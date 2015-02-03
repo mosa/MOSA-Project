@@ -149,7 +149,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var s in block.NextBlocks)
 			{
-				var index = WhichPredecessor(s, block); // okay since the block list order does not change between this stage and PhiPlacementStage
+				// index does not change between this stage and PhiPlacementStage since the block list order does not change
+				var index = WhichPredecessor(s, block);
 
 				for (var context = new Context(InstructionSet, s); !context.IsBlockEndInstruction; context.GotoNext())
 				{

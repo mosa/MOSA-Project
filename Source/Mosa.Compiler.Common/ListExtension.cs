@@ -28,6 +28,14 @@ namespace Mosa.Compiler.Common
 			list.Add(item);
 		}
 
+		public static void AddIfNew<T>(this HashSet<T> list, T item)
+		{
+			if (list.Contains(item))
+				return;
+
+			list.Add(item);
+		}
+
 		/// <summary>
 		/// Determines whether the two lists' elements are equal.
 		/// </summary>

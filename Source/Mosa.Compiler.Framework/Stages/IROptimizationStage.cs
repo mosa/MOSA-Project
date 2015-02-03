@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
@@ -48,8 +49,12 @@ namespace Mosa.Compiler.Framework.Stages
 		private int foldConstantPhiCount = 0;
 		private int simplifyPhiCount = 0;
 		private int removeUselessPhiCount = 0;
+		private int reduce64BitOperationsTo32BitCount = 0;
+		private int promoteLocalVariableCount = 0;
 
 		private Stack<int> worklist = new Stack<int>();
+
+		private HashSet<Operand> virtualRegisters = new HashSet<Operand>();
 
 		private TraceLog trace;
 
@@ -80,6 +85,22 @@ namespace Mosa.Compiler.Framework.Stages
 					Do(ctx);
 
 					ProcessWorkList();
+
+					// Collext virtual registers
+					if (ctx.IsEmpty)
+						continue;
+
+					// add virtual registers
+					foreach (var op in ctx.Results)
+					{
+						if (op.IsVirtualRegister)
+							virtualRegisters.AddIfNew(op);
+					}
+					foreach (var op in ctx.Operands)
+					{
+						if (op.IsVirtualRegister)
+							virtualRegisters.AddIfNew(op);
+					}
 				}
 			}
 
@@ -128,7 +149,18 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhiCount);
 			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
 			UpdateCounter("IROptimizations.RemoveUselessPhi", removeUselessPhiCount);
+			UpdateCounter("IROptimizations.PromoteLocalVariable", promoteLocalVariableCount);
+			UpdateCounter("IROptimizations.Reduce64BitOperationsTo32Bit", reduce64BitOperationsTo32BitCount);
 
+			worklist = null;
+		}
+
+		/// <summary>
+		/// Finishes this instance.
+		/// </summary>
+		protected override void Finish()
+		{
+			virtualRegisters = null;
 			worklist = null;
 		}
 
@@ -173,6 +205,7 @@ namespace Mosa.Compiler.Framework.Stages
 			FoldConstantPhi(context);
 			SimplifyPhi(context);
 			RemoveUselessPhi(context);
+			NormalizeConstantTo32Bit(context);
 		}
 
 		/// <summary>
@@ -256,6 +289,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				ReplaceVirtualRegister(local, v);
 
+				promoteLocalVariableCount++;
 				change = true;
 			}
 
@@ -1498,10 +1532,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Result.IsVirtualRegister || !context.Operand1.IsVirtualRegister)
 				return;
 
-			if (!((NativePointerSize == 4 && context.Result.IsI && (context.Operand1.IsI4 || context.Operand1.IsU4)) ||
-				(NativePointerSize == 4 && context.Operand1.IsI && (context.Result.IsI4 || context.Result.IsU4)) ||
-				(NativePointerSize == 8 && context.Result.IsI && (context.Operand1.IsI8 || context.Operand1.IsU8)) ||
-				(NativePointerSize == 8 && context.Operand1.IsI && (context.Result.IsI8 || context.Result.IsU8))))
+			if (!((NativePointerSize == 4 && context.Result.IsInt && (context.Operand1.IsInt || context.Operand1.IsU || context.Operand1.IsI)) ||
+				(NativePointerSize == 4 && context.Operand1.IsInt && (context.Result.IsInt || context.Result.IsU || context.Result.IsI)) ||
+				(NativePointerSize == 8 && context.Result.IsLong && (context.Operand1.IsLong || context.Operand1.IsU || context.Operand1.IsI)) ||
+				(NativePointerSize == 8 && context.Operand1.IsLong && (context.Result.IsLong || context.Result.IsU || context.Result.IsI))))
 				return;
 
 			AddOperandUsageToWorkList(context);
@@ -1677,23 +1711,26 @@ namespace Mosa.Compiler.Framework.Stages
 
 			bool change = false;
 
-			foreach (var local in MethodCompiler.LocalVariables)
+			foreach (var register in virtualRegisters)
 			{
-				if (!local.IsVirtualRegister)
+				Debug.Assert(register.IsVirtualRegister);
+
+				if (register.Definitions.Count != 1)
 					continue;
 
-				if (!(local.IsU8 || local.IsI8))
+				if (!(register.IsU8 || register.IsI8))
 					continue;
 
-				if (!CanReduceTo32Bit(local))
+				if (!CanReduceTo32Bit(register))
 					continue;
 
 				var v = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 				if (trace.Active) trace.Log("*** Reduce64BitOperationsTo32Bit");
 
-				ReplaceVirtualRegister(local, v);
+				ReplaceVirtualRegister(register, v);
 
+				reduce64BitOperationsTo32BitCount++;
 				change = true;
 			}
 
@@ -1796,5 +1833,46 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		private void NormalizeConstantTo32Bit(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.ResultCount != 1)
+				return;
+
+			if (!context.Result.IsInt)
+				return;
+
+			bool changed = false;
+
+			if (context.Instruction == IRInstruction.LogicalAnd ||
+				context.Instruction == IRInstruction.LogicalOr ||
+				context.Instruction == IRInstruction.LogicalXor ||
+				context.Instruction == IRInstruction.LogicalNot)
+			{
+				if (context.Operand1.IsConstant && context.Operand1.IsLong)
+				{
+					if (trace.Active) trace.Log("*** NormalizeConstantTo32Bit");
+
+					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+					context.Operand1 = Operand.CreateConstantUnsignedInt(TypeSystem, (uint)(context.Operand1.ConstantSignedInteger & uint.MaxValue));
+					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+				}
+				if (context.OperandCount >= 2 && context.Operand2.IsConstant && context.Operand2.IsLong)
+				{
+					if (trace.Active) trace.Log("*** NormalizeConstantTo32Bit");
+
+					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+					context.Operand2 = Operand.CreateConstantUnsignedInt(TypeSystem, (uint)(context.Operand2.ConstantSignedInteger & uint.MaxValue));
+					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+				}
+			}
+
+			if (changed)
+			{
+				AddOperandUsageToWorkList(context);
+			}
+		}
 	}
 }
