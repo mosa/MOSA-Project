@@ -63,7 +63,7 @@
     <NoWarn>1685</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assert.cs" />
+    <Compile Include="Helpers\Assert.cs" />
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="ConsoleSession.cs" />
     <Compile Include="ELFHeader.cs" />

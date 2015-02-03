@@ -31,7 +31,7 @@ namespace Mosa.Internal
 		public static extern uint Load32(uint address, uint offset);
 
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		public static extern void* GetObjectAddress(object obj);
+		public static extern void* GetObjectAddress<T>(T obj) where T : class;
 
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public static extern void* GetValueTypeAddress<T>(T obj) where T : struct;

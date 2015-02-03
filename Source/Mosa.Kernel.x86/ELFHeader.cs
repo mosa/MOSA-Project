@@ -128,7 +128,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return (uint)Mosa.Internal.Intrinsic.GetObjectAddress(this);
+				return (uint)Mosa.Internal.Intrinsic.GetValueTypeAddress(this);
 			}
 		}
 
