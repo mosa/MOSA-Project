@@ -66,7 +66,6 @@
     <Compile Include="Assert.cs" />
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="ConsoleSession.cs" />
-    <Compile Include="ELFHeader.cs" />
     <Compile Include="SSE.cs" />
     <Compile Include="DebugClient.cs" />
     <Compile Include="Serial.cs" />
