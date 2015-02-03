@@ -19,7 +19,7 @@ namespace Mosa.Kernel.x86
 	/// <summary>
 	///
 	/// </summary>
-	public static class GDT_
+	public static class GDT
 	{
 		private static uint gdtTable = 0x1401000;
 		private static uint gdtEntries = gdtTable + 6;
@@ -99,7 +99,7 @@ namespace Mosa.Kernel.x86
 	//	}
 	//}
 
-	unsafe public static class GDT
+	unsafe public static class GDT_
 	{
 		private static uint gdtTableAddress = 0x1401000;
 		private static DescriptorTable* table;
