@@ -366,14 +366,66 @@ namespace Mosa.Kernel.x86
 		{
 			DebugClient.Process();
 
-			if (interrupt == 14)
+			switch (interrupt)
 			{
-				// Page Fault!
-				PageFaultHandler.Fault(errorCode);
-			}
-			else if (interruptHandler != null)
-			{
-				interruptHandler(interrupt, errorCode);
+				case 0:
+					Panic.Error("Divide Error");
+					break;
+
+				case 4:
+					Panic.Error("Arithmetic Overflow Exception");
+					break;
+
+				case 5:
+					Panic.Error("Bound Check Error");
+					break;
+
+				case 6:
+					Panic.Error("Invalid Opcode");
+					break;
+
+				case 7:
+					Panic.Error("Coprocessor Not Available");
+					break;
+
+				case 8:
+					//TODO: Analyze the double fault
+					Panic.Error("Double Fault");
+					break;
+
+				case 9:
+					Panic.Error("Coprocessor Segment Overrun");
+					break;
+
+				case 10:
+					Panic.Error("Invalid TSS");
+					break;
+
+				case 11:
+					Panic.Error("Segment Not Present");
+					break;
+
+				case 12:
+					Panic.Error("Stack Exception");
+					break;
+
+				case 13:
+					Panic.Error("General Proection Exception");
+					break;
+
+				case 14:
+					// Page Fault!
+					PageFaultHandler.Fault(errorCode);
+					break;
+
+				case 16:
+					Panic.Error("Coprocessor Error");
+					break;
+
+				default:
+					if (interruptHandler != null)
+						interruptHandler(interrupt, errorCode);
+					break;
 			}
 
 			PIC.SendEndOfInterrupt(interrupt);
