@@ -35,7 +35,7 @@
     <StartupObject>Mosa.Tool.Explorer.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>..\..\Tools\icons\explorer.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\3rdParty\icons\explorer.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="dnlib, Version=1.0.1.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
@@ -148,7 +148,7 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\Tools\icons\explorer.ico">
+    <Content Include="..\..\3rdParty\icons\explorer.ico">
       <Link>Resources\explorer.ico</Link>
     </Content>
   </ItemGroup>
