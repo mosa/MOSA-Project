@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
@@ -48,8 +49,12 @@ namespace Mosa.Compiler.Framework.Stages
 		private int foldConstantPhiCount = 0;
 		private int simplifyPhiCount = 0;
 		private int removeUselessPhiCount = 0;
+		private int reduce64BitOperationsTo32BitCount = 0;
+		private int promoteLocalVariableCount = 0;
 
 		private Stack<int> worklist = new Stack<int>();
+
+		private HashSet<Operand> virtualRegisters = new HashSet<Operand>();
 
 		private TraceLog trace;
 
@@ -80,12 +85,40 @@ namespace Mosa.Compiler.Framework.Stages
 					Do(ctx);
 
 					ProcessWorkList();
+
+					// Collext virtual registers
+					if (ctx.IsEmpty)
+						continue;
+
+					// add virtual registers
+					foreach (var op in ctx.Results)
+					{
+						if (op.IsVirtualRegister)
+							virtualRegisters.AddIfNew(op);
+					}
+					foreach (var op in ctx.Operands)
+					{
+						if (op.IsVirtualRegister)
+							virtualRegisters.AddIfNew(op);
+					}
 				}
 			}
 
-			while (PromoteLocalVariable())
+			bool change = true;
+			while (change)
 			{
-				ProcessWorkList();
+				change = false;
+
+				if (PromoteLocalVariable())
+					change = true;
+
+				if (Reduce64BitOperationsTo32Bit())
+					change = true;
+
+				if (change)
+				{
+					ProcessWorkList();
+				}
 			}
 
 			UpdateCounter("IROptimizations.IRInstructionRemoved", instructionsRemovedCount);
@@ -116,7 +149,18 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhiCount);
 			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
 			UpdateCounter("IROptimizations.RemoveUselessPhi", removeUselessPhiCount);
+			UpdateCounter("IROptimizations.PromoteLocalVariable", promoteLocalVariableCount);
+			UpdateCounter("IROptimizations.Reduce64BitOperationsTo32Bit", reduce64BitOperationsTo32BitCount);
 
+			worklist = null;
+		}
+
+		/// <summary>
+		/// Finishes this instance.
+		/// </summary>
+		protected override void Finish()
+		{
+			virtualRegisters = null;
 			worklist = null;
 		}
 
@@ -161,6 +205,7 @@ namespace Mosa.Compiler.Framework.Stages
 			FoldConstantPhi(context);
 			SimplifyPhi(context);
 			RemoveUselessPhi(context);
+			NormalizeConstantTo32Bit(context);
 		}
 
 		/// <summary>
@@ -222,7 +267,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool PromoteLocalVariable()
 		{
-			bool promoted = false;
+			bool change = false;
 
 			foreach (var local in MethodCompiler.LocalVariables)
 			{
@@ -238,58 +283,17 @@ namespace Mosa.Compiler.Framework.Stages
 				if (ContainsAddressOf(local))
 					continue;
 
-				promoted = true;
-				PromoteTempVariable(local);
+				var v = MethodCompiler.CreateVirtualRegister(local.Type.GetStackType());
+
+				if (trace.Active) trace.Log("*** PromoteLocalVariable");
+
+				ReplaceVirtualRegister(local, v);
+
+				promoteLocalVariableCount++;
+				change = true;
 			}
 
-			return promoted;
-		}
-
-		private void PromoteTempVariable(Operand local)
-		{
-			var stacktype = local.Type.GetStackType();
-
-			var v = MethodCompiler.CreateVirtualRegister(stacktype);
-
-			if (trace.Active) trace.Log("*** PromoteTempVariable");
-			if (trace.Active) trace.Log("Replacing: " + local.ToString() + " with " + v.ToString());
-
-			foreach (int index in local.Uses.ToArray())
-			{
-				Context ctx = new Context(InstructionSet, index);
-
-				AddOperandUsageToWorkList(ctx);
-
-				for (int i = 0; i < ctx.OperandCount; i++)
-				{
-					Operand operand = ctx.GetOperand(i);
-
-					if (local == operand)
-					{
-						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
-						ctx.SetOperand(i, v);
-						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
-					}
-				}
-			}
-
-			foreach (int index in local.Definitions.ToArray())
-			{
-				Context ctx = new Context(InstructionSet, index);
-				AddOperandUsageToWorkList(ctx);
-
-				for (int i = 0; i < ctx.OperandCount; i++)
-				{
-					Operand operand = ctx.GetResult(i);
-
-					if (local == operand)
-					{
-						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
-						ctx.SetResult(i, v);
-						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
-					}
-				}
-			}
+			return change;
 		}
 
 		/// <summary>
@@ -1528,10 +1532,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Result.IsVirtualRegister || !context.Operand1.IsVirtualRegister)
 				return;
 
-			if (!((NativePointerSize == 4 && context.Result.IsI && (context.Operand1.IsI4 || context.Operand1.IsU4)) ||
-				(NativePointerSize == 4 && context.Operand1.IsI && (context.Result.IsI4 || context.Result.IsU4)) ||
-				(NativePointerSize == 8 && context.Result.IsI && (context.Operand1.IsI8 || context.Operand1.IsU8)) ||
-				(NativePointerSize == 8 && context.Operand1.IsI && (context.Result.IsI8 || context.Result.IsU8))))
+			if (!((NativePointerSize == 4 && context.Result.IsInt && (context.Operand1.IsInt || context.Operand1.IsU || context.Operand1.IsI)) ||
+				(NativePointerSize == 4 && context.Operand1.IsInt && (context.Result.IsInt || context.Result.IsU || context.Result.IsI)) ||
+				(NativePointerSize == 8 && context.Result.IsLong && (context.Operand1.IsLong || context.Operand1.IsU || context.Operand1.IsI)) ||
+				(NativePointerSize == 8 && context.Operand1.IsLong && (context.Result.IsLong || context.Result.IsU || context.Result.IsI))))
 				return;
 
 			AddOperandUsageToWorkList(context);
@@ -1698,6 +1702,177 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return bits - 1;
+		}
+
+		private bool Reduce64BitOperationsTo32Bit()
+		{
+			if (Architecture.NativeIntegerSize != 32)
+				return false;
+
+			bool change = false;
+
+			foreach (var register in virtualRegisters)
+			{
+				Debug.Assert(register.IsVirtualRegister);
+
+				if (register.Definitions.Count != 1)
+					continue;
+
+				if (!(register.IsU8 || register.IsI8))
+					continue;
+
+				if (!CanReduceTo32Bit(register))
+					continue;
+
+				var v = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.U4);
+
+				if (trace.Active) trace.Log("*** Reduce64BitOperationsTo32Bit");
+
+				ReplaceVirtualRegister(register, v);
+
+				reduce64BitOperationsTo32BitCount++;
+				change = true;
+			}
+
+			return change;
+		}
+
+		private bool CanReduceTo32Bit(Operand local)
+		{
+			foreach (int index in local.Uses)
+			{
+				Context ctx = new Context(InstructionSet, index);
+
+				if (ctx.Instruction == IRInstruction.AddressOf)
+					return false;
+
+				if (ctx.Instruction == IRInstruction.Call)
+					return false;
+
+				if (ctx.Instruction == IRInstruction.Return)
+					return false;
+
+				if (ctx.Instruction == IRInstruction.SubSigned)
+					return false;
+
+				if (ctx.Instruction == IRInstruction.SubUnsigned)
+					return false;
+
+				if (ctx.Instruction == IRInstruction.DivSigned)
+					return false;
+
+				if (ctx.Instruction == IRInstruction.DivUnsigned)
+					return false;
+
+				if (ctx.Instruction == IRInstruction.Load || ctx.Instruction == IRInstruction.LoadSignExtended || ctx.Instruction == IRInstruction.LoadZeroExtended)
+					if (ctx.Result == local)
+						return false;
+
+				if (ctx.Instruction == IRInstruction.ShiftRight || ctx.Instruction == IRInstruction.ArithmeticShiftRight)
+					if (ctx.Operand1 == local)
+						return false;
+
+				if (ctx.Instruction == IRInstruction.Phi)
+					return false;
+
+				if (ctx.Instruction == IRInstruction.IntegerCompareBranch)
+					return false;
+
+				if (ctx.Instruction == IRInstruction.IntegerCompare)
+					return false;
+
+				if (ctx.Instruction == IRInstruction.RemSigned)
+					return false;
+
+				if (ctx.Instruction == IRInstruction.RemUnsigned)
+					return false;
+			}
+
+			return true;
+		}
+
+		private void ReplaceVirtualRegister(Operand local, Operand replacement)
+		{
+			if (trace.Active) trace.Log("Replacing: " + local.ToString() + " with " + replacement.ToString());
+
+			foreach (int index in local.Uses.ToArray())
+			{
+				var ctx = new Context(InstructionSet, index);
+
+				AddOperandUsageToWorkList(ctx);
+
+				for (int i = 0; i < ctx.OperandCount; i++)
+				{
+					var operand = ctx.GetOperand(i);
+
+					if (local == operand)
+					{
+						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
+						ctx.SetOperand(i, replacement);
+						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
+					}
+				}
+			}
+
+			foreach (int index in local.Definitions.ToArray())
+			{
+				var ctx = new Context(InstructionSet, index);
+				AddOperandUsageToWorkList(ctx);
+
+				for (int i = 0; i < ctx.OperandCount; i++)
+				{
+					var operand = ctx.GetResult(i);
+
+					if (local == operand)
+					{
+						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
+						ctx.SetResult(i, replacement);
+						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
+					}
+				}
+			}
+		}
+
+		private void NormalizeConstantTo32Bit(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.ResultCount != 1)
+				return;
+
+			if (!context.Result.IsInt)
+				return;
+
+			bool changed = false;
+
+			if (context.Instruction == IRInstruction.LogicalAnd ||
+				context.Instruction == IRInstruction.LogicalOr ||
+				context.Instruction == IRInstruction.LogicalXor ||
+				context.Instruction == IRInstruction.LogicalNot)
+			{
+				if (context.Operand1.IsConstant && context.Operand1.IsLong)
+				{
+					if (trace.Active) trace.Log("*** NormalizeConstantTo32Bit");
+
+					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+					context.Operand1 = Operand.CreateConstantUnsignedInt(TypeSystem, (uint)(context.Operand1.ConstantSignedInteger & uint.MaxValue));
+					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+				}
+				if (context.OperandCount >= 2 && context.Operand2.IsConstant && context.Operand2.IsLong)
+				{
+					if (trace.Active) trace.Log("*** NormalizeConstantTo32Bit");
+
+					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+					context.Operand2 = Operand.CreateConstantUnsignedInt(TypeSystem, (uint)(context.Operand2.ConstantSignedInteger & uint.MaxValue));
+					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+				}
+			}
+
+			if (changed)
+			{
+				AddOperandUsageToWorkList(context);
+			}
 		}
 	}
 }
