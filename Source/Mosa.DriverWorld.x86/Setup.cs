@@ -50,7 +50,6 @@ namespace Mosa.DriverWorld.x86
 
 		static public StandardKeyboard Keyboard = null;
 		static public CMOS CMOS = null;
-		static public PIC PIC = null;
 
 		/// <summary>
 		/// Initializes the Device Driver System.
@@ -84,25 +83,18 @@ namespace Mosa.DriverWorld.x86
 		/// </summary>
 		static public void Start()
 		{
-			Mosa.Kernel.x86.Screen.RawWrite(4, 1, 'A', 0x0A);
 			// Find all drivers
 			deviceDriverRegistry.RegisterBuiltInDeviceDrivers();
-			Mosa.Kernel.x86.Screen.RawWrite(4, 2, 'A', 0x0A);
+
 			// Start drivers for ISA devices
 			StartISADevices();
-			Mosa.Kernel.x86.Screen.RawWrite(4, 3, 'A', 0x0A);
+
 			// Start drivers for PCI devices
 			StartPCIDevices();
-			Mosa.Kernel.x86.Screen.RawWrite(4, 4, 'A', 0x0A);
+
 			// Get CMOS, StandardKeyboard, and PIC driver instances
 			CMOS = (CMOS)deviceManager.GetDevices(new FindDevice.WithName("CMOS")).First.Value;
-			PIC = (PIC)deviceManager.GetDevices(new FindDevice.WithName("PIC_0x20")).First.Value;
 			Keyboard = (StandardKeyboard)deviceManager.GetDevices(new FindDevice.WithName("StandardKeyboard")).First.Value;
-			Mosa.Kernel.x86.Screen.RawWrite(4, 5, 'A', 0x0A);
-			// Enable Interrupts
-			for (byte i = 0; i < byte.MaxValue; i++)
-				Setup.PIC.EnableIRQ(i);
-			Mosa.Kernel.x86.Screen.RawWrite(4, 0, '6', 0x0A);
 		}
 
 		/// <summary>
@@ -203,6 +195,10 @@ namespace Mosa.DriverWorld.x86
 		{
 			var driverAtttribute = deviceDriver.Attribute as ISADeviceDriverAttribute;
 
+			// Don't load the VGAText and PIC drivers
+			if (/*driverAtttribute.BasePort == 0x03B0 || */driverAtttribute.BasePort == 0x20)
+				return;
+
 			if (driverAtttribute.AutoLoad)
 			{
 				var hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
@@ -227,11 +223,10 @@ namespace Mosa.DriverWorld.x86
 
 				var hardwareResources = new HardwareResources(resourceManager, ioPortRegions.ToArray(), memoryRegions.ToArray(), new InterruptHandler(resourceManager.InterruptManager, driverAtttribute.IRQ, hardwareDevice));
 
-				hardwareDevice.Setup(hardwareResources);
-
 				if (resourceManager.ClaimResources(hardwareResources))
 				{
 					hardwareResources.EnableIRQ();
+					hardwareDevice.Setup(hardwareResources);
 
 					if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
 					{

@@ -125,8 +125,6 @@ namespace System
 					return ((char*)valuePtr)[0];
 
 				case TypeCode.U2:
-					if ((argument + 4) == null)
-						throw new ArgumentException();
 					return ((ushort*)valuePtr)[0];
 
 				case TypeCode.I2:

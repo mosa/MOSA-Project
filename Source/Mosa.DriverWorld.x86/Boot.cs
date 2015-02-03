@@ -17,43 +17,36 @@ namespace Mosa.DriverWorld.x86
 	/// </summary>
 	public static class Boot
 	{
-		public static TextScreen Console = null;
+		public static TextScreen console;
+
+		public static TextScreen Console
+		{
+			get { return console; }
+		}
 
 		/// <summary>
 		/// Main
 		/// </summary>
 		public static void Main()
 		{
-			DebugClient.Setup(Serial.COM1);
-			IDT.SetInterruptHandler(null);
-			SSE.Setup();
-			Multiboot.Setup();
-			PIC.Setup();
-			GDT.Setup();
-			IDT.Setup();
-			PageFrameAllocator.Setup();
-			PageTable.Setup();
-			VirtualPageAllocator.Setup();
-			ProcessManager.Setup();
-			Runtime.Setup();
-			TaskManager.Setup();
-			SmbiosManager.Setup();
+			Mosa.Kernel.x86.Kernel.Setup();
+
 			IDT.SetInterruptHandler(ProcessInterrupt);
-			Screen.RawWrite(3, 0, 'A', 0x0A);
+
 			Setup.Initialize();
-			Screen.RawWrite(4, 0, 'A', 0x0A);
 			Setup.Start();
-			Screen.RawWrite(5, 0, 'A', 0x0A);
+			
 			var textDevice = (ITextDevice)Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText")).First.Value;
-			Console = new TextScreen(textDevice);
-			Screen.RawWrite(6, 0, 'A', 0x0A);
+			console = new TextScreen(textDevice);
+
 			Console.ClearScreen();
 
-			Console.Write("          Copyright (C) 2008-2015 [Managed Operating System Alliance]");
-			Console.WriteLine();
+			Console.Write(@"                   MOSA OS Version 1.4 - Compiler Version 1.4");
 			Console.WriteLine("> System ready");
 			Console.WriteLine();
-			Screen.RawWrite(7, 0, 'A', 0x0A);
+			Console.SetCursor(0, 24);
+			Console.Write("          Copyright (C) 2008-2015 [Managed Operating System Alliance]");
+
 			Process();
 		}
 
@@ -61,6 +54,7 @@ namespace Mosa.DriverWorld.x86
 		{
 			int lastSecond = -1;
 
+			Console.SetCursor(0, 21);
 			Console.Write("> ");
 
 			Mosa.DeviceDriver.ScanCodeMap.US KBDMAP = new DeviceDriver.ScanCodeMap.US();
@@ -106,7 +100,7 @@ namespace Mosa.DriverWorld.x86
 
 		public static void PrintDone()
 		{
-			InBrackets("Done");
+			InBrackets("Done", Colors.White, Colors.LightGreen);
 			Console.WriteLine();
 		}
 
@@ -115,7 +109,7 @@ namespace Mosa.DriverWorld.x86
 			Console.Write("  * ");
 		}
 
-		public static void InBrackets(string message)
+		public static void InBrackets(string message, byte outerColor, byte innerColor)
 		{
 			Console.Write("[");
 			Console.Write(message);
@@ -130,7 +124,6 @@ namespace Mosa.DriverWorld.x86
 			}
 			else if (interrupt >= 0x20 && interrupt < 0x30)
 			{
-				Console.WriteLine("1");
 				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 
 				//Debug.Trace("Returned from HAL.ProcessInterrupt");
