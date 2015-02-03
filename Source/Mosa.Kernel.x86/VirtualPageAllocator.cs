@@ -92,7 +92,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static uint Reserve(uint size)
 		{
-			//Assert.True(initialized, "VirtualPageAllocator is not initialized");
+			Assert.True(initialized, "VirtualPageAllocator is not initialized");
 
 			uint first = 0xFFFFFFFF; // Marker
 			uint requested = ((size - 1) / PageFrameAllocator.PageSize) + 1;
