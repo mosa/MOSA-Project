@@ -271,13 +271,17 @@ namespace Mosa.Compiler.Framework
 		public void SetMethodStackSize(MosaMethod method, int size)
 		{
 			lock (methodStackSizes)
+			{
 				methodStackSizes.Add(method, size);
+			}
 		}
 
 		public void SetMethodParameterStackSize(MosaMethod method, int size)
 		{
 			lock (methodParameterStackSizes)
+			{
 				methodParameterStackSizes.Add(method, size);
+			}
 		}
 
 		public int GetMethodStackSize(MosaMethod method)
@@ -285,6 +289,7 @@ namespace Mosa.Compiler.Framework
 			var size = 0;
 
 			lock (methodStackSizes)
+			{
 				if (!methodStackSizes.TryGetValue(method, out size))
 				{
 					if ((method.MethodAttributes & MosaMethodAttributes.Abstract) == MosaMethodAttributes.Abstract)
@@ -293,6 +298,7 @@ namespace Mosa.Compiler.Framework
 					return 0;
 					//throw new InvalidCompilerException();
 				}
+			}
 
 			return size;
 		}
@@ -302,6 +308,7 @@ namespace Mosa.Compiler.Framework
 			var size = 0;
 
 			lock (methodParameterStackSizes)
+			{
 				if (!methodParameterStackSizes.TryGetValue(method, out size))
 				{
 					if ((method.MethodAttributes & MosaMethodAttributes.Abstract) == MosaMethodAttributes.Abstract)
@@ -310,6 +317,7 @@ namespace Mosa.Compiler.Framework
 					return 0;
 					//throw new InvalidCompilerException();
 				}
+			}
 
 			return size;
 		}

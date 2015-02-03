@@ -92,15 +92,16 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			Operand eaxH = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			Operand eaxL = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.SetInstruction(X86.Mov, eaxL, op1L);
-			context.AppendInstruction(X86.Add, eaxL, eaxL, op2L);
-			context.AppendInstruction(X86.Mov, op0L, eaxL);
-			context.AppendInstruction(X86.Mov, eaxH, op1H);
-			context.AppendInstruction(X86.Adc, eaxH, eaxH, op2H);
-			context.AppendInstruction(X86.Mov, op0H, eaxH);
+			context.SetInstruction(X86.Mov, v2, op1L);
+			context.AppendInstruction(X86.Add, v2, v2, op2L);
+			context.AppendInstruction(X86.Mov, op0L, v2);
+			context.AppendInstruction(X86.Mov, v1, op1H);
+			context.AppendInstruction(X86.Adc, v1, v1, op2H);
+			if (!op0H.IsConstantZero)
+				context.AppendInstruction(X86.Mov, op0H, v1);
 		}
 
 		/// <summary>
@@ -114,15 +115,16 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			Operand eaxH = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			Operand eaxL = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.SetInstruction(X86.Mov, eaxL, op1L);
-			context.AppendInstruction(X86.Sub, eaxL, eaxL, op2L);
-			context.AppendInstruction(X86.Mov, op0L, eaxL);
-			context.AppendInstruction(X86.Mov, eaxH, op1H);
-			context.AppendInstruction(X86.Sbb, eaxH, eaxH, op2H);
-			context.AppendInstruction(X86.Mov, op0H, eaxH);
+			context.SetInstruction(X86.Mov, v2, op1L);
+			context.AppendInstruction(X86.Sub, v2, v2, op2L);
+			context.AppendInstruction(X86.Mov, op0L, v2);
+			context.AppendInstruction(X86.Mov, v1, op1H);
+			context.AppendInstruction(X86.Sbb, v1, v1, op2H);
+			if (!op0H.IsConstantZero)
+				context.AppendInstruction(X86.Mov, op0H, v1);
 		}
 
 		/// <summary>
@@ -152,19 +154,22 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov, v20, eax);
 			context.AppendInstruction(X86.Mov, eax, v20);
 			context.AppendInstruction2(X86.Mul, edx, eax, eax, op1L);
-			context.AppendInstruction(X86.Mov, v16, eax);
-			context.AppendInstruction(X86.Mov, v12, edx);
-			context.AppendInstruction(X86.Mov, eax, op1L);
-			context.AppendInstruction(X86.Mov, ebx, eax);
-			context.AppendInstruction(X86.IMul, ebx, ebx, op2H);
-			context.AppendInstruction(X86.Mov, eax, v12);
-			context.AppendInstruction(X86.Add, eax, eax, ebx);
-			context.AppendInstruction(X86.Mov, ebx, op2L);
-			context.AppendInstruction(X86.IMul, ebx, ebx, op1H);
-			context.AppendInstruction(X86.Add, eax, eax, ebx);
-			context.AppendInstruction(X86.Mov, v12, eax);
-			context.AppendInstruction(X86.Mov, op0L, v16);
-			context.AppendInstruction(X86.Mov, op0H, v12);
+			context.AppendInstruction(X86.Mov, op0L, eax);
+
+			if (!op0H.IsConstantZero)
+			{
+				context.AppendInstruction(X86.Mov, v12, edx);
+				context.AppendInstruction(X86.Mov, eax, op1L);
+				context.AppendInstruction(X86.Mov, ebx, eax);
+				context.AppendInstruction(X86.IMul, ebx, ebx, op2H);
+				context.AppendInstruction(X86.Mov, eax, v12);
+				context.AppendInstruction(X86.Add, eax, eax, ebx);
+				context.AppendInstruction(X86.Mov, ebx, op2L);
+				context.AppendInstruction(X86.IMul, ebx, ebx, op1H);
+				context.AppendInstruction(X86.Add, eax, eax, ebx);
+				context.AppendInstruction(X86.Mov, v12, eax);
+				context.AppendInstruction(X86.Mov, op0H, v12);
+			}
 		}
 
 		/// <summary>
@@ -387,9 +392,8 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 
-			//Operand eax = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			//Operand edx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			Operand ecx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			Context nextBlock = Split(context);
 			Context[] newBlocks = CreateNewBlocksWithContexts(4);
@@ -405,22 +409,26 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[1]);
 
-			newBlocks[1].AppendInstruction(X86.Mov, op0H, op1H);
+			newBlocks[1].AppendInstruction(X86.Mov, v1, op1H);
 			newBlocks[1].AppendInstruction(X86.Mov, op0L, op1L);
-			newBlocks[1].AppendInstruction(X86.Shrd, op0L, op0L, op0H, ecx);
-			newBlocks[1].AppendInstruction(X86.Shr, op0H, op0H, ecx);
+			newBlocks[1].AppendInstruction(X86.Shrd, op0L, op0L, v1, ecx);
+			newBlocks[1].AppendInstruction(X86.Shr, v1, v1, ecx);
+			if (!op0H.IsConstantZero)
+				newBlocks[1].AppendInstruction(X86.Mov, op0H, v1);
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[1], nextBlock.BasicBlock);
 
 			newBlocks[2].AppendInstruction(X86.Mov, op0L, op1H);
-			newBlocks[2].AppendInstruction(X86.Mov, op0H, ConstantZero);
+			if (!op0H.IsConstantZero)
+				newBlocks[2].AppendInstruction(X86.Mov, op0H, ConstantZero);
 			newBlocks[2].AppendInstruction(X86.And, ecx, ecx, Operand.CreateConstantSignedInt(TypeSystem, (int)0x1F));
 			newBlocks[2].AppendInstruction(X86.Sar, op0L, op0L, ecx);
 			newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[2], nextBlock.BasicBlock);
 
-			newBlocks[3].AppendInstruction(X86.Mov, op0H, ConstantZero);
 			newBlocks[3].AppendInstruction(X86.Mov, op0L, op0H);
+			if (!op0H.IsConstantZero)
+				newBlocks[3].AppendInstruction(X86.Mov, op0H, ConstantZero);
 			newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[3], nextBlock.BasicBlock);
 		}
@@ -600,7 +608,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Mov, op0L, v2);
 				context.AppendInstruction(X86.Mov, op0H, v3);
 			}
-			else if (op1.IsI4 || op1.IsPointer || op1.IsI || op1.IsU)
+			else if (op1.IsI4 || op1.IsU4 || op1.IsPointer || op1.IsI || op1.IsU)
 			{
 				Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
@@ -711,7 +719,7 @@ namespace Mosa.Platform.x86.Stages
 			// FIXME: If the conditional branch and unconditional branch are the same, this could cause a problem
 			target.PreviousBlocks.Remove(context.BasicBlock);
 
-			// The block is being split on the condition, so the new next block has too one many next blocks!
+			// The block is being split on the condition, so the new next block has one too many next blocks!
 			nextBlock.BasicBlock.NextBlocks.Remove(target);
 
 			// Compare high dwords
