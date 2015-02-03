@@ -140,9 +140,7 @@ namespace Mosa.Kernel.x86
 
 		internal static PageDirectoryEntry* GetPageDirectoryEntry(uint index)
 		{
-#if DEBUG
 			Assert.InRange(index, PageDirectoryLength);
-#endif
 
 			#region COMPILER_BUG?
 
@@ -156,9 +154,7 @@ namespace Mosa.Kernel.x86
 
 		public static PageTableEntry* GetPageTableEntry(uint index)
 		{
-#if DEBUG
-			Assert.InRange(index, PageTableLength);
-#endif
+			Assert.InRange(index, AllPageTableLength);
 
 			//return pageTableEntries + index;
 			return (PageTableEntry*)(pageTableAddress + index * PageTableEntry.EntrySize);
