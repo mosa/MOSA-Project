@@ -17,9 +17,9 @@ namespace Mosa.DriverWorld.x86
 	/// </summary>
 	public static class Boot
 	{
-		public static ConsoleSession console;
+		public static TextScreen console;
 
-		public static ConsoleSession Console
+		public static TextScreen Console
 		{
 			get { return console; }
 		}
@@ -31,44 +31,33 @@ namespace Mosa.DriverWorld.x86
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
 
-			console = ConsoleManager.Controller.Boot;
-
-			Console.Clear();
-
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
-			Console.Color = Colors.White;
-			Console.BackgroundColor = Colors.Green;
+			Setup.Initialize();
+			Screen.RawWrite(9, 0, (Multiboot.IsMultibootEnabled) ? 'A' : 'B', 0x0F);
+			Setup.Start();
+			Screen.RawWrite(10, 0, (Multiboot.IsMultibootEnabled) ? 'A' : 'B', 0x0F);
+			/*var textDevice = (ITextDevice)Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText")).First.Value;
+			Screen.RawWrite(11, 0, (Multiboot.IsMultibootEnabled) ? 'A': 'B', 0x0F);
+			console = new TextScreen(textDevice);
+
+			Console.ClearScreen();
 
 			Console.Write(@"                   MOSA OS Version 1.4 - Compiler Version 1.4");
-			FillLine();
-			Console.Color = Colors.White;
-			Console.BackgroundColor = Colors.Black;
-
-			Console.WriteLine("> Initializing hardware abstraction layer...");
-			Setup.Initialize();
-
-			Console.WriteLine("> Adding hardware devices...");
-			Setup.Start();
-
 			Console.WriteLine("> System ready");
 			Console.WriteLine();
-			Console.Goto(24, 0);
-			Console.Color = Colors.White;
-			Console.BackgroundColor = Colors.Green;
+			//Console.Goto(24, 0);
 			Console.Write("          Copyright (C) 2008-2015 [Managed Operating System Alliance]");
-			FillLine();
 
-			Process();
+			Process();*/
+			Native.Hlt();
 		}
 
 		public static void Process()
 		{
 			int lastSecond = -1;
 
-			Console.BackgroundColor = Colors.Black;
-			Console.Goto(21, 0);
-			Console.Color = Colors.White;
+			//Console.Goto(21, 0);
 			Console.Write("> ");
 
 			Mosa.DeviceDriver.ScanCodeMap.US KBDMAP = new DeviceDriver.ScanCodeMap.US();
@@ -112,12 +101,6 @@ namespace Mosa.DriverWorld.x86
 			}
 		}
 
-		public static void FillLine()
-		{
-			for (uint c = 80 - Console.Column; c != 0; c--)
-				Console.Write(' ');
-		}
-
 		public static void PrintDone()
 		{
 			InBrackets("Done", Colors.White, Colors.LightGreen);
@@ -126,18 +109,13 @@ namespace Mosa.DriverWorld.x86
 
 		public static void BulletPoint()
 		{
-			Console.Color = Colors.Yellow;
 			Console.Write("  * ");
-			Console.Color = Colors.White;
 		}
 
 		public static void InBrackets(string message, byte outerColor, byte innerColor)
 		{
-			Console.Color = outerColor;
 			Console.Write("[");
-			Console.Color = innerColor;
 			Console.Write(message);
-			Console.Color = outerColor;
 			Console.Write("]");
 		}
 
