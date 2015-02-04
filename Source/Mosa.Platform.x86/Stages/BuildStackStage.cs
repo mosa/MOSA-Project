@@ -88,7 +88,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (MethodCompiler.StackLayout.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstantSignedInt(TypeSystem, -MethodCompiler.StackLayout.StackSize));
+				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(TypeSystem, -MethodCompiler.StackLayout.StackSize));
 			}
 		}
 
@@ -105,7 +105,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (MethodCompiler.StackLayout.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstantSignedInt(TypeSystem, -MethodCompiler.StackLayout.StackSize));
+				context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(TypeSystem, -MethodCompiler.StackLayout.StackSize));
 			}
 
 			context.AppendInstruction(X86.Pop, ebp);

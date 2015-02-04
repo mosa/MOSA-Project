@@ -38,15 +38,14 @@ namespace Mosa.Platform.x86.Instructions
 		#region Methods
 
 		/// <summary>
-		/// Computes the opcode.
+		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			return opcode;
+			emitter.WriteByte(0xCD);
+			emitter.WriteByte((byte)context.Operand1.ConstantUnsignedInteger);
 		}
 
 		/// <summary>

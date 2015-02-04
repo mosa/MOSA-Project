@@ -160,7 +160,7 @@ namespace Mosa.Platform.x86.Stages
 						Context[] newBlocks = CreateNewBlocksWithContexts(2);
 						Context nextBlock = Split(context);
 
-						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(TypeSystem, 1));
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(TypeSystem, 1));
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].BasicBlock);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
@@ -189,7 +189,7 @@ namespace Mosa.Platform.x86.Stages
 						Context[] newBlocks = CreateNewBlocksWithContexts(1);
 						Context nextBlock = Split(context);
 
-						context.SetInstruction(X86.Mov, result, Operand.CreateConstantSignedInt(TypeSystem, 1));
+						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(TypeSystem, 1));
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.BasicBlock);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
@@ -479,9 +479,9 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, context.Result, context.Operand1);
 			if (dest.IsByte)
-				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(TypeSystem, 0xFF));
+				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(TypeSystem, 0xFF));
 			else if (dest.IsU2)
-				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(TypeSystem, 0xFFFF));
+				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(TypeSystem, 0xFFFF));
 			else
 				context.AppendInstruction(X86.Not, dest, dest);
 		}
@@ -900,7 +900,7 @@ namespace Mosa.Platform.x86.Stages
 
 			for (int i = 0; i < targets.Length - 1; ++i)
 			{
-				context.AppendInstruction(X86.Cmp, null, operand, Operand.CreateConstantSignedInt(TypeSystem, i));
+				context.AppendInstruction(X86.Cmp, null, operand, Operand.CreateConstant(TypeSystem, i));
 				context.AppendInstruction(X86.Branch, ConditionCode.Equal);
 				context.SetBranch(targets[i]);
 			}
