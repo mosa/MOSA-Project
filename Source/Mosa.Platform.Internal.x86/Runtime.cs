@@ -473,11 +473,14 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint GetStackFrame(uint depth)
 		{
-			return GetStackFrame(depth, Native.GetEBP());
+			return GetStackFrame(depth, 0);
 		}
 
 		public static uint GetStackFrame(uint depth, uint ebp)
 		{
+			if (ebp == 0)
+				ebp = Native.GetEBP();
+
 			while (depth > 0)
 			{
 				depth--;
@@ -508,16 +511,46 @@ namespace Mosa.Platform.Internal.x86
 
 		public static MetadataMethodStruct* GetMethodDefinitionFromStackFrameDepth(uint depth)
 		{
-			uint ebp = GetStackFrame(depth + 2);
-			uint address = GetReturnAddressFromStackFrame(ebp);
-			return GetMethodDefinition(address);
+			return GetMethodDefinitionFromStackFrameDepth(depth, 0);
 		}
 
 		public static MetadataMethodStruct* GetMethodDefinitionFromStackFrameDepth(uint depth, uint ebp)
 		{
-			ebp = GetStackFrame(depth + 1, ebp);
+			if (ebp == 0)
+				ebp = Native.GetEBP();
+
+			ebp = GetStackFrame(depth + 0, ebp);
+
 			uint address = GetReturnAddressFromStackFrame(ebp);
 			return GetMethodDefinition(address);
+		}
+
+		public static StringBuffer GetStackTraceEntry(uint depth, uint ebp)
+		{
+			if (ebp == 0)
+				ebp = Native.GetEBP();
+
+			ebp = GetStackFrame(depth + 0, ebp);
+
+			StringBuffer result = new StringBuffer();
+
+			uint address = GetReturnAddressFromStackFrame(ebp);
+			var methodDef = GetMethodDefinition(address);
+
+
+			if (methodDef != null)
+			{
+				var caller = GetMethodDefinitionName(methodDef);
+				if (caller != null)
+				{
+					result.Append(caller);
+				}
+				else
+					result.Append("UNKNOWN ");
+			}
+
+			result.Append(" +X");
+			return result;
 		}
 
 		public static void ExceptionHandler()

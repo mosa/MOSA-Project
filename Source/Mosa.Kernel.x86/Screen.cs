@@ -123,6 +123,19 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
+		/// Writes the string to the screen.
+		/// </summary>
+		/// <param name="value">The string value to write to the screen.</param>
+		unsafe public static void Write(StringBuffer value)
+		{
+			for (int index = 0; index < value.Length; index++)
+			{
+				char chr = value.Chars[index];
+				Write(chr);
+			}
+		}
+
+		/// <summary>
 		/// Goto the top.
 		/// </summary>
 		public static void GotoTop()

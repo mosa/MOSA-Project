@@ -19,24 +19,26 @@ namespace Mosa.CoolWorld.x86
 	{
 		public static ConsoleSession Console;
 
-		private static void main1(){
-			Native.Int(100);
-		}
+		//private static void main1(){
+		//	Native.Int(100);
+		//}
 		private static void main2(){}
+
+		//private static char[] tmpBuffer = new char[100];
 
 		/// <summary>
 		/// Main
 		/// </summary>
 		public static void Main()
 		{
-			//Panic.Error("blubb");
 			Mosa.Kernel.x86.Kernel.Setup();
-
+			//Panic.Error("test");
 			//double i = 10;
 			//double n = 0;
 			//double m = i / n;
+			Panic.Error("blubb");
 
-			Native.Int(100);
+			//main1();
 
 			Console.Clear();
 

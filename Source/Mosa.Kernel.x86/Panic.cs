@@ -241,17 +241,20 @@ namespace Mosa.Kernel.x86
 				Native.Hlt();
 		}
 
-		public unsafe static void DumpStackTrace() {
+		public unsafe static void DumpStackTrace()
+		{
 			DumpStackTrace(0);
 		}
 
-		public unsafe static void DumpStackTrace(uint depth)
+		public unsafe static void DumpStackTrace_(uint depth)
 		{
 			while (true)
 			{
 				MetadataMethodStruct* methodDef;
 				if (ebp == 0)
+				{
 					methodDef = Runtime.GetMethodDefinitionFromStackFrameDepth(depth);
+				}
 				else
 					methodDef = Runtime.GetMethodDefinitionFromStackFrameDepth(depth, ebp);
 
@@ -264,6 +267,20 @@ namespace Mosa.Kernel.x86
 					return;
 
 				Screen.Write(caller);
+				Screen.Row++;
+				Screen.Column = 0;
+
+				depth++;
+			}
+		}
+
+		public unsafe static void DumpStackTrace(uint depth)
+		{
+			while (true)
+			{
+				var entry = Runtime.GetStackTraceEntry(depth, ebp);
+
+				Screen.Write(entry);
 				Screen.Row++;
 				Screen.Column = 0;
 
