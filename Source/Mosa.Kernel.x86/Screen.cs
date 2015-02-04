@@ -214,6 +214,11 @@ namespace Mosa.Kernel.x86
 			Write(val, 10, -1);
 		}
 
+		public static void Write(uint val, string format)
+		{
+			Write(new StringBuffer(val, format));
+		}
+
 		/// <summary>
 		/// Writes the specified value.
 		/// </summary>

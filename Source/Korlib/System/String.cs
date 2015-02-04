@@ -661,7 +661,7 @@ namespace System
 				bool found = true;
 				for (int n = 0; n < value.length; n++)
 				{
-					if (this[i] != value[n])
+					if (this[i + n] != value[n])
 					{
 						found = false;
 						break;

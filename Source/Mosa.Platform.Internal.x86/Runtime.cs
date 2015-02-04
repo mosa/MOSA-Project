@@ -549,9 +549,9 @@ namespace Mosa.Platform.Internal.x86
 			return GetMethodDefinition(address);
 		}
 
-		public static StringBuffer GetStackTraceEntry(uint depth, uint ebp, uint eip)
+		public static SimpleStackTraceEntry GetStackTraceEntry(uint depth, uint ebp, uint eip)
 		{
-			StringBuffer result = new StringBuffer();
+			var entry = new SimpleStackTraceEntry();
 
 			uint address;
 			if (depth == 0 && eip != 0)
@@ -563,8 +563,8 @@ namespace Mosa.Platform.Internal.x86
 
 				if (eip != 0)
 					depth--;
-				else
-					depth += 3;
+				//else
+				//	depth += 3;
 
 				ebp = GetStackFrame(depth, ebp);
 
@@ -574,17 +574,12 @@ namespace Mosa.Platform.Internal.x86
 			var methodDef = GetMethodDefinition(address);
 
 			if (methodDef == null)
-				return result;
+				return entry;
 
-			var caller = GetMethodDefinitionName(methodDef);
-			if (caller == null)
-				return result;
+			entry.MethodName = GetMethodDefinitionName(methodDef);
+			entry.Position = address - GetMethodStartAddress(address);
 
-			var idx = caller.IndexOf(' ') + 1; //Skip return type
-			result.Append(caller, idx);
-			result.Append(" +");
-			result.Append(address - GetMethodStartAddress(address));
-			return result;
+			return entry;
 		}
 
 		public static void ExceptionHandler()
@@ -636,6 +631,48 @@ namespace Mosa.Platform.Internal.x86
 				// no handler in method, go up the stack
 				stackFrame = GetPreviousStackFrame(stackFrame);
 			}
+		}
+	}
+
+	/// <summary>
+	/// Holds information about a single stacktrace entry
+	/// </summary>
+	public struct SimpleStackTraceEntry
+	{
+		public string MethodName;
+		public uint Position;
+
+		/// <summary>
+		/// Returns a human readable text of this entry
+		/// </summary>
+		/// <returns></returns>
+		public StringBuffer ToStringBuffer()
+		{
+			var buf = new StringBuffer();
+			var idx = MethodName.IndexOf(' ') + 1; //Skip return type
+			buf.Append(MethodName, idx);
+			buf.Append(" +");
+			buf.Append(Position);
+			return buf;
+		}
+
+		/// <summary>
+		/// Skip defines, if this entry should be displayed, or not.
+		/// </summary>
+		public bool Skip
+		{
+			get
+			{
+				{
+					if (!Valid) return true;
+					return MethodName.IndexOf("System.Void Mosa.Kernel.x86.Panic::") >= 0;
+				}
+			}
+		}
+
+		public bool Valid
+		{
+			get { return MethodName != null; }
 		}
 	}
 }

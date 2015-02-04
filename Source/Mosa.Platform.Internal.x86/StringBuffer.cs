@@ -11,22 +11,60 @@ using System.Runtime.InteropServices;
 
 namespace Mosa.Platform.Internal.x86
 {
-	[StructLayout(LayoutKind.Explicit, Size = 204)]
+	/// <summary>
+	/// Represents a string as struct, so it can used before memory and runtime initialization.
+	/// Use only where needed. Do not incease the struct size more as needed. A good limit would be the maximum horizontal text resolution.
+	/// </summary>
+	[StructLayout(LayoutKind.Explicit, Size = 132 * 2 + 4)]
 	public struct StringBuffer
 	{
 		[FieldOffset(0)]
 		private int length;
 
-		public const int MaxLength = 100;
-		public const int EntrySize = 204;
+		//[FieldOffset(4)]
+		//private byte isSet; //Compiler crash!
 
-		[FieldOffset(4)]
-		unsafe private char* chars;
+		public const int MaxLength = 132;
+		public const int EntrySize = 132 * 2 + 4;
 
+		//[FieldOffset(4)]
+		//unsafe private char* chars;
+
+		private unsafe char* firstChar()
+		{
+			//Does not work!
+			//return (char*)((uint)(Mosa.Internal.Intrinsic.GetValueTypeAddress(this)) + 4);
+
+			//Compiler crash
+			//fixed (void* ptr = &this)
+			//return (char*)(((uint)ptr) + 4);
+
+			//Workarround
+			uint ui;
+			fixed (void* ptr = &this)
+				ui = (uint)ptr;
+			return (char*)(ui + 4);
+		}
+
+		/// <summary>
+		/// Acces a char at a specific index
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
 		unsafe public char this[int index]
 		{
-			get { return chars[index]; }
-			set { chars[index] = value; }
+			get
+			{
+				if (index >= Length) //TODO: Error
+					return '\x0';
+				return firstChar()[index];
+			}
+			set
+			{
+				if (index >= Length) //TODO: Error
+					return;
+				firstChar()[index] = value;
+			}
 		}
 
 		public void Clear()
@@ -34,14 +72,70 @@ namespace Mosa.Platform.Internal.x86
 			length = 0;
 		}
 
+		/// <summary>
+		/// Overwrite the current value with a new one
+		/// </summary>
+		/// <param name="value"></param>
 		public void Set(string value)
 		{
 			Clear();
+			//if (value == null)
+			//	isSet = 0;
+			//else
 			Append(value);
 		}
 
+		//public bool IsNull
+		//{
+		//	get { return isSet == 0; }
+		//}
+
+		#region Constructor
+
+		public StringBuffer(string value)
+			: this()
+		{
+			Append(value);
+		}
+
+		public StringBuffer(byte value)
+			: this()
+		{
+			Append(value);
+		}
+
+		public StringBuffer(int value)
+			: this()
+		{
+			Append(value);
+		}
+
+		public StringBuffer(int value, string format)
+			: this()
+		{
+			Append(value);
+		}
+
+		public StringBuffer(uint value)
+			: this()
+		{
+			Append(value);
+		}
+
+		public StringBuffer(uint value, string format)
+			: this()
+		{
+			Append(value);
+		}
+
+		#endregion Constructor
+
 		#region Append
 
+		/// <summary>
+		/// Appends a string
+		/// </summary>
+		/// <param name="value"></param>
 		public void Append(string value)
 		{
 			if (value == null)
@@ -93,6 +187,7 @@ namespace Mosa.Platform.Internal.x86
 				//TODO: Error
 				return;
 			}
+			//isSet = 1;
 			length++;
 			this[length - 1] = value;
 		}
@@ -107,14 +202,25 @@ namespace Mosa.Platform.Internal.x86
 			Append((uint)value, true, false);
 		}
 
+		/// <summary>
+		/// Appends a number to the string. Use format to output as Hex.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="format"></param>
 		public void Append(uint value, string format)
 		{
 			Append(value, false, true);
 		}
 
+		/// <summary>
+		/// Appends a number to the string. Use format to output as Hex.
+		/// </summary>
+		/// <param name="value"></param>
+		/// <param name="format"></param>
 		public void Append(int value, string format)
 		{
-			Append((uint)value, true, true);
+			var u = (uint)value;
+			Append(u, true, true);
 		}
 
 		unsafe internal void Append(uint value, bool signed, bool hex)
@@ -144,14 +250,14 @@ namespace Mosa.Platform.Internal.x86
 			}
 			while (temp != 0);
 
-			var firstChar = (this.chars + this.length);
+			var first = (firstChar() + this.length);
 
 			len = count;
 			Length += len;
 
 			if (negative)
 			{
-				*(firstChar + offset) = '-';
+				*(first + offset) = '-';
 				offset++;
 				count--;
 			}
@@ -161,9 +267,9 @@ namespace Mosa.Platform.Internal.x86
 				uint remainder = uvalue % divisor;
 
 				if (remainder < 10)
-					*(firstChar + offset + count - 1 - i) = (char)('0' + remainder);
+					*(first + offset + count - 1 - i) = (char)('0' + remainder);
 				else
-					*(firstChar + offset + count - 1 - i) = (char)('A' + remainder - 10);
+					*(first + offset + count - 1 - i) = (char)('A' + remainder - 10);
 
 				uvalue /= divisor;
 			}
@@ -171,15 +277,14 @@ namespace Mosa.Platform.Internal.x86
 
 		#endregion Append
 
-		public void SetLength(int length)
-		{
-			Length = length;
-		}
-
+		/// <summary>
+		/// The length of the string
+		/// </summary>
+		/// <param name="length"></param>
 		public int Length
 		{
 			get { return length; }
-			private set
+			set
 			{
 				if (value > MaxLength)
 				{
@@ -187,9 +292,15 @@ namespace Mosa.Platform.Internal.x86
 					value = MaxLength;
 				}
 				length = value;
+				//isSet = 1;
 			}
 		}
 
+		/// <summary>
+		/// Gets the index of a specific value
+		/// </summary>
+		/// <param name="value"></param>
+		/// <returns></returns>
 		public int IndexOf(string value)
 		{
 			if (this.length == 0)
@@ -205,7 +316,7 @@ namespace Mosa.Platform.Internal.x86
 				bool found = true;
 				for (int n = 0; n < value.Length; n++)
 				{
-					if (this[i] != value[n])
+					if (this[i + n] != value[n])
 					{
 						found = false;
 						break;

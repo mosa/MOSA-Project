@@ -217,7 +217,7 @@ namespace Mosa.Kernel.x86
 			PrepareScreen("Debug Message");
 			Screen.Color = Colors.Red;
 			Screen.Write(" Number: 0x");
-			Screen.Write(message.ToString("X"));
+			Screen.Write(message, "X");
 			Halt();
 		}
 
@@ -233,9 +233,23 @@ namespace Mosa.Kernel.x86
 			Halt();
 		}
 
+		// TODO: Try to reduce redundancy. This is not simple, because delegates ans dynamic strings are not allowed.
+		// Onother way idea is to increate the size of the StringBuffer and call Error(new StringBuffer(message))
+		public static void Error(StringBuffer message)
+		{
+			PrepareScreen("Kernel Panic");
+			Screen.Color = Colors.Red;
+			Screen.Write(message);
+			Screen.Row += 2;
+			Screen.Column = 0;
+			DumpStackTrace();
+			Screen.Color = Colors.LightGray;
+			Halt();
+		}
+
 		public static void Error(uint error)
 		{
-			Error(error.ToString());
+			Error(new StringBuffer(error));
 		}
 
 		private static void Halt()
@@ -255,11 +269,14 @@ namespace Mosa.Kernel.x86
 			while (true)
 			{
 				var entry = Runtime.GetStackTraceEntry(depth, ebp, eip);
-				if (entry.Length == 0) return;
+				if (!entry.Valid) return;
 
-				Screen.Write(entry);
-				Screen.Row++;
-				Screen.Column = 0;
+				if (!entry.Skip)
+				{
+					Screen.Write(entry.ToStringBuffer());
+					Screen.Row++;
+					Screen.Column = 0;
+				}
 
 				depth++;
 			}
