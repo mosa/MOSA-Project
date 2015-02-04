@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 
 			if (context.OperandCount == 1)
 			{
-				context.SetInstruction(IRInstruction.Load, size, context.Result, context.Operand1, Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 0));
+				context.SetInstruction(IRInstruction.Load, size, context.Result, context.Operand1, Operand.CreateConstant(methodCompiler.TypeSystem, 0));
 			}
 			else if (context.OperandCount == 2)
 			{

@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						ctx.SetInstruction(IRInstruction.KillAll);
 						ctx.AppendInstruction(IRInstruction.Move, exceptionRegister, nullOperand);
-						ctx.AppendInstruction(IRInstruction.Move, finallyReturnBlockRegister, Operand.CreateConstantSignedInt(TypeSystem, finallyReturn));
+						ctx.AppendInstruction(IRInstruction.Move, finallyReturnBlockRegister, Operand.CreateConstant(TypeSystem, finallyReturn));
 						ctx.AppendInstruction(IRInstruction.Jmp);
 						ctx.SetBranch(target);
 					}
@@ -126,14 +126,14 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							var newBlocks = CreateNewBlocksWithContexts(targets.Length - 1);
 
-							ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstantSignedInt(TypeSystem, targets[0]));
+							ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[0]));
 							ctx.SetBranch(targets[0]);
 							ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].BasicBlock);
 							LinkBlocks(ctx, BasicBlocks.GetByLabel(targets[0]), newBlocks[0].BasicBlock);
 
 							for (int b = 1; b < targets.Length - 2; b++)
 							{
-								newBlocks[b - 1].AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstantSignedInt(TypeSystem, targets[b]));
+								newBlocks[b - 1].AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[b]));
 								newBlocks[b - 1].SetBranch(targets[b]);
 								newBlocks[b - 1].AppendInstruction(IRInstruction.Jmp, newBlocks[b + 1].BasicBlock);
 								newBlocks[b - 1].SetBranch(newBlocks[b + 1].BasicBlock);

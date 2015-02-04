@@ -121,7 +121,7 @@ namespace Mosa.Platform.x86.Stages
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ebp, 0), zero);
 
 			// store multiboot registers eax and ebx at 0x200000 and 0x200004 respectively
-			ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstantSignedInt(TypeSystem, 0x200000));
+			ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstant(TypeSystem, 0x200000));
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 0), eax);
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 4), ebx);
 

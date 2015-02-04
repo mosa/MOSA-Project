@@ -743,7 +743,7 @@ namespace Mosa.Compiler.Framework.Stages
 					AddOperandUsageToWorkList(context);
 					if (trace.Active) trace.Log("*** ArithmeticSimplificationMultiplication");
 					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-					context.SetInstruction(IRInstruction.ShiftLeft, result, op1, Operand.CreateConstantUnsignedInt(TypeSystem, shift));
+					context.SetInstruction(IRInstruction.ShiftLeft, result, op1, Operand.CreateConstant(TypeSystem, (int)shift));
 					arithmeticSimplificationMultiplicationCount++;
 					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 					return;
@@ -807,7 +807,7 @@ namespace Mosa.Compiler.Framework.Stages
 					AddOperandUsageToWorkList(context);
 					if (trace.Active) trace.Log("*** ArithmeticSimplificationDivision");
 					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-					context.SetInstruction(IRInstruction.ShiftRight, result, op1, Operand.CreateConstantUnsignedInt(TypeSystem, shift));
+					context.SetInstruction(IRInstruction.ShiftRight, result, op1, Operand.CreateConstant(TypeSystem, (int)shift));
 					arithmeticSimplificationDivisionCount++;
 					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 					return;
@@ -1856,7 +1856,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (trace.Active) trace.Log("*** NormalizeConstantTo32Bit");
 
 					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-					context.Operand1 = Operand.CreateConstantUnsignedInt(TypeSystem, (uint)(context.Operand1.ConstantSignedInteger & uint.MaxValue));
+					context.Operand1 = Operand.CreateConstant(TypeSystem, (int)(context.Operand1.ConstantUnsignedInteger & uint.MaxValue));
 					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				}
 				if (context.OperandCount >= 2 && context.Operand2.IsConstant && context.Operand2.IsLong)
@@ -1864,7 +1864,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (trace.Active) trace.Log("*** NormalizeConstantTo32Bit");
 
 					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-					context.Operand2 = Operand.CreateConstantUnsignedInt(TypeSystem, (uint)(context.Operand2.ConstantSignedInteger & uint.MaxValue));
+					context.Operand2 = Operand.CreateConstant(TypeSystem, (int)(context.Operand2.ConstantUnsignedInteger & uint.MaxValue));
 					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				}
 			}

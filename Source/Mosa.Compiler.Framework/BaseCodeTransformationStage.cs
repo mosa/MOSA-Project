@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework
 		{
 			base.Setup();
 
-			ConstantZero = Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, 0);
+			ConstantZero = Operand.CreateConstant(MethodCompiler.TypeSystem, 0);
 		}
 
 		protected override void Run()
