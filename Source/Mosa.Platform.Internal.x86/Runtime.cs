@@ -10,9 +10,9 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
+using Mosa.Internal;
 using System;
 using System.Collections.Generic;
-using Mosa.Internal;
 
 namespace Mosa.Platform.Internal.x86
 {
@@ -99,7 +99,6 @@ namespace Mosa.Platform.Internal.x86
 		}
 
 		#endregion Metadata
-
 
 		public static bool IsTypeInInheritanceChain(MetadataTypeStruct* typeDefinition, MetadataTypeStruct* chain)
 		{
@@ -550,16 +549,28 @@ namespace Mosa.Platform.Internal.x86
 			return GetMethodDefinition(address);
 		}
 
-		public static StringBuffer GetStackTraceEntry(uint depth, uint ebp)
+		public static StringBuffer GetStackTraceEntry(uint depth, uint ebp, uint eip)
 		{
-			if (ebp == 0)
-				ebp = Native.GetEBP();
-
-			ebp = GetStackFrame(depth + 0, ebp);
-
 			StringBuffer result = new StringBuffer();
 
-			uint address = GetReturnAddressFromStackFrame(ebp);
+			uint address;
+			if (depth == 0 && eip != 0)
+				address = eip;
+			else
+			{
+				if (ebp == 0)
+					ebp = Native.GetEBP();
+
+				if (eip != 0)
+					depth--;
+				else
+					depth += 3;
+
+				ebp = GetStackFrame(depth, ebp);
+
+				address = GetReturnAddressFromStackFrame(ebp);
+			}
+
 			var methodDef = GetMethodDefinition(address);
 
 			if (methodDef == null)

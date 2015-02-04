@@ -54,6 +54,7 @@ namespace Mosa.Kernel.x86
 		#region Beautiful Panic
 
 		private static bool firstError = true;
+
 		private static void PrepareScreen(string title)
 		{
 			IDT.SetInterruptHandler(null);
@@ -78,12 +79,14 @@ namespace Mosa.Kernel.x86
 			Error("Invalid operation");
 		}
 
-		internal static void SetStackPointer(uint ebp)
+		internal static void SetStackPointer(uint ebp, uint eip)
 		{
 			Panic.ebp = ebp;
+			Panic.eip = eip;
 		}
 
 		private static uint ebp = 0;
+		private static uint eip = 0;
 
 		public static void DumpMemory(uint address)
 		{
@@ -230,12 +233,6 @@ namespace Mosa.Kernel.x86
 			Halt();
 		}
 
-		//public static void ErrorWithEBP(string message, uint ebp)
-		//{
-		//	SetStackPointer(ebp);
-		//	Error(message);
-		//}
-
 		public static void Error(uint error)
 		{
 			Error(error.ToString());
@@ -253,39 +250,11 @@ namespace Mosa.Kernel.x86
 			DumpStackTrace(0);
 		}
 
-		public unsafe static void DumpStackTrace_(uint depth)
-		{
-			while (true)
-			{
-				MetadataMethodStruct* methodDef;
-				if (ebp == 0)
-				{
-					methodDef = Runtime.GetMethodDefinitionFromStackFrameDepth(depth);
-				}
-				else
-					methodDef = Runtime.GetMethodDefinitionFromStackFrameDepth(depth, ebp);
-
-				if (methodDef == null)
-					return;
-
-				string caller = Runtime.GetMethodDefinitionName(methodDef);
-
-				if (caller == null)
-					return;
-
-				Screen.Write(caller);
-				Screen.Row++;
-				Screen.Column = 0;
-
-				depth++;
-			}
-		}
-
 		public unsafe static void DumpStackTrace(uint depth)
 		{
 			while (true)
 			{
-				var entry = Runtime.GetStackTraceEntry(depth, ebp);
+				var entry = Runtime.GetStackTraceEntry(depth, ebp, eip);
 				if (entry.Length == 0) return;
 
 				Screen.Write(entry);

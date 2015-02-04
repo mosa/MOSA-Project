@@ -19,23 +19,12 @@ namespace Mosa.CoolWorld.x86
 	{
 		public static ConsoleSession Console;
 
-		private static void ExceptionTest()
-		{
-			//Native.Int(6);
-			Panic.Error("test");
-		}
-		private static void main2(){}
-
-		//private static char[] tmpBuffer = new char[100];
-
 		/// <summary>
 		/// Main
 		/// </summary>
 		public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
-
-			ExceptionTest();
 
 			Console.Clear();
 

@@ -11,14 +11,14 @@ using System.Runtime.InteropServices;
 
 namespace Mosa.Platform.Internal.x86
 {
-	[StructLayout(LayoutKind.Explicit, Size = 208)]
+	[StructLayout(LayoutKind.Explicit, Size = 204)]
 	public struct StringBuffer
 	{
 		[FieldOffset(0)]
 		private int length;
 
 		public const int MaxLength = 100;
-		public const int EntrySize = 208;
+		public const int EntrySize = 204;
 
 		[FieldOffset(4)]
 		unsafe private char* chars;
@@ -64,8 +64,6 @@ namespace Mosa.Platform.Internal.x86
 				Append(value[i + start]);
 		}
 
-
-
 		public void Append(StringBuffer value)
 		{
 			if (value.length == 0)
@@ -87,7 +85,6 @@ namespace Mosa.Platform.Internal.x86
 			for (var i = 0; i < length; i++)
 				Append(value[i + start]);
 		}
-
 
 		unsafe public void Append(char value)
 		{
@@ -170,10 +167,9 @@ namespace Mosa.Platform.Internal.x86
 
 				uvalue /= divisor;
 			}
-
 		}
 
-		#endregion
+		#endregion Append
 
 		public void SetLength(int length)
 		{
@@ -207,7 +203,7 @@ namespace Mosa.Platform.Internal.x86
 			for (int i = startIndex; i < count; i++)
 			{
 				bool found = true;
-				for (int n = 0; n < value.length; n++)
+				for (int n = 0; n < value.Length; n++)
 				{
 					if (this[i] != value[n])
 					{
@@ -221,6 +217,5 @@ namespace Mosa.Platform.Internal.x86
 
 			return -1;
 		}
-		
 	}
 }

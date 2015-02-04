@@ -362,55 +362,55 @@ namespace Mosa.Kernel.x86
 		/// <param name="eax">The eax.</param>
 		/// <param name="interrupt">The interrupt.</param>
 		/// <param name="errorCode">The error code.</param>
-		private static void ProcessInterrupt(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, uint interrupt, uint errorCode)
+		private static void ProcessInterrupt(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, uint interrupt, uint errorCode, uint eip, uint cs, uint eflags)
 		{
 			DebugClient.Process();
 
 			switch (interrupt)
 			{
 				case 0:
-					Error(ebp, "Divide Error");
+					Error(ebp, eip, "Divide Error");
 					break;
 
 				case 4:
-					Error(ebp, "Arithmetic Overflow Exception");
+					Error(ebp, eip, "Arithmetic Overflow Exception");
 					break;
 
 				case 5:
-					Error(ebp, "Bound Check Error");
+					Error(ebp, eip, "Bound Check Error");
 					break;
 
 				case 6:
-					Error(ebp, "Invalid Opcode");
+					//Error(ebp, eip, "Invalid Opcode");
 					break;
 
 				case 7:
-					Error(ebp, "Coprocessor Not Available");
+					Error(ebp, eip, "Coprocessor Not Available");
 					break;
 
 				case 8:
 					//TODO: Analyze the double fault
-					Error(ebp, "Double Fault");
+					Error(ebp, eip, "Double Fault");
 					break;
 
 				case 9:
-					Error(ebp, "Coprocessor Segment Overrun");
+					Error(ebp, eip, "Coprocessor Segment Overrun");
 					break;
 
 				case 10:
-					Error(ebp, "Invalid TSS");
+					Error(ebp, eip, "Invalid TSS");
 					break;
 
 				case 11:
-					Error(ebp, "Segment Not Present");
+					Error(ebp, eip, "Segment Not Present");
 					break;
 
 				case 12:
-					Error(ebp, "Stack Exception");
+					Error(ebp, eip, "Stack Exception");
 					break;
 
 				case 13:
-					Error(ebp, "General Proection Exception");
+					Error(ebp, eip, "General Proection Exception");
 					break;
 
 				case 14:
@@ -419,7 +419,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case 16:
-					Error(ebp, "Coprocessor Error");
+					Error(ebp, eip, "Coprocessor Error");
 					break;
 
 				default:
@@ -431,11 +431,10 @@ namespace Mosa.Kernel.x86
 			PIC.SendEndOfInterrupt(interrupt);
 		}
 
-		private static void Error(uint ebp, string message)
+		private static void Error(uint ebp, uint eip, string message)
 		{
-			Panic.SetStackPointer(ebp);
+			Panic.SetStackPointer(ebp, eip);
 			Panic.Error(message);
 		}
-
 	}
 }
