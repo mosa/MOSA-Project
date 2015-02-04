@@ -44,15 +44,15 @@ namespace Mosa.Platform.x86.Stages
 
 				if (source.IsShort || source.IsChar)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x0000ffff));
-					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x00010000));
-					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x00010000));
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x0000ffff));
+					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00010000));
+					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00010000));
 				}
 				else if (source.IsByte || source.IsBoolean)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x000000ff));
-					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x00000100));
-					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstantUnsignedInt(MethodCompiler.TypeSystem, (uint)0x00000100));
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x000000ff));
+					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00000100));
+					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00000100));
 				}
 			}
 		}
@@ -82,11 +82,11 @@ namespace Mosa.Platform.x86.Stages
 
 				if (dest.IsShort || dest.IsChar)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)0xffff));
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(TypeSystem, 0xffff));
 				}
 				else if (dest.IsByte || dest.IsBoolean)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstantUnsignedInt(TypeSystem, (uint)0xff));
+					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(TypeSystem, 0xff));
 				}
 			}
 		}
@@ -196,7 +196,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
 
 			// NOTE: Other option is to use Movzx after IN instruction
-			context.InsertBefore().SetInstruction(X86.Mov, context.Result, Operand.CreateConstantSignedInt(TypeSystem, 0));
+			context.InsertBefore().SetInstruction(X86.Mov, context.Result, Operand.CreateConstant(TypeSystem, 0));
 		}
 
 		#endregion IX86Visitor

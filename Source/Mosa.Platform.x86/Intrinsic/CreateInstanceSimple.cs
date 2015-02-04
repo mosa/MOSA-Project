@@ -27,7 +27,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var result = context.Result;
 			var esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.Pointer, GeneralPurposeRegister.ESP);
 			var edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.Pointer, GeneralPurposeRegister.EDX);
-			var espMovment = Operand.CreateConstantSignedInt(methodCompiler.TypeSystem, 4);
+			var espMovment = Operand.CreateConstant(methodCompiler.TypeSystem, 4);
 
 			context.SetInstruction(X86.Sub, esp, esp, espMovment);
 			context.AppendInstruction(X86.Mov, edx, esp);
