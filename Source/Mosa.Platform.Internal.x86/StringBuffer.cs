@@ -113,7 +113,7 @@ namespace Mosa.Platform.Internal.x86
 		public StringBuffer(int value, string format)
 			: this()
 		{
-			Append(value);
+			Append(value, format);
 		}
 
 		public StringBuffer(uint value)
@@ -125,7 +125,7 @@ namespace Mosa.Platform.Internal.x86
 		public StringBuffer(uint value, string format)
 			: this()
 		{
-			Append(value);
+			Append(value, format);
 		}
 
 		#endregion Constructor

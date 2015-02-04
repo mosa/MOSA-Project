@@ -106,7 +106,7 @@ namespace Mosa.Kernel.x86
 				Screen.Row++;
 				Screen.Column = 0;
 
-				WriteHex(word.ToString("X"), Colors.Brown);
+				WriteHex(word, 8, Colors.Brown);
 				Screen.Write("  ");
 
 				const uint dwordsPerRow = 4;
@@ -116,7 +116,7 @@ namespace Mosa.Kernel.x86
 					{
 						var number = Native.Get8(word + ((4 - 1) - x2));
 						//var number = Native.Get8(word + x2);
-						WriteHex(number.ToString("X"), 2, number == 0);
+						WriteHex(number, 2, Colors.LightGray);
 						Screen.Write(' ');
 					}
 					if (x == 1 || x == 3)
@@ -176,24 +176,27 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		private static void WriteHex(string hex, byte digits, bool zero)
+		private static void WriteHex(uint num, byte digits, byte color)
 		{
-			if (!zero)
+			var oldColor = Screen.Color;
+			Screen.Color = color;
+
+			if (num == 0)
 				Screen.Color = Colors.LightGray;
+
+			var hex = new StringBuffer(num, "X");
 
 			for (var i = 0; i < digits - hex.Length; i++)
 				Screen.Write('0');
 			Screen.Write(hex);
 
-			Screen.Color = Colors.DarkGray;
+			//Screen.Color = Colors.DarkGray;
+			Screen.Color = oldColor;
 		}
 
-		private static void WriteHex(string hex, byte color)
+		private static void WriteHex(uint num, byte color)
 		{
-			var oldColor = Screen.Color;
-			Screen.Color = color;
-			Screen.Write(hex);
-			Screen.Color = oldColor;
+			WriteHex(num, 0, color);
 		}
 
 		public static void Message(string message)
