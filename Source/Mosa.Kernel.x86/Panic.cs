@@ -71,6 +71,13 @@ namespace Mosa.Kernel.x86
 			Error("Invalid operation");
 		}
 
+		internal static void SetStackPointer(uint ebp)
+		{
+			Panic.ebp = ebp;
+		}
+
+		private static uint ebp = 0;
+
 		public static void DumpMemory(uint address)
 		{
 			PrepareScreen("Memory Dump");
@@ -216,6 +223,12 @@ namespace Mosa.Kernel.x86
 			Halt();
 		}
 
+		//public static void ErrorWithEBP(string message, uint ebp)
+		//{
+		//	SetStackPointer(ebp);
+		//	Error(message);
+		//}
+
 		public static void Error(uint error)
 		{
 			Error(error.ToString());
@@ -228,13 +241,19 @@ namespace Mosa.Kernel.x86
 				Native.Hlt();
 		}
 
-		public unsafe static void DumpStackTrace()
-		{
-			uint depth = 0;
+		public unsafe static void DumpStackTrace() {
+			DumpStackTrace(0);
+		}
 
+		public unsafe static void DumpStackTrace(uint depth)
+		{
 			while (true)
 			{
-				var methodDef = Runtime.GetMethodDefinitionFromStackFrameDepth(depth);
+				MetadataMethodStruct* methodDef;
+				if (ebp == 0)
+					methodDef = Runtime.GetMethodDefinitionFromStackFrameDepth(depth);
+				else
+					methodDef = Runtime.GetMethodDefinitionFromStackFrameDepth(depth, ebp);
 
 				if (methodDef == null)
 					return;

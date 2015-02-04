@@ -373,44 +373,44 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case 4:
-					Panic.Error("Arithmetic Overflow Exception");
+					Error(ebp, "Arithmetic Overflow Exception");
 					break;
 
 				case 5:
-					Panic.Error("Bound Check Error");
+					Error(ebp, "Bound Check Error");
 					break;
 
 				case 6:
-					Panic.Error("Invalid Opcode");
+					Error(ebp, "Invalid Opcode");
 					break;
 
 				case 7:
-					Panic.Error("Coprocessor Not Available");
+					Error(ebp, "Coprocessor Not Available");
 					break;
 
 				case 8:
 					//TODO: Analyze the double fault
-					Panic.Error("Double Fault");
+					Error(ebp, "Double Fault");
 					break;
 
 				case 9:
-					Panic.Error("Coprocessor Segment Overrun");
+					Error(ebp, "Coprocessor Segment Overrun");
 					break;
 
 				case 10:
-					Panic.Error("Invalid TSS");
+					Error(ebp, "Invalid TSS");
 					break;
 
 				case 11:
-					Panic.Error("Segment Not Present");
+					Error(ebp, "Segment Not Present");
 					break;
 
 				case 12:
-					Panic.Error("Stack Exception");
+					Error(ebp, "Stack Exception");
 					break;
 
 				case 13:
-					Panic.Error("General Proection Exception");
+					Error(ebp, "General Proection Exception");
 					break;
 
 				case 14:
@@ -419,7 +419,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case 16:
-					Panic.Error("Coprocessor Error");
+					Error(ebp, "Coprocessor Error");
 					break;
 
 				default:
@@ -430,5 +430,12 @@ namespace Mosa.Kernel.x86
 
 			PIC.SendEndOfInterrupt(interrupt);
 		}
+
+		private static void Error(uint ebp, string message)
+		{
+			Panic.SetStackPointer(ebp);
+			Panic.Error(message);
+		}
+
 	}
 }

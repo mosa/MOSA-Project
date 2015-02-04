@@ -473,8 +473,11 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint GetStackFrame(uint depth)
 		{
-			uint ebp = Native.GetEBP();
+			return GetStackFrame(depth, Native.GetEBP());
+		}
 
+		public static uint GetStackFrame(uint depth, uint ebp)
+		{
 			while (depth > 0)
 			{
 				depth--;
@@ -505,10 +508,15 @@ namespace Mosa.Platform.Internal.x86
 
 		public static MetadataMethodStruct* GetMethodDefinitionFromStackFrameDepth(uint depth)
 		{
-			uint ebp = GetStackFrame(depth + 1);
-
+			uint ebp = GetStackFrame(depth + 2);
 			uint address = GetReturnAddressFromStackFrame(ebp);
+			return GetMethodDefinition(address);
+		}
 
+		public static MetadataMethodStruct* GetMethodDefinitionFromStackFrameDepth(uint depth, uint ebp)
+		{
+			ebp = GetStackFrame(depth + 1, ebp);
+			uint address = GetReturnAddressFromStackFrame(ebp);
 			return GetMethodDefinition(address);
 		}
 

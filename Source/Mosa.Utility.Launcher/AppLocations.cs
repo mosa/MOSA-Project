@@ -125,7 +125,9 @@ namespace Mosa.Utility.Launcher
 					new string[] { "vmplayer.exe", "vmplayer" },
 					new string[] {
 					CombineParameterAndDirectory("ProgramFiles",@"VMware\VMware Player"),
+					CombineParameterAndDirectory("ProgramFiles",@"VMware\VMware Workstation"),
 					CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Player"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Workstation"),
                     @"/bin"
 				}
 				);

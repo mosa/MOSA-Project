@@ -19,14 +19,24 @@ namespace Mosa.CoolWorld.x86
 	{
 		public static ConsoleSession Console;
 
+		private static void main1(){
+			Native.Int(100);
+		}
+		private static void main2(){}
+
 		/// <summary>
 		/// Main
 		/// </summary>
 		public static void Main()
 		{
+			//Panic.Error("blubb");
 			Mosa.Kernel.x86.Kernel.Setup();
 
-			Console = ConsoleManager.Controller.Boot;
+			//double i = 10;
+			//double n = 0;
+			//double m = i / n;
+
+			Native.Int(100);
 
 			Console.Clear();
 
