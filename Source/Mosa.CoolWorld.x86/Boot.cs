@@ -26,6 +26,7 @@ namespace Mosa.CoolWorld.x86
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
 
+			Console = ConsoleManager.Controller.Boot;
 			Console.Clear();
 
 			IDT.SetInterruptHandler(ProcessInterrupt);
