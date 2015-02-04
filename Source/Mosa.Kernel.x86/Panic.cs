@@ -53,6 +53,7 @@ namespace Mosa.Kernel.x86
 
 		#region Beautiful Panic
 
+		private static bool firstError = true;
 		private static void PrepareScreen(string title)
 		{
 			IDT.SetInterruptHandler(null);
@@ -62,6 +63,12 @@ namespace Mosa.Kernel.x86
 			Screen.Color = Colors.LightGray;
 			Screen.Write("*** ");
 			Screen.Write(title);
+
+			if (firstError)
+				firstError = false;
+			else
+				Screen.Write("* (multiple)");
+
 			Screen.Write(" ***");
 			Screen.Goto(3, 1);
 		}
@@ -279,6 +286,7 @@ namespace Mosa.Kernel.x86
 			while (true)
 			{
 				var entry = Runtime.GetStackTraceEntry(depth, ebp);
+				if (entry.Length == 0) return;
 
 				Screen.Write(entry);
 				Screen.Row++;

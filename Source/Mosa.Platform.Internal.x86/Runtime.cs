@@ -330,6 +330,31 @@ namespace Mosa.Platform.Internal.x86
 			return null;
 		}
 
+		public static uint GetMethodStartAddress(uint address)
+		{
+			uint table = Native.GetMethodLookupTable();
+			uint entries = Intrinsic.Load32(table);
+
+			table = table + 4;
+
+			while (entries > 0)
+			{
+				uint addr = Intrinsic.Load32(table);
+				uint size = Intrinsic.Load32(table, NativeIntSize);
+
+				if (address >= addr && address < addr + size)
+				{
+					return addr;
+				}
+
+				table = table + (NativeIntSize * 3);
+
+				entries--;
+			}
+
+			return 0;
+		}
+
 		public static MetadataMethodStruct* GetMethodDefinitionViaMethodExceptionLookup(uint address)
 		{
 			uint table = Native.GetMethodExceptionLookupTable();
@@ -537,19 +562,17 @@ namespace Mosa.Platform.Internal.x86
 			uint address = GetReturnAddressFromStackFrame(ebp);
 			var methodDef = GetMethodDefinition(address);
 
+			if (methodDef == null)
+				return result;
 
-			if (methodDef != null)
-			{
-				var caller = GetMethodDefinitionName(methodDef);
-				if (caller != null)
-				{
-					result.Append(caller);
-				}
-				else
-					result.Append("UNKNOWN ");
-			}
+			var caller = GetMethodDefinitionName(methodDef);
+			if (caller == null)
+				return result;
 
-			result.Append(" +X");
+			var idx = caller.IndexOf(' ') + 1; //Skip return type
+			result.Append(caller, idx);
+			result.Append(" +");
+			result.Append(address - GetMethodStartAddress(address));
 			return result;
 		}
 

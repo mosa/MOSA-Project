@@ -369,7 +369,7 @@ namespace Mosa.Kernel.x86
 			switch (interrupt)
 			{
 				case 0:
-					Panic.Error("Divide Error");
+					Error(ebp, "Divide Error");
 					break;
 
 				case 4:
