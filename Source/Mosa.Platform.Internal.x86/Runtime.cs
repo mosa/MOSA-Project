@@ -10,9 +10,9 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
+using Mosa.Internal;
 using System;
 using System.Collections.Generic;
-using Mosa.Internal;
 
 namespace Mosa.Platform.Internal.x86
 {
@@ -99,7 +99,6 @@ namespace Mosa.Platform.Internal.x86
 		}
 
 		#endregion Metadata
-
 
 		public static bool IsTypeInInheritanceChain(MetadataTypeStruct* typeDefinition, MetadataTypeStruct* chain)
 		{
@@ -473,7 +472,13 @@ namespace Mosa.Platform.Internal.x86
 
 		public static uint GetStackFrame(uint depth)
 		{
-			uint ebp = Native.GetEBP();
+			return GetStackFrame(depth, 0);
+		}
+
+		public static uint GetStackFrame(uint depth, uint ebp)
+		{
+			if (ebp == 0)
+				ebp = Native.GetEBP();
 
 			while (depth > 0)
 			{
@@ -505,11 +510,51 @@ namespace Mosa.Platform.Internal.x86
 
 		public static MetadataMethodStruct* GetMethodDefinitionFromStackFrameDepth(uint depth)
 		{
-			uint ebp = GetStackFrame(depth + 1);
+			return GetMethodDefinitionFromStackFrameDepth(depth, 0);
+		}
+
+		public static MetadataMethodStruct* GetMethodDefinitionFromStackFrameDepth(uint depth, uint ebp)
+		{
+			if (ebp == 0)
+				ebp = Native.GetEBP();
+
+			ebp = GetStackFrame(depth + 0, ebp);
 
 			uint address = GetReturnAddressFromStackFrame(ebp);
-
 			return GetMethodDefinition(address);
+		}
+
+		public static SimpleStackTraceEntry GetStackTraceEntry(uint depth, uint ebp, uint eip)
+		{
+			var entry = new SimpleStackTraceEntry();
+
+			uint address;
+			if (depth == 0 && eip != 0)
+				address = eip;
+			else
+			{
+				if (ebp == 0)
+					ebp = Native.GetEBP();
+
+				if (eip != 0)
+					depth--;
+				//else
+				//	depth += 3;
+
+				ebp = GetStackFrame(depth, ebp);
+
+				address = GetReturnAddressFromStackFrame(ebp);
+			}
+
+			var methodDef = GetMethodDefinition(address);
+
+			if (methodDef == null)
+				return entry;
+
+			entry.MethodDefinition = methodDef;
+			entry.Offset = address - (uint)(methodDef->Method);
+
+			return entry;
 		}
 
 		public static void ExceptionHandler()
@@ -561,6 +606,64 @@ namespace Mosa.Platform.Internal.x86
 				// no handler in method, go up the stack
 				stackFrame = GetPreviousStackFrame(stackFrame);
 			}
+		}
+	}
+
+	/// <summary>
+	/// Holds information about a single stacktrace entry
+	/// </summary>
+	public struct SimpleStackTraceEntry
+	{
+		private string methodName;
+		public unsafe MetadataMethodStruct* MethodDefinition;
+		public uint Offset;
+
+		unsafe public string MethodName
+		{
+			get
+			{
+				if (methodName == null)
+					methodName = Runtime.GetMethodDefinitionName(MethodDefinition);
+				return methodName;
+			}
+		}
+
+		/// <summary>
+		/// Returns a human readable text of this entry
+		/// </summary>
+		/// <returns></returns>
+		unsafe public StringBuffer ToStringBuffer()
+		{
+			var buf = new StringBuffer();
+
+			buf.Append("0x");
+			buf.Append((uint)MethodDefinition->Method, "X");
+			buf.Append("+0x");
+			buf.Append(Offset, "X");
+			buf.Append(" ");
+
+			var idx = MethodName.IndexOf(' ') + 1; //Skip return type
+			buf.Append(MethodName, idx);
+			return buf;
+		}
+
+		/// <summary>
+		/// Skip defines, if this entry should be displayed, or not.
+		/// </summary>
+		public bool Skip
+		{
+			get
+			{
+				{
+					if (!Valid) return true;
+					return MethodName.IndexOf("System.Void Mosa.Kernel.x86.Panic::") >= 0;
+				}
+			}
+		}
+
+		public bool Valid
+		{
+			get { return MethodName != null; }
 		}
 	}
 }
