@@ -51,8 +51,6 @@ namespace Mosa.Kernel.x86
 				Native.Hlt();
 		}
 
-		#region Beautiful Panic
-
 		private static bool firstError = true;
 
 		private static void PrepareScreen(string title)
@@ -68,7 +66,7 @@ namespace Mosa.Kernel.x86
 			if (firstError)
 				firstError = false;
 			else
-				Screen.Write("* (multiple)");
+				Screen.Write(" (multiple)");
 
 			Screen.Write(" ***");
 			Screen.Goto(3, 1);
@@ -79,24 +77,15 @@ namespace Mosa.Kernel.x86
 			Error("Invalid operation");
 		}
 
-		internal static void SetStackPointer(uint ebp, uint eip)
-		{
-			Panic.ebp = ebp;
-			Panic.eip = eip;
-		}
-
-		private static uint ebp = 0;
-		private static uint eip = 0;
+		#region DumpMemory
 
 		public static void DumpMemory(uint address)
 		{
 			PrepareScreen("Memory Dump");
 			Screen.Column = 0;
-			//Screen.Write("Address   dword        dword         dword       dword      ascii");
 			Screen.Write("ADDRESS  ");
 			Screen.Color = Colors.Brown;
 			Screen.Write("03 02 01 00  07 06 05 04   11 10 09 08  15 14 13 12   ASCII");
-			//Screen.Write(address.ToString("X"));
 
 			var word = address;
 			var rowAddress = address;
@@ -115,7 +104,6 @@ namespace Mosa.Kernel.x86
 					for (uint x2 = 0; x2 < 4; x2++)
 					{
 						var number = Native.Get8(word + ((4 - 1) - x2));
-						//var number = Native.Get8(word + x2);
 						WriteHex(number, 2, Colors.LightGray);
 						Screen.Write(' ');
 					}
@@ -176,6 +164,11 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
+		private static void WriteHex(uint num, byte color)
+		{
+			WriteHex(num, 0, color);
+		}
+
 		private static void WriteHex(uint num, byte digits, byte color)
 		{
 			var oldColor = Screen.Color;
@@ -190,64 +183,63 @@ namespace Mosa.Kernel.x86
 				Screen.Write('0');
 			Screen.Write(hex);
 
-			//Screen.Color = Colors.DarkGray;
 			Screen.Color = oldColor;
 		}
 
-		private static void WriteHex(uint num, byte color)
+		#endregion DumpMemory
+
+		#region Message
+
+		public static void BeginMessage()
 		{
-			WriteHex(num, 0, color);
+			PrepareScreen("Debug Message");
+			Screen.Color = Colors.Red;
 		}
 
 		public static void Message(string message)
 		{
-			PrepareScreen("Debug Message");
-			Screen.Color = Colors.Red;
+			BeginMessage();
 			Screen.Write(message);
 			Halt();
 		}
 
 		public static void Message(char message)
 		{
-			PrepareScreen("Debug Message");
-			Screen.Color = Colors.Red;
+			BeginMessage();
 			Screen.Write(message);
 			Halt();
 		}
 
 		public static void Message(uint message)
 		{
-			PrepareScreen("Debug Message");
-			Screen.Color = Colors.Red;
+			BeginMessage();
 			Screen.Write(" Number: 0x");
 			Screen.Write(message, "X");
 			Halt();
 		}
 
-		public static void Error(string message)
+		#endregion Message
+
+		#region Error
+
+		private static void BeginError()
 		{
 			PrepareScreen("Kernel Panic");
 			Screen.Color = Colors.Red;
-			Screen.Write(message);
-			Screen.Row += 2;
-			Screen.Column = 0;
-			DumpStackTrace();
-			Screen.Color = Colors.LightGray;
-			Halt();
 		}
 
-		// TODO: Try to reduce redundancy. This is not simple, because delegates ans dynamic strings are not allowed.
-		// Onother way idea is to increate the size of the StringBuffer and call Error(new StringBuffer(message))
+		public static void Error(string message)
+		{
+			BeginError();
+			Screen.Write(message);
+			EndError();
+		}
+
 		public static void Error(StringBuffer message)
 		{
-			PrepareScreen("Kernel Panic");
-			Screen.Color = Colors.Red;
+			BeginError();
 			Screen.Write(message);
-			Screen.Row += 2;
-			Screen.Column = 0;
-			DumpStackTrace();
-			Screen.Color = Colors.LightGray;
-			Halt();
+			EndError();
 		}
 
 		public static void Error(uint error)
@@ -255,11 +247,33 @@ namespace Mosa.Kernel.x86
 			Error(new StringBuffer(error));
 		}
 
+		private static void EndError()
+		{
+			Screen.Row += 2;
+			Screen.Column = 0;
+			DumpStackTrace();
+			Screen.Color = Colors.LightGray;
+			Halt();
+		}
+
+		#endregion Error
+
 		private static void Halt()
 		{
 			Screen.Goto(Screen.Rows - 1, 0);
 			while (true)
 				Native.Hlt();
+		}
+
+		#region DumpStackTrace
+
+		private static uint ebp = 0;
+		private static uint eip = 0;
+
+		internal static void SetStackPointer(uint ebp, uint eip)
+		{
+			Panic.ebp = ebp;
+			Panic.eip = eip;
 		}
 
 		public unsafe static void DumpStackTrace()
@@ -285,6 +299,6 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		#endregion Beautiful Panic
+		#endregion DumpStackTrace
 	}
 }

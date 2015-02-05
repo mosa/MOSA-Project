@@ -329,31 +329,6 @@ namespace Mosa.Platform.Internal.x86
 			return null;
 		}
 
-		public static uint GetMethodStartAddress(uint address)
-		{
-			uint table = Native.GetMethodLookupTable();
-			uint entries = Intrinsic.Load32(table);
-
-			table = table + 4;
-
-			while (entries > 0)
-			{
-				uint addr = Intrinsic.Load32(table);
-				uint size = Intrinsic.Load32(table, NativeIntSize);
-
-				if (address >= addr && address < addr + size)
-				{
-					return addr;
-				}
-
-				table = table + (NativeIntSize * 3);
-
-				entries--;
-			}
-
-			return 0;
-		}
-
 		public static MetadataMethodStruct* GetMethodDefinitionViaMethodExceptionLookup(uint address)
 		{
 			uint table = Native.GetMethodExceptionLookupTable();
@@ -576,8 +551,8 @@ namespace Mosa.Platform.Internal.x86
 			if (methodDef == null)
 				return entry;
 
-			entry.MethodName = GetMethodDefinitionName(methodDef);
-			entry.Position = address - GetMethodStartAddress(address);
+			entry.MethodDefinition = methodDef;
+			entry.Offset = address - (uint)(methodDef->Method);
 
 			return entry;
 		}
@@ -639,20 +614,36 @@ namespace Mosa.Platform.Internal.x86
 	/// </summary>
 	public struct SimpleStackTraceEntry
 	{
-		public string MethodName;
-		public uint Position;
+		private string methodName;
+		public unsafe MetadataMethodStruct* MethodDefinition;
+		public uint Offset;
+
+		unsafe public string MethodName
+		{
+			get
+			{
+				if (methodName == null)
+					methodName = Runtime.GetMethodDefinitionName(MethodDefinition);
+				return methodName;
+			}
+		}
 
 		/// <summary>
 		/// Returns a human readable text of this entry
 		/// </summary>
 		/// <returns></returns>
-		public StringBuffer ToStringBuffer()
+		unsafe public StringBuffer ToStringBuffer()
 		{
 			var buf = new StringBuffer();
+
+			buf.Append("0x");
+			buf.Append((uint)MethodDefinition->Method, "X");
+			buf.Append("+0x");
+			buf.Append(Offset, "X");
+			buf.Append(" ");
+
 			var idx = MethodName.IndexOf(' ') + 1; //Skip return type
 			buf.Append(MethodName, idx);
-			buf.Append(" +");
-			buf.Append(Position);
 			return buf;
 		}
 
