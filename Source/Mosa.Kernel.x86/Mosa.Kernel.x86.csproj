@@ -67,6 +67,7 @@
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="ConsoleSession.cs" />
     <Compile Include="ELFHeader.cs" />
+    <Compile Include="Helpers\DebugImplementation.cs" />
     <Compile Include="SSE.cs" />
     <Compile Include="DebugClient.cs" />
     <Compile Include="Serial.cs" />
@@ -109,9 +110,6 @@
       <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
       <Name>Mosa.Platform.Internal.x86</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

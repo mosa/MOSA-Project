@@ -12,7 +12,7 @@ namespace Mosa.Kernel.x86
 	/// <summary>
 	///
 	/// </summary>
-	public static class Debug
+	public static class DebugTrace
 	{
 		private static uint Count = 0;
 
