@@ -25,7 +25,7 @@
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>NET_2_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>True</DebugSymbols>
