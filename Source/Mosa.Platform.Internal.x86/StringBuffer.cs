@@ -280,7 +280,9 @@ namespace Mosa.Platform.Internal.x86
 		/// <summary>
 		/// The length of the string
 		/// </summary>
-		/// <param name="length"></param>
+		/// <value>
+		/// The length.
+		/// </value>
 		public int Length
 		{
 			get { return length; }
