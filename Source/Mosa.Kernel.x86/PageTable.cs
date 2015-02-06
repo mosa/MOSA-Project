@@ -17,7 +17,7 @@ namespace Mosa.Kernel.x86
 	/// <summary>
 	///
 	/// </summary>
-	public static class PageTable_
+	public static class PageTable
 	{
 		// Location for page directory starts at 20MB
 		private static uint pageDirectory = 1024 * 1024 * 20; // 0x1400000
@@ -30,6 +30,8 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Setup()
 		{
+			Memory.Clear(pageTable, 1024 * 1024 * 4);
+
 			// Setup Page Directory
 			for (int index = 0; index < 1024; index++)
 			{
@@ -77,7 +79,7 @@ namespace Mosa.Kernel.x86
 		}
 	}
 
-	unsafe public static class PageTable
+	unsafe public static class PageTable_
 	{
 		// Location for page directory starts at 20MB
 		private static uint pageDirectoryAddress = 1024 * 1024 * 20; // 0x1400000

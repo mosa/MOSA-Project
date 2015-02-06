@@ -11,6 +11,11 @@ namespace Mosa.ClassLib
 	/// <remarks>Usefull to track memory changes for debugging purposes</remarks>
 	public static class FlechterChecksum
 	{
+		unsafe public static ushort Fletcher16(uint startAddress, uint bytes)
+		{
+			return Fletcher16((byte*)startAddress, bytes);
+		}
+
 		unsafe public static ushort Fletcher16(byte* data, uint bytes)
 		{
 			ushort sum1 = 0xff, sum2 = 0xff;
