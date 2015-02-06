@@ -40,6 +40,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <NoStdLib>false</NoStdLib>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <BaseAddress>285212672</BaseAddress>
@@ -60,10 +61,14 @@
     <Compile Include="BinaryFormat.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FlechtersChecksum.cs" />
     <Compile Include="Math.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RedBlackTree.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
