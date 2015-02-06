@@ -69,10 +69,12 @@ namespace Mosa.Tool.Debugger
 						DebugEngine.Stream = pipeStream;
 						break;
 
-					//case 2:
-					//    var server = new TcpListener(Convert.ToInt32(tbPort.Text));
-					//    DebugEngine.Stream = new DebugNetworkStream(server.AcceptSocket(), true);
-					//    break;
+					//case 1:
+					//	var server = new TcpListener(System.Net.IPAddress.Parse(tbServerName.Text.Trim()), Convert.ToInt32(tbPort.Text));
+					//	var helper = new TcpServer(DebugEngine, server);
+					//	helper.Start();
+					//	break;
+
 					default:
 						Status = "Connection method not supported yet!";
 						break;
@@ -88,6 +90,37 @@ namespace Mosa.Tool.Debugger
 			{
 				Status = "ERROR: " + ex.Message;
 			}
+		}
+
+		private class TcpServer
+		{
+			private TcpListener listener;
+			private DebugServerEngine debugEngine;
+
+			public TcpServer(DebugServerEngine debugEngine, TcpListener listener)
+			{
+				this.debugEngine = debugEngine;
+				this.listener = listener;
+			}
+
+			private IAsyncResult result;
+			public void Start()
+			{
+				listener.Start();
+				result = listener.BeginAcceptSocket(onBeginAccept, null);
+			}
+
+			public void Stop()
+			{
+				listener.Stop();
+			}
+
+			private void onBeginAccept(object state)
+			{
+				var socket = listener.EndAcceptSocket(result);
+				debugEngine.Stream = new DebugNetworkStream(socket, true);
+			}
+
 		}
 
 		private void btnDisconnect_Click(object sender, EventArgs e)

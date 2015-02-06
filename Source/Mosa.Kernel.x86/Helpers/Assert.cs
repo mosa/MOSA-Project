@@ -32,5 +32,19 @@ namespace Mosa.Kernel.x86.Helpers
 			if (!condition)
 				AssertError(userMessage);
 		}
+
+		[Conditional("DEBUG")]
+		public static void False(bool condition)
+		{
+			if (condition)
+				AssertError("Assert.False failed");
+		}
+
+		[Conditional("DEBUG")]
+		public static void False(bool condition, string userMessage)
+		{
+			if (condition)
+				AssertError(userMessage);
+		}
 	}
 }
