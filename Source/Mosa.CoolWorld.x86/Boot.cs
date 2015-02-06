@@ -24,6 +24,7 @@ namespace Mosa.CoolWorld.x86
 		/// </summary>
 		public static void Main()
 		{
+			System.Diagnostics.Debug.Fail("test");
 			Mosa.Kernel.x86.Kernel.Setup();
 
 			Console = ConsoleManager.Controller.Boot;

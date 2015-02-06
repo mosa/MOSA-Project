@@ -6,24 +6,10 @@ namespace Mosa.Kernel.x86.Helpers
 	[Type("System.Diagnostics.Debug")]
 	internal class DebugImplementation
 	{
-		//Can removed after Bugfix in PlugSystem
-		[Conditional("DEBUG")]
-		public static void Assert(bool condition, string message)
-		{
-			Mosa.Kernel.x86.Helpers.Assert.True(condition, message);
-		}
-
 		[Conditional("DEBUG")]
 		public static void Assert(bool condition, string message, string detailMessage)
 		{
 			Mosa.Kernel.x86.Helpers.Assert.True(condition, message);
-		}
-
-		//Can removed after Bugfix in PlugSystem
-		[Conditional("DEBUG")]
-		public static void Fail(string message)
-		{
-			Panic.Error(message);
 		}
 
 		[Conditional("DEBUG")]
@@ -40,13 +26,6 @@ namespace Mosa.Kernel.x86.Helpers
 			Screen.Write(value.ToString());
 		}
 
-		//Can removed after Bugfix in PlugSystem
-		[Conditional("DEBUG")]
-		public static void Write(string message)
-		{
-			Screen.Write(message);
-		}
-
 		[Conditional("DEBUG")]
 		public static void Write(string message, string category)
 		{
@@ -59,14 +38,6 @@ namespace Mosa.Kernel.x86.Helpers
 			if (value == null)
 				return;
 			Screen.Write(value.ToString());
-			Screen.NextLine();
-		}
-
-		//Can removed after Bugfix in PlugSystem
-		[Conditional("DEBUG")]
-		public static void WriteLine(string message)
-		{
-			Screen.Write(message);
 			Screen.NextLine();
 		}
 

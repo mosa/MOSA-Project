@@ -49,7 +49,7 @@ namespace System.Diagnostics
 		[Conditional("DEBUG")]
 		public static void Assert(bool condition, string message, string detailMessage)
 		{
-			//Plug
+			throw new NotImplementedException(); //Plug
 		}
 
 		[Conditional("DEBUG")]
@@ -74,7 +74,7 @@ namespace System.Diagnostics
 		[Conditional("DEBUG")]
 		public static void Fail(string message, string detailMessage)
 		{
-			//Plug
+			throw new NotImplementedException(); //Plug
 		}
 
 		[Conditional("DEBUG")]
@@ -110,13 +110,13 @@ namespace System.Diagnostics
 		[Conditional("DEBUG")]
 		public static void Write(object value, string category)
 		{
-			//Plug
+			throw new NotImplementedException(); //Plug
 		}
 
 		[Conditional("DEBUG")]
 		public static void Write(string message, string category)
 		{
-			//Plug
+			throw new NotImplementedException(); //Plug
 		}
 
 		[Conditional("DEBUG")]
@@ -169,13 +169,13 @@ namespace System.Diagnostics
 		[Conditional("DEBUG")]
 		public static void WriteLine(object value, string category)
 		{
-			//Plug
+			throw new NotImplementedException(); //Plug
 		}
 
 		[Conditional("DEBUG")]
 		public static void WriteLine(string message, string category)
 		{
-			//Plug
+			throw new NotImplementedException(); //Plug
 		}
 
 		[Conditional("DEBUG")]
@@ -207,7 +207,7 @@ namespace System.Diagnostics
 		[Conditional("DEBUG")]
 		public static void Print(string message)
 		{
-			//Plug
+			throw new NotImplementedException(); //Plug
 		}
 
 		[Conditional("DEBUG")]

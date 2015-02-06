@@ -25,6 +25,10 @@ namespace Mosa.Kernel.x86
 			DebugClient.Setup(Serial.COM1);
 			SSE.Setup();
 
+			//Initialize interrupts
+			PIC.Setup();
+			IDT.Setup();
+
 			//Initializing the memory management
 			Multiboot.Setup();
 			GDT.Setup();
@@ -34,8 +38,6 @@ namespace Mosa.Kernel.x86
 
 			//At this point we can use objects, that allocates memory
 			Runtime.Setup();
-			PIC.Setup();
-			IDT.Setup();
 			ProcessManager.Setup();
 			TaskManager.Setup();
 			SmbiosManager.Setup();
