@@ -433,19 +433,12 @@ namespace Mosa.Compiler.Framework
 		{
 			var operand = new Operand(type);
 			operand.IsConstant = true;
+			operand.ConstantUnsignedInteger = value;
 
-			if (operand.IsUnsigned)
-				operand.ConstantUnsignedInteger = value;
-			else if (operand.IsSigned)
-				operand.ConstantSignedInteger = (long)value;
-			else if (operand.IsBoolean)
-				operand.ConstantUnsignedInteger = value;
-			else if (operand.IsChar)
-				operand.ConstantUnsignedInteger = value;
-			else if (operand.IsPointer)
-				operand.ConstantUnsignedInteger = value;
-			else
+			if (!(operand.IsInteger || operand.IsBoolean || operand.IsChar || operand.IsPointer))
+			{
 				throw new InvalidCompilerException();
+			}
 
 			return operand;
 		}
@@ -477,20 +470,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates the constant unsigned byte.
-		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
-		/// <param name="value">The value.</param>
-		/// <returns></returns>
-		public static Operand CreateConstantUnsignedByte(TypeSystem typeSystem, byte value)
-		{
-			var operand = new Operand(typeSystem.BuiltIn.U1);
-			operand.IsConstant = true;
-			operand.ConstantUnsignedInteger = value;
-			return operand;
-		}
-
-		/// <summary>
 		/// Creates a new constant <see cref="Operand" /> for the given integral value.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
@@ -498,23 +477,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		/// A new operand representing the value <paramref name="value" />.
 		/// </returns>
-		public static Operand CreateConstantUnsignedInt(TypeSystem typeSystem, uint value)
-		{
-			var operand = new Operand(typeSystem.BuiltIn.U4);
-			operand.IsConstant = true;
-			operand.ConstantUnsignedInteger = value;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand" /> for the given integral value.
-		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>
-		/// A new operand representing the value <paramref name="value" />.
-		/// </returns>
-		public static Operand CreateConstantSignedInt(TypeSystem typeSystem, int value)
+		public static Operand CreateConstant(TypeSystem typeSystem, int value)
 		{
 			var operand = new Operand(typeSystem.BuiltIn.I4);
 			operand.IsConstant = true;
@@ -530,23 +493,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		/// A new operand representing the value <paramref name="value" />.
 		/// </returns>
-		public static Operand CreateConstantUnsignedLong(TypeSystem typeSystem, ulong value)
-		{
-			var operand = new Operand(typeSystem.BuiltIn.U8);
-			operand.IsConstant = true;
-			operand.ConstantUnsignedInteger = value;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand" /> for the given integral value.
-		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <returns>
-		/// A new operand representing the value <paramref name="value" />.
-		/// </returns>
-		public static Operand CreateConstantSignedLong(TypeSystem typeSystem, long value)
+		public static Operand CreateConstant(TypeSystem typeSystem, long value)
 		{
 			var operand = new Operand(typeSystem.BuiltIn.I8);
 			operand.IsConstant = true;
@@ -555,14 +502,14 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a new constant <see cref="Operand" /> for the given integral value.
+		/// Creates a new constant <see cref="Operand"/> for the given integral value.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="value">The value to create the constant operand for.</param>
 		/// <returns>
-		/// A new operand representing the value <paramref name="value" />.
+		/// A new operand representing the value <paramref name="value"/>.
 		/// </returns>
-		public static Operand CreateConstantSingle(TypeSystem typeSystem, float value)
+		public static Operand CreateConstant(TypeSystem typeSystem, float value)
 		{
 			var operand = new Operand(typeSystem.BuiltIn.R4);
 			operand.IsConstant = true;
@@ -571,14 +518,14 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a new constant <see cref="Operand" /> for the given integral value.
+		/// Creates a new constant <see cref="Operand"/> for the given integral value.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="value">The value to create the constant operand for.</param>
 		/// <returns>
-		/// A new operand representing the value <paramref name="value" />.
+		/// A new operand representing the value <paramref name="value"/>.
 		/// </returns>
-		public static Operand CreateConstantDouble(TypeSystem typeSystem, double value)
+		public static Operand CreateConstant(TypeSystem typeSystem, double value)
 		{
 			var operand = new Operand(typeSystem.BuiltIn.R8);
 			operand.IsConstant = true;

@@ -509,6 +509,14 @@ namespace System
 			return (value == null) || (value.Length == 0);
 		}
 
+		public int IndexOf(string value)
+		{
+			if (this.length == 0)
+				return -1;
+
+			return IndexOfImpl(value, 0, this.length);
+		}
+
 		public int IndexOf(char value)
 		{
 			if (this.length == 0)
@@ -642,6 +650,26 @@ namespace System
 			for (int i = startIndex; i < count; i++)
 				if (this[i] == value)
 					return i;
+
+			return -1;
+		}
+
+		private int IndexOfImpl(string value, int startIndex, int count)
+		{
+			for (int i = startIndex; i < count; i++)
+			{
+				bool found = true;
+				for (int n = 0; n < value.length; n++)
+				{
+					if (this[i + n] != value[n])
+					{
+						found = false;
+						break;
+					}
+				}
+				if (found)
+					return i;
+			}
 
 			return -1;
 		}

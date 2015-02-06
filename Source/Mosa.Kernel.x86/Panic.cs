@@ -51,7 +51,7 @@ namespace Mosa.Kernel.x86
 				Native.Hlt();
 		}
 
-		#region Beautiful Panic
+		private static bool firstError = true;
 
 		private static void PrepareScreen(string title)
 		{
@@ -62,6 +62,12 @@ namespace Mosa.Kernel.x86
 			Screen.Color = Colors.LightGray;
 			Screen.Write("*** ");
 			Screen.Write(title);
+
+			if (firstError)
+				firstError = false;
+			else
+				Screen.Write(" (multiple)");
+
 			Screen.Write(" ***");
 			Screen.Goto(3, 1);
 		}
@@ -71,15 +77,15 @@ namespace Mosa.Kernel.x86
 			Error("Invalid operation");
 		}
 
+		#region DumpMemory
+
 		public static void DumpMemory(uint address)
 		{
 			PrepareScreen("Memory Dump");
 			Screen.Column = 0;
-			//Screen.Write("Address   dword        dword         dword       dword      ascii");
 			Screen.Write("ADDRESS  ");
 			Screen.Color = Colors.Brown;
 			Screen.Write("03 02 01 00  07 06 05 04   11 10 09 08  15 14 13 12   ASCII");
-			//Screen.Write(address.ToString("X"));
 
 			var word = address;
 			var rowAddress = address;
@@ -89,7 +95,7 @@ namespace Mosa.Kernel.x86
 				Screen.Row++;
 				Screen.Column = 0;
 
-				WriteHex(word.ToString("X"), Colors.Brown);
+				WriteHex(word, 8, Colors.Brown);
 				Screen.Write("  ");
 
 				const uint dwordsPerRow = 4;
@@ -98,8 +104,7 @@ namespace Mosa.Kernel.x86
 					for (uint x2 = 0; x2 < 4; x2++)
 					{
 						var number = Native.Get8(word + ((4 - 1) - x2));
-						//var number = Native.Get8(word + x2);
-						WriteHex(number.ToString("X"), 2, number == 0);
+						WriteHex(number, 2, Colors.LightGray);
 						Screen.Write(' ');
 					}
 					if (x == 1 || x == 3)
@@ -159,56 +164,91 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		private static void WriteHex(string hex, byte digits, bool zero)
+		private static void WriteHex(uint num, byte color)
 		{
-			if (!zero)
+			WriteHex(num, 0, color);
+		}
+
+		private static void WriteHex(uint num, byte digits, byte color)
+		{
+			var oldColor = Screen.Color;
+			Screen.Color = color;
+
+			if (num == 0)
 				Screen.Color = Colors.LightGray;
+
+			var hex = new StringBuffer(num, "X");
 
 			for (var i = 0; i < digits - hex.Length; i++)
 				Screen.Write('0');
 			Screen.Write(hex);
 
-			Screen.Color = Colors.DarkGray;
+			Screen.Color = oldColor;
 		}
 
-		private static void WriteHex(string hex, byte color)
+		#endregion DumpMemory
+
+		#region Message
+
+		public static void BeginMessage()
 		{
-			var oldColor = Screen.Color;
-			Screen.Color = color;
-			Screen.Write(hex);
-			Screen.Color = oldColor;
+			PrepareScreen("Debug Message");
+			Screen.Color = Colors.Red;
 		}
 
 		public static void Message(string message)
 		{
-			PrepareScreen("Debug Message");
-			Screen.Color = Colors.Red;
+			BeginMessage();
 			Screen.Write(message);
 			Halt();
 		}
 
 		public static void Message(char message)
 		{
-			PrepareScreen("Debug Message");
-			Screen.Color = Colors.Red;
+			BeginMessage();
 			Screen.Write(message);
 			Halt();
 		}
 
 		public static void Message(uint message)
 		{
-			PrepareScreen("Debug Message");
-			Screen.Color = Colors.Red;
+			BeginMessage();
 			Screen.Write(" Number: 0x");
-			Screen.Write(message.ToString("X"));
+			Screen.Write(message, "X");
 			Halt();
+		}
+
+		#endregion Message
+
+		#region Error
+
+		private static void BeginError()
+		{
+			PrepareScreen("Kernel Panic");
+			Screen.Color = Colors.Red;
 		}
 
 		public static void Error(string message)
 		{
-			PrepareScreen("Kernel Panic");
-			Screen.Color = Colors.Red;
+			BeginError();
 			Screen.Write(message);
+			EndError();
+		}
+
+		public static void Error(StringBuffer message)
+		{
+			BeginError();
+			Screen.Write(message);
+			EndError();
+		}
+
+		public static void Error(uint error)
+		{
+			Error(new StringBuffer(error));
+		}
+
+		private static void EndError()
+		{
 			Screen.Row += 2;
 			Screen.Column = 0;
 			DumpStackTrace();
@@ -216,10 +256,7 @@ namespace Mosa.Kernel.x86
 			Halt();
 		}
 
-		public static void Error(uint error)
-		{
-			Error(error.ToString());
-		}
+		#endregion Error
 
 		private static void Halt()
 		{
@@ -228,30 +265,40 @@ namespace Mosa.Kernel.x86
 				Native.Hlt();
 		}
 
+		#region DumpStackTrace
+
+		private static uint ebp = 0;
+		private static uint eip = 0;
+
+		internal static void SetStackPointer(uint ebp, uint eip)
+		{
+			Panic.ebp = ebp;
+			Panic.eip = eip;
+		}
+
 		public unsafe static void DumpStackTrace()
 		{
-			uint depth = 0;
+			DumpStackTrace(0);
+		}
 
+		public unsafe static void DumpStackTrace(uint depth)
+		{
 			while (true)
 			{
-				var methodDef = Runtime.GetMethodDefinitionFromStackFrameDepth(depth);
+				var entry = Runtime.GetStackTraceEntry(depth, ebp, eip);
+				if (!entry.Valid) return;
 
-				if (methodDef == null)
-					return;
-
-				string caller = Runtime.GetMethodDefinitionName(methodDef);
-
-				if (caller == null)
-					return;
-
-				Screen.Write(caller);
-				Screen.Row++;
-				Screen.Column = 0;
+				if (!entry.Skip)
+				{
+					Screen.Write(entry.ToStringBuffer());
+					Screen.Row++;
+					Screen.Column = 0;
+				}
 
 				depth++;
 			}
 		}
 
-		#endregion Beautiful Panic
+		#endregion DumpStackTrace
 	}
 }

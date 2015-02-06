@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context = context.InsertBefore();
 
 			// Now push the this pointer by two native pointer sizes
-			context.SetInstruction(IRInstruction.AddSigned, thisPtr, thisPtr, Operand.CreateConstantSignedInt(TypeSystem, NativePointerSize * 2));
+			context.SetInstruction(IRInstruction.AddSigned, thisPtr, thisPtr, Operand.CreateConstant(TypeSystem, NativePointerSize * 2));
 		}
 
 		private Context GetFirstContext(BasicBlock block)

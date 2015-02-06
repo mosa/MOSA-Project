@@ -51,6 +51,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private int removeUselessPhiCount = 0;
 		private int reduce64BitOperationsTo32BitCount = 0;
 		private int promoteLocalVariableCount = 0;
+		private int constantFoldingLogicalOrCount = 0;
+		private int constantFoldingLogicalAndCount = 0;
 
 		private Stack<int> worklist = new Stack<int>();
 
@@ -131,21 +133,23 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.ArithmeticSimplificationLogicalOperators", arithmeticSimplificationLogicalOperatorsCount);
 			UpdateCounter("IROptimizations.ArithmeticSimplificationShiftOperators", arithmeticSimplificationShiftOperators);
 			UpdateCounter("IROptimizations.SimpleConstantPropagation", simpleConstantPropagationCount);
-			UpdateCounter("IROptimizations.SimplifyExtendedMoveWithConstant", simplifyExtendedMoveWithConstantCount);
 			UpdateCounter("IROptimizations.SimpleForwardCopyPropagation", simpleForwardCopyPropagationCount);
 			UpdateCounter("IROptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
-			UpdateCounter("IROptimizations.StrengthReductionIntegerCompareBranch", strengthReductionIntegerCompareBranchCount);
-			UpdateCounter("IROptimizations.DeadCodeElimination", deadCodeEliminationCount);
 			UpdateCounter("IROptimizations.ConstantFoldingAdditionAndSubstraction", constantFoldingAdditionAndSubstractionCount);
 			UpdateCounter("IROptimizations.ConstantFoldingMultiplication", constantFoldingMultiplicationCount);
 			UpdateCounter("IROptimizations.ConstantFoldingDivision", constantFoldingDivisionCount);
+			UpdateCounter("IROptimizations.ConstantFoldingLogicalOr", constantFoldingLogicalOrCount);
+			UpdateCounter("IROptimizations.ConstantFoldingLogicalAnd", constantFoldingLogicalAndCount);
+			UpdateCounter("IROptimizations.StrengthReductionIntegerCompareBranch", strengthReductionIntegerCompareBranchCount);
+			UpdateCounter("IROptimizations.DeadCodeElimination", deadCodeEliminationCount);
 			UpdateCounter("IROptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansionCount);
 			UpdateCounter("IROptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranchCount);
 			UpdateCounter("IROptimizations.FoldIntegerCompare", foldIntegerCompareCount);
-			UpdateCounter("IROptimizations.SimplifyExtendedMove", simplifyExtendedMoveCount);
-			UpdateCounter("IROptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMoveCount);
 			UpdateCounter("IROptimizations.FoldLoadStoreOffsets", foldLoadStoreOffsetsCount);
 			UpdateCounter("IROptimizations.FoldConstantPhi", foldConstantPhiCount);
+			UpdateCounter("IROptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMoveCount);
+			UpdateCounter("IROptimizations.SimplifyExtendedMove", simplifyExtendedMoveCount);
+			UpdateCounter("IROptimizations.SimplifyExtendedMoveWithConstant", simplifyExtendedMoveWithConstantCount);
 			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhiCount);
 			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
 			UpdateCounter("IROptimizations.RemoveUselessPhi", removeUselessPhiCount);
@@ -195,6 +199,8 @@ namespace Mosa.Compiler.Framework.Stages
 			ConstantFoldingMultiplication(context);
 			ConstantFoldingDivision(context);
 			ConstantFoldingIntegerCompare(context);
+			ConstantFoldingLogicalOr(context);
+			ConstantFoldingLogicalAnd(context);
 			FoldIntegerCompare(context);
 			FoldIntegerCompareBranch(context);
 			SimplifyExtendedMoveWithConstant(context);
@@ -743,7 +749,7 @@ namespace Mosa.Compiler.Framework.Stages
 					AddOperandUsageToWorkList(context);
 					if (trace.Active) trace.Log("*** ArithmeticSimplificationMultiplication");
 					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-					context.SetInstruction(IRInstruction.ShiftLeft, result, op1, Operand.CreateConstantUnsignedInt(TypeSystem, shift));
+					context.SetInstruction(IRInstruction.ShiftLeft, result, op1, Operand.CreateConstant(TypeSystem, (int)shift));
 					arithmeticSimplificationMultiplicationCount++;
 					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 					return;
@@ -807,7 +813,7 @@ namespace Mosa.Compiler.Framework.Stages
 					AddOperandUsageToWorkList(context);
 					if (trace.Active) trace.Log("*** ArithmeticSimplificationDivision");
 					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-					context.SetInstruction(IRInstruction.ShiftRight, result, op1, Operand.CreateConstantUnsignedInt(TypeSystem, shift));
+					context.SetInstruction(IRInstruction.ShiftRight, result, op1, Operand.CreateConstant(TypeSystem, (int)shift));
 					arithmeticSimplificationDivisionCount++;
 					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 					return;
@@ -1258,6 +1264,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (trace.Active) trace.Log("*** ConstantFoldingAdditionAndSubstraction");
 			AddOperandUsageToWorkList(ctx);
+			AddOperandUsageToWorkList(context);
 			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
 			ctx.SetInstruction(IRInstruction.Move, ctx.Result, context.Result);
 			if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
@@ -1265,6 +1272,100 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Operand2 = Operand.CreateConstant(context.Operand2.Type, r);
 			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 			constantFoldingAdditionAndSubstractionCount++;
+		}
+
+		private void ConstantFoldingLogicalOr(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.Instruction != IRInstruction.LogicalOr)
+				return;
+
+			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (context.Result.Definitions.Count != 1)
+				return;
+
+			if (!context.Operand2.IsConstant)
+				return;
+
+			if (context.Result.Uses.Count != 1)
+				return;
+
+			Context ctx = new Context(InstructionSet, context.Result.Uses[0]);
+
+			if (ctx.Instruction != IRInstruction.LogicalOr)
+				return;
+
+			if (!ctx.Result.IsVirtualRegister)
+				return;
+
+			if (!ctx.Operand2.IsConstant)
+				return;
+
+			Debug.Assert(ctx.Result.Definitions.Count == 1);
+
+			ulong r = context.Operand2.ConstantUnsignedInteger | ctx.Operand2.ConstantUnsignedInteger;
+
+			if (trace.Active) trace.Log("*** ConstantFoldingLogicalOr");
+			AddOperandUsageToWorkList(ctx);
+			AddOperandUsageToWorkList(context);
+			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
+			ctx.SetInstruction(IRInstruction.Move, ctx.Result, context.Result);
+			if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+			context.Operand2 = Operand.CreateConstant(context.Operand2.Type, r);
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+			constantFoldingLogicalOrCount++;
+		}
+
+		private void ConstantFoldingLogicalAnd(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.Instruction != IRInstruction.LogicalAnd)
+				return;
+
+			if (!context.Result.IsVirtualRegister)
+				return;
+
+			if (context.Result.Definitions.Count != 1)
+				return;
+
+			if (!context.Operand2.IsConstant)
+				return;
+
+			if (context.Result.Uses.Count != 1)
+				return;
+
+			Context ctx = new Context(InstructionSet, context.Result.Uses[0]);
+
+			if (ctx.Instruction != IRInstruction.LogicalAnd)
+				return;
+
+			if (!ctx.Result.IsVirtualRegister)
+				return;
+
+			if (!ctx.Operand2.IsConstant)
+				return;
+
+			Debug.Assert(ctx.Result.Definitions.Count == 1);
+
+			ulong r = context.Operand2.ConstantUnsignedInteger & ctx.Operand2.ConstantUnsignedInteger;
+
+			if (trace.Active) trace.Log("*** ConstantFoldingLogicalOr");
+			AddOperandUsageToWorkList(ctx);
+			AddOperandUsageToWorkList(context);
+			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
+			ctx.SetInstruction(IRInstruction.Move, ctx.Result, context.Result);
+			if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
+			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
+			context.Operand2 = Operand.CreateConstant(context.Operand2.Type, r);
+			if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+			constantFoldingLogicalAndCount++;
 		}
 
 		private void ConstantFoldingMultiplication(Context context)
@@ -1352,6 +1453,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (trace.Active) trace.Log("*** ConstantFoldingDivision");
 			AddOperandUsageToWorkList(ctx);
+			AddOperandUsageToWorkList(context);
 			if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
 			ctx.SetInstruction(IRInstruction.Move, ctx.Result, context.Result);
 			if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
@@ -1584,9 +1686,9 @@ namespace Mosa.Compiler.Framework.Stages
 				constant = Operand.CreateConstant(context.Operand2.Type, context.Operand2.ConstantSignedInteger - ctx.Operand2.ConstantSignedInteger);
 			}
 
+			if (trace.Active) trace.Log("*** FoldLoadStoreOffsets");
 			AddOperandUsageToWorkList(context);
 			AddOperandUsageToWorkList(ctx);
-			if (trace.Active) trace.Log("*** FoldLoadStoreOffsets");
 			if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 			context.Operand1 = ctx.Operand1;
 			context.Operand2 = constant;
@@ -1856,7 +1958,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (trace.Active) trace.Log("*** NormalizeConstantTo32Bit");
 
 					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-					context.Operand1 = Operand.CreateConstantUnsignedInt(TypeSystem, (uint)(context.Operand1.ConstantSignedInteger & uint.MaxValue));
+					context.Operand1 = Operand.CreateConstant(TypeSystem, (int)(context.Operand1.ConstantUnsignedInteger & uint.MaxValue));
 					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				}
 				if (context.OperandCount >= 2 && context.Operand2.IsConstant && context.Operand2.IsLong)
@@ -1864,7 +1966,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (trace.Active) trace.Log("*** NormalizeConstantTo32Bit");
 
 					if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-					context.Operand2 = Operand.CreateConstantUnsignedInt(TypeSystem, (uint)(context.Operand2.ConstantSignedInteger & uint.MaxValue));
+					context.Operand2 = Operand.CreateConstant(TypeSystem, (int)(context.Operand2.ConstantUnsignedInteger & uint.MaxValue));
 					if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
 				}
 			}
