@@ -14,77 +14,7 @@ using System.Runtime.InteropServices;
 
 namespace Mosa.Kernel.x86
 {
-	/// <summary>
-	///
-	/// </summary>
-	public static class PageTable
-	{
-		// Location for page directory starts at 20MB
-		private static uint pageDirectory = 1024 * 1024 * 20; // 0x1400000
-
-		// Location for page tables start at 16MB
-		private static uint pageTable = 1024 * 1024 * 16;	// 0x1000000
-
-		/// <summary>
-		/// Sets up the PageTable
-		/// </summary>
-		public static void Setup()
-		{
-			// Setup Page Directory
-			for (int index = 0; index < 1024; index++)
-			{
-				Native.Set32((uint)(pageDirectory + (index << 2)), (uint)(pageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
-			}
-
-			// Map the first 256MB of memory (65536 4K pages) (why 256MB?)
-			for (int index = 0; index < 1024 * 64; index++)
-			{
-				Native.Set32((uint)(pageTable + (index << 2)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
-			}
-
-			//Panic.DumpMemory(pageDirectory);
-
-			// Set CR3 register on processor - sets page directory
-			Native.SetCR3(pageDirectory);
-
-			// Set CR0 register on processor - turns on virtual memory
-			Native.SetCR0(Native.GetCR0() | BitMask.Bit31);
-		}
-
-		/// <summary>
-		/// Maps the virtual address to physical.
-		/// </summary>
-		/// <param name="virtualAddress">The virtual address.</param>
-		/// <param name="physicalAddress">The physical address.</param>
-		public static void MapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress)
-		{
-			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			//uint pdIndex = virtualAddress >> 22;
-			//uint ptIndex = virtualAddress >> 12 & 0x03FF;
-			//uint location = pageTable + (0x1000 * pdIndex) + ptIndex;
-			//Native.Set32(location, (uint)(physicalAddress & 0xFFC00000 | 0x04 | 0x02 | 0x01));
-			Native.Set32(pageTable + ((virtualAddress & 0xFFC00000) >> 10), (uint)(physicalAddress & 0xFFC00000 | 0x04 | 0x02 | 0x01));
-			// Flush TLB
-			//Native.SetCR3(Native.GetCR3());
-		}
-
-		/// <summary>
-		/// Gets the physical memory.
-		/// </summary>
-		/// <param name="virtualAddress">The virtual address.</param>
-		/// <returns></returns>
-		public static uint GetPhysicalAddressFromVirtual(uint virtualAddress)
-		{
-			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			//uint pdIndex = virtualAddress >> 22;
-			//uint ptIndex = virtualAddress >> 12 & 0x03FF;
-			//uint location = pageTable + (0x400 * pdIndex) + ptIndex;
-			//return Native.Get32(location + (virtualAddress & 0xFFF));
-			return Native.Get32(pageTable + ((virtualAddress & 0xFFFFF000) >> 10)) + (virtualAddress & 0xFFF);
-		}
-	}
-
-	unsafe public static class PageTable_
+	unsafe public static class PageTable
 	{
 		// Location for page directory starts at 20MB
 		private static uint pageDirectoryAddress = 1024 * 1024 * 20; // 0x1400000
@@ -95,14 +25,18 @@ namespace Mosa.Kernel.x86
 		internal static PageDirectoryEntry* pageDirectoryEntries;
 		internal static PageTableEntry* pageTableEntries;
 
-		public const uint PageDirectoryLength = 1024;
-		public const uint PageDirectorySize = PageDirectoryLength * PageDirectoryEntry.EntrySize;
+		//We can have up to 1024 PageDirectories
+		public const uint PageDirectoryCount = 1024;
 
-		public const uint PageTableLength = 1024;
-		public const uint PageTableSize = PageTableLength * PageTableEntry.EntrySize;
+		public const uint PageDirectorySize = PageDirectoryCount * PageDirectoryEntry.EntrySize;
 
-		public const uint AllPageTableLength = PageDirectoryLength * PageTableLength;
-		public const uint AllPageTableSize = AllPageTableLength * PageTableEntry.EntrySize;
+		//For each PageDirectory, we can have up to 1024 PageTables
+		public const uint PageTableCount = 1024;
+
+		public const uint PageTableSize = PageTableCount * PageTableEntry.EntrySize; //Size of 1024 PageTables
+
+		public const uint PageTablesMaxCount = PageDirectoryCount * PageTableCount; //The sum of 1024 PageTables in 1024 PageDirectories
+		public const uint PageTablesMaxSize = PageTablesMaxCount * PageTableEntry.EntrySize;  //Size of 1024 PageTables in 1024 PageDirectories
 
 		/// <summary>
 		/// Sets up the PageTable
@@ -135,29 +69,19 @@ namespace Mosa.Kernel.x86
 
 		public static void ClearPageTable()
 		{
-			Memory.Clear(pageTableAddress, AllPageTableSize);
+			Memory.Clear(pageTableAddress, PageTablesMaxSize);
 		}
 
 		internal static PageDirectoryEntry* GetPageDirectoryEntry(uint index)
 		{
-			Assert.InRange(index, PageDirectoryLength);
-
-			#region COMPILER_BUG?
-
-			//return pageDirectoryEntries + index;
-
-			#endregion COMPILER_BUG?
-
-			//workarround
-			return (PageDirectoryEntry*)(pageDirectoryAddress + index * PageDirectoryEntry.EntrySize);
+			Assert.InRange(index, PageDirectoryCount);
+			return pageDirectoryEntries + index;
 		}
 
 		public static PageTableEntry* GetPageTableEntry(uint index)
 		{
-			Assert.InRange(index, AllPageTableLength);
-
-			//return pageTableEntries + index;
-			return (PageTableEntry*)(pageTableAddress + index * PageTableEntry.EntrySize);
+			Assert.InRange(index, PageTablesMaxCount);
+			return pageTableEntries + index;
 		}
 
 		private static uint currentDictionaryEntryCount;
@@ -172,7 +96,7 @@ namespace Mosa.Kernel.x86
 				var dicEntry = GetPageDirectoryEntry(currentDictionaryEntryCount - 1);
 				dicEntry->PageTableEntry = page;
 				dicEntry->Present = true;
-				dicEntry->Readonly = true; //??
+				dicEntry->Writable = true;
 				dicEntry->User = true;
 				currentTableEntryCount = 0;
 			}
@@ -187,7 +111,7 @@ namespace Mosa.Kernel.x86
 			var tabEntry = GetPageTableEntry(allTableEntryCount - 1);
 			tabEntry->PhysicalAddress = (allTableEntryCount - 1) * 4096;
 			tabEntry->Present = true;
-			tabEntry->Readonly = true; //??
+			tabEntry->Writable = true;
 			tabEntry->User = true;
 
 			RegisterPage(tabEntry);
@@ -247,9 +171,7 @@ namespace Mosa.Kernel.x86
 			get { return data & AddressMask; }
 			set
 			{
-				if (value << AddressBitSize != 0)
-					Panic.Error("PageDirectoryEntry.Address needs to be 4k aligned");
-
+				Assert.True(value << AddressBitSize == 0, "PageDirectoryEntry.Address needs to be 4k aligned");
 				data = data.SetBits(Offset.Address, AddressBitSize, value, Offset.Address);
 			}
 		}
@@ -266,7 +188,7 @@ namespace Mosa.Kernel.x86
 			set { data = data.SetBit(Offset.Present, value); }
 		}
 
-		public bool Readonly
+		public bool Writable
 		{
 			get { return data.IsBitSet(Offset.Readonly); }
 			set { data = data.SetBit(Offset.Readonly, value); }
@@ -343,9 +265,7 @@ namespace Mosa.Kernel.x86
 			get { return Value & AddressMask; }
 			set
 			{
-				if (value << AddressBitSize != 0)
-					Panic.Error("PageTableEntry.PhysicalAddress needs to be 4k aligned");
-
+				Assert.True(value << AddressBitSize == 0, "PageTableEntry.PhysicalAddress needs to be 4k aligned");
 				Value = Value.SetBits(Offset.Address, AddressBitSize, value, Offset.Address);
 			}
 		}
@@ -356,7 +276,7 @@ namespace Mosa.Kernel.x86
 			set { Value = Value.SetBit(Offset.Present, value); }
 		}
 
-		public bool Readonly
+		public bool Writable
 		{
 			get { return Value.IsBitSet(Offset.Readonly); }
 			set { Value = Value.SetBit(Offset.Readonly, value); }
