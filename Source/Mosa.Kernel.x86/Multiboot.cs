@@ -448,10 +448,10 @@ namespace Mosa.Kernel.x86
 	{
 		public uint Num;
 		public uint Size;
-		unsafe public ElfSectionHeader* Sections;
+		unsafe public MultiBootElfSectionHeader* Sections;
 		public uint Shndx;
 
-		unsafe public ElfSectionHeader* StringTableSection
+		unsafe public MultiBootElfSectionHeader* StringTableSection
 		{
 			get
 			{
@@ -467,7 +467,7 @@ namespace Mosa.Kernel.x86
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	public struct ElfSectionHeader
+	public struct MultiBootElfSectionHeader
 	{
 		public uint Name;                /* Section name (string tbl index) */
 		public uint Type;                /* Section type */
