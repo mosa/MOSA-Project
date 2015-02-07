@@ -9,6 +9,7 @@
  */
 
 using Mosa.Compiler.MosaTypeSystem;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
@@ -16,7 +17,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	///
 	/// </summary>
-	public struct InstructionData
+	public struct InstructionNode
 	{
 		#region Data members
 
@@ -71,14 +72,14 @@ namespace Mosa.Compiler.Framework
 		public int[] BranchTargets;
 
 		/// <summary>
+		/// Holds branch targets
+		/// </summary>
+		public List<BasicBlock> Targets;
+
+		/// <summary>
 		/// The instruction size
 		/// </summary>
 		public InstructionSize Size;
-
-		/// <summary>
-		/// Holds the "other" object
-		/// </summary>
-		public object Other;
 
 		/// <summary>
 		/// Holds a packed value (to save space)
@@ -86,9 +87,9 @@ namespace Mosa.Compiler.Framework
 		private uint packed;
 
 		/// <summary>
-		/// The additional operands
+		/// The additional properties of an instruction node
 		/// </summary>
-		private Operand[] additionalOperands;
+		private InstructionNodeExtension extension;
 
 		#endregion Data members
 
@@ -116,7 +117,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether this <see cref="InstructionData"/> is marked.
+		/// Gets or sets a value indicating whether this <see cref="InstructionNode"/> is marked.
 		/// </summary>
 		public bool Marked
 		{
@@ -154,14 +155,24 @@ namespace Mosa.Compiler.Framework
 			set { packed = (uint)((packed & 0x000FFFFF) | ((uint)value << 20)); }
 		}
 
+		private void CheckExtension()
+		{
+			if (extension == null)
+			{
+				extension = new InstructionNodeExtension();
+			}
+		}
+
 		/// <summary>
-		/// Gets or sets the runtime method.
-		/// </summary>16
-		/// <value>The runtime method.</value>
+		/// Gets or sets the invoke method.
+		/// </summary>
+		/// <value>
+		/// The invoke method.
+		/// </value>
 		public MosaMethod InvokeMethod
 		{
-			get { return Other as MosaMethod; }
-			set { Other = value; }
+			get { return extension == null ? null : extension.InvokeMethod; }
+			set { CheckExtension(); extension.InvokeMethod = value; }
 		}
 
 		/// <summary>
@@ -170,8 +181,8 @@ namespace Mosa.Compiler.Framework
 		/// <value>The runtime field.</value>
 		public MosaField MosaField
 		{
-			get { return Other as MosaField; }
-			set { Other = value; }
+			get { return extension == null ? null : extension.MosaField; }
+			set { CheckExtension(); extension.MosaField = value; }
 		}
 
 		/// <summary>
@@ -180,8 +191,29 @@ namespace Mosa.Compiler.Framework
 		/// <value>The runtime field.</value>
 		public MosaType MosaType
 		{
-			get { return Other as MosaType; }
-			set { Other = value; }
+			get { return extension == null ? null : extension.MosaType; }
+			set { CheckExtension(); extension.MosaType = value; }
+		}
+
+		/// <summary>
+		///  Holds the cil branch targets
+		/// </summary>
+		public int[] CILTargets
+		{
+			get { return extension == null ? null : extension.CILTargets; }
+			set { CheckExtension(); extension.CILTargets = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the phi blocks.
+		/// </summary>
+		/// <value>
+		/// The phi blocks.
+		/// </value>
+		public List<BasicBlock> PhiBlocks
+		{
+			get { return extension == null ? null : extension.PhiBlocks; }
+			set { CheckExtension(); extension.PhiBlocks = value; }
 		}
 
 		#endregion Properties
@@ -201,9 +233,8 @@ namespace Mosa.Compiler.Framework
 			this.Result = null;
 			this.Result2 = null;
 			this.packed = 0;
-			this.additionalOperands = null;
+			this.extension = null;
 			this.BranchTargets = null;
-			this.Other = null;
 			this.BranchHint = false;
 			this.ConditionCode = ConditionCode.Undefined;
 		}
@@ -215,12 +246,13 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operand">The operand.</param>
 		public void SetAdditionalOperand(int index, Operand operand)
 		{
-			if (additionalOperands == null) additionalOperands = new Operand[253];
+			CheckExtension();
+			if (extension.AdditionalOperands == null) extension.AdditionalOperands = new Operand[253];
 
 			Debug.Assert(index < 255, @"No Index");
 			Debug.Assert(index >= 3, @"No Index");
 
-			additionalOperands[index - 3] = operand;
+			extension.AdditionalOperands[index - 3] = operand;
 		}
 
 		/// <summary>
@@ -230,12 +262,13 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand GetAdditionalOperand(int index)
 		{
-			if (additionalOperands == null) return null;
+			if (extension == null || extension.AdditionalOperands == null)
+				return null;
 
 			Debug.Assert(index < 255, @"No Index");
 			Debug.Assert(index >= 3, @"No Index");
 
-			return additionalOperands[index - 3];
+			return extension.AdditionalOperands[index - 3];
 		}
 
 		/// <summary>

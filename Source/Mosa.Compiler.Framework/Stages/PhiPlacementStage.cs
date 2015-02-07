@@ -141,7 +141,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			//var sourceBlocks = new BasicBlock[block.PreviousBlocks.Count];
 			var sourceBlocks = new List<BasicBlock>(block.PreviousBlocks.Count);
-			context.Other = sourceBlocks;
+			context.PhiBlocks = sourceBlocks;
 
 			for (var i = 0; i < block.PreviousBlocks.Count; i++)
 			{

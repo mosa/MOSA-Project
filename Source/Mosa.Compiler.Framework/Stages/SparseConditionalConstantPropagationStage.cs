@@ -203,7 +203,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (context.Instruction != IRInstruction.Phi)
 						continue;
 
-					var sourceBlocks = context.Other as List<BasicBlock>;
+					var sourceBlocks = context.PhiBlocks;
 
 					int index = sourceBlocks.IndexOf(block);
 

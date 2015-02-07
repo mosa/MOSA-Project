@@ -99,7 +99,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void ProcessPhiInstruction(Context context)
 		{
-			var sourceBlocks = context.Other as List<BasicBlock>;
+			var sourceBlocks = context.PhiBlocks;
 
 			for (var index = 0; index < context.BasicBlock.PreviousBlocks.Count; index++)
 			{

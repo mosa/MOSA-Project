@@ -40,7 +40,8 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			byte alignment = (byte)decoder.Instruction.Operand;
-			ctx.Other = alignment;
+			//FUTURE:
+			//ctx.Other = alignment;
 		}
 
 		#endregion Methods Overrides
