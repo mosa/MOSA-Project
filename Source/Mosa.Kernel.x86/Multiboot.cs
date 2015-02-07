@@ -23,12 +23,7 @@ namespace Mosa.Kernel.x86
 		private static uint multibootptr = 0x200004;
 		private static uint multibootsignature = 0x200000;
 
-		unsafe internal static MultiBootInfo* MultiBootInfo;
-
-		/// <summary>
-		/// Location of the Multiboot Structure
-		/// </summary>
-		public static uint MultibootStructure { get; private set; }
+		unsafe public static MultiBootInfo* MultiBootInfo;
 
 		/// <summary>
 		/// Magic value that indicates that kernel was loaded by a Multiboot-compliant boot loader
@@ -51,7 +46,6 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Setup()
 		{
-			MultibootStructure = 0x0;
 			SetMultibootLocation(Intrinsic.Load32(multibootptr), Intrinsic.Load32(multibootsignature));
 		}
 
@@ -75,7 +69,6 @@ namespace Mosa.Kernel.x86
 		/// <param name="address">The address.</param>
 		unsafe public static void SetMultibootLocation(uint address)
 		{
-			MultibootStructure = address;
 			MultiBootInfo = (MultiBootInfo*)address;
 			//CountMemoryMap();
 		}
@@ -88,7 +81,7 @@ namespace Mosa.Kernel.x86
 		/// </value>
 		public static bool IsMultibootEnabled
 		{
-			get { return (MultibootStructure != 0x0); }
+			get { return (MultiBootInfo != null); }
 		}
 
 		/// <summary>
@@ -99,7 +92,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure);
+				return MultiBootInfo->flags;
 			}
 		}
 
@@ -111,7 +104,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 4);
+				return MultiBootInfo->memLower;
 			}
 		}
 
@@ -123,7 +116,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 8);
+				return MultiBootInfo->memUpper;
 			}
 		}
 
@@ -135,7 +128,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 12);
+				return MultiBootInfo->bootDevice;
 			}
 		}
 
@@ -147,7 +140,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 16);
+				return MultiBootInfo->commandLine;
 			}
 		}
 
@@ -159,7 +152,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 20);
+				return MultiBootInfo->moduleAddress;
 			}
 		}
 
@@ -171,7 +164,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 24);
+				return MultiBootInfo->moduleCount;
 			}
 		}
 
@@ -183,7 +176,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 44);
+				return MultiBootInfo->memMapLength;
 			}
 		}
 
@@ -195,7 +188,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 48);
+				return MultiBootInfo->memMapAddress;
 			}
 		}
 
@@ -205,12 +198,13 @@ namespace Mosa.Kernel.x86
 		private static void CountMemoryMap()
 		{
 			memoryMapCount = 0;
-			uint location = MemoryMapStart;
+			MultiBootMemoryMap* location = (MultiBootMemoryMap*)MemoryMapStart;
 
-			while (location < (MemoryMapStart + MemoryMapLength))
+			while ((uint)location < (MemoryMapStart + MemoryMapLength))
 			{
 				memoryMapCount++;
-				location = Intrinsic.Load32(location) + location + 4;
+				//location = (MultiBootMemoryMap*)(((uint)location) + location->size + 4);
+				location = location->Next;
 			}
 		}
 
@@ -219,15 +213,14 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		private static uint GetMemoryMapIndexLocation(uint index)
+		private static MultiBootMemoryMap* GetMemoryMapIndexLocation(uint index)
 		{
-			uint location = MemoryMapStart;
+			MultiBootMemoryMap* location = (MultiBootMemoryMap*)MemoryMapStart;
 
 			for (uint i = 0; i < index; i++)
 			{
-				location = location + Intrinsic.Load32(location) + 4;
+				location = location->Next;
 			}
-
 			return location;
 		}
 
@@ -238,7 +231,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static uint GetMemoryMapBase(uint index)
 		{
-			return Intrinsic.Load32(GetMemoryMapIndexLocation(index), 4);
+			return (uint)GetMemoryMapIndexLocation(index)->base_addr;
 		}
 
 		/// <summary>
@@ -248,7 +241,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static uint GetMemoryMapLength(uint index)
 		{
-			return Intrinsic.Load32(GetMemoryMapIndexLocation(index), 12);
+			return (uint)GetMemoryMapIndexLocation(index)->length;
 		}
 
 		/// <summary>
@@ -258,7 +251,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static byte GetMemoryMapType(uint index)
 		{
-			return Native.Get8(GetMemoryMapIndexLocation(index) + 20);
+			return (byte)GetMemoryMapIndexLocation(index)->type;
 		}
 
 		/// <summary>
@@ -269,7 +262,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 52);
+				return MultiBootInfo->drivesLength;
 			}
 		}
 
@@ -281,7 +274,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 56);
+				return MultiBootInfo->drivesAddress;
 			}
 		}
 
@@ -293,7 +286,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 60);
+				return MultiBootInfo->configTable;
 			}
 		}
 
@@ -305,7 +298,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 64);
+				return Intrinsic.Load32((uint)MultiBootInfo, 64);
 			}
 		}
 
@@ -317,7 +310,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 68);
+				return MultiBootInfo->apmTable;
 			}
 		}
 
@@ -329,7 +322,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 72);
+				return MultiBootInfo->vbeControlInfo;
 			}
 		}
 
@@ -341,7 +334,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 72);
+				return MultiBootInfo->vbeModeInfo;
 			}
 		}
 
@@ -353,7 +346,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 76);
+				return MultiBootInfo->vbeMode;
 			}
 		}
 
@@ -365,7 +358,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 80);
+				return MultiBootInfo->vbeInterfaceSeg;
 			}
 		}
 
@@ -377,7 +370,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 84);
+				return MultiBootInfo->vbeInterfaceOff;
 			}
 		}
 
@@ -389,13 +382,13 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return Intrinsic.Load32(MultibootStructure, 86);
+				return MultiBootInfo->vbeInterfaceLength;
 			}
 		}
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	unsafe internal struct MultiBootInfo
+	unsafe public struct MultiBootInfo
 	{
 		public uint flags;			//required
 		public uint memLower;		//if bit 0 in flags are set
@@ -406,7 +399,7 @@ namespace Mosa.Kernel.x86
 		public uint moduleAddress;		//if bit 3 in flags are set
 		public MultiBootElfSectionHeaderTable syms;		//if bits 4 or 5 in flags are set
 		public uint memMapLength;		//if bit 6 in flags is set
-		public MultiBootMemoryMap* memMapAddress;		//if bit 6 in flags is set
+		public uint memMapAddress;		//if bit 6 in flags is set
 		public uint drivesLength;		//if bit 7 in flags is set
 		public uint drivesAddress;		//if bit 7 in flags is set
 		public uint configTable;		//if bit 8 in flags is set
@@ -458,7 +451,7 @@ namespace Mosa.Kernel.x86
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct MultiBootElfSectionHeaderTable
+	public struct MultiBootElfSectionHeaderTable
 	{
 		public uint num;
 		public uint size;
@@ -483,7 +476,7 @@ namespace Mosa.Kernel.x86
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct ElfSectionHeader
+	public struct ElfSectionHeader
 	{
 		public uint sh_name;                /* Section name (string tbl index) */
 		public uint sh_type;                /* Section type */
@@ -498,12 +491,40 @@ namespace Mosa.Kernel.x86
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct MultiBootMemoryMap
+	public struct MultiBootMemoryMap
 	{
 		public uint size;
-		public uint base_addr;
-		public uint length;
+		public ulong base_addr;
+		public ulong length;
 		public uint type;
 		public const uint EntrySize = 16;
+
+		//public bool IsLast
+		//{
+		//	get { return size == 0; }
+		//}
+
+		unsafe private MultiBootMemoryMap* thisPtr
+		{
+			get
+			{
+				//fixed (MultiBootMemoryMap* ptr = &this)
+				//	return ptr;
+
+				uint addr;
+				fixed (void* ptr = &this)
+					addr = (uint)ptr;
+				return (MultiBootMemoryMap*)addr;
+			}
+		}
+
+		unsafe public MultiBootMemoryMap* Next
+		{
+			get
+			{
+				//Assert.False(IsLast);
+				return (MultiBootMemoryMap*)(((uint)thisPtr) + size + 4);
+			}
+		}
 	}
 }
