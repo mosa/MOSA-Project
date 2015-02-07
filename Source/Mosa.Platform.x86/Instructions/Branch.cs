@@ -97,7 +97,7 @@ namespace Mosa.Platform.x86.Instructions
 				default: throw new NotSupportedException();
 			}
 
-			emitter.EmitRelativeBranch(opcode, context.BranchTargets[0]);
+			emitter.EmitRelativeBranch(opcode, context.Targets[0].Label);
 		}
 
 		/// <summary>

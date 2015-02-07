@@ -1034,7 +1034,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(context.Next.Instruction == IRInstruction.Jmp);
 
-			if (context.BranchTargets[0] == context.Next.BranchTargets[0])
+			if (context.Targets[0] == context.Next.Targets[0])
 			{
 				if (trace.Active) trace.Log("*** StrengthReductionIntegerCompareBranch-1");
 				if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());
@@ -1066,12 +1066,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (compareResult)
 			{
-				target = BasicBlocks.GetByLabel(context.Next.BranchTargets[0]);
+				target = context.Next.Targets[0];
 
 				if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 
 				// change to JMP
-				context.SetInstruction(IRInstruction.Jmp, BasicBlocks.GetByLabel(context.BranchTargets[0]));
+				context.SetInstruction(IRInstruction.Jmp, context.Targets[0]);
 				if (trace.Active) trace.Log("AFTER:\t" + context.ToString());
 
 				// goto next instruction and prepare to remove it
@@ -1079,7 +1079,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				target = BasicBlocks.GetByLabel(context.BranchTargets[0]);
+				target = context.Targets[0];
 			}
 
 			if (trace.Active) trace.Log("REMOVED:\t" + context.ToString());

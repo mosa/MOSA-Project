@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Add a jump instruction to the first block from the prologue
 			context.AppendInstruction(IRInstruction.Jmp);
-			context.SetBranch(0);
+			context.SetCILBranch(0);
 			prologue = context.BasicBlock;
 			BasicBlocks.AddHeaderBlock(prologue);
 
@@ -127,13 +127,13 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.UnconditionalBranch:
 						{
 							//Debug.Assert(ctx.BranchTargets.Length == 1);
-							targets.AddIfNew(ctx.BranchTargets[0]);
+							targets.AddIfNew(ctx.CILTargets[0]);
 							continue;
 						}
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.ConditionalBranch:
 						{
-							foreach (int target in ctx.BranchTargets)
+							foreach (int target in ctx.CILTargets)
 								targets.AddIfNew(target);
 							targets.AddIfNew(ctx.Next.Label);
 							continue;
@@ -142,7 +142,7 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.Leave:
 						{
 							//Debug.Assert(ctx.BranchTargets.Length == 1);
-							targets.AddIfNew(ctx.BranchTargets[0]);
+							targets.AddIfNew(ctx.CILTargets[0]);
 							continue;
 						}
 					default:
@@ -192,7 +192,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						// This jump joins fall-through blocks by giving them a proper end.
 						previous.AppendInstruction(IRInstruction.Jmp);
-						previous.SetBranch(ctx.Label);
+						previous.SetCILBranch(ctx.Label);
 					}
 
 					// Close current block
@@ -219,6 +219,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			for (var ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 			{
+				ConvertCILTargets(ctx);
+
 				switch (ctx.Instruction.FlowControl)
 				{
 					case FlowControl.Next: continue;
@@ -234,12 +236,12 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.UnconditionalBranch:
 						{
-							LinkBlocks(block, ctx.BranchTargets[0]);
+							LinkBlocks(block, ctx.CILTargets[0]);
 							return;
 						}
 					case FlowControl.ConditionalBranch:
 						{
-							foreach (int target in ctx.BranchTargets)
+							foreach (int target in ctx.CILTargets)
 								LinkBlocks(block, target);
 
 							int nextIndex = ctx.Index + 1;
@@ -262,7 +264,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 							if (createLink)
 							{
-								foreach (int target in ctx.BranchTargets)
+								foreach (int target in ctx.CILTargets)
 									LinkBlocks(block, target);
 							}
 
@@ -281,6 +283,24 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				LinkBlocks(block, next);
 				BuildBasicBlockLinks(next);
+			}
+		}
+
+		private void ConvertCILTargets(Context ctx)
+		{
+			if (ctx.CILTargets == null || ctx.CILTargets.Length == 0)
+				return;
+
+			if (ctx.CILTargets.Length == 1)
+				ctx.SetBranch(BasicBlocks.GetByLabel(ctx.CILTargets[0]));
+			else if (ctx.CILTargets.Length == 2)
+				ctx.SetBranch(BasicBlocks.GetByLabel(ctx.CILTargets[0]), BasicBlocks.GetByLabel(ctx.CILTargets[1]));
+			else
+			{
+				foreach (int label in ctx.CILTargets)
+				{
+					ctx.SetBranch(BasicBlocks.GetByLabel(label));
+				}
 			}
 		}
 

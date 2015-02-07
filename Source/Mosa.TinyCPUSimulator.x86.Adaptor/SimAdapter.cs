@@ -95,12 +95,10 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				operands.Add(ConvertToOpcodeOperand(operand, size));
 			}
 
-			if (context.BranchTargets != null)
+			if (context.Targets != null)
 			{
-				foreach (var target in context.BranchTargets)
+				foreach (var block in context.Targets)
 				{
-					var block = basicBlocks.GetByLabel(target);
-
 					operands.Add(CreateLabel(32, block.ToString() + ":" + method.FullName));
 				}
 			}

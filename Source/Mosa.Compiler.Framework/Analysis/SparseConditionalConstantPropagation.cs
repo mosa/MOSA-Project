@@ -422,7 +422,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private void Jmp(Context context)
 		{
-			if (context.BranchTargets == null || context.BranchTargets.Length == 0)
+			if (context.Targets == null || context.Targets.Count == 0)
 				return;
 
 			Branch(context);
@@ -646,10 +646,8 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			//Debug.Assert(context.BranchTargets.Length == 1);
 
-			foreach (var target in context.BranchTargets)
+			foreach (var block in context.Targets)
 			{
-				var block = BasicBlocks.GetByLabel(target);
-
 				AddExecutionBlock(block);
 			}
 		}

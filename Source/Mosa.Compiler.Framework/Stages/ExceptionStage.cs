@@ -56,12 +56,12 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else if (ctx.Instruction == IRInstruction.CallFinally)
 					{
-						var target = ctx.BranchTargets[0];
-						var finallyReturn = ctx.BranchTargets[1];
+						var target = ctx.Targets[0];
+						var finallyReturn = ctx.Targets[1];
 
 						ctx.SetInstruction(IRInstruction.KillAll);
 						ctx.AppendInstruction(IRInstruction.Move, exceptionRegister, nullOperand);
-						ctx.AppendInstruction(IRInstruction.Move, finallyReturnBlockRegister, Operand.CreateConstant(TypeSystem, finallyReturn));
+						ctx.AppendInstruction(IRInstruction.Move, finallyReturnBlockRegister, Operand.CreateConstant(TypeSystem, finallyReturn.Label));
 						ctx.AppendInstruction(IRInstruction.Jmp);
 						ctx.SetBranch(target);
 					}
@@ -108,40 +108,40 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else if (ctx.Instruction == IRInstruction.FinallyReturn)
 					{
-						var targets = ctx.BranchTargets;
+						var targets = ctx.Targets;
 
 						var header = FindImmediateExceptionHandler(ctx);
 						var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
 
 						var finallyReturnBlockVirtualRegister = finallyReturnVirtualRegisters[headerBlock];
 
-						Debug.Assert(targets.Length != 0);
+						Debug.Assert(targets.Count != 0);
 
-						if (targets.Length == 1)
+						if (targets.Count == 1)
 						{
-							ctx.SetInstruction(IRInstruction.Jmp, BasicBlocks.GetByLabel(targets[0]));
-							LinkBlocks(ctx, BasicBlocks.GetByLabel(targets[0]));
+							ctx.SetInstruction(IRInstruction.Jmp, targets[0]);
+							LinkBlocks(ctx, targets[0]);
 						}
 						else
 						{
-							var newBlocks = CreateNewBlocksWithContexts(targets.Length - 1);
+							var newBlocks = CreateNewBlocksWithContexts(targets.Count - 1);
 
-							ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[0]));
+							ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[0].Label));
 							ctx.SetBranch(targets[0]);
 							ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].BasicBlock);
-							LinkBlocks(ctx, BasicBlocks.GetByLabel(targets[0]), newBlocks[0].BasicBlock);
+							LinkBlocks(ctx, targets[0], newBlocks[0].BasicBlock);
 
-							for (int b = 1; b < targets.Length - 2; b++)
+							for (int b = 1; b < targets.Count - 2; b++)
 							{
-								newBlocks[b - 1].AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[b]));
+								newBlocks[b - 1].AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[b].Label));
 								newBlocks[b - 1].SetBranch(targets[b]);
 								newBlocks[b - 1].AppendInstruction(IRInstruction.Jmp, newBlocks[b + 1].BasicBlock);
 								newBlocks[b - 1].SetBranch(newBlocks[b + 1].BasicBlock);
-								LinkBlocks(newBlocks[b - 1], BasicBlocks.GetByLabel(targets[b]), newBlocks[b + 1].BasicBlock);
+								LinkBlocks(newBlocks[b - 1], targets[b], newBlocks[b + 1].BasicBlock);
 							}
 
-							newBlocks[targets.Length - 2].AppendInstruction(IRInstruction.Jmp, BasicBlocks.GetByLabel(targets[targets.Length - 1]));
-							LinkBlocks(newBlocks[targets.Length - 2], BasicBlocks.GetByLabel(targets[targets.Length - 1]));
+							newBlocks[targets.Count - 2].AppendInstruction(IRInstruction.Jmp, targets[targets.Count - 1]);
+							LinkBlocks(newBlocks[targets.Count - 2], targets[targets.Count - 1]);
 						}
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionStart)
@@ -154,7 +154,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionEnd)
 					{
-						int target = ctx.BranchTargets[0];
+						var target = ctx.Targets[0];
 						ctx.SetInstruction(IRInstruction.Jmp);
 						ctx.SetBranch(target);
 					}

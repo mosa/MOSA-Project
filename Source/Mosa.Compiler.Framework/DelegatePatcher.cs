@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework
 			context.AppendInstruction(IRInstruction.Store, size, null, v1, instanceOffsetOperand, instanceOperand);
 			context.MosaType = instanceOperand.Type;
 			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
-			context.SetBranch(BasicBlock.EpilogueLabel);
+			context.SetCILBranch(BasicBlock.EpilogueLabel);
 		}
 
 		private static void PatchInvoke(BaseMethodCompiler methodCompiler, bool withReturn)
@@ -188,7 +188,7 @@ namespace Mosa.Compiler.Framework
 
 			// Add a jump instruction to the first block from the prologue
 			context.AppendInstruction(IRInstruction.Jmp);
-			context.SetBranch(0);
+			context.SetCILBranch(0);
 			var prologue = context.BasicBlock;
 			basicBlocks.AddHeaderBlock(prologue);
 
