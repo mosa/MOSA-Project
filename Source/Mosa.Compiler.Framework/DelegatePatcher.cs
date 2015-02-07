@@ -65,7 +65,6 @@ namespace Mosa.Compiler.Framework
 			context.AppendInstruction(IRInstruction.Store, size, null, v1, instanceOffsetOperand, instanceOperand);
 			context.MosaType = instanceOperand.Type;
 			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
-			context.SetCILBranch(BasicBlock.EpilogueLabel);
 		}
 
 		private static void PatchInvoke(BaseMethodCompiler methodCompiler, bool withReturn)
@@ -116,7 +115,7 @@ namespace Mosa.Compiler.Framework
 			b0.AppendInstruction(IRInstruction.Load, size, opInstance, thisOperand, instanceOffsetOperand);
 			b0.AppendInstruction(IRInstruction.IntegerCompare, ConditionCode.Equal, opCompare, opInstance, c0);
 			b0.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, opCompare, c0);
-			b0.SetBranch(b2.BasicBlock);
+			b0.AddBranch(b2.BasicBlock);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.BasicBlock);
 			methodCompiler.BasicBlocks.LinkBlocks(b0.BasicBlock, b1.BasicBlock);
 			methodCompiler.BasicBlocks.LinkBlocks(b0.BasicBlock, b2.BasicBlock);
@@ -157,7 +156,7 @@ namespace Mosa.Compiler.Framework
 
 			Context context = CreateMethodStructure(methodCompiler, true);
 			context.AppendInstruction(IRInstruction.Return, null, nullOperand);
-			context.SetBranch(methodCompiler.BasicBlocks.EpilogueBlock);
+			context.AddBranch(methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private static void PatchEndInvoke(BaseMethodCompiler methodCompiler)
@@ -187,14 +186,12 @@ namespace Mosa.Compiler.Framework
 			var context = instructionSet.CreateNewBlock(basicBlocks, BasicBlock.PrologueLabel);
 
 			// Add a jump instruction to the first block from the prologue
-			context.AppendInstruction(IRInstruction.Jmp);
-			context.SetCILBranch(0);
-			var prologue = context.BasicBlock;
-			basicBlocks.AddHeaderBlock(prologue);
+			context.AppendInstruction(IRInstruction.Jmp, basicBlocks[0]);
+
+			basicBlocks.AddHeaderBlock(context.BasicBlock);
 
 			// Create the epilogue block
 			context = instructionSet.CreateNewBlock(basicBlocks, BasicBlock.EpilogueLabel);
-			var epilogue = context.BasicBlock;
 		}
 
 		private static Context CreateNewBlock(BaseMethodCompiler methodCompiler)

@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework.Stages
 						ctx.AppendInstruction(IRInstruction.Move, exceptionRegister, nullOperand);
 						ctx.AppendInstruction(IRInstruction.Move, finallyReturnBlockRegister, Operand.CreateConstant(TypeSystem, finallyReturn.Label));
 						ctx.AppendInstruction(IRInstruction.Jmp);
-						ctx.SetBranch(target);
+						ctx.AddBranch(target);
 					}
 					else if (ctx.Instruction == IRInstruction.FinallyStart)
 					{
@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework.Stages
 						var nextBlock = Split(ctx);
 
 						ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.NotEqual, null, exceptionVirtualRegister, nullOperand);
-						ctx.SetBranch(newBlocks[0].BasicBlock);
+						ctx.AddBranch(newBlocks[0].BasicBlock);
 						ctx.AppendInstruction(IRInstruction.Jmp, nextBlock.BasicBlock);
 						LinkBlocks(ctx, newBlocks[0]);
 						LinkBlocks(ctx, nextBlock);
@@ -127,16 +127,16 @@ namespace Mosa.Compiler.Framework.Stages
 							var newBlocks = CreateNewBlocksWithContexts(targets.Count - 1);
 
 							ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[0].Label));
-							ctx.SetBranch(targets[0]);
+							ctx.AddBranch(targets[0]);
 							ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].BasicBlock);
 							LinkBlocks(ctx, targets[0], newBlocks[0].BasicBlock);
 
 							for (int b = 1; b < targets.Count - 2; b++)
 							{
 								newBlocks[b - 1].AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[b].Label));
-								newBlocks[b - 1].SetBranch(targets[b]);
+								newBlocks[b - 1].AddBranch(targets[b]);
 								newBlocks[b - 1].AppendInstruction(IRInstruction.Jmp, newBlocks[b + 1].BasicBlock);
-								newBlocks[b - 1].SetBranch(newBlocks[b + 1].BasicBlock);
+								newBlocks[b - 1].AddBranch(newBlocks[b + 1].BasicBlock);
 								LinkBlocks(newBlocks[b - 1], targets[b], newBlocks[b + 1].BasicBlock);
 							}
 
@@ -156,7 +156,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var target = ctx.Targets[0];
 						ctx.SetInstruction(IRInstruction.Jmp);
-						ctx.SetBranch(target);
+						ctx.AddBranch(target);
 					}
 				}
 			}

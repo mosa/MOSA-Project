@@ -150,7 +150,7 @@ namespace Mosa.Compiler.Framework.Stages
 							{
 								if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 								context.SetInstruction(IRInstruction.Jmp);
-								context.SetBranch(branch);
+								context.AddBranch(branch);
 								if (trace.Active) trace.Log("AFTER:\t" + context.ToString());
 								unconditional = false;
 							}

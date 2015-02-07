@@ -898,8 +898,7 @@ namespace Mosa.Platform.x86.Stages
 			for (int i = 0; i < targets.Count - 1; ++i)
 			{
 				context.AppendInstruction(X86.Cmp, null, operand, Operand.CreateConstant(TypeSystem, i));
-				context.AppendInstruction(X86.Branch, ConditionCode.Equal);
-				context.SetBranch(targets[i]);
+				context.AppendInstruction(X86.Branch, ConditionCode.Equal, targets[i]);
 			}
 		}
 

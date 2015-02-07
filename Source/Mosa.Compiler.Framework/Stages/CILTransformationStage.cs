@@ -1077,13 +1077,13 @@ namespace Mosa.Compiler.Framework.Stages
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
 			{
 				context.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.NotEqual, null, first, second);
-				context.SetBranch(target);
+				context.AddBranch(target);
 				return;
 			}
 			else if (opcode == CIL.OpCode.Brfalse || opcode == CIL.OpCode.Brfalse_s)
 			{
 				context.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, first, second);
-				context.SetBranch(target);
+				context.AddBranch(target);
 				return;
 			}
 
@@ -1107,12 +1107,12 @@ namespace Mosa.Compiler.Framework.Stages
 				Operand comparisonResult = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
 				context.SetInstruction(IRInstruction.FloatCompare, cc, comparisonResult, first, second);
 				context.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, comparisonResult, Operand.CreateConstant(TypeSystem, 1));
-				context.SetBranch(target);
+				context.AddBranch(target);
 			}
 			else
 			{
 				context.SetInstruction(IRInstruction.IntegerCompareBranch, cc, null, first, second);
-				context.SetBranch(target);
+				context.AddBranch(target);
 			}
 		}
 

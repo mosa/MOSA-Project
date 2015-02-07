@@ -89,13 +89,10 @@ namespace Mosa.Compiler.Framework.Stages
 						return;
 
 					context.AppendInstruction(IRInstruction.FinallyReturn);
-					context.AllocateBranchTargets((uint)list.Count);
 
-					int targetNumber = 0;
 					foreach (var returnBlock in list)
 					{
-						context.Targets[targetNumber] = returnBlock;
-						targetNumber++;
+						context.AddBranch(returnBlock);
 					}
 				}
 				else if (context.Instruction is LeaveInstruction)
