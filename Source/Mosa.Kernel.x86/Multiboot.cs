@@ -92,7 +92,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->flags;
+				return MultiBootInfo->Flags;
 			}
 		}
 
@@ -104,7 +104,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->memLower;
+				return MultiBootInfo->MemLower;
 			}
 		}
 
@@ -116,7 +116,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->memUpper;
+				return MultiBootInfo->MemUpper;
 			}
 		}
 
@@ -128,7 +128,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->bootDevice;
+				return MultiBootInfo->BootDevice;
 			}
 		}
 
@@ -140,7 +140,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->commandLine;
+				return MultiBootInfo->CommandLine;
 			}
 		}
 
@@ -152,7 +152,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->moduleAddress;
+				return MultiBootInfo->ModuleAddress;
 			}
 		}
 
@@ -164,7 +164,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->moduleCount;
+				return MultiBootInfo->ModuleCount;
 			}
 		}
 
@@ -176,7 +176,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->memMapLength;
+				return MultiBootInfo->MemMapLength;
 			}
 		}
 
@@ -188,7 +188,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->memMapAddress;
+				return MultiBootInfo->MemMapAddress;
 			}
 		}
 
@@ -231,7 +231,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static uint GetMemoryMapBase(uint index)
 		{
-			return (uint)GetMemoryMapIndexLocation(index)->base_addr;
+			return (uint)GetMemoryMapIndexLocation(index)->BaseAddr;
 		}
 
 		/// <summary>
@@ -241,7 +241,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static uint GetMemoryMapLength(uint index)
 		{
-			return (uint)GetMemoryMapIndexLocation(index)->length;
+			return (uint)GetMemoryMapIndexLocation(index)->Length;
 		}
 
 		/// <summary>
@@ -251,7 +251,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static byte GetMemoryMapType(uint index)
 		{
-			return (byte)GetMemoryMapIndexLocation(index)->type;
+			return (byte)GetMemoryMapIndexLocation(index)->Type;
 		}
 
 		/// <summary>
@@ -262,7 +262,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->drivesLength;
+				return MultiBootInfo->DrivesLength;
 			}
 		}
 
@@ -274,7 +274,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->drivesAddress;
+				return MultiBootInfo->DrivesAddress;
 			}
 		}
 
@@ -286,7 +286,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->configTable;
+				return MultiBootInfo->ConfigTable;
 			}
 		}
 
@@ -310,7 +310,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->apmTable;
+				return MultiBootInfo->ApmTable;
 			}
 		}
 
@@ -322,7 +322,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->vbeControlInfo;
+				return MultiBootInfo->VbeControlInfo;
 			}
 		}
 
@@ -334,7 +334,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->vbeModeInfo;
+				return MultiBootInfo->VbeModeInfo;
 			}
 		}
 
@@ -346,7 +346,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->vbeMode;
+				return MultiBootInfo->VbeMode;
 			}
 		}
 
@@ -358,7 +358,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->vbeInterfaceSeg;
+				return MultiBootInfo->VbeInterfaceSeg;
 			}
 		}
 
@@ -370,7 +370,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->vbeInterfaceOff;
+				return MultiBootInfo->VbeInterfaceOff;
 			}
 		}
 
@@ -382,7 +382,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return MultiBootInfo->vbeInterfaceLength;
+				return MultiBootInfo->VbeInterfaceLength;
 			}
 		}
 	}
@@ -390,26 +390,26 @@ namespace Mosa.Kernel.x86
 	[StructLayout(LayoutKind.Sequential)]
 	unsafe public struct MultiBootInfo
 	{
-		public uint flags;			//required
-		public uint memLower;		//if bit 0 in flags are set
-		public uint memUpper;		//if bit 0 in flags are set
-		public uint bootDevice;		//if bit 1 in flags are set
-		public uint commandLine;		//if bit 2 in flags are set
-		public uint moduleCount;		//if bit 3 in flags are set
-		public uint moduleAddress;		//if bit 3 in flags are set
-		public MultiBootElfSectionHeaderTable syms;		//if bits 4 or 5 in flags are set
-		public uint memMapLength;		//if bit 6 in flags is set
-		public uint memMapAddress;		//if bit 6 in flags is set
-		public uint drivesLength;		//if bit 7 in flags is set
-		public uint drivesAddress;		//if bit 7 in flags is set
-		public uint configTable;		//if bit 8 in flags is set
-		public uint apmTable;		//if bit 9 in flags is set
-		public uint vbeControlInfo;	//if bit 10 in flags is set
-		public uint vbeModeInfo;		//if bit 11 in flags is set
-		public uint vbeMode;		// all vbe_* set if bit 12 in flags are set
-		public uint vbeInterfaceSeg;
-		public uint vbeInterfaceOff;
-		public uint vbeInterfaceLength;
+		public uint Flags;			    //required
+		public uint MemLower;		    //if bit 0 in flags are set
+		public uint MemUpper;		    //if bit 0 in flags are set
+		public uint BootDevice;		  //if bit 1 in flags are set
+		public uint CommandLine;		//if bit 2 in flags are set
+		public uint ModuleCount;		//if bit 3 in flags are set
+		public uint ModuleAddress;	//if bit 3 in flags are set
+		public MultiBootElfSectionHeaderTable Syms;	//if bits 4 or 5 in flags are set
+		public uint MemMapLength;		//if bit 6 in flags is set
+		public uint MemMapAddress;	//if bit 6 in flags is set
+		public uint DrivesLength;		//if bit 7 in flags is set
+		public uint DrivesAddress;	//if bit 7 in flags is set
+		public uint ConfigTable;		//if bit 8 in flags is set
+		public uint ApmTable;				//if bit 9 in flags is set
+		public uint VbeControlInfo;	//if bit 10 in flags is set
+		public uint VbeModeInfo;		//if bit 11 in flags is set
+		public uint VbeMode;				// all vbe_* set if bit 12 in flags are set
+		public uint VbeInterfaceSeg;
+		public uint VbeInterfaceOff;
+		public uint VbeInterfaceLength;
 
 		private static class FlagsOffset
 		{
@@ -420,17 +420,9 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				return flags.IsBitSet(5);
+				return Flags.IsBitSet(5);
 			}
 		}
-
-		//unsafe public uint MemoryMapCount
-		//{
-		//	get
-		//	{
-		//		return (uint)(memMapLength / MultiBootMemoryMap.EntrySize);
-		//	}
-		//}
 
 		unsafe public MultiBootElfSectionHeaderTable* ElfSectionHeaderTable
 		{
@@ -443,7 +435,7 @@ namespace Mosa.Kernel.x86
 				//	return (MultiBootElfSectionHeaderTable*)ptr;
 
 				uint ui;
-				fixed (void* ptr = &syms)
+				fixed (void* ptr = &Syms)
 					ui = (uint)ptr;
 				return (MultiBootElfSectionHeaderTable*)ui;
 			}
@@ -453,51 +445,48 @@ namespace Mosa.Kernel.x86
 	[StructLayout(LayoutKind.Sequential)]
 	public struct MultiBootElfSectionHeaderTable
 	{
-		public uint num;
-		public uint size;
+		public uint Num;
+		public uint Size;
 		unsafe public ElfSectionHeader* Sections;
-		public uint shndx;
+		public uint Shndx;
 
 		unsafe public ElfSectionHeader* StringTableSection
 		{
 			get
 			{
-				return Sections + shndx;
+				return Sections + Shndx;
 			}
 		}
 
 		unsafe public StringBuffer GetSectionName(int idx)
 		{
-			//return StringBuffer.CreateFromNullTerminatedString((byte*)(StringTableSection->sh_addr + (Sections + idx)->sh_name));
-
-			//TODO: Why name idx -1?
-			return StringBuffer.CreateFromNullTerminatedString((byte*)(StringTableSection->sh_addr + (Sections + idx)->sh_name - 1));
+			//TODO / confirm: Why name idx -1?
+			return StringBuffer.CreateFromNullTerminatedString((byte*)(StringTableSection->Addr + (Sections + idx)->Name - 1));
 		}
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
 	public struct ElfSectionHeader
 	{
-		public uint sh_name;                /* Section name (string tbl index) */
-		public uint sh_type;                /* Section type */
-		public uint sh_flags;               /* Section flags */
-		public uint sh_addr;                /* Section virtual addr at execution */
-		public uint sh_offset;              /* Section file offset */
-		public uint sh_size;                /* Section size in bytes */
-		public uint sh_link;                /* Link to another section */
-		public uint sh_info;                /* Additional section information */
-		public uint sh_addralign;           /* Section alignment */
-		public uint sh_entsize;             /* Entry size if section holds table */
+		public uint Name;                /* Section name (string tbl index) */
+		public uint Type;                /* Section type */
+		public uint Flags;               /* Section flags */
+		public uint Addr;                /* Section virtual addr at execution */
+		public uint Offset;              /* Section file offset */
+		public uint Size;                /* Section size in bytes */
+		public uint Link;                /* Link to another section */
+		public uint Info;                /* Additional section information */
+		public uint AddrAlign;           /* Section alignment */
+		public uint EntSize;             /* Entry size if section holds table */
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
 	public struct MultiBootMemoryMap
 	{
-		public uint size;
-		public ulong base_addr;
-		public ulong length;
-		public uint type;
-		public const uint EntrySize = 16;
+		public uint Size;
+		public ulong BaseAddr;
+		public ulong Length;
+		public uint Type;
 
 		//public bool IsLast
 		//{
@@ -523,7 +512,7 @@ namespace Mosa.Kernel.x86
 			get
 			{
 				//Assert.False(IsLast);
-				return (MultiBootMemoryMap*)(((uint)thisPtr) + size + 4);
+				return (MultiBootMemoryMap*)(((uint)thisPtr) + Size + 4);
 			}
 		}
 	}
