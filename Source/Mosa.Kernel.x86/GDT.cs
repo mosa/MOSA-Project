@@ -6,7 +6,7 @@
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
- *  Sebastion Loncar (Arakis) <sebastion.loncar@gmail.com>
+ *  Sebastian Loncar (Arakis) <sebastian.loncar@gmail.com>
  */
 
 using Mosa.Kernel.Helpers;
