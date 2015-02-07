@@ -40,8 +40,17 @@ namespace Mosa.Kernel.x86
 
 		private static MemoryChangedItem memoyChangedItem;
 
+		/// <summary>
+		/// Helps to track memroy changes. Checks if memroy has changed between two calls.
+		/// </summary>
+		/// <param name="startAddress"></param>
+		/// <param name="bytes"></param>
+		/// <param name="panic">Halt the kernel</param>
+		/// <param name="message">Display a custom message</param>
+		/// <returns></returns>
 		public static bool MemoryChanged(uint startAddress, uint bytes, bool panic = false, string message = null)
 		{
+			//Improvement: Allocate memory for multiple items and check for different input values.
 			var checksum = ClassLib.FlechterChecksum.Fletcher16(startAddress, bytes);
 			memoyChangedItem.bevoreLastCheckum = memoyChangedItem.lastChecksum;
 			memoyChangedItem.lastChecksum = checksum;
