@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Mosa.ClassLib
+namespace Mosa.Kernel.x86.Helpers
 {
 	/// <summary>
 	/// Fast checksum algorithm.
