@@ -37,7 +37,7 @@ namespace Mosa.Kernel.x86
 		{
 			public uint checks;
 			public ushort lastChecksum;
-			public ushort bevoreLastCheckum;
+			public ushort beforeLastCheckum;
 		}
 
 		private static MemoryChangedItem memoyChangedItem;
@@ -54,11 +54,11 @@ namespace Mosa.Kernel.x86
 		{
 			//Improvement: Allocate memory for multiple items and check for different input values.
 			var checksum = FlechterChecksum.Fletcher16(startAddress, bytes);
-			memoyChangedItem.bevoreLastCheckum = memoyChangedItem.lastChecksum;
+			memoyChangedItem.beforeLastCheckum = memoyChangedItem.lastChecksum;
 			memoyChangedItem.lastChecksum = checksum;
 			memoyChangedItem.checks++;
 
-			if (memoyChangedItem.checks > 1 && memoyChangedItem.bevoreLastCheckum != memoyChangedItem.lastChecksum)
+			if (memoyChangedItem.checks > 1 && memoyChangedItem.beforeLastCheckum != memoyChangedItem.lastChecksum)
 			{
 				if (panic)
 					if (message == null)

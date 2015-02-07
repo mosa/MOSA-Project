@@ -8,17 +8,22 @@
  */
 
 using Mosa.Internal;
+using Mosa.Kernel.Helpers;
+using Mosa.Kernel.x86.Helpers;
 using Mosa.Platform.Internal.x86;
+using System.Runtime.InteropServices;
 
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
 	/// Static class of helpful memory functions
 	/// </summary>
-	public static class Multiboot
+	unsafe public static class Multiboot
 	{
 		private static uint multibootptr = 0x200004;
 		private static uint multibootsignature = 0x200000;
+
+		unsafe internal static MultiBootInfo* MultiBootInfo;
 
 		/// <summary>
 		/// Location of the Multiboot Structure
@@ -61,16 +66,18 @@ namespace Mosa.Kernel.x86
 			{
 				SetMultibootLocation(address);
 			}
+			CountMemoryMap();
 		}
 
 		/// <summary>
 		/// Sets the multiboot location.
 		/// </summary>
 		/// <param name="address">The address.</param>
-		public static void SetMultibootLocation(uint address)
+		unsafe public static void SetMultibootLocation(uint address)
 		{
 			MultibootStructure = address;
-			CountMemoryMap();
+			MultiBootInfo = (MultiBootInfo*)address;
+			//CountMemoryMap();
 		}
 
 		/// <summary>
@@ -385,5 +392,118 @@ namespace Mosa.Kernel.x86
 				return Intrinsic.Load32(MultibootStructure, 86);
 			}
 		}
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	unsafe internal struct MultiBootInfo
+	{
+		public uint flags;			//required
+		public uint memLower;		//if bit 0 in flags are set
+		public uint memUpper;		//if bit 0 in flags are set
+		public uint bootDevice;		//if bit 1 in flags are set
+		public uint commandLine;		//if bit 2 in flags are set
+		public uint moduleCount;		//if bit 3 in flags are set
+		public uint moduleAddress;		//if bit 3 in flags are set
+		public MultiBootElfSectionHeaderTable syms;		//if bits 4 or 5 in flags are set
+		public uint memMapLength;		//if bit 6 in flags is set
+		public MultiBootMemoryMap* memMapAddress;		//if bit 6 in flags is set
+		public uint drivesLength;		//if bit 7 in flags is set
+		public uint drivesAddress;		//if bit 7 in flags is set
+		public uint configTable;		//if bit 8 in flags is set
+		public uint apmTable;		//if bit 9 in flags is set
+		public uint vbeControlInfo;	//if bit 10 in flags is set
+		public uint vbeModeInfo;		//if bit 11 in flags is set
+		public uint vbeMode;		// all vbe_* set if bit 12 in flags are set
+		public uint vbeInterfaceSeg;
+		public uint vbeInterfaceOff;
+		public uint vbeInterfaceLength;
+
+		private static class FlagsOffset
+		{
+			public const byte SymIsELF = 5;
+		}
+
+		public bool SymIsELF
+		{
+			get
+			{
+				return flags.IsBitSet(5);
+			}
+		}
+
+		//unsafe public uint MemoryMapCount
+		//{
+		//	get
+		//	{
+		//		return (uint)(memMapLength / MultiBootMemoryMap.EntrySize);
+		//	}
+		//}
+
+		unsafe public MultiBootElfSectionHeaderTable* ElfSectionHeaderTable
+		{
+			get
+			{
+				Assert.True(SymIsELF, "MultiBoot info does not contain ELF sections");
+
+				//FIXME: COMPILER BUG
+				//fixed (void* ptr = &this)
+				//	return (MultiBootElfSectionHeaderTable*)ptr;
+
+				uint ui;
+				fixed (void* ptr = &syms)
+					ui = (uint)ptr;
+				return (MultiBootElfSectionHeaderTable*)ui;
+			}
+		}
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct MultiBootElfSectionHeaderTable
+	{
+		public uint num;
+		public uint size;
+		unsafe public ElfSectionHeader* Sections;
+		public uint shndx;
+
+		unsafe public ElfSectionHeader* StringTableSection
+		{
+			get
+			{
+				return Sections + shndx;
+			}
+		}
+
+		unsafe public StringBuffer GetSectionName(int idx)
+		{
+			//return StringBuffer.CreateFromNullTerminatedString((byte*)(StringTableSection->sh_addr + (Sections + idx)->sh_name));
+
+			//TODO: Why name idx -1?
+			return StringBuffer.CreateFromNullTerminatedString((byte*)(StringTableSection->sh_addr + (Sections + idx)->sh_name - 1));
+		}
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct ElfSectionHeader
+	{
+		public uint sh_name;                /* Section name (string tbl index) */
+		public uint sh_type;                /* Section type */
+		public uint sh_flags;               /* Section flags */
+		public uint sh_addr;                /* Section virtual addr at execution */
+		public uint sh_offset;              /* Section file offset */
+		public uint sh_size;                /* Section size in bytes */
+		public uint sh_link;                /* Link to another section */
+		public uint sh_info;                /* Additional section information */
+		public uint sh_addralign;           /* Section alignment */
+		public uint sh_entsize;             /* Entry size if section holds table */
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	internal struct MultiBootMemoryMap
+	{
+		public uint size;
+		public uint base_addr;
+		public uint length;
+		public uint type;
+		public const uint EntrySize = 16;
 	}
 }

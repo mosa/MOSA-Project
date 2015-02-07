@@ -30,6 +30,21 @@ namespace Mosa.Platform.Internal.x86
 		//[FieldOffset(4)]
 		//unsafe private char* chars;
 
+		unsafe public static StringBuffer CreateFromNullTerminatedString(uint start)
+		{
+			return CreateFromNullTerminatedString((byte*)start);
+		}
+
+		unsafe public static StringBuffer CreateFromNullTerminatedString(byte* start)
+		{
+			var buf = new StringBuffer();
+			while (*start != 0)
+			{
+				buf.Append((char)*start++);
+			}
+			return buf;
+		}
+
 		private unsafe char* firstChar()
 		{
 			//Does not work!

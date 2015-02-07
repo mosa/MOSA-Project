@@ -22,9 +22,14 @@ namespace Mosa.CoolWorld.x86
 		/// <summary>
 		/// Main
 		/// </summary>
-		public static void Main()
+		unsafe public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
+			//Panic.DumpMemory((uint)Multiboot.info->ElfSectionHeaderTable);
+			//Panic.Error(StringBuffer.CreateFromNullTerminatedString(0x66d0c8 + 1));
+			//Panic.DumpMemory((Multiboot.info->ElfSectionHeaderTable->Sections + 4)->sh_addr);
+			//Panic.DumpMemory(Multiboot.info->ElfSectionHeaderTable->shndx);
+			Panic.Error(Multiboot.MultiBootInfo->ElfSectionHeaderTable->GetSectionName(4));
 
 			Console = ConsoleManager.Controller.Boot;
 			Console.Clear();
