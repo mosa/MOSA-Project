@@ -40,8 +40,8 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			byte nocheck = (byte)decoder.Instruction.Operand;
-
-			ctx.Other = nocheck;
+			//FUTURE:
+			//ctx.Other = nocheck;
 		}
 
 		#endregion Methods Overrides

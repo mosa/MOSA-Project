@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		///
 		/// </summary>
-		public InstructionData[] Data;
+		public InstructionNode[] Data;
 
 		/// <summary>
 		///
@@ -53,24 +53,9 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
-		/// Gets the size.
-		/// </summary>
-		public int Size { get { return size; } }
-
-		/// <summary>
 		/// Gets the amount of used indices.
 		/// </summary>
 		public int Used { get { return used; } }
-
-		/// <summary>
-		/// Gets an array that maps each index to its corresponding next index.
-		/// </summary>
-		public int[] NextArray { get { return next; } }
-
-		/// <summary>
-		/// Gets an array that maps each index to its corresponding previous index.
-		/// </summary>
-		public int[] PrevArray { get { return prev; } }
 
 		#endregion Properties
 
@@ -85,7 +70,7 @@ namespace Mosa.Compiler.Framework
 			this.size = size;
 			this.next = new int[size];
 			this.prev = new int[size + 2];
-			Data = new InstructionData[size];
+			Data = new InstructionNode[size];
 			Clear();
 		}
 
@@ -117,7 +102,7 @@ namespace Mosa.Compiler.Framework
 		{
 			int[] newNext = new int[newsize];
 			int[] newPrev = new int[newsize + 2];
-			InstructionData[] newInstructions = new InstructionData[newsize];
+			InstructionNode[] newInstructions = new InstructionNode[newsize];
 
 			next.CopyTo(newNext, 0);
 			prev.CopyTo(newPrev, 0);

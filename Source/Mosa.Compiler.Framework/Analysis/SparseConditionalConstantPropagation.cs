@@ -688,7 +688,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			if (result.IsOverDefined)
 				return;
 
-			var sourceBlocks = context.Other as List<BasicBlock>;
+			var sourceBlocks = context.PhiBlocks;
 
 			VariableState first = null;
 

@@ -132,6 +132,17 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gets the branch targets.
+		/// </summary>
+		/// <value>
+		/// The targets.
+		/// </value>
+		public List<BasicBlock> Targets
+		{
+			get { return instructionSet.Data[index].Targets; }
+		}
+
+		/// <summary>
 		/// Allocates the branch targets.
 		/// </summary>
 		/// <param name="targets">The targets.</param>
@@ -479,13 +490,15 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the "other" object.
+		/// Gets or sets the phi blocks.
 		/// </summary>
-		/// <value>The "other" object.</value>
-		public object Other
+		/// <value>
+		/// The phi blocks.
+		/// </value>
+		public List<BasicBlock> PhiBlocks
 		{
-			get { return instructionSet.Data[index].Other; }
-			set { instructionSet.Data[index].Other = value; }
+			get { return instructionSet.Data[index].PhiBlocks; }
+			set { instructionSet.Data[index].PhiBlocks = value; }
 		}
 
 		/// <summary>
