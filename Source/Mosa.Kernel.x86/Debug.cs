@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Kernel.x86.Helpers;
+
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
@@ -51,7 +53,7 @@ namespace Mosa.Kernel.x86
 		public static bool MemoryChanged(uint startAddress, uint bytes, bool panic = false, string message = null)
 		{
 			//Improvement: Allocate memory for multiple items and check for different input values.
-			var checksum = ClassLib.FlechterChecksum.Fletcher16(startAddress, bytes);
+			var checksum = FlechterChecksum.Fletcher16(startAddress, bytes);
 			memoyChangedItem.bevoreLastCheckum = memoyChangedItem.lastChecksum;
 			memoyChangedItem.lastChecksum = checksum;
 			memoyChangedItem.checks++;

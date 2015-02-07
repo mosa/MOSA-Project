@@ -68,6 +68,7 @@
     <Compile Include="ConsoleSession.cs" />
     <Compile Include="ELFHeader.cs" />
     <Compile Include="Helpers\DebugImplementation.cs" />
+    <Compile Include="Helpers\FlechtersChecksum.cs" />
     <Compile Include="SSE.cs" />
     <Compile Include="DebugClient.cs" />
     <Compile Include="Serial.cs" />
