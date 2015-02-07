@@ -35,10 +35,10 @@ namespace Mosa.Kernel.x86
 			PageFrameAllocator.Setup();
 			PageTable.Setup();
 			VirtualPageAllocator.Setup();
+			ProcessManager.Setup();
 
 			//At this point we can use objects, that allocates memory
 			Runtime.Setup();
-			ProcessManager.Setup();
 			TaskManager.Setup();
 			SmbiosManager.Setup();
 			ConsoleManager.Setup();
