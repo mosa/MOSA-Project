@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Sebastion Loncar (Arakis) <sebastion.loncar@gmail.com>
+ *  Sebastian Loncar (Arakis) <sebastian.loncar@gmail.com>
  */
 
 using Mosa.Kernel.x86.Helpers;

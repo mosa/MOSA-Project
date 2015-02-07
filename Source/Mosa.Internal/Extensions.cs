@@ -1,7 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Sebastian Loncar (Arakis) <sebastian.loncar@gmail.com>
+ */
+
+using System;
 
 namespace Mosa.Kernel.Helpers
 {

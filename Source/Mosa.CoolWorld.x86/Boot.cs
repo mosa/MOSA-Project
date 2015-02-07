@@ -22,7 +22,7 @@ namespace Mosa.CoolWorld.x86
 		/// <summary>
 		/// Main
 		/// </summary>
-		public static void Main()
+		unsafe public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
 

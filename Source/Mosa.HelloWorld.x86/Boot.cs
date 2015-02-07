@@ -55,7 +55,10 @@ namespace Mosa.HelloWorld.x86
 			Console.Color = Colors.Green;
 			Console.Write("Multibootaddress: ");
 			Console.Color = Colors.Gray;
-			Console.Write(Multiboot.MultibootStructure, 16, 8);
+			unsafe
+			{
+				Console.Write((uint)Multiboot.MultiBootInfo, 16, 8);
+			}
 
 			Console.WriteLine();
 			Console.Color = Colors.Green;
