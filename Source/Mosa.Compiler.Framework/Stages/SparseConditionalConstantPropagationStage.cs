@@ -126,17 +126,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 				var context = new Context(InstructionSet, block, prev.EndIndex);
 
-				while (context.IsEmpty || context.IsBlockEndInstruction || context.BranchTargets != null)
+				while (context.IsEmpty || context.IsBlockEndInstruction || context.Targets != null)
 				{
 					if (context.Instruction.FlowControl == FlowControl.ConditionalBranch ||
 						context.Instruction.FlowControl == FlowControl.UnconditionalBranch ||
 						context.Instruction.FlowControl == FlowControl.Switch)
 					{
-						Debug.Assert(context.BranchTargets.Length == 1);
+						Debug.Assert(context.Targets.Count == 1);
 
-						int branch = context.BranchTargets[0];
+						var branch = context.Targets[0];
 
-						if (branch == block.Label)
+						if (branch == block)
 						{
 							unconditional = context.Instruction.FlowControl == FlowControl.UnconditionalBranch;
 
@@ -150,7 +150,7 @@ namespace Mosa.Compiler.Framework.Stages
 							{
 								if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
 								context.SetInstruction(IRInstruction.Jmp);
-								context.SetBranch(branch);
+								context.AddBranch(branch);
 								if (trace.Active) trace.Log("AFTER:\t" + context.ToString());
 								unconditional = false;
 							}

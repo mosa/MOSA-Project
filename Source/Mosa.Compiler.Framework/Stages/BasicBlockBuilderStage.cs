@@ -32,6 +32,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private BasicBlock prologue;
 
+		private HashSet<BasicBlock> traversed;
+
 		#endregion Data members
 
 		protected override void Run()
@@ -46,18 +48,20 @@ namespace Mosa.Compiler.Framework.Stages
 			if (MethodCompiler.Method.Code.Count == 0)
 				return;
 
+			traversed = new HashSet<BasicBlock>();
+
 			// Create the prologue block
 			var context = CreateNewBlockWithContext(BasicBlock.PrologueLabel);
 
 			// Add a jump instruction to the first block from the prologue
-			context.AppendInstruction(IRInstruction.Jmp);
-			context.SetBranch(0);
 			prologue = context.BasicBlock;
 			BasicBlocks.AddHeaderBlock(prologue);
 
 			// Create the basic blocks
 			var targets = FindBasicBlockTargets();
 			CreateBasicBlocksFromTargets(targets);
+
+			context.AppendInstruction(IRInstruction.Jmp, BasicBlocks.GetByLabel(0));
 
 			// Create the epilogue block
 			context = CreateNewBlockWithContext(BasicBlock.EpilogueLabel);
@@ -103,6 +107,11 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		protected override void Finish()
+		{
+			traversed = null;
+		}
+
 		/// <summary>
 		/// Finds basic block targets.
 		/// </summary>
@@ -127,14 +136,16 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.UnconditionalBranch:
 						{
 							//Debug.Assert(ctx.BranchTargets.Length == 1);
-							targets.AddIfNew(ctx.BranchTargets[0]);
+							targets.AddIfNew(ctx.CILTargets[0]);
 							continue;
 						}
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.ConditionalBranch:
 						{
-							foreach (int target in ctx.BranchTargets)
+							foreach (int target in ctx.CILTargets)
+							{
 								targets.AddIfNew(target);
+							}
 							targets.AddIfNew(ctx.Next.Label);
 							continue;
 						}
@@ -142,7 +153,7 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.Leave:
 						{
 							//Debug.Assert(ctx.BranchTargets.Length == 1);
-							targets.AddIfNew(ctx.BranchTargets[0]);
+							targets.AddIfNew(ctx.CILTargets[0]);
 							continue;
 						}
 					default:
@@ -157,13 +168,10 @@ namespace Mosa.Compiler.Framework.Stages
 				targets.AddIfNew(handler.TryStart);
 
 				if (handler.FilterOffset != null)
+				{
 					targets.AddIfNew(handler.FilterOffset.Value);
+				}
 			}
-
-			//foreach (var target in targets)
-			//{
-			//	//trace.Log("Target: " + target.ToString("X4"));
-			//}
 
 			return targets;
 		}
@@ -192,7 +200,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						// This jump joins fall-through blocks by giving them a proper end.
 						previous.AppendInstruction(IRInstruction.Jmp);
-						previous.SetBranch(ctx.Label);
+						previous.SetCILBranch(ctx.Label);
 					}
 
 					// Close current block
@@ -217,8 +225,15 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <exception cref="InvalidCompilerException"></exception>
 		private void BuildBasicBlockLinks(BasicBlock block)
 		{
+			if (traversed.Contains(block))
+				return;
+
+			traversed.Add(block);
+
 			for (var ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 			{
+				ConvertCILTargets(ctx);
+
 				switch (ctx.Instruction.FlowControl)
 				{
 					case FlowControl.Next: continue;
@@ -226,7 +241,9 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.Return:
 						{
 							if (!block.NextBlocks.Contains(epilogue))
+							{
 								LinkBlocks(block, epilogue);
+							}
 							return;
 						}
 					case FlowControl.Break: goto case FlowControl.UnconditionalBranch;
@@ -234,17 +251,22 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.UnconditionalBranch:
 						{
-							LinkBlocks(block, ctx.BranchTargets[0]);
+							LinkBlocks(block, ctx.Targets[0]);
 							return;
 						}
 					case FlowControl.ConditionalBranch:
 						{
-							foreach (int target in ctx.BranchTargets)
+							foreach (var target in ctx.Targets)
+							{
 								LinkBlocks(block, target);
+							}
 
 							int nextIndex = ctx.Index + 1;
-							if (nextIndex < this.InstructionSet.Used)
+							if (nextIndex < InstructionSet.Used)
+							{
 								LinkBlocks(block, InstructionSet.Data[nextIndex].Label);
+							}
+
 							continue;
 						}
 					case FlowControl.EndFinally: return;
@@ -262,14 +284,38 @@ namespace Mosa.Compiler.Framework.Stages
 
 							if (createLink)
 							{
-								foreach (int target in ctx.BranchTargets)
+								foreach (var target in ctx.Targets)
+								{
 									LinkBlocks(block, target);
+								}
 							}
 
 							return;
 						}
 					default:
 						throw new InvalidCompilerException();
+				}
+			}
+		}
+
+		private void ConvertCILTargets(Context ctx)
+		{
+			if (ctx.CILTargets == null || ctx.CILTargets.Length == 0)
+				return;
+
+			if (ctx.CILTargets.Length == 1)
+			{
+				ctx.AddBranch(BasicBlocks.GetByLabel(ctx.CILTargets[0]));
+			}
+			else if (ctx.CILTargets.Length == 2)
+			{
+				ctx.AddBranch(BasicBlocks.GetByLabel(ctx.CILTargets[0]), BasicBlocks.GetByLabel(ctx.CILTargets[1]));
+			}
+			else
+			{
+				foreach (int label in ctx.CILTargets)
+				{
+					ctx.AddBranch(BasicBlocks.GetByLabel(label));
 				}
 			}
 		}
@@ -292,8 +338,10 @@ namespace Mosa.Compiler.Framework.Stages
 		private void LinkBlocks(BasicBlock caller, BasicBlock callee)
 		{
 			// Chain the blocks together
-			caller.NextBlocks.Add(callee);
-			callee.PreviousBlocks.Add(caller);
+			caller.NextBlocks.AddIfNew(callee);
+			callee.PreviousBlocks.AddIfNew(caller);
+
+			BuildBasicBlockLinks(callee);
 		}
 	}
 }

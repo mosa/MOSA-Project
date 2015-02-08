@@ -61,10 +61,10 @@ namespace Mosa.Compiler.Framework.CIL
 			// Populate the array
 			for (int i = 0; i < targets.Length; i++)
 			{
-				ctx.BranchTargets[i] = targets[i];
+				ctx.CILTargets[i] = targets[i];
 			}
 
-			ctx.BranchTargets[targets.Length] = decoder.Instruction.Next.Value;
+			ctx.CILTargets[targets.Length] = decoder.Instruction.Next.Value;
 		}
 
 		/// <summary>

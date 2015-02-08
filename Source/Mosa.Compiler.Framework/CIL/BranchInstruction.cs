@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode bases first
 			base.Decode(ctx, decoder);
 
-			ctx.SetBranch((int)decoder.Instruction.Operand);
+			ctx.SetCILBranch((int)decoder.Instruction.Operand);
 		}
 
 		/// <summary>

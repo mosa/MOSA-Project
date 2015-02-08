@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework
 			Operand instanceOperand = methodCompiler.Parameters[1];
 			Operand methodPointerOperand = methodCompiler.Parameters[2];
 
-			var size = methodCompiler.Architecture.NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64;
+			var size = methodCompiler.Architecture.NativeInstructionSize;
 
 			MosaField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
@@ -65,7 +65,6 @@ namespace Mosa.Compiler.Framework
 			context.AppendInstruction(IRInstruction.Store, size, null, v1, instanceOffsetOperand, instanceOperand);
 			context.MosaType = instanceOperand.Type;
 			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
-			context.SetBranch(BasicBlock.EpilogueLabel);
 		}
 
 		private static void PatchInvoke(BaseMethodCompiler methodCompiler, bool withReturn)
@@ -80,7 +79,7 @@ namespace Mosa.Compiler.Framework
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
 			Operand instanceOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, instanceOffset);
 
-			var size = methodCompiler.Architecture.NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64;
+			var size = methodCompiler.Architecture.NativeInstructionSize;
 
 			Context b0 = CreateMethodStructure(methodCompiler, false);
 			Context b1 = CreateNewBlock(methodCompiler);
@@ -116,7 +115,7 @@ namespace Mosa.Compiler.Framework
 			b0.AppendInstruction(IRInstruction.Load, size, opInstance, thisOperand, instanceOffsetOperand);
 			b0.AppendInstruction(IRInstruction.IntegerCompare, ConditionCode.Equal, opCompare, opInstance, c0);
 			b0.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, opCompare, c0);
-			b0.SetBranch(b2.BasicBlock);
+			b0.AddBranch(b2.BasicBlock);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.BasicBlock);
 			methodCompiler.BasicBlocks.LinkBlocks(b0.BasicBlock, b1.BasicBlock);
 			methodCompiler.BasicBlocks.LinkBlocks(b0.BasicBlock, b2.BasicBlock);
@@ -157,7 +156,7 @@ namespace Mosa.Compiler.Framework
 
 			Context context = CreateMethodStructure(methodCompiler, true);
 			context.AppendInstruction(IRInstruction.Return, null, nullOperand);
-			context.SetBranch(methodCompiler.BasicBlocks.EpilogueBlock);
+			context.AddBranch(methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private static void PatchEndInvoke(BaseMethodCompiler methodCompiler)
@@ -169,32 +168,27 @@ namespace Mosa.Compiler.Framework
 		private static Context CreateMethodStructure(BaseMethodCompiler methodCompiler, bool linkEpilogueBlock)
 		{
 			var basicBlocks = methodCompiler.BasicBlocks;
-			CreatePrologueAndEpilogueBlocks(methodCompiler.InstructionSet, basicBlocks);
 
-			var context = methodCompiler.InstructionSet.CreateNewBlock(basicBlocks, 0);
-
-			basicBlocks.LinkBlocks(basicBlocks.PrologueBlock, context.BasicBlock);
-
-			if (linkEpilogueBlock)
-				basicBlocks.LinkBlocks(context.BasicBlock, basicBlocks.EpilogueBlock);
-
-			return context;
-		}
-
-		private static void CreatePrologueAndEpilogueBlocks(InstructionSet instructionSet, BasicBlocks basicBlocks)
-		{
 			// Create the prologue block
-			var context = instructionSet.CreateNewBlock(basicBlocks, BasicBlock.PrologueLabel);
-
-			// Add a jump instruction to the first block from the prologue
-			context.AppendInstruction(IRInstruction.Jmp);
-			context.SetBranch(0);
-			var prologue = context.BasicBlock;
-			basicBlocks.AddHeaderBlock(prologue);
+			var context = methodCompiler.InstructionSet.CreateNewBlock(basicBlocks, BasicBlock.PrologueLabel);
+			basicBlocks.AddHeaderBlock(context.BasicBlock);
 
 			// Create the epilogue block
-			context = instructionSet.CreateNewBlock(basicBlocks, BasicBlock.EpilogueLabel);
-			var epilogue = context.BasicBlock;
+			methodCompiler.InstructionSet.CreateNewBlock(basicBlocks, BasicBlock.EpilogueLabel);
+
+			var b1 = methodCompiler.InstructionSet.CreateNewBlock(basicBlocks, 0);
+
+			basicBlocks.LinkBlocks(basicBlocks.PrologueBlock, b1.BasicBlock);
+
+			if (linkEpilogueBlock)
+			{
+				basicBlocks.LinkBlocks(b1.BasicBlock, basicBlocks.EpilogueBlock);
+			}
+
+			// Add a jump instruction to the first block from the prologue
+			context.AppendInstruction(IRInstruction.Jmp, basicBlocks.GetByLabel(0));
+
+			return b1;
 		}
 
 		private static Context CreateNewBlock(BaseMethodCompiler methodCompiler)

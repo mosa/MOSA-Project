@@ -53,7 +53,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (context.OperandCount == 0)
 			{
-				emitter.EmitRelativeBranch(CALL, context.BranchTargets[0]);
+				emitter.EmitRelativeBranch(CALL, context.Targets[0].Label);
 				return;
 			}
 

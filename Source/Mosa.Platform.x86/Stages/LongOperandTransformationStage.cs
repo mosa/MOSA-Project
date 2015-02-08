@@ -699,7 +699,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			BasicBlock target = BasicBlocks.GetByLabel(context.BranchTargets[0]);
+			BasicBlock target = context.Targets[0];
 			ConditionCode conditionCode = context.ConditionCode;
 
 			Context nextBlock = Split(context);

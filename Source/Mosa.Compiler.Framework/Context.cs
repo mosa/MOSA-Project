@@ -121,14 +121,12 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the branch targets.
+		///  Holds the cil branch targets
 		/// </summary>
-		/// <value>
-		/// The branch.
-		/// </value>
-		public int[] BranchTargets
+		public int[] CILTargets
 		{
-			get { return instructionSet.Data[index].BranchTargets; }
+			get { return instructionSet.Data[index].CILTargets; }
+			set { instructionSet.Data[index].CILTargets = value; }
 		}
 
 		/// <summary>
@@ -140,6 +138,7 @@ namespace Mosa.Compiler.Framework
 		public List<BasicBlock> Targets
 		{
 			get { return instructionSet.Data[index].Targets; }
+			private set { instructionSet.Data[index].Targets = value; }
 		}
 
 		/// <summary>
@@ -784,7 +783,7 @@ namespace Mosa.Compiler.Framework
 		public void SetInstruction(BaseInstruction instruction, BasicBlock block)
 		{
 			SetInstruction(instruction);
-			SetBranch(block);
+			AddBranch(block);
 		}
 
 		/// <summary>
@@ -796,7 +795,7 @@ namespace Mosa.Compiler.Framework
 		public void SetInstruction(BaseInstruction instruction, BasicBlock block1, BasicBlock block2)
 		{
 			SetInstruction(instruction);
-			SetBranch(block1, block2);
+			AddBranch(block1, block2);
 		}
 
 		/// <summary>
@@ -820,7 +819,7 @@ namespace Mosa.Compiler.Framework
 		{
 			SetInstruction(instruction);
 			ConditionCode = condition;
-			SetBranch(block);
+			AddBranch(block);
 		}
 
 		/// <summary>
@@ -1457,9 +1456,16 @@ namespace Mosa.Compiler.Framework
 		/// Sets the branch target.
 		/// </summary>
 		/// <param name="block">The basic block.</param>
-		public void SetBranch(BasicBlock block)
+		public void AddBranch(BasicBlock block)
 		{
-			SetBranch(block.Label);
+			Debug.Assert(block != null);
+
+			if (Targets == null)
+			{
+				Targets = new List<BasicBlock>(1);
+			}
+
+			Targets.Add(block);
 		}
 
 		/// <summary>
@@ -1467,35 +1473,32 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="block1">The block1.</param>
 		/// <param name="block2">The block2.</param>
-		public void SetBranch(BasicBlock block1, BasicBlock block2)
+		public void AddBranch(BasicBlock block1, BasicBlock block2)
 		{
-			SetBranch(block1.Label, block2.Label);
+			Debug.Assert(block1 != null);
+			Debug.Assert(block2 != null);
+
+			if (Targets == null)
+			{
+				Targets = new List<BasicBlock>(2);
+			}
+
+			Targets.Add(block1);
+			Targets.Add(block2);
 		}
 
 		/// <summary>
 		/// Sets the branch target.
 		/// </summary>
 		/// <param name="target1">The first target.</param>
-		public void SetBranch(int target1)
+		public void SetCILBranch(int target1)
 		{
-			if (BranchTargets == null)
+			if (CILTargets == null)
+			{
 				AllocateBranchTargets(1);
+			}
 
-			BranchTargets[0] = target1;
-		}
-
-		/// <summary>
-		/// Sets the branch target.
-		/// </summary>
-		/// <param name="target1">The target1.</param>
-		/// <param name="target2">The target2.</param>
-		public void SetBranch(int target1, int target2)
-		{
-			if (BranchTargets == null)
-				AllocateBranchTargets(2);
-
-			BranchTargets[0] = target1;
-			BranchTargets[1] = target2;
+			CILTargets[0] = target1;
 		}
 
 		/// <summary>

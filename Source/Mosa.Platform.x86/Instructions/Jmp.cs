@@ -52,7 +52,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (context.Operand1 == null)
 			{
-				emitter.EmitRelativeBranch(JMP, context.BranchTargets[0]);
+				emitter.EmitRelativeBranch(JMP, context.Targets[0].Label);
 			}
 			else
 			{

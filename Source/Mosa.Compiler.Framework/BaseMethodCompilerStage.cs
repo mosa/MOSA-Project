@@ -123,8 +123,7 @@ namespace Mosa.Compiler.Framework
 
 			NativePointerSize = Architecture.NativePointerSize;
 			NativePointerAlignment = Architecture.NativeAlignment;
-
-			NativeInstructionSize = NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64;
+			NativeInstructionSize = Architecture.NativeInstructionSize;
 
 			traceLogs = new List<TraceLog>();
 
@@ -404,13 +403,13 @@ namespace Mosa.Compiler.Framework
 					ctx.Instruction.FlowControl == FlowControl.UnconditionalBranch ||
 					ctx.Instruction.FlowControl == FlowControl.Switch)
 				{
-					var targets = ctx.BranchTargets;
+					var targets = ctx.Targets;
 
-					for (int index = 0; index < targets.Length; index++)
+					for (int index = 0; index < targets.Count; index++)
 					{
-						if (targets[index] == oldTarget.Label)
+						if (targets[index] == oldTarget)
 						{
-							targets[index] = newTarget.Label;
+							targets[index] = newTarget;
 						}
 					}
 				}

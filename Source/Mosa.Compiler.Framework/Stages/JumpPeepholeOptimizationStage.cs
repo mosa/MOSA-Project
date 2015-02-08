@@ -46,9 +46,9 @@ namespace Mosa.Compiler.Framework.Stages
 				Debug.Assert(context.Instruction.FlowControl == FlowControl.UnconditionalBranch);
 				//Debug.Assert(context.BranchTargets.Length == 1);
 
-				var target = context.BranchTargets[0];
+				var target = context.Targets[0];
 
-				if (next.Label != target)
+				if (next != target)
 					continue;
 
 				context.Remove();

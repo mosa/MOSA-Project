@@ -89,13 +89,10 @@ namespace Mosa.Compiler.Framework.Stages
 						return;
 
 					context.AppendInstruction(IRInstruction.FinallyReturn);
-					context.AllocateBranchTargets((uint)list.Count);
 
-					int targetNumber = 0;
 					foreach (var returnBlock in list)
 					{
-						context.BranchTargets[targetNumber] = returnBlock.Label;
-						targetNumber++;
+						context.AddBranch(returnBlock);
 					}
 				}
 				else if (context.Instruction is LeaveInstruction)
@@ -113,8 +110,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (createLink)
 					{
-						var tryFinally = context.BranchTargets[0];
-						var tryFinallyBlock = BasicBlocks.GetByLabel(tryFinally);
+						var tryFinallyBlock = context.Targets[0];
 
 						returns.Add(entry, tryFinallyBlock);
 

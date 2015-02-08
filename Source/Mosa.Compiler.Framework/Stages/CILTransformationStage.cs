@@ -1067,7 +1067,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.UnaryBranch(Context context)
 		{
-			int target = context.BranchTargets[0];
+			var target = context.Targets[0];
 
 			Operand first = context.Operand1;
 			Operand second = Operand.CreateConstant(TypeSystem, (int)0);
@@ -1077,13 +1077,13 @@ namespace Mosa.Compiler.Framework.Stages
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
 			{
 				context.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.NotEqual, null, first, second);
-				context.SetBranch(target);
+				context.AddBranch(target);
 				return;
 			}
 			else if (opcode == CIL.OpCode.Brfalse || opcode == CIL.OpCode.Brfalse_s)
 			{
 				context.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, first, second);
-				context.SetBranch(target);
+				context.AddBranch(target);
 				return;
 			}
 
@@ -1096,7 +1096,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.BinaryBranch(Context context)
 		{
-			int target = context.BranchTargets[0];
+			var target = context.Targets[0];
 
 			ConditionCode cc = ConvertCondition(((CIL.BaseCILInstruction)context.Instruction).OpCode);
 			Operand first = context.Operand1;
@@ -1107,12 +1107,12 @@ namespace Mosa.Compiler.Framework.Stages
 				Operand comparisonResult = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
 				context.SetInstruction(IRInstruction.FloatCompare, cc, comparisonResult, first, second);
 				context.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, comparisonResult, Operand.CreateConstant(TypeSystem, 1));
-				context.SetBranch(target);
+				context.AddBranch(target);
 			}
 			else
 			{
 				context.SetInstruction(IRInstruction.IntegerCompareBranch, cc, null, first, second);
-				context.SetBranch(target);
+				context.AddBranch(target);
 			}
 		}
 
@@ -1332,7 +1332,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// If we reach here then the leave is not inside a protected region and must act like a branch.
 			// We must also tell the compiler to link the two blocks together
 			context.ReplaceInstructionOnly(IRInstruction.Jmp);
-			LinkBlocks(context, BasicBlocks.GetByLabel(context.BranchTargets[0]));
+			LinkBlocks(context, context.Targets[0]);
 		}
 
 		/// <summary>

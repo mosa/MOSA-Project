@@ -9,6 +9,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -195,6 +196,9 @@ namespace Mosa.Compiler.Framework
 		{
 			BasicBlock basicBlock = null;
 			basicBlocksByLabel.TryGetValue(label, out basicBlock);
+
+			Debug.Assert(label == BasicBlock.PrologueLabel || label == BasicBlock.EpilogueLabel || basicBlock != null);
+
 			return basicBlock;
 		}
 

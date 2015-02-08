@@ -234,7 +234,7 @@ namespace Mosa.Compiler.Framework
 			this.Result2 = null;
 			this.packed = 0;
 			this.extension = null;
-			this.BranchTargets = null;
+			this.Targets = null;
 			this.BranchHint = false;
 			this.ConditionCode = ConditionCode.Undefined;
 		}
@@ -277,7 +277,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="targets">The targets.</param>
 		public void AllocateBranchTargets(uint targets)
 		{
-			BranchTargets = new int[targets];
+			CILTargets = new int[targets];
 		}
 
 		/// <summary>
@@ -296,10 +296,10 @@ namespace Mosa.Compiler.Framework
 			if (Label >= 0)
 				str = Label.ToString() + ": " + str;
 
-			if (BranchTargets != null)
+			if (Targets != null)
 			{
 				str = str + " (";
-				foreach (int branch in BranchTargets)
+				foreach (var branch in Targets)
 					str = str + branch.ToString() + ",";
 
 				str = str.Trim(',') + ")";

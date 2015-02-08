@@ -91,6 +91,17 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public abstract int NativePointerSize { get; }
 
+		/// <summary>
+		/// Gets the size of the native instruction.
+		/// </summary>
+		/// <value>
+		/// The size of the native instruction.
+		/// </value>
+		public virtual InstructionSize NativeInstructionSize
+		{
+			get { return NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64; }
+		}
+
 		#endregion Properties
 
 		#region Methods
