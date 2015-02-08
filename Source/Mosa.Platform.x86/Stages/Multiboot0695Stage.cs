@@ -100,6 +100,9 @@ namespace Mosa.Platform.x86.Stages
 
 				WriteMultibootHeader();
 
+				Linker.CreateSymbol(MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativeIntegerSize);
+				Linker.CreateSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativeIntegerSize);
+
 				return;
 			}
 
@@ -120,10 +123,8 @@ namespace Mosa.Platform.x86.Stages
 			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ebp, 0), zero);
 
-			// store multiboot registers eax and ebx at 0x200000 and 0x200004 respectively
-			ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstant(TypeSystem, 0x200000));
-			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 0), eax);
-			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 4), ebx);
+			ctx.AppendInstruction(X86.Mov, Operand.CreateUnmanagedSymbolPointer(TypeSystem, MultibootEAX), eax);
+			ctx.AppendInstruction(X86.Mov, Operand.CreateUnmanagedSymbolPointer(TypeSystem, MultibootEBX), ebx);
 
 			// call type initializer
 			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
@@ -137,7 +138,9 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Internals
 
-		private const string MultibootHeaderSymbolName = @"<$>mosa-multibootHeader-header";
+		private const string MultibootHeaderSymbolName = @"<$>mosa-multiboot-header";
+		public const string MultibootEAX = @"<$>mosa-multiboot-eax";
+		public const string MultibootEBX = @"<$>mosa-multiboot-ebx";
 
 		/// <summary>
 		/// Writes the multiboot header.

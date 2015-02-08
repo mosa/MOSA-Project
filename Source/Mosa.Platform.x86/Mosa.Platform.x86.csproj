@@ -111,6 +111,8 @@
     <Compile Include="Intrinsic\FrameJump.cs" />
     <Compile Include="Intrinsic\GetExceptionRegister.cs" />
     <Compile Include="Intrinsic\GetMethodExceptionLookupTable.cs" />
+    <Compile Include="Intrinsic\GetMultibootEAX.cs" />
+    <Compile Include="Intrinsic\GetMultibootEBX.cs" />
     <Compile Include="Intrinsic\Int.cs" />
     <Compile Include="Intrinsic\In16.cs" />
     <Compile Include="Intrinsic\In32.cs" />
