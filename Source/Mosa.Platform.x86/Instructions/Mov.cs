@@ -103,6 +103,13 @@ namespace Mosa.Platform.x86.Instructions
 				return M_R;
 			}
 
+			if (destination.IsSymbol && source.IsRegister)
+			{
+				if (destination.IsByte || destination.IsBoolean) return RM_C_U8;
+				if (destination.IsChar || destination.IsShort) return M_C_16;
+				return RM_C;
+			}
+
 			throw new ArgumentException(@"No opcode for operand type. [" + destination + ", " + source + ")");
 		}
 

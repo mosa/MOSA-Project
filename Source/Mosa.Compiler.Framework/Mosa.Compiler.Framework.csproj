@@ -175,10 +175,8 @@
     <Compile Include="Analysis\SimpleFastDominance.cs" />
     <Compile Include="Analysis\LoopAwareBlockOrder.cs" />
     <Compile Include="CompilationScheduler.cs" />
-    <Compile Include="Stages\CheckPlatformOperandCountStage.cs" />
     <Compile Include="Stages\PlatformIntrinsicStage.cs" />
     <Compile Include="PlugSystem.cs" />
-    <Compile Include="Stages\CheckIROperandCountStage.cs" />
     <Compile Include="Stages\BlockOrderingStage.cs" />
     <Compile Include="Stages\IROptimizationStage.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
@@ -213,7 +211,6 @@
     <Compile Include="Platform\BasePlatformInstruction.cs" />
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
     <Compile Include="StackLayout.cs" />
-    <Compile Include="Stages\MultipleDefinitionMarkerStage.cs" />
     <Compile Include="Stages\PlugStage.cs" />
     <Compile Include="Stages\ProtectedRegionStage.cs" />
     <Compile Include="IR\ExceptionStart.cs" />

@@ -21,9 +21,6 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	unsafe public static class Multiboot
 	{
-		private static uint multibootptr = 0x200004;
-		private static uint multibootsignature = 0x200000;
-
 		unsafe public static MultiBootInfo* MultiBootInfo;
 
 		/// <summary>
@@ -47,7 +44,10 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Setup()
 		{
-			SetMultibootLocation(Intrinsic.Load32(multibootptr), Intrinsic.Load32(multibootsignature));
+			uint eax = Native.GetMultibootEAX();
+			uint ebx = Native.GetMultibootEBX();
+
+			SetMultibootLocation(ebx, eax);
 		}
 
 		/// <summary>

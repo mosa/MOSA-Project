@@ -117,9 +117,11 @@ namespace Mosa.Platform.x86
 			// Add immediate bytes
 			if (dest.IsConstant)
 				WriteImmediate(dest);
-			if (src != null && src.IsConstant)
+			else if (dest.IsSymbol)
+				WriteDisplacement(dest);
+			else if (src != null && src.IsConstant)
 				WriteImmediate(src);
-			if (src != null && src.IsSymbol)
+			else if (src != null && src.IsSymbol)
 				WriteDisplacement(src);
 		}
 

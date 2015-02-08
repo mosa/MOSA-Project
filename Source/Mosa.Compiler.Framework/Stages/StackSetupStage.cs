@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.Stages
 				// Create an epilogue instruction
 				var epilogueCtx = new Context(InstructionSet, BasicBlocks.EpilogueBlock);
 				epilogueCtx.AppendInstruction(IRInstruction.Epilogue);
-				epilogueCtx.Label = Int32.MaxValue;
+				epilogueCtx.Label = BasicBlock.EpilogueLabel;
 			}
 		}
 	}
