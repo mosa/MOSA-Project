@@ -123,8 +123,7 @@ namespace Mosa.Compiler.Framework
 
 			NativePointerSize = Architecture.NativePointerSize;
 			NativePointerAlignment = Architecture.NativeAlignment;
-
-			NativeInstructionSize = NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64;
+			NativeInstructionSize = Architecture.NativeInstructionSize;
 
 			traceLogs = new List<TraceLog>();
 

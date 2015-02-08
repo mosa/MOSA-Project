@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework
 			Operand instanceOperand = methodCompiler.Parameters[1];
 			Operand methodPointerOperand = methodCompiler.Parameters[2];
 
-			var size = methodCompiler.Architecture.NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64;
+			var size = methodCompiler.Architecture.NativeInstructionSize;
 
 			MosaField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
@@ -79,7 +79,7 @@ namespace Mosa.Compiler.Framework
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
 			Operand instanceOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, instanceOffset);
 
-			var size = methodCompiler.Architecture.NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64;
+			var size = methodCompiler.Architecture.NativeInstructionSize;
 
 			Context b0 = CreateMethodStructure(methodCompiler, false);
 			Context b1 = CreateNewBlock(methodCompiler);
