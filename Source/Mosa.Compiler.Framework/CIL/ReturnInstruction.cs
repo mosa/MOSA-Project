@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.CIL
 			else
 				ctx.OperandCount = 1;
 
-			ctx.SetCILBranch(BasicBlock.EpilogueLabel);
+			ctx.AddCILBranch(BasicBlock.EpilogueLabel);
 		}
 
 		/// <summary>

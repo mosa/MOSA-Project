@@ -56,15 +56,13 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var targets = (int[])decoder.Instruction.Operand;
 
-			ctx.AllocateBranchTargets((uint)targets.Length + 1);
-
 			// Populate the array
 			for (int i = 0; i < targets.Length; i++)
 			{
-				ctx.CILTargets[i] = targets[i];
+				ctx.AddCILBranch(targets[i]);
 			}
 
-			ctx.CILTargets[targets.Length] = decoder.Instruction.Next.Value;
+			ctx.AddCILBranch(decoder.Instruction.Next.Value);
 		}
 
 		/// <summary>

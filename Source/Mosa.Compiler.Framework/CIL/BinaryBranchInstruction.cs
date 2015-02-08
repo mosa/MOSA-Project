@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Read the branch target
 			// Is this a short branch target?
 			// FIXME: Remove unary branch instructions from this list.
-			ctx.SetCILBranch((int)decoder.Instruction.Operand);
+			ctx.AddCILBranch((int)decoder.Instruction.Operand);
 		}
 
 		/// <summary>

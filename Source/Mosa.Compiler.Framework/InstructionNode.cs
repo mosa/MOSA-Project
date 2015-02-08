@@ -198,7 +198,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		///  Holds the cil branch targets
 		/// </summary>
-		public int[] CILTargets
+		public List<int> CILTargets
 		{
 			get { return extension == null ? null : extension.CILTargets; }
 			set { CheckExtension(); extension.CILTargets = value; }
@@ -269,15 +269,6 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(index >= 3, @"No Index");
 
 			return extension.AdditionalOperands[index - 3];
-		}
-
-		/// <summary>
-		/// Allocates the branch targets.
-		/// </summary>
-		/// <param name="targets">The targets.</param>
-		public void AllocateBranchTargets(uint targets)
-		{
-			CILTargets = new int[targets];
 		}
 
 		/// <summary>

@@ -123,7 +123,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		///  Holds the cil branch targets
 		/// </summary>
-		public int[] CILTargets
+		public List<int> CILTargets
 		{
 			get { return instructionSet.Data[index].CILTargets; }
 			set { instructionSet.Data[index].CILTargets = value; }
@@ -139,15 +139,6 @@ namespace Mosa.Compiler.Framework
 		{
 			get { return instructionSet.Data[index].Targets; }
 			private set { instructionSet.Data[index].Targets = value; }
-		}
-
-		/// <summary>
-		/// Allocates the branch targets.
-		/// </summary>
-		/// <param name="targets">The targets.</param>
-		public void AllocateBranchTargets(uint targets)
-		{
-			instructionSet.Data[index].AllocateBranchTargets(targets);
 		}
 
 		/// <summary>
@@ -1490,15 +1481,15 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Sets the branch target.
 		/// </summary>
-		/// <param name="target1">The first target.</param>
-		public void SetCILBranch(int target1)
+		/// <param name="target">The first target.</param>
+		public void AddCILBranch(int target)
 		{
 			if (CILTargets == null)
 			{
-				AllocateBranchTargets(1);
+				CILTargets = new List<int>(1);
 			}
 
-			CILTargets[0] = target1;
+			CILTargets.Add(target);
 		}
 
 		/// <summary>

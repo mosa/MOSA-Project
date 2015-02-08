@@ -18,20 +18,6 @@ namespace Mosa.Compiler.Framework
 		#region Structures
 
 		/// <summary>
-		/// Struct for multiboot options.
-		/// </summary>
-		public struct MultibootStruct
-		{
-			public uint? VideoMode { get; set; }
-
-			public uint? VideoWidth { get; set; }
-
-			public uint? VideoHeight { get; set; }
-
-			public uint? VideoDepth { get; set; }
-		}
-
-		/// <summary>
 		/// Struct for PE options.
 		/// </summary>
 		public struct PortableExecutableStruct
@@ -73,12 +59,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <value>The output file.</value>
 		public string OutputFile { get; set; }
-
-		/// <summary>
-		/// Gets or sets the statistics file.
-		/// </summary>
-		/// <value>The statistics file.</value>
-		public string StatisticsFile { get; set; }
 
 		/// <summary>
 		/// Gets or sets the map file.
@@ -123,12 +103,6 @@ namespace Mosa.Compiler.Framework
 		/// 	<c>true</c> if static allocations are enabled; otherwise, <c>false</c>.
 		/// </value>
 		public bool EnableStaticAllocations { get; set; }
-
-		/// <summary>
-		/// Holds a struct with additional options for Multiboot.
-		/// </summary>
-		/// <value>The multiboot struct.</value>
-		public MultibootStruct Multiboot;
 
 		/// <summary>
 		/// Holds a struct with additional options for ELF32.

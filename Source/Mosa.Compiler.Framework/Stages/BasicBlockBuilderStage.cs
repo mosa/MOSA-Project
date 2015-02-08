@@ -200,7 +200,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						// This jump joins fall-through blocks by giving them a proper end.
 						previous.AppendInstruction(IRInstruction.Jmp);
-						previous.SetCILBranch(ctx.Label);
+						previous.AddCILBranch(ctx.Label);
 					}
 
 					// Close current block
@@ -300,23 +300,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConvertCILTargets(Context ctx)
 		{
-			if (ctx.CILTargets == null || ctx.CILTargets.Length == 0)
+			if (ctx.CILTargets == null || ctx.CILTargets.Count == 0)
 				return;
 
-			if (ctx.CILTargets.Length == 1)
+			foreach (int label in ctx.CILTargets)
 			{
-				ctx.AddBranch(BasicBlocks.GetByLabel(ctx.CILTargets[0]));
-			}
-			else if (ctx.CILTargets.Length == 2)
-			{
-				ctx.AddBranch(BasicBlocks.GetByLabel(ctx.CILTargets[0]), BasicBlocks.GetByLabel(ctx.CILTargets[1]));
-			}
-			else
-			{
-				foreach (int label in ctx.CILTargets)
-				{
-					ctx.AddBranch(BasicBlocks.GetByLabel(label));
-				}
+				ctx.AddBranch(BasicBlocks.GetByLabel(label));
 			}
 		}
 

@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		///  Holds the cil branch targets
 		/// </summary>
-		public int[] CILTargets;
+		public List<int> CILTargets;
 
 		/// <summary>
 		/// Gets or sets the phi blocks.

@@ -156,7 +156,6 @@
     <Compile Include="Stages\ProtectedRegionLayoutStage.cs" />
     <Compile Include="Stages\ExceptionStage.cs" />
     <Compile Include="Stages\ConvertCompoundStage.cs" />
-    <Compile Include="Stages\InstructionStatisticsStage.cs" />
     <Compile Include="Stages\MapFileGenerationStage.cs" />
     <Compile Include="Stages\PromoteLocalVariablesStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
