@@ -195,7 +195,8 @@ namespace Mosa.Compiler.Framework
 			{
 				for (int i = 0; (i < 2) && (i < context.Targets.Count); i++)
 				{
-					s.Append(String.Format(" L_{0:X4},", context.Targets[i]));
+					s.Append(' ');
+					s.Append(context.Targets[i].ToString());
 				}
 
 				if (context.Targets.Count > 2)

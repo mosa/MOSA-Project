@@ -168,30 +168,27 @@ namespace Mosa.Compiler.Framework
 		private static Context CreateMethodStructure(BaseMethodCompiler methodCompiler, bool linkEpilogueBlock)
 		{
 			var basicBlocks = methodCompiler.BasicBlocks;
-			CreatePrologueAndEpilogueBlocks(methodCompiler.InstructionSet, basicBlocks);
 
-			var context = methodCompiler.InstructionSet.CreateNewBlock(basicBlocks, 0);
-
-			basicBlocks.LinkBlocks(basicBlocks.PrologueBlock, context.BasicBlock);
-
-			if (linkEpilogueBlock)
-				basicBlocks.LinkBlocks(context.BasicBlock, basicBlocks.EpilogueBlock);
-
-			return context;
-		}
-
-		private static void CreatePrologueAndEpilogueBlocks(InstructionSet instructionSet, BasicBlocks basicBlocks)
-		{
 			// Create the prologue block
-			var context = instructionSet.CreateNewBlock(basicBlocks, BasicBlock.PrologueLabel);
-
-			// Add a jump instruction to the first block from the prologue
-			context.AppendInstruction(IRInstruction.Jmp, basicBlocks[0]);
-
+			var context = methodCompiler.InstructionSet.CreateNewBlock(basicBlocks, BasicBlock.PrologueLabel);
 			basicBlocks.AddHeaderBlock(context.BasicBlock);
 
 			// Create the epilogue block
-			context = instructionSet.CreateNewBlock(basicBlocks, BasicBlock.EpilogueLabel);
+			methodCompiler.InstructionSet.CreateNewBlock(basicBlocks, BasicBlock.EpilogueLabel);
+
+			var b1 = methodCompiler.InstructionSet.CreateNewBlock(basicBlocks, 0);
+
+			basicBlocks.LinkBlocks(basicBlocks.PrologueBlock, b1.BasicBlock);
+
+			if (linkEpilogueBlock)
+			{
+				basicBlocks.LinkBlocks(b1.BasicBlock, basicBlocks.EpilogueBlock);
+			}
+
+			// Add a jump instruction to the first block from the prologue
+			context.AppendInstruction(IRInstruction.Jmp, basicBlocks.GetByLabel(0));
+
+			return b1;
 		}
 
 		private static Context CreateNewBlock(BaseMethodCompiler methodCompiler)
