@@ -201,84 +201,18 @@ namespace Mosa.Tool.Compiler
 			);
 
 			optionSet.Add(
-				"stats=",
-				"Generate instruction statistics {file} of the produced binary.",
-				delegate(string file)
-				{
-					compiler.CompilerOptions.StatisticsFile = file;
-				}
-			);
-
-			optionSet.Add(
-				"multibootHeader-video-mode=",
-				"Specify the video mode for multibootHeader [{text|graphics}].",
-				delegate(string v)
-				{
-					switch (v.ToLower())
-					{
-						case "text":
-							compiler.CompilerOptions.Multiboot.VideoMode = 1;
-							break;
-
-						case "graphics":
-							compiler.CompilerOptions.Multiboot.VideoMode = 0;
-							break;
-
-						default:
-							throw new OptionException("Invalid value for multibootHeader video mode: " + v, "multibootHeader-video-mode");
-					}
-				}
-			);
-
-			optionSet.Add(
-				"multibootHeader-video-width=",
-				"Specify the {width} for video output, in pixels for graphics mode or in characters for text mode.",
+				"base-address=",
+				"Specify the {base address}.",
 				delegate(string v)
 				{
 					uint val;
 					if (uint.TryParse(v, out val))
 					{
-						// TODO: this probably needs further validation
-						compiler.CompilerOptions.Multiboot.VideoWidth = val;
+						compiler.CompilerOptions.BaseAddress = val;
 					}
 					else
 					{
-						throw new OptionException("Invalid value for multibootHeader video width: " + v, "multibootHeader-video-width");
-					}
-				}
-			);
-
-			optionSet.Add(
-				"multibootHeader-video-height=",
-				"Specify the {height} for video output, in pixels for graphics mode or in characters for text mode.",
-				delegate(string v)
-				{
-					uint val;
-					if (uint.TryParse(v, out val))
-					{
-						// TODO: this probably needs further validation
-						compiler.CompilerOptions.Multiboot.VideoHeight = val;
-					}
-					else
-					{
-						throw new OptionException("Invalid value for multibootHeader video height: " + v, "multibootHeader-video-height");
-					}
-				}
-			);
-
-			optionSet.Add(
-				"multibootHeader-video-depth=",
-				"Specify the {depth} (number of bits per pixel) for graphics mode.",
-				delegate(string v)
-				{
-					uint val;
-					if (uint.TryParse(v, out val))
-					{
-						compiler.CompilerOptions.Multiboot.VideoDepth = val;
-					}
-					else
-					{
-						throw new OptionException("Invalid value for multibootHeader video depth: " + v, "multibootHeader-video-depth");
+						throw new OptionException("Invalid value for base address: " + v, "base-address");
 					}
 				}
 			);

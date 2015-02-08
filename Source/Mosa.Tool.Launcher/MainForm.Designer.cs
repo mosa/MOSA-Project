@@ -192,9 +192,9 @@
 			this.cbCompilerUsesMultipleThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbCompilerUsesMultipleThreads.Location = new System.Drawing.Point(6, 19);
 			this.cbCompilerUsesMultipleThreads.Name = "cbCompilerUsesMultipleThreads";
-			this.cbCompilerUsesMultipleThreads.Size = new System.Drawing.Size(171, 17);
+			this.cbCompilerUsesMultipleThreads.Size = new System.Drawing.Size(126, 17);
 			this.cbCompilerUsesMultipleThreads.TabIndex = 13;
-			this.cbCompilerUsesMultipleThreads.Text = "Compiler uses multiple Threads";
+			this.cbCompilerUsesMultipleThreads.Text = "Use Multiple Threads";
 			this.cbCompilerUsesMultipleThreads.UseVisualStyleBackColor = true;
 			// 
 			// statusStrip1
