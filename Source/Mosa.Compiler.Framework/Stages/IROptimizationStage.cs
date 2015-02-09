@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int constantFoldingLogicalOrCount = 0;
 		private int constantFoldingLogicalAndCount = 0;
 
-		private Stack<int> worklist = new Stack<int>();
+		private Stack<Context> worklist = new Stack<Context>();
 
 		private HashSet<Operand> virtualRegisters = new HashSet<Operand>();
 
@@ -88,7 +88,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					ProcessWorkList();
 
-					// Collext virtual registers
+					// Collect virtual registers
 					if (ctx.IsEmpty)
 						continue;
 
@@ -172,9 +172,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			while (worklist.Count != 0)
 			{
-				int index = worklist.Pop();
-				Context ctx2 = new Context(InstructionSet, index);
-				Do(ctx2);
+				var ctx = worklist.Pop();
+				Do(ctx);
 			}
 		}
 
@@ -214,15 +213,26 @@ namespace Mosa.Compiler.Framework.Stages
 			NormalizeConstantTo32Bit(context);
 		}
 
+		private void AddToWorkList(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			// work list stays small, so the check is inexpensive
+			if (worklist.Contains(context))
+				return;
+
+			worklist.Push(context);
+		}
+
 		/// <summary>
 		/// Adds to work list.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		private void AddToWorkList(int index)
 		{
-			// work list stays small, so the check is inexpensive
-			if (!worklist.Contains(index))
-				worklist.Push(index);
+			Context ctx = new Context(InstructionSet, index);
+			AddToWorkList(ctx);
 		}
 
 		/// <summary>
@@ -400,7 +410,9 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				if (propogated)
-					AddToWorkList(index);
+				{
+					AddToWorkList(ctx);
+				}
 			}
 		}
 
