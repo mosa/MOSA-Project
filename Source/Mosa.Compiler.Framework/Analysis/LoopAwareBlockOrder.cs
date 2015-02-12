@@ -49,7 +49,6 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			public int Depth;
 			public int Order;
-			public bool Hinted;
 
 			/// <summary>
 			/// Initializes a new instance of the <see cref="Priority"/> class.
@@ -57,11 +56,10 @@ namespace Mosa.Compiler.Framework.Analysis
 			/// <param name="depth">The depth.</param>
 			/// <param name="order">The order.</param>
 			/// <param name="hinted">if set to <c>true</c> [hinted].</param>
-			public Priority(int depth, int order, bool hinted)
+			public Priority(int depth, int order)
 			{
 				Depth = depth;
 				Order = order;
-				Hinted = hinted;
 			}
 
 			/// <summary>
@@ -89,8 +87,6 @@ namespace Mosa.Compiler.Framework.Analysis
 					return 1;
 				if (Order > other.Order)
 					return -1;
-				if (Hinted)
-					return 1;
 				return 0;
 			}
 		}
@@ -309,7 +305,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			var workList = new SortedList<Priority, BasicBlock>();
 
 			// Start worklist with first block
-			workList.Add(new Priority(0, 0, true), start);
+			workList.Add(new Priority(0, 0), start);
 
 			while (workList.Count != 0)
 			{
@@ -324,7 +320,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 					if (forwardBranchesCount[successor.Sequence] == 0)
 					{
-						workList.Add(new Priority(loopDepth[successor.Sequence], successor.Sequence, block.HintTarget != -1 && block.HintTarget == successor.Label), successor);
+						workList.Add(new Priority(loopDepth[successor.Sequence], successor.Sequence), successor);
 					}
 				}
 			}

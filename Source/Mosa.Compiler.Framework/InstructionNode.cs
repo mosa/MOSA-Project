@@ -22,66 +22,6 @@ namespace Mosa.Compiler.Framework
 		#region Data members
 
 		/// <summary>
-		/// Holds the instruction type of this instruction
-		/// </summary>
-		public BaseInstruction Instruction;
-
-		/// <summary>
-		/// Label of the instruction
-		/// </summary>
-		public int Label;
-
-		/// <summary>
-		/// The order slot number (initalized by some stage)
-		/// </summary>
-		public int SlotNumber;
-
-		/// <summary>
-		/// Holds the first operand of the instruction.
-		/// </summary>
-		public Operand Operand1;
-
-		/// <summary>
-		/// Holds the second operand of the instruction.
-		/// </summary>
-		public Operand Operand2;
-
-		/// <summary>
-		/// Holds the third operand of the instruction.
-		/// </summary>
-		public Operand Operand3;
-
-		/// <summary>
-		/// Holds the result first operand of the instruction.
-		/// </summary>
-		public Operand Result;
-
-		/// <summary>
-		/// Holds the second result operand of the instruction.
-		/// </summary>
-		public Operand Result2;
-
-		/// <summary>
-		/// The condition code
-		/// </summary>
-		public ConditionCode ConditionCode;
-
-		/// <summary>
-		///  Holds the branch targets
-		/// </summary>
-		public int[] BranchTargets;
-
-		/// <summary>
-		/// Holds branch targets
-		/// </summary>
-		public List<BasicBlock> Targets;
-
-		/// <summary>
-		/// The instruction size
-		/// </summary>
-		public InstructionSize Size;
-
-		/// <summary>
 		/// Holds a packed value (to save space)
 		/// </summary>
 		private uint packed;
@@ -94,6 +34,65 @@ namespace Mosa.Compiler.Framework
 		#endregion Data members
 
 		#region Properties
+
+		public InstructionNode Previous { get; set; }
+
+		public InstructionNode Next { get; set; }
+
+		/// <summary>
+		/// Holds the instruction type of this instruction
+		/// </summary>
+		public BaseInstruction Instruction { get; set; }
+
+		/// <summary>
+		/// Label of the instruction
+		/// </summary>
+		public int Label { get; set; }
+
+		/// <summary>
+		/// The order slot number (initalized by some stage)
+		/// </summary>
+		public int SlotNumber { get; set; }
+
+		/// <summary>
+		/// Holds the first operand of the instruction.
+		/// </summary>
+		public Operand Operand1 { get; set; }
+
+		/// <summary>
+		/// Holds the second operand of the instruction.
+		/// </summary>
+		public Operand Operand2 { get; set; }
+
+		/// <summary>
+		/// Holds the third operand of the instruction.
+		/// </summary>
+		public Operand Operand3 { get; set; }
+
+		/// <summary>
+		/// Holds the result first operand of the instruction.
+		/// </summary>
+		public Operand Result { get; set; }
+
+		/// <summary>
+		/// Holds the second result operand of the instruction.
+		/// </summary>
+		public Operand Result2 { get; set; }
+
+		/// <summary>
+		/// The condition code
+		/// </summary>
+		public ConditionCode ConditionCode { get; set; }
+
+		/// <summary>
+		/// Holds branch targets
+		/// </summary>
+		public List<BasicBlock> Targets { get; set; }
+
+		/// <summary>
+		/// The instruction size
+		/// </summary>
+		public InstructionSize Size { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this instance has a prefix.
