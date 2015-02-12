@@ -8,11 +8,14 @@
  */
 
 using Mosa.Compiler.Framework.IR;
+using System;
 
 namespace Mosa.Compiler.Framework
 {
+	//[Obsolete]
 	public static class ContextExtension
 	{
+		//[Obsolete]
 		public static Context CreateNewBlock(this InstructionSet instructionSet, BasicBlocks basicBlocks, int label)
 		{
 			Context ctx = new Context(instructionSet);
@@ -30,6 +33,7 @@ namespace Mosa.Compiler.Framework
 			return ctx;
 		}
 
+		//[Obsolete]
 		public static Context CreateNewBlock(this InstructionSet instructionSet, BasicBlocks basicBlocks)
 		{
 			var ctx = new Context(instructionSet);

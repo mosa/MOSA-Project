@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	///
 	/// </summary>
-	public struct InstructionNode
+	public sealed class InstructionNode
 	{
 		#region Data members
 

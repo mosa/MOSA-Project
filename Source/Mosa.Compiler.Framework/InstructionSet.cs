@@ -86,6 +86,7 @@ namespace Mosa.Compiler.Framework
 			for (int i = 0; i < size; i++)
 			{
 				next[i] = prev[i + 2] = i + 1;
+				Data[i] = new InstructionNode();
 			}
 
 			prev[0] = -1;
@@ -107,14 +108,21 @@ namespace Mosa.Compiler.Framework
 			next.CopyTo(newNext, 0);
 			prev.CopyTo(newPrev, 0);
 
-			for (int i = size; i < newsize; ++i)
+			for (int i = 0; i < size; i++)
+			{
+				newInstructions[i] = Data[i];
+			}
+
+			for (int i = size; i < newsize; i++)
 			{
 				newNext[i] = i + 1;
 				newPrev[i] = i - 1;
+				newInstructions[i] = new InstructionNode();
 			}
+
 			newNext[newsize - 1] = -1;
 			newPrev[size] = -1;
-			Data.CopyTo(newInstructions, 0);
+			//Data.CopyTo(newInstructions, 0);
 
 			free = size;
 			next = newNext;
@@ -163,7 +171,9 @@ namespace Mosa.Compiler.Framework
 		{
 			//	if (_used + 1 == _size)
 			if (free == -1)
+			{
 				Resize(size * 2);
+			}
 
 			int beforeFree = free;
 
