@@ -32,19 +32,6 @@ namespace Mosa.Compiler.Framework.CIL
 		#region Methods
 
 		/// <summary>
-		/// Decodes the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
-		{
-			// Decode base classes first
-			base.Decode(ctx, decoder);
-
-			ctx.AddCILBranch((int)decoder.Instruction.Operand);
-		}
-
-		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor.</param>

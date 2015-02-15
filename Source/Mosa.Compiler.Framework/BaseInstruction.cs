@@ -203,10 +203,6 @@ namespace Mosa.Compiler.Framework
 				{
 					s.Append(" [more]");
 				}
-				else if (context.Targets.Count > 0)
-				{
-					s.Length = s.Length - 1;
-				}
 			}
 
 			if (context.MosaMethod != null)
