@@ -1,4 +1,8 @@
-[![Build status][build-status-image]][build-status] [![Bountysource][bounty-image]][bounty-issues]  [![Issue Stats][pull-requests-image]][pull-requests]  [![Issue Stats][issues-closed-image]][issues-closed]
+[![Build status][build-status-image]][build-status]   [![License][github-license]][github-license-link]  [![Issues][github-issues]][github-issues-link]  [![Stars][github-stars]][github-stars-link]  [![Forks][github-forks]][github-forks-link]  [![Gitter Chat][gitter-image]][gitter-chat]
+
+[![Issue Stats][pull-requests-image]][pull-requests]  [![Issue Stats][issues-closed-image]][issues-closed]
+
+[![Bountysource][bounty-image]][bounty-issues]  
 
 [build-status-image]: https://ci.appveyor.com/api/projects/status/gmeosk7sa6su8rb3/branch/master?svg=true
 [build-status]: https://ci.appveyor.com/project/MOSA/mosa-project
@@ -8,6 +12,18 @@
 [issues-closed]: http://www.issuestats.com/github/mosa/mosa-project
 [bounty-image]: https://api.bountysource.com/badge/team?team_id=55027&style=bounties_received
 [bounty-issues]: https://api.bountysource.com/badge/team?team_id=55027&style=bounties_received
+[gitter-image]: https://img.shields.io/badge/gitter-join%20chat%20-blue.svg
+[gitter2-image]: https://badges.gitter.im/Join%20Chat.svg
+[gitter-chat]: https://gitter.im/mosa
+[github-issues]: https://img.shields.io/github/issues/mosa/MOSA-Project.svg
+[github-forks]: https://img.shields.io/github/forks/mosa/MOSA-Project.svg
+[github-stars]: https://img.shields.io/github/stars/mosa/MOSA-Project.svg
+[github-license]: https://img.shields.io/badge/license-New%20BSD-blue.svg
+[github-link]: https://github.com/mosa/MOSA-Project
+[github-stars-link]: https://github.com/mosa/MOSA-Project/stargazers
+[github-forks-link]: https://github.com/mosa/MOSA-Project/network
+[github-issues-link]: https://github.com/mosa/MOSA-Project/issues
+[github-license-link]: https://raw.githubusercontent.com/mosa/MOSA-Project/master/LICENSE.txt
 
 MOSA is an open source software project aiming to create a high quality, cross-platform, optimizing .NET compiler designed specifically to support a managed operating system based on the .NET framework.
 
