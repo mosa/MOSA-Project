@@ -14,7 +14,7 @@
 [bounty-issues]: https://api.bountysource.com/badge/team?team_id=55027&style=bounties_received
 [gitter-image]: https://img.shields.io/badge/gitter-join%20chat%20-blue.svg
 [gitter2-image]: https://badges.gitter.im/Join%20Chat.svg
-[gitter-chat]: https://gitter.im/mosa
+[gitter-chat]: https://gitter.im/mosa/MOSA-Project
 [github-issues]: https://img.shields.io/github/issues/mosa/MOSA-Project.svg
 [github-forks]: https://img.shields.io/github/forks/mosa/MOSA-Project.svg
 [github-stars]: https://img.shields.io/github/stars/mosa/MOSA-Project.svg
