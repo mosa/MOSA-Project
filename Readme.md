@@ -37,6 +37,8 @@ Read our [Frequently Asked Questions](https://github.com/mosa/MOSA-Project/wiki/
 
 ### Getting Started
 
+[![Join the chat at https://gitter.im/mosa/MOSA-Project](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mosa/MOSA-Project?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 **Download**
 
 The MOSA project is available as a [zip download](https://github.com/mosa/MOSA-Project/archive/master.zip) or via git:
