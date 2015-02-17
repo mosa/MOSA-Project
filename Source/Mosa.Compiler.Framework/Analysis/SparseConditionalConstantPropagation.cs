@@ -84,25 +84,23 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		protected Dictionary<Operand, VariableState> variableStates = new Dictionary<Operand, VariableState>();
 
-		protected Stack<int> instructionWorkList = new Stack<int>();
+		protected Stack<InstructionNode> instructionWorkList = new Stack<InstructionNode>();
 		protected Stack<BasicBlock> blockWorklist = new Stack<BasicBlock>();
 
-		protected HashSet<int> executedStatements = new HashSet<int>();
+		protected HashSet<InstructionNode> executedStatements = new HashSet<InstructionNode>();
 
 		protected readonly BasicBlocks BasicBlocks;
-		protected readonly InstructionSet InstructionSet;
 		protected readonly ITraceFactory TraceFactory;
 		protected readonly TraceLog MainTrace;
 
-		protected readonly KeyedList<BasicBlock, int> phiStatements = new KeyedList<BasicBlock, int>();
+		protected readonly KeyedList<BasicBlock, InstructionNode> phiStatements = new KeyedList<BasicBlock, InstructionNode>();
 
-		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, InstructionSet instructionSet, ITraceFactory traceFactory)
+		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, ITraceFactory traceFactory)
 		{
 			this.TraceFactory = traceFactory;
 			this.BasicBlocks = basicBlocks;
-			this.InstructionSet = instructionSet;
 
-			MainTrace = CreateTrace("ConditionalConstantPropagation");
+			MainTrace = CreateTrace("SparseConditionalConstantPropagation");
 
 			// Method is empty - must be a plugged method
 			if (BasicBlocks.HeadBlocks.Count == 0)
@@ -214,14 +212,14 @@ namespace Mosa.Compiler.Framework.Analysis
 			blockWorklist.Push(block);
 		}
 
-		protected void AddInstruction(int index)
+		protected void AddInstruction(InstructionNode node)
 		{
-			instructionWorkList.Push(index);
+			instructionWorkList.Push(node);
 		}
 
 		protected void AddInstruction(Context context)
 		{
-			instructionWorkList.Push(context.Index);
+			instructionWorkList.Push(context.Node);
 		}
 
 		protected void AddInstruction(VariableState variable)
@@ -230,7 +228,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				if (executedStatements.Contains(use))
 				{
-					var context = new Context(InstructionSet, use);
+					var context = new Context(use);
 					AddInstruction(context);
 				}
 			}
@@ -255,7 +253,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				AddExecutionBlock(block.NextBlocks[0]);
 			}
 
-			ProcessInstructionsContinuiously(new Context(InstructionSet, block));
+			ProcessInstructionsContinuiously(new Context(block));
 
 			// re-analysis phi statements
 			var phiUse = phiStatements.Get(block);
@@ -263,7 +261,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			if (phiUse == null)
 				return;
 
-			foreach (int index in phiUse)
+			foreach (var index in phiUse)
 			{
 				AddInstruction(index);
 			}
@@ -279,7 +277,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 				bool @continue = ProcessInstruction(context);
 
-				executedStatements.Add(context.Index);
+				executedStatements.Add(context.Node);
 
 				if (!@continue)
 					return;
@@ -292,7 +290,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				var index = instructionWorkList.Pop();
 
-				var context = new Context(InstructionSet, index);
+				var context = new Context(index);
 
 				if (context.Instruction == IRInstruction.IntegerCompareBranch)
 				{
@@ -422,7 +420,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private void Jmp(Context context)
 		{
-			if (context.Targets == null || context.Targets.Count == 0)
+			if (context.BranchTargets == null || context.BranchTargetsCount == 0)
 				return;
 
 			Branch(context);
@@ -646,7 +644,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			//Debug.Assert(context.BranchTargets.Length == 1);
 
-			foreach (var block in context.Targets)
+			foreach (var block in context.BranchTargets)
 			{
 				AddExecutionBlock(block);
 			}
@@ -703,7 +701,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 				//if (Trace.Active) Trace.Log("# " + index.ToString() + ": " + predecessor.ToString() + " " + (executable ? "Yes" : "No"));
 
-				phiStatements.AddIfNew(predecessor, context.Index);
+				phiStatements.AddIfNew(predecessor, context.Node);
 
 				if (!executable)
 					continue;

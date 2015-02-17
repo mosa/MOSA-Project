@@ -18,8 +18,10 @@ namespace System
 	{
 		private MetadataTypeStruct* typeStruct;
 		private Assembly assembly;
+
 		//private RuntimeTypeHandle handle;
 		private string assemblyQualifiedName;
+
 		private string name;
 		private string @namespace;
 		private string fullname;

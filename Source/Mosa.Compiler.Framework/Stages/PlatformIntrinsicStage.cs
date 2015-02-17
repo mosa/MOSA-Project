@@ -21,15 +21,15 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				for (var context = CreateContext(block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (context.IsEmpty)
+					if (node.IsEmpty)
 						continue;
 
-					if (!(context.Instruction is IntrinsicMethodCall))
+					if (!(node.Instruction is IntrinsicMethodCall))
 						continue;
 
-					string external = context.MosaMethod.ExternMethod;
+					string external = node.InvokeMethod.ExternMethod;
 
 					//TODO: Verify!
 
@@ -42,6 +42,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (instance == null)
 						return;
+
+					var context = new Context(node);
 
 					instance.ReplaceIntrinsicCall(context, MethodCompiler);
 				}

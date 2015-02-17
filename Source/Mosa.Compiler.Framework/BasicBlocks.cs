@@ -9,7 +9,6 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -132,39 +131,10 @@ namespace Mosa.Compiler.Framework
 		/// Creates the block.
 		/// </summary>
 		/// <param name="label">The label.</param>
-		/// <param name="start">The start.</param>
-		/// <param name="end">The end.</param>
-		/// <returns></returns>
-		public BasicBlock CreateBlock(int label, int start, int end)
-		{
-			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, start, end);
-			basicBlocks.Add(basicBlock);
-			basicBlocksByLabel.Add(label, basicBlock);
-			return basicBlock;
-		}
-
-		/// <summary>
-		/// Creates the block.
-		/// </summary>
-		/// <param name="label">The label.</param>
-		/// <param name="start">The start.</param>
-		/// <returns></returns>
-		public BasicBlock CreateBlock(int label, int start)
-		{
-			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, start);
-			basicBlocks.Add(basicBlock);
-			basicBlocksByLabel.Add(label, basicBlock);
-			return basicBlock;
-		}
-
-		/// <summary>
-		/// Creates the block.
-		/// </summary>
-		/// <param name="label">The label.</param>
 		/// <returns></returns>
 		public BasicBlock CreateBlock(int label)
 		{
-			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, -1, -1);
+			var basicBlock = new BasicBlock(basicBlocks.Count, label);
 			basicBlocks.Add(basicBlock);
 			basicBlocksByLabel.Add(label, basicBlock);
 			return basicBlock;
@@ -173,13 +143,11 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the block.
 		/// </summary>
-		/// <param name="start">The start.</param>
-		/// <param name="end">The end.</param>
 		/// <returns></returns>
-		public BasicBlock CreateBlockWithAutoLabel(int start, int end)
+		public BasicBlock CreateBlock()
 		{
 			int label = basicBlocks.Count + 0x10000000;
-			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, start, end);
+			var basicBlock = new BasicBlock(basicBlocks.Count, label);
 			basicBlocks.Add(basicBlock);
 			basicBlocksByLabel.Add(label, basicBlock);
 			return basicBlock;
@@ -197,7 +165,7 @@ namespace Mosa.Compiler.Framework
 			BasicBlock basicBlock = null;
 			basicBlocksByLabel.TryGetValue(label, out basicBlock);
 
-			Debug.Assert(label == BasicBlock.PrologueLabel || label == BasicBlock.EpilogueLabel || basicBlock != null);
+			//Debug.Assert(label == BasicBlock.PrologueLabel || label == BasicBlock.EpilogueLabel || basicBlock != null);
 
 			return basicBlock;
 		}
@@ -210,37 +178,6 @@ namespace Mosa.Compiler.Framework
 		public bool Contains(BasicBlock block)
 		{
 			return basicBlocks.Contains(block);
-		}
-
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
-		public void LinkBlocks(BasicBlock source, BasicBlock destination)
-		{
-			if (!source.NextBlocks.Contains(destination))
-				source.NextBlocks.Add(destination);
-
-			if (!destination.PreviousBlocks.Contains(source))
-				destination.PreviousBlocks.Add(source);
-		}
-
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destinations">The destinations.</param>
-		public void LinkBlocks(BasicBlock source, IList<BasicBlock> destinations)
-		{
-			foreach (var destination in destinations)
-			{
-				if (!source.NextBlocks.Contains(destination))
-					source.NextBlocks.Add(destination);
-
-				if (!destination.PreviousBlocks.Contains(source))
-					destination.PreviousBlocks.Add(source);
-			}
 		}
 
 		/// <summary>
@@ -291,6 +228,18 @@ namespace Mosa.Compiler.Framework
 			}
 
 			epilogueBlock = null;
+		}
+
+		public void OrderByLabel()
+		{
+			var blocks = new SortedList<int, BasicBlock>(basicBlocks.Count);
+
+			foreach (var block in basicBlocks)
+			{
+				blocks.Add(block.Label, block);
+			}
+
+			ReorderBlocks(blocks.Values);
 		}
 
 		#endregion Methods

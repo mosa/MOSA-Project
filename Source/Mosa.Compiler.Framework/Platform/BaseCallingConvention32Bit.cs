@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Framework.Platform
 
 			Operand target = context.Operand1;
 			Operand result = context.Result;
-			MosaMethod method = context.MosaMethod;
+			MosaMethod method = context.InvokeMethod;
 
 			Debug.Assert(method != null, context.ToString());
 
@@ -76,7 +76,7 @@ namespace Mosa.Compiler.Framework.Platform
 
 			int stackSize = CalculateStackSizeForParameters(typeLayout, architecture, operands, method);
 
-			context.Remove();
+			context.Empty();
 
 			int returnSize = 0;
 			if (typeLayout.IsCompoundType(method.Signature.ReturnType))

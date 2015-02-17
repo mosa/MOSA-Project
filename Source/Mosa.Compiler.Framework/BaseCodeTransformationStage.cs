@@ -29,16 +29,16 @@ namespace Mosa.Compiler.Framework
 		{
 			for (int index = 0; index < BasicBlocks.Count; index++)
 			{
-				for (var ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+				for (var node = BasicBlocks[index].First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					{
-						if (ctx.IsEmpty)
-							continue;
+					if (node.IsEmpty)
+						continue;
 
-						instructionCount++;
+					instructionCount++;
 
-						ctx.Clone().Visit(this);
-					}
+					Context ctx = new Context(node);
+
+					ctx.Visit(this);
 				}
 			}
 		}

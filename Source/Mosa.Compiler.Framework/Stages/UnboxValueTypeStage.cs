@@ -8,8 +8,6 @@
  */
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.MosaTypeSystem;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -40,42 +38,20 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.PrologueBlock.NextBlocks.Count == 0 || BasicBlocks.PrologueBlock.NextBlocks[0] == BasicBlocks.EpilogueBlock)
 				return;
 
-			// Get our first viable context
-			var context = GetFirstContext(BasicBlocks.PrologueBlock.NextBlocks[0]);
-
-			// If we didn't get a viable context then the method is empty
-			if (context == null)
-			{
-				Debug.Assert(false, MethodCompiler.Method.FullName);
-				return;
-			}
-
 			// Get the this pointer
 			var thisPtr = MethodCompiler.StackLayout.GetStackParameter(0);
 
-			// Insert a new context before the viable context
-			context = context.InsertBefore();
+			var context = new Context(BasicBlocks.PrologueBlock.NextBlocks[0].First);
 
 			// Now push the this pointer by two native pointer sizes
-			context.SetInstruction(IRInstruction.AddSigned, thisPtr, thisPtr, Operand.CreateConstant(TypeSystem, NativePointerSize * 2));
-		}
-
-		private Context GetFirstContext(BasicBlock block)
-		{
-			for (Context context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
-			{
-				if (context.IsBlockStartInstruction)
-					continue;
-				return context;
-			}
-			return null;
+			context.AppendInstruction(IRInstruction.AddSigned, thisPtr, thisPtr, Operand.CreateConstant(TypeSystem, NativePointerSize * 2));
 		}
 
 		private bool IsInterfaceMethod()
 		{
-			foreach (MosaType iface in MethodCompiler.Type.Interfaces)
+			foreach (var iface in MethodCompiler.Type.Interfaces)
 			{
-				foreach (MosaMethod method in TypeLayout.GetInterfaceTable(MethodCompiler.Type, iface))
+				foreach (var method in TypeLayout.GetInterfaceTable(MethodCompiler.Type, iface))
 				{
 					if (method == MethodCompiler.Method)
 						return true;

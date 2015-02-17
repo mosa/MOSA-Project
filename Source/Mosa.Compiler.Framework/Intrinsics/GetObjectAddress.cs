@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			if (operand1.IsValueType)
 			{
 				operand1 = context.Previous.Operand1;
-				context.Previous.Remove();
+				context.Previous.Empty();
 				context.SetInstruction(IRInstruction.AddressOf, result, operand1);
 				return;
 			}

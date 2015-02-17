@@ -28,25 +28,11 @@ namespace Mosa.Platform.x86.Instructions
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			//Operand mop = context.Operand1;
-
-			//if (mop.EffectiveOffsetBase != null)
-			//{
-			//	byte[] code = new byte[] { 0x8D, 0x84, (4 << 3) };
-			//	code[1] |= (byte)((context.Result.Register.RegisterCode & 0x07));
-			//	code[2] |= (byte)((mop.EffectiveOffsetBase.RegisterCode & 0x07));
-
-			//	emitter.Write(code, 0, code.Length);
-			//	emitter.EmitImmediate(mop);
-			//}
-			//else
-			{
-				emitter.Emit(opcode, context.Result, context.Operand1);
-			}
+			emitter.Emit(opcode, node.Result, node.Operand1);
 		}
 
 		/// <summary>

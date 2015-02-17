@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework;
-
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
@@ -26,30 +24,30 @@ namespace Mosa.Platform.x86.Stages
 			{
 				changed = false;
 
-				foreach (BasicBlock block in BasicBlocks)
+				foreach (var block in BasicBlocks)
 				{
-					for (Context ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+					for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 					{
-						if (ctx.IsEmpty)
+						if (node.IsEmpty)
 							continue;
 
 						// Remove Nop instructions
-						if (ctx.Instruction == X86.Nop)
+						if (node.Instruction == X86.Nop)
 						{
-							ctx.Delete(false);
+							node.Empty();
 							continue;
 						}
 
 						// Remove useless instructions
-						if (ctx.ResultCount == 1 && ctx.Result.Uses.Count == 0 && ctx.Result.IsVirtualRegister)
+						if (node.ResultCount == 1 && node.Result.Uses.Count == 0 && node.Result.IsVirtualRegister)
 						{
 							// Check is split child, if so check is parent in use (IR.Return for example)
-							if (ctx.Result.IsSplitChild && ctx.Result.SplitParent.Uses.Count != 0)
+							if (node.Result.IsSplitChild && node.Result.SplitParent.Uses.Count != 0)
 								continue;
 
-							if (trace.Active) trace.Log("REMOVED:\t" + ctx.ToString());
+							if (trace.Active) trace.Log("REMOVED:\t" + node.ToString());
 
-							ctx.Remove();
+							node.Empty();
 							changed = true;
 						}
 					}

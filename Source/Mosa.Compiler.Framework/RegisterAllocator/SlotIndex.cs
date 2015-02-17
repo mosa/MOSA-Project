@@ -19,9 +19,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public const int Increment = 2;
 
-		public readonly int Index;
-
-		private InstructionSet instructionSet;
+		public readonly InstructionNode Index;
 
 		private SlotType slotType;
 
@@ -29,7 +27,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			get
 			{
-				int slot = instructionSet.Data[Index].SlotNumber;
+				int slot = Index.SlotNumber;
 
 				if (slotType == SlotType.HalfStepForward)
 					slot++;
@@ -46,22 +44,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsOnHalfStepBack { get { return slotType == SlotType.HalfStepBack; } }
 
-		private SlotIndex(InstructionSet instructionSet, int index, SlotType slotType)
+		private SlotIndex(InstructionNode index, SlotType slotType)
 		{
-			Debug.Assert(index >= 0);
-
-			this.instructionSet = instructionSet;
 			this.Index = index;
 			this.slotType = slotType;
 		}
 
-		public SlotIndex(InstructionSet instructionSet, int index)
-			: this(instructionSet, index, SlotType.Normal)
+		public SlotIndex(InstructionNode index)
+			: this(index, SlotType.Normal)
 		{
 		}
 
 		public SlotIndex(Context context)
-			: this(context.InstructionSet, context.Index, SlotType.Normal)
+			: this(context.Node, SlotType.Normal)
 		{
 		}
 
@@ -146,7 +141,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			get
 			{
 				Debug.Assert(slotType == SlotType.Normal);
-				return new SlotIndex(instructionSet, Index, SlotType.HalfStepForward);
+				return new SlotIndex(Index, SlotType.HalfStepForward);
 			}
 		}
 
@@ -155,7 +150,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			get
 			{
 				Debug.Assert(slotType == SlotType.Normal);
-				return new SlotIndex(instructionSet, Index, SlotType.HalfStepBack);
+				return new SlotIndex(Index, SlotType.HalfStepBack);
 			}
 		}
 
@@ -166,7 +161,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (slotType != SlotType.Normal)
 					return false;
 
-				return instructionSet.Data[Index].Instruction == IRInstruction.BlockStart;
+				return Index.Instruction == IRInstruction.BlockStart;
 			}
 		}
 
@@ -177,7 +172,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (slotType != SlotType.Normal)
 					return false;
 
-				return instructionSet.Data[Index].Instruction == IRInstruction.BlockEnd;
+				return Index.Instruction == IRInstruction.BlockEnd;
 			}
 		}
 	}

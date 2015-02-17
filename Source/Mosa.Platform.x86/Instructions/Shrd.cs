@@ -54,17 +54,17 @@ namespace Mosa.Platform.x86.Instructions
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			if (context.Operand3.IsConstant)
+			if (node.Operand3.IsConstant)
 			{
-				emitter.Emit(C, context.Operand2, context.Result, context.Operand3);
+				emitter.Emit(C, node.Operand2, node.Result, node.Operand3);
 			}
 			else
 			{
-				emitter.Emit(RM, context.Operand2, context.Result);
+				emitter.Emit(RM, node.Operand2, node.Result);
 			}
 		}
 

@@ -23,29 +23,29 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 		SimCPU ISimAdapter.SimCPU { get { return this.CPU; } }
 
-		SimInstruction ISimAdapter.Convert(Context context, MosaMethod method, BasicBlocks basicBlocks, byte opcodeSize)
+		SimInstruction ISimAdapter.Convert(InstructionNode node, MosaMethod method, BasicBlocks basicBlocks, byte opcodeSize)
 		{
-			X86Instruction x86Instruction = context.Instruction as X86Instruction;
+			X86Instruction x86Instruction = node.Instruction as X86Instruction;
 
 			if (x86Instruction == null)
 				return null;
 
-			BaseOpcode opcode = ConvertToOpcode(x86Instruction, context.ConditionCode);
+			BaseOpcode opcode = ConvertToOpcode(x86Instruction, node.ConditionCode);
 
 			if (opcode == null)
 				return null;
 
-			var operands = GetOperands(context, method, basicBlocks);
+			var operands = GetOperands(node, method, basicBlocks);
 
 			AdjustInstructionOperands(opcode, operands);
 
 			byte size = 0;
 
-			if (context.Size == InstructionSize.Size32)
+			if (node.Size == InstructionSize.Size32)
 				size = 32;
-			else if (context.Size == InstructionSize.Size16)
+			else if (node.Size == InstructionSize.Size16)
 				size = 16;
-			else if (context.Size == InstructionSize.Size8)
+			else if (node.Size == InstructionSize.Size8)
 				size = 8;
 
 			SimInstruction instruction = null;
@@ -63,41 +63,41 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			return instruction;
 		}
 
-		private List<SimOperand> GetOperands(Context context, MosaMethod method, BasicBlocks basicBlocks)
+		private List<SimOperand> GetOperands(InstructionNode node, MosaMethod method, BasicBlocks basicBlocks)
 		{
 			List<SimOperand> operands = new List<SimOperand>();
 
-			if (context.ResultCount != 0)
+			if (node.ResultCount != 0)
 			{
-				int size = GetSize(context.Result.Type);
-				operands.Add(ConvertToOpcodeOperand(context.Result, size));
+				int size = GetSize(node.Result.Type);
+				operands.Add(ConvertToOpcodeOperand(node.Result, size));
 			}
 
-			foreach (var operand in context.Operands)
+			foreach (var operand in node.Operands)
 			{
 				int size = GetSize(operand.Type);
 
-				if (context.Instruction == X86.Mov && context.Result.IsMemoryAddress)
+				if (node.Instruction == X86.Mov && node.Result.IsMemoryAddress)
 				{
-					if (context.Result.IsPointer
+					if (node.Result.IsPointer
 						&& !operand.IsPointer
-						&& context.Result.Type.ElementType != null
-						&& (GetSize(context.Result.Type.ElementType) < size))
+						&& node.Result.Type.ElementType != null
+						&& (GetSize(node.Result.Type.ElementType) < size))
 					{
-						size = GetSize(context.Result.Type.ElementType);
+						size = GetSize(node.Result.Type.ElementType);
 					}
-					else if (context.Result.IsByte || context.Result.IsChar || context.Result.IsShort)
+					else if (node.Result.IsByte || node.Result.IsChar || node.Result.IsShort)
 					{
-						size = GetSize(context.Result.Type);
+						size = GetSize(node.Result.Type);
 					}
 				}
 
 				operands.Add(ConvertToOpcodeOperand(operand, size));
 			}
 
-			if (context.Targets != null)
+			if (node.BranchTargets != null)
 			{
-				foreach (var block in context.Targets)
+				foreach (var block in node.BranchTargets)
 				{
 					operands.Add(CreateLabel(32, block.ToString() + ":" + method.FullName));
 				}

@@ -38,5 +38,12 @@ namespace Mosa.Compiler.Framework.CIL
 		/// The type system.
 		/// </value>
 		TypeSystem TypeSystem { get; }
+
+		/// <summary>
+		/// Gets the block.
+		/// </summary>
+		/// <param name="label">The label.</param>
+		/// <returns></returns>
+		BasicBlock GetBlock(int label);
 	}
 }

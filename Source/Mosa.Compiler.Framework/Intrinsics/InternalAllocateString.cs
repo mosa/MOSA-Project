@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			Operand result = context.Result;
 
 			context.SetInstruction(IRInstruction.Call, result, callTargetOperand, typeDefinitionOperand, lengthOperand);
-			context.MosaMethod = method;
+			context.InvokeMethod = method;
 		}
 
 		private Operand GetRuntimeTypeHandle(Context context, BaseMethodCompiler methodCompiler)

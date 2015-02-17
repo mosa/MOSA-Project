@@ -60,13 +60,14 @@ namespace Mosa.Platform.x86.Instructions
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		/// <exception cref="System.NotSupportedException"></exception>
+		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
 			OpCode opcode = null;
 
-			switch (context.ConditionCode)
+			switch (node.ConditionCode)
 			{
 				case ConditionCode.Equal: opcode = CMOVO; break;
 				case ConditionCode.NotEqual: opcode = CMOVNE; break;
@@ -91,7 +92,7 @@ namespace Mosa.Platform.x86.Instructions
 				default: throw new NotSupportedException();
 			}
 
-			emitter.Emit(opcode, context.Result, context.Operand1);
+			emitter.Emit(opcode, node.Result, node.Operand1);
 		}
 
 		/// <summary>

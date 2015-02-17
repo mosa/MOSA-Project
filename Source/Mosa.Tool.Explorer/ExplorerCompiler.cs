@@ -44,9 +44,9 @@ namespace Mosa.Tool.Explorer
 		/// <returns>
 		/// An instance of a MethodCompilerBase for the given type/method pair.
 		/// </returns>
-		protected override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
+		protected override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID)
 		{
-			return new ExplorerMethodCompiler(this, method, basicBlocks, instructionSet, threadID);
+			return new ExplorerMethodCompiler(this, method, basicBlocks, threadID);
 		}
 	}
 }

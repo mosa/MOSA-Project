@@ -45,13 +45,13 @@ namespace Mosa.Utility.Aot
 		/// </summary>
 		/// <param name="method">The method.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
-		/// <param name="instructionSet">The instruction set.</param>
+		/// <param name="threadID"></param>
 		/// <returns>
 		/// An instance of a MethodCompilerBase for the given type/method pair.
 		/// </returns>
-		protected override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
+		protected override BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID)
 		{
-			return new AotMethodCompiler(this, method, basicBlocks, instructionSet, threadID);
+			return new AotMethodCompiler(this, method, basicBlocks, threadID);
 		}
 	}
 }

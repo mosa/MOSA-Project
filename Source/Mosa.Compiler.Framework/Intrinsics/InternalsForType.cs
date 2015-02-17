@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			Internal(context, methodCompiler, context.MosaMethod.Name, "InternalsForType");
+			Internal(context, methodCompiler, context.InvokeMethod.Name, "InternalsForType");
 		}
 	}
 }

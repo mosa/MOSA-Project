@@ -51,7 +51,7 @@
     <OutputPath>..\..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -77,12 +77,9 @@
     <Compile Include="LiveRangeTests.cs" />
     <Compile Include="SimplePriorityQueueTests.cs" />
     <Compile Include="PatchTests.cs" />
-    <Compile Include="LoopAwareBlockOrderTests.cs" />
-    <Compile Include="SimpleFastDominanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BlockTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">

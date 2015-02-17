@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);
@@ -48,11 +48,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Gets the instruction modifier.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <returns></returns>
-		protected override string GetModifier(Context context)
+		protected override string GetModifier(InstructionNode node)
 		{
-			switch (((context.Instruction) as CIL.BaseCILInstruction).OpCode)
+			switch (((node.Instruction) as CIL.BaseCILInstruction).OpCode)
 			{
 				case OpCode.Ceq: return @"==";
 				case OpCode.Cgt: return @">";

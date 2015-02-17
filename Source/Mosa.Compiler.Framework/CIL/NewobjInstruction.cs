@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context context, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode context, IInstructionDecoder decoder)
 		{
 			var ctor = DecodeInvocationTarget(context, decoder, InvokeSupport);
 
@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Framework.CIL
 			context.OperandCount--;
 
 			decoder.Compiler.Scheduler.TrackTypeAllocated(ctor.DeclaringType);
-			decoder.Compiler.Scheduler.TrackTypeAllocated(context.MosaMethod.DeclaringType);
+			decoder.Compiler.Scheduler.TrackTypeAllocated(context.InvokeMethod.DeclaringType);
 
 			// Set a return value according to the type of the object allocated
 			context.Result = decoder.Compiler.CreateVirtualRegister(ctor.DeclaringType);
@@ -112,9 +112,9 @@ namespace Mosa.Compiler.Framework.CIL
 		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
 			// Validate the operands...
-			int offset = (ctx.MosaMethod.HasExplicitThis ? 1 : 0);
+			int offset = (ctx.InvokeMethod.HasExplicitThis ? 1 : 0);
 
-			Debug.Assert(ctx.OperandCount == ctx.MosaMethod.Signature.Parameters.Count - offset, @"Operand count doesn't match parameter count.");
+			Debug.Assert(ctx.OperandCount == ctx.InvokeMethod.Signature.Parameters.Count - offset, @"Operand count doesn't match parameter count.");
 		}
 
 		/// <summary>

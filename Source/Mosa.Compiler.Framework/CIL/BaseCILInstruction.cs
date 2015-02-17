@@ -62,12 +62,17 @@ namespace Mosa.Compiler.Framework.CIL
 
 		#region Methods
 
+		public virtual bool DecodeTargets(IInstructionDecoder decoder)
+		{
+			return false;
+		}
+
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public virtual void Decode(Context ctx, IInstructionDecoder decoder)
+		public virtual void Decode(InstructionNode ctx, IInstructionDecoder decoder)
 		{
 			ctx.SetInstruction(this, DefaultOperandCount, DefaultResultCount);
 		}

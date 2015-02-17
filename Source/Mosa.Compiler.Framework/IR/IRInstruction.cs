@@ -338,5 +338,10 @@ namespace Mosa.Compiler.Framework.IR
 		///
 		/// </summary>
 		public static readonly BaseIRInstruction CallFinally = new CallFinally();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly BaseIRInstruction Flow = new Flow();
 	}
 }

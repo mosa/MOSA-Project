@@ -17,33 +17,19 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseInstruction
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the default number of operands for this instruction.
-		/// </summary>
-		protected byte operandDefaultCount;
-
-		/// <summary>
-		/// Holds the default number of operand results for this instruction.
-		/// </summary>
-		protected byte resultDefaultCount;
-
-		#endregion Data members
-
 		#region Properties
 
 		/// <summary>
 		/// Gets the default operand count of the instruction
 		/// </summary>
 		/// <value>The operand count.</value>
-		public byte DefaultOperandCount { get { return operandDefaultCount; } }
+		public byte DefaultOperandCount { get; protected set; }
 
 		/// <summary>
 		/// Gets the default result operand count of the instruction
 		/// </summary>
 		/// <value>The operand result count.</value>
-		public byte DefaultResultCount { get { return resultDefaultCount; } }
+		public byte DefaultResultCount { get; protected set; }
 
 		/// <summary>
 		/// Determines flow behavior of this instruction.
@@ -63,6 +49,14 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public virtual bool IgnoreDuringCodeGeneration { get { return false; } }
 
+		/// <summary>
+		/// Gets a value indicating whether to [ignore instruction's basic block].
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if [ignore instruction basic block]; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool IgnoreInstructionBasicBlockTargets { get { return false; } }
+
 		#endregion Properties
 
 		#region Construction
@@ -74,8 +68,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operandCount">The operand count.</param>
 		public BaseInstruction(byte resultCount, byte operandCount)
 		{
-			resultDefaultCount = resultCount;
-			operandDefaultCount = operandCount;
+			DefaultResultCount = resultCount;
+			DefaultOperandCount = operandCount;
 		}
 
 		#endregion Construction
@@ -116,43 +110,43 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// Returns a <see cref="System.String" /> that represents this instance.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
+		/// A <see cref="System.String" /> that represents this instance.
 		/// </returns>
-		public virtual string ToString(Context context)
+		public virtual string ToString(InstructionNode node)
 		{
 			var s = new StringBuilder(ToString());
 
-			var size = GetSizeString(context.Size);
+			var size = GetSizeString(node.Size);
 
 			if (size != string.Empty)
 				s.Append("/" + size);
 
-			if (context.ConditionCode != ConditionCode.Undefined)
+			if (node.ConditionCode != ConditionCode.Undefined)
 			{
 				s.Append(" [");
-				s.Append(GetConditionString(context.ConditionCode));
+				s.Append(GetConditionString(node.ConditionCode));
 				s.Append("]");
 			}
 
-			if (context.MosaType != null)
+			if (node.MosaType != null)
 			{
 				s.Append(" [[");
-				s.Append(context.MosaType.FullName);
+				s.Append(node.MosaType.FullName);
 				s.Append("]]");
 			}
 
-			if (context.MosaField != null)
+			if (node.MosaField != null)
 			{
 				s.Append(" [[");
-				s.Append(context.MosaField.FullName);
+				s.Append(node.MosaField.FullName);
 				s.Append("]]");
 			}
 
-			string mod = GetModifier(context);
+			string mod = GetModifier(node);
 			if (mod != null)
 			{
 				s.Append(" [");
@@ -160,62 +154,68 @@ namespace Mosa.Compiler.Framework
 				s.Append("]");
 			}
 
-			for (int i = 0; i < context.ResultCount; i++)
+			for (int i = 0; i < node.ResultCount; i++)
 			{
-				var op = context.GetResult(i);
+				var op = node.GetResult(i);
 				s.Append(" ");
 				s.Append(op == null ? "[NULL]" : op.ToString());
 				s.Append(",");
 			}
 
-			if (context.ResultCount > 0)
+			if (node.ResultCount > 0)
 			{
 				s.Length = s.Length - 1;
 			}
 
-			if (context.ResultCount > 0 && context.OperandCount > 0)
+			if (node.ResultCount > 0 && node.OperandCount > 0)
 			{
 				s.Append(" <=");
 			}
 
-			for (int i = 0; i < context.OperandCount; i++)
+			for (int i = 0; i < node.OperandCount; i++)
 			{
-				var op = context.GetOperand(i);
+				var op = node.GetOperand(i);
 				s.Append(" ");
 				s.Append(op == null ? "[NULL]" : op.ToString());
 				s.Append(",");
 			}
 
-			if (context.OperandCount > 0)
+			if (node.OperandCount > 0)
 			{
 				s.Length = s.Length - 1;
 			}
 
-			if (context.Targets != null)
+			if (node.BranchTargets != null)
 			{
-				for (int i = 0; (i < 2) && (i < context.Targets.Count); i++)
+				s.Append(' ');
+
+				for (int i = 0; (i < 2) && (i < node.BranchTargetsCount); i++)
 				{
-					s.Append(' ');
-					s.Append(context.Targets[i].ToString());
+					if (i != 0)
+					{
+						s.Append(", ");
+					}
+
+					s.Append(node.BranchTargets[i].ToString());
 				}
 
-				if (context.Targets.Count > 2)
+				if (node.BranchTargetsCount > 2)
 				{
-					s.Append(" [more]");
+					s.Append(", [more]");
 				}
 			}
 
-			if (context.MosaMethod != null)
+			if (node.InvokeMethod != null)
 			{
 				s.Append(" {");
-				s.Append(context.MosaMethod.FullName);
+				s.Append(node.InvokeMethod.FullName);
 				s.Append("}");
 			}
 
-			if (context.MosaField != null)
+			if (node.MosaField != null)
 			{
 				s.Append(" {");
-				s.Append(context.MosaField.FullName);
+				s.Append(node.MosaField.FullName);
 				s.Append("}");
 			}
 
@@ -234,9 +234,9 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the instruction modifier.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <returns></returns>
-		protected virtual string GetModifier(Context context)
+		protected virtual string GetModifier(InstructionNode node)
 		{
 			return null;
 		}

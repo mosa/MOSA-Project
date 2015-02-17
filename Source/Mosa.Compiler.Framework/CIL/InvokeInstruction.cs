@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
 		{
 			DecodeInvocationTarget(ctx, decoder, InvokeSupport);
 		}
@@ -123,7 +123,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
 		/// <param name="flags">Flags, which control the</param>
 		/// <returns></returns>
-		protected static MosaMethod DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
+		protected static MosaMethod DecodeInvocationTarget(InstructionNode ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
 		{
 			var method = (MosaMethod)decoder.Instruction.Operand;
 
@@ -140,9 +140,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
-		private static void SetInvokeTarget(Context context, BaseMethodCompiler compiler, MosaMethod method)
+		private static void SetInvokeTarget(InstructionNode context, BaseMethodCompiler compiler, MosaMethod method)
 		{
-			context.MosaMethod = method;
+			context.InvokeMethod = method;
 
 			// Fix the parameter list
 			int paramCount = method.Signature.Parameters.Count;

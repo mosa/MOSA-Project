@@ -12,7 +12,6 @@ using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -46,7 +45,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				var tryHandler = BasicBlocks.GetByLabel(handler.HandlerStart);
 
-				var context = new Context(InstructionSet, tryBlock);
+				var context = new Context(tryBlock);
 
 				while (context.IsEmpty || context.Instruction == IRInstruction.TryStart)
 				{
@@ -55,7 +54,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				context.AppendInstruction(IRInstruction.TryStart, tryHandler);
 
-				context = new Context(InstructionSet, tryHandler);
+				context = new Context(tryHandler);
 
 				if (handler.HandlerType == ExceptionHandlerType.Finally)
 				{
@@ -71,9 +70,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				var context = new Context(InstructionSet, block, block.EndIndex);
+				var context = new Context(block.Last);
 
-				while (context.IsEmpty || context.IsBlockEndInstruction)
+				while (context.IsEmpty || context.IsBlockEndInstruction || context.Instruction == IRInstruction.Flow)
 				{
 					context.GotoPrevious();
 				}
@@ -82,7 +81,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					context.SetInstruction(IRInstruction.FinallyEnd);
 
-					var entry = FindFinallyHandler(context);
+					var entry = FindFinallyHandler(context.Node);
 					var list = returns.Get(entry);
 
 					if (list == null)
@@ -92,7 +91,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					foreach (var returnBlock in list)
 					{
-						context.AddBranch(returnBlock);
+						context.AddBranchTarget(returnBlock);
 					}
 				}
 				else if (context.Instruction is LeaveInstruction)
@@ -100,7 +99,7 @@ namespace Mosa.Compiler.Framework.Stages
 					// Find enclosing finally clause
 					bool createLink = false;
 
-					var entry = FindImmediateExceptionHandler(context);
+					var entry = FindImmediateExceptionHandler(context.Node);
 
 					if (entry != null)
 					{
@@ -110,7 +109,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (createLink)
 					{
-						var tryFinallyBlock = context.Targets[0];
+						var tryFinallyBlock = context.BranchTargets[0];
 
 						returns.Add(entry, tryFinallyBlock);
 
@@ -121,19 +120,13 @@ namespace Mosa.Compiler.Framework.Stages
 							var finallyBlock = BasicBlocks.GetByLabel(entry.HandlerStart);
 
 							context.AppendInstruction(IRInstruction.CallFinally, finallyBlock, tryFinallyBlock);
-
-							// Fix flow
-							var nextBlock = context.BasicBlock.NextBlocks[context.BasicBlock.NextBlocks.Count - 1];
-							nextBlock.PreviousBlocks.Remove(context.BasicBlock);
-							context.BasicBlock.NextBlocks.Remove(nextBlock);
-							LinkBlocks(context, finallyBlock);
 						}
 						else
 						{
 							context.AppendInstruction(IRInstruction.Jmp, tryFinallyBlock);
 						}
 
-						Debug.Assert(context.BasicBlock.NextBlocks.Count <= 1);
+						//Debug.Assert(context.BasicBlock.NextBlocks.Count <= 1);
 					}
 					else
 					{
