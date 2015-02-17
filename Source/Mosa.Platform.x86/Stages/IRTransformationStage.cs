@@ -164,15 +164,12 @@ namespace Mosa.Platform.x86.Stages
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].BasicBlock);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
-						//LinkBlocks(context, newBlocks[0], newBlocks[1]);
 
 						newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[1].BasicBlock);
 						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
-						//LinkBlocks(newBlocks[0], newBlocks[1], nextBlock);
 
 						newBlocks[1].AppendInstruction(X86.Mov, result, ConstantZero);
 						newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
-						//LinkBlocks(newBlocks[1], nextBlock);
 
 						break;
 					}
@@ -193,12 +190,10 @@ namespace Mosa.Platform.x86.Stages
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.BasicBlock);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
-						//LinkBlocks(context, nextBlock, newBlocks[0]);
 
 						newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.NotEqual, result);
 						newBlocks[0].AppendInstruction(X86.Movzx, result, result);
 						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
-						//LinkBlocks(newBlocks[0], nextBlock);
 
 						break;
 					}

@@ -117,8 +117,6 @@ namespace Mosa.Compiler.Framework
 			b0.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, opCompare, c0);
 			b0.AddBranchTarget(b2.BasicBlock);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.BasicBlock);
-			//methodCompiler.BasicBlocks.LinkBlocks(b0.BasicBlock, b1.BasicBlock);
-			//methodCompiler.BasicBlocks.LinkBlocks(b0.BasicBlock, b2.BasicBlock);
 
 			// no instance
 			b1.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
@@ -128,7 +126,6 @@ namespace Mosa.Compiler.Framework
 				b1.AddOperand(vrs[i]);
 			}
 			b1.AppendInstruction(IRInstruction.Jmp, b3.BasicBlock);
-			//methodCompiler.BasicBlocks.LinkBlocks(b1.BasicBlock, b3.BasicBlock);
 
 			// instance
 			b2.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
@@ -139,7 +136,6 @@ namespace Mosa.Compiler.Framework
 				b2.AddOperand(vrs[i]);
 			}
 			b2.AppendInstruction(IRInstruction.Jmp, b3.BasicBlock);
-			//methodCompiler.BasicBlocks.LinkBlocks(b2.BasicBlock, b3.BasicBlock);
 
 			// return
 			b3.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
@@ -147,7 +143,6 @@ namespace Mosa.Compiler.Framework
 			{
 				b3.SetOperand(0, opReturn);
 			}
-			//methodCompiler.BasicBlocks.LinkBlocks(b3.BasicBlock, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private static void PatchBeginInvoke(BaseMethodCompiler methodCompiler)
@@ -177,13 +172,6 @@ namespace Mosa.Compiler.Framework
 			var epiologue = new Context(methodCompiler.BasicBlocks.CreateBlock(BasicBlock.EpilogueLabel));
 
 			var b0 = new Context(methodCompiler.BasicBlocks.CreateBlock(0));
-
-			//basicBlocks.LinkBlocks(basicBlocks.PrologueBlock, b1.BasicBlock);
-
-			//if (linkEpilogueBlock)
-			//{
-			//	basicBlocks.LinkBlocks(b1.BasicBlock, basicBlocks.EpilogueBlock);
-			//}
 
 			// Add a jump instruction to the first block from the prologue
 			prologue.AppendInstruction(IRInstruction.Jmp, b0.BasicBlock);

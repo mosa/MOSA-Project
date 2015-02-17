@@ -228,10 +228,9 @@ namespace Mosa.Platform.x86
 					//new CheckOperandCountStage(),
 					new PlatformIntrinsicStage(),
 					new LongOperandTransformationStage(),
-
-					new IRTransformationStage(),
 					//new StopStage(),
 
+					new IRTransformationStage(),
 				    new TweakTransformationStage(),
 
 					new FixedRegisterAssignmentStage(),

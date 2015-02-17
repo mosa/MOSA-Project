@@ -1332,7 +1332,6 @@ namespace Mosa.Compiler.Framework.Stages
 			// If we reach here then the leave is not inside a protected region and must act like a branch.
 			// We must also tell the compiler to link the two blocks together
 			context.ReplaceInstructionOnly(IRInstruction.Jmp);
-			//LinkBlocks(context, context.Targets[0]);
 		}
 
 		/// <summary>
