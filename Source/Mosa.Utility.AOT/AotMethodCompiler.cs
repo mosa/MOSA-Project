@@ -28,22 +28,19 @@ namespace Mosa.Utility.Aot
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
-		/// <param name="instructionSet">The instruction set.</param>
-		/// <param name="threadID"></param>
-		public AotMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
-			: base(compiler, method, basicBlocks, instructionSet, threadID)
+		/// <param name="threadID">The thread identifier.</param>
+		public AotMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
+			: base(compiler, method, basicBlocks, threadID)
 		{
 			var compilerOptions = compiler.CompilerOptions;
 
 			// Populate the pipeline
 			Pipeline.Add(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
-				new BasicBlockBuilderStage(),
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),
 				new StackSetupStage(),
 				new ProtectedRegionStage(),
-				//new ProtectedRegionFlowUpdateStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				new ConvertCompoundStage(),
@@ -57,7 +54,6 @@ namespace Mosa.Utility.Aot
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableOptimizations) ? new IROptimizationStage() : null,
-				//(compilerOptions.EnableSSA) ? new DeadCodeRemovalStage() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 
 				new IRCleanup(),

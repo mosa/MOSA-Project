@@ -21,14 +21,14 @@ namespace Mosa.Compiler.Framework.Stages
 			// Remove Nops
 			foreach (var block in BasicBlocks)
 			{
-				for (var ctx = new Context(InstructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+				for (var ctx = new Context(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 				{
 					if (ctx.IsEmpty)
 						continue;
 
 					if (ctx.Instruction == IRInstruction.Nop)
 					{
-						ctx.Remove();
+						ctx.Empty();
 						continue;
 					}
 				}

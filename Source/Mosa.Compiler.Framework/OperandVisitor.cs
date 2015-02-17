@@ -13,18 +13,18 @@ namespace Mosa.Compiler.Framework
 {
 	public sealed class OperandVisitor
 	{
-		private Context context;
+		private InstructionNode node;
 
-		public OperandVisitor(Context context)
+		public OperandVisitor(InstructionNode node)
 		{
-			this.context = context;
+			this.node = node;
 		}
 
 		public IEnumerable<Operand> Input
 		{
 			get
 			{
-				foreach (Operand operand in context.Operands)
+				foreach (var operand in node.Operands)
 				{
 					if (operand.IsVirtualRegister || operand.IsCPURegister)
 					{
@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework
 					}
 				}
 
-				foreach (Operand operand in context.Results)
+				foreach (var operand in node.Results)
 				{
 					if (operand.IsMemoryAddress && operand.OffsetBase != null)
 					{
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework
 		{
 			get
 			{
-				foreach (Operand operand in context.Results)
+				foreach (var operand in node.Results)
 				{
 					if (operand.IsVirtualRegister || operand.IsCPURegister)
 					{

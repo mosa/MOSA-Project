@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.30729</ProductVersion>
@@ -39,7 +39,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
@@ -52,13 +52,14 @@
     <OutputPath>..\..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <NoWarn>0414, 0219</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
@@ -72,6 +73,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
     <DebugType>none</DebugType>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -88,11 +90,13 @@
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InstructionNodeExtension.cs" />
+    <Compile Include="InstructionNodeAddition.cs" />
     <Compile Include="Intrinsics\GetObjectFromAddress.cs" />
     <Compile Include="Intrinsics\Load64.cs" />
     <Compile Include="IR\FinallyReturn.cs" />
     <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="IR\KillAllExcept.cs" />
+    <Compile Include="IR\Flow.cs" />
     <Compile Include="MosaCompiler.cs" />
     <Compile Include="InstructionSize.cs" />
     <Compile Include="Intrinsics\GetObjectAddress.cs" />
@@ -134,7 +138,6 @@
     <Compile Include="ShiftType.cs" />
     <Compile Include="ConditionCodeExtension.cs" />
     <Compile Include="BasicBlocks.cs" />
-    <Compile Include="ContextExtension.cs" />
     <Compile Include="IR\BlockStart.cs" />
     <Compile Include="IR\BlockEnd.cs" />
     <Compile Include="IR\InternalReturn.cs" />
@@ -185,7 +188,6 @@
     <Compile Include="VirtualRegisters.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
     <Compile Include="BaseInstruction.cs" />
-    <Compile Include="Stages\BasicBlockBuilderStage.cs" />
     <Compile Include="CIL\AddInstruction.cs" />
     <Compile Include="CIL\ArglistInstruction.cs" />
     <Compile Include="CIL\ArithmeticInstruction.cs" />
@@ -350,7 +352,6 @@
     <Compile Include="IR\ZeroExtendedMove.cs" />
     <Compile Include="IVisitor.cs" />
     <Compile Include="CIL\NopInstruction.cs" />
-    <Compile Include="InstructionSet.cs" />
     <Compile Include="InstructionNode.cs" />
     <Compile Include="CIL\BaseCILInstruction.cs" />
     <Compile Include="BaseCompiler.cs">

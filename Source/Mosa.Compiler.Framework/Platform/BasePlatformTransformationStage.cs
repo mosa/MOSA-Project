@@ -35,15 +35,15 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <summary>
 		/// Emits the constant operands.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		protected void EmitFloatingPointConstants(Context context)
+		/// <param name="node">The node.</param>
+		protected void EmitFloatingPointConstants(InstructionNode node)
 		{
-			if (context.OperandCount > 0)
-				context.Operand1 = EmitFloatingPointConstant(context.Operand1);
-			if (context.OperandCount > 1)
-				context.Operand2 = EmitFloatingPointConstant(context.Operand2);
-			if (context.OperandCount > 2)
-				context.Operand3 = EmitFloatingPointConstant(context.Operand3);
+			if (node.OperandCount > 0)
+				node.Operand1 = EmitFloatingPointConstant(node.Operand1);
+			if (node.OperandCount > 1)
+				node.Operand2 = EmitFloatingPointConstant(node.Operand2);
+			if (node.OperandCount > 2)
+				node.Operand3 = EmitFloatingPointConstant(node.Operand3);
 		}
 
 		/// <summary>

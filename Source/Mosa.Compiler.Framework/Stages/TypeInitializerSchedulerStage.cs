@@ -28,11 +28,6 @@ namespace Mosa.Compiler.Framework.Stages
 		#region Data Members
 
 		/// <summary>
-		/// The instruction set
-		/// </summary>
-		private InstructionSet instructionSet;
-
-		/// <summary>
 		/// Hold the current context
 		/// </summary>
 		private Context context;
@@ -52,9 +47,9 @@ namespace Mosa.Compiler.Framework.Stages
 		public TypeInitializerSchedulerStage()
 		{
 			basicBlocks = new BasicBlocks();
-			instructionSet = new InstructionSet(25);
-			context = instructionSet.CreateNewBlock(basicBlocks);
-			basicBlocks.AddHeaderBlock(context.BasicBlock);
+			var block = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
+			basicBlocks.AddHeaderBlock(block);
+			context = new Context(block);
 		}
 
 		#endregion Construction
@@ -80,7 +75,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			TypeInitializerMethod = Compiler.CreateLinkerMethod(TypeInitializerName);
 
-			Compiler.CompileMethod(TypeInitializerMethod, basicBlocks, instructionSet, 0);
+			Compiler.CompileMethod(TypeInitializerMethod, basicBlocks, 0);
 		}
 
 		#region Methods
@@ -93,7 +88,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
 			context.AppendInstruction(IRInstruction.Call, null, symbolOperand);
-			context.MosaMethod = method;
+			context.InvokeMethod = method;
 		}
 
 		#endregion Methods

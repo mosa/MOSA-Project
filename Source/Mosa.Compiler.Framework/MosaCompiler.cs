@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private static IEnumerable<string> GetInputFileNames(List<FileInfo> inputFiles)
 		{
-			foreach (FileInfo file in inputFiles)
+			foreach (var file in inputFiles)
 			{
 				yield return file.FullName;
 			}

@@ -36,7 +36,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
 			// TODO
 		}

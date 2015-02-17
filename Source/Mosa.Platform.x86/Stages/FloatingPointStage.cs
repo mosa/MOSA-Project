@@ -20,56 +20,59 @@ namespace Mosa.Platform.x86.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				for (var context = new Context(this.InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (context.IsEmpty || !(context.Instruction is X86Instruction))
+					if (node.IsEmpty || !(node.Instruction is X86Instruction))
 						continue;
 
-					if (context.Instruction == X86.Jmp || context.Instruction == X86.FarJmp)
+					if (node.Instruction == X86.Jmp || node.Instruction == X86.FarJmp)
 						continue;
 
 					// Convert any floating point constants into labels
-					EmitFloatingPointConstants(context);
+					EmitFloatingPointConstants(node);
 
 					// No floating point opcode allows both the result and operand to be a memory location
 					// if necessary, load into register first
-					if (context.OperandCount == 1
-						&& context.ResultCount == 1
-						&& context.Operand1.IsMemoryAddress
-						&& context.Result.IsMemoryAddress
-						&& (context.Result.IsR || context.Operand1.IsR))
+					if (node.OperandCount == 1
+						&& node.ResultCount == 1
+						&& node.Operand1.IsMemoryAddress
+						&& node.Result.IsMemoryAddress
+						&& (node.Result.IsR || node.Operand1.IsR))
 					{
-						LoadFirstOperandIntoRegister(context);
+						LoadFirstOperandIntoRegister(node);
 					}
 					else
 						// No two-operand floating point opcode allows the first operand to a memory operand
-						if (context.OperandCount == 2 && context.Operand1.IsMemoryAddress && context.Operand1.IsR)
+						if (node.OperandCount == 2 && node.Operand1.IsMemoryAddress && node.Operand1.IsR)
 						{
-							if (IsCommutative(context.Instruction))
+							if (IsCommutative(node.Instruction))
 							{
 								// swap operands
-								var t = context.Operand2;
-								context.Operand2 = context.Operand1;
-								context.Operand1 = t;
+								var t = node.Operand2;
+								node.Operand2 = node.Operand1;
+								node.Operand1 = t;
 							}
 							else
 							{
-								LoadFirstOperandIntoRegister(context);
+								LoadFirstOperandIntoRegister(node);
 							}
 						}
 				}
 			}
 		}
 
-		private void LoadFirstOperandIntoRegister(Context context)
+		private void LoadFirstOperandIntoRegister(InstructionNode node)
 		{
 			// load into a register
-			Operand operand = context.Operand1;
+			Operand operand = node.Operand1;
 
 			Operand register = AllocateVirtualRegister(operand.Type);
-			context.Operand1 = register;
+			node.Operand1 = register;
 
-			context.InsertBefore().SetInstruction(GetMove(register, operand), register, operand);
+			var move = GetMove(register, operand);
+
+			var newNode = new InstructionNode(move, register, operand);
+			node.Previous.Insert(newNode);
 		}
 
 		private bool IsCommutative(BaseInstruction instruction)

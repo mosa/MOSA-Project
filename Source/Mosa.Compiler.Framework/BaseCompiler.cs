@@ -170,13 +170,12 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="method">The method.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
-		/// <param name="instructionSet">The instruction set.</param>
 		/// <param name="threadID">The thread identifier.</param>
-		public void CompileMethod(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
+		public void CompileMethod(MosaMethod method, BasicBlocks basicBlocks, int threadID)
 		{
 			NewCompilerTraceEvent(CompilerEvent.CompilingMethod, method.FullName, threadID);
 
-			var methodCompiler = CreateMethodCompiler(method, basicBlocks, instructionSet, threadID);
+			var methodCompiler = CreateMethodCompiler(method, basicBlocks, threadID);
 			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
 
 			methodCompiler.Compile();
@@ -187,9 +186,9 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="method">The method to compile.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
-		/// <param name="instructionSet">The instruction set.</param>
+		/// <param name="threadID">The thread identifier.</param>
 		/// <returns></returns>
-		protected abstract BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID);
+		protected abstract BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID);
 
 		/// <summary>
 		/// Compiles the linker method.
@@ -242,7 +241,7 @@ namespace Mosa.Compiler.Framework
 				if (method == null)
 					return;
 
-				CompileMethod(method, null, null, 0);
+				CompileMethod(method, null, 0);
 
 				CompilerTrace.UpdatedCompilerProgress(
 					CompilationScheduler.TotalMethods,
@@ -296,7 +295,7 @@ namespace Mosa.Compiler.Framework
 					break;
 				}
 
-				CompileMethod(method, null, null, threadID);
+				CompileMethod(method, null, threadID);
 
 				CompilerTrace.UpdatedCompilerProgress(
 					CompilationScheduler.TotalMethods,

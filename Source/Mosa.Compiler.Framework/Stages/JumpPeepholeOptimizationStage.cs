@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var from = BasicBlocks[f];
 				var next = BasicBlocks[f + 1];
 
-				Context context = new Context(InstructionSet, from, from.EndIndex);
+				var context = new Context(from.Last);
 				context.GotoPrevious();
 
 				while (context.IsEmpty)
@@ -46,12 +46,12 @@ namespace Mosa.Compiler.Framework.Stages
 				Debug.Assert(context.Instruction.FlowControl == FlowControl.UnconditionalBranch);
 				//Debug.Assert(context.BranchTargets.Length == 1);
 
-				var target = context.Targets[0];
+				var target = context.BranchTargets[0];
 
 				if (next != target)
 					continue;
 
-				context.Remove();
+				context.Empty();
 			}
 		}
 	}

@@ -44,25 +44,35 @@ namespace Mosa.Compiler.Framework.CIL
 
 		#region Methods Overrides
 
+		public override bool DecodeTargets(IInstructionDecoder decoder)
+		{
+			foreach (var target in (int[])decoder.Instruction.Operand)
+			{
+				var block = decoder.GetBlock(target);
+			}
+
+			decoder.GetBlock(decoder.Instruction.Next.Value);
+			return true;
+		}
+
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			var targets = (int[])decoder.Instruction.Operand;
-
-			// Populate the array
-			for (int i = 0; i < targets.Length; i++)
+			foreach (var target in (int[])decoder.Instruction.Operand)
 			{
-				ctx.AddCILBranch(targets[i]);
+				var block = decoder.GetBlock(target);
+
+				ctx.AddBranchTarget(block);
 			}
 
-			ctx.AddCILBranch(decoder.Instruction.Next.Value);
+			ctx.AddBranchTarget(decoder.GetBlock(decoder.Instruction.Next.Value));
 		}
 
 		/// <summary>

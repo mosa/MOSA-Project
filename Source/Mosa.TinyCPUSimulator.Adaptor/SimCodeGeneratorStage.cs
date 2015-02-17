@@ -33,22 +33,22 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			simLinker = MethodCompiler.Linker as SimLinker;
 		}
 
-		protected override void EmitInstruction(Context context, BaseCodeEmitter codeEmitter)
+		protected override void EmitInstruction(InstructionNode node, BaseCodeEmitter codeEmitter)
 		{
 			long start = codeEmitter.CurrentPosition;
 
-			base.EmitInstruction(context, codeEmitter);
+			base.EmitInstruction(node, codeEmitter);
 
 			long end = codeEmitter.CurrentPosition;
 
-			var instruction = simAdapter.Convert(context, MethodCompiler.Method, BasicBlocks, (byte)(end - start));
+			var instruction = simAdapter.Convert(node, MethodCompiler.Method, BasicBlocks, (byte)(end - start));
 
 			if (instruction != null)
 			{
 				simLinker.AddInstruction(symbol, start, instruction);
 			}
 
-			simLinker.AddSourceInformation(symbol, start, context.ToString());
+			simLinker.AddSourceInformation(symbol, start, node.ToString());
 		}
 
 		protected override void BlockStart(BasicBlock block)

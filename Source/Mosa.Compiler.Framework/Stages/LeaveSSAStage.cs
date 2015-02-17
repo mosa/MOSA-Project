@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var block in BasicBlocks)
 			{
-				for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (context.IsEmpty)
 						continue;
@@ -109,7 +109,7 @@ namespace Mosa.Compiler.Framework.Stages
 				InsertCopyStatement(predecessor, context.Result, operand);
 			}
 
-			context.Remove();
+			context.Empty();
 		}
 
 		/// <summary>
@@ -120,7 +120,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="operand">The operand.</param>
 		private void InsertCopyStatement(BasicBlock predecessor, Operand result, Operand operand)
 		{
-			var context = new Context(InstructionSet, predecessor, predecessor.EndIndex);
+			var context = new Context(predecessor.Last);
 
 			context.GotoPrevious();
 

@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (context.IsEmpty)
 						continue;
@@ -136,7 +136,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="variable">The variable.</param>
 		private void InsertPhiInstruction(BasicBlock block, Operand variable)
 		{
-			var context = new Context(InstructionSet, block);
+			var context = new Context(block);
 			context.AppendInstruction(IRInstruction.Phi, variable);
 
 			//var sourceBlocks = new BasicBlock[block.PreviousBlocks.Count];

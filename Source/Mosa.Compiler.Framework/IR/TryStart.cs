@@ -36,6 +36,14 @@ namespace Mosa.Compiler.Framework.IR
 		/// </value>
 		public override bool IgnoreDuringCodeGeneration { get { return true; } }
 
+		/// <summary>
+		/// Gets a value indicating whether to [ignore instruction's basic block].
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if [ignore instruction basic block]; otherwise, <c>false</c>.
+		/// </value>
+		public override bool IgnoreInstructionBasicBlockTargets { get { return true; } }
+
 		#endregion Properties
 
 		#region Instruction Overrides

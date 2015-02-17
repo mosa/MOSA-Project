@@ -47,9 +47,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected bool ContainsAddressOf(Operand local)
 		{
-			foreach (int index in local.Uses)
+			foreach (var index in local.Uses)
 			{
-				Context ctx = new Context(InstructionSet, index);
+				Context ctx = new Context(index);
 
 				if (ctx.Instruction == IRInstruction.AddressOf)
 					return true;
@@ -66,13 +66,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (trace.Active) trace.Log("*** Replacing: " + local.ToString() + " with " + v.ToString());
 
-			foreach (int index in local.Uses.ToArray())
+			foreach (var index in local.Uses.ToArray())
 			{
-				Context ctx = new Context(InstructionSet, index);
+				var ctx = new Context(index);
 
 				for (int i = 0; i < ctx.OperandCount; i++)
 				{
-					Operand operand = ctx.GetOperand(i);
+					var operand = ctx.GetOperand(i);
 
 					if (local == operand)
 					{
@@ -83,13 +83,13 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			foreach (int index in local.Definitions.ToArray())
+			foreach (var index in local.Definitions.ToArray())
 			{
-				Context ctx = new Context(InstructionSet, index);
+				var ctx = new Context(index);
 
 				for (int i = 0; i < ctx.OperandCount; i++)
 				{
-					Operand operand = ctx.GetResult(i);
+					var operand = ctx.GetResult(i);
 
 					if (local == operand)
 					{

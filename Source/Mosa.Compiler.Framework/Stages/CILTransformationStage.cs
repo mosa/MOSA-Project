@@ -160,7 +160,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldftn(Context context)
 		{
-			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbolFromMethod(TypeSystem, context.MosaMethod));
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbolFromMethod(TypeSystem, context.InvokeMethod));
 		}
 
 		/// <summary>
@@ -261,7 +261,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.Dup(Context context)
 		{
 			// We don't need the dup anymore.
-			context.Remove();
+			context.Empty();
 		}
 
 		/// <summary>
@@ -272,7 +272,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (CanSkipDueToRecursiveSystemObjectCtorCall(context))
 			{
-				context.Remove();
+				context.Empty();
 				return;
 			}
 
@@ -280,12 +280,12 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// If the method being called is a virtual method then we need to box the value type
-			if (context.MosaMethod.IsVirtual &&
+			if (context.InvokeMethod.IsVirtual &&
 				context.Operand1.Type.ElementType != null &&
 				context.Operand1.Type.ElementType.IsValueType &&
-				context.MosaMethod.DeclaringType == context.Operand1.Type.ElementType)
+				context.InvokeMethod.DeclaringType == context.Operand1.Type.ElementType)
 			{
-				if (OverridesMethod(context.MosaMethod))
+				if (OverridesMethod(context.InvokeMethod))
 				{
 					var before = context.InsertBefore();
 					before.SetInstruction(IRInstruction.SubSigned, context.Operand1, context.Operand1, Operand.CreateConstant(TypeSystem, NativePointerSize * 2));
@@ -318,7 +318,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			ProcessInvokeInstruction(context, context.MosaMethod, context.Result, new List<Operand>(context.Operands));
+			ProcessInvokeInstruction(context, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
 		}
 
 		private bool OverridesMethod(MosaMethod method)
@@ -343,7 +343,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand destinationOperand = context.GetOperand(context.OperandCount - 1);
 			context.OperandCount -= 1;
 
-			ProcessInvokeInstruction(context, context.MosaMethod, context.Result, new List<Operand>(context.Operands));
+			ProcessInvokeInstruction(context, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
 		}
 
 		/// <summary>
@@ -456,7 +456,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ProcessExternalCall(context))
 				return;
 
-			MosaMethod method = context.MosaMethod;
+			MosaMethod method = context.InvokeMethod;
 			Operand resultOperand = context.Result;
 			List<Operand> operands = new List<Operand>(context.Operands);
 
@@ -464,7 +464,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var type = context.Previous.MosaType;
 
-				context.Previous.Remove();
+				context.Previous.Empty();
 
 				if (type.IsValueType)
 				{
@@ -670,7 +670,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ReplaceWithInternalCall(context))
 				return;
 
-			var classType = context.MosaMethod.DeclaringType;
+			var classType = context.InvokeMethod.DeclaringType;
 			var thisReference = context.Result;
 
 			Context before = context.InsertBefore();
@@ -704,7 +704,7 @@ namespace Mosa.Compiler.Framework.Stages
 			List<Operand> operands = new List<Operand>(context.Operands);
 			operands.Insert(0, thisReference);
 
-			ProcessInvokeInstruction(context, context.MosaMethod, null, operands);
+			ProcessInvokeInstruction(context, context.InvokeMethod, null, operands);
 		}
 
 		private Operand GetRuntimeTypeHandle(MosaType runtimeType, Context context)
@@ -922,7 +922,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Pop(Context context)
 		{
-			context.Remove();
+			context.Empty();
 		}
 
 		#endregion ICILVisitor
@@ -1067,7 +1067,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.UnaryBranch(Context context)
 		{
-			var target = context.Targets[0];
+			var target = context.BranchTargets[0];
 
 			Operand first = context.Operand1;
 			Operand second = Operand.CreateConstant(TypeSystem, (int)0);
@@ -1077,13 +1077,13 @@ namespace Mosa.Compiler.Framework.Stages
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
 			{
 				context.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.NotEqual, null, first, second);
-				context.AddBranch(target);
+				context.AddBranchTarget(target);
 				return;
 			}
 			else if (opcode == CIL.OpCode.Brfalse || opcode == CIL.OpCode.Brfalse_s)
 			{
 				context.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, first, second);
-				context.AddBranch(target);
+				context.AddBranchTarget(target);
 				return;
 			}
 
@@ -1096,7 +1096,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.BinaryBranch(Context context)
 		{
-			var target = context.Targets[0];
+			var target = context.BranchTargets[0];
 
 			ConditionCode cc = ConvertCondition(((CIL.BaseCILInstruction)context.Instruction).OpCode);
 			Operand first = context.Operand1;
@@ -1107,12 +1107,12 @@ namespace Mosa.Compiler.Framework.Stages
 				Operand comparisonResult = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
 				context.SetInstruction(IRInstruction.FloatCompare, cc, comparisonResult, first, second);
 				context.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, comparisonResult, Operand.CreateConstant(TypeSystem, 1));
-				context.AddBranch(target);
+				context.AddBranchTarget(target);
 			}
 			else
 			{
 				context.SetInstruction(IRInstruction.IntegerCompareBranch, cc, null, first, second);
-				context.AddBranch(target);
+				context.AddBranchTarget(target);
 			}
 		}
 
@@ -1332,7 +1332,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// If we reach here then the leave is not inside a protected region and must act like a branch.
 			// We must also tell the compiler to link the two blocks together
 			context.ReplaceInstructionOnly(IRInstruction.Jmp);
-			LinkBlocks(context, context.Targets[0]);
+			//LinkBlocks(context, context.Targets[0]);
 		}
 
 		/// <summary>
@@ -1879,8 +1879,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </remarks>
 		private bool ProcessExternalCall(Context context)
 		{
-			string external = context.MosaMethod.ExternMethod;
-			bool isInternal = context.MosaMethod.IsInternal;
+			string external = context.InvokeMethod.ExternMethod;
+			bool isInternal = context.InvokeMethod.IsInternal;
 
 			Type intrinsicType = null;
 
@@ -1890,11 +1890,11 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (isInternal)
 			{
-				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.FullName, out intrinsicType);
+				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.InvokeMethod.FullName, out intrinsicType);
 				if (intrinsicType == null)
-					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.MosaMethod.DeclaringType.FullName + "::" + context.MosaMethod.Name, out intrinsicType);
+					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.InvokeMethod.DeclaringType.FullName + "::" + context.InvokeMethod.Name, out intrinsicType);
 
-				Debug.Assert(intrinsicType != null, "Method is internal but no processor found: " + context.MosaMethod.FullName);
+				Debug.Assert(intrinsicType != null, "Method is internal but no processor found: " + context.InvokeMethod.FullName);
 			}
 
 			if (intrinsicType == null)
@@ -1942,11 +1942,11 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(method != null);
 
 			context.SetInstruction(IRInstruction.Call, (byte)(operands.Count + 1), (byte)(resultOperand == null ? 0 : 1));
-			context.MosaMethod = method;
+			context.InvokeMethod = method;
 
 			if (resultOperand != null)
 			{
-				context.SetResult(resultOperand);
+				context.Result = resultOperand;
 			}
 
 			int index = 0;
@@ -1960,7 +1960,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private bool CanSkipDueToRecursiveSystemObjectCtorCall(Context context)
 		{
 			var currentMethod = MethodCompiler.Method;
-			var invokeTarget = context.MosaMethod;
+			var invokeTarget = context.InvokeMethod;
 
 			// Skip recursive System.Object ctor calls.
 			if (currentMethod.DeclaringType.FullName == @"System.Object" &&
@@ -2018,12 +2018,12 @@ namespace Mosa.Compiler.Framework.Stages
 			context.ReplaceInstructionOnly(IRInstruction.Call);
 			context.SetOperand(0, Operand.CreateSymbolFromMethod(TypeSystem, method));
 			context.OperandCount = 1;
-			context.MosaMethod = method;
+			context.InvokeMethod = method;
 		}
 
 		private bool ReplaceWithInternalCall(Context context)
 		{
-			var method = context.MosaMethod;
+			var method = context.InvokeMethod;
 
 			if (!method.IsInternal)
 				return false;

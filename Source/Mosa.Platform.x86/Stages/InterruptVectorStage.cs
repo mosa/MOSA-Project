@@ -45,10 +45,10 @@ namespace Mosa.Platform.x86.Stages
 
 			for (int i = 0; i <= 255; i++)
 			{
-				BasicBlocks basicBlocks = new BasicBlocks();
-				InstructionSet instructionSet = new InstructionSet(25);
-				Context ctx = instructionSet.CreateNewBlock(basicBlocks);
-				basicBlocks.AddHeaderBlock(ctx.BasicBlock);
+				var basicBlocks = new BasicBlocks();
+				var block = basicBlocks.CreateBlock();
+				basicBlocks.AddHeaderBlock(block);
+				var ctx = new Context(block);
 
 				ctx.AppendInstruction(X86.Cli);
 				if (i <= 7 || i >= 16 | i == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
@@ -62,7 +62,7 @@ namespace Mosa.Platform.x86.Stages
 				ctx.AppendInstruction(X86.IRetd);
 
 				var interruptMethod = Compiler.CreateLinkerMethod("InterruptISR" + i.ToString());
-				Compiler.CompileMethod(interruptMethod, basicBlocks, instructionSet, 0);
+				Compiler.CompileMethod(interruptMethod, basicBlocks, 0);
 			}
 		}
 

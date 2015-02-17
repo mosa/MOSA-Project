@@ -47,24 +47,24 @@ namespace Mosa.Platform.x86.Instructions
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			if (context.OperandCount == 0)
+			if (node.OperandCount == 0)
 			{
-				emitter.EmitRelativeBranch(CALL, context.Targets[0].Label);
+				emitter.EmitRelativeBranch(CALL, node.BranchTargets[0].Label);
 				return;
 			}
 
-			if (context.Operand1.IsSymbol)
+			if (node.Operand1.IsSymbol)
 			{
 				emitter.WriteByte(0xE8);
-				emitter.EmitCallSite(context.Operand1);
+				emitter.EmitCallSite(node.Operand1);
 			}
 			else
 			{
-				emitter.Emit(RegCall, context.Operand1);
+				emitter.Emit(RegCall, node.Operand1);
 			}
 		}
 

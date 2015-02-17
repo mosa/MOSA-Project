@@ -49,12 +49,28 @@ namespace Mosa.Compiler.Framework.CIL
 
 		#region Methods
 
+		public override bool DecodeTargets(IInstructionDecoder decoder)
+		{
+			if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s ||
+				opcode == OpCode.Brfalse || opcode == OpCode.Brtrue)
+			{
+				decoder.GetBlock((int)decoder.Instruction.Operand);
+				return true;
+			}
+			else if (opcode == OpCode.Switch)
+			{
+				return base.DecodeTargets(decoder);
+			}
+
+			return true;
+		}
+
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);
@@ -64,7 +80,9 @@ namespace Mosa.Compiler.Framework.CIL
 			if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s ||
 				opcode == OpCode.Brfalse || opcode == OpCode.Brtrue)
 			{
-				ctx.AddCILBranch((int)decoder.Instruction.Operand);
+				var block = decoder.GetBlock((int)decoder.Instruction.Operand);
+
+				ctx.AddBranchTarget(block);
 			}
 			else if (opcode == OpCode.Switch)
 			{
@@ -89,11 +107,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Gets the instruction modifier.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <returns></returns>
-		protected override string GetModifier(Context context)
+		protected override string GetModifier(InstructionNode node)
 		{
-			OpCode opCode = ((context.Instruction) as CIL.BaseCILInstruction).OpCode;
+			OpCode opCode = ((node.Instruction) as CIL.BaseCILInstruction).OpCode;
 			switch (opCode)
 			{
 				case OpCode.Brtrue: return @"true";

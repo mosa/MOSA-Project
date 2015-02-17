@@ -26,12 +26,11 @@ namespace Mosa.Compiler.Trace
 				methodCompiler.Trace,
 				methodCompiler.FormatStageName(stage),
 				methodCompiler.Method,
-				methodCompiler.InstructionSet,
 				methodCompiler.BasicBlocks
 			);
 		}
 
-		public static void Run(CompilerTrace compilerTrace, string stage, MosaMethod method, InstructionSet instructionSet, BasicBlocks basicBlocks)
+		public static void Run(CompilerTrace compilerTrace, string stage, MosaMethod method, BasicBlocks basicBlocks)
 		{
 			if (compilerTrace == null)
 				return;
@@ -53,7 +52,7 @@ namespace Mosa.Compiler.Trace
 
 					traceLog.Log("  Prev: " + ListBlocks(block.PreviousBlocks));
 
-					LogInstructions(traceLog, new Context(instructionSet, block));
+					LogInstructions(traceLog, block.First);
 
 					traceLog.Log("  Next: " + ListBlocks(block.NextBlocks));
 
@@ -62,7 +61,8 @@ namespace Mosa.Compiler.Trace
 			}
 			else
 			{
-				LogInstructions(traceLog, new Context(instructionSet, 0));
+				//LogInstructions(traceLog, new Context(0));
+				traceLog.Log("No instructions.");
 			}
 
 			compilerTrace.NewTraceLog(traceLog);
@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Trace
 				if (text.Length != 0)
 					text.Append(", ");
 
-				text.AppendFormat("L_{0:X4}", next.Label);
+				text.AppendFormat(next.ToString());
 			}
 
 			return text.ToString();
@@ -87,28 +87,28 @@ namespace Mosa.Compiler.Trace
 		/// Logs the instructions in the given enumerable to the trace.
 		/// </summary>
 		/// <param name="traceLog">The trace log.</param>
-		/// <param name="ctx">The context.</param>
-		private static void LogInstructions(TraceLog traceLog, Context ctx)
+		/// <param name="node">The context.</param>
+		private static void LogInstructions(TraceLog traceLog, InstructionNode node)
 		{
-			for (; ctx.Index >= 0; ctx.GotoNext())
+			for (; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (ctx.IsEmpty) // || ctx.IsBlockStartInstruction || ctx.IsBlockEndInstruction)
+				if (node.IsEmpty)
 					continue;
 
 				var sb = new StringBuilder();
 
-				sb.AppendFormat("L_{0:X4}", ctx.Label);
+				sb.AppendFormat("L_{0:X4}", node.Label);
 
-				if (ctx.Marked)
+				if (node.Marked)
 					sb.Append("*");
 				else
 					sb.Append(" ");
 
-				sb.AppendFormat("{0}", ctx.Instruction.ToString(ctx));
+				sb.AppendFormat("{0}", node.Instruction.ToString(node));
 
 				traceLog.Log(sb.ToString());
 
-				if (ctx.IsBlockEndInstruction)
+				if (node.IsBlockEndInstruction)
 					return;
 			}
 		}

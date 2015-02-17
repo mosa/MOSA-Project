@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void PerformStaticAllocationOf(Context allocation, Context assignment)
 		{
-			MosaType allocatedType = (allocation.MosaMethod != null) ? allocation.MosaMethod.DeclaringType : allocation.Result.Type;
+			MosaType allocatedType = (allocation.InvokeMethod != null) ? allocation.InvokeMethod.DeclaringType : allocation.Result.Type;
 			MosaField assignmentField = (assignment.Instruction is DupInstruction) ? FindStsfldForDup(assignment).MosaField : assignment.MosaField;
 
 			// Get size of type
@@ -114,7 +114,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (BasicBlock block in BasicBlocks)
 			{
-				for (Context context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (Context context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (!context.IsEmpty && (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction))
 					{
@@ -150,7 +150,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Only direct assignment without any casts is compliant. We can't perform casts or anything alike here,
 			// as that is hard to complete at this point of time.
 
-			MosaType allocationType = (allocation.MosaMethod != null) ? allocation.MosaMethod.DeclaringType : allocation.Result.Type.ElementType;
+			MosaType allocationType = (allocation.InvokeMethod != null) ? allocation.InvokeMethod.DeclaringType : allocation.Result.Type.ElementType;
 			MosaType storageType = (assignment.Instruction is DupInstruction) ? assignment.Operand1.Type.ElementType : assignment.MosaField.DeclaringType;
 
 			return ReferenceEquals(allocationType, storageType);
@@ -159,7 +159,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Context FindStsfldForDup(Context dup)
 		{
 			var context = dup;
-			while(!(context.Instruction is StsfldInstruction))
+			while (!(context.Instruction is StsfldInstruction))
 			{
 				if (context.IsBlockEndInstruction)
 					return null;

@@ -26,10 +26,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public readonly List<Move> Moves;
 
-		public readonly int Index;
+		public readonly InstructionNode Index;
+
 		public readonly bool Before;
 
-		public MoveResolver(int index, bool before)
+		public MoveResolver(InstructionNode index, bool before)
 		{
 			Moves = new List<Move>();
 
@@ -37,7 +38,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Index = index;
 		}
 
-		public MoveResolver(int index, bool before, List<Move> moves)
+		public MoveResolver(InstructionNode index, bool before, List<Move> moves)
 			: this(index, before)
 		{
 			foreach (var move in moves)
@@ -45,7 +46,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		}
 
 		public MoveResolver(BasicBlock anchor, BasicBlock source, BasicBlock destination)
-			: this(source == anchor ? source.EndIndex : destination.StartIndex, source == anchor)
+			: this(source == anchor ? source.Last : destination.First, source == anchor)
 		{
 		}
 
@@ -163,14 +164,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return moves;
 		}
 
-		public void InsertResolvingMoves(BaseArchitecture architecture, InstructionSet instructionSet)
+		public void InsertResolvingMoves(BaseArchitecture architecture)
 		{
 			if (Moves.Count == 0)
 				return;
 
 			var moves = GetResolveMoves();
 
-			var context = new Context(instructionSet, Index);
+			var context = new Context(Index);
 
 			if (Before)
 			{

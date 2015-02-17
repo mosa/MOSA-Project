@@ -119,13 +119,13 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="dominance">The dominance provider.</param>
 		private void RenameVariables(BasicBlock block, IDominanceAnalysis dominance)
 		{
-			for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+			for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (context.Instruction != IRInstruction.Phi)
+				if (node.Instruction != IRInstruction.Phi)
 				{
-					for (var i = 0; i < context.OperandCount; ++i)
+					for (var i = 0; i < node.OperandCount; ++i)
 					{
-						var op = context.GetOperand(i);
+						var op = node.GetOperand(i);
 
 						if (op == null || !op.IsVirtualRegister)
 							continue;
@@ -133,15 +133,15 @@ namespace Mosa.Compiler.Framework.Stages
 						Debug.Assert(variables.ContainsKey(op), op.ToString() + " is not in dictionary [block = " + block + "]");
 
 						var version = variables[op].Peek();
-						context.SetOperand(i, GetSSAOperand(op, version));
+						node.SetOperand(i, GetSSAOperand(op, version));
 					}
 				}
 
-				if (!context.IsEmpty && context.Result != null && context.Result.IsVirtualRegister)
+				if (!node.IsEmpty && node.Result != null && node.Result.IsVirtualRegister)
 				{
-					var op = context.Result;
+					var op = node.Result;
 					var index = counts[op];
-					context.SetResult(GetSSAOperand(op, index));
+					node.Result = GetSSAOperand(op, index);
 					variables[op].Push(index);
 					counts[op] = index + 1;
 				}
@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 				// index does not change between this stage and PhiPlacementStage since the block list order does not change
 				var index = WhichPredecessor(s, block);
 
-				for (var context = new Context(InstructionSet, s); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(s); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (context.Instruction != IRInstruction.Phi)
 						continue;
@@ -174,7 +174,7 @@ namespace Mosa.Compiler.Framework.Stages
 				RenameVariables(s, dominance);
 			}
 
-			for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+			for (var context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
 			{
 				if (!context.IsEmpty && context.Result != null && context.Result.IsVirtualRegister)
 				{

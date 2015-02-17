@@ -36,6 +36,8 @@ namespace Mosa.Compiler.Framework.Analysis
 		private int[] loopIndex;
 		private BasicBlock[] blockOrder;
 
+		private HashSet<BasicBlock> orderSet;
+
 		private int orderIndex;
 
 		#endregion Data members
@@ -51,11 +53,10 @@ namespace Mosa.Compiler.Framework.Analysis
 			public int Order;
 
 			/// <summary>
-			/// Initializes a new instance of the <see cref="Priority"/> class.
+			/// Initializes a new instance of the <see cref="Priority" /> class.
 			/// </summary>
 			/// <param name="depth">The depth.</param>
 			/// <param name="order">The order.</param>
-			/// <param name="hinted">if set to <c>true</c> [hinted].</param>
 			public Priority(int depth, int order)
 			{
 				Depth = depth;
@@ -137,6 +138,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			loopIndex = new int[blockCount];
 			blockOrder = new BasicBlock[blockCount];
 			orderIndex = 0;
+			orderSet = new HashSet<BasicBlock>();
 
 			foreach (var head in basicBlocks.HeadBlocks)
 			{
@@ -148,6 +150,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			loopHeader = null;
 			loopBlockIndex = null;
 			forwardBranchesCount = null;
+			orderSet = null;
 		}
 
 		#endregion IBlockOrderAnalysis
@@ -312,6 +315,10 @@ namespace Mosa.Compiler.Framework.Analysis
 				var block = workList.Values[workList.Count - 1];
 				workList.RemoveAt(workList.Count - 1);
 
+				if (orderSet.Contains(block))
+					continue;
+
+				orderSet.Add(block);
 				blockOrder[orderIndex++] = block;
 
 				foreach (var successor in block.NextBlocks)

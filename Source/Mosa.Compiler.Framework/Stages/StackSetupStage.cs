@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework.IR;
-using System;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -27,14 +26,14 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// Create a prologue instruction
-			var prologueCtx = new Context(InstructionSet, BasicBlocks.PrologueBlock);
+			var prologueCtx = new Context(BasicBlocks.PrologueBlock);
 			prologueCtx.AppendInstruction(IRInstruction.Prologue);
 			prologueCtx.Label = -1;
 
 			if (BasicBlocks.EpilogueBlock != null)
 			{
 				// Create an epilogue instruction
-				var epilogueCtx = new Context(InstructionSet, BasicBlocks.EpilogueBlock);
+				var epilogueCtx = new Context(BasicBlocks.EpilogueBlock);
 				epilogueCtx.AppendInstruction(IRInstruction.Epilogue);
 				epilogueCtx.Label = BasicBlock.EpilogueLabel;
 			}

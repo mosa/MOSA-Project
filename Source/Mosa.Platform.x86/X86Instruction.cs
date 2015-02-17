@@ -36,11 +36,11 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		public override void Emit(Context context, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Emit(context, emitter as MachineCodeEmitter);
+			Emit(node, emitter as MachineCodeEmitter);
 		}
 
 		/// <summary>
@@ -58,12 +58,12 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected virtual void Emit(Context context, MachineCodeEmitter emitter)
+		protected virtual void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
-			emitter.Emit(opCode, context.Result, context.Operand1, context.Operand2);
+			OpCode opCode = ComputeOpCode(node.Result, node.Operand1, node.Operand2);
+			emitter.Emit(opCode, node.Result, node.Operand1, node.Operand2);
 		}
 
 		#endregion Methods

@@ -57,19 +57,19 @@ namespace Mosa.Platform.x86.Instructions
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, null);
+			OpCode opCode = ComputeOpCode(node.Result, node.Operand1, null);
 
-			if (context.Result.Register is ControlRegister)
+			if (node.Result.Register is ControlRegister)
 			{
-				emitter.Emit(opCode, context.Result, context.Operand1);
+				emitter.Emit(opCode, node.Result, node.Operand1);
 			}
 			else
 			{
-				emitter.Emit(opCode, context.Operand1, context.Result);
+				emitter.Emit(opCode, node.Operand1, node.Result);
 			}
 		}
 

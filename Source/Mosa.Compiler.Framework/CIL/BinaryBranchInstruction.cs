@@ -46,20 +46,25 @@ namespace Mosa.Compiler.Framework.CIL
 
 		#region Methods
 
+		public override bool DecodeTargets(IInstructionDecoder decoder)
+		{
+			decoder.GetBlock((int)decoder.Instruction.Operand);
+			return true;
+		}
+
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Read the branch target
-			// Is this a short branch target?
-			// FIXME: Remove unary branch instructions from this list.
-			ctx.AddCILBranch((int)decoder.Instruction.Operand);
+			var block = decoder.GetBlock((int)decoder.Instruction.Operand);
+
+			ctx.AddBranchTarget(block);
 		}
 
 		/// <summary>
@@ -75,11 +80,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Gets the instruction modifier.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <returns></returns>
-		protected override string GetModifier(Context context)
+		protected override string GetModifier(InstructionNode node)
 		{
-			switch (((context.Instruction) as CIL.BaseCILInstruction).OpCode)
+			switch (((node.Instruction) as CIL.BaseCILInstruction).OpCode)
 			{
 				case OpCode.Beq_s: return @"==";
 				case OpCode.Beq: return @"==";

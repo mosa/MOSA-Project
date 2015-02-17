@@ -79,12 +79,6 @@ namespace Mosa.Compiler.Framework
 		public MosaType Type { get; private set; }
 
 		/// <summary>
-		/// Gets the instruction set.
-		/// </summary>
-		/// <value>The instruction set.</value>
-		public InstructionSet InstructionSet { get; private set; }
-
-		/// <summary>
 		/// Gets the basic blocks.
 		/// </summary>
 		/// <value>The basic blocks.</value>
@@ -175,9 +169,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="compiler">The assembly compiler.</param>
 		/// <param name="method">The method to compile by this instance.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
-		/// <param name="instructionSet">The instruction set.</param>
 		/// <param name="threadID">The thread identifier.</param>
-		protected BaseMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
+		protected BaseMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
 		{
 			this.Compiler = compiler;
 			this.Method = method;
@@ -189,7 +182,6 @@ namespace Mosa.Compiler.Framework
 			this.Trace = Compiler.CompilerTrace;
 			this.Linker = compiler.Linker;
 			this.BasicBlocks = basicBlocks ?? new BasicBlocks();
-			this.InstructionSet = instructionSet ?? new InstructionSet(256);
 			this.Pipeline = new CompilerPipeline();
 			this.StackLayout = new StackLayout(Architecture, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
 			this.VirtualRegisters = new VirtualRegisters(Architecture);

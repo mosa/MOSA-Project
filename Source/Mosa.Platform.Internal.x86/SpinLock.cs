@@ -18,7 +18,7 @@ namespace Mosa.Platform.Internal.x86
 		{
 			while (!Native.SyncCompareAndSwap(ref spinlock, 0, 1))
 			{
-					Native.Pause();
+				Native.Pause();
 			}
 		}
 

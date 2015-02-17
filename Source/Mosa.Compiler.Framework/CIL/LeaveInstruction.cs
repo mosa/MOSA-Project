@@ -27,21 +27,34 @@ namespace Mosa.Compiler.Framework.CIL
 
 		#endregion Construction
 
+		#region Properties
+
+		/// <summary>
+		/// Determines flow behavior of this instruction.
+		/// </summary>
+		/// <remarks>
+		/// Knowledge of control flow is required for correct basic block
+		/// building. Any instruction that alters the control flow must override
+		/// this property and correctly identify its control flow modifications.
+		/// </remarks>
 		public override FlowControl FlowControl { get { return FlowControl.Leave; } }
+
+		/// <summary>
+		/// Gets a value indicating whether to [ignore instruction's basic block].
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if [ignore instruction basic block]; otherwise, <c>false</c>.
+		/// </value>
+		public override bool IgnoreInstructionBasicBlockTargets { get { return true; } }
+
+		#endregion Properties
 
 		#region Methods
 
-		/// <summary>
-		/// Decodes the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override bool DecodeTargets(IInstructionDecoder decoder)
 		{
-			// Decode base classes first
-			base.Decode(ctx, decoder);
-
-			ctx.AddCILBranch((int)decoder.Instruction.Operand);
+			decoder.GetBlock((int)decoder.Instruction.Operand);
+			return true;
 		}
 
 		/// <summary>

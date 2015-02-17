@@ -36,18 +36,18 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
 		{
 			var type = (MosaType)decoder.Instruction.Operand;
 
 			ctx.MosaType = type;
 		}
 
-		public override string ToString(Context context)
+		public override string ToString(InstructionNode node)
 		{
-			string s = base.ToString(context);
+			string s = base.ToString(node);
 
-			MosaType type = context.MosaType;
+			MosaType type = node.MosaType;
 
 			if (type != null)
 				s = s + " {" + type.ToString() + "}";

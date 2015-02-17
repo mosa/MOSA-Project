@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 		#region Properties
 
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
 		{
 			base.Decode(ctx, decoder);
 		}
