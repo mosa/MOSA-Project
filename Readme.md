@@ -96,7 +96,7 @@ The MOSA compiler supports:
 
 ### Join the Discussion
 
-Join us on our [Gitter chat][gitter-chat] - this is the most interactive way to connect to MOSA's development team.
+Join us on [Gitter chat][gitter-chat]. This is the most interactive way to connect to MOSA's development team.
 
 
 ### License
