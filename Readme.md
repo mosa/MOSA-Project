@@ -96,7 +96,8 @@ The MOSA compiler supports:
 
 ### Join the Discussion
 
-We have our own IRC chat channel #mosa on irc.freenode.org. The IRC channel can be access via this [browser-based client](http://webchat.freenode.net/?channels=mosa).
+Join us on our [Gitter chat][gitter-chat] - this is the most interactive way to connect to MOSA's development team.
+
 
 ### License
 
