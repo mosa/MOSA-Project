@@ -68,24 +68,22 @@ namespace Mosa.Compiler.Framework.Stages
 				var constant = Operand.CreateConstant(target.Type, value);
 
 				// for each statement T that uses operand, substituted c in statement T
-				foreach (var index in target.Uses.ToArray())
+				foreach (var node in target.Uses.ToArray())
 				{
-					var context = new Context(index);
+					Debug.Assert(node.Instruction != IRInstruction.AddressOf);
 
-					Debug.Assert(context.Instruction != IRInstruction.AddressOf);
-
-					for (int i = 0; i < context.OperandCount; i++)
+					for (int i = 0; i < node.OperandCount; i++)
 					{
-						var operand = context.GetOperand(i);
+						var operand = node.GetOperand(i);
 
 						if (operand != target)
 							continue;
 
 						if (trace.Active) trace.Log("*** ConditionalConstantPropagation");
-						if (trace.Active) trace.Log("BEFORE:\t" + context.ToString());
-						context.SetOperand(i, constant);
+						if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
+						node.SetOperand(i, constant);
 						conditionalConstantPropagation++;
-						if (trace.Active) trace.Log("AFTER: \t" + context.ToString());
+						if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
 
 						changed = true;
 					}
@@ -97,10 +95,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (target.Definitions.Count == 0)
 				return;
 
-			var ctx = new Context(target.Definitions[0]);
+			var defNode = new Context(target.Definitions[0]);
 
-			if (trace.Active) trace.Log("REMOVED:\t" + ctx.ToString());
-			ctx.SetInstruction(IRInstruction.Nop);
+			if (trace.Active) trace.Log("REMOVED:\t" + defNode.ToString());
+			defNode.SetInstruction(IRInstruction.Nop);
 			instructionsRemovedCount++;
 		}
 

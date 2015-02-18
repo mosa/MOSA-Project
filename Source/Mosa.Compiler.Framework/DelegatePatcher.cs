@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
 			Operand instanceOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, instanceOffset);
 
-			Context context = CreateMethodStructure(methodCompiler, true);
+			var context = new Context(CreateMethodStructure(methodCompiler, true));
 
 			Operand v1 = methodCompiler.CreateVirtualRegister(thisOperand.Type);
 
@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework
 
 			var size = methodCompiler.Architecture.NativeInstructionSize;
 
-			Context b0 = CreateMethodStructure(methodCompiler, false);
+			Context b0 = new Context(CreateMethodStructure(methodCompiler, false));
 			Context b1 = new Context(methodCompiler.BasicBlocks.CreateBlock());
 			Context b2 = new Context(methodCompiler.BasicBlocks.CreateBlock());
 			Context b3 = new Context(methodCompiler.BasicBlocks.CreateBlock());
@@ -115,8 +115,8 @@ namespace Mosa.Compiler.Framework
 			b0.AppendInstruction(IRInstruction.Load, size, opInstance, thisOperand, instanceOffsetOperand);
 			b0.AppendInstruction(IRInstruction.IntegerCompare, ConditionCode.Equal, opCompare, opInstance, c0);
 			b0.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, opCompare, c0);
-			b0.AddBranchTarget(b2.BasicBlock);
-			b0.AppendInstruction(IRInstruction.Jmp, b1.BasicBlock);
+			b0.AddBranchTarget(b2.Block);
+			b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 
 			// no instance
 			b1.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
@@ -125,7 +125,7 @@ namespace Mosa.Compiler.Framework
 			{
 				b1.AddOperand(vrs[i]);
 			}
-			b1.AppendInstruction(IRInstruction.Jmp, b3.BasicBlock);
+			b1.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 			// instance
 			b2.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
@@ -135,7 +135,7 @@ namespace Mosa.Compiler.Framework
 			{
 				b2.AddOperand(vrs[i]);
 			}
-			b2.AppendInstruction(IRInstruction.Jmp, b3.BasicBlock);
+			b2.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 			// return
 			b3.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
@@ -149,34 +149,35 @@ namespace Mosa.Compiler.Framework
 		{
 			var nullOperand = Operand.GetNull(methodCompiler.TypeSystem);
 
-			Context context = CreateMethodStructure(methodCompiler, true);
+			var context = new Context(CreateMethodStructure(methodCompiler, true));
 			context.AppendInstruction(IRInstruction.Return, null, nullOperand);
 			context.AddBranchTarget(methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private static void PatchEndInvoke(BaseMethodCompiler methodCompiler)
 		{
-			Context context = CreateMethodStructure(methodCompiler, true);
-			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
+			var start = CreateMethodStructure(methodCompiler, true);
+
+			start.First.Insert(new InstructionNode(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock));
 		}
 
-		private static Context CreateMethodStructure(BaseMethodCompiler methodCompiler, bool linkEpilogueBlock)
+		private static BasicBlock CreateMethodStructure(BaseMethodCompiler methodCompiler, bool linkEpilogueBlock)
 		{
 			var basicBlocks = methodCompiler.BasicBlocks;
 
 			// Create the prologue block
-			var prologue = new Context(methodCompiler.BasicBlocks.CreateBlock(BasicBlock.PrologueLabel));
-			basicBlocks.AddHeaderBlock(prologue.BasicBlock);
+			var prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
+			basicBlocks.AddHeaderBlock(prologue);
 
 			// Create the epilogue block
-			var epiologue = new Context(methodCompiler.BasicBlocks.CreateBlock(BasicBlock.EpilogueLabel));
+			var epiologue = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel);
 
-			var b0 = new Context(methodCompiler.BasicBlocks.CreateBlock(0));
+			var start = basicBlocks.CreateBlock(BasicBlock.StartLabel);
 
 			// Add a jump instruction to the first block from the prologue
-			prologue.AppendInstruction(IRInstruction.Jmp, b0.BasicBlock);
+			prologue.First.Insert(new InstructionNode(IRInstruction.Jmp, start));
 
-			return b0;
+			return start;
 		}
 
 		private static MosaField GetField(MosaType type, string name)

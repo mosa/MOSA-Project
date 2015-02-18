@@ -58,11 +58,11 @@ namespace Mosa.Platform.x86.Intrinsic
 				context.GotoNext();
 			}
 
-			var nextBlocks = context.BasicBlock.NextBlocks;
+			var nextBlocks = context.Block.NextBlocks;
 
 			foreach (var next in nextBlocks)
 			{
-				next.PreviousBlocks.Remove(context.BasicBlock);
+				next.PreviousBlocks.Remove(context.Block);
 			}
 
 			nextBlocks.Clear();

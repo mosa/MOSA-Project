@@ -151,7 +151,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.OperandCount = (byte)block.PreviousBlocks.Count;
 
-			Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
+			Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
 		}
 
 		/// <summary>

@@ -68,13 +68,13 @@ namespace Mosa.Compiler.Framework.Stages
 					else if (ctx.Instruction == IRInstruction.FinallyStart)
 					{
 						// Remove from header blocks
-						BasicBlocks.RemoveHeaderBlock(ctx.BasicBlock);
+						BasicBlocks.RemoveHeaderBlock(ctx.Block);
 
 						var exceptionVirtualRegister = ctx.Result;
 						var finallyReturnBlockVirtualRegister = ctx.Result2;
 
-						exceptionVirtualRegisters.Add(ctx.BasicBlock, exceptionVirtualRegister);
-						finallyReturnVirtualRegisters.Add(ctx.BasicBlock, finallyReturnBlockRegister);
+						exceptionVirtualRegisters.Add(ctx.Block, exceptionVirtualRegister);
+						finallyReturnVirtualRegisters.Add(ctx.Block, finallyReturnBlockRegister);
 
 						ctx.SetInstruction(IRInstruction.KillAll);
 						ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
@@ -94,8 +94,8 @@ namespace Mosa.Compiler.Framework.Stages
 						var newBlocks = CreateNewBlockContexts(1);
 						var nextBlock = Split(ctx);
 
-						ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.NotEqual, null, exceptionVirtualRegister, nullOperand, newBlocks[0].BasicBlock);
-						ctx.AppendInstruction(IRInstruction.Jmp, nextBlock.BasicBlock);
+						ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.NotEqual, null, exceptionVirtualRegister, nullOperand, newBlocks[0].Block);
+						ctx.AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 
 						var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
@@ -123,12 +123,12 @@ namespace Mosa.Compiler.Framework.Stages
 							var newBlocks = CreateNewBlockContexts(targets.Count - 1);
 
 							ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[0].Label), targets[0]);
-							ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].BasicBlock);
+							ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 							for (int b = 1; b < targets.Count - 2; b++)
 							{
 								newBlocks[b - 1].AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[b].Label), targets[b]);
-								newBlocks[b - 1].AppendInstruction(IRInstruction.Jmp, newBlocks[b + 1].BasicBlock);
+								newBlocks[b - 1].AppendInstruction(IRInstruction.Jmp, newBlocks[b + 1].Block);
 							}
 
 							newBlocks[targets.Count - 2].AppendInstruction(IRInstruction.Jmp, targets[targets.Count - 1]);

@@ -267,9 +267,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var index in local.Uses)
 			{
-				var ctx = new Context(index);
+				var node = new Context(index);
 
-				if (ctx.Instruction == IRInstruction.AddressOf)
+				if (node.Instruction == IRInstruction.AddressOf)
 					return true;
 			}
 

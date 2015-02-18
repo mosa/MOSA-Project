@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			int orderBlockCnt = 0;
 
 			// Create sorted worklist
-			Stack<BasicBlock> workList = new Stack<BasicBlock>();
+			var workList = new Stack<BasicBlock>();
 
 			foreach (var head in basicBlocks.HeadBlocks)
 			{
@@ -58,14 +58,14 @@ namespace Mosa.Compiler.Framework.Analysis
 
 				while (workList.Count != 0)
 				{
-					BasicBlock block = workList.Pop();
+					var block = workList.Pop();
 
 					if (!referenced.ContainsKey(block))
 					{
 						referenced.Add(block, 0);
 						blockOrder[orderBlockCnt++] = block;
 
-						foreach (BasicBlock successor in block.NextBlocks)
+						foreach (var successor in block.NextBlocks)
 							if (!referenced.ContainsKey(successor))
 								workList.Push(successor);
 					}

@@ -157,7 +157,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (context.Instruction != IRInstruction.Phi)
 						continue;
 
-					Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
+					Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
 
 					var op = context.GetOperand(index);
 

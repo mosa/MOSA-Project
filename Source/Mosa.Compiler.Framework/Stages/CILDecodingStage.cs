@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var plugSymbol = Operand.CreateSymbolFromMethod(TypeSystem, plugMethod);
 				var context = CreateNewBlockContext(-1);
 				context.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
-				BasicBlocks.AddHeaderBlock(context.BasicBlock);
+				BasicBlocks.AddHeaderBlock(context.Block);
 				return;
 			}
 
@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var jmpNode = new InstructionNode();
 			jmpNode.Label = BasicBlock.PrologueLabel;
-			jmpNode.BasicBlock = prologue;
+			jmpNode.Block = prologue;
 			prologue.First.Insert(jmpNode);
 
 			// Create starting block

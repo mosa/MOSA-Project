@@ -162,14 +162,14 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(TypeSystem, 1));
 						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].BasicBlock);
-						context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
+						context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].Block);
+						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
-						newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[1].BasicBlock);
-						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
+						newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[1].Block);
+						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 						newBlocks[1].AppendInstruction(X86.Mov, result, ConstantZero);
-						newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
+						newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 						break;
 					}
@@ -188,12 +188,12 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(TypeSystem, 1));
 						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.BasicBlock);
-						context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
+						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.Block);
+						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
 						newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.NotEqual, result);
 						newBlocks[0].AppendInstruction(X86.Movzx, result, result);
-						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
+						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 						break;
 					}

@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets the basic block currently processed.
 		/// </summary>
-		public BasicBlock BasicBlock { get { return Node.BasicBlock; } internal set { Node.BasicBlock = value; } }
+		public BasicBlock Block { get { return Node.Block; } internal set { Node.Block = value; } }
 
 		public InstructionNode Node { get; set; }
 
@@ -310,7 +310,7 @@ namespace Mosa.Compiler.Framework
 		private void AppendInstruction()
 		{
 			Debug.Assert(!IsBlockEndInstruction);
-			Debug.Assert(BasicBlock != null);
+			Debug.Assert(Block != null);
 
 			var node = new InstructionNode();
 			node.Label = Label;

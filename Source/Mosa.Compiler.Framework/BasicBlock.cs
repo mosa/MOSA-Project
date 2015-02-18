@@ -21,6 +21,7 @@ namespace Mosa.Compiler.Framework
 	public sealed class BasicBlock
 	{
 		public static readonly int PrologueLabel = -1;
+		public static readonly int StartLabel = 0;
 		public static readonly int EpilogueLabel = Int32.MaxValue;
 
 		#region Data Fields
@@ -96,11 +97,11 @@ namespace Mosa.Compiler.Framework
 
 			First = new InstructionNode(IRInstruction.BlockStart);
 			First.Label = label;
-			First.BasicBlock = this;
+			First.Block = this;
 
 			Last = new InstructionNode(IRInstruction.BlockEnd);
 			Last.Label = label;
-			Last.BasicBlock = this;
+			Last.Block = this;
 
 			First.Next = Last;
 			Last.Previous = First;
@@ -118,13 +119,13 @@ namespace Mosa.Compiler.Framework
 			if (node.BranchTargets == null || node.BranchTargetsCount == 0)
 				return;
 
-			Debug.Assert(node.BasicBlock != null);
+			Debug.Assert(node.Block != null);
 
 			// Note: The list only has 1 unless it's a switch statement, so actual performance is very close to O(1) for non-switch statements
 
 			branchInstructions.AddIfNew(node);
 
-			var currentBlock = node.BasicBlock;
+			var currentBlock = node.Block;
 
 			foreach (var target in node.BranchTargets)
 			{
@@ -140,7 +141,7 @@ namespace Mosa.Compiler.Framework
 
 			branchInstructions.Remove(node);
 
-			var currentBlock = node.BasicBlock;
+			var currentBlock = node.Block;
 
 			// Note: The list only has 1 or 2 entries, so actual performance is very close to O(1)
 

@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ctx.Label = -1;
 
-			ReplaceBranchTargets(from, to, ctx.BasicBlock);
+			ReplaceBranchTargets(from, to, ctx.Block);
 		}
 	}
 }

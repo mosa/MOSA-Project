@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (context.Instruction == IRInstruction.Phi)
 					{
 						//Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
-						if (context.OperandCount != context.BasicBlock.PreviousBlocks.Count)
+						if (context.OperandCount != context.Block.PreviousBlocks.Count)
 						{
 							throw new Mosa.Compiler.Common.InvalidCompilerException(context.ToString());
 						}
@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var sourceBlocks = context.PhiBlocks;
 
-			for (var index = 0; index < context.BasicBlock.PreviousBlocks.Count; index++)
+			for (var index = 0; index < context.Block.PreviousBlocks.Count; index++)
 			{
 				var operand = context.GetOperand(index);
 				var predecessor = sourceBlocks[index];

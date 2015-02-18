@@ -99,7 +99,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the basic block of this instruction
 		/// </summary>
-		public BasicBlock BasicBlock
+		public BasicBlock Block
 		{
 			get { return basicBlock; }
 			internal set
@@ -390,9 +390,9 @@ namespace Mosa.Compiler.Framework
 
 			branchTargets.Add(block);
 
-			if (BasicBlock != null)
+			if (Block != null)
 			{
-				BasicBlock.AddBranchInstruction(this);
+				Block.AddBranchInstruction(this);
 			}
 		}
 
@@ -402,11 +402,11 @@ namespace Mosa.Compiler.Framework
 			if (branchTargets[index] == block)
 				return;
 
-			BasicBlock.RemoveBranchInstruction(this);
+			Block.RemoveBranchInstruction(this);
 
 			branchTargets[index] = block;
 
-			BasicBlock.AddBranchInstruction(this);
+			Block.AddBranchInstruction(this);
 		}
 
 		/// <summary>
@@ -570,7 +570,7 @@ namespace Mosa.Compiler.Framework
 			this.addition = null;
 			this.BranchHint = false;
 			this.ConditionCode = ConditionCode.Undefined;
-			this.BasicBlock = null;
+			this.Block = null;
 			this.branchTargets = null;
 		}
 
@@ -587,23 +587,23 @@ namespace Mosa.Compiler.Framework
 			this.BranchHint = false;
 			this.ConditionCode = ConditionCode.Undefined;
 
-			BasicBlock.RemoveBranchInstruction(this);
+			Block.RemoveBranchInstruction(this);
 
 			this.branchTargets = null;
 
-			BasicBlock.DebugCheck();
+			Block.DebugCheck();
 		}
 
 		public void Insert(InstructionNode node)
 		{
-			var block = BasicBlock;
+			var block = Block;
 
-			node.BasicBlock = block;
+			node.Block = block;
 			var firstnode = node;
 
 			while (firstnode.Previous != null)
 			{
-				firstnode.BasicBlock = block;
+				firstnode.Block = block;
 				firstnode = firstnode.Previous;
 			}
 
@@ -611,7 +611,7 @@ namespace Mosa.Compiler.Framework
 
 			while (lastnode.Next != null)
 			{
-				lastnode.BasicBlock = block;
+				lastnode.Block = block;
 				lastnode = lastnode.Next;
 			}
 
@@ -625,7 +625,7 @@ namespace Mosa.Compiler.Framework
 			Next = firstnode;
 			firstnode.Previous = this;
 
-			BasicBlock.DebugCheck();
+			Block.DebugCheck();
 		}
 
 		/// <summary>
@@ -651,7 +651,7 @@ namespace Mosa.Compiler.Framework
 			ClearOperands();
 			Instruction = null;
 
-			BasicBlock.DebugCheck();
+			Block.DebugCheck();
 		}
 
 		/// <summary>
@@ -666,20 +666,20 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(newblock.First.Next == newblock.Last);
 
 			newblock.First.Next = Next;
-			newblock.Last.Previous = BasicBlock.Last.Previous;
+			newblock.Last.Previous = Block.Last.Previous;
 			newblock.First.Next.Previous = newblock.First;
 			newblock.Last.Previous.Next = newblock.Last;
 
-			Next = BasicBlock.Last;
-			BasicBlock.Last.Previous = this;
+			Next = Block.Last;
+			Block.Last.Previous = this;
 
 			for (var node = newblock.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				node.BasicBlock = newblock;
+				node.Block = newblock;
 			}
 
 			newblock.DebugCheck();
-			BasicBlock.DebugCheck();
+			Block.DebugCheck();
 		}
 
 		private void ClearOperands()
@@ -1014,7 +1014,7 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(!IsBlockEndInstruction);
 
 			int label = Label;
-			var block = BasicBlock;
+			var block = Block;
 
 			Clear();
 
@@ -1023,9 +1023,9 @@ namespace Mosa.Compiler.Framework
 			ResultCount = resultCount;
 			Label = label;
 			Size = InstructionSize.None;
-			BasicBlock = block;
+			Block = block;
 
-			BasicBlock.DebugCheck();
+			Block.DebugCheck();
 		}
 
 		/// <summary>
