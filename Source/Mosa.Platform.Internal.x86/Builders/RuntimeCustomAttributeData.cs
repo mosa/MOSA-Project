@@ -7,11 +7,10 @@
  *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
+using Mosa.Internal;
 using Mosa.Platform.Internal.x86;
 using System.Collections.Generic;
 using System.Reflection;
-using Mosa.Platform.Internal;
-using Mosa.Internal;
 using x86Runtime = Mosa.Platform.Internal.x86.Runtime;
 
 namespace System

@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			for (int i = 0; i < operands.Length; i++)
 				context.SetOperand(1 + i, operands[i]);
 			context.OperandCount = (byte)(1 + operands.Length);
-			context.MosaMethod = method;
+			context.InvokeMethod = method;
 		}
 	}
 }

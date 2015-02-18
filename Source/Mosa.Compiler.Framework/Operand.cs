@@ -28,12 +28,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds a list of instructions, which define this operand.
 		/// </summary>
-		public List<int> Definitions { get; private set; }
+		public List<InstructionNode> Definitions { get; private set; }
 
 		/// <summary>
 		/// Holds a list of instructions, which use this operand.
 		/// </summary>
-		public List<int> Uses { get; private set; }
+		public List<InstructionNode> Uses { get; private set; }
 
 		/// <summary>
 		/// Returns the type of the operand.
@@ -378,8 +378,8 @@ namespace Mosa.Compiler.Framework
 
 		private Operand()
 		{
-			Definitions = new List<int>();
-			Uses = new List<int>();
+			Definitions = new List<InstructionNode>();
+			Uses = new List<InstructionNode>();
 			this.IsParameter = false;
 			this.IsStackLocal = false;
 			this.IsShift = false;

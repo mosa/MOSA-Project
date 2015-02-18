@@ -37,6 +37,7 @@ namespace Mosa.Platform.x86.Stages
 		private void CreateUnboxStub(MosaType type)
 		{
 			var methodTable = Compiler.TypeLayout.GetMethodTable(type);
+
 			for (int i = 0; i < methodTable.Count; i++)
 			{
 				var method = methodTable[i];
@@ -51,10 +52,9 @@ namespace Mosa.Platform.x86.Stages
 				var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
 				var basicBlocks = new BasicBlocks();
-				var instructionSet = new InstructionSet(25);
-
-				var ctx = instructionSet.CreateNewBlock(basicBlocks);
-				basicBlocks.AddHeaderBlock(ctx.BasicBlock);
+				var block = basicBlocks.CreateBlock();
+				basicBlocks.AddHeaderBlock(block);
+				var ctx = new Context(block);
 
 				// Stack frame hasn't been pushed yet, so subtract a pointer.
 				var thisOffset = Architecture.CallingConvention.OffsetOfFirstParameter - Architecture.NativePointerSize;
@@ -67,7 +67,7 @@ namespace Mosa.Platform.x86.Stages
 				ctx.AppendInstruction(X86.Mov, thisArg, eax);
 				ctx.AppendInstruction(X86.Jmp, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
 
-				Compiler.CompileMethod(unboxStub, basicBlocks, instructionSet, 0);
+				Compiler.CompileMethod(unboxStub, basicBlocks, 0);
 				methodTable[i] = unboxStub;
 			}
 		}

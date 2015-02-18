@@ -64,7 +64,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			compiler.Load(TypeSystem.Load(moduleLoader.CreateMetadata()));
 
-			compiler.Execute();
+			compiler.Execute(Environment.ProcessorCount);
 
 			linker = compiler.Linker as SimLinker;
 

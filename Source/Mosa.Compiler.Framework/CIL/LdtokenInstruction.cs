@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 			else if (decoder.Instruction.Operand is MosaMethod)
 			{
-				ctx.MosaMethod = (MosaMethod)decoder.Instruction.Operand;
+				ctx.InvokeMethod = (MosaMethod)decoder.Instruction.Operand;
 				ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeMethodHandle"));
 			}
 			else if (decoder.Instruction.Operand is MosaField)

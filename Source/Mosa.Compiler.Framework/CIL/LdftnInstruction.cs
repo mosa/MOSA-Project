@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);
@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.CIL
 			decoder.Compiler.Scheduler.TrackMethodInvoked(method);
 
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.ToFnPtr(method.Signature));
-			ctx.MosaMethod = method;
+			ctx.InvokeMethod = method;
 		}
 
 		/// <summary>

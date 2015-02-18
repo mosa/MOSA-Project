@@ -39,7 +39,7 @@ namespace Mosa.Platform.x86.Stages
 				}
 				else
 				{
-					context.Remove();
+					context.Empty();
 				}
 
 				if (source.IsShort || source.IsChar)
@@ -77,7 +77,7 @@ namespace Mosa.Platform.x86.Stages
 				}
 				else
 				{
-					context.Remove();
+					context.Empty();
 				}
 
 				if (dest.IsShort || dest.IsChar)
@@ -99,7 +99,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
 			{
-				context.Delete(false);
+				context.Empty();
 				return;
 			}
 
@@ -170,7 +170,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 
 			before.SetInstruction(X86.Call, null, before.Operand1);
-			context.Delete(false);
+			context.Empty();
 		}
 
 		/// <summary>
@@ -179,7 +179,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Nop(Context context)
 		{
-			context.Delete(false);
+			context.Empty();
 		}
 
 		/// <summary>

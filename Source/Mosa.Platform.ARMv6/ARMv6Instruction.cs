@@ -48,9 +48,9 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected virtual void Emit(Context context, MachineCodeEmitter emitter)
+		protected virtual void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
 			// TODO: Check x86 Implementation
 		}
@@ -58,29 +58,29 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		public void Emit(Context context, BaseCodeEmitter emitter)
+		public void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Emit(context, emitter as MachineCodeEmitter);
+			Emit(node, emitter as MachineCodeEmitter);
 		}
 
 		/// <summary>
 		/// Emits the data processing instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
 		/// <param name="opcode">The opcode.</param>
 		/// <exception cref="InvalidCompilerException"></exception>
-		protected void EmitDataProcessingInstruction(Context context, MachineCodeEmitter emitter, byte opcode)
+		protected void EmitDataProcessingInstruction(InstructionNode node, MachineCodeEmitter emitter, byte opcode)
 		{
-			if (context.Operand2.IsRegister && context.Operand3.IsShift)
+			if (node.Operand2.IsRegister && node.Operand3.IsShift)
 			{
-				emitter.EmitInstructionWithRegister(context.ConditionCode, opcode, context.UpdateStatus, context.Operand1.Register.Index, context.Result.Register.Index, context.Operand3.ShiftType, context.Operand2.Register.Index);
+				emitter.EmitInstructionWithRegister(node.ConditionCode, opcode, node.UpdateStatus, node.Operand1.Register.Index, node.Result.Register.Index, node.Operand3.ShiftType, node.Operand2.Register.Index);
 			}
-			else if (context.Operand2.IsConstant && context.Operand3.IsConstant)
+			else if (node.Operand2.IsConstant && node.Operand3.IsConstant)
 			{
-				emitter.EmitInstructionWithImmediate(context.ConditionCode, opcode, context.UpdateStatus, context.Operand1.Register.Index, context.Result.Register.Index, (int)context.Operand2.ConstantSignedInteger, (int)context.Operand3.ConstantSignedInteger);
+				emitter.EmitInstructionWithImmediate(node.ConditionCode, opcode, node.UpdateStatus, node.Operand1.Register.Index, node.Result.Register.Index, (int)node.Operand2.ConstantSignedInteger, (int)node.Operand3.ConstantSignedInteger);
 			}
 			else
 			{
@@ -88,47 +88,52 @@ namespace Mosa.Platform.ARMv6
 			}
 		}
 
-		protected void EmitMultiplyInstruction(Context context, MachineCodeEmitter emitter)
+		/// <summary>
+		/// Emits the multiply instruction.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected void EmitMultiplyInstruction(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			if (!context.Operand3.IsRegister)
+			if (!node.Operand3.IsRegister)
 			{
-				emitter.EmitMultiply(context.ConditionCode, context.UpdateStatus, context.Operand1.Register.Index, context.Result.Register.Index, context.Operand2.Register.Index);
+				emitter.EmitMultiply(node.ConditionCode, node.UpdateStatus, node.Operand1.Register.Index, node.Result.Register.Index, node.Operand2.Register.Index);
 			}
 			else
 			{
-				emitter.EmitMultiplyWithAccumulate(context.ConditionCode, context.UpdateStatus, context.Operand1.Register.Index, context.Result.Register.Index, context.Operand2.Register.Index, context.Operand3.Register.Index);
+				emitter.EmitMultiplyWithAccumulate(node.ConditionCode, node.UpdateStatus, node.Operand1.Register.Index, node.Result.Register.Index, node.Operand2.Register.Index, node.Operand3.Register.Index);
 			}
 		}
 
-		protected void EmitMemoryLoadStore(Context context, MachineCodeEmitter emitter, TransferType transferType)
+		protected void EmitMemoryLoadStore(InstructionNode node, MachineCodeEmitter emitter, TransferType transferType)
 		{
-			if (context.Operand2.IsConstant)
+			if (node.Operand2.IsConstant)
 			{
 				emitter.EmitSingleDataTransfer(
-					context.ConditionCode,
+					node.ConditionCode,
 					Indexing.Post,
 					OffsetDirection.Up,
 					TransferSize.Word,
 					WriteBack.NoWriteBack,
 					transferType,
-					context.Operand1.Index,
-					context.Result.Index,
-					(uint)context.Operand2.ConstantUnsignedInteger
+					node.Operand1.Index,
+					node.Result.Index,
+					(uint)node.Operand2.ConstantUnsignedInteger
 				);
 			}
 			else
 			{
 				emitter.EmitSingleDataTransfer(
-					  context.ConditionCode,
+					  node.ConditionCode,
 					  Indexing.Post,
 					  OffsetDirection.Up,
 					  TransferSize.Word,
 					  WriteBack.NoWriteBack,
 					  transferType,
-					  context.Operand1.Index,
-					  context.Result.Index,
-					  context.Operand2.ShiftType,
-					  context.Operand3.Index
+					  node.Operand1.Index,
+					  node.Result.Index,
+					  node.Operand2.ShiftType,
+					  node.Operand3.Index
 				  );
 			}
 		}

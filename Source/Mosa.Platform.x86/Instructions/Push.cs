@@ -50,24 +50,25 @@ namespace Mosa.Platform.x86.Instructions
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		/// <exception cref="System.InvalidOperationException">@unable to emit opcode for segment register</exception>
+		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			if (context.Operand1.IsConstant)
+			if (node.Operand1.IsConstant)
 			{
-				if (context.Operand1.IsByte)
-					emitter.Emit(CONST8, context.Operand1, null);
-				else if (context.Operand1.IsShort || context.Operand1.IsChar)
-					emitter.Emit(CONST16, context.Operand1, null);
-				else if (context.Operand1.IsInt)
-					emitter.Emit(CONST32, context.Operand1, null);
+				if (node.Operand1.IsByte)
+					emitter.Emit(CONST8, node.Operand1, null);
+				else if (node.Operand1.IsShort || node.Operand1.IsChar)
+					emitter.Emit(CONST16, node.Operand1, null);
+				else if (node.Operand1.IsInt)
+					emitter.Emit(CONST32, node.Operand1, null);
 				return;
 			}
-			if (context.Operand1.IsRegister)
+			if (node.Operand1.IsRegister)
 			{
-				if (context.Operand1.Register is SegmentRegister)
-					switch ((context.Operand1.Register as SegmentRegister).Segment)
+				if (node.Operand1.Register is SegmentRegister)
+					switch ((node.Operand1.Register as SegmentRegister).Segment)
 					{
 						case SegmentRegister.SegmentType.CS: emitter.Emit(PUSH_CS, null, null); return;
 						case SegmentRegister.SegmentType.SS: emitter.Emit(PUSH_SS, null, null); return;
@@ -78,7 +79,7 @@ namespace Mosa.Platform.x86.Instructions
 						default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
 					}
 			}
-			emitter.Emit(PUSH, context.Operand1);
+			emitter.Emit(PUSH, node.Operand1);
 		}
 
 		/// <summary>

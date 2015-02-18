@@ -25,7 +25,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	public abstract class BaseRegisterAllocator
 	{
 		protected readonly BasicBlocks BasicBlocks;
-		protected readonly InstructionSet InstructionSet;
 		protected readonly BaseArchitecture Architecture;
 		private readonly StackLayout StackLayout;
 
@@ -51,12 +50,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected readonly TraceLog Trace;
 
-		public BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, InstructionSet instructionSet, StackLayout stackLayout, BaseArchitecture architecture, ITraceFactory traceFactory)
+		public BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, StackLayout stackLayout, BaseArchitecture architecture, ITraceFactory traceFactory)
 		{
 			this.TraceFactory = traceFactory;
 
 			this.BasicBlocks = basicBlocks;
-			this.InstructionSet = instructionSet;
 			this.StackLayout = stackLayout;
 			this.Architecture = architecture;
 
@@ -293,34 +291,37 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			SpilledIntervals.Add(liveInterval);
 		}
 
-		public static void NumberInstructions(BasicBlocks basicBlocks, InstructionSet instructionSet)
+		public static void NumberInstructions(BasicBlocks basicBlocks)
 		{
-			int index = SlotIndex.Increment;
+			int increment = SlotIndex.Increment;
+			int index = increment;
 
 			foreach (var block in basicBlocks)
 			{
-				for (var context = new Context(instructionSet, block); ; context.GotoNext())
+				for (var node = block.First; ; node = node.Next)
 				{
-					if (!context.IsEmpty)
-					{
-						context.SlotNumber = index;
-						index = index + SlotIndex.Increment;
-					}
+					if (node.IsEmpty)
+						continue;
 
-					if (context.IsBlockEndInstruction)
+					node.SlotNumber = index;
+					index = index + increment;
+
+					if (node.IsBlockEndInstruction)
 						break;
 				}
+
+				Debug.Assert(block.Last.SlotNumber != 0);
 			}
 		}
 
 		private void NumberInstructions()
 		{
-			NumberInstructions(BasicBlocks, InstructionSet);
+			NumberInstructions(BasicBlocks);
 
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (var block in BasicBlocks)
 			{
-				SlotIndex start = new SlotIndex(InstructionSet, block.StartIndex);
-				SlotIndex end = new SlotIndex(InstructionSet, block.EndIndex);
+				var start = new SlotIndex(block.First);
+				var end = new SlotIndex(block.Last);
 				ExtendedBlocks[block.Sequence].Interval = new Interval(start, end);
 			}
 		}
@@ -334,24 +335,21 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			int index = SlotIndex.Increment;
 
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (var block in BasicBlocks)
 			{
-				for (Context context = new Context(InstructionSet, block); ; context.GotoNext())
+				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (context.IsEmpty)
+					if (node.IsEmpty)
 						continue;
 
-					if (context.IsBlockStartInstruction)
+					if (node.IsBlockStartInstruction)
 					{
-						numberTrace.Log(context.SlotNumber.ToString() + " = " + context.ToString() + " # " + block.ToString());
+						numberTrace.Log(node.SlotNumber.ToString() + " = " + node.ToString() + " # " + block.ToString());
 					}
 					else
 					{
-						numberTrace.Log(context.SlotNumber.ToString() + " = " + context.ToString());
+						numberTrace.Log(node.SlotNumber.ToString() + " = " + node.ToString());
 					}
-
-					if (context.IsBlockEndInstruction)
-						break;
 				}
 			}
 		}
@@ -387,15 +385,15 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						liveSetTrace.Log("KILL ALL PHYSICAL");
 				}
 
-				for (var context = new Context(InstructionSet, block.BasicBlock); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var node = block.BasicBlock.First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (context.IsEmpty)
+					if (node.IsEmpty)
 						continue;
 
 					if (liveSetTrace.Active)
-						liveSetTrace.Log(context.ToString());
+						liveSetTrace.Log(node.ToString());
 
-					var visitor = new OperandVisitor(context);
+					var visitor = new OperandVisitor(node);
 
 					foreach (var op in visitor.Input)
 					{
@@ -415,7 +413,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						}
 					}
 
-					if (context.Instruction.FlowControl == FlowControl.Call || context.Instruction == IRInstruction.KillAll)
+					if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 					{
 						for (int s = 0; s < PhysicalRegisterCount; s++)
 						{
@@ -425,9 +423,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						if (liveSetTrace.Active)
 							liveSetTrace.Log("KILL ALL PHYSICAL");
 					}
-					else if (context.Instruction == IRInstruction.KillAllExcept)
+					else if (node.Instruction == IRInstruction.KillAllExcept)
 					{
-						var except = context.Operand1.Register.Index;
+						var except = node.Operand1.Register.Index;
 
 						for (int s = 0; s < PhysicalRegisterCount; s++)
 						{
@@ -438,7 +436,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						}
 
 						if (liveSetTrace.Active)
-							liveSetTrace.Log("KILL EXCEPT PHYSICAL: " + context.Operand1.ToString());
+							liveSetTrace.Log("KILL EXCEPT PHYSICAL: " + node.Operand1.ToString());
 					}
 
 					foreach (var op in visitor.Output)
@@ -512,6 +510,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var block = ExtendedBlocks[b];
 
+				block.BasicBlock.DebugCheck();
+
 				if (intervalTrace.Active)
 					intervalTrace.Log("Block # " + block.BasicBlock.Sequence.ToString());
 
@@ -538,104 +538,102 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					}
 				}
 
-				var context = new Context(InstructionSet, block.BasicBlock, block.BasicBlock.EndIndex);
+				block.BasicBlock.DebugCheck();
 
-				while (!context.IsBlockStartInstruction)
+				for (var node = block.BasicBlock.Last; !node.IsBlockStartInstruction; node = node.Previous)
 				{
-					if (!context.IsEmpty)
+					if (node.IsEmpty)
+						continue;
+
+					var slotIndex = new SlotIndex(node);
+
+					var visitor = new OperandVisitor(node);
+
+					if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 					{
-						SlotIndex slotIndex = new SlotIndex(context);
-
-						OperandVisitor visitor = new OperandVisitor(context);
-
-						if (context.Instruction.FlowControl == FlowControl.Call || context.Instruction == IRInstruction.KillAll)
+						for (int s = 0; s < PhysicalRegisterCount; s++)
 						{
-							for (int s = 0; s < PhysicalRegisterCount; s++)
-							{
-								var register = VirtualRegisters[s];
-								if (intervalTrace.Active) intervalTrace.Log("Add (Call) " + register.ToString() + " : " + slotIndex + " destination " + slotIndex.HalfStepForward);
-								if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
-								register.AddLiveInterval(slotIndex, slotIndex.HalfStepForward);
-								if (intervalTrace.Active) intervalTrace.Log("    After: " + LiveIntervalsToString(register.LiveIntervals));
-							}
-
-							KillAll.Add(slotIndex);
-						}
-						else if (context.Instruction == IRInstruction.KillAllExcept)
-						{
-							for (int s = 0; s < PhysicalRegisterCount; s++)
-							{
-								var except = context.Operand1.Register.Index;
-
-								if (s == except)
-									continue;
-
-								var register = VirtualRegisters[s];
-								if (intervalTrace.Active) intervalTrace.Log("Add (Call) " + register.ToString() + " : " + slotIndex + " destination " + slotIndex.HalfStepForward);
-								if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
-								register.AddLiveInterval(slotIndex, slotIndex.HalfStepForward);
-								if (intervalTrace.Active) intervalTrace.Log("    After: " + LiveIntervalsToString(register.LiveIntervals));
-							}
-						}
-
-						foreach (var result in visitor.Output)
-						{
-							if (result.IsCPURegister && result.Register.IsSpecial)
-								continue;
-
-							var register = VirtualRegisters[GetIndex(result)];
-
-							if (register.IsReserved)
-								continue;
-
-							var first = register.FirstRange;
-
-							if (!register.IsPhysicalRegister)
-							{
-								register.AddDefPosition(slotIndex);
-							}
-
-							if (first != null)
-							{
-								if (intervalTrace.Active) intervalTrace.Log("Replace First " + register.ToString() + " : " + slotIndex + " destination " + first.End);
-								if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
-								register.FirstRange = new LiveInterval(register, slotIndex, first.End);
-								if (intervalTrace.Active) intervalTrace.Log("    After: " + LiveIntervalsToString(register.LiveIntervals));
-							}
-							else
-							{
-								// This is necesary to handled a result that is never used!
-								// Common with instructions with more than one result
-								if (intervalTrace.Active) intervalTrace.Log("Add (Unused) " + register.ToString() + " : " + slotIndex + " destination " + slotIndex);
-								if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
-								register.AddLiveInterval(slotIndex, slotIndex.HalfStepForward);
-								if (intervalTrace.Active) intervalTrace.Log("    After: " + LiveIntervalsToString(register.LiveIntervals));
-							}
-						}
-
-						foreach (var result in visitor.Input)
-						{
-							if (result.IsCPURegister && result.Register.IsSpecial)
-								continue;
-
-							var register = VirtualRegisters[GetIndex(result)];
-
-							if (register.IsReserved)
-								continue;
-
-							if (!register.IsPhysicalRegister)
-							{
-								register.AddUsePosition(slotIndex);
-							}
-
-							if (intervalTrace.Active) intervalTrace.Log("Add (normal) " + register.ToString() + " : " + block.Start + " destination " + slotIndex);
+							var register = VirtualRegisters[s];
+							if (intervalTrace.Active) intervalTrace.Log("Add (Call) " + register.ToString() + " : " + slotIndex + " destination " + slotIndex.HalfStepForward);
 							if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
-							register.AddLiveInterval(block.Start, slotIndex);
+							register.AddLiveInterval(slotIndex, slotIndex.HalfStepForward);
+							if (intervalTrace.Active) intervalTrace.Log("    After: " + LiveIntervalsToString(register.LiveIntervals));
+						}
+
+						KillAll.Add(slotIndex);
+					}
+					else if (node.Instruction == IRInstruction.KillAllExcept)
+					{
+						for (int s = 0; s < PhysicalRegisterCount; s++)
+						{
+							var except = node.Operand1.Register.Index;
+
+							if (s == except)
+								continue;
+
+							var register = VirtualRegisters[s];
+							if (intervalTrace.Active) intervalTrace.Log("Add (Call) " + register.ToString() + " : " + slotIndex + " destination " + slotIndex.HalfStepForward);
+							if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
+							register.AddLiveInterval(slotIndex, slotIndex.HalfStepForward);
 							if (intervalTrace.Active) intervalTrace.Log("    After: " + LiveIntervalsToString(register.LiveIntervals));
 						}
 					}
 
-					context.GotoPrevious();
+					foreach (var result in visitor.Output)
+					{
+						if (result.IsCPURegister && result.Register.IsSpecial)
+							continue;
+
+						var register = VirtualRegisters[GetIndex(result)];
+
+						if (register.IsReserved)
+							continue;
+
+						var first = register.FirstRange;
+
+						if (!register.IsPhysicalRegister)
+						{
+							register.AddDefPosition(slotIndex);
+						}
+
+						if (first != null)
+						{
+							if (intervalTrace.Active) intervalTrace.Log("Replace First " + register.ToString() + " : " + slotIndex + " destination " + first.End);
+							if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
+							register.FirstRange = new LiveInterval(register, slotIndex, first.End);
+							if (intervalTrace.Active) intervalTrace.Log("    After: " + LiveIntervalsToString(register.LiveIntervals));
+						}
+						else
+						{
+							// This is necesary to handled a result that is never used!
+							// Common with instructions with more than one result
+							if (intervalTrace.Active) intervalTrace.Log("Add (Unused) " + register.ToString() + " : " + slotIndex + " destination " + slotIndex);
+							if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
+							register.AddLiveInterval(slotIndex, slotIndex.HalfStepForward);
+							if (intervalTrace.Active) intervalTrace.Log("    After: " + LiveIntervalsToString(register.LiveIntervals));
+						}
+					}
+
+					foreach (var result in visitor.Input)
+					{
+						if (result.IsCPURegister && result.Register.IsSpecial)
+							continue;
+
+						var register = VirtualRegisters[GetIndex(result)];
+
+						if (register.IsReserved)
+							continue;
+
+						if (!register.IsPhysicalRegister)
+						{
+							register.AddUsePosition(slotIndex);
+						}
+
+						if (intervalTrace.Active) intervalTrace.Log("Add (normal) " + register.ToString() + " : " + block.Start + " destination " + slotIndex);
+						if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
+						register.AddLiveInterval(block.Start, slotIndex);
+						if (intervalTrace.Active) intervalTrace.Log("    After: " + LiveIntervalsToString(register.LiveIntervals));
+					}
 				}
 			}
 		}
@@ -1111,7 +1109,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					foreach (var def in liveInterval.DefPositions)
 					{
-						var context = new Context(InstructionSet, def.Index);
+						var context = new Context(def.Index);
 
 						Architecture.InsertMoveInstruction(context, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
 
@@ -1132,30 +1130,28 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					foreach (var use in liveInterval.UsePositions)
 					{
-						var context = new Context(InstructionSet, use.Index);
-						AssignPhysicalRegistersToInstructions(context, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand == null ? liveInterval.VirtualRegister.SpillSlotOperand : liveInterval.AssignedPhysicalOperand);
+						AssignPhysicalRegistersToInstructions(use.Index, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand == null ? liveInterval.VirtualRegister.SpillSlotOperand : liveInterval.AssignedPhysicalOperand);
 					}
 
 					foreach (var def in liveInterval.DefPositions)
 					{
-						var context = new Context(InstructionSet, def.Index);
-						AssignPhysicalRegistersToInstructions(context, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand == null ? liveInterval.VirtualRegister.SpillSlotOperand : liveInterval.AssignedPhysicalOperand);
+						AssignPhysicalRegistersToInstructions(def.Index, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand == null ? liveInterval.VirtualRegister.SpillSlotOperand : liveInterval.AssignedPhysicalOperand);
 					}
 				}
 			}
 		}
 
-		protected void AssignPhysicalRegistersToInstructions(Context context, Operand old, Operand replacement)
+		protected void AssignPhysicalRegistersToInstructions(InstructionNode node, Operand old, Operand replacement)
 		{
-			for (int i = 0; i < context.OperandCount; i++)
+			for (int i = 0; i < node.OperandCount; i++)
 			{
-				var operand = context.GetOperand(i);
+				var operand = node.GetOperand(i);
 
 				if (operand.IsVirtualRegister)
 				{
 					if (operand == old)
 					{
-						context.SetOperand(i, replacement);
+						node.SetOperand(i, replacement);
 						continue;
 					}
 				}
@@ -1164,20 +1160,20 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (operand.OffsetBase == old)
 					{
 						// FIXME: Creates a lot of duplicate single operands
-						context.SetOperand(i, Operand.CreateMemoryAddress(operand.Type, replacement, operand.Displacement));
+						node.SetOperand(i, Operand.CreateMemoryAddress(operand.Type, replacement, operand.Displacement));
 					}
 				}
 			}
 
-			for (int i = 0; i < context.ResultCount; i++)
+			for (int i = 0; i < node.ResultCount; i++)
 			{
-				var operand = context.GetResult(i);
+				var operand = node.GetResult(i);
 
 				if (operand.IsVirtualRegister)
 				{
 					if (operand == old)
 					{
-						context.SetResult(i, replacement);
+						node.SetResult(i, replacement);
 						continue;
 					}
 				}
@@ -1186,7 +1182,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (operand.OffsetBase == old)
 					{
 						// FIXME: Creates a lot of duplicate single operands
-						context.SetResult(i, Operand.CreateMemoryAddress(operand.Type, replacement, operand.Displacement));
+						node.SetResult(i, Operand.CreateMemoryAddress(operand.Type, replacement, operand.Displacement));
 					}
 				}
 			}
@@ -1256,12 +1252,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				for (int fromTag = 0; fromTag < 2; fromTag++)
 				{
-					MoveResolver moveResolver = moveResolvers[fromTag, b];
+					var moveResolver = moveResolvers[fromTag, b];
 
 					if (moveResolver == null)
 						continue;
 
-					moveResolver.InsertResolvingMoves(Architecture, InstructionSet);
+					moveResolver.InsertResolvingMoves(Architecture);
 				}
 			}
 		}
@@ -1282,9 +1278,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var key in moves.Keys)
 			{
-				MoveResolver moveResolver = new MoveResolver(key.Index, !key.IsOnHalfStepForward, moves[key]);
+				var moveResolver = new MoveResolver(key.Index, !key.IsOnHalfStepForward, moves[key]);
 
-				moveResolver.InsertResolvingMoves(Architecture, InstructionSet);
+				moveResolver.InsertResolvingMoves(Architecture);
 
 				if (insertTrace.Active)
 				{
@@ -1306,7 +1302,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			MoveKeyedList keyedList = new MoveKeyedList();
 
 			// collect edge slot indexes
-			Dictionary<SlotIndex, ExtendedBlock> blockEdges = new Dictionary<SlotIndex, ExtendedBlock>();
+			var blockEdges = new Dictionary<SlotIndex, ExtendedBlock>();
 
 			foreach (var block in ExtendedBlocks)
 			{

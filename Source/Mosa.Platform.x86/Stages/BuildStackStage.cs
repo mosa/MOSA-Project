@@ -34,18 +34,16 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		private void UpdatePrologue()
 		{
-			// Update prologue Block
-			var prologueBlock = BasicBlocks.PrologueBlock;
+			if (BasicBlocks.PrologueBlock == null)
+				return;
 
-			if (prologueBlock != null)
+			for (var node = BasicBlocks.PrologueBlock.First; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				var prologueContext = new Context(InstructionSet, prologueBlock);
-
-				prologueContext.GotoNext();
-
-				Debug.Assert(prologueContext.Instruction == IRInstruction.Prologue);
-
-				AddPrologueInstructions(prologueContext);
+				if (node.Instruction == IRInstruction.Prologue)
+				{
+					AddPrologueInstructions(new Context(node));
+					return;
+				}
 			}
 		}
 
@@ -54,23 +52,16 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		private void UpdateEpilogue()
 		{
-			// Update epilogue Block
-			var epilogueBlock = BasicBlocks.EpilogueBlock;
+			if (BasicBlocks.EpilogueBlock == null)
+				return;
 
-			if (epilogueBlock != null)
+			for (var node = BasicBlocks.EpilogueBlock.First; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				var epilogueContext = new Context(InstructionSet, epilogueBlock);
-
-				epilogueContext.GotoNext();
-
-				while (epilogueContext.IsEmpty)
+				if (node.Instruction == IRInstruction.Epilogue)
 				{
-					epilogueContext.GotoNext();
+					AddEpilogueInstructions(new Context(node));
+					return;
 				}
-
-				Debug.Assert(epilogueContext.Instruction == IRInstruction.Epilogue);
-
-				AddEpilogueInstructions(epilogueContext);
 			}
 		}
 
@@ -101,7 +92,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
 			Operand esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
-			context.Remove();
+			context.Empty();
 
 			if (MethodCompiler.StackLayout.StackSize != 0)
 			{

@@ -7,157 +7,66 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.IR;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Represents a block of instructions with no internal jumps and only one entry and exit.
 	/// </summary>
-	public class BasicBlock
+	public sealed class BasicBlock
 	{
 		public static readonly int PrologueLabel = -1;
+		public static readonly int StartLabel = 0;
 		public static readonly int EpilogueLabel = Int32.MaxValue;
 
-		#region Data members
+		#region Data Fields
 
 		/// <summary>
-		/// The index to the start of the block within the instruction set
+		/// The branch instructions
 		/// </summary>
-		private int start;
+		private List<InstructionNode> branchInstructions = new List<InstructionNode>(2);
 
-		/// <summary>
-		/// The index to the end of the block within the instruction set
-		/// </summary>
-		private int end;
-
-		/// <summary>
-		/// The label of the block. (For simplicity this is actually the original instruction offset.)
-		/// </summary>
-		private int label;
-
-		/// <summary>
-		/// The creation sequence number of the block; unique within a method. (For use with stages that require an integer id for blocks starting from 0).
-		/// </summary>
-		private int sequence;
-
-		/// <summary>
-		/// Hints at which target the block will most likely branch to
-		/// </summary>
-		private int hintTarget;
-
-		/// <summary>
-		/// Links this block to all blocks invoked by the final branch instruction.
-		/// </summary>
-		/// <remarks>
-		/// Usually there are two blocks in this list: The branch destination and
-		/// the immediately following block. If the final branch instruction is a
-		/// switch, there are potentially more blocks in this list.
-		/// </remarks>
-		private List<BasicBlock> nextBlocks;
-
-		/// <summary>
-		/// A list of all Blocks, whose final branch instruction refers to this block.
-		/// </summary>
-		private List<BasicBlock> previousBlocks;
-
-		#endregion Data members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes common fields of the BasicBlock.
-		/// </summary>
-		/// <param name="sequence">The sequence.</param>
-		/// <param name="label">The label.</param>
-		/// <param name="start">The start.</param>
-		public BasicBlock(int sequence, int label, int start)
-		{
-			nextBlocks = new List<BasicBlock>(2);
-			previousBlocks = new List<BasicBlock>(2);
-			this.sequence = sequence;
-			this.label = label;
-			this.start = start;
-			this.end = -1;
-			this.hintTarget = -1;
-		}
-
-		/// <summary>
-		/// Initializes common fields of the BasicBlock.
-		/// </summary>
-		/// <param name="sequence">The sequence.</param>
-		/// <param name="label">The label.</param>
-		/// <param name="start">The index.</param>
-		/// <param name="end">The end.</param>
-		public BasicBlock(int sequence, int label, int start, int end)
-		{
-			nextBlocks = new List<BasicBlock>(2);
-			previousBlocks = new List<BasicBlock>(2);
-			this.sequence = sequence;
-			this.label = label;
-			this.start = start;
-			this.end = end;
-			this.hintTarget = -1;
-		}
-
-		#endregion Construction
+		#endregion Data Fields
 
 		#region Properties
 
 		/// <summary>
-		/// The index to the start of the block within the instruction set
+		/// Gets the first instruction node.
 		/// </summary>
-		public int StartIndex
-		{
-			get { return start; }
-			set { start = value; }
-		}
+		public InstructionNode First { get; private set; }
 
 		/// <summary>
-		/// The index to the end of the block within the instruction set
+		/// Gets the last instruction node.
 		/// </summary>
-		public int EndIndex
-		{
-			get { return end; }
-			set { end = value; }
-		}
+		public InstructionNode Last { get; private set; }
 
 		/// <summary>
 		/// Retrieves the label, which uniquely identifies this block.
 		/// </summary>
 		/// <value>The label.</value>
-		public int Label
-		{
-			get { return label; }
-		}
+		public int Label { get; private set; }
 
 		/// <summary>
 		/// Retrieves the label, which uniquely identifies this block.
 		/// </summary>
 		/// <value>The label.</value>
-		public int Sequence
-		{
-			get { return sequence; }
-			internal set { sequence = value; }
-		}
+		public int Sequence { get; internal set; }
 
 		/// <summary>
 		/// Returns a list of all Blocks, which are potential branch targets
 		/// of the last instruction in this block.
 		/// </summary>
-		public List<BasicBlock> NextBlocks
-		{
-			get { return nextBlocks; }
-		}
+		public List<BasicBlock> NextBlocks { get; internal set; }
 
 		/// <summary>
 		/// Returns a list of all Blocks, which branch to this block.
 		/// </summary>
-		public List<BasicBlock> PreviousBlocks
-		{
-			get { return previousBlocks; }
-		}
+		public List<BasicBlock> PreviousBlocks { get; internal set; }
 
 		/// <summary>
 		/// <True/> if this Block has following blocks
@@ -175,18 +84,87 @@ namespace Mosa.Compiler.Framework
 			get { return PreviousBlocks.Count > 0; }
 		}
 
-		/// <summary>
-		/// Hints at which target the block will most likely branch to
-		/// </summary>
-		public int HintTarget
-		{
-			get { return hintTarget; }
-			set { hintTarget = value; }
-		}
-
 		#endregion Properties
 
+		#region Construction
+
+		internal BasicBlock(int sequence, int label)
+		{
+			NextBlocks = new List<BasicBlock>(2);
+			PreviousBlocks = new List<BasicBlock>(1);
+			Label = label;
+			Sequence = sequence;
+
+			First = new InstructionNode(IRInstruction.BlockStart);
+			First.Label = label;
+			First.Block = this;
+
+			Last = new InstructionNode(IRInstruction.BlockEnd);
+			Last.Label = label;
+			Last.Block = this;
+
+			First.Next = Last;
+			Last.Previous = First;
+		}
+
+		#endregion Construction
+
 		#region Methods
+
+		internal void AddBranchInstruction(InstructionNode node)
+		{
+			if (node.Instruction != null && node.Instruction.IgnoreInstructionBasicBlockTargets)
+				return;
+
+			if (node.BranchTargets == null || node.BranchTargetsCount == 0)
+				return;
+
+			Debug.Assert(node.Block != null);
+
+			// Note: The list only has 1 unless it's a switch statement, so actual performance is very close to O(1) for non-switch statements
+
+			branchInstructions.AddIfNew(node);
+
+			var currentBlock = node.Block;
+
+			foreach (var target in node.BranchTargets)
+			{
+				currentBlock.NextBlocks.AddIfNew(target);
+				target.PreviousBlocks.AddIfNew(currentBlock);
+			}
+		}
+
+		internal void RemoveBranchInstruction(InstructionNode node)
+		{
+			if (node.BranchTargets == null || node.BranchTargetsCount == 0)
+				return;
+
+			branchInstructions.Remove(node);
+
+			var currentBlock = node.Block;
+
+			// Note: The list only has 1 or 2 entries, so actual performance is very close to O(1)
+
+			foreach (var target in node.BranchTargets)
+			{
+				if (!FindTarget(target))
+				{
+					currentBlock.NextBlocks.Remove(target);
+					target.PreviousBlocks.Remove(currentBlock);
+				}
+			}
+		}
+
+		private bool FindTarget(BasicBlock block)
+		{
+			foreach (var b in branchInstructions)
+			{
+				if (b.BranchTargets.Contains(block))
+					return true;
+			}
+
+			return false;
+		}
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
@@ -195,6 +173,31 @@ namespace Mosa.Compiler.Framework
 		public override string ToString()
 		{
 			return String.Format("L_{0:X4}", Label);
+		}
+
+		public void DebugCheck()
+		{
+			Debug.Assert(First.Label == Last.Label);
+
+			var node = First;
+
+			while (!node.IsBlockEndInstruction)
+			{
+				node = node.Next;
+				Debug.Assert(node != null);
+			}
+
+			Debug.Assert(node == Last);
+
+			node = Last;
+
+			while (!node.IsBlockStartInstruction)
+			{
+				node = node.Previous;
+				Debug.Assert(node != null);
+			}
+
+			Debug.Assert(node == First);
 		}
 
 		#endregion Methods

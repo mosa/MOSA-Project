@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			if (!operand.IsConstant)
 			{
 				// try to find the constant - a bit of a hack
-				Context ctx = new Context(context.InstructionSet, operand.Definitions[0]);
+				Context ctx = new Context(operand.Definitions[0]);
 
 				if (ctx.Instruction == IRInstruction.Move && ctx.Operand1.IsConstant)
 				{

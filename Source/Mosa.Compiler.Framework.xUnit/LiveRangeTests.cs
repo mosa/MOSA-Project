@@ -17,13 +17,14 @@ namespace Mosa.Compiler.Framework.xUnit
 {
 	public class LiveRangeTests
 	{
-		private static Tuple<BasicBlocks, InstructionSet> CreateBasicBlockInstructionSet()
+		private static BasicBlocks CreateBasicBlockInstructionSet()
 		{
 			var basicBlocks = new BasicBlocks();
-			var instructionSet = new InstructionSet(25);
 
-			var context = instructionSet.CreateNewBlock(basicBlocks);
-			basicBlocks.AddHeaderBlock(context.BasicBlock);
+			var block = basicBlocks.CreateBlock();
+			basicBlocks.AddHeaderBlock(block);
+
+			var context = new Context(block);
 
 			context.AppendInstruction(IRInstruction.Nop);
 			context.AppendInstruction(IRInstruction.Nop);
@@ -32,21 +33,19 @@ namespace Mosa.Compiler.Framework.xUnit
 			context.AppendInstruction(IRInstruction.Nop);
 			context.AppendInstruction(IRInstruction.Nop);
 
-			return new Tuple<BasicBlocks, InstructionSet>(basicBlocks, instructionSet);
+			return basicBlocks;
 		}
 
 		[Fact]
 		public void LiveRangeTest()
 		{
-			var tuple = CreateBasicBlockInstructionSet();
-			var basicBlocks = tuple.Item1;
-			var instructionSet = tuple.Item2;
+			var basicBlocks = CreateBasicBlockInstructionSet();
 
-			GreedyRegisterAllocator.NumberInstructions(basicBlocks, instructionSet);
+			GreedyRegisterAllocator.NumberInstructions(basicBlocks);
 
 			var liveRange = new LiveRange(
-				new SlotIndex(instructionSet, basicBlocks[0].StartIndex),
-				new SlotIndex(instructionSet, basicBlocks[0].EndIndex),
+				new SlotIndex(basicBlocks[0].First),
+				new SlotIndex(basicBlocks[0].Last),
 				new List<SlotIndex>(),
 				new List<SlotIndex>()
 			);

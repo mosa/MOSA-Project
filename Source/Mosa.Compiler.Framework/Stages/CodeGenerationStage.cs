@@ -111,22 +111,22 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				BlockStart(block);
 
-				for (var context = new Context(InstructionSet, block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (context.IsEmpty)
+					if (node.IsEmpty)
 						continue;
 
-					if (context.Instruction.IgnoreDuringCodeGeneration)
+					if (node.Instruction.IgnoreDuringCodeGeneration)
 						continue;
 
-					if (context.Instruction is BasePlatformInstruction)
+					if (node.Instruction is BasePlatformInstruction)
 					{
-						EmitInstruction(context, codeEmitter);
+						EmitInstruction(node, codeEmitter);
 						generatedInstructionCount++;
 					}
 					else
 					{
-						NewCompilerTraceEvent(CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
+						NewCompilerTraceEvent(CompilerEvent.Error, "Missing Code Transformation: " + node.ToString());
 					}
 				}
 
@@ -138,11 +138,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Emits the instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="codeEmitter">The code emitter.</param>
-		protected virtual void EmitInstruction(Context context, BaseCodeEmitter codeEmitter)
+		protected virtual void EmitInstruction(InstructionNode node, BaseCodeEmitter codeEmitter)
 		{
-			(context.Instruction as BasePlatformInstruction).Emit(context, codeEmitter);
+			(node.Instruction as BasePlatformInstruction).Emit(node, codeEmitter);
 		}
 
 		/// <summary>

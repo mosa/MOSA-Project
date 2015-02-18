@@ -157,7 +157,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="operandStack">The operand stack.</param>
 		private void AssignOperands(BasicBlock block, Stack<Operand> operandStack)
 		{
-			for (var ctx = new Context(InstructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+			for (var ctx = new Context(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 			{
 				if (ctx.IsEmpty)
 					continue;
@@ -224,7 +224,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="joinStack">The join stack.</param>
 		private void CreateOutgoingMoves(BasicBlock block, Stack<Operand> operandStack, Stack<Operand> joinStack)
 		{
-			var context = new Context(InstructionSet, block, block.EndIndex);
+			var context = new Context(block.Last);
 
 			context.GotoPrevious();
 

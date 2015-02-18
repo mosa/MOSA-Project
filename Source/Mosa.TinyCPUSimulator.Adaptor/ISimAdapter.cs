@@ -28,11 +28,11 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		/// <summary>
 		/// Converts the specified method.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="method">The method.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="opcodeSize">Size of the opcode.</param>
 		/// <returns></returns>
-		SimInstruction Convert(Context context, MosaMethod method, BasicBlocks basicBlocks, byte opcodeSize);
+		SimInstruction Convert(InstructionNode node, MosaMethod method, BasicBlocks basicBlocks, byte opcodeSize);
 	}
 }

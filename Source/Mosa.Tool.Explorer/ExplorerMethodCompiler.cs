@@ -23,20 +23,20 @@ namespace Mosa.Tool.Explorer
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <param name="threadID">The thread identifier.</param>
-		public ExplorerMethodCompiler(ExplorerCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, InstructionSet instructionSet, int threadID)
-			: base(compiler, method, basicBlocks, instructionSet, threadID)
+		public ExplorerMethodCompiler(ExplorerCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
+			: base(compiler, method, basicBlocks, threadID)
 		{
 			var compilerOptions = Compiler.CompilerOptions;
 
 			// Populate the pipeline
 			Pipeline.Add(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
-				new BasicBlockBuilderStage(),
 				new ExceptionPrologueStage(),
+
 				new OperandAssignmentStage(),
 				new StackSetupStage(),
 				new ProtectedRegionStage(),
-				//new ProtectedRegionFlowUpdateStage(),
+
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				new ConvertCompoundStage(),
@@ -47,17 +47,19 @@ namespace Mosa.Tool.Explorer
 
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
+
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableOptimizations) ? new IROptimizationStage() : null,
-				//(compilerOptions.EnableSSA) ? new DeadCodeRemovalStage() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 
 				new IRCleanup(),
 				new PlatformStubStage(),
 				new	PlatformEdgeSplitStage(),
+
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
+
 				new EmptyBlockRemovalStage(),
 				new BlockOrderingStage(),
 				new CodeGenerationStage(compilerOptions.EmitBinary),

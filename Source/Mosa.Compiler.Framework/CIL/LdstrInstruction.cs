@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);
@@ -54,14 +54,14 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString(Context context)
+		public override string ToString(InstructionNode node)
 		{
 			//FIXME!
-			return base.ToString(context); // +" <- 0x" + context.TokenType.ToString();
+			return base.ToString(node); // +" <- 0x" + context.TokenType.ToString();
 		}
 
 		/// <summary>

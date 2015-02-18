@@ -16,10 +16,10 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// Represents the IL decoding compilation stage.
+	/// Represents the CIL decoding compilation stage.
 	/// </summary>
 	/// <remarks>
-	/// The IL decoding stage takes a stream of bytes and decodes the
+	/// The CIL decoding stage takes a stream of bytes and decodes the
 	/// instructions represented into an MSIL based intermediate
 	/// representation. The instructions are grouped into basic Blocks
 	/// for easier local optimizations in later compiler stages.
@@ -33,6 +33,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private MosaInstruction instruction;
 
+		/// <summary>
+		/// The block instruction beings too
+		/// </summary>
+		private BasicBlock block;
+
 		#endregion Data members
 
 		protected override void Run()
@@ -45,10 +50,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (plugMethod != null)
 			{
-				Operand plugSymbol = Operand.CreateSymbolFromMethod(TypeSystem, plugMethod);
-				Context context = CreateNewBlockWithContext(-1);
+				var plugSymbol = Operand.CreateSymbolFromMethod(TypeSystem, plugMethod);
+				var context = CreateNewBlockContext(-1);
 				context.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
-				BasicBlocks.AddHeaderBlock(context.BasicBlock);
+				BasicBlocks.AddHeaderBlock(context.Block);
 				return;
 			}
 
@@ -63,8 +68,38 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MethodCompiler.SetLocalVariables(MethodCompiler.Method.LocalVariables);
 
+			// Create the prologue block
+			var prologue = CreateNewBlock(BasicBlock.PrologueLabel);
+			BasicBlocks.AddHeaderBlock(prologue);
+
+			var jmpNode = new InstructionNode();
+			jmpNode.Label = BasicBlock.PrologueLabel;
+			jmpNode.Block = prologue;
+			prologue.First.Insert(jmpNode);
+
+			// Create starting block
+			var startBlock = CreateNewBlock(0);
+
+			jmpNode.SetInstruction(IRInstruction.Jmp, startBlock);
+
+			DecodeInstructionTargets();
+
+			DecodeProtectedRegionTargets();
+
 			/* Decode the instructions */
-			Decode(MethodCompiler);
+			DecodeInstructions();
+
+			foreach (var block in BasicBlocks)
+			{
+				if (!block.HasPreviousBlocks && !BasicBlocks.HeadBlocks.Contains(block))
+				{
+					// block was targeted (probably by an leave instruction within a protected region)
+					BasicBlocks.AddHeaderBlock(block);
+				}
+			}
+
+			// This makes it easier to review --- it's not necessary
+			BasicBlocks.OrderByLabel();
 		}
 
 		protected override void Finish()
@@ -74,15 +109,60 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Internals
 
+		private void DecodeProtectedRegionTargets()
+		{
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
+			{
+				if (handler.TryStart != 0)
+				{
+					var block = GetBlockByLabel(handler.TryStart);
+				}
+				if (handler.TryEnd != 0)
+				{
+					var block = GetBlockByLabel(handler.TryEnd);
+				}
+				if (handler.HandlerStart != 0)
+				{
+					var block = GetBlockByLabel(handler.HandlerStart);
+					BasicBlocks.AddHeaderBlock(block);
+				}
+				if (handler.FilterOffset != null)
+				{
+					var block = GetBlockByLabel(handler.FilterOffset.Value);
+					BasicBlocks.AddHeaderBlock(block);
+				}
+			}
+		}
+
+		private void DecodeInstructionTargets()
+		{
+			bool branched = false;
+
+			for (int i = 0; i < MethodCompiler.Method.Code.Count; i++)
+			{
+				instruction = MethodCompiler.Method.Code[i];
+
+				if (branched)
+				{
+					GetBlockByLabel(instruction.Offset);
+					branched = false;
+				}
+
+				var op = (OpCode)instruction.OpCode;
+
+				var cil = CILInstruction.Get(op);
+
+				branched = cil.DecodeTargets(this);
+			}
+		}
+
 		/// <summary>
 		/// Decodes the instruction stream of the reader and populates the compiler.
 		/// </summary>
-		/// <param name="compiler">The compiler to populate.</param>
 		/// <exception cref="InvalidMetadataException"></exception>
-		private void Decode(BaseMethodCompiler compiler)
+		private void DecodeInstructions()
 		{
-			// Create context
-			var context = new Context(InstructionSet);
+			block = null;
 
 			// Prefix instruction
 			bool prefix = false;
@@ -90,31 +170,66 @@ namespace Mosa.Compiler.Framework.Stages
 			for (int i = 0; i < MethodCompiler.Method.Code.Count; i++)
 			{
 				instruction = MethodCompiler.Method.Code[i];
+
+				block = BasicBlocks.GetByLabel(instruction.Offset) ?? block;
+
 				var op = (OpCode)instruction.OpCode;
 
-				var cilInstruction = CILInstruction.Get(op);
+				var cil = CILInstruction.Get(op);
 
-				if (cilInstruction == null)
+				if (cil == null)
 				{
 					throw new InvalidMetadataException();
 				}
 
 				// Create and initialize the corresponding instruction
-				context.AppendInstruction(cilInstruction);
-				context.Label = instruction.Offset;
-				context.HasPrefix = prefix;
-				cilInstruction.Decode(context, this);
+				var node = new InstructionNode();
+				node.Label = instruction.Offset;
+				node.HasPrefix = prefix;
+				node.Instruction = cil;
 
-				//Debug.Assert(context.Instruction != null);
+				block.Last.Previous.Insert(node);
 
-				prefix = (cilInstruction is PrefixInstruction);
+				cil.Decode(node, this);
+
+				prefix = (cil is PrefixInstruction);
 				instructionCount++;
+
+				bool addjmp = false;
+
+				var flow = node.Instruction.FlowControl;
+
+				if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch)
+				{
+					var nextInstruction = MethodCompiler.Method.Code[i + 1];
+
+					if (BasicBlocks.GetByLabel(nextInstruction.Offset) != null)
+					{
+						var target = GetBlockByLabel(nextInstruction.Offset);
+
+						var jmpNode = new InstructionNode(IRInstruction.Jmp, target);
+						jmpNode.Label = instruction.Offset;
+						block.Last.Previous.Insert(jmpNode);
+					}
+				}
 			}
+		}
+
+		private BasicBlock GetBlockByLabel(int label)
+		{
+			var block = BasicBlocks.GetByLabel(label);
+
+			if (block == null)
+			{
+				block = CreateNewBlock(label);
+			}
+
+			return block;
 		}
 
 		#endregion Internals
 
-		#region BaseInstructionDecoder Members
+		#region IInstructionDecoder Members
 
 		/// <summary>
 		/// Gets the compiler, that is currently executing.
@@ -141,6 +256,16 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </value>
 		TypeSystem IInstructionDecoder.TypeSystem { get { return TypeSystem; } }
 
-		#endregion BaseInstructionDecoder Members
+		/// <summary>
+		/// Gets the block.
+		/// </summary>
+		/// <param name="label">The label.</param>
+		/// <returns></returns>
+		BasicBlock IInstructionDecoder.GetBlock(int label)
+		{
+			return GetBlockByLabel(label);
+		}
+
+		#endregion IInstructionDecoder Members
 	}
 }

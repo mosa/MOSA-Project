@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// <summary>
 	///
 	/// </summary>
-	public class SparseConditionalConstantPropagation
+	public sealed class SparseConditionalConstantPropagation
 	{
 		protected class VariableState
 		{
@@ -84,25 +84,23 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		protected Dictionary<Operand, VariableState> variableStates = new Dictionary<Operand, VariableState>();
 
-		protected Stack<int> instructionWorkList = new Stack<int>();
+		protected Stack<InstructionNode> instructionWorkList = new Stack<InstructionNode>();
 		protected Stack<BasicBlock> blockWorklist = new Stack<BasicBlock>();
 
-		protected HashSet<int> executedStatements = new HashSet<int>();
+		protected HashSet<InstructionNode> executedStatements = new HashSet<InstructionNode>();
 
 		protected readonly BasicBlocks BasicBlocks;
-		protected readonly InstructionSet InstructionSet;
 		protected readonly ITraceFactory TraceFactory;
 		protected readonly TraceLog MainTrace;
 
-		protected readonly KeyedList<BasicBlock, int> phiStatements = new KeyedList<BasicBlock, int>();
+		protected readonly KeyedList<BasicBlock, InstructionNode> phiStatements = new KeyedList<BasicBlock, InstructionNode>();
 
-		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, InstructionSet instructionSet, ITraceFactory traceFactory)
+		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, ITraceFactory traceFactory)
 		{
 			this.TraceFactory = traceFactory;
 			this.BasicBlocks = basicBlocks;
-			this.InstructionSet = instructionSet;
 
-			MainTrace = CreateTrace("ConditionalConstantPropagation");
+			MainTrace = CreateTrace("SparseConditionalConstantPropagation");
 
 			// Method is empty - must be a plugged method
 			if (BasicBlocks.HeadBlocks.Count == 0)
@@ -214,14 +212,9 @@ namespace Mosa.Compiler.Framework.Analysis
 			blockWorklist.Push(block);
 		}
 
-		protected void AddInstruction(int index)
+		protected void AddInstruction(InstructionNode node)
 		{
-			instructionWorkList.Push(index);
-		}
-
-		protected void AddInstruction(Context context)
-		{
-			instructionWorkList.Push(context.Index);
+			instructionWorkList.Push(node);
 		}
 
 		protected void AddInstruction(VariableState variable)
@@ -230,8 +223,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				if (executedStatements.Contains(use))
 				{
-					var context = new Context(InstructionSet, use);
-					AddInstruction(context);
+					AddInstruction(use);
 				}
 			}
 		}
@@ -255,7 +247,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				AddExecutionBlock(block.NextBlocks[0]);
 			}
 
-			ProcessInstructionsContinuiously(new Context(InstructionSet, block));
+			ProcessInstructionsContinuiously(block.First);
 
 			// re-analysis phi statements
 			var phiUse = phiStatements.Get(block);
@@ -263,23 +255,23 @@ namespace Mosa.Compiler.Framework.Analysis
 			if (phiUse == null)
 				return;
 
-			foreach (int index in phiUse)
+			foreach (var index in phiUse)
 			{
 				AddInstruction(index);
 			}
 		}
 
-		protected void ProcessInstructionsContinuiously(Context context)
+		protected void ProcessInstructionsContinuiously(InstructionNode node)
 		{
 			// instead of adding items to the worklist, the whole block will be processed
-			for (; !context.IsBlockEndInstruction; context.GotoNext())
+			for (; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (context.IsEmpty)
+				if (node.IsEmpty)
 					continue;
 
-				bool @continue = ProcessInstruction(context);
+				bool @continue = ProcessInstruction(node);
 
-				executedStatements.Add(context.Index);
+				executedStatements.Add(node);
 
 				if (!@continue)
 					return;
@@ -290,42 +282,40 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			while (instructionWorkList.Count > 0)
 			{
-				var index = instructionWorkList.Pop();
+				var node = instructionWorkList.Pop();
 
-				var context = new Context(InstructionSet, index);
-
-				if (context.Instruction == IRInstruction.IntegerCompareBranch)
+				if (node.Instruction == IRInstruction.IntegerCompareBranch)
 				{
 					// special case
-					ProcessInstructionsContinuiously(context);
+					ProcessInstructionsContinuiously(node);
 				}
 				else
 				{
-					ProcessInstruction(context);
+					ProcessInstruction(node);
 				}
 			}
 		}
 
-		protected bool ProcessInstruction(Context context)
+		protected bool ProcessInstruction(InstructionNode node)
 		{
 			//if (MainTrace.Active) MainTrace.Log(context.ToString());
 
-			var instruction = context.Instruction;
+			var instruction = node.Instruction;
 
 			if (instruction == IRInstruction.Move)
 			{
-				Move(context);
+				Move(node);
 			}
 			else if (instruction == IRInstruction.Call ||
 				instruction == IRInstruction.IntrinsicMethodCall)
 			{
-				Call(context);
+				Call(node);
 			}
 			else if (instruction == IRInstruction.Load ||
-				context.Instruction == IRInstruction.LoadSignExtended ||
-				context.Instruction == IRInstruction.LoadZeroExtended)
+				node.Instruction == IRInstruction.LoadSignExtended ||
+				node.Instruction == IRInstruction.LoadZeroExtended)
 			{
-				Load(context);
+				Load(node);
 			}
 			else if (instruction == IRInstruction.AddSigned ||
 				instruction == IRInstruction.AddUnsigned ||
@@ -342,41 +332,41 @@ namespace Mosa.Compiler.Framework.Analysis
 				instruction == IRInstruction.ShiftRight ||
 				instruction == IRInstruction.ArithmeticShiftRight)
 			{
-				IntegerOperation(context);
+				IntegerOperation(node);
 			}
-			else if (context.Instruction == IRInstruction.Phi)
+			else if (node.Instruction == IRInstruction.Phi)
 			{
-				Phi(context);
+				Phi(node);
 			}
-			else if (context.Instruction == IRInstruction.Jmp)
+			else if (node.Instruction == IRInstruction.Jmp)
 			{
-				Jmp(context);
+				Jmp(node);
 			}
-			else if (context.Instruction == IRInstruction.IntegerCompareBranch)
+			else if (node.Instruction == IRInstruction.IntegerCompareBranch)
 			{
-				return IntegerCompareBranch(context);
+				return IntegerCompareBranch(node);
 			}
-			else if (context.Instruction == IRInstruction.AddressOf)
+			else if (node.Instruction == IRInstruction.AddressOf)
 			{
-				AddressOf(context);
+				AddressOf(node);
 			}
 			else if (instruction == IRInstruction.ZeroExtendedMove ||
 				instruction == IRInstruction.SignExtendedMove)
 			{
-				Move(context);
+				Move(node);
 			}
 			else if (instruction == IRInstruction.Switch)
 			{
-				Switch(context);
+				Switch(node);
 			}
 			else if (instruction == IRInstruction.FinallyStart)
 			{
-				FinallyStart(context);
+				FinallyStart(node);
 			}
 			else
 			{
 				// for all other instructions
-				Default(context);
+				Default(node);
 			}
 
 			return true;
@@ -420,21 +410,21 @@ namespace Mosa.Compiler.Framework.Analysis
 			AddInstruction(variable);
 		}
 
-		private void Jmp(Context context)
+		private void Jmp(InstructionNode node)
 		{
-			if (context.Targets == null || context.Targets.Count == 0)
+			if (node.BranchTargets == null || node.BranchTargetsCount == 0)
 				return;
 
-			Branch(context);
+			Branch(node);
 		}
 
-		private void Move(Context context)
+		private void Move(InstructionNode node)
 		{
-			if (!context.Result.IsVirtualRegister)
+			if (!node.Result.IsVirtualRegister)
 				return;
 
-			var result = GetVariableState(context.Result);
-			var operand = GetVariableState(context.Operand1);
+			var result = GetVariableState(node.Result);
+			var operand = GetVariableState(node.Operand1);
 
 			if (result.IsOverDefined)
 				return;
@@ -455,27 +445,27 @@ namespace Mosa.Compiler.Framework.Analysis
 			return;
 		}
 
-		private void Call(Context context)
+		private void Call(InstructionNode node)
 		{
-			if (context.ResultCount == 0)
+			if (node.ResultCount == 0)
 				return;
 
-			Debug.Assert(context.ResultCount == 1);
+			Debug.Assert(node.ResultCount == 1);
 
-			var result = GetVariableState(context.Result);
+			var result = GetVariableState(node.Result);
 
 			UpdateToOverDefined(result);
 		}
 
-		private void IntegerOperation(Context context)
+		private void IntegerOperation(InstructionNode node)
 		{
-			var result = GetVariableState(context.Result);
+			var result = GetVariableState(node.Result);
 
 			if (result.IsOverDefined)
 				return;
 
-			var operand1 = GetVariableState(context.Operand1);
-			var operand2 = GetVariableState(context.Operand2);
+			var operand1 = GetVariableState(node.Operand1);
+			var operand2 = GetVariableState(node.Operand2);
 
 			if (operand1.IsOverDefined || operand2.IsOverDefined)
 			{
@@ -489,7 +479,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 			else if (operand1.IsConstant && operand2.IsConstant)
 			{
-				var instruction = context.Instruction;
+				var instruction = node.Instruction;
 
 				if (instruction == IRInstruction.AddSigned || instruction == IRInstruction.AddUnsigned)
 				{
@@ -533,7 +523,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				}
 				else if (instruction == IRInstruction.IntegerCompare)
 				{
-					bool? compare = Compare(operand1, operand2, context.ConditionCode);
+					bool? compare = Compare(operand1, operand2, node.ConditionCode);
 
 					if (compare.HasValue)
 					{
@@ -552,38 +542,38 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
-		private void Load(Context context)
+		private void Load(InstructionNode node)
 		{
-			var result = GetVariableState(context.Result);
+			var result = GetVariableState(node.Result);
 			UpdateToOverDefined(result);
 		}
 
-		private void AddressOf(Context context)
+		private void AddressOf(InstructionNode node)
 		{
-			var result = GetVariableState(context.Result);
-			var operand1 = GetVariableState(context.Operand1);
+			var result = GetVariableState(node.Result);
+			var operand1 = GetVariableState(node.Operand1);
 
 			UpdateToOverDefined(result);
 			UpdateToOverDefined(operand1);
 		}
 
-		private void FinallyStart(Context context)
+		private void FinallyStart(InstructionNode node)
 		{
-			var result = GetVariableState(context.Result);
+			var result = GetVariableState(node.Result);
 			//var result2 = GetVariableState(context.Result2);
 
 			UpdateToOverDefined(result);
 			//UpdateToOverDefined(result2);
 		}
 
-		private void Default(Context context)
+		private void Default(InstructionNode node)
 		{
-			if (context.ResultCount == 0)
+			if (node.ResultCount == 0)
 				return;
 
-			Debug.Assert(context.ResultCount == 1);
+			Debug.Assert(node.ResultCount == 1);
 
-			var result = GetVariableState(context.Result);
+			var result = GetVariableState(node.Result);
 
 			if (result.IsOverDefined)
 				return;
@@ -591,35 +581,35 @@ namespace Mosa.Compiler.Framework.Analysis
 			UpdateToOverDefined(result);
 		}
 
-		private bool IntegerCompareBranch(Context context)
+		private bool IntegerCompareBranch(InstructionNode node)
 		{
-			var operand1 = GetVariableState(context.Operand1);
-			var operand2 = GetVariableState(context.Operand2);
+			var operand1 = GetVariableState(node.Operand1);
+			var operand2 = GetVariableState(node.Operand2);
 
 			if (operand1.IsOverDefined || operand2.IsOverDefined)
 			{
-				Branch(context);
+				Branch(node);
 				return true;
 			}
 			else if (operand1.IsConstant && operand2.IsConstant)
 			{
-				bool? compare = Compare(operand1, operand2, context.ConditionCode);
+				bool? compare = Compare(operand1, operand2, node.ConditionCode);
 
 				if (!compare.HasValue)
 				{
-					Branch(context);
+					Branch(node);
 					return true;
 				}
 
 				if (compare.Value)
 				{
-					Branch(context);
+					Branch(node);
 				}
 
 				return !compare.Value;
 			}
 
-			Branch(context);
+			Branch(node);
 			return true;
 		}
 
@@ -642,68 +632,49 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
-		private void Branch(Context context)
+		private void Branch(InstructionNode node)
 		{
-			//Debug.Assert(context.BranchTargets.Length == 1);
+			//Debug.Assert(node.BranchTargets.Length == 1);
 
-			foreach (var block in context.Targets)
+			foreach (var block in node.BranchTargets)
 			{
 				AddExecutionBlock(block);
 			}
 		}
 
-		private BasicBlock GetBlock(Context context, bool backwards)
-		{
-			var block = context.BasicBlock;
-
-			if (block == null)
-			{
-				Context clone = context.Clone();
-
-				if (backwards)
-					clone.GotoFirst();
-				else
-					clone.GotoLast();
-
-				block = BasicBlocks.GetByLabel(clone.Label);
-			}
-
-			return block;
-		}
-
-		private void Switch(Context context)
+		private void Switch(InstructionNode node)
 		{
 			// no optimization attempted
-			Branch(context);
+			Branch(node);
 		}
 
-		private void Phi(Context context)
+		private void Phi(InstructionNode node)
 		{
-			//if (Trace.Active) Trace.Log(context.ToString());
+			//if (Trace.Active) Trace.Log(node.ToString());
 
-			var result = GetVariableState(context.Result);
+			var result = GetVariableState(node.Result);
 
 			if (result.IsOverDefined)
 				return;
 
-			var sourceBlocks = context.PhiBlocks;
+			var sourceBlocks = node.PhiBlocks;
 
 			VariableState first = null;
 
-			var currentBlock = GetBlock(context, true);
+			var currentBlock = node.Block;
 
 			//if (Trace.Active) Trace.Log("Loop: " + currentBlock.PreviousBlocks.Count.ToString());
 
 			for (var index = 0; index < currentBlock.PreviousBlocks.Count; index++)
 			{
-				var op = context.GetOperand(index);
+				var op = node.GetOperand(index);
 
 				var predecessor = sourceBlocks[index];
 				bool executable = blockStates[predecessor.Sequence];
 
 				//if (Trace.Active) Trace.Log("# " + index.ToString() + ": " + predecessor.ToString() + " " + (executable ? "Yes" : "No"));
 
-				phiStatements.AddIfNew(predecessor, context.Index);
+				phiStatements.AddIfNew(predecessor, node);
 
 				if (!executable)
 					continue;

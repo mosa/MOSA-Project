@@ -8,7 +8,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
@@ -41,11 +40,6 @@ namespace Mosa.Compiler.Framework
 		/// The architecture of the compilation process
 		/// </summary>
 		protected BaseArchitecture Architecture { get; private set; }
-
-		/// <summary>
-		/// Holds the instruction set
-		/// </summary>
-		protected InstructionSet InstructionSet { get; private set; }
 
 		/// <summary>
 		/// List of basic blocks found during decoding
@@ -114,7 +108,6 @@ namespace Mosa.Compiler.Framework
 		void IMethodCompilerStage.Initialize(BaseMethodCompiler compiler)
 		{
 			MethodCompiler = compiler;
-			InstructionSet = compiler.InstructionSet;
 			BasicBlocks = compiler.BasicBlocks;
 			Architecture = compiler.Architecture;
 			TypeSystem = compiler.TypeSystem;
@@ -179,17 +172,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected Context CreateContext(BasicBlock block)
 		{
-			return new Context(InstructionSet, block);
-		}
-
-		/// <summary>
-		/// Creates the context.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		protected Context CreateContext(int index)
-		{
-			return new Context(InstructionSet, index);
+			return new Context(block);
 		}
 
 		/// <summary>
@@ -207,59 +190,22 @@ namespace Mosa.Compiler.Framework
 		#region Block Operations
 
 		/// <summary>
-		/// Links the blocks.
+		/// Create an empty block.
 		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
-		protected void LinkBlocks(Context source, BasicBlock destination)
+		/// <param name="label">The label.</param>
+		/// <returns></returns>
+		protected BasicBlock CreateNewBlock(int label)
 		{
-			BasicBlocks.LinkBlocks(source.BasicBlock, destination);
+			return BasicBlocks.CreateBlock(label);
 		}
 
 		/// <summary>
-		/// Links the blocks.
+		/// Create an empty block.
 		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
-		protected void LinkBlocks(Context source, Context destination)
+		/// <returns></returns>
+		protected BasicBlock CreateNewBlock()
 		{
-			BasicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
-		}
-
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="destination2">The destination2.</param>
-		protected void LinkBlocks(Context source, Context destination, Context destination2)
-		{
-			BasicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
-			BasicBlocks.LinkBlocks(source.BasicBlock, destination2.BasicBlock);
-		}
-
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="destination2">The destination2.</param>
-		protected void LinkBlocks(Context source, Context destination, BasicBlock destination2)
-		{
-			BasicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
-			BasicBlocks.LinkBlocks(source.BasicBlock, destination2);
-		}
-
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="destination2">The destination2.</param>
-		protected void LinkBlocks(Context source, BasicBlock destination, BasicBlock destination2)
-		{
-			BasicBlocks.LinkBlocks(source.BasicBlock, destination);
-			BasicBlocks.LinkBlocks(source.BasicBlock, destination2);
+			return BasicBlocks.CreateBlock();
 		}
 
 		/// <summary>
@@ -267,18 +213,9 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="label">The label.</param>
 		/// <returns></returns>
-		protected Context CreateNewBlockWithContext(int label)
+		protected Context CreateNewBlockContext(int label)
 		{
-			return InstructionSet.CreateNewBlock(BasicBlocks, label);
-		}
-
-		/// <summary>
-		/// Create an empty block.
-		/// </summary>
-		/// <returns></returns>
-		protected Context CreateNewBlockWithContext()
-		{
-			return InstructionSet.CreateNewBlock(BasicBlocks);
+			return new Context(CreateNewBlock(label));
 		}
 
 		/// <summary>
@@ -286,15 +223,58 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="blocks">The Blocks.</param>
 		/// <returns></returns>
-		protected Context[] CreateNewBlocksWithContexts(int blocks)
+		protected BasicBlock[] CreateNewBlocks(int blocks)
 		{
-			// Allocate the context array
-			Context[] result = new Context[blocks];
+			// Allocate the block array
+			var result = new BasicBlock[blocks];
 
 			for (int index = 0; index < blocks; index++)
-				result[index] = CreateNewBlockWithContext();
+			{
+				result[index] = CreateNewBlock();
+			}
 
 			return result;
+		}
+
+		/// <summary>
+		/// Create an empty block.
+		/// </summary>
+		/// <returns></returns>
+		protected Context CreateNewBlockContext()
+		{
+			return new Context(CreateNewBlock());
+		}
+
+		/// <summary>
+		/// Creates empty blocks.
+		/// </summary>
+		/// <param name="blocks">The Blocks.</param>
+		/// <returns></returns>
+		protected Context[] CreateNewBlockContexts(int blocks)
+		{
+			// Allocate the context array
+			var result = new Context[blocks];
+
+			for (int index = 0; index < blocks; index++)
+			{
+				result[index] = CreateNewBlockContext();
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Splits the block.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <returns></returns>
+		protected BasicBlock Split(InstructionNode node)
+		{
+			var newblock = CreateNewBlock();
+
+			node.Split(newblock);
+
+			return newblock;
 		}
 
 		/// <summary>
@@ -304,26 +284,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected Context Split(Context ctx)
 		{
-			Context current = ctx.Clone();
-
-			Context next = ctx.Clone();
-			next.AppendInstruction(IRInstruction.BlockStart);
-			BasicBlock nextBlock = BasicBlocks.CreateBlockWithAutoLabel(next.Index, current.BasicBlock.EndIndex);
-			Context nextContext = new Context(InstructionSet, nextBlock);
-
-			foreach (var block in current.BasicBlock.NextBlocks)
-			{
-				nextBlock.NextBlocks.Add(block);
-				block.PreviousBlocks.Remove(current.BasicBlock);
-				block.PreviousBlocks.Add(nextBlock);
-			}
-
-			current.BasicBlock.NextBlocks.Clear();
-
-			current.AppendInstruction(IRInstruction.BlockEnd);
-			current.BasicBlock.EndIndex = current.Index;
-
-			return nextContext;
+			return new Context(Split(ctx.Node));
 		}
 
 		/// <summary>
@@ -338,20 +299,13 @@ namespace Mosa.Compiler.Framework
 			if (block.NextBlocks.Count != 1)
 				return false;
 
-			var ctx = new Context(InstructionSet, block);
-
-			Debug.Assert(ctx.IsBlockStartInstruction);
-			ctx.GotoNext();
-
-			while (!ctx.IsBlockEndInstruction)
+			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (!ctx.IsEmpty)
+				if (!node.IsEmpty)
 				{
-					if (ctx.Instruction.FlowControl != FlowControl.UnconditionalBranch)
+					if (node.Instruction.FlowControl != FlowControl.UnconditionalBranch)
 						return false;
 				}
-
-				ctx.GotoNext();
 			}
 
 			return true;
@@ -363,18 +317,9 @@ namespace Mosa.Compiler.Framework
 		/// <param name="block">The block.</param>
 		protected void EmptyBlockOfAllInstructions(BasicBlock block)
 		{
-			var ctx = new Context(InstructionSet, block);
-			Debug.Assert(ctx.IsBlockStartInstruction);
-			ctx.GotoNext();
-
-			while (!ctx.IsBlockEndInstruction)
+			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (!ctx.IsEmpty)
-				{
-					ctx.Remove();
-				}
-
-				ctx.GotoNext();
+				node.Empty();
 			}
 		}
 
@@ -386,39 +331,27 @@ namespace Mosa.Compiler.Framework
 		/// <param name="newTarget">The new target block.</param>
 		protected void ReplaceBranchTargets(BasicBlock block, BasicBlock oldTarget, BasicBlock newTarget)
 		{
-			// Replace any jump/branch target in block (from) with js
-			var ctx = new Context(InstructionSet, block, block.EndIndex);
-			Debug.Assert(ctx.IsBlockEndInstruction);
-
-			do
+			for (var node = block.Last; !node.IsBlockStartInstruction; node = node.Previous)
 			{
-				ctx.GotoPrevious();
-			}
-			while (ctx.IsEmpty);
+				if (node.IsEmpty)
+					continue;
 
-			// Find branch or jump to (to) and replace it with js
-			while (!ctx.IsBlockStartInstruction)
-			{
-				if (ctx.Instruction.FlowControl == FlowControl.ConditionalBranch ||
-					ctx.Instruction.FlowControl == FlowControl.UnconditionalBranch ||
-					ctx.Instruction.FlowControl == FlowControl.Switch)
+				if (node.BranchTargets != null && node.BranchTargetsCount > 0)
 				{
-					var targets = ctx.Targets;
+					var targets = node.BranchTargets;
 
 					for (int index = 0; index < targets.Count; index++)
 					{
 						if (targets[index] == oldTarget)
 						{
-							targets[index] = newTarget;
+							node.UpdateBranchTarget(index, newTarget);
 						}
 					}
+
+					//continue;
 				}
 
-				do
-				{
-					ctx.GotoPrevious();
-				}
-				while (ctx.IsEmpty);
+				//return;
 			}
 		}
 
@@ -428,33 +361,93 @@ namespace Mosa.Compiler.Framework
 
 			BasicBlock target = block.NextBlocks[0];
 
-			target.PreviousBlocks.Remove(block);
-
-			foreach (var from in block.PreviousBlocks)
+			foreach (var previous in block.PreviousBlocks.ToArray())
 			{
-				from.NextBlocks.Remove(block);
-				from.NextBlocks.AddIfNew(target);
-
-				target.PreviousBlocks.AddIfNew(from);
-
-				ReplaceBranchTargets(from, block, target);
+				ReplaceBranchTargets(previous, block, target);
 			}
 
-			block.NextBlocks.Clear();
-			block.PreviousBlocks.Clear();
-
 			EmptyBlockOfAllInstructions(block);
+
+			Debug.Assert(block.NextBlocks.Count == 0);
+			Debug.Assert(block.PreviousBlocks.Count == 0);
+		}
+
+		protected static void UpdatePhiList(BasicBlock removedBlock, BasicBlock[] nextBlocks)
+		{
+			foreach (var next in nextBlocks)
+			{
+				for (var node = next.First; !node.IsBlockEndInstruction; node = node.Next)
+				{
+					if (node.IsEmpty)
+						continue;
+
+					if (node.Instruction != IRInstruction.Phi)
+						continue;
+
+					var sourceBlocks = node.PhiBlocks;
+
+					int index = sourceBlocks.IndexOf(removedBlock);
+
+					if (index < 0)
+						continue;
+
+					sourceBlocks.RemoveAt(index);
+
+					for (int i = index; index < node.OperandCount - 1; index++)
+					{
+						node.SetOperand(i, node.GetOperand(i + 1));
+					}
+
+					node.SetOperand(node.OperandCount - 1, null);
+					node.OperandCount--;
+				}
+			}
 		}
 
 		#endregion Block Operations
 
 		#region Protected Region Methods
 
-		protected MosaExceptionHandler FindImmediateExceptionHandler(Context context)
+		protected bool IsLeaveAndTargetWithinTry(InstructionNode node)
+		{
+			int leaveLabel = node.Label;
+			int targetLabel = node.BranchTargets[0].First.Label;
+
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
+			{
+				bool one = handler.IsLabelWithinTry(leaveLabel);
+				bool two = handler.IsLabelWithinTry(targetLabel);
+
+				if (one && !two)
+					return false;
+
+				if (!one && two)
+					return false;
+
+				if (one && two)
+					return true;
+
+				one = handler.IsLabelWithinHandler(leaveLabel);
+				two = handler.IsLabelWithinHandler(targetLabel);
+
+				if (one && !two)
+					return false;
+
+				if (!one && two)
+					return false;
+
+				if (one && two)
+					return true;
+			}
+
+			return true;
+		}
+
+		protected MosaExceptionHandler FindImmediateExceptionHandler(InstructionNode node)
 		{
 			MosaExceptionHandler innerClause = null;
 
-			int label = context.Label;
+			int label = node.Label;
 
 			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
 			{
@@ -467,11 +460,11 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		protected MosaExceptionHandler FindFinallyHandler(Context context)
+		protected MosaExceptionHandler FindFinallyHandler(InstructionNode node)
 		{
 			MosaExceptionHandler innerClause = null;
 
-			int label = context.Label;
+			int label = node.Label;
 
 			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
 			{
@@ -582,7 +575,7 @@ namespace Mosa.Compiler.Framework
 			Debug.WriteLine(string.Empty);
 
 			for (int index = 0; index < BasicBlocks.Count; index++)
-				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+				for (Context ctx = new Context(BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 					if (!ctx.IsEmpty)
 						Debug.WriteLine(ctx.ToString());
 		}

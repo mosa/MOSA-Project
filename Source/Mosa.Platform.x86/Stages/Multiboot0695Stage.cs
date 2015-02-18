@@ -114,10 +114,9 @@ namespace Mosa.Platform.x86.Stages
 			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
 
 			var basicBlocks = new BasicBlocks();
-			var instructionSet = new InstructionSet(25);
-
-			var ctx = instructionSet.CreateNewBlock(basicBlocks);
-			basicBlocks.AddHeaderBlock(ctx.BasicBlock);
+			var block = basicBlocks.CreateBlock();
+			basicBlocks.AddHeaderBlock(block);
+			var ctx = new Context(block);
 
 			// set sentinal on the stack to indicate the start of the stack
 			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
@@ -133,7 +132,7 @@ namespace Mosa.Platform.x86.Stages
 			// should never get here
 			ctx.AppendInstruction(X86.Ret);
 
-			Compiler.CompileMethod(multibootMethod, basicBlocks, instructionSet, 0);
+			Compiler.CompileMethod(multibootMethod, basicBlocks, 0);
 		}
 
 		#region Internals

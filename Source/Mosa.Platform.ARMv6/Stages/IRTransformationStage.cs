@@ -535,6 +535,14 @@ namespace Mosa.Platform.ARMv6.Stages
 		{
 		}
 
+		/// <summary>
+		/// Visitation function for FinallyReturn.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.Flow(Context context)
+		{
+		}
+
 		#endregion IIRVisitor - Unused
 	}
 }

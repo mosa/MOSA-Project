@@ -54,25 +54,13 @@ namespace Mosa.Compiler.Framework.Stages
 		private void SplitEdge(BasicBlock from, BasicBlock to)
 		{
 			// Create new block z
-			var ctx = CreateNewBlockWithContext();
+			var ctx = CreateNewBlockContext();
+
 			InsertJumpInstruction(ctx, to);
+
 			ctx.Label = -1;
 
-			var js = ctx.BasicBlock;
-
-			// Unlink blocks
-			from.NextBlocks.Remove(to);
-			to.PreviousBlocks.Remove(from);
-
-			// Link (from) to js
-			from.NextBlocks.Add(js);
-			js.PreviousBlocks.Add(from);
-
-			// Link z to (to)
-			to.PreviousBlocks.Add(js);
-			js.NextBlocks.Add(to);
-
-			ReplaceBranchTargets(from, to, js);
+			ReplaceBranchTargets(from, to, ctx.Block);
 		}
 	}
 }

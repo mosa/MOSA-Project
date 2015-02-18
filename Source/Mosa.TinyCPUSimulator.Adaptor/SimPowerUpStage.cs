@@ -36,18 +36,17 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			var typeInitializer = Compiler.PostCompilePipeline.FindFirst<TypeInitializerSchedulerStage>().TypeInitializerMethod;
 
 			var basicBlocks = new BasicBlocks();
-			var instructionSet = new InstructionSet(25);
-
-			var context = instructionSet.CreateNewBlock(basicBlocks);
-			basicBlocks.AddHeaderBlock(context.BasicBlock);
+			var block = basicBlocks.CreateBlock();
+			basicBlocks.AddHeaderBlock(block);
+			var context = new Context(block);
 
 			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializer);
 
 			context.AppendInstruction(IRInstruction.Call, null, entryPoint);
-			context.MosaMethod = typeInitializer;
+			context.InvokeMethod = typeInitializer;
 
 			var method = Compiler.CreateLinkerMethod(StartUpName);
-			Compiler.CompileMethod(method, basicBlocks, instructionSet, 0);
+			Compiler.CompileMethod(method, basicBlocks, 0);
 
 			Linker.EntryPoint = Linker.GetSymbol(method.FullName, SectionKind.Text);
 		}

@@ -33,9 +33,9 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		public abstract void Emit(Context context, BaseCodeEmitter emitter);
+		public abstract void Emit(InstructionNode node, BaseCodeEmitter emitter);
 
 		#endregion Methods
 	}

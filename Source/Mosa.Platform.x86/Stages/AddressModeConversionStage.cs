@@ -20,31 +20,35 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void Run()
 		{
-			foreach (BasicBlock block in BasicBlocks)
-				for (Context ctx = CreateContext(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
-					if (!ctx.IsEmpty)
-						if (ctx.OperandCount == 2 && ctx.ResultCount == 1)
-							ThreeTwoAddressConversion(ctx);
+			foreach (var block in BasicBlocks)
+				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
+					if (!node.IsEmpty)
+						if (node.OperandCount == 2 && node.ResultCount == 1)
+							ThreeTwoAddressConversion(node);
 		}
 
 		/// <summary>
 		/// Converts the given instruction from three address format to a two address format.
 		/// </summary>
-		/// <param name="context">The conversion context.</param>
-		private void ThreeTwoAddressConversion(Context context)
+		/// <param name="node">The conversion context.</param>
+		private void ThreeTwoAddressConversion(InstructionNode node)
 		{
-			if (!(context.Instruction is X86Instruction))
+			if (!(node.Instruction is X86Instruction))
 				return;
 
-			if (!(context.OperandCount >= 1 && context.ResultCount >= 1 && context.Result != context.Operand1))
+			if (!(node.OperandCount >= 1 && node.ResultCount >= 1 && node.Result != node.Operand1))
 				return;
 
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
+			Operand result = node.Result;
+			Operand operand1 = node.Operand1;
 
-			context.Operand1 = result;
+			node.Operand1 = result;
 
-			context.InsertBefore().SetInstruction(GetMove(result, operand1), result, operand1);
+			var move = GetMove(result, operand1);
+
+			var newNode = new InstructionNode(move, result, operand1);
+
+			node.Previous.Insert(newNode);
 
 			return;
 		}

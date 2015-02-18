@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var block = BasicBlocks[i];
 
-				for (var ctx = new Context(InstructionSet, block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+				for (var ctx = new Context(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 				{
 					if (ctx.IsEmpty)
 						continue;
@@ -52,29 +52,29 @@ namespace Mosa.Compiler.Framework.Stages
 						ctx.SetInstruction(IRInstruction.Move, exceptionRegister, ctx.Operand1);
 						//ctx.AppendInstruction(IRInstruction.KillAllExcept, null, exceptionRegister);
 						ctx.AppendInstruction(IRInstruction.Call, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
-						ctx.MosaMethod = method;
+						ctx.InvokeMethod = method;
 					}
 					else if (ctx.Instruction == IRInstruction.CallFinally)
 					{
-						var target = ctx.Targets[0];
-						var finallyReturn = ctx.Targets[1];
+						var target = ctx.BranchTargets[0];
+						var finallyReturn = ctx.BranchTargets[1];
 
 						ctx.SetInstruction(IRInstruction.KillAll);
 						ctx.AppendInstruction(IRInstruction.Move, exceptionRegister, nullOperand);
 						ctx.AppendInstruction(IRInstruction.Move, finallyReturnBlockRegister, Operand.CreateConstant(TypeSystem, finallyReturn.Label));
 						ctx.AppendInstruction(IRInstruction.Jmp);
-						ctx.AddBranch(target);
+						ctx.AddBranchTarget(target);
 					}
 					else if (ctx.Instruction == IRInstruction.FinallyStart)
 					{
 						// Remove from header blocks
-						BasicBlocks.RemoveHeaderBlock(ctx.BasicBlock);
+						BasicBlocks.RemoveHeaderBlock(ctx.Block);
 
 						var exceptionVirtualRegister = ctx.Result;
 						var finallyReturnBlockVirtualRegister = ctx.Result2;
 
-						exceptionVirtualRegisters.Add(ctx.BasicBlock, exceptionVirtualRegister);
-						finallyReturnVirtualRegisters.Add(ctx.BasicBlock, finallyReturnBlockRegister);
+						exceptionVirtualRegisters.Add(ctx.Block, exceptionVirtualRegister);
+						finallyReturnVirtualRegisters.Add(ctx.Block, finallyReturnBlockRegister);
 
 						ctx.SetInstruction(IRInstruction.KillAll);
 						ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
@@ -85,32 +85,29 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else if (ctx.Instruction == IRInstruction.FinallyEnd)
 					{
-						var header = FindImmediateExceptionHandler(ctx);
+						var header = FindImmediateExceptionHandler(ctx.Node);
 						var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
 
 						var exceptionVirtualRegister = exceptionVirtualRegisters[headerBlock];
 						var finallyReturnBlockVirtualRegister = finallyReturnVirtualRegisters[headerBlock];
 
-						var newBlocks = CreateNewBlocksWithContexts(1);
+						var newBlocks = CreateNewBlockContexts(1);
 						var nextBlock = Split(ctx);
 
-						ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.NotEqual, null, exceptionVirtualRegister, nullOperand);
-						ctx.AddBranch(newBlocks[0].BasicBlock);
-						ctx.AppendInstruction(IRInstruction.Jmp, nextBlock.BasicBlock);
-						LinkBlocks(ctx, newBlocks[0]);
-						LinkBlocks(ctx, nextBlock);
+						ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.NotEqual, null, exceptionVirtualRegister, nullOperand, newBlocks[0].Block);
+						ctx.AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 
 						var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
 						newBlocks[0].AppendInstruction(IRInstruction.Move, exceptionRegister, exceptionVirtualRegister);
 						newBlocks[0].AppendInstruction(IRInstruction.Call, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
-						newBlocks[0].MosaMethod = method;
+						newBlocks[0].InvokeMethod = method;
 					}
 					else if (ctx.Instruction == IRInstruction.FinallyReturn)
 					{
-						var targets = ctx.Targets;
+						var targets = ctx.BranchTargets;
 
-						var header = FindImmediateExceptionHandler(ctx);
+						var header = FindImmediateExceptionHandler(ctx.Node);
 						var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
 
 						var finallyReturnBlockVirtualRegister = finallyReturnVirtualRegisters[headerBlock];
@@ -120,28 +117,21 @@ namespace Mosa.Compiler.Framework.Stages
 						if (targets.Count == 1)
 						{
 							ctx.SetInstruction(IRInstruction.Jmp, targets[0]);
-							LinkBlocks(ctx, targets[0]);
 						}
 						else
 						{
-							var newBlocks = CreateNewBlocksWithContexts(targets.Count - 1);
+							var newBlocks = CreateNewBlockContexts(targets.Count - 1);
 
-							ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[0].Label));
-							ctx.AddBranch(targets[0]);
-							ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].BasicBlock);
-							LinkBlocks(ctx, targets[0], newBlocks[0].BasicBlock);
+							ctx.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[0].Label), targets[0]);
+							ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 							for (int b = 1; b < targets.Count - 2; b++)
 							{
-								newBlocks[b - 1].AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[b].Label));
-								newBlocks[b - 1].AddBranch(targets[b]);
-								newBlocks[b - 1].AppendInstruction(IRInstruction.Jmp, newBlocks[b + 1].BasicBlock);
-								newBlocks[b - 1].AddBranch(newBlocks[b + 1].BasicBlock);
-								LinkBlocks(newBlocks[b - 1], targets[b], newBlocks[b + 1].BasicBlock);
+								newBlocks[b - 1].AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockVirtualRegister, Operand.CreateConstant(TypeSystem, targets[b].Label), targets[b]);
+								newBlocks[b - 1].AppendInstruction(IRInstruction.Jmp, newBlocks[b + 1].Block);
 							}
 
 							newBlocks[targets.Count - 2].AppendInstruction(IRInstruction.Jmp, targets[targets.Count - 1]);
-							LinkBlocks(newBlocks[targets.Count - 2], targets[targets.Count - 1]);
 						}
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionStart)
@@ -154,9 +144,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else if (ctx.Instruction == IRInstruction.ExceptionEnd)
 					{
-						var target = ctx.Targets[0];
-						ctx.SetInstruction(IRInstruction.Jmp);
-						ctx.AddBranch(target);
+						ctx.SetInstruction(IRInstruction.Jmp, ctx.BranchTargets[0]);
 					}
 				}
 			}
