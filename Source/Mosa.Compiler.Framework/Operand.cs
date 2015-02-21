@@ -281,7 +281,7 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!IsConstant)
 					return false;
-				else if (IsInteger)
+				else if (IsInteger || IsBoolean || IsChar || IsPointer)
 					return ConstantUnsignedInteger == 0;
 				else if (IsR8)
 					return ConstantDoubleFloatingPoint == 0;
@@ -306,7 +306,7 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!IsConstant)
 					return false;
-				else if (IsInteger)
+				else if (IsInteger || IsBoolean || IsChar || IsPointer)
 					return ConstantUnsignedInteger == 1;
 				else if (IsR8)
 					return ConstantDoubleFloatingPoint == 1;
@@ -986,7 +986,7 @@ namespace Mosa.Compiler.Framework
 
 				if (IsNull)
 					sb.Append("null");
-				else if (IsUnsigned || IsBoolean || IsChar)
+				else if (IsUnsigned || IsBoolean || IsChar || IsPointer)
 					sb.AppendFormat("{0}", ConstantUnsignedInteger);
 				else if (IsSigned)
 					sb.AppendFormat("{0}", ConstantSignedInteger);
