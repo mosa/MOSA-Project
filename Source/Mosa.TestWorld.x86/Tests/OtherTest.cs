@@ -29,6 +29,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.AddLast(ForeachBreak);
 			testMethods.AddLast(ConditionalBug);
 			testMethods.AddLast(PointerBug);
+			testMethods.AddLast(AddressOfThisBug);
 		}
 
 		private static uint StaticValue = 0x200000;
@@ -179,6 +180,11 @@ namespace Mosa.TestWorld.x86.Tests
 			return PointerBugClass.Test();
 		}
 
+		public static bool AddressOfThisBug()
+		{
+			return PointerBugClass.Test2();
+		}
+
 		unsafe public static class PointerBugClass
 		{
 			private static uint pageDirectoryAddress = 0x1000;
@@ -188,6 +194,11 @@ namespace Mosa.TestWorld.x86.Tests
 			{
 				pageDirectoryEntries = (PageDirectoryEntry*)pageDirectoryAddress;
 				return GetItem(1);
+			}
+
+			public static bool Test2()
+			{
+				return (uint)pageDirectoryEntries == pageDirectoryEntries->AddressOfThis;
 			}
 
 			internal static bool GetItem(uint index)
@@ -206,6 +217,15 @@ namespace Mosa.TestWorld.x86.Tests
 			{
 				[FieldOffset(0)]
 				private uint data;
+
+				public uint AddressOfThis
+				{
+					get
+					{
+						fixed (PageDirectoryEntry* ptr = &this)
+							return (uint)ptr;
+					}
+				}
 			}
 		}
 	}
