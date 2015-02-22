@@ -84,6 +84,22 @@ namespace Mosa.Compiler.Framework
 			get { return PreviousBlocks.Count > 0; }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this instance is prologue.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is prologue; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsPrologue { get { return Label == PrologueLabel; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is epilogue.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is epilogue; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsEpilogue { get { return Label == EpilogueLabel; } }
+
 		#endregion Properties
 
 		#region Construction

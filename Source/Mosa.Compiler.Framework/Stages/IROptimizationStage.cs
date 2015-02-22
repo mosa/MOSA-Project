@@ -1227,7 +1227,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Result.Uses.Count != 1)
 				return;
 
-			Context ctx = new Context(context.Result.Uses[0]);
+			var ctx = new Context(context.Result.Uses[0]);
 
 			if (ctx.Instruction != IRInstruction.LogicalOr)
 				return;
@@ -1274,7 +1274,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Result.Uses.Count != 1)
 				return;
 
-			Context ctx = new Context(context.Result.Uses[0]);
+			var ctx = new Context(context.Result.Uses[0]);
 
 			if (ctx.Instruction != IRInstruction.LogicalAnd)
 				return;
@@ -1599,7 +1599,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Operand1.Uses.Count != 1)
 				return;
 
-			Context ctx = new Context(node.Operand1.Definitions[0]);
+			var ctx = new Context(node.Operand1.Definitions[0]);
 
 			if (!(ctx.Instruction == IRInstruction.AddSigned || ctx.Instruction == IRInstruction.SubSigned ||
 				ctx.Instruction == IRInstruction.AddUnsigned || ctx.Instruction == IRInstruction.SubUnsigned))

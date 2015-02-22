@@ -562,11 +562,10 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the symbol.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
 		/// <param name="type">The type.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public static Operand CreateManagedSymbolPointer(TypeSystem typeSystem, MosaType type, string name)
+		private static Operand CreateManagedSymbolPointer(MosaType type, string name)
 		{
 			// NOTE: Not being used
 			var operand = new Operand(type.ToManagedPointer());
@@ -578,11 +577,10 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the symbol.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
 		/// <param name="type">The type.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public static Operand CreateManagedSymbol(TypeSystem typeSystem, MosaType type, string name)
+		public static Operand CreateManagedSymbol(MosaType type, string name)
 		{
 			var operand = new Operand(type);
 			operand.IsSymbol = true;
@@ -616,7 +614,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateSymbolFromMethod(TypeSystem typeSystem, MosaMethod method)
 		{
-			Operand operand = CreateUnmanagedSymbolPointer(typeSystem, method.FullName);
+			var operand = CreateUnmanagedSymbolPointer(typeSystem, method.FullName);
 			operand.Method = method;
 			return operand;
 		}

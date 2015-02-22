@@ -20,8 +20,8 @@ namespace Mosa.Compiler.Framework
 		#region Data Members
 
 		private readonly Queue<MosaMethod> methodQueue = new Queue<MosaMethod>();
+
 		private readonly HashSet<MosaMethod> methodScheduled = new HashSet<MosaMethod>(new MosaMethodFullNameComparer());
-		//private readonly HashSet<MosaMethod> methodCompiled = new HashSet<MosaMethod>();
 
 		private readonly TypeSystem typeSystem;
 
@@ -87,12 +87,10 @@ namespace Mosa.Compiler.Framework
 
 		public void TrackTypeAllocated(MosaType type)
 		{
-			// TODO
 		}
 
 		public void TrackMethodInvoked(MosaMethod method)
 		{
-			// TODO
 		}
 
 		public void TrackFieldReferenced(MosaField field)

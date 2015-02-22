@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (target.Definitions.Count == 0)
 				return;
 
-			var defNode = new Context(target.Definitions[0]);
+			var defNode = target.Definitions[0];
 
 			if (trace.Active) trace.Log("REMOVED:\t" + defNode.ToString());
 			defNode.SetInstruction(IRInstruction.Nop);

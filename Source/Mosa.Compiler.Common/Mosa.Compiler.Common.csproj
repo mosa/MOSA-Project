@@ -34,6 +34,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="EndianAwareBinaryWriterExtensions.cs" />
     <Compile Include="IncludeFile.cs" />
     <Compile Include="KeyedList.cs" />
     <Compile Include="Alignment.cs" />
@@ -53,6 +54,7 @@
     <Compile Include="EndianAwareBinaryReader.cs" />
     <Compile Include="Endian.cs" />
     <Compile Include="StreamExtension.cs" />
+    <Compile Include="Trilean.cs" />
     <Compile Include="Tuple.cs" />
   </ItemGroup>
   <ItemGroup />

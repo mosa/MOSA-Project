@@ -51,6 +51,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 
 				new IRCleanup(),
+				new InlineMethodEvaluationStage(),
 				new PlatformStubStage(),
 				new	PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),

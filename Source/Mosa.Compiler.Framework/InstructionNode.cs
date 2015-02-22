@@ -591,7 +591,7 @@ namespace Mosa.Compiler.Framework
 
 			this.branchTargets = null;
 
-			Block.DebugCheck();
+			//Block.DebugCheck();
 		}
 
 		public void Insert(InstructionNode node)
@@ -625,7 +625,7 @@ namespace Mosa.Compiler.Framework
 			Next = firstnode;
 			firstnode.Previous = this;
 
-			Block.DebugCheck();
+			//Block.DebugCheck();
 		}
 
 		/// <summary>
@@ -651,7 +651,7 @@ namespace Mosa.Compiler.Framework
 			ClearOperands();
 			Instruction = null;
 
-			Block.DebugCheck();
+			//Block.DebugCheck();
 		}
 
 		/// <summary>
@@ -678,8 +678,8 @@ namespace Mosa.Compiler.Framework
 				node.Block = newblock;
 			}
 
-			newblock.DebugCheck();
-			Block.DebugCheck();
+			//newblock.DebugCheck();
+			//Block.DebugCheck();
 		}
 
 		private void ClearOperands()
@@ -1025,7 +1025,7 @@ namespace Mosa.Compiler.Framework
 			Size = InstructionSize.None;
 			Block = block;
 
-			Block.DebugCheck();
+			//Block.DebugCheck();
 		}
 
 		/// <summary>

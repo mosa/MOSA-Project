@@ -102,6 +102,14 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public MosaType PlatformInternalRuntimeType { get; private set; }
 
+		/// <summary>
+		/// Gets the compiler data.
+		/// </summary>
+		/// <value>
+		/// The compiler data.
+		/// </value>
+		public CompilerData CompilerData { get; private set; }
+
 		#endregion Properties
 
 		#region Methods
@@ -125,6 +133,7 @@ namespace Mosa.Compiler.Framework
 			PostCompilePipeline = new CompilerPipeline();
 			Counters = new Counters();
 			PlugSystem = new PlugSystem();
+			CompilerData = new CompilerData(this);
 
 			// Create new dictionary
 			IntrinsicTypes = new Dictionary<string, Type>();

@@ -101,9 +101,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand InsertLoadBeforeInstruction(Context context, string symbolName, MosaType type)
 		{
-			Context before = context.InsertBefore();
+			var before = context.InsertBefore();
 			Operand result = MethodCompiler.CreateVirtualRegister(type);
-			Operand op = Operand.CreateManagedSymbol(TypeSystem, type, symbolName);
+			Operand op = Operand.CreateManagedSymbol(type, symbolName);
 
 			before.SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), result, op);
 
@@ -112,9 +112,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private IEnumerable<Context> ScanForOperatorNew()
 		{
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (var block in BasicBlocks)
 			{
-				for (Context context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (!context.IsEmpty && (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction))
 					{

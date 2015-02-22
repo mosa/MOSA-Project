@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// </summary>
 	public sealed class SparseConditionalConstantPropagation
 	{
-		protected class VariableState
+		private class VariableState
 		{
 			private enum VariableStatus { NeverDefined, OverDefined, Constant };
 
@@ -80,20 +80,20 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
-		protected bool[] blockStates;
+		private bool[] blockStates;
 
-		protected Dictionary<Operand, VariableState> variableStates = new Dictionary<Operand, VariableState>();
+		private Dictionary<Operand, VariableState> variableStates = new Dictionary<Operand, VariableState>();
 
-		protected Stack<InstructionNode> instructionWorkList = new Stack<InstructionNode>();
-		protected Stack<BasicBlock> blockWorklist = new Stack<BasicBlock>();
+		private Stack<InstructionNode> instructionWorkList = new Stack<InstructionNode>();
+		private Stack<BasicBlock> blockWorklist = new Stack<BasicBlock>();
 
-		protected HashSet<InstructionNode> executedStatements = new HashSet<InstructionNode>();
+		private HashSet<InstructionNode> executedStatements = new HashSet<InstructionNode>();
 
-		protected readonly BasicBlocks BasicBlocks;
-		protected readonly ITraceFactory TraceFactory;
-		protected readonly TraceLog MainTrace;
+		private readonly BasicBlocks BasicBlocks;
+		private readonly ITraceFactory TraceFactory;
+		private readonly TraceLog MainTrace;
 
-		protected readonly KeyedList<BasicBlock, InstructionNode> phiStatements = new KeyedList<BasicBlock, InstructionNode>();
+		private readonly KeyedList<BasicBlock, InstructionNode> phiStatements = new KeyedList<BasicBlock, InstructionNode>();
 
 		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, ITraceFactory traceFactory)
 		{
@@ -203,7 +203,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
-		protected void AddExecutionBlock(BasicBlock block)
+		private void AddExecutionBlock(BasicBlock block)
 		{
 			if (blockStates[block.Sequence])
 				return;
@@ -212,12 +212,12 @@ namespace Mosa.Compiler.Framework.Analysis
 			blockWorklist.Push(block);
 		}
 
-		protected void AddInstruction(InstructionNode node)
+		private void AddInstruction(InstructionNode node)
 		{
 			instructionWorkList.Push(node);
 		}
 
-		protected void AddInstruction(VariableState variable)
+		private void AddInstruction(VariableState variable)
 		{
 			foreach (var use in variable.Operand.Uses)
 			{
@@ -228,7 +228,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
-		protected void ProcessBlocks()
+		private void ProcessBlocks()
 		{
 			while (blockWorklist.Count > 0)
 			{
@@ -237,7 +237,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
-		protected void ProcessBlock(BasicBlock block)
+		private void ProcessBlock(BasicBlock block)
 		{
 			if (MainTrace.Active) MainTrace.Log("Process Block: " + block.ToString());
 
@@ -261,7 +261,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
-		protected void ProcessInstructionsContinuiously(InstructionNode node)
+		private void ProcessInstructionsContinuiously(InstructionNode node)
 		{
 			// instead of adding items to the worklist, the whole block will be processed
 			for (; !node.IsBlockEndInstruction; node = node.Next)
@@ -278,7 +278,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
-		protected void ProcessInstructions()
+		private void ProcessInstructions()
 		{
 			while (instructionWorkList.Count > 0)
 			{
@@ -296,7 +296,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
-		protected bool ProcessInstruction(InstructionNode node)
+		private bool ProcessInstruction(InstructionNode node)
 		{
 			//if (MainTrace.Active) MainTrace.Log(context.ToString());
 

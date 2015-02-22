@@ -510,7 +510,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var block = ExtendedBlocks[b];
 
-				block.BasicBlock.DebugCheck();
+				//block.BasicBlock.DebugCheck();
 
 				if (intervalTrace.Active)
 					intervalTrace.Log("Block # " + block.BasicBlock.Sequence.ToString());
@@ -538,7 +538,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					}
 				}
 
-				block.BasicBlock.DebugCheck();
+				//block.BasicBlock.DebugCheck();
 
 				for (var node = block.BasicBlock.Last; !node.IsBlockStartInstruction; node = node.Previous)
 				{

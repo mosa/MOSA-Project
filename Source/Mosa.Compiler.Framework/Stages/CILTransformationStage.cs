@@ -1950,9 +1950,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			int index = 0;
 			context.SetOperand(index++, symbolOperand);
-			foreach (Operand op in operands)
+			foreach (var operand in operands)
 			{
-				context.SetOperand(index++, op);
+				context.SetOperand(index++, operand);
 			}
 		}
 

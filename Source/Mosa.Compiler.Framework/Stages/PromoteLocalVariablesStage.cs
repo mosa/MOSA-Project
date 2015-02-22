@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var index in local.Uses)
 			{
-				Context ctx = new Context(index);
+				var ctx = new Context(index);
 
 				if (ctx.Instruction == IRInstruction.AddressOf)
 					return true;
