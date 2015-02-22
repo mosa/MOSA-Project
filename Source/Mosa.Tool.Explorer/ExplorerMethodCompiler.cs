@@ -44,7 +44,6 @@ namespace Mosa.Tool.Explorer
 				new ExceptionStage(),
 
 				new InlineStage(),
-				new StopStage(),
 
 				(compilerOptions.EnablePromoteTemporaryVariablesOptimization) ? new PromoteTempVariablesStage() : null,
 
@@ -58,6 +57,8 @@ namespace Mosa.Tool.Explorer
 
 				new IRCleanup(),
 				new InlineEvaluationStage(),
+				new StopStage(),
+
 				new PlatformStubStage(),
 				new	PlatformEdgeSplitStage(),
 

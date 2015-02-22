@@ -27,70 +27,80 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var trace = CreateTraceLog("Inline");
 
-			compilerMethod.IsCompiled = true;
-			compilerMethod.HasProtectedRegions = HasProtectedRegions;
-			compilerMethod.IsLinkerGenerated = method.IsLinkerGenerated;
-			compilerMethod.IsCILDecoded = (!method.IsLinkerGenerated && method.Code.Count > 0);
-			compilerMethod.IsPlugged = !HasCode;
-			compilerMethod.HasLoops = false;
-
-			// TODO
-			compilerMethod.HasDoNotInlineAttribute = false;
-
-			int totalIRCount = 0;
-			int totalIROtherCount = 0;
-
-			foreach (var block in BasicBlocks)
+			lock (compilerMethod)
 			{
-				int blockIRCount = 0;
+				compilerMethod.IsCompiled = true;
+				compilerMethod.HasProtectedRegions = HasProtectedRegions;
+				compilerMethod.IsLinkerGenerated = method.IsLinkerGenerated;
+				compilerMethod.IsCILDecoded = (!method.IsLinkerGenerated && method.Code.Count > 0);
+				compilerMethod.IsPlugged = !HasCode;
+				compilerMethod.HasLoops = false;
+				compilerMethod.ClearCallList();
+				compilerMethod.BasicBlocks = null;
 
-				for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+				// TODO
+				compilerMethod.HasDoNotInlineAttribute = false;
+
+				int totalIRCount = 0;
+				int totalIROtherCount = 0;
+
+				foreach (var block in BasicBlocks)
 				{
-					if (node.IsEmpty)
-						continue;
+					int blockIRCount = 0;
 
-					if (node.Instruction is BaseIRInstruction)
+					for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 					{
-						blockIRCount++;
+						if (node.IsEmpty)
+							continue;
+
+						if (node.Instruction is BaseIRInstruction)
+						{
+							blockIRCount++;
+						}
+						else
+						{
+							totalIROtherCount++;
+						}
+
+						if (node.Instruction == IRInstruction.Call)
+						{
+							Debug.Assert(node.InvokeMethod != null);
+
+							var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
+
+							compilerMethod.IsMethodInvoked = true;
+							compilerMethod.AddCall(node.InvokeMethod);
+
+							invoked.AddCalledBy(MethodCompiler.Method);
+						}
 					}
-					else
+
+					if (!block.IsPrologue && !block.IsEpilogue)
 					{
-						totalIROtherCount++;
+						totalIRCount = totalIRCount + blockIRCount;
 					}
 
-					if (node.InvokeMethod != null)
+					if (block.PreviousBlocks.Count > 1)
 					{
-						Debug.Assert(node.Instruction == IRInstruction.Call || node.Instruction == IRInstruction.IntrinsicMethodCall);
-
-						var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
-
-						compilerMethod.IsMethodInvoked = true;
-						compilerMethod.AddCall(node.InvokeMethod);
-
-						invoked.AddCalledBy(MethodCompiler.Method);
+						compilerMethod.HasLoops = true;
 					}
+
+					compilerMethod.IRInstructionCount = totalIRCount;
+					compilerMethod.IROtherInstructionCount = totalIROtherCount;
+					compilerMethod.IsVirtual = method.IsVirtual;
+
+					compilerMethod.CanInline = CanInline(compilerMethod);
+
+					if (compilerMethod.CanInline)
+					{
+						compilerMethod.BasicBlocks = CopyInstructions();
+					}
+
+					//foreach(var called in compilerMethod.CalledBy)
+					//{
+					//	MethodCompiler.Compiler.CompilationScheduler.Schedule(called);
+					//}
 				}
-
-				if (!block.IsPrologue && !block.IsEpilogue)
-				{
-					totalIRCount = totalIRCount + blockIRCount;
-				}
-
-				if (block.PreviousBlocks.Count > 1)
-				{
-					compilerMethod.HasLoops = true;
-				}
-			}
-
-			compilerMethod.IRInstructionCount = totalIRCount;
-			compilerMethod.IROtherInstructionCount = totalIROtherCount;
-			compilerMethod.IsVirtual = method.IsVirtual;
-
-			compilerMethod.CanInline = CanInline(compilerMethod);
-
-			if (compilerMethod.CanInline)
-			{
-				compilerMethod.BasicBlocks = CopyInstructions();
 			}
 
 			trace.Log("CanInline: " + compilerMethod.CanInline.ToString());
@@ -136,11 +146,13 @@ namespace Mosa.Compiler.Framework.Stages
 		protected BasicBlocks CopyInstructions()
 		{
 			var newBasicBlocks = new BasicBlocks();
+			var mapBlocks = new Dictionary<BasicBlock, BasicBlock>(BasicBlocks.Count);
 			var map = new Dictionary<Operand, Operand>();
 
 			foreach (var block in BasicBlocks)
 			{
-				newBasicBlocks.CreateBlock(block.Label);
+				var newBlock = newBasicBlocks.CreateBlock(block.Label);
+				mapBlocks.Add(block, newBlock);
 			}
 
 			foreach (var block in BasicBlocks)
@@ -153,13 +165,14 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 
 					var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount);
+					newNode.Size = node.Size;
 
 					if (node.BranchTargets != null)
 					{
 						// copy targets
 						foreach (var target in node.BranchTargets)
 						{
-							newNode.AddBranchTarget(target);
+							newNode.AddBranchTarget(mapBlocks[target]);
 						}
 					}
 

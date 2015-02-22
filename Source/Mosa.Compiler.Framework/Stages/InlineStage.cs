@@ -20,6 +20,8 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
+			var nodes = new List<InstructionNode>();
+
 			foreach (var block in BasicBlocks)
 			{
 				for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
@@ -30,22 +32,37 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.Instruction != IRInstruction.Call)
 						continue;
 
-					Debug.Assert(node.InvokeMethod != null);
-
-					var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
-
-					if (!invoked.CanInline)
-						continue;
-
-					Inline(node, invoked.BasicBlocks);
+					nodes.Add(node);
 				}
+			}
+
+
+			foreach (var node in nodes)
+			{
+				Debug.Assert(node.InvokeMethod != null);
+
+				var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
+
+				if (!invoked.CanInline)
+					continue;
+
+				// don't inline self
+				if (invoked.MosaMethod == MethodCompiler.Method)
+					continue;
+
+				var blocks = invoked.BasicBlocks;
+
+				if (blocks == null)
+					continue;
+
+				System.Diagnostics.Debug.WriteLine(MethodCompiler.Method.FullName);
+
+				Inline(node, blocks);
 			}
 		}
 
 		protected void Inline(InstructionNode callNode, BasicBlocks blocks)
 		{
-			System.Diagnostics.Debug.WriteLine(this.MethodCompiler.Method.FullName);
-
 			var mapBlocks = new Dictionary<BasicBlock, BasicBlock>(blocks.Count);
 			var map = new Dictionary<Operand, Operand>();
 
@@ -66,14 +83,26 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
+					if (node.Instruction == IRInstruction.Epilogue)
+					{
+						// TODO
+						continue;
+					}
+					else if (node.Instruction == IRInstruction.Prologue)
+					{
+						// TODO
+						continue;
+					}
+
 					var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount);
+					newNode.Size = node.Size;
 
 					if (node.BranchTargets != null)
 					{
 						// copy targets
 						foreach (var target in node.BranchTargets)
 						{
-							newNode.AddBranchTarget(target);
+							newNode.AddBranchTarget(mapBlocks[target]);
 						}
 					}
 

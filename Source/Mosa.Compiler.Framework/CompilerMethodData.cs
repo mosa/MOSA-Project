@@ -10,6 +10,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
@@ -19,13 +20,6 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class CompilerMethodData
 	{
-		#region Data Members
-
-		public object mylock1 = new object();
-		public object mylock2 = new object();
-
-		#endregion Data Members
-
 		#region Properties
 
 		public MosaMethod MosaMethod { get; private set; }
@@ -48,9 +42,9 @@ namespace Mosa.Compiler.Framework
 
 		public bool HasLoops { get; set; }
 
-		public HashSet<MosaMethod> Calls { get; set; }
+		public List<MosaMethod> Calls { get; set; }
 
-		public HashSet<MosaMethod> CalledBy { get; set; }
+		public List<MosaMethod> CalledBy { get; set; }
 
 		public BasicBlocks BasicBlocks { get; set; }
 
@@ -71,13 +65,29 @@ namespace Mosa.Compiler.Framework
 
 			MosaMethod = mosaMethod;
 
-			this.Calls = new HashSet<MosaMethod>();
-			this.CalledBy = new HashSet<MosaMethod>();
+			this.Calls = new List<MosaMethod>();
+			this.CalledBy = new List<MosaMethod>();
+		}
+
+		public void ClearCallList()
+		{
+			lock (this)
+			{
+				Calls.Clear();
+			}
+		}
+
+		public void ClearCalledByList()
+		{
+			lock (this)
+			{
+				CalledBy.Clear();
+			}
 		}
 
 		public void AddCall(MosaMethod method)
 		{
-			lock (mylock1)
+			lock (this)
 			{
 				Calls.AddIfNew(method);
 			}
@@ -85,7 +95,7 @@ namespace Mosa.Compiler.Framework
 
 		public void AddCalledBy(MosaMethod method)
 		{
-			lock (mylock2)
+			lock (this)
 			{
 				CalledBy.AddIfNew(method);
 			}

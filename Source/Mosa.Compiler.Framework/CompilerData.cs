@@ -24,9 +24,6 @@ namespace Mosa.Compiler.Framework
 
 		private Dictionary<MosaMethod, CompilerMethodData> compilerMethods = new Dictionary<MosaMethod, CompilerMethodData>();
 
-		private object mylock1 = new object();
-		private object mylock2 = new object();
-
 		#endregion Data Members
 
 		#region Properties
@@ -47,7 +44,7 @@ namespace Mosa.Compiler.Framework
 
 		public CompilerTypeData GetCompilerTypeData(MosaType type)
 		{
-			lock (mylock1)
+			lock (compilerTypes)
 			{
 				CompilerTypeData compilerType;
 
@@ -63,7 +60,7 @@ namespace Mosa.Compiler.Framework
 
 		public CompilerMethodData GetCompilerMethodData(MosaMethod method)
 		{
-			lock (mylock2)
+			lock (compilerMethods)
 			{
 				CompilerMethodData compilerMethod;
 
