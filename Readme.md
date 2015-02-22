@@ -11,7 +11,7 @@
 [issues-closed-image]: http://www.issuestats.com/github/mosa/mosa-project/badge/issue
 [issues-closed]: http://www.issuestats.com/github/mosa/mosa-project
 [bounty-image]: https://api.bountysource.com/badge/team?team_id=55027&style=bounties_received
-[bounty-issues]: https://api.bountysource.com/badge/team?team_id=55027&style=bounties_received
+[bounty-issues]: https://www.bountysource.com/teams/mosa/issues?utm_source=MOSA%20Project&utm_medium=shield&utm_campaign=bounties_received
 [gitter-image]: https://img.shields.io/badge/gitter-join%20chat%20-blue.svg
 [gitter2-image]: https://badges.gitter.im/Join%20Chat.svg
 [gitter-chat]: https://gitter.im/mosa/MOSA-Project
