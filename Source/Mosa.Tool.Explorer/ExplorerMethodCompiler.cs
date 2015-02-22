@@ -43,6 +43,9 @@ namespace Mosa.Tool.Explorer
 				new UnboxValueTypeStage(),
 				new ExceptionStage(),
 
+				new InlineStage(),
+				new StopStage(),
+
 				(compilerOptions.EnablePromoteTemporaryVariablesOptimization) ? new PromoteTempVariablesStage() : null,
 
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
@@ -54,7 +57,7 @@ namespace Mosa.Tool.Explorer
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 
 				new IRCleanup(),
-				new InlineMethodEvaluationStage(),
+				new InlineEvaluationStage(),
 				new PlatformStubStage(),
 				new	PlatformEdgeSplitStage(),
 

@@ -23,7 +23,6 @@ namespace Mosa.Tool.Explorer
 			// Build the assembly compiler pipeline
 			PreCompilePipeline.Add(new ICompilerStage[] {
 				new PlugStage(),
-				//new MethodCompilerSchedulerStage(),
 			});
 
 			// Build the assembly compiler pipeline

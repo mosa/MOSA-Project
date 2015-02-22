@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Framework
 
 			TypeLayout = new MosaTypeLayout(typeSystem, CompilerOptions.Architecture.NativePointerSize, CompilerOptions.Architecture.NativeAlignment);
 
-			CompilationScheduler = new CompilationScheduler(TypeSystem);
+			CompilationScheduler = new CompilationScheduler();
 		}
 
 		public void Execute()
@@ -110,7 +110,7 @@ namespace Mosa.Compiler.Framework
 
 		public void ScheduleAll()
 		{
-			CompilationScheduler.ScheduleAll();
+			CompilationScheduler.ScheduleAll(TypeSystem);
 		}
 
 		public void Schedule(MosaType type)

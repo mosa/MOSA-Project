@@ -154,7 +154,8 @@
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
     <Compile Include="Stages\ExceptionPrologueStage.cs" />
-    <Compile Include="Stages\InlineMethodEvaluationStage.cs" />
+    <Compile Include="Stages\InlineStage.cs" />
+    <Compile Include="Stages\InlineEvaluationStage.cs" />
     <Compile Include="Stages\IRCleanup.cs" />
     <Compile Include="Stages\SparseConditionalConstantPropagationStage.cs" />
     <Compile Include="Stages\MethodExceptionLookupTableStage.cs" />

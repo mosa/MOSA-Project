@@ -9,6 +9,7 @@
 
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework
 {
@@ -19,22 +20,16 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data Members
 
-		private readonly Queue<MosaMethod> methodQueue = new Queue<MosaMethod>();
-
-		private readonly HashSet<MosaMethod> methodScheduled = new HashSet<MosaMethod>(new MosaMethodFullNameComparer());
-
-		private readonly TypeSystem typeSystem;
-
-		private object mylock = new object();
+		private readonly UniqueQueue<MosaMethod> methodQueue = new UniqueQueue<MosaMethod>();
+		private readonly HashSet<MosaMethod> methods = new HashSet<MosaMethod>();
 
 		#endregion Data Members
 
-		public CompilationScheduler(TypeSystem typeSystem)
+		public CompilationScheduler()
 		{
-			this.typeSystem = typeSystem;
 		}
 
-		public void ScheduleAll()
+		public void ScheduleAll(TypeSystem typeSystem)
 		{
 			foreach (var type in typeSystem.AllTypes)
 			{
@@ -64,25 +59,23 @@ namespace Mosa.Compiler.Framework
 			if (method.IsAbstract || method.HasOpenGenericParams)
 				return;
 
-			if (methodScheduled.Contains(method))
-				return;
-
 			if (method.IsLinkerGenerated)
 				return;
 
-			lock (mylock)
+			methodQueue.Enqueue(method);
+
+			lock (methods)
 			{
-				methodScheduled.Add(method);
-				methodQueue.Enqueue(method);
+				if (!methods.Contains(method))
+				{
+					methods.Add(method);
+				}
 			}
 		}
 
 		public bool IsScheduled(MosaMethod method)
 		{
-			lock (mylock)
-			{
-				return methodScheduled.Contains(method);
-			}
+			return methodQueue.Contains(method);
 		}
 
 		public void TrackTypeAllocated(MosaType type)
@@ -100,13 +93,7 @@ namespace Mosa.Compiler.Framework
 
 		public MosaMethod GetMethodToCompile()
 		{
-			lock (mylock)
-			{
-				if (methodQueue.Count == 0)
-					return null;
-
-				return methodQueue.Dequeue();
-			}
+			return methodQueue.Dequeue();
 		}
 
 		/// <summary>
@@ -115,7 +102,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The total methods.
 		/// </value>
-		public int TotalMethods { get { return methodScheduled.Count; } }
+		public int TotalMethods { get { return methods.Count; } }
 
 		/// <summary>
 		/// Gets the queued methods.

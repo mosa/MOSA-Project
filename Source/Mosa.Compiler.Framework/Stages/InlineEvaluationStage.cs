@@ -16,8 +16,10 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public class InlineMethodEvaluationStage : BaseMethodCompilerStage
+	public class InlineEvaluationStage : BaseMethodCompilerStage
 	{
+		public static int IRMaximumForInline = 24;
+
 		protected override void Run()
 		{
 			var method = MethodCompiler.Method;
@@ -105,8 +107,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		public static int IRMaximumForInline = 25;
-
 		public static bool CanInline(CompilerMethodData method)
 		{
 			if (method.HasDoNotInlineAttribute)
@@ -118,8 +118,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (method.HasProtectedRegions)
 				return false;
 
-			if (method.HasLoops)
-				return false;
+			//if (method.HasLoops)
+			//	return false;
 
 			if (method.IsVirtual)
 				return false;

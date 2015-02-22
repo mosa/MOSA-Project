@@ -54,6 +54,8 @@
     <Compile Include="EndianAwareBinaryReader.cs" />
     <Compile Include="Endian.cs" />
     <Compile Include="StreamExtension.cs" />
+    <Compile Include="UniqueQueueThreadSafe.cs" />
+    <Compile Include="UniqueQueue.cs" />
     <Compile Include="Trilean.cs" />
     <Compile Include="Tuple.cs" />
   </ItemGroup>

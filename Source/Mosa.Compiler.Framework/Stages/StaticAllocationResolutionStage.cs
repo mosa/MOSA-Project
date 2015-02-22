@@ -27,9 +27,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void AttemptToStaticallyAllocateObjects()
 		{
-			foreach (Context allocation in ScanForOperatorNew())
+			foreach (var allocation in ScanForOperatorNew())
 			{
-				Context assignment = SeekAssignmentOfAllocatedObject(allocation);
+				var assignment = SeekAssignmentOfAllocatedObject(allocation);
 
 				if (assignment != null && CheckAssignmentForCompliance(allocation, assignment))
 				{
@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Context SeekAssignmentOfAllocatedObject(Context allocation)
 		{
-			Context next = allocation.Next;
+			var next = allocation.Next;
 
 			while (next.IsEmpty)
 			{

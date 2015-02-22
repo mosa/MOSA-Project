@@ -7,10 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework
 {
