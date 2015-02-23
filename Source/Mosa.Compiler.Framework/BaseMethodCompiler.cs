@@ -245,8 +245,8 @@ namespace Mosa.Compiler.Framework
 				}
 				//catch (Exception e)
 				//{
-				//	InternalTrace.TraceListener.SubmitDebugStageInformation(Method, stage.Name + "-Exception", e.ToString());
-				//	InternalTrace.CompilerEventListener.SubmitTraceEvent(CompilerEvent.Exception, Method.FullName + " @ " + stage.Name);
+				//	//	Trace.TraceListener.SubmitDebugStageInformation(Method, stage.Name + "-Exception", e.ToString());
+				//	Trace.TraceListener.OnNewCompilerTraceEvent(CompilerEvent.Exception, Method.FullName + " @ " + stage.Name, ThreadID);
 				//	return;
 				//}
 			}

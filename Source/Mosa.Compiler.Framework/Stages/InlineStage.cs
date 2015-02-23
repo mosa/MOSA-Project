@@ -36,6 +36,10 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
+			if (nodes.Count == 0)
+				return;
+
+			var trace = CreateTraceLog("Inlined");
 
 			foreach (var node in nodes)
 			{
@@ -47,7 +51,7 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 
 				// don't inline self
-				if (invoked.MosaMethod == MethodCompiler.Method)
+				if (invoked.Method == MethodCompiler.Method)
 					continue;
 
 				var blocks = invoked.BasicBlocks;
@@ -55,9 +59,14 @@ namespace Mosa.Compiler.Framework.Stages
 				if (blocks == null)
 					continue;
 
+				if (trace.Active)
+					trace.Log(invoked.Method.FullName);
+
 				System.Diagnostics.Debug.WriteLine(MethodCompiler.Method.FullName);
 
 				Inline(node, blocks);
+
+				MethodCompiler.Stop();
 			}
 		}
 
@@ -65,6 +74,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var mapBlocks = new Dictionary<BasicBlock, BasicBlock>(blocks.Count);
 			var map = new Dictionary<Operand, Operand>();
+
+			var nextBlock = Split(callNode);
 
 			// create basic blocks
 			foreach (var block in blocks)
@@ -83,14 +94,20 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if (node.Instruction == IRInstruction.Epilogue)
-					{
-						// TODO
+					if (node.Instruction == IRInstruction.Prologue)
 						continue;
-					}
-					else if (node.Instruction == IRInstruction.Prologue)
+
+					if (node.Instruction == IRInstruction.Epilogue)
+						continue;
+
+					if (node.Instruction == IRInstruction.Return)
 					{
-						// TODO
+						if (callNode.Result != null)
+						{
+							newBlock.Last.Previous.Insert(new InstructionNode(IRInstruction.Move, callNode.Result, node.Operand1));
+						}
+						newBlock.Last.Previous.Insert(new InstructionNode(IRInstruction.Jmp, nextBlock));
+
 						continue;
 					}
 
@@ -137,6 +154,8 @@ namespace Mosa.Compiler.Framework.Stages
 					newBlock.Last.Previous.Insert(newNode);
 				}
 			}
+
+			callNode.SetInstruction(IRInstruction.Jmp, mapBlocks[blocks.PrologueBlock]);
 		}
 
 		private Operand Map(Operand operand, Dictionary<Operand, Operand> map, InstructionNode callNode)

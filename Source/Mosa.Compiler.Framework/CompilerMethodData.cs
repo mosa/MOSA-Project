@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Properties
 
-		public MosaMethod MosaMethod { get; private set; }
+		public MosaMethod Method { get; private set; }
 
 		public bool IsMethodInvoked { get; set; }
 
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework
 			if (mosaMethod == null)
 				throw new ArgumentNullException("mosaMethod");
 
-			MosaMethod = mosaMethod;
+			Method = mosaMethod;
 
 			this.Calls = new List<MosaMethod>();
 			this.CalledBy = new List<MosaMethod>();

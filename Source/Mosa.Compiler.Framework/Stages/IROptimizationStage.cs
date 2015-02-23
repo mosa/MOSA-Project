@@ -500,6 +500,15 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ContainsAddressOf(destination))
 				return;
 
+			//if (destination != source)
+			//{
+			//	if (trace.Active) trace.Log("REMOVED:\t" + node.ToString());
+			//	AddOperandUsageToWorkList(node);
+			//	node.SetInstruction(IRInstruction.Nop);
+			//	instructionsRemovedCount++;
+			//	return;
+			//}
+
 			// for each statement T that uses operand, substituted c in statement T
 			AddOperandUsageToWorkList(node);
 
