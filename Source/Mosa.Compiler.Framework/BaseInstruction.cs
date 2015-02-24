@@ -118,14 +118,16 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public string ToString(InstructionNode node)
 		{
-			var sb = new StringBuilder(ToString());
+			var sb = new StringBuilder();
 
-			sb.AppendFormat("{0:X4}", node.Label);
+			sb.AppendFormat("L_{0:X4}", node.Label);
 
 			if (node.Marked)
-				sb.Append("*");
+				sb.Append('*');
 			else
-				sb.Append(":");
+				sb.Append(' ');
+
+			sb.Append(ToString());
 
 			var size = GetSizeString(node.Size);
 
