@@ -117,7 +117,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		public static bool CanInline(CompilerMethodData method)
+		public bool CanInline(CompilerMethodData method)
 		{
 			if (method.HasDoNotInlineAttribute)
 				return false;
@@ -138,6 +138,11 @@ namespace Mosa.Compiler.Framework.Stages
 				return false;
 
 			if (method.IRInstructionCount > IRMaximumForInline)
+				return false;
+
+			var returnType = method.Method.Signature.ReturnType;
+
+			if (TypeLayout.IsCompoundType(returnType) && !returnType.IsUI8 && !returnType.IsR8)
 				return false;
 
 			return true;

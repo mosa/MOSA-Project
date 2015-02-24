@@ -20,6 +20,9 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
+			if (HasProtectedRegions)
+				return;
+
 			var nodes = new List<InstructionNode>();
 
 			foreach (var block in BasicBlocks)
@@ -62,7 +65,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active)
 					trace.Log(invoked.Method.FullName);
 
-				System.Diagnostics.Debug.WriteLine(MethodCompiler.Method.FullName);
+				//System.Diagnostics.Debug.WriteLine(MethodCompiler.Method.FullName);
+				//System.Diagnostics.Debug.WriteLine(" * " + invoked.Method.FullName);
 
 				Inline(node, blocks);
 				//MethodCompiler.Stop();
@@ -188,11 +192,11 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsParameter)
 			{
-				mappedOperand = callNode.GetOperand(operand.Index);
+				mappedOperand = callNode.GetOperand(operand.Index + 1);
 			}
 			else if (operand.IsStackLocal)
 			{
-				mappedOperand = this.MethodCompiler.StackLayout.AddStackLocal(operand.Type);
+				mappedOperand = MethodCompiler.StackLayout.AddStackLocal(operand.Type);
 			}
 			else if (operand.IsVirtualRegister)
 			{

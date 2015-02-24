@@ -30,28 +30,28 @@ namespace Mosa.Compiler.Framework.Stages
 			for (int f = 0; f < BasicBlocks.Count - 1; f++)
 			{
 				var from = BasicBlocks[f];
-				var next = BasicBlocks[f + 1];
+				var node = from.Last.Previous;
 
-				var context = new Context(from.Last);
-				context.GotoPrevious();
-
-				while (context.IsEmpty)
+				while (node.IsEmpty)
 				{
-					context.GotoPrevious();
+					node = node.Previous;
 				}
 
-				if (context.Instruction.FlowControl != FlowControl.UnconditionalBranch)
+				if (node.Instruction.FlowControl != FlowControl.UnconditionalBranch)
 					continue;
 
-				Debug.Assert(context.Instruction.FlowControl == FlowControl.UnconditionalBranch);
-				//Debug.Assert(context.BranchTargets.Length == 1);
+				if (node.BranchTargetsCount == 0)
+					continue;
 
-				var target = context.BranchTargets[0];
+				Debug.Assert(node.Instruction.FlowControl == FlowControl.UnconditionalBranch);
+
+				var next = BasicBlocks[f + 1];
+				var target = node.BranchTargets[0];
 
 				if (next != target)
 					continue;
 
-				context.Empty();
+				node.Empty();
 			}
 		}
 	}
