@@ -65,8 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 				System.Diagnostics.Debug.WriteLine(MethodCompiler.Method.FullName);
 
 				Inline(node, blocks);
-
-				MethodCompiler.Stop();
+				//MethodCompiler.Stop();
 			}
 		}
 
@@ -104,7 +103,8 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						if (callNode.Result != null)
 						{
-							newBlock.Last.Previous.Insert(new InstructionNode(IRInstruction.Move, callNode.Result, node.Operand1));
+							var newOp = Map(node.Operand1, map, callNode);
+							newBlock.Last.Previous.Insert(new InstructionNode(IRInstruction.Move, callNode.Result, newOp));
 						}
 						newBlock.Last.Previous.Insert(new InstructionNode(IRInstruction.Jmp, nextBlock));
 
@@ -113,6 +113,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount);
 					newNode.Size = node.Size;
+					newNode.ConditionCode = node.ConditionCode;
 
 					if (node.BranchTargets != null)
 					{

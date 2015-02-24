@@ -231,6 +231,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="operand">The operand.</param>
 		private void AddOperandUsageToWorkList(Operand operand)
 		{
+			if (!operand.IsVirtualRegister)
+				return;
+
 			foreach (var index in operand.Uses)
 			{
 				AddToWorkList(index);

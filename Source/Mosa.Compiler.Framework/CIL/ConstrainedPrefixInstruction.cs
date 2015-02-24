@@ -43,18 +43,6 @@ namespace Mosa.Compiler.Framework.CIL
 			ctx.MosaType = type;
 		}
 
-		public override string ToString(InstructionNode node)
-		{
-			string s = base.ToString(node);
-
-			MosaType type = node.MosaType;
-
-			if (type != null)
-				s = s + " {" + type.ToString() + "}";
-
-			return s;
-		}
-
 		#endregion Methods
 	}
 }

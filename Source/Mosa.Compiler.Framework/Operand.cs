@@ -434,8 +434,14 @@ namespace Mosa.Compiler.Framework
 			var operand = new Operand(type);
 			operand.IsConstant = true;
 			operand.ConstantUnsignedInteger = value;
+			operand.IsNull = (type.IsReferenceType && value == 0);
 
-			if (!(operand.IsInteger || operand.IsBoolean || operand.IsChar || operand.IsPointer))
+			if (type.IsReferenceType && value != 0)
+			{
+				throw new InvalidCompilerException();
+			}
+
+			if (!(operand.IsInteger || operand.IsBoolean || operand.IsChar || operand.IsPointer || operand.IsReferenceType))
 			{
 				throw new InvalidCompilerException();
 			}

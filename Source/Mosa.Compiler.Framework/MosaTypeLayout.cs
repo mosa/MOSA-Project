@@ -272,6 +272,7 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (methodStackSizes)
 			{
+				//methodStackSizes.Remove(method);
 				methodStackSizes.Add(method, size);
 			}
 		}
@@ -280,6 +281,7 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (methodParameterStackSizes)
 			{
+				//methodParameterStackSizes.Remove(method);
 				methodParameterStackSizes.Add(method, size);
 			}
 		}

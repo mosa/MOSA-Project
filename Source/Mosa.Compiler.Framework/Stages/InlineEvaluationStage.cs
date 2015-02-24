@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class InlineEvaluationStage : BaseMethodCompilerStage
 	{
-		public static int IRMaximumForInline = 24;
+		public static int IRMaximumForInline = 25;
 
 		protected override void Run()
 		{
@@ -166,6 +166,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount);
 					newNode.Size = node.Size;
+					newNode.ConditionCode = node.ConditionCode;
 
 					if (node.BranchTargets != null)
 					{
@@ -255,10 +256,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsStackLocal)
 			{
-				if (operand.Uses.Count != 0)
-				{
-					mappedOperand = Operand.CreateStackLocal(operand.Type, operand.Register, operand.Index);
-				}
+				//if (operand.Uses.Count != 0)
+				//{
+				mappedOperand = Operand.CreateStackLocal(operand.Type, operand.Register, operand.Index);
+				//}
 			}
 			else if (operand.IsVirtualRegister)
 			{

@@ -116,110 +116,117 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		/// A <see cref="System.String" /> that represents this instance.
 		/// </returns>
-		public virtual string ToString(InstructionNode node)
+		public string ToString(InstructionNode node)
 		{
-			var s = new StringBuilder(ToString());
+			var sb = new StringBuilder(ToString());
+
+			sb.AppendFormat("{0:X4}", node.Label);
+
+			if (node.Marked)
+				sb.Append("*");
+			else
+				sb.Append(":");
 
 			var size = GetSizeString(node.Size);
 
 			if (size != string.Empty)
-				s.Append("/" + size);
+				sb.Append("/" + size);
 
 			if (node.ConditionCode != ConditionCode.Undefined)
 			{
-				s.Append(" [");
-				s.Append(GetConditionString(node.ConditionCode));
-				s.Append("]");
+				sb.Append(" [");
+				sb.Append(GetConditionString(node.ConditionCode));
+				sb.Append("]");
 			}
 
 			if (node.MosaType != null)
 			{
-				s.Append(" [[");
-				s.Append(node.MosaType.FullName);
-				s.Append("]]");
+				sb.Append(" [[");
+				sb.Append(node.MosaType.FullName);
+				sb.Append("]]");
 			}
 
 			if (node.MosaField != null)
 			{
-				s.Append(" [[");
-				s.Append(node.MosaField.FullName);
-				s.Append("]]");
+				sb.Append(" [[");
+				sb.Append(node.MosaField.FullName);
+				sb.Append("]]");
 			}
 
 			string mod = GetModifier(node);
 			if (mod != null)
 			{
-				s.Append(" [");
-				s.Append(mod);
-				s.Append("]");
+				sb.Append(" [");
+				sb.Append(mod);
+				sb.Append("]");
 			}
 
 			for (int i = 0; i < node.ResultCount; i++)
 			{
 				var op = node.GetResult(i);
-				s.Append(" ");
-				s.Append(op == null ? "[NULL]" : op.ToString());
-				s.Append(",");
+				sb.Append(" ");
+				sb.Append(op == null ? "[NULL]" : op.ToString());
+				sb.Append(",");
 			}
 
 			if (node.ResultCount > 0)
 			{
-				s.Length = s.Length - 1;
+				sb.Length = sb.Length - 1;
 			}
 
 			if (node.ResultCount > 0 && node.OperandCount > 0)
 			{
-				s.Append(" <=");
+				sb.Append(" <=");
 			}
 
 			for (int i = 0; i < node.OperandCount; i++)
 			{
 				var op = node.GetOperand(i);
-				s.Append(" ");
-				s.Append(op == null ? "[NULL]" : op.ToString());
-				s.Append(",");
+				sb.Append(" ");
+				sb.Append(op == null ? "[NULL]" : op.ToString());
+				sb.Append(",");
 			}
 
 			if (node.OperandCount > 0)
 			{
-				s.Length = s.Length - 1;
+				sb.Length = sb.Length - 1;
 			}
 
 			if (node.BranchTargets != null)
 			{
-				s.Append(' ');
+				sb.Append(' ');
 
 				for (int i = 0; (i < 2) && (i < node.BranchTargetsCount); i++)
 				{
 					if (i != 0)
 					{
-						s.Append(", ");
+						sb.Append(", ");
 					}
 
-					s.Append(node.BranchTargets[i].ToString());
+					sb.Append(node.BranchTargets[i].ToString());
 				}
 
 				if (node.BranchTargetsCount > 2)
 				{
-					s.Append(", [more]");
+					sb.Append(", [more]");
 				}
 			}
 
 			if (node.InvokeMethod != null)
 			{
-				s.Append(" {");
-				s.Append(node.InvokeMethod.FullName);
-				s.Append("}");
+				sb.Append(" {");
+				sb.Append(node.InvokeMethod.FullName);
+				sb.Append("}");
 			}
 
 			if (node.MosaField != null)
 			{
-				s.Append(" {");
-				s.Append(node.MosaField.FullName);
-				s.Append("}");
+				sb.Append(" {");
+				sb.Append(node.MosaField.FullName);
+				sb.Append("}");
 			}
 
-			return s.ToString();
+			return sb.ToString();
 		}
 
 		/// <summary>

@@ -139,7 +139,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister)
+					if (!value.IsCPURegister && !value.IsConstant)
 					{
 						value.Uses.Add(this);
 					}
@@ -174,7 +174,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister)
+					if (!value.IsCPURegister && !value.IsConstant)
 					{
 						value.Uses.Add(this);
 					}
@@ -208,7 +208,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister)
+					if (!value.IsCPURegister && !value.IsConstant)
 					{
 						value.Uses.Add(this);
 					}
@@ -284,7 +284,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister)
+					if (!value.IsCPURegister && !value.IsConstant)
 					{
 						value.Definitions.Add(this);
 					}
@@ -317,10 +317,6 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Definitions.Remove(this);
-					if (!current.IsCPURegister)
-					{
-						current.Definitions.Add(this);
-					}
 					if (current.IsMemoryAddress)
 					{
 						if (current.OffsetBase != null)
@@ -335,7 +331,10 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					value.Definitions.Add(this);
+					if (!value.IsCPURegister && !value.IsConstant)
+					{
+						value.Definitions.Add(this);
+					}
 					if (value.IsMemoryAddress)
 					{
 						if (value.OffsetBase != null)
@@ -724,7 +723,7 @@ namespace Mosa.Compiler.Framework
 
 						if (operand != null)
 						{
-							if (!operand.IsCPURegister)
+							if (!operand.IsCPURegister & !operand.IsConstant)
 							{
 								operand.Uses.Add(this);
 							}
@@ -838,30 +837,9 @@ namespace Mosa.Compiler.Framework
 		{
 			if (Instruction == null)
 				return "<none>";
-			else
-				return Instruction.ToString(this);
 
-			//StringBuilder sb = new StringBuilder();
-
-			//if (Label >= 0)
-			//{
-			//	sb.AppendFormat("{0:X6}:", Label);
-			//}
-
-			//sb.Append(Instruction.ToString(this));
-
-			//if (BranchTargets != null)
-			//{
-			//	sb.Append(" (");
-			//	foreach (var branch in BranchTargets)
-			//		sb.Append(branch.ToString() + ",");
-
-			//	sb.Length = sb.Length--;
-
-			//	sb.Append(")");
-			//}
-
-			//return sb.ToString();
+			// TODO: Copy next method into this class
+			return Instruction.ToString(this);
 		}
 
 		/// <summary>

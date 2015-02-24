@@ -32,39 +32,29 @@ namespace Mosa.Tool.Explorer
 			Pipeline.Add(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new ExceptionPrologueStage(),
-
 				new OperandAssignmentStage(),
 				new StackSetupStage(),
 				new ProtectedRegionStage(),
-
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),
 				new ExceptionStage(),
-
-				new InlineStage(),
-
+				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				(compilerOptions.EnablePromoteTemporaryVariablesOptimization) ? new PromoteTempVariablesStage() : null,
-
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
-
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableOptimizations) ? new IROptimizationStage() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
-
 				new IRCleanup(),
-				new InlineEvaluationStage(),
-				new StopStage(),
-
+				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
+				//new StopStage(),
 				new PlatformStubStage(),
 				new	PlatformEdgeSplitStage(),
-
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
-
 				new EmptyBlockRemovalStage(),
 				new BlockOrderingStage(),
 				new CodeGenerationStage(compilerOptions.EmitBinary),

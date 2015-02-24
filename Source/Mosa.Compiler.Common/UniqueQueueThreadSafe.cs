@@ -50,12 +50,5 @@ namespace Mosa.Compiler.Common
 			}
 		}
 
-		public bool Contains(T item)
-		{
-			lock (mylock)
-			{
-				return set.Contains(item);
-			}
-		}
 	}
 }

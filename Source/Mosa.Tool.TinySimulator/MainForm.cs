@@ -214,6 +214,7 @@ namespace Mosa.Tool.TinySimulator
 			Compiler.CompilerOptions.EnableOptimizations = true;
 			Compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = true;
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
+			Compiler.CompilerOptions.EnableInlinedMethods = true;
 
 			Compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
 			Compiler.CompilerFactory = delegate { return new SimCompiler(simAdapter); };

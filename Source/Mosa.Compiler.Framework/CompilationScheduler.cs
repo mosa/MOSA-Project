@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data Members
 
-		private readonly UniqueQueue<MosaMethod> methodQueue = new UniqueQueue<MosaMethod>();
+		private readonly UniqueQueueThreadSafe<MosaMethod> methodQueue = new UniqueQueueThreadSafe<MosaMethod>();
 		private readonly HashSet<MosaMethod> methods = new HashSet<MosaMethod>();
 
 		#endregion Data Members
@@ -75,7 +75,10 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsScheduled(MosaMethod method)
 		{
-			return methodQueue.Contains(method);
+			lock (methods)
+			{
+				return methods.Contains(method);
+			}
 		}
 
 		public void TrackTypeAllocated(MosaType type)

@@ -312,7 +312,7 @@ namespace Mosa.Compiler.Framework.Stages
 					before.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
 					before.OperandCount = 4;
 					before.Result = boxedValue;
-
+					before.ResultCount = 1;
 					// Now replace the value type pointer with the boxed value virtual register
 					context.Operand1 = boxedValue;
 				}
@@ -504,6 +504,7 @@ namespace Mosa.Compiler.Framework.Stages
 						before.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
 						before.OperandCount = 4;
 						before.Result = boxedValue;
+						before.ResultCount = 1;
 
 						// Now replace the value type pointer with the boxed value virtual register
 						context.Operand1 = boxedValue;
@@ -698,6 +699,7 @@ namespace Mosa.Compiler.Framework.Stages
 				before.SetOperand(2, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(classType)));
 				before.OperandCount = 3;
 				before.Result = thisReference;
+				before.ResultCount = 1;
 			}
 
 			// Result is the this pointer, now invoke the real constructor
@@ -802,6 +804,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Operand tmp = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
 			context.Result = tmp;
+			context.ResultCount = 1;
 
 			var size = GetInstructionSize(tmp);
 
@@ -860,6 +863,7 @@ namespace Mosa.Compiler.Framework.Stages
 				context.OperandCount = 3;
 			}
 			context.Result = result;
+			context.ResultCount = 1;
 		}
 
 		/// <summary>
