@@ -13,7 +13,7 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public class SlotIndex : IComparable
+	public sealed class SlotIndex : IComparable
 	{
 		private enum SlotType { Normal, HalfStepBack, HalfStepForward };
 

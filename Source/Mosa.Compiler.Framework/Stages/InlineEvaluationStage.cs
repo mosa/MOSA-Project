@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class InlineEvaluationStage : BaseMethodCompilerStage
 	{
-		public static int IRMaximumForInline = 25;
+		public static int IRMaximumForInline = 4;
 
 		protected override void Run()
 		{
@@ -27,16 +27,18 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var trace = CreateTraceLog("Inline");
 
+			var plugMethod = MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method);
+
 			lock (compilerMethod)
 			{
 				compilerMethod.IsCompiled = true;
 				compilerMethod.HasProtectedRegions = HasProtectedRegions;
 				compilerMethod.IsLinkerGenerated = method.IsLinkerGenerated;
 				compilerMethod.IsCILDecoded = (!method.IsLinkerGenerated && method.Code.Count > 0);
-				compilerMethod.IsPlugged = !HasCode;
 				compilerMethod.HasLoops = false;
 				compilerMethod.ClearCallList();
 				compilerMethod.BasicBlocks = null;
+				compilerMethod.IsPlugged = (plugMethod != null);
 
 				// TODO
 				compilerMethod.HasDoNotInlineAttribute = false;

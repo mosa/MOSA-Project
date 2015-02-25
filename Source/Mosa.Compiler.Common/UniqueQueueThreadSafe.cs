@@ -49,6 +49,5 @@ namespace Mosa.Compiler.Common
 				return item;
 			}
 		}
-
 	}
 }
