@@ -158,6 +158,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 					newBlock.Last.Previous.Insert(newNode);
 				}
+
+				newBlock.DebugCheck();
 			}
 
 			callNode.SetInstruction(IRInstruction.Jmp, mapBlocks[blocks.PrologueBlock]);

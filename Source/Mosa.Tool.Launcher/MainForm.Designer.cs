@@ -34,8 +34,6 @@
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tbOptions = new System.Windows.Forms.TabPage();
-			this.groupBox12 = new System.Windows.Forms.GroupBox();
-			this.cbCompilerUsesMultipleThreads = new System.Windows.Forms.CheckBox();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.tsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
@@ -99,9 +97,11 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+			this.cbInlinedMethods = new System.Windows.Forms.CheckBox();
+			this.groupBox12 = new System.Windows.Forms.GroupBox();
+			this.cbCompilerUsesMultipleThreads = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tbOptions.SuspendLayout();
-			this.groupBox12.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
 			this.groupBox2.SuspendLayout();
@@ -118,6 +118,7 @@
 			this.groupBox7.SuspendLayout();
 			this.tpOutput.SuspendLayout();
 			this.tabPage3.SuspendLayout();
+			this.groupBox12.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -132,7 +133,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.progressBar1.Location = new System.Drawing.Point(0, 6);
 			this.progressBar1.Name = "progressBar1";
-			this.progressBar1.Size = new System.Drawing.Size(637, 20);
+			this.progressBar1.Size = new System.Drawing.Size(634, 20);
 			this.progressBar1.TabIndex = 3;
 			// 
 			// tabControl1
@@ -152,7 +153,7 @@
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(637, 431);
+			this.tabControl1.Size = new System.Drawing.Size(634, 410);
 			this.tabControl1.TabIndex = 22;
 			// 
 			// tbOptions
@@ -169,41 +170,17 @@
 			this.tbOptions.Location = new System.Drawing.Point(4, 22);
 			this.tbOptions.Margin = new System.Windows.Forms.Padding(0);
 			this.tbOptions.Name = "tbOptions";
-			this.tbOptions.Size = new System.Drawing.Size(629, 405);
+			this.tbOptions.Size = new System.Drawing.Size(626, 384);
 			this.tbOptions.TabIndex = 0;
 			this.tbOptions.Text = "MOSA Options";
-			// 
-			// groupBox12
-			// 
-			this.groupBox12.Controls.Add(this.cbCompilerUsesMultipleThreads);
-			this.groupBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox12.Location = new System.Drawing.Point(5, 338);
-			this.groupBox12.Name = "groupBox12";
-			this.groupBox12.Size = new System.Drawing.Size(614, 38);
-			this.groupBox12.TabIndex = 30;
-			this.groupBox12.TabStop = false;
-			this.groupBox12.Text = "Misc Options:";
-			// 
-			// cbCompilerUsesMultipleThreads
-			// 
-			this.cbCompilerUsesMultipleThreads.AutoSize = true;
-			this.cbCompilerUsesMultipleThreads.Checked = true;
-			this.cbCompilerUsesMultipleThreads.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbCompilerUsesMultipleThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbCompilerUsesMultipleThreads.Location = new System.Drawing.Point(6, 19);
-			this.cbCompilerUsesMultipleThreads.Name = "cbCompilerUsesMultipleThreads";
-			this.cbCompilerUsesMultipleThreads.Size = new System.Drawing.Size(126, 17);
-			this.cbCompilerUsesMultipleThreads.TabIndex = 13;
-			this.cbCompilerUsesMultipleThreads.Text = "Use Multiple Threads";
-			this.cbCompilerUsesMultipleThreads.UseVisualStyleBackColor = true;
 			// 
 			// statusStrip1
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsStatusLabel});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 383);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 362);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(629, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(626, 22);
 			this.statusStrip1.TabIndex = 32;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -221,7 +198,7 @@
 			this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox5.Location = new System.Drawing.Point(283, 196);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(139, 138);
+			this.groupBox5.Size = new System.Drawing.Size(139, 115);
 			this.groupBox5.TabIndex = 31;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Debugger:";
@@ -280,7 +257,7 @@
 			this.groupBox2.Controls.Add(this.cbGenerateASMFile);
 			this.groupBox2.Controls.Add(this.cbGenerateMapFile);
 			this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox2.Location = new System.Drawing.Point(5, 296);
+			this.groupBox2.Location = new System.Drawing.Point(8, 317);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(272, 38);
 			this.groupBox2.TabIndex = 29;
@@ -321,7 +298,7 @@
 			this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox6.Location = new System.Drawing.Point(428, 197);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(191, 137);
+			this.groupBox6.Size = new System.Drawing.Size(188, 158);
 			this.groupBox6.TabIndex = 28;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Virtual Machine Emulator:";
@@ -331,9 +308,9 @@
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.button1.Location = new System.Drawing.Point(14, 108);
+			this.button1.Location = new System.Drawing.Point(14, 129);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(171, 23);
+			this.button1.Size = new System.Drawing.Size(168, 23);
 			this.button1.TabIndex = 28;
 			this.button1.Text = "Compile and Run (F5)";
 			this.button1.UseVisualStyleBackColor = true;
@@ -376,7 +353,7 @@
 			// 
 			this.cbExitOnLaunch.AutoSize = true;
 			this.cbExitOnLaunch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbExitOnLaunch.Location = new System.Drawing.Point(10, 82);
+			this.cbExitOnLaunch.Location = new System.Drawing.Point(14, 106);
 			this.cbExitOnLaunch.Name = "cbExitOnLaunch";
 			this.cbExitOnLaunch.Size = new System.Drawing.Size(102, 17);
 			this.cbExitOnLaunch.TabIndex = 22;
@@ -407,7 +384,7 @@
 			this.groupBox4.Controls.Add(this.lbSource);
 			this.groupBox4.Location = new System.Drawing.Point(5, 7);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(614, 70);
+			this.groupBox4.Size = new System.Drawing.Size(611, 70);
 			this.groupBox4.TabIndex = 25;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Source:";
@@ -469,7 +446,7 @@
 			this.groupBox3.Controls.Add(this.cbLinkerFormat);
 			this.groupBox3.Location = new System.Drawing.Point(5, 83);
 			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(614, 108);
+			this.groupBox3.Size = new System.Drawing.Size(611, 108);
 			this.groupBox3.TabIndex = 24;
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Output:";
@@ -608,13 +585,14 @@
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.cbInlinedMethods);
 			this.groupBox1.Controls.Add(this.cbEnableSparseConditionalConstantPropagation);
 			this.groupBox1.Controls.Add(this.cbEnableIROptimizations);
 			this.groupBox1.Controls.Add(this.cbEnableSSA);
 			this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox1.Location = new System.Drawing.Point(5, 196);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(272, 94);
+			this.groupBox1.Size = new System.Drawing.Size(272, 115);
 			this.groupBox1.TabIndex = 22;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Optimizations:";
@@ -938,24 +916,59 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
+			// cbInlinedMethods
+			// 
+			this.cbInlinedMethods.AutoSize = true;
+			this.cbInlinedMethods.Checked = true;
+			this.cbInlinedMethods.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbInlinedMethods.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbInlinedMethods.Location = new System.Drawing.Point(6, 89);
+			this.cbInlinedMethods.Name = "cbInlinedMethods";
+			this.cbInlinedMethods.Size = new System.Drawing.Size(137, 17);
+			this.cbInlinedMethods.TabIndex = 9;
+			this.cbInlinedMethods.Text = "Enable Inlined Methods";
+			this.cbInlinedMethods.UseVisualStyleBackColor = true;
+			// 
+			// groupBox12
+			// 
+			this.groupBox12.Controls.Add(this.cbCompilerUsesMultipleThreads);
+			this.groupBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox12.Location = new System.Drawing.Point(286, 317);
+			this.groupBox12.Name = "groupBox12";
+			this.groupBox12.Size = new System.Drawing.Size(136, 38);
+			this.groupBox12.TabIndex = 30;
+			this.groupBox12.TabStop = false;
+			this.groupBox12.Text = "Misc Options:";
+			// 
+			// cbCompilerUsesMultipleThreads
+			// 
+			this.cbCompilerUsesMultipleThreads.AutoSize = true;
+			this.cbCompilerUsesMultipleThreads.Checked = true;
+			this.cbCompilerUsesMultipleThreads.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbCompilerUsesMultipleThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbCompilerUsesMultipleThreads.Location = new System.Drawing.Point(6, 19);
+			this.cbCompilerUsesMultipleThreads.Name = "cbCompilerUsesMultipleThreads";
+			this.cbCompilerUsesMultipleThreads.Size = new System.Drawing.Size(126, 17);
+			this.cbCompilerUsesMultipleThreads.TabIndex = 13;
+			this.cbCompilerUsesMultipleThreads.Text = "Use Multiple Threads";
+			this.cbCompilerUsesMultipleThreads.UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(635, 462);
+			this.ClientSize = new System.Drawing.Size(632, 441);
 			this.Controls.Add(this.progressBar1);
 			this.Controls.Add(this.tabControl1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "MainForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-			this.Text = "MOSA Launcher v1.4";
+			this.Text = "MOSA Launcher v1.5.1";
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.Shown += new System.EventHandler(this.MainForm_Shown);
 			this.tabControl1.ResumeLayout(false);
 			this.tbOptions.ResumeLayout(false);
 			this.tbOptions.PerformLayout();
-			this.groupBox12.ResumeLayout(false);
-			this.groupBox12.PerformLayout();
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
 			this.groupBox5.ResumeLayout(false);
@@ -984,6 +997,8 @@
 			this.groupBox7.PerformLayout();
 			this.tpOutput.ResumeLayout(false);
 			this.tabPage3.ResumeLayout(false);
+			this.groupBox12.ResumeLayout(false);
+			this.groupBox12.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1060,5 +1075,6 @@
 		private System.Windows.Forms.ToolStripStatusLabel tsStatusLabel;
 		private System.Windows.Forms.GroupBox groupBox12;
 		private System.Windows.Forms.CheckBox cbCompilerUsesMultipleThreads;
+		private System.Windows.Forms.CheckBox cbInlinedMethods;
 	}
 }

@@ -15,7 +15,6 @@ namespace Mosa.Compiler.Common
 	{
 		private readonly Queue<T> queue;
 		private readonly HashSet<T> set;
-		private readonly object mylock = new object();
 
 		public int Count { get { return queue.Count; } }
 
@@ -27,7 +26,7 @@ namespace Mosa.Compiler.Common
 
 		public void Enqueue(T item)
 		{
-			lock (mylock)
+			lock (queue)
 			{
 				if (!set.Contains(item))
 				{
@@ -39,7 +38,7 @@ namespace Mosa.Compiler.Common
 
 		public T Dequeue()
 		{
-			lock (mylock)
+			lock (queue)
 			{
 				if (queue.Count == 0)
 					return default(T);

@@ -38,6 +38,8 @@ namespace Mosa.Utility.Launcher
 
 		public bool EnableSparseConditionalConstantPropagation { get; set; }
 
+		public bool EnableInlinedMethods { get; set; }
+
 		public bool GenerateASMFile { get; set; }
 
 		public bool GenerateMapFile { get; set; }
@@ -70,6 +72,7 @@ namespace Mosa.Utility.Launcher
 			FileSystemFormat = FileSystemFormat.FAT16;
 			DebugConnectionOption = DebugConnectionOption.None;
 			CompilerUsesMultipleThreads = true;
+			EnableInlinedMethods = true;
 		}
 
 		public void LoadFile(string file)
@@ -139,6 +142,7 @@ namespace Mosa.Utility.Launcher
 					case "-pipe": DebugConnectionOption = DebugConnectionOption.Pipe; continue;
 					case "-tcpclient": DebugConnectionOption = DebugConnectionOption.TCPClient; continue;
 					case "-tcpserver": DebugConnectionOption = DebugConnectionOption.TCPServer; continue;
+					//case "-inline": EnableInlinedMethods = true; continue;
 					default: break;
 				}
 

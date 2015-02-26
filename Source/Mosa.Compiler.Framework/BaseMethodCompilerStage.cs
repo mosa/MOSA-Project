@@ -166,16 +166,6 @@ namespace Mosa.Compiler.Framework
 		protected bool HasProtectedRegions { get { return MethodCompiler.Method.ExceptionHandlers.Count != 0; } }
 
 		/// <summary>
-		/// Creates the context.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <returns></returns>
-		protected Context CreateContext(BasicBlock block)
-		{
-			return new Context(block);
-		}
-
-		/// <summary>
 		/// Allocates the virtual register.
 		/// </summary>
 		/// <param name="type">The type.</param>
