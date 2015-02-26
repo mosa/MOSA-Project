@@ -301,7 +301,7 @@ namespace Mosa.Compiler.Framework
 
 				if (method == null)
 				{
-					break;
+					return;
 				}
 
 				CompileMethod(method, null, threadID);

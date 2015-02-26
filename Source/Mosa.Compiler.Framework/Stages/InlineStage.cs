@@ -108,9 +108,9 @@ namespace Mosa.Compiler.Framework.Stages
 						if (callNode.Result != null)
 						{
 							var newOp = Map(node.Operand1, map, callNode);
-							newBlock.Last.Previous.Insert(new InstructionNode(IRInstruction.Move, callNode.Result, newOp));
+							newBlock.BeforeLast.Insert(new InstructionNode(IRInstruction.Move, callNode.Result, newOp));
 						}
-						newBlock.Last.Previous.Insert(new InstructionNode(IRInstruction.Jmp, nextBlock));
+						newBlock.BeforeLast.Insert(new InstructionNode(IRInstruction.Jmp, nextBlock));
 
 						continue;
 					}
@@ -156,10 +156,10 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.InvokeMethod != null)
 						newNode.InvokeMethod = node.InvokeMethod;
 
-					newBlock.Last.Previous.Insert(newNode);
-				}
+					newBlock.BeforeLast.Insert(newNode);
 
-				newBlock.DebugCheck();
+					newBlock.DebugCheck();
+				}
 			}
 
 			callNode.SetInstruction(IRInstruction.Jmp, mapBlocks[blocks.PrologueBlock]);

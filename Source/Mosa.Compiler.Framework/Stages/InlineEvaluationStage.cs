@@ -209,7 +209,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.InvokeMethod != null)
 						newNode.InvokeMethod = node.InvokeMethod;
 
-					newBlock.Last.Previous.Insert(newNode);
+					newBlock.BeforeLast.Insert(newNode);
 				}
 
 				newBlock.DebugCheck();

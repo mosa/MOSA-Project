@@ -661,8 +661,12 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(!IsBlockEndInstruction);
 
+			Block.DebugCheck();
+			newblock.DebugCheck();
+
 			// check that new block is empty
 			Debug.Assert(newblock.First.Next == newblock.Last);
+			Debug.Assert(newblock.Last.Previous == newblock.First);
 
 			newblock.First.Next = Next;
 			newblock.Last.Previous = Block.Last.Previous;
@@ -1003,7 +1007,7 @@ namespace Mosa.Compiler.Framework
 			Size = InstructionSize.None;
 			Block = block;
 
-			//Block.DebugCheck();
+			Block.DebugCheck();
 		}
 
 		/// <summary>
@@ -1016,6 +1020,8 @@ namespace Mosa.Compiler.Framework
 				SetInstruction(instruction, instruction.DefaultOperandCount, instruction.DefaultResultCount);
 			else
 				SetInstruction(null, 0, 0);
+
+			Block.DebugCheck();
 		}
 
 		/// <summary>

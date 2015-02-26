@@ -337,11 +337,7 @@ namespace Mosa.Compiler.Framework
 							node.UpdateBranchTarget(index, newTarget);
 						}
 					}
-
-					//continue;
 				}
-
-				//return;
 			}
 		}
 

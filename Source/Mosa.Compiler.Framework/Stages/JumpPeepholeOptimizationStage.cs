@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 			for (int f = 0; f < BasicBlocks.Count - 1; f++)
 			{
 				var from = BasicBlocks[f];
-				var node = from.Last.Previous;
+				var node = from.BeforeLast;
 
 				while (node.IsEmpty)
 				{
