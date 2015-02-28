@@ -49,11 +49,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private static readonly Operand[] emptyOperandList = new Operand[0];
 
-		/// <summary>
-		/// The basic block operands
-		/// </summary>
-		private Dictionary<BasicBlock, Operand> basicBlockOperands;
-
 		#endregion Data Members
 
 		#region Properties
@@ -299,25 +294,6 @@ namespace Mosa.Compiler.Framework
 		public Operand GetParameterOperand(int index)
 		{
 			return StackLayout.GetStackParameter(index);
-		}
-
-		public Operand GetBasicBlockOperand(BasicBlock basicBlock)
-		{
-			// very lazy initialization
-			if (basicBlockOperands == null)
-			{
-				basicBlockOperands = new Dictionary<BasicBlock, Operand>();
-			}
-
-			Operand operand = null;
-
-			if (!basicBlockOperands.TryGetValue(basicBlock, out operand))
-			{
-				operand = Operand.CreateBasicBlock(TypeSystem, basicBlock);
-				basicBlockOperands.Add(basicBlock, operand);
-			}
-
-			return operand;
 		}
 
 		/// <summary>

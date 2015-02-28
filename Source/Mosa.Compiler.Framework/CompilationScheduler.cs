@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data Members
 
-		private readonly UniqueQueueThreadSafe<MosaMethod> methodQueue = new UniqueQueueThreadSafe<MosaMethod>();
+		private readonly UniqueQueueThreadSafe<MosaMethod> queue = new UniqueQueueThreadSafe<MosaMethod>();
 		private readonly HashSet<MosaMethod> methods = new HashSet<MosaMethod>();
 
 		#endregion Data Members
@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Framework
 			if (method.IsLinkerGenerated)
 				return;
 
-			methodQueue.Enqueue(method);
+			queue.Enqueue(method);
 
 			lock (methods)
 			{
@@ -96,7 +96,7 @@ namespace Mosa.Compiler.Framework
 
 		public MosaMethod GetMethodToCompile()
 		{
-			return methodQueue.Dequeue();
+			return queue.Dequeue();
 		}
 
 		/// <summary>
@@ -113,6 +113,6 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The queued methods.
 		/// </value>
-		public int TotalQueuedMethods { get { return methodQueue.Count; } }
+		public int TotalQueuedMethods { get { return queue.Count; } }
 	}
 }

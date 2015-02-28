@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 
 				// Run the type through the TypeLayout system
-				TypeLayout.ResolveType(type);
+				//TypeLayout.ResolveType(type);
 
 				var typeTableSymbol = CreateTypeDefinition(type, assemblyTableSymbol);
 

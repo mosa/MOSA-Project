@@ -310,7 +310,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						break;
 				}
 
-				block.DebugCheck();
+				//block.DebugCheck();
 
 				Debug.Assert(block.Last.SlotNumber != 0);
 			}

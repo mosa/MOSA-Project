@@ -590,19 +590,19 @@ namespace Mosa.Compiler.Framework
 
 			this.branchTargets = null;
 
-			Block.DebugCheck();
+			//Block.DebugCheck();
 		}
 
 		public void Insert(InstructionNode node)
 		{
-			var block = Block;
+			//Block.DebugCheck();
 
-			node.Block = block;
+			node.Block = Block;
 			var firstnode = node;
 
 			while (firstnode.Previous != null)
 			{
-				firstnode.Block = block;
+				firstnode.Block = Block;
 				firstnode = firstnode.Previous;
 			}
 
@@ -610,7 +610,7 @@ namespace Mosa.Compiler.Framework
 
 			while (lastnode.Next != null)
 			{
-				lastnode.Block = block;
+				lastnode.Block = Block;
 				lastnode = lastnode.Next;
 			}
 
@@ -624,7 +624,7 @@ namespace Mosa.Compiler.Framework
 			Next = firstnode;
 			firstnode.Previous = this;
 
-			Block.DebugCheck();
+			//Block.DebugCheck();
 		}
 
 		/// <summary>
@@ -633,6 +633,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="node">The node.</param>
 		public void Replace(InstructionNode node)
 		{
+			//Block.DebugCheck();
+
 			Debug.Assert(!IsBlockStartInstruction);
 			Debug.Assert(!IsBlockEndInstruction);
 			Debug.Assert(!node.IsBlockStartInstruction);
@@ -650,8 +652,9 @@ namespace Mosa.Compiler.Framework
 			ClearOperands();
 			Instruction = null;
 
-			Block.DebugCheck();
+			//Block.DebugCheck();
 		}
+
 
 		/// <summary>
 		/// Splits the node list by moving the next instructions into the new block.
@@ -659,10 +662,13 @@ namespace Mosa.Compiler.Framework
 		/// <param name="newblock">The newblock.</param>
 		public void Split(BasicBlock newblock)
 		{
-			Debug.Assert(!IsBlockEndInstruction);
+//			Debug.Assert(!IsBlockEndInstruction);
 
-			Block.DebugCheck();
-			newblock.DebugCheck();
+			if (Next == Block.Last)
+				return;
+
+			//Block.DebugCheck();
+			//newblock.DebugCheck();
 
 			// check that new block is empty
 			Debug.Assert(newblock.First.Next == newblock.Last);
@@ -681,8 +687,8 @@ namespace Mosa.Compiler.Framework
 				node.Block = newblock;
 			}
 
-			Block.DebugCheck();
-			newblock.DebugCheck();
+		//	Block.DebugCheck();
+		//	newblock.DebugCheck();
 		}
 
 		private void ClearOperands()
@@ -1007,7 +1013,7 @@ namespace Mosa.Compiler.Framework
 			Size = InstructionSize.None;
 			Block = block;
 
-			Block.DebugCheck();
+			//Block.DebugCheck();
 		}
 
 		/// <summary>
@@ -1021,7 +1027,7 @@ namespace Mosa.Compiler.Framework
 			else
 				SetInstruction(null, 0, 0);
 
-			Block.DebugCheck();
+			//Block.DebugCheck();
 		}
 
 		/// <summary>

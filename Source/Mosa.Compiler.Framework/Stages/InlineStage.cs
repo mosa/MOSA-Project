@@ -158,11 +158,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 					newBlock.BeforeLast.Insert(newNode);
 
-					newBlock.DebugCheck();
+					//newBlock.DebugCheck();
 				}
 			}
 
 			callNode.SetInstruction(IRInstruction.Jmp, mapBlocks[blocks.PrologueBlock]);
+
+			//callNode.Block.DebugCheck();
 		}
 
 		private Operand Map(Operand operand, Dictionary<Operand, Operand> map, InstructionNode callNode)

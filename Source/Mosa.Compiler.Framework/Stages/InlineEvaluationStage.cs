@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class InlineEvaluationStage : BaseMethodCompilerStage
 	{
-		public static int IRMaximumForInline = 8;
+		public static int IRMaximumForInline = 4;
 
 		protected override void Run()
 		{
@@ -29,13 +29,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var plugMethod = MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method);
 
+			compilerMethod.BasicBlocks = null;
 			compilerMethod.IsCompiled = true;
 			compilerMethod.HasProtectedRegions = HasProtectedRegions;
 			compilerMethod.IsLinkerGenerated = method.IsLinkerGenerated;
 			compilerMethod.IsCILDecoded = (!method.IsLinkerGenerated && method.Code.Count > 0);
 			compilerMethod.HasLoops = false;
 			compilerMethod.ClearCallList();
-			compilerMethod.BasicBlocks = null;
 			compilerMethod.IsPlugged = (plugMethod != null);
 
 			// TODO
@@ -211,8 +211,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 					newBlock.BeforeLast.Insert(newNode);
 				}
-
-				newBlock.DebugCheck();
 			}
 
 			var trace = CreateTraceLog("InlineMap");
@@ -221,8 +219,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				foreach (var entry in map)
 				{
-					//if (entry.Value != null)
-					trace.Log(entry.Value.ToString());
+					trace.Log(entry.Value.ToString() + " from: " + entry.Key.ToString());
 				}
 			}
 
@@ -262,10 +259,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsStackLocal)
 			{
-				//if (operand.Uses.Count != 0)
-				//{
 				mappedOperand = Operand.CreateStackLocal(operand.Type, operand.Register, operand.Index);
-				//}
 			}
 			else if (operand.IsVirtualRegister)
 			{

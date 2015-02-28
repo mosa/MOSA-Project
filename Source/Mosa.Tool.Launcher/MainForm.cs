@@ -326,7 +326,7 @@ namespace Mosa.Tool.Launcher
 					}
 					catch (Exception e)
 					{
-						AddOutput(e.ToString());
+						OnException(e.ToString());
 					}
 					finally
 					{
@@ -335,6 +335,16 @@ namespace Mosa.Tool.Launcher
 					}
 				}
 			));
+		}
+
+		private void OnException(string data)
+		{
+			MethodInvoker method = delegate()
+			{
+				AddOutput(data);
+			};
+
+			Invoke(method);
 		}
 
 		private void OnCompileCompleted()

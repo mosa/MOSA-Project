@@ -179,14 +179,6 @@ namespace Mosa.Compiler.Framework
 		public bool IsShift { get; private set; }
 
 		/// <summary>
-		/// Gets a value indicating whether this instance is basic block.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is basic block; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsBasicBlock { get { return BasicBlock != null; } }
-
-		/// <summary>
 		/// Gets the name.
 		/// </summary>
 		/// <value>The name.</value>
@@ -260,14 +252,6 @@ namespace Mosa.Compiler.Framework
 		/// The type of the shift.
 		/// </value>
 		public ShiftType ShiftType { get; private set; }
-
-		/// <summary>
-		/// Gets the basic block.
-		/// </summary>
-		/// <value>
-		/// The basic block.
-		/// </value>
-		public BasicBlock BasicBlock { get; private set; }
 
 		/// <summary>
 		/// Gets a value indicating whether [is constant zero].
@@ -702,20 +686,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates the basic block.
-		/// </summary>
-		/// <param name="basicBlock">The basic block.</param>
-		/// <returns></returns>
-		public static Operand CreateBasicBlock(TypeSystem typeSystem, BasicBlock basicBlock)
-		{
-			var operand = new Operand(typeSystem.BuiltIn.Pointer);
-			operand.BasicBlock = basicBlock;
-			operand.IsMemoryAddress = true;
-			operand.Index = basicBlock.Label;
-			return operand;
-		}
-
-		/// <summary>
 		/// Creates a new runtime member <see cref="Operand"/>.
 		/// </summary>
 		/// <param name="field">The field.</param>
@@ -955,10 +925,6 @@ namespace Mosa.Compiler.Framework
 			{
 				sb.AppendFormat("P_{0}", Index);
 			}
-			else if (IsBasicBlock)
-			{
-				sb.AppendFormat(BasicBlock.ToString());
-			}
 
 			if (Name != null)
 			{
@@ -1006,7 +972,7 @@ namespace Mosa.Compiler.Framework
 			{
 				sb.AppendFormat(" {0}", Register);
 			}
-			else if (IsMemoryAddress && !IsBasicBlock)
+			else if (IsMemoryAddress)
 			{
 				sb.Append(' ');
 				if (OffsetBase != null)
