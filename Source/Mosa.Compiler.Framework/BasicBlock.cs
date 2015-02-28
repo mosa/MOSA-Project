@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the before last instruction node.
 		/// </summary>
-		public InstructionNode BeforeLast { get { return Last.Previous;  } }
+		public InstructionNode BeforeLast { get { return Last.Previous; } }
 
 		/// <summary>
 		/// Retrieves the label, which uniquely identifies this block.

@@ -655,14 +655,13 @@ namespace Mosa.Compiler.Framework
 			//Block.DebugCheck();
 		}
 
-
 		/// <summary>
 		/// Splits the node list by moving the next instructions into the new block.
 		/// </summary>
 		/// <param name="newblock">The newblock.</param>
 		public void Split(BasicBlock newblock)
 		{
-//			Debug.Assert(!IsBlockEndInstruction);
+			//			Debug.Assert(!IsBlockEndInstruction);
 
 			if (Next == Block.Last)
 				return;
@@ -687,8 +686,8 @@ namespace Mosa.Compiler.Framework
 				node.Block = newblock;
 			}
 
-		//	Block.DebugCheck();
-		//	newblock.DebugCheck();
+			//	Block.DebugCheck();
+			//	newblock.DebugCheck();
 		}
 
 		private void ClearOperands()
@@ -859,6 +858,29 @@ namespace Mosa.Compiler.Framework
 		public void ReplaceInstructionOnly(BaseInstruction instruction)
 		{
 			Instruction = instruction;
+		}
+
+		private void ReplaceOperands(Operand target, Operand replacement)
+		{
+			for (int i = 0; i < OperandCount; i++)
+			{
+				var operand = GetOperand(i);
+
+				if (target == operand)
+				{
+					SetOperand(i, replacement);
+				}
+			}
+
+			for (int i = 0; i < ResultCount; i++)
+			{
+				var operand = GetResult(i);
+
+				if (target == operand)
+				{
+					SetResult(i, replacement);
+				}
+			}
 		}
 
 		#endregion Methods

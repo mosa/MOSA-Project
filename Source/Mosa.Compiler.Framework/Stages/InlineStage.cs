@@ -157,14 +157,10 @@ namespace Mosa.Compiler.Framework.Stages
 						newNode.InvokeMethod = node.InvokeMethod;
 
 					newBlock.BeforeLast.Insert(newNode);
-
-					//newBlock.DebugCheck();
 				}
 			}
 
 			callNode.SetInstruction(IRInstruction.Jmp, mapBlocks[blocks.PrologueBlock]);
-
-			//callNode.Block.DebugCheck();
 		}
 
 		private Operand Map(Operand operand, Dictionary<Operand, Operand> map, InstructionNode callNode)
@@ -208,7 +204,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsField)
 			{
-				mappedOperand = operand;
+				mappedOperand = Operand.CreateField(operand.Field);
 			}
 			else if (operand.IsConstant)
 			{

@@ -270,7 +270,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsField)
 			{
-				mappedOperand = operand;
+				mappedOperand = Operand.CreateField(operand.Field);
 			}
 			else if (operand.IsConstant)
 			{
