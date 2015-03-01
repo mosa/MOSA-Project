@@ -114,8 +114,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (PromoteLocalVariable())
 					change = true;
 
-				if (Reduce64BitOperationsTo32Bit())
-					change = true;
+				//if (Reduce64BitOperationsTo32Bit())
+				//	change = true;
 
 				if (change)
 				{
