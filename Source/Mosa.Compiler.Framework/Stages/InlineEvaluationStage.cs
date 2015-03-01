@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class InlineEvaluationStage : BaseMethodCompilerStage
 	{
-		public static int IRMaximumForInline = 4;
+		public static int IRMaximumForInline = 0;
 
 		protected override void Run()
 		{
@@ -29,14 +29,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var plugMethod = MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method);
 
+			bool firstCompile = (compilerMethod.CompileCount == 0);
+
 			compilerMethod.BasicBlocks = null;
 			compilerMethod.IsCompiled = true;
 			compilerMethod.HasProtectedRegions = HasProtectedRegions;
 			compilerMethod.IsLinkerGenerated = method.IsLinkerGenerated;
 			compilerMethod.IsCILDecoded = (!method.IsLinkerGenerated && method.Code.Count > 0);
 			compilerMethod.HasLoops = false;
-			compilerMethod.ClearCallList();
 			compilerMethod.IsPlugged = (plugMethod != null);
+			compilerMethod.IsVirtual = method.IsVirtual;
 
 			// TODO
 			compilerMethod.HasDoNotInlineAttribute = false;
@@ -46,8 +48,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var block in BasicBlocks)
 			{
-				int blockIRCount = 0;
-
 				for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 				{
 					if (node.IsEmpty)
@@ -55,52 +55,34 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (node.Instruction is BaseIRInstruction)
 					{
-						blockIRCount++;
+						totalIRCount++;
 					}
 					else
 					{
 						totalIROtherCount++;
 					}
-
-					if (node.Instruction == IRInstruction.Call)
-					{
-						Debug.Assert(node.InvokeMethod != null);
-
-						var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
-
-						compilerMethod.IsMethodInvoked = true;
-						compilerMethod.AddCall(node.InvokeMethod);
-
-						invoked.AddCalledBy(MethodCompiler.Method);
-					}
-				}
-
-				if (!block.IsPrologue && !block.IsEpilogue)
-				{
-					totalIRCount = totalIRCount + blockIRCount;
 				}
 
 				if (block.PreviousBlocks.Count > 1)
 				{
 					compilerMethod.HasLoops = true;
 				}
-
-				compilerMethod.IRInstructionCount = totalIRCount;
-				compilerMethod.IROtherInstructionCount = totalIROtherCount;
-				compilerMethod.IsVirtual = method.IsVirtual;
-
-				compilerMethod.CanInline = CanInline(compilerMethod);
-
-				if (compilerMethod.CanInline)
-				{
-					compilerMethod.BasicBlocks = CopyInstructions();
-				}
-
-				//foreach(var called in compilerMethod.CalledBy)
-				//{
-				//	MethodCompiler.Compiler.CompilationScheduler.Schedule(called);
-				//}
 			}
+
+			compilerMethod.IRInstructionCount = totalIRCount;
+			compilerMethod.IROtherInstructionCount = totalIROtherCount;
+
+			compilerMethod.CanInline = CanInline(compilerMethod);
+
+			if (compilerMethod.CanInline)
+			{
+				compilerMethod.BasicBlocks = CopyInstructions();
+			}
+
+			//foreach(var called in compilerMethod.CalledBy)
+			//{
+			//	MethodCompiler.Compiler.CompilationScheduler.Schedule(called);
+			//}
 
 			trace.Log("CanInline: " + compilerMethod.CanInline.ToString());
 			trace.Log("IsVirtual: " + compilerMethod.IsVirtual.ToString());
@@ -157,6 +139,24 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var newBlock = newBasicBlocks.CreateBlock(block.Label);
 				mapBlocks.Add(block, newBlock);
+			}
+
+			var newPrologueBlock = newBasicBlocks.GetByLabel(BasicBlock.PrologueLabel);
+
+			foreach (var operand in MethodCompiler.Parameters)
+			{
+				if (operand.Definitions.Count > 0)
+				{
+					var newOp = Map(operand, map);
+
+					var newOperand = Operand.CreateVirtualRegister(operand.Type, -operand.Index);
+
+					newPrologueBlock.BeforeLast.Insert(new InstructionNode(IRInstruction.Move, newOperand, newOp));
+
+					// redirect map from parameter to virtual register going forward
+					map.Remove(operand);
+					map.Add(operand, newOperand);
+				}
 			}
 
 			foreach (var block in BasicBlocks)

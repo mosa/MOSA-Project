@@ -11,6 +11,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -23,7 +24,7 @@ namespace Mosa.Compiler.Framework
 
 		public MosaMethod Method { get; private set; }
 
-		public bool IsMethodInvoked { get; set; }
+		public bool InvokesMethod { get; set; }
 
 		public bool IsCompiled { get; set; }
 
@@ -53,6 +54,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsVirtual { get; set; }
 
+		public int CompileCount { get; set; }
+
 		#endregion Properties
 
 		#region Methods
@@ -66,30 +69,7 @@ namespace Mosa.Compiler.Framework
 
 			this.Calls = new List<MosaMethod>();
 			this.CalledBy = new List<MosaMethod>();
-		}
-
-		public void ClearCallList()
-		{
-			lock (this)
-			{
-				Calls.Clear();
-			}
-		}
-
-		public void ClearCalledByList()
-		{
-			lock (this)
-			{
-				CalledBy.Clear();
-			}
-		}
-
-		public void AddCall(MosaMethod method)
-		{
-			lock (this)
-			{
-				Calls.AddIfNew(method);
-			}
+			this.CompileCount = 0;
 		}
 
 		public void AddCalledBy(MosaMethod method)

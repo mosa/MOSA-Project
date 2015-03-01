@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,6 +24,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (HasProtectedRegions)
 				return;
 
+			var compilerMethod = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(MethodCompiler.Method);
+
+			bool firstCompile = (compilerMethod.CompileCount == 0);
+
+			compilerMethod.CompileCount++;
+
 			var nodes = new List<InstructionNode>();
 
 			foreach (var block in BasicBlocks)
@@ -36,6 +43,18 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 
 					nodes.Add(node);
+
+					if (firstCompile)
+					{
+						Debug.Assert(node.InvokeMethod != null);
+
+						var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
+
+						compilerMethod.InvokesMethod = true;
+						compilerMethod.Calls.AddIfNew(node.InvokeMethod);
+
+						invoked.AddCalledBy(MethodCompiler.Method);
+					}
 				}
 			}
 

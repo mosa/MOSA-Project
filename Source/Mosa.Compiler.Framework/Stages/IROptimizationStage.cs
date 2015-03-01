@@ -114,8 +114,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (PromoteLocalVariable())
 					change = true;
 
-				//if (Reduce64BitOperationsTo32Bit())
-				//	change = true;
+				if (Reduce64BitOperationsTo32Bit())
+					change = true;
 
 				if (change)
 				{
@@ -1759,7 +1759,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (register.Definitions.Count != 1)
 					continue;
 
-				if (!(register.IsU8 || register.IsI8))
+				if (!register.IsLong)
 					continue;
 
 				if (!CanReduceTo32Bit(register))
