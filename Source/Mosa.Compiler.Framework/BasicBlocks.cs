@@ -44,6 +44,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private BasicBlock epilogueBlock = null;
 
+		private int nextAvailableLabel = 0x10000000;
+
 		#endregion Data members
 
 		#region Construction
@@ -146,7 +148,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public BasicBlock CreateBlock()
 		{
-			int label = basicBlocks.Count + 0x10000000;
+			int label = nextAvailableLabel++;
 			var basicBlock = new BasicBlock(basicBlocks.Count, label);
 			basicBlocks.Add(basicBlock);
 			basicBlocksByLabel.Add(label, basicBlock);
