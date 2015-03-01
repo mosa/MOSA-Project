@@ -304,7 +304,11 @@ namespace Mosa.Compiler.Framework
 					return;
 				}
 
-				CompileMethod(method, null, threadID);
+				// only one method can be compiled at a time
+				lock (method)
+				{
+					CompileMethod(method, null, threadID);
+				}
 
 				CompilerTrace.UpdatedCompilerProgress(
 					CompilationScheduler.TotalMethods,
