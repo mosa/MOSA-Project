@@ -291,11 +291,14 @@ namespace Mosa.Compiler.Framework
 
 			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (!node.IsEmpty)
-				{
-					if (node.Instruction.FlowControl != FlowControl.UnconditionalBranch)
-						return false;
-				}
+				if (node.IsEmpty)
+					continue;
+
+				if (node.Instruction == IRInstruction.Nop)
+					continue;
+
+				if (node.Instruction.FlowControl != FlowControl.UnconditionalBranch)
+					return false;
 			}
 
 			return true;
@@ -589,7 +592,7 @@ namespace Mosa.Compiler.Framework
 			if (type.IsR4)
 				return InstructionSize.Size32;
 
-			if (type.IsR8)
+			if (type.IsR8 || type.IsUI8)
 				return InstructionSize.Size64;
 
 			return InstructionSize.Size32;
@@ -616,7 +619,7 @@ namespace Mosa.Compiler.Framework
 			if (operand.IsR4)
 				return InstructionSize.Size32;
 
-			if (operand.IsR8)
+			if (operand.IsR8 || operand.IsLong)
 				return InstructionSize.Size64;
 
 			return InstructionSize.Size32;
