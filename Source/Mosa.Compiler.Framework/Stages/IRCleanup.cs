@@ -8,6 +8,7 @@
  */
 
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -18,7 +19,29 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			// Remove Nops
+			RemoveEmptyBlocks();
+
+			// TODO: merge block A & B, where A.Next contains only B, and B.Previous contains only A.
+
+			OrderBlocks();
+			RemoveNops();
+		}
+
+		private void OrderBlocks()
+		{
+			// don't remove any blocks when the flow control is unusual
+			if (HasProtectedRegions)
+				return;
+
+			var blockOrderAnalysis = new LoopAwareBlockOrder();
+
+			blockOrderAnalysis.PerformAnalysis(BasicBlocks);
+
+			BasicBlocks.ReorderBlocks(blockOrderAnalysis.NewBlockOrder);
+		}
+
+		private void RemoveNops()
+		{
 			foreach (var block in BasicBlocks)
 			{
 				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
@@ -26,14 +49,13 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
+					// Remove Nops
 					if (node.Instruction == IRInstruction.Nop)
 					{
 						node.Empty();
 					}
 				}
 			}
-
-			RemoveEmptyBlocks();
 		}
 	}
 }
