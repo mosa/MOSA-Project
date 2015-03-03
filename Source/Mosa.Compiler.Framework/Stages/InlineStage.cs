@@ -44,17 +44,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 					nodes.Add(node);
 
-					if (firstCompile)
-					{
-						Debug.Assert(node.InvokeMethod != null);
+					if (!firstCompile)
+						continue;
 
-						var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
+					Debug.Assert(node.InvokeMethod != null);
 
-						compilerMethod.InvokesMethod = true;
-						compilerMethod.Calls.AddIfNew(node.InvokeMethod);
+					var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
 
-						invoked.AddCalledBy(MethodCompiler.Method);
-					}
+					compilerMethod.InvokesMethod = true;
+					compilerMethod.Calls.AddIfNew(node.InvokeMethod);
+
+					invoked.AddCalledBy(MethodCompiler.Method);
 				}
 			}
 

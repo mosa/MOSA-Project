@@ -114,8 +114,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (PromoteLocalVariable())
 					change = true;
 
-				if (Reduce64BitOperationsTo32Bit())
-					change = true;
+				//if (Reduce64BitOperationsTo32Bit())
+				//	change = true;
 
 				if (change)
 				{
@@ -1825,6 +1825,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (node.Instruction == IRInstruction.RemUnsigned)
 					return false;
+
+				if (node.Instruction == IRInstruction.Move)
+					if (node.Operand1.IsParameter)
+						return false;
 			}
 
 			return true;

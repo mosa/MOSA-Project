@@ -213,6 +213,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = enableOptimizations.Checked;
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = enableSparseConditionalConstantPropagation.Checked;
 			Compiler.CompilerOptions.EmitBinary = enableBinaryCodeGeneration.Checked;
+			Compiler.CompilerOptions.EnableInlinedMethods = enableInlinedMethods.Checked;
 		}
 
 		private void CleanGUI()

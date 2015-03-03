@@ -172,7 +172,7 @@ namespace Mosa.Compiler.Framework
 			EnableOptimizations = true;
 			EnablePromoteTemporaryVariablesOptimization = true;
 			EnableSparseConditionalConstantPropagation = true;
-			EnableInlinedMethods = true;
+			EnableInlinedMethods = false;
 			BaseAddress = 0x00400000;
 			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };

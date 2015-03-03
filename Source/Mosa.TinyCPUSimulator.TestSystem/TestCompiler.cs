@@ -107,7 +107,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			platform.PrepareToExecuteMethod(simAdapter, address, parameters);
 
-			simAdapter.SimCPU.Monitor.BreakAtTick = simAdapter.SimCPU.Monitor.BreakAtTick + 500000; // nothing should take this long
+			simAdapter.SimCPU.Monitor.BreakAtTick = simAdapter.SimCPU.Monitor.BreakAtTick + 1500000; // nothing should take this long
 			simAdapter.SimCPU.Execute();
 
 			if (simAdapter.SimCPU.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)
