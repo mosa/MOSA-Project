@@ -16,6 +16,9 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
+			if (MethodCompiler.Method.FullName.Contains("Mosa.Platform.Internal"))
+				return;
+
 			if (!HasCode)
 				return;
 

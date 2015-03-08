@@ -62,6 +62,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			if (MethodCompiler.Method.FullName.Contains("Mosa.Platform.Internal"))
+				return;
+
 			// Method is empty - must be a plugged method
 			if (!HasCode)
 				return;
@@ -263,10 +266,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool ContainsAddressOf(Operand local)
 		{
-			foreach (var index in local.Uses)
+			foreach (var node in local.Uses)
 			{
-				var node = new Context(index);
-
 				if (node.Instruction == IRInstruction.AddressOf)
 					return true;
 			}

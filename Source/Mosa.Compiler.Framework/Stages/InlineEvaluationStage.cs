@@ -19,6 +19,7 @@ namespace Mosa.Compiler.Framework.Stages
 	public class InlineEvaluationStage : BaseMethodCompilerStage
 	{
 		public static int IRMaximumForInline = 8;
+		public static string InlineMethodAttribute = "System.Runtime.CompilerServices.MethodImplAttribute";
 
 		protected override void Run()
 		{
@@ -71,6 +72,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			compilerMethod.IRInstructionCount = totalIRCount;
 			compilerMethod.IROtherInstructionCount = totalIROtherCount;
+
+			var methodAttribute = method.FindCustomAttribute(InlineMethodAttribute);
+
+			if (methodAttribute != null)
+			{
+				compilerMethod.HasDoNotInlineAttribute = true;
+			}
 
 			compilerMethod.CanInline = CanInline(compilerMethod);
 
