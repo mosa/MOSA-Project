@@ -58,9 +58,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void Promote(Operand local)
 		{
-			var stacktype = local.Type.GetStackType();
-
-			var v = MethodCompiler.CreateVirtualRegister(stacktype);
+			var v = MethodCompiler.CreateVirtualRegister(local.Type);
 
 			if (trace.Active) trace.Log("*** Replacing: " + local.ToString() + " with " + v.ToString());
 

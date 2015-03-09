@@ -26,9 +26,9 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			private VariableStatus Status;
 
-			public ulong ConstantUnsignedInteger { get; set; }
+			public ulong ConstantUnsignedLongInteger { get; set; }
 
-			public long ConstantSignedInteger { get { return (long)ConstantUnsignedInteger; } set { ConstantUnsignedInteger = (ulong)value; } }
+			public long ConstantSignedLongInteger { get { return (long)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = (ulong)value; } }
 
 			public Operand Operand { get; private set; }
 
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				}
 				else if (operand.IsConstant && operand.IsInteger)
 				{
-					ConstantUnsignedInteger = operand.ConstantUnsignedInteger;
+					ConstantUnsignedLongInteger = operand.ConstantUnsignedLongInteger;
 					IsConstant = true;
 				}
 				else
@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				if (!other.IsConstant || !IsConstant)
 					return false;
 
-				return (other.ConstantUnsignedInteger == ConstantUnsignedInteger);
+				return (other.ConstantUnsignedLongInteger == ConstantUnsignedLongInteger);
 			}
 
 			public override string ToString()
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 				if (IsConstant)
 				{
-					s = s + " = " + ConstantUnsignedInteger.ToString();
+					s = s + " = " + ConstantUnsignedLongInteger.ToString();
 				}
 
 				return s;
@@ -139,7 +139,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				if (variable.IsVirtualRegister && variable.IsConstant)
 				{
-					list.Add(new Tuple<Operand, ulong>(variable.Operand, variable.ConstantUnsignedInteger));
+					list.Add(new Tuple<Operand, ulong>(variable.Operand, variable.ConstantUnsignedLongInteger));
 				}
 			}
 
@@ -381,7 +381,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			Debug.Assert(!variable.IsOverDefined);
 
-			if (variable.IsConstant && variable.ConstantUnsignedInteger != value)
+			if (variable.IsConstant && variable.ConstantUnsignedLongInteger != value)
 			{
 				UpdateToOverDefined(variable);
 				return;
@@ -391,7 +391,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				return;
 
 			variable.IsConstant = true;
-			variable.ConstantUnsignedInteger = value;
+			variable.ConstantUnsignedLongInteger = value;
 
 			if (MainTrace.Active) MainTrace.Log(variable.ToString());
 
@@ -435,7 +435,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 			else if (operand.IsConstant)
 			{
-				UpdateToConstant(result, operand.ConstantUnsignedInteger);
+				UpdateToConstant(result, operand.ConstantUnsignedLongInteger);
 			}
 			else if (operand.IsNeverDefined)
 			{
@@ -483,43 +483,43 @@ namespace Mosa.Compiler.Framework.Analysis
 
 				if (instruction == IRInstruction.AddSigned || instruction == IRInstruction.AddUnsigned)
 				{
-					UpdateToConstant(result, operand1.ConstantUnsignedInteger + operand2.ConstantUnsignedInteger);
+					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger + operand2.ConstantUnsignedLongInteger);
 				}
 				else if (instruction == IRInstruction.SubSigned || instruction == IRInstruction.SubUnsigned)
 				{
-					UpdateToConstant(result, operand1.ConstantUnsignedInteger - operand2.ConstantUnsignedInteger);
+					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger - operand2.ConstantUnsignedLongInteger);
 				}
 				else if (instruction == IRInstruction.MulUnsigned || instruction == IRInstruction.MulSigned)
 				{
-					UpdateToConstant(result, operand1.ConstantUnsignedInteger * operand2.ConstantUnsignedInteger);
+					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger * operand2.ConstantUnsignedLongInteger);
 				}
-				else if (instruction == IRInstruction.DivUnsigned && operand2.ConstantUnsignedInteger != 0)
+				else if (instruction == IRInstruction.DivUnsigned && operand2.ConstantUnsignedLongInteger != 0)
 				{
-					UpdateToConstant(result, operand1.ConstantUnsignedInteger / operand2.ConstantUnsignedInteger);
+					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger / operand2.ConstantUnsignedLongInteger);
 				}
-				else if (instruction == IRInstruction.DivSigned && operand2.ConstantUnsignedInteger != 0)
+				else if (instruction == IRInstruction.DivSigned && operand2.ConstantUnsignedLongInteger != 0)
 				{
-					UpdateToConstant(result, operand1.ConstantSignedInteger / operand2.ConstantSignedInteger);
+					UpdateToConstant(result, operand1.ConstantSignedLongInteger / operand2.ConstantSignedLongInteger);
 				}
-				else if (instruction == IRInstruction.RemUnsigned && operand2.ConstantUnsignedInteger != 0)
+				else if (instruction == IRInstruction.RemUnsigned && operand2.ConstantUnsignedLongInteger != 0)
 				{
-					UpdateToConstant(result, operand1.ConstantUnsignedInteger % operand2.ConstantUnsignedInteger);
+					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger % operand2.ConstantUnsignedLongInteger);
 				}
-				else if (instruction == IRInstruction.RemSigned && operand2.ConstantUnsignedInteger != 0)
+				else if (instruction == IRInstruction.RemSigned && operand2.ConstantUnsignedLongInteger != 0)
 				{
-					UpdateToConstant(result, operand1.ConstantSignedInteger % operand2.ConstantSignedInteger);
+					UpdateToConstant(result, operand1.ConstantSignedLongInteger % operand2.ConstantSignedLongInteger);
 				}
 				else if (instruction == IRInstruction.ArithmeticShiftRight)
 				{
-					UpdateToConstant(result, ((long)operand1.ConstantUnsignedInteger) >> (int)operand2.ConstantUnsignedInteger);
+					UpdateToConstant(result, ((long)operand1.ConstantUnsignedLongInteger) >> (int)operand2.ConstantUnsignedLongInteger);
 				}
 				else if (instruction == IRInstruction.ShiftRight)
 				{
-					UpdateToConstant(result, operand1.ConstantUnsignedInteger >> (int)operand2.ConstantUnsignedInteger);
+					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger >> (int)operand2.ConstantUnsignedLongInteger);
 				}
 				else if (instruction == IRInstruction.ShiftLeft)
 				{
-					UpdateToConstant(result, operand1.ConstantUnsignedInteger << (int)operand2.ConstantUnsignedInteger);
+					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger << (int)operand2.ConstantUnsignedLongInteger);
 				}
 				else if (instruction == IRInstruction.IntegerCompare)
 				{
@@ -617,12 +617,12 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			switch (conditionCode)
 			{
-				case ConditionCode.Equal: return operand1.ConstantUnsignedInteger == operand2.ConstantUnsignedInteger;
-				case ConditionCode.NotEqual: return operand1.ConstantUnsignedInteger != operand2.ConstantUnsignedInteger;
-				case ConditionCode.GreaterOrEqual: return operand1.ConstantUnsignedInteger >= operand2.ConstantUnsignedInteger;
-				case ConditionCode.GreaterThan: return operand1.ConstantUnsignedInteger > operand2.ConstantUnsignedInteger;
-				case ConditionCode.LessOrEqual: return operand1.ConstantUnsignedInteger <= operand2.ConstantUnsignedInteger;
-				case ConditionCode.LessThan: return operand1.ConstantUnsignedInteger < operand2.ConstantUnsignedInteger;
+				case ConditionCode.Equal: return operand1.ConstantUnsignedLongInteger == operand2.ConstantUnsignedLongInteger;
+				case ConditionCode.NotEqual: return operand1.ConstantUnsignedLongInteger != operand2.ConstantUnsignedLongInteger;
+				case ConditionCode.GreaterOrEqual: return operand1.ConstantUnsignedLongInteger >= operand2.ConstantUnsignedLongInteger;
+				case ConditionCode.GreaterThan: return operand1.ConstantUnsignedLongInteger > operand2.ConstantUnsignedLongInteger;
+				case ConditionCode.LessOrEqual: return operand1.ConstantUnsignedLongInteger <= operand2.ConstantUnsignedLongInteger;
+				case ConditionCode.LessThan: return operand1.ConstantUnsignedLongInteger < operand2.ConstantUnsignedLongInteger;
 
 				case ConditionCode.Always: return true;
 				case ConditionCode.Never: return false;
@@ -707,7 +707,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			if (first != null)
 			{
-				UpdateToConstant(result, first.ConstantUnsignedInteger);
+				UpdateToConstant(result, first.ConstantUnsignedLongInteger);
 			}
 		}
 	}

@@ -312,7 +312,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offsetOperand.IsConstant)
 			{
-				Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ConstantSignedInteger);
+				Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ConstantSignedLongInteger);
 
 				var mov = GetMove(result, mem);
 
@@ -351,7 +351,7 @@ namespace Mosa.Platform.x86.Stages
 			int offset = 0;
 			if (context.Operand2.IsConstant)
 			{
-				offset = (int)context.Operand2.ConstantSignedInteger;
+				offset = (int)context.Operand2.ConstantSignedLongInteger;
 			}
 
 			var offsetop = context.Operand2;
@@ -397,7 +397,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offset.IsConstant)
 			{
-				offsetPtr = offset.ConstantSignedInteger;
+				offsetPtr = offset.ConstantSignedLongInteger;
 			}
 			else
 			{
@@ -427,7 +427,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offset.IsConstant)
 			{
-				offsetPtr = offset.ConstantSignedInteger;
+				offsetPtr = offset.ConstantSignedLongInteger;
 			}
 			else
 			{
@@ -660,7 +660,7 @@ namespace Mosa.Platform.x86.Stages
 				}
 				else
 				{
-					var mem = Operand.CreateMemoryAddress(storeType, baseOperand, offsetOperand.ConstantSignedInteger);
+					var mem = Operand.CreateMemoryAddress(storeType, baseOperand, offsetOperand.ConstantSignedLongInteger);
 					context.SetInstruction(GetMove(mem, value), size, mem, value);
 				}
 			}
@@ -689,7 +689,7 @@ namespace Mosa.Platform.x86.Stages
 			int offset = 0;
 			if (context.Operand2.IsConstant)
 			{
-				offset = (int)context.Operand2.ConstantSignedInteger;
+				offset = (int)context.Operand2.ConstantSignedLongInteger;
 			}
 
 			var offsetop = context.Operand2;

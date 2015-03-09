@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// If instruction is newarr then get the size of the element, multiply it by array size, and add array header size
 			// Also need to align to a 4-byte boundry
 			if (allocation.Instruction is NewarrInstruction)
-				typeSize = (TypeLayout.GetTypeSize(allocatedType.ElementType) * (int)allocation.Previous.Operand1.ConstantSignedInteger) + (TypeLayout.NativePointerSize * 3);
+				typeSize = (TypeLayout.GetTypeSize(allocatedType.ElementType) * (int)allocation.Previous.Operand1.ConstantSignedLongInteger) + (TypeLayout.NativePointerSize * 3);
 
 			// Allocate a linker symbol to refer to this allocation. Use the destination field name as the linker symbol name.
 			var symbolName = MethodCompiler.Linker.CreateSymbol(assignmentField.FullName + @"<<$cctor", SectionKind.ROData, Architecture.NativeAlignment, typeSize);

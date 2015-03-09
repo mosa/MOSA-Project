@@ -190,12 +190,20 @@ namespace Mosa.Compiler.Framework
 		public int Index { get; private set; }
 
 		/// <summary>
+		/// Gets the constant long integer.
+		/// </summary>
+		/// <value>
+		/// The constant long integer.
+		/// </value>
+		public ulong ConstantUnsignedLongInteger { get; private set; }
+
+		/// <summary>
 		/// Gets the constant integer.
 		/// </summary>
 		/// <value>
 		/// The constant integer.
 		/// </value>
-		public ulong ConstantUnsignedInteger { get; private set; }
+		public uint ConstantUnsignedInteger { get { return (uint)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = value; } }
 
 		/// <summary>
 		/// Gets the constant double float point.
@@ -214,12 +222,20 @@ namespace Mosa.Compiler.Framework
 		public float ConstantSingleFloatingPoint { get; private set; }
 
 		/// <summary>
+		/// Gets or sets the constant signed long integer.
+		/// </summary>
+		/// <value>
+		/// The constant signed long integer.
+		/// </value>
+		public long ConstantSignedLongInteger { get { return (long)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = (ulong)value; } }
+
+		/// <summary>
 		/// Gets or sets the constant signed integer.
 		/// </summary>
 		/// <value>
 		/// The constant signed integer.
 		/// </value>
-		public long ConstantSignedInteger { get { return (long)ConstantUnsignedInteger; } set { ConstantUnsignedInteger = (ulong)value; } }
+		public int ConstantSignedInteger { get { return (int)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = (ulong)value; } }
 
 		/// <summary>
 		/// Gets the string data.
@@ -266,7 +282,7 @@ namespace Mosa.Compiler.Framework
 				if (!IsConstant)
 					return false;
 				else if (IsInteger || IsBoolean || IsChar || IsPointer)
-					return ConstantUnsignedInteger == 0;
+					return ConstantUnsignedLongInteger == 0;
 				else if (IsR8)
 					return ConstantDoubleFloatingPoint == 0;
 				else if (IsR4)
@@ -291,7 +307,7 @@ namespace Mosa.Compiler.Framework
 				if (!IsConstant)
 					return false;
 				else if (IsInteger || IsBoolean || IsChar || IsPointer)
-					return ConstantUnsignedInteger == 1;
+					return ConstantUnsignedLongInteger == 1;
 				else if (IsR8)
 					return ConstantDoubleFloatingPoint == 1;
 				else if (IsR4)
@@ -417,7 +433,7 @@ namespace Mosa.Compiler.Framework
 		{
 			var operand = new Operand(type);
 			operand.IsConstant = true;
-			operand.ConstantUnsignedInteger = value;
+			operand.ConstantUnsignedLongInteger = value;
 			operand.IsNull = (type.IsReferenceType && value == 0);
 
 			if (type.IsReferenceType && value != 0)
@@ -471,7 +487,7 @@ namespace Mosa.Compiler.Framework
 		{
 			var operand = new Operand(typeSystem.BuiltIn.I4);
 			operand.IsConstant = true;
-			operand.ConstantSignedInteger = value;
+			operand.ConstantSignedLongInteger = value;
 			return operand;
 		}
 
@@ -487,7 +503,7 @@ namespace Mosa.Compiler.Framework
 		{
 			var operand = new Operand(typeSystem.BuiltIn.I8);
 			operand.IsConstant = true;
-			operand.ConstantSignedInteger = value;
+			operand.ConstantSignedLongInteger = value;
 			return operand;
 		}
 
@@ -783,7 +799,7 @@ namespace Mosa.Compiler.Framework
 			{
 				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsConstant = true;
-				operand.ConstantUnsignedInteger = longOperand.ConstantUnsignedInteger & uint.MaxValue;
+				operand.ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger & uint.MaxValue;
 			}
 			else if (longOperand.IsField)
 			{
@@ -841,7 +857,7 @@ namespace Mosa.Compiler.Framework
 			{
 				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsConstant = true;
-				operand.ConstantUnsignedInteger = ((uint)(longOperand.ConstantUnsignedInteger >> 32)) & uint.MaxValue;
+				operand.ConstantUnsignedLongInteger = ((uint)(longOperand.ConstantUnsignedLongInteger >> 32)) & uint.MaxValue;
 			}
 			else if (longOperand.IsField)
 			{
@@ -957,9 +973,15 @@ namespace Mosa.Compiler.Framework
 				if (IsNull)
 					sb.Append("null");
 				else if (IsUnsigned || IsBoolean || IsChar || IsPointer)
-					sb.AppendFormat("{0}", ConstantUnsignedInteger);
+					if (IsU8)
+						sb.AppendFormat("{0}", ConstantUnsignedLongInteger);
+					else
+						sb.AppendFormat("{0}", ConstantUnsignedInteger);
 				else if (IsSigned)
-					sb.AppendFormat("{0}", ConstantSignedInteger);
+					if (IsI8)
+						sb.AppendFormat("{0}", ConstantSignedLongInteger);
+					else
+						sb.AppendFormat("{0}", ConstantSignedInteger);
 				if (IsR8)
 					sb.AppendFormat("{0}", ConstantDoubleFloatingPoint);
 				else if (IsR4)

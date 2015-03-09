@@ -80,7 +80,7 @@ namespace Mosa.Platform.ARMv6
 			}
 			else if (node.Operand2.IsConstant && node.Operand3.IsConstant)
 			{
-				emitter.EmitInstructionWithImmediate(node.ConditionCode, opcode, node.UpdateStatus, node.Operand1.Register.Index, node.Result.Register.Index, (int)node.Operand2.ConstantSignedInteger, (int)node.Operand3.ConstantSignedInteger);
+				emitter.EmitInstructionWithImmediate(node.ConditionCode, opcode, node.UpdateStatus, node.Operand1.Register.Index, node.Result.Register.Index, (int)node.Operand2.ConstantSignedLongInteger, (int)node.Operand3.ConstantSignedLongInteger);
 			}
 			else
 			{
@@ -118,7 +118,7 @@ namespace Mosa.Platform.ARMv6
 					transferType,
 					node.Operand1.Index,
 					node.Result.Index,
-					(uint)node.Operand2.ConstantUnsignedInteger
+					(uint)node.Operand2.ConstantUnsignedLongInteger
 				);
 			}
 			else

@@ -66,7 +66,7 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('9');
 			ProcessManager.Setup();
 			Screen.Write('0');
-			Runtime.Setup();
+			//Runtime.Setup();
 			Screen.Write('A');
 			TaskManager.Setup();
 			Screen.Write('B');
