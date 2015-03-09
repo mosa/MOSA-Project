@@ -35,9 +35,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (MethodCompiler.Method.FullName.Contains("Mosa.Platform.Internal"))
-				return;
-
 			var analysis = new SparseConditionalConstantPropagation(BasicBlocks, this);
 
 			var deadBlocks = analysis.GetDeadBlocked();

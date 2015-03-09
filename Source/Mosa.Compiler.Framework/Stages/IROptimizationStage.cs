@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (MethodCompiler.Method.FullName.Contains("Mosa.Platform.Internal"))
+			if (MethodCompiler.Method.FullName.Contains(" Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
 				return;
 
 			// Method is empty - must be a plugged method
@@ -277,6 +277,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool PromoteLocalVariable()
 		{
+			if (MethodCompiler.Method.FullName.Contains(" Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
+				return false;
+
 			bool change = false;
 
 			foreach (var local in MethodCompiler.LocalVariables)

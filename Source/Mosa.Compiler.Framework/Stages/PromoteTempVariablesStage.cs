@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			if (MethodCompiler.Method.FullName.Contains("Mosa.Platform.Internal"))
+			if (MethodCompiler.Method.FullName.Contains(" Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
 				return;
 
 			if (!HasCode)
