@@ -40,7 +40,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			compiler.CompilerOptions.EnableOptimizations = true;
 			compiler.CompilerOptions.EnableSSA = true;
-			compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = true;
+			compiler.CompilerOptions.EnableVariablePromotion = true;
 			compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
 			compiler.CompilerOptions.EnableInlinedMethods = false;
 

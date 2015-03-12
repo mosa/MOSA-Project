@@ -41,7 +41,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				new UnboxValueTypeStage(),
 				new ExceptionStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
-				(compilerOptions.EnablePromoteTemporaryVariablesOptimization) ? new PromoteTempVariablesStage() : null,
+				(compilerOptions.EnableVariablePromotion) ? new PromoteTempVariablesStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,

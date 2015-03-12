@@ -195,9 +195,9 @@ namespace Mosa.Tool.Compiler
 			);
 
 			optionSet.Add(
-				@"promote-temps|enable-promote-temporary-variables-optimization",
-				@"Enables temporary variables promotion optimization.",
-				enable => compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = enable != null
+				@"promote-variables|enable-variable-promotion",
+				@"Enables variable promotion optimization.",
+				enable => compiler.CompilerOptions.EnableVariablePromote = enable != null
 			);
 
 			optionSet.Add(

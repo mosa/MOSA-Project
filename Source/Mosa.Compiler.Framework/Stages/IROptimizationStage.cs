@@ -74,7 +74,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace = CreateTraceLog();
 
-			PromoteLocalVariable();
+			if (MethodCompiler.Compiler.CompilerOptions.EnableVariablePromotion)
+				PromoteLocalVariable();
 
 			// initialize worklist
 			foreach (var block in BasicBlocks)
@@ -114,8 +115,9 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				change = false;
 
-				if (PromoteLocalVariable())
-					change = true;
+				if (MethodCompiler.Compiler.CompilerOptions.EnableVariablePromotion)
+					if (PromoteLocalVariable())
+						change = true;
 
 				//if (Reduce64BitOperationsTo32Bit())
 				//	change = true;
@@ -277,14 +279,20 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool PromoteLocalVariable()
 		{
-			if (MethodCompiler.Method.FullName.Contains(" Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
-				return false;
+			//if (MethodCompiler.Method.FullName.Contains(" Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
+			//	return false;
 
 			bool change = false;
 
 			foreach (var local in MethodCompiler.LocalVariables)
 			{
 				if (local.IsVirtualRegister)
+					continue;
+
+				if (local.IsParameter)
+					continue;
+
+				if (!local.IsStackLocal)
 					continue;
 
 				if (local.Definitions.Count != 1)
@@ -294,6 +302,9 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 
 				if (ContainsAddressOf(local))
+					continue;
+
+				if (local.Definitions.Count == 0 || local.Uses.Count == 0)
 					continue;
 
 				var v = MethodCompiler.CreateVirtualRegister(local.Type.GetStackType());
