@@ -212,7 +212,7 @@ namespace Mosa.Tool.TinySimulator
 
 			Compiler.CompilerOptions.EnableSSA = true;
 			Compiler.CompilerOptions.EnableOptimizations = true;
-			Compiler.CompilerOptions.EnablePromoteTemporaryVariables = true;
+			Compiler.CompilerOptions.EnableVariablePromotion = true;
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
 			Compiler.CompilerOptions.EnableInlinedMethods = true;
 

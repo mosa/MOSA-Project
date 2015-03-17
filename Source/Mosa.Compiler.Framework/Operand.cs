@@ -908,17 +908,15 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Static Factory Constructors
 
-		#region Object Overrides
-
 		/// <summary>
 		/// Returns a string representation of <see cref="Operand"/>.
 		/// </summary>
 		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
+		public string ToString(bool full)
 		{
 			if (IsSSA)
 			{
-				string ssa = SSAParent.ToString();
+				string ssa = SSAParent.ToString(full);
 				int pos = ssa.IndexOf(' ');
 
 				if (pos < 0)
@@ -927,7 +925,7 @@ namespace Mosa.Compiler.Framework
 					return ssa.Substring(0, pos) + "<" + SSAVersion + ">" + ssa.Substring(pos);
 			}
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			if (IsVirtualRegister)
 			{
@@ -951,14 +949,14 @@ namespace Mosa.Compiler.Framework
 			if (IsField)
 			{
 				sb.Append(' ');
-				sb.Append(Field.FullName.ToString());
+				sb.Append(Field.FullName);
 			}
 
 			if (IsSplitChild)
 			{
 				sb.Append(' ');
 
-				sb.Append("(" + SplitParent.ToString() + ")");
+				sb.Append("(" + SplitParent.ToString(full) + ")");
 
 				if (SplitParent.High == this)
 					sb.Append("/high");
@@ -1000,9 +998,9 @@ namespace Mosa.Compiler.Framework
 				if (OffsetBase != null)
 				{
 					if (Displacement > 0)
-						sb.AppendFormat("[{0}+{1:X}h]", OffsetBase.ToString(), Displacement);
+						sb.AppendFormat("[{0}+{1:X}h]", OffsetBase.ToString(full), Displacement);
 					else
-						sb.AppendFormat("[{0}-{1:X}h]", OffsetBase.ToString(), -Displacement);
+						sb.AppendFormat("[{0}-{1:X}h]", OffsetBase.ToString(full), -Displacement);
 				}
 				else if (Register != null)
 				{
@@ -1020,9 +1018,19 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			sb.AppendFormat(" [{0}]", Type.FullName);
+			if (full)
+			{
+				sb.AppendFormat(" [{0}]", Type.FullName);
+			}
 
 			return sb.ToString().Replace("  ", " ").Trim();
+		}
+
+		#region Object Overrides
+
+		public override string ToString()
+		{
+			return ToString(true);
 		}
 
 		#endregion Object Overrides

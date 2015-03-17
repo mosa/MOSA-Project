@@ -62,9 +62,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (MethodCompiler.Method.FullName.Contains(" Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
-				return;
-
 			// Method is empty - must be a plugged method
 			if (!HasCode)
 				return;
@@ -102,6 +99,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (op.IsVirtualRegister)
 							virtualRegisters.AddIfNew(op);
 					}
+
 					foreach (var op in node.Operands)
 					{
 						if (op.IsVirtualRegister)
@@ -304,8 +302,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (ContainsAddressOf(local))
 					continue;
 
-				if (local.Definitions.Count == 0 || local.Uses.Count == 0)
-					continue;
+				//if (local.Definitions.Count == 0 || local.Uses.Count == 0)
+				//	continue;
 
 				var v = MethodCompiler.CreateVirtualRegister(local.Type.GetStackType());
 

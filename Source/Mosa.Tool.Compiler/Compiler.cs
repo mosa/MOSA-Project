@@ -197,7 +197,7 @@ namespace Mosa.Tool.Compiler
 			optionSet.Add(
 				@"promote-variables|enable-variable-promotion",
 				@"Enables variable promotion optimization.",
-				enable => compiler.CompilerOptions.EnableVariablePromote = enable != null
+				enable => compiler.CompilerOptions.EnableVariablePromotion = enable != null
 			);
 
 			optionSet.Add(

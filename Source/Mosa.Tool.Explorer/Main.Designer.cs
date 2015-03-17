@@ -381,7 +381,7 @@
 			this.tabControl1.Location = new System.Drawing.Point(3, 3);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(706, 405);
+			this.tabControl1.Size = new System.Drawing.Size(713, 405);
 			this.tabControl1.TabIndex = 38;
 			// 
 			// tabPage1
@@ -397,7 +397,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 25);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(698, 376);
+			this.tabPage1.Size = new System.Drawing.Size(705, 376);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Instructions";
 			// 
@@ -459,7 +459,7 @@
 			this.tabPage2.Location = new System.Drawing.Point(4, 25);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(698, 376);
+			this.tabPage2.Size = new System.Drawing.Size(705, 376);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Debug";
 			// 
@@ -485,7 +485,7 @@
 			this.rbOtherResult.Location = new System.Drawing.Point(0, 35);
 			this.rbOtherResult.Margin = new System.Windows.Forms.Padding(0);
 			this.rbOtherResult.Name = "rbOtherResult";
-			this.rbOtherResult.Size = new System.Drawing.Size(708, 341);
+			this.rbOtherResult.Size = new System.Drawing.Size(702, 341);
 			this.rbOtherResult.TabIndex = 32;
 			this.rbOtherResult.Text = "";
 			this.rbOtherResult.WordWrap = false;
@@ -497,7 +497,7 @@
 			this.tabPage3.Location = new System.Drawing.Point(4, 25);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(698, 376);
+			this.tabPage3.Size = new System.Drawing.Size(705, 376);
 			this.tabPage3.TabIndex = 2;
 			this.tabPage3.Text = "Errors";
 			// 
@@ -509,7 +509,7 @@
 			this.rbErrors.Font = new System.Drawing.Font("Lucida Console", 8F);
 			this.rbErrors.Location = new System.Drawing.Point(0, 0);
 			this.rbErrors.Name = "rbErrors";
-			this.rbErrors.Size = new System.Drawing.Size(708, 376);
+			this.rbErrors.Size = new System.Drawing.Size(705, 376);
 			this.rbErrors.TabIndex = 0;
 			this.rbErrors.Text = "";
 			this.rbErrors.WordWrap = false;
@@ -521,7 +521,7 @@
 			this.tabPage4.Location = new System.Drawing.Point(4, 25);
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(698, 376);
+			this.tabPage4.Size = new System.Drawing.Size(705, 376);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "Log";
 			// 
@@ -533,7 +533,7 @@
 			this.rbLog.Font = new System.Drawing.Font("Lucida Console", 8F);
 			this.rbLog.Location = new System.Drawing.Point(0, 0);
 			this.rbLog.Name = "rbLog";
-			this.rbLog.Size = new System.Drawing.Size(708, 376);
+			this.rbLog.Size = new System.Drawing.Size(709, 376);
 			this.rbLog.TabIndex = 1;
 			this.rbLog.Text = "";
 			this.rbLog.WordWrap = false;
@@ -545,7 +545,7 @@
 			this.tabPage5.Location = new System.Drawing.Point(4, 25);
 			this.tabPage5.Name = "tabPage5";
 			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage5.Size = new System.Drawing.Size(698, 376);
+			this.tabPage5.Size = new System.Drawing.Size(705, 376);
 			this.tabPage5.TabIndex = 4;
 			this.tabPage5.Text = "Counters";
 			// 
@@ -557,7 +557,7 @@
 			this.rbCounters.Font = new System.Drawing.Font("Lucida Console", 8F);
 			this.rbCounters.Location = new System.Drawing.Point(-2, 0);
 			this.rbCounters.Name = "rbCounters";
-			this.rbCounters.Size = new System.Drawing.Size(710, 376);
+			this.rbCounters.Size = new System.Drawing.Size(711, 376);
 			this.rbCounters.TabIndex = 1;
 			this.rbCounters.Text = "";
 			this.rbCounters.WordWrap = false;
@@ -568,7 +568,7 @@
 			this.tabPage6.Location = new System.Drawing.Point(4, 25);
 			this.tabPage6.Name = "tabPage6";
 			this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage6.Size = new System.Drawing.Size(698, 376);
+			this.tabPage6.Size = new System.Drawing.Size(705, 376);
 			this.tabPage6.TabIndex = 5;
 			this.tabPage6.Text = "Exceptions";
 			this.tabPage6.UseVisualStyleBackColor = true;
@@ -581,7 +581,7 @@
 			this.rbException.Font = new System.Drawing.Font("Lucida Console", 8F);
 			this.rbException.Location = new System.Drawing.Point(-4, 0);
 			this.rbException.Name = "rbException";
-			this.rbException.Size = new System.Drawing.Size(716, 376);
+			this.rbException.Size = new System.Drawing.Size(713, 376);
 			this.rbException.TabIndex = 2;
 			this.rbException.Text = "";
 			this.rbException.WordWrap = false;
