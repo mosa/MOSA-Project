@@ -958,7 +958,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 
-			var symbol = linker.CreateSymbol(symbolName, SectionKind.ROData, NativePointerAlignment, NativePointerSize * 3 + stringdata.Length * 2);
+			var symbol = linker.CreateSymbol(symbolName, SectionKind.ROData, NativeAlignment, NativePointerSize * 3 + stringdata.Length * 2);
 			var stream = symbol.Stream;
 
 			// Type Definition and sync block

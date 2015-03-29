@@ -295,7 +295,7 @@ namespace Mosa.Platform.x86
 		/// <param name="size">The size.</param>
 		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand source, int size)
 		{
-			int alignedSize = size - (size % 4);
+			int alignedSize = size - (size % NativeAlignment);
 			Debug.Assert(size > 0);
 
 			var src = source;
@@ -308,7 +308,7 @@ namespace Mosa.Platform.x86
 
 			context.AppendInstruction(X86.Lea, srcReg, src);
 			context.AppendInstruction(X86.Lea, dstReg, dest);
-			for (int i = 0; i < alignedSize; i += 4)
+			for (int i = 0; i < alignedSize; i += NativeAlignment)
 			{
 				context.AppendInstruction(X86.Mov, InstructionSize.Size32, tmp, Operand.CreateMemoryAddress(src.Type.TypeSystem.BuiltIn.I4, srcReg, i));
 				context.AppendInstruction(X86.Mov, InstructionSize.Size32, Operand.CreateMemoryAddress(dest.Type.TypeSystem.BuiltIn.I4, dstReg, i), tmp);
