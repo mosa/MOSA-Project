@@ -67,9 +67,9 @@ namespace Mosa.Compiler.Framework
 		protected int NativePointerSize { get; private set; }
 
 		/// <summary>
-		/// Holds the native pointer alignment
+		/// Holds the native alignment
 		/// </summary>
-		protected int NativePointerAlignment { get; private set; }
+		protected int NativeAlignment { get; private set; }
 
 		/// <summary>
 		/// Gets the type of the platform internal runtime.
@@ -115,7 +115,7 @@ namespace Mosa.Compiler.Framework
 			CallingConvention = Architecture.CallingConvention;
 
 			NativePointerSize = Architecture.NativePointerSize;
-			NativePointerAlignment = Architecture.NativeAlignment;
+			NativeAlignment = Architecture.NativeAlignment;
 			NativeInstructionSize = Architecture.NativeInstructionSize;
 
 			traceLogs = new List<TraceLog>();
