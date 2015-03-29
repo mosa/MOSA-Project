@@ -6,6 +6,7 @@
  */
 
 using Mosa.Kernel.x86;
+using System.Runtime.InteropServices;
 
 namespace Mosa.DebugWorld.x86
 {
@@ -26,8 +27,16 @@ namespace Mosa.DebugWorld.x86
 			Screen.Write('>');
 			SSE.Setup();
 
-			Test();
-			Screen.Write('X');
+			if (Test())
+				Screen.Write('X');
+
+
+			var t = Test2();
+			if (t.TestResult1)
+				Screen.Write('O');
+
+			if (Test3(t).TestResult2)
+				Screen.Write('P');
 
 			while (true) ;
 		}
@@ -40,12 +49,72 @@ namespace Mosa.DebugWorld.x86
 
 			#region COMPILER_BUG
 
-			if (num >= 32 && num < 128) //COMPILER_BUG: This conditinal expression will not resolved correctly!
-				return true;
-			else
+			if (num < 32 && num >= 128) //COMPILER_BUG: This conditinal expression will not resolved correctly!
 				return false;
+			else
+				return true;
 
 			#endregion COMPILER_BUG
+		}
+		
+		private static TestStruct Test2()
+		{
+			return TestStruct.Create();
+		}
+
+		private static TestStruct Test3(TestStruct t)
+		{
+			t.Limit = 0;
+			return t;
+		}
+
+	}
+
+	[StructLayout(LayoutKind.Explicit)]
+	unsafe public struct TestStruct
+	{
+		[FieldOffset(0)]
+		private ushort limitLow;
+
+		[FieldOffset(2)]
+		private ushort baseLow;
+
+		[FieldOffset(4)]
+		private byte baseMiddle;
+
+		[FieldOffset(5)]
+		private byte access;
+
+		[FieldOffset(6)]
+		private byte flags;
+
+		public static TestStruct Create()
+		{
+			return new TestStruct() { limitLow = (ushort)0xFFFF };
+		}
+
+		public uint Limit
+		{
+			set
+			{
+				limitLow = (ushort)(0xFFFFFFFFU & 0xFFFF);
+			}
+		}
+
+		public bool TestResult1
+		{
+			get
+			{
+				return limitLow == (ushort)(0xFFFF);
+			}
+		}
+
+		public bool TestResult2
+		{
+			get
+			{
+				return limitLow == (ushort)(0xFFFFFFFFU & 0xFFFF);
+			}
 		}
 	}
 }

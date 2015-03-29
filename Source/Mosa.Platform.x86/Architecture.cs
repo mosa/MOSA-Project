@@ -295,7 +295,8 @@ namespace Mosa.Platform.x86
 		/// <param name="size">The size.</param>
 		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand source, int size)
 		{
-			Debug.Assert(size > 0 && size % 4 == 0);
+			int alignedSize = size - (size % 4);
+			Debug.Assert(size > 0);
 
 			var src = source;
 			var dest = destination;
@@ -307,10 +308,15 @@ namespace Mosa.Platform.x86
 
 			context.AppendInstruction(X86.Lea, srcReg, src);
 			context.AppendInstruction(X86.Lea, dstReg, dest);
-			for (int i = 0; i < size; i += 4)
+			for (int i = 0; i < alignedSize; i += 4)
 			{
-				context.AppendInstruction(X86.Mov, tmp, Operand.CreateMemoryAddress(src.Type.TypeSystem.BuiltIn.I4, srcReg, i));
-				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(dest.Type.TypeSystem.BuiltIn.I4, dstReg, i), tmp);
+				context.AppendInstruction(X86.Mov, InstructionSize.Size32, tmp, Operand.CreateMemoryAddress(src.Type.TypeSystem.BuiltIn.I4, srcReg, i));
+				context.AppendInstruction(X86.Mov, InstructionSize.Size32, Operand.CreateMemoryAddress(dest.Type.TypeSystem.BuiltIn.I4, dstReg, i), tmp);
+			}
+			for (int i = alignedSize; i < size; i++)
+			{
+				context.AppendInstruction(X86.Mov, InstructionSize.Size8, tmp, Operand.CreateMemoryAddress(src.Type.TypeSystem.BuiltIn.I4, srcReg, i));
+				context.AppendInstruction(X86.Mov, InstructionSize.Size8, Operand.CreateMemoryAddress(dest.Type.TypeSystem.BuiltIn.I4, dstReg, i), tmp);
 			}
 		}
 
