@@ -580,7 +580,12 @@ namespace Mosa.TinyCPUSimulator
 			instruction.Opcode.Execute(this, instruction);
 		}
 
-		public virtual string CompactDump()
+		public virtual string GetDumpHeaders()
+		{
+			return string.Empty;
+		}
+
+		public virtual string GetDump()
 		{
 			return string.Empty;
 		}
@@ -602,9 +607,10 @@ namespace Mosa.TinyCPUSimulator
 
 				if (Monitor.DebugOutput)
 				{
-					Debug.Write(CompactDump());
-					Debug.Write("  0x" + LastProgramCounter.ToString("X") + ": ");
-					Debug.WriteLine(LastInstruction.ToString());
+					string info = GetSourceInformation(LastProgramCounter) ?? string.Empty;
+
+					Debug.Write(GetDump());
+					Debug.WriteLine("\t0x" + LastProgramCounter.ToString("X") + ": " + LastInstruction.ToString() + '\t' + info);
 				}
 			}
 			catch (SimCPUException e)
@@ -628,9 +634,7 @@ namespace Mosa.TinyCPUSimulator
 
 				if (Monitor.DebugOutput)
 				{
-					// Move to CPUx86
-					//Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      XMM#3      FLAGS");
-					Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
+					Debug.WriteLine(GetDumpHeaders());
 				}
 
 				for (; ; )

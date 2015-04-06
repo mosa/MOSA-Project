@@ -153,6 +153,7 @@
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
+    <Compile Include="Stages\GraphVizStage.cs" />
     <Compile Include="Stages\ExceptionPrologueStage.cs" />
     <Compile Include="Stages\InlineStage.cs" />
     <Compile Include="Stages\InlineEvaluationStage.cs" />

@@ -116,6 +116,17 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
+					node.SlotNumber = codeEmitter.CurrentPosition;
+
+					if (node.IsBlockStartInstruction)
+					{
+						if (trace.Active)
+						{
+							trace.Log(String.Format("Block #{0} - Label L_{1:X4}", block.Sequence, block.Label)
+								   + (BasicBlocks.IsHeaderBlock(block) ? " [Header]" : string.Empty));
+						}
+					}
+
 					if (node.Instruction.IgnoreDuringCodeGeneration)
 						continue;
 
@@ -123,6 +134,8 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						EmitInstruction(node, codeEmitter);
 						generatedInstructionCount++;
+
+						if (trace.Active) trace.Log(node.SlotNumber.ToString() + " - /0x" + node.SlotNumber.ToString("X") + " : " + node.ToString());
 					}
 					else
 					{
