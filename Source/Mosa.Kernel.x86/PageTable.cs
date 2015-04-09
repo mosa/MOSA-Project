@@ -54,6 +54,9 @@ namespace Mosa.Kernel.x86
 			for (uint index = 0; index < 1024 * 32; index++)
 				AllocatePage();
 
+			MapVirtualAddressToPhysical(0xFFE00000, 0x0);
+			MapVirtualAddressToPhysical(0x0, 0x0, false);
+
 			//Panic.DumpMemory(pageDirectoryAddress);
 
 			// Set CR3 register on processor - sets page directory
@@ -128,10 +131,10 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="virtualAddress">The virtual address.</param>
 		/// <param name="physicalAddress">The physical address.</param>
-		public static void MapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress)
+		public static void MapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress, bool present = true)
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			Native.Set32(pageTableAddress + ((virtualAddress & 0xFFC00000) >> 10), (uint)(physicalAddress & 0xFFC00000 | 0x04 | 0x02 | 0x01));
+			Native.Set32(pageTableAddress + ((virtualAddress & 0xFFC00000u) >> 10), (uint)(physicalAddress & 0xFFC00000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u)));
 		}
 
 		/// <summary>
@@ -142,7 +145,7 @@ namespace Mosa.Kernel.x86
 		public static uint GetPhysicalAddressFromVirtual(uint virtualAddress)
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			return Native.Get32(pageTableAddress + ((virtualAddress & 0xFFFFF000) >> 10)) + (virtualAddress & 0xFFF);
+			return Native.Get32(pageTableAddress + ((virtualAddress & 0xFFFFF000u) >> 10)) + (virtualAddress & 0xFFFu);
 		}
 	}
 

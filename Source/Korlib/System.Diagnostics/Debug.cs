@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2015 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Sebastian Loncar (Arakis) <sebastian.loncar@gmail.com>
+ */
+
+using System;
 using System.Diagnostics;
 
 namespace System.Diagnostics

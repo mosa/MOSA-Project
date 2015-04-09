@@ -166,6 +166,8 @@ namespace System.Collections.Generic
 			}
 			else
 			{
+				if (node.previous == null)
+					node.previous = last;
 				node.previous.next = node;
 				last = node;
 			}
