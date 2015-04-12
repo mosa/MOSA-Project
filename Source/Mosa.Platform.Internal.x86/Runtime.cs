@@ -545,22 +545,33 @@ namespace Mosa.Platform.Internal.x86
 				{
 					var protectedRegion = GetProtectedRegionEntryByAddress(returnAdddress - 1, exceptionType, methodDef);
 
+					//DebugOutput(((uint)protectedRegion));
+
 					if (protectedRegion != null)
 					{
 						// found handler for current method, call it
 
 						uint methodStart = (uint)methodDef->Method;
-						uint stackSize = methodDef->StackSize & 0xFFFF; // lower 16-bits only
 						uint handlerOffset = protectedRegion->HandlerOffset;
-						uint previousFrame = GetPreviousStackFrame(stackFrame);
-
 						uint jumpTarget = methodStart + handlerOffset;
+
+						uint stackSize = methodDef->StackSize & 0xFFFF; // lower 16-bits only
+						uint previousFrame = GetPreviousStackFrame(stackFrame);
 						uint newStack = previousFrame - stackSize;
 
+						//DebugOutput("5x:");
 						//DebugOutput(jumpTarget);
 						//DebugOutput(stackSize);
 						//DebugOutput(newStack);
 						//DebugOutput(previousFrame);
+
+						//var method = GetMethodDefinition(jumpTarget);
+
+						//DebugOutput(jumpTarget - methodStart);
+
+						//string caller = Runtime.GetMethodDefinitionName(method);
+
+						//DebugOutput(caller);
 
 						Native.FrameJump(jumpTarget, newStack, previousFrame);
 					}

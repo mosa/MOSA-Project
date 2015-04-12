@@ -69,6 +69,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (HasProtectedRegions)
 				return;
 
+			//if (MethodCompiler.Method.FullName.Contains(" Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
+			//	return;
+
 			trace = CreateTraceLog();
 
 			if (MethodCompiler.Compiler.CompilerOptions.EnableVariablePromotion)

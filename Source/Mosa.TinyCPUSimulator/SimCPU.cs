@@ -609,8 +609,11 @@ namespace Mosa.TinyCPUSimulator
 				{
 					string info = GetSourceInformation(LastProgramCounter) ?? string.Empty;
 
+					Debug.Write(Tick.ToString());
+					Debug.Write('\t');
 					Debug.Write(GetDump());
-					Debug.WriteLine("\t0x" + LastProgramCounter.ToString("X") + ": " + LastInstruction.ToString() + '\t' + info);
+					Debug.Write('\t');
+					Debug.WriteLine(LastProgramCounter.ToString("X") + ": " + LastInstruction.ToString() + '\t' + info);
 				}
 			}
 			catch (SimCPUException e)
@@ -634,6 +637,7 @@ namespace Mosa.TinyCPUSimulator
 
 				if (Monitor.DebugOutput)
 				{
+					Debug.Write("Tick\t");
 					Debug.WriteLine(GetDumpHeaders());
 				}
 
