@@ -1544,12 +1544,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				foreach (var currentInterval in virtualRegister.LiveIntervals)
 				{
+					// No moves at block edges (these are done in the resolve move phase later)
 					if (blockEdges.ContainsKey(currentInterval.End))
 						continue;
 
 					// List is not sorted, so scan thru each one
 					foreach (var nextInterval in virtualRegister.LiveIntervals)
 					{
+						// same interval
+						if (currentInterval == nextInterval)
+							continue;
+
 						if (nextInterval.Start != currentInterval.End)
 							continue;
 
@@ -1561,6 +1566,18 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						if (nextInterval.AssignedOperand == currentInterval.AssignedOperand ||
 							nextInterval.AssignedOperand.Register == currentInterval.AssignedOperand.Register)
 							break;
+
+						// don't load from slot if next live interval starts with a def before use
+						if (nextInterval.DefPositions.Count != 0)
+						{
+							if (nextInterval.UsePositions.Count == 0)
+								continue;
+							else
+							{
+								if (nextInterval.LiveRange.FirstDef < nextInterval.LiveRange.FirstUse)
+									continue;
+							}
+						}
 
 						keyedList.Add(currentInterval.End, currentInterval.AssignedOperand, nextInterval.AssignedOperand);
 
