@@ -421,7 +421,7 @@ namespace Mosa.Platform.Internal.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static uint GetPreviousStackFrame(uint ebp)
 		{
-			if (ebp < 0x100000)
+			if (ebp < 0x1000)
 				return 0;
 			return Intrinsic.Load32(ebp);
 		}
@@ -454,7 +454,7 @@ namespace Mosa.Platform.Internal.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static uint GetReturnAddressFromStackFrame(uint stackframe)
 		{
-			if (stackframe < 0x100000)
+			if (stackframe < 0x1000)
 				return 0;
 			return Intrinsic.Load32(stackframe, NativeIntSize);
 		}
