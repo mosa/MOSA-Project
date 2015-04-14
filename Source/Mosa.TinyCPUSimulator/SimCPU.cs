@@ -618,12 +618,18 @@ namespace Mosa.TinyCPUSimulator
 			}
 			catch (SimCPUException e)
 			{
-				Debug.WriteLine("SIM: " + e.ToString());
+				if (Monitor.DebugOutput)
+				{
+					Debug.WriteLine("SIM: " + e.ToString());
+				}
 				LastException = e;
 			}
 			catch (NotSupportedException e)
 			{
-				Debug.WriteLine(e.ToString());
+				if (Monitor.DebugOutput)
+				{
+					Debug.WriteLine(e.ToString());
+				}
 				LastException = new SimCPUException();
 				Monitor.Stop = true;
 			}
