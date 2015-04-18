@@ -179,14 +179,6 @@ namespace Mosa.Compiler.Framework
 		public bool IsShift { get; private set; }
 
 		/// <summary>
-		/// Gets a value indicating whether this instance is basic block.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is basic block; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsBasicBlock { get { return BasicBlock != null; } }
-
-		/// <summary>
 		/// Gets the name.
 		/// </summary>
 		/// <value>The name.</value>
@@ -198,12 +190,20 @@ namespace Mosa.Compiler.Framework
 		public int Index { get; private set; }
 
 		/// <summary>
+		/// Gets the constant long integer.
+		/// </summary>
+		/// <value>
+		/// The constant long integer.
+		/// </value>
+		public ulong ConstantUnsignedLongInteger { get; private set; }
+
+		/// <summary>
 		/// Gets the constant integer.
 		/// </summary>
 		/// <value>
 		/// The constant integer.
 		/// </value>
-		public ulong ConstantUnsignedInteger { get; private set; }
+		public uint ConstantUnsignedInteger { get { return (uint)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = value; } }
 
 		/// <summary>
 		/// Gets the constant double float point.
@@ -222,12 +222,20 @@ namespace Mosa.Compiler.Framework
 		public float ConstantSingleFloatingPoint { get; private set; }
 
 		/// <summary>
+		/// Gets or sets the constant signed long integer.
+		/// </summary>
+		/// <value>
+		/// The constant signed long integer.
+		/// </value>
+		public long ConstantSignedLongInteger { get { return (long)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = (ulong)value; } }
+
+		/// <summary>
 		/// Gets or sets the constant signed integer.
 		/// </summary>
 		/// <value>
 		/// The constant signed integer.
 		/// </value>
-		public long ConstantSignedInteger { get { return (long)ConstantUnsignedInteger; } set { ConstantUnsignedInteger = (ulong)value; } }
+		public int ConstantSignedInteger { get { return (int)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = (ulong)value; } }
 
 		/// <summary>
 		/// Gets the string data.
@@ -262,14 +270,6 @@ namespace Mosa.Compiler.Framework
 		public ShiftType ShiftType { get; private set; }
 
 		/// <summary>
-		/// Gets the basic block.
-		/// </summary>
-		/// <value>
-		/// The basic block.
-		/// </value>
-		public BasicBlock BasicBlock { get; private set; }
-
-		/// <summary>
 		/// Gets a value indicating whether [is constant zero].
 		/// </summary>
 		/// <value>
@@ -282,7 +282,7 @@ namespace Mosa.Compiler.Framework
 				if (!IsConstant)
 					return false;
 				else if (IsInteger || IsBoolean || IsChar || IsPointer)
-					return ConstantUnsignedInteger == 0;
+					return ConstantUnsignedLongInteger == 0;
 				else if (IsR8)
 					return ConstantDoubleFloatingPoint == 0;
 				else if (IsR4)
@@ -307,7 +307,7 @@ namespace Mosa.Compiler.Framework
 				if (!IsConstant)
 					return false;
 				else if (IsInteger || IsBoolean || IsChar || IsPointer)
-					return ConstantUnsignedInteger == 1;
+					return ConstantUnsignedLongInteger == 1;
 				else if (IsR8)
 					return ConstantDoubleFloatingPoint == 1;
 				else if (IsR4)
@@ -433,9 +433,15 @@ namespace Mosa.Compiler.Framework
 		{
 			var operand = new Operand(type);
 			operand.IsConstant = true;
-			operand.ConstantUnsignedInteger = value;
+			operand.ConstantUnsignedLongInteger = value;
+			operand.IsNull = (type.IsReferenceType && value == 0);
 
-			if (!(operand.IsInteger || operand.IsBoolean || operand.IsChar || operand.IsPointer))
+			if (type.IsReferenceType && value != 0)
+			{
+				throw new InvalidCompilerException();
+			}
+
+			if (!(operand.IsInteger || operand.IsBoolean || operand.IsChar || operand.IsPointer || operand.IsReferenceType))
 			{
 				throw new InvalidCompilerException();
 			}
@@ -481,7 +487,7 @@ namespace Mosa.Compiler.Framework
 		{
 			var operand = new Operand(typeSystem.BuiltIn.I4);
 			operand.IsConstant = true;
-			operand.ConstantSignedInteger = value;
+			operand.ConstantSignedLongInteger = value;
 			return operand;
 		}
 
@@ -497,7 +503,7 @@ namespace Mosa.Compiler.Framework
 		{
 			var operand = new Operand(typeSystem.BuiltIn.I8);
 			operand.IsConstant = true;
-			operand.ConstantSignedInteger = value;
+			operand.ConstantSignedLongInteger = value;
 			return operand;
 		}
 
@@ -562,11 +568,10 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the symbol.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
 		/// <param name="type">The type.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public static Operand CreateManagedSymbolPointer(TypeSystem typeSystem, MosaType type, string name)
+		private static Operand CreateManagedSymbolPointer(MosaType type, string name)
 		{
 			// NOTE: Not being used
 			var operand = new Operand(type.ToManagedPointer());
@@ -578,11 +583,10 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the symbol.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
 		/// <param name="type">The type.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public static Operand CreateManagedSymbol(TypeSystem typeSystem, MosaType type, string name)
+		public static Operand CreateManagedSymbol(MosaType type, string name)
 		{
 			var operand = new Operand(type);
 			operand.IsSymbol = true;
@@ -616,7 +620,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateSymbolFromMethod(TypeSystem typeSystem, MosaMethod method)
 		{
-			Operand operand = CreateUnmanagedSymbolPointer(typeSystem, method.FullName);
+			var operand = CreateUnmanagedSymbolPointer(typeSystem, method.FullName);
 			operand.Method = method;
 			return operand;
 		}
@@ -694,20 +698,6 @@ namespace Mosa.Compiler.Framework
 			operand.IsLabel = true;
 			operand.Name = label;
 			operand.Displacement = 0;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates the basic block.
-		/// </summary>
-		/// <param name="basicBlock">The basic block.</param>
-		/// <returns></returns>
-		public static Operand CreateBasicBlock(TypeSystem typeSystem, BasicBlock basicBlock)
-		{
-			var operand = new Operand(typeSystem.BuiltIn.Pointer);
-			operand.BasicBlock = basicBlock;
-			operand.IsMemoryAddress = true;
-			operand.Index = basicBlock.Label;
 			return operand;
 		}
 
@@ -809,7 +799,7 @@ namespace Mosa.Compiler.Framework
 			{
 				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsConstant = true;
-				operand.ConstantUnsignedInteger = longOperand.ConstantUnsignedInteger & uint.MaxValue;
+				operand.ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger & uint.MaxValue;
 			}
 			else if (longOperand.IsField)
 			{
@@ -867,7 +857,7 @@ namespace Mosa.Compiler.Framework
 			{
 				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsConstant = true;
-				operand.ConstantUnsignedInteger = ((uint)(longOperand.ConstantUnsignedInteger >> 32)) & uint.MaxValue;
+				operand.ConstantUnsignedLongInteger = ((uint)(longOperand.ConstantUnsignedLongInteger >> 32)) & uint.MaxValue;
 			}
 			else if (longOperand.IsField)
 			{
@@ -918,17 +908,15 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Static Factory Constructors
 
-		#region Object Overrides
-
 		/// <summary>
 		/// Returns a string representation of <see cref="Operand"/>.
 		/// </summary>
 		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
+		public string ToString(bool full)
 		{
 			if (IsSSA)
 			{
-				string ssa = SSAParent.ToString();
+				string ssa = SSAParent.ToString(full);
 				int pos = ssa.IndexOf(' ');
 
 				if (pos < 0)
@@ -937,7 +925,7 @@ namespace Mosa.Compiler.Framework
 					return ssa.Substring(0, pos) + "<" + SSAVersion + ">" + ssa.Substring(pos);
 			}
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			if (IsVirtualRegister)
 			{
@@ -951,10 +939,6 @@ namespace Mosa.Compiler.Framework
 			{
 				sb.AppendFormat("P_{0}", Index);
 			}
-			else if (IsBasicBlock)
-			{
-				sb.AppendFormat(BasicBlock.ToString());
-			}
 
 			if (Name != null)
 			{
@@ -965,14 +949,14 @@ namespace Mosa.Compiler.Framework
 			if (IsField)
 			{
 				sb.Append(' ');
-				sb.Append(Field.FullName.ToString());
+				sb.Append(Field.FullName);
 			}
 
 			if (IsSplitChild)
 			{
 				sb.Append(' ');
 
-				sb.Append("(" + SplitParent.ToString() + ")");
+				sb.Append("(" + SplitParent.ToString(full) + ")");
 
 				if (SplitParent.High == this)
 					sb.Append("/high");
@@ -987,9 +971,15 @@ namespace Mosa.Compiler.Framework
 				if (IsNull)
 					sb.Append("null");
 				else if (IsUnsigned || IsBoolean || IsChar || IsPointer)
-					sb.AppendFormat("{0}", ConstantUnsignedInteger);
+					if (IsU8)
+						sb.AppendFormat("{0}", ConstantUnsignedLongInteger);
+					else
+						sb.AppendFormat("{0}", ConstantUnsignedInteger);
 				else if (IsSigned)
-					sb.AppendFormat("{0}", ConstantSignedInteger);
+					if (IsI8)
+						sb.AppendFormat("{0}", ConstantSignedLongInteger);
+					else
+						sb.AppendFormat("{0}", ConstantSignedInteger);
 				if (IsR8)
 					sb.AppendFormat("{0}", ConstantDoubleFloatingPoint);
 				else if (IsR4)
@@ -1002,15 +992,15 @@ namespace Mosa.Compiler.Framework
 			{
 				sb.AppendFormat(" {0}", Register);
 			}
-			else if (IsMemoryAddress && !IsBasicBlock)
+			else if (IsMemoryAddress)
 			{
 				sb.Append(' ');
 				if (OffsetBase != null)
 				{
 					if (Displacement > 0)
-						sb.AppendFormat("[{0}+{1:X}h]", OffsetBase.ToString(), Displacement);
+						sb.AppendFormat("[{0}+{1:X}h]", OffsetBase.ToString(full), Displacement);
 					else
-						sb.AppendFormat("[{0}-{1:X}h]", OffsetBase.ToString(), -Displacement);
+						sb.AppendFormat("[{0}-{1:X}h]", OffsetBase.ToString(full), -Displacement);
 				}
 				else if (Register != null)
 				{
@@ -1028,9 +1018,19 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			sb.AppendFormat(" [{0}]", Type.FullName);
+			if (full)
+			{
+				sb.AppendFormat(" [{0}]", Type.FullName);
+			}
 
 			return sb.ToString().Replace("  ", " ").Trim();
+		}
+
+		#region Object Overrides
+
+		public override string ToString()
+		{
+			return ToString(true);
 		}
 
 		#endregion Object Overrides

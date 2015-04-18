@@ -73,10 +73,10 @@ namespace Mosa.Compiler.Framework
 		public bool EnableSSA { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether [enable SSA optimizations].
+		/// Gets or sets a value indicating whether [enable IR optimizations].
 		/// </summary>
 		/// <value>
-		/// 	<c>true</c> if [enable SSA optimizations]; otherwise, <c>false</c>.
+		/// 	<c>true</c> if [enable IR optimizations]; otherwise, <c>false</c>.
 		/// </value>
 		public bool EnableOptimizations { get; set; }
 
@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if [enable promote temporary variables optimization]; otherwise, <c>false</c>.
 		/// </value>
-		public bool EnablePromoteTemporaryVariablesOptimization { get; set; }
+		public bool EnableVariablePromotion { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable conditional constant propagation].
@@ -95,6 +95,14 @@ namespace Mosa.Compiler.Framework
 		/// <c>true</c> if [enable conditional constant propagation]; otherwise, <c>false</c>.
 		/// </value>
 		public bool EnableSparseConditionalConstantPropagation { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether [enable inlined methods].
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if [enable inlined methods]; otherwise, <c>false</c>.
+		/// </value>
+		public bool EnableInlinedMethods { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether static allocations are enabled.
@@ -162,8 +170,9 @@ namespace Mosa.Compiler.Framework
 		{
 			EnableSSA = true;
 			EnableOptimizations = true;
-			EnablePromoteTemporaryVariablesOptimization = true;
+			EnableVariablePromotion = true;
 			EnableSparseConditionalConstantPropagation = true;
+			EnableInlinedMethods = false;
 			BaseAddress = 0x00400000;
 			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };

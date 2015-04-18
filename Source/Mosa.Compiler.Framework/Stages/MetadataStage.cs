@@ -18,71 +18,6 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
-	#region EndianAwareBinaryWriter Extensions
-
-	public static class EndianAwareBinaryWriterExtensions
-	{
-		public static void Write(this EndianAwareBinaryWriter writer, byte[] value, int nativeSize)
-		{
-			byte[] bytesToWrite = new byte[nativeSize];
-			for (int i = 0; i < nativeSize && i < value.Length; i++)
-				bytesToWrite[i] = value[i];
-			writer.Write(bytesToWrite);
-		}
-
-		public static void Write(this EndianAwareBinaryWriter writer, bool value, int nativeSize)
-		{
-			Write(writer, BitConverter.GetBytes(value), nativeSize);
-		}
-
-		public static void Write(this EndianAwareBinaryWriter writer, sbyte value, int nativeSize)
-		{
-			Write(writer, BitConverter.GetBytes(value), nativeSize);
-		}
-
-		public static void Write(this EndianAwareBinaryWriter writer, char value, int nativeSize)
-		{
-			Write(writer, BitConverter.GetBytes(value), nativeSize);
-		}
-
-		public static void Write(this EndianAwareBinaryWriter writer, short value, int nativeSize)
-		{
-			Write(writer, BitConverter.GetBytes(value), nativeSize);
-		}
-
-		public static void Write(this EndianAwareBinaryWriter writer, int value, int nativeSize)
-		{
-			Write(writer, BitConverter.GetBytes(value), nativeSize);
-		}
-
-		public static void Write(this EndianAwareBinaryWriter writer, long value, int nativeSize)
-		{
-			Write(writer, BitConverter.GetBytes(value), nativeSize);
-		}
-
-		public static void Write(this EndianAwareBinaryWriter writer, byte value, int nativeSize)
-		{
-			Write(writer, BitConverter.GetBytes(value), nativeSize);
-		}
-
-		public static void Write(this EndianAwareBinaryWriter writer, ushort value, int nativeSize)
-		{
-			Write(writer, BitConverter.GetBytes(value), nativeSize);
-		}
-
-		public static void Write(this EndianAwareBinaryWriter writer, uint value, int nativeSize)
-		{
-			Write(writer, BitConverter.GetBytes(value), nativeSize);
-		}
-
-		public static void Write(this EndianAwareBinaryWriter writer, ulong value, int nativeSize)
-		{
-			Write(writer, BitConverter.GetBytes(value), nativeSize);
-		}
-	}
-
-	#endregion EndianAwareBinaryWriter Extensions
-
 	/// <summary>
 	/// Emits metadata for assemblies and types
 	/// </summary>
@@ -191,7 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 
 				// Run the type through the TypeLayout system
-				TypeLayout.ResolveType(type);
+				//TypeLayout.ResolveType(type);
 
 				var typeTableSymbol = CreateTypeDefinition(type, assemblyTableSymbol);
 

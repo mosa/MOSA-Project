@@ -139,7 +139,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister)
+					if (!value.IsCPURegister && !value.IsConstant)
 					{
 						value.Uses.Add(this);
 					}
@@ -174,7 +174,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister)
+					if (!value.IsCPURegister && !value.IsConstant)
 					{
 						value.Uses.Add(this);
 					}
@@ -208,7 +208,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister)
+					if (!value.IsCPURegister && !value.IsConstant)
 					{
 						value.Uses.Add(this);
 					}
@@ -284,7 +284,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister)
+					if (!value.IsCPURegister && !value.IsConstant)
 					{
 						value.Definitions.Add(this);
 					}
@@ -317,10 +317,6 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Definitions.Remove(this);
-					if (!current.IsCPURegister)
-					{
-						current.Definitions.Add(this);
-					}
 					if (current.IsMemoryAddress)
 					{
 						if (current.OffsetBase != null)
@@ -335,7 +331,10 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					value.Definitions.Add(this);
+					if (!value.IsCPURegister && !value.IsConstant)
+					{
+						value.Definitions.Add(this);
+					}
 					if (value.IsMemoryAddress)
 					{
 						if (value.OffsetBase != null)
@@ -591,19 +590,19 @@ namespace Mosa.Compiler.Framework
 
 			this.branchTargets = null;
 
-			Block.DebugCheck();
+			//Block.DebugCheck();
 		}
 
 		public void Insert(InstructionNode node)
 		{
-			var block = Block;
+			//Block.DebugCheck();
 
-			node.Block = block;
+			node.Block = Block;
 			var firstnode = node;
 
 			while (firstnode.Previous != null)
 			{
-				firstnode.Block = block;
+				firstnode.Block = Block;
 				firstnode = firstnode.Previous;
 			}
 
@@ -611,7 +610,7 @@ namespace Mosa.Compiler.Framework
 
 			while (lastnode.Next != null)
 			{
-				lastnode.Block = block;
+				lastnode.Block = Block;
 				lastnode = lastnode.Next;
 			}
 
@@ -625,7 +624,7 @@ namespace Mosa.Compiler.Framework
 			Next = firstnode;
 			firstnode.Previous = this;
 
-			Block.DebugCheck();
+			//Block.DebugCheck();
 		}
 
 		/// <summary>
@@ -634,6 +633,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="node">The node.</param>
 		public void Replace(InstructionNode node)
 		{
+			//Block.DebugCheck();
+
 			Debug.Assert(!IsBlockStartInstruction);
 			Debug.Assert(!IsBlockEndInstruction);
 			Debug.Assert(!node.IsBlockStartInstruction);
@@ -651,7 +652,7 @@ namespace Mosa.Compiler.Framework
 			ClearOperands();
 			Instruction = null;
 
-			Block.DebugCheck();
+			//Block.DebugCheck();
 		}
 
 		/// <summary>
@@ -660,10 +661,17 @@ namespace Mosa.Compiler.Framework
 		/// <param name="newblock">The newblock.</param>
 		public void Split(BasicBlock newblock)
 		{
-			Debug.Assert(!IsBlockEndInstruction);
+			//			Debug.Assert(!IsBlockEndInstruction);
+
+			if (Next == Block.Last)
+				return;
+
+			//Block.DebugCheck();
+			//newblock.DebugCheck();
 
 			// check that new block is empty
 			Debug.Assert(newblock.First.Next == newblock.Last);
+			Debug.Assert(newblock.Last.Previous == newblock.First);
 
 			newblock.First.Next = Next;
 			newblock.Last.Previous = Block.Last.Previous;
@@ -678,8 +686,8 @@ namespace Mosa.Compiler.Framework
 				node.Block = newblock;
 			}
 
-			newblock.DebugCheck();
-			Block.DebugCheck();
+			//	Block.DebugCheck();
+			//	newblock.DebugCheck();
 		}
 
 		private void ClearOperands()
@@ -724,7 +732,7 @@ namespace Mosa.Compiler.Framework
 
 						if (operand != null)
 						{
-							if (!operand.IsCPURegister)
+							if (!operand.IsCPURegister & !operand.IsConstant)
 							{
 								operand.Uses.Add(this);
 							}
@@ -838,30 +846,9 @@ namespace Mosa.Compiler.Framework
 		{
 			if (Instruction == null)
 				return "<none>";
-			else
-				return Instruction.ToString(this);
 
-			//StringBuilder sb = new StringBuilder();
-
-			//if (Label >= 0)
-			//{
-			//	sb.AppendFormat("{0:X6}:", Label);
-			//}
-
-			//sb.Append(Instruction.ToString(this));
-
-			//if (BranchTargets != null)
-			//{
-			//	sb.Append(" (");
-			//	foreach (var branch in BranchTargets)
-			//		sb.Append(branch.ToString() + ",");
-
-			//	sb.Length = sb.Length--;
-
-			//	sb.Append(")");
-			//}
-
-			//return sb.ToString();
+			// TODO: Copy next method into this class
+			return Instruction.ToString(this);
 		}
 
 		/// <summary>
@@ -871,6 +858,29 @@ namespace Mosa.Compiler.Framework
 		public void ReplaceInstructionOnly(BaseInstruction instruction)
 		{
 			Instruction = instruction;
+		}
+
+		private void ReplaceOperands(Operand target, Operand replacement)
+		{
+			for (int i = 0; i < OperandCount; i++)
+			{
+				var operand = GetOperand(i);
+
+				if (target == operand)
+				{
+					SetOperand(i, replacement);
+				}
+			}
+
+			for (int i = 0; i < ResultCount; i++)
+			{
+				var operand = GetResult(i);
+
+				if (target == operand)
+				{
+					SetResult(i, replacement);
+				}
+			}
 		}
 
 		#endregion Methods
@@ -1025,7 +1035,7 @@ namespace Mosa.Compiler.Framework
 			Size = InstructionSize.None;
 			Block = block;
 
-			Block.DebugCheck();
+			//Block.DebugCheck();
 		}
 
 		/// <summary>
@@ -1038,6 +1048,8 @@ namespace Mosa.Compiler.Framework
 				SetInstruction(instruction, instruction.DefaultOperandCount, instruction.DefaultResultCount);
 			else
 				SetInstruction(null, 0, 0);
+
+			//Block.DebugCheck();
 		}
 
 		/// <summary>

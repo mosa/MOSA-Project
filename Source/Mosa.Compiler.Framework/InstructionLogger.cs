@@ -61,7 +61,6 @@ namespace Mosa.Compiler.Trace
 			}
 			else
 			{
-				//LogInstructions(traceLog, new Context(0));
 				traceLog.Log("No instructions.");
 			}
 
@@ -95,18 +94,7 @@ namespace Mosa.Compiler.Trace
 				if (node.IsEmpty)
 					continue;
 
-				var sb = new StringBuilder();
-
-				sb.AppendFormat("L_{0:X4}", node.Label);
-
-				if (node.Marked)
-					sb.Append("*");
-				else
-					sb.Append(" ");
-
-				sb.AppendFormat("{0}", node.Instruction.ToString(node));
-
-				traceLog.Log(sb.ToString());
+				traceLog.Log(node.ToString());
 
 				if (node.IsBlockEndInstruction)
 					return;

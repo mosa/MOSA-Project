@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 
@@ -19,22 +20,16 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data Members
 
-		private readonly Queue<MosaMethod> methodQueue = new Queue<MosaMethod>();
-		private readonly HashSet<MosaMethod> methodScheduled = new HashSet<MosaMethod>(new MosaMethodFullNameComparer());
-		//private readonly HashSet<MosaMethod> methodCompiled = new HashSet<MosaMethod>();
-
-		private readonly TypeSystem typeSystem;
-
-		private object mylock = new object();
+		private readonly UniqueQueueThreadSafe<MosaMethod> queue = new UniqueQueueThreadSafe<MosaMethod>();
+		private readonly HashSet<MosaMethod> methods = new HashSet<MosaMethod>();
 
 		#endregion Data Members
 
-		public CompilationScheduler(TypeSystem typeSystem)
+		public CompilationScheduler()
 		{
-			this.typeSystem = typeSystem;
 		}
 
-		public void ScheduleAll()
+		public void ScheduleAll(TypeSystem typeSystem)
 		{
 			foreach (var type in typeSystem.AllTypes)
 			{
@@ -64,35 +59,34 @@ namespace Mosa.Compiler.Framework
 			if (method.IsAbstract || method.HasOpenGenericParams)
 				return;
 
-			if (methodScheduled.Contains(method))
-				return;
-
 			if (method.IsLinkerGenerated)
 				return;
 
-			lock (mylock)
+			queue.Enqueue(method);
+
+			lock (methods)
 			{
-				methodScheduled.Add(method);
-				methodQueue.Enqueue(method);
+				if (!methods.Contains(method))
+				{
+					methods.Add(method);
+				}
 			}
 		}
 
 		public bool IsScheduled(MosaMethod method)
 		{
-			lock (mylock)
+			lock (methods)
 			{
-				return methodScheduled.Contains(method);
+				return methods.Contains(method);
 			}
 		}
 
 		public void TrackTypeAllocated(MosaType type)
 		{
-			// TODO
 		}
 
 		public void TrackMethodInvoked(MosaMethod method)
 		{
-			// TODO
 		}
 
 		public void TrackFieldReferenced(MosaField field)
@@ -102,13 +96,7 @@ namespace Mosa.Compiler.Framework
 
 		public MosaMethod GetMethodToCompile()
 		{
-			lock (mylock)
-			{
-				if (methodQueue.Count == 0)
-					return null;
-
-				return methodQueue.Dequeue();
-			}
+			return queue.Dequeue();
 		}
 
 		/// <summary>
@@ -117,7 +105,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The total methods.
 		/// </value>
-		public int TotalMethods { get { return methodScheduled.Count; } }
+		public int TotalMethods { get { return methods.Count; } }
 
 		/// <summary>
 		/// Gets the queued methods.
@@ -125,6 +113,6 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The queued methods.
 		/// </value>
-		public int TotalQueuedMethods { get { return methodQueue.Count; } }
+		public int TotalQueuedMethods { get { return queue.Count; } }
 	}
 }

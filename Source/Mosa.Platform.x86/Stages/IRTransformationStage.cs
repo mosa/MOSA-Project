@@ -312,7 +312,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offsetOperand.IsConstant)
 			{
-				Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ConstantSignedInteger);
+				Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ConstantSignedLongInteger);
 
 				var mov = GetMove(result, mem);
 
@@ -346,12 +346,13 @@ namespace Mosa.Platform.x86.Stages
 		{
 			var type = context.Result.Type;
 			int typeSize = TypeLayout.GetTypeSize(type);
-			Debug.Assert(typeSize > 0 && typeSize % 4 == 0, context.Operand2.Name);
+			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
+			Debug.Assert(typeSize > 0, context.Operand2.Name);
 
 			int offset = 0;
 			if (context.Operand2.IsConstant)
 			{
-				offset = (int)context.Operand2.ConstantSignedInteger;
+				offset = (int)context.Operand2.ConstantSignedLongInteger;
 			}
 
 			var offsetop = context.Operand2;
@@ -372,10 +373,15 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Add, srcReg, srcReg, offsetop);
 			}
 
-			for (int i = 0; i < typeSize; i += 4)
+			for (int i = 0; i < alignedTypeSize; i += NativeAlignment)
 			{
-				context.AppendInstruction(X86.Mov, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i + offset));
-				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i), tmp);
+				context.AppendInstruction(X86.Mov, InstructionSize.Size32, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i + offset));
+				context.AppendInstruction(X86.Mov, InstructionSize.Size32, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i), tmp);
+			}
+			for (int i = alignedTypeSize; i < typeSize; i++)
+			{
+				context.AppendInstruction(X86.Mov, InstructionSize.Size8, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i + offset));
+				context.AppendInstruction(X86.Mov, InstructionSize.Size8, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i), tmp);
 			}
 		}
 
@@ -397,7 +403,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offset.IsConstant)
 			{
-				offsetPtr = offset.ConstantSignedInteger;
+				offsetPtr = offset.ConstantSignedLongInteger;
 			}
 			else
 			{
@@ -427,7 +433,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offset.IsConstant)
 			{
-				offsetPtr = offset.ConstantSignedInteger;
+				offsetPtr = offset.ConstantSignedLongInteger;
 			}
 			else
 			{
@@ -523,7 +529,8 @@ namespace Mosa.Platform.x86.Stages
 		{
 			var type = context.Result.Type;
 			int typeSize = TypeLayout.GetTypeSize(type);
-			Debug.Assert(typeSize > 0 && typeSize % 4 == 0);
+			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
+			Debug.Assert(typeSize > 0, MethodCompiler.Method.FullName);
 
 			var src = context.Operand1;
 			var dest = context.Result;
@@ -543,10 +550,16 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Lea, srcReg, src);
 			}
 			context.AppendInstruction(X86.Lea, dstReg, dest);
-			for (int i = 0; i < typeSize; i += 4)
+
+			for (int i = 0; i < alignedTypeSize; i += NativeAlignment)
 			{
-				context.AppendInstruction(X86.Mov, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
-				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i), tmp);
+				context.AppendInstruction(X86.Mov, InstructionSize.Size32, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
+				context.AppendInstruction(X86.Mov, InstructionSize.Size32, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i), tmp);
+			}
+			for (int i = alignedTypeSize; i < typeSize; i++)
+			{
+				context.AppendInstruction(X86.Mov, InstructionSize.Size8, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
+				context.AppendInstruction(X86.Mov, InstructionSize.Size8, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i), tmp);
 			}
 		}
 
@@ -660,7 +673,7 @@ namespace Mosa.Platform.x86.Stages
 				}
 				else
 				{
-					var mem = Operand.CreateMemoryAddress(storeType, baseOperand, offsetOperand.ConstantSignedInteger);
+					var mem = Operand.CreateMemoryAddress(storeType, baseOperand, offsetOperand.ConstantSignedLongInteger);
 					context.SetInstruction(GetMove(mem, value), size, mem, value);
 				}
 			}
@@ -684,12 +697,13 @@ namespace Mosa.Platform.x86.Stages
 		{
 			var type = context.Operand3.Type;
 			int typeSize = TypeLayout.GetTypeSize(type);
-			Debug.Assert(typeSize > 0 && typeSize % 4 == 0, MethodCompiler.Method.FullName);
+			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
+			Debug.Assert(typeSize > 0, MethodCompiler.Method.FullName);
 
 			int offset = 0;
 			if (context.Operand2.IsConstant)
 			{
-				offset = (int)context.Operand2.ConstantSignedInteger;
+				offset = (int)context.Operand2.ConstantSignedLongInteger;
 			}
 
 			var offsetop = context.Operand2;
@@ -710,10 +724,15 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Add, dstReg, dstReg, offsetop);
 			}
 
-			for (int i = 0; i < typeSize; i += 4)
+			for (int i = 0; i < alignedTypeSize; i += NativeAlignment)
 			{
-				context.AppendInstruction(X86.Mov, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
-				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i + offset), tmp);
+				context.AppendInstruction(X86.Mov, InstructionSize.Size32, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
+				context.AppendInstruction(X86.Mov, InstructionSize.Size32, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i + offset), tmp);
+			}
+			for (int i = alignedTypeSize; i < typeSize; i++)
+			{
+				context.AppendInstruction(X86.Mov, InstructionSize.Size8, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
+				context.AppendInstruction(X86.Mov, InstructionSize.Size8, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i + offset), tmp);
 			}
 		}
 

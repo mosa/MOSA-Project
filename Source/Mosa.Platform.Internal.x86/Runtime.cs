@@ -13,6 +13,7 @@
 using Mosa.Internal;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.Platform.Internal.x86
 {
@@ -360,15 +361,6 @@ namespace Mosa.Platform.Internal.x86
 
 		public static MetadataPRDefinitionStruct* GetProtectedRegionEntryByAddress(uint address, MetadataTypeStruct* exceptionType, MetadataMethodStruct* methodDef)
 		{
-			//DebugOutput("===GetProtectedRegionEntryByAddress===");
-
-			//DebugOutput("address:");
-			//DebugOutput(address);
-			//DebugOutput("exceptionType:");
-			//DebugOutput((uint)exceptionType);
-			//DebugOutput("methodDef:");
-			//DebugOutput((uint)methodDef);
-
 			var protectedRegionTable = methodDef->ProtectedRegionTable;
 
 			if (protectedRegionTable == null)
@@ -379,20 +371,8 @@ namespace Mosa.Platform.Internal.x86
 			if (method == 0)
 				return null;
 
-			//DebugOutput("table:");
-			//DebugOutput((uint)protectedRegionTable);
-			//DebugOutput("method:");
-			//DebugOutput(method);
-
 			uint offset = address - method;
-
-			//DebugOutput("offset:");
-			//DebugOutput(offset);
-
 			int entries = protectedRegionTable->NumberOfRegions;
-
-			//DebugOutput("entries:");
-			//DebugOutput((uint)entries);
 
 			int entry = 0;
 			MetadataPRDefinitionStruct* protectedRegionDef = null;
@@ -400,33 +380,18 @@ namespace Mosa.Platform.Internal.x86
 			uint currentEnd = uint.MaxValue;
 			while (entry < entries)
 			{
-				//DebugOutput("entry:");
-				//DebugOutput((uint)entries);
-
 				var prDef = MetadataPRTableStruct.GetProtecteRegionDefinitionAddress(protectedRegionTable, (uint)entry);
 
 				uint start = prDef->StartOffset;
 				uint end = prDef->EndOffset;
 
-				//DebugOutput("start:");
-				//DebugOutput(start);
-
-				//DebugOutput("end:");
-				//DebugOutput(end);
-
 				if ((offset >= start) && (offset < end) && (start >= currentStart) && (end < currentEnd))
 				{
 					var handlerType = prDef->HandlerType;
 
-					//DebugOutput("type:");
-					//DebugOutput((uint)handlerType);
-
 					// If the handler is a Finally clause, accept without testing
 					if (handlerType == ExceptionHandlerType.Finally)
 					{
-						//DebugOutput("entry found:");
-						//DebugOutput((uint)protectedRegionDef);
-
 						protectedRegionDef = prDef;
 						currentStart = start;
 						currentEnd = end;
@@ -436,16 +401,10 @@ namespace Mosa.Platform.Internal.x86
 
 					var exType = prDef->ExceptionType;
 
-					//DebugOutput("exType:");
-					//DebugOutput((uint)exType);
-
 					// If the handler is a Exception clause, accept if the exception Type
 					// is in the is within the inhertiance chain of the exception object
 					if (handlerType == ExceptionHandlerType.Exception && IsTypeInInheritanceChain(exType, exceptionType))
 					{
-						//DebugOutput("entry found:");
-						//DebugOutput((uint)protectedRegionDef);
-
 						protectedRegionDef = prDef;
 						currentStart = start;
 						currentEnd = end;
@@ -457,24 +416,22 @@ namespace Mosa.Platform.Internal.x86
 				entry++;
 			}
 
-			if (protectedRegionDef != null)
-				return protectedRegionDef;
-
-			//DebugOutput("No entry found");
-
-			return null;
+			return protectedRegionDef;
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static uint GetPreviousStackFrame(uint ebp)
 		{
 			return Intrinsic.Load32(ebp);
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static uint GetStackFrame(uint depth)
 		{
 			return GetStackFrame(depth, 0);
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static uint GetStackFrame(uint depth, uint ebp)
 		{
 			if (ebp == 0)
@@ -493,11 +450,13 @@ namespace Mosa.Platform.Internal.x86
 			return ebp;
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static uint GetReturnAddressFromStackFrame(uint stackframe)
 		{
 			return Intrinsic.Load32(stackframe, NativeIntSize);
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void SetReturnAddressForStackFrame(uint stackframe, uint value)
 		{
 			Native.Set32(stackframe + NativeIntSize, value);
@@ -557,6 +516,7 @@ namespace Mosa.Platform.Internal.x86
 			return entry;
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void ExceptionHandler()
 		{
 			// capture this register immediately
@@ -582,22 +542,33 @@ namespace Mosa.Platform.Internal.x86
 				{
 					var protectedRegion = GetProtectedRegionEntryByAddress(returnAdddress - 1, exceptionType, methodDef);
 
+					//DebugOutput(((uint)protectedRegion));
+
 					if (protectedRegion != null)
 					{
 						// found handler for current method, call it
 
 						uint methodStart = (uint)methodDef->Method;
-						uint stackSize = methodDef->StackSize & 0xFFFF; // lower 16-bits only
 						uint handlerOffset = protectedRegion->HandlerOffset;
-						uint previousFrame = GetPreviousStackFrame(stackFrame);
-
 						uint jumpTarget = methodStart + handlerOffset;
+
+						uint stackSize = methodDef->StackSize & 0xFFFF; // lower 16-bits only
+						uint previousFrame = GetPreviousStackFrame(stackFrame);
 						uint newStack = previousFrame - stackSize;
 
+						//DebugOutput("5x:");
 						//DebugOutput(jumpTarget);
 						//DebugOutput(stackSize);
 						//DebugOutput(newStack);
 						//DebugOutput(previousFrame);
+
+						//var method = GetMethodDefinition(jumpTarget);
+
+						//DebugOutput(jumpTarget - methodStart);
+
+						//string caller = Runtime.GetMethodDefinitionName(method);
+
+						//DebugOutput(caller);
 
 						Native.FrameJump(jumpTarget, newStack, previousFrame);
 					}

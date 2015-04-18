@@ -188,7 +188,7 @@ namespace Mosa.Compiler.Framework.Stages
 				node.HasPrefix = prefix;
 				node.Instruction = cil;
 
-				block.Last.Previous.Insert(node);
+				block.BeforeLast.Insert(node);
 
 				cil.Decode(node, this);
 
@@ -209,7 +209,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						var jmpNode = new InstructionNode(IRInstruction.Jmp, target);
 						jmpNode.Label = instruction.Offset;
-						block.Last.Previous.Insert(jmpNode);
+						block.BeforeLast.Insert(jmpNode);
 					}
 				}
 			}

@@ -50,10 +50,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaCustomAttribute FindCustomAttribute(string fullName)
 		{
-			foreach (var attr in customAttributes)
+			foreach (var attribute in customAttributes)
 			{
-				if (attr.Constructor.DeclaringType.FullName == fullName)
-					return attr;
+				if (attribute.Constructor.DeclaringType.FullName == fullName)
+					return attribute;
 			}
 			return null;
 		}

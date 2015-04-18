@@ -90,6 +90,7 @@ namespace Mosa.Utility.Launcher
 				Compiler.CompilerOptions.EnableSSA = Options.EnableSSA;
 				Compiler.CompilerOptions.EnableOptimizations = Options.EnableIROptimizations;
 				Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = Options.EnableSparseConditionalConstantPropagation;
+				Compiler.CompilerOptions.EnableInlinedMethods = Options.EnableInlinedMethods;
 				Compiler.CompilerOptions.OutputFile = compiledFile;
 
 				Compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);

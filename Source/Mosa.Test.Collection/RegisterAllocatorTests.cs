@@ -93,5 +93,25 @@ namespace Mosa.Test.Collection
 
 			return z * 10;
 		}
+
+		public static int Pressure9(int a, int b, int c, int d, int e, int f, int g)
+		{
+			int a1 = a;
+			int b1 = b;
+			int c1 = c;
+			int d1 = d;
+			int e1 = e;
+			int f1 = f;
+			int g1 = g;
+
+			int z = a1 + b1 + c1 + d1 + e1 + f1 + g1;
+
+			for (int i = 1; i < 20; i++)
+			{
+				z = z + a1 * b1 * c1 * d1 * e1 * f1 * g1 + i;
+			}
+
+			return z;
+		}
 	}
 }

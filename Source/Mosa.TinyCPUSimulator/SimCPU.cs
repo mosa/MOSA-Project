@@ -580,7 +580,12 @@ namespace Mosa.TinyCPUSimulator
 			instruction.Opcode.Execute(this, instruction);
 		}
 
-		public virtual string CompactDump()
+		public virtual string GetDumpHeaders()
+		{
+			return string.Empty;
+		}
+
+		public virtual string GetDump()
 		{
 			return string.Empty;
 		}
@@ -602,19 +607,29 @@ namespace Mosa.TinyCPUSimulator
 
 				if (Monitor.DebugOutput)
 				{
-					Debug.Write(CompactDump());
-					Debug.Write("  0x" + LastProgramCounter.ToString("X") + ": ");
-					Debug.WriteLine(LastInstruction.ToString());
+					string info = GetSourceInformation(LastProgramCounter) ?? string.Empty;
+
+					Debug.Write(Tick.ToString());
+					Debug.Write('\t');
+					Debug.Write(GetDump());
+					Debug.Write('\t');
+					Debug.WriteLine(LastProgramCounter.ToString("X") + ": " + LastInstruction.ToString() + '\t' + info);
 				}
 			}
 			catch (SimCPUException e)
 			{
-				Debug.WriteLine("SIM: " + e.ToString());
+				if (Monitor.DebugOutput)
+				{
+					Debug.WriteLine("SIM: " + e.ToString());
+				}
 				LastException = e;
 			}
 			catch (NotSupportedException e)
 			{
-				Debug.WriteLine(e.ToString());
+				if (Monitor.DebugOutput)
+				{
+					Debug.WriteLine(e.ToString());
+				}
 				LastException = new SimCPUException();
 				Monitor.Stop = true;
 			}
@@ -628,9 +643,8 @@ namespace Mosa.TinyCPUSimulator
 
 				if (Monitor.DebugOutput)
 				{
-					// Move to CPUx86
-					//Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      XMM#3      FLAGS");
-					Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
+					Debug.Write("Tick\t");
+					Debug.WriteLine(GetDumpHeaders());
 				}
 
 				for (; ; )

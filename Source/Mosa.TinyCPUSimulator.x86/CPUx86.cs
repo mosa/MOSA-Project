@@ -257,14 +257,20 @@ namespace Mosa.TinyCPUSimulator.x86
 			return "0x" + value.ToString("X8");
 		}
 
-		public override string CompactDump()
+		public override string GetDumpHeaders()
 		{
-			//s.AppendLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
-			return Hex(EIP.Value) + " " + Hex(EAX.Value) + " " + Hex(EBX.Value) + " " + Hex(ECX.Value) + " " + Hex(EDX.Value) + " " + Hex(ESI.Value) + " " + Hex(EDI.Value) + " " + Hex(ESP.Value) + " " + Hex(EBP.Value) + " "
-				//+ (String.Format("{0:F}", XMM0.Value)) + " "
-				//+ (String.Format("{0:F}", XMM1.Value)) + " "
-				//+ (String.Format("{0:F}", XMM2.Value)) + " "
-				//+ (String.Format("{0:F}", XMM3.Value)) + " "
+			return "EIP\tEAX\tEBX\tECX\tEDX\tESI\tEDI\tESP\tEBP\tFLAGS";
+			//Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      XMM#3      FLAGS");
+			//Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
+		}
+
+		public override string GetDump()
+		{
+			return Hex(EIP.Value) + "\t" + Hex(EAX.Value) + "\t" + Hex(EBX.Value) + "\t" + Hex(ECX.Value) + "\t" + Hex(EDX.Value) + "\t" + Hex(ESI.Value) + "\t" + Hex(EDI.Value) + "\t" + Hex(ESP.Value) + "\t" + Hex(EBP.Value) + "\t"
+				//+ (String.Format("{0:F}", XMM0.Value)) + "\t"
+				//+ (String.Format("{0:F}", XMM1.Value)) + "\t"
+				//+ (String.Format("{0:F}", XMM2.Value)) + "\t"
+				//+ (String.Format("{0:F}", XMM3.Value)) + "\t"
 				+ (EFLAGS.Zero ? "Z" : "-")
 				+ (EFLAGS.Carry ? "C" : "-")
 				+ (EFLAGS.Direction ? "D" : "-")
@@ -273,6 +279,22 @@ namespace Mosa.TinyCPUSimulator.x86
 				+ (EFLAGS.Sign ? "S" : "-");
 			//"[" + Tick.ToString("D5") + "] "
 		}
+
+		//public override string CompactDump2()
+		//{
+		//	return Hex(EIP.Value) + " " + Hex(EAX.Value) + " " + Hex(EBX.Value) + " " + Hex(ECX.Value) + " " + Hex(EDX.Value) + " " + Hex(ESI.Value) + " " + Hex(EDI.Value) + " " + Hex(ESP.Value) + " " + Hex(EBP.Value) + " "
+		//		//+ (String.Format("{0:F}", XMM0.Value)) + " "
+		//		//+ (String.Format("{0:F}", XMM1.Value)) + " "
+		//		//+ (String.Format("{0:F}", XMM2.Value)) + " "
+		//		//+ (String.Format("{0:F}", XMM3.Value)) + " "
+		//		+ (EFLAGS.Zero ? "Z" : "-")
+		//		+ (EFLAGS.Carry ? "C" : "-")
+		//		+ (EFLAGS.Direction ? "D" : "-")
+		//		+ (EFLAGS.Overflow ? "O" : "-")
+		//		+ (EFLAGS.Parity ? "P" : "-")
+		//		+ (EFLAGS.Sign ? "S" : "-");
+		//	//"[" + Tick.ToString("D5") + "] "
+		//}
 
 		public override BaseSimState GetState()
 		{

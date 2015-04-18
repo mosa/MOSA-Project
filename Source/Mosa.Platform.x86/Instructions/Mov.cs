@@ -77,7 +77,7 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (destination.IsRegister && source.IsRegister)
 			{
-				Debug.Assert(!((source.IsByte || destination.IsByte) && (source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI)));
+				Debug.Assert(!((source.IsByte || destination.IsByte) && (source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI)), source.ToString());
 
 				if (source.IsByte || destination.IsByte) return R_M_U8;
 				if (source.IsChar || destination.IsChar || source.IsShort || destination.IsShort) return R_RM_16;

@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		#region IBlockOrderAnalysis
 
-		public BasicBlock[] NewBlockOrder { get { return blockOrder; } }
+		public IList<BasicBlock> NewBlockOrder { get { return blockOrder; } }
 
 		public int GetLoopDepth(BasicBlock block)
 		{
@@ -39,9 +39,6 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		public void PerformAnalysis(BasicBlocks basicBlocks)
 		{
-			// Retrieve the first block
-			BasicBlock first = basicBlocks.PrologueBlock;
-
 			// Create dictionary of referenced blocks
 			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 

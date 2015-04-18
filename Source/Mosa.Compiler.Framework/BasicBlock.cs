@@ -46,6 +46,11 @@ namespace Mosa.Compiler.Framework
 		public InstructionNode Last { get; private set; }
 
 		/// <summary>
+		/// Gets the before last instruction node.
+		/// </summary>
+		public InstructionNode BeforeLast { get { return Last.Previous; } }
+
+		/// <summary>
 		/// Retrieves the label, which uniquely identifies this block.
 		/// </summary>
 		/// <value>The label.</value>
@@ -83,6 +88,22 @@ namespace Mosa.Compiler.Framework
 		{
 			get { return PreviousBlocks.Count > 0; }
 		}
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is prologue.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is prologue; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsPrologue { get { return Label == PrologueLabel; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is epilogue.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is epilogue; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsEpilogue { get { return Label == EpilogueLabel; } }
 
 		#endregion Properties
 
@@ -175,14 +196,19 @@ namespace Mosa.Compiler.Framework
 			return String.Format("L_{0:X4}", Label);
 		}
 
+		/// <summary>
+		/// Checks that all instructions are part of the block.
+		/// </summary>
 		public void DebugCheck()
 		{
+			Debug.Assert(First.Block == Last.Block);
 			Debug.Assert(First.Label == Last.Label);
 
 			var node = First;
 
 			while (!node.IsBlockEndInstruction)
 			{
+				Debug.Assert(node.Block == this);
 				node = node.Next;
 				Debug.Assert(node != null);
 			}
@@ -193,6 +219,7 @@ namespace Mosa.Compiler.Framework
 
 			while (!node.IsBlockStartInstruction)
 			{
+				Debug.Assert(node.Block == this);
 				node = node.Previous;
 				Debug.Assert(node != null);
 			}

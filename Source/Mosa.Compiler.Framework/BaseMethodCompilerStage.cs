@@ -67,9 +67,9 @@ namespace Mosa.Compiler.Framework
 		protected int NativePointerSize { get; private set; }
 
 		/// <summary>
-		/// Holds the native pointer alignment
+		/// Holds the native alignment
 		/// </summary>
-		protected int NativePointerAlignment { get; private set; }
+		protected int NativeAlignment { get; private set; }
 
 		/// <summary>
 		/// Gets the type of the platform internal runtime.
@@ -115,7 +115,7 @@ namespace Mosa.Compiler.Framework
 			CallingConvention = Architecture.CallingConvention;
 
 			NativePointerSize = Architecture.NativePointerSize;
-			NativePointerAlignment = Architecture.NativeAlignment;
+			NativeAlignment = Architecture.NativeAlignment;
 			NativeInstructionSize = Architecture.NativeInstructionSize;
 
 			traceLogs = new List<TraceLog>();
@@ -164,16 +164,6 @@ namespace Mosa.Compiler.Framework
 		/// <c>true</c> if this instance has protected regions; otherwise, <c>false</c>.
 		/// </value>
 		protected bool HasProtectedRegions { get { return MethodCompiler.Method.ExceptionHandlers.Count != 0; } }
-
-		/// <summary>
-		/// Creates the context.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <returns></returns>
-		protected Context CreateContext(BasicBlock block)
-		{
-			return new Context(block);
-		}
 
 		/// <summary>
 		/// Allocates the virtual register.
@@ -301,11 +291,14 @@ namespace Mosa.Compiler.Framework
 
 			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (!node.IsEmpty)
-				{
-					if (node.Instruction.FlowControl != FlowControl.UnconditionalBranch)
-						return false;
-				}
+				if (node.IsEmpty)
+					continue;
+
+				if (node.Instruction == IRInstruction.Nop)
+					continue;
+
+				if (node.Instruction.FlowControl != FlowControl.UnconditionalBranch)
+					return false;
 			}
 
 			return true;
@@ -347,11 +340,7 @@ namespace Mosa.Compiler.Framework
 							node.UpdateBranchTarget(index, newTarget);
 						}
 					}
-
-					//continue;
 				}
-
-				//return;
 			}
 		}
 
@@ -603,7 +592,7 @@ namespace Mosa.Compiler.Framework
 			if (type.IsR4)
 				return InstructionSize.Size32;
 
-			if (type.IsR8)
+			if (type.IsR8 || type.IsUI8)
 				return InstructionSize.Size64;
 
 			return InstructionSize.Size32;
@@ -630,7 +619,7 @@ namespace Mosa.Compiler.Framework
 			if (operand.IsR4)
 				return InstructionSize.Size32;
 
-			if (operand.IsR8)
+			if (operand.IsR8 || operand.IsLong)
 				return InstructionSize.Size64;
 
 			return InstructionSize.Size32;

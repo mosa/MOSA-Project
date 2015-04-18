@@ -163,6 +163,7 @@ namespace Mosa.Compiler.Framework
 		{
 			var size = 0;
 
+			//FIXME: This is not thread safe!
 			if (fieldSizes.TryGetValue(field, out size))
 			{
 				return size;
@@ -272,6 +273,7 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (methodStackSizes)
 			{
+				//methodStackSizes.Remove(method);
 				methodStackSizes.Add(method, size);
 			}
 		}
@@ -280,6 +282,7 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (methodParameterStackSizes)
 			{
+				//methodParameterStackSizes.Remove(method);
 				methodParameterStackSizes.Add(method, size);
 			}
 		}
@@ -333,7 +336,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void ResolveType(MosaType type)
+		private void ResolveType(MosaType type)
 		{
 			if (type.IsModule)
 				return;
@@ -347,6 +350,7 @@ namespace Mosa.Compiler.Framework
 				return;
 			}
 
+			// FIXME: This is not threadsafe!!!!!
 			if (typeSet.Contains(type))
 				return;
 
@@ -364,7 +368,7 @@ namespace Mosa.Compiler.Framework
 				return;
 			}
 
-			foreach (MosaType interfaceType in type.Interfaces)
+			foreach (var interfaceType in type.Interfaces)
 			{
 				ResolveInterfaceType(interfaceType);
 			}

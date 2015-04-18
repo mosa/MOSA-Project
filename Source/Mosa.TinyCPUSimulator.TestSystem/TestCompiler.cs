@@ -38,10 +38,11 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			compiler.CompilerTrace.TraceFilter.Active = false;
 			compiler.CompilerTrace.TraceListener = this;
 
-			compiler.CompilerOptions.EnableOptimizations = false;
-			compiler.CompilerOptions.EnableSSA = false;
-			compiler.CompilerOptions.EnablePromoteTemporaryVariablesOptimization = false;
-			compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = false;
+			compiler.CompilerOptions.EnableOptimizations = true;
+			compiler.CompilerOptions.EnableSSA = true;
+			compiler.CompilerOptions.EnableVariablePromotion = true;
+			compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
+			compiler.CompilerOptions.EnableInlinedMethods = false;
 
 			compiler.CompilerOptions.Architecture = platform.CreateArchitecture();
 			compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
@@ -110,7 +111,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			simAdapter.SimCPU.Execute();
 
 			if (simAdapter.SimCPU.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)
+			{
 				throw new Exception("Aborted. Method did not complete under 500000 ticks. " + simAdapter.SimCPU.Tick.ToString());
+			}
 
 			if (runtimeMethod.Signature.ReturnType.IsVoid)
 				return default(T);
@@ -126,7 +129,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			}
 			catch (InvalidCastException e)
 			{
-				Debug.Assert(false, String.Format("Failed to convert result {0} of destinationpe {1} destination type {2}.", result, result.GetType(), typeof(T).ToString()));
+				Debug.Assert(false, String.Format("Failed to convert result {0} of destination {1} destination type {2}.", result, result.GetType(), typeof(T).ToString()));
 				throw e;
 			}
 		}

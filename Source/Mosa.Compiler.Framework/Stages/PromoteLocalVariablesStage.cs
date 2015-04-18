@@ -47,11 +47,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected bool ContainsAddressOf(Operand local)
 		{
-			foreach (var index in local.Uses)
+			foreach (var node in local.Uses)
 			{
-				Context ctx = new Context(index);
-
-				if (ctx.Instruction == IRInstruction.AddressOf)
+				if (node.Instruction == IRInstruction.AddressOf)
 					return true;
 			}
 
@@ -66,36 +64,32 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (trace.Active) trace.Log("*** Replacing: " + local.ToString() + " with " + v.ToString());
 
-			foreach (var index in local.Uses.ToArray())
+			foreach (var node in local.Uses.ToArray())
 			{
-				var ctx = new Context(index);
-
-				for (int i = 0; i < ctx.OperandCount; i++)
+				for (int i = 0; i < node.OperandCount; i++)
 				{
-					var operand = ctx.GetOperand(i);
+					var operand = node.GetOperand(i);
 
 					if (local == operand)
 					{
-						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
-						ctx.SetOperand(i, v);
-						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
+						if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
+						node.SetOperand(i, v);
+						if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
 					}
 				}
 			}
 
-			foreach (var index in local.Definitions.ToArray())
+			foreach (var node in local.Definitions.ToArray())
 			{
-				var ctx = new Context(index);
-
-				for (int i = 0; i < ctx.OperandCount; i++)
+				for (int i = 0; i < node.OperandCount; i++)
 				{
-					var operand = ctx.GetResult(i);
+					var operand = node.GetResult(i);
 
 					if (local == operand)
 					{
-						if (trace.Active) trace.Log("BEFORE:\t" + ctx.ToString());
-						ctx.SetResult(i, v);
-						if (trace.Active) trace.Log("AFTER: \t" + ctx.ToString());
+						if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
+						node.SetResult(i, v);
+						if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
 					}
 				}
 			}

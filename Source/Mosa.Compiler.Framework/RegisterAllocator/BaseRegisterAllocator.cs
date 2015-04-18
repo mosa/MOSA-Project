@@ -116,6 +116,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			// Generate trace information for instruction numbering
 			TraceNumberInstructions();
+			TraceDefAndUseLocations();
 
 			// Computer local live sets
 			ComputeLocalLiveSets();
@@ -128,6 +129,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			// Generate trace information for blocks
 			TraceBlocks();
+
+			TraceUsageMap("Initial");
 
 			// Generate trace information for live intervals
 			TraceLiveIntervals("InitialLiveIntervals", false);
@@ -148,6 +151,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			// Create physical register operands
 			CreatePhysicalRegisterOperands();
+
+			TraceUsageMap("Post");
 
 			// Assign physical registers
 			AssignRegisters();
@@ -231,7 +236,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (liveIntervals.Count == 0)
 				return string.Empty;
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			foreach (var liveInterval in liveIntervals)
 			{
@@ -252,7 +257,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (slots.Count == 0)
 				return string.Empty;
 
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			foreach (var use in slots)
 			{
@@ -333,24 +338,247 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (!numberTrace.Active)
 				return;
 
-			int index = SlotIndex.Increment;
-
 			foreach (var block in BasicBlocks)
 			{
-				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
+				for (var node = block.First; ; node = node.Next)
 				{
 					if (node.IsEmpty)
 						continue;
 
+					string log = node.SlotNumber.ToString() + " = " + node.ToString();
+
 					if (node.IsBlockStartInstruction)
 					{
-						numberTrace.Log(node.SlotNumber.ToString() + " = " + node.ToString() + " # " + block.ToString());
+						log = log + " # " + block.ToString();
 					}
-					else
-					{
-						numberTrace.Log(node.SlotNumber.ToString() + " = " + node.ToString());
-					}
+
+					numberTrace.Log(log);
+
+					if (node.IsBlockEndInstruction)
+						break;
 				}
+			}
+		}
+
+		private void TraceDefAndUseLocations()
+		{
+			var locationTrace = CreateTrace("DefAndUseLocations");
+
+			if (!locationTrace.Active)
+				return;
+
+			foreach (var block in BasicBlocks)
+			{
+				for (var node = block.First; ; node = node.Next)
+				{
+					if (node.IsEmpty)
+						continue;
+
+					var visitor = new OperandVisitor(node);
+					var sb = new StringBuilder();
+
+					var def = new List<Operand>();
+					var use = new List<Operand>();
+
+					foreach (var op in visitor.Output)
+					{
+						def.AddIfNew(op);
+					}
+
+					foreach (var op in visitor.Input)
+					{
+						use.AddIfNew(op);
+					}
+
+					//if (output.Count == 0 && input.Count == 0)
+					//	continue;
+
+					sb.Append(node.SlotNumber.ToString());
+					sb.Append(" - ");
+
+					if (def.Count > 0)
+					{
+						sb.Append("DEF: ");
+						foreach (var op in def)
+						{
+							sb.Append(op.ToString(false));
+							sb.Append(' ');
+						}
+					}
+
+					if (use.Count > 0)
+					{
+						sb.Append("USE: ");
+						foreach (var op in use)
+						{
+							sb.Append(op.ToString(false));
+							sb.Append(' ');
+						}
+					}
+
+					locationTrace.Log(sb.ToString());
+
+					if (node.IsBlockEndInstruction)
+						break;
+				}
+			}
+		}
+
+		private void TraceUsageMap(string stage)
+		{
+			var usageMap = CreateTrace("TraceUsageMap-" + stage);
+
+			if (!usageMap.Active)
+				return;
+
+			var map = new Dictionary<int, string[]>();
+			var slots = new List<int>();
+			var blockStarts = new List<int>();
+			var blockEnds = new List<int>();
+
+			var header = new StringBuilder();
+			header.Append('\t');
+
+			foreach (var block in BasicBlocks)
+			{
+				for (var node = block.First; ; node = node.Next)
+				{
+					if (node.IsEmpty)
+						continue;
+
+					var slotIndex = new SlotIndex(node);
+
+					if (node.IsBlockStartInstruction)
+						blockStarts.Add(slotIndex.SlotNumber);
+					else if (node.IsBlockEndInstruction)
+						blockEnds.Add(slotIndex.SlotNumber);
+
+					for (int step = 0; step < 2; step++)
+					{
+						var slot = slotIndex;
+
+						if (step == 0)
+							slot = slot.HalfStepBack;
+						//else if (step == 2)
+						//	slot = slot.HalfStepForward;
+
+						var row = new string[RegisterCount];
+						map.Add(slot.SlotNumber, row);
+
+						header.Append(slot.SlotNumber.ToString());
+						header.Append("\t");
+
+						slots.Add(slot.SlotNumber);
+
+						if (!slot.IsOnHalfStep)
+						{
+							var visitor = new OperandVisitor(node);
+
+							foreach (var op in visitor.Output)
+							{
+								if (op.IsCPURegister && op.Register.IsSpecial)
+									continue;
+
+								var s = row[GetIndex(op)] ?? string.Empty;
+
+								row[GetIndex(op)] = s + "+D";
+							}
+
+							foreach (var op in visitor.Input)
+							{
+								if (op.IsCPURegister && op.Register.IsSpecial)
+									continue;
+
+								var s = row[GetIndex(op)] ?? string.Empty;
+
+								row[GetIndex(op)] = s + "+U";
+							}
+						}
+
+						for (int index = 0; index < RegisterCount; index++)
+						{
+							var vr = VirtualRegisters[index];
+
+							foreach (var r in vr.LiveIntervals)
+							{
+								if (r.Contains(slot))
+								{
+									string s = row[index] ?? string.Empty;
+
+									if (vr.IsPhysicalRegister)
+										s = "X";
+									else
+										if (r.AssignedPhysicalRegister == null)
+											if (vr.SpillSlotOperand == null)
+												s = "x";
+											else
+												s = "T_" + vr.SpillSlotOperand.Index.ToString(); //vr.SpillSlotOperand.ToString(false);
+										else
+											s = r.AssignedPhysicalRegister.ToString() + s;
+
+									if (r.Start == slot)
+										s = "(" + s;
+
+									row[index] = s;
+
+									if (!vr.IsPhysicalRegister)
+									{
+										if (r.AssignedPhysicalRegister != null)
+										{
+											int index2 = r.AssignedPhysicalRegister.Index;
+
+											string s2 = row[index2] ?? string.Empty;
+
+											s2 = s2 + vr.ToString();
+
+											row[index2] = s2;
+										}
+									}
+								}
+								else if (r.End == slot)
+								{
+									string s = row[index] ?? string.Empty;
+									s = s + ")";
+									row[index] = s;
+								}
+							}
+						}
+					}
+
+					if (node.IsBlockEndInstruction)
+						break;
+				}
+			}
+
+			usageMap.Log(header.ToString());
+
+			for (int index = 0; index < RegisterCount; index++)
+			{
+				var vr = VirtualRegisters[index];
+				if (vr.LiveIntervals.Count == 0)
+					continue;
+
+				var sb = new StringBuilder();
+				sb.Append(vr.ToString());
+				sb.Append('\t');
+
+				foreach (var s in slots)
+				{
+					var row = map[s];
+					var value = row[index];
+
+					if (blockStarts.Contains(s))
+						sb.Append("|");
+
+					sb.Append(value);
+
+					if (blockEnds.Contains(s))
+						sb.Append("!");
+
+					sb.Append('\t');
+				}
+
+				usageMap.Log(sb.ToString());
 			}
 		}
 
@@ -363,8 +591,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (liveSetTrace.Active)
 					liveSetTrace.Log("Block # " + block.BasicBlock.Sequence.ToString());
 
-				BitArray liveGen = new BitArray(RegisterCount, false);
-				BitArray liveKill = new BitArray(RegisterCount, false);
+				var liveGen = new BitArray(RegisterCount, false);
+				var liveKill = new BitArray(RegisterCount, false);
 
 				liveGen.Set(StackFrameRegister.Index, true);
 				liveGen.Set(StackPointerRegister.Index, true);
@@ -480,14 +708,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					var block = ExtendedBlocks[i];
 
-					BitArray liveOut = new BitArray(RegisterCount);
+					var liveOut = new BitArray(RegisterCount);
 
 					foreach (var next in block.BasicBlock.NextBlocks)
 					{
 						liveOut.Or(ExtendedBlocks[next.Sequence].LiveIn);
 					}
 
-					BitArray liveIn = (BitArray)block.LiveOut.Clone();
+					var liveIn = (BitArray)block.LiveOut.Clone();
 					liveIn.And(block.LiveKillNot);
 					liveIn.Or(block.LiveGen);
 
@@ -509,8 +737,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			for (int b = BasicBlocks.Count - 1; b >= 0; b--)
 			{
 				var block = ExtendedBlocks[b];
-
-				block.BasicBlock.DebugCheck();
 
 				if (intervalTrace.Active)
 					intervalTrace.Log("Block # " + block.BasicBlock.Sequence.ToString());
@@ -537,8 +763,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						if (intervalTrace.Active) intervalTrace.Log("    After: " + LiveIntervalsToString(register.LiveIntervals));
 					}
 				}
-
-				block.BasicBlock.DebugCheck();
 
 				for (var node = block.BasicBlock.Last; !node.IsBlockStartInstruction; node = node.Previous)
 				{
@@ -890,7 +1114,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 
 			// No live intervals to evict!
-			if (Trace.Active) Trace.Log("  No live new to evicts");
+			if (Trace.Active) Trace.Log("  No live intervals to evict");
 
 			// prepare to split live interval
 			if (liveInterval.Stage == LiveInterval.AllocationStage.Initial)
@@ -1320,12 +1544,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				foreach (var currentInterval in virtualRegister.LiveIntervals)
 				{
+					// No moves at block edges (these are done in the resolve move phase later)
 					if (blockEdges.ContainsKey(currentInterval.End))
 						continue;
 
 					// List is not sorted, so scan thru each one
 					foreach (var nextInterval in virtualRegister.LiveIntervals)
 					{
+						// same interval
+						if (currentInterval == nextInterval)
+							continue;
+
 						if (nextInterval.Start != currentInterval.End)
 							continue;
 
@@ -1337,6 +1566,18 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						if (nextInterval.AssignedOperand == currentInterval.AssignedOperand ||
 							nextInterval.AssignedOperand.Register == currentInterval.AssignedOperand.Register)
 							break;
+
+						// don't load from slot if next live interval starts with a def before use
+						if (nextInterval.DefPositions.Count != 0)
+						{
+							if (nextInterval.UsePositions.Count == 0)
+								continue;
+							else
+							{
+								if (nextInterval.LiveRange.FirstDef < nextInterval.LiveRange.FirstUse)
+									continue;
+							}
+						}
 
 						keyedList.Add(currentInterval.End, currentInterval.AssignedOperand, nextInterval.AssignedOperand);
 

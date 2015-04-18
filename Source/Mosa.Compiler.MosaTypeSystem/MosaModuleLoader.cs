@@ -82,7 +82,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <param name="file">The file path of the module to load.</param>
 		public void LoadModuleFromFile(string file)
 		{
-			ModuleDefMD module = ModuleDefMD.Load(file, Resolver.DefaultModuleContext);
+			var module = ModuleDefMD.Load(file, Resolver.DefaultModuleContext);
 			module.EnableTypeDefFindCache = true;
 
 			LoadDependencies(module);

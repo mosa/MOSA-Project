@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Collections.Generic;
+
 namespace Mosa.Compiler.Framework.Analysis
 {
 	/// <summary>
@@ -22,7 +24,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		#region IBlockOrderAnalysis
 
-		public BasicBlock[] NewBlockOrder { get { return blockOrder; } }
+		public IList<BasicBlock> NewBlockOrder { get { return blockOrder; } }
 
 		public int GetLoopDepth(BasicBlock block)
 		{

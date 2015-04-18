@@ -102,6 +102,14 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public MosaType PlatformInternalRuntimeType { get; private set; }
 
+		/// <summary>
+		/// Gets the compiler data.
+		/// </summary>
+		/// <value>
+		/// The compiler data.
+		/// </value>
+		public CompilerData CompilerData { get; private set; }
+
 		#endregion Properties
 
 		#region Methods
@@ -125,6 +133,7 @@ namespace Mosa.Compiler.Framework
 			PostCompilePipeline = new CompilerPipeline();
 			Counters = new Counters();
 			PlugSystem = new PlugSystem();
+			CompilerData = new CompilerData(this);
 
 			// Create new dictionary
 			IntrinsicTypes = new Dictionary<string, Type>();
@@ -292,10 +301,14 @@ namespace Mosa.Compiler.Framework
 
 				if (method == null)
 				{
-					break;
+					return;
 				}
 
-				CompileMethod(method, null, threadID);
+				// only one method can be compiled at a time
+				lock (method)
+				{
+					CompileMethod(method, null, threadID);
+				}
 
 				CompilerTrace.UpdatedCompilerProgress(
 					CompilationScheduler.TotalMethods,

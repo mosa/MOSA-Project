@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				for (var node = block.Last.Previous; !node.IsBlockStartInstruction; node = node.Previous)
+				for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
 				{
 					if (node.IsEmpty)
 						continue;

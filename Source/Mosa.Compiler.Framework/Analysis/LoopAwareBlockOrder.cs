@@ -112,7 +112,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		#region IBlockOrderAnalysis
 
-		public BasicBlock[] NewBlockOrder { get { return blockOrder; } }
+		public IList<BasicBlock> NewBlockOrder { get { return blockOrder; } }
 
 		public int GetLoopDepth(BasicBlock block)
 		{

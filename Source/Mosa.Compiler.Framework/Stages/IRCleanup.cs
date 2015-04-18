@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -14,58 +15,46 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public class IRCleanup : BaseMethodCompilerStage
+	public class IRCleanup : EmptyBlockRemovalStage
 	{
 		protected override void Run()
 		{
-			// Remove Nops
-			foreach (var block in BasicBlocks)
-			{
-				for (var ctx = new Context(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
-				{
-					if (ctx.IsEmpty)
-						continue;
+			RemoveEmptyBlocks();
 
-					if (ctx.Instruction == IRInstruction.Nop)
-					{
-						ctx.Empty();
-						continue;
-					}
-				}
-			}
+			// TODO: merge block A & B, where A.Next contains only B, and B.Previous contains only A.
 
-			// copied from EmptyBlockRemovalStage.cs
+			OrderBlocks();
+			RemoveNops();
+		}
 
-			// don't remove any blocks given unusual flow control
+		private void OrderBlocks()
+		{
+			// don't remove any blocks when the flow control is unusual
 			if (HasProtectedRegions)
 				return;
 
-			//var trace = CreateTraceLog();
+			var blockOrderAnalysis = new LoopAwareBlockOrder();
 
+			blockOrderAnalysis.PerformAnalysis(BasicBlocks);
+
+			BasicBlocks.ReorderBlocks(blockOrderAnalysis.NewBlockOrder);
+		}
+
+		private void RemoveNops()
+		{
 			foreach (var block in BasicBlocks)
 			{
-				// don't process other unusual blocks (header blocks, return block, etc.)
-				if (block.NextBlocks.Count == 0 || block.PreviousBlocks.Count == 0)
-					continue;
+				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
+				{
+					if (node.IsEmpty)
+						continue;
 
-				// don't remove block if it jumps back to itself
-				if (block.PreviousBlocks.Contains(block))
-					continue;
-
-				if (!IsEmptyBlockWithSingleJump(block))
-					continue;
-
-				//if (trace.Active)
-				//{
-				//	trace.Log("====== Removing: " + block.ToString() + " # " + block.Sequence);
-				//	trace.Log("     New Target: " + block.NextBlocks[0].ToString());
-				//	foreach (var from in block.PreviousBlocks)
-				//	{
-				//		trace.Log("Previous Blocks: " + from.ToString());
-				//	}
-				//}
-
-				RemoveEmptyBlockWithSingleJump(block);
+					// Remove Nops
+					if (node.Instruction == IRInstruction.Nop)
+					{
+						node.Empty();
+					}
+				}
 			}
 		}
 	}

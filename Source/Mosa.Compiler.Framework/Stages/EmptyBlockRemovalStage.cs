@@ -16,11 +16,14 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			// don't remove any blocks given unusual flow control
+			RemoveEmptyBlocks();
+		}
+
+		protected void RemoveEmptyBlocks()
+		{
+			// don't remove any blocks when the flow control is unusual
 			if (HasProtectedRegions)
 				return;
-
-			//var trace = CreateTrace();
 
 			foreach (var block in BasicBlocks)
 			{
@@ -34,16 +37,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (!IsEmptyBlockWithSingleJump(block))
 					continue;
-
-				//if (trace.Active)
-				//{
-				//	trace.Log("====== Removing: " + block.ToString() + " # " + block.Sequence);
-				//	trace.Log("     New Target: " + block.NextBlocks[0].ToString());
-				//	foreach (var from in block.PreviousBlocks)
-				//	{
-				//		trace.Log("Previous Blocks: " + from.ToString());
-				//	}
-				//}
 
 				RemoveEmptyBlockWithSingleJump(block);
 			}

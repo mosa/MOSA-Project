@@ -482,12 +482,12 @@ namespace Mosa.Test.Collection
 					n = n + 4000;
 				}
 			}
-			catch(SystemException ex)
+			catch (SystemException ex)
 			{
 				// There should never be a 50000
 				n = n + 50000;
 			}
-			catch(TestExceptionType ex)
+			catch (TestExceptionType ex)
 			{
 				n = n + 600000;
 			}

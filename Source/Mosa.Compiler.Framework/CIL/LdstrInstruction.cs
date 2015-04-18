@@ -52,19 +52,6 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="node">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(InstructionNode node)
-		{
-			//FIXME!
-			return base.ToString(node); // +" <- 0x" + context.TokenType.ToString();
-		}
-
-		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor.</param>

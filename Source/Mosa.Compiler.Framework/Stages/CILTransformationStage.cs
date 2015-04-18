@@ -312,7 +312,7 @@ namespace Mosa.Compiler.Framework.Stages
 					before.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
 					before.OperandCount = 4;
 					before.Result = boxedValue;
-
+					before.ResultCount = 1;
 					// Now replace the value type pointer with the boxed value virtual register
 					context.Operand1 = boxedValue;
 				}
@@ -407,6 +407,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Neg(Context context)
 		{
+			//FUTURE: Add IRInstruction.Negate
 			if (context.Operand1.IsUnsigned)
 			{
 				Operand zero = Operand.CreateConstant(context.Operand1.Type, 0);
@@ -504,6 +505,7 @@ namespace Mosa.Compiler.Framework.Stages
 						before.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
 						before.OperandCount = 4;
 						before.Result = boxedValue;
+						before.ResultCount = 1;
 
 						// Now replace the value type pointer with the boxed value virtual register
 						context.Operand1 = boxedValue;
@@ -698,6 +700,7 @@ namespace Mosa.Compiler.Framework.Stages
 				before.SetOperand(2, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(classType)));
 				before.OperandCount = 3;
 				before.Result = thisReference;
+				before.ResultCount = 1;
 			}
 
 			// Result is the this pointer, now invoke the real constructor
@@ -802,6 +805,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Operand tmp = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
 			context.Result = tmp;
+			context.ResultCount = 1;
 
 			var size = GetInstructionSize(tmp);
 
@@ -860,6 +864,7 @@ namespace Mosa.Compiler.Framework.Stages
 				context.OperandCount = 3;
 			}
 			context.Result = result;
+			context.ResultCount = 1;
 		}
 
 		/// <summary>
@@ -868,16 +873,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.BinaryComparison(Context context)
 		{
-			ConditionCode code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
+			var code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
+			var instruction = context.Operand1.IsR ? IRInstruction.FloatCompare : IRInstruction.IntegerCompare;
 
-			if (context.Operand1.IsR)
-			{
-				context.SetInstruction(IRInstruction.FloatCompare, code, context.Result, context.Operand1, context.Operand2);
-			}
-			else
-			{
-				context.SetInstruction(IRInstruction.IntegerCompare, code, context.Result, context.Operand1, context.Operand2);
-			}
+			context.SetInstruction(instruction, code, context.Result, context.Operand1, context.Operand2);
+			context.SetInstruction(instruction, code, context.Result, context.Operand1, context.Operand2);
 		}
 
 		/// <summary>
@@ -958,7 +958,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 
-			var symbol = linker.CreateSymbol(symbolName, SectionKind.ROData, NativePointerAlignment, NativePointerSize * 3 + stringdata.Length * 2);
+			var symbol = linker.CreateSymbol(symbolName, SectionKind.ROData, NativeAlignment, NativePointerSize * 3 + stringdata.Length * 2);
 			var stream = symbol.Stream;
 
 			// Type Definition and sync block
@@ -988,7 +988,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int offset = TypeLayout.GetFieldOffset(field);
 			Operand offsetOperand = Operand.CreateConstant(TypeSystem, offset);
 
-			BaseInstruction loadInstruction = IRInstruction.Load;
+			var loadInstruction = IRInstruction.Load;
 
 			if (MustSignExtendOnLoad(field.FieldType))
 			{
@@ -1576,8 +1576,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Gets the index.
 		/// </summary>
 		/// <param name="type">The type.</param>
+		/// <param name="Platform32Bit">if set to <c>true</c> [platform32 bit].</param>
 		/// <returns></returns>
-		private int GetIndex(MosaType type)
+		/// <exception cref="InvalidCompilerException"></exception>
+		private int GetIndex(MosaType type, bool Platform32Bit)
 		{
 			if (type.IsChar) return 5;
 			else if (type.IsI1) return 0;
@@ -1590,8 +1592,8 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (type.IsU8) return 7;
 			else if (type.IsR4) return 8;
 			else if (type.IsR8) return 9;
-			else if (type.IsI) return 10;
-			else if (type.IsU) return 11;
+			else if (type.IsI) return Platform32Bit ? 2 : 10;
+			else if (type.IsU) return Platform32Bit ? 6 : 11;
 			else if (type.IsPointer) return 12;
 			else if (!type.IsValueType) return 12;
 
@@ -1753,7 +1755,7 @@ namespace Mosa.Compiler.Framework.Stages
 				/* I1 */ IRInstruction.SignExtendedMove,
 				/* I2 */ IRInstruction.SignExtendedMove,
 				/* I4 */ IRInstruction.SignExtendedMove,
-				/* I8 */ IRInstruction.SignExtendedMove,
+				/* I8 */ IRInstruction.Move,
 				/* U1 */ IRInstruction.ZeroExtendedMove,
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
@@ -1772,7 +1774,7 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U1 */ IRInstruction.ZeroExtendedMove,
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
-				/* U8 */ IRInstruction.ZeroExtendedMove,
+				/* U8 */ IRInstruction.Move,
 				/* R4 */ IRInstruction.FloatToIntegerConversion,
 				/* R8 */ IRInstruction.FloatToIntegerConversion,
 				/* I  */ IRInstruction.Move,
@@ -1801,16 +1803,16 @@ namespace Mosa.Compiler.Framework.Stages
 			var destinationOperand = context.Result;
 			var sourceOperand = context.Operand1;
 
-			int destIndex = GetIndex(destinationOperand.Type);
-			int srcIndex = GetIndex(sourceOperand.Type);
+			int destIndex = GetIndex(destinationOperand.Type, NativeInstructionSize == InstructionSize.Size32);
+			int srcIndex = GetIndex(sourceOperand.Type, NativeInstructionSize == InstructionSize.Size32);
 
-			BaseIRInstruction type = convTable[destIndex][srcIndex];
+			var type = convTable[destIndex][srcIndex];
 
 			if (type == null)
 				throw new InvalidCompilerException();
 
 			uint mask = 0xFFFFFFFF;
-			BaseInstruction instruction = ComputeExtensionTypeAndMask(destinationOperand.Type, ref mask);
+			var instruction = ComputeExtensionTypeAndMask(destinationOperand.Type, ref mask);
 
 			if (type == IRInstruction.LogicalAnd)
 			{
@@ -1950,9 +1952,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			int index = 0;
 			context.SetOperand(index++, symbolOperand);
-			foreach (Operand op in operands)
+			foreach (var operand in operands)
 			{
-				context.SetOperand(index++, op);
+				context.SetOperand(index++, operand);
 			}
 		}
 

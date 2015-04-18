@@ -27,9 +27,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void AttemptToStaticallyAllocateObjects()
 		{
-			foreach (Context allocation in ScanForOperatorNew())
+			foreach (var allocation in ScanForOperatorNew())
 			{
-				Context assignment = SeekAssignmentOfAllocatedObject(allocation);
+				var assignment = SeekAssignmentOfAllocatedObject(allocation);
 
 				if (assignment != null && CheckAssignmentForCompliance(allocation, assignment))
 				{
@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// If instruction is newarr then get the size of the element, multiply it by array size, and add array header size
 			// Also need to align to a 4-byte boundry
 			if (allocation.Instruction is NewarrInstruction)
-				typeSize = (TypeLayout.GetTypeSize(allocatedType.ElementType) * (int)allocation.Previous.Operand1.ConstantSignedInteger) + (TypeLayout.NativePointerSize * 3);
+				typeSize = (TypeLayout.GetTypeSize(allocatedType.ElementType) * (int)allocation.Previous.Operand1.ConstantSignedLongInteger) + (TypeLayout.NativePointerSize * 3);
 
 			// Allocate a linker symbol to refer to this allocation. Use the destination field name as the linker symbol name.
 			var symbolName = MethodCompiler.Linker.CreateSymbol(assignmentField.FullName + @"<<$cctor", SectionKind.ROData, Architecture.NativeAlignment, typeSize);
@@ -101,9 +101,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand InsertLoadBeforeInstruction(Context context, string symbolName, MosaType type)
 		{
-			Context before = context.InsertBefore();
+			var before = context.InsertBefore();
 			Operand result = MethodCompiler.CreateVirtualRegister(type);
-			Operand op = Operand.CreateManagedSymbol(TypeSystem, type, symbolName);
+			Operand op = Operand.CreateManagedSymbol(type, symbolName);
 
 			before.SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), result, op);
 
@@ -112,9 +112,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private IEnumerable<Context> ScanForOperatorNew()
 		{
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (var block in BasicBlocks)
 			{
-				for (Context context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
 				{
 					if (!context.IsEmpty && (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction))
 					{
@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Context SeekAssignmentOfAllocatedObject(Context allocation)
 		{
-			Context next = allocation.Next;
+			var next = allocation.Next;
 
 			while (next.IsEmpty)
 			{

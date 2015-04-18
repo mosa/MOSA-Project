@@ -45,16 +45,13 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog("Regions");
 
-			var protectedRegionTableSymbol = MethodCompiler.Linker.CreateSymbol(MethodCompiler.Method.FullName + Metadata.ProtectedRegionTable, SectionKind.ROData, NativePointerAlignment, 0);
+			var protectedRegionTableSymbol = MethodCompiler.Linker.CreateSymbol(MethodCompiler.Method.FullName + Metadata.ProtectedRegionTable, SectionKind.ROData, NativeAlignment, 0);
 			var writer = new EndianAwareBinaryWriter(protectedRegionTableSymbol.Stream, Architecture.Endianness);
 
 			int sectioncount = 0;
 
 			// 1. Number of Regions (dummy for now)
 			writer.Write((uint)0);
-
-			if (trace.Active)
-				trace.Log("*****");
 
 			foreach (var region in MethodCompiler.ProtectedRegions)
 			{

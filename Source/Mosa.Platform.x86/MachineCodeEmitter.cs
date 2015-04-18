@@ -193,7 +193,7 @@ namespace Mosa.Platform.x86
 			}
 			else if (displacement.IsMemoryAddress && displacement.OffsetBase != null && displacement.OffsetBase.IsConstant)
 			{
-				codeStream.Write((int)(displacement.OffsetBase.ConstantSignedInteger + displacement.Displacement), Endianness.Little);
+				codeStream.Write((int)(displacement.OffsetBase.ConstantSignedLongInteger + displacement.Displacement), Endianness.Little);
 			}
 			else
 			{

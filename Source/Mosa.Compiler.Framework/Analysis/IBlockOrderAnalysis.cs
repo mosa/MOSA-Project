@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Collections.Generic;
+
 namespace Mosa.Compiler.Framework.Analysis
 {
 	public interface IBlockOrderAnalysis
@@ -15,7 +17,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		#region Properties
 
-		BasicBlock[] NewBlockOrder { get; }
+		IList<BasicBlock> NewBlockOrder { get; }
 
 		int GetLoopDepth(BasicBlock block);
 
