@@ -280,7 +280,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool PromoteLocalVariable()
 		{
-			//HACK!!! HACK!!! HACK!!! 
+			//HACK!!! HACK!!! HACK!!!
 			if (MethodCompiler.Method.FullName.Contains(" Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
 				return false;
 

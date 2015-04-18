@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Text;
-
 namespace Mosa.Compiler.Framework.Stages
 {
 	public class GraphVizStage : BaseMethodCompilerStage
@@ -52,4 +50,3 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 	}
 }
-
