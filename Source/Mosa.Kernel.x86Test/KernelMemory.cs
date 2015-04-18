@@ -8,12 +8,18 @@
  */
 
 using Mosa.Internal.Plug;
+using Mosa.Platform.Internal.x86;
 
 namespace Mosa.Kernel.x86Test
 {
 	public static class KernelMemory
 	{
 		private static uint memoryPtr = 0x00900000;
+
+		static KernelMemory()
+		{
+			GC.Setup();
+		}
 
 		[Method("Mosa.Platform.Internal.x86.Runtime.AllocateMemory")]
 		static public uint AllocateMemory(uint size)

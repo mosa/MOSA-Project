@@ -54,7 +54,7 @@ namespace Mosa.Kernel.x86
 			for (uint index = 0; index < 1024 * 32; index++)
 				AllocatePage();
 
-			MapVirtualAddressToPhysical(0xFFE00000, 0x0);
+			MapVirtualAddressToPhysical(0xFFC00000, 0x0);
 			MapVirtualAddressToPhysical(0x0, 0x0, false);
 
 			//Panic.DumpMemory(pageDirectoryAddress);
