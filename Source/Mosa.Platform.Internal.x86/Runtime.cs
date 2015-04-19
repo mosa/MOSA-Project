@@ -23,10 +23,9 @@ namespace Mosa.Platform.Internal.x86
 
 		#region Allocation
 
-		// This method will be plugged by "Mosa.Kernel.x86.KernelMemory.AllocateMemory"
-		public static uint AllocateMemory(uint size)
+		public static void* AllocateMemory(uint size)
 		{
-			return 0;
+			return GC.AllocateObject(size);
 		}
 
 		public static void* AllocateObject(RuntimeTypeHandle handle, uint classSize)
@@ -37,7 +36,7 @@ namespace Mosa.Platform.Internal.x86
 			//   - 0 .. n object data fields
 
 			uint allocationSize = (2 * NativeIntSize) + classSize;
-			void* memory = (void*)AllocateMemory(allocationSize);
+			void* memory = AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
 			destination[0] = ((uint*)&handle)[0];
@@ -57,7 +56,7 @@ namespace Mosa.Platform.Internal.x86
 
 			uint allocationSize = (NativeIntSize * 3) + (uint)(elements * elementSize);
 			allocationSize = (allocationSize + 3) & ~3u;	// Align to 4-bytes boundary
-			void* memory = (void*)AllocateMemory(allocationSize);
+			void* memory = AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
 			destination[0] = ((uint*)&handle)[0];
@@ -286,8 +285,9 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void DebugOutput(string msg)
 		{
-			foreach (var c in msg)
+			for(int i = 0; i < msg.Length; i++)
 			{
+				var c = msg[i];
 				Native.Out8(0xEC, (byte)c);
 			}
 
@@ -422,6 +422,8 @@ namespace Mosa.Platform.Internal.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static uint GetPreviousStackFrame(uint ebp)
 		{
+			if (ebp < 0x1000)
+				return 0;
 			return Intrinsic.Load32(ebp);
 		}
 
@@ -453,6 +455,8 @@ namespace Mosa.Platform.Internal.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static uint GetReturnAddressFromStackFrame(uint stackframe)
 		{
+			if (stackframe < 0x1000)
+				return 0;
 			return Intrinsic.Load32(stackframe, NativeIntSize);
 		}
 
@@ -593,6 +597,8 @@ namespace Mosa.Platform.Internal.x86
 		{
 			get
 			{
+				if (MethodDefinition == null)
+					return null;
 				if (methodName == null)
 					methodName = Runtime.GetMethodDefinitionName(MethodDefinition);
 				return methodName;
@@ -627,6 +633,8 @@ namespace Mosa.Platform.Internal.x86
 			{
 				{
 					if (!Valid) return true;
+					if (MethodName == null)
+						return true;
 					return MethodName.IndexOf("System.Void Mosa.Kernel.x86.Panic::") >= 0;
 				}
 			}

@@ -87,7 +87,7 @@ namespace Mosa.Kernel.x86
 
 			Native.Set32(process + Offset.Status, Status.Running);
 			Native.Set32(process + Offset.ProcessID, slot);
-			Native.Set32(process + Offset.MemoryMap, AllocateMemory(slot, 32U * 4096U));
+			Native.Set32(process + Offset.MemoryMap, VirtualPageAllocator.Reserve(32U * 4096U));
 			Native.Set32(process + Offset.Lock, 0);
 			Native.Set32(process + Offset.DefaultPriority, 7);
 			Native.Set32(process + Offset.MaximumPriority, 255);

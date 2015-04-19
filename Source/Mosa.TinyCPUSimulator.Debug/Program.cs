@@ -10,21 +10,71 @@
 
 using Mosa.Test.Collection.x86.xUnit;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Mosa.TinyCPUSimulator.Debug
 {
+	internal class TraceListener : System.Diagnostics.TraceListener
+	{
+		private List<string> output = new List<string>();
+		public string Output
+		{
+			get
+			{
+				var builder = new StringBuilder();
+				foreach (var m in output)
+					builder.Append(m);
+				return builder.ToString();
+			}
+		}
+
+		public override void Write(string message)
+		{
+			output.Add(message);
+		}
+
+		public override void WriteLine(string message)
+		{
+			output.Add(message);
+			output.Add("\r\n");
+		}
+	}
+
 	internal class Program
 	{
 		private static void Main(string[] args)
 		{
-			//Test5a();
-			//Test5b();
-			//Test5c();
-			//Test3();
-			//Test4();
-			//Test12();
+			var listener = new TraceListener();
+			try
+			{
+				System.Diagnostics.Debug.Listeners.Add(listener);
+				//Test5a();
+				//Test5b();
+				//Test5c();
+				//Test3();
+				//Test4();
+				//Test12();
 
-			Test13();
+				//Test13();
+
+				Test14();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+			}
+
+			System.Diagnostics.Debugger.Launch();
+			System.Diagnostics.Debug.Write(listener.Output);
+			Console.ReadLine();
+		}
+
+		private static void Test14()
+		{
+			var fixture = new UInt16Fixture();
+
+			fixture.Newarr();
 		}
 
 		private static void Test13()

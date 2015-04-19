@@ -415,6 +415,13 @@ namespace Mosa.Kernel.x86
 
 				case 14:
 					// Page Fault!
+					var cr2 = Native.GetCR2() >> 5;
+					if (cr2 < 0x1000)
+					{
+						Error(ebp, eip, "Null Pointer Exception");
+						break;
+					}
+
 					PageFaultHandler.Fault(errorCode);
 					break;
 

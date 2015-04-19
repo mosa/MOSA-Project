@@ -117,7 +117,7 @@ namespace Mosa.Kernel.x86
 					first = 0xFFFFFFFF;
 				}
 			}
-
+			Assert.True(false, "VirtualPageAllocator cannot reserve memory");
 			return 0;
 		}
 

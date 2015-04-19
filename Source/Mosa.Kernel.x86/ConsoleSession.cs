@@ -5,6 +5,8 @@
  *
  */
 
+using System;
+using Mosa.Kernel.x86.Helpers;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
@@ -127,6 +129,8 @@ namespace Mosa.Kernel.x86
 		/// <param name="value">The string value to write to the screen.</param>
 		public void Write(string value)
 		{
+			Assert.False(value == null);
+
 			for (int index = 0; index < value.Length; index++)
 			{
 				char chr = value[index];

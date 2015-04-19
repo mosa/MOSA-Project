@@ -39,6 +39,8 @@
     <NoWarn>1685</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assert.cs" />
+    <Compile Include="DebugImplementation.cs" />
     <Compile Include="KernelMemory.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -52,6 +54,10 @@
     <ProjectReference Include="..\Mosa.Internal\Mosa.Internal.csproj">
       <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
       <Name>Mosa.Internal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.Internal.x86\Mosa.Platform.Internal.x86.csproj">
+      <Project>{a47b7998-4ee8-4af8-9373-c664fdeddc65}</Project>
+      <Name>Mosa.Platform.Internal.x86</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
