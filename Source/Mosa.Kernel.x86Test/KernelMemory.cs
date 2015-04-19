@@ -21,7 +21,7 @@ namespace Mosa.Kernel.x86Test
 			GC.Setup();
 		}
 
-		[Method("Mosa.Platform.Internal.x86.Runtime.AllocateMemory")]
+		[Method("Mosa.Platform.Internal.x86.GC.AllocateMemory")]
 		static public uint AllocateMemory(uint size)
 		{
 			uint alloc = memoryPtr;

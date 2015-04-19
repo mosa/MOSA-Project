@@ -39,6 +39,8 @@
     <NoWarn>1685</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assert.cs" />
+    <Compile Include="DebugImplementation.cs" />
     <Compile Include="KernelMemory.cs" />
   </ItemGroup>
   <ItemGroup>

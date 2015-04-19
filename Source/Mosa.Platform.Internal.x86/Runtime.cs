@@ -285,8 +285,9 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void DebugOutput(string msg)
 		{
-			foreach (var c in msg)
+			for(int i = 0; i < msg.Length; i++)
 			{
+				var c = msg[i];
 				Native.Out8(0xEC, (byte)c);
 			}
 
