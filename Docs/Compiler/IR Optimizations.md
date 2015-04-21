@@ -1,6 +1,6 @@
 # IR Optimizations
 
-The MOSA Compiler implements many common compiler optimizations. The following describes some of the optimizations performed by the IR Optimization Stage (implemented in IROptimizationStage.cs). As its name implies, it operates on the immediate representation (IR) instruction level. It can work on IR instructions in SSA form or not; however, it will perform more optimization transformation when the code is in SSA form. The stage is optional and can be enabled or disabled.
+The MOSA Compiler implements many common compiler optimizations. The following describes some of the optimizations performed by the compiler's IR Optimization stage (implemented in IROptimizationStage.cs). As its name implies, it operates on the immediate representation (IR) instruction level. It can work on IR instructions in SSA form or not; however, it will perform more optimizations when the instructions are in SSA form. The stage is optional and can be enabled or disabled.
 
 ## Constant Propagation
 
@@ -77,6 +77,6 @@ _Note: More arithmetic simplifications can be added._
 
 ## Move Constants to the Right
 
-This move constants from the left side of an operation to the right, when the operating has the commutative property. This is not an optimization unto itself, simplifies the source code for other optimizations.
+This move constants from the left side of an operation to the right, when the operating has the commutative property. While this is not an optimization unto itself, it simplifies the source code for other optimizations.
 
 
