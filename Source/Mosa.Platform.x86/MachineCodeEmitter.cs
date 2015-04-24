@@ -188,7 +188,11 @@ namespace Mosa.Platform.x86
 
 				SectionKind section = (displacement.Method != null) ? SectionKind.Text : SectionKind.ROData;
 
-				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Name, section, 0);
+				var symbol = linker.FindSymbol(displacement.Name);
+				if (symbol == null)
+					symbol = linker.GetSymbol(displacement.Name, section);
+				
+				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, symbol.Name, symbol.SectionKind, 0);
 				codeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsMemoryAddress && displacement.OffsetBase != null && displacement.OffsetBase.IsConstant)

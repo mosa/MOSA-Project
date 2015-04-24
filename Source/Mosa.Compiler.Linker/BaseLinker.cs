@@ -109,6 +109,23 @@ namespace Mosa.Compiler.Linker
 			return CreateSymbol(name, kind, 0);
 		}
 
+		public LinkerSymbol FindSymbol(string name)
+		{
+			var list = new [] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
+			foreach (var kind in list)
+			{
+				var section = Sections[(int)kind];
+
+				Debug.Assert(section != null);
+
+				var symbol = section.GetSymbol(name);
+
+				if (symbol != null)
+					return symbol;
+			}
+			return null;
+		}
+
 		protected LinkerSymbol CreateSymbol(string name, SectionKind kind, uint alignment)
 		{
 			lock (mylock)
