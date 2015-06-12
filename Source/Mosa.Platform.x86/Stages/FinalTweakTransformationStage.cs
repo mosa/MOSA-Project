@@ -120,6 +120,32 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
+		/// Movsses instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Movss(Context context)
+		{
+			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
+			{
+				context.Empty();
+				return;
+			}
+		}
+
+		/// <summary>
+		/// Movsds instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IX86Visitor.Movsd(Context context)
+		{
+			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
+			{
+				context.Empty();
+				return;
+			}
+		}
+
+		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Setcc"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -816,22 +842,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Out(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Movsses instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Movss(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Movsds instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IX86Visitor.Movsd(Context context)
 		{
 		}
 

@@ -7,9 +7,37 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
+
 namespace Mosa.TinyCPUSimulator.x86.Opcodes
 {
-	public class Roundss : Movsd
+	public class Roundss : BaseX86Opcode
 	{
+		public override void Execute(CPUx86 cpu, SimInstruction instruction)
+		{
+			float a = (float)LoadFloatValue(cpu, instruction.Operand1);
+			uint p = LoadValue(cpu, instruction.Operand2);
+			int size = instruction.Operand1.Size;
+
+			float r;
+			if ((p & 0x3) == 0x3)
+			{
+				r = (float)Math.Truncate(a);
+			}
+			else if ((p & 0x2) == 0x2)
+			{
+				r = (float)Math.Ceiling(a);
+			}
+			else if ((p & 0x1) == 0x1)
+			{
+				r = (float)Math.Floor(a);
+			}
+			else
+			{
+				r = (float)Math.Round(a);
+			}
+
+			StoreFloatValue(cpu, instruction.Operand1, r, size);
+		}
 	}
 }

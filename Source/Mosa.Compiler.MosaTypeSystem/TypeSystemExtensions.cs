@@ -84,6 +84,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 					return type.TypeSystem.BuiltIn.I;
 
 				case StackTypeCode.F:
+					if (type.IsR4)
+						return type.TypeSystem.BuiltIn.R4;
 					return type.TypeSystem.BuiltIn.R8;
 
 				case StackTypeCode.O:

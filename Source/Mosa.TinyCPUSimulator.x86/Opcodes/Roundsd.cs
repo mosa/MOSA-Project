@@ -19,9 +19,23 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			uint p = LoadValue(cpu, instruction.Operand2);
 			int size = instruction.Operand1.Size;
 
-			//TODO - p is ignored
-
-			double r = Math.Truncate(a);
+			double r;
+			if ((p & 0x3) == 0x3)
+			{
+				r = Math.Truncate(a);
+			}
+			else if ((p & 0x2) == 0x2)
+			{
+				r = Math.Ceiling(a);
+			}
+			else if ((p & 0x1) == 0x1)
+			{
+				r = Math.Floor(a);
+			}
+			else
+			{
+				r = Math.Round(a);
+			}
 
 			StoreFloatValue(cpu, instruction.Operand1, r, size);
 		}

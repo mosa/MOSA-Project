@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
+ * (c) 2015 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -24,6 +24,73 @@ namespace Mosa.Platform.Internal.x86
 
 	public unsafe static class Division
 	{
+		/* Single and Double Remainder */
+		public static double RemR8(double n, double d)
+		{
+			if (double.IsInfinity(d))
+			{
+				if (double.IsInfinity(n))
+					return double.NaN;
+				else
+					return n;
+			}
+			else if (double.IsInfinity(n))
+			{
+				return double.NaN;
+			}
+
+			if (double.IsNaN(n) || double.IsNaN(d))
+				return double.NaN;
+
+			if (d == 0d)
+			{
+				if (n > 0d)
+					return double.PositiveInfinity;
+				else
+					return double.NegativeInfinity;
+			}
+
+			if (n == 0d)
+				return n;
+
+			return Native.Remainder(n, d);
+
+			//return n - d * ((double)(uint)(n / d));
+		}
+
+		public static float RemR4(float n, float d)
+		{
+			if (float.IsInfinity(d))
+			{
+				if (float.IsInfinity(n))
+					return float.NaN;
+				else
+					return n;
+			}
+			else if (float.IsInfinity(n))
+			{
+				return float.NaN;
+			}
+
+			if (float.IsNaN(n) || float.IsNaN(d))
+				return float.NaN;
+
+			if (d == 0f)
+			{
+				if (n > 0f)
+					return float.PositiveInfinity;
+				else
+					return float.NegativeInfinity;
+			}
+
+			if (n == 0f)
+				return n;
+
+			return Native.Remainder(n, d);
+
+			//return n - d * ((float)(uint)(n / d));
+		}
+
 		/* Divides unsigned 64-bit N by unsigned 64-bit D and returns the quotient. */
 
 		public static ulong udiv64(ulong n, ulong d)
