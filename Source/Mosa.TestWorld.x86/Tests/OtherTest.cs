@@ -30,7 +30,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.AddLast(ConditionalBug);
 			testMethods.AddLast(PointerBug);
 			testMethods.AddLast(AddressOfThisBug);
-			//testMethods.AddLast(RemR4);
+			testMethods.AddLast(RemR4);
 			//testMethods.AddLast(RemR8);
 		}
 
@@ -187,12 +187,10 @@ namespace Mosa.TestWorld.x86.Tests
 			return PointerBugClass.Test2();
 		}
 
-		//static float f1 = 1.232145E+10f;
-		//static float f2 = 1.00012f;
+		static float f1 = 1.232145E+10f;
+		static float f2 = 1.00012f;
 		public static bool RemR4()
 		{
-			float f1 = 1.232145E+10f;
-			float f2 = 1.00012f;
 			return (f1 % f2) == 0.4191103f;
 		}
 

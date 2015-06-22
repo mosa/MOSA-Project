@@ -23,7 +23,6 @@ namespace Mosa.Kernel.x86
 			IDT.SetInterruptHandler(null);
 			Panic.Setup();
 			DebugClient.Setup(Serial.COM1);
-			SSE.Setup();
 
 			//Initialize interrupts
 			PIC.Setup();
