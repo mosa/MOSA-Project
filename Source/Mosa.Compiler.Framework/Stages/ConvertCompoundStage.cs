@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (node.Operand3.IsVirtualRegister && !repl.ContainsKey(node.Operand3))
 					{
-						repl[node.Operand3] = MethodCompiler.StackLayout.AddStackLocal(node.Result.Type);
+						repl[node.Operand3] = MethodCompiler.StackLayout.AddStackLocal(node.MosaType);
 					}
 					node.ReplaceInstructionOnly(IRInstruction.CompoundStore);
 				}
