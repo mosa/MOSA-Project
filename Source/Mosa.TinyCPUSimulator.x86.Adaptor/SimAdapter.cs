@@ -262,8 +262,8 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (opcode == Opcode.Cvtsi2sd) return true;
 			//if (opcode == Opcode.Cvtsi2ss) return true;
 			//if (opcode == Opcode.Cvtss2sd) return true;
-			if (opcode == Opcode.Cvttsd2si) return true;
-			if (opcode == Opcode.Cvttss2si) return true;
+			//if (opcode == Opcode.Cvttsd2si) return true;
+			//if (opcode == Opcode.Cvttss2si) return true;
 			if (opcode == Opcode.Dec) return true;
 			if (opcode == Opcode.Div) return true;
 			if (opcode == Opcode.Divsd) return true;

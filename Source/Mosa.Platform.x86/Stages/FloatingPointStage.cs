@@ -70,8 +70,10 @@ namespace Mosa.Platform.x86.Stages
 			node.Operand1 = register;
 
 			var move = GetMove(register, operand);
+			var size = GetInstructionSize(operand.Type);
 
 			var newNode = new InstructionNode(move, register, operand);
+			newNode.Size = size;
 			node.Previous.Insert(newNode);
 		}
 

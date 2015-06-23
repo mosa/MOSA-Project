@@ -9,7 +9,20 @@
 
 namespace Mosa.TinyCPUSimulator.x86.Opcodes
 {
-	public class Divss : Divsd
+	public class Divss : BaseX86Opcode
 	{
+		public override void Execute(CPUx86 cpu, SimInstruction instruction)
+		{
+			float a = (float)LoadFloatValue(cpu, instruction.Operand1);
+			float b = (float)LoadFloatValue(cpu, instruction.Operand2);
+			int size = instruction.Operand1.Size;
+
+			if (a == 1f && b == -1.00012f)
+				System.Console.Write("");
+
+			float r = a / b;
+
+			StoreFloatValue(cpu, instruction.Operand1, r, size);
+		}
 	}
 }

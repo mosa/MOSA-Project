@@ -120,10 +120,11 @@
     <Compile Include="Intrinsic\Out32.cs" />
     <Compile Include="Intrinsic\Pause.cs" />
     <Compile Include="Intrinsic\LockSet.cs" />
+    <Compile Include="Intrinsic\Remainder.cs" />
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
-    <Compile Include="Stages\UnboxStubStage.cs" />
+    <Compile Include="Stages\SSESetupStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
     <Compile Include="Stages\FinalTweakTransformationStage.cs" />
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />

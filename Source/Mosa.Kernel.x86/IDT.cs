@@ -381,7 +381,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case 6:
-					//Error(ebp, eip, "Invalid Opcode");
+					Error(ebp, eip, "Invalid Opcode");
 					break;
 
 				case 7:
@@ -410,7 +410,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case 13:
-					Error(ebp, eip, "General Proection Exception");
+					Error(ebp, eip, "General Protection Exception");
 					break;
 
 				case 14:
@@ -427,6 +427,10 @@ namespace Mosa.Kernel.x86
 
 				case 16:
 					Error(ebp, eip, "Coprocessor Error");
+					break;
+
+				case 19:
+					Error(ebp, eip, "SIMD Floating-Point Exception");
 					break;
 
 				default:

@@ -884,18 +884,30 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.RemFloat(Context context)
 		{
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
+			var result = context.Result;
+			var dividend = context.Operand1;
+			var divisor = context.Operand2;
+			var method = (result.IsR8) ? "RemR8" : "RemR4";
 
-			Operand xmm1 = AllocateVirtualRegister(TypeSystem.BuiltIn.R8);
-			Operand xmm2 = AllocateVirtualRegister(TypeSystem.BuiltIn.R8);
-			Operand xmm3 = AllocateVirtualRegister(TypeSystem.BuiltIn.R8);
+			var type = TypeSystem.GetTypeByName("Mosa.Platform.Internal.x86", "Division");
 
-			context.SetInstruction(X86.Divsd, xmm1, operand1, operand2);
-			context.AppendInstruction(X86.Roundsd, xmm2, xmm1, Operand.CreateConstant(TypeSystem.BuiltIn.U1, 0x3));
-			context.AppendInstruction(X86.Mulsd, xmm3, operand2, xmm2);
-			context.AppendInstruction(X86.Subsd, result, operand1, xmm3);
+			Debug.Assert(type != null, "Cannot find type: Mosa.Platform.Internal.x86.Division type");
+
+			var mosaMethod = type.FindMethodByName(method);
+
+			Debug.Assert(method != null, "Cannot find method: " + method);
+
+			context.ReplaceInstructionOnly(IRInstruction.Call);
+			context.SetOperand(0, Operand.CreateSymbolFromMethod(TypeSystem, mosaMethod));
+			context.Result = result;
+			context.Operand2 = dividend;
+			context.Operand3 = divisor;
+			context.OperandCount = 3;
+			context.ResultCount = 1;
+			context.InvokeMethod = mosaMethod;
+
+			// Since we are already in IR Transformation Stage we gotta call this now
+			CallingConvention.MakeCall(MethodCompiler, TypeLayout, context);
 		}
 
 		/// <summary>

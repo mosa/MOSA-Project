@@ -30,6 +30,8 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.AddLast(ConditionalBug);
 			testMethods.AddLast(PointerBug);
 			testMethods.AddLast(AddressOfThisBug);
+			testMethods.AddLast(RemR4);
+			testMethods.AddLast(RemR8);
 		}
 
 		private static uint StaticValue = 0x200000;
@@ -183,6 +185,20 @@ namespace Mosa.TestWorld.x86.Tests
 		public static bool AddressOfThisBug()
 		{
 			return PointerBugClass.Test2();
+		}
+
+		static float f1 = 1.232145E+10f;
+		static float f2 = 2f;
+		public static bool RemR4()
+		{
+			return (f1 % f2) == 0f;
+		}
+
+		static double d1 = 1.232145E+10d;
+		static double d2 = 15d;
+		public static bool RemR8()
+		{
+			return (d1 % d2) == 0d;
 		}
 
 		unsafe public static class PointerBugClass

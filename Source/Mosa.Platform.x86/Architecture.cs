@@ -203,6 +203,10 @@ namespace Mosa.Platform.x86
 			compilerPipeline.InsertAfterFirst<ICompilerStage>(
 				new InterruptVectorStage()
 			);
+
+			compilerPipeline.InsertAfterLast<ICompilerStage>(
+				new SSESetupStage()
+			);
 		}
 
 		/// <summary>

@@ -261,6 +261,24 @@ namespace Mosa.Platform.Internal.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Int, Mosa.Platform.x86")]
 		public extern static void Int(byte interrupt);
 
+		/// <summary>
+		/// Wraps the intrinsic method for calculating the remainder of floating-point division
+		/// </summary>
+		/// <param name="n">The dividend</param>
+		/// <param name="d">The divisor</param>
+		/// <returns>The remainder</returns>
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Remainder, Mosa.Platform.x86")]
+		public extern static float Remainder(float n, float d);
+
+		/// <summary>
+		/// Wraps the intrinsic method for calculating the remainder of floating-point division
+		/// </summary>
+		/// <param name="n">The dividend</param>
+		/// <param name="d">The divisor</param>
+		/// <returns>The remainder</returns>
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Remainder, Mosa.Platform.x86")]
+		public extern static double Remainder(double n, double d);
+
 		#endregion Intrinsic
 	}
 }
