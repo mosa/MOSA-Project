@@ -54,8 +54,6 @@ namespace Mosa.Platform.Internal.x86
 				return n;
 
 			return Native.Remainder(n, d);
-
-			//return n - d * ((double)(uint)(n / d));
 		}
 
 		public static float RemR4(float n, float d)
@@ -87,8 +85,6 @@ namespace Mosa.Platform.Internal.x86
 				return n;
 
 			return Native.Remainder(n, d);
-
-			//return n - d * ((float)(uint)(n / d));
 		}
 
 		/* Divides unsigned 64-bit N by unsigned 64-bit D and returns the quotient. */

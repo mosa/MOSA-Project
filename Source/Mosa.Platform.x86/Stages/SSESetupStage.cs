@@ -62,7 +62,6 @@ namespace Mosa.Platform.x86.Stages
 				ret
 			*/
 
-			// set sentinal on the stack to indicate the start of the stack
 			ctx.AppendInstruction(X86.MovCR, eax, cr0);
 			ctx.AppendInstruction(X86.And, eax, eax, Operand.CreateConstant(TypeSystem.BuiltIn.U4, 0xFFFB));
 			ctx.AppendInstruction(X86.Or, eax, eax, Operand.CreateConstant(TypeSystem.BuiltIn.U4, 0x2));

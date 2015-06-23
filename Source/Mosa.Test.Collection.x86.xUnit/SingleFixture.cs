@@ -63,8 +63,9 @@ namespace Mosa.Test.Collection.x86.xUnit
 			Run<float>("Mosa.Test.Collection", "SingleTests", "DivR4R4", (float)0, a, (float)0);
 		}
 
-		[Theory]
-		[PropertyData("R4R4")]
+		// TinySimulator can't simulate this.
+		//[Theory]
+		//[PropertyData("R4R4")]
 		public void RemR4R4(float a, float b)
 		{
 			if (a == int.MinValue && b == -1)
