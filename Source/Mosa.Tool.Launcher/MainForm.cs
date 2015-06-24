@@ -71,9 +71,9 @@ namespace Mosa.Tool.Launcher
 			switch (cbImageFormat.SelectedIndex)
 			{
 				case 0: Options.ImageFormat = ImageFormat.IMG; break;
-				case 1: Options.ImageFormat = ImageFormat.VHD; break;
-				case 2: Options.ImageFormat = ImageFormat.VDI; break;
-				case 3: Options.ImageFormat = ImageFormat.ISO; break;
+				case 1: Options.ImageFormat = ImageFormat.ISO; break;
+				case 2: Options.ImageFormat = ImageFormat.VHD; break;
+				case 3: Options.ImageFormat = ImageFormat.VDI; break;
 				case 4: Options.ImageFormat = ImageFormat.VMDK; break;
 				default: break;
 			}
@@ -81,8 +81,8 @@ namespace Mosa.Tool.Launcher
 			switch (cbEmulator.SelectedIndex)
 			{
 				case 0: Options.Emulator = EmulatorType.Qemu; break;
-				case 1: Options.Emulator = EmulatorType.Boches; break;
-				case 2: Options.Emulator = EmulatorType.WMware; break;
+				case 1: Options.Emulator = EmulatorType.Bochs; break;
+				case 2: Options.Emulator = EmulatorType.VMware; break;
 				default: break;
 			}
 
@@ -149,9 +149,9 @@ namespace Mosa.Tool.Launcher
 			switch (Options.ImageFormat)
 			{
 				case ImageFormat.IMG: cbImageFormat.SelectedIndex = 0; break;
-				case ImageFormat.VHD: cbImageFormat.SelectedIndex = 1; break;
-				case ImageFormat.VDI: cbImageFormat.SelectedIndex = 2; break;
-				case ImageFormat.ISO: cbImageFormat.SelectedIndex = 3; break;
+				case ImageFormat.ISO: cbImageFormat.SelectedIndex = 1; break;
+				case ImageFormat.VHD: cbImageFormat.SelectedIndex = 2; break;
+				case ImageFormat.VDI: cbImageFormat.SelectedIndex = 3; break;
 				case ImageFormat.VMDK: cbImageFormat.SelectedIndex = 4; break;
 				default: break;
 			}
@@ -159,8 +159,8 @@ namespace Mosa.Tool.Launcher
 			switch (Options.Emulator)
 			{
 				case EmulatorType.Qemu: cbEmulator.SelectedIndex = 0; break;
-				case EmulatorType.Boches: cbEmulator.SelectedIndex = 1; break;
-				case EmulatorType.WMware: cbEmulator.SelectedIndex = 2; break;
+				case EmulatorType.Bochs: cbEmulator.SelectedIndex = 1; break;
+				case EmulatorType.VMware: cbEmulator.SelectedIndex = 2; break;
 				default: break;
 			}
 

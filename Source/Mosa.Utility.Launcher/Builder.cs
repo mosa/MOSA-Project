@@ -300,8 +300,8 @@ namespace Mosa.Utility.Launcher
 			switch (Options.Emulator)
 			{
 				case EmulatorType.Qemu: LaunchQemu(Options.ExitOnLaunch); break;
-				case EmulatorType.Boches: LaunchBochs(Options.ExitOnLaunch); break;
-				case EmulatorType.WMware: LaunchVMwarePlayer(Options.ExitOnLaunch); break;
+				case EmulatorType.Bochs: LaunchBochs(Options.ExitOnLaunch); break;
+				case EmulatorType.VMware: LaunchVMwarePlayer(Options.ExitOnLaunch); break;
 				default: throw new InvalidOperationException();
 			}
 		}
@@ -320,6 +320,11 @@ namespace Mosa.Utility.Launcher
 			{
 				arg = arg +
 					" -hda " + Quote(imageFile);
+			}
+
+			if (Options.PlatformType == PlatformType.X86)
+			{
+				arg = arg + " -cpu qemu32,+sse4.1";
 			}
 
 			//arg = arg + " -vga vmware";
