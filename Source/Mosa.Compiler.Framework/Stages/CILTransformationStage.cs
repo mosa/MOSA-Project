@@ -681,16 +681,15 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var newThis = MethodCompiler.StackLayout.AddStackLocal(thisReference.Type);
 
-				for (int i = 0; i < context.Next.OperandCount; i++)
-				{
-					if (context.Next.GetOperand(i) == thisReference)
-					{
-						context.Next.SetOperand(i, newThis);
-					}
-				}
-
+				var oldThisReference = thisReference;
 				thisReference = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
 				before.SetInstruction(IRInstruction.AddressOf, thisReference, newThis);
+
+				for (var node = context.Next; !node.IsBlockEndInstruction; node = node.Next)
+					if (!node.IsEmpty)
+						for (int i = 0; i < node.OperandCount; i++)
+							if (node.GetOperand(i) == oldThisReference)
+								node.SetOperand(i, newThis);
 			}
 			else
 			{

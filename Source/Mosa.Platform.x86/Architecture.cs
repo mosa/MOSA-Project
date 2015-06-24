@@ -189,7 +189,7 @@ namespace Mosa.Platform.x86
 		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
-				architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
+				architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2 | ArchitectureFeatureFlags.SSE3 | ArchitectureFeatureFlags.SSE4;
 
 			return new Architecture(architectureFeatures);
 		}
@@ -304,7 +304,7 @@ namespace Mosa.Platform.x86
 
 			var src = source;
 			var dest = destination;
-			Debug.Assert(src.IsMemoryAddress && dest.IsMemoryAddress);
+			Debug.Assert(src.IsMemoryAddress && dest.IsMemoryAddress, context.ToString());
 
 			var srcReg = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
 			var dstReg = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
