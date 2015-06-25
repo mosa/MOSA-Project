@@ -95,11 +95,13 @@
     <Compile Include="Instructions\Btr.cs" />
     <Compile Include="Instructions\Cmovcc.cs" />
     <Compile Include="Instructions\Fld.cs" />
+    <Compile Include="Instructions\MovAPS.cs" />
     <Compile Include="Instructions\Mov_store.cs" />
     <Compile Include="Instructions\Mov_load.cs" />
     <Compile Include="Instructions\MovCR.cs" />
     <Compile Include="Instructions\IMul.cs" />
     <Compile Include="Instructions\Bts.cs" />
+    <Compile Include="Instructions\PXor.cs" />
     <Compile Include="Instructions\Test.cs" />
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\AddSD.cs" />
@@ -116,6 +118,8 @@
     <Compile Include="Intrinsic\Int.cs" />
     <Compile Include="Intrinsic\In16.cs" />
     <Compile Include="Intrinsic\In32.cs" />
+    <Compile Include="Intrinsic\Memclr256.cs" />
+    <Compile Include="Intrinsic\Memcpy256.cs" />
     <Compile Include="Intrinsic\Out16.cs" />
     <Compile Include="Intrinsic\Out32.cs" />
     <Compile Include="Intrinsic\Pause.cs" />

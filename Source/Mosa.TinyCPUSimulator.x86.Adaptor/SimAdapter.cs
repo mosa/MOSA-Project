@@ -41,7 +41,11 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 			byte size = 0;
 
-			if (node.Size == InstructionSize.Size32)
+			if (node.Size == InstructionSize.Size128)
+				size = 128;
+			else if (node.Size == InstructionSize.Size64)
+				size = 64;
+			else if (node.Size == InstructionSize.Size32)
 				size = 32;
 			else if (node.Size == InstructionSize.Size16)
 				size = 16;
@@ -300,6 +304,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			//if (opcode == Opcode.Ucomiss) return true;
 			//if (opcode == Opcode.Xchg) return true;
 			if (opcode == Opcode.Xor) return true;
+			if (opcode == Opcode.Pxor) return true;
 			//if (opcode == Opcode.Ucomisd) return true;
 			//if (opcode == Opcode.Ucomiss) return true;
 			if (opcode == Opcode.Neg) return true;
@@ -394,7 +399,9 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Subss) return Opcode.Subss;
 			if (instruction == X86.Xchg) return Opcode.Xchg;
 			if (instruction == X86.Xor) return Opcode.Xor;
+			if (instruction == X86.PXor) return Opcode.Pxor;
 			if (instruction == X86.MovCR) return Opcode.Mov;
+			if (instruction == X86.MovAPS) return Opcode.Movaps;
 			if (instruction == X86.Ucomisd) return Opcode.Ucomisd;
 			if (instruction == X86.Ucomiss) return Opcode.Ucomiss;
 			if (instruction == X86.Test) return Opcode.Test;

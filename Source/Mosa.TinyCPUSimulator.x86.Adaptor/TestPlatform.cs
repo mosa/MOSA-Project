@@ -199,9 +199,9 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			else if (type.IsBoolean)
 				return (object)(bool)(x86.EAX.Value != 0);
 			else if (type.IsR4)
-				return (object)(float)x86.XMM0.Value;
+				return (object)(float)x86.XMM0.Value.LowF;
 			else if (type.IsR8)
-				return (object)(double)x86.XMM0.Value;
+				return (object)(double)x86.XMM0.Value.Low;
 			else if (type.IsVoid)
 				return null;
 

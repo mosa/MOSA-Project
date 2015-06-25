@@ -16,6 +16,7 @@ namespace Mosa.Compiler.Framework
 		Size16 = 16,
 		Size32 = 32,
 		Size64 = 64,
+		Size128 = 128,
 		Native = 0xFF,
 	}
 }

@@ -1,10 +1,11 @@
 ﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
+ * (c) 2015 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
 using Mosa.TinyCPUSimulator.x86.Opcodes;
@@ -150,6 +151,8 @@ namespace Mosa.TinyCPUSimulator.x86
 		public static BaseX86Opcode Lock = new Lock();
 		public static BaseX86Opcode Pause = new Pause();
 		public static BaseX86Opcode CmpXchg = new CmpXchg();
+		public static BaseX86Opcode Movaps = new Movaps();
+		public static BaseX86Opcode Pxor = new Pxor();
 
 		public static BaseX86Opcode InternalBreak = new InternalBreak();
 	}

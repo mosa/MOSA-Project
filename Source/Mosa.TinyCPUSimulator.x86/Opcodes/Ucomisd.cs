@@ -13,8 +13,8 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 	{
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
 		{
-			double a = LoadFloatValue(cpu, instruction.Operand1);
-			double b = LoadFloatValue(cpu, instruction.Operand2);
+			var a = LoadFloatValue(cpu, instruction.Operand1).Low;
+			var b = LoadFloatValue(cpu, instruction.Operand2).Low;
 			int size = instruction.Operand1.Size;
 
 			if (double.IsNaN(a) || double.IsNaN(b))

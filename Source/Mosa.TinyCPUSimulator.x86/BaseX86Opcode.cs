@@ -215,7 +215,7 @@ namespace Mosa.TinyCPUSimulator.x86
 			}
 		}
 
-		protected double LoadFloatValue(CPUx86 cpu, SimOperand operand)
+		protected FloatingValue LoadFloatValue(CPUx86 cpu, SimOperand operand)
 		{
 			if (operand.IsRegister)
 			{
@@ -239,13 +239,44 @@ namespace Mosa.TinyCPUSimulator.x86
 			throw new SimCPUException();
 		}
 
+		protected void StoreFloatValue(CPUx86 cpu, SimOperand operand, float value, int size)
+		{
+			var val = new FloatingValue()
+			{
+				LowF = value
+			};
+			StoreFloatValue(cpu, operand, val, size);
+		}
+
 		protected void StoreFloatValue(CPUx86 cpu, SimOperand operand, double value, int size)
+		{
+			var val = new FloatingValue()
+			{
+				Low = value
+			};
+			StoreFloatValue(cpu, operand, val, size);
+		}
+
+		protected void StoreFloatValue(CPUx86 cpu, SimOperand operand, FloatingValue value, int size)
 		{
 			Debug.Assert(!operand.IsImmediate);
 
 			if (operand.IsRegister)
 			{
-				((operand.Register) as RegisterFloatingPoint).Value = value;
+				var newValue = ((operand.Register) as RegisterFloatingPoint).Value;
+				switch (size)
+				{
+					case 128:
+						newValue = value;
+						break;
+					case 64:
+						newValue.Low = value.Low;
+						break;
+					case 32:
+						newValue.LowF = value.LowF;
+						break;
+				}
+				((operand.Register) as RegisterFloatingPoint).Value = newValue;
 			}
 
 			if (operand.IsLabel)
@@ -279,61 +310,50 @@ namespace Mosa.TinyCPUSimulator.x86
 			else if (size == 8) cpu.Write8(address, (byte)value);
 		}
 
-		protected double ReadFloat(CPUx86 cpu, uint address, int size)
+		protected FloatingValue ReadFloat(CPUx86 cpu, uint address, int size)
 		{
-			if (size == 64)
+			if (size == 128)
 			{
-				byte[] b = new byte[8];
-
-				b[0] = cpu.Read8(address + 0);
-				b[1] = cpu.Read8(address + 1);
-				b[2] = cpu.Read8(address + 2);
-				b[3] = cpu.Read8(address + 3);
-				b[4] = cpu.Read8(address + 4);
-				b[5] = cpu.Read8(address + 5);
-				b[6] = cpu.Read8(address + 6);
-				b[7] = cpu.Read8(address + 7);
-
-				return BitConverter.ToDouble(b, 0);
+				return new FloatingValue()
+				{
+					ULow = cpu.Read64(address),
+					UHigh = cpu.Read64(address + 0x8)
+				};
+			}
+			else if (size == 64)
+			{
+				return new FloatingValue()
+				{
+					ULow = cpu.Read64(address)
+				};
 			}
 			else if (size == 32)
 			{
-				byte[] b = new byte[4];
-
-				b[0] = cpu.Read8(address + 0);
-				b[1] = cpu.Read8(address + 1);
-				b[2] = cpu.Read8(address + 2);
-				b[3] = cpu.Read8(address + 3);
-
-				return BitConverter.ToSingle(b, 0);
+				var val = new FloatingValue();
+				var b = BitConverter.GetBytes(cpu.Read32(address));
+				val.LowF = BitConverter.ToSingle(b, 0);
+				return val;
 			}
 
 			throw new SimCPUException();
 		}
 
-		protected void WriteFloat(CPUx86 cpu, uint address, double value, int size)
+		protected void WriteFloat(CPUx86 cpu, uint address, FloatingValue value, int size)
 		{
-			if (size == 64)
+			if (size == 128)
 			{
-				byte[] b = BitConverter.GetBytes(value);
-
-				cpu.Write8(address + 0, b[0]);
-				cpu.Write8(address + 1, b[1]);
-				cpu.Write8(address + 2, b[2]);
-				cpu.Write8(address + 3, b[3]);
-				cpu.Write8(address + 4, b[4]);
-				cpu.Write8(address + 5, b[5]);
-				cpu.Write8(address + 6, b[6]);
-				cpu.Write8(address + 7, b[7]);
+				cpu.Write64(address, value.ULow);
+				cpu.Write64(address + 0x08, value.UHigh);
+			}
+			else if (size == 64)
+			{
+				cpu.Write64(address, value.ULow);
 			}
 			else if (size == 32)
 			{
-				byte[] b = BitConverter.GetBytes((float)value);
-
-				cpu.Write8(address + 0, b[0]);
-				cpu.Write8(address + 1, b[1]);
-				cpu.Write8(address + 2, b[2]);
-				cpu.Write8(address + 3, b[3]);
+				var b = BitConverter.GetBytes(value.LowF);
+				uint val = BitConverter.ToUInt32(b, 0);
+				cpu.Write32(address, val);
 			}
 		}
 

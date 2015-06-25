@@ -71,6 +71,12 @@ namespace Mosa.Platform.x86
 		void Xor(Context context);
 
 		/// <summary>
+		/// PXor instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void PXor(Context context);
+
+		/// <summary>
 		/// Subs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -395,16 +401,22 @@ namespace Mosa.Platform.x86
 		void Movsx(Context context);
 
 		/// <summary>
-		/// Movsses instruction
+		/// Movss instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Movss(Context context);
 
 		/// <summary>
-		/// Movsds instruction
+		/// Movsd instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Movsd(Context context);
+
+		/// <summary>
+		/// MovAPS instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void MovAPS(Context context);
 
 		/// <summary>
 		/// Move with Zero-Extension

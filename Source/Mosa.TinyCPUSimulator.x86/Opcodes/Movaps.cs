@@ -9,14 +9,14 @@
 
 namespace Mosa.TinyCPUSimulator.x86.Opcodes
 {
-	public class Movss : BaseX86Opcode
+	public class Movaps : BaseX86Opcode
 	{
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
 		{
 			var a = LoadFloatValue(cpu, instruction.Operand2);
-			int size = instruction.Operand1.Size;
+			int size = instruction.Size;
 
-			StoreFloatValue(cpu, instruction.Operand1, a.LowF, size);
+			StoreFloatValue(cpu, instruction.Operand1, a, size);
 		}
 	}
 }
