@@ -32,11 +32,11 @@ namespace Mosa.Platform.x86.Stages
 			// Convert moves to float moves, if necessary
 			if (context.Result.IsR4)
 			{
-				context.SetInstruction(X86.Movss, context.Result, context.Operand1);
+				context.SetInstruction(X86.Movss, InstructionSize.Size32, context.Result, context.Operand1);
 			}
 			else if (context.Result.IsR8)
 			{
-				context.SetInstruction(X86.Movsd, context.Result, context.Operand1);
+				context.SetInstruction(X86.Movsd, InstructionSize.Size64, context.Result, context.Operand1);
 			}
 			else if (context.Operand1.IsConstant && (context.Result.Type.IsUI1 || context.Result.Type.IsUI2 || context.Result.IsBoolean || context.Result.IsChar))
 			{
@@ -89,7 +89,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				Operand register = AllocateVirtualRegister(result.Type);
 				context.Result = register;
-				context.AppendInstruction(X86.Movsd, result, register);
+				context.AppendInstruction(X86.Movsd, InstructionSize.Size64, result, register);
 			}
 		}
 
@@ -105,7 +105,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				Operand register = AllocateVirtualRegister(result.Type);
 				context.Result = register;
-				context.AppendInstruction(X86.Movss, result, register);
+				context.AppendInstruction(X86.Movss, InstructionSize.Size32, result, register);
 			}
 		}
 

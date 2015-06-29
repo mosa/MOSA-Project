@@ -305,7 +305,9 @@ namespace Mosa.TinyCPUSimulator
 		{
 			uint low = InternalRead32(address);
 			uint high = InternalRead32(address + 0x4);
-			ulong value = (high << 32) | low;
+			ulong val = high | ((ulong)low << 32);
+
+			var value = val;
 
 			if (Endian.NativeIsLittleEndian)
 			{
@@ -353,14 +355,14 @@ namespace Mosa.TinyCPUSimulator
 				val = Endian.Swap(val);
 			}
 
-			uint low = (uint)val;
-			uint high = (uint)(val >> 32);
+			uint low = (uint)(val >> 32);
+			uint high = (uint)val;
 
 			InternalWrite32(address, low);
 			InternalWrite32(address + 0x4, high);
 
 			// very slow performance if assert enabled
-			//Debug.Assert(DirectRead32(address) == value);
+			//Debug.Assert(DirectRead64(address) == value);
 
 			//Debug.WriteLine(address.ToString("X") + ": " + value.ToString("X"));
 

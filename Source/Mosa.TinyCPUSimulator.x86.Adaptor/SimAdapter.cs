@@ -126,16 +126,16 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			{
 				if (operands[0] == operands[1]) operands.RemoveAt(0);
 			}
-			else if (opcode == Opcode.Movsd)
-			{
-				operands[0].Size = 64;
-				operands[1].Size = 64;
-			}
-			else if (opcode == Opcode.Movss)
-			{
-				operands[0].Size = 32;
-				operands[1].Size = 32;
-			}
+			//else if (opcode == Opcode.Movsd)
+			//{
+			//	operands[0].Size = 64;
+			//	operands[1].Size = 64;
+			//}
+			//else if (opcode == Opcode.Movss)
+			//{
+			//	operands[0].Size = 32;
+			//	operands[1].Size = 32;
+			//}
 		}
 
 		private SimOperand ConvertToOpcodeOperand(Operand operand, int size)

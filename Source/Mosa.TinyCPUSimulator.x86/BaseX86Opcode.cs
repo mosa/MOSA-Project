@@ -215,7 +215,7 @@ namespace Mosa.TinyCPUSimulator.x86
 			}
 		}
 
-		protected FloatingValue LoadFloatValue(CPUx86 cpu, SimOperand operand)
+		protected FloatingValue LoadFloatValue(CPUx86 cpu, SimOperand operand, int size)
 		{
 			if (operand.IsRegister)
 			{
@@ -226,14 +226,14 @@ namespace Mosa.TinyCPUSimulator.x86
 			{
 				uint address = (uint)cpu.GetSymbol(operand.Label).Address;
 
-				return ReadFloat(cpu, address, operand.Size);
+				return ReadFloat(cpu, address, size);
 			}
 
 			if (operand.IsMemory)
 			{
 				uint address = GetAddress(cpu, operand);
 
-				return ReadFloat(cpu, address, operand.Size);
+				return ReadFloat(cpu, address, size);
 			}
 
 			throw new SimCPUException();

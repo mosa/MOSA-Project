@@ -13,9 +13,9 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 	{
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
 		{
-			var a = LoadFloatValue(cpu, instruction.Operand1).LowF;
-			var b = LoadFloatValue(cpu, instruction.Operand2).LowF;
-			int size = instruction.Operand1.Size;
+			var a = LoadFloatValue(cpu, instruction.Operand1, instruction.Size).LowF;
+			var b = LoadFloatValue(cpu, instruction.Operand2, instruction.Size).LowF;
+			int size = instruction.Size;
 
 			if (float.IsNaN(a) || float.IsNaN(b))
 			{
@@ -41,6 +41,10 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 				cpu.EFLAGS.Parity = false;
 				cpu.EFLAGS.Carry = true;
 			}
+
+			cpu.EFLAGS.Overflow = false;
+			cpu.EFLAGS.Adjust = false;
+			cpu.EFLAGS.Sign = false;
 		}
 	}
 }

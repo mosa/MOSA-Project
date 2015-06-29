@@ -13,7 +13,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 	{
 		public override void Execute(CPUx86 cpu, SimInstruction instruction)
 		{
-			var a = LoadFloatValue(cpu, instruction.Operand2);
+			var a = LoadFloatValue(cpu, instruction.Operand2, instruction.Size);
 			int size = instruction.Size;
 
 			StoreFloatValue(cpu, instruction.Operand1, a, size);
