@@ -98,14 +98,14 @@ namespace Mosa.TinyCPUSimulator.x86
 			CR3 = x86.CR3.Value;
 			CR4 = x86.CR4.Value;
 
-			XMM0 = x86.XMM0.Value;
-			XMM1 = x86.XMM1.Value;
-			XMM2 = x86.XMM2.Value;
-			XMM3 = x86.XMM3.Value;
-			XMM4 = x86.XMM4.Value;
-			XMM5 = x86.XMM5.Value;
-			XMM6 = x86.XMM6.Value;
-			XMM7 = x86.XMM7.Value;
+			XMM0 = x86.XMM0.Value.Low;
+			XMM1 = x86.XMM1.Value.Low;
+			XMM2 = x86.XMM2.Value.Low;
+			XMM3 = x86.XMM3.Value.Low;
+			XMM4 = x86.XMM4.Value.Low;
+			XMM5 = x86.XMM5.Value.Low;
+			XMM6 = x86.XMM6.Value.Low;
+			XMM7 = x86.XMM7.Value.Low;
 
 			Zero = x86.EFLAGS.Zero;
 			Parity = x86.EFLAGS.Parity;

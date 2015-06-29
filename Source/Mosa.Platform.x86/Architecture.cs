@@ -287,7 +287,17 @@ namespace Mosa.Platform.x86
 		/// <param name="source">The source.</param>
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
-			context.AppendInstruction(BaseTransformationStage.GetMove(destination, source), destination, source);
+			var instruction = BaseTransformationStage.GetMove(destination, source);
+			var size = InstructionSize.None;
+			if (instruction is x86.Instructions.Movsd)
+			{
+				size = InstructionSize.Size64;
+			}
+			else if (instruction is x86.Instructions.Movss)
+			{
+				size = InstructionSize.Size32;
+			}
+			context.AppendInstruction(instruction, size, destination, source);
 		}
 
 		/// <summary>

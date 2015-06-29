@@ -1,10 +1,11 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2015 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
 using Mosa.Platform.Internal.x86;
@@ -19,30 +20,48 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Clears the specified memory area.
 		/// </summary>
-		/// <param name="start">The start.</param>
-		/// <param name="bytes">The bytes.</param>
-		public static void Clear(uint start, uint bytes)
+		/// <param name="destination">The destination address.</param>
+		/// <param name="length">The length of bytes to clear.</param>
+		public static void Clear(uint destination, uint length)
 		{
-			if (bytes % 4 == 0)
-			{
-				Clear4(start, bytes);
-				return;
-			}
-
-			for (uint at = start; at < (start + bytes); at++)
-				Native.Set8(at, 0);
+			Memclr(destination, length);
 		}
 
-		public static void Clear4(uint start, uint bytes)
-		{
-			for (uint at = start; at < (start + bytes); at = at + 4)
-				Native.Set32(at, 0);
-		}
-
+		/// <summary>
+		/// Copies memory from the source to the destination.
+		/// </summary>
+		/// <param name="source">The source address.</param>
+		/// <param name="destination">The destination address.</param>
+		/// <param name="length">The length of bytes to copy.</param>
 		public static void Copy(uint source, uint destination, uint length)
 		{
-			for (uint i = 0; i < length; i++)
-				Native.Set8(destination + i, Native.Get8(source + i));  //TODO: Optimize with Set32
+			Memcpy(destination, source, length);
+		}
+
+		/// <summary>
+		/// Sets the specified memory area to the specified byte value.
+		/// </summary>
+		/// <param name="destination">The destination address.</param>
+		/// <param name="value">The byte value.</param>
+		/// <param name="length">The length of bytes to set.</param>
+		public static void Set(uint destination, byte value, uint length)
+		{
+			Memset(destination, value, length);
+		}
+
+		private unsafe static void Memclr(uint destination, uint count)
+		{
+			Runtime.Memclr((void*)destination, count);
+		}
+
+		private unsafe static void Memset(uint destination, byte value, uint count)
+		{
+			Runtime.Memset((void*)destination, value, count);
+		}
+
+		private unsafe static void Memcpy(uint destination, uint source, uint count)
+		{
+			Runtime.Memcpy((void*)destination, (void*)source, count);
 		}
 	}
 }

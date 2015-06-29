@@ -45,9 +45,10 @@ namespace Mosa.Platform.x86.Stages
 			node.Operand1 = result;
 
 			var move = GetMove(result, operand1);
+			var size = GetInstructionSize(result.Type);
 
 			var newNode = new InstructionNode(move, result, operand1);
-
+			newNode.Size = size;
 			node.Previous.Insert(newNode);
 
 			return;

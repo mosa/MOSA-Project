@@ -53,9 +53,15 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.AddFloat(Context context)
 		{
 			if (context.Result.IsR4)
+			{
 				context.ReplaceInstructionOnly(X86.Addss);
+				context.Size = InstructionSize.Size32;
+			}
 			else
+			{
 				context.ReplaceInstructionOnly(X86.Addsd);
+				context.Size = InstructionSize.Size64;
+			}
 		}
 
 		/// <summary>
@@ -65,9 +71,15 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.DivFloat(Context context)
 		{
 			if (context.Result.IsR4)
+			{
 				context.ReplaceInstructionOnly(X86.Divss);
+				context.Size = InstructionSize.Size32;
+			}
 			else
+			{
 				context.ReplaceInstructionOnly(X86.Divsd);
+				context.Size = InstructionSize.Size64;
+			}
 		}
 
 		/// <summary>
@@ -135,13 +147,16 @@ namespace Mosa.Platform.x86.Stages
 			}
 
 			X86Instruction instruction = null;
+			InstructionSize size = InstructionSize.None;
 			if (left.IsR4)
 			{
 				instruction = X86.Ucomiss;
+				size = InstructionSize.Size32;
 			}
 			else
 			{
 				instruction = X86.Ucomisd;
+				size = InstructionSize.Size64;
 			}
 
 			switch (condition)
@@ -161,7 +176,7 @@ namespace Mosa.Platform.x86.Stages
 						Context nextBlock = Split(context);
 
 						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(TypeSystem, 1));
-						context.AppendInstruction(instruction, null, left, right);
+						context.AppendInstruction(instruction, size, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
@@ -187,7 +202,7 @@ namespace Mosa.Platform.x86.Stages
 						Context nextBlock = Split(context);
 
 						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(TypeSystem, 1));
-						context.AppendInstruction(instruction, null, left, right);
+						context.AppendInstruction(instruction, size, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
@@ -206,7 +221,7 @@ namespace Mosa.Platform.x86.Stages
 						//	seta	al
 
 						context.SetInstruction(X86.Mov, result, ConstantZero);
-						context.AppendInstruction(instruction, null, right, left);
+						context.AppendInstruction(instruction, size, null, right, left);
 						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterThan, result);
 						break;
 					}
@@ -218,7 +233,7 @@ namespace Mosa.Platform.x86.Stages
 						//	seta	al
 
 						context.SetInstruction(X86.Mov, result, ConstantZero);
-						context.AppendInstruction(instruction, null, left, right);
+						context.AppendInstruction(instruction, size, null, left, right);
 						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterThan, result);
 						break;
 					}
@@ -230,7 +245,7 @@ namespace Mosa.Platform.x86.Stages
 						//	setae	al
 
 						context.SetInstruction(X86.Mov, result, ConstantZero);
-						context.AppendInstruction(instruction, null, right, left);
+						context.AppendInstruction(instruction, size, null, right, left);
 						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
 						break;
 					}
@@ -242,7 +257,7 @@ namespace Mosa.Platform.x86.Stages
 						//	setae	al
 
 						context.SetInstruction(X86.Mov, result, ConstantZero);
-						context.AppendInstruction(instruction, null, left, right);
+						context.AppendInstruction(instruction, size, null, left, right);
 						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
 						break;
 					}
@@ -496,6 +511,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand = context.Operand1;
 
 			X86Instruction instruction = X86.Mov;
+			InstructionSize size = InstructionSize.None;
 
 			if (result.IsR)
 			{
@@ -506,10 +522,12 @@ namespace Mosa.Platform.x86.Stages
 					if (result.IsR4)
 					{
 						instruction = X86.Movss;
+						size = InstructionSize.Size32;
 					}
 					else if (result.IsR8)
 					{
 						instruction = X86.Movsd;
+						size = InstructionSize.Size64;
 					}
 				}
 				else if (result.IsR8)
@@ -523,6 +541,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 
 			context.ReplaceInstructionOnly(instruction);
+			context.Size = size;
 		}
 
 		void IIRVisitor.CompoundMove(Context context)
@@ -743,9 +762,15 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.MulFloat(Context context)
 		{
 			if (context.Result.IsR4)
+			{
 				context.ReplaceInstructionOnly(X86.Mulss);
+				context.Size = InstructionSize.Size32;
+			}
 			else
+			{
 				context.ReplaceInstructionOnly(X86.Mulsd);
+				context.Size = InstructionSize.Size64;
+			}
 		}
 
 		/// <summary>
@@ -755,9 +780,15 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.SubFloat(Context context)
 		{
 			if (context.Result.IsR4)
+			{
 				context.ReplaceInstructionOnly(X86.Subss);
+				context.Size = InstructionSize.Size32;
+			}
 			else
+			{
 				context.ReplaceInstructionOnly(X86.Subsd);
+				context.Size = InstructionSize.Size64;
+			}
 		}
 
 		/// <summary>
