@@ -1,12 +1,15 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2015 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace System
@@ -14,8 +17,8 @@ namespace System
 	/// <summary>
 	/// Implementation of the "System.String" class
 	/// </summary>
-	public class String
-	{
+	public sealed class String : IEnumerable, IEnumerable<char>
+    {
 		/*
 		 * Michael "grover" Froehlich, 2010/05/17:
 		 *
@@ -702,5 +705,15 @@ namespace System
 
 			return -1;
 		}
-	}
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new CharEnumerator(this);
+        }
+
+        IEnumerator<char> IEnumerable<char>.GetEnumerator()
+        {
+            return new CharEnumerator(this);
+        }
+    }
 }
