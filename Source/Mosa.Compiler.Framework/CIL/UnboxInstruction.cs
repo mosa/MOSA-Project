@@ -7,12 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.MosaTypeSystem;
+
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class UnboxInstruction : BoxingInstruction
+	public sealed class UnboxInstruction : UnaryInstruction
 	{
 		#region Construction
 
@@ -21,20 +23,33 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public UnboxInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 1)
 		{
 		}
 
-		#endregion Construction
+        #endregion Construction
 
-		#region Methods
+        #region Methods
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
+        public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+        {
+            // Decode base classes first
+            base.Decode(ctx, decoder);
+
+            var type = (MosaType)decoder.Instruction.Operand;
+
+            //Operand result = decoder.Compiler.CreateVirtualRegister(type);
+            //ctx.Result = result;
+            ctx.Result = LoadInstruction.CreateResultOperand(decoder, type);
+            ctx.MosaType = type;
+        }
+
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor.</param>
+        /// <param name="context">The context.</param>
+        public override void Visit(ICILVisitor visitor, Context context)
 		{
 			visitor.Unbox(context);
 		}
