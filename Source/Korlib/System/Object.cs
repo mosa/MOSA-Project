@@ -1,13 +1,15 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2015 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
  */
 
 using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
 
 namespace System
 {
@@ -26,14 +28,16 @@ namespace System
 		/// <summary>
 		/// Initializes a new instance of the System.Object class.
 		/// </summary>
+        [NonVersionable]
 		public Object()
 		{
 		}
 
-		/// <summary>
-		/// Object destructor.
-		/// </summary>
-		~Object()
+        /// <summary>
+        /// Object destructor.
+        /// </summary>
+        [NonVersionable]
+        ~Object()
 		{
 		}
 
@@ -102,16 +106,17 @@ namespace System
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		protected extern object MemberwiseClone();
 
-		/// <summary>
-		/// Determines whether the specified <see cref="Object"/> instances are the same instance.
-		/// </summary>
-		/// <param name="left">The first <see cref="Object"/> to compare.</param>
-		/// <param name="right">The second <see cref="Object"/> to compare.</param>
-		/// <returns>
-		/// true if left is the same instance as right or if both are null references;
-		/// otherwise, false.
-		/// </returns>
-		public static bool ReferenceEquals(object left, object right)
+        /// <summary>
+        /// Determines whether the specified <see cref="Object"/> instances are the same instance.
+        /// </summary>
+        /// <param name="left">The first <see cref="Object"/> to compare.</param>
+        /// <param name="right">The second <see cref="Object"/> to compare.</param>
+        /// <returns>
+        /// true if left is the same instance as right or if both are null references;
+        /// otherwise, false.
+        /// </returns>
+        [NonVersionable]
+        public static bool ReferenceEquals(object left, object right)
 		{
 			return (left == right);
 		}

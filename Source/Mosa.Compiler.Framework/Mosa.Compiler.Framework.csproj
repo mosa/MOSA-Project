@@ -202,7 +202,6 @@
     <Compile Include="CIL\BinaryComparisonInstruction.cs" />
     <Compile Include="CIL\BinaryInstruction.cs" />
     <Compile Include="CIL\BinaryLogicInstruction.cs" />
-    <Compile Include="CIL\BoxingInstruction.cs" />
     <Compile Include="CIL\BoxInstruction.cs" />
     <Compile Include="CIL\BranchInstruction.cs" />
     <Compile Include="CIL\CalliInstruction.cs" />
