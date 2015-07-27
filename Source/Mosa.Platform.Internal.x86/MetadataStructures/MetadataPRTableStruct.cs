@@ -18,7 +18,7 @@ namespace Mosa.Platform.Internal.x86
 		public int NumberOfRegions;
 		public const uint ProtectedRegionDefintionOffset = 1;
 
-		public static MetadataPRDefinitionStruct* GetProtecteRegionDefinitionAddress(MetadataPRTableStruct* data, uint slot)
+		public static MetadataPRDefinitionStruct* GetProtectedRegionDefinitionAddress(MetadataPRTableStruct* data, uint slot)
 		{
 			return (MetadataPRDefinitionStruct*)*((uint*)data + MetadataPRTableStruct.ProtectedRegionDefintionOffset + slot);
 		}
