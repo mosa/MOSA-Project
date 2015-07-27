@@ -49,9 +49,14 @@ git clone https://github.com/mosa/MOSA-Project.git
 
 You will also need the following prerequisites:
 
+**All Platforms**
+
+[EditorConfig](http://editorconfig.org/) plugin for your IDE.
+
 **Windows**
 
 Install any [Visual Studio](http://www.visualstudio.com) version 2013 or newer.
+
 All editions are supported including the fully-featured free [Community Edition](https://www.visualstudio.com/products/visual-studio-community-vs).
 
 **Linux**
