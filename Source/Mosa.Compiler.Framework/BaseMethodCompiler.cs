@@ -309,7 +309,7 @@ namespace Mosa.Compiler.Framework
 				var local = locals[index];
 				Operand operand;
 
-				if (local.Type.IsValueType)
+				if (local.Type.IsValueType || local.Type.IsPointer)
 				{
 					operand = StackLayout.AddStackLocal(local.Type);
 				}
