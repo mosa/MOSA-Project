@@ -12,11 +12,11 @@ using System.Diagnostics;
 
 namespace System.Runtime.Versioning
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Method | AttributeTargets.Constructor, AllowMultiple = false, Inherited = false)]
-    public sealed class NonVersionableAttribute : Attribute
-    {
-        public NonVersionableAttribute()
-        {
-        }
-    }
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Method | AttributeTargets.Constructor, AllowMultiple = false, Inherited = false)]
+	public sealed class NonVersionableAttribute : Attribute
+	{
+		public NonVersionableAttribute()
+		{
+		}
+	}
 }

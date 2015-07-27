@@ -27,29 +27,29 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-        #endregion Construction
+		#endregion Construction
 
-        #region Methods
+		#region Methods
 
-        public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
-        {
-            // Decode base classes first
-            base.Decode(ctx, decoder);
+		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		{
+			// Decode base classes first
+			base.Decode(ctx, decoder);
 
-            var type = (MosaType)decoder.Instruction.Operand;
+			var type = (MosaType)decoder.Instruction.Operand;
 
-            //Operand result = decoder.Compiler.CreateVirtualRegister(type);
-            //ctx.Result = result;
-            ctx.Result = LoadInstruction.CreateResultOperand(decoder, type);
-            ctx.MosaType = type;
-        }
+			//Operand result = decoder.Compiler.CreateVirtualRegister(type);
+			//ctx.Result = result;
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, type);
+			ctx.MosaType = type;
+		}
 
-        /// <summary>
-        /// Allows visitor based dispatch for this instruction object.
-        /// </summary>
-        /// <param name="visitor">The visitor.</param>
-        /// <param name="context">The context.</param>
-        public override void Visit(ICILVisitor visitor, Context context)
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(ICILVisitor visitor, Context context)
 		{
 			visitor.Unbox(context);
 		}
