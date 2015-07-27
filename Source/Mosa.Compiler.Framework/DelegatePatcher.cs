@@ -31,8 +31,8 @@ namespace Mosa.Compiler.Framework
 			switch (methodCompiler.Method.Name)
 			{
 				case ".ctor": PatchConstructor(methodCompiler); return true;
-				case "Invoke": PatchInvoke(methodCompiler, false); return true;
-				case "InvokeWithReturn": PatchInvoke(methodCompiler, true); return true;
+				case "Invoke": PatchInvoke(methodCompiler); return true;
+				case "InvokeWithReturn": PatchInvoke(methodCompiler); return true;
 				case "BeginInvoke": PatchBeginInvoke(methodCompiler); return true;
 				case "EndInvoke": PatchEndInvoke(methodCompiler); return true;
 				default: return false;
@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework
 			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
-		private static void PatchInvoke(BaseMethodCompiler methodCompiler, bool withReturn)
+		private static void PatchInvoke(BaseMethodCompiler methodCompiler)
 		{
 			// check if instance is null (if so, it's a static call to the methodPointer)
 
@@ -80,6 +80,7 @@ namespace Mosa.Compiler.Framework
 			Operand instanceOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, instanceOffset);
 
 			var size = methodCompiler.Architecture.NativeInstructionSize;
+			bool withReturn = (methodCompiler.Method.Signature.ReturnType != null);
 
 			Context b0 = new Context(CreateMethodStructure(methodCompiler, false));
 			Context b1 = new Context(methodCompiler.BasicBlocks.CreateBlock());
@@ -91,15 +92,7 @@ namespace Mosa.Compiler.Framework
 			for (int i = 0; i < methodCompiler.Parameters.Length; i++)
 			{
 				vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
-
-				if (methodCompiler.TypeLayout.IsCompoundType(methodCompiler.Parameters[i].Type))
-				{
-					b0.AppendInstruction(IRInstruction.CompoundMove, vrs[i], methodCompiler.Parameters[i]);
-				}
-				else
-				{
-					b0.AppendInstruction(IRInstruction.Move, vrs[i], methodCompiler.Parameters[i]);
-				}
+				b0.AppendInstruction(IRInstruction.Move, vrs[i], methodCompiler.Parameters[i]);
 			}
 
 			Operand thisOperand = vrs[0];
@@ -108,7 +101,7 @@ namespace Mosa.Compiler.Framework
 			Operand opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
 			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.I4);
 
-			Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.Object) : null;
+			Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(methodCompiler.Method.Signature.ReturnType) : null;
 			Operand c0 = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
 
 			b0.AppendInstruction(IRInstruction.Load, size, opMethod, thisOperand, methodPointerOffsetOperand);
@@ -122,9 +115,9 @@ namespace Mosa.Compiler.Framework
 			b1.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
 			b1.InvokeMethod = methodCompiler.Method;
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
-			{
 				b1.AddOperand(vrs[i]);
-			}
+			if (withReturn)
+				b1.SetResult(0, opReturn);
 			b1.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 			// instance
@@ -132,17 +125,15 @@ namespace Mosa.Compiler.Framework
 			b2.InvokeMethod = methodCompiler.Method;
 			b2.AddOperand(opInstance);
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
-			{
 				b2.AddOperand(vrs[i]);
-			}
+			if (withReturn)
+				b2.SetResult(0, opReturn);
 			b2.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 			// return
 			b3.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
 			if (withReturn)
-			{
 				b3.SetOperand(0, opReturn);
-			}
 		}
 
 		private static void PatchBeginInvoke(BaseMethodCompiler methodCompiler)

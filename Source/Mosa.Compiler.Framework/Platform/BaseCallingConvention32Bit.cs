@@ -161,9 +161,8 @@ namespace Mosa.Compiler.Framework.Platform
 			else if (typeLayout.IsCompoundType(result.Type))
 			{
 				int size = typeLayout.GetTypeSize(result.Type);
-				Operand returnLow = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.Pointer, return32BitRegister);
-				context.AppendInstruction(IRInstruction.Gen, returnLow);
-				architecture.InsertCompoundMoveInstruction(compiler, context, result, Operand.CreateMemoryAddress(result.Type, returnLow, 0), size);
+				Operand stackPointerReg = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.Pointer, architecture.StackPointerRegister);
+				architecture.InsertCompoundMoveInstruction(compiler, context, result, Operand.CreateMemoryAddress(result.Type, stackPointerReg, 0), size);
 			}
 			else
 			{
@@ -290,7 +289,8 @@ namespace Mosa.Compiler.Framework.Platform
 			}
 			else if (typeLayout.IsCompoundType(operand.Type))
 			{
-				architecture.InsertAddressOfInstruction(context, Operand.CreateCPURegister(operand.Type, return32BitRegister), operand);
+				Operand stackBaseReg = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.Pointer, architecture.StackFrameRegister);
+				architecture.InsertCompoundMoveInstruction(compiler, context, Operand.CreateMemoryAddress(operand.Type, stackBaseReg, OffsetOfFirstParameter), operand, size);
 			}
 		}
 
