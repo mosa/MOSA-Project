@@ -182,21 +182,17 @@
     <Compile Include="System.Runtime.InteropServices\ComVisible.cs" />
     <Compile Include="System.Runtime.InteropServices\OutAttribute.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="korlib.rsp">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <PropertyGroup>
     <CompileDependsOn>GenerateCompilerResponseFile;$(CompileDependsOn)</CompileDependsOn>
   </PropertyGroup>
   <Target Name="GenerateCompilerResponseFile">
-    <Message Text="Generating module name response file: $(IntermediateOutputPath)\moduleName.rsp" />
+    <Message Text="Generating module name response file: $(IntermediateOutputPath)\korlib.rsp" />
+    <Message Text="VS Version: $(VisualStudioVersion); Tools Version: $(MSBuildToolsVersion)" />
     <!-- When Roslyn is NOT enabled, we need to set the module name for mscorlib -->
-    <WriteLinesToFile Condition="'$(VisualStudioVersion)'&lt;'14.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/test:moduleName=CommonLanguageRuntimeLibrary" Overwrite="true" />
+    <WriteLinesToFile Condition="'$(MSBuildToolsVersion)'&lt;'14.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/test:moduleName=CommonLanguageRuntimeLibrary" Overwrite="true" />
     <!-- When Roslyn is enabled we need to set the runtimemetadataversion -->
-    <WriteLinesToFile Condition="'$(VisualStudioVersion)'&gt;='14.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/runtimemetadataversion:v1.0.0" Overwrite="true" />
+    <WriteLinesToFile Condition="'$(MSBuildToolsVersion)'&gt;='14.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/runtimemetadataversion:v1.0.0" Overwrite="true" />
     <ItemGroup>
       <Clean Include="$(IntermediateOutputPath)\korlib.rsp" />
     </ItemGroup>
