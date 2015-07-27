@@ -126,16 +126,6 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			{
 				if (operands[0] == operands[1]) operands.RemoveAt(0);
 			}
-			//else if (opcode == Opcode.Movsd)
-			//{
-			//	operands[0].Size = 64;
-			//	operands[1].Size = 64;
-			//}
-			//else if (opcode == Opcode.Movss)
-			//{
-			//	operands[0].Size = 32;
-			//	operands[1].Size = 32;
-			//}
 		}
 
 		private SimOperand ConvertToOpcodeOperand(Operand operand, int size)
@@ -401,6 +391,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Xor) return Opcode.Xor;
 			if (instruction == X86.PXor) return Opcode.Pxor;
 			if (instruction == X86.MovCR) return Opcode.Mov;
+			if (instruction == X86.MovUPS) return Opcode.Movups;
 			if (instruction == X86.MovAPS) return Opcode.Movaps;
 			if (instruction == X86.Ucomisd) return Opcode.Ucomisd;
 			if (instruction == X86.Ucomiss) return Opcode.Ucomiss;

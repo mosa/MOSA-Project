@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Runtime.InteropServices;
 using Mosa.Platform.Internal.x86;
 
 namespace Mosa.Kernel.x86
@@ -362,55 +363,55 @@ namespace Mosa.Kernel.x86
 		/// <param name="eax">The eax.</param>
 		/// <param name="interrupt">The interrupt.</param>
 		/// <param name="errorCode">The error code.</param>
-		private static void ProcessInterrupt(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, uint interrupt, uint errorCode, uint eip, uint cs, uint eflags)
+		private unsafe static void ProcessInterrupt(IDTStack* stack)
 		{
 			DebugClient.Process();
 
-			switch (interrupt)
+			switch (stack->Interrupt)
 			{
 				case 0:
-					Error(ebp, eip, "Divide Error");
+					Error(stack->EBP, stack->EIP, "Divide Error");
 					break;
 
 				case 4:
-					Error(ebp, eip, "Arithmetic Overflow Exception");
+					Error(stack->EBP, stack->EIP, "Arithmetic Overflow Exception");
 					break;
 
 				case 5:
-					Error(ebp, eip, "Bound Check Error");
+					Error(stack->EBP, stack->EIP, "Bound Check Error");
 					break;
 
 				case 6:
-					Error(ebp, eip, "Invalid Opcode");
+					Error(stack->EBP, stack->EIP, "Invalid Opcode");
 					break;
 
 				case 7:
-					Error(ebp, eip, "Coprocessor Not Available");
+					Error(stack->EBP, stack->EIP, "Coprocessor Not Available");
 					break;
 
 				case 8:
 					//TODO: Analyze the double fault
-					Error(ebp, eip, "Double Fault");
+					Error(stack->EBP, stack->EIP, "Double Fault");
 					break;
 
 				case 9:
-					Error(ebp, eip, "Coprocessor Segment Overrun");
+					Error(stack->EBP, stack->EIP, "Coprocessor Segment Overrun");
 					break;
 
 				case 10:
-					Error(ebp, eip, "Invalid TSS");
+					Error(stack->EBP, stack->EIP, "Invalid TSS");
 					break;
 
 				case 11:
-					Error(ebp, eip, "Segment Not Present");
+					Error(stack->EBP, stack->EIP, "Segment Not Present");
 					break;
 
 				case 12:
-					Error(ebp, eip, "Stack Exception");
+					Error(stack->EBP, stack->EIP, "Stack Exception");
 					break;
 
 				case 13:
-					Error(ebp, eip, "General Protection Exception");
+					Error(stack->EBP, stack->EIP, "General Protection Exception");
 					break;
 
 				case 14:
@@ -418,34 +419,67 @@ namespace Mosa.Kernel.x86
 					var cr2 = Native.GetCR2() >> 5;
 					if (cr2 < 0x1000)
 					{
-						Error(ebp, eip, "Null Pointer Exception");
+						Error(stack->EBP, stack->EIP, "Null Pointer Exception");
 						break;
 					}
 
-					PageFaultHandler.Fault(errorCode);
+					//PageFaultHandler.Fault(errorCode);
+					Panic.SetStackPointer(stack->EBP, stack->EIP);
+					Panic.Error(cr2);
 					break;
 
 				case 16:
-					Error(ebp, eip, "Coprocessor Error");
+					Error(stack->EBP, stack->EIP, "Coprocessor Error");
 					break;
 
 				case 19:
-					Error(ebp, eip, "SIMD Floating-Point Exception");
+					Error(stack->EBP, stack->EIP, "SIMD Floating-Point Exception");
 					break;
 
 				default:
 					if (interruptHandler != null)
-						interruptHandler(interrupt, errorCode);
+						interruptHandler(stack->Interrupt, stack->ErrorCode);
 					break;
 			}
 
-			PIC.SendEndOfInterrupt(interrupt);
+			PIC.SendEndOfInterrupt(stack->Interrupt);
 		}
 
 		private static void Error(uint ebp, uint eip, string message)
 		{
 			Panic.SetStackPointer(ebp, eip);
 			Panic.Error(message);
+		}
+
+		[StructLayout(LayoutKind.Explicit)]
+		private struct IDTStack
+		{
+			[FieldOffset(0x00)]
+			public uint EDI;
+			[FieldOffset(0x04)]
+			public uint ESI;
+			[FieldOffset(0x08)]
+			public uint EBP;
+			[FieldOffset(0x0C)]
+			public uint ESP;
+			[FieldOffset(0x10)]
+			public uint EBX;
+			[FieldOffset(0x14)]
+			public uint EDX;
+			[FieldOffset(0x18)]
+			public uint ECX;
+			[FieldOffset(0x1C)]
+			public uint EAX;
+			[FieldOffset(0x20)]
+			public uint Interrupt;
+			[FieldOffset(0x24)]
+			public uint ErrorCode;
+			[FieldOffset(0x28)]
+			public uint EIP;
+			[FieldOffset(0x2C)]
+			public uint CS;
+			[FieldOffset(0x30)]
+			public uint EFLAGS;
 		}
 	}
 }

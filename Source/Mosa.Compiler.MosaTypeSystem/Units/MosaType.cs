@@ -152,7 +152,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		public bool IsUserValueType { get { return TypeCode == MosaTypeCode.ValueType && !IsEnum; } }
+		public bool IsUserValueType
+		{
+			get
+			{
+				return TypeCode == MosaTypeCode.ValueType
+					&& !IsEnum
+					&& !IsInteger
+					&& !IsR
+					&& TypeCode != MosaTypeCode.Boolean
+					&& TypeCode != MosaTypeCode.Char;
+			}
+		}
 
 		public MosaType ElementType { get; private set; }
 

@@ -5,6 +5,7 @@
  *
  */
 
+using System.Collections.Generic;
 using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
 using Mosa.Kernel.x86.Smbios;
@@ -35,17 +36,19 @@ namespace Mosa.DriverWorld.x86
 
 			Setup.Initialize();
 			Setup.Start();
-			
-			var textDevice = (ITextDevice)Setup.DeviceManager.GetDevices(new FindDevice.WithName("VGAText")).First.Value;
+
+			var textDevice = (ITextDevice)Setup.DeviceManager.GetDevices(new FindDevice.IsTypeOf<ITextDevice>()).First.Value;
 			console = new TextScreen(textDevice);
 
 			Console.ClearScreen();
+			Console.SetCursor(0, 0);
 
-			Console.Write(@"                   MOSA OS Version 1.4 - Compiler Version 1.4");
+			Console.SetColor(TextColor.Blue, TextColor.Green);
+			Console.WriteLine("                   MOSA OS Version 1.5 - Compiler Version 1.5                   ");
+			Console.SetColor(TextColor.Black, TextColor.White);
 			Console.WriteLine("> System ready");
-			Console.WriteLine();
 			Console.SetCursor(0, 24);
-			Console.Write("          Copyright (C) 2008-2015 [Managed Operating System Alliance]");
+			Console.Write("          Copyright (C) 2008-2015 [Managed Operating System Alliance]           ");
 
 			Process();
 		}
@@ -54,7 +57,7 @@ namespace Mosa.DriverWorld.x86
 		{
 			int lastSecond = -1;
 
-			Console.SetCursor(0, 21);
+			Console.SetCursor(0, 3);
 			Console.Write("> ");
 
 			Mosa.DeviceDriver.ScanCodeMap.US KBDMAP = new DeviceDriver.ScanCodeMap.US();
@@ -100,7 +103,7 @@ namespace Mosa.DriverWorld.x86
 
 		public static void PrintDone()
 		{
-			InBrackets("Done", Colors.White, Colors.LightGreen);
+			InBrackets("Done", TextColor.White, TextColor.LightGreen);
 			Console.WriteLine();
 		}
 
@@ -109,7 +112,7 @@ namespace Mosa.DriverWorld.x86
 			Console.Write("  * ");
 		}
 
-		public static void InBrackets(string message, byte outerColor, byte innerColor)
+		public static void InBrackets(string message, TextColor outerColor, TextColor innerColor)
 		{
 			Console.Write("[");
 			Console.Write(message);

@@ -294,6 +294,11 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		///
 		/// </summary>
+		public static readonly MovUPS MovUPS = new MovUPS();
+
+		/// <summary>
+		///
+		/// </summary>
 		public static readonly MovAPS MovAPS = new MovAPS();
 
 		/// <summary>

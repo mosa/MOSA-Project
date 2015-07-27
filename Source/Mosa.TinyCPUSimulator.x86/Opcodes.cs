@@ -151,6 +151,7 @@ namespace Mosa.TinyCPUSimulator.x86
 		public static BaseX86Opcode Lock = new Lock();
 		public static BaseX86Opcode Pause = new Pause();
 		public static BaseX86Opcode CmpXchg = new CmpXchg();
+		public static BaseX86Opcode Movups = new Movups();
 		public static BaseX86Opcode Movaps = new Movaps();
 		public static BaseX86Opcode Pxor = new Pxor();
 

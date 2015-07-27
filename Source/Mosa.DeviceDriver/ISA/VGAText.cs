@@ -207,9 +207,7 @@ namespace Mosa.DeviceDriver.ISA
 			height = GetValue(CRTCommands.VerticalDisplayEnableEnd);
 
 			width++;
-			width = (byte)(width / bytePerChar);
-
-			height = 25; // override for bug?
+			height = 25;
 
 			base.deviceStatus = DeviceStatus.Online;
 			return DeviceDriverStartStatus.Started;
@@ -316,14 +314,16 @@ namespace Mosa.DeviceDriver.ISA
 			uint size = (uint)(height * width);
 
 			if (bytePerChar == 2)
+				for (int i = 0; i < size; i++)
+				{
+					memory[(uint)(index + (i * 2))] = 0;
+					memory[(uint)(index + (i * 2) + 1)] = (byte)((byte)defaultBackground << 4);
+				}
+			else
 				for (int i = 0; i < size; i = i + bytePerChar)
 				{
 					memory[(uint)(index + i)] = 0;
-					memory[(uint)(index + i + 1)] = (byte)defaultBackground;
 				}
-			else
-				for (int i = 0; i < size * bytePerChar; i++)
-					memory[(uint)(index + i)] = 0;
 		}
 
 		/// <summary>

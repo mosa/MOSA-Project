@@ -74,14 +74,18 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Result.Type.Equals(node.Operand1.Type) &&
 					TypeLayout.IsCompoundType(node.Result.Type) && !node.Result.Type.IsUI8 && !node.Result.Type.IsR8)
 				{
+					var prevNode = node.Previous;
+					var nextNode = node.Next;
+					while (prevNode.IsEmpty)
+						prevNode = prevNode.Previous;
+					while (nextNode.IsEmpty)
+						nextNode = nextNode.Next;
+
 					// If this move is proceded by a return then remove this instruction
 					// It is basically a double up caused by some instructions result in the same instruction output
-					if (node.Next.Instruction == IRInstruction.Return && node.Next.Operand1 == node.Result)
+					if (nextNode.Instruction == IRInstruction.Return && nextNode.Operand1 == node.Result)
 					{
-						node.Next.Operand1 = node.Operand1;
-
-						var nopNode = new InstructionNode(IRInstruction.Nop);
-						node.Previous.Insert(nopNode);
+						nextNode.Operand1 = node.Operand1;
 
 						node.Empty();
 						return;
@@ -89,20 +93,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 					// If this move is preceded by a compound move (which will turn into a compound move) remove this instruction
 					// It is basically a double up caused by some instructions result in the same IR output
-					if ((node.Previous.Instruction == IRInstruction.CompoundMove
-							|| node.Previous.Instruction == IRInstruction.CompoundLoad
-							|| node.Previous.Instruction == IRInstruction.Call)
-						&& node.Previous.Result == node.Operand1)
+					if ((prevNode.Instruction == IRInstruction.CompoundMove
+							|| prevNode.Instruction == IRInstruction.CompoundLoad
+							|| prevNode.Instruction == IRInstruction.Call)
+						&& prevNode.Result == node.Operand1)
 					{
-						if (repl.ContainsKey(node.Previous.Result))
+						if (repl.ContainsKey(prevNode.Result))
 						{
-							repl[node.Result] = repl[node.Previous.Result];
-							repl.Remove(node.Previous.Result);
+							repl[node.Result] = repl[prevNode.Result];
+							repl.Remove(prevNode.Result);
 						}
-						node.Previous.Result = node.Result;
-
-						var nopNode = new InstructionNode(IRInstruction.Nop);
-						node.Previous.Insert(nopNode);
+						prevNode.Result = node.Result;
 
 						node.Empty();
 						return;

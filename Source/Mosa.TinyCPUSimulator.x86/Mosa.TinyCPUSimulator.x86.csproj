@@ -64,6 +64,7 @@
     <Compile Include="Opcodes\Cmovcc.cs" />
     <Compile Include="Opcodes\CmpXchg.cs" />
     <Compile Include="Opcodes\Movaps.cs" />
+    <Compile Include="Opcodes\Movups.cs" />
     <Compile Include="Opcodes\Pause.cs" />
     <Compile Include="Opcodes\Lock.cs" />
     <Compile Include="Opcodes\Pxor.cs" />

@@ -397,7 +397,7 @@ namespace Mosa.Platform.Internal.x86
 			uint currentEnd = uint.MaxValue;
 			while (entry < entries)
 			{
-				var prDef = MetadataPRTableStruct.GetProtecteRegionDefinitionAddress(protectedRegionTable, (uint)entry);
+				var prDef = MetadataPRTableStruct.GetProtectedRegionDefinitionAddress(protectedRegionTable, (uint)entry);
 
 				uint start = prDef->StartOffset;
 				uint end = prDef->EndOffset;
@@ -547,9 +547,9 @@ namespace Mosa.Platform.Internal.x86
 
 			for (; ; )
 			{
-				uint returnAdddress = GetReturnAddressFromStackFrame(stackFrame);
+				uint returnAddress = GetReturnAddressFromStackFrame(stackFrame);
 
-				if (returnAdddress == 0)
+				if (returnAddress == 0)
 				{
 					// hit the top of stack!
 					Fault(0XBAD00002);
@@ -557,11 +557,11 @@ namespace Mosa.Platform.Internal.x86
 
 				var exceptionType = (MetadataTypeStruct*)Intrinsic.Load32(exceptionObject);
 
-				var methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAdddress);
+				var methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAddress);
 
 				if (methodDef != null)
 				{
-					var protectedRegion = GetProtectedRegionEntryByAddress(returnAdddress - 1, exceptionType, methodDef);
+					var protectedRegion = GetProtectedRegionEntryByAddress(returnAddress - 1, exceptionType, methodDef);
 
 					//DebugOutput(((uint)protectedRegion));
 
