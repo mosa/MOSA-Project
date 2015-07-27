@@ -18,7 +18,7 @@ namespace System
 	/// Implementation of the "System.String" class
 	/// </summary>
 	public sealed class String : IEnumerable, IEnumerable<char>
-    {
+	{
 		/*
 		 * Michael "grover" Froehlich, 2010/05/17:
 		 *
@@ -706,14 +706,14 @@ namespace System
 			return -1;
 		}
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return new CharEnumerator(this);
-        }
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return new CharEnumerator(this);
+		}
 
-        IEnumerator<char> IEnumerable<char>.GetEnumerator()
-        {
-            return new CharEnumerator(this);
-        }
-    }
+		IEnumerator<char> IEnumerable<char>.GetEnumerator()
+		{
+			return new CharEnumerator(this);
+		}
+	}
 }

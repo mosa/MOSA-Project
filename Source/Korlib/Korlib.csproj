@@ -194,9 +194,9 @@
   <Target Name="GenerateCompilerResponseFile">
     <Message Text="Generating module name response file: $(IntermediateOutputPath)\moduleName.rsp" />
     <!-- When Roslyn is NOT enabled, we need to set the module name for mscorlib -->
-    <WriteLinesToFile Condition="'$(VisualStudioVersion)'=='12.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/test:moduleName=CommonLanguageRuntimeLibrary" Overwrite="true" />
+    <WriteLinesToFile Condition="'$(VisualStudioVersion)'&lt;'14.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/test:moduleName=CommonLanguageRuntimeLibrary" Overwrite="true" />
     <!-- When Roslyn is enabled we need to set the runtimemetadataversion -->
-    <WriteLinesToFile Condition="'$(VisualStudioVersion)'!='12.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/runtimemetadataversion:v1.0.0" Overwrite="true" />
+    <WriteLinesToFile Condition="'$(VisualStudioVersion)'&gt;='14.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/runtimemetadataversion:v1.0.0" Overwrite="true" />
     <ItemGroup>
       <Clean Include="$(IntermediateOutputPath)\korlib.rsp" />
     </ItemGroup>
