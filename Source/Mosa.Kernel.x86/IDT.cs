@@ -353,16 +353,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Interrupts the handler.
 		/// </summary>
-		/// <param name="edi">The edi.</param>
-		/// <param name="esi">The esi.</param>
-		/// <param name="ebp">The ebp.</param>
-		/// <param name="esp">The esp.</param>
-		/// <param name="ebx">The ebx.</param>
-		/// <param name="edx">The edx.</param>
-		/// <param name="ecx">The ecx.</param>
-		/// <param name="eax">The eax.</param>
-		/// <param name="interrupt">The interrupt.</param>
-		/// <param name="errorCode">The error code.</param>
+		/// <param name="stack">The stack.</param>
 		private unsafe static void ProcessInterrupt(IDTStack* stack)
 		{
 			DebugClient.Process();
