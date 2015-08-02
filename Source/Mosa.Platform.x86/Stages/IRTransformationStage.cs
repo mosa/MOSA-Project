@@ -96,7 +96,7 @@ namespace Mosa.Platform.x86.Stages
 			context.Result = register;
 			context.ReplaceInstructionOnly(X86.Lea);
 
-			context.AppendInstruction(X86.Mov, result, register);
+			context.AppendInstruction(X86.Mov, NativeInstructionSize, result, register);
 		}
 
 		/// <summary>

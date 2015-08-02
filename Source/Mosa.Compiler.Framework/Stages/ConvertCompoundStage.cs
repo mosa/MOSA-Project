@@ -47,8 +47,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (node.Instruction == IRInstruction.Load)
 			{
-				if (node.MosaType != null &&
-					TypeLayout.IsCompoundType(node.MosaType) && !node.MosaType.IsUI8 && !node.MosaType.IsR8)
+				if (node.MosaType != null && TypeLayout.IsCompoundType(node.MosaType))
 				{
 					if (node.Result.IsVirtualRegister && !repl.ContainsKey(node.Result))
 					{
@@ -59,8 +58,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (node.Instruction == IRInstruction.Store)
 			{
-				if (node.MosaType != null &&
-					TypeLayout.IsCompoundType(node.MosaType) && !node.MosaType.IsUI8 && !node.MosaType.IsR8)
+				if (node.MosaType != null && TypeLayout.IsCompoundType(node.MosaType))
 				{
 					if (node.Operand3.IsVirtualRegister && !repl.ContainsKey(node.Operand3))
 					{
@@ -71,8 +69,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (node.Instruction == IRInstruction.Move)
 			{
-				if (node.Result.Type.Equals(node.Operand1.Type) &&
-					TypeLayout.IsCompoundType(node.Result.Type) && !node.Result.Type.IsUI8 && !node.Result.Type.IsR8)
+				if (node.Result.Type.Equals(node.Operand1.Type) && TypeLayout.IsCompoundType(node.Result.Type))
 				{
 					var prevNode = node.Previous;
 					var nextNode = node.Next;
@@ -99,10 +96,7 @@ namespace Mosa.Compiler.Framework.Stages
 						&& prevNode.Result == node.Operand1)
 					{
 						if (repl.ContainsKey(prevNode.Result))
-						{
 							repl[node.Result] = repl[prevNode.Result];
-							repl.Remove(prevNode.Result);
-						}
 						prevNode.Result = node.Result;
 
 						node.Empty();
@@ -119,11 +113,14 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					node.ReplaceInstructionOnly(IRInstruction.CompoundMove);
 				}
+				else if (node.Result.Type.Equals(node.Operand1.Type) && node.Result.IsStackLocal && node.Operand1.IsStackLocal)
+				{
+					node.ReplaceInstructionOnly(IRInstruction.CompoundMove);
+				}
 			}
 			else if (node.Instruction == IRInstruction.Call)
 			{
-				if (node.Result != null &&
-					TypeLayout.IsCompoundType(node.Result.Type) && !node.Result.Type.IsUI8 && !node.Result.Type.IsR8)
+				if (node.Result != null && TypeLayout.IsCompoundType(node.Result.Type))
 				{
 					if (node.Result.IsVirtualRegister && !repl.ContainsKey(node.Result))
 					{

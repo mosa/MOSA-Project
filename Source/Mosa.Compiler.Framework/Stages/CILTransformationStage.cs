@@ -56,22 +56,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.Ldloc(Context context)
 		{
 			Debug.Assert(context.MosaType == null);
-
-			var instruction = IRInstruction.Move;
-
-			var type = context.Operand1.Type;
-
-			if (MustSignExtendOnLoad(type))
-			{
-				instruction = IRInstruction.SignExtendedMove;
-			}
-			else if (MustZeroExtendOnLoad(type))
-			{
-				instruction = IRInstruction.ZeroExtendedMove;
-			}
-
-			var size = GetInstructionSize(type);
-			context.SetInstruction(instruction, size, context.Result, context.Operand1);
+			ProcessLoadInstruction(context);
 		}
 
 		/// <summary>
@@ -924,10 +909,6 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Empty();
 		}
 
-		#endregion ICILVisitor
-
-		#region ICILVisitor - Unused
-
 		/// <summary>
 		/// Visitation function for Break instruction.
 		/// </summary>
@@ -983,6 +964,19 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand resultOperand = context.Result;
 			Operand objectOperand = context.Operand1;
 			MosaField field = context.MosaField;
+
+			if (!objectOperand.IsPointer && objectOperand.Type.IsUserValueType)
+			{
+				var userStruct = objectOperand;
+				if (!userStruct.IsStackLocal)
+				{
+					var originalOperand = userStruct;
+					userStruct = MethodCompiler.StackLayout.AddStackLocal(userStruct.Type);
+					context.InsertBefore().SetInstruction(IRInstruction.Move, userStruct, originalOperand);
+				}
+				objectOperand = MethodCompiler.CreateVirtualRegister(userStruct.Type.ToManagedPointer());
+				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, objectOperand, userStruct);
+			}
 
 			int offset = TypeLayout.GetFieldOffset(field);
 			Operand offsetOperand = Operand.CreateConstant(TypeSystem, offset);
@@ -1318,6 +1312,10 @@ namespace Mosa.Compiler.Framework.Stages
 			context.MosaType = type;
 			return;
 		}
+
+		#endregion ICILVisitor
+
+		#region ICILVisitor - Unused
 
 		/// <summary>
 		/// Visitation function for Refanyval instruction.
@@ -2023,27 +2021,22 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">Provides the transformation context.</param>
 		private void ProcessLoadInstruction(Context context)
 		{
-			Operand source = context.Operand1;
-			Operand destination = context.Result;
+			var source = context.Operand1;
+			var destination = context.Result;
+			var size = GetInstructionSize(source.Type);
 
-			BaseInstruction extension = null;
+			var instruction = IRInstruction.Move;
 
 			if (MustSignExtendOnLoad(source.Type))
 			{
-				extension = IRInstruction.SignExtendedMove;
+				instruction = IRInstruction.SignExtendedMove;
 			}
 			else if (MustZeroExtendOnLoad(source.Type))
 			{
-				extension = IRInstruction.ZeroExtendedMove;
+				instruction = IRInstruction.ZeroExtendedMove;
 			}
 
-			if (extension != null)
-			{
-				context.SetInstruction(extension, destination, source);
-				return;
-			}
-
-			context.ReplaceInstructionOnly(IRInstruction.Move);
+			context.SetInstruction(instruction, size, destination, source);
 		}
 
 		/// <summary>
