@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
+ * (c) 2015 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -151,54 +151,71 @@ namespace Mosa.Platform.Internal.x86
 			return obj;
 		}
 
-		// TODO: efficiency?
 		public static void Memcpy(void* dest, void* src, uint count)
 		{
-			uint* _dest = (uint*)dest;
-			uint* _src = (uint*)src;
-			uint c = count & 3;
-			count >>= 2;
+			ulong* _dest = (ulong*)dest;
+			ulong* _src = (ulong*)src;
+			uint byteCount = count & 7;
+			count >>= 3;
 
-			while (count > 0)
-			{
-				*_dest = *_src;
-				_dest++;
-				_src++;
-				count--;
-			}
+			for (; count >= 4; count -= 4, _dest += 4, _src += 4)
+				Native.Memcpy256(_dest, _src);
+
+			for (uint index = 0; index < count; index++)
+				_dest[index] = _src[index];
+
+			_dest += count;
+			_src += count;
 
 			byte* __dest = (byte*)_dest;
 			byte* __src = (byte*)_src;
-			while (c > 0)
-			{
-				*__dest = *__src;
-				__dest++;
-				__src++;
-				c--;
-			}
+			for (uint index = 0; index < byteCount; index++)
+				__dest[index] = __src[index];
 		}
 
-		public static void Memset(void* dest, byte value, uint size)
+		public static void Memset(void* dest, byte value, uint count)
 		{
-			uint* _dest = (uint*)dest;
-			uint s = size & 3;
-			size >>= 2;
-			uint value4 = (uint)((value << 24) + (value << 16) + (value << 8) + value);
+			ulong* _dest = (ulong*)dest;
+			uint byteCount = count & 7;
+			count >>= 3;
+			uint value4 = (uint)((value << 24) | (value << 16) | (value << 8) | value);
+			ulong value8 = ((ulong)value4 << 32) | value4;
 
-			while (size > 0)
+			for (; count >= 4; count -= 4, _dest += 4)
 			{
-				*_dest = value4;
-				_dest++;
-				size--;
+				_dest[0] = value8;
+				_dest[1] = value8;
+				_dest[2] = value8;
+				_dest[3] = value8;
 			}
+
+			for (uint index = 0; index < count; index++)
+				_dest[index] = value8;
+
+			_dest += count;
 
 			byte* __dest = (byte*)_dest;
-			while (s > 0)
-			{
-				*__dest = value;
-				__dest++;
-				s--;
-			}
+			for (uint index = 0; index < byteCount; index++)
+				__dest[index] = value;
+		}
+
+		public static void Memclr(void* dest, uint count)
+		{
+			ulong* _dest = (ulong*)dest;
+			uint byteCount = count & 7;
+			count >>= 3;
+
+			for (; count >= 4; count -= 4, _dest += 4)
+				Native.Memclr256(_dest);
+
+			for (uint index = 0; index < count; index++)
+				_dest[index] = 0ul;
+
+			_dest += count;
+
+			byte* __dest = (byte*)_dest;
+			for (uint index = 0; index < byteCount; index++)
+				__dest[index] = 0;
 		}
 
 		#region (Un)Boxing
@@ -519,9 +536,9 @@ namespace Mosa.Platform.Internal.x86
 
 			for (; ; )
 			{
-				uint returnAdddress = GetReturnAddressFromStackFrame(stackFrame);
+				uint returnAddress = GetReturnAddressFromStackFrame(stackFrame);
 
-				if (returnAdddress == 0)
+				if (returnAddress == 0)
 				{
 					// hit the top of stack!
 					Fault(0XBAD00002);
@@ -529,11 +546,11 @@ namespace Mosa.Platform.Internal.x86
 
 				var exceptionType = (MetadataTypeStruct*)Intrinsic.Load32(exceptionObject);
 
-				var methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAdddress);
+				var methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAddress);
 
 				if (methodDef != null)
 				{
-					var protectedRegion = GetProtectedRegionEntryByAddress(returnAdddress - 1, exceptionType, methodDef);
+					var protectedRegion = GetProtectedRegionEntryByAddress(returnAddress - 1, exceptionType, methodDef);
 
 					//DebugOutput(((uint)protectedRegion));
 

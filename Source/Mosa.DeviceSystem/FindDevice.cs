@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
 using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceSystem
@@ -164,20 +165,32 @@ namespace Mosa.DeviceSystem
 			}
 		}
 
-		//public class IsTypeOf : IFindDevice
-		//{
-		//    private Type type;
+		/// <summary>
+		///
+		/// </summary>
+		/// <typeparam name="T">The Type to check.</typeparam>
+		public class IsTypeOf<T> : IFindDevice
+			where T : class
+		{
+			/// <summary>
+			/// Initializes a new instance of the <see cref="IsTypeOf&lt;T>"/> class.
+			/// </summary>
+			public IsTypeOf()
+			{
+			}
 
-		//    public IsTypeOf(Type type)
-		//    {
-		//        this.type = type;
-		//    }
-
-		//    public bool IsMatch(IDevice device)
-		//    {
-		//        return ((device.IsSubclassOf(type)) || (device == type) || (device.IsAssignableFrom(type)) || (type.IsAssignableFrom(device)));
-		//    }
-		//}
+			/// <summary>
+			/// Determines whether the specified device is match.
+			/// </summary>
+			/// <param name="device">The device.</param>
+			/// <returns>
+			/// 	<c>true</c> if the specified device is match; otherwise, <c>false</c>.
+			/// </returns>
+			public bool IsMatch(IDevice device)
+			{
+				return (device as T) != null;
+			}
+		}
 
 		/// <summary>
 		///
@@ -210,7 +223,7 @@ namespace Mosa.DeviceSystem
 		public class IsDiskDevice : IFindDevice
 		{
 			/// <summary>
-			/// Initializes a new instance of the <see cref="IsPCIDevice"/> class.
+			/// Initializes a new instance of the <see cref="IsDiskDevice"/> class.
 			/// </summary>
 			public IsDiskDevice()
 			{

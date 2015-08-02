@@ -30,6 +30,13 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.AddLast(ConditionalBug);
 			testMethods.AddLast(PointerBug);
 			testMethods.AddLast(AddressOfThisBug);
+			testMethods.AddLast(RemR4);
+			testMethods.AddLast(RemR8);
+			testMethods.AddLast(NullableTest1);
+			testMethods.AddLast(NullableTest2);
+			testMethods.AddLast(NullableTest3);
+			testMethods.AddLast(NullableTest4);
+			testMethods.AddLast(NullableTest5);
 		}
 
 		private static uint StaticValue = 0x200000;
@@ -183,6 +190,59 @@ namespace Mosa.TestWorld.x86.Tests
 		public static bool AddressOfThisBug()
 		{
 			return PointerBugClass.Test2();
+		}
+
+		static float f1 = 1.232145E+10f;
+		static float f2 = 2f;
+		public static bool RemR4()
+		{
+			return (f1 % f2) == 0f;
+		}
+
+		static double d1 = 1.232145E+10d;
+		static double d2 = 15d;
+		public static bool RemR8()
+		{
+			return (d1 % d2) == 0d;
+		}
+
+		public static bool NullableTest1()
+		{
+			bool? v1 = true;
+
+			return (v1 == true);
+		}
+
+		public static bool NullableTest2()
+		{
+			bool? v1 = null;
+
+			return (v1 == null);
+		}
+
+		public static bool NullableTest3()
+		{
+			bool? v1 = null;
+
+			return !(v1 == true);
+		}
+
+		public static bool NullableTest4()
+		{
+			bool? v1 = null;
+			bool? v2 = true;
+
+			return !(v1 == v2);
+		}
+
+		public static bool NullableTest5()
+		{
+			int? v1 = null;
+			int? v2 = 32;
+
+			long? v3 = v1 ?? v2;
+
+			return (v3 == 32);
 		}
 
 		unsafe public static class PointerBugClass

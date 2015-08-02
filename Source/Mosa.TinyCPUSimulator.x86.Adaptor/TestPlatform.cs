@@ -104,6 +104,14 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			x86.Write32(x86.ESP.Value, value);
 		}
 
+		private void WriteStackValue(ISimAdapter simAdapter, ulong value)
+		{
+			var x86 = simAdapter.SimCPU as CPUx86;
+
+			x86.ESP.Value = x86.ESP.Value - 8;
+			x86.Write64(x86.ESP.Value, value);
+		}
+
 		public void PopulateStack(ISimAdapter simAdapter, object parameter)
 		{
 			if ((parameter == null) || !(parameter is ValueType))
@@ -163,8 +171,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			{
 				var b = BitConverter.GetBytes((double)parameter);
 				var u = BitConverter.ToUInt64(b, 0);
-				WriteStackValue(simAdapter, (uint)(u >> 32));
-				WriteStackValue(simAdapter, (uint)u);
+				WriteStackValue(simAdapter, u);
 			}
 			//else  if (parameter is UIntPtr) { WriteStackValue(simAdapter, (uint)parameter);  }
 			//else  if (parameter is IntPtr) { WriteStackValue(simAdapter, (uint)parameter); }
@@ -199,9 +206,9 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			else if (type.IsBoolean)
 				return (object)(bool)(x86.EAX.Value != 0);
 			else if (type.IsR4)
-				return (object)(float)x86.XMM0.Value;
+				return (object)(float)x86.XMM0.Value.LowF;
 			else if (type.IsR8)
-				return (object)(double)x86.XMM0.Value;
+				return (object)(double)x86.XMM0.Value.Low;
 			else if (type.IsVoid)
 				return null;
 

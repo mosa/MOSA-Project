@@ -126,8 +126,8 @@ namespace Mosa.Utility.Launcher
 					case "-map": GenerateMapFile = true; continue;
 					case "-asm": GenerateASMFile = true; continue;
 					case "-qemu": Emulator = EmulatorType.Qemu; continue;
-					case "-vmware": Emulator = EmulatorType.WMware; continue;
-					case "-bochs": Emulator = EmulatorType.Boches; continue;
+					case "-vmware": Emulator = EmulatorType.VMware; continue;
+					case "-bochs": Emulator = EmulatorType.Bochs; continue;
 					case "-debugger": MOSADebugger = true; continue;
 					case "-vhd": ImageFormat = ImageFormat.VHD; continue;
 					case "-img": ImageFormat = ImageFormat.IMG; continue;

@@ -261,6 +261,39 @@ namespace Mosa.Platform.Internal.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Int, Mosa.Platform.x86")]
 		public extern static void Int(byte interrupt);
 
+		/// <summary>
+		/// Wraps the intrinsic method for calculating the remainder of floating-point division
+		/// </summary>
+		/// <param name="n">The dividend</param>
+		/// <param name="d">The divisor</param>
+		/// <returns>The remainder</returns>
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Remainder, Mosa.Platform.x86")]
+		public extern static float Remainder(float n, float d);
+
+		/// <summary>
+		/// Wraps the intrinsic method for calculating the remainder of floating-point division
+		/// </summary>
+		/// <param name="n">The dividend</param>
+		/// <param name="d">The divisor</param>
+		/// <returns>The remainder</returns>
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Remainder, Mosa.Platform.x86")]
+		public extern static double Remainder(double n, double d);
+
+		/// <summary>
+		/// Wraps the intrinsic method for copying 256 bits of memory from source to destination
+		/// </summary>
+		/// <param name="destination">The destination address.</param>
+		/// <param name="source">The source address.</param>
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Memcpy256, Mosa.Platform.x86")]
+		public extern static void Memcpy256(void* destination, void* source);
+
+		/// <summary>
+		/// Wraps the intrinsic method for clearing 256 bits of memory at destination
+		/// </summary>
+		/// <param name="destination">The destination address.</param>
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Memclr256, Mosa.Platform.x86")]
+		public extern static void Memclr256(void* destination);
+
 		#endregion Intrinsic
 	}
 }

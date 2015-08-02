@@ -161,9 +161,8 @@ namespace Mosa.Compiler.Framework.Platform
 			else if (typeLayout.IsCompoundType(result.Type))
 			{
 				int size = typeLayout.GetTypeSize(result.Type);
-				Operand returnLow = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.Pointer, return32BitRegister);
-				context.AppendInstruction(IRInstruction.Gen, returnLow);
-				architecture.InsertCompoundMoveInstruction(compiler, context, result, Operand.CreateMemoryAddress(result.Type, returnLow, 0), size);
+				Operand stackPointerReg = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.Pointer, architecture.StackPointerRegister);
+				architecture.InsertCompoundMoveInstruction(compiler, context, result, Operand.CreateMemoryAddress(result.Type, stackPointerReg, 0), size);
 			}
 			else
 			{
@@ -269,11 +268,7 @@ namespace Mosa.Compiler.Framework.Platform
 			architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
 			size = Alignment.AlignUp(size, alignment);
 
-			if (size == 4 || size == 2 || size == 1)
-			{
-				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(operand.Type, return32BitRegister), operand);
-			}
-			else if (operand.IsR4)
+			if (operand.IsR4)
 			{
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(operand.Type, returnFloatingPointRegister), operand);
 			}
@@ -288,9 +283,14 @@ namespace Mosa.Compiler.Framework.Platform
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.U4, return32BitRegister), operand.Low);
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(highType, return64BitRegister), operand.High);
 			}
+			else if (size == 4 || size == 2 || size == 1)
+			{
+				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(operand.Type, return32BitRegister), operand);
+			}
 			else if (typeLayout.IsCompoundType(operand.Type))
 			{
-				architecture.InsertAddressOfInstruction(context, Operand.CreateCPURegister(operand.Type, return32BitRegister), operand);
+				Operand stackBaseReg = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.Pointer, architecture.StackFrameRegister);
+				architecture.InsertCompoundMoveInstruction(compiler, context, Operand.CreateMemoryAddress(operand.Type, stackBaseReg, OffsetOfFirstParameter), operand, size);
 			}
 		}
 

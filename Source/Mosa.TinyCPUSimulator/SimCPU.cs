@@ -301,6 +301,22 @@ namespace Mosa.TinyCPUSimulator
 			//Debug.Assert(InternalRead8(address) == value);
 		}
 
+		public ulong DirectRead64(ulong address)
+		{
+			uint low = InternalRead32(address);
+			uint high = InternalRead32(address + 0x4);
+			ulong val = high | ((ulong)low << 32);
+
+			var value = val;
+
+			if (Endian.NativeIsLittleEndian)
+			{
+				value = Endian.Swap(value);
+			}
+
+			return value;
+		}
+
 		public uint DirectRead32(ulong address)
 		{
 			uint value = InternalRead32(address);
@@ -328,6 +344,29 @@ namespace Mosa.TinyCPUSimulator
 		public byte DirectRead8(ulong address)
 		{
 			return InternalRead8(address);
+		}
+
+		public void DirectWrite64(ulong address, ulong value)
+		{
+			ulong val = value;
+
+			if (Endian.NativeIsLittleEndian)
+			{
+				val = Endian.Swap(val);
+			}
+
+			uint low = (uint)(val >> 32);
+			uint high = (uint)val;
+
+			InternalWrite32(address, low);
+			InternalWrite32(address + 0x4, high);
+
+			// very slow performance if assert enabled
+			//Debug.Assert(DirectRead64(address) == value);
+
+			//Debug.WriteLine(address.ToString("X") + ": " + value.ToString("X"));
+
+			MemoryUpdate(address, 64);
 		}
 
 		public void DirectWrite32(ulong address, uint value)
@@ -395,6 +434,11 @@ namespace Mosa.TinyCPUSimulator
 			DirectWrite32(TranslateToPhysical(address), value);
 		}
 
+		public void Write64(ulong address, ulong value)
+		{
+			DirectWrite64(TranslateToPhysical(address), value);
+		}
+
 		public byte Read8(ulong address)
 		{
 			return DirectRead8(TranslateToPhysical(address));
@@ -408,6 +452,11 @@ namespace Mosa.TinyCPUSimulator
 		public uint Read32(ulong address)
 		{
 			return DirectRead32(TranslateToPhysical(address));
+		}
+
+		public ulong Read64(ulong address)
+		{
+			return DirectRead64(TranslateToPhysical(address));
 		}
 
 		public void SetSymbol(string name, ulong address, ulong size)

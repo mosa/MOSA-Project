@@ -27,7 +27,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, Multiboot0695Stage.MultibootEBX));
+			var result = context.Result;
+			var address = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.I4);
+			context.SetInstruction(IRInstruction.Move, address, Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, Multiboot0695Stage.MultibootEBX));
+			context.AppendInstruction(IRInstruction.Move, result, Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.I4, address, 0));
 		}
 
 		#endregion Methods

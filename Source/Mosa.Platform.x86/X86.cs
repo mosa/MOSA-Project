@@ -144,6 +144,11 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		///
 		/// </summary>
+		public static readonly PXor PXor = new PXor();
+
+		/// <summary>
+		///
+		/// </summary>
 		public static readonly Mov Mov = new Mov();
 
 		/// <summary>
@@ -285,6 +290,16 @@ namespace Mosa.Platform.x86
 		///
 		/// </summary>
 		public static readonly Movsd Movsd = new Movsd();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly MovUPS MovUPS = new MovUPS();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly MovAPS MovAPS = new MovAPS();
 
 		/// <summary>
 		///

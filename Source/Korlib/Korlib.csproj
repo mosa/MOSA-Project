@@ -11,49 +11,32 @@
     <DelaySign>false</DelaySign>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>
-    </AppDesignerFolder>
     <RootNamespace>System</RootNamespace>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
+    <NoWarn>0169;0649;1685</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <TargetFrameworkProfile />
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <FileAlignment>4096</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup>
     <NoStdLib>True</NoStdLib>
+    <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
+    <AdditionalExplicitAssemblyReferences />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
     <DebugSymbols>True</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <RemoveIntegerChecks>False</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
-    <NoStdLib>True</NoStdLib>
-    <NoWarn>0169;0649;1685</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
     <DebugSymbols>False</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
     <Optimize>True</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <RemoveIntegerChecks>False</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
-    <NoStdLib>True</NoStdLib>
-    <NoWarn>0169;0649;1685</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="System.Collections.Generic\LinkedList.cs" />
@@ -107,6 +90,7 @@
     <Compile Include="System.Runtime.InteropServices\DllImportAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\UnmanagedFunctionPointerAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\UnmanagedType.cs" />
+    <Compile Include="System.Runtime.Versioning\NonVersionableAttribute.cs" />
     <Compile Include="System.Runtime.Versioning\TargetFrameworkAttribute.cs" />
     <Compile Include="System.Threading\SpinLock.cs" />
     <Compile Include="System\Action.cs" />
@@ -117,6 +101,7 @@
     <Compile Include="System\Attribute.cs" />
     <Compile Include="System\AttributeTarget.cs" />
     <Compile Include="System\AttributeUsageAttribute.cs" />
+    <Compile Include="System\CharEnumerator.cs" />
     <Compile Include="System\Convert.cs" />
     <Compile Include="System\CLSCompliantAttribute.cs" />
     <Compile Include="System.Diagnostics\DebuggableAttribute.cs" />
@@ -198,4 +183,21 @@
     <Compile Include="System.Runtime.InteropServices\OutAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <PropertyGroup>
+    <CompileDependsOn>GenerateCompilerResponseFile;$(CompileDependsOn)</CompileDependsOn>
+  </PropertyGroup>
+  <Target Name="GenerateCompilerResponseFile">
+    <Message Text="Generating module name response file: $(IntermediateOutputPath)\korlib.rsp" />
+    <Message Text="VS Version: $(VisualStudioVersion); Tools Version: $(MSBuildToolsVersion)" />
+    <!-- When Roslyn is NOT enabled, we need to set the module name for mscorlib -->
+    <WriteLinesToFile Condition="'$(MSBuildToolsVersion)'&lt;'14.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/test:moduleName=CommonLanguageRuntimeLibrary" Overwrite="true" />
+    <!-- When Roslyn is enabled we need to set the runtimemetadataversion -->
+    <WriteLinesToFile Condition="'$(MSBuildToolsVersion)'&gt;='14.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/runtimemetadataversion:v1.0.0" Overwrite="true" />
+    <ItemGroup>
+      <Clean Include="$(IntermediateOutputPath)\korlib.rsp" />
+    </ItemGroup>
+    <PropertyGroup>
+      <CompilerResponseFile>$(IntermediateOutputPath)\korlib.rsp</CompilerResponseFile>
+    </PropertyGroup>
+  </Target>
 </Project>

@@ -100,23 +100,24 @@ namespace Mosa.DeviceSystem
 		/// <param name="character">The character.</param>
 		protected void InternalWrite(char character)
 		{
-			// TODO: handle character = newline!
-
-			textDevice.WriteChar(cursorX, cursorY, character, foreground, background);
-			cursorX++;
-
-			if (cursorX == width)
+			if (cursorX == width || character == '\n')
 			{
 				cursorY++;
+				cursorX = 0;
 
 				if (cursorY == height)
 				{
 					textDevice.ScrollUp();
 					cursorY--;
 				}
-
-				cursorX = 0;
 			}
+
+			if (character != '\n')
+			{
+				textDevice.WriteChar(cursorX, cursorY, character, foreground, background);
+				cursorX++;
+			}
+
 			SetCursor();
 		}
 
@@ -147,16 +148,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public void WriteLine()
 		{
-			cursorY++;
-
-			if (cursorY == height)
-			{
-				textDevice.ScrollUp();
-				cursorY--;
-			}
-
-			cursorX = 0;
-			SetCursor();
+			Write('\n');
 		}
 
 		/// <summary>
@@ -165,8 +157,18 @@ namespace Mosa.DeviceSystem
 		/// <param name="text">The text.</param>
 		public void WriteLine(string text)
 		{
-			Write(text);
-			WriteLine();
+			Write(text + "\n");
+		}
+
+		/// <summary>
+		/// Sets the colors of the TextScreen for future writes.
+		/// </summary>
+		/// <param name="foreground">The text color.</param>
+		/// <param name="background">The background color.</param>
+		public void SetColor(TextColor foreground, TextColor background)
+		{
+			this.foreground = foreground;
+			this.background = background;
 		}
 	}
 }

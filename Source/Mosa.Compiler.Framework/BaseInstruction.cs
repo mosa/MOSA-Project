@@ -291,6 +291,7 @@ namespace Mosa.Compiler.Framework
 				case InstructionSize.Size8: return "8";
 				case InstructionSize.Size16: return "16";
 				case InstructionSize.Size64: return "64";
+				case InstructionSize.Size128: return "128";
 				case InstructionSize.Native: return "Native";
 				default: return string.Empty;
 			}

@@ -431,14 +431,8 @@ namespace Mosa.Kernel.x86
 			{
 				Assert.True(SymIsELF, "MultiBoot info does not contain ELF sections");
 
-				//FIXME: COMPILER BUG
-				//fixed (void* ptr = &this)
-				//	return (MultiBootElfSectionHeaderTable*)ptr;
-
-				uint ui;
-				fixed (void* ptr = &Syms)
-					ui = (uint)ptr;
-				return (MultiBootElfSectionHeaderTable*)ui;
+				fixed (void* ptr = &this)
+					return (MultiBootElfSectionHeaderTable*)ptr;
 			}
 		}
 	}
@@ -498,13 +492,8 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				//fixed (MultiBootMemoryMap* ptr = &this)
-				//	return ptr;
-
-				uint addr;
-				fixed (void* ptr = &this)
-					addr = (uint)ptr;
-				return (MultiBootMemoryMap*)addr;
+				fixed (MultiBootMemoryMap* ptr = &this)
+					return ptr;
 			}
 		}
 

@@ -100,8 +100,8 @@ namespace Mosa.Platform.x86.Stages
 
 				WriteMultibootHeader();
 
-				Linker.CreateSymbol(MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativeIntegerSize);
-				Linker.CreateSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativeIntegerSize);
+				Linker.CreateSymbol(MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
+				Linker.CreateSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 
 				return;
 			}
@@ -112,6 +112,8 @@ namespace Mosa.Platform.x86.Stages
 			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
+			var multibootEax = Operand.CreateUnmanagedSymbolPointer(TypeSystem, MultibootEAX);
+			var multibootEbx = Operand.CreateUnmanagedSymbolPointer(TypeSystem, MultibootEBX);
 
 			var basicBlocks = new BasicBlocks();
 			var block = basicBlocks.CreateBlock();
@@ -122,8 +124,10 @@ namespace Mosa.Platform.x86.Stages
 			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ebp, 0), zero);
 
-			ctx.AppendInstruction(X86.Mov, Operand.CreateUnmanagedSymbolPointer(TypeSystem, MultibootEAX), eax);
-			ctx.AppendInstruction(X86.Mov, Operand.CreateUnmanagedSymbolPointer(TypeSystem, MultibootEBX), ebx);
+			ctx.AppendInstruction(X86.Mov, ecx, multibootEax);
+			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 0), eax);
+			ctx.AppendInstruction(X86.Mov, ecx, multibootEbx);
+			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 0), ebx);
 
 			// call type initializer
 			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
@@ -155,7 +159,7 @@ namespace Mosa.Platform.x86.Stages
 			var writer = new BinaryWriter(stream, Encoding.ASCII);
 
 			// flags - multiboot flags
-			uint flags = HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
+			uint flags = HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;// | HEADER_MB_FLAG_VIDEO_MODES_REQUIRED;
 
 			uint load_addr = 0;
 

@@ -681,16 +681,15 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var newThis = MethodCompiler.StackLayout.AddStackLocal(thisReference.Type);
 
-				for (int i = 0; i < context.Next.OperandCount; i++)
-				{
-					if (context.Next.GetOperand(i) == thisReference)
-					{
-						context.Next.SetOperand(i, newThis);
-					}
-				}
-
+				var oldThisReference = thisReference;
 				thisReference = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
 				before.SetInstruction(IRInstruction.AddressOf, thisReference, newThis);
+
+				for (var node = context.Next; !node.IsBlockEndInstruction; node = node.Next)
+					if (!node.IsEmpty)
+						for (int i = 0; i < node.OperandCount; i++)
+							if (node.GetOperand(i) == oldThisReference)
+								node.SetOperand(i, newThis);
 			}
 			else
 			{
@@ -1275,7 +1274,49 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Unbox(Context context)
 		{
-			throw new NotImplementCompilerException();
+			var value = context.Operand1;
+			var result = context.Result;
+			var type = context.MosaType;
+
+			if (!type.IsValueType)
+			{
+				context.ReplaceInstructionOnly(IRInstruction.Move);
+				return;
+			}
+
+			int typeSize = TypeLayout.GetTypeSize(type);
+			int alignment = TypeLayout.NativePointerAlignment;
+			typeSize += (alignment - (typeSize % alignment)) % alignment;
+
+			var vmCall = ToVmUnboxCall(typeSize);
+
+			context.SetInstruction(IRInstruction.Nop);
+			ReplaceWithVmCall(context, vmCall);
+
+			context.SetOperand(1, value);
+			if (vmCall == VmCall.Unbox)
+			{
+				Operand adr = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
+				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.StackLayout.AddStackLocal(type));
+
+				context.SetOperand(2, adr);
+				context.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
+				context.OperandCount = 4;
+			}
+			else
+			{
+				context.OperandCount = 2;
+			}
+
+			Operand tmp = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
+			context.Result = tmp;
+			context.ResultCount = 1;
+
+			var size = GetInstructionSize(tmp);
+
+			context.AppendInstruction(IRInstruction.Load, size, result, tmp, ConstantZero);
+			context.MosaType = type;
+			return;
 		}
 
 		/// <summary>

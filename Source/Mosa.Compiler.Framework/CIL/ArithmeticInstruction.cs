@@ -9,6 +9,7 @@
 
 using Mosa.Compiler.MosaTypeSystem;
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -106,6 +107,9 @@ namespace Mosa.Compiler.Framework.CIL
 			if (StackTypeCode.UnmanagedPointer != result)
 			{
 				resultType = compiler.TypeSystem.GetStackTypeFromCode(result);
+
+				if (result == StackTypeCode.F && ctx.Operand1.Type.IsR4 && ctx.Operand2.Type.IsR4)
+					resultType = compiler.TypeSystem.BuiltIn.R4;
 			}
 			else
 			{
@@ -120,6 +124,8 @@ namespace Mosa.Compiler.Framework.CIL
 				else
 					throw new InvalidOperationException(@"Invalid operand types passed to " + opcode);
 			}
+
+			//Debug.Assert(resultType != null, ctx.ToString());
 
 			ctx.Result = compiler.CreateVirtualRegister(resultType);
 		}
