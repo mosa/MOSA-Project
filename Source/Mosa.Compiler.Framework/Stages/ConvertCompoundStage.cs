@@ -119,6 +119,10 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					node.ReplaceInstructionOnly(IRInstruction.CompoundMove);
 				}
+				else if (node.Result.Type.Equals(node.Operand1.Type) && node.Result.IsStackLocal && node.Operand1.IsStackLocal)
+				{
+					node.ReplaceInstructionOnly(IRInstruction.CompoundMove);
+				}
 			}
 			else if (node.Instruction == IRInstruction.Call)
 			{
