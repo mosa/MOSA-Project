@@ -29,6 +29,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		protected SimLinker linker;
 
+		protected const uint MaxTicks = 500000;
+
 		public TestCompiler(BaseTestPlatform platform)
 		{
 			this.platform = platform;
@@ -65,15 +67,27 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			compiler.Load(TypeSystem.Load(moduleLoader.CreateMetadata()));
 
+			//compiler.Execute();
 			compiler.Execute(Environment.ProcessorCount);
 
 			linker = compiler.Linker as SimLinker;
 
+			//DumpSymbols();
 			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 
 			Run<int>(string.Empty, "Default", "AssemblyInit", true);
 
-			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
+			simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
+		}
+
+		public void DumpSymbols()
+		{
+			var symbols = simAdapter.SimCPU.Symbols;
+
+			foreach (var symbol in symbols)
+			{
+				Debug.WriteLine(symbol.Value.ToString());
+			}
 		}
 
 		public T Run<T>(string ns, string type, string method, params object[] parameters)
@@ -107,12 +121,12 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			platform.PrepareToExecuteMethod(simAdapter, address, parameters);
 
-			simAdapter.SimCPU.Monitor.BreakAtTick = simAdapter.SimCPU.Monitor.BreakAtTick + 500000; // nothing should take this long
+			simAdapter.SimCPU.Monitor.BreakAtTick = simAdapter.SimCPU.Monitor.BreakAtTick + MaxTicks; // nothing should take this long
 			simAdapter.SimCPU.Execute();
 
 			if (simAdapter.SimCPU.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)
 			{
-				throw new Exception("Aborted. Method did not complete under 500000 ticks. " + simAdapter.SimCPU.Tick.ToString());
+				throw new Exception("Aborted. Method did not complete under " + MaxTicks.ToString() + " ticks. " + simAdapter.SimCPU.Tick.ToString());
 			}
 
 			if (runtimeMethod.Signature.ReturnType.IsVoid)

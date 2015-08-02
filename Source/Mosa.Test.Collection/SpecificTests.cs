@@ -11,6 +11,11 @@ namespace Mosa.Test.Collection
 {
 	public static class SpecificTests
 	{
+		public unsafe static void RefPointer(ref int* ptr)
+		{
+			ptr++;
+		}
+
 		public static uint Test2(uint size)
 		{
 			uint first = 0xFFFFFFFF; // Marker

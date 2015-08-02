@@ -17,7 +17,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public ulong Size { get; private set; }
 
-		public ulong EndAddress { get { return Address + Size; } }
+		public ulong EndAddress { get { return Size == 0 ? Address : Address + Size - 1; } }
 
 		public SimSymbol(string name, ulong address, ulong size)
 		{
@@ -28,7 +28,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public override string ToString()
 		{
-			return "0x" + Address.ToString("X") + " " + Name;
+			return "0x" + Address.ToString("X") + " - " + "0x" + EndAddress.ToString("X") + " " + Name + " (" + Size.ToString() + ")";
 		}
 	}
 }

@@ -56,9 +56,9 @@ namespace Mosa.TinyCPUSimulator.Debug
 				//Test4();
 				//Test12();
 
-				//Test13();
+				Test13();
 
-				Test14();
+				//Test14();
 			}
 			catch (Exception e)
 			{

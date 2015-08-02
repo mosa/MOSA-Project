@@ -191,6 +191,18 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		protected virtual void EndGenerate()
 		{
+			//HACK - for debugging
+			// Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress
+			//if (MethodCompiler.Method.FullName.Contains("Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
+			//{
+			//	codeStream.Position = codeStream.Length - 1;
+			//	while (codeStream.Length < 1024)
+			//	{
+			//		codeStream.WriteByte(0);
+			//	}
+			//}
+			//ENDHACK
+
 			codeEmitter.ResolvePatches();
 		}
 
