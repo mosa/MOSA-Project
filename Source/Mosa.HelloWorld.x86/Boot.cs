@@ -83,28 +83,28 @@ namespace Mosa.HelloWorld.x86
 
 			Console.WriteLine();
 
-			Console.Color = Colors.Green;
-			Console.Write("Memory-Map:");
-			Console.WriteLine();
+			//Console.Color = Colors.Green;
+			//Console.Write("Memory-Map:");
+			//Console.WriteLine();
 
-			for (uint index = 0; index < Multiboot.MemoryMapCount; index++)
-			{
-				Console.Color = Colors.White;
-				Console.Write(Multiboot.GetMemoryMapBase(index), 16, 10);
-				Console.Write(" - ");
-				Console.Write(Multiboot.GetMemoryMapBase(index) + Multiboot.GetMemoryMapLength(index) - 1, 16, 10);
-				Console.Write(" (");
-				Console.Color = Colors.Gray;
-				Console.Write(Multiboot.GetMemoryMapLength(index), 16, 10);
-				Console.Color = Colors.White;
-				Console.Write(") ");
-				Console.Color = Colors.Gray;
-				Console.Write("Type: ");
-				Console.Write(Multiboot.GetMemoryMapType(index), 16, 1);
-				Console.WriteLine();
-			}
-			Console.WriteLine();
-			Console.WriteLine();
+			//for (uint index = 0; index < Multiboot.MemoryMapCount; index++)
+			//{
+			//	Console.Color = Colors.White;
+			//	Console.Write(Multiboot.GetMemoryMapBase(index), 16, 10);
+			//	Console.Write(" - ");
+			//	Console.Write(Multiboot.GetMemoryMapBase(index) + Multiboot.GetMemoryMapLength(index) - 1, 16, 10);
+			//	Console.Write(" (");
+			//	Console.Color = Colors.Gray;
+			//	Console.Write(Multiboot.GetMemoryMapLength(index), 16, 10);
+			//	Console.Color = Colors.White;
+			//	Console.Write(") ");
+			//	Console.Color = Colors.Gray;
+			//	Console.Write("Type: ");
+			//	Console.Write(Multiboot.GetMemoryMapType(index), 16, 1);
+			//	Console.WriteLine();
+			//}
+			//Console.WriteLine();
+			//Console.WriteLine();
 			Console.Color = Colors.Green;
 			Console.Write("Smbios Info: ");
 			if (SmbiosManager.IsAvailable)

@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework.Stages
 					while (nextNode.IsEmpty)
 						nextNode = nextNode.Next;
 
-					// If this move is proceded by a return then remove this instruction
+					// If this move is preceded by a return then remove this instruction
 					// It is basically a double up caused by some instructions result in the same instruction output
 					if (nextNode.Instruction == IRInstruction.Return && nextNode.Operand1 == node.Result)
 					{
