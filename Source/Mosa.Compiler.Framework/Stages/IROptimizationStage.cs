@@ -281,8 +281,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private bool PromoteLocalVariable()
 		{
 			//HACK!!! HACK!!! HACK!!!
-			if (MethodCompiler.Method.FullName.Contains(" Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
-				return false;
+			//if (MethodCompiler.Method.FullName.Contains(" Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
+			//	return false;
 
 			bool change = false;
 
@@ -305,9 +305,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (ContainsAddressOf(local))
 					continue;
-
-				//if (local.Definitions.Count == 0 || local.Uses.Count == 0)
-				//	continue;
 
 				var v = MethodCompiler.CreateVirtualRegister(local.Type.GetStackType());
 

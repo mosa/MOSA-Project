@@ -42,7 +42,7 @@ namespace Mosa.Tool.Explorer
 			public List<string> OrderedStageNames = new List<string>();
 			public List<string> OrderedDebugStageNames = new List<string>();
 			public Dictionary<string, List<string>> InstructionLogs = new Dictionary<string, List<string>>();
-			public Dictionary<string, string> DebugLogs = new Dictionary<string, string>();
+			public Dictionary<string, List<string>> DebugLogs = new Dictionary<string, List<string>>();
 		}
 
 		private StringBuilder compileLog = new StringBuilder();
@@ -186,7 +186,7 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private void SubmitDebugStageInformation(MosaMethod method, string stage, string lines)
+		private void SubmitDebugStageInformation(MosaMethod method, string stage, List<string> lines)
 		{
 			lock (methodStagelock)
 			{
@@ -517,9 +517,13 @@ namespace Mosa.Tool.Explorer
 				string stage = cbDebugStages.SelectedItem.ToString();
 
 				if (methodStage.DebugLogs.ContainsKey(stage))
-					rbOtherResult.Text = methodStage.DebugLogs[stage].ToString();
+				{
+					rbOtherResult.Text = GetDebugLogText(methodStage.DebugLogs[stage]);
+				}
 				else
+				{
 					rbOtherResult.Text = string.Empty;
+				}
 			}
 		}
 
@@ -620,11 +624,13 @@ namespace Mosa.Tool.Explorer
 
 		private void cbLabels_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			tbResult.Text = string.Empty;
 			SetStatus(string.Empty);
 
 			if (currentInstructionLines == null)
+			{
+				tbResult.Text = string.Empty;
 				return;
+			}
 
 			var node = GetCurrentNode<ViewNode<MosaMethod>>();
 
@@ -633,9 +639,34 @@ namespace Mosa.Tool.Explorer
 
 			SetStatus(node.Type.FullName);
 
+			tbResult.Text = GetCurrentStageInstructions(currentInstructionLines);
+		}
+
+		private string GetDebugLogText(List<string> list)
+		{
+			var result = new StringBuilder();
+
+			if (currentInstructionLines == null)
+				return string.Empty;
+
+			foreach (var l in list)
+			{
+				result.AppendLine(l);
+			}
+
+			return result.ToString();
+		}
+
+		private string GetCurrentStageInstructions(List<string> lines)
+		{
+			var result = new StringBuilder();
+
+			if (lines == null)
+				return string.Empty;
+
 			if (cbLabels.SelectedIndex == 0)
 			{
-				foreach (string l in currentInstructionLines)
+				foreach (string l in lines)
 				{
 					string line = l;
 
@@ -645,18 +676,18 @@ namespace Mosa.Tool.Explorer
 					if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
 						continue;
 
-					tbResult.AppendText(line);
-					tbResult.AppendText("\n");
+					result.Append(line);
+					result.Append("\n");
 				}
 
-				return;
+				return result.ToString();
 			}
 
 			string blockLabel = cbLabels.SelectedItem as string;
 
 			bool inBlock = false;
 
-			foreach (string l in currentInstructionLines)
+			foreach (string l in lines)
 			{
 				string line = l;
 
@@ -673,13 +704,17 @@ namespace Mosa.Tool.Explorer
 					if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
 						continue;
 
-					tbResult.AppendText(line);
-					tbResult.AppendText("\n");
+					result.Append(line);
+					result.Append("\n");
 
 					if (line.StartsWith("  Next:"))
-						return;
+					{
+						return result.ToString();
+					}
 				}
 			}
+
+			return result.ToString();
 		}
 
 		private void toolStripButton4_Click(object sender, EventArgs e)
@@ -727,11 +762,60 @@ namespace Mosa.Tool.Explorer
 				if (traceLog.Section != null)
 					stagesection = stagesection + "-" + traceLog.Section;
 
-				SubmitDebugStageInformation(traceLog.Method, stagesection, traceLog.ToString());
+				SubmitDebugStageInformation(traceLog.Method, stagesection, traceLog.Lines);
 			}
 			else if (traceLog.Type == TraceType.InstructionList)
 			{
 				SubmitInstructionTraceInformation(traceLog.Method, traceLog.Stage, traceLog.Lines);
+			}
+		}
+
+		private void dumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var node = GetCurrentNode<ViewNode<MosaMethod>>();
+
+			if (node == null)
+				return;
+
+			var type = node.Type.FullName;
+
+			if (folderBrowserDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			{
+				var path = folderBrowserDialog1.SelectedPath;
+
+				cbStages.SelectedIndex = 0;
+
+				while (true)
+				{
+					cbStages_SelectedIndexChanged(null, null);
+
+					string stage = cbStages.SelectedItem.ToString();
+					var result = tbResult.Text.Replace("\n", "\r\n");
+
+					File.WriteAllText(Path.Combine(path, stage + "-stage.txt"), result);
+
+					if (cbStages.Items.Count == cbStages.SelectedIndex + 1)
+						break;
+
+					cbStages.SelectedIndex++;
+				}
+
+				cbDebugStages.SelectedIndex = 0;
+
+				while (true)
+				{
+					cbDebugStages_SelectedIndexChanged(null, null);
+
+					string stage = cbDebugStages.SelectedItem.ToString();
+					var result = rbOtherResult.Text.Replace("\n","\r\n");
+
+					File.WriteAllText(Path.Combine(path, stage + "-debug.txt"), result);
+
+					if (cbDebugStages.Items.Count == cbDebugStages.SelectedIndex + 1)
+						break;
+
+					cbDebugStages.SelectedIndex++;
+				}
 			}
 		}
 	}

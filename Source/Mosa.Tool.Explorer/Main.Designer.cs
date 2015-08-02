@@ -55,6 +55,8 @@
 			this.enableBinaryCodeGeneration = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableVariablePromotion = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableInlinedMethods = new System.Windows.Forms.ToolStripMenuItem();
+			this.advanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.dumpAllMethodStagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.treeView = new System.Windows.Forms.TreeView();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -82,6 +84,7 @@
 			this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.cbPlatform = new System.Windows.Forms.ComboBox();
+			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			label2 = new System.Windows.Forms.Label();
 			label1 = new System.Windows.Forms.Label();
 			stageLabel = new System.Windows.Forms.Label();
@@ -175,7 +178,8 @@
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.compileToolStripMenuItem,
-            this.optionsToolStripMenuItem});
+            this.optionsToolStripMenuItem,
+            this.advanceToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
 			this.menuStrip1.Size = new System.Drawing.Size(992, 24);
@@ -327,6 +331,21 @@
 			this.enableInlinedMethods.Size = new System.Drawing.Size(293, 22);
 			this.enableInlinedMethods.Text = "Enable Inlined Methods";
 			// 
+			// advanceToolStripMenuItem
+			// 
+			this.advanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dumpAllMethodStagesToolStripMenuItem});
+			this.advanceToolStripMenuItem.Name = "advanceToolStripMenuItem";
+			this.advanceToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+			this.advanceToolStripMenuItem.Text = "Advance";
+			// 
+			// dumpAllMethodStagesToolStripMenuItem
+			// 
+			this.dumpAllMethodStagesToolStripMenuItem.Name = "dumpAllMethodStagesToolStripMenuItem";
+			this.dumpAllMethodStagesToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+			this.dumpAllMethodStagesToolStripMenuItem.Text = "Dump All Method Stages";
+			this.dumpAllMethodStagesToolStripMenuItem.Click += new System.EventHandler(this.dumpAllMethodStagesToolStripMenuItem_Click);
+			// 
 			// openFileDialog
 			// 
 			this.openFileDialog.DefaultExt = "exe";
@@ -381,7 +400,7 @@
 			this.tabControl1.Location = new System.Drawing.Point(3, 3);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(713, 405);
+			this.tabControl1.Size = new System.Drawing.Size(709, 405);
 			this.tabControl1.TabIndex = 38;
 			// 
 			// tabPage1
@@ -397,7 +416,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 25);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(705, 376);
+			this.tabPage1.Size = new System.Drawing.Size(701, 376);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Instructions";
 			// 
@@ -405,7 +424,7 @@
 			// 
 			this.textBox1.Location = new System.Drawing.Point(537, 5);
 			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(100, 23);
+			this.textBox1.Size = new System.Drawing.Size(76, 23);
 			this.textBox1.TabIndex = 42;
 			this.textBox1.Visible = false;
 			// 
@@ -459,7 +478,7 @@
 			this.tabPage2.Location = new System.Drawing.Point(4, 25);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(705, 376);
+			this.tabPage2.Size = new System.Drawing.Size(701, 376);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Debug";
 			// 
@@ -497,7 +516,7 @@
 			this.tabPage3.Location = new System.Drawing.Point(4, 25);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(705, 376);
+			this.tabPage3.Size = new System.Drawing.Size(701, 376);
 			this.tabPage3.TabIndex = 2;
 			this.tabPage3.Text = "Errors";
 			// 
@@ -521,7 +540,7 @@
 			this.tabPage4.Location = new System.Drawing.Point(4, 25);
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(705, 376);
+			this.tabPage4.Size = new System.Drawing.Size(701, 376);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "Log";
 			// 
@@ -545,7 +564,7 @@
 			this.tabPage5.Location = new System.Drawing.Point(4, 25);
 			this.tabPage5.Name = "tabPage5";
 			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage5.Size = new System.Drawing.Size(705, 376);
+			this.tabPage5.Size = new System.Drawing.Size(701, 376);
 			this.tabPage5.TabIndex = 4;
 			this.tabPage5.Text = "Counters";
 			// 
@@ -568,7 +587,7 @@
 			this.tabPage6.Location = new System.Drawing.Point(4, 25);
 			this.tabPage6.Name = "tabPage6";
 			this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage6.Size = new System.Drawing.Size(705, 376);
+			this.tabPage6.Size = new System.Drawing.Size(701, 376);
 			this.tabPage6.TabIndex = 5;
 			this.tabPage6.Text = "Exceptions";
 			this.tabPage6.UseVisualStyleBackColor = true;
@@ -649,6 +668,10 @@
 			this.cbPlatform.Size = new System.Drawing.Size(78, 21);
 			this.cbPlatform.TabIndex = 28;
 			// 
+			// folderBrowserDialog1
+			// 
+			this.folderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer;
+			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -662,7 +685,7 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "Main";
-			this.Text = "MOSA Explorer v1.5.1";
+			this.Text = "MOSA Explorer v1.5.2";
 			this.Load += new System.EventHandler(this.Main_Load);
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
@@ -738,5 +761,8 @@
 		private System.Windows.Forms.RichTextBox rbException;
 		private System.Windows.Forms.ToolStripMenuItem enableInlinedMethods;
 		private System.Windows.Forms.ToolStripMenuItem enableVariablePromotion;
+		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+		private System.Windows.Forms.ToolStripMenuItem advanceToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem dumpAllMethodStagesToolStripMenuItem;
 	}
 }

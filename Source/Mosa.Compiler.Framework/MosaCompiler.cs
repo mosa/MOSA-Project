@@ -110,6 +110,13 @@ namespace Mosa.Compiler.Framework
 
 		public void ScheduleAll()
 		{
+			//HACK - for debugging
+			// Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress
+			//var type = TypeSystem.GetTypeByName("Mosa.Platform.Internal.x86", "Runtime");
+			//var method = type.FindMethodByName("GetProtectedRegionEntryByAddress");
+			//CompilationScheduler.Schedule(method);
+			//ENDHACK
+
 			CompilationScheduler.ScheduleAll(TypeSystem);
 		}
 

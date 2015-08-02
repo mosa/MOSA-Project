@@ -302,7 +302,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void DebugOutput(string msg)
 		{
-			for(int i = 0; i < msg.Length; i++)
+			for (int i = 0; i < msg.Length; i++)
 			{
 				var c = msg[i];
 				Native.Out8(0xEC, (byte)c);
@@ -395,6 +395,7 @@ namespace Mosa.Platform.Internal.x86
 			MetadataPRDefinitionStruct* protectedRegionDef = null;
 			uint currentStart = uint.MinValue;
 			uint currentEnd = uint.MaxValue;
+
 			while (entry < entries)
 			{
 				var prDef = MetadataPRTableStruct.GetProtectedRegionDefinitionAddress(protectedRegionTable, (uint)entry);
@@ -405,28 +406,16 @@ namespace Mosa.Platform.Internal.x86
 				if ((offset >= start) && (offset < end) && (start >= currentStart) && (end < currentEnd))
 				{
 					var handlerType = prDef->HandlerType;
-
-					// If the handler is a Finally clause, accept without testing
-					if (handlerType == ExceptionHandlerType.Finally)
-					{
-						protectedRegionDef = prDef;
-						currentStart = start;
-						currentEnd = end;
-						entry++;
-						continue;
-					}
-
 					var exType = prDef->ExceptionType;
 
-					// If the handler is a Exception clause, accept if the exception Type
-					// is in the is within the inhertiance chain of the exception object
-					if (handlerType == ExceptionHandlerType.Exception && IsTypeInInheritanceChain(exType, exceptionType))
+					// If the handler is a finally clause, accept without testing
+					// If the handler is a exception clause, accept if the exception type is in the is within the inhertiance chain of the exception object
+					if ((handlerType == ExceptionHandlerType.Finally) ||
+						(handlerType == ExceptionHandlerType.Exception && IsTypeInInheritanceChain(exType, exceptionType)))
 					{
 						protectedRegionDef = prDef;
 						currentStart = start;
 						currentEnd = end;
-						entry++;
-						continue;
 					}
 				}
 
