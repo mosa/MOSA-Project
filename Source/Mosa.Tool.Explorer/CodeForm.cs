@@ -1,4 +1,6 @@
-﻿using Mosa.Utility.CodeDomCompiler;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Utility.CodeDomCompiler;
 using System;
 using System.CodeDom.Compiler;
 using System.Windows.Forms;

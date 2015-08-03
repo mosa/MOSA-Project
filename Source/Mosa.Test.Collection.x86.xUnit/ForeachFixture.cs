@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Xunit;
 using Xunit.Extensions;
 using System;
 using System.Collections.Generic;

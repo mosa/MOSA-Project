@@ -1,4 +1,6 @@
-﻿namespace Mosa.Tool.TinySimulator
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace Mosa.Tool.TinySimulator
 {
 	public class Watch
 	{

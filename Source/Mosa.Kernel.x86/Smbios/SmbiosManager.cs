@@ -1,3 +1,5 @@
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 using Mosa.Platform.Internal.x86;
 
 namespace Mosa.Kernel.x86.Smbios

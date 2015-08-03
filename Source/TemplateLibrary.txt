@@ -1,22 +1,13 @@
-﻿<#
-/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
- *
- */
- #><#@ template language="C#"
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+<#@ template language="C#"
 #><#@ import namespace="System.Collections"
 #><#@ import namespace="System.Collections.Generic"
-#><# 	
+#><#
 	List<KeyValuePair<string, string>> PositiveIntegers = new List<KeyValuePair<string, string>>();
 	PositiveIntegers.Add(new KeyValuePair<string, string>("byte", "U1"));
 	PositiveIntegers.Add(new KeyValuePair<string, string>("ushort", "U2"));
 	PositiveIntegers.Add(new KeyValuePair<string, string>("uint", "U4"));
-	PositiveIntegers.Add(new KeyValuePair<string, string>("ulong", "U8"));	
+	PositiveIntegers.Add(new KeyValuePair<string, string>("ulong", "U8"));
 
 	List<KeyValuePair<string, string>> NegativeIntegers = new List<KeyValuePair<string, string>>();
 	NegativeIntegers.Add(new KeyValuePair<string, string>("sbyte", "I1"));
@@ -26,32 +17,32 @@
 
 	List<KeyValuePair<string, string>> Integers = new List<KeyValuePair<string, string>>(PositiveIntegers);
 	Integers.AddRange(NegativeIntegers);
-	
+
 	List<KeyValuePair<string, string>> PositiveIntegersWithChar = new List<KeyValuePair<string, string>>(PositiveIntegers);
-	PositiveIntegersWithChar.Add(new KeyValuePair<string, string>("char", "C"));	
-	
+	PositiveIntegersWithChar.Add(new KeyValuePair<string, string>("char", "C"));
+
 	List<KeyValuePair<string, string>> IntegersWithChar = new List<KeyValuePair<string, string>>(Integers);
-	IntegersWithChar.Add(new KeyValuePair<string, string>("char", "C"));	
-	
+	IntegersWithChar.Add(new KeyValuePair<string, string>("char", "C"));
+
 	List<KeyValuePair<string, string>> IntegersWithCharAndBool = new List<KeyValuePair<string, string>>(IntegersWithChar);
-	IntegersWithCharAndBool.Add(new KeyValuePair<string, string>("bool", "B"));	
+	IntegersWithCharAndBool.Add(new KeyValuePair<string, string>("bool", "B"));
 
 	List<KeyValuePair<string, string>> FloatingPoints = new List<KeyValuePair<string, string>>();
 	FloatingPoints.Add(new KeyValuePair<string, string>("float", "R4"));
-	FloatingPoints.Add(new KeyValuePair<string, string>("double", "R8"));	
+	FloatingPoints.Add(new KeyValuePair<string, string>("double", "R8"));
 
 	List<KeyValuePair<string, string>> Numbers = new List<KeyValuePair<string, string>>(Integers);
-	Numbers.AddRange(FloatingPoints);	
+	Numbers.AddRange(FloatingPoints);
 
 	List<KeyValuePair<string, string>> NumbersWithChar = new List<KeyValuePair<string, string>>(Numbers);
-	NumbersWithChar.Add(new KeyValuePair<string, string>("char", "C"));	
+	NumbersWithChar.Add(new KeyValuePair<string, string>("char", "C"));
 
 	List<KeyValuePair<string, string>> NumbersWithCharAndBool = new List<KeyValuePair<string, string>>(NumbersWithChar);
-	NumbersWithCharAndBool.Add(new KeyValuePair<string, string>("bool", "B"));	
+	NumbersWithCharAndBool.Add(new KeyValuePair<string, string>("bool", "B"));
 
 	List<KeyValuePair<string, string>> Primitives = new List<KeyValuePair<string, string>>(Numbers);
 	Primitives.Add(new KeyValuePair<string, string>("bool", "B"));
-	
+
 	List<KeyValuePair<string, string>> PrimitivesWithChar = new List<KeyValuePair<string, string>>(Primitives);
 	PrimitivesWithChar.Add(new KeyValuePair<string, string>("char", "C"));
 

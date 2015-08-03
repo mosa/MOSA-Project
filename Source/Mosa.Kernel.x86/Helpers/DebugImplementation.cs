@@ -1,4 +1,6 @@
-﻿using Mosa.Internal.Plug;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Internal.Plug;
 using System.Diagnostics;
 
 namespace Mosa.Kernel.x86.Helpers

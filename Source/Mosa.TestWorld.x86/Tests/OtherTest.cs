@@ -1,11 +1,4 @@
-/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
 using System.Runtime.InteropServices;

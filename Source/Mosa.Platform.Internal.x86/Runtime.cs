@@ -1,14 +1,4 @@
-﻿/*
- * (c) 2015 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
- *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Internal;
 using System;

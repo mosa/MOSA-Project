@@ -1,12 +1,5 @@
-﻿/*
- * (c) 2011 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Kai Patrick Reisert (Boddlnagg) <kpreisert@googlemail.com> 
- *
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 
 namespace Mosa.Test.Collection
 {

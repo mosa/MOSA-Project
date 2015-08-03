@@ -1,4 +1,6 @@
-﻿using Mosa.Utility.DebugEngine;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Utility.DebugEngine;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.Debugger

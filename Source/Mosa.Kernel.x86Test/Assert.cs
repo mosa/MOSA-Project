@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System;
 using System.Diagnostics;
 using Mosa.Platform.Internal.x86;
 
