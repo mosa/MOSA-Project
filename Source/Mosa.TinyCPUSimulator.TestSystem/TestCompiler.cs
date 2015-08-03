@@ -44,7 +44,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			compiler.CompilerOptions.EnableSSA = true;
 			compiler.CompilerOptions.EnableVariablePromotion = true;
 			compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
-			compiler.CompilerOptions.EnableInlinedMethods = false;
+			compiler.CompilerOptions.EnableInlinedMethods = true;
 
 			compiler.CompilerOptions.Architecture = platform.CreateArchitecture();
 			compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
@@ -77,7 +77,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			Run<int>(string.Empty, "Default", "AssemblyInit", true);
 
-			simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
+			simAdapter.SimCPU.Monitor.DebugOutput = false; // DEBUG OPTION
 		}
 
 		public void DumpSymbols()

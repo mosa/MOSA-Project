@@ -37,6 +37,9 @@ namespace Mosa.Compiler.Framework.IR
 		Box64,
 		Box,
 
+		BoxR4,
+		BoxR8,
+
 		/// <summary>
 		/// Casts an object references to a specific type.
 		/// </summary>

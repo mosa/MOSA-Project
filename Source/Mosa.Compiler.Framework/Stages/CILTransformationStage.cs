@@ -827,7 +827,18 @@ namespace Mosa.Compiler.Framework.Stages
 			int alignment = TypeLayout.NativePointerAlignment;
 			typeSize += (alignment - (typeSize % alignment)) % alignment;
 
-			var vmCall = ToVmBoxCall(typeSize);
+			VmCall vmCall = VmCall.Box32;
+
+			if (type.IsR4)
+				vmCall = VmCall.BoxR4;
+			else if (type.IsR8)
+				vmCall = VmCall.BoxR8;
+			else if (typeSize <= 4)
+				vmCall = VmCall.Box32;
+			else if (typeSize == 8)
+				vmCall = VmCall.Box64;
+			else
+				vmCall = VmCall.Box;
 
 			context.SetInstruction(IRInstruction.Nop);
 			ReplaceWithVmCall(context, vmCall);
@@ -2090,17 +2101,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return name;
 		}
-
-		private VmCall ToVmBoxCall(int typeSize)
-		{
-			if (typeSize <= 4)
-				return VmCall.Box32;
-			else if (typeSize == 8)
-				return VmCall.Box64;
-			else
-				return VmCall.Box;
-		}
-
 		private VmCall ToVmUnboxCall(int typeSize)
 		{
 			if (typeSize <= 4)

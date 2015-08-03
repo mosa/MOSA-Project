@@ -248,6 +248,20 @@ namespace Mosa.Platform.Internal.x86
 			return memory;
 		}
 
+		public static void* BoxR4(RuntimeTypeHandle handle, float value)
+		{
+			byte* memory = (byte*)AllocateObject(handle, 4);
+			*(float*)(memory + (NativeIntSize * 2)) = value;
+			return memory;
+		}
+
+		public static void* BoxR8(RuntimeTypeHandle handle, double value)
+		{
+			byte* memory = (byte*)AllocateObject(handle, 8);
+			*(double*)(memory + (NativeIntSize * 2)) = value;
+			return memory;
+		}
+
 		public static void* Box(RuntimeTypeHandle handle, void* value, uint size)
 		{
 			byte* memory = (byte*)AllocateObject(handle, size);
