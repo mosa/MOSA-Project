@@ -72,7 +72,7 @@ namespace Mosa.Utility.Launcher
 			FileSystemFormat = FileSystemFormat.FAT16;
 			DebugConnectionOption = DebugConnectionOption.None;
 			CompilerUsesMultipleThreads = true;
-			EnableInlinedMethods = false;
+			EnableInlinedMethods = true;
 		}
 
 		public void LoadFile(string file)
