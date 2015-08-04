@@ -11,7 +11,7 @@ using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
 
 // FIXME: This stage depends on Node.Next & Node.Previous properties but the compiler may insert empty nodes.
-// Rewrite not to depend on those properities.
+// Rewrite not to depend on those properties.
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework.Stages
 					while (nextNode.IsEmpty)
 						nextNode = nextNode.Next;
 
-					// If this move is preceded by a return then remove this instruction
+					// If this move is proceeded by a return then remove this instruction
 					// It is basically a double up caused by some instructions result in the same instruction output
 					if (nextNode.Instruction == IRInstruction.Return && nextNode.Operand1 == node.Result)
 					{
@@ -88,7 +88,7 @@ namespace Mosa.Compiler.Framework.Stages
 						return;
 					}
 
-					// If this move is preceded by a compound move (which will turn into a compound move) remove this instruction
+					// If this move is proceeded by a compound move (which will turn into a compound move) remove this instruction
 					// It is basically a double up caused by some instructions result in the same IR output
 					if ((prevNode.Instruction == IRInstruction.CompoundMove
 							|| prevNode.Instruction == IRInstruction.CompoundLoad
