@@ -1,13 +1,5 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.RegisterAllocator;
 using System.Collections.Generic;

@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael "grover" Fröhlich (<mailto:sharpos@michaelruck.de>)
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace System.Runtime.CompilerServices
 {

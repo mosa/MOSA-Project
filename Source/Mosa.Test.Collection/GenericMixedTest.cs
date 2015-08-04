@@ -1,4 +1,6 @@
-﻿namespace Mosa.Test.Collection
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace Mosa.Test.Collection
 {
 	//public static class GenericMixedTest
 	//{

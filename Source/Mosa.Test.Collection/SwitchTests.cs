@@ -1,14 +1,13 @@
-﻿// Remove conditional statement after Mono 2.11 is released
-#if !__MonoCS__
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
 
 namespace Mosa.Test.Collection
 {
 
-	public static class SwitchTests 
+	public static class SwitchTests
 	{
-		
+	
 		public static sbyte SwitchI1(sbyte a)
 		{
 			switch (a)
@@ -33,7 +32,7 @@ namespace Mosa.Test.Collection
 					return 42;
 			}
 		}
-		
+	
 		public static short SwitchI2(short a)
 		{
 			switch (a)
@@ -58,7 +57,7 @@ namespace Mosa.Test.Collection
 					return 42;
 			}
 		}
-		
+	
 		public static int SwitchI4(int a)
 		{
 			switch (a)
@@ -83,7 +82,7 @@ namespace Mosa.Test.Collection
 					return 42;
 			}
 		}
-		
+	
 		public static long SwitchI8(long a)
 		{
 			switch (a)
@@ -108,7 +107,7 @@ namespace Mosa.Test.Collection
 					return 42;
 			}
 		}
-			
+		
 		public static byte SwitchU1(byte a)
 		{
 			switch (a)
@@ -127,7 +126,7 @@ namespace Mosa.Test.Collection
 					return 42;
 			}
 		}
-		
+	
 		public static ushort SwitchU2(ushort a)
 		{
 			switch (a)
@@ -146,7 +145,7 @@ namespace Mosa.Test.Collection
 					return 42;
 			}
 		}
-		
+	
 		public static uint SwitchU4(uint a)
 		{
 			switch (a)
@@ -165,7 +164,7 @@ namespace Mosa.Test.Collection
 					return 42;
 			}
 		}
-		
+	
 		public static ulong SwitchU8(ulong a)
 		{
 			switch (a)
@@ -186,5 +185,3 @@ namespace Mosa.Test.Collection
 		}
 		}
 }
-
-#endif

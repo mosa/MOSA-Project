@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.IO;
 using System.Xml.Linq;
@@ -92,7 +85,8 @@ namespace Mosa.Utility.Launcher
 					case "CompilerUsesMultipleThreads":
 						CompilerUsesMultipleThreads = value.ToLower() == "true";
 						break;
-					//TODO: Other options
+
+						//TODO: Other options
 				}
 			}
 		}
@@ -142,6 +136,7 @@ namespace Mosa.Utility.Launcher
 					case "-pipe": DebugConnectionOption = DebugConnectionOption.Pipe; continue;
 					case "-tcpclient": DebugConnectionOption = DebugConnectionOption.TCPClient; continue;
 					case "-tcpserver": DebugConnectionOption = DebugConnectionOption.TCPServer; continue;
+
 					//case "-inline": EnableInlinedMethods = true; continue;
 					default: break;
 				}

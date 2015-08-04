@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.FileSystem.VFS;
 
@@ -78,7 +71,7 @@ namespace Mosa.FileSystem.FAT
 		/// </returns>
 		public override IVfsNode Lookup(string name)
 		{
-			return null;	// Lookup() method doesn't make sense here
+			return null;    // Lookup() method doesn't make sense here
 		}
 
 		/// <summary>

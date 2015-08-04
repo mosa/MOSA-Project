@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
 using System;
@@ -610,6 +603,7 @@ namespace Mosa.TinyCPUSimulator
 				if (instruction == null)
 				{
 					return instruction;
+
 					//throw new SimCPUException();
 				}
 
@@ -696,7 +690,7 @@ namespace Mosa.TinyCPUSimulator
 					Debug.WriteLine(GetDumpHeaders());
 				}
 
-				for (; ; )
+				for (;;)
 				{
 					ExecuteInstruction();
 

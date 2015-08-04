@@ -1,12 +1,4 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Ki (kiootic) <kiootic@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
 using System.Collections.Generic;
@@ -313,7 +305,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				if (!type.Module.Types.ContainsKey(type.ID))
 					type.Module.Types.Add(type.ID, type);
 
-				if (string.IsNullOrEmpty(type.Signature))	// i.e. elementary types
+				if (string.IsNullOrEmpty(type.Signature))   // i.e. elementary types
 					typeSystem.typeLookup[Tuple.Create(type.Module, type.Namespace, type.ShortName)] = type;
 				else
 					typeSystem.typeLookup[Tuple.Create(type.Module, type.Namespace, type.ShortName + type.Signature)] = type;

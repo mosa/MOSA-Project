@@ -1,11 +1,4 @@
-/*
- * (c) 2012 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Utility.DebugEngine;
 using System;
@@ -104,6 +97,7 @@ namespace Mosa.Tool.Debugger
 			}
 
 			private IAsyncResult result;
+
 			public void Start()
 			{
 				listener.Start();
@@ -120,7 +114,6 @@ namespace Mosa.Tool.Debugger
 				var socket = listener.EndAcceptSocket(result);
 				debugEngine.Stream = new DebugNetworkStream(socket, true);
 			}
-
 		}
 
 		private void btnDisconnect_Click(object sender, EventArgs e)

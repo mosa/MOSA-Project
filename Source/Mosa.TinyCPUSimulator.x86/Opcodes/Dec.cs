@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.TinyCPUSimulator.x86.Opcodes
 {
@@ -27,6 +20,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			UpdateFlags(cpu, size, s, u, true, true, true, true, true);
 
 			cpu.EFLAGS.Adjust = IsAdjustAfterAdd(a, 1);
+
 			//cpu.FLAGS.Overflow = !IsSign(a, size) && IsSign(r, size);
 		}
 	}

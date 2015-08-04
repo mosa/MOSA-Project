@@ -1,13 +1,4 @@
-/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
@@ -862,6 +853,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				// String
 				case MosaTypeCode.String:
+
 					// Since strings are immutable, make it an object that we can just use
 					var str = (string)value;
 					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)writer.Position, 0, "System.String" + Metadata.TypeDefinition, SectionKind.ROData, 0);

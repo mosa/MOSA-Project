@@ -1,17 +1,10 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
 	public interface ISimDisplay
 	{
-		void SetBitMap(object bitmap);	// using object to avoid referencing winforms
+		void SetBitMap(object bitmap);  // using object to avoid referencing winforms
 
 		bool Changed { get; set; }
 

@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Xunit;
 using Xunit.Extensions;
@@ -15,6 +8,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 	public class Int64Fixture : X86TestFixture
 	{
 		[Theory]
+
 		//[PropertyData("I8I8")]
 		[InlineData((long)1, (long)2)]
 		public void AddI8I8(long a, long b)

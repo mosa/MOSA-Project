@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
@@ -173,6 +166,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				var u = BitConverter.ToUInt64(b, 0);
 				WriteStackValue(simAdapter, u);
 			}
+
 			//else  if (parameter is UIntPtr) { WriteStackValue(simAdapter, (uint)parameter);  }
 			//else  if (parameter is IntPtr) { WriteStackValue(simAdapter, (uint)parameter); }
 			else

@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Platform.Internal.x86;
 using System.Reflection;
@@ -38,6 +31,7 @@ namespace System
 			get
 			{
 				if (this.declaringType == null)
+
 					// Declaring Type - Lazy load
 					this.declaringType = Type.GetTypeFromHandle(this.declaringTypeHandle);
 
@@ -92,9 +86,9 @@ namespace System
 			this.handle = handle;
 			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
 
-			this.assemblyQualifiedName = x86Runtime.InitializeMetadataString(this.typeStruct->Name);	// TODO
-			this.name = x86Runtime.InitializeMetadataString(this.typeStruct->Name);					// TODO
-			this.@namespace = x86Runtime.InitializeMetadataString(this.typeStruct->Name);				// TODO
+			this.assemblyQualifiedName = x86Runtime.InitializeMetadataString(this.typeStruct->Name);    // TODO
+			this.name = x86Runtime.InitializeMetadataString(this.typeStruct->Name);                 // TODO
+			this.@namespace = x86Runtime.InitializeMetadataString(this.typeStruct->Name);               // TODO
 			this.fullname = x86Runtime.InitializeMetadataString(this.typeStruct->Name);
 
 			this.typeCode = (TypeCode)(this.typeStruct->Attributes >> 24);
@@ -126,6 +120,7 @@ namespace System
 		public override Type GetElementType()
 		{
 			if (this.elementType == null)
+
 				// Element Type - Lazy load
 				this.elementType = Type.GetTypeFromHandle(this.elementTypeHandle);
 			return this.elementType;

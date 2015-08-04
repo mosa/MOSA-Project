@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Platform.Internal.x86;
 
@@ -129,7 +122,7 @@ namespace Mosa.Kernel.x86
 			Native.Set32(task + Offset.ESP, stack + StackSetupOffset.InitialSize); // TODO
 
 			// Setup Stack
-			Native.Set32(stacktop - StackSetupOffset.SENTINEL, 0);	// important for traversing the stack backwards
+			Native.Set32(stacktop - StackSetupOffset.SENTINEL, 0);  // important for traversing the stack backwards
 			Native.Set32(stacktop - StackSetupOffset.EFLAG, 0);
 			Native.Set32(stacktop - StackSetupOffset.CS, 0);
 			Native.Set32(stacktop - StackSetupOffset.EIP, eip);

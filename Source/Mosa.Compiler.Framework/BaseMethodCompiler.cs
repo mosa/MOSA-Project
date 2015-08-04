@@ -1,12 +1,4 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Stages;
@@ -238,6 +230,7 @@ namespace Mosa.Compiler.Framework
 					if (stop)
 						break;
 				}
+
 				//catch (Exception e)
 				//{
 				//	//	Trace.TraceListener.SubmitDebugStageInformation(Method, stage.Name + "-Exception", e.ToString());

@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2012 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Trace;
 using System.Collections.Generic;
@@ -78,7 +71,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				var register = (liveInterval.Start == moveHint.Slot) ? moveHint.FromRegister : moveHint.ToRegister;
 
 				if (register == null)
-					continue;	// no usable hint
+					continue;   // no usable hint
 
 				if (Trace.Active) Trace.Log("  Trying move hint: " + register.ToString() + "  [ " + moveHint.ToString() + " ]");
 
@@ -145,7 +138,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				moveHints[0].Update(liveInterval);
 			else
 				if (moveHints.Length >= 2)
-					moveHints[1].Update(liveInterval);
+				moveHints[1].Update(liveInterval);
 		}
 
 		private void UpdateMoveHints(LiveInterval liveInterval)

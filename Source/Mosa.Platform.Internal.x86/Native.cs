@@ -1,14 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
- *  Scott Balmos <sbalmos@fastmail.fm>
-*/
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Runtime.InteropServices;
 

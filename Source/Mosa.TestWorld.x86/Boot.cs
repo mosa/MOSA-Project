@@ -1,9 +1,4 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.x86;
 using Mosa.Platform.Internal.x86;
@@ -67,6 +62,7 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('9');
 			GC.Setup();
 			Screen.Write('0');
+
 			//Runtime.Setup();
 			Screen.Write('A');
 			TaskManager.Setup();

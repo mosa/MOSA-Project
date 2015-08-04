@@ -1,12 +1,4 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Ki (kiootic) <kiootic@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using dnlib.DotNet;
 using Mosa.Compiler.Common;
@@ -40,6 +32,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		public void AddModule(MosaModule module)
 		{
 			Modules.Add(module.Name, module);
+
 			//var desc = module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>();
 		}
 

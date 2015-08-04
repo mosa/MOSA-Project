@@ -1,13 +1,4 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Alex Lyman <mail.alex.lyman@gmail.com>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
@@ -57,7 +48,7 @@ namespace Mosa.Utility.Aot
 				new IRCleanup(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 				new PlatformStubStage(),
-				new	PlatformEdgeSplitStage(),
+				new PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 				new EmptyBlockRemovalStage(),

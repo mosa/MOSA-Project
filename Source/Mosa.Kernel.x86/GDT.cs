@@ -1,13 +1,4 @@
-﻿/*
- * (c) 2015 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
- *  Sebastian Loncar (Arakis) <sebastian.loncar@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.Helpers;
 using Mosa.Kernel.x86.Helpers;
@@ -428,9 +419,9 @@ namespace Mosa.Kernel.x86
 					return EAddressMode.Bits32;
 				else
 					if (LongMode)
-						return EAddressMode.Bits64;
-					else
-						return EAddressMode.Bits16;
+					return EAddressMode.Bits64;
+				else
+					return EAddressMode.Bits16;
 			}
 			set
 			{
@@ -441,15 +432,15 @@ namespace Mosa.Kernel.x86
 				}
 				else
 					if (value == EAddressMode.Bits16)
-					{
-						LongMode = false;
-						SizeBit = false;
-					}
-					else
-					{
-						LongMode = true;
-						SizeBit = false;
-					}
+				{
+					LongMode = false;
+					SizeBit = false;
+				}
+				else
+				{
+					LongMode = true;
+					SizeBit = false;
+				}
 			}
 		}
 

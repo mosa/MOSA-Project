@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
 using System;
@@ -111,7 +104,7 @@ namespace Mosa.Compiler.Linker
 
 		public LinkerSymbol FindSymbol(string name)
 		{
-			var list = new [] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
+			var list = new[] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
 			foreach (var kind in list)
 			{
 				var section = Sections[(int)kind];

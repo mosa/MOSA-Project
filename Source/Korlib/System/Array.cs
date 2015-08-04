@@ -1,12 +1,4 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections;
 using System.Collections.Generic;
@@ -47,6 +39,7 @@ namespace System
 				throw new ArgumentNullException("indices");
 			if (this.Rank != indices.Length)
 				throw new ArgumentException("The number of dimensions in the current Array is not equal to the number of elements in indices.", "indices");
+
 			// TODO
 		}
 
@@ -59,6 +52,7 @@ namespace System
 				throw new ArgumentNullException("indices");
 			if (this.Rank != indices.Length)
 				throw new ArgumentException("The number of dimensions in the current Array is not equal to the number of elements in indices.", "indices");
+
 			// TODO
 			return null;
 		}
@@ -258,6 +252,7 @@ namespace System
 		{
 			if (array == null)
 				throw new ArgumentNullException("array");
+
 			// TODO
 			throw new NotImplementedException();
 		}

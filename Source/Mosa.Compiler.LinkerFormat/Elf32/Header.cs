@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.LinkerFormat.Elf;
@@ -116,20 +109,20 @@ namespace Mosa.Compiler.LinkerFormat.Elf32
 		public void Write(EndianAwareBinaryWriter writer)
 		{
 			writer.Seek(0, SeekOrigin.Begin);
-			writer.Write(Ident);					// ident
-			writer.Write((ushort)Type);				// type
-			writer.Write((ushort)Machine);			// machine
-			writer.Write((uint)Version);			// version
-			writer.Write(EntryAddress);				// entry
-			writer.Write(ProgramHeaderOffset);		// phoff
-			writer.Write(SectionHeaderOffset);		// shoff
-			writer.Write(Flags);					// flags
-			writer.Write(ElfHeaderSize);			// ehsize
-			writer.Write(ProgramHeaderEntrySize);	// phentsize
-			writer.Write(ProgramHeaderNumber);		// phnum
-			writer.Write(SectionHeaderEntrySize);	// shentsize
-			writer.Write(SectionHeaderNumber);		// shnum
-			writer.Write(SectionHeaderStringIndex);	// shstrndx
+			writer.Write(Ident);                    // ident
+			writer.Write((ushort)Type);             // type
+			writer.Write((ushort)Machine);          // machine
+			writer.Write((uint)Version);            // version
+			writer.Write(EntryAddress);             // entry
+			writer.Write(ProgramHeaderOffset);      // phoff
+			writer.Write(SectionHeaderOffset);      // shoff
+			writer.Write(Flags);                    // flags
+			writer.Write(ElfHeaderSize);            // ehsize
+			writer.Write(ProgramHeaderEntrySize);   // phentsize
+			writer.Write(ProgramHeaderNumber);      // phnum
+			writer.Write(SectionHeaderEntrySize);   // shentsize
+			writer.Write(SectionHeaderNumber);      // shnum
+			writer.Write(SectionHeaderStringIndex); // shstrndx
 		}
 
 		/// <summary>
@@ -154,9 +147,11 @@ namespace Mosa.Compiler.LinkerFormat.Elf32
 			ProgramHeaderOffset = reader.ReadUInt32();
 			SectionHeaderOffset = reader.ReadUInt32();
 			Flags = reader.ReadUInt32();
+
 			//ElfHeaderSize = reader.ReadUInt16();
 			//ProgramHeaderEntrySize = reader.ReadUInt16();
 			ProgramHeaderNumber = reader.ReadUInt16();
+
 			//SectionHeaderEntrySize = reader.ReadUInt16();
 			SectionHeaderNumber = reader.ReadUInt16();
 			SectionHeaderStringIndex = reader.ReadUInt16();

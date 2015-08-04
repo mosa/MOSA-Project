@@ -1,11 +1,4 @@
-/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -192,15 +185,17 @@ namespace Mosa.TestWorld.x86.Tests
 			return PointerBugClass.Test2();
 		}
 
-		static float f1 = 1.232145E+10f;
-		static float f2 = 2f;
+		private static float f1 = 1.232145E+10f;
+		private static float f2 = 2f;
+
 		public static bool RemR4()
 		{
 			return (f1 % f2) == 0f;
 		}
 
-		static double d1 = 1.232145E+10d;
-		static double d2 = 15d;
+		private static double d1 = 1.232145E+10d;
+		private static double d2 = 15d;
+
 		public static bool RemR8()
 		{
 			return (d1 % d2) == 0d;

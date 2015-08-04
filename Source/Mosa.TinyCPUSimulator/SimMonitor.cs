@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
 
@@ -57,6 +50,7 @@ namespace Mosa.TinyCPUSimulator
 		{
 			CPU = cpu;
 			DebugOutput = false;
+
 			//DebugOutput = true;
 			Stop = false;
 			StepOverBreakPoint = 0;

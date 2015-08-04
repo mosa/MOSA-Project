@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.TinyCPUSimulator.x86.Opcodes
 {
@@ -17,6 +10,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			int size = 32;
 
 			cpu.EIP.Value = Read(cpu, cpu.ESP.Value - (8 * 1), size);
+
 			// Skip CS
 			cpu.EFLAGS.Value = Read(cpu, cpu.ESP.Value - (8 * 3), size);
 

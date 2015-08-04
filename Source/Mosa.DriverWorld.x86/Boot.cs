@@ -1,14 +1,7 @@
-﻿/*
- * (c) 2012 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
-using Mosa.Kernel.x86.Smbios;
 using Mosa.Platform.Internal.x86;
 
 namespace Mosa.DriverWorld.x86
@@ -86,6 +79,7 @@ namespace Mosa.DriverWorld.x86
 						else if (keyevent.KeyType == KeyType.F2)
 							ConsoleManager.Controller.Active = ConsoleManager.Controller.Debug;
 					}
+
 					//	Debug.Trace("Main.Main Key Character: " + ((uint)keyevent.Character).ToString());
 				}
 
@@ -93,6 +87,7 @@ namespace Mosa.DriverWorld.x86
 				{
 					//DebugClient.SendAlive();
 					lastSecond = Setup.CMOS.Second;
+
 					//Debug.Trace("Main.Main Ping Alive");
 				}
 

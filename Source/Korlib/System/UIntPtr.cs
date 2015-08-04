@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace System
 {
@@ -41,7 +34,7 @@ namespace System
 		//	return new UIntPtr((uint)value);
 		//}
 
-		public static explicit operator uint(UIntPtr value)
+		public static explicit operator uint (UIntPtr value)
 		{
 			return value._value;
 		}
@@ -51,7 +44,7 @@ namespace System
 			return new UIntPtr(value);
 		}
 
-		public static unsafe explicit operator void*(UIntPtr value)
+		public static unsafe explicit operator void* (UIntPtr value)
 		{
 			return value.ToPointer();
 		}

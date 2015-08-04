@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.FileSystem.FAT
 {
@@ -79,7 +72,7 @@ namespace Mosa.FileSystem.FAT
 		/// </summary>
 		public FatSettings()
 		{
-			this.FATType = FatType.FAT16;	// default
+			this.FATType = FatType.FAT16;   // default
 			this.SerialID = new byte[0];
 			this.FloppyMedia = false;
 			this.OSBootCode = null;

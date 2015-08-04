@@ -1,12 +1,4 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Ki (kiootic) <kiootic@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
 using System.Collections.Generic;
@@ -99,6 +91,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public bool Equals(MosaMethod other)
 		{
 			return SignatureComparer.Equals(this.Signature, other.Signature);
+
 			//return SignatureEquals(other) && this.DeclaringType.FullName == other.DeclaringType.FullName && this.Name == other.Name;
 		}
 

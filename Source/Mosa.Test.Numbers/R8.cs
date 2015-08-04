@@ -1,11 +1,4 @@
-﻿/*
-* (c) 2008 MOSA - The Managed Operating System Alliance
-*
-* Licensed under the terms of the New BSD License.
-*
-* Authors:
-*  Phil Garcia (tgiphil) <phil@thinkedge.com>
-*/
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
 
@@ -33,6 +26,7 @@ namespace Mosa.Test.Numbers
 			list.Add(0);
 			list.Add(1);
 			list.Add(2);
+
 			//list.Add(double.MinValue);
 			//list.Add(double.MaxValue);
 			list.Add(double.NaN);

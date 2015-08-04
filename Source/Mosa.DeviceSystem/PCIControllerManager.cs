@@ -1,11 +1,4 @@
-/*
-* (c) 2008 MOSA - The Managed Operating System Alliance
-*
-* Licensed under the terms of the New BSD License.
-*
-* Authors:
-*  Phil Garcia (tgiphil) <phil@thinkedge.com>
-*/
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
 
@@ -41,6 +34,7 @@ namespace Mosa.DeviceSystem
 		protected bool ProbeDevice(IPCIController pciController, byte bus, byte slot, byte fun)
 		{
 			uint value = pciController.ReadConfig32(bus, slot, fun, 0);
+
 			//HAL.DebugWrite(": " + value.ToString("x"));
 			return value != 0xFFFFFFFF;
 		}

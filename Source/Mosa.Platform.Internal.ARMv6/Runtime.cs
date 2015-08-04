@@ -1,13 +1,4 @@
-/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Platform.Internal.ARMv6
 {

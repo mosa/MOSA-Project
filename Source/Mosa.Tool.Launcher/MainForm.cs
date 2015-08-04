@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Utility.Launcher;
 using System;
@@ -217,7 +210,7 @@ namespace Mosa.Tool.Launcher
 
 		void IBuilderEvent.NewStatus(string status)
 		{
-			MethodInvoker method = delegate()
+			MethodInvoker method = delegate ()
 			{
 				NewStatus(status);
 			};
@@ -233,7 +226,7 @@ namespace Mosa.Tool.Launcher
 
 		void IBuilderEvent.UpdateProgress(int total, int at)
 		{
-			MethodInvoker method = delegate()
+			MethodInvoker method = delegate ()
 			{
 				UpdateProgress(total, at);
 			};
@@ -339,7 +332,7 @@ namespace Mosa.Tool.Launcher
 
 		private void OnException(string data)
 		{
-			MethodInvoker method = delegate()
+			MethodInvoker method = delegate ()
 			{
 				AddOutput(data);
 			};
@@ -349,7 +342,7 @@ namespace Mosa.Tool.Launcher
 
 		private void OnCompileCompleted()
 		{
-			MethodInvoker method = delegate()
+			MethodInvoker method = delegate ()
 			{
 				CompileCompleted();
 			};

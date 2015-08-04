@@ -1,12 +1,7 @@
-﻿/*
- * (c) 2012 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using Mosa.Kernel.x86.Helpers;
+
 namespace Mosa.Kernel.x86
 {
 	/// <summary>

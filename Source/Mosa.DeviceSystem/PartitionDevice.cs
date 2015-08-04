@@ -1,11 +1,4 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
@@ -71,7 +64,7 @@ namespace Mosa.DeviceSystem
 			this.readOnly = readOnly;
 
 			base.parent = diskDevice as Device;
-			base.name = base.parent.Name + "/Raw";	// need to give it a unique name
+			base.name = base.parent.Name + "/Raw";  // need to give it a unique name
 			base.deviceStatus = DeviceStatus.Online;
 		}
 
@@ -89,7 +82,7 @@ namespace Mosa.DeviceSystem
 			this.readOnly = readOnly;
 
 			base.parent = diskDevice as Device;
-			base.name = base.parent.Name + "/Partition" + (partition.Index + 1).ToString();	// need to give it a unique name
+			base.name = base.parent.Name + "/Partition" + (partition.Index + 1).ToString(); // need to give it a unique name
 			base.deviceStatus = DeviceStatus.Online;
 		}
 

@@ -1,13 +1,4 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Kai P. Reisert <kpreisert@googlemail.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
@@ -77,7 +68,7 @@ namespace Mosa.Tool.Compiler
 			optionSet.Add(
 				"local|version",
 				"Display version information.",
-				delegate(string v)
+				delegate (string v)
 				{
 					if (v != null)
 					{
@@ -89,7 +80,7 @@ namespace Mosa.Tool.Compiler
 			optionSet.Add(
 				"h|?|help",
 				"Display the full set of available options.",
-				delegate(string v)
+				delegate (string v)
 				{
 					if (v != null)
 					{
@@ -102,7 +93,7 @@ namespace Mosa.Tool.Compiler
 			optionSet.Add(
 				"<>",
 				"Input files.",
-				delegate(string v)
+				delegate (string v)
 				{
 					if (!File.Exists(v))
 					{
@@ -131,7 +122,7 @@ namespace Mosa.Tool.Compiler
 			optionSet.Add(
 				"b|boot=",
 				"Specify the bootable format of the produced binary [{mb0.7}].",
-				delegate(string format)
+				delegate (string format)
 				{
 					compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(format);
 				}
@@ -140,7 +131,7 @@ namespace Mosa.Tool.Compiler
 			optionSet.Add(
 				"a|Architecture=",
 				"Select one of the MOSA architectures to compile for [{x86|ARMv6}].",
-				delegate(string arch)
+				delegate (string arch)
 				{
 					compiler.CompilerOptions.Architecture = SelectArchitecture(arch);
 				}
@@ -149,7 +140,7 @@ namespace Mosa.Tool.Compiler
 			optionSet.Add(
 				"f|format=",
 				"Select the format of the binary file to create [{ELF32|ELF64|PE}].",
-				delegate(string format)
+				delegate (string format)
 				{
 					compiler.CompilerOptions.LinkerFactory = GetLinkerFactory(format);
 
@@ -161,7 +152,7 @@ namespace Mosa.Tool.Compiler
 			optionSet.Add(
 				"o|out=",
 				"The name of the output {file}.",
-				delegate(string file)
+				delegate (string file)
 				{
 					compiler.CompilerOptions.OutputFile = file;
 				}
@@ -170,7 +161,7 @@ namespace Mosa.Tool.Compiler
 			optionSet.Add(
 				"map=",
 				"Generate a map {file} of the produced binary.",
-				delegate(string file)
+				delegate (string file)
 				{
 					compiler.CompilerOptions.MapFile = file;
 				}
@@ -203,7 +194,7 @@ namespace Mosa.Tool.Compiler
 			optionSet.Add(
 				"base-address=",
 				"Specify the {base address}.",
-				delegate(string v)
+				delegate (string v)
 				{
 					uint val;
 					if (uint.TryParse(v, out val))
@@ -413,6 +404,7 @@ namespace Mosa.Tool.Compiler
 				case "pe": return delegate { return new PELinker(); };
 				case "elf": return delegate { return new Elf32(); };
 				case "elf32": return delegate { return new Elf32(); };
+
 				//case "elf64": return delegate { return new Elf64Linker(); };
 				default: return null;
 			}

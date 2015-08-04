@@ -1,9 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Platform.Internal.x86;
 
@@ -24,7 +19,7 @@ namespace Mosa.Kernel.x86
 			while (true)
 			{
 				counter++;
-				Native.Hlt();	// wait for interrupt
+				Native.Hlt();   // wait for interrupt
 			}
 		}
 	}

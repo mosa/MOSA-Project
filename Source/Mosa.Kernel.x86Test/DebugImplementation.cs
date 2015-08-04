@@ -1,5 +1,6 @@
-﻿using Mosa.Internal.Plug;
-using Mosa.Platform.Internal.x86;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Internal.Plug;
 using System.Diagnostics;
 
 namespace Mosa.Kernel.x86Test

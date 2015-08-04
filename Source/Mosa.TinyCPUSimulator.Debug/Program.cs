@@ -1,12 +1,4 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Test.Collection.x86.xUnit;
 using System;
@@ -18,6 +10,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 	internal class TraceListener : System.Diagnostics.TraceListener
 	{
 		private List<string> output = new List<string>();
+
 		public string Output
 		{
 			get
@@ -49,6 +42,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 			try
 			{
 				System.Diagnostics.Debug.Listeners.Add(listener);
+
 				//Test5a();
 				//Test5b();
 				//Test5c();

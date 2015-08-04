@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 // References:
 // http://en.wikipedia.org/wiki/Floppy_disk_controller
@@ -322,7 +315,7 @@ namespace Mosa.DeviceDriver.ISA
 				floppyMedia[drive].TotalTracks = 80;
 
 				//TODO: for 5.25, Gap1 = 0x2A and Gap2 = 0x50
-				floppyMedia[drive].Gap1Length = 0x1B;	// 27
+				floppyMedia[drive].Gap1Length = 0x1B;   // 27
 				floppyMedia[drive].Gap2Length = 0x54;
 			}
 
@@ -670,8 +663,8 @@ namespace Mosa.DeviceDriver.ISA
 				{
 					lastSeek[drive].calibrated = true;
 					lastSeek[drive].track = 0;
-					lastSeek[drive].head = 2;	// invalid head (required)
-					return true;	// Note: motor is left on
+					lastSeek[drive].head = 2;   // invalid head (required)
+					return true;    // Note: motor is left on
 				}
 			}
 
@@ -800,7 +793,7 @@ namespace Mosa.DeviceDriver.ISA
 			}
 			finally
 			{
-				TurnOffMotor(drive);	//TODO: create timer to turn off drive motors after 1 sec.
+				TurnOffMotor(drive);    //TODO: create timer to turn off drive motors after 1 sec.
 				spinLock.Exit();
 			}
 		}
@@ -830,7 +823,7 @@ namespace Mosa.DeviceDriver.ISA
 			}
 			finally
 			{
-				TurnOffMotor(drive);	//TODO: create timer to turn off drive motors after 1 sec.
+				TurnOffMotor(drive);    //TODO: create timer to turn off drive motors after 1 sec.
 				spinLock.Exit();
 			}
 		}
@@ -959,14 +952,14 @@ namespace Mosa.DeviceDriver.ISA
 					else
 						SendByte(FIFOCommand.ReadSector | FIFOCommand.MFMModeMask);
 
-					SendByte((byte)((byte)drive | (head << 2)));	// 0:0:0:0:0:HD:US1:US0 = head and drive
+					SendByte((byte)((byte)drive | (head << 2)));    // 0:0:0:0:0:HD:US1:US0 = head and drive
 					SendByte(track);// C:
-					SendByte(head);	// H: first head (should match with above)
-					SendByte((byte)(sector + 1));	// R: first sector, strangely counts from 1
-					SendByte(2);	// N: bytes/sector, 128*2^x (x=2 -> 512)
+					SendByte(head); // H: first head (should match with above)
+					SendByte((byte)(sector + 1));   // R: first sector, strangely counts from 1
+					SendByte(2);    // N: bytes/sector, 128*2^x (x=2 -> 512)
 					SendByte((byte)(sector + count)); // EOT
-					SendByte(floppyMedia[drive].Gap1Length);	// GPL: GAP3 length, 27 is default for 3.5"
-					SendByte(0xFF);	// DTL: (bytes to transfer) = unused
+					SendByte(floppyMedia[drive].Gap1Length);    // GPL: GAP3 length, 27 is default for 3.5"
+					SendByte(0xFF); // DTL: (bytes to transfer) = unused
 
 					if (!WaitForInterrupt(3000))
 						error = 3;
@@ -975,12 +968,12 @@ namespace Mosa.DeviceDriver.ISA
 					byte st1 = GetByte();
 					byte st2 = GetByte();
 
-					byte trk = GetByte();	// track (cylinder)
-					byte rhe = GetByte();	// head
+					byte trk = GetByte();   // track (cylinder)
+					byte rhe = GetByte();   // head
 
 					//byte sec = GetByte();	// sector number
 					GetByte(); // sector number
-					byte bps = GetByte();	// bytes per sector
+					byte bps = GetByte();   // bytes per sector
 
 					if ((st0 & 0xC0) != 0x0)
 					{
@@ -1074,12 +1067,12 @@ namespace Mosa.DeviceDriver.ISA
 						return true;
 					else
 						if (floppyDMA.TransferOut(count * FDC.BytesPerSector, data, offset))
-							return true;
+						return true;
 
 					return false;
 				}
 
-				lastSeek[drive].calibrated = false;	// will force recalibration
+				lastSeek[drive].calibrated = false; // will force recalibration
 
 				if (error > 1)
 				{

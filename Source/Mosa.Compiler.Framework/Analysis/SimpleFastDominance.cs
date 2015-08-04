@@ -1,12 +1,4 @@
-﻿/*
- * (c) 2011 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
 using System;

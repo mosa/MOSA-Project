@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.TinyCPUSimulator.x86
 {
@@ -260,6 +253,7 @@ namespace Mosa.TinyCPUSimulator.x86
 		public override string GetDumpHeaders()
 		{
 			return "EIP\tEAX\tEBX\tECX\tEDX\tESI\tEDI\tESP\tEBP\tFLAGS";
+
 			//Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        XMM#0      XMM#1      XMM#2      XMM#3      FLAGS");
 			//Debug.WriteLine("EIP        EAX        EBX        ECX        EDX        ESI        EDI        ESP        EBP        FLAGS");
 		}
@@ -267,6 +261,7 @@ namespace Mosa.TinyCPUSimulator.x86
 		public override string GetDump()
 		{
 			return Hex(EIP.Value) + "\t" + Hex(EAX.Value) + "\t" + Hex(EBX.Value) + "\t" + Hex(ECX.Value) + "\t" + Hex(EDX.Value) + "\t" + Hex(ESI.Value) + "\t" + Hex(EDI.Value) + "\t" + Hex(ESP.Value) + "\t" + Hex(EBP.Value) + "\t"
+
 				//+ (String.Format("{0:F}", XMM0.Value)) + "\t"
 				//+ (String.Format("{0:F}", XMM1.Value)) + "\t"
 				//+ (String.Format("{0:F}", XMM2.Value)) + "\t"
@@ -277,6 +272,7 @@ namespace Mosa.TinyCPUSimulator.x86
 				+ (EFLAGS.Overflow ? "O" : "-")
 				+ (EFLAGS.Parity ? "P" : "-")
 				+ (EFLAGS.Sign ? "S" : "-");
+
 			//"[" + Tick.ToString("D5") + "] "
 		}
 

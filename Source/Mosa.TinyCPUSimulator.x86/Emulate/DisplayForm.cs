@@ -1,4 +1,6 @@
-﻿using Mosa.TinyCPUSimulator.Adaptor;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.TinyCPUSimulator.Adaptor;
 using System;
 using System.Drawing;
 using System.Windows.Forms;

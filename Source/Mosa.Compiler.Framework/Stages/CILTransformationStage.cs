@@ -1,13 +1,4 @@
-/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
@@ -298,6 +289,7 @@ namespace Mosa.Compiler.Framework.Stages
 					before.OperandCount = 4;
 					before.Result = boxedValue;
 					before.ResultCount = 1;
+
 					// Now replace the value type pointer with the boxed value virtual register
 					context.Operand1 = boxedValue;
 				}

@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2010 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
 
@@ -27,6 +20,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			// Retrieve register context
 			Operand edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EDX);
+
 			//Operand ebp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EBP);
 			//Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.ESP);
 

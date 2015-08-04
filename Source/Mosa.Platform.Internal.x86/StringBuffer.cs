@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Sebastian Loncar (Arakis) <sebastian.loncar@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Runtime.InteropServices;
 
@@ -94,6 +87,7 @@ namespace Mosa.Platform.Internal.x86
 		public void Set(string value)
 		{
 			Clear();
+
 			//if (value == null)
 			//	isSet = 0;
 			//else
@@ -202,6 +196,7 @@ namespace Mosa.Platform.Internal.x86
 				//TODO: Error
 				return;
 			}
+
 			//isSet = 1;
 			length++;
 			this[length - 1] = value;
@@ -309,6 +304,7 @@ namespace Mosa.Platform.Internal.x86
 					value = MaxLength;
 				}
 				length = value;
+
 				//isSet = 1;
 			}
 		}

@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Platform.Internal.x86;
 using System.Collections.Generic;
@@ -155,12 +148,13 @@ namespace System
 			var handle = type.TypeHandle;
 			this.asType = type;
 			this.assembly = assembly;
+
 			//this.handle = handle;
 			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
 
-			this.assemblyQualifiedName = x86Runtime.InitializeMetadataString(this.typeStruct->Name);	// TODO
-			this.name = x86Runtime.InitializeMetadataString(this.typeStruct->Name);					// TODO
-			this.@namespace = x86Runtime.InitializeMetadataString(this.typeStruct->Name);				// TODO
+			this.assemblyQualifiedName = x86Runtime.InitializeMetadataString(this.typeStruct->Name);    // TODO
+			this.name = x86Runtime.InitializeMetadataString(this.typeStruct->Name);                 // TODO
+			this.@namespace = x86Runtime.InitializeMetadataString(this.typeStruct->Name);               // TODO
 			this.fullname = x86Runtime.InitializeMetadataString(this.typeStruct->Name);
 
 			this.typeCode = (TypeCode)(this.typeStruct->Attributes >> 24);

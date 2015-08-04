@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 using System.Diagnostics;
 
 namespace Mosa.Kernel.x86.Helpers

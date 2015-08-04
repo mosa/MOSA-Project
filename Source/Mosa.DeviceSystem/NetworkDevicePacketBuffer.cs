@@ -1,11 +1,4 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
 
@@ -82,8 +75,8 @@ namespace Mosa.DeviceSystem
 		public NetworkDevicePacketBuffer(INetworkDevice networkDevice)
 		{
 			this.networkDevice = networkDevice;
-			this.maxTransmitQueue = 100;	// TODO: Lookup system default
-			this.maxReceiveQueue = 100;		// TODO: Lookup system default
+			this.maxTransmitQueue = 100;    // TODO: Lookup system default
+			this.maxReceiveQueue = 100;     // TODO: Lookup system default
 			this.transmitLock = new SpinLock();
 			this.receiveLock = new SpinLock();
 			countTransmitPackets = 0;

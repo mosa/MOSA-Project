@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
@@ -459,6 +452,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 						if (step == 0)
 							slot = slot.HalfStepBack;
+
 						//else if (step == 2)
 						//	slot = slot.HalfStepForward;
 
@@ -509,12 +503,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 										s = "X";
 									else
 										if (r.AssignedPhysicalRegister == null)
-											if (vr.SpillSlotOperand == null)
-												s = "x";
-											else
-												s = "T_" + vr.SpillSlotOperand.Index.ToString(); //vr.SpillSlotOperand.ToString(false);
+										if (vr.SpillSlotOperand == null)
+											s = "x";
 										else
-											s = r.AssignedPhysicalRegister.ToString() + s;
+											s = "T_" + vr.SpillSlotOperand.Index.ToString(); //vr.SpillSlotOperand.ToString(false);
+									else
+										s = r.AssignedPhysicalRegister.ToString() + s;
 
 									if (r.Start == slot)
 										s = "(" + s;
@@ -1099,6 +1093,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private void ProcessLiveInterval(LiveInterval liveInterval)
 		{
 			Debug.Assert(liveInterval.LiveIntervalTrack == null);
+
 			//Debug.Assert(!liveInterval.IsSplit);
 
 			if (Trace.Active)

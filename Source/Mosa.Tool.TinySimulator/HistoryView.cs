@@ -1,11 +1,4 @@
-/*
- * (c) 2012 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.TinyCPUSimulator;
 using System;
@@ -114,6 +107,7 @@ namespace Mosa.Tool.TinySimulator
 			}
 
 			dataGridView1.CurrentCell = dataGridView1[0, history.Count - 1];
+
 			// FirstDisplayedScrollingRowIndex
 			//dataGridView1.CurrentCell = dataGridView1.Rows[history.Count - 1].Cells[0];
 

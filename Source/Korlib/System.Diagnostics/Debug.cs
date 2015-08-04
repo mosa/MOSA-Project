@@ -1,14 +1,4 @@
-﻿/*
- * (c) 2015 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Sebastian Loncar (Arakis) <sebastian.loncar@gmail.com>
- */
-
-using System;
-using System.Diagnostics;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace System.Diagnostics
 {
@@ -172,6 +162,7 @@ namespace System.Diagnostics
 		public static void WriteLine(string format, params object[] args)
 		{
 			throw new NotImplementedException();
+
 			//WriteLine(string.Format(format, args));
 		}
 
@@ -223,6 +214,7 @@ namespace System.Diagnostics
 		public static void Print(string format, params Object[] args)
 		{
 			throw new NotImplementedException();
+
 			//Print(string.Format(format, args));
 		}
 	}

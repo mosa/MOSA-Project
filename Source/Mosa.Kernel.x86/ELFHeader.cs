@@ -1,14 +1,6 @@
-﻿/*
- * (c) 2015 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Sebastian Loncar (Arakis) <sebastian.loncar@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.x86.Helpers;
-using Mosa.Platform.Internal.x86;
 using System;
 using System.Runtime.InteropServices;
 

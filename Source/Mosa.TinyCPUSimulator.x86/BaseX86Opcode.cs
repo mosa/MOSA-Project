@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
 using System.Diagnostics;
@@ -269,9 +262,11 @@ namespace Mosa.TinyCPUSimulator.x86
 					case 128:
 						newValue = value;
 						break;
+
 					case 64:
 						newValue.Low = value.Low;
 						break;
+
 					case 32:
 						newValue.LowF = value.LowF;
 						break;

@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
@@ -38,6 +31,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			// Build the assembly compiler pipeline
 			PreCompilePipeline.Add(new ICompilerStage[] {
 				new PlugStage(),
+
 				//new MethodCompilerSchedulerStage(),
 			});
 

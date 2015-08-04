@@ -1,16 +1,13 @@
-﻿// Remove conditional statement after Mono 2.11 is released
-#if !__MonoCS__
-
-<#@ include file="../TemplateLibrary.txt" #>
+﻿<#@ include file="../TemplateLibrary.txt" #>
 using System;
 
 namespace Mosa.Test.Collection
 {
 
-	public static class SwitchTests 
+	public static class SwitchTests
 	{
 	<# foreach (KeyValuePair<string, string> number in NegativeIntegers) { #>
-	
+
 		public static <#= number.Key #> Switch<#= number.Value #>(<#= number.Key #> a)
 		{
 			switch (a)
@@ -37,7 +34,7 @@ namespace Mosa.Test.Collection
 		}
 	<# } #>
 	<# foreach (KeyValuePair<string, string> number in PositiveIntegers) { #>
-	
+
 		public static <#= number.Key #> Switch<#= number.Value #>(<#= number.Key #> a)
 		{
 			switch (a)
@@ -59,5 +56,3 @@ namespace Mosa.Test.Collection
 	<# } #>
 	}
 }
-
-#endif

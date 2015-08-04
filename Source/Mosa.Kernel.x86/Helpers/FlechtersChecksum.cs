@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Kernel.x86.Helpers
 {

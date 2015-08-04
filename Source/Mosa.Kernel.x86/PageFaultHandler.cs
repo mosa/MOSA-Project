@@ -1,13 +1,5 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Threading;
 using Mosa.Platform.Internal.x86;
 
 namespace Mosa.Kernel.x86
@@ -29,7 +21,7 @@ namespace Mosa.Kernel.x86
 
 			if (virtualpage == 0x0)
 			{
-				Panic.Now(2);	// Can't map null! what happened?
+				Panic.Now(2);   // Can't map null! what happened?
 			}
 
 			//bool taken = false;
@@ -38,7 +30,7 @@ namespace Mosa.Kernel.x86
 			uint physicalpage = PageFrameAllocator.Allocate();
 
 			if (physicalpage == 0x0)
-				Panic.Now(1);	// Panic! Out of memory
+				Panic.Now(1);   // Panic! Out of memory
 
 			PageTable.MapVirtualAddressToPhysical(virtualpage, physicalpage);
 

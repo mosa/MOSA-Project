@@ -1,18 +1,8 @@
-﻿/*
- * (c) 2015 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Stefan Andres Charsley (charsleysa) <charsleysa@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
-using System.IO;
-using System.Text;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -22,10 +12,6 @@ namespace Mosa.Platform.x86.Stages
 	/// </summary>
 	public sealed class SSESetupStage : BaseCompilerStage
 	{
-		#region Constants
-
-		#endregion Constants
-
 		#region Data members
 
 		/// <summary>
@@ -78,9 +64,5 @@ namespace Mosa.Platform.x86.Stages
 			var typeInitializerSchedulerStage = Compiler.PostCompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
 			typeInitializerSchedulerStage.Schedule(setupMethod);
 		}
-
-		#region Internals
-
-		#endregion Internals
 	}
 }

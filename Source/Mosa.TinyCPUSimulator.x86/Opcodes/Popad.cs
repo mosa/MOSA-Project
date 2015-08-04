@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2013 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.TinyCPUSimulator.x86.Opcodes
 {
@@ -19,6 +12,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			cpu.EDI.Value = Read(cpu, cpu.ESP.Value - (8 * 1), size);
 			cpu.ESI.Value = Read(cpu, cpu.ESP.Value - (8 * 2), size);
 			cpu.EBP.Value = Read(cpu, cpu.ESP.Value - (8 * 3), size);
+
 			// Skip ESP
 			cpu.EBX.Value = Read(cpu, cpu.ESP.Value - (8 * 4), size);
 			cpu.EDX.Value = Read(cpu, cpu.ESP.Value - (8 * 5), size);

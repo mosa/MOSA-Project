@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem.PCI;
 
@@ -135,7 +128,7 @@ namespace Mosa.DeviceSystem
 			get
 			{
 				if (interruptHandler == null)
-					return 0xFF;	// 0xFF means unused
+					return 0xFF;    // 0xFF means unused
 				else
 					return interruptHandler.IRQ;
 			}

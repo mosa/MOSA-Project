@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Ki (kiootic) <kiootic@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
 using System.Collections.Generic;
@@ -66,6 +59,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				case MosaTypeCode.UnmanagedPointer:
 				case MosaTypeCode.ManagedPointer:
 				case MosaTypeCode.SZArray:
+
 				// Hash code DOES not need to be unique, so to save time ArrayInfo is not hashed
 				case MosaTypeCode.Array:
 					result += result * 7 + GetHashCode(type.ElementType);

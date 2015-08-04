@@ -1,4 +1,6 @@
-﻿using Mosa.Internal.Plug;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Internal.Plug;
 using System.Diagnostics;
 
 namespace Mosa.Kernel.x86.Helpers
@@ -49,6 +51,7 @@ namespace Mosa.Kernel.x86.Helpers
 		}
 
 		[Conditional("DEBUG")]
+
 		//[Method("System.Diagnostics.Debug.Print")]
 		public static void Print(string message)
 		{

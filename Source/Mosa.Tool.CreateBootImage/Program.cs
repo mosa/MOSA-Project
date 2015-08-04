@@ -1,11 +1,4 @@
-﻿/*
-* (c) 2012 MOSA - The Managed Operating System Alliance
-*
-* Licensed under the terms of the New BSD License.
-*
-* Authors:
-*  Phil Garcia (tgiphil) <phil@thinkedge.com>
-*/
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
 using Mosa.Utility.BootImage;
@@ -48,7 +41,8 @@ namespace Mosa.Tool.CreateBootImage
 					case "-fat12": options.FileSystem = FileSystemType.FAT12; break;
 					case "-fat16": options.FileSystem = FileSystemType.FAT16; break;
 					case "-fat32": options.FileSystem = FileSystemType.FAT32; break;
-					case "-file": if (parts.Length > 2) options.IncludeFiles.Add(new IncludeFile(parts[1], parts[2]));
+					case "-file":
+						if (parts.Length > 2) options.IncludeFiles.Add(new IncludeFile(parts[1], parts[2]));
 						else options.IncludeFiles.Add(new IncludeFile(parts[1])); break;
 					case "-blocks": options.BlockCount = Convert.ToUInt32(parts[1]); break;
 					case "-volume": options.VolumeLabel = parts[1]; break;

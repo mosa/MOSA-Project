@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2015 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
@@ -14,7 +7,7 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public struct SpinLock
 	{
-		System.Threading.SpinLock spinlock;
+		private System.Threading.SpinLock spinlock;
 
 		/// <summary>
 		/// Enters spinlock

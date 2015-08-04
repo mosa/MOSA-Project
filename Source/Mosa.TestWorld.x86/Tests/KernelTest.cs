@@ -1,10 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.x86;
 using System.Collections.Generic;
@@ -105,6 +99,7 @@ namespace Mosa.TestWorld.x86.Tests
 			plugTestTest.Test();
 			compareTest.Test();
 			simpleTest.Test();
+
 			//reflectionTest.Test();
 			arrayTest.Test();
 			int64Test.Test();

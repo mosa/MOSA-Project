@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
 
@@ -488,7 +481,7 @@ namespace Mosa.DeviceDriver.ISA
 		protected byte GetFromFIFO()
 		{
 			if (fifoEnd == fifoStart)
-				return 0;	// should not happen
+				return 0;   // should not happen
 
 			byte value = fifoBuffer[fifoStart];
 

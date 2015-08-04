@@ -1,11 +1,5 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Andrey Turkin <andrey.turkin@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 using System;
 
 namespace Mosa.Test.Collection

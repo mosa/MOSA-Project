@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2012 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
@@ -265,7 +258,7 @@ namespace Mosa.Tool.Explorer
 
 		private void OnCompileCompleted()
 		{
-			MethodInvoker call = delegate()
+			MethodInvoker call = delegate ()
 			{
 				CompileCompleted();
 			};
@@ -428,7 +421,8 @@ namespace Mosa.Tool.Explorer
 				case "System.UInt64": return "U8";
 				case "System.Single": return "R4";
 				case "System.Double": return "R8";
-				//default: return "O";
+
+					//default: return "O";
 			}
 
 			return value;
@@ -732,7 +726,7 @@ namespace Mosa.Tool.Explorer
 		{
 			SubmitTraceEvent(compilerStage, message, threadID);
 
-			MethodInvoker call = delegate()
+			MethodInvoker call = delegate ()
 			{
 				SubmitTraceEventGUI(compilerStage, message, threadID);
 			};
@@ -742,7 +736,7 @@ namespace Mosa.Tool.Explorer
 
 		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
 		{
-			MethodInvoker call = delegate()
+			MethodInvoker call = delegate ()
 			{
 				SubmitMethodStatus(totalMethods, completedMethods);
 			};
@@ -807,7 +801,7 @@ namespace Mosa.Tool.Explorer
 					cbDebugStages_SelectedIndexChanged(null, null);
 
 					string stage = cbDebugStages.SelectedItem.ToString();
-					var result = rbOtherResult.Text.Replace("\n","\r\n");
+					var result = rbOtherResult.Text.Replace("\n", "\r\n");
 
 					File.WriteAllText(Path.Combine(path, stage + "-debug.txt"), result);
 
