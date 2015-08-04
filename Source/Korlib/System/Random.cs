@@ -136,8 +136,8 @@ namespace System
 		protected virtual double Sample()
 		{
 			// a single 32 bits random value is not enough to create a random double value
-			uint a = JKiss() >> 6;	// Upper 26 bits
-			uint b = JKiss() >> 5;	// Upper 27 bits
+			uint a = JKiss() >> 6;  // Upper 26 bits
+			uint b = JKiss() >> 5;  // Upper 27 bits
 			return (a * 134217728.0 + b) / 9007199254740992.0;
 		}
 	}

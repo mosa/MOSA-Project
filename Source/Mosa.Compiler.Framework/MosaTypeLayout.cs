@@ -292,6 +292,7 @@ namespace Mosa.Compiler.Framework
 						return 0;
 
 					return 0;
+
 					//throw new InvalidCompilerException();
 				}
 			}
@@ -311,6 +312,7 @@ namespace Mosa.Compiler.Framework
 						return 0;
 
 					return 0;
+
 					//throw new InvalidCompilerException();
 				}
 			}
@@ -451,6 +453,7 @@ namespace Mosa.Compiler.Framework
 		private void ComputeExplicitLayout(MosaType type)
 		{
 			Debug.Assert(type != null, @"No type given.");
+
 			//Debug.Assert(type.BaseType.LayoutSize != 0, @"Type size not set for explicit layout.");
 
 			int size = 0;

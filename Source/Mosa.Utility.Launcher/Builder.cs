@@ -216,6 +216,7 @@ namespace Mosa.Utility.Launcher
 				"-relaxed-filenames" +
 				" -J -R" +
 				" -o " + Quote(imageFile) +
+
 				//" -b " + Quote(Path.Combine(isoDirectory, "isolinux.bin")) +
 				" -b isolinux.bin" +
 				" -no-emul-boot" +
@@ -478,6 +479,7 @@ namespace Mosa.Utility.Launcher
 			{
 				case LinkerFormat.PE32: return delegate { return new PELinker(); };
 				case LinkerFormat.Elf32: return delegate { return new Elf32(); };
+
 				//case LinkerType.Elf64: return delegate { return new Elf64(); };
 				default: return null;
 			}

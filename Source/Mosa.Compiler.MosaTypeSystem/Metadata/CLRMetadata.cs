@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using dnlib.DotNet;
-
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
 	internal class CLRMetadata : IMetadata

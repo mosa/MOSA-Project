@@ -210,7 +210,7 @@ namespace Mosa.Tool.Launcher
 
 		void IBuilderEvent.NewStatus(string status)
 		{
-			MethodInvoker method = delegate()
+			MethodInvoker method = delegate ()
 			{
 				NewStatus(status);
 			};
@@ -226,7 +226,7 @@ namespace Mosa.Tool.Launcher
 
 		void IBuilderEvent.UpdateProgress(int total, int at)
 		{
-			MethodInvoker method = delegate()
+			MethodInvoker method = delegate ()
 			{
 				UpdateProgress(total, at);
 			};
@@ -332,7 +332,7 @@ namespace Mosa.Tool.Launcher
 
 		private void OnException(string data)
 		{
-			MethodInvoker method = delegate()
+			MethodInvoker method = delegate ()
 			{
 				AddOutput(data);
 			};
@@ -342,7 +342,7 @@ namespace Mosa.Tool.Launcher
 
 		private void OnCompileCompleted()
 		{
-			MethodInvoker method = delegate()
+			MethodInvoker method = delegate ()
 			{
 				CompileCompleted();
 			};

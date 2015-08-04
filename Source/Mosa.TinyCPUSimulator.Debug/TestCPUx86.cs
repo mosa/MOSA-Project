@@ -11,6 +11,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 		{
 			CPU.AddDevice(new PowerUp(CPU));
 			CPU.AddDevice(new Multiboot(CPU));
+
 			//CPU.AddDevice(new BochDebug(CPU, System.Console.Out));
 		}
 

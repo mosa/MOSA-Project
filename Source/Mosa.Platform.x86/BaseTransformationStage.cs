@@ -403,6 +403,5 @@ namespace Mosa.Platform.x86
 		}
 
 		#endregion IX86Visitor
-
 	}
 }

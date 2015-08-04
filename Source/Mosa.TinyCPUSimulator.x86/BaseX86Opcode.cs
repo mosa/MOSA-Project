@@ -262,9 +262,11 @@ namespace Mosa.TinyCPUSimulator.x86
 					case 128:
 						newValue = value;
 						break;
+
 					case 64:
 						newValue.Low = value.Low;
 						break;
+
 					case 32:
 						newValue.LowF = value.LowF;
 						break;

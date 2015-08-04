@@ -20,6 +20,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			UpdateFlags(cpu, size, s, u, true, true, true, true, true);
 
 			cpu.EFLAGS.Adjust = IsAdjustAfterAdd(a, 1);
+
 			//cpu.FLAGS.Overflow = !IsSign(a, size) && IsSign(r, size);
 		}
 	}

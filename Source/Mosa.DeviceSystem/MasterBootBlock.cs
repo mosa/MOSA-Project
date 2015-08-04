@@ -26,7 +26,7 @@ namespace Mosa.DeviceSystem
 	{
 		internal const uint Status = 0x00; // 1
 		internal const uint FirstCRS = 0x01; // 3
-		internal const uint PartitionType = 0x04;	// 1
+		internal const uint PartitionType = 0x04;   // 1
 		internal const uint LastCRS = 0x05; // 3
 		internal const uint LBA = 0x08; // 4
 		internal const uint Sectors = 0x0C; // 4

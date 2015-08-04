@@ -72,7 +72,7 @@ namespace Mosa.FileSystem.FAT
 		/// </summary>
 		public FatSettings()
 		{
-			this.FATType = FatType.FAT16;	// default
+			this.FATType = FatType.FAT16;   // default
 			this.SerialID = new byte[0];
 			this.FloppyMedia = false;
 			this.OSBootCode = null;

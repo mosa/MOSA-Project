@@ -19,7 +19,7 @@ namespace Mosa.Kernel.x86
 			while (true)
 			{
 				counter++;
-				Native.Hlt();	// wait for interrupt
+				Native.Hlt();   // wait for interrupt
 			}
 		}
 	}

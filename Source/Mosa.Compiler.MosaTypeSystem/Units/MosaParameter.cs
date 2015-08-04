@@ -24,6 +24,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public bool Equals(MosaParameter parameter)
 		{
 			return ParameterType.Equals(parameter.ParameterType);
+
 			//&& ParameterAttributes.Equals(parameter.ParameterAttributes)
 			//&& CustomAttributes.Equals(parameter.CustomAttributes)
 			//&& Name.Equals(parameter.Name);

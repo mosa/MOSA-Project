@@ -66,5 +66,3 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 		}
 }
-
-#endif

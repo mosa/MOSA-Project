@@ -18,6 +18,7 @@ namespace Mosa.Utility.Aot
 			PreCompilePipeline.Add(new ICompilerStage[] {
 				bootStage,
 				new PlugStage(),
+
 				//new MethodCompilerSchedulerStage(),
 			});
 

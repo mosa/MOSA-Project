@@ -85,7 +85,8 @@ namespace Mosa.Utility.Launcher
 					case "CompilerUsesMultipleThreads":
 						CompilerUsesMultipleThreads = value.ToLower() == "true";
 						break;
-					//TODO: Other options
+
+						//TODO: Other options
 				}
 			}
 		}
@@ -135,6 +136,7 @@ namespace Mosa.Utility.Launcher
 					case "-pipe": DebugConnectionOption = DebugConnectionOption.Pipe; continue;
 					case "-tcpclient": DebugConnectionOption = DebugConnectionOption.TCPClient; continue;
 					case "-tcpserver": DebugConnectionOption = DebugConnectionOption.TCPServer; continue;
+
 					//case "-inline": EnableInlinedMethods = true; continue;
 					default: break;
 				}

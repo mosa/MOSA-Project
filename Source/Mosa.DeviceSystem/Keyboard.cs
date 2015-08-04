@@ -89,7 +89,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public Key GetKeyPressed()
 		{
-			for (; ; )
+			for (;;)
 			{
 				byte scanCode = keyboardDevice.GetScanCode();
 

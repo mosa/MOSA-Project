@@ -1,10 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace Mosa.Utility.Launcher
 {
 	public static class CheckOptions
@@ -38,6 +33,5 @@ namespace Mosa.Utility.Launcher
 
 			return null;
 		}
-
 	}
 }

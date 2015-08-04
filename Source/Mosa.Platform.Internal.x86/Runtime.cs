@@ -45,7 +45,7 @@ namespace Mosa.Platform.Internal.x86
 			//   - Padding
 
 			uint allocationSize = (NativeIntSize * 3) + (uint)(elements * elementSize);
-			allocationSize = (allocationSize + 3) & ~3u;	// Align to 4-bytes boundary
+			allocationSize = (allocationSize + 3) & ~3u;    // Align to 4-bytes boundary
 			void* memory = AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
@@ -212,14 +212,14 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void* Box8(RuntimeTypeHandle handle, byte value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, 4);	// 4 for alignment
+			byte* memory = (byte*)AllocateObject(handle, 4);    // 4 for alignment
 			*(byte*)(memory + (NativeIntSize * 2)) = value;
 			return memory;
 		}
 
 		public static void* Box16(RuntimeTypeHandle handle, ushort value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, 4);	// 4 for alignment
+			byte* memory = (byte*)AllocateObject(handle, 4);    // 4 for alignment
 			*(ushort*)(memory + (NativeIntSize * 2)) = value;
 			return memory;
 		}
@@ -497,6 +497,7 @@ namespace Mosa.Platform.Internal.x86
 
 				if (eip != 0)
 					depth--;
+
 				//else
 				//	depth += 3;
 
@@ -524,7 +525,7 @@ namespace Mosa.Platform.Internal.x86
 
 			uint stackFrame = GetStackFrame(1);
 
-			for (; ; )
+			for (;;)
 			{
 				uint returnAddress = GetReturnAddressFromStackFrame(stackFrame);
 

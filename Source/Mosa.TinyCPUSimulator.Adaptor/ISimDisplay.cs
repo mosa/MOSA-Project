@@ -4,7 +4,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 {
 	public interface ISimDisplay
 	{
-		void SetBitMap(object bitmap);	// using object to avoid referencing winforms
+		void SetBitMap(object bitmap);  // using object to avoid referencing winforms
 
 		bool Changed { get; set; }
 

@@ -115,6 +115,7 @@ namespace Mosa.ClassLib
 			while (cur != null)
 			{
 				int cmp = key.CompareTo(cur.key);
+
 				//int cmp = (cur.key == key) ? 0 : (cur.key < key ? -1, 1);
 
 				if (cmp == 0)
@@ -213,12 +214,12 @@ namespace Mosa.ClassLib
 			}
 			else
 				if (parent.right == null)
-				{
-					newnode.parent = parent;
-					parent.right = newnode;
-				}
-				else
-					Insert(parent.right, newnode);
+			{
+				newnode.parent = parent;
+				parent.right = newnode;
+			}
+			else
+				Insert(parent.right, newnode);
 		}
 
 		/// <summary>
@@ -264,9 +265,9 @@ namespace Mosa.ClassLib
 				root = p;
 			else
 				if (r.left == q)
-					r.left = p;
-				else
-					r.right = p;
+				r.left = p;
+			else
+				r.right = p;
 
 			p.parent = r;
 			p.right = q;
@@ -290,9 +291,9 @@ namespace Mosa.ClassLib
 				root = q;
 			else
 				if (r.left == p)
-					r.left = q;
-				else
-					r.right = q;
+				r.left = q;
+			else
+				r.right = q;
 
 			q.parent = r;
 			q.left = p;

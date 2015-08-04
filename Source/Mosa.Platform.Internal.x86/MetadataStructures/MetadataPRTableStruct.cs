@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 namespace Mosa.Platform.Internal.x86
 {
 	[StructLayout(LayoutKind.Sequential)]
+
 	// Protected Region Table
 	public unsafe struct MetadataPRTableStruct
 	{

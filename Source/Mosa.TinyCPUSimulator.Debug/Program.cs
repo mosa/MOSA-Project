@@ -10,6 +10,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 	internal class TraceListener : System.Diagnostics.TraceListener
 	{
 		private List<string> output = new List<string>();
+
 		public string Output
 		{
 			get
@@ -41,6 +42,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 			try
 			{
 				System.Diagnostics.Debug.Listeners.Add(listener);
+
 				//Test5a();
 				//Test5b();
 				//Test5c();

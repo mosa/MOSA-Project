@@ -71,7 +71,7 @@ namespace Mosa.FileSystem.FAT
 		/// </returns>
 		public override IVfsNode Lookup(string name)
 		{
-			return null;	// Lookup() method doesn't make sense here
+			return null;    // Lookup() method doesn't make sense here
 		}
 
 		/// <summary>

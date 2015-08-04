@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Kernel.x86.Helpers

@@ -33,6 +33,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			byte nocheck = (byte)decoder.Instruction.Operand;
+
 			//FUTURE:
 			//ctx.Other = nocheck;
 		}

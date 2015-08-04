@@ -241,10 +241,12 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (opcode == Opcode.Addsd) return true;
 			if (opcode == Opcode.Addss) return true;
 			if (opcode == Opcode.And) return true;
+
 			//if (opcode == Opcode.Cld) return true;
 			if (opcode == Opcode.CmpXchg) return true;
 			if (opcode == Opcode.Comisd) return true;
 			if (opcode == Opcode.Comiss) return true;
+
 			//if (opcode == Opcode.Cvtsd2ss) return true;
 			//if (opcode == Opcode.Cvtsi2sd) return true;
 			//if (opcode == Opcode.Cvtsi2ss) return true;
@@ -255,11 +257,14 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (opcode == Opcode.Div) return true;
 			if (opcode == Opcode.Divsd) return true;
 			if (opcode == Opcode.Divss) return true;
+
 			//if (opcode == Opcode.FarJmp) return true;
 			//if (opcode == Opcode.Fld) return true;
 			if (opcode == Opcode.Idiv) return true;
+
 			//if (opcode == Opcode.Imul) return false;
 			if (opcode == Opcode.Inc) return true;
+
 			//if (opcode == Opcode.Lea) return true;
 			if (opcode == Opcode.Mul) return true;
 			if (opcode == Opcode.Mulsd) return true;
@@ -267,6 +272,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (opcode == Opcode.Not) return true;
 			if (opcode == Opcode.Or) return true;
 			if (opcode == Opcode.Rcr) return true;
+
 			//if (opcode == Opcode.Rdmsr) return true;
 			//if (opcode == Opcode.Rdpmc) return true;
 			//if (opcode == Opcode.Rdtsc) return true;
@@ -279,15 +285,18 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (opcode == Opcode.Shld) return true;
 			if (opcode == Opcode.Shr) return true;
 			if (opcode == Opcode.Shrd) return true;
+
 			//if (opcode == Opcode.Stos) return true;
 			if (opcode == Opcode.Sub) return true;
 			if (opcode == Opcode.Subsd) return true;
 			if (opcode == Opcode.Subss) return true;
+
 			//if (opcode == Opcode.Ucomisd) return true;
 			//if (opcode == Opcode.Ucomiss) return true;
 			//if (opcode == Opcode.Xchg) return true;
 			if (opcode == Opcode.Xor) return true;
 			if (opcode == Opcode.Pxor) return true;
+
 			//if (opcode == Opcode.Ucomisd) return true;
 			//if (opcode == Opcode.Ucomiss) return true;
 			if (opcode == Opcode.Neg) return true;
@@ -304,9 +313,11 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Addsd) return Opcode.Addsd;
 			if (instruction == X86.Addss) return Opcode.Addss;
 			if (instruction == X86.And) return Opcode.And;
+
 			//if (instruction == X86.Break) return Opcode.Break;
 			if (instruction == X86.Call) return Opcode.Call;
 			if (instruction == X86.Cdq) return Opcode.Cdq;
+
 			//if (instruction == X86.Cld) return Opcode.Cld;
 			if (instruction == X86.Cli) return Opcode.Cli;
 			if (instruction == X86.Cmp) return Opcode.Cmp;
@@ -331,14 +342,17 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.IMul) return Opcode.Imul;
 			if (instruction == X86.In) return Opcode.In;
 			if (instruction == X86.Inc) return Opcode.Inc;
+
 			//if (instruction == X86.Int) return Opcode.Int;
 			//if (instruction == X86.Invlpg) return Opcode.Invlpg;
 			if (instruction == X86.IRetd) return Opcode.Iretd;
 			if (instruction == X86.Jmp) return Opcode.Jmp;
 			if (instruction == X86.Lea) return Opcode.Lea;
+
 			//if (instruction == X86.Leave) return Opcode.Leave;
 			if (instruction == X86.Lgdt) return Opcode.Lgdt;
 			if (instruction == X86.Lidt) return Opcode.Lidt;
+
 			//if (instruction == X86.Lock) return Opcode.Lock;
 			if (instruction == X86.Mov) return Opcode.Mov;
 			if (instruction == X86.Movsd) return Opcode.Movsd;
@@ -353,6 +367,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Not) return Opcode.Not;
 			if (instruction == X86.Or) return Opcode.Or;
 			if (instruction == X86.Out) return Opcode.Out;
+
 			//if (instruction == X86.Pause) return Opcode.Pause;
 			if (instruction == X86.Pop) return Opcode.Pop;
 			if (instruction == X86.Popad) return Opcode.Popad;
@@ -361,6 +376,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Pushad) return Opcode.Pushad;
 			if (instruction == X86.Pushfd) return Opcode.Pushfd;
 			if (instruction == X86.Rcr) return Opcode.Rcr;
+
 			//if (instruction == X86.Rdmsr) return Opcode.Rdmsr;
 			//if (instruction == X86.Rdpmc) return Opcode.Rdpmc;
 			//if (instruction == X86.Rdtsc) return Opcode.Rdtsc;
@@ -376,6 +392,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			if (instruction == X86.Shrd) return Opcode.Shrd;
 			if (instruction == X86.Sti) return Opcode.Sti;
 			if (instruction == X86.Pause) return Opcode.Pause;
+
 			//if (instruction == X86.Stos) return Opcode.Stos;
 			if (instruction == X86.Sub) return Opcode.Sub;
 			if (instruction == X86.Subsd) return Opcode.Subsd;

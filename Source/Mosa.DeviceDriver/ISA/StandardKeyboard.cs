@@ -115,7 +115,7 @@ namespace Mosa.DeviceDriver.ISA
 		protected byte GetFromFIFO()
 		{
 			if (fifoEnd == fifoStart)
-				return 0;	// should not happen
+				return 0;   // should not happen
 
 			byte value = fifoBuffer[fifoStart];
 

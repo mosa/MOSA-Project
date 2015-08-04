@@ -374,6 +374,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case 8:
+
 					//TODO: Analyze the double fault
 					Error(stack->EBP, stack->EIP, "Double Fault");
 					break;
@@ -399,6 +400,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case 14:
+
 					// Page Fault!
 					var cr2 = Native.GetCR2() >> 5;
 					if (cr2 < 0x1000)
@@ -440,28 +442,40 @@ namespace Mosa.Kernel.x86
 		{
 			[FieldOffset(0x00)]
 			public uint EDI;
+
 			[FieldOffset(0x04)]
 			public uint ESI;
+
 			[FieldOffset(0x08)]
 			public uint EBP;
+
 			[FieldOffset(0x0C)]
 			public uint ESP;
+
 			[FieldOffset(0x10)]
 			public uint EBX;
+
 			[FieldOffset(0x14)]
 			public uint EDX;
+
 			[FieldOffset(0x18)]
 			public uint ECX;
+
 			[FieldOffset(0x1C)]
 			public uint EAX;
+
 			[FieldOffset(0x20)]
 			public uint Interrupt;
+
 			[FieldOffset(0x24)]
 			public uint ErrorCode;
+
 			[FieldOffset(0x28)]
 			public uint EIP;
+
 			[FieldOffset(0x2C)]
 			public uint CS;
+
 			[FieldOffset(0x30)]
 			public uint EFLAGS;
 		}

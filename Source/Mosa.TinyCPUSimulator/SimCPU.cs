@@ -603,6 +603,7 @@ namespace Mosa.TinyCPUSimulator
 				if (instruction == null)
 				{
 					return instruction;
+
 					//throw new SimCPUException();
 				}
 
@@ -689,7 +690,7 @@ namespace Mosa.TinyCPUSimulator
 					Debug.WriteLine(GetDumpHeaders());
 				}
 
-				for (; ; )
+				for (;;)
 				{
 					ExecuteInstruction();
 

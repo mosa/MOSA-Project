@@ -1,8 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Diagnostics;
-
 namespace System.Diagnostics
 {
 	public static class Debug
@@ -165,6 +162,7 @@ namespace System.Diagnostics
 		public static void WriteLine(string format, params object[] args)
 		{
 			throw new NotImplementedException();
+
 			//WriteLine(string.Format(format, args));
 		}
 
@@ -216,6 +214,7 @@ namespace System.Diagnostics
 		public static void Print(string format, params Object[] args)
 		{
 			throw new NotImplementedException();
+
 			//Print(string.Format(format, args));
 		}
 	}

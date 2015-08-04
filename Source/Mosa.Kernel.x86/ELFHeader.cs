@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.x86.Helpers;
-using Mosa.Platform.Internal.x86;
 using System;
 using System.Runtime.InteropServices;
 

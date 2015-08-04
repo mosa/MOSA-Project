@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Analysis

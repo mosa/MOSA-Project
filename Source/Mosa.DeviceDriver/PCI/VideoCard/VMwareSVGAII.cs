@@ -43,21 +43,21 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 			/* ID 0 implementation only had the above registers; then the palette */
 
 			internal const byte Capabilities = 17;
-			internal const byte MemStart = 18;		/* Memory for command FIFO and bitmaps */
+			internal const byte MemStart = 18;      /* Memory for command FIFO and bitmaps */
 			internal const byte MemSize = 19;
-			internal const byte ConfigDone = 20;  	/* Set when memory area configured */
-			internal const byte Sync = 21; 			/* Write to force synchronization */
-			internal const byte Busy = 22; 			/* Read to check if sync is done */
-			internal const byte GuestID = 23; 		/* Set guest OS identifier */
-			internal const byte CursorID = 24;		/* ID of cursor */
-			internal const byte CursorX = 25; 		/* Set cursor X position */
-			internal const byte CursorY = 26; 		/* Set cursor Y position */
-			internal const byte CursorOn = 27;		/* Turn cursor on/off */
+			internal const byte ConfigDone = 20;    /* Set when memory area configured */
+			internal const byte Sync = 21;          /* Write to force synchronization */
+			internal const byte Busy = 22;          /* Read to check if sync is done */
+			internal const byte GuestID = 23;       /* Set guest OS identifier */
+			internal const byte CursorID = 24;      /* ID of cursor */
+			internal const byte CursorX = 25;       /* Set cursor X position */
+			internal const byte CursorY = 26;       /* Set cursor Y position */
+			internal const byte CursorOn = 27;      /* Turn cursor on/off */
 			internal const byte HostBitsPerPixel = 28; /* Current bpp in the host */
-			internal const byte ScratchSize = 29; 	/* Number of scratch registers */
-			internal const byte MemRegs = 30; 		/* Number of FIFO registers */
-			internal const byte NumDisplays = 31; 	/* Number of guest displays */
-			internal const byte PitchLock = 32;		/* Fixed pitch for all modes */
+			internal const byte ScratchSize = 29;   /* Number of scratch registers */
+			internal const byte MemRegs = 30;       /* Number of FIFO registers */
+			internal const byte NumDisplays = 31;   /* Number of guest displays */
+			internal const byte PitchLock = 32;     /* Fixed pitch for all modes */
 		}
 
 		internal struct ID
@@ -286,6 +286,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 			alphaMaskShift = GetMaskShift(alphaMask);
 			offset = ReadRegister(Register.FrameBufferOffset);
 			fifoSize = ReadRegister(Register.MemSize);
+
 			//fifoNumRegs = GetValue(Register.MemRegs);
 
 			version = GetVersion();
@@ -362,6 +363,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 
 			// get the frame buffer offset
 			offset = ReadRegister(Register.FrameBufferOffset);
+
 			// get the bytes per line (pitch)
 			bytesPerLine = ReadRegister(Register.BytesPerLine);
 

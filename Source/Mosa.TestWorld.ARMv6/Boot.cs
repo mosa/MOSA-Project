@@ -13,7 +13,7 @@ namespace Mosa.TestWorld.ARMv6
 		public static void Main()
 		{
 			Mosa.Kernel.ARMv6.Kernel.Setup();
-			Mosa.Platform.Internal.ARMv6.Native.Nop();	// force load of the assembly
+			Mosa.Platform.Internal.ARMv6.Native.Nop();  // force load of the assembly
 		}
 
 		public static void Test()

@@ -26,6 +26,7 @@ namespace Mosa.Test.Numbers
 			list.Add(0);
 			list.Add(1);
 			list.Add(2);
+
 			//list.Add(double.MinValue);
 			//list.Add(double.MaxValue);
 			list.Add(double.NaN);

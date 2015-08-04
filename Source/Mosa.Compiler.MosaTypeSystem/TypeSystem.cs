@@ -305,7 +305,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				if (!type.Module.Types.ContainsKey(type.ID))
 					type.Module.Types.Add(type.ID, type);
 
-				if (string.IsNullOrEmpty(type.Signature))	// i.e. elementary types
+				if (string.IsNullOrEmpty(type.Signature))   // i.e. elementary types
 					typeSystem.typeLookup[Tuple.Create(type.Module, type.Namespace, type.ShortName)] = type;
 				else
 					typeSystem.typeLookup[Tuple.Create(type.Module, type.Namespace, type.ShortName + type.Signature)] = type;

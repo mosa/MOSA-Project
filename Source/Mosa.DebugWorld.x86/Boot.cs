@@ -25,7 +25,6 @@ namespace Mosa.DebugWorld.x86
 			if (Test())
 				Screen.Write('X');
 
-
 			var t = Test2();
 			if (t.TestResult1)
 				Screen.Write('O');
@@ -51,7 +50,7 @@ namespace Mosa.DebugWorld.x86
 
 			#endregion COMPILER_BUG
 		}
-		
+
 		private static TestStruct Test2()
 		{
 			return TestStruct.Create();
@@ -62,7 +61,6 @@ namespace Mosa.DebugWorld.x86
 			t.Limit = 0;
 			return t;
 		}
-
 	}
 
 	[StructLayout(LayoutKind.Explicit)]

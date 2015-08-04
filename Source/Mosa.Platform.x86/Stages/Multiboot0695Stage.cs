@@ -163,19 +163,26 @@ namespace Mosa.Platform.x86.Stages
 
 			// magic
 			writer.Write(HEADER_MB_MAGIC);
+
 			// flags
 			writer.Write(flags);
+
 			// checksum
 			writer.Write(unchecked(0U - HEADER_MB_MAGIC - flags));
+
 			// header_addr - load address of the multiboot header
 			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, multibootHeader, (int)stream.Position, 0, multibootHeader, 0);
 			writer.Write(0);
+
 			// load_addr - address of the binary in memory
 			writer.Write(load_addr);
+
 			// load_end_addr - address past the last byte to load from the image
 			writer.Write(0);
+
 			// bss_end_addr - address of the last byte to be zeroed out
 			writer.Write(0);
+
 			// entry_addr - address of the entry point to invoke
 			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, multibootHeader, (int)stream.Position, 0, Linker.EntryPoint, 0);
 			writer.Write(0);

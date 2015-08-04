@@ -7,7 +7,7 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public struct SpinLock
 	{
-		System.Threading.SpinLock spinlock;
+		private System.Threading.SpinLock spinlock;
 
 		/// <summary>
 		/// Enters spinlock

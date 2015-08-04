@@ -60,27 +60,27 @@ namespace Mosa.Platform.ARMv6
 		/// Gets the register set of the architecture.
 		/// </summary>
 		private static readonly Register[] registers = new Register[]
-        {
+		{
    			////////////////////////////////////////////////////////
             // 32-bit general purpose registers
    			////////////////////////////////////////////////////////
             GeneralPurposeRegister.R0,
-            GeneralPurposeRegister.R1,
-            GeneralPurposeRegister.R2,
-            GeneralPurposeRegister.R3,
-            GeneralPurposeRegister.R4,
-            GeneralPurposeRegister.R5,
-            GeneralPurposeRegister.R6,
-            GeneralPurposeRegister.R7,
-            GeneralPurposeRegister.R8,
-            GeneralPurposeRegister.R9,
-            GeneralPurposeRegister.R10,
-            GeneralPurposeRegister.R11,
-            GeneralPurposeRegister.R12,
-            GeneralPurposeRegister.SP,
-            GeneralPurposeRegister.LR,
-            GeneralPurposeRegister.PC
-        };
+			GeneralPurposeRegister.R1,
+			GeneralPurposeRegister.R2,
+			GeneralPurposeRegister.R3,
+			GeneralPurposeRegister.R4,
+			GeneralPurposeRegister.R5,
+			GeneralPurposeRegister.R6,
+			GeneralPurposeRegister.R7,
+			GeneralPurposeRegister.R8,
+			GeneralPurposeRegister.R9,
+			GeneralPurposeRegister.R10,
+			GeneralPurposeRegister.R11,
+			GeneralPurposeRegister.R12,
+			GeneralPurposeRegister.SP,
+			GeneralPurposeRegister.LR,
+			GeneralPurposeRegister.PC
+		};
 
 		/// <summary>
 		/// Specifies the architecture features to use in generated code.
@@ -207,10 +207,10 @@ namespace Mosa.Platform.ARMv6
 		{
 			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
-			    {
+				{
 			        //new LongOperandTransformationStage(),
 			        new IRTransformationStage(),
-			    });
+				});
 
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
 			//    new ExceptionLayoutStage()

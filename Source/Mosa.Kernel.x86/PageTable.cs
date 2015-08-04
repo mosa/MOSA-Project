@@ -13,7 +13,7 @@ namespace Mosa.Kernel.x86
 		private static uint pageDirectoryAddress = 1024 * 1024 * 20; // 0x1400000
 
 		// Location for page tables start at 16MB
-		private static uint pageTableAddress = 1024 * 1024 * 16;	// 0x1000000
+		private static uint pageTableAddress = 1024 * 1024 * 16;    // 0x1000000
 
 		internal static PageDirectoryEntry* pageDirectoryEntries;
 		internal static PageTableEntry* pageTableEntries;

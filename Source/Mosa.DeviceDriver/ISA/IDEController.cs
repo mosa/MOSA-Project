@@ -47,7 +47,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			internal const uint CommandSetSupported83 = 83 * 2; // 1 word
 			internal const uint MaxLBA28 = 60 * 2; // 2 words
-			internal const uint MaxLBA48 = 100 * 2;	// 3 words
+			internal const uint MaxLBA48 = 100 * 2; // 3 words
 		}
 
 		#endregion Definitions
@@ -397,9 +397,9 @@ namespace Mosa.DeviceDriver.ISA
 				DeviceHeadPort.Write8(0xA0);
 			else
 				if (drive == 1)
-					DeviceHeadPort.Write8(0xB0);
-				else
-					return false;
+				DeviceHeadPort.Write8(0xB0);
+			else
+				return false;
 
 			CommandPort.Write8(IDECommands.IdentifyDrive);
 

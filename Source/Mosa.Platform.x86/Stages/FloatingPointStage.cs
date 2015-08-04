@@ -35,21 +35,22 @@ namespace Mosa.Platform.x86.Stages
 						LoadFirstOperandIntoRegister(node);
 					}
 					else
+
 						// No two-operand floating point opcode allows the first operand to a memory operand
 						if (node.OperandCount == 2 && node.Operand1.IsMemoryAddress && node.Operand1.IsR)
+					{
+						if (IsCommutative(node.Instruction))
 						{
-							if (IsCommutative(node.Instruction))
-							{
-								// swap operands
-								var t = node.Operand2;
-								node.Operand2 = node.Operand1;
-								node.Operand1 = t;
-							}
-							else
-							{
-								LoadFirstOperandIntoRegister(node);
-							}
+							// swap operands
+							var t = node.Operand2;
+							node.Operand2 = node.Operand1;
+							node.Operand1 = t;
 						}
+						else
+						{
+							LoadFirstOperandIntoRegister(node);
+						}
+					}
 				}
 			}
 		}

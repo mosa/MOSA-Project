@@ -107,6 +107,7 @@ namespace Mosa.Tool.TinySimulator
 			}
 
 			dataGridView1.CurrentCell = dataGridView1[0, history.Count - 1];
+
 			// FirstDisplayedScrollingRowIndex
 			//dataGridView1.CurrentCell = dataGridView1.Rows[history.Count - 1].Cells[0];
 

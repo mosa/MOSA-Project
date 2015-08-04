@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public sealed class VirtualRegister	// alternative name is LiveInterval
+	public sealed class VirtualRegister // alternative name is LiveInterval
 	{
 		private List<LiveInterval> liveIntervals = new List<LiveInterval>(1);
 

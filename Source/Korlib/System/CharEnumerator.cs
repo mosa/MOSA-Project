@@ -34,7 +34,6 @@ namespace System
 			else
 				currentPosition = str.Length;
 			return false;
-
 		}
 
 		public void Dispose()

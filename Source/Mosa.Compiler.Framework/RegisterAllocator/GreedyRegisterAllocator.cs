@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				var register = (liveInterval.Start == moveHint.Slot) ? moveHint.FromRegister : moveHint.ToRegister;
 
 				if (register == null)
-					continue;	// no usable hint
+					continue;   // no usable hint
 
 				if (Trace.Active) Trace.Log("  Trying move hint: " + register.ToString() + "  [ " + moveHint.ToString() + " ]");
 
@@ -138,7 +138,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				moveHints[0].Update(liveInterval);
 			else
 				if (moveHints.Length >= 2)
-					moveHints[1].Update(liveInterval);
+				moveHints[1].Update(liveInterval);
 		}
 
 		private void UpdateMoveHints(LiveInterval liveInterval)

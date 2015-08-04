@@ -166,6 +166,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 				var u = BitConverter.ToUInt64(b, 0);
 				WriteStackValue(simAdapter, u);
 			}
+
 			//else  if (parameter is UIntPtr) { WriteStackValue(simAdapter, (uint)parameter);  }
 			//else  if (parameter is IntPtr) { WriteStackValue(simAdapter, (uint)parameter); }
 			else

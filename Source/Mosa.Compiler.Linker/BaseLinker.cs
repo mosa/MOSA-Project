@@ -104,7 +104,7 @@ namespace Mosa.Compiler.Linker
 
 		public LinkerSymbol FindSymbol(string name)
 		{
-			var list = new [] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
+			var list = new[] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
 			foreach (var kind in list)
 			{
 				var section = Sections[(int)kind];

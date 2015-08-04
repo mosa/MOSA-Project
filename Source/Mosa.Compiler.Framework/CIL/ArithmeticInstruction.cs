@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.MosaTypeSystem;
 using System;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.CIL
 {

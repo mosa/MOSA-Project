@@ -238,7 +238,7 @@ namespace Mosa.FileSystem.FAT
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			if (position >= length)
-				return -1;	// EOF
+				return -1;  // EOF
 
 			int index = 0;
 
@@ -264,7 +264,7 @@ namespace Mosa.FileSystem.FAT
 		public override int ReadByte()
 		{
 			if (position >= length)
-				return -1;	// EOF
+				return -1;  // EOF
 
 			uint index = (uint)(position % clusterSize);
 
@@ -320,16 +320,16 @@ namespace Mosa.FileSystem.FAT
 			}
 			else
 				if (newNthCluster > currentNthCluster)
-				{
-					newCluster = fs.FindNthCluster(currentCluster, (uint)diff);
-					currentNthCluster = currentNthCluster + (uint)diff;
-				}
-				else
+			{
+				newCluster = fs.FindNthCluster(currentCluster, (uint)diff);
+				currentNthCluster = currentNthCluster + (uint)diff;
+			}
+			else
 					if (newNthCluster < currentNthCluster)
-					{
-						newCluster = fs.FindNthCluster(this.startCluster, newNthCluster);
-						currentNthCluster = newNthCluster;
-					}
+			{
+				newCluster = fs.FindNthCluster(this.startCluster, newNthCluster);
+				currentNthCluster = newNthCluster;
+			}
 
 			ReadCluster(newCluster);
 			position = newposition;

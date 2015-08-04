@@ -152,6 +152,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			lastCommand = 0;
 
 			font = new Font("Lucida Console", 9, FontStyle.Regular);
+
 			//font = new Font("Consolas", 8, FontStyle.Regular);
 			fontWidth = (int)font.SizeInPoints;
 			fontHeight = (int)font.SizeInPoints + 5;
@@ -169,7 +170,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 
 		public override void Reset()
 		{
-			miscellaneous = 0x01;	// set color mode
+			miscellaneous = 0x01;   // set color mode
 
 			for (ulong a = baseAddress; a < baseAddress + StandardMemorySize; a++)
 			{

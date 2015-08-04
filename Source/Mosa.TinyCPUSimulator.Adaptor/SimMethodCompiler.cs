@@ -44,7 +44,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				new IRCleanup(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 				new PlatformStubStage(),
-				new	PlatformEdgeSplitStage(),
+				new PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 				new EmptyBlockRemovalStage(),

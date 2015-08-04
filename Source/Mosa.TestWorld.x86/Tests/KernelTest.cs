@@ -99,6 +99,7 @@ namespace Mosa.TestWorld.x86.Tests
 			plugTestTest.Test();
 			compareTest.Test();
 			simpleTest.Test();
+
 			//reflectionTest.Test();
 			arrayTest.Test();
 			int64Test.Test();

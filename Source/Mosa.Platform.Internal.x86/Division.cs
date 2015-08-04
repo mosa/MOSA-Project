@@ -17,6 +17,7 @@ namespace Mosa.Platform.Internal.x86
 	public unsafe static class Division
 	{
 		/* Single and Double Remainder */
+
 		public static double RemR8(double n, double d)
 		{
 			if (double.IsInfinity(d))

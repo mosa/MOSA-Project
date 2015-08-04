@@ -419,9 +419,9 @@ namespace Mosa.Kernel.x86
 					return EAddressMode.Bits32;
 				else
 					if (LongMode)
-						return EAddressMode.Bits64;
-					else
-						return EAddressMode.Bits16;
+					return EAddressMode.Bits64;
+				else
+					return EAddressMode.Bits16;
 			}
 			set
 			{
@@ -432,15 +432,15 @@ namespace Mosa.Kernel.x86
 				}
 				else
 					if (value == EAddressMode.Bits16)
-					{
-						LongMode = false;
-						SizeBit = false;
-					}
-					else
-					{
-						LongMode = true;
-						SizeBit = false;
-					}
+				{
+					LongMode = false;
+					SizeBit = false;
+				}
+				else
+				{
+					LongMode = true;
+					SizeBit = false;
+				}
 			}
 		}
 

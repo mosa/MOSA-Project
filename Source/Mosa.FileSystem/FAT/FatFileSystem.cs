@@ -14,17 +14,17 @@ namespace Mosa.FileSystem.FAT
 	internal struct BootSector
 	{
 		internal const uint JumpInstruction = 0x00; // 3
-		internal const uint EOMName = 0x03;	// 8 - "IBM  3.3", "MSDOS5.0", "MSWIN4.1", "FreeDOS"
-		internal const uint BytesPerSector = 0x0B;	// 2 - common value 512
-		internal const uint SectorsPerCluster = 0x0D;	// 1 - valid 1 to 128
+		internal const uint EOMName = 0x03; // 8 - "IBM  3.3", "MSDOS5.0", "MSWIN4.1", "FreeDOS"
+		internal const uint BytesPerSector = 0x0B;  // 2 - common value 512
+		internal const uint SectorsPerCluster = 0x0D;   // 1 - valid 1 to 128
 		internal const uint ReservedSectors = 0x0E; // 2 - 1 for FAT12/FAT16, usually 32 for FAT32
-		internal const uint FatAllocationTables = 0x10;	// 1 - always 2
+		internal const uint FatAllocationTables = 0x10; // 1 - always 2
 		internal const uint MaxRootDirEntries = 0x11; // 2
-		internal const uint TotalSectors16 = 0x13;	// 2
+		internal const uint TotalSectors16 = 0x13;  // 2
 		internal const uint MediaDescriptor = 0x15; // 1
 		internal const uint SectorsPerFAT = 0x16; // 2
-		internal const uint SectorsPerTrack = 0x18;	// 2
-		internal const uint NumberOfHeads = 0x1A;	// 2
+		internal const uint SectorsPerTrack = 0x18; // 2
+		internal const uint NumberOfHeads = 0x1A;   // 2
 		internal const uint HiddenSectors = 0x1C; // 4
 		internal const uint TotalSectors32 = 0x20; // 4
 
@@ -78,9 +78,9 @@ namespace Mosa.FileSystem.FAT
 	internal struct Entry
 	{
 		internal const uint DOSName = 0x00; // 8
-		internal const uint DOSExtension = 0x08;	// 3
-		internal const uint FileAttributes = 0x0B;	// 1
-		internal const uint Reserved = 0x0C;	// 1
+		internal const uint DOSExtension = 0x08;    // 3
+		internal const uint FileAttributes = 0x0B;  // 1
+		internal const uint Reserved = 0x0C;    // 1
 		internal const uint CreationTimeFine = 0x0D; // 1
 		internal const uint CreationTime = 0x0E; // 2
 		internal const uint CreationDate = 0x10; // 2
@@ -99,7 +99,7 @@ namespace Mosa.FileSystem.FAT
 	internal struct FileNameAttribute
 	{
 		internal const uint LastEntry = 0x00;
-		internal const uint Escape = 0x05;	// special msdos hack where 0x05 really means 0xE5 (since 0xE5 was already used for delete)
+		internal const uint Escape = 0x05;  // special msdos hack where 0x05 really means 0xE5 (since 0xE5 was already used for delete)
 		internal const uint Dot = 0x2E;
 		internal const uint Deleted = 0xE5;
 	}
@@ -323,7 +323,7 @@ namespace Mosa.FileSystem.FAT
 		{
 			valid = false;
 
-			if (blockSize != 512)	// only going to work with 512 sector sizes (for now)
+			if (blockSize != 512)   // only going to work with 512 sector sizes (for now)
 				return false;
 
 			BinaryFormat bootSector = new BinaryFormat(partition.ReadBlock(0, 1));
@@ -980,7 +980,7 @@ namespace Mosa.FileSystem.FAT
 
 			uint increment = 0;
 
-			for (; ; )
+			for (;;)
 			{
 				BinaryFormat directory = new BinaryFormat(partition.ReadBlock(activeSector, 1));
 
@@ -1171,7 +1171,7 @@ namespace Mosa.FileSystem.FAT
 				location = FindEntry(new Find.Empty(), 0);
 
 				if (!location.Valid)
-					return;	// TODO: something went wrong
+					return; // TODO: something went wrong
 			}
 
 			BinaryFormat directory = new BinaryFormat(partition.ReadBlock(location.DirectorySector, 1));
@@ -1302,7 +1302,7 @@ namespace Mosa.FileSystem.FAT
 					at = 2;
 			}
 
-			return 0;	// mean no free space
+			return 0;   // mean no free space
 		}
 
 		/// <summary>

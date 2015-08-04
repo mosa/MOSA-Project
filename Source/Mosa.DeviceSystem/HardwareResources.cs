@@ -128,7 +128,7 @@ namespace Mosa.DeviceSystem
 			get
 			{
 				if (interruptHandler == null)
-					return 0xFF;	// 0xFF means unused
+					return 0xFF;    // 0xFF means unused
 				else
 					return interruptHandler.IRQ;
 			}

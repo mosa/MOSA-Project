@@ -181,7 +181,7 @@ namespace Mosa.Platform.x86
 				var symbol = linker.FindSymbol(displacement.Name);
 				if (symbol == null)
 					symbol = linker.GetSymbol(displacement.Name, section);
-				
+
 				linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, symbol.Name, symbol.SectionKind, 0);
 				codeStream.WriteZeroBytes(4);
 			}
@@ -343,6 +343,7 @@ namespace Mosa.Platform.x86
 				// mod = 11b, reg = rop1, r/m = rop2
 				modRM = (byte)((3 << 6) | (op1.Register.RegisterCode << 3) | op2.Register.RegisterCode);
 			}
+
 			// Check for register/memory combinations
 			else if (mop2 != null && mop2.EffectiveOffsetBase != null)
 			{

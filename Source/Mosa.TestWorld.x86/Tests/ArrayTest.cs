@@ -10,6 +10,7 @@ namespace Mosa.TestWorld.x86.Tests
 			: base("Array")
 		{
 			testMethods.AddLast(GenericInterfaceTest);
+
 			// TODO: add more tests
 		}
 

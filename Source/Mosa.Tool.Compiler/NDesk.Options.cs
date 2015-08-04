@@ -601,7 +601,7 @@ namespace NDesk.Options
 	public class OptionSet : KeyedCollection<string, Option>
 	{
 		public OptionSet()
-			: this(delegate(string f) { return f; })
+			: this(delegate (string f) { return f; })
 		{
 		}
 
@@ -725,7 +725,7 @@ namespace NDesk.Options
 			if (action == null)
 				throw new ArgumentNullException("action");
 			Option p = new ActionOption(prototype, description, 1,
-										 delegate(OptionValueCollection v) { action(v[0]); });
+										 delegate (OptionValueCollection v) { action(v[0]); });
 			base.Add(p);
 			return this;
 		}
@@ -740,7 +740,7 @@ namespace NDesk.Options
 			if (action == null)
 				throw new ArgumentNullException("action");
 			Option p = new ActionOption(prototype, description, 2,
-										 delegate(OptionValueCollection v) { action(v[0], v[1]); });
+										 delegate (OptionValueCollection v) { action(v[0], v[1]); });
 			base.Add(p);
 			return this;
 		}

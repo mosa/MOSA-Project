@@ -51,6 +51,7 @@ namespace Mosa.Kernel.x86.Helpers
 		}
 
 		[Conditional("DEBUG")]
+
 		//[Method("System.Diagnostics.Debug.Print")]
 		public static void Print(string message)
 		{

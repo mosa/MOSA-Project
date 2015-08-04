@@ -17,16 +17,16 @@ namespace Mosa.DeviceDriver.ISA
 
 		internal struct DMAModeValue
 		{
-			internal const byte ReadFromMemory = 0x08;	// TRN=10
+			internal const byte ReadFromMemory = 0x08;  // TRN=10
 			internal const byte WriteToMemory = 0x04;   // TRN=01
 		}
 
 		internal struct DMATransferTypeValue
 		{
-			internal const byte OnDemand = 0x00;	// MOD=00
-			internal const byte Single = 0x40;		// MOD=01
-			internal const byte Block = 0x80;		// MOD=10
-			internal const byte CascadeMode = 0xC0;	// MOD=11
+			internal const byte OnDemand = 0x00;    // MOD=00
+			internal const byte Single = 0x40;      // MOD=01
+			internal const byte Block = 0x80;       // MOD=10
+			internal const byte CascadeMode = 0xC0; // MOD=11
 		}
 
 		internal struct DMAAutoValue
@@ -255,7 +255,7 @@ namespace Mosa.DeviceDriver.ISA
 			channelMaskRegister.Write8((byte)((byte)channel | 4));
 
 			// Clear any current transfers
-			byteWordRegister.Write8((byte)0xFF);	// reset flip-flop
+			byteWordRegister.Write8((byte)0xFF);    // reset flip-flop
 
 			// Set Address
 			dmaAddress.Write8((byte)(address & 0xFF)); // low byte
@@ -263,7 +263,7 @@ namespace Mosa.DeviceDriver.ISA
 			dmaPage.Write8((byte)((address >> 16) & 0xFF)); // page
 
 			// Clear any current transfers
-			byteWordRegister.Write8((byte)0xFF);	// reset flip-flop
+			byteWordRegister.Write8((byte)0xFF);    // reset flip-flop
 
 			// Set Count
 			dmaCount.Write8((byte)((count - 1) & 0xFF)); // low

@@ -20,6 +20,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			// Retrieve register context
 			Operand edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EDX);
+
 			//Operand ebp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EBP);
 			//Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.ESP);
 

@@ -274,6 +274,7 @@ namespace System
 					}
 
 				default:
+
 					// TODO: Enums
 					// What kind of array is this!?
 					throw new NotSupportedException();

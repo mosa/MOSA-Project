@@ -38,7 +38,7 @@ namespace Mosa.Utility.Launcher
 					@"Tools\QEMU",
 					CombineParameterAndDirectory("ProgramFiles",@"qemu"),
 					CombineParameterAndDirectory("ProgramFiles(x86)",@"qemu"),
-                    @"/bin"
+					@"/bin"
 				}
 				);
 			}
@@ -50,15 +50,15 @@ namespace Mosa.Utility.Launcher
 					QEMUImg = TryFind(
 						new string[] { "qemu-img.exe", "qemu-img" },
 						new string[]
-                        {
-                            CombineParameterAndDirectory("MOSA", @"Tools\QEMU"),
-                            CombineParameterAndDirectory("MOSA", @"QEMU"),
-                            @"..\Tools\QEMU",
-                            @"Tools\QEMU",
-                            CombineParameterAndDirectory("ProgramFiles", @"qemu"),
-                            CombineParameterAndDirectory("ProgramFiles(x86)", @"qemu"),
-                            @"/bin"
-                        }
+						{
+							CombineParameterAndDirectory("MOSA", @"Tools\QEMU"),
+							CombineParameterAndDirectory("MOSA", @"QEMU"),
+							@"..\Tools\QEMU",
+							@"Tools\QEMU",
+							CombineParameterAndDirectory("ProgramFiles", @"qemu"),
+							CombineParameterAndDirectory("ProgramFiles(x86)", @"qemu"),
+							@"/bin"
+						}
 					);
 				}
 
@@ -68,11 +68,11 @@ namespace Mosa.Utility.Launcher
 						TryFind(
 							new string[] { "bios.bin" },
 							new string[]
-                            {
-                                Path.GetDirectoryName(QEMU),
-                                Path.Combine(Path.GetDirectoryName(QEMU), "bios"),
-                                "/usr/share/qemu"
-                            }
+							{
+								Path.GetDirectoryName(QEMU),
+								Path.Combine(Path.GetDirectoryName(QEMU), "bios"),
+								"/usr/share/qemu"
+							}
 						)
 					);
 				}
@@ -88,7 +88,7 @@ namespace Mosa.Utility.Launcher
 					CombineParameterAndDirectory("MOSA",@"ndisasm"),
 					@"..\Tools\ndisasm",
 					@"Tools\ndisasm",
-                    @"/bin"
+					@"/bin"
 				}
 				);
 			}
@@ -106,8 +106,8 @@ namespace Mosa.Utility.Launcher
 					CombineParameterAndDirectory("MOSA",@"Bochs"),
 					@"..\Tools\Bochs",
 					@"Tools\Bochs",
-                    @"/bin"
-                    }
+					@"/bin"
+					}
 				);
 			}
 
@@ -121,7 +121,7 @@ namespace Mosa.Utility.Launcher
 					CombineParameterAndDirectory("ProgramFiles",@"VMware\VMware Workstation"),
 					CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Player"),
 					CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Workstation"),
-                    @"/bin"
+					@"/bin"
 				}
 				);
 			}
@@ -140,7 +140,7 @@ namespace Mosa.Utility.Launcher
 					CombineParameterAndDirectory("MOSA",@"mkisofs"),
 					@"..\Tools\mkisofs",
 					@"Tools\mkisofs",
-                    @"/bin"
+					@"/bin"
 				}
 				);
 			}

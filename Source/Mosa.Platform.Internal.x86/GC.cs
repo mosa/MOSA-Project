@@ -1,10 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Internal;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace Mosa.Platform.Internal.x86
 {
@@ -21,6 +17,7 @@ namespace Mosa.Platform.Internal.x86
 		public static void* AllocateObject(uint size)
 		{
 			Debug.Assert(isSetup, "GC not setup yet!");
+
 			// TODO: GC
 			return (void*)AllocateMemory(size);
 		}

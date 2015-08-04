@@ -267,6 +267,7 @@ namespace Mosa.Compiler.Framework
 							//try
 							//{
 							CompileWorker(tid);
+
 							//}
 							//catch (Exception e)
 							//{
@@ -275,6 +276,7 @@ namespace Mosa.Compiler.Framework
 							//finally
 							//{
 							finished.Signal();
+
 							//}
 						}
 					));

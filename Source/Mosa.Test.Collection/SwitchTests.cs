@@ -185,5 +185,3 @@ namespace Mosa.Test.Collection
 		}
 		}
 }
-
-#endif

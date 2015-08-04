@@ -34,6 +34,7 @@ namespace Mosa.DeviceSystem
 		protected bool ProbeDevice(IPCIController pciController, byte bus, byte slot, byte fun)
 		{
 			uint value = pciController.ReadConfig32(bus, slot, fun, 0);
+
 			//HAL.DebugWrite(": " + value.ToString("x"));
 			return value != 0xFFFFFFFF;
 		}

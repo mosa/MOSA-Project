@@ -34,7 +34,7 @@ namespace System
 		//	return new UIntPtr((uint)value);
 		//}
 
-		public static explicit operator uint(UIntPtr value)
+		public static explicit operator uint (UIntPtr value)
 		{
 			return value._value;
 		}
@@ -44,7 +44,7 @@ namespace System
 			return new UIntPtr(value);
 		}
 
-		public static unsafe explicit operator void*(UIntPtr value)
+		public static unsafe explicit operator void* (UIntPtr value)
 		{
 			return value.ToPointer();
 		}

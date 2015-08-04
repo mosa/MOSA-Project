@@ -289,6 +289,7 @@ namespace Mosa.Compiler.Framework.Stages
 					before.OperandCount = 4;
 					before.Result = boxedValue;
 					before.ResultCount = 1;
+
 					// Now replace the value type pointer with the boxed value virtual register
 					context.Operand1 = boxedValue;
 				}

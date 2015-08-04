@@ -24,26 +24,26 @@ namespace Mosa.Platform.x86.Instructions
 
 		#region Data Members
 
-		private static readonly OpCode CMOVO = new OpCode(new byte[] { 0x0F, 0x40 });	// Overflow (OF = 1)
-		private static readonly OpCode CMOVNO = new OpCode(new byte[] { 0x0F, 0x41 });	// NoOverflow (OF = 0)
-		private static readonly OpCode CMOVB = new OpCode(new byte[] { 0x0F, 0x42 });	// UnsignedLessThan (CF = 1).
-		private static readonly OpCode CMOVC = new OpCode(new byte[] { 0x0F, 0x42 });	// Carry (CF = 1)
-		private static readonly OpCode CMOVNB = new OpCode(new byte[] { 0x0F, 0x43 });	// UnsignedGreaterOrEqual (greater or equal) (CF = 0)
-		private static readonly OpCode CMOVNC = new OpCode(new byte[] { 0x0F, 0x43 });	// NoCarry (CF = 0)
-		private static readonly OpCode CMOVE = new OpCode(new byte[] { 0x0F, 0x44 });	// Equal (ZF = 1)
-		private static readonly OpCode CMOVZ = new OpCode(new byte[] { 0x0F, 0x44 });	// Zero (ZF = 1)
-		private static readonly OpCode CMOVNE = new OpCode(new byte[] { 0x0F, 0x45 });	// NotEqual (ZF = 0)
-		private static readonly OpCode CMOVNZ = new OpCode(new byte[] { 0x0F, 0x45 });	// NotZero (ZF = 1)
-		private static readonly OpCode CMOVBE = new OpCode(new byte[] { 0x0F, 0x46 });	// UnsignedLessOrEqual (CF = 1 or ZF = 1).
-		private static readonly OpCode CMOVA = new OpCode(new byte[] { 0x0F, 0x47 });	// UnsignedGreaterThan (CF = 0 and ZF = 0).
-		private static readonly OpCode CMOVS = new OpCode(new byte[] { 0x0F, 0x48 });	// Signed (CF = 0 and ZF = 0)
-		private static readonly OpCode CMOVNS = new OpCode(new byte[] { 0x0F, 0x49 });	// NotSigned (SF = 0)
-		private static readonly OpCode CMOVP = new OpCode(new byte[] { 0x0F, 0x4A });	// Parity (PF = 1)
-		private static readonly OpCode CMOVNP = new OpCode(new byte[] { 0x0F, 0x4B });	// NoParity (PF = 0)
-		private static readonly OpCode CMOVL = new OpCode(new byte[] { 0x0F, 0x4C });	// LessThan (SF <> OF)
-		private static readonly OpCode CMOVGE = new OpCode(new byte[] { 0x0F, 0x4D });	// GreaterOrEqual (greater or equal) (SF = OF)
-		private static readonly OpCode CMOVLE = new OpCode(new byte[] { 0x0F, 0x4E });	// LessOrEqual (ZF = 1 or SF <> OF)
-		private static readonly OpCode CMOVG = new OpCode(new byte[] { 0x0F, 0x4F });	// GreaterThan (ZF = 0 and SF = OF)
+		private static readonly OpCode CMOVO = new OpCode(new byte[] { 0x0F, 0x40 });   // Overflow (OF = 1)
+		private static readonly OpCode CMOVNO = new OpCode(new byte[] { 0x0F, 0x41 });  // NoOverflow (OF = 0)
+		private static readonly OpCode CMOVB = new OpCode(new byte[] { 0x0F, 0x42 });   // UnsignedLessThan (CF = 1).
+		private static readonly OpCode CMOVC = new OpCode(new byte[] { 0x0F, 0x42 });   // Carry (CF = 1)
+		private static readonly OpCode CMOVNB = new OpCode(new byte[] { 0x0F, 0x43 });  // UnsignedGreaterOrEqual (greater or equal) (CF = 0)
+		private static readonly OpCode CMOVNC = new OpCode(new byte[] { 0x0F, 0x43 });  // NoCarry (CF = 0)
+		private static readonly OpCode CMOVE = new OpCode(new byte[] { 0x0F, 0x44 });   // Equal (ZF = 1)
+		private static readonly OpCode CMOVZ = new OpCode(new byte[] { 0x0F, 0x44 });   // Zero (ZF = 1)
+		private static readonly OpCode CMOVNE = new OpCode(new byte[] { 0x0F, 0x45 });  // NotEqual (ZF = 0)
+		private static readonly OpCode CMOVNZ = new OpCode(new byte[] { 0x0F, 0x45 });  // NotZero (ZF = 1)
+		private static readonly OpCode CMOVBE = new OpCode(new byte[] { 0x0F, 0x46 });  // UnsignedLessOrEqual (CF = 1 or ZF = 1).
+		private static readonly OpCode CMOVA = new OpCode(new byte[] { 0x0F, 0x47 });   // UnsignedGreaterThan (CF = 0 and ZF = 0).
+		private static readonly OpCode CMOVS = new OpCode(new byte[] { 0x0F, 0x48 });   // Signed (CF = 0 and ZF = 0)
+		private static readonly OpCode CMOVNS = new OpCode(new byte[] { 0x0F, 0x49 });  // NotSigned (SF = 0)
+		private static readonly OpCode CMOVP = new OpCode(new byte[] { 0x0F, 0x4A });   // Parity (PF = 1)
+		private static readonly OpCode CMOVNP = new OpCode(new byte[] { 0x0F, 0x4B });  // NoParity (PF = 0)
+		private static readonly OpCode CMOVL = new OpCode(new byte[] { 0x0F, 0x4C });   // LessThan (SF <> OF)
+		private static readonly OpCode CMOVGE = new OpCode(new byte[] { 0x0F, 0x4D });  // GreaterOrEqual (greater or equal) (SF = OF)
+		private static readonly OpCode CMOVLE = new OpCode(new byte[] { 0x0F, 0x4E });  // LessOrEqual (ZF = 1 or SF <> OF)
+		private static readonly OpCode CMOVG = new OpCode(new byte[] { 0x0F, 0x4F });   // GreaterThan (ZF = 0 and SF = OF)
 
 		#endregion Data Members
 

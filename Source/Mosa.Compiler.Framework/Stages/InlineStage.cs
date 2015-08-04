@@ -81,6 +81,7 @@ namespace Mosa.Compiler.Framework.Stages
 				//System.Diagnostics.Debug.WriteLine(" * " + invoked.Method.FullName);
 
 				Inline(node, blocks);
+
 				//MethodCompiler.Stop();
 			}
 		}

@@ -1,12 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection;
-using System.Runtime;
-using System.Runtime.CompilerServices;
-using System.Security;
 
 namespace System
 {

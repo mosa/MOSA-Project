@@ -44,6 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 						var ctx = new Context(node);
 
 						ctx.SetInstruction(IRInstruction.Move, exceptionRegister, node.Operand1);
+
 						//ctx.AppendInstruction(IRInstruction.KillAllExcept, null, exceptionRegister);
 						ctx.AppendInstruction(IRInstruction.Call, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
 						ctx.InvokeMethod = method;

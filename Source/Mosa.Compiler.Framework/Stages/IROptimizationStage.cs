@@ -990,6 +990,7 @@ namespace Mosa.Compiler.Framework.Stages
 					return;
 				}
 			}
+
 			// TODO: Add more strength reductions especially for AND w/ 0xFF, 0xFFFF, 0xFFFFFFFF, etc when source or destination are same or smaller
 		}
 

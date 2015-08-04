@@ -51,7 +51,7 @@ namespace Mosa.Tool.TinySimulator
 				string cmd = string.Empty;
 				string data = string.Empty;
 
-				Split(line, out  cmd, out  data);
+				Split(line, out cmd, out data);
 
 				Execute(lineNbr, cmd, data);
 			}
@@ -109,7 +109,7 @@ namespace Mosa.Tool.TinySimulator
 				string cmd = string.Empty;
 				string data = string.Empty;
 
-				Split(line, out  cmd, out  data);
+				Split(line, out cmd, out data);
 
 				Execute(lineNbr, cmd, data);
 			}

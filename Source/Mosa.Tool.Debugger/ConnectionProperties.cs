@@ -97,6 +97,7 @@ namespace Mosa.Tool.Debugger
 			}
 
 			private IAsyncResult result;
+
 			public void Start()
 			{
 				listener.Start();
@@ -113,7 +114,6 @@ namespace Mosa.Tool.Debugger
 				var socket = listener.EndAcceptSocket(result);
 				debugEngine.Stream = new DebugNetworkStream(socket, true);
 			}
-
 		}
 
 		private void btnDisconnect_Click(object sender, EventArgs e)

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Runtime.InteropServices;
+
 namespace Mosa.TinyCPUSimulator
 {
 	public class RegisterFloatingPoint : SimRegister
@@ -52,12 +53,14 @@ namespace Mosa.TinyCPUSimulator
 		// As Double
 		[FieldOffset(0)]
 		public double Low;
+
 		[FieldOffset(8)]
 		public double High;
 
 		// As ULong
 		[FieldOffset(0)]
 		public ulong ULow;
+
 		[FieldOffset(8)]
 		public ulong UHigh;
 	}

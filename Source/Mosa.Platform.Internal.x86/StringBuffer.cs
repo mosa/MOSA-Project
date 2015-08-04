@@ -87,6 +87,7 @@ namespace Mosa.Platform.Internal.x86
 		public void Set(string value)
 		{
 			Clear();
+
 			//if (value == null)
 			//	isSet = 0;
 			//else
@@ -195,6 +196,7 @@ namespace Mosa.Platform.Internal.x86
 				//TODO: Error
 				return;
 			}
+
 			//isSet = 1;
 			length++;
 			this[length - 1] = value;
@@ -302,6 +304,7 @@ namespace Mosa.Platform.Internal.x86
 					value = MaxLength;
 				}
 				length = value;
+
 				//isSet = 1;
 			}
 		}

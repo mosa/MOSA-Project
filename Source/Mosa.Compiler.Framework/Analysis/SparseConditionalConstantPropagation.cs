@@ -553,9 +553,11 @@ namespace Mosa.Compiler.Framework.Analysis
 		private void FinallyStart(InstructionNode node)
 		{
 			var result = GetVariableState(node.Result);
+
 			//var result2 = GetVariableState(context.Result2);
 
 			UpdateToOverDefined(result);
+
 			//UpdateToOverDefined(result2);
 		}
 

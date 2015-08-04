@@ -63,6 +63,7 @@ namespace Mosa.Kernel.x86
 		unsafe public static void SetMultibootLocation(uint address)
 		{
 			MultiBootInfo = (MultiBootInfo*)address;
+
 			//CountMemoryMap();
 		}
 
@@ -196,6 +197,7 @@ namespace Mosa.Kernel.x86
 			while ((uint)location < (MemoryMapStart + MemoryMapLength))
 			{
 				memoryMapCount++;
+
 				//location = (MultiBootMemoryMap*)(((uint)location) + location->size + 4);
 				location = location->Next;
 			}
@@ -383,23 +385,23 @@ namespace Mosa.Kernel.x86
 	[StructLayout(LayoutKind.Sequential)]
 	unsafe public struct MultiBootInfo
 	{
-		public uint Flags;			    //required
-		public uint MemLower;		    //if bit 0 in flags are set
-		public uint MemUpper;		    //if bit 0 in flags are set
-		public uint BootDevice;		  //if bit 1 in flags are set
-		public uint CommandLine;		//if bit 2 in flags are set
-		public uint ModuleCount;		//if bit 3 in flags are set
-		public uint ModuleAddress;	//if bit 3 in flags are set
-		public MultiBootElfSectionHeaderTable Syms;	//if bits 4 or 5 in flags are set
-		public uint MemMapLength;		//if bit 6 in flags is set
-		public uint MemMapAddress;	//if bit 6 in flags is set
-		public uint DrivesLength;		//if bit 7 in flags is set
-		public uint DrivesAddress;	//if bit 7 in flags is set
-		public uint ConfigTable;		//if bit 8 in flags is set
-		public uint ApmTable;				//if bit 9 in flags is set
-		public uint VbeControlInfo;	//if bit 10 in flags is set
-		public uint VbeModeInfo;		//if bit 11 in flags is set
-		public uint VbeMode;				// all vbe_* set if bit 12 in flags are set
+		public uint Flags;              //required
+		public uint MemLower;           //if bit 0 in flags are set
+		public uint MemUpper;           //if bit 0 in flags are set
+		public uint BootDevice;       //if bit 1 in flags are set
+		public uint CommandLine;        //if bit 2 in flags are set
+		public uint ModuleCount;        //if bit 3 in flags are set
+		public uint ModuleAddress;  //if bit 3 in flags are set
+		public MultiBootElfSectionHeaderTable Syms; //if bits 4 or 5 in flags are set
+		public uint MemMapLength;       //if bit 6 in flags is set
+		public uint MemMapAddress;  //if bit 6 in flags is set
+		public uint DrivesLength;       //if bit 7 in flags is set
+		public uint DrivesAddress;  //if bit 7 in flags is set
+		public uint ConfigTable;        //if bit 8 in flags is set
+		public uint ApmTable;               //if bit 9 in flags is set
+		public uint VbeControlInfo; //if bit 10 in flags is set
+		public uint VbeModeInfo;        //if bit 11 in flags is set
+		public uint VbeMode;                // all vbe_* set if bit 12 in flags are set
 		public uint VbeInterfaceSeg;
 		public uint VbeInterfaceOff;
 		public uint VbeInterfaceLength;

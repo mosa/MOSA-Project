@@ -230,6 +230,7 @@ namespace Mosa.Compiler.Framework
 					if (stop)
 						break;
 				}
+
 				//catch (Exception e)
 				//{
 				//	//	Trace.TraceListener.SubmitDebugStageInformation(Method, stage.Name + "-Exception", e.ToString());

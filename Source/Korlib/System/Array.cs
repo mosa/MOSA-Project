@@ -39,6 +39,7 @@ namespace System
 				throw new ArgumentNullException("indices");
 			if (this.Rank != indices.Length)
 				throw new ArgumentException("The number of dimensions in the current Array is not equal to the number of elements in indices.", "indices");
+
 			// TODO
 		}
 
@@ -51,6 +52,7 @@ namespace System
 				throw new ArgumentNullException("indices");
 			if (this.Rank != indices.Length)
 				throw new ArgumentException("The number of dimensions in the current Array is not equal to the number of elements in indices.", "indices");
+
 			// TODO
 			return null;
 		}
@@ -250,6 +252,7 @@ namespace System
 		{
 			if (array == null)
 				throw new ArgumentNullException("array");
+
 			// TODO
 			throw new NotImplementedException();
 		}

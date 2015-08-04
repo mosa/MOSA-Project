@@ -131,6 +131,7 @@ namespace Mosa.TestWorld.x86.Tests
 			try
 			{
 				a = a + 2;
+
 				//throw new System.Exception();
 			}
 			catch

@@ -226,7 +226,7 @@ namespace Mosa.Tool.TinySimulator
 
 		private void OnCompileCompleted()
 		{
-			MethodInvoker method = delegate()
+			MethodInvoker method = delegate ()
 			{
 				CompileCompleted();
 			};
@@ -360,7 +360,7 @@ namespace Mosa.Tool.TinySimulator
 
 			if (forceUpdate || simState.Tick == 0 || DateTime.Now.Ticks > lastTimeTick + 2500000)
 			{
-				MethodInvoker method = delegate()
+				MethodInvoker method = delegate ()
 				{
 					UpdateAllDocks(simState);
 				};
@@ -373,7 +373,7 @@ namespace Mosa.Tool.TinySimulator
 
 		private void UpdateExecutionCompleted()
 		{
-			MethodInvoker method = delegate()
+			MethodInvoker method = delegate ()
 			{
 				Status = "Simulation stopped.";
 				scriptView.ExecutingCompleted();
@@ -384,7 +384,7 @@ namespace Mosa.Tool.TinySimulator
 
 		private void ExecuteThread()
 		{
-			for (; ; )
+			for (;;)
 			{
 				lock (signalLock)
 				{
@@ -426,6 +426,7 @@ namespace Mosa.Tool.TinySimulator
 							case 8: list.Add(entry.Address, SimCPU.Read8(entry.Address)); break;
 							case 16: list.Add(entry.Address, SimCPU.Read16(entry.Address)); break;
 							case 32: list.Add(entry.Address, SimCPU.Read32(entry.Address)); break;
+
 							//case 64: list.Add(entry.Address, SimCPU.Read64(entry.Address)); break;
 							default: break;
 						}
@@ -535,7 +536,7 @@ namespace Mosa.Tool.TinySimulator
 
 		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string info, int threadID)
 		{
-			MethodInvoker call = delegate()
+			MethodInvoker call = delegate ()
 			{
 				SubmitTraceEvent(compilerStage, info);
 			};

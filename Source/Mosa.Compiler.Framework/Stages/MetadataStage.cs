@@ -853,6 +853,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				// String
 				case MosaTypeCode.String:
+
 					// Since strings are immutable, make it an object that we can just use
 					var str = (string)value;
 					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)writer.Position, 0, "System.String" + Metadata.TypeDefinition, SectionKind.ROData, 0);
