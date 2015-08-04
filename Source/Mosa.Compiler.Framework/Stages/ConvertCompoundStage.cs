@@ -88,7 +88,7 @@ namespace Mosa.Compiler.Framework.Stages
 						return;
 					}
 
-					// If this move is proceeded by a compound move (which will turn into a compound move) remove this instruction
+					// If this move is preceded by a compound move (which will turn into a compound move) remove this instruction
 					// It is basically a double up caused by some instructions result in the same IR output
 					if ((prevNode.Instruction == IRInstruction.CompoundMove
 							|| prevNode.Instruction == IRInstruction.CompoundLoad
