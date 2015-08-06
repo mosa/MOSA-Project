@@ -111,7 +111,7 @@ namespace Mosa.Platform.x86.Stages
 			basicBlocks.AddHeaderBlock(block);
 			var ctx = new Context(block);
 
-			// set sentinal on the stack to indicate the start of the stack
+			// set sentinel on the stack to indicate the start of the stack
 			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ebp, 0), zero);
 

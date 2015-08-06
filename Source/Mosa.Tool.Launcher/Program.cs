@@ -17,7 +17,7 @@ namespace Mosa.Tool.Launcher
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			var main = new MainForm();
-			main.Options.LoadFile(main.ConfigFile);
+			//main.Options.LoadFile(main.ConfigFile);
 
 			//commannd line arguments will overwrite config file settings
 			main.Options.LoadArguments(args);

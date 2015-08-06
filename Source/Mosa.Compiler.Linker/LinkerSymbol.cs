@@ -1,7 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Linker
 {
@@ -28,14 +30,15 @@ namespace Mosa.Compiler.Linker
 
 		public ulong VirtualAddress { get; internal set; }
 
-		//public uint FileOffset { get; internal set; }
+		public List<LinkRequest> LinkRequests { get; private set; }
 
 		internal LinkerSymbol(string name, SectionKind kind, uint alignment)
 		{
 			Name = name;
 			Alignment = alignment;
 			SectionKind = kind;
-		}
+			LinkRequests = new List<LinkRequest>();
+        }
 
 		public void SetData(MemoryStream stream)
 		{
@@ -47,30 +50,48 @@ namespace Mosa.Compiler.Linker
 			Stream = Stream.Synchronized(new MemoryStream(data));
 		}
 
+		public void AddPatch(LinkRequest linkRequest)
+		{
+			lock(this)
+			{
+				LinkRequests.Add(linkRequest);
+			}
+		}
+
+		//public void RemovePatch(LinkRequest source, LinkRequest destination)
+		//{ }
+
 		public void ApplyPatch(long offset, ulong value, ulong mask, byte patchSize, Endianness endianness)
 		{
-			Stream.Position = offset;
-
-			ulong current = 0;
-
-			switch (patchSize)
+			try
 			{
-				case 8: current = (ulong)Stream.ReadByte(); break;
-				case 16: current = (ulong)Stream.ReadUInt16(endianness); break;
-				case 32: current = (ulong)Stream.ReadUInt32(endianness); break;
-				case 64: current = (ulong)Stream.ReadUInt64(endianness); break;
+				Stream.Position = offset;
+
+				ulong current = 0;
+
+				switch (patchSize)
+				{
+					case 8: current = (ulong)Stream.ReadByte(); break;
+					case 16: current = (ulong)Stream.ReadUInt16(endianness); break;
+					case 32: current = (ulong)Stream.ReadUInt32(endianness); break;
+					case 64: current = (ulong)Stream.ReadUInt64(endianness); break;
+				}
+
+				Stream.Position = offset;
+				current = (current & ~mask) | value;
+
+				// Apply the patch
+				switch (patchSize)
+				{
+					case 8: Stream.WriteByte((byte)current); break;
+					case 16: Stream.Write((ushort)current, endianness); break;
+					case 32: Stream.Write((uint)current, endianness); break;
+					case 64: Stream.Write((ulong)current, endianness); break;
+				}
 			}
-
-			Stream.Position = offset;
-			current = (current & ~mask) | value;
-
-			// Apply the patch
-			switch (patchSize)
+			catch(Exception ex)
 			{
-				case 8: Stream.WriteByte((byte)current); break;
-				case 16: Stream.Write((ushort)current, endianness); break;
-				case 32: Stream.Write((uint)current, endianness); break;
-				case 64: Stream.Write((ulong)current, endianness); break;
+				return;
 			}
 		}
 
