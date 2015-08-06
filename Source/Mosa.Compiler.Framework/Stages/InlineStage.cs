@@ -19,12 +19,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var compilerMethod = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(MethodCompiler.Method);
 
-			bool firstCompile = (compilerMethod.CompileCount == 0);
+			//bool firstCompile = (compilerMethod.CompileCount == 0);
 
 			compilerMethod.CompileCount++;
+			compilerMethod.Calls.Clear();
 
 			var nodes = new List<InstructionNode>();
 
+			// find all call sites
 			foreach (var block in BasicBlocks)
 			{
 				for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
@@ -37,8 +39,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 					nodes.Add(node);
 
-					if (!firstCompile)
-						continue;
+					//if (!firstCompile)
+					//	continue;
 
 					Debug.Assert(node.InvokeMethod != null);
 

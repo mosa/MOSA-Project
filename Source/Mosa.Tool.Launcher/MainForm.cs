@@ -302,7 +302,7 @@ namespace Mosa.Tool.Launcher
 
 		private void CompileAndLaunch()
 		{
-			Options.SaveFile(ConfigFile);
+			//Options.SaveFile(ConfigFile);
 			rtbOutput.Clear();
 			rtbCounters.Clear();
 

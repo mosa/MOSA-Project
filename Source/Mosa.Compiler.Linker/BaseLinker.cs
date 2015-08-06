@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Linker
 	{
 		public LinkerSection[] Sections { get; private set; }
 
-		public List<LinkRequest> LinkRequests { get; private set; }
+		//public List<LinkRequest> LinkRequests { get; private set; }
 
 		public LinkerSymbol EntryPoint { get; set; }
 
@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Linker
 		protected BaseLinker()
 		{
 			Sections = new LinkerSection[4];
-			LinkRequests = new List<LinkRequest>();
+			//LinkRequests = new List<LinkRequest>();
 
 			Endianness = Common.Endianness.Little;
 			MachineID = 0;
@@ -78,7 +78,8 @@ namespace Mosa.Compiler.Linker
 			lock (mylock)
 			{
 				var linkRequest = new LinkRequest(linkType, patchType, patchSymbol, patchOffset, relativeBase, referenceSymbol, referenceOffset);
-				LinkRequests.Add(linkRequest);
+				//LinkRequests.Add(linkRequest);
+				patchSymbol.AddPatch(linkRequest);
 			}
 		}
 
@@ -191,9 +192,12 @@ namespace Mosa.Compiler.Linker
 
 		private void ApplyPatches()
 		{
-			foreach (var linkRequest in LinkRequests)
+			foreach (var symbol in Symbols)
 			{
-				ApplyPatch(linkRequest);
+				foreach (var linkRequest in symbol.LinkRequests)
+				{
+					ApplyPatch(linkRequest);
+				}
 			}
 		}
 
