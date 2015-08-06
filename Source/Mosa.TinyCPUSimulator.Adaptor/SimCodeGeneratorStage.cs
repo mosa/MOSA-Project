@@ -24,6 +24,8 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 			symbol = MethodCompiler.Linker.GetSymbol(MethodCompiler.Method.FullName, SectionKind.Text);
 			simLinker = MethodCompiler.Linker as SimLinker;
+
+			simLinker.ClearSymbolInformation(symbol);
 		}
 
 		protected override void EmitInstruction(InstructionNode node, BaseCodeEmitter codeEmitter)

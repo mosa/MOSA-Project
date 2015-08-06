@@ -125,6 +125,10 @@ namespace Mosa.Compiler.Framework
 			this.linker = linker;
 			this.codeStream = codeStream;
 			this.TypeSystem = typeSystem;
+
+			// only necessary if method is being recompiled (due to inline optimization, for example)
+			var symbol = linker.GetSymbol(MethodName, SectionKind.Text);
+			symbol.RemovePatches();
 		}
 
 		/// <summary>

@@ -14,13 +14,14 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 	{
 		private ISimAdapter simAdapter;
 
-		private List<Tuple<LinkerSymbol, int, string>> targetSymbols = new List<Tuple<LinkerSymbol, int, string>>();
-		private List<Tuple<LinkerSymbol, long, SimInstruction>> instructions = new List<Tuple<LinkerSymbol, long, SimInstruction>>();
-		private List<Tuple<LinkerSymbol, long, string>> source = new List<Tuple<LinkerSymbol, long, string>>();
+		private class SymbolInfo
+		{
+			public List<Tuple<int, string>> targetSymbols = new List<Tuple<int, string>>();
+			public List<Tuple<long, SimInstruction>> instructions = new List<Tuple<long, SimInstruction>>();
+			public List<Tuple<long, string>> source = new List<Tuple<long, string>>();
+		}
 
-		private object mylock1 = new object();
-		private object mylock2 = new object();
-		private object mylock3 = new object();
+		private Dictionary<LinkerSymbol, SymbolInfo> symbolData = new Dictionary<LinkerSymbol, SymbolInfo>();
 
 		#region Construction
 
@@ -35,28 +36,46 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		#endregion Construction
 
+		private SymbolInfo GetSymbolInfo(LinkerSymbol linkerSymbol)
+		{
+			SymbolInfo symbolInfo = null;
+
+			lock (symbolData)
+			{
+				if (!symbolData.TryGetValue(linkerSymbol, out symbolInfo))
+				{
+					symbolInfo = new SymbolInfo();
+					symbolData.Add(linkerSymbol, symbolInfo);
+				}
+			}
+
+			return symbolInfo;
+		}
+
+		public void ClearSymbolInformation(LinkerSymbol linkerSymbol)
+		{
+			symbolData.Remove(linkerSymbol);
+        }
+
 		public void AddTargetSymbol(LinkerSymbol baseSymbol, int offset, string name)
 		{
-			lock (mylock1)
-			{
-				targetSymbols.Add(new Tuple<LinkerSymbol, int, string>(baseSymbol, offset, name));
-			}
+			var symbolInfo = GetSymbolInfo(baseSymbol);
+
+			symbolInfo.targetSymbols.Add(new Tuple<int, string>(offset, name));
 		}
 
 		public void AddInstruction(LinkerSymbol baseSymbol, long offset, SimInstruction instruction)
 		{
-			lock (mylock2)
-			{
-				instructions.Add(new Tuple<LinkerSymbol, long, SimInstruction>(baseSymbol, offset, instruction));
-			}
+			var symbolInfo = GetSymbolInfo(baseSymbol);
+
+			symbolInfo.instructions.Add(new Tuple<long, SimInstruction>(offset, instruction));
 		}
 
 		public void AddSourceInformation(LinkerSymbol baseSymbol, long offset, string information)
 		{
-			lock (mylock3)
-			{
-				source.Add(new Tuple<LinkerSymbol, long, string>(baseSymbol, offset, information));
-			}
+			var symbolInfo = GetSymbolInfo(baseSymbol);
+
+			symbolInfo.source.Add(new Tuple<long, string>(offset, information));
 		}
 
 		protected override void EmitImplementation(Stream stream)
@@ -68,24 +87,25 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				simAdapter.SimCPU.SetSymbol(symbol.Name, symbol.VirtualAddress, (ulong)symbol.Size);
 			}
 
-			foreach (var target in targetSymbols)
+			foreach (var symbol in symbolData)
 			{
-				simAdapter.SimCPU.SetSymbol(target.Item3, target.Item1.VirtualAddress + (ulong)target.Item2, 0);
+				foreach (var target in symbol.Value.targetSymbols)
+				{
+					simAdapter.SimCPU.SetSymbol(target.Item2, symbol.Key.VirtualAddress + (ulong)target.Item1, 0);
+				}
+
+				foreach (var target in symbol.Value.instructions)
+				{
+					simAdapter.SimCPU.AddInstruction(symbol.Key.VirtualAddress + (ulong)target.Item1, target.Item2);
+				}
+
+				foreach (var target in symbol.Value.source)
+				{
+					simAdapter.SimCPU.AddSourceInformation(symbol.Key.VirtualAddress + (ulong)target.Item1, target.Item2);
+				}
 			}
 
-			foreach (var target in instructions)
-			{
-				simAdapter.SimCPU.AddInstruction(target.Item1.VirtualAddress + (ulong)target.Item2, target.Item3);
-			}
-
-			foreach (var target in source)
-			{
-				simAdapter.SimCPU.AddSourceInformation(target.Item1.VirtualAddress + (ulong)target.Item2, target.Item3);
-			}
-
-			targetSymbols = null;
-			instructions = null;
-			source = null;
+			symbolData = null;
 		}
 	}
 }

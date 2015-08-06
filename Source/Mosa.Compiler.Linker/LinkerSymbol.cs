@@ -58,8 +58,13 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
-		//public void RemovePatch(LinkRequest source, LinkRequest destination)
-		//{ }
+		public void RemovePatches()
+		{
+			lock (this)
+			{
+				LinkRequests.Clear();
+			}
+		}
 
 		public void ApplyPatch(long offset, ulong value, ulong mask, byte patchSize, Endianness endianness)
 		{
