@@ -35,6 +35,7 @@ namespace Mosa.Compiler.Framework.Stages
 			compilerMethod.IsPlugged = (plugMethod != null);
 			compilerMethod.IsVirtual = method.IsVirtual;
 			compilerMethod.HasDoNotInlineAttribute = false;
+			compilerMethod.HasAddressOfInstruction = false;
 
 			int totalIRCount = 0;
 			int totalIROtherCount = 0;
@@ -53,6 +54,11 @@ namespace Mosa.Compiler.Framework.Stages
 					else
 					{
 						totalIROtherCount++;
+					}
+
+					if (node.Instruction == IRInstruction.AddressOf)
+					{
+						compilerMethod.HasAddressOfInstruction = true;
 					}
 				}
 
@@ -80,7 +86,7 @@ namespace Mosa.Compiler.Framework.Stages
 				compilerMethod.BasicBlocks = CopyInstructions();
 			}
 
-			lock(compilerMethod)
+			lock (compilerMethod)
 			{
 				foreach (var called in compilerMethod.CalledBy)
 				{
@@ -122,6 +128,10 @@ namespace Mosa.Compiler.Framework.Stages
 			//	return false;
 
 			if (method.IsVirtual)
+				return false;
+
+			// current implementation limitation - can't include methods with addressOf instruction
+			if (method.HasAddressOfInstruction)
 				return false;
 
 			if (method.IROtherInstructionCount > 0)

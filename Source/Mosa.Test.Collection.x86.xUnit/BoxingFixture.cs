@@ -11,56 +11,56 @@ namespace Mosa.Test.Collection.x86.xUnit
 		//private float FloatTolerance = 0.00001f;
 
 		[Theory]
-		[PropertyData("U1")]
+		[MemberData("U1")]
 		public void BoxU1(byte value)
 		{
 			Assert.Equal(BoxingTests.BoxU1(value), Run<byte>("Mosa.Test.Collection.BoxingTests.BoxU1", value));
 		}
 
 		[Theory]
-		[PropertyData("U2")]
+		[MemberData("U2")]
 		public void BoxU2(ushort value)
 		{
 			Assert.Equal(BoxingTests.BoxU2(value), Run<ushort>("Mosa.Test.Collection.BoxingTests.BoxU2", value));
 		}
 
 		[Theory]
-		[PropertyData("U4")]
+		[MemberData("U4")]
 		public void BoxU4(uint value)
 		{
 			Assert.Equal(BoxingTests.BoxU4(value), Run<uint>("Mosa.Test.Collection.BoxingTests.BoxU4", value));
 		}
 
 		[Theory]
-		[PropertyData("U8")]
+		[MemberData("U8")]
 		public void BoxU8(ulong value)
 		{
 			Assert.Equal(BoxingTests.BoxU8(value), Run<ulong>("Mosa.Test.Collection.BoxingTests.BoxU8", value));
 		}
 
 		[Theory]
-		[PropertyData("I1")]
+		[MemberData("I1")]
 		public void BoxI1(sbyte value)
 		{
 			Assert.Equal(BoxingTests.BoxI1(value), Run<sbyte>("Mosa.Test.Collection.BoxingTests.BoxI1", value));
 		}
 
 		[Theory]
-		[PropertyData("I2")]
+		[MemberData("I2")]
 		public void BoxI2(short value)
 		{
 			Assert.Equal(BoxingTests.BoxI2(value), Run<short>("Mosa.Test.Collection.BoxingTests.BoxI2", value));
 		}
 
 		[Theory]
-		[PropertyData("I4")]
+		[MemberData("I4")]
 		public void BoxI4(int value)
 		{
 			Assert.Equal(BoxingTests.BoxI4(value), Run<int>("Mosa.Test.Collection.BoxingTests.BoxI4", value));
 		}
 
 		[Theory]
-		[PropertyData("I8")]
+		[MemberData("I8")]
 		public void BoxI8(long value)
 		{
 			Assert.Equal(BoxingTests.BoxI8(value), Run<long>("Mosa.Test.Collection.BoxingTests.BoxI8", value));
@@ -87,84 +87,84 @@ namespace Mosa.Test.Collection.x86.xUnit
 		//}
 
 		[Theory]
-		[PropertyData("C")]
+		[MemberData("C")]
 		public void BoxC(char value)
 		{
 			Assert.Equal(BoxingTests.BoxC(value), Run<char>("Mosa.Test.Collection.BoxingTests.BoxC", value));
 		}
 
 		[Theory]
-		[PropertyData("U1")]
+		[MemberData("U1")]
 		public void EqualsU1(byte value)
 		{
 			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsU1(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsU1", value));
 		}
 
 		[Theory]
-		[PropertyData("U2")]
+		[MemberData("U2")]
 		public void EqualsU2(ushort value)
 		{
 			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsU2(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsU2", value));
 		}
 
 		[Theory]
-		[PropertyData("U4")]
+		[MemberData("U4")]
 		public void EqualsU4(uint value)
 		{
 			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsU4(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsU4", value));
 		}
 
 		[Theory]
-		[PropertyData("U8")]
+		[MemberData("U8")]
 		public void EqualsU8(ulong value)
 		{
 			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsU8(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsU8", value));
 		}
 
 		[Theory]
-		[PropertyData("I1")]
+		[MemberData("I1")]
 		public void EqualsI1(sbyte value)
 		{
 			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsI1(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsI1", value));
 		}
 
 		[Theory]
-		[PropertyData("I2")]
+		[MemberData("I2")]
 		public void EqualsI2(short value)
 		{
 			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsI2(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsI2", value));
 		}
 
 		[Theory]
-		[PropertyData("I4")]
+		[MemberData("I4")]
 		public void EqualsI4(int value)
 		{
 			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsI4(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsI4", value));
 		}
 
 		[Theory]
-		[PropertyData("I8")]
+		[MemberData("I8")]
 		public void EqualsI8(long value)
 		{
 			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsI8(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsI8", value));
 		}
 
 		[Theory]
-		[PropertyData("R4NotNaN")]
+		[MemberData("R4NotNaN")]
 		public void EqualsR4(float value)
 		{
 			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsR4(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsR4", value));
 		}
 
 		[Theory]
-		[PropertyData("R8NotNaN")]
+		[MemberData("R8NotNaN")]
 		public void EqualsR8(double value)
 		{
 			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsR8(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsR8", value));
 		}
 
 		[Theory]
-		[PropertyData("C")]
+		[MemberData("C")]
 		public void EqualsC(char value)
 		{
 			Assert.Equal(Mosa.Test.Collection.BoxingTests.EqualsC(value), Run<bool>("Mosa.Test.Collection.BoxingTests.EqualsC", value));

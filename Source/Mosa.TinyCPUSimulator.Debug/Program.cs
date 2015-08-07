@@ -50,9 +50,9 @@ namespace Mosa.TinyCPUSimulator.Debug
 				//Test4();
 				//Test12();
 
-				Test13();
+				//Test13();
 
-				//Test14();
+				Test14();
 			}
 			catch (Exception e)
 			{
@@ -66,9 +66,9 @@ namespace Mosa.TinyCPUSimulator.Debug
 
 		private static void Test14()
 		{
-			var fixture = new UInt16Fixture();
+			var fixture = new BoxingFixture();
 
-			fixture.Newarr();
+			fixture.BoxI4(10);
 		}
 
 		private static void Test13()
