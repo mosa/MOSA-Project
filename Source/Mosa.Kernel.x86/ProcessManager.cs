@@ -74,7 +74,7 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="slot">The slot.</param>
 		/// <returns>The slot.</returns>
-		private static unsafe uint CreateProcess(uint slot)
+		private static uint CreateProcess(uint slot)
 		{
 			uint process = GetProcessLocation(slot);
 
@@ -101,7 +101,7 @@ namespace Mosa.Kernel.x86
 
 			// Deallocate used memory (pages)
 			uint address = Native.Get32(process + Offset.MemoryMap);
-			DeallocateMemory(slot, address, 32U * 4096U);
+			VirtualPageAllocator.Release(address, 32U * 4096U);
 
 			// Now here's the weird part, what do we want to do?
 			// For the moment decided to set the status to
@@ -160,7 +160,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="free">if set to <c>true</c> [free].</param>
 		private static void SetPageStatus(uint bitmap, uint page, bool free)
 		{
-			uint at = (uint)(bitmap + (page / 32));
+			uint at = bitmap + (page / 32);
 			byte bit = (byte)(page % 32);
 			uint mask = (byte)(1 << bit);
 

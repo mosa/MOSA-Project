@@ -68,7 +68,7 @@ namespace Mosa.Kernel.x86
 		public static void Setup()
 		{
 			// Allocate memory for the task table
-			table = (uint)VirtualPageAllocator.Reserve(slots * Offset.TotalSize);
+			table = VirtualPageAllocator.Reserve(slots * Offset.TotalSize);
 
 			uint stack = ProcessManager.AllocateMemory(0, defaultStackSize);
 
@@ -175,7 +175,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static uint GetTaskLocation(uint slot)
 		{
-			return (uint)(table + (Offset.TotalSize * slot));
+			return table + (Offset.TotalSize * slot);
 		}
 
 		public static void ThreadOut(uint esp)

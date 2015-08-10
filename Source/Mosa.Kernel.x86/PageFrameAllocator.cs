@@ -9,15 +9,6 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class PageFrameAllocator
 	{
-		// Location for memory map starts at 28MB
-		private const uint StartLocation = 1024 * 1024 * 28;
-
-		// Reserve memory up to 32MB
-		public const uint ReserveMemory = 1024 * 1024 * 32;
-
-		// Maximum memory usage (4GB)
-		public const uint MaximumMemory = 0xFFFFFFFF;
-
 		// Start of memory map
 		private static uint map;
 
@@ -32,8 +23,8 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Setup()
 		{
-			map = StartLocation;
-			at = StartLocation;
+			map = Address.PageFrameAllocator;
+			at = Address.PageFrameAllocator;
 			totalPages = 0;
 			totalUsedPages = 0;
 			SetupFreeMemory();
@@ -71,19 +62,19 @@ namespace Mosa.Kernel.x86
 		/// <param name="size">The size.</param>
 		private static void AddFreeMemory(uint cnt, uint start, uint size)
 		{
-			if ((start > MaximumMemory) || (start + size < ReserveMemory))
+			if ((start > Address.MaximumMemory) || (start + size < Address.ReserveMemory))
 				return;
 
 			// Normalize
-			uint normstart = (uint)((start + PageSize - 1) & ~(PageSize - 1));
-			uint normend = (uint)((start + size) & ~(PageSize - 1));
-			uint normsize = (uint)(normend - normstart);
+			uint normstart = (start + PageSize - 1) & ~(PageSize - 1);
+			uint normend = (start + size) & ~(PageSize - 1);
+			uint normsize = normend - normstart;
 
 			// Adjust if memory below is reserved
-			if (normstart < ReserveMemory)
+			if (normstart < Address.ReserveMemory)
 			{
-				normsize = (normstart + normsize) - ReserveMemory;
-				normstart = ReserveMemory;
+				normsize = (normstart + normsize) - Address.ReserveMemory;
+				normstart = Address.ReserveMemory;
 
 				if (normsize <= 0)
 					return;
