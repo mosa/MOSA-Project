@@ -69,7 +69,7 @@ namespace Mosa.Utility.Launcher
 			CompilerUsesMultipleThreads = true;
 			EnableInlinedMethods = true;
 			InlinedIRMaximum = 8;
-        }
+		}
 
 		public void LoadFile(string file)
 		{

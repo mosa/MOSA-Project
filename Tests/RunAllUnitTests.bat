@@ -1,8 +1,8 @@
 
-SET XUNIT="..\Source\packages\xunit.runners.1.9.2\tools\xunit.console.clr4.x86.exe"
+cd ..\bin
 
-if not exist results mkdir results
+SET XUNIT="..\Source\packages\xunit.runner.console.2.0.0\tools\xunit.console.x86.exe"
 
-%XUNIT% Mosa.UnitTests.xunit
+%XUNIT% Mosa.Compiler.Framework.xUnit.dll
 
-
+%XUNIT% Mosa.Test.Collection.x86.xUnit.dll
