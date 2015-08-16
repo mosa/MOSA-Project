@@ -73,11 +73,11 @@ namespace Mosa.Kernel.x86
 			// Adjust if memory below is reserved
 			if (normstart < Address.ReserveMemory)
 			{
+				if ((normstart + normsize) < Address.ReserveMemory)
+					return;
+
 				normsize = (normstart + normsize) - Address.ReserveMemory;
 				normstart = Address.ReserveMemory;
-
-				if (normsize <= 0)
-					return;
 			}
 
 			// Populate free table

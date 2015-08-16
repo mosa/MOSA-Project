@@ -84,7 +84,6 @@
     <Compile Include="Keyboard.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Multiboot.cs" />
-    <Compile Include="PageFaultHandler.cs" />
     <Compile Include="PageFrameAllocator.cs" />
     <Compile Include="PageTable.cs" />
     <Compile Include="Panic.cs" />

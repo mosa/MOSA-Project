@@ -400,17 +400,28 @@ namespace Mosa.Kernel.x86
 
 				case 14:
 
-					// Page Fault!
+					// Check if Null Pointer Exception
+					// Otherwise handle as Page Fault
 					var cr2 = Native.GetCR2() >> 5;
 					if (cr2 < 0x1000)
-					{
 						Error(stack->EBP, stack->EIP, "Null Pointer Exception");
-						break;
+
+					//bool taken = false;
+					//spinLock.Enter(ref taken);
+
+					uint physicalpage = PageFrameAllocator.Allocate();
+
+					if (physicalpage == 0x0)
+					{
+						// Panic! Out of memory
+						Panic.SetStackPointer(stack->EBP, stack->EIP);
+						Panic.Error(cr2);
 					}
 
-					//PageFaultHandler.Fault(errorCode);
-					Panic.SetStackPointer(stack->EBP, stack->EIP);
-					Panic.Error(cr2);
+					PageTable.MapVirtualAddressToPhysical(Native.GetCR2(), physicalpage);
+
+					//spinLock.Exit();
+
 					break;
 
 				case 16:

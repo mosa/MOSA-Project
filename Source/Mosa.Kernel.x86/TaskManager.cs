@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Platform.Internal.x86;
+using System.Runtime.InteropServices;
 
 namespace Mosa.Kernel.x86
 {
@@ -9,9 +10,8 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class TaskManager
 	{
-		private static uint defaultStackSize = 1024 * 1024 * 4; // 4MB
-		private static uint slots = 4096 * 8;
-		private static uint table;
+		private static uint defaultStackSize = 1024 * 1024 * 1; // 1MB
+		private static uint slots = 3072;
 		private static uint currenttask; // Not SMP
 
 		//private static uint lock = 0;
@@ -26,19 +26,38 @@ namespace Mosa.Kernel.x86
 			public static readonly byte Terminated = 3;
 		}
 
-		internal struct Offset
+		[StructLayout(LayoutKind.Explicit)]
+		internal struct Task
 		{
-			public static readonly uint Status = 0;
-			public static readonly uint ProcessID = 4;
-			public static readonly uint TaskID = 8;
-			public static readonly uint StackBottom = 12;
-			public static readonly uint StackTop = 16;
-			public static readonly uint TickCounter = 20;
-			public static readonly uint LastCounter = 24;
-			public static readonly uint Priority = 28;
-			public static readonly uint Lock = 32;
-			public static readonly uint ESP = 36;
-			public static readonly uint TotalSize = 40;
+			[FieldOffset(0x00)]
+			public uint Status;
+
+			[FieldOffset(0x04)]
+			public uint ProcessID;
+
+			[FieldOffset(0x08)]
+			public uint TaskID;
+
+			[FieldOffset(0x0C)]
+			public uint StackBottom;
+
+			[FieldOffset(0x10)]
+			public uint StackTop;
+
+			[FieldOffset(0x14)]
+			public uint TickCounter;
+
+			[FieldOffset(0x18)]
+			public uint LastCounter;
+
+			[FieldOffset(0x1C)]
+			public uint Priority;
+
+			[FieldOffset(0x20)]
+			public uint Lock;
+
+			[FieldOffset(0x24)]
+			public uint ESP;
 		}
 
 		internal struct StackSetupOffset
@@ -67,9 +86,6 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Setup()
 		{
-			// Allocate memory for the task table
-			table = VirtualPageAllocator.Reserve(slots * Offset.TotalSize);
-
 			uint stack = ProcessManager.AllocateMemory(0, defaultStackSize);
 
 			// Create idle task
@@ -103,23 +119,23 @@ namespace Mosa.Kernel.x86
 		/// Creates the task.
 		/// </summary>
 		/// <returns></returns>
-		private static uint CreateTask(uint processid, uint slot, uint eip)
+		private unsafe static uint CreateTask(uint processid, uint slot, uint eip)
 		{
 			// TODO: Lock
 
-			uint task = GetTaskLocation(slot);
+			var task = GetTaskLocation(slot);
 			uint stack = ProcessManager.AllocateMemory(processid, defaultStackSize);
 			uint stacktop = stack + defaultStackSize;
 
 			// TODO: Add guard pages before and after stack
 
 			// Setup Task Entry
-			Native.Set32(task + Offset.Status, Status.Running);
-			Native.Set32(task + Offset.ProcessID, processid);
-			Native.Set32(task + Offset.TaskID, slot);
-			Native.Set32(task + Offset.StackBottom, stack);
-			Native.Set32(task + Offset.StackTop, stacktop);
-			Native.Set32(task + Offset.ESP, stack + StackSetupOffset.InitialSize); // TODO
+			task->Status = Status.Running;
+			task->ProcessID = processid;
+			task->TaskID = slot;
+			task->StackBottom = stack;
+			task->StackTop = stacktop;
+			task->ESP = stack + StackSetupOffset.InitialSize; // TODO
 
 			// Setup Stack
 			Native.Set32(stacktop - StackSetupOffset.SENTINEL, 0);  // important for traversing the stack backwards
@@ -159,10 +175,10 @@ namespace Mosa.Kernel.x86
 		/// Finds an empty slot in the process table.
 		/// </summary>
 		/// <returns></returns>
-		private static uint FindEmptySlot()
+		private unsafe static uint FindEmptySlot()
 		{
 			for (uint slot = 1; slot < slots; slot++)
-				if (Native.Get32(GetTaskLocation(slot) + Offset.Status) == Status.Empty)
+				if (GetTaskLocation(slot)->Status == Status.Empty)
 					return slot;
 
 			return 0;
@@ -173,36 +189,30 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="slot">The slot.</param>
 		/// <returns></returns>
-		private static uint GetTaskLocation(uint slot)
+		private unsafe static Task* GetTaskLocation(uint slot)
 		{
-			return table + (Offset.TotalSize * slot);
+			return (Task*)(Address.TaskSlots + (sizeof(Task) * slot));
 		}
 
-		public static void ThreadOut(uint esp)
+		public unsafe static void ThreadOut(uint esp)
 		{
-			// Get Stack Slot Location
-			uint task = GetTaskLocation(currenttask);
-
-			// Save Stack location
-			Native.Set32(task + Offset.ESP, esp);
+			// Get Stack Slot Location and Save Stack location
+			GetTaskLocation(currenttask)->ESP = esp;
 		}
 
 		/// <summary>
 		/// Switches the specified esp.
 		/// </summary>
 		/// <param name="nexttask">The nexttask.</param>
-		public static void Switch(uint nexttask)
+		public unsafe static void Switch(uint nexttask)
 		{
 			PIC.SendEndOfInterrupt(0x20);
 
 			// Update current task
 			currenttask = nexttask;
 
-			// Get Stack Slot Location
-			uint task = GetTaskLocation(currenttask);
-
 			// Get Stack location
-			uint esp = Native.Get32(task + Offset.ESP);
+			uint esp = GetTaskLocation(currenttask)->ESP;
 
 			// Switch task
 			Native.SwitchTask(esp);

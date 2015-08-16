@@ -12,27 +12,27 @@ namespace Mosa.Kernel.x86
 	{
 		public static void Setup()
 		{
-			//At this stage, allocating memory does not work, so you are only allowed to use ValueTypes or static classes.
+			// At this stage, allocating memory does not work, so you are only allowed to use ValueTypes or static classes.
 			IDT.SetInterruptHandler(null);
 			Panic.Setup();
 			DebugClient.Setup(Serial.COM1);
 
-			//Initialize interrupts
+			// Initialize interrupts
 			PIC.Setup();
 			IDT.Setup();
 
-			//Initializing the memory management
+			// Initializing the memory management
 			Multiboot.Setup();
 			GDT.Setup();
 			PageFrameAllocator.Setup();
 			PageTable.Setup();
 			VirtualPageAllocator.Setup();
 			ProcessManager.Setup();
+			TaskManager.Setup();
 			GC.Setup();
 
-			//At this point we can use objects, that allocates memory
+			// At this point we can use objects, that allocates memory
 			Runtime.Setup();
-			TaskManager.Setup();
 			SmbiosManager.Setup();
 			ConsoleManager.Setup();
 		}
