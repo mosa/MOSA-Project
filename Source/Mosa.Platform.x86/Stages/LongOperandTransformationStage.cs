@@ -123,7 +123,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand edx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 			Operand ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 
-			Operand v16 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			              AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			Operand v20 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			Operand v12 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
