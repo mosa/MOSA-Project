@@ -183,4 +183,22 @@
     <Compile Include="System.Runtime.InteropServices\OutAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
+  <PropertyGroup>
+    <CompileDependsOn>GenerateCompilerResponseFile;$(CompileDependsOn)</CompileDependsOn>
+  </PropertyGroup>
+  <Target Name="GenerateCompilerResponseFile">
+    <Message Text="Generating module name response file: $(IntermediateOutputPath)\korlib.rsp" />
+    <Message Text="VS Version: $(VisualStudioVersion); Tools Version: $(MSBuildToolsVersion)" />
+    <!-- When Roslyn is NOT enabled, we need to set the module name for mscorlib -->
+    <Touch Condition="'$(UseRoslynCompiler)'!='true'" Files="$(IntermediateOutputPath)\korlib.rsp" AlwaysCreate="true" />
+    <!--<WriteLinesToFile Condition="'$(UseRoslynCompiler)'!='true'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/nodebug" Overwrite="true" />-->
+    <!-- When Roslyn is enabled we need to set the runtimemetadataversion -->
+    <WriteLinesToFile Condition="'$(UseRoslynCompiler)'=='true'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/runtimemetadataversion:v1.0.0" Overwrite="true" />
+    <ItemGroup>
+      <Clean Include="$(IntermediateOutputPath)\korlib.rsp" />
+    </ItemGroup>
+    <PropertyGroup>
+      <CompilerResponseFile>$(IntermediateOutputPath)\korlib.rsp</CompilerResponseFile>
+    </PropertyGroup>
+  </Target>
 </Project>

@@ -116,14 +116,10 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			//Operand eax = AllocateVirtualRegister(typeSystem.BuiltIn.I4);
-			//Operand edx = AllocateVirtualRegister(typeSystem.BuiltIn.I4);
-			//Operand ebx = AllocateVirtualRegister(typeSystem.BuiltIn.I4);
 			Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			Operand edx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 			Operand ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 
-			              AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			Operand v20 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			Operand v12 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
