@@ -118,6 +118,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.DriverWorld.x86", "Mos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Collection.x86.xUnit", "Mosa.Test.Collection.x86.xUnit\Mosa.Test.Collection.x86.xUnit.csproj", "{50568E2D-5360-4F71-87E3-A6979D1D858C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.TinyCPUSimulator.Debug", "Mosa.TinyCPUSimulator.Debug\Mosa.TinyCPUSimulator.Debug.csproj", "{72057219-525C-45E8-AF69-6C2A7F5BEC08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -621,6 +623,18 @@ Global
 		{50568E2D-5360-4F71-87E3-A6979D1D858C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{50568E2D-5360-4F71-87E3-A6979D1D858C}.Release|x86.ActiveCfg = Release|Any CPU
 		{50568E2D-5360-4F71-87E3-A6979D1D858C}.Release|x86.Build.0 = Release|Any CPU
+		{72057219-525C-45E8-AF69-6C2A7F5BEC08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72057219-525C-45E8-AF69-6C2A7F5BEC08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72057219-525C-45E8-AF69-6C2A7F5BEC08}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{72057219-525C-45E8-AF69-6C2A7F5BEC08}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{72057219-525C-45E8-AF69-6C2A7F5BEC08}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{72057219-525C-45E8-AF69-6C2A7F5BEC08}.Debug|x86.Build.0 = Debug|Any CPU
+		{72057219-525C-45E8-AF69-6C2A7F5BEC08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72057219-525C-45E8-AF69-6C2A7F5BEC08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72057219-525C-45E8-AF69-6C2A7F5BEC08}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{72057219-525C-45E8-AF69-6C2A7F5BEC08}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{72057219-525C-45E8-AF69-6C2A7F5BEC08}.Release|x86.ActiveCfg = Release|Any CPU
+		{72057219-525C-45E8-AF69-6C2A7F5BEC08}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -675,5 +689,6 @@ Global
 		{B69C2F31-5161-47AA-9FD3-2F2F2BCCF659} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
 		{78A4131F-BD6A-4CCE-A6A3-48B48012DA8A} = {1AB7FA6A-829C-4DCF-BCA6-A27156D8DA26}
 		{50568E2D-5360-4F71-87E3-A6979D1D858C} = {88D3D1D0-85D2-4301-A9EA-3F964CB05415}
+		{72057219-525C-45E8-AF69-6C2A7F5BEC08} = {229DB190-FE03-4BA0-A16C-2EAE7D141EEE}
 	EndGlobalSection
 EndGlobal

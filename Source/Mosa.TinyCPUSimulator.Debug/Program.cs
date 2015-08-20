@@ -43,7 +43,8 @@ namespace Mosa.TinyCPUSimulator.Debug
 			{
 				System.Diagnostics.Debug.Listeners.Add(listener);
 
-				//Test5a();
+				Test5a();
+
 				//Test5b();
 				//Test5c();
 				//Test3();
@@ -52,7 +53,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 
 				//Test13();
 
-				Test14();
+				//Test14();
 			}
 			catch (Exception e)
 			{
@@ -132,7 +133,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 		{
 			var fixture = new UInt32Fixture();
 
-			fixture.AddU4U4(1, 2);
+			fixture.XorU4U4(65535, 1);
 		}
 
 		private static void Test5b()

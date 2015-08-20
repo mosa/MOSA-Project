@@ -54,8 +54,11 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		public void ClearSymbolInformation(LinkerSymbol linkerSymbol)
 		{
-			symbolData.Remove(linkerSymbol);
-        }
+			lock (symbolData)
+			{
+				symbolData.Remove(linkerSymbol);
+			}
+		}
 
 		public void AddTargetSymbol(LinkerSymbol baseSymbol, int offset, string name)
 		{
