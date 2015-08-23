@@ -33,10 +33,10 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			compiler.CompilerTrace.TraceFilter.Active = false;
 			compiler.CompilerTrace.TraceListener = this;
 
-			compiler.CompilerOptions.EnableOptimizations = true;
-			compiler.CompilerOptions.EnableSSA = true;
-			compiler.CompilerOptions.EnableVariablePromotion = true;
-			compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
+			compiler.CompilerOptions.EnableOptimizations = false;
+			compiler.CompilerOptions.EnableSSA = false;
+			compiler.CompilerOptions.EnableVariablePromotion = false;
+			compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = false;
 			compiler.CompilerOptions.EnableInlinedMethods = false;
 
 			compiler.CompilerOptions.Architecture = platform.CreateArchitecture();
@@ -61,7 +61,10 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			compiler.Load(TypeSystem.Load(moduleLoader.CreateMetadata()));
 
 			//compiler.Execute();
+
 			compiler.Execute(Environment.ProcessorCount);
+
+			Console.WriteLine("Compiled.");
 
 			linker = compiler.Linker as SimLinker;
 
@@ -90,14 +93,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		protected T Run<T>(string ns, string type, string method, bool reset, params object[] parameters)
 		{
-			if (reset)
-			{
-				// reset the stack
-				platform.ResetSimulation(simAdapter);
-
-				//Run<int>("Mosa.Kernel.x86Test", "KernelMemory", "SetMemory", false, new object[] { (uint)0x00900000 });
-			}
-
 			// Find the test method to execute
 			MosaMethod runtimeMethod = FindMethod(
 				ns,
@@ -112,32 +107,46 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			ulong address = (ulong)symbol.VirtualAddress;
 
-			platform.PrepareToExecuteMethod(simAdapter, address, parameters);
-
-			simAdapter.SimCPU.Monitor.BreakAtTick = simAdapter.SimCPU.Monitor.BreakAtTick + MaxTicks; // nothing should take this long
-			simAdapter.SimCPU.Execute();
-
-			if (simAdapter.SimCPU.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)
+			// single threaded
+			lock (this)
 			{
-				throw new Exception("Aborted. Method did not complete under " + MaxTicks.ToString() + " ticks. " + simAdapter.SimCPU.Tick.ToString());
-			}
+				//Console.WriteLine(ns + "." + type + "." + method);
 
-			if (runtimeMethod.Signature.ReturnType.IsVoid)
-				return default(T);
+				if (reset)
+				{
+					// reset the stack
+					platform.ResetSimulation(simAdapter);
 
-			object result = platform.GetResult(simAdapter, runtimeMethod.Signature.ReturnType);
+					//Run<int>("Mosa.Kernel.x86Test", "KernelMemory", "SetMemory", false, new object[] { (uint)0x00900000 });
+				}
 
-			try
-			{
-				if (default(T) is ValueType)
-					return (T)result;
-				else
+				platform.PrepareToExecuteMethod(simAdapter, address, parameters);
+
+				simAdapter.SimCPU.Monitor.BreakAtTick = simAdapter.SimCPU.Monitor.BreakAtTick + MaxTicks; // nothing should take this long
+				simAdapter.SimCPU.Execute();
+
+				if (simAdapter.SimCPU.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)
+				{
+					throw new Exception("Aborted. Method did not complete under " + MaxTicks.ToString() + " ticks. " + simAdapter.SimCPU.Tick.ToString());
+				}
+
+				if (runtimeMethod.Signature.ReturnType.IsVoid)
 					return default(T);
-			}
-			catch (InvalidCastException e)
-			{
-				Debug.Assert(false, String.Format("Failed to convert result {0} of destination {1} destination type {2}.", result, result.GetType(), typeof(T).ToString()));
-				throw e;
+
+				object result = platform.GetResult(simAdapter, runtimeMethod.Signature.ReturnType);
+
+				try
+				{
+					if (default(T) is ValueType)
+						return (T)result;
+					else
+						return default(T);
+				}
+				catch (InvalidCastException e)
+				{
+					Debug.Assert(false, String.Format("Failed to convert result {0} of destination {1} destination type {2}.", result, result.GetType(), typeof(T).ToString()));
+					throw e;
+				}
 			}
 		}
 

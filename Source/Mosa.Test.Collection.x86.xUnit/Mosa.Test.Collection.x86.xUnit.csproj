@@ -75,6 +75,7 @@
     <Compile Include="BoxingFixture.cs" />
     <Compile Include="ArrayLayoutFixture.cs" />
     <Compile Include="CallOrderFixture.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringFixture.cs" />
     <Compile Include="ForeachFixture.cs">
       <AutoGen>True</AutoGen>
@@ -85,7 +86,6 @@
     <Compile Include="SingleFixture.cs" />
     <Compile Include="DoubleFixture.cs" />
     <Compile Include="EnumFixture.cs" />
-    <Compile Include="ExceptionHandlingFixture.cs" />
     <Compile Include="InterfaceFixture.cs" />
     <Compile Include="FibonacciFixture.cs" />
     <Compile Include="Int16Fixture.cs" />

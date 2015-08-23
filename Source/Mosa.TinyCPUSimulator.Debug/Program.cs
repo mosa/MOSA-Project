@@ -73,12 +73,12 @@ namespace Mosa.TinyCPUSimulator.Debug
 			fixture.BoxI4(10);
 		}
 
-		private static void Test13()
-		{
-			var fixture = new _ExceptionHandlingFixture();
+		//private static void Test13()
+		//{
+		//	var fixture = new _ExceptionHandlingFixture();
 
-			fixture.ExceptionTest8();
-		}
+		//	fixture.ExceptionTest8();
+		//}
 
 		private static void Test12()
 		{
