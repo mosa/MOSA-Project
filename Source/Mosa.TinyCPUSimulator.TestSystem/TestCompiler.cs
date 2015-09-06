@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.TestSystem
 {
-	public class TestCompiler : ITraceListener
+	internal class TestCompiler : ITraceListener
 	{
 		protected MosaCompiler compiler = new MosaCompiler();
 
@@ -24,7 +24,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		protected const uint MaxTicks = 500000;
 
-		public TestCompiler(BaseTestPlatform platform)
+		internal TestCompiler(BaseTestPlatform platform)
 		{
 			this.platform = platform;
 
@@ -64,7 +64,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			compiler.Execute(Environment.ProcessorCount);
 
-			Console.WriteLine("Compiled.");
+			//Console.WriteLine("Compiled.");
 
 			linker = compiler.Linker as SimLinker;
 
@@ -93,24 +93,24 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		protected T Run<T>(string ns, string type, string method, bool reset, params object[] parameters)
 		{
-			// Find the test method to execute
-			MosaMethod runtimeMethod = FindMethod(
-				ns,
-				type,
-				method,
-				parameters
-			);
-
-			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
-
-			var symbol = linker.GetSymbol(runtimeMethod.FullName, SectionKind.Text);
-
-			ulong address = (ulong)symbol.VirtualAddress;
-
-			// single threaded
+			// enforce single thread execution only
 			lock (this)
 			{
-				//Console.WriteLine(ns + "." + type + "." + method);
+				// Find the test method to execute
+				MosaMethod runtimeMethod = FindMethod(
+					ns,
+					type,
+					method,
+					parameters
+				);
+
+				Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
+
+				var symbol = linker.GetSymbol(runtimeMethod.FullName, SectionKind.Text);
+
+				ulong address = (ulong)symbol.VirtualAddress;
+
+				//Console.Write("Testing: " + ns + "." + type + "." + method);
 
 				if (reset)
 				{
@@ -137,6 +137,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 				try
 				{
+					//Console.WriteLine(".");
 					if (default(T) is ValueType)
 						return (T)result;
 					else
@@ -144,6 +145,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 				}
 				catch (InvalidCastException e)
 				{
+					//Console.WriteLine("..." + e.ToString());
 					Debug.Assert(false, String.Format("Failed to convert result {0} of destination {1} destination type {2}.", result, result.GetType(), typeof(T).ToString()));
 					throw e;
 				}
