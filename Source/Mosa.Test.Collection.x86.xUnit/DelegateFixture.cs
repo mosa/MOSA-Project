@@ -32,42 +32,42 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 
 		[Theory]
-		[MemberData("I4I4")]
+		[MemberData("I4I4", DisableDiscoveryEnumeration = true)]
 		public void CallDelegateParameters(int a, int b)
 		{
 			Assert.Equal(DelegateTests.CallDelegateParameters(a, b), Run<int>("Mosa.Test.Collection.DelegateTests.CallDelegateParameters", a, b));
 		}
 
 		[Theory]
-		[MemberData("I4")]
+		[MemberData("I4", DisableDiscoveryEnumeration = true)]
 		public void CallDelegateReturn(int a)
 		{
 			Assert.Equal(DelegateTests.CallDelegateReturn(a), Run<int>("Mosa.Test.Collection.DelegateTests.CallDelegateReturn", a));
 		}
 
 		[Theory]
-		[MemberData("I4I4")]
+		[MemberData("I4I4", DisableDiscoveryEnumeration = true)]
 		public void CallDelegateParametersReturn(int a, int b)
 		{
 			Assert.Equal(DelegateTests.CallDelegateParametersReturn(a, b), Run<int>("Mosa.Test.Collection.DelegateTests.CallDelegateParametersReturn", a, b));
 		}
 
 		[Theory]
-		[MemberData("I4")]
+		[MemberData("I4", DisableDiscoveryEnumeration = true)]
 		public void CallDelegateBox(int a)
 		{
 			Assert.Equal(DelegateTests.CallDelegateBox(a), Run<int>("Mosa.Test.Collection.DelegateTests.CallDelegateBox", a));
 		}
 
 		[Theory]
-		[MemberData("I4")]
+		[MemberData("I4", DisableDiscoveryEnumeration = true)]
 		public void CallDelegateGenericReturn(int a)
 		{
 			Assert.Equal(DelegateTests.CallDelegateGenericReturn(a), Run<int>("Mosa.Test.Collection.DelegateTests.CallDelegateGenericReturn", a));
 		}
 
 		[Theory]
-		[MemberData("I4")]
+		[MemberData("I4", DisableDiscoveryEnumeration = true)]
 		public void CallDelegateGenericReturnStructA(int a)
 		{
 			Assert.Equal(DelegateTests.CallDelegateGenericReturnStructA(a), Run<int>("Mosa.Test.Collection.DelegateTests.CallDelegateGenericReturnStructA", a));
@@ -92,14 +92,14 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 
 		[Theory]
-		[MemberData("I4")]
+		[MemberData("I4", DisableDiscoveryEnumeration = true)]
 		public void TestInstanceDelegate1(int a)
 		{
 			Assert.Equal(DelegateTests.TestInstanceDelegate1(a), Run<int>("Mosa.Test.Collection.DelegateTests.TestInstanceDelegate1", a));
 		}
 
 		[Theory]
-		[MemberData("I4I4")]
+		[MemberData("I4I4", DisableDiscoveryEnumeration = true)]
 		public void TestInstanceDelegate2(int a, int b)
 		{
 			Assert.Equal(DelegateTests.TestInstanceDelegate2(a, b), Run<int>("Mosa.Test.Collection.DelegateTests.TestInstanceDelegate2", a, b));

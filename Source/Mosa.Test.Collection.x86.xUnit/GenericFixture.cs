@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2014 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Ki (kiootic) <kiootic@gmail.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Test.Collection;
 using Xunit;
@@ -16,56 +9,56 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 	public class GenericFixture : TestFixture
 	{
 		[Theory]
-		[PropertyData("U1")]
+		[MemberData("U1", DisableDiscoveryEnumeration = true)]
 		public void GenericCallU1(byte value)
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.GenericCallTests.GenericCallU1", value));
 		}
 
 		[Theory]
-		[PropertyData("U2")]
+		[MemberData("U2", DisableDiscoveryEnumeration = true)]
 		public void GenericCallU2(ushort value)
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.GenericCallTests.GenericCallU2", value));
 		}
 
 		[Theory]
-		[PropertyData("U4")]
+		[MemberData("U4", DisableDiscoveryEnumeration = true)]
 		public void GenericCallU4(uint value)
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.GenericCallTests.GenericCallU4", value));
 		}
 
 		[Theory]
-		[PropertyData("U8")]
+		[MemberData("U8", DisableDiscoveryEnumeration = true)]
 		public void GenericCallU8(ulong value)
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.GenericCallTests.GenericCallU8", value));
 		}
 
 		[Theory]
-		[PropertyData("I1")]
+		[MemberData("I1", DisableDiscoveryEnumeration = true)]
 		public void GenericCallI1(sbyte value)
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.GenericCallTests.GenericCallI1", value));
 		}
 
 		[Theory]
-		[PropertyData("I2")]
+		[MemberData("I2", DisableDiscoveryEnumeration = true)]
 		public void GenericCallI2(short value)
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.GenericCallTests.GenericCallI2", value));
 		}
 
 		[Theory]
-		[PropertyData("I4")]
+		[MemberData("I4", DisableDiscoveryEnumeration = true)]
 		public void GenericCallI4(int value)
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.GenericCallTests.GenericCallI4", value));
 		}
 
 		[Theory]
-		[PropertyData("I8")]
+		[MemberData("I8", DisableDiscoveryEnumeration = true)]
 		public void GenericCallI8(long value)
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.GenericCallTests.GenericCallI8", value));
@@ -92,16 +85,10 @@ namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
 		//}
 
 		[Theory]
-		[PropertyData("C")]
+		[MemberData("C", DisableDiscoveryEnumeration = true)]
 		public void GenericCallC(char value)
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection.GenericCallTests.GenericCallC", value));
-		}
-
-		[Fact]
-		public void GenericMixed()
-		{
-			Assert.Equal(0x7fffu, Run<uint>("Mosa.Test.Collection.GenericMixedTest.GenericMixed"));
 		}
 	}
 }

@@ -23,12 +23,12 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void InitializeArray(uint* array, RuntimeFieldHandle handle)
 		{
-			uint* fieldDefinition = ((uint**)&handle)[0];
+			MetadataFieldDefinitionStruct* fieldDefinition = (MetadataFieldDefinitionStruct*)((uint**)&handle)[0];
 			byte* arrayElements = (byte*)(array + 3);
 
 			// See FieldDefinition for format of field handle
-			byte* fieldData = (byte*)*(fieldDefinition + 4);
-			uint dataLength = *(fieldDefinition + 5);
+			byte* fieldData = fieldDefinition->FieldData;
+			uint dataLength = fieldDefinition->OffsetOrSize;
 			while (dataLength > 0)
 			{
 				*arrayElements = *fieldData;

@@ -80,7 +80,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 
 		[Theory]
-		[MemberData("I4")]
+		[MemberData("I4", DisableDiscoveryEnumeration = true)]
 		public void OptimizationTest13(int a)
 		{
 			Assert.Equal(Mosa.Test.Collection.OptimizationTest.OptimizationTest13(a), Run<int>("Mosa.Test.Collection.OptimizationTest.OptimizationTest13", a));
