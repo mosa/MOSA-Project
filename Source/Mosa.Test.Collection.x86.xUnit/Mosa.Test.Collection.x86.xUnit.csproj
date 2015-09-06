@@ -75,6 +75,12 @@
     <Compile Include="BoxingFixture.cs" />
     <Compile Include="ArrayLayoutFixture.cs" />
     <Compile Include="CallOrderFixture.cs" />
+    <Compile Include="EnumFixture1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EnumFixture.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GenericFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringFixture.cs" />
     <Compile Include="ForeachFixture.cs">
@@ -106,6 +112,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="ValueTypeFixture.cs" />
     <Compile Include="X86TestFixture.cs" />
     <Compile Include="UInt16Fixture.cs" />
     <Compile Include="UInt32Fixture.cs" />
@@ -131,6 +138,12 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SwitchFixture.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EnumFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EnumFixture1.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

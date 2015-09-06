@@ -10,7 +10,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 	<# foreach (KeyValuePair<string, string> number in NegativeIntegers) { #>
 
 		[Theory]
-		[MemberData("<#= number.Value #>")]
+		[MemberData("<#= number.Value #>", DisableDiscoveryEnumeration = true)]
 		public void Switch<#= number.Value #>(<#= number.Key #> a)
 		{
 			Assert.Equal(Mosa.Test.Collection.SwitchTests.Switch<#= number.Value #>(a), Run<<#= number.Key #>>("Mosa.Test.Collection.SwitchTests.Switch<#= number.Value #>", a));
@@ -19,7 +19,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 	<# foreach (KeyValuePair<string, string> number in PositiveIntegers) { #>
 
 		[Theory]
-		[MemberData("<#= number.Value #>")]
+		[MemberData("<#= number.Value #>", DisableDiscoveryEnumeration = true)]
 		public void Switch<#= number.Value #>(<#= number.Key #> a)
 		{
 			Assert.Equal(Mosa.Test.Collection.SwitchTests.Switch<#= number.Value #>(a), Run<<#= number.Key #>>("Mosa.Test.Collection.SwitchTests.Switch<#= number.Value #>", a));

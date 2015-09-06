@@ -81,6 +81,7 @@
     <Compile Include="MetadataStructures\MetadataCAArgumentStruct.cs" />
     <Compile Include="MetadataStructures\MetadataCAStruct.cs" />
     <Compile Include="MetadataStructures\MetadataMethodStruct.cs" />
+    <Compile Include="MetadataStructures\MetadataFieldDefinitionStruct.cs" />
     <Compile Include="MetadataStructures\MetadataPRDefinitionStruct.cs" />
     <Compile Include="MetadataStructures\MetadataPRTableStruct.cs" />
     <Compile Include="MetadataStructures\MetadataTypeStruct.cs" />
