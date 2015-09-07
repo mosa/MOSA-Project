@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.TestSystem
 {
-	public class TestCompiler : ITraceListener
+	internal class TestCompiler : ITraceListener
 	{
 		protected MosaCompiler compiler = new MosaCompiler();
 
@@ -24,7 +24,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		protected const uint MaxTicks = 500000;
 
-		public TestCompiler(BaseTestPlatform platform)
+		internal TestCompiler(BaseTestPlatform platform)
 		{
 			this.platform = platform;
 
@@ -61,7 +61,10 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			compiler.Load(TypeSystem.Load(moduleLoader.CreateMetadata()));
 
 			//compiler.Execute();
+
 			compiler.Execute(Environment.ProcessorCount);
+
+			//Console.WriteLine("Compiled.");
 
 			linker = compiler.Linker as SimLinker;
 
@@ -90,54 +93,62 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		protected T Run<T>(string ns, string type, string method, bool reset, params object[] parameters)
 		{
-			if (reset)
+			// enforce single thread execution only
+			lock (this)
 			{
-				// reset the stack
-				platform.ResetSimulation(simAdapter);
+				// Find the test method to execute
+				MosaMethod runtimeMethod = FindMethod(
+					ns,
+					type,
+					method,
+					parameters
+				);
 
-				//Run<int>("Mosa.Kernel.x86Test", "KernelMemory", "SetMemory", false, new object[] { (uint)0x00900000 });
-			}
+				Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
 
-			// Find the test method to execute
-			MosaMethod runtimeMethod = FindMethod(
-				ns,
-				type,
-				method,
-				parameters
-			);
+				var symbol = linker.GetSymbol(runtimeMethod.FullName, SectionKind.Text);
 
-			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
+				ulong address = (ulong)symbol.VirtualAddress;
 
-			var symbol = linker.GetSymbol(runtimeMethod.FullName, SectionKind.Text);
+				//Console.Write("Testing: " + ns + "." + type + "." + method);
 
-			ulong address = (ulong)symbol.VirtualAddress;
+				if (reset)
+				{
+					// reset the stack
+					platform.ResetSimulation(simAdapter);
 
-			platform.PrepareToExecuteMethod(simAdapter, address, parameters);
+					//Run<int>("Mosa.Kernel.x86Test", "KernelMemory", "SetMemory", false, new object[] { (uint)0x00900000 });
+				}
 
-			simAdapter.SimCPU.Monitor.BreakAtTick = simAdapter.SimCPU.Monitor.BreakAtTick + MaxTicks; // nothing should take this long
-			simAdapter.SimCPU.Execute();
+				platform.PrepareToExecuteMethod(simAdapter, address, parameters);
 
-			if (simAdapter.SimCPU.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)
-			{
-				throw new Exception("Aborted. Method did not complete under " + MaxTicks.ToString() + " ticks. " + simAdapter.SimCPU.Tick.ToString());
-			}
+				simAdapter.SimCPU.Monitor.BreakAtTick = simAdapter.SimCPU.Monitor.BreakAtTick + MaxTicks; // nothing should take this long
+				simAdapter.SimCPU.Execute();
 
-			if (runtimeMethod.Signature.ReturnType.IsVoid)
-				return default(T);
+				if (simAdapter.SimCPU.Monitor.BreakAtTick == simAdapter.SimCPU.Tick)
+				{
+					throw new Exception("Aborted. Method did not complete under " + MaxTicks.ToString() + " ticks. " + simAdapter.SimCPU.Tick.ToString());
+				}
 
-			object result = platform.GetResult(simAdapter, runtimeMethod.Signature.ReturnType);
-
-			try
-			{
-				if (default(T) is ValueType)
-					return (T)result;
-				else
+				if (runtimeMethod.Signature.ReturnType.IsVoid)
 					return default(T);
-			}
-			catch (InvalidCastException e)
-			{
-				Debug.Assert(false, String.Format("Failed to convert result {0} of destination {1} destination type {2}.", result, result.GetType(), typeof(T).ToString()));
-				throw e;
+
+				object result = platform.GetResult(simAdapter, runtimeMethod.Signature.ReturnType);
+
+				try
+				{
+					//Console.WriteLine(".");
+					if (default(T) is ValueType)
+						return (T)result;
+					else
+						return default(T);
+				}
+				catch (InvalidCastException e)
+				{
+					//Console.WriteLine("..." + e.ToString());
+					Debug.Assert(false, String.Format("Failed to convert result {0} of destination {1} destination type {2}.", result, result.GetType(), typeof(T).ToString()));
+					throw e;
+				}
 			}
 		}
 

@@ -34,6 +34,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool HasLoops { get; set; }
 
+		public bool HasAddressOfInstruction { get; set; }
+
 		public List<MosaMethod> Calls { get; set; }
 
 		public List<MosaMethod> CalledBy { get; set; }

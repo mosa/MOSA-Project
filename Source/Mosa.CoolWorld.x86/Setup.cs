@@ -114,7 +114,7 @@ namespace Mosa.CoolWorld.x86
 			{
 				var pciDevice = device as IPCIDevice;
 
-				Mosa.CoolWorld.x86.Boot.BulletPoint();
+				//Mosa.CoolWorld.x86.Boot.BulletPoint();
 
 				Boot.Console.WriteLine(device.Name + ": " + pciDevice.VendorID.ToString("x") + "." + pciDevice.DeviceID.ToString("x") + "." + pciDevice.Function.ToString("x") + "." + pciDevice.ClassCode.ToString("x"));
 
@@ -242,7 +242,7 @@ namespace Mosa.CoolWorld.x86
 
 				hardwareDevice.Setup(hardwareResources);
 
-				Mosa.CoolWorld.x86.Boot.BulletPoint();
+				//Mosa.CoolWorld.x86.Boot.BulletPoint();
 				Boot.Console.Write("Adding device ");
 				Boot.InBrackets(hardwareDevice.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
 				Boot.Console.WriteLine();

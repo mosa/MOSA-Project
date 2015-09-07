@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Interface to an intrinsic instruction
 	/// </summary>
-	public interface IIntrinsicInternalMethod
+	internal interface IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site
