@@ -33,11 +33,11 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			compiler.CompilerTrace.TraceFilter.Active = false;
 			compiler.CompilerTrace.TraceListener = this;
 
-			compiler.CompilerOptions.EnableOptimizations = false;
-			compiler.CompilerOptions.EnableSSA = false;
-			compiler.CompilerOptions.EnableVariablePromotion = false;
-			compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = false;
-			compiler.CompilerOptions.EnableInlinedMethods = false;
+			compiler.CompilerOptions.EnableOptimizations = true;
+			compiler.CompilerOptions.EnableSSA = true;
+			compiler.CompilerOptions.EnableVariablePromotion = true;
+			compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
+			compiler.CompilerOptions.EnableInlinedMethods = true;
 
 			compiler.CompilerOptions.Architecture = platform.CreateArchitecture();
 			compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };

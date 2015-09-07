@@ -4,9 +4,9 @@ using Mosa.Test.Collection;
 using Xunit;
 using Xunit.Extensions;
 
-namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
+namespace Mosa.Test.Collection.x86.xUnit
 {
-	public class GenericFixture : TestFixture
+	public class GenericFixture : X86TestFixture
 	{
 		[Theory]
 		[MemberData("U1", DisableDiscoveryEnumeration = true)]

@@ -2,9 +2,9 @@
 
 using Xunit;
 
-namespace Mosa.TinyCPUSimulator.TestSystem.xUnit
+namespace Mosa.Test.Collection.x86.xUnit
 {
-	public class ValueTypeFixture : TestFixture
+	public class ValueTypeFixture : X86TestFixture
 	{
 		[Fact]
 		public void TestValueTypeVariable()
