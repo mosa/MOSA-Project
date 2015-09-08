@@ -77,6 +77,11 @@ _Note: More arithmetic simplifications can be added._
 
 ## Move Constants to the Right
 
-This move constants from the left side of an operation to the right, when the operating has the commutative property. While this is not an optimization unto itself, it simplifies the source code for other optimizations.
+This transformation moves constants from the left side of an operation to the right, when the operation is commutative. While this is not an optimization per se, it simplifies the operation and operands for other optimizations. Examples:
 
+````
+C * a = a * C 
+C + a = a + C
 
+where C is a constant
+````
