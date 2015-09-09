@@ -22,16 +22,16 @@ namespace Mosa.Compiler.Framework.Stages
 		private int arithmeticSimplificationAdditionAndSubstractionCount = 0;
 		private int arithmeticSimplificationLogicalOperatorsCount = 0;
 		private int arithmeticSimplificationShiftOperators = 0;
-		private int constantFoldingIntegerOperationsCount = 0;
 		private int simpleConstantPropagationCount = 0;
 		private int simpleForwardCopyPropagationCount = 0;
-		private int constantFoldingIntegerCompareCount = 0;
-		private int strengthReductionIntegerCompareBranchCount = 0;
 		private int deadCodeEliminationCount = 0;
 		private int reduceTruncationAndExpansionCount = 0;
+		private int constantFoldingIntegerOperationsCount = 0;
+		private int constantFoldingIntegerCompareCount = 0;
 		private int constantFoldingAdditionAndSubstractionCount = 0;
 		private int constantFoldingMultiplicationCount = 0;
 		private int constantFoldingDivisionCount = 0;
+		private int constantFoldingPhiCount = 0;
 		private int blockRemovedCount = 0;
 		private int foldIntegerCompareBranchCount = 0;
 		private int reduceZeroExtendedMoveCount = 0;
@@ -39,13 +39,13 @@ namespace Mosa.Compiler.Framework.Stages
 		private int simplifyExtendedMoveCount = 0;
 		private int foldLoadStoreOffsetsCount = 0;
 		private int constantMoveToRightCount = 0;
-		private int foldConstantPhiCount = 0;
 		private int simplifyPhiCount = 0;
-		private int removeUselessPhiCount = 0;
+		private int deadCodeEliminationPhi = 0;
 		private int reduce64BitOperationsTo32BitCount = 0;
 		private int promoteLocalVariableCount = 0;
 		private int constantFoldingLogicalOrCount = 0;
 		private int constantFoldingLogicalAndCount = 0;
+		private int combineIntegerCompareBranchCount = 0;
 
 		private Stack<InstructionNode> worklist = new Stack<InstructionNode>();
 
@@ -124,6 +124,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			UpdateCounter("IROptimizations.IRInstructionRemoved", instructionsRemovedCount);
 			UpdateCounter("IROptimizations.ConstantFoldingIntegerOperations", constantFoldingIntegerOperationsCount);
+			UpdateCounter("IROptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
+			UpdateCounter("IROptimizations.ConstantFoldingAdditionAndSubstraction", constantFoldingAdditionAndSubstractionCount);
+			UpdateCounter("IROptimizations.ConstantFoldingMultiplication", constantFoldingMultiplicationCount);
+			UpdateCounter("IROptimizations.ConstantFoldingDivision", constantFoldingDivisionCount);
+			UpdateCounter("IROptimizations.ConstantFoldingLogicalOr", constantFoldingLogicalOrCount);
+			UpdateCounter("IROptimizations.ConstantFoldingLogicalAnd", constantFoldingLogicalAndCount);
+			UpdateCounter("IROptimizations.ConstantFoldingPhi", constantFoldingPhiCount);
 			UpdateCounter("IROptimizations.ConstantMoveToRight", constantMoveToRightCount);
 			UpdateCounter("IROptimizations.ArithmeticSimplificationSubtraction", arithmeticSimplificationSubtractionCount);
 			UpdateCounter("IROptimizations.ArithmeticSimplificationMultiplication", arithmeticSimplificationMultiplicationCount);
@@ -133,25 +140,18 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.ArithmeticSimplificationShiftOperators", arithmeticSimplificationShiftOperators);
 			UpdateCounter("IROptimizations.SimpleConstantPropagation", simpleConstantPropagationCount);
 			UpdateCounter("IROptimizations.SimpleForwardCopyPropagation", simpleForwardCopyPropagationCount);
-			UpdateCounter("IROptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
-			UpdateCounter("IROptimizations.ConstantFoldingAdditionAndSubstraction", constantFoldingAdditionAndSubstractionCount);
-			UpdateCounter("IROptimizations.ConstantFoldingMultiplication", constantFoldingMultiplicationCount);
-			UpdateCounter("IROptimizations.ConstantFoldingDivision", constantFoldingDivisionCount);
-			UpdateCounter("IROptimizations.ConstantFoldingLogicalOr", constantFoldingLogicalOrCount);
-			UpdateCounter("IROptimizations.ConstantFoldingLogicalAnd", constantFoldingLogicalAndCount);
-			UpdateCounter("IROptimizations.StrengthReductionIntegerCompareBranch", strengthReductionIntegerCompareBranchCount);
-			UpdateCounter("IROptimizations.DeadCodeElimination", deadCodeEliminationCount);
-			UpdateCounter("IROptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansionCount);
 			UpdateCounter("IROptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranchCount);
 			UpdateCounter("IROptimizations.FoldIntegerCompare", foldIntegerCompareCount);
 			UpdateCounter("IROptimizations.FoldLoadStoreOffsets", foldLoadStoreOffsetsCount);
-			UpdateCounter("IROptimizations.FoldConstantPhi", foldConstantPhiCount);
+			UpdateCounter("IROptimizations.DeadCodeElimination", deadCodeEliminationCount);
+			UpdateCounter("IROptimizations.DeadCodeEliminationPhi", deadCodeEliminationPhi);
+			UpdateCounter("IROptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansionCount);
+			UpdateCounter("IROptimizations.CombineIntegerCompareBranch", combineIntegerCompareBranchCount);
 			UpdateCounter("IROptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMoveCount);
 			UpdateCounter("IROptimizations.SimplifyExtendedMove", simplifyExtendedMoveCount);
 			UpdateCounter("IROptimizations.SimplifyExtendedMoveWithConstant", simplifyExtendedMoveWithConstantCount);
 			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhiCount);
 			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
-			UpdateCounter("IROptimizations.RemoveUselessPhi", removeUselessPhiCount);
 			UpdateCounter("IROptimizations.PromoteLocalVariable", promoteLocalVariableCount);
 			UpdateCounter("IROptimizations.Reduce64BitOperationsTo32Bit", reduce64BitOperationsTo32BitCount);
 
@@ -199,16 +199,16 @@ namespace Mosa.Compiler.Framework.Stages
 			ConstantFoldingIntegerCompare(node);
 			ConstantFoldingLogicalOr(node);
 			ConstantFoldingLogicalAnd(node);
+			CombineIntegerCompareBranch(node);
 			FoldIntegerCompare(node);
 			FoldIntegerCompareBranch(node);
-			SimplifyExtendedMoveWithConstant(node);
-			StrengthReductionIntegerCompareBranch(node);
 			ReduceTruncationAndExpansion(node);
+			SimplifyExtendedMoveWithConstant(node);
 			SimplifyExtendedMove(node);
 			FoldLoadStoreOffsets(node);
-			FoldConstantPhi(node);
+			ConstantFoldingPhi(node);
 			SimplifyPhi(node);
-			RemoveUselessPhi(node);
+			DeadCodeEliminationPhi(node);
 			NormalizeConstantTo32Bit(node);
 		}
 
@@ -1029,10 +1029,10 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Strength reduction integer compare branch.
+		/// Folds integer compare branch.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void StrengthReductionIntegerCompareBranch(InstructionNode node)
+		private void FoldIntegerCompareBranch(InstructionNode node)
 		{
 			if (node.IsEmpty)
 				return;
@@ -1057,12 +1057,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (node.BranchTargets[0] == nextNode.BranchTargets[0])
 			{
-				if (trace.Active) trace.Log("*** StrengthReductionIntegerCompareBranch-1");
+				if (trace.Active) trace.Log("*** FoldIntegerCompareBranch-Useless");
 				if (trace.Active) trace.Log("REMOVED:\t" + node.ToString());
 				AddOperandUsageToWorkList(node);
 				node.SetInstruction(IRInstruction.Nop);
 				instructionsRemovedCount++;
-				strengthReductionIntegerCompareBranchCount++;
+				foldIntegerCompareBranchCount++;
 				return;
 			}
 
@@ -1084,7 +1084,7 @@ namespace Mosa.Compiler.Framework.Stages
 			BasicBlock notTaken;
 			InstructionNode notUsed;
 
-			if (trace.Active) trace.Log("*** StrengthReductionIntegerCompareBranch-2");
+			if (trace.Active) trace.Log("*** FoldIntegerCompareBranch");
 
 			if (compareResult)
 			{
@@ -1105,7 +1105,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(notUsed);
 			notUsed.SetInstruction(IRInstruction.Nop);
 			instructionsRemovedCount++;
-			strengthReductionIntegerCompareBranchCount++;
+			foldIntegerCompareBranchCount++;
 
 			// if target block no longer has any predecessors (or the only predecessor is itself), remove all instructions from it.
 			CheckAndClearEmptyBlock(notTaken);
@@ -1481,7 +1481,7 @@ namespace Mosa.Compiler.Framework.Stages
 			instructionsRemovedCount++;
 		}
 
-		private void FoldIntegerCompareBranch(InstructionNode node)
+		private void CombineIntegerCompareBranch(InstructionNode node)
 		{
 			if (node.IsEmpty)
 				return;
@@ -1511,7 +1511,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AddOperandUsageToWorkList(node2);
 			AddOperandUsageToWorkList(node);
-			if (trace.Active) trace.Log("*** FoldIntegerCompareBranch");
+			if (trace.Active) trace.Log("*** CombineIntegerCompareBranch");
 			if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
 			node.ConditionCode = node.ConditionCode == ConditionCode.NotEqual ? node2.ConditionCode : node2.ConditionCode.GetOpposite();
 			node.Operand1 = node2.Operand1;
@@ -1519,7 +1519,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
 			if (trace.Active) trace.Log("REMOVED:\t" + node2.ToString());
 			node2.SetInstruction(IRInstruction.Nop);
-			foldIntegerCompareBranchCount++;
+			combineIntegerCompareBranchCount++;
 			instructionsRemovedCount++;
 		}
 
@@ -1651,7 +1651,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Folds the constant phi instruction.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void FoldConstantPhi(InstructionNode node)
+		private void ConstantFoldingPhi(InstructionNode node)
 		{
 			if (node.IsEmpty)
 				return;
@@ -1682,7 +1682,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(node);
 			node.SetInstruction(IRInstruction.Move, result, operand1);
 			if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
-			foldConstantPhiCount++;
+			constantFoldingPhiCount++;
 		}
 
 		/// <summary>
@@ -1711,7 +1711,7 @@ namespace Mosa.Compiler.Framework.Stages
 			simplifyPhiCount++;
 		}
 
-		private void RemoveUselessPhi(InstructionNode node)
+		private void DeadCodeEliminationPhi(InstructionNode node)
 		{
 			if (node.IsEmpty)
 				return;
@@ -1724,16 +1724,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var result = node.Result;
 
-			foreach (var use in node.Result.Uses)
+			foreach (var use in result.Uses)
 			{
 				if (use != node)
 					return;
 			}
 
 			AddOperandUsageToWorkList(node);
+			if (trace.Active) trace.Log("*** DeadCodeEliminationPhi");
 			if (trace.Active) trace.Log("REMOVED:\t" + node.ToString());
 			node.SetInstruction(IRInstruction.Nop);
-			removeUselessPhiCount++;
+			deadCodeEliminationPhi++;
 		}
 
 		private static bool IsPowerOfTwo(ulong n)
