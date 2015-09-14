@@ -43,14 +43,15 @@ namespace Mosa.TinyCPUSimulator.Debug
 			{
 				System.Diagnostics.Debug.Listeners.Add(listener);
 
-				//Test5a();
+				Test5a();
+
 				//Test5b();
 				//Test5c();
 				//Test3();
 				//Test4();
 				//Test12();
 
-				Test13();
+				//Test13();
 
 				//Test14();
 			}
@@ -61,22 +62,23 @@ namespace Mosa.TinyCPUSimulator.Debug
 
 			System.Diagnostics.Debugger.Launch();
 			System.Diagnostics.Debug.Write(listener.Output);
-			Console.ReadLine();
+
+			//Console.ReadLine();
 		}
 
 		private static void Test14()
 		{
-			var fixture = new UInt16Fixture();
+			var fixture = new BoxingFixture();
 
-			fixture.Newarr();
+			fixture.BoxI4(10);
 		}
 
-		private static void Test13()
-		{
-			var fixture = new _ExceptionHandlingFixture();
+		//private static void Test13()
+		//{
+		//	var fixture = new _ExceptionHandlingFixture();
 
-			fixture.ExceptionTest8();
-		}
+		//	fixture.ExceptionTest8();
+		//}
 
 		private static void Test12()
 		{
@@ -131,7 +133,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 		{
 			var fixture = new UInt32Fixture();
 
-			fixture.AddU4U4(1, 2);
+			fixture.XorU4U4(65535, 1);
 		}
 
 		private static void Test5b()

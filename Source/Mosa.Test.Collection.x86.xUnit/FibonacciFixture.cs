@@ -8,7 +8,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 	public class FibonacciFixture : X86TestFixture
 	{
 		[Theory]
-		[PropertyData("I4Small")]
+		[MemberData("I4Small", DisableDiscoveryEnumeration = true)]
 		public void Fibonacci(int value)
 		{
 			Assert.Equal(FibonacciTests.Fibonacci(value), Run<int>("Mosa.Test.Collection.FibonacciTests.Fibonacci", value));

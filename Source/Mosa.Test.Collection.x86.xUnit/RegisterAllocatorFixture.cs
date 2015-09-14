@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Xunit;
-using Xunit.Extensions;
 
 namespace Mosa.Test.Collection.x86.xUnit
 {
@@ -14,17 +13,17 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 
 		[Theory]
-		[PropertyData("I4MiniI4MiniI4MiniI4MiniI4MiniI4MiniI4Mini")]
-		public void Pressure7(int a, int b, int c, int d, int e, int f, int g)
+		[MemberData("I4MiniI4MiniI4MiniI4Mini", DisableDiscoveryEnumeration = true)]
+		public void Pressure7(int a, int b, int c, int d)
 		{
-			Assert.Equal(Mosa.Test.Collection.RegisterAllocatorTests.Pressure7(a, b, c, d, e, f, g), Run<int>("Mosa.Test.Collection.RegisterAllocatorTests.Pressure7", a, b, c, d, e, f, g));
+			Assert.Equal(Mosa.Test.Collection.RegisterAllocatorTests.Pressure7(a, b, 7, c, 9, d, 10), Run<int>("Mosa.Test.Collection.RegisterAllocatorTests.Pressure7", a, b, 7, c, 9, d, 10));
 		}
 
 		[Theory]
-		[PropertyData("I4MiniI4MiniI4MiniI4MiniI4MiniI4MiniI4Mini")]
-		public void Pressure9(int a, int b, int c, int d, int e, int f, int g)
+		[MemberData("I4MiniI4MiniI4MiniI4Mini", DisableDiscoveryEnumeration = true)]
+		public void Pressure9(int a, int b, int c, int d)
 		{
-			Assert.Equal(Mosa.Test.Collection.RegisterAllocatorTests.Pressure9(a, b, c, d, e, f, g), Run<int>("Mosa.Test.Collection.RegisterAllocatorTests.Pressure9", a, b, c, d, e, f, g));
+			Assert.Equal(Mosa.Test.Collection.RegisterAllocatorTests.Pressure9(a, b, c, 7, d, 3, 9), Run<int>("Mosa.Test.Collection.RegisterAllocatorTests.Pressure9", a, b, c, 7, d, 3, 9));
 		}
 	}
 }

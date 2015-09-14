@@ -6,6 +6,9 @@ using System;
 
 namespace Mosa.Compiler.Framework
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class CompilerOptions
 	{
 		#region Structures
@@ -98,6 +101,14 @@ namespace Mosa.Compiler.Framework
 		public bool EnableInlinedMethods { get; set; }
 
 		/// <summary>
+		/// Gets or sets the maximum IR numbers for inlined optimization.
+		/// </summary>
+		/// <value>
+		/// The maximum IR numbers for inlined optimization.
+		/// </value>
+		public int InlinedIRMaximum { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether static allocations are enabled.
 		/// </summary>
 		/// <value>
@@ -108,13 +119,13 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds a struct with additional options for ELF32.
 		/// </summary>
-		/// <value>The ELF32 struct.</value>
+		/// <value>The ELF32 format.</value>
 		public Elf32Struct Elf32;
 
 		/// <summary>
 		/// Holds a struct with additional options for the PE format.
 		/// </summary>
-		/// <value>The portable executable (PE) struct.</value>
+		/// <value>The portable executable (PE) format.</value>
 		public PortableExecutableStruct PortableExecutable;
 
 		/// <summary>
@@ -170,6 +181,7 @@ namespace Mosa.Compiler.Framework
 			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
 			EmitBinary = true;
-		}
+			InlinedIRMaximum = 20;		
+        }
 	}
 }

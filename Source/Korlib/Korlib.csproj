@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.30729</ProductVersion>
@@ -9,7 +9,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyName>mscorlib</AssemblyName>
     <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <RootNamespace>System</RootNamespace>
     <NoWarn>0169;0649;1685</NoWarn>
@@ -32,11 +32,13 @@
     <DebugSymbols>True</DebugSymbols>
     <Optimize>false</Optimize>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>False</DebugSymbols>
     <Optimize>True</Optimize>
     <WarningLevel>2</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="System.Collections.Generic\LinkedList.cs" />
@@ -190,7 +192,7 @@
     <Message Text="Generating module name response file: $(IntermediateOutputPath)\korlib.rsp" />
     <Message Text="VS Version: $(VisualStudioVersion); Tools Version: $(MSBuildToolsVersion)" />
     <!-- When Roslyn is NOT enabled, we need to set the module name for mscorlib -->
-    <WriteLinesToFile Condition="'$(MSBuildToolsVersion)'&lt;'14.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/test:moduleName=CommonLanguageRuntimeLibrary" Overwrite="true" />
+    <Touch Condition="'$(MSBuildToolsVersion)'&lt;'14.0'" Files="$(IntermediateOutputPath)\korlib.rsp" AlwaysCreate="true" />
     <!-- When Roslyn is enabled we need to set the runtimemetadataversion -->
     <WriteLinesToFile Condition="'$(MSBuildToolsVersion)'&gt;='14.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/runtimemetadataversion:v1.0.0" Overwrite="true" />
     <ItemGroup>

@@ -11,8 +11,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class InlineEvaluationStage : BaseMethodCompilerStage
 	{
-		public static int IRMaximumForInline = 8;
 		public static string InlineMethodAttribute = "System.Runtime.CompilerServices.MethodImplAttribute";
+
+		public const int MaximumCompileCount = 10;
 
 		protected override void Run()
 		{
@@ -33,9 +34,8 @@ namespace Mosa.Compiler.Framework.Stages
 			compilerMethod.HasLoops = false;
 			compilerMethod.IsPlugged = (plugMethod != null);
 			compilerMethod.IsVirtual = method.IsVirtual;
-
-			// TODO
 			compilerMethod.HasDoNotInlineAttribute = false;
+			compilerMethod.HasAddressOfInstruction = false;
 
 			int totalIRCount = 0;
 			int totalIROtherCount = 0;
@@ -55,6 +55,11 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						totalIROtherCount++;
 					}
+
+					if (node.Instruction == IRInstruction.AddressOf)
+					{
+						compilerMethod.HasAddressOfInstruction = true;
+					}
 				}
 
 				if (block.PreviousBlocks.Count > 1)
@@ -68,6 +73,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var methodAttribute = method.FindCustomAttribute(InlineMethodAttribute);
 
+			//TODO: check for specific attribute: System.Runtime.CompilerServices.MethodImplOptions.NoInlining
 			if (methodAttribute != null)
 			{
 				compilerMethod.HasDoNotInlineAttribute = true;
@@ -80,10 +86,18 @@ namespace Mosa.Compiler.Framework.Stages
 				compilerMethod.BasicBlocks = CopyInstructions();
 			}
 
-			//foreach(var called in compilerMethod.CalledBy)
-			//{
-			//	MethodCompiler.Compiler.CompilationScheduler.Schedule(called);
-			//}
+			lock (compilerMethod)
+			{
+				foreach (var called in compilerMethod.CalledBy)
+				{
+					var calledMethod = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(called);
+
+					if (calledMethod.CompileCount < MaximumCompileCount)
+					{
+						MethodCompiler.Compiler.CompilationScheduler.Schedule(called);
+					}
+				}
+			}
 
 			trace.Log("CanInline: " + compilerMethod.CanInline.ToString());
 			trace.Log("IsVirtual: " + compilerMethod.IsVirtual.ToString());
@@ -116,10 +130,14 @@ namespace Mosa.Compiler.Framework.Stages
 			if (method.IsVirtual)
 				return false;
 
+			// current implementation limitation - can't include methods with addressOf instruction
+			if (method.HasAddressOfInstruction)
+				return false;
+
 			if (method.IROtherInstructionCount > 0)
 				return false;
 
-			if (method.IRInstructionCount > IRMaximumForInline)
+			if (method.IRInstructionCount > MethodCompiler.Compiler.CompilerOptions.InlinedIRMaximum)
 				return false;
 
 			var returnType = method.Method.Signature.ReturnType;

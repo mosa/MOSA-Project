@@ -6,6 +6,7 @@ using Mosa.Compiler.Trace;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 
 namespace Mosa.Compiler.Framework
@@ -130,20 +131,17 @@ namespace Mosa.Compiler.Framework
 			// Create new dictionary
 			IntrinsicTypes = new Dictionary<string, Type>();
 
-			// Get all the classes that implement the IIntrinsicInternalMethod interface
-			IEnumerable<Type> types = AppDomain.CurrentDomain.GetAssemblies()
-				.SelectMany(s => s.GetTypes())
-				.Where(p => typeof(IIntrinsicInternalMethod).IsAssignableFrom(p) && p.IsClass);
-
-			// Iterate through all the found types
-			foreach (var t in types)
+			foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
 			{
-				// Now get all the ReplacementTarget attributes
-				var attributes = (ReplacementTargetAttribute[])t.GetCustomAttributes(typeof(ReplacementTargetAttribute), true);
-				for (int i = 0; i < attributes.Length; i++)
+				if (type.IsClass && typeof(IIntrinsicInternalMethod).IsAssignableFrom(type))
 				{
-					// Finally add the dictionary entry mapping the target string and the type
-					IntrinsicTypes.Add(attributes[i].Target, t);
+					// Now get all the ReplacementTarget attributes
+					var attributes = (ReplacementTargetAttribute[])type.GetCustomAttributes(typeof(ReplacementTargetAttribute), true);
+					for (int i = 0; i < attributes.Length; i++)
+					{
+						// Finally add the dictionary entry mapping the target string and the type
+						IntrinsicTypes.Add(attributes[i].Target, type);
+					}
 				}
 			}
 

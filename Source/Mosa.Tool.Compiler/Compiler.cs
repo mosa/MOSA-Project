@@ -321,7 +321,7 @@ namespace Mosa.Tool.Compiler
 		{
 			compiler.CompilerTrace.TraceListener = new ConsoleEventListener();
 			compiler.Load(inputFiles);
-			compiler.Execute();
+			compiler.Execute(Environment.ProcessorCount);
 		}
 
 		/// <summary>

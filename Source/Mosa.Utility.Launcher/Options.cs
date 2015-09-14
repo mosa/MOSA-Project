@@ -33,6 +33,8 @@ namespace Mosa.Utility.Launcher
 
 		public bool EnableInlinedMethods { get; set; }
 
+		public int InlinedIRMaximum { get; set; }
+
 		public bool GenerateASMFile { get; set; }
 
 		public bool GenerateMapFile { get; set; }
@@ -66,6 +68,7 @@ namespace Mosa.Utility.Launcher
 			DebugConnectionOption = DebugConnectionOption.None;
 			CompilerUsesMultipleThreads = true;
 			EnableInlinedMethods = true;
+			InlinedIRMaximum = 8;
 		}
 
 		public void LoadFile(string file)

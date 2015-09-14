@@ -7,6 +7,8 @@ namespace Mosa.Test.Collection.x86.xUnit
 {
 	public class X86TestFixture : TestFixture
 	{
-		protected override BaseTestPlatform BasePlatform { get { return new TestPlatform(); } }
+		private static BaseTestPlatform testPlatform = new TestPlatform();
+
+		protected override BaseTestPlatform BasePlatform { get { return testPlatform; } }
 	}
 }

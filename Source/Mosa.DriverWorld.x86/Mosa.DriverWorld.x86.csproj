@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mosa.DriverWorld.x86</RootNamespace>
     <AssemblyName>Mosa.DriverWorld.x86</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>true</NoStdLib>
     <TargetFrameworkProfile />

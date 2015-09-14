@@ -9,18 +9,23 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 	{
 		private static TestCompiler testCompiler;
 
+		private static object mylock = new object();
+
 		protected virtual BaseTestPlatform BasePlatform { get { return null; } }
 
 		private TestCompiler TestCompiler
 		{
 			get
 			{
-				if (testCompiler == null)
+				lock (mylock)
 				{
-					testCompiler = new TestCompiler(BasePlatform);
-				}
+					if (testCompiler == null)
+					{
+						testCompiler = new TestCompiler(BasePlatform);
+					}
 
-				return testCompiler;
+					return testCompiler;
+				}
 			}
 		}
 

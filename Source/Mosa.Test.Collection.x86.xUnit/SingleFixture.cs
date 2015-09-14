@@ -11,28 +11,28 @@ namespace Mosa.Test.Collection.x86.xUnit
 		//private static IComparer<float> target = new ApproximateComparer(Tolerance);
 
 		[Theory]
-		[PropertyData("R4R4")]
+		[MemberData("R4R4", DisableDiscoveryEnumeration = true)]
 		public void AddR4R4(float a, float b)
 		{
 			Assert.Equal(SingleTests.AddR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "AddR4R4", a, b));
 		}
 
 		[Theory]
-		[PropertyData("R4R4")]
+		[MemberData("R4R4", DisableDiscoveryEnumeration = true)]
 		public void SubR4R4(float a, float b)
 		{
 			Assert.Equal(SingleTests.SubR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "SubR4R4", a, b));
 		}
 
 		[Theory]
-		[PropertyData("R4R4")]
+		[MemberData("R4R4", DisableDiscoveryEnumeration = true)]
 		public void MulR4R4(float a, float b)
 		{
 			Assert.Equal(SingleTests.MulR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "MulR4R4", a, b));
 		}
 
 		[Theory]
-		[PropertyData("R4R4")]
+		[MemberData("R4R4", DisableDiscoveryEnumeration = true)]
 		public void DivR4R4(float a, float b)
 		{
 			if (a == int.MinValue && b == -1)
@@ -58,7 +58,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 
 		// TinySimulator can't simulate this.
 		//[Theory]
-		//[PropertyData("R4R4")]
+		//[MemberData("R4R4", DisableDiscoveryEnumeration = true)]
 		public void RemR4R4(float a, float b)
 		{
 			if (a == int.MinValue && b == -1)
@@ -83,42 +83,42 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 
 		[Theory]
-		[PropertyData("R4SimpleR4Simple")]
+		[MemberData("R4SimpleR4Simple", DisableDiscoveryEnumeration = true)]
 		public void CeqR4R4(float a, float b)
 		{
 			Assert.Equal(SingleTests.CeqR4R4(a, b), Run<bool>("Mosa.Test.Collection", "SingleTests", "CeqR4R4", a, b));
 		}
 
 		[Theory]
-		[PropertyData("R4SimpleR4Simple")]
+		[MemberData("R4SimpleR4Simple", DisableDiscoveryEnumeration = true)]
 		public void CneqR4R4(float a, float b)
 		{
 			Assert.Equal(SingleTests.CneqR4R4(a, b), Run<bool>("Mosa.Test.Collection", "SingleTests", "CneqR4R4", a, b));
 		}
 
 		[Theory]
-		[PropertyData("R4SimpleR4Simple")]
+		[MemberData("R4SimpleR4Simple", DisableDiscoveryEnumeration = true)]
 		public void CltR4R4(float a, float b)
 		{
 			Assert.Equal(SingleTests.CltR4R4(a, b), Run<bool>("Mosa.Test.Collection", "SingleTests", "CltR4R4", a, b));
 		}
 
 		[Theory]
-		[PropertyData("R4SimpleR4Simple")]
+		[MemberData("R4SimpleR4Simple", DisableDiscoveryEnumeration = true)]
 		public void CgtR4R4(float a, float b)
 		{
 			Assert.Equal(SingleTests.CgtR4R4(a, b), Run<bool>("Mosa.Test.Collection", "SingleTests", "CgtR4R4", a, b));
 		}
 
 		[Theory]
-		[PropertyData("R4SimpleR4Simple")]
+		[MemberData("R4SimpleR4Simple", DisableDiscoveryEnumeration = true)]
 		public void CleR4R4(float a, float b)
 		{
 			Assert.Equal(SingleTests.CleR4R4(a, b), Run<bool>("Mosa.Test.Collection", "SingleTests", "CleR4R4", a, b));
 		}
 
 		[Theory]
-		[PropertyData("R4SimpleR4Simple")]
+		[MemberData("R4SimpleR4Simple", DisableDiscoveryEnumeration = true)]
 		public void CgeR4R4(float a, float b)
 		{
 			Assert.Equal(SingleTests.CgeR4R4(a, b), Run<bool>("Mosa.Test.Collection", "SingleTests", "CgeR4R4", a, b));
@@ -131,35 +131,35 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 
 		[Theory]
-		[PropertyData("I4Small")]
+		[MemberData("I4Small", DisableDiscoveryEnumeration = true)]
 		public void Ldlen(int length)
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection", "SingleTests", "Ldlen", length));
 		}
 
 		[Theory]
-		[PropertyData("I4SmallR4Simple")]
+		[MemberData("I4SmallR4Simple", DisableDiscoveryEnumeration = true)]
 		public void StelemR4(int index, float value)
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection", "SingleTests", "Stelem", index, value));
 		}
 
 		[Theory]
-		[PropertyData("I4SmallR4Simple")]
+		[MemberData("I4SmallR4Simple", DisableDiscoveryEnumeration = true)]
 		public void LdelemR4(int index, float value)
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection", "SingleTests", "Ldelem", index, value));
 		}
 
 		[Theory]
-		[PropertyData("I4SmallR4Simple")]
+		[MemberData("I4SmallR4Simple", DisableDiscoveryEnumeration = true)]
 		public void LdelemaR4(int index, float value)
 		{
 			Assert.True(Run<bool>("Mosa.Test.Collection", "SingleTests", "Ldelema", index, value));
 		}
 
 		//[Theory]
-		//[PropertyData("R4")]
+		//[MemberData("R4", DisableDiscoveryEnumeration = true)]
 		public void IsNaN(float value)
 		{
 			Assert.Equal(SingleTests.IsNaN(value), Run<bool>("Mosa.Test.Collection", "SingleTests", "IsNaN", value));
