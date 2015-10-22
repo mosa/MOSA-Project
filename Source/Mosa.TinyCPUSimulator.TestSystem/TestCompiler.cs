@@ -16,8 +16,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		protected BaseTestPlatform platform;
 
-		protected ISimAdapter adapter;
-
 		protected ISimAdapter simAdapter;
 
 		protected SimLinker linker;
