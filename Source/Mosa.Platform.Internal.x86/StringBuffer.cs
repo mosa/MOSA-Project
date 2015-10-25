@@ -47,7 +47,7 @@ namespace Mosa.Platform.Internal.x86
 			//fixed (void* ptr = &this)
 			//return (char*)(((uint)ptr) + 4);
 
-			//Workarround
+			//Workaround
 			uint ui;
 			fixed (void* ptr = &this)
 				ui = (uint)ptr;
