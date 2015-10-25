@@ -77,29 +77,6 @@ namespace Mosa.HelloWorld.x86
 				Console.Write((char)205);
 
 			Console.WriteLine();
-
-			//Console.Color = Colors.Green;
-			//Console.Write("Memory-Map:");
-			//Console.WriteLine();
-
-			//for (uint index = 0; index < Multiboot.MemoryMapCount; index++)
-			//{
-			//	Console.Color = Colors.White;
-			//	Console.Write(Multiboot.GetMemoryMapBase(index), 16, 10);
-			//	Console.Write(" - ");
-			//	Console.Write(Multiboot.GetMemoryMapBase(index) + Multiboot.GetMemoryMapLength(index) - 1, 16, 10);
-			//	Console.Write(" (");
-			//	Console.Color = Colors.Gray;
-			//	Console.Write(Multiboot.GetMemoryMapLength(index), 16, 10);
-			//	Console.Color = Colors.White;
-			//	Console.Write(") ");
-			//	Console.Color = Colors.Gray;
-			//	Console.Write("Type: ");
-			//	Console.Write(Multiboot.GetMemoryMapType(index), 16, 1);
-			//	Console.WriteLine();
-			//}
-			//Console.WriteLine();
-			//Console.WriteLine();
 			Console.Color = Colors.Green;
 			Console.Write("Smbios Info: ");
 			if (SmbiosManager.IsAvailable)
@@ -186,6 +163,29 @@ namespace Mosa.HelloWorld.x86
 
 			Console.WriteLine();
 
+			Console.Color = Colors.Green;
+			Console.Write("Memory-Map:");
+			Console.WriteLine();
+
+			for (uint index = 0; index < Multiboot.MemoryMapCount; index++)
+			{
+				Console.Color = Colors.White;
+				Console.Write(Multiboot.GetMemoryMapBase(index), 16, 8);
+				Console.Write(" - ");
+				Console.Write(Multiboot.GetMemoryMapBase(index) + Multiboot.GetMemoryMapLength(index) - 1, 16, 8);
+				Console.Write(" (");
+				Console.Color = Colors.Gray;
+				Console.Write(Multiboot.GetMemoryMapLength(index), 16, 8);
+				Console.Color = Colors.White;
+				Console.Write(") ");
+				Console.Color = Colors.Gray;
+				Console.Write("Type: ");
+				Console.Write(Multiboot.GetMemoryMapType(index), 16, 1);
+				Console.WriteLine();
+			}
+			Console.WriteLine();
+			Console.WriteLine();
+
 			//CpuInfo cpuInfo = new CpuInfo();
 
 			//#region Vendor
@@ -253,8 +253,9 @@ namespace Mosa.HelloWorld.x86
 			//#endregion Type
 
 			Console.Row = 19;
-			for (uint index = 0; index < 80; index++)
+			for (uint index = 60; index < 80; index++)
 			{
+				Console.Color = Colors.White;
 				Console.Column = index;
 				Console.Write((char)205);
 			}
@@ -262,6 +263,7 @@ namespace Mosa.HelloWorld.x86
 			Console.Row = 23;
 			for (uint index = 0; index < 80; index++)
 			{
+				Console.Color = Colors.White;
 				Console.Column = index;
 				Console.Write((char)205);
 			}

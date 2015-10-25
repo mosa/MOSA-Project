@@ -9,7 +9,6 @@ namespace Mosa.Kernel.x86
 {
 	unsafe public static class GDT
 	{
-		private static uint gdtTableAddress = 0x1401000;
 		private static DescriptorTable* table;
 
 		/// <summary>
@@ -17,31 +16,58 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Setup()
 		{
-			table = (DescriptorTable*)gdtTableAddress;
+			table = (DescriptorTable*)Address.GDTTable;
 			table->Clear();
-			table->AdressOfEntries = gdtTableAddress + DescriptorTable.StructSize;
+			table->AdressOfEntries = Address.GDTTable + DescriptorTable.StructSize;
 
-			//Null segment
+			// Null segment
 			var nullEntry = DescriptorTableEntry.CreateNullDescriptor();
 			table->AddEntry(nullEntry);
 
-			//code segment
-			var codeEntry = DescriptorTableEntry.CreateCode(0, 0xFFFFFFFF);
-			codeEntry.CodeSegment_Readable = true;
-			codeEntry.PriviligeRing = 0;
-			codeEntry.Present = true;
-			codeEntry.AddressMode = DescriptorTableEntry.EAddressMode.Bits32;
-			codeEntry.Granularity = true;
-			table->AddEntry(codeEntry);
+			// Code Segment
+			var kernelCodeEntry = DescriptorTableEntry.CreateCode(0, 0xFFFFFFFF);
+			kernelCodeEntry.CodeSegment_Readable = true;
+			kernelCodeEntry.PriviligeRing = 0;
+			kernelCodeEntry.Present = true;
+			kernelCodeEntry.AddressMode = DescriptorTableEntry.EAddressMode.Bits32;
+			kernelCodeEntry.Granularity = true;
+			table->AddEntry(kernelCodeEntry);
 
-			//data segment
-			var dataEntry = DescriptorTableEntry.CreateData(0, 0xFFFFFFFF);
-			dataEntry.DataSegment_Writable = true;
-			dataEntry.PriviligeRing = 0;
-			dataEntry.Present = true;
-			dataEntry.AddressMode = DescriptorTableEntry.EAddressMode.Bits32;
-			dataEntry.Granularity = true;
-			table->AddEntry(dataEntry);
+			// Data Segment
+			var kernelDataEntry = DescriptorTableEntry.CreateData(0, 0xFFFFFFFF);
+			kernelDataEntry.DataSegment_Writable = true;
+			kernelDataEntry.PriviligeRing = 0;
+			kernelDataEntry.Present = true;
+			kernelDataEntry.AddressMode = DescriptorTableEntry.EAddressMode.Bits32;
+			kernelDataEntry.Granularity = true;
+			table->AddEntry(kernelDataEntry);
+
+			// User Code Segment
+			var userCodeEntry = DescriptorTableEntry.CreateCode(0, 0xFFFFFFFF);
+			userCodeEntry.CodeSegment_Readable = true;
+			userCodeEntry.PriviligeRing = 3;
+			userCodeEntry.Present = true;
+			userCodeEntry.AddressMode = DescriptorTableEntry.EAddressMode.Bits32;
+			userCodeEntry.Granularity = true;
+			table->AddEntry(userCodeEntry);
+
+			// User Data Segment
+			var userDataEntry = DescriptorTableEntry.CreateData(0, 0xFFFFFFFF);
+			userDataEntry.DataSegment_Writable = true;
+			userDataEntry.PriviligeRing = 3;
+			userDataEntry.Present = true;
+			userDataEntry.AddressMode = DescriptorTableEntry.EAddressMode.Bits32;
+			userDataEntry.Granularity = true;
+			table->AddEntry(userDataEntry);
+
+			// TSS Segment
+			var tssEntry = DescriptorTableEntry.CreateData(Address.TSS, Address.TSSSize);
+			tssEntry.DataSegment_Writable = true;
+			tssEntry.PriviligeRing = 0;
+			tssEntry.Present = true;
+			tssEntry.AddressMode = DescriptorTableEntry.EAddressMode.Bits32;
+			tssEntry.Granularity = true;
+			table->AddEntry(tssEntry);
 
 			Flush();
 		}
@@ -51,7 +77,7 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Flush()
 		{
-			Native.Lgdt(gdtTableAddress);
+			Native.Lgdt(Address.GDTTable);
 		}
 	}
 
