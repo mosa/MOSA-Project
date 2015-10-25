@@ -65,6 +65,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Address.cs" />
     <Compile Include="Helpers\Assert.cs" />
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="ConsoleSession.cs" />
@@ -85,7 +86,6 @@
     <Compile Include="Keyboard.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="Multiboot.cs" />
-    <Compile Include="PageFaultHandler.cs" />
     <Compile Include="PageFrameAllocator.cs" />
     <Compile Include="PageTable.cs" />
     <Compile Include="Panic.cs" />

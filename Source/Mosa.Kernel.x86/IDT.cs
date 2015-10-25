@@ -14,8 +14,7 @@ namespace Mosa.Kernel.x86
 
 		private static InterruptHandler interruptHandler;
 
-		private static uint idtTable = 0x1411000;
-		private static uint idtEntries = idtTable + 6;
+		private static uint idtEntries = Address.IDTTable + 6;
 
 		#region Data members
 
@@ -34,13 +33,13 @@ namespace Mosa.Kernel.x86
 		public static void Setup()
 		{
 			// Setup IDT table
-			Memory.Clear(idtTable, 6);
-			Native.Set16(idtTable, (Offset.TotalSize * 256) - 1);
-			Native.Set32(idtTable + 2, idtEntries);
+			Memory.Clear(Address.IDTTable, 6);
+			Native.Set16(Address.IDTTable, (Offset.TotalSize * 256) - 1);
+			Native.Set32(Address.IDTTable + 2, idtEntries);
 
 			SetTableEntries();
 
-			Native.Lidt(idtTable);
+			Native.Lidt(Address.IDTTable);
 			Native.Sti();
 		}
 
@@ -73,7 +72,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static uint GetEntryLocation(uint index)
 		{
-			return (uint)(idtEntries + (index * Offset.TotalSize));
+			return idtEntries + (index * Offset.TotalSize);
 		}
 
 		/// <summary>
@@ -401,17 +400,28 @@ namespace Mosa.Kernel.x86
 
 				case 14:
 
-					// Page Fault!
+					// Check if Null Pointer Exception
+					// Otherwise handle as Page Fault
 					var cr2 = Native.GetCR2() >> 5;
 					if (cr2 < 0x1000)
-					{
 						Error(stack->EBP, stack->EIP, "Null Pointer Exception");
-						break;
+
+					//bool taken = false;
+					//spinLock.Enter(ref taken);
+
+					uint physicalpage = PageFrameAllocator.Allocate();
+
+					if (physicalpage == 0x0)
+					{
+						// Panic! Out of memory
+						Panic.SetStackPointer(stack->EBP, stack->EIP);
+						Panic.Error(cr2);
 					}
 
-					//PageFaultHandler.Fault(errorCode);
-					Panic.SetStackPointer(stack->EBP, stack->EIP);
-					Panic.Error(cr2);
+					PageTable.MapVirtualAddressToPhysical(Native.GetCR2(), physicalpage);
+
+					//spinLock.Exit();
+
 					break;
 
 				case 16:

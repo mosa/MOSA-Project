@@ -192,7 +192,7 @@
     <Message Text="Generating module name response file: $(IntermediateOutputPath)\korlib.rsp" />
     <Message Text="VS Version: $(VisualStudioVersion); Tools Version: $(MSBuildToolsVersion)" />
     <!-- When Roslyn is NOT enabled, we need to set the module name for mscorlib -->
-    <WriteLinesToFile Condition="'$(MSBuildToolsVersion)'&lt;'14.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/test:moduleName=CommonLanguageRuntimeLibrary" Overwrite="true" />
+    <Touch Condition="'$(MSBuildToolsVersion)'&lt;'14.0'" Files="$(IntermediateOutputPath)\korlib.rsp" AlwaysCreate="true" />
     <!-- When Roslyn is enabled we need to set the runtimemetadataversion -->
     <WriteLinesToFile Condition="'$(MSBuildToolsVersion)'&gt;='14.0'" File="$(IntermediateOutputPath)\korlib.rsp" Lines="/runtimemetadataversion:v1.0.0" Overwrite="true" />
     <ItemGroup>
