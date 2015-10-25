@@ -42,3 +42,6 @@ mkisofs
 - http://code.google.com/p/mkisofs-md5/
 - Version: 2.01
 
+nuget
+- Apache License, Version 2.0
+- http://docs.nuget.org/consume/Command-Line-Reference
