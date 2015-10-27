@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
@@ -19,8 +21,18 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var operand1 = context.Operand1;
 			if (operand1.IsValueType)
 			{
-				operand1 = context.Previous.Operand1;
-				context.Previous.Empty();
+				InstructionNode def = operand1.Definitions[0];
+				var replacements = new List<Tuple<InstructionNode, int>>();
+				foreach (var use in operand1.Uses)
+					for (int i = 0; i < use.OperandCount; i++)
+						if (use.GetOperand(i) == operand1)
+							replacements.Add(new Tuple<InstructionNode, int>(use, i));
+
+				foreach (var replace in replacements)
+					replace.Item1.SetOperand(replace.Item2, def.Operand1);
+
+				operand1 = def.Operand1;
+				def.Empty();
 				context.SetInstruction(IRInstruction.AddressOf, result, operand1);
 				return;
 			}
