@@ -3,4 +3,6 @@ if exist %SYSTEMROOT%\Microsoft.NET\Framework\v4.0.30319 set MSBUILDPATH=%SYSTEM
 
 set MSBUILD=%MSBUILDPATH%\msbuild.exe
 
+..\Tools\nuget\nuget.exe restore MOSA.sln
+
 %MSBUILD% /nologo /m /p:BuildInParallel=true /p:Configuration=Debug /p:Platform="Any CPU" MOSA.sln
