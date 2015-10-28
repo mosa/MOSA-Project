@@ -114,7 +114,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the number of operands.
 		/// </summary>
 		/// <value>The number of operands.</value>
-		public byte OperandCount { get { return Node.OperandCount; } set { Node.OperandCount = value; } }
+		public int OperandCount { get { return Node.OperandCount; } set { Node.OperandCount = value; } }
 
 		/// <summary>
 		/// Gets or sets number of operand results.
@@ -388,11 +388,11 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Sets the operand by index.
 		/// </summary>
-		/// <param name="opIndex">The index.</param>
+		/// <param name="index">The index.</param>
 		/// <param name="operand">The operand.</param>
-		public void SetOperand(int opIndex, Operand operand)
+		public void SetOperand(int index, Operand operand)
 		{
-			Node.SetOperand(opIndex, operand);
+			Node.SetOperand(index, operand);
 		}
 
 		/// <summary>
@@ -444,7 +444,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		public void SetInstruction(BaseInstruction instruction, byte operandCount, byte resultCount)
+		public void SetInstruction(BaseInstruction instruction, int operandCount, byte resultCount)
 		{
 			Node.SetInstruction(instruction, operandCount, resultCount);
 		}

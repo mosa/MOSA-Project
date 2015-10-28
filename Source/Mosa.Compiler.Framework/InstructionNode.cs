@@ -85,7 +85,7 @@ namespace Mosa.Compiler.Framework
 		public int Label { get; set; }
 
 		/// <summary>
-		/// The order slot number (initalized by some stage)
+		/// The order slot number (initialized by some stage)
 		/// </summary>
 		public int SlotNumber { get; set; }
 
@@ -455,11 +455,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets the number of operands
 		/// </summary>
-		public byte OperandCount
-		{
-			get { return (byte)((packed >> 20) & 0xFFF); }
-			set { packed = (uint)((packed & 0x000FFFFF) | ((uint)value << 20)); }
-		}
+		public int OperandCount { get; set; }
 
 		private void CheckAddition()
 		{
@@ -805,12 +801,35 @@ namespace Mosa.Compiler.Framework
 		public void SetAdditionalOperand(int index, Operand operand)
 		{
 			CheckAddition();
-			if (addition.AdditionalOperands == null) addition.AdditionalOperands = new Operand[253];
 
-			Debug.Assert(index < 255, @"No Index");
+			//if (addition.AdditionalOperands == null) addition.AdditionalOperands = new Operand[253];
+			//Debug.Assert(index < 255, @"No Index");
 			Debug.Assert(index >= 3, @"No Index");
 
+			SizeAdditionalOperands(index - 3);
+
 			addition.AdditionalOperands[index - 3] = operand;
+		}
+
+		private void SizeAdditionalOperands(int index)
+		{
+			if (addition.AdditionalOperands == null)
+			{
+				addition.AdditionalOperands = new Operand[(index < 8) ? 8 : index];
+				return;
+			}
+
+			if (index < addition.AdditionalOperands.Length)
+				return;
+
+			var old = addition.AdditionalOperands;
+
+			addition.AdditionalOperands = new Operand[old.Length * 2];
+
+			for (int i = 0; i < old.Length; i++)
+			{
+				addition.AdditionalOperands[i] = old[i];
+			}
 		}
 
 		/// <summary>
@@ -823,8 +842,11 @@ namespace Mosa.Compiler.Framework
 			if (addition == null || addition.AdditionalOperands == null)
 				return null;
 
-			Debug.Assert(index < 255, @"No Index");
 			Debug.Assert(index >= 3, @"No Index");
+
+			//Debug.Assert(index < 255, @"No Index");
+
+			SizeAdditionalOperands(index - 3);
 
 			return addition.AdditionalOperands[index - 3];
 		}
@@ -890,7 +912,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		public InstructionNode(BaseInstruction instruction, byte operandCount, byte resultCount)
+		public InstructionNode(BaseInstruction instruction, int operandCount, byte resultCount)
 		{
 			Instruction = instruction;
 			OperandCount = operandCount;
@@ -1011,7 +1033,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		public void SetInstruction(BaseInstruction instruction, byte operandCount, byte resultCount)
+		public void SetInstruction(BaseInstruction instruction, int operandCount, byte resultCount)
 		{
 			Debug.Assert(!IsBlockStartInstruction);
 			Debug.Assert(!IsBlockEndInstruction);

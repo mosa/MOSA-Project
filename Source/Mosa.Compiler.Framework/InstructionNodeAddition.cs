@@ -28,10 +28,10 @@ namespace Mosa.Compiler.Framework
 		public MosaField MosaField { get; set; }
 
 		/// <summary>
-		/// Gets or sets the type of the mosa.
+		/// Gets or sets the mosa type.
 		/// </summary>
 		/// <value>
-		/// The type of the mosa.
+		/// The type.
 		/// </value>
 		public MosaType MosaType { get; set; }
 
