@@ -83,7 +83,7 @@ Next double click on the "Launcher.bat" script, which will bring up the MOSA Lau
 * Create a virtual disk image, with the compiled binary and boot loader
 * Launch a virtual machine instance (QEMU by default)
 
-By default, the CoolWorld operating system demo is pre-selected. Click the "Compiler and Emulator" button to compile and launch the demo.
+By default, the CoolWorld operating system demo is pre-selected. Click the "Compile and Run" button to compile and launch the demo.
 
 ![MOSA Launcher](https://raw.githubusercontent.com/mosa/MOSA-Screenshots/master/MOSA%20Launcher.png)
 
