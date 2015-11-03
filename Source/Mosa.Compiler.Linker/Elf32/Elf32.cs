@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Linker.Elf32
 
 				var pheader = new ProgramHeader
 				{
-					Alignment = 0,
+					Alignment = section.SectionAlignment,
 					FileSize = section.AlignedSize,
 					MemorySize = section.AlignedSize,
 					Offset = section.FileOffset,
@@ -130,7 +130,7 @@ namespace Mosa.Compiler.Linker.Elf32
 				sheader.Size = section.AlignedSize;
 				sheader.Link = 0;
 				sheader.Info = 0;
-				sheader.AddressAlignment = 0;
+				sheader.AddressAlignment = section.SectionAlignment;
 				sheader.EntrySize = 0;
 				sheader.Write(writer);
 			}
@@ -160,11 +160,11 @@ namespace Mosa.Compiler.Linker.Elf32
 			stringSection.Type = SectionType.StringTable;
 			stringSection.Flags = (SectionAttribute)0;
 			stringSection.Address = 0;
-			stringSection.Offset = GetSection(SectionKind.ROData).FileOffset + GetSection(SectionKind.ROData).AlignedSize;
+			stringSection.Offset = GetSection(SectionKind.BSS).FileOffset + GetSection(SectionKind.BSS).AlignedSize;
 			stringSection.Size = (uint)stringTable.Count;
 			stringSection.Link = 0;
 			stringSection.Info = 0;
-			stringSection.AddressAlignment = 0;
+			stringSection.AddressAlignment = SectionAlignment;
 			stringSection.EntrySize = 0;
 			stringSection.Write(writer);
 		}
