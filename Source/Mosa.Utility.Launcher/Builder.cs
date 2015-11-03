@@ -168,7 +168,7 @@ namespace Mosa.Utility.Launcher
 			var options = new Mosa.Utility.BootImage.Options();
 
 			options.MBRCode = GetResource("mbr.bin");
-			options.FatBootCode = GetResource("boot.bin");
+			options.FatBootCode = GetResource("ldlinux.bin");
 
 			options.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource("ldlinux.sys")));
 			options.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource("mboot.c32")));
@@ -207,6 +207,8 @@ namespace Mosa.Utility.Launcher
 			Directory.CreateDirectory(isoDirectory);
 
 			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.bin"), GetResource("isolinux.bin"));
+			File.WriteAllBytes(Path.Combine(isoDirectory, "ldlinux.c32"), GetResource("ldlinux.c32"));
+			File.WriteAllBytes(Path.Combine(isoDirectory, "libcom32.c32"), GetResource("libcom32.c32"));
 			File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource("mboot.c32"));
 			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetResource("syslinux.cfg"));
 			File.Copy(compiledFile, Path.Combine(isoDirectory, "main.exe"));
