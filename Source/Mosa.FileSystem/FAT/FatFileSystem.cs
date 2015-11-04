@@ -1084,7 +1084,7 @@ namespace Mosa.FileSystem.FAT
 		{
 			FatFileLocation location = FindEntry(new Find.WithName(filename), directoryCluster);
 
-			if (location.Valid)
+			if (location.IsValid)
 			{
 				// Truncate the file
 				BinaryFormat entry = new BinaryFormat(partition.ReadBlock(location.DirectorySector, 1));
@@ -1105,7 +1105,7 @@ namespace Mosa.FileSystem.FAT
 			// Find an empty location in the directory
 			location = FindEntry(new Find.Empty(), directoryCluster);
 
-			if (!location.Valid)
+			if (!location.IsValid)
 			{
 				// Extend Directory
 
@@ -1166,11 +1166,11 @@ namespace Mosa.FileSystem.FAT
 
 			FatFileLocation location = FindEntry(new Find.Volume(), 0);
 
-			if (!location.Valid)
+			if (!location.IsValid)
 			{
 				location = FindEntry(new Find.Empty(), 0);
 
-				if (!location.Valid)
+				if (!location.IsValid)
 					return; // TODO: something went wrong
 			}
 

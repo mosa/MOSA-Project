@@ -4,6 +4,8 @@ using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
 using System;
 using System.IO;
+using System.Collections.Generic;
+using Mosa.ClassLib;
 
 namespace Mosa.Utility.BootImage
 {
@@ -135,7 +137,7 @@ namespace Mosa.Utility.BootImage
 				string newname = (Path.GetFileNameWithoutExtension(includeFile.Filename).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Filename).PadRight(4).Substring(1, 3)).ToUpper();
 				FatFileLocation location = fat.CreateFile(newname, fileAttributes, 0);
 
-				if (!location.Valid)
+				if (!location.IsValid)
 					throw new Exception("Unable to write file");
 
 				FatFileStream fatFileStream = new FatFileStream(fat, location);
@@ -151,10 +153,10 @@ namespace Mosa.Utility.BootImage
 
 				FatFileLocation location = fat.FindEntry(new Mosa.FileSystem.FAT.Find.WithName(name), 0);
 
-				if (location.Valid)
+				if (location.IsValid)
 				{
 					// Read boot sector
-					Mosa.ClassLib.BinaryFormat bootSector = new Mosa.ClassLib.BinaryFormat(partitionDevice.ReadBlock(0, 1));
+					BinaryFormat bootSector = new BinaryFormat(partitionDevice.ReadBlock(0, 1));
 
 					// Set the first sector location of the file
 					bootSector.SetUInt(0x1F8, fat.GetSectorByCluster(location.FirstCluster));
@@ -169,19 +171,20 @@ namespace Mosa.Utility.BootImage
 					uint fileSize = fat.GetFileSize(location.DirectorySector, location.DirectorySectorIndex);
 					uint sectorCount = (fileSize + 511) >> 9;
 
-					uint[] sectors = new uint[65];
-					uint nsec = 0;
+					List<uint> sectors = new List<uint>();
 
-					// Create list of the first 65 sectors of the file
-					for (uint cluster = location.FirstCluster; ((cluster != 0) & (nsec <= 64)); cluster = fat.GetNextCluster(cluster))
+					// Create list of the sectors of the file
+					for (uint cluster = location.FirstCluster; (cluster != 0); cluster = fat.GetNextCluster(cluster))
 					{
 						uint sec = fat.GetSectorByCluster(cluster);
 						for (uint s = 0; s < fat.SectorsPerCluster; s++)
-							sectors[nsec++] = sec + s;
+						{
+							sectors.Add(sec + s);
+						}
 					}
 
 					// Read the first cluster of the file
-					Mosa.ClassLib.BinaryFormat firstCluster = new Mosa.ClassLib.BinaryFormat(fat.ReadCluster(location.FirstCluster));
+					BinaryFormat firstCluster = new BinaryFormat(fat.ReadCluster(location.FirstCluster));
 
 					uint patchArea = 0;
 
@@ -197,11 +200,13 @@ namespace Mosa.Utility.BootImage
 						firstCluster.SetUShort(patchArea + 2, (ushort)(sectorCount - 1));
 
 						// Clear sector entries
-						firstCluster.Fill(patchArea + 8, 0, 64 * 4);
+						firstCluster.Fill(patchArea + 8, 0, (uint)(sectors.Count * 4));
 
 						// Set sector entries
-						for (nsec = 0; nsec < 64; nsec++)
-							firstCluster.SetUInt(patchArea + 8 + (nsec * 4), sectors[nsec + 1]);
+						for (int nsec = 0; nsec < sectors.Count; nsec++)
+						{
+							firstCluster.SetUInt((uint)(patchArea + 8 + (nsec * 4)), sectors[nsec]);
+						}
 
 						// Clear out checksum
 						firstCluster.SetUInt(patchArea + 4, 0);
