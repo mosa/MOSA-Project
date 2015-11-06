@@ -36,7 +36,7 @@ namespace Mosa.Utility.BootImage
 				}
 			}
 
-			var diskGeometry = new Mosa.DeviceSystem.DiskGeometry();
+			var diskGeometry = new DiskGeometry();
 			diskGeometry.GuessGeometry(blockCount);
 
 			// Create disk image file
@@ -45,7 +45,7 @@ namespace Mosa.Utility.BootImage
 			if (options.ImageFormat == ImageFormatType.VDI)
 			{
 				// Create header
-				byte[] header = Mosa.DeviceSystem.VDI.CreateHeader(
+				byte[] header = VDI.CreateHeader(
 					blockCount,
 					options.MediaGuid.ToByteArray(),
 					options.MediaLastSnapGuid.ToByteArray(),
@@ -54,7 +54,7 @@ namespace Mosa.Utility.BootImage
 
 				diskDevice.WriteBlock(0, 1, header);
 
-				byte[] map = Mosa.DeviceSystem.VDI.CreateImageMap(blockCount);
+				byte[] map = VDI.CreateImageMap(blockCount);
 
 				diskDevice.WriteBlock(1, (uint)(map.Length / 512), map);
 
@@ -236,7 +236,7 @@ namespace Mosa.Utility.BootImage
 			if (options.ImageFormat == ImageFormatType.VHD)
 			{
 				// Create footer
-				byte[] footer = Mosa.DeviceSystem.VHD.CreateFooter(
+				byte[] footer = VHD.CreateFooter(
 					blockCount,
 					(uint)(DateTime.Now - (new DateTime(2000, 1, 1, 0, 0, 0))).Seconds,
 					options.MediaGuid.ToByteArray(),
