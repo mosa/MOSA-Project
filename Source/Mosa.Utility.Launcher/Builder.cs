@@ -219,8 +219,6 @@ namespace Mosa.Utility.Launcher
 				"-relaxed-filenames" +
 				" -J -R" +
 				" -o " + Quote(imageFile) +
-
-				//" -b " + Quote(Path.Combine(isoDirectory, "isolinux.bin")) +
 				" -b isolinux.bin" +
 				" -no-emul-boot" +
 				" -boot-load-size 4" +

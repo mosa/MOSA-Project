@@ -133,7 +133,6 @@ namespace Mosa.Utility.BootImage
 				if (includeFile.Hidden) fileAttributes |= Mosa.FileSystem.FAT.FatFileAttributes.Hidden;
 				if (includeFile.System) fileAttributes |= Mosa.FileSystem.FAT.FatFileAttributes.System;
 
-				//byte[] file = File.ReadAllBytes(includeFile.Filename);
 				string newname = (Path.GetFileNameWithoutExtension(includeFile.Filename).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Filename).PadRight(4).Substring(1, 3)).ToUpper();
 				FatFileLocation location = fat.CreateFile(newname, fileAttributes, 0);
 
@@ -157,15 +156,6 @@ namespace Mosa.Utility.BootImage
 				{
 					// Read boot sector
 					BinaryFormat bootSector = new BinaryFormat(partitionDevice.ReadBlock(0, 1));
-
-					// Set the first sector location of the file
-					bootSector.SetUInt(0x1F8, fat.GetSectorByCluster(location.FirstCluster));
-
-					// Change jump address
-					bootSector.SetUInt(0x01, 0x58);
-
-					// Write back patched boot sector
-					partitionDevice.WriteBlock(0, 1, bootSector.Data);
 
 					// Get the file size & number of sectors used
 					uint fileSize = fat.GetFileSize(location.DirectorySector, location.DirectorySectorIndex);
@@ -191,45 +181,55 @@ namespace Mosa.Utility.BootImage
 					// Search for 0x3EB202FE (magic)
 					for (patchArea = 0; (firstCluster.GetUInt(patchArea) != 0x3EB202FE) && (patchArea < fat.ClusterSizeInBytes); patchArea += 4) ;
 
-					patchArea = patchArea + 8;
+					if (patchArea >= fat.ClusterSizeInBytes)
+						throw new InvalidProgramException("Unable to find patch location for syslinux");
 
-					if (patchArea < fat.ClusterSizeInBytes)
+					// Set up the totals
+					firstCluster.SetUShort(patchArea + Syslinux.PatchAreaOffset.DataSectors, (ushort)(sectorCount));
+					firstCluster.SetUShort(patchArea + Syslinux.PatchAreaOffset.AdvSectors, 2);
+					firstCluster.SetUInt(patchArea + Syslinux.PatchAreaOffset.Dwords, (fileSize >> 2));
+
+					// Clear sector entries
+					firstCluster.Fill(patchArea + 16, 0, (uint)(sectors.Count * 4));
+
+					// Set sector entries
+					for (int i = 0; i < sectors.Count; i++)
 					{
-						// Set up the totals
-						firstCluster.SetUShort(patchArea, (ushort)(fileSize >> 2));
-						firstCluster.SetUShort(patchArea + 2, (ushort)(sectorCount - 1));
-
-						// Clear sector entries
-						firstCluster.Fill(patchArea + 8, 0, (uint)(sectors.Count * 4));
-
-						// Set sector entries
-						for (int nsec = 0; nsec < sectors.Count; nsec++)
-						{
-							firstCluster.SetUInt((uint)(patchArea + 8 + (nsec * 4)), sectors[nsec]);
-						}
-
-						// Clear out checksum
-						firstCluster.SetUInt(patchArea + 4, 0);
-
-						// Write back the updated cluster
-						fat.WriteCluster(location.FirstCluster, firstCluster.Data);
-
-						// Re-Calculate checksum by opening the file
-						FatFileStream file = new FatFileStream(fat, location);
-
-						uint csum = 0x3EB202FE;
-						for (uint index = 0; index < (file.Length >> 2); index++)
-						{
-							uint value = (uint)file.ReadByte() | ((uint)file.ReadByte() << 8) | ((uint)file.ReadByte() << 16) | ((uint)file.ReadByte() << 24);
-							csum -= value;
-						}
-
-						// Set the checksum
-						firstCluster.SetUInt(patchArea + 4, csum);
-
-						// Write patched cluster back to disk
-						fat.WriteCluster(location.FirstCluster, firstCluster.Data);
+						firstCluster.SetUInt((uint)(patchArea + 16 + (i * 4)), sectors[i]);
 					}
+
+					// Clear out checksum
+					firstCluster.SetUInt(patchArea + 12, 0);
+
+					// Write back the updated cluster
+					fat.WriteCluster(location.FirstCluster, firstCluster.Data);
+
+					// Re-Calculate checksum by opening the file
+					FatFileStream file = new FatFileStream(fat, location);
+
+					uint csum = 0x3EB202FE;
+					for (uint index = 0; index < (file.Length >> 2); index++)
+					{
+						uint value = (uint)file.ReadByte() | ((uint)file.ReadByte() << 8) | ((uint)file.ReadByte() << 16) | ((uint)file.ReadByte() << 24);
+						csum -= value;
+					}
+
+					// Set the checksum
+					firstCluster.SetUInt(patchArea + 12, csum);
+
+					// Write patched cluster back to disk
+					fat.WriteCluster(location.FirstCluster, firstCluster.Data);
+
+					// Set the first sector location of the file
+					// TBD: 0x1FB may be dynamic
+					bootSector.SetUInt(0x1F8, fat.GetSectorByCluster(location.FirstCluster));
+					bootSector.SetUInt(0x1F8 + 4, 0);
+
+					// Change jump address
+					//bootSector.SetUInt(0x01, 0x58);
+
+					// Write back patched boot sector
+					partitionDevice.WriteBlock(0, 1, bootSector.Data);
 				}
 			}
 

@@ -49,7 +49,6 @@ namespace Mosa.Tool.Launcher
 
 		private void UpdateBuilderOptions()
 		{
-			//Builder.Options.AutoLaunch = cbExitOnLaunch;
 			Options.EnableSSA = cbEnableSSA.Checked;
 			Options.EnableIROptimizations = cbEnableIROptimizations.Checked;
 			Options.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
@@ -127,7 +126,6 @@ namespace Mosa.Tool.Launcher
 
 		private void UpdateInterfaceOptions()
 		{
-			//Builder.Options.AutoLaunch = cbExitOnLaunch;
 			cbEnableSSA.Checked = Options.EnableSSA;
 			cbEnableIROptimizations.Checked = Options.EnableIROptimizations;
 			cbEnableSparseConditionalConstantPropagation.Checked = Options.EnableSparseConditionalConstantPropagation;
@@ -268,7 +266,6 @@ namespace Mosa.Tool.Launcher
 			{
 				Options.SourceFile = openFileDialog1.FileName;
 
-				// UpdateBuilderOptions();
 				lbSource.Text = Path.GetFileName(Options.SourceFile);
 				lbSourceDirectory.Text = Path.GetDirectoryName(Options.SourceFile);
 			}
