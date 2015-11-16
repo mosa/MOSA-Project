@@ -352,7 +352,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 			this.width = width;
 			this.height = height;
 
-			// set heigth  & width
+			// set height  & width
 			SendCommand(Register.Height, height);
 			SendCommand(Register.Width, width);
 			SendCommand(Register.BitsPerPixel, 32);
@@ -518,7 +518,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		}
 
 		/// <summary>
-		/// Converts the color to the framebuffer color
+		/// Converts the color to the frame-buffer color
 		/// </summary>
 		/// <param name="color">The color.</param>
 		/// <returns></returns>

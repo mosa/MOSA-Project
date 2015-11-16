@@ -119,7 +119,8 @@ namespace Mosa.Utility.BootImage
 			fatSettings.OSBootCode = options.FatBootCode;
 
 			// Create FAT file system
-			FatFileSystem fat = new FatFileSystem(partitionDevice);
+			var fat = new FatFileSystem(partitionDevice);
+
 			if (!fat.Format(fatSettings))
 			{
 				throw new Exception("ERROR: Invalid FAT settings");
@@ -154,98 +155,116 @@ namespace Mosa.Utility.BootImage
 
 				var location = fat.FindEntry(new Mosa.FileSystem.FAT.Find.WithName(name), 0);
 
-				if (location.IsValid)
+				if (!location.IsValid)
+					throw new InvalidProgramException("Unable to find syslinux.sys");
+
+				// Get the ldlinux.sys file stream
+				var ldlinux = new FatFileStream(fat, location);
+
+				// Get the file size & number of sectors used
+				uint fileSize = fat.GetFileSize(location.DirectorySector, location.DirectorySectorIndex);
+
+				var sectors = new List<uint>();
+
+				// Create list of the sectors of the file
+				for (uint cluster = location.FirstCluster; (cluster != 0); cluster = fat.GetNextCluster(cluster))
 				{
-					// Read boot sector
-					var bootSector = new BinaryFormat(partitionDevice.ReadBlock(0, 1));
-
-					// Get the file size & number of sectors used
-					uint fileSize = fat.GetFileSize(location.DirectorySector, location.DirectorySectorIndex);
-
-					var sectors = new List<uint>();
-
-					// Create list of the sectors of the file
-					for (uint cluster = location.FirstCluster; (cluster != 0); cluster = fat.GetNextCluster(cluster))
+					uint sec = fat.GetSectorByCluster(cluster);
+					for (uint i = 0; i < fat.SectorsPerCluster; i++)
 					{
-						uint sec = fat.GetSectorByCluster(cluster);
-						for (uint s = 0; s < fat.SectorsPerCluster; s++)
-						{
-							sectors.Add(sec + s);
-						}
+						sectors.Add(sec + i);
 					}
-
-					// Sanity check: sectorCount == sectors.Count
-					//uint sectorCount = (fileSize + SectorSize - 1) >> 9;
-
-					// Read the first cluster of the file
-					var firstCluster = new BinaryFormat(fat.ReadCluster(location.FirstCluster));
-
-					uint patchArea = 0;
-
-					// Search for 0x3EB202FE (magic)
-					for (patchArea = 0; (firstCluster.GetUInt(patchArea) != 0x3EB202FE) && (patchArea < fat.ClusterSizeInBytes); patchArea += 4) ;
-
-					if (patchArea >= fat.ClusterSizeInBytes)
-						throw new InvalidProgramException("Unable to find patch location for syslinux");
-
-					// Get Extended Patch Area offset
-					ushort epa = firstCluster.GetUShort(patchArea + Syslinux.PatchAreaOffset.EPAOffset);
-
-					// Get boot block offset for storing the start of syslinux
-					ushort sect1ptr0 = firstCluster.GetUShort(epa + Syslinux.ExtendedPatchAreaOffset.Sect1Ptr0);
-					ushort sect1ptr1 = firstCluster.GetUShort(epa + Syslinux.ExtendedPatchAreaOffset.Sect1Ptr1);
-
-					ushort ex = firstCluster.GetUShort(epa + Syslinux.ExtendedPatchAreaOffset.SecPtrOffset);
-					ushort nptrs = firstCluster.GetUShort(epa + Syslinux.ExtendedPatchAreaOffset.SecPtrCnt);
-					ushort advptrs = firstCluster.GetUShort(epa + Syslinux.ExtendedPatchAreaOffset.AdvPtrOffset);
-
-					if (sectors.Count > nptrs)
-						throw new InvalidProgramException("Insufficient space for patching syslinux");
-
-					// Set the first sector location of the file
-					// Note: 0x1FB was the previous offset
-					bootSector.SetUInt(sect1ptr0, fat.GetSectorByCluster(location.FirstCluster));
-					bootSector.SetUInt(sect1ptr1, 0);   // since only 32-bit offsets are support, the high portion of 64-bit is zero
-
-					// Set up the totals
-					firstCluster.SetUShort(patchArea + Syslinux.PatchAreaOffset.DataSectors, (ushort)sectors.Count);
-					firstCluster.SetUShort(patchArea + Syslinux.PatchAreaOffset.AdvSectors, 2);
-					firstCluster.SetUInt(patchArea + Syslinux.PatchAreaOffset.Dwords, fileSize >> 2);
-
-					// Generate Extents
-					var extents = GenerateExtents(sectors);
-
-					// TODO: Write out extents
-
-					// Write out ADV
-					firstCluster.SetULong(advptrs, sectors[sectors.Count - 2]);
-					firstCluster.SetULong(advptrs + (uint)8, sectors[sectors.Count - 1]);
-
-					// Clear out checksum
-					firstCluster.SetUInt(patchArea + Syslinux.PatchAreaOffset.Checksum, 0);
-
-					// Write back the updated cluster
-					fat.WriteCluster(location.FirstCluster, firstCluster.Data);
-
-					// Re-Calculate checksum by opening the file
-					var file = new FatFileStream(fat, location);
-
-					uint csum = 0x3EB202FE;
-					for (uint index = 0; index < (file.Length >> 2); index++)
-					{
-						uint value = (uint)file.ReadByte() | ((uint)file.ReadByte() << 8) | ((uint)file.ReadByte() << 16) | ((uint)file.ReadByte() << 24);
-						csum -= value;
-					}
-
-					// Set the checksum
-					firstCluster.SetUInt(patchArea + Syslinux.PatchAreaOffset.Checksum, csum);
-
-					// Write patched cluster back to disk
-					fat.WriteCluster(location.FirstCluster, firstCluster.Data);
-
-					// Write back patched boot sector
-					partitionDevice.WriteBlock(0, 1, bootSector.Data);
 				}
+
+				// Sanity check: sectorCount == sectors.Count
+				// uint sectorCount = (fileSize + SectorSize - 1) >> 9;
+
+				// Read the first cluster of the file
+				var firstCluster = new BinaryFormat(fat.ReadCluster(location.FirstCluster));
+
+				uint patchArea = 0;
+
+				// Search for 0x3EB202FE (magic)
+				for (patchArea = 0; (firstCluster.GetUInt(patchArea) != Syslinux.LDLINUX_MAGIC) && (patchArea < fat.ClusterSizeInBytes); patchArea += 4) ;
+
+				if (patchArea >= fat.ClusterSizeInBytes)
+					throw new InvalidProgramException("Unable to find patch location for syslinux");
+
+				// Get Extended Patch Area offset
+				ushort epa = firstCluster.GetUShort(patchArea + Syslinux.PatchAreaOffset.EPAOffset);
+
+				ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.Sect1Ptr0;
+				uint sect1Ptr0 = (uint)(ldlinux.ReadByte() | (ldlinux.ReadByte() << 8));
+
+				ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.Sect1Ptr1;
+				uint sect1Ptr1 = (uint)(ldlinux.ReadByte() | (ldlinux.ReadByte() << 8));
+
+				ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.SecPtrOffset;
+				uint ex = (uint)(ldlinux.ReadByte() | (ldlinux.ReadByte() << 8));
+
+				ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.SecPtrCnt;
+				uint nptrs = (uint)(ldlinux.ReadByte() | (ldlinux.ReadByte() << 8));
+
+				ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.AdvPtrOffset;
+				uint advptrs = (uint)(ldlinux.ReadByte() | (ldlinux.ReadByte() << 8));
+
+				if (sectors.Count > nptrs)
+					throw new InvalidProgramException("Insufficient space for patching syslinux");
+
+				// Set up the totals
+				firstCluster.SetUShort(patchArea + Syslinux.PatchAreaOffset.DataSectors, (ushort)sectors.Count);
+				firstCluster.SetUShort(patchArea + Syslinux.PatchAreaOffset.AdvSectors, 2);
+				firstCluster.SetUInt(patchArea + Syslinux.PatchAreaOffset.Dwords, fileSize >> 2);
+
+				// Generate Extents
+				var extents = GenerateExtents(sectors);
+
+				// Write out extents
+				foreach (var extent in extents)
+				{
+					firstCluster.SetULong(ex, extent.Start);
+					firstCluster.SetUShort(ex + 8, extent.Length);
+					ex = ex + 8 + 2;
+				}
+
+				// Write out ADV
+				firstCluster.SetULong(advptrs, sectors[sectors.Count - 2]);
+				firstCluster.SetULong(advptrs + 8, sectors[sectors.Count - 1]);
+
+				// Clear out checksum
+				firstCluster.SetUInt(patchArea + Syslinux.PatchAreaOffset.Checksum, 0);
+
+				// Write back the updated cluster
+				fat.WriteCluster(location.FirstCluster, firstCluster.Data);
+
+				// Re-Calculate checksum
+				// reload file
+				ldlinux = new FatFileStream(fat, location);
+				uint csum = Syslinux.LDLINUX_MAGIC;
+				for (uint index = 0; index < (ldlinux.Length >> 2); index++)
+				{
+					uint value = (uint)ldlinux.ReadByte() | ((uint)ldlinux.ReadByte() << 8) | ((uint)ldlinux.ReadByte() << 16) | ((uint)ldlinux.ReadByte() << 24);
+					csum -= value;
+				}
+
+				// Re-Read the first cluster of the file
+				firstCluster = new BinaryFormat(fat.ReadCluster(location.FirstCluster));
+
+				// Set the checksum
+				firstCluster.SetUInt(patchArea + Syslinux.PatchAreaOffset.Checksum, csum);
+
+				// Write patched cluster back to disk
+				fat.WriteCluster(location.FirstCluster, firstCluster.Data);
+
+				// Read boot sector
+				var fatBootSector = new BinaryFormat(partitionDevice.ReadBlock(0, 1));
+
+				// Set the first sector location of the file
+				fatBootSector.SetUInt(sect1Ptr0, fat.GetSectorByCluster(location.FirstCluster));
+				fatBootSector.SetUInt(sect1Ptr1, 0);   // since only 32-bit offsets are support, the high portion of 64-bit value is zero
+
+				// Write back patched boot sector
+				partitionDevice.WriteBlock(0, 1, fatBootSector.Data);
 			}
 
 			if (options.ImageFormat == ImageFormatType.VHD)

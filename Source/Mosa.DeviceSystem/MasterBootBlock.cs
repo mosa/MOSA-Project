@@ -91,7 +91,7 @@ namespace Mosa.DeviceSystem
 			{
 				if (code == null) return null;
 
-				byte[] copy = new byte[code.Length];
+				var copy = new byte[code.Length];
 
 				for (int i = 0; i < code.Length; i++)
 					copy[i] = code[i];
@@ -137,7 +137,7 @@ namespace Mosa.DeviceSystem
 			if (diskDevice.BlockSize != 512) return false;  // only going to work with 512 sector sizes
 			if (diskDevice.TotalBlocks < 3) return false;
 
-			BinaryFormat masterboot = new BinaryFormat(diskDevice.ReadBlock(0, 1));
+			var masterboot = new BinaryFormat(diskDevice.ReadBlock(0, 1));
 
 			if (masterboot.GetUShort(MBR.MBRSignature) != MBRConstant.MBRSignature)
 				return false;
@@ -175,9 +175,10 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool Write()
 		{
-			if (!diskDevice.CanWrite) { return false; }
+			if (!diskDevice.CanWrite)
+				return false;
 
-			BinaryFormat masterboot = new BinaryFormat(new byte[512]);
+			var masterboot = new BinaryFormat(new byte[512]);
 
 			masterboot.SetUInt(MBR.DiskSignature, diskSignature);
 			masterboot.SetUShort(MBR.MBRSignature, MBRConstant.MBRSignature);
@@ -187,6 +188,7 @@ namespace Mosa.DeviceSystem
 					masterboot.SetByte(index, code[index]);
 
 			for (uint index = 0; index < MaxMBRPartitions; index++)
+			{
 				if (Partitions[index].TotalBlocks != 0)
 				{
 					uint offset = MBR.FirstPartition + (index * 16);
@@ -195,11 +197,11 @@ namespace Mosa.DeviceSystem
 					masterboot.SetUInt(offset + PartitionRecord.LBA, Partitions[index].StartLBA);
 					masterboot.SetUInt(offset + PartitionRecord.Sectors, Partitions[index].TotalBlocks);
 
-					DiskGeometry diskGeometry = new DiskGeometry();
+					var diskGeometry = new DiskGeometry();
 					diskGeometry.GuessGeometry(diskDevice.TotalBlocks);
 
-					CHS chsStart = new CHS();
-					CHS chsEnd = new CHS();
+					var chsStart = new CHS();
+					var chsEnd = new CHS();
 
 					chsStart.SetCHS(diskGeometry, Partitions[index].StartLBA);
 					chsEnd.SetCHS(diskGeometry, Partitions[index].StartLBA + Partitions[index].TotalBlocks - 1);
@@ -211,6 +213,7 @@ namespace Mosa.DeviceSystem
 					masterboot.SetByte(offset + PartitionRecord.LastCRS + 1, (byte)((chsEnd.Sector & 0x3F) | ((chsEnd.Cylinder >> 8) & 0x03)));
 					masterboot.SetByte(offset + PartitionRecord.LastCRS + 2, (byte)(chsEnd.Cylinder & 0xFF));
 				}
+			}
 
 			diskDevice.WriteBlock(0, 1, masterboot.Data);
 
