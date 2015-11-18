@@ -15,6 +15,7 @@ bochs
 syslinux
 - GNU License
 - http://syslinux.zytor.com/
+- Version: 6.03
 
 wget
 - GNU License

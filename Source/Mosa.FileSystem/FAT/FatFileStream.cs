@@ -105,7 +105,7 @@ namespace Mosa.FileSystem.FAT
 			this.directorySector = directorySector;
 			this.directorySectorIndex = directorySectorIndex;
 			this.read = true;
-			this.write = false;
+			this.write = true;
 			this.position = 0;
 			this.dirty = false;
 
@@ -115,7 +115,6 @@ namespace Mosa.FileSystem.FAT
 			this.length = this.lengthOnDisk;
 
 			currentCluster = 0;
-			ReadCluster(this.startCluster);
 		}
 
 		/// <summary>
@@ -245,7 +244,6 @@ namespace Mosa.FileSystem.FAT
 
 			int index = 0;
 
-			// very slow
 			for (; (position < length) && (index < count); index++)
 				buffer[offset + index] = (byte)ReadByte();
 
@@ -270,14 +268,12 @@ namespace Mosa.FileSystem.FAT
 				return -1;  // EOF
 
 			uint index = (uint)(position % clusterSize);
+			position++;
 
 			if (index == 0)
 				NextCluster();
 
-			byte b = data[index];
-			position++;
-
-			return b;
+			return data[index];
 		}
 
 		/// <summary>
@@ -486,28 +482,6 @@ namespace Mosa.FileSystem.FAT
 			{
 				WriteByte(buffer[offset + i]);
 			}
-
-			//dirty = true;
-
-			//uint remaining = (uint)count;
-
-			//while (remaining != 0)
-			//{
-			//    uint clusterIndex = (uint)(position % clusterSize);
-
-			//    if (clusterIndex == 0)
-			//        NextClusterExpand();
-
-			//    uint clusterAvailable = clusterSize - clusterIndex;
-
-			//    uint size = System.Math.Min(remaining, clusterAvailable);
-
-			//    System.Array.Copy(buffer, offset, data, clusterIndex, size);
-
-			//    offset += (int)size;
-			//    position += size;
-			//    remaining -= size;
-			//}
 		}
 
 		/// <summary>

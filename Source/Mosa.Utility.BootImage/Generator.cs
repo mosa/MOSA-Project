@@ -6,6 +6,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using Mosa.ClassLib;
+using Mosa.Compiler.Common;
 
 //using Mosa.Compiler.Common;
 
@@ -158,9 +159,6 @@ namespace Mosa.Utility.BootImage
 				if (!location.IsValid)
 					throw new InvalidProgramException("Unable to find syslinux.sys");
 
-				// Get the ldlinux.sys file stream
-				var ldlinux = new FatFileStream(fat, location);
-
 				// Get the file size & number of sectors used
 				uint fileSize = fat.GetFileSize(location.DirectorySector, location.DirectorySectorIndex);
 
@@ -176,85 +174,91 @@ namespace Mosa.Utility.BootImage
 					}
 				}
 
-				// Sanity check: sectorCount == sectors.Count
-				// uint sectorCount = (fileSize + SectorSize - 1) >> 9;
+				// Get the ldlinux.sys file stream
+				var ldlinux = new FatFileStream(fat, location);
 
-				// Read the first cluster of the file
-				var firstCluster = new BinaryFormat(fat.ReadCluster(location.FirstCluster));
-
-				uint patchArea = 0;
+				var ldlinuxReader = new EndianAwareBinaryReader(ldlinux, Endianness.Little);
 
 				// Search for 0x3EB202FE (magic)
-				for (patchArea = 0; (firstCluster.GetUInt(patchArea) != Syslinux.LDLINUX_MAGIC) && (patchArea < fat.ClusterSizeInBytes); patchArea += 4) ;
+				while ((ldlinuxReader.ReadUInt32() != Syslinux.LDLINUX_MAGIC) && (ldlinux.Position < ldlinux.Length)) ;
 
-				if (patchArea >= fat.ClusterSizeInBytes)
+				if (ldlinux.Position >= ldlinux.Length || ldlinux.Position <= 0)
 					throw new InvalidProgramException("Unable to find patch location for syslinux");
 
+				uint patchArea = (uint)ldlinux.Position - 4;
+
 				// Get Extended Patch Area offset
-				ushort epa = firstCluster.GetUShort(patchArea + Syslinux.PatchAreaOffset.EPAOffset);
+				ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.EPAOffset;
+				ushort epa = ldlinuxReader.ReadUInt16();
 
 				ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.Sect1Ptr0;
-				uint sect1Ptr0 = (uint)(ldlinux.ReadByte() | (ldlinux.ReadByte() << 8));
+				uint sect1Ptr0 = (uint)ldlinuxReader.ReadUInt16();
 
 				ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.Sect1Ptr1;
-				uint sect1Ptr1 = (uint)(ldlinux.ReadByte() | (ldlinux.ReadByte() << 8));
+				uint sect1Ptr1 = (uint)ldlinuxReader.ReadUInt16();
 
 				ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.SecPtrOffset;
-				uint ex = (uint)(ldlinux.ReadByte() | (ldlinux.ReadByte() << 8));
+				uint ex = (uint)ldlinuxReader.ReadUInt16();
 
 				ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.SecPtrCnt;
-				uint nptrs = (uint)(ldlinux.ReadByte() | (ldlinux.ReadByte() << 8));
+				uint nptrs = (uint)ldlinuxReader.ReadUInt16();
 
 				ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.AdvPtrOffset;
-				uint advptrs = (uint)(ldlinux.ReadByte() | (ldlinux.ReadByte() << 8));
+				uint advptrs = (uint)ldlinuxReader.ReadUInt16();
 
 				if (sectors.Count > nptrs)
 					throw new InvalidProgramException("Insufficient space for patching syslinux");
 
+				var ldlinuxWriter = new EndianAwareBinaryWriter(ldlinux, Endianness.Little);
+
 				// Set up the totals
-				firstCluster.SetUShort(patchArea + Syslinux.PatchAreaOffset.DataSectors, (ushort)sectors.Count);
-				firstCluster.SetUShort(patchArea + Syslinux.PatchAreaOffset.AdvSectors, 2);
-				firstCluster.SetUInt(patchArea + Syslinux.PatchAreaOffset.Dwords, fileSize >> 2);
+				ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.DataSectors;
+				ldlinuxWriter.Write((ushort)sectors.Count);
+
+				ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.DataSectors;
+				ldlinuxWriter.Write((ushort)2);
+
+				ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.DataSectors;
+				ldlinuxWriter.Write((uint)fileSize >> 2);
 
 				// Generate Extents
 				var extents = GenerateExtents(sectors);
 
+				ldlinux.Position = ex;
+
 				// Write out extents
 				foreach (var extent in extents)
 				{
-					firstCluster.SetULong(ex, extent.Start);
-					firstCluster.SetUShort(ex + 8, extent.Length);
-					ex = ex + 8 + 2;
+					ldlinuxWriter.Write((ulong)extent.Start);
+					ldlinuxWriter.Write((ushort)extent.Length);
 				}
 
 				// Write out ADV
-				firstCluster.SetULong(advptrs, sectors[sectors.Count - 2]);
-				firstCluster.SetULong(advptrs + 8, sectors[sectors.Count - 1]);
+				ldlinux.Position = advptrs;
+				ldlinuxWriter.Write((ulong)sectors[sectors.Count - 2]);
+				ldlinuxWriter.Write((ulong)sectors[sectors.Count - 1]);
 
 				// Clear out checksum
-				firstCluster.SetUInt(patchArea + Syslinux.PatchAreaOffset.Checksum, 0);
+				ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.Checksum;
+				ldlinuxWriter.Write((uint)0);
 
 				// Write back the updated cluster
-				fat.WriteCluster(location.FirstCluster, firstCluster.Data);
+				ldlinuxWriter.Flush();
 
 				// Re-Calculate checksum
-				// reload file
-				ldlinux = new FatFileStream(fat, location);
+				ldlinux.Position = 0;
 				uint csum = Syslinux.LDLINUX_MAGIC;
 				for (uint index = 0; index < (ldlinux.Length >> 2); index++)
 				{
-					uint value = (uint)ldlinux.ReadByte() | ((uint)ldlinux.ReadByte() << 8) | ((uint)ldlinux.ReadByte() << 16) | ((uint)ldlinux.ReadByte() << 24);
-					csum -= value;
+					csum = csum + ldlinuxReader.ReadUInt32();
 				}
 
-				// Re-Read the first cluster of the file
-				firstCluster = new BinaryFormat(fat.ReadCluster(location.FirstCluster));
-
 				// Set the checksum
-				firstCluster.SetUInt(patchArea + Syslinux.PatchAreaOffset.Checksum, csum);
+				ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.Checksum;
+				ldlinuxWriter.Write(csum);
 
 				// Write patched cluster back to disk
-				fat.WriteCluster(location.FirstCluster, firstCluster.Data);
+				ldlinuxWriter.Flush();
 
 				// Read boot sector
 				var fatBootSector = new BinaryFormat(partitionDevice.ReadBlock(0, 1));
@@ -313,15 +317,10 @@ namespace Mosa.Utility.BootImage
 
 				address = address + SectorSize;
 
-				if (extent == null)
-				{
-					extent = new Extent(sector, 1);
-					extends.Add(extent);
-					baseAddress = address;
-					continue;
-				}
-
 				bool extend =
+
+					// Only if there is an active extent
+					(extent != null) &&
 
 					// Sectors in extent must be continuous
 					(extent.Start + extent.Length == sector) &&
@@ -329,8 +328,8 @@ namespace Mosa.Utility.BootImage
 					// Extents must be strictly less than 64K in size.
 					(extent.Length < (65536 / SectorSize)) &&
 
-					// Extents can not cross 64K boundaries
-					(((address ^ (baseAddress + ((extent.Length + 1) * SectorSize) - 1)) & 0xffff0000) != 0);
+					// Extents can not cross 64K boundaries - first two hard coded boundaries
+					(address != 64 * 1024) && (address != 128 * 1024);
 
 				if (extend)
 				{
@@ -338,9 +337,12 @@ namespace Mosa.Utility.BootImage
 					extent.Length++;
 					continue;
 				}
-
-				// end extent
-				extent = null;
+				else
+				{
+					extent = new Extent(sector, 1);
+					extends.Add(extent);
+					baseAddress = address;
+				}
 			}
 
 			return extends;
