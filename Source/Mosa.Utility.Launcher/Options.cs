@@ -58,7 +58,7 @@ namespace Mosa.Utility.Launcher
 			EnablePromoteTemporaryVariables = true;
 			EnableSparseConditionalConstantPropagation = true;
 			Emulator = EmulatorType.Qemu;
-			ImageFormat = ImageFormat.IMG;
+			ImageFormat = ImageFormat.ISO;
 			BootFormat = BootFormat.Multiboot_0_7;
 			PlatformType = PlatformType.X86;
 			LinkerFormat = Launcher.LinkerFormat.Elf32;

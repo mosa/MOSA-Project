@@ -2,5 +2,5 @@
 
 namespace Mosa.Utility.Launcher
 {
-	public enum FileSystemFormat { FAT24, FAT16 };
+	public enum FileSystemFormat { FAT12, FAT16 };
 }

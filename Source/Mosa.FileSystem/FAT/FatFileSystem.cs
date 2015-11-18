@@ -28,7 +28,7 @@ namespace Mosa.FileSystem.FAT
 		internal const uint HiddenSectors = 0x1C; // 4
 		internal const uint TotalSectors32 = 0x20; // 4
 
-		// Extended BIOS Paremeter Block
+		// Extended BIOS Parameter Block
 
 		internal const uint PhysicalDriveNbr = 0x24; // 1
 		internal const uint ReservedCurrentHead = 0x25; // 1
@@ -460,7 +460,7 @@ namespace Mosa.FileSystem.FAT
 
 			firstRootDirectorySector = reservedSectors + sectorsPerFat;
 
-			BinaryFormat bootSector = new BinaryFormat(512);
+			var bootSector = new BinaryFormat(512);
 
 			bootSector.SetUInt(BootSector.JumpInstruction, 0);
 			bootSector.SetString(BootSector.EOMName, "MOSA    ");
@@ -516,18 +516,8 @@ namespace Mosa.FileSystem.FAT
 
 				if (fatSettings.OSBootCode != null)
 				{
-					if (fatSettings.OSBootCode.Length == 512)
-					{
-						bootSector.SetBytes(BootSector.JumpInstruction, fatSettings.OSBootCode, BootSector.JumpInstruction, 3);
-						bootSector.SetBytes(BootSector.OSBootCode, fatSettings.OSBootCode, BootSector.OSBootCode, 448);
-					}
-					else
-					{
-						bootSector.SetByte(BootSector.JumpInstruction, 0xEB); // 0xEB = JMP Instruction
-						bootSector.SetByte(BootSector.JumpInstruction + 1, 0x3C);
-						bootSector.SetByte(BootSector.JumpInstruction + 2, 0x90);
-						bootSector.SetBytes(BootSector.OSBootCode, fatSettings.OSBootCode, 0, (uint)Math.Min(448, fatSettings.OSBootCode.Length));
-					}
+					bootSector.SetBytes(BootSector.JumpInstruction, fatSettings.OSBootCode, BootSector.JumpInstruction, 3);
+					bootSector.SetBytes(BootSector.OSBootCode, fatSettings.OSBootCode, BootSector.OSBootCode, (uint)Math.Min(448, fatSettings.OSBootCode.Length));
 				}
 
 				if (fatType == FatType.FAT12)
@@ -577,7 +567,7 @@ namespace Mosa.FileSystem.FAT
 					partition.WriteBlock(6, 1, bootSector.Data);
 
 				// Create FSInfo Structure
-				BinaryFormat infoSector = new BinaryFormat(512);
+				var infoSector = new BinaryFormat(512);
 
 				infoSector.SetUInt(FSInfo.FSI_LeadSignature, 0x41615252);
 
@@ -594,7 +584,7 @@ namespace Mosa.FileSystem.FAT
 				partition.WriteBlock(7, 1, infoSector.Data);
 
 				// Create 2nd sector
-				BinaryFormat secondSector = new BinaryFormat(512);
+				var secondSector = new BinaryFormat(512);
 
 				secondSector.SetUShort(FSInfo.FSI_TrailSignature2, 0xAA55);
 
@@ -605,7 +595,7 @@ namespace Mosa.FileSystem.FAT
 			// Create FAT table(s)
 
 			// Clear primary & secondary FATs
-			BinaryFormat emptyFat = new BinaryFormat(512);
+			var emptyFat = new BinaryFormat(512);
 
 			for (uint i = 1; i < sectorsPerFat; i++)
 				partition.WriteBlock(reservedSectors + i, 1, emptyFat.Data);
@@ -615,7 +605,7 @@ namespace Mosa.FileSystem.FAT
 					partition.WriteBlock(reservedSectors + sectorsPerFat + i, 1, emptyFat.Data);
 
 			// First FAT block is special
-			BinaryFormat firstFat = new BinaryFormat(512);
+			var firstFat = new BinaryFormat(512);
 
 			if (fatType == FatType.FAT12)
 			{
@@ -751,7 +741,7 @@ namespace Mosa.FileSystem.FAT
 			if ((fatType == FatType.FAT12) && (sectorOffset == bytesPerSector - 1))
 				nbrSectors = 2;
 
-			BinaryFormat fat = new BinaryFormat(partition.ReadBlock(sector, nbrSectors));
+			var fat = new BinaryFormat(partition.ReadBlock(sector, nbrSectors));
 
 			uint clusterValue;
 
@@ -775,7 +765,7 @@ namespace Mosa.FileSystem.FAT
 		/// Sets the cluster entry value.
 		/// </summary>
 		/// <param name="cluster">The cluster.</param>
-		/// <param name="nextcluster">The nextcluster.</param>
+		/// <param name="nextcluster">The next cluster.</param>
 		/// <returns></returns>
 		protected bool SetClusterEntryValue(uint cluster, uint nextcluster)
 		{
@@ -1084,7 +1074,7 @@ namespace Mosa.FileSystem.FAT
 		{
 			FatFileLocation location = FindEntry(new Find.WithName(filename), directoryCluster);
 
-			if (location.Valid)
+			if (location.IsValid)
 			{
 				// Truncate the file
 				BinaryFormat entry = new BinaryFormat(partition.ReadBlock(location.DirectorySector, 1));
@@ -1105,7 +1095,7 @@ namespace Mosa.FileSystem.FAT
 			// Find an empty location in the directory
 			location = FindEntry(new Find.Empty(), directoryCluster);
 
-			if (!location.Valid)
+			if (!location.IsValid)
 			{
 				// Extend Directory
 
@@ -1166,11 +1156,11 @@ namespace Mosa.FileSystem.FAT
 
 			FatFileLocation location = FindEntry(new Find.Volume(), 0);
 
-			if (!location.Valid)
+			if (!location.IsValid)
 			{
 				location = FindEntry(new Find.Empty(), 0);
 
-				if (!location.Valid)
+				if (!location.IsValid)
 					return; // TODO: something went wrong
 			}
 

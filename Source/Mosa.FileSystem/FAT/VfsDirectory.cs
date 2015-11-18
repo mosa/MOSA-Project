@@ -55,7 +55,7 @@ namespace Mosa.FileSystem.FAT
 		{
 			FatFileLocation location = (FileSystem as VfsFileSystem).FAT.FindEntry(new Find.WithName(name), this.directoryCluster);
 
-			if (!location.Valid)
+			if (!location.IsValid)
 				return null;
 
 			if (location.IsDirectory)
@@ -104,7 +104,7 @@ namespace Mosa.FileSystem.FAT
 
 			FatFileLocation location = fs.FindEntry(new Find.ByCluster(targetCluster), this.directoryCluster);
 
-			if (!location.Valid)
+			if (!location.IsValid)
 				throw new System.ArgumentException(); //throw new IOException ("Unable to delete directory because it is not empty");
 
 			fs.Delete(targetCluster, location.DirectorySector, location.DirectorySectorIndex);

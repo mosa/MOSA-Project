@@ -49,7 +49,6 @@ namespace Mosa.Tool.Launcher
 
 		private void UpdateBuilderOptions()
 		{
-			//Builder.Options.AutoLaunch = cbExitOnLaunch;
 			Options.EnableSSA = cbEnableSSA.Checked;
 			Options.EnableIROptimizations = cbEnableIROptimizations.Checked;
 			Options.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
@@ -99,8 +98,8 @@ namespace Mosa.Tool.Launcher
 
 			switch (cbBootFileSystem.SelectedIndex)
 			{
-				case 0: Options.FileSystemFormat = FileSystemFormat.FAT16; ; break;
-				case 1: Options.FileSystemFormat = FileSystemFormat.FAT24; ; break;
+				case 0: Options.FileSystemFormat = FileSystemFormat.FAT12; ; break;
+				case 1: Options.FileSystemFormat = FileSystemFormat.FAT16; ; break;
 				default: Options.FileSystemFormat = FileSystemFormat.FAT16; ; break;
 			}
 
@@ -127,7 +126,6 @@ namespace Mosa.Tool.Launcher
 
 		private void UpdateInterfaceOptions()
 		{
-			//Builder.Options.AutoLaunch = cbExitOnLaunch;
 			cbEnableSSA.Checked = Options.EnableSSA;
 			cbEnableIROptimizations.Checked = Options.EnableIROptimizations;
 			cbEnableSparseConditionalConstantPropagation.Checked = Options.EnableSparseConditionalConstantPropagation;
@@ -159,8 +157,8 @@ namespace Mosa.Tool.Launcher
 
 			switch (Options.FileSystemFormat)
 			{
-				case FileSystemFormat.FAT16: cbBootFileSystem.SelectedIndex = 0; break;
-				case FileSystemFormat.FAT24: cbBootFileSystem.SelectedIndex = 1; break;
+				case FileSystemFormat.FAT12: cbBootFileSystem.SelectedIndex = 0; break;
+				case FileSystemFormat.FAT16: cbBootFileSystem.SelectedIndex = 1; break;
 				default: break;
 			}
 
@@ -268,7 +266,6 @@ namespace Mosa.Tool.Launcher
 			{
 				Options.SourceFile = openFileDialog1.FileName;
 
-				// UpdateBuilderOptions();
 				lbSource.Text = Path.GetFileName(Options.SourceFile);
 				lbSourceDirectory.Text = Path.GetDirectoryName(Options.SourceFile);
 			}

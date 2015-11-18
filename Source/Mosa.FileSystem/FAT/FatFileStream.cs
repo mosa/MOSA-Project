@@ -1,11 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.IO;
+
 namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
 	///
 	/// </summary>
-	public class FatFileStream : System.IO.Stream
+	public class FatFileStream : Stream
 	{
 		/// <summary>
 		///
@@ -103,7 +105,7 @@ namespace Mosa.FileSystem.FAT
 			this.directorySector = directorySector;
 			this.directorySectorIndex = directorySectorIndex;
 			this.read = true;
-			this.write = false;
+			this.write = true;
 			this.position = 0;
 			this.dirty = false;
 
@@ -170,7 +172,7 @@ namespace Mosa.FileSystem.FAT
 		/// <returns>
 		/// The current position within the stream.
 		/// </returns>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">
@@ -187,14 +189,14 @@ namespace Mosa.FileSystem.FAT
 			}
 			set
 			{
-				Seek((long)value, System.IO.SeekOrigin.Begin);
+				Seek((long)value, SeekOrigin.Begin);
 			}
 		}
 
 		/// <summary>
 		/// When overridden in a derived class, clears all buffers for this stream and causes any buffered data to be written to the underlying device.
 		/// </summary>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		public override void Flush()
@@ -226,7 +228,7 @@ namespace Mosa.FileSystem.FAT
 		/// <exception cref="T:System.ArgumentOutOfRangeException">
 		/// 	<paramref name="offset"/> or <paramref name="count"/> is negative.
 		/// </exception>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">
@@ -242,7 +244,6 @@ namespace Mosa.FileSystem.FAT
 
 			int index = 0;
 
-			// very slow
 			for (; (position < length) && (index < count); index++)
 				buffer[offset + index] = (byte)ReadByte();
 
@@ -267,25 +268,23 @@ namespace Mosa.FileSystem.FAT
 				return -1;  // EOF
 
 			uint index = (uint)(position % clusterSize);
+			position++;
 
 			if (index == 0)
 				NextCluster();
 
-			byte b = data[index];
-			position++;
-
-			return b;
+			return data[index];
 		}
 
 		/// <summary>
 		/// When overridden in a derived class, sets the position within the current stream.
 		/// </summary>
 		/// <param name="offset">A byte offset relative to the <paramref name="origin"/> parameter.</param>
-		/// <param name="origin">A value of type <see cref="T:System.IO.SeekOrigin"/> indicating the reference point used to obtain the new position.</param>
+		/// <param name="origin">A value of type <see cref="T:SeekOrigin"/> indicating the reference point used to obtain the new position.</param>
 		/// <returns>
 		/// The new position within the current stream.
 		/// </returns>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">
@@ -294,17 +293,15 @@ namespace Mosa.FileSystem.FAT
 		/// <exception cref="T:System.ObjectDisposedException">
 		/// Methods were called after the stream was closed.
 		/// </exception>
-		public override long Seek(long offset, System.IO.SeekOrigin origin)
+		public override long Seek(long offset, SeekOrigin origin)
 		{
-			// FIXME: off-by-one bug when new position modulus 512 = 0
-
 			long newposition = position;
 
 			switch (origin)
 			{
-				case System.IO.SeekOrigin.Begin: newposition = offset; break;
-				case System.IO.SeekOrigin.Current: newposition = position + offset; break;
-				case System.IO.SeekOrigin.End: newposition = length + offset; break;
+				case SeekOrigin.Begin: newposition = offset; break;
+				case SeekOrigin.Current: newposition = position + offset; break;
+				case SeekOrigin.End: newposition = length + offset; break;
 			}
 
 			// find cluster number of new position
@@ -318,14 +315,12 @@ namespace Mosa.FileSystem.FAT
 			{
 				newCluster = currentCluster;
 			}
-			else
-				if (newNthCluster > currentNthCluster)
+			else if (newNthCluster > currentNthCluster)
 			{
 				newCluster = fs.FindNthCluster(currentCluster, (uint)diff);
 				currentNthCluster = currentNthCluster + (uint)diff;
 			}
-			else
-					if (newNthCluster < currentNthCluster)
+			else if (newNthCluster < currentNthCluster)
 			{
 				newCluster = fs.FindNthCluster(this.startCluster, newNthCluster);
 				currentNthCluster = newNthCluster;
@@ -432,7 +427,7 @@ namespace Mosa.FileSystem.FAT
 		/// When overridden in a derived class, sets the length of the current stream.
 		/// </summary>
 		/// <param name="value">The desired length of the current stream in bytes.</param>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">
@@ -466,7 +461,7 @@ namespace Mosa.FileSystem.FAT
 		/// <exception cref="T:System.ArgumentOutOfRangeException">
 		/// 	<paramref name="offset"/> or <paramref name="count"/> is negative.
 		/// </exception>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">
@@ -487,35 +482,13 @@ namespace Mosa.FileSystem.FAT
 			{
 				WriteByte(buffer[offset + i]);
 			}
-
-			//dirty = true;
-
-			//uint remaining = (uint)count;
-
-			//while (remaining != 0)
-			//{
-			//    uint clusterIndex = (uint)(position % clusterSize);
-
-			//    if (clusterIndex == 0)
-			//        NextClusterExpand();
-
-			//    uint clusterAvailable = clusterSize - clusterIndex;
-
-			//    uint size = System.Math.Min(remaining, clusterAvailable);
-
-			//    System.Array.Copy(buffer, offset, data, clusterIndex, size);
-
-			//    offset += (int)size;
-			//    position += size;
-			//    remaining -= size;
-			//}
 		}
 
 		/// <summary>
 		/// Writes a byte to the current position in the stream and advances the position within the stream by one byte.
 		/// </summary>
 		/// <param name="value">The byte to write to the stream.</param>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">

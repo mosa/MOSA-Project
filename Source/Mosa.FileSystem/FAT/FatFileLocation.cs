@@ -10,7 +10,7 @@ namespace Mosa.FileSystem.FAT
 		/// <summary>
 		///
 		/// </summary>
-		public bool Valid;
+		public bool IsValid;
 
 		/// <summary>
 		///
@@ -42,7 +42,7 @@ namespace Mosa.FileSystem.FAT
 		/// </summary>
 		public FatFileLocation()
 		{
-			this.Valid = false;
+			this.IsValid = false;
 		}
 
 		/// <summary>
@@ -54,7 +54,7 @@ namespace Mosa.FileSystem.FAT
 		/// <param name="directory">if set to <c>true</c> [directory].</param>
 		public FatFileLocation(uint startCluster, uint directorySector, uint directoryIndex, bool directory)
 		{
-			this.Valid = true;
+			this.IsValid = true;
 			this.FirstCluster = startCluster;
 			this.DirectorySector = directorySector;
 			this.DirectorySectorIndex = directoryIndex;
