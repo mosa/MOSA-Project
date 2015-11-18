@@ -133,8 +133,6 @@ namespace Mosa.Utility.Launcher
 					case "-vmdk": ImageFormat = ImageFormat.VMDK; continue;
 					case "-elf32": LinkerFormat = LinkerFormat.Elf32; continue;
 					case "-elf": LinkerFormat = LinkerFormat.Elf32; continue;
-					case "-pe32": LinkerFormat = LinkerFormat.PE32; continue;
-					case "-pe": LinkerFormat = LinkerFormat.PE32; continue;
 					case "-mb0.7": BootFormat = BootFormat.Multiboot_0_7; continue;
 					case "-pipe": DebugConnectionOption = DebugConnectionOption.Pipe; continue;
 					case "-tcpclient": DebugConnectionOption = DebugConnectionOption.TCPClient; continue;

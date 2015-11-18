@@ -4,7 +4,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf32;
-using Mosa.Compiler.Linker.PE;
 using Mosa.Compiler.Trace.BuiltIn;
 using Mosa.Utility.Aot;
 using NDesk.Options;
@@ -401,7 +400,7 @@ namespace Mosa.Tool.Compiler
 		{
 			switch (format.ToLower())
 			{
-				case "pe": return delegate { return new PELinker(); };
+				//case "pe": return delegate { return new PELinker(); };
 				case "elf": return delegate { return new Elf32(); };
 				case "elf32": return delegate { return new Elf32(); };
 

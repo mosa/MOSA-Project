@@ -106,8 +106,7 @@ namespace Mosa.Tool.Launcher
 			switch (cbLinkerFormat.SelectedIndex)
 			{
 				case 0: Options.LinkerFormat = LinkerFormat.Elf32; break;
-				case 1: Options.LinkerFormat = LinkerFormat.PE32; break;
-				case 2: Options.LinkerFormat = LinkerFormat.Elf64; break;
+				case 1: Options.LinkerFormat = LinkerFormat.Elf64; break;
 				default: break;
 			}
 
@@ -165,8 +164,7 @@ namespace Mosa.Tool.Launcher
 			switch (Options.LinkerFormat)
 			{
 				case LinkerFormat.Elf32: cbLinkerFormat.SelectedIndex = 0; break;
-				case LinkerFormat.PE32: cbLinkerFormat.SelectedIndex = 1; break;
-				case LinkerFormat.Elf64: cbLinkerFormat.SelectedIndex = 0; break; // Not supported yet
+				case LinkerFormat.Elf64: cbLinkerFormat.SelectedIndex = 1; break; // Not supported yet
 				default: break;
 			}
 

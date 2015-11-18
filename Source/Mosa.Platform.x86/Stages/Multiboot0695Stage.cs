@@ -154,13 +154,6 @@ namespace Mosa.Platform.x86.Stages
 
 			uint load_addr = 0;
 
-			if (Linker is Mosa.Compiler.Linker.PE.PELinker)
-			{
-				// No, special multiboot treatment required
-				flags |= HEADER_MB_FLAG_NON_ELF_BINARY;
-				load_addr = (uint)Linker.BaseAddress;
-			}
-
 			// magic
 			writer.Write(HEADER_MB_MAGIC);
 
