@@ -24,6 +24,7 @@ wget
 grub
 - GNU License
 - http://www.gnu.org/software/grub/
+- Version 0.97
 
 peter-bochs
 - GNU License

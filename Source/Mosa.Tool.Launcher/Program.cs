@@ -18,9 +18,6 @@ namespace Mosa.Tool.Launcher
 
 			var main = new MainForm();
 
-			//main.Options.LoadFile(main.ConfigFile);
-
-			//command line arguments will overwrite config file settings
 			main.Options.LoadArguments(args);
 
 			Application.Run(main);

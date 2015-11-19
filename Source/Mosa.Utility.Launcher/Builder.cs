@@ -125,7 +125,14 @@ namespace Mosa.Utility.Launcher
 
 				if (Options.ImageFormat == ImageFormat.ISO)
 				{
-					CreateISOImage(compiledFile);
+					if (Options.BootLoaderType == BootLoaderType.Grub)
+					{
+						CreateISOImageWithGrub(compiledFile);
+					}
+					else
+					{
+						CreateISOImageWithSyslinux(compiledFile);
+					}
 				}
 				else
 				{
@@ -194,7 +201,7 @@ namespace Mosa.Utility.Launcher
 			Generator.Create(options);
 		}
 
-		private void CreateISOImage(string compiledFile)
+		private void CreateISOImageWithSyslinux(string compiledFile)
 		{
 			string isoDirectory = Path.Combine(Options.DestinationDirectory, "iso");
 
@@ -219,6 +226,41 @@ namespace Mosa.Utility.Launcher
 				" -J -R" +
 				" -o " + Quote(imageFile) +
 				" -b isolinux.bin" +
+				" -no-emul-boot" +
+				" -boot-load-size 4" +
+				" -boot-info-table " +
+				Quote(isoDirectory);
+
+			var output = LaunchApplication(AppLocations.mkisofs, arg, true);
+
+			AddOutput(output);
+		}
+
+		private void CreateISOImageWithGrub(string compiledFile)
+		{
+			string isoDirectory = Path.Combine(Options.DestinationDirectory, "iso");
+
+			if (Directory.Exists(isoDirectory))
+			{
+				Directory.Delete(isoDirectory, true);
+			}
+
+			Directory.CreateDirectory(isoDirectory);
+			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot"));
+			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot", "grub"));
+			Directory.CreateDirectory(isoDirectory);
+
+			File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "stage2_eltorito"), GetResource("stage2_eltorito"));
+			File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "menu.lst"), GetResource("menu.lst"));
+			File.Copy(compiledFile, Path.Combine(isoDirectory, "boot", "main.exe"));
+
+			imageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".iso");
+
+			string arg =
+				"-relaxed-filenames" +
+				" -J -R" +
+				" -o " + Quote(imageFile) +
+				" -b " + Quote(@"boot/grub/stage2_eltorito") +
 				" -no-emul-boot" +
 				" -boot-load-size 4" +
 				" -boot-info-table " +

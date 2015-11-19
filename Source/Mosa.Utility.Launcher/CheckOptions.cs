@@ -31,6 +31,21 @@ namespace Mosa.Utility.Launcher
 				return "VMware does not support the VHD image format";
 			}
 
+			if (options.ImageFormat != ImageFormat.ISO && options.BootLoaderType == BootLoaderType.Grub)
+			{
+				return "Grub boot loader not support with virtual disk formats";
+			}
+
+			if (options.ImageFormat != ImageFormat.ISO)
+			{
+				return "Image format and boot loader combination not supported";
+			}
+
+			if (options.PlatformType == PlatformType.NotSpecified)
+			{
+				return "Platform not supported";
+			}
+
 			return null;
 		}
 	}

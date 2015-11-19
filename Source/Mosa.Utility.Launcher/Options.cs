@@ -51,6 +51,8 @@ namespace Mosa.Utility.Launcher
 
 		public bool CompilerUsesMultipleThreads { get; set; }
 
+		public BootLoaderType BootLoaderType { get; set; }
+
 		public Options()
 		{
 			EnableSSA = true;
@@ -69,6 +71,7 @@ namespace Mosa.Utility.Launcher
 			CompilerUsesMultipleThreads = true;
 			EnableInlinedMethods = true;
 			InlinedIRMaximum = 8;
+			BootLoaderType = BootLoaderType.Syslinux;
 		}
 
 		public void LoadFile(string file)
@@ -104,10 +107,11 @@ namespace Mosa.Utility.Launcher
 			if (!CompilerUsesMultipleThreads)
 				root.Add(new XElement("param", new XAttribute("key", "CompilerUsesMultipleThreads"), new XAttribute("value", CompilerUsesMultipleThreads.ToString())));
 
-			//TODO: Other options
-
 			if (File.Exists(file))
+			{
 				File.Delete(file);
+			}
+
 			xmlDoc.Save(file);
 		}
 
@@ -137,8 +141,9 @@ namespace Mosa.Utility.Launcher
 					case "-pipe": DebugConnectionOption = DebugConnectionOption.Pipe; continue;
 					case "-tcpclient": DebugConnectionOption = DebugConnectionOption.TCPClient; continue;
 					case "-tcpserver": DebugConnectionOption = DebugConnectionOption.TCPServer; continue;
-
-					//case "-inline": EnableInlinedMethods = true; continue;
+					case "-grub": BootLoaderType = BootLoaderType.Grub; continue;
+					case "-syslinux": BootLoaderType = BootLoaderType.Syslinux; continue;
+					case "-inline": EnableInlinedMethods = true; continue;
 					default: break;
 				}
 
