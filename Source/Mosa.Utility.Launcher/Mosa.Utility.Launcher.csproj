@@ -86,6 +86,7 @@
     <Compile Include="DebugConnectionOption.cs" />
     <Compile Include="LinkerFormat.cs" />
     <Compile Include="Options.cs" />
+    <Compile Include="BootLoaderType.cs" />
     <Compile Include="PlatformType.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="AppLocations.cs" />
@@ -174,7 +175,11 @@
     <EmbeddedResource Include="..\..\Tools\syslinux\isolinux.bin">
       <Link>Resources\isolinux.bin</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\Tools\grub\stage2_eltorito">
+      <Link>Resources\stage2_eltorito</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\syslinux.cfg" />
+	<EmbeddedResource Include="Resources\menu.lst" />	   
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

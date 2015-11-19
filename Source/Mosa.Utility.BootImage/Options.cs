@@ -26,7 +26,7 @@ namespace Mosa.Utility.BootImage
 		public byte[] MBRCode = null;
 		public byte[] FatBootCode = null;
 		public string VolumeLabel = string.Empty;
-		public ImageFormatType ImageFormat = ImageFormatType.VHD;
+		public ImageFormatType ImageFormat = ImageFormatType.IMG;
 		public bool MBROption = true;
 		public bool PatchSyslinuxOption = false;
 		public uint BlockCount = 0;

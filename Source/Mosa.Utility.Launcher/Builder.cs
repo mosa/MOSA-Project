@@ -4,7 +4,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf32;
-using Mosa.Compiler.Linker.PE;
 using Mosa.Compiler.Trace;
 using Mosa.Utility.Aot;
 using Mosa.Utility.BootImage;
@@ -126,7 +125,14 @@ namespace Mosa.Utility.Launcher
 
 				if (Options.ImageFormat == ImageFormat.ISO)
 				{
-					CreateISOImage(compiledFile);
+					if (Options.BootLoaderType == BootLoaderType.Grub)
+					{
+						CreateISOImageWithGrub(compiledFile);
+					}
+					else
+					{
+						CreateISOImageWithSyslinux(compiledFile);
+					}
 				}
 				else
 				{
@@ -195,7 +201,7 @@ namespace Mosa.Utility.Launcher
 			Generator.Create(options);
 		}
 
-		private void CreateISOImage(string compiledFile)
+		private void CreateISOImageWithSyslinux(string compiledFile)
 		{
 			string isoDirectory = Path.Combine(Options.DestinationDirectory, "iso");
 
@@ -220,6 +226,41 @@ namespace Mosa.Utility.Launcher
 				" -J -R" +
 				" -o " + Quote(imageFile) +
 				" -b isolinux.bin" +
+				" -no-emul-boot" +
+				" -boot-load-size 4" +
+				" -boot-info-table " +
+				Quote(isoDirectory);
+
+			var output = LaunchApplication(AppLocations.mkisofs, arg, true);
+
+			AddOutput(output);
+		}
+
+		private void CreateISOImageWithGrub(string compiledFile)
+		{
+			string isoDirectory = Path.Combine(Options.DestinationDirectory, "iso");
+
+			if (Directory.Exists(isoDirectory))
+			{
+				Directory.Delete(isoDirectory, true);
+			}
+
+			Directory.CreateDirectory(isoDirectory);
+			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot"));
+			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot", "grub"));
+			Directory.CreateDirectory(isoDirectory);
+
+			File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "stage2_eltorito"), GetResource("stage2_eltorito"));
+			File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "menu.lst"), GetResource("menu.lst"));
+			File.Copy(compiledFile, Path.Combine(isoDirectory, "boot", "main.exe"));
+
+			imageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".iso");
+
+			string arg =
+				"-relaxed-filenames" +
+				" -J -R" +
+				" -o " + Quote(imageFile) +
+				" -b " + Quote(@"boot/grub/stage2_eltorito") +
 				" -no-emul-boot" +
 				" -boot-load-size 4" +
 				" -boot-info-table " +
@@ -478,7 +519,7 @@ namespace Mosa.Utility.Launcher
 		{
 			switch (linkerType)
 			{
-				case LinkerFormat.PE32: return delegate { return new PELinker(); };
+				//case LinkerFormat.PE32: return delegate { return new PELinker(); };
 				case LinkerFormat.Elf32: return delegate { return new Elf32(); };
 
 				//case LinkerType.Elf64: return delegate { return new Elf64(); };

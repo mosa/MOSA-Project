@@ -2,5 +2,5 @@
 
 namespace Mosa.Utility.Launcher
 {
-	public enum LinkerFormat { NotSpecified, Elf32, Elf64 };
+	public enum BootLoaderType { Syslinux, Grub };
 }

@@ -55,7 +55,7 @@ You will also need the following prerequisites:
 
 **Windows**
 
-Install any [Visual Studio](http://www.visualstudio.com) version 2013 or newer.
+Install any [Visual Studio](http://www.visualstudio.com) version 2015 or newer.
 
 All editions are supported including the fully-featured free [Community Edition](https://www.visualstudio.com/products/visual-studio-community-vs).
 

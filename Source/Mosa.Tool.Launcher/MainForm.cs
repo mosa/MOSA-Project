@@ -103,14 +103,6 @@ namespace Mosa.Tool.Launcher
 				default: Options.FileSystemFormat = FileSystemFormat.FAT16; ; break;
 			}
 
-			switch (cbLinkerFormat.SelectedIndex)
-			{
-				case 0: Options.LinkerFormat = LinkerFormat.Elf32; break;
-				case 1: Options.LinkerFormat = LinkerFormat.PE32; break;
-				case 2: Options.LinkerFormat = LinkerFormat.Elf64; break;
-				default: break;
-			}
-
 			switch (cbPlatform.SelectedIndex)
 			{
 				case 0: Options.PlatformType = PlatformType.X86; break;
@@ -121,6 +113,13 @@ namespace Mosa.Tool.Launcher
 			{
 				case 0: Options.BootFormat = BootFormat.Multiboot_0_7; break;
 				default: Options.BootFormat = BootFormat.NotSpecified; break;
+			}
+
+			switch (cbBootLoader.SelectedIndex)
+			{
+				case 0: Options.BootLoaderType = BootLoaderType.Syslinux; break;
+				case 1: Options.BootLoaderType = BootLoaderType.Grub; break;
+				default: break;
 			}
 		}
 
@@ -162,11 +161,10 @@ namespace Mosa.Tool.Launcher
 				default: break;
 			}
 
-			switch (Options.LinkerFormat)
+			switch (Options.BootLoaderType)
 			{
-				case LinkerFormat.Elf32: cbLinkerFormat.SelectedIndex = 0; break;
-				case LinkerFormat.PE32: cbLinkerFormat.SelectedIndex = 1; break;
-				case LinkerFormat.Elf64: cbLinkerFormat.SelectedIndex = 0; break; // Not supported yet
+				case BootLoaderType.Syslinux: cbBootLoader.SelectedIndex = 0; break;
+				case BootLoaderType.Grub: cbBootLoader.SelectedIndex = 1; break;
 				default: break;
 			}
 
