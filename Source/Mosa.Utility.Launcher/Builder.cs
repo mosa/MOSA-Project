@@ -125,11 +125,11 @@ namespace Mosa.Utility.Launcher
 
 				if (Options.ImageFormat == ImageFormat.ISO)
 				{
-					if (Options.BootLoaderType == BootLoaderType.Grub)
+					if (Options.BootLoader == BootLoader.Grub_0_97)
 					{
 						CreateISOImageWithGrub(compiledFile);
 					}
-					else
+					else // assuming syslinux
 					{
 						CreateISOImageWithSyslinux(compiledFile);
 					}
@@ -156,6 +156,12 @@ namespace Mosa.Utility.Launcher
 			}
 		}
 
+		protected byte[] GetResource(string path, string name)
+		{
+			var newname = path.Replace(".", "._").Replace(@"\", "._").Replace(@"/", "._") + "." + name;
+			return GetResource(newname);
+		}
+
 		protected byte[] GetResource(string name)
 		{
 			var assembly = Assembly.GetExecutingAssembly();
@@ -171,34 +177,47 @@ namespace Mosa.Utility.Launcher
 
 		private void CreateDiskImage(string compiledFile)
 		{
-			var options = new Mosa.Utility.BootImage.Options();
+			var bootImageOptions = new BootImageOptions();
 
-			options.MBRCode = GetResource("mbr.bin");
-			options.FatBootCode = GetResource("ldlinux.bin");
+			if (Options.BootLoader == BootLoader.Syslinux_6_03)
+			{
+				bootImageOptions.MBRCode = GetResource(@"syslinux\6.03", "mbr.bin");
+				bootImageOptions.FatBootCode = GetResource(@"syslinux\6.03", "ldlinux.bin");
 
-			options.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource("ldlinux.sys")));
-			options.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource("mboot.c32")));
-			options.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetResource("syslinux.cfg")));
-			options.IncludeFiles.Add(new IncludeFile(compiledFile, "main.exe"));
+				bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\6.03", "ldlinux.sys")));
+				bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\6.03", "mboot.c32")));
+			}
+			else if (Options.BootLoader == BootLoader.Syslinux_3_72)
+			{
+				bootImageOptions.MBRCode = GetResource(@"syslinux\3.72", "mbr.bin");
+				bootImageOptions.FatBootCode = GetResource(@"syslinux\3.72", "ldlinux.bin");
 
-			options.VolumeLabel = "MOSABOOT";
-			options.PatchSyslinuxOption = true;
+				bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\3.72", "ldlinux.sys")));
+				bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\3.72", "mboot.c32")));
+			}
 
-			string vmext = ".img";
+			bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetResource(@"syslinux", "syslinux.cfg")));
+			bootImageOptions.IncludeFiles.Add(new IncludeFile(compiledFile, "main.exe"));
 
+			bootImageOptions.VolumeLabel = "MOSABOOT";
+
+			var vmext = ".img";
 			switch (Options.ImageFormat)
 			{
-				case ImageFormat.IMG: options.ImageFormat = ImageFormatType.IMG; break;
-				case ImageFormat.VHD: options.ImageFormat = ImageFormatType.VHD; vmext = ".vhd"; break;
-				case ImageFormat.VDI: options.ImageFormat = ImageFormatType.VDI; vmext = ".vdi"; break;
-				case ImageFormat.VMDK: options.ImageFormat = ImageFormatType.IMG; break;
-				default: throw new InvalidOperationException();
+				case ImageFormat.VHD: vmext = ".vhd"; break;
+				case ImageFormat.VDI: vmext = ".vdi"; break;
+				default: break;
 			}
 
 			imageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + vmext);
-			options.DiskImageFileName = imageFile;
 
-			Generator.Create(options);
+			bootImageOptions.DiskImageFileName = imageFile;
+			bootImageOptions.PatchSyslinuxOption = true;
+			bootImageOptions.FileSystem = Options.FileSystem;
+			bootImageOptions.ImageFormat = Options.ImageFormat;
+			bootImageOptions.BootLoader = Options.BootLoader;
+
+			Generator.Create(bootImageOptions);
 		}
 
 		private void CreateISOImageWithSyslinux(string compiledFile)
@@ -212,11 +231,20 @@ namespace Mosa.Utility.Launcher
 
 			Directory.CreateDirectory(isoDirectory);
 
-			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.bin"), GetResource("isolinux.bin"));
-			File.WriteAllBytes(Path.Combine(isoDirectory, "ldlinux.c32"), GetResource("ldlinux.c32"));
-			File.WriteAllBytes(Path.Combine(isoDirectory, "libcom32.c32"), GetResource("libcom32.c32"));
-			File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource("mboot.c32"));
-			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetResource("syslinux.cfg"));
+			if (Options.BootLoader == BootLoader.Syslinux_6_03)
+			{
+				File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.bin"), GetResource(@"syslinux\6.03", "isolinux.bin"));
+				File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource(@"syslinux\6.03", "mboot.c32"));
+				File.WriteAllBytes(Path.Combine(isoDirectory, "ldlinux.c32"), GetResource(@"syslinux\6.03", "ldlinux.c32"));
+				File.WriteAllBytes(Path.Combine(isoDirectory, "libcom32.c32"), GetResource(@"syslinux\6.03", "libcom32.c32"));
+			}
+			else if (Options.BootLoader == BootLoader.Syslinux_3_72)
+			{
+				File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.bin"), GetResource(@"syslinux\3.72", "isolinux.bin"));
+				File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource(@"syslinux\3.72", "mboot.c32"));
+			}
+
+			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetResource(@"syslinux", "syslinux.cfg"));
 			File.Copy(compiledFile, Path.Combine(isoDirectory, "main.exe"));
 
 			imageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".iso");
@@ -250,8 +278,8 @@ namespace Mosa.Utility.Launcher
 			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot", "grub"));
 			Directory.CreateDirectory(isoDirectory);
 
-			File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "stage2_eltorito"), GetResource("stage2_eltorito"));
-			File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "menu.lst"), GetResource("menu.lst"));
+			File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "stage2_eltorito"), GetResource(@"grub\0.97", "stage2_eltorito"));
+			File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "menu.lst"), GetResource(@"grub", "menu.lst"));
 			File.Copy(compiledFile, Path.Combine(isoDirectory, "boot", "main.exe"));
 
 			imageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".iso");
@@ -296,7 +324,7 @@ namespace Mosa.Utility.Launcher
 			AddOutput("Launching Application: " + app);
 			AddOutput("Arguments: " + args);
 
-			ProcessStartInfo start = new ProcessStartInfo();
+			var start = new ProcessStartInfo();
 			start.FileName = app;
 			start.Arguments = args;
 			start.UseShellExecute = false;
@@ -519,7 +547,6 @@ namespace Mosa.Utility.Launcher
 		{
 			switch (linkerType)
 			{
-				//case LinkerFormat.PE32: return delegate { return new PELinker(); };
 				case LinkerFormat.Elf32: return delegate { return new Elf32(); };
 
 				//case LinkerType.Elf64: return delegate { return new Elf64(); };

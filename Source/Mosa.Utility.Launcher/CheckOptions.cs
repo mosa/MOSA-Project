@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Utility.BootImage;
+
 namespace Mosa.Utility.Launcher
 {
 	public static class CheckOptions
@@ -31,14 +33,14 @@ namespace Mosa.Utility.Launcher
 				return "VMware does not support the VHD image format";
 			}
 
-			if (options.ImageFormat != ImageFormat.ISO && options.BootLoaderType == BootLoaderType.Grub)
+			if (options.BootLoader == BootLoader.Grub_0_97 && options.ImageFormat != ImageFormat.ISO)
 			{
-				return "Grub boot loader not support with virtual disk formats";
+				return "Grub boot loader does not support virtual disk formats";
 			}
 
-			if (options.ImageFormat != ImageFormat.ISO)
+			if (options.BootLoader == BootLoader.Syslinux_6_03 && options.ImageFormat != ImageFormat.ISO)
 			{
-				return "Image format and boot loader combination not supported";
+				return "Syslinux boot loader v6.3 does not support virtual disk format";
 			}
 
 			if (options.PlatformType == PlatformType.NotSpecified)

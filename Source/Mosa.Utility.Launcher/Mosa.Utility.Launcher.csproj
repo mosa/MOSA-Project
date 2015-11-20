@@ -82,17 +82,13 @@
     <Compile Include="BuilderEventListener.cs" />
     <Compile Include="CheckOptions.cs" />
     <Compile Include="IBuilderEvent.cs" />
-    <Compile Include="FileSystemFormat.cs" />
     <Compile Include="DebugConnectionOption.cs" />
     <Compile Include="LinkerFormat.cs" />
     <Compile Include="Options.cs" />
-    <Compile Include="BootLoaderType.cs" />
     <Compile Include="PlatformType.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="AppLocations.cs" />
     <Compile Include="Emulator.cs" />
-    <Compile Include="BootFormat.cs" />
-    <Compile Include="ImageFormat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -154,32 +150,47 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\Tools\syslinux\mbr.bin">
-      <Link>Resources\mbr.bin</Link>
+    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\mbr.bin">
+      <Link>Resources\syslinux\6.03\mbr.bin</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\ldlinux.bin">
-      <Link>Resources\ldlinux.bin</Link>
+    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\ldlinux.bin">
+      <Link>Resources\syslinux\6.03\ldlinux.bin</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\ldlinux.c32">
-      <Link>Resources\ldlinux.c32</Link>
+    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\ldlinux.c32">
+      <Link>Resources\syslinux\6.03\ldlinux.c32</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\ldlinux.sys">
-      <Link>Resources\ldlinux.sys</Link>
+    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\ldlinux.sys">
+      <Link>Resources\syslinux\6.03\ldlinux.sys</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\libcom32.c32">
-      <Link>Resources\libcom32.c32</Link>
+    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\libcom32.c32">
+      <Link>Resources\syslinux\6.03\libcom32.c32</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\mboot.c32">
-      <Link>Resources\mboot.c32</Link>
+    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\mboot.c32">
+      <Link>Resources\syslinux\6.03\mboot.c32</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\isolinux.bin">
-      <Link>Resources\isolinux.bin</Link>
+    <EmbeddedResource Include="..\..\Tools\syslinux\6.03\isolinux.bin">
+      <Link>Resources\syslinux\6.03\isolinux.bin</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\grub\stage2_eltorito">
-      <Link>Resources\stage2_eltorito</Link>
+    <EmbeddedResource Include="..\..\Tools\syslinux\3.72\mbr.bin">
+      <Link>Resources\syslinux\3.72\mbr.bin</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\syslinux.cfg" />
-	<EmbeddedResource Include="Resources\menu.lst" />	   
+    <EmbeddedResource Include="..\..\Tools\syslinux\3.72\ldlinux.bin">
+      <Link>Resources\syslinux\3.72\ldlinux.bin</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\Tools\syslinux\3.72\ldlinux.sys">
+      <Link>Resources\syslinux\3.72\ldlinux.sys</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\Tools\syslinux\3.72\mboot.c32">
+      <Link>Resources\syslinux\3.72\mboot.c32</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\Tools\syslinux\3.72\isolinux.bin">
+      <Link>Resources\syslinux\3.72\isolinux.bin</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\Tools\grub\0.97\stage2_eltorito">
+      <Link>Resources\grub\0.97\stage2_eltorito</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\syslinux\syslinux.cfg" />
+    <EmbeddedResource Include="Resources\grub\menu.lst" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

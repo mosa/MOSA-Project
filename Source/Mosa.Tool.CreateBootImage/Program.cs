@@ -12,9 +12,9 @@ namespace Mosa.Tool.CreateBootImage
 	/// </summary>
 	internal class Program
 	{
-		public static Options Parse(string filename)
+		public static BootImageOptions Parse(string filename)
 		{
-			var options = new Options();
+			var options = new BootImageOptions();
 
 			var reader = File.OpenText(filename);
 
@@ -32,15 +32,15 @@ namespace Mosa.Tool.CreateBootImage
 				{
 					case "-mbr": options.MBROption = true; options.MBRCode = (parts.Length > 1) ? File.ReadAllBytes(parts[1]) : null; break;
 					case "-boot": options.FatBootCode = (parts.Length > 1) ? File.ReadAllBytes(parts[1]) : null; break;
-					case "-vhd": options.ImageFormat = ImageFormatType.VHD; break;
-					case "-img": options.ImageFormat = ImageFormatType.IMG; break;
-					case "-vdi": options.ImageFormat = ImageFormatType.VDI; break;
+					case "-vhd": options.ImageFormat = ImageFormat.VHD; break;
+					case "-img": options.ImageFormat = ImageFormat.IMG; break;
+					case "-vdi": options.ImageFormat = ImageFormat.VDI; break;
 					case "-syslinux": options.PatchSyslinuxOption = true; break;
 					case "-guid": if (parts.Length > 1) options.MediaGuid = new Guid(parts[1]); break;
 					case "-snapguid": if (parts.Length > 1) options.MediaLastSnapGuid = new Guid(parts[1]); break;
-					case "-fat12": options.FileSystem = FileSystemType.FAT12; break;
-					case "-fat16": options.FileSystem = FileSystemType.FAT16; break;
-					case "-fat32": options.FileSystem = FileSystemType.FAT32; break;
+					case "-fat12": options.FileSystem = FileSystem.FAT12; break;
+					case "-fat16": options.FileSystem = FileSystem.FAT16; break;
+					case "-fat32": options.FileSystem = FileSystem.FAT32; break;
 					case "-file":
 						if (parts.Length > 2) options.IncludeFiles.Add(new IncludeFile(parts[1], parts[2]));
 						else options.IncludeFiles.Add(new IncludeFile(parts[1])); break;
@@ -84,18 +84,18 @@ namespace Mosa.Tool.CreateBootImage
 
 			try
 			{
-				var options = Parse(args[0]);
+				var bootImageOptions = Parse(args[0]);
 
-				if (options == null)
+				if (bootImageOptions == null)
 				{
 					Console.WriteLine("Usage: CreateBootImage <boot.config file> <image name>");
 					Console.Error.WriteLine("ERROR: Invalid options");
 					return -1;
 				}
 
-				options.DiskImageFileName = args[1];
+				bootImageOptions.DiskImageFileName = args[1];
 
-				Generator.Create(options);
+				Generator.Create(bootImageOptions);
 
 				Console.WriteLine("Completed!");
 			}

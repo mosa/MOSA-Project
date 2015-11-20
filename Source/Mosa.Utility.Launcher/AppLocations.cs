@@ -98,6 +98,8 @@ namespace Mosa.Utility.Launcher
 				BOCHS = TryFind(
 					new string[] { "bochs.exe", "bochs" },
 					new string[] {
+					CombineParameterAndDirectory("ProgramFiles",@"Bochs-2.6.8"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"Bochs-2.6.8"),
 					CombineParameterAndDirectory("ProgramFiles",@"Bochs-2.6.5"),
 					CombineParameterAndDirectory("ProgramFiles(x86)",@"Bochs-2.6.5"),
 					CombineParameterAndDirectory("ProgramFiles",@"Bochs-2.6.2"),
