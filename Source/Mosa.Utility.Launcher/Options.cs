@@ -2,6 +2,7 @@
 
 using System.IO;
 using System.Xml.Linq;
+using Mosa.Utility.BootImage;
 
 namespace Mosa.Utility.Launcher
 {
@@ -45,13 +46,13 @@ namespace Mosa.Utility.Launcher
 
 		public PlatformType PlatformType { get; set; }
 
-		public FileSystemFormat FileSystemFormat { get; set; }
+		public FileSystem FileSystem { get; set; }
 
 		public DebugConnectionOption DebugConnectionOption { get; set; }
 
 		public bool CompilerUsesMultipleThreads { get; set; }
 
-		public BootLoaderType BootLoaderType { get; set; }
+		public BootLoader BootLoader { get; set; }
 
 		public Options()
 		{
@@ -60,18 +61,18 @@ namespace Mosa.Utility.Launcher
 			EnablePromoteTemporaryVariables = true;
 			EnableSparseConditionalConstantPropagation = true;
 			Emulator = EmulatorType.Qemu;
-			ImageFormat = ImageFormat.ISO;
+			ImageFormat = ImageFormat.IMG;
 			BootFormat = BootFormat.Multiboot_0_7;
 			PlatformType = PlatformType.X86;
 			LinkerFormat = Launcher.LinkerFormat.Elf32;
 			MemoryInMB = 128;
 			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
-			FileSystemFormat = FileSystemFormat.FAT16;
+			FileSystem = FileSystem.FAT16;
 			DebugConnectionOption = DebugConnectionOption.None;
 			CompilerUsesMultipleThreads = true;
 			EnableInlinedMethods = true;
 			InlinedIRMaximum = 8;
-			BootLoaderType = BootLoaderType.Syslinux;
+			BootLoader = BootLoader.Syslinux_3_72;
 		}
 
 		public void LoadFile(string file)
@@ -141,8 +142,11 @@ namespace Mosa.Utility.Launcher
 					case "-pipe": DebugConnectionOption = DebugConnectionOption.Pipe; continue;
 					case "-tcpclient": DebugConnectionOption = DebugConnectionOption.TCPClient; continue;
 					case "-tcpserver": DebugConnectionOption = DebugConnectionOption.TCPServer; continue;
-					case "-grub": BootLoaderType = BootLoaderType.Grub; continue;
-					case "-syslinux": BootLoaderType = BootLoaderType.Syslinux; continue;
+					case "-grub": BootLoader = BootLoader.Grub_0_97; continue;
+					case "-grub-0.97": BootLoader = BootLoader.Grub_0_97; continue;
+					case "-syslinux": BootLoader = BootLoader.Syslinux_6_03; continue;
+					case "-syslinux-6.03": BootLoader = BootLoader.Syslinux_6_03; continue;
+					case "-syslinux-3.72": BootLoader = BootLoader.Syslinux_3_72; continue;
 					case "-inline": EnableInlinedMethods = true; continue;
 					default: break;
 				}

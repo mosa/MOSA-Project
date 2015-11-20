@@ -47,8 +47,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BlockFileStream.cs" />
-    <Compile Include="Options.cs" />
+    <Compile Include="BootFormat.cs" />
+    <Compile Include="BootLoader.cs" />
+    <Compile Include="BootImageOptions.cs" />
+    <Compile Include="FileSystemFormat.cs" />
     <Compile Include="Generator.cs" />
+    <Compile Include="ImageFormat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Syslinux.cs" />
   </ItemGroup>

@@ -154,28 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <EmbeddedResource Include="..\..\Tools\syslinux\mbr.bin">
-      <Link>Resources\mbr.bin</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\ldlinux.bin">
-      <Link>Resources\ldlinux.bin</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\ldlinux.c32">
-      <Link>Resources\ldlinux.c32</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\ldlinux.sys">
-      <Link>Resources\ldlinux.sys</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\libcom32.c32">
-      <Link>Resources\libcom32.c32</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\mboot.c32">
-      <Link>Resources\mboot.c32</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\..\Tools\syslinux\isolinux.bin">
-      <Link>Resources\isolinux.bin</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\syslinux.cfg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainForm.resx">
@@ -209,9 +187,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\3rdParty\icons\launch.ico">
-      <Link>Resources\launch.ico</Link>
-    </Content>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

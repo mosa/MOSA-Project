@@ -15,7 +15,7 @@ bochs
 syslinux
 - GNU License
 - http://syslinux.zytor.com/
-- Version: 6.03
+- Version: 3.72 & 6.03
 
 wget
 - GNU License
@@ -33,6 +33,7 @@ peter-bochs
 ndisasm
 - Simplified BSD License
 - http://www.nasm.us/
+- Version 2.11.08
 
 xunit
 - Apache License, Version 2.0

@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using Mosa.Utility.BootImage;
 
 namespace Mosa.Tool.Launcher
 {
@@ -98,9 +99,9 @@ namespace Mosa.Tool.Launcher
 
 			switch (cbBootFileSystem.SelectedIndex)
 			{
-				case 0: Options.FileSystemFormat = FileSystemFormat.FAT12; ; break;
-				case 1: Options.FileSystemFormat = FileSystemFormat.FAT16; ; break;
-				default: Options.FileSystemFormat = FileSystemFormat.FAT16; ; break;
+				case 0: Options.FileSystem = FileSystem.FAT12; ; break;
+				case 1: Options.FileSystem = FileSystem.FAT16; ; break;
+				default: Options.FileSystem = FileSystem.FAT16; ; break;
 			}
 
 			switch (cbPlatform.SelectedIndex)
@@ -117,8 +118,9 @@ namespace Mosa.Tool.Launcher
 
 			switch (cbBootLoader.SelectedIndex)
 			{
-				case 0: Options.BootLoaderType = BootLoaderType.Syslinux; break;
-				case 1: Options.BootLoaderType = BootLoaderType.Grub; break;
+				case 0: Options.BootLoader = BootLoader.Syslinux_3_72; break;
+				case 1: Options.BootLoader = BootLoader.Syslinux_6_03; break;
+				case 2: Options.BootLoader = BootLoader.Grub_0_97; break;
 				default: break;
 			}
 		}
@@ -154,17 +156,18 @@ namespace Mosa.Tool.Launcher
 				default: break;
 			}
 
-			switch (Options.FileSystemFormat)
+			switch (Options.FileSystem)
 			{
-				case FileSystemFormat.FAT12: cbBootFileSystem.SelectedIndex = 0; break;
-				case FileSystemFormat.FAT16: cbBootFileSystem.SelectedIndex = 1; break;
+				case FileSystem.FAT12: cbBootFileSystem.SelectedIndex = 0; break;
+				case FileSystem.FAT16: cbBootFileSystem.SelectedIndex = 1; break;
 				default: break;
 			}
 
-			switch (Options.BootLoaderType)
+			switch (Options.BootLoader)
 			{
-				case BootLoaderType.Syslinux: cbBootLoader.SelectedIndex = 0; break;
-				case BootLoaderType.Grub: cbBootLoader.SelectedIndex = 1; break;
+				case BootLoader.Syslinux_3_72: cbBootLoader.SelectedIndex = 0; break;
+				case BootLoader.Syslinux_6_03: cbBootLoader.SelectedIndex = 1; break;
+				case BootLoader.Grub_0_97: cbBootLoader.SelectedIndex = 2; break;
 				default: break;
 			}
 

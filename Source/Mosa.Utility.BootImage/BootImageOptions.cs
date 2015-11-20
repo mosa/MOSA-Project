@@ -9,33 +9,24 @@ namespace Mosa.Utility.BootImage
 	/// <summary>
 	///
 	/// </summary>
-	public enum FileSystemType { FAT12, FAT16, FAT32 };
-
-	/// <summary>
-	///
-	/// </summary>
-	public enum ImageFormatType { IMG, VHD, VDI };
-
-	/// <summary>
-	///
-	/// </summary>
-	public class Options
+	public class BootImageOptions
 	{
 		public Guid MediaGuid = Guid.NewGuid();
 		public Guid MediaLastSnapGuid = Guid.NewGuid();
 		public byte[] MBRCode = null;
 		public byte[] FatBootCode = null;
 		public string VolumeLabel = string.Empty;
-		public ImageFormatType ImageFormat = ImageFormatType.IMG;
+		public ImageFormat ImageFormat = ImageFormat.IMG;
 		public bool MBROption = true;
 		public bool PatchSyslinuxOption = false;
 		public uint BlockCount = 0;
-		public FileSystemType FileSystem = FileSystemType.FAT12;
+		public FileSystem FileSystem = FileSystem.FAT12;
 		public List<IncludeFile> IncludeFiles = new List<IncludeFile>();
+		public BootLoader BootLoader = BootLoader.Syslinux_3_72;
 
 		public string DiskImageFileName = null;
 
-		public Options()
+		public BootImageOptions()
 		{
 		}
 	}

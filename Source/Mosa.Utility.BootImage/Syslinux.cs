@@ -42,7 +42,7 @@ namespace Mosa.Utility.BootImage
 			public const uint RaidPatch = 18;       // Boot sector RAID mode patch pointer
 		}
 
-		public static void PatchSyslinux(PartitionDevice partitionDevice, FatFileSystem fat)
+		public static void PatchSyslinux_6_03(PartitionDevice partitionDevice, FatFileSystem fat)
 		{
 			// Locate ldlinux.sys file for patching
 			string filename = "ldlinux.sys";
@@ -163,6 +163,91 @@ namespace Mosa.Utility.BootImage
 
 			// Write back patched boot sector
 			partitionDevice.WriteBlock(0, 1, fatBootSector.Data);
+		}
+
+		public static void PatchSyslinux_3_72(PartitionDevice partitionDevice, FatFileSystem fat)
+		{
+			// Locate ldlinux.sys file for patching
+			string filename = "ldlinux.sys";
+			string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(4).Substring(0, 4)).ToUpper();
+
+			var location = fat.FindEntry(new Mosa.FileSystem.FAT.Find.WithName(name), 0);
+
+			if (location.IsValid)
+			{
+				// Read boot sector
+				var bootSector = new BinaryFormat(partitionDevice.ReadBlock(0, 1));
+
+				// Set the first sector location of the file
+				bootSector.SetUInt(0x1F8, fat.GetSectorByCluster(location.FirstCluster));
+
+				// Change jump address
+				bootSector.SetUInt(0x01, 0x58);
+
+				// Write back patched boot sector
+				partitionDevice.WriteBlock(0, 1, bootSector.Data);
+
+				// Get the file size & number of sectors used
+				uint fileSize = fat.GetFileSize(location.DirectorySector, location.DirectorySectorIndex);
+				uint sectorCount = (fileSize + 511) >> 9;
+
+				uint[] sectors = new uint[65];
+				uint nsec = 0;
+
+				// Create list of the first 65 sectors of the file
+				for (uint cluster = location.FirstCluster; ((cluster != 0) & (nsec <= 64)); cluster = fat.GetNextCluster(cluster))
+				{
+					uint sec = fat.GetSectorByCluster(cluster);
+					for (uint s = 0; s < fat.SectorsPerCluster; s++)
+						sectors[nsec++] = sec + s;
+				}
+
+				// Read the first cluster of the file
+				var firstCluster = new BinaryFormat(fat.ReadCluster(location.FirstCluster));
+
+				uint patchArea = 0;
+
+				// Search for 0x3EB202FE (magic)
+				for (patchArea = 0; (firstCluster.GetUInt(patchArea) != 0x3EB202FE) && (patchArea < fat.ClusterSizeInBytes); patchArea += 4) ;
+
+				patchArea = patchArea + 8;
+
+				if (patchArea < fat.ClusterSizeInBytes)
+				{
+					// Set up the totals
+					firstCluster.SetUShort(patchArea, (ushort)(fileSize >> 2));
+					firstCluster.SetUShort(patchArea + 2, (ushort)(sectorCount - 1));
+
+					// Clear sector entries
+					firstCluster.Fill(patchArea + 8, 0, 64 * 4);
+
+					// Set sector entries
+					for (nsec = 0; nsec < 64; nsec++)
+						firstCluster.SetUInt(patchArea + 8 + (nsec * 4), sectors[nsec + 1]);
+
+					// Clear out checksum
+					firstCluster.SetUInt(patchArea + 4, 0);
+
+					// Write back the updated cluster
+					fat.WriteCluster(location.FirstCluster, firstCluster.Data);
+
+					// Re-Calculate checksum by opening the file
+					var file = new FatFileStream(fat, location);
+
+					uint csum = 0x3EB202FE;
+					for (uint index = 0; index < (file.Length >> 2); index++)
+					{
+						uint value = (uint)file.ReadByte() | ((uint)file.ReadByte() << 8) | ((uint)file.ReadByte() << 16) | ((uint)file.ReadByte() << 24);
+						csum -= value;
+					}
+
+					// Set the checksum
+					firstCluster.SetUInt(patchArea + 4, csum);
+
+					// Write patched cluster back to disk
+					fat.WriteCluster(location.FirstCluster, firstCluster.Data);
+				}
+			}
 		}
 
 		protected class Extent

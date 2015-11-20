@@ -18,7 +18,7 @@ namespace Mosa.Utility.BootImage
 		/// Creates the specified options.
 		/// </summary>
 		/// <param name="options">The options.</param>
-		static public void Create(Options options)
+		static public void Create(BootImageOptions options)
 		{
 			if (File.Exists(options.DiskImageFileName))
 			{
@@ -42,7 +42,7 @@ namespace Mosa.Utility.BootImage
 			// Create disk image file
 			var diskDevice = new BlockFileStream(options.DiskImageFileName);
 
-			if (options.ImageFormat == ImageFormatType.VDI)
+			if (options.ImageFormat == ImageFormat.VDI)
 			{
 				// Create header
 				byte[] header = VDI.CreateHeader(
@@ -80,9 +80,9 @@ namespace Mosa.Utility.BootImage
 
 				switch (options.FileSystem)
 				{
-					case FileSystemType.FAT12: mbr.Partitions[0].PartitionType = PartitionType.FAT12; break;
-					case FileSystemType.FAT16: mbr.Partitions[0].PartitionType = PartitionType.FAT16; break;
-					case FileSystemType.FAT32: mbr.Partitions[0].PartitionType = PartitionType.FAT32; break;
+					case FileSystem.FAT12: mbr.Partitions[0].PartitionType = PartitionType.FAT12; break;
+					case FileSystem.FAT16: mbr.Partitions[0].PartitionType = PartitionType.FAT16; break;
+					case FileSystem.FAT32: mbr.Partitions[0].PartitionType = PartitionType.FAT32; break;
 					default: break;
 				}
 
@@ -102,9 +102,9 @@ namespace Mosa.Utility.BootImage
 
 			switch (options.FileSystem)
 			{
-				case FileSystemType.FAT12: fatSettings.FATType = FatType.FAT12; break;
-				case FileSystemType.FAT16: fatSettings.FATType = FatType.FAT16; break;
-				case FileSystemType.FAT32: fatSettings.FATType = FatType.FAT32; break;
+				case FileSystem.FAT12: fatSettings.FATType = FatType.FAT12; break;
+				case FileSystem.FAT16: fatSettings.FATType = FatType.FAT16; break;
+				case FileSystem.FAT32: fatSettings.FATType = FatType.FAT32; break;
 				default: break;
 			}
 
@@ -147,10 +147,17 @@ namespace Mosa.Utility.BootImage
 
 			if (options.PatchSyslinuxOption)
 			{
-				Syslinux.PatchSyslinux(partitionDevice, fat);
+				if (options.BootLoader == BootLoader.Syslinux_6_03)
+				{
+					Syslinux.PatchSyslinux_6_03(partitionDevice, fat);
+				}
+				else if (options.BootLoader == BootLoader.Syslinux_3_72)
+				{
+					Syslinux.PatchSyslinux_3_72(partitionDevice, fat);
+				}
 			}
 
-			if (options.ImageFormat == ImageFormatType.VHD)
+			if (options.ImageFormat == ImageFormat.VHD)
 			{
 				// Create footer
 				byte[] footer = VHD.CreateFooter(

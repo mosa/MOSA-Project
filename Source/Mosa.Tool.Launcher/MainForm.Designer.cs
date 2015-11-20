@@ -488,8 +488,9 @@
 			this.cbBootLoader.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbBootLoader.FormattingEnabled = true;
 			this.cbBootLoader.Items.AddRange(new object[] {
-            "Syslinux",
-            "Grub"});
+            "Syslinux 3.72",
+            "Syslinux 6.03",
+            "Grub 0.97"});
 			this.cbBootLoader.Location = new System.Drawing.Point(267, 78);
 			this.cbBootLoader.Name = "cbBootLoader";
 			this.cbBootLoader.Size = new System.Drawing.Size(127, 21);
@@ -836,27 +837,27 @@
 			// lbQEMUImgApplication
 			// 
 			this.lbQEMUImgApplication.AutoSize = true;
-			this.lbQEMUImgApplication.Location = new System.Drawing.Point(118, 75);
+			this.lbQEMUImgApplication.Location = new System.Drawing.Point(118, 74);
 			this.lbQEMUImgApplication.Name = "lbQEMUImgApplication";
-			this.lbQEMUImgApplication.Size = new System.Drawing.Size(171, 13);
+			this.lbQEMUImgApplication.Size = new System.Drawing.Size(135, 13);
 			this.lbQEMUImgApplication.TabIndex = 24;
-			this.lbQEMUImgApplication.Text = "{QEMU qemu-img.exe Executable}";
+			this.lbQEMUImgApplication.Text = "{QEMU Image Executable}";
 			// 
 			// button8
 			// 
 			this.button8.Enabled = false;
 			this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.button8.Location = new System.Drawing.Point(6, 70);
+			this.button8.Location = new System.Drawing.Point(6, 69);
 			this.button8.Name = "button8";
 			this.button8.Size = new System.Drawing.Size(106, 23);
 			this.button8.TabIndex = 23;
-			this.button8.Text = "qemu-img:";
+			this.button8.Text = "QEMU Image:";
 			this.button8.UseVisualStyleBackColor = true;
 			// 
 			// lbQEMUBIOSDirectory
 			// 
 			this.lbQEMUBIOSDirectory.AutoSize = true;
-			this.lbQEMUBIOSDirectory.Location = new System.Drawing.Point(118, 48);
+			this.lbQEMUBIOSDirectory.Location = new System.Drawing.Point(118, 49);
 			this.lbQEMUBIOSDirectory.Name = "lbQEMUBIOSDirectory";
 			this.lbQEMUBIOSDirectory.Size = new System.Drawing.Size(120, 13);
 			this.lbQEMUBIOSDirectory.TabIndex = 22;
@@ -866,7 +867,7 @@
 			// 
 			this.button3.Enabled = false;
 			this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.button3.Location = new System.Drawing.Point(6, 43);
+			this.button3.Location = new System.Drawing.Point(6, 44);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(106, 23);
 			this.button3.TabIndex = 21;
