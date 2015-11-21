@@ -7,22 +7,11 @@ using System;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class CompilerOptions
 	{
 		#region Structures
-
-		/// <summary>
-		/// Struct for PE options.
-		/// </summary>
-		public struct PortableExecutableStruct
-		{
-			public bool? SetChecksum { get; set; }
-
-			//public uint? FileAlignment { get; set; }
-			//public uint? SectionAlignment { get; set; }
-		}
 
 		/// <summary>
 		///  Struct for ELF32 options.
@@ -123,12 +112,6 @@ namespace Mosa.Compiler.Framework
 		public Elf32Struct Elf32;
 
 		/// <summary>
-		/// Holds a struct with additional options for the PE format.
-		/// </summary>
-		/// <value>The portable executable (PE) format.</value>
-		public PortableExecutableStruct PortableExecutable;
-
-		/// <summary>
 		/// Gets or sets the dominance analysis factory.
 		/// </summary>
 		/// <value>
@@ -181,7 +164,7 @@ namespace Mosa.Compiler.Framework
 			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
 			EmitBinary = true;
-			InlinedIRMaximum = 20;		
-        }
+			InlinedIRMaximum = 20;
+		}
 	}
 }
