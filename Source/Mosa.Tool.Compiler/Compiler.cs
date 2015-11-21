@@ -83,7 +83,7 @@ namespace Mosa.Tool.Compiler
 				{
 					if (v != null)
 					{
-						this.ShowHelp();
+						ShowHelp();
 						Environment.Exit(0);
 					}
 				});
@@ -96,7 +96,7 @@ namespace Mosa.Tool.Compiler
 				{
 					if (!File.Exists(v))
 					{
-						throw new OptionException(String.Format("Input file or option '{0}' doesn't exist.", v), String.Empty);
+						throw new OptionException(string.Format("Input file or option '{0}' doesn't exist.", v), string.Empty);
 					}
 
 					FileInfo file = new FileInfo(v);
@@ -105,7 +105,7 @@ namespace Mosa.Tool.Compiler
 						if (isExecutable)
 						{
 							// there are more than one exe files in the list
-							throw new OptionException("Multiple executables aren't allowed.", String.Empty);
+							throw new OptionException("Multiple executables aren't allowed.", string.Empty);
 						}
 
 						isExecutable = true;
@@ -240,7 +240,7 @@ namespace Mosa.Tool.Compiler
 
 				if (inputFiles.Count == 0)
 				{
-					throw new OptionException("No input file(s) specified.", String.Empty);
+					throw new OptionException("No input file(s) specified.", string.Empty);
 				}
 
 				// Process boot format:
@@ -258,7 +258,7 @@ namespace Mosa.Tool.Compiler
 					throw new OptionException("No binary format specified.", "format");
 				}
 
-				if (String.IsNullOrEmpty(compiler.CompilerOptions.OutputFile))
+				if (string.IsNullOrEmpty(compiler.CompilerOptions.OutputFile))
 				{
 					throw new OptionException("No output file specified.", "o");
 				}
@@ -274,7 +274,7 @@ namespace Mosa.Tool.Compiler
 				return;
 			}
 
-			Console.WriteLine(this.ToString());
+			Console.WriteLine(ToString());
 
 			Console.WriteLine("Compiling ...");
 
@@ -286,7 +286,7 @@ namespace Mosa.Tool.Compiler
 			}
 			catch (CompilerException ce)
 			{
-				this.ShowError(ce.Message);
+				ShowError(ce.Message);
 			}
 
 			DateTime end = DateTime.Now;
@@ -304,10 +304,10 @@ namespace Mosa.Tool.Compiler
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.Append(" > Output file: ").AppendLine(compiler.CompilerOptions.OutputFile);
-			sb.Append(" > Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
+			sb.Append(" > Input file(s): ").AppendLine(string.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append(" > Architecture: ").AppendLine(compiler.CompilerOptions.Architecture.GetType().FullName);
 			sb.Append(" > Binary format: ").AppendLine(compiler.CompilerOptions.LinkerFactory().GetType().FullName);
-			sb.Append(" > Boot format: ").AppendLine((compiler.CompilerOptions.BootStageFactory == null) ? "None" : ((IPipelineStage)compiler.CompilerOptions.BootStageFactory()).Name);
+			sb.Append(" > Boot format: ").AppendLine((compiler.CompilerOptions.BootStageFactory == null) ? "None" : compiler.CompilerOptions.BootStageFactory().Name);
 			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
 		}
@@ -365,7 +365,7 @@ namespace Mosa.Tool.Compiler
 			Console.WriteLine(usageString);
 			Console.WriteLine();
 			Console.WriteLine("Options:");
-			this.optionSet.WriteOptionDescriptions(Console.Out);
+			optionSet.WriteOptionDescriptions(Console.Out);
 		}
 
 		#endregion Private Methods
@@ -382,7 +382,7 @@ namespace Mosa.Tool.Compiler
 			switch (architecture.ToLower())
 			{
 				case "x86": return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
-				default: throw new NotImplementCompilerException(String.Format("Unknown or unsupported Architecture {0}.", architecture));
+				default: throw new NotImplementCompilerException(string.Format("Unknown or unsupported Architecture {0}.", architecture));
 			}
 		}
 
@@ -392,7 +392,8 @@ namespace Mosa.Tool.Compiler
 			{
 				case "multibootHeader-0.7":
 				case "mb0.7": return delegate { return new Mosa.Platform.x86.Stages.Multiboot0695Stage(); };
-				default: throw new NotImplementCompilerException(String.Format("Unknown or unsupported boot format {0}.", format));
+				case "mb0.7_video": return delegate { return new Mosa.Platform.x86.Stages.Multiboot0695Stage() { HasVideo = true }; };
+				default: throw new NotImplementCompilerException(string.Format("Unknown or unsupported boot format {0}.", format));
 			}
 		}
 

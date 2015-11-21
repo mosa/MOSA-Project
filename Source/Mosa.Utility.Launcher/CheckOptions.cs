@@ -40,7 +40,7 @@ namespace Mosa.Utility.Launcher
 
 			if (options.BootLoader == BootLoader.Syslinux_6_03 && options.ImageFormat != ImageFormat.ISO)
 			{
-				return "Syslinux boot loader v6.3 does not support virtual disk format";
+				return "Syslinux boot loader v6.03 does not support virtual disk format";
 			}
 
 			if (options.PlatformType == PlatformType.NotSpecified)

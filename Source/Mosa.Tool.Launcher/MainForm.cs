@@ -94,26 +94,21 @@ namespace Mosa.Tool.Launcher
 			switch (cbBootFormat.SelectedIndex)
 			{
 				case 0: Options.BootFormat = BootFormat.Multiboot_0_7; break;
+				case 1: Options.BootFormat = BootFormat.Multiboot_0_7_video; break;
 				default: Options.BootFormat = BootFormat.NotSpecified; break;
 			}
 
 			switch (cbBootFileSystem.SelectedIndex)
 			{
-				case 0: Options.FileSystem = FileSystem.FAT12; ; break;
-				case 1: Options.FileSystem = FileSystem.FAT16; ; break;
-				default: Options.FileSystem = FileSystem.FAT16; ; break;
-			}
-
-			switch (cbPlatform.SelectedIndex)
-			{
-				case 0: Options.PlatformType = PlatformType.X86; break;
+				case 0: Options.FileSystem = FileSystem.FAT12; break;
+				case 1: Options.FileSystem = FileSystem.FAT16; break;
 				default: break;
 			}
 
 			switch (cbPlatform.SelectedIndex)
 			{
-				case 0: Options.BootFormat = BootFormat.Multiboot_0_7; break;
-				default: Options.BootFormat = BootFormat.NotSpecified; break;
+				case 0: Options.PlatformType = PlatformType.X86; break;
+				default: Options.PlatformType = PlatformType.NotSpecified; break;
 			}
 
 			switch (cbBootLoader.SelectedIndex)
@@ -174,12 +169,13 @@ namespace Mosa.Tool.Launcher
 			switch (Options.PlatformType)
 			{
 				case PlatformType.X86: cbPlatform.SelectedIndex = 0; break;
-				default: break;
+				default: cbPlatform.SelectedIndex = 0; break;
 			}
 
 			switch (Options.BootFormat)
 			{
 				case BootFormat.Multiboot_0_7: cbBootFormat.SelectedIndex = 0; break;
+				case BootFormat.Multiboot_0_7_video: cbBootFormat.SelectedIndex = 1; break;
 				default: cbBootFormat.SelectedIndex = 0; break;
 			}
 
@@ -263,7 +259,7 @@ namespace Mosa.Tool.Launcher
 
 		private void btnSource_Click(object sender, EventArgs e)
 		{
-			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			if (openFileDialog1.ShowDialog() == DialogResult.OK)
 			{
 				Options.SourceFile = openFileDialog1.FileName;
 
@@ -279,7 +275,7 @@ namespace Mosa.Tool.Launcher
 
 		private void btnDestination_Click(object sender, EventArgs e)
 		{
-			if (folderBrowserDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
 			{
 				Options.DestinationDirectory = folderBrowserDialog1.SelectedPath;
 
@@ -368,7 +364,7 @@ namespace Mosa.Tool.Launcher
 
 		private bool CheckKeyPressed()
 		{
-			return ((Control.ModifierKeys & Keys.Shift) != 0) || ((Control.ModifierKeys & Keys.Control) != 0);
+			return ((ModifierKeys & Keys.Shift) != 0) || ((ModifierKeys & Keys.Control) != 0);
 		}
 
 		private void button1_Click(object sender, EventArgs e)
