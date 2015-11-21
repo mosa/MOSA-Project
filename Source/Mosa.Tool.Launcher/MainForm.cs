@@ -60,6 +60,7 @@ namespace Mosa.Tool.Launcher
 			Options.CompilerUsesMultipleThreads = cbCompilerUsesMultipleThreads.Checked;
 			Options.MemoryInMB = (uint)nmMemory.Value;
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
+			Options.VBEVideo = cbVBEVideo.Checked;
 
 			switch (cbImageFormat.SelectedIndex)
 			{
@@ -133,6 +134,7 @@ namespace Mosa.Tool.Launcher
 			cbInlinedMethods.Checked = Options.EnableInlinedMethods;
 			cbCompilerUsesMultipleThreads.Checked = Options.CompilerUsesMultipleThreads;
 			nmMemory.Value = Options.MemoryInMB;
+			cbVBEVideo.Checked = Options.VBEVideo;
 
 			switch (Options.ImageFormat)
 			{

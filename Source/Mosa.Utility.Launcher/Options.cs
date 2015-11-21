@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.IO;
-using System.Xml.Linq;
 using Mosa.Utility.BootImage;
 
 namespace Mosa.Utility.Launcher
@@ -53,6 +52,10 @@ namespace Mosa.Utility.Launcher
 		public bool CompilerUsesMultipleThreads { get; set; }
 
 		public BootLoader BootLoader { get; set; }
+		public bool VBEVideo { get; set; }
+		public int Width { get; set; }
+		public int Height { get; set; }
+		public int Depth { get; set; }
 
 		public Options()
 		{
@@ -73,6 +76,10 @@ namespace Mosa.Utility.Launcher
 			EnableInlinedMethods = true;
 			InlinedIRMaximum = 8;
 			BootLoader = BootLoader.Syslinux_3_72;
+			VBEVideo = false;
+			Width = 1280;
+			Height = 720;
+			Depth = 24;
 		}
 
 		public void LoadArguments(string[] args)
@@ -110,6 +117,7 @@ namespace Mosa.Utility.Launcher
 					case "-syslinux-3.72": BootLoader = BootLoader.Syslinux_3_72; continue;
 					case "-inline": EnableInlinedMethods = true; continue;
 					case "-inline-off": EnableInlinedMethods = false; continue;
+					case "-video": VBEVideo = true; continue;
 					default: break;
 				}
 

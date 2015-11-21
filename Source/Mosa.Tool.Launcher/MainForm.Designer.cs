@@ -100,6 +100,7 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+			this.cbVBEVideo = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tbOptions.SuspendLayout();
 			this.groupBox12.SuspendLayout();
@@ -455,6 +456,7 @@
 			// 
 			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Controls.Add(this.cbVBEVideo);
 			this.groupBox3.Controls.Add(this.label1);
 			this.groupBox3.Controls.Add(this.cbBootLoader);
 			this.groupBox3.Controls.Add(this.label4);
@@ -535,8 +537,7 @@
 			this.cbBootFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbBootFormat.FormattingEnabled = true;
 			this.cbBootFormat.Items.AddRange(new object[] {
-            "Multiboot v0.7",
-            "Multiboot v0.7 Video"});
+            "Multiboot v0.7"});
 			this.cbBootFormat.Location = new System.Drawing.Point(267, 47);
 			this.cbBootFormat.Name = "cbBootFormat";
 			this.cbBootFormat.Size = new System.Drawing.Size(127, 21);
@@ -953,6 +954,19 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
+			// cbVBEVideo
+			// 
+			this.cbVBEVideo.AutoSize = true;
+			this.cbVBEVideo.Checked = true;
+			this.cbVBEVideo.CheckState = System.Windows.Forms.CheckState.Indeterminate;
+			this.cbVBEVideo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbVBEVideo.Location = new System.Drawing.Point(403, 80);
+			this.cbVBEVideo.Name = "cbVBEVideo";
+			this.cbVBEVideo.Size = new System.Drawing.Size(113, 17);
+			this.cbVBEVideo.TabIndex = 37;
+			this.cbVBEVideo.Text = "Enable VBE Video";
+			this.cbVBEVideo.UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1076,5 +1090,6 @@
 		private System.Windows.Forms.CheckBox cbInlinedMethods;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ComboBox cbBootLoader;
+		private System.Windows.Forms.CheckBox cbVBEVideo;
 	}
 }

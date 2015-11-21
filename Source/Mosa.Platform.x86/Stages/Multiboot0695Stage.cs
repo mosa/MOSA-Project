@@ -9,15 +9,6 @@ using System.Text;
 
 namespace Mosa.Platform.x86.Stages
 {
-	/*
-	 * FIXME:
-	 * - Allow video mode options to be controlled by the command line
-	 * - Allow the specification of additional load modules on the command line
-	 * - Write the multiboot compliant entry point, which parses the the boot
-	 *   information structure and populates the appropriate fields in the
-	 *   KernelBoot entry.
-	 */
-
 	/// <summary>
 	/// Writes a multiboot v0.6.95 header into the generated binary.
 	/// </summary>
@@ -77,17 +68,19 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		private LinkerSymbol multibootHeader;
 
-		/// <summary>
-		/// Indicator for including video information
-		/// </summary>
-		private bool hasVideo;
-
 		#endregion Data members
 
-		public bool HasVideo
+		public bool HasVideo { get; set; }
+		public int Width { get; set; }
+		public int Height { get; set; }
+		public int Depth { get; set; }
+
+		protected override void Setup()
 		{
-			get { return hasVideo; }
-			set { hasVideo = value; }
+			HasVideo = CompilerOptions.GetCustomOptionAsBoolean("multiboot.video", false);
+			Width = CompilerOptions.GetCustomOptionAsInteger("multiboot.width", 0);
+			Height = CompilerOptions.GetCustomOptionAsInteger("multiboot.height", 0);
+			Depth = CompilerOptions.GetCustomOptionAsInteger("multiboot.depth", 0);
 		}
 
 		protected override void Run()
@@ -162,7 +155,8 @@ namespace Mosa.Platform.x86.Stages
 
 			// flags - multiboot flags
 			uint flags = HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
-			if (hasVideo)
+
+			if (HasVideo)
 				flags |= HEADER_MB_FLAG_VIDEO_MODES_REQUIRED;
 
 			uint load_addr = 0;
@@ -194,12 +188,12 @@ namespace Mosa.Platform.x86.Stages
 			writer.Write(0);
 
 			// Write video settings if video has been specified, otherwise pad
-			if (hasVideo)
+			if (HasVideo)
 			{
 				writer.Write(0); // Mode, 0 = linear
-				writer.Write(1280); // Width, 1280px
-				writer.Write(720); // Height, 720px
-				writer.Write(24); // Depth, 24px
+				writer.Write(Width); // Width, 1280px
+				writer.Write(Height); // Height, 720px
+				writer.Write(Depth); // Depth, 24px
 			}
 			else
 			{

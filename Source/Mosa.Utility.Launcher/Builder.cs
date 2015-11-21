@@ -91,6 +91,11 @@ namespace Mosa.Utility.Launcher
 				Compiler.CompilerOptions.LinkerFactory = GetLinkerFactory(Options.LinkerFormat);
 				Compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(Options.BootFormat);
 
+				Compiler.CompilerOptions.SetCustomOption("multiboot.video", Options.VBEVideo ? "true" : "false");
+				Compiler.CompilerOptions.SetCustomOption("multiboot.width", Options.Width.ToString());
+				Compiler.CompilerOptions.SetCustomOption("multiboot.heigth", Options.Height.ToString());
+				Compiler.CompilerOptions.SetCustomOption("multiboot.depth", Options.Depth.ToString());
+
 				if (Options.GenerateMapFile)
 				{
 					Compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");
@@ -556,7 +561,6 @@ namespace Mosa.Utility.Launcher
 			switch (bootFormat)
 			{
 				case BootFormat.Multiboot_0_7: return delegate { return new Mosa.Platform.x86.Stages.Multiboot0695Stage(); };
-				case BootFormat.Multiboot_0_7_video: return delegate { return new Mosa.Platform.x86.Stages.Multiboot0695Stage() { HasVideo = true }; };
 				default: return null;
 			}
 		}
