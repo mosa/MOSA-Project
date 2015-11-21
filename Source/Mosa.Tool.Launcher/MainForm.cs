@@ -116,6 +116,7 @@ namespace Mosa.Tool.Launcher
 				case 0: Options.BootLoader = BootLoader.Syslinux_3_72; break;
 				case 1: Options.BootLoader = BootLoader.Syslinux_6_03; break;
 				case 2: Options.BootLoader = BootLoader.Grub_0_97; break;
+				case 3: Options.BootLoader = BootLoader.Grub_2_00; break;
 				default: break;
 			}
 		}
@@ -163,6 +164,7 @@ namespace Mosa.Tool.Launcher
 				case BootLoader.Syslinux_3_72: cbBootLoader.SelectedIndex = 0; break;
 				case BootLoader.Syslinux_6_03: cbBootLoader.SelectedIndex = 1; break;
 				case BootLoader.Grub_0_97: cbBootLoader.SelectedIndex = 2; break;
+				case BootLoader.Grub_2_00: cbBootLoader.SelectedIndex = 3; break;
 				default: break;
 			}
 

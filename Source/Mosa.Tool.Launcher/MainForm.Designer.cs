@@ -193,7 +193,7 @@
 			this.cbCompilerUsesMultipleThreads.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbCompilerUsesMultipleThreads.Location = new System.Drawing.Point(6, 19);
 			this.cbCompilerUsesMultipleThreads.Name = "cbCompilerUsesMultipleThreads";
-			this.cbCompilerUsesMultipleThreads.Size = new System.Drawing.Size(164, 21);
+			this.cbCompilerUsesMultipleThreads.Size = new System.Drawing.Size(126, 17);
 			this.cbCompilerUsesMultipleThreads.TabIndex = 13;
 			this.cbCompilerUsesMultipleThreads.Text = "Use Multiple Threads";
 			this.cbCompilerUsesMultipleThreads.UseVisualStyleBackColor = true;
@@ -240,7 +240,7 @@
             "TCP Client"});
 			this.cbDebugConnectionOption.Location = new System.Drawing.Point(9, 87);
 			this.cbDebugConnectionOption.Name = "cbDebugConnectionOption";
-			this.cbDebugConnectionOption.Size = new System.Drawing.Size(120, 25);
+			this.cbDebugConnectionOption.Size = new System.Drawing.Size(120, 21);
 			this.cbDebugConnectionOption.TabIndex = 36;
 			// 
 			// label8
@@ -249,7 +249,7 @@
 			this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label8.Location = new System.Drawing.Point(6, 71);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(146, 17);
+			this.label8.Size = new System.Drawing.Size(116, 13);
 			this.label8.TabIndex = 35;
 			this.label8.Text = "Debug Connection:";
 			// 
@@ -260,7 +260,7 @@
 			this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.checkBox1.Location = new System.Drawing.Point(6, 41);
 			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(137, 21);
+			this.checkBox1.Size = new System.Drawing.Size(107, 17);
 			this.checkBox1.TabIndex = 14;
 			this.checkBox1.Text = "MOSA Debugger";
 			this.checkBox1.UseVisualStyleBackColor = true;
@@ -272,7 +272,7 @@
 			this.cbMOSADebugger.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbMOSADebugger.Location = new System.Drawing.Point(6, 19);
 			this.cbMOSADebugger.Name = "cbMOSADebugger";
-			this.cbMOSADebugger.Size = new System.Drawing.Size(160, 21);
+			this.cbMOSADebugger.Size = new System.Drawing.Size(123, 17);
 			this.cbMOSADebugger.TabIndex = 13;
 			this.cbMOSADebugger.Text = "MOSA TinySimulator";
 			this.cbMOSADebugger.UseVisualStyleBackColor = true;
@@ -295,7 +295,7 @@
 			this.cbGenerateASMFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbGenerateASMFile.Location = new System.Drawing.Point(137, 19);
 			this.cbGenerateASMFile.Name = "cbGenerateASMFile";
-			this.cbGenerateASMFile.Size = new System.Drawing.Size(149, 21);
+			this.cbGenerateASMFile.Size = new System.Drawing.Size(115, 17);
 			this.cbGenerateASMFile.TabIndex = 14;
 			this.cbGenerateASMFile.Text = "Generate ASM File";
 			this.cbGenerateASMFile.UseVisualStyleBackColor = true;
@@ -306,7 +306,7 @@
 			this.cbGenerateMapFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbGenerateMapFile.Location = new System.Drawing.Point(6, 19);
 			this.cbGenerateMapFile.Name = "cbGenerateMapFile";
-			this.cbGenerateMapFile.Size = new System.Drawing.Size(149, 21);
+			this.cbGenerateMapFile.Size = new System.Drawing.Size(115, 17);
 			this.cbGenerateMapFile.TabIndex = 13;
 			this.cbGenerateMapFile.Text = "Generate MAP File";
 			this.cbGenerateMapFile.UseVisualStyleBackColor = true;
@@ -345,7 +345,7 @@
 			this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label6.Location = new System.Drawing.Point(7, 52);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(69, 17);
+			this.label6.Size = new System.Drawing.Size(54, 13);
 			this.label6.TabIndex = 24;
 			this.label6.Text = "Memory:";
 			// 
@@ -364,7 +364,7 @@
             0,
             0});
 			this.nmMemory.Name = "nmMemory";
-			this.nmMemory.Size = new System.Drawing.Size(56, 23);
+			this.nmMemory.Size = new System.Drawing.Size(56, 20);
 			this.nmMemory.TabIndex = 23;
 			this.nmMemory.Value = new decimal(new int[] {
             128,
@@ -378,7 +378,7 @@
 			this.cbExitOnLaunch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbExitOnLaunch.Location = new System.Drawing.Point(14, 106);
 			this.cbExitOnLaunch.Name = "cbExitOnLaunch";
-			this.cbExitOnLaunch.Size = new System.Drawing.Size(132, 21);
+			this.cbExitOnLaunch.Size = new System.Drawing.Size(102, 17);
 			this.cbExitOnLaunch.TabIndex = 22;
 			this.cbExitOnLaunch.Text = "Exit on Emulator";
 			this.cbExitOnLaunch.UseVisualStyleBackColor = true;
@@ -394,7 +394,7 @@
             "VMware"});
 			this.cbEmulator.Location = new System.Drawing.Point(10, 19);
 			this.cbEmulator.Name = "cbEmulator";
-			this.cbEmulator.Size = new System.Drawing.Size(171, 25);
+			this.cbEmulator.Size = new System.Drawing.Size(171, 21);
 			this.cbEmulator.TabIndex = 21;
 			// 
 			// groupBox4
@@ -417,7 +417,7 @@
 			this.lbSourceDirectory.AutoSize = true;
 			this.lbSourceDirectory.Location = new System.Drawing.Point(119, 48);
 			this.lbSourceDirectory.Name = "lbSourceDirectory";
-			this.lbSourceDirectory.Size = new System.Drawing.Size(105, 15);
+			this.lbSourceDirectory.Size = new System.Drawing.Size(94, 13);
 			this.lbSourceDirectory.TabIndex = 20;
 			this.lbSourceDirectory.Text = "{Source Directory}";
 			// 
@@ -427,7 +427,7 @@
 			this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label7.Location = new System.Drawing.Point(7, 48);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(135, 17);
+			this.label7.Size = new System.Drawing.Size(106, 13);
 			this.label7.TabIndex = 19;
 			this.label7.Text = "Source Directory:";
 			// 
@@ -447,7 +447,7 @@
 			this.lbSource.AutoSize = true;
 			this.lbSource.Location = new System.Drawing.Point(119, 24);
 			this.lbSource.Name = "lbSource";
-			this.lbSource.Size = new System.Drawing.Size(54, 15);
+			this.lbSource.Size = new System.Drawing.Size(49, 13);
 			this.lbSource.TabIndex = 17;
 			this.lbSource.Text = "{Source}";
 			// 
@@ -480,7 +480,7 @@
 			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label1.Location = new System.Drawing.Point(182, 82);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(102, 17);
+			this.label1.Size = new System.Drawing.Size(80, 13);
 			this.label1.TabIndex = 36;
 			this.label1.Text = "Boot Loader:";
 			// 
@@ -491,7 +491,8 @@
 			this.cbBootLoader.Items.AddRange(new object[] {
             "Syslinux 3.72",
             "Syslinux 6.03",
-            "Grub 0.97"});
+            "Grub 0.97",
+            "Grub 2.00"});
 			this.cbBootLoader.Location = new System.Drawing.Point(267, 78);
 			this.cbBootLoader.Name = "cbBootLoader";
 			this.cbBootLoader.Size = new System.Drawing.Size(127, 21);
@@ -503,7 +504,7 @@
 			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label4.Location = new System.Drawing.Point(7, 81);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(96, 17);
+			this.label4.Size = new System.Drawing.Size(75, 13);
 			this.label4.TabIndex = 34;
 			this.label4.Text = "File System:";
 			// 
@@ -525,7 +526,7 @@
 			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label2.Location = new System.Drawing.Point(183, 51);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(101, 17);
+			this.label2.Size = new System.Drawing.Size(79, 13);
 			this.label2.TabIndex = 32;
 			this.label2.Text = "Boot Format:";
 			// 
@@ -547,7 +548,7 @@
 			this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label5.Location = new System.Drawing.Point(25, 51);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(73, 17);
+			this.label5.Size = new System.Drawing.Size(57, 13);
 			this.label5.TabIndex = 30;
 			this.label5.Text = "Platform:";
 			// 
@@ -594,7 +595,7 @@
 			this.lbDestinationDirectory.AutoSize = true;
 			this.lbDestinationDirectory.Location = new System.Drawing.Point(119, 23);
 			this.lbDestinationDirectory.Name = "lbDestinationDirectory";
-			this.lbDestinationDirectory.Size = new System.Drawing.Size(128, 15);
+			this.lbDestinationDirectory.Size = new System.Drawing.Size(113, 13);
 			this.lbDestinationDirectory.TabIndex = 14;
 			this.lbDestinationDirectory.Text = "{Destination Directory}";
 			// 
@@ -604,7 +605,7 @@
 			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label3.Location = new System.Drawing.Point(400, 51);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(111, 17);
+			this.label3.Size = new System.Drawing.Size(87, 13);
 			this.label3.TabIndex = 12;
 			this.label3.Text = "Image Format:";
 			// 
@@ -628,7 +629,7 @@
 			this.cbInlinedMethods.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbInlinedMethods.Location = new System.Drawing.Point(6, 89);
 			this.cbInlinedMethods.Name = "cbInlinedMethods";
-			this.cbInlinedMethods.Size = new System.Drawing.Size(177, 21);
+			this.cbInlinedMethods.Size = new System.Drawing.Size(137, 17);
 			this.cbInlinedMethods.TabIndex = 9;
 			this.cbInlinedMethods.Text = "Enable Inlined Methods";
 			this.cbInlinedMethods.UseVisualStyleBackColor = true;
@@ -641,7 +642,7 @@
 			this.cbEnableSparseConditionalConstantPropagation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbEnableSparseConditionalConstantPropagation.Location = new System.Drawing.Point(6, 65);
 			this.cbEnableSparseConditionalConstantPropagation.Name = "cbEnableSparseConditionalConstantPropagation";
-			this.cbEnableSparseConditionalConstantPropagation.Size = new System.Drawing.Size(338, 21);
+			this.cbEnableSparseConditionalConstantPropagation.Size = new System.Drawing.Size(255, 17);
 			this.cbEnableSparseConditionalConstantPropagation.TabIndex = 8;
 			this.cbEnableSparseConditionalConstantPropagation.Text = "Enable Sparse Conditional Constant Propagation";
 			this.cbEnableSparseConditionalConstantPropagation.UseVisualStyleBackColor = true;
@@ -654,7 +655,7 @@
 			this.cbEnableIROptimizations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbEnableIROptimizations.Location = new System.Drawing.Point(6, 42);
 			this.cbEnableIROptimizations.Name = "cbEnableIROptimizations";
-			this.cbEnableIROptimizations.Size = new System.Drawing.Size(180, 21);
+			this.cbEnableIROptimizations.Size = new System.Drawing.Size(138, 17);
 			this.cbEnableIROptimizations.TabIndex = 7;
 			this.cbEnableIROptimizations.Text = "Enable IR Optimizations";
 			this.cbEnableIROptimizations.UseVisualStyleBackColor = true;
@@ -667,7 +668,7 @@
 			this.cbEnableSSA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbEnableSSA.Location = new System.Drawing.Point(6, 18);
 			this.cbEnableSSA.Name = "cbEnableSSA";
-			this.cbEnableSSA.Size = new System.Drawing.Size(274, 21);
+			this.cbEnableSSA.Size = new System.Drawing.Size(208, 17);
 			this.cbEnableSSA.TabIndex = 6;
 			this.cbEnableSSA.Text = "Enable Static Single Assignment (SSA)";
 			this.cbEnableSSA.UseVisualStyleBackColor = true;
@@ -716,7 +717,7 @@
 			this.lbmkisofsExecutable.AutoSize = true;
 			this.lbmkisofsExecutable.Location = new System.Drawing.Point(118, 24);
 			this.lbmkisofsExecutable.Name = "lbmkisofsExecutable";
-			this.lbmkisofsExecutable.Size = new System.Drawing.Size(144, 15);
+			this.lbmkisofsExecutable.Size = new System.Drawing.Size(126, 13);
 			this.lbmkisofsExecutable.TabIndex = 19;
 			this.lbmkisofsExecutable.Text = "{mkisofs.exe Executable}";
 			// 
@@ -749,7 +750,7 @@
 			this.lbVMwarePlayerExecutable.AutoSize = true;
 			this.lbVMwarePlayerExecutable.Location = new System.Drawing.Point(118, 24);
 			this.lbVMwarePlayerExecutable.Name = "lbVMwarePlayerExecutable";
-			this.lbVMwarePlayerExecutable.Size = new System.Drawing.Size(161, 15);
+			this.lbVMwarePlayerExecutable.Size = new System.Drawing.Size(142, 13);
 			this.lbVMwarePlayerExecutable.TabIndex = 19;
 			this.lbVMwarePlayerExecutable.Text = "{VMware Player Executable}";
 			// 
@@ -782,7 +783,7 @@
 			this.lbBOCHSExecutable.AutoSize = true;
 			this.lbBOCHSExecutable.Location = new System.Drawing.Point(118, 24);
 			this.lbBOCHSExecutable.Name = "lbBOCHSExecutable";
-			this.lbBOCHSExecutable.Size = new System.Drawing.Size(121, 15);
+			this.lbBOCHSExecutable.Size = new System.Drawing.Size(108, 13);
 			this.lbBOCHSExecutable.TabIndex = 19;
 			this.lbBOCHSExecutable.Text = "{BOCHS Executable}";
 			// 
@@ -815,7 +816,7 @@
 			this.lbNDISASMExecutable.AutoSize = true;
 			this.lbNDISASMExecutable.Location = new System.Drawing.Point(118, 24);
 			this.lbNDISASMExecutable.Name = "lbNDISASMExecutable";
-			this.lbNDISASMExecutable.Size = new System.Drawing.Size(134, 15);
+			this.lbNDISASMExecutable.Size = new System.Drawing.Size(120, 13);
 			this.lbNDISASMExecutable.TabIndex = 19;
 			this.lbNDISASMExecutable.Text = "{NDISASM Executable}";
 			// 
@@ -841,7 +842,7 @@
 			this.lbQEMUImgApplication.AutoSize = true;
 			this.lbQEMUImgApplication.Location = new System.Drawing.Point(118, 74);
 			this.lbQEMUImgApplication.Name = "lbQEMUImgApplication";
-			this.lbQEMUImgApplication.Size = new System.Drawing.Size(154, 15);
+			this.lbQEMUImgApplication.Size = new System.Drawing.Size(135, 13);
 			this.lbQEMUImgApplication.TabIndex = 24;
 			this.lbQEMUImgApplication.Text = "{QEMU Image Executable}";
 			// 
@@ -861,7 +862,7 @@
 			this.lbQEMUBIOSDirectory.AutoSize = true;
 			this.lbQEMUBIOSDirectory.Location = new System.Drawing.Point(118, 49);
 			this.lbQEMUBIOSDirectory.Name = "lbQEMUBIOSDirectory";
-			this.lbQEMUBIOSDirectory.Size = new System.Drawing.Size(134, 15);
+			this.lbQEMUBIOSDirectory.Size = new System.Drawing.Size(120, 13);
 			this.lbQEMUBIOSDirectory.TabIndex = 22;
 			this.lbQEMUBIOSDirectory.Text = "{QEMU BIOS Directory}";
 			// 
@@ -892,7 +893,7 @@
 			this.lbQEMUExecutable.AutoSize = true;
 			this.lbQEMUExecutable.Location = new System.Drawing.Point(118, 24);
 			this.lbQEMUExecutable.Name = "lbQEMUExecutable";
-			this.lbQEMUExecutable.Size = new System.Drawing.Size(116, 15);
+			this.lbQEMUExecutable.Size = new System.Drawing.Size(103, 13);
 			this.lbQEMUExecutable.TabIndex = 19;
 			this.lbQEMUExecutable.Text = "{QEMU Executable}";
 			// 

@@ -125,7 +125,7 @@ namespace Mosa.Utility.Launcher
 
 				if (Options.ImageFormat == ImageFormat.ISO)
 				{
-					if (Options.BootLoader == BootLoader.Grub_0_97)
+					if (Options.BootLoader == BootLoader.Grub_0_97 || Options.BootLoader == BootLoader.Grub_2_00)
 					{
 						CreateISOImageWithGrub(compiledFile);
 					}
@@ -278,7 +278,19 @@ namespace Mosa.Utility.Launcher
 			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot", "grub"));
 			Directory.CreateDirectory(isoDirectory);
 
-			File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "stage2_eltorito"), GetResource(@"grub\0.97", "stage2_eltorito"));
+			string loader = string.Empty;
+
+			if (Options.BootLoader == BootLoader.Grub_0_97)
+			{
+				loader = "stage2_eltorito";
+				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "stage2_eltorito"), GetResource(@"grub\0.97", "stage2_eltorito"));
+			}
+			else if (Options.BootLoader == BootLoader.Grub_2_00)
+			{
+				loader = "eltorito.img";
+				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "eltorito.img"), GetResource(@"grub\2.00", "eltorito.img"));
+			}
+
 			File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "menu.lst"), GetResource(@"grub", "menu.lst"));
 			File.Copy(compiledFile, Path.Combine(isoDirectory, "boot", "main.exe"));
 
@@ -288,7 +300,7 @@ namespace Mosa.Utility.Launcher
 				"-relaxed-filenames" +
 				" -J -R" +
 				" -o " + Quote(imageFile) +
-				" -b " + Quote(@"boot/grub/stage2_eltorito") +
+				" -b " + Quote(@"boot/grub/" + loader) +
 				" -no-emul-boot" +
 				" -boot-load-size 4" +
 				" -boot-info-table " +
