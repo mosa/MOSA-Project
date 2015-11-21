@@ -70,6 +70,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
@@ -189,11 +191,14 @@
     <EmbeddedResource Include="..\..\Tools\grub\0.97\stage2_eltorito">
       <Link>Resources\grub\0.97\stage2_eltorito</Link>
     </EmbeddedResource>
-	  <EmbeddedResource Include="..\..\Tools\grub\2.00\eltorito.img">
-		  <Link>Resources\grub\2.00\eltorito.img</Link>
-	  </EmbeddedResource>
-	  <EmbeddedResource Include="Resources\syslinux\syslinux.cfg" />
-    <EmbeddedResource Include="Resources\grub\menu.lst" />
+    <EmbeddedResource Include="..\..\Tools\grub\2.00\eltorito.img">
+      <Link>Resources\grub\2.00\eltorito.img</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\Tools\grub\2.00\i386-pc.zip">
+      <Link>Resources\grub\2.00\i386-pc.zip</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\syslinux\syslinux.cfg" />
+    <EmbeddedResource Include="Resources\grub\0.97\menu.lst" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -216,6 +221,9 @@
       <ProductName>Windows Installer 4.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\grub\2.00\grub.cfg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

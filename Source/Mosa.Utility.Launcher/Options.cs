@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.IO;
-using System.Xml.Linq;
 using Mosa.Utility.BootImage;
 
 namespace Mosa.Utility.Launcher
@@ -53,6 +52,10 @@ namespace Mosa.Utility.Launcher
 		public bool CompilerUsesMultipleThreads { get; set; }
 
 		public BootLoader BootLoader { get; set; }
+		public bool VBEVideo { get; set; }
+		public int Width { get; set; }
+		public int Height { get; set; }
+		public int Depth { get; set; }
 
 		public Options()
 		{
@@ -73,6 +76,10 @@ namespace Mosa.Utility.Launcher
 			EnableInlinedMethods = true;
 			InlinedIRMaximum = 8;
 			BootLoader = BootLoader.Syslinux_3_72;
+			VBEVideo = false;
+			Width = 1280;
+			Height = 720;
+			Depth = 24;
 		}
 
 		public void LoadArguments(string[] args)
@@ -104,10 +111,13 @@ namespace Mosa.Utility.Launcher
 					case "-grub": BootLoader = BootLoader.Grub_0_97; continue;
 					case "-grub-0.97": BootLoader = BootLoader.Grub_0_97; continue;
 					case "-grub-2": BootLoader = BootLoader.Grub_2_00; continue;
+					case "-grub2": BootLoader = BootLoader.Grub_2_00; continue;
 					case "-syslinux": BootLoader = BootLoader.Syslinux_6_03; continue;
 					case "-syslinux-6.03": BootLoader = BootLoader.Syslinux_6_03; continue;
 					case "-syslinux-3.72": BootLoader = BootLoader.Syslinux_3_72; continue;
 					case "-inline": EnableInlinedMethods = true; continue;
+					case "-inline-off": EnableInlinedMethods = false; continue;
+					case "-video": VBEVideo = true; continue;
 					default: break;
 				}
 

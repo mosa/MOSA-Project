@@ -3,6 +3,7 @@
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Linker;
 using System;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
 {
@@ -11,17 +12,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public class CompilerOptions
 	{
-		#region Structures
-
-		/// <summary>
-		///  Struct for ELF32 options.
-		/// </summary>
-		public struct Elf32Struct
-		{
-			//public uint FileAlignment { get; set; }
-		}
-
-		#endregion Structures
+		private Dictionary<string, string> options = new Dictionary<string, string>();
 
 		#region Properties
 
@@ -106,12 +97,6 @@ namespace Mosa.Compiler.Framework
 		public bool EnableStaticAllocations { get; set; }
 
 		/// <summary>
-		/// Holds a struct with additional options for ELF32.
-		/// </summary>
-		/// <value>The ELF32 format.</value>
-		public Elf32Struct Elf32;
-
-		/// <summary>
 		/// Gets or sets the dominance analysis factory.
 		/// </summary>
 		/// <value>
@@ -149,6 +134,87 @@ namespace Mosa.Compiler.Framework
 		public bool EmitBinary { get; set; }
 
 		#endregion Properties
+
+		/// <summary>
+		/// Sets the custom option.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="value">The value.</param>
+		public void SetCustomOption(string name, string value)
+		{
+			if (options.ContainsKey(name))
+				options.Remove(name);
+
+			options.Add(name, value);
+		}
+
+		public string GetCustomOption(string name)
+		{
+			if (options.ContainsKey(name))
+				return options[name];
+
+			return null;
+		}
+
+		/// <summary>
+		/// Gets the custom option as boolean.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="default">if set to <c>true</c> [default].</param>
+		/// <returns></returns>
+		public bool GetCustomOptionAsBoolean(string name, bool @default = false)
+		{
+			var value = GetCustomOption(name);
+
+			if (value == null)
+				return @default;
+
+			value = value.ToLower();
+
+			return (value.Contains("y") || value.Contains("t") || value.Contains("1"));
+		}
+
+		/// <summary>
+		/// Gets the custom option as integer.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="default">The default.</param>
+		/// <returns></returns>
+		public int? GetCustomOptionAsInteger(string name, int? @default = null)
+		{
+			var value = GetCustomOption(name);
+
+			if (value == null)
+				return @default;
+
+			int val;
+
+			if (Int32.TryParse(value, out val))
+				return val;
+			else
+				return @default;
+		}
+
+		/// <summary>
+		/// Gets the custom option as integer.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="default">The default.</param>
+		/// <returns></returns>
+		public int GetCustomOptionAsInteger(string name, int @default = 0)
+		{
+			var value = GetCustomOption(name);
+
+			if (value == null)
+				return @default;
+
+			int val;
+
+			if (Int32.TryParse(value, out val))
+				return val;
+			else
+				return @default;
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CompilerOptions"/> class.

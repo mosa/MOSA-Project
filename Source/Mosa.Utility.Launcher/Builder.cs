@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
+using System.IO.Compression;
 
 namespace Mosa.Utility.Launcher
 {
@@ -90,6 +91,11 @@ namespace Mosa.Utility.Launcher
 				Compiler.CompilerOptions.LinkerFactory = GetLinkerFactory(Options.LinkerFormat);
 				Compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(Options.BootFormat);
 
+				Compiler.CompilerOptions.SetCustomOption("multiboot.video", Options.VBEVideo ? "true" : "false");
+				Compiler.CompilerOptions.SetCustomOption("multiboot.width", Options.Width.ToString());
+				Compiler.CompilerOptions.SetCustomOption("multiboot.heigth", Options.Height.ToString());
+				Compiler.CompilerOptions.SetCustomOption("multiboot.depth", Options.Depth.ToString());
+
 				if (Options.GenerateMapFile)
 				{
 					Compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");
@@ -158,7 +164,7 @@ namespace Mosa.Utility.Launcher
 
 		protected byte[] GetResource(string path, string name)
 		{
-			var newname = path.Replace(".", "._").Replace(@"\", "._").Replace(@"/", "._") + "." + name;
+			var newname = path.Replace(".", "._").Replace(@"\", "._").Replace(@"/", "._").Replace(@"-", "_") + "." + name;
 			return GetResource(newname);
 		}
 
@@ -276,6 +282,7 @@ namespace Mosa.Utility.Launcher
 			Directory.CreateDirectory(isoDirectory);
 			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot"));
 			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot", "grub"));
+			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot", "grub", "i386-pc"));
 			Directory.CreateDirectory(isoDirectory);
 
 			string loader = string.Empty;
@@ -284,14 +291,22 @@ namespace Mosa.Utility.Launcher
 			{
 				loader = "stage2_eltorito";
 				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "stage2_eltorito"), GetResource(@"grub\0.97", "stage2_eltorito"));
+				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "menu.lst"), GetResource(@"grub\0.97", "menu.lst"));
 			}
 			else if (Options.BootLoader == BootLoader.Grub_2_00)
 			{
 				loader = "eltorito.img";
 				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "eltorito.img"), GetResource(@"grub\2.00", "eltorito.img"));
+				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "grub.cfg"), GetResource(@"grub\2.00", "grub.cfg"));
+
+				var data = GetResource(@"grub\2.00", "i386-pc.zip");
+				var dataStream = new MemoryStream(data);
+
+				var archive = new ZipArchive(dataStream);
+
+				archive.ExtractToDirectory(Path.Combine(isoDirectory, "boot", "grub"));
 			}
 
-			File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "menu.lst"), GetResource(@"grub", "menu.lst"));
 			File.Copy(compiledFile, Path.Combine(isoDirectory, "boot", "main.exe"));
 
 			imageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".iso");
@@ -546,7 +561,6 @@ namespace Mosa.Utility.Launcher
 			switch (bootFormat)
 			{
 				case BootFormat.Multiboot_0_7: return delegate { return new Mosa.Platform.x86.Stages.Multiboot0695Stage(); };
-				case BootFormat.Multiboot_0_7_video: return delegate { return new Mosa.Platform.x86.Stages.Multiboot0695Stage() { HasVideo = true }; };
 				default: return null;
 			}
 		}
