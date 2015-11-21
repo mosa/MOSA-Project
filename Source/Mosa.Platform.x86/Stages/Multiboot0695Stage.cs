@@ -77,7 +77,18 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		private LinkerSymbol multibootHeader;
 
+		/// <summary>
+		/// Indicator for including video information
+		/// </summary>
+		private bool hasVideo;
+
 		#endregion Data members
+
+		public bool HasVideo
+		{
+			get { return hasVideo; }
+			set { hasVideo = value; }
+		}
 
 		protected override void Run()
 		{
@@ -150,7 +161,9 @@ namespace Mosa.Platform.x86.Stages
 			var writer = new BinaryWriter(stream, Encoding.ASCII);
 
 			// flags - multiboot flags
-			uint flags = HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;// | HEADER_MB_FLAG_VIDEO_MODES_REQUIRED;
+			uint flags = HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
+			if (hasVideo)
+				flags |= HEADER_MB_FLAG_VIDEO_MODES_REQUIRED;
 
 			uint load_addr = 0;
 
@@ -179,6 +192,22 @@ namespace Mosa.Platform.x86.Stages
 			// entry_addr - address of the entry point to invoke
 			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, multibootHeader, (int)stream.Position, 0, Linker.EntryPoint, 0);
 			writer.Write(0);
+
+			// Write video settings if video has been specified, otherwise pad
+			if (hasVideo)
+			{
+				writer.Write(0); // Mode, 0 = linear
+				writer.Write(1280); // Width, 1280px
+				writer.Write(720); // Height, 720px
+				writer.Write(24); // Depth, 24px
+			}
+			else
+			{
+				writer.Write(0);
+				writer.Write(0);
+				writer.Write(0);
+				writer.Write(0);
+			}
 		}
 
 		#endregion Internals

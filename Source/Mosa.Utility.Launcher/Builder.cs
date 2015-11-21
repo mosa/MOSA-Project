@@ -534,6 +534,7 @@ namespace Mosa.Utility.Launcher
 			switch (bootFormat)
 			{
 				case BootFormat.Multiboot_0_7: return delegate { return new Mosa.Platform.x86.Stages.Multiboot0695Stage(); };
+				case BootFormat.Multiboot_0_7_video: return delegate { return new Mosa.Platform.x86.Stages.Multiboot0695Stage() { HasVideo = true }; };
 				default: return null;
 			}
 		}
