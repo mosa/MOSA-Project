@@ -38,6 +38,11 @@ namespace Mosa.Utility.Launcher
 				return "Grub boot loader does not support virtual disk formats";
 			}
 
+			if (options.BootLoader == BootLoader.Grub_2_00 && options.ImageFormat != ImageFormat.ISO)
+			{
+				return "Grub boot loader does not support virtual disk formats";
+			}
+
 			if (options.BootLoader == BootLoader.Syslinux_6_03 && options.ImageFormat != ImageFormat.ISO)
 			{
 				return "Syslinux boot loader v6.03 does not support virtual disk format";

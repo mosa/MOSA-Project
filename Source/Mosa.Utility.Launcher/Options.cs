@@ -103,6 +103,7 @@ namespace Mosa.Utility.Launcher
 					case "-tcpserver": DebugConnectionOption = DebugConnectionOption.TCPServer; continue;
 					case "-grub": BootLoader = BootLoader.Grub_0_97; continue;
 					case "-grub-0.97": BootLoader = BootLoader.Grub_0_97; continue;
+					case "-grub-2": BootLoader = BootLoader.Grub_2_00; continue;
 					case "-syslinux": BootLoader = BootLoader.Syslinux_6_03; continue;
 					case "-syslinux-6.03": BootLoader = BootLoader.Syslinux_6_03; continue;
 					case "-syslinux-3.72": BootLoader = BootLoader.Syslinux_3_72; continue;
