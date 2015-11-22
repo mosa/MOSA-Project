@@ -62,7 +62,36 @@ namespace Mosa.Tool.Launcher
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
 
-			switch (cbImageFormat.SelectedIndex)
+            if (Options.VBEVideo)
+            {
+                string[] Mode = tbMode.Text.Split('x');
+
+                if (Mode.Length == 3)
+                {
+                    try
+                    {
+                        int ModeWidth = int.Parse(Mode[0]); //Get Mode Width
+                        int ModeHeight = int.Parse(Mode[1]); //Get Mode Height
+                        int ModeDepth = int.Parse(Mode[2]); //Get Mode Depth
+
+                        Options.Width = ModeWidth;
+                        Options.Height = ModeHeight;
+                        Options.Depth = ModeDepth;
+                    }
+
+                    catch (Exception e)
+                    {
+                        throw new Exception("An error occured while parsing VBE Mode: " + e.Message);
+                    }
+                }
+
+                else
+                {
+                    throw new Exception("An error occured while parsing VBE Mode: " + "There wasn't 3 arguments");
+                }
+            }
+
+            switch (cbImageFormat.SelectedIndex)
 			{
 				case 0: Options.ImageFormat = ImageFormat.IMG; break;
 				case 1: Options.ImageFormat = ImageFormat.ISO; break;
@@ -136,7 +165,9 @@ namespace Mosa.Tool.Launcher
 			nmMemory.Value = Options.MemoryInMB;
 			cbVBEVideo.Checked = Options.VBEVideo;
 
-			switch (Options.ImageFormat)
+            tbMode.Text = Options.Width + "x" + Options.Height + "x" + Options.Depth;
+
+            switch (Options.ImageFormat)
 			{
 				case ImageFormat.IMG: cbImageFormat.SelectedIndex = 0; break;
 				case ImageFormat.ISO: cbImageFormat.SelectedIndex = 1; break;
@@ -387,5 +418,18 @@ namespace Mosa.Tool.Launcher
 				AddOutput(result);
 			}
 		}
-	}
+
+        private void cbVBEVideo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbVBEVideo.Checked)
+            {
+                tbMode.Enabled = true;
+            }
+
+            else
+            {
+                tbMode.Enabled = false;
+            }
+        }
+    }
 }
