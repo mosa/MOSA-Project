@@ -62,6 +62,33 @@ namespace Mosa.Tool.Launcher
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
 
+			if (Options.VBEVideo)
+			{
+				string[] Mode = tbMode.Text.Split('x');
+
+				if (Mode.Length == 3)
+				{
+					try
+					{
+						int ModeWidth = int.Parse(Mode[0]); //Get Mode Width
+						int ModeHeight = int.Parse(Mode[1]); //Get Mode Height
+						int ModeDepth = int.Parse(Mode[2]); //Get Mode Depth
+
+						Options.Width = ModeWidth;
+						Options.Height = ModeHeight;
+						Options.Depth = ModeDepth;
+					}
+					catch (Exception e)
+					{
+						throw new Exception("An error occured while parsing VBE Mode: " + e.Message);
+					}
+				}
+				else
+				{
+					throw new Exception("An error occured while parsing VBE Mode: " + "There wasn't 3 arguments");
+				}
+			}
+
 			switch (cbImageFormat.SelectedIndex)
 			{
 				case 0: Options.ImageFormat = ImageFormat.IMG; break;
@@ -135,6 +162,8 @@ namespace Mosa.Tool.Launcher
 			cbCompilerUsesMultipleThreads.Checked = Options.CompilerUsesMultipleThreads;
 			nmMemory.Value = Options.MemoryInMB;
 			cbVBEVideo.Checked = Options.VBEVideo;
+
+			tbMode.Text = Options.Width + "x" + Options.Height + "x" + Options.Depth;
 
 			switch (Options.ImageFormat)
 			{
@@ -385,6 +414,18 @@ namespace Mosa.Tool.Launcher
 			{
 				UpdateStatusLabel("ERROR: " + result);
 				AddOutput(result);
+			}
+		}
+
+		private void cbVBEVideo_CheckedChanged(object sender, EventArgs e)
+		{
+			if (cbVBEVideo.Checked)
+			{
+				tbMode.Enabled = true;
+			}
+			else
+			{
+				tbMode.Enabled = false;
 			}
 		}
 	}

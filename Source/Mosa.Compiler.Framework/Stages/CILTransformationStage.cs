@@ -2093,6 +2093,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return name;
 		}
+
 		private VmCall ToVmUnboxCall(int typeSize)
 		{
 			if (typeSize <= 4)

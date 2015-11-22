@@ -58,6 +58,7 @@
 			this.btnSource = new System.Windows.Forms.Button();
 			this.lbSource = new System.Windows.Forms.Label();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.tbMode = new System.Windows.Forms.TextBox();
 			this.cbVBEVideo = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.cbBootLoader = new System.Windows.Forms.ComboBox();
@@ -456,6 +457,7 @@
 			// 
 			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Controls.Add(this.tbMode);
 			this.groupBox3.Controls.Add(this.cbVBEVideo);
 			this.groupBox3.Controls.Add(this.label1);
 			this.groupBox3.Controls.Add(this.cbBootLoader);
@@ -476,22 +478,32 @@
 			this.groupBox3.TabStop = false;
 			this.groupBox3.Text = "Output:";
 			// 
+			// tbMode
+			// 
+			this.tbMode.Enabled = false;
+			this.tbMode.Location = new System.Drawing.Point(516, 78);
+			this.tbMode.Name = "tbMode";
+			this.tbMode.Size = new System.Drawing.Size(89, 20);
+			this.tbMode.TabIndex = 38;
+			this.tbMode.Text = "{Mode}";
+			// 
 			// cbVBEVideo
 			// 
 			this.cbVBEVideo.AutoSize = true;
 			this.cbVBEVideo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbVBEVideo.Location = new System.Drawing.Point(403, 80);
+			this.cbVBEVideo.Location = new System.Drawing.Point(400, 80);
 			this.cbVBEVideo.Name = "cbVBEVideo";
-			this.cbVBEVideo.Size = new System.Drawing.Size(113, 17);
+			this.cbVBEVideo.Size = new System.Drawing.Size(116, 17);
 			this.cbVBEVideo.TabIndex = 37;
-			this.cbVBEVideo.Text = "Enable VBE Video";
+			this.cbVBEVideo.Text = "Enable VBE Video:";
 			this.cbVBEVideo.UseVisualStyleBackColor = true;
+			this.cbVBEVideo.CheckedChanged += new System.EventHandler(this.cbVBEVideo_CheckedChanged);
 			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
 			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(182, 82);
+			this.label1.Location = new System.Drawing.Point(179, 82);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(80, 13);
 			this.label1.TabIndex = 36;
@@ -506,7 +518,7 @@
             "Syslinux 6.03",
             "Grub 0.97",
             "Grub 2.00"});
-			this.cbBootLoader.Location = new System.Drawing.Point(267, 78);
+			this.cbBootLoader.Location = new System.Drawing.Point(264, 78);
 			this.cbBootLoader.Name = "cbBootLoader";
 			this.cbBootLoader.Size = new System.Drawing.Size(127, 21);
 			this.cbBootLoader.TabIndex = 35;
@@ -537,7 +549,7 @@
 			// 
 			this.label2.AutoSize = true;
 			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label2.Location = new System.Drawing.Point(183, 51);
+			this.label2.Location = new System.Drawing.Point(180, 51);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(79, 13);
 			this.label2.TabIndex = 32;
@@ -549,7 +561,7 @@
 			this.cbBootFormat.FormattingEnabled = true;
 			this.cbBootFormat.Items.AddRange(new object[] {
             "Multiboot v0.7"});
-			this.cbBootFormat.Location = new System.Drawing.Point(267, 47);
+			this.cbBootFormat.Location = new System.Drawing.Point(264, 47);
 			this.cbBootFormat.Name = "cbBootFormat";
 			this.cbBootFormat.Size = new System.Drawing.Size(127, 21);
 			this.cbBootFormat.TabIndex = 31;
@@ -597,9 +609,9 @@
             "Microsoft (.vhd)",
             "Virtual Box (.vdi)",
             "VMware (.vmdk)"});
-			this.cbImageFormat.Location = new System.Drawing.Point(493, 47);
+			this.cbImageFormat.Location = new System.Drawing.Point(490, 47);
 			this.cbImageFormat.Name = "cbImageFormat";
-			this.cbImageFormat.Size = new System.Drawing.Size(100, 21);
+			this.cbImageFormat.Size = new System.Drawing.Size(114, 21);
 			this.cbImageFormat.TabIndex = 16;
 			// 
 			// lbDestinationDirectory
@@ -615,7 +627,7 @@
 			// 
 			this.label3.AutoSize = true;
 			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label3.Location = new System.Drawing.Point(400, 51);
+			this.label3.Location = new System.Drawing.Point(397, 51);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(87, 13);
 			this.label3.TabIndex = 12;
@@ -1089,5 +1101,6 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ComboBox cbBootLoader;
 		private System.Windows.Forms.CheckBox cbVBEVideo;
+		private System.Windows.Forms.TextBox tbMode;
 	}
 }

@@ -93,7 +93,7 @@ namespace Mosa.Utility.Launcher
 
 				Compiler.CompilerOptions.SetCustomOption("multiboot.video", Options.VBEVideo ? "true" : "false");
 				Compiler.CompilerOptions.SetCustomOption("multiboot.width", Options.Width.ToString());
-				Compiler.CompilerOptions.SetCustomOption("multiboot.heigth", Options.Height.ToString());
+				Compiler.CompilerOptions.SetCustomOption("multiboot.height", Options.Height.ToString());
 				Compiler.CompilerOptions.SetCustomOption("multiboot.depth", Options.Depth.ToString());
 
 				if (Options.GenerateMapFile)
