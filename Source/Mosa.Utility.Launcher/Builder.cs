@@ -282,22 +282,22 @@ namespace Mosa.Utility.Launcher
 			Directory.CreateDirectory(isoDirectory);
 			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot"));
 			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot", "grub"));
-			Directory.CreateDirectory(Path.Combine(isoDirectory, "boot", "grub", "i386-pc"));
 			Directory.CreateDirectory(isoDirectory);
 
 			string loader = string.Empty;
 
 			if (Options.BootLoader == BootLoader.Grub_0_97)
 			{
-				loader = "stage2_eltorito";
+				loader = @"boot/grub/stage2_eltorito";
 				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "stage2_eltorito"), GetResource(@"grub\0.97", "stage2_eltorito"));
 				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "menu.lst"), GetResource(@"grub\0.97", "menu.lst"));
 			}
 			else if (Options.BootLoader == BootLoader.Grub_2_00)
 			{
-				loader = "eltorito.img";
-				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "eltorito.img"), GetResource(@"grub\2.00", "eltorito.img"));
+				loader = @"boot/grub/i386-pc/eltorito.img";
 				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "grub.cfg"), GetResource(@"grub\2.00", "grub.cfg"));
+
+				Directory.CreateDirectory(Path.Combine(isoDirectory, "boot", "grub", "i386-pc"));
 
 				var data = GetResource(@"grub\2.00", "i386-pc.zip");
 				var dataStream = new MemoryStream(data);
@@ -315,7 +315,7 @@ namespace Mosa.Utility.Launcher
 				"-relaxed-filenames" +
 				" -J -R" +
 				" -o " + Quote(imageFile) +
-				" -b " + Quote(@"boot/grub/" + loader) +
+				" -b " + Quote(loader) +
 				" -no-emul-boot" +
 				" -boot-load-size 4" +
 				" -boot-info-table " +
