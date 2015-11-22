@@ -58,7 +58,7 @@ namespace Mosa.Tool.Compiler
 		{
 			compiler.CompilerFactory = delegate { return new AotCompiler(); };
 
-			usageString = "Usage: mosacl -o outputfile --Architecture=[x86|avr32] --format=[ELF32|ELF64|PE] {--boot=[mb0.7]} {additional options} inputfiles";
+			usageString = "Usage: mosacl -o outputfile --Architecture=[x86|avr32] --format=[ELF32|ELF64] {--boot=[mb0.7]} {additional options} inputfiles";
 			optionSet = new OptionSet();
 			inputFiles = new List<FileInfo>();
 
@@ -400,7 +400,6 @@ namespace Mosa.Tool.Compiler
 		{
 			switch (format.ToLower())
 			{
-				//case "pe": return delegate { return new PELinker(); };
 				case "elf": return delegate { return new Elf32(); };
 				case "elf32": return delegate { return new Elf32(); };
 
