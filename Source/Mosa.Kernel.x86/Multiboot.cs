@@ -2,7 +2,6 @@
 
 using Mosa.Internal;
 using Mosa.Kernel.Helpers;
-using Mosa.Kernel.x86.Helpers;
 using Mosa.Platform.Internal.x86;
 using System.Runtime.InteropServices;
 
@@ -63,8 +62,6 @@ namespace Mosa.Kernel.x86
 		unsafe public static void SetMultibootLocation(uint address)
 		{
 			MultiBootInfo = (MultiBootInfo*)address;
-
-			//CountMemoryMap();
 		}
 
 		/// <summary>
@@ -423,7 +420,7 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				Assert.True(SymIsELF, "MultiBoot info does not contain ELF sections");
+				//Assert.True(SymIsELF, "MultiBoot info does not contain ELF sections");
 
 				fixed (void* ptr = &this)
 					return (MultiBootElfSectionHeaderTable*)ptr;
@@ -495,7 +492,6 @@ namespace Mosa.Kernel.x86
 		{
 			get
 			{
-				//Assert.False(IsLast);
 				return (MultiBootMemoryMap*)(((uint)thisPtr) + Size + 4);
 			}
 		}
