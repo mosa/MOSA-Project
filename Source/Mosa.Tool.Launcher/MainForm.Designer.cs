@@ -131,8 +131,8 @@
 			// 
 			// progressBar1
 			// 
-			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.progressBar1.Location = new System.Drawing.Point(0, 6);
 			this.progressBar1.Name = "progressBar1";
 			this.progressBar1.Size = new System.Drawing.Size(634, 20);
@@ -140,9 +140,9 @@
 			// 
 			// tabControl1
 			// 
-			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
 			this.tabControl1.Controls.Add(this.tbOptions);
 			this.tabControl1.Controls.Add(this.tabPage4);
@@ -204,7 +204,7 @@
 			// 
 			this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.tsStatusLabel});
+            this.tsStatusLabel});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 362);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(626, 22);
@@ -236,10 +236,10 @@
 			this.cbDebugConnectionOption.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbDebugConnectionOption.FormattingEnabled = true;
 			this.cbDebugConnectionOption.Items.AddRange(new object[] {
-			"None",
-			"Pipe",
-			"TCP Server",
-			"TCP Client"});
+            "None",
+            "Pipe",
+            "TCP Server",
+            "TCP Client"});
 			this.cbDebugConnectionOption.Location = new System.Drawing.Point(9, 87);
 			this.cbDebugConnectionOption.Name = "cbDebugConnectionOption";
 			this.cbDebugConnectionOption.Size = new System.Drawing.Size(120, 21);
@@ -315,8 +315,8 @@
 			// 
 			// groupBox6
 			// 
-			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox6.Controls.Add(this.button1);
 			this.groupBox6.Controls.Add(this.label6);
 			this.groupBox6.Controls.Add(this.nmMemory);
@@ -356,23 +356,23 @@
 			this.nmMemory.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.nmMemory.Location = new System.Drawing.Point(67, 50);
 			this.nmMemory.Maximum = new decimal(new int[] {
-			2048,
-			0,
-			0,
-			0});
+            2048,
+            0,
+            0,
+            0});
 			this.nmMemory.Minimum = new decimal(new int[] {
-			64,
-			0,
-			0,
-			0});
+            64,
+            0,
+            0,
+            0});
 			this.nmMemory.Name = "nmMemory";
 			this.nmMemory.Size = new System.Drawing.Size(56, 20);
 			this.nmMemory.TabIndex = 23;
 			this.nmMemory.Value = new decimal(new int[] {
-			128,
-			0,
-			0,
-			0});
+            128,
+            0,
+            0,
+            0});
 			// 
 			// cbExitOnLaunch
 			// 
@@ -391,9 +391,9 @@
 			this.cbEmulator.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbEmulator.FormattingEnabled = true;
 			this.cbEmulator.Items.AddRange(new object[] {
-			"QEMU",
-			"Bochs",
-			"VMware"});
+            "QEMU",
+            "Bochs",
+            "VMware"});
 			this.cbEmulator.Location = new System.Drawing.Point(10, 19);
 			this.cbEmulator.Name = "cbEmulator";
 			this.cbEmulator.Size = new System.Drawing.Size(171, 21);
@@ -401,8 +401,8 @@
 			// 
 			// groupBox4
 			// 
-			this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox4.Controls.Add(this.lbSourceDirectory);
 			this.groupBox4.Controls.Add(this.label7);
 			this.groupBox4.Controls.Add(this.btnSource);
@@ -455,8 +455,8 @@
 			// 
 			// groupBox3
 			// 
-			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox3.Controls.Add(this.tbMode);
 			this.groupBox3.Controls.Add(this.cbVBEVideo);
 			this.groupBox3.Controls.Add(this.label1);
@@ -491,7 +491,7 @@
 			// 
 			this.cbVBEVideo.AutoSize = true;
 			this.cbVBEVideo.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbVBEVideo.Location = new System.Drawing.Point(403, 80);
+			this.cbVBEVideo.Location = new System.Drawing.Point(400, 80);
 			this.cbVBEVideo.Name = "cbVBEVideo";
 			this.cbVBEVideo.Size = new System.Drawing.Size(116, 17);
 			this.cbVBEVideo.TabIndex = 37;
@@ -503,7 +503,7 @@
 			// 
 			this.label1.AutoSize = true;
 			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label1.Location = new System.Drawing.Point(182, 82);
+			this.label1.Location = new System.Drawing.Point(179, 82);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(80, 13);
 			this.label1.TabIndex = 36;
@@ -514,11 +514,11 @@
 			this.cbBootLoader.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbBootLoader.FormattingEnabled = true;
 			this.cbBootLoader.Items.AddRange(new object[] {
-			"Syslinux 3.72",
-			"Syslinux 6.03",
-			"Grub 0.97",
-			"Grub 2.00"});
-			this.cbBootLoader.Location = new System.Drawing.Point(267, 78);
+            "Syslinux 3.72",
+            "Syslinux 6.03",
+            "Grub 0.97",
+            "Grub 2.00"});
+			this.cbBootLoader.Location = new System.Drawing.Point(264, 78);
 			this.cbBootLoader.Name = "cbBootLoader";
 			this.cbBootLoader.Size = new System.Drawing.Size(127, 21);
 			this.cbBootLoader.TabIndex = 35;
@@ -538,8 +538,8 @@
 			this.cbBootFileSystem.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbBootFileSystem.FormattingEnabled = true;
 			this.cbBootFileSystem.Items.AddRange(new object[] {
-			"FAT12",
-			"FAT16"});
+            "FAT12",
+            "FAT16"});
 			this.cbBootFileSystem.Location = new System.Drawing.Point(88, 78);
 			this.cbBootFileSystem.Name = "cbBootFileSystem";
 			this.cbBootFileSystem.Size = new System.Drawing.Size(88, 21);
@@ -549,7 +549,7 @@
 			// 
 			this.label2.AutoSize = true;
 			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label2.Location = new System.Drawing.Point(183, 51);
+			this.label2.Location = new System.Drawing.Point(180, 51);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(79, 13);
 			this.label2.TabIndex = 32;
@@ -560,8 +560,8 @@
 			this.cbBootFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbBootFormat.FormattingEnabled = true;
 			this.cbBootFormat.Items.AddRange(new object[] {
-			"Multiboot v0.7"});
-			this.cbBootFormat.Location = new System.Drawing.Point(267, 47);
+            "Multiboot v0.7"});
+			this.cbBootFormat.Location = new System.Drawing.Point(264, 47);
 			this.cbBootFormat.Name = "cbBootFormat";
 			this.cbBootFormat.Size = new System.Drawing.Size(127, 21);
 			this.cbBootFormat.TabIndex = 31;
@@ -581,8 +581,8 @@
 			this.cbPlatform.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbPlatform.FormattingEnabled = true;
 			this.cbPlatform.Items.AddRange(new object[] {
-			"x86",
-			"ARMv6"});
+            "x86",
+            "ARMv6"});
 			this.cbPlatform.Location = new System.Drawing.Point(88, 47);
 			this.cbPlatform.Name = "cbPlatform";
 			this.cbPlatform.Size = new System.Drawing.Size(88, 21);
@@ -604,14 +604,14 @@
 			this.cbImageFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbImageFormat.FormattingEnabled = true;
 			this.cbImageFormat.Items.AddRange(new object[] {
-			"IMG (.img)",
-			"ISO Image (.iso)",
-			"Microsoft (.vhd)",
-			"Virtual Box (.vdi)",
-			"VMware (.vmdk)"});
-			this.cbImageFormat.Location = new System.Drawing.Point(493, 47);
+            "IMG (.img)",
+            "ISO Image (.iso)",
+            "Microsoft (.vhd)",
+            "Virtual Box (.vdi)",
+            "VMware (.vmdk)"});
+			this.cbImageFormat.Location = new System.Drawing.Point(490, 47);
 			this.cbImageFormat.Name = "cbImageFormat";
-			this.cbImageFormat.Size = new System.Drawing.Size(100, 21);
+			this.cbImageFormat.Size = new System.Drawing.Size(114, 21);
 			this.cbImageFormat.TabIndex = 16;
 			// 
 			// lbDestinationDirectory
@@ -627,7 +627,7 @@
 			// 
 			this.label3.AutoSize = true;
 			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label3.Location = new System.Drawing.Point(400, 51);
+			this.label3.Location = new System.Drawing.Point(397, 51);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(87, 13);
 			this.label3.TabIndex = 12;
@@ -714,8 +714,8 @@
 			// 
 			// groupBox11
 			// 
-			this.groupBox11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox11.Controls.Add(this.button7);
 			this.groupBox11.Controls.Add(this.lbmkisofsExecutable);
 			this.groupBox11.Location = new System.Drawing.Point(8, 291);
@@ -747,8 +747,8 @@
 			// 
 			// groupBox10
 			// 
-			this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox10.Controls.Add(this.button4);
 			this.groupBox10.Controls.Add(this.lbVMwarePlayerExecutable);
 			this.groupBox10.Location = new System.Drawing.Point(8, 235);
@@ -780,8 +780,8 @@
 			// 
 			// groupBox9
 			// 
-			this.groupBox9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox9.Controls.Add(this.button6);
 			this.groupBox9.Controls.Add(this.lbBOCHSExecutable);
 			this.groupBox9.Location = new System.Drawing.Point(8, 179);
@@ -813,8 +813,8 @@
 			// 
 			// groupBox8
 			// 
-			this.groupBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox8.Controls.Add(this.button5);
 			this.groupBox8.Controls.Add(this.lbNDISASMExecutable);
 			this.groupBox8.Location = new System.Drawing.Point(8, 17);
@@ -846,8 +846,8 @@
 			// 
 			// groupBox7
 			// 
-			this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox7.Controls.Add(this.lbQEMUImgApplication);
 			this.groupBox7.Controls.Add(this.button8);
 			this.groupBox7.Controls.Add(this.lbQEMUBIOSDirectory);
@@ -934,9 +934,9 @@
 			// 
 			// rtbOutput
 			// 
-			this.rtbOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.rtbOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbOutput.Font = new System.Drawing.Font("Consolas", 8F);
 			this.rtbOutput.Location = new System.Drawing.Point(0, 0);
 			this.rtbOutput.Name = "rtbOutput";
@@ -959,9 +959,9 @@
 			// 
 			// rtbCounters
 			// 
-			this.rtbCounters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.rtbCounters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbCounters.Font = new System.Drawing.Font("Consolas", 8F);
 			this.rtbCounters.Location = new System.Drawing.Point(0, 1);
 			this.rtbCounters.Name = "rtbCounters";
