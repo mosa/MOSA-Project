@@ -77,9 +77,9 @@ namespace Mosa.Utility.Launcher
 			InlinedIRMaximum = 8;
 			BootLoader = BootLoader.Syslinux_3_72;
 			VBEVideo = false;
-			Width = 1280;
-			Height = 720;
-			Depth = 24;
+			Width = 640;
+			Height = 480;
+			Depth = 32;
 		}
 
 		public void LoadArguments(string[] args)
