@@ -21,6 +21,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			blockOrderAnalysis.PerformAnalysis(BasicBlocks);
 
+			if (HasProtectedRegions & blockOrderAnalysis.NewBlockOrder.Count != BasicBlocks.Count)
+			{
+				// exception handlers may point to removed blocks
+				return;
+			}
+
 			BasicBlocks.ReorderBlocks(blockOrderAnalysis.NewBlockOrder);
 
 			DumpTrace(blockOrderAnalysis);
