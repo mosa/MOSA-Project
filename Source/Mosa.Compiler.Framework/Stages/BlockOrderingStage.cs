@@ -11,6 +11,12 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
+			if (HasProtectedRegions)
+			{
+				// exception handlers may point to empty/unreferenced blocks
+				return;
+			}
+
 			var blockOrderAnalysis = MethodCompiler.Compiler.CompilerOptions.BlockOrderAnalysisFactory();
 
 			blockOrderAnalysis.PerformAnalysis(BasicBlocks);
