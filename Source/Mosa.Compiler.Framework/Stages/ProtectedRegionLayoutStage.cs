@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			int sectioncount = 0;
 
-			// 1. Number of Regions (dummy for now)
+			// 1. Number of Regions (filled in later)
 			writer.Write((uint)0);
 
 			foreach (var region in MethodCompiler.ProtectedRegions)
