@@ -290,7 +290,12 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly BaseIRInstruction FinallyReturn = new FinallyReturn();
+		public static readonly BaseIRInstruction Leave = new Leave();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly BaseIRInstruction LeaveTarget = new LeaveTarget();
 
 		/// <summary>
 		///
@@ -326,11 +331,6 @@ namespace Mosa.Compiler.Framework.IR
 		///
 		/// </summary>
 		public static readonly BaseIRInstruction KillAllExcept = new KillAllExcept();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction CallFinally = new CallFinally();
 
 		/// <summary>
 		///

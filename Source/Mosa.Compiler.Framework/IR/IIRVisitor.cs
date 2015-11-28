@@ -302,93 +302,9 @@ namespace Mosa.Compiler.Framework.IR
 		void Break(Context context);
 
 		/// <summary>
-		/// Visitation function for Throw.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Throw(Context context);
-
-		/// <summary>
-		/// Visitation function for StartTry.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void TryStart(Context context);
-
-		/// <summary>
-		/// Visitation function for ExceptionStart.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void ExceptionStart(Context context);
-
-		/// <summary>
-		/// Visitation function for FinallyStart.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void FinallyStart(Context context);
-
-		/// <summary>
-		/// Visitation function for TryEnd.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void TryEnd(Context context);
-
-		/// <summary>
-		/// Visitation function for ExceptionEnd.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void ExceptionEnd(Context context);
-
-		/// <summary>
-		/// Visitation function for EndFinally.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void FinallyEnd(Context context);
-
-		/// <summary>
-		/// Visitation function for CallFinally.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CallFinally(Context context);
-
-		/// <summary>
-		/// Visitation function for FinallyReturn.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void FinallyReturn(Context context);
-
-		/// <summary>
 		/// Visitation function for intrinsic the method call.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IntrinsicMethodCall(Context context);
-
-		/// <summary>
-		/// Visitation function for Flow.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Flow(Context context);
-
-		///// <summary>
-		///// Visitation function for StackLoad.
-		///// </summary>
-		///// <param name="context">The context.</param>
-		//void StackLoad(Context context);
-
-		///// <summary>
-		///// Visitation function for StackStore.
-		///// </summary>
-		///// <param name="context">The context.</param>
-		//void StackStore(Context context);
-
-		///// <summary>
-		///// Visitation function for ParamLoad.
-		///// </summary>
-		///// <param name="context">The context.</param>
-		//void ParamLoad(Context context);
-
-		///// <summary>
-		///// Visitation function for ParamStore.
-		///// </summary>
-		///// <param name="context">The context.</param>
-		//void ParamStore(Context context);
 	}
 }

@@ -33,6 +33,7 @@ namespace Mosa.Tool.Explorer
 				new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),
 				new ExceptionStage(),
+
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				(compilerOptions.EnableVariablePromotion) ? new PromoteTempVariablesStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
@@ -43,6 +44,8 @@ namespace Mosa.Tool.Explorer
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 				new IRCleanup(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
+
+				//new StopStage(),
 				new PlatformStubStage(),
 				new PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),

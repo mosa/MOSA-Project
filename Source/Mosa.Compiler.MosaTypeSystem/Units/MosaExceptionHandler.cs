@@ -10,7 +10,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <summary>
 		///
 		/// </summary>
-		public ExceptionHandlerType HandlerType { get; private set; }
+		public ExceptionHandlerType ExceptionHandlerType { get; private set; }
 
 		/// <summary>
 		///
@@ -68,7 +68,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaExceptionHandler(ExceptionHandlerType ehType, int tryStart, int tryEnd, int handlerStart, int handlerEnd, MosaType type, int? filterOffset)
 		{
-			HandlerType = ehType;
+			ExceptionHandlerType = ehType;
 
 			TryStart = tryStart;
 			TryEnd = tryEnd;

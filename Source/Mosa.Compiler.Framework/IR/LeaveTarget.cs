@@ -3,17 +3,17 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// An abstract intermediate representation of the start of an finally block.
+	/// An abstract intermediate representation of set finally instruction.
 	/// </summary>
-	public sealed class FinallyStart : BaseIRInstruction
+	public sealed class LeaveTarget : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="FinallyStart"/>.
+		/// Initializes a new instance of <see cref="LeaveTarget"/>.
 		/// </summary>
-		public FinallyStart() :
-			base(0, 2)
+		public LeaveTarget() :
+			base(0, 0)
 		{
 		}
 

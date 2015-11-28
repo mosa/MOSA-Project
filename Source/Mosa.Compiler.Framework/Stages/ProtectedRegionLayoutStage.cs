@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			int sectioncount = 0;
 
-			// 1. Number of Regions (dummy for now)
+			// 1. Number of Regions (filled in later)
 			writer.Write((uint)0);
 
 			foreach (var region in MethodCompiler.ProtectedRegions)
@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework.Stages
 					sectioncount++;
 
 					var name = MethodCompiler.Method.FullName + Metadata.ProtectedRegionTable + "$" + sectioncount.ToString();
-					var protectedRegionDefinition = CreateProtectedRegionDefinition(name, (uint)start, (uint)end, handler, region.Handler.HandlerType, region.Handler.Type);
+					var protectedRegionDefinition = CreateProtectedRegionDefinition(name, (uint)start, (uint)end, handler, region.Handler.ExceptionHandlerType, region.Handler.Type);
 					MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionTableSymbol, (int)writer.Position, 0, protectedRegionDefinition, 0);
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 

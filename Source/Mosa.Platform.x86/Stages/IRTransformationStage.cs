@@ -1058,15 +1058,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for ThrowInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Throw(Context context)
-		{
-			throw new InvalidCompilerException("Throw instruction should have been processed by ExceptionStage.");
-		}
-
-		/// <summary>
 		/// Visitation function for IntegerToFloatingPointConversion.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -1145,78 +1136,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntrinsicMethodCall(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for TryStart.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.TryStart(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for FinallyStart.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.FinallyStart(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for ExceptionStart.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.ExceptionStart(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for TryEnd.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.TryEnd(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for ExceptionEnd.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.ExceptionEnd(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for FinallyEnd.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.FinallyEnd(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for CallFinally.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.CallFinally(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for FinallyReturn.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.FinallyReturn(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for FinallyReturn.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Flow(Context context)
 		{
 		}
 

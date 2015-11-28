@@ -62,9 +62,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (HasProtectedRegions)
 				return;
 
-			//if (MethodCompiler.Method.FullName.Contains(" Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
-			//	return;
-
 			trace = CreateTraceLog();
 
 			if (MethodCompiler.Compiler.CompilerOptions.EnableVariablePromotion)
@@ -273,10 +270,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool PromoteLocalVariable()
 		{
-			//HACK!!! HACK!!! HACK!!!
-			//if (MethodCompiler.Method.FullName.Contains(" Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
-			//	return false;
-
 			bool change = false;
 
 			foreach (var local in MethodCompiler.LocalVariables)
