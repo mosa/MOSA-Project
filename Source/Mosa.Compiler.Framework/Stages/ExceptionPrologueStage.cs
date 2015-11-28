@@ -26,9 +26,9 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var tryHandler = BasicBlocks.GetByLabel(clause.HandlerStart);
 
-					var context = new Context(tryHandler);
-
 					var exceptionObject = MethodCompiler.CreateVirtualRegister(clause.Type);
+
+					var context = new Context(tryHandler);
 
 					context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
 				}
@@ -51,6 +51,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (IsLeaveAndTargetWithinTry(node))
 					{
+						var test = IsLeaveAndTargetWithinTry(node); // delete me
+
 						node.SetInstruction(IRInstruction.Jmp, target);
 
 						BasicBlocks.RemoveHeaderBlock(target);

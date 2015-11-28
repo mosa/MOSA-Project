@@ -13,8 +13,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class ProtectedRegionStage : BaseMethodCompilerStage
 	{
-		private KeyedList<MosaExceptionHandler, BasicBlock> returns = new KeyedList<MosaExceptionHandler, BasicBlock>();
-
 		private MosaType exceptionType;
 
 		protected override void Run()
@@ -61,6 +59,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void UpdateBlockProtectInstructions()
 		{
+			var returns = new KeyedList<MosaExceptionHandler, BasicBlock>();
+
 			foreach (var block in BasicBlocks)
 			{
 				var context = new Context(block.Last);
@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework.Stages
 					context.GotoPrevious();
 				}
 
-				if (context.Instruction is EndFinallyInstruction)
+				if (context.Instruction is EndFinallyInstruction) // CIL.Endfinally
 				{
 					context.SetInstruction(IRInstruction.FinallyEnd);
 
@@ -78,7 +78,15 @@ namespace Mosa.Compiler.Framework.Stages
 					var list = returns.Get(entry);
 
 					if (list == null)
-						return;
+					{
+						// FIXME
+						continue;
+					}
+
+					if (list.Count > 1)
+					{
+						int i = 10;
+					}
 
 					context.AppendInstruction(IRInstruction.FinallyReturn);
 
@@ -87,43 +95,37 @@ namespace Mosa.Compiler.Framework.Stages
 						context.AddBranchTarget(returnBlock);
 					}
 				}
-				else if (context.Instruction is LeaveInstruction)
+				else if (context.Instruction is LeaveInstruction) // CIL.LeaveInstruction
 				{
-					// Find enclosing finally clause
-					bool createLink = false;
+					bool notInExceptionHandler = false;
 
+					// Find enclosing try or finally handler
 					var entry = FindImmediateExceptionHandler(context.Node);
 
-					if (entry != null)
+					if (entry.IsLabelWithinTry(context.Label))
+						notInExceptionHandler = true;
+
+					if (!notInExceptionHandler)
 					{
-						if (entry.IsLabelWithinTry(context.Label))
-							createLink = true;
+						context.ReplaceInstructionOnly(IRInstruction.ExceptionEnd);
+						continue;
 					}
 
-					if (createLink)
+					var tryFinallyBlock = context.BranchTargets[0];
+
+					returns.Add(entry, tryFinallyBlock);
+
+					context.SetInstruction(IRInstruction.TryEnd);
+
+					if (entry.HandlerType == ExceptionHandlerType.Finally)
 					{
-						var tryFinallyBlock = context.BranchTargets[0];
+						var finallyBlock = BasicBlocks.GetByLabel(entry.HandlerStart);
 
-						returns.Add(entry, tryFinallyBlock);
-
-						context.SetInstruction(IRInstruction.TryEnd);
-
-						if (entry.HandlerType == ExceptionHandlerType.Finally)
-						{
-							var finallyBlock = BasicBlocks.GetByLabel(entry.HandlerStart);
-
-							context.AppendInstruction(IRInstruction.CallFinally, finallyBlock, tryFinallyBlock);
-						}
-						else
-						{
-							context.AppendInstruction(IRInstruction.Jmp, tryFinallyBlock);
-						}
-
-						//Debug.Assert(context.BasicBlock.NextBlocks.Count <= 1);
+						context.AppendInstruction(IRInstruction.CallFinally, finallyBlock, tryFinallyBlock);
 					}
 					else
 					{
-						context.ReplaceInstructionOnly(IRInstruction.ExceptionEnd);
+						context.AppendInstruction(IRInstruction.Jmp, tryFinallyBlock);
 					}
 				}
 			}
