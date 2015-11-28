@@ -101,30 +101,21 @@ namespace Mosa.Compiler.Framework.Stages
 						ctx.AppendInstruction(IRInstruction.Move, exceptionVirtualRegister, exceptionRegister);
 						continue;
 					}
-					else if (node.Instruction == IRInstruction.ExceptionEnd)
+					else if (node.Instruction == IRInstruction.SetLeaveTarget)
 					{
-						node.SetInstruction(IRInstruction.Jmp, node.BranchTargets[0]);
-						continue;
-					}
-					else if (node.Instruction == IRInstruction.CallFinally)
-					{
-						var exceptionContext = FindImmediateExceptionContext(node.Label);
-						var handlerBlock = BasicBlocks.GetByLabel(exceptionContext.HandlerStart);
 						var target = node.BranchTargets[0];
 
 						var ctx = new Context(node);
 
-						//ctx.SetInstruction(IRInstruction.KillAll);
 						ctx.SetInstruction(IRInstruction.Move, finallyReturnBlockRegister, Operand.CreateConstant(TypeSystem, target.Label));
-						ctx.AppendInstruction(IRInstruction.Jmp, handlerBlock);
-
-						continue;
 					}
 					else if (node.Instruction == IRInstruction.Leave)
 					{
 						var label = node.Label;
 						var exceptionContext = FindImmediateExceptionContext(label);
-						var nextFinallyContext = FindNextEnclosingFinallyContext(exceptionContext);
+
+						var nextFinallyContext = (exceptionContext.ExceptionHandlerType == ExceptionHandlerType.Finally && exceptionContext.IsLabelWithinTry(node.Label))
+							? exceptionContext : FindNextEnclosingFinallyContext(exceptionContext);
 
 						var ctx = new Context(node);
 
@@ -135,7 +126,6 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							var handlerBlock = BasicBlocks.GetByLabel(nextFinallyContext.HandlerStart);
 
-							var newBlocks = CreateNewBlockContexts(1);
 							var nextBlock = Split(ctx);
 
 							// compare finallyReturnBlockRegister > handlerBlock.End, then goto handler
@@ -150,11 +140,13 @@ namespace Mosa.Compiler.Framework.Stages
 						foreach (var target in leaveTargets)
 						{
 							// Leave target must be after end of exception context
-							// Leave target must be found within try start and end of exception context
+							// Leave target must be found within try or handler
 
-							if (target.Item1.Label > exceptionContext.TryEnd)
-								if (exceptionContext.IsLabelWithinTry(target.Item2.Label))
-									targets.Add(target.Item1);
+							if (target.Item1.Label > exceptionContext.TryEnd
+								&& (exceptionContext.IsLabelWithinTry(target.Item2.Label) || exceptionContext.IsLabelWithinHandler(target.Item2.Label)))
+							{
+								targets.Add(target.Item1);
+							}
 						}
 
 						Debug.Assert(targets.Count != 0);
@@ -186,6 +178,19 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						node.Empty();
 					}
+					else if (node.Instruction == IRInstruction.TryStart)
+					{
+						node.Empty();
+					}
+					else if (node.Instruction == IRInstruction.TryEnd)
+					{
+						node.Empty();
+					}
+					else if (node.Instruction == IRInstruction.ExceptionEnd)
+					{
+						node.Empty();
+						continue;
+					}
 				}
 			}
 		}
@@ -198,12 +203,12 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var context = new Context(block.Last);
 
-				while (context.IsEmpty || context.IsBlockEndInstruction || context.Instruction == IRInstruction.Flow)
+				while (context.IsEmpty || context.IsBlockEndInstruction || context.Instruction == IRInstruction.Flow || context.Instruction == IRInstruction.Leave)
 				{
 					context.GotoPrevious();
 				}
 
-				if (context.Instruction == IRInstruction.CallFinally)
+				if (context.Instruction == IRInstruction.SetLeaveTarget)
 				{
 					leaveTargets.Add(new Tuple<BasicBlock, BasicBlock>(context.BranchTargets[0], block));
 				}

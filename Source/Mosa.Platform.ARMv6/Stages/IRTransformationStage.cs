@@ -365,54 +365,6 @@ namespace Mosa.Platform.ARMv6.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for StartTry.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.TryStart(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for StartException.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.ExceptionStart(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for StartFinally.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.FinallyStart(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for EndTry.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.TryEnd(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for EndException.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.ExceptionEnd(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for EndFinally.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.FinallyEnd(Context context)
-		{
-		}
-
-		/// <summary>
 		/// Visitation function for IntegerToFloatingPointConversion.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -509,30 +461,6 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntrinsicMethodCall(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for CallFinally.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.CallFinally(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for Leave.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Leave(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for FinallyReturn.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Flow(Context context)
 		{
 		}
 

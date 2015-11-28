@@ -290,12 +290,12 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly BaseIRInstruction CallFinally = new CallFinally();
+		public static readonly BaseIRInstruction Leave = new Leave();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly BaseIRInstruction Leave = new Leave();
+		public static readonly BaseIRInstruction SetLeaveTarget = new LeaveTarget();
 
 		/// <summary>
 		///

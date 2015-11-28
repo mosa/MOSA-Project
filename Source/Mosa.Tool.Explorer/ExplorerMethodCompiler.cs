@@ -29,12 +29,11 @@ namespace Mosa.Tool.Explorer
 				new StackSetupStage(),
 				new ProtectedRegionStage(),
 				new StaticAllocationResolutionStage(),
-
-				//new StopStage(),
 				new CILTransformationStage(),
 				new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),
 				new ExceptionStage(),
+				new StopStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				(compilerOptions.EnableVariablePromotion) ? new PromoteTempVariablesStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,

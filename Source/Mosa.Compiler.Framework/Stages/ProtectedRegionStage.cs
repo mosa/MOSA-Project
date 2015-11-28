@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
@@ -79,25 +78,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (!InTryContext)
 					{
-						// Within try exception context
-						context.ReplaceInstructionOnly(IRInstruction.ExceptionEnd);
-						continue;
-					}
-
-					// Within try context
-					context.SetInstruction(IRInstruction.TryEnd);
-
-					if (exceptionContext.ExceptionHandlerType == ExceptionHandlerType.Finally)
-					{
-						//var finallyBlock = BasicBlocks.GetByLabel(exceptionContext.HandlerStart);
-
-						context.AppendInstruction(IRInstruction.CallFinally, leaveBlock);
+						// Within exception handler
+						context.SetInstruction(IRInstruction.ExceptionEnd);
 					}
 					else
 					{
-						// Leave within exception goes directly to the leave target
-						context.AppendInstruction(IRInstruction.Jmp, leaveBlock);
+						context.SetInstruction(IRInstruction.TryEnd);
 					}
+
+					context.AppendInstruction(IRInstruction.SetLeaveTarget, leaveBlock);
+					context.AppendInstruction(IRInstruction.Leave);
 				}
 				else if (context.Instruction is EndFinallyInstruction) // CIL.Endfinally
 				{
