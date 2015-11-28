@@ -29,6 +29,8 @@ namespace Mosa.Tool.Explorer
 				new StackSetupStage(),
 				new ProtectedRegionStage(),
 				new StaticAllocationResolutionStage(),
+
+				//new StopStage(),
 				new CILTransformationStage(),
 				new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),

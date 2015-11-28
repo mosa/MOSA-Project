@@ -389,7 +389,57 @@ namespace Mosa.Compiler.Framework
 
 		#region Protected Region Methods
 
-		protected bool IsLeaveAndTargetWithinTry(InstructionNode node)
+		protected MosaExceptionHandler FindImmediateExceptionContext(int label)
+		{
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
+			{
+				if (handler.IsLabelWithinTry(label) || handler.IsLabelWithinHandler(label))
+				{
+					return handler;
+				}
+			}
+
+			return null;
+		}
+
+		protected MosaExceptionHandler FindNextEnclosingFinallyContext(MosaExceptionHandler exceptionContext)
+		{
+			int index = MethodCompiler.Method.ExceptionHandlers.IndexOf(exceptionContext);
+
+			for (int i = index + 1; i < MethodCompiler.Method.ExceptionHandlers.Count; i++)
+			{
+				var entry = MethodCompiler.Method.ExceptionHandlers[i];
+
+				if (!entry.IsLabelWithinTry(exceptionContext.TryStart))
+					return null;
+
+				if (entry.ExceptionHandlerType != ExceptionHandlerType.Finally)
+					continue;
+
+				return entry;
+			}
+
+			return null;
+		}
+
+		protected MosaExceptionHandler FindFinallyExceptionContext(InstructionNode node)
+		{
+			MosaExceptionHandler innerClause = null;
+
+			int label = node.Label;
+
+			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
+			{
+				if (handler.IsLabelWithinHandler(label))
+				{
+					return handler;
+				}
+			}
+
+			return null;
+		}
+
+		protected bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
 		{
 			int leaveLabel = node.Label;
 			int targetLabel = node.BranchTargets[0].First.Label;
@@ -421,41 +471,8 @@ namespace Mosa.Compiler.Framework
 					return true;
 			}
 
+			// very odd
 			return true;
-		}
-
-		protected MosaExceptionHandler FindImmediateExceptionHandler(InstructionNode node)
-		{
-			MosaExceptionHandler innerClause = null;
-
-			int label = node.Label;
-
-			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
-			{
-				if (handler.IsLabelWithinTry(label) || handler.IsLabelWithinHandler(label))
-				{
-					return handler;
-				}
-			}
-
-			return null;
-		}
-
-		protected MosaExceptionHandler FindFinallyHandler(InstructionNode node)
-		{
-			MosaExceptionHandler innerClause = null;
-
-			int label = node.Label;
-
-			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
-			{
-				if (handler.IsLabelWithinHandler(label))
-				{
-					return handler;
-				}
-			}
-
-			return null;
 		}
 
 		#endregion Protected Region Methods

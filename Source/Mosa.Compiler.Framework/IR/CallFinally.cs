@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// An abstract intermediate representation of the call to the finally block.
+	/// An abstract intermediate representation of the end of a finally block.
 	/// </summary>
 	public sealed class CallFinally : BaseIRInstruction
 	{
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <value>
 		/// <c>true</c> if [ignore during code generation]; otherwise, <c>false</c>.
 		/// </value>
-		public override bool IgnoreDuringCodeGeneration { get { return true; } }
+		public override bool IgnoreDuringCodeGeneration { get { return false; } }
 
 		#endregion Properties
 

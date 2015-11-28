@@ -521,10 +521,10 @@ namespace Mosa.Platform.ARMv6.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for FinallyReturn.
+		/// Visitation function for Leave.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.FinallyReturn(Context context)
+		void IIRVisitor.Leave(Context context)
 		{
 		}
 

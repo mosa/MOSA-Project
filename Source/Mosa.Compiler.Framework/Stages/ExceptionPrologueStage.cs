@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var clause in MethodCompiler.Method.ExceptionHandlers)
 			{
-				if (clause.HandlerType == ExceptionHandlerType.Exception)
+				if (clause.ExceptionHandlerType == ExceptionHandlerType.Exception)
 				{
 					var tryHandler = BasicBlocks.GetByLabel(clause.HandlerStart);
 
@@ -49,21 +49,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var target = node.BranchTargets[0];
 
-					if (IsLeaveAndTargetWithinTry(node))
+					if (IsSourceAndTargetWithinSameTryOrException(node))
 					{
-						var test = IsLeaveAndTargetWithinTry(node); // delete me
-
+						// Leave instruction can be converted into a simple jump instruction
 						node.SetInstruction(IRInstruction.Jmp, target);
-
 						BasicBlocks.RemoveHeaderBlock(target);
-
 						continue;
 					}
 
-					var entry = FindImmediateExceptionHandler(node);
-
-					if (entry == null)
-						break;
+					var entry = FindImmediateExceptionContext(node.Label);
 
 					if (!entry.IsLabelWithinTry(node.Label))
 						break;

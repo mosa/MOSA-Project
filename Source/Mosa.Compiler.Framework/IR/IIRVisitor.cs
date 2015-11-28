@@ -350,10 +350,10 @@ namespace Mosa.Compiler.Framework.IR
 		void CallFinally(Context context);
 
 		/// <summary>
-		/// Visitation function for FinallyReturn.
+		/// Visitation function for Leave.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void FinallyReturn(Context context);
+		void Leave(Context context);
 
 		/// <summary>
 		/// Visitation function for intrinsic the method call.

@@ -3,16 +3,16 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// An abstract intermediate representation of the end of a finally block.
+	/// An abstract intermediate representation of the call to the finally block.
 	/// </summary>
-	public sealed class FinallyReturn : BaseIRInstruction
+	public sealed class Leave : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="FinallyReturn"/>.
+		/// Initializes a new instance of <see cref="Leave"/>.
 		/// </summary>
-		public FinallyReturn() :
+		public Leave() :
 			base(0, 0)
 		{
 		}
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <value>
 		/// <c>true</c> if [ignore during code generation]; otherwise, <c>false</c>.
 		/// </value>
-		public override bool IgnoreDuringCodeGeneration { get { return false; } }
+		public override bool IgnoreDuringCodeGeneration { get { return true; } }
 
 		#endregion Properties
 
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.FinallyReturn(context);
+			visitor.Leave(context);
 		}
 
 		#endregion Instruction Overrides
