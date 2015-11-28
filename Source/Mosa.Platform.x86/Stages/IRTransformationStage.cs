@@ -1058,15 +1058,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for ThrowInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Throw(Context context)
-		{
-			throw new InvalidCompilerException("Throw instruction should have been processed by ExceptionStage.");
-		}
-
-		/// <summary>
 		/// Visitation function for IntegerToFloatingPointConversion.
 		/// </summary>
 		/// <param name="context">The context.</param>

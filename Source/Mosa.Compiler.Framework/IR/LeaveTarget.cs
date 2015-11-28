@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Initializes a new instance of <see cref="LeaveTarget"/>.
 		/// </summary>
 		public LeaveTarget() :
-			base(0, 1)
+			base(0, 0)
 		{
 		}
 

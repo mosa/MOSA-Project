@@ -302,12 +302,6 @@ namespace Mosa.Compiler.Framework.IR
 		void Break(Context context);
 
 		/// <summary>
-		/// Visitation function for Throw.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Throw(Context context);
-
-		/// <summary>
 		/// Visitation function for intrinsic the method call.
 		/// </summary>
 		/// <param name="context">The context.</param>

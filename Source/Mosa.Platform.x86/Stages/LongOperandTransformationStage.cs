@@ -1280,14 +1280,6 @@ namespace Mosa.Platform.x86.Stages
 		{
 		}
 
-		/// <summary>
-		/// Visitation function for ThrowInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Throw(Context context)
-		{
-		}
-
 		#endregion IIRVisitor - Unused
 	}
 }

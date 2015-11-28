@@ -14,9 +14,6 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			if (!HasProtectedRegions)
-				return;
-
 			var exceptionVirtualRegisters = new Dictionary<BasicBlock, Operand>();
 
 			var exceptionType = TypeSystem.GetTypeByName("System", "Exception");
@@ -101,7 +98,7 @@ namespace Mosa.Compiler.Framework.Stages
 						ctx.AppendInstruction(IRInstruction.Move, exceptionVirtualRegister, exceptionRegister);
 						continue;
 					}
-					else if (node.Instruction == IRInstruction.SetLeaveTarget)
+					else if (node.Instruction == IRInstruction.LeaveTarget)
 					{
 						var target = node.BranchTargets[0];
 
@@ -208,7 +205,7 @@ namespace Mosa.Compiler.Framework.Stages
 					context.GotoPrevious();
 				}
 
-				if (context.Instruction == IRInstruction.SetLeaveTarget)
+				if (context.Instruction == IRInstruction.LeaveTarget)
 				{
 					leaveTargets.Add(new Tuple<BasicBlock, BasicBlock>(context.BranchTargets[0], block));
 				}

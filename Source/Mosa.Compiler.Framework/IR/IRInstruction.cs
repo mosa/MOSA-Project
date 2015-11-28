@@ -295,7 +295,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly BaseIRInstruction SetLeaveTarget = new LeaveTarget();
+		public static readonly BaseIRInstruction LeaveTarget = new LeaveTarget();
 
 		/// <summary>
 		///

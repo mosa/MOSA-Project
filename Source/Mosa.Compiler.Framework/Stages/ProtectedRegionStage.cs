@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Framework.Stages
 						context.SetInstruction(IRInstruction.TryEnd);
 					}
 
-					context.AppendInstruction(IRInstruction.SetLeaveTarget, leaveBlock);
+					context.AppendInstruction(IRInstruction.LeaveTarget, leaveBlock);
 					context.AppendInstruction(IRInstruction.Leave);
 				}
 				else if (context.Instruction is EndFinallyInstruction) // CIL.Endfinally

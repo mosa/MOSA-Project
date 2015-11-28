@@ -357,14 +357,6 @@ namespace Mosa.Platform.ARMv6.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for ThrowInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Throw(Context context)
-		{
-		}
-
-		/// <summary>
 		/// Visitation function for IntegerToFloatingPointConversion.
 		/// </summary>
 		/// <param name="context">The context.</param>
