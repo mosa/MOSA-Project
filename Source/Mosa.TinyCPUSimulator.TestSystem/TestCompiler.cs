@@ -76,8 +76,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			//DumpSymbols(); // DEBUG OPTION
 
+			IsInternalized = true;  // must be before Run!
+
 			Run<int>(string.Empty, "Default", "AssemblyInit", true);
-			IsInternalized = true;
 
 			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 		}

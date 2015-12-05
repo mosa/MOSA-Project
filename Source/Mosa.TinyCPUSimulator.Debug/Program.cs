@@ -64,6 +64,8 @@ namespace Mosa.TinyCPUSimulator.Debug
 			System.Diagnostics.Debug.Write(listener.Output);
 
 			//Console.ReadLine();
+
+			return;
 		}
 
 		private static void Test14()

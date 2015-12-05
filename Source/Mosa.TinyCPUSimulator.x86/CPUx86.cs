@@ -99,7 +99,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 		public uint IDTR { get; set; }
 
-		public CPUx86()
+		public CPUx86() 
 		{
 			CreateRegisters();
 
@@ -109,6 +109,8 @@ namespace Mosa.TinyCPUSimulator.x86
 		public CPUx86(CPUx86 simCPU) : base(simCPU)
 		{
 			CreateRegisters();
+
+			EIP.Value = simCPU.EIP.Value;
 
 			EFLAGS.Value = simCPU.EFLAGS.Value;
 
@@ -147,6 +149,8 @@ namespace Mosa.TinyCPUSimulator.x86
 
 		private void CreateRegisters()
 		{
+			EIP = new Register32Bit("EIP", 0, RegisterType.InstructionPointer, false);
+
 			EFLAGS = new FlagsRegister();
 
 			EAX = new GeneralPurposeRegister("EAX", 0);
