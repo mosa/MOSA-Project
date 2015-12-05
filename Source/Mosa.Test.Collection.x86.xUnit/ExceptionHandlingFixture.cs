@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Mosa.Test.Collection.x86.xUnit
 {
-	public class _ExceptionHandlingFixture : X86TestFixture
+	public class ExceptionHandlingFixture : X86TestFixture
 	{
 		[Fact]
 		public void TryFinally1()
