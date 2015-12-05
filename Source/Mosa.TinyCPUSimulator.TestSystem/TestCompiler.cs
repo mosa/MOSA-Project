@@ -21,10 +21,12 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		protected SimLinker linker;
 
 		protected const uint MaxTicks = 500000;
+		internal bool IsInternalized { get; set; }
 
 		internal TestCompiler(BaseTestPlatform platform)
 		{
 			this.platform = platform;
+			IsInternalized = false;
 
 			simAdapter = platform.CreateSimAdaptor();
 
@@ -44,7 +46,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			CompileTestCode();
 		}
 
-		protected void CompileTestCode()
+		private void CompileTestCode()
 		{
 			platform.InitializeSimulation(simAdapter);
 
@@ -65,13 +67,19 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			//Console.WriteLine("Compiled.");
 
 			linker = compiler.Linker as SimLinker;
+		}
 
-			//DumpSymbols();
-			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
+		internal void Initialize()
+		{
+			if (IsInternalized)
+				return;
+
+			//DumpSymbols(); // DEBUG OPTION
 
 			Run<int>(string.Empty, "Default", "AssemblyInit", true);
+			IsInternalized = true;
 
-			simAdapter.SimCPU.Monitor.DebugOutput = false; // DEBUG OPTION
+			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
 		}
 
 		public void DumpSymbols()
@@ -94,6 +102,9 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			// enforce single thread execution only
 			lock (this)
 			{
+				// If not initialized, do it now
+				Initialize();
+
 				// Find the test method to execute
 				MosaMethod runtimeMethod = FindMethod(
 					ns,

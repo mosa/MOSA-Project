@@ -18,5 +18,10 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 
 			simCPU.AddMemory(BaseAddress, ImageSize, 1);
 		}
+
+		public override BaseSimDevice Clone(SimCPU simCPU)
+		{
+			return new MosaImage(simCPU);
+		}
 	}
 }

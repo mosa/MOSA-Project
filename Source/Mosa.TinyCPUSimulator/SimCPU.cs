@@ -43,12 +43,12 @@ namespace Mosa.TinyCPUSimulator
 
 		private uint[][] MemoryBlocks;
 
-		internal static uint BlockSize = 1024 * 1024 / 4; // 1 MB
-		internal static ulong MaxMemory = 1024L * 1024L * 1024L * 4L; // 4 GB
+		private const uint BlockSize = 1024 * 1024; // 1 MB
+		private const ulong MaxMemory = 1024L * 1024L * 1024L * 4L; // 4 GB
 
 		public SimCPU()
 		{
-			MemoryBlocks = new uint[MaxMemory / BlockSize][];
+			MemoryBlocks = new uint[MaxMemory / BlockSize / 4][];
 			InstructionCache = new Dictionary<ulong, SimInstruction>();
 			SourceInformation = new Dictionary<ulong, string>();
 			SimDevices = new List<BaseSimDevice>();
@@ -60,6 +60,60 @@ namespace Mosa.TinyCPUSimulator
 
 			Tick = 0;
 			IsLittleEndian = true;
+		}
+
+		protected SimCPU(SimCPU simCPU)
+		{
+			// Create CPU clone with the assumption that NO new instructions or symbols are added.
+
+			MemoryBlocks = new uint[simCPU.MemoryBlocks.Length][];
+			InstructionCache = simCPU.InstructionCache;
+			SourceInformation = simCPU.SourceInformation;
+			SimDevices = new List<BaseSimDevice>();
+			SimMemoryDevices = simCPU.SimMemoryDevices;
+			PortDevices = new BaseSimDevice[65536];
+			Symbols = simCPU.Symbols;
+			Monitor = new SimMonitor(this);
+			MemoryRegions = simCPU.MemoryRegions;
+			Tick = simCPU.Tick;
+			IsLittleEndian = simCPU.IsLittleEndian;
+
+			CurrentProgramCounter = simCPU.CurrentProgramCounter;
+			LastProgramCounter = simCPU.LastProgramCounter;
+			LastInstruction = simCPU.LastInstruction;
+			StackPointer = simCPU.StackPointer;
+			FramePointer = simCPU.FramePointer;
+			LastException = simCPU.LastException;
+
+			foreach (var device in simCPU.SimDevices)
+			{
+				var clone = device.Clone(this);
+
+				if (clone == null)
+					throw new InvalidProgramException("Unable to clone sim device");
+
+				SimDevices.Add(clone);
+
+				var ports = clone.GetPortList();
+
+				if (ports != null)
+				{
+					foreach (var port in ports)
+					{
+						PortDevices[port] = clone;
+					}
+				}
+			}
+
+			for (int i = 0; i < MemoryBlocks.Length; i++)
+			{
+				if (simCPU.MemoryBlocks[i] == null)
+					continue;
+
+				MemoryBlocks[i] = new uint[BlockSize];
+
+				simCPU.MemoryBlocks[i].CopyTo(MemoryBlocks[i], 0);
+			}
 		}
 
 		public void AddMemory(ulong address, ulong size, uint type)

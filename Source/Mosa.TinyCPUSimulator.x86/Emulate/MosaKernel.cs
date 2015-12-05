@@ -29,5 +29,10 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			simCPU.AddMemory(PageFrameTable, 1024 * 1024 * 4, 1); // Page Table (4Mb)
 			simCPU.AddMemory(VirtualPageBitMap, 1024 * 1024 * 4, 1); // Virtual Page BitMap (4Mb)
 		}
+
+		public override BaseSimDevice Clone(SimCPU simCPU)
+		{
+			return new MosaKernel(simCPU);
+		}
 	}
 }

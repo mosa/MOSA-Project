@@ -34,6 +34,11 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			debug = output;
 		}
 
+		public override BaseSimDevice Clone(SimCPU simCPU)
+		{
+			return null; // not clonable
+		}
+
 		public override ushort[] GetPortList()
 		{
 			return GetPortList(StandardIOBase, 1);
