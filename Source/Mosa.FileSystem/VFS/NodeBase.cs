@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.IO;
+
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
@@ -89,7 +91,7 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="access">The access.</param>
 		/// <param name="sharing">The sharing.</param>
 		/// <returns></returns>
-		public abstract object Open(System.IO.FileAccess access, System.IO.FileShare sharing);
+		public abstract object Open(FileAccess access, FileShare sharing);
 
 		/// <summary>
 		/// Deletes the specified child.

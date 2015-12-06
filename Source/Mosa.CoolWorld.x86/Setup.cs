@@ -263,5 +263,10 @@ namespace Mosa.CoolWorld.x86
 				}
 			}
 		}
+
+		//public static Mosa.FileSystem.FAT.FatFileAttributes DummyReference()
+		//{
+		//	return FileSystem.FAT.FatFileAttributes.Archive;
+		//}
 	}
 }

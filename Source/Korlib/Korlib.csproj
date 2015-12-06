@@ -49,6 +49,7 @@
     <Compile Include="System.Collections\IStructuralEquatable.cs" />
     <Compile Include="System.Diagnostics\ConditionalAttribute.cs" />
     <Compile Include="System.Diagnostics\Debug.cs" />
+    <Compile Include="System.Diagnostics\DebuggerBrowsableAttribute.cs" />
     <Compile Include="System.Diagnostics\DebuggerHiddenAttribute.cs" />
     <Compile Include="System.Globalization\CultureInfo.cs" />
     <Compile Include="System.IO\BinaryReader.cs" />

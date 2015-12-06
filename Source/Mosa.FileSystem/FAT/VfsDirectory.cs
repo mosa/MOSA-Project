@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.IO;
 using Mosa.FileSystem.VFS;
 
 namespace Mosa.FileSystem.FAT
@@ -80,7 +81,7 @@ namespace Mosa.FileSystem.FAT
 		/// as System.Threading.EventWaitHandle, System.Threading.Mutex, System.Threading.Thread, System.Diagnostics.Process etc. Note: The object
 		/// retrieved can be closed by the respective methods on the returned object. There's no close functionality on the IVfsNode itself.
 		/// </remarks>
-		public override object Open(System.IO.FileAccess access, System.IO.FileShare share)
+		public override object Open(FileAccess access, FileShare share)
 		{
 			return null;
 		}

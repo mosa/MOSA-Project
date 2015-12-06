@@ -59,11 +59,9 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		/// <param name="rootDirectory">The root directory.</param>
 		/// <param name="path">The path to resolve.</param>
-		/// <returns>The directory entry of the resolved path.</returns>
-		/// <exception cref="System.Security.SecurityException">The caller does not have access to the path or a component. For example the caller does not have the right to traverse the path.</exception>
-		/// <exception cref="System.IO.PathTooLongException">The path is too long to traverse. This can be the result of circular symbolic links in the path.</exception>
-		/// <exception cref="System.IO.FileNotFoundException">The file or folder path not found.</exception>
-		/// <exception cref="System.IO.DirectoryNotFoundException">A path component was not found.</exception>
+		/// <returns>
+		/// The directory entry of the resolved path.
+		/// </returns>
 		/// <remarks>
 		/// This call my result in other exceptions not specified in the above list. Other exceptions can be thrown by IVfsNode implementations, which are visited during the traversal
 		/// process. For example a network file system node may throw an exception, if the server is unreachable.
@@ -85,11 +83,9 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="rootDirectory">The root directory.</param>
 		/// <param name="path">The path to resolve.</param>
 		/// <param name="flags">Controls aspects of the path lookup process.</param>
-		/// <returns>The directory entry of the resolved path.</returns>
-		/// <exception cref="System.Security.SecurityException">The caller does not have access to the path or a component. For example the caller does not have the right to traverse the path.</exception>
-		/// <exception cref="System.IO.PathTooLongException">The path is too long to traverse. This can be the result of circular symbolic links in the path.</exception>
-		/// <exception cref="System.IO.FileNotFoundException">The file or folder path was not found. This exception can be prevented by specifying PathResolutionFlags.DoNotThrowNotFoundException.</exception>
-		/// <exception cref="System.IO.DirectoryNotFoundException">A path component was not found. This exception can be prevented by specifying PathResolutionFlags.DoNotThrowNotFoundException.</exception>
+		/// <returns>
+		/// The directory entry of the resolved path.
+		/// </returns>
 		/// <remarks>
 		/// This call my result in other exceptions not specified in the above list. Other exceptions can be thrown by IVfsNode implementations, which are visited during the traversal
 		/// process. For example a network file system node may throw an exception, if the server is unreachable.
@@ -111,11 +107,9 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		/// <param name="path">The path to lookup. This can be a relative or absolute path. Path.DirectorySeparatorChar or Path.AltDirectorySeparatorChar are valid delimiters.</param>
 		/// <param name="flags">The lookup flags, which control the lookup process.</param>
-		/// <returns>The directory entry of the resolved path.</returns>
-		/// <exception cref="System.Security.SecurityException">The caller does not have access to the path or a component. For example the caller does not have the right to traverse the path.</exception>
-		/// <exception cref="System.IO.PathTooLongException">The path is too long to traverse. This can be the result of circular symbolic links in the path.</exception>
-		/// <exception cref="System.IO.FileNotFoundException">The path or a component was not found. This exception can be prevented by specifying PathResolutionFlags.DoNotThrowNotFoundException.</exception>
-		/// <exception cref="System.IO.DirectoryNotFoundException">A path component was not found. This exception can be prevented by specifying PathResolutionFlags.DoNotThrowNotFoundException.</exception>
+		/// <returns>
+		/// The directory entry of the resolved path.
+		/// </returns>
 		/// <remarks>
 		/// This call may result in other exceptions not specified in the above list. Other exceptions can be thrown by IVfsNode implementations, which are visited during the traversal
 		/// process. For example a network file system node may throw an exception, if the server is unreachable.

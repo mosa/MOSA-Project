@@ -862,9 +862,9 @@ namespace Mosa.FileSystem.FAT
 		public static string ExtractFileName(byte[] directory, uint index)
 		{
 			// rewrite to use string
-			BinaryFormat entry = new BinaryFormat(directory);
+			var entry = new BinaryFormat(directory);
 
-			char[] name = new char[12];
+			var name = new char[12];
 
 			for (uint i = 0; i < 8; i++)
 				name[i] = (char)entry.GetByte(index + i + Entry.DOSName);

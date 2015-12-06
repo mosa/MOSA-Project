@@ -2,7 +2,6 @@
 
 using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
-using Mosa.Kernel.x86.Smbios;
 using Mosa.Platform.Internal.x86;
 
 namespace Mosa.CoolWorld.x86

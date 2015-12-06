@@ -1,5 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+// Copyright (c) Microsoft. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -11,28 +14,6 @@ namespace System
 	/// </summary>
 	public sealed class String : IEnumerable, IEnumerable<char>
 	{
-		/*
-		 * Michael "grover" Froehlich, 2010/05/17:
-		 *
-		 * Strings are unfortunately very special in their behavior and memory layout. The AOT compiler
-		 * expects strings to have a very specific layout in memory to be able to compile instructions,
-		 * such as ldstr ahead of time. This is only true as long as we don't have a real loader, app domains
-		 * and actual string interning, which would be used in the AOT too. Until that time has come,
-		 * the memory layout of String must match:
-		 *
-		 * Object:
-		 *      - Method Table Ptr
-		 *      - Sync Block
-		 * String:
-		 *      - Length
-		 *      - Variable length UTF-16 character buffer (should we switch to UTF-8 instead?)
-		 *
-		 * This layout is used to generated strings in the AOT'd image in CILTransformationStage, which transforms
-		 * CIL instructions to IR and replaces ldstr by a load from the data section, which contains the string laid
-		 * out along the above lines.
-		 *
-		 */
-
 		/// <summary>
 		/// Length
 		/// </summary>
@@ -40,13 +21,7 @@ namespace System
 
 		private char start_char;
 
-		public int Length
-		{
-			get
-			{
-				return this.length;
-			}
-		}
+		public int Length { get { return this.length; } }
 
 		public static string Empty = "";
 
@@ -141,6 +116,23 @@ namespace System
 			for (int index = startIndex; index < startIndex + length; index++)
 			{
 				*chars = value[index];
+				chars++;
+			}
+
+			return result;
+		}
+
+		private static unsafe string CreateString(string source, int startIndex, int length)
+		{
+			if (source.Length == 0)
+				return string.Empty;
+
+			String result = InternalAllocateString(length);
+			char* chars = result.first_char;
+
+			for (int index = startIndex; index < startIndex + length; index++)
+			{
+				*chars = source[index];
 				chars++;
 			}
 
@@ -706,6 +698,123 @@ namespace System
 		IEnumerator<char> IEnumerable<char>.GetEnumerator()
 		{
 			return new CharEnumerator(this);
+		}
+
+		private const int TrimHead = 0;
+		private const int TrimTail = 1;
+		private const int TrimBoth = 2;
+
+		// Removes a set of characters from the end of this string.
+		public String TrimEnd(char[] trimChars)
+		{
+			if (null == trimChars || trimChars.Length == 0)
+			{
+				return TrimHelper(TrimTail);
+			}
+			return TrimHelper(trimChars, TrimTail);
+		}
+
+		public String TrimEnd()
+		{
+			return TrimHelper(TrimTail);
+		}
+
+		// Trims the whitespace from both ends of the string.  Whitespace is defined by
+		// Char.IsWhiteSpace.
+		//
+		public String Trim()
+		{
+			return TrimHelper(TrimBoth);
+		}
+
+		private String TrimHelper(int trimType)
+		{
+			//end will point to the first non-trimmed character on the right
+			//start will point to the first non-trimmed character on the Left
+			int end = this.Length - 1;
+			int start = 0;
+
+			//Trim specified characters.
+			if (trimType != TrimTail)
+			{
+				for (start = 0; start < this.Length; start++)
+				{
+					if (!Char.IsWhiteSpace(this[start])) break;
+				}
+			}
+
+			if (trimType != TrimHead)
+			{
+				for (end = Length - 1; end >= start; end--)
+				{
+					if (!Char.IsWhiteSpace(this[end])) break;
+				}
+			}
+
+			return CreateTrimmedString(start, end);
+		}
+
+		private String TrimHelper(char[] trimChars, int trimType)
+		{
+			//end will point to the first non-trimmed character on the right
+			//start will point to the first non-trimmed character on the Left
+			int end = this.Length - 1;
+			int start = 0;
+
+			//Trim specified characters.
+			if (trimType != TrimTail)
+			{
+				for (start = 0; start < this.Length; start++)
+				{
+					int i = 0;
+					char ch = this[start];
+					for (i = 0; i < trimChars.Length; i++)
+					{
+						if (trimChars[i] == ch) break;
+					}
+					if (i == trimChars.Length)
+					{ // the character is not white space
+						break;
+					}
+				}
+			}
+
+			if (trimType != TrimHead)
+			{
+				for (end = Length - 1; end >= start; end--)
+				{
+					int i = 0;
+					char ch = this[end];
+					for (i = 0; i < trimChars.Length; i++)
+					{
+						if (trimChars[i] == ch) break;
+					}
+					if (i == trimChars.Length)
+					{ // the character is not white space
+						break;
+					}
+				}
+			}
+
+			return CreateTrimmedString(start, end);
+		}
+
+		private String CreateTrimmedString(int start, int end)
+		{
+			int len = end - start + 1;
+			if (len == this.Length)
+			{
+				// Don't allocate a new string as the trimmed string has not changed.
+				return this;
+			}
+			else
+			{
+				if (len == 0)
+				{
+					return String.Empty;
+				}
+				return String.CreateString(this, start, len);
+			}
 		}
 	}
 }

@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.IO;
+
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
@@ -16,7 +18,7 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// Holds all nodes added to the root vfs node.
 		/// </summary>
-		private System.Collections.ArrayList nodes;
+		//private System.Collections.ArrayList nodes;
 
 		#endregion Data members
 
@@ -29,7 +31,7 @@ namespace Mosa.FileSystem.VFS
 		public DirectoryNode(IFileSystem fs)
 			: base(fs, VfsNodeType.Directory)
 		{
-			nodes = new System.Collections.ArrayList();
+			//nodes = new System.Collections.ArrayList();
 		}
 
 		#endregion Construction
@@ -65,7 +67,7 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="access">The access.</param>
 		/// <param name="sharing">The sharing.</param>
 		/// <returns></returns>
-		public override object Open(System.IO.FileAccess access, System.IO.FileShare sharing)
+		public override object Open(FileAccess access, FileShare sharing)
 		{
 			// FIXME: return something like: new System.IO.DirectoryInfo(VirtualFileSystem.GetPath(this));
 			//throw new NotImplementedException();

@@ -2,7 +2,7 @@
 
 namespace Mosa.FileSystem.VFS
 {
-	internal interface IDirectory : System.IDisposable
+	internal interface IDirectory
 	{
 	}
 }
