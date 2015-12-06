@@ -13,11 +13,13 @@ namespace Mosa.TinyCPUSimulator.Debug
 		{
 			var fixture = new ForeachFixture();
 
-			fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = false;
-			DoTest(fixture.ForeachU1, "no: variable promotion");
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = false;
+			//fixture.TestCompiler.DebugOutput = true;
+			//DoTest(fixture.ForeachU1, "no: variable promotion");
 
-			fixture.TestCompiler.Reset();
+			//fixture.TestCompiler.Reset();
 			fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = true;
+			fixture.TestCompiler.DebugOutput = true;
 			DoTest(fixture.ForeachU1, "normal-all");
 
 			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;

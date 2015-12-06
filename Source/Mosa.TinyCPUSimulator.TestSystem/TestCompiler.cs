@@ -14,6 +14,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 	{
 		public MosaCompiler Compiler { get; private set; }
 
+		public bool DebugOutput { get; set; }
+
 		protected BaseTestPlatform platform;
 
 		protected ISimAdapter simAdapter;
@@ -26,6 +28,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		internal TestCompiler(BaseTestPlatform platform)
 		{
 			this.platform = platform;
+			DebugOutput = false;
 			Reset();
 		}
 
@@ -77,13 +80,13 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			CompileTestCode();
 
-			//DumpSymbols(); // DEBUG OPTION
-
 			IsInitialized = true;  // must be before Run!
+
+			simAdapter.SimCPU.Monitor.DebugOutput = false;
 
 			Run<int>(string.Empty, "Default", "AssemblyInit", true);
 
-			//simAdapter.SimCPU.Monitor.DebugOutput = true; // DEBUG OPTION
+			simAdapter.SimCPU.Monitor.DebugOutput = DebugOutput;
 		}
 
 		public void DumpSymbols()
