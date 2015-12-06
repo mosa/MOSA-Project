@@ -101,6 +101,10 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				RemoveDeadBlock(block);
 			}
+
+			// FIXME: This may leave branch instructions pointing to a dead block
+			// IR Optimization Stage --- does catch and clean this up,
+			//    but only if optimizations are turned on enabled
 		}
 
 		protected void RemoveDeadBlock(BasicBlock block)

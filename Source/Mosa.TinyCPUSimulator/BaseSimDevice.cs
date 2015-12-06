@@ -14,6 +14,8 @@ namespace Mosa.TinyCPUSimulator
 			IsMemoryMonitor = false;
 		}
 
+		public abstract BaseSimDevice Clone(SimCPU simCPU);
+
 		public virtual void Initialize()
 		{
 		}
@@ -42,7 +44,7 @@ namespace Mosa.TinyCPUSimulator
 
 		static protected ushort[] GetPortList(ushort start, ushort count)
 		{
-			ushort[] list = new ushort[count];
+			var list = new ushort[count];
 
 			for (int i = 0; i < count; i++)
 				list[i] = (ushort)(start + i);

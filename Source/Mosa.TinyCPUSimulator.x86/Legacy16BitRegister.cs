@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.x86
 {
-	public class Legacy16BitRegister : Register32Bit
+	public sealed class Legacy16BitRegister : Register32Bit
 	{
 		private GeneralPurposeRegister register;
 

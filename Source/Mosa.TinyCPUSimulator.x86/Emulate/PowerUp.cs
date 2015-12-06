@@ -12,6 +12,11 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 		{
 		}
 
+		public override BaseSimDevice Clone(SimCPU simCPU)
+		{
+			return new PowerUp(simCPU);
+		}
+
 		public override void Initialize()
 		{
 			var x86 = simCPU as CPUx86;

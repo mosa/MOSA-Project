@@ -8,7 +8,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 {
 	public abstract class BaseTestPlatform
 	{
-		public string Name { get; set; }
+		public string Name { get; private set; }
 
 		public BaseTestPlatform(string platform)
 		{

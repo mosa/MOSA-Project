@@ -163,6 +163,11 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			dislayForm.SetBitMap(bitmap);
 		}
 
+		public override BaseSimDevice Clone(SimCPU simCPU)
+		{
+			return null; // not clonable
+		}
+
 		public override void Initialize()
 		{
 			simCPU.AddMemory(baseAddress, StandardMemorySize, 2);

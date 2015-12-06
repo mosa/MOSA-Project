@@ -4,9 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace Mosa.TinyCPUSimulator
 {
-	public class RegisterFloatingPoint : SimRegister
+	public sealed class RegisterFloatingPoint : SimRegister
 	{
-		public virtual FloatingValue Value { get; set; }
+		public FloatingValue Value { get; set; }
 
 		public RegisterFloatingPoint(string name, int index, RegisterType registerType, bool physical)
 			: base(name, index, registerType, 128, physical)

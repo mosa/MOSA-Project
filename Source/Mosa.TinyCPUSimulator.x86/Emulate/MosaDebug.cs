@@ -6,7 +6,7 @@ using System.Text;
 namespace Mosa.TinyCPUSimulator.x86.Emulate
 {
 	/// <summary>
-	/// Represents an special debug ports used by MOSA during simulations
+	/// Represents special debug ports used by MOSA during simulations
 	/// </summary>
 	public class MosaDebug : BaseSimDevice
 	{
@@ -38,6 +38,17 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			: base(simCPU)
 		{
 			debug = output;
+		}
+
+		public override BaseSimDevice Clone(SimCPU simCPU)
+		{
+			var device = new MosaDebug(simCPU, debug);
+
+			device.value32 = value32;
+			device.bytes32 = bytes32;
+			device.sb = new StringBuilder(sb.ToString());
+
+			return device;
 		}
 
 		public override ushort[] GetPortList()

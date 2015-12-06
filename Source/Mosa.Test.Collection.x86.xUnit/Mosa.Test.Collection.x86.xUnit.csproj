@@ -84,6 +84,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EnumFixture.tt</DependentUpon>
     </Compile>
+    <Compile Include="ExceptionHandlingFixture.cs" />
     <Compile Include="GenericFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringFixture.cs" />

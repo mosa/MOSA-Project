@@ -2,7 +2,7 @@
 
 namespace Mosa.TinyCPUSimulator.x86
 {
-	public class SegmentRegister : Register32Bit
+	public sealed class SegmentRegister : Register32Bit
 	{
 		public SegmentRegister(string name, int index)
 			: base(name, index, RegisterType.SegmentRegister, false)

@@ -57,6 +57,14 @@ namespace Mosa.Compiler.Framework
 		public bool EnableOptimizations { get; set; }
 
 		/// <summary>
+		/// Gets or sets the debug restrict optimization by count.
+		/// </summary>
+		/// <value>
+		/// The debug restrict optimization by count.
+		/// </value>
+		public int DebugRestrictOptimizationByCount { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether [enable promote temporary variables optimization].
 		/// </summary>
 		/// <value>
@@ -231,6 +239,7 @@ namespace Mosa.Compiler.Framework
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
 			EmitBinary = true;
 			InlinedIRMaximum = 20;
+			DebugRestrictOptimizationByCount = 0;
 		}
 	}
 }

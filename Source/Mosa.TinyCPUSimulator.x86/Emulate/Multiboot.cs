@@ -12,6 +12,11 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 		{
 		}
 
+		public override BaseSimDevice Clone(SimCPU simCPU)
+		{
+			return new Multiboot(simCPU);
+		}
+
 		public override void Initialize()
 		{
 			simCPU.AddMemory(0x00200000, 0x08, 2);

@@ -2,7 +2,7 @@
 
 namespace Mosa.TinyCPUSimulator.x86
 {
-	public class Legacy8BitHighRegister : Register32Bit
+	public sealed class Legacy8BitHighRegister : Register32Bit
 	{
 		private GeneralPurposeRegister register;
 

@@ -30,6 +30,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.AddLast(NullableTest3);
 			testMethods.AddLast(NullableTest4);
 			testMethods.AddLast(NullableTest5);
+			testMethods.AddLast(ForeachU1Test);
 		}
 
 		private static uint StaticValue = 0x200000;
@@ -238,6 +239,25 @@ namespace Mosa.TestWorld.x86.Tests
 			long? v3 = v1 ?? v2;
 
 			return (v3 == 32);
+		}
+
+		public static byte ForeachU1()
+		{
+			byte[] a = new byte[5];
+			for (int i = 0; i < 5; i++)
+				a[i] = (byte)i;
+
+			byte total = 0;
+
+			foreach (byte v in a)
+				total += v;
+
+			return total;
+		}
+
+		public static bool ForeachU1Test()
+		{
+			return ForeachU1() == 10;
 		}
 
 		unsafe public static class PointerBugClass

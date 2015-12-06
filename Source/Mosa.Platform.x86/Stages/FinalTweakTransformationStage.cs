@@ -102,16 +102,19 @@ namespace Mosa.Platform.x86.Stages
 				Operand source = context.Operand1;
 				Operand dest = context.Result;
 
-				Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+				var replace = (dest.IsMemoryAddress && dest.EffectiveOffsetBase == GeneralPurposeRegister.EAX)
+						? GeneralPurposeRegister.EBX : GeneralPurposeRegister.EAX;
 
-				context.SetInstruction2(X86.Xchg, EAX, source, source, EAX);
-				context.AppendInstruction(X86.Mov, dest, EAX);
-				context.AppendInstruction2(X86.Xchg, source, EAX, EAX, source);
+				Operand reg = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, replace);
+
+				context.SetInstruction2(X86.Xchg, reg, source, source, reg);
+				context.AppendInstruction(X86.Mov, dest, reg);
+				context.AppendInstruction2(X86.Xchg, source, reg, reg, source);
 			}
 		}
 
 		/// <summary>
-		/// Movsses instruction
+		/// Movss instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		public override void Movss(Context context)

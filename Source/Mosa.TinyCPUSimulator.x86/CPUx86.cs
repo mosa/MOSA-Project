@@ -101,7 +101,56 @@ namespace Mosa.TinyCPUSimulator.x86
 
 		public CPUx86()
 		{
+			CreateRegisters();
+
+			Reset();
+		}
+
+		public CPUx86(CPUx86 simCPU) : base(simCPU)
+		{
+			CreateRegisters();
+
+			EIP.Value = simCPU.EIP.Value;
+
+			EFLAGS.Value = simCPU.EFLAGS.Value;
+
+			EAX.Value = simCPU.EAX.Value;
+			EBX.Value = simCPU.EBX.Value;
+			ECX.Value = simCPU.ECX.Value;
+			EDX.Value = simCPU.EDX.Value;
+			ESP.Value = simCPU.ESP.Value;
+			EBP.Value = simCPU.EBP.Value;
+			ESI.Value = simCPU.ESI.Value;
+			EDI.Value = simCPU.EDI.Value;
+
+			CR0.Value = simCPU.CR0.Value;
+			CR2.Value = simCPU.CR2.Value;
+			CR3.Value = simCPU.CR3.Value;
+			CR4.Value = simCPU.CR4.Value;
+
+			XMM0.Value = simCPU.XMM0.Value;
+			XMM1.Value = simCPU.XMM1.Value;
+			XMM2.Value = simCPU.XMM2.Value;
+			XMM3.Value = simCPU.XMM3.Value;
+			XMM4.Value = simCPU.XMM4.Value;
+			XMM5.Value = simCPU.XMM5.Value;
+			XMM6.Value = simCPU.XMM6.Value;
+			XMM7.Value = simCPU.XMM7.Value;
+
+			ST0.Value = simCPU.ST0.Value;
+
+			CS.Value = simCPU.CS.Value;
+			DS.Value = simCPU.DS.Value;
+			ES.Value = simCPU.ES.Value;
+			FS.Value = simCPU.FS.Value;
+			GS.Value = simCPU.GS.Value;
+			SS.Value = simCPU.SS.Value;
+		}
+
+		private void CreateRegisters()
+		{
 			EIP = new Register32Bit("EIP", 0, RegisterType.InstructionPointer, false);
+
 			EFLAGS = new FlagsRegister();
 
 			EAX = new GeneralPurposeRegister("EAX", 0);
@@ -153,8 +202,6 @@ namespace Mosa.TinyCPUSimulator.x86
 			FS = new SegmentRegister("FS", 3);
 			GS = new SegmentRegister("GS", 4);
 			SS = new SegmentRegister("SS", 5);
-
-			Reset();
 		}
 
 		public override void Reset()

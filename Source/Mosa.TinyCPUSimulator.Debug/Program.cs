@@ -2,68 +2,79 @@
 
 using Mosa.Test.Collection.x86.xUnit;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.TinyCPUSimulator.Debug
 {
-	internal class TraceListener : System.Diagnostics.TraceListener
-	{
-		private List<string> output = new List<string>();
-
-		public string Output
-		{
-			get
-			{
-				var builder = new StringBuilder();
-				foreach (var m in output)
-					builder.Append(m);
-				return builder.ToString();
-			}
-		}
-
-		public override void Write(string message)
-		{
-			output.Add(message);
-		}
-
-		public override void WriteLine(string message)
-		{
-			output.Add(message);
-			output.Add("\r\n");
-		}
-	}
-
 	internal class Program
 	{
+		private delegate void Test();
+
 		private static void Main(string[] args)
 		{
-			var listener = new TraceListener();
+			var fixture = new ForeachFixture();
+
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = false;
+			//fixture.TestCompiler.DebugOutput = true;
+			//DoTest(fixture.ForeachU1, "no: variable promotion");
+
+			//fixture.TestCompiler.Reset();
+			fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = true;
+			fixture.TestCompiler.DebugOutput = true;
+			DoTest(fixture.ForeachU1, "normal-all");
+
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = false;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = false;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableSSA = false;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = false;
+			//DoTest(fixture.ForeachU1, "no: optimizations, inline, sparse, ssa, variable promotion");
+
+			//fixture.TestCompiler.Reset();
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;
+			//DoTest(fixture.ForeachU1, "no optimization");
+
+			//fixture.TestCompiler.Reset();
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = false;
+			//DoTest(fixture.ForeachU1, "no: optimizations, inline");
+
+			//fixture.TestCompiler.Reset();
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = false;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = false;
+			//DoTest(fixture.ForeachU1, "no: optimizations, inline, sparse");
+
+			//fixture.TestCompiler.Reset();
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = false;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = false;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableSSA = false;
+			//DoTest(fixture.ForeachU1, "no: optimizations, inline, sparse, ssa");
+
+			return;
+		}
+
+		private static bool DoTest(Test test, string note = null)
+		{
 			try
 			{
-				System.Diagnostics.Debug.Listeners.Add(listener);
+				Console.WriteLine("Testing: " + test.Method.ToString());
+				if (note != null)
+				{
+					Console.WriteLine("Note: " + note);
+				}
 
-				Test5a();
+				test.Invoke();
 
-				//Test5b();
-				//Test5c();
-				//Test3();
-				//Test4();
-				//Test12();
-
-				//Test13();
-
-				//Test14();
+				Console.WriteLine("=> OK");
+				return true;
 			}
 			catch (Exception e)
 			{
 				Console.WriteLine(e.Message);
+				Console.WriteLine("=> ERROR");
+				return false;
 			}
-
-			System.Diagnostics.Debugger.Launch();
-			System.Diagnostics.Debug.Write(listener.Output);
-
-			//Console.ReadLine();
 		}
 
 		private static void Test14()

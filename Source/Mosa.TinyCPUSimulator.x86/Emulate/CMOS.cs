@@ -17,11 +17,6 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 		/// <summary>
 		///
 		/// </summary>
-		protected ushort ioBase;
-
-		/// <summary>
-		///
-		/// </summary>
 		protected byte index = 0;
 
 		/// <summary>
@@ -31,6 +26,13 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 		public CMOS(SimCPU simCPU)
 			: base(simCPU)
 		{
+		}
+
+		public override BaseSimDevice Clone(SimCPU simCPU)
+		{
+			var device = new CMOS(simCPU);
+			device.index = index;
+			return device;
 		}
 
 		public override void Reset()
@@ -50,7 +52,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 
 		public override void PortWrite(uint port, byte value)
 		{
-			switch (port - ioBase)
+			switch (port - StandardIOBase)
 			{
 				case 0: index = value; return;
 				default: return;
@@ -59,7 +61,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 
 		public override byte PortRead(uint port)
 		{
-			switch (port - ioBase)
+			switch (port - StandardIOBase)
 			{
 				case 1: return ReadCMOS(index);
 				default: return 0xFF;
