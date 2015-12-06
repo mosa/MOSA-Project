@@ -21,12 +21,12 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		protected SimLinker linker;
 
 		protected const uint MaxTicks = 500000;
-		internal bool IsInternalized { get; set; }
+		internal bool IsInitialized { get; set; }
 
 		internal TestCompiler(BaseTestPlatform platform)
 		{
 			this.platform = platform;
-			IsInternalized = false;
+			IsInitialized = false;
 
 			simAdapter = platform.CreateSimAdaptor();
 
@@ -71,12 +71,12 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		internal void Initialize()
 		{
-			if (IsInternalized)
+			if (IsInitialized)
 				return;
 
 			//DumpSymbols(); // DEBUG OPTION
 
-			IsInternalized = true;  // must be before Run!
+			IsInitialized = true;  // must be before Run!
 
 			Run<int>(string.Empty, "Default", "AssemblyInit", true);
 
