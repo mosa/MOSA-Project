@@ -342,7 +342,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (trace.Active) trace.Log("*** PromoteLocalVariable");
 
-				ReplaceVirtualRegister(local, v);
+				ReplaceVirtualRegister(local, v, true);
 
 				promoteLocalVariableCount++;
 				changeCount++;
@@ -1856,7 +1856,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (trace.Active) trace.Log("*** Reduce64BitOperationsTo32Bit");
 
-				ReplaceVirtualRegister(register, v);
+				ReplaceVirtualRegister(register, v, true);
 
 				reduce64BitOperationsTo32BitCount++;
 				changeCount++;
@@ -1922,7 +1922,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return true;
 		}
 
-		private void ReplaceVirtualRegister(Operand local, Operand replacement)
+		private void ReplaceVirtualRegister(Operand local, Operand replacement, bool updateMove)
 		{
 			if (trace.Active) trace.Log("Replacing: " + local.ToString() + " with " + replacement.ToString());
 
@@ -1938,6 +1938,16 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
 						node.SetOperand(i, replacement);
+
+						if (updateMove)
+						{
+							if (node.Instruction == IRInstruction.ZeroExtendedMove)
+							{
+								node.Instruction = IRInstruction.Move;
+								node.Size = InstructionSize.None;
+							}
+						}
+
 						if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
 					}
 				}
@@ -1955,6 +1965,16 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
 						node.SetResult(i, replacement);
+
+						if (updateMove)
+						{
+							if (node.Instruction == IRInstruction.ZeroExtendedMove)
+							{
+								node.Instruction = IRInstruction.Move;
+								node.Size = InstructionSize.None;
+							}
+						}
+
 						if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
 					}
 				}
@@ -1972,8 +1992,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsInt)
 				return;
 
-			bool changed = false;
-
 			if (node.Instruction == IRInstruction.LogicalAnd ||
 				node.Instruction == IRInstruction.LogicalOr ||
 				node.Instruction == IRInstruction.LogicalXor ||
@@ -1985,7 +2003,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
 					node.Operand1 = Operand.CreateConstant(TypeSystem, (int)(node.Operand1.ConstantUnsignedLongInteger & uint.MaxValue));
+					changeCount++;
 					if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
+					AddOperandUsageToWorkList(node);
 				}
 				if (node.OperandCount >= 2 && node.Operand2.IsConstant && node.Operand2.IsLong)
 				{
@@ -1993,13 +2013,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
 					node.Operand2 = Operand.CreateConstant(TypeSystem, (int)(node.Operand2.ConstantUnsignedLongInteger & uint.MaxValue));
+					changeCount++;
 					if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
+					AddOperandUsageToWorkList(node);
 				}
-			}
-
-			if (changed)
-			{
-				AddOperandUsageToWorkList(node);
 			}
 		}
 	}

@@ -10,9 +10,9 @@ using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.TestSystem
 {
-	internal class TestCompiler : ITraceListener
+	public class TestCompiler : ITraceListener
 	{
-		protected MosaCompiler compiler = new MosaCompiler();
+		public MosaCompiler Compiler { get; private set; }
 
 		protected BaseTestPlatform platform;
 
@@ -26,24 +26,29 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		internal TestCompiler(BaseTestPlatform platform)
 		{
 			this.platform = platform;
+			Reset();
+		}
+
+		public void Reset()
+		{
 			IsInitialized = false;
 
 			simAdapter = platform.CreateSimAdaptor();
 
-			compiler.CompilerTrace.TraceFilter.Active = false;
-			compiler.CompilerTrace.TraceListener = this;
+			Compiler = new MosaCompiler();
 
-			compiler.CompilerOptions.EnableOptimizations = true;
-			compiler.CompilerOptions.EnableSSA = true;
-			compiler.CompilerOptions.EnableVariablePromotion = true;
-			compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
-			compiler.CompilerOptions.EnableInlinedMethods = true;
+			Compiler.CompilerTrace.TraceFilter.Active = false;
+			Compiler.CompilerTrace.TraceListener = this;
 
-			compiler.CompilerOptions.Architecture = platform.CreateArchitecture();
-			compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
-			compiler.CompilerFactory = delegate { return new SimCompiler(simAdapter); };
+			Compiler.CompilerOptions.EnableOptimizations = true;
+			Compiler.CompilerOptions.EnableSSA = true;
+			Compiler.CompilerOptions.EnableVariablePromotion = true;
+			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
+			Compiler.CompilerOptions.EnableInlinedMethods = true;
 
-			CompileTestCode();
+			Compiler.CompilerOptions.Architecture = platform.CreateArchitecture();
+			Compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
+			Compiler.CompilerFactory = delegate { return new SimCompiler(simAdapter); };
 		}
 
 		private void CompileTestCode()
@@ -58,21 +63,19 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			moduleLoader.LoadModuleFromFile("Mosa.Test.Collection.dll");
 			moduleLoader.LoadModuleFromFile("Mosa.Kernel." + platform.Name + "Test.dll");
 
-			compiler.Load(TypeSystem.Load(moduleLoader.CreateMetadata()));
+			Compiler.Load(TypeSystem.Load(moduleLoader.CreateMetadata()));
 
-			//compiler.Execute();
+			Compiler.Execute(Environment.ProcessorCount);
 
-			compiler.Execute(Environment.ProcessorCount);
-
-			//Console.WriteLine("Compiled.");
-
-			linker = compiler.Linker as SimLinker;
+			linker = Compiler.Linker as SimLinker;
 		}
 
 		internal void Initialize()
 		{
 			if (IsInitialized)
 				return;
+
+			CompileTestCode();
 
 			//DumpSymbols(); // DEBUG OPTION
 
@@ -107,7 +110,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 				Initialize();
 
 				// Find the test method to execute
-				MosaMethod runtimeMethod = FindMethod(
+				var runtimeMethod = FindMethod(
 					ns,
 					type,
 					method,
@@ -164,7 +167,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		private MosaMethod FindMethod(string ns, string type, string method, params object[] parameters)
 		{
-			foreach (var t in compiler.TypeSystem.AllTypes)
+			foreach (var t in Compiler.TypeSystem.AllTypes)
 			{
 				if (t.Name != type)
 					continue;

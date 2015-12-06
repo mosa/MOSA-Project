@@ -67,6 +67,13 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
 						node.SetOperand(i, v);
+
+						if (node.Instruction == IRInstruction.ZeroExtendedMove)
+						{
+							node.Instruction = IRInstruction.Move;
+							node.Size = InstructionSize.None;
+						}
+
 						if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
 					}
 				}
@@ -82,6 +89,13 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
 						node.SetResult(i, v);
+
+						if (node.Instruction == IRInstruction.ZeroExtendedMove)
+						{
+							node.Instruction = IRInstruction.Move;
+							node.Size = InstructionSize.None;
+						}
+
 						if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
 					}
 				}

@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 namespace Mosa.TinyCPUSimulator.TestSystem
 {
-	public class TestFixture
+	public class BaseTestFixture
 	{
 		protected virtual BaseTestPlatform BasePlatform { get { return null; } }
 
-		private TestCompiler TestCompiler
+		public TestCompiler TestCompiler
 		{
 			get
 			{

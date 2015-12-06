@@ -99,7 +99,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 		public uint IDTR { get; set; }
 
-		public CPUx86() 
+		public CPUx86()
 		{
 			CreateRegisters();
 

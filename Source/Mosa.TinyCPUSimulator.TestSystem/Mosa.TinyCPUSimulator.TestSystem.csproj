@@ -90,7 +90,7 @@
     <Compile Include="BaseTestPlatform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestCompilerFactory.cs" />
-    <Compile Include="TestFixture.cs" />
+    <Compile Include="BaseTestFixture.cs" />
     <Compile Include="TestCompiler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
