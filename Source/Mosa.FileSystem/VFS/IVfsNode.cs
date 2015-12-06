@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.IO;
+
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
@@ -53,13 +55,13 @@ namespace Mosa.FileSystem.VFS
 		/// <returns>An object instance, which represents the node.</returns>
 		/// <remarks>
 		/// This method is central to the entire VFS. It allows for interaction with filesystem entries in a way not possible
-		/// with classical operating systems. The result of this function is heavily dependant on the item represented by the node, e.g.
+		/// with classical operating systems. The result of this function is heavily dependent on the item represented by the node, e.g.
 		/// for a classic file (stream of bytes) the result of this method call would be a System.IO.Stream. For a device the result would
 		/// be the driver object, for a directory it would be a System.IO.DirectoryInfo object, for kernel objects the respective object such
 		/// as System.Threading.EventWaitHandle, System.Threading.Mutex, System.Threading.Thread, System.Diagnostics.Process etc. Note: The object
 		/// retrieved can be closed by the respective methods on the returned object. There's no close functionality on the IVfsNode itself.
 		/// </remarks>
-		object Open(System.IO.FileAccess access, System.IO.FileShare share);
+		object Open(FileAccess access, FileShare share);
 
 		/// <summary>
 		/// Called to delete a child from a directory.

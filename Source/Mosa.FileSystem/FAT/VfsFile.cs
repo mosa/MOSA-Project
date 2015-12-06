@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.IO;
 using Mosa.FileSystem.VFS;
 
 namespace Mosa.FileSystem.FAT
@@ -80,9 +81,9 @@ namespace Mosa.FileSystem.FAT
 		/// <param name="access">The access.</param>
 		/// <param name="sharing">The sharing.</param>
 		/// <returns></returns>
-		public override object Open(System.IO.FileAccess access, System.IO.FileShare sharing)
+		public override object Open(FileAccess access, FileShare sharing)
 		{
-			if (access == System.IO.FileAccess.Read)
+			if (access == FileAccess.Read)
 				return new FatFileStream((FileSystem as VfsFileSystem).FAT, fileCluster, directorySector, directoryIndex);
 
 			// TODO

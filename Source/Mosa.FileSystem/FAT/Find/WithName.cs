@@ -32,7 +32,7 @@ namespace Mosa.FileSystem.FAT.Find
 		/// <returns></returns>
 		public bool Compare(byte[] data, uint offset, FatType type)
 		{
-			BinaryFormat entry = new BinaryFormat(data);
+			var entry = new BinaryFormat(data);
 
 			byte first = entry.GetByte(offset + Entry.DOSName);
 

@@ -12,7 +12,6 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// Holds the current directory of the current thread.
 		/// </summary>
-		[System.ThreadStatic]
 		private static DirectoryEntry currentDirectory = null;
 
 		#endregion Static data members
