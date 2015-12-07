@@ -220,7 +220,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool ShouldStop
 		{
-			get { return ((changeCount != 0) && (changeCount > debugRestrictOptimizationByCount)); }
+			get { return ((debugRestrictOptimizationByCount != 0) && (changeCount > debugRestrictOptimizationByCount)); }
 		}
 
 		/// <summary>
