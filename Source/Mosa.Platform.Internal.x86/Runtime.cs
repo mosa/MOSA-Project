@@ -571,21 +571,7 @@ namespace Mosa.Platform.Internal.x86
 						uint previousFrame = GetPreviousStackFrame(stackFrame);
 						uint newStack = previousFrame - stackSize;
 
-						//DebugOutput("5x:");
-						//DebugOutput(jumpTarget);
-						//DebugOutput(stackSize);
-						//DebugOutput(newStack);
-						//DebugOutput(previousFrame);
-
-						//var method = GetMethodDefinition(jumpTarget);
-
-						//DebugOutput(jumpTarget - methodStart);
-
-						//string caller = Runtime.GetMethodDefinitionName(method);
-
-						//DebugOutput(caller);
-
-						Native.FrameJump(jumpTarget, newStack, previousFrame);
+						Native.FrameJump(jumpTarget, newStack, previousFrame, exceptionObject);
 					}
 				}
 
