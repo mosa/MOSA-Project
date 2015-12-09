@@ -138,7 +138,7 @@
 			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
 			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(67, 22);
+			this.toolStripButton1.Size = new System.Drawing.Size(72, 22);
 			this.toolStripButton1.Text = "Connect";
 			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
 			// 
@@ -152,7 +152,7 @@
 			this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
 			this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton4.Name = "toolStripButton4";
-			this.toolStripButton4.Size = new System.Drawing.Size(47, 22);
+			this.toolStripButton4.Size = new System.Drawing.Size(51, 22);
 			this.toolStripButton4.Text = "Ping";
 			this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
 			// 
@@ -161,7 +161,7 @@
 			this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
 			this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton2.Name = "toolStripButton2";
-			this.toolStripButton2.Size = new System.Drawing.Size(90, 22);
+			this.toolStripButton2.Size = new System.Drawing.Size(100, 22);
 			this.toolStripButton2.Text = "View Memory";
 			this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
 			// 

@@ -22,10 +22,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void OrderBlocks()
 		{
-			// don't remove any blocks when the flow control is unusual
-			if (HasProtectedRegions)
-				return;
-
 			var blockOrderAnalysis = new LoopAwareBlockOrder();
 
 			blockOrderAnalysis.PerformAnalysis(BasicBlocks);

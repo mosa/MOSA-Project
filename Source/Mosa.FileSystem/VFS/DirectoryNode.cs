@@ -13,15 +13,6 @@ namespace Mosa.FileSystem.VFS
 	/// </remarks>
 	public class DirectoryNode : NodeBase
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds all nodes added to the root vfs node.
-		/// </summary>
-		//private System.Collections.ArrayList nodes;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -31,7 +22,6 @@ namespace Mosa.FileSystem.VFS
 		public DirectoryNode(IFileSystem fs)
 			: base(fs, VfsNodeType.Directory)
 		{
-			//nodes = new System.Collections.ArrayList();
 		}
 
 		#endregion Construction

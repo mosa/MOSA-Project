@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
 using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -11,25 +12,46 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			if (HasProtectedRegions)
-			{
-				// exception handlers may point to empty/unreferenced blocks
-				return;
-			}
-
 			var blockOrderAnalysis = MethodCompiler.Compiler.CompilerOptions.BlockOrderAnalysisFactory();
 
 			blockOrderAnalysis.PerformAnalysis(BasicBlocks);
 
-			if (HasProtectedRegions & blockOrderAnalysis.NewBlockOrder.Count != BasicBlocks.Count)
+			var newBlockOrder = blockOrderAnalysis.NewBlockOrder;
+
+			if (HasProtectedRegions)
 			{
-				// exception handlers may point to removed blocks
-				return;
+				newBlockOrder = AddMissingBlocks(newBlockOrder);
 			}
 
-			BasicBlocks.ReorderBlocks(blockOrderAnalysis.NewBlockOrder);
+			BasicBlocks.ReorderBlocks(newBlockOrder);
 
 			DumpTrace(blockOrderAnalysis);
+		}
+
+		private IList<BasicBlock> AddMissingBlocks(IList<BasicBlock> blocks)
+		{
+			if (blocks.Contains(null))
+				return blocks;
+
+			var list = new List<BasicBlock>();
+
+			foreach (var block in blocks)
+			{
+				if (block != null)
+				{
+					list.Add(block);
+				}
+			}
+
+			foreach (var block in BasicBlocks)
+			{
+				if (!blocks.Contains(block))
+				{
+					list.Add(block);
+				}
+			}
+
+			return list;
 		}
 
 		private void DumpTrace(IBlockOrderAnalysis blockOrderAnalysis)

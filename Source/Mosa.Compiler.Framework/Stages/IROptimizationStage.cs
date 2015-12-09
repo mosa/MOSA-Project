@@ -66,9 +66,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!HasCode)
 				return;
 
-			if (HasProtectedRegions)
-				return;
-
 			trace = CreateTraceLog();
 
 			debugRestrictOptimizationByCount = MethodCompiler.Compiler.CompilerOptions.DebugRestrictOptimizationByCount;
