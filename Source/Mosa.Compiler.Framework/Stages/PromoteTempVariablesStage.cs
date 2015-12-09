@@ -9,15 +9,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			//HACK!!! HACK!!! HACK!!!
-			//if (MethodCompiler.Method.FullName.Contains(" Mosa.Platform.Internal.x86.Runtime::GetProtectedRegionEntryByAddress"))
-			//	return;
-
 			if (!HasCode)
-				return;
-
-			// Unable to optimize SSA w/ exceptions or finally handlers present
-			if (HasProtectedRegions)
 				return;
 
 			trace = CreateTraceLog();
