@@ -16,6 +16,7 @@ namespace Mosa.Compiler.Framework
 		public static readonly int PrologueLabel = -1;
 		public static readonly int StartLabel = 0;
 		public static readonly int EpilogueLabel = Int32.MaxValue;
+		public static readonly int CompilerBlockStartLabel = 0x10000000;
 
 		#region Data Fields
 
@@ -97,6 +98,14 @@ namespace Mosa.Compiler.Framework
 		/// <c>true</c> if this instance is epilogue; otherwise, <c>false</c>.
 		/// </value>
 		public bool IsEpilogue { get { return Label == EpilogueLabel; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is compiler block.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is compiler block; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsCompilerBlock { get { return (Label >= CompilerBlockStartLabel) && (Label != EpilogueLabel); } }
 
 		#endregion Properties
 

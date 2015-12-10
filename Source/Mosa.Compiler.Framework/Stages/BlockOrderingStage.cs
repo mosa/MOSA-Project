@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (blocks.Contains(null))
 				return blocks;
 
-			var list = new List<BasicBlock>();
+			var list = new List<BasicBlock>(blocks.Count);
 
 			foreach (var block in blocks)
 			{
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var block in BasicBlocks)
 			{
-				if (!blocks.Contains(block))
+				if (!block.IsCompilerBlock && !blocks.Contains(block))
 				{
 					list.Add(block);
 				}

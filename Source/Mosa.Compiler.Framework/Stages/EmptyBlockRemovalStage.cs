@@ -14,10 +14,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void RemoveEmptyBlocks()
 		{
-			// don't remove any blocks when the flow control is unusual
-			if (HasProtectedRegions)
-				return;
-
 			foreach (var block in BasicBlocks)
 			{
 				// don't process other unusual blocks (header blocks, return block, etc.)
@@ -29,6 +25,9 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 
 				if (!IsEmptyBlockWithSingleJump(block))
+					continue;
+
+				if (HasProtectedRegions && !block.IsCompilerBlock)
 					continue;
 
 				RemoveEmptyBlockWithSingleJump(block);

@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private BasicBlock epilogueBlock = null;
 
-		private int nextAvailableLabel = 0x10000000;
+		private int nextAvailableLabel = BasicBlock.CompilerBlockStartLabel;
 
 		#endregion Data members
 
