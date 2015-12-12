@@ -9,7 +9,7 @@ set GIT="%ProgramFiles(x86)%\Git\bin\git.exe"
 rmdir /q /s source
 mkdir source
 
-%GIT% clone --branch v1.0.2-mosa --depth 1 https://github.com/mosa/dnlib.git source/dnlib
+%GIT% clone --branch v1.6.0-mosa --depth 1 https://github.com/mosa/dnlib.git source/dnlib
 %GIT% clone --branch v3.0-alpha8-mosa  --depth 1 https://github.com/mosa/dockpanelsuite.git source/dockpanelsuite
 
 %MSBUILD% /nologo /m /p:BuildInParallel=true /p:Configuration=Release /p:Platform="Any CPU" source/dnlib\dnlib.sln
