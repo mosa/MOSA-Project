@@ -289,12 +289,18 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 						return result;           // Don't add again to controller
 
 					case ElementType.SZArray:
-						GetType(new GenericInstSig(szHelperSig, typeSig.Next));
-						GetType(new GenericInstSig(iListSig, typeSig.Next));
+						if (!typeSig.Next.HasOpenGenericParameter())
+						{
+							GetType(new GenericInstSig(szHelperSig, typeSig.Next));
+							GetType(new GenericInstSig(iListSig, typeSig.Next));
+						}
+
 						result = elementType.ToSZArray();
 						using (var arrayType = metadata.Controller.MutateType(result))
 							arrayType.UnderlyingObject = elementType.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Clone(typeSig);
-						metadata.Resolver.EnqueueForArrayResolve(result);
+						
+						if (!typeSig.Next.HasOpenGenericParameter())
+							metadata.Resolver.EnqueueForArrayResolve(result);
 						return result;
 
 					case ElementType.Array:
