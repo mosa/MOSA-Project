@@ -427,7 +427,7 @@ namespace Mosa.DeviceDriver.ISA
 		}
 
 		/// <summary>
-		/// Gets the maximun drive count.
+		/// Gets the maximum drive count.
 		/// </summary>
 		/// <value>The drive count.</value>
 		public uint MaximunDriveCount { get { return 2; } }

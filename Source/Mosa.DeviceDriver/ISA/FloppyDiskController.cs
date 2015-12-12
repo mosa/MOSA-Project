@@ -488,7 +488,7 @@ namespace Mosa.DeviceDriver.ISA
 		}
 
 		/// <summary>
-		/// Waits for reqister ready.
+		/// Waits for register ready.
 		/// </summary>
 		/// <returns></returns>
 		protected bool WaitForReqisterReady()
@@ -636,7 +636,7 @@ namespace Mosa.DeviceDriver.ISA
 		}
 
 		/// <summary>
-		/// Recalibrates the specified drive.
+		/// Re-calibrates the specified drive.
 		/// </summary>
 		/// <param name="drive">The drive.</param>
 		/// <returns></returns>
