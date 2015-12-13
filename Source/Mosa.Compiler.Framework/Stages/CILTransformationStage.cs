@@ -236,6 +236,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Dup(Context context)
 		{
+			Debug.Assert(false); // should never get here
+
 			// We don't need the dup anymore.
 			context.Empty();
 		}

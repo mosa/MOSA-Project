@@ -4,6 +4,7 @@ using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -42,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		///
 		/// </summary>
-		private Queue<WorkItem> workList = new Queue<WorkItem>();
+		private Queue<WorkItem> workList;
 
 		/// <summary>
 		///
@@ -64,13 +65,34 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private Stack<Operand>[] scheduledMoves;
 
+		/// <summary>
+		/// The dup nodes
+		/// </summary>
+		private List<InstructionNode> dupNodes;
+
 		protected override void Run()
 		{
 			if (MethodCompiler.Method.Code.Count == 0)
 				return;
 
+			workList = new Queue<WorkItem>();
+
 			foreach (BasicBlock headBlock in BasicBlocks.HeadBlocks)
+			{
 				Trace(headBlock);
+			}
+
+			RemoveDuplicateInstructions();
+		}
+
+		protected override void Finish()
+		{
+			workList = null;
+			outgoingStack = null;
+			scheduledMoves = null;
+			processed = null;
+			enqueued = null;
+			dupNodes = null;
 		}
 
 		/// <summary>
@@ -254,7 +276,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="currentStack">The current stack.</param>
-		private static void PushResultOperands(Context ctx, Stack<Operand> currentStack)
+		private void PushResultOperands(Context ctx, Stack<Operand> currentStack)
 		{
 			if (ctx.Instruction != IRInstruction.ExceptionStart)
 				if (!(ctx.Instruction as BaseCILInstruction).PushResult)
@@ -266,7 +288,32 @@ namespace Mosa.Compiler.Framework.Stages
 			currentStack.Push(ctx.Result);
 
 			if (ctx.Instruction is CIL.DupInstruction)
+			{
 				currentStack.Push(ctx.Result);
+				if (dupNodes == null)
+				{
+					dupNodes = new List<InstructionNode>();
+				}
+
+				dupNodes.Add(ctx.Node);
+			}
+		}
+
+		/// <summary>
+		/// Removes the duplicate instructions.
+		/// </summary>
+		private void RemoveDuplicateInstructions()
+		{
+			if (dupNodes == null)
+				return;
+
+			foreach (var node in dupNodes)
+			{
+				Debug.Assert(node.Instruction is CIL.DupInstruction);
+				Debug.Assert(node.Result == node.Operand1);
+
+				node.Empty();
+			}
 		}
 	}
 }
