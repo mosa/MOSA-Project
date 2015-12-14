@@ -74,10 +74,10 @@ namespace Mosa.Compiler.Framework.Stages
 			var methodAttribute = method.FindCustomAttribute(InlineMethodAttribute);
 
 			//TODO: check for specific attribute: System.Runtime.CompilerServices.MethodImplOptions.NoInlining
-			if (methodAttribute != null)
-			{
-				compilerMethod.HasDoNotInlineAttribute = true;
-			}
+			//if (methodAttribute != null)
+			//{
+			//	compilerMethod.HasDoNotInlineAttribute = true;
+			//}
 
 			compilerMethod.CanInline = CanInline(compilerMethod);
 
