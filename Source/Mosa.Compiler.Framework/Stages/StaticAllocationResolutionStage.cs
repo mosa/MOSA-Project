@@ -3,7 +3,6 @@
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Common;
 using System.Collections.Generic;
 

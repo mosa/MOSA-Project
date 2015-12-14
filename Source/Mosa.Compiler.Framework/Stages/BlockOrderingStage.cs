@@ -20,38 +20,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (HasProtectedRegions)
 			{
-				newBlockOrder = AddMissingBlocks(newBlockOrder);
+				newBlockOrder = AddMissingBlocksExceptCompilerBlocks(newBlockOrder);
 			}
 
 			BasicBlocks.ReorderBlocks(newBlockOrder);
 
 			DumpTrace(blockOrderAnalysis);
-		}
-
-		private IList<BasicBlock> AddMissingBlocks(IList<BasicBlock> blocks)
-		{
-			if (blocks.Contains(null))
-				return blocks;
-
-			var list = new List<BasicBlock>(blocks.Count);
-
-			foreach (var block in blocks)
-			{
-				if (block != null)
-				{
-					list.Add(block);
-				}
-			}
-
-			foreach (var block in BasicBlocks)
-			{
-				if (!block.IsCompilerBlock && !blocks.Contains(block))
-				{
-					list.Add(block);
-				}
-			}
-
-			return list;
 		}
 
 		private void DumpTrace(IBlockOrderAnalysis blockOrderAnalysis)

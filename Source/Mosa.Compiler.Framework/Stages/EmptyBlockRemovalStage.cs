@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				// don't process other unusual blocks (header blocks, return block, etc.)
+				// don't remove unusual blocks (header blocks, return block, etc.)
 				if (block.NextBlocks.Count == 0 || block.PreviousBlocks.Count == 0)
 					continue;
 
@@ -28,6 +28,9 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 
 				if (HasProtectedRegions && !block.IsCompilerBlock)
+					continue;
+
+				if (BasicBlocks.IsHandlerBlock(block))
 					continue;
 
 				RemoveEmptyBlockWithSingleJump(block);

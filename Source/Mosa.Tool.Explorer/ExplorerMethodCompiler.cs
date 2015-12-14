@@ -40,10 +40,9 @@ namespace Mosa.Tool.Explorer
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableOptimizations) ? new IROptimizationStage() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
-				new IRCleanup(),
+				new IRCleanupStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 
-				//new StopStage(),
 				new PlatformStubStage(),
 				new PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),

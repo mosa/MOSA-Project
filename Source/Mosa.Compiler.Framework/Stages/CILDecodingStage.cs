@@ -117,11 +117,13 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var block = GetBlockByLabel(handler.HandlerStart);
 					BasicBlocks.AddHeaderBlock(block);
+					BasicBlocks.AddHandlerBlock(block);
 				}
 				if (handler.FilterOffset != null)
 				{
 					var block = GetBlockByLabel(handler.FilterOffset.Value);
 					BasicBlocks.AddHeaderBlock(block);
+					BasicBlocks.AddHandlerBlock(block);
 				}
 			}
 		}

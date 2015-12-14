@@ -648,6 +648,32 @@ namespace Mosa.Compiler.Framework
 			return GetInstructionSize(operand);
 		}
 
+		public IList<BasicBlock> AddMissingBlocksExceptCompilerBlocks(IList<BasicBlock> blocks)
+		{
+			var list = new List<BasicBlock>(blocks.Count);
+
+			foreach (var block in blocks)
+			{
+				if (block != null)
+				{
+					list.Add(block);
+				}
+			}
+
+			foreach (var block in BasicBlocks)
+			{
+				if (!blocks.Contains(block))
+				{
+					if (!block.IsCompilerBlock)
+					{
+						list.Add(block);
+					}
+				}
+			}
+
+			return list;
+		}
+
 		#endregion Instruction Size Helpers
 	}
 }

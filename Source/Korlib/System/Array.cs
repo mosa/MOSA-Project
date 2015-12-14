@@ -182,15 +182,15 @@ namespace System
 			return new SZArrayEnumerator(this);
 		}
 
-		//public static T[] Empty<T>()
-		//{
-		//	return EmptyArray<T>.Value;
-		//}
+		public static T[] Empty<T>()
+		{
+			return EmptyArray<T>.Value;
+		}
 
-		//private static class EmptyArray<T>
-		//{
-		//	internal static readonly T[] Value = new T[0];
-		//}
+		private static class EmptyArray<T>
+		{
+			internal static readonly T[] Value = new T[0];
+		}
 
 		// TODO Support multidimensional arrays
 		[Serializable]

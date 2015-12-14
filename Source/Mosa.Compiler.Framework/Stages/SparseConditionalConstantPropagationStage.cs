@@ -95,9 +95,9 @@ namespace Mosa.Compiler.Framework.Stages
 			instructionsRemovedCount++;
 		}
 
-		protected void RemoveDeadBlocks(List<BasicBlock> blocks)
+		protected void RemoveDeadBlocks(List<BasicBlock> deadBlocks)
 		{
-			foreach (var block in blocks)
+			foreach (var block in deadBlocks)
 			{
 				RemoveDeadBlock(block);
 			}

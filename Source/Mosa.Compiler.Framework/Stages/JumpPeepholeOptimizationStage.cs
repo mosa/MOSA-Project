@@ -17,9 +17,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			//if (HasProtectedRegions)
-			//	return;
-
 			var trace = CreateTraceLog();
 
 			for (int f = 0; f < BasicBlocks.Count - 1; f++)
