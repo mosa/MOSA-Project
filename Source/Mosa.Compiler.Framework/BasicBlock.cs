@@ -70,18 +70,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// <True/> if this Block has following blocks
 		/// </summary>
-		public bool HasNextBlocks
-		{
-			get { return NextBlocks.Count > 0; }
-		}
+		public bool HasNextBlocks { get { return NextBlocks.Count > 0; } }
 
 		/// <summary>
 		/// <True/> if this Block has previous blocks
 		/// </summary>
-		public bool HasPreviousBlocks
-		{
-			get { return PreviousBlocks.Count > 0; }
-		}
+		public bool HasPreviousBlocks { get { return PreviousBlocks.Count > 0; } }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is prologue.

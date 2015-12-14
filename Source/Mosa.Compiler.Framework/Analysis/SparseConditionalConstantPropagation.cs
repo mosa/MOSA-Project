@@ -112,6 +112,11 @@ namespace Mosa.Compiler.Framework.Analysis
 				AddExecutionBlock(block);
 			}
 
+			foreach (var block in BasicBlocks.HandlerBlocks)
+			{
+				AddExecutionBlock(block);
+			}
+
 			while (blockWorklist.Count > 0 || instructionWorkList.Count > 0)
 			{
 				ProcessBlocks();

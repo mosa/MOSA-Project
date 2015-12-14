@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.Stages
 			compilerMethod.HasAddressOfInstruction = false;
 
 			int totalIRCount = 0;
-			int totalIROtherCount = 0;
+			int totalNonIRCount = 0;
 
 			foreach (var block in BasicBlocks)
 			{
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else
 					{
-						totalIROtherCount++;
+						totalNonIRCount++;
 					}
 
 					if (node.Instruction == IRInstruction.AddressOf)
@@ -69,7 +69,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			compilerMethod.IRInstructionCount = totalIRCount;
-			compilerMethod.IROtherInstructionCount = totalIROtherCount;
+			compilerMethod.NonIRInstructionCount = totalNonIRCount;
 
 			var methodAttribute = method.FindCustomAttribute(InlineMethodAttribute);
 
@@ -104,7 +104,7 @@ namespace Mosa.Compiler.Framework.Stages
 			trace.Log("HasLoops: " + compilerMethod.HasLoops.ToString());
 			trace.Log("HasProtectedRegions: " + compilerMethod.HasProtectedRegions.ToString());
 			trace.Log("IRInstructionCount: " + compilerMethod.IRInstructionCount.ToString());
-			trace.Log("IROtherInstructionCount: " + compilerMethod.IROtherInstructionCount.ToString());
+			trace.Log("NonIRInstructionCount: " + compilerMethod.NonIRInstructionCount.ToString());
 
 			UpdateCounter("InlineMethodEvaluationStage.MethodCount", 1);
 			if (compilerMethod.CanInline)
@@ -134,7 +134,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (method.HasAddressOfInstruction)
 				return false;
 
-			if (method.IROtherInstructionCount > 0)
+			if (method.NonIRInstructionCount > 0)
 				return false;
 
 			if (method.IRInstructionCount > MethodCompiler.Compiler.CompilerOptions.InlinedIRMaximum)

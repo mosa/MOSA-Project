@@ -41,7 +41,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				(compilerOptions.EnableOptimizations && compilerOptions.EnableSSA && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableOptimizations) ? new IROptimizationStage() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
-				new IRCleanup(),
+				new IRCleanupStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 				new PlatformStubStage(),
 				new PlatformEdgeSplitStage(),

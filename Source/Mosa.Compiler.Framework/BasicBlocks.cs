@@ -28,6 +28,11 @@ namespace Mosa.Compiler.Framework
 		private readonly List<BasicBlock> headBlocks = new List<BasicBlock>();
 
 		/// <summary>
+		/// The handler blocks
+		/// </summary>
+		private readonly List<BasicBlock> handlerBlocks = new List<BasicBlock>();
+
+		/// <summary>
 		///
 		/// </summary>
 		private BasicBlock prologueBlock = null;
@@ -91,6 +96,11 @@ namespace Mosa.Compiler.Framework
 		/// Gets the head blocks.
 		/// </summary>
 		public IList<BasicBlock> HeadBlocks { get { return headBlocks.AsReadOnly(); } }
+
+		/// <summary>
+		/// Gets the handler blocks.
+		/// </summary>
+		public IList<BasicBlock> HandlerBlocks { get { return handlerBlocks.AsReadOnly(); } }
 
 		/// <summary>
 		/// Gets the prologue block.
@@ -185,6 +195,15 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Adds the handler block.
+		/// </summary>
+		/// <param name="basicBlock">The basic block.</param>
+		public void AddHandlerBlock(BasicBlock basicBlock)
+		{
+			handlerBlocks.Add(basicBlock);
+		}
+
+		/// <summary>
 		/// Removes the header block.
 		/// </summary>
 		/// <param name="basicBlock">The basic block.</param>
@@ -204,6 +223,16 @@ namespace Mosa.Compiler.Framework
 		public bool IsHeaderBlock(BasicBlock basicBlock)
 		{
 			return headBlocks.Contains(basicBlock);
+		}
+
+		/// <summary>
+		/// Determines whether [is handler block] [the specified basic block].
+		/// </summary>
+		/// <param name="basicBlock">The basic block.</param>
+		/// <returns></returns>
+		public bool IsHandlerBlock(BasicBlock basicBlock)
+		{
+			return handlerBlocks.Contains(basicBlock);
 		}
 
 		public void ReorderBlocks(IList<BasicBlock> newBlockOrder)

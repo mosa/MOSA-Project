@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework
 
 		public int IRInstructionCount { get; set; }
 
-		public int IROtherInstructionCount { get; set; }
+		public int NonIRInstructionCount { get; set; }
 
 		public bool IsVirtual { get; set; }
 
