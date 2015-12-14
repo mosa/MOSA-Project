@@ -14,7 +14,6 @@ namespace Mosa.Tool.Explorer
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
-		/// <param name="instructionSet">The instruction set.</param>
 		/// <param name="threadID">The thread identifier.</param>
 		public ExplorerMethodCompiler(ExplorerCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
 			: base(compiler, method, basicBlocks, threadID)
@@ -33,7 +32,6 @@ namespace Mosa.Tool.Explorer
 				new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),
 				new ExceptionStage(),
-
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				(compilerOptions.EnableVariablePromotion) ? new PromoteTempVariablesStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
