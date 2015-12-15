@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework.Analysis;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -20,7 +19,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (HasProtectedRegions)
 			{
-				newBlockOrder = AddMissingBlocksExceptCompilerBlocks(newBlockOrder);
+				newBlockOrder = AddMissingBlocks(newBlockOrder, true);
 			}
 
 			BasicBlocks.ReorderBlocks(newBlockOrder);

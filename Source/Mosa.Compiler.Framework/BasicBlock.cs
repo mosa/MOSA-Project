@@ -101,6 +101,10 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool IsCompilerBlock { get { return (Label >= CompilerBlockStartLabel) && (Label != EpilogueLabel); } }
 
+		public bool IsHandlerHeadBlock { get; internal set; }
+
+		public bool IsTryHeadBlock { get; internal set; }
+
 		#endregion Properties
 
 		#region Construction

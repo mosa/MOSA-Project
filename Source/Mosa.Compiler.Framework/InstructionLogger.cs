@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Trace
 				foreach (var block in basicBlocks)
 				{
 					traceLog.Log(String.Format("Block #{0} - Label L_{1:X4}", block.Sequence, block.Label)
-						+ (basicBlocks.IsHeaderBlock(block) ? " [Header]" : string.Empty));
+						+ (basicBlocks.IsHeadBlock(block) ? " [Header]" : string.Empty));
 
 					traceLog.Log("  Prev: " + ListBlocks(block.PreviousBlocks));
 

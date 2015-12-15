@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// <summary>
 	/// The Simple Trace Block Order quickly reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class SimpleTraceBlockOrderStage : IBlockOrderAnalysis
+	public class SimpleTraceBlockOrder : IBlockOrderAnalysis
 	{
 		#region Data members
 
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		public void PerformAnalysis(BasicBlocks basicBlocks)
 		{
 			// Create dictionary of referenced blocks
-			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(basicBlocks.Count);
+			var referenced = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 
 			// Allocate list of ordered Blocks
 			blockOrder = new BasicBlock[basicBlocks.Count];

@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var plugSymbol = Operand.CreateSymbolFromMethod(TypeSystem, plugMethod);
 				var context = CreateNewBlockContext(-1);
 				context.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
-				BasicBlocks.AddHeaderBlock(context.Block);
+				BasicBlocks.AddHeadBlock(context.Block);
 				return;
 			}
 
@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Create the prologue block
 			var prologue = CreateNewBlock(BasicBlock.PrologueLabel);
-			BasicBlocks.AddHeaderBlock(prologue);
+			BasicBlocks.AddHeadBlock(prologue);
 
 			var jmpNode = new InstructionNode();
 			jmpNode.Label = BasicBlock.PrologueLabel;
@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (!block.HasPreviousBlocks && !BasicBlocks.HeadBlocks.Contains(block))
 				{
 					// block was targeted (probably by an leave instruction within a protected region)
-					BasicBlocks.AddHeaderBlock(block);
+					BasicBlocks.AddHeadBlock(block);
 				}
 			}
 
@@ -116,14 +116,14 @@ namespace Mosa.Compiler.Framework.Stages
 				if (handler.HandlerStart != 0)
 				{
 					var block = GetBlockByLabel(handler.HandlerStart);
-					BasicBlocks.AddHeaderBlock(block);
-					BasicBlocks.AddHandlerBlock(block);
+					BasicBlocks.AddHeadBlock(block);
+					BasicBlocks.AddHandlerHeadBlock(block);
 				}
 				if (handler.FilterOffset != null)
 				{
 					var block = GetBlockByLabel(handler.FilterOffset.Value);
-					BasicBlocks.AddHeaderBlock(block);
-					BasicBlocks.AddHandlerBlock(block);
+					BasicBlocks.AddHeadBlock(block);
+					BasicBlocks.AddHandlerHeadBlock(block);
 				}
 			}
 		}

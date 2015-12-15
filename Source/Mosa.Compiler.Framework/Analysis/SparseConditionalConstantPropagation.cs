@@ -112,7 +112,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				AddExecutionBlock(block);
 			}
 
-			foreach (var block in BasicBlocks.HandlerBlocks)
+			foreach (var block in BasicBlocks.HandlerHeadBlocks)
 			{
 				AddExecutionBlock(block);
 			}

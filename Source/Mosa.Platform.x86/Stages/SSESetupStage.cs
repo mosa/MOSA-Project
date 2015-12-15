@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Stages
 
 			var basicBlocks = new BasicBlocks();
 			var block = basicBlocks.CreateBlock();
-			basicBlocks.AddHeaderBlock(block);
+			basicBlocks.AddHeadBlock(block);
 			var ctx = new Context(block);
 
 			/*

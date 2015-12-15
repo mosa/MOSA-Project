@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			basicBlocks = new BasicBlocks();
 			var block = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
-			basicBlocks.AddHeaderBlock(block);
+			basicBlocks.AddHeadBlock(block);
 			context = new Context(block);
 		}
 

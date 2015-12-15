@@ -150,7 +150,7 @@ namespace Mosa.Compiler.Framework
 
 			// Create the prologue block
 			var prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
-			basicBlocks.AddHeaderBlock(prologue);
+			basicBlocks.AddHeadBlock(prologue);
 
 			// Create the epilogue block
 			var epiologue = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel);
