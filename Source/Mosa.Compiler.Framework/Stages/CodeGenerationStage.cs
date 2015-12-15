@@ -115,7 +115,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active)
 						{
 							trace.Log(String.Format("Block #{0} - Label L_{1:X4}", block.Sequence, block.Label)
-								   + (BasicBlocks.IsHeaderBlock(block) ? " [Header]" : string.Empty));
+								   + (BasicBlocks.IsHeadBlock(block) ? " [Header]" : string.Empty));
 						}
 					}
 

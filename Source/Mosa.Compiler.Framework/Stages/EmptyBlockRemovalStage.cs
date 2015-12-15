@@ -30,7 +30,10 @@ namespace Mosa.Compiler.Framework.Stages
 				if (HasProtectedRegions && !block.IsCompilerBlock)
 					continue;
 
-				if (BasicBlocks.IsHandlerBlock(block))
+				if (block.IsHandlerHeadBlock)
+					continue;
+
+				if (block.IsTryHeadBlock)
 					continue;
 
 				RemoveEmptyBlockWithSingleJump(block);

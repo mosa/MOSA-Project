@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void OrderBlocks()
 		{
-			var blockOrderAnalysis = new LoopAwareBlockOrder();
+			var blockOrderAnalysis = new SimpleTraceBlockOrder();   // faster than others
 
 			blockOrderAnalysis.PerformAnalysis(BasicBlocks);
 
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (HasProtectedRegions)
 			{
-				newBlockOrder = AddMissingBlocksExceptCompilerBlocks(newBlockOrder);
+				newBlockOrder = AddMissingBlocks(newBlockOrder, true);
 			}
 
 			BasicBlocks.ReorderBlocks(newBlockOrder);

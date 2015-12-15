@@ -6,7 +6,7 @@ namespace Mosa.Platform.Internal.x86
 {
 	/// <summary>
 	/// Represents a string as struct, so it can used before memory and runtime initialization.
-	/// Use only where needed. Do not incease the struct size more as needed. A good limit would be the maximum horizontal text resolution.
+	/// Use only where needed. Do not increase the struct size more as needed. A good limit would be the maximum horizontal text resolution.
 	/// </summary>
 	[StructLayout(LayoutKind.Explicit, Size = 132 * 2 + 4)]
 	public struct StringBuffer

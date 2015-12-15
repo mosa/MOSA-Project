@@ -648,7 +648,7 @@ namespace Mosa.Compiler.Framework
 			return GetInstructionSize(operand);
 		}
 
-		public IList<BasicBlock> AddMissingBlocksExceptCompilerBlocks(IList<BasicBlock> blocks)
+		public IList<BasicBlock> AddMissingBlocks(IList<BasicBlock> blocks, bool cleanUp)
 		{
 			var list = new List<BasicBlock>(blocks.Count);
 
@@ -664,7 +664,7 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!blocks.Contains(block))
 				{
-					if (!block.IsCompilerBlock)
+					if ((!cleanUp) || (block.HasNextBlocks || block.HasPreviousBlocks || block.IsHandlerHeadBlock || block.IsTryHeadBlock))
 					{
 						list.Add(block);
 					}

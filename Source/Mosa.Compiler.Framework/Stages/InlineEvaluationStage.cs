@@ -71,6 +71,7 @@ namespace Mosa.Compiler.Framework.Stages
 			compilerMethod.IRInstructionCount = totalIRCount;
 			compilerMethod.NonIRInstructionCount = totalNonIRCount;
 
+			// BUG: does not find the attribute
 			var methodAttribute = method.FindCustomAttribute(InlineMethodAttribute);
 
 			//TODO: check for specific attribute: System.Runtime.CompilerServices.MethodImplOptions.NoInlining
@@ -105,6 +106,7 @@ namespace Mosa.Compiler.Framework.Stages
 			trace.Log("HasProtectedRegions: " + compilerMethod.HasProtectedRegions.ToString());
 			trace.Log("IRInstructionCount: " + compilerMethod.IRInstructionCount.ToString());
 			trace.Log("NonIRInstructionCount: " + compilerMethod.NonIRInstructionCount.ToString());
+			trace.Log("HasDoNotInlineAttribute: " + compilerMethod.HasDoNotInlineAttribute.ToString());
 
 			UpdateCounter("InlineMethodEvaluationStage.MethodCount", 1);
 			if (compilerMethod.CanInline)

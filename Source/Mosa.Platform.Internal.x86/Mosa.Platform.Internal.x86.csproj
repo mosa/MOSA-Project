@@ -87,6 +87,7 @@
     <Compile Include="MetadataStructures\MetadataPRTableStruct.cs" />
     <Compile Include="MetadataStructures\MetadataTypeStruct.cs" />
     <Compile Include="Native.cs" />
+    <Compile Include="SimpleStackTraceEntry.cs" />
     <Compile Include="SpinLock.cs" />
     <Compile Include="StringBuffer.cs" />
     <Compile Include="Runtime.cs" />

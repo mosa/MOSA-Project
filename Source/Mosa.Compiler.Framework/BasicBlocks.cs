@@ -30,7 +30,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The handler blocks
 		/// </summary>
-		private readonly List<BasicBlock> handlerBlocks = new List<BasicBlock>();
+		private readonly List<BasicBlock> handlerHeadBlocks = new List<BasicBlock>();
+
+		/// <summary>
+		/// The try blocks
+		/// </summary>
+		private readonly List<BasicBlock> tryHeadBlocks = new List<BasicBlock>();
 
 		/// <summary>
 		///
@@ -98,9 +103,14 @@ namespace Mosa.Compiler.Framework
 		public IList<BasicBlock> HeadBlocks { get { return headBlocks.AsReadOnly(); } }
 
 		/// <summary>
-		/// Gets the handler blocks.
+		/// Gets the handler head blocks.
 		/// </summary>
-		public IList<BasicBlock> HandlerBlocks { get { return handlerBlocks.AsReadOnly(); } }
+		public IList<BasicBlock> HandlerHeadBlocks { get { return handlerHeadBlocks.AsReadOnly(); } }
+
+		/// <summary>
+		/// Gets the try head blocks.
+		/// </summary>
+		public IList<BasicBlock> TryHeadBlocks { get { return tryHeadBlocks.AsReadOnly(); } }
 
 		/// <summary>
 		/// Gets the prologue block.
@@ -189,7 +199,7 @@ namespace Mosa.Compiler.Framework
 		/// Adds the header block.
 		/// </summary>
 		/// <param name="basicBlock">The basic block.</param>
-		public void AddHeaderBlock(BasicBlock basicBlock)
+		public void AddHeadBlock(BasicBlock basicBlock)
 		{
 			headBlocks.Add(basicBlock);
 		}
@@ -198,9 +208,20 @@ namespace Mosa.Compiler.Framework
 		/// Adds the handler block.
 		/// </summary>
 		/// <param name="basicBlock">The basic block.</param>
-		public void AddHandlerBlock(BasicBlock basicBlock)
+		public void AddHandlerHeadBlock(BasicBlock basicBlock)
 		{
-			handlerBlocks.Add(basicBlock);
+			handlerHeadBlocks.Add(basicBlock);
+			basicBlock.IsHandlerHeadBlock = true;
+		}
+
+		/// <summary>
+		/// Adds the try block.
+		/// </summary>
+		/// <param name="basicBlock">The basic block.</param>
+		public void AddTryHeadBlock(BasicBlock basicBlock)
+		{
+			tryHeadBlocks.Add(basicBlock);
+			basicBlock.IsTryHeadBlock = true;
 		}
 
 		/// <summary>
@@ -220,21 +241,15 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		///   <c>true</c> if [is header block] [the specified basic block]; otherwise, <c>false</c>.
 		/// </returns>
-		public bool IsHeaderBlock(BasicBlock basicBlock)
+		public bool IsHeadBlock(BasicBlock basicBlock)
 		{
 			return headBlocks.Contains(basicBlock);
 		}
 
 		/// <summary>
-		/// Determines whether [is handler block] [the specified basic block].
+		/// Reorders the blocks.
 		/// </summary>
-		/// <param name="basicBlock">The basic block.</param>
-		/// <returns></returns>
-		public bool IsHandlerBlock(BasicBlock basicBlock)
-		{
-			return handlerBlocks.Contains(basicBlock);
-		}
-
+		/// <param name="newBlockOrder">The new block order.</param>
 		public void ReorderBlocks(IList<BasicBlock> newBlockOrder)
 		{
 			basicBlocks.Clear();

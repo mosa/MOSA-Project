@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework.xUnit
 			var basicBlocks = new BasicBlocks();
 
 			var block = basicBlocks.CreateBlock();
-			basicBlocks.AddHeaderBlock(block);
+			basicBlocks.AddHeadBlock(block);
 
 			var context = new Context(block);
 

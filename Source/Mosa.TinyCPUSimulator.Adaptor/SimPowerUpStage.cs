@@ -30,7 +30,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 			var basicBlocks = new BasicBlocks();
 			var block = basicBlocks.CreateBlock();
-			basicBlocks.AddHeaderBlock(block);
+			basicBlocks.AddHeadBlock(block);
 			var context = new Context(block);
 
 			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializer);
