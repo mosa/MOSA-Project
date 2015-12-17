@@ -57,7 +57,7 @@ namespace Mosa.Tool.Launcher
 			Options.GenerateMapFile = cbGenerateMapFile.Checked;
 			Options.ExitOnLaunch = cbExitOnLaunch.Checked;
 			Options.MOSADebugger = cbMOSADebugger.Checked;
-			Options.CompilerUsesMultipleThreads = cbCompilerUsesMultipleThreads.Checked;
+			Options.UseMultipleThreadCompiler = cbCompilerUsesMultipleThreads.Checked;
 			Options.MemoryInMB = (uint)nmMemory.Value;
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
@@ -159,7 +159,7 @@ namespace Mosa.Tool.Launcher
 			cbExitOnLaunch.Checked = Options.ExitOnLaunch;
 			cbMOSADebugger.Checked = Options.MOSADebugger;
 			cbInlinedMethods.Checked = Options.EnableInlinedMethods;
-			cbCompilerUsesMultipleThreads.Checked = Options.CompilerUsesMultipleThreads;
+			cbCompilerUsesMultipleThreads.Checked = Options.UseMultipleThreadCompiler;
 			nmMemory.Value = Options.MemoryInMB;
 			cbVBEVideo.Checked = Options.VBEVideo;
 

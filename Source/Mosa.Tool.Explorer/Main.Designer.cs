@@ -152,9 +152,9 @@
             this.toolStripStatusLabel1,
             this.toolStripProgressBar1,
             this.toolStripStatusLabel});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 466);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 477);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(992, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(975, 22);
 			this.statusStrip1.TabIndex = 0;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -182,7 +182,7 @@
             this.advanceToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(992, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(975, 24);
 			this.menuStrip1.TabIndex = 3;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -361,7 +361,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.treeView.Location = new System.Drawing.Point(0, 0);
 			this.treeView.Name = "treeView";
-			this.treeView.Size = new System.Drawing.Size(267, 414);
+			this.treeView.Size = new System.Drawing.Size(262, 425);
 			this.treeView.TabIndex = 3;
 			this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
 			// 
@@ -384,8 +384,8 @@
 			this.splitContainer1.Panel2.Controls.Add(this.tabControl1);
 			this.splitContainer1.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.splitContainer1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.splitContainer1.Size = new System.Drawing.Size(988, 411);
-			this.splitContainer1.SplitterDistance = 264;
+			this.splitContainer1.Size = new System.Drawing.Size(971, 422);
+			this.splitContainer1.SplitterDistance = 259;
 			this.splitContainer1.SplitterWidth = 6;
 			this.splitContainer1.TabIndex = 26;
 			// 
@@ -406,7 +406,7 @@
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(705, 414);
+			this.tabControl1.Size = new System.Drawing.Size(699, 425);
 			this.tabControl1.TabIndex = 38;
 			// 
 			// tabPage1
@@ -422,7 +422,7 @@
 			this.tabPage1.Location = new System.Drawing.Point(4, 25);
 			this.tabPage1.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Size = new System.Drawing.Size(697, 385);
+			this.tabPage1.Size = new System.Drawing.Size(691, 396);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Instructions";
 			// 
@@ -469,7 +469,7 @@
 			this.tbResult.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tbResult.Location = new System.Drawing.Point(0, 32);
 			this.tbResult.Name = "tbResult";
-			this.tbResult.Size = new System.Drawing.Size(707, 357);
+			this.tbResult.Size = new System.Drawing.Size(693, 368);
 			this.tbResult.TabIndex = 31;
 			this.tbResult.Text = "";
 			this.tbResult.WordWrap = false;
@@ -483,7 +483,7 @@
 			this.tabPage2.Location = new System.Drawing.Point(4, 25);
 			this.tabPage2.Margin = new System.Windows.Forms.Padding(0);
 			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Size = new System.Drawing.Size(697, 385);
+			this.tabPage2.Size = new System.Drawing.Size(691, 396);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Debug";
 			// 
@@ -508,7 +508,7 @@
 			this.rbOtherResult.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.rbOtherResult.Location = new System.Drawing.Point(0, 32);
 			this.rbOtherResult.Name = "rbOtherResult";
-			this.rbOtherResult.Size = new System.Drawing.Size(704, 354);
+			this.rbOtherResult.Size = new System.Drawing.Size(697, 365);
 			this.rbOtherResult.TabIndex = 32;
 			this.rbOtherResult.Text = "";
 			this.rbOtherResult.WordWrap = false;
@@ -520,7 +520,7 @@
 			this.tabPage3.Location = new System.Drawing.Point(4, 25);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(697, 385);
+			this.tabPage3.Size = new System.Drawing.Size(691, 396);
 			this.tabPage3.TabIndex = 2;
 			this.tabPage3.Text = "Errors";
 			// 
@@ -532,7 +532,7 @@
 			this.rbErrors.Font = new System.Drawing.Font("Lucida Console", 8F);
 			this.rbErrors.Location = new System.Drawing.Point(0, 0);
 			this.rbErrors.Name = "rbErrors";
-			this.rbErrors.Size = new System.Drawing.Size(708, 383);
+			this.rbErrors.Size = new System.Drawing.Size(687, 394);
 			this.rbErrors.TabIndex = 0;
 			this.rbErrors.Text = "";
 			this.rbErrors.WordWrap = false;
@@ -544,7 +544,7 @@
 			this.tabPage4.Location = new System.Drawing.Point(4, 25);
 			this.tabPage4.Name = "tabPage4";
 			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(697, 385);
+			this.tabPage4.Size = new System.Drawing.Size(691, 396);
 			this.tabPage4.TabIndex = 3;
 			this.tabPage4.Text = "Log";
 			// 
@@ -556,7 +556,7 @@
 			this.rbLog.Font = new System.Drawing.Font("Lucida Console", 8F);
 			this.rbLog.Location = new System.Drawing.Point(0, 0);
 			this.rbLog.Name = "rbLog";
-			this.rbLog.Size = new System.Drawing.Size(705, 383);
+			this.rbLog.Size = new System.Drawing.Size(687, 394);
 			this.rbLog.TabIndex = 1;
 			this.rbLog.Text = "";
 			this.rbLog.WordWrap = false;
@@ -568,7 +568,7 @@
 			this.tabPage5.Location = new System.Drawing.Point(4, 25);
 			this.tabPage5.Name = "tabPage5";
 			this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage5.Size = new System.Drawing.Size(697, 385);
+			this.tabPage5.Size = new System.Drawing.Size(691, 396);
 			this.tabPage5.TabIndex = 4;
 			this.tabPage5.Text = "Counters";
 			// 
@@ -580,7 +580,7 @@
 			this.rbCounters.Font = new System.Drawing.Font("Lucida Console", 8F);
 			this.rbCounters.Location = new System.Drawing.Point(0, 0);
 			this.rbCounters.Name = "rbCounters";
-			this.rbCounters.Size = new System.Drawing.Size(709, 383);
+			this.rbCounters.Size = new System.Drawing.Size(687, 394);
 			this.rbCounters.TabIndex = 1;
 			this.rbCounters.Text = "";
 			this.rbCounters.WordWrap = false;
@@ -591,7 +591,7 @@
 			this.tabPage6.Location = new System.Drawing.Point(4, 25);
 			this.tabPage6.Name = "tabPage6";
 			this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage6.Size = new System.Drawing.Size(697, 385);
+			this.tabPage6.Size = new System.Drawing.Size(691, 396);
 			this.tabPage6.TabIndex = 5;
 			this.tabPage6.Text = "Exceptions";
 			this.tabPage6.UseVisualStyleBackColor = true;
@@ -604,7 +604,7 @@
 			this.rbException.Font = new System.Drawing.Font("Lucida Console", 8F);
 			this.rbException.Location = new System.Drawing.Point(0, 0);
 			this.rbException.Name = "rbException";
-			this.rbException.Size = new System.Drawing.Size(705, 383);
+			this.rbException.Size = new System.Drawing.Size(697, 394);
 			this.rbException.TabIndex = 2;
 			this.rbException.Text = "";
 			this.rbException.WordWrap = false;
@@ -619,7 +619,7 @@
             this.toolStripSeparator2});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(992, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(975, 25);
 			this.toolStrip1.TabIndex = 27;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -680,7 +680,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(992, 488);
+			this.ClientSize = new System.Drawing.Size(975, 499);
 			this.Controls.Add(this.cbPlatform);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.statusStrip1);

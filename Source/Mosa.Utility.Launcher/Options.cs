@@ -49,7 +49,7 @@ namespace Mosa.Utility.Launcher
 
 		public DebugConnectionOption DebugConnectionOption { get; set; }
 
-		public bool CompilerUsesMultipleThreads { get; set; }
+		public bool UseMultipleThreadCompiler { get; set; }
 
 		public BootLoader BootLoader { get; set; }
 		public bool VBEVideo { get; set; }
@@ -72,7 +72,7 @@ namespace Mosa.Utility.Launcher
 			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
 			FileSystem = FileSystem.FAT16;
 			DebugConnectionOption = DebugConnectionOption.None;
-			CompilerUsesMultipleThreads = true;
+			UseMultipleThreadCompiler = true;
 			EnableInlinedMethods = true;
 			InlinedIRMaximum = 8;
 			BootLoader = BootLoader.Syslinux_3_72;
@@ -117,6 +117,7 @@ namespace Mosa.Utility.Launcher
 					case "-syslinux-3.72": BootLoader = BootLoader.Syslinux_3_72; continue;
 					case "-inline": EnableInlinedMethods = true; continue;
 					case "-inline-off": EnableInlinedMethods = false; continue;
+					case "-threading-off": UseMultipleThreadCompiler = false; continue;
 					case "-video": VBEVideo = true; continue;
 					default: break;
 				}

@@ -84,7 +84,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			simAdapter.SimCPU.Monitor.DebugOutput = false;
 
-			Run<int>(string.Empty, "Default", "AssemblyInit", true);
+			Run<int>(string.Empty, "Default", Mosa.Compiler.Framework.Stages.TypeInitializerSchedulerStage.TypeInitializerName, true);
 
 			simAdapter.SimCPU.Monitor.DebugOutput = DebugOutput;
 		}

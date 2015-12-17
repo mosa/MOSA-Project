@@ -19,9 +19,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// Create a prologue instruction
-			var prologueCtx = new Context(BasicBlocks.PrologueBlock);
-			prologueCtx.AppendInstruction(IRInstruction.Prologue);
-			prologueCtx.Label = -1;
+			var prologue = new Context(BasicBlocks.PrologueBlock);
+			prologue.AppendInstruction(IRInstruction.Prologue);
+			prologue.Label = -1;
 
 			if (BasicBlocks.EpilogueBlock != null)
 			{
