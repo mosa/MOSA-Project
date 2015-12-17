@@ -71,13 +71,19 @@ namespace Mosa.Compiler.Framework.Stages
 			compilerMethod.IRInstructionCount = totalIRCount;
 			compilerMethod.NonIRInstructionCount = totalNonIRCount;
 
-			// BUG: does not find the attribute
-			var methodAttribute = method.FindCustomAttribute(InlineMethodAttribute);
+			compilerMethod.HasDoNotInlineAttribute = !MethodCompiler.Method.IsNoInlining;
 
-			//TODO: check for specific attribute: System.Runtime.CompilerServices.MethodImplOptions.NoInlining
-			if (methodAttribute != null)
+			if (!compilerMethod.HasDoNotInlineAttribute)
 			{
-				compilerMethod.HasDoNotInlineAttribute = true;
+				// check attribute
+				// BUG: does not find the attribute
+				var methodAttribute = method.FindCustomAttribute(InlineMethodAttribute);
+
+				//TODO: check for specific attribute: System.Runtime.CompilerServices.MethodImplOptions.NoInlining
+				if (methodAttribute != null)
+				{
+					compilerMethod.HasDoNotInlineAttribute = true;
+				}
 			}
 
 			compilerMethod.CanInline = CanInline(compilerMethod);

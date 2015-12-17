@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Hold the current context
 		/// </summary>
-		private Context context;
+		private Context start;
 
 		/// <summary>
 		/// The basic blocks
@@ -40,9 +40,27 @@ namespace Mosa.Compiler.Framework.Stages
 		public TypeInitializerSchedulerStage()
 		{
 			basicBlocks = new BasicBlocks();
-			var block = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
-			basicBlocks.AddHeadBlock(block);
-			context = new Context(block);
+
+			// Create the blocks
+			var prologueBlock = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
+			var startBlock = basicBlocks.CreateBlock(BasicBlock.StartLabel);
+			var epilogueBlock = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel);
+
+			// Create the prologue instructions
+			basicBlocks.AddHeadBlock(prologueBlock);
+			var prologue = new Context(prologueBlock);
+			prologue.AppendInstruction(IRInstruction.Prologue);
+			prologue.Label = -1;
+			prologue.AppendInstruction(IRInstruction.Jmp, startBlock);
+
+			// Create the epilogue instruction
+			var epilogue = new Context(epilogueBlock);
+			epilogue.AppendInstruction(IRInstruction.Epilogue);
+
+			// create start instructions
+			start = new Context(startBlock);
+			start.AppendInstruction(IRInstruction.Jmp, epilogueBlock);
+			start.GotoPrevious();
 		}
 
 		#endregion Construction
@@ -50,7 +68,7 @@ namespace Mosa.Compiler.Framework.Stages
 		#region Properties
 
 		/// <summary>
-		/// Gets the intializer method.
+		/// Gets the initializer method.
 		/// </summary>
 		/// <value>The method.</value>
 		public MosaMethod TypeInitializerMethod { get; private set; }
@@ -63,8 +81,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Schedule(TypeSystem.EntryPoint);
 			}
-
-			context.AppendInstruction(IRInstruction.InternalReturn);
 
 			TypeInitializerMethod = Compiler.CreateLinkerMethod(TypeInitializerName);
 
@@ -80,8 +96,8 @@ namespace Mosa.Compiler.Framework.Stages
 		public void Schedule(MosaMethod method)
 		{
 			var symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
-			context.AppendInstruction(IRInstruction.Call, null, symbolOperand);
-			context.InvokeMethod = method;
+			start.AppendInstruction(IRInstruction.Call, null, symbolOperand);
+			start.InvokeMethod = method;
 		}
 
 		#endregion Methods
