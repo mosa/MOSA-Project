@@ -18,12 +18,12 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 		SimInstruction ISimAdapter.Convert(InstructionNode node, MosaMethod method, BasicBlocks basicBlocks, byte opcodeSize)
 		{
-			X86Instruction x86Instruction = node.Instruction as X86Instruction;
+			var x86Instruction = node.Instruction as X86Instruction;
 
 			if (x86Instruction == null)
 				return null;
 
-			BaseOpcode opcode = ConvertToOpcode(x86Instruction, node.ConditionCode);
+			var opcode = ConvertToOpcode(x86Instruction, node.ConditionCode);
 
 			if (opcode == null)
 				return null;
@@ -62,7 +62,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 		private List<SimOperand> GetOperands(InstructionNode node, MosaMethod method, BasicBlocks basicBlocks)
 		{
-			List<SimOperand> operands = new List<SimOperand>();
+			var operands = new List<SimOperand>();
 
 			if (node.ResultCount != 0)
 			{

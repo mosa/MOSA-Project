@@ -41,6 +41,13 @@ namespace Mosa.TinyCPUSimulator
 
 		public List<MemoryRegion> MemoryRegions { get; private set; }
 
+		public bool AcceleratorEnabled { get; set; }
+
+		public delegate void AccelerationMethod();
+
+		private List<ulong> AcceleratorAddresses;
+		private Dictionary<ulong, AccelerationMethod> AccelerationMethods;
+
 		private uint[][] MemoryBlocks;
 
 		private const uint BlockSize = 1024 * 1024; // 1 MB
@@ -57,7 +64,9 @@ namespace Mosa.TinyCPUSimulator
 			Symbols = new Dictionary<string, SimSymbol>();
 			Monitor = new SimMonitor(this);
 			MemoryRegions = new List<MemoryRegion>();
-
+			AcceleratorAddresses = new List<ulong>();
+			AcceleratorEnabled = true;
+			AccelerationMethods = new Dictionary<ulong, AccelerationMethod>();
 			Tick = 0;
 			IsLittleEndian = true;
 		}
@@ -74,6 +83,9 @@ namespace Mosa.TinyCPUSimulator
 			PortDevices = new BaseSimDevice[65536];
 			Symbols = simCPU.Symbols;
 			Monitor = new SimMonitor(this);
+			AcceleratorAddresses = new List<ulong>();
+			AcceleratorEnabled = simCPU.AcceleratorEnabled;
+			AccelerationMethods = new Dictionary<ulong, AccelerationMethod>();
 			MemoryRegions = simCPU.MemoryRegions;
 			Tick = simCPU.Tick;
 			IsLittleEndian = simCPU.IsLittleEndian;
@@ -114,6 +126,8 @@ namespace Mosa.TinyCPUSimulator
 
 				simCPU.MemoryBlocks[i].CopyTo(MemoryBlocks[i], 0);
 			}
+
+			RegisterAccelerationFunctions();
 		}
 
 		public void AddMemory(ulong address, ulong size, uint type)
@@ -138,6 +152,33 @@ namespace Mosa.TinyCPUSimulator
 			{
 				device.Reset();
 			}
+		}
+
+		public void RegisterAccelerationFunction(ulong address, AccelerationMethod method)
+		{
+			AcceleratorAddresses.Add(address);
+			AccelerationMethods.Add(address, method);
+		}
+
+		public void RegisterAccelerationMethod(string symbolName, AccelerationMethod method)
+		{
+			try
+			{
+				var symbol = GetSymbol(symbolName);
+
+				if (symbol == null)
+					return;
+
+				RegisterAccelerationFunction(symbol.Address, method);
+			}
+			catch (SimCPUException e)
+			{
+				return;
+			}
+		}
+
+		public virtual void RegisterAccelerationFunctions()
+		{
 		}
 
 		protected virtual ulong TranslateToPhysical(ulong address)
@@ -411,8 +452,6 @@ namespace Mosa.TinyCPUSimulator
 			// very slow performance if assert enabled
 			//Debug.Assert(DirectRead64(address) == value);
 
-			//Debug.WriteLine(address.ToString("X") + ": " + value.ToString("X"));
-
 			MemoryUpdate(address, 64);
 		}
 
@@ -429,8 +468,6 @@ namespace Mosa.TinyCPUSimulator
 
 			// very slow performance if assert enabled
 			//Debug.Assert(DirectRead32(address) == value);
-
-			//Debug.WriteLine(address.ToString("X") + ": " + value.ToString("X"));
 
 			MemoryUpdate(address, 32);
 		}
@@ -449,8 +486,6 @@ namespace Mosa.TinyCPUSimulator
 			// very slow performance if assert enabled
 			//Debug.Assert(DirectRead16(address) == value);
 
-			//Debug.WriteLine(address.ToString("X") + ": " + value.ToString("X"));
-
 			MemoryUpdate(address, 16);
 		}
 
@@ -460,8 +495,6 @@ namespace Mosa.TinyCPUSimulator
 
 			// very slow performance if assert enabled
 			//Debug.Assert(DirectRead8(address) == value);
-
-			//Debug.WriteLine(address.ToString("X") + ": " + value.ToString("X"));
 
 			MemoryUpdate(address, 8);
 		}
@@ -746,7 +779,16 @@ namespace Mosa.TinyCPUSimulator
 
 				for (;;)
 				{
-					ExecuteInstruction();
+					if (AcceleratorEnabled && AcceleratorAddresses.Contains(CurrentProgramCounter))
+					{
+						var method = AccelerationMethods[CurrentProgramCounter];
+
+						method.Invoke();
+					}
+					else
+					{
+						ExecuteInstruction();
+					}
 
 					bool brk = Monitor.Break;
 
@@ -771,6 +813,30 @@ namespace Mosa.TinyCPUSimulator
 
 		public virtual void ExtendState(BaseSimState simState)
 		{
+		}
+
+		// Accelerator Functions
+		public void MemoryClear(ulong dest, uint count)
+		{
+			MemorySet(dest, 0, count);
+		}
+
+		public void MemorySet(ulong dest, byte value, uint count)
+		{
+			//FUTURE: Implement aligned 32bit versions
+			for (ulong at = 0; at < count; at++)
+			{
+				Write8(dest + at, value);
+			}
+		}
+
+		public void MemoryCopy(ulong dest, ulong src, uint count)
+		{
+			//FUTURE: Implement aligned 32bit versions
+			for (ulong at = 0; at < count; at++)
+			{
+				Write8(dest + at, Read8(src + at));
+			}
 		}
 	}
 }

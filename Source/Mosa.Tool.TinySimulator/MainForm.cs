@@ -241,6 +241,8 @@ namespace Mosa.Tool.TinySimulator
 			Status = "Compiled.";
 
 			SimCPU.Monitor.OnExecutionStepCompleted(true);
+			SimCPU.RegisterAccelerationFunctions();
+			SimCPU.AcceleratorEnabled = true;
 
 			symbolView.CreateEntries();
 		}
@@ -358,7 +360,7 @@ namespace Mosa.Tool.TinySimulator
 				}
 			}
 
-			if (forceUpdate || simState.Tick == 0 || DateTime.Now.Ticks > lastTimeTick + 2500000)
+			if (forceUpdate || simState.Tick == 0 || DateTime.Now.Ticks > lastTimeTick + 7500000)
 			{
 				MethodInvoker method = delegate ()
 				{

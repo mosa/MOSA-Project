@@ -43,17 +43,17 @@ namespace Mosa.Kernel.x86
 
 		private unsafe static void Memclr(uint destination, uint count)
 		{
-			Runtime.Memclr((void*)destination, count);
+			Runtime.MemoryClear((void*)destination, count);
 		}
 
 		private unsafe static void Memset(uint destination, byte value, uint count)
 		{
-			Runtime.Memset((void*)destination, value, count);
+			Runtime.MemorySet((void*)destination, value, count);
 		}
 
 		private unsafe static void Memcpy(uint destination, uint source, uint count)
 		{
-			Runtime.Memcpy((void*)destination, (void*)source, count);
+			Runtime.MemoryCopy((void*)destination, (void*)source, count);
 		}
 	}
 }

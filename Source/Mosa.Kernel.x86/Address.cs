@@ -19,9 +19,9 @@ namespace Mosa.Kernel.x86
 
 		public const uint VirtualPageAllocator = 0x01400000; // 20MB
 
-		public const uint GCInitialMemory = 0x01800000; // 8MB
+		public const uint GCInitialMemory = 0x02000000; // 8MB
 
-		public const uint ReserveMemory = 0x02000000; // 32MB
+		public const uint ReserveMemory = 0x03000000; // 48MB
 		public const uint MaximumMemory = 0xFFFFFFFF; // 4GB
 	}
 }

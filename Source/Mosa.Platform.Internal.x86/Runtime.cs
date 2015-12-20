@@ -141,7 +141,7 @@ namespace Mosa.Platform.Internal.x86
 			return obj;
 		}
 
-		public static void Memcpy(void* dest, void* src, uint count)
+		public static void MemoryCopy(void* dest, void* src, uint count)
 		{
 			ulong* _dest = (ulong*)dest;
 			ulong* _src = (ulong*)src;
@@ -163,7 +163,7 @@ namespace Mosa.Platform.Internal.x86
 				__dest[index] = __src[index];
 		}
 
-		public static void Memset(void* dest, byte value, uint count)
+		public static void MemorySet(void* dest, byte value, uint count)
 		{
 			ulong* _dest = (ulong*)dest;
 			uint byteCount = count & 7;
@@ -189,7 +189,7 @@ namespace Mosa.Platform.Internal.x86
 				__dest[index] = value;
 		}
 
-		public static void Memclr(void* dest, uint count)
+		public static void MemoryClear(void* dest, uint count)
 		{
 			ulong* _dest = (ulong*)dest;
 			uint byteCount = count & 7;
@@ -255,7 +255,7 @@ namespace Mosa.Platform.Internal.x86
 		public static void* Box(RuntimeTypeHandle handle, void* value, uint size)
 		{
 			byte* memory = (byte*)AllocateObject(handle, size);
-			Memcpy(memory + NativeIntSize * 2, value, size);
+			MemoryCopy(memory + NativeIntSize * 2, value, size);
 			return memory;
 		}
 
@@ -281,7 +281,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void* Unbox(void* box, void* vt, uint size)
 		{
-			Memcpy(vt, (byte*)box + NativeIntSize * 2, size);
+			MemoryCopy(vt, (byte*)box + NativeIntSize * 2, size);
 			return vt;
 		}
 

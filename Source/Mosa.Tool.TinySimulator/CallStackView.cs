@@ -60,9 +60,10 @@ namespace Mosa.Tool.TinySimulator
 		{
 			treeView1.Nodes.Clear();
 
-			List<ulong> list = simState.Values["CallStack"] as List<ulong>;
+			var list = simState.Values["CallStack"] as List<ulong>;
+			list.Reverse();
 
-			foreach (ulong ip in list)
+			foreach (var ip in list)
 			{
 				AddSymbol(ip);
 			}

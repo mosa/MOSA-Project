@@ -5,7 +5,7 @@ using Mosa.Internal.Plug;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// Kernel Memory Allocator - This is a pure HACK!
+	/// Kernel Memory Allocator
 	/// </summary>
 	public static class KernelMemory
 	{

@@ -30,13 +30,13 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		private LinkedList<IDevice> CreateDevices(IDiskControllerDevice diskControllerDevice)
 		{
-			LinkedList<IDevice> devices = new LinkedList<IDevice>();
+			var devices = new LinkedList<IDevice>();
 
 			for (uint drive = 0; drive < diskControllerDevice.MaximunDriveCount; drive++)
 			{
 				if (diskControllerDevice.Open(drive))
 				{
-					IDiskDevice diskDevice = new DiskDevice(diskControllerDevice, drive, false);
+					var diskDevice = new DiskDevice(diskControllerDevice, drive, false);
 					devices.AddLast(diskDevice as IDevice);
 				}
 			}
@@ -52,18 +52,18 @@ namespace Mosa.DeviceSystem
 			// FIXME: Do not create disk devices if this method executed more than once
 
 			// Find disk controller devices
-			LinkedList<IDevice> devices = deviceManager.GetDevices(new FindDevice.IsDiskControllerDevice(), new FindDevice.IsOnline());
+			var devices = deviceManager.GetDevices(new FindDevice.IsDiskControllerDevice(), new FindDevice.IsOnline());
 
 			// For each controller
-			foreach (IDevice device in devices)
+			foreach (var device in devices)
 			{
-				IDiskControllerDevice controller = device as IDiskControllerDevice;
+				var controller = device as IDiskControllerDevice;
 
 				// Create disk devices
-				LinkedList<IDevice> disks = CreateDevices(controller);
+				var disks = CreateDevices(controller);
 
 				// Add them to the device manager
-				foreach (IDevice disk in disks)
+				foreach (var disk in disks)
 					deviceManager.Add(disk);
 			}
 		}
