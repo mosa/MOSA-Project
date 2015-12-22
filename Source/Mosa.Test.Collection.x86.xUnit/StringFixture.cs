@@ -29,5 +29,29 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(StringTests.LastCharacterMustMatch(), Run<char>("Mosa.Test.Collection.StringTests.LastCharacterMustMatch"));
 		}
+
+		[Fact]
+		public void ConcatTest1()
+		{
+			Assert.Equal(StringTests.ConcatTest1(), Run<bool>("Mosa.Test.Collection.StringTests.ConcatTest1"));
+		}
+
+		[Fact]
+		public void ConcatTest2()
+		{
+			Assert.Equal(StringTests.ConcatTest2(), Run<bool>("Mosa.Test.Collection.StringTests.ConcatTest2"));
+		}
+
+		[Fact]
+		public void Equal1()
+		{
+			Assert.Equal(StringTests.Equal1(), Run<bool>("Mosa.Test.Collection.StringTests.Equal1"));
+		}
+
+		[Fact]
+		public void NotEqual1()
+		{
+			Assert.Equal(StringTests.NotEqual1(), Run<bool>("Mosa.Test.Collection.StringTests.NotEqual1"));
+		}
 	}
 }

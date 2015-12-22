@@ -203,11 +203,11 @@ namespace Mosa.Tool.TinySimulator
 
 			compileStartTime = DateTime.Now;
 
-			Compiler.CompilerOptions.EnableSSA = false;
-			Compiler.CompilerOptions.EnableOptimizations = false;
-			Compiler.CompilerOptions.EnableVariablePromotion = false;
-			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = false;
-			Compiler.CompilerOptions.EnableInlinedMethods = false;
+			Compiler.CompilerOptions.EnableSSA = true;
+			Compiler.CompilerOptions.EnableOptimizations = true;
+			Compiler.CompilerOptions.EnableVariablePromotion = true;
+			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
+			Compiler.CompilerOptions.EnableInlinedMethods = true;
 
 			Compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
 			Compiler.CompilerFactory = delegate { return new SimCompiler(simAdapter); };

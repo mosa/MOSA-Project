@@ -600,12 +600,23 @@ namespace Mosa.TinyCPUSimulator
 			return symbol;
 		}
 
+		private SimSymbol lastSymbol;
+
 		public SimSymbol FindSymbol(ulong address)
 		{
+			// check last result first - very high cache hit ratio
+			if (lastSymbol != null && address >= lastSymbol.Address && address < lastSymbol.EndAddress)
+			{
+				return lastSymbol;
+			}
+
 			foreach (var entry in Symbols)
 			{
 				if (address >= entry.Value.Address && address < entry.Value.EndAddress)
-					return entry.Value;
+				{
+					lastSymbol = entry.Value;
+					return lastSymbol;
+				}
 			}
 
 			return null;
