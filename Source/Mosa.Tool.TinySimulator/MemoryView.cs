@@ -12,7 +12,7 @@ namespace Mosa.Tool.TinySimulator
 	{
 		private uint multibootStructure = Multiboot.MultibootStructure;
 		private uint physicalPageFreeList = MosaKernel.PageTable;
-		private uint cr3 = MosaKernel.PageDirectory;
+		private uint cr3 = MosaKernel.SmallTables;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MemoryView"/> class.

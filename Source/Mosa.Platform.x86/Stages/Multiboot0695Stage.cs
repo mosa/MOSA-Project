@@ -54,6 +54,11 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		private const uint HEADER_MB_FLAG_NON_ELF_BINARY = 0x00010000U;
 
+		/// <summary>
+		/// This address is the top of the initial kernel stack.
+		/// </summary>
+		private const uint STACK_ADDRESS = 0x003FFFFC;
+
 		#endregion Constants
 
 		#region Data members
@@ -107,18 +112,22 @@ namespace Mosa.Platform.x86.Stages
 			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
+			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 			var multibootEax = Operand.CreateUnmanagedSymbolPointer(TypeSystem, MultibootEAX);
 			var multibootEbx = Operand.CreateUnmanagedSymbolPointer(TypeSystem, MultibootEBX);
+			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
+			var stackTop = Operand.CreateConstant(TypeSystem.BuiltIn.I4, STACK_ADDRESS);
 
 			var basicBlocks = new BasicBlocks();
 			var block = basicBlocks.CreateBlock();
 			basicBlocks.AddHeadBlock(block);
 			var ctx = new Context(block);
 
-			// set sentinel on the stack to indicate the start of the stack
-			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
+			// Setup the stack and place the sentinel on the stack to indicate the start of the stack
+			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, esp, 0), stackTop);
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ebp, 0), zero);
 
+			// Place the multiboot address into a static field
 			ctx.AppendInstruction(X86.Mov, ecx, multibootEax);
 			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 0), eax);
 			ctx.AppendInstruction(X86.Mov, ecx, multibootEbx);
