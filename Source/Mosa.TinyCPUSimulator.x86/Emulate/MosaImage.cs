@@ -5,7 +5,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 	public class MosaImage : BaseSimDevice
 	{
 		public static readonly uint BaseAddress = 0x00400000;
-		public static readonly uint ImageSize = 0x00400000;
+		public static readonly uint ImageSize = 1024 * 1024 * 8; // 8MB
 
 		public MosaImage(SimCPU simCPU)
 			: base(simCPU)

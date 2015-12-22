@@ -9,8 +9,8 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class KernelMemory
 	{
-		static private uint heap = Address.GCInitialMemory;
-		static private uint allocated = 1024 * 1024 * 8; // 8MB
+		static private uint heap = 0;
+		static private uint allocated = 0;
 		static private uint used = 0;
 
 		[Method("Mosa.Platform.Internal.x86.GC.AllocateMemory")]
