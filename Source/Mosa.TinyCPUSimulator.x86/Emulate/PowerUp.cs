@@ -32,7 +32,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			var x86 = simCPU as CPUx86;
 
 			// Start of stack
-			x86.ESP.Value = 0x00080000;
+			x86.ESP.Value = 0x003FFFFC;
 			x86.EBP.Value = x86.ESP.Value;
 
 			// Start EIP
