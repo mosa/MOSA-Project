@@ -27,7 +27,7 @@ namespace Mosa.Utility.Launcher
 
 		public bool EnableIROptimizations { get; set; }
 
-		public bool EnablePromoteTemporaryVariables { get; set; }
+		public bool EnableVariablePromotion { get; set; }
 
 		public bool EnableSparseConditionalConstantPropagation { get; set; }
 
@@ -61,7 +61,7 @@ namespace Mosa.Utility.Launcher
 		{
 			EnableSSA = true;
 			EnableIROptimizations = true;
-			EnablePromoteTemporaryVariables = true;
+			EnableVariablePromotion = true;
 			EnableSparseConditionalConstantPropagation = true;
 			Emulator = EmulatorType.Qemu;
 			ImageFormat = ImageFormat.IMG;

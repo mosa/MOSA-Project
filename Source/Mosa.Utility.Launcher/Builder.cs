@@ -85,6 +85,7 @@ namespace Mosa.Utility.Launcher
 				Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = Options.EnableSparseConditionalConstantPropagation;
 				Compiler.CompilerOptions.EnableInlinedMethods = Options.EnableInlinedMethods;
 				Compiler.CompilerOptions.InlinedIRMaximum = Options.InlinedIRMaximum;
+				Compiler.CompilerOptions.EnableVariablePromotion = Options.EnableVariablePromotion;
 				Compiler.CompilerOptions.OutputFile = compiledFile;
 
 				Compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);

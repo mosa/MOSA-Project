@@ -74,21 +74,6 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			{
 				int size = GetSize(operand.Type);
 
-				if (node.Instruction == X86.Mov && node.Result.IsMemoryAddress)
-				{
-					if (node.Result.IsPointer
-						&& !operand.IsPointer
-						&& node.Result.Type.ElementType != null
-						&& (GetSize(node.Result.Type.ElementType) < size))
-					{
-						size = GetSize(node.Result.Type.ElementType);
-					}
-					else if (node.Result.IsByte || node.Result.IsChar || node.Result.IsShort)
-					{
-						size = GetSize(node.Result.Type);
-					}
-				}
-
 				operands.Add(ConvertToOpcodeOperand(operand, size));
 			}
 

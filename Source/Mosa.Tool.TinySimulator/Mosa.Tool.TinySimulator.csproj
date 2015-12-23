@@ -57,7 +57,7 @@
     <StartupObject>Mosa.Tool.TinySimulator.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>debugging.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\3rdParty\app-icons\debugging.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="dnlib, Version=1.0.1.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
