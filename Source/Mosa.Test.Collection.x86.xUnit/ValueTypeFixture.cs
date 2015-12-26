@@ -51,7 +51,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		[Fact]
 		public void TestValueTypeVirtualMethod()
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection.ValueTypeTests.TestValueTypeVirtualMethod"));
+			Assert.Equal(Mosa.Test.Collection.ValueTypeTests.TestValueTypeVirtualMethod(), Run<bool>("Mosa.Test.Collection.ValueTypeTests.TestValueTypeVirtualMethod"));
 		}
 
 		[Fact]

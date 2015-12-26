@@ -166,7 +166,14 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		public override void IMul(Context context)
 		{
-			//TODO
+			if (!context.Operand2.IsConstant)
+				return;
+
+			Operand v1 = AllocateVirtualRegister(context.Operand2.Type);
+			Operand operand2 = context.Operand2;
+
+			context.Operand2 = v1;
+			context.InsertBefore().SetInstruction(X86.Mov, v1, operand2);
 		}
 
 		/// <summary>
