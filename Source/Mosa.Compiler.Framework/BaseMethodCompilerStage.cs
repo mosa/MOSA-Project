@@ -587,10 +587,11 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static InstructionSize GetInstructionSize(MosaType type)
 		{
-			if (type.IsPointer && type.ElementType != null)
-			{
-				return GetInstructionSize(type.ElementType);
-			}
+			if (type.IsPointer)
+				return InstructionSize.Native;
+
+			if (type.IsI4 || type.IsU4)
+				return InstructionSize.Size32;
 
 			if (type.IsUI1 || type.IsBoolean)
 				return InstructionSize.Size8;
@@ -604,6 +605,12 @@ namespace Mosa.Compiler.Framework
 			if (type.IsR8 || type.IsUI8)
 				return InstructionSize.Size64;
 
+			if (type.IsReferenceType)
+				return InstructionSize.Native;
+
+			if (type.IsValueType)
+				return InstructionSize.Native;
+
 			return InstructionSize.Size32;
 		}
 
@@ -614,24 +621,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static InstructionSize GetInstructionSize(Operand operand)
 		{
-			if (operand.IsPointer && operand.Type.ElementType != null)
-			{
-				GetInstructionSize(operand.Type.ElementType);
-			}
-
-			if (operand.IsByte || operand.IsBoolean)
-				return InstructionSize.Size8;
-
-			if (operand.IsChar || operand.IsShort)
-				return InstructionSize.Size16;
-
-			if (operand.IsR4)
-				return InstructionSize.Size32;
-
-			if (operand.IsR8 || operand.IsLong)
-				return InstructionSize.Size64;
-
-			return InstructionSize.Size32;
+			return GetInstructionSize(operand.Type);
 		}
 
 		/// <summary>

@@ -90,6 +90,10 @@ namespace Mosa.CoolWorld.x86
 			// Get CMOS, StandardKeyboard, and PIC driver instances
 			CMOS = (CMOS)deviceManager.GetDevices(new FindDevice.WithName("CMOS")).First.Value;
 			Keyboard = (StandardKeyboard)deviceManager.GetDevices(new FindDevice.WithName("StandardKeyboard")).First.Value;
+
+			//Boot.Console.Write("Spinning up disks...");
+			//var diskcontroller = new DiskControllerManager(Setup.DeviceManager);
+			//diskcontroller.CreateDiskDevices();
 		}
 
 		/// <summary>
@@ -110,11 +114,9 @@ namespace Mosa.CoolWorld.x86
 			Boot.Console.Write(devices.Count.ToString());
 			Boot.Console.WriteLine(" Devices");
 
-			foreach (IDevice device in devices)
+			foreach (var device in devices)
 			{
 				var pciDevice = device as IPCIDevice;
-
-				//Mosa.CoolWorld.x86.Boot.BulletPoint();
 
 				Boot.Console.WriteLine(device.Name + ": " + pciDevice.VendorID.ToString("x") + "." + pciDevice.DeviceID.ToString("x") + "." + pciDevice.Function.ToString("x") + "." + pciDevice.ClassCode.ToString("x"));
 
@@ -201,7 +203,9 @@ namespace Mosa.CoolWorld.x86
 			var deviceDrivers = deviceDriverRegistry.GetISADeviceDrivers();
 
 			foreach (var deviceDriver in deviceDrivers)
+			{
 				StartDevice(deviceDriver);
+			}
 		}
 
 		/// <summary>
@@ -242,7 +246,6 @@ namespace Mosa.CoolWorld.x86
 
 				hardwareDevice.Setup(hardwareResources);
 
-				//Mosa.CoolWorld.x86.Boot.BulletPoint();
 				Boot.Console.Write("Adding device ");
 				Boot.InBrackets(hardwareDevice.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
 				Boot.Console.WriteLine();

@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// The memcpy method is similar to the memcpy function in C runtime libraries. It copies the
 		/// specified number of bytes From a source to a destination block.
 		/// </remarks>
-		Memcpy,
+		MemoryCopy,
 
 		/// <summary>
 		/// The method call represents a runtime defined memory set method.
@@ -79,7 +79,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// The memset method is similar to the memset function in C runtime libraries. It fills a block
 		/// of memory with a specific value.
 		/// </remarks>
-		Memset,
+		MemorySet,
 
 		/// <summary>
 		/// Rethrows the given exception.

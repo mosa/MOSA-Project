@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Text;
+
 namespace Mosa.Test.Collection
 {
 	public static class StringTests
@@ -32,6 +34,43 @@ namespace Mosa.Test.Collection
 			}
 
 			return ch;
+		}
+
+		public static bool ConcatTest1()
+		{
+			string part1 = "abc";
+			string part2 = "def";
+			string ab = "abcdef";
+			string combined = string.Concat(part1, part2);
+
+			return string.Equals(combined, ab);
+		}
+
+		public static bool ConcatTest2()
+		{
+			string part1 = "abc";
+			string part2 = "def";
+			string part3 = "ghi";
+			string abc = "abcdefghi";
+			string combined = string.Concat(part1, part2, part3);
+
+			return string.Equals(combined, abc);
+		}
+
+		public static bool Equal1()
+		{
+			string a = "abc";
+			string b = "abc";
+
+			return string.Equals(a, b);
+		}
+
+		public static bool NotEqual1()
+		{
+			string a = "abc";
+			string b = "abd";
+
+			return string.Equals(a, b);
 		}
 	}
 }

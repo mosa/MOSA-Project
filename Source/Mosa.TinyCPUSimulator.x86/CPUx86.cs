@@ -364,5 +364,67 @@ namespace Mosa.TinyCPUSimulator.x86
 				default: return null;
 			}
 		}
+
+		public override void RegisterAccelerationFunctions()
+		{
+			RegisterAccelerationMethod("System.Void Mosa.Platform.Internal.x86.Runtime::MemoryCopy(System.Void*, System.Void*, System.UInt32)", AcceleratorMemoryCopy);
+			RegisterAccelerationMethod("System.Void Mosa.Platform.Internal.x86.Runtime::MemorySet(System.Void*, System.Byte, System.UInt32)", AcceleratorMemorySet);
+			RegisterAccelerationMethod("System.Void Mosa.Platform.Internal.x86.Runtime::MemoryClear(System.Void*, System.UInt32)", AcceleratorMemoryClear);
+		}
+
+		private void AcceleratorMemoryClear()
+		{
+			//TODO: parse stack for parameters
+			// 0: return address
+			// 1: address
+			// 2: count
+
+			uint ret = Read32(ESP.Value);
+			uint address = Read32(ESP.Value + 4);
+			uint count = Read32(ESP.Value + 8);
+
+			MemoryClear(address, count);
+
+			ESP.Value = (uint)(ESP.Value + (32 / 8));
+			EIP.Value = ret;
+		}
+
+		private void AcceleratorMemorySet()
+		{
+			//TODO: parse stack for parameters
+			// 0: return address
+			// 1: address
+			// 2: value
+			// 3: count
+
+			uint ret = Read32(ESP.Value);
+			uint address = Read32(ESP.Value + 4);
+			uint value = Read32(ESP.Value + 8);
+			uint count = Read32(ESP.Value + 12);
+
+			MemorySet(address, (byte)value, count);
+
+			ESP.Value = (uint)(ESP.Value + (32 / 8));
+			EIP.Value = ret;
+		}
+
+		private void AcceleratorMemoryCopy()
+		{
+			//TODO: parse stack for parameters
+			// 0: return address
+			// 1: source
+			// 2: destination
+			// 3: count
+
+			uint ret = Read32(ESP.Value);
+			uint source = Read32(ESP.Value + 4);
+			uint destination = Read32(ESP.Value + 8);
+			uint count = Read32(ESP.Value + 12);
+
+			MemoryCopy(source, destination, count);
+
+			ESP.Value = (uint)(ESP.Value + (32 / 8));
+			EIP.Value = ret;
+		}
 	}
 }

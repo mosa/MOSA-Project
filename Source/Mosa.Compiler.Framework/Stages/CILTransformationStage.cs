@@ -875,7 +875,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Cpblk(Context context)
 		{
-			ReplaceWithVmCall(context, VmCall.Memcpy);
+			ReplaceWithVmCall(context, VmCall.MemoryCopy);
 		}
 
 		/// <summary>
@@ -884,7 +884,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Initblk(Context context)
 		{
-			ReplaceWithVmCall(context, VmCall.Memset);
+			ReplaceWithVmCall(context, VmCall.MemorySet);
 		}
 
 		/// <summary>
@@ -1416,7 +1416,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.Nop);
 
 			// Setup context for VmCall
-			ReplaceWithVmCall(context, VmCall.Memset);
+			ReplaceWithVmCall(context, VmCall.MemorySet);
 
 			// Set the operands
 			context.SetOperand(1, ptr);

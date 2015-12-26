@@ -11,10 +11,10 @@ namespace Mosa.TinyCPUSimulator.Debug
 
 		private static void Main(string[] args)
 		{
-			var fixture = new ExceptionHandlingFixture();
+			var fixture = new StringFixture();
 
 			fixture.TestCompiler.DebugOutput = false;
-			DoTest(fixture.ExceptionTest8, "normal-all");
+			DoTest(fixture.NotEqual1, "normal-all");
 
 			//fixture.TestCompiler.Reset();
 			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;
@@ -24,9 +24,18 @@ namespace Mosa.TinyCPUSimulator.Debug
 			//fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = false;
 			//DoTest(fixture.ExceptionTest8, "no: optimizations, inline, sparse, ssa, variable promotion");
 
-			//fixture.TestCompiler.Reset();
-			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;
-			//DoTest(fixture.ForeachU1, "no optimization");
+			fixture.TestCompiler.Reset();
+			fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = false;
+			DoTest(fixture.NotEqual1, "no inline");
+
+			fixture.TestCompiler.Reset();
+			fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = false;
+			DoTest(fixture.NotEqual1, "no promotion");
+
+			fixture.TestCompiler.Reset();
+			fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = false;
+			fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = false;
+			DoTest(fixture.NotEqual1, "no promotion, inline");
 
 			//fixture.TestCompiler.Reset();
 			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;

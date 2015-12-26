@@ -50,11 +50,6 @@ namespace Mosa.Kernel.x86
 
 			// Set CR0 register on processor - turns on virtual memory
 			Native.SetCR0(Native.GetCR0() | BitMask.Bit31);
-
-			unsafe
-			{
-				//Panic.Error(Mosa.ClassLib.FlechterChecksum.Fletcher16((byte*)pageDirectoryAddress, PageDirectorySize));
-			}
 		}
 
 		public static void ClearPageDirectory()

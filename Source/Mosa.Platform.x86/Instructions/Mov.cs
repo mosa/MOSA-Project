@@ -52,7 +52,7 @@ namespace Mosa.Platform.x86.Instructions
 			if (destination.IsRegister && destination.Register is SegmentRegister) return SR_R;
 
 			if (source.IsRegister && source.Register is SegmentRegister)
-				throw new ArgumentException(@"TODO: No opcode for move sourcee segment register");
+				throw new ArgumentException(@"TODO: No opcode for move source segment register");
 
 			if (destination.IsRegister && source.IsConstant) return RM_C;
 
@@ -78,19 +78,19 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (destination.IsRegister && source.IsMemoryAddress)
 			{
-				if (destination.IsByte) return R_M_U8;
+				if (destination.IsByte || destination.IsBoolean) return R_M_U8;
 				if (destination.IsChar || destination.IsShort) return R_RM_16;
 				return R_RM;
 			}
 
 			if (destination.IsMemoryAddress && source.IsRegister)
 			{
-				if (destination.IsPointer && !source.IsPointer && destination.Type.ElementType != null)
-				{
-					if (destination.Type.ElementType.IsUI1 || destination.Type.ElementType.IsBoolean) return RM_R_U8;
-					if (destination.Type.ElementType.IsChar || destination.Type.ElementType.IsUI2) return M_R_16;
-				}
-				if (destination.IsByte) return RM_R_U8;
+				//if (destination.IsPointer && !source.IsPointer && destination.Type.ElementType != null)
+				//{
+				//	if (destination.Type.ElementType.IsUI1 || destination.Type.ElementType.IsBoolean) return RM_R_U8;
+				//	if (destination.Type.ElementType.IsChar || destination.Type.ElementType.IsUI2) return M_R_16;
+				//}
+				if (destination.IsByte || destination.IsBoolean) return RM_R_U8;
 				if (destination.IsChar || destination.IsShort) return M_R_16;
 				return M_R;
 			}

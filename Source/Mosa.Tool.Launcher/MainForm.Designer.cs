@@ -102,6 +102,7 @@
 			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+			this.cbEnableVariablePromotion = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tbOptions.SuspendLayout();
 			this.groupBox12.SuspendLayout();
@@ -155,7 +156,7 @@
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(634, 410);
+			this.tabControl1.Size = new System.Drawing.Size(634, 429);
 			this.tabControl1.TabIndex = 22;
 			// 
 			// tbOptions
@@ -172,7 +173,7 @@
 			this.tbOptions.Location = new System.Drawing.Point(4, 22);
 			this.tbOptions.Margin = new System.Windows.Forms.Padding(0);
 			this.tbOptions.Name = "tbOptions";
-			this.tbOptions.Size = new System.Drawing.Size(626, 384);
+			this.tbOptions.Size = new System.Drawing.Size(626, 403);
 			this.tbOptions.TabIndex = 0;
 			this.tbOptions.Text = "MOSA Options";
 			// 
@@ -180,7 +181,7 @@
 			// 
 			this.groupBox12.Controls.Add(this.cbCompilerUsesMultipleThreads);
 			this.groupBox12.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox12.Location = new System.Drawing.Point(286, 317);
+			this.groupBox12.Location = new System.Drawing.Point(5, 336);
 			this.groupBox12.Name = "groupBox12";
 			this.groupBox12.Size = new System.Drawing.Size(136, 38);
 			this.groupBox12.TabIndex = 30;
@@ -205,7 +206,7 @@
 			this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsStatusLabel});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 362);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 381);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(626, 22);
 			this.statusStrip1.TabIndex = 32;
@@ -223,9 +224,9 @@
 			this.groupBox5.Controls.Add(this.checkBox1);
 			this.groupBox5.Controls.Add(this.cbMOSADebugger);
 			this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox5.Location = new System.Drawing.Point(283, 196);
+			this.groupBox5.Location = new System.Drawing.Point(243, 196);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(139, 115);
+			this.groupBox5.Size = new System.Drawing.Size(179, 136);
 			this.groupBox5.TabIndex = 31;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Debugger:";
@@ -260,7 +261,7 @@
 			this.checkBox1.AutoSize = true;
 			this.checkBox1.Enabled = false;
 			this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.checkBox1.Location = new System.Drawing.Point(6, 41);
+			this.checkBox1.Location = new System.Drawing.Point(9, 41);
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new System.Drawing.Size(107, 17);
 			this.checkBox1.TabIndex = 14;
@@ -272,7 +273,7 @@
 			this.cbMOSADebugger.AutoSize = true;
 			this.cbMOSADebugger.Enabled = false;
 			this.cbMOSADebugger.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbMOSADebugger.Location = new System.Drawing.Point(6, 19);
+			this.cbMOSADebugger.Location = new System.Drawing.Point(9, 18);
 			this.cbMOSADebugger.Name = "cbMOSADebugger";
 			this.cbMOSADebugger.Size = new System.Drawing.Size(123, 17);
 			this.cbMOSADebugger.TabIndex = 13;
@@ -284,7 +285,7 @@
 			this.groupBox2.Controls.Add(this.cbGenerateASMFile);
 			this.groupBox2.Controls.Add(this.cbGenerateMapFile);
 			this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox2.Location = new System.Drawing.Point(8, 317);
+			this.groupBox2.Location = new System.Drawing.Point(150, 336);
 			this.groupBox2.Name = "groupBox2";
 			this.groupBox2.Size = new System.Drawing.Size(272, 38);
 			this.groupBox2.TabIndex = 29;
@@ -323,9 +324,9 @@
 			this.groupBox6.Controls.Add(this.cbExitOnLaunch);
 			this.groupBox6.Controls.Add(this.cbEmulator);
 			this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox6.Location = new System.Drawing.Point(428, 197);
+			this.groupBox6.Location = new System.Drawing.Point(428, 196);
 			this.groupBox6.Name = "groupBox6";
-			this.groupBox6.Size = new System.Drawing.Size(188, 158);
+			this.groupBox6.Size = new System.Drawing.Size(188, 178);
 			this.groupBox6.TabIndex = 28;
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "Virtual Machine Emulator:";
@@ -333,7 +334,7 @@
 			// button1
 			// 
 			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.button1.Location = new System.Drawing.Point(14, 129);
+			this.button1.Location = new System.Drawing.Point(10, 148);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(168, 23);
 			this.button1.TabIndex = 28;
@@ -378,7 +379,7 @@
 			// 
 			this.cbExitOnLaunch.AutoSize = true;
 			this.cbExitOnLaunch.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbExitOnLaunch.Location = new System.Drawing.Point(14, 106);
+			this.cbExitOnLaunch.Location = new System.Drawing.Point(10, 125);
 			this.cbExitOnLaunch.Name = "cbExitOnLaunch";
 			this.cbExitOnLaunch.Size = new System.Drawing.Size(102, 17);
 			this.cbExitOnLaunch.TabIndex = 22;
@@ -471,7 +472,7 @@
 			this.groupBox3.Controls.Add(this.cbImageFormat);
 			this.groupBox3.Controls.Add(this.lbDestinationDirectory);
 			this.groupBox3.Controls.Add(this.label3);
-			this.groupBox3.Location = new System.Drawing.Point(5, 83);
+			this.groupBox3.Location = new System.Drawing.Point(5, 82);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(611, 108);
 			this.groupBox3.TabIndex = 24;
@@ -635,6 +636,7 @@
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.cbEnableVariablePromotion);
 			this.groupBox1.Controls.Add(this.cbInlinedMethods);
 			this.groupBox1.Controls.Add(this.cbEnableSparseConditionalConstantPropagation);
 			this.groupBox1.Controls.Add(this.cbEnableIROptimizations);
@@ -642,7 +644,7 @@
 			this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox1.Location = new System.Drawing.Point(5, 196);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(272, 115);
+			this.groupBox1.Size = new System.Drawing.Size(232, 136);
 			this.groupBox1.TabIndex = 22;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Optimizations:";
@@ -651,11 +653,11 @@
 			// 
 			this.cbInlinedMethods.AutoSize = true;
 			this.cbInlinedMethods.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbInlinedMethods.Location = new System.Drawing.Point(6, 89);
+			this.cbInlinedMethods.Location = new System.Drawing.Point(6, 110);
 			this.cbInlinedMethods.Name = "cbInlinedMethods";
-			this.cbInlinedMethods.Size = new System.Drawing.Size(137, 17);
+			this.cbInlinedMethods.Size = new System.Drawing.Size(101, 17);
 			this.cbInlinedMethods.TabIndex = 9;
-			this.cbInlinedMethods.Text = "Enable Inlined Methods";
+			this.cbInlinedMethods.Text = "Inlined Methods";
 			this.cbInlinedMethods.UseVisualStyleBackColor = true;
 			// 
 			// cbEnableSparseConditionalConstantPropagation
@@ -664,11 +666,11 @@
 			this.cbEnableSparseConditionalConstantPropagation.Checked = true;
 			this.cbEnableSparseConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.cbEnableSparseConditionalConstantPropagation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbEnableSparseConditionalConstantPropagation.Location = new System.Drawing.Point(6, 65);
+			this.cbEnableSparseConditionalConstantPropagation.Location = new System.Drawing.Point(6, 64);
 			this.cbEnableSparseConditionalConstantPropagation.Name = "cbEnableSparseConditionalConstantPropagation";
-			this.cbEnableSparseConditionalConstantPropagation.Size = new System.Drawing.Size(255, 17);
+			this.cbEnableSparseConditionalConstantPropagation.Size = new System.Drawing.Size(219, 17);
 			this.cbEnableSparseConditionalConstantPropagation.TabIndex = 8;
-			this.cbEnableSparseConditionalConstantPropagation.Text = "Enable Sparse Conditional Constant Propagation";
+			this.cbEnableSparseConditionalConstantPropagation.Text = "Sparse Conditional Constant Propagation";
 			this.cbEnableSparseConditionalConstantPropagation.UseVisualStyleBackColor = true;
 			// 
 			// cbEnableIROptimizations
@@ -677,11 +679,11 @@
 			this.cbEnableIROptimizations.Checked = true;
 			this.cbEnableIROptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.cbEnableIROptimizations.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbEnableIROptimizations.Location = new System.Drawing.Point(6, 42);
+			this.cbEnableIROptimizations.Location = new System.Drawing.Point(6, 41);
 			this.cbEnableIROptimizations.Name = "cbEnableIROptimizations";
-			this.cbEnableIROptimizations.Size = new System.Drawing.Size(138, 17);
+			this.cbEnableIROptimizations.Size = new System.Drawing.Size(102, 17);
 			this.cbEnableIROptimizations.TabIndex = 7;
-			this.cbEnableIROptimizations.Text = "Enable IR Optimizations";
+			this.cbEnableIROptimizations.Text = "IR Optimizations";
 			this.cbEnableIROptimizations.UseVisualStyleBackColor = true;
 			// 
 			// cbEnableSSA
@@ -692,9 +694,9 @@
 			this.cbEnableSSA.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbEnableSSA.Location = new System.Drawing.Point(6, 18);
 			this.cbEnableSSA.Name = "cbEnableSSA";
-			this.cbEnableSSA.Size = new System.Drawing.Size(208, 17);
+			this.cbEnableSSA.Size = new System.Drawing.Size(172, 17);
 			this.cbEnableSSA.TabIndex = 6;
-			this.cbEnableSSA.Text = "Enable Static Single Assignment (SSA)";
+			this.cbEnableSSA.Text = "Static Single Assignment (SSA)";
 			this.cbEnableSSA.UseVisualStyleBackColor = true;
 			// 
 			// tabPage4
@@ -977,11 +979,22 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
+			// cbEnableVariablePromotion
+			// 
+			this.cbEnableVariablePromotion.AutoSize = true;
+			this.cbEnableVariablePromotion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbEnableVariablePromotion.Location = new System.Drawing.Point(6, 87);
+			this.cbEnableVariablePromotion.Name = "cbEnableVariablePromotion";
+			this.cbEnableVariablePromotion.Size = new System.Drawing.Size(114, 17);
+			this.cbEnableVariablePromotion.TabIndex = 10;
+			this.cbEnableVariablePromotion.Text = "Variable Promotion";
+			this.cbEnableVariablePromotion.UseVisualStyleBackColor = true;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(632, 441);
+			this.ClientSize = new System.Drawing.Size(632, 460);
 			this.Controls.Add(this.progressBar1);
 			this.Controls.Add(this.tabControl1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1102,5 +1115,6 @@
 		private System.Windows.Forms.ComboBox cbBootLoader;
 		private System.Windows.Forms.CheckBox cbVBEVideo;
 		private System.Windows.Forms.TextBox tbMode;
+		private System.Windows.Forms.CheckBox cbEnableVariablePromotion;
 	}
 }
