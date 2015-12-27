@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 
+// No run-time tests
+
 namespace Mosa.Test.Collection
 {
 	public struct InitStruct
