@@ -11,50 +11,36 @@ namespace Mosa.TinyCPUSimulator.Debug
 
 		private static void Main(string[] args)
 		{
-			var fixture = new StringFixture();
+			var fixture = new ValueTypeFixture();
 
-			fixture.TestCompiler.DebugOutput = false;
-			DoTest(fixture.NotEqual1, "normal-all");
+			fixture.TestCompiler.DebugOutput = true;
+
+			fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = true;
+			DoTest(fixture.TestValueTypeVirtualMethod, "normal-all");
 
 			//fixture.TestCompiler.Reset();
-			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;
-			//fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = false;
-			//fixture.TestCompiler.Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = false;
-			//fixture.TestCompiler.Compiler.CompilerOptions.EnableSSA = false;
 			//fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = false;
-			//DoTest(fixture.ExceptionTest8, "no: optimizations, inline, sparse, ssa, variable promotion");
-
-			fixture.TestCompiler.Reset();
-			fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = false;
-			DoTest(fixture.NotEqual1, "no inline");
-
-			fixture.TestCompiler.Reset();
-			fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = false;
-			DoTest(fixture.NotEqual1, "no promotion");
-
-			fixture.TestCompiler.Reset();
-			fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = false;
-			fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = false;
-			DoTest(fixture.NotEqual1, "no promotion, inline");
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = false;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;
+			//DoTest(fixture.NotEqual1, "no optimizations, inline, promotion");
 
 			//fixture.TestCompiler.Reset();
-			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = true;
 			//fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = false;
-			//DoTest(fixture.ForeachU1, "no: optimizations, inline");
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;
+			//DoTest(fixture.NotEqual1, "no optimizations, inline");
 
 			//fixture.TestCompiler.Reset();
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = true;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = true;
 			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;
-			//fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = false;
-			//fixture.TestCompiler.Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = false;
-			//DoTest(fixture.ForeachU1, "no: optimizations, inline, sparse");
+			//DoTest(fixture.NotEqual1, "no optimizations");
 
 			//fixture.TestCompiler.Reset();
-			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = false;
-			//fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = false;
-			//fixture.TestCompiler.Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = false;
-			//fixture.TestCompiler.Compiler.CompilerOptions.EnableSSA = false;
-			//DoTest(fixture.ForeachU1, "no: optimizations, inline, sparse, ssa");
-
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = false;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = true;
+			//fixture.TestCompiler.Compiler.CompilerOptions.EnableOptimizations = true;
+			//DoTest(fixture.NotEqual1, "no promotion");
 			return;
 		}
 

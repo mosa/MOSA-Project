@@ -74,6 +74,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CallFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CallFixture.tt</DependentUpon>
+    </Compile>
     <Compile Include="CharFixture.cs" />
     <Compile Include="DelegateFixture.cs" />
     <Compile Include="BooleanFixture.cs" />
@@ -146,6 +151,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CallFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CallFixture.cs</LastGenOutput>
+    </Content>
     <Content Include="EnumFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>EnumFixture1.cs</LastGenOutput>

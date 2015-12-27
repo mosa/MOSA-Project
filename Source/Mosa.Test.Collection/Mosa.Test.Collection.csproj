@@ -51,6 +51,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="ArrayLayoutTests.cs" />
+    <Compile Include="CallTests.cs">
+      <DependentUpon>CallTests.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="CharTests.cs" />
     <Compile Include="ComparisonTests.cs">
       <AutoGen>True</AutoGen>
@@ -73,11 +78,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="CallOrderTests.cs" />
-    <Compile Include="CallTests.cs">
-      <DependentUpon>CallTests.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="ConvTests.cs">
       <DependentUpon>ConvTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -87,6 +87,10 @@
     <None Include="BoxingTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>BoxingTests.cs</LastGenOutput>
+    </None>
+    <None Include="CallTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CallTests.cs</LastGenOutput>
     </None>
     <None Include="ComparisonTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -199,10 +203,6 @@
     <None Include="ConditionalOperatorTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ConditionalOperatorTests.cs</LastGenOutput>
-    </None>
-    <None Include="CallTests.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CallTests.cs</LastGenOutput>
     </None>
     <None Include="ConvTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
