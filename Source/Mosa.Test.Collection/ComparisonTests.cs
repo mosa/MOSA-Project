@@ -248,62 +248,32 @@ namespace Mosa.Test.Collection
 			return (a <= b);
 		}
 	
-		public static bool CompareEqualR4(float a, float b)
+		public static bool CompareEqualC(char a, char b)
 		{
 			return (a == b);
 		}
 	
-		public static bool CompareNotEqualR4(float a, float b)
+		public static bool CompareNotEqualC(char a, char b)
 		{
 			return (a != b);
 		}
 	
-		public static bool CompareGreaterThanR4(float a, float b)
+		public static bool CompareGreaterThanC(char a, char b)
 		{
 			return (a > b);
 		}
 	
-		public static bool CompareLessThanR4(float a, float b)
+		public static bool CompareLessThanC(char a, char b)
 		{
 			return (a < b);
 		}
 	
-		public static bool CompareGreaterThanOrEqualR4(float a, float b)
+		public static bool CompareGreaterThanOrEqualC(char a, char b)
 		{
 			return (a >= b);
 		}
 	
-		public static bool CompareLessThanOrEqualR4(float a, float b)
-		{
-			return (a <= b);
-		}
-	
-		public static bool CompareEqualR8(double a, double b)
-		{
-			return (a == b);
-		}
-	
-		public static bool CompareNotEqualR8(double a, double b)
-		{
-			return (a != b);
-		}
-	
-		public static bool CompareGreaterThanR8(double a, double b)
-		{
-			return (a > b);
-		}
-	
-		public static bool CompareLessThanR8(double a, double b)
-		{
-			return (a < b);
-		}
-	
-		public static bool CompareGreaterThanOrEqualR8(double a, double b)
-		{
-			return (a >= b);
-		}
-	
-		public static bool CompareLessThanOrEqualR8(double a, double b)
+		public static bool CompareLessThanOrEqualC(char a, char b)
 		{
 			return (a <= b);
 		}

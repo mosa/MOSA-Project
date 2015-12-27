@@ -348,87 +348,45 @@ namespace Mosa.Test.Collection.x86.xUnit
 		}
 				
 		[Theory]
-		[MemberData("R4R4", DisableDiscoveryEnumeration = true)]
-		public void CompareEqualR4(float a, float b)
+		[MemberData("CC", DisableDiscoveryEnumeration = true)]
+		public void CompareEqualC(char a, char b)
 		{
-			Assert.Equal(ComparisonTests.CompareEqualR4(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareEqualR4", a, b));
+			Assert.Equal(ComparisonTests.CompareEqualC(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareEqualC", a, b));
 		}
 				
 		[Theory]
-		[MemberData("R4R4", DisableDiscoveryEnumeration = true)]
-		public void CompareNotEqualR4(float a, float b)
+		[MemberData("CC", DisableDiscoveryEnumeration = true)]
+		public void CompareNotEqualC(char a, char b)
 		{
-			Assert.Equal(ComparisonTests.CompareNotEqualR4(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareNotEqualR4", a, b));
+			Assert.Equal(ComparisonTests.CompareNotEqualC(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareNotEqualC", a, b));
 		}
 				
 		[Theory]
-		[MemberData("R4R4", DisableDiscoveryEnumeration = true)]
-		public void CompareGreaterThanR4(float a, float b)
+		[MemberData("CC", DisableDiscoveryEnumeration = true)]
+		public void CompareGreaterThanC(char a, char b)
 		{
-			Assert.Equal(ComparisonTests.CompareGreaterThanR4(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareGreaterThanR4", a, b));
+			Assert.Equal(ComparisonTests.CompareGreaterThanC(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareGreaterThanC", a, b));
 		}
 				
 		[Theory]
-		[MemberData("R4R4", DisableDiscoveryEnumeration = true)]
-		public void CompareLessThanR4(float a, float b)
+		[MemberData("CC", DisableDiscoveryEnumeration = true)]
+		public void CompareLessThanC(char a, char b)
 		{
-			Assert.Equal(ComparisonTests.CompareLessThanR4(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareLessThanR4", a, b));
+			Assert.Equal(ComparisonTests.CompareLessThanC(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareLessThanC", a, b));
 		}
 				
 		[Theory]
-		[MemberData("R4R4", DisableDiscoveryEnumeration = true)]
-		public void CompareGreaterThanOrEqualR4(float a, float b)
+		[MemberData("CC", DisableDiscoveryEnumeration = true)]
+		public void CompareGreaterThanOrEqualC(char a, char b)
 		{
-			Assert.Equal(ComparisonTests.CompareGreaterThanOrEqualR4(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareGreaterThanOrEqualR4", a, b));
+			Assert.Equal(ComparisonTests.CompareGreaterThanOrEqualC(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareGreaterThanOrEqualC", a, b));
 		}
 				
 		[Theory]
-		[MemberData("R4R4", DisableDiscoveryEnumeration = true)]
-		public void CompareLessThanOrEqualR4(float a, float b)
+		[MemberData("CC", DisableDiscoveryEnumeration = true)]
+		public void CompareLessThanOrEqualC(char a, char b)
 		{
-			Assert.Equal(ComparisonTests.CompareLessThanOrEqualR4(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareLessThanOrEqualR4", a, b));
-		}
-				
-		[Theory]
-		[MemberData("R8R8", DisableDiscoveryEnumeration = true)]
-		public void CompareEqualR8(double a, double b)
-		{
-			Assert.Equal(ComparisonTests.CompareEqualR8(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareEqualR8", a, b));
-		}
-				
-		[Theory]
-		[MemberData("R8R8", DisableDiscoveryEnumeration = true)]
-		public void CompareNotEqualR8(double a, double b)
-		{
-			Assert.Equal(ComparisonTests.CompareNotEqualR8(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareNotEqualR8", a, b));
-		}
-				
-		[Theory]
-		[MemberData("R8R8", DisableDiscoveryEnumeration = true)]
-		public void CompareGreaterThanR8(double a, double b)
-		{
-			Assert.Equal(ComparisonTests.CompareGreaterThanR8(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareGreaterThanR8", a, b));
-		}
-				
-		[Theory]
-		[MemberData("R8R8", DisableDiscoveryEnumeration = true)]
-		public void CompareLessThanR8(double a, double b)
-		{
-			Assert.Equal(ComparisonTests.CompareLessThanR8(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareLessThanR8", a, b));
-		}
-				
-		[Theory]
-		[MemberData("R8R8", DisableDiscoveryEnumeration = true)]
-		public void CompareGreaterThanOrEqualR8(double a, double b)
-		{
-			Assert.Equal(ComparisonTests.CompareGreaterThanOrEqualR8(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareGreaterThanOrEqualR8", a, b));
-		}
-				
-		[Theory]
-		[MemberData("R8R8", DisableDiscoveryEnumeration = true)]
-		public void CompareLessThanOrEqualR8(double a, double b)
-		{
-			Assert.Equal(ComparisonTests.CompareLessThanOrEqualR8(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareLessThanOrEqualR8", a, b));
+			Assert.Equal(ComparisonTests.CompareLessThanOrEqualC(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.CompareLessThanOrEqualC", a, b));
 		}
 		
 	}

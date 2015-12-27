@@ -9,7 +9,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 {
 	public class ComparisonFixture : X86TestFixture
 	{
-		<# foreach (KeyValuePair<string, string> number in Numbers) 
+		<# foreach (KeyValuePair<string, string> number in IntegersWithChar) 
 		foreach (KeyValuePair<string, string> compare in Comparisons) 
 		{ #>
 		
