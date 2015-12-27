@@ -79,6 +79,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CallFixture.tt</DependentUpon>
     </Compile>
+    <Compile Include="CallVirtualFixture.cs" />
     <Compile Include="CharFixture.cs" />
     <Compile Include="DelegateFixture.cs" />
     <Compile Include="BooleanFixture.cs" />
@@ -92,6 +93,7 @@
     </Compile>
     <Compile Include="ExceptionHandlingFixture.cs" />
     <Compile Include="GenericCallFixture.cs" />
+    <Compile Include="IsInstFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringFixture.cs" />
     <Compile Include="ForeachFixture.cs">
