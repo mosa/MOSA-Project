@@ -1,0 +1,25 @@
+﻿<#@ include file="../TemplateLibrary.txt" #>
+
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Xunit;
+using Xunit.Extensions;
+
+namespace Mosa.Test.Collection.x86.xUnit
+{
+	public class ComparisonFixture : X86TestFixture
+	{
+		<# foreach (KeyValuePair<string, string> number in Numbers) 
+		foreach (KeyValuePair<string, string> compare in Comparisons) 
+		{ #>
+		
+		[Theory]
+		[MemberData("<#= number.Value #><#= number.Value #>", DisableDiscoveryEnumeration = true)]
+		public void Compare<#= compare.Value #><#= number.Value #>(<#= number.Key #> a, <#= number.Key #> b)
+		{
+			Assert.Equal(ComparisonTests.Compare<#= compare.Value #><#= number.Value #>(a, b), Run<bool>("Mosa.Test.Collection.ComparisonTests.Compare<#= compare.Value #><#= number.Value #>", a, b));
+		}
+		<# } #>
+
+	}
+}

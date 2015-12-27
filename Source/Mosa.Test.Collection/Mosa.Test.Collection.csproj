@@ -57,11 +57,6 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="CharTests.cs" />
-    <Compile Include="ComparisonTests.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ComparisonTests.tt</DependentUpon>
-    </Compile>
     <Compile Include="ConvI2Tests.cs" />
     <Compile Include="ConvI1Tests.cs" />
     <Compile Include="ConvI4Tests.cs" />
@@ -72,8 +67,8 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="BooleanTests.cs" />
-    <Compile Include="ConditionalOperatorTests.cs">
-      <DependentUpon>ConditionalOperatorTests.tt</DependentUpon>
+    <Compile Include="ComparisonTests.cs">
+      <DependentUpon>ComparisonTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -91,10 +86,6 @@
     <None Include="CallTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>CallTests.cs</LastGenOutput>
-    </None>
-    <None Include="ComparisonTests.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ComparisonTests.cs</LastGenOutput>
     </None>
     <None Include="EnumTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -126,7 +117,7 @@
       <DependentUpon>EnumTests.tt</DependentUpon>
     </Compile>
     <Compile Include="GenericMixedTest.cs" />
-    <Compile Include="LargeSwitchFixture.cs" />
+    <Compile Include="LargeSwitchTest.cs" />
     <Compile Include="LdargaTests.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -200,9 +191,9 @@
     <Compile Include="DerivedNewObjectTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ConditionalOperatorTests.tt">
+    <None Include="ComparisonTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ConditionalOperatorTests.cs</LastGenOutput>
+      <LastGenOutput>ComparisonTests.cs</LastGenOutput>
     </None>
     <None Include="ConvTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

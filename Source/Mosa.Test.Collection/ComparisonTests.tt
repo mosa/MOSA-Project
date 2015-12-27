@@ -4,25 +4,13 @@ using System;
 namespace Mosa.Test.Collection
 {
 
-	public static class ComparisonTests
+	public static class ComparisonTests 
 	{
-	<# foreach (KeyValuePair<string, string> number1 in PositiveIntegersWithChar) 
-		foreach (KeyValuePair<string, string> number2 in PositiveIntegersWithChar)
+	<# foreach (KeyValuePair<string, string> number in Numbers) 
 		foreach (KeyValuePair<string, string> compare in Comparisons) 
 	{ #>
-  
-		public static bool Compare<#= compare.Value #><#= number1.Value #><#= number2.Value #>(<#= number1.Key #> a, <#= number2.Key #> b)
-		{
-			return (a <#= compare.Key #> b);
-		}
-	<# } #>
-	
-	<# foreach (KeyValuePair<string, string> number1 in NegativeIntegers) 
-		foreach (KeyValuePair<string, string> number2 in NegativeIntegers)
-		foreach (KeyValuePair<string, string> compare in Comparisons) 
-	{ #>
-  
-		public static bool Compare<#= compare.Value #><#= number1.Value #><#= number2.Value #>(<#= number1.Key #> a, <#= number2.Key #> b)
+
+		public static bool Compare<#= compare.Value #><#= number.Value #>(<#= number.Key #> a, <#= number.Key #> b)
 		{
 			return (a <#= compare.Key #> b);
 		}
