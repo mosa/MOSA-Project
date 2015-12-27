@@ -17,7 +17,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 
 		public void CallU1(byte a)
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection", "CallTests", "CallU1", a));
+			Assert.True(Run<bool>("Mosa.Test.Collection.CallTests.CallU1", a));
 		}
 		
 		[Theory]
@@ -25,7 +25,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 
 		public void CallU2(ushort a)
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection", "CallTests", "CallU2", a));
+			Assert.True(Run<bool>("Mosa.Test.Collection.CallTests.CallU2", a));
 		}
 		
 		[Theory]
@@ -33,7 +33,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 
 		public void CallU4(uint a)
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection", "CallTests", "CallU4", a));
+			Assert.True(Run<bool>("Mosa.Test.Collection.CallTests.CallU4", a));
 		}
 		
 		[Theory]
@@ -41,7 +41,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 
 		public void CallU8(ulong a)
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection", "CallTests", "CallU8", a));
+			Assert.True(Run<bool>("Mosa.Test.Collection.CallTests.CallU8", a));
 		}
 		
 		[Theory]
@@ -49,7 +49,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 
 		public void CallI1(sbyte a)
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection", "CallTests", "CallI1", a));
+			Assert.True(Run<bool>("Mosa.Test.Collection.CallTests.CallI1", a));
 		}
 		
 		[Theory]
@@ -57,7 +57,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 
 		public void CallI2(short a)
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection", "CallTests", "CallI2", a));
+			Assert.True(Run<bool>("Mosa.Test.Collection.CallTests.CallI2", a));
 		}
 		
 		[Theory]
@@ -65,7 +65,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 
 		public void CallI4(int a)
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection", "CallTests", "CallI4", a));
+			Assert.True(Run<bool>("Mosa.Test.Collection.CallTests.CallI4", a));
 		}
 		
 		[Theory]
@@ -73,7 +73,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 
 		public void CallI8(long a)
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection", "CallTests", "CallI8", a));
+			Assert.True(Run<bool>("Mosa.Test.Collection.CallTests.CallI8", a));
 		}
 		
 		[Theory]
@@ -81,7 +81,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 
 		public void CallC(char a)
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection", "CallTests", "CallC", a));
+			Assert.True(Run<bool>("Mosa.Test.Collection.CallTests.CallC", a));
 		}
 		
 	}

@@ -17,7 +17,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 
 		public void Call<#= number.Value #>(<#= number.Key #> a)
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection", "CallTests", "Call<#= number.Value #>", a));
+			Assert.True(Run<bool>("Mosa.Test.Collection.CallTests.Call<#= number.Value #>", a));
 		}
 		<# } #>
 
