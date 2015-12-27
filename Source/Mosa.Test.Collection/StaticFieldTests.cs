@@ -10,10 +10,16 @@ namespace Mosa.Test.Collection
 	{
 		private static byte field;
 		
-		public static bool StaticFieldU1 (byte value) 
+		public static bool StaticFieldU1(byte value) 
 		{
 			field = value;
 			return (value == field);
+		}
+
+		public static byte StaticReturnFieldU1(byte value) 
+		{
+			field = value;
+			return field;
 		}
 	}
 	
@@ -21,10 +27,16 @@ namespace Mosa.Test.Collection
 	{
 		private static ushort field;
 		
-		public static bool StaticFieldU2 (ushort value) 
+		public static bool StaticFieldU2(ushort value) 
 		{
 			field = value;
 			return (value == field);
+		}
+
+		public static ushort StaticReturnFieldU2(ushort value) 
+		{
+			field = value;
+			return field;
 		}
 	}
 	
@@ -32,10 +44,16 @@ namespace Mosa.Test.Collection
 	{
 		private static uint field;
 		
-		public static bool StaticFieldU4 (uint value) 
+		public static bool StaticFieldU4(uint value) 
 		{
 			field = value;
 			return (value == field);
+		}
+
+		public static uint StaticReturnFieldU4(uint value) 
+		{
+			field = value;
+			return field;
 		}
 	}
 	
@@ -43,10 +61,16 @@ namespace Mosa.Test.Collection
 	{
 		private static ulong field;
 		
-		public static bool StaticFieldU8 (ulong value) 
+		public static bool StaticFieldU8(ulong value) 
 		{
 			field = value;
 			return (value == field);
+		}
+
+		public static ulong StaticReturnFieldU8(ulong value) 
+		{
+			field = value;
+			return field;
 		}
 	}
 	
@@ -54,10 +78,16 @@ namespace Mosa.Test.Collection
 	{
 		private static sbyte field;
 		
-		public static bool StaticFieldI1 (sbyte value) 
+		public static bool StaticFieldI1(sbyte value) 
 		{
 			field = value;
 			return (value == field);
+		}
+
+		public static sbyte StaticReturnFieldI1(sbyte value) 
+		{
+			field = value;
+			return field;
 		}
 	}
 	
@@ -65,10 +95,16 @@ namespace Mosa.Test.Collection
 	{
 		private static short field;
 		
-		public static bool StaticFieldI2 (short value) 
+		public static bool StaticFieldI2(short value) 
 		{
 			field = value;
 			return (value == field);
+		}
+
+		public static short StaticReturnFieldI2(short value) 
+		{
+			field = value;
+			return field;
 		}
 	}
 	
@@ -76,10 +112,16 @@ namespace Mosa.Test.Collection
 	{
 		private static int field;
 		
-		public static bool StaticFieldI4 (int value) 
+		public static bool StaticFieldI4(int value) 
 		{
 			field = value;
 			return (value == field);
+		}
+
+		public static int StaticReturnFieldI4(int value) 
+		{
+			field = value;
+			return field;
 		}
 	}
 	
@@ -87,10 +129,16 @@ namespace Mosa.Test.Collection
 	{
 		private static long field;
 		
-		public static bool StaticFieldI8 (long value) 
+		public static bool StaticFieldI8(long value) 
 		{
 			field = value;
 			return (value == field);
+		}
+
+		public static long StaticReturnFieldI8(long value) 
+		{
+			field = value;
+			return field;
 		}
 	}
 	
@@ -98,10 +146,16 @@ namespace Mosa.Test.Collection
 	{
 		private static float field;
 		
-		public static bool StaticFieldR4 (float value) 
+		public static bool StaticFieldR4(float value) 
 		{
 			field = value;
 			return (value == field);
+		}
+
+		public static float StaticReturnFieldR4(float value) 
+		{
+			field = value;
+			return field;
 		}
 	}
 	
@@ -109,10 +163,16 @@ namespace Mosa.Test.Collection
 	{
 		private static double field;
 		
-		public static bool StaticFieldR8 (double value) 
+		public static bool StaticFieldR8(double value) 
 		{
 			field = value;
 			return (value == field);
+		}
+
+		public static double StaticReturnFieldR8(double value) 
+		{
+			field = value;
+			return field;
 		}
 	}
 	
@@ -120,10 +180,16 @@ namespace Mosa.Test.Collection
 	{
 		private static bool field;
 		
-		public static bool StaticFieldB (bool value) 
+		public static bool StaticFieldB(bool value) 
 		{
 			field = value;
 			return (value == field);
+		}
+
+		public static bool StaticReturnFieldB(bool value) 
+		{
+			field = value;
+			return field;
 		}
 	}
 	
@@ -131,10 +197,16 @@ namespace Mosa.Test.Collection
 	{
 		private static char field;
 		
-		public static bool StaticFieldC (char value) 
+		public static bool StaticFieldC(char value) 
 		{
 			field = value;
 			return (value == field);
+		}
+
+		public static char StaticReturnFieldC(char value) 
+		{
+			field = value;
+			return field;
 		}
 	}
 }

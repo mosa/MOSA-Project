@@ -95,6 +95,7 @@
     <Compile Include="GenericCallFixture.cs" />
     <Compile Include="IsInstFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StaticFieldFixture.cs" />
     <Compile Include="StringFixture.cs" />
     <Compile Include="ForeachFixture.cs">
       <AutoGen>True</AutoGen>
