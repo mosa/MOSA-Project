@@ -16,17 +16,17 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public static bool CompareTest1()
 		{
-			return ComparisonTests.CompareEqualI1I8(-1, -1);
+			return ComparisonTests.CompareEqualI1(-1, -1);
 		}
 
 		public static bool CompareTest2()
 		{
-			return ComparisonTests.CompareEqualI2I8(-2, -2);
+			return ComparisonTests.CompareEqualI2(-2, -2);
 		}
 
 		public static bool CompareTest3()
 		{
-			return ComparisonTests.CompareEqualI2I8(-1, -1);
+			return ComparisonTests.CompareEqualI2(-1, -1);
 		}
 	}
 }
