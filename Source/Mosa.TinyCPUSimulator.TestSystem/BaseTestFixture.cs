@@ -40,6 +40,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		public static IEnumerable<object[]> C { get { return Combinations.C; } }
 
+		public static IEnumerable<object[]> CC { get { return Combinations.CC; } }
+
 		public static IEnumerable<object[]> CCC { get { return Combinations.CCC; } }
 
 		public static IEnumerable<object[]> I1 { get { return Combinations.I1; } }
@@ -67,6 +69,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 		public static IEnumerable<object[]> I4Small { get { return Combinations.I4Small; } }
 
 		public static IEnumerable<object[]> I4SmallB { get { return Combinations.I4SmallB; } }
+
+		public static IEnumerable<object[]> I4SmallC { get { return Combinations.I4SmallC; } }
 
 		public static IEnumerable<object[]> I4SmallI1 { get { return Combinations.I4SmallI1; } }
 

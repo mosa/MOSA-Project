@@ -173,6 +173,16 @@ namespace Mosa.Test.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> I4SmallC
+		{
+			get
+			{
+				foreach (var i1 in Mosa.Test.Numbers.Series.I4Small)
+					foreach (var i2 in Mosa.Test.Numbers.C.Series)
+						yield return new object[] { i1, i2 };
+			}
+		}
+
 		public static IEnumerable<object[]> I4Small
 		{
 			get
