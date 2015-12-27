@@ -1,0 +1,25 @@
+﻿<#@ include file="../TemplateLibrary.txt" #>
+
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Xunit;
+using Xunit.Extensions;
+
+namespace Mosa.Test.Collection.x86.xUnit
+{
+	public class CallFixture : X86TestFixture
+	{
+
+		<# foreach (KeyValuePair<string, string> number in IntegersWithChar) { #>
+
+		[Theory]
+		[MemberData("<#= number.Value #>", DisableDiscoveryEnumeration = true)]
+
+		public void Call<#= number.Value #>(<#= number.Key #> a)
+		{
+			Assert.True(Run<bool>("Mosa.Test.Collection.CallTests.Call<#= number.Value #>", a));
+		}
+		<# } #>
+
+	}
+}

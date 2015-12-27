@@ -10,10 +10,16 @@ namespace Mosa.Test.Collection
 	{
 		private static <#= number.Key #> field;
 		
-		public static bool StaticField<#= number.Value #> (<#= number.Key #> value) 
+		public static bool StaticField<#= number.Value #>(<#= number.Key #> value) 
 		{
 			field = value;
 			return (value == field);
+		}
+
+		public static <#= number.Key #> StaticReturnField<#= number.Value #>(<#= number.Key #> value) 
+		{
+			field = value;
+			return field;
 		}
 	}
 <# } #>

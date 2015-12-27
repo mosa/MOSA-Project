@@ -6,7 +6,7 @@ using Xunit.Extensions;
 
 namespace Mosa.Test.Collection.x86.xUnit
 {
-	public class GenericFixture : X86TestFixture
+	public class GenericCallFixture : X86TestFixture
 	{
 		[Theory]
 		[MemberData("U1", DisableDiscoveryEnumeration = true)]

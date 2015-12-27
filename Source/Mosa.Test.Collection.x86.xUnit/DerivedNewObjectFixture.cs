@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Mosa.Test.Collection.x86.xUnit
 {
-	public class NewDerivedObjectFixture : X86TestFixture
+	public class DerivedNewObjectFixture : X86TestFixture
 	{
 		[Fact]
 		public void WithoutArgs()

@@ -7,11 +7,6 @@ namespace Mosa.Test.Collection.x86.xUnit
 {
 	public class CallOrderFixture : X86TestFixture
 	{
-		//[Fact]
-		public void CallEmpty()
-		{
-		}
-
 		[Theory]
 		[MemberData("I4", DisableDiscoveryEnumeration = true)]
 		public void CallOrderI4(int a)
