@@ -242,10 +242,10 @@ namespace Mosa.DeviceDriver.ISA
 		}
 
 		/// <summary>
-		/// Waits for reqister ready.
+		/// Waits for register ready.
 		/// </summary>
 		/// <returns></returns>
-		protected bool WaitForReqisterReady()
+		protected bool WaitForRegisterReady()
 		{
 			while (true)
 			{
@@ -304,10 +304,10 @@ namespace Mosa.DeviceDriver.ISA
 			else
 				CommandPort.Write8(IDECommands.ReadSectorsWithRetry);
 
-			if (!WaitForReqisterReady())
+			if (!WaitForRegisterReady())
 				return false;
 
-			BinaryFormat sector = new BinaryFormat(data);
+			var sector = new BinaryFormat(data);
 
 			//TODO: Don't use PIO
 			if (operation == SectorOperation.Read)
@@ -360,10 +360,10 @@ namespace Mosa.DeviceDriver.ISA
 			else
 				CommandPort.Write8(0x24);
 
-			if (!WaitForReqisterReady())
+			if (!WaitForRegisterReady())
 				return false;
 
-			BinaryFormat sector = new BinaryFormat(data);
+			var sector = new BinaryFormat(data);
 
 			//TODO: Don't use PIO
 			if (operation == SectorOperation.Read)
@@ -403,10 +403,10 @@ namespace Mosa.DeviceDriver.ISA
 
 			CommandPort.Write8(IDECommands.IdentifyDrive);
 
-			if (!WaitForReqisterReady())
+			if (!WaitForRegisterReady())
 				return false;
 
-			BinaryFormat info = new BinaryFormat(new byte[512]);
+			var info = new BinaryFormat(new byte[512]);
 
 			for (uint index = 0; index < 256; index++)
 				info.SetUShort(index * 2, DataPort.Read16());
