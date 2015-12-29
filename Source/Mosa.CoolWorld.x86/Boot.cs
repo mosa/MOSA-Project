@@ -23,6 +23,8 @@ namespace Mosa.CoolWorld.x86
 			Console = ConsoleManager.Controller.Boot;
 			Console.Clear();
 
+			Console.ScrollRow = 23;
+
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
 			Console.Color = Colors.White;
@@ -33,37 +35,15 @@ namespace Mosa.CoolWorld.x86
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Black;
 
-			//if (SmbiosManager.IsAvailable)
-			//{
-			//	BiosInformationStructure biosInfo = new BiosInformationStructure();
-			//	CpuStructure cpuInfo = new CpuStructure();
-
-			//	Console.WriteLine("> Checking BIOS...");
-			//	BulletPoint(); Console.Write("Vendor  "); InBrackets(biosInfo.BiosVendor, Colors.White, Colors.LightBlue); Console.WriteLine();
-			//	BulletPoint(); Console.Write("Version "); InBrackets(biosInfo.BiosVersion, Colors.White, Colors.LightBlue); Console.WriteLine();
-
-			//	Console.WriteLine("> Checking CPU...");
-			//	BulletPoint(); Console.Write("Vendor  "); InBrackets(cpuInfo.Vendor, Colors.White, Colors.LightBlue); Console.WriteLine();
-			//	BulletPoint(); Console.Write("Version "); InBrackets(cpuInfo.Version, Colors.White, Colors.LightBlue); Console.WriteLine();
-			//}
-			//else
-			//{
-			//	Console.WriteLine("> No SMBIOS available!");
-			//}
-
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 			Setup.Initialize();
 
 			Console.WriteLine("> Adding hardware devices...");
 			Setup.Start();
 
-			Console.WriteLine("> System ready");
+			Console.Color = Colors.Yellow;
+			Console.WriteLine("System ready!!!");
 			Console.WriteLine();
-			Console.Goto(24, 0);
-			Console.Color = Colors.White;
-			Console.BackgroundColor = Colors.Green;
-			Console.Write("          Copyright (C) 2008-2015 [Managed Operating System Alliance]");
-			FillLine();
 
 			Process();
 		}
@@ -73,7 +53,6 @@ namespace Mosa.CoolWorld.x86
 			int lastSecond = -1;
 
 			Console.BackgroundColor = Colors.Black;
-			Console.Goto(21, 0);
 			Console.Color = Colors.White;
 			Console.Write("> ");
 
@@ -157,10 +136,12 @@ namespace Mosa.CoolWorld.x86
 			uint r = Console.Row;
 			byte col = Console.Color;
 			byte back = Console.BackgroundColor;
+			uint sr = Console.ScrollRow;
 
 			Console.Color = Colors.Cyan;
+			Console.ScrollRow = Console.Rows;
 
-			Console.Row = 23;
+			Console.Row = 24;
 			Console.Column = 1;
 
 			//Console.Write("Total: ");
@@ -169,11 +150,11 @@ namespace Mosa.CoolWorld.x86
 			Console.Write((PageFrameAllocator.TotalPages - PageFrameAllocator.TotalPagesInUse) * PageFrameAllocator.PageSize / (1024 * 1024));
 			Console.Write(" MB");
 
-			Console.Column = 55;
+			Console.Column = 45;
 			Console.BackgroundColor = Colors.Black;
 			Console.Write("        ");
-			Console.Column = 55;
-			Console.Row = 23;
+			Console.Column = 45;
+			Console.Row = 24;
 
 			counter++;
 			Console.Write(counter, 10, 7);
@@ -202,6 +183,7 @@ namespace Mosa.CoolWorld.x86
 			Console.Row = r;
 			Console.Color = col;
 			Console.BackgroundColor = back;
+			Console.ScrollRow = sr;
 		}
 	}
 }

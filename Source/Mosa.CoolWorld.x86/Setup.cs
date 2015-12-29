@@ -91,9 +91,29 @@ namespace Mosa.CoolWorld.x86
 			CMOS = (CMOS)deviceManager.GetDevices(new FindDevice.WithName("CMOS")).First.Value;
 			Keyboard = (StandardKeyboard)deviceManager.GetDevices(new FindDevice.WithName("StandardKeyboard")).First.Value;
 
-			//Boot.Console.Write("Spinning up disks...");
-			//var diskcontroller = new DiskControllerManager(Setup.DeviceManager);
-			//diskcontroller.CreateDiskDevices();
+			Boot.Console.Write("Finding disk controllers...");
+			var diskcontroller = new DiskControllerManager(Setup.DeviceManager);
+			diskcontroller.CreateDiskDevices();
+
+			var diskcontrollers = deviceManager.GetDevices(new FindDevice.IsDiskControllerDevice());
+			Boot.Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
+			foreach (var device in diskcontrollers)
+			{
+				Boot.Console.Write("Found controller ");
+				Boot.InBrackets(device.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
+				Boot.Console.WriteLine();
+			}
+
+			Boot.Console.Write("Finding disks...");
+			var disks = deviceManager.GetDevices(new FindDevice.IsDiskDevice());
+			Boot.Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
+			foreach (var device in disks)
+			{
+				Boot.Console.Write("Spinning up disk ");
+				Boot.InBrackets(device.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
+				Boot.Console.Write(" " + (device as IDiskDevice).TotalBlocks.ToString() + " blocks");
+				Boot.Console.WriteLine();
+			}
 		}
 
 		/// <summary>

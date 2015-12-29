@@ -16,6 +16,8 @@ namespace Mosa.Kernel.x86
 		protected byte color = 0;
 		protected ConsoleManager consoleManager;
 
+		protected uint scrollRow = 0;
+
 		/// <summary>
 		///
 		/// </summary>
@@ -44,6 +46,12 @@ namespace Mosa.Kernel.x86
 			set { row = value; consoleManager.UpdateCursor(this); }
 		}
 
+		public uint ScrollRow
+		{
+			get { return scrollRow; }
+			set { scrollRow = value; }
+		}
+
 		public byte Color
 		{
 			get { return (byte)(color & 0x0F); }
@@ -62,20 +70,21 @@ namespace Mosa.Kernel.x86
 			set { consoleManager = value; }
 		}
 
-		public ConsoleSession(byte columns, byte rows, ConsoleManager consoleManager)
+		public ConsoleSession(uint columns, uint rows, ConsoleManager consoleManager, uint scrollRow)
 		{
 			Columns = columns;
 			Rows = rows;
 			ConsoleManager = consoleManager;
 			text = new byte[Columns * Rows];
 			textcolor = new byte[Columns * Rows];
+			ScrollRow = scrollRow;
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConsoleSession"/> class.
 		/// </summary>
 		public ConsoleSession(ConsoleManager consoleManager)
-			: this(80, 40, consoleManager)
+			: this(80, 25, consoleManager, 25)
 		{
 		}
 
@@ -99,7 +108,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="chr">The character.</param>
 		public void Write(char chr)
 		{
-			if (Row >= Rows)
+			if (Row >= ScrollRow)
 			{
 				Row--;
 				ScrollUp();
@@ -159,6 +168,12 @@ namespace Mosa.Kernel.x86
 		{
 			Column = 0;
 			Row++;
+
+			if (Row >= ScrollRow)
+			{
+				Row--;
+				ScrollUp();
+			}
 		}
 
 		/// <summary>
@@ -168,14 +183,21 @@ namespace Mosa.Kernel.x86
 		{
 			GotoTop();
 
-			byte c = Color;
-			Color = 0x0A;
+			for (uint r = 0; r < Rows; r++)
+			{
+				for (uint c = 0; c < Columns; c++)
+				{
+					uint address = r * Columns + c;
 
-			for (int i = 0; i < Columns * Rows; i++)
-				Write(' ');
+					text[address] = (byte)' ';
+					textcolor[address] = BackgroundColor;
 
-			Color = c;
-			GotoTop();
+					if (consoleManager != null)
+					{
+						consoleManager.RawWrite(this, r, c, ' ', BackgroundColor);
+					}
+				}
+			}
 		}
 
 		/// <summary>
@@ -194,25 +216,27 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		protected void ScrollUp()
 		{
-			for (uint row = 0; row < Rows - 1; row++)
+			for (uint r = 0; r < ScrollRow; r++)
 			{
-				for (uint column = 0; column < Columns; column++)
+				for (uint c = 0; c < Columns; c++)
 				{
-					uint address = row * Columns + column;
+					uint address = r * Columns + c;
 
-					if (row != Rows - 1)
-					{
-						text[address] = text[address + Columns];
-						textcolor[address] = textcolor[address + Columns];
-					}
-					else
+					if (r == ScrollRow)
 					{
 						text[address] = 0;
 						textcolor[address] = BackgroundColor;
 					}
+					else
+					{
+						text[address] = text[address + Columns];
+						textcolor[address] = textcolor[address + Columns];
+					}
 
 					if (consoleManager != null)
-						consoleManager.RawWrite(this, row, column, (char)text[address], textcolor[address]);
+					{
+						consoleManager.RawWrite(this, r, c, (char)text[address], textcolor[address]);
+					}
 				}
 			}
 		}

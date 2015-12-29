@@ -79,7 +79,7 @@ namespace Mosa.DeviceSystem
 				(!mbr.Partitions[0].Bootable) || (mbr.Partitions[0].StartLBA != 1))
 				return false;
 
-			BinaryFormat gpt = new BinaryFormat(diskDevice.ReadBlock(1, 1));
+			var gpt = new BinaryFormat(diskDevice.ReadBlock(1, 1));
 
 			if ((gpt.GetByte(0) != 45) && (gpt.GetByte(1) != 46) && (gpt.GetByte(2) != 49) && (gpt.GetByte(3) != 20) &&
 				(gpt.GetByte(4) != 50) && (gpt.GetByte(5) != 41) && (gpt.GetByte(6) != 52) && (gpt.GetByte(7) != 54))

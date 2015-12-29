@@ -49,7 +49,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		static public byte[] CreateHeader(uint blocks, byte[] guid, byte[] lastSnapGuid, DiskGeometry diskGeometry)
 		{
-			Mosa.ClassLib.BinaryFormat binaryHeader = new Mosa.ClassLib.BinaryFormat(512);
+			var binaryHeader = new Mosa.ClassLib.BinaryFormat(512);
 
 			binaryHeader.SetString(VHIHeaderOffset.HeaderText, HeaderText, (uint)HeaderText.Length);
 			binaryHeader.SetByte(VHIHeaderOffset.HeaderText + 0x25, 0x0A);
@@ -86,7 +86,7 @@ namespace Mosa.DeviceSystem
 
 			uint imageBlocks = (uint)(GetAlignedSize(size) / 512);
 
-			Mosa.ClassLib.BinaryFormat binaryMap = new Mosa.ClassLib.BinaryFormat(imageBlocks * 512);
+			var binaryMap = new Mosa.ClassLib.BinaryFormat(imageBlocks * 512);
 
 			for (uint i = 0; i < ((blocks * 512) / 0x100000); i++)
 				binaryMap.SetUInt(i * 4, i);
