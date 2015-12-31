@@ -134,7 +134,7 @@ namespace Mosa.Test.Collection
 			p.c = 21;
 			p.d = 171;
 
-			return p.ToString() == "200";
+			return p.ToString() == "202";
 		}
 
 		private static bool ByRefModify(ref valuetype p)

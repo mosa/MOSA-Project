@@ -103,22 +103,23 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldsfld(Context context)
 		{
-			MosaType type = context.MosaField.FieldType;
-			Operand source = Operand.CreateField(context.MosaField);
-			Operand destination = context.Result;
+			var fieldType = context.MosaField.FieldType;
+			var destination = context.Result;
 
-			if (MustSignExtendOnLoad(type))
+			var loadInstruction = IRInstruction.Load;
+
+			if (MustSignExtendOnLoad(fieldType))
 			{
-				context.SetInstruction(IRInstruction.SignExtendedMove, destination, source);
+				loadInstruction = IRInstruction.LoadSignExtended;
 			}
-			else if (MustZeroExtendOnLoad(type))
+			else if (MustZeroExtendOnLoad(fieldType))
 			{
-				context.SetInstruction(IRInstruction.ZeroExtendedMove, destination, source);
+				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
-			else
-			{
-				context.SetInstruction(IRInstruction.Move, destination, source);
-			}
+
+			var size = GetInstructionSize(fieldType);
+			context.SetInstruction(loadInstruction, size, destination, Operand.CreateField(context.MosaField), ConstantZero);
+			context.MosaType = fieldType;
 		}
 
 		/// <summary>

@@ -12,7 +12,7 @@ namespace Mosa.Kernel.x86
 	{
 		private static uint slots = 256;
 
-		//private static uint lock = 0;
+		private static System.Threading.SpinLock spinlock;
 
 		#region Data members
 
@@ -63,7 +63,8 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static uint CreateProcess()
 		{
-			// TODO: Lock
+			bool lck = false;
+			spinlock.Enter(ref lck);
 
 			uint slot = FindEmptySlot();
 
@@ -72,7 +73,7 @@ namespace Mosa.Kernel.x86
 
 			CreateProcess(slot);
 
-			// TODO: Unlock
+			spinlock.Exit();
 
 			return slot;
 		}
@@ -102,6 +103,9 @@ namespace Mosa.Kernel.x86
 		/// <param name="slot">The slot.</param>
 		public unsafe static void TerminateProcess(uint slot)
 		{
+			bool lck = false;
+			spinlock.Enter(ref lck);
+
 			var process = GetProcessLocation(slot);
 
 			// Set status to terminating
@@ -116,6 +120,8 @@ namespace Mosa.Kernel.x86
 			// can shift through in the next few cycles and see
 			// whether or not it wants to free the slot.
 			process->Status = Status.Terminated;
+
+			spinlock.Exit();
 		}
 
 		/// <summary>

@@ -613,7 +613,16 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offset.IsConstant && offset.IsConstantZero)
 			{
-				context.SetInstruction(X86.Mov, v1, address);
+				if (address.IsField)
+				{
+					Debug.Assert(address.Field.IsStatic);
+
+					context.SetInstruction(X86.Lea, v1, address);
+				}
+				else
+				{
+					context.SetInstruction(X86.Mov, v1, address);
+				}
 			}
 			else
 			{
@@ -642,7 +651,16 @@ namespace Mosa.Platform.x86.Stages
 			// Fortunately in 32-bit mode, we can't have 64-bit offsets so a 32-bit add willl work.
 			if (offset.IsConstant && offset.IsConstantZero)
 			{
-				context.SetInstruction(X86.Mov, v1, address);
+				if (address.IsField)
+				{
+					Debug.Assert(address.Field.IsStatic);
+
+					context.SetInstruction(X86.Lea, v1, address);
+				}
+				else
+				{
+					context.SetInstruction(X86.Mov, v1, address);
+				}
 			}
 			else
 			{
@@ -818,7 +836,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (AreAny64Bit(context))
 			{
-				return;
+				throw new NotImplementCompilerException("64bit LoadZeroExtended not implemented!");
 			}
 		}
 
@@ -828,7 +846,10 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.LoadSignExtended(Context context)
 		{
-			// TODO
+			if (AreAny64Bit(context))
+			{
+				throw new NotImplementCompilerException("64bit LoadSignExtended not implemented!");
+			}
 		}
 
 		/// <summary>

@@ -14,7 +14,7 @@ namespace Mosa.Kernel.x86
 		private static uint slots = 3072;
 		private static uint currenttask; // Not SMP
 
-		//private static uint lock = 0;
+		private static System.Threading.SpinLock spinlock;
 
 		#region Data members
 
@@ -86,10 +86,19 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Setup()
 		{
-			uint stack = ProcessManager.AllocateMemory(0, defaultStackSize);
+			unsafe
+			{
+				// Setup task 0 manually
+				var task = GetTaskLocation(0);
 
-			// Create idle task
-			CreateTask(0, 0);
+				// Setup Task Entry
+				task->Status = Status.Running;
+				task->ProcessID = 0; // We are process 0
+				task->TaskID = 0; // We are task 0
+				task->StackBottom = 0x00300000;
+				task->StackTop = 0x003FFFFC;
+				task->ESP = 0; // We are already running so this will be populated on task switch
+			}
 
 			// Set current stack
 			currenttask = 0;
@@ -101,7 +110,8 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static uint CreateTask(uint processid, uint eip)
 		{
-			// TODO: Lock
+			bool lck = false;
+			spinlock.Enter(ref lck);
 
 			uint slot = FindEmptySlot();
 
@@ -110,7 +120,7 @@ namespace Mosa.Kernel.x86
 
 			CreateTask(processid, slot, eip);
 
-			// TODO: Unlock
+			spinlock.Exit();
 
 			return slot;
 		}
@@ -121,8 +131,6 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private unsafe static uint CreateTask(uint processid, uint slot, uint eip)
 		{
-			// TODO: Lock
-
 			var task = GetTaskLocation(slot);
 			uint stack = ProcessManager.AllocateMemory(processid, defaultStackSize);
 			uint stacktop = stack + defaultStackSize;
@@ -135,7 +143,7 @@ namespace Mosa.Kernel.x86
 			task->TaskID = slot;
 			task->StackBottom = stack;
 			task->StackTop = stacktop;
-			task->ESP = stack + StackSetupOffset.InitialSize; // TODO
+			task->ESP = stacktop - StackSetupOffset.InitialSize;
 
 			// Setup Stack
 			Native.Set32(stacktop - StackSetupOffset.SENTINEL, 0);  // important for traversing the stack backwards
@@ -148,12 +156,10 @@ namespace Mosa.Kernel.x86
 			Native.Set32(stacktop - StackSetupOffset.ECX, 0);
 			Native.Set32(stacktop - StackSetupOffset.EDX, 0);
 			Native.Set32(stacktop - StackSetupOffset.EBX, 0);
-			Native.Set32(stacktop - StackSetupOffset.ESP, stacktop + 4);
-			Native.Set32(stacktop - StackSetupOffset.EBP, stacktop + 4);
+			Native.Set32(stacktop - StackSetupOffset.ESP, stacktop - 4);
+			Native.Set32(stacktop - StackSetupOffset.EBP, stacktop - 4);
 			Native.Set32(stacktop - StackSetupOffset.ESI, 0);
 			Native.Set32(stacktop - StackSetupOffset.EDI, 0);
-
-			// TODO: Unlock
 
 			return slot;
 		}
@@ -164,11 +170,16 @@ namespace Mosa.Kernel.x86
 		/// <param name="slot">The slot.</param>
 		public static void TerminateTask(uint slot)
 		{
+			bool lck = false;
+			spinlock.Enter(ref lck);
+
 			// TODO
 
 			// 1. Set status to terminating
 			// 2. Stop the thread
 			// 3. Release the stack memory
+
+			spinlock.Exit();
 		}
 
 		/// <summary>
