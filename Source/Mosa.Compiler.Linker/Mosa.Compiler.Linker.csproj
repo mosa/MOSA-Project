@@ -46,11 +46,7 @@
   <ItemGroup>
     <Compile Include="BaseLinker.cs" />
     <Compile Include="Elf32\Elf32.cs" />
-    <Compile Include="Elf32\FileType.cs" />
     <Compile Include="Elf32\Header.cs" />
-    <Compile Include="Elf32\IdentClass.cs" />
-    <Compile Include="Elf32\IdentData.cs" />
-    <Compile Include="Elf32\IdentIndex.cs" />
     <Compile Include="Elf32\ProgramHeader.cs" />
     <Compile Include="Elf32\ProgramHeaderFlags.cs" />
     <Compile Include="Elf32\ProgramHeaderType.cs" />
@@ -58,15 +54,16 @@
     <Compile Include="Elf32\SectionHeader.cs" />
     <Compile Include="Elf32\SectionType.cs" />
     <Compile Include="Elf32\SymbolTableEntry.cs" />
-    <Compile Include="Elf32\Version.cs" />
-    <Compile Include="Elf64\FileType.cs" />
+    <Compile Include="Elf\Version.cs" />
+    <Compile Include="Elf\FileType.cs" />
     <Compile Include="Elf64\Header.cs" />
-    <Compile Include="Elf64\IdentClass.cs" />
-    <Compile Include="Elf64\IdentData.cs" />
-    <Compile Include="Elf64\IdentIndex.cs" />
+    <Compile Include="Elf\IdentClass.cs" />
+    <Compile Include="Elf\IdentData.cs" />
+    <Compile Include="Elf\IdentIndex.cs" />
     <Compile Include="Elf64\ProgramHeader.cs" />
     <Compile Include="Elf64\SymbolTableEntry.cs" />
-    <Compile Include="Elf64\Version.cs" />
+    <Compile Include="Elf\SymbolBinding.cs" />
+    <Compile Include="Elf\SymbolType.cs" />
     <Compile Include="Elf\MachineType.cs" />
     <Compile Include="LinkerSection.cs" />
     <Compile Include="LinkerSymbol.cs" />

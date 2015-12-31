@@ -1,11 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.LinkerFormat.Elf;
-using System;
+using Mosa.Compiler.Linker.Elf;
 using System.IO;
 
-namespace Mosa.Compiler.LinkerFormat.Elf64
+namespace Mosa.Compiler.Linker.Elf64
 {
 	/// <summary>
 	///
@@ -149,7 +148,7 @@ namespace Mosa.Compiler.LinkerFormat.Elf64
 			if (Ident[0] != MagicNumber[0] || Ident[1] != MagicNumber[1] || Ident[2] != MagicNumber[2] || Ident[3] != MagicNumber[3])
 			{
 				// Magic number not present, so it seems to be an invalid ELF file
-				throw new NotSupportedException("This is not a valid ELF file");
+				throw new System.NotSupportedException("This is not a valid ELF file");
 			}
 
 			Type = (FileType)reader.ReadUInt16();
@@ -203,26 +202,26 @@ namespace Mosa.Compiler.LinkerFormat.Elf64
 		/// </summary>
 		public void PrintInfo()
 		{
-			Console.WriteLine("--------------");
-			Console.WriteLine("| Elf64 Info:");
-			Console.WriteLine("--------------");
-			Console.WriteLine();
-			Console.WriteLine("Magic number equals 0x7F454C46: Yes");
-			Console.WriteLine("Ident class:                    {0} ({1})", ((IdentClass)Ident[4]).ToString(), ((IdentClass)Ident[4]).ToString("x"));
-			Console.WriteLine("Ident data:                     {0} ({1})", ((IdentData)Ident[4]).ToString(), ((IdentData)Ident[4]).ToString("x"));
-			Console.WriteLine("FileType:                       {0}", Type.ToString());
-			Console.WriteLine("Machine:                        {0}", Machine.ToString());
-			Console.WriteLine("Version:                        {0}", Version.ToString());
-			Console.WriteLine("Entry VirtualAddress:                  0x{0}", EntryAddress.ToString("x"));
-			Console.WriteLine("ProgramHeaderOffset:            0x{0}", ProgramHeaderOffset.ToString("x"));
-			Console.WriteLine("SectionHeaderOffset:            0x{0}", SectionHeaderOffset.ToString("x"));
-			Console.WriteLine("Flags:                          0x{0}", Flags.ToString("x"));
-			Console.WriteLine("Header size:                    0x{0}", ElfHeaderSize.ToString("x"));
-			Console.WriteLine("ProgramHeaderEntrySize:         0x{0}", ProgramHeaderEntrySize.ToString("x"));
-			Console.WriteLine("ProgramHeaderNumber:            0x{0}", ProgramHeaderNumber.ToString("x"));
-			Console.WriteLine("SectionHeaderEntrySize:         0x{0}", SectionHeaderEntrySize.ToString("x"));
-			Console.WriteLine("SectionHeaderNumber:            0x{0}", SectionHeaderNumber.ToString("x"));
-			Console.WriteLine("SectionHeaderStringIndex:       0x{0}", SectionHeaderStringIndex.ToString("x"));
+			System.Console.WriteLine("--------------");
+			System.Console.WriteLine("| Elf64 Info:");
+			System.Console.WriteLine("--------------");
+			System.Console.WriteLine();
+			System.Console.WriteLine("Magic number equals 0x7F454C46: Yes");
+			System.Console.WriteLine("Ident class:                    {0} ({1})", ((IdentClass)Ident[4]).ToString(), ((IdentClass)Ident[4]).ToString("x"));
+			System.Console.WriteLine("Ident data:                     {0} ({1})", ((IdentData)Ident[4]).ToString(), ((IdentData)Ident[4]).ToString("x"));
+			System.Console.WriteLine("FileType:                       {0}", Type.ToString());
+			System.Console.WriteLine("Machine:                        {0}", Machine.ToString());
+			System.Console.WriteLine("Version:                        {0}", Version.ToString());
+			System.Console.WriteLine("Entry VirtualAddress:                  0x{0}", EntryAddress.ToString("x"));
+			System.Console.WriteLine("ProgramHeaderOffset:            0x{0}", ProgramHeaderOffset.ToString("x"));
+			System.Console.WriteLine("SectionHeaderOffset:            0x{0}", SectionHeaderOffset.ToString("x"));
+			System.Console.WriteLine("Flags:                          0x{0}", Flags.ToString("x"));
+			System.Console.WriteLine("Header size:                    0x{0}", ElfHeaderSize.ToString("x"));
+			System.Console.WriteLine("ProgramHeaderEntrySize:         0x{0}", ProgramHeaderEntrySize.ToString("x"));
+			System.Console.WriteLine("ProgramHeaderNumber:            0x{0}", ProgramHeaderNumber.ToString("x"));
+			System.Console.WriteLine("SectionHeaderEntrySize:         0x{0}", SectionHeaderEntrySize.ToString("x"));
+			System.Console.WriteLine("SectionHeaderNumber:            0x{0}", SectionHeaderNumber.ToString("x"));
+			System.Console.WriteLine("SectionHeaderStringIndex:       0x{0}", SectionHeaderStringIndex.ToString("x"));
 		}
 	}
 }

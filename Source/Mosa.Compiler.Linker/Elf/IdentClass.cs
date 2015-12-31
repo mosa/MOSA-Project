@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Linker.Elf32
+namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
 	/// Identifies the file's class, or capacity.

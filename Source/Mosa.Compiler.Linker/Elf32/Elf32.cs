@@ -1,8 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.LinkerFormat.Elf;
-using Mosa.Compiler.Linker.Elf32;
+using Mosa.Compiler.Linker.Elf;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;

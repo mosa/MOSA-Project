@@ -1,30 +1,30 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Linker.Elf32
+namespace Mosa.Compiler.Linker.Elf64
 {
 	/// <summary>
 	///
 	/// </summary>
-	public class Elf64SymbolTableEntry
+	public class SymbolTableEntry
 	{
 		/// <summary>
 		/// This member holds an index into the object file's symbol string table, which holds
 		/// the character representations of the symbol names.
 		/// </summary>
-		public uint Name;
+		public ulong Name;
 
 		/// <summary>
 		/// This member gives the value of the associated symbol. Depending on the context,
 		/// this may be an absolute value, an virtualAddress, and so on; details appear below.
 		/// </summary>
-		public uint Value;
+		public ulong Value;
 
 		/// <summary>
 		/// Many symbols have associated sizes. For example, a data object's size is the number
 		/// of bytes contained in the object. This member holds 0 if the symbol has no size or
 		/// an unknown size.
 		/// </summary>
-		public uint Size;
+		public ulong Size;
 
 		/// <summary>
 		/// This member specifies the symbol's type and binding attributes. A list of the values
@@ -42,6 +42,6 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Every symbol table entry is "defined'' in relation to some section; this member holds
 		/// the relevant section header table index.
 		/// </summary>
-		public ushort SectionHeaderTableIndex;
+		public uint SectionHeaderTableIndex;
 	}
 }
