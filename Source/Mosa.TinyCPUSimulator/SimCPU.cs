@@ -834,19 +834,72 @@ namespace Mosa.TinyCPUSimulator
 
 		public void MemorySet(ulong dest, byte value, uint count)
 		{
+			uint value4 = (uint)((value << 24) | (value << 16) | (value << 8) | value);
+			ulong value8 = (value4 << 32) | value4;
+
 			//FUTURE: Implement aligned 32bit versions
-			for (ulong at = 0; at < count; at++)
+			for (ulong at = 0; at < count; )
 			{
-				Write8(dest + at, value);
+				if ((at + 16) < count)
+				{
+					// 128bit
+					Write64(dest + at, value8);
+					Write64(dest + at + 8, value8);
+					at += 16;
+				}
+				else if ((at + 8) < count)
+				{
+					// 64bit
+					Write64(dest + at, value8);
+					at += 8;
+				}
+				else if ((at + 4) < count)
+				{
+					// 32bit
+					Write32(dest + at, value4);
+					at += 4;
+				}
+				else
+				{
+					// 8bit
+					Write8(dest + at, value);
+					at += 1;
+				}
 			}
 		}
 
 		public void MemoryCopy(ulong dest, ulong src, uint count)
 		{
 			//FUTURE: Implement aligned 32bit versions
-			for (ulong at = 0; at < count; at++)
+			for (ulong at = 0; at < count; )
 			{
-				Write8(dest + at, Read8(src + at));
+				if ((at + 16) < count)
+				{
+					// 128bit
+					var v1 = Read64(src + at);
+					var v2 = Read64(src + at + 8);
+					Write64(dest + at, v1);
+					Write64(dest + at + 8, v2);
+					at += 16;
+				}
+				else if ((at + 8) < count)
+				{
+					// 64bit
+					Write64(dest + at, Read64(src + at));
+					at += 8;
+				}
+				else if ((at + 4) < count)
+				{
+					// 32bit
+					Write32(dest + at, Read32(src + at));
+					at += 4;
+				}
+				else
+				{
+					// 8bit
+					Write8(dest + at, Read8(src + at));
+					at += 1;
+				}
 			}
 		}
 	}

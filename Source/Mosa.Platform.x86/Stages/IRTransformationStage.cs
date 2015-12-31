@@ -320,16 +320,33 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offsetOperand.IsConstant)
 			{
-				Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ConstantSignedLongInteger);
-
-				var mov = GetMove(result, mem);
-
-				if (result.IsR8 && type.IsR4) // size == InstructionSize.Size32)
+				if (baseOperand.IsField)
 				{
-					mov = X86.Cvtss2sd;
-				}
+					Debug.Assert(offsetOperand.IsConstantZero);
+					Debug.Assert(baseOperand.Field.IsStatic);
 
-				context.SetInstruction(mov, size, result, mem);
+					var mov = GetMove(result, baseOperand);
+
+					if (result.IsR8 && type.IsR4) // size == InstructionSize.Size32)
+					{
+						mov = X86.Cvtss2sd;
+					}
+
+					context.SetInstruction(GetMove(result, baseOperand), size, result, baseOperand);
+				}
+				else
+				{
+					Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ConstantSignedLongInteger);
+
+					var mov = GetMove(result, mem);
+
+					if (result.IsR8 && type.IsR4) // size == InstructionSize.Size32)
+					{
+						mov = X86.Cvtss2sd;
+					}
+
+					context.SetInstruction(mov, size, result, mem);
+				}
 			}
 			else
 			{
@@ -413,22 +430,31 @@ namespace Mosa.Platform.x86.Stages
 			var source = context.Operand1;
 			var type = context.MosaType;
 			var offset = context.Operand2;
+			var size = context.Size;
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			long offsetPtr = 0;
 
 			context.SetInstruction(X86.Mov, v1, source);
 
 			if (offset.IsConstant)
 			{
-				offsetPtr = offset.ConstantSignedLongInteger;
+				if (source.IsField)
+				{
+					Debug.Assert(offset.IsConstantZero);
+					Debug.Assert(source.Field.IsStatic);
+
+					context.SetInstruction(X86.Movsx, size, destination, source);
+				}
+				else
+				{
+					context.AppendInstruction(X86.Movsx, destination, Operand.CreateMemoryAddress(type, v1, offset.ConstantSignedLongInteger));
+				}
 			}
 			else
 			{
 				context.AppendInstruction(X86.Add, v1, v1, offset);
+				context.AppendInstruction(X86.Movsx, destination, Operand.CreateMemoryAddress(type, v1, 0));
 			}
-
-			context.AppendInstruction(X86.Movsx, destination, Operand.CreateMemoryAddress(type, v1, offsetPtr));
 		}
 
 		/// <summary>
@@ -441,23 +467,33 @@ namespace Mosa.Platform.x86.Stages
 			var source = context.Operand1;
 			var offset = context.Operand2;
 			var type = context.MosaType;
+			var size = context.Size;
 
 			Debug.Assert(offset != null);
 
 			Operand v1 = AllocateVirtualRegister(source.Type);
-			long offsetPtr = 0;
 
 			context.SetInstruction(X86.Mov, v1, source);
 
 			if (offset.IsConstant)
 			{
-				offsetPtr = offset.ConstantSignedLongInteger;
+				if (source.IsField)
+				{
+					Debug.Assert(offset.IsConstantZero);
+					Debug.Assert(source.Field.IsStatic);
+
+					context.SetInstruction(X86.Movzx, size, destination, source);
+				}
+				else
+				{
+					context.AppendInstruction(X86.Movzx, destination, Operand.CreateMemoryAddress(type, v1, offset.ConstantSignedLongInteger));
+				}
 			}
 			else
 			{
 				context.AppendInstruction(X86.Add, v1, v1, offset);
+				context.AppendInstruction(X86.Movzx, destination, Operand.CreateMemoryAddress(type, v1, 0));
 			}
-			context.AppendInstruction(X86.Movzx, destination, Operand.CreateMemoryAddress(type, v1, offsetPtr));
 		}
 
 		/// <summary>
