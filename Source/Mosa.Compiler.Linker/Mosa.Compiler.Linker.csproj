@@ -42,17 +42,32 @@
       <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
       <Name>Mosa.Compiler.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.LinkerFormat\Mosa.Compiler.LinkerFormat.csproj">
-      <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
-      <Name>Mosa.Compiler.LinkerFormat</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseLinker.cs" />
     <Compile Include="Elf32\Elf32.cs" />
+    <Compile Include="Elf32\FileType.cs" />
+    <Compile Include="Elf32\Header.cs" />
+    <Compile Include="Elf32\IdentClass.cs" />
+    <Compile Include="Elf32\IdentData.cs" />
+    <Compile Include="Elf32\IdentIndex.cs" />
+    <Compile Include="Elf32\ProgramHeader.cs" />
+    <Compile Include="Elf32\ProgramHeaderFlags.cs" />
+    <Compile Include="Elf32\ProgramHeaderType.cs" />
     <Compile Include="Elf32\SectionAttribute.cs" />
     <Compile Include="Elf32\SectionHeader.cs" />
     <Compile Include="Elf32\SectionType.cs" />
+    <Compile Include="Elf32\SymbolTableEntry.cs" />
+    <Compile Include="Elf32\Version.cs" />
+    <Compile Include="Elf64\FileType.cs" />
+    <Compile Include="Elf64\Header.cs" />
+    <Compile Include="Elf64\IdentClass.cs" />
+    <Compile Include="Elf64\IdentData.cs" />
+    <Compile Include="Elf64\IdentIndex.cs" />
+    <Compile Include="Elf64\ProgramHeader.cs" />
+    <Compile Include="Elf64\SymbolTableEntry.cs" />
+    <Compile Include="Elf64\Version.cs" />
+    <Compile Include="Elf\MachineType.cs" />
     <Compile Include="LinkerSection.cs" />
     <Compile Include="LinkerSymbol.cs" />
     <Compile Include="BuiltInPatch.cs" />
@@ -64,9 +79,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SectionKind.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Elf64\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

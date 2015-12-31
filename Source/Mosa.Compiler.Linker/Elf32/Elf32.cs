@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.LinkerFormat.Elf;
-using Mosa.Compiler.LinkerFormat.Elf32;
+using Mosa.Compiler.Linker.Elf32;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;

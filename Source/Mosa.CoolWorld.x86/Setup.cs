@@ -61,7 +61,7 @@ namespace Mosa.CoolWorld.x86
 			pciControllerManager = new PCIControllerManager(deviceManager);
 
 			// Setup hardware abstraction interface
-			IHardwareAbstraction hardwareAbstraction = new Mosa.CoolWorld.x86.HAL.HardwareAbstraction();
+			var hardwareAbstraction = new Mosa.CoolWorld.x86.HAL.HardwareAbstraction();
 
 			// Set device driver system to the hardware HAL
 			Mosa.DeviceSystem.HAL.SetHardwareAbstraction(hardwareAbstraction);
@@ -162,14 +162,14 @@ namespace Mosa.CoolWorld.x86
 
 			StartDevice(pciDevice, deviceDriver, hardwareDevice as IHardwareDevice);
 
-			if (pciDevice.VendorID == 0x15AD && pciDevice.DeviceID == 0x0405)
-			{
-				var display = hardwareDevice as IPixelGraphicsDevice;
+			//if (pciDevice.VendorID == 0x15AD && pciDevice.DeviceID == 0x0405)
+			//{
+			//	var display = hardwareDevice as IPixelGraphicsDevice;
 
-				var color = new Color(255, 0, 0);
+			//	var color = new Color(255, 0, 0);
 
-				display.WritePixel(color, 100, 100);
-			}
+			//	display.WritePixel(color, 100, 100);
+			//}
 		}
 
 		private static void StartDevice(IPCIDevice pciDevice, Mosa.DeviceSystem.DeviceDriver deviceDriver, IHardwareDevice hardwareDevice)

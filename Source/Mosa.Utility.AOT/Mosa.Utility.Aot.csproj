@@ -75,10 +75,6 @@
       <Project>{540beac7-a2c3-4c46-9f4a-e6e1df4ef6fc}</Project>
       <Name>Mosa.Compiler.Trace</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.LinkerFormat\Mosa.Compiler.LinkerFormat.csproj">
-      <Project>{cc2e6418-c325-4486-b50d-941ec27053f6}</Project>
-      <Name>Mosa.Compiler.LinkerFormat</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
       <Project>{65866a51-b229-44c5-ac81-87a90fa1741c}</Project>
       <Name>Mosa.Compiler.Linker</Name>
