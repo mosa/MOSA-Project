@@ -79,8 +79,21 @@ namespace Mosa.Compiler.Linker.Elf
 		/// <summary>
 		/// Writes the section header
 		/// </summary>
+		/// <param name="elfType">Type of the elf.</param>
 		/// <param name="writer">The writer.</param>
-		public void Write32(BinaryWriter writer)
+		public void Write(ElfType elfType, BinaryWriter writer)
+		{
+			if (elfType == ElfType.Elf32)
+				Write32(writer);
+			else if (elfType == ElfType.Elf64)
+				Write64(writer);
+		}
+
+		/// <summary>
+		/// Writes the section header
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		protected void Write32(BinaryWriter writer)
 		{
 			writer.Write((uint)Name);
 			writer.Write((uint)Type);
@@ -98,7 +111,7 @@ namespace Mosa.Compiler.Linker.Elf
 		/// Writes the section header
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public void Write64(BinaryWriter writer)
+		protected void Write64(BinaryWriter writer)
 		{
 			writer.Write((uint)Name);
 			writer.Write((uint)Type);

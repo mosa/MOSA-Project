@@ -45,7 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseLinker.cs" />
+    <Compile Include="Elf\Elf64.cs" />
     <Compile Include="Elf\Elf32.cs" />
+    <Compile Include="Elf\ElfType.cs" />
     <Compile Include="Elf\Header.cs" />
     <Compile Include="Elf\ProgramHeader.cs" />
     <Compile Include="Elf\ProgramHeaderFlags.cs" />

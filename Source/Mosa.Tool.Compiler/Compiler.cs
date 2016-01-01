@@ -402,8 +402,7 @@ namespace Mosa.Tool.Compiler
 			{
 				case "elf": return delegate { return new Elf32(); };
 				case "elf32": return delegate { return new Elf32(); };
-
-				//case "elf64": return delegate { return new Elf64Linker(); };
+				case "elf64": return delegate { return new Elf64(); };
 				default: return null;
 			}
 		}

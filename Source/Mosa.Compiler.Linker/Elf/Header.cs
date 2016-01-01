@@ -60,13 +60,17 @@ namespace Mosa.Compiler.Linker.Elf
 		/// <summary>
 		/// This member holds the ELF header's size in bytes.
 		/// </summary>
-		public static readonly ushort ElfHeaderSize = 0x34;
+		public static readonly ushort ElfHeaderSize32 = 0x34;
+
+		public static readonly ushort ElfHeaderSize64 = 0x40;
 
 		/// <summary>
 		/// This member holds the size in bytes of one entry in the file's program header table;
 		/// all entries are the same size.
 		/// </summary>
-		public static readonly ushort ProgramHeaderEntrySize = 0x20;
+		public static readonly ushort ProgramHeaderEntrySize32 = 0x20;
+
+		public static readonly ushort ProgramHeaderEntrySize64 = 0x28;
 
 		/// <summary>
 		/// This member holds the number of entries in the program header table. Thus the
@@ -79,7 +83,9 @@ namespace Mosa.Compiler.Linker.Elf
 		/// This member holds a section header's size in bytes. A section header is one entry
 		/// in the section header table; all entries are the same size.
 		/// </summary>
-		public static readonly ushort SectionHeaderEntrySize = 0x28;
+		public static readonly ushort SectionHeaderEntrySize32 = 0x28;
+
+		public static readonly ushort SectionHeaderEntrySize64 = 0x38;
 
 		/// <summary>
 		/// This member holds the number of entries in the section header table. Thus the
@@ -104,8 +110,21 @@ namespace Mosa.Compiler.Linker.Elf
 		/// <summary>
 		/// Writes the elf header
 		/// </summary>
+		/// <param name="elfType">Type of the elf.</param>
 		/// <param name="writer">The writer.</param>
-		public void Write32(EndianAwareBinaryWriter writer)
+		public void Write(ElfType elfType, EndianAwareBinaryWriter writer)
+		{
+			if (elfType == ElfType.Elf32)
+				Write32(writer);
+			else if (elfType == ElfType.Elf64)
+				Write64(writer);
+		}
+
+		/// <summary>
+		/// Writes the elf header
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		protected void Write32(EndianAwareBinaryWriter writer)
 		{
 			writer.Seek(0, SeekOrigin.Begin);
 			writer.Write(Ident);                    // ident
@@ -116,10 +135,10 @@ namespace Mosa.Compiler.Linker.Elf
 			writer.Write((uint)ProgramHeaderOffset);      // phoff
 			writer.Write((uint)SectionHeaderOffset);      // shoff
 			writer.Write((uint)Flags);                    // flags
-			writer.Write((ushort)ElfHeaderSize);            // ehsize
-			writer.Write((ushort)ProgramHeaderEntrySize);   // phentsize
+			writer.Write((ushort)ElfHeaderSize32);            // ehsize
+			writer.Write((ushort)ProgramHeaderEntrySize32);   // phentsize
 			writer.Write((ushort)ProgramHeaderNumber);      // phnum
-			writer.Write((ushort)SectionHeaderEntrySize);   // shentsize
+			writer.Write((ushort)SectionHeaderEntrySize32);   // shentsize
 			writer.Write((ushort)SectionHeaderNumber);      // shnum
 			writer.Write((ushort)SectionHeaderStringIndex); // shstrndx
 		}
@@ -128,7 +147,7 @@ namespace Mosa.Compiler.Linker.Elf
 		/// Writes the elf header
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public void Write64(EndianAwareBinaryWriter writer)
+		protected void Write64(EndianAwareBinaryWriter writer)
 		{
 			writer.Seek(0, SeekOrigin.Begin);
 			writer.Write(Ident);                    // ident
@@ -139,10 +158,10 @@ namespace Mosa.Compiler.Linker.Elf
 			writer.Write((ulong)ProgramHeaderOffset);      // phoff
 			writer.Write((ulong)SectionHeaderOffset);      // shoff
 			writer.Write((uint)Flags);                    // flags
-			writer.Write((ushort)ElfHeaderSize);            // ehsize
-			writer.Write((ushort)ProgramHeaderEntrySize);   // phentsize
+			writer.Write((ushort)ElfHeaderSize64);            // ehsize
+			writer.Write((ushort)ProgramHeaderEntrySize64);   // phentsize
 			writer.Write((ushort)ProgramHeaderNumber);      // phnum
-			writer.Write((ushort)SectionHeaderEntrySize);   // shentsize
+			writer.Write((ushort)SectionHeaderEntrySize64);   // shentsize
 			writer.Write((ushort)SectionHeaderNumber);      // shnum
 			writer.Write((ushort)SectionHeaderStringIndex); // shstrndx
 		}
@@ -229,10 +248,8 @@ namespace Mosa.Compiler.Linker.Elf
 			Console.WriteLine("ProgramHeaderOffset:            0x{0}", ProgramHeaderOffset.ToString("x"));
 			Console.WriteLine("SectionHeaderOffset:            0x{0}", SectionHeaderOffset.ToString("x"));
 			Console.WriteLine("Flags:                          0x{0}", Flags.ToString("x"));
-			Console.WriteLine("Header size:                    0x{0}", ElfHeaderSize.ToString("x"));
-			Console.WriteLine("ProgramHeaderEntrySize:         0x{0}", ProgramHeaderEntrySize.ToString("x"));
+			Console.WriteLine("ProgramHeaderEntrySize:         0x{0}", ProgramHeaderEntrySize32.ToString("x"));
 			Console.WriteLine("ProgramHeaderNumber:            0x{0}", ProgramHeaderNumber.ToString("x"));
-			Console.WriteLine("SectionHeaderEntrySize:         0x{0}", SectionHeaderEntrySize.ToString("x"));
 			Console.WriteLine("SectionHeaderNumber:            0x{0}", SectionHeaderNumber.ToString("x"));
 			Console.WriteLine("SectionHeaderStringIndex:       0x{0}", SectionHeaderStringIndex.ToString("x"));
 		}

@@ -2,10 +2,12 @@
 
 namespace Mosa.Compiler.Linker.Elf
 {
-	public class Elf32 : ElfLinker
+	/// <summary>
+	///
+	/// </summary>
+	public enum ElfType
 	{
-		public Elf32() : base(ElfType.Elf32)
-		{
-		}
+		Elf32,
+		Elf64
 	}
 }

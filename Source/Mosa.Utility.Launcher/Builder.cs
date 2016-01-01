@@ -576,8 +576,7 @@ namespace Mosa.Utility.Launcher
 			switch (linkerType)
 			{
 				case LinkerFormat.Elf32: return delegate { return new Elf32(); };
-
-				//case LinkerType.Elf64: return delegate { return new Elf64(); };
+				case LinkerFormat.Elf64: return delegate { return new Elf64(); };
 				default: return null;
 			}
 		}
