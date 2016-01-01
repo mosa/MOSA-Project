@@ -1,11 +1,13 @@
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.LinkerFormat.Elf32
+using System.IO;
+
+namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
 	///
 	/// </summary>
-	public class Elf64SymbolTableEntry
+	public class SymbolTableEntry
 	{
 		/// <summary>
 		/// This member holds an index into the object file's symbol string table, which holds
@@ -17,14 +19,14 @@ namespace Mosa.Compiler.LinkerFormat.Elf32
 		/// This member gives the value of the associated symbol. Depending on the context,
 		/// this may be an absolute value, an virtualAddress, and so on; details appear below.
 		/// </summary>
-		public uint Value;
+		public ulong Value;
 
 		/// <summary>
 		/// Many symbols have associated sizes. For example, a data object's size is the number
 		/// of bytes contained in the object. This member holds 0 if the symbol has no size or
 		/// an unknown size.
 		/// </summary>
-		public uint Size;
+		public ulong Size;
 
 		/// <summary>
 		/// This member specifies the symbol's type and binding attributes. A list of the values
@@ -43,5 +45,33 @@ namespace Mosa.Compiler.LinkerFormat.Elf32
 		/// the relevant section header table index.
 		/// </summary>
 		public ushort SectionHeaderTableIndex;
+
+		/// <summary>
+		/// Writes the symbol table entry
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		public void Write32(BinaryWriter writer)
+		{
+			writer.Write((uint)Name);
+			writer.Write((uint)Value);
+			writer.Write((uint)Size);
+			writer.Write((byte)Info);
+			writer.Write((byte)Other);
+			writer.Write((ushort)SectionHeaderTableIndex);
+		}
+
+		/// <summary>
+		/// Writes the symbol table entry
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		public void Write64(BinaryWriter writer)
+		{
+			writer.Write((uint)Name);
+			writer.Write((byte)Info);
+			writer.Write((byte)Other);
+			writer.Write((ushort)SectionHeaderTableIndex);
+			writer.Write((ulong)Value);
+			writer.Write((ulong)Size);
+		}
 	}
 }

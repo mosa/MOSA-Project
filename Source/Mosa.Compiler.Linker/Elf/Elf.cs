@@ -1,26 +1,26 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
-using Mosa.Compiler.LinkerFormat.Elf;
-using Mosa.Compiler.LinkerFormat.Elf32;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Mosa.Compiler.Common;
 
-namespace Mosa.Compiler.Linker.Elf32
+namespace Mosa.Compiler.Linker.Elf
 {
-	public class Elf32 : BaseLinker
+	public abstract class ElfLinker : BaseLinker
 	{
 		#region Data members
 
+		protected ElfType ElfType;
 		protected Header elfheader = new Header();
-		protected List<byte> stringTable = new List<byte>();
 		protected SectionHeader stringSection = new SectionHeader();
+		protected List<byte> stringTable = new List<byte>();
 
 		#endregion Data members
 
-		public Elf32()
+		public ElfLinker(ElfType elfType)
 		{
+			ElfType = elfType;
 			SectionAlignment = 0x1000;
 			BaseFileOffset = 0x1000;
 
@@ -66,13 +66,14 @@ namespace Mosa.Compiler.Linker.Elf32
 			elfheader.Type = FileType.Executable;
 			elfheader.Machine = (MachineType)MachineID;
 			elfheader.EntryAddress = (uint)EntryPoint.VirtualAddress;
-			elfheader.CreateIdent(IdentClass.Class32, Endianness == Endianness.Little ? IdentData.Data2LSB : IdentData.Data2MSB, null);
-			elfheader.ProgramHeaderOffset = Header.ElfHeaderSize;
+			elfheader.CreateIdent((ElfType == ElfType.Elf32) ? IdentClass.Class32 : IdentClass.Class64, Endianness == Endianness.Little ? IdentData.Data2LSB : IdentData.Data2MSB, null);
+			elfheader.ProgramHeaderOffset = (ElfType == ElfType.Elf32) ? Header.ElfHeaderSize32 : Header.ElfHeaderSize64;
 			elfheader.ProgramHeaderNumber = sectons;
 			elfheader.SectionHeaderNumber = (ushort)(sectons + 2);
-			elfheader.SectionHeaderOffset = (uint)(elfheader.ProgramHeaderOffset + (Header.ProgramHeaderEntrySize * elfheader.ProgramHeaderNumber));
+			elfheader.SectionHeaderOffset = (uint)(elfheader.ProgramHeaderOffset + (((ElfType == ElfType.Elf32) ? Header.ProgramHeaderEntrySize32 : Header.ProgramHeaderEntrySize64) * elfheader.ProgramHeaderNumber));
 			elfheader.SectionHeaderStringIndex = (ushort)(sectons + 1);
-			elfheader.Write(writer);
+
+			elfheader.Write(ElfType, writer);
 		}
 
 		private void WriteProgramHeaders(EndianAwareBinaryWriter writer)
@@ -98,7 +99,7 @@ namespace Mosa.Compiler.Linker.Elf32
 						(section.SectionKind == SectionKind.ROData) ? ProgramHeaderFlags.Read : ProgramHeaderFlags.Read | ProgramHeaderFlags.Write
 				};
 
-				pheader.Write(writer);
+				pheader.Write(ElfType, writer);
 			}
 		}
 
@@ -113,45 +114,48 @@ namespace Mosa.Compiler.Linker.Elf32
 				if (section.Size == 0 && section.SectionKind != SectionKind.BSS)
 					continue;
 
-				var sheader = new SectionHeader();
+				var sectionHeader = new SectionHeader();
 
-				sheader.Name = AddToStringTable(section.Name);
+				sectionHeader.Name = AddToStringTable(section.Name);
 
 				switch (section.SectionKind)
 				{
-					case SectionKind.Text: sheader.Type = SectionType.ProgBits; sheader.Flags = SectionAttribute.AllocExecute; break;
-					case SectionKind.Data: sheader.Type = SectionType.ProgBits; sheader.Flags = SectionAttribute.Alloc | SectionAttribute.Write; break;
-					case SectionKind.ROData: sheader.Type = SectionType.ProgBits; sheader.Flags = SectionAttribute.Alloc; break;
-					case SectionKind.BSS: sheader.Type = SectionType.NoBits; sheader.Flags = SectionAttribute.Alloc | SectionAttribute.Write; break;
+					case SectionKind.Text: sectionHeader.Type = SectionType.ProgBits; sectionHeader.Flags = SectionAttribute.AllocExecute; break;
+					case SectionKind.Data: sectionHeader.Type = SectionType.ProgBits; sectionHeader.Flags = SectionAttribute.Alloc | SectionAttribute.Write; break;
+					case SectionKind.ROData: sectionHeader.Type = SectionType.ProgBits; sectionHeader.Flags = SectionAttribute.Alloc; break;
+					case SectionKind.BSS: sectionHeader.Type = SectionType.NoBits; sectionHeader.Flags = SectionAttribute.Alloc | SectionAttribute.Write; break;
 				}
 
-				sheader.Address = (uint)section.VirtualAddress;
-				sheader.Offset = section.FileOffset;
-				sheader.Size = section.AlignedSize;
-				sheader.Link = 0;
-				sheader.Info = 0;
-				sheader.AddressAlignment = section.SectionAlignment;
-				sheader.EntrySize = 0;
-				sheader.Write(writer);
+				sectionHeader.Address = (uint)section.VirtualAddress;
+				sectionHeader.Offset = section.FileOffset;
+				sectionHeader.Size = section.AlignedSize;
+				sectionHeader.Link = 0;
+				sectionHeader.Info = 0;
+				sectionHeader.AddressAlignment = section.SectionAlignment;
+				sectionHeader.EntrySize = 0;
+
+				sectionHeader.Write(ElfType, writer);
 			}
 
 			WriteStringHeaderSection(writer);
 		}
 
-		private static void WriteNullHeaderSection(EndianAwareBinaryWriter writer)
+		private void WriteNullHeaderSection(EndianAwareBinaryWriter writer)
 		{
-			var nullsection = new SectionHeader();
-			nullsection.Name = 0;
-			nullsection.Type = SectionType.Null;
-			nullsection.Flags = 0;
-			nullsection.Address = 0;
-			nullsection.Offset = 0;
-			nullsection.Size = 0;
-			nullsection.Link = 0;
-			nullsection.Info = 0;
-			nullsection.AddressAlignment = 0;
-			nullsection.EntrySize = 0;
-			nullsection.Write(writer);
+			var nullSection = new SectionHeader();
+
+			nullSection.Name = 0;
+			nullSection.Type = SectionType.Null;
+			nullSection.Flags = 0;
+			nullSection.Address = 0;
+			nullSection.Offset = 0;
+			nullSection.Size = 0;
+			nullSection.Link = 0;
+			nullSection.Info = 0;
+			nullSection.AddressAlignment = 0;
+			nullSection.EntrySize = 0;
+
+			nullSection.Write(ElfType, writer);
 		}
 
 		private void WriteStringHeaderSection(EndianAwareBinaryWriter writer)
@@ -166,22 +170,21 @@ namespace Mosa.Compiler.Linker.Elf32
 			stringSection.Info = 0;
 			stringSection.AddressAlignment = SectionAlignment;
 			stringSection.EntrySize = 0;
-			stringSection.Write(writer);
+
+			stringSection.Write(ElfType, writer);
 		}
 
-		private void WriteStringSection(BinaryWriter writer)
+		protected void WriteStringSection(BinaryWriter writer)
 		{
 			writer.BaseStream.Position = stringSection.Offset;
 			writer.Write(stringTable.ToArray());
 		}
 
-		#region Internals
-
 		/// <summary>
 		/// Counts the valid sections.
 		/// </summary>
 		/// <returns>Determines the number of sections.</returns>
-		private uint CountNonEmptySections()
+		protected uint CountNonEmptySections()
 		{
 			uint sections = 0;
 
@@ -196,7 +199,7 @@ namespace Mosa.Compiler.Linker.Elf32
 			return sections;
 		}
 
-		public uint AddToStringTable(string text)
+		protected uint AddToStringTable(string text)
 		{
 			if (text.Length == 0)
 				return 0;
@@ -212,7 +215,5 @@ namespace Mosa.Compiler.Linker.Elf32
 
 			return index + 1;
 		}
-
-		#endregion Internals
 	}
 }

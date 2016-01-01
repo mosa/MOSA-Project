@@ -3,7 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Linker.Elf32;
+using Mosa.Compiler.Linker.Elf;
 using Mosa.Compiler.Trace;
 using Mosa.Utility.Aot;
 using Mosa.Utility.BootImage;
@@ -576,8 +576,7 @@ namespace Mosa.Utility.Launcher
 			switch (linkerType)
 			{
 				case LinkerFormat.Elf32: return delegate { return new Elf32(); };
-
-				//case LinkerType.Elf64: return delegate { return new Elf64(); };
+				case LinkerFormat.Elf64: return delegate { return new Elf64(); };
 				default: return null;
 			}
 		}
