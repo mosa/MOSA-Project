@@ -50,8 +50,6 @@ namespace Mosa.Compiler.Linker
 		{
 			Sections = new LinkerSection[4];
 
-			//LinkRequests = new List<LinkRequest>();
-
 			Endianness = Common.Endianness.Little;
 			MachineID = 0;
 

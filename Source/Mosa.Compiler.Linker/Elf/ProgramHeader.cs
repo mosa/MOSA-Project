@@ -2,7 +2,7 @@
 
 using System.IO;
 
-namespace Mosa.Compiler.Linker.Elf32
+namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
 	///
@@ -19,31 +19,31 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// This member gives the offset from the beginning of the file at which the first byte
 		/// of the segment resides.
 		/// </summary>
-		public uint Offset;
+		public ulong Offset;
 
 		/// <summary>
 		/// This member gives the virtual virtualAddress at which the first byte of the segment resides
 		/// in memory.
 		/// </summary>
-		public uint VirtualAddress;
+		public ulong VirtualAddress;
 
 		/// <summary>
 		/// On systems for which physical addressing is relevant, this member is reserved for
 		/// the segment's physical virtualAddress.
 		/// </summary>
-		public uint PhysicalAddress;
+		public ulong PhysicalAddress;
 
 		/// <summary>
 		/// This member gives the number of bytes in the file image of the segment; it may be
 		/// zero.
 		/// </summary>
-		public uint FileSize;
+		public ulong FileSize;
 
 		/// <summary>
 		/// This member gives the number of bytes in the memory image of the segment; it
 		/// may be zero.
 		/// </summary>
-		public uint MemorySize;
+		public ulong MemorySize;
 
 		/// <summary>
 		/// This member gives flags relevant to the segment.
@@ -53,22 +53,38 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// <summary>
 		///
 		/// </summary>
-		public uint Alignment;
+		public ulong Alignment;
 
 		/// <summary>
-		/// Writes the specified writer.
+		/// Writes the program header
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public virtual void Write(BinaryWriter writer)
+		public void Write32(BinaryWriter writer)
 		{
 			writer.Write((uint)Type);
-			writer.Write(Offset);
-			writer.Write(VirtualAddress);
-			writer.Write(PhysicalAddress);
-			writer.Write(FileSize);
-			writer.Write(MemorySize);
+			writer.Write((uint)Offset);
+			writer.Write((uint)VirtualAddress);
+			writer.Write((uint)PhysicalAddress);
+			writer.Write((uint)FileSize);
+			writer.Write((uint)MemorySize);
 			writer.Write((uint)Flags);
-			writer.Write(Alignment);
+			writer.Write((uint)Alignment);
+		}
+
+		/// <summary>
+		/// Writes the program header
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		public void Write64(BinaryWriter writer)
+		{
+			writer.Write((uint)Type);
+			writer.Write((uint)Flags);
+			writer.Write((ulong)Offset);
+			writer.Write((ulong)VirtualAddress);
+			writer.Write((ulong)PhysicalAddress);
+			writer.Write((ulong)FileSize);
+			writer.Write((ulong)MemorySize);
+			writer.Write((ulong)Alignment);
 		}
 	}
 }

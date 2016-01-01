@@ -1,10 +1,10 @@
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Linker.Elf;
+using System;
 using System.IO;
 
-namespace Mosa.Compiler.Linker.Elf64
+namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
 	///
@@ -37,19 +37,19 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// thus starting the process. If the file has no associated entry point, this member holds
 		/// zero.
 		/// </summary>
-		public uint EntryAddress;
+		public ulong EntryAddress;
 
 		/// <summary>
 		/// This member holds the program header table's file offset in bytes. If the file has no
 		/// program header table, this member holds zero.
 		/// </summary>
-		public uint ProgramHeaderOffset;
+		public long ProgramHeaderOffset;
 
 		/// <summary>
 		/// This member holds the section header table's file offset in bytes. If the file has no
 		/// section header table, this member holds zero.
 		/// </summary>
-		public uint SectionHeaderOffset;
+		public long SectionHeaderOffset;
 
 		/// <summary>
 		/// This member holds processor-specific flags associated with the file. Flag names
@@ -60,13 +60,13 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <summary>
 		/// This member holds the ELF header's size in bytes.
 		/// </summary>
-		public ushort ElfHeaderSize;
+		public static readonly ushort ElfHeaderSize = 0x34;
 
 		/// <summary>
 		/// This member holds the size in bytes of one entry in the file's program header table;
 		/// all entries are the same size.
 		/// </summary>
-		public ushort ProgramHeaderEntrySize;
+		public static readonly ushort ProgramHeaderEntrySize = 0x20;
 
 		/// <summary>
 		/// This member holds the number of entries in the program header table. Thus the
@@ -79,7 +79,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// This member holds a section header's size in bytes. A section header is one entry
 		/// in the section header table; all entries are the same size.
 		/// </summary>
-		public ushort SectionHeaderEntrySize;
+		public static readonly ushort SectionHeaderEntrySize = 0x28;
 
 		/// <summary>
 		/// This member holds the number of entries in the section header table. Thus the
@@ -99,48 +99,59 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly byte[] MagicNumber = new byte[4] { (byte)0x7F, (byte)'E', (byte)'L', (byte)'F' };
+		public static readonly byte[] MagicNumber = new byte[] { 0x7F, (byte)'E', (byte)'L', (byte)'F' };
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Header"/> class.
-		/// </summary>
-		public Header()
-		{
-			ElfHeaderSize = 0x34;
-			ProgramHeaderEntrySize = 0x20;
-			SectionHeaderEntrySize = 0x28;
-			SectionHeaderStringIndex = 1;
-		}
-
-		/// <summary>
-		/// Writes the specified fs.
+		/// Writes the elf header
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public void Write(EndianAwareBinaryWriter writer)
+		public void Write32(EndianAwareBinaryWriter writer)
 		{
 			writer.Seek(0, SeekOrigin.Begin);
-			writer.Write(Ident);
-			writer.Write((ushort)Type);
-			writer.Write((ushort)Machine);
-			writer.Write((uint)Version);
-			writer.Write(EntryAddress);
-			writer.Write(ProgramHeaderOffset);
-			writer.Write(SectionHeaderOffset);
-			writer.Write(Flags);
-			writer.Write(ElfHeaderSize);
-			writer.Write(ProgramHeaderEntrySize);
-			writer.Write(ProgramHeaderNumber);
-			writer.Write(SectionHeaderEntrySize);
-			writer.Write(SectionHeaderNumber);
-			SectionHeaderStringIndex = 1;
-			writer.Write(SectionHeaderStringIndex);
+			writer.Write(Ident);                    // ident
+			writer.Write((ushort)Type);             // type
+			writer.Write((ushort)Machine);          // machine
+			writer.Write((uint)Version);            // version
+			writer.Write((uint)EntryAddress);             // entry
+			writer.Write((uint)ProgramHeaderOffset);      // phoff
+			writer.Write((uint)SectionHeaderOffset);      // shoff
+			writer.Write((uint)Flags);                    // flags
+			writer.Write((ushort)ElfHeaderSize);            // ehsize
+			writer.Write((ushort)ProgramHeaderEntrySize);   // phentsize
+			writer.Write((ushort)ProgramHeaderNumber);      // phnum
+			writer.Write((ushort)SectionHeaderEntrySize);   // shentsize
+			writer.Write((ushort)SectionHeaderNumber);      // shnum
+			writer.Write((ushort)SectionHeaderStringIndex); // shstrndx
 		}
 
 		/// <summary>
-		/// Reads the specified reader.
+		/// Writes the elf header
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		public void Write64(EndianAwareBinaryWriter writer)
+		{
+			writer.Seek(0, SeekOrigin.Begin);
+			writer.Write(Ident);                    // ident
+			writer.Write((ushort)Type);             // type
+			writer.Write((ushort)Machine);          // machine
+			writer.Write((uint)Version);            // version
+			writer.Write((ulong)EntryAddress);             // entry
+			writer.Write((ulong)ProgramHeaderOffset);      // phoff
+			writer.Write((ulong)SectionHeaderOffset);      // shoff
+			writer.Write((uint)Flags);                    // flags
+			writer.Write((ushort)ElfHeaderSize);            // ehsize
+			writer.Write((ushort)ProgramHeaderEntrySize);   // phentsize
+			writer.Write((ushort)ProgramHeaderNumber);      // phnum
+			writer.Write((ushort)SectionHeaderEntrySize);   // shentsize
+			writer.Write((ushort)SectionHeaderNumber);      // shnum
+			writer.Write((ushort)SectionHeaderStringIndex); // shstrndx
+		}
+
+		/// <summary>
+		/// Reads elf header
 		/// </summary>
 		/// <param name="reader">The reader.</param>
-		public void Read(EndianAwareBinaryReader reader)
+		public void Read32(EndianAwareBinaryReader reader)
 		{
 			Ident = reader.ReadBytes(16);
 
@@ -148,7 +159,7 @@ namespace Mosa.Compiler.Linker.Elf64
 			if (Ident[0] != MagicNumber[0] || Ident[1] != MagicNumber[1] || Ident[2] != MagicNumber[2] || Ident[3] != MagicNumber[3])
 			{
 				// Magic number not present, so it seems to be an invalid ELF file
-				throw new System.NotSupportedException("This is not a valid ELF file");
+				throw new NotSupportedException("This is not a valid ELF file");
 			}
 
 			Type = (FileType)reader.ReadUInt16();
@@ -158,10 +169,12 @@ namespace Mosa.Compiler.Linker.Elf64
 			ProgramHeaderOffset = reader.ReadUInt32();
 			SectionHeaderOffset = reader.ReadUInt32();
 			Flags = reader.ReadUInt32();
-			ElfHeaderSize = reader.ReadUInt16();
-			ProgramHeaderEntrySize = reader.ReadUInt16();
+
+			//ElfHeaderSize = reader.ReadUInt16();
+			//ProgramHeaderEntrySize = reader.ReadUInt16();
 			ProgramHeaderNumber = reader.ReadUInt16();
-			SectionHeaderEntrySize = reader.ReadUInt16();
+
+			//SectionHeaderEntrySize = reader.ReadUInt16();
 			SectionHeaderNumber = reader.ReadUInt16();
 			SectionHeaderStringIndex = reader.ReadUInt16();
 		}
@@ -202,26 +215,26 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// </summary>
 		public void PrintInfo()
 		{
-			System.Console.WriteLine("--------------");
-			System.Console.WriteLine("| Elf64 Info:");
-			System.Console.WriteLine("--------------");
-			System.Console.WriteLine();
-			System.Console.WriteLine("Magic number equals 0x7F454C46: Yes");
-			System.Console.WriteLine("Ident class:                    {0} ({1})", ((IdentClass)Ident[4]).ToString(), ((IdentClass)Ident[4]).ToString("x"));
-			System.Console.WriteLine("Ident data:                     {0} ({1})", ((IdentData)Ident[4]).ToString(), ((IdentData)Ident[4]).ToString("x"));
-			System.Console.WriteLine("FileType:                       {0}", Type.ToString());
-			System.Console.WriteLine("Machine:                        {0}", Machine.ToString());
-			System.Console.WriteLine("Version:                        {0}", Version.ToString());
-			System.Console.WriteLine("Entry VirtualAddress:                  0x{0}", EntryAddress.ToString("x"));
-			System.Console.WriteLine("ProgramHeaderOffset:            0x{0}", ProgramHeaderOffset.ToString("x"));
-			System.Console.WriteLine("SectionHeaderOffset:            0x{0}", SectionHeaderOffset.ToString("x"));
-			System.Console.WriteLine("Flags:                          0x{0}", Flags.ToString("x"));
-			System.Console.WriteLine("Header size:                    0x{0}", ElfHeaderSize.ToString("x"));
-			System.Console.WriteLine("ProgramHeaderEntrySize:         0x{0}", ProgramHeaderEntrySize.ToString("x"));
-			System.Console.WriteLine("ProgramHeaderNumber:            0x{0}", ProgramHeaderNumber.ToString("x"));
-			System.Console.WriteLine("SectionHeaderEntrySize:         0x{0}", SectionHeaderEntrySize.ToString("x"));
-			System.Console.WriteLine("SectionHeaderNumber:            0x{0}", SectionHeaderNumber.ToString("x"));
-			System.Console.WriteLine("SectionHeaderStringIndex:       0x{0}", SectionHeaderStringIndex.ToString("x"));
+			Console.WriteLine("--------------");
+			Console.WriteLine("| Elf Info:");
+			Console.WriteLine("--------------");
+			Console.WriteLine();
+			Console.WriteLine("Magic number equals 0x7F454C46: Yes");
+			Console.WriteLine("Ident class:                    {0} ({1})", ((IdentClass)Ident[4]), ((IdentClass)Ident[4]).ToString("x"));
+			Console.WriteLine("Ident data:                     {0} ({1})", ((IdentData)Ident[4]), ((IdentData)Ident[4]).ToString("x"));
+			Console.WriteLine("FileType:                       {0}", Type);
+			Console.WriteLine("Machine:                        {0}", Machine);
+			Console.WriteLine("Version:                        {0}", Version);
+			Console.WriteLine("Entry VirtualAddress:           0x{0}", EntryAddress.ToString("x"));
+			Console.WriteLine("ProgramHeaderOffset:            0x{0}", ProgramHeaderOffset.ToString("x"));
+			Console.WriteLine("SectionHeaderOffset:            0x{0}", SectionHeaderOffset.ToString("x"));
+			Console.WriteLine("Flags:                          0x{0}", Flags.ToString("x"));
+			Console.WriteLine("Header size:                    0x{0}", ElfHeaderSize.ToString("x"));
+			Console.WriteLine("ProgramHeaderEntrySize:         0x{0}", ProgramHeaderEntrySize.ToString("x"));
+			Console.WriteLine("ProgramHeaderNumber:            0x{0}", ProgramHeaderNumber.ToString("x"));
+			Console.WriteLine("SectionHeaderEntrySize:         0x{0}", SectionHeaderEntrySize.ToString("x"));
+			Console.WriteLine("SectionHeaderNumber:            0x{0}", SectionHeaderNumber.ToString("x"));
+			Console.WriteLine("SectionHeaderStringIndex:       0x{0}", SectionHeaderStringIndex.ToString("x"));
 		}
 	}
 }

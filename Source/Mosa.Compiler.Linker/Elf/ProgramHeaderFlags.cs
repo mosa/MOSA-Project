@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Mosa.Compiler.Linker.Elf32
+namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
 	///
