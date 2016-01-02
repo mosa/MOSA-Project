@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Linker
 			SectionAlignment = 0x1000; // default 1K
 			BaseFileOffset = 0;
 
-			EmitSymbols = false;
+			EmitSymbols = true;
 		}
 
 		public virtual void Initialize(ulong baseAddress, Endianness endianness, ushort machineID)
