@@ -3,7 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Linker.Elf32;
+using Mosa.Compiler.Linker.Elf;
 using Mosa.Compiler.Trace.BuiltIn;
 using Mosa.Utility.Aot;
 using NDesk.Options;
@@ -138,7 +138,7 @@ namespace Mosa.Tool.Compiler
 
 			optionSet.Add(
 				"f|format=",
-				"Select the format of the binary file to create [{ELF32|ELF64|PE}].",
+				"Select the format of the binary file to create [{ELF32|ELF64}].",
 				delegate (string format)
 				{
 					compiler.CompilerOptions.LinkerFactory = GetLinkerFactory(format);
@@ -402,8 +402,7 @@ namespace Mosa.Tool.Compiler
 			{
 				case "elf": return delegate { return new Elf32(); };
 				case "elf32": return delegate { return new Elf32(); };
-
-				//case "elf64": return delegate { return new Elf64Linker(); };
+				case "elf64": return delegate { return new Elf64(); };
 				default: return null;
 			}
 		}

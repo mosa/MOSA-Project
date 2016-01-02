@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.LinkerFormat.Elf
+namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
 	///

@@ -28,7 +28,7 @@ namespace Mosa.DeviceDriver.ScanCodeMap
 		/// <returns></returns>
 		public KeyEvent ConvertScanCode(byte scancode)
 		{
-			KeyEvent key = new KeyEvent();
+			var key = new KeyEvent();
 
 			if (scancode == 0)
 				return key;

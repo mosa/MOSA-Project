@@ -2,7 +2,7 @@
 
 using System.IO;
 
-namespace Mosa.Compiler.Linker.Elf32
+namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
 	///
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// gives the virtualAddress at which the section's first byte should reside. Otherwise,
 		/// the member contains 0.
 		/// </summary>
-		public uint Address;
+		public ulong Address;
 
 		/// <summary>
 		/// This member's value gives the byte offset from the beginning of the file to
@@ -40,12 +40,12 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// space in the file, and its Offset member locates
 		/// the conceptual placement in the file.
 		/// </summary>
-		public uint Offset;
+		public long Offset;
 
 		/// <summary>
 		///
 		/// </summary>
-		public uint Size;
+		public ulong Size;
 
 		/// <summary>
 		/// This member holds a section header table index link, whose interpretation
@@ -67,38 +67,69 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// integral powers of two are allowed. Values 0 and 1 mean the section has no
 		/// alignment constraints.
 		/// </summary>
-		public uint AddressAlignment;
+		public ulong AddressAlignment;
 
 		/// <summary>
 		/// Some sections hold a table of fixed-size entries, such as a symbol table. For
 		/// such a section, this member gives the size in bytes of each entry. The
 		/// member contains 0 if the section does not hold a table of fixed-size entries.
 		/// </summary>
-		public uint EntrySize;
+		public ulong EntrySize;
 
 		/// <summary>
-		/// Writes the specified fs.
+		/// Writes the section header
 		/// </summary>
+		/// <param name="elfType">Type of the elf.</param>
 		/// <param name="writer">The writer.</param>
-		public void Write(BinaryWriter writer)
+		public void Write(ElfType elfType, BinaryWriter writer)
 		{
-			writer.Write(Name);
-			writer.Write((uint)Type);
-			writer.Write((uint)Flags);
-			writer.Write(Address);
-			writer.Write(Offset);
-			writer.Write(Size);
-			writer.Write(Link);
-			writer.Write(Info);
-			writer.Write(AddressAlignment);
-			writer.Write(EntrySize);
+			if (elfType == ElfType.Elf32)
+				Write32(writer);
+			else if (elfType == ElfType.Elf64)
+				Write64(writer);
 		}
 
 		/// <summary>
-		/// Reads the specified writer.
+		/// Writes the section header
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		protected void Write32(BinaryWriter writer)
+		{
+			writer.Write((uint)Name);
+			writer.Write((uint)Type);
+			writer.Write((uint)Flags);
+			writer.Write((uint)Address);
+			writer.Write((int)Offset);
+			writer.Write((uint)Size);
+			writer.Write((uint)Link);
+			writer.Write((uint)Info);
+			writer.Write((uint)AddressAlignment);
+			writer.Write((uint)EntrySize);
+		}
+
+		/// <summary>
+		/// Writes the section header
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		protected void Write64(BinaryWriter writer)
+		{
+			writer.Write((uint)Name);
+			writer.Write((uint)Type);
+			writer.Write((ulong)Flags);
+			writer.Write((ulong)Address);
+			writer.Write((long)Offset);
+			writer.Write((ulong)Size);
+			writer.Write((uint)Link);
+			writer.Write((uint)Info);
+			writer.Write((ulong)AddressAlignment);
+			writer.Write((ulong)EntrySize);
+		}
+
+		/// <summary>
+		/// Reads the section header
 		/// </summary>
 		/// <param name="reader">The reader.</param>
-		public void Read(BinaryReader reader)
+		public void Read32(BinaryReader reader)
 		{
 			Address = reader.ReadUInt16();
 			Name = reader.ReadUInt32();

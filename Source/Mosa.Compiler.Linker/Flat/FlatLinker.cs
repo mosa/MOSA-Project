@@ -10,11 +10,6 @@ namespace Mosa.Compiler.Linker.Flat
 		public FlatLinker()
 		{
 			SectionAlignment = 0;
-
-			AddSection(new LinkerSection(SectionKind.Text, ".text", SectionAlignment));
-			AddSection(new LinkerSection(SectionKind.Data, ".data", SectionAlignment));
-			AddSection(new LinkerSection(SectionKind.ROData, ".rodata", SectionAlignment));
-			AddSection(new LinkerSection(SectionKind.BSS, ".bss", SectionAlignment));
 		}
 
 		public virtual void Initalize(ulong baseAddress, Endianness endianness, ushort machineID)

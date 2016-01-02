@@ -33,9 +33,8 @@ namespace Mosa.Compiler.Linker
 
 		private object mylock = new object();
 
-		public LinkerSection(SectionKind sectionKind, string name, uint alignment)
+		public LinkerSection(SectionKind sectionKind, uint alignment)
 		{
-			Name = name;
 			SectionKind = sectionKind;
 			IsResolved = false;
 			symbolLookup = new Dictionary<string, LinkerSymbol>();

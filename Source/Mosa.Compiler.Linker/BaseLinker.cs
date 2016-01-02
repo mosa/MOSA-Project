@@ -15,8 +15,6 @@ namespace Mosa.Compiler.Linker
 	{
 		public LinkerSection[] Sections { get; private set; }
 
-		//public List<LinkRequest> LinkRequests { get; private set; }
-
 		public LinkerSymbol EntryPoint { get; set; }
 
 		public Endianness Endianness { get; protected set; }
@@ -28,6 +26,8 @@ namespace Mosa.Compiler.Linker
 		public uint SectionAlignment { get; protected set; }
 
 		public uint BaseFileOffset { get; set; }
+
+		public bool EmitSymbols { get; set; }
 
 		private object mylock = new object();
 
@@ -51,14 +51,15 @@ namespace Mosa.Compiler.Linker
 		protected BaseLinker()
 		{
 			Sections = new LinkerSection[4];
-			//LinkRequests = new List<LinkRequest>();
 
 			Endianness = Common.Endianness.Little;
 			MachineID = 0;
 
-			BaseAddress = 0x00400000; // Use the Win32 default for now
+			BaseAddress = 0x00400000;
 			SectionAlignment = 0x1000; // default 1K
 			BaseFileOffset = 0;
+
+			EmitSymbols = false;
 		}
 
 		public virtual void Initialize(ulong baseAddress, Endianness endianness, ushort machineID)
@@ -66,9 +67,14 @@ namespace Mosa.Compiler.Linker
 			BaseAddress = baseAddress;
 			Endianness = endianness;
 			MachineID = machineID;
+
+			AddSection(new LinkerSection(SectionKind.Text, SectionAlignment));
+			AddSection(new LinkerSection(SectionKind.Data, SectionAlignment));
+			AddSection(new LinkerSection(SectionKind.ROData, SectionAlignment));
+			AddSection(new LinkerSection(SectionKind.BSS, SectionAlignment));
 		}
 
-		protected void AddSection(LinkerSection section)
+		private void AddSection(LinkerSection section)
 		{
 			Sections[(int)section.SectionKind] = section;
 		}
@@ -78,7 +84,7 @@ namespace Mosa.Compiler.Linker
 			lock (mylock)
 			{
 				var linkRequest = new LinkRequest(linkType, patchType, patchSymbol, patchOffset, relativeBase, referenceSymbol, referenceOffset);
-				//LinkRequests.Add(linkRequest);
+
 				patchSymbol.AddPatch(linkRequest);
 			}
 		}
@@ -103,10 +109,11 @@ namespace Mosa.Compiler.Linker
 			return CreateSymbol(name, kind, 0);
 		}
 
+		private static SectionKind[] SectionList = new[] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
+
 		public LinkerSymbol FindSymbol(string name)
 		{
-			var list = new[] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
-			foreach (var kind in list)
+			foreach (var kind in SectionList)
 			{
 				var section = Sections[(int)kind];
 
@@ -117,6 +124,7 @@ namespace Mosa.Compiler.Linker
 				if (symbol != null)
 					return symbol;
 			}
+
 			return null;
 		}
 
@@ -147,7 +155,8 @@ namespace Mosa.Compiler.Linker
 		{
 			var symbol = CreateSymbol(name, kind, (uint)alignment);
 
-			MemoryStream stream = (size == 0) ? new MemoryStream() : new MemoryStream(size);
+			var stream = (size == 0) ? new MemoryStream() : new MemoryStream(size);
+
 			symbol.Stream = Stream.Synchronized(stream);
 
 			if (size != 0)

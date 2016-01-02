@@ -66,7 +66,7 @@ namespace Mosa.CoolWorld.x86
 				{
 					//	Debug.Trace("Main.Main Key Scan Code: " + scancode.ToString());
 
-					KeyEvent keyevent = KBDMAP.ConvertScanCode(scancode);
+					var keyevent = KBDMAP.ConvertScanCode(scancode);
 
 					//	Debug.Trace("Main.Main Key Character: " + keyevent.Character.ToString());
 
