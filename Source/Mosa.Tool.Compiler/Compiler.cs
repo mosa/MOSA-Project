@@ -138,7 +138,7 @@ namespace Mosa.Tool.Compiler
 
 			optionSet.Add(
 				"f|format=",
-				"Select the format of the binary file to create [{ELF32|ELF64|PE}].",
+				"Select the format of the binary file to create [{ELF32|ELF64}].",
 				delegate (string format)
 				{
 					compiler.CompilerOptions.LinkerFactory = GetLinkerFactory(format);

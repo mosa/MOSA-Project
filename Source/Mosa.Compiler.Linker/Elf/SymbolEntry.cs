@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Linker.Elf
 	/// <summary>
 	///
 	/// </summary>
-	public class SymbolTableEntry
+	public class SymbolEntry
 	{
 		/// <summary>
 		/// This member holds an index into the object file's symbol string table, which holds
@@ -29,16 +29,19 @@ namespace Mosa.Compiler.Linker.Elf
 		public ulong Size;
 
 		/// <summary>
-		/// This member specifies the symbol's type and binding attributes. A list of the values
-		/// and meanings appears below. The following code shows how to manipulate the
-		/// values.
+		/// The symbol binding
 		/// </summary>
-		public byte Info;
+		public SymbolBinding SymbolBinding;
 
 		/// <summary>
-		/// This member currently holds 0 and has no defined meaning.
+		/// The symbol type
 		/// </summary>
-		public byte Other;
+		public SymbolType SymbolType;
+
+		/// <summary>
+		/// The symbol visibility
+		/// </summary>
+		public SymbolVisibility SymbolVisibility;
 
 		/// <summary>
 		/// Every symbol table entry is "defined'' in relation to some section; this member holds
@@ -47,10 +50,33 @@ namespace Mosa.Compiler.Linker.Elf
 		public ushort SectionHeaderTableIndex;
 
 		/// <summary>
+		/// Gets the Info value.
+		/// </summary>
+		public byte Info { get { return (byte)((((byte)SymbolBinding) << 4) | (((byte)SymbolType) & 0xF)); } }
+
+		/// <summary>
+		/// This member currently holds 0 and has no defined meaning.
+		/// </summary>
+		public byte Other { get { return (byte)(((byte)SymbolVisibility) & 0x3); } }
+
+		/// <summary>
+		/// Writes the program header
+		/// </summary>
+		/// <param name="elfType">Type of the elf.</param>
+		/// <param name="writer">The writer.</param>
+		public void Write(ElfType elfType, BinaryWriter writer)
+		{
+			if (elfType == ElfType.Elf32)
+				Write32(writer);
+			else if (elfType == ElfType.Elf64)
+				Write64(writer);
+		}
+
+		/// <summary>
 		/// Writes the symbol table entry
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public void Write32(BinaryWriter writer)
+		protected void Write32(BinaryWriter writer)
 		{
 			writer.Write((uint)Name);
 			writer.Write((uint)Value);
@@ -64,7 +90,7 @@ namespace Mosa.Compiler.Linker.Elf
 		/// Writes the symbol table entry
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public void Write64(BinaryWriter writer)
+		protected void Write64(BinaryWriter writer)
 		{
 			writer.Write((uint)Name);
 			writer.Write((byte)Info);

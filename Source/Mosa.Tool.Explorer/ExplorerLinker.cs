@@ -15,11 +15,6 @@ namespace Mosa.Tool.Explorer
 		public ExplorerLinker()
 		{
 			SectionAlignment = 1;
-
-			AddSection(new LinkerSection(SectionKind.Text, ".text", SectionAlignment));
-			AddSection(new LinkerSection(SectionKind.Data, ".data", SectionAlignment));
-			AddSection(new LinkerSection(SectionKind.ROData, ".rodata", SectionAlignment));
-			AddSection(new LinkerSection(SectionKind.BSS, ".bss", SectionAlignment));
 		}
 
 		protected override void EmitImplementation(Stream stream)

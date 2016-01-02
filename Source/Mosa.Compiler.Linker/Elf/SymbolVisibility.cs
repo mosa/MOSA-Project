@@ -5,10 +5,14 @@ namespace Mosa.Compiler.Linker.Elf
 	/// <summary>
 	///
 	/// </summary>
-	public enum SymbolBinding
+	public enum SymbolVisibility
 	{
-		Local = 0,
-		Global = 1,
-		Weak = 2
+		Default = 0,
+		Internal = 1,
+		Hidden = 2,
+		Protected = 3,
+		Exported = 4,
+		Singleton = 5,
+		Eliminate = 6,
 	}
 }

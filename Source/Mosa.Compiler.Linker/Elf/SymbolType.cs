@@ -12,6 +12,7 @@ namespace Mosa.Compiler.Linker.Elf
 		Function = 2,
 		Section = 3,
 		File = 4,
-		ProcessorSpecific = 5
+		Common = 5,
+		TLS = 6,
 	}
 }

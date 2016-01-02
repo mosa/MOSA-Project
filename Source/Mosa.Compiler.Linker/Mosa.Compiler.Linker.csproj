@@ -55,8 +55,9 @@
     <Compile Include="Elf\SectionAttribute.cs" />
     <Compile Include="Elf\SectionHeader.cs" />
     <Compile Include="Elf\SectionType.cs" />
-    <Compile Include="Elf\SymbolTableEntry.cs" />
+    <Compile Include="Elf\SymbolEntry.cs" />
     <Compile Include="Elf\Elf.cs" />
+    <Compile Include="Elf\SymbolVisibility.cs" />
     <Compile Include="Elf\Version.cs" />
     <Compile Include="Elf\FileType.cs" />
     <Compile Include="Elf\IdentClass.cs" />
