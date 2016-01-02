@@ -9,6 +9,10 @@ namespace Mosa.Compiler.Linker.Elf
 	/// </summary>
 	public class SymbolEntry
 	{
+		public static readonly ushort EntrySize32 = 0x10;
+
+		public static readonly ushort EntrySize64 = 0x18;
+
 		/// <summary>
 		/// This member holds an index into the object file's symbol string table, which holds
 		/// the character representations of the symbol names.
@@ -59,6 +63,14 @@ namespace Mosa.Compiler.Linker.Elf
 		/// </summary>
 		public byte Other { get { return (byte)(((byte)SymbolVisibility) & 0x3); } }
 
+		public static int GetEntrySize(ElfType elfType)
+		{
+			if (elfType == ElfType.Elf32)
+				return EntrySize32;
+			else // if (elfType == ElfType.Elf64)
+				return EntrySize64;
+		}
+
 		/// <summary>
 		/// Writes the program header
 		/// </summary>
@@ -68,7 +80,7 @@ namespace Mosa.Compiler.Linker.Elf
 		{
 			if (elfType == ElfType.Elf32)
 				Write32(writer);
-			else if (elfType == ElfType.Elf64)
+			else // if (elfType == ElfType.Elf64)
 				Write64(writer);
 		}
 

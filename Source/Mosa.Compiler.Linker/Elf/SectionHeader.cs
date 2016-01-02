@@ -10,6 +10,14 @@ namespace Mosa.Compiler.Linker.Elf
 	public class SectionHeader
 	{
 		/// <summary>
+		/// This member holds a section header's size in bytes. A section header is one entry
+		/// in the section header table; all entries are the same size.
+		/// </summary>
+		public static readonly ushort EntrySize32 = 0x28;
+
+		public static readonly ushort EntrySize64 = 0x38;
+
+		/// <summary>
 		/// This member specifies the name of the section. Its value is an index into
 		/// the section header string table section , giving
 		/// the location of a null-terminated string.
@@ -76,6 +84,14 @@ namespace Mosa.Compiler.Linker.Elf
 		/// </summary>
 		public ulong EntrySize;
 
+		public static int GetEntrySize(ElfType elfType)
+		{
+			if (elfType == ElfType.Elf32)
+				return EntrySize32;
+			else // if (elfType == ElfType.Elf64)
+				return EntrySize64;
+		}
+
 		/// <summary>
 		/// Writes the section header
 		/// </summary>
@@ -85,7 +101,7 @@ namespace Mosa.Compiler.Linker.Elf
 		{
 			if (elfType == ElfType.Elf32)
 				Write32(writer);
-			else if (elfType == ElfType.Elf64)
+			else // if (elfType == ElfType.Elf64)
 				Write64(writer);
 		}
 

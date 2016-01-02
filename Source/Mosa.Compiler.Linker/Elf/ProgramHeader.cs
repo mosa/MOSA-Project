@@ -10,6 +10,13 @@ namespace Mosa.Compiler.Linker.Elf
 	public class ProgramHeader
 	{
 		/// <summary>
+		/// This member holds the size in bytes of one entry in the file's program header table;
+		/// all entries are the same size.
+		/// </summary>
+		public static readonly ushort EntrySize32 = 0x20;
+
+		public static readonly ushort EntrySize64 = 0x28;
+
 		/// This member tells what kind of segment this array element describes or how to
 		/// interpret the array element's information.
 		/// </summary>
@@ -54,6 +61,14 @@ namespace Mosa.Compiler.Linker.Elf
 		///
 		/// </summary>
 		public ulong Alignment;
+
+		public static int GetEntrySize(ElfType elfType)
+		{
+			if (elfType == ElfType.Elf32)
+				return EntrySize32;
+			else // if (elfType == ElfType.Elf64)
+				return EntrySize64;
+		}
 
 		/// <summary>
 		/// Writes the program header
