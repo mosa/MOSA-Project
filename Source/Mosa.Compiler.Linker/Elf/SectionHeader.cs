@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Linker.Elf
 		/// </summary>
 		public static readonly ushort EntrySize32 = 0x28;
 
-		public static readonly ushort EntrySize64 = 0x38;
+		public static readonly ushort EntrySize64 = 0x40;
 
 		/// <summary>
 		/// This member specifies the name of the section. Its value is an index into

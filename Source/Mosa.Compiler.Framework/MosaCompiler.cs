@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework
 		public void Initialize()
 		{
 			Linker = CompilerOptions.LinkerFactory();
-			Linker.Initialize(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.ElfMachineType);
+			Linker.Initialize(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.ElfMachineType, CompilerOptions.EmitSymbols);
 
 			BaseCompiler = CompilerFactory();
 

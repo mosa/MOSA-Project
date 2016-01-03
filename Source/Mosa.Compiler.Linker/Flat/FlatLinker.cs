@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Linker.Flat
 
 		public virtual void Initalize(ulong baseAddress, Endianness endianness, ushort machineID)
 		{
-			base.Initialize(baseAddress, endianness, machineID);
+			base.Initialize(baseAddress, endianness, machineID, false);
 			Endianness = Common.Endianness.Little;
 		}
 

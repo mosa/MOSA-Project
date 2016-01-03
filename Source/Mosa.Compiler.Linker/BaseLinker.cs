@@ -51,22 +51,22 @@ namespace Mosa.Compiler.Linker
 		protected BaseLinker()
 		{
 			Sections = new LinkerSection[4];
+			BaseFileOffset = 0;
+			SectionAlignment = 0x1000; // default 1K
 
+			// defaults
+			BaseAddress = 0x00400000;
 			Endianness = Common.Endianness.Little;
 			MachineID = 0;
-
-			BaseAddress = 0x00400000;
-			SectionAlignment = 0x1000; // default 1K
-			BaseFileOffset = 0;
-
 			EmitSymbols = true;
 		}
 
-		public virtual void Initialize(ulong baseAddress, Endianness endianness, ushort machineID)
+		public virtual void Initialize(ulong baseAddress, Endianness endianness, ushort machineID, bool emitSymbols)
 		{
 			BaseAddress = baseAddress;
 			Endianness = endianness;
 			MachineID = machineID;
+			EmitSymbols = emitSymbols;
 
 			AddSection(new LinkerSection(SectionKind.Text, SectionAlignment));
 			AddSection(new LinkerSection(SectionKind.Data, SectionAlignment));
