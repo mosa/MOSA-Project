@@ -141,6 +141,14 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool EmitBinary { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether [emit symbols].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [emit symbols]; otherwise, <c>false</c>.
+		/// </value>
+		public bool EmitSymbols { get; set; }
+
 		#endregion Properties
 
 		/// <summary>
@@ -240,6 +248,7 @@ namespace Mosa.Compiler.Framework
 			EmitBinary = true;
 			InlinedIRMaximum = 20;
 			DebugRestrictOptimizationByCount = 0;
+			EmitSymbols = true;
 		}
 	}
 }

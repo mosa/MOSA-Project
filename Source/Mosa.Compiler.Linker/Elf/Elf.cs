@@ -203,13 +203,13 @@ namespace Mosa.Compiler.Linker.Elf
 				AddSectionHeaders(header, name);
 			}
 
+			CreateSectionHeaderStringHeaderSection();
+
 			if (EmitSymbols)
 			{
 				CreateSymbolHeaderSection();
 				CreateStringHeaderSection();
 			}
-
-			CreateSectionHeaderStringHeaderSection();
 		}
 
 		private void WriteSectionHeaders()
@@ -233,13 +233,13 @@ namespace Mosa.Compiler.Linker.Elf
 				section.WriteTo(stream);
 			}
 
+			WriteSectionHeaderStringSection();
+
 			if (EmitSymbols)
 			{
 				WriteSymbolSection();
 				WriteStringSection();
 			}
-
-			WriteSectionHeaderStringSection();
 		}
 
 		/// <summary>
@@ -291,7 +291,7 @@ namespace Mosa.Compiler.Linker.Elf
 			sectionHeaderStringSection.Link = 0;
 			sectionHeaderStringSection.Info = 0;
 			sectionHeaderStringSection.AddressAlignment = SectionAlignment;
-			sectionHeaderStringSection.EntrySize = 0;
+			sectionHeaderStringSection.EntrySize = 1;
 
 			AddSectionHeaders(sectionHeaderStringSection, name);
 		}
@@ -301,7 +301,7 @@ namespace Mosa.Compiler.Linker.Elf
 			ResolveSectionOffset(sectionHeaderStringSection);
 
 			sectionHeaderStringSection.Size = (ulong)sectionHeaderStringTable.Count;
-			writer.BaseStream.Position = sectionHeaderStringSection.Offset;
+			writer.Position = sectionHeaderStringSection.Offset;
 			writer.Write(sectionHeaderStringTable.ToArray());
 		}
 
@@ -337,6 +337,8 @@ namespace Mosa.Compiler.Linker.Elf
 			stringSection.EntrySize = 0;
 
 			AddSectionHeaders(stringSection, name);
+
+			symbolSection.Link = GetSectionHeaderIndex(stringSection);
 		}
 
 		protected void WriteStringSection()
@@ -344,7 +346,7 @@ namespace Mosa.Compiler.Linker.Elf
 			ResolveSectionOffset(stringSection);
 
 			stringSection.Size = (ulong)stringTable.Count;
-			writer.BaseStream.Position = stringSection.Offset;
+			writer.Position = stringSection.Offset;
 			writer.Write(stringTable.ToArray());
 		}
 
@@ -375,7 +377,7 @@ namespace Mosa.Compiler.Linker.Elf
 			symbolSection.Address = 0;
 			symbolSection.Offset = 0;
 			symbolSection.Size = 0;
-			symbolSection.Link = 0;
+			symbolSection.Link = 0; //GetSectionHeaderIndex(stringSection);
 			symbolSection.Info = 0;
 			symbolSection.AddressAlignment = SectionAlignment;
 			symbolSection.EntrySize = (ulong)SymbolEntry.GetEntrySize(elfType);
@@ -409,8 +411,6 @@ namespace Mosa.Compiler.Linker.Elf
 
 				symbolEntry.Write(elfType, writer);
 				count++;
-
-				break; // FIXME: temp
 			}
 
 			symbolSection.Size = (ulong)(count * SymbolEntry.GetEntrySize(elfType));
