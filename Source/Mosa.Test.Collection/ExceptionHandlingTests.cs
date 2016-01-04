@@ -4,7 +4,7 @@ using System;
 
 namespace Mosa.Test.Collection
 {
-	public static class ExceptionHandlingTests
+	public static class _ExceptionHandlingTests
 	{
 		public static int TryFinally1()
 		{
@@ -536,7 +536,7 @@ namespace Mosa.Test.Collection
 			throw new Exception();
 		}
 
-		public static int ExceptionTest20()
+		public static int _ExceptionTest20()
 		{
 			bool DoCatch = true;
 			int counter = 1;

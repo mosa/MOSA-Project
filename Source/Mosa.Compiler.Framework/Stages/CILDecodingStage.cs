@@ -119,9 +119,9 @@ namespace Mosa.Compiler.Framework.Stages
 					BasicBlocks.AddHeadBlock(block);
 					BasicBlocks.AddHandlerHeadBlock(block);
 				}
-				if (handler.FilterOffset != null)
+				if (handler.FilterStart != null)
 				{
-					var block = GetBlockByLabel(handler.FilterOffset.Value);
+					var block = GetBlockByLabel(handler.FilterStart.Value);
 					BasicBlocks.AddHeadBlock(block);
 					BasicBlocks.AddHandlerHeadBlock(block);
 				}

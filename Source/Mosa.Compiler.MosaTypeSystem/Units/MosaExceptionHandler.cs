@@ -40,7 +40,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <summary>
 		///
 		/// </summary>
-		public int? FilterOffset { get; private set; }
+		public int? FilterStart { get; private set; }
+
+		public int? FilterEnd
+		{
+			get { return (ExceptionHandlerType == ExceptionHandlerType.Filter) ? (int?)HandlerStart : (int?)null; }
+		}
 
 		/// <summary>
 		/// Determines whether [is label within try] [the specified label].
@@ -77,7 +82,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			HandlerEnd = handlerEnd;
 
 			Type = type;
-			FilterOffset = filterOffset;
+			FilterStart = filterOffset;
 		}
 	}
 }

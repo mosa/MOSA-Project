@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="ExceptionEnd"/>.
+		/// Initializes a new instance of <see cref="FilterEnd"/>.
 		/// </summary>
 		public FilterEnd() :
 			base(0, 0)

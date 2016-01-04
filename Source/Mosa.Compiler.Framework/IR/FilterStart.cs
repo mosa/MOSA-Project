@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="ExceptionStart"/>.
+		/// Initializes a new instance of <see cref="FilterStart"/>.
 		/// </summary>
 		public FilterStart() :
 			base(0, 1)

@@ -184,10 +184,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (!(ctx.Instruction.FlowControl == FlowControl.ConditionalBranch || ctx.Instruction.FlowControl == FlowControl.UnconditionalBranch || ctx.Instruction.FlowControl == FlowControl.Return)
 					&& !(ctx.Instruction is BaseCILInstruction)
-					&& ctx.Instruction != IRInstruction.ExceptionStart)
+					&& ctx.Instruction != IRInstruction.ExceptionStart
+					&& ctx.Instruction != IRInstruction.FilterStart)
 					continue;
 
-				if (ctx.Instruction == IRInstruction.ExceptionStart)
+				if (ctx.Instruction == IRInstruction.ExceptionStart || ctx.Instruction == IRInstruction.FilterStart)
 				{
 					AssignOperandsFromCILStack(ctx, operandStack);
 					PushResultOperands(ctx, operandStack);
@@ -278,7 +279,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="currentStack">The current stack.</param>
 		private void PushResultOperands(Context ctx, Stack<Operand> currentStack)
 		{
-			if (ctx.Instruction != IRInstruction.ExceptionStart)
+			if (ctx.Instruction != IRInstruction.ExceptionStart && ctx.Instruction != IRInstruction.FilterStart)
 				if (!(ctx.Instruction as BaseCILInstruction).PushResult)
 					return;
 
