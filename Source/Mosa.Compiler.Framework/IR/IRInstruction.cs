@@ -270,6 +270,11 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		///
 		/// </summary>
+		public static readonly BaseIRInstruction FilterStart = new FilterStart();
+
+		/// <summary>
+		///
+		/// </summary>
 		public static readonly BaseIRInstruction FinallyStart = new FinallyStart();
 
 		/// <summary>
@@ -286,6 +291,11 @@ namespace Mosa.Compiler.Framework.IR
 		///
 		/// </summary>
 		public static readonly BaseIRInstruction FinallyEnd = new FinallyEnd();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly BaseIRInstruction FilterEnd = new FilterEnd();
 
 		/// <summary>
 		///

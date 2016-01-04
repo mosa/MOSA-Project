@@ -535,5 +535,29 @@ namespace Mosa.Test.Collection
 		{
 			throw new Exception();
 		}
+
+		public static int ExceptionTest20()
+		{
+			bool DoCatch = true;
+			int counter = 1;
+			try
+			{
+				try
+				{
+					throw new System.Exception();
+				}
+				finally
+				{
+					counter = counter * 10;
+					DoCatch = false;
+				}
+			}
+			catch when (DoCatch)
+			{
+				counter = counter + 1000;
+			}
+
+			return counter;
+		}
 	}
 }

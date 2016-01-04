@@ -1403,7 +1403,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Endfilter(Context context)
 		{
-			throw new NotImplementCompilerException();
+			context.SetInstruction(IRInstruction.FilterEnd, context.Operand1);
 		}
 
 		/// <summary>

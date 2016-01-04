@@ -107,5 +107,11 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(ExceptionHandlingTests.ExceptionTest10(), Run<ulong>("Mosa.Test.Collection.ExceptionHandlingTests.ExceptionTest10"));
 		}
+
+		[Fact]
+		public void ExceptionTest20()
+		{
+			Assert.Equal(ExceptionHandlingTests.ExceptionTest20(), Run<int>("Mosa.Test.Collection.ExceptionHandlingTests.ExceptionTest20"));
+		}
 	}
 }

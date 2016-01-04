@@ -98,6 +98,8 @@
     <Compile Include="Intrinsics\GetObjectFromAddress.cs" />
     <Compile Include="Intrinsics\Load64.cs" />
     <Compile Include="Intrinsics\InternalsForArray.cs" />
+    <Compile Include="IR\FilterEnd.cs" />
+    <Compile Include="IR\FilterStart.cs" />
     <Compile Include="IR\LeaveTarget.cs" />
     <Compile Include="IR\KillAllExcept.cs" />
     <Compile Include="IR\Flow.cs" />
