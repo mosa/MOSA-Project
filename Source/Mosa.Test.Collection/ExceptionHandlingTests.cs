@@ -192,6 +192,70 @@ namespace Mosa.Test.Collection
 			return 0;
 		}
 
+		public static int ExceptionTest0a()
+		{
+			int a = 10;
+
+			try
+			{
+				a = a + 2;
+
+				throw new Exception();
+			}
+			catch
+			{
+				a = a + 50;
+			}
+
+			a = a + 7;
+
+			return a;
+		}
+
+		public static int ExceptionTest0b()
+		{
+			int a = 10;
+
+			try
+			{
+				a = a + 2;
+
+				throw new Exception();
+			}
+			catch
+			{
+				a = a + 50;
+			}
+			finally
+			{
+				a = a + 25;
+			}
+
+			a = a + 7;
+
+			return a;
+		}
+
+		public static int ExceptionTest0c()
+		{
+			int a = 10;
+
+			try
+			{
+				a = a + 2;
+
+				throw new Exception();
+			}
+			finally
+			{
+				a = a + 25;
+			}
+
+			a = a + 7;
+
+			return a;
+		}
+
 		public static int ExceptionTest1()
 		{
 			int a = 10;

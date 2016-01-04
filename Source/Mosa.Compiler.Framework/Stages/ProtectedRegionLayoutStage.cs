@@ -5,6 +5,7 @@ using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
+using System;
 
 namespace Mosa.Compiler.Framework.Stages
 {

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,7 +21,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var exceptionRegister = Operand.CreateCPURegister(exceptionType, Architecture.ExceptionRegister);
 
-			var finallyReturnBlockRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, Architecture.FinallyReturnBlockRegister);
+			var leaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, Architecture.LeaveTargetRegister);
 
 			var nullOperand = Operand.GetNull(TypeSystem);
 
@@ -54,17 +55,17 @@ namespace Mosa.Compiler.Framework.Stages
 						BasicBlocks.RemoveHeaderBlock(node.Block);
 
 						var exceptionVirtualRegister = node.Result;
-						var finallyReturnBlockVirtualRegister = node.Result2;
+						var leaveTargetVirtualRegister = node.Result2;
 						var ctx = new Context(node);
 
 						exceptionVirtualRegisters.Add(node.Block, exceptionVirtualRegister);
 
 						ctx.SetInstruction(IRInstruction.KillAll);
 						ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
-						ctx.AppendInstruction(IRInstruction.Gen, finallyReturnBlockRegister);
+						ctx.AppendInstruction(IRInstruction.Gen, leaveTargetRegister);
 
 						ctx.AppendInstruction(IRInstruction.Move, exceptionVirtualRegister, exceptionRegister);
-						ctx.AppendInstruction(IRInstruction.Move, finallyReturnBlockVirtualRegister, finallyReturnBlockRegister);
+						ctx.AppendInstruction(IRInstruction.Move, leaveTargetVirtualRegister, leaveTargetRegister);
 						continue;
 					}
 					else if (node.Instruction == IRInstruction.FinallyEnd)
@@ -98,21 +99,23 @@ namespace Mosa.Compiler.Framework.Stages
 						ctx.AppendInstruction(IRInstruction.Move, exceptionVirtualRegister, exceptionRegister);
 						continue;
 					}
-					else if (node.Instruction == IRInstruction.LeaveTarget)
+					else if (node.Instruction == IRInstruction.SetLeaveTarget)
 					{
 						var target = node.BranchTargets[0];
 
 						var ctx = new Context(node);
 
-						ctx.SetInstruction(IRInstruction.Move, finallyReturnBlockRegister, Operand.CreateConstant(TypeSystem, target.Label));
+						ctx.SetInstruction(IRInstruction.Move, leaveTargetRegister, Operand.CreateConstant(TypeSystem, target.Label));
 					}
-					else if (node.Instruction == IRInstruction.Leave)
+					else if (node.Instruction == IRInstruction.GotoLeaveTarget)
 					{
 						var label = node.Label;
 						var exceptionContext = FindImmediateExceptionContext(label);
 
-						var nextFinallyContext = (exceptionContext.ExceptionHandlerType == ExceptionHandlerType.Finally && exceptionContext.IsLabelWithinTry(node.Label))
-							? exceptionContext : FindNextEnclosingFinallyContext(exceptionContext);
+						var nextFinallyContext =
+							(exceptionContext.ExceptionHandlerType == ExceptionHandlerType.Finally && exceptionContext.IsLabelWithinTry(node.Label))
+								? exceptionContext
+								: FindNextEnclosingFinallyContext(exceptionContext);
 
 						var ctx = new Context(node);
 
@@ -125,8 +128,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 							var nextBlock = Split(ctx);
 
-							// compare finallyReturnBlockRegister > handlerBlock.End, then goto handler
-							ctx.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.GreaterThan, null, Operand.CreateConstant(TypeSystem, handlerBlock.Label), finallyReturnBlockRegister, nextBlock.Block);
+							// compare leaveTargetRegister > handlerBlock.End, then goto finally handler
+							ctx.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.GreaterThan, null, Operand.CreateConstant(TypeSystem, handlerBlock.Label), leaveTargetRegister, nextBlock.Block);
 							ctx.AppendInstruction(IRInstruction.Jmp, handlerBlock);
 
 							ctx = nextBlock;
@@ -139,11 +142,19 @@ namespace Mosa.Compiler.Framework.Stages
 							// Leave target must be after end of exception context
 							// Leave target must be found within try or handler
 
-							if (target.Item1.Label > exceptionContext.TryEnd
-								&& (exceptionContext.IsLabelWithinTry(target.Item2.Label) || exceptionContext.IsLabelWithinHandler(target.Item2.Label)))
+							if ((target.Item1.Label > exceptionContext.TryEnd) &&
+								(
+									exceptionContext.IsLabelWithinTry(target.Item2.Label) ||
+									exceptionContext.IsLabelWithinHandler(target.Item2.Label))
+								)
 							{
-								targets.Add(target.Item1);
+								targets.AddIfNew(target.Item1);
 							}
+						}
+
+						if (targets.Count == 0)
+						{
+							MethodCompiler.Stop();
 						}
 
 						Debug.Assert(targets.Count != 0);
@@ -157,12 +168,12 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							var newBlocks = CreateNewBlockContexts(targets.Count - 1);
 
-							ctx.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockRegister, Operand.CreateConstant(TypeSystem, targets[0].Label), targets[0]);
+							ctx.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, leaveTargetRegister, Operand.CreateConstant(TypeSystem, targets[0].Label), targets[0]);
 							ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 							for (int b = 1; b < targets.Count - 2; b++)
 							{
-								newBlocks[b - 1].AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, finallyReturnBlockRegister, Operand.CreateConstant(TypeSystem, targets[b].Label), targets[b]);
+								newBlocks[b - 1].AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, leaveTargetRegister, Operand.CreateConstant(TypeSystem, targets[b].Label), targets[b]);
 								newBlocks[b - 1].AppendInstruction(IRInstruction.Jmp, newBlocks[b + 1].Block);
 							}
 
@@ -200,12 +211,12 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var context = new Context(block.Last);
 
-				while (context.IsEmpty || context.IsBlockEndInstruction || context.Instruction == IRInstruction.Flow || context.Instruction == IRInstruction.Leave)
+				while (context.IsEmpty || context.IsBlockEndInstruction || context.Instruction == IRInstruction.Flow || context.Instruction == IRInstruction.GotoLeaveTarget)
 				{
 					context.GotoPrevious();
 				}
 
-				if (context.Instruction == IRInstruction.LeaveTarget)
+				if (context.Instruction == IRInstruction.SetLeaveTarget)
 				{
 					leaveTargets.Add(new Tuple<BasicBlock, BasicBlock>(context.BranchTargets[0], block));
 				}

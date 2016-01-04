@@ -61,7 +61,6 @@
     <Compile Include="UniqueQueueThreadSafe.cs" />
     <Compile Include="UniqueQueue.cs" />
     <Compile Include="Trilean.cs" />
-    <Compile Include="Tuple.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

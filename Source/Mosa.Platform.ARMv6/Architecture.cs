@@ -159,7 +159,7 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public override Register FinallyReturnBlockRegister
+		public override Register LeaveTargetRegister
 		{
 			get { return GeneralPurposeRegister.R9; }
 		}

@@ -3,16 +3,16 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// An abstract intermediate representation of set finally instruction.
+	/// An abstract intermediate representation to set the target of the eventually (even if nested) target for the leave instruction within a finally or catch handler, or a try protected block.
 	/// </summary>
-	public sealed class LeaveTarget : BaseIRInstruction
+	public sealed class SetLeaveTarget : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="LeaveTarget"/>.
+		/// Initializes a new instance of <see cref="SetLeaveTarget"/>.
 		/// </summary>
-		public LeaveTarget() :
+		public SetLeaveTarget() :
 			base(0, 0)
 		{
 		}

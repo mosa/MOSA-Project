@@ -300,12 +300,12 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly BaseIRInstruction Leave = new Leave();
+		public static readonly BaseIRInstruction GotoLeaveTarget = new GotoLeaveTarget();
 
 		/// <summary>
 		///
 		/// </summary>
-		public static readonly BaseIRInstruction LeaveTarget = new LeaveTarget();
+		public static readonly BaseIRInstruction SetLeaveTarget = new SetLeaveTarget();
 
 		/// <summary>
 		///

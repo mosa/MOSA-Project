@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public abstract Register FinallyReturnBlockRegister { get; }
+		public abstract Register LeaveTargetRegister { get; }
 
 		/// <summary>
 		/// Gets the name of the platform.

@@ -112,7 +112,7 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public override Register FinallyReturnBlockRegister
+		public override Register LeaveTargetRegister
 		{
 			get { return null; /* GeneralPurposeRegister.EDX;*/ }
 		}
