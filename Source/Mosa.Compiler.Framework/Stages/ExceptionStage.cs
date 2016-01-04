@@ -132,7 +132,7 @@ namespace Mosa.Compiler.Framework.Stages
 							ctx = nextBlock;
 						}
 
-						List<BasicBlock> targets = new List<BasicBlock>();
+						var targets = new List<BasicBlock>();
 
 						foreach (var target in leaveTargets)
 						{

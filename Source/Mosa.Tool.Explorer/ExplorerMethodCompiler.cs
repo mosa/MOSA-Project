@@ -24,7 +24,6 @@ namespace Mosa.Tool.Explorer
 			Pipeline.Add(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new ExceptionPrologueStage(),
-				//new StopStage(),	
 				new OperandAssignmentStage(),
 				new StackSetupStage(),
 				new ProtectedRegionStage(),
