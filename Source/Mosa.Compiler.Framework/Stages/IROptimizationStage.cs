@@ -46,6 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int constantFoldingLogicalOrCount = 0;
 		private int constantFoldingLogicalAndCount = 0;
 		private int combineIntegerCompareBranchCount = 0;
+		private int removeUselessIntegerCompareBranch = 0;
 		private int changeCount = 0;
 
 		private Stack<InstructionNode> worklist = new Stack<InstructionNode>();
@@ -106,6 +107,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
 			UpdateCounter("IROptimizations.PromoteLocalVariable", promoteLocalVariableCount);
 			UpdateCounter("IROptimizations.Reduce64BitOperationsTo32Bit", reduce64BitOperationsTo32BitCount);
+			UpdateCounter("IROptimizations.RemoveUselessIntegerCompareBranch", removeUselessIntegerCompareBranch);
 
 			worklist = null;
 		}
@@ -203,6 +205,7 @@ namespace Mosa.Compiler.Framework.Stages
 				ConstantFoldingLogicalAnd,
 				CombineIntegerCompareBranch,
 				FoldIntegerCompare,
+				RemoveUselessIntegerCompareBranch,
 				FoldIntegerCompareBranch,
 				ReduceTruncationAndExpansion,
 				SimplifyExtendedMoveWithConstant,
@@ -1087,6 +1090,29 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
+		/// Removes the unless integer compare branch.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void RemoveUselessIntegerCompareBranch(InstructionNode node)
+		{
+			if (node.IsEmpty)
+				return;
+
+			if (node.Instruction != IRInstruction.IntegerCompareBranch)
+				return;
+
+			if (node.Block.NextBlocks.Count != 1)
+				return;
+
+			if (trace.Active) trace.Log("REMOVED:\t" + node.ToString());
+			AddOperandUsageToWorkList(node);
+			node.SetInstruction(IRInstruction.Nop);
+			instructionsRemovedCount++;
+			removeUselessIntegerCompareBranch++;
+			changeCount++;
+		}
+
+		/// <summary>
 		/// Folds integer compare branch.
 		/// </summary>
 		/// <param name="node">The node.</param>
@@ -1098,8 +1124,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Instruction != IRInstruction.IntegerCompareBranch)
 				return;
 
-			if (node.OperandCount != 2)
-				return;
+			Debug.Assert(node.OperandCount == 2);
 
 			Operand op1 = node.Operand1;
 			Operand op2 = node.Operand2;

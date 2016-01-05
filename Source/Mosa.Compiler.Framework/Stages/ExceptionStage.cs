@@ -166,12 +166,24 @@ namespace Mosa.Compiler.Framework.Stages
 							}
 						}
 
-						//if (targets.Count == 0)
-						//{
-						//	MethodCompiler.Stop();
-						//}
+						if (targets.Count == 0)
+						{
+							// this is an unreachable location
 
-						Debug.Assert(targets.Count != 0);
+							// clear this block --- should only have on instruction
+							ctx.Empty();
+
+							var currentBlock = ctx.Block;
+							var previousBlock = currentBlock.PreviousBlocks[0];
+
+							var otherBranch = (previousBlock.NextBlocks[0] == currentBlock) ? previousBlock.NextBlocks[1] : previousBlock.NextBlocks[0];
+
+							ReplaceBranchTargets(previousBlock, currentBlock, otherBranch);
+
+							// the optimizer will remove the branch comparison
+
+							continue;
+						}
 
 						if (targets.Count == 1)
 						{
