@@ -123,9 +123,8 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							var handlerBlock = BasicBlocks.GetByLabel(exceptionContext.HandlerStart);
 
-							var nextBlock = Split(ctx);
-
 							ctx.AppendInstruction(IRInstruction.Jmp, handlerBlock);
+
 							continue;
 						}
 
