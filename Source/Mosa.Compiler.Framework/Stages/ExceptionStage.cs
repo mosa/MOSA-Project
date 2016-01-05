@@ -109,18 +109,28 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else if (node.Instruction == IRInstruction.GotoLeaveTarget)
 					{
-						var label = node.Label;
-						var exceptionContext = FindImmediateExceptionContext(label);
-
-						var nextFinallyContext =
-							(exceptionContext.ExceptionHandlerType == ExceptionHandlerType.Finally && exceptionContext.IsLabelWithinTry(node.Label))
-								? exceptionContext
-								: FindNextEnclosingFinallyContext(exceptionContext);
-
 						var ctx = new Context(node);
 
 						// clear exception register
+						// FIXME: This will need to be preserved for filtered exceptions; will need a flag to know this - maybe an upper bit of leaveTargetRegister
 						ctx.SetInstruction(IRInstruction.Move, exceptionRegister, nullOperand);
+
+						var label = node.Label;
+						var exceptionContext = FindImmediateExceptionContext(label);
+
+						// 1) currently within a try block with a finally handler --- call it.
+						if (exceptionContext.ExceptionHandlerType == ExceptionHandlerType.Finally && exceptionContext.IsLabelWithinTry(node.Label))
+						{
+							var handlerBlock = BasicBlocks.GetByLabel(exceptionContext.HandlerStart);
+
+							var nextBlock = Split(ctx);
+
+							ctx.AppendInstruction(IRInstruction.Jmp, handlerBlock);
+							continue;
+						}
+
+						// 2) else, find the next finally handler (if any), check if it should be called, if so, call it
+						var nextFinallyContext = FindNextEnclosingFinallyContext(exceptionContext);
 
 						if (nextFinallyContext != null)
 						{
@@ -135,27 +145,32 @@ namespace Mosa.Compiler.Framework.Stages
 							ctx = nextBlock;
 						}
 
+						// find all the available targets within the method from this node's location
 						var targets = new List<BasicBlock>();
 
-						foreach (var target in leaveTargets)
-						{
-							// Leave target must be after end of exception context
-							// Leave target must be found within try or handler
+						// using the end of the protected as the location
+						var location = exceptionContext.TryEnd;
 
-							if ((target.Item1.Label > exceptionContext.TryEnd) &&
-								(
-									exceptionContext.IsLabelWithinTry(target.Item2.Label) ||
-									exceptionContext.IsLabelWithinHandler(target.Item2.Label))
-								)
+						foreach (var targetBlock in leaveTargets)
+						{
+							var source = targetBlock.Item2;
+							var target = targetBlock.Item1;
+
+							// target must be after end of exception context
+							if (target.Label <= location)
+								continue;
+
+							// target must be found within try or handler
+							if (exceptionContext.IsLabelWithinTry(source.Label) || exceptionContext.IsLabelWithinHandler(source.Label))
 							{
-								targets.AddIfNew(target.Item1);
+								targets.AddIfNew(target);
 							}
 						}
 
-						if (targets.Count == 0)
-						{
-							MethodCompiler.Stop();
-						}
+						//if (targets.Count == 0)
+						//{
+						//	MethodCompiler.Stop();
+						//}
 
 						Debug.Assert(targets.Count != 0);
 
