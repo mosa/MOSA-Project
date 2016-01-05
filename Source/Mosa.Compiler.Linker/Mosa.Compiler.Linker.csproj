@@ -66,6 +66,7 @@
     <Compile Include="Elf\SymbolBinding.cs" />
     <Compile Include="Elf\SymbolType.cs" />
     <Compile Include="Elf\MachineType.cs" />
+    <Compile Include="Elf\RelocationType.cs" />
     <Compile Include="LinkerSection.cs" />
     <Compile Include="LinkerSymbol.cs" />
     <Compile Include="BuiltInPatch.cs" />
