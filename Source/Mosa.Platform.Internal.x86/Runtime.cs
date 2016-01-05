@@ -559,8 +559,6 @@ namespace Mosa.Platform.Internal.x86
 				{
 					var protectedRegion = GetProtectedRegionEntryByAddress(returnAddress - 1, exceptionType, methodDef);
 
-					//DebugOutput(((uint)protectedRegion));
-
 					if (protectedRegion != null)
 					{
 						// found handler for current method, call it

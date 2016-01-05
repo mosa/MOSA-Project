@@ -4,7 +4,7 @@ using System;
 
 namespace Mosa.Test.Collection
 {
-	public static class ExceptionHandlingTests
+	public static class _ExceptionHandlingTests
 	{
 		public static int TryFinally1()
 		{
@@ -535,5 +535,93 @@ namespace Mosa.Test.Collection
 		{
 			throw new Exception();
 		}
+
+		//public static int ExceptionTest11()
+		//{
+		//	int a = 10;
+
+		//	try
+		//	{
+		//		a = a + 2;
+
+		//		throw new Exception();
+		//	}
+		//	catch
+		//	{
+		//		a = a + 50;
+		//	}
+
+		//	a = a + 7;
+
+		//	return a;
+		//}
+
+		//public static int ExceptionTest12()
+		//{
+		//	int a = 10;
+
+		//	try
+		//	{
+		//		a = a + 2;
+
+		//		throw new Exception();
+		//	}
+		//	catch
+		//	{
+		//		a = a + 50;
+		//	}
+		//	finally
+		//	{
+		//		a = a + 25;
+		//	}
+
+		//	a = a + 7;
+
+		//	return a;
+		//}
+
+		//public static int ExceptionTest13()
+		//{
+		//	int a = 10;
+
+		//	try
+		//	{
+		//		a = a + 2;
+
+		//		throw new Exception();
+		//	}
+		//	finally
+		//	{
+		//		a = a + 25;
+		//	}
+
+		//	a = a + 7;
+
+		//	return a;
+		//}
+
+		//public static int _ExceptionTest20()
+		//{
+		//	bool DoCatch = true;
+		//	int counter = 1;
+		//	try
+		//	{
+		//		try
+		//		{
+		//			throw new System.Exception();
+		//		}
+		//		finally
+		//		{
+		//			counter = counter * 10;
+		//			DoCatch = false;
+		//		}
+		//	}
+		//	catch when (DoCatch)
+		//	{
+		//		counter = counter + 1000;
+		//	}
+
+		//	return counter;
+		//}
 	}
 }

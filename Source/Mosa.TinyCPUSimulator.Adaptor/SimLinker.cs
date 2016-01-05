@@ -1,10 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Flat;
 using System.Collections.Generic;
 using System.IO;
+using System;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {

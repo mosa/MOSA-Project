@@ -10,51 +10,56 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The instruction always continues execution on the next instruction.
 		/// </summary>
-		Next = 0x00,
+		Next,
 
 		/// <summary>
 		/// The instruction invokes another method.
 		/// </summary>
-		Call = 0x01,
+		Call,
 
 		/// <summary>
 		/// The instruction is an unconditional branch.
 		/// </summary>
-		UnconditionalBranch = 0x02,
+		UnconditionalBranch,
 
 		/// <summary>
 		/// The instruction is a conditional branch, which never falls through.
 		/// </summary>
-		ConditionalBranch = 0x04,
+		ConditionalBranch,
 
 		/// <summary>
 		/// The instruction is a conditional branch, which may fall-through.
 		/// </summary>
-		Switch = 0x08,
+		Switch,
 
 		/// <summary>
 		/// The instruction breaks the control-flow.
 		/// </summary>
-		Break = 0x10,
+		Break,
 
 		/// <summary>
 		/// The instruction returns from the method
 		/// </summary>
-		Return = 0x20,
+		Return,
 
 		/// <summary>
 		/// The instruction throws an exception.
 		/// </summary>
-		Throw = 0x40,
+		Throw,
 
 		/// <summary>
 		/// Leaves a try block
 		/// </summary>
-		Leave = 0x60,
+		Leave,
 
 		/// <summary>
 		/// End of finally block
 		/// </summary>
-		EndFinally = 0x80,
+		EndFinally,
+
+		/// <summary>
+		/// End of filter block
+		/// </summary>
+		EndFilter,
 	}
 }

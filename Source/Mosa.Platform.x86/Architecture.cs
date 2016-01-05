@@ -148,7 +148,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public override Register FinallyReturnBlockRegister
+		public override Register LeaveTargetRegister
 		{
 			get { return GeneralPurposeRegister.ESI; }
 		}

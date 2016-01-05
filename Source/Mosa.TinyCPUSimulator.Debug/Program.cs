@@ -11,12 +11,12 @@ namespace Mosa.TinyCPUSimulator.Debug
 
 		private static void Main(string[] args)
 		{
-			var fixture = new ValueTypeFixture();
+			var fixture = new ExceptionHandlingFixture();
 
 			fixture.TestCompiler.DebugOutput = true;
 
 			fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = true;
-			DoTest(fixture.TestValueTypeVirtualMethod, "normal-all");
+			DoTest(fixture.ExceptionTest2, "normal-all");
 
 			//fixture.TestCompiler.Reset();
 			//fixture.TestCompiler.Compiler.CompilerOptions.EnableVariablePromotion = false;

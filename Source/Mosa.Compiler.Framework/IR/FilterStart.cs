@@ -3,17 +3,17 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// An abstract intermediate representation of set finally instruction.
+	/// An abstract intermediate representation of the start of an filter block.
 	/// </summary>
-	public sealed class LeaveTarget : BaseIRInstruction
+	public sealed class FilterStart : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="LeaveTarget"/>.
+		/// Initializes a new instance of <see cref="FilterStart"/>.
 		/// </summary>
-		public LeaveTarget() :
-			base(0, 0)
+		public FilterStart() :
+			base(0, 1)
 		{
 		}
 

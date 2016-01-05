@@ -22,6 +22,8 @@ namespace Mosa.Compiler.Framework.CIL
 
 		#endregion Construction
 
+		public override FlowControl FlowControl { get { return FlowControl.EndFilter; } }
+
 		#region Methods
 
 		/// <summary>
@@ -32,8 +34,6 @@ namespace Mosa.Compiler.Framework.CIL
 		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
 			base.Resolve(ctx, compiler);
-
-			throw new NotImplementedException();
 		}
 
 		/// <summary>

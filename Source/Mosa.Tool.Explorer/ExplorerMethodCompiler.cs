@@ -31,6 +31,8 @@ namespace Mosa.Tool.Explorer
 				new CILTransformationStage(),
 				new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),
+
+				//new StopStage(),
 				new ExceptionStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				(compilerOptions.EnableVariablePromotion) ? new PromoteTempVariablesStage() : null,

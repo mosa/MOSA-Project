@@ -20,17 +20,42 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void InsertExceptionStartInstructions()
 		{
+			var objectType = TypeSystem.GetTypeByName("System", "Object");
+
 			foreach (var clause in MethodCompiler.Method.ExceptionHandlers)
 			{
 				if (clause.ExceptionHandlerType == ExceptionHandlerType.Exception)
 				{
-					var tryHandler = BasicBlocks.GetByLabel(clause.HandlerStart);
+					var handler = BasicBlocks.GetByLabel(clause.HandlerStart);
 
 					var exceptionObject = MethodCompiler.CreateVirtualRegister(clause.Type);
 
-					var context = new Context(tryHandler);
+					var context = new Context(handler);
 
 					context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
+				}
+
+				if (clause.ExceptionHandlerType == ExceptionHandlerType.Filter)
+				{
+					{
+						var handler = BasicBlocks.GetByLabel(clause.HandlerStart);
+
+						var exceptionObject = MethodCompiler.CreateVirtualRegister(objectType);
+
+						var context = new Context(handler);
+
+						context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
+					}
+
+					{
+						var handler = BasicBlocks.GetByLabel(clause.FilterStart.Value);
+
+						var exceptionObject = MethodCompiler.CreateVirtualRegister(objectType);
+
+						var context = new Context(handler);
+
+						context.AppendInstruction(IRInstruction.FilterStart, exceptionObject);
+					}
 				}
 			}
 		}
