@@ -683,7 +683,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// Result is the this pointer, now invoke the real constructor
-			List<Operand> operands = new List<Operand>(context.Operands);
+			var operands = new List<Operand>(context.Operands);
 			operands.Insert(0, thisReference);
 
 			ProcessInvokeInstruction(context, context.InvokeMethod, null, operands);
@@ -799,7 +799,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Throw(Context context)
 		{
-			context.SetInstruction(IRInstruction.Throw, context.Result, context.Operand1);
+			throw new InvalidCompilerException();
 		}
 
 		/// <summary>
@@ -1373,10 +1373,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Leave(Context context)
 		{
-			// If leave is inside a protected region it should have been processed by another stage and removed.
-			// If we reach here then the leave is not inside a protected region and must act like a branch.
-			// We must also tell the compiler to link the two blocks together
-			context.ReplaceInstructionOnly(IRInstruction.Jmp);
+			throw new InvalidCompilerException();
 		}
 
 		/// <summary>
@@ -1403,7 +1400,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Endfilter(Context context)
 		{
-			context.SetInstruction(IRInstruction.FilterEnd, context.Operand1);
+			throw new InvalidCompilerException();
+
+			// Move this transformation to ProtectedRegionStage
+			//context.SetInstruction(IRInstruction.FilterEnd, context.Operand1);
 		}
 
 		/// <summary>

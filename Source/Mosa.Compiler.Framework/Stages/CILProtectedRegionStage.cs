@@ -10,15 +10,12 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// This stage inserts IR instructions related to protected regions.
 	/// </summary>
-	public class ProtectedRegionStage : BaseMethodCompilerStage
+	public class CILProtectedRegionStage : BaseMethodCompilerStage
 	{
 		private MosaType exceptionType;
 
 		protected override void Run()
 		{
-			if (!HasProtectedRegions)
-				return;
-
 			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
 
 			InsertBlockProtectInstructions();
@@ -60,39 +57,45 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				var context = new Context(block.Last);
-
-				while (context.IsEmpty || context.IsBlockEndInstruction || context.Instruction == IRInstruction.Flow)
+				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					context.GotoPrevious();
-				}
+					if (node.IsEmpty)
+						continue;
 
-				if (context.Instruction is LeaveInstruction) // CIL.LeaveInstruction
-				{
-					var leaveBlock = context.BranchTargets[0];
-
-					// Find enclosing try or finally handler
-					var exceptionContext = FindImmediateExceptionContext(context.Label);
-
-					bool InTryContext = exceptionContext.IsLabelWithinTry(context.Label);
-
-					if (!InTryContext)
+					if (node.Instruction is LeaveInstruction) // CIL.LeaveInstruction
 					{
-						// Within exception handler
-						context.SetInstruction(IRInstruction.ExceptionEnd);
-					}
-					else
-					{
-						context.SetInstruction(IRInstruction.TryEnd);
-					}
+						var leaveBlock = node.BranchTargets[0];
 
-					context.AppendInstruction(IRInstruction.SetLeaveTarget, leaveBlock);
-					context.AppendInstruction(IRInstruction.GotoLeaveTarget);
-				}
-				else if (context.Instruction is EndFinallyInstruction) // CIL.Endfinally
-				{
-					context.SetInstruction(IRInstruction.FinallyEnd);
-					context.AppendInstruction(IRInstruction.GotoLeaveTarget);
+						// Find enclosing try or finally handler
+						var exceptionContext = FindImmediateExceptionContext(node.Label);
+
+						bool InTryContext = exceptionContext.IsLabelWithinTry(node.Label);
+
+						var ctx = new Context(node);
+
+						if (!InTryContext)
+						{
+							// Within exception handler
+							ctx.SetInstruction(IRInstruction.ExceptionEnd);
+						}
+						else
+						{
+							ctx.SetInstruction(IRInstruction.TryEnd);
+						}
+						ctx.AppendInstruction(IRInstruction.SetLeaveTarget, leaveBlock);
+						ctx.AppendInstruction(IRInstruction.GotoLeaveTarget);
+					}
+					else if (node.Instruction is EndFinallyInstruction) // CIL.Endfinally
+					{
+						var ctx = new Context(node);
+
+						ctx.SetInstruction(IRInstruction.FinallyEnd);
+						ctx.AppendInstruction(IRInstruction.GotoLeaveTarget);
+					}
+					else if (node.Instruction is ThrowInstruction) // CIL.Throw
+					{
+						node.SetInstruction(IRInstruction.Throw, node.Result, node.Operand1);
+					}
 				}
 			}
 		}
