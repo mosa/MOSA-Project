@@ -536,69 +536,83 @@ namespace Mosa.Test.Collection
 			throw new Exception();
 		}
 
-		//public static int ExceptionTest11()
-		//{
-		//	int a = 10;
+		public static int ExceptionTest11()
+		{
+			int a = 10;
 
-		//	try
-		//	{
-		//		a = a + 2;
+			try
+			{
+				a = a + 2;
 
-		//		throw new Exception();
-		//	}
-		//	catch
-		//	{
-		//		a = a + 50;
-		//	}
+				throw new Exception();
+			}
+			catch
+			{
+				a = a + 50;
+			}
 
-		//	a = a + 7;
+			a = a + 7;
 
-		//	return a;
-		//}
+			return a;
+		}
 
-		//public static int ExceptionTest12()
-		//{
-		//	int a = 10;
+		public static int ExceptionTest12()
+		{
+			int a = 10;
 
-		//	try
-		//	{
-		//		a = a + 2;
+			try
+			{
+				a = a + 2;
 
-		//		throw new Exception();
-		//	}
-		//	catch
-		//	{
-		//		a = a + 50;
-		//	}
-		//	finally
-		//	{
-		//		a = a + 25;
-		//	}
+				throw new Exception();
+			}
+			catch
+			{
+				a = a + 50;
+			}
+			finally
+			{
+				a = a + 25;
+			}
 
-		//	a = a + 7;
+			a = a + 7;
 
-		//	return a;
-		//}
+			return a;
+		}
 
-		//public static int ExceptionTest13()
-		//{
-		//	int a = 10;
+		public static int ExceptionTest13()
+		{
+			try
+			{
+				int a = ExceptionTest13b();
+			}
+			catch
+			{
+				return 123;
+			}
 
-		//	try
-		//	{
-		//		a = a + 2;
+			return 321;
+		}
 
-		//		throw new Exception();
-		//	}
-		//	finally
-		//	{
-		//		a = a + 25;
-		//	}
+		public static int ExceptionTest13b()
+		{
+			int a = 10;
 
-		//	a = a + 7;
+			try
+			{
+				a = a + 2;
 
-		//	return a;
-		//}
+				throw new Exception();
+			}
+			finally
+			{
+				a = a + 25;
+			}
+
+			a = a + 7;
+
+			return a;
+		}
 
 		//public static int _ExceptionTest20()
 		//{
