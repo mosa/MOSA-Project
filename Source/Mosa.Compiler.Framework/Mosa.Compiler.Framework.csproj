@@ -221,7 +221,7 @@
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
     <Compile Include="StackLayout.cs" />
     <Compile Include="Stages\PlugStage.cs" />
-    <Compile Include="Stages\ProtectedRegionStage.cs" />
+    <Compile Include="Stages\CILProtectedRegionStage.cs" />
     <Compile Include="IR\ExceptionStart.cs" />
     <Compile Include="Stages\MetadataStage.cs" />
     <Compile Include="Stages\EnterSSAStage.cs" />
