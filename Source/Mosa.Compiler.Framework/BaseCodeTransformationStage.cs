@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework
 
 					instructionCount++;
 
-					Context ctx = new Context(node);
+					var ctx = new Context(node);
 
 					ctx.Visit(this);
 				}

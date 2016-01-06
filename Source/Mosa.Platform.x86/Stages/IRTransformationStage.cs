@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Visitation function for AddSigned.
 		/// </summary>
-		/// <param name="context">Initializeontext.</param>
+		/// <param name="context">The context.</param>
 		void IIRVisitor.AddSigned(Context context)
 		{
 			context.ReplaceInstructionOnly(X86.Add);
@@ -1106,39 +1106,7 @@ namespace Mosa.Platform.x86.Stages
 			else
 				throw new NotSupportedException();
 		}
-
-		///// <summary>
-		///// Visitation function for StackLoad.
-		///// </summary>
-		///// <param name="context">The context.</param>
-		//void IIRVisitor.StackLoad(Context context)
-		//{
-		//}
-
-		///// <summary>
-		///// Visitation function for StackStore.
-		///// </summary>
-		///// <param name="context">The context.</param>
-		//void IIRVisitor.StackStore(Context context)
-		//{
-		//}
-
-		///// <summary>
-		///// Visitation function for ParamLoad.
-		///// </summary>
-		///// <param name="context">The context.</param>
-		//void IIRVisitor.ParamLoad(Context context)
-		//{
-		//}
-
-		///// <summary>
-		///// Visitation function for ParamStore.
-		///// </summary>
-		///// <param name="context">The context.</param>
-		//void IIRVisitor.ParamStore(Context context)
-		//{
-		//}
-
+		
 		#endregion IIRVisitor
 
 		#region IIRVisitor - Unused

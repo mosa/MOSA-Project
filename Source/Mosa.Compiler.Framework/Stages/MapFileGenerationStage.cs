@@ -3,6 +3,7 @@
 using Mosa.Compiler.Linker;
 using System;
 using System.IO;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -21,17 +22,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private TextWriter writer;
 
 		#endregion Data members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MapFileGenerationStage"/> class.
-		/// </summary>
-		public MapFileGenerationStage()
-		{
-		}
-
-		#endregion Construction
 
 		protected override void Setup()
 		{
@@ -89,7 +79,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var section in linker.Sections)
 			{
-				//foreach (var symbol in section.Ordered)
 				foreach (var symbol in section.Symbols)
 				{
 					writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.SectionOffset, symbol.VirtualAddress, symbol.Size, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
