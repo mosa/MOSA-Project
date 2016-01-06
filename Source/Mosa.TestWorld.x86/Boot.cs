@@ -85,8 +85,6 @@ namespace Mosa.TestWorld.x86
 
 			KernelTest.RunTests();
 
-			Console.WriteLine();
-
 			DumpStackTrace();
 
 			//System.Threading.SpinLock splk = new System.Threading.SpinLock();

@@ -31,6 +31,7 @@ namespace Mosa.Tool.TinySimulator
 		private BreakPointView breakPointView;
 		private OutputView outputView;
 		private ScriptView scriptView;
+		private DisassemblyView disassemblyView;
 
 		public MosaCompiler Compiler = new MosaCompiler();
 
@@ -85,6 +86,7 @@ namespace Mosa.Tool.TinySimulator
 			breakPointView = new BreakPointView(this);
 			outputView = new OutputView(this);
 			scriptView = new ScriptView(this);
+			disassemblyView = new DisassemblyView(this);
 
 			Thread.CurrentThread.Priority = ThreadPriority.Highest;
 			worker = new Thread(ExecuteThread);
@@ -129,6 +131,7 @@ namespace Mosa.Tool.TinySimulator
 			flagView.Show(dockPanel, DockState.DockRight);
 			stackView.Show(dockPanel, DockState.DockRight);
 			stackFrameView.Show(dockPanel, DockState.DockRight);
+			disassemblyView.Show(dockPanel, DockState.DockRight);
 
 			registersView.Show();
 
@@ -506,12 +509,11 @@ namespace Mosa.Tool.TinySimulator
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			if (SimCPU == null)
-				return;
-
 			Stop();
 
 			worker.Abort();
+
+			Application.Exit();
 		}
 
 		public void AddWatch(string name, ulong address, int size)
