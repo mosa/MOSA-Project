@@ -19,3 +19,8 @@ dnlib (dnlib.dll)
 - https://bitbucket.org/0xd4d/dnlib
 - The MIT License
 - Used in the MOSA Compiler Type System
+
+SharpDisasm
+-- https://github.com/spazzarama/SharpDisasm
+-- Simplified BSD License
+-- Used in MOSA for debugging & diagnostic purposes

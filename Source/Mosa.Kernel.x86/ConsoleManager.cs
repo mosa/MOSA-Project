@@ -14,7 +14,7 @@ namespace Mosa.Kernel.x86
 		public ConsoleSession Boot;
 		public ConsoleSession Debug;
 
-		public ConsoleSession Active { get { return active; } set { Change(value); } }
+		public ConsoleSession Active { get { return active; } set { Switch(value); } }
 
 		public static void Setup()
 		{
@@ -23,12 +23,17 @@ namespace Mosa.Kernel.x86
 
 		public ConsoleManager()
 		{
-			Boot = new ConsoleSession(this);
-			Debug = new ConsoleSession(this);
+			Boot = CreateSeason();
+			Debug = CreateSeason();
 			active = Boot;
 		}
 
-		public void Change(ConsoleSession console)
+		public ConsoleSession CreateSeason()
+		{
+			return new ConsoleSession(this);
+		}
+
+		public void Switch(ConsoleSession console)
 		{
 			if (console == active)
 				return;
@@ -40,11 +45,11 @@ namespace Mosa.Kernel.x86
 					char chr = console.GetText(column, row);
 					byte color = console.GetColor(column, row);
 
-					Mosa.Kernel.x86.Screen.RawWrite(row, column, chr, color);
+					Screen.RawWrite(row, column, chr, color);
 				}
 			}
 
-			Mosa.Kernel.x86.Screen.Goto(console.Row, console.Column);
+			Screen.Goto(console.Row, console.Column);
 			UpdateCursor(console);
 
 			active = console;
@@ -52,7 +57,7 @@ namespace Mosa.Kernel.x86
 
 		public void UpdateCursor(ConsoleSession console)
 		{
-			Mosa.Kernel.x86.Screen.SetCursor(console.Row, console.Column);
+			Screen.SetCursor(console.Row, console.Column);
 		}
 
 		public void RawWrite(ConsoleSession console, uint row, uint column, char chr, byte color)
@@ -60,7 +65,7 @@ namespace Mosa.Kernel.x86
 			if (console != active)
 				return;
 
-			Mosa.Kernel.x86.Screen.RawWrite(row, column, chr, color);
+			Screen.RawWrite(row, column, chr, color);
 		}
 	}
 }

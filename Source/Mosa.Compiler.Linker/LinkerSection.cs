@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Linker
 
 		private Dictionary<string, LinkerSymbol> symbolLookup;
 
-		public string Name { get; private set; }
+		public string Name { get { return SectionKind.ToString(); } }
 
 		public SectionKind SectionKind { get; private set; }
 

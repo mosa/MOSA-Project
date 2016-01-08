@@ -2,6 +2,7 @@
 
 using System.IO;
 using Mosa.FileSystem.VFS;
+using Mosa.FileSystem.FAT.Vfs;
 
 namespace Mosa.FileSystem.FAT
 {
@@ -27,17 +28,17 @@ namespace Mosa.FileSystem.FAT
 		}
 
 		/// <summary>
-		/// Creates a new filesystem entry of the given name and type.
+		/// Creates a new file system entry of the given name and type.
 		/// </summary>
-		/// <param name="name">The name of the filesystem entry to create.</param>
-		/// <param name="type">The type of the filesystem entry. See remarks.</param>
-		/// <param name="settings">Potential settings for the file systeme entry.</param>
+		/// <param name="name">The name of the file system entry to create.</param>
+		/// <param name="type">The type of the file system entry. See remarks.</param>
+		/// <param name="settings">Potential settings for the file system entry.</param>
 		/// <returns>
 		/// The created file system node for the requested object.
 		/// </returns>
-		/// <exception cref="System.NotSupportedException">The specified nodetype is not supported in the filesystem owning the node. See remarks about this.</exception>
+		/// <exception cref="System.NotSupportedException">The specified node type is not supported in the file system owning the node. See remarks about this.</exception>
 		/// <remarks>
-		/// In theory every filesystem should support any VfsNodeType. Standard objects, such as directories and files are obvious. For other objects however, the
+		/// In theory every file system should support any VfsNodeType. Standard objects, such as directories and files are obvious. For other objects however, the
 		/// file system is encouraged to store the passed settings in a specially marked file and treat these files as the appropriate node type. Instances of these
 		/// objects can be retrieved using VfsObjectFactory.Create(settings).
 		/// <para/>
@@ -54,7 +55,7 @@ namespace Mosa.FileSystem.FAT
 		/// <returns></returns>
 		public override IVfsNode Lookup(string name)
 		{
-			FatFileLocation location = (FileSystem as VfsFileSystem).FAT.FindEntry(new Find.WithName(name), this.directoryCluster);
+			var location = (FileSystem as VfsFileSystem).Fat.FindEntry(new Find.WithName(name), this.directoryCluster);
 
 			if (!location.IsValid)
 				return null;
@@ -74,8 +75,8 @@ namespace Mosa.FileSystem.FAT
 		/// An object instance, which represents the node.
 		/// </returns>
 		/// <remarks>
-		/// This method is central to the entire VFS. It allows for interaction with filesystem entries in a way not possible
-		/// with classical operating systems. The result of this function is heavily dependant on the item represented by the node, e.g.
+		/// This method is central to the entire VFS. It allows for interaction with file system entries in a way not possible
+		/// with classical operating systems. The result of this function is heavily dependent on the item represented by the node, e.g.
 		/// for a classic file (stream of bytes) the result of this method call would be a System.IO.Stream. For a device the result would
 		/// be the driver object, for a directory it would be a System.IO.DirectoryInfo object, for kernel objects the respective object such
 		/// as System.Threading.EventWaitHandle, System.Threading.Mutex, System.Threading.Thread, System.Diagnostics.Process etc. Note: The object
@@ -99,11 +100,11 @@ namespace Mosa.FileSystem.FAT
 		/// <exception cref="System.NotSupportedException">The object does not support removal this way. There's most likely an object specific API to remove this IVfsNode.</exception>
 		public override void Delete(IVfsNode child, DirectoryEntry dentry)
 		{
-			FatFileSystem fs = this.FileSystem as FatFileSystem;
+			var fs = this.FileSystem as FatFileSystem;
 
 			uint targetCluster = (child as VfsDirectory).directoryCluster;
 
-			FatFileLocation location = fs.FindEntry(new Find.ByCluster(targetCluster), this.directoryCluster);
+			var location = fs.FindEntry(new Find.ByCluster(targetCluster), this.directoryCluster);
 
 			if (!location.IsValid)
 				throw new System.ArgumentException(); //throw new IOException ("Unable to delete directory because it is not empty");

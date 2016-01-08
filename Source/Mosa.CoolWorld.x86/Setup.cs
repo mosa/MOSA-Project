@@ -4,6 +4,7 @@ using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 using System.Collections.Generic;
+using Mosa.FileSystem.FAT;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -16,6 +17,7 @@ namespace Mosa.CoolWorld.x86
 		static private IDeviceManager deviceManager;
 		static private IResourceManager resourceManager;
 		static private PCIControllerManager pciControllerManager;
+		static private PartitionManager partitionManager;
 
 		/// <summary>
 		/// Gets the device driver library
@@ -40,7 +42,10 @@ namespace Mosa.CoolWorld.x86
 		/// </summary>
 		static public PCIControllerManager PCIControllerManager { get { return pciControllerManager; } }
 
+		static public PartitionManager PartitionManager { get { return partitionManager; } }
+
 		static public StandardKeyboard Keyboard = null;
+
 		static public CMOS CMOS = null;
 
 		/// <summary>
@@ -59,6 +64,8 @@ namespace Mosa.CoolWorld.x86
 
 			// Create the PCI Controller Manager
 			pciControllerManager = new PCIControllerManager(deviceManager);
+
+			partitionManager = new PartitionManager(deviceManager);
 
 			// Setup hardware abstraction interface
 			var hardwareAbstraction = new Mosa.CoolWorld.x86.HAL.HardwareAbstraction();
@@ -107,12 +114,39 @@ namespace Mosa.CoolWorld.x86
 			Boot.Console.Write("Finding disks...");
 			var disks = deviceManager.GetDevices(new FindDevice.IsDiskDevice());
 			Boot.Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
-			foreach (var device in disks)
+			foreach (var disk in disks)
 			{
 				Boot.Console.Write("Spinning up disk ");
-				Boot.InBrackets(device.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
-				Boot.Console.Write(" " + (device as IDiskDevice).TotalBlocks.ToString() + " blocks");
+				Boot.InBrackets(disk.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
+				Boot.Console.Write(" " + (disk as IDiskDevice).TotalBlocks.ToString() + " blocks");
 				Boot.Console.WriteLine();
+			}
+
+			partitionManager.CreatePartitionDevices();
+
+			Boot.Console.Write("Finding partitions...");
+			var partitions = deviceManager.GetDevices(new FindDevice.IsPartitionDevice());
+			Boot.Console.WriteLine("[Completed: " + partitions.Count.ToString() + " found]");
+			foreach (var partition in partitions)
+			{
+				Boot.Console.Write("Opening partition: ");
+				Boot.InBrackets(partition.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
+				Boot.Console.Write(" " + (partition as IPartitionDevice).BlockCount.ToString() + " blocks");
+				Boot.Console.WriteLine();
+			}
+
+			Boot.Console.Write("Finding file systems...");
+			var filesystem = deviceManager.GetDevices(new FindDevice.IsPartitionDevice());
+
+			//Boot.Console.WriteLine("[Completed: " + filesystem.Count.ToString() + " found]");
+			foreach (var partition in partitions)
+			{
+				var fat = new FatFileSystem(partition as IPartitionDevice);
+
+				if (fat.IsValid)
+				{
+					Boot.Console.WriteLine("Found a FAT file system!");
+				}
 			}
 		}
 
@@ -286,10 +320,5 @@ namespace Mosa.CoolWorld.x86
 				}
 			}
 		}
-
-		//public static Mosa.FileSystem.FAT.FatFileAttributes DummyReference()
-		//{
-		//	return FileSystem.FAT.FatFileAttributes.Archive;
-		//}
 	}
 }

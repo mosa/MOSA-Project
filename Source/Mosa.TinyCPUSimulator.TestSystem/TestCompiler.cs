@@ -68,6 +68,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			Compiler.Load(TypeSystem.Load(moduleLoader.CreateMetadata()));
 
+			//var threads = Compiler.CompilerOptions.UseMultipleThreadCompiler ? Environment.ProcessorCount : 1;
+			//Compiler.Execute(threads);
 			Compiler.Execute(Environment.ProcessorCount);
 
 			linker = Compiler.Linker as SimLinker;

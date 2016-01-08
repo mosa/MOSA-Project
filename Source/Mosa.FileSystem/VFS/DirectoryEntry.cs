@@ -322,7 +322,7 @@ namespace Mosa.FileSystem.VFS
 		/// its parent is itself. This provides for the ability to cd .. on the root to stay on the root.
 		/// <para/>
 		/// The next ability is to create specialized root directories to isolate processes from the remainder
-		/// of the filesystem. Setting a root directory created using this method effectively limits the process
+		/// of the file system. Setting a root directory created using this method effectively limits the process
 		/// to access inside of the newly created namespace.
 		/// </remarks>
 		public static DirectoryEntry AllocateRoot(IVfsNode node)

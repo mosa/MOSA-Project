@@ -74,7 +74,6 @@
   <ItemGroup>
     <Compile Include="FAT\FatFileAttributes.cs" />
     <Compile Include="FAT\FatType.cs" />
-    <Compile Include="FAT\Find\Any.cs" />
     <Compile Include="FAT\Find\WithName.cs" />
     <Compile Include="FAT\Find\Volume.cs" />
     <Compile Include="FAT\Find\ByCluster.cs" />
@@ -92,7 +91,7 @@
     <Compile Include="FAT\FatFileSystem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FAT\FatService.cs">
+    <Compile Include="FAT\FatFileSystemDevice.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FAT\FatFileStream.cs">
@@ -101,13 +100,13 @@
     <Compile Include="FAT\FatSettings.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FAT\VfsDirectory.cs">
+    <Compile Include="FAT\Vfs\VfsDirectory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FAT\VfsFile.cs">
+    <Compile Include="FAT\Vfs\VfsFile.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FAT\VfsFileSystem.cs">
+    <Compile Include="FAT\Vfs\VfsFileSystem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="VFS\AccessCheck.cs">

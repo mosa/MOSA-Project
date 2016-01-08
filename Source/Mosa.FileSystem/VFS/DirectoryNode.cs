@@ -18,7 +18,7 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// Initializes a new instance of the DirectoryNode object.
 		/// </summary>
-		/// <param name="fs">The filesystem, which owns the node.</param>
+		/// <param name="fs">The file system, which owns the node.</param>
 		public DirectoryNode(IFileSystem fs)
 			: base(fs, VfsNodeType.Directory)
 		{

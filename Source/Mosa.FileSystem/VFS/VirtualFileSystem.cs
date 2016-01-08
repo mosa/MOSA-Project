@@ -82,16 +82,16 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// Creates a new node in the (virtual) filesystem.
+		/// Creates a new node in the (virtual) file system.
 		/// </summary>
 		/// <param name="path">The path to create.</param>
 		/// <param name="type">The type of the node to create.</param>
 		/// <param name="settings">Settings used to initialize the node.</param>
 		/// <param name="access">Requests the specified access modes on the created object.</param>
 		/// <param name="share">Requests the specified sharing settings on the object.</param>
-		/// <returns>The created filesystem object.</returns>
+		/// <returns>The created file system object.</returns>
 		/// <remarks>
-		/// This function creates new nodes in the virtual filesystem. In contrast to *nix this call
+		/// This function creates new nodes in the virtual file system. In contrast to *nix this call
 		/// creates all node types, e.g. files, directories, devices and more. Specific types may
 		/// require additional settings, which are specified in a settings object passed as the third
 		/// parameter.
@@ -126,7 +126,7 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// Deletes the named node from the filesystem.
+		/// Deletes the named node from the file system.
 		/// </summary>
 		/// <param name="path">The path, which identifies a node.</param>
 		public static void Delete(string path)
@@ -145,8 +145,8 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// Mounts a new file system.
 		/// </summary>
-		/// <param name="source">The source of the filesystem. This is usually a device name, but can also be another directory.</param>
-		/// <param name="target">The path including the name of the mount point, where to mount the new filesystem.</param>
+		/// <param name="source">The source of the file system. This is usually a device name, but can also be another directory.</param>
+		/// <param name="target">The path including the name of the mount point, where to mount the new file system.</param>
 		public static void Mount(string source, string target)
 		{
 			// Retrieve the parent directory of the mount
@@ -155,12 +155,12 @@ namespace Mosa.FileSystem.VFS
 			if (parent == null)
 				throw new System.ArgumentException();
 
-			IFileSystem root = FileSystemFactory.CreateFileSystem(source);
+			var root = FileSystemFactory.CreateFileSystem(source);
 
 			if (root == null)
 				throw new System.ArgumentException();
 
-			PathSplitter path = new PathSplitter(target);
+			var path = new PathSplitter(target);
 			DirectoryEntry.Allocate(parent, path.Last, root.Root);
 		}
 
@@ -173,16 +173,16 @@ namespace Mosa.FileSystem.VFS
 		/// <returns></returns>
 		public static object Open(string path, System.IO.FileAccess access, System.IO.FileShare share)
 		{
-			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path);
+			var entry = PathResolver.Resolve(rootNode, ref path);
 
 			/* HINT:
 			 *
 			 * 1. Do we really need to pass the FileShare flags down to the inode?
 			 * 2. Shouldn't we have some sort of lock deamon governing shared access?
 			 *
-			 * Ansers:
+			 * Answers:
 			 * 1. Yes.
-			 * 2. Yes and no. A lock deamon would only work for local filesystems. For imported
+			 * 2. Yes and no. A lock deamon would only work for local file systems. For imported
 			 *    ones we need to notify the server of the sharing lock anyway, so that the IVfsNode
 			 *    (acting as a client to the server) is the best place to do it without giving the
 			 *    lock deamon knowledge of all file sharing protocols (afp, smb, ftp, name it.)
@@ -262,11 +262,11 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// Unmounts the filesystem rooted at the given path.
+		/// Unmounts the file system rooted at the given path.
 		/// </summary>
-		/// <param name="path">The path identifying the filesystem to unmount.</param>
+		/// <param name="path">The path identifying the file system to unmount.</param>
 		/// <remarks>
-		/// In contrast to Posix this does not have to be the root directory of the filesystem. Any path in the filesystem will unmount the
+		/// In contrast to Posix this does not have to be the root directory of the file system. Any path in the file system will unmount the
 		/// entire tree.
 		/// </remarks>
 		/// FIXME: Which exceptions can be thrown.

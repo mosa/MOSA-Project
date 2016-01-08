@@ -64,6 +64,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdParty\dnlib.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDisasm, Version=1.0.2.0, Culture=neutral, PublicKeyToken=71afd155bcebae3e, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDisasm.1.0.2\lib\net45\SharpDisasm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -98,6 +102,12 @@
     </Compile>
     <Compile Include="OutputView.designer.cs">
       <DependentUpon>OutputView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DisassemblyView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DisassemblyView.designer.cs">
+      <DependentUpon>DisassemblyView.cs</DependentUpon>
     </Compile>
     <Compile Include="Watch.cs" />
     <Compile Include="WatchView.cs">
@@ -204,6 +214,9 @@
     <EmbeddedResource Include="BreakPointView.resx">
       <DependentUpon>BreakPointView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DisassemblyView.resx">
+      <DependentUpon>DisassemblyView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ScriptView.resx">
       <DependentUpon>ScriptView.cs</DependentUpon>
     </EmbeddedResource>
@@ -309,6 +322,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
