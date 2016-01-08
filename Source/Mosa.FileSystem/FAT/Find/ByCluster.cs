@@ -6,7 +6,7 @@ namespace Mosa.FileSystem.FAT.Find
 {
 	/// <summary>
 	///
-	/// internalsummary>
+	/// </summary>
 	public class ByCluster : FatFileSystem.ICompare
 	{
 		/// <summary>
