@@ -14,7 +14,7 @@ namespace Mosa.Application
 			Console.WriteLine("*** MOSA Credits ****");
 			Console.WriteLine(" Phil Garcia");
 			Console.WriteLine(" Simon Wollwage");
-			Console.WriteLine(" Michael Fröhlich");
+			Console.WriteLine(" Michael Frohlich");
 			Console.WriteLine(" Stefan Andres Charsley");
 			Console.WriteLine(" Chin Ki Yuen");
 			Console.WriteLine(" Patrick Reisert");
