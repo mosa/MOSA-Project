@@ -116,6 +116,7 @@ namespace Mosa.Tool.TinySimulator
 			statusView.Show(dockPanel, DockState.DockTop);
 			controlView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
 			callStackView.Show(controlView.PanelPane, DockAlignment.Bottom, 0.50);
+			disassemblyView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
 
 			breakPointView.Show(dockPanel, DockState.DockBottom);
 			watchView.Show(breakPointView.PanelPane, DockAlignment.Right, 0.50);
@@ -131,7 +132,6 @@ namespace Mosa.Tool.TinySimulator
 			flagView.Show(dockPanel, DockState.DockRight);
 			stackView.Show(dockPanel, DockState.DockRight);
 			stackFrameView.Show(dockPanel, DockState.DockRight);
-			disassemblyView.Show(dockPanel, DockState.DockRight);
 
 			registersView.Show();
 

@@ -48,7 +48,7 @@ namespace Mosa.Utility.BootImage
 			string filename = "ldlinux.sys";
 			string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(4).Substring(0, 4)).ToUpper();
 
-			var location = fat.FindEntry(new Mosa.FileSystem.FAT.Find.WithName(name), 0);
+			var location = fat.FindEntry(name);
 
 			if (!location.IsValid)
 				throw new InvalidProgramException("Unable to find syslinux.sys");
@@ -171,7 +171,7 @@ namespace Mosa.Utility.BootImage
 			string filename = "ldlinux.sys";
 			string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(4).Substring(0, 4)).ToUpper();
 
-			var location = fat.FindEntry(new Mosa.FileSystem.FAT.Find.WithName(name), 0);
+			var location = fat.FindEntry(name);
 
 			if (location.IsValid)
 			{

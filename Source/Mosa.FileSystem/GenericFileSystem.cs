@@ -18,22 +18,24 @@ namespace Mosa.FileSystem
 		/// <summary>
 		///
 		/// </summary>
-		protected uint blockSize;
+		public uint BlockSize { get; protected set; }
 
 		/// <summary>
 		///
 		/// </summary>
-		protected bool valid;
+		public bool IsValid { get; protected set; }
 
 		/// <summary>
-		///
+		/// Gets the volume label.
 		/// </summary>
-		protected string volumeLabel;
+		/// <value>The volume label.</value>
+		public string VolumeLabel { get; protected set; }
 
 		/// <summary>
-		///
+		/// Gets the serial number.
 		/// </summary>
-		protected byte[] serialNbr;
+		/// <value>The serial number.</value>
+		public byte[] SerialNumber { get; protected set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GenericFileSystem"/> class.
@@ -42,10 +44,10 @@ namespace Mosa.FileSystem
 		public GenericFileSystem(IPartitionDevice partition)
 		{
 			this.partition = partition;
-			this.blockSize = partition.BlockSize;
-			this.valid = false;
-			this.volumeLabel = string.Empty;
-			this.serialNbr = new byte[0];
+			this.BlockSize = partition.BlockSize;
+			this.IsValid = false;
+			this.VolumeLabel = string.Empty;
+			this.SerialNumber = new byte[0];
 		}
 
 		/// <summary>
@@ -53,23 +55,5 @@ namespace Mosa.FileSystem
 		/// </summary>
 		/// <returns></returns>
 		public abstract IFileSystem CreateVFSMount();
-
-		/// <summary>
-		/// Gets a value indicating whether this <see cref="GenericFileSystem"/> is valid.
-		/// </summary>
-		/// <value><c>true</c> if valid; otherwise, <c>false</c>.</value>
-		public bool IsValid { get { return valid; } }
-
-		/// <summary>
-		/// Gets the volume label.
-		/// </summary>
-		/// <value>The volume label.</value>
-		public string VolumeLabel { get { return volumeLabel; } }
-
-		/// <summary>
-		/// Gets the serial number.
-		/// </summary>
-		/// <value>The serial number.</value>
-		public byte[] SerialNumber { get { return serialNbr; } }
 	}
 }

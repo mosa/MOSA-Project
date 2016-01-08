@@ -23,7 +23,7 @@ namespace Mosa.FileSystem.VFS
 		Directory,
 
 		/// <summary>
-		/// A symbolic link in the (virtual) filesystem.
+		/// A symbolic link in the (virtual) file system.
 		/// </summary>
 		SymbolicLink,
 

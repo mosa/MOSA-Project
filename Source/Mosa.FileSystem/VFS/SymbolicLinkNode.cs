@@ -84,7 +84,7 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="dentry"></param>
 		public override void Delete(IVfsNode child, DirectoryEntry dentry)
 		{
-			// FIXME: Delete the symbolic link from the filesystem, after all names have been dropped.
+			// FIXME: Delete the symbolic link from the file system, after all names have been dropped.
 			throw new System.NotSupportedException();
 		}
 

@@ -7,7 +7,7 @@ namespace Mosa.FileSystem.FAT.Find
 	/// <summary>
 	///
 	/// </summary>
-	public class WithName : FatFileSystem.ICompare
+	internal class WithName : FatFileSystem.ICompare
 	{
 		/// <summary>
 		///

@@ -14,10 +14,10 @@ namespace Mosa.Tool.TinySimulator
 			InitializeComponent();
 		}
 
-		static private byte[] raw = new byte[16];
-
 		public string GetInstruction(ulong location)
 		{
+			var raw = new byte[16];
+
 			// read the 16 bytes (max instruction length on x86 is 15 bytes) from EIP
 			for (int i = 0; i < 15; i = i + 4)
 			{

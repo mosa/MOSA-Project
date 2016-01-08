@@ -3,7 +3,6 @@
 using Mosa.Kernel.x86;
 using Mosa.Platform.Internal.x86;
 using Mosa.TestWorld.x86.Tests;
-using System.Diagnostics;
 
 namespace Mosa.TestWorld.x86
 {
@@ -131,8 +130,6 @@ namespace Mosa.TestWorld.x86
 
 				if (methodDef == null)
 					return;
-
-				Debug.Assert(methodDef != null, "methodDef == null");
 
 				string caller = Runtime.GetMethodDefinitionName(methodDef);
 
