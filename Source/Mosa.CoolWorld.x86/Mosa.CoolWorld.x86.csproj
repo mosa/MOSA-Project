@@ -27,7 +27,6 @@
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
-
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -71,6 +70,15 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Mosa.Application\Credits.cs" />
+    <Compile Include="Mosa.Application\Mem.cs" />
+    <Compile Include="Mosa.AppSystem\AppOutputStream.cs" />
+    <Compile Include="Mosa.AppSystem\AppConsole.cs" />
+    <Compile Include="Mosa.AppSystem\AppManager.cs" />
+    <Compile Include="Mosa.Application\BaseApplication.cs" />
+    <Compile Include="Mosa.AppSystem\AppInputStream.cs" />
+    <Compile Include="Mosa.Application\Shell.cs" />
+    <Compile Include="Mosa.AppSystem\IConsoleApp.cs" />
     <Compile Include="Boot.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="HAL\Memory.cs" />
@@ -93,6 +101,10 @@
     <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj">
       <Project>{6509477a-7360-4937-a1b9-26fed0a75cda}</Project>
       <Name>Mosa.DeviceSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj">
+      <Project>{d89972fd-a930-4d0c-b393-1895e78fafab}</Project>
+      <Name>Mosa.FileSystem</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Internal\Mosa.Internal.csproj">
       <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>

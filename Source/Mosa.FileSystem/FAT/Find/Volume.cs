@@ -7,20 +7,8 @@ namespace Mosa.FileSystem.FAT.Find
 	/// <summary>
 	///
 	/// </summary>
-	public class Volume : FatFileSystem.ICompare
+	internal class Volume : FatFileSystem.ICompare
 	{
-		/// <summary>
-		///
-		/// </summary>
-		protected uint cluster;
-
-		/// <summary>
-		///
-		/// </summary>
-		public Volume()
-		{
-		}
-
 		/// <summary>
 		/// Compares the specified data.
 		/// </summary>

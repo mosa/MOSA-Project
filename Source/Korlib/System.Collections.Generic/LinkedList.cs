@@ -30,6 +30,8 @@ namespace System.Collections.Generic
 			}
 		}
 
+		public bool IsEmpty { get { return first == null; } }
+
 		/// <summary>
 		/// Gets the first node of the LinkedList<T>.
 		/// </summary>

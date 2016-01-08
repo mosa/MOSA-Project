@@ -513,10 +513,7 @@ namespace Mosa.Platform.Internal.x86
 
 				if (eip != 0)
 					depth--;
-
-				//else
-				//	depth += 3;
-
+				
 				ebp = GetStackFrame(depth, ebp);
 
 				address = GetReturnAddressFromStackFrame(ebp);

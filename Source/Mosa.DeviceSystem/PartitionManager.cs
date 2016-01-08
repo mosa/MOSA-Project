@@ -29,16 +29,22 @@ namespace Mosa.DeviceSystem
 			// FIXME: Do not create multiple partition devices if this method executed more than once
 
 			// Find all online disk devices
-			foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsDiskDevice(), new FindDevice.IsOnline()))
+			foreach (var device in deviceManager.GetDevices(new FindDevice.IsDiskDevice(), new FindDevice.IsOnline()))
 			{
-				IDiskDevice diskDevice = device as IDiskDevice;
+				var diskDevice = device as IDiskDevice;
 
-				MasterBootBlock mbr = new MasterBootBlock(diskDevice);
+				var mbr = new MasterBootBlock(diskDevice);
 
-				if (mbr.Valid)
-					for (uint i = 0; i < MasterBootBlock.MaxMBRPartitions; i++)
-						if (mbr.Partitions[i].PartitionType != PartitionType.Empty)
-							deviceManager.Add(new PartitionDevice(diskDevice, mbr.Partitions[i], false));
+				if (!mbr.Valid)
+					return;
+
+				for (uint i = 0; i < MasterBootBlock.MaxMBRPartitions; i++)
+				{
+					if (mbr.Partitions[i].PartitionType != PartitionType.Empty)
+					{
+						deviceManager.Add(new PartitionDevice(diskDevice, mbr.Partitions[i], false));
+					}
+				}
 			}
 		}
 	}

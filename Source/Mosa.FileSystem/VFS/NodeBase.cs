@@ -5,7 +5,7 @@ using System.IO;
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
-	/// Provides a default implementation for INodes. A filesystem implementation
+	/// Provides a default implementation for INodes. A file system implementation
 	/// may choose to derive from BasicNode to receive a default implementation of
 	/// the interface.
 	/// </summary>
@@ -14,7 +14,7 @@ namespace Mosa.FileSystem.VFS
 		#region Data members
 
 		/// <summary>
-		/// Holds the filesystem of the node.
+		/// Holds the file system of the node.
 		/// </summary>
 		private IFileSystem fs;
 
@@ -55,17 +55,17 @@ namespace Mosa.FileSystem.VFS
 		public VfsNodeType NodeType { get { return type; } }
 
 		/// <summary>
-		/// Creates a new filesystem entry of the given name and type.
+		/// Creates a new file system entry of the given name and type.
 		/// </summary>
-		/// <param name="name">The name of the filesystem entry to create.</param>
-		/// <param name="type">The type of the filesystem entry. See remarks.</param>
+		/// <param name="name">The name of the file system entry to create.</param>
+		/// <param name="type">The type of the file system entry. See remarks.</param>
 		/// <param name="settings">Potential settings for the file systeme entry.</param>
 		/// <returns>
 		/// The created file system node for the requested object.
 		/// </returns>
-		/// <exception cref="System.NotSupportedException">The specified nodetype is not supported in the filesystem owning the node. See remarks about this.</exception>
+		/// <exception cref="System.NotSupportedException">The specified nodetype is not supported in the file system owning the node. See remarks about this.</exception>
 		/// <remarks>
-		/// In theory every filesystem should support any VfsNodeType. Standard objects, such as directories and files are obvious. For other objects however, the
+		/// In theory every file system should support any VfsNodeType. Standard objects, such as directories and files are obvious. For other objects however, the
 		/// file system is encouraged to store the passed settings in a specially marked file and treat these files as the appropriate node type. Instances of these
 		/// objects can be retrieved using VfsObjectFactory.Create(settings).
 		/// <para/>

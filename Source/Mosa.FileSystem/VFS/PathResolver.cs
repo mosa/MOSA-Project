@@ -68,8 +68,8 @@ namespace Mosa.FileSystem.VFS
 		/// </remarks>
 		public static DirectoryEntry Resolve(DirectoryEntry rootDirectory, ref string path)
 		{
-			// FIXME: Remove the root argument. The filesystem root should be unique for a process as part of a security model similar to jails, e.g. give apps from
-			// untrusted sources their private filesystem regions.
+			// FIXME: Remove the root argument. The file system root should be unique for a process as part of a security model similar to jails, e.g. give apps from
+			// untrusted sources their private file system regions.
 
 			// FIXME: Get the root from the thread execution block
 			DirectoryEntry current = rootDirectory;

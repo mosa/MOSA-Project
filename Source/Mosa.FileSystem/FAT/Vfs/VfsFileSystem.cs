@@ -2,7 +2,7 @@
 
 using Mosa.FileSystem.VFS;
 
-namespace Mosa.FileSystem.FAT
+namespace Mosa.FileSystem.FAT.Vfs
 {
 	/// <summary>
 	///
@@ -10,18 +10,19 @@ namespace Mosa.FileSystem.FAT
 	public class VfsFileSystem : IFileSystemService, IFileSystem
 	{
 		/// <summary>
-		///
+		/// Gets the FAT file system
 		/// </summary>
-		protected FatFileSystem fat;
+		public FatFileSystem Fat { get; private set; }
 
 		/// <summary>
-		/// Gets the FAT.
+		///
 		/// </summary>
-		/// <value>The FAT.</value>
-		public FatFileSystem FAT
-		{
-			get { return fat; }
-		}
+		private VfsDirectory root;
+
+		/// <summary>
+		/// </summary>
+		/// <value></value>
+		public bool IsReadOnly { get { return Fat.IsReadOnly; } }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VfsFileSystem"/> class.
@@ -29,22 +30,22 @@ namespace Mosa.FileSystem.FAT
 		/// <param name="fat">The fat.</param>
 		public VfsFileSystem(FatFileSystem fat)
 		{
-			this.fat = fat;
+			Fat = fat;
 		}
 
 		/// <summary>
-		/// Retrieves the type of the filesystem settings class to pass to IFileSystemService.Format
+		/// Retrieves the type of the file system settings class to pass to IFileSystemService.Format
 		/// </summary>
 		/// <value></value>
-		public GenericFileSystemSettings SettingsType { get { return fat.SettingsType; } }
+		public GenericFileSystemSettings SettingsType { get { return Fat.SettingsType; } }
 
 		/// <summary>
 		/// Mounts a file system from the specified stream/device.
 		/// </summary>
-		/// <returns>The mounted filesystem.</returns>
+		/// <returns>The mounted file system.</returns>
 		/// <remarks>
 		/// File system implementations should not blindly assume that the block device or file really
-		/// contain the expected filesystem. An implementation should run some checks for integrity and
+		/// contain the expected file system. An implementation should run some checks for integrity and
 		/// validity before returning an object implementing IFileSystem.
 		/// <para/>
 		/// Also this method should not throw. In contrast to other operating systems, the user will not
@@ -58,27 +59,14 @@ namespace Mosa.FileSystem.FAT
 		}
 
 		/// <summary>
-		/// Formats the media with the filesystem.
+		/// Formats the media with the file system.
 		/// </summary>
-		/// <param name="settings">The settings for the filesystem to create.</param>
-		/// <returns>The created and mounted filesystem.</returns>
+		/// <param name="settings">The settings for the file system to create.</param>
+		/// <returns>The created and mounted file system.</returns>
 		public bool Format(GenericFileSystemSettings settings)
 		{
-			return (fat.Format(((FatSettings)settings)));
+			return (Fat.Format(((FatSettings)settings)));
 		}
-
-		/// <summary>
-		/// </summary>
-		/// <value></value>
-		public bool IsReadOnly
-		{
-			get { return fat.IsReadOnly; }
-		}
-
-		/// <summary>
-		///
-		/// </summary>
-		private VfsDirectory root;
 
 		/// <summary>
 		/// </summary>
