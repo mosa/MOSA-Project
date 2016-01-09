@@ -21,7 +21,7 @@ namespace Mosa.Kernel.x86
 				// Go allocate memory
 
 				allocated = 1024 * 1024 * 64; // 64Mb
-				heap = x86.ProcessManager.AllocateMemory(0, allocated);
+				heap = VirtualPageAllocator.Reserve(size);
 				used = 0;
 			}
 

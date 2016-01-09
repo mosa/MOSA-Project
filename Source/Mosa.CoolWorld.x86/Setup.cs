@@ -44,7 +44,7 @@ namespace Mosa.CoolWorld.x86
 
 		static public PartitionManager PartitionManager { get { return partitionManager; } }
 
-		static public StandardKeyboard Keyboard = null;
+		static public StandardKeyboard StandardKeyboard = null;
 
 		static public CMOS CMOS = null;
 
@@ -96,7 +96,7 @@ namespace Mosa.CoolWorld.x86
 
 			// Get CMOS, StandardKeyboard, and PIC driver instances
 			CMOS = (CMOS)deviceManager.GetDevices(new FindDevice.WithName("CMOS")).First.Value;
-			Keyboard = (StandardKeyboard)deviceManager.GetDevices(new FindDevice.WithName("StandardKeyboard")).First.Value;
+			StandardKeyboard = (StandardKeyboard)deviceManager.GetDevices(new FindDevice.WithName("StandardKeyboard")).First.Value;
 
 			Boot.Console.Write("Finding disk controllers...");
 			var diskcontroller = new DiskControllerManager(Setup.DeviceManager);

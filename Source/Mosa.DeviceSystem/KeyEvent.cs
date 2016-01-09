@@ -5,65 +5,33 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Implements a key event
 	/// </summary>
-	public class KeyEvent
+	public struct KeyEvent
 	{
 		/// <summary>
 		///
 		/// </summary>
-		public enum Press
+		public enum KeyPressType : byte
 		{
-			/// <summary>
-			///
-			/// </summary>
 			Make,
-
-			/// <summary>
-			///
-			/// </summary>
 			Break
 		};
-
-		/// <summary>
-		///
-		/// </summary>
-		protected KeyType keyType;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected Press press;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected char character;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Key"/> class.
-		/// </summary>
-		public KeyEvent()
-		{
-			keyType = KeyType.NoKey;
-			press = Press.Make;
-			character = (char)0x00;
-		}
 
 		/// <summary>
 		/// Gets or sets the special key.
 		/// </summary>
 		/// <value>The special key.</value>
-		public KeyType KeyType { get { return keyType; } set { keyType = value; } }
+		public KeyType KeyType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the key press.
 		/// </summary>
 		/// <value>The key press.</value>
-		public Press KeyPress { get { return press; } set { press = value; } }
+		public KeyPressType KeyPress { get; set; }
 
 		/// <summary>
 		/// Gets or sets the character.
 		/// </summary>
 		/// <value>The character.</value>
-		public char Character { get { return character; } set { character = value; } }
+		public char Character { get; set; }
 	}
 }

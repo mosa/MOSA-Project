@@ -136,7 +136,8 @@ namespace Mosa.Kernel.x86
 		/// <param name="value">The string value to write to the screen.</param>
 		public void Write(string value)
 		{
-			Assert.False(value == null);
+			if (value == null)
+				return;
 
 			for (int index = 0; index < value.Length; index++)
 			{

@@ -163,49 +163,66 @@ namespace Mosa.Platform.Internal.x86
 				__dest[index] = __src[index];
 		}
 
-		public static void MemorySet(void* dest, byte value, uint count)
+		public static void MemorySet(uint dest, byte value, uint count)
 		{
-			ulong* _dest = (ulong*)dest;
-			uint byteCount = count & 7;
-			count >>= 3;
-			uint value4 = (uint)((value << 24) | (value << 16) | (value << 8) | value);
-			ulong value8 = ((ulong)value4 << 32) | value4;
+			// TEMP: assigning the method parameters into local variables forces the compiler to load the values
+			// into virtual registers, which unlocks the optimizer to generate much better code quality.
+			uint dst = dest;
+			uint cnt = count;
 
-			for (; count >= 4; count -= 4, _dest += 4)
+			uint e3 = dst + cnt;
+			byte val = value;
+
+			// write 1 byte increments until 32-bit alignment
+			for (; (dst & 0x3) != 0; dst++)
 			{
-				_dest[0] = value8;
-				_dest[1] = value8;
-				_dest[2] = value8;
-				_dest[3] = value8;
+				Native.Set8(dst, val);
 			}
 
-			for (uint index = 0; index < count; index++)
-				_dest[index] = value8;
+			uint e2 = e3 & 0xFFFFFFFC;
+			uint value4 = (uint)((val << 24) | (val << 16) | (val << 8) | val);
 
-			_dest += count;
+			// write in 32-bit increments
+			for (; dst < e2; dst = dst + 4)
+			{
+				Native.Set32(dst, value4);
+			}
 
-			byte* __dest = (byte*)_dest;
-			for (uint index = 0; index < byteCount; index++)
-				__dest[index] = value;
+			// write remaining in 1 byte increments
+			for (; dst < e3; dst++)
+			{
+				Native.Set8(dst, val);
+			}
 		}
 
-		public static void MemoryClear(void* dest, uint count)
+		public static void MemoryClear(uint dest, uint count)
 		{
-			ulong* _dest = (ulong*)dest;
-			uint byteCount = count & 7;
-			count >>= 3;
+			// TEMP: assigning the method parameters into local variables forces the compiler to load the values
+			// into virtual registers, which unlocks the optimizer to generate much better code quality.
+			uint dst = dest;
+			uint cnt = count;
 
-			for (; count >= 4; count -= 4, _dest += 4)
-				Native.Memclr256(_dest);
+			uint e3 = dst + cnt;
 
-			for (uint index = 0; index < count; index++)
-				_dest[index] = 0ul;
+			// write 1 byte increments until 32-bit alignment
+			for (; (dst & 0x3) != 0; dst++)
+			{
+				Native.Set8(dst, 0);
+			}
 
-			_dest += count;
+			uint e2 = e3 & 0xFFFFFFFC;
 
-			byte* __dest = (byte*)_dest;
-			for (uint index = 0; index < byteCount; index++)
-				__dest[index] = 0;
+			// write in 32-bit increments
+			for (; dst < e2; dst = dst + 4)
+			{
+				Native.Set32(dst, 0);
+			}
+
+			// write remaining in 1 byte increments
+			for (; dst < e3; dst++)
+			{
+				Native.Set8(dst, 0);
+			}
 		}
 
 		#region (Un)Boxing
@@ -286,10 +303,6 @@ namespace Mosa.Platform.Internal.x86
 		}
 
 		#endregion (Un)Boxing
-
-		public static void Throw(uint something)
-		{
-		}
 
 		public static void DebugOutput(byte code)
 		{
@@ -513,7 +526,7 @@ namespace Mosa.Platform.Internal.x86
 
 				if (eip != 0)
 					depth--;
-				
+
 				ebp = GetStackFrame(depth, ebp);
 
 				address = GetReturnAddressFromStackFrame(ebp);

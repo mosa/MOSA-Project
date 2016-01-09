@@ -24,6 +24,9 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode SR_R = new OpCode(new byte[] { 0x8E });
 		private static readonly OpCode M_C_16 = new OpCode(new byte[] { 0x66, 0xC7 });
 
+		private static readonly OpCode FS_R = new OpCode(new byte[] { 0x83 }); // Mov r32 to FS
+		private static readonly OpCode RM_FS = new OpCode(new byte[] { 0x8C }); // Mov FS to r/m32
+
 		#endregion Data Members
 
 		#region Construction
@@ -49,10 +52,21 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (destination.IsRegister && destination.Register is SegmentRegister) return SR_R;
+			if (destination.Register is SegmentRegister)
+			{
+				if (destination.Register is SegmentRegister) return SR_R;
+				if (source.IsRegister) return FS_R;
 
-			if (source.IsRegister && source.Register is SegmentRegister)
+				throw new ArgumentException(@"TODO: No opcode for move destination segment register");
+			}
+
+			if (source.Register is SegmentRegister)
+			{
+				if (destination.IsRegister) return RM_FS;
+				if (destination.IsMemoryAddress) return RM_FS;
+
 				throw new ArgumentException(@"TODO: No opcode for move source segment register");
+			}
 
 			if (destination.IsRegister && source.IsConstant) return RM_C;
 
@@ -85,11 +99,6 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (destination.IsMemoryAddress && source.IsRegister)
 			{
-				//if (destination.IsPointer && !source.IsPointer && destination.Type.ElementType != null)
-				//{
-				//	if (destination.Type.ElementType.IsUI1 || destination.Type.ElementType.IsBoolean) return RM_R_U8;
-				//	if (destination.Type.ElementType.IsChar || destination.Type.ElementType.IsUI2) return M_R_16;
-				//}
 				if (destination.IsByte || destination.IsBoolean) return RM_R_U8;
 				if (destination.IsChar || destination.IsShort) return M_R_16;
 				return M_R;

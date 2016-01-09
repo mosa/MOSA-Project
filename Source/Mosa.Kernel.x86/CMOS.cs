@@ -95,31 +95,5 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <value>The BCD.</value>
 		public static bool BCD { get { return (Get(0x0B) & 0x04) == 0x00; } }
-
-		/// <summary>
-		/// Dump multiboot info.
-		/// </summary>
-		public static void Dump(ConsoleSession console, uint row, uint col)
-		{
-			console.Row = row;
-			console.Column = col;
-			console.Color = 0x0A;
-			console.Write(@"CMOS:");
-			console.WriteLine();
-
-			for (byte i = 0; i < 19; i++)
-			{
-				console.Column = col;
-				console.Color = 0x0F;
-				console.Write(i, 16, 2);
-				console.Write(':');
-				console.Write(' ');
-				console.Write(Get(i), 16, 2);
-				console.Write(' ');
-				console.Color = 0x07;
-				console.Write(Get(i), 10, 3);
-				console.WriteLine();
-			}
-		}
 	}
 }

@@ -41,10 +41,7 @@ namespace Mosa.DeviceDriver.ScanCodeMap
 					return key;
 				}
 
-				if ((scancode & 0x80) != 0)
-					key.KeyPress = KeyEvent.Press.Break;
-				else
-					key.KeyPress = KeyEvent.Press.Make;
+				key.KeyPress = ((scancode & 0x80) != 0) ? KeyEvent.KeyPressType.Break : key.KeyPress = KeyEvent.KeyPressType.Make;
 
 				key.KeyType = KeyType.RegularKey;
 
@@ -233,10 +230,7 @@ namespace Mosa.DeviceDriver.ScanCodeMap
 				{
 					key.KeyType = KeyType.RegularKey;
 
-					if (((scancode & 0x80) != 0) || (keyState == KeyState.EscapeBreak))
-						key.KeyPress = KeyEvent.Press.Break;
-					else
-						key.KeyPress = KeyEvent.Press.Make;
+					key.KeyPress = (((scancode & 0x80) != 0) || (keyState == KeyState.EscapeBreak)) ? key.KeyPress = KeyEvent.KeyPressType.Break : key.KeyPress = KeyEvent.KeyPressType.Make;
 
 					if (scancode == 0xF0)
 					{

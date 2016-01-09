@@ -16,7 +16,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="length">The length of bytes to clear.</param>
 		public static void Clear(uint destination, uint length)
 		{
-			Memclr(destination, length);
+			Runtime.MemoryClear(destination, length);
 		}
 
 		/// <summary>
@@ -38,17 +38,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="length">The length of bytes to set.</param>
 		public static void Set(uint destination, byte value, uint length)
 		{
-			Memset(destination, value, length);
-		}
-
-		private unsafe static void Memclr(uint destination, uint count)
-		{
-			Runtime.MemoryClear((void*)destination, count);
-		}
-
-		private unsafe static void Memset(uint destination, byte value, uint count)
-		{
-			Runtime.MemorySet((void*)destination, value, count);
+			Runtime.MemorySet(destination, value, length);
 		}
 
 		private unsafe static void Memcpy(uint destination, uint source, uint count)

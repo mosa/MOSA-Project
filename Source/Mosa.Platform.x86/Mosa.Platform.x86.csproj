@@ -115,6 +115,7 @@
     <Compile Include="Intrinsic\Get16.cs" />
     <Compile Include="Intrinsic\GetAssemblyListTable.cs" />
     <Compile Include="Intrinsic\FrameJump.cs" />
+    <Compile Include="Intrinsic\GetFS.cs" />
     <Compile Include="Intrinsic\GetExceptionRegister.cs" />
     <Compile Include="Intrinsic\GetMethodExceptionLookupTable.cs" />
     <Compile Include="Intrinsic\GetMultibootEAX.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Intrinsic\Pause.cs" />
     <Compile Include="Intrinsic\LockSet.cs" />
     <Compile Include="Intrinsic\Remainder.cs" />
+    <Compile Include="Intrinsic\SetFS.cs" />
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />

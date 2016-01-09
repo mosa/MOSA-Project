@@ -30,5 +30,10 @@ namespace Mosa.Application
 		{
 			AppManager.DumpStackTrace(line);
 		}
+
+		public unsafe static void DumpData(string data)
+		{
+			AppManager.DumpData(data);
+		}
 	}
 }

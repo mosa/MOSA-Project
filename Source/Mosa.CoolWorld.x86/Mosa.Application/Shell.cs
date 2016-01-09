@@ -13,7 +13,7 @@ namespace Mosa.Application
 		{
 			Console.WriteLine();
 
-			Console.WriteLine("[MOSA Shell Ready]");
+			Console.WriteLine("[MOSA Command Shell Ready]");
 
 			Console.WriteLine();
 

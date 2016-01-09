@@ -14,8 +14,6 @@ namespace Mosa.Kernel.x86
 
 		private static InterruptHandler interruptHandler;
 
-		private static uint idtEntries = Address.IDTTable + 6;
-
 		#region Data members
 
 		internal struct Offset
@@ -35,7 +33,7 @@ namespace Mosa.Kernel.x86
 			// Setup IDT table
 			Memory.Clear(Address.IDTTable, 6);
 			Native.Set16(Address.IDTTable, (Offset.TotalSize * 256) - 1);
-			Native.Set32(Address.IDTTable + 2, idtEntries);
+			Native.Set32(Address.IDTTable + 2, Address.IDTTable + 6);
 
 			SetTableEntries();
 
@@ -72,7 +70,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static uint GetEntryLocation(uint index)
 		{
-			return idtEntries + (index * Offset.TotalSize);
+			return Address.IDTTable + 6 + (index * Offset.TotalSize);
 		}
 
 		/// <summary>
@@ -81,7 +79,7 @@ namespace Mosa.Kernel.x86
 		private static void SetTableEntries()
 		{
 			// Clear out idt table
-			Memory.Clear(idtEntries, Offset.TotalSize * 256);
+			Memory.Clear(Address.IDTTable + 6, Offset.TotalSize * 256);
 
 			// Note: GetIDTJumpLocation parameter must be a constant and not a variable
 			Set(0, Native.GetIDTJumpLocation(0), 0x08, 0x8E);
@@ -369,7 +367,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case 7:
-					Error(stack->EBP, stack->EIP, "Coprocessor Not Available");
+					Error(stack->EBP, stack->EIP, "Co-processor Not Available");
 					break;
 
 				case 8:
@@ -379,7 +377,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case 9:
-					Error(stack->EBP, stack->EIP, "Coprocessor Segment Overrun");
+					Error(stack->EBP, stack->EIP, "Co-processor Segment Overrun");
 					break;
 
 				case 10:
@@ -402,11 +400,11 @@ namespace Mosa.Kernel.x86
 
 					// Check if Null Pointer Exception
 					// Otherwise handle as Page Fault
+
 					var cr2 = Native.GetCR2() >> 5;
 					if (cr2 < 0x1000)
 						Error(stack->EBP, stack->EIP, "Null Pointer Exception");
 
-					//bool taken = false;
 					//spinLock.Enter(ref taken);
 
 					uint physicalpage = PageFrameAllocator.Allocate();
@@ -425,7 +423,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case 16:
-					Error(stack->EBP, stack->EIP, "Coprocessor Error");
+					Error(stack->EBP, stack->EIP, "Co-processor Error");
 					break;
 
 				case 19:
@@ -448,7 +446,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		[StructLayout(LayoutKind.Explicit)]
-		private struct IDTStack
+		internal struct IDTStack
 		{
 			[FieldOffset(0x00)]
 			public uint EDI;
