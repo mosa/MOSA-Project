@@ -2,6 +2,7 @@
 
 using Mosa.Kernel.x86.Smbios;
 using Mosa.Platform.Internal.x86;
+using Mosa.Internal;
 
 namespace Mosa.Kernel.x86
 {

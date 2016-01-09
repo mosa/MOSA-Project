@@ -2,6 +2,7 @@
 
 using Mosa.Internal.Plug;
 using Mosa.Platform.Internal.x86;
+using Mosa.Internal;
 
 namespace Mosa.Kernel.x86Test
 {
@@ -14,7 +15,12 @@ namespace Mosa.Kernel.x86Test
 			GC.Setup();
 		}
 
-		[Method("Mosa.Platform.Internal.x86.GC.AllocateMemory")]
+		[Method("Mosa.Internal.GC.AllocateMemory")]
+		static unsafe private void* _AllocateMemory(uint size)
+		{
+			return (void*)AllocateMemory(size);
+		}
+
 		static public uint AllocateMemory(uint size)
 		{
 			uint alloc = memoryPtr;

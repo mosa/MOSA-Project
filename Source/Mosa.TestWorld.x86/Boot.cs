@@ -3,6 +3,7 @@
 using Mosa.Kernel.x86;
 using Mosa.Platform.Internal.x86;
 using Mosa.TestWorld.x86.Tests;
+using Mosa.Internal;
 
 namespace Mosa.TestWorld.x86
 {

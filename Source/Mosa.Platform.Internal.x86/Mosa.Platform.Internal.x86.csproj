@@ -73,7 +73,6 @@
     <Compile Include="Builders\RuntimeTypeInfo.cs" />
     <Compile Include="Division.cs" />
     <Compile Include="ExceptionHandlerType.cs" />
-    <Compile Include="GC.cs" />
     <Compile Include="Internals\InternalsForArray.cs" />
     <Compile Include="Internals\InternalsForObject.cs" />
     <Compile Include="Internals\InternalsForRuntimeHelpers.cs" />

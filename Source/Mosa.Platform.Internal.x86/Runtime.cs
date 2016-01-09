@@ -15,7 +15,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void* AllocateMemory(uint size)
 		{
-			return GC.AllocateObject(size);
+			return (void*)GC.AllocateObject(size);
 		}
 
 		public static void* AllocateObject(RuntimeTypeHandle handle, uint classSize)
