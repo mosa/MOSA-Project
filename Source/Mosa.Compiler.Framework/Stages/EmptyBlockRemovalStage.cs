@@ -24,9 +24,6 @@ namespace Mosa.Compiler.Framework.Stages
 				if (block.PreviousBlocks.Contains(block))
 					continue;
 
-				if (!IsEmptyBlockWithSingleJump(block))
-					continue;
-
 				if (HasProtectedRegions && !block.IsCompilerBlock)
 					continue;
 
@@ -34,6 +31,9 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 
 				if (block.IsTryHeadBlock)
+					continue;
+
+				if (!IsEmptyBlockWithSingleJump(block))
 					continue;
 
 				RemoveEmptyBlockWithSingleJump(block);

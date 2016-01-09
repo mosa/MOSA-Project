@@ -55,7 +55,7 @@ namespace Mosa.Platform.Internal.x86
 		}
 
 		/// <summary>
-		/// Acces a char at a specific index
+		/// Access a char at a specific index
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns></returns>

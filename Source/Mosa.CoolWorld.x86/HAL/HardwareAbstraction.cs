@@ -31,18 +31,18 @@ namespace Mosa.CoolWorld.x86.HAL
 		{
 			// Map physical memory space to virtual memory space
 
-			Boot.Console.WriteLine("");
-			Boot.Console.WriteLine(":" + address.ToString("X"));
-			Boot.Console.WriteLine(":" + size.ToString("X"));
+			ConsoleManager.Controller.Debug.WriteLine("");
+			ConsoleManager.Controller.Debug.WriteLine(":" + address.ToString("X"));
+			ConsoleManager.Controller.Debug.WriteLine(":" + size.ToString("X"));
 
 			//address = address & 0xFFFFF000;	// force alignment
 			uint end = address + size;
 			for (uint at = address; at < end; address = address + 4096)
 			{
-				Boot.Console.WriteLine(at.ToString("X"));
+				ConsoleManager.Controller.Debug.WriteLine(at.ToString("X"));
 				PageTable.MapVirtualAddressToPhysical(address, address);
 			}
-			Boot.Console.WriteLine("Y");
+			ConsoleManager.Controller.Debug.WriteLine("Y");
 			return new Memory(address, size);
 		}
 
@@ -105,19 +105,19 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <summary>
 		/// Debugs the write.
 		/// </summary>
-		/// <param name="msg">The message.</param>
+		/// <param name="message">The message.</param>
 		void IHardwareAbstraction.DebugWrite(string message)
 		{
-			Mosa.CoolWorld.x86.Boot.Console.Write(message);
+			Mosa.CoolWorld.x86.Boot.Debug.Write(message);
 		}
 
 		/// <summary>
 		/// Debugs the write line.
 		/// </summary>
-		/// <param name="msg">The message.</param>
+		/// <param name="message">The message.</param>
 		void IHardwareAbstraction.DebugWriteLine(string message)
 		{
-			Mosa.CoolWorld.x86.Boot.Console.WriteLine(message);
+			Mosa.CoolWorld.x86.Boot.Debug.WriteLine(message);
 		}
 	}
 }

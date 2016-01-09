@@ -159,7 +159,11 @@ namespace Mosa.DeviceDriver.ISA
 		{
 			spinLock.Enter();
 
-			AddToFIFO(commandPort.Read8());
+			byte v = commandPort.Read8();
+
+			AddToFIFO(v);
+
+			HAL.DebugWrite(" scancode: " + v.ToString() + "   ");
 
 			spinLock.Exit();
 		}

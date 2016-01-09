@@ -1,4 +1,11 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
 
 using Mosa.Platform.Internal.x86;
 
@@ -9,6 +16,9 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class GDT
 	{
+		private static uint _gdtTable = 0x1401000;
+		private static uint _gdtEntries = 0x1401000 + 6;
+
 		#region Data members
 
 		internal struct Offset
@@ -26,15 +36,15 @@ namespace Mosa.Kernel.x86
 
 		public static void Setup()
 		{
-			Memory.Clear(Address.GDTTable, 6);
-			Native.Set16(Address.GDTTable, (Offset.TotalSize * 3) - 1);
-			Native.Set32(Address.GDTTable + 2, Address.GDTTable + 6);
+			Memory.Clear(_gdtTable, 6);
+			Native.Set16(_gdtTable, (Offset.TotalSize * 3) - 1);
+			Native.Set32(_gdtTable + 2, _gdtEntries);
 
 			Set(0, 0, 0, 0, 0);                // Null segment
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
 			Set(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
 
-			Native.Lgdt(Address.GDTTable);
+			Native.Lgdt(_gdtTable);
 		}
 
 		private static void Set(uint index, uint address, uint limit, byte access, byte granularity)
@@ -49,13 +59,13 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// Gets the GTP entry location.
+		/// Gets the gdt entry location.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
 		private static uint GetEntryLocation(uint index)
 		{
-			return (uint)(Address.GDTTable + 6 + (index * Offset.TotalSize));
+			return (uint)(_gdtEntries + (index * Offset.TotalSize));
 		}
 	}
 }

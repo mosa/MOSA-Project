@@ -11,7 +11,6 @@ namespace Mosa.Kernel.x86
 		public const uint TaskSlots = 0x00240000; // 2MB Offset 256KB - Size 320KB
 
 		public const uint PageFrameAllocator = 0x00C00000; // 12MB
-
 		public const uint PageTable = 0x01000000; // 16MB
 
 		public const uint TSS = 0x0; // TODO

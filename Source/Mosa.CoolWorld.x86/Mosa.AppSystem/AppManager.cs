@@ -13,68 +13,63 @@ namespace Mosa.AppSystem
 	/// </summary>
 	public class AppManager
 	{
-		protected IScanCodeMap keymap;
-
 		protected IConsoleApp currentApp;
 
-		protected IConsoleApp Shell;
+		protected IConsoleApp shell;
+
+		protected IKeyboard keyboard;
 
 		protected ConsoleSession debug;
 
-		private uint counter = 0;
+		private uint tick = 0;
 
-		public AppManager(ConsoleSession debug, IScanCodeMap keymap)
+		public AppManager(ConsoleSession debug, IKeyboard keyboard)
 		{
-			this.keymap = keymap;
-
-			Shell = new Shell();
-
-			currentApp = Shell;
+			this.keyboard = keyboard;
 
 			this.debug = debug;
+
+			shell = new Shell();
+
+			currentApp = shell;
 		}
 
 		public void Start()
 		{
 			var stream = new AppOutputStream(Mosa.CoolWorld.x86.Boot.Console);
 
-			StartApp(Shell, null, stream, true, null);
+			StartApp(shell, null, stream, true, null);
 		}
 
 		public void Poll()
 		{
-			// takes key board input and directs it to the active application
-			byte scancode = Mosa.CoolWorld.x86.Setup.Keyboard.GetScanCode();
+			// get the key board input and directs it to the active application
+			var key = keyboard.GetKeyPressed();
 
-			if (scancode == 0)
+			if (key == null)
 				return;
 
-			var keyevent = keymap.ConvertScanCode(scancode);
-
-			if (keyevent.KeyType == KeyType.F1)
+			if (key.KeyType == KeyType.F1)
 			{
 				SetCurrentApplication(currentApp);
 				return;
 			}
-			if (keyevent.KeyType == KeyType.F2)
+			if (key.KeyType == KeyType.F2)
 			{
 				ConsoleManager.Controller.Active = ConsoleManager.Controller.Boot;
 				return;
 			}
-			else if (keyevent.KeyType == KeyType.F3)
+			else if (key.KeyType == KeyType.F3)
 			{
 				ConsoleManager.Controller.Active = ConsoleManager.Controller.Debug;
 				return;
 			}
 
-			if (keyevent.KeyPress != KeyEvent.Press.Make)
-				return;
-
 			var input = currentApp.Console.Input as AppInputStream;
 
 			if (input != null)
 			{
-				input.Write((byte)keyevent.Character);
+				input.Write((byte)key.Character);
 
 				if (currentApp.Console.EnableEcho)
 				{
@@ -82,7 +77,7 @@ namespace Mosa.AppSystem
 
 					if (output != null)
 					{
-						output.WriteByte((byte)keyevent.Character);
+						output.WriteByte((byte)key.Character);
 					}
 				}
 			}
@@ -133,36 +128,21 @@ namespace Mosa.AppSystem
 			uint sr = debug.ScrollRow;
 
 			debug.Color = Colors.Cyan;
+			debug.BackgroundColor = Colors.Black;
+			debug.Row = 24;
+			debug.Column = 0;
 			debug.ScrollRow = debug.Rows;
 
-			debug.Row = 24;
-			debug.Column = 1;
-
-			debug.Write("Free: ");
+			tick++;
+			debug.Write("Shell Mode - ");
+			debug.Write("Tick: ");
+			debug.Write(tick, 10, 7);
+			debug.Write(" Free Memory: ");
 			debug.Write((PageFrameAllocator.TotalPages - PageFrameAllocator.TotalPagesInUse) * PageFrameAllocator.PageSize / (1024 * 1024));
-			debug.Write(" MB");
-
-			debug.Column = 45;
-			debug.BackgroundColor = Colors.Black;
-			debug.Write("        ");
-			debug.Column = 44;
-			debug.Row = 24;
-
-			debug.Write('X');
-			counter++;
-			debug.Write(counter, 10, 7);
-			debug.Write(':');
-			debug.Write(interrupt, 16, 2);
-			debug.Write(':');
-			debug.Write(errorCode, 16, 2);
+			debug.Write(" MB    ");
 
 			if (interrupt >= 0x20 && interrupt < 0x30)
 			{
-				debug.Write('-');
-				debug.Write(counter, 10, 7);
-				debug.Write(':');
-				debug.Write(interrupt, 16, 2);
-
 				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 			}
 
@@ -176,6 +156,16 @@ namespace Mosa.AppSystem
 			{
 				Poll();
 			}
+		}
+
+		public static void DumpData(string data)
+		{
+			Mosa.Kernel.x86.ConsoleManager.Controller.Debug.Write(data);
+		}
+
+		public static void DumpDataLine(string data)
+		{
+			Mosa.Kernel.x86.ConsoleManager.Controller.Debug.WriteLine(data);
 		}
 
 		public unsafe static void DumpStackTrace(int line)

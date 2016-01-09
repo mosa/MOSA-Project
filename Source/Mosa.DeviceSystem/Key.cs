@@ -8,82 +8,45 @@ namespace Mosa.DeviceSystem
 	public class Key
 	{
 		/// <summary>
-		///
+		/// Gets or sets the special key.
 		/// </summary>
-		protected KeyType keyType;
+		/// <value>The special key.</value>
+		public KeyType KeyType { get; set; }
 
 		/// <summary>
-		///
+		/// Gets or sets the character.
 		/// </summary>
-		protected char character;
+		/// <value>The character.</value>
+		public char Character { get; set; }
 
 		/// <summary>
-		///
+		/// Gets or sets a value indicating whether the control key is pressed.
 		/// </summary>
-		protected bool control;
+		/// <value><c>true</c> if control key pressed; otherwise, <c>false</c>.</value>
+		public bool Control { get; set; }
 
 		/// <summary>
-		///
+		/// Gets or sets a value indicating whether the alt key is pressed.
 		/// </summary>
-		protected bool alt;
+		/// <value><c>true</c> if alt key pressed; otherwise, <c>false</c>.</value>
+		public bool Alt { get; set; }
 
 		/// <summary>
-		///
+		/// Gets or sets a value indicating whether the shift key is pressed.
 		/// </summary>
-		protected bool shift;
+		/// <value><c>true</c> if shift key pressed; otherwise, <c>false</c>.</value>
+		public bool Shift { get; set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Key"/> class.
 		/// </summary>
 		public Key()
 		{
-			keyType = KeyType.NoKey;
-			character = (char)0x00;
-			control = false;
-			alt = false;
-			shift = false;
+			KeyType = KeyType.NoKey;
+			Character = (char)0x00;
+			Control = false;
+			Alt = false;
+			Shift = false;
 		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Key"/> class.
-		/// </summary>
-		public Key(char key)
-		{
-			keyType = KeyType.RegularKey;
-			character = key;
-			control = false;
-			alt = false;
-			shift = char.IsUpper(key);
-		}
-
-		/// <summary>
-		/// Gets or sets the special key.
-		/// </summary>
-		/// <value>The special key.</value>
-		public KeyType KeyType { get { return keyType; } set { keyType = value; } }
-
-		/// <summary>
-		/// Gets or sets the character.
-		/// </summary>
-		/// <value>The character.</value>
-		public char Character { get { return character; } set { character = value; } }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the control key is pressed.
-		/// </summary>
-		/// <value><c>true</c> if control key pressed; otherwise, <c>false</c>.</value>
-		public bool Control { get { return control; } set { control = value; } }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the alt key is pressed.
-		/// </summary>
-		/// <value><c>true</c> if alt key pressed; otherwise, <c>false</c>.</value>
-		public bool Alt { get { return alt; } set { alt = value; } }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the shift key is pressed.
-		/// </summary>
-		/// <value><c>true</c> if shift key pressed; otherwise, <c>false</c>.</value>
-		public bool Shift { get { return shift; } set { shift = value; } }
 	}
 }

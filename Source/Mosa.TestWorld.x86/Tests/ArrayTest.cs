@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.TestWorld.x86.Tests
@@ -10,6 +11,7 @@ namespace Mosa.TestWorld.x86.Tests
 			: base("Array")
 		{
 			testMethods.AddLast(GenericInterfaceTest);
+			testMethods.AddLast(ArrayBoundsCheck);
 
 			// TODO: add more tests
 		}
@@ -23,6 +25,20 @@ namespace Mosa.TestWorld.x86.Tests
 			foreach (var i in iList)
 				result += i;
 			return (result == 9);
+		}
+
+		public static bool ArrayBoundsCheck()
+		{
+			int[] myArray = new int[1];
+			try
+			{
+				myArray[1] = 20;
+				return false;
+			}
+			catch (IndexOutOfRangeException ex)
+			{
+				return true;
+			}
 		}
 	}
 }

@@ -70,18 +70,13 @@
     <Compile Include="Helpers\Assert.cs" />
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="ConsoleSession.cs" />
-    <Compile Include="ELFHeader.cs" />
-    <Compile Include="Helpers\DebugImplementation.cs" />
-    <Compile Include="Helpers\FlechtersChecksum.cs" />
     <Compile Include="DebugClient.cs" />
     <Compile Include="Serial.cs" />
-    <Compile Include="Debug.cs" />
     <Compile Include="KernelMemory.cs" />
     <Compile Include="CMOS.cs" />
     <Compile Include="Colors.cs" />
     <Compile Include="CpuInfo.cs" />
     <Compile Include="GDT.cs" />
-    <Compile Include="IdleTask.cs" />
     <Compile Include="IDT.cs" />
     <Compile Include="Kernel.cs" />
     <Compile Include="Keyboard.cs" />
@@ -91,13 +86,11 @@
     <Compile Include="PageTable.cs" />
     <Compile Include="Panic.cs" />
     <Compile Include="PIC.cs" />
-    <Compile Include="ProcessManager.cs" />
     <Compile Include="Screen.cs" />
     <Compile Include="Smbios\BiosInformationStructure.cs" />
     <Compile Include="Smbios\CpuStructure.cs" />
     <Compile Include="Smbios\SmbiosManager.cs" />
     <Compile Include="Smbios\SmbiosStructure.cs" />
-    <Compile Include="TaskManager.cs" />
     <Compile Include="VirtualPageAllocator.cs" />
   </ItemGroup>
   <ItemGroup>

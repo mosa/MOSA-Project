@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	///
 	/// </summary>
-	public enum KeyType
+	public enum KeyType : byte
 	{
 		/// <summary>
 		///
