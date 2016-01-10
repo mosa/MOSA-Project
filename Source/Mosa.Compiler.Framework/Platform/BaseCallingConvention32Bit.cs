@@ -249,7 +249,6 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
-		/// <param name="method">The method.</param>
 		/// <param name="operands">The operand stack.</param>
 		/// <param name="space">The space.</param>
 		/// <param name="scratch">The scratch.</param>

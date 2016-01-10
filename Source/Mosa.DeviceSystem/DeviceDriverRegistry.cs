@@ -131,11 +131,11 @@ namespace Mosa.DeviceSystem
 						attributeData.AttributeType != typeof(PCIDeviceDriverAttribute))
 						continue;
 
-					IDeviceDriver attribute = GetIDeviceDriver(attributeData);
+					var attribute = GetIDeviceDriver(attributeData);
 
 					if ((attribute.Platforms & platformArchitecture) != 0)
 					{
-						DeviceDriver deviceDriver = new DeviceDriver(attribute, type.AsType());
+						var deviceDriver = new DeviceDriver(attribute, type.AsType());
 
 						foreach (var memAttributeData in attributes)
 						{

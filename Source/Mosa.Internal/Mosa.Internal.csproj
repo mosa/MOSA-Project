@@ -79,10 +79,10 @@
     <Compile Include="Builders\RuntimeTypeInfo.cs" />
     <Compile Include="ExceptionHandlerType.cs" />
     <Compile Include="GC.cs" />
-    <Compile Include="Internals\InternalsForArray.cs" />
-    <Compile Include="Internals\InternalsForObject.cs" />
-    <Compile Include="Internals\InternalsForRuntimeHelpers.cs" />
-    <Compile Include="Internals\InternalsForType.cs" />
+    <Compile Include="InternalsForArray.cs" />
+    <Compile Include="InternalsForObject.cs" />
+    <Compile Include="InternalsForRuntimeHelpers.cs" />
+    <Compile Include="InternalsForType.cs" />
     <Compile Include="Intrinsic.cs" />
     <Compile Include="MetadataStructures\MetadataAssemblyStruct.cs" />
     <Compile Include="MetadataStructures\MetadataCAArgumentStruct.cs" />

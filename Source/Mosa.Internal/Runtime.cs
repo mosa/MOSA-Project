@@ -109,10 +109,10 @@ namespace Mosa.Internal
 
 			//MemoryCopy(memory + (uint)(sizeof(void*)) * 2, value, size);
 
-			byte* dest = memory + (uint)(sizeof(void*)) * 2;
+			byte* dest = memory + (uint)(sizeof(void*) * 2);
 			byte* src = (byte*)value;
 
-			for (int i = 0; i < size; i++, dest++, src++)
+			for (int i = 0; i < size; i++)
 			{
 				dest[i] = src[i];
 			}
@@ -144,10 +144,10 @@ namespace Mosa.Internal
 		{
 			//MemoryCopy(vt, (byte*)box + (uint)(sizeof(void*)) * 2, size);
 
-			byte* dest = (byte*)box + (uint)(sizeof(void*)) * 2;
-			byte* src = (byte*)vt;
+			byte* dest = (byte*)vt;
+			byte* src = (byte*)box + (uint)(sizeof(void*) * 2);
 
-			for (int i = 0; i < size; i++, dest++, src++)
+			for (int i = 0; i < size; i++)
 			{
 				dest[i] = src[i];
 			}

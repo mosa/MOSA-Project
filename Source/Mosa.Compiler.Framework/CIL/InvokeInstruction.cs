@@ -5,14 +5,6 @@ using System;
 
 namespace Mosa.Compiler.Framework.CIL
 {
-	/* FIXME:
-	 * - Schedule compilation of invocation target
-	 * - Scheduling puts the target method on the jit or aot compilers work list
-	 * - This allows the jit to run async ahead of time in the same process
-	 * - This may not turn the jit into a full aot, but is used to prepare MethodCompilers and jit stubs
-	 *   for invoked methods.
-	 */
-
 	/// <summary>
 	/// Base class for instructions, which invoke other functions.
 	/// </summary>
