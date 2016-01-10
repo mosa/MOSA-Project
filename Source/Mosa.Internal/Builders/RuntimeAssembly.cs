@@ -1,9 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.Internal.x86;
 using System.Collections.Generic;
 using System.Reflection;
-using x86Runtime = Mosa.Platform.Internal.x86.Runtime;
+using Mosa.Internal;
 
 namespace System
 {
@@ -32,7 +31,7 @@ namespace System
 						customAttributesTablePtr++;
 						for (uint i = 0; i < customAttributesCount; i++)
 						{
-							RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData((MetadataCAStruct*)customAttributesTablePtr[i]);
+							var cad = new RuntimeCustomAttributeData((MetadataCAStruct*)customAttributesTablePtr[i]);
 							customAttributesData.AddLast(cad);
 						}
 					}
@@ -54,7 +53,7 @@ namespace System
 						this.typeInfoList.AddLast(new RuntimeTypeInfo(type, this));
 				}
 
-				LinkedList<TypeInfo> types = new LinkedList<TypeInfo>();
+				var types = new LinkedList<TypeInfo>();
 				foreach (var type in this.typeInfoList)
 					types.AddLast(type);
 				return types;
@@ -70,7 +69,7 @@ namespace System
 		{
 			get
 			{
-				LinkedList<Type> types = new LinkedList<Type>();
+				var types = new LinkedList<Type>();
 				foreach (RuntimeType type in this.typeList)
 				{
 					if ((type.attributes & TypeAttributes.VisibilityMask) != TypeAttributes.Public)
@@ -84,12 +83,12 @@ namespace System
 		internal RuntimeAssembly(uint* pointer)
 		{
 			this.assemblyStruct = (MetadataAssemblyStruct*)pointer;
-			this.fullName = x86Runtime.InitializeMetadataString(this.assemblyStruct->Name);
+			this.fullName = Mosa.Internal.Runtime.InitializeMetadataString(this.assemblyStruct->Name);
 
 			uint typeCount = (*this.assemblyStruct).NumberOfTypes;
 			for (uint i = 0; i < typeCount; i++)
 			{
-				RuntimeTypeHandle handle = new RuntimeTypeHandle();
+				var handle = new RuntimeTypeHandle();
 				((uint**)&handle)[0] = (uint*)MetadataAssemblyStruct.GetTypeDefinitionAddress(assemblyStruct, i);
 
 				if (this.typeHandles.Contains(handle))

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Platform.Internal.x86;
+using Mosa.Internal;
 
 namespace Mosa.Kernel.x86
 {

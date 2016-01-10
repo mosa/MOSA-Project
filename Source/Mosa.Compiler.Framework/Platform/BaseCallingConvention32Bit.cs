@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.Platform
 
 			Operand scratch = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.Pointer, scratchRegister);
 
-			List<Operand> operands = BuildOperands(context);
+			var operands = BuildOperands(context);
 
 			int stackSize = CalculateStackSizeForParameters(typeLayout, architecture, operands, method);
 

@@ -95,6 +95,8 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InstructionNodeExtension.cs" />
     <Compile Include="InstructionNodeAddition.cs" />
+    <Compile Include="Intrinsics\CreateInstanceSimple.cs" />
+    <Compile Include="Intrinsics\GetAssemblyListTable.cs" />
     <Compile Include="Intrinsics\GetObjectFromAddress.cs" />
     <Compile Include="Intrinsics\Load64.cs" />
     <Compile Include="Intrinsics\InternalsForArray.cs" />

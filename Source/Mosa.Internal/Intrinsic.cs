@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Mosa.Internal
 {
@@ -28,6 +29,12 @@ namespace Mosa.Internal
 
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public static extern object GetObjectFromAddress(void* address);
+
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public extern static object CreateInstanceSimple(void* ctor, void* thisObject);
+
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public extern static uint* GetAssemblyListTable();
 
 		#endregion Intrinsic
 	}

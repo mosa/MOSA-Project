@@ -122,12 +122,12 @@ namespace Mosa.TestWorld.x86
 
 			while (true)
 			{
-				var methodDef = Runtime.GetMethodDefinitionFromStackFrameDepth(depth);
+				var methodDef = Mosa.Platform.Internal.x86.Runtime.GetMethodDefinitionFromStackFrameDepth(depth);
 
 				if (methodDef == null)
 					return;
 
-				string caller = Runtime.GetMethodDefinitionName(methodDef);
+				string caller = Mosa.Internal.Runtime.GetMethodDefinitionName(methodDef);
 
 				if (caller == null)
 					return;

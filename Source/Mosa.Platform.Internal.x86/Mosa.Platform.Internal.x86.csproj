@@ -67,29 +67,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Builders\RuntimeAssembly.cs" />
-    <Compile Include="Builders\RuntimeCustomAttributeData.cs" />
-    <Compile Include="Builders\RuntimeType.cs" />
-    <Compile Include="Builders\RuntimeTypeInfo.cs" />
     <Compile Include="Division.cs" />
-    <Compile Include="ExceptionHandlerType.cs" />
-    <Compile Include="Internals\InternalsForArray.cs" />
-    <Compile Include="Internals\InternalsForObject.cs" />
-    <Compile Include="Internals\InternalsForRuntimeHelpers.cs" />
-    <Compile Include="Internals\InternalsForType.cs" />
-    <Compile Include="MetadataStructures\MetadataAssemblyStruct.cs" />
-    <Compile Include="MetadataStructures\MetadataCAArgumentStruct.cs" />
-    <Compile Include="MetadataStructures\MetadataCAStruct.cs" />
-    <Compile Include="MetadataStructures\MetadataMethodStruct.cs" />
-    <Compile Include="MetadataStructures\MetadataFieldDefinitionStruct.cs" />
-    <Compile Include="MetadataStructures\MetadataPRDefinitionStruct.cs" />
-    <Compile Include="MetadataStructures\MetadataPRTableStruct.cs" />
-    <Compile Include="MetadataStructures\MetadataTypeStruct.cs" />
     <Compile Include="Native.cs" />
-    <Compile Include="RuntimeExceptions.cs" />
-    <Compile Include="SimpleStackTraceEntry.cs" />
     <Compile Include="SpinLock.cs" />
-    <Compile Include="StringBuffer.cs" />
     <Compile Include="Runtime.cs" />
   </ItemGroup>
   <ItemGroup>
