@@ -14,14 +14,15 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// Replaces the intrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
+		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			var ctor = context.Operand1;
 			var thisObject = context.Operand2;
 			var result = context.Result;
 
-			context.SetInstruction(IRInstruction.Call, result, ctor, thisObject);
+			context.SetInstruction(IRInstruction.Call, null, ctor, thisObject);
+			context.AppendInstruction(IRInstruction.Move, result, thisObject);
 		}
 
 		#endregion Methods

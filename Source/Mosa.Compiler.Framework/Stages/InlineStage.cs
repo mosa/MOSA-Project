@@ -45,6 +45,9 @@ namespace Mosa.Compiler.Framework.Stages
 					//if (!firstCompile)
 					//	continue;
 
+					if (node.InvokeMethod == null)
+						continue;
+
 					Debug.Assert(node.InvokeMethod != null);
 
 					var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
@@ -63,6 +66,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var node in nodes)
 			{
+				if (node.InvokeMethod == null)
+					continue;
+
 				Debug.Assert(node.InvokeMethod != null);
 
 				var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
