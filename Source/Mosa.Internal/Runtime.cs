@@ -189,5 +189,10 @@ namespace Mosa.Internal
 		}
 
 		#endregion Metadata
+
+		public static void ThrowIndexOutOfRangeException()
+		{
+			throw new IndexOutOfRangeException();
+		}
 	}
 }

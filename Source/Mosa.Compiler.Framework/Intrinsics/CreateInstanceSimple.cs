@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
-	[ReplacementTarget("Mosa.Internal.Intrinsic::GetAssemblyListTable")]
+	[ReplacementTarget("Mosa.Internal.Intrinsic::CreateInstanceSimple")]
 	internal class CreateInstanceSimple : IIntrinsicInternalMethod
 	{
 		#region Methods

@@ -95,6 +95,8 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public MosaType PlatformInternalRuntimeType { get; private set; }
 
+		public MosaType InternalRuntimeType { get; private set; }
+
 		/// <summary>
 		/// Gets the compiler data.
 		/// </summary>
@@ -146,6 +148,7 @@ namespace Mosa.Compiler.Framework
 			}
 
 			PlatformInternalRuntimeType = GetPlatformInternalRuntimeType();
+			InternalRuntimeType = GeInternalRuntimeType();
 
 			// Extended Setup
 			ExtendCompilerSetup();
@@ -374,11 +377,12 @@ namespace Mosa.Compiler.Framework
 
 		protected MosaType GetPlatformInternalRuntimeType()
 		{
-			string ns = "Mosa.Platform.Internal." + Architecture.PlatformName;
+			return TypeSystem.GetTypeByName("Mosa.Platform.Internal." + Architecture.PlatformName, "Runtime");
+		}
 
-			var type = TypeSystem.GetTypeByName(ns, "Runtime");
-
-			return type;
+		protected MosaType GeInternalRuntimeType()
+		{
+			return TypeSystem.GetTypeByName("Mosa.Internal", "Runtime");
 		}
 
 		#endregion Helper Methods
