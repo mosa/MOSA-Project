@@ -1549,10 +1549,9 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
 
 			// Build exception block which is just a call to throw exception
-			string arch = "Mosa.Platform.Internal." + MethodCompiler.Architecture.PlatformName;
-			var type = MethodCompiler.TypeSystem.GetTypeByName(arch, "RuntimeExceptions");
-			var method = type.FindMethodByName("ThrowIndexOutOfRangeException");
+			var method = InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
 			var symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
+
 			exceptionContext.AppendInstruction(IRInstruction.Call, null, symbolOperand);
 			exceptionContext.InvokeMethod = method;
 		}
@@ -2104,7 +2103,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="internalCallTarget">The internal call target.</param>
 		private void ReplaceWithVmCall(Context context, VmCall internalCallTarget)
 		{
-			var method = PlatformInternalRuntimeType.FindMethodByName(internalCallTarget.ToString());
+			var method = InternalRuntimeType.FindMethodByName(internalCallTarget.ToString());
+
+			if (method == null)
+			{
+				method = PlatformInternalRuntimeType.FindMethodByName(internalCallTarget.ToString());
+			}
 
 			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());
 

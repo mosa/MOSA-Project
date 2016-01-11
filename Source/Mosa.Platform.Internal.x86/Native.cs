@@ -248,9 +248,6 @@ namespace Mosa.Platform.Internal.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.FrameJump, Mosa.Platform.x86")]
 		public extern static void FrameJump(uint eip, uint esp, uint ebp, uint exceptionRegister);
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CreateInstanceSimple, Mosa.Platform.x86")]
-		public extern static object CreateInstanceSimple(void* ctor, void* thisObject);
-
 		/// <summary>
 		/// Wraps the x86 int instruction to cause a software interrupt
 		/// </summary>

@@ -4,7 +4,7 @@ using Mosa.Internal.Plug;
 
 namespace Mosa.Platform.Internal.x86
 {
-	public unsafe static class SpinLock
+	internal static class SpinLock
 	{
 		[Method("System.Threading.SpinLock.InternalEnter")]
 		public static void Enter(ref bool spinlock)

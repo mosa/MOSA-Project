@@ -2,7 +2,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace Mosa.Platform.Internal.x86
+namespace Mosa.Internal
 {
 	/// <summary>
 	/// Represents a string as struct, so it can used before memory and runtime initialization.

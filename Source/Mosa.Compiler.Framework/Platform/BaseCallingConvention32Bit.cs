@@ -60,26 +60,40 @@ namespace Mosa.Compiler.Framework.Platform
 			Operand result = context.Result;
 			MosaMethod method = context.InvokeMethod;
 
-			Debug.Assert(method != null, context.ToString());
+			//Debug.Assert(method != null, context.ToString());
 
 			Operand scratch = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.Pointer, scratchRegister);
 
-			List<Operand> operands = BuildOperands(context);
-
-			int stackSize = CalculateStackSizeForParameters(typeLayout, architecture, operands, method);
+			var operands = BuildOperands(context);
 
 			context.Empty();
 
+			int stackSize = 0;
 			int returnSize = 0;
-			if (typeLayout.IsCompoundType(method.Signature.ReturnType))
+
+			if (method != null)
 			{
-				returnSize = typeLayout.GetTypeSize(method.Signature.ReturnType);
+				stackSize = CalculateStackSizeForParameters(typeLayout, architecture, operands, method);
+				returnSize = CalculateReturnSize(typeLayout, method);
+			}
+			else
+			{
+				stackSize = CalculateStackSizeForParameters(typeLayout, architecture, operands);
+				returnSize = CalculateReturnSize(typeLayout, result);
 			}
 
 			if (stackSize != 0 || returnSize != 0)
 			{
 				ReserveStackSizeForCall(typeLayout.TypeSystem, context, returnSize + stackSize, scratch);
-				PushOperands(compiler, typeLayout, context, method, operands, returnSize + stackSize, scratch);
+
+				if (method != null)
+				{
+					PushOperands(compiler, typeLayout, context, method, operands, returnSize + stackSize, scratch);
+				}
+				else
+				{
+					PushOperands(compiler, typeLayout, context, operands, returnSize + stackSize, scratch);
+				}
 			}
 
 			// the mov/call two-instructions combo is to help facilitate the register allocator
@@ -88,6 +102,29 @@ namespace Mosa.Compiler.Framework.Platform
 
 			CleanupReturnValue(compiler, typeLayout, context, result);
 			FreeStackAfterCall(typeLayout.TypeSystem, context, returnSize + stackSize);
+		}
+
+		private static int CalculateReturnSize(MosaTypeLayout typeLayout, MosaMethod method)
+		{
+			if (typeLayout.IsCompoundType(method.Signature.ReturnType))
+			{
+				return typeLayout.GetTypeSize(method.Signature.ReturnType);
+			}
+
+			return 0;
+		}
+
+		private static int CalculateReturnSize(MosaTypeLayout typeLayout, Operand result)
+		{
+			if (result == null)
+				return 0;
+
+			if (typeLayout.IsCompoundType(result.Type))
+			{
+				return typeLayout.GetTypeSize(result.Type);
+			}
+
+			return 0;
 		}
 
 		/// <summary>
@@ -197,6 +234,31 @@ namespace Mosa.Compiler.Framework.Platform
 				{
 					architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
 				}
+
+				size = Alignment.AlignUp(size, alignment);
+
+				space -= size;
+
+				Push(compiler, typeLayout, context, operand, space, size, scratch);
+			}
+		}
+
+		/// <summary>
+		/// Calculates the remaining space.
+		/// </summary>
+		/// <param name="compiler">The compiler.</param>
+		/// <param name="typeLayout">The type layouts.</param>
+		/// <param name="context">The context.</param>
+		/// <param name="operands">The operand stack.</param>
+		/// <param name="space">The space.</param>
+		/// <param name="scratch">The scratch.</param>
+		private void PushOperands(BaseMethodCompiler compiler, MosaTypeLayout typeLayout, Context context, List<Operand> operands, int space, Operand scratch)
+		{
+			foreach (var operand in operands)
+			{
+				int size, alignment;
+
+				architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
 
 				size = Alignment.AlignUp(size, alignment);
 

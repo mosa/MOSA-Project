@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Mosa.Platform.Internal.x86
+namespace Mosa.Internal
 {
 	public unsafe static class InternalsForObject
 	{
@@ -14,10 +14,10 @@ namespace Mosa.Platform.Internal.x86
 		public static Type GetType(void* obj)
 		{
 			// Get the handle of the object
-			RuntimeTypeHandle handle = GetTypeHandle(obj);
+			var handle = GetTypeHandle(obj);
 
 			// Iterate through all the assemblies and look for the type handle
-			foreach (RuntimeAssembly assembly in Runtime.Assemblies)
+			foreach (var assembly in Runtime.Assemblies)
 			{
 				foreach (RuntimeType type in assembly.typeList)
 				{
@@ -37,7 +37,7 @@ namespace Mosa.Platform.Internal.x86
 		private static RuntimeTypeHandle GetTypeHandle(void* obj)
 		{
 			// TypeDefinition is located at the beginning of object (i.e. *obj )
-			RuntimeTypeHandle handle = new RuntimeTypeHandle();
+			var handle = new RuntimeTypeHandle();
 			((uint*)&handle)[0] = ((uint*)obj)[0];
 			return handle;
 		}

@@ -20,25 +20,28 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			if (context == null || methodCompiler == null || internalMethod == null || internalClass == null)
 				throw new ArgumentNullException();
 
-			string arch = "Mosa.Platform.Internal." + methodCompiler.Architecture.PlatformName;
-
-			var type = methodCompiler.TypeSystem.GetTypeByName(arch, internalClass);
-			Debug.Assert(type != null, "Cannot find " + arch + "." + internalClass);
+			var type = methodCompiler.TypeSystem.GetTypeByName("Mosa.Internal", internalClass);
+			Debug.Assert(type != null, "Cannot find Mosa.Internal." + internalClass);
 
 			var method = type.FindMethodByName(internalMethod);
-
 			Debug.Assert(method != null, "Cannot find " + internalMethod + " in " + type.Name);
 
 			Operand callTargetOperand = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
 
-			Operand[] operands = new Operand[context.OperandCount];
+			var operands = new Operand[context.OperandCount];
+
 			for (int i = 0; i < context.OperandCount; i++)
 				operands[i] = context.GetOperand(i);
+
 			Operand result = context.Result;
 
 			context.SetInstruction(IRInstruction.Call, result, callTargetOperand);
+
 			for (int i = 0; i < operands.Length; i++)
+			{
 				context.SetOperand(1 + i, operands[i]);
+			}
+
 			context.OperandCount = (byte)(1 + operands.Length);
 			context.InvokeMethod = method;
 		}

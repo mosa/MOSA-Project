@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Platform.Internal.x86;
+using Mosa.Internal;
 
 namespace Mosa.Kernel.x86
 {
@@ -207,11 +208,6 @@ namespace Mosa.Kernel.x86
 		public static void Write(uint val)
 		{
 			Write(val, 10, -1);
-		}
-
-		public static void Write(uint val, string format)
-		{
-			Write(new StringBuffer(val, format));
 		}
 
 		/// <summary>

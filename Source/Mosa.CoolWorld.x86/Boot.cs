@@ -20,7 +20,7 @@ namespace Mosa.CoolWorld.x86
 		/// </summary>
 		unsafe public static void Main()
 		{
-			Mosa.Kernel.x86.Kernel.Setup();
+			Kernel.x86.Kernel.Setup();
 
 			Console = ConsoleManager.Controller.Boot;
 			Debug = ConsoleManager.Controller.Boot;

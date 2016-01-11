@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected static List<Operand> BuildOperands(Context context)
 		{
-			List<Operand> operands = new List<Operand>(context.OperandCount - 1);
+			var operands = new List<Operand>(context.OperandCount - 1);
 			int index = 0;
 
 			foreach (Operand operand in context.Operands)
@@ -93,6 +93,22 @@ namespace Mosa.Compiler.Framework
 				}
 
 				result = (int)Alignment.AlignUp(result, (uint)alignment) + size;
+			}
+
+			return result;
+		}
+
+		protected static int CalculateStackSizeForParameters(MosaTypeLayout typeLayout, BaseArchitecture architecture, List<Operand> operands)
+		{
+			// first operand is the call location
+			int result = 0;
+
+			foreach (var operand in operands)
+			{
+				int size, alignment;
+				architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
+
+				result = Alignment.AlignUp(result, alignment) + size;
 			}
 
 			return result;

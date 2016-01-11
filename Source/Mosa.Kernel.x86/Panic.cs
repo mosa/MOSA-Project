@@ -80,7 +80,7 @@ namespace Mosa.Kernel.x86
 			EndError();
 		}
 
-		public static void Error(StringBuffer message)
+		public static void Error(Mosa.Internal.StringBuffer message)
 		{
 			BeginError();
 			Screen.Write(message);
@@ -89,7 +89,7 @@ namespace Mosa.Kernel.x86
 
 		public static void Error(uint error)
 		{
-			Error(new StringBuffer(error));
+			Error(new Mosa.Internal.StringBuffer(error));
 		}
 
 		private static void EndError()

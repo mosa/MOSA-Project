@@ -1,10 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Internal;
-using Mosa.Platform.Internal.x86;
 using System.Collections.Generic;
 using System.Reflection;
-using x86Runtime = Mosa.Platform.Internal.x86.Runtime;
 
 namespace System
 {
@@ -36,7 +34,7 @@ namespace System
 				string name = null;
 				if (argument->Name != null)
 				{
-					name = x86Runtime.InitializeMetadataString(argument->Name);
+					name = Mosa.Internal.Runtime.InitializeMetadataString(argument->Name);
 				}
 
 				// Get the argument type
@@ -148,7 +146,7 @@ namespace System
 
 				// String
 				case TypeCode.String:
-					return x86Runtime.InitializeMetadataString(valuePtr);
+					return Mosa.Internal.Runtime.InitializeMetadataString(valuePtr);
 
 				default:
 					if (type.FullName == "System.Type")

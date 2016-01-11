@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Platform.Internal.x86
+namespace Mosa.Internal
 {
 	/// <summary>
 	/// Holds information about a single stacktrace entry
