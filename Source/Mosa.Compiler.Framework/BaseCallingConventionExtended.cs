@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected static List<Operand> BuildOperands(Context context)
 		{
-			List<Operand> operands = new List<Operand>(context.OperandCount - 1);
+			var operands = new List<Operand>(context.OperandCount - 1);
 			int index = 0;
 
 			foreach (Operand operand in context.Operands)
@@ -103,10 +103,8 @@ namespace Mosa.Compiler.Framework
 			// first operand is the call location
 			int result = 0;
 
-			for (int i = 1; i < operands.Count; i++)
+			foreach (var operand in operands)
 			{
-				var operand = operands[0];
-
 				int size, alignment;
 				architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
 
