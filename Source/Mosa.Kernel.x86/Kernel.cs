@@ -2,6 +2,7 @@
 
 using Mosa.Kernel.x86.Smbios;
 using Mosa.Platform.Internal.x86;
+using Mosa.Internal;
 
 namespace Mosa.Kernel.x86
 {
@@ -30,9 +31,9 @@ namespace Mosa.Kernel.x86
 			GC.Setup();
 
 			// At this point we can use objects, that allocates memory
-			Runtime.Setup();
 			SmbiosManager.Setup();
 			ConsoleManager.Setup();
+			Mosa.Internal.Runtime.Setup();
 		}
 	}
 }

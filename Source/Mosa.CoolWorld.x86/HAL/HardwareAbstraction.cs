@@ -68,7 +68,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="irq">The irq.</param>
 		void IHardwareAbstraction.ProcessInterrupt(byte irq)
 		{
-			Mosa.DeviceSystem.HAL.ProcessInterrupt(irq);
+			DeviceSystem.HAL.ProcessInterrupt(irq);
 		}
 
 		/// <summary>
@@ -99,7 +99,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <returns></returns>
 		uint IHardwareAbstraction.GetPhysicalAddress(IMemory memory)
 		{
-			return Mosa.Kernel.x86.PageTable.GetPhysicalAddressFromVirtual(memory.Address);
+			return PageTable.GetPhysicalAddressFromVirtual(memory.Address);
 		}
 
 		/// <summary>
@@ -108,7 +108,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="message">The message.</param>
 		void IHardwareAbstraction.DebugWrite(string message)
 		{
-			Mosa.CoolWorld.x86.Boot.Debug.Write(message);
+			Boot.Debug.Write(message);
 		}
 
 		/// <summary>
@@ -117,7 +117,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="message">The message.</param>
 		void IHardwareAbstraction.DebugWriteLine(string message)
 		{
-			Mosa.CoolWorld.x86.Boot.Debug.WriteLine(message);
+			Boot.Debug.WriteLine(message);
 		}
 	}
 }

@@ -2,7 +2,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace Mosa.Platform.Internal.x86
+namespace Mosa.Internal
 {
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MetadataCAStruct

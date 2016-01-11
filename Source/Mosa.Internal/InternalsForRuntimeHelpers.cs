@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Mosa.Platform.Internal.x86
+namespace Mosa.Internal
 {
 	public unsafe static class InternalsForRuntimeHelpers
 	{
@@ -23,7 +23,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static void InitializeArray(uint* array, RuntimeFieldHandle handle)
 		{
-			MetadataFieldDefinitionStruct* fieldDefinition = (MetadataFieldDefinitionStruct*)((uint**)&handle)[0];
+			var fieldDefinition = (MetadataFieldDefinitionStruct*)((uint**)&handle)[0];
 			byte* arrayElements = (byte*)(array + 3);
 
 			// See FieldDefinition for format of field handle
@@ -45,7 +45,7 @@ namespace Mosa.Platform.Internal.x86
 
 		public static IEnumerable<Assembly> GetAssemblies()
 		{
-			LinkedList<Assembly> assemblies = new LinkedList<Assembly>();
+			var assemblies = new LinkedList<Assembly>();
 			foreach (var assembly in Runtime.Assemblies)
 				assemblies.AddLast(assembly);
 			return assemblies;
@@ -62,7 +62,7 @@ namespace Mosa.Platform.Internal.x86
 
 			var thisObject = Runtime.AllocateObject(type.TypeHandle, typeStruct->Size);
 
-			return Native.CreateInstanceSimple(typeStruct->DefaultConstructor->Method, thisObject);
+			return Intrinsic.CreateInstanceSimple(typeStruct->DefaultConstructor->Method, thisObject);
 		}
 	}
 }

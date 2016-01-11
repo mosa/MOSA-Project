@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Mosa.Platform.Internal.x86
+namespace Mosa.Internal
 {
 	public unsafe static class InternalsForType
 	{
@@ -12,9 +12,9 @@ namespace Mosa.Platform.Internal.x86
 				throw new ArgumentNullException("typeName");
 
 			// Iterate through all the assemblies and look for the type name
-			foreach (RuntimeAssembly assembly in Runtime.Assemblies)
+			foreach (var assembly in Runtime.Assemblies)
 			{
-				foreach (RuntimeType type in assembly.typeList)
+				foreach (var type in assembly.typeList)
 				{
 					// Get type name for currently found type, if its not a match then skip
 					if (type.FullName != typeName) continue;
@@ -34,9 +34,9 @@ namespace Mosa.Platform.Internal.x86
 		public static Type GetTypeFromHandleImpl(RuntimeTypeHandle handle)
 		{
 			// Iterate through all the assemblies and look for the type handle
-			foreach (RuntimeAssembly assembly in Runtime.Assemblies)
+			foreach (var assembly in Runtime.Assemblies)
 			{
-				foreach (RuntimeType type in assembly.typeList)
+				foreach (var type in assembly.typeList)
 				{
 					// If its not a match then skip
 					if (type.TypeHandle != handle)

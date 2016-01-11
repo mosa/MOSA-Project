@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework
 		public MosaTypeLayout TypeLayout { get; private set; }
 
 		/// <summary>
-		/// Gets the internal logging interface
+		/// Gets the compiler trace handle
 		/// </summary>
 		/// <value>The log.</value>
 		public CompilerTrace Trace { get; private set; }

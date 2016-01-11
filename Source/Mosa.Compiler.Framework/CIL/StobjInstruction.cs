@@ -74,13 +74,6 @@ namespace Mosa.Compiler.Framework.CIL
 		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
 		{
 			base.Resolve(ctx, compiler);
-
-			//FIXME: Intent?
-			//SigType destType = ctx.Operand1.Type;
-
-			//Debug.Assert(destType is PtrSigType || destType is RefSigType, @"Destination operand not a pointer or reference.");
-			//if (!(destType is PtrSigType || destType is RefSigType))
-			//    throw new InvalidOperationException(@"Invalid operand.");
 		}
 
 		/// <summary>

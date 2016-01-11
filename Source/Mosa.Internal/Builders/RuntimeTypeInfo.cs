@@ -1,9 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.Internal.x86;
 using System.Collections.Generic;
 using System.Reflection;
-using x86Runtime = Mosa.Platform.Internal.x86.Runtime;
+using Mosa.Internal;
 
 namespace System
 {
@@ -152,10 +151,10 @@ namespace System
 			//this.handle = handle;
 			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
 
-			this.assemblyQualifiedName = x86Runtime.InitializeMetadataString(this.typeStruct->Name);    // TODO
-			this.name = x86Runtime.InitializeMetadataString(this.typeStruct->Name);                 // TODO
-			this.@namespace = x86Runtime.InitializeMetadataString(this.typeStruct->Name);               // TODO
-			this.fullname = x86Runtime.InitializeMetadataString(this.typeStruct->Name);
+			this.assemblyQualifiedName = Mosa.Internal.Runtime.InitializeMetadataString(this.typeStruct->Name);    // TODO
+			this.name = Mosa.Internal.Runtime.InitializeMetadataString(this.typeStruct->Name);                 // TODO
+			this.@namespace = Mosa.Internal.Runtime.InitializeMetadataString(this.typeStruct->Name);               // TODO
+			this.fullname = Mosa.Internal.Runtime.InitializeMetadataString(this.typeStruct->Name);
 
 			this.typeCode = (TypeCode)(this.typeStruct->Attributes >> 24);
 			this.attributes = (TypeAttributes)(this.typeStruct->Attributes & 0x00FFFFFF);

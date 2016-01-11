@@ -13,7 +13,12 @@ namespace Mosa.Kernel.x86
 		static private uint allocated = 0;
 		static private uint used = 0;
 
-		[Method("Mosa.Platform.Internal.x86.GC.AllocateMemory")]
+		[Method("Mosa.Internal.GC.AllocateMemory")]
+		static unsafe private void* _AllocateMemory(uint size)
+		{
+			return (void*)AllocateMemory(size);
+		}
+
 		static public uint AllocateMemory(uint size)
 		{
 			if ((heap == 0) || (size > (allocated - used)))

@@ -11,85 +11,6 @@ namespace Mosa.Platform.Internal.x86
 	{
 		internal const uint NativeIntSize = 4;
 
-		#region Allocation
-
-		public static void* AllocateMemory(uint size)
-		{
-			return GC.AllocateObject(size);
-		}
-
-		public static void* AllocateObject(RuntimeTypeHandle handle, uint classSize)
-		{
-			// An object has the following memory layout:
-			//   - IntPtr TypeDef
-			//   - IntPtr SyncBlock
-			//   - 0 .. n object data fields
-
-			uint allocationSize = (2 * NativeIntSize) + classSize;
-			void* memory = AllocateMemory(allocationSize);
-
-			uint* destination = (uint*)memory;
-			destination[0] = ((uint*)&handle)[0];
-			destination[1] = 0; // No sync block initially
-
-			return memory;
-		}
-
-		public static void* AllocateArray(RuntimeTypeHandle handle, uint elementSize, uint elements)
-		{
-			// An array has the following memory layout:
-			//   - IntPtr TypeDef
-			//   - IntPtr SyncBlock
-			//   - int length
-			//   - ElementType[length] elements
-			//   - Padding
-
-			uint allocationSize = (NativeIntSize * 3) + (uint)(elements * elementSize);
-			allocationSize = (allocationSize + 3) & ~3u;    // Align to 4-bytes boundary
-			void* memory = AllocateMemory(allocationSize);
-
-			uint* destination = (uint*)memory;
-			destination[0] = ((uint*)&handle)[0];
-			destination[1] = 0; // No sync block initially
-			destination[2] = elements;
-
-			return memory;
-		}
-
-		public static void* AllocateString(RuntimeTypeHandle handle, uint length)
-		{
-			return AllocateArray(handle, sizeof(char), length);
-		}
-
-		#endregion Allocation
-
-		#region Metadata
-
-		internal static LinkedList<RuntimeAssembly> Assemblies;
-
-		public static string InitializeMetadataString(uint* ptr)
-		{
-			return (string)Intrinsic.GetObjectFromAddress(ptr);
-		}
-
-		public static void Setup()
-		{
-			// Get AssemblyListTable and Assembly count
-			uint* assemblyListTable = (uint*)Native.GetAssemblyListTable();
-			uint assemblyCount = assemblyListTable[0];
-			Assemblies = new LinkedList<RuntimeAssembly>();
-
-			// Loop through and populate the array
-			for (uint i = 0; i < assemblyCount; i++)
-			{
-				// Get the pointer to the Assembly Metadata
-				uint* ptr = (uint*)(assemblyListTable[1 + i]);
-				Assemblies.AddLast(new RuntimeAssembly(ptr));
-			}
-		}
-
-		#endregion Metadata
-
 		public static bool IsTypeInInheritanceChain(MetadataTypeStruct* typeDefinition, MetadataTypeStruct* chain)
 		{
 			while (chain != null)
@@ -224,85 +145,6 @@ namespace Mosa.Platform.Internal.x86
 				Native.Set8(dst, 0);
 			}
 		}
-
-		#region (Un)Boxing
-
-		public static void* Box8(RuntimeTypeHandle handle, byte value)
-		{
-			byte* memory = (byte*)AllocateObject(handle, 4);    // 4 for alignment
-			*(byte*)(memory + (NativeIntSize * 2)) = value;
-			return memory;
-		}
-
-		public static void* Box16(RuntimeTypeHandle handle, ushort value)
-		{
-			byte* memory = (byte*)AllocateObject(handle, 4);    // 4 for alignment
-			*(ushort*)(memory + (NativeIntSize * 2)) = value;
-			return memory;
-		}
-
-		public static void* Box32(RuntimeTypeHandle handle, uint value)
-		{
-			byte* memory = (byte*)AllocateObject(handle, 4);
-			*(uint*)(memory + (NativeIntSize * 2)) = value;
-			return memory;
-		}
-
-		public static void* Box64(RuntimeTypeHandle handle, ulong value)
-		{
-			byte* memory = (byte*)AllocateObject(handle, 8);
-			*(ulong*)(memory + (NativeIntSize * 2)) = value;
-			return memory;
-		}
-
-		public static void* BoxR4(RuntimeTypeHandle handle, float value)
-		{
-			byte* memory = (byte*)AllocateObject(handle, 4);
-			*(float*)(memory + (NativeIntSize * 2)) = value;
-			return memory;
-		}
-
-		public static void* BoxR8(RuntimeTypeHandle handle, double value)
-		{
-			byte* memory = (byte*)AllocateObject(handle, 8);
-			*(double*)(memory + (NativeIntSize * 2)) = value;
-			return memory;
-		}
-
-		public static void* Box(RuntimeTypeHandle handle, void* value, uint size)
-		{
-			byte* memory = (byte*)AllocateObject(handle, size);
-			MemoryCopy(memory + NativeIntSize * 2, value, size);
-			return memory;
-		}
-
-		public static byte Unbox8(void* box)
-		{
-			return *(byte*)((byte*)box + NativeIntSize * 2);
-		}
-
-		public static ushort Unbox16(void* box)
-		{
-			return *(ushort*)((byte*)box + NativeIntSize * 2);
-		}
-
-		public static uint* Unbox32(void* box)
-		{
-			return (uint*)((byte*)box + NativeIntSize * 2);
-		}
-
-		public static ulong* Unbox64(void* box)
-		{
-			return (ulong*)((byte*)box + NativeIntSize * 2);
-		}
-
-		public static void* Unbox(void* box, void* vt, uint size)
-		{
-			MemoryCopy(vt, (byte*)box + NativeIntSize * 2, size);
-			return vt;
-		}
-
-		#endregion (Un)Boxing
 
 		public static void DebugOutput(byte code)
 		{
@@ -487,11 +329,6 @@ namespace Mosa.Platform.Internal.x86
 		public static void SetReturnAddressForStackFrame(uint stackframe, uint value)
 		{
 			Native.Set32(stackframe + NativeIntSize, value);
-		}
-
-		public static string GetMethodDefinitionName(MetadataMethodStruct* methodDef)
-		{
-			return InitializeMetadataString(methodDef->Name);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
