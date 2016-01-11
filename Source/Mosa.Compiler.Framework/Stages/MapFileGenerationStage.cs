@@ -4,6 +4,8 @@ using Mosa.Compiler.Linker;
 using System;
 using System.IO;
 using System.Diagnostics;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -75,13 +77,13 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="linker">The linker.</param>
 		private void EmitSymbols(BaseLinker linker)
 		{
-			writer.WriteLine("Offset           Virtual          Length           Section Symbols");
+			writer.WriteLine("Virtual          Offset           Length           Symbol");
 
 			foreach (var section in linker.Sections)
 			{
 				foreach (var symbol in section.Symbols)
 				{
-					writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.SectionOffset, symbol.VirtualAddress, symbol.Size, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
+					writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.VirtualAddress, symbol.SectionOffset, symbol.Size, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
 				}
 			}
 
@@ -93,6 +95,44 @@ namespace Mosa.Compiler.Framework.Stages
 				writer.WriteLine("\tat Offset {0:x16}", entryPoint.SectionOffset); // TODO! add section offset too?
 				writer.WriteLine("\tat virtual address {0:x16}", entryPoint.VirtualAddress);
 			}
+
+			writer.WriteLine();
+			writer.WriteLine("Hash Table:");
+			writer.WriteLine();
+			writer.WriteLine("Virtual          Size     Pre-Hash  Post-Hash Symbol");
+
+			var symbols = linker.Symbols.OrderBy(symbol => symbol.Name);
+
+			foreach (var symbol in symbols)
+			{
+				if (symbol.SectionKind == SectionKind.Text)
+				{
+					writer.WriteLine("{0:x16} {1:x8} {2} {3}  {4}", symbol.VirtualAddress, symbol.Size, ExtractHash(symbol.PreHash), ExtractHash(symbol.PostHash), symbol.Name);
+				}
+			}
+
+			writer.WriteLine();
+			writer.WriteLine("Pre-Hash Table:");
+			writer.WriteLine();
+			writer.WriteLine("Hash     Size     Symbol");
+
+			var symbols2 = linker.Symbols.OrderBy(symbol => symbol.Name);
+
+			foreach (var symbol in symbols2)
+			{
+				if (symbol.SectionKind == SectionKind.Text)
+				{
+					writer.WriteLine("{0} {1:x8} {2}", ExtractHash(symbol.PreHash), symbol.Size, symbol.Name);
+				}
+			}
+		}
+
+		private string ExtractHash(string hash)
+		{
+			if (hash.Length > 8)
+				return hash.Substring(hash.Length - 8, 8);
+
+			return hash.PadLeft(8, '-');
 		}
 
 		#endregion Internals

@@ -203,10 +203,14 @@ namespace Mosa.Compiler.Linker
 		{
 			foreach (var symbol in Symbols)
 			{
+				symbol.PreHash = symbol.ComputeMD5Hash();
+
 				foreach (var linkRequest in symbol.LinkRequests)
 				{
 					ApplyPatch(linkRequest);
 				}
+
+				symbol.PostHash = symbol.ComputeMD5Hash();
 			}
 		}
 
