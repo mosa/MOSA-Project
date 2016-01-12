@@ -979,9 +979,9 @@ namespace Mosa.Platform.x86.Stages
 			var divisor = context.Operand2;
 			var method = (result.IsR8) ? "RemR8" : "RemR4";
 
-			var type = TypeSystem.GetTypeByName("Mosa.Platform.Internal.x86", "Division");
+			var type = TypeSystem.GetTypeByName("Mosa.Runtime.x86", "Division");
 
-			Debug.Assert(type != null, "Cannot find type: Mosa.Platform.Internal.x86.Division type");
+			Debug.Assert(type != null, "Cannot find type: Mosa.Runtime.x86.Division type");
 
 			var mosaMethod = type.FindMethodByName(method);
 
@@ -1106,7 +1106,7 @@ namespace Mosa.Platform.x86.Stages
 			else
 				throw new NotSupportedException();
 		}
-		
+
 		#endregion IIRVisitor
 
 		#region IIRVisitor - Unused

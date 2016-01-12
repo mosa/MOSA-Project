@@ -54,13 +54,13 @@
       <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
       <Name>Korlib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Internal\Mosa.Internal.csproj">
-      <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
-      <Name>Mosa.Internal</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.Internal.x86\Mosa.Platform.Internal.x86.csproj">
+    <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj">
       <Project>{a47b7998-4ee8-4af8-9373-c664fdeddc65}</Project>
-      <Name>Mosa.Platform.Internal.x86</Name>
+      <Name>Mosa.Runtime.x86</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
+      <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>
+      <Name>Mosa.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />

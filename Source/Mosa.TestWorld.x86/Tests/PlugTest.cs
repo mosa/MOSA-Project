@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Internal.Plug;
+using Mosa.Runtime.Plug;
 
 namespace Mosa.TestWorld.x86.Tests
 {

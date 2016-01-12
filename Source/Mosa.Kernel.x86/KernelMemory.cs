@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Internal.Plug;
+using Mosa.Runtime.Plug;
 
 namespace Mosa.Kernel.x86
 {
@@ -13,7 +13,7 @@ namespace Mosa.Kernel.x86
 		static private uint allocated = 0;
 		static private uint used = 0;
 
-		[Method("Mosa.Internal.GC.AllocateMemory")]
+		[Method("Mosa.Runtime.GC.AllocateMemory")]
 		static unsafe private void* _AllocateMemory(uint size)
 		{
 			return (void*)AllocateMemory(size);

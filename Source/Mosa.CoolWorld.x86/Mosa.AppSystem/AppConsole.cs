@@ -98,7 +98,7 @@ namespace Mosa.AppSystem
 					return (byte)value;
 
 				// Call Hlt so VM doesn't use up all the CPUs
-				Mosa.Platform.Internal.x86.Native.Hlt();
+				Mosa.Runtime.x86.Native.Hlt();
 			}
 		}
 

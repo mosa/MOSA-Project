@@ -45,9 +45,9 @@ namespace Mosa.Platform.x86.Stages
 
 		private void ReplaceWithDivisionCall(Context context, string methodName)
 		{
-			var type = TypeSystem.GetTypeByName("Mosa.Platform.Internal.x86", "Division");
+			var type = TypeSystem.GetTypeByName("Mosa.Runtime.x86", "Division");
 
-			Debug.Assert(type != null, "Cannot find type: Mosa.Platform.Internal.x86.Division type");
+			Debug.Assert(type != null, "Cannot find type: Mosa.Runtime.x86.Division type");
 
 			var method = type.FindMethodByName(methodName);
 
