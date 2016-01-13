@@ -1026,19 +1026,8 @@ namespace Mosa.Compiler.Framework.Stages
 					return;
 				}
 
-				if ((result.IsI4 || result.IsU4) && op2.ConstantUnsignedInteger == 0xFFFFFFFF)
-				{
-					AddOperandUsageToWorkList(node);
-					if (trace.Active) trace.Log("*** ArithmeticSimplificationLogicalOperators");
-					if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
-					node.SetInstruction(IRInstruction.Move, result, op1);
-					arithmeticSimplificationLogicalOperatorsCount++;
-					changeCount++;
-					if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
-					return;
-				}
-
-				if ((result.IsI8 || result.IsU8) && op2.ConstantUnsignedLongInteger == 0xFFFFFFFFFFFFFFFF)
+				if (((result.IsI4 || result.IsU4 || result.IsI || result.IsU) && op2.ConstantUnsignedInteger == 0xFFFFFFFF)
+					|| ((result.IsI8 || result.IsU8) && op2.ConstantUnsignedLongInteger == 0xFFFFFFFFFFFFFFFF))
 				{
 					AddOperandUsageToWorkList(node);
 					if (trace.Active) trace.Log("*** ArithmeticSimplificationLogicalOperators");
