@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.x86;
-using Mosa.Platform.Internal.x86;
+using Mosa.Runtime.x86;
 using Mosa.TestWorld.x86.Tests;
-using Mosa.Internal;
+using Mosa.Runtime;
 
 namespace Mosa.TestWorld.x86
 {
@@ -122,12 +122,12 @@ namespace Mosa.TestWorld.x86
 
 			while (true)
 			{
-				var methodDef = Mosa.Platform.Internal.x86.Runtime.GetMethodDefinitionFromStackFrameDepth(depth);
+				var methodDef = Mosa.Runtime.x86.Internal.GetMethodDefinitionFromStackFrameDepth(depth);
 
 				if (methodDef == null)
 					return;
 
-				string caller = Mosa.Internal.Runtime.GetMethodDefinitionName(methodDef);
+				string caller = Mosa.Runtime.Internal.GetMethodDefinitionName(methodDef);
 
 				if (caller == null)
 					return;

@@ -62,7 +62,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 			moduleLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
 			moduleLoader.LoadModuleFromFile("mscorlib.dll");
-			moduleLoader.LoadModuleFromFile("Mosa.Platform.Internal." + platform.Name + ".dll");
+			moduleLoader.LoadModuleFromFile("Mosa.Runtime.dll");
+			moduleLoader.LoadModuleFromFile("Mosa.Runtime." + platform.Name + ".dll");
 			moduleLoader.LoadModuleFromFile("Mosa.Test.Collection.dll");
 			moduleLoader.LoadModuleFromFile("Mosa.Kernel." + platform.Name + "Test.dll");
 

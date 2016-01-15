@@ -18,8 +18,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Data members
 
-		private const string PlugTypeAttribute = "Mosa.Internal.Plug.TypeAttribute";
-		private const string PlugMethodAttribute = "Mosa.Internal.Plug.MethodAttribute";
+		private const string PlugTypeAttribute = "Mosa.Runtime.Plug.TypeAttribute";
+		private const string PlugMethodAttribute = "Mosa.Runtime.Plug.MethodAttribute";
 
 		protected override void Run()
 		{

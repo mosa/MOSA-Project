@@ -377,12 +377,12 @@ namespace Mosa.Compiler.Framework
 
 		protected MosaType GetPlatformInternalRuntimeType()
 		{
-			return TypeSystem.GetTypeByName("Mosa.Platform.Internal." + Architecture.PlatformName, "Runtime");
+			return TypeSystem.GetTypeByName("Mosa.Runtime." + Architecture.PlatformName, "Internal");
 		}
 
 		protected MosaType GeInternalRuntimeType()
 		{
-			return TypeSystem.GetTypeByName("Mosa.Internal", "Runtime");
+			return TypeSystem.GetTypeByName("Mosa.Runtime", "Internal");
 		}
 
 		#endregion Helper Methods

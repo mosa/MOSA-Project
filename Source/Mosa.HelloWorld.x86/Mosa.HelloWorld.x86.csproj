@@ -72,17 +72,17 @@
       <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
       <Name>Mosa.ClassLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Internal\Mosa.Internal.csproj">
-      <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
-      <Name>Mosa.Internal</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj">
       <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
       <Name>Mosa.Kernel.x86</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.Internal.x86\Mosa.Platform.Internal.x86.csproj">
+    <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj">
       <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
-      <Name>Mosa.Platform.Internal.x86</Name>
+      <Name>Mosa.Runtime.x86</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
+      <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>
+      <Name>Mosa.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -2,7 +2,7 @@
 
 using Mosa.Kernel.x86;
 using Mosa.Kernel.x86.Smbios;
-using Mosa.Platform.Internal.x86;
+using Mosa.Runtime.x86;
 using System;
 
 namespace Mosa.HelloWorld.x86

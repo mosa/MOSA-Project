@@ -2,7 +2,7 @@
 
 using Mosa.AppSystem;
 using Mosa.Kernel.x86;
-using Mosa.Platform.Internal.x86;
+using Mosa.Runtime.x86;
 using Mosa.DeviceDriver.ScanCodeMap;
 
 namespace Mosa.CoolWorld.x86

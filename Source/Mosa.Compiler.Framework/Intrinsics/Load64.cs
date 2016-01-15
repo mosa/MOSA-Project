@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
-	[ReplacementTarget("Mosa.Internal.Intrinsic::Load64")]
+	[ReplacementTarget("Mosa.Runtime.Intrinsic::Load64")]
 	public sealed class Load64 : IIntrinsicInternalMethod
 	{
 		/// <summary>

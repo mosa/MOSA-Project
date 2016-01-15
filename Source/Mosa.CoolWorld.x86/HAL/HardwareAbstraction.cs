@@ -2,7 +2,7 @@
 
 using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
-using Mosa.Platform.Internal.x86;
+using Mosa.Runtime.x86;
 
 namespace Mosa.CoolWorld.x86.HAL
 {

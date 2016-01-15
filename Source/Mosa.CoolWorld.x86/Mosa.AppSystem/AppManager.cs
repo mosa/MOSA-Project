@@ -177,12 +177,12 @@ namespace Mosa.AppSystem
 
 			while (true)
 			{
-				var methodDef = Mosa.Platform.Internal.x86.Runtime.GetMethodDefinitionFromStackFrameDepth(depth);
+				var methodDef = Mosa.Runtime.x86.Internal.GetMethodDefinitionFromStackFrameDepth(depth);
 
 				if (methodDef == null)
 					return;
 
-				string caller = Mosa.Internal.Runtime.GetMethodDefinitionName(methodDef);
+				string caller = Mosa.Runtime.Internal.GetMethodDefinitionName(methodDef);
 
 				if (caller == null)
 					return;

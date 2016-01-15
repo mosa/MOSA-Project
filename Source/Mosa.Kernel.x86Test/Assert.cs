@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
-using Mosa.Platform.Internal.x86;
+using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86Test
 {
@@ -11,7 +11,7 @@ namespace Mosa.Kernel.x86Test
 	{
 		private static void AssertError(string message)
 		{
-			Runtime.DebugOutput(message);
+			Mosa.Runtime.x86.Internal.DebugOutput(message);
 		}
 
 		[Conditional("DEBUG")]
