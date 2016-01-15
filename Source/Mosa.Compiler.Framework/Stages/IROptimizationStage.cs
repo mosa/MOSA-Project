@@ -498,7 +498,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (source.IsR8 && destination.IsR8)
 				return true;
 
-			if (source.IsI && destination.IsI)
+			if (((source.IsI || source.IsU) && (destination.IsI || destination.IsU)))
 				return true;
 
 			if (source.IsValueType || destination.IsValueType)
@@ -547,15 +547,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (ContainsAddressOf(destination))
 				return;
-
-			//if (destination != source)
-			//{
-			//	if (trace.Active) trace.Log("REMOVED:\t" + node.ToString());
-			//	AddOperandUsageToWorkList(node);
-			//	node.SetInstruction(IRInstruction.Nop);
-			//	instructionsRemovedCount++;
-			//	return;
-			//}
 
 			// for each statement T that uses operand, substituted c in statement T
 			AddOperandUsageToWorkList(node);
