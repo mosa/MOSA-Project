@@ -66,12 +66,17 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the type of the platform internal runtime.
 		/// </summary>
-		/// <value>
-		/// The type of the platform internal runtime.
-		/// </value>
 		public MosaType PlatformInternalRuntimeType { get { return MethodCompiler.Compiler.PlatformInternalRuntimeType; } }
 
+		/// <summary>
+		/// Gets the type of the internal runtime.
+		/// </summary>
 		public MosaType InternalRuntimeType { get { return MethodCompiler.Compiler.InternalRuntimeType; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is plugged.
+		/// </summary>
+		public bool IsPlugged { get { return MethodCompiler.IsPlugged; } }
 
 		/// <summary>
 		/// Gets the size of the native instruction.

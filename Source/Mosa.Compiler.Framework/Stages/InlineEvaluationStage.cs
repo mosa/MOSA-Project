@@ -22,8 +22,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var trace = CreateTraceLog("Inline");
 
-			var plugMethod = MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method);
-
 			bool firstCompile = (compilerMethod.CompileCount == 0);
 
 			compilerMethod.BasicBlocks = null;
@@ -32,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 			compilerMethod.IsLinkerGenerated = method.IsLinkerGenerated;
 			compilerMethod.IsCILDecoded = (!method.IsLinkerGenerated && method.Code.Count > 0);
 			compilerMethod.HasLoops = false;
-			compilerMethod.IsPlugged = (plugMethod != null);
+			compilerMethod.IsPlugged = IsPlugged;
 			compilerMethod.IsVirtual = method.IsVirtual;
 			compilerMethod.HasDoNotInlineAttribute = false;
 			compilerMethod.HasAddressOfInstruction = false;

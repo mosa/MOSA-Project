@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			if (MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method) != null)
+			if (IsPlugged)
 				return;
 
 			// Layout stack variables
@@ -33,8 +33,22 @@ namespace Mosa.Compiler.Framework.Stages
 			int size = LayoutVariables(MethodCompiler.StackLayout.LocalStack, CallingConvention, CallingConvention.OffsetOfFirstLocal, true);
 
 			MethodCompiler.StackLayout.StackSize = size;
-
 			MethodCompiler.TypeLayout.SetMethodStackSize(MethodCompiler.Method, -size);
+
+			CreateStackLocalTrace();
+		}
+
+		private void CreateStackLocalTrace()
+		{
+			var trace = CreateTraceLog("Stack Local");
+
+			if (trace.!Active)
+				return;
+
+			foreach (var local in MethodCompiler.StackLayout.LocalStack)
+			{
+				trace.Log(local.ToString() + ": displacement = " + local.Displacement.ToString());
+			}
 		}
 
 		/// <summary>
@@ -65,7 +79,6 @@ namespace Mosa.Compiler.Framework.Stages
 			int size = LayoutVariables(parameters, CallingConvention, CallingConvention.OffsetOfFirstParameter + returnSize, false);
 
 			MethodCompiler.StackLayout.StackParameterSize = size;
-
 			MethodCompiler.TypeLayout.SetMethodParameterStackSize(MethodCompiler.Method, size);
 		}
 

@@ -32,14 +32,14 @@ namespace Mosa.Compiler.Framework
 		private TypeInitializerSchedulerStage typeInitializer;
 
 		/// <summary>
-		/// Holds flag that will stop method compiler
-		/// </summary>
-		private bool stop;
-
-		/// <summary>
 		/// The empty operand list
 		/// </summary>
 		private static readonly Operand[] emptyOperandList = new Operand[0];
+
+		/// <summary>
+		/// Holds flag that will stop method compiler
+		/// </summary>
+		private bool stop;
 
 		#endregion Data Members
 
@@ -139,6 +139,16 @@ namespace Mosa.Compiler.Framework
 		public IList<ProtectedRegion> ProtectedRegions { get; private set; }
 
 		/// <summary>
+		/// Gets a value indicating whether [plugged method].
+		/// </summary>
+		public MosaMethod PluggedMethod { get; private set; }
+
+		/// <summary>
+		/// Gets a value indicating whether this method is plugged.
+		/// </summary>
+		public bool IsPlugged { get { return PluggedMethod != null; } }
+
+		/// <summary>
 		/// Gets the thread identifier.
 		/// </summary>
 		/// <value>
@@ -175,12 +185,10 @@ namespace Mosa.Compiler.Framework
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
 			DominanceAnalysis = new Dominance(Compiler.CompilerOptions.DominanceAnalysisFactory, BasicBlocks);
-
-			EvaluateParameterOperands();
-
+			PluggedMethod = Compiler.PlugSystem.GetPlugMethod(Method);
 			stop = false;
 
-			Debug.Assert(Linker != null);
+			EvaluateParameterOperands();
 		}
 
 		#endregion Construction
