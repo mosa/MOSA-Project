@@ -12,9 +12,9 @@ namespace Mosa.Compiler.Linker
 
 		public Patch(int start, int length, int shift)
 		{
-			this.Mask = (~(ulong)0) >> (64 - length);
-			this.Mask = this.Mask << start;
-			this.Shift = shift - start;
+			Mask = (~(ulong)0) >> (64 - length);
+			Mask = Mask << start;
+			Shift = shift - start;
 		}
 
 		public ulong GetResult(ulong value)

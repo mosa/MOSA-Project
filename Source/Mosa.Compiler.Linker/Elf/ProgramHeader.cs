@@ -107,12 +107,12 @@ namespace Mosa.Compiler.Linker.Elf
 		{
 			writer.Write((uint)Type);
 			writer.Write((uint)Flags);
-			writer.Write((ulong)Offset);
-			writer.Write((ulong)VirtualAddress);
-			writer.Write((ulong)PhysicalAddress);
-			writer.Write((ulong)FileSize);
-			writer.Write((ulong)MemorySize);
-			writer.Write((ulong)Alignment);
+			writer.Write(Offset);
+			writer.Write(VirtualAddress);
+			writer.Write(PhysicalAddress);
+			writer.Write(FileSize);
+			writer.Write(MemorySize);
+			writer.Write(Alignment);
 		}
 	}
 }

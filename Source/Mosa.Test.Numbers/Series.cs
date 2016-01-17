@@ -470,7 +470,7 @@ namespace Mosa.Test.Numbers
 
 		public static IEnumerable<float> R4FitsI4
 		{
-			get { foreach (float a in R4) if (!float.IsNaN(a) && a <= Int32.MaxValue && a >= Int32.MinValue) yield return a; }
+			get { foreach (float a in R4) if (!float.IsNaN(a) && a <= int.MaxValue && a >= int.MinValue) yield return a; }
 		}
 
 		public static IEnumerable<float> R4Simple
@@ -561,7 +561,7 @@ namespace Mosa.Test.Numbers
 
 		public static IEnumerable<double> R8FitsI4
 		{
-			get { foreach (double a in R8) if (!double.IsNaN(a) && a <= Int32.MaxValue && a >= Int32.MinValue) yield return a; }
+			get { foreach (double a in R8) if (!double.IsNaN(a) && a <= int.MaxValue && a >= int.MinValue) yield return a; }
 		}
 
 		public static IEnumerable<double> R8Simple

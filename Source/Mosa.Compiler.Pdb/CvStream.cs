@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Pdb
 			get
 			{
 				ThrowIfDisposed();
-				return this.stream.CanRead;
+				return stream.CanRead;
 			}
 		}
 
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Pdb
 			get
 			{
 				ThrowIfDisposed();
-				return this.stream.CanSeek;
+				return stream.CanSeek;
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Pdb
 			get
 			{
 				ThrowIfDisposed();
-				return this.stream.CanWrite;
+				return stream.CanWrite;
 			}
 		}
 
@@ -90,7 +90,7 @@ namespace Mosa.Compiler.Pdb
 		{
 			if (disposing == true)
 			{
-				this.stream = null;
+				stream = null;
 			}
 
 			base.Dispose(disposing);
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Pdb
 		public override void Flush()
 		{
 			ThrowIfDisposed();
-			this.stream.Flush();
+			stream.Flush();
 		}
 
 		/// <summary>
@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Pdb
 			get
 			{
 				ThrowIfDisposed();
-				return this.stream.Length;
+				return stream.Length;
 			}
 		}
 
@@ -151,12 +151,12 @@ namespace Mosa.Compiler.Pdb
 			get
 			{
 				ThrowIfDisposed();
-				return this.stream.Position;
+				return stream.Position;
 			}
 			set
 			{
 				ThrowIfDisposed();
-				this.stream.Position = value;
+				stream.Position = value;
 			}
 		}
 
@@ -190,7 +190,7 @@ namespace Mosa.Compiler.Pdb
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			ThrowIfDisposed();
-			return this.stream.Read(buffer, offset, count);
+			return stream.Read(buffer, offset, count);
 		}
 
 		/// <summary>
@@ -213,7 +213,7 @@ namespace Mosa.Compiler.Pdb
 		public override long Seek(long offset, SeekOrigin origin)
 		{
 			ThrowIfDisposed();
-			return this.stream.Seek(offset, origin);
+			return stream.Seek(offset, origin);
 		}
 
 		/// <summary>
@@ -232,7 +232,7 @@ namespace Mosa.Compiler.Pdb
 		public override void SetLength(long value)
 		{
 			ThrowIfDisposed();
-			this.stream.SetLength(value);
+			stream.SetLength(value);
 		}
 
 		/// <summary>
@@ -262,7 +262,7 @@ namespace Mosa.Compiler.Pdb
 		public override void Write(byte[] buffer, int offset, int count)
 		{
 			ThrowIfDisposed();
-			this.stream.Write(buffer, offset, count);
+			stream.Write(buffer, offset, count);
 		}
 
 		#endregion Stream Overrides
@@ -274,7 +274,7 @@ namespace Mosa.Compiler.Pdb
 		/// </summary>
 		private void ThrowIfDisposed()
 		{
-			if (this.stream == null)
+			if (stream == null)
 				throw new ObjectDisposedException(@"CvStream");
 		}
 

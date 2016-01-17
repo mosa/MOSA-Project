@@ -94,7 +94,7 @@ namespace Mosa.Platform.ARMv6
 		private Architecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			this.architectureFeatures = architectureFeatures;
-			this.CallingConvention = new DefaultCallingConvention(this);
+			CallingConvention = new DefaultCallingConvention(this);
 		}
 
 		/// <summary>

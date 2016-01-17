@@ -44,10 +44,10 @@ namespace Mosa.FileSystem
 		public GenericFileSystem(IPartitionDevice partition)
 		{
 			this.partition = partition;
-			this.BlockSize = partition.BlockSize;
-			this.IsValid = false;
-			this.VolumeLabel = string.Empty;
-			this.SerialNumber = new byte[0];
+			BlockSize = partition.BlockSize;
+			IsValid = false;
+			VolumeLabel = string.Empty;
+			SerialNumber = new byte[0];
 		}
 
 		/// <summary>

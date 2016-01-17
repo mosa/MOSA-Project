@@ -121,10 +121,10 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(codeStream != null);
 			Debug.Assert(linker != null);
 
-			this.MethodName = methodName;
+			MethodName = methodName;
 			this.linker = linker;
 			this.codeStream = codeStream;
-			this.TypeSystem = typeSystem;
+			TypeSystem = typeSystem;
 
 			// only necessary if method is being recompiled (due to inline optimization, for example)
 			var symbol = linker.GetSymbol(MethodName, SectionKind.Text);

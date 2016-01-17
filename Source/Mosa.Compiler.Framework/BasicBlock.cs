@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework
 	{
 		public static readonly int PrologueLabel = -1;
 		public static readonly int StartLabel = 0;
-		public static readonly int EpilogueLabel = Int32.MaxValue;
+		public static readonly int EpilogueLabel = int.MaxValue;
 		public static readonly int CompilerBlockStartLabel = 0x10000000;
 
 		#region Data Fields

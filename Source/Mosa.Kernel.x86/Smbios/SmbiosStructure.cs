@@ -16,8 +16,8 @@ namespace Mosa.Kernel.x86.Smbios
 		protected SmbiosStructure(uint address)
 		{
 			this.address = address;
-			this.length = Native.Get8(address + 0x01u);
-			this.handle = Native.Get16(address + 0x02u);
+			length = Native.Get8(address + 0x01u);
+			handle = Native.Get16(address + 0x02u);
 		}
 
 		protected string GetStringFromIndex(byte index)
@@ -25,7 +25,7 @@ namespace Mosa.Kernel.x86.Smbios
 			if (index == 0)
 				return string.Empty;
 
-			uint stringStart = this.address + this.length;
+			uint stringStart = address + length;
 			int count = 1;
 
 			while (count++ != index)

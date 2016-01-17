@@ -140,7 +140,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			: base(simCPU)
 		{
 			this.dislayForm = dislayForm;
-			this.IsMemoryMonitor = true;
+			IsMemoryMonitor = true;
 
 			ioBase = StandardIOBase;
 			baseAddress = StandardAddressBase;
@@ -287,7 +287,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 		{
 			switch (data)
 			{
-				case CRTCommands.HorizontalDisplayEnableEnd: crtControllerData = (byte)(width); break;
+				case CRTCommands.HorizontalDisplayEnableEnd: crtControllerData = width; break;
 				case CRTCommands.VerticalDisplayEnableEnd: crtControllerData = height; break;
 				default: break;
 			}

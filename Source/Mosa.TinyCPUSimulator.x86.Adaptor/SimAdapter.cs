@@ -14,7 +14,7 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 		{
 		}
 
-		SimCPU ISimAdapter.SimCPU { get { return this.CPU; } }
+		SimCPU ISimAdapter.SimCPU { get { return CPU; } }
 
 		SimInstruction ISimAdapter.Convert(InstructionNode node, MosaMethod method, BasicBlocks basicBlocks, byte opcodeSize)
 		{

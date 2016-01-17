@@ -15,7 +15,7 @@ namespace Mosa.Internal
 
 		public static uint* GetArgumentAddress(MetadataCAArgumentStruct* data)
 		{
-			return (uint*)((uint*)data + MetadataCAArgumentStruct.ArgumentOffset);
+			return (uint*)data + MetadataCAArgumentStruct.ArgumentOffset;
 		}
 	}
 }

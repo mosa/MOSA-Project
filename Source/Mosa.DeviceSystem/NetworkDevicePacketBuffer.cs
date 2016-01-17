@@ -75,10 +75,10 @@ namespace Mosa.DeviceSystem
 		public NetworkDevicePacketBuffer(INetworkDevice networkDevice)
 		{
 			this.networkDevice = networkDevice;
-			this.maxTransmitQueue = 100;    // TODO: Lookup system default
-			this.maxReceiveQueue = 100;     // TODO: Lookup system default
-			this.transmitLock = new SpinLock();
-			this.receiveLock = new SpinLock();
+			maxTransmitQueue = 100;    // TODO: Lookup system default
+			maxReceiveQueue = 100;     // TODO: Lookup system default
+			transmitLock = new SpinLock();
+			receiveLock = new SpinLock();
 			countTransmitPackets = 0;
 			countReceivePackets = 0;
 			discardedTransmitPackets = 0;
@@ -96,8 +96,8 @@ namespace Mosa.DeviceSystem
 			this.networkDevice = networkDevice;
 			this.maxReceiveQueue = maxReceiveQueue;
 			this.maxTransmitQueue = maxTransmitQueue;
-			this.transmitLock = new SpinLock();
-			this.receiveLock = new SpinLock();
+			transmitLock = new SpinLock();
+			receiveLock = new SpinLock();
 			countTransmitPackets = 0;
 			countReceivePackets = 0;
 			discardedTransmitPackets = 0;

@@ -24,10 +24,10 @@ namespace Mosa.Compiler.Pdb
 		internal CvPublicSymbol3(ushort length, CvEntryType type, BinaryReader reader) :
 			base(length, type)
 		{
-			this.symtype = reader.ReadInt32();
-			this.offset = reader.ReadInt32();
-			this.segment = reader.ReadInt16();
-			this.name = CvUtil.ReadString(reader);
+			symtype = reader.ReadInt32();
+			offset = reader.ReadInt32();
+			segment = reader.ReadInt16();
+			name = CvUtil.ReadString(reader);
 		}
 
 		/// <summary>
@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Pdb
 		/// </returns>
 		public override string ToString()
 		{
-			return String.Format("Public {0} {1}:{2} {3}", this.symtype, this.segment, this.offset, this.name);
+			return String.Format("Public {0} {1}:{2} {3}", symtype, segment, offset, name);
 		}
 	}
 }

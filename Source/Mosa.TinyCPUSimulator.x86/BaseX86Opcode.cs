@@ -11,7 +11,7 @@ namespace Mosa.TinyCPUSimulator.x86
 		{
 			var x86 = cpu as CPUx86;
 
-			x86.EIP.Value = (uint)(x86.EIP.Value + instruction.OpcodeSize);
+			x86.EIP.Value = x86.EIP.Value + instruction.OpcodeSize;
 
 			Execute(x86, instruction);
 		}
@@ -300,7 +300,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 		protected void Write(CPUx86 cpu, uint address, uint value, int size)
 		{
-			if (size == 32) cpu.Write32(address, (uint)value);
+			if (size == 32) cpu.Write32(address, value);
 			else if (size == 16) cpu.Write16(address, (ushort)value);
 			else if (size == 8) cpu.Write8(address, (byte)value);
 		}

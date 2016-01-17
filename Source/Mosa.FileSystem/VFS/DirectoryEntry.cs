@@ -63,7 +63,7 @@ namespace Mosa.FileSystem.VFS
 		{
 			get
 			{
-				return this.name;
+				return name;
 			}
 		}
 

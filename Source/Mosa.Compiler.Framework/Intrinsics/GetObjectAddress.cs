@@ -33,8 +33,12 @@ namespace Mosa.Compiler.Framework.Intrinsics
 
 				operand1 = def.Operand1;
 				def.Empty();
-				context.SetInstruction(IRInstruction.AddressOf, result, operand1);
-				return;
+
+				if (operand1.IsMemoryAddress)
+				{
+					context.SetInstruction(IRInstruction.AddressOf, result, operand1);
+					return;
+				}
 			}
 			context.SetInstruction(IRInstruction.Move, result, operand1);
 		}

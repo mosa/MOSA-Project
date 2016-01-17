@@ -365,7 +365,7 @@ namespace Mosa.TinyCPUSimulator
 			}
 			else if (offset == 2)
 			{
-				InternalWrite32Ex(address - 2, ((uint)value), 0x0000FFFF);
+				InternalWrite32Ex(address - 2, value, 0x0000FFFF);
 			}
 			else if (offset == 3)
 			{

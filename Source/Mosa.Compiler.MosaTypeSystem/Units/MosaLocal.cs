@@ -14,9 +14,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaLocal(string name, MosaType type, bool isPinned)
 		{
-			this.Name = name;
-			this.Type = type;
-			this.IsPinned = isPinned;
+			Name = name;
+			Type = type;
+			IsPinned = isPinned;
 		}
 
 		public override string ToString()

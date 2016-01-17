@@ -61,9 +61,9 @@ namespace Mosa.Compiler.Framework
 
 			Method = mosaMethod;
 
-			this.Calls = new List<MosaMethod>();
-			this.CalledBy = new List<MosaMethod>();
-			this.CompileCount = 0;
+			Calls = new List<MosaMethod>();
+			CalledBy = new List<MosaMethod>();
+			CompileCount = 0;
 		}
 
 		public void AddCalledBy(MosaMethod method)

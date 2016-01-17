@@ -12,6 +12,6 @@ namespace Mosa.TinyCPUSimulator.x86
 			this.register = register;
 		}
 
-		public override uint Value { get { return (byte)((register.Value >> 8) & 0xFF); } set { register.Value = (uint)((register.Value & 0xFFFF00FF) | (uint)(value << 8)); } }
+		public override uint Value { get { return (byte)((register.Value >> 8) & 0xFF); } set { register.Value = (register.Value & 0xFFFF00FF) | (uint)(value << 8); } }
 	}
 }

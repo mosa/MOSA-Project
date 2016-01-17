@@ -25,7 +25,7 @@ namespace Mosa.Tool.TinySimulator
 				listBox1.Items.Add(listBox1.Items.Count.ToString("D2") + ": " + MainForm.Format(entry[0], display32) + " [" + MainForm.Format(entry[1], display32) + "]");
 			}
 
-			this.Refresh();
+			Refresh();
 		}
 	}
 }

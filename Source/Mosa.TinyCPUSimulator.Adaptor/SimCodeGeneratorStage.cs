@@ -50,7 +50,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		{
 			base.BlockStart(block);
 
-			simLinker.AddTargetSymbol(symbol, (int)codeEmitter.CurrentPosition, block.ToString() + ":" + MethodCompiler.Method.FullName);
+			simLinker.AddTargetSymbol(symbol, codeEmitter.CurrentPosition, block.ToString() + ":" + MethodCompiler.Method.FullName);
 		}
 	}
 }

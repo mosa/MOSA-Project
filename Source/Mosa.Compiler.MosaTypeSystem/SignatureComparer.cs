@@ -94,7 +94,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public static int GetHashCode(MosaMethodSignature method)
 		{
-			int result = (int)GetHashCode(method.ReturnType);
+			int result = GetHashCode(method.ReturnType);
 
 			foreach (var param in method.Parameters)
 			{

@@ -54,10 +54,10 @@ namespace Mosa.Compiler.Pdb
 				throw new ArgumentException(@"Stream must be seekable.", @"stream");
 
 			this.stream = stream;
-			this.reader = new BinaryReader(stream);
+			reader = new BinaryReader(stream);
 
 			// Read the file header
-			if (PdbFileHeader.Read(this.reader, out this.header) == false)
+			if (PdbFileHeader.Read(reader, out header) == false)
 				throw new InvalidDataException(@"Not a Microsoft program database v7.0 file.");
 
 			LoadRootStream();
@@ -69,26 +69,26 @@ namespace Mosa.Compiler.Pdb
 		private void LoadRootStream()
 		{
 			// The root stream length
-			int dwStreamLength = this.header.dwRootBytes;
+			int dwStreamLength = header.dwRootBytes;
 
 			// Calculate the number of pages of the root stream
-			int pageCount = (dwStreamLength / this.header.dwPageSize) + 1;
+			int pageCount = (dwStreamLength / header.dwPageSize) + 1;
 
 			// Allocate page list
 			int[] pages = new int[pageCount];
 
 			// Read the pages
-			this.stream.Position = this.header.dwIndexPage * this.header.dwPageSize;
+			stream.Position = header.dwIndexPage * header.dwPageSize;
 			for (int i = 0; i < pageCount; i++)
 			{
-				pages[i] = this.reader.ReadInt32();
-				Debug.WriteLine(String.Format(@"PdbReader: Root stream page {0} (at offset {1})", pages[i], pages[i] * this.header.dwPageSize));
+				pages[i] = reader.ReadInt32();
+				Debug.WriteLine(String.Format(@"PdbReader: Root stream page {0} (at offset {1})", pages[i], pages[i] * header.dwPageSize));
 			}
 
 			using (PdbStream pdbStream = GetStream(pages, dwStreamLength))
 			using (BinaryReader rootReader = new BinaryReader(pdbStream))
 			{
-				PdbRootStream.Read(rootReader, this.header.dwPageSize, out this.root);
+				PdbRootStream.Read(rootReader, header.dwPageSize, out root);
 			}
 		}
 
@@ -99,15 +99,15 @@ namespace Mosa.Compiler.Pdb
 		/// <returns></returns>
 		public PdbStream GetStream(int pdbStream)
 		{
-			if (pdbStream > this.root.streamLength.Length || this.root.streamPages[pdbStream] == null)
+			if (pdbStream > root.streamLength.Length || root.streamPages[pdbStream] == null)
 				throw new ArgumentException(@"Invalid pdb stream index.", @"pdbStream");
 
-			return GetStream(this.root.streamPages[pdbStream], this.root.streamLength[pdbStream]);
+			return GetStream(root.streamPages[pdbStream], root.streamLength[pdbStream]);
 		}
 
 		private PdbStream GetStream(int[] pages, int dwStreamLength)
 		{
-			return new PdbStream(this.stream, this.header.dwPageSize, pages, dwStreamLength);
+			return new PdbStream(stream, header.dwPageSize, pages, dwStreamLength);
 		}
 
 		#endregion Construction
@@ -119,11 +119,11 @@ namespace Mosa.Compiler.Pdb
 		/// </summary>
 		public void Dispose()
 		{
-			if (this.reader != null)
+			if (reader != null)
 			{
-				this.reader.Close();
-				this.reader = null;
-				this.stream = null;
+				reader.Close();
+				reader = null;
+				stream = null;
 			}
 		}
 

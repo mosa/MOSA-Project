@@ -35,7 +35,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool Equals(MosaField other)
 		{
-			return SignatureComparer.Equals(this.FieldType, other.FieldType);
+			return SignatureComparer.Equals(FieldType, other.FieldType);
 		}
 
 		public class Mutator : MosaUnit.MutatorBase

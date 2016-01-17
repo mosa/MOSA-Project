@@ -371,18 +371,18 @@ namespace Mosa.Compiler.Framework
 		{
 			Definitions = new List<InstructionNode>();
 			Uses = new List<InstructionNode>();
-			this.IsParameter = false;
-			this.IsStackLocal = false;
-			this.IsShift = false;
-			this.IsConstant = false;
-			this.IsVirtualRegister = false;
-			this.IsLabel = false;
-			this.IsCPURegister = false;
-			this.IsMemoryAddress = false;
-			this.IsSSA = false;
-			this.IsSymbol = false;
-			this.IsField = false;
-			this.IsParameter = false;
+			IsParameter = false;
+			IsStackLocal = false;
+			IsShift = false;
+			IsConstant = false;
+			IsVirtualRegister = false;
+			IsLabel = false;
+			IsCPURegister = false;
+			IsMemoryAddress = false;
+			IsSSA = false;
+			IsSymbol = false;
+			IsField = false;
+			IsParameter = false;
 		}
 
 		/// <summary>
@@ -403,8 +403,8 @@ namespace Mosa.Compiler.Framework
 		private Operand(ShiftType shiftType)
 			: this()
 		{
-			this.ShiftType = shiftType;
-			this.IsShift = true;
+			ShiftType = shiftType;
+			IsShift = true;
 		}
 
 		#endregion Construction

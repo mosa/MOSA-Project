@@ -284,9 +284,9 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 				colorIndex = (byte)(colorIndex & 0xF);
 
 				if ((x & 0x01) == 0)
-					memory.Write8((uint)(address & 0xF), (byte)(colorIndex << 4));
+					memory.Write8(address & 0xF, (byte)(colorIndex << 4));
 				else
-					memory.Write8((uint)(address & 0x0F), (byte)(colorIndex));
+					memory.Write8(address & 0x0F, colorIndex);
 			}
 
 			// TODO: Support more video modes

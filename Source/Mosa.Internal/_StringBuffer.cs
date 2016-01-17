@@ -12,16 +12,13 @@ namespace Mosa.Internal
 	public struct StringBuffer
 	{
 		[FieldOffset(0)]
-		private int length;
+		private short length;
 
-		//[FieldOffset(4)]
-		//private byte isSet; //Compiler crash!
+		[FieldOffset(2)]
+		private short isSet;
 
 		public const int MaxLength = 132;
 		public const int EntrySize = 132 * 2 + 4;
-
-		//[FieldOffset(4)]
-		//unsafe private char* chars;
 
 		unsafe public static StringBuffer CreateFromNullTerminatedString(uint start)
 		{
@@ -40,18 +37,7 @@ namespace Mosa.Internal
 
 		private unsafe char* firstChar()
 		{
-			//Does not work!
-			//return (char*)((uint)(Mosa.Internal.Intrinsic.GetValueTypeAddress(this)) + 4);
-
-			//Compiler crash
-			//fixed (void* ptr = &this)
-			//return (char*)(((uint)ptr) + 4);
-
-			//Workaround
-			uint ui;
-			fixed (void* ptr = &this)
-				ui = (uint)ptr;
-			return (char*)(ui + 4);
+			return (char*)((uint)(Intrinsic.GetValueTypeAddress(this)) + 4);
 		}
 
 		/// <summary>
@@ -88,16 +74,16 @@ namespace Mosa.Internal
 		{
 			Clear();
 
-			//if (value == null)
-			//	isSet = 0;
-			//else
-			Append(value);
+			if (value == null)
+				isSet = 0;
+			else
+				Append(value);
 		}
 
-		//public bool IsNull
-		//{
-		//	get { return isSet == 0; }
-		//}
+		public bool IsNull
+		{
+			get { return isSet == 0; }
+		}
 
 		#region Constructor
 
@@ -197,7 +183,7 @@ namespace Mosa.Internal
 				return;
 			}
 
-			//isSet = 1;
+			isSet = 1;
 			length++;
 			this[length - 1] = value;
 		}
@@ -237,7 +223,7 @@ namespace Mosa.Internal
 		{
 			int offset = 0;
 
-			uint uvalue = (uint)value;
+			uint uvalue = value;
 			ushort divisor = hex ? (ushort)16 : (ushort)10;
 			int len = 0;
 			int count = 0;
@@ -260,7 +246,7 @@ namespace Mosa.Internal
 			}
 			while (temp != 0);
 
-			var first = (firstChar() + this.length);
+			var first = (firstChar() + length);
 
 			len = count;
 			Length += len;
@@ -303,9 +289,9 @@ namespace Mosa.Internal
 					//TODO: Error
 					value = MaxLength;
 				}
-				length = value;
+				length = (short)value;
 
-				//isSet = 1;
+				isSet = 1;
 			}
 		}
 
@@ -316,10 +302,10 @@ namespace Mosa.Internal
 		/// <returns></returns>
 		public int IndexOf(string value)
 		{
-			if (this.length == 0)
+			if (length == 0)
 				return -1;
 
-			return IndexOfImpl(value, 0, this.length);
+			return IndexOfImpl(value, 0, length);
 		}
 
 		private int IndexOfImpl(string value, int startIndex, int count)

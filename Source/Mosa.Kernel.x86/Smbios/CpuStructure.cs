@@ -35,10 +35,10 @@ namespace Mosa.Kernel.x86.Smbios
 		public CpuStructure()
 			: base(SmbiosManager.GetStructureOfType(0x04))
 		{
-			this.version = GetStringFromIndex(Native.Get8(address + 0x10u));
-			this.socket = GetStringFromIndex(Native.Get8(address + 0x04u));
-			this.maxSpeed = Native.Get16(address + 0x16u);
-			this.vendor = GetStringFromIndex(Native.Get8(address + 0x07u));
+			version = GetStringFromIndex(Native.Get8(address + 0x10u));
+			socket = GetStringFromIndex(Native.Get8(address + 0x04u));
+			maxSpeed = Native.Get16(address + 0x16u);
+			vendor = GetStringFromIndex(Native.Get8(address + 0x07u));
 		}
 
 		/// <summary>
@@ -46,7 +46,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		public uint MaxSpeed
 		{
-			get { return this.maxSpeed; }
+			get { return maxSpeed; }
 		}
 
 		/// <summary>
@@ -54,7 +54,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		public string Socket
 		{
-			get { return this.socket; }
+			get { return socket; }
 		}
 
 		/// <summary>
@@ -62,7 +62,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		public string Vendor
 		{
-			get { return this.vendor; }
+			get { return vendor; }
 		}
 
 		/// <summary>
@@ -70,7 +70,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		public string Version
 		{
-			get { return this.version; }
+			get { return version; }
 		}
 	}
 }

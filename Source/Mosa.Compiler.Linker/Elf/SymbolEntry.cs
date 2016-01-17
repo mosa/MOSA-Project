@@ -90,12 +90,12 @@ namespace Mosa.Compiler.Linker.Elf
 		/// <param name="writer">The writer.</param>
 		protected void Write32(BinaryWriter writer)
 		{
-			writer.Write((uint)Name);
+			writer.Write(Name);
 			writer.Write((uint)Value);
 			writer.Write((uint)Size);
-			writer.Write((byte)Info);
-			writer.Write((byte)Other);
-			writer.Write((ushort)SectionHeaderTableIndex);
+			writer.Write(Info);
+			writer.Write(Other);
+			writer.Write(SectionHeaderTableIndex);
 		}
 
 		/// <summary>
@@ -104,12 +104,12 @@ namespace Mosa.Compiler.Linker.Elf
 		/// <param name="writer">The writer.</param>
 		protected void Write64(BinaryWriter writer)
 		{
-			writer.Write((uint)Name);
-			writer.Write((byte)Info);
-			writer.Write((byte)Other);
-			writer.Write((ushort)SectionHeaderTableIndex);
-			writer.Write((ulong)Value);
-			writer.Write((ulong)Size);
+			writer.Write(Name);
+			writer.Write(Info);
+			writer.Write(Other);
+			writer.Write(SectionHeaderTableIndex);
+			writer.Write(Value);
+			writer.Write(Size);
 		}
 	}
 }

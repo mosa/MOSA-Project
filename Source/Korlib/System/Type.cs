@@ -45,7 +45,7 @@ namespace System
 		/// </summary>
 		public bool HasElementType
 		{
-			get { return this.HasElementTypeImpl(); }
+			get { return HasElementTypeImpl(); }
 		}
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace System
 		/// </summary>
 		public bool IsArray
 		{
-			get { return this.IsArrayImpl(); }
+			get { return IsArrayImpl(); }
 		}
 
 		/// <summary>
@@ -61,7 +61,7 @@ namespace System
 		/// </summary>
 		public bool IsByRef
 		{
-			get { return this.IsByRefImpl(); }
+			get { return IsByRefImpl(); }
 		}
 
 		/// <summary>
@@ -79,7 +79,7 @@ namespace System
 		/// </summary>
 		public bool IsNested
 		{
-			get { return this.IsNestedImpl(); }
+			get { return IsNestedImpl(); }
 		}
 
 		/// <summary>
@@ -87,7 +87,7 @@ namespace System
 		/// </summary>
 		public bool IsPointer
 		{
-			get { return this.IsPointerImpl(); }
+			get { return IsPointerImpl(); }
 		}
 
 		/// <summary>
@@ -118,7 +118,7 @@ namespace System
 			if (!(obj is Type))
 				return false;
 
-			return ((Type)obj).TypeHandle == this.TypeHandle;
+			return ((Type)obj).TypeHandle == TypeHandle;
 		}
 
 		/// <summary>
@@ -128,7 +128,7 @@ namespace System
 		/// <returns>True if the underlying system type of o is the same as the underlying system type of the current Type; otherwise, False.</returns>
 		public virtual bool Equals(Type obj)
 		{
-			return obj.TypeHandle == this.TypeHandle;
+			return obj.TypeHandle == TypeHandle;
 		}
 
 		/// <summary>
@@ -274,7 +274,7 @@ namespace System
 		/// <returns>A String representing the name of the current Type.</returns>
 		public override string ToString()
 		{
-			return this.FullName;
+			return FullName;
 		}
 	}
 }

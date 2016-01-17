@@ -424,7 +424,7 @@ namespace Mosa.Compiler.Framework.Stages
 					int size, alignment;
 					Architecture.GetTypeRequirements(TypeLayout, field.FieldType, out size, out alignment);
 
-					size = (int)TypeLayout.GetFieldSize(field);
+					size = TypeLayout.GetFieldSize(field);
 
 					// The linker section to move this field into
 					SectionKind section = field.Data != null ? section = SectionKind.ROData : section = SectionKind.BSS;

@@ -69,12 +69,12 @@ namespace System
 
 		public static int ToInt32(byte value)
 		{
-			return (int)value;
+			return value;
 		}
 
 		public static int ToInt32(char value)
 		{
-			return (int)value;
+			return value;
 		}
 	}
 }

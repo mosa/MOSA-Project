@@ -8,22 +8,22 @@ namespace Mosa.Test.Collection
 
 		public DerivedNewObjectTests()
 		{
-			this.int32 = 0;
+			int32 = 0;
 		}
 
 		public DerivedNewObjectTests(int value)
 		{
-			this.int32 = value;
+			int32 = value;
 		}
 
 		public DerivedNewObjectTests(int v1, int v2)
 		{
-			this.int32 = v1 + v2;
+			int32 = v1 + v2;
 		}
 
 		public DerivedNewObjectTests(int v1, int v2, int v3)
 		{
-			this.int32 = (v1 * v2) + v3;
+			int32 = (v1 * v2) + v3;
 		}
 
 		public static bool WithoutArgs()

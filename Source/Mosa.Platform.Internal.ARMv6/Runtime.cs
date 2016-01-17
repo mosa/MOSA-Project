@@ -37,7 +37,7 @@ namespace Mosa.Platform.Internal.ARMv6
 			//   - int length
 			//   - ElementType[length] elements
 
-			uint allocationSize = (nativeIntSize * 3) + (uint)(elements * elementSize);
+			uint allocationSize = (nativeIntSize * 3) + elements * elementSize;
 			void* memory = (void*)AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
@@ -224,7 +224,7 @@ namespace Mosa.Platform.Internal.ARMv6
 		public static byte UnboxUInt8(void* obj)
 		{
 			byte* memory = (byte*)obj + (nativeIntSize * 2);
-			return ((byte*)memory)[0];
+			return memory[0];
 		}
 
 		public static short UnboxInt16(void* obj)
@@ -283,7 +283,7 @@ namespace Mosa.Platform.Internal.ARMv6
 		{
 			void* methodTable = (void*)((uint*)obj)[0];
 
-			return GetSizeOfType((void*)methodTable);
+			return GetSizeOfType(methodTable);
 		}
 
 		public static uint GetSizeOfType(void* methodTable)

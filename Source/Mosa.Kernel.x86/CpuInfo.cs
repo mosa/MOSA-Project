@@ -39,9 +39,9 @@ namespace Mosa.Kernel.x86
 		{
 			if (SupportsBrandString)
 			{
-				PrintBrand(console, (uint)0x80000002);
-				PrintBrand(console, (uint)0x80000003);
-				PrintBrand(console, (uint)0x80000004);
+				PrintBrand(console, 0x80000002);
+				PrintBrand(console, 0x80000003);
+				PrintBrand(console, 0x80000004);
 				return;
 			}
 

@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.CIL
 		public BaseCILInstruction(OpCode opCode, byte operandCount)
 			: base(0, operandCount)
 		{
-			this.opcode = opCode;
+			opcode = opCode;
 		}
 
 		/// <summary>
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.CIL
 		public BaseCILInstruction(OpCode opCode, byte operandCount, byte resultCount)
 			: base(resultCount, operandCount)
 		{
-			this.opcode = opCode;
+			opcode = opCode;
 		}
 
 		#endregion Construction

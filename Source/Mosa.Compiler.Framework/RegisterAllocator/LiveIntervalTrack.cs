@@ -21,8 +21,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public LiveIntervalTrack(Register register, bool reserved)
 		{
-			this.Register = register;
-			this.IsReserved = reserved;
+			Register = register;
+			IsReserved = reserved;
 		}
 
 		public void Add(LiveInterval liveInterval)

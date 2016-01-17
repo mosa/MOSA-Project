@@ -86,19 +86,19 @@ namespace Mosa.Utility.BootImage
 			ushort epa = ldlinuxReader.ReadUInt16();
 
 			ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.Sect1Ptr0;
-			uint sect1Ptr0 = (uint)ldlinuxReader.ReadUInt16();
+			uint sect1Ptr0 = ldlinuxReader.ReadUInt16();
 
 			ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.Sect1Ptr1;
-			uint sect1Ptr1 = (uint)ldlinuxReader.ReadUInt16();
+			uint sect1Ptr1 = ldlinuxReader.ReadUInt16();
 
 			ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.SecPtrOffset;
-			uint ex = (uint)ldlinuxReader.ReadUInt16();
+			uint ex = ldlinuxReader.ReadUInt16();
 
 			ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.SecPtrCnt;
-			uint nptrs = (uint)ldlinuxReader.ReadUInt16();
+			uint nptrs = ldlinuxReader.ReadUInt16();
 
 			ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.AdvPtrOffset;
-			uint advptrs = (uint)ldlinuxReader.ReadUInt16();
+			uint advptrs = ldlinuxReader.ReadUInt16();
 
 			if (sectors.Count > nptrs)
 				throw new InvalidProgramException("Insufficient space for patching syslinux");
@@ -113,7 +113,7 @@ namespace Mosa.Utility.BootImage
 			ldlinuxWriter.Write((ushort)2);
 
 			ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.DataSectors;
-			ldlinuxWriter.Write((uint)fileSize >> 2);
+			ldlinuxWriter.Write(fileSize >> 2);
 
 			// Generate Extents
 			var extents = GenerateExtents(sectors);
@@ -123,8 +123,8 @@ namespace Mosa.Utility.BootImage
 			// Write out extents
 			foreach (var extent in extents)
 			{
-				ldlinuxWriter.Write((ulong)extent.Start);
-				ldlinuxWriter.Write((ushort)extent.Length);
+				ldlinuxWriter.Write(extent.Start);
+				ldlinuxWriter.Write(extent.Length);
 			}
 
 			// Write out ADV

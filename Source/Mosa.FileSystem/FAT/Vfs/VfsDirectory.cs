@@ -55,7 +55,7 @@ namespace Mosa.FileSystem.FAT
 		/// <returns></returns>
 		public override IVfsNode Lookup(string name)
 		{
-			var location = (FileSystem as VfsFileSystem).Fat.FindEntry(new Find.WithName(name), this.directoryCluster);
+			var location = (FileSystem as VfsFileSystem).Fat.FindEntry(new Find.WithName(name), directoryCluster);
 
 			if (!location.IsValid)
 				return null;
@@ -100,11 +100,11 @@ namespace Mosa.FileSystem.FAT
 		/// <exception cref="System.NotSupportedException">The object does not support removal this way. There's most likely an object specific API to remove this IVfsNode.</exception>
 		public override void Delete(IVfsNode child, DirectoryEntry dentry)
 		{
-			var fs = this.FileSystem as FatFileSystem;
+			var fs = FileSystem as FatFileSystem;
 
 			uint targetCluster = (child as VfsDirectory).directoryCluster;
 
-			var location = fs.FindEntry(new Find.ByCluster(targetCluster), this.directoryCluster);
+			var location = fs.FindEntry(new Find.ByCluster(targetCluster), directoryCluster);
 
 			if (!location.IsValid)
 				throw new System.ArgumentException(); //throw new IOException ("Unable to delete directory because it is not empty");

@@ -159,28 +159,28 @@ namespace Mosa.Compiler.Framework
 		/// <param name="threadID">The thread identifier.</param>
 		protected BaseMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
 		{
-			this.Compiler = compiler;
-			this.Method = method;
-			this.Type = method.DeclaringType;
-			this.Scheduler = compiler.CompilationScheduler;
-			this.Architecture = compiler.Architecture;
-			this.TypeSystem = compiler.TypeSystem;
-			this.TypeLayout = Compiler.TypeLayout;
-			this.Trace = Compiler.CompilerTrace;
-			this.Linker = compiler.Linker;
-			this.BasicBlocks = basicBlocks ?? new BasicBlocks();
-			this.Pipeline = new CompilerPipeline();
-			this.StackLayout = new StackLayout(Architecture, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
-			this.VirtualRegisters = new VirtualRegisters(Architecture);
-			this.LocalVariables = emptyOperandList;
-			this.ThreadID = threadID;
-			this.DominanceAnalysis = new Dominance(Compiler.CompilerOptions.DominanceAnalysisFactory, this.BasicBlocks);
+			Compiler = compiler;
+			Method = method;
+			Type = method.DeclaringType;
+			Scheduler = compiler.CompilationScheduler;
+			Architecture = compiler.Architecture;
+			TypeSystem = compiler.TypeSystem;
+			TypeLayout = Compiler.TypeLayout;
+			Trace = Compiler.CompilerTrace;
+			Linker = compiler.Linker;
+			BasicBlocks = basicBlocks ?? new BasicBlocks();
+			Pipeline = new CompilerPipeline();
+			StackLayout = new StackLayout(Architecture, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
+			VirtualRegisters = new VirtualRegisters(Architecture);
+			LocalVariables = emptyOperandList;
+			ThreadID = threadID;
+			DominanceAnalysis = new Dominance(Compiler.CompilerOptions.DominanceAnalysisFactory, BasicBlocks);
 
 			EvaluateParameterOperands();
 
-			this.stop = false;
+			stop = false;
 
-			Debug.Assert(this.Linker != null);
+			Debug.Assert(Linker != null);
 		}
 
 		#endregion Construction
@@ -309,7 +309,10 @@ namespace Mosa.Compiler.Framework
 				else
 				{
 					var stacktype = local.Type.GetStackType();
-					operand = VirtualRegisters.Allocate(stacktype);
+
+					// All local variables must start on the stack otherwise bugs will occur.
+					// They can be optimized away or optimized into a register later on.
+					operand = StackLayout.AddStackLocal(local.Type);
 				}
 
 				LocalVariables[index] = operand;

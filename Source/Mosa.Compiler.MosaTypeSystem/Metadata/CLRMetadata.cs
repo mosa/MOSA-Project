@@ -8,7 +8,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 		public CLRMetadata(MosaModuleLoader loader)
 		{
-			this.moduleLoader = loader;
+			moduleLoader = loader;
 		}
 
 		public TypeSystem TypeSystem { get; private set; }

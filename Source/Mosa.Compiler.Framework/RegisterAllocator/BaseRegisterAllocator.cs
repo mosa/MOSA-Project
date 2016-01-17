@@ -45,21 +45,21 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, StackLayout stackLayout, BaseArchitecture architecture, ITraceFactory traceFactory)
 		{
-			this.TraceFactory = traceFactory;
+			TraceFactory = traceFactory;
 
-			this.BasicBlocks = basicBlocks;
-			this.StackLayout = stackLayout;
-			this.Architecture = architecture;
+			BasicBlocks = basicBlocks;
+			StackLayout = stackLayout;
+			Architecture = architecture;
 
-			this.VirtualRegisterCount = compilerVirtualRegisters.Count;
-			this.PhysicalRegisterCount = architecture.RegisterSet.Length;
-			this.RegisterCount = VirtualRegisterCount + PhysicalRegisterCount;
+			VirtualRegisterCount = compilerVirtualRegisters.Count;
+			PhysicalRegisterCount = architecture.RegisterSet.Length;
+			RegisterCount = VirtualRegisterCount + PhysicalRegisterCount;
 
-			this.LiveIntervalTracks = new List<LiveIntervalTrack>(PhysicalRegisterCount);
-			this.VirtualRegisters = new List<VirtualRegister>(RegisterCount);
-			this.ExtendedBlocks = new List<ExtendedBlock>(basicBlocks.Count);
+			LiveIntervalTracks = new List<LiveIntervalTrack>(PhysicalRegisterCount);
+			VirtualRegisters = new List<VirtualRegister>(RegisterCount);
+			ExtendedBlocks = new List<ExtendedBlock>(basicBlocks.Count);
 
-			this.Trace = CreateTrace("Main");
+			Trace = CreateTrace("Main");
 
 			StackFrameRegister = architecture.StackFrameRegister;
 			StackPointerRegister = architecture.StackPointerRegister;
@@ -75,8 +75,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					|| physicalRegister == StackPointerRegister
 					|| (ProgramCounter != null && physicalRegister == ProgramCounter));
 
-				this.VirtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));
-				this.LiveIntervalTracks.Add(new LiveIntervalTrack(physicalRegister, reserved));
+				VirtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));
+				LiveIntervalTracks.Add(new LiveIntervalTrack(physicalRegister, reserved));
 			}
 
 			// Setup extended virtual registers
@@ -84,7 +84,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				Debug.Assert(virtualRegister.Index == VirtualRegisters.Count - PhysicalRegisterCount + 1);
 
-				this.VirtualRegisters.Add(new VirtualRegister(virtualRegister));
+				VirtualRegisters.Add(new VirtualRegister(virtualRegister));
 			}
 
 			PriorityQueue = new SimpleKeyPriorityQueue<LiveInterval>();
@@ -271,7 +271,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void CreateExtendedBlocks()
 		{
-			var blockOrder = new LoopAwareBlockOrder(this.BasicBlocks);
+			var blockOrder = new LoopAwareBlockOrder(BasicBlocks);
 
 			// The re-ordering is not strictly necessary; however, it reduces "holes" in live ranges.
 			// Less "holes" increase readability of the debug logs.
@@ -1025,7 +1025,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				foreach (var intersection in intersections)
 				{
-					if (intersection.SpillCost >= liveInterval.SpillCost || intersection.SpillCost == Int32.MaxValue || intersection.VirtualRegister.IsPhysicalRegister || intersection.IsPhysicalRegister)
+					if (intersection.SpillCost >= liveInterval.SpillCost || intersection.SpillCost == int.MaxValue || intersection.VirtualRegister.IsPhysicalRegister || intersection.IsPhysicalRegister)
 					{
 						evict = false;
 						break;

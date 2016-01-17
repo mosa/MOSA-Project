@@ -291,7 +291,7 @@ namespace Mosa.FileSystem.FAT
 		/// <returns></returns>
 		public byte[] ReadCluster(uint cluster)
 		{
-			return partition.ReadBlock(dataAreaStart + ((cluster - 2) * (uint)sectorsPerCluster), sectorsPerCluster);
+			return partition.ReadBlock(dataAreaStart + ((cluster - 2) * sectorsPerCluster), sectorsPerCluster);
 		}
 
 		/// <summary>
@@ -302,7 +302,7 @@ namespace Mosa.FileSystem.FAT
 		/// <returns></returns>
 		public bool ReadCluster(uint cluster, byte[] block)
 		{
-			return partition.ReadBlock(dataAreaStart + ((cluster - 2) * (uint)sectorsPerCluster), sectorsPerCluster, block);
+			return partition.ReadBlock(dataAreaStart + ((cluster - 2) * sectorsPerCluster), sectorsPerCluster, block);
 		}
 
 		/// <summary>
@@ -313,7 +313,7 @@ namespace Mosa.FileSystem.FAT
 		/// <returns></returns>
 		public bool WriteCluster(uint cluster, byte[] block)
 		{
-			return partition.WriteBlock(dataAreaStart + ((cluster - 2) * (uint)sectorsPerCluster), sectorsPerCluster, block);
+			return partition.WriteBlock(dataAreaStart + ((cluster - 2) * sectorsPerCluster), sectorsPerCluster, block);
 		}
 
 		/// <summary>
@@ -428,7 +428,7 @@ namespace Mosa.FileSystem.FAT
 			if (!partition.CanWrite)
 				return false;
 
-			this.fatType = fatSettings.FATType;
+			fatType = fatSettings.FATType;
 			bytesPerSector = 512;
 			nbrFats = 2;
 
@@ -466,8 +466,8 @@ namespace Mosa.FileSystem.FAT
 			bootSector.SetUInt(BootSector.JumpInstruction, 0);
 			bootSector.SetString(BootSector.EOMName, "MOSA    ");
 			bootSector.SetUShort(BootSector.BytesPerSector, (ushort)bytesPerSector);
-			bootSector.SetByte(BootSector.SectorsPerCluster, (byte)sectorsPerCluster);
-			bootSector.SetUShort(BootSector.ReservedSectors, (ushort)reservedSectors);
+			bootSector.SetByte(BootSector.SectorsPerCluster, sectorsPerCluster);
+			bootSector.SetUShort(BootSector.ReservedSectors, reservedSectors);
 			bootSector.SetByte(BootSector.FatAllocationTables, nbrFats);
 			bootSector.SetUShort(BootSector.MaxRootDirEntries, (ushort)rootEntries);
 			bootSector.SetUShort(BootSector.BootSectorSignature, 0xAA55);
@@ -907,7 +907,7 @@ namespace Mosa.FileSystem.FAT
 			string str = string.Empty;
 
 			for (uint i = 0; i < len; i++)
-				str = str + (char)name[i];
+				str = str + name[i];
 
 			return str;
 		}

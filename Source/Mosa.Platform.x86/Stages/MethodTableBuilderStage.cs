@@ -76,7 +76,7 @@ namespace Mosa.Platform.x86.Stages
 				stream.Position += TypeLayout.NativePointerSize;
 
 				// 2. Store the length (its copied in by the next loop)
-				stream.Write((uint)entry.Size, Endianness.Little);
+				stream.Write(entry.Size, Endianness.Little);
 
 				// 3. Store the pointer to the method description table (the linker writes the actual entry)
 				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodtable, (int)stream.Position, 0, entry.Name + "$mdtable", SectionKind.ROData, 0);

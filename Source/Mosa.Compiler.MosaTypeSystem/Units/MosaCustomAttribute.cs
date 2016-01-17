@@ -10,8 +10,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			public Argument(MosaType type, object value)
 			{
-				this.Type = type;
-				this.Value = value;
+				Type = type;
+				Value = value;
 			}
 
 			public readonly MosaType Type;
@@ -22,9 +22,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			public NamedArgument(string name, bool isField, Argument arg)
 			{
-				this.Name = name;
-				this.IsField = isField;
-				this.Argument = arg;
+				Name = name;
+				IsField = isField;
+				Argument = arg;
 			}
 
 			public string Name { get; private set; }
@@ -56,15 +56,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 			if (!(obj is MosaCustomAttributeList))
 				return false;
 
-			if (object.ReferenceEquals(this, obj))
+			if (ReferenceEquals(this, obj))
 				return true;
 
 			var customAttributeList = obj as MosaCustomAttributeList;
 
-			if (customAttributeList.Count != this.Count)
+			if (customAttributeList.Count != Count)
 				return false;
 
-			for (int i = 0; i < this.Count; i++)
+			for (int i = 0; i < Count; i++)
 			{
 				if (!customAttributeList[i].Constructor.DeclaringType.Equals(this[i].Constructor.DeclaringType))
 					return false;

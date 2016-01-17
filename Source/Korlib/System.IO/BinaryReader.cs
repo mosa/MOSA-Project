@@ -19,7 +19,7 @@ namespace System.IO
 				throw new ArgumentException("The stream does not support reading", "input");
 
 			// Set the base stream
-			this.BaseStream = input;
+			BaseStream = input;
 		}
 
 		/// <summary>
@@ -37,7 +37,7 @@ namespace System.IO
 		public virtual void Close()
 		{
 			//TODO
-			this.BaseStream.Close();
+			BaseStream.Close();
 		}
 
 		/// <summary>
@@ -47,7 +47,7 @@ namespace System.IO
 		protected virtual void Dispose(bool disposing)
 		{
 			//TODO
-			this.BaseStream.Dispose();
+			BaseStream.Dispose();
 		}
 
 		/// <summary>

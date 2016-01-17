@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			this.MapFile = CompilerOptions.MapFile;
+			MapFile = CompilerOptions.MapFile;
 		}
 
 		protected override void Run()

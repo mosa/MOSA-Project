@@ -32,7 +32,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		protected override uint GetOffset(uint x, uint y)
 		{
-			return (uint)(offset + (y * depth) + x);
+			return offset + (y * depth) + x;
 		}
 
 		/// <summary>

@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Pdb
 
 		public IEnumerator<CvSymbol> GetEnumerator()
 		{
-			CvStream cvStream = new CvStream(this.stream);
+			CvStream cvStream = new CvStream(stream);
 			using (BinaryReader reader = new BinaryReader(cvStream))
 			{
 				object state = Prepare(reader);

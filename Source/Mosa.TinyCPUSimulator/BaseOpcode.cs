@@ -12,7 +12,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public override string ToString()
 		{
-			return this.GetType().Name;
+			return GetType().Name;
 		}
 
 		public virtual OpcodeFlowType FlowType { get { return OpcodeFlowType.Normal; } }

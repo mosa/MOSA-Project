@@ -11,7 +11,7 @@ namespace System
 
 		public CLSCompliantAttribute(bool isCompliant)
 		{
-			this.is_compliant = isCompliant;
+			is_compliant = isCompliant;
 		}
 
 		public bool IsCompliant

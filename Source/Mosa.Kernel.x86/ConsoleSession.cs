@@ -120,11 +120,11 @@ namespace Mosa.Kernel.x86
 			uint address = Row * Columns + Column;
 
 			text[address] = (byte)chr;
-			textcolor[address] = (byte)color;
+			textcolor[address] = color;
 
 			if (consoleManager != null)
 			{
-				consoleManager.RawWrite(this, Row, Column, chr, (byte)color);
+				consoleManager.RawWrite(this, Row, Column, chr, color);
 			}
 
 			Next();
@@ -307,7 +307,7 @@ namespace Mosa.Kernel.x86
 
 			for (uint i = 0; i < count; i++)
 			{
-				uint digit = (uint)(val % digits);
+				uint digit = val % digits;
 				Column = x;
 				Row = y;
 				Skip(count - 1 - i);

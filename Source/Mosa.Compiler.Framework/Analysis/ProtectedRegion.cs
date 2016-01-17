@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		public ProtectedRegion(BasicBlocks basicBlocks, MosaExceptionHandler exceptionHandler)
 		{
-			this.Handler = exceptionHandler;
+			Handler = exceptionHandler;
 
 			foreach (var block in basicBlocks)
 			{

@@ -24,37 +24,37 @@ namespace Mosa.Utility.DebugEngine
 
 		public DebugMessage(int code, byte[] data)
 		{
-			this.Code = code;
-			this.CommandData = data;
+			Code = code;
+			CommandData = data;
 		}
 
 		public DebugMessage(int code, int[] data)
 		{
-			this.Code = code;
-			this.CommandData = new byte[data.Length * 4];
+			Code = code;
+			CommandData = new byte[data.Length * 4];
 
 			int index = 0;
 			foreach (int i in data)
 			{
-				this.CommandData[index++] = (byte)(i & 0xFF);
-				this.CommandData[index++] = (byte)((i >> 8) & 0xFF);
-				this.CommandData[index++] = (byte)((i >> 16) & 0xFF);
-				this.CommandData[index++] = (byte)((i >> 24) & 0xFF);
+				CommandData[index++] = (byte)(i & 0xFF);
+				CommandData[index++] = (byte)((i >> 8) & 0xFF);
+				CommandData[index++] = (byte)((i >> 16) & 0xFF);
+				CommandData[index++] = (byte)((i >> 24) & 0xFF);
 			}
 		}
 
 		public DebugMessage(int code, byte[] data, object sender, SenderMesseageDelegate senderMethod)
 			: this(code, data)
 		{
-			this.Sender = sender;
-			this.SenderMethod = senderMethod;
+			Sender = sender;
+			SenderMethod = senderMethod;
 		}
 
 		public DebugMessage(int code, int[] data, object sender, SenderMesseageDelegate senderMethod)
 			: this(code, data)
 		{
-			this.Sender = sender;
-			this.SenderMethod = senderMethod;
+			Sender = sender;
+			SenderMethod = senderMethod;
 		}
 
 		public int GetInt32(int index)

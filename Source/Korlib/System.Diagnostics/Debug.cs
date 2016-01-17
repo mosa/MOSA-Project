@@ -150,7 +150,7 @@ namespace System.Diagnostics
 		[Conditional("DEBUG")]
 		public static void WriteLine(object value)
 		{
-			WriteLine(value, (string)null);
+			WriteLine(value, null);
 		}
 
 		[Conditional("DEBUG")]

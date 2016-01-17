@@ -26,7 +26,7 @@ namespace System.Runtime.CompilerServices
 		{
 			get
 			{
-				return this.options;
+				return options;
 			}
 		}
 	}

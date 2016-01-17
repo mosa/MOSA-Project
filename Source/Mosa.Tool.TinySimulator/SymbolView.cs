@@ -32,9 +32,9 @@ namespace Mosa.Tool.TinySimulator
 
 			public SymbolEntry(LinkerSymbol linkerSymbol, bool display32)
 			{
-				this.LinkerSymbol = linkerSymbol;
+				LinkerSymbol = linkerSymbol;
 				this.display32 = display32;
-				this.SectionKind = linkerSymbol.SectionKind.ToString();
+				SectionKind = linkerSymbol.SectionKind.ToString();
 			}
 		}
 
@@ -131,7 +131,7 @@ namespace Mosa.Tool.TinySimulator
 			if (clickedSymbolEntry == null)
 				return;
 
-			MainForm.AddWatch(clickedSymbolEntry.Name, (ulong)clickedSymbolEntry.LinkerSymbol.VirtualAddress, (int)clickedSymbolEntry.LinkerSymbol.Size);
+			MainForm.AddWatch(clickedSymbolEntry.Name, clickedSymbolEntry.LinkerSymbol.VirtualAddress, (int)clickedSymbolEntry.LinkerSymbol.Size);
 		}
 
 		private void MenuItem2_Click(Object sender, EventArgs e)
@@ -139,7 +139,7 @@ namespace Mosa.Tool.TinySimulator
 			if (clickedSymbolEntry == null)
 				return;
 
-			MainForm.AddBreakpoint(clickedSymbolEntry.Name, (ulong)clickedSymbolEntry.LinkerSymbol.VirtualAddress);
+			MainForm.AddBreakpoint(clickedSymbolEntry.Name, clickedSymbolEntry.LinkerSymbol.VirtualAddress);
 		}
 
 		private void MenuItem3_Click(Object sender, EventArgs e)

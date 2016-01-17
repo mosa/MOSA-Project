@@ -11,7 +11,7 @@ namespace System.Runtime.InteropServices
 
 		public UnmanagedFunctionPointerAttribute(CallingConvention callingConvention)
 		{
-			this.call_conv = callingConvention;
+			call_conv = callingConvention;
 		}
 	}
 }

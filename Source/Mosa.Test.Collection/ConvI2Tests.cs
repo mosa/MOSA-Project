@@ -6,12 +6,12 @@ namespace Mosa.Test.Collection
 	{
 		public static bool ConvI2_I1(short expect, sbyte a)
 		{
-			return expect == ((short)a);
+			return expect == a;
 		}
 
 		public static bool ConvI2_I2(short expect, short a)
 		{
-			return expect == ((short)a);
+			return expect == a;
 		}
 
 		public static bool ConvI2_I4(short expect, int a)

@@ -30,22 +30,22 @@ namespace System
 
 		public override string AssemblyQualifiedName
 		{
-			get { return this.assemblyQualifiedName; }
+			get { return assemblyQualifiedName; }
 		}
 
 		public override Assembly Assembly
 		{
-			get { return this.assembly; }
+			get { return assembly; }
 		}
 
 		public override TypeAttributes Attributes
 		{
-			get { return this.attributes; }
+			get { return attributes; }
 		}
 
 		public override Type BaseType
 		{
-			get { return (this.IsInterface) ? null : this.baseType; }
+			get { return (IsInterface) ? null : baseType; }
 		}
 
 		public override bool ContainsGenericParameters
@@ -57,24 +57,24 @@ namespace System
 		{
 			get
 			{
-				if (this.customAttributesData == null)
+				if (customAttributesData == null)
 				{
 					// Custom Attributes Data - Lazy load
-					this.customAttributesData = new LinkedList<CustomAttributeData>();
-					if (this.typeStruct->CustomAttributes != null)
+					customAttributesData = new LinkedList<CustomAttributeData>();
+					if (typeStruct->CustomAttributes != null)
 					{
-						var customAttributesTablePtr = this.typeStruct->CustomAttributes;
+						var customAttributesTablePtr = typeStruct->CustomAttributes;
 						var customAttributesCount = customAttributesTablePtr[0];
 						customAttributesTablePtr++;
 						for (uint i = 0; i < customAttributesCount; i++)
 						{
 							RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData((MetadataCAStruct*)customAttributesTablePtr[i]);
-							this.customAttributesData.AddLast(cad);
+							customAttributesData.AddLast(cad);
 						}
 					}
 				}
 
-				return this.customAttributesData;
+				return customAttributesData;
 			}
 		}
 
@@ -85,12 +85,12 @@ namespace System
 
 		public override Type DeclaringType
 		{
-			get { return this.declaringType; }
+			get { return declaringType; }
 		}
 
 		public override string FullName
 		{
-			get { return this.fullname; }
+			get { return fullname; }
 		}
 
 		public override int GenericParameterPosition
@@ -105,7 +105,7 @@ namespace System
 
 		public override bool IsEnum
 		{
-			get { return this.BaseType == EnumType; }
+			get { return BaseType == EnumType; }
 		}
 
 		public override bool IsGenericParameter
@@ -134,70 +134,70 @@ namespace System
 
 		public override string Name
 		{
-			get { return this.name; }
+			get { return name; }
 		}
 
 		public override string Namespace
 		{
-			get { return this.@namespace; }
+			get { return @namespace; }
 		}
 
 		public RuntimeTypeInfo(RuntimeType type, Assembly assembly)
 		{
 			var handle = type.TypeHandle;
-			this.asType = type;
+			asType = type;
 			this.assembly = assembly;
 
 			//this.handle = handle;
-			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
+			typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
 
-			this.assemblyQualifiedName = Mosa.Internal.Runtime.InitializeMetadataString(this.typeStruct->Name);    // TODO
-			this.name = Mosa.Internal.Runtime.InitializeMetadataString(this.typeStruct->Name);                 // TODO
-			this.@namespace = Mosa.Internal.Runtime.InitializeMetadataString(this.typeStruct->Name);               // TODO
-			this.fullname = Mosa.Internal.Runtime.InitializeMetadataString(this.typeStruct->Name);
+			assemblyQualifiedName = Mosa.Internal.Runtime.InitializeMetadataString(typeStruct->Name);    // TODO
+			name = Mosa.Internal.Runtime.InitializeMetadataString(typeStruct->Name);                 // TODO
+			@namespace = Mosa.Internal.Runtime.InitializeMetadataString(typeStruct->Name);               // TODO
+			fullname = Mosa.Internal.Runtime.InitializeMetadataString(typeStruct->Name);
 
-			this.typeCode = (TypeCode)(this.typeStruct->Attributes >> 24);
-			this.attributes = (TypeAttributes)(this.typeStruct->Attributes & 0x00FFFFFF);
+			typeCode = (TypeCode)(typeStruct->Attributes >> 24);
+			attributes = (TypeAttributes)(typeStruct->Attributes & 0x00FFFFFF);
 
 			// Base Type
-			if (this.typeStruct->ParentType != null)
+			if (typeStruct->ParentType != null)
 			{
 				RuntimeTypeHandle parentHandle = new RuntimeTypeHandle();
-				((uint**)&parentHandle)[0] = (uint*)this.typeStruct->ParentType;
-				this.baseType = Type.GetTypeFromHandle(parentHandle);
+				((uint**)&parentHandle)[0] = (uint*)typeStruct->ParentType;
+				baseType = Type.GetTypeFromHandle(parentHandle);
 			}
 
 			// Declaring Type
-			if (this.typeStruct->DeclaringType != null)
+			if (typeStruct->DeclaringType != null)
 			{
 				RuntimeTypeHandle declaringHandle = new RuntimeTypeHandle();
-				((uint**)&declaringHandle)[0] = (uint*)this.typeStruct->DeclaringType;
-				this.declaringType = Type.GetTypeFromHandle(declaringHandle);
+				((uint**)&declaringHandle)[0] = (uint*)typeStruct->DeclaringType;
+				declaringType = Type.GetTypeFromHandle(declaringHandle);
 			}
 
 			// Element Type
-			if (this.typeStruct->ElementType != null)
+			if (typeStruct->ElementType != null)
 			{
 				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
-				((uint**)&elementHandle)[0] = (uint*)this.typeStruct->ElementType;
-				this.elementType = Type.GetTypeFromHandle(elementHandle);
+				((uint**)&elementHandle)[0] = (uint*)typeStruct->ElementType;
+				elementType = Type.GetTypeFromHandle(elementHandle);
 			}
 		}
 
 		public override Type AsType()
 		{
-			return this.asType;
+			return asType;
 		}
 
 		public override int GetArrayRank()
 		{
 			// We don't know so just return 1 if array, 0 otherwise
-			return (this.IsArrayImpl() == true) ? 1 : 0;
+			return (IsArrayImpl() == true) ? 1 : 0;
 		}
 
 		public override Type GetElementType()
 		{
-			return this.elementType;
+			return elementType;
 		}
 
 		public override Type[] GetGenericParameterConstraints()
@@ -214,12 +214,12 @@ namespace System
 
 		protected override bool HasElementTypeImpl()
 		{
-			return (this.elementType != null);
+			return (elementType != null);
 		}
 
 		protected override bool IsArrayImpl()
 		{
-			return this.typeCode == TypeCode.Array || this.typeCode == TypeCode.SZArray;
+			return typeCode == TypeCode.Array || typeCode == TypeCode.SZArray;
 		}
 
 		protected override bool IsByRefImpl()
@@ -230,31 +230,31 @@ namespace System
 
 		protected override bool IsNestedImpl()
 		{
-			return (this.attributes & TypeAttributes.VisibilityMask) > TypeAttributes.Public;
+			return (attributes & TypeAttributes.VisibilityMask) > TypeAttributes.Public;
 		}
 
 		protected override bool IsPointerImpl()
 		{
-			return this.typeCode == TypeCode.ManagedPointer || this.typeCode == TypeCode.UnmanagedPointer;
+			return typeCode == TypeCode.ManagedPointer || typeCode == TypeCode.UnmanagedPointer;
 		}
 
 		protected override bool IsPrimitiveImpl()
 		{
-			return (this.typeCode == TypeCode.Boolean
-				|| this.typeCode == TypeCode.Char
-				|| (this.typeCode >= TypeCode.I && this.typeCode <= TypeCode.I8)
-				|| (this.typeCode >= TypeCode.U && this.typeCode <= TypeCode.U8)
-				|| this.typeCode == TypeCode.R4
-				|| this.typeCode == TypeCode.R8);
+			return (typeCode == TypeCode.Boolean
+				|| typeCode == TypeCode.Char
+				|| (typeCode >= TypeCode.I && typeCode <= TypeCode.I8)
+				|| (typeCode >= TypeCode.U && typeCode <= TypeCode.U8)
+				|| typeCode == TypeCode.R4
+				|| typeCode == TypeCode.R8);
 		}
 
 		protected override bool IsValueTypeImpl()
 		{
-			Type thisType = this.AsType();
+			Type thisType = AsType();
 			if (thisType == ValueType || thisType == EnumType)
 				return false;
 
-			return this.IsSubclassOf(ValueType);
+			return IsSubclassOf(ValueType);
 		}
 
 		public override Type MakeArrayType()

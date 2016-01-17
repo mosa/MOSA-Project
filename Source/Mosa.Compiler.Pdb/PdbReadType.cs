@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Pdb
 		{
 			get
 			{
-				return new CvLineEnumerator(this.pdbReader, this.Stream, this.SymbolSize);
+				return new CvLineEnumerator(pdbReader, Stream, SymbolSize);
 			}
 		}
 
@@ -56,10 +56,10 @@ namespace Mosa.Compiler.Pdb
 		{
 			get
 			{
-				if (this.SymbolSize == 0)
+				if (SymbolSize == 0)
 					return new CvSymbol[0];
 
-				return new CvTypeSymbolEnumerator(this.pdbReader.GetStream(this.Stream), this.SymbolSize);
+				return new CvTypeSymbolEnumerator(pdbReader.GetStream(Stream), SymbolSize);
 			}
 		}
 
@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Pdb
 			protected override bool IsComplete(object state)
 			{
 				BinaryReader reader = (BinaryReader)state;
-				return (reader.BaseStream.Position >= this.size);
+				return (reader.BaseStream.Position >= size);
 			}
 
 			protected override object Prepare(BinaryReader reader)

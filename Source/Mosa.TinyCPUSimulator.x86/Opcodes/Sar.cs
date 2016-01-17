@@ -20,13 +20,13 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			if (sign)
 			{
-				uint m = (uint.MaxValue << (int)(32 - shift));
+				uint m = (uint.MaxValue << 32 - shift);
 				u = u | m;
 			}
 
-			StoreValue(cpu, instruction.Operand1, (uint)u, size);
+			StoreValue(cpu, instruction.Operand1, u, size);
 
-			UpdateFlags(cpu, size, (long)u, u, true, true, false, false, false);
+			UpdateFlags(cpu, size, u, u, true, true, false, false, false);
 
 			cpu.EFLAGS.Overflow = (shift != 1);
 			cpu.EFLAGS.Carry = ((a >> (shift - 1)) & 0x1) == 1;

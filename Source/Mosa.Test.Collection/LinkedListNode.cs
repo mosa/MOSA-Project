@@ -18,7 +18,7 @@ namespace Mosa.Test.Collection
 		/// </summary>
 		public LinkedList<T> List
 		{
-			get { return this.list; }
+			get { return list; }
 		}
 
 		/// <summary>
@@ -26,7 +26,7 @@ namespace Mosa.Test.Collection
 		/// </summary>
 		public LinkedListNode<T> Next
 		{
-			get { return this.next; }
+			get { return next; }
 		}
 
 		/// <summary>
@@ -34,7 +34,7 @@ namespace Mosa.Test.Collection
 		/// </summary>
 		public LinkedListNode<T> Previous
 		{
-			get { return this.previous; }
+			get { return previous; }
 		}
 
 		/// <summary>
@@ -42,7 +42,7 @@ namespace Mosa.Test.Collection
 		/// </summary>
 		public T Value
 		{
-			get { return this.value; }
+			get { return value; }
 			set { this.value = value; }
 		}
 

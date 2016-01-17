@@ -34,11 +34,11 @@ namespace Mosa.Tool.TinySimulator
 
 			public HistoryEntry(BaseSimState simState, string method, bool display32)
 			{
-				this.Tick = simState.Tick;
-				this.ip = simState.IP;
-				this.Code = simState.Instruction.ToString();
-				this.Method = method;
-				this.SimState = simState;
+				Tick = simState.Tick;
+				ip = simState.IP;
+				Code = simState.Instruction.ToString();
+				Method = method;
+				SimState = simState;
 				IP = MainForm.Format(simState.IP, display32);
 			}
 		}
@@ -111,7 +111,7 @@ namespace Mosa.Tool.TinySimulator
 			// FirstDisplayedScrollingRowIndex
 			//dataGridView1.CurrentCell = dataGridView1.Rows[history.Count - 1].Cells[0];
 
-			this.Refresh();
+			Refresh();
 		}
 
 		private void Select(BaseSimState simState)
@@ -130,7 +130,7 @@ namespace Mosa.Tool.TinySimulator
 		{
 			int max = 1000;
 
-			if (Int32.TryParse(toolStripTextBox1.Text, out max))
+			if (int.TryParse(toolStripTextBox1.Text, out max))
 			{
 				if (max < 1)
 					max = 1;

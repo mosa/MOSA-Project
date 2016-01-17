@@ -127,7 +127,7 @@ namespace Mosa.Test.Collection
 
 		public static bool IsInstI4ToU4()
 		{
-			object o = (int)1;
+			object o = 1;
 			return (o is uint);
 		}
 
@@ -157,13 +157,13 @@ namespace Mosa.Test.Collection
 
 		public static bool IsInstCToC()
 		{
-			object o = (char)'A';
+			object o = 'A';
 			return (o is char);
 		}
 
 		public static bool IsInstBToB(bool b)
 		{
-			object o = (bool)b;
+			object o = b;
 			return (o is bool);
 		}
 	}

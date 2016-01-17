@@ -33,8 +33,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 				return true;
 
 			return Rank == info.Rank &&
-				   this.LowerBounds.SequenceEquals(info.LowerBounds) &&
-				   this.Sizes.SequenceEqual(info.Sizes);
+				   LowerBounds.SequenceEquals(info.LowerBounds) &&
+				   Sizes.SequenceEqual(info.Sizes);
 		}
 
 		private string sig;

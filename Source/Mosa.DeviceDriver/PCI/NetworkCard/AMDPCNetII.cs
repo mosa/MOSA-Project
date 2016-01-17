@@ -235,7 +235,7 @@ namespace Mosa.DeviceDriver.PCI.NetworkCard
 				length++;
 
 				// Set bits 31/OWN, 25/STP (start of packet), 24/ENP (end of packet) and two's compliment of the buffer length
-				txDescriptor.Write32(offset + 1, (uint)(length & (uint)(0x0FFF) | (uint)(0x8300F000)));
+				txDescriptor.Write32(offset + 1, length & (uint)(0x0FFF) | (uint)(0x8300F000));
 
 				return true;
 			}

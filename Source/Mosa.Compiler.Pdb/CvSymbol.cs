@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Pdb
 		/// <value>The length.</value>
 		public ushort Length
 		{
-			get { return this.length; }
+			get { return length; }
 		}
 
 		/// <summary>
@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Pdb
 		/// <value>The type.</value>
 		public CvEntryType Type
 		{
-			get { return this.type; }
+			get { return type; }
 		}
 
 		#endregion Properties
@@ -99,7 +99,7 @@ namespace Mosa.Compiler.Pdb
 		/// </returns>
 		public override string ToString()
 		{
-			return String.Format("Unknown Symbol ({0:x})", this.type);
+			return String.Format("Unknown Symbol ({0:x})", type);
 		}
 
 		#endregion Methods

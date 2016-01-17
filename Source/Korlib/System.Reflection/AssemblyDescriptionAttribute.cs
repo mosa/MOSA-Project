@@ -12,7 +12,7 @@ namespace System.Reflection
 		/// </summary>
 		public string Description
 		{
-			get { return this.description; }
+			get { return description; }
 		}
 
 		/// <summary>

@@ -36,19 +36,19 @@ namespace Mosa.Compiler.Pdb
 		/// <param name="reader">The reader to initialize From.</param>
 		protected PdbType(BinaryReader reader)
 		{
-			this.unknown1 = reader.ReadInt32();
-			this.range = new PdbSymbolRangeEx(reader);
-			this.flag = reader.ReadInt16();
-			this.stream = reader.ReadInt16();
-			this.symbol_size = reader.ReadInt32();
-			this.lineno_size = reader.ReadInt32();
-			this.unknown2 = reader.ReadInt32();
-			this.nSrcFiles = reader.ReadInt32();
-			this.attribute = reader.ReadInt32();
-			this.reserved1 = reader.ReadInt32();
-			this.reserved2 = reader.ReadInt32();
-			this.name = CvUtil.ReadString(reader);
-			this.unknown3 = CvUtil.ReadString(reader);
+			unknown1 = reader.ReadInt32();
+			range = new PdbSymbolRangeEx(reader);
+			flag = reader.ReadInt16();
+			stream = reader.ReadInt16();
+			symbol_size = reader.ReadInt32();
+			lineno_size = reader.ReadInt32();
+			unknown2 = reader.ReadInt32();
+			nSrcFiles = reader.ReadInt32();
+			attribute = reader.ReadInt32();
+			reserved1 = reader.ReadInt32();
+			reserved2 = reader.ReadInt32();
+			name = CvUtil.ReadString(reader);
+			unknown3 = CvUtil.ReadString(reader);
 			CvUtil.PadToBoundary(reader, 4);
 		}
 
@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Pdb
 		/// <value>The size of the line numbers in this type.</value>
 		protected int LineNoSize
 		{
-			get { return this.lineno_size; }
+			get { return lineno_size; }
 		}
 
 		/// <summary>
@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Pdb
 		/// <value>The name.</value>
 		public string Name
 		{
-			get { return this.name; }
+			get { return name; }
 		}
 
 		/// <summary>
@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Pdb
 		/// <value>The stream, which describes this type.</value>
 		protected short Stream
 		{
-			get { return this.stream; }
+			get { return stream; }
 		}
 
 		/// <summary>
@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Pdb
 		/// <value>The size of the symbol information.</value>
 		protected int SymbolSize
 		{
-			get { return this.symbol_size; }
+			get { return symbol_size; }
 		}
 
 		#endregion Properties

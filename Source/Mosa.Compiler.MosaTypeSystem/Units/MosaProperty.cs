@@ -18,7 +18,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			get
 			{
-				return this.DeclaringType.FindMethodByName(this.GetterMethodName);
+				return DeclaringType.FindMethodByName(GetterMethodName);
 			}
 		}
 
@@ -28,7 +28,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			get
 			{
-				return this.DeclaringType.FindMethodByName(this.SetterMethodName);
+				return DeclaringType.FindMethodByName(SetterMethodName);
 			}
 		}
 
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool Equals(MosaProperty other)
 		{
-			return SignatureComparer.Equals(this.PropertyType, other.PropertyType);
+			return SignatureComparer.Equals(PropertyType, other.PropertyType);
 		}
 
 		public class Mutator : MosaUnit.MutatorBase

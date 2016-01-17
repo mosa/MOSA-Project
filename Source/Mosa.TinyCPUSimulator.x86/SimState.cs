@@ -128,7 +128,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 			while (index < 16)
 			{
-				stack.Add(new ulong[2] { (ulong)x86.Read32(esp), esp });
+				stack.Add(new ulong[2] { x86.Read32(esp), esp });
 				esp = esp + 4;
 				index++;
 			}
@@ -145,7 +145,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 			while (ebp > x86.ESP.Value && index < 32)
 			{
-				frame.Add(new ulong[2] { (ulong)x86.Read32(ebp), ebp });
+				frame.Add(new ulong[2] { x86.Read32(ebp), ebp });
 				ebp = ebp - 4;
 				index++;
 			}
@@ -160,7 +160,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 			StoreValue("CallStack", callStack);
 
-			callStack.Add((ulong)ip);
+			callStack.Add(ip);
 
 			try
 			{
@@ -174,7 +174,7 @@ namespace Mosa.TinyCPUSimulator.x86
 					if (ip == 0)
 						return;
 
-					callStack.Add((ulong)ip);
+					callStack.Add(ip);
 
 					ebp = x86.DirectRead32(ebp);
 				}
@@ -188,37 +188,37 @@ namespace Mosa.TinyCPUSimulator.x86
 		{
 			switch (name)
 			{
-				case "EIP": return (object)EIP;
-				case "EAX": return (object)EAX;
-				case "EBX": return (object)EBX;
-				case "ECX": return (object)ECX;
-				case "EDX": return (object)EDX;
-				case "ESP": return (object)ESP;
-				case "EBP": return (object)EBP;
-				case "ESI": return (object)ESI;
-				case "EDI": return (object)EDI;
-				case "CR0": return (object)CR0;
-				case "CR2": return (object)CR2;
-				case "CR3": return (object)CR3;
-				case "CR4": return (object)CR4;
-				case "EFLAGS": return (object)EFLAGS;
+				case "EIP": return EIP;
+				case "EAX": return EAX;
+				case "EBX": return EBX;
+				case "ECX": return ECX;
+				case "EDX": return EDX;
+				case "ESP": return ESP;
+				case "EBP": return EBP;
+				case "ESI": return ESI;
+				case "EDI": return EDI;
+				case "CR0": return CR0;
+				case "CR2": return CR2;
+				case "CR3": return CR3;
+				case "CR4": return CR4;
+				case "EFLAGS": return EFLAGS;
 
-				case "XMM0": return (object)XMM0;
-				case "XMM1": return (object)XMM1;
-				case "XMM2": return (object)XMM2;
-				case "XMM3": return (object)XMM3;
-				case "XMM4": return (object)XMM4;
-				case "XMM5": return (object)XMM5;
-				case "XMM6": return (object)XMM6;
-				case "XMM7": return (object)XMM7;
+				case "XMM0": return XMM0;
+				case "XMM1": return XMM1;
+				case "XMM2": return XMM2;
+				case "XMM3": return XMM3;
+				case "XMM4": return XMM4;
+				case "XMM5": return XMM5;
+				case "XMM6": return XMM6;
+				case "XMM7": return XMM7;
 
-				case "Zero": return (object)Zero;
-				case "Parity": return (object)Parity;
-				case "Carry": return (object)Carry;
-				case "Direction": return (object)Direction;
-				case "Sign": return (object)Sign;
-				case "Adjust": return (object)Adjust;
-				case "Overflow": return (object)Overflow;
+				case "Zero": return Zero;
+				case "Parity": return Parity;
+				case "Carry": return Carry;
+				case "Direction": return Direction;
+				case "Sign": return Sign;
+				case "Adjust": return Adjust;
+				case "Overflow": return Overflow;
 
 				default: return null;
 			}

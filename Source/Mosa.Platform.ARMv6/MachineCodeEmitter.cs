@@ -91,7 +91,7 @@ namespace Mosa.Platform.ARMv6
 			uint value = 0;
 
 			value |= (uint)(GetConditionCode(conditionCode) << 28);
-			value |= (uint)0x12FFF10;
+			value |= 0x12FFF10;
 			value |= (uint)register;
 
 			Write(value);
@@ -104,7 +104,7 @@ namespace Mosa.Platform.ARMv6
 			uint value = 0;
 
 			value |= (uint)(GetConditionCode(conditionCode) << 28);
-			value |= (uint)(Bits.b0101 << 25);
+			value |= Bits.b0101 << 25;
 			value |= (uint)(link ? 1 : 0 << 24);
 			value |= (uint)offset;
 
@@ -121,7 +121,7 @@ namespace Mosa.Platform.ARMv6
 			uint value = 0;
 
 			value |= (uint)(GetConditionCode(conditionCode) << 28);
-			value |= (uint)(0x0 << 25);
+			value |= 0x0 << 25;
 			value |= (uint)(opcode << 21);
 			value |= (uint)(setCondition ? 1 : 0 << 20);
 			value |= (uint)(firstRegister << 16);
@@ -143,7 +143,7 @@ namespace Mosa.Platform.ARMv6
 			uint value = 0;
 
 			value |= (uint)(GetConditionCode(conditionCode) << 28);
-			value |= (uint)(0x1 << 25);
+			value |= 0x1 << 25;
 			value |= (uint)(opcode << 21);
 			value |= (uint)(setCondition ? 1 : 0 << 20);
 			value |= (uint)(firstRegister << 16);
@@ -166,7 +166,7 @@ namespace Mosa.Platform.ARMv6
 			value |= (uint)(setCondition ? 1 : 0 << 20);
 			value |= (uint)(destinationRegister << 16);
 			value |= (uint)(firstRegister << 12);
-			value |= (uint)(Bits.b1001 << 4);
+			value |= Bits.b1001 << 4;
 			value |= (uint)(secondRegister << 8);
 
 			Write(value);
@@ -181,12 +181,12 @@ namespace Mosa.Platform.ARMv6
 			uint value = 0;
 
 			value |= (uint)(GetConditionCode(conditionCode) << 28);
-			value |= (uint)(1 << 21);
+			value |= 1 << 21;
 			value |= (uint)(setCondition ? 1 : 0 << 20);
 			value |= (uint)(destinationRegister << 16);
 			value |= (uint)(firstRegister << 12);
 			value |= (uint)(secondRegister << 8);
-			value |= (uint)(Bits.b1001 << 4);
+			value |= Bits.b1001 << 4;
 			value |= (uint)accumulateRegister;
 
 			Write(value);
@@ -201,8 +201,8 @@ namespace Mosa.Platform.ARMv6
 			uint value = 0;
 
 			value |= (uint)(GetConditionCode(conditionCode) << 28);
-			value |= (uint)(1 << 26);
-			value |= (uint)(1 << 25);
+			value |= 1 << 26;
+			value |= 1 << 25;
 			value |= (uint)((indexing == Indexing.Post ? 0 : 1) << 24);
 			value |= (uint)((transferSize == TransferSize.Word ? 0 : 1) << 23);
 			value |= (uint)((offsetDirection == OffsetDirection.Down ? 0 : 1) << 22);
@@ -210,7 +210,7 @@ namespace Mosa.Platform.ARMv6
 			value |= (uint)((transferType == TransferType.Store ? 0 : 1) << 20);
 			value |= (uint)(destinationRegister << 12);
 			value |= (uint)(firstRegister << 16);
-			value |= (uint)immediate;
+			value |= immediate;
 
 			Write(value);
 		}
@@ -224,8 +224,8 @@ namespace Mosa.Platform.ARMv6
 			uint value = 0;
 
 			value |= (uint)(GetConditionCode(conditionCode) << 28);
-			value |= (uint)(1 << 26);
-			value |= (uint)(1 << 25);
+			value |= 1 << 26;
+			value |= 1 << 25;
 			value |= (uint)((indexing == Indexing.Post ? 0 : 1) << 24);
 			value |= (uint)((transferSize == TransferSize.Word ? 0 : 1) << 23);
 			value |= (uint)((offsetDirection == OffsetDirection.Down ? 0 : 1) << 22);

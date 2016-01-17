@@ -23,15 +23,15 @@ namespace Mosa.Tool.TinySimulator
 
 			public BreakPointEntry(ulong address, bool display32)
 			{
-				this.Address = address;
-				this.Hex = MainForm.Format(address, display32);
+				Address = address;
+				Hex = MainForm.Format(address, display32);
 				this.display32 = display32;
 			}
 
 			public BreakPointEntry(string name, ulong address, bool display32)
 				: this(address, display32)
 			{
-				this.Name = name;
+				Name = name;
 			}
 		}
 

@@ -16,7 +16,7 @@ namespace System
 		public Nullable(T value)
 		{
 			this.value = value;
-			this.hasValue = true;
+			hasValue = true;
 		}
 
 		public bool HasValue
@@ -101,14 +101,19 @@ namespace System
 			//	return false;
 			//}
 			//if (n2.HasValue) return false;
-			return true;
+			T[] v1 = Runtime.CompilerServices.RuntimeHelpers.UnsafeCast<T[]>(n1);
+			T[] v2 = Runtime.CompilerServices.RuntimeHelpers.UnsafeCast<T[]>(n2);
+
+			return Compare(n1, n2) == 0;
+
+			//return true;
 		}
 
 		// If the type provided is not a Nullable Type, return null.
 		// Otherwise, returns the underlying type of the Nullable type
 		public static Type GetUnderlyingType(Type nullableType)
 		{
-			if ((object)nullableType == null)
+			if (nullableType == null)
 			{
 				throw new ArgumentNullException("nullableType");
 			}

@@ -40,12 +40,12 @@ namespace System
 		/// <value>The message.</value>
 		public override string Message
 		{
-			get { return base.Message + " " + this.typeName; }
+			get { return base.Message + " " + typeName; }
 		}
 
 		public string TypeName
 		{
-			get { return this.typeName; }
+			get { return typeName; }
 		}
 	}
 }

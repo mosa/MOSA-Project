@@ -32,9 +32,7 @@ namespace System
 
 		public static int Size
 		{
-			get { return 4; }
-
-			//get { return sizeof(void*); } // not supported yet
+			get { return sizeof(void*); }
 		}
 
 		public override bool Equals(object obj)
@@ -57,11 +55,7 @@ namespace System
 
 		public long ToInt64()
 		{
-			// pointer to long conversion is done using conv.u8 by the compiler
-			if (Size == 4)
-				return (long)(int)_value;
-			else
-				return (long)_value;
+			return (long)_value;
 		}
 
 		unsafe public void* ToPointer()
@@ -92,34 +86,34 @@ namespace System
 			return (value1._value != value2._value);
 		}
 
-		//public static explicit operator IntPtr(int value)
-		//{
-		//    return new IntPtr(value);
-		//}
+		public static explicit operator IntPtr(int value)
+		{
+			return new IntPtr(value);
+		}
 
-		//public static explicit operator IntPtr(long value)
-		//{
-		//    return new IntPtr(value);
-		//}
+		public static explicit operator IntPtr(long value)
+		{
+			return new IntPtr(value);
+		}
 
-		//unsafe public static explicit operator IntPtr(void* value)
-		//{
-		//    return new IntPtr(value);
-		//}
+		unsafe public static explicit operator IntPtr(void* value)
+		{
+			return new IntPtr(value);
+		}
 
-		//public static explicit operator int(IntPtr value)
-		//{
-		//    return (int)value._value;
-		//}
+		public static explicit operator int(IntPtr value)
+		{
+			return (int)value._value;
+		}
 
-		//public static explicit operator long(IntPtr value)
-		//{
-		//    return value.ToInt64();
-		//}
+		public static explicit operator long(IntPtr value)
+		{
+			return value.ToInt64();
+		}
 
-		//unsafe public static explicit operator void*(IntPtr value)
-		//{
-		//    return value._value;
-		//}
+		unsafe public static explicit operator void* (IntPtr value)
+		{
+			return value._value;
+		}
 	}
 }

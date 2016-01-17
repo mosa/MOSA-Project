@@ -25,12 +25,12 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			{
 				if (fromsize == 16)
 				{
-					return (int)(short)a;
+					return (short)a;
 				}
 
 				if (fromsize == 8)
 				{
-					return (int)(sbyte)a;
+					return (sbyte)a;
 				}
 			}
 

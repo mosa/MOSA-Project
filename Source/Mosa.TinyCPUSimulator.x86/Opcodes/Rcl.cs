@@ -31,7 +31,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			u = u | (a >> (size - shift));
 
-			StoreValue(cpu, instruction.Operand1, (uint)u, size);
+			StoreValue(cpu, instruction.Operand1, u, size);
 
 			cpu.EFLAGS.Overflow = cpu.EFLAGS.Carry ^ IsSign(a, size);
 			cpu.EFLAGS.Carry = ((a >> (size - shift)) & 0x1) == 1;

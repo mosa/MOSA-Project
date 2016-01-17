@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private SlotIndex(InstructionNode index, SlotType slotType)
 		{
-			this.Index = index;
+			Index = index;
 			this.slotType = slotType;
 		}
 
@@ -80,8 +80,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public static bool operator ==(SlotIndex s1, SlotIndex s2)
 		{
-			bool ns1 = object.ReferenceEquals(null, s1);
-			bool ns2 = object.ReferenceEquals(null, s2);
+			bool ns1 = ReferenceEquals(null, s1);
+			bool ns2 = ReferenceEquals(null, s2);
 
 			if (ns1 && ns2)
 				return true;
@@ -93,8 +93,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public static bool operator !=(SlotIndex s1, SlotIndex s2)
 		{
-			bool ns1 = object.ReferenceEquals(null, s1);
-			bool ns2 = object.ReferenceEquals(null, s2);
+			bool ns1 = ReferenceEquals(null, s1);
+			bool ns2 = ReferenceEquals(null, s2);
 
 			if (ns1 && ns2)
 				return false;

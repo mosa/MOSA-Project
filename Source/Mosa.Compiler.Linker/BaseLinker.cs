@@ -245,7 +245,7 @@ namespace Mosa.Compiler.Linker
 
 				targetAddress = targetAddress + (ulong)linkRequest.RelativeBase;
 
-				value = Patch.GetResult(linkRequest.PatchType.Patches, (ulong)targetAddress);
+				value = Patch.GetResult(linkRequest.PatchType.Patches, targetAddress);
 			}
 
 			ulong mask = Patch.GetFinalMask(linkRequest.PatchType.Patches);

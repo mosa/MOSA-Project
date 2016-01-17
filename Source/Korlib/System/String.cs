@@ -21,7 +21,7 @@ namespace System
 
 		private char start_char;
 
-		public int Length { get { return this.length; } }
+		public int Length { get { return length; } }
 
 		public static string Empty = "";
 
@@ -58,36 +58,36 @@ namespace System
 			}
 		}
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern String(char c, int count);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern String(char[] value);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern String(char[] value, int startIndex, int length);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern unsafe String(sbyte* value, int startIndex, int length);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern unsafe String(sbyte* value);
 
-		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		////public unsafe extern String(sbyte* value, int startIndex, int length, Encoding enc);
+		//[MethodImpl(MethodImplOptions.InternalCall)]
+		//public unsafe extern String(sbyte* value, int startIndex, int length, Encoding enc);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public unsafe extern String(char* value);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public unsafe extern String(char* value, int startIndex, int length);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		internal static extern string InternalAllocateString(int length);
 
 		private static unsafe string CreateString(char c, int count)
 		{
-			String result = InternalAllocateString(count);
+			string result = InternalAllocateString(count);
 			char* chars = result.first_char;
 
 			while (count > 0)
@@ -108,9 +108,9 @@ namespace System
 		private static unsafe string CreateString(char[] value, int startIndex, int length)
 		{
 			if (length == 0)
-				return string.Empty;
+				return Empty;
 
-			String result = InternalAllocateString(length);
+			string result = InternalAllocateString(length);
 			char* chars = result.first_char;
 
 			for (int index = startIndex; index < startIndex + length; index++)
@@ -125,9 +125,9 @@ namespace System
 		private static unsafe string CreateString(string source, int startIndex, int length)
 		{
 			if (source.Length == 0)
-				return string.Empty;
+				return Empty;
 
-			String result = InternalAllocateString(length);
+			string result = InternalAllocateString(length);
 			char* chars = result.first_char;
 
 			for (int index = startIndex; index < startIndex + length; index++)
@@ -142,9 +142,9 @@ namespace System
 		private static unsafe string CreateString(sbyte* value, int startIndex, int length)
 		{
 			if (length == 0)
-				return string.Empty;
+				return Empty;
 
-			String result = InternalAllocateString(length);
+			string result = InternalAllocateString(length);
 			char* chars = result.first_char;
 
 			value += startIndex;
@@ -170,9 +170,9 @@ namespace System
 			}
 
 			if (length == 0)
-				return string.Empty;
+				return Empty;
 
-			String result = InternalAllocateString(length);
+			string result = InternalAllocateString(length);
 			char* chars = result.first_char;
 
 			for (int index = 0; index < length; index++)
@@ -190,7 +190,7 @@ namespace System
 			if (length == 0)
 				return InternalAllocateString(0);
 
-			String result = InternalAllocateString(length);
+			string result = InternalAllocateString(length);
 			char* chars = result.first_char;
 
 			value += startIndex;
@@ -216,9 +216,9 @@ namespace System
 			}
 
 			if (length == 0)
-				return string.Empty;
+				return Empty;
 
-			String result = InternalAllocateString(length);
+			string result = InternalAllocateString(length);
 			char* chars = result.first_char;
 
 			for (int index = 0; index < length; index++)
@@ -231,31 +231,31 @@ namespace System
 			return result;
 		}
 
-		public bool Equals(String i)
+		public bool Equals(string i)
 		{
 			return Equals(this, i);
 		}
 
 		public override bool Equals(object o)
 		{
-			if (!(o is String))
+			if (!(o is string))
 				return false;
 
-			String other = (String)o;
+			string other = (string)o;
 			return other == this;
 		}
 
-		public static bool operator ==(String a, String b)
+		public static bool operator ==(string a, string b)
 		{
 			return Equals(a, b);
 		}
 
-		public static bool operator !=(String a, String b)
+		public static bool operator !=(string a, string b)
 		{
 			return !Equals(a, b);
 		}
 
-		public static unsafe bool Equals(String a, String b)
+		public static unsafe bool Equals(string a, string b)
 		{
 			if (a == null || b == null)
 				return false;
@@ -285,11 +285,11 @@ namespace System
 
 		public unsafe string ToUpper()
 		{
-			String result = InternalAllocateString(this.length);
+			string result = InternalAllocateString(length);
 			char* chars = result.first_char;
-			char* self = this.first_char;
+			char* self = first_char;
 
-			for (int i = 0; i < this.length; i++)
+			for (int i = 0; i < length; i++)
 			{
 				if (self[i] >= 97 && self[i] <= 122)
 					*chars = (char)(self[i] - 32);
@@ -303,11 +303,11 @@ namespace System
 
 		public unsafe string ToLower()
 		{
-			String result = InternalAllocateString(this.length);
+			string result = InternalAllocateString(length);
 			char* chars = result.first_char;
-			char* self = this.first_char;
+			char* self = first_char;
 
-			for (int i = 0; i < this.length; i++)
+			for (int i = 0; i < length; i++)
 			{
 				if (self[i] >= 65 && self[i] <= 90)
 					*chars = (char)(self[i] + 32);
@@ -320,9 +320,9 @@ namespace System
 		}
 
 		// TODO: Seems some compiler bugs prevent the original algorithms from working...
-		public unsafe static string Concat(String a, String b)
+		public unsafe static string Concat(string a, string b)
 		{
-			String result = InternalAllocateString(a.length + b.length);
+			string result = InternalAllocateString(a.length + b.length);
 			char* chars = result.first_char;
 
 			char* aPtr = a.first_char;
@@ -341,9 +341,9 @@ namespace System
 			return result;
 		}
 
-		public unsafe static string Concat(String a, String b, String c)
+		public unsafe static string Concat(string a, string b, string c)
 		{
-			String result = InternalAllocateString(a.length + b.length + c.length);
+			string result = InternalAllocateString(a.length + b.length + c.length);
 			char* chars = result.first_char;
 
 			char* aPtr = a.first_char;
@@ -368,9 +368,9 @@ namespace System
 			return result;
 		}
 
-		public unsafe static string Concat(String a, String b, String c, String d)
+		public unsafe static string Concat(string a, string b, string c, string d)
 		{
-			String result = InternalAllocateString(a.length + b.length + c.length + d.length);
+			string result = InternalAllocateString(a.length + b.length + c.length + d.length);
 			char* chars = result.first_char;
 
 			char* aPtr = a.first_char;
@@ -401,22 +401,22 @@ namespace System
 			return result;
 		}
 
-		public static string Concat(Object a)
+		public static string Concat(object a)
 		{
 			return a.ToString();
 		}
 
-		public static string Concat(Object a, Object b)
+		public static string Concat(object a, object b)
 		{
 			return Concat(a.ToString(), b.ToString());
 		}
 
-		public static string Concat(Object a, Object b, Object c)
+		public static string Concat(object a, object b, object c)
 		{
 			return Concat(a.ToString(), b.ToString(), c.ToString());
 		}
 
-		public static string Concat(Object a, Object b, Object c, Object d)
+		public static string Concat(object a, object b, object c, object d)
 		{
 			return Concat(a.ToString(), b.ToString(), c.ToString(), d.ToString());
 		}
@@ -424,7 +424,7 @@ namespace System
 		public static string Concat(params object[] args)
 		{
 			if (args.Length == 0)
-				return string.Empty;
+				return Empty;
 
 			string result = args[0].ToString();
 
@@ -437,7 +437,7 @@ namespace System
 		public static string Concat(string[] objects)
 		{
 			if (objects.Length == 0)
-				return string.Empty;
+				return Empty;
 
 			string result = objects[0].ToString();
 
@@ -453,17 +453,17 @@ namespace System
 				return Empty;
 
 			// FIXME: Following line does not compile correctly
-			if (startIndex < 0 || startIndex > this.length)
-				throw new System.ArgumentOutOfRangeException("startIndex");
+			if (startIndex < 0 || startIndex > length)
+				throw new ArgumentOutOfRangeException("startIndex");
 
 			if (startIndex < 0)
-				throw new System.ArgumentOutOfRangeException("startIndex");
+				throw new ArgumentOutOfRangeException("startIndex");
 
-			if (startIndex > this.length)
-				throw new System.ArgumentOutOfRangeException("startIndex");
+			if (startIndex > length)
+				throw new ArgumentOutOfRangeException("startIndex");
 
-			int newlen = this.length - startIndex;
-			String result = InternalAllocateString(newlen);
+			int newlen = length - startIndex;
+			string result = InternalAllocateString(newlen);
 
 			char* chars = result.first_char;
 
@@ -476,12 +476,12 @@ namespace System
 		public unsafe string Substring(int startIndex, int length)
 		{
 			if (length < 0)
-				throw new System.ArgumentOutOfRangeException("length", "< 0");
+				throw new ArgumentOutOfRangeException("length", "< 0");
 
 			if (startIndex < 0 || startIndex > this.length)
-				throw new System.ArgumentOutOfRangeException("startIndex");
+				throw new ArgumentOutOfRangeException("startIndex");
 
-			String result = InternalAllocateString(length);
+			string result = InternalAllocateString(length);
 
 			char* chars = result.first_char;
 
@@ -498,35 +498,35 @@ namespace System
 
 		public int IndexOf(string value)
 		{
-			if (this.length == 0)
+			if (length == 0)
 				return -1;
 
-			return IndexOfImpl(value, 0, this.length);
+			return IndexOfImpl(value, 0, length);
 		}
 
 		public int IndexOf(char value)
 		{
-			if (this.length == 0)
+			if (length == 0)
 				return -1;
 
-			return IndexOfImpl(value, 0, this.length);
+			return IndexOfImpl(value, 0, length);
 		}
 
 		public int IndexOf(char value, int startIndex)
 		{
-			return IndexOf(value, startIndex, this.length - startIndex);
+			return IndexOf(value, startIndex, length - startIndex);
 		}
 
 		public int IndexOf(char value, int startIndex, int count)
 		{
 			if (startIndex < 0)
-				throw new System.ArgumentOutOfRangeException("startIndex", "< 0");
+				throw new ArgumentOutOfRangeException("startIndex", "< 0");
 			if (count < 0)
-				throw new System.ArgumentOutOfRangeException("count", "< 0");
-			if (startIndex > this.length - count)
-				throw new System.ArgumentOutOfRangeException("startIndex + count > this.length");
+				throw new ArgumentOutOfRangeException("count", "< 0");
+			if (startIndex > length - count)
+				throw new ArgumentOutOfRangeException("startIndex + count > this.length");
 
-			if ((startIndex == 0 && this.length == 0) || (startIndex == this.length) || (count == 0))
+			if ((startIndex == 0 && length == 0) || (startIndex == length) || (count == 0))
 				return -1;
 
 			return IndexOfImpl(value, startIndex, count);
@@ -535,33 +535,33 @@ namespace System
 		public int IndexOfAny(char[] anyOf)
 		{
 			if (anyOf == null)
-				throw new System.ArgumentNullException("anyOf");
-			if (this.length == 0)
+				throw new ArgumentNullException("anyOf");
+			if (length == 0)
 				return -1;
 
-			return IndexOfAnyImpl(anyOf, 0, this.length);
+			return IndexOfAnyImpl(anyOf, 0, length);
 		}
 
 		public int IndexOfAny(char[] anyOf, int startIndex)
 		{
 			if (anyOf == null)
-				throw new System.ArgumentNullException("anyOf");
-			if (startIndex < 0 || startIndex > this.length)
-				throw new System.ArgumentOutOfRangeException("startIndex");
+				throw new ArgumentNullException("anyOf");
+			if (startIndex < 0 || startIndex > length)
+				throw new ArgumentOutOfRangeException("startIndex");
 
-			return IndexOfAnyImpl(anyOf, startIndex, this.length - startIndex);
+			return IndexOfAnyImpl(anyOf, startIndex, length - startIndex);
 		}
 
 		public int IndexOfAny(char[] anyOf, int startIndex, int count)
 		{
 			if (anyOf == null)
-				throw new System.ArgumentNullException("anyOf");
+				throw new ArgumentNullException("anyOf");
 			if (startIndex < 0)
-				throw new System.ArgumentOutOfRangeException("startIndex", "< 0");
+				throw new ArgumentOutOfRangeException("startIndex", "< 0");
 			if (count < 0)
-				throw new System.ArgumentOutOfRangeException("count", "< 0");
-			if (startIndex > this.length - count)
-				throw new System.ArgumentOutOfRangeException("startIndex + count > this.length");
+				throw new ArgumentOutOfRangeException("count", "< 0");
+			if (startIndex > length - count)
+				throw new ArgumentOutOfRangeException("startIndex + count > this.length");
 
 			return IndexOfAnyImpl(anyOf, startIndex, count);
 		}
@@ -569,20 +569,20 @@ namespace System
 		public int LastIndexOfAny(char[] anyOf)
 		{
 			if (anyOf == null)
-				throw new System.ArgumentNullException("anyOf");
+				throw new ArgumentNullException("anyOf");
 
-			return InternalLastIndexOfAny(anyOf, this.length - 1, this.length);
+			return InternalLastIndexOfAny(anyOf, length - 1, length);
 		}
 
 		public int LastIndexOfAny(char[] anyOf, int startIndex)
 		{
 			if (anyOf == null)
-				throw new System.ArgumentNullException("anyOf");
+				throw new ArgumentNullException("anyOf");
 
-			if (startIndex < 0 || startIndex >= this.length)
-				throw new System.ArgumentOutOfRangeException();
+			if (startIndex < 0 || startIndex >= length)
+				throw new ArgumentOutOfRangeException();
 
-			if (this.length == 0)
+			if (length == 0)
 				return -1;
 
 			return IndexOfAnyImpl(anyOf, startIndex, startIndex + 1);
@@ -591,15 +591,15 @@ namespace System
 		public int LastIndexOfAny(char[] anyOf, int startIndex, int count)
 		{
 			if (anyOf == null)
-				throw new System.ArgumentNullException("anyOf");
-			if ((startIndex < 0) || (startIndex >= this.Length))
-				throw new System.ArgumentOutOfRangeException("startIndex", "< 0 || > this.Length");
-			if ((count < 0) || (count > this.Length))
-				throw new System.ArgumentOutOfRangeException("count", "< 0 || > this.Length");
+				throw new ArgumentNullException("anyOf");
+			if ((startIndex < 0) || (startIndex >= Length))
+				throw new ArgumentOutOfRangeException("startIndex", "< 0 || > this.Length");
+			if ((count < 0) || (count > Length))
+				throw new ArgumentOutOfRangeException("count", "< 0 || > this.Length");
 			if (startIndex - count + 1 < 0)
-				throw new System.ArgumentOutOfRangeException("startIndex - count + 1 < 0");
+				throw new ArgumentOutOfRangeException("startIndex - count + 1 < 0");
 
-			if (this.length == 0)
+			if (length == 0)
 				return -1;
 
 			return InternalLastIndexOfAny(anyOf, startIndex, count);
@@ -607,10 +607,10 @@ namespace System
 
 		public int LastIndexOf(char value)
 		{
-			if (this.length == 0)
+			if (length == 0)
 				return -1;
 
-			return LastIndexOfImpl(value, this.length - 1, this.length);
+			return LastIndexOfImpl(value, length - 1, length);
 		}
 
 		public int LastIndexOf(char value, int startIndex)
@@ -620,14 +620,14 @@ namespace System
 
 		public int LastIndexOf(char value, int startIndex, int count)
 		{
-			if (startIndex == 0 && this.length == 0)
+			if (startIndex == 0 && length == 0)
 				return -1;
-			if ((startIndex < 0) || (startIndex >= this.Length))
-				throw new System.ArgumentOutOfRangeException("startIndex", "< 0 || >= this.Length");
-			if ((count < 0) || (count > this.Length))
-				throw new System.ArgumentOutOfRangeException("count", "< 0 || > this.Length");
+			if ((startIndex < 0) || (startIndex >= Length))
+				throw new ArgumentOutOfRangeException("startIndex", "< 0 || >= this.Length");
+			if ((count < 0) || (count > Length))
+				throw new ArgumentOutOfRangeException("count", "< 0 || > this.Length");
 			if (startIndex - count + 1 < 0)
-				throw new System.ArgumentOutOfRangeException("startIndex - count + 1 < 0");
+				throw new ArgumentOutOfRangeException("startIndex - count + 1 < 0");
 
 			return LastIndexOfImpl(value, startIndex, count);
 		}
@@ -704,8 +704,12 @@ namespace System
 		private const int TrimTail = 1;
 		private const int TrimBoth = 2;
 
-		// Removes a set of characters from the end of this string.
-		public String TrimEnd(char[] trimChars)
+		/// <summary>
+		/// Removes a set of characters from the end of this string.
+		/// </summary>
+		/// <param name="trimChars">Characters to remove.</param>
+		/// <returns>Trimmed string.</returns>
+		public string TrimEnd(char[] trimChars)
 		{
 			if (null == trimChars || trimChars.Length == 0)
 			{
@@ -714,32 +718,34 @@ namespace System
 			return TrimHelper(trimChars, TrimTail);
 		}
 
-		public String TrimEnd()
+		public string TrimEnd()
 		{
 			return TrimHelper(TrimTail);
 		}
 
-		// Trims the whitespace from both ends of the string.  Whitespace is defined by
-		// Char.IsWhiteSpace.
-		//
-		public String Trim()
+		/// <summary>
+		/// Trims the whitespace from both ends of the string.
+		/// Whitespace is defined by Char.IsWhiteSpace.
+		/// </summary>
+		/// <returns>Trimmed string.</returns>
+		public string Trim()
 		{
 			return TrimHelper(TrimBoth);
 		}
 
-		private String TrimHelper(int trimType)
+		private string TrimHelper(int trimType)
 		{
 			//end will point to the first non-trimmed character on the right
 			//start will point to the first non-trimmed character on the Left
-			int end = this.Length - 1;
+			int end = Length - 1;
 			int start = 0;
 
 			//Trim specified characters.
 			if (trimType != TrimTail)
 			{
-				for (start = 0; start < this.Length; start++)
+				for (start = 0; start < Length; start++)
 				{
-					if (!Char.IsWhiteSpace(this[start])) break;
+					if (!char.IsWhiteSpace(this[start])) break;
 				}
 			}
 
@@ -747,24 +753,24 @@ namespace System
 			{
 				for (end = Length - 1; end >= start; end--)
 				{
-					if (!Char.IsWhiteSpace(this[end])) break;
+					if (!char.IsWhiteSpace(this[end])) break;
 				}
 			}
 
 			return CreateTrimmedString(start, end);
 		}
 
-		private String TrimHelper(char[] trimChars, int trimType)
+		private string TrimHelper(char[] trimChars, int trimType)
 		{
 			//end will point to the first non-trimmed character on the right
 			//start will point to the first non-trimmed character on the Left
-			int end = this.Length - 1;
+			int end = Length - 1;
 			int start = 0;
 
 			//Trim specified characters.
 			if (trimType != TrimTail)
 			{
-				for (start = 0; start < this.Length; start++)
+				for (start = 0; start < Length; start++)
 				{
 					int i = 0;
 					char ch = this[start];
@@ -799,10 +805,10 @@ namespace System
 			return CreateTrimmedString(start, end);
 		}
 
-		private String CreateTrimmedString(int start, int end)
+		private string CreateTrimmedString(int start, int end)
 		{
 			int len = end - start + 1;
-			if (len == this.Length)
+			if (len == Length)
 			{
 				// Don't allocate a new string as the trimmed string has not changed.
 				return this;
@@ -811,9 +817,9 @@ namespace System
 			{
 				if (len == 0)
 				{
-					return String.Empty;
+					return string.Empty;
 				}
-				return String.CreateString(this, start, len);
+				return string.CreateString(this, start, len);
 			}
 		}
 	}

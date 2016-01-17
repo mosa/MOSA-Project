@@ -60,7 +60,7 @@ namespace Mosa.Test.Numbers
 			foreach (long value in list)
 			{
 				if (value > 0)
-					negs.AddIfNew<long>((long)-value);
+					negs.AddIfNew<long>(-value);
 			}
 
 			return negs;

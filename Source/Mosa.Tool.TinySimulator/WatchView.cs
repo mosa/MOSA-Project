@@ -31,12 +31,12 @@ namespace Mosa.Tool.TinySimulator
 			public WatchEntry(string name, ulong address, int size, bool signed, bool display32)
 			{
 				Name = name;
-				this.Address = "0x" + address.ToString("X8");
+				Address = "0x" + address.ToString("X8");
 				this.address = address;
 				this.size = size;
 				this.signed = signed;
-				this.Value = "[N/A]";
-				this.Hex = "[N/A]";
+				Value = "[N/A]";
+				Hex = "[N/A]";
 				this.display32 = display32;
 			}
 
@@ -121,7 +121,7 @@ namespace Mosa.Tool.TinySimulator
 				entry.Update(data);
 			}
 
-			this.Refresh();
+			Refresh();
 		}
 
 		public void AddWatch(string name, ulong address, int size, bool signed)

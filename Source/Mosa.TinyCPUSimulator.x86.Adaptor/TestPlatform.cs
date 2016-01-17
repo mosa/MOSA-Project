@@ -114,11 +114,11 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 			if (parameter is Boolean)
 			{
-				WriteStackValue(simAdapter, (bool)parameter ? (uint)1 : (uint)0);
+				WriteStackValue(simAdapter, (bool)parameter ? 1 : (uint)0);
 			}
 			else if (parameter is Char)
 			{
-				WriteStackValue(simAdapter, (uint)(char)parameter);
+				WriteStackValue(simAdapter, (char)parameter);
 			}
 			else if (parameter is SByte)
 			{
@@ -128,21 +128,21 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			{
 				WriteStackValue(simAdapter, (uint)(short)parameter);
 			}
-			else if (parameter is Int32)
+			else if (parameter is int)
 			{
 				WriteStackValue(simAdapter, (uint)(int)parameter);
 			}
 			else if (parameter is Byte)
 			{
-				WriteStackValue(simAdapter, (uint)(byte)parameter);
+				WriteStackValue(simAdapter, (byte)parameter);
 			}
 			else if (parameter is UInt16)
 			{
-				WriteStackValue(simAdapter, (uint)(ushort)parameter);
+				WriteStackValue(simAdapter, (ushort)parameter);
 			}
 			else if (parameter is UInt32)
 			{
-				WriteStackValue(simAdapter, (uint)(uint)parameter);
+				WriteStackValue(simAdapter, (uint)parameter);
 			}
 			else if (parameter is UInt64)
 			{
@@ -180,29 +180,29 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 			var x86 = simAdapter.SimCPU as CPUx86;
 
 			if (type.IsI1)
-				return (object)(sbyte)x86.EAX.Value;
+				return (sbyte)x86.EAX.Value;
 			else if (type.IsI2)
-				return (object)(short)x86.EAX.Value;
+				return (short)x86.EAX.Value;
 			else if (type.IsI4)
-				return (object)(int)x86.EAX.Value;
+				return (int)x86.EAX.Value;
 			else if (type.IsI8)
-				return (object)(long)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
+				return (long)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
 			else if (type.IsU1)
-				return (object)(byte)x86.EAX.Value;
+				return (byte)x86.EAX.Value;
 			else if (type.IsU2)
-				return (object)(ushort)x86.EAX.Value;
+				return (ushort)x86.EAX.Value;
 			else if (type.IsU4)
-				return (object)(uint)x86.EAX.Value;
+				return (uint)x86.EAX.Value;
 			else if (type.IsU8)
-				return (object)(ulong)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
+				return (ulong)(((ulong)x86.EAX.Value) | ((ulong)x86.EDX.Value << 32));
 			else if (type.IsChar)
-				return (object)(char)x86.EAX.Value;
+				return (char)x86.EAX.Value;
 			else if (type.IsBoolean)
-				return (object)(bool)(x86.EAX.Value != 0);
+				return (bool)(x86.EAX.Value != 0);
 			else if (type.IsR4)
-				return (object)(float)x86.XMM0.Value.LowF;
+				return (float)x86.XMM0.Value.LowF;
 			else if (type.IsR8)
-				return (object)(double)x86.XMM0.Value.Low;
+				return (double)x86.XMM0.Value.Low;
 			else if (type.IsVoid)
 				return null;
 

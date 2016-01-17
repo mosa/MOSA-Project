@@ -52,7 +52,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		//[ExpectedException(typeof(DivideByZeroException))]
 		public void DivI8I8DivideByZeroException(long a)
 		{
-			Assert.Equal(Int64Tests.DivI8I8(a, (long)0), Run<long>("Mosa.Test.Collection.Int64Tests.DivI8I8", a, (long)0));
+			Assert.Equal(Int64Tests.DivI8I8(a, 0), Run<long>("Mosa.Test.Collection.Int64Tests.DivI8I8", a, (long)0));
 		}
 
 		[Theory]
@@ -78,7 +78,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		//[ExpectedException(typeof(DivideByZeroException))]
 		public void RemI8I8DivideByZeroException(long a)
 		{
-			Assert.Equal(Int64Tests.RemI8I8(a, (long)0), Run<long>("Mosa.Test.Collection.Int64Tests.RemI8I8", a, (long)0));
+			Assert.Equal(Int64Tests.RemI8I8(a, 0), Run<long>("Mosa.Test.Collection.Int64Tests.RemI8I8", a, (long)0));
 		}
 
 		[Theory]

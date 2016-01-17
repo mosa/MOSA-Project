@@ -17,7 +17,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 		public SimStream(SimCPU simCPU, ulong offset)
 		{
 			this.simCPU = simCPU;
-			this.internaloffset = offset;
+			internaloffset = offset;
 		}
 
 		public override bool CanRead { get { return false; } }
@@ -46,7 +46,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		public override int ReadByte()
 		{
-			return (int)simCPU.DirectRead8(internaloffset + ((ulong)position++));
+			return simCPU.DirectRead8(internaloffset + ((ulong)position++));
 		}
 
 		public override long Seek(long offset, SeekOrigin origin)

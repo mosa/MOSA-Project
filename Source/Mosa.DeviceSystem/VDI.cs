@@ -67,8 +67,8 @@ namespace Mosa.DeviceSystem
 			binaryHeader.SetULong(VHIHeaderOffset.DiskSize, blocks * 512);
 			binaryHeader.SetUInt(VHIHeaderOffset.BlockSize, 0x100000);
 			binaryHeader.SetUInt(VHIHeaderOffset.BlockExtraData, 0);
-			binaryHeader.SetUInt(VHIHeaderOffset.BlocksInHDD, (uint)((blocks * 512) / 0x100000));
-			binaryHeader.SetUInt(VHIHeaderOffset.BlocksAllocated, (uint)((blocks * 512) / 0x100000));
+			binaryHeader.SetUInt(VHIHeaderOffset.BlocksInHDD, (blocks * 512) / 0x100000);
+			binaryHeader.SetUInt(VHIHeaderOffset.BlocksAllocated, (blocks * 512) / 0x100000);
 			binaryHeader.SetBytes(VHIHeaderOffset.UUID, guid, 0, 16);
 			binaryHeader.SetBytes(VHIHeaderOffset.UUIDLastSnap, lastSnapGuid, 0, 16);
 

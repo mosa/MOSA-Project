@@ -18,15 +18,15 @@ namespace Mosa.Compiler.Pdb
 
 		public PdbSymbolRangeEx(BinaryReader reader)
 		{
-			this.segment = reader.ReadInt16();
-			this.pad1 = reader.ReadInt16();
-			this.offset = reader.ReadInt32();
-			this.size = reader.ReadInt32();
-			this.characteristics = reader.ReadInt32();
-			this.index = reader.ReadInt16();
-			this.pad2 = reader.ReadInt16();
-			this.timestamp = reader.ReadInt32();
-			this.unknown = reader.ReadInt32();
+			segment = reader.ReadInt16();
+			pad1 = reader.ReadInt16();
+			offset = reader.ReadInt32();
+			size = reader.ReadInt32();
+			characteristics = reader.ReadInt32();
+			index = reader.ReadInt16();
+			pad2 = reader.ReadInt16();
+			timestamp = reader.ReadInt32();
+			unknown = reader.ReadInt32();
 		}
 	}
 }

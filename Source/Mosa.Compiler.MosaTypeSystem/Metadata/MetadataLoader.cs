@@ -4,6 +4,7 @@ using dnlib.DotNet;
 using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
@@ -25,8 +26,9 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private Dictionary<TypeSig, MosaType> typeCache = new Dictionary<TypeSig, MosaType>(new TypeSigComparer());
 		private MosaType[] mvar = new MosaType[0x100];
 		private MosaType[] var = new MosaType[0x100];
-		private ClassOrValueTypeSig szHelperSig = null;
+		private ClassOrValueTypeSig szHelperEnumeratorSig = null;
 		private ClassOrValueTypeSig iListSig = null;
+		private UnitDesc<MethodDef, MethodSig>[] szHelperMethods = null;
 
 		public IList<MosaUnit> LoadedUnits { get; private set; }
 
@@ -69,8 +71,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			TypeSig typeSig = typeDef.ToTypeSig();
 
 			// Check to see if its one of our classes we need for SZ Arrays
-			if (typeDef.Name.Contains("SZArrayHelper`1"))
-				szHelperSig = typeSig as ClassOrValueTypeSig;
+			if (typeDef.Name.Contains("SZGenericArrayEnumerator`1"))
+				szHelperEnumeratorSig = typeSig as ClassOrValueTypeSig;
 			else if (typeDef.Name.Contains("IList`1"))
 				iListSig = typeSig as ClassOrValueTypeSig;
 
@@ -141,6 +143,12 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			metadata.Controller.AddType(mosaType);
 			metadata.Cache.AddType(mosaType);
 			LoadedUnits.Add(mosaType);
+
+			if (typeDef.Name.Contains("SZArrayHelper"))
+				szHelperMethods = mosaType
+					.Methods
+					.Select(x => x.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>())
+					.ToArray();
 		}
 
 		private void LoadField(MosaType declType, MosaField.Mutator field, FieldDef fieldDef)
@@ -234,7 +242,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				}
 				else if (typeSig is FnPtrSig)
 				{
-					MethodSig fnPtr = (MethodSig)((FnPtrSig)typeSig).MethodSig;
+					MethodSig fnPtr = ((FnPtrSig)typeSig).MethodSig;
 					MosaType returnType = GetType(fnPtr.RetType);
 					List<MosaParameter> pars = new List<MosaParameter>();
 					for (int i = 0; i < fnPtr.Params.Count; i++)
@@ -289,16 +297,24 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 						return result;           // Don't add again to controller
 
 					case ElementType.SZArray:
-						if (!typeSig.Next.HasOpenGenericParameter())
-						{
-							GetType(new GenericInstSig(szHelperSig, typeSig.Next));
-							GetType(new GenericInstSig(iListSig, typeSig.Next));
-						}
-
 						result = elementType.ToSZArray();
 						using (var arrayType = metadata.Controller.MutateType(result))
+						{
 							arrayType.UnderlyingObject = elementType.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Clone(typeSig);
-						
+
+							if (!typeSig.Next.HasOpenGenericParameter())
+							{
+								var typeDesc = elementType.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>();
+								GetType(new GenericInstSig(szHelperEnumeratorSig, typeSig.Next));
+								GetType(new GenericInstSig(iListSig, typeSig.Next));
+								foreach (var method in szHelperMethods)
+								{
+									var methodSpec = new MethodSpecUser(method.Definition, new GenericInstMethodSig(typeDesc.Signature));
+									LoadGenericMethodInstance(methodSpec, new GenericArgumentResolver());
+								}
+							}
+						}
+
 						if (!typeSig.Next.HasOpenGenericParameter())
 							metadata.Resolver.EnqueueForArrayResolve(result);
 						return result;
@@ -454,11 +470,18 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 			// Check for existing generic method instance
 			var newSig = resolver.Resolve(method.MethodSig);
+
+			// Need to make sure we pop otherwise it will cause bugs
+			resolver.PopMethodGenericArguments();
+
 			var comparer = new SigComparer();
 			foreach (var m in declType.Methods)
 			{
 				var mDesc = m.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>();
-				if (mDesc.Definition == desc.Definition && comparer.Equals(mDesc.Signature, newSig))
+				if (mDesc.Definition != desc.Definition || !comparer.Equals(mDesc.Signature, newSig))
+					continue;
+
+				if (!(newSig.ContainsGenericParameter == false && newSig.GenParamCount > 0))
 					return m;
 			}
 
@@ -467,11 +490,10 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			using (var _mosaMethod = metadata.Controller.MutateMethod(mosaMethod))
 			{
 				bool hasOpening = mosaMethod.DeclaringType.HasOpenGenericParams;
-				foreach (var genericArg in genericArguments)
+				foreach (var genericArg in genericArgs)
 				{
-					var newGenericArg = resolver.Resolve(genericArg);
-					hasOpening |= newGenericArg.HasOpenGenericParameter();
-					_mosaMethod.GenericArguments.Add(GetType(newGenericArg));
+					hasOpening |= genericArg.HasOpenGenericParameter();
+					_mosaMethod.GenericArguments.Add(GetType(genericArg));
 				}
 
 				_mosaMethod.UnderlyingObject = desc.Clone(newSig);
@@ -479,8 +501,6 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 				_mosaMethod.HasOpenGenericParams = hasOpening;
 			}
-
-			resolver.PopMethodGenericArguments();
 
 			using (var decl = metadata.Controller.MutateType(declType))
 				decl.Methods.Add(mosaMethod);

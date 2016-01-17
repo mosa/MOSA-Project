@@ -9,7 +9,7 @@ namespace System
 	{
 		internal RuntimeTypeHandle(IntPtr handle)
 		{
-			this.m_ptr = handle;
+			m_ptr = handle;
 		}
 
 		private IntPtr m_ptr;
@@ -50,7 +50,7 @@ namespace System
 
 		public override int GetHashCode()
 		{
-			return this.m_ptr.ToInt32();
+			return m_ptr.ToInt32();
 		}
 	}
 }

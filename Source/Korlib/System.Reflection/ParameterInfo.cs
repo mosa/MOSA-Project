@@ -42,7 +42,7 @@ namespace System.Reflection
 		/// </summary>
 		public virtual ParameterAttributes Attributes
 		{
-			get { return this.AttrsImpl; }
+			get { return AttrsImpl; }
 		}
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace System.Reflection
 		/// </summary>
 		public virtual object DefaultValue
 		{
-			get { return this.DefaultValueImpl; }
+			get { return DefaultValueImpl; }
 		}
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace System.Reflection
 		/// </summary>
 		public virtual bool HasDefaultValue
 		{
-			get { return (this.AttrsImpl & ParameterAttributes.HasDefault) == ParameterAttributes.HasDefault; }
+			get { return (AttrsImpl & ParameterAttributes.HasDefault) == ParameterAttributes.HasDefault; }
 		}
 
 		/// <summary>
@@ -74,7 +74,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsIn
 		{
-			get { return (this.AttrsImpl & ParameterAttributes.In) == ParameterAttributes.In; }
+			get { return (AttrsImpl & ParameterAttributes.In) == ParameterAttributes.In; }
 		}
 
 		/// <summary>
@@ -82,7 +82,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsOptional
 		{
-			get { return (this.AttrsImpl & ParameterAttributes.Optional) == ParameterAttributes.Optional; }
+			get { return (AttrsImpl & ParameterAttributes.Optional) == ParameterAttributes.Optional; }
 		}
 
 		/// <summary>
@@ -90,7 +90,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsOut
 		{
-			get { return (this.AttrsImpl & ParameterAttributes.Out) == ParameterAttributes.Out; }
+			get { return (AttrsImpl & ParameterAttributes.Out) == ParameterAttributes.Out; }
 		}
 
 		/// <summary>
@@ -98,7 +98,7 @@ namespace System.Reflection
 		/// </summary>
 		public virtual MemberInfo Member
 		{
-			get { return this.MemberImpl; }
+			get { return MemberImpl; }
 		}
 
 		/// <summary>
@@ -106,7 +106,7 @@ namespace System.Reflection
 		/// </summary>
 		public virtual string Name
 		{
-			get { return this.NameImpl; }
+			get { return NameImpl; }
 		}
 
 		/// <summary>
@@ -114,7 +114,7 @@ namespace System.Reflection
 		/// </summary>
 		public virtual Type ParameterType
 		{
-			get { return this.ClassImpl; }
+			get { return ClassImpl; }
 		}
 
 		/// <summary>
@@ -122,7 +122,7 @@ namespace System.Reflection
 		/// </summary>
 		public virtual int Position
 		{
-			get { return this.PositionImpl; }
+			get { return PositionImpl; }
 		}
 	}
 }

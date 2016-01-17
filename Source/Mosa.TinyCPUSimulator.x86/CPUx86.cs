@@ -385,7 +385,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 			MemoryClear(address, count);
 
-			ESP.Value = (uint)(ESP.Value + (32 / 8));
+			ESP.Value = ESP.Value + (32 / 8);
 			EIP.Value = ret;
 		}
 
@@ -404,7 +404,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 			MemorySet(address, (byte)value, count);
 
-			ESP.Value = (uint)(ESP.Value + (32 / 8));
+			ESP.Value = ESP.Value + (32 / 8);
 			EIP.Value = ret;
 		}
 
@@ -423,7 +423,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 			MemoryCopy(source, destination, count);
 
-			ESP.Value = (uint)(ESP.Value + (32 / 8));
+			ESP.Value = ESP.Value + (32 / 8);
 			EIP.Value = ret;
 		}
 	}

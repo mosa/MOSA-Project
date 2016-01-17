@@ -35,31 +35,31 @@ namespace Mosa.TinyCPUSimulator
 		public SimInstruction(BaseOpcode opcode, byte size, SimOperand operand1, byte opcodeSize)
 			: this(opcode, size, 1, opcodeSize)
 		{
-			this.Operand1 = operand1;
+			Operand1 = operand1;
 		}
 
 		public SimInstruction(BaseOpcode opcode, byte size, SimOperand operand1, SimOperand operand2, byte opcodeSize)
 			: this(opcode, size, 2, opcodeSize)
 		{
-			this.Operand1 = operand1;
-			this.Operand2 = operand2;
+			Operand1 = operand1;
+			Operand2 = operand2;
 		}
 
 		public SimInstruction(BaseOpcode opcode, byte size, SimOperand operand1, SimOperand operand2, SimOperand operand3, byte opcodeSize)
 			: this(opcode, size, 3, opcodeSize)
 		{
-			this.Operand1 = operand1;
-			this.Operand2 = operand2;
-			this.Operand3 = operand3;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			Operand3 = operand3;
 		}
 
 		public SimInstruction(BaseOpcode opcode, byte size, SimOperand operand1, SimOperand operand2, SimOperand operand3, SimOperand operand4, byte opcodeSize)
 			: this(opcode, size, 4, opcodeSize)
 		{
-			this.Operand1 = operand1;
-			this.Operand2 = operand2;
-			this.Operand3 = operand3;
-			this.Operand4 = operand4;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			Operand3 = operand3;
+			Operand4 = operand4;
 		}
 
 		public override string ToString()

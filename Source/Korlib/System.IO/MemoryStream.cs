@@ -16,9 +16,9 @@ namespace System.IO
 
 		public MemoryStream(byte[] buffer, int index, int count, bool writable, bool publiclyVisible)
 		{
-			this.internalBuffer = buffer;
-			this.initialIndex = index;
-			this.position = index;
+			internalBuffer = buffer;
+			initialIndex = index;
+			position = index;
 			this.count = count;
 			this.writable = writable;
 			this.publiclyVisible = publiclyVisible;

@@ -53,7 +53,7 @@ namespace System
 
 		public override int GetHashCode()
 		{
-			return (int)_value;
+			return _value;
 		}
 
 		private static bool IsWhiteSpaceLatin1(char c)

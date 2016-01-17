@@ -80,9 +80,9 @@ namespace Mosa.Compiler.Linker
 			switch (patchSize)
 			{
 				case 8: current = (ulong)Stream.ReadByte(); break;
-				case 16: current = (ulong)Stream.ReadUInt16(endianness); break;
-				case 32: current = (ulong)Stream.ReadUInt32(endianness); break;
-				case 64: current = (ulong)Stream.ReadUInt64(endianness); break;
+				case 16: current = Stream.ReadUInt16(endianness); break;
+				case 32: current = Stream.ReadUInt32(endianness); break;
+				case 64: current = Stream.ReadUInt64(endianness); break;
 			}
 
 			Stream.Position = offset;
@@ -94,7 +94,7 @@ namespace Mosa.Compiler.Linker
 				case 8: Stream.WriteByte((byte)current); break;
 				case 16: Stream.Write((ushort)current, endianness); break;
 				case 32: Stream.Write((uint)current, endianness); break;
-				case 64: Stream.Write((ulong)current, endianness); break;
+				case 64: Stream.Write(current, endianness); break;
 			}
 		}
 
@@ -107,12 +107,12 @@ namespace Mosa.Compiler.Linker
 		{
 			var md5 = MD5.Create();
 
-			if (this.Stream == null)
+			if (Stream == null)
 				return string.Empty;
 
-			this.Stream.Position = 0;
+			Stream.Position = 0;
 
-			var hash = md5.ComputeHash(this.Stream);
+			var hash = md5.ComputeHash(Stream);
 
 			var s = new StringBuilder();
 

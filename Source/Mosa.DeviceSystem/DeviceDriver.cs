@@ -41,7 +41,7 @@ namespace Mosa.DeviceSystem
 		{
 			this.deviceDriverAttribute = deviceDriverAttribute;
 			this.driverType = driverType;
-			this.memoryAttributes = new LinkedList<DeviceDriverPhysicalMemoryAttribute>();
+			memoryAttributes = new LinkedList<DeviceDriverPhysicalMemoryAttribute>();
 		}
 
 		/// <summary>

@@ -22,25 +22,25 @@ namespace System
 
 		public override string AssemblyQualifiedName
 		{
-			get { return this.assemblyQualifiedName; }
+			get { return assemblyQualifiedName; }
 		}
 
 		public override Type DeclaringType
 		{
 			get
 			{
-				if (this.declaringType == null)
+				if (declaringType == null)
 
 					// Declaring Type - Lazy load
-					this.declaringType = Type.GetTypeFromHandle(this.declaringTypeHandle);
+					declaringType = Type.GetTypeFromHandle(declaringTypeHandle);
 
-				return this.declaringType;
+				return declaringType;
 			}
 		}
 
 		public override string FullName
 		{
-			get { return this.fullname; }
+			get { return fullname; }
 		}
 
 		public override int GenericParameterPosition
@@ -67,62 +67,62 @@ namespace System
 
 		public override string Name
 		{
-			get { return this.name; }
+			get { return name; }
 		}
 
 		public override string Namespace
 		{
-			get { return this.@namespace; }
+			get { return @namespace; }
 		}
 
 		public override RuntimeTypeHandle TypeHandle
 		{
-			get { return this.handle; }
+			get { return handle; }
 		}
 
 		internal RuntimeType(RuntimeTypeHandle handle)
 		{
 			this.handle = handle;
-			this.typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
+			typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
 
-			this.assemblyQualifiedName = Mosa.Internal.Runtime.InitializeMetadataString(this.typeStruct->Name);    // TODO
-			this.name = Mosa.Internal.Runtime.InitializeMetadataString(this.typeStruct->Name);                 // TODO
-			this.@namespace = Mosa.Internal.Runtime.InitializeMetadataString(this.typeStruct->Name);               // TODO
-			this.fullname = Mosa.Internal.Runtime.InitializeMetadataString(this.typeStruct->Name);
+			assemblyQualifiedName = Mosa.Internal.Runtime.InitializeMetadataString(typeStruct->Name);    // TODO
+			name = Mosa.Internal.Runtime.InitializeMetadataString(typeStruct->Name);                 // TODO
+			@namespace = Mosa.Internal.Runtime.InitializeMetadataString(typeStruct->Name);               // TODO
+			fullname = Mosa.Internal.Runtime.InitializeMetadataString(typeStruct->Name);
 
-			this.typeCode = (TypeCode)(this.typeStruct->Attributes >> 24);
-			this.attributes = (TypeAttributes)(this.typeStruct->Attributes & 0x00FFFFFF);
+			typeCode = (TypeCode)(typeStruct->Attributes >> 24);
+			attributes = (TypeAttributes)(typeStruct->Attributes & 0x00FFFFFF);
 
 			// Declaring Type
-			if (this.typeStruct->DeclaringType != null)
+			if (typeStruct->DeclaringType != null)
 			{
 				RuntimeTypeHandle declaringHandle = new RuntimeTypeHandle();
-				((uint**)&declaringHandle)[0] = (uint*)this.typeStruct->DeclaringType;
-				this.declaringTypeHandle = declaringHandle;
+				((uint**)&declaringHandle)[0] = (uint*)typeStruct->DeclaringType;
+				declaringTypeHandle = declaringHandle;
 			}
 
 			// Element Type
-			if ((*this.typeStruct).ElementType != null)
+			if ((*typeStruct).ElementType != null)
 			{
 				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
-				((uint**)&elementHandle)[0] = (uint*)this.typeStruct->ElementType;
-				this.elementTypeHandle = elementHandle;
+				((uint**)&elementHandle)[0] = (uint*)typeStruct->ElementType;
+				elementTypeHandle = elementHandle;
 			}
 		}
 
 		public override int GetArrayRank()
 		{
 			// We don't know so just return 1 if array, 0 otherwise
-			return (this.IsArrayImpl() == true) ? 1 : 0;
+			return (IsArrayImpl() == true) ? 1 : 0;
 		}
 
 		public override Type GetElementType()
 		{
-			if (this.elementType == null)
+			if (elementType == null)
 
 				// Element Type - Lazy load
-				this.elementType = Type.GetTypeFromHandle(this.elementTypeHandle);
-			return this.elementType;
+				elementType = Type.GetTypeFromHandle(elementTypeHandle);
+			return elementType;
 		}
 
 		public override Type GetGenericTypeDefinition()
@@ -133,12 +133,12 @@ namespace System
 
 		protected override bool HasElementTypeImpl()
 		{
-			return (this.elementTypeHandle.Value != IntPtr.Zero);
+			return (elementTypeHandle.Value != IntPtr.Zero);
 		}
 
 		protected override bool IsArrayImpl()
 		{
-			return this.typeCode == TypeCode.Array || this.typeCode == TypeCode.SZArray;
+			return typeCode == TypeCode.Array || typeCode == TypeCode.SZArray;
 		}
 
 		protected override bool IsByRefImpl()
@@ -149,12 +149,12 @@ namespace System
 
 		protected override bool IsNestedImpl()
 		{
-			return (this.attributes & TypeAttributes.VisibilityMask) > TypeAttributes.Public;
+			return (attributes & TypeAttributes.VisibilityMask) > TypeAttributes.Public;
 		}
 
 		protected override bool IsPointerImpl()
 		{
-			return this.typeCode == TypeCode.ManagedPointer || this.typeCode == TypeCode.UnmanagedPointer;
+			return typeCode == TypeCode.ManagedPointer || typeCode == TypeCode.UnmanagedPointer;
 		}
 
 		public override Type MakeArrayType()

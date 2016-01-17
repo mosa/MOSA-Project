@@ -19,7 +19,7 @@ namespace System.Reflection
 		/// </summary>
 		public Type AttributeType
 		{
-			get { return this.attributeType; }
+			get { return attributeType; }
 		}
 
 		/// <summary>
@@ -27,7 +27,7 @@ namespace System.Reflection
 		/// </summary>
 		public virtual IList<CustomAttributeTypedArgument> ConstructorArguments
 		{
-			get { return this.ctorArgs; }
+			get { return ctorArgs; }
 		}
 
 		/// <summary>
@@ -35,7 +35,7 @@ namespace System.Reflection
 		/// </summary>
 		public virtual IList<CustomAttributeNamedArgument> NamedArguments
 		{
-			get { return this.namedArgs; }
+			get { return namedArgs; }
 		}
 	}
 }

@@ -75,7 +75,7 @@ namespace Mosa.Compiler.Pdb
 		/// <value>The segment.</value>
 		public int Segment
 		{
-			get { return this.segment; }
+			get { return segment; }
 		}
 
 		/// <summary>
@@ -84,7 +84,7 @@ namespace Mosa.Compiler.Pdb
 		/// <value>The offset.</value>
 		public int Offset
 		{
-			get { return this.offset; }
+			get { return offset; }
 		}
 
 		/// <summary>
@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Pdb
 		/// <value>The line number.</value>
 		public int Line
 		{
-			get { return this.line; }
+			get { return line; }
 		}
 
 		/// <summary>
@@ -102,7 +102,7 @@ namespace Mosa.Compiler.Pdb
 		/// <value>The start column.</value>
 		public int StartColumn
 		{
-			get { return this.startCol; }
+			get { return startCol; }
 		}
 
 		/// <summary>
@@ -111,7 +111,7 @@ namespace Mosa.Compiler.Pdb
 		/// <value>The end column.</value>
 		public int EndColumn
 		{
-			get { return this.endCol; }
+			get { return endCol; }
 		}
 
 		#endregion Properties
@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Pdb
 		/// </returns>
 		public override string ToString()
 		{
-			return String.Format("Line {0} columns {1}-{2} at {3:x4}:{4:x8}", this.line, this.startCol, this.endCol, this.segment, this.offset);
+			return String.Format("Line {0} columns {1}-{2} at {3:x4}:{4:x8}", line, startCol, endCol, segment, offset);
 		}
 
 		#endregion Object Overrides

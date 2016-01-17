@@ -269,7 +269,7 @@ namespace Mosa.Tool.Launcher
 			UpdateInterfaceOptions();
 			UpdateeInterfaceAppLocations();
 
-			this.Refresh();
+			Refresh();
 
 			if (Options.AutoLaunch)
 				CompileAndLaunch();

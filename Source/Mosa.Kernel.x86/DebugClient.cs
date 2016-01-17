@@ -172,7 +172,7 @@ namespace Mosa.Kernel.x86
 
 			if (index >= 16 && length == -1)
 			{
-				length = (int)GetInt32(12);
+				length = GetInt32(12);
 			}
 
 			if (length > 4096 || index > 4096)
@@ -231,11 +231,11 @@ namespace Mosa.Kernel.x86
 			int id = GetInt32(4);
 			int count = GetInt32(12) / 4;
 
-			SendResponse(id, Codes.Scattered32BitReadMemory, (int)(count * 8), 0);
+			SendResponse(id, Codes.Scattered32BitReadMemory, count * 8, 0);
 
 			for (uint i = 0; i < count; i++)
 			{
-				uint address = GetUInt32((uint)((i * 4) + 20));
+				uint address = GetUInt32((i * 4) + 20);
 				SendInteger(address);
 				SendInteger(Native.Get32(address));
 			}

@@ -9,7 +9,7 @@ namespace System
 	{
 		public override string ToString()
 		{
-			return this.GetType().ToString();
+			return GetType().ToString();
 		}
 	}
 }

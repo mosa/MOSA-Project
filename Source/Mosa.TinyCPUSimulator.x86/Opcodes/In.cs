@@ -18,7 +18,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			else if (size == 32)
 				value = cpu.Read32Port(a);
 
-			StoreValue(cpu, instruction.Operand1, (uint)value, size);
+			StoreValue(cpu, instruction.Operand1, value, size);
 		}
 	}
 }

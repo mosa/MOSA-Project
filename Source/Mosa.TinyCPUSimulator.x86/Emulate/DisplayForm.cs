@@ -65,7 +65,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 		{
 			if (sender == timer)
 				if (changed)
-					this.Refresh();
+					Refresh();
 		}
 
 		private void DisplayForm_Paint(object sender, PaintEventArgs e)

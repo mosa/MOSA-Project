@@ -6,22 +6,22 @@ namespace Mosa.Test.Collection
 	{
 		public static bool ConvI8_I1(long expect, sbyte a)
 		{
-			return expect == ((long)a);
+			return expect == a;
 		}
 
 		public static bool ConvI8_I2(long expect, short a)
 		{
-			return expect == ((long)a);
+			return expect == a;
 		}
 
 		public static bool ConvI8_I4(long expect, int a)
 		{
-			return expect == ((long)a);
+			return expect == a;
 		}
 
 		public static bool ConvI8_I8(long expect, long a)
 		{
-			return expect == ((long)a);
+			return expect == a;
 		}
 
 		//TODO:

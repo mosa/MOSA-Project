@@ -11,8 +11,8 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			uint eax = cpu.EAX.Value;
 			int size = instruction.Operand1.Size;
 
-			long s = (long)(int)a - (long)(int)eax;
-			ulong u = (ulong)a - (ulong)eax;
+			long s = (int)a - (long)(int)eax;
+			ulong u = a - (ulong)eax;
 
 			UpdateFlags(cpu, size, s, u, true, true, true, true, true);
 

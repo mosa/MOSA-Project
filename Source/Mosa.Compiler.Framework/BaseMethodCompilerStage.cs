@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public virtual string Name { get { return this.GetType().Name; } }
+		public virtual string Name { get { return GetType().Name; } }
 
 		#endregion IPipelineStage Members
 
@@ -571,7 +571,7 @@ namespace Mosa.Compiler.Framework
 			Debug.WriteLine(string.Empty);
 
 			Debug.WriteLine("METHOD: " + MethodCompiler.Method.FullName);
-			Debug.WriteLine("STAGE : " + (before ? "[BEFORE] " : "[AFTER] ") + this.GetType().Name);
+			Debug.WriteLine("STAGE : " + (before ? "[BEFORE] " : "[AFTER] ") + GetType().Name);
 			Debug.WriteLine(string.Empty);
 
 			for (int index = 0; index < BasicBlocks.Count; index++)

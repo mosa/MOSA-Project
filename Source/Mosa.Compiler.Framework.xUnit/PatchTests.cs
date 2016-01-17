@@ -39,14 +39,14 @@ namespace Mosa.Compiler.Framework.xUnit
 		public void Patch5()
 		{
 			var p = new Patch(0, 32, 0);
-			Assert.Equal((ulong)0xFFFFFFFF, p.Mask);
+			Assert.Equal(0xFFFFFFFF, p.Mask);
 		}
 
 		[Fact]
 		public void Patch6()
 		{
 			var p = new Patch(0, 64, 0);
-			Assert.Equal((ulong)0xFFFFFFFFFFFFFFFF, p.Mask);
+			Assert.Equal(0xFFFFFFFFFFFFFFFF, p.Mask);
 		}
 
 		[Fact]

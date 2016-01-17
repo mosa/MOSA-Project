@@ -36,7 +36,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsSpecialName
 		{
-			get { return (this.Attributes & PropertyAttributes.SpecialName) == PropertyAttributes.SpecialName; }
+			get { return (Attributes & PropertyAttributes.SpecialName) == PropertyAttributes.SpecialName; }
 		}
 
 		/// <summary>
@@ -93,7 +93,7 @@ namespace System.Reflection
 		/// <returns>The property value of the specified object.</returns>
 		public object GetValue(object obj)
 		{
-			return this.GetValue(obj, null);
+			return GetValue(obj, null);
 		}
 
 		/// <summary>
@@ -114,7 +114,7 @@ namespace System.Reflection
 		/// <param name="value">The new property value.</param>
 		public void SetValue(object obj, object value)
 		{
-			this.SetValue(obj, value, null);
+			SetValue(obj, value, null);
 		}
 
 		/// <summary>
