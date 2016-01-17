@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.Internal.x86;
+using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
 {
@@ -16,7 +16,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="length">The length of bytes to clear.</param>
 		public static void Clear(uint destination, uint length)
 		{
-			Runtime.MemoryClear(destination, length);
+			Runtime.x86.Internal.MemoryClear(destination, length);
 		}
 
 		/// <summary>
@@ -38,12 +38,12 @@ namespace Mosa.Kernel.x86
 		/// <param name="length">The length of bytes to set.</param>
 		public static void Set(uint destination, byte value, uint length)
 		{
-			Runtime.MemorySet(destination, value, length);
+			Runtime.x86.Internal.MemorySet(destination, value, length);
 		}
 
 		private unsafe static void Memcpy(uint destination, uint source, uint count)
 		{
-			Runtime.MemoryCopy((void*)destination, (void*)source, count);
+			Runtime.x86.Internal.MemoryCopy((void*)destination, (void*)source, count);
 		}
 	}
 }

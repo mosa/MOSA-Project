@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.Internal.x86;
+using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
 {
@@ -80,7 +80,7 @@ namespace Mosa.Kernel.x86
 			EndError();
 		}
 
-		public static void Error(Mosa.Internal.StringBuffer message)
+		public static void Error(Mosa.Runtime.StringBuffer message)
 		{
 			BeginError();
 			Screen.Write(message);
@@ -89,7 +89,7 @@ namespace Mosa.Kernel.x86
 
 		public static void Error(uint error)
 		{
-			Error(new Mosa.Internal.StringBuffer(error));
+			Error(new Mosa.Runtime.StringBuffer(error));
 		}
 
 		private static void EndError()
@@ -130,7 +130,7 @@ namespace Mosa.Kernel.x86
 		{
 			while (true)
 			{
-				var entry = Runtime.GetStackTraceEntry(depth, ebp, eip);
+				var entry = Mosa.Runtime.x86.Internal.GetStackTraceEntry(depth, ebp, eip);
 				if (!entry.Valid) return;
 
 				if (!entry.Skip)

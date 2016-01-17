@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.Platform.Internal.x86;
+using Mosa.Runtime.x86;
 
 namespace Mosa.CoolWorld.x86.HAL
 {

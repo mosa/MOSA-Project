@@ -6,8 +6,8 @@ using System;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
-	[ReplacementTarget("Mosa.Internal.Intrinsic::GetObjectAddress")]
-	[ReplacementTarget("Mosa.Internal.Intrinsic::GetValueTypeAddress")]
+	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetObjectAddress")]
+	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetValueTypeAddress")]
 	public sealed class GetObjectAddress : IIntrinsicInternalMethod
 	{
 		/// <summary>

@@ -168,8 +168,8 @@ namespace Mosa.TestWorld.x86.Tests
 		public static bool ConditionalBug()
 		{
 			uint address = 0x1000;
-			Mosa.Platform.Internal.x86.Native.Set8(address, 81);
-			var num = Mosa.Platform.Internal.x86.Native.Get8(address);
+			Mosa.Runtime.x86.Native.Set8(address, 81);
+			var num = Mosa.Runtime.x86.Native.Get8(address);
 
 			if (num >= 32 && num < 128)
 				return true;

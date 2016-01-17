@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
-	[ReplacementTarget("Mosa.Internal.Intrinsic::GetAssemblyListTable")]
+	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetAssemblyListTable")]
 	internal class GetAssemblyListTable : IIntrinsicInternalMethod
 	{
 		#region Methods

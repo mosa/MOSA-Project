@@ -367,9 +367,9 @@ namespace Mosa.TinyCPUSimulator.x86
 
 		public override void RegisterAccelerationFunctions()
 		{
-			RegisterAccelerationMethod("System.Void Mosa.Platform.Internal.x86.Runtime::MemoryCopy(System.Void*, System.Void*, System.UInt32)", AcceleratorMemoryCopy);
-			RegisterAccelerationMethod("System.Void Mosa.Platform.Internal.x86.Runtime::MemorySet(System.Void*, System.Byte, System.UInt32)", AcceleratorMemorySet);
-			RegisterAccelerationMethod("System.Void Mosa.Platform.Internal.x86.Runtime::MemoryClear(System.Void*, System.UInt32)", AcceleratorMemoryClear);
+			RegisterAccelerationMethod("System.Void Mosa.Runtime.x86.Runtime::MemoryCopy(System.Void*, System.Void*, System.UInt32)", AcceleratorMemoryCopy);
+			RegisterAccelerationMethod("System.Void Mosa.Runtime.x86.Runtime::MemorySet(System.Void*, System.Byte, System.UInt32)", AcceleratorMemorySet);
+			RegisterAccelerationMethod("System.Void Mosa.Runtime.x86.Runtime::MemoryClear(System.Void*, System.UInt32)", AcceleratorMemoryClear);
 		}
 
 		private void AcceleratorMemoryClear()

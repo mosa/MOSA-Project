@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Internal.Plug;
+using Mosa.Runtime.Plug;
 
 namespace Mosa.Kernel.ARMv6
 {
@@ -13,7 +13,7 @@ namespace Mosa.Kernel.ARMv6
 		static private uint _size = 0;
 		static private uint _used = 0;
 
-		[Method("Mosa.Platform.Internal.ARMv6.Runtime.AllocateMemory")]
+		[Method("Mosa.Runtime.ARMv6.Internal.AllocateMemory")]
 		static public uint AllocateMemory(uint size)
 		{
 			if ((_heap == 0) || (size > (_size - _used)))

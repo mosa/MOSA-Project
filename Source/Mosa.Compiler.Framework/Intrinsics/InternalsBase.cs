@@ -15,13 +15,13 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		/// <param name="internalMethod">The internal method to replace with.</param>
 		/// <param name="internalClass">The internal class that has the internal method.</param>
-		protected void Internal(Context context, BaseMethodCompiler methodCompiler, string internalMethod, string internalClass = "Runtime")
+		protected void Internal(Context context, BaseMethodCompiler methodCompiler, string internalMethod, string internalClass = "Internal")
 		{
 			if (context == null || methodCompiler == null || internalMethod == null || internalClass == null)
 				throw new ArgumentNullException();
 
-			var type = methodCompiler.TypeSystem.GetTypeByName("Mosa.Internal", internalClass);
-			Debug.Assert(type != null, "Cannot find Mosa.Internal." + internalClass);
+			var type = methodCompiler.TypeSystem.GetTypeByName("Mosa.Runtime", internalClass);
+			Debug.Assert(type != null, "Cannot find Mosa.Runtime." + internalClass);
 
 			var method = type.FindMethodByName(internalMethod);
 			Debug.Assert(method != null, "Cannot find " + internalMethod + " in " + type.Name);

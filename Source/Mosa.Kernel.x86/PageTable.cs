@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.Internal.x86;
+using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
 {
