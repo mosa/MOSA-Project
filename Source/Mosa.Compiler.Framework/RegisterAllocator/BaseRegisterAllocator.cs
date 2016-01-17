@@ -165,18 +165,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected abstract void AdditionalSetup();
 
-		private static string ToString(BitArray bitArray)
-		{
-			var builder = new StringBuilder();
-
-			foreach (bool bit in bitArray)
-			{
-				builder.Append(bit ? "X" : ".");
-			}
-
-			return builder.ToString();
-		}
-
 		private void TraceBlocks()
 		{
 			var extendedBlockTrace = CreateTrace("Extended Blocks");
@@ -187,10 +175,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			foreach (var block in ExtendedBlocks)
 			{
 				extendedBlockTrace.Log("Block # " + block.BasicBlock.Sequence.ToString() + " (" + block.Start + " destination " + block.End + ")");
-				extendedBlockTrace.Log(" LiveIn:   " + ToString(block.LiveIn));
-				extendedBlockTrace.Log(" LiveGen:  " + ToString(block.LiveGen));
-				extendedBlockTrace.Log(" LiveKill: " + ToString(block.LiveKill));
-				extendedBlockTrace.Log(" LiveOut:  " + ToString(block.LiveOut));
+				extendedBlockTrace.Log(" LiveIn:   " + block.LiveIn.ToString2());
+				extendedBlockTrace.Log(" LiveGen:  " + block.LiveGen.ToString2());
+				extendedBlockTrace.Log(" LiveKill: " + block.LiveKill.ToString2());
+				extendedBlockTrace.Log(" LiveOut:  " + block.LiveOut.ToString2());
 			}
 		}
 
@@ -274,7 +262,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			var blockOrder = new LoopAwareBlockOrder(BasicBlocks);
 
 			// The re-ordering is not strictly necessary; however, it reduces "holes" in live ranges.
-			// Less "holes" increase readability of the debug logs.
+			// And less "holes" improves the readability of the debug logs.
 			//basicBlocks.ReorderBlocks(loopAwareBlockOrder.NewBlockOrder);
 
 			// Allocate and setup extended blocks
@@ -301,14 +289,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (node.IsEmpty)
 						continue;
 
-					node.SlotNumber = index;
+					node.Offset = index;
 					index = index + increment;
 
 					if (node.IsBlockEndInstruction)
 						break;
 				}
 
-				Debug.Assert(block.Last.SlotNumber != 0);
+				Debug.Assert(block.Last.Offset != 0);
 			}
 		}
 
@@ -338,7 +326,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (node.IsEmpty)
 						continue;
 
-					string log = node.SlotNumber.ToString() + " = " + node.ToString();
+					string log = node.Offset.ToString() + " = " + node.ToString();
 
 					if (node.IsBlockStartInstruction)
 					{
@@ -386,7 +374,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					//if (output.Count == 0 && input.Count == 0)
 					//	continue;
 
-					sb.Append(node.SlotNumber.ToString());
+					sb.Append(node.Offset.ToString());
 					sb.Append(" - ");
 
 					if (def.Count > 0)
@@ -683,9 +671,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				if (liveSetTrace.Active)
 				{
-					liveSetTrace.Log("GEN:     " + ToString(block.LiveGen));
-					liveSetTrace.Log("KILL:    " + ToString(block.LiveKill));
-					liveSetTrace.Log("KILLNOT: " + ToString(block.LiveKillNot));
+					liveSetTrace.Log("GEN:     " + block.LiveGen.ToString2());
+					liveSetTrace.Log("KILL:    " + block.LiveKill.ToString2());
+					liveSetTrace.Log("KILLNOT: " + block.LiveKillNot.ToString2());
 					liveSetTrace.Log(string.Empty);
 				}
 			}

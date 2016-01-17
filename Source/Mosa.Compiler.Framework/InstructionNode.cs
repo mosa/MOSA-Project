@@ -87,7 +87,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The order slot number (initialized by some stage)
 		/// </summary>
-		public int SlotNumber { get; set; }
+		public int Offset { get; set; }
 
 		/// <summary>
 		/// Gets the basic block of this instruction

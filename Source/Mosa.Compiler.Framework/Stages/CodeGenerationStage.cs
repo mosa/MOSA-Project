@@ -108,7 +108,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					node.SlotNumber = codeEmitter.CurrentPosition;
+					node.Offset = codeEmitter.CurrentPosition;
 
 					if (node.IsBlockStartInstruction)
 					{
@@ -127,7 +127,7 @@ namespace Mosa.Compiler.Framework.Stages
 						EmitInstruction(node, codeEmitter);
 						generatedInstructionCount++;
 
-						if (trace.Active) trace.Log(node.SlotNumber.ToString() + " - /0x" + node.SlotNumber.ToString("X") + " : " + node.ToString());
+						if (trace.Active) trace.Log(node.Offset.ToString() + " - /0x" + node.Offset.ToString("X") + " : " + node.ToString());
 					}
 					else
 					{

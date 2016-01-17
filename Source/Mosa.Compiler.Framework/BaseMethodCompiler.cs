@@ -286,7 +286,7 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
 		public Operand GetParameterOperand(int index)
 		{
-			return StackLayout.GetStackParameter(index);
+			return StackLayout.Parameters[index];
 		}
 
 		/// <summary>

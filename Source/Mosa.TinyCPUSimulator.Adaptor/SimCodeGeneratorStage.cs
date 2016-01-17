@@ -43,7 +43,7 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 				simLinker.AddInstruction(symbol, start, instruction);
 			}
 
-			simLinker.AddSourceInformation(symbol, start, node.SlotNumber.ToString() + "\t0x" + node.SlotNumber.ToString("X") + "\t" + node.Block.ToString() + "\t" + symbol + "\t" + node.ToString());
+			simLinker.AddSourceInformation(symbol, start, node.Offset.ToString() + "\t0x" + node.Offset.ToString("X") + "\t" + node.Block.ToString() + "\t" + symbol + "\t" + node.ToString());
 		}
 
 		protected override void BlockStart(BasicBlock block)

@@ -33,10 +33,10 @@ namespace Mosa.Compiler.Framework
 		public int Label { get { return Node.Label; } set { Node.Label = value; } }
 
 		/// <summary>
-		/// The order slot number (initalized by some stage)
+		/// The order slot number (initialized by some stage)
 		/// </summary>
 		/// <value>The label.</value>
-		public int SlotNumber { get { return Node.SlotNumber; } set { Node.SlotNumber = value; } }
+		public int Offset { get { return Node.Offset; } set { Node.Offset = value; } }
 
 		/// <summary>
 		/// Gets or sets the label.
