@@ -79,8 +79,9 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand SetStackParameter(int index, MosaType type, int displacement, string name)
 		{
-			Parameters[index] = Operand.CreateParameter(type, architecture.StackFrameRegister, displacement, index, name);
-			return Parameters[index];
+			var param = Operand.CreateParameter(type, architecture.StackFrameRegister, displacement, index, name);
+			Parameters[index] = param;
+			return param;
 		}
 	}
 }

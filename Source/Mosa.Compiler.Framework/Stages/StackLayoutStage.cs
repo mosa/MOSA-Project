@@ -35,14 +35,14 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodCompiler.StackLayout.StackSize = size;
 			MethodCompiler.TypeLayout.SetMethodStackSize(MethodCompiler.Method, -size);
 
-			CreateStackLocalTrace();
+			TraceStackLocals();
 		}
 
-		private void CreateStackLocalTrace()
+		private void TraceStackLocals()
 		{
 			var trace = CreateTraceLog("Stack Local");
 
-			if (trace.!Active)
+			if (!trace.Active)
 				return;
 
 			foreach (var local in MethodCompiler.StackLayout.LocalStack)
@@ -96,10 +96,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var operand in locals)
 			{
-				bool skip = false;
-
 				if (!operand.IsParameter && operand.Uses.Count == 0 && operand.Definitions.Count == 0)
 				{
+					bool skip = false;
+
 					if (operand.Low == null && operand.High == null)
 					{
 						skip = true;
@@ -108,12 +108,12 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						skip = true;
 					}
-				}
 
-				if (skip)
-				{
-					operand.Displacement = 0;
-					continue;
+					if (skip)
+					{
+						operand.Displacement = 0;
+						continue;
+					}
 				}
 
 				int size, alignment;

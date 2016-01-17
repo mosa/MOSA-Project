@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework
 
 		/// <summary>
 		/// Gets a value indicating whether this register is special register that the
-		/// registor allocator should not consider.
+		/// register allocator should not consider.
 		/// </summary>
 		public bool IsSpecial { get { return !(IsInteger || IsFloatingPoint); } }
 
