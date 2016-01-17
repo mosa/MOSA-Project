@@ -126,13 +126,13 @@ namespace Mosa.Compiler.Linker.Elf
 			writer.Write((uint)EntryAddress);             // entry
 			writer.Write((uint)ProgramHeaderOffset);      // phoff
 			writer.Write((uint)SectionHeaderOffset);      // shoff
-			writer.Write((uint)Flags);                    // flags
-			writer.Write((ushort)ElfHeaderSize32);            // ehsize
-			writer.Write((ushort)ProgramHeader.EntrySize32);   // phentsize
-			writer.Write((ushort)ProgramHeaderNumber);      // phnum
-			writer.Write((ushort)SectionHeader.EntrySize32);   // shentsize
-			writer.Write((ushort)SectionHeaderNumber);      // shnum
-			writer.Write((ushort)SectionHeaderStringIndex); // shstrndx
+			writer.Write(Flags);                    // flags
+			writer.Write(ElfHeaderSize32);            // ehsize
+			writer.Write(ProgramHeader.EntrySize32);   // phentsize
+			writer.Write(ProgramHeaderNumber);      // phnum
+			writer.Write(SectionHeader.EntrySize32);   // shentsize
+			writer.Write(SectionHeaderNumber);      // shnum
+			writer.Write(SectionHeaderStringIndex); // shstrndx
 		}
 
 		/// <summary>
@@ -146,16 +146,16 @@ namespace Mosa.Compiler.Linker.Elf
 			writer.Write((ushort)Type);             // type
 			writer.Write((ushort)Machine);          // machine
 			writer.Write((uint)Version);            // version
-			writer.Write((ulong)EntryAddress);             // entry
+			writer.Write(EntryAddress);             // entry
 			writer.Write((ulong)ProgramHeaderOffset);      // phoff
 			writer.Write((ulong)SectionHeaderOffset);      // shoff
-			writer.Write((uint)Flags);                    // flags
-			writer.Write((ushort)ElfHeaderSize64);            // ehsize
-			writer.Write((ushort)ProgramHeader.EntrySize64);   // phentsize
-			writer.Write((ushort)ProgramHeaderNumber);      // phnum
-			writer.Write((ushort)SectionHeader.EntrySize64);   // shentsize
-			writer.Write((ushort)SectionHeaderNumber);      // shnum
-			writer.Write((ushort)SectionHeaderStringIndex); // shstrndx
+			writer.Write(Flags);                    // flags
+			writer.Write(ElfHeaderSize64);            // ehsize
+			writer.Write(ProgramHeader.EntrySize64);   // phentsize
+			writer.Write(ProgramHeaderNumber);      // phnum
+			writer.Write(SectionHeader.EntrySize64);   // shentsize
+			writer.Write(SectionHeaderNumber);      // shnum
+			writer.Write(SectionHeaderStringIndex); // shstrndx
 		}
 
 		/// <summary>

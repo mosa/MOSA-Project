@@ -44,7 +44,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		//[ExpectedException(typeof(DivideByZeroException))]
 		public void DivI1I1DivideByZeroException(sbyte a)
 		{
-			Assert.Equal(Int8Tests.DivI1I1(a, (sbyte)0), Run<int>("Mosa.Test.Collection.Int8Tests.DivI1I1", a, (sbyte)0));
+			Assert.Equal(Int8Tests.DivI1I1(a, 0), Run<int>("Mosa.Test.Collection.Int8Tests.DivI1I1", a, (sbyte)0));
 		}
 
 		[Theory]
@@ -63,7 +63,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		//[ExpectedException(typeof(DivideByZeroException))]
 		public void RemI1I1DivideByZeroException(sbyte a)
 		{
-			Assert.Equal(Int8Tests.RemI1I1(a, (sbyte)0), Run<int>("Mosa.Test.Collection.Int8Tests.RemI1I1", a, (sbyte)0));
+			Assert.Equal(Int8Tests.RemI1I1(a, 0), Run<int>("Mosa.Test.Collection.Int8Tests.RemI1I1", a, (sbyte)0));
 		}
 
 		[Theory]

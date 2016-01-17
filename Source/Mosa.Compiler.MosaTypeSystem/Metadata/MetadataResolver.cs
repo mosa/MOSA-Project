@@ -5,6 +5,7 @@ using dnlib.DotNet.Emit;
 using Mosa.Compiler.Common;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
@@ -94,7 +95,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			while (arrayResolveQueue.Count > 0)
 			{
 				MosaType type = arrayResolveQueue.Dequeue();
-				type.FinishSZArray();
+				ResolveSZArray(type);
 			}
 		}
 
@@ -499,6 +500,53 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private MosaType ResolveTypeOperand(ITypeDefOrRef operand, GenericArgumentResolver resolver)
 		{
 			return metadata.Loader.GetType(resolver.Resolve(operand.ToTypeSig()));
+		}
+
+		private void ResolveSZArray(MosaType arrayType)
+		{
+			if (arrayType.ArrayInfo != MosaArrayInfo.Vector)
+				throw new InvalidCompilerException("Type must be a SZ Array.");
+
+			var typeSystem = arrayType.TypeSystem;
+			var szHelper = typeSystem.GetTypeByName(typeSystem.CorLib, "System", "Array+SZArrayHelper");
+
+			using (var type = typeSystem.Controller.MutateType(arrayType))
+			using (var szHelperType = typeSystem.Controller.MutateType(szHelper))
+			{
+				// Add the methods to the mutable type
+				var methods = szHelper
+					.Methods
+					.Where(x => x.GenericArguments.Count > 0 && x.GenericArguments[0] == arrayType.ElementType)
+					.ToList();
+				foreach (var method in methods)
+				{
+					// HACK: the normal Equals for methods only compares signatures which causes issues with wrong methods being removed from the list
+					(szHelperType.Methods as List<MosaMethod>).RemoveAll(x => ReferenceEquals(x, method));
+
+					using (var mMethod = typeSystem.Controller.MutateMethod(method))
+						mMethod.DeclaringType = arrayType;
+					type.Methods.Add(method);
+				}
+
+				// Add interfaces to the type and copy properties from interfaces into type so we can expose them
+				var list = new LinkedList<MosaType>();
+				list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic", "IList`1<" + arrayType.ElementType.FullName + ">"));
+				list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic", "ICollection`1<" + arrayType.ElementType.FullName + ">"));
+				list.AddLast(typeSystem.GetTypeByName(typeSystem.CorLib, "System.Collections.Generic", "IEnumerable`1<" + arrayType.ElementType.FullName + ">"));
+				foreach (var iface in list)
+				{
+					type.Interfaces.Add(iface);
+					foreach (var property in iface.Properties)
+					{
+						var newProperty = typeSystem.Controller.CreateProperty(property);
+						using (var mProperty = typeSystem.Controller.MutateProperty(newProperty))
+						{
+							mProperty.DeclaringType = arrayType;
+						}
+						type.Properties.Add(newProperty);
+					}
+				}
+			}
 		}
 	}
 }

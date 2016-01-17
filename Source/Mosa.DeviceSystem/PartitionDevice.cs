@@ -59,8 +59,8 @@ namespace Mosa.DeviceSystem
 		public PartitionDevice(IDiskDevice diskDevice, bool readOnly)
 		{
 			this.diskDevice = diskDevice;
-			this.startBlock = 0;
-			this.blockCount = diskDevice.TotalBlocks;
+			startBlock = 0;
+			blockCount = diskDevice.TotalBlocks;
 			this.readOnly = readOnly;
 
 			base.parent = diskDevice as Device;
@@ -77,8 +77,8 @@ namespace Mosa.DeviceSystem
 		public PartitionDevice(IDiskDevice diskDevice, GenericPartition partition, bool readOnly)
 		{
 			this.diskDevice = diskDevice;
-			this.startBlock = partition.StartLBA;
-			this.blockCount = partition.TotalBlocks;
+			startBlock = partition.StartLBA;
+			blockCount = partition.TotalBlocks;
 			this.readOnly = readOnly;
 
 			base.parent = diskDevice as Device;

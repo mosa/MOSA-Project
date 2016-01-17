@@ -182,12 +182,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			MosaType result = (MosaType)base.MemberwiseClone();
 
-			result.Methods = (result.methods = new List<MosaMethod>(this.methods)).AsReadOnly();
-			result.Fields = (result.fields = new List<MosaField>(this.fields)).AsReadOnly();
-			result.Properties = (result.properties = new List<MosaProperty>(this.properties)).AsReadOnly();
-			result.Interfaces = (result.interfaces = new List<MosaType>(this.interfaces)).AsReadOnly();
+			result.Methods = (result.methods = new List<MosaMethod>(methods)).AsReadOnly();
+			result.Fields = (result.fields = new List<MosaField>(fields)).AsReadOnly();
+			result.Properties = (result.properties = new List<MosaProperty>(properties)).AsReadOnly();
+			result.Interfaces = (result.interfaces = new List<MosaType>(interfaces)).AsReadOnly();
 
-			result.GenericArguments = (result.genericArguments = new List<MosaType>(this.genericArguments)).AsReadOnly();
+			result.GenericArguments = (result.genericArguments = new List<MosaType>(genericArguments)).AsReadOnly();
 
 			return result;
 		}

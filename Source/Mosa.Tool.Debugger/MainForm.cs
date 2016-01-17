@@ -14,7 +14,7 @@ namespace Mosa.Tool.Debugger
 		private ConnectionProperties connectionProperties = new ConnectionProperties();
 		private DispatchOutput dispatchOutput = new DispatchOutput();
 
-		public string Status { set { this.toolStripStatusLabel1.Text = value; } }
+		public string Status { set { toolStripStatusLabel1.Text = value; } }
 
 		public MainForm()
 		{
@@ -32,7 +32,7 @@ namespace Mosa.Tool.Debugger
 
 		public void SignalConnect()
 		{
-			foreach (var content in this.dockPanel.Contents)
+			foreach (var content in dockPanel.Contents)
 			{
 				var debugContent = content as DebuggerDockContent;
 
@@ -45,7 +45,7 @@ namespace Mosa.Tool.Debugger
 
 		public void SignalDisconnect()
 		{
-			foreach (var content in this.dockPanel.Contents)
+			foreach (var content in dockPanel.Contents)
 			{
 				var debugContent = content as DebuggerDockContent;
 

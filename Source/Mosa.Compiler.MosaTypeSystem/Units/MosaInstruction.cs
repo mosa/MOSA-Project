@@ -16,11 +16,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaInstruction(int offset, ushort opCode, object operand, int? prev, int? next)
 		{
-			this.Offset = offset;
-			this.OpCode = opCode;
-			this.Operand = operand;
-			this.Previous = prev;
-			this.Next = next;
+			Offset = offset;
+			OpCode = opCode;
+			Operand = operand;
+			Previous = prev;
+			Next = next;
 		}
 	}
 }

@@ -11,7 +11,7 @@ namespace Mosa.Utility.GUI.Common
 		public ViewNode(T type, string name)
 			: base(name)
 		{
-			this.Type = type;
+			Type = type;
 		}
 
 		public override string ToString()

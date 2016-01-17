@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int SpillValue { get; set; }
 
-		public int SpillCost { get { return NeverSpill ? Int32.MaxValue : (SpillValue / (Length + 1)); } }
+		public int SpillCost { get { return NeverSpill ? int.MaxValue : (SpillValue / (Length + 1)); } }
 
 		public LiveIntervalTrack LiveIntervalTrack { get; set; }
 
@@ -99,13 +99,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)
 		{
-			this.LiveRange = new LiveRange(start, end, uses, defs);
+			LiveRange = new LiveRange(start, end, uses, defs);
 
-			this.VirtualRegister = virtualRegister;
-			this.SpillValue = 0;
-			this.Stage = AllocationStage.Initial;
-			this.ForceSpilled = false;
-			this.NeverSpill = false;
+			VirtualRegister = virtualRegister;
+			SpillValue = 0;
+			Stage = AllocationStage.Initial;
+			ForceSpilled = false;
+			NeverSpill = false;
 		}
 
 		public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			var mergedStart = Start < start ? Start : start;
 			var mergedEnd = End > end ? End : end;
 
-			return new LiveInterval(this.VirtualRegister, mergedStart, mergedEnd);
+			return new LiveInterval(VirtualRegister, mergedStart, mergedEnd);
 		}
 
 		public override string ToString()
@@ -138,7 +138,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public void Evict()
 		{
-			this.LiveIntervalTrack.Evict(this);
+			LiveIntervalTrack.Evict(this);
 		}
 
 		private LiveInterval CreateSplit(LiveRange liveRange)

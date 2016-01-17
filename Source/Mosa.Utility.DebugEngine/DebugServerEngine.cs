@@ -35,13 +35,13 @@ namespace Mosa.Utility.DebugEngine
 
 		public DebugServerEngine()
 		{
-			this.stream = null;
+			stream = null;
 		}
 
 		public void SetDispatchMethod(object receiver, SenderMesseageDelegate receiverMethod)
 		{
 			this.receiver = receiver;
-			this.dispatchMethod = receiverMethod;
+			dispatchMethod = receiverMethod;
 		}
 
 		public bool SendCommand(DebugMessage message)

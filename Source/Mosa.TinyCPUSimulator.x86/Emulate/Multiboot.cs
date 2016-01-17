@@ -57,7 +57,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 			simCPU.Write32(multiboot + 20, 0x0);    // mods_count
 			simCPU.Write32(multiboot + 24, 0x0);    // mods_addr
 			simCPU.Write32(multiboot + 28, 0x0);    // syms
-			simCPU.Write32(multiboot + 44, (uint)(1 * 24)); // mmap_length
+			simCPU.Write32(multiboot + 44, 1 * 24); // mmap_length
 			simCPU.Write32(multiboot + 48, multiboot + 96); // mmap_addr
 			simCPU.Write32(multiboot + 52, 0x0);    // drives_length
 			simCPU.Write32(multiboot + 56, 0x0);    // drives_addr
@@ -80,7 +80,7 @@ namespace Mosa.TinyCPUSimulator.x86.Emulate
 				simCPU.Write32(multiboot + 8, 0x00);    // base_addr_high
 				simCPU.Write32(multiboot + 12, (uint)region.Size);  // length_low
 				simCPU.Write32(multiboot + 16, 0x00);   // length_high
-				simCPU.Write32(multiboot + 20, (uint)region.Type);  // type
+				simCPU.Write32(multiboot + 20, region.Type);  // type
 				multiboot = multiboot + 24;
 			}
 		}

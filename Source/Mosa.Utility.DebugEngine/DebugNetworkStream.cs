@@ -11,6 +11,6 @@ namespace Mosa.Utility.DebugEngine
 		{
 		}
 
-		public bool IsConnected { get { return this.Socket.Connected; } }
+		public bool IsConnected { get { return Socket.Connected; } }
 	}
 }

@@ -6,7 +6,7 @@ namespace Mosa.Test.Collection
 	{
 		public static bool ConvI1_I1(sbyte expect, sbyte a)
 		{
-			return expect == (sbyte)a;
+			return expect == a;
 		}
 
 		public static bool ConvI1_I2(sbyte expect, short a)

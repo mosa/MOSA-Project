@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -241,6 +242,14 @@ namespace Mosa.TestWorld.x86.Tests
 			return (v3 == 32);
 		}
 
+		public static bool NullableTest6()
+		{
+			bool? v1 = null;
+			bool? v2 = true;
+
+			return !Nullable.Equals(v1, v2);
+		}
+
 		public static byte ForeachU1()
 		{
 			byte[] a = new byte[5];
@@ -282,7 +291,7 @@ namespace Mosa.TestWorld.x86.Tests
 				var addr1 = (uint)(pageDirectoryEntries + index);
 
 				//increpmenting a UInt32
-				var addr2 = (uint)(pageDirectoryAddress + (index * 4));  //struct PageDirectoryEntry as a size of 4 bytes
+				var addr2 = pageDirectoryAddress + (index * 4);  //struct PageDirectoryEntry as a size of 4 bytes
 
 				return addr1 == addr2;
 			}

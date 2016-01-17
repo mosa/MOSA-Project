@@ -15,7 +15,7 @@ namespace System
 		internal CharEnumerator(string str)
 		{
 			this.str = str;
-			this.currentPosition = -1;
+			currentPosition = -1;
 		}
 
 		public object Clone()

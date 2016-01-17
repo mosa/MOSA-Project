@@ -68,7 +68,7 @@ namespace Mosa.Tool.TinySimulator
 				AddSymbol(ip);
 			}
 
-			this.Refresh();
+			Refresh();
 		}
 
 		private CallStackEntry clickedNode = null;
@@ -110,7 +110,7 @@ namespace Mosa.Tool.TinySimulator
 			if (clickedNode == null)
 				return;
 
-			MainForm.AddBreakpoint(clickedNode.MethodName, (ulong)clickedNode.Address);
+			MainForm.AddBreakpoint(clickedNode.MethodName, clickedNode.Address);
 		}
 
 		private void MenuItem3_Click(Object sender, EventArgs e)

@@ -449,7 +449,7 @@ namespace Mosa.Compiler.Framework
 		public byte ResultCount
 		{
 			get { return (byte)((packed >> 8) & 0xF); }
-			set { packed = (uint)((packed & 0xFFFFF0FF) | ((uint)value << 8)); }
+			set { packed = (packed & 0xFFFFF0FF) | ((uint)value << 8); }
 		}
 
 		/// <summary>
@@ -549,17 +549,17 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private void Clear()
 		{
-			this.Label = -1;
-			this.Instruction = null;
+			Label = -1;
+			Instruction = null;
 
 			ClearOperands();
 
-			this.packed = 0;
-			this.addition = null;
-			this.BranchHint = false;
-			this.ConditionCode = ConditionCode.Undefined;
-			this.Block = null;
-			this.branchTargets = null;
+			packed = 0;
+			addition = null;
+			BranchHint = false;
+			ConditionCode = ConditionCode.Undefined;
+			Block = null;
+			branchTargets = null;
 		}
 
 		/// <summary>
@@ -569,15 +569,15 @@ namespace Mosa.Compiler.Framework
 		{
 			ClearOperands();
 
-			this.Instruction = null;
-			this.packed = 0;
-			this.addition = null;
-			this.BranchHint = false;
-			this.ConditionCode = ConditionCode.Undefined;
+			Instruction = null;
+			packed = 0;
+			addition = null;
+			BranchHint = false;
+			ConditionCode = ConditionCode.Undefined;
 
 			Block.RemoveBranchInstruction(this);
 
-			this.branchTargets = null;
+			branchTargets = null;
 
 			//Block.DebugCheck();
 		}

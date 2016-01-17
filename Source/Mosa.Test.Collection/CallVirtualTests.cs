@@ -33,7 +33,7 @@ namespace Mosa.Test.Collection
 
 		public int TestBase()
 		{
-			return this.Test() + base.Test();
+			return Test() + base.Test();
 		}
 	}
 }

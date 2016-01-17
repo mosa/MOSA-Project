@@ -15,9 +15,9 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		public UnitDesc(ModuleDef module, Def definition, Sig signature)
 		{
 			if (definition != null)
-				this.Token = new ScopedToken(module, definition.MDToken);
-			this.Definition = definition;
-			this.Signature = signature;
+				Token = new ScopedToken(module, definition.MDToken);
+			Definition = definition;
+			Signature = signature;
 		}
 
 		public UnitDesc<Def, Sig> Clone(Sig newSig)

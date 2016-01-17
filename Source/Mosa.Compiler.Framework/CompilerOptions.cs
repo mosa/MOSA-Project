@@ -205,7 +205,7 @@ namespace Mosa.Compiler.Framework
 
 			int val;
 
-			if (Int32.TryParse(value, out val))
+			if (int.TryParse(value, out val))
 				return val;
 			else
 				return @default;
@@ -226,7 +226,7 @@ namespace Mosa.Compiler.Framework
 
 			int val;
 
-			if (Int32.TryParse(value, out val))
+			if (int.TryParse(value, out val))
 				return val;
 			else
 				return @default;

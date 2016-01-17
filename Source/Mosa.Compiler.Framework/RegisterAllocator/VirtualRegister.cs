@@ -44,16 +44,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public VirtualRegister(Operand virtualRegister)
 		{
-			this.VirtualRegisterOperand = virtualRegister;
-			this.IsReserved = false;
-			this.IsSpilled = false;
+			VirtualRegisterOperand = virtualRegister;
+			IsReserved = false;
+			IsSpilled = false;
 		}
 
 		public VirtualRegister(Register physicalRegister, bool reserved)
 		{
-			this.PhysicalRegister = physicalRegister;
-			this.IsReserved = reserved;
-			this.IsSpilled = false;
+			PhysicalRegister = physicalRegister;
+			IsReserved = reserved;
+			IsSpilled = false;
 		}
 
 		public void AddUsePosition(SlotIndex position)

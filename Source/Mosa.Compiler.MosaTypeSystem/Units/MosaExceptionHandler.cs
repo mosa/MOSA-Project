@@ -44,7 +44,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public int? FilterEnd
 		{
-			get { return (ExceptionHandlerType == ExceptionHandlerType.Filter) ? (int?)HandlerStart : (int?)null; }
+			get { return (ExceptionHandlerType == ExceptionHandlerType.Filter) ? HandlerStart : (int?)null; }
 		}
 
 		/// <summary>

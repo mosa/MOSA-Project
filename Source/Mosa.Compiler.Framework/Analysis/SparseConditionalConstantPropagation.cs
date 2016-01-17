@@ -91,8 +91,8 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, ITraceFactory traceFactory)
 		{
-			this.TraceFactory = traceFactory;
-			this.BasicBlocks = basicBlocks;
+			TraceFactory = traceFactory;
+			BasicBlocks = basicBlocks;
 
 			MainTrace = CreateTrace("SparseConditionalConstantPropagation");
 

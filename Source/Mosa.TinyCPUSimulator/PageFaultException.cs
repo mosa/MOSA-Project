@@ -11,7 +11,7 @@ namespace Mosa.TinyCPUSimulator
 
 		public PageFaultException(ulong address)
 		{
-			this.Address = address;
+			Address = address;
 		}
 
 		public override string ToString()

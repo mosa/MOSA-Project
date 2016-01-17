@@ -12,28 +12,28 @@ namespace Mosa.Runtime
 	{
 		#region Intrinsic
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern uint Load32(uint address);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern uint Load32(uint address, int offset);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern uint Load32(uint address, uint offset);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void* GetObjectAddress<T>(T obj) where T : class;
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void* GetValueTypeAddress<T>(T obj) where T : struct;
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern object GetObjectFromAddress(void* address);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static object CreateInstanceSimple(void* ctor, void* thisObject);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static uint* GetAssemblyListTable();
 
 		#endregion Intrinsic

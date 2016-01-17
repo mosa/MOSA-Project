@@ -9,8 +9,8 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			uint a = LoadValue(cpu, instruction.Operand1);
 			int size = instruction.Operand1.Size;
 
-			long s = (long)(int)a;
-			ulong u = (ulong)a;
+			long s = (int)a;
+			ulong u = a;
 
 			s--;
 			u--;

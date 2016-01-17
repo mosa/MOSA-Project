@@ -26,9 +26,9 @@ namespace Mosa.DeviceSystem
 			this.pixelPaletteGraphicsDevice = pixelPaletteGraphicsDevice;
 
 			if (pixelPaletteGraphicsDevice.PaletteSize == 256)
-				this.colorPalette = ColorPalette.CreateNetscape256ColorPalette();
+				colorPalette = ColorPalette.CreateNetscape256ColorPalette();
 			else
-				this.colorPalette = ColorPalette.CreateStandard16ColorPalette();
+				colorPalette = ColorPalette.CreateStandard16ColorPalette();
 		}
 
 		/// <summary>

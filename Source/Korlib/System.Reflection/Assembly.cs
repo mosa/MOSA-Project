@@ -47,12 +47,12 @@ namespace System.Reflection
 			if (!(obj is Assembly))
 				return false;
 
-			return ((Assembly)obj).FullName == this.FullName;
+			return ((Assembly)obj).FullName == FullName;
 		}
 
 		public override int GetHashCode()
 		{
-			return this.FullName.GetHashCode();
+			return FullName.GetHashCode();
 		}
 
 		/// <summary>

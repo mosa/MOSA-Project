@@ -20,7 +20,7 @@ namespace Mosa.Tool.Debugger
 		{
 		}
 
-		public MainForm MainForm { get { return ((this.ParentForm) as MainForm); } }
+		public MainForm MainForm { get { return ((ParentForm) as MainForm); } }
 
 		public DebugServerEngine DebugEngine { get { return MainForm.DebugEngine; } }
 

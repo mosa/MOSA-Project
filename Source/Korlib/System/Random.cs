@@ -47,9 +47,9 @@ namespace System
 		public Random(int Seed)
 		{
 			x = (uint)Seed;
-			y = (uint)987654321;
-			z = (uint)43219876;
-			c = (uint)6543217;
+			y = 987654321;
+			z = 43219876;
+			c = 6543217;
 		}
 
 		private uint JKiss()
@@ -92,7 +92,7 @@ namespace System
 			// but we want to avoid calls to Math.Abs (call cost and branching cost it requires)
 			// and the fact it would throw for Int32.MinValue (so roughly 1 time out of 2^32)
 			int random = (int)JKiss();
-			while (random == Int32.MinValue)
+			while (random == int.MinValue)
 				random = (int)JKiss();
 			int mask = random >> 31;
 			random ^= mask;

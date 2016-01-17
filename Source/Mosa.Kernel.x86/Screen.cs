@@ -235,7 +235,7 @@ namespace Mosa.Kernel.x86
 
 			for (uint i = 0; i < count; i++)
 			{
-				uint digit = (uint)(val % digits);
+				uint digit = val % digits;
 				Column = x;
 				Row = y;
 				Skip(count - 1 - i);

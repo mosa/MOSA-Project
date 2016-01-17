@@ -56,7 +56,7 @@ namespace Mosa.DeviceSystem
 			base.parent = diskController as Device;
 			base.name = base.parent.Name + "/Disk" + driveNbr.ToString();
 			base.deviceStatus = DeviceStatus.Online;
-			this.totalSectors = diskController.GetTotalSectors(driveNbr);
+			totalSectors = diskController.GetTotalSectors(driveNbr);
 			this.diskController = diskController;
 			this.driveNbr = driveNbr;
 

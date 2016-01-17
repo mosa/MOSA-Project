@@ -31,7 +31,7 @@ namespace Mosa.Tool.Debugger
 		public override void Connect()
 		{
 			Status = "Querying...";
-			SendCommand(new DebugMessage(Codes.Scattered32BitReadMemory, new int[] { (int)0x200004, (int)(1024 * 1024 * 28) }, this, UpdatePointers));
+			SendCommand(new DebugMessage(Codes.Scattered32BitReadMemory, new int[] { 0x200004, 1024 * 1024 * 28 }, this, UpdatePointers));
 			SendCommand(new DebugMessage(Codes.ReadCR3, (byte[])null, this, ReadCR3));
 		}
 
@@ -42,13 +42,13 @@ namespace Mosa.Tool.Debugger
 
 		private void UpdatePointers(DebugMessage message)
 		{
-			multibootStructure = (uint)message.GetUInt32(4);
-			physicalPageFreeList = (uint)message.GetUInt32(12);
+			multibootStructure = message.GetUInt32(4);
+			physicalPageFreeList = message.GetUInt32(12);
 		}
 
 		private void ReadCR3(DebugMessage message)
 		{
-			cr3 = (uint)message.GetUInt32(0);
+			cr3 = message.GetUInt32(0);
 
 			cbSelect.Enabled = Enabled;
 			if (cbSelect.SelectedIndex == -1)

@@ -19,7 +19,7 @@ namespace System.Runtime.Versioning
 
 		public TargetFrameworkAttribute(string frameworkName)
 		{
-			this.FrameworkName = frameworkName;
+			FrameworkName = frameworkName;
 		}
 	}
 }

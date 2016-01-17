@@ -26,7 +26,7 @@ namespace System
 					customAttributesData = new LinkedList<CustomAttributeData>();
 					if (assemblyStruct->CustomAttributes != null)
 					{
-						var customAttributesTablePtr = this.assemblyStruct->CustomAttributes;
+						var customAttributesTablePtr = assemblyStruct->CustomAttributes;
 						var customAttributesCount = customAttributesTablePtr[0];
 						customAttributesTablePtr++;
 						for (uint i = 0; i < customAttributesCount; i++)
@@ -37,7 +37,7 @@ namespace System
 					}
 				}
 
-				return this.customAttributesData;
+				return customAttributesData;
 			}
 		}
 
@@ -45,16 +45,16 @@ namespace System
 		{
 			get
 			{
-				if (this.typeInfoList == null)
+				if (typeInfoList == null)
 				{
 					// Type Info - Lazy load
-					this.typeInfoList = new LinkedList<RuntimeTypeInfo>();
-					foreach (RuntimeType type in this.typeList)
-						this.typeInfoList.AddLast(new RuntimeTypeInfo(type, this));
+					typeInfoList = new LinkedList<RuntimeTypeInfo>();
+					foreach (RuntimeType type in typeList)
+						typeInfoList.AddLast(new RuntimeTypeInfo(type, this));
 				}
 
 				var types = new LinkedList<TypeInfo>();
-				foreach (var type in this.typeInfoList)
+				foreach (var type in typeInfoList)
 					types.AddLast(type);
 				return types;
 			}
@@ -62,7 +62,7 @@ namespace System
 
 		public override string FullName
 		{
-			get { return this.fullName; }
+			get { return fullName; }
 		}
 
 		public override IEnumerable<Type> ExportedTypes
@@ -70,7 +70,7 @@ namespace System
 			get
 			{
 				var types = new LinkedList<Type>();
-				foreach (RuntimeType type in this.typeList)
+				foreach (RuntimeType type in typeList)
 				{
 					if ((type.attributes & TypeAttributes.VisibilityMask) != TypeAttributes.Public)
 						continue;
@@ -82,27 +82,27 @@ namespace System
 
 		internal RuntimeAssembly(uint* pointer)
 		{
-			this.assemblyStruct = (MetadataAssemblyStruct*)pointer;
-			this.fullName = Mosa.Runtime.Internal.InitializeMetadataString(this.assemblyStruct->Name);
+			assemblyStruct = (MetadataAssemblyStruct*)pointer;
+			fullName = Mosa.Runtime.Internal.InitializeMetadataString(assemblyStruct->Name);
 
-			uint typeCount = (*this.assemblyStruct).NumberOfTypes;
+			uint typeCount = (*assemblyStruct).NumberOfTypes;
 			for (uint i = 0; i < typeCount; i++)
 			{
 				var handle = new RuntimeTypeHandle();
 				((uint**)&handle)[0] = (uint*)MetadataAssemblyStruct.GetTypeDefinitionAddress(assemblyStruct, i);
 
-				if (this.typeHandles.Contains(handle))
+				if (typeHandles.Contains(handle))
 					continue;
 
-				this.ProcessType(handle);
+				ProcessType(handle);
 			}
 		}
 
 		internal RuntimeType ProcessType(RuntimeTypeHandle handle)
 		{
-			this.typeHandles.AddLast(handle);
+			typeHandles.AddLast(handle);
 			var type = new RuntimeType(handle);
-			this.typeList.AddLast(type);
+			typeList.AddLast(type);
 			return type;
 		}
 	}

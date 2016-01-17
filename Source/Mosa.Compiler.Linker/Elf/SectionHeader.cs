@@ -111,14 +111,14 @@ namespace Mosa.Compiler.Linker.Elf
 		/// <param name="writer">The writer.</param>
 		protected void Write32(BinaryWriter writer)
 		{
-			writer.Write((uint)Name);
+			writer.Write(Name);
 			writer.Write((uint)Type);
 			writer.Write((uint)Flags);
 			writer.Write((uint)Address);
 			writer.Write((int)Offset);
 			writer.Write((uint)Size);
-			writer.Write((uint)Link);
-			writer.Write((uint)Info);
+			writer.Write(Link);
+			writer.Write(Info);
 			writer.Write((uint)AddressAlignment);
 			writer.Write((uint)EntrySize);
 		}
@@ -129,16 +129,16 @@ namespace Mosa.Compiler.Linker.Elf
 		/// <param name="writer">The writer.</param>
 		protected void Write64(BinaryWriter writer)
 		{
-			writer.Write((uint)Name);
+			writer.Write(Name);
 			writer.Write((uint)Type);
 			writer.Write((ulong)Flags);
-			writer.Write((ulong)Address);
-			writer.Write((long)Offset);
-			writer.Write((ulong)Size);
-			writer.Write((uint)Link);
-			writer.Write((uint)Info);
-			writer.Write((ulong)AddressAlignment);
-			writer.Write((ulong)EntrySize);
+			writer.Write(Address);
+			writer.Write(Offset);
+			writer.Write(Size);
+			writer.Write(Link);
+			writer.Write(Info);
+			writer.Write(AddressAlignment);
+			writer.Write(EntrySize);
 		}
 
 		/// <summary>

@@ -39,7 +39,7 @@ namespace Mosa.Tool.TinySimulator
 
 		public int MaxHistory { get; set; }
 
-		public string Status { set { this.toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
+		public string Status { set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
 
 		public string CompileOnLaunch { get; set; }
 
@@ -346,7 +346,7 @@ namespace Mosa.Tool.TinySimulator
 
 			simState.TotalElapsedSeconds = secs;
 
-			if (this.Record)
+			if (Record)
 			{
 				stateQueue.Enqueue(simState);
 				if (stateQueue.Count > MaxHistory)

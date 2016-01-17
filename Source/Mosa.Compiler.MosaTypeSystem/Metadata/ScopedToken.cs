@@ -25,12 +25,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool Equals(ScopedToken other)
 		{
-			return other.Module == this.Module && other.Token == this.Token;
+			return other.Module == Module && other.Token == Token;
 		}
 
 		public override bool Equals(object obj)
 		{
-			return obj is ScopedToken && this.Equals((ScopedToken)obj);
+			return obj is ScopedToken && Equals((ScopedToken)obj);
 		}
 
 		public override int GetHashCode()

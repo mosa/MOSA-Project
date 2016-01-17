@@ -20,8 +20,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool Equals(MosaMethodSignature sig)
 		{
-			return SignatureComparer.Equals(this.ReturnType, sig.ReturnType) &&
-				   this.Parameters.SequenceEquals(sig.Parameters);
+			return SignatureComparer.Equals(ReturnType, sig.ReturnType) &&
+				   Parameters.SequenceEquals(sig.Parameters);
 		}
 
 		private string sig;

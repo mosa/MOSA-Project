@@ -41,13 +41,13 @@ namespace Mosa.TinyCPUSimulator
 		public float LowF
 		{
 			get { return (float)Low; }
-			set { Low = (double)value; }
+			set { Low = value; }
 		}
 
 		public float HighF
 		{
 			get { return (float)Low; }
-			set { Low = (double)value; }
+			set { Low = value; }
 		}
 
 		// As Double

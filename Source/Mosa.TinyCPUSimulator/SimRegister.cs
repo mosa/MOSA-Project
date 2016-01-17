@@ -16,11 +16,11 @@ namespace Mosa.TinyCPUSimulator
 
 		public SimRegister(string name, int index, RegisterType registerType, int size, bool physical)
 		{
-			this.Index = index;
-			this.RegisterType = registerType;
-			this.Size = size;
-			this.Physical = physical;
-			this.Name = name;
+			Index = index;
+			RegisterType = registerType;
+			Size = size;
+			Physical = physical;
+			Name = name;
 		}
 
 		public SimRegister(string name, int index, RegisterType registerType, int size)

@@ -127,7 +127,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 				var symbol = linker.GetSymbol(runtimeMethod.FullName, SectionKind.Text);
 
-				ulong address = (ulong)symbol.VirtualAddress;
+				ulong address = symbol.VirtualAddress;
 
 				//Console.Write("Testing: " + ns + "." + type + "." + method);
 

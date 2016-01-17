@@ -57,7 +57,7 @@ namespace System
 			}
 
 			// Generate arrays from the argument lists
-			this.ctorArgs = typedArgs.ToArray();
+			ctorArgs = typedArgs.ToArray();
 			this.namedArgs = namedArgs.ToArray();
 		}
 
@@ -122,7 +122,7 @@ namespace System
 
 				// 4 bytes
 				case TypeCode.U4:
-					return ((uint*)valuePtr)[0];
+					return valuePtr[0];
 
 				case TypeCode.I4:
 					return ((int*)valuePtr)[0];
@@ -226,7 +226,7 @@ namespace System
 					{
 						uint[] array = new uint[size];
 						for (int i = 0; i < size; i++)
-							array[i] = ((uint*)valuePtr)[i];
+							array[i] = valuePtr[i];
 						return array;
 					}
 

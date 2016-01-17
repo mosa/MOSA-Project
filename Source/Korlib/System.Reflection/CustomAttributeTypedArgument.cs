@@ -16,7 +16,7 @@ namespace System.Reflection
 		/// </summary>
 		public Type ArgumentType
 		{
-			get { return this.argumentType; }
+			get { return argumentType; }
 		}
 
 		/// <summary>
@@ -24,7 +24,7 @@ namespace System.Reflection
 		/// </summary>
 		public object Value
 		{
-			get { return this.value; }
+			get { return value; }
 		}
 	}
 }

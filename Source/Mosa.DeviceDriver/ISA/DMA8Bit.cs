@@ -252,10 +252,10 @@ namespace Mosa.DeviceDriver.ISA
 			uint address = memory.Address;
 
 			// Disable DMA Controller
-			channelMaskRegister.Write8((byte)((byte)channel | 4));
+			channelMaskRegister.Write8((byte)(channel | 4));
 
 			// Clear any current transfers
-			byteWordRegister.Write8((byte)0xFF);    // reset flip-flop
+			byteWordRegister.Write8(0xFF);    // reset flip-flop
 
 			// Set Address
 			dmaAddress.Write8((byte)(address & 0xFF)); // low byte
@@ -263,7 +263,7 @@ namespace Mosa.DeviceDriver.ISA
 			dmaPage.Write8((byte)((address >> 16) & 0xFF)); // page
 
 			// Clear any current transfers
-			byteWordRegister.Write8((byte)0xFF);    // reset flip-flop
+			byteWordRegister.Write8(0xFF);    // reset flip-flop
 
 			// Set Count
 			dmaCount.Write8((byte)((count - 1) & 0xFF)); // low
@@ -294,7 +294,7 @@ namespace Mosa.DeviceDriver.ISA
 			modeRegister.Write8(value);
 
 			// Enable DMA Controller
-			channelMaskRegister.Write8((byte)(channel));
+			channelMaskRegister.Write8(channel);
 
 			return true;
 		}

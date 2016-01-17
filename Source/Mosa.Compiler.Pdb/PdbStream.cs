@@ -57,10 +57,10 @@ namespace Mosa.Compiler.Pdb
 		public PdbStream(Stream stream, int pageSize, int[] pages, long length)
 		{
 			this.length = length;
-			this.page = new byte[pageSize];
+			page = new byte[pageSize];
 			this.pageSize = pageSize;
 			this.pages = pages;
-			this.position = 0;
+			position = 0;
 			this.stream = stream;
 
 			SwitchPage();
@@ -106,7 +106,7 @@ namespace Mosa.Compiler.Pdb
 		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
 		public override void Flush()
 		{
-			this.stream.Flush();
+			stream.Flush();
 		}
 
 		/// <summary>
@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Pdb
 		/// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
 		public override long Length
 		{
-			get { return this.length; }
+			get { return length; }
 		}
 
 		/// <summary>
@@ -133,7 +133,7 @@ namespace Mosa.Compiler.Pdb
 		{
 			get
 			{
-				return this.position;
+				return position;
 			}
 			set
 			{
@@ -165,18 +165,18 @@ namespace Mosa.Compiler.Pdb
 			// Split the read into page sized chunks
 			while (0 != count)
 			{
-				pageOffset = (int)(this.position % this.pageSize);
-				pageRemaining = this.pageSize - pageOffset;
+				pageOffset = (int)(position % pageSize);
+				pageRemaining = pageSize - pageOffset;
 				Debug.Assert(pageRemaining != 0, @"pageRemaining should never be zero.");
 
 				pageRead = Math.Min(count, pageRemaining);
 
-				Array.Copy(this.page, pageOffset, buffer, offset, pageRead);
+				Array.Copy(page, pageOffset, buffer, offset, pageRead);
 				offset += pageRead;
 				totalRead += pageRead;
 				count -= pageRead;
 
-				this.Position += pageRead;
+				Position += pageRead;
 			}
 
 			return totalRead;
@@ -198,20 +198,20 @@ namespace Mosa.Compiler.Pdb
 			switch (origin)
 			{
 				case SeekOrigin.Begin:
-					this.position = offset;
+					position = offset;
 					break;
 
 				case SeekOrigin.Current:
-					this.position += offset;
+					position += offset;
 					break;
 
 				case SeekOrigin.End:
-					this.position = this.length - offset;
+					position = length - offset;
 					break;
 			}
 
 			SwitchPage();
-			return this.position;
+			return position;
 		}
 
 		/// <summary>
@@ -255,15 +255,15 @@ namespace Mosa.Compiler.Pdb
 		private void SwitchPage()
 		{
 			// Calculate the page index
-			int pageIdx = (int)(this.position / this.pageSize);
-			int pageOffset = (int)(this.position - (pageIdx * this.pageSize));
+			int pageIdx = (int)(position / pageSize);
+			int pageOffset = (int)(position - (pageIdx * pageSize));
 
 			// Find the real offset
-			lock (this.stream)
+			lock (stream)
 			{
 				// Read the full page into the buffer
-				this.stream.Position = (this.pages[pageIdx] * this.pageSize);
-				this.stream.Read(this.page, 0, this.pageSize);
+				stream.Position = (pages[pageIdx] * pageSize);
+				stream.Read(page, 0, pageSize);
 			}
 		}
 

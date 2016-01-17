@@ -31,12 +31,12 @@ namespace System
 
 		public override string ToString()
 		{
-			return Int32.CreateString(_value, false, false);
+			return int.CreateString(_value, false, false);
 		}
 
 		public string ToString(string format)
 		{
-			return Int32.CreateString((uint)_value, false, true);
+			return int.CreateString(_value, false, true);
 		}
 
 		public override int GetHashCode()

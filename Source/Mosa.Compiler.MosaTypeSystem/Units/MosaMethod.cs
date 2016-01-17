@@ -77,20 +77,20 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			MosaMethod result = (MosaMethod)base.MemberwiseClone();
 
-			result.GenericArguments = (result.genericArguments = new List<MosaType>(this.genericArguments)).AsReadOnly();
+			result.GenericArguments = (result.genericArguments = new List<MosaType>(genericArguments)).AsReadOnly();
 
-			result.LocalVariables = (result.localVars = new List<MosaLocal>(this.localVars)).AsReadOnly();
-			result.Code = (result.instructions = new List<MosaInstruction>(this.instructions)).AsReadOnly();
-			result.ExceptionHandlers = (result.exceptionHandlers = new List<MosaExceptionHandler>(this.exceptionHandlers)).AsReadOnly();
+			result.LocalVariables = (result.localVars = new List<MosaLocal>(localVars)).AsReadOnly();
+			result.Code = (result.instructions = new List<MosaInstruction>(instructions)).AsReadOnly();
+			result.ExceptionHandlers = (result.exceptionHandlers = new List<MosaExceptionHandler>(exceptionHandlers)).AsReadOnly();
 
-			result.Overrides = (result.overrides = new List<MosaMethod>(this.overrides)).AsReadOnly();
+			result.Overrides = (result.overrides = new List<MosaMethod>(overrides)).AsReadOnly();
 
 			return result;
 		}
 
 		public bool Equals(MosaMethod other)
 		{
-			return SignatureComparer.Equals(this.Signature, other.Signature);
+			return SignatureComparer.Equals(Signature, other.Signature);
 
 			//return SignatureEquals(other) && this.DeclaringType.FullName == other.DeclaringType.FullName && this.Name == other.Name;
 		}
@@ -169,7 +169,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 						{
 							if (i != 0)
 								methodName.Append(", ");
-							methodName.Append(GenericArguments[i].Name);
+							methodName.Append(GenericArguments[i].FullName);
 						}
 						methodName.Append(">");
 					}

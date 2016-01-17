@@ -104,11 +104,11 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		protected uint GetIndex(byte bus, byte slot, byte function, byte register)
 		{
-			return (uint)(BaseValue
+			return BaseValue
 					   | (uint)((bus & 0xFF) << 16)
 					   | (uint)((slot & 0x0F) << 11)
 					   | (uint)((function & 0x07) << 8)
-					   | (uint)(register & 0xFC));
+					   | (uint)(register & 0xFC);
 		}
 
 		/// <summary>

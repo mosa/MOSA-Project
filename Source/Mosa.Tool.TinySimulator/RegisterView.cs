@@ -27,7 +27,7 @@ namespace Mosa.Tool.TinySimulator
 				dataGridView1.Rows.Add(name, MainForm.Format(simState.GetRegister(name)));
 			}
 
-			this.Refresh();
+			Refresh();
 		}
 	}
 }

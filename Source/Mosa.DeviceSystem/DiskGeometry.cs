@@ -30,9 +30,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="sectorsPerTrack">The sectors per track.</param>
 		public DiskGeometry(ushort cylinders, byte heads, ushort sectorsPerTrack)
 		{
-			this.Cylinders = cylinders;
-			this.Heads = heads;
-			this.SectorsPerTrack = sectorsPerTrack;
+			Cylinders = cylinders;
+			Heads = heads;
+			SectorsPerTrack = sectorsPerTrack;
 		}
 
 		/// <summary>

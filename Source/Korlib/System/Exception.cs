@@ -21,7 +21,7 @@ namespace System
 		/// </summary>
 		public Exception InnerException
 		{
-			get { return this.innerException; }
+			get { return innerException; }
 		}
 
 		/// <summary>

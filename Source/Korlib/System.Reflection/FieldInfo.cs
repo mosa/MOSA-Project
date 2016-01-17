@@ -23,7 +23,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsAssembly
 		{
-			get { return (this.Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.Assembly; }
+			get { return (Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.Assembly; }
 		}
 
 		/// <summary>
@@ -31,7 +31,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsFamily
 		{
-			get { return (this.Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.Family; }
+			get { return (Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.Family; }
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsFamilyAndAssembly
 		{
-			get { return (this.Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.FamANDAssem; }
+			get { return (Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.FamANDAssem; }
 		}
 
 		/// <summary>
@@ -47,7 +47,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsFamilyOrAssembly
 		{
-			get { return (this.Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.FamORAssem; }
+			get { return (Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.FamORAssem; }
 		}
 
 		/// <summary>
@@ -55,7 +55,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsInitOnly
 		{
-			get { return (this.Attributes & FieldAttributes.InitOnly) == FieldAttributes.InitOnly; }
+			get { return (Attributes & FieldAttributes.InitOnly) == FieldAttributes.InitOnly; }
 		}
 
 		/// <summary>
@@ -63,7 +63,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsLiteral
 		{
-			get { return (this.Attributes & FieldAttributes.Literal) == FieldAttributes.Literal; }
+			get { return (Attributes & FieldAttributes.Literal) == FieldAttributes.Literal; }
 		}
 
 		/// <summary>
@@ -71,7 +71,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsPrivate
 		{
-			get { return (this.Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.Private; }
+			get { return (Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.Private; }
 		}
 
 		/// <summary>
@@ -79,7 +79,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsPublic
 		{
-			get { return (this.Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.Public; }
+			get { return (Attributes & FieldAttributes.FieldAccessMask) == FieldAttributes.Public; }
 		}
 
 		/// <summary>
@@ -87,7 +87,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsSpecialName
 		{
-			get { return (this.Attributes & FieldAttributes.SpecialName) == FieldAttributes.SpecialName; }
+			get { return (Attributes & FieldAttributes.SpecialName) == FieldAttributes.SpecialName; }
 		}
 
 		/// <summary>
@@ -95,7 +95,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsStatic
 		{
-			get { return (this.Attributes & FieldAttributes.Static) == FieldAttributes.Static; }
+			get { return (Attributes & FieldAttributes.Static) == FieldAttributes.Static; }
 		}
 
 		/// <summary>

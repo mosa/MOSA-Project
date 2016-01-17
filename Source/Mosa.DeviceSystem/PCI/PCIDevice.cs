@@ -156,9 +156,9 @@ namespace Mosa.DeviceSystem.PCI
 			base.deviceStatus = DeviceStatus.Available;
 
 			this.pciController = pciController;
-			this.Bus = bus;
-			this.Slot = slot;
-			this.Function = fun;
+			Bus = bus;
+			Slot = slot;
+			Function = fun;
 
 			ioPortRegionCount = memoryRegionCount = 0;
 			BaseAddresses = new BaseAddress[8];
@@ -209,7 +209,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		public void EnableDevice()
 		{
-			CommandRegister = (ushort)(CommandRegister | (((ioPortRegionCount > 0) ? PCICommand.IO : (ushort)0) | PCICommand.Master | ((memoryRegionCount > 0) ? PCICommand.Memort : (ushort)0)));
+			CommandRegister = (ushort)(CommandRegister | (((ioPortRegionCount > 0) ? PCICommand.IO : 0) | PCICommand.Master | ((memoryRegionCount > 0) ? PCICommand.Memort : 0)));
 		}
 
 		/// <summary>

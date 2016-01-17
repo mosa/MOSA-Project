@@ -129,7 +129,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool HasElementType
 		{
-			get { return this.HasElementTypeImpl(); }
+			get { return HasElementTypeImpl(); }
 		}
 
 		/// <summary>
@@ -145,7 +145,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsAbstract
 		{
-			get { return (this.Attributes & TypeAttributes.Abstract) == TypeAttributes.Abstract; }
+			get { return (Attributes & TypeAttributes.Abstract) == TypeAttributes.Abstract; }
 		}
 
 		/// <summary>
@@ -153,7 +153,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsAnsiClass
 		{
-			get { return (this.Attributes & TypeAttributes.StringFormatMask) == TypeAttributes.AnsiClass; }
+			get { return (Attributes & TypeAttributes.StringFormatMask) == TypeAttributes.AnsiClass; }
 		}
 
 		/// <summary>
@@ -161,7 +161,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsArray
 		{
-			get { return this.IsArrayImpl(); }
+			get { return IsArrayImpl(); }
 		}
 
 		/// <summary>
@@ -169,7 +169,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsAutoClass
 		{
-			get { return (this.Attributes & TypeAttributes.StringFormatMask) == TypeAttributes.AutoClass; }
+			get { return (Attributes & TypeAttributes.StringFormatMask) == TypeAttributes.AutoClass; }
 		}
 
 		/// <summary>
@@ -177,7 +177,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsAutoLayout
 		{
-			get { return (this.Attributes & TypeAttributes.LayoutMask) == TypeAttributes.AutoLayout; }
+			get { return (Attributes & TypeAttributes.LayoutMask) == TypeAttributes.AutoLayout; }
 		}
 
 		/// <summary>
@@ -185,7 +185,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsByRef
 		{
-			get { return this.IsByRefImpl(); }
+			get { return IsByRefImpl(); }
 		}
 
 		/// <summary>
@@ -193,7 +193,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsClass
 		{
-			get { return !(this.IsInterface || this.IsValueType); }
+			get { return !(IsInterface || IsValueType); }
 		}
 
 		/// <summary>
@@ -206,7 +206,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsExplicitLayout
 		{
-			get { return (this.Attributes & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout; }
+			get { return (Attributes & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout; }
 		}
 
 		/// <summary>
@@ -229,7 +229,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsImport
 		{
-			get { return (this.Attributes & TypeAttributes.Import) == TypeAttributes.Import; }
+			get { return (Attributes & TypeAttributes.Import) == TypeAttributes.Import; }
 		}
 
 		/// <summary>
@@ -237,7 +237,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsInterface
 		{
-			get { return (this.Attributes & TypeAttributes.ClassSemanticsMask) == TypeAttributes.Interface; }
+			get { return (Attributes & TypeAttributes.ClassSemanticsMask) == TypeAttributes.Interface; }
 		}
 
 		/// <summary>
@@ -245,7 +245,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsLayoutSequential
 		{
-			get { return (this.Attributes & TypeAttributes.LayoutMask) == TypeAttributes.SequentialLayout; }
+			get { return (Attributes & TypeAttributes.LayoutMask) == TypeAttributes.SequentialLayout; }
 		}
 
 		/// <summary>
@@ -261,7 +261,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsNestedAssembly
 		{
-			get { return (this.Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedAssembly; }
+			get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedAssembly; }
 		}
 
 		/// <summary>
@@ -269,7 +269,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsNestedFamANDAssem
 		{
-			get { return (this.Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamANDAssem; }
+			get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamANDAssem; }
 		}
 
 		/// <summary>
@@ -277,7 +277,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsNestedFamily
 		{
-			get { return (this.Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamily; }
+			get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamily; }
 		}
 
 		/// <summary>
@@ -285,7 +285,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsNestedFamORAssem
 		{
-			get { return (this.Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamORAssem; }
+			get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedFamORAssem; }
 		}
 
 		/// <summary>
@@ -293,7 +293,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsNestedPrivate
 		{
-			get { return (this.Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedPrivate; }
+			get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedPrivate; }
 		}
 
 		/// <summary>
@@ -301,7 +301,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsNestedPublic
 		{
-			get { return (this.Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedPublic; }
+			get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NestedPublic; }
 		}
 
 		/// <summary>
@@ -309,7 +309,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsNotPublic
 		{
-			get { return (this.Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NotPublic; }
+			get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.NotPublic; }
 		}
 
 		/// <summary>
@@ -317,7 +317,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsPointer
 		{
-			get { return this.IsPointerImpl(); }
+			get { return IsPointerImpl(); }
 		}
 
 		/// <summary>
@@ -325,7 +325,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsPrimitive
 		{
-			get { return this.IsPrimitiveImpl(); }
+			get { return IsPrimitiveImpl(); }
 		}
 
 		/// <summary>
@@ -333,7 +333,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsPublic
 		{
-			get { return (this.Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.Public; }
+			get { return (Attributes & TypeAttributes.VisibilityMask) == TypeAttributes.Public; }
 		}
 
 		/// <summary>
@@ -341,7 +341,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsSealed
 		{
-			get { return (this.Attributes & TypeAttributes.Sealed) == TypeAttributes.Sealed; }
+			get { return (Attributes & TypeAttributes.Sealed) == TypeAttributes.Sealed; }
 		}
 
 		/// <summary>
@@ -354,7 +354,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsSpecialName
 		{
-			get { return (this.Attributes & TypeAttributes.SpecialName) == TypeAttributes.SpecialName; }
+			get { return (Attributes & TypeAttributes.SpecialName) == TypeAttributes.SpecialName; }
 		}
 
 		/// <summary>
@@ -362,7 +362,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsUnicodeClass
 		{
-			get { return (this.Attributes & TypeAttributes.StringFormatMask) == TypeAttributes.UnicodeClass; }
+			get { return (Attributes & TypeAttributes.StringFormatMask) == TypeAttributes.UnicodeClass; }
 		}
 
 		/// <summary>
@@ -370,7 +370,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsValueType
 		{
-			get { return this.IsValueTypeImpl(); }
+			get { return IsValueTypeImpl(); }
 		}
 
 		/// <summary>
@@ -558,7 +558,7 @@ namespace System.Reflection
 			if (typeInfo == this)
 				return true;
 
-			if (typeInfo.IsSubclassOf(this.AsType()))
+			if (typeInfo.IsSubclassOf(AsType()))
 				return true;
 
 			return false;
@@ -571,10 +571,10 @@ namespace System.Reflection
 		/// <returns>True if the Type represented by the c parameter and the current Type represent classes, and the class represented by the current Type derives from the class represented by c; otherwise, False. This method also returns False if c and the current Type represent the same class.</returns>
 		public virtual bool IsSubclassOf(Type c)
 		{
-			if (c == null || c == this.AsType())
+			if (c == null || c == AsType())
 				return false;
 
-			Type type = this.BaseType;
+			Type type = BaseType;
 			while (type != null)
 			{
 				if (type == c)

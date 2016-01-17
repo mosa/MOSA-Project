@@ -516,10 +516,10 @@ namespace Mosa.Compiler.Framework.Stages
 					context.SetInstruction(IRInstruction.Load, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 					// Get the MethodDef pointer
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodDefinition, typeDefinition, Operand.CreateConstant(TypeSystem, (int)methodDefinitionOffset));
+					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodDefinition, typeDefinition, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
 
 					// Get the address of the method
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, (int)methodPointerOffset));
+					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 				}
 				else
 				{
@@ -543,16 +543,16 @@ namespace Mosa.Compiler.Framework.Stages
 					context.SetInstruction(IRInstruction.Load, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 					// Get the Interface Slot Table pointer
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, interfaceSlotPtr, typeDefinition, Operand.CreateConstant(TypeSystem, (int)interfaceSlotTableOffset));
+					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, interfaceSlotPtr, typeDefinition, Operand.CreateConstant(TypeSystem, interfaceSlotTableOffset));
 
 					// Get the Interface Method Table pointer
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant(TypeSystem, (int)interfaceMethodTableOffset));
+					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant(TypeSystem, interfaceMethodTableOffset));
 
 					// Get the MethodDef pointer
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, Operand.CreateConstant(TypeSystem, (int)methodDefinitionOffset));
+					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
 
 					// Get the address of the method
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, (int)methodPointerOffset));
+					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 				}
 
 				context.AppendInstruction(IRInstruction.Nop);
@@ -638,7 +638,7 @@ namespace Mosa.Compiler.Framework.Stages
 			ReplaceWithVmCall(context, VmCall.AllocateArray);
 
 			context.SetOperand(1, GetRuntimeTypeHandle(arrayType, context));
-			context.SetOperand(2, Operand.CreateConstant(TypeSystem, (int)elementSize));
+			context.SetOperand(2, Operand.CreateConstant(TypeSystem, elementSize));
 			context.SetOperand(3, lengthOperand);
 			context.OperandCount = 4;
 		}
@@ -1015,7 +1015,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand objectOperand = context.Operand1;
 
 			int offset = TypeLayout.GetFieldOffset(context.MosaField);
-			Operand fixedOffset = Operand.CreateConstant(TypeSystem, (int)offset);
+			Operand fixedOffset = Operand.CreateConstant(TypeSystem, offset);
 
 			context.SetInstruction(IRInstruction.AddUnsigned, fieldAddress, objectOperand, fixedOffset);
 		}
@@ -1069,7 +1069,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var target = context.BranchTargets[0];
 
 			Operand first = context.Operand1;
-			Operand second = Operand.CreateConstant(TypeSystem, (int)0);
+			Operand second = Operand.CreateConstant(TypeSystem, 0);
 
 			CIL.OpCode opcode = ((CIL.BaseCILInstruction)context.Instruction).OpCode;
 
@@ -1501,7 +1501,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Architecture.GetTypeRequirements(TypeLayout, arrayType.ElementType, out elementSizeInBytes, out alignment);
 
 			var elementOffset = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var elementSizeOperand = Operand.CreateConstant(TypeSystem, (int)elementSizeInBytes);
+			var elementSizeOperand = Operand.CreateConstant(TypeSystem, elementSizeInBytes);
 			context.InsertBefore().SetInstruction(IRInstruction.MulSigned, elementOffset, arrayIndexOperand, elementSizeOperand);
 
 			return elementOffset;
@@ -1943,12 +1943,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (destinationType.IsUI1)
 			{
 				mask = 0xFF;
-				return (destinationType.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove);
+				return (destinationType.IsSigned ? IRInstruction.SignExtendedMove : IRInstruction.ZeroExtendedMove);
 			}
 			else if (destinationType.IsUI2)
 			{
 				mask = 0xFFFF;
-				return destinationType.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove;
+				return destinationType.IsSigned ? IRInstruction.SignExtendedMove : IRInstruction.ZeroExtendedMove;
 			}
 			else if (destinationType.IsUI4)
 			{

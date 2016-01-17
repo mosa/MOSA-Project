@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework
 
 		public ReplacementTargetAttribute(string target)
 		{
-			this.Target = target;
+			Target = target;
 		}
 	}
 }

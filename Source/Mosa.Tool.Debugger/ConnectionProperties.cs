@@ -16,14 +16,14 @@ namespace Mosa.Tool.Debugger
 
 		public override void Connect()
 		{
-			this.btnConnect.Enabled = false;
-			this.btnDisconnect.Enabled = true;
+			btnConnect.Enabled = false;
+			btnDisconnect.Enabled = true;
 		}
 
 		public override void Disconnect()
 		{
-			this.btnConnect.Enabled = true;
-			this.btnDisconnect.Enabled = false;
+			btnConnect.Enabled = true;
+			btnDisconnect.Enabled = false;
 		}
 
 		private void ConnectionProperties_Load(object sender, EventArgs e)

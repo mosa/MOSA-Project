@@ -208,7 +208,7 @@ namespace Mosa.Compiler.Framework
 
 			for (int i = 0; i < pipeline.Count; i++)
 			{
-				if (object.ReferenceEquals(pipeline[i], stage))
+				if (ReferenceEquals(pipeline[i], stage))
 					return i;
 			}
 

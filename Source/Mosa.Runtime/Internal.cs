@@ -11,7 +11,7 @@ namespace Mosa.Runtime
 
 		public static void* AllocateMemory(uint size)
 		{
-			return (void*)GC.AllocateObject(size);
+			return GC.AllocateObject(size);
 		}
 
 		public static void* AllocateObject(RuntimeTypeHandle handle, uint classSize)
@@ -40,7 +40,7 @@ namespace Mosa.Runtime
 			//   - ElementType[length] elements
 			//   - Padding
 
-			uint allocationSize = ((uint)(sizeof(void*)) * 3) + (uint)(elements * elementSize);
+			uint allocationSize = ((uint)(sizeof(void*)) * 3) + elements * elementSize;
 			allocationSize = (allocationSize + 3) & ~3u;    // Align to 4-bytes boundary
 			void* memory = AllocateMemory(allocationSize);
 
@@ -64,7 +64,7 @@ namespace Mosa.Runtime
 		public static void* Box8(RuntimeTypeHandle handle, byte value)
 		{
 			byte* memory = (byte*)AllocateObject(handle, 4);    // 4 for alignment
-			*(byte*)(memory + ((uint)(sizeof(void*)) * 2)) = value;
+			*(memory + ((uint)(sizeof(void*)) * 2)) = value;
 			return memory;
 		}
 
@@ -122,7 +122,7 @@ namespace Mosa.Runtime
 
 		public static byte Unbox8(void* box)
 		{
-			return *(byte*)((byte*)box + (uint)(sizeof(void*)) * 2);
+			return *((byte*)box + (uint)(sizeof(void*)) * 2);
 		}
 
 		public static ushort Unbox16(void* box)

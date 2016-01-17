@@ -247,7 +247,7 @@ namespace Mosa.Platform.x86
 			if (TryGetLabel(label, out position))
 			{
 				// Yes, calculate the relative offset
-				relOffset = (int)position - ((int)codeStream.Position + 4);
+				relOffset = position - ((int)codeStream.Position + 4);
 			}
 			else
 			{
@@ -275,7 +275,7 @@ namespace Mosa.Platform.x86
 				codeStream.Position = p.Position;
 
 				// Compute relative branch offset
-				int relOffset = (int)labelPosition - ((int)p.Position + 4);
+				int relOffset = labelPosition - ((int)p.Position + 4);
 
 				// Write relative offset to stream
 				var bytes = BitConverter.GetBytes(relOffset);

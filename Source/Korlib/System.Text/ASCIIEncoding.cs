@@ -18,7 +18,7 @@ namespace System.Text
 			for (int index = byteIndex; index < byteIndex + byteCount; index++)
 			{
 				byte b = bytes[index];
-				result += new string((b <= 0x7F) ? (char)b : (char)'?', 1);
+				result += new string((b <= 0x7F) ? (char)b : '?', 1);
 			}
 
 			return result;

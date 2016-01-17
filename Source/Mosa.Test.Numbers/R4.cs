@@ -56,7 +56,7 @@ namespace Mosa.Test.Numbers
 			foreach (float value in list)
 			{
 				if (value > 0)
-					negs.AddIfNew<float>((float)-value);
+					negs.AddIfNew<float>(-value);
 			}
 
 			return negs;

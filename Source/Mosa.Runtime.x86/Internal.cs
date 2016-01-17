@@ -34,7 +34,7 @@ namespace Mosa.Runtime.x86
 			MetadataTypeStruct* objTypeDefinition = (MetadataTypeStruct*)((uint*)obj)[0];
 
 			if (IsTypeInInheritanceChain(typeDefinition, objTypeDefinition))
-				return (void*)obj;
+				return obj;
 
 			return null;
 		}

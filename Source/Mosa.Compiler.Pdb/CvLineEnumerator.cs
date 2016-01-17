@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Pdb
 			// sizeOfLines: The size of the lines in bytes
 			int header, nextBlockOffset, start, seg, size, fileOffset, numberOfLines, sizeOfLines;
 
-			using (BinaryReader reader = new BinaryReader(this.reader.GetStream(this.stream)))
+			using (BinaryReader reader = new BinaryReader(this.reader.GetStream(stream)))
 			{
 				reader.BaseStream.Position = offset;
 
@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Pdb
 					seg = reader.ReadInt32() & 0xFFFF;
 
 					// Is this the function we're looking for?
-					if (true || start == this.functionAddress)
+					if (true || start == functionAddress)
 					{
 						size = reader.ReadInt32();
 						fileOffset = reader.ReadInt32();

@@ -15,7 +15,7 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 
 			uint u = a | (uint)(1 << (int)(b % mod));
 
-			StoreValue(cpu, instruction.Operand1, (uint)u, size);
+			StoreValue(cpu, instruction.Operand1, u, size);
 
 			cpu.EFLAGS.Carry = c;
 		}

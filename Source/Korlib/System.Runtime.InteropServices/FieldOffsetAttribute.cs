@@ -11,7 +11,7 @@ namespace System.Runtime.InteropServices
 		/// <param name="offset">The offset in bytes from the beginning of the structure to the beginning of the field.</param>
 		public FieldOffsetAttribute(int offset)
 		{
-			this.Value = offset;
+			Value = offset;
 		}
 
 		/// <summary>

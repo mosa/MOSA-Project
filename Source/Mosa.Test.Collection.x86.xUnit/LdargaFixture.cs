@@ -85,7 +85,7 @@ namespace Mosa.Test.Collection.x86.xUnit
 		[MemberData("R4", DisableDiscoveryEnumeration = true)]
 		public void LdargaCheckValueR4(float a)
 		{
-			Assert.Equal(a, (float)Run<float>("Mosa.Test.Collection.LdargaTests.LdargaCheckValueR4", a));
+			Assert.Equal(a, Run<float>("Mosa.Test.Collection.LdargaTests.LdargaCheckValueR4", a));
 		}
 
 		[Theory]

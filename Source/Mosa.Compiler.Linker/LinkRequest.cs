@@ -73,15 +73,15 @@ namespace Mosa.Compiler.Linker
 			Debug.Assert(referenceSymbol != null);
 			Debug.Assert(patchType != null);
 
-			this.LinkType = linkType;
-			this.PatchType = patchType;
+			LinkType = linkType;
+			PatchType = patchType;
 
-			this.PatchSymbol = patchSymbol;
-			this.PatchOffset = patchOffset;
+			PatchSymbol = patchSymbol;
+			PatchOffset = patchOffset;
 
-			this.RelativeBase = relativeBase;
-			this.ReferenceSymbol = referenceSymbol;
-			this.ReferenceOffset = referenceOffset;
+			RelativeBase = relativeBase;
+			ReferenceSymbol = referenceSymbol;
+			ReferenceOffset = referenceOffset;
 		}
 
 		#endregion Construction

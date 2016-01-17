@@ -39,7 +39,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.Abstract) == MethodAttributes.Abstract;
+				return (Attributes & MethodAttributes.Abstract) == MethodAttributes.Abstract;
 			}
 		}
 
@@ -50,7 +50,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Assembly;
+				return (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Assembly;
 			}
 		}
 
@@ -61,7 +61,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this is ConstructorInfo && !IsStatic && (this.Attributes & MethodAttributes.RTSpecialName) == MethodAttributes.RTSpecialName);
+				return (this is ConstructorInfo && !IsStatic && (Attributes & MethodAttributes.RTSpecialName) == MethodAttributes.RTSpecialName);
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Assembly;
+				return (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Assembly;
 			}
 		}
 
@@ -83,7 +83,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.FamANDAssem;
+				return (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.FamANDAssem;
 			}
 		}
 
@@ -94,7 +94,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.FamORAssem;
+				return (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.FamORAssem;
 			}
 		}
 
@@ -105,7 +105,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.Final) == MethodAttributes.Final;
+				return (Attributes & MethodAttributes.Final) == MethodAttributes.Final;
 			}
 		}
 
@@ -138,7 +138,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.HideBySig) == MethodAttributes.HideBySig;
+				return (Attributes & MethodAttributes.HideBySig) == MethodAttributes.HideBySig;
 			}
 		}
 
@@ -149,7 +149,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Private;
+				return (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Private;
 			}
 		}
 
@@ -160,7 +160,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Public;
+				return (Attributes & MethodAttributes.MemberAccessMask) == MethodAttributes.Public;
 			}
 		}
 
@@ -171,7 +171,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.SpecialName) == MethodAttributes.SpecialName;
+				return (Attributes & MethodAttributes.SpecialName) == MethodAttributes.SpecialName;
 			}
 		}
 
@@ -182,7 +182,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.Static) == MethodAttributes.Static;
+				return (Attributes & MethodAttributes.Static) == MethodAttributes.Static;
 			}
 		}
 
@@ -193,7 +193,7 @@ namespace System.Reflection
 		{
 			get
 			{
-				return (this.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual;
+				return (Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual;
 			}
 		}
 

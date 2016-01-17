@@ -14,8 +14,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			Debug.Assert(start <= end);
 
-			this.Start = start;
-			this.End = end;
+			Start = start;
+			End = end;
 		}
 
 		public int Length { get { return End - Start; } }

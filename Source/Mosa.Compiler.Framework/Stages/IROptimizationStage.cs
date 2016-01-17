@@ -651,7 +651,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (node.Instruction == IRInstruction.ShiftRight)
 			{
-				constant = Operand.CreateConstant(result.Type, ((ulong)op1.ConstantUnsignedLongInteger) >> (int)op2.ConstantUnsignedLongInteger);
+				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedLongInteger >> (int)op2.ConstantUnsignedLongInteger);
 			}
 			else if (node.Instruction == IRInstruction.ShiftLeft)
 			{
@@ -713,7 +713,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(node);
 			if (trace.Active) trace.Log("*** ConstantFoldingIntegerCompare");
 			if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
-			node.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(result.Type, (int)(compareResult ? 1 : 0)));
+			node.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(result.Type, compareResult ? 1 : 0));
 			constantFoldingIntegerCompareCount++;
 			changeCount++;
 			if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
@@ -933,7 +933,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.IsI1) return (ulong)((sbyte)value);
 			else if (type.IsI2) return (ulong)((short)value);
 			else if (type.IsI4) return (ulong)((int)value);
-			else if (type.IsI8) return (ulong)((long)value);
+			else if (type.IsI8) return (ulong)value;
 			else return (ulong)value;
 		}
 

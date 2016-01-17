@@ -70,7 +70,7 @@ namespace Mosa.DeviceSystem
 		/// </returns>
 		public bool IsEqual(Color color)
 		{
-			return ((color.Red == this.Red) && (color.Green == this.Green) && (color.Blue == this.Blue) && (color.Alpha == this.Alpha));
+			return ((color.Red == Red) && (color.Green == Green) && (color.Blue == Blue) && (color.Alpha == Alpha));
 		}
 	}
 }

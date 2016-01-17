@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public virtual string Name { get { return this.GetType().Name; } }
+		public virtual string Name { get { return GetType().Name; } }
 
 		#endregion IPipelineStage Members
 
@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(compiler != null);
 
-			this.Compiler = compiler;
+			Compiler = compiler;
 
 			Setup();
 		}

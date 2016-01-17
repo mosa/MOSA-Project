@@ -43,7 +43,7 @@ namespace System
 		{
 			int offset = 0;
 
-			uint uvalue = (uint)value;
+			uint uvalue = value;
 			ushort divisor = hex ? (ushort)16 : (ushort)10;
 			int length = 0;
 			int count = 0;

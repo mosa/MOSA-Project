@@ -284,7 +284,7 @@ namespace Mosa.Compiler.Linker.Elf
 			string name = ".shstrtab";
 			sectionHeaderStringSection.Name = AddToSectionHeaderStringTable(name);
 			sectionHeaderStringSection.Type = SectionType.StringTable;
-			sectionHeaderStringSection.Flags = (SectionAttribute)0;
+			sectionHeaderStringSection.Flags = 0;
 			sectionHeaderStringSection.Address = 0;
 			sectionHeaderStringSection.Offset = 0;
 			sectionHeaderStringSection.Size = 0;
@@ -327,7 +327,7 @@ namespace Mosa.Compiler.Linker.Elf
 			string name = ".strtab";
 			stringSection.Name = AddToSectionHeaderStringTable(name);
 			stringSection.Type = SectionType.StringTable;
-			stringSection.Flags = (SectionAttribute)0;
+			stringSection.Flags = 0;
 			stringSection.Address = 0;
 			stringSection.Offset = 0;
 			stringSection.Size = 0;
@@ -373,7 +373,7 @@ namespace Mosa.Compiler.Linker.Elf
 
 			symbolSection.Name = AddToSectionHeaderStringTable(name);
 			symbolSection.Type = SectionType.SymbolTable;
-			symbolSection.Flags = (SectionAttribute)0;
+			symbolSection.Flags = 0;
 			symbolSection.Address = 0;
 			symbolSection.Offset = 0;
 			symbolSection.Size = 0;

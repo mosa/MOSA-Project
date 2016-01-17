@@ -144,25 +144,25 @@ namespace Mosa.Utility.CodeDomCompiler
 			if (other == null)
 				return false;
 
-			if (this.codeSource != other.codeSource)
+			if (codeSource != other.codeSource)
 				return false;
 
-			if (this.additionalSource != other.additionalSource)
+			if (additionalSource != other.additionalSource)
 				return false;
 
-			if (this.unsafeCode != other.unsafeCode)
+			if (unsafeCode != other.unsafeCode)
 				return false;
 
-			if (this.language != other.language)
+			if (language != other.language)
 				return false;
 
-			if (this.doNotReferenceMscorlib != other.doNotReferenceMscorlib)
+			if (doNotReferenceMscorlib != other.doNotReferenceMscorlib)
 				return false;
 
-			if (this.references.Count != other.references.Count)
+			if (references.Count != other.references.Count)
 				return false;
 
-			foreach (string file in this.references)
+			foreach (string file in references)
 				if (!other.references.Contains(file))
 					return false;
 

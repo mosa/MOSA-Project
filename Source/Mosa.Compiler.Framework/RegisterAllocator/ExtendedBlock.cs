@@ -30,13 +30,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public ExtendedBlock(BasicBlock basicBlock, int registerCount, int loopDepth)
 		{
-			this.BasicBlock = basicBlock;
-			this.LiveGen = new BitArray(registerCount);
-			this.LiveKill = new BitArray(registerCount);
-			this.LiveOut = new BitArray(registerCount);
-			this.LiveIn = new BitArray(registerCount);
-			this.LiveKillNot = new BitArray(registerCount);
-			this.LoopDepth = loopDepth;
+			BasicBlock = basicBlock;
+			LiveGen = new BitArray(registerCount);
+			LiveKill = new BitArray(registerCount);
+			LiveOut = new BitArray(registerCount);
+			LiveIn = new BitArray(registerCount);
+			LiveKillNot = new BitArray(registerCount);
+			LoopDepth = loopDepth;
 		}
 
 		public bool Contains(SlotIndex slotIndex)

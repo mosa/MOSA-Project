@@ -36,7 +36,7 @@ namespace System
 
 		public override string ToString()
 		{
-			return Int32.CreateString((uint)_value, true, false);
+			return int.CreateString((uint)_value, true, false);
 		}
 	}
 }

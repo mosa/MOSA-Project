@@ -9,11 +9,11 @@ namespace Mosa.TinyCPUSimulator.x86.Opcodes
 			uint a = LoadValue(cpu, instruction.Operand1);
 			int size = instruction.Operand1.Size;
 
-			uint u = (uint)(0 - a);
+			uint u = 0 - a;
 
-			StoreValue(cpu, instruction.Operand1, (uint)u, size);
+			StoreValue(cpu, instruction.Operand1, u, size);
 
-			UpdateFlags(cpu, size, (long)u, u, true, true, true, false, false);
+			UpdateFlags(cpu, size, u, u, true, true, true, false, false);
 
 			cpu.EFLAGS.Carry = !cpu.EFLAGS.Zero;
 		}

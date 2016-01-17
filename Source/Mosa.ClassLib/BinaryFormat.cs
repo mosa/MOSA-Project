@@ -29,7 +29,7 @@ namespace Mosa.ClassLib
 		/// <param name="length">The length.</param>
 		public BinaryFormat(uint length)
 		{
-			this.data = new byte[length];
+			data = new byte[length];
 		}
 
 		/// <summary>

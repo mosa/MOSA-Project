@@ -67,7 +67,7 @@ namespace Mosa.Tool.TinySimulator
 		{
 			if (sender == timer)
 				if (changed)
-					this.Refresh();
+					Refresh();
 		}
 
 		private void DisplayForm_Paint(object sender, PaintEventArgs e)
@@ -85,7 +85,7 @@ namespace Mosa.Tool.TinySimulator
 
 		public override void UpdateDock(BaseSimState simState)
 		{
-			this.Refresh();
+			Refresh();
 		}
 	}
 }

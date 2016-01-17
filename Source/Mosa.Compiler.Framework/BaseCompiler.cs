@@ -154,10 +154,10 @@ namespace Mosa.Compiler.Framework
 			ExtendCompilerSetup();
 
 			// Build the default pre-compiler pipeline
-			Architecture.ExtendPreCompilerPipeline(this.PreCompilePipeline);
+			Architecture.ExtendPreCompilerPipeline(PreCompilePipeline);
 
 			// Build the default post-compiler pipeline
-			Architecture.ExtendPostCompilerPipeline(this.PostCompilePipeline);
+			Architecture.ExtendPostCompilerPipeline(PostCompilePipeline);
 		}
 
 		/// <summary>

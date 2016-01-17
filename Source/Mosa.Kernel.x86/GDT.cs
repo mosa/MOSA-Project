@@ -55,7 +55,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static uint GetEntryLocation(uint index)
 		{
-			return (uint)(Address.GDTTable + 6 + (index * Offset.TotalSize));
+			return Address.GDTTable + 6 + (index * Offset.TotalSize);
 		}
 	}
 }

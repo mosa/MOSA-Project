@@ -402,9 +402,9 @@ namespace Mosa.DeviceDriver.ISA
 			msrBase = base.hardwareResources.GetIOPort(0, 6); // Modem Status Register
 			scrBase = base.hardwareResources.GetIOPort(0, 7); // Scratch Register (16450+ and some 8250s, special use with some boards)
 
-			this.fifoBuffer = new byte[fifoSize];
-			this.fifoStart = 0;
-			this.fifoEnd = 0;
+			fifoBuffer = new byte[fifoSize];
+			fifoStart = 0;
+			fifoEnd = 0;
 
 			base.deviceStatus = DeviceStatus.Online;
 			return true;

@@ -99,20 +99,20 @@ namespace Mosa.FileSystem.FAT
 		public FatFileStream(FatFileSystem fs, uint startCluster, uint directorySector, uint directorySectorIndex)
 		{
 			this.fs = fs;
-			this.clusterSize = fs.ClusterSizeInBytes;
-			this.data = new byte[clusterSize];
+			clusterSize = fs.ClusterSizeInBytes;
+			data = new byte[clusterSize];
 			this.startCluster = startCluster;
 			this.directorySector = directorySector;
 			this.directorySectorIndex = directorySectorIndex;
-			this.read = true;
-			this.write = true;
-			this.position = 0;
-			this.dirty = false;
+			read = true;
+			write = true;
+			position = 0;
+			dirty = false;
 
-			this.nthCluster = System.UInt32.MaxValue; // Not positioned yet
+			nthCluster = System.UInt32.MaxValue; // Not positioned yet
 
-			this.lengthOnDisk = fs.GetFileSize(directorySector, directorySectorIndex);
-			this.length = this.lengthOnDisk;
+			lengthOnDisk = fs.GetFileSize(directorySector, directorySectorIndex);
+			length = lengthOnDisk;
 
 			currentCluster = 0;
 		}
@@ -189,7 +189,7 @@ namespace Mosa.FileSystem.FAT
 			}
 			set
 			{
-				Seek((long)value, SeekOrigin.Begin);
+				Seek(value, SeekOrigin.Begin);
 			}
 		}
 
@@ -322,7 +322,7 @@ namespace Mosa.FileSystem.FAT
 			}
 			else if (newNthCluster < currentNthCluster)
 			{
-				newCluster = fs.FindNthCluster(this.startCluster, newNthCluster);
+				newCluster = fs.FindNthCluster(startCluster, newNthCluster);
 				currentNthCluster = newNthCluster;
 			}
 

@@ -362,7 +362,7 @@ namespace Mosa.Test.Collection
 		/// <returns></returns>
 		public T[] ToArray()
 		{
-			T[] array = new T[this.count];
+			T[] array = new T[count];
 
 			LinkedListNode<T> cur = First;
 			uint index = 0;
@@ -432,7 +432,7 @@ namespace Mosa.Test.Collection
 
 			internal Enumerator(LinkedList<T> parent)
 			{
-				this.list = parent;
+				list = parent;
 				current = null;
 				index = -1;
 			}
@@ -444,7 +444,7 @@ namespace Mosa.Test.Collection
 					if (list == null)
 						throw new ObjectDisposedException(null);
 
-					return this.current.value;
+					return current.value;
 				}
 			}
 
@@ -485,7 +485,7 @@ namespace Mosa.Test.Collection
 
 			object IEnumerator.Current
 			{
-				get { return this.Current; }
+				get { return Current; }
 			}
 
 			void IEnumerator.Reset()

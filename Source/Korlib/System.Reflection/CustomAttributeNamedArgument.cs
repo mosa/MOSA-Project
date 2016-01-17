@@ -17,7 +17,7 @@ namespace System.Reflection
 		/// </summary>
 		public bool IsField
 		{
-			get { return this.isField; }
+			get { return isField; }
 		}
 
 		/// <summary>
@@ -25,7 +25,7 @@ namespace System.Reflection
 		/// </summary>
 		public string MemberName
 		{
-			get { return this.memberName; }
+			get { return memberName; }
 		}
 
 		/// <summary>
@@ -33,7 +33,7 @@ namespace System.Reflection
 		/// </summary>
 		public CustomAttributeTypedArgument TypedValue
 		{
-			get { return this.typedArgument; }
+			get { return typedArgument; }
 		}
 	}
 }
