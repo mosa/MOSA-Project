@@ -284,7 +284,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsStackLocal)
 			{
-				mappedOperand = Operand.CreateStackLocal(operand.Type, operand.Register, operand.Index);
+				mappedOperand = Operand.CreateStackLocal(operand.Type, operand.Register, operand.Index, operand.IsPinned);
 			}
 			else if (operand.IsVirtualRegister)
 			{
