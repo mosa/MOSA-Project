@@ -29,14 +29,10 @@ namespace System
 		{
 			get
 			{
-				char* result;
-
 				fixed (char* c = &start_char)
 				{
-					result = c;
+					return c;
 				}
-
-				return result;
 			}
 		}
 
@@ -45,16 +41,13 @@ namespace System
 		{
 			get
 			{
-				//if (index < 0 || index >= length)
-				//	return (char)0; // throw new IndexOutOfRangeException();
+				if (index < 0 || index >= length)
+					throw new IndexOutOfRangeException();
 
-				char result = (char)0;
 				fixed (char* c = &start_char)
 				{
-					result = c[index];
+					return c[index];
 				}
-
-				return result;
 			}
 		}
 

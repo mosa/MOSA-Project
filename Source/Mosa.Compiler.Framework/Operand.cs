@@ -351,6 +351,12 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsPointer { get { return Type.IsPointer; } }
 
+		public bool IsManagedPointer { get { return Type.IsManagedPointer; } }
+
+		public bool IsUnmanagedPointer { get { return Type.IsUnmanagedPointer; } }
+
+		public bool IsFunctionPointer { get { return Type.IsFunctionPointer; } }
+
 		public bool IsValueType { get { return underlyingType.IsValueType; } }
 
 		public bool IsArray { get { return Type.IsArray; } }
