@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (MethodCompiler.Method.DeclaringType.IsLinkerGenerated)
 				return;
 
-			if (MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method) != null)
+			if (IsPlugged)
 				return;
 
 			// Create a prologue instruction

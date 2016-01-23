@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// Get the this pointer
-			var thisPtr = MethodCompiler.StackLayout.GetStackParameter(0);
+			var thisPtr = MethodCompiler.StackLayout.Parameters[0];
 
 			var context = new Context(BasicBlocks.PrologueBlock.NextBlocks[0].First);
 

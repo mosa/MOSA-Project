@@ -215,9 +215,6 @@ namespace Mosa.Platform.x86
 		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
 		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
 		{
-			// FIXME: Create a specific code generator instance using requested feature flags.
-			// FIXME: Add some more optimization passes, which take advantage of advanced x86 instructions
-			// and packed operations available with SSE extensions
 			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
@@ -245,7 +242,7 @@ namespace Mosa.Platform.x86
 			);
 
 			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
-				new JumpPeepholeOptimizationStage()
+				new JumpOptimizationStage()
 			);
 		}
 
@@ -305,10 +302,12 @@ namespace Mosa.Platform.x86
 			const int LargeAlignment = 16;
 			int alignedSize = size - (size % NativeAlignment);
 			int largeAlignedTypeSize = size - (size % LargeAlignment);
+
 			Debug.Assert(size > 0);
 
 			var src = source;
 			var dest = destination;
+
 			Debug.Assert(src.IsMemoryAddress && dest.IsMemoryAddress, context.ToString());
 
 			var srcReg = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
@@ -320,7 +319,7 @@ namespace Mosa.Platform.x86
 			context.AppendInstruction(X86.Lea, dstReg, dest);
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
-				// Large Aligned moves allow 128bits to be copied at a time
+				// Large aligned moves allow 128bits to be copied at a time
 				var memSrc = Operand.CreateMemoryAddress(destination.Type.TypeSystem.BuiltIn.Void, srcReg, i);
 				var memDest = Operand.CreateMemoryAddress(destination.Type.TypeSystem.BuiltIn.Void, dstReg, i);
 				context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, tmpLarge, memSrc);

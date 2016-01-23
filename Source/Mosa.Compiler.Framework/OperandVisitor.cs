@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
 {
-	public sealed class OperandVisitor
+	public struct OperandVisitor
 	{
 		private InstructionNode node;
 

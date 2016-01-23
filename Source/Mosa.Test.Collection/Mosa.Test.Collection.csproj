@@ -50,6 +50,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ArrayTest.cs" />
     <Compile Include="ArrayLayoutTests.cs" />
     <Compile Include="CallTests.cs">
       <DependentUpon>CallTests.tt</DependentUpon>

@@ -14,10 +14,6 @@ namespace Mosa.Compiler.Framework
 
 		private BaseArchitecture architecture;
 
-		private List<Operand> stackLocal = new List<Operand>();
-
-		private Operand[] parameters;
-
 		#endregion Data members
 
 		#region Properties
@@ -41,17 +37,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the parameters.
 		/// </summary>
-		public Operand[] Parameters { get { return parameters; } }
+		public Operand[] Parameters { get; private set; }
 
 		/// <summary>
 		/// Gets the stack.
 		/// </summary>
-		public IList<Operand> Stack { get { return stackLocal.AsReadOnly(); } }
-
-		/// <summary>
-		/// Gets the stack local count.
-		/// </summary>
-		public int StackLocalCount { get { return stackLocal.Count; } }
+		public List<Operand> LocalStack { get; private set; }
 
 		#endregion Properties
 
@@ -63,17 +54,8 @@ namespace Mosa.Compiler.Framework
 		public StackLayout(BaseArchitecture architecture, int parameters)
 		{
 			this.architecture = architecture;
-			this.parameters = new Operand[parameters];
-		}
-
-		/// <summary>
-		/// Gets the stack local operand.
-		/// </summary>
-		/// <param name="slot">The slot.</param>
-		/// <returns></returns>
-		public Operand GetStackLocalOperand(int slot)
-		{
-			return stackLocal[slot];
+			Parameters = new Operand[parameters];
+			LocalStack = new List<Operand>();
 		}
 
 		/// <summary>
@@ -83,8 +65,8 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand AddStackLocal(MosaType type)
 		{
-			var local = Operand.CreateStackLocal(type, architecture.StackFrameRegister, stackLocal.Count);
-			stackLocal.Add(local);
+			var local = Operand.CreateStackLocal(type, architecture.StackFrameRegister, LocalStack.Count);
+			LocalStack.Add(local);
 			return local;
 		}
 
@@ -97,18 +79,9 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand SetStackParameter(int index, MosaType type, int displacement, string name)
 		{
-			parameters[index] = Operand.CreateParameter(type, architecture.StackFrameRegister, displacement, index, name);
-			return parameters[index];
-		}
-
-		/// <summary>
-		/// Gets the stack parameter.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		public Operand GetStackParameter(int index)
-		{
-			return parameters[index];
+			var param = Operand.CreateParameter(type, architecture.StackFrameRegister, displacement, index, name);
+			Parameters[index] = param;
+			return param;
 		}
 	}
 }

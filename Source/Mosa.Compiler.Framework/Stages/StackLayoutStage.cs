@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			if (MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method) != null)
+			if (IsPlugged)
 				return;
 
 			// Layout stack variables
@@ -30,11 +30,25 @@ namespace Mosa.Compiler.Framework.Stages
 		private void LayoutStackVariables()
 		{
 			// assign increasing stack offsets to each variable
-			int size = LayoutVariables(MethodCompiler.StackLayout.Stack, CallingConvention, CallingConvention.OffsetOfFirstLocal, true);
+			int size = LayoutVariables(MethodCompiler.StackLayout.LocalStack, CallingConvention, CallingConvention.OffsetOfFirstLocal, true);
 
 			MethodCompiler.StackLayout.StackSize = size;
-
 			MethodCompiler.TypeLayout.SetMethodStackSize(MethodCompiler.Method, -size);
+
+			TraceStackLocals();
+		}
+
+		private void TraceStackLocals()
+		{
+			var trace = CreateTraceLog("Stack Local");
+
+			if (!trace.Active)
+				return;
+
+			foreach (var local in MethodCompiler.StackLayout.LocalStack)
+			{
+				trace.Log(local.ToString() + ": displacement = " + local.Displacement.ToString());
+			}
 		}
 
 		/// <summary>
@@ -65,7 +79,6 @@ namespace Mosa.Compiler.Framework.Stages
 			int size = LayoutVariables(parameters, CallingConvention, CallingConvention.OffsetOfFirstParameter + returnSize, false);
 
 			MethodCompiler.StackLayout.StackParameterSize = size;
-
 			MethodCompiler.TypeLayout.SetMethodParameterStackSize(MethodCompiler.Method, size);
 		}
 
@@ -83,10 +96,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var operand in locals)
 			{
-				bool skip = false;
-
 				if (!operand.IsParameter && operand.Uses.Count == 0 && operand.Definitions.Count == 0)
 				{
+					bool skip = false;
+
 					if (operand.Low == null && operand.High == null)
 					{
 						skip = true;
@@ -95,12 +108,12 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						skip = true;
 					}
-				}
 
-				if (skip)
-				{
-					operand.Displacement = 0;
-					continue;
+					if (skip)
+					{
+						operand.Displacement = 0;
+						continue;
+					}
 				}
 
 				int size, alignment;

@@ -1,11 +1,24 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections;
+using System.Text;
 
 namespace Mosa.Compiler.Common
 {
 	public static class BitArrayExtension
 	{
+		public static string ToString2(this BitArray bitArray)
+		{
+			var sb = new StringBuilder();
+
+			foreach (bool bit in bitArray)
+			{
+				sb.Append(bit ? "X" : ".");
+			}
+
+			return sb.ToString();
+		}
+
 		public static bool AreSame(this BitArray array1, BitArray array2)
 		{
 			if (array1.Length != array2.Length)

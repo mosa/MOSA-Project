@@ -64,12 +64,8 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (node.Result.Type.Equals(node.Operand1.Type) && TypeLayout.IsCompoundType(node.Result.Type))
 				{
-					var prevNode = node.Previous;
-					var nextNode = node.Next;
-					while (prevNode.IsEmpty)
-						prevNode = prevNode.Previous;
-					while (nextNode.IsEmpty)
-						nextNode = nextNode.Next;
+					var prevNode = node.Previous.GoBackwardsToNonEmpty();
+					var nextNode = node.Next.GoForwardToNonEmpty();
 
 					// If this move is proceeded by a return then remove this instruction
 					// It is basically a double up caused by some instructions result in the same instruction output

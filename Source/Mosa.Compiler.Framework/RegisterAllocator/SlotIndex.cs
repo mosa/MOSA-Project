@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			get
 			{
-				int slot = Index.SlotNumber;
+				int slot = Index.Offset;
 
 				if (slotType == SlotType.HalfStepForward)
 					slot++;
