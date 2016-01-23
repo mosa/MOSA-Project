@@ -74,6 +74,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayFixture.cs" />
     <Compile Include="CallFixture.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

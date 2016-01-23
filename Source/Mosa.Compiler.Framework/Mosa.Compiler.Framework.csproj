@@ -176,7 +176,7 @@
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />
     <Compile Include="Stages\EmptyBlockRemovalStage.cs" />
-    <Compile Include="Stages\JumpPeepholeOptimizationStage.cs" />
+    <Compile Include="Stages\JumpOptimizationStage.cs" />
     <Compile Include="Stages\PlatformEdgeSplitStage.cs" />
     <Compile Include="Stages\StackSetupStage.cs" />
     <Compile Include="Stages\GreedyRegisterAllocatorStage.cs" />

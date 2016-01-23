@@ -270,34 +270,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Goto the first instruction
-		/// </summary>
-		public void GotoFirst()
-		{
-			while (true)
-			{
-				if (IsBlockStartInstruction)
-					break;
-
-				GotoPrevious();
-			}
-		}
-
-		/// <summary>
-		/// Goto the last instruction.
-		/// </summary>
-		public void GotoLast()
-		{
-			while (true)
-			{
-				if (IsBlockEndInstruction)
-					break;
-
-				GotoNext();
-			}
-		}
-
-		/// <summary>
 		/// Appends an (empty) instruction after the current index.
 		/// </summary>
 		private void AppendInstruction()

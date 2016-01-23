@@ -357,7 +357,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds branch targets
 		/// </summary>
-		public IList<BasicBlock> BranchTargets { get { return (branchTargets == null) ? null : branchTargets.AsReadOnly(); } }
+		public List<BasicBlock> BranchTargets { get { return branchTargets; } }
 
 		/// <summary>
 		/// Gets the branch targets count.
@@ -896,6 +896,38 @@ namespace Mosa.Compiler.Framework
 					SetResult(i, replacement);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Returns the 1st non empty node (including the current) by traversing the instructions forward
+		/// </summary>
+		/// <returns></returns>
+		public InstructionNode GoForwardToNonEmpty()
+		{
+			var node = this;
+
+			while (node.IsEmpty)
+			{
+				node = node.Next;
+			}
+
+			return node;
+		}
+
+		/// <summary>
+		/// Returns the 1st non empty node (including the current) by traversing the instructions backwards
+		/// </summary>
+		/// <returns></returns>
+		public InstructionNode GoBackwardsToNonEmpty()
+		{
+			var node = this;
+
+			while (node.IsEmpty)
+			{
+				node = node.Previous;
+			}
+
+			return node;
 		}
 
 		#endregion Methods
