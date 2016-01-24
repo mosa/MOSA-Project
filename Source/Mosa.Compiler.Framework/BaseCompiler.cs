@@ -236,6 +236,16 @@ namespace Mosa.Compiler.Framework
 
 		public void ExecuteCompile()
 		{
+			ExecuteCompilePass();
+
+			while (CompilationScheduler.StartNextPass())
+			{
+				ExecuteCompilePass();
+			}
+		}
+
+		private void ExecuteCompilePass()
+		{
 			while (true)
 			{
 				var method = CompilationScheduler.GetMethodToCompile();
@@ -253,6 +263,16 @@ namespace Mosa.Compiler.Framework
 		}
 
 		public void ExecuteThreadedCompile(int threads)
+		{
+			ExecuteThreadedCompilePass(threads);
+
+			while (CompilationScheduler.StartNextPass())
+			{
+				ExecuteThreadedCompilePass(threads);
+			}
+		}
+
+		private void ExecuteThreadedCompilePass(int threads)
 		{
 			using (var finished = new CountdownEvent(1))
 			{
@@ -288,7 +308,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void CompileWorker(int threadID)
+		private void CompileWorker(int threadID)
 		{
 			while (true)
 			{

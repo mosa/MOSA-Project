@@ -69,40 +69,45 @@ namespace Mosa.Compiler.Framework.Stages
 			compilerMethod.IRInstructionCount = totalIRCount;
 			compilerMethod.NonIRInstructionCount = totalNonIRCount;
 
-			compilerMethod.HasDoNotInlineAttribute = !MethodCompiler.Method.IsNoInlining;
+			compilerMethod.HasDoNotInlineAttribute = MethodCompiler.Method.IsNoInlining;
 
-			if (!compilerMethod.HasDoNotInlineAttribute)
-			{
-				// check attribute
-				// BUG: does not find the attribute
-				var methodAttribute = method.FindCustomAttribute(InlineMethodAttribute);
+			//if (!compilerMethod.HasDoNotInlineAttribute)
+			//{
+			//	// check attribute
+			//	// BUG: does not find the attribute
+			//	var methodAttribute = method.FindCustomAttribute(InlineMethodAttribute);
 
-				//TODO: check for specific attribute: System.Runtime.CompilerServices.MethodImplOptions.NoInlining
-				if (methodAttribute != null)
-				{
-					compilerMethod.HasDoNotInlineAttribute = true;
-				}
-			}
+			//	//TODO: check for specific attribute: System.Runtime.CompilerServices.MethodImplOptions.NoInlining
+			//	if (methodAttribute != null)
+			//	{
+			//		compilerMethod.HasDoNotInlineAttribute = true;
+			//	}
+			//}
 
 			compilerMethod.CanInline = CanInline(compilerMethod);
 
 			if (compilerMethod.CanInline)
 			{
 				compilerMethod.BasicBlocks = CopyInstructions();
-			}
 
-			lock (compilerMethod)
-			{
-				foreach (var called in compilerMethod.CalledBy)
+				if (compilerMethod.CompileCount < MaximumCompileCount)
 				{
-					var calledMethod = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(called);
-
-					if (calledMethod.CompileCount < MaximumCompileCount)
-					{
-						MethodCompiler.Compiler.CompilationScheduler.Schedule(called);
-					}
+					MethodCompiler.Compiler.CompilationScheduler.AddToInlineQueue(compilerMethod);
 				}
 			}
+
+			//lock (compilerMethod)
+			//{
+			//	foreach (var called in compilerMethod.CalledBy)
+			//	{
+			//		var calledMethod = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(called);
+
+			//		if (calledMethod.CompileCount < MaximumCompileCount)
+			//		{
+			//			MethodCompiler.Compiler.CompilationScheduler.Schedule(called);
+			//		}
+			//	}
+			//}
 
 			trace.Log("CanInline: " + compilerMethod.CanInline.ToString());
 			trace.Log("IsVirtual: " + compilerMethod.IsVirtual.ToString());
