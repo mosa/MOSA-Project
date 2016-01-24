@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -16,10 +17,35 @@ namespace Mosa.Compiler.Framework
 		private readonly UniqueQueueThreadSafe<MosaMethod> queue = new UniqueQueueThreadSafe<MosaMethod>();
 		private readonly HashSet<MosaMethod> methods = new HashSet<MosaMethod>();
 
+		private readonly UniqueQueueThreadSafe<CompilerMethodData> inlineQueue = new UniqueQueueThreadSafe<CompilerMethodData>();
+
 		#endregion Data Members
+
+		#region Properties
+
+		public int PassCount { get; private set; }
+
+		/// <summary>
+		/// Gets the total methods.
+		/// </summary>
+		/// <value>
+		/// The total methods.
+		/// </value>
+		public int TotalMethods { get { return methods.Count; } }
+
+		/// <summary>
+		/// Gets the queued methods.
+		/// </summary>
+		/// <value>
+		/// The queued methods.
+		/// </value>
+		public int TotalQueuedMethods { get { return queue.Count; } }
+
+		#endregion Properties
 
 		public CompilationScheduler()
 		{
+			PassCount = 0;
 		}
 
 		public void ScheduleAll(TypeSystem typeSystem)
@@ -92,20 +118,36 @@ namespace Mosa.Compiler.Framework
 			return queue.Dequeue();
 		}
 
-		/// <summary>
-		/// Gets the total methods.
-		/// </summary>
-		/// <value>
-		/// The total methods.
-		/// </value>
-		public int TotalMethods { get { return methods.Count; } }
+		public void AddToInlineQueue(CompilerMethodData methodData)
+		{
+			Debug.Assert(!methodData.Method.IsAbstract && !methodData.Method.HasOpenGenericParams);
 
-		/// <summary>
-		/// Gets the queued methods.
-		/// </summary>
-		/// <value>
-		/// The queued methods.
-		/// </value>
-		public int TotalQueuedMethods { get { return queue.Count; } }
+			//Debug.Assert(!methodData.Method.IsLinkerGenerated);
+
+			inlineQueue.Enqueue(methodData);
+		}
+
+		public bool StartNextPass()
+		{
+			int i = 0;
+
+			lock (inlineQueue)
+			{
+				while (inlineQueue.Count != 0)
+				{
+					var methodData = inlineQueue.Dequeue();
+
+					foreach (var callee in methodData.CalledBy)
+					{
+						Schedule(callee);
+						i++;
+					}
+				}
+			}
+
+			PassCount++;
+
+			return i != 0;
+		}
 	}
 }

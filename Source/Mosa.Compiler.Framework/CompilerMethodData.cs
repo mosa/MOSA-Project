@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework
 
 		public MosaMethod Method { get; private set; }
 
-		public bool InvokesMethod { get; set; }
+		public bool InvokesAnyMethod { get { return Calls.Count != 0; } }
 
 		public bool IsCompiled { get; set; }
 

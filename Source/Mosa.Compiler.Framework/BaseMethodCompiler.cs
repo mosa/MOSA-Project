@@ -305,25 +305,12 @@ namespace Mosa.Compiler.Framework
 		{
 			LocalVariables = new Operand[locals.Count];
 
-			for (int index = 0; index < locals.Count; index++)
+			int index = 0;
+			foreach (var local in locals)
 			{
-				var local = locals[index];
-				Operand operand;
+				var operand = StackLayout.AddStackLocal(local.Type, local.IsPinned);
 
-				if (local.Type.IsValueType || local.Type.IsPointer)
-				{
-					operand = StackLayout.AddStackLocal(local.Type);
-				}
-				else
-				{
-					var stacktype = local.Type.GetStackType();
-
-					// All local variables must start on the stack otherwise bugs will occur.
-					// They can be optimized away or optimized into a register later on.
-					operand = StackLayout.AddStackLocal(local.Type);
-				}
-
-				LocalVariables[index] = operand;
+				LocalVariables[index++] = operand;
 			}
 		}
 

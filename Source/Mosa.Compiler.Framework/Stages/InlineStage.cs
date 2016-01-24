@@ -22,8 +22,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var compilerMethod = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(MethodCompiler.Method);
 
-			//bool firstCompile = (compilerMethod.CompileCount == 0);
-
 			compilerMethod.CompileCount++;
 			compilerMethod.Calls.Clear();
 
@@ -42,9 +40,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 					nodes.Add(node);
 
-					//if (!firstCompile)
-					//	continue;
-
 					if (node.InvokeMethod == null)
 						continue;
 
@@ -52,7 +47,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
 
-					compilerMethod.InvokesMethod = true;
 					compilerMethod.Calls.AddIfNew(node.InvokeMethod);
 
 					invoked.AddCalledBy(MethodCompiler.Method);
@@ -92,8 +86,6 @@ namespace Mosa.Compiler.Framework.Stages
 				//System.Diagnostics.Debug.WriteLine(" * " + invoked.Method.FullName);
 
 				Inline(node, blocks);
-
-				//MethodCompiler.Stop();
 			}
 		}
 
@@ -220,7 +212,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsStackLocal)
 			{
-				mappedOperand = MethodCompiler.StackLayout.AddStackLocal(operand.Type);
+				mappedOperand = MethodCompiler.StackLayout.AddStackLocal(operand.Type, operand.IsPinned);
 			}
 			else if (operand.IsVirtualRegister)
 			{

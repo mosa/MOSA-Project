@@ -65,7 +65,19 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand AddStackLocal(MosaType type)
 		{
-			var local = Operand.CreateStackLocal(type, architecture.StackFrameRegister, LocalStack.Count);
+			var local = Operand.CreateStackLocal(type, architecture.StackFrameRegister, LocalStack.Count, false);
+			LocalStack.Add(local);
+			return local;
+		}
+
+		/// <summary>
+		/// Adds the stack local.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public Operand AddStackLocal(MosaType type, bool pinned)
+		{
+			var local = Operand.CreateStackLocal(type, architecture.StackFrameRegister, LocalStack.Count, pinned);
 			LocalStack.Add(local);
 			return local;
 		}

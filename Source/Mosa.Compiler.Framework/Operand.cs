@@ -351,6 +351,12 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsPointer { get { return Type.IsPointer; } }
 
+		public bool IsManagedPointer { get { return Type.IsManagedPointer; } }
+
+		public bool IsUnmanagedPointer { get { return Type.IsUnmanagedPointer; } }
+
+		public bool IsFunctionPointer { get { return Type.IsFunctionPointer; } }
+
 		public bool IsValueType { get { return underlyingType.IsValueType; } }
 
 		public bool IsArray { get { return Type.IsArray; } }
@@ -362,6 +368,7 @@ namespace Mosa.Compiler.Framework
 		public bool IsReferenceType { get { return Type.IsReferenceType; } }
 
 		private MosaType underlyingType { get { return Type.GetEnumUnderlyingType(); } }
+		public bool IsPinned { get; private set; }
 
 		#endregion Properties
 
@@ -733,14 +740,16 @@ namespace Mosa.Compiler.Framework
 		/// <param name="type">The type.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="index">The index.</param>
+		/// <param name="pinned">if set to <c>true</c> [pinned].</param>
 		/// <returns></returns>
-		public static Operand CreateStackLocal(MosaType type, Register register, int index)
+		public static Operand CreateStackLocal(MosaType type, Register register, int index, bool pinned)
 		{
 			var operand = new Operand(type);
 			operand.IsMemoryAddress = true;
 			operand.Register = register;
 			operand.Index = index;
 			operand.IsStackLocal = true;
+			operand.IsPinned = pinned;
 			return operand;
 		}
 

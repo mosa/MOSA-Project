@@ -329,6 +329,9 @@ namespace Mosa.Compiler.Framework.Stages
 				if (!local.IsStackLocal)
 					continue;
 
+				if (local.IsPinned)
+					continue;
+
 				if (local.Definitions.Count != 1)
 					continue;
 
@@ -459,10 +462,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool CanCopyPropagation(Operand source, Operand destination)
 		{
-			if (source.IsPointer && destination.IsPointer)
+			if (source.IsReferenceType && destination.IsReferenceType)
 				return true;
 
-			if (source.IsReferenceType && destination.IsReferenceType)
+			if (source.IsUnmanagedPointer && destination.IsUnmanagedPointer)
+				return true;
+
+			if (source.IsManagedPointer && destination.IsManagedPointer)
+				return true;
+
+			if (source.IsFunctionPointer && destination.IsFunctionPointer)
 				return true;
 
 			if (source.Type.IsArray & destination.Type.IsArray & source.Type.ElementType == destination.Type.ElementType)
@@ -480,16 +489,16 @@ namespace Mosa.Compiler.Framework.Stages
 			if (source.Type.IsUI8 & destination.Type.IsUI8)
 				return true;
 
-			if (NativePointerSize == 4 && (destination.IsI || destination.IsU || destination.IsPointer) && (source.IsI4 || source.IsU4))
+			if (NativePointerSize == 4 && (destination.IsI || destination.IsU || destination.IsUnmanagedPointer) && (source.IsI4 || source.IsU4))
 				return true;
 
-			if (NativePointerSize == 4 && (source.IsI || source.IsU || source.IsPointer) && (destination.IsI4 || destination.IsU4))
+			if (NativePointerSize == 4 && (source.IsI || source.IsU || source.IsUnmanagedPointer) && (destination.IsI4 || destination.IsU4))
 				return true;
 
-			if (NativePointerSize == 8 && (destination.IsI || destination.IsU || destination.IsPointer) && (source.IsI8 || source.IsU8))
+			if (NativePointerSize == 8 && (destination.IsI || destination.IsU || destination.IsUnmanagedPointer) && (source.IsI8 || source.IsU8))
 				return true;
 
-			if (NativePointerSize == 8 && (source.IsI || source.IsU || source.IsPointer) && (destination.IsI8 || destination.IsU8))
+			if (NativePointerSize == 8 && (source.IsI || source.IsU || source.IsUnmanagedPointer) && (destination.IsI8 || destination.IsU8))
 				return true;
 
 			if (source.IsR4 && destination.IsR4)
