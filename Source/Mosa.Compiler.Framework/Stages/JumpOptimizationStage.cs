@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog();
 
-			for (int f = 0; f < BasicBlocks.Count - 2; f++)
+			for (int f = 0; f < BasicBlocks.Count - 1; f++)
 			{
 				var from = BasicBlocks[f];
 				var next = BasicBlocks[f + 1];
