@@ -1022,6 +1022,10 @@ namespace Mosa.Compiler.Framework
 			{
 				sb.AppendFormat(" [{0}]", Type.FullName);
 			}
+			else
+			{
+				//sb.AppendFormat(" [{0}]", Type.FullName);
+			}
 
 			return sb.ToString().Replace("  ", " ").Trim();
 		}

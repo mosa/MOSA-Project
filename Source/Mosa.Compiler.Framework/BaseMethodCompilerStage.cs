@@ -86,6 +86,14 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		protected InstructionSize NativeInstructionSize { get; private set; }
 
+		/// <summary>
+		/// Gets the method data.
+		/// </summary>
+		/// <value>
+		/// The method data.
+		/// </value>
+		protected CompilerMethodData MethodData { get; private set; }
+
 		#endregion Properties
 
 		#region IPipelineStage Members
@@ -112,10 +120,11 @@ namespace Mosa.Compiler.Framework
 			TypeSystem = compiler.TypeSystem;
 			TypeLayout = compiler.TypeLayout;
 			CallingConvention = Architecture.CallingConvention;
-
 			NativePointerSize = Architecture.NativePointerSize;
 			NativeAlignment = Architecture.NativeAlignment;
 			NativeInstructionSize = Architecture.NativeInstructionSize;
+
+			MethodData = MethodCompiler.MethodData;
 
 			traceLogs = new List<TraceLog>();
 
@@ -565,7 +574,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="count">The count.</param>
 		public void UpdateCounter(string name, int count)
 		{
-			MethodCompiler.Compiler.Counters.UpdateCounter(name, count);
+			MethodData.Counters.Update(name, count);
 		}
 
 		/// <summary>

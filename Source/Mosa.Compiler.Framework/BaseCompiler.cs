@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the counters.
 		/// </summary>
-		public Counters Counters { get; private set; }
+		public Counters GlobalCounters { get; private set; }
 
 		/// <summary>
 		/// Gets the scheduler.
@@ -126,9 +126,9 @@ namespace Mosa.Compiler.Framework
 
 			PreCompilePipeline = new CompilerPipeline();
 			PostCompilePipeline = new CompilerPipeline();
-			Counters = new Counters();
+			GlobalCounters = new Counters();
 			PlugSystem = new PlugSystem();
-			CompilerData = new CompilerData(this);
+			CompilerData = new CompilerData();
 
 			// Create new dictionary
 			IntrinsicTypes = new Dictionary<string, Type>();
@@ -350,6 +350,14 @@ namespace Mosa.Compiler.Framework
 				NewCompilerTraceEvent(CompilerEvent.CompilerStageEnd, stage.Name);
 			}
 
+			// TODO: Add compiler option
+
+			// Sum up the counters
+			foreach (var methodData in CompilerData.MethodData)
+			{
+				GlobalCounters.Merge(methodData.Counters);
+			}
+
 			ExportCounters();
 		}
 
@@ -357,7 +365,7 @@ namespace Mosa.Compiler.Framework
 
 		protected void ExportCounters()
 		{
-			foreach (var counter in Counters.Export())
+			foreach (var counter in GlobalCounters.Export())
 			{
 				NewCompilerTraceEvent(CompilerEvent.Counter, counter);
 			}
@@ -392,7 +400,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="count">The count.</param>
 		protected void UpdateCounter(string name, int count)
 		{
-			Counters.UpdateCounter(name, count);
+			GlobalCounters.Update(name, count);
 		}
 
 		protected MosaType GetPlatformInternalRuntimeType()

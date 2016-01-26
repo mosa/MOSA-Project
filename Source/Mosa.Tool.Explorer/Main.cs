@@ -24,18 +24,19 @@ namespace Mosa.Tool.Explorer
 
 		private MosaCompiler Compiler = new MosaCompiler();
 
-		private Dictionary<MosaMethod, MethodStages> methodStages = new Dictionary<MosaMethod, MethodStages>();
+		private Dictionary<MosaMethod, MethodData> methodDataStore = new Dictionary<MosaMethod, MethodData>();
 
 		private enum CompileStage { Nothing, Loaded, PreCompiled, Compiled };
 
 		private CompileStage Stage = CompileStage.Nothing;
 
-		private class MethodStages
+		private class MethodData
 		{
 			public List<string> OrderedStageNames = new List<string>();
 			public List<string> OrderedDebugStageNames = new List<string>();
 			public Dictionary<string, List<string>> InstructionLogs = new Dictionary<string, List<string>>();
 			public Dictionary<string, List<string>> DebugLogs = new Dictionary<string, List<string>>();
+			public List<string> CounterData = new List<string>();
 		}
 
 		private StringBuilder compileLog = new StringBuilder();
@@ -51,8 +52,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerTrace.TraceFilter.Active = true;
 			Compiler.CompilerTrace.TraceFilter.ExcludeInternalMethods = false;
 			Compiler.CompilerTrace.TraceFilter.MethodMatch = MatchType.Any;
-			Compiler.CompilerTrace.TraceFilter.StageMatch = MatchType.Exclude;
-			Compiler.CompilerTrace.TraceFilter.Stage = "PlatformStubStage|ProtectedRegionLayoutStage|DominanceCalculationStage|CodeGenerationStage";
+			Compiler.CompilerTrace.TraceFilter.StageMatch = MatchType.Any;
 
 			Compiler.CompilerFactory = delegate { return new ExplorerCompiler(); };
 			Compiler.CompilerOptions.LinkerFactory = delegate { return new ExplorerLinker(); };
@@ -96,7 +96,7 @@ namespace Mosa.Tool.Explorer
 
 			LoadAssembly(filename, includeTestKorlibToolStripMenuItem.Checked, cbPlatform.Text);
 
-			methodStages.Clear();
+			methodDataStore.Clear();
 
 			SetStatus("Assemblies Loaded!");
 		}
@@ -157,45 +157,59 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private object methodStagelock = new object();
+		private MethodData GetMethodData(MosaMethod method, bool create)
+		{
+			lock (methodDataStore)
+			{
+				MethodData methodData = null;
+
+				if (!methodDataStore.TryGetValue(method, out methodData))
+				{
+					if (create)
+					{
+						methodData = new MethodData();
+						methodDataStore.Add(method, methodData);
+					}
+				}
+				return methodData;
+			}
+		}
 
 		private void SubmitInstructionTraceInformation(MosaMethod method, string stage, List<string> lines)
 		{
-			lock (methodStagelock)
+			var methodData = GetMethodData(method, true);
+
+			lock (methodData)
 			{
-				MethodStages methodStage;
+				methodData.OrderedStageNames.AddIfNew(stage);
 
-				if (!methodStages.TryGetValue(method, out methodStage))
-				{
-					methodStage = new MethodStages();
-					methodStages.Add(method, methodStage);
-				}
+				methodData.InstructionLogs.Remove(stage);
 
-				methodStage.OrderedStageNames.AddIfNew(stage);
-
-				methodStage.InstructionLogs.Remove(stage);
-
-				methodStage.InstructionLogs.Add(stage, lines);
+				methodData.InstructionLogs.Add(stage, lines);
 			}
 		}
 
 		private void SubmitDebugStageInformation(MosaMethod method, string stage, List<string> lines)
 		{
-			lock (methodStagelock)
+			var methodData = GetMethodData(method, true);
+
+			lock (methodData)
 			{
-				MethodStages methodStage;
+				methodData.OrderedDebugStageNames.AddIfNew(stage);
 
-				if (!methodStages.TryGetValue(method, out methodStage))
-				{
-					methodStage = new MethodStages();
-					methodStages.Add(method, methodStage);
-				}
+				methodData.DebugLogs.Remove(stage);
 
-				methodStage.OrderedDebugStageNames.AddIfNew(stage);
+				methodData.DebugLogs.Add(stage, lines);
+			}
+		}
 
-				methodStage.DebugLogs.Remove(stage);
+		private void SubmitMethodCounterInformation(MosaMethod method, List<string> lines)
+		{
+			var methodData = GetMethodData(method, true);
 
-				methodStage.DebugLogs.Add(stage, lines);
+			lock (methodData)
+			{
+				methodData.CounterData = lines;
 			}
 		}
 
@@ -218,7 +232,7 @@ namespace Mosa.Tool.Explorer
 
 			rbLog.Text = string.Empty;
 			rbErrors.Text = string.Empty;
-			rbCounters.Text = string.Empty;
+			rbGlobalCounters.Text = string.Empty;
 			rbException.Text = string.Empty;
 		}
 
@@ -237,7 +251,7 @@ namespace Mosa.Tool.Explorer
 			{
 				CleanGUI();
 
-				methodStages.Clear();
+				methodDataStore.Clear();
 
 				toolStrip1.Enabled = false;
 
@@ -274,11 +288,11 @@ namespace Mosa.Tool.Explorer
 
 			SetStatus("Compiled!");
 
-			tabControl1.SelectedTab = tabPage1;
+			tabControl1.SelectedTab = tbStages;
 
 			rbLog.Text = compileLog.ToString();
 			rbErrors.Text = errorLog.ToString();
-			rbCounters.Text = counterLog.ToString();
+			rbGlobalCounters.Text = counterLog.ToString();
 			rbException.Text = exceptionLog.ToString();
 
 			UpdateTree();
@@ -338,25 +352,27 @@ namespace Mosa.Tool.Explorer
 				Compiler.Compile();
 			}
 
-			MethodStages methodStage;
+			var methodData = GetMethodData(node.Type, false);
 
-			if (!methodStages.TryGetValue(node.Type, out methodStage))
+			if (methodData == null)
 				return;
 
 			cbStages.Items.Clear();
 
-			foreach (string stage in methodStage.OrderedStageNames)
+			foreach (string stage in methodData.OrderedStageNames)
 				cbStages.Items.Add(stage);
 
 			cbStages.SelectedIndex = 0;
 
 			cbDebugStages.Items.Clear();
 
-			foreach (string stage in methodStage.OrderedDebugStageNames)
+			foreach (string stage in methodData.OrderedDebugStageNames)
 				cbDebugStages.Items.Add(stage);
 
 			if (cbDebugStages.Items.Count > 0)
 				cbDebugStages.SelectedIndex = 0;
+
+			rbMethodCounters.Text = CreateText(methodData.CounterData);
 		}
 
 		private void cbStages_SelectedIndexChanged(object sender, EventArgs e)
@@ -368,14 +384,14 @@ namespace Mosa.Tool.Explorer
 			if (node == null)
 				return;
 
-			MethodStages methodStage;
+			var methodData = GetMethodData(node.Type, false);
 
-			if (!methodStages.TryGetValue(node.Type, out methodStage))
+			if (methodData == null)
 				return;
 
 			string stage = cbStages.SelectedItem.ToString();
 
-			currentInstructionLines = methodStage.InstructionLogs[stage];
+			currentInstructionLines = methodData.InstructionLogs[stage];
 			var previousItemLabel = cbLabels.SelectedItem;
 
 			cbLabels.Items.Clear();
@@ -397,7 +413,7 @@ namespace Mosa.Tool.Explorer
 			cbLabels_SelectedIndexChanged(null, null);
 		}
 
-		private string ReplaceTypeName(string value)
+		private static string ReplaceTypeName(string value)
 		{
 			if (value.Contains("-") || value.Contains("+"))
 				return value;
@@ -428,7 +444,7 @@ namespace Mosa.Tool.Explorer
 			return value;
 		}
 
-		private string ReplaceType(string value)
+		private static string ReplaceType(string value)
 		{
 			if (value.Length < 2)
 				return value;
@@ -455,7 +471,7 @@ namespace Mosa.Tool.Explorer
 			return ReplaceTypeName(type) + end;
 		}
 
-		private string UpdateParameter(string p)
+		private static string UpdateParameter(string p)
 		{
 			if (!(p.StartsWith("[") && p.EndsWith("]")))
 				return p;
@@ -465,7 +481,7 @@ namespace Mosa.Tool.Explorer
 			return "[" + ReplaceType(value) + "]";
 		}
 
-		private string UpdateLine(string line)
+		private static string UpdateLine(string line)
 		{
 			if (!line.StartsWith("L_"))
 				return line;
@@ -504,20 +520,23 @@ namespace Mosa.Tool.Explorer
 			if (node == null)
 				return;
 
-			MethodStages methodStage;
+			var methodData = GetMethodData(node.Type, false);
 
-			if (methodStages.TryGetValue(node.Type, out methodStage))
+			if (methodData == null)
+				return;
+
+			string stage = cbDebugStages.SelectedItem.ToString();
+
+			if (methodData.DebugLogs.ContainsKey(stage))
 			{
-				string stage = cbDebugStages.SelectedItem.ToString();
-
-				if (methodStage.DebugLogs.ContainsKey(stage))
-				{
-					rbOtherResult.Text = GetDebugLogText(methodStage.DebugLogs[stage]);
-				}
-				else
-				{
+				if (currentInstructionLines == null)
 					rbOtherResult.Text = string.Empty;
-				}
+				else
+					rbOtherResult.Text = CreateText(methodData.DebugLogs[stage]);
+			}
+			else
+			{
+				rbOtherResult.Text = string.Empty;
 			}
 		}
 
@@ -637,12 +656,12 @@ namespace Mosa.Tool.Explorer
 			tbResult.Text = GetCurrentStageInstructions(currentInstructionLines);
 		}
 
-		private string GetDebugLogText(List<string> list)
+		private string CreateText(List<string> list)
 		{
-			var result = new StringBuilder();
-
-			if (currentInstructionLines == null)
+			if (list == null)
 				return string.Empty;
+
+			var result = new StringBuilder();
 
 			foreach (var l in list)
 			{
@@ -758,6 +777,10 @@ namespace Mosa.Tool.Explorer
 					stagesection = stagesection + "-" + traceLog.Section;
 
 				SubmitDebugStageInformation(traceLog.Method, stagesection, traceLog.Lines);
+			}
+			else if (traceLog.Type == TraceType.Counters)
+			{
+				SubmitMethodCounterInformation(traceLog.Method, traceLog.Lines);
 			}
 			else if (traceLog.Type == TraceType.InstructionList)
 			{

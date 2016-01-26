@@ -160,7 +160,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var op = node.GetResult(i);
 				sb.Append(" ");
-				sb.Append(op == null ? "[NULL]" : op.ToString());
+				sb.Append(op == null ? "[NULL]" : op.ToString(true));
 				sb.Append(",");
 			}
 
@@ -178,7 +178,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var op = node.GetOperand(i);
 				sb.Append(" ");
-				sb.Append(op == null ? "[NULL]" : op.ToString());
+				sb.Append(op == null ? "[NULL]" : op.ToString(true));
 				sb.Append(",");
 			}
 
@@ -246,7 +246,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the condition string.
 		/// </summary>
-		/// <param name="conditioncode">The conditioncode.</param>
+		/// <param name="conditioncode">The condition code.</param>
 		/// <returns></returns>
 		protected string GetConditionString(ConditionCode conditioncode)
 		{

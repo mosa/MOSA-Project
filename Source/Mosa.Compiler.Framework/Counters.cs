@@ -7,17 +7,23 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	///
 	/// </summary>
-	public class Counters
+	public sealed class Counters
 	{
-		protected Dictionary<string, int> counters = new Dictionary<string, int>();
+		private Dictionary<string, int> counters;
 
-		public Counters()
-		{ }
-
-		public void UpdateCounter(string name, int count)
+		public void Clear()
 		{
-			lock (counters)
+			if (counters != null)
+				counters.Clear();
+		}
+
+		public void Update(string name, int count)
+		{
+			lock (this)
 			{
+				if (counters == null)
+					counters = new Dictionary<string, int>();
+
 				if (counters.ContainsKey(name))
 					counters[name] = counters[name] + count;
 				else
@@ -27,14 +33,28 @@ namespace Mosa.Compiler.Framework
 
 		public IList<string> Export()
 		{
-			List<string> counts = new List<string>();
+			var counts = new List<string>();
 
-			foreach (var item in counters)
+			if (counters != null)
 			{
-				counts.Add(item.Key + ": " + item.Value.ToString());
+				foreach (var item in counters)
+				{
+					counts.Add(item.Key + ": " + item.Value.ToString());
+				}
 			}
 
 			return counts;
+		}
+
+		public void Merge(Counters counters)
+		{
+			if (counters.counters != null)
+			{
+				foreach (var item in counters.counters)
+				{
+					Update(item.Key, item.Value);
+				}
+			}
 		}
 	}
 }

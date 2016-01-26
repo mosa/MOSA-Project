@@ -13,38 +13,35 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data Members
 
-		private Dictionary<MosaType, CompilerTypeData> compilerTypes = new Dictionary<MosaType, CompilerTypeData>();
+		private Dictionary<MosaType, CompilerTypeData> types = new Dictionary<MosaType, CompilerTypeData>();
 
-		private Dictionary<MosaMethod, CompilerMethodData> compilerMethods = new Dictionary<MosaMethod, CompilerMethodData>();
+		private Dictionary<MosaMethod, CompilerMethodData> methods = new Dictionary<MosaMethod, CompilerMethodData>();
 
 		#endregion Data Members
 
-		#region Properties
-
-		public BaseCompiler Compiler { get; private set; }
-
-		#endregion Properties
+		public IEnumerable<CompilerMethodData> MethodData
+		{
+			get
+			{
+				foreach (var method in methods)
+				{
+					yield return method.Value;
+				}
+			}
+		}
 
 		#region Methods
 
-		public CompilerData(BaseCompiler compiler)
-		{
-			if (compiler == null)
-				throw new ArgumentNullException("compiler");
-
-			Compiler = compiler;
-		}
-
 		public CompilerTypeData GetCompilerTypeData(MosaType type)
 		{
-			lock (compilerTypes)
+			lock (types)
 			{
 				CompilerTypeData compilerType;
 
-				if (!compilerTypes.TryGetValue(type, out compilerType))
+				if (!types.TryGetValue(type, out compilerType))
 				{
 					compilerType = new CompilerTypeData(type);
-					compilerTypes.Add(type, compilerType);
+					types.Add(type, compilerType);
 				}
 
 				return compilerType;
@@ -53,14 +50,14 @@ namespace Mosa.Compiler.Framework
 
 		public CompilerMethodData GetCompilerMethodData(MosaMethod method)
 		{
-			lock (compilerMethods)
+			lock (methods)
 			{
 				CompilerMethodData compilerMethod;
 
-				if (!compilerMethods.TryGetValue(method, out compilerMethod))
+				if (!methods.TryGetValue(method, out compilerMethod))
 				{
 					compilerMethod = new CompilerMethodData(method);
-					compilerMethods.Add(method, compilerMethod);
+					methods.Add(method, compilerMethod);
 				}
 
 				return compilerMethod;
