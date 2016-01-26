@@ -20,10 +20,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (MethodCompiler.Method.IsLinkerGenerated && MethodCompiler.Method.Name == TypeInitializerSchedulerStage.TypeInitializerName)
 				return;
 
-			var compilerMethod = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(MethodCompiler.Method);
-
-			compilerMethod.CompileCount++;
-			compilerMethod.Calls.Clear();
+			MethodData.CompileCount++;
+			MethodData.Calls.Clear();
 
 			var nodes = new List<InstructionNode>();
 
@@ -47,7 +45,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
 
-					compilerMethod.Calls.AddIfNew(node.InvokeMethod);
+					MethodData.Calls.AddIfNew(node.InvokeMethod);
 
 					invoked.AddCalledBy(MethodCompiler.Method);
 				}

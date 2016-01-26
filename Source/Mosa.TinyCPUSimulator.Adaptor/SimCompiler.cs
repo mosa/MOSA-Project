@@ -31,8 +31,6 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			// Build the assembly compiler pipeline
 			PreCompilePipeline.Add(new ICompilerStage[] {
 				new PlugStage(),
-
-				//new MethodCompilerSchedulerStage(),
 			});
 
 			PostCompilePipeline.Add(new ICompilerStage[] {

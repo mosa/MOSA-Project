@@ -24,12 +24,12 @@ namespace Mosa.Compiler.Trace
 			TraceListener.OnNewTraceLog(traceLog);
 		}
 
-		public void NewCompilerTraceEvent(CompilerEvent compilerStage, string message, int threadID)
+		public void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
 			if (TraceListener == null)
 				return;
 
-			TraceListener.OnNewCompilerTraceEvent(compilerStage, message, threadID);
+			TraceListener.OnNewCompilerTraceEvent(compilerEvent, message, threadID);
 		}
 
 		public void UpdatedCompilerProgress(int totalMethods, int completedMethods)

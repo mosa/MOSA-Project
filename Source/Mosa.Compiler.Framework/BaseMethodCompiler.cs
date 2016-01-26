@@ -156,6 +156,14 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public int ThreadID { get; private set; }
 
+		/// <summary>
+		/// Gets the method data.
+		/// </summary>
+		/// <value>
+		/// The method data.
+		/// </value>
+		public CompilerMethodData MethodData { get; private set; }
+
 		#endregion Properties
 
 		#region Construction
@@ -175,8 +183,8 @@ namespace Mosa.Compiler.Framework
 			Scheduler = compiler.CompilationScheduler;
 			Architecture = compiler.Architecture;
 			TypeSystem = compiler.TypeSystem;
-			TypeLayout = Compiler.TypeLayout;
-			Trace = Compiler.CompilerTrace;
+			TypeLayout = compiler.TypeLayout;
+			Trace = compiler.CompilerTrace;
 			Linker = compiler.Linker;
 			BasicBlocks = basicBlocks ?? new BasicBlocks();
 			Pipeline = new CompilerPipeline();
@@ -185,8 +193,11 @@ namespace Mosa.Compiler.Framework
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
 			DominanceAnalysis = new Dominance(Compiler.CompilerOptions.DominanceAnalysisFactory, BasicBlocks);
-			PluggedMethod = Compiler.PlugSystem.GetPlugMethod(Method);
+			PluggedMethod = compiler.PlugSystem.GetPlugMethod(Method);
 			stop = false;
+
+			MethodData = compiler.CompilerData.GetCompilerMethodData(Method);
+			MethodData.Counters.Clear();
 
 			EvaluateParameterOperands();
 		}
@@ -202,7 +213,7 @@ namespace Mosa.Compiler.Framework
 		{
 			int index = 0;
 
-			//FIXME! Note: displacement is recalculated later
+			// Note: displacement is recalculated later
 			int displacement = 4;
 
 			if (Method.HasThis || Method.HasExplicitThis)
@@ -248,6 +259,10 @@ namespace Mosa.Compiler.Framework
 			}
 
 			InitializeType();
+
+			var log = new TraceLog(TraceType.Counters, this.Method, string.Empty, Trace.TraceFilter.Active);
+			log.Log(MethodData.Counters.Export());
+			Trace.TraceListener.OnNewTraceLog(log);
 
 			EndCompile();
 		}

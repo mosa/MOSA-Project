@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Trace
 {
 	public interface ITraceListener
 	{
-		void OnNewCompilerTraceEvent(CompilerEvent compilerStage, string message, int threadID);
+		void OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID);
 
 		void OnUpdatedCompilerProgress(int totalMethods, int completedMethods);
 

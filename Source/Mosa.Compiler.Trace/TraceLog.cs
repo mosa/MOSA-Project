@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Mosa.Compiler.Trace
 {
-	public enum TraceType { InstructionList, DebugTrace };
+	public enum TraceType { InstructionList, DebugTrace, Counters };
 
 	public class TraceLog
 	{
@@ -65,6 +65,17 @@ namespace Mosa.Compiler.Trace
 				return;
 
 			Lines.Add(line);
+		}
+
+		public void Log(IList<string> lines)
+		{
+			if (!Active)
+				return;
+
+			foreach (var line in lines)
+			{
+				Lines.Add(line);
+			}
 		}
 
 		public override string ToString()
