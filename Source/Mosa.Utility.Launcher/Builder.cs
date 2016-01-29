@@ -206,6 +206,8 @@ namespace Mosa.Utility.Launcher
 			bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetResource(@"syslinux", "syslinux.cfg")));
 			bootImageOptions.IncludeFiles.Add(new IncludeFile(compiledFile, "main.exe"));
 
+			bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
+
 			bootImageOptions.VolumeLabel = "MOSABOOT";
 
 			var vmext = ".img";

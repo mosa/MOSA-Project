@@ -146,6 +146,26 @@ namespace Mosa.CoolWorld.x86
 				if (fat.IsValid)
 				{
 					Boot.Console.WriteLine("Found a FAT file system!");
+
+					var filename = "TEST.TXT";
+
+					var location = fat.FindEntry(filename);
+
+					if (location.IsValid)
+					{
+						Boot.Console.WriteLine("Found: " + filename);
+
+						var fatFileStream = new FatFileStream(fat, location);
+
+						//Boot.Console.WriteLine("Length: " + fatFileStream.Length.ToString());
+
+						//Boot.Console.WriteLine("Reading File:");
+
+						//for (int i = fatFileStream.ReadByte(); i > 0; i++)
+						//{
+						//	Boot.Console.Write((char)i);
+						//}
+					}
 				}
 			}
 		}

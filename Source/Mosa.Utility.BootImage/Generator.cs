@@ -45,7 +45,7 @@ namespace Mosa.Utility.BootImage
 			if (options.ImageFormat == ImageFormat.VDI)
 			{
 				// Create header
-				byte[] header = VDI.CreateHeader(
+				var header = VDI.CreateHeader(
 					blockCount,
 					options.MediaGuid.ToByteArray(),
 					options.MediaLastSnapGuid.ToByteArray(),
@@ -135,7 +135,7 @@ namespace Mosa.Utility.BootImage
 				if (includeFile.System) fileAttributes |= FatFileAttributes.System;
 
 				string newname = (Path.GetFileNameWithoutExtension(includeFile.Filename).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Filename).PadRight(4).Substring(1, 3)).ToUpper();
-				var location = fat.CreateFile(newname, fileAttributes, 0);
+				var location = fat.CreateFile(newname, fileAttributes);
 
 				if (!location.IsValid)
 					throw new Exception("Unable to write file");
@@ -160,7 +160,7 @@ namespace Mosa.Utility.BootImage
 			if (options.ImageFormat == ImageFormat.VHD)
 			{
 				// Create footer
-				byte[] footer = VHD.CreateFooter(
+				var footer = VHD.CreateFooter(
 					blockCount,
 					(uint)(DateTime.Now - (new DateTime(2000, 1, 1, 0, 0, 0))).Seconds,
 					options.MediaGuid.ToByteArray(),
