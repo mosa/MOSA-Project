@@ -97,6 +97,12 @@ namespace Mosa.Utility.Launcher
 				Compiler.CompilerOptions.SetCustomOption("multiboot.height", Options.Height.ToString());
 				Compiler.CompilerOptions.SetCustomOption("multiboot.depth", Options.Depth.ToString());
 
+				Compiler.CompilerOptions.BaseAddress = Options.BaseAddress;
+				Compiler.CompilerOptions.EmitSymbols = Options.EmitSymbols;
+				Compiler.CompilerOptions.EmitRelocations = Options.EmitRelocations;
+
+				Compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
+
 				if (Options.GenerateMapFile)
 				{
 					Compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");

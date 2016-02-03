@@ -58,7 +58,7 @@ namespace Mosa.Tool.Compiler
 		{
 			compiler.CompilerFactory = delegate { return new AotCompiler(); };
 
-			usageString = "Usage: mosacl -o outputfile --Architecture=[x86|avr32] --format=[ELF32|ELF64] {--boot=[mb0.7]} {additional options} inputfiles";
+			usageString = "Usage: mosacl -o outputfile --Architecture=[x86|x64|ARMv6] --format=[ELF32|ELF64] {--boot=[mb0.7]} {additional options} inputfiles";
 			optionSet = new OptionSet();
 			inputFiles = new List<FileInfo>();
 
@@ -129,7 +129,7 @@ namespace Mosa.Tool.Compiler
 
 			optionSet.Add(
 				"a|Architecture=",
-				"Select one of the MOSA architectures to compile for [{x86|ARMv6}].",
+				"Select one of the MOSA architectures to compile for [{x86|x64|ARMv6}].",
 				delegate (string arch)
 				{
 					compiler.CompilerOptions.Architecture = SelectArchitecture(arch);
@@ -188,6 +188,24 @@ namespace Mosa.Tool.Compiler
 				@"promote-variables|enable-variable-promotion",
 				@"Enables variable promotion optimization.",
 				enable => compiler.CompilerOptions.EnableVariablePromotion = enable != null
+			);
+
+			optionSet.Add(
+				@"emit-symbols",
+				@"Emits the Symbol Table.",
+				enable => compiler.CompilerOptions.EmitSymbols = enable != null
+			);
+
+			optionSet.Add(
+				@"emit-relocations",
+				@"Emits the Relocation Table.",
+				enable => compiler.CompilerOptions.EmitRelocations = enable != null
+			);
+
+			optionSet.Add(
+				@"x86-irq-methods",
+				@"Emits x86 interrupt methods.",
+				enable => compiler.CompilerOptions.SetCustomOption("x86.irq-methods", enable != null ? "true" : "false")
 			);
 
 			optionSet.Add(

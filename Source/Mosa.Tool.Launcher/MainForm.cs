@@ -6,6 +6,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using Mosa.Utility.BootImage;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Tool.Launcher
 {
@@ -37,7 +38,7 @@ namespace Mosa.Tool.Launcher
 			Builder = new Builder(Options, AppLocations, this);
 		}
 
-		private void UpdateeInterfaceAppLocations()
+		private void UpdateInterfaceAppLocations()
 		{
 			lbBOCHSExecutable.Text = AppLocations.BOCHS;
 			lbNDISASMExecutable.Text = AppLocations.NDISASM;
@@ -62,6 +63,11 @@ namespace Mosa.Tool.Launcher
 			Options.MemoryInMB = (uint)nmMemory.Value;
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
+
+			Options.BaseAddress = tbBaseAddress.Text.ParseHexOrDecimal();
+			Options.EmitSymbols = cbRelocationTable.Checked;
+			Options.EmitRelocations = cbEmitSymbolTable.Checked;
+			Options.Emitx86IRQMethods = cbEmitx86IRQMethods.Checked;
 
 			if (Options.VBEVideo)
 			{
@@ -165,6 +171,11 @@ namespace Mosa.Tool.Launcher
 			nmMemory.Value = Options.MemoryInMB;
 			cbVBEVideo.Checked = Options.VBEVideo;
 
+			tbBaseAddress.Text = "0x" + Options.BaseAddress.ToString("x8");
+			cbRelocationTable.Checked = Options.EmitSymbols;
+			cbEmitSymbolTable.Checked = Options.EmitRelocations;
+			cbEmitx86IRQMethods.Checked = Options.Emitx86IRQMethods;
+
 			tbMode.Text = Options.Width + "x" + Options.Height + "x" + Options.Depth;
 
 			switch (Options.ImageFormat)
@@ -267,7 +278,7 @@ namespace Mosa.Tool.Launcher
 		private void MainForm_Shown(object sender, EventArgs e)
 		{
 			UpdateInterfaceOptions();
-			UpdateeInterfaceAppLocations();
+			UpdateInterfaceAppLocations();
 
 			Refresh();
 
@@ -305,7 +316,7 @@ namespace Mosa.Tool.Launcher
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			tabControl1.SelectedTab = tbOptions;
+			tbApplicationLocations.SelectedTab = tabOptions;
 		}
 
 		private void btnDestination_Click(object sender, EventArgs e)
@@ -338,7 +349,7 @@ namespace Mosa.Tool.Launcher
 			if (CheckKeyPressed())
 				return;
 
-			tabControl1.SelectedTab = tpOutput;
+			tbApplicationLocations.SelectedTab = tabOutput;
 
 			ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
 				{

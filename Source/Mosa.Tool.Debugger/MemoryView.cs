@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Utility.DebugEngine;
+using Mosa.Compiler.Common;
 using System;
 
 namespace Mosa.Tool.Debugger
@@ -65,7 +66,7 @@ namespace Mosa.Tool.Debugger
 
 			try
 			{
-				string[] newlines = new string[lines];
+				var newlines = new string[lines];
 
 				for (int line = 0; line < lines; line++)
 				{
@@ -101,17 +102,7 @@ namespace Mosa.Tool.Debugger
 
 			try
 			{
-				string nbr = tbMemory.Text.ToUpper().Trim();
-				int digits = 10;
-				int where = nbr.IndexOf('X');
-
-				if (where >= 0)
-				{
-					digits = 16;
-					nbr = nbr.Substring(where + 1);
-				}
-
-				uint at = Convert.ToUInt32(nbr, digits);
+				uint at = tbMemory.Text.ParseHexOrDecimal();
 				int lines = lbMemory.Height / (lbMemory.Font.Height + 2);
 
 				Status = "Updating...";

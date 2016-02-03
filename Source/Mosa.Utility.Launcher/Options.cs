@@ -2,6 +2,7 @@
 
 using System.IO;
 using Mosa.Utility.BootImage;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Utility.Launcher
 {
@@ -57,6 +58,12 @@ namespace Mosa.Utility.Launcher
 		public int Height { get; set; }
 		public int Depth { get; set; }
 
+		public ulong BaseAddress { get; set; }
+		public bool EmitSymbols { get; set; }
+		public bool EmitRelocations { get; set; }
+
+		public bool Emitx86IRQMethods { get; set; }
+
 		public Options()
 		{
 			EnableSSA = true;
@@ -80,12 +87,18 @@ namespace Mosa.Utility.Launcher
 			Width = 640;
 			Height = 480;
 			Depth = 32;
+			BaseAddress = 0x00400000;
+			EmitRelocations = true;
+			EmitSymbols = true;
+			Emitx86IRQMethods = true;
 		}
 
 		public void LoadArguments(string[] args)
 		{
-			foreach (var arg in args)
+			for (int i = 0; i < args.Length; i++)
 			{
+				var arg = args[i];
+
 				switch (arg.ToLower())
 				{
 					case "-e": ExitOnLaunch = true; continue;
@@ -119,6 +132,13 @@ namespace Mosa.Utility.Launcher
 					case "-inline-off": EnableInlinedMethods = false; continue;
 					case "-threading-off": UseMultipleThreadCompiler = false; continue;
 					case "-video": VBEVideo = true; continue;
+					case "-base": BaseAddress = args[++i].ParseHexOrDecimal(); continue;
+					case "-symbols": EmitSymbols = true; continue;
+					case "-symbols-false": EmitSymbols = false; continue;
+					case "-relocations": EmitRelocations = true; continue;
+					case "-relocations-false": EmitRelocations = false; continue;
+					case "-x86-irq-methods": Emitx86IRQMethods = true; continue;
+					case "-x86-irq-methods-false": Emitx86IRQMethods = false; continue;
 					default: break;
 				}
 

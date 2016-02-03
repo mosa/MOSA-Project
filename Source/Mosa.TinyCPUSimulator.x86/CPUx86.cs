@@ -349,22 +349,6 @@ namespace Mosa.TinyCPUSimulator.x86
 			simState.ExtendState(this);
 		}
 
-		public override SimInstruction DecodeOpcode(ulong address)
-		{
-			ulong at = address;
-
-			var opcode = DirectRead8(at++);
-
-			switch (opcode)
-			{
-				case 0x90: return new SimInstruction(Opcode.Nop, 0, 1);
-				case 0xFA: return new SimInstruction(Opcode.Cli, 0, 1);
-				case 0xFB: return new SimInstruction(Opcode.Sti, 0, 1);
-				case 0xC3: return new SimInstruction(Opcode.Ret, 0, 1);
-				default: return null;
-			}
-		}
-
 		public override void RegisterAccelerationFunctions()
 		{
 			RegisterAccelerationMethod("System.Void Mosa.Runtime.x86.Runtime::MemoryCopy(System.Void*, System.Void*, System.UInt32)", AcceleratorMemoryCopy);
@@ -374,7 +358,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 		private void AcceleratorMemoryClear()
 		{
-			//TODO: parse stack for parameters
+			// parse stack for parameters
 			// 0: return address
 			// 1: address
 			// 2: count
@@ -391,7 +375,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 		private void AcceleratorMemorySet()
 		{
-			//TODO: parse stack for parameters
+			// parse stack for parameters
 			// 0: return address
 			// 1: address
 			// 2: value
@@ -410,7 +394,7 @@ namespace Mosa.TinyCPUSimulator.x86
 
 		private void AcceleratorMemoryCopy()
 		{
-			//TODO: parse stack for parameters
+			// parse stack for parameters
 			// 0: return address
 			// 1: source
 			// 2: destination
@@ -425,6 +409,22 @@ namespace Mosa.TinyCPUSimulator.x86
 
 			ESP.Value = ESP.Value + (32 / 8);
 			EIP.Value = ret;
+		}
+
+		public override SimInstruction DecodeOpcode(ulong address)
+		{
+			ulong at = address;
+
+			var opcode = DirectRead8(at++);
+
+			switch (opcode)
+			{
+				case 0x90: return new SimInstruction(Opcode.Nop, 0, 1);
+				case 0xFA: return new SimInstruction(Opcode.Cli, 0, 1);
+				case 0xFB: return new SimInstruction(Opcode.Sti, 0, 1);
+				case 0xC3: return new SimInstruction(Opcode.Ret, 0, 1);
+				default: return null;
+			}
 		}
 	}
 }

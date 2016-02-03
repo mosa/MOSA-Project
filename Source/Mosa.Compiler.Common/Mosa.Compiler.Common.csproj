@@ -60,7 +60,7 @@
     <Compile Include="UniqueStackThreadSafe.cs" />
     <Compile Include="UniqueQueueThreadSafe.cs" />
     <Compile Include="UniqueQueue.cs" />
-    <Compile Include="Trilean.cs" />
+    <Compile Include="StringExtension.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

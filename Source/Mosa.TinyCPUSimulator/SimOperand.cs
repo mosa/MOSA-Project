@@ -2,7 +2,7 @@
 
 namespace Mosa.TinyCPUSimulator
 {
-	public class SimOperand
+	public sealed class SimOperand
 	{
 		public bool IsRegister { get; private set; }
 
