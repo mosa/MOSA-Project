@@ -1076,11 +1076,22 @@ namespace Mosa.FileSystem.FAT
 		/// </summary>
 		/// <param name="filename">The filename.</param>
 		/// <param name="fileAttributes">The file attributes.</param>
+		/// <returns></returns>
+		public FatFileLocation CreateFile(string filename, FatFileAttributes fileAttributes)
+		{
+			return CreateFile(filename, fileAttributes, 0);
+		}
+
+		/// <summary>
+		/// Creates the file.
+		/// </summary>
+		/// <param name="filename">The filename.</param>
+		/// <param name="fileAttributes">The file attributes.</param>
 		/// <param name="directoryCluster">The directory cluster.</param>
 		/// <returns></returns>
 		public FatFileLocation CreateFile(string filename, FatFileAttributes fileAttributes, uint directoryCluster)
 		{
-			FatFileLocation location = FindEntry(new Find.WithName(filename), directoryCluster);
+			var location = FindEntry(new Find.WithName(filename), directoryCluster);
 
 			if (location.IsValid)
 			{

@@ -97,6 +97,12 @@ namespace Mosa.Utility.Launcher
 				Compiler.CompilerOptions.SetCustomOption("multiboot.height", Options.Height.ToString());
 				Compiler.CompilerOptions.SetCustomOption("multiboot.depth", Options.Depth.ToString());
 
+				Compiler.CompilerOptions.BaseAddress = Options.BaseAddress;
+				Compiler.CompilerOptions.EmitSymbols = Options.EmitSymbols;
+				Compiler.CompilerOptions.EmitRelocations = Options.EmitRelocations;
+
+				Compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
+
 				if (Options.GenerateMapFile)
 				{
 					Compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");
@@ -205,6 +211,8 @@ namespace Mosa.Utility.Launcher
 
 			bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetResource(@"syslinux", "syslinux.cfg")));
 			bootImageOptions.IncludeFiles.Add(new IncludeFile(compiledFile, "main.exe"));
+
+			bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
 
 			bootImageOptions.VolumeLabel = "MOSABOOT";
 

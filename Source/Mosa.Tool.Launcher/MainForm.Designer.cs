@@ -32,8 +32,8 @@
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.progressBar1 = new System.Windows.Forms.ProgressBar();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-			this.tabControl1 = new System.Windows.Forms.TabControl();
-			this.tbOptions = new System.Windows.Forms.TabPage();
+			this.tbApplicationLocations = new System.Windows.Forms.TabControl();
+			this.tabOptions = new System.Windows.Forms.TabPage();
 			this.groupBox12 = new System.Windows.Forms.GroupBox();
 			this.cbCompilerUsesMultipleThreads = new System.Windows.Forms.CheckBox();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -73,11 +73,18 @@
 			this.lbDestinationDirectory = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.cbEnableVariablePromotion = new System.Windows.Forms.CheckBox();
 			this.cbInlinedMethods = new System.Windows.Forms.CheckBox();
 			this.cbEnableSparseConditionalConstantPropagation = new System.Windows.Forms.CheckBox();
 			this.cbEnableIROptimizations = new System.Windows.Forms.CheckBox();
 			this.cbEnableSSA = new System.Windows.Forms.CheckBox();
-			this.tabPage4 = new System.Windows.Forms.TabPage();
+			this.tabAdvanced = new System.Windows.Forms.TabPage();
+			this.groupBox13 = new System.Windows.Forms.GroupBox();
+			this.label9 = new System.Windows.Forms.Label();
+			this.tbBaseAddress = new System.Windows.Forms.TextBox();
+			this.cbRelocationTable = new System.Windows.Forms.CheckBox();
+			this.cbEmitSymbolTable = new System.Windows.Forms.CheckBox();
+			this.tabApplicationLocations = new System.Windows.Forms.TabPage();
 			this.groupBox11 = new System.Windows.Forms.GroupBox();
 			this.button7 = new System.Windows.Forms.Button();
 			this.lbmkisofsExecutable = new System.Windows.Forms.Label();
@@ -97,14 +104,15 @@
 			this.button3 = new System.Windows.Forms.Button();
 			this.button2 = new System.Windows.Forms.Button();
 			this.lbQEMUExecutable = new System.Windows.Forms.Label();
-			this.tpOutput = new System.Windows.Forms.TabPage();
+			this.tabOutput = new System.Windows.Forms.TabPage();
 			this.rtbOutput = new System.Windows.Forms.RichTextBox();
-			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this.tabCounters = new System.Windows.Forms.TabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.cbEnableVariablePromotion = new System.Windows.Forms.CheckBox();
-			this.tabControl1.SuspendLayout();
-			this.tbOptions.SuspendLayout();
+			this.groupBox14 = new System.Windows.Forms.GroupBox();
+			this.cbEmitx86IRQMethods = new System.Windows.Forms.CheckBox();
+			this.tbApplicationLocations.SuspendLayout();
+			this.tabOptions.SuspendLayout();
 			this.groupBox12.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
 			this.groupBox5.SuspendLayout();
@@ -114,14 +122,17 @@
 			this.groupBox4.SuspendLayout();
 			this.groupBox3.SuspendLayout();
 			this.groupBox1.SuspendLayout();
-			this.tabPage4.SuspendLayout();
+			this.tabAdvanced.SuspendLayout();
+			this.groupBox13.SuspendLayout();
+			this.tabApplicationLocations.SuspendLayout();
 			this.groupBox11.SuspendLayout();
 			this.groupBox10.SuspendLayout();
 			this.groupBox9.SuspendLayout();
 			this.groupBox8.SuspendLayout();
 			this.groupBox7.SuspendLayout();
-			this.tpOutput.SuspendLayout();
-			this.tabPage3.SuspendLayout();
+			this.tabOutput.SuspendLayout();
+			this.tabCounters.SuspendLayout();
+			this.groupBox14.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -139,43 +150,44 @@
 			this.progressBar1.Size = new System.Drawing.Size(634, 20);
 			this.progressBar1.TabIndex = 3;
 			// 
-			// tabControl1
+			// tbApplicationLocations
 			// 
-			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.tbApplicationLocations.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.tabControl1.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
-			this.tabControl1.Controls.Add(this.tbOptions);
-			this.tabControl1.Controls.Add(this.tabPage4);
-			this.tabControl1.Controls.Add(this.tpOutput);
-			this.tabControl1.Controls.Add(this.tabPage3);
-			this.tabControl1.ItemSize = new System.Drawing.Size(48, 18);
-			this.tabControl1.Location = new System.Drawing.Point(0, 32);
-			this.tabControl1.Margin = new System.Windows.Forms.Padding(0);
-			this.tabControl1.Multiline = true;
-			this.tabControl1.Name = "tabControl1";
-			this.tabControl1.Padding = new System.Drawing.Point(0, 0);
-			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(634, 429);
-			this.tabControl1.TabIndex = 22;
+			this.tbApplicationLocations.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
+			this.tbApplicationLocations.Controls.Add(this.tabOptions);
+			this.tbApplicationLocations.Controls.Add(this.tabAdvanced);
+			this.tbApplicationLocations.Controls.Add(this.tabApplicationLocations);
+			this.tbApplicationLocations.Controls.Add(this.tabOutput);
+			this.tbApplicationLocations.Controls.Add(this.tabCounters);
+			this.tbApplicationLocations.ItemSize = new System.Drawing.Size(48, 18);
+			this.tbApplicationLocations.Location = new System.Drawing.Point(0, 32);
+			this.tbApplicationLocations.Margin = new System.Windows.Forms.Padding(0);
+			this.tbApplicationLocations.Multiline = true;
+			this.tbApplicationLocations.Name = "tbApplicationLocations";
+			this.tbApplicationLocations.Padding = new System.Drawing.Point(0, 0);
+			this.tbApplicationLocations.SelectedIndex = 0;
+			this.tbApplicationLocations.Size = new System.Drawing.Size(634, 429);
+			this.tbApplicationLocations.TabIndex = 22;
 			// 
-			// tbOptions
+			// tabOptions
 			// 
-			this.tbOptions.BackColor = System.Drawing.SystemColors.Control;
-			this.tbOptions.Controls.Add(this.groupBox12);
-			this.tbOptions.Controls.Add(this.statusStrip1);
-			this.tbOptions.Controls.Add(this.groupBox5);
-			this.tbOptions.Controls.Add(this.groupBox2);
-			this.tbOptions.Controls.Add(this.groupBox6);
-			this.tbOptions.Controls.Add(this.groupBox4);
-			this.tbOptions.Controls.Add(this.groupBox3);
-			this.tbOptions.Controls.Add(this.groupBox1);
-			this.tbOptions.Location = new System.Drawing.Point(4, 22);
-			this.tbOptions.Margin = new System.Windows.Forms.Padding(0);
-			this.tbOptions.Name = "tbOptions";
-			this.tbOptions.Size = new System.Drawing.Size(626, 403);
-			this.tbOptions.TabIndex = 0;
-			this.tbOptions.Text = "MOSA Options";
+			this.tabOptions.BackColor = System.Drawing.SystemColors.Control;
+			this.tabOptions.Controls.Add(this.groupBox12);
+			this.tabOptions.Controls.Add(this.statusStrip1);
+			this.tabOptions.Controls.Add(this.groupBox5);
+			this.tabOptions.Controls.Add(this.groupBox2);
+			this.tabOptions.Controls.Add(this.groupBox6);
+			this.tabOptions.Controls.Add(this.groupBox4);
+			this.tabOptions.Controls.Add(this.groupBox3);
+			this.tabOptions.Controls.Add(this.groupBox1);
+			this.tabOptions.Location = new System.Drawing.Point(4, 22);
+			this.tabOptions.Margin = new System.Windows.Forms.Padding(0);
+			this.tabOptions.Name = "tabOptions";
+			this.tabOptions.Size = new System.Drawing.Size(626, 403);
+			this.tabOptions.TabIndex = 0;
+			this.tabOptions.Text = "Compile Options";
 			// 
 			// groupBox12
 			// 
@@ -649,6 +661,17 @@
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Optimizations:";
 			// 
+			// cbEnableVariablePromotion
+			// 
+			this.cbEnableVariablePromotion.AutoSize = true;
+			this.cbEnableVariablePromotion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbEnableVariablePromotion.Location = new System.Drawing.Point(6, 87);
+			this.cbEnableVariablePromotion.Name = "cbEnableVariablePromotion";
+			this.cbEnableVariablePromotion.Size = new System.Drawing.Size(114, 17);
+			this.cbEnableVariablePromotion.TabIndex = 10;
+			this.cbEnableVariablePromotion.Text = "Variable Promotion";
+			this.cbEnableVariablePromotion.UseVisualStyleBackColor = true;
+			// 
 			// cbInlinedMethods
 			// 
 			this.cbInlinedMethods.AutoSize = true;
@@ -699,20 +722,93 @@
 			this.cbEnableSSA.Text = "Static Single Assignment (SSA)";
 			this.cbEnableSSA.UseVisualStyleBackColor = true;
 			// 
-			// tabPage4
+			// tabAdvanced
 			// 
-			this.tabPage4.Controls.Add(this.groupBox11);
-			this.tabPage4.Controls.Add(this.groupBox10);
-			this.tabPage4.Controls.Add(this.groupBox9);
-			this.tabPage4.Controls.Add(this.groupBox8);
-			this.tabPage4.Controls.Add(this.groupBox7);
-			this.tabPage4.Location = new System.Drawing.Point(4, 22);
-			this.tabPage4.Name = "tabPage4";
-			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage4.Size = new System.Drawing.Size(626, 384);
-			this.tabPage4.TabIndex = 3;
-			this.tabPage4.Text = "Application Settings";
-			this.tabPage4.UseVisualStyleBackColor = true;
+			this.tabAdvanced.Controls.Add(this.groupBox14);
+			this.tabAdvanced.Controls.Add(this.groupBox13);
+			this.tabAdvanced.Location = new System.Drawing.Point(4, 22);
+			this.tabAdvanced.Name = "tabAdvanced";
+			this.tabAdvanced.Padding = new System.Windows.Forms.Padding(3);
+			this.tabAdvanced.Size = new System.Drawing.Size(626, 403);
+			this.tabAdvanced.TabIndex = 4;
+			this.tabAdvanced.Text = "Advanced Options";
+			this.tabAdvanced.UseVisualStyleBackColor = true;
+			// 
+			// groupBox13
+			// 
+			this.groupBox13.Controls.Add(this.label9);
+			this.groupBox13.Controls.Add(this.tbBaseAddress);
+			this.groupBox13.Controls.Add(this.cbRelocationTable);
+			this.groupBox13.Controls.Add(this.cbEmitSymbolTable);
+			this.groupBox13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox13.Location = new System.Drawing.Point(8, 18);
+			this.groupBox13.Name = "groupBox13";
+			this.groupBox13.Size = new System.Drawing.Size(206, 124);
+			this.groupBox13.TabIndex = 23;
+			this.groupBox13.TabStop = false;
+			this.groupBox13.Text = "Linker Options:";
+			// 
+			// label9
+			// 
+			this.label9.AutoSize = true;
+			this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label9.Location = new System.Drawing.Point(6, 91);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(75, 13);
+			this.label9.TabIndex = 42;
+			this.label9.Text = "Base Address:";
+			// 
+			// tbBaseAddress
+			// 
+			this.tbBaseAddress.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tbBaseAddress.Location = new System.Drawing.Point(87, 84);
+			this.tbBaseAddress.Name = "tbBaseAddress";
+			this.tbBaseAddress.Size = new System.Drawing.Size(89, 20);
+			this.tbBaseAddress.TabIndex = 41;
+			this.tbBaseAddress.Text = "0x00400000";
+			this.tbBaseAddress.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			// 
+			// cbRelocationTable
+			// 
+			this.cbRelocationTable.AutoSize = true;
+			this.cbRelocationTable.Checked = true;
+			this.cbRelocationTable.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbRelocationTable.Enabled = false;
+			this.cbRelocationTable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbRelocationTable.Location = new System.Drawing.Point(6, 51);
+			this.cbRelocationTable.Name = "cbRelocationTable";
+			this.cbRelocationTable.Size = new System.Drawing.Size(130, 17);
+			this.cbRelocationTable.TabIndex = 7;
+			this.cbRelocationTable.Text = "Emit Relocation Table";
+			this.cbRelocationTable.UseVisualStyleBackColor = true;
+			// 
+			// cbEmitSymbolTable
+			// 
+			this.cbEmitSymbolTable.AutoSize = true;
+			this.cbEmitSymbolTable.Checked = true;
+			this.cbEmitSymbolTable.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEmitSymbolTable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbEmitSymbolTable.Location = new System.Drawing.Point(6, 28);
+			this.cbEmitSymbolTable.Name = "cbEmitSymbolTable";
+			this.cbEmitSymbolTable.Size = new System.Drawing.Size(113, 17);
+			this.cbEmitSymbolTable.TabIndex = 6;
+			this.cbEmitSymbolTable.Text = "Emit Symbol Table";
+			this.cbEmitSymbolTable.UseVisualStyleBackColor = true;
+			// 
+			// tabApplicationLocations
+			// 
+			this.tabApplicationLocations.Controls.Add(this.groupBox11);
+			this.tabApplicationLocations.Controls.Add(this.groupBox10);
+			this.tabApplicationLocations.Controls.Add(this.groupBox9);
+			this.tabApplicationLocations.Controls.Add(this.groupBox8);
+			this.tabApplicationLocations.Controls.Add(this.groupBox7);
+			this.tabApplicationLocations.Location = new System.Drawing.Point(4, 22);
+			this.tabApplicationLocations.Name = "tabApplicationLocations";
+			this.tabApplicationLocations.Padding = new System.Windows.Forms.Padding(3);
+			this.tabApplicationLocations.Size = new System.Drawing.Size(626, 403);
+			this.tabApplicationLocations.TabIndex = 3;
+			this.tabApplicationLocations.Text = "Application Locations";
+			this.tabApplicationLocations.UseVisualStyleBackColor = true;
 			// 
 			// groupBox11
 			// 
@@ -923,16 +1019,16 @@
 			this.lbQEMUExecutable.TabIndex = 19;
 			this.lbQEMUExecutable.Text = "{QEMU Executable}";
 			// 
-			// tpOutput
+			// tabOutput
 			// 
-			this.tpOutput.Controls.Add(this.rtbOutput);
-			this.tpOutput.Location = new System.Drawing.Point(4, 22);
-			this.tpOutput.Name = "tpOutput";
-			this.tpOutput.Padding = new System.Windows.Forms.Padding(3);
-			this.tpOutput.Size = new System.Drawing.Size(626, 384);
-			this.tpOutput.TabIndex = 1;
-			this.tpOutput.Text = "Output";
-			this.tpOutput.UseVisualStyleBackColor = true;
+			this.tabOutput.Controls.Add(this.rtbOutput);
+			this.tabOutput.Location = new System.Drawing.Point(4, 22);
+			this.tabOutput.Name = "tabOutput";
+			this.tabOutput.Padding = new System.Windows.Forms.Padding(3);
+			this.tabOutput.Size = new System.Drawing.Size(626, 403);
+			this.tabOutput.TabIndex = 1;
+			this.tabOutput.Text = "Output";
+			this.tabOutput.UseVisualStyleBackColor = true;
 			// 
 			// rtbOutput
 			// 
@@ -948,16 +1044,16 @@
 			this.rtbOutput.Text = "";
 			this.rtbOutput.WordWrap = false;
 			// 
-			// tabPage3
+			// tabCounters
 			// 
-			this.tabPage3.Controls.Add(this.rtbCounters);
-			this.tabPage3.Location = new System.Drawing.Point(4, 22);
-			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(626, 384);
-			this.tabPage3.TabIndex = 2;
-			this.tabPage3.Text = "Counters";
-			this.tabPage3.UseVisualStyleBackColor = true;
+			this.tabCounters.Controls.Add(this.rtbCounters);
+			this.tabCounters.Location = new System.Drawing.Point(4, 22);
+			this.tabCounters.Name = "tabCounters";
+			this.tabCounters.Padding = new System.Windows.Forms.Padding(3);
+			this.tabCounters.Size = new System.Drawing.Size(626, 403);
+			this.tabCounters.TabIndex = 2;
+			this.tabCounters.Text = "Counters";
+			this.tabCounters.UseVisualStyleBackColor = true;
 			// 
 			// rtbCounters
 			// 
@@ -979,16 +1075,29 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
-			// cbEnableVariablePromotion
+			// groupBox14
 			// 
-			this.cbEnableVariablePromotion.AutoSize = true;
-			this.cbEnableVariablePromotion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbEnableVariablePromotion.Location = new System.Drawing.Point(6, 87);
-			this.cbEnableVariablePromotion.Name = "cbEnableVariablePromotion";
-			this.cbEnableVariablePromotion.Size = new System.Drawing.Size(114, 17);
-			this.cbEnableVariablePromotion.TabIndex = 10;
-			this.cbEnableVariablePromotion.Text = "Variable Promotion";
-			this.cbEnableVariablePromotion.UseVisualStyleBackColor = true;
+			this.groupBox14.Controls.Add(this.cbEmitx86IRQMethods);
+			this.groupBox14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox14.Location = new System.Drawing.Point(248, 18);
+			this.groupBox14.Name = "groupBox14";
+			this.groupBox14.Size = new System.Drawing.Size(206, 124);
+			this.groupBox14.TabIndex = 43;
+			this.groupBox14.TabStop = false;
+			this.groupBox14.Text = "Other:";
+			// 
+			// cbEmitx86InterruptTableMethods
+			// 
+			this.cbEmitx86IRQMethods.AutoSize = true;
+			this.cbEmitx86IRQMethods.Checked = true;
+			this.cbEmitx86IRQMethods.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEmitx86IRQMethods.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbEmitx86IRQMethods.Location = new System.Drawing.Point(6, 28);
+			this.cbEmitx86IRQMethods.Name = "cbEmitx86InterruptTableMethods";
+			this.cbEmitx86IRQMethods.Size = new System.Drawing.Size(182, 17);
+			this.cbEmitx86IRQMethods.TabIndex = 6;
+			this.cbEmitx86IRQMethods.Text = "Emit x86 Interrupt Table Methods";
+			this.cbEmitx86IRQMethods.UseVisualStyleBackColor = true;
 			// 
 			// MainForm
 			// 
@@ -996,16 +1105,16 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(632, 460);
 			this.Controls.Add(this.progressBar1);
-			this.Controls.Add(this.tabControl1);
+			this.Controls.Add(this.tbApplicationLocations);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "MainForm";
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
 			this.Text = "MOSA Launcher v1.6";
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.Shown += new System.EventHandler(this.MainForm_Shown);
-			this.tabControl1.ResumeLayout(false);
-			this.tbOptions.ResumeLayout(false);
-			this.tbOptions.PerformLayout();
+			this.tbApplicationLocations.ResumeLayout(false);
+			this.tabOptions.ResumeLayout(false);
+			this.tabOptions.PerformLayout();
 			this.groupBox12.ResumeLayout(false);
 			this.groupBox12.PerformLayout();
 			this.statusStrip1.ResumeLayout(false);
@@ -1023,7 +1132,10 @@
 			this.groupBox3.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
-			this.tabPage4.ResumeLayout(false);
+			this.tabAdvanced.ResumeLayout(false);
+			this.groupBox13.ResumeLayout(false);
+			this.groupBox13.PerformLayout();
+			this.tabApplicationLocations.ResumeLayout(false);
 			this.groupBox11.ResumeLayout(false);
 			this.groupBox11.PerformLayout();
 			this.groupBox10.ResumeLayout(false);
@@ -1034,8 +1146,10 @@
 			this.groupBox8.PerformLayout();
 			this.groupBox7.ResumeLayout(false);
 			this.groupBox7.PerformLayout();
-			this.tpOutput.ResumeLayout(false);
-			this.tabPage3.ResumeLayout(false);
+			this.tabOutput.ResumeLayout(false);
+			this.tabCounters.ResumeLayout(false);
+			this.groupBox14.ResumeLayout(false);
+			this.groupBox14.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1045,8 +1159,8 @@
 		private System.Windows.Forms.OpenFileDialog openFileDialog1;
 		private System.Windows.Forms.ProgressBar progressBar1;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-		private System.Windows.Forms.TabControl tabControl1;
-		private System.Windows.Forms.TabPage tpOutput;
+		private System.Windows.Forms.TabControl tbApplicationLocations;
+		private System.Windows.Forms.TabPage tabOutput;
 		private System.Windows.Forms.GroupBox groupBox6;
 		private System.Windows.Forms.ComboBox cbEmulator;
 		private System.Windows.Forms.GroupBox groupBox4;
@@ -1066,13 +1180,13 @@
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.CheckBox cbEnableIROptimizations;
 		private System.Windows.Forms.CheckBox cbEnableSSA;
-		private System.Windows.Forms.TabPage tbOptions;
+		private System.Windows.Forms.TabPage tabOptions;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.ComboBox cbBootFileSystem;
 		private System.Windows.Forms.RichTextBox rtbOutput;
-		private System.Windows.Forms.TabPage tabPage3;
+		private System.Windows.Forms.TabPage tabCounters;
 		private System.Windows.Forms.RichTextBox rtbCounters;
-		private System.Windows.Forms.TabPage tabPage4;
+		private System.Windows.Forms.TabPage tabApplicationLocations;
 		private System.Windows.Forms.GroupBox groupBox7;
 		private System.Windows.Forms.Label lbQEMUBIOSDirectory;
 		private System.Windows.Forms.Button button3;
@@ -1116,5 +1230,13 @@
 		private System.Windows.Forms.CheckBox cbVBEVideo;
 		private System.Windows.Forms.TextBox tbMode;
 		private System.Windows.Forms.CheckBox cbEnableVariablePromotion;
+		private System.Windows.Forms.TabPage tabAdvanced;
+		private System.Windows.Forms.GroupBox groupBox13;
+		private System.Windows.Forms.CheckBox cbRelocationTable;
+		private System.Windows.Forms.CheckBox cbEmitSymbolTable;
+		private System.Windows.Forms.TextBox tbBaseAddress;
+		private System.Windows.Forms.Label label9;
+		private System.Windows.Forms.GroupBox groupBox14;
+		private System.Windows.Forms.CheckBox cbEmitx86IRQMethods;
 	}
 }

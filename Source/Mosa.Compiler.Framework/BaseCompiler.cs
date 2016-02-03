@@ -100,9 +100,6 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the compiler data.
 		/// </summary>
-		/// <value>
-		/// The compiler data.
-		/// </value>
 		public CompilerData CompilerData { get; private set; }
 
 		#endregion Properties

@@ -50,7 +50,9 @@ namespace Mosa.TinyCPUSimulator
 
 		private uint[][] MemoryBlocks;
 
-		private const uint BlockSize = 1024 * 1024; // 1 MB
+		//private bool[] MemoryReadOnly;
+
+		private const uint BlockSize = 1024 * 4; // 4 KB
 		private const ulong MaxMemory = 1024L * 1024L * 1024L * 4L; // 4 GB
 
 		public SimCPU()

@@ -30,12 +30,7 @@ namespace Mosa.FileSystem.FAT
 		/// <summary>
 		///
 		/// </summary>
-		private bool directory;
-
-		/// <summary>
-		///
-		/// </summary>
-		public bool IsDirectory { get { return directory; } }
+		public bool IsDirectory { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FatFileLocation"/> class.
@@ -58,7 +53,7 @@ namespace Mosa.FileSystem.FAT
 			FirstCluster = startCluster;
 			DirectorySector = directorySector;
 			DirectorySectorIndex = directoryIndex;
-			this.directory = directory;
+			IsDirectory = directory;
 		}
 	}
 }

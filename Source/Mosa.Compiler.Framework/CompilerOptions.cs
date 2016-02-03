@@ -149,6 +149,14 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool EmitSymbols { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether [emit relocations].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [emit relocations]; otherwise, <c>false</c>.
+		/// </value>
+		public bool EmitRelocations { get; set; }
+
 		#endregion Properties
 
 		/// <summary>
@@ -241,7 +249,7 @@ namespace Mosa.Compiler.Framework
 			EnableOptimizations = true;
 			EnableVariablePromotion = true;
 			EnableSparseConditionalConstantPropagation = true;
-			EnableInlinedMethods = false;
+			EnableInlinedMethods = true;
 			BaseAddress = 0x00400000;
 			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
@@ -249,6 +257,7 @@ namespace Mosa.Compiler.Framework
 			InlinedIRMaximum = 20;
 			DebugRestrictOptimizationByCount = 0;
 			EmitSymbols = true;
+			EmitRelocations = true;
 		}
 	}
 }
