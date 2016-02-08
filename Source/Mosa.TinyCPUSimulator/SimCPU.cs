@@ -596,7 +596,9 @@ namespace Mosa.TinyCPUSimulator
 
 			if (!Symbols.TryGetValue(name, out symbol))
 			{
-				throw new SimCPUException();
+				return null;
+
+				//throw new SimCPUException();
 			}
 
 			return symbol;

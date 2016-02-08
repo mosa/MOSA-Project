@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Linker.Elf
 	/// <summary>
 	///
 	/// </summary>
-	public enum RelocationType : int
+	public enum RelocationType : uint
 	{
 		// Notes:
 		//
@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Linker.Elf
 
 		R_386_NONE = 0,
 		R_386_32 = 1,       // S + A
-		R_386_PC3 = 2,      // S + A - P
+		R_386_PC32 = 2,     // S + A - P
 		R_386_GOT32 = 3,    // G + A
 		R_386_PLT32 = 4,    // L + A - P
 		R_386_COPY = 5,     // None

@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Linker.Elf;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Platform.x64
@@ -26,7 +27,7 @@ namespace Mosa.Platform.x64
 		/// <value>
 		/// The type of the elf machine.
 		/// </value>
-		public override ushort ElfMachineType { get { return 3; } }
+		public override MachineType MachineType { get { return MachineType.IA_64; } }
 
 		/// <summary>
 		/// Defines the register set of the target architecture.

@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Linker.Elf;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework
@@ -31,7 +32,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The type of the elf machine.
 		/// </value>
-		public abstract ushort ElfMachineType { get; }
+		public abstract MachineType MachineType { get; }
 
 		/// <summary>
 		/// Gets the register set of the architecture.

@@ -4,8 +4,8 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -28,9 +28,9 @@ namespace Mosa.Compiler.Framework.Stages
 			codeEmitter = MethodCompiler.Pipeline.FindFirst<CodeGenerationStage>().CodeEmitter;
 
 			if (TypeLayout.NativePointerSize == 4)
-				NativePatchType = BuiltInPatch.I4;
+				NativePatchType = PatchType.I4;
 			else
-				NativePatchType = BuiltInPatch.I8;
+				NativePatchType = PatchType.I8;
 
 			EmitProtectedRegionTable();
 		}

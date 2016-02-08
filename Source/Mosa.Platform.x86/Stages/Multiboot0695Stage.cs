@@ -180,7 +180,7 @@ namespace Mosa.Platform.x86.Stages
 			writer.Write(unchecked(0U - HEADER_MB_MAGIC - flags));
 
 			// header_addr - load address of the multiboot header
-			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, multibootHeader, (int)stream.Position, 0, multibootHeader, 0);
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, multibootHeader, (int)stream.Position, 0, multibootHeader, 0);
 			writer.Write(0);
 
 			// load_addr - address of the binary in memory
@@ -193,7 +193,7 @@ namespace Mosa.Platform.x86.Stages
 			writer.Write(0);
 
 			// entry_addr - address of the entry point to invoke
-			Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, multibootHeader, (int)stream.Position, 0, Linker.EntryPoint, 0);
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, multibootHeader, (int)stream.Position, 0, Linker.EntryPoint, 0);
 			writer.Write(0);
 
 			// Write video settings if video has been specified, otherwise pad

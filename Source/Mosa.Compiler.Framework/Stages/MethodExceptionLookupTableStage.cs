@@ -20,9 +20,9 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Setup()
 		{
 			if (TypeLayout.NativePointerSize == 4)
-				NativePatchType = BuiltInPatch.I4;
+				NativePatchType = PatchType.I4;
 			else
-				NativePatchType = BuiltInPatch.I8;
+				NativePatchType = PatchType.I8;
 		}
 
 		protected override void Run()

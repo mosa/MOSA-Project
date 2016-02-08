@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Linker.Elf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,7 +20,7 @@ namespace Mosa.Compiler.Linker
 
 		public Endianness Endianness { get; protected set; }
 
-		public uint MachineID { get; private set; }
+		public MachineType MachineType { get; private set; }
 
 		public ulong BaseAddress { get; private set; }
 
@@ -57,15 +58,14 @@ namespace Mosa.Compiler.Linker
 			// defaults
 			BaseAddress = 0x00400000;
 			Endianness = Common.Endianness.Little;
-			MachineID = 0;
 			EmitSymbols = true;
 		}
 
-		public virtual void Initialize(ulong baseAddress, Endianness endianness, ushort machineID, bool emitSymbols)
+		public virtual void Initialize(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitSymbols)
 		{
 			BaseAddress = baseAddress;
 			Endianness = endianness;
-			MachineID = machineID;
+			MachineType = machineType;
 			EmitSymbols = emitSymbols;
 
 			AddSection(new LinkerSection(SectionKind.Text, SectionAlignment));
@@ -245,18 +245,27 @@ namespace Mosa.Compiler.Linker
 
 				targetAddress = targetAddress + (ulong)linkRequest.RelativeBase;
 
-				value = Patch.GetResult(linkRequest.PatchType.Patches, targetAddress);
+				//value = Patch.GetResult(linkRequest.PatchType.Patches, targetAddress);
+				value = targetAddress;
 			}
-
-			ulong mask = Patch.GetFinalMask(linkRequest.PatchType.Patches);
 
 			linkRequest.PatchSymbol.ApplyPatch(
 				linkRequest.PatchOffset,
 				value,
-				mask,
-				linkRequest.PatchType.Size,
+				GetPatchTypeSize(linkRequest.PatchType),
 				Endianness
 			);
+		}
+
+		private static byte GetPatchTypeSize(PatchType patchType)
+		{
+			switch (patchType)
+			{
+				case PatchType.I4: return 32;
+				case PatchType.I8: return 64;
+				default:
+					throw new CompilerException("unknown patch type: " + patchType.ToString());
+			}
 		}
 
 		#region Cache Methods

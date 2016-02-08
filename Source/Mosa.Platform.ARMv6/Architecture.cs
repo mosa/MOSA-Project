@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
+using Mosa.Compiler.Linker.Elf;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.ARMv6.Stages;
 
@@ -29,7 +30,7 @@ namespace Mosa.Platform.ARMv6
 		/// <value>
 		/// The type of the elf machine. As defined in ARM ELF File Format doc. page 5, EM_ARM.
 		/// </value>
-		public override ushort ElfMachineType { get { return 40; } }
+		public override MachineType MachineType { get { return MachineType.ARM; } }
 
 		/// <summary>
 		/// Gets the name of the platform.

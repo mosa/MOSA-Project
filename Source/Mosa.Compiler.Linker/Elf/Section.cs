@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Linker.Elf
 	/// <summary>
 	///
 	/// </summary>
-	public class SectionHeader
+	public class SectionHeaderEntry
 	{
 		/// <summary>
 		/// This member holds a section header's size in bytes. A section header is one entry
@@ -139,25 +139,6 @@ namespace Mosa.Compiler.Linker.Elf
 			writer.Write(Info);
 			writer.Write(AddressAlignment);
 			writer.Write(EntrySize);
-		}
-
-		/// <summary>
-		/// Reads the section header
-		/// </summary>
-		/// <param name="reader">The reader.</param>
-		public void Read32(BinaryReader reader)
-		{
-			Address = reader.ReadUInt16();
-			Name = reader.ReadUInt32();
-			Type = (SectionType)reader.ReadUInt16();
-			Flags = (SectionAttribute)reader.ReadUInt16();
-			Address = reader.ReadUInt32();
-			Offset = reader.ReadUInt32();
-			Size = reader.ReadUInt32();
-			Link = reader.ReadUInt32();
-			Info = reader.ReadUInt32();
-			AddressAlignment = reader.ReadUInt32();
-			EntrySize = reader.ReadUInt32();
 		}
 	}
 }
