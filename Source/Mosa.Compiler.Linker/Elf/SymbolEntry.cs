@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Linker.Elf
 		/// Every symbol table entry is "defined'' in relation to some section; this member holds
 		/// the relevant section header table index.
 		/// </summary>
-		public ushort SectionHeaderTableIndex;
+		public int SectionHeaderTableIndex;
 
 		/// <summary>
 		/// Gets the Info value.
@@ -63,9 +63,9 @@ namespace Mosa.Compiler.Linker.Elf
 		/// </summary>
 		public byte Other { get { return (byte)(((byte)SymbolVisibility) & 0x3); } }
 
-		public static int GetEntrySize(ElfType elfType)
+		public static uint GetEntrySize(LinkerFormatType elfType)
 		{
-			if (elfType == ElfType.Elf32)
+			if (elfType == LinkerFormatType.Elf32)
 				return EntrySize32;
 			else // if (elfType == ElfType.Elf64)
 				return EntrySize64;
@@ -76,9 +76,9 @@ namespace Mosa.Compiler.Linker.Elf
 		/// </summary>
 		/// <param name="elfType">Type of the elf.</param>
 		/// <param name="writer">The writer.</param>
-		public void Write(ElfType elfType, BinaryWriter writer)
+		public void Write(LinkerFormatType elfType, BinaryWriter writer)
 		{
-			if (elfType == ElfType.Elf32)
+			if (elfType == LinkerFormatType.Elf32)
 				Write32(writer);
 			else // if (elfType == ElfType.Elf64)
 				Write64(writer);
@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Linker.Elf
 			writer.Write((uint)Size);
 			writer.Write(Info);
 			writer.Write(Other);
-			writer.Write(SectionHeaderTableIndex);
+			writer.Write((ushort)SectionHeaderTableIndex);
 		}
 
 		/// <summary>
@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Linker.Elf
 			writer.Write(Name);
 			writer.Write(Info); // TODO
 			writer.Write(Other); // TODO
-			writer.Write(SectionHeaderTableIndex);
+			writer.Write((ushort)SectionHeaderTableIndex);
 			writer.Write(Value);
 			writer.Write(Size);
 		}

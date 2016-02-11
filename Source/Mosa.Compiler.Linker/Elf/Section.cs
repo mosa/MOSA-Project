@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
 using System.IO;
 
 namespace Mosa.Compiler.Linker.Elf
@@ -7,138 +8,69 @@ namespace Mosa.Compiler.Linker.Elf
 	/// <summary>
 	///
 	/// </summary>
-	public class SectionHeaderEntry
+	public class Section
 	{
-		/// <summary>
-		/// This member holds a section header's size in bytes. A section header is one entry
-		/// in the section header table; all entries are the same size.
-		/// </summary>
-		public static readonly ushort EntrySize32 = 0x28;
+		public delegate void EmitSectionMethod(Section section);
 
-		public static readonly ushort EntrySize64 = 0x40;
+		public int Index { get; set; }
 
-		/// <summary>
-		/// This member specifies the name of the section. Its value is an index into
-		/// the section header string table section , giving
-		/// the location of a null-terminated string.
-		/// </summary>
-		public uint Name;
+		public string Name { get; set; }
 
-		/// <summary>
-		/// This member categorizes the section's contents and semantics. Section
-		/// types and their descriptions appear below.
-		/// </summary>
-		public SectionType Type;
+		public uint NameIndex { get; set; }
 
-		/// <summary>
-		/// Sections support 1-bit flags that describe miscellaneous attributes.
-		/// </summary>
-		public SectionAttribute Flags;
+		public SectionType Type { get; set; }
 
-		/// <summary>
-		/// If the section will appear in the memory image of a process, this member
-		/// gives the virtualAddress at which the section's first byte should reside. Otherwise,
-		/// the member contains 0.
-		/// </summary>
-		public ulong Address;
+		public SectionAttribute Flags { get; set; }
 
-		/// <summary>
-		/// This member's value gives the byte offset from the beginning of the file to
-		/// the first byte in the section. One section type, NoBits,occupies no
-		/// space in the file, and its Offset member locates
-		/// the conceptual placement in the file.
-		/// </summary>
-		public long Offset;
+		public ulong Address { get; set; }
 
-		/// <summary>
-		///
-		/// </summary>
-		public ulong Size;
+		public uint Offset { get; set; }
 
-		/// <summary>
-		/// This member holds a section header table index link, whose interpretation
-		/// depends on the section type.
-		/// </summary>
-		public uint Link;
+		public uint Size { get; set; }
 
-		/// <summary>
-		/// This member holds extra information, whose interpretation depends on the
-		/// section type.
-		/// </summary>
-		public uint Info;
+		public Section Link { get; set; }
 
-		/// <summary>
-		/// Some sections have alignment constraints. For example, if a section
-		/// holds a doubleword, the system must ensure doubleword alignment for the
-		/// entire section.  That is, the value of sh_addr must be congruent to 0,
-		/// modulo the value of sh_addralign. Currently, only 0 and positive
-		/// integral powers of two are allowed. Values 0 and 1 mean the section has no
-		/// alignment constraints.
-		/// </summary>
-		public ulong AddressAlignment;
+		public Section Info { get; set; }
 
-		/// <summary>
-		/// Some sections hold a table of fixed-size entries, such as a symbol table. For
-		/// such a section, this member gives the size in bytes of each entry. The
-		/// member contains 0 if the section does not hold a table of fixed-size entries.
-		/// </summary>
-		public ulong EntrySize;
+		public ulong AddressAlignment { get; set; }
 
-		public static int GetEntrySize(ElfType elfType)
+		public uint EntrySize { get; set; }
+
+		public bool IsEmitted { get; set; }
+
+		public List<Section> Dependencies { get; private set; }
+
+		public EmitSectionMethod EmitMethod { get; set; }
+
+		public SectionKind SectionKind { get; set; }
+
+		public Section()
 		{
-			if (elfType == ElfType.Elf32)
-				return EntrySize32;
-			else // if (elfType == ElfType.Elf64)
-				return EntrySize64;
+			IsEmitted = false;
+			Dependencies = new List<Section>();
 		}
 
-		/// <summary>
-		/// Writes the section header
-		/// </summary>
-		/// <param name="elfType">Type of the elf.</param>
-		/// <param name="writer">The writer.</param>
-		public void Write(ElfType elfType, BinaryWriter writer)
+		public void AddDependency(Section section)
 		{
-			if (elfType == ElfType.Elf32)
-				Write32(writer);
-			else // if (elfType == ElfType.Elf64)
-				Write64(writer);
+			Dependencies.Add(section);
 		}
 
-		/// <summary>
-		/// Writes the section header
-		/// </summary>
-		/// <param name="writer">The writer.</param>
-		protected void Write32(BinaryWriter writer)
+		public void WriteSectionHeader(LinkerFormatType elfType, BinaryWriter writer)
 		{
-			writer.Write(Name);
-			writer.Write((uint)Type);
-			writer.Write((uint)Flags);
-			writer.Write((uint)Address);
-			writer.Write((int)Offset);
-			writer.Write((uint)Size);
-			writer.Write(Link);
-			writer.Write(Info);
-			writer.Write((uint)AddressAlignment);
-			writer.Write((uint)EntrySize);
-		}
+			var header = new SectionHeaderEntry();
 
-		/// <summary>
-		/// Writes the section header
-		/// </summary>
-		/// <param name="writer">The writer.</param>
-		protected void Write64(BinaryWriter writer)
-		{
-			writer.Write(Name);
-			writer.Write((uint)Type);
-			writer.Write((ulong)Flags);
-			writer.Write(Address);
-			writer.Write(Offset);
-			writer.Write(Size);
-			writer.Write(Link);
-			writer.Write(Info);
-			writer.Write(AddressAlignment);
-			writer.Write(EntrySize);
+			header.Name = NameIndex;
+			header.Address = Address;
+			header.Offset = Offset;
+			header.Size = Size;
+			header.EntrySize = EntrySize;
+			header.AddressAlignment = AddressAlignment;
+			header.Type = Type;
+			header.Flags = Flags;
+			header.Link = Link == null ? 0 : Link.Index;
+			header.Info = Info == null ? 0 : Info.Index;
+
+			header.Write(elfType, writer);
 		}
 	}
 }

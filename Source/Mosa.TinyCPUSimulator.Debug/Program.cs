@@ -13,7 +13,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 		{
 			var fixture = new ArrayFixture();
 
-			fixture.TestCompiler.DebugOutput = true;
+			fixture.TestCompiler.DebugOutput = false;
 
 			fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = true;
 			DoTest(fixture.BoundsCheck, "normal-all");

@@ -2,8 +2,6 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker;
-using Mosa.Compiler.Linker.Elf;
 using Mosa.Compiler.Trace;
 using Mosa.Utility.Aot;
 using Mosa.Utility.BootImage;
@@ -11,9 +9,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Reflection;
 using System.Text;
-using System.IO.Compression;
 
 namespace Mosa.Utility.Launcher
 {
@@ -89,7 +87,7 @@ namespace Mosa.Utility.Launcher
 				Compiler.CompilerOptions.OutputFile = compiledFile;
 
 				Compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);
-				Compiler.CompilerOptions.LinkerFactory = GetLinkerFactory(Options.LinkerFormat);
+				Compiler.CompilerOptions.LinkerFormatType = Options.LinkerFormatType;
 				Compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(Options.BootFormat);
 
 				Compiler.CompilerOptions.SetCustomOption("multiboot.video", Options.VBEVideo ? "true" : "false");
@@ -570,21 +568,6 @@ namespace Mosa.Utility.Launcher
 			switch (bootFormat)
 			{
 				case BootFormat.Multiboot_0_7: return delegate { return new Mosa.Platform.x86.Stages.Multiboot0695Stage(); };
-				default: return null;
-			}
-		}
-
-		/// <summary>
-		/// Gets the linker factory.
-		/// </summary>
-		/// <param name="linkerType">Type of the linker.</param>
-		/// <returns></returns>
-		private static Func<BaseLinker> GetLinkerFactory(LinkerFormat linkerType)
-		{
-			switch (linkerType)
-			{
-				case LinkerFormat.Elf32: return delegate { return new Elf32(); };
-				case LinkerFormat.Elf64: return delegate { return new Elf64(); };
 				default: return null;
 			}
 		}

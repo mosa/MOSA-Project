@@ -1,11 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Linker.Elf
+namespace Mosa.Compiler.Linker
 {
 	/// <summary>
 	///
 	/// </summary>
-	public enum ElfType
+	public enum LinkerFormatType
 	{
 		Elf32,
 		Elf64

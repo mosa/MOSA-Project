@@ -12,9 +12,9 @@ namespace Mosa.Compiler.Linker
 	/// <summary>
 	///
 	/// </summary>
-	public abstract class BaseLinker
+	public class BaseLinker
 	{
-		public LinkerSection[] Sections { get; private set; }
+		public LinkerSection[] LinkerSections { get; private set; }
 
 		public LinkerSymbol EntryPoint { get; set; }
 
@@ -24,11 +24,13 @@ namespace Mosa.Compiler.Linker
 
 		public ulong BaseAddress { get; private set; }
 
-		public uint SectionAlignment { get; protected set; }
+		public uint SectionAlignment { get; set; }
 
 		public uint BaseFileOffset { get; set; }
 
 		public bool EmitSymbols { get; set; }
+
+		public LinkerFormatType LinkerFormatType { get; private set; }
 
 		private object mylock = new object();
 
@@ -36,7 +38,7 @@ namespace Mosa.Compiler.Linker
 		{
 			get
 			{
-				foreach (var section in Sections)
+				foreach (var section in LinkerSections)
 				{
 					if (section == null)
 						continue;
@@ -49,10 +51,11 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
-		protected BaseLinker()
+		public BaseLinker()
 		{
-			Sections = new LinkerSection[4];
-			BaseFileOffset = 0;
+			LinkerSections = new LinkerSection[4];
+
+			BaseFileOffset = 0x1000;   // required by ELF
 			SectionAlignment = 0x1000; // default 1K
 
 			// defaults
@@ -61,7 +64,7 @@ namespace Mosa.Compiler.Linker
 			EmitSymbols = true;
 		}
 
-		public virtual void Initialize(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitSymbols)
+		public virtual void Initialize(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitSymbols, LinkerFormatType linkerFormatType)
 		{
 			BaseAddress = baseAddress;
 			Endianness = endianness;
@@ -76,7 +79,7 @@ namespace Mosa.Compiler.Linker
 
 		private void AddSection(LinkerSection section)
 		{
-			Sections[(int)section.SectionKind] = section;
+			LinkerSections[(int)section.SectionKind] = section;
 		}
 
 		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, int relativeBase, LinkerSymbol referenceSymbol, int referenceOffset)
@@ -115,7 +118,7 @@ namespace Mosa.Compiler.Linker
 		{
 			foreach (var kind in SectionList)
 			{
-				var section = Sections[(int)kind];
+				var section = LinkerSections[(int)kind];
 
 				Debug.Assert(section != null);
 
@@ -132,7 +135,7 @@ namespace Mosa.Compiler.Linker
 		{
 			lock (mylock)
 			{
-				var section = Sections[(int)kind];
+				var section = LinkerSections[(int)kind];
 
 				Debug.Assert(section != null);
 
@@ -179,7 +182,7 @@ namespace Mosa.Compiler.Linker
 			ulong virtualAddress = BaseAddress;
 			uint fileOffset = BaseFileOffset;
 
-			foreach (var section in Sections)
+			foreach (var section in LinkerSections)
 			{
 				section.ResolveLayout(fileOffset, virtualAddress);
 
@@ -190,13 +193,13 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
-		protected abstract void EmitImplementation(Stream stream);
-
 		public void Emit(Stream stream)
 		{
 			FinalizeLayout();
 
-			EmitImplementation(stream);
+			var elfLinker = new ElfLinker(this, LinkerFormatType);
+
+			elfLinker.Emit(stream);
 		}
 
 		private void ApplyPatches()
@@ -212,11 +215,6 @@ namespace Mosa.Compiler.Linker
 
 				symbol.PostHash = symbol.ComputeMD5Hash();
 			}
-		}
-
-		protected LinkerSection GetSection(SectionKind kind)
-		{
-			return Sections[(int)kind];
 		}
 
 		private void ApplyPatch(LinkRequest linkRequest)

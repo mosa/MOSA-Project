@@ -1,8 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.IO;
-using Mosa.Utility.BootImage;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Linker;
+using Mosa.Utility.BootImage;
+using System.IO;
 
 namespace Mosa.Utility.Launcher
 {
@@ -40,7 +41,7 @@ namespace Mosa.Utility.Launcher
 
 		public bool GenerateMapFile { get; set; }
 
-		public LinkerFormat LinkerFormat { get; set; }
+		public LinkerFormatType LinkerFormatType { get; set; }
 
 		public BootFormat BootFormat { get; set; }
 
@@ -74,7 +75,7 @@ namespace Mosa.Utility.Launcher
 			ImageFormat = ImageFormat.IMG;
 			BootFormat = BootFormat.Multiboot_0_7;
 			PlatformType = PlatformType.X86;
-			LinkerFormat = Launcher.LinkerFormat.Elf32;
+			LinkerFormatType = LinkerFormatType.Elf32;
 			MemoryInMB = 128;
 			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
 			FileSystem = FileSystem.FAT16;
@@ -115,8 +116,8 @@ namespace Mosa.Utility.Launcher
 					case "-vdi": ImageFormat = ImageFormat.VDI; continue;
 					case "-iso": ImageFormat = ImageFormat.ISO; continue;
 					case "-vmdk": ImageFormat = ImageFormat.VMDK; continue;
-					case "-elf32": LinkerFormat = LinkerFormat.Elf32; continue;
-					case "-elf": LinkerFormat = LinkerFormat.Elf32; continue;
+					case "-elf32": LinkerFormatType = LinkerFormatType.Elf32; continue;
+					case "-elf": LinkerFormatType = LinkerFormatType.Elf32; continue;
 					case "-mb0.7": BootFormat = BootFormat.Multiboot_0_7; continue;
 					case "-pipe": DebugConnectionOption = DebugConnectionOption.Pipe; continue;
 					case "-tcpclient": DebugConnectionOption = DebugConnectionOption.TCPClient; continue;

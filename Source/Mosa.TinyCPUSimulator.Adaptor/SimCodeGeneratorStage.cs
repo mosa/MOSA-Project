@@ -3,6 +3,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker;
+using System.Diagnostics;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
@@ -10,7 +11,8 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 	{
 		protected ISimAdapter simAdapter;
 		protected LinkerSymbol symbol;
-		protected SimLinker simLinker;
+
+		private SimLinkerFinalizationStage stage;
 
 		public SimCodeGeneratorStage(ISimAdapter simAdapter)
 			: base(true)
@@ -23,9 +25,12 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 			base.Setup();
 
 			symbol = MethodCompiler.Linker.GetSymbol(MethodCompiler.Method.FullName, SectionKind.Text);
-			simLinker = MethodCompiler.Linker as SimLinker;
 
-			simLinker.ClearSymbolInformation(symbol);
+			stage = MethodCompiler.Compiler.PostCompilePipeline.FindFirst<SimLinkerFinalizationStage>() as SimLinkerFinalizationStage;
+
+			Debug.Assert(stage != null);
+
+			stage.ClearSymbolInformation(symbol);
 		}
 
 		protected override void EmitInstruction(InstructionNode node, BaseCodeEmitter codeEmitter)
@@ -40,17 +45,17 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 			if (instruction != null)
 			{
-				simLinker.AddInstruction(symbol, start, instruction);
+				stage.AddInstruction(symbol, start, instruction);
 			}
 
-			simLinker.AddSourceInformation(symbol, start, node.Offset.ToString() + "\t0x" + node.Offset.ToString("X") + "\t" + node.Block.ToString() + "\t" + symbol + "\t" + node.ToString());
+			stage.AddSourceInformation(symbol, start, node.Offset.ToString() + "\t0x" + node.Offset.ToString("X") + "\t" + node.Block.ToString() + "\t" + symbol + "\t" + node.ToString());
 		}
 
 		protected override void BlockStart(BasicBlock block)
 		{
 			base.BlockStart(block);
 
-			simLinker.AddTargetSymbol(symbol, codeEmitter.CurrentPosition, block.ToString() + ":" + MethodCompiler.Method.FullName);
+			stage.AddTargetSymbol(symbol, codeEmitter.CurrentPosition, block.ToString() + ":" + MethodCompiler.Method.FullName);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
 using Mosa.TinyCPUSimulator;
@@ -212,7 +213,7 @@ namespace Mosa.Tool.TinySimulator
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
 			Compiler.CompilerOptions.EnableInlinedMethods = true;
 
-			Compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
+			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
 			Compiler.CompilerFactory = delegate { return new SimCompiler(simAdapter); };
 
 			Compiler.Execute(Environment.ProcessorCount);

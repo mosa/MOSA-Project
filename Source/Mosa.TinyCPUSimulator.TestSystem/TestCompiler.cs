@@ -20,9 +20,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 		protected ISimAdapter simAdapter;
 
-		protected SimLinker linker;
-
 		protected const uint MaxTicks = 500000;
+
 		internal bool IsInitialized { get; set; }
 
 		internal TestCompiler(BaseTestPlatform platform)
@@ -50,7 +49,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			Compiler.CompilerOptions.EnableInlinedMethods = true;
 
 			Compiler.CompilerOptions.Architecture = platform.CreateArchitecture();
-			Compiler.CompilerOptions.LinkerFactory = delegate { return new SimLinker(simAdapter); };
+			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
 			Compiler.CompilerFactory = delegate { return new SimCompiler(simAdapter); };
 		}
 
@@ -72,8 +71,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			//var threads = Compiler.CompilerOptions.UseMultipleThreadCompiler ? Environment.ProcessorCount : 1;
 			//Compiler.Execute(threads);
 			Compiler.Execute(Environment.ProcessorCount);
-
-			linker = Compiler.Linker as SimLinker;
 		}
 
 		internal void Initialize()
@@ -125,7 +122,7 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 
 				Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
 
-				var symbol = linker.GetSymbol(runtimeMethod.FullName, SectionKind.Text);
+				var symbol = Compiler.Linker.GetSymbol(runtimeMethod.FullName, SectionKind.Text);
 
 				ulong address = symbol.VirtualAddress;
 
@@ -135,8 +132,6 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 				{
 					// reset the stack
 					platform.ResetSimulation(simAdapter);
-
-					//Run<int>("Mosa.Kernel.x86Test", "KernelMemory", "SetMemory", false, new object[] { (uint)0x00900000 });
 				}
 
 				platform.PrepareToExecuteMethod(simAdapter, address, parameters);

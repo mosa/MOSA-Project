@@ -29,16 +29,16 @@ namespace Mosa.Compiler.Linker.Elf
 		/// <summary>
 		/// Gets the Info field for 32bit elf
 		/// </summary>
-		public ushort Info32 { get { return (ushort)((Symbol << 8) | ((ushort)RelocationType & 0xFF)); } }
+		public ushort Info32 { get { return (ushort)((Symbol << 8) | ((uint)RelocationType & 0xFF)); } }
 
 		/// <summary>
 		/// Gets the Info field for 64bit elf
 		/// </summary>
 		public ushort Info64 { get { return (ushort)((Symbol << 32) | ((ushort)RelocationType & 0xFFFFFFFF)); } }
 
-		public static int GetEntrySize(ElfType elfType)
+		public static uint GetEntrySize(LinkerFormatType elfType)
 		{
-			if (elfType == ElfType.Elf32)
+			if (elfType == LinkerFormatType.Elf32)
 				return EntrySize32;
 			else // if (elfType == ElfType.Elf64)
 				return EntrySize64;
@@ -49,9 +49,9 @@ namespace Mosa.Compiler.Linker.Elf
 		/// </summary>
 		/// <param name="elfType">Type of the elf.</param>
 		/// <param name="writer">The writer.</param>
-		public void Write(ElfType elfType, BinaryWriter writer)
+		public void Write(LinkerFormatType elfType, BinaryWriter writer)
 		{
-			if (elfType == ElfType.Elf32)
+			if (elfType == LinkerFormatType.Elf32)
 				Write32(writer);
 			else // if (elfType == ElfType.Elf64)
 				Write64(writer);

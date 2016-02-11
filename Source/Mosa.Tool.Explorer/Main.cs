@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Pdb;
 using Mosa.Compiler.Trace;
@@ -55,7 +56,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerTrace.TraceFilter.StageMatch = MatchType.Any;
 
 			Compiler.CompilerFactory = delegate { return new ExplorerCompiler(); };
-			Compiler.CompilerOptions.LinkerFactory = delegate { return new ExplorerLinker(); };
+			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
 		}
 
 		private void SetStatus(string status)

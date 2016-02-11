@@ -75,7 +75,6 @@
     <Compile Include="ISimDisplay.cs" />
     <Compile Include="SimCodeGeneratorStage.cs" />
     <Compile Include="SimCompiler.cs" />
-    <Compile Include="SimLinker.cs" />
     <Compile Include="SimMethodCompiler.cs" />
     <Compile Include="SimPowerUpStage.cs" />
   </ItemGroup>
