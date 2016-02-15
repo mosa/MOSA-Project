@@ -4,6 +4,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Mosa.TinyCPUSimulator.Adaptor
 {
@@ -30,9 +31,22 @@ namespace Mosa.TinyCPUSimulator.Adaptor
 
 		protected override void Run()
 		{
-			var stream = new SimStream(simAdapter.SimCPU, Linker.BaseAddress);
+			var stream = new MemoryStream();
+			var reader = new BinaryReader(stream);
 
 			Linker.Emit(stream);
+
+			foreach (var section in Linker.LinkerSections)
+			{
+				stream.Position = section.FileOffset;
+
+				for (uint i = 0; i < section.Size; i = i + 4)
+				{
+					uint value = reader.ReadUInt32();
+
+					simAdapter.SimCPU.DirectWrite32((ulong)(section.VirtualAddress + i), value);
+				}
+			}
 
 			UpdateSim();
 
