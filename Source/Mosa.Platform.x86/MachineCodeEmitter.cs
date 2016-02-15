@@ -167,7 +167,8 @@ namespace Mosa.Platform.x86
 			}
 			else if (displacement.IsField)
 			{
-				SectionKind section = displacement.Field.Data != null ? section = SectionKind.ROData : section = SectionKind.BSS;
+				var section = displacement.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
+
 				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Field.FullName, section, (int)displacement.Displacement);
 				codeStream.WriteZeroBytes(4);
 			}
@@ -176,13 +177,16 @@ namespace Mosa.Platform.x86
 				// FIXME! remove assertion
 				Debug.Assert(displacement.Displacement == 0);
 
-				SectionKind section = (displacement.Method != null) ? SectionKind.Text : SectionKind.ROData;
+				var section = (displacement.Method != null) ? SectionKind.Text : SectionKind.ROData;
 
-				var symbol = linker.FindSymbol(displacement.Name);
+				var symbol = linker.GetSymbol(displacement.Name, section);
+
 				if (symbol == null)
-					symbol = linker.GetSymbol(displacement.Name, section);
+				{
+					symbol = linker.FindSymbol(displacement.Name);
+				}
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, symbol.Name, symbol.SectionKind, 0);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, symbol, 0);
 				codeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsMemoryAddress && displacement.OffsetBase != null && displacement.OffsetBase.IsConstant)

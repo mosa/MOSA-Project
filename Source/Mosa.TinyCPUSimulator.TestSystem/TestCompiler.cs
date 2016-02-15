@@ -47,7 +47,8 @@ namespace Mosa.TinyCPUSimulator.TestSystem
 			Compiler.CompilerOptions.EnableVariablePromotion = true;
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = true;
 			Compiler.CompilerOptions.EnableInlinedMethods = true;
-
+			Compiler.CompilerOptions.EmitRelocations = false;
+			Compiler.CompilerOptions.EmitSymbols = false;
 			Compiler.CompilerOptions.Architecture = platform.CreateArchitecture();
 			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
 			Compiler.CompilerFactory = delegate { return new SimCompiler(simAdapter); };

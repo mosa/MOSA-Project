@@ -32,7 +32,11 @@ namespace Mosa.Compiler.Linker
 
 		public LinkerFormatType LinkerFormatType { get; private set; }
 
+		private readonly ElfLinker elfLinker;
+
 		private object mylock = new object();
+
+		private static SectionKind[] SectionList = new[] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
 
 		public IEnumerable<LinkerSymbol> Symbols
 		{
@@ -51,30 +55,31 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
-		public BaseLinker()
+		public BaseLinker(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitSymbols, LinkerFormatType linkerFormatType)
 		{
 			LinkerSections = new LinkerSection[4];
 
-			BaseFileOffset = 0x1000;   // required by ELF
-			SectionAlignment = 0x1000; // default 1K
-
-			// defaults
-			BaseAddress = 0x00400000;
-			Endianness = Common.Endianness.Little;
-			EmitSymbols = true;
-		}
-
-		public virtual void Initialize(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitSymbols, LinkerFormatType linkerFormatType)
-		{
 			BaseAddress = baseAddress;
 			Endianness = endianness;
 			MachineType = machineType;
 			EmitSymbols = emitSymbols;
 
+			elfLinker = new ElfLinker(this, LinkerFormatType);
+
+			BaseFileOffset = elfLinker.BaseFileOffset;
+			SectionAlignment = elfLinker.SectionAlignment;
+
 			AddSection(new LinkerSection(SectionKind.Text, SectionAlignment));
 			AddSection(new LinkerSection(SectionKind.Data, SectionAlignment));
 			AddSection(new LinkerSection(SectionKind.ROData, SectionAlignment));
 			AddSection(new LinkerSection(SectionKind.BSS, SectionAlignment));
+		}
+
+		public void Emit(Stream stream)
+		{
+			FinalizeLayout();
+
+			elfLinker.Emit(stream);
 		}
 
 		private void AddSection(LinkerSection section)
@@ -92,17 +97,24 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, string patchSymbol, SectionKind patchKind, int patchOffset, int relativeBase, string referenceSymbol, SectionKind referenceKind, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, string patchSymbolName, SectionKind patchKind, int patchOffset, int relativeBase, string referenceSymbolName, SectionKind referenceKind, int referenceOffset)
 		{
-			var referenceObject = GetSymbol(referenceSymbol, referenceKind);
-			var patchObject = GetSymbol(patchSymbol, patchKind);
+			var referenceSymbol = GetSymbol(referenceSymbolName, referenceKind);
+			var patchObject = GetSymbol(patchSymbolName, patchKind);
 
-			Link(linkType, patchType, patchObject, patchOffset, relativeBase, referenceObject, referenceOffset);
+			Link(linkType, patchType, patchObject, patchOffset, relativeBase, referenceSymbol, referenceOffset);
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, int relativeBase, string referenceSymbol, SectionKind patchRelativeBase, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, string patchSymbolName, SectionKind patchKind, int patchOffset, int relativeBase, LinkerSymbol referenceSymbol, int referenceOffset)
 		{
-			var referenceObject = GetSymbol(referenceSymbol, patchRelativeBase);
+			var patchObject = GetSymbol(patchSymbolName, patchKind);
+
+			Link(linkType, patchType, patchObject, patchOffset, relativeBase, referenceSymbol, referenceOffset);
+		}
+
+		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, int relativeBase, string referenceSymbolName, SectionKind referenceKind, int referenceOffset)
+		{
+			var referenceObject = GetSymbol(referenceSymbolName, referenceKind);
 
 			Link(linkType, patchType, patchSymbol, patchOffset, relativeBase, referenceObject, referenceOffset);
 		}
@@ -111,8 +123,6 @@ namespace Mosa.Compiler.Linker
 		{
 			return CreateSymbol(name, kind, 0);
 		}
-
-		private static SectionKind[] SectionList = new[] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
 
 		public LinkerSymbol FindSymbol(string name)
 		{
@@ -191,15 +201,6 @@ namespace Mosa.Compiler.Linker
 				virtualAddress = section.VirtualAddress + size;
 				fileOffset = fileOffset + size;
 			}
-		}
-
-		public void Emit(Stream stream)
-		{
-			FinalizeLayout();
-
-			var elfLinker = new ElfLinker(this, LinkerFormatType);
-
-			elfLinker.Emit(stream);
 		}
 
 		private void ApplyPatches()

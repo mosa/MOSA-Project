@@ -36,6 +36,10 @@ namespace Mosa.Compiler.Linker.Elf
 
 		protected static string[] LinkerSectionNames = { ".text", ".data", ".rodata", ".bss" };
 
+		public uint BaseFileOffset { get; private set; }
+
+		public uint SectionAlignment { get; private set; }
+
 		#endregion Data members
 
 		public ElfLinker(BaseLinker linker, LinkerFormatType linkerFormatType)
@@ -45,6 +49,9 @@ namespace Mosa.Compiler.Linker.Elf
 
 			sectionHeaderStringTable.Add((byte)'\0');
 			stringTable.Add((byte)'\0');
+
+			BaseFileOffset = 0x1000;   // required by ELF
+			SectionAlignment = 0x1000; // default 1K
 		}
 
 		#region Helpers
