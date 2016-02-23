@@ -52,12 +52,12 @@ namespace Mosa.FileSystem.FAT
 		/// <summary>
 		///
 		/// </summary>
-		protected bool read;
+		protected bool canRead;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected bool write;
+		protected bool canWrite;
 
 		/// <summary>
 		///
@@ -67,7 +67,7 @@ namespace Mosa.FileSystem.FAT
 		/// <summary>
 		///
 		/// </summary>
-		protected bool dirty;
+		protected bool isDirty;
 
 		/// <summary>
 		///
@@ -104,10 +104,10 @@ namespace Mosa.FileSystem.FAT
 			this.startCluster = startCluster;
 			this.directorySector = directorySector;
 			this.directorySectorIndex = directorySectorIndex;
-			read = true;
-			write = true;
 			position = 0;
-			dirty = false;
+			canRead = true;
+			canWrite = true;
+			isDirty = false;
 
 			nthCluster = System.UInt32.MaxValue; // Not positioned yet
 
@@ -123,7 +123,7 @@ namespace Mosa.FileSystem.FAT
 		/// <value></value>
 		/// <returns>true if the stream supports reading; otherwise, false.
 		/// </returns>
-		public override bool CanRead { get { return read; } }
+		public override bool CanRead { get { return canRead; } }
 
 		/// <summary>
 		/// When overridden in a derived class, gets a value indicating whether the current stream supports seeking.
@@ -139,7 +139,7 @@ namespace Mosa.FileSystem.FAT
 		/// <value></value>
 		/// <returns>true if the stream supports writing; otherwise, false.
 		/// </returns>
-		public override bool CanWrite { get { return write; } }
+		public override bool CanWrite { get { return canWrite; } }
 
 		/// <summary>
 		/// Gets a value that determines whether the current stream can time out.
@@ -201,13 +201,13 @@ namespace Mosa.FileSystem.FAT
 		/// </exception>
 		public override void Flush()
 		{
-			if (!dirty)
+			if (!isDirty)
 				return;
 
 			fs.WriteCluster(currentCluster, data);
 			SetLength(length);
 
-			dirty = false;
+			isDirty = false;
 		}
 
 		/// <summary>
@@ -245,7 +245,9 @@ namespace Mosa.FileSystem.FAT
 			int index = 0;
 
 			for (; (position < length) && (index < count); index++)
+			{
 				buffer[offset + index] = (byte)ReadByte();
+			}
 
 			return index;
 		}
@@ -271,7 +273,9 @@ namespace Mosa.FileSystem.FAT
 			position++;
 
 			if (index == 0)
+			{
 				NextCluster();
+			}
 
 			return data[index];
 		}
@@ -336,12 +340,7 @@ namespace Mosa.FileSystem.FAT
 		/// </summary>
 		protected bool NextCluster()
 		{
-			uint newcluster = 0;
-
-			if (currentCluster == 0)
-				newcluster = startCluster;
-			else
-				newcluster = fs.GetNextCluster(currentCluster);
+			uint newcluster = (currentCluster == 0) ? startCluster : fs.GetNextCluster(currentCluster);
 
 			ReadCluster(newcluster);
 
@@ -369,7 +368,7 @@ namespace Mosa.FileSystem.FAT
 
 					startCluster = newCluster;
 					currentCluster = newCluster;
-					dirty = true;
+					isDirty = true;
 
 					// Clear cluster
 					for (int i = 0; i < clusterSize; i++)
@@ -392,7 +391,7 @@ namespace Mosa.FileSystem.FAT
 						return false;
 
 					currentCluster = newCluster;
-					dirty = true;
+					isDirty = true;
 
 					// Clear cluster
 					for (int i = 0; i < clusterSize; i++)
@@ -420,7 +419,6 @@ namespace Mosa.FileSystem.FAT
 
 			currentCluster = cluster;
 			fs.ReadCluster(cluster, data);
-			dirty = false;
 		}
 
 		/// <summary>
@@ -476,7 +474,9 @@ namespace Mosa.FileSystem.FAT
 				return;
 
 			if (buffer.Length - offset < count)
+			{
 				count = buffer.Length - offset;
+			}
 
 			for (int i = 0; i < count; i++)
 			{
@@ -502,14 +502,18 @@ namespace Mosa.FileSystem.FAT
 			uint index = (uint)(position % clusterSize);
 
 			if (index == 0)
+			{
 				NextClusterExpand();
+			}
 
-			dirty = true;
+			isDirty = true;
 			data[index] = value;
 			position++;
 
 			if (position > length)
+			{
 				length = position;
+			}
 		}
 	}
 }

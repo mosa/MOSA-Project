@@ -3,7 +3,7 @@
 using Mosa.Test.Collection.x86.xUnit;
 using System;
 
-namespace Mosa.TinyCPUSimulator.Debug
+namespace Mosa.Workspace.TinyCPUSimulator.Debug
 {
 	internal class Program
 	{
