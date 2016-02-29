@@ -34,7 +34,7 @@ namespace Mosa.DeviceSystem
 			/// <summary>
 			///
 			/// </summary>
-			SubVendorID = 4,
+			SubSystemVendorID = 4,
 
 			/// <summary>
 			///
@@ -80,12 +80,12 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		///
 		/// </summary>
-		protected ushort subVendorID;
+		protected ushort subSystemVendorID;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected ushort subDeviceID;
+		protected ushort subSystemID;
 
 		/// <summary>
 		///
@@ -138,13 +138,13 @@ namespace Mosa.DeviceSystem
 		/// Gets or sets the sub vendor ID.
 		/// </summary>
 		/// <value>The sub vendor ID.</value>
-		public ushort SubVendorID { get { return subVendorID; } set { subVendorID = value; fields = fields | Field.SubVendorID; } }
+		public ushort SubSystemVendorID { get { return subSystemVendorID; } set { subSystemVendorID = value; fields = fields | Field.SubSystemVendorID; } }
 
 		/// <summary>
 		/// Gets or sets the sub device ID.
 		/// </summary>
 		/// <value>The sub device ID.</value>
-		public ushort SubDeviceID { get { return subDeviceID; } set { subDeviceID = value; fields = fields | Field.SubSystemID; } }
+		public ushort SubSystemID { get { return subSystemID; } set { subSystemID = value; fields = fields | Field.SubSystemID; } }
 
 		/// <summary>
 		/// Gets or sets the revision ID.
@@ -170,35 +170,16 @@ namespace Mosa.DeviceSystem
 		/// <value>The sub class code.</value>
 		public byte SubClassCode { get { return subClassCode; } set { subClassCode = value; fields = fields | Field.SubClassCode; } }
 
-		/// <summary>
-		///
-		/// </summary>
-		protected const Field Priority1 = Field.VendorID | Field.DeviceID | Field.SubVendorID | Field.SubSystemID | Field.RevisionID;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected const Field Priority2 = Field.VendorID | Field.DeviceID | Field.SubVendorID | Field.SubSystemID;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected const Field Priority3 = Field.VendorID | Field.DeviceID | Field.RevisionID;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected const Field Priority4 = Field.VendorID | Field.DeviceID;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected const Field Priority5 = Field.ClassCode | Field.SubClassCode | Field.ProgIF;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected const Field Priority6 = Field.ClassCode | Field.SubClassCode;
+		protected const Field Priority1 = Field.VendorID | Field.DeviceID | Field.ClassCode | Field.SubClassCode | Field.ProgIF | Field.RevisionID;
+		protected const Field Priority2 = Field.VendorID | Field.DeviceID | Field.ClassCode | Field.SubClassCode | Field.ProgIF;
+		protected const Field Priority3 = Field.VendorID | Field.DeviceID | Field.SubSystemVendorID | Field.SubSystemID | Field.RevisionID;
+		protected const Field Priority4 = Field.VendorID | Field.DeviceID | Field.SubSystemVendorID | Field.SubSystemID;
+		protected const Field Priority5 = Field.VendorID | Field.DeviceID | Field.RevisionID;
+		protected const Field Priority6 = Field.VendorID | Field.DeviceID;
+		protected const Field Priority7 = Field.ClassCode | Field.SubClassCode | Field.ProgIF | Field.RevisionID;
+		protected const Field Priority8 = Field.ClassCode | Field.SubClassCode | Field.ProgIF;
+		protected const Field Priority9 = Field.ClassCode | Field.SubClassCode | Field.RevisionID;
+		protected const Field Priority10 = Field.ClassCode | Field.SubClassCode;
 
 		/// <summary>
 		/// Gets the priority.
@@ -208,23 +189,50 @@ namespace Mosa.DeviceSystem
 		{
 			get
 			{
-				//MOSA will use the following PCI binding order:
-				//1. Bus + Vendor ID + Device ID + Sub. Vendor ID + SubSystem ID + Revision ID
-				//2. Bus + Vendor ID + Device ID + Sub. Vendor ID + SubSystem ID
-				//3. Bus + Vendor ID + Device ID + Revision ID
-				//4. Bus + Vendor ID + Device ID
-				//5. Bus + Class Code + Sub. Class + Prog Interface
-				//6. Bus + Class Code + Sub. Class
-
 				if ((fields & Priority1) == Priority1) return 1;
 				if ((fields & Priority2) == Priority2) return 2;
 				if ((fields & Priority3) == Priority3) return 3;
 				if ((fields & Priority4) == Priority4) return 4;
 				if ((fields & Priority5) == Priority5) return 5;
 				if ((fields & Priority6) == Priority6) return 6;
+				if ((fields & Priority7) == Priority7) return 7;
+				if ((fields & Priority8) == Priority8) return 8;
+
 				return 0; // no binding
 			}
 		}
+
+		//static protected Field[] BindingPriority = new Field[]
+		//{
+		//	Field.VendorID | Field.DeviceID | Field.ClassCode | Field.SubClassCode | Field.ProgIF | Field.RevisionID,
+		//	Field.VendorID | Field.DeviceID | Field.SubSystemVendorID | Field.SubSystemID | Field.RevisionID,
+		//	Field.VendorID | Field.DeviceID | Field.SubSystemVendorID | Field.SubSystemID,
+		//	Field.VendorID | Field.DeviceID | Field.RevisionID,
+		//	Field.VendorID | Field.DeviceID,
+		//	Field.ClassCode | Field.SubClassCode | Field.ProgIF | Field.RevisionID,
+		//	Field.ClassCode | Field.SubClassCode | Field.ProgIF,
+		//	Field.ClassCode | Field.SubClassCode | Field.RevisionID,
+		//	Field.ClassCode | Field.SubClassCode,
+		//};
+
+		///// <summary>
+		///// Gets the priority.
+		///// </summary>
+		///// <value>The priority.</value>
+		//public int Priority
+		//{
+		//	get
+		//	{
+		//		for (int i = 0; i < BindingPriority.Length; i++)
+		//		{
+		//			var bindingpriority = BindingPriority[i];
+
+		//			if ((fields & bindingpriority) == bindingpriority) return i + 1;
+		//		}
+
+		//		return 0; // no binding
+		//	}
+		//}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PCIDeviceDriverAttribute"/> class.
@@ -248,9 +256,9 @@ namespace Mosa.DeviceSystem
 				return false;
 			if (((fields & Field.DeviceID) == Field.DeviceID) && (pciDevice.DeviceID != DeviceID))
 				return false;
-			if (((fields & Field.SubVendorID) == Field.SubVendorID) && (pciDevice.SubVendorID != SubVendorID))
+			if (((fields & Field.SubSystemVendorID) == Field.SubSystemVendorID) && (pciDevice.SubVendorID != SubSystemVendorID))
 				return false;
-			if (((fields & Field.SubSystemID) == Field.SubSystemID) && (pciDevice.SubSystemID != SubDeviceID))
+			if (((fields & Field.SubSystemID) == Field.SubSystemID) && (pciDevice.SubSystemID != SubSystemID))
 				return false;
 			if (((fields & Field.RevisionID) == Field.RevisionID) && (pciDevice.RevisionID != RevisionID))
 				return false;

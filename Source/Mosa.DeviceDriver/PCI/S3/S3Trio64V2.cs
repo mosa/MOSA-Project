@@ -2,7 +2,7 @@
 
 using Mosa.DeviceSystem;
 
-namespace Mosa.DeviceDriver.PCI.VideoCard
+namespace Mosa.DeviceDriver.PCI.S3
 {
 	/// <summary>
 	/// S3 Trio64 V2 Graphics Device Driver

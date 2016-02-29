@@ -112,13 +112,19 @@
     <Compile Include="ISA\VGAText.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PCI\NetworkCard\AMDPCNetII.cs" />
-    <Compile Include="PCI\IntelQuarkSoC\GPIOController.cs" />
+    <Compile Include="PCI\Intel\Intel82540EM.cs" />
+    <Compile Include="PCI\Intel\Intel82541EI.cs" />
+    <Compile Include="PCI\Intel\IntelPIIX4.cs" />
+    <Compile Include="PCI\Intel\IntelPIIX3.cs" />
+    <Compile Include="PCI\Intel\Intel440FX.cs" />
+    <Compile Include="PCI\Intel\QuarkSoC\IntelHSUART.cs" />
+    <Compile Include="PCI\AMD\AMDPCNetII.cs" />
+    <Compile Include="PCI\Intel\QuarkSoC\IntelGPIOController.cs" />
     <Compile Include="PCI\VideoCard\GenericVGA.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PCI\VideoCard\S3Trio64V2.cs" />
-    <Compile Include="PCI\VideoCard\VMwareSVGAII.cs">
+    <Compile Include="PCI\S3\S3Trio64V2.cs" />
+    <Compile Include="PCI\VMware\VMwareSVGAII.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ScanCodeMap\US.cs">

@@ -10,7 +10,7 @@ using Mosa.DeviceSystem;
  *
  */
 
-namespace Mosa.DeviceDriver.PCI.VideoCard
+namespace Mosa.DeviceDriver.PCI.VMware
 {
 	/// <summary>
 	/// VMware SVGA II Device Driver
