@@ -39,7 +39,7 @@ namespace Mosa.DeviceSystem
 			/// <summary>
 			///
 			/// </summary>
-			SubDeviceID = 8,
+			SubSystemID = 8,
 
 			/// <summary>
 			///
@@ -144,7 +144,7 @@ namespace Mosa.DeviceSystem
 		/// Gets or sets the sub device ID.
 		/// </summary>
 		/// <value>The sub device ID.</value>
-		public ushort SubDeviceID { get { return subDeviceID; } set { subDeviceID = value; fields = fields | Field.SubDeviceID; } }
+		public ushort SubDeviceID { get { return subDeviceID; } set { subDeviceID = value; fields = fields | Field.SubSystemID; } }
 
 		/// <summary>
 		/// Gets or sets the revision ID.
@@ -173,12 +173,12 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		///
 		/// </summary>
-		protected const Field Priority1 = Field.VendorID | Field.DeviceID | Field.SubVendorID | Field.SubDeviceID | Field.RevisionID;
+		protected const Field Priority1 = Field.VendorID | Field.DeviceID | Field.SubVendorID | Field.SubSystemID | Field.RevisionID;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected const Field Priority2 = Field.VendorID | Field.DeviceID | Field.SubVendorID | Field.SubDeviceID;
+		protected const Field Priority2 = Field.VendorID | Field.DeviceID | Field.SubVendorID | Field.SubSystemID;
 
 		/// <summary>
 		///
@@ -250,7 +250,7 @@ namespace Mosa.DeviceSystem
 				return false;
 			if (((fields & Field.SubVendorID) == Field.SubVendorID) && (pciDevice.SubVendorID != SubVendorID))
 				return false;
-			if (((fields & Field.SubDeviceID) == Field.SubDeviceID) && (pciDevice.SubDeviceID != SubDeviceID))
+			if (((fields & Field.SubSystemID) == Field.SubSystemID) && (pciDevice.SubSystemID != SubDeviceID))
 				return false;
 			if (((fields & Field.RevisionID) == Field.RevisionID) && (pciDevice.RevisionID != RevisionID))
 				return false;
