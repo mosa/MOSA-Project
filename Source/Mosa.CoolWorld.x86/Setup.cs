@@ -199,7 +199,7 @@ namespace Mosa.CoolWorld.x86
 			{
 				var pciDevice = device as IPCIDevice;
 
-				Boot.Console.WriteLine(device.Name + ": " + pciDevice.VendorID.ToString("x") + "." + pciDevice.DeviceID.ToString("x") + "." + pciDevice.Function.ToString("x") + "-" + pciDevice.ClassCode.ToString("x") + "." + pciDevice.SubClassCode.ToString("x") + "." + pciDevice.ProgIF.ToString("x") + "." + pciDevice.RevisionID.ToString("x"));
+				Boot.Console.WriteLine(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubVendorID.ToString("x"));
 
 				StartDevice(pciDevice);
 			}
