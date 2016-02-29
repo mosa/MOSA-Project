@@ -9,6 +9,47 @@ namespace Mosa.DeviceSystem.PCI
 	{
 		#region PCICommand
 
+		internal struct PCIOffset
+		{
+			internal const int VendorID = 0x00;
+			internal const int DeviceID = 0x02;
+			internal const int CommandRegister = 0x04;
+			internal const int StatusRegister = 0x06;
+			internal const int RevisionID = 0x08;
+			internal const int ProgrammingInterface = 0x09;
+			internal const int SubClassCode = 0x0A;
+			internal const int ClassCode = 0x0B;
+			internal const int CacheLineSize = 0xC;
+			internal const int LatencyTimer = 0xD;
+			internal const int HeaderType = 0xE;
+			internal const int BIST = 0xF;
+			internal const int BaseAddressRegister1 = 0x10;
+			internal const int BaseAddressRegister2 = 0x14;
+			internal const int CardbusCISPointer = 0x28;
+			internal const int SubSystemVendorID = 0x2C;
+			internal const int SubSystemID = 0x2E;
+			internal const int ExpansionROMBaseAddress = 0x30;
+			internal const int CapabilitiesPointer = 0x34;
+			internal const int InterruptLineRegister = 0x3C;
+			internal const int InterruptPinRegister = 0x3D;
+			internal const int MIN_GNT = 0x3E;
+			internal const int MAX_LAT = 0x3F;
+
+			//internal const int CapabilityID = 0x80;
+			//internal const int NextCapabilityPointer = 0x81;
+			//internal const int PowerManagementCapabilities = 0x82;
+			//internal const int PowerManagementControlStatusRegister = 0x84;
+			//internal const int BridgeSupportExtension = 0x86;
+			//internal const int PowerManagementDataRegister = 0x87;
+			//internal const int CapabilityID = 0xA0;
+			//internal const int NextCapabilityPointer = 0xA1;
+			//internal const int MessageControl = 0xA2;
+			//internal const int MessageAddress = 0xA4;
+			//internal const int MessageData = 0xA8;
+			//internal const int MaskBitsforMSI = 0xAC;
+			//internal const int PendingBitsforMSI = 0xB0;
+		}
+
 		internal struct PCICommand
 		{
 			internal const ushort IO = 0x1; // Enable response in I/O space
@@ -64,55 +105,55 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the vendor ID.
 		/// </summary>
 		/// <value>The vendor ID.</value>
-		public ushort VendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, 0x00); } }
+		public ushort VendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIOffset.VendorID); } }
 
 		/// <summary>
 		/// Gets the device ID.
 		/// </summary>
 		/// <value>The device ID.</value>
-		public ushort DeviceID { get { return pciController.ReadConfig16(Bus, Slot, Function, 0x02); } }
+		public ushort DeviceID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIOffset.DeviceID); } }
 
 		/// <summary>
 		/// Gets the revision ID.
 		/// </summary>
 		/// <value>The revision ID.</value>
-		public byte RevisionID { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x08); } }
+		public byte RevisionID { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.RevisionID); } }
 
 		/// <summary>
 		/// Gets the class code.
 		/// </summary>
 		/// <value>The class code.</value>
-		public byte ClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x0A); } }
+		public byte ClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.ClassCode); } } // previous 0x0A (SubClassCode)
 
 		/// <summary>
 		/// Gets the prog IF.
 		/// </summary>
 		/// <value>The prog IF.</value>
-		public byte ProgIF { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x0B); } }
+		public byte ProgIF { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.ProgrammingInterface); } } // previous 0x0B (ClassCode)
 
 		/// <summary>
 		/// Gets the sub class code.
 		/// </summary>
 		/// <value>The sub class code.</value>
-		public byte SubClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x09); } }
+		public byte SubClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.SubClassCode); } } // previous 0x09 (ProgrammingInterface)
 
 		/// <summary>
 		/// Gets the sub vendor ID.
 		/// </summary>
 		/// <value>The sub vendor ID.</value>
-		public ushort SubVendorID { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x0C); } }
+		public ushort SubVendorID { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.SubSystemVendorID); } } // preivous 0X0C (CacheLineSize)
 
 		/// <summary>
 		/// Gets the sub device ID.
 		/// </summary>
 		/// <value>The sub device ID.</value>
-		public ushort SubDeviceID { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x0E); } }
+		public ushort SubSystemID { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.SubSystemID); } } // preivous 0x0E (HeaderType)
 
 		/// <summary>
 		/// Gets the IRQ.
 		/// </summary>
 		/// <value>The IRQ.</value>
-		public byte IRQ { get { return pciController.ReadConfig8(Bus, Slot, Function, 0x3c); } }
+		public byte IRQ { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.InterruptLineRegister); } }
 
 		/// <summary>
 		/// Gets or sets the status register.
@@ -120,8 +161,8 @@ namespace Mosa.DeviceSystem.PCI
 		/// <value>The status.</value>
 		public ushort StatusRegister
 		{
-			get { return pciController.ReadConfig16(Bus, Slot, Function, 0x06); }
-			set { pciController.WriteConfig16(Bus, Slot, Function, 0x06, value); }
+			get { return pciController.ReadConfig16(Bus, Slot, Function, PCIOffset.StatusRegister); }
+			set { pciController.WriteConfig16(Bus, Slot, Function, PCIOffset.StatusRegister, value); }
 		}
 
 		/// <summary>
@@ -130,8 +171,8 @@ namespace Mosa.DeviceSystem.PCI
 		/// <value>The status.</value>
 		public ushort CommandRegister
 		{
-			get { return pciController.ReadConfig16(Bus, Slot, Function, 0x04); }
-			set { pciController.WriteConfig16(Bus, Slot, Function, 0x04, value); }
+			get { return pciController.ReadConfig16(Bus, Slot, Function, PCIOffset.CommandRegister); }
+			set { pciController.WriteConfig16(Bus, Slot, Function, PCIOffset.CommandRegister, value); }
 		}
 
 		/// <summary>
@@ -191,7 +232,7 @@ namespace Mosa.DeviceSystem.PCI
 				BaseAddresses[7] = new BaseAddress(AddressType.IO, 0x3B0, 0x0F, false);
 			}
 
-			foreach (BaseAddress baseAddress in BaseAddresses)
+			foreach (var baseAddress in BaseAddresses)
 			{
 				if (baseAddress != null)
 				{

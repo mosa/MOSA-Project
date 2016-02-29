@@ -1,9 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.TinyCPUSimulator;
 using Mosa.TinyCPUSimulator.x86;
 using Mosa.TinyCPUSimulator.x86.Emulate;
 
-namespace Mosa.TinyCPUSimulator.Debug
+namespace Mosa.Workspace.TinyCPUSimulator.Debug
 {
 	internal class TestCPUx86 : BaseSetup<CPUx86>
 	{

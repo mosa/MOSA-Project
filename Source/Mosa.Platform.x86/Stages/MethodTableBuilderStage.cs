@@ -72,14 +72,14 @@ namespace Mosa.Platform.x86.Stages
 			foreach (var entry in table)
 			{
 				// 1. Store address (the linker writes the actual entry)
-				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodtable, (int)stream.Position, 0, entry.Name, SectionKind.Text, 0);
+				Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, methodtable, (int)stream.Position, 0, entry.Name, SectionKind.Text, 0);
 				stream.Position += TypeLayout.NativePointerSize;
 
 				// 2. Store the length (its copied in by the next loop)
 				stream.Write(entry.Size, Endianness.Little);
 
 				// 3. Store the pointer to the method description table (the linker writes the actual entry)
-				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, methodtable, (int)stream.Position, 0, entry.Name + "$mdtable", SectionKind.ROData, 0);
+				Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, methodtable, (int)stream.Position, 0, entry.Name + "$mdtable", SectionKind.ROData, 0);
 				stream.Position += TypeLayout.NativePointerSize;
 			}
 
@@ -102,7 +102,7 @@ namespace Mosa.Platform.x86.Stages
 
 				// Pointer to Exception Handler Table
 				// TODO: If there is no exception clause table, set to 0 and do not involve linker
-				Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, section, 0, 0, method.FullName + "$etable", SectionKind.ROData, 0);
+				Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, section, 0, 0, method.FullName + "$etable", SectionKind.ROData, 0);
 				stream.Position += TypeLayout.NativePointerSize;
 
 				// GC tracking info (not implemented yet)

@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Linker.Elf
 	/// <summary>
 	///
 	/// </summary>
-	public class SectionHeader
+	public class SectionHeaderEntry
 	{
 		/// <summary>
 		/// This member holds a section header's size in bytes. A section header is one entry
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Linker.Elf
 		/// space in the file, and its Offset member locates
 		/// the conceptual placement in the file.
 		/// </summary>
-		public long Offset;
+		public ulong Offset;
 
 		/// <summary>
 		///
@@ -59,13 +59,13 @@ namespace Mosa.Compiler.Linker.Elf
 		/// This member holds a section header table index link, whose interpretation
 		/// depends on the section type.
 		/// </summary>
-		public uint Link;
+		public int Link;
 
 		/// <summary>
 		/// This member holds extra information, whose interpretation depends on the
 		/// section type.
 		/// </summary>
-		public uint Info;
+		public int Info;
 
 		/// <summary>
 		/// Some sections have alignment constraints. For example, if a section
@@ -84,9 +84,9 @@ namespace Mosa.Compiler.Linker.Elf
 		/// </summary>
 		public ulong EntrySize;
 
-		public static int GetEntrySize(ElfType elfType)
+		public static uint GetEntrySize(LinkerFormatType elfType)
 		{
-			if (elfType == ElfType.Elf32)
+			if (elfType == LinkerFormatType.Elf32)
 				return EntrySize32;
 			else // if (elfType == ElfType.Elf64)
 				return EntrySize64;
@@ -97,9 +97,9 @@ namespace Mosa.Compiler.Linker.Elf
 		/// </summary>
 		/// <param name="elfType">Type of the elf.</param>
 		/// <param name="writer">The writer.</param>
-		public void Write(ElfType elfType, BinaryWriter writer)
+		public void Write(LinkerFormatType elfType, BinaryWriter writer)
 		{
-			if (elfType == ElfType.Elf32)
+			if (elfType == LinkerFormatType.Elf32)
 				Write32(writer);
 			else // if (elfType == ElfType.Elf64)
 				Write64(writer);
@@ -139,25 +139,6 @@ namespace Mosa.Compiler.Linker.Elf
 			writer.Write(Info);
 			writer.Write(AddressAlignment);
 			writer.Write(EntrySize);
-		}
-
-		/// <summary>
-		/// Reads the section header
-		/// </summary>
-		/// <param name="reader">The reader.</param>
-		public void Read32(BinaryReader reader)
-		{
-			Address = reader.ReadUInt16();
-			Name = reader.ReadUInt32();
-			Type = (SectionType)reader.ReadUInt16();
-			Flags = (SectionAttribute)reader.ReadUInt16();
-			Address = reader.ReadUInt32();
-			Offset = reader.ReadUInt32();
-			Size = reader.ReadUInt32();
-			Link = reader.ReadUInt32();
-			Info = reader.ReadUInt32();
-			AddressAlignment = reader.ReadUInt32();
-			EntrySize = reader.ReadUInt32();
 		}
 	}
 }

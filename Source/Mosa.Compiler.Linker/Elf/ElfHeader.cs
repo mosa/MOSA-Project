@@ -84,16 +84,16 @@ namespace Mosa.Compiler.Linker.Elf
 		/// holds the value  SHN_UNDEF. See "Sections" and "String Table" below for more
 		/// information.
 		/// </summary>
-		public ushort SectionHeaderStringIndex;
+		public int SectionHeaderStringIndex;
 
 		/// <summary>
 		///
 		/// </summary>
 		public static readonly byte[] MagicNumber = new byte[] { 0x7F, (byte)'E', (byte)'L', (byte)'F' };
 
-		public static int GetEntrySize(ElfType elfType)
+		public static int GetEntrySize(LinkerFormatType elfType)
 		{
-			if (elfType == ElfType.Elf32)
+			if (elfType == LinkerFormatType.Elf32)
 				return ElfHeaderSize32;
 			else // if (elfType == ElfType.Elf64)
 				return ElfHeaderSize64;
@@ -104,9 +104,9 @@ namespace Mosa.Compiler.Linker.Elf
 		/// </summary>
 		/// <param name="elfType">Type of the elf.</param>
 		/// <param name="writer">The writer.</param>
-		public void Write(ElfType elfType, EndianAwareBinaryWriter writer)
+		public void Write(LinkerFormatType elfType, EndianAwareBinaryWriter writer)
 		{
-			if (elfType == ElfType.Elf32)
+			if (elfType == LinkerFormatType.Elf32)
 				Write32(writer);
 			else // if (elfType == ElfType.Elf64)
 				Write64(writer);
@@ -130,9 +130,9 @@ namespace Mosa.Compiler.Linker.Elf
 			writer.Write(ElfHeaderSize32);            // ehsize
 			writer.Write(ProgramHeader.EntrySize32);   // phentsize
 			writer.Write(ProgramHeaderNumber);      // phnum
-			writer.Write(SectionHeader.EntrySize32);   // shentsize
-			writer.Write(SectionHeaderNumber);      // shnum
-			writer.Write(SectionHeaderStringIndex); // shstrndx
+			writer.Write(SectionHeaderEntry.EntrySize32);   // shentsize
+			writer.Write((ushort)SectionHeaderNumber);      // shnum
+			writer.Write((ushort)SectionHeaderStringIndex); // shstrndx
 		}
 
 		/// <summary>
@@ -153,9 +153,9 @@ namespace Mosa.Compiler.Linker.Elf
 			writer.Write(ElfHeaderSize64);            // ehsize
 			writer.Write(ProgramHeader.EntrySize64);   // phentsize
 			writer.Write(ProgramHeaderNumber);      // phnum
-			writer.Write(SectionHeader.EntrySize64);   // shentsize
-			writer.Write(SectionHeaderNumber);      // shnum
-			writer.Write(SectionHeaderStringIndex); // shstrndx
+			writer.Write(SectionHeaderEntry.EntrySize64);   // shentsize
+			writer.Write((ushort)SectionHeaderNumber);      // shnum
+			writer.Write((ushort)SectionHeaderStringIndex); // shstrndx
 		}
 
 		/// <summary>

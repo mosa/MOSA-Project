@@ -121,12 +121,9 @@ namespace Mosa.Compiler.Framework
 		public Func<IBlockOrderAnalysis> BlockOrderAnalysisFactory { get; set; }
 
 		/// <summary>
-		/// Gets or sets the linker factory.
+		/// Gets or sets the type of the elf.
 		/// </summary>
-		/// <value>
-		/// The linker factory.
-		/// </value>
-		public Func<BaseLinker> LinkerFactory { get; set; }
+		public LinkerFormatType LinkerFormatType { get; set; }
 
 		/// <summary>
 		/// Gets or sets the compiler stage responsible for booting.

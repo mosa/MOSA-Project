@@ -56,7 +56,6 @@
       <Name>Mosa.Utility.BootImage</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>

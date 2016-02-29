@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using System.IO;
 using System.Collections.Generic;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -71,30 +71,17 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
-		public void ApplyPatch(long offset, ulong value, ulong mask, byte patchSize, Endianness endianness)
+		public void ApplyPatch(long offset, ulong value, byte patchSize, Endianness endianness)
 		{
 			Stream.Position = offset;
-
-			ulong current = 0;
-
-			switch (patchSize)
-			{
-				case 8: current = (ulong)Stream.ReadByte(); break;
-				case 16: current = Stream.ReadUInt16(endianness); break;
-				case 32: current = Stream.ReadUInt32(endianness); break;
-				case 64: current = Stream.ReadUInt64(endianness); break;
-			}
-
-			Stream.Position = offset;
-			current = (current & ~mask) | value;
 
 			// Apply the patch
 			switch (patchSize)
 			{
-				case 8: Stream.WriteByte((byte)current); break;
-				case 16: Stream.Write((ushort)current, endianness); break;
-				case 32: Stream.Write((uint)current, endianness); break;
-				case 64: Stream.Write(current, endianness); break;
+				case 8: Stream.WriteByte((byte)value); break;
+				case 16: Stream.Write((ushort)value, endianness); break;
+				case 32: Stream.Write((uint)value, endianness); break;
+				case 64: Stream.Write(value, endianness); break;
 			}
 		}
 

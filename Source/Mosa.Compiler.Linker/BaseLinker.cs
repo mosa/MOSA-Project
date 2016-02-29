@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Linker.Elf;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,31 +12,37 @@ namespace Mosa.Compiler.Linker
 	/// <summary>
 	///
 	/// </summary>
-	public abstract class BaseLinker
+	public class BaseLinker
 	{
-		public LinkerSection[] Sections { get; private set; }
+		public LinkerSection[] LinkerSections { get; private set; }
 
 		public LinkerSymbol EntryPoint { get; set; }
 
 		public Endianness Endianness { get; protected set; }
 
-		public uint MachineID { get; private set; }
+		public MachineType MachineType { get; private set; }
 
 		public ulong BaseAddress { get; private set; }
 
-		public uint SectionAlignment { get; protected set; }
+		public uint SectionAlignment { get; set; }
 
 		public uint BaseFileOffset { get; set; }
 
 		public bool EmitSymbols { get; set; }
 
+		public LinkerFormatType LinkerFormatType { get; private set; }
+
+		private readonly ElfLinker elfLinker;
+
 		private object mylock = new object();
+
+		private static SectionKind[] SectionList = new[] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
 
 		public IEnumerable<LinkerSymbol> Symbols
 		{
 			get
 			{
-				foreach (var section in Sections)
+				foreach (var section in LinkerSections)
 				{
 					if (section == null)
 						continue;
@@ -48,25 +55,19 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
-		protected BaseLinker()
+		public BaseLinker(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitSymbols, LinkerFormatType linkerFormatType)
 		{
-			Sections = new LinkerSection[4];
-			BaseFileOffset = 0;
-			SectionAlignment = 0x1000; // default 1K
+			LinkerSections = new LinkerSection[4];
 
-			// defaults
-			BaseAddress = 0x00400000;
-			Endianness = Common.Endianness.Little;
-			MachineID = 0;
-			EmitSymbols = true;
-		}
-
-		public virtual void Initialize(ulong baseAddress, Endianness endianness, ushort machineID, bool emitSymbols)
-		{
 			BaseAddress = baseAddress;
 			Endianness = endianness;
-			MachineID = machineID;
+			MachineType = machineType;
 			EmitSymbols = emitSymbols;
+
+			elfLinker = new ElfLinker(this, LinkerFormatType);
+
+			BaseFileOffset = elfLinker.BaseFileOffset;
+			SectionAlignment = elfLinker.SectionAlignment;
 
 			AddSection(new LinkerSection(SectionKind.Text, SectionAlignment));
 			AddSection(new LinkerSection(SectionKind.Data, SectionAlignment));
@@ -74,9 +75,16 @@ namespace Mosa.Compiler.Linker
 			AddSection(new LinkerSection(SectionKind.BSS, SectionAlignment));
 		}
 
+		public void Emit(Stream stream)
+		{
+			FinalizeLayout();
+
+			elfLinker.Emit(stream);
+		}
+
 		private void AddSection(LinkerSection section)
 		{
-			Sections[(int)section.SectionKind] = section;
+			LinkerSections[(int)section.SectionKind] = section;
 		}
 
 		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, int relativeBase, LinkerSymbol referenceSymbol, int referenceOffset)
@@ -89,17 +97,24 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, string patchSymbol, SectionKind patchKind, int patchOffset, int relativeBase, string referenceSymbol, SectionKind referenceKind, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, string patchSymbolName, SectionKind patchKind, int patchOffset, int relativeBase, string referenceSymbolName, SectionKind referenceKind, int referenceOffset)
 		{
-			var referenceObject = GetSymbol(referenceSymbol, referenceKind);
-			var patchObject = GetSymbol(patchSymbol, patchKind);
+			var referenceSymbol = GetSymbol(referenceSymbolName, referenceKind);
+			var patchObject = GetSymbol(patchSymbolName, patchKind);
 
-			Link(linkType, patchType, patchObject, patchOffset, relativeBase, referenceObject, referenceOffset);
+			Link(linkType, patchType, patchObject, patchOffset, relativeBase, referenceSymbol, referenceOffset);
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, int relativeBase, string referenceSymbol, SectionKind patchRelativeBase, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, string patchSymbolName, SectionKind patchKind, int patchOffset, int relativeBase, LinkerSymbol referenceSymbol, int referenceOffset)
 		{
-			var referenceObject = GetSymbol(referenceSymbol, patchRelativeBase);
+			var patchObject = GetSymbol(patchSymbolName, patchKind);
+
+			Link(linkType, patchType, patchObject, patchOffset, relativeBase, referenceSymbol, referenceOffset);
+		}
+
+		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, int relativeBase, string referenceSymbolName, SectionKind referenceKind, int referenceOffset)
+		{
+			var referenceObject = GetSymbol(referenceSymbolName, referenceKind);
 
 			Link(linkType, patchType, patchSymbol, patchOffset, relativeBase, referenceObject, referenceOffset);
 		}
@@ -109,13 +124,11 @@ namespace Mosa.Compiler.Linker
 			return CreateSymbol(name, kind, 0);
 		}
 
-		private static SectionKind[] SectionList = new[] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
-
 		public LinkerSymbol FindSymbol(string name)
 		{
 			foreach (var kind in SectionList)
 			{
-				var section = Sections[(int)kind];
+				var section = LinkerSections[(int)kind];
 
 				Debug.Assert(section != null);
 
@@ -132,7 +145,7 @@ namespace Mosa.Compiler.Linker
 		{
 			lock (mylock)
 			{
-				var section = Sections[(int)kind];
+				var section = LinkerSections[(int)kind];
 
 				Debug.Assert(section != null);
 
@@ -179,7 +192,7 @@ namespace Mosa.Compiler.Linker
 			ulong virtualAddress = BaseAddress;
 			uint fileOffset = BaseFileOffset;
 
-			foreach (var section in Sections)
+			foreach (var section in LinkerSections)
 			{
 				section.ResolveLayout(fileOffset, virtualAddress);
 
@@ -188,15 +201,6 @@ namespace Mosa.Compiler.Linker
 				virtualAddress = section.VirtualAddress + size;
 				fileOffset = fileOffset + size;
 			}
-		}
-
-		protected abstract void EmitImplementation(Stream stream);
-
-		public void Emit(Stream stream)
-		{
-			FinalizeLayout();
-
-			EmitImplementation(stream);
 		}
 
 		private void ApplyPatches()
@@ -212,11 +216,6 @@ namespace Mosa.Compiler.Linker
 
 				symbol.PostHash = symbol.ComputeMD5Hash();
 			}
-		}
-
-		protected LinkerSection GetSection(SectionKind kind)
-		{
-			return Sections[(int)kind];
 		}
 
 		private void ApplyPatch(LinkRequest linkRequest)
@@ -245,18 +244,27 @@ namespace Mosa.Compiler.Linker
 
 				targetAddress = targetAddress + (ulong)linkRequest.RelativeBase;
 
-				value = Patch.GetResult(linkRequest.PatchType.Patches, targetAddress);
+				//value = Patch.GetResult(linkRequest.PatchType.Patches, targetAddress);
+				value = targetAddress;
 			}
-
-			ulong mask = Patch.GetFinalMask(linkRequest.PatchType.Patches);
 
 			linkRequest.PatchSymbol.ApplyPatch(
 				linkRequest.PatchOffset,
 				value,
-				mask,
-				linkRequest.PatchType.Size,
+				GetPatchTypeSize(linkRequest.PatchType),
 				Endianness
 			);
+		}
+
+		private static byte GetPatchTypeSize(PatchType patchType)
+		{
+			switch (patchType)
+			{
+				case PatchType.I4: return 32;
+				case PatchType.I8: return 64;
+				default:
+					throw new CompilerException("unknown patch type: " + patchType.ToString());
+			}
 		}
 
 		#region Cache Methods

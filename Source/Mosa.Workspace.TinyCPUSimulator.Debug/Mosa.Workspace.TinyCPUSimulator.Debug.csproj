@@ -7,8 +7,8 @@
     <ProjectGuid>{72057219-525C-45E8-AF69-6C2A7F5BEC08}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.TinyCPUSimulator.Debug</RootNamespace>
-    <AssemblyName>Mosa.TinyCPUSimulator.Debug</AssemblyName>
+    <RootNamespace>Mosa.Workspace.TinyCPUSimulator.Debug</RootNamespace>
+    <AssemblyName>Mosa.Workspace.TinyCPUSimulator.Debug</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -36,7 +36,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Mosa.TinyCPUSimulator.Debug.Program</StartupObject>
+    <StartupObject>Mosa.Workspace.TinyCPUSimulator.Debug.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

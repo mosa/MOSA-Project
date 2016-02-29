@@ -1,9 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.Common;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (typeDefinitionSymbol != null)
 			{
-				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, BuiltInPatch.I4, symbolName, 0, 0, typeDefinitionSymbol, SectionKind.ROData, 0);
+				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, symbolName, 0, 0, typeDefinitionSymbol, SectionKind.ROData, 0);
 			}
 
 			Operand staticAddress = Operand.CreateManagedSymbol(assignmentField.FieldType, symbolName.Name);

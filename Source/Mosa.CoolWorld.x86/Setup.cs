@@ -3,8 +3,8 @@
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
-using System.Collections.Generic;
 using Mosa.FileSystem.FAT;
+using System.Collections.Generic;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -157,14 +157,21 @@ namespace Mosa.CoolWorld.x86
 
 						var fatFileStream = new FatFileStream(fat, location);
 
-						//Boot.Console.WriteLine("Length: " + fatFileStream.Length.ToString());
+						uint len = (uint)fatFileStream.Length;
 
-						//Boot.Console.WriteLine("Reading File:");
+						Boot.Console.WriteLine("Length: " + len.ToString());
 
-						//for (int i = fatFileStream.ReadByte(); i > 0; i++)
-						//{
-						//	Boot.Console.Write((char)i);
-						//}
+						Boot.Console.WriteLine("Reading File:");
+
+						for (;;)
+						{
+							int i = fatFileStream.ReadByte();
+
+							if (i < 0)
+								break;
+
+							Boot.Console.Write((char)i);
+						}
 					}
 				}
 			}
@@ -192,7 +199,7 @@ namespace Mosa.CoolWorld.x86
 			{
 				var pciDevice = device as IPCIDevice;
 
-				Boot.Console.WriteLine(device.Name + ": " + pciDevice.VendorID.ToString("x") + "." + pciDevice.DeviceID.ToString("x") + "." + pciDevice.Function.ToString("x") + "." + pciDevice.ClassCode.ToString("x"));
+				Boot.Console.WriteLine(device.Name + ": " + pciDevice.VendorID.ToString("x") + "." + pciDevice.DeviceID.ToString("x") + "." + pciDevice.Function.ToString("x") + "-" + pciDevice.ClassCode.ToString("x") + "." + pciDevice.SubClassCode.ToString("x") + "." + pciDevice.ProgIF.ToString("x") + "." + pciDevice.RevisionID.ToString("x"));
 
 				StartDevice(pciDevice);
 			}

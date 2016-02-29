@@ -3,7 +3,7 @@
 using Mosa.Test.Collection.x86.xUnit;
 using System;
 
-namespace Mosa.TinyCPUSimulator.Debug
+namespace Mosa.Workspace.TinyCPUSimulator.Debug
 {
 	internal class Program
 	{
@@ -13,7 +13,7 @@ namespace Mosa.TinyCPUSimulator.Debug
 		{
 			var fixture = new ArrayFixture();
 
-			fixture.TestCompiler.DebugOutput = true;
+			fixture.TestCompiler.DebugOutput = false;
 
 			fixture.TestCompiler.Compiler.CompilerOptions.EnableInlinedMethods = true;
 			DoTest(fixture.BoundsCheck, "normal-all");

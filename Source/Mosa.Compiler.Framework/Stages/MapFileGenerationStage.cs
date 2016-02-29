@@ -3,8 +3,6 @@
 using Mosa.Compiler.Linker;
 using System;
 using System.IO;
-using System.Diagnostics;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -42,7 +40,7 @@ namespace Mosa.Compiler.Framework.Stages
 				writer.WriteLine();
 				writer.WriteLine("Timestamp is {0}", DateTime.Now);
 				writer.WriteLine();
-				writer.WriteLine("Preferred load address is {0:x16}", Linker.BaseAddress);
+				writer.WriteLine("Preferred load address is {0:x16}", (object)Linker.BaseAddress);
 				writer.WriteLine();
 
 				// Emit the sections
@@ -65,7 +63,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void EmitSections(BaseLinker linker)
 		{
 			writer.WriteLine("Offset           Virtual          Length           Name                             Class");
-			foreach (var section in linker.Sections)
+			foreach (var section in linker.LinkerSections)
 			{
 				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.FileOffset, section.VirtualAddress, section.Size, section.Name.PadRight(32), section.SectionKind);
 			}
@@ -79,7 +77,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			writer.WriteLine("Virtual          Offset           Length           Symbol");
 
-			foreach (var section in linker.Sections)
+			foreach (var section in linker.LinkerSections)
 			{
 				foreach (var symbol in section.Symbols)
 				{
@@ -103,7 +101,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var symbols = linker.Symbols.OrderBy(symbol => symbol.Name);
 
-			foreach (var symbol in symbols)
+			foreach (var symbol in linker.Symbols)
 			{
 				if (symbol.SectionKind == SectionKind.Text)
 				{

@@ -3,7 +3,6 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Linker.Elf;
 using Mosa.Compiler.Trace.BuiltIn;
 using Mosa.Utility.Aot;
 using NDesk.Options;
@@ -141,10 +140,7 @@ namespace Mosa.Tool.Compiler
 				"Select the format of the binary file to create [{ELF32|ELF64}].",
 				delegate (string format)
 				{
-					compiler.CompilerOptions.LinkerFactory = GetLinkerFactory(format);
-
-					if (compiler.CompilerOptions.LinkerFactory == null)
-						throw new OptionException("Invalid value Linker format: " + format, "format");
+					compiler.CompilerOptions.LinkerFormatType = GetLinkerFactory(format);
 				}
 			);
 
@@ -270,12 +266,6 @@ namespace Mosa.Tool.Compiler
 					Console.WriteLine();
 				}
 
-				// Check for missing options
-				if (compiler.CompilerOptions.LinkerFactory == null)
-				{
-					throw new OptionException("No binary format specified.", "format");
-				}
-
 				if (string.IsNullOrEmpty(compiler.CompilerOptions.OutputFile))
 				{
 					throw new OptionException("No output file specified.", "o");
@@ -324,7 +314,7 @@ namespace Mosa.Tool.Compiler
 			sb.Append(" > Output file: ").AppendLine(compiler.CompilerOptions.OutputFile);
 			sb.Append(" > Input file(s): ").AppendLine(string.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append(" > Architecture: ").AppendLine(compiler.CompilerOptions.Architecture.GetType().FullName);
-			sb.Append(" > Binary format: ").AppendLine(compiler.CompilerOptions.LinkerFactory().GetType().FullName);
+			sb.Append(" > Binary format: ").AppendLine(compiler.CompilerOptions.LinkerFormatType.ToString());
 			sb.Append(" > Boot format: ").AppendLine((compiler.CompilerOptions.BootStageFactory == null) ? "None" : compiler.CompilerOptions.BootStageFactory().Name);
 			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
@@ -414,14 +404,14 @@ namespace Mosa.Tool.Compiler
 			}
 		}
 
-		private static Func<BaseLinker> GetLinkerFactory(string format)
+		private static LinkerFormatType GetLinkerFactory(string format)
 		{
 			switch (format.ToLower())
 			{
-				case "elf": return delegate { return new Elf32(); };
-				case "elf32": return delegate { return new Elf32(); };
-				case "elf64": return delegate { return new Elf64(); };
-				default: return null;
+				case "elf": return LinkerFormatType.Elf32;
+				case "elf32": return LinkerFormatType.Elf32;
+				case "elf64": return LinkerFormatType.Elf64;
+				default: return LinkerFormatType.Elf32;
 			}
 		}
 

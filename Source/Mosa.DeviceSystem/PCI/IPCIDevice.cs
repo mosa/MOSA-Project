@@ -71,7 +71,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the sub device ID.
 		/// </summary>
 		/// <value>The sub device ID.</value>
-		ushort SubDeviceID { get; }
+		ushort SubSystemID { get; }
 
 		/// <summary>
 		/// Gets the IRQ.

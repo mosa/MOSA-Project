@@ -56,6 +56,12 @@ namespace Mosa.Compiler.Common
 				Write((byte)0);
 		}
 
+		public void WriteZeroBytes(uint size)
+		{
+			for (uint i = 0; i < size; i++)
+				Write((byte)0);
+		}
+
 		public long Position { get { return BaseStream.Position; } set { BaseStream.Position = value; } }
 	}
 }

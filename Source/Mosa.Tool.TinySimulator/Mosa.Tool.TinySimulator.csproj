@@ -64,8 +64,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdParty\dnlib.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDisasm, Version=1.0.2.0, Culture=neutral, PublicKeyToken=71afd155bcebae3e, processorArchitecture=MSIL">
-      <HintPath>..\packages\SharpDisasm.1.0.2\lib\net45\SharpDisasm.dll</HintPath>
+    <Reference Include="SharpDisasm, Version=1.1.5.0, Culture=neutral, PublicKeyToken=71afd155bcebae3e, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDisasm.1.1.5\lib\net45\SharpDisasm.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -109,6 +109,7 @@
     <Compile Include="DisassemblyView.designer.cs">
       <DependentUpon>DisassemblyView.cs</DependentUpon>
     </Compile>
+    <Compile Include="SimAssemblyCode.cs" />
     <Compile Include="Watch.cs" />
     <Compile Include="WatchView.cs">
       <SubType>Form</SubType>
