@@ -1,12 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
+using Mosa.Utility.BootImage;
 using Mosa.Utility.Launcher;
 using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using Mosa.Utility.BootImage;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Tool.Launcher
 {
@@ -65,8 +65,8 @@ namespace Mosa.Tool.Launcher
 			Options.VBEVideo = cbVBEVideo.Checked;
 
 			Options.BaseAddress = tbBaseAddress.Text.ParseHexOrDecimal();
-			Options.EmitSymbols = cbRelocationTable.Checked;
-			Options.EmitRelocations = cbEmitSymbolTable.Checked;
+			Options.EmitSymbols = cbEmitSymbolTable.Checked;
+			Options.EmitRelocations = cbRelocationTable.Checked;
 			Options.Emitx86IRQMethods = cbEmitx86IRQMethods.Checked;
 
 			if (Options.VBEVideo)
@@ -172,8 +172,8 @@ namespace Mosa.Tool.Launcher
 			cbVBEVideo.Checked = Options.VBEVideo;
 
 			tbBaseAddress.Text = "0x" + Options.BaseAddress.ToString("x8");
-			cbRelocationTable.Checked = Options.EmitSymbols;
-			cbEmitSymbolTable.Checked = Options.EmitRelocations;
+			cbRelocationTable.Checked = Options.EmitRelocations;
+			cbEmitSymbolTable.Checked = Options.EmitSymbols;
 			cbEmitx86IRQMethods.Checked = Options.Emitx86IRQMethods;
 
 			tbMode.Text = Options.Width + "x" + Options.Height + "x" + Options.Depth;

@@ -79,6 +79,8 @@
 			this.cbEnableIROptimizations = new System.Windows.Forms.CheckBox();
 			this.cbEnableSSA = new System.Windows.Forms.CheckBox();
 			this.tabAdvanced = new System.Windows.Forms.TabPage();
+			this.groupBox14 = new System.Windows.Forms.GroupBox();
+			this.cbEmitx86IRQMethods = new System.Windows.Forms.CheckBox();
 			this.groupBox13 = new System.Windows.Forms.GroupBox();
 			this.label9 = new System.Windows.Forms.Label();
 			this.tbBaseAddress = new System.Windows.Forms.TextBox();
@@ -109,8 +111,6 @@
 			this.tabCounters = new System.Windows.Forms.TabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.groupBox14 = new System.Windows.Forms.GroupBox();
-			this.cbEmitx86IRQMethods = new System.Windows.Forms.CheckBox();
 			this.tbApplicationLocations.SuspendLayout();
 			this.tabOptions.SuspendLayout();
 			this.groupBox12.SuspendLayout();
@@ -123,6 +123,7 @@
 			this.groupBox3.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.tabAdvanced.SuspendLayout();
+			this.groupBox14.SuspendLayout();
 			this.groupBox13.SuspendLayout();
 			this.tabApplicationLocations.SuspendLayout();
 			this.groupBox11.SuspendLayout();
@@ -132,7 +133,6 @@
 			this.groupBox7.SuspendLayout();
 			this.tabOutput.SuspendLayout();
 			this.tabCounters.SuspendLayout();
-			this.groupBox14.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -734,6 +734,30 @@
 			this.tabAdvanced.Text = "Advanced Options";
 			this.tabAdvanced.UseVisualStyleBackColor = true;
 			// 
+			// groupBox14
+			// 
+			this.groupBox14.Controls.Add(this.cbEmitx86IRQMethods);
+			this.groupBox14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox14.Location = new System.Drawing.Point(248, 18);
+			this.groupBox14.Name = "groupBox14";
+			this.groupBox14.Size = new System.Drawing.Size(206, 124);
+			this.groupBox14.TabIndex = 43;
+			this.groupBox14.TabStop = false;
+			this.groupBox14.Text = "Other:";
+			// 
+			// cbEmitx86IRQMethods
+			// 
+			this.cbEmitx86IRQMethods.AutoSize = true;
+			this.cbEmitx86IRQMethods.Checked = true;
+			this.cbEmitx86IRQMethods.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEmitx86IRQMethods.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbEmitx86IRQMethods.Location = new System.Drawing.Point(6, 28);
+			this.cbEmitx86IRQMethods.Name = "cbEmitx86IRQMethods";
+			this.cbEmitx86IRQMethods.Size = new System.Drawing.Size(182, 17);
+			this.cbEmitx86IRQMethods.TabIndex = 6;
+			this.cbEmitx86IRQMethods.Text = "Emit x86 Interrupt Table Methods";
+			this.cbEmitx86IRQMethods.UseVisualStyleBackColor = true;
+			// 
 			// groupBox13
 			// 
 			this.groupBox13.Controls.Add(this.label9);
@@ -773,7 +797,6 @@
 			this.cbRelocationTable.AutoSize = true;
 			this.cbRelocationTable.Checked = true;
 			this.cbRelocationTable.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbRelocationTable.Enabled = false;
 			this.cbRelocationTable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbRelocationTable.Location = new System.Drawing.Point(6, 51);
 			this.cbRelocationTable.Name = "cbRelocationTable";
@@ -1075,30 +1098,6 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
-			// groupBox14
-			// 
-			this.groupBox14.Controls.Add(this.cbEmitx86IRQMethods);
-			this.groupBox14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox14.Location = new System.Drawing.Point(248, 18);
-			this.groupBox14.Name = "groupBox14";
-			this.groupBox14.Size = new System.Drawing.Size(206, 124);
-			this.groupBox14.TabIndex = 43;
-			this.groupBox14.TabStop = false;
-			this.groupBox14.Text = "Other:";
-			// 
-			// cbEmitx86InterruptTableMethods
-			// 
-			this.cbEmitx86IRQMethods.AutoSize = true;
-			this.cbEmitx86IRQMethods.Checked = true;
-			this.cbEmitx86IRQMethods.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbEmitx86IRQMethods.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbEmitx86IRQMethods.Location = new System.Drawing.Point(6, 28);
-			this.cbEmitx86IRQMethods.Name = "cbEmitx86InterruptTableMethods";
-			this.cbEmitx86IRQMethods.Size = new System.Drawing.Size(182, 17);
-			this.cbEmitx86IRQMethods.TabIndex = 6;
-			this.cbEmitx86IRQMethods.Text = "Emit x86 Interrupt Table Methods";
-			this.cbEmitx86IRQMethods.UseVisualStyleBackColor = true;
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1133,6 +1132,8 @@
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.tabAdvanced.ResumeLayout(false);
+			this.groupBox14.ResumeLayout(false);
+			this.groupBox14.PerformLayout();
 			this.groupBox13.ResumeLayout(false);
 			this.groupBox13.PerformLayout();
 			this.tabApplicationLocations.ResumeLayout(false);
@@ -1148,8 +1149,6 @@
 			this.groupBox7.PerformLayout();
 			this.tabOutput.ResumeLayout(false);
 			this.tabCounters.ResumeLayout(false);
-			this.groupBox14.ResumeLayout(false);
-			this.groupBox14.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
