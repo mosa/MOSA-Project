@@ -44,7 +44,7 @@ namespace Mosa.DeviceSystem
 		public DeviceDriver FindDriver(IPCIDevice pciDevice)
 		{
 			DeviceDriver bestDeviceDriver = null;
-			int bestPriority = System.Int32.MaxValue;
+			int bestPriority = int.MaxValue;
 
 			foreach (var deviceDriver in deviceDrivers)
 			{
@@ -195,9 +195,9 @@ namespace Mosa.DeviceSystem
 					else if (arg.MemberName == "VendorID")
 						attribute.VendorID = (ushort)arg.TypedValue.Value;
 					else if (arg.MemberName == "SubVendorID")
-						attribute.SubVendorID = (ushort)arg.TypedValue.Value;
+						attribute.SubSystemVendorID = (ushort)arg.TypedValue.Value;
 					else if (arg.MemberName == "SubDeviceID")
-						attribute.SubDeviceID = (ushort)arg.TypedValue.Value;
+						attribute.SubSystemID = (ushort)arg.TypedValue.Value;
 					else if (arg.MemberName == "RevisionID")
 						attribute.RevisionID = (byte)arg.TypedValue.Value;
 					else if (arg.MemberName == "ProgIF")

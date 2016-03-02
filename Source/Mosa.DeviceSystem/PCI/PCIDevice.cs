@@ -123,31 +123,31 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the class code.
 		/// </summary>
 		/// <value>The class code.</value>
-		public byte ClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.ClassCode); } } // previous 0x0A (SubClassCode)
+		public byte ClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.ClassCode); } }
 
 		/// <summary>
 		/// Gets the prog IF.
 		/// </summary>
 		/// <value>The prog IF.</value>
-		public byte ProgIF { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.ProgrammingInterface); } } // previous 0x0B (ClassCode)
+		public byte ProgIF { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.ProgrammingInterface); } }
 
 		/// <summary>
 		/// Gets the sub class code.
 		/// </summary>
 		/// <value>The sub class code.</value>
-		public byte SubClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.SubClassCode); } } // previous 0x09 (ProgrammingInterface)
+		public byte SubClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.SubClassCode); } }
 
 		/// <summary>
 		/// Gets the sub vendor ID.
 		/// </summary>
 		/// <value>The sub vendor ID.</value>
-		public ushort SubVendorID { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.SubSystemVendorID); } } // preivous 0X0C (CacheLineSize)
+		public ushort SubVendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIOffset.SubSystemVendorID); } }
 
 		/// <summary>
 		/// Gets the sub device ID.
 		/// </summary>
 		/// <value>The sub device ID.</value>
-		public ushort SubSystemID { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.SubSystemID); } } // preivous 0x0E (HeaderType)
+		public ushort SubSystemID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIOffset.SubSystemID); } }
 
 		/// <summary>
 		/// Gets the IRQ.
