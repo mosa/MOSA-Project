@@ -146,27 +146,27 @@ namespace Mosa.DeviceDriver.ISA
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "VGAText";
+			this.HardwareResources = hardwareResources;
+			base.Name = "VGAText";
 
-			miscellaneousOutput = base.hardwareResources.GetIOPort(0, 0x1C);
-			crtControllerIndex = base.hardwareResources.GetIOPort(0, 0x04);
-			crtControllerData = base.hardwareResources.GetIOPort(0, 0x05);
-			crtControllerIndexColor = base.hardwareResources.GetIOPort(0, 0x24);
-			crtControllerDataColor = base.hardwareResources.GetIOPort(0, 0x25);
+			miscellaneousOutput = base.HardwareResources.GetIOPort(0, 0x1C);
+			crtControllerIndex = base.HardwareResources.GetIOPort(0, 0x04);
+			crtControllerData = base.HardwareResources.GetIOPort(0, 0x05);
+			crtControllerIndexColor = base.HardwareResources.GetIOPort(0, 0x24);
+			crtControllerDataColor = base.HardwareResources.GetIOPort(0, 0x25);
 
-			miscellaneousOutputWrite = base.hardwareResources.GetIOPort(0, 0x12);
-			sequencerAddress = base.hardwareResources.GetIOPort(0, 0x14);
-			sequencerData = base.hardwareResources.GetIOPort(0, 0x15);
-			graphicsControllerAddress = base.hardwareResources.GetIOPort(0, 0x1E);
-			graphicsControllerData = base.hardwareResources.GetIOPort(0, 0x1F);
-			inputStatus1ReadB = base.hardwareResources.GetIOPort(0, 0x2A);
-			attributeAddress = base.hardwareResources.GetIOPort(0, 0x10);
-			attributeData = base.hardwareResources.GetIOPort(0, 0x11);
+			miscellaneousOutputWrite = base.HardwareResources.GetIOPort(0, 0x12);
+			sequencerAddress = base.HardwareResources.GetIOPort(0, 0x14);
+			sequencerData = base.HardwareResources.GetIOPort(0, 0x15);
+			graphicsControllerAddress = base.HardwareResources.GetIOPort(0, 0x1E);
+			graphicsControllerData = base.HardwareResources.GetIOPort(0, 0x1F);
+			inputStatus1ReadB = base.HardwareResources.GetIOPort(0, 0x2A);
+			attributeAddress = base.HardwareResources.GetIOPort(0, 0x10);
+			attributeData = base.HardwareResources.GetIOPort(0, 0x11);
 
-			memory = base.hardwareResources.GetMemory(0);
+			memory = base.HardwareResources.GetMemory(0);
 
 			return true;
 		}
@@ -202,7 +202,7 @@ namespace Mosa.DeviceDriver.ISA
 			width++;
 			height = 25;
 
-			base.deviceStatus = DeviceStatus.Online;
+			base.DeviceStatus = DeviceStatus.Online;
 			return DeviceDriverStartStatus.Started;
 		}
 

@@ -81,6 +81,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CHS.cs" />
+    <Compile Include="IMemory.cs" />
     <Compile Include="NetworkDevicePacketBuffer.cs" />
     <Compile Include="INetworkDevice.cs" />
     <Compile Include="DeviceDriverPhysicalMemoryAttribute.cs" />
@@ -176,15 +177,6 @@
     <Compile Include="IHardwareDevice.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IHardwareResources.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IInterruptHandler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IIOPortRegion.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IIOPorts.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -192,12 +184,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IKeyboardDevice.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IMemory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IMemoryRegion.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InterruptHandler.cs">
@@ -222,9 +208,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IPixelPaletteGraphicsDevice.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IResourceManager.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IScanCodeMap.cs">

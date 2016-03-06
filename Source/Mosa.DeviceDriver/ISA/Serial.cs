@@ -384,29 +384,29 @@ namespace Mosa.DeviceDriver.ISA
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "COM_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			this.HardwareResources = hardwareResources;
+			base.Name = "COM_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
 
-			rbrBase = base.hardwareResources.GetIOPort(0, 0); // Receive Buffer Register (read only)
-			thrBase = base.hardwareResources.GetIOPort(0, 0); // Transmitter Holding Register (write only)
-			ierBase = base.hardwareResources.GetIOPort(0, 1); // Interrupt Enable Register
-			dllBase = base.hardwareResources.GetIOPort(0, 0); // Divisor Latch (LSB and MSB)
-			dlmBase = base.hardwareResources.GetIOPort(0, 1);
-			iirBase = base.hardwareResources.GetIOPort(0, 2); // Interrupt Identification Register (read only)
-			fcrBase = base.hardwareResources.GetIOPort(0, 2); // FIFO Control Register (write only, 16550+ only)
-			lcrBase = base.hardwareResources.GetIOPort(0, 3); // Line Control Register
-			mcrBase = base.hardwareResources.GetIOPort(0, 4); // Modem Control Register
-			lsrBase = base.hardwareResources.GetIOPort(0, 5); // Line Status Register
-			msrBase = base.hardwareResources.GetIOPort(0, 6); // Modem Status Register
-			scrBase = base.hardwareResources.GetIOPort(0, 7); // Scratch Register (16450+ and some 8250s, special use with some boards)
+			rbrBase = base.HardwareResources.GetIOPort(0, 0); // Receive Buffer Register (read only)
+			thrBase = base.HardwareResources.GetIOPort(0, 0); // Transmitter Holding Register (write only)
+			ierBase = base.HardwareResources.GetIOPort(0, 1); // Interrupt Enable Register
+			dllBase = base.HardwareResources.GetIOPort(0, 0); // Divisor Latch (LSB and MSB)
+			dlmBase = base.HardwareResources.GetIOPort(0, 1);
+			iirBase = base.HardwareResources.GetIOPort(0, 2); // Interrupt Identification Register (read only)
+			fcrBase = base.HardwareResources.GetIOPort(0, 2); // FIFO Control Register (write only, 16550+ only)
+			lcrBase = base.HardwareResources.GetIOPort(0, 3); // Line Control Register
+			mcrBase = base.HardwareResources.GetIOPort(0, 4); // Modem Control Register
+			lsrBase = base.HardwareResources.GetIOPort(0, 5); // Line Status Register
+			msrBase = base.HardwareResources.GetIOPort(0, 6); // Modem Status Register
+			scrBase = base.HardwareResources.GetIOPort(0, 7); // Scratch Register (16450+ and some 8250s, special use with some boards)
 
 			fifoBuffer = new byte[fifoSize];
 			fifoStart = 0;
 			fifoEnd = 0;
 
-			base.deviceStatus = DeviceStatus.Online;
+			base.DeviceStatus = DeviceStatus.Online;
 			return true;
 		}
 

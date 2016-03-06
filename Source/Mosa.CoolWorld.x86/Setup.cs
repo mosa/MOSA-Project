@@ -15,27 +15,24 @@ namespace Mosa.CoolWorld.x86
 	{
 		static private DeviceDriverRegistry deviceDriverRegistry;
 		static private IDeviceManager deviceManager;
-		static private IResourceManager resourceManager;
+		static private ResourceManager resourceManager;
 		static private PCIControllerManager pciControllerManager;
 		static private PartitionManager partitionManager;
 
 		/// <summary>
 		/// Gets the device driver library
 		/// </summary>
-		/// <value>The device driver library.</value>
 		static public DeviceDriverRegistry DeviceDriverRegistry { get { return deviceDriverRegistry; } }
 
 		/// <summary>
 		/// Gets the device manager.
 		/// </summary>
-		/// <value>The device manager.</value>
 		static public IDeviceManager DeviceManager { get { return deviceManager; } }
 
 		/// <summary>
 		/// Gets the resource manager.
 		/// </summary>
-		/// <value>The resource manager.</value>
-		static public IResourceManager ResourceManager { get { return resourceManager; } }
+		static public ResourceManager ResourceManager { get { return resourceManager; } }
 
 		/// <summary>
 		/// Gets the PCI Controller Manager
@@ -65,16 +62,16 @@ namespace Mosa.CoolWorld.x86
 			// Create the PCI Controller Manager
 			pciControllerManager = new PCIControllerManager(deviceManager);
 
-			partitionManager = new PartitionManager(deviceManager);
-
 			// Setup hardware abstraction interface
-			var hardwareAbstraction = new Mosa.CoolWorld.x86.HAL.HardwareAbstraction();
+			var hardware = new Mosa.CoolWorld.x86.HAL.Hardware();
 
 			// Set device driver system to the hardware HAL
-			Mosa.DeviceSystem.HAL.SetHardwareAbstraction(hardwareAbstraction);
+			Mosa.DeviceSystem.HAL.SetHardwareAbstraction(hardware);
 
 			// Set the interrupt handler
 			Mosa.DeviceSystem.HAL.SetInterruptHandler(ResourceManager.InterruptManager.ProcessInterrupt);
+
+			partitionManager = new PartitionManager(deviceManager);
 		}
 
 		/// <summary>
@@ -221,22 +218,27 @@ namespace Mosa.CoolWorld.x86
 
 			var hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType);
 
-			StartDevice(pciDevice, deviceDriver, hardwareDevice as IHardwareDevice);
+			if (hardwareDevice == null)
+			{
+				Mosa.Kernel.x86.Panic.Error("ERROR: hardwareDevice == null");
+				return;
+			}
 
-			//if (pciDevice.VendorID == 0x15AD && pciDevice.DeviceID == 0x0405)
-			//{
-			//	var display = hardwareDevice as IPixelGraphicsDevice;
+			var iHardwareDevice = hardwareDevice as IHardwareDevice;
 
-			//	var color = new Color(255, 0, 0);
+			if (iHardwareDevice == null)
+			{
+				Mosa.Kernel.x86.Panic.Error("ERROR: iHardwareDevice == null");
+				return;
+			}
 
-			//	display.WritePixel(color, 100, 100);
-			//}
+			StartDevice(pciDevice, deviceDriver, iHardwareDevice);
 		}
 
 		private static void StartDevice(IPCIDevice pciDevice, Mosa.DeviceSystem.DeviceDriver deviceDriver, IHardwareDevice hardwareDevice)
 		{
-			var ioPortRegions = new LinkedList<IIOPortRegion>();
-			var memoryRegions = new LinkedList<IMemoryRegion>();
+			var ioPortRegions = new LinkedList<IOPortRegion>();
+			var memoryRegions = new LinkedList<MemoryRegion>();
 
 			foreach (var pciBaseAddress in pciDevice.BaseAddresses)
 			{
@@ -252,16 +254,23 @@ namespace Mosa.CoolWorld.x86
 			{
 				if (memoryAttribute.MemorySize > 0)
 				{
-					var memory = Mosa.DeviceSystem.HAL.AllocateMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
+					var memory = DeviceSystem.HAL.AllocateMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
 					memoryRegions.AddLast(new MemoryRegion(memory.Address, memory.Size));
 				}
 			}
 
-			var hardwareResources = new HardwareResources(resourceManager, ioPortRegions.ToArray(), memoryRegions.ToArray(), new InterruptHandler(resourceManager.InterruptManager, pciDevice.IRQ, hardwareDevice), pciDevice as IDeviceResource);
+			var hardwareResources = new HardwareResources(
+				resourceManager,
+				ioPortRegions.ToArray(),
+				memoryRegions.ToArray(),
+				new InterruptHandler(resourceManager.InterruptManager, pciDevice.IRQ, hardwareDevice),
+				pciDevice as IDeviceResource
+			);
 
 			if (resourceManager.ClaimResources(hardwareResources))
 			{
 				hardwareResources.EnableIRQ();
+
 				hardwareDevice.Setup(hardwareResources);
 
 				if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
@@ -297,7 +306,7 @@ namespace Mosa.CoolWorld.x86
 		{
 			var driverAtttribute = deviceDriver.Attribute as ISADeviceDriverAttribute;
 
-			// Don't load the VGAText and PIC drivers
+			// TEMP: Don't load the VGAText and PIC drivers
 			if (driverAtttribute.BasePort == 0x03B0 || driverAtttribute.BasePort == 0x20)
 				return;
 
@@ -305,25 +314,36 @@ namespace Mosa.CoolWorld.x86
 			{
 				var hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
 
-				var ioPortRegions = new LinkedList<IIOPortRegion>();
-				var memoryRegions = new LinkedList<IMemoryRegion>();
+				var ioPortRegions = new LinkedList<IOPortRegion>();
+				var memoryRegions = new LinkedList<MemoryRegion>();
 
 				ioPortRegions.AddLast(new IOPortRegion(driverAtttribute.BasePort, driverAtttribute.PortRange));
 
 				if (driverAtttribute.AltBasePort != 0x00)
+				{
 					ioPortRegions.AddLast(new IOPortRegion(driverAtttribute.AltBasePort, driverAtttribute.AltPortRange));
+				}
 
 				if (driverAtttribute.BaseAddress != 0x00)
+				{
 					memoryRegions.AddLast(new MemoryRegion(driverAtttribute.BaseAddress, driverAtttribute.AddressRange));
+				}
 
 				foreach (var memoryAttribute in deviceDriver.MemoryAttributes)
+				{
 					if (memoryAttribute.MemorySize > 0)
 					{
-						IMemory memory = Mosa.DeviceSystem.HAL.AllocateMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
+						var memory = Mosa.DeviceSystem.HAL.AllocateMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
 						memoryRegions.AddLast(new MemoryRegion(memory.Address, memory.Size));
 					}
+				}
 
-				var hardwareResources = new HardwareResources(resourceManager, ioPortRegions.ToArray(), memoryRegions.ToArray(), new InterruptHandler(resourceManager.InterruptManager, driverAtttribute.IRQ, hardwareDevice));
+				var hardwareResources = new HardwareResources(
+					resourceManager,
+					ioPortRegions.ToArray(),
+					memoryRegions.ToArray(),
+					new InterruptHandler(resourceManager.InterruptManager, driverAtttribute.IRQ, hardwareDevice)
+				);
 
 				hardwareDevice.Setup(hardwareResources);
 

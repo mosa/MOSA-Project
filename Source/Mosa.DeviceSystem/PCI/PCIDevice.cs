@@ -192,9 +192,9 @@ namespace Mosa.DeviceSystem.PCI
 		/// <param name="fun">The fun.</param>
 		public PCIDevice(IPCIController pciController, byte bus, byte slot, byte fun)
 		{
-			base.parent = pciController as Device;
-			base.name = base.parent.Name + "/" + bus.ToString() + "." + slot.ToString() + "." + fun.ToString();
-			base.deviceStatus = DeviceStatus.Available;
+			base.Parent = pciController as Device;
+			base.Name = base.Parent.Name + "/" + bus.ToString() + "." + slot.ToString() + "." + fun.ToString();
+			base.DeviceStatus = DeviceStatus.Available;
 
 			this.pciController = pciController;
 			Bus = bus;
@@ -266,7 +266,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		public void SetNoDriverFound()
 		{
-			deviceStatus = DeviceStatus.NotFound;
+			DeviceStatus = DeviceStatus.NotFound;
 		}
 
 		/// <summary>
@@ -274,7 +274,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		public void SetDeviceOnline()
 		{
-			deviceStatus = DeviceStatus.Online;
+			DeviceStatus = DeviceStatus.Online;
 		}
 	}
 }

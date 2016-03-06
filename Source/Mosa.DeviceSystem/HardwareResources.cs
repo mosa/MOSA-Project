@@ -7,32 +7,32 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	///
 	/// </summary>
-	public class HardwareResources : IHardwareResources
+	public sealed class HardwareResources
 	{
 		/// <summary>
 		///
 		/// </summary>
-		protected IResourceManager resourceManager;
+		private ResourceManager resourceManager;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IIOPortRegion[] ioPortRegions;
+		private IOPortRegion[] ioPortRegions;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemoryRegion[] memoryRegions;
+		private MemoryRegion[] memoryRegions;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IInterruptHandler interruptHandler;
+		private InterruptHandler interruptHandler;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IDeviceResource deviceResource;
+		private IDeviceResource deviceResource;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HardwareResources"/> class.
@@ -41,7 +41,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="ioPortRegions">The io port regions.</param>
 		/// <param name="memoryRegions">The memory regions.</param>
 		/// <param name="interruptHandler">The interrupt handler.</param>
-		public HardwareResources(IResourceManager resourceManager, IIOPortRegion[] ioPortRegions, IMemoryRegion[] memoryRegions, IInterruptHandler interruptHandler)
+		public HardwareResources(ResourceManager resourceManager, IOPortRegion[] ioPortRegions, MemoryRegion[] memoryRegions, InterruptHandler interruptHandler)
 		{
 			this.resourceManager = resourceManager;
 			this.ioPortRegions = ioPortRegions;
@@ -57,7 +57,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="memoryRegions">The memory regions.</param>
 		/// <param name="interruptHandler">The interrupt handler.</param>
 		/// <param name="deviceResource">The device resource.</param>
-		public HardwareResources(IResourceManager resourceManager, IIOPortRegion[] ioPortRegions, IMemoryRegion[] memoryRegions, IInterruptHandler interruptHandler, IDeviceResource deviceResource)
+		public HardwareResources(ResourceManager resourceManager, IOPortRegion[] ioPortRegions, MemoryRegion[] memoryRegions, InterruptHandler interruptHandler, IDeviceResource deviceResource)
 		{
 			this.resourceManager = resourceManager;
 			this.ioPortRegions = ioPortRegions;
@@ -71,7 +71,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public IIOPortRegion GetIOPortRegion(byte index)
+		public IOPortRegion GetIOPortRegion(byte index)
 		{
 			return ioPortRegions[index];
 		}
@@ -81,7 +81,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public IMemoryRegion GetMemoryRegion(byte index)
+		public MemoryRegion GetMemoryRegion(byte index)
 		{
 			return memoryRegions[index];
 		}

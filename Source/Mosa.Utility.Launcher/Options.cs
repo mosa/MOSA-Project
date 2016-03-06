@@ -89,8 +89,8 @@ namespace Mosa.Utility.Launcher
 			Height = 480;
 			Depth = 32;
 			BaseAddress = 0x00400000;
-			EmitRelocations = true;
-			EmitSymbols = true;
+			EmitRelocations = false;
+			EmitSymbols = false;
 			Emitx86IRQMethods = true;
 		}
 

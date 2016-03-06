@@ -32,7 +32,9 @@ namespace Mosa.DeviceSystem
 			interruptHandlers = new LinkedList<IHardwareDevice>[MaxInterrupts];
 
 			for (int i = 0; i < MaxInterrupts; i++)
+			{
 				interruptHandlers[i] = new LinkedList<IHardwareDevice>();
+			}
 		}
 
 		/// <summary>
@@ -44,8 +46,11 @@ namespace Mosa.DeviceSystem
 			try
 			{
 				spinLock.Enter();
-				foreach (IHardwareDevice hardwareDevice in interruptHandlers[irq])
+
+				foreach (var hardwareDevice in interruptHandlers[irq])
+				{
 					hardwareDevice.OnInterrupt();
+				}
 			}
 			finally
 			{
@@ -60,6 +65,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="hardwareDevice">The hardware device.</param>
 		public void AddInterruptHandler(byte irq, IHardwareDevice hardwareDevice)
 		{
+			if (irq >= MaxInterrupts)
+				return;
+
 			try
 			{
 				spinLock.Enter();
@@ -78,6 +86,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="hardwareDevice">The hardware device.</param>
 		public void ReleaseInterruptHandler(byte irq, IHardwareDevice hardwareDevice)
 		{
+			if (irq >= MaxInterrupts)
+				return;
+
 			try
 			{
 				spinLock.Enter();

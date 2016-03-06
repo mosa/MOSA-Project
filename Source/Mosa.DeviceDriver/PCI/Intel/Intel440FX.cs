@@ -23,10 +23,10 @@ namespace Mosa.DeviceDriver.PCI.Intel
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "Intel440FX";
+			this.HardwareResources = hardwareResources;
+			base.Name = "Intel440FX";
 
 			return true;
 		}

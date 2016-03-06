@@ -42,13 +42,13 @@ namespace Mosa.DeviceDriver.ISA
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "PCI_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			this.HardwareResources = hardwareResources;
+			base.Name = "PCI_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
 
-			configAddress = base.hardwareResources.GetIOPort(0, 0);
-			configData = base.hardwareResources.GetIOPort(0, 4);
+			configAddress = base.HardwareResources.GetIOPort(0, 0);
+			configData = base.HardwareResources.GetIOPort(0, 4);
 
 			return true;
 		}
@@ -75,12 +75,12 @@ namespace Mosa.DeviceDriver.ISA
 		{
 			if (Probe())
 			{
-				base.deviceStatus = DeviceStatus.Online;
+				base.DeviceStatus = DeviceStatus.Online;
 				return DeviceDriverStartStatus.Started;
 			}
 			else
 			{
-				base.deviceStatus = DeviceStatus.NotFound;
+				base.DeviceStatus = DeviceStatus.NotFound;
 				return DeviceDriverStartStatus.NotFound;
 			}
 		}

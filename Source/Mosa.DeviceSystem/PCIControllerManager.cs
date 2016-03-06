@@ -45,23 +45,23 @@ namespace Mosa.DeviceSystem
 		public void CreatePCIDevices()
 		{
 			// Find PCI controller devices
-			LinkedList<IDevice> devices = deviceManager.GetDevices(new FindDevice.IsPCIController(), new FindDevice.IsOnline());
+			var devices = deviceManager.GetDevices(new FindDevice.IsPCIController(), new FindDevice.IsOnline());
+
+			if (devices.Count == 0)
+				return;
+
+			var pciController = devices.First.Value as IPCIController;
 
 			// For each controller
-			foreach (IDevice device in devices)
+			for (int bus = 0; bus < 255; bus++)
 			{
-				IPCIController pciController = device as IPCIController;
-
-				for (int bus = 0; bus < 255; bus++)
+				for (int slot = 0; slot < 16; slot++)
 				{
-					for (int slot = 0; slot < 16; slot++)
+					for (int fun = 0; fun < 7; fun++)
 					{
-						for (int fun = 0; fun < 7; fun++)
+						if (ProbeDevice(pciController, (byte)bus, (byte)slot, (byte)fun))
 						{
-							if (ProbeDevice(pciController, (byte)bus, (byte)slot, (byte)fun))
-							{
-								deviceManager.Add(new Mosa.DeviceSystem.PCI.PCIDevice(pciController, (byte)bus, (byte)slot, (byte)fun));
-							}
+							deviceManager.Add(new Mosa.DeviceSystem.PCI.PCIDevice(pciController, (byte)bus, (byte)slot, (byte)fun));
 						}
 					}
 				}

@@ -70,5 +70,11 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="message">The message.</param>
 		void DebugWriteLine(string message);
+
+		/// <summary>
+		/// Aborts with the specified message.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		void Abort(string message);
 	}
 }

@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	///
 	/// </summary>
-	public class InterruptHandler : IInterruptHandler
+	public class InterruptHandler
 	{
 		/// <summary>
 		///
@@ -36,6 +36,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="hardwareDevice">The hardware device.</param>
 		public InterruptHandler(InterruptManager interruptManager, byte irq, IHardwareDevice hardwareDevice)
 		{
+			if (hardwareDevice == null)
+				HAL.Abort("hardwareDevice == null");
+
 			this.interruptManager = interruptManager;
 			this.irq = irq;
 			this.hardwareDevice = hardwareDevice;
@@ -47,7 +50,9 @@ namespace Mosa.DeviceSystem
 		public void Enable()
 		{
 			if (irq != 0xFF)
+			{
 				interruptManager.AddInterruptHandler(irq, hardwareDevice);
+			}
 		}
 
 		/// <summary>
@@ -56,7 +61,9 @@ namespace Mosa.DeviceSystem
 		public void Disable()
 		{
 			if (irq != 0xFF)
+			{
 				interruptManager.ReleaseInterruptHandler(irq, hardwareDevice);
+			}
 		}
 	}
 }

@@ -83,16 +83,16 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		/// <param name="hardwareResources"></param>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "PIC_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			this.HardwareResources = hardwareResources;
+			base.Name = "PIC_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
 
-			masterCommandPort = base.hardwareResources.GetIOPort(0, 0);
-			masterDataPort = base.hardwareResources.GetIOPort(0, 1);
+			masterCommandPort = base.HardwareResources.GetIOPort(0, 0);
+			masterDataPort = base.HardwareResources.GetIOPort(0, 1);
 
-			slaveCommandPort = base.hardwareResources.GetIOPort(1, 0);
-			slaveDataPort = base.hardwareResources.GetIOPort(1, 1);
+			slaveCommandPort = base.HardwareResources.GetIOPort(1, 0);
+			slaveDataPort = base.HardwareResources.GetIOPort(1, 1);
 
 			return true;
 		}
@@ -140,7 +140,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			DisableIRQs();
 
-			base.deviceStatus = DeviceStatus.Online;
+			base.DeviceStatus = DeviceStatus.Online;
 			return DeviceDriverStartStatus.Started;
 		}
 

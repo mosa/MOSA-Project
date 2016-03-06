@@ -22,10 +22,10 @@ namespace Mosa.DeviceDriver.PCI.Intel.QuarkSoC
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "IntelGPIOController";
+			this.HardwareResources = hardwareResources;
+			base.Name = "IntelGPIOController";
 
 			return true;
 		}

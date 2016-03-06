@@ -58,13 +58,13 @@ namespace Mosa.DeviceDriver.ISA
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "PIT_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			this.HardwareResources = hardwareResources;
+			base.Name = "PIT_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
 
-			modeControlPort = base.hardwareResources.GetIOPort(0, 3);
-			counter0Divisor = base.hardwareResources.GetIOPort(0, 0);
+			modeControlPort = base.HardwareResources.GetIOPort(0, 3);
+			counter0Divisor = base.HardwareResources.GetIOPort(0, 0);
 
 			return true;
 		}
@@ -84,7 +84,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			tickCount = 0;
 
-			base.deviceStatus = DeviceStatus.Online;
+			base.DeviceStatus = DeviceStatus.Online;
 			return DeviceDriverStartStatus.Started;
 		}
 

@@ -192,33 +192,33 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "GenericVGA";
+			this.HardwareResources = hardwareResources;
+			base.Name = "GenericVGA";
 
-			byte portBar = (byte)(base.hardwareResources.IOPointRegionCount - 1);
+			byte portBar = (byte)(base.HardwareResources.IOPointRegionCount - 1);
 
-			miscellaneousOutputRead = base.hardwareResources.GetIOPort(portBar, 0x1C);
-			crtControllerIndex = base.hardwareResources.GetIOPort(portBar, 0x04);
-			crtControllerData = base.hardwareResources.GetIOPort(portBar, 0x05);
-			crtControllerIndexColor = base.hardwareResources.GetIOPort(portBar, 0x24);
-			crtControllerDataColor = base.hardwareResources.GetIOPort(portBar, 0x25);
-			dacPaletteMask = base.hardwareResources.GetIOPort(portBar, 0x16);
-			dacIndexRead = base.hardwareResources.GetIOPort(portBar, 0x17);
-			dacIndexWrite = base.hardwareResources.GetIOPort(portBar, 0x18);
-			dacData = base.hardwareResources.GetIOPort(portBar, 0x19);
-			inputStatus1 = base.hardwareResources.GetIOPort(portBar, 0x12);
-			miscellaneousOutputWrite = base.hardwareResources.GetIOPort(portBar, 0x12);
-			sequencerAddress = base.hardwareResources.GetIOPort(portBar, 0x14);
-			sequencerData = base.hardwareResources.GetIOPort(portBar, 0x15);
-			graphicsControllerAddress = base.hardwareResources.GetIOPort(portBar, 0x1E);
-			graphicsControllerData = base.hardwareResources.GetIOPort(portBar, 0x1F);
-			inputStatus1ReadB = base.hardwareResources.GetIOPort(portBar, 0x2A);
-			attributeAddress = base.hardwareResources.GetIOPort(portBar, 0x10);
-			attributeData = base.hardwareResources.GetIOPort(portBar, 0x11);
+			miscellaneousOutputRead = base.HardwareResources.GetIOPort(portBar, 0x1C);
+			crtControllerIndex = base.HardwareResources.GetIOPort(portBar, 0x04);
+			crtControllerData = base.HardwareResources.GetIOPort(portBar, 0x05);
+			crtControllerIndexColor = base.HardwareResources.GetIOPort(portBar, 0x24);
+			crtControllerDataColor = base.HardwareResources.GetIOPort(portBar, 0x25);
+			dacPaletteMask = base.HardwareResources.GetIOPort(portBar, 0x16);
+			dacIndexRead = base.HardwareResources.GetIOPort(portBar, 0x17);
+			dacIndexWrite = base.HardwareResources.GetIOPort(portBar, 0x18);
+			dacData = base.HardwareResources.GetIOPort(portBar, 0x19);
+			inputStatus1 = base.HardwareResources.GetIOPort(portBar, 0x12);
+			miscellaneousOutputWrite = base.HardwareResources.GetIOPort(portBar, 0x12);
+			sequencerAddress = base.HardwareResources.GetIOPort(portBar, 0x14);
+			sequencerData = base.HardwareResources.GetIOPort(portBar, 0x15);
+			graphicsControllerAddress = base.HardwareResources.GetIOPort(portBar, 0x1E);
+			graphicsControllerData = base.HardwareResources.GetIOPort(portBar, 0x1F);
+			inputStatus1ReadB = base.HardwareResources.GetIOPort(portBar, 0x2A);
+			attributeAddress = base.HardwareResources.GetIOPort(portBar, 0x10);
+			attributeData = base.HardwareResources.GetIOPort(portBar, 0x11);
 
-			memory = base.hardwareResources.GetMemory((byte)(base.hardwareResources.MemoryRegionCount - 1));
+			memory = base.HardwareResources.GetMemory((byte)(base.HardwareResources.MemoryRegionCount - 1));
 
 			return true;
 		}

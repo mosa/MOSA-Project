@@ -32,9 +32,9 @@ namespace Mosa.Workspace.FileSystem.Debug.Synthetic
 		/// <param name="blocks">The blocks.</param>
 		public RamDiskDevice(uint blocks)
 		{
-			base.name = "RamDiskDevice_" + ((blocks * 512) / (1024 * 1024)).ToString() + "Mb";
-			base.parent = null;
-			base.deviceStatus = DeviceStatus.Online;
+			base.Name = "RamDiskDevice_" + ((blocks * 512) / (1024 * 1024)).ToString() + "Mb";
+			base.Parent = null;
+			base.DeviceStatus = DeviceStatus.Online;
 			this.totalBlocks = blocks;
 			this.mem = new byte[blocks * 512];
 		}

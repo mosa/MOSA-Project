@@ -10,27 +10,23 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public class DeviceDriver
 	{
-		private IDeviceDriver deviceDriverAttribute;
-		private Type driverType;
-		private LinkedList<DeviceDriverPhysicalMemoryAttribute> memoryAttributes;
-
 		/// <summary>
 		/// Gets the signature attribute.
 		/// </summary>
 		/// <value>The signature attribute.</value>
-		public IDeviceDriver Attribute { get { return deviceDriverAttribute; } }
+		public IDeviceDriver Attribute { get; private set; }
 
 		/// <summary>
 		/// Gets the type of the driver.
 		/// </summary>
 		/// <value>The type of the driver.</value>
-		public Type DriverType { get { return driverType; } }
+		public Type DriverType { get; private set; }
 
 		/// <summary>
 		/// Gets the memory attributes.
 		/// </summary>
 		/// <value>The memory attributes.</value>
-		public LinkedList<DeviceDriverPhysicalMemoryAttribute> MemoryAttributes { get { return memoryAttributes; } }
+		public LinkedList<DeviceDriverPhysicalMemoryAttribute> MemoryAttributes { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeviceDriver"/> class.
@@ -39,9 +35,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="driverType">Type of the driver.</param>
 		public DeviceDriver(IDeviceDriver deviceDriverAttribute, Type driverType)
 		{
-			this.deviceDriverAttribute = deviceDriverAttribute;
-			this.driverType = driverType;
-			memoryAttributes = new LinkedList<DeviceDriverPhysicalMemoryAttribute>();
+			Attribute = deviceDriverAttribute;
+			DriverType = driverType;
+			MemoryAttributes = new LinkedList<DeviceDriverPhysicalMemoryAttribute>();
 		}
 
 		/// <summary>
@@ -50,7 +46,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="memoryAttribute">The memory attribute.</param>
 		public void Add(DeviceDriverPhysicalMemoryAttribute memoryAttribute)
 		{
-			memoryAttributes.AddLast(memoryAttribute);
+			MemoryAttributes.AddLast(memoryAttribute);
 		}
 	}
 }

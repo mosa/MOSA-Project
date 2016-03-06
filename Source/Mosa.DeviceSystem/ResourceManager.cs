@@ -5,63 +5,48 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	///
 	/// </summary>
-	public class ResourceManager : IResourceManager
+	public class ResourceManager
 	{
-		/// <summary>
-		///
-		/// </summary>
-		protected IOPortResources ioPortResources;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected MemoryResources memoryResources;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected InterruptManager interruptManager;
-
 		/// <summary>
 		/// Gets the IO port resources.
 		/// </summary>
 		/// <value>The IO port resources.</value>
-		public IOPortResources IOPortResources { get { return ioPortResources; } }
+		public IOPortResources IOPortResources { get; private set; }
 
 		/// <summary>
 		/// Gets the memory resources.
 		/// </summary>
 		/// <value>The memory resources.</value>
-		public MemoryResources MemoryResources { get { return memoryResources; } }
+		public MemoryResources MemoryResources { get; private set; }
 
 		/// <summary>
 		/// Gets the interrupt manager.
 		/// </summary>
 		/// <value>The interrupt manager.</value>
-		public InterruptManager InterruptManager { get { return interruptManager; } }
+		public InterruptManager InterruptManager { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ResourceManager"/> class.
 		/// </summary>
 		public ResourceManager()
 		{
-			ioPortResources = new IOPortResources();
-			memoryResources = new MemoryResources();
-			interruptManager = new InterruptManager();
+			IOPortResources = new IOPortResources();
+			MemoryResources = new MemoryResources();
+			InterruptManager = new InterruptManager();
 		}
 
 		/// <summary>
 		/// Claims the resources.
 		/// </summary>
 		/// <returns></returns>
-		public bool ClaimResources(IHardwareResources hardwareResources)
+		public bool ClaimResources(HardwareResources hardwareResources)
 		{
-			if (!ioPortResources.ClaimResources(hardwareResources))
+			if (!IOPortResources.ClaimResources(hardwareResources))
 				return false;
 
-			if (!memoryResources.ClaimResources(hardwareResources))
+			if (!MemoryResources.ClaimResources(hardwareResources))
 			{
-				ioPortResources.ReleaseResources(hardwareResources);
+				IOPortResources.ReleaseResources(hardwareResources);
 				return false;
 			}
 
@@ -73,10 +58,10 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="hardwareResources">The hardware resources.</param>
 		/// <returns></returns>
-		public void ReleaseResources(IHardwareResources hardwareResources)
+		public void ReleaseResources(HardwareResources hardwareResources)
 		{
-			ioPortResources.ReleaseResources(hardwareResources);
-			memoryResources.ReleaseResources(hardwareResources);
+			IOPortResources.ReleaseResources(hardwareResources);
+			MemoryResources.ReleaseResources(hardwareResources);
 		}
 	}
 }

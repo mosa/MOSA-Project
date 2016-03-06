@@ -63,9 +63,9 @@ namespace Mosa.DeviceSystem
 			blockCount = diskDevice.TotalBlocks;
 			this.readOnly = readOnly;
 
-			base.parent = diskDevice as Device;
-			base.name = base.parent.Name + "/Raw";  // need to give it a unique name
-			base.deviceStatus = DeviceStatus.Online;
+			base.Parent = diskDevice as Device;
+			base.Name = base.Parent.Name + "/Raw";  // need to give it a unique name
+			base.DeviceStatus = DeviceStatus.Online;
 		}
 
 		/// <summary>
@@ -81,9 +81,9 @@ namespace Mosa.DeviceSystem
 			blockCount = partition.TotalBlocks;
 			this.readOnly = readOnly;
 
-			base.parent = diskDevice as Device;
-			base.name = base.parent.Name + "/Partition" + (partition.Index + 1).ToString(); // need to give it a unique name
-			base.deviceStatus = DeviceStatus.Online;
+			base.Parent = diskDevice as Device;
+			base.Name = base.Parent.Name + "/Partition" + (partition.Index + 1).ToString(); // need to give it a unique name
+			base.DeviceStatus = DeviceStatus.Online;
 		}
 
 		/// <summary>

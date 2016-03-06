@@ -251,17 +251,17 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "VMWARE_SVGA_0x" + hardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+			this.HardwareResources = hardwareResources;
+			base.Name = "VMWARE_SVGA_0x" + hardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
 			indexPort = hardwareResources.GetIOPort(0, 0);
 			valuePort = hardwareResources.GetIOPort(0, 1);
 			HAL.DebugWrite("**G**");
-			memory = base.hardwareResources.GetMemory(0);
+			memory = base.HardwareResources.GetMemory(0);
 			HAL.DebugWrite("**I**");
-			fifo = base.hardwareResources.GetMemory(1);
+			fifo = base.HardwareResources.GetMemory(1);
 			HAL.DebugWrite("**J**");
 			return true;
 		}
@@ -305,7 +305,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 			SetMode(640, 480);
 
-			base.deviceStatus = DeviceStatus.Online;
+			base.DeviceStatus = DeviceStatus.Online;
 
 			return DeviceDriverStartStatus.Started;
 		}

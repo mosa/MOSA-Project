@@ -23,9 +23,9 @@ namespace Mosa.Utility.BootImage
 		/// <param name="filename">The filename.</param>
 		public BlockFileStream(string filename)
 		{
-			base.name = "DiskDevice_" + Path.GetFileName(filename);
-			base.parent = null;
-			base.deviceStatus = DeviceStatus.Online;
+			base.Name = "DiskDevice_" + Path.GetFileName(filename);
+			base.Parent = null;
+			base.DeviceStatus = DeviceStatus.Online;
 
 			diskFile = new FileStream(filename, FileMode.OpenOrCreate);
 		}

@@ -5,29 +5,19 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	///
 	/// </summary>
-	public class IOPortRegion : IIOPortRegion
+	public sealed class IOPortRegion
 	{
-		/// <summary>
-		///
-		/// </summary>
-		protected ushort baseIOPort;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected ushort size;
-
 		/// <summary>
 		/// Gets the base IO port.
 		/// </summary>
 		/// <value>The base IO port.</value>
-		public ushort BaseIOPort { get { return baseIOPort; } }
+		public ushort BaseIOPort { get; private set; }
 
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
 		/// <value>The size.</value>
-		public ushort Size { get { return size; } }
+		public ushort Size { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IOPortRegion"/> class.
@@ -36,8 +26,8 @@ namespace Mosa.DeviceSystem
 		/// <param name="size">The size.</param>
 		public IOPortRegion(ushort baseIOPort, ushort size)
 		{
-			this.baseIOPort = baseIOPort;
-			this.size = size;
+			this.BaseIOPort = baseIOPort;
+			this.Size = size;
 		}
 	}
 }

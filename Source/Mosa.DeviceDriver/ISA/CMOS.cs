@@ -36,13 +36,13 @@ namespace Mosa.DeviceDriver.ISA
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "CMOS";
+			this.HardwareResources = hardwareResources;
+			base.Name = "CMOS";
 
-			commandPort = base.hardwareResources.GetIOPort(0, 0);
-			dataPort = base.hardwareResources.GetIOPort(0, 4);
+			commandPort = base.HardwareResources.GetIOPort(0, 0);
+			dataPort = base.HardwareResources.GetIOPort(0, 4);
 
 			return true;
 		}
@@ -53,7 +53,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		public override DeviceDriverStartStatus Start()
 		{
-			base.deviceStatus = DeviceStatus.Online;
+			base.DeviceStatus = DeviceStatus.Online;
 			return DeviceDriverStartStatus.Started;
 		}
 

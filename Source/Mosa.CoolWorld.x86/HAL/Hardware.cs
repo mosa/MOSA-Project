@@ -9,7 +9,7 @@ namespace Mosa.CoolWorld.x86.HAL
 	/// <summary>
 	///
 	/// </summary>
-	public class HardwareAbstraction : IHardwareAbstraction
+	public sealed class Hardware : IHardwareAbstraction
 	{
 		/// <summary>
 		/// Requests an IO read/write port interface from the kernel
@@ -30,19 +30,11 @@ namespace Mosa.CoolWorld.x86.HAL
 		IMemory IHardwareAbstraction.RequestPhysicalMemory(uint address, uint size)
 		{
 			// Map physical memory space to virtual memory space
-
-			ConsoleManager.Controller.Debug.WriteLine("");
-			ConsoleManager.Controller.Debug.WriteLine(":" + address.ToString("X"));
-			ConsoleManager.Controller.Debug.WriteLine(":" + size.ToString("X"));
-
-			//address = address & 0xFFFFF000;	// force alignment
-			uint end = address + size;
-			for (uint at = address; at < end; address = address + 4096)
+			for (uint at = address; at < address + size; address = address + 4096)
 			{
-				ConsoleManager.Controller.Debug.WriteLine(at.ToString("X"));
 				PageTable.MapVirtualAddressToPhysical(address, address);
 			}
-			ConsoleManager.Controller.Debug.WriteLine("Y");
+
 			return new Memory(address, size);
 		}
 
@@ -97,7 +89,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="memory">The memory.</param>
 		/// <returns></returns>
-		uint IHardwareAbstraction.GetPhysicalAddress(IMemory memory)
+		uint IHardwareAbstraction.GetPhysicalAddress(DeviceSystem.IMemory memory)
 		{
 			return PageTable.GetPhysicalAddressFromVirtual(memory.Address);
 		}
@@ -118,6 +110,15 @@ namespace Mosa.CoolWorld.x86.HAL
 		void IHardwareAbstraction.DebugWriteLine(string message)
 		{
 			Boot.Debug.WriteLine(message);
+		}
+
+		/// <summary>
+		/// Aborts with the specified message.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		void IHardwareAbstraction.Abort(string message)
+		{
+			Panic.Error(message);
 		}
 	}
 }

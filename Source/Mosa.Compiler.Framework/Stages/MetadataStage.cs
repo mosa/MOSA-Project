@@ -216,16 +216,18 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
+				var interfaces = GetInterfaces(type);
+
 				// If the type doesn't use interfaces then skip 9 and 10
-				if (type.Interfaces.Count > 0)
+				if (interfaces.Count > 0)
 				{
 					// 12. Pointer to Interface Slots
-					var interfaceSlotTableSymbol = CreateInterfaceSlotTable(type);
+					var interfaceSlotTableSymbol = CreateInterfaceSlotTable(type, interfaces);
 					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, 0, interfaceSlotTableSymbol, 0);
 					writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 					// 13. Pointer to Interface Bitmap
-					var interfaceBitmapSymbol = CreateInterfaceBitmap(type);
+					var interfaceBitmapSymbol = CreateInterfaceBitmap(type, interfaces);
 					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, 0, interfaceBitmapSymbol, 0);
 					writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 				}
@@ -266,7 +268,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Interface Bitmap and Tables
 
-		private LinkerSymbol CreateInterfaceBitmap(MosaType type)
+		private LinkerSymbol CreateInterfaceBitmap(MosaType type, List<MosaType> interfaces)
 		{
 			var bitmap = new byte[(((TypeLayout.Interfaces.Count - 1) / 8) + 1)];
 
@@ -274,7 +276,7 @@ namespace Mosa.Compiler.Framework.Stages
 			byte bit = 0;
 			foreach (var interfaceType in TypeLayout.Interfaces)
 			{
-				if (type.Interfaces.Contains(interfaceType))
+				if (interfaces.Contains(interfaceType))
 				{
 					bitmap[at] = (byte)(bitmap[at] | (byte)(1 << bit));
 				}
@@ -294,7 +296,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return symbol;
 		}
 
-		private LinkerSymbol CreateInterfaceSlotTable(MosaType type)
+		private LinkerSymbol CreateInterfaceSlotTable(MosaType type, List<MosaType> interfaces)
 		{
 			// Emit interface slot table
 			var interfaceSlotTableSymbol = Linker.CreateSymbol(type.FullName + Metadata.InterfaceSlotTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
@@ -302,19 +304,23 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var slots = new List<MosaType>(TypeLayout.Interfaces.Count);
 
-			foreach (MosaType interfaceType in TypeLayout.Interfaces)
+			foreach (var interfaceType in TypeLayout.Interfaces)
 			{
-				if (type.Interfaces.Contains(interfaceType))
+				if (interfaces.Contains(interfaceType))
+				{
 					slots.Add(interfaceType);
+				}
 				else
+				{
 					slots.Add(null);
+				}
 			}
 
 			// 1. Number of Interface slots
 			writer1.Write((uint)slots.Count, TypeLayout.NativePointerSize);
 
 			// 2. Pointers to Interface Method Tables
-			foreach (MosaType interfaceType in slots)
+			foreach (var interfaceType in slots)
 			{
 				if (interfaceType != null)
 				{
@@ -328,6 +334,24 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Return interfaceSlotTableSymbol for linker usage
 			return interfaceSlotTableSymbol;
+		}
+
+		private static List<MosaType> GetInterfaces(MosaType type)
+		{
+			var interfaces = new List<MosaType>();
+			var baseType = type;
+
+			while (baseType != null)
+			{
+				foreach (var interfaceType in baseType.Interfaces)
+				{
+					interfaces.AddIfNew(interfaceType);
+				}
+
+				baseType = baseType.BaseType;
+			}
+
+			return interfaces;
 		}
 
 		private LinkerSymbol CreateInterfaceMethodTable(MosaType type, MosaType interfaceType)
@@ -346,7 +370,7 @@ namespace Mosa.Compiler.Framework.Stages
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 3. Pointers to Method Definitions
-			foreach (MosaMethod method in interfaceMethodTable)
+			foreach (var method in interfaceMethodTable)
 			{
 				// Create definition and get the symbol
 				var methodDefinitionSymbol = CreateMethodDefinition(method);

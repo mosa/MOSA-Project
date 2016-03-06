@@ -5,29 +5,17 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	///
 	/// </summary>
-	public class MemoryRegion : IMemoryRegion
+	public sealed class MemoryRegion
 	{
-		/// <summary>
-		///
-		/// </summary>
-		protected uint baseAddress;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected uint size;
-
 		/// <summary>
 		/// Gets the base address.
 		/// </summary>
-		/// <value>The base address.</value>
-		public uint BaseAddress { get { return baseAddress; } }
+		public uint BaseAddress { get; private set; }
 
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
-		/// <value>The size.</value>
-		public uint Size { get { return size; } }
+		public uint Size { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MemoryRegion"/> class.
@@ -36,8 +24,8 @@ namespace Mosa.DeviceSystem
 		/// <param name="size">The size.</param>
 		public MemoryRegion(uint baseAddress, uint size)
 		{
-			this.baseAddress = baseAddress;
-			this.size = size;
+			this.BaseAddress = baseAddress;
+			this.Size = size;
 		}
 
 		/// <summary>
@@ -49,7 +37,7 @@ namespace Mosa.DeviceSystem
 		/// </returns>
 		public bool Contains(uint address)
 		{
-			return ((address >= baseAddress) && (address <= baseAddress + size));
+			return ((address >= BaseAddress) && (address <= BaseAddress + Size));
 		}
 	}
 }

@@ -8,36 +8,18 @@ namespace Mosa.DeviceSystem
 	public abstract class Device : IDevice
 	{
 		/// <summary>
-		///
-		/// </summary>
-		protected string name;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected IDevice parent;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected DeviceStatus deviceStatus;
-
-		/// <summary>
 		/// Gets the name of the device.
 		/// </summary>
-		/// <value>The name.</value>
-		public string Name { get { return name; } }
+		public string Name { get; protected set; }
 
 		/// <summary>
 		/// Gets the parent device, if any, of the device.
 		/// </summary>
-		/// <value>The parent.</value>
-		public IDevice Parent { get { return parent; } }
+		public IDevice Parent { get; protected set; }
 
 		/// <summary>
 		/// Gets the status of the device.
 		/// </summary>
-		/// <value>The status.</value>
-		public DeviceStatus Status { get { return deviceStatus; } }
+		public DeviceStatus DeviceStatus { get; protected set; }
 	}
 }

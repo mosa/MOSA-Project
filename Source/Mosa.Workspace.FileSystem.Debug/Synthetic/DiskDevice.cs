@@ -33,9 +33,9 @@ namespace Mosa.Workspace.FileSystem.Debug.Synthetic
 		/// <param name="filename">The filename.</param>
 		public DiskDevice(string filename)
 		{
-			base.name = "DiskDevice_" + Path.GetFileName(filename);
-			base.parent = null;
-			base.deviceStatus = DeviceStatus.Online;
+			base.Name = "DiskDevice_" + Path.GetFileName(filename);
+			base.Parent = null;
+			base.DeviceStatus = DeviceStatus.Online;
 
 			diskFile = new FileStream(filename, FileMode.OpenOrCreate);
 		}

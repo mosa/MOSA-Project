@@ -96,7 +96,7 @@ namespace Mosa.DeviceSystem
 			/// </returns>
 			public bool IsMatch(IDevice device)
 			{
-				return device.Status == DeviceStatus.Online;
+				return device.DeviceStatus == DeviceStatus.Online;
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace Mosa.DeviceSystem
 			/// </returns>
 			public bool IsMatch(IDevice device)
 			{
-				return device.Status == DeviceStatus.Available;
+				return device.DeviceStatus == DeviceStatus.Available;
 			}
 		}
 
@@ -153,7 +153,7 @@ namespace Mosa.DeviceSystem
 			/// </returns>
 			public bool IsMatch(IDevice device)
 			{
-				return device.Status == deviceStatus;
+				return device.DeviceStatus == deviceStatus;
 			}
 		}
 

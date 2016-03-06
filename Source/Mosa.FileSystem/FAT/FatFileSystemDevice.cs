@@ -14,9 +14,9 @@ namespace Mosa.FileSystem.FAT
 		/// </summary>
 		private FatFileSystemDevice(IPartitionDevice partition)
 		{
-			base.parent = partition as Device;
-			base.name = base.parent.Name + "/FS/Fat"; // need to give it a unique name
-			base.deviceStatus = DeviceStatus.Online;
+			base.Parent = partition as Device;
+			base.Name = base.Parent.Name + "/FS/Fat"; // need to give it a unique name
+			base.DeviceStatus = DeviceStatus.Online;
 		}
 	}
 }

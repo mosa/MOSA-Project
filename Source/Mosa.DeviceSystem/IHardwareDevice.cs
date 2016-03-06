@@ -11,7 +11,7 @@ namespace Mosa.DeviceSystem
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		bool Setup(IHardwareResources hardwareResources);
+		bool Setup(HardwareResources hardwareResources);
 
 		/// <summary>
 		/// Starts this hardware device.

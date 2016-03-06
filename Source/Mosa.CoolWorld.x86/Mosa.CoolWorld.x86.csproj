@@ -70,6 +70,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="HAL\Memory.cs" />
     <Compile Include="Mosa.Application\Credits.cs" />
     <Compile Include="Mosa.Application\Mem.cs" />
     <Compile Include="Mosa.AppSystem\AppOutputStream.cs" />
@@ -81,9 +82,8 @@
     <Compile Include="Mosa.AppSystem\IConsoleApp.cs" />
     <Compile Include="Boot.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="HAL\Memory.cs" />
     <Compile Include="HAL\IOPort.cs" />
-    <Compile Include="HAL\HardwareAbstraction.cs" />
+    <Compile Include="HAL\Hardware.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Korlib\Korlib.csproj">

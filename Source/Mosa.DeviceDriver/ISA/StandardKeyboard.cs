@@ -56,13 +56,13 @@ namespace Mosa.DeviceDriver.ISA
 		/// Setups the standard keyboard driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "StandardKeyboard";
+			this.HardwareResources = hardwareResources;
+			base.Name = "StandardKeyboard";
 
-			commandPort = base.hardwareResources.GetIOPort(0, 0);
-			dataPort = base.hardwareResources.GetIOPort(1, 0);
+			commandPort = base.HardwareResources.GetIOPort(0, 0);
+			dataPort = base.HardwareResources.GetIOPort(1, 0);
 
 			fifoBuffer = new byte[fifoSize];
 			fifoStart = 0;

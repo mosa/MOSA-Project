@@ -8,23 +8,23 @@ namespace Mosa.DeviceSystem
 	public abstract class HardwareDevice : Device, IHardwareDevice
 	{
 		/// <summary>
-		///
+		/// Gets or sets the hardware resources.
 		/// </summary>
-		protected IHardwareResources hardwareResources;
+		protected HardwareResources HardwareResources;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HardwareDevice"/> class.
 		/// </summary>
 		public HardwareDevice()
 		{
-			base.deviceStatus = DeviceStatus.Initializing;
+			base.DeviceStatus = DeviceStatus.Initializing;
 		}
 
 		/// <summary>
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public abstract bool Setup(IHardwareResources hardwareResources);
+		public abstract bool Setup(HardwareResources hardwareResources);
 
 		/// <summary>
 		/// Starts this hardware device.

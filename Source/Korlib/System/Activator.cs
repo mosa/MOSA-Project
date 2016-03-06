@@ -41,6 +41,7 @@ namespace System
 		{
 			if (type == null)
 				throw new ArgumentNullException("type");
+
 			return RuntimeHelpers.CreateInstance(type, args);
 		}
 	}

@@ -23,6 +23,6 @@ namespace Mosa.DeviceSystem
 		/// Gets the status of the device.
 		/// </summary>
 		/// <value>The status.</value>
-		DeviceStatus Status { get; }
+		DeviceStatus DeviceStatus { get; }
 	}
 }

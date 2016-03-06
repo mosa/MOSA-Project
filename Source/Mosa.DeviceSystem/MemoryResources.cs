@@ -12,7 +12,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		///
 		/// </summary>
-		protected LinkedList<IMemoryRegion> memoryRegions;
+		protected LinkedList<MemoryRegion> memoryRegions;
 
 		/// <summary>
 		///
@@ -24,7 +24,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public MemoryResources()
 		{
-			memoryRegions = new LinkedList<IMemoryRegion>();
+			memoryRegions = new LinkedList<MemoryRegion>();
 		}
 
 		/// <summary>
@@ -43,21 +43,25 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="hardwareResources">The hardware resources.</param>
 		/// <returns></returns>
-		public bool ClaimResources(IHardwareResources hardwareResources)
+		public bool ClaimResources(HardwareResources hardwareResources)
 		{
 			spinLock.Enter();
 
 			for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
 			{
-				IMemoryRegion region = hardwareResources.GetMemoryRegion(r);
+				var region = hardwareResources.GetMemoryRegion(r);
 
-				foreach (IMemoryRegion memoryRegion in memoryRegions)
+				foreach (var memoryRegion in memoryRegions)
+				{
 					if ((memoryRegion.Contains(region.BaseAddress) || memoryRegion.Contains(region.BaseAddress + region.Size)))
 						return false;
+				}
 			}
 
 			for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
+			{
 				memoryRegions.AddLast(hardwareResources.GetMemoryRegion(r));
+			}
 
 			spinLock.Exit();
 
@@ -68,12 +72,14 @@ namespace Mosa.DeviceSystem
 		/// Releases the resources.
 		/// </summary>
 		/// <param name="hardwareResources">The hardware resources.</param>
-		public void ReleaseResources(IHardwareResources hardwareResources)
+		public void ReleaseResources(HardwareResources hardwareResources)
 		{
 			spinLock.Enter();
 
 			for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
+			{
 				memoryRegions.Remove(hardwareResources.GetMemoryRegion(r));
+			}
 
 			spinLock.Exit();
 		}

@@ -130,5 +130,14 @@ namespace Mosa.DeviceSystem
 		{
 			hardwareAbstraction.DebugWriteLine(message);
 		}
+
+		/// <summary>
+		/// Aborts with the specified message.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		public static void Abort(string message)
+		{
+			hardwareAbstraction.Abort(message);
+		}
 	}
 }

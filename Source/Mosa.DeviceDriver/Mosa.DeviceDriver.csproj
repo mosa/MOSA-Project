@@ -112,8 +112,8 @@
     <Compile Include="ISA\VGAText.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PCI\Intel\Intel82540EM.cs" />
     <Compile Include="PCI\Intel\Intel82541EI.cs" />
+    <Compile Include="PCI\Intel\Intel82540EM.cs" />
     <Compile Include="PCI\Intel\IntelPIIX4.cs" />
     <Compile Include="PCI\Intel\IntelPIIX3.cs" />
     <Compile Include="PCI\Intel\Intel440FX.cs" />

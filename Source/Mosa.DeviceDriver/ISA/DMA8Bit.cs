@@ -168,40 +168,40 @@ namespace Mosa.DeviceDriver.ISA
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "DMA_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			this.HardwareResources = hardwareResources;
+			base.Name = "DMA_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
 
-			statusRegister = base.hardwareResources.GetIOPort(0, 0x08);
-			commandRegister = base.hardwareResources.GetIOPort(0, 0x08);
-			requestRegister = base.hardwareResources.GetIOPort(0, 0x09);
-			channelMaskRegister = base.hardwareResources.GetIOPort(0, 0x0A);
-			modeRegister = base.hardwareResources.GetIOPort(0, 0x0B);
-			byteWordRegister = base.hardwareResources.GetIOPort(0, 0x0C);
-			intermediateRegister = base.hardwareResources.GetIOPort(0, 0x0D);
-			maskRegister = base.hardwareResources.GetIOPort(0, 0x0F);
+			statusRegister = base.HardwareResources.GetIOPort(0, 0x08);
+			commandRegister = base.HardwareResources.GetIOPort(0, 0x08);
+			requestRegister = base.HardwareResources.GetIOPort(0, 0x09);
+			channelMaskRegister = base.HardwareResources.GetIOPort(0, 0x0A);
+			modeRegister = base.HardwareResources.GetIOPort(0, 0x0B);
+			byteWordRegister = base.HardwareResources.GetIOPort(0, 0x0C);
+			intermediateRegister = base.HardwareResources.GetIOPort(0, 0x0D);
+			maskRegister = base.HardwareResources.GetIOPort(0, 0x0F);
 
-			channel0Address = base.hardwareResources.GetIOPort(0, 0x00);
-			channel0Count = base.hardwareResources.GetIOPort(0, 0x01);
-			channel0Page = base.hardwareResources.GetIOPort(0, 0x87);
+			channel0Address = base.HardwareResources.GetIOPort(0, 0x00);
+			channel0Count = base.HardwareResources.GetIOPort(0, 0x01);
+			channel0Page = base.HardwareResources.GetIOPort(0, 0x87);
 
-			channel1Address = base.hardwareResources.GetIOPort(0, 0x02);
-			channel1Count = base.hardwareResources.GetIOPort(0, 0x03);
-			channel1Page = base.hardwareResources.GetIOPort(0, 0x83);
+			channel1Address = base.HardwareResources.GetIOPort(0, 0x02);
+			channel1Count = base.HardwareResources.GetIOPort(0, 0x03);
+			channel1Page = base.HardwareResources.GetIOPort(0, 0x83);
 
-			channel2Address = base.hardwareResources.GetIOPort(0, 0x04);
-			channel2Count = base.hardwareResources.GetIOPort(0, 0x05);
-			channel2Page = base.hardwareResources.GetIOPort(0, 0x81);
+			channel2Address = base.HardwareResources.GetIOPort(0, 0x04);
+			channel2Count = base.HardwareResources.GetIOPort(0, 0x05);
+			channel2Page = base.HardwareResources.GetIOPort(0, 0x81);
 
-			channel3Address = base.hardwareResources.GetIOPort(0, 0x06);
-			channel3Count = base.hardwareResources.GetIOPort(0, 0x07);
-			channel3Page = base.hardwareResources.GetIOPort(0, 0x82);
+			channel3Address = base.HardwareResources.GetIOPort(0, 0x06);
+			channel3Count = base.HardwareResources.GetIOPort(0, 0x07);
+			channel3Page = base.HardwareResources.GetIOPort(0, 0x82);
 
-			memory0 = base.hardwareResources.GetMemory(0);
-			memory1 = base.hardwareResources.GetMemory(1);
-			memory2 = base.hardwareResources.GetMemory(2);
-			memory3 = base.hardwareResources.GetMemory(3);
+			memory0 = base.HardwareResources.GetMemory(0);
+			memory1 = base.HardwareResources.GetMemory(1);
+			memory2 = base.HardwareResources.GetMemory(2);
+			memory3 = base.HardwareResources.GetMemory(3);
 
 			return true;
 		}
