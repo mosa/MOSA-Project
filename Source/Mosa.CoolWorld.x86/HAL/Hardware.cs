@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 
@@ -60,7 +60,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="irq">The irq.</param>
 		void IHardwareAbstraction.ProcessInterrupt(byte irq)
 		{
-			DeviceSystem.HAL.ProcessInterrupt(irq);
+			Mosa.HardwareSystem.HAL.ProcessInterrupt(irq);
 		}
 
 		/// <summary>
@@ -89,7 +89,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="memory">The memory.</param>
 		/// <returns></returns>
-		uint IHardwareAbstraction.GetPhysicalAddress(DeviceSystem.IMemory memory)
+		uint IHardwareAbstraction.GetPhysicalAddress(IMemory memory)
 		{
 			return PageTable.GetPhysicalAddressFromVirtual(memory.Address);
 		}

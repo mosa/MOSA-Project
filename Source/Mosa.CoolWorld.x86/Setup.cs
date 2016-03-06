@@ -2,8 +2,9 @@
 
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.PCI;
 using Mosa.FileSystem.FAT;
+using Mosa.HardwareSystem;
+using Mosa.HardwareSystem.PCI;
 using System.Collections.Generic;
 
 namespace Mosa.CoolWorld.x86
@@ -66,10 +67,10 @@ namespace Mosa.CoolWorld.x86
 			var hardware = new Mosa.CoolWorld.x86.HAL.Hardware();
 
 			// Set device driver system to the hardware HAL
-			Mosa.DeviceSystem.HAL.SetHardwareAbstraction(hardware);
+			Mosa.HardwareSystem.HAL.SetHardwareAbstraction(hardware);
 
 			// Set the interrupt handler
-			Mosa.DeviceSystem.HAL.SetInterruptHandler(ResourceManager.InterruptManager.ProcessInterrupt);
+			Mosa.HardwareSystem.HAL.SetInterruptHandler(ResourceManager.InterruptManager.ProcessInterrupt);
 
 			partitionManager = new PartitionManager(deviceManager);
 		}
@@ -92,14 +93,14 @@ namespace Mosa.CoolWorld.x86
 			StartPCIDevices();
 
 			// Get CMOS, StandardKeyboard, and PIC driver instances
-			CMOS = (CMOS)deviceManager.GetDevices(new FindDevice.WithName("CMOS")).First.Value;
-			StandardKeyboard = (StandardKeyboard)deviceManager.GetDevices(new FindDevice.WithName("StandardKeyboard")).First.Value;
+			CMOS = (CMOS)deviceManager.GetDevices(new WithName("CMOS")).First.Value;
+			StandardKeyboard = (StandardKeyboard)deviceManager.GetDevices(new WithName("StandardKeyboard")).First.Value;
 
 			Boot.Console.Write("Finding disk controllers...");
 			var diskcontroller = new DiskControllerManager(Setup.DeviceManager);
 			diskcontroller.CreateDiskDevices();
 
-			var diskcontrollers = deviceManager.GetDevices(new FindDevice.IsDiskControllerDevice());
+			var diskcontrollers = deviceManager.GetDevices(new IsDiskControllerDevice());
 			Boot.Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
 			foreach (var device in diskcontrollers)
 			{
@@ -109,7 +110,7 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			Boot.Console.Write("Finding disks...");
-			var disks = deviceManager.GetDevices(new FindDevice.IsDiskDevice());
+			var disks = deviceManager.GetDevices(new IsDiskDevice());
 			Boot.Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
 			foreach (var disk in disks)
 			{
@@ -122,7 +123,7 @@ namespace Mosa.CoolWorld.x86
 			partitionManager.CreatePartitionDevices();
 
 			Boot.Console.Write("Finding partitions...");
-			var partitions = deviceManager.GetDevices(new FindDevice.IsPartitionDevice());
+			var partitions = deviceManager.GetDevices(new IsPartitionDevice());
 			Boot.Console.WriteLine("[Completed: " + partitions.Count.ToString() + " found]");
 			foreach (var partition in partitions)
 			{
@@ -133,7 +134,7 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			Boot.Console.Write("Finding file systems...");
-			var filesystem = deviceManager.GetDevices(new FindDevice.IsPartitionDevice());
+			var filesystem = deviceManager.GetDevices(new IsPartitionDevice());
 
 			//Boot.Console.WriteLine("[Completed: " + filesystem.Count.ToString() + " found]");
 			foreach (var partition in partitions)
@@ -187,7 +188,7 @@ namespace Mosa.CoolWorld.x86
 
 			Boot.Console.Write("Starting PCI devices... ");
 
-			var devices = deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable());
+			var devices = deviceManager.GetDevices(new IsPCIDevice(), new IsAvailable());
 
 			Boot.Console.Write(devices.Count.ToString());
 			Boot.Console.WriteLine(" Devices");
@@ -235,7 +236,7 @@ namespace Mosa.CoolWorld.x86
 			StartDevice(pciDevice, deviceDriver, iHardwareDevice);
 		}
 
-		private static void StartDevice(IPCIDevice pciDevice, Mosa.DeviceSystem.DeviceDriver deviceDriver, IHardwareDevice hardwareDevice)
+		private static void StartDevice(IPCIDevice pciDevice, Mosa.HardwareSystem.DeviceDriver deviceDriver, IHardwareDevice hardwareDevice)
 		{
 			var ioPortRegions = new LinkedList<IOPortRegion>();
 			var memoryRegions = new LinkedList<MemoryRegion>();
@@ -254,7 +255,7 @@ namespace Mosa.CoolWorld.x86
 			{
 				if (memoryAttribute.MemorySize > 0)
 				{
-					var memory = DeviceSystem.HAL.AllocateMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
+					var memory = Mosa.HardwareSystem.HAL.AllocateMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
 					memoryRegions.AddLast(new MemoryRegion(memory.Address, memory.Size));
 				}
 			}
@@ -302,7 +303,7 @@ namespace Mosa.CoolWorld.x86
 		/// Starts the device.
 		/// </summary>
 		/// <param name="deviceDriver">The device driver.</param>
-		static public void StartDevice(Mosa.DeviceSystem.DeviceDriver deviceDriver)
+		static public void StartDevice(Mosa.HardwareSystem.DeviceDriver deviceDriver)
 		{
 			var driverAtttribute = deviceDriver.Attribute as ISADeviceDriverAttribute;
 
@@ -333,7 +334,7 @@ namespace Mosa.CoolWorld.x86
 				{
 					if (memoryAttribute.MemorySize > 0)
 					{
-						var memory = Mosa.DeviceSystem.HAL.AllocateMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
+						var memory = Mosa.HardwareSystem.HAL.AllocateMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
 						memoryRegions.AddLast(new MemoryRegion(memory.Address, memory.Size));
 					}
 				}

@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.HardwareSystem;
 using System.Collections.Generic;
 
 namespace Mosa.DeviceSystem

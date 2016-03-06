@@ -6,6 +6,7 @@
 // http://www.amd.com/files/connectivitysolutions/networking/archivednetworking/19436.pdf
 
 using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceDriver.PCI.AMD
 {

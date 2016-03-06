@@ -8,6 +8,7 @@
  */
 
 using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 using System.IO;
 
 namespace Mosa.Workspace.FileSystem.Debug.Synthetic

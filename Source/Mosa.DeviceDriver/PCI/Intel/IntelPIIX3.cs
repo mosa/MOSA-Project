@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 // PCI ISA IDE Xcelerator (PIIX3)
 // http://download.intel.com/design/intarch/datashts/29055002.pdf

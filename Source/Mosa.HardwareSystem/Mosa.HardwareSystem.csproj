@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Mosa.HardwareSystem</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>
+    </AppDesignerFolder>
+    <RootNamespace>Mosa.HardwareSystem</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+    <NoStdLib>true</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <NoWarn>1685,219,414</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>..\..\bin\Mosa.HardwareSystem.xml</DocumentationFile>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>2</WarningLevel>
+    <NoWarn>1685,219,414</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Device.cs" />
+    <Compile Include="DeviceDriver.cs" />
+    <Compile Include="DeviceDriverPhysicalMemoryAttribute.cs" />
+    <Compile Include="DeviceDriverRegistry.cs" />
+    <Compile Include="DeviceDriverStartStatus.cs" />
+    <Compile Include="DeviceManager.cs" />
+    <Compile Include="DeviceStatus.cs" />
+    <Compile Include="FindDevices.cs" />
+    <Compile Include="HAL.cs" />
+    <Compile Include="HardwareDevice.cs" />
+    <Compile Include="HardwareResources.cs" />
+    <Compile Include="IDevice.cs" />
+    <Compile Include="IDeviceDriver.cs" />
+    <Compile Include="IDeviceManager.cs" />
+    <Compile Include="IDMAChannel.cs" />
+    <Compile Include="IFindDevice.cs" />
+    <Compile Include="IHardwareAbstraction.cs" />
+    <Compile Include="IHardwareDevice.cs" />
+    <Compile Include="IIOPorts.cs" />
+    <Compile Include="IMemory.cs" />
+    <Compile Include="InterruptHandler.cs" />
+    <Compile Include="InterruptManager.cs" />
+    <Compile Include="IOPortRegion.cs" />
+    <Compile Include="IOPortResources.cs" />
+    <Compile Include="IPCIController.cs" />
+    <Compile Include="ISADeviceDriverAttribute.cs" />
+    <Compile Include="MemoryRegion.cs" />
+    <Compile Include="MemoryResources.cs" />
+    <Compile Include="PCIControllerManager.cs" />
+    <Compile Include="PCIDeviceDriverAttribute.cs" />
+    <Compile Include="PCI\AddressType.cs" />
+    <Compile Include="PCI\BaseAddress.cs" />
+    <Compile Include="PCI\ClassCodeTable.cs" />
+    <Compile Include="PCI\IDeviceResource.cs" />
+    <Compile Include="PCI\IPCIDevice.cs" />
+    <Compile Include="PCI\PCIDevice.cs" />
+    <Compile Include="PCI\SubClassCodeTable.cs" />
+    <Compile Include="PlatformArchitecture.cs" />
+    <Compile Include="ResourceManager.cs" />
+    <Compile Include="Setup.cs" />
+    <Compile Include="SpinLock.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Korlib\Korlib.csproj">
+      <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
+      <Name>Korlib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
+      <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
+      <Name>Mosa.ClassLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+</Project>

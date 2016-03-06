@@ -1,12 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.ClassLib;
+using Mosa.Compiler.Common;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
 using System;
-using System.IO;
 using System.Collections.Generic;
-using Mosa.ClassLib;
-using Mosa.Compiler.Common;
+using System.IO;
 
 namespace Mosa.Utility.BootImage
 {

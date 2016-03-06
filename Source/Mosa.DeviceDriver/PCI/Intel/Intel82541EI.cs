@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 // 82541EI Gigabit Ethernet Controller
 // http://www.intel.com/content/dam/doc/datasheet/82541-gbe-controller-datasheet.pdf

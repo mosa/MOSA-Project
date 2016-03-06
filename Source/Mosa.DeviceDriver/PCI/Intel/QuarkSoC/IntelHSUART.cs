@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 // http://download.intel.com/support/processors/quark/sb/quarkdatasheetrev02.pdf
 

@@ -9,6 +9,7 @@
 // http://www.osdev.org/phpBB2/viewtopic.php?t=13538
 
 using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceDriver.ISA
 {

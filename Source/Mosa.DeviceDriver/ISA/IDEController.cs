@@ -7,6 +7,7 @@
 
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceDriver.ISA
 {

@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.HardwareSystem;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -29,7 +31,7 @@ namespace Mosa.DeviceSystem
 			// FIXME: Do not create multiple partition devices if this method executed more than once
 
 			// Find all online disk devices
-			foreach (var device in deviceManager.GetDevices(new FindDevice.IsDiskDevice(), new FindDevice.IsOnline()))
+			foreach (var device in deviceManager.GetDevices(new IsDiskDevice(), new IsOnline()))
 			{
 				var diskDevice = device as IDiskDevice;
 

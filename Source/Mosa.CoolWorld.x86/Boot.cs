@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.AppSystem;
+using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
-using Mosa.DeviceDriver.ScanCodeMap;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -132,7 +132,7 @@ namespace Mosa.CoolWorld.x86
 
 			if (interrupt >= 0x20 && interrupt < 0x30)
 			{
-				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
+				Mosa.HardwareSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 			}
 
 			Console.Column = c;

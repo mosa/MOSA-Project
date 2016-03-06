@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 // Intel82540EM Gigabit Ethernet Controller
 // http://www.intel.com/content/dam/doc/datasheet/82540ep-gbe-controller-datasheet.pdf

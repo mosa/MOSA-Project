@@ -2,8 +2,8 @@
 
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
-using Mosa.FileSystem.VFS;
 using Mosa.FileSystem.FAT.Vfs;
+using Mosa.FileSystem.VFS;
 
 namespace Mosa.FileSystem.FAT
 {

@@ -106,6 +106,10 @@
       <Project>{d89972fd-a930-4d0c-b393-1895e78fafab}</Project>
       <Name>Mosa.FileSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.HardwareSystem\Mosa.HardwareSystem.csproj">
+      <Project>{4dbd4c50-bec5-48d9-b471-9fb0c7f69999}</Project>
+      <Name>Mosa.HardwareSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj">
       <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
       <Name>Mosa.Kernel.x86</Name>

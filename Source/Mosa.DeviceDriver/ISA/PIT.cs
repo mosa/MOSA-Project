@@ -3,7 +3,7 @@
 // 82C54 CHMOS Programmable Interval Timer Datasheet
 // http://bochs.sourceforge.net/techspec/intel-82c54-timer.pdf.gz
 
-using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceDriver.ISA
 {
