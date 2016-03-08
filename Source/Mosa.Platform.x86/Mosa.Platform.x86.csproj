@@ -262,7 +262,6 @@
     <Compile Include="Instructions\Ucomiss.cs" />
     <Compile Include="OpCode.cs" />
     <Compile Include="X86Instruction.cs" />
-    <Compile Include="IX86Visitor.cs" />
     <Compile Include="Instructions\Nop.cs" />
     <Compile Include="DefaultCallingConvention.cs">
       <SubType>Code</SubType>

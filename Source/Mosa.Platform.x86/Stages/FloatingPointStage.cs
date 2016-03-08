@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using System;
+using System.Collections.Generic;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -9,6 +11,11 @@ namespace Mosa.Platform.x86.Stages
 	/// </summary>
 	public class FloatingPointStage : BaseTransformationStage
 	{
+		protected override void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary)
+		{
+			// Nothing to do
+		}
+
 		protected override void Run()
 		{
 			foreach (var block in BasicBlocks)

@@ -36,16 +36,6 @@ namespace Mosa.Compiler.Framework.CIL
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4);
 		}
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Refanytype(context);
-		}
-
 		#endregion Methods
 	}
 }

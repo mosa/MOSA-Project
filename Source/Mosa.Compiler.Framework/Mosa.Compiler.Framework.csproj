@@ -261,7 +261,6 @@
     <Compile Include="CIL\ConversionInstruction.cs" />
     <Compile Include="CIL\CILInstruction.cs" />
     <Compile Include="CIL\StoreInstruction.cs" />
-    <Compile Include="CIL\ICILVisitor.cs" />
     <Compile Include="CIL\Prefix.cs" />
     <Compile Include="CIL\CpblkInstruction.cs" />
     <Compile Include="CIL\CpobjInstruction.cs" />
@@ -338,7 +337,6 @@
     <Compile Include="IR\Epilogue.cs" />
     <Compile Include="IR\FloatCompare.cs" />
     <Compile Include="IR\FloatToIntegerConversion.cs" />
-    <Compile Include="IR\IIRVisitor.cs" />
     <Compile Include="IR\IntegerCompareBranch.cs" />
     <Compile Include="IR\IntegerCompare.cs" />
     <Compile Include="IR\IntegerToFloatConversion.cs" />
@@ -361,7 +359,6 @@
     <Compile Include="IR\ThreeOperandInstruction.cs" />
     <Compile Include="IR\TwoOperandInstruction.cs" />
     <Compile Include="IR\ZeroExtendedMove.cs" />
-    <Compile Include="IVisitor.cs" />
     <Compile Include="CIL\NopInstruction.cs" />
     <Compile Include="InstructionNode.cs" />
     <Compile Include="CIL\BaseCILInstruction.cs" />

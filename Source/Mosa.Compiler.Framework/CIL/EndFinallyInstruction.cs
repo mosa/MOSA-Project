@@ -21,19 +21,5 @@ namespace Mosa.Compiler.Framework.CIL
 		#endregion Construction
 
 		public override FlowControl FlowControl { get { return FlowControl.EndFinally; } }
-
-		#region Methods
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Endfinally(context);
-		}
-
-		#endregion Methods
 	}
 }

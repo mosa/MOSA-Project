@@ -1,6 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -10,13 +12,26 @@ namespace Mosa.Platform.x86.Stages
 	/// </summary>
 	public sealed class FinalTweakTransformationStage : BaseTransformationStage
 	{
-		#region IX86Visitor
+		protected override void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary)
+		{
+			dictionary[X86.Mov] = Mov;
+			dictionary[X86.Movsx] = Movsx;
+			dictionary[X86.Movzx] = Movzx;
+			dictionary[X86.Movss] = Movss;
+			dictionary[X86.Movsd] = Movsd;
+			dictionary[X86.Setcc] = Setcc;
+			dictionary[X86.Call] = Call;
+			dictionary[X86.Nop] = Nop;
+			dictionary[X86.In] = In;
+		}
+
+		#region Visitation Methods
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Movsx"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Movsx(Context context)
+		public void Movsx(Context context)
 		{
 			// Movsx can not use ESI or EDI registers
 			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
@@ -52,7 +67,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Movzx"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Movzx(Context context)
+		public void Movzx(Context context)
 		{
 			// Movsx can not use ESI or EDI registers
 			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
@@ -86,7 +101,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Mov(Context context)
+		public void Mov(Context context)
 		{
 			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
 			{
@@ -117,7 +132,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Movss instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Movss(Context context)
+		public void Movss(Context context)
 		{
 			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
 			{
@@ -130,7 +145,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Movsds instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Movsd(Context context)
+		public void Movsd(Context context)
 		{
 			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
 			{
@@ -143,7 +158,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Setcc"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Setcc(Context context)
+		public void Setcc(Context context)
 		{
 			Debug.Assert(context.Result.IsCPURegister);
 
@@ -165,7 +180,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Call"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Call(Context context)
+		public void Call(Context context)
 		{
 			if (context.Operand1 == null)
 				return;
@@ -197,7 +212,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Nop"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Nop(Context context)
+		public void Nop(Context context)
 		{
 			context.Empty();
 		}
@@ -206,7 +221,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.In"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void In(Context context)
+		public void In(Context context)
 		{
 			var size = context.Size;
 
@@ -219,6 +234,6 @@ namespace Mosa.Platform.x86.Stages
 			context.InsertBefore().SetInstruction(X86.Mov, context.Result, Operand.CreateConstant(TypeSystem, 0));
 		}
 
-		#endregion IX86Visitor
+		#endregion Visitation Methods
 	}
 }

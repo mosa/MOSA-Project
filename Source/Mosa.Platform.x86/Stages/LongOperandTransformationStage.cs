@@ -4,6 +4,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -15,8 +16,43 @@ namespace Mosa.Platform.x86.Stages
 	/// This stage translates all 64-bit operations to appropriate 32-bit operations on
 	/// architectures without appropriate 64-bit integral operations.
 	/// </remarks>
-	public sealed class LongOperandTransformationStage : BaseTransformationStage, IIRVisitor
+	public sealed class LongOperandTransformationStage : BaseTransformationStage
 	{
+		protected override void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary)
+		{
+			dictionary[IRInstruction.ArithmeticShiftRight] = ArithmeticShiftRight;
+			dictionary[IRInstruction.IntegerCompareBranch] = IntegerCompareBranch;
+			dictionary[IRInstruction.IntegerCompare] = IntegerCompare;
+			dictionary[IRInstruction.Load] = Load;
+			dictionary[IRInstruction.CompoundLoad] = CompoundLoad;
+			dictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
+			dictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
+			dictionary[IRInstruction.LogicalAnd] = LogicalAnd;
+			dictionary[IRInstruction.LogicalOr] = LogicalOr;
+			dictionary[IRInstruction.LogicalXor] = LogicalXor;
+			dictionary[IRInstruction.LogicalNot] = LogicalNot;
+			dictionary[IRInstruction.Move] = Move;
+			dictionary[IRInstruction.CompoundMove] = CompoundMove;
+			dictionary[IRInstruction.ShiftLeft] = ShiftLeft;
+			dictionary[IRInstruction.ShiftRight] = ShiftRight;
+			dictionary[IRInstruction.SignExtendedMove] = SignExtendedMove;
+			dictionary[IRInstruction.Store] = Store;
+			dictionary[IRInstruction.CompoundStore] = CompoundStore;
+			dictionary[IRInstruction.DivSigned] = DivSigned;
+			dictionary[IRInstruction.DivUnsigned] = DivUnsigned;
+			dictionary[IRInstruction.MulSigned] = MulSigned;
+			dictionary[IRInstruction.MulUnsigned] = MulUnsigned;
+			dictionary[IRInstruction.SubSigned] = SubSigned;
+			dictionary[IRInstruction.SubUnsigned] = SubUnsigned;
+			dictionary[IRInstruction.RemSigned] = RemSigned;
+			dictionary[IRInstruction.RemUnsigned] = RemUnsigned;
+			dictionary[IRInstruction.ZeroExtendedMove] = ZeroExtendedMove;
+			dictionary[IRInstruction.AddSigned] = AddSigned;
+			dictionary[IRInstruction.AddUnsigned] = AddUnsigned;
+			dictionary[IRInstruction.Call] = Call;
+			dictionary[IRInstruction.Return] = Return;
+		}
+
 		#region Utility Methods
 
 		public static void SplitLongOperand(BaseMethodCompiler methodCompiler, Operand operand, out Operand operandLow, out Operand operandHigh, Operand ConstantZero)
@@ -774,13 +810,13 @@ namespace Mosa.Platform.x86.Stages
 
 		#endregion Utility Methods
 
-		#region IIRVisitor
+		#region Visitation Methods
 
 		/// <summary>
 		/// Visitation function for ArithmeticShiftRightInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ArithmeticShiftRight(Context context)
+		private void ArithmeticShiftRight(Context context)
 		{
 			if (context.Operand1.Is64BitInteger)
 			{
@@ -792,7 +828,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for IntegerCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntegerCompareBranch(Context context)
+		private void IntegerCompareBranch(Context context)
 		{
 			if (context.Operand1.Is64BitInteger || context.Operand2.Is64BitInteger)
 			{
@@ -804,7 +840,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for IntegerCompare.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntegerCompare(Context context)
+		private void IntegerCompare(Context context)
 		{
 			if (context.Operand1.Is64BitInteger)
 			{
@@ -816,7 +852,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for Load.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Load(Context context)
+		private void Load(Context context)
 		{
 			if (context.Operand1.Is64BitInteger || context.Result.Is64BitInteger)
 			{
@@ -824,7 +860,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		void IIRVisitor.CompoundLoad(Context context)
+		private void CompoundLoad(Context context)
 		{
 		}
 
@@ -832,7 +868,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for Load Zero Extended.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.LoadZeroExtended(Context context)
+		private void LoadZeroExtended(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -844,7 +880,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for Load Sign Extended.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.LoadSignExtended(Context context)
+		private void LoadSignExtended(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -856,7 +892,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalAndInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.LogicalAnd(Context context)
+		private void LogicalAnd(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -868,7 +904,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalOrInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.LogicalOr(Context context)
+		private void LogicalOr(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -880,7 +916,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalXorInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.LogicalXor(Context context)
+		private void LogicalXor(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -892,7 +928,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalNotInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.LogicalNot(Context context)
+		private void LogicalNot(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -904,7 +940,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MoveInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Move(Context context)
+		private void Move(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -912,7 +948,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		void IIRVisitor.CompoundMove(Context context)
+		private void CompoundMove(Context context)
 		{
 		}
 
@@ -920,7 +956,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for ShiftLeftInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ShiftLeft(Context context)
+		private void ShiftLeft(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -932,7 +968,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for ShiftRightInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ShiftRight(Context context)
+		private void ShiftRight(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -944,7 +980,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SignExtendedMoveInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.SignExtendedMove(Context context)
+		private void SignExtendedMove(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -956,7 +992,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for StoreInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Store(Context context)
+		private void Store(Context context)
 		{
 			//if ((context.MosaType ?? context.Operand3.Type).IsUI8)
 			if (context.MosaType.IsUI8)
@@ -965,7 +1001,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		void IIRVisitor.CompoundStore(Context context)
+		private void CompoundStore(Context context)
 		{
 		}
 
@@ -973,7 +1009,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for DivSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.DivSigned(Context context)
+		private void DivSigned(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -985,7 +1021,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for DivUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.DivUnsigned(Context context)
+		private void DivUnsigned(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -997,7 +1033,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MulSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.MulSigned(Context context)
+		private void MulSigned(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -1009,7 +1045,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MulUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.MulUnsigned(Context context)
+		private void MulUnsigned(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -1021,7 +1057,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SubSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.SubSigned(Context context)
+		private void SubSigned(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -1033,7 +1069,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SubUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.SubUnsigned(Context context)
+		private void SubUnsigned(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -1045,7 +1081,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for RemSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.RemSigned(Context context)
+		private void RemSigned(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -1057,7 +1093,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for RemUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.RemUnsigned(Context context)
+		private void RemUnsigned(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -1069,7 +1105,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Zeroes the extended move instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ZeroExtendedMove(Context context)
+		private void ZeroExtendedMove(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -1081,7 +1117,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for AddSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.AddSigned(Context context)
+		private void AddSigned(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -1093,7 +1129,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for AddUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.AddUnsigned(Context context)
+		private void AddUnsigned(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
@@ -1105,7 +1141,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for CallInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Call(Context context)
+		private void Call(Context context)
 		{
 			Operand op0L, op0H;
 
@@ -1127,7 +1163,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for ReturnInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.Return(Context context)
+		private void Return(Context context)
 		{
 			Operand op0L, op0H;
 
@@ -1145,162 +1181,6 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		#endregion IIRVisitor
-
-		#region IIRVisitor - Unused
-
-		/// <summary>
-		/// Visitation function for InternalCall.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.InternalCall(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for InternalReturn.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.InternalReturn(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for RemFloatInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.RemFloat(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for SubFloatInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.SubFloat(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for SwitchInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Switch(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for AddFloat.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.AddFloat(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for DivFloat.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.DivFloat(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for BreakInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Break(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for AddressOfInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.AddressOf(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for intrinsic the method call.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.IntrinsicMethodCall(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for EpilogueInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Epilogue(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for FloatingPointCompareInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.FloatCompare(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for FloatingPointToIntegerConversionInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.FloatToIntegerConversion(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for IntegerToFloatingPointConversionInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.IntegerToFloatConversion(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for JmpInstruction instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Jmp(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for PhiInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Phi(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for PrologueInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Prologue(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for NopInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.Nop(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for MulFloatInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.MulFloat(Context context)
-		{
-		}
-
-		#endregion IIRVisitor - Unused
+		#endregion Visitation Methods
 	}
 }

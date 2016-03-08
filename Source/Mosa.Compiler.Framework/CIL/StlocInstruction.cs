@@ -59,16 +59,6 @@ namespace Mosa.Compiler.Framework.CIL
 			ctx.Result = decoder.Compiler.GetLocalOperand(index);
 		}
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Stloc(context);
-		}
-
 		#endregion Methods
 	}
 }

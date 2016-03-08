@@ -95,7 +95,6 @@
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="DefaultCallingConvention.cs" />
     <Compile Include="GeneralPurposeRegister.cs" />
-    <Compile Include="IARMv6Visitor.cs" />
     <Compile Include="Instructions\Adc.cs" />
     <Compile Include="Instructions\Add.cs" />
     <Compile Include="Instructions\Adr.cs" />

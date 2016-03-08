@@ -144,26 +144,6 @@ namespace Mosa.Platform.ARMv6
 			return "ARMv6." + base.ToString();
 		}
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public virtual void Visit(IARMv6Visitor visitor, Context context)
-		{
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IVisitor visitor, Context context)
-		{
-			if (visitor is IARMv6Visitor)
-				Visit(visitor as IARMv6Visitor, context);
-		}
-
 		#endregion Operand Overrides
 	}
 }
