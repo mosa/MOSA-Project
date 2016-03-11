@@ -11,7 +11,7 @@ namespace Mosa.Platform.x86.Stages
 	/// </summary>
 	public sealed class AddressModeConversionStage : BaseTransformationStage
 	{
-		protected override void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary)
+		protected override void PopulateVisitationDictionary()
 		{
 			// Nothing to do
 		}

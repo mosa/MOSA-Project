@@ -12,21 +12,21 @@ namespace Mosa.Platform.x86.Stages
 	/// </summary>
 	public sealed class FixedRegisterAssignmentStage : BaseTransformationStage
 	{
-		protected override void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary)
+		protected override void PopulateVisitationDictionary()
 		{
-			dictionary[X86.In] = In;
-			dictionary[X86.Out] = Out;
-			dictionary[X86.Cdq] = Cdq;
-			dictionary[X86.Mul] = Mul;
-			dictionary[X86.Div] = Div;
-			dictionary[X86.IMul] = IMul;
-			dictionary[X86.IDiv] = IDiv;
-			dictionary[X86.Sar] = Sar;
-			dictionary[X86.Shr] = Shr;
-			dictionary[X86.Shl] = Shl;
-			dictionary[X86.Rcr] = Rcr;
-			dictionary[X86.Shld] = Shld;
-			dictionary[X86.Shrd] = Shrd;
+			visitationDictionary[X86.In] = In;
+			visitationDictionary[X86.Out] = Out;
+			visitationDictionary[X86.Cdq] = Cdq;
+			visitationDictionary[X86.Mul] = Mul;
+			visitationDictionary[X86.Div] = Div;
+			visitationDictionary[X86.IMul] = IMul;
+			visitationDictionary[X86.IDiv] = IDiv;
+			visitationDictionary[X86.Sar] = Sar;
+			visitationDictionary[X86.Shr] = Shr;
+			visitationDictionary[X86.Shl] = Shl;
+			visitationDictionary[X86.Rcr] = Rcr;
+			visitationDictionary[X86.Shld] = Shld;
+			visitationDictionary[X86.Shrd] = Shrd;
 		}
 
 		#region Visitation Methods
