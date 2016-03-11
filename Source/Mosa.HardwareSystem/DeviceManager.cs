@@ -7,7 +7,7 @@ namespace Mosa.HardwareSystem
 	/// <summary>
 	///
 	/// </summary>
-	public class DeviceManager : IDeviceManager
+	public class DeviceManager
 	{
 		/// <summary>
 		///
@@ -47,11 +47,13 @@ namespace Mosa.HardwareSystem
 		{
 			spinLock.Enter();
 
-			LinkedList<IDevice> list = new LinkedList<IDevice>();
+			var list = new LinkedList<IDevice>();
 
-			foreach (IDevice device in devices)
+			foreach (var device in devices)
+			{
 				if (match.IsMatch(device))
 					list.AddLast(device);
+			}
 
 			spinLock.Exit();
 
@@ -68,11 +70,13 @@ namespace Mosa.HardwareSystem
 		{
 			spinLock.Enter();
 
-			LinkedList<IDevice> list = new LinkedList<IDevice>();
+			var list = new LinkedList<IDevice>();
 
-			foreach (IDevice device in devices)
+			foreach (var device in devices)
+			{
 				if (match1.IsMatch(device) && (match2.IsMatch(device)))
 					list.AddLast(device);
+			}
 
 			spinLock.Exit();
 
@@ -90,11 +94,13 @@ namespace Mosa.HardwareSystem
 		{
 			spinLock.Enter();
 
-			LinkedList<IDevice> list = new LinkedList<IDevice>();
+			var list = new LinkedList<IDevice>();
 
-			foreach (IDevice device in devices)
+			foreach (var device in devices)
+			{
 				if (match1.IsMatch(device) && (match2.IsMatch(device)) && (match3.IsMatch(device)))
 					list.AddLast(device);
+			}
 
 			spinLock.Exit();
 
@@ -110,9 +116,9 @@ namespace Mosa.HardwareSystem
 		{
 			spinLock.Enter();
 
-			LinkedList<IDevice> list = new LinkedList<IDevice>();
+			var list = new LinkedList<IDevice>();
 
-			foreach (IDevice device in devices)
+			foreach (var device in devices)
 			{
 				bool matched = true;
 
@@ -150,9 +156,9 @@ namespace Mosa.HardwareSystem
 		{
 			spinLock.Enter();
 
-			LinkedList<IDevice> list = new LinkedList<IDevice>();
+			var list = new LinkedList<IDevice>();
 
-			foreach (IDevice device in devices)
+			foreach (var device in devices)
 				list.AddLast(device);
 
 			spinLock.Exit();

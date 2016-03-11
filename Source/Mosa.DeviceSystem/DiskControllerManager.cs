@@ -13,13 +13,13 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		///
 		/// </summary>
-		protected IDeviceManager deviceManager;
+		protected DeviceManager deviceManager;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DiskControllerManager"/> class.
 		/// </summary>
 		/// <param name="deviceManager">The device manager.</param>
-		public DiskControllerManager(IDeviceManager deviceManager)
+		public DiskControllerManager(DeviceManager deviceManager)
 		{
 			this.deviceManager = deviceManager;
 		}

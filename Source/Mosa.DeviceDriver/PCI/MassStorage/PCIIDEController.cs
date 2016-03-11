@@ -9,14 +9,14 @@ using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 using Mosa.HardwareSystem;
 
-namespace Mosa.DeviceDriver.ISA
+namespace Mosa.DeviceDriver.PCI.MassStorage
 {
 	/// <summary>
 	///
 	/// </summary>
-	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x1F0, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
-	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x170, PortRange = 8, ForceOption = "ide2", Platforms = PlatformArchitecture.X86AndX64)]
-	public class IDEController : HardwareDevice, IDevice, IHardwareDevice, IDiskControllerDevice
+	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x7010, Platforms = PlatformArchitecture.X86AndX64)]
+	[PCIDeviceDriver(ClassCode = 0x01, SubClassCode = 0x01, ProgIF = 0x80, Platforms = PlatformArchitecture.X86AndX64)]
+	public class PCIIDEController : HardwareDevice, IDiskControllerDevice
 	{
 		#region Definitions
 
@@ -160,7 +160,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IDEController"/> class.
 		/// </summary>
-		public IDEController()
+		public PCIIDEController()
 		{
 			driveInfo = new DriveInfo[DrivesPerConroller];
 		}
@@ -173,7 +173,7 @@ namespace Mosa.DeviceDriver.ISA
 		public override bool Setup(HardwareResources hardwareResources)
 		{
 			this.HardwareResources = hardwareResources;
-			base.Name = "IDE_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			base.Name = "PCI_IDE_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
 
 			DataPort = base.HardwareResources.GetIOPort(0, 0);
 			ErrorPort = base.HardwareResources.GetIOPort(0, 1);

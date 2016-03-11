@@ -30,9 +30,10 @@ namespace Mosa.HardwareSystem
 		private InterruptHandler interruptHandler;
 
 		/// <summary>
-		///
+		/// Gets the PCI device resource.
 		/// </summary>
-		private IDeviceResource deviceResource;
+		/// <value>The PCI device resource.</value>
+		public IPCIDeviceResource DeviceResource { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HardwareResources"/> class.
@@ -57,13 +58,13 @@ namespace Mosa.HardwareSystem
 		/// <param name="memoryRegions">The memory regions.</param>
 		/// <param name="interruptHandler">The interrupt handler.</param>
 		/// <param name="deviceResource">The device resource.</param>
-		public HardwareResources(ResourceManager resourceManager, IOPortRegion[] ioPortRegions, MemoryRegion[] memoryRegions, InterruptHandler interruptHandler, IDeviceResource deviceResource)
+		public HardwareResources(ResourceManager resourceManager, IOPortRegion[] ioPortRegions, MemoryRegion[] memoryRegions, InterruptHandler interruptHandler, IPCIDeviceResource deviceResource)
 		{
 			this.resourceManager = resourceManager;
 			this.ioPortRegions = ioPortRegions;
 			this.memoryRegions = memoryRegions;
 			this.interruptHandler = interruptHandler;
-			this.deviceResource = DeviceResource;
+			this.DeviceResource = DeviceResource;
 		}
 
 		/// <summary>
@@ -149,11 +150,5 @@ namespace Mosa.HardwareSystem
 		{
 			interruptHandler.Disable();
 		}
-
-		/// <summary>
-		/// Gets the PCI device resource.
-		/// </summary>
-		/// <value>The PCI device resource.</value>
-		public IDeviceResource DeviceResource { get { return deviceResource; } }
 	}
 }

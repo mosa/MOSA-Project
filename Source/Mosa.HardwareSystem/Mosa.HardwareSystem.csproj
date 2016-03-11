@@ -79,7 +79,6 @@
     <Compile Include="HardwareResources.cs" />
     <Compile Include="IDevice.cs" />
     <Compile Include="IDeviceDriver.cs" />
-    <Compile Include="IDeviceManager.cs" />
     <Compile Include="IDMAChannel.cs" />
     <Compile Include="IFindDevice.cs" />
     <Compile Include="IHardwareAbstraction.cs" />
@@ -99,7 +98,7 @@
     <Compile Include="PCI\AddressType.cs" />
     <Compile Include="PCI\BaseAddress.cs" />
     <Compile Include="PCI\ClassCodeTable.cs" />
-    <Compile Include="PCI\IDeviceResource.cs" />
+    <Compile Include="PCI\IPCIDeviceResource.cs" />
     <Compile Include="PCI\IPCIDevice.cs" />
     <Compile Include="PCI\PCIDevice.cs" />
     <Compile Include="PCI\SubClassCodeTable.cs" />

@@ -5,11 +5,11 @@ namespace Mosa.HardwareSystem.PCI
 	/// <summary>
 	///
 	/// </summary>
-	public class PCIDevice : Device, IDevice, IPCIDevice, IDeviceResource
+	public class PCIDevice : Device, IDevice, IPCIDevice, IPCIDeviceResource
 	{
 		#region PCICommand
 
-		internal struct PCIOffset
+		internal struct PCIConfigurationHeader
 		{
 			internal const int VendorID = 0x00;
 			internal const int DeviceID = 0x02;
@@ -23,8 +23,13 @@ namespace Mosa.HardwareSystem.PCI
 			internal const int LatencyTimer = 0xD;
 			internal const int HeaderType = 0xE;
 			internal const int BIST = 0xF;
+			internal const int BaseAddressRegisterBase = 0x10;
 			internal const int BaseAddressRegister1 = 0x10;
 			internal const int BaseAddressRegister2 = 0x14;
+			internal const int BaseAddressRegister3 = 0x18;
+			internal const int BaseAddressRegister4 = 0x1C;
+			internal const int BaseAddressRegister5 = 0x20;
+			internal const int BaseAddressRegister6 = 0x24;
 			internal const int CardbusCISPointer = 0x28;
 			internal const int SubSystemVendorID = 0x2C;
 			internal const int SubSystemID = 0x2E;
@@ -105,55 +110,55 @@ namespace Mosa.HardwareSystem.PCI
 		/// Gets the vendor ID.
 		/// </summary>
 		/// <value>The vendor ID.</value>
-		public ushort VendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIOffset.VendorID); } }
+		public ushort VendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.VendorID); } }
 
 		/// <summary>
 		/// Gets the device ID.
 		/// </summary>
 		/// <value>The device ID.</value>
-		public ushort DeviceID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIOffset.DeviceID); } }
+		public ushort DeviceID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.DeviceID); } }
 
 		/// <summary>
 		/// Gets the revision ID.
 		/// </summary>
 		/// <value>The revision ID.</value>
-		public byte RevisionID { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.RevisionID); } }
+		public byte RevisionID { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIConfigurationHeader.RevisionID); } }
 
 		/// <summary>
 		/// Gets the class code.
 		/// </summary>
 		/// <value>The class code.</value>
-		public byte ClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.ClassCode); } }
+		public byte ClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIConfigurationHeader.ClassCode); } }
 
 		/// <summary>
 		/// Gets the prog IF.
 		/// </summary>
 		/// <value>The prog IF.</value>
-		public byte ProgIF { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.ProgrammingInterface); } }
+		public byte ProgIF { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIConfigurationHeader.ProgrammingInterface); } }
 
 		/// <summary>
 		/// Gets the sub class code.
 		/// </summary>
 		/// <value>The sub class code.</value>
-		public byte SubClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.SubClassCode); } }
+		public byte SubClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIConfigurationHeader.SubClassCode); } }
 
 		/// <summary>
 		/// Gets the sub vendor ID.
 		/// </summary>
 		/// <value>The sub vendor ID.</value>
-		public ushort SubVendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIOffset.SubSystemVendorID); } }
+		public ushort SubVendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.SubSystemVendorID); } }
 
 		/// <summary>
 		/// Gets the sub device ID.
 		/// </summary>
 		/// <value>The sub device ID.</value>
-		public ushort SubSystemID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIOffset.SubSystemID); } }
+		public ushort SubSystemID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.SubSystemID); } }
 
 		/// <summary>
 		/// Gets the IRQ.
 		/// </summary>
 		/// <value>The IRQ.</value>
-		public byte IRQ { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIOffset.InterruptLineRegister); } }
+		public byte IRQ { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIConfigurationHeader.InterruptLineRegister); } }
 
 		/// <summary>
 		/// Gets or sets the status register.
@@ -161,8 +166,8 @@ namespace Mosa.HardwareSystem.PCI
 		/// <value>The status.</value>
 		public ushort StatusRegister
 		{
-			get { return pciController.ReadConfig16(Bus, Slot, Function, PCIOffset.StatusRegister); }
-			set { pciController.WriteConfig16(Bus, Slot, Function, PCIOffset.StatusRegister, value); }
+			get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.StatusRegister); }
+			set { pciController.WriteConfig16(Bus, Slot, Function, PCIConfigurationHeader.StatusRegister, value); }
 		}
 
 		/// <summary>
@@ -171,8 +176,8 @@ namespace Mosa.HardwareSystem.PCI
 		/// <value>The status.</value>
 		public ushort CommandRegister
 		{
-			get { return pciController.ReadConfig16(Bus, Slot, Function, PCIOffset.CommandRegister); }
-			set { pciController.WriteConfig16(Bus, Slot, Function, PCIOffset.CommandRegister, value); }
+			get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.CommandRegister); }
+			set { pciController.WriteConfig16(Bus, Slot, Function, PCIConfigurationHeader.CommandRegister, value); }
 		}
 
 		/// <summary>
@@ -206,23 +211,24 @@ namespace Mosa.HardwareSystem.PCI
 
 			for (byte i = 0; i < 6; i++)
 			{
-				uint address = pciController.ReadConfig32(bus, slot, fun, (byte)(16 + (i * 4)));
+				byte barr = (byte)(PCIConfigurationHeader.BaseAddressRegisterBase + (i * 4));
+				uint address = pciController.ReadConfig32(bus, slot, fun, barr);
 
-				if (address != 0)
-				{
-					HAL.DisableAllInterrupts();
+				if (address == 0)
+					continue;
 
-					pciController.WriteConfig32(bus, slot, fun, (byte)(16 + (i * 4)), 0xFFFFFFFF);
-					uint mask = pciController.ReadConfig32(bus, slot, fun, (byte)(16 + (i * 4)));
-					pciController.WriteConfig32(bus, slot, fun, (byte)(16 + (i * 4)), address);
+				HAL.DisableAllInterrupts();
 
-					HAL.EnableAllInterrupts();
+				pciController.WriteConfig32(bus, slot, fun, barr, 0xFFFFFFFF);
+				uint mask = pciController.ReadConfig32(bus, slot, fun, barr);
+				pciController.WriteConfig32(bus, slot, fun, barr, address);
 
-					if (address % 2 == 1)
-						BaseAddresses[i] = new BaseAddress(AddressType.IO, address & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
-					else
-						BaseAddresses[i] = new BaseAddress(AddressType.Memory, address & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((address & 0x08) == 1));
-				}
+				HAL.EnableAllInterrupts();
+
+				if (address % 2 == 1)
+					BaseAddresses[i] = new BaseAddress(AddressType.IO, address & 0x0000FFF8, (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
+				else
+					BaseAddresses[i] = new BaseAddress(AddressType.Memory, address & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((address & 0x08) == 1));
 			}
 
 			if ((ClassCode == 0x03) && (SubClassCode == 0x00) && (ProgIF == 0x00))
@@ -234,13 +240,13 @@ namespace Mosa.HardwareSystem.PCI
 
 			foreach (var baseAddress in BaseAddresses)
 			{
-				if (baseAddress != null)
+				if (baseAddress == null)
+					continue;
+
+				switch (baseAddress.Region)
 				{
-					switch (baseAddress.Region)
-					{
-						case AddressType.IO: ioPortRegionCount++; break;
-						case AddressType.Memory: memoryRegionCount++; break;
-					}
+					case AddressType.IO: ioPortRegionCount++; break;
+					case AddressType.Memory: memoryRegionCount++; break;
 				}
 			}
 		}

@@ -10,13 +10,13 @@ namespace Mosa.HardwareSystem
 		/// <summary>
 		///
 		/// </summary>
-		protected IDeviceManager deviceManager;
+		protected DeviceManager deviceManager;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PCIControllerManager"/> class.
 		/// </summary>
 		/// <param name="deviceManager">The device manager.</param>
-		public PCIControllerManager(IDeviceManager deviceManager)
+		public PCIControllerManager(DeviceManager deviceManager)
 		{
 			this.deviceManager = deviceManager;
 		}
@@ -33,7 +33,6 @@ namespace Mosa.HardwareSystem
 		{
 			uint value = pciController.ReadConfig32(bus, slot, fun, 0);
 
-			//HAL.DebugWrite(": " + value.ToString("x"));
 			return value != 0xFFFFFFFF;
 		}
 
@@ -59,7 +58,8 @@ namespace Mosa.HardwareSystem
 					{
 						if (ProbeDevice(pciController, (byte)bus, (byte)slot, (byte)fun))
 						{
-							deviceManager.Add(new Mosa.HardwareSystem.PCI.PCIDevice(pciController, (byte)bus, (byte)slot, (byte)fun));
+							var pciDevice = new PCI.PCIDevice(pciController, (byte)bus, (byte)slot, (byte)fun);
+							deviceManager.Add(pciDevice);
 						}
 					}
 				}
