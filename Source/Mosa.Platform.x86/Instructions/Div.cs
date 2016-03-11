@@ -39,16 +39,6 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Emit(opcode, node.Operand3, null);
 		}
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor object.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IX86Visitor visitor, Context context)
-		{
-			visitor.Div(context);
-		}
-
 		#endregion Methods
 	}
 }

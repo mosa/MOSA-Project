@@ -7,10 +7,5 @@ namespace Mosa.Compiler.Framework.IR
 		public CompoundMove()
 		{
 		}
-
-		public override void Visit(IIRVisitor visitor, Context context)
-		{
-			visitor.CompoundMove(context);
-		}
 	}
 }

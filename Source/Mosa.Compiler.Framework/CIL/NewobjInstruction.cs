@@ -110,16 +110,6 @@ namespace Mosa.Compiler.Framework.CIL
 			Debug.Assert(ctx.OperandCount == ctx.InvokeMethod.Signature.Parameters.Count - offset, @"Operand count doesn't match parameter count.");
 		}
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Newobj(context);
-		}
-
 		#endregion Methods
 	}
 }

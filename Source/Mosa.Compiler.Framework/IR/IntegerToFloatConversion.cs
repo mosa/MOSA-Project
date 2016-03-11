@@ -17,19 +17,5 @@ namespace Mosa.Compiler.Framework.IR
 		}
 
 		#endregion Construction
-
-		#region TwoOperandInstruction Overrides
-
-		/// <summary>
-		/// Abstract visitor method for intermediate representation visitors.
-		/// </summary>
-		/// <param name="visitor">The visitor object.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IIRVisitor visitor, Context context)
-		{
-			visitor.IntegerToFloatConversion(context);
-		}
-
-		#endregion TwoOperandInstruction Overrides
 	}
 }

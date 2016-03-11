@@ -64,26 +64,6 @@ namespace Mosa.Platform.x86
 		#region Operand Overrides
 
 		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public virtual void Visit(IX86Visitor visitor, Context context)
-		{
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IVisitor visitor, Context context)
-		{
-			if (visitor is IX86Visitor)
-				Visit(visitor as IX86Visitor, context);
-		}
-
-		/// <summary>
 		/// Returns a string representation of <see cref="ConstantOperand"/>.
 		/// </summary>
 		/// <returns>A string representation of the operand.</returns>

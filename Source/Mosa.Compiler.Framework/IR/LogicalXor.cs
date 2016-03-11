@@ -17,19 +17,5 @@ namespace Mosa.Compiler.Framework.IR
 		}
 
 		#endregion Construction
-
-		#region ThreeOperandInstruction Overrides
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor object.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IIRVisitor visitor, Context context)
-		{
-			visitor.LogicalXor(context);
-		}
-
-		#endregion ThreeOperandInstruction Overrides
 	}
 }

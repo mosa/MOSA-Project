@@ -1,6 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -10,13 +12,30 @@ namespace Mosa.Platform.x86.Stages
 	/// </summary>
 	public sealed class FixedRegisterAssignmentStage : BaseTransformationStage
 	{
-		#region IX86Visitor
+		protected override void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary)
+		{
+			dictionary[X86.In] = In;
+			dictionary[X86.Out] = Out;
+			dictionary[X86.Cdq] = Cdq;
+			dictionary[X86.Mul] = Mul;
+			dictionary[X86.Div] = Div;
+			dictionary[X86.IMul] = IMul;
+			dictionary[X86.IDiv] = IDiv;
+			dictionary[X86.Sar] = Sar;
+			dictionary[X86.Shr] = Shr;
+			dictionary[X86.Shl] = Shl;
+			dictionary[X86.Rcr] = Rcr;
+			dictionary[X86.Shld] = Shld;
+			dictionary[X86.Shrd] = Shrd;
+		}
+
+		#region Visitation Methods
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.In"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void In(Context context)
+		public void In(Context context)
 		{
 			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister &&
 				context.Result.Register == GeneralPurposeRegister.EAX &&
@@ -40,7 +59,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Out"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Out(Context context)
+		public void Out(Context context)
 		{
 			// TRANSFORM: OUT <= EDX, EAX && OUT <= imm8, EAX
 			var size = context.Size;
@@ -65,7 +84,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Cdq"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Cdq(Context context)
+		public void Cdq(Context context)
 		{
 			if (context.Result.IsCPURegister && context.Result2.IsCPURegister && context.Operand1.IsCPURegister)
 				return;
@@ -87,7 +106,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Mul"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Mul(Context context)
+		public void Mul(Context context)
 		{
 			if (context.Result.IsCPURegister && context.Result2.IsCPURegister && context.Operand1.IsCPURegister && context.Operand2.IsRegister)
 				if (context.Result.Register == GeneralPurposeRegister.EDX &&
@@ -124,7 +143,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Div"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Div(Context context)
+		public void Div(Context context)
 		{
 			if (context.Result.IsCPURegister && context.Result2.IsCPURegister && context.Operand1.IsCPURegister)
 				if (context.Result.Register == GeneralPurposeRegister.EDX &&
@@ -164,7 +183,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.IMul" /> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void IMul(Context context)
+		public void IMul(Context context)
 		{
 			if (!context.Operand2.IsConstant)
 				return;
@@ -180,7 +199,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.IDiv"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void IDiv(Context context)
+		public void IDiv(Context context)
 		{
 			if (context.Result.IsCPURegister && context.Result2.IsCPURegister &
 				context.Operand1.IsCPURegister && context.Operand2.IsCPURegister)
@@ -221,25 +240,25 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Sar"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Sar(Context context)
+		public void Sar(Context context)
 		{
 			HandleShiftOperation(context, X86.Sar);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Sal"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public override void Sal(Context context)
-		{
-			HandleShiftOperation(context, X86.Shl);
-		}
+		///// <summary>
+		///// Visitation function for <see cref="IX86Visitor.Sal"/> instructions.
+		///// </summary>
+		///// <param name="context">The context.</param>
+		//public override void Sal(Context context)
+		//{
+		//	HandleShiftOperation(context, X86.Shl);
+		//}
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Shl"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Shl(Context context)
+		public void Shl(Context context)
 		{
 			HandleShiftOperation(context, X86.Shl);
 		}
@@ -248,7 +267,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Shr"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Shr(Context context)
+		public void Shr(Context context)
 		{
 			HandleShiftOperation(context, X86.Shr);
 		}
@@ -257,7 +276,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Rcr"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Rcr(Context context)
+		public void Rcr(Context context)
 		{
 			HandleShiftOperation(context, X86.Rcr);
 		}
@@ -266,7 +285,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Shld"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Shld(Context context)
+		public void Shld(Context context)
 		{
 			if (context.Operand3.IsConstant || context.Operand3.IsCPURegister)
 				return;
@@ -291,7 +310,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Shrd"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Shrd(Context context)
+		public void Shrd(Context context)
 		{
 			if (context.Operand3.IsConstant || context.Operand3.IsCPURegister)
 				return;
@@ -312,7 +331,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Shrd, result, operand1, operand2, ECX);
 		}
 
-		#endregion IX86Visitor
+		#endregion Visitation Methods
 
 		private void HandleShiftOperation(Context context, BaseInstruction instruction)
 		{

@@ -34,26 +34,6 @@ namespace Mosa.Compiler.Framework.IR
 			return "IR." + base.ToString();
 		}
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public virtual void Visit(IIRVisitor visitor, Context context)
-		{
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IVisitor visitor, Context context)
-		{
-			if (visitor is IIRVisitor)
-				Visit(visitor as IIRVisitor, context);
-		}
-
 		#endregion Methods
 	}
 }

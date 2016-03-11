@@ -1,6 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -10,13 +12,29 @@ namespace Mosa.Platform.x86.Stages
 	/// </summary>
 	public sealed class TweakTransformationStage : BaseTransformationStage
 	{
-		#region IX86Visitor
+		protected override void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary)
+		{
+			dictionary[X86.Mov] = Mov;
+			dictionary[X86.Cvttsd2si] = Cvttsd2si;
+			dictionary[X86.Cvttss2si] = Cvttss2si;
+			dictionary[X86.Cvtss2sd] = Cvtss2sd;
+			dictionary[X86.Cvtsd2ss] = Cvtsd2ss;
+			dictionary[X86.Movsx] = Movsx;
+			dictionary[X86.Movzx] = Movzx;
+			dictionary[X86.Cmp] = Cmp;
+			dictionary[X86.Sar] = Sar;
+			dictionary[X86.Shl] = Shl;
+			dictionary[X86.Shr] = Shr;
+			dictionary[X86.Call] = Call;
+		}
+
+		#region Visitation Methods
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Mov(Context context)
+		public void Mov(Context context)
 		{
 			Debug.Assert(!context.Result.IsConstant);
 
@@ -40,7 +58,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Cvttsd2si"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Cvttsd2si(Context context)
+		public void Cvttsd2si(Context context)
 		{
 			Operand result = context.Result;
 
@@ -56,7 +74,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Cvttss2si"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Cvttss2si(Context context)
+		public void Cvttss2si(Context context)
 		{
 			Operand result = context.Result;
 			Operand register = AllocateVirtualRegister(result.Type);
@@ -72,7 +90,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Cvtss2sd" /> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Cvtss2sd(Context context)
+		public void Cvtss2sd(Context context)
 		{
 			Operand result = context.Result;
 
@@ -88,7 +106,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Cvtsd2ss"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Cvtsd2ss(Context context)
+		public void Cvtsd2ss(Context context)
 		{
 			Operand result = context.Result;
 
@@ -104,7 +122,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Movsx"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Movsx(Context context)
+		public void Movsx(Context context)
 		{
 			if (context.Operand1.IsInt || context.Operand1.IsPointer || !context.Operand1.IsValueType)
 			{
@@ -116,7 +134,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Movzx"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Movzx(Context context)
+		public void Movzx(Context context)
 		{
 			if (context.Operand1.IsInt || context.Operand1.IsPointer || !context.Operand1.IsValueType)
 			{
@@ -128,7 +146,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Cmp"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Cmp(Context context)
+		public void Cmp(Context context)
 		{
 			Operand left = context.Operand1;
 			Operand right = context.Operand2;
@@ -163,7 +181,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Sar"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Sar(Context context)
+		public void Sar(Context context)
 		{
 			ConvertShiftConstantToByte(context);
 		}
@@ -172,7 +190,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Shl"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Shl(Context context)
+		public void Shl(Context context)
 		{
 			ConvertShiftConstantToByte(context);
 		}
@@ -181,7 +199,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Shr"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Shr(Context context)
+		public void Shr(Context context)
 		{
 			ConvertShiftConstantToByte(context);
 		}
@@ -190,7 +208,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Call"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public override void Call(Context context)
+		public void Call(Context context)
 		{
 			// FIXME: Result operand should be used instead of Operand1 for the result
 			// FIXME: Move to FixedRegisterAssignmentStage
@@ -209,7 +227,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		#endregion IX86Visitor
+		#endregion Visitation Methods
 
 		/// <summary>
 		/// Adjusts the shift constant.

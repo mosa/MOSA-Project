@@ -23,16 +23,6 @@ namespace Mosa.Compiler.Framework.IR
 
 		public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
 
-		/// <summary>
-		/// Visits the specified visitor.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IIRVisitor visitor, Context context)
-		{
-			visitor.Jmp(context);
-		}
-
 		#endregion IRInstruction Overrides
 	}
 }
