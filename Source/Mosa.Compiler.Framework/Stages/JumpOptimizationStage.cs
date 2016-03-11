@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class JumpOptimizationStage : BaseCodeTransformationStage
 	{
-		protected override void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary)
+		protected override void PopulateVisitationDictionary()
 		{
 			// Nothing to do
 		}

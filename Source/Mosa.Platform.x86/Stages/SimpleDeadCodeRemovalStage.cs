@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Stages
 	/// </summary>
 	public sealed class SimpleDeadCodeRemovalStage : BaseTransformationStage
 	{
-		protected override void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary)
+		protected override void PopulateVisitationDictionary()
 		{
 			// Nothing to do
 		}

@@ -18,39 +18,39 @@ namespace Mosa.Platform.x86.Stages
 	/// </remarks>
 	public sealed class LongOperandTransformationStage : BaseTransformationStage
 	{
-		protected override void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary)
+		protected override void PopulateVisitationDictionary()
 		{
-			dictionary[IRInstruction.ArithmeticShiftRight] = ArithmeticShiftRight;
-			dictionary[IRInstruction.IntegerCompareBranch] = IntegerCompareBranch;
-			dictionary[IRInstruction.IntegerCompare] = IntegerCompare;
-			dictionary[IRInstruction.Load] = Load;
-			dictionary[IRInstruction.CompoundLoad] = CompoundLoad;
-			dictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
-			dictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
-			dictionary[IRInstruction.LogicalAnd] = LogicalAnd;
-			dictionary[IRInstruction.LogicalOr] = LogicalOr;
-			dictionary[IRInstruction.LogicalXor] = LogicalXor;
-			dictionary[IRInstruction.LogicalNot] = LogicalNot;
-			dictionary[IRInstruction.Move] = Move;
-			dictionary[IRInstruction.CompoundMove] = CompoundMove;
-			dictionary[IRInstruction.ShiftLeft] = ShiftLeft;
-			dictionary[IRInstruction.ShiftRight] = ShiftRight;
-			dictionary[IRInstruction.SignExtendedMove] = SignExtendedMove;
-			dictionary[IRInstruction.Store] = Store;
-			dictionary[IRInstruction.CompoundStore] = CompoundStore;
-			dictionary[IRInstruction.DivSigned] = DivSigned;
-			dictionary[IRInstruction.DivUnsigned] = DivUnsigned;
-			dictionary[IRInstruction.MulSigned] = MulSigned;
-			dictionary[IRInstruction.MulUnsigned] = MulUnsigned;
-			dictionary[IRInstruction.SubSigned] = SubSigned;
-			dictionary[IRInstruction.SubUnsigned] = SubUnsigned;
-			dictionary[IRInstruction.RemSigned] = RemSigned;
-			dictionary[IRInstruction.RemUnsigned] = RemUnsigned;
-			dictionary[IRInstruction.ZeroExtendedMove] = ZeroExtendedMove;
-			dictionary[IRInstruction.AddSigned] = AddSigned;
-			dictionary[IRInstruction.AddUnsigned] = AddUnsigned;
-			dictionary[IRInstruction.Call] = Call;
-			dictionary[IRInstruction.Return] = Return;
+			visitationDictionary[IRInstruction.ArithmeticShiftRight] = ArithmeticShiftRight;
+			visitationDictionary[IRInstruction.IntegerCompareBranch] = IntegerCompareBranch;
+			visitationDictionary[IRInstruction.IntegerCompare] = IntegerCompare;
+			visitationDictionary[IRInstruction.Load] = Load;
+			visitationDictionary[IRInstruction.CompoundLoad] = CompoundLoad;
+			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
+			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
+			visitationDictionary[IRInstruction.LogicalAnd] = LogicalAnd;
+			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
+			visitationDictionary[IRInstruction.LogicalXor] = LogicalXor;
+			visitationDictionary[IRInstruction.LogicalNot] = LogicalNot;
+			visitationDictionary[IRInstruction.Move] = Move;
+			visitationDictionary[IRInstruction.CompoundMove] = CompoundMove;
+			visitationDictionary[IRInstruction.ShiftLeft] = ShiftLeft;
+			visitationDictionary[IRInstruction.ShiftRight] = ShiftRight;
+			visitationDictionary[IRInstruction.SignExtendedMove] = SignExtendedMove;
+			visitationDictionary[IRInstruction.Store] = Store;
+			visitationDictionary[IRInstruction.CompoundStore] = CompoundStore;
+			visitationDictionary[IRInstruction.DivSigned] = DivSigned;
+			visitationDictionary[IRInstruction.DivUnsigned] = DivUnsigned;
+			visitationDictionary[IRInstruction.MulSigned] = MulSigned;
+			visitationDictionary[IRInstruction.MulUnsigned] = MulUnsigned;
+			visitationDictionary[IRInstruction.SubSigned] = SubSigned;
+			visitationDictionary[IRInstruction.SubUnsigned] = SubUnsigned;
+			visitationDictionary[IRInstruction.RemSigned] = RemSigned;
+			visitationDictionary[IRInstruction.RemUnsigned] = RemUnsigned;
+			visitationDictionary[IRInstruction.ZeroExtendedMove] = ZeroExtendedMove;
+			visitationDictionary[IRInstruction.AddSigned] = AddSigned;
+			visitationDictionary[IRInstruction.AddUnsigned] = AddUnsigned;
+			visitationDictionary[IRInstruction.Call] = Call;
+			visitationDictionary[IRInstruction.Return] = Return;
 		}
 
 		#region Utility Methods
