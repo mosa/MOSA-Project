@@ -20,19 +20,5 @@ namespace Mosa.Compiler.Framework.IR
 		}
 
 		#endregion Construction
-
-		#region TwoOperandInstruction Overrides
-
-		/// <summary>
-		/// Implementation of the visitor pattern.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IIRVisitor visitor, Context context)
-		{
-			visitor.SignExtendedMove(context);
-		}
-
-		#endregion TwoOperandInstruction Overrides
 	}
 }

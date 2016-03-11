@@ -80,26 +80,6 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public virtual void Visit(ICILVisitor visitor, Context context)
-		{
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IVisitor visitor, Context context)
-		{
-			if (visitor is ICILVisitor)
-				Visit(visitor as ICILVisitor, context);
-		}
-
-		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
 		/// <returns>

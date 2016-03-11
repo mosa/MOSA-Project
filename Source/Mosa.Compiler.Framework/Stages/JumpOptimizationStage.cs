@@ -1,7 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -10,6 +12,11 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class JumpOptimizationStage : BaseCodeTransformationStage
 	{
+		protected override void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary)
+		{
+			// Nothing to do
+		}
+
 		protected override void Run()
 		{
 			var trace = CreateTraceLog();

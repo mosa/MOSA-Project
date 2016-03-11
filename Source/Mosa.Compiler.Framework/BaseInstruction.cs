@@ -225,15 +225,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public virtual void Visit(IVisitor visitor, Context context)
-		{
-		}
-
-		/// <summary>
 		/// Gets the instruction modifier.
 		/// </summary>
 		/// <param name="node">The node.</param>

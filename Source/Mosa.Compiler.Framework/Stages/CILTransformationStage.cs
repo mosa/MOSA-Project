@@ -18,15 +18,248 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
 	/// </remarks>
-	public sealed class CILTransformationStage : BaseCodeTransformationStage, CIL.ICILVisitor, IPipelineStage
+	public sealed class CILTransformationStage : BaseCodeTransformationStage, IPipelineStage
 	{
-		#region ICILVisitor
+		protected override void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary)
+		{
+			dictionary[CILInstruction.Nop] = Nop;
+			dictionary[CILInstruction.Break] = Break;
+			dictionary[CILInstruction.Ldarg_0] = Ldarg;
+			dictionary[CILInstruction.Ldarg_1] = Ldarg;
+			dictionary[CILInstruction.Ldarg_2] = Ldarg;
+			dictionary[CILInstruction.Ldarg_3] = Ldarg;
+			dictionary[CILInstruction.Ldloc_0] = Ldloc;
+			dictionary[CILInstruction.Ldloc_1] = Ldloc;
+			dictionary[CILInstruction.Ldloc_2] = Ldloc;
+			dictionary[CILInstruction.Ldloc_3] = Ldloc;
+			dictionary[CILInstruction.Stloc_0] = Stloc;
+			dictionary[CILInstruction.Stloc_1] = Stloc;
+			dictionary[CILInstruction.Stloc_2] = Stloc;
+			dictionary[CILInstruction.Stloc_3] = Stloc;
+			dictionary[CILInstruction.Ldarg_s] = Ldarg;
+			dictionary[CILInstruction.Ldarga_s] = Ldarga;
+			dictionary[CILInstruction.Starg_s] = Starg;
+			dictionary[CILInstruction.Ldloc_s] = Ldloc;
+			dictionary[CILInstruction.Ldloca_s] = Ldloca;
+			dictionary[CILInstruction.Stloc_s] = Stloc;
+			dictionary[CILInstruction.Ldnull] = Ldc;
+			dictionary[CILInstruction.Ldc_i4_m1] = Ldc;
+			dictionary[CILInstruction.Ldc_i4_0] = Ldc;
+			dictionary[CILInstruction.Ldc_i4_1] = Ldc;
+			dictionary[CILInstruction.Ldc_i4_2] = Ldc;
+			dictionary[CILInstruction.Ldc_i4_3] = Ldc;
+			dictionary[CILInstruction.Ldc_i4_4] = Ldc;
+			dictionary[CILInstruction.Ldc_i4_5] = Ldc;
+			dictionary[CILInstruction.Ldc_i4_6] = Ldc;
+			dictionary[CILInstruction.Ldc_i4_7] = Ldc;
+			dictionary[CILInstruction.Ldc_i4_8] = Ldc;
+			dictionary[CILInstruction.Ldc_i4_s] = Ldc;
+			dictionary[CILInstruction.Ldc_i4] = Ldc;
+			dictionary[CILInstruction.Ldc_i8] = Ldc;
+			dictionary[CILInstruction.Ldc_r4] = Ldc;
+			dictionary[CILInstruction.Ldc_r8] = Ldc;
+			dictionary[CILInstruction.Dup] = Dup;
+			dictionary[CILInstruction.Pop] = Pop;
+
+			//dictionary[CILInstruction.Jmp] = Jmp;
+			dictionary[CILInstruction.Call] = Call;
+			dictionary[CILInstruction.Calli] = Calli;
+			dictionary[CILInstruction.Ret] = Ret;
+			dictionary[CILInstruction.Br_s] = Branch;
+			dictionary[CILInstruction.Brfalse_s] = UnaryBranch;
+			dictionary[CILInstruction.Brtrue_s] = UnaryBranch;
+			dictionary[CILInstruction.Beq_s] = BinaryBranch;
+			dictionary[CILInstruction.Bge_s] = BinaryBranch;
+			dictionary[CILInstruction.Bgt_s] = BinaryBranch;
+			dictionary[CILInstruction.Ble_s] = BinaryBranch;
+			dictionary[CILInstruction.Blt_s] = BinaryBranch;
+			dictionary[CILInstruction.Bne_un_s] = BinaryBranch;
+			dictionary[CILInstruction.Bge_un_s] = BinaryBranch;
+			dictionary[CILInstruction.Bgt_un_s] = BinaryBranch;
+			dictionary[CILInstruction.Ble_un_s] = BinaryBranch;
+			dictionary[CILInstruction.Blt_un_s] = BinaryBranch;
+			dictionary[CILInstruction.Br] = Branch;
+			dictionary[CILInstruction.Brfalse] = UnaryBranch;
+			dictionary[CILInstruction.Brtrue] = UnaryBranch;
+			dictionary[CILInstruction.Beq] = BinaryBranch;
+			dictionary[CILInstruction.Bge] = BinaryBranch;
+			dictionary[CILInstruction.Bgt] = BinaryBranch;
+			dictionary[CILInstruction.Ble] = BinaryBranch;
+			dictionary[CILInstruction.Blt] = BinaryBranch;
+			dictionary[CILInstruction.Bne_un] = BinaryBranch;
+			dictionary[CILInstruction.Bge_un] = BinaryBranch;
+			dictionary[CILInstruction.Bgt_un] = BinaryBranch;
+			dictionary[CILInstruction.Ble_un] = BinaryBranch;
+			dictionary[CILInstruction.Blt_un] = BinaryBranch;
+			dictionary[CILInstruction.Switch] = Switch;
+			dictionary[CILInstruction.Ldind_i1] = Ldobj;
+			dictionary[CILInstruction.Ldind_u1] = Ldobj;
+			dictionary[CILInstruction.Ldind_i2] = Ldobj;
+			dictionary[CILInstruction.Ldind_u2] = Ldobj;
+			dictionary[CILInstruction.Ldind_i4] = Ldobj;
+			dictionary[CILInstruction.Ldind_u4] = Ldobj;
+			dictionary[CILInstruction.Ldind_i8] = Ldobj;
+			dictionary[CILInstruction.Ldind_i] = Ldobj;
+			dictionary[CILInstruction.Ldind_r4] = Ldobj;
+			dictionary[CILInstruction.Ldind_r8] = Ldobj;
+			dictionary[CILInstruction.Ldind_ref] = Ldobj;
+			dictionary[CILInstruction.Stind_ref] = Stobj;
+			dictionary[CILInstruction.Stind_i1] = Stobj;
+			dictionary[CILInstruction.Stind_i2] = Stobj;
+			dictionary[CILInstruction.Stind_i4] = Stobj;
+			dictionary[CILInstruction.Stind_i8] = Stobj;
+			dictionary[CILInstruction.Stind_r4] = Stobj;
+			dictionary[CILInstruction.Stind_r8] = Stobj;
+			dictionary[CILInstruction.Add] = Add;
+			dictionary[CILInstruction.Sub] = Sub;
+			dictionary[CILInstruction.Mul] = Mul;
+			dictionary[CILInstruction.Div] = Div;
+			dictionary[CILInstruction.Div_un] = BinaryLogic;
+			dictionary[CILInstruction.Rem] = Rem;
+			dictionary[CILInstruction.Rem_un] = BinaryLogic;
+			dictionary[CILInstruction.And] = BinaryLogic;
+			dictionary[CILInstruction.Or] = BinaryLogic;
+			dictionary[CILInstruction.Xor] = BinaryLogic;
+			dictionary[CILInstruction.Shl] = Shift;
+			dictionary[CILInstruction.Shr] = Shift;
+			dictionary[CILInstruction.Shr_un] = Shift;
+			dictionary[CILInstruction.Neg] = Neg;
+			dictionary[CILInstruction.Not] = Not;
+			dictionary[CILInstruction.Conv_i1] = Conversion;
+			dictionary[CILInstruction.Conv_i2] = Conversion;
+			dictionary[CILInstruction.Conv_i4] = Conversion;
+			dictionary[CILInstruction.Conv_i8] = Conversion;
+			dictionary[CILInstruction.Conv_r4] = Conversion;
+			dictionary[CILInstruction.Conv_r8] = Conversion;
+			dictionary[CILInstruction.Conv_u4] = Conversion;
+			dictionary[CILInstruction.Conv_u8] = Conversion;
+			dictionary[CILInstruction.Callvirt] = Callvirt;
+
+			//dictionary[CILInstruction.Cpobj] = Cpobj;
+			dictionary[CILInstruction.Ldobj] = Ldobj;
+			dictionary[CILInstruction.Ldstr] = Ldstr;
+			dictionary[CILInstruction.Newobj] = Newobj;
+			dictionary[CILInstruction.Castclass] = Castclass;
+			dictionary[CILInstruction.Isinst] = IsInst;
+			dictionary[CILInstruction.Conv_r_un] = Conversion;
+			dictionary[CILInstruction.Unbox] = Unbox;
+			dictionary[CILInstruction.Throw] = Throw;
+			dictionary[CILInstruction.Ldfld] = Ldfld;
+			dictionary[CILInstruction.Ldflda] = Ldflda;
+			dictionary[CILInstruction.Stfld] = Stfld;
+			dictionary[CILInstruction.Ldsfld] = Ldsfld;
+			dictionary[CILInstruction.Ldsflda] = Ldsflda;
+			dictionary[CILInstruction.Stsfld] = Stsfld;
+			dictionary[CILInstruction.Stobj] = Stobj;
+			dictionary[CILInstruction.Conv_ovf_i1_un] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_i2_un] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_i4_un] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_i8_un] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_u1_un] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_u2_un] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_u4_un] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_u8_un] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_i_un] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_u_un] = Conversion;
+			dictionary[CILInstruction.Box] = Box;
+			dictionary[CILInstruction.Newarr] = Newarr;
+			dictionary[CILInstruction.Ldlen] = Ldlen;
+			dictionary[CILInstruction.Ldelema] = Ldelema;
+			dictionary[CILInstruction.Ldelem_i1] = Ldelem;
+			dictionary[CILInstruction.Ldelem_u1] = Ldelem;
+			dictionary[CILInstruction.Ldelem_i2] = Ldelem;
+			dictionary[CILInstruction.Ldelem_u2] = Ldelem;
+			dictionary[CILInstruction.Ldelem_i4] = Ldelem;
+			dictionary[CILInstruction.Ldelem_u4] = Ldelem;
+			dictionary[CILInstruction.Ldelem_i8] = Ldelem;
+			dictionary[CILInstruction.Ldelem_i] = Ldelem;
+			dictionary[CILInstruction.Ldelem_r4] = Ldelem;
+			dictionary[CILInstruction.Ldelem_r8] = Ldelem;
+			dictionary[CILInstruction.Ldelem_ref] = Ldelem;
+			dictionary[CILInstruction.Stelem_i] = Stelem;
+			dictionary[CILInstruction.Stelem_i1] = Stelem;
+			dictionary[CILInstruction.Stelem_i2] = Stelem;
+			dictionary[CILInstruction.Stelem_i4] = Stelem;
+			dictionary[CILInstruction.Stelem_i8] = Stelem;
+			dictionary[CILInstruction.Stelem_r4] = Stelem;
+			dictionary[CILInstruction.Stelem_r8] = Stelem;
+			dictionary[CILInstruction.Stelem_ref] = Stelem;
+			dictionary[CILInstruction.Ldelem] = Ldelem;
+			dictionary[CILInstruction.Stelem] = Stelem;
+			dictionary[CILInstruction.Unbox_any] = UnboxAny;
+			dictionary[CILInstruction.Conv_ovf_i1] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_u1] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_i2] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_u2] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_i4] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_u4] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_i8] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_u8] = Conversion;
+
+			//dictionary[CILInstruction.Refanyval] = Refanyval;
+			//dictionary[CILInstruction.Ckfinite] = Ckfinite;
+			//dictionary[CILInstruction.Mkrefany] = Mkrefany;
+			dictionary[CILInstruction.Ldtoken] = Ldtoken;
+			dictionary[CILInstruction.Conv_u2] = Conversion;
+			dictionary[CILInstruction.Conv_u1] = Conversion;
+			dictionary[CILInstruction.Conv_i] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_i] = Conversion;
+			dictionary[CILInstruction.Conv_ovf_u] = Conversion;
+
+			//dictionary[CILInstruction.Add_ovf] = Add_ovf;
+			//dictionary[CILInstruction.Add_ovf_un] = Add_ovf_un;
+			//dictionary[CILInstruction.Mul_ovf] = Mul_ovf;
+			//dictionary[CILInstruction.Mul_ovf_un] = Mul_ovf_un;
+			//dictionary[CILInstruction.Sub_ovf] = Sub_ovf;
+			//dictionary[CILInstruction.Sub_ovf_un] = Sub_ovf_un;
+			dictionary[CILInstruction.Endfinally] = Endfinally;
+			dictionary[CILInstruction.Leave] = Leave;
+			dictionary[CILInstruction.Leave_s] = Leave;
+			dictionary[CILInstruction.Stind_i] = Stobj;
+			dictionary[CILInstruction.Conv_u] = Conversion;
+
+			//dictionary[CILInstruction.Arglist] = Arglist;
+			dictionary[CILInstruction.Ceq] = BinaryComparison;
+			dictionary[CILInstruction.Cgt] = BinaryComparison;
+			dictionary[CILInstruction.Cgt_un] = BinaryComparison;
+			dictionary[CILInstruction.Clt] = BinaryComparison;
+			dictionary[CILInstruction.Clt_un] = BinaryComparison;
+			dictionary[CILInstruction.Ldftn] = Ldftn;
+			dictionary[CILInstruction.Ldvirtftn] = Ldvirtftn;
+			dictionary[CILInstruction.Ldarg] = Ldarg;
+			dictionary[CILInstruction.Ldarga] = Ldarga;
+			dictionary[CILInstruction.Starg] = Starg;
+			dictionary[CILInstruction.Ldloc] = Ldloc;
+			dictionary[CILInstruction.Ldloca] = Ldloca;
+			dictionary[CILInstruction.Stloc] = Stloc;
+
+			//dictionary[CILInstruction.Localalloc] = Localalloc;
+			dictionary[CILInstruction.Endfilter] = Endfilter;
+
+			//dictionary[CILInstruction.PreUnaligned] = PreUnaligned;
+			//dictionary[CILInstruction.PreVolatile] = PreVolatile;
+			//dictionary[CILInstruction.PreTail] = PreTail;
+			dictionary[CILInstruction.InitObj] = InitObj;
+
+			//dictionary[CILInstruction.PreConstrained] = PreConstrained;
+			dictionary[CILInstruction.Cpblk] = Cpblk;
+			dictionary[CILInstruction.Initblk] = Initblk;
+
+			//dictionary[CILInstruction.PreNo] = PreNo;
+			dictionary[CILInstruction.Rethrow] = Rethrow;
+			dictionary[CILInstruction.Sizeof] = Sizeof;
+
+			//dictionary[CILInstruction.Refanytype] = Refanytype;
+			//dictionary[CILInstruction.PreReadOnly] = PreReadOnly;
+		}
+
+		#region Visitation Methods
 
 		/// <summary>
 		/// Visitation function for Ldarg instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldarg(Context context)
+		private void Ldarg(Context context)
 		{
 			ProcessLoadInstruction(context);
 		}
@@ -35,7 +268,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldarga instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldarga(Context context)
+		private void Ldarga(Context context)
 		{
 			context.ReplaceInstructionOnly(IRInstruction.AddressOf);
 		}
@@ -44,7 +277,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldloc instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldloc(Context context)
+		private void Ldloc(Context context)
 		{
 			Debug.Assert(context.MosaType == null);
 			ProcessLoadInstruction(context);
@@ -54,7 +287,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldloca instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldloca(Context context)
+		private void Ldloca(Context context)
 		{
 			context.ReplaceInstructionOnly(IRInstruction.AddressOf);
 		}
@@ -63,7 +296,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldc instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldc(Context context)
+		private void Ldc(Context context)
 		{
 			ProcessLoadInstruction(context);
 		}
@@ -72,7 +305,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldobj instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldobj(Context context)
+		private void Ldobj(Context context)
 		{
 			Operand destination = context.Result;
 			Operand source = context.Operand1;
@@ -101,7 +334,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldsfld instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldsfld(Context context)
+		private void Ldsfld(Context context)
 		{
 			var fieldType = context.MosaField.FieldType;
 			var destination = context.Result;
@@ -126,7 +359,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldsflda instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldsflda(Context context)
+		private void Ldsflda(Context context)
 		{
 			context.SetInstruction(IRInstruction.AddressOf, context.Result, Operand.CreateField(context.MosaField));
 		}
@@ -135,7 +368,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldftn instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldftn(Context context)
+		private void Ldftn(Context context)
 		{
 			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbolFromMethod(TypeSystem, context.InvokeMethod));
 		}
@@ -144,7 +377,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldvirtftn instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldvirtftn(Context context)
+		private void Ldvirtftn(Context context)
 		{
 			ReplaceWithVmCall(context, VmCall.GetVirtualFunctionPtr);
 		}
@@ -153,7 +386,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldtoken instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldtoken(Context context)
+		private void Ldtoken(Context context)
 		{
 			// TODO: remove VmCall.GetHandleForToken?
 
@@ -181,7 +414,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Stloc instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Stloc(Context context)
+		private void Stloc(Context context)
 		{
 			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 		}
@@ -190,7 +423,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Starg instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Starg(Context context)
+		private void Starg(Context context)
 		{
 			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 		}
@@ -199,7 +432,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Stobj instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Stobj(Context context)
+		private void Stobj(Context context)
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
 			var type = context.MosaType;  // pass thru
@@ -222,7 +455,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Stsfld instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Stsfld(Context context)
+		private void Stsfld(Context context)
 		{
 			var field = context.MosaField;
 			var size = GetInstructionSize(field.FieldType);
@@ -235,7 +468,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Dup instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Dup(Context context)
+		private void Dup(Context context)
 		{
 			Debug.Assert(false); // should never get here
 
@@ -247,7 +480,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Call instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Call(Context context)
+		private void Call(Context context)
 		{
 			if (CanSkipDueToRecursiveSystemObjectCtorCall(context))
 			{
@@ -318,7 +551,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Calli instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Calli(Context context)
+		private void Calli(Context context)
 		{
 			Operand destinationOperand = context.GetOperand(context.OperandCount - 1);
 			context.OperandCount -= 1;
@@ -330,7 +563,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ret instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ret(Context context)
+		private void Ret(Context context)
 		{
 			context.ReplaceInstructionOnly(IRInstruction.Return);
 		}
@@ -339,7 +572,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for BinaryLogic instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.BinaryLogic(Context context)
+		private void BinaryLogic(Context context)
 		{
 			if (context.Operand1.Type.IsEnum)
 			{
@@ -370,7 +603,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Shift instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Shift(Context context)
+		private void Shift(Context context)
 		{
 			switch ((context.Instruction as CIL.BaseCILInstruction).OpCode)
 			{
@@ -385,7 +618,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Neg instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Neg(Context context)
+		private void Neg(Context context)
 		{
 			//FUTURE: Add IRInstruction.Negate
 			if (context.Operand1.IsUnsigned)
@@ -414,7 +647,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Not instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Not(Context context)
+		private void Not(Context context)
 		{
 			context.SetInstruction(IRInstruction.LogicalNot, context.Result, context.Operand1);
 		}
@@ -423,7 +656,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Conversion instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Conversion(Context context)
+		private void Conversion(Context context)
 		{
 			CheckAndConvertInstruction(context);
 		}
@@ -432,7 +665,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Callvirt instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Callvirt(Context context)
+		private void Callvirt(Context context)
 		{
 			if (ProcessExternalCall(context))
 				return;
@@ -615,7 +848,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Newarr instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Newarr(Context context)
+		private void Newarr(Context context)
 		{
 			Operand thisReference = context.Result;
 			Debug.Assert(thisReference != null, @"Newarr didn't specify class signature?");
@@ -647,7 +880,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Newobj instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Newobj(Context context)
+		private void Newobj(Context context)
 		{
 			if (ReplaceWithInternalCall(context))
 				return;
@@ -702,7 +935,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Castclass instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Castclass(Context context)
+		private void Castclass(Context context)
 		{
 			// TODO!
 			//ReplaceWithVmCall(context, VmCall.Castclass);
@@ -713,7 +946,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Isinst instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.IsInst(Context context)
+		private void IsInst(Context context)
 		{
 			Operand reference = context.Operand1;
 			Operand result = context.Result;
@@ -746,7 +979,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Unbox.Any instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.UnboxAny(Context context)
+		private void UnboxAny(Context context)
 		{
 			var value = context.Operand1;
 			var result = context.Result;
@@ -797,7 +1030,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Throw instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Throw(Context context)
+		private void Throw(Context context)
 		{
 			throw new InvalidCompilerException();
 		}
@@ -806,7 +1039,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Box instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Box(Context context)
+		private void Box(Context context)
 		{
 			var value = context.Operand1;
 			var result = context.Result;
@@ -861,7 +1094,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for BinaryComparison instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.BinaryComparison(Context context)
+		private void BinaryComparison(Context context)
 		{
 			var code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
 			var instruction = context.Operand1.IsR ? IRInstruction.FloatCompare : IRInstruction.IntegerCompare;
@@ -874,7 +1107,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Cpblk instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Cpblk(Context context)
+		private void Cpblk(Context context)
 		{
 			ReplaceWithVmCall(context, VmCall.MemoryCopy);
 		}
@@ -883,7 +1116,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Initblk instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Initblk(Context context)
+		private void Initblk(Context context)
 		{
 			ReplaceWithVmCall(context, VmCall.MemorySet);
 		}
@@ -892,7 +1125,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Rethrow instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Rethrow(Context context)
+		private void Rethrow(Context context)
 		{
 			ReplaceWithVmCall(context, VmCall.Rethrow);
 		}
@@ -901,7 +1134,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Nop instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Nop(Context context)
+		private void Nop(Context context)
 		{
 			context.SetInstruction(IRInstruction.Nop);
 		}
@@ -910,7 +1143,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Pop instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Pop(Context context)
+		private void Pop(Context context)
 		{
 			context.Empty();
 		}
@@ -919,7 +1152,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Break instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Break(Context context)
+		private void Break(Context context)
 		{
 			context.SetInstruction(IRInstruction.Break);
 		}
@@ -928,7 +1161,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldstr instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldstr(Context context)
+		private void Ldstr(Context context)
 		{
 			/*
 			 * This requires a special memory layout for strings as they are interned by the compiler
@@ -965,7 +1198,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldfld instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldfld(Context context)
+		private void Ldfld(Context context)
 		{
 			Operand resultOperand = context.Result;
 			Operand objectOperand = context.Operand1;
@@ -1009,7 +1242,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldflda instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldflda(Context context)
+		private void Ldflda(Context context)
 		{
 			Operand fieldAddress = context.Result;
 			Operand objectOperand = context.Operand1;
@@ -1024,7 +1257,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Stfld instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Stfld(Context context)
+		private void Stfld(Context context)
 		{
 			Operand objectOperand = context.Operand1;
 			Operand valueOperand = context.Operand2;
@@ -1043,19 +1276,10 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for Jmp instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Jmp(Context context)
-		{
-			throw new NotImplementCompilerException();
-		}
-
-		/// <summary>
 		/// Visitation function for Branch instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Branch(Context context)
+		private void Branch(Context context)
 		{
 			context.ReplaceInstructionOnly(IRInstruction.Jmp);
 		}
@@ -1064,7 +1288,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for UnaryBranch instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.UnaryBranch(Context context)
+		private void UnaryBranch(Context context)
 		{
 			var target = context.BranchTargets[0];
 
@@ -1093,7 +1317,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for BinaryBranch instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.BinaryBranch(Context context)
+		private void BinaryBranch(Context context)
 		{
 			var target = context.BranchTargets[0];
 
@@ -1119,25 +1343,16 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Switch instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Switch(Context context)
+		private void Switch(Context context)
 		{
 			context.ReplaceInstructionOnly(IRInstruction.Switch);
-		}
-
-		/// <summary>
-		/// Visitation function for Cpobj instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Cpobj(Context context)
-		{
-			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
 		/// Visitation function for Ldlen instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldlen(Context context)
+		private void Ldlen(Context context)
 		{
 			Operand arrayOperand = context.Operand1;
 			Operand arrayLength = context.Result;
@@ -1154,7 +1369,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldelema instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldelema(Context context)
+		private void Ldelema(Context context)
 		{
 			var result = context.Result;
 			var arrayOperand = context.Operand1;
@@ -1185,7 +1400,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldelem instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Ldelem(Context context)
+		private void Ldelem(Context context)
 		{
 			var result = context.Result;
 			var arrayOperand = context.Operand1;
@@ -1232,7 +1447,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Stelem instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Stelem(Context context)
+		private void Stelem(Context context)
 		{
 			var arrayOperand = context.Operand1;
 			var arrayIndexOperand = context.Operand2;
@@ -1255,7 +1470,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Unbox instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Unbox(Context context)
+		private void Unbox(Context context)
 		{
 			var value = context.Operand1;
 			var result = context.Result;
@@ -1302,50 +1517,11 @@ namespace Mosa.Compiler.Framework.Stages
 			return;
 		}
 
-		#endregion ICILVisitor
-
-		#region ICILVisitor - Unused
-
-		/// <summary>
-		/// Visitation function for Refanyval instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Refanyval(Context context)
-		{
-			throw new NotImplementCompilerException();
-		}
-
-		/// <summary>
-		/// Visitation function for UnaryArithmetic instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.UnaryArithmetic(Context context)
-		{
-			throw new NotImplementCompilerException();
-		}
-
-		/// <summary>
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Mkrefany(Context context)
-		{
-			throw new NotImplementCompilerException();
-		}
-
-		/// <summary>
-		/// Visitation function for ArithmeticOverflow instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.ArithmeticOverflow(Context context)
-		{
-			throw new NotImplementCompilerException();
-		}
-
 		/// <summary>
 		/// Visitation function for Endfinally instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Endfinally(Context context)
+		private void Endfinally(Context context)
 		{
 			throw new InvalidCompilerException();
 		}
@@ -1354,34 +1530,16 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Leave instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Leave(Context context)
+		private void Leave(Context context)
 		{
 			throw new InvalidCompilerException();
-		}
-
-		/// <summary>
-		/// Visitation function for Arglist instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Arglist(Context context)
-		{
-			throw new NotImplementCompilerException();
-		}
-
-		/// <summary>
-		/// Visitation function for Localalloc instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Localalloc(Context context)
-		{
-			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
 		/// Visitation function for Endfilter instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Endfilter(Context context)
+		private void Endfilter(Context context)
 		{
 			throw new InvalidCompilerException();
 
@@ -1393,7 +1551,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for InitObj instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.InitObj(Context context)
+		private void InitObj(Context context)
 		{
 			// Get the ptr and clear context
 			Operand ptr = context.Operand1;
@@ -1410,19 +1568,10 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for Prefix instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Prefix(Context context)
-		{
-			throw new NotImplementCompilerException();
-		}
-
-		/// <summary>
 		/// Visitation function for Sizeof instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Sizeof(Context context)
+		private void Sizeof(Context context)
 		{
 			var type = context.MosaType;
 			context.MosaType = null;
@@ -1431,19 +1580,10 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for Refanytype instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Refanytype(Context context)
-		{
-			throw new NotImplementCompilerException();
-		}
-
-		/// <summary>
 		/// Visitation function for Add instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Add(Context context)
+		private void Add(Context context)
 		{
 			Replace(context, IRInstruction.AddFloat, IRInstruction.AddSigned, IRInstruction.AddUnsigned);
 		}
@@ -1452,7 +1592,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Sub instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Sub(Context context)
+		private void Sub(Context context)
 		{
 			Replace(context, IRInstruction.SubFloat, IRInstruction.SubSigned, IRInstruction.SubUnsigned);
 		}
@@ -1461,7 +1601,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Mul instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Mul(Context context)
+		private void Mul(Context context)
 		{
 			Replace(context, IRInstruction.MulFloat, IRInstruction.MulSigned, IRInstruction.MulUnsigned);
 		}
@@ -1470,7 +1610,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Div instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Div(Context context)
+		private void Div(Context context)
 		{
 			Replace(context, IRInstruction.DivFloat, IRInstruction.DivSigned, IRInstruction.DivUnsigned);
 		}
@@ -1479,12 +1619,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Rem instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Rem(Context context)
+		private void Rem(Context context)
 		{
 			Replace(context, IRInstruction.RemFloat, IRInstruction.RemSigned, IRInstruction.RemUnsigned);
 		}
 
-		#endregion ICILVisitor - Unused
+		#endregion Visitation Methods
 
 		#region Internals
 

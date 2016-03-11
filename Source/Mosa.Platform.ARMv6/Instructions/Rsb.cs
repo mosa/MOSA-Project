@@ -35,16 +35,6 @@ namespace Mosa.Platform.ARMv6.Instructions
 			EmitDataProcessingInstruction(node, emitter, Bits.b0011);
 		}
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor object.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IARMv6Visitor visitor, Context context)
-		{
-			visitor.Rsb(context);
-		}
-
 		#endregion Methods
 	}
 }

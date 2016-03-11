@@ -8,10 +8,5 @@ namespace Mosa.Compiler.Framework.IR
 			: base(3, 0)
 		{
 		}
-
-		public override void Visit(IIRVisitor visitor, Context context)
-		{
-			visitor.CompoundStore(context);
-		}
 	}
 }

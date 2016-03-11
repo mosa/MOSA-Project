@@ -74,16 +74,6 @@ namespace Mosa.Compiler.Framework.CIL
 		#region Methods
 
 		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.ArithmeticOverflow(context);
-		}
-
-		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
 		/// <param name="ctx">The context.</param>

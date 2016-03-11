@@ -236,15 +236,6 @@ namespace Mosa.Compiler.Framework
 		#region Methods
 
 		/// <summary>
-		/// Visits the instruction by the specified visitor.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		public void Visit(IVisitor visitor)
-		{
-			Instruction.Visit(visitor, this);
-		}
-
-		/// <summary>
 		/// Clones this instance.
 		/// </summary>
 		/// <returns>A new instance with the same instruction set, basic block and index.</returns>
