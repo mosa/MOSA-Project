@@ -231,7 +231,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
 
 			// NOTE: Other option is to use Movzx after IN instruction
-			context.InsertBefore().SetInstruction(X86.Mov, context.Result, Operand.CreateConstant(TypeSystem, 0));
+			context.InsertBefore().SetInstruction(X86.Mov, context.Result, ConstantZero);
 		}
 
 		#endregion Visitation Methods
