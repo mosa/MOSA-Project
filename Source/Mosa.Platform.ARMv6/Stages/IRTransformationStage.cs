@@ -15,13 +15,13 @@ namespace Mosa.Platform.ARMv6.Stages
 	/// </remarks>
 	public sealed class IRTransformationStage : BaseTransformationStage
 	{
-		protected override void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary)
+		protected override void PopulateVisitationDictionary()
 		{
-			dictionary[IRInstruction.AddSigned] = AddSigned;
-			dictionary[IRInstruction.AddUnsigned] = AddUnsigned;
-			dictionary[IRInstruction.LogicalOr] = LogicalOr;
-			dictionary[IRInstruction.SubSigned] = SubSigned;
-			dictionary[IRInstruction.SubUnsigned] = SubUnsigned;
+			visitationDictionary[IRInstruction.AddSigned] = AddSigned;
+			visitationDictionary[IRInstruction.AddUnsigned] = AddUnsigned;
+			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
+			visitationDictionary[IRInstruction.SubSigned] = SubSigned;
+			visitationDictionary[IRInstruction.SubUnsigned] = SubUnsigned;
 		}
 
 		#region Visitation Methods

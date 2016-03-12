@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework
 
 		protected delegate void VisitationDelegate(Context context);
 
-		private Dictionary<BaseInstruction, VisitationDelegate> visitationDictionary;
+		protected Dictionary<BaseInstruction, VisitationDelegate> visitationDictionary;
 
 		protected override void Setup()
 		{
@@ -23,10 +23,10 @@ namespace Mosa.Compiler.Framework
 
 			visitationDictionary = new Dictionary<BaseInstruction, VisitationDelegate>();
 
-			PopulateVisitationDictionary(visitationDictionary);
+			PopulateVisitationDictionary();
 		}
 
-		protected abstract void PopulateVisitationDictionary(Dictionary<BaseInstruction, VisitationDelegate> dictionary);
+		protected abstract void PopulateVisitationDictionary();
 
 		protected override void Run()
 		{
