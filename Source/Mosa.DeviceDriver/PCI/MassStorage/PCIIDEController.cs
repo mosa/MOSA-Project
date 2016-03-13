@@ -8,6 +8,7 @@
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 using Mosa.HardwareSystem;
+using Mosa.HardwareSystem.PCI;
 
 namespace Mosa.DeviceDriver.PCI.MassStorage
 {
@@ -15,7 +16,8 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 	///
 	/// </summary>
 	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x7010, Platforms = PlatformArchitecture.X86AndX64)]
-	[PCIDeviceDriver(ClassCode = 0x01, SubClassCode = 0x01, ProgIF = 0x80, Platforms = PlatformArchitecture.X86AndX64)]
+	//, ProgIF = 0x80
+	[PCIDeviceDriver(ClassCode = 0x01, SubClassCode = 0x01, Platforms = PlatformArchitecture.X86AndX64)]
 	public class PCIIDEController : HardwareDevice, IDiskControllerDevice
 	{
 		#region Definitions
@@ -163,6 +165,12 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		public PCIIDEController()
 		{
 			driveInfo = new DriveInfo[DrivesPerConroller];
+		}
+
+		public override bool PreSetup(IPCIDeviceResource pciDeviceResource)
+		{
+			//pciDeviceResource.CommandRegister;
+			return true;
 		}
 
 		/// <summary>

@@ -271,6 +271,8 @@ namespace Mosa.CoolWorld.x86
 				Boot.Console.WriteLine("  Memory: 0x" + memoryregion.BaseAddress.ToString("X") + " [" + memoryregion.Size.ToString("X") + "]");
 			}
 
+			//Boot.Console.WriteLine("  Command: 0x" + hardwareDevice...ToString("X"));
+
 			var hardwareResources = new HardwareResources(
 				resourceManager,
 				ioPortRegions.ToArray(),

@@ -197,6 +197,8 @@ namespace Mosa.HardwareSystem
 				if ((fields & Priority6) == Priority6) return 6;
 				if ((fields & Priority7) == Priority7) return 7;
 				if ((fields & Priority8) == Priority8) return 8;
+				if ((fields & Priority9) == Priority9) return 9;
+				if ((fields & Priority10) == Priority10) return 10;
 
 				return 0; // no binding
 			}

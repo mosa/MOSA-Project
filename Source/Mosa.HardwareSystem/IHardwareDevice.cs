@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.HardwareSystem.PCI;
+
 namespace Mosa.HardwareSystem
 {
 	/// <summary>
@@ -7,6 +9,8 @@ namespace Mosa.HardwareSystem
 	/// </summary>
 	public interface IHardwareDevice : IDevice
 	{
+		bool PreSetup(IPCIDeviceResource pciDeviceResource);
+
 		/// <summary>
 		/// Setups this hardware device driver
 		/// </summary>

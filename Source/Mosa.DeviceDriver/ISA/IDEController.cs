@@ -16,7 +16,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x1F0, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x170, PortRange = 8, ForceOption = "ide2", Platforms = PlatformArchitecture.X86AndX64)]
-	public class IDEController : HardwareDevice, IDevice, IHardwareDevice, IDiskControllerDevice
+	public class IDEController : HardwareDevice, IDiskControllerDevice
 	{
 		#region Definitions
 

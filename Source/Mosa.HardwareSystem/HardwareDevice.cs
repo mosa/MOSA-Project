@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.HardwareSystem.PCI;
+
 namespace Mosa.HardwareSystem
 {
 	/// <summary>
@@ -19,6 +21,13 @@ namespace Mosa.HardwareSystem
 		{
 			base.DeviceStatus = DeviceStatus.Initializing;
 		}
+
+		/// <summary>
+		/// Pres the setup.
+		/// </summary>
+		/// <param name="pciDeviceResource">The pci device resource.</param>
+		/// <returns></returns>
+		public virtual bool PreSetup(IPCIDeviceResource pciDeviceResource) { return true; }
 
 		/// <summary>
 		/// Setups this hardware device driver

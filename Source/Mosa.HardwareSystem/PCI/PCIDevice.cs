@@ -57,16 +57,17 @@ namespace Mosa.HardwareSystem.PCI
 
 		internal struct PCICommand
 		{
-			internal const ushort IO = 0x1; // Enable response in I/O space
-			internal const ushort Memort = 0x2; //  Enable response in memory space
-			internal const ushort Master = 0x4; //  Enable bus mastering
-			internal const ushort Special = 0x8; //  Enable response to special cycles
-			internal const ushort Invalidate = 0x10; //  Use memory write and invalidate
-			internal const ushort VGA_Pallete = 0x20; //  Enable palette snooping
-			internal const ushort Parity = 0x40; //  Enable parity checking
-			internal const ushort Wait = 0x80; //  Enable address/data stepping
-			internal const ushort SERR = 0x100; //  Enable SERR
-			internal const ushort Fast_Back = 0x200; //  Enable back-to-back writes
+			internal const ushort IOSpaceEnable = 0x1; // Enable response in I/O space
+			internal const ushort MemorySpaceEnable = 0x2; //  Enable response in memory space
+			internal const ushort BusMasterFunctionEnable = 0x4; //  Enable bus mastering
+			internal const ushort SpecialCycleEnable = 0x8; //  Enable response to special cycles
+			internal const ushort MemoryWriteandInvalidateEnable = 0x10; //  Use memory write and invalidate
+
+			//internal const ushort VGA_Pallete = 0x20; //  Enable palette snooping
+			//internal const ushort Parity = 0x40; //  Enable parity checking
+			//internal const ushort Wait = 0x80; //  Enable address/data stepping
+			//internal const ushort SERR = 0x100; //  Enable SERR
+			//internal const ushort Fast_Back = 0x200; //  Enable back-to-back writes
 		}
 
 		#endregion PCICommand
@@ -256,7 +257,7 @@ namespace Mosa.HardwareSystem.PCI
 		/// </summary>
 		public void EnableDevice()
 		{
-			CommandRegister = (ushort)(CommandRegister | (((ioPortRegionCount > 0) ? PCICommand.IO : 0) | PCICommand.Master | ((memoryRegionCount > 0) ? PCICommand.Memort : 0)));
+			CommandRegister = (ushort)(CommandRegister | PCICommand.IOSpaceEnable | PCICommand.BusMasterFunctionEnable | PCICommand.MemorySpaceEnable);
 		}
 
 		/// <summary>
@@ -264,7 +265,7 @@ namespace Mosa.HardwareSystem.PCI
 		/// </summary>
 		public void DisableDevice()
 		{
-			CommandRegister = (ushort)(CommandRegister & (~PCICommand.IO & ~PCICommand.Master & PCICommand.Memort));
+			CommandRegister = (ushort)(CommandRegister & (~PCICommand.IOSpaceEnable & ~PCICommand.BusMasterFunctionEnable & PCICommand.MemorySpaceEnable));
 		}
 
 		/// <summary>
