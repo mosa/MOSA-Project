@@ -16,9 +16,9 @@ namespace Mosa.CoolWorld.x86
 	{
 		static private DeviceDriverRegistry deviceDriverRegistry;
 		static private DeviceManager deviceManager;
-		static private ResourceManager resourceManager;
 		static private PCIControllerManager pciControllerManager;
 		static private PartitionManager partitionManager;
+		static private InterruptManager interruptManager;
 
 		/// <summary>
 		/// Gets the device driver library
@@ -31,9 +31,9 @@ namespace Mosa.CoolWorld.x86
 		static public DeviceManager DeviceManager { get { return deviceManager; } }
 
 		/// <summary>
-		/// Gets the resource manager.
+		/// Gets the interrupt manager.
 		/// </summary>
-		static public ResourceManager ResourceManager { get { return resourceManager; } }
+		static public InterruptManager InterruptManager { get { return interruptManager; } }
 
 		/// <summary>
 		/// Gets the PCI Controller Manager
@@ -51,11 +51,11 @@ namespace Mosa.CoolWorld.x86
 		/// </summary>
 		static public void Initialize()
 		{
-			// Create Resource Manager
-			resourceManager = new ResourceManager();
-
 			// Create Device Manager
 			deviceManager = new DeviceManager();
+
+			// Create Interrupt Manager
+			interruptManager = new InterruptManager();
 
 			// Create the Device Driver Manager
 			deviceDriverRegistry = new DeviceDriverRegistry(PlatformArchitecture.X86);
@@ -70,7 +70,7 @@ namespace Mosa.CoolWorld.x86
 			Mosa.HardwareSystem.HAL.SetHardwareAbstraction(hardware);
 
 			// Set the interrupt handler
-			Mosa.HardwareSystem.HAL.SetInterruptHandler(ResourceManager.InterruptManager.ProcessInterrupt);
+			Mosa.HardwareSystem.HAL.SetInterruptHandler(InterruptManager.ProcessInterrupt);
 
 			partitionManager = new PartitionManager(deviceManager);
 		}
@@ -266,6 +266,7 @@ namespace Mosa.CoolWorld.x86
 			{
 				Boot.Console.WriteLine("  I/O: 0x" + ioportregion.BaseIOPort.ToString("X") + " [" + ioportregion.Size.ToString("X") + "]");
 			}
+
 			foreach (var memoryregion in memoryRegions)
 			{
 				Boot.Console.WriteLine("  Memory: 0x" + memoryregion.BaseAddress.ToString("X") + " [" + memoryregion.Size.ToString("X") + "]");
@@ -274,21 +275,17 @@ namespace Mosa.CoolWorld.x86
 			//Boot.Console.WriteLine("  Command: 0x" + hardwareDevice...ToString("X"));
 
 			var hardwareResources = new HardwareResources(
-				resourceManager,
 				ioPortRegions.ToArray(),
 				memoryRegions.ToArray(),
-				new InterruptHandler(resourceManager.InterruptManager, pciDevice.IRQ, hardwareDevice),
+				new InterruptHandler(InterruptManager, pciDevice.IRQ, hardwareDevice),
 				pciDevice as IPCIDeviceResource
 			);
-
-			if (!resourceManager.ClaimResources(hardwareResources))
-				return;
-
-			hardwareResources.EnableIRQ();
 
 			hardwareDevice.Setup(hardwareResources);
 
 			deviceManager.Add(hardwareDevice);
+
+			hardwareResources.EnableIRQ();
 
 			if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
 			{
@@ -351,10 +348,9 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			var hardwareResources = new HardwareResources(
-				resourceManager,
 				ioPortRegions.ToArray(),
 				memoryRegions.ToArray(),
-				new InterruptHandler(resourceManager.InterruptManager, driverAtttribute.IRQ, hardwareDevice)
+				new InterruptHandler(InterruptManager, driverAtttribute.IRQ, hardwareDevice)
 			);
 
 			hardwareDevice.Setup(hardwareResources);
@@ -363,11 +359,10 @@ namespace Mosa.CoolWorld.x86
 			Boot.InBrackets(hardwareDevice.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
 			Boot.Console.WriteLine();
 
-			if (!resourceManager.ClaimResources(hardwareResources))
-				return;
-
 			deviceManager.Add(hardwareDevice);
+
 			hardwareResources.EnableIRQ();
+
 			hardwareDevice.Start();
 		}
 	}

@@ -103,7 +103,6 @@
     <Compile Include="PCI\PCIDevice.cs" />
     <Compile Include="PCI\SubClassCodeTable.cs" />
     <Compile Include="PlatformArchitecture.cs" />
-    <Compile Include="ResourceManager.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="SpinLock.cs" />
   </ItemGroup>

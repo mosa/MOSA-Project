@@ -12,11 +12,6 @@ namespace Mosa.HardwareSystem
 		/// <summary>
 		///
 		/// </summary>
-		private ResourceManager resourceManager;
-
-		/// <summary>
-		///
-		/// </summary>
 		private IOPortRegion[] ioPortRegions;
 
 		/// <summary>
@@ -36,15 +31,13 @@ namespace Mosa.HardwareSystem
 		public IPCIDeviceResource DeviceResource { get; private set; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="HardwareResources"/> class.
+		/// Initializes a new instance of the <see cref="HardwareResources" /> class.
 		/// </summary>
-		/// <param name="resourceManager">The resource manager.</param>
 		/// <param name="ioPortRegions">The io port regions.</param>
 		/// <param name="memoryRegions">The memory regions.</param>
 		/// <param name="interruptHandler">The interrupt handler.</param>
-		public HardwareResources(ResourceManager resourceManager, IOPortRegion[] ioPortRegions, MemoryRegion[] memoryRegions, InterruptHandler interruptHandler)
+		public HardwareResources(IOPortRegion[] ioPortRegions, MemoryRegion[] memoryRegions, InterruptHandler interruptHandler)
 		{
-			this.resourceManager = resourceManager;
 			this.ioPortRegions = ioPortRegions;
 			this.memoryRegions = memoryRegions;
 			this.interruptHandler = interruptHandler;
@@ -58,9 +51,8 @@ namespace Mosa.HardwareSystem
 		/// <param name="memoryRegions">The memory regions.</param>
 		/// <param name="interruptHandler">The interrupt handler.</param>
 		/// <param name="deviceResource">The device resource.</param>
-		public HardwareResources(ResourceManager resourceManager, IOPortRegion[] ioPortRegions, MemoryRegion[] memoryRegions, InterruptHandler interruptHandler, IPCIDeviceResource deviceResource)
+		public HardwareResources(IOPortRegion[] ioPortRegions, MemoryRegion[] memoryRegions, InterruptHandler interruptHandler, IPCIDeviceResource deviceResource)
 		{
-			this.resourceManager = resourceManager;
 			this.ioPortRegions = ioPortRegions;
 			this.memoryRegions = memoryRegions;
 			this.interruptHandler = interruptHandler;
@@ -107,7 +99,7 @@ namespace Mosa.HardwareSystem
 		/// <returns></returns>
 		public IReadWriteIOPort GetIOPort(byte region, ushort index)
 		{
-			return resourceManager.IOPortResources.GetIOPort(ioPortRegions[region].BaseIOPort, index);
+			return HAL.RequestIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
 		}
 
 		/// <summary>
@@ -117,7 +109,7 @@ namespace Mosa.HardwareSystem
 		/// <returns></returns>
 		public IMemory GetMemory(byte region)
 		{
-			return resourceManager.MemoryResources.GetMemory(memoryRegions[region].BaseAddress, memoryRegions[region].Size);
+			return HAL.RequestPhysicalMemory(memoryRegions[region].BaseAddress, memoryRegions[region].Size);
 		}
 
 		/// <summary>

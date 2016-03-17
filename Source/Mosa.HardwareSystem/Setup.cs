@@ -7,6 +7,6 @@ namespace Mosa.HardwareSystem
 	/// </summary>
 	public static class Setup
 	{
-		// FIXME: Port back from CoolWorld's Mosa.CoolWorld.x86.Setup
+		// FIXME: Port back from Mosa.CoolWorld.x86.Setup when ready
 	}
 }
