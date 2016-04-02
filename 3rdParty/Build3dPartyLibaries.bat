@@ -4,12 +4,12 @@ if exist "%ProgramFiles(x86)%\MSBuild\14.0\Bin" set MSBUILDPATH="%ProgramFiles(x
 
 set MSBUILD=%MSBUILDPATH%\msbuild.exe
 
-set GIT="%ProgramFiles(x86)%\Git\bin\git.exe" 
+set GIT="%ProgramFiles%\Git\bin\git.exe" 
 
 rmdir /q /s source
 mkdir source
 
-%GIT% clone --branch v1.6.0-mosa --depth 1 https://github.com/mosa/dnlib.git source/dnlib
+%GIT% clone --branch v1.6.1-mosa --depth 1 https://github.com/mosa/dnlib.git source/dnlib
 %GIT% clone --branch v2.10.0.beta1-mosa  --depth 1 https://github.com/mosa/dockpanelsuite.git source/dockpanelsuite
 
 %MSBUILD% /nologo /m /p:BuildInParallel=true /p:Configuration=Release /p:Platform="Any CPU" source/dnlib\dnlib.sln
