@@ -7,15 +7,16 @@
 
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceDriver.ISA
 {
 	/// <summary>
 	///
 	/// </summary>
-	[ISADeviceDriver(AutoLoad = true, BasePort = 0x1F0, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
-	[ISADeviceDriver(AutoLoad = false, BasePort = 0x170, PortRange = 8, ForceOption = "ide2", Platforms = PlatformArchitecture.X86AndX64)]
-	public class IDEController : HardwareDevice, IDevice, IHardwareDevice, IDiskControllerDevice
+	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x1F0, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
+	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x170, PortRange = 8, ForceOption = "ide2", Platforms = PlatformArchitecture.X86AndX64)]
+	public class IDEController : HardwareDevice, IDiskControllerDevice
 	{
 		#region Definitions
 
@@ -169,21 +170,21 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		/// <param name="hardwareResources"></param>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "IDE_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			this.HardwareResources = hardwareResources;
+			base.Name = "IDE_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
 
-			DataPort = base.hardwareResources.GetIOPort(0, 0);
-			ErrorPort = base.hardwareResources.GetIOPort(0, 1);
-			FeaturePort = base.hardwareResources.GetIOPort(0, 1);
-			SectorCountPort = base.hardwareResources.GetIOPort(0, 2);
-			LBALowPort = base.hardwareResources.GetIOPort(0, 3);
-			LBAMidPort = base.hardwareResources.GetIOPort(0, 4);
-			LBAHighPort = base.hardwareResources.GetIOPort(0, 5);
-			DeviceHeadPort = base.hardwareResources.GetIOPort(0, 6);
-			CommandPort = base.hardwareResources.GetIOPort(0, 7);
-			StatusPort = base.hardwareResources.GetIOPort(0, 7);
+			DataPort = base.HardwareResources.GetIOPort(0, 0);
+			ErrorPort = base.HardwareResources.GetIOPort(0, 1);
+			FeaturePort = base.HardwareResources.GetIOPort(0, 1);
+			SectorCountPort = base.HardwareResources.GetIOPort(0, 2);
+			LBALowPort = base.HardwareResources.GetIOPort(0, 3);
+			LBAMidPort = base.HardwareResources.GetIOPort(0, 4);
+			LBAHighPort = base.HardwareResources.GetIOPort(0, 5);
+			DeviceHeadPort = base.HardwareResources.GetIOPort(0, 6);
+			CommandPort = base.HardwareResources.GetIOPort(0, 7);
+			StatusPort = base.HardwareResources.GetIOPort(0, 7);
 
 			for (int drive = 0; drive < DrivesPerConroller; drive++)
 			{
@@ -191,7 +192,7 @@ namespace Mosa.DeviceDriver.ISA
 				driveInfo[drive].MaxLBA = 0;
 			}
 
-			base.deviceStatus = DeviceStatus.Online;
+			base.DeviceStatus = DeviceStatus.Online;
 			return true;
 		}
 

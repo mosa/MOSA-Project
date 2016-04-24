@@ -94,44 +94,44 @@ namespace Mosa.Compiler.Framework.Stages
 				writer.WriteLine("\tat virtual address {0:x16}", entryPoint.VirtualAddress);
 			}
 
-			writer.WriteLine();
-			writer.WriteLine("Hash Table:");
-			writer.WriteLine();
-			writer.WriteLine("Virtual          Size     Pre-Hash  Post-Hash Symbol");
+			//writer.WriteLine();
+			//writer.WriteLine("Hash Table:");
+			//writer.WriteLine();
+			//writer.WriteLine("Virtual          Size     Pre-Hash  Post-Hash Symbol");
 
-			var symbols = linker.Symbols.OrderBy(symbol => symbol.Name);
+			//var symbols = linker.Symbols.OrderBy(symbol => symbol.Name);
 
-			foreach (var symbol in linker.Symbols)
-			{
-				if (symbol.SectionKind == SectionKind.Text)
-				{
-					writer.WriteLine("{0:x16} {1:x8} {2} {3}  {4}", symbol.VirtualAddress, symbol.Size, ExtractHash(symbol.PreHash), ExtractHash(symbol.PostHash), symbol.Name);
-				}
-			}
+			//foreach (var symbol in linker.Symbols)
+			//{
+			//	if (symbol.SectionKind == SectionKind.Text)
+			//	{
+			//		writer.WriteLine("{0:x16} {1:x8} {2} {3}  {4}", symbol.VirtualAddress, symbol.Size, ExtractHash(symbol.PreHash), ExtractHash(symbol.PostHash), symbol.Name);
+			//	}
+			//}
 
-			writer.WriteLine();
-			writer.WriteLine("Pre-Hash Table:");
-			writer.WriteLine();
-			writer.WriteLine("Hash     Size     Symbol");
+			//writer.WriteLine();
+			//writer.WriteLine("Pre-Hash Table:");
+			//writer.WriteLine();
+			//writer.WriteLine("Hash     Size     Symbol");
 
-			var symbols2 = linker.Symbols.OrderBy(symbol => symbol.Name);
+			//var symbols2 = linker.Symbols.OrderBy(symbol => symbol.Name);
 
-			foreach (var symbol in symbols2)
-			{
-				if (symbol.SectionKind == SectionKind.Text)
-				{
-					writer.WriteLine("{0} {1:x8} {2}", ExtractHash(symbol.PreHash), symbol.Size, symbol.Name);
-				}
-			}
+			//foreach (var symbol in symbols2)
+			//{
+			//	if (symbol.SectionKind == SectionKind.Text)
+			//	{
+			//		writer.WriteLine("{0} {1:x8} {2}", ExtractHash(symbol.PreHash), symbol.Size, symbol.Name);
+			//	}
+			//}
 		}
 
-		private string ExtractHash(string hash)
-		{
-			if (hash.Length > 8)
-				return hash.Substring(hash.Length - 8, 8);
+		//private string ExtractHash(string hash)
+		//{
+		//	if (hash.Length > 8)
+		//		return hash.Substring(hash.Length - 8, 8);
 
-			return hash.PadLeft(8, '-');
-		}
+		//	return hash.PadLeft(8, '-');
+		//}
 
 		#endregion Internals
 	}

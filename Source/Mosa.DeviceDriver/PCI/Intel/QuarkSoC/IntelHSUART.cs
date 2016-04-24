@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 // http://download.intel.com/support/processors/quark/sb/quarkdatasheetrev02.pdf
 
@@ -22,10 +22,10 @@ namespace Mosa.DeviceDriver.PCI.Intel.QuarkSoC
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "IntelHSUART";
+			this.HardwareResources = hardwareResources;
+			base.Name = "IntelHSUART";
 
 			return true;
 		}

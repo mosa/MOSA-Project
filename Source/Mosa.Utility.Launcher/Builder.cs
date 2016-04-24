@@ -440,6 +440,8 @@ namespace Mosa.Utility.Launcher
 				arg = arg + " -serial tcp:127.0.0.1:9999,client,nowait";
 			}
 
+			//arg = arg + " -boot menu=on";
+
 			var output = LaunchApplication(AppLocations.QEMU, arg, !exit);
 
 			AddOutput(output);

@@ -9,6 +9,7 @@
 // http://www.osdev.org/phpBB2/viewtopic.php?t=13538
 
 using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceDriver.ISA
 {
@@ -282,16 +283,16 @@ namespace Mosa.DeviceDriver.ISA
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "FDC_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
-			base.parent = null; // no parent
+			this.HardwareResources = hardwareResources;
+			base.Name = "FDC_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			base.Parent = null; // no parent
 
-			commandPort = base.hardwareResources.GetIOPort(0, 2);
-			statusPort = base.hardwareResources.GetIOPort(0, 4);
-			dataPort = base.hardwareResources.GetIOPort(0, 5);
-			configPort = base.hardwareResources.GetIOPort(0, 7);
+			commandPort = base.HardwareResources.GetIOPort(0, 2);
+			statusPort = base.HardwareResources.GetIOPort(0, 4);
+			dataPort = base.HardwareResources.GetIOPort(0, 5);
+			configPort = base.HardwareResources.GetIOPort(0, 7);
 
 			//			floppyDMA = base.CreateDMAChannel(2);
 			//			floppyIRQ = base.CreateIRQHandler(6);

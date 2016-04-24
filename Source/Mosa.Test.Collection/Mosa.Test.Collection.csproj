@@ -126,6 +126,7 @@
     </Compile>
     <Compile Include="LinkedList.cs" />
     <Compile Include="LinkedListNode.cs" />
+    <Compile Include="ListTests.cs" />
     <Compile Include="LinkedListTests.cs" />
     <Compile Include="NewObjectTests.cs" />
     <Compile Include="OptimizationTest.cs" />

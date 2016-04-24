@@ -73,6 +73,10 @@
       <Project>{D89972FD-A930-4D0C-B393-1895E78FAFAB}</Project>
       <Name>Mosa.FileSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.HardwareSystem\Mosa.HardwareSystem.csproj">
+      <Project>{4dbd4c50-bec5-48d9-b471-9fb0c7f69999}</Project>
+      <Name>Mosa.HardwareSystem</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

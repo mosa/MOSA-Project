@@ -1,10 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
-
-using System.IO;
-using Mosa.Kernel.x86;
 using Mosa.Application;
+using Mosa.DeviceSystem;
+using Mosa.Kernel.x86;
+using System.IO;
 
 namespace Mosa.AppSystem
 {
@@ -143,7 +142,7 @@ namespace Mosa.AppSystem
 
 			if (interrupt >= 0x20 && interrupt < 0x30)
 			{
-				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
+				Mosa.HardwareSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 			}
 
 			debug.Column = c;

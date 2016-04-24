@@ -120,6 +120,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workspaces", "Workspaces", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Workspace.FileSystem.Debug", "Mosa.Workspace.FileSystem.Debug\Mosa.Workspace.FileSystem.Debug.csproj", "{A8765C3C-1194-4A3A-8579-745CA47C36D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.HardwareSystem", "Mosa.HardwareSystem\Mosa.HardwareSystem.csproj", "{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -619,6 +621,18 @@ Global
 		{A8765C3C-1194-4A3A-8579-745CA47C36D3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A8765C3C-1194-4A3A-8579-745CA47C36D3}.Release|x86.ActiveCfg = Release|Any CPU
 		{A8765C3C-1194-4A3A-8579-745CA47C36D3}.Release|x86.Build.0 = Release|Any CPU
+		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Debug|x86.Build.0 = Debug|Any CPU
+		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Release|x86.ActiveCfg = Release|Any CPU
+		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -672,5 +686,6 @@ Global
 		{72057219-525C-45E8-AF69-6C2A7F5BEC08} = {AC7C3CDA-E0E8-408C-BB32-DBCBB905E3E1}
 		{77961864-DB33-4189-804F-D774022C96E2} = {3C5A2C4B-FD05-42B3-B6C6-C366DF978A62}
 		{A8765C3C-1194-4A3A-8579-745CA47C36D3} = {AC7C3CDA-E0E8-408C-BB32-DBCBB905E3E1}
+		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999} = {FF773BDF-A20C-4A5F-BFF9-F422C2AFF3CE}
 	EndGlobalSection
 EndGlobal

@@ -6,6 +6,7 @@
 // http://www.amd.com/files/connectivitysolutions/networking/archivednetworking/19436.pdf
 
 using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceDriver.PCI.AMD
 {
@@ -104,10 +105,10 @@ namespace Mosa.DeviceDriver.PCI.AMD
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "AMDPCNet_0x" + hardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+			this.HardwareResources = hardwareResources;
+			base.Name = "AMDPCNet_0x" + hardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
 			ioProm1 = hardwareResources.GetIOPort(0, 0x0);
 			ioProm4 = hardwareResources.GetIOPort(0, 0x4);
@@ -146,7 +147,7 @@ namespace Mosa.DeviceDriver.PCI.AMD
 		public override DeviceDriverStartStatus Start()
 		{
 			// Enable the card
-			hardwareResources.DeviceResource.EnableDevice();
+			HardwareResources.DeviceResource.EnableDevice();
 
 			// Do a 32-bit write to set 32-bit mode
 			rdp.Write32(0);

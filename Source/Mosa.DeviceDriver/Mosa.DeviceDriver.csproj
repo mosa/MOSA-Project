@@ -66,8 +66,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Korlib\Korlib.csproj">
       <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
       <Name>Korlib</Name>
@@ -79,6 +77,10 @@
     <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj">
       <Project>{6509477A-7360-4937-A1B9-26FED0A75CDA}</Project>
       <Name>Mosa.DeviceSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.HardwareSystem\Mosa.HardwareSystem.csproj">
+      <Project>{4dbd4c50-bec5-48d9-b471-9fb0c7f69999}</Project>
+      <Name>Mosa.HardwareSystem</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -112,14 +114,15 @@
     <Compile Include="ISA\VGAText.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PCI\Intel\Intel82540EM.cs" />
     <Compile Include="PCI\Intel\Intel82541EI.cs" />
+    <Compile Include="PCI\Intel\Intel82540EM.cs" />
     <Compile Include="PCI\Intel\IntelPIIX4.cs" />
     <Compile Include="PCI\Intel\IntelPIIX3.cs" />
     <Compile Include="PCI\Intel\Intel440FX.cs" />
     <Compile Include="PCI\Intel\QuarkSoC\IntelHSUART.cs" />
     <Compile Include="PCI\AMD\AMDPCNetII.cs" />
     <Compile Include="PCI\Intel\QuarkSoC\IntelGPIOController.cs" />
+    <Compile Include="PCI\MassStorage\PCIIDEController.cs" />
     <Compile Include="PCI\VideoCard\GenericVGA.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -130,6 +133,9 @@
     <Compile Include="ScanCodeMap\US.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

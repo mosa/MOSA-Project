@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 // PCI ISA IDE Xcelerator (PIIX4)
 // http://www.intel.com/assets/pdf/datasheet/290562.pdf
@@ -23,10 +23,10 @@ namespace Mosa.DeviceDriver.PCI.Intel
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "IntelPCI_ISA_IDE_Xcelerator_PIIX4";
+			this.HardwareResources = hardwareResources;
+			base.Name = "IntelPCI_ISA_IDE_Xcelerator_PIIX4";
 
 			return true;
 		}

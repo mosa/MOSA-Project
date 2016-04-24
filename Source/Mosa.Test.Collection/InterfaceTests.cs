@@ -53,6 +53,30 @@ namespace Mosa.Test.Collection
 		}
 	}
 
+	public class InterfaceTestClassY : IInterfaceA
+	{
+		int IInterfaceA.A()
+		{
+			return 2;
+		}
+	}
+
+	public class InterfaceTestClassZ : InterfaceTestClassY
+	{
+	}
+
+	public abstract class InterfaceTestClassY2 : IInterfaceA
+	{
+		int IInterfaceA.A()
+		{
+			return 2;
+		}
+	}
+
+	public class InterfaceTestClassZ2 : InterfaceTestClassY2
+	{
+	}
+
 	public static class InterfaceTests
 	{
 		public static int InterfaceTest1()
@@ -80,6 +104,27 @@ namespace Mosa.Test.Collection
 			InterfaceTestClassB tc = new InterfaceTestClassB();
 			IInterfaceA a = tc;
 			return a.A();
+		}
+
+		public static bool InterfaceTest5()
+		{
+			InterfaceTestClassY y = new InterfaceTestClassY();
+
+			return (y as IInterfaceA) == null;
+		}
+
+		public static bool InterfaceTest6()
+		{
+			InterfaceTestClassZ z = new InterfaceTestClassZ();
+
+			return (z as IInterfaceA) == null;
+		}
+
+		public static bool InterfaceTest7()
+		{
+			InterfaceTestClassZ2 z = new InterfaceTestClassZ2();
+
+			return (z as IInterfaceA) == null;
 		}
 	}
 }

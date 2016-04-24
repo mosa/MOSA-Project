@@ -1293,7 +1293,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var target = context.BranchTargets[0];
 
 			Operand first = context.Operand1;
-			Operand second = Operand.CreateConstant(TypeSystem, 0);
+			Operand second = ConstantZero;
 
 			CIL.OpCode opcode = ((CIL.BaseCILInstruction)context.Instruction).OpCode;
 
@@ -1562,7 +1562,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Set the operands
 			context.SetOperand(1, ptr);
-			context.SetOperand(2, Operand.CreateConstant(TypeSystem, 0));
+			context.SetOperand(2, ConstantZero);
 			context.SetOperand(3, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(ptr.Type.ElementType)));
 			context.OperandCount = 4;
 		}

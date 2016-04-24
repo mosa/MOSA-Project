@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 using Mosa.Runtime.x86;
 
 namespace Mosa.CoolWorld.x86.HAL
@@ -8,15 +8,13 @@ namespace Mosa.CoolWorld.x86.HAL
 	/// <summary>
 	/// Implementation of IReadWriteIOPort
 	/// </summary>
-	public class IOPort : IReadWriteIOPort, IWriteOnlyIOPort, IReadOnlyIOPort, IBaseIOPort
+	public sealed class IOPort : IReadWriteIOPort, IWriteOnlyIOPort, IReadOnlyIOPort, IBaseIOPort
 	{
-		private ushort address;
-
-		public ushort Address { get { return address; } }
+		public ushort Address { get; private set; }
 
 		public IOPort(ushort address)
 		{
-			this.address = address;
+			this.Address = address;
 		}
 
 		/// <summary>
@@ -25,7 +23,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <returns></returns>
 		public byte Read8()
 		{
-			return Native.In8(address);
+			return Native.In8(Address);
 		}
 
 		/// <summary>
@@ -34,7 +32,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <returns></returns>
 		public ushort Read16()
 		{
-			return Native.In16(address);
+			return Native.In16(Address);
 		}
 
 		/// <summary>
@@ -43,7 +41,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <returns></returns>
 		public uint Read32()
 		{
-			return Native.In32(address);
+			return Native.In32(Address);
 		}
 
 		/// <summary>
@@ -52,7 +50,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="data">The data.</param>
 		public void Write8(byte data)
 		{
-			Native.Out8(address, data);
+			Native.Out8(Address, data);
 		}
 
 		/// <summary>
@@ -61,7 +59,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="data">The data.</param>
 		public void Write16(ushort data)
 		{
-			Native.Out16(address, data);
+			Native.Out16(Address, data);
 		}
 
 		/// <summary>
@@ -70,7 +68,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="data">The data.</param>
 		public void Write32(uint data)
 		{
-			Native.Out32(address, data);
+			Native.Out32(Address, data);
 		}
 	}
 }

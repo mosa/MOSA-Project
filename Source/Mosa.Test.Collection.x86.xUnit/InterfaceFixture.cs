@@ -29,5 +29,23 @@ namespace Mosa.Test.Collection.x86.xUnit
 		{
 			Assert.Equal(InterfaceTests.InterfaceTest4(), Run<int>("Mosa.Test.Collection.InterfaceTests.InterfaceTest4"));
 		}
+
+		[Fact]
+		public void InterfaceTest5()
+		{
+			Assert.Equal(InterfaceTests.InterfaceTest5(), Run<bool>("Mosa.Test.Collection.InterfaceTests.InterfaceTest5"));
+		}
+
+		[Fact]
+		public void InterfaceTest6()
+		{
+			Assert.Equal(InterfaceTests.InterfaceTest6(), Run<bool>("Mosa.Test.Collection.InterfaceTests.InterfaceTest6"));
+		}
+
+		[Fact]
+		public void InterfaceTest7()
+		{
+			Assert.Equal(InterfaceTests.InterfaceTest7(), Run<bool>("Mosa.Test.Collection.InterfaceTests.InterfaceTest7"));
+		}
 	}
 }

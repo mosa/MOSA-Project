@@ -1,21 +1,21 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
-// Intel82540EM Gigabit Ethernet Controller
-// http://www.intel.com/content/dam/doc/datasheet/82540ep-gbe-controller-datasheet.pdf
+// 82541EI Gigabit Ethernet Controller
+// http://www.intel.com/content/dam/doc/datasheet/82541-gbe-controller-datasheet.pdf
 
 namespace Mosa.DeviceDriver.PCI.Intel
 {
 	/// <summary>
 	/// </summary>
-	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x100E, Platforms = PlatformArchitecture.X86AndX64)]
-	public class Intel82540EM : HardwareDevice
+	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x1013, Platforms = PlatformArchitecture.X86AndX64)]
+	public class Intel82541EI : HardwareDevice
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Intel82540EM"/> class.
+		/// Initializes a new instance of the <see cref="Intel82541EI"/> class.
 		/// </summary>
-		public Intel82540EM()
+		public Intel82541EI()
 		{
 		}
 
@@ -23,10 +23,10 @@ namespace Mosa.DeviceDriver.PCI.Intel
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;
-			base.name = "Intel82540EM";
+			this.HardwareResources = hardwareResources;
+			base.Name = "Intel82541EI";
 
 			return true;
 		}

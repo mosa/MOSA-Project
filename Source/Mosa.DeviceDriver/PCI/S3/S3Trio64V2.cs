@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceDriver.PCI.S3
 {
@@ -222,24 +223,24 @@ namespace Mosa.DeviceDriver.PCI.S3
 		/// Setups this hardware device driver
 		/// </summary>
 		/// <returns></returns>
-		public override bool Setup(IHardwareResources hardwareResources)
+		public override bool Setup(HardwareResources hardwareResources)
 		{
 			// Store reference to hardware resources
-			this.hardwareResources = hardwareResources;
+			this.HardwareResources = hardwareResources;
 
 			// Set the driver's name
-			base.name = "S3Trio64V2";
+			base.Name = "S3Trio64V2";
 
 			// Store portmanager
-			byte portBar = (byte)(base.hardwareResources.IOPointRegionCount - 1);
+			byte portBar = (byte)(base.HardwareResources.IOPointRegionCount - 1);
 
-			vgaEnableController = base.hardwareResources.GetIOPort(portBar, Register.VgaEnable);
-			miscOutputReader = base.hardwareResources.GetIOPort(portBar, Register.MiscOutRead);
-			miscOutputWriter = base.hardwareResources.GetIOPort(portBar, Register.MiscOutWrite);
-			crtcControllerIndex = base.hardwareResources.GetIOPort(portBar, Register.CrtcIndex);
-			crtcControllerData = base.hardwareResources.GetIOPort(portBar, Register.CrtcData);
-			seqControllerIndex = base.hardwareResources.GetIOPort(portBar, Register.SequenceIndex);
-			seqControllerData = base.hardwareResources.GetIOPort(portBar, Register.SequenceData);
+			vgaEnableController = base.HardwareResources.GetIOPort(portBar, Register.VgaEnable);
+			miscOutputReader = base.HardwareResources.GetIOPort(portBar, Register.MiscOutRead);
+			miscOutputWriter = base.HardwareResources.GetIOPort(portBar, Register.MiscOutWrite);
+			crtcControllerIndex = base.HardwareResources.GetIOPort(portBar, Register.CrtcIndex);
+			crtcControllerData = base.HardwareResources.GetIOPort(portBar, Register.CrtcData);
+			seqControllerIndex = base.HardwareResources.GetIOPort(portBar, Register.SequenceIndex);
+			seqControllerData = base.HardwareResources.GetIOPort(portBar, Register.SequenceData);
 
 			// Everything went fine
 			return true;
@@ -276,7 +277,7 @@ namespace Mosa.DeviceDriver.PCI.S3
 			int ramSizeMB = ramSizes[(ReadCrtcRegister(0x36) >> 5) & 0x7];
 
 			// Setup video memory
-			memory = base.hardwareResources.GetMemory((byte)(ramSizeMB * 1024 * 1024));
+			memory = base.HardwareResources.GetMemory((byte)(ramSizeMB * 1024 * 1024));
 
 			// Detect current mclk
 			WriteSequenceRegister(0x08, 0x06);
@@ -285,7 +286,7 @@ namespace Mosa.DeviceDriver.PCI.S3
 			byte n1 = (byte)(n & 0x1f);
 			byte n2 = (byte)((n >> 5) & 0x03);
 
-			base.deviceStatus = DeviceStatus.Online;
+			base.DeviceStatus = DeviceStatus.Online;
 			return DeviceDriverStartStatus.Started;
 		}
 

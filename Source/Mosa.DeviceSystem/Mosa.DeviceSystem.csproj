@@ -72,6 +72,10 @@
       <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
       <Name>Mosa.ClassLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.HardwareSystem\Mosa.HardwareSystem.csproj">
+      <Project>{4dbd4c50-bec5-48d9-b471-9fb0c7f69999}</Project>
+      <Name>Mosa.HardwareSystem</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Color.cs">
@@ -81,42 +85,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CHS.cs" />
+    <Compile Include="FindDevice.cs" />
     <Compile Include="NetworkDevicePacketBuffer.cs" />
     <Compile Include="INetworkDevice.cs" />
-    <Compile Include="DeviceDriverPhysicalMemoryAttribute.cs" />
     <Compile Include="MACAddress.cs" />
-    <Compile Include="DeviceDriver.cs" />
-    <Compile Include="ISADeviceDriverAttribute.cs" />
     <Compile Include="DiskControllerManager.cs" />
-    <Compile Include="PCIDeviceDriverAttribute.cs" />
     <Compile Include="GUIDPartitionTable.cs" />
     <Compile Include="PartitionType.cs" />
-    <Compile Include="PCIControllerManager.cs" />
-    <Compile Include="PCI\IDeviceResource.cs" />
-    <Compile Include="PCI\IPCIDevice.cs" />
-    <Compile Include="PCI\PCIDevice.cs" />
     <Compile Include="VDI.cs" />
     <Compile Include="DiskGeometry.cs" />
     <Compile Include="PartitionManager.cs" />
-    <Compile Include="Device.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DeviceDriverRegistry.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DeviceDriverStartStatus.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DeviceManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DeviceStatus.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DiskDevice.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FindDevice.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FrameBuffer.cs">
@@ -137,55 +116,13 @@
     <Compile Include="GenericPartition.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="HAL.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="HardwareDevice.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="HardwareResources.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IDevice.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IDeviceDriver.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IDeviceManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IDiskControllerDevice.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IDiskDevice.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IDMAChannel.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IFindDevice.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IFrameBuffer.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IHardwareAbstraction.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IHardwareDevice.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IHardwareResources.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IInterruptHandler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IIOPortRegion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IIOPorts.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IKeyboard.cs">
@@ -194,37 +131,13 @@
     <Compile Include="IKeyboardDevice.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IMemory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IMemoryRegion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InterruptHandler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="InterruptManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IOPortRegion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IOPortResources.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IPartitionDevice.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IPCIController.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IPixelGraphicsDevice.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IPixelPaletteGraphicsDevice.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IResourceManager.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IScanCodeMap.cs">
@@ -254,43 +167,13 @@
     <Compile Include="MasterBootBlock.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MemoryRegion.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MemoryResources.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="PartitionDevice.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PixelPaletteGraphicsAdapter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PlatformArchitecture.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ResourceManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Setup.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SpinLock.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="TextScreen.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PCI\AddressType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PCI\BaseAddress.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PCI\ClassCodeTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PCI\SubClassCodeTable.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="VHD.cs" />

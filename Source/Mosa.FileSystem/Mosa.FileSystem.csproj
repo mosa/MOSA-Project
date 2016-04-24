@@ -70,6 +70,10 @@
       <Project>{6509477A-7360-4937-A1B9-26FED0A75CDA}</Project>
       <Name>Mosa.DeviceSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.HardwareSystem\Mosa.HardwareSystem.csproj">
+      <Project>{4dbd4c50-bec5-48d9-b471-9fb0c7f69999}</Project>
+      <Name>Mosa.HardwareSystem</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FAT\FatFileAttributes.cs" />
