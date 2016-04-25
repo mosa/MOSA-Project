@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.x86;
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using Mosa.TestWorld.x86.Tests;
-using Mosa.Runtime;
 
 namespace Mosa.TestWorld.x86
 {
@@ -61,7 +61,7 @@ namespace Mosa.TestWorld.x86
 			GC.Setup();
 			Screen.Write('9');
 
-			//Runtime.Setup();
+			Runtime.Internal.Setup();
 			Screen.Write('A');
 			IDT.SetInterruptHandler(ProcessInterrupt);
 			Screen.Write('B');

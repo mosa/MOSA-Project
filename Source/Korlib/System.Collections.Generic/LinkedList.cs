@@ -65,7 +65,7 @@ namespace System.Collections.Generic
 			: this()
 		{
 			if (collection == null)
-				throw new ArgumentNullException("collection");
+				throw new ArgumentNullException(nameof(collection));
 
 			foreach (T value in collection)
 				AddLast(value);
@@ -338,9 +338,9 @@ namespace System.Collections.Generic
 		public void CopyTo(T[] array, int arrayIndex)
 		{
 			if (array == null)
-				throw new ArgumentNullException("array");
+				throw new ArgumentNullException(nameof(array));
 			if (arrayIndex < 0)
-				throw new ArgumentOutOfRangeException("index");
+				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
 
 			//if (array.Rank != 1)
 			//    throw new ArgumentException();

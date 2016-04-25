@@ -1,18 +1,18 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using System.Collections.Generic;
 using System.Reflection;
-using Mosa.Runtime;
 
 namespace System
 {
 	public sealed unsafe class RuntimeAssembly : Assembly
 	{
 		internal MetadataAssemblyStruct* assemblyStruct;
-		internal LinkedList<RuntimeType> typeList = new LinkedList<RuntimeType>();
-		internal LinkedList<RuntimeTypeHandle> typeHandles = new LinkedList<RuntimeTypeHandle>();
-		internal LinkedList<RuntimeTypeInfo> typeInfoList = null;
-		internal LinkedList<CustomAttributeData> customAttributesData = null;
+		internal readonly List<RuntimeType> typeList;
+		internal readonly LinkedList<RuntimeTypeHandle> typeHandles;
+		internal List<RuntimeTypeInfo> typeInfoList = null;
+		internal List<CustomAttributeData> customAttributesData = null;
 
 		private string fullName;
 
@@ -23,17 +23,21 @@ namespace System
 				if (customAttributesData == null)
 				{
 					// Custom Attributes Data - Lazy load
-					customAttributesData = new LinkedList<CustomAttributeData>();
 					if (assemblyStruct->CustomAttributes != null)
 					{
 						var customAttributesTablePtr = assemblyStruct->CustomAttributes;
 						var customAttributesCount = customAttributesTablePtr[0];
+						customAttributesData = new List<CustomAttributeData>((int)customAttributesCount);
 						customAttributesTablePtr++;
 						for (uint i = 0; i < customAttributesCount; i++)
 						{
 							var cad = new RuntimeCustomAttributeData((MetadataCAStruct*)customAttributesTablePtr[i]);
-							customAttributesData.AddLast(cad);
+							customAttributesData.Add(cad);
 						}
+					}
+					else
+					{
+						customAttributesData = new List<CustomAttributeData>();
 					}
 				}
 
@@ -48,15 +52,11 @@ namespace System
 				if (typeInfoList == null)
 				{
 					// Type Info - Lazy load
-					typeInfoList = new LinkedList<RuntimeTypeInfo>();
+					typeInfoList = new List<RuntimeTypeInfo>(typeList.Count);
 					foreach (RuntimeType type in typeList)
-						typeInfoList.AddLast(new RuntimeTypeInfo(type, this));
+						typeInfoList.Add(new RuntimeTypeInfo(type, this));
 				}
-
-				var types = new LinkedList<TypeInfo>();
-				foreach (var type in typeInfoList)
-					types.AddLast(type);
-				return types;
+				return typeInfoList;
 			}
 		}
 
@@ -69,14 +69,14 @@ namespace System
 		{
 			get
 			{
-				var types = new LinkedList<Type>();
+				var list = new List<RuntimeType>();
 				foreach (RuntimeType type in typeList)
 				{
 					if ((type.attributes & TypeAttributes.VisibilityMask) != TypeAttributes.Public)
 						continue;
-					types.AddLast(type);
+					list.Add(type);
 				}
-				return types;
+				return list;
 			}
 		}
 
@@ -86,6 +86,9 @@ namespace System
 			fullName = Mosa.Runtime.Internal.InitializeMetadataString(assemblyStruct->Name);
 
 			uint typeCount = (*assemblyStruct).NumberOfTypes;
+			typeList = new List<RuntimeType>((int)typeCount);
+			typeHandles = new LinkedList<RuntimeTypeHandle>();
+
 			for (uint i = 0; i < typeCount; i++)
 			{
 				var handle = new RuntimeTypeHandle();
@@ -102,7 +105,7 @@ namespace System
 		{
 			typeHandles.AddLast(handle);
 			var type = new RuntimeType(handle);
-			typeList.AddLast(type);
+			typeList.Add(type);
 			return type;
 		}
 	}

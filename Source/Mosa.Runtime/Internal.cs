@@ -157,9 +157,31 @@ namespace Mosa.Runtime
 
 		#endregion (Un)Boxing
 
+		#region Memory Manipulation
+
+		public static void MemoryCopy(void* dest, void* src, uint count)
+		{
+			// PLUGGED
+			throw new NotImplementedException();
+		}
+
+		public static void MemorySet(void* dest, byte value, uint count)
+		{
+			// PLUGGED
+			throw new NotImplementedException();
+		}
+
+		public static void MemoryClear(void* dest, uint count)
+		{
+			// PLUGGED
+			throw new NotImplementedException();
+		}
+
+		#endregion Memory Manipulation
+
 		#region Metadata
 
-		internal static LinkedList<RuntimeAssembly> Assemblies;
+		internal static List<RuntimeAssembly> Assemblies;
 
 		public static string InitializeMetadataString(uint* ptr)
 		{
@@ -177,14 +199,14 @@ namespace Mosa.Runtime
 			uint* assemblyListTable = Intrinsic.GetAssemblyListTable();
 			uint assemblyCount = assemblyListTable[0];
 
-			Assemblies = new LinkedList<RuntimeAssembly>();
+			Assemblies = new List<RuntimeAssembly>((int)assemblyCount);
 
 			// Loop through and populate the array
 			for (uint i = 0; i < assemblyCount; i++)
 			{
 				// Get the pointer to the Assembly Metadata
 				uint* ptr = (uint*)(assemblyListTable[1 + i]);
-				Assemblies.AddLast(new RuntimeAssembly(ptr));
+				Assemblies.Add(new RuntimeAssembly(ptr));
 			}
 		}
 

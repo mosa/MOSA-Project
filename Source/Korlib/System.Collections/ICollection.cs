@@ -31,7 +31,7 @@ namespace System.Collections
 		/// Copies to.
 		/// </summary>
 		/// <param name="array">The array.</param>
-		/// <param name="index">The index.</param>
-		void CopyTo(Array array, int index);
+		/// <param name="arrayIndex">The arrayIndex.</param>
+		void CopyTo(Array array, int arrayIndex);
 	}
 }

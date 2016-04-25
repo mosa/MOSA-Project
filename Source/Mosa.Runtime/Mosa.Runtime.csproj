@@ -92,6 +92,7 @@
     <Compile Include="MetadataStructures\MetadataPRDefinitionStruct.cs" />
     <Compile Include="MetadataStructures\MetadataPRTableStruct.cs" />
     <Compile Include="MetadataStructures\MetadataTypeStruct.cs" />
+    <Compile Include="PlatformPointer.cs" />
     <Compile Include="Plug\FieldAttribute.cs" />
     <Compile Include="Plug\MethodAttribute.cs" />
     <Compile Include="Plug\TypeAttribute.cs" />

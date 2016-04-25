@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using Mosa.Runtime.Plug;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -62,6 +63,7 @@ namespace Mosa.Runtime.x86
 			return obj;
 		}
 
+		[Method("Mosa.Runtime.Internal.MemoryCopy")]
 		public static void MemoryCopy(void* dest, void* src, uint count)
 		{
 			ulong* _dest = (ulong*)dest;
@@ -84,11 +86,12 @@ namespace Mosa.Runtime.x86
 				__dest[index] = __src[index];
 		}
 
-		public static void MemorySet(uint dest, byte value, uint count)
+		[Method("Mosa.Runtime.Internal.MemorySet")]
+		public static void MemorySet(void* dest, byte value, uint count)
 		{
 			// TEMP: assigning the method parameters into local variables forces the compiler to load the values
 			// into virtual registers, which unlocks the optimizer to generate much better code quality.
-			uint dst = dest;
+			uint dst = (uint)dest;
 			uint cnt = count;
 
 			uint e3 = dst + cnt;
@@ -116,11 +119,12 @@ namespace Mosa.Runtime.x86
 			}
 		}
 
-		public static void MemoryClear(uint dest, uint count)
+		[Method("Mosa.Runtime.Internal.MemoryClear")]
+		public static void MemoryClear(void* dest, uint count)
 		{
 			// TEMP: assigning the method parameters into local variables forces the compiler to load the values
 			// into virtual registers, which unlocks the optimizer to generate much better code quality.
-			uint dst = dest;
+			uint dst = (uint)dest;
 			uint cnt = count;
 
 			uint e3 = dst + cnt;

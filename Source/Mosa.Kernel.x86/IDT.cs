@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Runtime.InteropServices;
 using Mosa.Runtime.x86;
+using System.Runtime.InteropServices;
 
 namespace Mosa.Kernel.x86
 {
@@ -431,8 +431,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				default:
-					if (interruptHandler != null)
-						interruptHandler(stack->Interrupt, stack->ErrorCode);
+					interruptHandler?.Invoke(stack->Interrupt, stack->ErrorCode);
 					break;
 			}
 

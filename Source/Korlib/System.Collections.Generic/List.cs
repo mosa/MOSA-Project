@@ -6,7 +6,7 @@ namespace System.Collections.Generic
 	///
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public class List<T> : IList<T>
+	public class List<T> : IList<T>, IList, IReadOnlyList<T>
 	{
 		private const int _defaultCapacity = 4;
 
@@ -23,10 +23,115 @@ namespace System.Collections.Generic
 
 		public List(int capacity)
 		{
+			if (capacity < 0)
+				throw new ArgumentOutOfRangeException(nameof(capacity));
+
 			if (capacity == 0)
 				_items = _emptyArray;
 			else
 				_items = new T[capacity];
+		}
+
+		public List(IEnumerable<T> collection)
+		{
+			if (collection == null)
+				throw new ArgumentNullException(nameof(collection));
+
+			var c = collection as ICollection<T>;
+			if (c != null)
+			{
+				var count = c.Count;
+				if (count == 0)
+				{
+					_items = _emptyArray;
+				}
+				else
+				{
+					_items = new T[count];
+					c.CopyTo(_items, 0);
+					_size = count;
+				}
+			}
+			else
+			{
+				_size = 0;
+				_items = _emptyArray;
+
+				// This enumerable could be empty. Let Add handle resizing.
+				// Note that the default capacity is 4 so Add will only begin resizing after 4 elements.
+
+				using (var en = collection.GetEnumerator())
+				{
+					while (en.MoveNext())
+						Add(en.Current);
+				}
+			}
+		}
+
+		public int Capacity
+		{
+			get { return _items.Length; }
+			set
+			{
+				if (value < _size)
+					throw new ArgumentOutOfRangeException(nameof(value));
+
+				if (value != _items.Length)
+				{
+					if (value > 0)
+					{
+						T[] newItems = new T[value];
+						if (_size > 0)
+							Array.Copy(_items, 0, newItems, 0, _size);
+						_items = newItems;
+					}
+					else
+					{
+						_items = _emptyArray;
+					}
+				}
+			}
+		}
+
+		int ICollection.Count
+		{
+			get { return _size; }
+		}
+
+		bool ICollection.IsSynchronized
+		{
+			get { return false; }
+		}
+
+		object ICollection.SyncRoot
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		bool IList.IsReadOnly
+		{
+			get { return false; }
+		}
+
+		bool IList.IsFixedSize
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the T at the specified index.
+		/// </summary>
+		/// <value></value>
+		public T this[int index]
+		{
+			get { return _items[index]; }
+			set { _items[index] = value; }
 		}
 
 		public int Count
@@ -34,41 +139,39 @@ namespace System.Collections.Generic
 			get { return _size; }
 		}
 
-		public bool IsReadOnly
+		bool ICollection<T>.IsReadOnly
 		{
 			get { return false; }
+		}
+
+		object IList.this[int index]
+		{
+			get
+			{
+				throw new NotImplementedException();
+			}
+
+			set
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 		private void EnsureCapacity(int size)
 		{
 			if (_items.Length < size)
 			{
-				if (size == 0)
-				{
-					_items = new T[_defaultCapacity];
-				}
-				else
-				{
-					int newsize = _items.Length * 2;
-
-					if (newsize < size)
-						newsize = size;
-
-					Resize(newsize);
-				}
+				var newCapacity = _items.Length == 0 ? _defaultCapacity : _items.Length * 2;
+				if (newCapacity < size) newCapacity = size;
+				Capacity = newCapacity;
 			}
 		}
 
-		private void Resize(int newsize)
+		private static bool IsCompatibleObject(object value)
 		{
-			var previous = _items;
-
-			_items = new T[newsize];
-
-			for (int i = 0; i < _size; i++)
-			{
-				_items[i] = previous[i];
-			}
+			// Non-null values are fine. Only accept nulls if T is a class or Nullable<U>.
+			// Note that default(T) is not equal to null for value types except when T is Nullable<U>.
+			return ((value is T) || (value == null && default(T) == null));
 		}
 
 		public void Add(T item)
@@ -77,6 +180,14 @@ namespace System.Collections.Generic
 
 			_items[_size] = item;
 			_size++;
+		}
+
+		int IList.Add(object value)
+		{
+			if (!IsCompatibleObject(value))
+				throw new ArgumentException("item is of a type that is not assignable to the IList", nameof(value));
+			Add((T)value);
+			return Count - 1;
 		}
 
 		public void Clear()
@@ -94,29 +205,41 @@ namespace System.Collections.Generic
 			return false;
 		}
 
+		bool IList.Contains(object value)
+		{
+			if (IsCompatibleObject(value))
+				return Contains((T)value);
+			return false;
+		}
+
 		public void CopyTo(T[] array, int arrayIndex)
 		{
 			if (array == null)
-				throw new ArgumentNullException("array");
+				throw new ArgumentNullException(nameof(array));
 			if (arrayIndex < 0)
-				throw new ArgumentOutOfRangeException("index");
+				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
 
-			for (int i = 0; i < _size; i++)
-			{
-				array[arrayIndex++] = _items[i];
-			}
+			Array.Copy(_items, 0, array, arrayIndex, _size);
 		}
 
-		public bool Remove(T item)
+		void ICollection.CopyTo(Array array, int arrayIndex)
 		{
-			int at = IndexOf(item);
+			Array.Copy(_items, 0, array, arrayIndex, _size);
+		}
 
-			if (at < 0)
-				return false;
+		public Enumerator GetEnumerator()
+		{
+			return new Enumerator(this);
+		}
 
-			RemoveAt(at);
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return new Enumerator(this);
+		}
 
-			return true;
+		IEnumerator<T> IEnumerable<T>.GetEnumerator()
+		{
+			return new Enumerator(this);
 		}
 
 		public int IndexOf(T item)
@@ -126,6 +249,13 @@ namespace System.Collections.Generic
 				if (_items[i].Equals(item))
 					return i;
 			}
+			return -1;
+		}
+
+		int IList.IndexOf(object value)
+		{
+			if (IsCompatibleObject(value))
+				return IndexOf((T)value);
 			return -1;
 		}
 
@@ -140,6 +270,31 @@ namespace System.Collections.Generic
 			}
 
 			_items[index] = item;
+		}
+
+		void IList.Insert(int index, object value)
+		{
+			if (!IsCompatibleObject(value))
+				throw new ArgumentException("item is of a type that is not assignable to the IList", nameof(value));
+			Insert(index, (T)value);
+		}
+
+		public bool Remove(T item)
+		{
+			int at = IndexOf(item);
+
+			if (at < 0)
+				return false;
+
+			RemoveAt(at);
+
+			return true;
+		}
+
+		void IList.Remove(object value)
+		{
+			if (IsCompatibleObject(value))
+				Remove((T)value);
 		}
 
 		/// <summary>
@@ -158,32 +313,7 @@ namespace System.Collections.Generic
 			_items[_size] = default(T);
 		}
 
-		/// <summary>
-		/// Gets or sets the T at the specified index.
-		/// </summary>
-		/// <value></value>
-		public T this[int index]
-		{
-			get { return _items[index]; }
-			set { _items[index] = value; }
-		}
-
-		public List<T>.Enumerator GetEnumerator()
-		{
-			return new Enumerator(this);
-		}
-
-		IEnumerator<T> IEnumerable<T>.GetEnumerator()
-		{
-			return new Enumerator(this);
-		}
-
-		IEnumerator IEnumerable.GetEnumerator()
-		{
-			return new Enumerator(this);
-		}
-
-		public struct Enumerator : IEnumerator<T>, System.Collections.IEnumerator
+		public struct Enumerator : IEnumerator<T>, IEnumerator
 		{
 			private List<T> list;
 			private int index;
@@ -194,6 +324,16 @@ namespace System.Collections.Generic
 				this.list = list;
 				index = 0;
 				current = default(T);
+			}
+
+			public T Current
+			{
+				get { return current; }
+			}
+
+			object IEnumerator.Current
+			{
+				get { return current; }
 			}
 
 			public void Dispose()
@@ -220,23 +360,7 @@ namespace System.Collections.Generic
 				return false;
 			}
 
-			public T Current
-			{
-				get
-				{
-					return current;
-				}
-			}
-
-			Object System.Collections.IEnumerator.Current
-			{
-				get
-				{
-					return Current;
-				}
-			}
-
-			void System.Collections.IEnumerator.Reset()
+			void IEnumerator.Reset()
 			{
 				index = 0;
 				current = default(T);
