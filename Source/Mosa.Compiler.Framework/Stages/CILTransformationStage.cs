@@ -1554,17 +1554,31 @@ namespace Mosa.Compiler.Framework.Stages
 		private void InitObj(Context context)
 		{
 			// Get the ptr and clear context
-			Operand ptr = context.Operand1;
-			context.SetInstruction(IRInstruction.Nop);
+			var ptr = context.Operand1;
 
-			// Setup context for VmCall
-			ReplaceWithVmCall(context, VmCall.MemorySet);
+			// According to ECMA Spec, if the pointer element type is a reference type then
+			// this instruction is the equivalent of ldnull followed by stind.ref
 
-			// Set the operands
-			context.SetOperand(1, ptr);
-			context.SetOperand(2, ConstantZero);
-			context.SetOperand(3, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(ptr.Type.ElementType)));
-			context.OperandCount = 4;
+			var type = ptr.Type.ElementType;
+			if (type.IsReferenceType)
+			{
+				var size = GetInstructionSize(type);
+				context.SetInstruction(IRInstruction.Store, size, null, ptr, ConstantZero, Operand.GetNull(TypeSystem));
+				context.MosaType = type;
+			}
+			else
+			{
+				context.SetInstruction(IRInstruction.Nop);
+
+				// Setup context for VmCall
+				ReplaceWithVmCall(context, VmCall.MemorySet);
+
+				// Set the operands
+				context.SetOperand(1, ptr);
+				context.SetOperand(2, ConstantZero);
+				context.SetOperand(3, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(type)));
+				context.OperandCount = 4;
+			}
 		}
 
 		/// <summary>
