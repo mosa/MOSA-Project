@@ -12,7 +12,6 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly OpCode RM_C = new OpCode(new byte[] { 0xC7 }, 0); // Move imm32 to r/m32
 		private static readonly OpCode R_RM_16 = new OpCode(new byte[] { 0x66, 0x8B });
 		private static readonly OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
 		private static readonly OpCode R_RM = new OpCode(new byte[] { 0x8B });
