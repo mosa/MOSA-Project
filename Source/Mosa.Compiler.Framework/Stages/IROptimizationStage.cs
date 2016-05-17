@@ -47,6 +47,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int constantFoldingLogicalAndCount = 0;
 		private int combineIntegerCompareBranchCount = 0;
 		private int removeUselessIntegerCompareBranch = 0;
+		private int arithmeticSimplificationModulus = 0;
 		private int changeCount = 0;
 
 		private Stack<InstructionNode> worklist = new Stack<InstructionNode>();
@@ -91,6 +92,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.ArithmeticSimplificationAdditionAndSubstraction", arithmeticSimplificationAdditionAndSubstractionCount);
 			UpdateCounter("IROptimizations.ArithmeticSimplificationLogicalOperators", arithmeticSimplificationLogicalOperatorsCount);
 			UpdateCounter("IROptimizations.ArithmeticSimplificationShiftOperators", arithmeticSimplificationShiftOperators);
+			UpdateCounter("IROptimizations.ArithmeticSimplificationModulus", arithmeticSimplificationModulus);
 			UpdateCounter("IROptimizations.SimpleConstantPropagation", simpleConstantPropagationCount);
 			UpdateCounter("IROptimizations.SimpleForwardCopyPropagation", simpleForwardCopyPropagationCount);
 			UpdateCounter("IROptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranchCount);
@@ -194,6 +196,9 @@ namespace Mosa.Compiler.Framework.Stages
 				ArithmeticSimplificationMultiplication,
 				ArithmeticSimplificationDivision,
 				ArithmeticSimplificationAdditionAndSubstraction,
+
+				ArithmeticSimplificationRemUnsignedModulus,
+				ArithmeticSimplificationRemSignedModulus,
 				ArithmeticSimplificationLogicalOperators,
 				ArithmeticSimplificationShiftOperators,
 				ReduceZeroExtendedMove,
@@ -602,6 +607,7 @@ namespace Mosa.Compiler.Framework.Stages
 				  node.Instruction == IRInstruction.LogicalXor ||
 				  node.Instruction == IRInstruction.MulSigned || node.Instruction == IRInstruction.MulUnsigned ||
 				  node.Instruction == IRInstruction.DivSigned || node.Instruction == IRInstruction.DivUnsigned ||
+				  node.Instruction == IRInstruction.RemSigned || node.Instruction == IRInstruction.RemUnsigned ||
 				  node.Instruction == IRInstruction.ArithmeticShiftRight ||
 				  node.Instruction == IRInstruction.ShiftLeft || node.Instruction == IRInstruction.ShiftRight))
 				return;
@@ -617,7 +623,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// Divide by zero!
-			if ((node.Instruction == IRInstruction.DivSigned || node.Instruction == IRInstruction.DivUnsigned) && op2.IsConstant && op2.IsConstantZero)
+			if ((node.Instruction == IRInstruction.DivSigned || node.Instruction == IRInstruction.DivUnsigned || node.Instruction == IRInstruction.RemSigned || node.Instruction == IRInstruction.RemUnsigned) && op2.IsConstant && op2.IsConstantZero)
 				return;
 
 			Operand constant = null;
@@ -665,6 +671,14 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (node.Instruction == IRInstruction.ShiftLeft)
 			{
 				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedLongInteger << (int)op2.ConstantUnsignedLongInteger);
+			}
+			else if (node.Instruction == IRInstruction.RemSigned)
+			{
+				constant = Operand.CreateConstant(result.Type, op1.ConstantSignedLongInteger % op2.ConstantSignedLongInteger);
+			}
+			else if (node.Instruction == IRInstruction.RemUnsigned)
+			{
+				constant = Operand.CreateConstant(result.Type, op1.ConstantUnsignedLongInteger % op2.ConstantUnsignedLongInteger);
 			}
 
 			if (constant == null)
@@ -809,7 +823,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
 			{
-				uint shift = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
+				int shift = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
 
 				if (shift < 32)
 				{
@@ -876,7 +890,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (node.Instruction == IRInstruction.DivUnsigned && IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
 			{
-				uint shift = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
+				int shift = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
 
 				if (shift < 32)
 				{
@@ -1826,14 +1840,105 @@ namespace Mosa.Compiler.Framework.Stages
 			changeCount++;
 		}
 
+		/// <summary>
+		/// Arithmetics the simplification rem unsigned modulus.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void ArithmeticSimplificationRemUnsignedModulus(InstructionNode node)
+		{
+			if (node.IsEmpty)
+				return;
+
+			if (!(node.Instruction == IRInstruction.RemUnsigned))
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (!node.Operand2.IsConstant)
+				return;
+
+			if (node.Operand2.ConstantUnsignedLongInteger == 0)
+				return;
+
+			if (!IsPowerOfTwo(node.Operand2.ConstantUnsignedLongInteger))
+				return;
+
+			Operand result = node.Result;
+			Operand op1 = node.Operand1;
+			Operand op2 = node.Operand2;
+
+			if (op2.ConstantUnsignedLongInteger == 0)
+			{
+				AddOperandUsageToWorkList(node);
+				if (trace.Active) trace.Log("*** ArithmeticSimplificationRemUnsignedModulus");
+				if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
+				node.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(TypeSystem, 0));
+				arithmeticSimplificationModulus++;
+				changeCount++;
+				if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
+				return;
+			}
+
+			int power = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
+
+			var mask = (1 << power) - 1;
+
+			var constant = Operand.CreateConstant(TypeSystem, mask);
+
+			AddOperandUsageToWorkList(node);
+			if (trace.Active) trace.Log("*** ArithmeticSimplificationRemUnsignedModulus");
+			if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
+			node.SetInstruction(IRInstruction.LogicalAnd, result, op1, constant);
+			arithmeticSimplificationModulus++;
+			changeCount++;
+			if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
+			return;
+		}
+
+		/// <summary>
+		/// Arithmetics the simplification rem signed modulus.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void ArithmeticSimplificationRemSignedModulus(InstructionNode node)
+		{
+			if (node.IsEmpty)
+				return;
+
+			if (!(node.Instruction == IRInstruction.RemSigned))
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (!node.Operand2.IsConstant)
+				return;
+
+			if (node.Operand2.ConstantUnsignedLongInteger != 1)
+				return;
+
+			Operand result = node.Result;
+			Operand op1 = node.Operand1;
+			Operand op2 = node.Operand2;
+
+			AddOperandUsageToWorkList(node);
+			if (trace.Active) trace.Log("*** ArithmeticSimplificationRemSignedModulus");
+			if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
+			node.SetInstruction(IRInstruction.Move, result, Operand.CreateConstant(TypeSystem, 0));
+			arithmeticSimplificationModulus++;
+			changeCount++;
+			if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
+			return;
+		}
+
 		private static bool IsPowerOfTwo(ulong n)
 		{
 			return (n & (n - 1)) == 0;
 		}
 
-		private static uint GetPowerOfTwo(ulong n)
+		private static int GetPowerOfTwo(ulong n)
 		{
-			uint bits = 0;
+			int bits = 0;
 			while (n > 0)
 			{
 				bits++;
