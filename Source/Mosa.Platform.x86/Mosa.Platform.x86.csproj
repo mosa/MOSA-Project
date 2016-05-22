@@ -132,6 +132,7 @@
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
+    <Compile Include="Stages\ConversionPhaseStage.cs" />
     <Compile Include="Stages\SSESetupStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
     <Compile Include="Stages\FinalTweakTransformationStage.cs" />
@@ -278,6 +279,7 @@
     <Compile Include="SSE2Register.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="X86OpcodeEncoder.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Platform;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
@@ -10,21 +12,13 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class MovLoad : X86Instruction
 	{
-		#region Data Members
-
-		private static readonly OpCode R_RM_16 = new OpCode(new byte[] { 0x66, 0x8B });
-		private static readonly OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
-		private static readonly OpCode R_RM = new OpCode(new byte[] { 0x8B });
-
-		#endregion Data Members
-
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="MovLoad"/>.
 		/// </summary>
 		public MovLoad() :
-			base(1, 1)
+			base(1, 2)
 		{
 		}
 
@@ -33,40 +27,33 @@ namespace Mosa.Platform.x86.Instructions
 		#region Methods
 
 		/// <summary>
-		/// Computes the opcode.
-		/// </summary>
-		/// <param name="size">The size.</param>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <returns></returns>
-		/// <exception cref="System.ArgumentException">@No opcode for operand type. [ + destination + ,  + source + )</exception>
-		private OpCode ComputeOpCode(InstructionSize size, Operand destination, Operand source)
-		{
-			Debug.Assert(destination.IsRegister);
-			Debug.Assert(source.IsMemoryAddress);
-
-			size = BaseMethodCompilerStage.GetInstructionSize(size, destination);
-
-			Debug.Assert(size != InstructionSize.Size64);
-
-			if (size == InstructionSize.Size8)
-				return R_M_U8;
-
-			if (size == InstructionSize.Size16)
-				return R_RM_16;
-
-			return R_RM;
-		}
-
-		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			var opCode = ComputeOpCode(node.Size, node.Result, node.Operand1);
-			emitter.Emit(opCode, node.Result, node.Operand1);
+			Debug.Assert(node.Result.IsRegister);
+
+			var size = BaseMethodCompilerStage.GetInstructionSize(node.Size, node.Result);
+			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
+
+			// memory to reg 1000 101w: mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendConditionalPrefix(0x66, size == InstructionSize.Size16)  // 8:prefix: 64bit
+				.AppendNibble(Bits.b1000)                                       // 4:opcode
+				.Append3Bits(Bits.b101)                                         // 3:opcode
+				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
+				.AppendMod(true, node.Operand2)                                 // 2:mod
+				.AppendRegister(node.Result.Register)                           // 3:register (destination)
+				.AppendRM(node.Operand1)                                        // 3:r/m (source)
+				.AppendConditionalIntegerValue(node.Operand2.ConstantUnsignedInteger, !node.Operand2.IsConstantZero)      // 32:displacement value
+				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
+
+			if (linkreference)
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			else
+				emitter.Emit(opcode);
 		}
 
 		#endregion Methods

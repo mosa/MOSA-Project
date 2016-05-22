@@ -684,7 +684,7 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			// Fortunately in 32-bit mode, we can't have 64-bit offsets so a 32-bit add willl work.
+			// Fortunately in 32-bit mode, we can't have 64-bit offsets so a 32-bit add will work.
 			if (offset.IsConstant && offset.IsConstantZero)
 			{
 				if (address.IsField)

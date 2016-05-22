@@ -245,6 +245,10 @@ namespace Mosa.Platform.x86
 			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
 			);
+
+			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
+				new ConversionPhaseStage()
+			);
 		}
 
 		/// <summary>
