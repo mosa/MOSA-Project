@@ -71,6 +71,7 @@
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="ConsoleSession.cs" />
     <Compile Include="DebugClient.cs" />
+    <Compile Include="Helpers\DebugImplementation.cs" />
     <Compile Include="Serial.cs" />
     <Compile Include="KernelMemory.cs" />
     <Compile Include="CMOS.cs" />

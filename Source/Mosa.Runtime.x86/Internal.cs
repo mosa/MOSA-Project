@@ -12,7 +12,7 @@ namespace Mosa.Runtime.x86
 	{
 		internal const uint NativeIntSize = 4;
 
-		public static bool IsTypeInInheritanceChain(MetadataTypeStruct* typeDefinition, MetadataTypeStruct* chain)
+		public static bool IsTypeInInheritanceChain(MDTypeDefinition* typeDefinition, MDTypeDefinition* chain)
 		{
 			while (chain != null)
 			{
@@ -30,9 +30,9 @@ namespace Mosa.Runtime.x86
 			if (obj == null)
 				return null;
 
-			MetadataTypeStruct* typeDefinition = (MetadataTypeStruct*)((uint**)&handle)[0];
+			MDTypeDefinition* typeDefinition = (MDTypeDefinition*)((uint**)&handle)[0];
 
-			MetadataTypeStruct* objTypeDefinition = (MetadataTypeStruct*)((uint*)obj)[0];
+			MDTypeDefinition* objTypeDefinition = (MDTypeDefinition*)((uint*)obj)[0];
 
 			if (IsTypeInInheritanceChain(typeDefinition, objTypeDefinition))
 				return obj;
@@ -42,7 +42,7 @@ namespace Mosa.Runtime.x86
 
 		public static void* IsInstanceOfInterfaceType(int interfaceSlot, void* obj)
 		{
-			MetadataTypeStruct* objTypeDefinition = (MetadataTypeStruct*)((uint*)obj)[0];
+			MDTypeDefinition* objTypeDefinition = (MDTypeDefinition*)((uint*)obj)[0];
 
 			if (objTypeDefinition == null)
 				return null;
@@ -183,9 +183,10 @@ namespace Mosa.Runtime.x86
 		public static void Fault(uint code)
 		{
 			DebugOutput(code);
+			System.Diagnostics.Debug.Fail("Fault: " + ((int)code).ToString("hex"));
 		}
 
-		public static MetadataMethodStruct* GetMethodDefinition(uint address)
+		public static MDMethodDefinition* GetMethodDefinition(uint address)
 		{
 			uint table = Native.GetMethodLookupTable();
 			uint entries = Intrinsic.Load32(table);
@@ -199,7 +200,7 @@ namespace Mosa.Runtime.x86
 
 				if (address >= addr && address < addr + size)
 				{
-					return (MetadataMethodStruct*)Intrinsic.Load32(table, NativeIntSize * 2);
+					return (MDMethodDefinition*)Intrinsic.Load32(table, NativeIntSize * 2);
 				}
 
 				table = table + (NativeIntSize * 3);
@@ -210,7 +211,7 @@ namespace Mosa.Runtime.x86
 			return null;
 		}
 
-		public static MetadataMethodStruct* GetMethodDefinitionViaMethodExceptionLookup(uint address)
+		public static MDMethodDefinition* GetMethodDefinitionViaMethodExceptionLookup(uint address)
 		{
 			uint table = Native.GetMethodExceptionLookupTable();
 
@@ -228,7 +229,7 @@ namespace Mosa.Runtime.x86
 
 				if (address >= addr && address < addr + size)
 				{
-					return (MetadataMethodStruct*)Intrinsic.Load32(table, NativeIntSize * 2);
+					return (MDMethodDefinition*)Intrinsic.Load32(table, NativeIntSize * 2);
 				}
 
 				table = table + (NativeIntSize * 3);
@@ -239,7 +240,7 @@ namespace Mosa.Runtime.x86
 			return null;
 		}
 
-		public static MetadataPRDefinitionStruct* GetProtectedRegionEntryByAddress(uint address, MetadataTypeStruct* exceptionType, MetadataMethodStruct* methodDef)
+		public static MDProtectedRegionDefinition* GetProtectedRegionEntryByAddress(uint address, MDTypeDefinition* exceptionType, MDMethodDefinition* methodDef)
 		{
 			var protectedRegionTable = methodDef->ProtectedRegionTable;
 
@@ -252,16 +253,16 @@ namespace Mosa.Runtime.x86
 				return null;
 
 			uint offset = address - method;
-			int entries = protectedRegionTable->NumberOfRegions;
+			uint entries = protectedRegionTable->NumberOfRegions;
 
-			int entry = 0;
-			MetadataPRDefinitionStruct* protectedRegionDef = null;
+			uint entry = 0;
+			MDProtectedRegionDefinition* protectedRegionDef = null;
 			uint currentStart = uint.MinValue;
 			uint currentEnd = uint.MaxValue;
 
 			while (entry < entries)
 			{
-				var prDef = MetadataPRTableStruct.GetProtectedRegionDefinitionAddress(protectedRegionTable, (uint)entry);
+				var prDef = protectedRegionTable->GetProtectedRegionDefinition(entry);
 
 				uint start = prDef->StartOffset;
 				uint end = prDef->EndOffset;
@@ -336,13 +337,13 @@ namespace Mosa.Runtime.x86
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static MetadataMethodStruct* GetMethodDefinitionFromStackFrameDepth(uint depth)
+		public static MDMethodDefinition* GetMethodDefinitionFromStackFrameDepth(uint depth)
 		{
 			return GetMethodDefinitionFromStackFrameDepth(depth, 0);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static MetadataMethodStruct* GetMethodDefinitionFromStackFrameDepth(uint depth, uint ebp)
+		public static MDMethodDefinition* GetMethodDefinitionFromStackFrameDepth(uint depth, uint ebp)
 		{
 			if (ebp == 0)
 				ebp = Native.GetEBP();
@@ -402,7 +403,7 @@ namespace Mosa.Runtime.x86
 					Fault(0XBAD00002);
 				}
 
-				var exceptionType = (MetadataTypeStruct*)Intrinsic.Load32(exceptionObject);
+				var exceptionType = (MDTypeDefinition*)Intrinsic.Load32(exceptionObject);
 
 				var methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAddress);
 

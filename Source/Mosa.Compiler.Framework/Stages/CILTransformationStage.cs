@@ -888,10 +888,10 @@ namespace Mosa.Compiler.Framework.Stages
 			var classType = context.InvokeMethod.DeclaringType;
 			var thisReference = context.Result;
 
-			Context before = context.InsertBefore();
-
+			// If the type is value type we don't need to call AllocateObject
 			if (TypeLayout.IsCompoundType(thisReference.Type))
 			{
+				Context before = context.InsertBefore();
 				var newThis = MethodCompiler.StackLayout.AddStackLocal(thisReference.Type);
 
 				var oldThisReference = thisReference;
@@ -904,8 +904,23 @@ namespace Mosa.Compiler.Framework.Stages
 							if (node.GetOperand(i) == oldThisReference)
 								node.SetOperand(i, newThis);
 			}
+			else if (thisReference.Type.IsValueType)
+			{
+				Context before = context.InsertBefore();
+				var newThis = MethodCompiler.StackLayout.AddStackLocal(thisReference.Type);
+
+				var oldThisReference = thisReference;
+				thisReference = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
+				before.SetInstruction(IRInstruction.AddressOf, thisReference, newThis);
+
+				var after = context.Next.InsertBefore();
+				after.SetInstruction(IRInstruction.Move, oldThisReference, newThis);
+			}
 			else
 			{
+				Debug.Assert(thisReference.Type.IsReferenceType, $"VmCall.AllocateObject only needs to be called for reference types. Type: {thisReference.Type}");
+
+				Context before = context.InsertBefore();
 				ReplaceWithVmCall(before, VmCall.AllocateObject);
 
 				before.SetOperand(1, GetRuntimeTypeHandle(classType, before));
@@ -1310,7 +1325,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			throw new NotImplementCompilerException(@"CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
+			throw new NotImplementCompilerException($@"CILTransformationStage.UnaryBranch doesn't support CIL opcode {opcode}");
 		}
 
 		/// <summary>
@@ -2143,9 +2158,9 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.InvokeMethod.FullName, out intrinsicType);
 				if (intrinsicType == null)
-					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.InvokeMethod.DeclaringType.FullName + "::" + context.InvokeMethod.Name, out intrinsicType);
+					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue($"{context.InvokeMethod.DeclaringType.FullName}::{context.InvokeMethod.Name}", out intrinsicType);
 
-				Debug.Assert(intrinsicType != null, "Method is internal but no processor found: " + context.InvokeMethod.FullName);
+				Debug.Assert(intrinsicType != null, $"Method is internal but no processor found: {context.InvokeMethod.FullName}");
 			}
 
 			if (intrinsicType == null)
@@ -2264,7 +2279,7 @@ namespace Mosa.Compiler.Framework.Stages
 				method = PlatformInternalRuntimeType.FindMethodByName(internalCallTarget.ToString());
 			}
 
-			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());
+			Debug.Assert(method != null, $"Cannot find method: {internalCallTarget}");
 
 			context.ReplaceInstructionOnly(IRInstruction.Call);
 			context.SetOperand(0, Operand.CreateSymbolFromMethod(TypeSystem, method));
@@ -2297,11 +2312,11 @@ namespace Mosa.Compiler.Framework.Stages
 			string name = method.Name;
 			if (name == @".ctor")
 			{
-				name = @"Create" + method.DeclaringType.Name;
+				name = $@"Create{method.DeclaringType.Name}";
 			}
 			else
 			{
-				name = @"Internal" + name;
+				name = $@"Internal{name}";
 			}
 
 			return name;

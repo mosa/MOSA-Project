@@ -1,13 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Reflection;
 using Mosa.Runtime;
+using System.Reflection;
 
 namespace System
 {
 	public sealed unsafe class RuntimeType : Type
 	{
-		private MetadataTypeStruct* typeStruct;
+		private MDTypeDefinition* typeDefinition;
 		private string assemblyQualifiedName;
 		private string name;
 		private string @namespace;
@@ -83,29 +83,29 @@ namespace System
 		internal RuntimeType(RuntimeTypeHandle handle)
 		{
 			this.handle = handle;
-			typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
+			typeDefinition = (MDTypeDefinition*)((uint**)&handle)[0];
 
-			assemblyQualifiedName = Mosa.Runtime.Internal.InitializeMetadataString(typeStruct->Name);    // TODO
-			name = Mosa.Runtime.Internal.InitializeMetadataString(typeStruct->Name);                 // TODO
-			@namespace = Mosa.Runtime.Internal.InitializeMetadataString(typeStruct->Name);               // TODO
-			fullname = Mosa.Runtime.Internal.InitializeMetadataString(typeStruct->Name);
+			assemblyQualifiedName = typeDefinition->Name;   // TODO
+			name = typeDefinition->Name;                    // TODO
+			@namespace = typeDefinition->Name;              // TODO
+			fullname = typeDefinition->Name;
 
-			typeCode = (TypeCode)(typeStruct->Attributes >> 24);
-			attributes = (TypeAttributes)(typeStruct->Attributes & 0x00FFFFFF);
+			typeCode = typeDefinition->TypeCode;
+			attributes = typeDefinition->Attributes;
 
 			// Declaring Type
-			if (typeStruct->DeclaringType != null)
+			if (typeDefinition->DeclaringType != null)
 			{
 				RuntimeTypeHandle declaringHandle = new RuntimeTypeHandle();
-				((uint**)&declaringHandle)[0] = (uint*)typeStruct->DeclaringType;
+				((uint**)&declaringHandle)[0] = (uint*)typeDefinition->DeclaringType;
 				declaringTypeHandle = declaringHandle;
 			}
 
 			// Element Type
-			if ((*typeStruct).ElementType != null)
+			if ((*typeDefinition).ElementType != null)
 			{
 				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
-				((uint**)&elementHandle)[0] = (uint*)typeStruct->ElementType;
+				((uint**)&elementHandle)[0] = (uint*)typeDefinition->ElementType;
 				elementTypeHandle = elementHandle;
 			}
 		}

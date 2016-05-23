@@ -29,12 +29,12 @@ namespace Mosa.Runtime
 				throw new ArgumentOutOfRangeException(nameof(length));
 
 			// Get type info
-			MetadataTypeStruct* typeStruct = (MetadataTypeStruct*)((uint*)sourceArray);
-			var typeCode = (TypeCode)(typeStruct->Attributes >> 24);
+			MDTypeDefinition* typeStruct = (MDTypeDefinition*)((uint*)sourceArray);
+			var typeCode = typeStruct->TypeCode;
 
-			var size = (typeCode == TypeCode.ReferenceType) ? sizeof(void*) : (int)typeStruct->Size;
+			var size = (typeCode == TypeCode.ReferenceType) ? Ptr.Size : typeStruct->Size;
 
-			Internal.MemoryCopy((Ptr)destinationArray + ((sizeof(void*) * 2) + destinationIndex * size), (Ptr)sourceArray + ((sizeof(void*) * 2) + sourceIndex * size), (uint)(length * size));
+			Internal.MemoryCopy(((Ptr)destinationArray + (Ptr.Size * 2) + (destinationIndex * size)), ((Ptr)sourceArray + (Ptr.Size * 2) + (sourceIndex * size)), (uint)(length * size));
 		}
 
 		public static int GetLength(void* o, int dimension)

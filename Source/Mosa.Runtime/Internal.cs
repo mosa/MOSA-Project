@@ -181,32 +181,28 @@ namespace Mosa.Runtime
 
 		#region Metadata
 
-		internal static List<RuntimeAssembly> Assemblies;
+		internal static LinkedList<RuntimeAssembly> Assemblies = null;
 
 		public static string InitializeMetadataString(uint* ptr)
 		{
 			return (string)Intrinsic.GetObjectFromAddress(ptr);
 		}
 
-		public static string GetMethodDefinitionName(MetadataMethodStruct* methodDef)
-		{
-			return InitializeMetadataString(methodDef->Name);
-		}
-
 		public static void Setup()
 		{
 			// Get AssemblyListTable and Assembly count
-			uint* assemblyListTable = Intrinsic.GetAssemblyListTable();
-			uint assemblyCount = assemblyListTable[0];
+			Ptr assemblyListTable = Intrinsic.GetAssemblyListTable();
+			uint assemblyCount = (uint)assemblyListTable[0];
+			assemblyListTable++;
 
-			Assemblies = new List<RuntimeAssembly>((int)assemblyCount);
+			Assemblies = new LinkedList<RuntimeAssembly>();
 
 			// Loop through and populate the array
 			for (uint i = 0; i < assemblyCount; i++)
 			{
 				// Get the pointer to the Assembly Metadata
-				uint* ptr = (uint*)(assemblyListTable[1 + i]);
-				Assemblies.Add(new RuntimeAssembly(ptr));
+				MDAssemblyDefinition* ptr = (MDAssemblyDefinition*)(assemblyListTable[i]);
+				Assemblies.AddLast(new RuntimeAssembly(ptr));
 			}
 		}
 

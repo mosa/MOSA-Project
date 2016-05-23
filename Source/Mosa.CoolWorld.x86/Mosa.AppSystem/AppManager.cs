@@ -181,7 +181,7 @@ namespace Mosa.AppSystem
 				if (methodDef == null)
 					return;
 
-				string caller = Mosa.Runtime.Internal.GetMethodDefinitionName(methodDef);
+				string caller = methodDef->Name;
 
 				if (caller == null)
 					return;

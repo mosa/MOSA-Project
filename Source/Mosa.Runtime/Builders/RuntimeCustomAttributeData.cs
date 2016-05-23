@@ -9,9 +9,9 @@ namespace System
 	public sealed unsafe class RuntimeCustomAttributeData : CustomAttributeData
 	{
 		// We use this for cheats
-		internal readonly MetadataTypeStruct* EnumTypePtr;
+		internal readonly MDTypeDefinition* EnumTypePtr;
 
-		public RuntimeCustomAttributeData(MetadataCAStruct* customAttributeTable)
+		public RuntimeCustomAttributeData(MDCustomAttribute* customAttributeTable)
 		{
 			RuntimeTypeHandle typeHandle = new RuntimeTypeHandle();
 			((uint**)&typeHandle)[0] = (uint*)customAttributeTable->AttributeType;
@@ -19,7 +19,7 @@ namespace System
 
 			// Get the metadata pointer for the enum type
 			typeHandle = typeof(System.Enum).TypeHandle;
-			EnumTypePtr = (MetadataTypeStruct*)((uint**)&typeHandle)[0];
+			EnumTypePtr = (MDTypeDefinition*)((uint**)&typeHandle)[0];
 
 			// Create temporary lists to hold the arguments
 			var typedArgs = new LinkedList<CustomAttributeTypedArgument>();
@@ -28,14 +28,10 @@ namespace System
 			for (uint i = 0; i < customAttributeTable->NumberOfArguments; i++)
 			{
 				// Get the argument metadata pointer
-				var argument = MetadataCAStruct.GetCAArgumentAddress(customAttributeTable, i);
+				var argument = customAttributeTable->GetCustomAttributeArgument(i);
 
 				// Get the argument name (if any)
-				string name = null;
-				if (argument->Name != null)
-				{
-					name = Mosa.Runtime.Internal.InitializeMetadataString(argument->Name);
-				}
+				string name = argument->Name;
 
 				// Get the argument type
 				RuntimeTypeHandle argTypeHandle = new RuntimeTypeHandle();
@@ -87,15 +83,15 @@ namespace System
 			return namedArgument;
 		}
 
-		private object ResolveArgumentValue(MetadataCAArgumentStruct* argument, Type type)
+		private object ResolveArgumentValue(MDCustomAttributeArgument* argument, Type type)
 		{
-			TypeCode typeCode = (TypeCode)(argument->ArgumentType->Attributes >> 24);
-			var valuePtr = MetadataCAArgumentStruct.GetArgumentAddress(argument);
+			TypeCode typeCode = argument->ArgumentType->TypeCode;
+			var valuePtr = argument->GetArgumentValue();
 
 			// If its an enum type
 			if (argument->ArgumentType->ParentType == EnumTypePtr)
 			{
-				typeCode = (TypeCode)(argument->ArgumentType->ElementType->Attributes >> 24);
+				typeCode = argument->ArgumentType->ElementType->TypeCode;
 			}
 
 			switch (typeCode)
@@ -122,7 +118,7 @@ namespace System
 
 				// 4 bytes
 				case TypeCode.U4:
-					return valuePtr[0];
+					return ((uint*)valuePtr)[0];
 
 				case TypeCode.I4:
 					return ((int*)valuePtr)[0];
@@ -162,11 +158,11 @@ namespace System
 			//return null;
 		}
 
-		private object ResolveArrayValue(MetadataCAArgumentStruct* argument, Type type)
+		private object ResolveArrayValue(MDCustomAttributeArgument* argument, Type type)
 		{
-			TypeCode typeCode = (TypeCode)(argument->ArgumentType->ElementType->Attributes >> 24);
-			var valuePtr = MetadataCAArgumentStruct.GetArgumentAddress(argument);
-			var size = valuePtr[0];
+			TypeCode typeCode = argument->ArgumentType->ElementType->TypeCode;
+			var valuePtr = argument->GetArgumentValue();
+			var size = (uint)valuePtr[0];
 			valuePtr++;
 
 			switch (typeCode)
@@ -226,7 +222,7 @@ namespace System
 					{
 						uint[] array = new uint[size];
 						for (int i = 0; i < size; i++)
-							array[i] = valuePtr[i];
+							array[i] = (uint)valuePtr[i];
 						return array;
 					}
 

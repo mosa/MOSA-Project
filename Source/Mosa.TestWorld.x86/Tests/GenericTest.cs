@@ -16,7 +16,8 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.AddLast(GenericTest7);
 			testMethods.AddLast(GenericTest8);
 			testMethods.AddLast(GenericTest9);
-			testMethods.AddLast(GenericTest10);
+
+			//testMethods.AddLast(GenericTest10);
 		}
 
 		public static bool GenericTest1()

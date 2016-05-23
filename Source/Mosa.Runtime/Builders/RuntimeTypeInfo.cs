@@ -1,14 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using System.Collections.Generic;
 using System.Reflection;
-using Mosa.Runtime;
 
 namespace System
 {
 	public sealed unsafe class RuntimeTypeInfo : TypeInfo
 	{
-		private MetadataTypeStruct* typeStruct;
+		private MDTypeDefinition* typeDefinition;
 		private Assembly assembly;
 
 		//private RuntimeTypeHandle handle;
@@ -61,14 +61,14 @@ namespace System
 				{
 					// Custom Attributes Data - Lazy load
 					customAttributesData = new LinkedList<CustomAttributeData>();
-					if (typeStruct->CustomAttributes != null)
+					if (typeDefinition->CustomAttributes != null)
 					{
-						var customAttributesTablePtr = typeStruct->CustomAttributes;
-						var customAttributesCount = customAttributesTablePtr[0];
-						customAttributesTablePtr++;
+						var customAttributesTable = typeDefinition->CustomAttributes;
+						var customAttributesCount = customAttributesTable->NumberOfAttributes;
+						customAttributesTable++;
 						for (uint i = 0; i < customAttributesCount; i++)
 						{
-							RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData((MetadataCAStruct*)customAttributesTablePtr[i]);
+							RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData(customAttributesTable->GetCustomAttribute(i));
 							customAttributesData.AddLast(cad);
 						}
 					}
@@ -149,37 +149,37 @@ namespace System
 			this.assembly = assembly;
 
 			//this.handle = handle;
-			typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
+			typeDefinition = (MDTypeDefinition*)((uint**)&handle)[0];
 
-			assemblyQualifiedName = Mosa.Runtime.Internal.InitializeMetadataString(typeStruct->Name);    // TODO
-			name = Mosa.Runtime.Internal.InitializeMetadataString(typeStruct->Name);                 // TODO
-			@namespace = Mosa.Runtime.Internal.InitializeMetadataString(typeStruct->Name);               // TODO
-			fullname = Mosa.Runtime.Internal.InitializeMetadataString(typeStruct->Name);
+			assemblyQualifiedName = typeDefinition->Name;	// TODO
+			name = typeDefinition->Name;					// TODO
+			@namespace = typeDefinition->Name;				// TODO
+			fullname = typeDefinition->Name;
 
-			typeCode = (TypeCode)(typeStruct->Attributes >> 24);
-			attributes = (TypeAttributes)(typeStruct->Attributes & 0x00FFFFFF);
+			typeCode = typeDefinition->TypeCode;
+			attributes = typeDefinition->Attributes;
 
 			// Base Type
-			if (typeStruct->ParentType != null)
+			if (typeDefinition->ParentType != null)
 			{
 				RuntimeTypeHandle parentHandle = new RuntimeTypeHandle();
-				((uint**)&parentHandle)[0] = (uint*)typeStruct->ParentType;
+				((uint**)&parentHandle)[0] = (uint*)typeDefinition->ParentType;
 				baseType = Type.GetTypeFromHandle(parentHandle);
 			}
 
 			// Declaring Type
-			if (typeStruct->DeclaringType != null)
+			if (typeDefinition->DeclaringType != null)
 			{
 				RuntimeTypeHandle declaringHandle = new RuntimeTypeHandle();
-				((uint**)&declaringHandle)[0] = (uint*)typeStruct->DeclaringType;
+				((uint**)&declaringHandle)[0] = (uint*)typeDefinition->DeclaringType;
 				declaringType = Type.GetTypeFromHandle(declaringHandle);
 			}
 
 			// Element Type
-			if (typeStruct->ElementType != null)
+			if (typeDefinition->ElementType != null)
 			{
 				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
-				((uint**)&elementHandle)[0] = (uint*)typeStruct->ElementType;
+				((uint**)&elementHandle)[0] = (uint*)typeDefinition->ElementType;
 				elementType = Type.GetTypeFromHandle(elementHandle);
 			}
 		}

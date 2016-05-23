@@ -8,7 +8,7 @@ namespace Mosa.Runtime
 	public struct SimpleStackTraceEntry
 	{
 		private string methodName;
-		public unsafe MetadataMethodStruct* MethodDefinition;
+		public unsafe MDMethodDefinition* MethodDefinition;
 		public uint Offset;
 
 		unsafe public string MethodName
@@ -18,7 +18,7 @@ namespace Mosa.Runtime
 				if (MethodDefinition == null)
 					return null;
 				if (methodName == null)
-					methodName = Internal.GetMethodDefinitionName(MethodDefinition);
+					methodName = MethodDefinition->Name;
 				return methodName;
 			}
 		}
@@ -49,12 +49,11 @@ namespace Mosa.Runtime
 		{
 			get
 			{
-				{
-					if (!Valid) return true;
-					if (MethodName == null)
-						return true;
-					return MethodName.IndexOf("System.Void Mosa.Kernel.x86.Panic::") >= 0;
-				}
+				if (!Valid)
+					return true;
+				if (MethodName == null)
+					return true;
+				return MethodName.IndexOf("System.Void Mosa.Kernel.x86.Panic::") >= 0;
 			}
 		}
 

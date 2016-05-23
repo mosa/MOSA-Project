@@ -412,8 +412,11 @@ namespace Mosa.Kernel.x86
 					if (physicalpage == 0x0)
 					{
 						// Panic! Out of memory
+						var strBuffer = new Runtime.StringBuffer();
+						strBuffer.Append("Out of memory! CR2: 0x");
+						strBuffer.Append(cr2, "hex");
 						Panic.SetStackPointer(stack->EBP, stack->EIP);
-						Panic.Error(cr2);
+						Panic.Error(strBuffer);
 					}
 
 					PageTable.MapVirtualAddressToPhysical(Native.GetCR2(), physicalpage);
