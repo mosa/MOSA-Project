@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// </summary>
 	public sealed class SparseConditionalConstantPropagation
 	{
-		private static int MAXCONSTANTS = 1;
+		private static int MAXCONSTANTS = 5;
 
 		private class VariableState
 		{
@@ -42,9 +42,9 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			public bool IsSingleConstant { get { return Status == VariableStatus.SingleConstant; } set { Status = VariableStatus.SingleConstant; Debug.Assert(value); } }
 
-			public bool IsMultipleConstants { get { return Status == VariableStatus.MultipleConstants; } }
+			public bool HasMultipleConstants { get { return Status == VariableStatus.MultipleConstants; } }
 
-			public bool IsOnlyConstants { get { return Status == VariableStatus.SingleConstant || Status == VariableStatus.MultipleConstants; } }
+			public bool HasOnlyConstants { get { return Status == VariableStatus.SingleConstant || Status == VariableStatus.MultipleConstants; } }
 
 			public bool IsVirtualRegister { get { return Operand.IsVirtualRegister; } }
 
@@ -117,7 +117,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				{
 					s = s + " = " + ConstantUnsignedLongInteger.ToString();
 				}
-				else if (IsMultipleConstants)
+				else if (HasMultipleConstants)
 				{
 					s = s + " (" + constants.Count.ToString() + ") =";
 					foreach (ulong i in constants)
@@ -481,7 +481,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				UpdateToOverDefined(result);
 			}
-			else if (operand.IsOnlyConstants)
+			else if (operand.HasOnlyConstants)
 			{
 				foreach (var c in operand.Constants)
 				{
@@ -546,7 +546,7 @@ namespace Mosa.Compiler.Framework.Analysis
 					return;
 				}
 			}
-			else if (operand1.IsOnlyConstants && operand2.IsOnlyConstants)
+			else if (operand1.HasOnlyConstants && operand2.HasOnlyConstants)
 			{
 				foreach (var c1 in operand1.Constants)
 				{
@@ -699,7 +699,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 				return !compare.Value;
 			}
-			else if (operand1.IsOnlyConstants && operand2.IsOnlyConstants)
+			else if (operand1.HasOnlyConstants && operand2.HasOnlyConstants)
 			{
 				bool? final = null;
 
@@ -726,16 +726,21 @@ namespace Mosa.Compiler.Framework.Analysis
 						}
 						else
 						{
+							Branch(node);
 							return true;
 						}
 					}
+				}
+
+				if (final.Value)
+				{
+					Branch(node);
 				}
 
 				return !final.Value;
 			}
 
 			Branch(node);
-
 			return true;
 		}
 
@@ -785,31 +790,33 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			var result = GetVariableState(node.Result);
 
+			//UpdateToOverDefined(result); // test
+
 			if (result.IsOverDefined)
 				return;
 
 			var sourceBlocks = node.PhiBlocks;
-
 			var currentBlock = node.Block;
 
 			//if (Trace.Active) Trace.Log("Loop: " + currentBlock.PreviousBlocks.Count.ToString());
 
 			for (var index = 0; index < currentBlock.PreviousBlocks.Count; index++)
 			{
-				var op = node.GetOperand(index);
-
 				var predecessor = sourceBlocks[index];
+
+				phiStatements.AddIfNew(predecessor, node);
+
 				bool executable = blockStates[predecessor.Sequence];
 
 				//if (Trace.Active) Trace.Log("# " + index.ToString() + ": " + predecessor.ToString() + " " + (executable ? "Yes" : "No"));
-
-				phiStatements.AddIfNew(predecessor, node);
 
 				if (!executable)
 					continue;
 
 				if (result.IsOverDefined)
 					continue;
+
+				var op = node.GetOperand(index);
 
 				var operand = GetVariableState(op);
 
@@ -825,7 +832,7 @@ namespace Mosa.Compiler.Framework.Analysis
 					UpdateToConstant(result, operand.ConstantUnsignedLongInteger);
 					continue;
 				}
-				else if (operand.IsMultipleConstants)
+				else if (operand.HasMultipleConstants)
 				{
 					foreach (var c in operand.Constants)
 					{
