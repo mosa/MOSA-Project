@@ -87,6 +87,11 @@ namespace Mosa.Platform.x86
 			return encoder;
 		}
 
+		public static bool Is8BitDisplacement(Operand displacement)
+		{
+			return (displacement.ConstantSignedInteger >= sbyte.MinValue && displacement.ConstantSignedInteger <= sbyte.MaxValue);
+		}
+
 		public static OpcodeEncoder AppendMod(this OpcodeEncoder encoder, bool memory, Operand displacement)
 		{
 			if (memory)
@@ -94,8 +99,8 @@ namespace Mosa.Platform.x86
 				if (displacement.IsConstantZero)
 					return encoder.Append2Bits(Bits.b00);
 
-				//if (displacement.IsI1 || displacement.IsU1 || displacement.IsBoolean)
-				//	return encoder.Append2Bits(Bits.b00);
+				if (Is8BitDisplacement(displacement))
+					return encoder.Append2Bits(Bits.b01);
 
 				return encoder.Append2Bits(Bits.b10);
 			}
@@ -103,7 +108,18 @@ namespace Mosa.Platform.x86
 			return encoder.Append2Bits(Bits.b11);
 		}
 
-		public static OpcodeEncoder PrefixREX(this OpcodeEncoder encoder, bool w, bool r, bool x, bool b, bool include)
+		public static OpcodeEncoder AppendConditionalDisplacement(this OpcodeEncoder encoder, Operand displacement, bool include)
+		{
+			if (!include)
+				return encoder;
+
+			if (Is8BitDisplacement(displacement))
+				return encoder.AppendByteValue((byte)displacement.ConstantUnsignedInteger);
+
+			return encoder.AppendIntegerValue(displacement.ConstantUnsignedInteger);
+		}
+
+		public static OpcodeEncoder AppendConditionalREXPrefix(this OpcodeEncoder encoder, bool w, bool r, bool x, bool b, bool include)
 		{
 			if (!include)
 				return encoder;

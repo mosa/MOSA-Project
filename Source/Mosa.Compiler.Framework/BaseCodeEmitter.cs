@@ -77,35 +77,16 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Patches we need to perform.
 		/// </summary>
-		private readonly List<Patch> patches = new List<Patch>();
+		protected readonly List<Patch> patches = new List<Patch>();
 
 		#endregion Data members
 
 		#region Properties
 
 		/// <summary>
-		/// Gets the type system.
-		/// </summary>
-		/// <value>
-		/// The type system.
-		/// </value>
-		public TypeSystem TypeSystem { get; private set; }
-
-		/// <summary>
 		/// Gets the name of the method.
 		/// </summary>
-		/// <value>
-		/// The name of the method.
-		/// </value>
 		protected string MethodName { get; private set; }
-
-		/// <summary>
-		/// Gets the patches.
-		/// </summary>
-		/// <value>
-		/// The patches.
-		/// </value>
-		protected IList<Patch> Patches { get { return patches.AsReadOnly(); } }
 
 		#endregion Properties
 
@@ -117,8 +98,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="methodName">Name of the method.</param>
 		/// <param name="linker">The linker.</param>
 		/// <param name="codeStream">The stream the machine code is written to.</param>
-		/// <param name="typeSystem">The type system.</param>
-		public void Initialize(string methodName, BaseLinker linker, Stream codeStream, TypeSystem typeSystem)
+		public void Initialize(string methodName, BaseLinker linker, Stream codeStream)
 		{
 			Debug.Assert(codeStream != null);
 			Debug.Assert(linker != null);
@@ -126,7 +106,6 @@ namespace Mosa.Compiler.Framework
 			MethodName = methodName;
 			this.linker = linker;
 			this.codeStream = codeStream;
-			TypeSystem = typeSystem;
 
 			// only necessary if method is being recompiled (due to inline optimization, for example)
 			var symbol = linker.GetSymbol(MethodName, SectionKind.Text);

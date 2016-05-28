@@ -196,7 +196,6 @@ namespace Mosa.Compiler.Framework.Stages
 				ArithmeticSimplificationMultiplication,
 				ArithmeticSimplificationDivision,
 				ArithmeticSimplificationAdditionAndSubstraction,
-
 				ArithmeticSimplificationRemUnsignedModulus,
 				ArithmeticSimplificationRemSignedModulus,
 				ArithmeticSimplificationLogicalOperators,
@@ -558,6 +557,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Operand destination = node.Result;
 			Operand source = node.Operand1;
+
+			Debug.Assert(destination != source);
 
 			if (ContainsAddressOf(destination))
 				return;
@@ -1807,7 +1808,16 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("*** SimplifyPhiInstruction");
 			if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
 			AddOperandUsageToWorkList(node);
-			node.SetInstruction(IRInstruction.Move, node.Result, node.Operand1);
+
+			if (node.Result != node.Operand1)
+			{
+				node.SetInstruction(IRInstruction.Move, node.Result, node.Operand1);
+			}
+			else
+			{
+				node.SetInstruction(IRInstruction.Nop);
+			}
+
 			if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
 			simplifyPhiCount++;
 			changeCount++;

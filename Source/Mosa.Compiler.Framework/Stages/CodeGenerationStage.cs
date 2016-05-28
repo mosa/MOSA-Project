@@ -156,7 +156,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected virtual void BeginGenerate()
 		{
 			codeEmitter = Architecture.GetCodeEmitter();
-			codeEmitter.Initialize(MethodCompiler.Method.FullName, MethodCompiler.Linker, codeStream, TypeSystem);
+			codeEmitter.Initialize(MethodCompiler.Method.FullName, MethodCompiler.Linker, codeStream);
 		}
 
 		/// <summary>
