@@ -414,106 +414,6 @@ namespace Mosa.Tool.Explorer
 			cbLabels_SelectedIndexChanged(null, null);
 		}
 
-		private static string ReplaceTypeName(string value)
-		{
-			if (value.Contains("-") || value.Contains("+"))
-				return value;
-
-			switch (value)
-			{
-				case "System.Object": return "O";
-				case "System.Char": return "C";
-				case "System.Void": return "V";
-				case "System.String": return "String";
-				case "System.Byte": return "U1";
-				case "System.SByte": return "I1";
-				case "System.Boolean": return "B";
-				case "System.Int8": return "I1";
-				case "System.UInt8": return "U1";
-				case "System.Int16": return "I2";
-				case "System.UInt16": return "U2";
-				case "System.Int32": return "I4";
-				case "System.UInt32": return "U4";
-				case "System.Int64": return "I8";
-				case "System.UInt64": return "U8";
-				case "System.Single": return "R4";
-				case "System.Double": return "R8";
-
-					//default: return "O";
-			}
-
-			return value;
-		}
-
-		private static string ReplaceType(string value)
-		{
-			if (value.Length < 2)
-				return value;
-
-			string type = value;
-			string end = string.Empty;
-
-			if (value.EndsWith("*"))
-			{
-				type = value.Substring(0, value.Length - 1);
-				end = "*";
-			}
-			if (value.EndsWith("&"))
-			{
-				type = value.Substring(0, value.Length - 1);
-				end = "&";
-			}
-			if (value.EndsWith("[]"))
-			{
-				type = value.Substring(0, value.Length - 1);
-				end = "[]";
-			}
-
-			return ReplaceTypeName(type) + end;
-		}
-
-		private static string UpdateParameter(string p)
-		{
-			if (!(p.StartsWith("[") && p.EndsWith("]")))
-				return p;
-
-			string value = p.Substring(1, p.Length - 2);
-
-			return "[" + ReplaceType(value) + "]";
-		}
-
-		private static string UpdateLine(string line)
-		{
-			if (!line.StartsWith("L_"))
-				return line;
-
-			string l = line;
-			int at = 0;
-
-			while (true)
-			{
-				int s = l.IndexOf('[', at);
-
-				if (s < 0)
-					break;
-
-				int e = l.IndexOf(']', s);
-
-				if (e < 0)
-					break;
-
-				string oldvalue = l.Substring(s, e - s + 1);
-
-				string newvalue = UpdateParameter(oldvalue);
-
-				at = s + 1;
-
-				l = l.Substring(0, s) + newvalue + l.Substring(e + 1);
-			}
-
-			return l;
-		}
-
 		private void cbDebugStages_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			var node = GetCurrentNode<ViewNode<MosaMethod>>();
@@ -681,13 +581,8 @@ namespace Mosa.Tool.Explorer
 
 			if (cbLabels.SelectedIndex == 0)
 			{
-				foreach (string l in lines)
+				foreach (string line in lines)
 				{
-					string line = l;
-
-					if (displayShortName.Checked)
-						line = UpdateLine(line);
-
 					if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
 						continue;
 
@@ -713,9 +608,6 @@ namespace Mosa.Tool.Explorer
 
 				if (inBlock)
 				{
-					if (displayShortName.Checked)
-						line = UpdateLine(line);
-
 					if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
 						continue;
 

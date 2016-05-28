@@ -11,7 +11,7 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			//visitationDictionary[X86.Mov] = Mov;
+			visitationDictionary[X86.Mov] = Mov;
 
 			//visitationDictionary[X86.Movsx] = Movsx;
 			//visitationDictionary[X86.Movzx] = Movzx;
