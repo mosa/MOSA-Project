@@ -81,7 +81,7 @@ namespace Mosa.Tool.Debugger
 		private void toolStripButton4_Click(object sender, EventArgs e)
 		{
 			toolStripStatusLabel1.Text = "Sent Ping!";
-			DebugEngine.SendCommand(new DebugMessage(Codes.Ping, (byte[])null));
+			DebugEngine.SendCommand(new DebugMessage(DebugCode.Ping, (byte[])null));
 		}
 
 		private void toolStripButton2_Click(object sender, EventArgs e)

@@ -67,6 +67,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Address.cs" />
+    <Compile Include="UnitTestRunner.cs" />
     <Compile Include="Helpers\Assert.cs" />
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="ConsoleSession.cs" />

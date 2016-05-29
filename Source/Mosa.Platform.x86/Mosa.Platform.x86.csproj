@@ -110,6 +110,10 @@
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\AddSD.cs" />
     <Compile Include="Intrinsic\Div.cs" />
+    <Compile Include="Intrinsic\FrameCallRetR2.cs" />
+    <Compile Include="Intrinsic\FrameCallRetU8.cs" />
+    <Compile Include="Intrinsic\FrameCallRetU4.cs" />
+    <Compile Include="Intrinsic\FrameCall.cs" />
     <Compile Include="Intrinsic\Get32.cs" />
     <Compile Include="Intrinsic\Get16.cs" />
     <Compile Include="Intrinsic\FrameJump.cs" />

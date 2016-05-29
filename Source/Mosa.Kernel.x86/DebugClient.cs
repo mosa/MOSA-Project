@@ -11,7 +11,7 @@ namespace Mosa.Kernel.x86
 	{
 		#region Codes
 
-		public static class Codes
+		public static class DebugCode
 		{
 			public const int Connecting = 10;
 			public const int Connected = 11;
@@ -29,6 +29,12 @@ namespace Mosa.Kernel.x86
 			public const int WriteMemory = 1011;
 			public const int ReadCR3 = 1012;
 			public const int Scattered32BitReadMemory = 1013;
+
+			public const int StartUnitTest = 2000;
+			public const int SetUnitTestMethodAddress = 2001;
+			public const int SetUnitTestParameter = 2002;
+			public const int SetUnitTestID = 2003;
+			public const int AbortUnitTest = 2004;
 		}
 
 		#endregion Codes
@@ -116,7 +122,7 @@ namespace Mosa.Kernel.x86
 		public static void SendAlive()
 		{
 			busy = true;
-			SendResponse(0, Codes.Alive);
+			SendResponse(0, DebugCode.Alive);
 			busy = false;
 		}
 
@@ -146,7 +152,7 @@ namespace Mosa.Kernel.x86
 			return (uint)GetInt32(offset);
 		}
 
-		public static void Process()
+		public static void Process(uint interrupt)
 		{
 			if (!enabled)
 				return;
@@ -217,11 +223,18 @@ namespace Mosa.Kernel.x86
 
 			switch (code)
 			{
-				case Codes.Ping: SendResponse(id, Codes.Ping); return;
-				case Codes.ReadMemory: ReadMemory(); return;
-				case Codes.ReadCR3: SendResponse(id, Codes.ReadCR3, (int)Native.GetCR3()); return;
-				case Codes.Scattered32BitReadMemory: Scattered32BitReadMemory(); return;
-				case Codes.WriteMemory: WriteMemory(); return;
+				case DebugCode.Ping: SendResponse(id, DebugCode.Ping); return;
+				case DebugCode.ReadMemory: ReadMemory(); return;
+				case DebugCode.ReadCR3: SendResponse(id, DebugCode.ReadCR3, (int)Native.GetCR3()); return;
+				case DebugCode.Scattered32BitReadMemory: Scattered32BitReadMemory(); return;
+				case DebugCode.WriteMemory: WriteMemory(); return;
+
+				case DebugCode.StartUnitTest: StartUnitTest(); return;
+				case DebugCode.SetUnitTestMethodAddress: SetUnitTestMethodAddress(); return;
+				case DebugCode.SetUnitTestParameter: SetUnitTestParameter(); return;
+				case DebugCode.SetUnitTestID: SetUnitTestID(); return;
+				case DebugCode.AbortUnitTest: AbortUnitTest(); return;
+
 				default: return;
 			}
 		}
@@ -232,7 +245,7 @@ namespace Mosa.Kernel.x86
 			uint start = (uint)GetInt32(20);
 			uint bytes = (uint)GetInt32(24);
 
-			SendResponse(id, Codes.ReadMemory, (int)(bytes + 8), 0);
+			SendResponse(id, DebugCode.ReadMemory, (int)(bytes + 8), 0);
 
 			SendInteger(start); // starting address
 			SendInteger(bytes); // bytes
@@ -248,7 +261,7 @@ namespace Mosa.Kernel.x86
 			int id = GetInt32(4);
 			int count = GetInt32(12) / 4;
 
-			SendResponse(id, Codes.Scattered32BitReadMemory, count * 8, 0);
+			SendResponse(id, DebugCode.Scattered32BitReadMemory, count * 8, 0);
 
 			for (uint i = 0; i < count; i++)
 			{
@@ -264,7 +277,7 @@ namespace Mosa.Kernel.x86
 			uint start = GetUInt32(20);
 			uint bytes = GetUInt32(24);
 
-			SendResponse(id, Codes.WriteMemory);
+			SendResponse(id, DebugCode.WriteMemory);
 
 			uint at = 0;
 
@@ -285,6 +298,51 @@ namespace Mosa.Kernel.x86
 
 				at = at + 1;
 			}
+		}
+
+		private static void StartUnitTest()
+		{
+			UnitTestRunner.StartTest();
+		}
+
+		private static void SetUnitTestMethodAddress()
+		{
+			int id = GetInt32(4);
+			uint address = GetUInt32(20);
+
+			UnitTestRunner.SetUnitTestMethodAddress(address);
+
+			SendResponse(id, DebugCode.SetUnitTestMethodAddress);
+		}
+
+		private static void SetUnitTestParameter()
+		{
+			int id = GetInt32(4);
+			uint index = GetUInt32(20);
+			uint value = GetUInt32(24);
+
+			UnitTestRunner.SetUnitTestParameter(index, value);
+
+			SendResponse(id, DebugCode.SetUnitTestParameter);
+		}
+
+		private static void SetUnitTestID()
+		{
+			int id = GetInt32(4);
+			uint testid = GetUInt32(20);
+
+			UnitTestRunner.SetUnitTestID(testid);
+
+			SendResponse(id, DebugCode.SetUnitTestID);
+		}
+
+		private static void AbortUnitTest()
+		{
+			int id = GetInt32(4);
+
+			UnitTestRunner.AbortUnitTest();
+
+			SendResponse(id, DebugCode.AbortUnitTest);
 		}
 	}
 }

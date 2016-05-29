@@ -174,7 +174,7 @@ namespace Mosa.Utility.DebugEngine
 			for (int i = 0; i < index; i++)
 				data[i] = buffer[i];
 
-			PostResponse(0, Codes.UnknownData, data);
+			PostResponse(0, DebugCode.UnknownData, data);
 
 			ResetBuffer();
 		}

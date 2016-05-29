@@ -32,8 +32,8 @@ namespace Mosa.Tool.Debugger
 		public override void Connect()
 		{
 			Status = "Querying...";
-			SendCommand(new DebugMessage(Codes.Scattered32BitReadMemory, new int[] { 0x200004, 1024 * 1024 * 28 }, this, UpdatePointers));
-			SendCommand(new DebugMessage(Codes.ReadCR3, (byte[])null, this, ReadCR3));
+			SendCommand(new DebugMessage(DebugCode.Scattered32BitReadMemory, new int[] { 0x200004, 1024 * 1024 * 28 }, this, UpdatePointers));
+			SendCommand(new DebugMessage(DebugCode.ReadCR3, (byte[])null, this, ReadCR3));
 		}
 
 		public override void Disconnect()
@@ -106,7 +106,7 @@ namespace Mosa.Tool.Debugger
 				int lines = lbMemory.Height / (lbMemory.Font.Height + 2);
 
 				Status = "Updating...";
-				SendCommand(new DebugMessage(Codes.ReadMemory, new int[] { (int)at, 16 * lines }, this, DisplayMemory));
+				SendCommand(new DebugMessage(DebugCode.ReadMemory, new int[] { (int)at, 16 * lines }, this, DisplayMemory));
 			}
 			catch
 			{

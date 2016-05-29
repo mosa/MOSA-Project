@@ -2,7 +2,7 @@
 
 namespace Mosa.Utility.DebugEngine
 {
-	public static class Codes
+	public static class DebugCode
 	{
 		public const int Connecting = 10;
 		public const int Connected = 11;
@@ -20,5 +20,11 @@ namespace Mosa.Utility.DebugEngine
 		public const int WriteMemory = 1011;
 		public const int ReadCR3 = 1012;
 		public const int Scattered32BitReadMemory = 1013;
+
+		public const int StartUnitTest = 2000;
+		public const int SetUnitTestMethodAddress = 2001;
+		public const int SetUnitTestParameter = 2002;
+		public const int SetUnitTestID = 2003;
+		public const int AbortUnitTest = 2004;
 	}
 }
