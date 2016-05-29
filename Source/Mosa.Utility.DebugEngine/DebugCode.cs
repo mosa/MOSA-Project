@@ -24,7 +24,6 @@ namespace Mosa.Utility.DebugEngine
 		public const int StartUnitTest = 2000;
 		public const int SetUnitTestMethodAddress = 2001;
 		public const int SetUnitTestParameter = 2002;
-		public const int SetUnitTestID = 2003;
-		public const int AbortUnitTest = 2004;
+		public const int AbortUnitTest = 2003;
 	}
 }

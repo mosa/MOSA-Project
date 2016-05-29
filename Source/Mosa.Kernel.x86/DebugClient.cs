@@ -33,8 +33,7 @@ namespace Mosa.Kernel.x86
 			public const int StartUnitTest = 2000;
 			public const int SetUnitTestMethodAddress = 2001;
 			public const int SetUnitTestParameter = 2002;
-			public const int SetUnitTestID = 2003;
-			public const int AbortUnitTest = 2004;
+			public const int AbortUnitTest = 2003;
 		}
 
 		#endregion Codes
@@ -43,12 +42,10 @@ namespace Mosa.Kernel.x86
 
 		private static ushort com = Serial.COM1;
 
-		private static uint buffer = 0x04000;
 		private static uint index = 0;
 		private static int length = -1;
 
 		private static uint last = 0;
-		private static bool busy = false;
 
 		public static void Setup(ushort com)
 		{
@@ -75,6 +72,12 @@ namespace Mosa.Kernel.x86
 			SendInteger((int)i);
 		}
 
+		private static void SendInteger(ulong i)
+		{
+			SendInteger((uint)(i & 0xFFFFFFFF));
+			SendInteger((uint)((i >> 32) & 0xFFFFFFFF));
+		}
+
 		private static void SendMagic()
 		{
 			SendByte('M');
@@ -87,43 +90,45 @@ namespace Mosa.Kernel.x86
 
 		public static void SendResponse(int id, int code)
 		{
-			busy = true;
 			SendMagic();
 			SendInteger(id);
 			SendInteger(code);
 			SendInteger(0);
 			SendInteger(0); // TODO: not implemented
-			busy = false;
 		}
 
 		public static void SendResponse(int id, int code, int data)
 		{
-			busy = true;
 			SendMagic();
 			SendInteger(id);
 			SendInteger(code);
 			SendInteger(4);
 			SendInteger(0); // TODO: not implemented
 			SendInteger(data);
-			busy = false;
+		}
+
+		public static void SendResponse(int id, int code, ulong data)
+		{
+			SendMagic();
+			SendInteger(id);
+			SendInteger(code);
+			SendInteger(8);
+			SendInteger(0); // TODO: not implemented
+			SendInteger(data);
 		}
 
 		public static void SendResponse(int id, int code, int len, int magic)
 		{
-			busy = true;
 			SendMagic();
 			SendInteger(id);
 			SendInteger(code);
 			SendInteger(len);
 			SendInteger(magic);
-			busy = false;
 		}
 
 		public static void SendAlive()
 		{
-			busy = true;
 			SendResponse(0, DebugCode.Alive);
-			busy = false;
 		}
 
 		private static void BadDataAbort()
@@ -139,12 +144,12 @@ namespace Mosa.Kernel.x86
 
 		private static byte GetByte(uint offset)
 		{
-			return Native.Get8(buffer + offset);
+			return Native.Get8(Address.DebuggerBuffer + offset);
 		}
 
 		private static int GetInt32(uint offset)
 		{
-			return (Native.Get8(buffer + offset + 3) << 24) | (Native.Get8(buffer + offset + 2) << 16) | (Native.Get8(buffer + offset + 1) << 8) | Native.Get8(buffer + offset + 0);
+			return (Native.Get8(Address.DebuggerBuffer + offset + 3) << 24) | (Native.Get8(Address.DebuggerBuffer + offset + 2) << 16) | (Native.Get8(Address.DebuggerBuffer + offset + 1) << 8) | Native.Get8(Address.DebuggerBuffer + offset + 0);
 		}
 
 		private static uint GetUInt32(uint offset)
@@ -157,15 +162,18 @@ namespace Mosa.Kernel.x86
 			if (!enabled)
 				return;
 
-			if (!busy)
+			if (interrupt == 255)
 			{
-				byte second = CMOS.Second;
+				SendTestUnitResponse();
+				return;
+			}
 
-				if (second % 10 != 5 & last != second)
-				{
-					last = CMOS.Second;
-					SendAlive();
-				}
+			byte second = CMOS.Second;
+
+			if (second % 10 != 5 & last != second)
+			{
+				last = CMOS.Second;
+				SendAlive();
 			}
 
 			if (!Serial.IsDataReady(com))
@@ -190,7 +198,7 @@ namespace Mosa.Kernel.x86
 				return;
 			}
 
-			Native.Set8(buffer + index, b);
+			Native.Set8(Address.DebuggerBuffer + index, b);
 			index++;
 
 			if (index >= 16 && length == -1)
@@ -207,7 +215,6 @@ namespace Mosa.Kernel.x86
 			if (length + 20 == index)
 			{
 				ProcessCommand();
-
 				ResetBuffer();
 			}
 		}
@@ -232,7 +239,6 @@ namespace Mosa.Kernel.x86
 				case DebugCode.StartUnitTest: StartUnitTest(); return;
 				case DebugCode.SetUnitTestMethodAddress: SetUnitTestMethodAddress(); return;
 				case DebugCode.SetUnitTestParameter: SetUnitTestParameter(); return;
-				case DebugCode.SetUnitTestID: SetUnitTestID(); return;
 				case DebugCode.AbortUnitTest: AbortUnitTest(); return;
 
 				default: return;
@@ -302,7 +308,9 @@ namespace Mosa.Kernel.x86
 
 		private static void StartUnitTest()
 		{
-			UnitTestRunner.StartTest();
+			int id = GetInt32(4);
+
+			UnitTestRunner.StartTest(id);
 		}
 
 		private static void SetUnitTestMethodAddress()
@@ -326,16 +334,6 @@ namespace Mosa.Kernel.x86
 			SendResponse(id, DebugCode.SetUnitTestParameter);
 		}
 
-		private static void SetUnitTestID()
-		{
-			int id = GetInt32(4);
-			uint testid = GetUInt32(20);
-
-			UnitTestRunner.SetUnitTestID(testid);
-
-			SendResponse(id, DebugCode.SetUnitTestID);
-		}
-
 		private static void AbortUnitTest()
 		{
 			int id = GetInt32(4);
@@ -343,6 +341,14 @@ namespace Mosa.Kernel.x86
 			UnitTestRunner.AbortUnitTest();
 
 			SendResponse(id, DebugCode.AbortUnitTest);
+		}
+
+		private static void SendTestUnitResponse()
+		{
+			ulong result = UnitTestRunner.GetResults();
+			int id = UnitTestRunner.GetTestID();
+
+			SendResponse(id, DebugCode.SetUnitTestMethodAddress, result);
 		}
 	}
 }

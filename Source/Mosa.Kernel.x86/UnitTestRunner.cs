@@ -9,17 +9,15 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class UnitTestRunner
 	{
-		private const uint TestStackAddress = 0x1000;
-
 		private static uint counter = 0;
 
 		private static int testReady = 0;
-		private static uint testID = 0;
+		private static int testID = 0;
 		private static uint testParameters = 0;
 		private static uint testMethodAddress = 0;
 		private static uint testResultType = 0;
 
-		private static uint testResultReady = 0;
+		private static int testResultReady = 0;
 		private static uint testResultU4 = 0;
 		private static ulong testResultU8 = 0;
 		private static double testResultR2 = 0;
@@ -31,14 +29,22 @@ namespace Mosa.Kernel.x86
 
 		public static void EnterTestReadyLoop()
 		{
+			Screen.Write("Waiting for unit tests...");
+			Screen.NextLine();
+			Screen.NextLine();
+
 			while (true)
 			{
 				if (testReady != 0)
 				{
+					Screen.Write("Testing Test #");
+					Screen.Write((uint)testID);
+					Screen.Write(" : ");
+
 					testReady = 0;
 					testResultReady = 0;
 
-					uint esp = TestStackAddress + (testParameters * 4);
+					uint esp = Address.UnitTestStack + (testParameters * 4);
 
 					switch (testResultType)
 					{
@@ -68,6 +74,9 @@ namespace Mosa.Kernel.x86
 
 					testResultReady = 1;
 
+					Screen.Write("Done");
+					Screen.NextLine();
+
 					Native.Int(255);
 				}
 			}
@@ -87,7 +96,7 @@ namespace Mosa.Kernel.x86
 
 		public static void SetUnitTestParameter(uint index, uint value)
 		{
-			Native.Set32(TestStackAddress + (index * 4), value);
+			Native.Set32(Address.UnitTestStack + (index * 4), value);
 
 			testParameters = testParameters > index ? testParameters : index;
 		}
@@ -97,13 +106,9 @@ namespace Mosa.Kernel.x86
 			testMethodAddress = address;
 		}
 
-		public static void SetUnitTestID(uint id)
+		public static void StartTest(int id)
 		{
 			testID = id;
-		}
-
-		public static void StartTest()
-		{
 			testResultReady = 0;
 			testReady = 1;
 		}
@@ -113,7 +118,12 @@ namespace Mosa.Kernel.x86
 			testReady = 0;
 
 			// TODO
-			// Very Complex - the stack needs to be manipulated to re-enter EnterTestReadyLoop()
+			//  Complex - the stack needs to be manipulated to re-enter EnterTestReadyLoop()
+		}
+
+		public static int GetTestID()
+		{
+			return testID;
 		}
 
 		public static ulong GetResults()

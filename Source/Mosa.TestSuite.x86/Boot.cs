@@ -21,28 +21,24 @@ namespace Mosa.TestSuite.x86
 
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
-			EnterDebugger();
+			EnterUnitTestMode();
 		}
 
-		public static void EnterDebugger()
+		public static void EnterUnitTestMode()
 		{
 			Screen.Color = 0x0;
 			Screen.Clear();
 			Screen.GotoTop();
 			Screen.Color = 0x0E;
-			Screen.Write("MOSA OS Version 1.4");
+			Screen.Write("MOSA OS Version 1.4 - Unit Test Mode Kernel");
 			Screen.NextLine();
 			Screen.NextLine();
-			Screen.Write("Debug Mode Activated!");
-			Screen.NextLine();
-			Screen.NextLine();
+
+			UnitTestRunner.Setup();
 
 			DebugClient.Setup(Serial.COM1);
 
-			while (true)
-			{
-				Native.Hlt();
-			}
+			UnitTestRunner.EnterTestReadyLoop();
 		}
 
 		public static void ProcessInterrupt(uint interrupt, uint errorCode)
@@ -54,7 +50,7 @@ namespace Mosa.TestSuite.x86
 			byte col = Screen.Color;
 			byte back = Screen.BackgroundColor;
 
-			Screen.Column = 50;
+			Screen.Column = 60;
 			Screen.Row = 24;
 			Screen.Color = Colors.Cyan;
 			Screen.BackgroundColor = Colors.Black;
