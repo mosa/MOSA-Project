@@ -23,8 +23,6 @@ namespace Mosa.TestSuite.x86
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
 			EnterDebugger();
-
-			Screen.Write("Ready!");
 		}
 
 		public static void EnterDebugger()
@@ -33,27 +31,18 @@ namespace Mosa.TestSuite.x86
 			Screen.Clear();
 			Screen.GotoTop();
 			Screen.Color = 0x0E;
-			Screen.Write('D');
-			Screen.Write('E');
-			Screen.Write('B');
-			Screen.Write('U');
-			Screen.Write('G');
+			Screen.Write("MOSA OS Version 1.4");
+			Screen.NextLine();
+			Screen.NextLine();
+			Screen.Write("Debug Mode Activated!");
 			Screen.NextLine();
 			Screen.NextLine();
 
 			DebugClient.Setup(Serial.COM1);
 
-			byte last = 0;
-
 			while (true)
 			{
-				byte second = CMOS.Second;
-
-				if (second % 10 != 5 & last != second)
-				{
-					last = CMOS.Second;
-					DebugClient.SendAlive();
-				}
+				Native.Hlt();
 			}
 		}
 
