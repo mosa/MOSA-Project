@@ -337,16 +337,16 @@ namespace Mosa.Compiler.Framework
 				if (node.IsEmpty)
 					continue;
 
-				if (node.BranchTargets != null && node.BranchTargetsCount > 0)
-				{
-					var targets = node.BranchTargets;
+				if (node.BranchTargetsCount == 0)
+					continue;
 
-					for (int index = 0; index < targets.Count; index++)
+				var targets = node.BranchTargets;
+
+				for (int index = 0; index < targets.Count; index++)
+				{
+					if (targets[index] == oldTarget)
 					{
-						if (targets[index] == oldTarget)
-						{
-							node.UpdateBranchTarget(index, newTarget);
-						}
+						node.UpdateBranchTarget(index, newTarget);
 					}
 				}
 			}
