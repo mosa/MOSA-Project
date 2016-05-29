@@ -16,17 +16,6 @@ namespace Mosa.Platform.x86
 		#region Code Generation
 
 		/// <summary>
-		/// Emits relative branch code.
-		/// </summary>
-		/// <param name="code">The branch instruction code.</param>
-		/// <param name="dest">The destination label.</param>
-		public void EmitRelativeBranch(byte[] code, int dest)
-		{
-			codeStream.Write(code, 0, code.Length);
-			EmitRelativeBranchTarget(dest);
-		}
-
-		/// <summary>
 		/// Calls the specified target.
 		/// </summary>
 		/// <param name="symbolOperand">The symbol operand.</param>
@@ -45,6 +34,17 @@ namespace Mosa.Platform.x86
 			);
 
 			codeStream.WriteZeroBytes(4);
+		}
+
+		/// <summary>
+		/// Emits relative branch code.
+		/// </summary>
+		/// <param name="code">The branch instruction code.</param>
+		/// <param name="dest">The destination label.</param>
+		public void EmitRelativeBranch(byte[] code, int dest)
+		{
+			codeStream.Write(code, 0, code.Length);
+			EmitRelativeBranchTarget(dest);
 		}
 
 		/// <summary>
@@ -268,7 +268,7 @@ namespace Mosa.Platform.x86
 			// Save the current position
 			long currentPosition = codeStream.Position;
 
-			foreach (var p in Patches)
+			foreach (var p in patches)
 			{
 				int labelPosition;
 				if (!TryGetLabel(p.Label, out labelPosition))

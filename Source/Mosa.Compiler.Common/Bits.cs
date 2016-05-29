@@ -9,6 +9,15 @@ namespace Mosa.Compiler.Common
 		public const byte b10 = 0x2;
 		public const byte b11 = 0x3;
 
+		public const byte b000 = 0x0;
+		public const byte b001 = 0x1;
+		public const byte b010 = 0x2;
+		public const byte b011 = 0x3;
+		public const byte b100 = 0x4;
+		public const byte b101 = 0x5;
+		public const byte b110 = 0x6;
+		public const byte b111 = 0x7;
+
 		public const byte b0000 = 0x0;
 		public const byte b0001 = 0x1;
 		public const byte b0010 = 0x2;

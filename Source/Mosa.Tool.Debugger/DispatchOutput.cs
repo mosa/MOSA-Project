@@ -39,7 +39,7 @@ namespace Mosa.Tool.Debugger
 				case Codes.InformationalMessage: return "Informational Message: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
 				case Codes.ErrorMessage: return "Error Message: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
 				case Codes.WarningMessage: return "Warning Message: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
-				case Codes.Ping: return "Pong";
+				case Codes.Ping: return "Ping ACK";
 				case Codes.Alive: return "Alive";
 				case Codes.ReadCR3: return "ReadCR3";
 				case Codes.ReadMemory: return "ReadMemory";

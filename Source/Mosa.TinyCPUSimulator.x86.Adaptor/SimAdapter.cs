@@ -340,6 +340,8 @@ namespace Mosa.TinyCPUSimulator.x86.Adaptor
 
 			//if (instruction == X86.Lock) return Opcode.Lock;
 			if (instruction == X86.Mov) return Opcode.Mov;
+			if (instruction == X86.MovLoad) return Opcode.Mov;
+			if (instruction == X86.MovStore) return Opcode.Mov;
 			if (instruction == X86.Movsd) return Opcode.Movsd;
 			if (instruction == X86.Movss) return Opcode.Movss;
 			if (instruction == X86.Movsx) return Opcode.Movsx;

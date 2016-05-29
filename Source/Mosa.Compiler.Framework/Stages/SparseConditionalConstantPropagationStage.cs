@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Trace;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -103,8 +103,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// FIXME: This may leave branch instructions pointing to a dead block
-			// IR Optimization Stage --- does catch and clean this up,
-			//    but only if optimizations are turned on enabled
+			// The IR Optimization Stage does catch and clean this up,
+			// but only if optimizations are turned on enabled
 		}
 
 		protected void RemoveDeadBlock(BasicBlock block)

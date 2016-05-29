@@ -1,30 +1,33 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using System;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Representations the x86 mov instruction.
+	/// Representations the x86 Mov instruction.
 	/// </summary>
-	public sealed class Mov_load : X86Instruction
+	public sealed class MovStore : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode RM_C = new OpCode(new byte[] { 0xC7 }, 0); // Move imm32 to r/m32
-		private static readonly OpCode R_RM_16 = new OpCode(new byte[] { 0x66, 0x8B });
-		private static readonly OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
-		private static readonly OpCode R_RM = new OpCode(new byte[] { 0x8B });
+		private static readonly OpCode RM_C_U8 = new OpCode(new byte[] { 0xC6 }, 0); // Move imm8 to r/m8
+		private static readonly OpCode RM_R_U8 = new OpCode(new byte[] { 0x88 });
+		private static readonly OpCode M_R = new OpCode(new byte[] { 0x89 });
+		private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x89 });
+		private static readonly OpCode M_C_16 = new OpCode(new byte[] { 0x66, 0xC7 });
 
 		#endregion Data Members
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Mov_load"/>.
+		/// Initializes a new instance of <see cref="MovStore"/>.
 		/// </summary>
-		public Mov_load() :
+		public MovStore() :
 			base(1, 1)
 		{
 		}
@@ -43,20 +46,37 @@ namespace Mosa.Platform.x86.Instructions
 		/// <exception cref="System.ArgumentException">@No opcode for operand type. [ + destination + ,  + source + )</exception>
 		private OpCode ComputeOpCode(InstructionSize size, Operand destination, Operand source)
 		{
-			Debug.Assert(destination.IsRegister);
-			Debug.Assert(source.IsMemoryAddress);
+			Debug.Assert(destination.IsMemoryAddress);
+			Debug.Assert(source.IsRegister || source.IsConstant || source.IsSymbol);
 
 			size = BaseMethodCompilerStage.GetInstructionSize(size, destination);
 
-			Debug.Assert(size != InstructionSize.Size64);
+			if (source.IsSymbol)
+				return RM_C;
 
-			if (size == InstructionSize.Size8)
-				return R_M_U8;
+			if (source.IsConstant)
+			{
+				if (size == InstructionSize.Size8)
+					return RM_C_U8;
 
-			if (size == InstructionSize.Size16)
-				return R_RM_16;
+				if (size == InstructionSize.Size16)
+					return M_C_16;
 
-			return R_RM;
+				return RM_C;
+			}
+
+			if (source.IsRegister)
+			{
+				if (size == InstructionSize.Size8)
+					return RM_R_U8;
+
+				if (size == InstructionSize.Size16)
+					return M_R_16;
+
+				return M_R;
+			}
+
+			throw new ArgumentException(@"No opcode for operand type. [" + destination + ", " + source + ")");
 		}
 
 		/// <summary>

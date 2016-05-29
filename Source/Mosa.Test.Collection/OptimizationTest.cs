@@ -158,5 +158,23 @@ namespace Mosa.Test.Collection
 			}
 			return j;
 		}
+
+		public static int ConditionalConstantPropagation2()
+		{
+			int a = 3;
+			int b = 7;
+			int c = 20;
+
+			int z;
+
+			int g = a + b;
+
+			if (g < c)
+				z = 9;
+			else
+				z = 12;
+
+			return z;
+		}
 	}
 }

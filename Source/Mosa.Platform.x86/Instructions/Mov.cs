@@ -20,12 +20,10 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R_RM = new OpCode(new byte[] { 0x8B });
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x89 });
 		private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x89 });
-		private static readonly OpCode R_M_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
-		private static readonly OpCode SR_R = new OpCode(new byte[] { 0x8E });
+		private static readonly OpCode RM_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
 		private static readonly OpCode M_C_16 = new OpCode(new byte[] { 0x66, 0xC7 });
-
-		private static readonly OpCode FS_R = new OpCode(new byte[] { 0x83 }); // Mov r32 to FS
-		private static readonly OpCode RM_FS = new OpCode(new byte[] { 0x8C }); // Mov FS to r/m32
+		private static readonly OpCode SEG_RM = new OpCode(new byte[] { 0x8E }); // Move r/m to seg
+		private static readonly OpCode RM_SEG = new OpCode(new byte[] { 0x8C }); // Move seg to r/m
 
 		#endregion Data Members
 
@@ -54,16 +52,14 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (destination.Register is SegmentRegister)
 			{
-				if (destination.Register is SegmentRegister) return SR_R;
-				if (source.IsRegister) return FS_R;
+				if (source.IsRegister || destination.IsMemoryAddress) return SEG_RM;
 
 				throw new ArgumentException(@"TODO: No opcode for move destination segment register");
 			}
 
 			if (source.Register is SegmentRegister)
 			{
-				if (destination.IsRegister) return RM_FS;
-				if (destination.IsMemoryAddress) return RM_FS;
+				if (destination.IsRegister || destination.IsMemoryAddress) return RM_SEG;
 
 				throw new ArgumentException(@"TODO: No opcode for move source segment register");
 			}
@@ -85,14 +81,14 @@ namespace Mosa.Platform.x86.Instructions
 			{
 				Debug.Assert(!((source.IsByte || destination.IsByte) && (source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI)), source.ToString());
 
-				if (source.IsByte || destination.IsByte) return R_M_U8;
+				if (source.IsByte || destination.IsByte) return RM_U8;
 				if (source.IsChar || destination.IsChar || source.IsShort || destination.IsShort) return R_RM_16;
 				return R_RM;
 			}
 
 			if (destination.IsRegister && source.IsMemoryAddress)
 			{
-				if (destination.IsByte || destination.IsBoolean) return R_M_U8;
+				if (destination.IsByte || destination.IsBoolean) return RM_U8;
 				if (destination.IsChar || destination.IsShort) return R_RM_16;
 				return R_RM;
 			}
