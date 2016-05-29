@@ -69,6 +69,9 @@ namespace Mosa.Utility.Launcher
 		public void Compile()
 		{
 			HasCompileError = false;
+			Log.Clear();
+			Counters.Clear();
+
 			try
 			{
 				Compiler = new MosaCompiler();

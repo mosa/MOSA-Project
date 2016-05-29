@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Runtime.InteropServices;
 using Mosa.Runtime.x86;
+using System.Runtime.InteropServices;
 
 namespace Mosa.Kernel.x86
 {
