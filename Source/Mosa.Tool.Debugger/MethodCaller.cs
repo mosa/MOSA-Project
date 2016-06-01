@@ -35,7 +35,8 @@ namespace Mosa.Tool.Debugger
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			SetUnitTestMethodAddress();
+			//SetUnitTestMethodAddress();
+			ExecuteUnitTest();
 		}
 
 		private bool AddData(List<uint> data, ComboBox box, TextBox tb)
@@ -61,26 +62,23 @@ namespace Mosa.Tool.Debugger
 			}
 		}
 
-		private void SetUnitTestMethodAddress()
+		private void ExecuteUnitTest()
 		{
-			uint at = 0;
-			List<uint> data = new List<uint>();
+			uint address = 0;
 
 			try
 			{
-				at = (uint)tbMethodAddress.Text.ParseHexOrDecimal();
+				address = (uint)tbMethodAddress.Text.ParseHexOrDecimal();
 			}
 			catch { }
 
-			if (at == 0)
+			if (address == 0)
 			{
 				Status = "ERROR: Invalid address parameter";
 				return;
 			}
 
-			Status = "Preparing (1/4)...";
-
-			SendCommand(new DebugMessage(DebugCode.SetUnitTestMethodAddress, new uint[] { at }));
+			var data = new List<uint>();
 
 			try
 			{
@@ -94,26 +92,22 @@ namespace Mosa.Tool.Debugger
 				return;
 			}
 
-			Status = "Preparing (2/4)...";
+			var cmd = new uint[4 + 4 + 4 + data.Count];
 
-			uint index = 0;
+			cmd[0] = address;
+			cmd[1] = (uint)cbResultType.SelectedIndex;
+			cmd[2] = (uint)data.Count;
+
+			uint index = 3;
 			foreach (var value in data)
 			{
-				SendCommand(new DebugMessage(DebugCode.SetUnitTestMethodParameter, new uint[] { index, value }));
+				cmd[index] = value;
 				index++;
 			}
 
-			Status = "Preparing (3/4)...";
-
-			SendCommand(new DebugMessage(DebugCode.SetUnitTestMethodParameterCount, new uint[] { index }));
-
-			Status = "Preparing (4/4)...";
-
-			SendCommand(new DebugMessage(DebugCode.SetUnitTestResultType, new uint[] { (uint)cbResultType.SelectedIndex }));
-
 			Status = "Executing...";
 
-			SendCommand(new DebugMessage(DebugCode.StartUnitTest, (byte[])null));
+			SendCommand(new DebugMessage(DebugCode.ExecuteUnitTest, cmd));
 		}
 	}
 }

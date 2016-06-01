@@ -21,11 +21,7 @@ namespace Mosa.Utility.DebugEngine
 		public const int ReadCR3 = 1012;
 		public const int Scattered32BitReadMemory = 1013;
 
-		public const int StartUnitTest = 2000;
-		public const int SetUnitTestMethodAddress = 2001;
-		public const int SetUnitTestMethodParameter = 2002;
-		public const int SetUnitTestMethodParameterCount = 2003;
-		public const int SetUnitTestResultType = 2004;
-		public const int AbortUnitTest = 2005;
+		public const int ExecuteUnitTest = 2000;
+		public const int AbortUnitTest = 2001;
 	}
 }

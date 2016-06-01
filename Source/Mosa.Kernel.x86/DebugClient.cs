@@ -30,12 +30,8 @@ namespace Mosa.Kernel.x86
 			public const int ReadCR3 = 1012;
 			public const int Scattered32BitReadMemory = 1013;
 
-			public const int StartUnitTest = 2000;
-			public const int SetUnitTestMethodAddress = 2001;
-			public const int SetUnitTestMethodParameter = 2002;
-			public const int SetUnitTestMethodParameterCount = 2003;
-			public const int SetUnitTestResultType = 2004;
-			public const int AbortUnitTest = 2005;
+			public const int ExecuteUnitTest = 2000;
+			public const int AbortUnitTest = 2001;
 		}
 
 		#endregion Codes
@@ -238,11 +234,7 @@ namespace Mosa.Kernel.x86
 				case DebugCode.Scattered32BitReadMemory: Scattered32BitReadMemory(); return;
 				case DebugCode.WriteMemory: WriteMemory(); return;
 
-				case DebugCode.StartUnitTest: StartUnitTest(); return;
-				case DebugCode.SetUnitTestMethodAddress: SetUnitTestMethodAddress(); return;
-				case DebugCode.SetUnitTestMethodParameter: SetUnitTestMethodParameter(); return;
-				case DebugCode.SetUnitTestMethodParameterCount: SetUnitTestMethodParameterCount(); return;
-				case DebugCode.SetUnitTestResultType: SetUnitTestResultType(); return;
+				case DebugCode.ExecuteUnitTest: ExecuteUnitTest(); return;
 
 				case DebugCode.AbortUnitTest: AbortUnitTest(); return;
 
@@ -311,52 +303,34 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		private static void StartUnitTest()
+		private static void ExecuteUnitTest()
 		{
+			ulong result = UnitTestRunner.GetResults();
 			int id = GetInt32(4);
+
+			uint address = GetUInt32(20);
+			uint type = GetUInt32(24);
+			uint paramcnt = GetUInt32(28);
+
+			UnitTestRunner.SetUnitTestMethodAddress(address);
+			UnitTestRunner.SetUnitTestResultType(type);
+			UnitTestRunner.SetUnitTestMethodParameterCount(paramcnt);
+
+			for (uint index = 0; index < paramcnt; index++)
+			{
+				uint value = GetUInt32(32 + (index * 4));
+				UnitTestRunner.SetUnitTestMethodParameter(index, value);
+			}
 
 			UnitTestRunner.StartTest(id);
 		}
 
-		private static void SetUnitTestMethodAddress()
+		private static void SendTestUnitResponse()
 		{
-			int id = GetInt32(4);
-			uint address = GetUInt32(20);
+			ulong result = UnitTestRunner.GetResults();
+			int id = UnitTestRunner.GetTestID();
 
-			UnitTestRunner.SetUnitTestMethodAddress(address);
-
-			SendResponse(id, DebugCode.SetUnitTestMethodAddress);
-		}
-
-		private static void SetUnitTestMethodParameter()
-		{
-			int id = GetInt32(4);
-			uint index = GetUInt32(20);
-			uint value = GetUInt32(24);
-
-			UnitTestRunner.SetUnitTestMethodParameter(index, value);
-
-			SendResponse(id, DebugCode.SetUnitTestMethodParameter);
-		}
-
-		private static void SetUnitTestResultType()
-		{
-			int id = GetInt32(4);
-			uint type = GetUInt32(20);
-
-			UnitTestRunner.SetUnitTestResultType(type);
-
-			SendResponse(id, DebugCode.SetUnitTestResultType);
-		}
-
-		private static void SetUnitTestMethodParameterCount()
-		{
-			int id = GetInt32(4);
-			uint number = GetUInt32(20);
-
-			UnitTestRunner.SetUnitTestMethodParameterCount(number);
-
-			SendResponse(id, DebugCode.SetUnitTestMethodParameterCount);
+			SendResponse(id, DebugCode.ExecuteUnitTest, result);
 		}
 
 		private static void AbortUnitTest()
@@ -366,14 +340,6 @@ namespace Mosa.Kernel.x86
 			UnitTestRunner.AbortUnitTest();
 
 			SendResponse(id, DebugCode.AbortUnitTest);
-		}
-
-		private static void SendTestUnitResponse()
-		{
-			ulong result = UnitTestRunner.GetResults();
-			int id = UnitTestRunner.GetTestID();
-
-			SendResponse(id, DebugCode.SetUnitTestMethodAddress, result);
 		}
 	}
 }
