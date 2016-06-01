@@ -9,18 +9,22 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class UnitTestRunner
 	{
+		private const uint MaxParameters = 8; // max 32-bit parameters
+
 		private static uint counter = 0;
 
 		private static int testReady = 0;
+		private static int testResultReady = 0;
+		private static int testResultReported = 0;
+
 		private static int testID = 0;
 		private static uint testParameters = 0;
 		private static uint testMethodAddress = 0;
 		private static uint testResultType = 0;
 
-		private static int testResultReady = 0;
 		private static uint testResultU4 = 0;
 		private static ulong testResultU8 = 0;
-		private static double testResultR2 = 0;
+		private static double testResultR8 = 0;
 
 		public static void Setup()
 		{
@@ -33,39 +37,61 @@ namespace Mosa.Kernel.x86
 			Screen.NextLine();
 			Screen.NextLine();
 
+			// allocate space on stack for parameters
+			uint esp = Native.AllocateStackSpace(MaxParameters * 4);
+
+			Screen.Write("Stack @ ");
+			Screen.Write((uint)esp, 16, 8);
+
+			for (uint index = 0; index < MaxParameters; index++)
+			{
+				Native.Set32(esp + (index * 4), 0xFFFFFFFF);
+			}
+
+			Screen.NextLine();
+			Screen.NextLine();
+
 			while (true)
 			{
-				if (testReady != 0)
+				if (testReady == 1)
 				{
-					Screen.Write("Testing Test #");
+					Screen.Write("Test #");
 					Screen.Write((uint)testID);
-					Screen.Write(" : ");
+					Screen.Write(" = ");
 
 					testReady = 0;
 					testResultReady = 0;
+					testResultReported = 0;
 
-					uint esp = Address.UnitTestStack + (testParameters * 4);
+					// copy parameters into stack
+					for (uint index = 0; index < testParameters; index++)
+					{
+						uint value = Native.Get32(Address.UnitTestStack + (index * 4));
+
+						Native.Set32(esp + (index * 4), value);
+					}
 
 					switch (testResultType)
 					{
 						case 0:
 							{
-								Native.FrameCall(testMethodAddress, esp);
+								Native.FrameCall(testMethodAddress);
 								break;
 							}
 						case 1:
 							{
-								testResultU4 = Native.FrameCallRetU4(testMethodAddress, esp);
+								testResultU4 = Native.FrameCallRetU4(testMethodAddress);
+								Screen.Write((uint)testResultU4);
 								break;
 							}
 						case 2:
 							{
-								testResultU8 = Native.FrameCallRetU8(testMethodAddress, esp);
+								testResultU8 = Native.FrameCallRetU8(testMethodAddress);
 								break;
 							}
 						case 3:
 							{
-								testResultR2 = Native.FrameCallRetR2(testMethodAddress, esp);
+								testResultR8 = Native.FrameCallRetR8(testMethodAddress);
 								break;
 							}
 
@@ -74,7 +100,7 @@ namespace Mosa.Kernel.x86
 
 					testResultReady = 1;
 
-					Screen.Write("Done");
+					Screen.Write(" - Done");
 					Screen.NextLine();
 
 					Native.Int(255);
@@ -91,19 +117,27 @@ namespace Mosa.Kernel.x86
 
 			testResultU4 = 0;
 			testResultU8 = 0;
-			testResultR2 = 0;
+			testResultR8 = 0;
 		}
 
-		public static void SetUnitTestParameter(uint index, uint value)
+		public static void SetUnitTestMethodParameter(uint index, uint value)
 		{
 			Native.Set32(Address.UnitTestStack + (index * 4), value);
+		}
 
-			testParameters = testParameters > index ? testParameters : index;
+		public static void SetUnitTestMethodParameterCount(uint number)
+		{
+			testParameters = number;
 		}
 
 		public static void SetUnitTestMethodAddress(uint address)
 		{
 			testMethodAddress = address;
+		}
+
+		public static void SetUnitTestResultType(uint type)
+		{
+			testResultType = type;
 		}
 
 		public static void StartTest(int id)
@@ -136,6 +170,16 @@ namespace Mosa.Kernel.x86
 				case 3: return 0; // TODO
 				default: return 0;
 			}
+		}
+
+		public static bool CheckResultsReady()
+		{
+			if (testReady == 0 && testResultReady == 1 && testResultReported == 0)
+			{
+				testResultReported = 1;
+				return true;
+			}
+			return false;
 		}
 	}
 }

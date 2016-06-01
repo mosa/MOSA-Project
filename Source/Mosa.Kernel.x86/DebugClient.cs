@@ -32,8 +32,10 @@ namespace Mosa.Kernel.x86
 
 			public const int StartUnitTest = 2000;
 			public const int SetUnitTestMethodAddress = 2001;
-			public const int SetUnitTestParameter = 2002;
-			public const int AbortUnitTest = 2003;
+			public const int SetUnitTestMethodParameter = 2002;
+			public const int SetUnitTestMethodParameterCount = 2003;
+			public const int SetUnitTestResultType = 2004;
+			public const int AbortUnitTest = 2005;
 		}
 
 		#endregion Codes
@@ -162,7 +164,7 @@ namespace Mosa.Kernel.x86
 			if (!enabled)
 				return;
 
-			if (interrupt == 255)
+			if (UnitTestRunner.CheckResultsReady())
 			{
 				SendTestUnitResponse();
 				return;
@@ -238,7 +240,10 @@ namespace Mosa.Kernel.x86
 
 				case DebugCode.StartUnitTest: StartUnitTest(); return;
 				case DebugCode.SetUnitTestMethodAddress: SetUnitTestMethodAddress(); return;
-				case DebugCode.SetUnitTestParameter: SetUnitTestParameter(); return;
+				case DebugCode.SetUnitTestMethodParameter: SetUnitTestMethodParameter(); return;
+				case DebugCode.SetUnitTestMethodParameterCount: SetUnitTestMethodParameterCount(); return;
+				case DebugCode.SetUnitTestResultType: SetUnitTestResultType(); return;
+
 				case DebugCode.AbortUnitTest: AbortUnitTest(); return;
 
 				default: return;
@@ -323,15 +328,35 @@ namespace Mosa.Kernel.x86
 			SendResponse(id, DebugCode.SetUnitTestMethodAddress);
 		}
 
-		private static void SetUnitTestParameter()
+		private static void SetUnitTestMethodParameter()
 		{
 			int id = GetInt32(4);
 			uint index = GetUInt32(20);
 			uint value = GetUInt32(24);
 
-			UnitTestRunner.SetUnitTestParameter(index, value);
+			UnitTestRunner.SetUnitTestMethodParameter(index, value);
 
-			SendResponse(id, DebugCode.SetUnitTestParameter);
+			SendResponse(id, DebugCode.SetUnitTestMethodParameter);
+		}
+
+		private static void SetUnitTestResultType()
+		{
+			int id = GetInt32(4);
+			uint type = GetUInt32(20);
+
+			UnitTestRunner.SetUnitTestResultType(type);
+
+			SendResponse(id, DebugCode.SetUnitTestResultType);
+		}
+
+		private static void SetUnitTestMethodParameterCount()
+		{
+			int id = GetInt32(4);
+			uint number = GetUInt32(20);
+
+			UnitTestRunner.SetUnitTestMethodParameterCount(number);
+
+			SendResponse(id, DebugCode.SetUnitTestMethodParameterCount);
 		}
 
 		private static void AbortUnitTest()

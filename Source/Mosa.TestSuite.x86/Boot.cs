@@ -66,5 +66,10 @@ namespace Mosa.TestSuite.x86
 			Screen.Color = col;
 			Screen.BackgroundColor = back;
 		}
+
+		private static void ForceTestCollection()
+		{
+			Mosa.Test.Collection.OptimizationTest.OptimizationTest1();
+		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -19,16 +20,15 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
+			Operand methodAddress = context.Operand1;
+			Operand newESP = context.Operand2;
 
 			Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			Operand edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 
-			context.SetInstruction(X86.Push, null, esp);
-			context.AppendInstruction(X86.Mov, esp, operand2);
-			context.AppendInstruction(X86.Call, null, operand1);
-			context.AppendInstruction(X86.Pop, esp);
+			context.AppendInstruction(X86.Call, null, methodAddress);
+			context.AppendInstruction(IRInstruction.Gen, eax);
 			context.AppendInstruction(X86.Mov, result, eax);
 		}
 

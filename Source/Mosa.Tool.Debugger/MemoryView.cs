@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Utility.DebugEngine;
 using Mosa.Compiler.Common;
+using Mosa.Utility.DebugEngine;
 using System;
 
 namespace Mosa.Tool.Debugger
@@ -102,7 +102,7 @@ namespace Mosa.Tool.Debugger
 
 			try
 			{
-				uint at = tbMemory.Text.ParseHexOrDecimal();
+				uint at = (uint)tbMemory.Text.ParseHexOrDecimal();
 				int lines = lbMemory.Height / (lbMemory.Font.Height + 2);
 
 				Status = "Updating...";

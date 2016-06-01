@@ -43,6 +43,21 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
+		public DebugMessage(int code, uint[] data)
+		{
+			Code = code;
+			CommandData = new byte[data.Length * 4];
+
+			int index = 0;
+			foreach (int i in data)
+			{
+				CommandData[index++] = (byte)(i & 0xFF);
+				CommandData[index++] = (byte)((i >> 8) & 0xFF);
+				CommandData[index++] = (byte)((i >> 16) & 0xFF);
+				CommandData[index++] = (byte)((i >> 24) & 0xFF);
+			}
+		}
+
 		public DebugMessage(int code, byte[] data, object sender, SenderMesseageDelegate senderMethod)
 			: this(code, data)
 		{
@@ -52,6 +67,13 @@ namespace Mosa.Utility.DebugEngine
 
 		public DebugMessage(int code, int[] data, object sender, SenderMesseageDelegate senderMethod)
 			: this(code, data)
+		{
+			Sender = sender;
+			SenderMethod = senderMethod;
+		}
+
+		public DebugMessage(int code, uint[] data, object sender, SenderMesseageDelegate senderMethod)
+		: this(code, data)
 		{
 			Sender = sender;
 			SenderMethod = senderMethod;

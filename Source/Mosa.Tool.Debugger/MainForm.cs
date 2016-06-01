@@ -13,6 +13,7 @@ namespace Mosa.Tool.Debugger
 
 		private ConnectionProperties connectionProperties = new ConnectionProperties();
 		private DispatchOutput dispatchOutput = new DispatchOutput();
+		private MethodCaller methodCaller = new MethodCaller();
 
 		public string Status { set { toolStripStatusLabel1.Text = value; } }
 
@@ -26,6 +27,9 @@ namespace Mosa.Tool.Debugger
 			dockPanel.SuspendLayout(true);
 			connectionProperties.Show(dockPanel, DockState.DockLeft);
 			dispatchOutput.Show(connectionProperties.Pane, DockAlignment.Bottom, 0.40);
+
+			methodCaller.Show(dockPanel, DockState.DockRight);
+
 			dockPanel.ResumeLayout(true, true);
 			DebugEngine.SetDispatchMethod(this, Dispatch);
 		}

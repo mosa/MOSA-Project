@@ -110,7 +110,8 @@
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\AddSD.cs" />
     <Compile Include="Intrinsic\Div.cs" />
-    <Compile Include="Intrinsic\FrameCallRetR2.cs" />
+    <Compile Include="Intrinsic\AllocateStackSpace.cs" />
+    <Compile Include="Intrinsic\FrameCallRetR8.cs" />
     <Compile Include="Intrinsic\FrameCallRetU8.cs" />
     <Compile Include="Intrinsic\FrameCallRetU4.cs" />
     <Compile Include="Intrinsic\FrameCall.cs" />
