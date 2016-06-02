@@ -17,8 +17,6 @@ namespace Mosa.Utility.Launcher
 		public Starter(Options options, AppLocations appLocations, string imagefile, IStarterEvent launcherEvent)
 			: base(options, appLocations)
 		{
-			Options = options;
-			AppLocations = appLocations;
 			ImageFile = imagefile;
 			LauncherEvent = launcherEvent;
 		}
@@ -114,9 +112,9 @@ namespace Mosa.Utility.Launcher
 				sb.AppendLine(@"com1: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA");
 			}
 
-			File.WriteAllText(configfile, sb.ToString());
-
 			string arg = "-q " + "-f " + Quote(configfile);
+
+			File.WriteAllText(configfile, sb.ToString());
 
 			return LaunchApplication(AppLocations.BOCHS, arg, exit);
 		}
