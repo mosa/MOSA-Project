@@ -74,6 +74,9 @@
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseLauncher.cs" />
+    <Compile Include="IStarterEvent.cs" />
+    <Compile Include="Starter.cs" />
     <Compile Include="BuilderEventListener.cs" />
     <Compile Include="CheckOptions.cs" />
     <Compile Include="IBuilderEvent.cs" />
