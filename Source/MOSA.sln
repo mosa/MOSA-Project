@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 12.0.31101.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{AB88960E-B233-475B-96E4-8C10EEF8622C}"
 EndProject
@@ -121,6 +121,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Workspace.FileSystem.Debug", "Mosa.Workspace.FileSystem.Debug\Mosa.Workspace.FileSystem.Debug.csproj", "{A8765C3C-1194-4A3A-8579-745CA47C36D3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.HardwareSystem", "Mosa.HardwareSystem\Mosa.HardwareSystem.csproj", "{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.TestSuite.x86", "Mosa.TestSuite.x86\Mosa.TestSuite.x86.csproj", "{44725E46-513F-4CFB-8196-2191399C514B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -633,6 +635,18 @@ Global
 		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Release|x86.ActiveCfg = Release|Any CPU
 		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999}.Release|x86.Build.0 = Release|Any CPU
+		{44725E46-513F-4CFB-8196-2191399C514B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44725E46-513F-4CFB-8196-2191399C514B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44725E46-513F-4CFB-8196-2191399C514B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{44725E46-513F-4CFB-8196-2191399C514B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{44725E46-513F-4CFB-8196-2191399C514B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{44725E46-513F-4CFB-8196-2191399C514B}.Debug|x86.Build.0 = Debug|Any CPU
+		{44725E46-513F-4CFB-8196-2191399C514B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44725E46-513F-4CFB-8196-2191399C514B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44725E46-513F-4CFB-8196-2191399C514B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{44725E46-513F-4CFB-8196-2191399C514B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{44725E46-513F-4CFB-8196-2191399C514B}.Release|x86.ActiveCfg = Release|Any CPU
+		{44725E46-513F-4CFB-8196-2191399C514B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -687,5 +701,6 @@ Global
 		{77961864-DB33-4189-804F-D774022C96E2} = {3C5A2C4B-FD05-42B3-B6C6-C366DF978A62}
 		{A8765C3C-1194-4A3A-8579-745CA47C36D3} = {AC7C3CDA-E0E8-408C-BB32-DBCBB905E3E1}
 		{4DBD4C50-BEC5-48D9-B471-9FB0C7F69999} = {FF773BDF-A20C-4A5F-BFF9-F422C2AFF3CE}
+		{44725E46-513F-4CFB-8196-2191399C514B} = {88D3D1D0-85D2-4301-A9EA-3F964CB05415}
 	EndGlobalSection
 EndGlobal

@@ -99,6 +99,7 @@
     </Compile>
     <Compile Include="ExceptionHandlingFixture.cs" />
     <Compile Include="GenericCallFixture.cs" />
+    <Compile Include="RemFixture.cs" />
     <Compile Include="IsInstFixture.cs" />
     <Compile Include="LdargaFixture.cs" />
     <Compile Include="LdlocaFixture.cs">

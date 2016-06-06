@@ -134,20 +134,6 @@ namespace Mosa.Compiler.Framework
 				sb.Append("]");
 			}
 
-			if (node.MosaType != null)
-			{
-				sb.Append(" [[");
-				sb.Append(node.MosaType.FullName);
-				sb.Append("]]");
-			}
-
-			if (node.MosaField != null)
-			{
-				sb.Append(" [[");
-				sb.Append(node.MosaField.FullName);
-				sb.Append("]]");
-			}
-
 			string mod = GetModifier(node);
 			if (mod != null)
 			{
@@ -160,7 +146,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var op = node.GetResult(i);
 				sb.Append(" ");
-				sb.Append(op == null ? "[NULL]" : op.ToString(true));
+				sb.Append(op == null ? "[NULL]" : op.ToString(false));
 				sb.Append(",");
 			}
 
@@ -178,7 +164,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var op = node.GetOperand(i);
 				sb.Append(" ");
-				sb.Append(op == null ? "[NULL]" : op.ToString(true));
+				sb.Append(op == null ? "[NULL]" : op.ToString(false));
 				sb.Append(",");
 			}
 
@@ -209,14 +195,21 @@ namespace Mosa.Compiler.Framework
 
 			if (node.InvokeMethod != null)
 			{
-				sb.Append(" {");
+				sb.Append(" {m:");
 				sb.Append(node.InvokeMethod.FullName);
+				sb.Append("}");
+			}
+
+			if (node.MosaType != null)
+			{
+				sb.Append(" {t:");
+				sb.Append(node.MosaType.FullName);
 				sb.Append("}");
 			}
 
 			if (node.MosaField != null)
 			{
-				sb.Append(" {");
+				sb.Append(" {f:");
 				sb.Append(node.MosaField.FullName);
 				sb.Append("}");
 			}

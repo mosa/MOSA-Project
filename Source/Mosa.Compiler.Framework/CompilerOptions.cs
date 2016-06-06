@@ -154,6 +154,14 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool EmitRelocations { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether [aggressive optimizations].
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if [aggressive optimizations]; otherwise, <c>false</c>.
+		/// </value>
+		public bool TwoPassOptimizationStages { get; set; }
+
 		#endregion Properties
 
 		/// <summary>
@@ -255,6 +263,7 @@ namespace Mosa.Compiler.Framework
 			DebugRestrictOptimizationByCount = 0;
 			EmitSymbols = true;
 			EmitRelocations = true;
+			TwoPassOptimizationStages = true;
 		}
 	}
 }

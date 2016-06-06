@@ -37,9 +37,12 @@ namespace Mosa.Kernel.x86
 
 		private static ushort com = Serial.COM1;
 
-		private static uint buffer = 0x1412000;
+		private static uint buffer = 0x04000;
 		private static uint index = 0;
 		private static int length = -1;
+
+		private static uint last = 0;
+		private static bool busy = false;
 
 		public static void Setup(ushort com)
 		{
@@ -78,40 +81,43 @@ namespace Mosa.Kernel.x86
 
 		public static void SendResponse(int id, int code)
 		{
+			busy = true;
 			SendMagic();
 			SendInteger(id);
 			SendInteger(code);
 			SendInteger(0);
 			SendInteger(0); // TODO: not implemented
+			busy = false;
 		}
 
 		public static void SendResponse(int id, int code, int data)
 		{
+			busy = true;
 			SendMagic();
 			SendInteger(id);
 			SendInteger(code);
 			SendInteger(4);
 			SendInteger(0); // TODO: not implemented
 			SendInteger(data);
+			busy = false;
 		}
 
 		public static void SendResponse(int id, int code, int len, int magic)
 		{
+			busy = true;
 			SendMagic();
 			SendInteger(id);
 			SendInteger(code);
 			SendInteger(len);
 			SendInteger(magic);
+			busy = false;
 		}
 
 		public static void SendAlive()
 		{
+			busy = true;
 			SendResponse(0, Codes.Alive);
-		}
-
-		public static void SendNumber(int i)
-		{
-			SendResponse(0, Codes.SendNumber, i);
+			busy = false;
 		}
 
 		private static void BadDataAbort()
@@ -144,6 +150,17 @@ namespace Mosa.Kernel.x86
 		{
 			if (!enabled)
 				return;
+
+			if (!busy)
+			{
+				byte second = CMOS.Second;
+
+				if (second % 10 != 5 & last != second)
+				{
+					last = CMOS.Second;
+					SendAlive();
+				}
+			}
 
 			if (!Serial.IsDataReady(com))
 				return;

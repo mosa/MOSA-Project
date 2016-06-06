@@ -79,6 +79,18 @@ namespace Mosa.Test.Collection.x86.xUnit
 			Assert.Equal(Mosa.Test.Collection.OptimizationTest.OptimizationTest12(), Run<int>("Mosa.Test.Collection.OptimizationTest.OptimizationTest12"));
 		}
 
+		[Fact]
+		public void ConditionalConstantPropagation1()
+		{
+			Assert.Equal(Mosa.Test.Collection.OptimizationTest.ConditionalConstantPropagation1(), Run<int>("Mosa.Test.Collection.OptimizationTest.ConditionalConstantPropagation1"));
+		}
+
+		[Fact]
+		public void ConditionalConstantPropagation2()
+		{
+			Assert.Equal(Mosa.Test.Collection.OptimizationTest.ConditionalConstantPropagation2(), Run<int>("Mosa.Test.Collection.OptimizationTest.ConditionalConstantPropagation2"));
+		}
+
 		[Theory]
 		[MemberData("I4", DisableDiscoveryEnumeration = true)]
 		public void OptimizationTest13(int a)

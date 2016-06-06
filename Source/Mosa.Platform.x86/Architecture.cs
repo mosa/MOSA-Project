@@ -222,9 +222,6 @@ namespace Mosa.Platform.x86
 					//new CheckOperandCountStage(),
 					new PlatformIntrinsicStage(),
 					new LongOperandTransformationStage(),
-
-					//new StopStage(),
-
 					new IRTransformationStage(),
 					new TweakTransformationStage(),
 
@@ -245,6 +242,10 @@ namespace Mosa.Platform.x86
 			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
 			);
+
+			//methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
+			//	new ConversionPhaseStage()
+			//);
 		}
 
 		/// <summary>

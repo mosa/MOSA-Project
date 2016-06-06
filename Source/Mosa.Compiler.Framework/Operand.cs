@@ -1024,17 +1024,76 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				//sb.AppendFormat(" [{0}]", Type.FullName);
+				if (Type.IsReferenceType)
+				{
+					sb.AppendFormat(" [O]");
+				}
+				{
+					sb.AppendFormat(" [{0}]", ShortenTypeName(Type.FullName));
+				}
 			}
 
 			return sb.ToString().Replace("  ", " ").Trim();
+		}
+
+		private static string ShortenTypeName(string value)
+		{
+			if (value.Length < 2)
+				return value;
+
+			string type = value;
+			string end = string.Empty;
+
+			if (value.EndsWith("*"))
+			{
+				type = value.Substring(0, value.Length - 1);
+				end = "*";
+			}
+			if (value.EndsWith("&"))
+			{
+				type = value.Substring(0, value.Length - 1);
+				end = "&";
+			}
+			if (value.EndsWith("[]"))
+			{
+				type = value.Substring(0, value.Length - 2);
+				end = "[]";
+			}
+
+			return ShortenTypeName2(type) + end;
+		}
+
+		private static string ShortenTypeName2(string value)
+		{
+			switch (value)
+			{
+				case "System.Object": return "O";
+				case "System.Char": return "C";
+				case "System.Void": return "V";
+				case "System.String": return "String";
+				case "System.Byte": return "U1";
+				case "System.SByte": return "I1";
+				case "System.Boolean": return "B";
+				case "System.Int8": return "I1";
+				case "System.UInt8": return "U1";
+				case "System.Int16": return "I2";
+				case "System.UInt16": return "U2";
+				case "System.Int32": return "I4";
+				case "System.UInt32": return "U4";
+				case "System.Int64": return "I8";
+				case "System.UInt64": return "U8";
+				case "System.Single": return "R4";
+				case "System.Double": return "R8";
+			}
+
+			return value;
 		}
 
 		#region Object Overrides
 
 		public override string ToString()
 		{
-			return ToString(true);
+			return ToString(false);
 		}
 
 		#endregion Object Overrides

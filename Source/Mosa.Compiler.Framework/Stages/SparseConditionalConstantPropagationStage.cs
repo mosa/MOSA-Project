@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Trace;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -99,16 +99,20 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in deadBlocks)
 			{
-				RemoveDeadBlock(block);
+				RemoveBranchesToDeadBlocks(block);
 			}
 
-			// FIXME: This may leave branch instructions pointing to a dead block
-			// IR Optimization Stage --- does catch and clean this up,
-			//    but only if optimizations are turned on enabled
+			foreach (var block in deadBlocks)
+			{
+				RemoveDeadBlock(block);
+			}
 		}
 
 		protected void RemoveDeadBlock(BasicBlock block)
 		{
+			//if (block.PreviousBlocks.Count != 0 || BasicBlocks.HeadBlocks.Contains(block))
+			//	return;
+
 			if (trace.Active) trace.Log("*** RemoveBlock: " + block.ToString());
 
 			var nextBlocks = block.NextBlocks.ToArray();
@@ -116,6 +120,51 @@ namespace Mosa.Compiler.Framework.Stages
 			EmptyBlockOfAllInstructions(block);
 
 			UpdatePhiList(block, nextBlocks);
+
+			Debug.Assert(block.NextBlocks.Count == 0);
+
+			//Debug.Assert(block.PreviousBlocks.Count == 0);
+		}
+
+		protected void RemoveBranchesToDeadBlocks(BasicBlock deadBlock)
+		{
+			foreach (var previous in deadBlock.PreviousBlocks.ToArray())
+			{
+				// unable to handle more than two branch blocks
+				// and if only one branch, then this block is dead as well
+				if (previous.NextBlocks.Count != 2)
+					return;
+
+				var otherBlock = previous.NextBlocks[0] == deadBlock ? previous.NextBlocks[1] : previous.NextBlocks[0];
+
+				for (var node = previous.Last.Previous; !node.IsBlockStartInstruction; node = node.Previous)
+				{
+					if (node.IsEmpty)
+						continue;
+
+					if (node.BranchTargetsCount == 0)
+						continue;
+
+					if (node.Instruction == IRInstruction.IntegerCompareBranch)
+					{
+						if (trace.Active) trace.Log("*** RemoveBranchesToDeadBlocks");
+						if (trace.Active) trace.Log("REMOVED:\t" + node.ToString());
+						node.SetInstruction(IRInstruction.Nop);
+						instructionsRemovedCount++;
+					}
+					else if (node.Instruction == IRInstruction.Jmp)
+					{
+						if (trace.Active) trace.Log("*** RemoveBranchesToDeadBlocks");
+						if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
+						node.UpdateBranchTarget(0, otherBlock);
+						if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
+					}
+					else if (node.Instruction == IRInstruction.IntegerCompareBranch)
+					{
+						return;
+					}
+				}
+			}
 		}
 	}
 }

@@ -118,6 +118,7 @@
       <DependentUpon>EnumTests.tt</DependentUpon>
     </Compile>
     <Compile Include="GenericMixedTest.cs" />
+    <Compile Include="RemTests.cs" />
     <Compile Include="LargeSwitchTest.cs" />
     <Compile Include="LdargaTests.cs">
       <AutoGen>True</AutoGen>

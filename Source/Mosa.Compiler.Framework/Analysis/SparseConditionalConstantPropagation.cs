@@ -3,9 +3,9 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Trace;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System;
 
 namespace Mosa.Compiler.Framework.Analysis
 {
@@ -14,23 +14,37 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// </summary>
 	public sealed class SparseConditionalConstantPropagation
 	{
+		private static int MAXCONSTANTS = 5;
+
 		private class VariableState
 		{
-			private enum VariableStatus { NeverDefined, OverDefined, Constant };
+			private enum VariableStatus { NeverDefined, OverDefined, SingleConstant, MultipleConstants };
 
 			private VariableStatus Status;
 
-			public ulong ConstantUnsignedLongInteger { get; set; }
+			private List<ulong> constants;
 
-			public long ConstantSignedLongInteger { get { return (long)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = (ulong)value; } }
+			public int ConstantCount { get { return constants == null ? 0 : constants.Count; } }
+
+			public IList<ulong> Constants { get { return constants; } }
+
+			private ulong SingleConstant { get { return constants[0]; } }
+
+			public ulong ConstantUnsignedLongInteger { get { return SingleConstant; } }
+
+			public long ConstantSignedLongInteger { get { return (long)SingleConstant; } }
 
 			public Operand Operand { get; private set; }
 
-			public bool IsOverDefined { get { return Status == VariableStatus.OverDefined; } set { Status = VariableStatus.OverDefined; Debug.Assert(value); } }
+			public bool IsOverDefined { get { return Status == VariableStatus.OverDefined; } set { Status = VariableStatus.OverDefined; constants = null; Debug.Assert(value); } }
 
 			public bool IsNeverDefined { get { return Status == VariableStatus.NeverDefined; } }
 
-			public bool IsConstant { get { return Status == VariableStatus.Constant; } set { Status = VariableStatus.Constant; Debug.Assert(value); } }
+			public bool IsSingleConstant { get { return Status == VariableStatus.SingleConstant; } set { Status = VariableStatus.SingleConstant; Debug.Assert(value); } }
+
+			public bool HasMultipleConstants { get { return Status == VariableStatus.MultipleConstants; } }
+
+			public bool HasOnlyConstants { get { return Status == VariableStatus.SingleConstant || Status == VariableStatus.MultipleConstants; } }
 
 			public bool IsVirtualRegister { get { return Operand.IsVirtualRegister; } }
 
@@ -44,8 +58,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				}
 				else if (operand.IsConstant && operand.IsInteger)
 				{
-					ConstantUnsignedLongInteger = operand.ConstantUnsignedLongInteger;
-					IsConstant = true;
+					AddConstant(operand.ConstantUnsignedLongInteger);
 				}
 				else
 				{
@@ -53,9 +66,44 @@ namespace Mosa.Compiler.Framework.Analysis
 				}
 			}
 
+			public bool AddConstant(ulong value)
+			{
+				if (Status == VariableStatus.OverDefined)
+					return false;
+
+				if (constants != null)
+				{
+					if (constants.Contains(value))
+						return false;
+				}
+				else
+				{
+					constants = new List<ulong>(2);
+					constants.Add(value);
+					Status = VariableStatus.SingleConstant;
+					return true;
+				}
+
+				if (constants.Count > MAXCONSTANTS)
+				{
+					Status = VariableStatus.OverDefined;
+					constants = null;
+					return true;
+				}
+
+				constants.Add(value);
+				Status = VariableStatus.MultipleConstants;
+				return true;
+			}
+
+			public void AddConstant(long value)
+			{
+				AddConstant((ulong)value);
+			}
+
 			public bool AreConstantsEqual(VariableState other)
 			{
-				if (!other.IsConstant || !IsConstant)
+				if (!other.IsSingleConstant || !IsSingleConstant)
 					return false;
 
 				return (other.ConstantUnsignedLongInteger == ConstantUnsignedLongInteger);
@@ -65,9 +113,19 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				string s = Operand.ToString() + " : " + Status.ToString();
 
-				if (IsConstant)
+				if (IsSingleConstant)
 				{
 					s = s + " = " + ConstantUnsignedLongInteger.ToString();
+				}
+				else if (HasMultipleConstants)
+				{
+					s = s + " (" + constants.Count.ToString() + ") =";
+					foreach (ulong i in constants)
+					{
+						s = s + " " + i.ToString();
+						s = s + ",";
+					}
+					s = s.TrimEnd(',');
 				}
 
 				return s;
@@ -136,7 +194,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			foreach (var variable in variableStates.Values)
 			{
-				if (variable.IsVirtualRegister && variable.IsConstant)
+				if (variable.IsVirtualRegister && variable.IsSingleConstant)
 				{
 					list.Add(new Tuple<Operand, ulong>(variable.Operand, variable.ConstantUnsignedLongInteger));
 				}
@@ -380,21 +438,12 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			Debug.Assert(!variable.IsOverDefined);
 
-			if (variable.IsConstant && variable.ConstantUnsignedLongInteger != value)
+			if (variable.AddConstant(value))
 			{
-				UpdateToOverDefined(variable);
-				return;
+				if (MainTrace.Active) MainTrace.Log(variable.ToString());
+
+				AddInstruction(variable);
 			}
-
-			if (variable.IsConstant)
-				return;
-
-			variable.IsConstant = true;
-			variable.ConstantUnsignedLongInteger = value;
-
-			if (MainTrace.Active) MainTrace.Log(variable.ToString());
-
-			AddInstruction(variable);
 		}
 
 		private void UpdateToOverDefined(VariableState variable)
@@ -432,9 +481,15 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				UpdateToOverDefined(result);
 			}
-			else if (operand.IsConstant)
+			else if (operand.HasOnlyConstants)
 			{
-				UpdateToConstant(result, operand.ConstantUnsignedLongInteger);
+				foreach (var c in operand.Constants)
+				{
+					UpdateToConstant(result, c);
+
+					if (result.IsOverDefined)
+						return;
+				}
 			}
 			else if (operand.IsNeverDefined)
 			{
@@ -469,76 +524,118 @@ namespace Mosa.Compiler.Framework.Analysis
 			if (operand1.IsOverDefined || operand2.IsOverDefined)
 			{
 				UpdateToOverDefined(result);
+				return;
 			}
 			else if (operand1.IsNeverDefined || operand2.IsNeverDefined)
 			{
-				//result.IsNeverDefined = true;
 				Debug.Assert(result.IsNeverDefined);
 				return;
 			}
-			else if (operand1.IsConstant && operand2.IsConstant)
+			else if (operand1.IsSingleConstant && operand2.IsSingleConstant)
 			{
-				var instruction = node.Instruction;
+				ulong value;
 
-				if (instruction == IRInstruction.AddSigned || instruction == IRInstruction.AddUnsigned)
+				if (IntegerOperation(node.Instruction, operand1.ConstantUnsignedLongInteger, operand2.ConstantUnsignedLongInteger, node.ConditionCode, out value))
 				{
-					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger + operand2.ConstantUnsignedLongInteger);
-				}
-				else if (instruction == IRInstruction.SubSigned || instruction == IRInstruction.SubUnsigned)
-				{
-					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger - operand2.ConstantUnsignedLongInteger);
-				}
-				else if (instruction == IRInstruction.MulUnsigned || instruction == IRInstruction.MulSigned)
-				{
-					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger * operand2.ConstantUnsignedLongInteger);
-				}
-				else if (instruction == IRInstruction.DivUnsigned && operand2.ConstantUnsignedLongInteger != 0)
-				{
-					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger / operand2.ConstantUnsignedLongInteger);
-				}
-				else if (instruction == IRInstruction.DivSigned && operand2.ConstantUnsignedLongInteger != 0)
-				{
-					UpdateToConstant(result, operand1.ConstantSignedLongInteger / operand2.ConstantSignedLongInteger);
-				}
-				else if (instruction == IRInstruction.RemUnsigned && operand2.ConstantUnsignedLongInteger != 0)
-				{
-					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger % operand2.ConstantUnsignedLongInteger);
-				}
-				else if (instruction == IRInstruction.RemSigned && operand2.ConstantUnsignedLongInteger != 0)
-				{
-					UpdateToConstant(result, operand1.ConstantSignedLongInteger % operand2.ConstantSignedLongInteger);
-				}
-				else if (instruction == IRInstruction.ArithmeticShiftRight)
-				{
-					UpdateToConstant(result, ((long)operand1.ConstantUnsignedLongInteger) >> (int)operand2.ConstantUnsignedLongInteger);
-				}
-				else if (instruction == IRInstruction.ShiftRight)
-				{
-					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger >> (int)operand2.ConstantUnsignedLongInteger);
-				}
-				else if (instruction == IRInstruction.ShiftLeft)
-				{
-					UpdateToConstant(result, operand1.ConstantUnsignedLongInteger << (int)operand2.ConstantUnsignedLongInteger);
-				}
-				else if (instruction == IRInstruction.IntegerCompare)
-				{
-					bool? compare = Compare(operand1, operand2, node.ConditionCode);
-
-					if (compare.HasValue)
-					{
-						UpdateToConstant(result, compare.Value ? 1 : 0);
-						return;
-					}
-
-					// unknown integer operation
-					UpdateToOverDefined(result);
+					UpdateToConstant(result, value);
+					return;
 				}
 				else
 				{
-					// unknown integer operation
 					UpdateToOverDefined(result);
+					return;
 				}
 			}
+			else if (operand1.HasOnlyConstants && operand2.HasOnlyConstants)
+			{
+				foreach (var c1 in operand1.Constants)
+				{
+					foreach (var c2 in operand2.Constants)
+					{
+						ulong value;
+
+						if (IntegerOperation(node.Instruction, c1, c2, node.ConditionCode, out value))
+						{
+							UpdateToConstant(result, value);
+						}
+						else
+						{
+							UpdateToOverDefined(result);
+							return;
+						}
+
+						if (result.IsOverDefined)
+							return;
+					}
+				}
+			}
+		}
+
+		private bool IntegerOperation(BaseInstruction instruction, ulong operand1, ulong operand2, ConditionCode conditionCode, out ulong result)
+		{
+			if (instruction == IRInstruction.AddSigned || instruction == IRInstruction.AddUnsigned)
+			{
+				result = operand1 + operand2;
+				return true;
+			}
+			else if (instruction == IRInstruction.SubSigned || instruction == IRInstruction.SubUnsigned)
+			{
+				result = operand1 - operand2;
+				return true;
+			}
+			else if (instruction == IRInstruction.MulUnsigned || instruction == IRInstruction.MulSigned)
+			{
+				result = operand1 * operand2;
+				return true;
+			}
+			else if (instruction == IRInstruction.DivUnsigned && operand2 != 0)
+			{
+				result = operand1 / operand2;
+				return true;
+			}
+			else if (instruction == IRInstruction.DivSigned && operand2 != 0)
+			{
+				result = (ulong)((long)operand1 / (long)operand2);
+				return true;
+			}
+			else if (instruction == IRInstruction.RemUnsigned && operand2 != 0)
+			{
+				result = operand1 % operand2;
+				return true;
+			}
+			else if (instruction == IRInstruction.RemSigned && operand2 != 0)
+			{
+				result = (ulong)((long)operand1 % (long)operand2);
+				return true;
+			}
+			else if (instruction == IRInstruction.ArithmeticShiftRight)
+			{
+				result = (ulong)(((long)operand1) >> (int)operand2);
+				return true;
+			}
+			else if (instruction == IRInstruction.ShiftRight)
+			{
+				result = operand1 >> (int)operand2;
+				return true;
+			}
+			else if (instruction == IRInstruction.ShiftLeft)
+			{
+				result = operand1 << (int)operand2;
+				return true;
+			}
+			else if (instruction == IRInstruction.IntegerCompare)
+			{
+				bool? compare = Compare(operand1, operand2, conditionCode);
+
+				if (compare.HasValue)
+				{
+					result = compare.Value ? 1u : 0u;
+					return true;
+				}
+			}
+
+			result = 0;
+			return false;
 		}
 
 		private void Load(InstructionNode node)
@@ -560,11 +657,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			var result = GetVariableState(node.Result);
 
-			//var result2 = GetVariableState(context.Result2);
-
 			UpdateToOverDefined(result);
-
-			//UpdateToOverDefined(result2);
 		}
 
 		private void Default(InstructionNode node)
@@ -575,9 +668,6 @@ namespace Mosa.Compiler.Framework.Analysis
 			Debug.Assert(node.ResultCount == 1);
 
 			var result = GetVariableState(node.Result);
-
-			if (result.IsOverDefined)
-				return;
 
 			UpdateToOverDefined(result);
 		}
@@ -592,9 +682,9 @@ namespace Mosa.Compiler.Framework.Analysis
 				Branch(node);
 				return true;
 			}
-			else if (operand1.IsConstant && operand2.IsConstant)
+			else if (operand1.IsSingleConstant && operand2.IsSingleConstant)
 			{
-				bool? compare = Compare(operand1, operand2, node.ConditionCode);
+				bool? compare = Compare(operand1.ConstantUnsignedLongInteger, operand2.ConstantUnsignedLongInteger, node.ConditionCode);
 
 				if (!compare.HasValue)
 				{
@@ -609,21 +699,66 @@ namespace Mosa.Compiler.Framework.Analysis
 
 				return !compare.Value;
 			}
+			else if (operand1.HasOnlyConstants && operand2.HasOnlyConstants)
+			{
+				bool? final = null;
+
+				foreach (var c1 in operand1.Constants)
+				{
+					foreach (var c2 in operand2.Constants)
+					{
+						bool? compare = Compare(c1, c2, node.ConditionCode);
+
+						if (!compare.HasValue)
+						{
+							Branch(node);
+							return true;
+						}
+
+						if (!final.HasValue)
+						{
+							final = compare;
+							continue;
+						}
+						else if (final.Value == compare.Value)
+						{
+							continue;
+						}
+						else
+						{
+							Branch(node);
+							return true;
+						}
+					}
+				}
+
+				if (final.Value)
+				{
+					Branch(node);
+				}
+
+				return !final.Value;
+			}
 
 			Branch(node);
 			return true;
 		}
 
-		private static bool? Compare(VariableState operand1, VariableState operand2, ConditionCode conditionCode)
+		private static bool? Compare(ulong operand1, ulong operand2, ConditionCode conditionCode)
 		{
 			switch (conditionCode)
 			{
-				case ConditionCode.Equal: return operand1.ConstantUnsignedLongInteger == operand2.ConstantUnsignedLongInteger;
-				case ConditionCode.NotEqual: return operand1.ConstantUnsignedLongInteger != operand2.ConstantUnsignedLongInteger;
-				case ConditionCode.GreaterOrEqual: return operand1.ConstantUnsignedLongInteger >= operand2.ConstantUnsignedLongInteger;
-				case ConditionCode.GreaterThan: return operand1.ConstantUnsignedLongInteger > operand2.ConstantUnsignedLongInteger;
-				case ConditionCode.LessOrEqual: return operand1.ConstantUnsignedLongInteger <= operand2.ConstantUnsignedLongInteger;
-				case ConditionCode.LessThan: return operand1.ConstantUnsignedLongInteger < operand2.ConstantUnsignedLongInteger;
+				case ConditionCode.Equal: return operand1 == operand2;
+				case ConditionCode.NotEqual: return operand1 != operand2;
+				case ConditionCode.GreaterOrEqual: return operand1 >= operand2;
+				case ConditionCode.GreaterThan: return operand1 > operand2;
+				case ConditionCode.LessOrEqual: return operand1 <= operand2;
+				case ConditionCode.LessThan: return operand1 < operand2;
+
+				case ConditionCode.UnsignedGreaterOrEqual: return operand1 >= operand2;
+				case ConditionCode.UnsignedGreaterThan: return operand1 > operand2;
+				case ConditionCode.UnsignedLessOrEqual: return operand1 <= operand2;
+				case ConditionCode.UnsignedLessThan: return operand1 < operand2;
 
 				case ConditionCode.Always: return true;
 				case ConditionCode.Never: return false;
@@ -655,30 +790,33 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			var result = GetVariableState(node.Result);
 
+			//UpdateToOverDefined(result); // test
+
 			if (result.IsOverDefined)
 				return;
 
 			var sourceBlocks = node.PhiBlocks;
-
-			VariableState first = null;
-
 			var currentBlock = node.Block;
 
 			//if (Trace.Active) Trace.Log("Loop: " + currentBlock.PreviousBlocks.Count.ToString());
 
 			for (var index = 0; index < currentBlock.PreviousBlocks.Count; index++)
 			{
-				var op = node.GetOperand(index);
-
 				var predecessor = sourceBlocks[index];
+
+				phiStatements.AddIfNew(predecessor, node);
+
 				bool executable = blockStates[predecessor.Sequence];
 
 				//if (Trace.Active) Trace.Log("# " + index.ToString() + ": " + predecessor.ToString() + " " + (executable ? "Yes" : "No"));
 
-				phiStatements.AddIfNew(predecessor, node);
-
 				if (!executable)
 					continue;
+
+				if (result.IsOverDefined)
+					continue;
+
+				var op = node.GetOperand(index);
 
 				var operand = GetVariableState(op);
 
@@ -687,28 +825,23 @@ namespace Mosa.Compiler.Framework.Analysis
 				if (operand.IsOverDefined)
 				{
 					UpdateToOverDefined(result);
-					return;
+					continue;
 				}
-
-				if (operand.IsConstant)
+				else if (operand.IsSingleConstant)
 				{
-					if (first == null)
+					UpdateToConstant(result, operand.ConstantUnsignedLongInteger);
+					continue;
+				}
+				else if (operand.HasMultipleConstants)
+				{
+					foreach (var c in operand.Constants)
 					{
-						first = operand;
-						continue;
-					}
+						UpdateToConstant(result, c);
 
-					if (!first.AreConstantsEqual(operand))
-					{
-						UpdateToOverDefined(result);
-						return;
+						if (result.IsOverDefined)
+							break;
 					}
 				}
-			}
-
-			if (first != null)
-			{
-				UpdateToConstant(result, first.ConstantUnsignedLongInteger);
 			}
 		}
 	}
