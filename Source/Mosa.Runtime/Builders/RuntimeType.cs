@@ -102,7 +102,7 @@ namespace System
 			}
 
 			// Element Type
-			if ((*typeDefinition).ElementType != null)
+			if (typeDefinition->ElementType != null)
 			{
 				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
 				((uint**)&elementHandle)[0] = (uint*)typeDefinition->ElementType;

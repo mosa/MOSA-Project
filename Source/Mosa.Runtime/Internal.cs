@@ -183,11 +183,6 @@ namespace Mosa.Runtime
 
 		internal static LinkedList<RuntimeAssembly> Assemblies = null;
 
-		public static string InitializeMetadataString(uint* ptr)
-		{
-			return (string)Intrinsic.GetObjectFromAddress(ptr);
-		}
-
 		public static void Setup()
 		{
 			// Get AssemblyListTable and Assembly count

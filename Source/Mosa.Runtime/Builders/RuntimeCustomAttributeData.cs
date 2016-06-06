@@ -142,7 +142,7 @@ namespace System
 
 				// String
 				case TypeCode.String:
-					return Mosa.Runtime.Internal.InitializeMetadataString(valuePtr);
+					return (string)Intrinsic.GetObjectFromAddress(valuePtr);
 
 				default:
 					if (type.FullName == "System.Type")
@@ -162,7 +162,7 @@ namespace System
 		{
 			TypeCode typeCode = argument->ArgumentType->ElementType->TypeCode;
 			var valuePtr = argument->GetArgumentValue();
-			var size = (uint)valuePtr[0];
+			var size = ((uint*)valuePtr)[0];
 			valuePtr++;
 
 			switch (typeCode)
@@ -222,7 +222,7 @@ namespace System
 					{
 						uint[] array = new uint[size];
 						for (int i = 0; i < size; i++)
-							array[i] = (uint)valuePtr[i];
+							array[i] = ((uint*)valuePtr)[i];
 						return array;
 					}
 
