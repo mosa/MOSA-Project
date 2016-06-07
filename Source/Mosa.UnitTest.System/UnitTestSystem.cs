@@ -41,6 +41,8 @@ namespace Mosa.UnitTest.System
 		private const uint MaxRetries = 10;
 		private const uint RetryDelay = 1; // 1- seconds
 
+		private Stopwatch stopwatch = new Stopwatch();
+
 		public UnitTestSystem()
 		{
 			Options = new Options()
@@ -79,6 +81,8 @@ namespace Mosa.UnitTest.System
 			AppLocations.FindApplications();
 
 			Initialize();
+
+			stopwatch.Start();
 		}
 
 		public void Initialize()
@@ -258,8 +262,6 @@ namespace Mosa.UnitTest.System
 			var symbol = linker.GetSymbol(runtimeMethod.FullName, SectionKind.Text);
 
 			ulong address = symbol.VirtualAddress;
-
-			Console.WriteLine("Testing: " + ns + "." + type + "." + method);
 
 			var cmd = new List<int>(4 + 4 + 4 + runtimeMethod.Signature.Parameters.Count);
 

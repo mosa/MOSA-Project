@@ -196,8 +196,13 @@ namespace Mosa.Kernel.x86
 				SendReady();
 			}
 
+			while (ProcessSerial()) ;
+		}
+
+		private static bool ProcessSerial()
+		{
 			if (!Serial.IsDataReady(com))
-				return;
+				return false;
 
 			byte b = Serial.Read(com);
 
@@ -215,7 +220,7 @@ namespace Mosa.Kernel.x86
 			if (bad)
 			{
 				BadDataAbort();
-				return;
+				return true;
 			}
 
 			Native.Set8(Address.DebuggerBuffer + index, b);
@@ -229,7 +234,7 @@ namespace Mosa.Kernel.x86
 			if (length > 4096 || index > 4096)
 			{
 				BadDataAbort();
-				return;
+				return true;
 			}
 
 			if (length + 20 == index)
@@ -237,6 +242,8 @@ namespace Mosa.Kernel.x86
 				ProcessCommand();
 				ResetBuffer();
 			}
+
+			return true;
 		}
 
 		private static void ProcessCommand()

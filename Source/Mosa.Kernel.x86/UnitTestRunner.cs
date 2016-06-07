@@ -33,6 +33,8 @@ namespace Mosa.Kernel.x86
 
 		public static void EnterTestReadyLoop()
 		{
+			uint testCount = 0;
+
 			DebugClient.Ready();
 
 			Screen.Write("Waiting for unit tests...");
@@ -53,13 +55,16 @@ namespace Mosa.Kernel.x86
 			Screen.NextLine();
 			Screen.NextLine();
 
+			uint row = Screen.Row;
+
 			while (true)
 			{
 				if (testReady == 1)
 				{
-					Screen.Write("Test #");
-					Screen.Write((uint)testID);
-					Screen.Write(" = ");
+					Screen.Row = row;
+					Screen.Column = 0;
+
+					Screen.Write(++testCount, 10, 7);
 
 					testReady = 0;
 					testResultReady = 0;
@@ -83,7 +88,6 @@ namespace Mosa.Kernel.x86
 						case 1:
 							{
 								testResultU4 = Native.FrameCallRetU4(testMethodAddress);
-								Screen.Write((uint)testResultU4);
 								break;
 							}
 						case 2:
@@ -101,9 +105,6 @@ namespace Mosa.Kernel.x86
 					}
 
 					testResultReady = 1;
-
-					Screen.Write(" - Done");
-					Screen.NextLine();
 
 					Native.Int(255);
 				}
