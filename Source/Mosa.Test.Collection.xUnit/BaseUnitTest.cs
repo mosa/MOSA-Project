@@ -1,39 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Test.Numbers;
+using Mosa.UnitTest.System;
 using System.Collections.Generic;
+using Xunit;
 
-namespace Mosa.Test.System
+namespace Mosa.Test.Collection.xUnit
 {
 	public class BaseTestFixture
 	{
-		protected virtual BaseTestPlatform BasePlatform { get { return null; } }
-
-		public TestCompiler TestCompiler
-		{
-			get
-			{
-				return TestCompilerFactory.GetTestCompiler(BasePlatform);
-			}
-		}
-
-		protected T Run<T>(string ns, string type, string method, params object[] parameters)
-		{
-			return TestCompiler.Run<T>(ns, type, method, parameters);
-		}
-
-		protected T Run<T>(string fullMethodName, params object[] parameters)
-		{
-			int first = fullMethodName.LastIndexOf(".");
-			int second = fullMethodName.LastIndexOf(".", first - 1);
-
-			string ns = fullMethodName.Substring(0, second);
-			string type = fullMethodName.Substring(second + 1, first - second - 1);
-			string method = fullMethodName.Substring(first + 1);
-
-			return TestCompiler.Run<T>(ns, type, method, parameters);
-		}
-
 		public static IEnumerable<object[]> B { get { return Combinations.B; } }
 
 		public static IEnumerable<object[]> BB { get { return Combinations.BB; } }

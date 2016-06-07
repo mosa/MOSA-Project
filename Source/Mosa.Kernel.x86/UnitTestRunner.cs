@@ -33,6 +33,8 @@ namespace Mosa.Kernel.x86
 
 		public static void EnterTestReadyLoop()
 		{
+			DebugClient.Ready();
+
 			Screen.Write("Waiting for unit tests...");
 			Screen.NextLine();
 			Screen.NextLine();

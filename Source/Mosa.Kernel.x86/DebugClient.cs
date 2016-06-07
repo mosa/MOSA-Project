@@ -20,11 +20,12 @@ namespace Mosa.Kernel.x86
 			public const int UnknownData = 99;
 
 			public const int Alive = 1000;
-			public const int Ping = 1001;
-			public const int InformationalMessage = 1002;
-			public const int WarningMessage = 1003;
-			public const int ErrorMessage = 1004;
-			public const int SendNumber = 1005;
+			public const int Ready = 1001;
+			public const int Ping = 1002;
+			public const int InformationalMessage = 1003;
+			public const int WarningMessage = 1004;
+			public const int ErrorMessage = 1005;
+			public const int SendNumber = 1006;
 			public const int ReadMemory = 1010;
 			public const int WriteMemory = 1011;
 			public const int ReadCR3 = 1012;
@@ -45,11 +46,21 @@ namespace Mosa.Kernel.x86
 
 		private static uint last = 0;
 
+		private static bool ready = false;
+		private static bool readysent = false;
+
 		public static void Setup(ushort com)
 		{
 			enabled = true;
+			ready = false;
+			readysent = false;
 			Serial.SetupPort(com);
 			DebugClient.com = com;
+		}
+
+		public static void Ready()
+		{
+			ready = true;
 		}
 
 		private static void SendByte(int i)
@@ -86,7 +97,7 @@ namespace Mosa.Kernel.x86
 
 		// MAGIC-ID-CODE-LEN-CHECKSUM-DATA
 
-		public static void SendResponse(int id, int code)
+		private static void SendResponse(int id, int code)
 		{
 			SendMagic();
 			SendInteger(id);
@@ -95,7 +106,7 @@ namespace Mosa.Kernel.x86
 			SendInteger(0); // TODO: not implemented
 		}
 
-		public static void SendResponse(int id, int code, int data)
+		private static void SendResponse(int id, int code, int data)
 		{
 			SendMagic();
 			SendInteger(id);
@@ -105,7 +116,7 @@ namespace Mosa.Kernel.x86
 			SendInteger(data);
 		}
 
-		public static void SendResponse(int id, int code, ulong data)
+		private static void SendResponse(int id, int code, ulong data)
 		{
 			SendMagic();
 			SendInteger(id);
@@ -115,7 +126,7 @@ namespace Mosa.Kernel.x86
 			SendInteger(data);
 		}
 
-		public static void SendResponse(int id, int code, int len, int magic)
+		private static void SendResponse(int id, int code, int len, int magic)
 		{
 			SendMagic();
 			SendInteger(id);
@@ -124,9 +135,14 @@ namespace Mosa.Kernel.x86
 			SendInteger(magic);
 		}
 
-		public static void SendAlive()
+		private static void SendAlive()
 		{
 			SendResponse(0, DebugCode.Alive);
+		}
+
+		private static void SendReady()
+		{
+			SendResponse(0, DebugCode.Ready);
 		}
 
 		private static void BadDataAbort()
@@ -172,6 +188,12 @@ namespace Mosa.Kernel.x86
 			{
 				last = CMOS.Second;
 				SendAlive();
+			}
+
+			if (ready & !readysent)
+			{
+				readysent = true;
+				SendReady();
 			}
 
 			if (!Serial.IsDataReady(com))
@@ -233,9 +255,7 @@ namespace Mosa.Kernel.x86
 				case DebugCode.ReadCR3: SendResponse(id, DebugCode.ReadCR3, (int)Native.GetCR3()); return;
 				case DebugCode.Scattered32BitReadMemory: Scattered32BitReadMemory(); return;
 				case DebugCode.WriteMemory: WriteMemory(); return;
-
 				case DebugCode.ExecuteUnitTest: ExecuteUnitTest(); return;
-
 				case DebugCode.AbortUnitTest: AbortUnitTest(); return;
 
 				default: return;

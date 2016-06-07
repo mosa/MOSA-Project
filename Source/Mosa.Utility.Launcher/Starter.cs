@@ -27,18 +27,18 @@ namespace Mosa.Utility.Launcher
 				LauncherEvent.NewStatus(status);
 		}
 
-		public void Launch()
+		public Process Launch()
 		{
 			switch (Options.Emulator)
 			{
-				case EmulatorType.Qemu: LaunchQemu(Options.ExitOnLaunch); break;
-				case EmulatorType.Bochs: LaunchBochs(Options.ExitOnLaunch); break;
-				case EmulatorType.VMware: LaunchVMwarePlayer(Options.ExitOnLaunch); break;
+				case EmulatorType.Qemu: return LaunchQemu(!Options.ExitOnLaunch);
+				case EmulatorType.Bochs: return LaunchBochs(!Options.ExitOnLaunch);
+				case EmulatorType.VMware: return LaunchVMwarePlayer(!Options.ExitOnLaunch);
 				default: throw new InvalidOperationException();
 			}
 		}
 
-		private Process LaunchQemu(bool exit)
+		private Process LaunchQemu(bool getOutput)
 		{
 			string arg = " -L " + Quote(AppLocations.QEMUBIOSDirectory);
 
@@ -60,21 +60,21 @@ namespace Mosa.Utility.Launcher
 
 			if (Options.DebugConnectionOption == DebugConnectionOption.Pipe)
 			{
-				arg = arg + " -serial pipe:MOSA";
+				arg = arg + " -serial pipe:" + Options.DebugPipeName;
 			}
 			else if (Options.DebugConnectionOption == DebugConnectionOption.TCPServer)
 			{
-				arg = arg + " -serial tcp:127.0.0.1:9999,server,nowait,nodelay";
+				arg = arg + " -serial tcp:" + Options.DebugConnectionAddress + ":" + Options.DebugConnectionPort.ToString() + ",server,nowait,nodelay";
 			}
 			else if (Options.DebugConnectionOption == DebugConnectionOption.TCPClient)
 			{
-				arg = arg + " -serial tcp:127.0.0.1:9999,client,nowait";
+				arg = arg + " -serial tcp:" + Options.DebugConnectionAddress + ":" + Options.DebugConnectionPort.ToString() + ",client,nowait";
 			}
 
-			return LaunchApplication(AppLocations.QEMU, arg, exit);
+			return LaunchApplication(AppLocations.QEMU, arg, getOutput);
 		}
 
-		private Process LaunchBochs(bool exit)
+		private Process LaunchBochs(bool getOutput)
 		{
 			var logfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + "-bochs.log");
 			var configfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bxrc");
@@ -116,10 +116,10 @@ namespace Mosa.Utility.Launcher
 
 			File.WriteAllText(configfile, sb.ToString());
 
-			return LaunchApplication(AppLocations.BOCHS, arg, exit);
+			return LaunchApplication(AppLocations.BOCHS, arg, getOutput);
 		}
 
-		private Process LaunchVMwarePlayer(bool exit)
+		private Process LaunchVMwarePlayer(bool getOutput)
 		{
 			var logfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + "-vmx.log");
 			var configfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".vmx");
@@ -160,7 +160,7 @@ namespace Mosa.Utility.Launcher
 
 			string arg = Quote(configfile);
 
-			return LaunchApplication(AppLocations.VMwarePlayer, arg, exit);
+			return LaunchApplication(AppLocations.VMwarePlayer, arg, getOutput);
 		}
 	}
 }

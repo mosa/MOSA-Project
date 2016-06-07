@@ -81,11 +81,11 @@ namespace Mosa.Utility.Launcher
 			return output + error;
 		}
 
-		protected Process LaunchApplication(string app, string arg, bool exit)
+		protected Process LaunchApplication(string app, string arg, bool getOutput)
 		{
 			var process = LaunchApplication(app, arg);
 
-			if (!exit)
+			if (getOutput)
 			{
 				var output = GetOutput(process);
 				AddOutput(output);

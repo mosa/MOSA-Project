@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Utility.DebugEngine;
 using System;
+using System.Collections.Generic;
 
 namespace Mosa.Tool.Debugger
 {
@@ -33,7 +34,7 @@ namespace Mosa.Tool.Debugger
 		{
 			Status = "Querying...";
 			SendCommand(new DebugMessage(DebugCode.Scattered32BitReadMemory, new int[] { 0x200004, 1024 * 1024 * 28 }, this, UpdatePointers));
-			SendCommand(new DebugMessage(DebugCode.ReadCR3, (byte[])null, this, ReadCR3));
+			SendCommand(new DebugMessage(DebugCode.ReadCR3, new List<byte>(), this, ReadCR3));
 		}
 
 		public override void Disconnect()
@@ -62,7 +63,7 @@ namespace Mosa.Tool.Debugger
 
 			int start = message.GetInt32(0);
 			int lines = message.GetInt32(4) / 16;
-			uint at = (uint)start;
+			int at = start;
 
 			try
 			{

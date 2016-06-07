@@ -2,6 +2,8 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Linker;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
 using Mosa.Utility.Aot;
 using Mosa.Utility.BootImage;
@@ -15,8 +17,6 @@ namespace Mosa.Utility.Launcher
 {
 	public class Builder : BaseLauncher
 	{
-		private MosaCompiler Compiler { get; set; }
-
 		public IList<string> Counters { get; private set; }
 
 		public DateTime CompileStartTime { get; private set; }
@@ -28,6 +28,10 @@ namespace Mosa.Utility.Launcher
 		public string CompiledFile { get; private set; }
 
 		public string ImageFile { get; private set; }
+
+		public BaseLinker Linker { get; private set; }
+
+		public TypeSystem TypeSystem { get; private set; }
 
 		protected ITraceListener traceListener;
 
@@ -55,45 +59,46 @@ namespace Mosa.Utility.Launcher
 
 		public void Compile()
 		{
-			HasCompileError = false;
+			HasCompileError = true;
 			Log.Clear();
 			Counters.Clear();
 
+			var compiler = new MosaCompiler();
+
 			try
 			{
-				Compiler = new MosaCompiler();
 				CompileStartTime = DateTime.Now;
 
 				CompiledFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin");
 
-				Compiler.CompilerFactory = delegate { return new AotCompiler(); };
+				compiler.CompilerFactory = delegate { return new AotCompiler(); };
 
-				Compiler.CompilerOptions.EnableSSA = Options.EnableSSA;
-				Compiler.CompilerOptions.EnableOptimizations = Options.EnableIROptimizations;
-				Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = Options.EnableSparseConditionalConstantPropagation;
-				Compiler.CompilerOptions.EnableInlinedMethods = Options.EnableInlinedMethods;
-				Compiler.CompilerOptions.InlinedIRMaximum = Options.InlinedIRMaximum;
-				Compiler.CompilerOptions.EnableVariablePromotion = Options.EnableVariablePromotion;
-				Compiler.CompilerOptions.OutputFile = CompiledFile;
+				compiler.CompilerOptions.EnableSSA = Options.EnableSSA;
+				compiler.CompilerOptions.EnableOptimizations = Options.EnableIROptimizations;
+				compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = Options.EnableSparseConditionalConstantPropagation;
+				compiler.CompilerOptions.EnableInlinedMethods = Options.EnableInlinedMethods;
+				compiler.CompilerOptions.InlinedIRMaximum = Options.InlinedIRMaximum;
+				compiler.CompilerOptions.EnableVariablePromotion = Options.EnableVariablePromotion;
+				compiler.CompilerOptions.OutputFile = CompiledFile;
 
-				Compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);
-				Compiler.CompilerOptions.LinkerFormatType = Options.LinkerFormatType;
-				Compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(Options.BootFormat);
+				compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);
+				compiler.CompilerOptions.LinkerFormatType = Options.LinkerFormatType;
+				compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(Options.BootFormat);
 
-				Compiler.CompilerOptions.SetCustomOption("multiboot.video", Options.VBEVideo ? "true" : "false");
-				Compiler.CompilerOptions.SetCustomOption("multiboot.width", Options.Width.ToString());
-				Compiler.CompilerOptions.SetCustomOption("multiboot.height", Options.Height.ToString());
-				Compiler.CompilerOptions.SetCustomOption("multiboot.depth", Options.Depth.ToString());
+				compiler.CompilerOptions.SetCustomOption("multiboot.video", Options.VBEVideo ? "true" : "false");
+				compiler.CompilerOptions.SetCustomOption("multiboot.width", Options.Width.ToString());
+				compiler.CompilerOptions.SetCustomOption("multiboot.height", Options.Height.ToString());
+				compiler.CompilerOptions.SetCustomOption("multiboot.depth", Options.Depth.ToString());
 
-				Compiler.CompilerOptions.BaseAddress = Options.BaseAddress;
-				Compiler.CompilerOptions.EmitSymbols = Options.EmitSymbols;
-				Compiler.CompilerOptions.EmitRelocations = Options.EmitRelocations;
+				compiler.CompilerOptions.BaseAddress = Options.BaseAddress;
+				compiler.CompilerOptions.EmitSymbols = Options.EmitSymbols;
+				compiler.CompilerOptions.EmitRelocations = Options.EmitRelocations;
 
-				Compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
+				compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
 
 				if (Options.GenerateMapFile)
 				{
-					Compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");
+					compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");
 				}
 
 				if (!Directory.Exists(Options.DestinationDirectory))
@@ -101,28 +106,29 @@ namespace Mosa.Utility.Launcher
 					Directory.CreateDirectory(Options.DestinationDirectory);
 				}
 
-				Compiler.CompilerTrace.TraceListener = traceListener;
+				compiler.CompilerTrace.TraceListener = traceListener;
 
 				if (string.IsNullOrEmpty(Options.SourceFile))
 				{
 					AddOutput("Please select a source file");
-					HasCompileError = true;
 					return;
 				}
 				else if (!File.Exists(Options.SourceFile))
 				{
 					AddOutput(string.Format("File {0} does not exists", Options.SourceFile));
-					HasCompileError = true;
 					return;
 				}
 
 				var inputFiles = new List<FileInfo>();
 				inputFiles.Add(new FileInfo(Options.SourceFile));
 
-				Compiler.Load(inputFiles);
+				compiler.Load(inputFiles);
 
 				var threads = Options.UseMultipleThreadCompiler ? Environment.ProcessorCount : 1;
-				Compiler.Execute(threads);
+				compiler.Execute(threads);
+
+				Linker = compiler.Linker;
+				TypeSystem = compiler.TypeSystem;
 
 				if (Options.ImageFormat == ImageFormat.ISO)
 				{
@@ -145,6 +151,8 @@ namespace Mosa.Utility.Launcher
 					}
 				}
 
+				HasCompileError = false;
+
 				if (Options.GenerateASMFile)
 				{
 					LaunchNDISASM();
@@ -152,8 +160,8 @@ namespace Mosa.Utility.Launcher
 			}
 			finally
 			{
-				Compiler.Dispose();
-				Compiler = null;
+				compiler.Dispose();
+				compiler = null;
 			}
 		}
 

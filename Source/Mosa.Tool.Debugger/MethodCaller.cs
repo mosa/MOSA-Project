@@ -39,21 +39,21 @@ namespace Mosa.Tool.Debugger
 			ExecuteUnitTest();
 		}
 
-		private bool AddData(List<uint> data, ComboBox box, TextBox tb)
+		private bool AddData(List<int> data, ComboBox box, TextBox tb)
 		{
 			if (box.SelectedIndex == 0)
 				return false;
 
 			if (box.SelectedIndex == 1)
 			{
-				data.Add((uint)tb.Text.ParseHexOrDecimal());
+				data.Add((int)tb.Text.ParseHexOrDecimal());
 				return true;
 			}
 			else if (box.SelectedIndex == 2)
 			{
 				ulong val = tb.Text.ParseHexOrDecimal();
-				data.Add((uint)(uint)(val & 0xFFFFFFFF));
-				data.Add((uint)(uint)((val >> 32) & 0xFFFFFFFF));
+				data.Add((int)(uint)(val & 0xFFFFFFFF));
+				data.Add((int)(uint)((val >> 32) & 0xFFFFFFFF));
 				return true;
 			}
 			else
@@ -78,7 +78,7 @@ namespace Mosa.Tool.Debugger
 				return;
 			}
 
-			var data = new List<uint>();
+			var data = new List<int>();
 
 			try
 			{
@@ -92,17 +92,15 @@ namespace Mosa.Tool.Debugger
 				return;
 			}
 
-			var cmd = new uint[4 + 4 + 4 + data.Count];
+			var cmd = new List<int>();
 
-			cmd[0] = address;
-			cmd[1] = (uint)cbResultType.SelectedIndex;
-			cmd[2] = (uint)data.Count;
+			cmd.Add((int)address);
+			cmd.Add((int)cbResultType.SelectedIndex);
+			cmd.Add((int)data.Count);
 
-			uint index = 3;
 			foreach (var value in data)
 			{
-				cmd[index] = value;
-				index++;
+				cmd.Add(value);
 			}
 
 			Status = "Executing...";

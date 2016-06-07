@@ -2,6 +2,7 @@
 
 using Mosa.Utility.DebugEngine;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -31,7 +32,7 @@ namespace Mosa.Tool.Debugger
 			methodCaller.Show(dockPanel, DockState.DockRight);
 
 			dockPanel.ResumeLayout(true, true);
-			DebugEngine.SetDispatchMethod(this, Dispatch);
+			DebugEngine.SetDispatchMethod(Dispatch);
 		}
 
 		public void SignalConnect()
@@ -65,7 +66,7 @@ namespace Mosa.Tool.Debugger
 			if (response == null)
 				return;
 
-			dispatchOutput.BeginInvoke((SenderMesseageDelegate)dispatchOutput.ProcessResponses, new object[] { response });
+			dispatchOutput.BeginInvoke((SenderMessageDelegate)dispatchOutput.ProcessResponses, new object[] { response });
 
 			if (response.Sender is Form)
 			{
@@ -85,7 +86,7 @@ namespace Mosa.Tool.Debugger
 		private void toolStripButton4_Click(object sender, EventArgs e)
 		{
 			toolStripStatusLabel1.Text = "Sent Ping!";
-			DebugEngine.SendCommand(new DebugMessage(DebugCode.Ping, (byte[])null));
+			DebugEngine.SendCommand(new DebugMessage(DebugCode.Ping, new List<byte>()));
 		}
 
 		private void toolStripButton2_Click(object sender, EventArgs e)

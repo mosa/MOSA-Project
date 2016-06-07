@@ -9,7 +9,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.TestSuite.x86</AssemblyName>
+    <AssemblyName>Mosa.UnitTest.x86</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -18,8 +18,8 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
-    <RootNamespace>Mosa.TestSuite.x86</RootNamespace>
-    <StartupObject>Mosa.TestSuite.x86.Boot</StartupObject>
+    <RootNamespace>Mosa.UnitTest.x86</RootNamespace>
+    <StartupObject>Mosa.UnitTest.x86.Boot</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>

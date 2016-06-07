@@ -28,25 +28,9 @@ namespace Mosa.Tool.Debugger
 			Status = "Disconnected!";
 		}
 
-		private string FormatResponseMessage(DebugMessage response)
+		private static string FormatResponseMessage(DebugMessage response)
 		{
-			switch (response.Code)
-			{
-				case DebugCode.Connected: return "Connected";
-				case DebugCode.Connecting: return "Connecting";
-				case DebugCode.Disconnected: return "Disconnected";
-				case DebugCode.UnknownData: return "Unknown Data: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
-				case DebugCode.InformationalMessage: return "Informational Message: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
-				case DebugCode.ErrorMessage: return "Error Message: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
-				case DebugCode.WarningMessage: return "Warning Message: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
-				case DebugCode.Ping: return "Ping ACK";
-				case DebugCode.Alive: return "Alive";
-				case DebugCode.ReadCR3: return "ReadCR3";
-				case DebugCode.ReadMemory: return "ReadMemory";
-				case DebugCode.Scattered32BitReadMemory: return "Scattered32BitReadMemory";
-				case DebugCode.SendNumber: return "#: " + ((response.ResponseData[0] << 24) | (response.ResponseData[1] << 16) | (response.ResponseData[2] << 8) | response.ResponseData[3]).ToString();
-				default: return "Code: " + response.Code.ToString();
-			}
+			return response.ToString();
 		}
 
 		public void ProcessResponses(DebugMessage response)
