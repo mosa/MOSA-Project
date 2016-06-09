@@ -8,19 +8,24 @@ namespace Mosa.Workspace.UnitTest.Debug
 	{
 		private static void Main(string[] args)
 		{
-			var testSystem = UnitTestSystemFixture.UnitTestSystem;
+			ulong value = 0;
 
-			testSystem.Initialize();
+			using (var testSystem = UnitTestSystemFixture.UnitTestSystem)
+			{
+				testSystem.Initialize();
 
-			//int value = 0;
+				//value = testSystem.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 1, 2);
+				//value = testSystem.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 3, 4);
+				//value = testSystem.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 5, 6);
+				//value = testSystem.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 7, 8);
+				//value = testSystem.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 9, 0);
 
-			//value = testSystem.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 1, 2);
-			//value = testSystem.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 3, 4);
-			//value = testSystem.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 5, 6);
-			//value = testSystem.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 7, 8);
-			//value = testSystem.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 9, 0);
+				value = testSystem.Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "AddU8U8", 4294967295ul, 2ul);
 
-			ulong value = testSystem.Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "AddU8U8", 3ul, 2ul);
+				//long value = testSystem.Run<long>("Mosa.Test.Collection", "Int64Tests", "AddI8I8", -1l, -126l);
+
+				//Mosa.Test.Collection.xUnit.Int64Fixture.AndI8I8(a: -1, b: -126)
+			}
 
 			return;
 		}

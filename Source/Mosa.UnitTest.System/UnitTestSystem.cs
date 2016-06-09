@@ -367,7 +367,7 @@ namespace Mosa.UnitTest.System
 			else if (type.IsI4)
 				return 1;
 			else if (type.IsI8)
-				return 1;
+				return 2;
 			else if (type.IsU1)
 				return 1;
 			else if (type.IsU2)
@@ -375,7 +375,7 @@ namespace Mosa.UnitTest.System
 			else if (type.IsU4)
 				return 1;
 			else if (type.IsU8)
-				return 1;
+				return 2;
 			else if (type.IsChar)
 				return 1;
 			else if (type.IsBoolean)
@@ -399,7 +399,12 @@ namespace Mosa.UnitTest.System
 			else if (type.IsI4)
 				return (int)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
 			else if (type.IsI8)
-				return (long)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24) | data[4] << 32 | (data[5] << 40) | (data[6] << 48) | (data[7] << 56));
+			{
+				ulong low = (uint)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
+				ulong high = (uint)(data[4] | (data[5] << 8) | (data[6] << 16) | (data[7] << 24));
+
+				return (long)(low | (high << 32));
+			}
 			else if (type.IsU1)
 				return (byte)data[0];
 			else if (type.IsU2)
@@ -407,7 +412,12 @@ namespace Mosa.UnitTest.System
 			else if (type.IsU4)
 				return (uint)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
 			else if (type.IsU8)
-				return (ulong)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24) | data[4] << 32 | (data[5] << 40) | (data[6] << 48) | (data[7] << 56));
+			{
+				ulong low = (uint)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
+				ulong high = (uint)(data[4] | (data[5] << 8) | (data[6] << 16) | (data[7] << 24));
+
+				return (ulong)(low | (high << 32));
+			}
 			else if (type.IsChar)
 				return (char)(data[0] | (data[1] << 8));
 			else if (type.IsBoolean)
