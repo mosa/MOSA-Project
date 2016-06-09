@@ -332,7 +332,6 @@ namespace Mosa.Kernel.x86
 
 		private static void ExecuteUnitTest()
 		{
-			ulong result = UnitTestRunner.GetResults();
 			int id = GetInt32(4);
 
 			uint address = GetUInt32(20);

@@ -195,7 +195,7 @@ namespace Mosa.UnitTest.System
 
 			while (!ready)
 			{
-				Thread.Sleep(1);
+				Thread.Sleep(10);
 			}
 		}
 
@@ -267,12 +267,14 @@ namespace Mosa.UnitTest.System
 
 			cmd.Add((int)address);
 			cmd.Add(GetReturnResultType(runtimeMethod.Signature.ReturnType));
-			cmd.Add(runtimeMethod.Signature.Parameters.Count);
+			cmd.Add(0);
 
 			foreach (var parm in parameters)
 			{
 				AddParameters(cmd, parm);
 			}
+
+			cmd[2] = cmd.Count - 3;
 
 			var message = new DebugMessage(DebugCode.ExecuteUnitTest, cmd);
 
@@ -461,13 +463,13 @@ namespace Mosa.UnitTest.System
 			}
 			else if (parameter is UInt64)
 			{
-				cmd.Add((int)((ulong)parameter >> 32));
 				cmd.Add((int)(ulong)parameter);
+				cmd.Add((int)((ulong)parameter >> 32));
 			}
 			else if (parameter is Int64)
 			{
-				cmd.Add((int)((long)parameter >> 32));
 				cmd.Add((int)(long)parameter);
+				cmd.Add((int)((long)parameter >> 32));
 			}
 			else if (parameter is Single)
 			{
