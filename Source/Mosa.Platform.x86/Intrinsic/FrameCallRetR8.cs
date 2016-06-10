@@ -24,12 +24,15 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand newESP = context.Operand2;
 
 			Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
+			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			Operand edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 			Operand mmx1 = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, SSE2Register.XMM0);
 
-			context.AppendInstruction(X86.Call, null, methodAddress);
+			context.SetInstruction(X86.Call, null, methodAddress);
 			context.AppendInstruction(IRInstruction.Gen, mmx1);
 			context.AppendInstruction(X86.Mov, result, mmx1);
+			context.AppendInstruction(X86.Movd, eax, mmx1);
+			context.AppendInstruction(X86.Pextrd, edx, mmx1, Operand.CreateConstant(methodCompiler.TypeSystem.BuiltIn.U1, 1));
 		}
 
 		#endregion Methods

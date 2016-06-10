@@ -469,7 +469,7 @@ namespace Mosa.UnitTest.System
 			}
 			else if (parameter is UInt32)
 			{
-				cmd.Add((int)parameter);
+				cmd.Add((int)((uint)parameter));
 			}
 			else if (parameter is UInt64)
 			{

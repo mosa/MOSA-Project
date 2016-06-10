@@ -24,6 +24,12 @@ namespace Mosa.Platform.x86
 
 		#endregion Construction
 
+		#region Properties
+
+		public virtual bool ThreeTwoAddressConversion { get { return true; } }
+
+		#endregion Properties
+
 		#region Methods
 
 		/// <summary>

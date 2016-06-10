@@ -27,7 +27,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			Operand edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 
-			context.AppendInstruction(X86.Call, null, methodAddress);
+			context.SetInstruction(X86.Call, null, methodAddress);
 			context.AppendInstruction(IRInstruction.Gen, eax);
 			context.AppendInstruction(X86.Mov, result, eax);
 		}
