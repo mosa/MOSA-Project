@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Test.Collection;
 using Mosa.UnitTest.System;
 
 namespace Mosa.Workspace.UnitTest.Debug
@@ -25,10 +26,22 @@ namespace Mosa.Workspace.UnitTest.Debug
 
 				//Mosa.Test.Collection.xUnit.Int64Fixture.AndI8I8(a: -1, b: -126)
 
-				bool value = testSystem.Run<bool>("Mosa.Test.Collection", "GenericCallTests", "GenericCallU4", 10);
-			}
+				//bool value = testSystem.Run<bool>("Mosa.Test.Collection", "GenericCallTests", "GenericCallU4", 10);
 
-			return;
+				//double a = 7;
+				//double b = 9;
+
+				//var d1 = testSystem.Run<double>("Mosa.Test.Collection", "DoubleTests", "AddR8R8", a, b);
+				//var d2 = DoubleTests.AddR8R8(a, b);
+
+				float a = 7;
+				float b = 9;
+
+				var d1 = testSystem.Run<float>("Mosa.Test.Collection", "SingleTests", "AddR4R4", a, b);
+				var d2 = SingleTests.AddR4R4(a, b);
+
+				return;
+			}
 		}
 	}
 }

@@ -24,7 +24,8 @@ namespace Mosa.Kernel.x86
 
 		private static uint testResultU4 = 0;
 		private static ulong testResultU8 = 0;
-		private static double testResultR8 = 0;
+
+		//private static double testResultR8 = 0;
 
 		public static void Setup()
 		{
@@ -97,7 +98,7 @@ namespace Mosa.Kernel.x86
 							}
 						case 3:
 							{
-								testResultR8 = Native.FrameCallRetR8(testMethodAddress);
+								testResultU8 = Native.FrameCallRetR8(testMethodAddress);
 								break;
 							}
 
@@ -120,7 +121,8 @@ namespace Mosa.Kernel.x86
 
 			testResultU4 = 0;
 			testResultU8 = 0;
-			testResultR8 = 0;
+
+			//testResultR8 = 0;
 		}
 
 		public static void SetUnitTestMethodParameter(uint index, uint value)
@@ -170,7 +172,7 @@ namespace Mosa.Kernel.x86
 				case 0: return 0;
 				case 1: return testResultU4;
 				case 2: return testResultU8;
-				case 3: return 0; // TODO
+				case 3: return testResultU8;
 				default: return 0;
 			}
 		}

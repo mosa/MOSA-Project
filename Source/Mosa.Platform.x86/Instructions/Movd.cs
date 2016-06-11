@@ -34,6 +34,9 @@ namespace Mosa.Platform.x86.Instructions
 			// reg from mmxreg
 			// 0000 1111:0111 1110: 11 mmxreg reg
 			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0110)                                       // 4:opcode
+				.AppendNibble(Bits.b0110)                                       // 4:opcode
+
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
 

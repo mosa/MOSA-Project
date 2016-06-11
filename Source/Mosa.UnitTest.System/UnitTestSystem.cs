@@ -381,9 +381,9 @@ namespace Mosa.UnitTest.System
 			else if (type.IsBoolean)
 				return 1;
 			else if (type.IsR4)
-				return 2;
+				return 3;
 			else if (type.IsR8)
-				return 2;
+				return 3;
 			else if (type.IsVoid)
 				return 0;
 
@@ -423,9 +423,27 @@ namespace Mosa.UnitTest.System
 			else if (type.IsBoolean)
 				return (bool)(data[0] != 0);
 			else if (type.IsR4)
-				return (float)0; // todo
+			{
+				var value = new byte[8];
+
+				for (int i = 0; i < 8; i++)
+					value[i] = data[i];
+
+				var d = BitConverter.ToSingle(value, 0);
+
+				return d;
+			}
 			else if (type.IsR8)
-				return (double)0; // todo
+			{
+				var value = new byte[8];
+
+				for (int i = 0; i < 8; i++)
+					value[i] = data[i];
+
+				var d = BitConverter.ToDouble(value, 0);
+
+				return d;
+			}
 			else if (type.IsVoid)
 				return null;
 
@@ -491,8 +509,8 @@ namespace Mosa.UnitTest.System
 			{
 				var b = BitConverter.GetBytes((double)parameter);
 				var u = BitConverter.ToUInt64(b, 0);
+				cmd.Add((int)((long)u));
 				cmd.Add((int)((long)u >> 32));
-				cmd.Add((int)(long)u);
 			}
 			else
 			{
