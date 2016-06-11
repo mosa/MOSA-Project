@@ -34,11 +34,14 @@ namespace Mosa.Workspace.UnitTest.Debug
 				//var d1 = testSystem.Run<double>("Mosa.Test.Collection", "DoubleTests", "AddR8R8", a, b);
 				//var d2 = DoubleTests.AddR8R8(a, b);
 
-				float a = 7;
-				float b = 9;
+				//float a = 7;
+				//float b = 9;
 
-				var d1 = testSystem.Run<float>("Mosa.Test.Collection", "SingleTests", "AddR4R4", a, b);
-				var d2 = SingleTests.AddR4R4(a, b);
+				//var d1 = testSystem.Run<float>("Mosa.Test.Collection", "SingleTests", "AddR4R4", a, b);
+				//var d2 = SingleTests.AddR4R4(a, b);
+
+				var b1 = testSystem.Run<bool>("Mosa.Test.Collection", "ValueTypeTests", "TestValueTypeStaticField");
+				var b2 = ValueTypeTests.TestValueTypeStaticField();
 
 				return;
 			}

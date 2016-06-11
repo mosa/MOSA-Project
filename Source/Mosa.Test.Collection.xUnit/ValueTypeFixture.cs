@@ -15,7 +15,7 @@ namespace Mosa.Test.Collection.xUnit
 		[Fact]
 		public void TestValueTypeStaticField()
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection.ValueTypeTests.TestValueTypeStaticField"));
+			Assert.Equal(ValueTypeTests.TestValueTypeStaticField(), Run<bool>("Mosa.Test.Collection.ValueTypeTests.TestValueTypeStaticField"));
 		}
 
 		[Fact]
