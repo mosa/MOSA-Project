@@ -317,7 +317,7 @@ namespace Mosa.UnitTest.System
 			if (response == null)
 				return;
 
-			Console.WriteLine(response.ToString());
+			//Console.WriteLine(response.ToString());
 
 			if (response.Code == DebugCode.Ready)
 			{
@@ -520,7 +520,7 @@ namespace Mosa.UnitTest.System
 
 		void IBuilderEvent.NewStatus(string status)
 		{
-			Console.WriteLine(status);
+			//Console.WriteLine(status);
 		}
 
 		void IBuilderEvent.UpdateProgress(int total, int at)
@@ -529,7 +529,7 @@ namespace Mosa.UnitTest.System
 
 		void IStarterEvent.NewStatus(string status)
 		{
-			Console.WriteLine(status);
+			//Console.WriteLine(status);
 		}
 
 		void IDisposable.Dispose()
