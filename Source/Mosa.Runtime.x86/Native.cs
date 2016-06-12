@@ -239,14 +239,26 @@ namespace Mosa.Runtime.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMultibootEBX, Mosa.Platform.x86")]
 		public extern static uint GetMultibootEBX();
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SwitchTask, Mosa.Platform.x86")]
-		public extern static void SwitchTask(uint esp);
-
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetExceptionRegister, Mosa.Platform.x86")]
 		public extern static uint GetExceptionRegister();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.FrameJump, Mosa.Platform.x86")]
 		public extern static void FrameJump(uint eip, uint esp, uint ebp, uint exceptionRegister);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.FrameCall, Mosa.Platform.x86")]
+		public extern static void FrameCall(uint eip);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.FrameCallRetU4, Mosa.Platform.x86")]
+		public extern static uint FrameCallRetU4(uint eip);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.FrameCallRetU8, Mosa.Platform.x86")]
+		public extern static ulong FrameCallRetU8(uint eip);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.FrameCallRetR8, Mosa.Platform.x86")]
+		public extern static ulong FrameCallRetR8(uint eip);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.AllocateStackSpace, Mosa.Platform.x86")]
+		public extern static uint AllocateStackSpace(uint size);
 
 		/// <summary>
 		/// Wraps the x86 int instruction to cause a software interrupt

@@ -41,7 +41,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Codes.cs" />
+    <Compile Include="DebugCode.cs" />
     <Compile Include="DebugMessage.cs" />
     <Compile Include="DebugNetworkStream.cs" />
     <Compile Include="DebugServerEngine.cs" />

@@ -31,7 +31,12 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The conversion context.</param>
 		private void ThreeTwoAddressConversion(InstructionNode node)
 		{
-			if (!(node.Instruction is X86Instruction))
+			var instruction = node.Instruction as X86Instruction;
+
+			if (instruction == null)
+				return;
+
+			if (!instruction.ThreeTwoAddressConversion)
 				return;
 
 			if (!(node.OperandCount >= 1 && node.ResultCount >= 1 && node.Result != node.Operand1))
