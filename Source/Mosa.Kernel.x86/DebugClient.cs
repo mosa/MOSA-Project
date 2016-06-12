@@ -263,7 +263,6 @@ namespace Mosa.Kernel.x86
 				case DebugCode.Scattered32BitReadMemory: Scattered32BitReadMemory(); return;
 				case DebugCode.WriteMemory: WriteMemory(); return;
 				case DebugCode.ExecuteUnitTest: ExecuteUnitTest(); return;
-				case DebugCode.AbortUnitTest: AbortUnitTest(); return;
 
 				default: return;
 			}
@@ -357,15 +356,6 @@ namespace Mosa.Kernel.x86
 			int id = UnitTestRunner.GetTestID();
 
 			SendResponse(id, DebugCode.ExecuteUnitTest, result);
-		}
-
-		private static void AbortUnitTest()
-		{
-			int id = GetInt32(4);
-
-			UnitTestRunner.AbortUnitTest();
-
-			SendResponse(id, DebugCode.AbortUnitTest);
 		}
 	}
 }
