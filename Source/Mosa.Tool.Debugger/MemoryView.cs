@@ -1,8 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Utility.DebugEngine;
 using Mosa.Compiler.Common;
+using Mosa.Utility.DebugEngine;
 using System;
+using System.Collections.Generic;
 
 namespace Mosa.Tool.Debugger
 {
@@ -32,8 +33,8 @@ namespace Mosa.Tool.Debugger
 		public override void Connect()
 		{
 			Status = "Querying...";
-			SendCommand(new DebugMessage(Codes.Scattered32BitReadMemory, new int[] { 0x200004, 1024 * 1024 * 28 }, this, UpdatePointers));
-			SendCommand(new DebugMessage(Codes.ReadCR3, (byte[])null, this, ReadCR3));
+			SendCommand(new DebugMessage(DebugCode.Scattered32BitReadMemory, new int[] { 0x200004, 1024 * 1024 * 28 }, this, UpdatePointers));
+			SendCommand(new DebugMessage(DebugCode.ReadCR3, new List<byte>(), this, ReadCR3));
 		}
 
 		public override void Disconnect()
@@ -62,7 +63,7 @@ namespace Mosa.Tool.Debugger
 
 			int start = message.GetInt32(0);
 			int lines = message.GetInt32(4) / 16;
-			uint at = (uint)start;
+			int at = start;
 
 			try
 			{
@@ -102,11 +103,11 @@ namespace Mosa.Tool.Debugger
 
 			try
 			{
-				uint at = tbMemory.Text.ParseHexOrDecimal();
+				uint at = (uint)tbMemory.Text.ParseHexOrDecimal();
 				int lines = lbMemory.Height / (lbMemory.Font.Height + 2);
 
 				Status = "Updating...";
-				SendCommand(new DebugMessage(Codes.ReadMemory, new int[] { (int)at, 16 * lines }, this, DisplayMemory));
+				SendCommand(new DebugMessage(DebugCode.ReadMemory, new int[] { (int)at, 16 * lines }, this, DisplayMemory));
 			}
 			catch
 			{

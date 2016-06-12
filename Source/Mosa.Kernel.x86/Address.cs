@@ -22,5 +22,8 @@ namespace Mosa.Kernel.x86
 
 		public const uint ReserveMemory = 0x03000000; // 48MB
 		public const uint MaximumMemory = 0xFFFFFFFF; // 4GB
+
+		public const uint UnitTestStack = 0x00002000;   // 8K (stack grows down)
+		public const uint DebuggerBuffer = 0x00004000;  // 16k
 	}
 }

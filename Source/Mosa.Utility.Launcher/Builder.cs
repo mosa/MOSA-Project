@@ -2,56 +2,49 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Linker;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
 using Mosa.Utility.Aot;
 using Mosa.Utility.BootImage;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Reflection;
 using System.Text;
 
 namespace Mosa.Utility.Launcher
 {
-	public class Builder
+	public class Builder : BaseLauncher
 	{
-		private MosaCompiler Compiler { get; set; }
-
-		public Options Options { get; set; }
-
-		public AppLocations AppLocations { get; set; }
-
-		public IList<string> Log { get; private set; }
-
 		public IList<string> Counters { get; private set; }
 
 		public DateTime CompileStartTime { get; private set; }
 
 		public IBuilderEvent BuilderEvent { get; private set; }
 
-		protected string compiledFile;
-		protected string imageFile;
+		public bool HasCompileError { get; private set; }
+
+		public string CompiledFile { get; private set; }
+
+		public string ImageFile { get; private set; }
+
+		public BaseLinker Linker { get; private set; }
+
+		public TypeSystem TypeSystem { get; private set; }
+
 		protected ITraceListener traceListener;
 
 		public Builder(Options options, AppLocations appLocations, IBuilderEvent builderEvent)
+			: base(options, appLocations)
 		{
-			Log = new List<string>();
 			Counters = new List<string>();
 			traceListener = new BuilderEventListener(this);
-			Options = options;
-			AppLocations = appLocations;
 			BuilderEvent = builderEvent;
 		}
 
-		public void AddOutput(string status)
+		protected override void OutputEvent(string status)
 		{
-			if (status == null)
-				return;
-
-			Log.Add(status);
-
 			if (BuilderEvent != null)
 				BuilderEvent.NewStatus(status);
 		}
@@ -64,49 +57,48 @@ namespace Mosa.Utility.Launcher
 			Counters.Add(data);
 		}
 
-		public bool HasCompileError { get; private set; }
-
 		public void Compile()
 		{
-			HasCompileError = false;
+			HasCompileError = true;
 			Log.Clear();
 			Counters.Clear();
 
+			var compiler = new MosaCompiler();
+
 			try
 			{
-				Compiler = new MosaCompiler();
 				CompileStartTime = DateTime.Now;
 
-				compiledFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin");
+				CompiledFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin");
 
-				Compiler.CompilerFactory = delegate { return new AotCompiler(); };
+				compiler.CompilerFactory = delegate { return new AotCompiler(); };
 
-				Compiler.CompilerOptions.EnableSSA = Options.EnableSSA;
-				Compiler.CompilerOptions.EnableOptimizations = Options.EnableIROptimizations;
-				Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = Options.EnableSparseConditionalConstantPropagation;
-				Compiler.CompilerOptions.EnableInlinedMethods = Options.EnableInlinedMethods;
-				Compiler.CompilerOptions.InlinedIRMaximum = Options.InlinedIRMaximum;
-				Compiler.CompilerOptions.EnableVariablePromotion = Options.EnableVariablePromotion;
-				Compiler.CompilerOptions.OutputFile = compiledFile;
+				compiler.CompilerOptions.EnableSSA = Options.EnableSSA;
+				compiler.CompilerOptions.EnableOptimizations = Options.EnableIROptimizations;
+				compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = Options.EnableSparseConditionalConstantPropagation;
+				compiler.CompilerOptions.EnableInlinedMethods = Options.EnableInlinedMethods;
+				compiler.CompilerOptions.InlinedIRMaximum = Options.InlinedIRMaximum;
+				compiler.CompilerOptions.EnableVariablePromotion = Options.EnableVariablePromotion;
+				compiler.CompilerOptions.OutputFile = CompiledFile;
 
-				Compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);
-				Compiler.CompilerOptions.LinkerFormatType = Options.LinkerFormatType;
-				Compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(Options.BootFormat);
+				compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);
+				compiler.CompilerOptions.LinkerFormatType = Options.LinkerFormatType;
+				compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(Options.BootFormat);
 
-				Compiler.CompilerOptions.SetCustomOption("multiboot.video", Options.VBEVideo ? "true" : "false");
-				Compiler.CompilerOptions.SetCustomOption("multiboot.width", Options.Width.ToString());
-				Compiler.CompilerOptions.SetCustomOption("multiboot.height", Options.Height.ToString());
-				Compiler.CompilerOptions.SetCustomOption("multiboot.depth", Options.Depth.ToString());
+				compiler.CompilerOptions.SetCustomOption("multiboot.video", Options.VBEVideo ? "true" : "false");
+				compiler.CompilerOptions.SetCustomOption("multiboot.width", Options.Width.ToString());
+				compiler.CompilerOptions.SetCustomOption("multiboot.height", Options.Height.ToString());
+				compiler.CompilerOptions.SetCustomOption("multiboot.depth", Options.Depth.ToString());
 
-				Compiler.CompilerOptions.BaseAddress = Options.BaseAddress;
-				Compiler.CompilerOptions.EmitSymbols = Options.EmitSymbols;
-				Compiler.CompilerOptions.EmitRelocations = Options.EmitRelocations;
+				compiler.CompilerOptions.BaseAddress = Options.BaseAddress;
+				compiler.CompilerOptions.EmitSymbols = Options.EmitSymbols;
+				compiler.CompilerOptions.EmitRelocations = Options.EmitRelocations;
 
-				Compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
+				compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
 
 				if (Options.GenerateMapFile)
 				{
-					Compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");
+					compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");
 				}
 
 				if (!Directory.Exists(Options.DestinationDirectory))
@@ -114,49 +106,52 @@ namespace Mosa.Utility.Launcher
 					Directory.CreateDirectory(Options.DestinationDirectory);
 				}
 
-				Compiler.CompilerTrace.TraceListener = traceListener;
+				compiler.CompilerTrace.TraceListener = traceListener;
 
 				if (string.IsNullOrEmpty(Options.SourceFile))
 				{
 					AddOutput("Please select a source file");
-					HasCompileError = true;
 					return;
 				}
 				else if (!File.Exists(Options.SourceFile))
 				{
 					AddOutput(string.Format("File {0} does not exists", Options.SourceFile));
-					HasCompileError = true;
 					return;
 				}
 
 				var inputFiles = new List<FileInfo>();
 				inputFiles.Add(new FileInfo(Options.SourceFile));
 
-				Compiler.Load(inputFiles);
+				compiler.Load(inputFiles);
 
 				var threads = Options.UseMultipleThreadCompiler ? Environment.ProcessorCount : 1;
-				Compiler.Execute(threads);
+				compiler.Execute(threads);
+
+				Linker = compiler.Linker;
+				TypeSystem = compiler.TypeSystem;
 
 				if (Options.ImageFormat == ImageFormat.ISO)
 				{
 					if (Options.BootLoader == BootLoader.Grub_0_97 || Options.BootLoader == BootLoader.Grub_2_00)
 					{
-						CreateISOImageWithGrub(compiledFile);
+						CreateISOImageWithGrub(CompiledFile);
 					}
 					else // assuming syslinux
 					{
-						CreateISOImageWithSyslinux(compiledFile);
+						CreateISOImageWithSyslinux(CompiledFile);
 					}
 				}
 				else
 				{
-					CreateDiskImage(compiledFile);
+					CreateDiskImage(CompiledFile);
 
 					if (Options.ImageFormat == ImageFormat.VMDK)
 					{
-						CreateVMDK(imageFile);
+						CreateVMDK(ImageFile);
 					}
 				}
+
+				HasCompileError = false;
 
 				if (Options.GenerateASMFile)
 				{
@@ -165,28 +160,9 @@ namespace Mosa.Utility.Launcher
 			}
 			finally
 			{
-				Compiler.Dispose();
-				Compiler = null;
+				compiler.Dispose();
+				compiler = null;
 			}
-		}
-
-		protected byte[] GetResource(string path, string name)
-		{
-			var newname = path.Replace(".", "._").Replace(@"\", "._").Replace(@"/", "._").Replace(@"-", "_") + "." + name;
-			return GetResource(newname);
-		}
-
-		protected byte[] GetResource(string name)
-		{
-			var assembly = Assembly.GetExecutingAssembly();
-			var stream = assembly.GetManifestResourceStream("Mosa.Utility.Launcher.Resources." + name);
-			var binary = new BinaryReader(stream);
-			return binary.ReadBytes((int)stream.Length);
-		}
-
-		protected static string Quote(string location)
-		{
-			return '"' + location + '"';
 		}
 
 		private void CreateDiskImage(string compiledFile)
@@ -225,9 +201,9 @@ namespace Mosa.Utility.Launcher
 				default: break;
 			}
 
-			imageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + vmext);
+			ImageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + vmext);
 
-			bootImageOptions.DiskImageFileName = imageFile;
+			bootImageOptions.DiskImageFileName = ImageFile;
 			bootImageOptions.PatchSyslinuxOption = true;
 			bootImageOptions.FileSystem = Options.FileSystem;
 			bootImageOptions.ImageFormat = Options.ImageFormat;
@@ -263,21 +239,19 @@ namespace Mosa.Utility.Launcher
 			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetResource(@"syslinux", "syslinux.cfg"));
 			File.Copy(compiledFile, Path.Combine(isoDirectory, "main.exe"));
 
-			imageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".iso");
+			ImageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".iso");
 
 			string arg =
 				"-relaxed-filenames" +
 				" -J -R" +
-				" -o " + Quote(imageFile) +
+				" -o " + Quote(ImageFile) +
 				" -b isolinux.bin" +
 				" -no-emul-boot" +
 				" -boot-load-size 4" +
 				" -boot-info-table " +
 				Quote(isoDirectory);
 
-			var output = LaunchApplication(AppLocations.mkisofs, arg, true);
-
-			AddOutput(output);
+			LaunchApplication(AppLocations.mkisofs, arg, true);
 		}
 
 		private void CreateISOImageWithGrub(string compiledFile)
@@ -319,21 +293,19 @@ namespace Mosa.Utility.Launcher
 
 			File.Copy(compiledFile, Path.Combine(isoDirectory, "boot", "main.exe"));
 
-			imageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".iso");
+			ImageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".iso");
 
 			string arg =
 				"-relaxed-filenames" +
 				" -J -R" +
-				" -o " + Quote(imageFile) +
+				" -o " + Quote(ImageFile) +
 				" -b " + Quote(loader) +
 				" -no-emul-boot" +
 				" -boot-load-size 4" +
 				" -boot-info-table " +
 				Quote(isoDirectory);
 
-			var output = LaunchApplication(AppLocations.mkisofs, arg, true);
-
-			AddOutput(output);
+			LaunchApplication(AppLocations.mkisofs, arg, true);
 		}
 
 		private void CreateVMDK(string compiledFile)
@@ -346,203 +318,25 @@ namespace Mosa.Utility.Launcher
 				" raw" +
 				" -O" +
 				" vmdk " +
-				Quote(imageFile) + " " +
+				Quote(ImageFile) + " " +
 				Quote(vmdkFile);
 
-			var output = LaunchApplication(AppLocations.QEMUImg, arg, true);
+			ImageFile = vmdkFile;
 
-			AddOutput(output);
-
-			imageFile = vmdkFile;
-		}
-
-		private string LaunchApplication(string app, string args, bool waitForExit)
-		{
-			AddOutput("Launching Application: " + app);
-			AddOutput("Arguments: " + args);
-
-			var start = new ProcessStartInfo();
-			start.FileName = app;
-			start.Arguments = args;
-			start.UseShellExecute = false;
-			start.CreateNoWindow = true;
-			start.RedirectStandardOutput = true;
-			start.RedirectStandardError = true;
-
-			var process = Process.Start(start);
-
-			if (waitForExit)
-			{
-				var output = process.StandardOutput.ReadToEnd();
-
-				process.WaitForExit();
-
-				var error = process.StandardError.ReadToEnd();
-				return output + error;
-			}
-
-			return string.Empty;
+			LaunchApplication(AppLocations.QEMUImg, arg, true);
 		}
 
 		private void LaunchNDISASM()
 		{
-			string arg =
-				"-b 32 -o0x400030 -e 0x1030 " + Quote(compiledFile);
-
-			var output = LaunchApplication(AppLocations.NDISASM, arg, true);
+			string arg = "-b 32 -o0x400030 -e 0x1030 " + Quote(CompiledFile);
 
 			var asmfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".asm");
 
+			var process = LaunchApplication(AppLocations.NDISASM, arg);
+
+			var output = GetOutput(process);
+
 			File.WriteAllText(asmfile, output);
-		}
-
-		public void Launch()
-		{
-			switch (Options.Emulator)
-			{
-				case EmulatorType.Qemu: LaunchQemu(Options.ExitOnLaunch); break;
-				case EmulatorType.Bochs: LaunchBochs(Options.ExitOnLaunch); break;
-				case EmulatorType.VMware: LaunchVMwarePlayer(Options.ExitOnLaunch); break;
-				default: throw new InvalidOperationException();
-			}
-		}
-
-		private void LaunchQemu(bool exit)
-		{
-			string arg =
-				" -L " + Quote(AppLocations.QEMUBIOSDirectory);
-
-			if (Options.ImageFormat == ImageFormat.ISO)
-			{
-				arg = arg +
-					" -cdrom " + Quote(imageFile);
-			}
-			else
-			{
-				arg = arg +
-					" -hda " + Quote(imageFile);
-			}
-
-			if (Options.PlatformType == PlatformType.X86)
-			{
-				arg = arg + " -cpu qemu32,+sse4.1";
-			}
-
-			//arg = arg + " -vga vmware";
-
-			if (Options.DebugConnectionOption == DebugConnectionOption.Pipe)
-			{
-				arg = arg + " -serial pipe:MOSA";
-			}
-			else if (Options.DebugConnectionOption == DebugConnectionOption.TCPServer)
-			{
-				arg = arg + " -serial tcp:127.0.0.1:9999,server,nowait,nodelay";
-			}
-			else if (Options.DebugConnectionOption == DebugConnectionOption.TCPClient)
-			{
-				arg = arg + " -serial tcp:127.0.0.1:9999,client,nowait";
-			}
-
-			//arg = arg + " -boot menu=on";
-
-			var output = LaunchApplication(AppLocations.QEMU, arg, !exit);
-
-			AddOutput(output);
-		}
-
-		private void LaunchBochs(bool exit)
-		{
-			var logfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + "-bochs.log");
-			var configfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bxrc");
-			var exeDir = Path.GetDirectoryName(AppLocations.BOCHS);
-
-			var fileVersionInfo = FileVersionInfo.GetVersionInfo(AppLocations.BOCHS);
-
-			// simd or sse
-			var simd = "simd";
-
-			if (!(fileVersionInfo.FileMajorPart >= 2 && fileVersionInfo.FileMinorPart >= 6 && fileVersionInfo.FileBuildPart >= 5))
-				simd = "sse";
-
-			var sb = new StringBuilder();
-
-			sb.AppendLine("megs: " + Options.MemoryInMB.ToString());
-			sb.AppendLine("ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
-			sb.AppendLine("cpuid: mmx=1,sep=1," + simd + "=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1");
-			sb.AppendLine("boot: cdrom,disk");
-			sb.AppendLine("log: " + Quote(logfile));
-			sb.AppendLine("romimage: file=" + Quote(Path.Combine(exeDir, "BIOS-bochs-latest")));
-			sb.AppendLine("vgaromimage: file=" + Quote(Path.Combine(exeDir, "VGABIOS-lgpl-latest")));
-
-			if (Options.ImageFormat == ImageFormat.ISO)
-			{
-				sb.AppendLine("ata0-master: type=cdrom,path=" + Quote(imageFile) + ",status=inserted");
-			}
-			else
-			{
-				sb.AppendLine("ata0-master: type=disk,path=" + Quote(imageFile) + ",biosdetect=none,cylinders=0,heads=0,spt=0");
-			}
-
-			if (Options.DebugConnectionOption == DebugConnectionOption.Pipe)
-			{
-				sb.AppendLine(@"com1: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA");
-			}
-
-			File.WriteAllText(configfile, sb.ToString());
-
-			string arg =
-				"-q " +
-				"-f " + Quote(configfile);
-
-			var output = LaunchApplication(AppLocations.BOCHS, arg, !exit);
-
-			AddOutput(output);
-		}
-
-		private void LaunchVMwarePlayer(bool exit)
-		{
-			var logfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + "-vmx.log");
-			var configfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".vmx");
-
-			var sb = new StringBuilder();
-
-			sb.AppendLine(".encoding = \"windows-1252\"");
-			sb.AppendLine("config.version = \"8\"");
-			sb.AppendLine("virtualHW.version = \"4\"");
-			sb.AppendLine("memsize = " + Quote(Options.MemoryInMB.ToString()));
-
-			sb.AppendLine("displayName = \"MOSA - " + Path.GetFileNameWithoutExtension(Options.SourceFile) + "\"");
-			sb.AppendLine("guestOS = \"other\"");
-			sb.AppendLine("priority.grabbed = \"normal\"");
-			sb.AppendLine("priority.ungrabbed = \"normal\"");
-			sb.AppendLine("virtualHW.productCompatibility = \"hosted\"");
-			sb.AppendLine("ide0:0.present = \"TRUE\"");
-			sb.AppendLine("ide0:0.fileName = " + Quote(imageFile));
-
-			if (Options.ImageFormat == ImageFormat.ISO)
-			{
-				sb.AppendLine("ide0:0.deviceType = \"cdrom-image\"");
-			}
-
-			sb.AppendLine("floppy0.present = \"FALSE\"");
-
-			if (Options.DebugConnectionOption == DebugConnectionOption.Pipe)
-			{
-				sb.AppendLine("serial0.present = \"TRUE\"");
-				sb.AppendLine("serial0.yieldOnMsrRead = \"FALSE\"");
-				sb.AppendLine("serial0.fileType = \"pipe\"");
-				sb.AppendLine("serial0.fileName = \"\\\\.\\pipe\\MOSA\"");
-				sb.AppendLine("serial0.pipe.endPoint = \"server\"");
-				sb.AppendLine("serial0.tryNoRxLoss = \"FALSE\"");
-			}
-
-			File.WriteAllText(configfile, sb.ToString());
-
-			string arg = Quote(configfile);
-
-			var output = LaunchApplication(AppLocations.VMwarePlayer, arg, !exit);
-
-			AddOutput(output);
 		}
 
 		/// <summary>

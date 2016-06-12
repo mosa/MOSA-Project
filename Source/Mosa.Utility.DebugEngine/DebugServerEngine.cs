@@ -15,9 +15,12 @@ namespace Mosa.Utility.DebugEngine
 		private Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
 		private int nextID = 0;
 
-		private byte[] data = new byte[1];
-		private object receiver;
-		private SenderMesseageDelegate dispatchMethod;
+		private List<byte> buffer = new List<byte>();
+
+		private SenderMessageDelegate dispatchMethod;
+		private byte[] receivedData = new byte[1];
+
+		private int length = -1;
 
 		public Stream Stream
 		{
@@ -28,8 +31,11 @@ namespace Mosa.Utility.DebugEngine
 			set
 			{
 				stream = value;
+
 				if (IsConnected)
-					stream.BeginRead(data, 0, 1, ReadAsyncCallback, null);
+				{
+					stream.BeginRead(receivedData, 0, 1, ReadAsyncCallback, null);
+				}
 			}
 		}
 
@@ -38,9 +44,8 @@ namespace Mosa.Utility.DebugEngine
 			stream = null;
 		}
 
-		public void SetDispatchMethod(object receiver, SenderMesseageDelegate receiverMethod)
+		public void SetDispatchMethod(SenderMessageDelegate receiverMethod)
 		{
-			this.receiver = receiver;
 			dispatchMethod = receiverMethod;
 		}
 
@@ -109,14 +114,14 @@ namespace Mosa.Utility.DebugEngine
 			}
 			else
 			{
-				SendInteger(message.CommandData.Length);
+				SendInteger(message.CommandData.Count);
 				SendInteger(message.Checksum);
 				foreach (var b in message.CommandData)
 					SendByte(b);
 			}
 		}
 
-		private void PostResponse(int id, int code, byte[] data)
+		private void PostResponse(int id, int code, List<byte> data)
 		{
 			lock (sync)
 			{
@@ -153,9 +158,9 @@ namespace Mosa.Utility.DebugEngine
 			int len = GetInteger(12);
 			int checksum = GetInteger(16);
 
-			var data = new byte[len];
+			var data = new List<byte>();
 			for (int i = 0; i < len; i++)
-				data[i] = buffer[i + 20];
+				data.Add(buffer[i + 20]);
 
 			PostResponse(id, code, data);
 
@@ -164,24 +169,14 @@ namespace Mosa.Utility.DebugEngine
 
 		// Message format:	[MAGIC]-ID-CODE-LEN-CHECKSUM-DATA
 
-		private byte[] buffer = new byte[4096 + 5 * 4 + 1];
-		private int index = 0;
-		private int length = -1;
-
 		private void BadDataAbort()
 		{
-			var data = new byte[index];
-			for (int i = 0; i < index; i++)
-				data[i] = buffer[i];
+			var data = buffer;
 
-			PostResponse(0, Codes.UnknownData, data);
+			buffer = new List<byte>();
 
-			ResetBuffer();
-		}
+			PostResponse(0, DebugCode.UnknownData, data);
 
-		private void ResetBuffer()
-		{
-			index = 0;
 			length = -1;
 		}
 
@@ -189,13 +184,13 @@ namespace Mosa.Utility.DebugEngine
 		{
 			bool bad = false;
 
-			if (index == 0 && b != (byte)'M')
+			if (buffer.Count == 0 && b != (byte)'M')
 				bad = true;
-			else if (index == 1 && b != (byte)'O')
+			else if (buffer.Count == 1 && b != (byte)'O')
 				bad = true;
-			else if (index == 2 && b != (byte)'S')
+			else if (buffer.Count == 2 && b != (byte)'S')
 				bad = true;
-			else if (index == 3 && b != (byte)'A')
+			else if (buffer.Count == 3 && b != (byte)'A')
 				bad = true;
 
 			if (bad)
@@ -204,23 +199,24 @@ namespace Mosa.Utility.DebugEngine
 				return;
 			}
 
-			buffer[index++] = b;
+			buffer.Add(b);
 
-			if (index >= 16 && length == -1)
+			if (buffer.Count >= 16 && length == -1)
 			{
 				length = GetInteger(12);
 			}
 
-			if (length > 4096 || index > 4096)
+			if (length > 4096 || buffer.Count > 4096)
 			{
 				BadDataAbort();
 				return;
 			}
 
-			if (length + 20 == index)
+			if (length + 20 == buffer.Count)
 			{
 				bool valid = ParseResponse();
-				ResetBuffer();
+				buffer.Clear();
+				length = -1;
 			}
 		}
 
@@ -230,9 +226,9 @@ namespace Mosa.Utility.DebugEngine
 			{
 				stream.EndRead(ar);
 
-				Push(data[0]);
+				Push(receivedData[0]);
 
-				stream.BeginRead(data, 0, 1, ReadAsyncCallback, null);
+				stream.BeginRead(receivedData, 0, 1, ReadAsyncCallback, null);
 			}
 			catch
 			{

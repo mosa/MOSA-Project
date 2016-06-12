@@ -79,6 +79,12 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MethodCaller.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MethodCaller.Designer.cs">
+      <DependentUpon>MethodCaller.cs</DependentUpon>
+    </Compile>
     <Compile Include="MemoryView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +104,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MethodCaller.resx">
+      <DependentUpon>MethodCaller.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MemoryView.resx">
       <DependentUpon>MemoryView.cs</DependentUpon>

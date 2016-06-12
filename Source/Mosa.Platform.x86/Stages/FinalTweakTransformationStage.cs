@@ -196,6 +196,9 @@ namespace Mosa.Platform.x86.Stages
 			if (before == null || before.IsBlockStartInstruction)
 				return;
 
+			if (before.Instruction != X86.Mov)
+				return;
+
 			if (!before.Result.IsCPURegister)
 				return;
 
