@@ -11,7 +11,7 @@ namespace Mosa.Kernel.x86
 	{
 		#region Codes
 
-		public static class Codes
+		public static class DebugCode
 		{
 			public const int Connecting = 10;
 			public const int Connected = 11;
@@ -20,15 +20,19 @@ namespace Mosa.Kernel.x86
 			public const int UnknownData = 99;
 
 			public const int Alive = 1000;
-			public const int Ping = 1001;
-			public const int InformationalMessage = 1002;
-			public const int WarningMessage = 1003;
-			public const int ErrorMessage = 1004;
-			public const int SendNumber = 1005;
+			public const int Ready = 1001;
+			public const int Ping = 1002;
+			public const int InformationalMessage = 1003;
+			public const int WarningMessage = 1004;
+			public const int ErrorMessage = 1005;
+			public const int SendNumber = 1006;
 			public const int ReadMemory = 1010;
 			public const int WriteMemory = 1011;
 			public const int ReadCR3 = 1012;
 			public const int Scattered32BitReadMemory = 1013;
+
+			public const int ExecuteUnitTest = 2000;
+			public const int AbortUnitTest = 2001;
 		}
 
 		#endregion Codes
@@ -37,18 +41,26 @@ namespace Mosa.Kernel.x86
 
 		private static ushort com = Serial.COM1;
 
-		private static uint buffer = 0x04000;
 		private static uint index = 0;
 		private static int length = -1;
 
 		private static uint last = 0;
-		private static bool busy = false;
+
+		private static bool ready = false;
+		private static bool readysent = false;
 
 		public static void Setup(ushort com)
 		{
 			enabled = true;
+			ready = false;
+			readysent = false;
 			Serial.SetupPort(com);
 			DebugClient.com = com;
+		}
+
+		public static void Ready()
+		{
+			ready = true;
 		}
 
 		private static void SendByte(int i)
@@ -69,6 +81,12 @@ namespace Mosa.Kernel.x86
 			SendInteger((int)i);
 		}
 
+		private static void SendInteger(ulong i)
+		{
+			SendInteger((uint)(i & 0xFFFFFFFF));
+			SendInteger((uint)((i >> 32) & 0xFFFFFFFF));
+		}
+
 		private static void SendMagic()
 		{
 			SendByte('M');
@@ -79,45 +97,52 @@ namespace Mosa.Kernel.x86
 
 		// MAGIC-ID-CODE-LEN-CHECKSUM-DATA
 
-		public static void SendResponse(int id, int code)
+		private static void SendResponse(int id, int code)
 		{
-			busy = true;
 			SendMagic();
 			SendInteger(id);
 			SendInteger(code);
 			SendInteger(0);
 			SendInteger(0); // TODO: not implemented
-			busy = false;
 		}
 
-		public static void SendResponse(int id, int code, int data)
+		private static void SendResponse(int id, int code, int data)
 		{
-			busy = true;
 			SendMagic();
 			SendInteger(id);
 			SendInteger(code);
 			SendInteger(4);
 			SendInteger(0); // TODO: not implemented
 			SendInteger(data);
-			busy = false;
 		}
 
-		public static void SendResponse(int id, int code, int len, int magic)
+		private static void SendResponse(int id, int code, ulong data)
 		{
-			busy = true;
+			SendMagic();
+			SendInteger(id);
+			SendInteger(code);
+			SendInteger(8);
+			SendInteger(0); // TODO: not implemented
+			SendInteger(data);
+		}
+
+		private static void SendResponse(int id, int code, int len, int magic)
+		{
 			SendMagic();
 			SendInteger(id);
 			SendInteger(code);
 			SendInteger(len);
 			SendInteger(magic);
-			busy = false;
 		}
 
-		public static void SendAlive()
+		private static void SendAlive()
 		{
-			busy = true;
-			SendResponse(0, Codes.Alive);
-			busy = false;
+			SendResponse(0, DebugCode.Alive);
+		}
+
+		private static void SendReady()
+		{
+			SendResponse(0, DebugCode.Ready);
 		}
 
 		private static void BadDataAbort()
@@ -133,12 +158,12 @@ namespace Mosa.Kernel.x86
 
 		private static byte GetByte(uint offset)
 		{
-			return Native.Get8(buffer + offset);
+			return Native.Get8(Address.DebuggerBuffer + offset);
 		}
 
 		private static int GetInt32(uint offset)
 		{
-			return (Native.Get8(buffer + offset + 3) << 24) | (Native.Get8(buffer + offset + 2) << 16) | (Native.Get8(buffer + offset + 1) << 8) | Native.Get8(buffer + offset + 0);
+			return (Native.Get8(Address.DebuggerBuffer + offset + 3) << 24) | (Native.Get8(Address.DebuggerBuffer + offset + 2) << 16) | (Native.Get8(Address.DebuggerBuffer + offset + 1) << 8) | Native.Get8(Address.DebuggerBuffer + offset + 0);
 		}
 
 		private static uint GetUInt32(uint offset)
@@ -146,24 +171,38 @@ namespace Mosa.Kernel.x86
 			return (uint)GetInt32(offset);
 		}
 
-		public static void Process()
+		public static void Process(uint interrupt)
 		{
 			if (!enabled)
 				return;
 
-			if (!busy)
+			if (UnitTestRunner.CheckResultsReady())
 			{
-				byte second = CMOS.Second;
-
-				if (second % 10 != 5 & last != second)
-				{
-					last = CMOS.Second;
-					SendAlive();
-				}
+				SendTestUnitResponse();
+				return;
 			}
 
+			byte second = CMOS.Second;
+
+			if (second % 10 != 5 & last != second)
+			{
+				last = CMOS.Second;
+				SendAlive();
+			}
+
+			if (ready & !readysent)
+			{
+				readysent = true;
+				SendReady();
+			}
+
+			while (ProcessSerial()) ;
+		}
+
+		private static bool ProcessSerial()
+		{
 			if (!Serial.IsDataReady(com))
-				return;
+				return false;
 
 			byte b = Serial.Read(com);
 
@@ -181,10 +220,10 @@ namespace Mosa.Kernel.x86
 			if (bad)
 			{
 				BadDataAbort();
-				return;
+				return true;
 			}
 
-			Native.Set8(buffer + index, b);
+			Native.Set8(Address.DebuggerBuffer + index, b);
 			index++;
 
 			if (index >= 16 && length == -1)
@@ -195,15 +234,16 @@ namespace Mosa.Kernel.x86
 			if (length > 4096 || index > 4096)
 			{
 				BadDataAbort();
-				return;
+				return true;
 			}
 
 			if (length + 20 == index)
 			{
 				ProcessCommand();
-
 				ResetBuffer();
 			}
+
+			return true;
 		}
 
 		private static void ProcessCommand()
@@ -217,11 +257,14 @@ namespace Mosa.Kernel.x86
 
 			switch (code)
 			{
-				case Codes.Ping: SendResponse(id, Codes.Ping); return;
-				case Codes.ReadMemory: ReadMemory(); return;
-				case Codes.ReadCR3: SendResponse(id, Codes.ReadCR3, (int)Native.GetCR3()); return;
-				case Codes.Scattered32BitReadMemory: Scattered32BitReadMemory(); return;
-				case Codes.WriteMemory: WriteMemory(); return;
+				case DebugCode.Ping: SendResponse(id, DebugCode.Ping); return;
+				case DebugCode.ReadMemory: ReadMemory(); return;
+				case DebugCode.ReadCR3: SendResponse(id, DebugCode.ReadCR3, (int)Native.GetCR3()); return;
+				case DebugCode.Scattered32BitReadMemory: Scattered32BitReadMemory(); return;
+				case DebugCode.WriteMemory: WriteMemory(); return;
+				case DebugCode.ExecuteUnitTest: ExecuteUnitTest(); return;
+				case DebugCode.AbortUnitTest: AbortUnitTest(); return;
+
 				default: return;
 			}
 		}
@@ -232,7 +275,7 @@ namespace Mosa.Kernel.x86
 			uint start = (uint)GetInt32(20);
 			uint bytes = (uint)GetInt32(24);
 
-			SendResponse(id, Codes.ReadMemory, (int)(bytes + 8), 0);
+			SendResponse(id, DebugCode.ReadMemory, (int)(bytes + 8), 0);
 
 			SendInteger(start); // starting address
 			SendInteger(bytes); // bytes
@@ -248,7 +291,7 @@ namespace Mosa.Kernel.x86
 			int id = GetInt32(4);
 			int count = GetInt32(12) / 4;
 
-			SendResponse(id, Codes.Scattered32BitReadMemory, count * 8, 0);
+			SendResponse(id, DebugCode.Scattered32BitReadMemory, count * 8, 0);
 
 			for (uint i = 0; i < count; i++)
 			{
@@ -264,7 +307,7 @@ namespace Mosa.Kernel.x86
 			uint start = GetUInt32(20);
 			uint bytes = GetUInt32(24);
 
-			SendResponse(id, Codes.WriteMemory);
+			SendResponse(id, DebugCode.WriteMemory);
 
 			uint at = 0;
 
@@ -285,6 +328,44 @@ namespace Mosa.Kernel.x86
 
 				at = at + 1;
 			}
+		}
+
+		private static void ExecuteUnitTest()
+		{
+			int id = GetInt32(4);
+
+			uint address = GetUInt32(20);
+			uint type = GetUInt32(24);
+			uint paramcnt = GetUInt32(28);
+
+			UnitTestRunner.SetUnitTestMethodAddress(address);
+			UnitTestRunner.SetUnitTestResultType(type);
+			UnitTestRunner.SetUnitTestMethodParameterCount(paramcnt);
+
+			for (uint index = 0; index < paramcnt; index++)
+			{
+				uint value = GetUInt32(32 + (index * 4));
+				UnitTestRunner.SetUnitTestMethodParameter(index, value);
+			}
+
+			UnitTestRunner.StartTest(id);
+		}
+
+		private static void SendTestUnitResponse()
+		{
+			ulong result = UnitTestRunner.GetResults();
+			int id = UnitTestRunner.GetTestID();
+
+			SendResponse(id, DebugCode.ExecuteUnitTest, result);
+		}
+
+		private static void AbortUnitTest()
+		{
+			int id = GetInt32(4);
+
+			UnitTestRunner.AbortUnitTest();
+
+			SendResponse(id, DebugCode.AbortUnitTest);
 		}
 	}
 }

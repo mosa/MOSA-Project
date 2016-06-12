@@ -51,6 +51,12 @@ namespace Mosa.Utility.Launcher
 
 		public DebugConnectionOption DebugConnectionOption { get; set; }
 
+		public int DebugConnectionPort { get; set; }
+
+		public string DebugConnectionAddress { get; set; }
+
+		public string DebugPipeName { get; set; }
+
 		public bool UseMultipleThreadCompiler { get; set; }
 
 		public BootLoader BootLoader { get; set; }
@@ -80,6 +86,9 @@ namespace Mosa.Utility.Launcher
 			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
 			FileSystem = FileSystem.FAT16;
 			DebugConnectionOption = DebugConnectionOption.None;
+			DebugConnectionPort = 9999;
+			DebugConnectionAddress = "127.0.0.1";
+			DebugPipeName = "MOSA";
 			UseMultipleThreadCompiler = true;
 			EnableInlinedMethods = true;
 			InlinedIRMaximum = 8;

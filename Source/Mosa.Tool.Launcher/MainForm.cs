@@ -10,9 +10,11 @@ using System.Windows.Forms;
 
 namespace Mosa.Tool.Launcher
 {
-	public partial class MainForm : Form, IBuilderEvent
+	public partial class MainForm : Form, IBuilderEvent, IStarterEvent
 	{
 		public Builder Builder { get; private set; }
+
+		public Starter Starter { get; private set; }
 
 		public Options Options { get; private set; }
 
@@ -259,6 +261,16 @@ namespace Mosa.Tool.Launcher
 			Invoke(method);
 		}
 
+		void IStarterEvent.NewStatus(string status)
+		{
+			MethodInvoker method = delegate ()
+			{
+				NewStatus(status);
+			};
+
+			Invoke(method);
+		}
+
 		private void UpdateProgress(int total, int at)
 		{
 			progressBar1.Maximum = total;
@@ -283,7 +295,7 @@ namespace Mosa.Tool.Launcher
 			Refresh();
 
 			if (Options.AutoLaunch)
-				CompileAndLaunch();
+				CompileBuildAndStart();
 		}
 
 		public void AddOutput(string data)
@@ -333,14 +345,15 @@ namespace Mosa.Tool.Launcher
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
 			if (keyData == Keys.F5)
-				CompileAndLaunch();
-			if (keyData == Keys.F6)
-				Builder.Launch();
+				CompileBuildAndStart();
+
+			//if (keyData == Keys.F6)
+			//	Builder.Launch();
 
 			return base.ProcessCmdKey(ref msg, keyData);
 		}
 
-		private void CompileAndLaunch()
+		private void CompileBuildAndStart()
 		{
 			//Options.SaveFile(ConfigFile);
 			rtbOutput.Clear();
@@ -400,7 +413,9 @@ namespace Mosa.Tool.Launcher
 			if (CheckKeyPressed())
 				return;
 
-			Builder.Launch();
+			Starter = new Starter(Options, AppLocations, Builder.ImageFile, this);
+
+			Starter.Launch();
 
 			if (Options.ExitOnLaunch)
 			{
@@ -421,7 +436,7 @@ namespace Mosa.Tool.Launcher
 
 			if (result == null)
 			{
-				CompileAndLaunch();
+				CompileBuildAndStart();
 			}
 			else
 			{

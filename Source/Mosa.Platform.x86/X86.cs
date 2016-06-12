@@ -488,5 +488,15 @@ namespace Mosa.Platform.x86
 		///
 		/// </summary>
 		public static readonly Btr Btr = new Btr();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly Pextrd Pextrd = new Pextrd();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly Movd Movd = new Movd();
 	}
 }

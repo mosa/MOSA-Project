@@ -288,20 +288,10 @@ namespace Mosa.HelloWorld.x86
 
 			Console.Goto(12, 0);
 
-			byte last = 0;
-
 			while (true)
 			{
 				DisplayCMOS();
 				DisplayTime();
-
-				byte second = CMOS.Second;
-
-				if (second % 10 != 5 & last != second)
-				{
-					last = CMOS.Second;
-					DebugClient.SendAlive();
-				}
 
 				Native.Hlt();
 			}

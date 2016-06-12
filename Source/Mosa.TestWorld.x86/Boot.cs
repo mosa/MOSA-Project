@@ -101,17 +101,8 @@ namespace Mosa.TestWorld.x86
 
 		public static void Process()
 		{
-			byte last = 0;
-
 			while (true)
 			{
-				if (CMOS.Second != last)
-				{
-					last = CMOS.Second;
-					DebugClient.SendAlive();
-					Screen.Write('.');
-				}
-
 				Native.Hlt();
 			}
 		}
@@ -203,17 +194,9 @@ namespace Mosa.TestWorld.x86
 
 			DebugClient.Setup(Serial.COM1);
 
-			byte last = 0;
-
 			while (true)
 			{
-				byte second = CMOS.Second;
-
-				if (second % 10 != 5 & last != second)
-				{
-					last = CMOS.Second;
-					DebugClient.SendAlive();
-				}
+				Native.Hlt();
 			}
 		}
 
