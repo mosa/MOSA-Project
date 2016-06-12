@@ -2,9 +2,9 @@
 
 using Xunit;
 
-namespace Mosa.Test.Collection.x86.xUnit
+namespace Mosa.Test.Collection.xUnit
 {
-	public class ListFixture : X86TestFixture
+	public class ListFixture : TestFixture
 	{
 		[Fact]
 		public void Create()
