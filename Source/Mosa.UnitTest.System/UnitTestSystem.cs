@@ -148,7 +148,14 @@ namespace Mosa.UnitTest.System
 				retries++;
 				ready = false;
 
-				Connect();
+				try
+				{
+					Connect();
+				}
+				catch
+				{
+					Thread.Sleep(100);
+				}
 			}
 		}
 

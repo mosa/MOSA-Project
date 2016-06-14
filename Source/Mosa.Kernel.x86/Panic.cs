@@ -50,7 +50,8 @@ namespace Mosa.Kernel.x86
 		{
 			IDT.SetInterruptHandler(null);
 			Screen.BackgroundColor = Colors.Black;
-			Screen.Clear();
+
+			//Screen.Clear();
 			Screen.Goto(1, 1);
 			Screen.Color = Colors.LightGray;
 			Screen.Write("*** ");

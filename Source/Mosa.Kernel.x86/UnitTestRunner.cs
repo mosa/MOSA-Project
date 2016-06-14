@@ -26,7 +26,13 @@ namespace Mosa.Kernel.x86
 
 		public static void Setup()
 		{
-			ResetUnitTest();
+			testReady = 0;
+			testResult = 0;
+			testResultReported = 1;
+
+			testID = 0;
+			testParameters = 0;
+			testMethodAddress = 0;
 		}
 
 		public static void EnterTestReadyLoop()
@@ -57,12 +63,15 @@ namespace Mosa.Kernel.x86
 					Screen.Row = row;
 					Screen.Column = 0;
 
+					Screen.Write("Test #: ");
 					Screen.Write(++testCount, 10, 7);
+					Screen.Write(" ID: ");
+					Screen.Write((uint)testID, 10, 7);
 
-					testReady = 0;
 					testResult = 0;
 					testResultReady = 0;
 					testResultReported = 0;
+					testReady = 0;
 
 					// copy parameters into stack
 					for (uint index = 0; index < testParameters; index++)
@@ -86,16 +95,6 @@ namespace Mosa.Kernel.x86
 					Native.Int(255);
 				}
 			}
-		}
-
-		public static void ResetUnitTest()
-		{
-			testReady = 0;
-			testID = 0;
-			testParameters = 0;
-			testMethodAddress = 0;
-
-			testResult = 0;
 		}
 
 		public static void SetUnitTestMethodParameter(uint index, uint value)
@@ -125,23 +124,22 @@ namespace Mosa.Kernel.x86
 			testReady = 1;
 		}
 
-		public static int GetTestID()
+		public static bool IsReady()
 		{
-			return testID;
+			return (testResultReported == 1 && testReady == 0);
 		}
 
-		public static ulong GetResults()
+		public static bool GetResult(out ulong result, out int id)
 		{
-			return testResult;
-		}
+			result = testResult;
+			id = testID;
 
-		public static bool CheckResultsReady()
-		{
 			if (testReady == 0 && testResultReady == 1 && testResultReported == 0)
 			{
 				testResultReported = 1;
 				return true;
 			}
+
 			return false;
 		}
 	}

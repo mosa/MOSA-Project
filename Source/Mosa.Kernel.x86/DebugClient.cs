@@ -176,10 +176,10 @@ namespace Mosa.Kernel.x86
 			if (!enabled)
 				return;
 
-			if (UnitTestRunner.CheckResultsReady())
+			if (ready)
 			{
 				SendTestUnitResponse();
-				return;
+				ProcessTestUnit();
 			}
 
 			byte second = CMOS.Second;
@@ -197,6 +197,11 @@ namespace Mosa.Kernel.x86
 			}
 
 			while (ProcessSerial()) ;
+
+			if (ready)
+			{
+				ProcessTestUnit();
+			}
 		}
 
 		private static bool ProcessSerial()
@@ -262,7 +267,7 @@ namespace Mosa.Kernel.x86
 				case DebugCode.ReadCR3: SendResponse(id, DebugCode.ReadCR3, (int)Native.GetCR3()); return;
 				case DebugCode.Scattered32BitReadMemory: Scattered32BitReadMemory(); return;
 				case DebugCode.WriteMemory: WriteMemory(); return;
-				case DebugCode.ExecuteUnitTest: ExecuteUnitTest(); return;
+				case DebugCode.ExecuteUnitTest: QueueUnitTest(); return;
 
 				default: return;
 			}
@@ -329,33 +334,30 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		private static void ExecuteUnitTest()
+		private static void QueueUnitTest()
 		{
 			int id = GetInt32(4);
 
-			uint address = GetUInt32(20);
-			uint type = GetUInt32(24);
-			uint paramcnt = GetUInt32(28);
+			var start = Address.DebuggerBuffer + 20;
+			uint end = start + (uint)length;
 
-			UnitTestRunner.SetUnitTestMethodAddress(address);
-			UnitTestRunner.SetUnitTestResultType(type);
-			UnitTestRunner.SetUnitTestMethodParameterCount(paramcnt);
-
-			for (uint index = 0; index < paramcnt; index++)
-			{
-				uint value = GetUInt32(32 + (index * 4));
-				UnitTestRunner.SetUnitTestMethodParameter(index, value);
-			}
-
-			UnitTestRunner.StartTest(id);
+			UnitTestQueue.QueueUnitTest(id, start, end);
 		}
 
 		private static void SendTestUnitResponse()
 		{
-			ulong result = UnitTestRunner.GetResults();
-			int id = UnitTestRunner.GetTestID();
+			ulong result;
+			int id;
 
-			SendResponse(id, DebugCode.ExecuteUnitTest, result);
+			if (UnitTestRunner.GetResult(out result, out id))
+			{
+				SendResponse(id, DebugCode.ExecuteUnitTest, result);
+			}
+		}
+
+		private static void ProcessTestUnit()
+		{
+			UnitTestQueue.ProcessQueue();
 		}
 	}
 }
