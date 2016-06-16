@@ -6,7 +6,7 @@ namespace Mosa.UnitTest.System
 {
 	public class UnitTestSystemFixture : IDisposable
 	{
-		public static UnitTestSystem UnitTestSystem { get; } = new UnitTestSystem();
+		public static UnitTestEngine UnitTestSystem { get; } = new UnitTestEngine();
 
 		public UnitTestSystemFixture()
 		{

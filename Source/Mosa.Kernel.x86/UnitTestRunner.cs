@@ -65,8 +65,6 @@ namespace Mosa.Kernel.x86
 
 					Screen.Write("Test #: ");
 					Screen.Write(++testCount, 10, 7);
-					Screen.Write(" ID: ");
-					Screen.Write((uint)testID, 10, 7);
 
 					testResult = 0;
 					testResultReady = 0;

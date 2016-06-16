@@ -50,9 +50,9 @@
       <Project>{067aab6b-447a-45ba-9e0d-dfea886b4f69}</Project>
       <Name>Mosa.Test.Collection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.UnitTest.System\Mosa.UnitTest.System.csproj">
+    <ProjectReference Include="..\Mosa.UnitTest.Engine\Mosa.UnitTest.Engine.csproj">
       <Project>{b0776c9d-7f3d-4e6e-8c5d-5f735326c7d7}</Project>
-      <Name>Mosa.UnitTest.System</Name>
+      <Name>Mosa.UnitTest.Engine</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj">
       <Project>{b69c2f31-5161-47aa-9fd3-2f2f2bccf659}</Project>

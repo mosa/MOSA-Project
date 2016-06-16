@@ -25,19 +25,6 @@ namespace Mosa.Kernel.x86
 
 		public static bool QueueUnitTest(int id, uint start, uint end)
 		{
-			//Screen.Row = 12;
-			//Screen.Column = 0;
-
-			//Screen.Write("Queue:  ");
-			//Screen.Write(" Tick: ");
-			//Screen.Write(tick++, 16, 4);
-			//Screen.Write(" Q.Next: ");
-			//Screen.Write(queueNext, 16, 8);
-			//Screen.Write(" Q.Current: ");
-			//Screen.Write(queueCurrent, 16, 8);
-			//Screen.Write(" Cnt: ");
-			//Screen.Write(count, 16, 4);
-
 			uint len = end - start;
 
 			if (queueNext + len + 32 >= Address.UnitTestQueueEnd)
@@ -49,14 +36,7 @@ namespace Mosa.Kernel.x86
 
 				// cycle to front
 				queueNext = Address.UnitTestQueueStart;
-
-				//Screen.Write(" Cycling");
 			}
-
-			//else
-			//{
-			//	Screen.Write("        ");
-			//}
 
 			Native.Set32(queueNext, len + 4);
 			queueNext = queueNext + 4;
@@ -74,41 +54,16 @@ namespace Mosa.Kernel.x86
 			Native.Set32(queueNext, 0); // mark end
 			count++;
 
-			//Screen.NextLine();
-			//Screen.Write("After:  ");
-			//Screen.Write(" Tick: ");
-			//Screen.Write(tick++, 16, 4);
-			//Screen.Write(" Q.Next: ");
-			//Screen.Write(queueNext, 16, 8);
-			//Screen.Write(" Q.Current: ");
-			//Screen.Write(queueCurrent, 16, 8);
-			//Screen.Write(" Cnt: ");
-			//Screen.Write(count, 16, 4);
-
 			return true;
 		}
 
 		public static void ProcessQueue()
 		{
-			//Screen.Row = 16;
-			//Screen.Column = 0;
-
 			if (queueNext == queueCurrent)
 				return;
 
-			//Screen.Write("Process:");
-			//Screen.Write(" Tick: ");
-			//Screen.Write(tick++, 16, 4);
-			//Screen.Write(" Q.Next: ");
-			//Screen.Write(queueNext, 16, 8);
-			//Screen.Write(" Q.Current: ");
-			//Screen.Write(queueCurrent, 16, 8);
-			//Screen.Write(" Cnt: ");
-			//Screen.Write(count, 16, 4);
-
 			if (!UnitTestRunner.IsReady())
 			{
-				//Screen.Write(" Not Ready ");
 				return;
 			}
 
@@ -117,14 +72,7 @@ namespace Mosa.Kernel.x86
 			if (marker == uint.MaxValue)
 			{
 				queueCurrent = Address.UnitTestQueueStart;
-
-				//Screen.Write(" Executing!!");
 			}
-
-			//else
-			//{
-			//	Screen.Write(" Executing !");
-			//}
 
 			uint len = Native.Get32(queueCurrent);
 			uint id = Native.Get32(queueCurrent + 4);
@@ -143,23 +91,11 @@ namespace Mosa.Kernel.x86
 			}
 
 			queueCurrent = queueCurrent + len + 4;
+			count--;
 
-			//Screen.NextLine();
-			//Screen.Write("  After:");
-			//Screen.Write(" Tick: ");
-			//Screen.Write(tick++, 16, 4);
-			//Screen.Write(" Q.Next: ");
-			//Screen.Write(queueNext, 16, 8);
-			//Screen.Write(" Q.Current: ");
-			//Screen.Write(queueCurrent, 16, 8);
-			//Screen.Write(" Cnt: ");
-			//Screen.Write(queueCurrent, 16, 8);
-			//Screen.NextLine();
-			//Screen.NextLine();
-
-			Screen.Row = 16;
+			Screen.Row = 10;
 			Screen.Column = 0;
-			Screen.Write("   Test:");
+			Screen.Write("Test:");
 			Screen.Write(" ID: ");
 			Screen.Write(id, 10, 7);
 			Screen.Write(" Address: ");
@@ -168,6 +104,8 @@ namespace Mosa.Kernel.x86
 			Screen.Write(paramcnt, 16, 2);
 			Screen.Write(" Len: ");
 			Screen.Write(len, 16, 8);
+			Screen.Write(" - Cnt: ");
+			Screen.Write(count, 10, 4);
 
 			UnitTestRunner.StartTest((int)id);
 		}

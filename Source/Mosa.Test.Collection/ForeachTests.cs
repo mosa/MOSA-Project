@@ -97,7 +97,7 @@ namespace Mosa.Test.Collection
 		{
 			int[] a = new int[5];
 			for (int i = 0; i < 5; i++)
-				a[i] = i;
+				a[i] = (int)i;
 
 			int total = 0;
 
@@ -111,7 +111,7 @@ namespace Mosa.Test.Collection
 		{
 			long[] a = new long[5];
 			for (int i = 0; i < 5; i++)
-				a[i] = i;
+				a[i] = (long)i;
 
 			long total = 0;
 

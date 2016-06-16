@@ -17,7 +17,7 @@ namespace Mosa.Utility.DebugEngine
 
 		private List<byte> buffer = new List<byte>();
 
-		private SenderMessageDelegate dispatchMethod;
+		private CallBack globalDispatch;
 		private byte[] receivedData = new byte[1];
 
 		private int length = -1;
@@ -44,9 +44,9 @@ namespace Mosa.Utility.DebugEngine
 			stream = null;
 		}
 
-		public void SetDispatchMethod(SenderMessageDelegate receiverMethod)
+		public void SetGlobalDispatch(CallBack dispatch)
 		{
-			dispatchMethod = receiverMethod;
+			globalDispatch = dispatch;
 		}
 
 		public bool SendCommand(DebugMessage message)
@@ -123,10 +123,10 @@ namespace Mosa.Utility.DebugEngine
 
 		private void PostResponse(int id, int code, List<byte> data)
 		{
+			DebugMessage message = null;
+
 			lock (sync)
 			{
-				DebugMessage message;
-
 				if (id == 0 || !pending.TryGetValue(id, out message))
 				{
 					// message without command
@@ -141,8 +141,13 @@ namespace Mosa.Utility.DebugEngine
 				}
 
 				message.ResponseData = data;
+			}
 
-				dispatchMethod(message);
+			if (message != null)
+			{
+				globalDispatch?.Invoke(message);
+
+				message.CallBack?.Invoke(message);
 			}
 		}
 

@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Test.Collection.xUnit;
 using Xunit;
 
 namespace Mosa.Test.Collection.xUnit
