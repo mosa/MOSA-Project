@@ -14,7 +14,7 @@ using System.IO.Pipes;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace Mosa.UnitTest.System
+namespace Mosa.UnitTest.Engine
 {
 	public class UnitTestEngine : IBuilderEvent, IStarterEvent, IDisposable
 	{
@@ -40,7 +40,7 @@ namespace Mosa.UnitTest.System
 
 		private Stopwatch stopwatch = new Stopwatch();
 
-		private volatile List<byte> resultData = null;
+		//private volatile List<byte> resultData = null;
 
 		private const uint MaxRetries = 10;
 		private const uint RetryDelay = 1; // 1- seconds
@@ -51,7 +51,8 @@ namespace Mosa.UnitTest.System
 		private HashSet<UnitTestRequest> sent = new HashSet<UnitTestRequest>();
 
 		private int MaxSentQueue = DefaultMaxSentQueue;
-		private int SentQueueCountDown = 0;
+
+		//private int SentQueueCountDown = 0;
 
 		private Thread processThread;
 		private volatile bool processThreadAbort = false;
@@ -98,7 +99,9 @@ namespace Mosa.UnitTest.System
 			stopwatch.Start();
 
 			processThread = new Thread(ProcessQueue);
-			processThread.IsBackground = true;
+			processThread.Name = "ProcesQueue";
+
+			//processThread.IsBackground = true;
 			processThread.Start();
 		}
 
@@ -116,27 +119,28 @@ namespace Mosa.UnitTest.System
 
 		private void ProcessQueue()
 		{
-			CheckCompiled();
-
-			while (!processThreadAbort)
+			try
 			{
-				Thread.Sleep(5);   // temporary
-
-				// todo - wait for pulse (or timeout)
-
-				lock (queue)
+				while (!processThreadAbort)
 				{
-					// check if queue has requests or too many have already been sent
-					if (queue.Count <= 0 || sent.Count > MaxSentQueue)
+					//Thread.Sleep(5);   // temporary
+
+					// todo - wait for pulse (or timeout)
+
+					UnitTestRequest request = null;
+
+					lock (queue)
 					{
-						continue;
+						// check if queue has requests or too many have already been sent
+						if (queue.Count <= 0 || sent.Count > MaxSentQueue)
+						{
+							continue;
+						}
+
+						request = queue.Dequeue();
 					}
 
 					PrepareUnitTest();
-
-					var request = queue.Dequeue();
-
-					sent.Add(request);
 
 					var message = new DebugMessage(DebugCode.ExecuteUnitTest, request.CreateRequestMessage());
 					message.CallBack = UnitTestResults;
@@ -144,6 +148,10 @@ namespace Mosa.UnitTest.System
 
 					debugServerEngine.SendCommand(message);
 				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.ToString());
 			}
 		}
 
@@ -335,39 +343,42 @@ namespace Mosa.UnitTest.System
 
 		public bool PrepareUnitTest()
 		{
-			if (fatalError)
-				return false;
-
-			if (restartVM)
+			lock (this)
 			{
-				RestartVirtualMachine();
+				if (fatalError)
+					return false;
+
+				if (restartVM)
+				{
+					RestartVirtualMachine();
+				}
+
+				if (fatalError)
+					return false;
+
+				if (!processStarted)
+				{
+					LaunchVirtualMachine();
+				}
+
+				if (fatalError)
+					return false;
+
+				ConnectToDebugEngine();
+
+				if (fatalError)
+					return false;
+
+				if (!ready)
+				{
+					WaitForReady();
+				}
+
+				if (fatalError)
+					return false;
+
+				return true;
 			}
-
-			if (fatalError)
-				return false;
-
-			if (!processStarted)
-			{
-				LaunchVirtualMachine();
-			}
-
-			if (fatalError)
-				return false;
-
-			ConnectToDebugEngine();
-
-			if (fatalError)
-				return false;
-
-			if (!ready)
-			{
-				WaitForReady();
-			}
-
-			if (fatalError)
-				return false;
-
-			return true;
 		}
 
 		private void GlobalDispatch(DebugMessage response)
@@ -375,23 +386,17 @@ namespace Mosa.UnitTest.System
 			if (response == null)
 				return;
 
-			lock (this)
+			if (response.Code == DebugCode.Ready)
 			{
-				//Console.WriteLine(response.ToString());
-
-				if (response.Code == DebugCode.Ready)
-				{
-					ready = true;
-				}
+				ready = true;
 			}
+
+			//Console.WriteLine(response.ToString());
 		}
 
 		void IBuilderEvent.NewStatus(string status)
 		{
-			lock (this)
-			{
-				//Console.WriteLine(status);
-			}
+			//Console.WriteLine(status);
 		}
 
 		void IBuilderEvent.UpdateProgress(int total, int at)
@@ -400,14 +405,13 @@ namespace Mosa.UnitTest.System
 
 		void IStarterEvent.NewStatus(string status)
 		{
-			lock (this)
-			{
-				//Console.WriteLine(status);
-			}
+			//Console.WriteLine(status);
 		}
 
 		void IDisposable.Dispose()
 		{
+			processThreadAbort = true;
+
 			if (processThread != null)
 			{
 				if (processThread.IsAlive)

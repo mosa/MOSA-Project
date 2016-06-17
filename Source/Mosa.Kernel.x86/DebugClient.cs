@@ -179,7 +179,7 @@ namespace Mosa.Kernel.x86
 			if (ready)
 			{
 				SendTestUnitResponse();
-				ProcessTestUnit();
+				ProcessTestUnitQueue();
 			}
 
 			byte second = CMOS.Second;
@@ -200,7 +200,7 @@ namespace Mosa.Kernel.x86
 
 			if (ready)
 			{
-				ProcessTestUnit();
+				ProcessTestUnitQueue();
 			}
 		}
 
@@ -355,7 +355,7 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		private static void ProcessTestUnit()
+		private static void ProcessTestUnitQueue()
 		{
 			UnitTestQueue.ProcessQueue();
 		}

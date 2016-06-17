@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Test.Numbers;
-using Mosa.UnitTest.System;
+using Mosa.UnitTest.Engine;
 using System.Collections.Generic;
 using Xunit;
 

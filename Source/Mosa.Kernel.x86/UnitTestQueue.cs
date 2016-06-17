@@ -52,7 +52,7 @@ namespace Mosa.Kernel.x86
 			}
 
 			Native.Set32(queueNext, 0); // mark end
-			count++;
+			++count;
 
 			return true;
 		}
@@ -91,7 +91,7 @@ namespace Mosa.Kernel.x86
 			}
 
 			queueCurrent = queueCurrent + len + 4;
-			count--;
+			--count;
 
 			Screen.Row = 10;
 			Screen.Column = 0;

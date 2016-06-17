@@ -75,12 +75,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayFixture.cs" />
+    <Compile Include="ArrayLayoutFixture.cs" />
     <Compile Include="BaseUnitTest.cs" />
+    <Compile Include="BooleanFixture.cs" />
+    <Compile Include="BoxingFixture.cs" />
     <Compile Include="CallFixture.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CallFixture.tt</DependentUpon>
     </Compile>
+    <Compile Include="CallOrderFixture.cs" />
     <Compile Include="CallVirtualFixture.cs" />
     <Compile Include="CharFixture.cs" />
     <Compile Include="ComparisonFixture.cs">
@@ -89,18 +93,26 @@
       <DependentUpon>ComparisonFixture.tt</DependentUpon>
     </Compile>
     <Compile Include="DelegateFixture.cs" />
-    <Compile Include="BooleanFixture.cs" />
-    <Compile Include="BoxingFixture.cs" />
-    <Compile Include="ArrayLayoutFixture.cs" />
-    <Compile Include="CallOrderFixture.cs" />
-    <Compile Include="EnumFixture1.cs">
+    <Compile Include="DerivedNewObjectFixture.cs" />
+    <Compile Include="DoubleFixture.cs" />
+    <Compile Include="EnumFixture.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EnumFixture.tt</DependentUpon>
     </Compile>
     <Compile Include="ExceptionHandlingFixture.cs" />
+    <Compile Include="FibonacciFixture.cs" />
+    <Compile Include="ForeachFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ForeachFixture.tt</DependentUpon>
+    </Compile>
     <Compile Include="GenericCallFixture.cs" />
-    <Compile Include="RemFixture.cs" />
+    <Compile Include="Int16Fixture.cs" />
+    <Compile Include="Int32Fixture.cs" />
+    <Compile Include="Int64Fixture.cs" />
+    <Compile Include="Int8Fixture.cs" />
+    <Compile Include="InterfaceFixture.cs" />
     <Compile Include="IsInstFixture.cs" />
     <Compile Include="LdargaFixture.cs" />
     <Compile Include="LdlocaFixture.cs">
@@ -108,45 +120,32 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>LdlocaFixture.tt</DependentUpon>
     </Compile>
+    <Compile Include="LinkedListFixture.cs" />
     <Compile Include="ListFixture.cs" />
+    <Compile Include="NewObjectFixture.cs" />
+    <Compile Include="OptimizationFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegisterAllocatorFixture.cs" />
+    <Compile Include="RemFixture.cs" />
+    <Compile Include="SingleFixture.cs" />
     <Compile Include="StaticFieldFixture.cs" />
     <Compile Include="StringFixture.cs" />
-    <Compile Include="ForeachFixture.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ForeachFixture.tt</DependentUpon>
-    </Compile>
-    <Compile Include="LinkedListFixture.cs" />
-    <Compile Include="SingleFixture.cs" />
-    <Compile Include="DoubleFixture.cs" />
-    <Compile Include="EnumFixture.cs" />
-    <Compile Include="InterfaceFixture.cs" />
-    <Compile Include="FibonacciFixture.cs" />
-    <Compile Include="Int16Fixture.cs" />
-    <Compile Include="Int32Fixture.cs" />
-    <Compile Include="Int64Fixture.cs" />
-    <Compile Include="Int8Fixture.cs" />
-    <Compile Include="DerivedNewObjectFixture.cs" />
-    <Compile Include="RegisterAllocatorFixture.cs" />
-    <Compile Include="OptimizationFixture.cs" />
-    <Compile Include="NewObjectFixture.cs" />
     <Compile Include="StructureFixture.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>StructureFixture.tt</DependentUpon>
     </Compile>
     <Compile Include="SwitchFixture.cs">
-      <DependentUpon>SwitchFixture.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>SwitchFixture.tt</DependentUpon>
     </Compile>
-    <Compile Include="ValueTypeFixture.cs" />
     <Compile Include="TestFixture.cs" />
     <Compile Include="UInt16Fixture.cs" />
     <Compile Include="UInt32Fixture.cs" />
     <Compile Include="UInt64Fixture.cs" />
     <Compile Include="UInt8Fixture.cs" />
+    <Compile Include="ValueTypeFixture.cs" />
     <Compile Include="WhileFixture.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -154,19 +153,7 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ForeachFixture.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ForeachFixture.cs</LastGenOutput>
-    </None>
     <None Include="packages.config" />
-    <None Include="StructureFixture.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>StructureFixture.cs</LastGenOutput>
-    </None>
-    <None Include="SwitchFixture.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>SwitchFixture.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="CallFixture.tt">
@@ -179,11 +166,23 @@
     </Content>
     <Content Include="EnumFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>EnumFixture1.cs</LastGenOutput>
+      <LastGenOutput>EnumFixture.cs</LastGenOutput>
+    </Content>
+    <Content Include="ForeachFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ForeachFixture.cs</LastGenOutput>
     </Content>
     <Content Include="LdlocaFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LdlocaFixture.cs</LastGenOutput>
+    </Content>
+    <Content Include="StructureFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StructureFixture.cs</LastGenOutput>
+    </Content>
+    <Content Include="SwitchFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SwitchFixture.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

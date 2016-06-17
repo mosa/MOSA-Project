@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Mosa.UnitTest.System
+namespace Mosa.UnitTest.Engine
 {
 	internal class UnitTestRequest
 	{
@@ -43,7 +43,7 @@ namespace Mosa.UnitTest.System
 				Parameters
 			);
 
-			Debug.Assert(RuntimeMethod != null, RuntimeMethod.ToString());
+			Debug.Assert(RuntimeMethod != null, MethodNamespaceName + "." + MethodTypeName + "." + MethodName);
 
 			var symbol = linker.GetSymbol(RuntimeMethod.FullName, SectionKind.Text);
 
