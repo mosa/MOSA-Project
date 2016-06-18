@@ -437,11 +437,13 @@ namespace Mosa.Kernel.x86
 
 		private unsafe static void Error(IDTStack* stack, string message)
 		{
+			Panic.ESP = stack->ESP;
 			Panic.EBP = stack->EBP;
 			Panic.EIP = stack->EIP;
 			Panic.EAX = stack->EAX;
 			Panic.EBX = stack->EBX;
 			Panic.ECX = stack->ECX;
+			Panic.EDX = stack->EDX;
 			Panic.EDI = stack->EDI;
 			Panic.ESI = stack->ESI;
 			Panic.CS = stack->CS;
