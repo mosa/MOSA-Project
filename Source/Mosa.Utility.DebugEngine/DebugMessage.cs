@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mosa.Utility.DebugEngine
 {
-	public delegate void SenderMessageDelegate(DebugMessage response);
+	public delegate void CallBack(DebugMessage response);
 
 	public class DebugMessage
 	{
@@ -16,11 +16,11 @@ namespace Mosa.Utility.DebugEngine
 
 		public List<byte> ResponseData { get; internal set; }
 
-		public object Sender { get; protected set; }
+		public CallBack CallBack { get; set; }
 
-		public SenderMessageDelegate SenderMethod { get; protected set; }
+		public int Checksum { get { return 0; } }
 
-		public int Checksum { get { return 0; } } // TODO
+		public object Other { get; set; }
 
 		public DebugMessage(int code, List<byte> data)
 		{
@@ -53,25 +53,16 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
-		public DebugMessage(int code, List<byte> data, object sender, SenderMessageDelegate senderMethod)
-			: this(code, data)
+		public DebugMessage(int code, List<byte> data, CallBack callback)
+		: this(code, data)
 		{
-			Sender = sender;
-			SenderMethod = senderMethod;
+			CallBack = callback;
 		}
 
-		public DebugMessage(int code, List<int> data, object sender, SenderMessageDelegate senderMethod)
+		public DebugMessage(int code, int[] data, CallBack callback)
 			: this(code, data)
 		{
-			Sender = sender;
-			SenderMethod = senderMethod;
-		}
-
-		public DebugMessage(int code, int[] data, object sender, SenderMessageDelegate senderMethod)
-			: this(code, data)
-		{
-			Sender = sender;
-			SenderMethod = senderMethod;
+			CallBack = callback;
 		}
 
 		public int GetInt32(int index)
@@ -105,7 +96,7 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
-		private byte[] CreateByteArray(List<byte> data)
+		private static byte[] CreateByteArray(List<byte> data)
 		{
 			var array = new byte[data.Count];
 			data.CopyTo(array);

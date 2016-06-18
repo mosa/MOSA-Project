@@ -16,7 +16,7 @@ namespace Mosa.Test.Collection.xUnit
 		[MemberData("<#= number.Value #>", DisableDiscoveryEnumeration = true)]
 		public void LdlocaCheckValue<#= number.Value #>(<#= number.Key #> a)
 		{
-			Assert.True(Run<bool>("Mosa.Test.Collection.LdlocaTests.LdlocaCheckValue<#= number.Value #>", a, a));
+			Assert.Equal(Mosa.Test.Collection.LdlocaTests.LdlocaCheckValue<#= number.Value #>(a), Run<bool>("Mosa.Test.Collection.LdlocaTests.LdlocaCheckValue<#= number.Value #>", a));
 		}
 		<# } #>
 	}

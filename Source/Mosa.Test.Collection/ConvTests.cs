@@ -90,7 +90,7 @@ namespace Mosa.Test.Collection
 
 		public static bool ConvI1I1(sbyte expect, sbyte a)
 		{
-			return expect == a;
+			return expect == (sbyte)a;
 		}
 
 		public static bool ConvI1I2(sbyte expect, short a)
@@ -110,12 +110,12 @@ namespace Mosa.Test.Collection
 
 		public static bool ConvI2I1(short expect, sbyte a)
 		{
-			return expect == a;
+			return expect == (short)a;
 		}
 
 		public static bool ConvI2I2(short expect, short a)
 		{
-			return expect == a;
+			return expect == (short)a;
 		}
 
 		public static bool ConvI2I4(short expect, int a)
@@ -130,17 +130,17 @@ namespace Mosa.Test.Collection
 
 		public static bool ConvI4I1(int expect, sbyte a)
 		{
-			return expect == a;
+			return expect == (int)a;
 		}
 
 		public static bool ConvI4I2(int expect, short a)
 		{
-			return expect == a;
+			return expect == (int)a;
 		}
 
 		public static bool ConvI4I4(int expect, int a)
 		{
-			return expect == a;
+			return expect == (int)a;
 		}
 
 		public static bool ConvI4I8(int expect, long a)
@@ -150,62 +150,62 @@ namespace Mosa.Test.Collection
 
 		public static bool ConvI8I1(long expect, sbyte a)
 		{
-			return expect == a;
+			return expect == (long)a;
 		}
 
 		public static bool ConvI8I2(long expect, short a)
 		{
-			return expect == a;
+			return expect == (long)a;
 		}
 
 		public static bool ConvI8I4(long expect, int a)
 		{
-			return expect == a;
+			return expect == (long)a;
 		}
 
 		public static bool ConvI8I8(long expect, long a)
 		{
-			return expect == a;
+			return expect == (long)a;
 		}
 
 		public static bool ConvR4I1(float expect, sbyte a)
 		{
-			return expect == a;
+			return expect == (float)a;
 		}
 
 		public static bool ConvR4I2(float expect, short a)
 		{
-			return expect == a;
+			return expect == (float)a;
 		}
 
 		public static bool ConvR4I4(float expect, int a)
 		{
-			return expect == a;
+			return expect == (float)a;
 		}
 
 		public static bool ConvR4I8(float expect, long a)
 		{
-			return expect == a;
+			return expect == (float)a;
 		}
 
 		public static bool ConvR8I1(double expect, sbyte a)
 		{
-			return expect == a;
+			return expect == (double)a;
 		}
 
 		public static bool ConvR8I2(double expect, short a)
 		{
-			return expect == a;
+			return expect == (double)a;
 		}
 
 		public static bool ConvR8I4(double expect, int a)
 		{
-			return expect == a;
+			return expect == (double)a;
 		}
 
 		public static bool ConvR8I8(double expect, long a)
 		{
-			return expect == a;
+			return expect == (double)a;
 		}
 	}
 }

@@ -20,21 +20,6 @@ namespace Mosa.Runtime
 		public const int MaxLength = 132;
 		public const int EntrySize = 132 * 2 + 4;
 
-		unsafe public static StringBuffer CreateFromNullTerminatedString(uint start)
-		{
-			return CreateFromNullTerminatedString((byte*)start);
-		}
-
-		unsafe public static StringBuffer CreateFromNullTerminatedString(byte* start)
-		{
-			var buf = new StringBuffer();
-			while (*start != 0)
-			{
-				buf.Append((char)*start++);
-			}
-			return buf;
-		}
-
 		private unsafe char* firstChar()
 		{
 			return (char*)((uint)(Intrinsic.GetValueTypeAddress(this)) + 4);
@@ -77,7 +62,7 @@ namespace Mosa.Runtime
 			if (value == null)
 				isSet = 0;
 			else
-			Append(value);
+				Append(value);
 		}
 
 		public bool IsNull

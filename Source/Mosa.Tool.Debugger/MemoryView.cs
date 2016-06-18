@@ -4,6 +4,7 @@ using Mosa.Compiler.Common;
 using Mosa.Utility.DebugEngine;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace Mosa.Tool.Debugger
 {
@@ -33,8 +34,23 @@ namespace Mosa.Tool.Debugger
 		public override void Connect()
 		{
 			Status = "Querying...";
-			SendCommand(new DebugMessage(DebugCode.Scattered32BitReadMemory, new int[] { 0x200004, 1024 * 1024 * 28 }, this, UpdatePointers));
-			SendCommand(new DebugMessage(DebugCode.ReadCR3, new List<byte>(), this, ReadCR3));
+			SendCommand(new DebugMessage(DebugCode.Scattered32BitReadMemory, new int[] { 0x200004, 1024 * 1024 * 28 }, CallBack_UpdatePointers));
+			SendCommand(new DebugMessage(DebugCode.ReadCR3, new List<byte>(), CallBack_ReadCR3));
+		}
+
+		private void CallBack_ReadCR3(DebugMessage message)
+		{
+			BeginInvoke((MethodInvoker)delegate { ReadCR3(message); });
+		}
+
+		private void CallBack_UpdatePointers(DebugMessage message)
+		{
+			BeginInvoke((MethodInvoker)delegate { UpdatePointers(message); });
+		}
+
+		private void CallBack_DisplayMemory(DebugMessage message)
+		{
+			BeginInvoke((MethodInvoker)delegate { DisplayMemory(message); });
 		}
 
 		public override void Disconnect()
@@ -107,7 +123,7 @@ namespace Mosa.Tool.Debugger
 				int lines = lbMemory.Height / (lbMemory.Font.Height + 2);
 
 				Status = "Updating...";
-				SendCommand(new DebugMessage(DebugCode.ReadMemory, new int[] { (int)at, 16 * lines }, this, DisplayMemory));
+				SendCommand(new DebugMessage(DebugCode.ReadMemory, new int[] { (int)at, 16 * lines }, CallBack_DisplayMemory));
 			}
 			catch
 			{
