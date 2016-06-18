@@ -1,20 +1,20 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.UnitTest.System;
+using Mosa.UnitTest.Engine;
 using Xunit;
 
 namespace Mosa.Test.Collection.xUnit
 {
-	[Collection("MOSA")]
+	//[Collection("MOSA")]
 	public class TestFixture : BaseTestFixture
 	{
 		protected T Run<T>(string ns, string type, string method, params object[] parameters)
 		{
 			// Get test system
-			var unitTestSystem = UnitTestSystemFixture.UnitTestSystem;
+			var unitTestEngine = UnitTestFixture.UnitTestEngine;
 
 			// execute test
-			return unitTestSystem.Run<T>(ns, type, method, parameters);
+			return unitTestEngine.Run<T>(ns, type, method, parameters);
 		}
 
 		protected T Run<T>(string fullMethodName, params object[] parameters)
@@ -30,8 +30,8 @@ namespace Mosa.Test.Collection.xUnit
 		}
 	}
 
-	[CollectionDefinition("MOSA")]
-	public class DummyCollection : ICollectionFixture<UnitTestSystemFixture>
-	{
-	}
+	//[CollectionDefinition("MOSA")]
+	//public class DummyCollection : ICollectionFixture<UnitTestFixture>
+	//{
+	//}
 }

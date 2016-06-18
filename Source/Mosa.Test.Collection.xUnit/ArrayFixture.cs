@@ -4,7 +4,6 @@ using Xunit;
 
 namespace Mosa.Test.Collection.xUnit
 {
-	//[Collection("MOSA")]
 	public class ArrayFixture : TestFixture
 	{
 		[Fact]

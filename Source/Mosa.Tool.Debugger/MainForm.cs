@@ -32,7 +32,7 @@ namespace Mosa.Tool.Debugger
 			methodCaller.Show(dockPanel, DockState.DockRight);
 
 			dockPanel.ResumeLayout(true, true);
-			DebugEngine.SetDispatchMethod(Dispatch);
+			DebugEngine.SetGlobalDispatch(Dispatch);
 		}
 
 		public void SignalConnect()
@@ -66,16 +66,7 @@ namespace Mosa.Tool.Debugger
 			if (response == null)
 				return;
 
-			dispatchOutput.BeginInvoke((SenderMessageDelegate)dispatchOutput.ProcessResponses, new object[] { response });
-
-			if (response.Sender is Form)
-			{
-				(response.Sender as Form).BeginInvoke(response.SenderMethod, new object[] { response });
-			}
-			else if (response.Sender is DockContent)
-			{
-				(response.Sender as DockContent).BeginInvoke(response.SenderMethod, new object[] { response });
-			}
+			dispatchOutput.BeginInvoke((CallBack)dispatchOutput.ProcessResponses, new object[] { response });
 		}
 
 		private void toolStripButton1_Click(object sender, EventArgs e)

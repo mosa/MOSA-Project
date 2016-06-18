@@ -33,6 +33,7 @@ namespace Mosa.UnitTest.x86
 			Screen.NextLine();
 			Screen.NextLine();
 
+			UnitTestQueue.Setup();
 			UnitTestRunner.Setup();
 
 			DebugClient.Setup(Serial.COM1);

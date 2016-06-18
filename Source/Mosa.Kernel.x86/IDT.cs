@@ -351,49 +351,49 @@ namespace Mosa.Kernel.x86
 			switch (stack->Interrupt)
 			{
 				case 0:
-					Error(stack->EBP, stack->EIP, "Divide Error");
+					Error(stack, "Divide Error");
 					break;
 
 				case 4:
-					Error(stack->EBP, stack->EIP, "Arithmetic Overflow Exception");
+					Error(stack, "Arithmetic Overflow Exception");
 					break;
 
 				case 5:
-					Error(stack->EBP, stack->EIP, "Bound Check Error");
+					Error(stack, "Bound Check Error");
 					break;
 
 				case 6:
-					Error(stack->EBP, stack->EIP, "Invalid Opcode");
+					Error(stack, "Invalid Opcode");
 					break;
 
 				case 7:
-					Error(stack->EBP, stack->EIP, "Co-processor Not Available");
+					Error(stack, "Co-processor Not Available");
 					break;
 
 				case 8:
 
 					//TODO: Analyze the double fault
-					Error(stack->EBP, stack->EIP, "Double Fault");
+					Error(stack, "Double Fault");
 					break;
 
 				case 9:
-					Error(stack->EBP, stack->EIP, "Co-processor Segment Overrun");
+					Error(stack, "Co-processor Segment Overrun");
 					break;
 
 				case 10:
-					Error(stack->EBP, stack->EIP, "Invalid TSS");
+					Error(stack, "Invalid TSS");
 					break;
 
 				case 11:
-					Error(stack->EBP, stack->EIP, "Segment Not Present");
+					Error(stack, "Segment Not Present");
 					break;
 
 				case 12:
-					Error(stack->EBP, stack->EIP, "Stack Exception");
+					Error(stack, "Stack Exception");
 					break;
 
 				case 13:
-					Error(stack->EBP, stack->EIP, "General Protection Exception");
+					Error(stack, "General Protection Exception");
 					break;
 
 				case 14:
@@ -401,36 +401,30 @@ namespace Mosa.Kernel.x86
 					// Check if Null Pointer Exception
 					// Otherwise handle as Page Fault
 
-					var cr2 = Native.GetCR2() >> 5;
-					if (cr2 < 0x1000)
-						Error(stack->EBP, stack->EIP, "Null Pointer Exception");
+					var cr2 = Native.GetCR2();
 
-					//spinLock.Enter(ref taken);
+					if ((cr2 >> 5) < 0x1000)
+					{
+						Error(stack, "Null Pointer Exception");
+					}
 
 					uint physicalpage = PageFrameAllocator.Allocate();
 
 					if (physicalpage == 0x0)
 					{
-						// Panic! Out of memory
-						var strBuffer = new Runtime.StringBuffer();
-						strBuffer.Append("Out of memory! CR2: 0x");
-						strBuffer.Append(cr2, "hex");
-						Panic.SetStackPointer(stack->EBP, stack->EIP);
-						Panic.Error(strBuffer);
+						Error(stack, "Out of Memory");
 					}
 
-					PageTable.MapVirtualAddressToPhysical(Native.GetCR2(), physicalpage);
-
-					//spinLock.Exit();
+					PageTable.MapVirtualAddressToPhysical(cr2, physicalpage);
 
 					break;
 
 				case 16:
-					Error(stack->EBP, stack->EIP, "Co-processor Error");
+					Error(stack, "Co-processor Error");
 					break;
 
 				case 19:
-					Error(stack->EBP, stack->EIP, "SIMD Floating-Point Exception");
+					Error(stack, "SIMD Floating-Point Exception");
 					break;
 
 				default:
@@ -441,9 +435,21 @@ namespace Mosa.Kernel.x86
 			PIC.SendEndOfInterrupt(stack->Interrupt);
 		}
 
-		private static void Error(uint ebp, uint eip, string message)
+		private unsafe static void Error(IDTStack* stack, string message)
 		{
-			Panic.SetStackPointer(ebp, eip);
+			Panic.ESP = stack->ESP;
+			Panic.EBP = stack->EBP;
+			Panic.EIP = stack->EIP;
+			Panic.EAX = stack->EAX;
+			Panic.EBX = stack->EBX;
+			Panic.ECX = stack->ECX;
+			Panic.EDX = stack->EDX;
+			Panic.EDI = stack->EDI;
+			Panic.ESI = stack->ESI;
+			Panic.CS = stack->CS;
+			Panic.ErrorCode = stack->ErrorCode;
+			Panic.EFLAGS = stack->EFLAGS;
+			Panic.Interrupt = stack->Interrupt;
 			Panic.Error(message);
 		}
 

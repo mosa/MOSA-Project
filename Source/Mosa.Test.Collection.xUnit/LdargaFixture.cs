@@ -6,8 +6,8 @@ namespace Mosa.Test.Collection.xUnit
 {
 	public class Ldarga : TestFixture
 	{
-		private double DoubleTolerance = 0.000001d;
-		private float FloatTolerance = 0.00001f;
+		//private double DoubleTolerance = 0.000001d;
+		//private float FloatTolerance = 0.00001f;
 
 		#region CheckValue
 

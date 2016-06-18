@@ -9,116 +9,96 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class Panic
 	{
+		private static bool firstError = true;
+
+		public static uint EBP = 0;
+		public static uint EIP = 0;
+		public static uint EAX = 0;
+		public static uint EBX = 0;
+		public static uint ECX = 0;
+		public static uint EDX = 0;
+		public static uint EDI = 0;
+		public static uint ESI = 0;
+		public static uint ESP = 0;
+		public static uint Interrupt = 0;
+		public static uint ErrorCode = 0;
+		public static uint CS = 0;
+		public static uint EFLAGS = 0;
+
 		public static void Setup()
 		{
 		}
 
-		/// <summary>
-		/// Nows this instance.
-		/// </summary>
-		public static void Now()
-		{
-			Now(0);
-		}
-
-		/// <summary>
-		/// Nows the specified error code.
-		/// </summary>
-		/// <param name="errorCode">The error code.</param>
-		public static void Now(uint errorCode)
-		{
-			Screen.Column = 0;
-			Screen.Row = 0;
-			Screen.Color = 0x0C;
-
-			Screen.Write('P');
-			Screen.Write('A');
-			Screen.Write('N');
-			Screen.Write('I');
-			Screen.Write('C');
-			Screen.Write('!');
-			Screen.Write(' ');
-			Screen.Write(errorCode, 8, 8);
-
-			while (true)
-				Native.Hlt();
-		}
-
-		private static bool firstError = true;
-
-		private static void PrepareScreen(string title)
+		public static void Error(string message)
 		{
 			IDT.SetInterruptHandler(null);
-			Screen.BackgroundColor = Colors.Black;
+
+			Screen.BackgroundColor = Colors.Blue;
+
 			Screen.Clear();
-			Screen.Goto(1, 1);
-			Screen.Color = Colors.LightGray;
-			Screen.Write("*** ");
-			Screen.Write(title);
+			Screen.Goto(1, 0);
+			Screen.Color = Colors.White;
+			Screen.Write("*** Kernel Panic ***");
 
 			if (firstError)
 				firstError = false;
 			else
 				Screen.Write(" (multiple)");
 
-			Screen.Write(" ***");
-			Screen.Goto(3, 1);
-		}
-
-		#region Error
-
-		private static void BeginError()
-		{
-			PrepareScreen("Kernel Panic");
-			Screen.Color = Colors.Red;
-		}
-
-		public static void Error(string message)
-		{
-			BeginError();
+			Screen.NextLine();
+			Screen.NextLine();
 			Screen.Write(message);
-			EndError();
-		}
-
-		public static void Error(Mosa.Runtime.StringBuffer message)
-		{
-			BeginError();
-			Screen.Write(message);
-			EndError();
-		}
-
-		public static void Error(uint error)
-		{
-			Error(new Mosa.Runtime.StringBuffer(error));
-		}
-
-		private static void EndError()
-		{
-			Screen.Row += 2;
-			Screen.Column = 0;
+			Screen.NextLine();
+			Screen.NextLine();
+			Screen.Write("REGISTERS:");
+			Screen.NextLine();
+			Screen.NextLine();
+			DumpRegisters();
+			Screen.NextLine();
+			Screen.Write("STACK TRACE:");
+			Screen.NextLine();
+			Screen.NextLine();
 			DumpStackTrace();
-			Screen.Color = Colors.LightGray;
-			Halt();
-		}
 
-		#endregion Error
-
-		private static void Halt()
-		{
-			Screen.Goto(Screen.Rows - 1, 0);
 			while (true)
-				Native.Hlt();
+			{
+				// keep debugger running
+				DebugClient.Process(0);
+
+				//Native.Hlt();
+			}
 		}
 
-		#region DumpStackTrace
-
-		private static uint ebp = 0;
-		private static uint eip = 0;
-
-		internal static void SetStackPointer(uint ebp, uint eip)
+		public static void DumpRegisters()
 		{
-			Panic.ebp = ebp;
-			Panic.eip = eip;
+			Screen.Write("EIP: ");
+			Screen.Write(EIP, 16, 8);
+			Screen.Write(" ESP: ");
+			Screen.Write(ESP, 16, 8);
+			Screen.Write(" EBP: ");
+			Screen.Write(EBP, 16, 8);
+			Screen.Write(" EFLAGS: ");
+			Screen.Write(EFLAGS, 16, 8);
+			Screen.NextLine();
+			Screen.Write("EAX: ");
+			Screen.Write(EAX, 16, 8);
+			Screen.Write(" EBX: ");
+			Screen.Write(EBX, 16, 8);
+			Screen.Write(" ECX: ");
+			Screen.Write(ECX, 16, 8);
+			Screen.NextLine();
+			Screen.Write("EDX: ");
+			Screen.Write(EDX, 16, 8);
+			Screen.Write(" EDI: ");
+			Screen.Write(EDI, 16, 8);
+			Screen.Write(" EDX: ");
+			Screen.Write(EDX, 16, 8);
+			Screen.NextLine();
+			Screen.Write("IRQ: ");
+			Screen.Write(Interrupt, 16, 2);
+			Screen.Write(" ERROR: ");
+			Screen.Write(ErrorCode, 16, 2);
+			Screen.NextLine();
 		}
 
 		public static void DumpStackTrace()
@@ -126,12 +106,14 @@ namespace Mosa.Kernel.x86
 			DumpStackTrace(0);
 		}
 
-		public static void DumpStackTrace(uint depth)
+		private static void DumpStackTrace(uint depth)
 		{
 			while (true)
 			{
-				var entry = Mosa.Runtime.x86.Internal.GetStackTraceEntry(depth, ebp, eip);
-				if (!entry.Valid) return;
+				var entry = Internal.GetStackTraceEntry(depth, EBP, EIP);
+
+				if (!entry.Valid)
+					return;
 
 				if (!entry.Skip)
 				{
@@ -143,7 +125,5 @@ namespace Mosa.Kernel.x86
 				depth++;
 			}
 		}
-
-		#endregion DumpStackTrace
 	}
 }

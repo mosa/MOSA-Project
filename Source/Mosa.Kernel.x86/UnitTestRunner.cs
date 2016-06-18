@@ -22,14 +22,17 @@ namespace Mosa.Kernel.x86
 		private static uint testMethodAddress = 0;
 		private static uint testResultType = 0;
 
-		private static uint testResultU4 = 0;
-		private static ulong testResultU8 = 0;
-
-		//private static double testResultR8 = 0;
+		private static ulong testResult = 0;
 
 		public static void Setup()
 		{
-			ResetUnitTest();
+			testReady = 0;
+			testResult = 0;
+			testResultReported = 1;
+
+			testID = 0;
+			testParameters = 0;
+			testMethodAddress = 0;
 		}
 
 		public static void EnterTestReadyLoop()
@@ -48,11 +51,6 @@ namespace Mosa.Kernel.x86
 			Screen.Write("Stack @ ");
 			Screen.Write((uint)esp, 16, 8);
 
-			for (uint index = 0; index < MaxParameters; index++)
-			{
-				Native.Set32(esp + (index * 4), 0xFFFFFFFF);
-			}
-
 			Screen.NextLine();
 			Screen.NextLine();
 
@@ -65,11 +63,13 @@ namespace Mosa.Kernel.x86
 					Screen.Row = row;
 					Screen.Column = 0;
 
+					Screen.Write("Test #: ");
 					Screen.Write(++testCount, 10, 7);
 
-					testReady = 0;
+					testResult = 0;
 					testResultReady = 0;
 					testResultReported = 0;
+					testReady = 0;
 
 					// copy parameters into stack
 					for (uint index = 0; index < testParameters; index++)
@@ -81,27 +81,10 @@ namespace Mosa.Kernel.x86
 
 					switch (testResultType)
 					{
-						case 0:
-							{
-								Native.FrameCall(testMethodAddress);
-								break;
-							}
-						case 1:
-							{
-								testResultU4 = Native.FrameCallRetU4(testMethodAddress);
-								break;
-							}
-						case 2:
-							{
-								testResultU8 = Native.FrameCallRetU8(testMethodAddress);
-								break;
-							}
-						case 3:
-							{
-								testResultU8 = Native.FrameCallRetR8(testMethodAddress);
-								break;
-							}
-
+						case 0: Native.FrameCall(testMethodAddress); break;
+						case 1: testResult = Native.FrameCallRetU4(testMethodAddress); break;
+						case 2: testResult = Native.FrameCallRetU8(testMethodAddress); break;
+						case 3: testResult = Native.FrameCallRetR8(testMethodAddress); break;
 						default: break;
 					}
 
@@ -110,19 +93,6 @@ namespace Mosa.Kernel.x86
 					Native.Int(255);
 				}
 			}
-		}
-
-		public static void ResetUnitTest()
-		{
-			testReady = 0;
-			testID = 0;
-			testParameters = 0;
-			testMethodAddress = 0;
-
-			testResultU4 = 0;
-			testResultU8 = 0;
-
-			//testResultR8 = 0;
 		}
 
 		public static void SetUnitTestMethodParameter(uint index, uint value)
@@ -152,38 +122,22 @@ namespace Mosa.Kernel.x86
 			testReady = 1;
 		}
 
-		public static void AbortUnitTest()
+		public static bool IsReady()
 		{
-			testReady = 0;
-
-			// TODO
-			//  Complex - the stack needs to be manipulated to re-enter EnterTestReadyLoop()
+			return (testResultReported == 1 && testReady == 0);
 		}
 
-		public static int GetTestID()
+		public static bool GetResult(out ulong result, out int id)
 		{
-			return testID;
-		}
+			result = testResult;
+			id = testID;
 
-		public static ulong GetResults()
-		{
-			switch (testResultType)
-			{
-				case 0: return 0;
-				case 1: return testResultU4;
-				case 2: return testResultU8;
-				case 3: return testResultU8;
-				default: return 0;
-			}
-		}
-
-		public static bool CheckResultsReady()
-		{
 			if (testReady == 0 && testResultReady == 1 && testResultReported == 0)
 			{
 				testResultReported = 1;
 				return true;
 			}
+
 			return false;
 		}
 	}
