@@ -87,7 +87,8 @@ namespace Mosa.UnitTest.Engine
 				Emitx86IRQMethods = true,
 				DebugConnectionOption = DebugConnectionOption.TCPServer,
 				DebugConnectionPort = 9999,
-				ExitOnLaunch = true
+				ExitOnLaunch = true,
+				GenerateASMFile = true
 			};
 
 			AppLocations = new AppLocations();
@@ -101,7 +102,6 @@ namespace Mosa.UnitTest.Engine
 			processThread = new Thread(ProcessQueue);
 			processThread.Name = "ProcesQueue";
 
-			//processThread.IsBackground = true;
 			processThread.Start();
 		}
 

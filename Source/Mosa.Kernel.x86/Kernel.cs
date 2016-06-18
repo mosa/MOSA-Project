@@ -32,7 +32,7 @@ namespace Mosa.Kernel.x86
 			// At this point we can use objects, that allocates memory
 			SmbiosManager.Setup();
 			ConsoleManager.Setup();
-			Mosa.Runtime.Internal.Setup();
+			Internal.Setup();
 		}
 	}
 }
