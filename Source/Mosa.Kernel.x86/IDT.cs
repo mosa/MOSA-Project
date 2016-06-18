@@ -449,6 +449,7 @@ namespace Mosa.Kernel.x86
 			Panic.CS = stack->CS;
 			Panic.ErrorCode = stack->ErrorCode;
 			Panic.EFLAGS = stack->EFLAGS;
+			Panic.Interrupt = stack->Interrupt;
 			Panic.Error(message);
 		}
 
