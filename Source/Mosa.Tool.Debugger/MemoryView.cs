@@ -128,6 +128,7 @@ namespace Mosa.Tool.Debugger
 			catch
 			{
 				Status = "ERROR: Invalid memory location";
+				cbSelect.Enabled = Enabled;
 			}
 		}
 

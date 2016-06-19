@@ -88,7 +88,8 @@ namespace Mosa.UnitTest.Engine
 				DebugConnectionOption = DebugConnectionOption.TCPServer,
 				DebugConnectionPort = 9999,
 				ExitOnLaunch = true,
-				GenerateASMFile = true
+				GenerateASMFile = true,
+				GenerateMapFile = true
 			};
 
 			AppLocations = new AppLocations();
