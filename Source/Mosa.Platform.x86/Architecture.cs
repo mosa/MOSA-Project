@@ -257,7 +257,7 @@ namespace Mosa.Platform.x86
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
 		public override void GetTypeRequirements(MosaTypeLayout typeLayout, MosaType type, out int size, out int alignment)
 		{
-			alignment = type.IsR8 ? 8 : 4;
+			alignment = 4;
 
 			size = type.IsValueType ? typeLayout.GetTypeSize(type) : 4;
 		}
