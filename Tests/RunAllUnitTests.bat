@@ -8,5 +8,5 @@ echo %DATE% %TIME%
 %XUNIT% Mosa.Compiler.Framework.xUnit.dll
 echo %DATE% %TIME%
 
-%XUNIT% Mosa.Test.Collection.x86.xUnit.dll
+%XUNIT% Mosa.UnitTest.Collection.xUnit.dll
 echo %DATE% %TIME%

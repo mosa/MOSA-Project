@@ -1,0 +1,29 @@
+﻿<#@ include file="../TemplateLibrary.txt" #>
+using Xunit;
+using Xunit.Extensions;
+
+namespace Mosa.UnitTest.Collection.xUnit
+{
+
+	public class SwitchFixture : TestFixture
+	{
+	<# foreach (KeyValuePair<string, string> number in NegativeIntegers) { #>
+
+		[Theory]
+		[MemberData("<#= number.Value #>", DisableDiscoveryEnumeration = true)]
+		public void Switch<#= number.Value #>(<#= number.Key #> a)
+		{
+			Assert.Equal(Mosa.UnitTest.Collection.SwitchTests.Switch<#= number.Value #>(a), Run<<#= number.Key #>>("Mosa.UnitTest.Collection.SwitchTests.Switch<#= number.Value #>", a));
+		}
+	<# } #>
+	<# foreach (KeyValuePair<string, string> number in PositiveIntegers) { #>
+
+		[Theory]
+		[MemberData("<#= number.Value #>", DisableDiscoveryEnumeration = true)]
+		public void Switch<#= number.Value #>(<#= number.Key #> a)
+		{
+			Assert.Equal(Mosa.UnitTest.Collection.SwitchTests.Switch<#= number.Value #>(a), Run<<#= number.Key #>>("Mosa.UnitTest.Collection.SwitchTests.Switch<#= number.Value #>", a));
+		}
+	<# } #>
+	}
+}
