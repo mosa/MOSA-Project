@@ -7,6 +7,8 @@ namespace Mosa.Compiler.Framework.CIL
 	/// </summary>
 	public static class CILInstruction
 	{
+		public const uint MaxOpCodeValue = 0x120;
+
 		#region Static Data
 
 		public static BaseCILInstruction Nop = new NopInstruction(OpCode.Nop);
@@ -258,7 +260,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <returns></returns>
 		public static BaseCILInstruction[] Initialize()
 		{
-			BaseCILInstruction[] opcodeMap = new BaseCILInstruction[0x120];
+			BaseCILInstruction[] opcodeMap = new BaseCILInstruction[MaxOpCodeValue];
 
 			/* 0x000 */
 			opcodeMap[(int)OpCode.Nop] = Nop;

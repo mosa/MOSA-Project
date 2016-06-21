@@ -4,6 +4,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -30,6 +31,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// The block instruction beings too
 		/// </summary>
 		private BasicBlock block;
+
+		private int[] counts;
 
 		#endregion Data members
 
@@ -59,6 +62,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 				MethodCompiler.Stop();
 				return;
+			}
+
+			if (MethodCompiler.Compiler.CompilerOptions.EnableStatistics)
+			{
+				counts = new int[CILInstruction.MaxOpCodeValue];
 			}
 
 			MethodCompiler.SetLocalVariables(MethodCompiler.Method.LocalVariables);
@@ -99,7 +107,26 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			UpdateCounter("CILDecoding.Instructions", instructionCount);
+			if (counts == null)
+				return;
+
+			int total = 0;
+
+			for (int op = 0; op < counts.Length; op++)
+			{
+				int count = counts[op];
+
+				if (count == 0)
+					continue;
+
+				var cil = CILInstruction.Get((OpCode)op);
+
+				UpdateCounter("CILDecodingStage.OpCode." + cil.ToString(), count);
+
+				total = total + count;
+			}
+
+			UpdateCounter("CILDecodingStage.CILInstructions", total);
 		}
 
 		#region Internals
@@ -148,6 +175,8 @@ namespace Mosa.Compiler.Framework.Stages
 				var op = (OpCode)instruction.OpCode;
 
 				var cil = CILInstruction.Get(op);
+
+				++counts[(int)op];
 
 				branched = cil.DecodeTargets(this);
 			}
@@ -264,5 +293,7 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		#endregion IInstructionDecoder Members
+
+		//var trace = CreateTraceLog("Inlined");
 	}
 }

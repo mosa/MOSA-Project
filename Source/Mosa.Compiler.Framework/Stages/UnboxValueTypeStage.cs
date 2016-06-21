@@ -9,8 +9,12 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class UnboxValueTypeStage : BaseMethodCompilerStage
 	{
+		private bool triggered = false;
+
 		protected override void Run()
 		{
+			triggered = false;
+
 			// The method declaring type must be a valuetype
 			if (!MethodCompiler.Type.IsValueType)
 				return;
@@ -27,6 +31,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.PrologueBlock.NextBlocks.Count == 0 || BasicBlocks.PrologueBlock.NextBlocks[0] == BasicBlocks.EpilogueBlock)
 				return;
 
+			triggered = true;
+
 			// Get the this pointer
 			var thisPtr = MethodCompiler.StackLayout.Parameters[0];
 
@@ -34,6 +40,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Now push the this pointer by two native pointer sizes
 			context.AppendInstruction(IRInstruction.AddSigned, thisPtr, thisPtr, Operand.CreateConstant(TypeSystem, NativePointerSize * 2));
+		}
+
+		protected override void Finish()
+		{
+			UpdateCounter("UnboxValueTypeStage.Triggered", triggered ? 1 : 0);
 		}
 
 		private bool IsInterfaceMethod()

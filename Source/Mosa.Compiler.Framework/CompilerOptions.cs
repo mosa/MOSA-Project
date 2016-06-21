@@ -162,6 +162,14 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool TwoPassOptimizationStages { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether [enable statistics].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [enable statistics]; otherwise, <c>false</c>.
+		/// </value>
+		public bool EnableStatistics { get; set; }
+
 		#endregion Properties
 
 		/// <summary>
@@ -264,6 +272,7 @@ namespace Mosa.Compiler.Framework
 			EmitSymbols = true;
 			EmitRelocations = true;
 			TwoPassOptimizationStages = true;
+			EnableStatistics = true;
 		}
 	}
 }
