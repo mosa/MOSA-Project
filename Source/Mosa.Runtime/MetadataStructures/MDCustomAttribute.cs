@@ -22,7 +22,7 @@ namespace Mosa.Runtime
 			fixed (MDCustomAttribute* _this = &this)
 			{
 				Ptr pThis = _this;
-				return (MDCustomAttributeArgument*)(pThis + sizeof(MDCustomAttribute) + (Ptr.Size * slot))[0];
+				return (MDCustomAttributeArgument*)(pThis + sizeof(MDCustomAttribute) + (Ptr.Size * slot)).Dereference(0);
 			}
 		}
 	}

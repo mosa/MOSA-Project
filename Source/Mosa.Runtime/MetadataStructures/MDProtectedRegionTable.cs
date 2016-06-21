@@ -17,7 +17,7 @@ namespace Mosa.Runtime
 			fixed (MDProtectedRegionTable* _this = &this)
 			{
 				Ptr pThis = _this;
-				return (MDProtectedRegionDefinition*)(pThis + sizeof(MDProtectedRegionTable) + (Ptr.Size * slot))[0];
+				return (MDProtectedRegionDefinition*)(pThis + sizeof(MDProtectedRegionTable) + (Ptr.Size * slot)).Dereference(0);
 			}
 		}
 	}

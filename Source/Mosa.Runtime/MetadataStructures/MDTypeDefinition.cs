@@ -58,7 +58,7 @@ namespace Mosa.Runtime
 			fixed (MDTypeDefinition* _this = &this)
 			{
 				Ptr pThis = _this;
-				return (MDMethodDefinition*)(pThis + sizeof(MDTypeDefinition) + (Ptr.Size * slot))[0];
+				return (MDMethodDefinition*)(pThis + sizeof(MDTypeDefinition) + (Ptr.Size * slot)).Dereference(0);
 			}
 		}
 	}

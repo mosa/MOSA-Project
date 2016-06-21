@@ -59,20 +59,34 @@ namespace Mosa.Runtime
 			return (int)_value;
 		}
 
-		public Ptr this[uint i]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public Ptr Dereference(uint i)
 		{
-			get
-			{
-				Ptr p;
-				if (_size == 4)
-					p = new Ptr(((uint*)_value)[i]);
-				else
-					p = new Ptr(((ulong*)_value)[i]);
-				return p;
-			}
+			Ptr p;
+			if (_size == 4)
+				p = new Ptr(((uint*)_value)[i]);
+			else
+				p = new Ptr(((ulong*)_value)[i]);
+			return p;
 		}
 
-		public Ptr this[int i] => this[(uint)i];
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public void Increment()
+		{
+			if (_size == 4)
+				_value = (void*)((uint)_value + _size);
+			else
+				_value = (void*)((ulong)_value + _size);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public void Decrement()
+		{
+			if (_size == 4)
+				_value = (void*)((uint)_value - _size);
+			else
+				_value = (void*)((ulong)_value - _size);
+		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool operator ==(Ptr value1, Ptr value2)
@@ -127,28 +141,6 @@ namespace Mosa.Runtime
 				p = new Ptr(~((uint)value._value));
 			else
 				p = new Ptr(~((ulong)value._value));
-			return p;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Ptr operator ++(Ptr value)
-		{
-			Ptr p;
-			if (_size == 4)
-				p = new Ptr((uint)value._value + _size);
-			else
-				p = new Ptr((ulong)value._value + _size);
-			return p;
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Ptr operator --(Ptr value)
-		{
-			Ptr p;
-			if (_size == 4)
-				p = new Ptr((uint)value._value - _size);
-			else
-				p = new Ptr((ulong)value._value - _size);
 			return p;
 		}
 

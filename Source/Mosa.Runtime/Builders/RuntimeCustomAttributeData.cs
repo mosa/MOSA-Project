@@ -163,7 +163,7 @@ namespace System
 			TypeCode typeCode = argument->ArgumentType->ElementType->TypeCode;
 			var valuePtr = argument->GetArgumentValue();
 			var size = ((uint*)valuePtr)[0];
-			valuePtr++;
+			valuePtr.Increment();
 
 			switch (typeCode)
 			{

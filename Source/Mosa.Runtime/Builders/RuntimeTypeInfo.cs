@@ -65,7 +65,6 @@ namespace System
 					{
 						var customAttributesTable = typeDefinition->CustomAttributes;
 						var customAttributesCount = customAttributesTable->NumberOfAttributes;
-						customAttributesTable++;
 						for (uint i = 0; i < customAttributesCount; i++)
 						{
 							RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData(customAttributesTable->GetCustomAttribute(i));
@@ -151,9 +150,9 @@ namespace System
 			//this.handle = handle;
 			typeDefinition = (MDTypeDefinition*)((uint**)&handle)[0];
 
-			assemblyQualifiedName = typeDefinition->Name;	// TODO
-			name = typeDefinition->Name;					// TODO
-			@namespace = typeDefinition->Name;				// TODO
+			assemblyQualifiedName = typeDefinition->Name;   // TODO
+			name = typeDefinition->Name;                    // TODO
+			@namespace = typeDefinition->Name;              // TODO
 			fullname = typeDefinition->Name;
 
 			typeCode = typeDefinition->TypeCode;

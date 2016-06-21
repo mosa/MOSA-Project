@@ -25,7 +25,7 @@ namespace Mosa.Runtime
 			fixed (MDAssemblyDefinition* _this = &this)
 			{
 				Ptr pThis = _this;
-				return (MDTypeDefinition*)(pThis + sizeof(MDAssemblyDefinition) + (Ptr.Size * slot))[0];
+				return (MDTypeDefinition*)(pThis + sizeof(MDAssemblyDefinition) + (Ptr.Size * slot)).Dereference(0);
 			}
 		}
 	}

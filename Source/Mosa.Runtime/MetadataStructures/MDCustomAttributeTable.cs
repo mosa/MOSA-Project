@@ -17,7 +17,7 @@ namespace Mosa.Runtime
 			fixed (MDCustomAttributeTable* _this = &this)
 			{
 				Ptr pThis = _this;
-				return (MDCustomAttribute*)(pThis + sizeof(MDCustomAttributeTable) + (Ptr.Size * slot))[0];
+				return (MDCustomAttribute*)(pThis + sizeof(MDCustomAttributeTable) + (Ptr.Size * slot)).Dereference(0);
 			}
 		}
 	}

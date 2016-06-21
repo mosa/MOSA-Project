@@ -187,8 +187,8 @@ namespace Mosa.Runtime
 		{
 			// Get AssemblyListTable and Assembly count
 			Ptr assemblyListTable = Intrinsic.GetAssemblyListTable();
-			uint assemblyCount = (uint)assemblyListTable[0];
-			assemblyListTable++;
+			uint assemblyCount = (uint)assemblyListTable.Dereference(0);
+			assemblyListTable.Increment();
 
 			Assemblies = new LinkedList<RuntimeAssembly>();
 
@@ -196,7 +196,7 @@ namespace Mosa.Runtime
 			for (uint i = 0; i < assemblyCount; i++)
 			{
 				// Get the pointer to the Assembly Metadata
-				MDAssemblyDefinition* ptr = (MDAssemblyDefinition*)(assemblyListTable[i]);
+				MDAssemblyDefinition* ptr = (MDAssemblyDefinition*)(assemblyListTable.Dereference(i));
 				Assemblies.AddLast(new RuntimeAssembly(ptr));
 			}
 		}
