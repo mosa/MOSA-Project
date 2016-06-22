@@ -1,0 +1,25 @@
+﻿<#@ include file="../TemplateLibrary.txt" #>
+
+// No run-time tests
+
+namespace Mosa.UnitTest.Collection
+{
+	public struct InitStruct
+	{
+<# foreach (KeyValuePair<string, string> primitives in PrimitivesWithCharAndObject) { #>
+		public <#= primitives.Key #> Value<#= primitives.Value #>;
+<# } #>
+	}
+
+	public static class InitStructTests
+	{
+<# foreach (KeyValuePair<string, string> primitives in PrimitivesWithCharAndObject) {#>
+		public static <#= primitives.Key #> InitStruct<#= primitives.Value #>()
+		{
+			InitStruct d = new InitStruct();
+			return d.Value<#= primitives.Value #>;
+		}
+
+<# } #>
+	}
+}

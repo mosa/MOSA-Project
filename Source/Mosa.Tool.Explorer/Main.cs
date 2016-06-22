@@ -690,7 +690,7 @@ namespace Mosa.Tool.Explorer
 
 			var type = node.Type.FullName;
 
-			if (folderBrowserDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
 			{
 				var path = folderBrowserDialog1.SelectedPath;
 

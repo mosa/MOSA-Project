@@ -1,0 +1,20 @@
+﻿<#@ include file="../TemplateLibrary.txt" #>
+using System;
+
+namespace Mosa.UnitTest.Collection
+{
+	public static class GenericCallTests
+	{
+		private static T GenericCallTarget<T>(T value)
+		{
+			return value;
+		}
+<# foreach (KeyValuePair<string, string> number in IntegersWithChar) { #>
+
+		public static bool GenericCall<#= number.Value #>(<#= number.Key #> value)
+		{
+			return value == GenericCallTarget<<#= number.Key #>>(value);
+		}
+<# } #>
+	}
+}

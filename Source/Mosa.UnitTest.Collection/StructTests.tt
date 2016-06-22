@@ -1,0 +1,63 @@
+﻿<#@ include file="../TemplateLibrary.txt" #>
+using System;
+
+namespace Mosa.UnitTest.Collection
+{
+
+	public class StructTests
+	{
+	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
+		public static bool StructTestSet1<#= number.Value #>(<#= number.Key #> one)
+		{
+			Struct1<#= number.Value #> structure;
+			
+			structure.One = one;
+	
+			return (structure.One.Equals(one));
+		}
+	
+		public static bool StructTestSet2<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two)
+		{
+			Struct3<#= number.Value #> structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two));
+		}
+	
+		public static bool StructTestSet3<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two, <#= number.Key #> three)
+		{
+			Struct3<#= number.Value #> structure;
+			
+			structure.One = one;
+			structure.Two = two;
+			structure.Three = three;
+			
+			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
+		}
+		<# } #>
+
+	}
+
+	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
+	public struct Struct1<#= number.Value #>
+	{
+		public <#= number.Key #> One;
+	}
+	
+	public struct Struct2<#= number.Value #>
+	{
+		public <#= number.Key #> One;
+		public <#= number.Key #> Two;
+	}
+	
+	public struct Struct3<#= number.Value #>
+	{
+		public <#= number.Key #> One;
+		public <#= number.Key #> Two;
+		public <#= number.Key #> Three;
+	}
+	<# } #>
+	
+}

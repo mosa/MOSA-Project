@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(node.Result == node.Operand1, node.ToString());
+			Debug.Assert(node.Result == node.Operand1);
 			OpCode opCode = ComputeOpCode(node.Result, node.Operand1, node.Operand2);
 			emitter.Emit(opCode, node.Result, node.Operand2);
 		}

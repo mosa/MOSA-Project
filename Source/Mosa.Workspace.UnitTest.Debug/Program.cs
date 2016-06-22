@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Test.Collection;
+using Mosa.UnitTest.Collection;
 using Mosa.UnitTest.Engine;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 {
 	internal class Program
 	{
-		private static UnitTestEngine unitTestEngine = UnitTestFixture.UnitTestEngine;
+		private static UnitTestEngine unitTestEngine = new UnitTestEngine();
 
 		private static void Main(string[] args)
 		{
@@ -52,26 +52,26 @@ namespace Mosa.Workspace.UnitTest.Debug
 
 			for (int i = 0; i < 1; i++)
 			{
-				//int value = unitTestEngine.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 1, 2);
-				//value = unitTestEngine.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 3, 4);
-				//value = unitTestEngine.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 5, 6);
-				//value = unitTestEngine.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 7, 8);
-				//value = unitTestEngine.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 9, 0);
+				int value = unitTestEngine.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 1, 2);
+				value = unitTestEngine.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 3, 4);
+				value = unitTestEngine.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 5, 6);
+				value = unitTestEngine.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 7, 8);
+				value = unitTestEngine.Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", 9, 0);
 
-				//double a1 = 7;
-				//double b1 = 9;
+				double a1 = 7;
+				double b1 = 9;
 
-				//var d1 = unitTestEngine.Run<double>("Mosa.Test.Collection", "DoubleTests", "AddR8R8", a1, b1);
-				//var d2 = DoubleTests.AddR8R8(a1, b1);
+				var d1 = unitTestEngine.Run<double>("Mosa.Test.Collection", "DoubleTests", "AddR8R8", a1, b1);
+				var d2 = DoubleTests.AddR8R8(a1, b1);
 
-				//float a2 = 7;
-				//float b2 = 9;
+				float a2 = 7;
+				float b2 = 9;
 
-				//var d1a = unitTestEngine.Run<float>("Mosa.Test.Collection", "SingleTests", "AddR4R4", a2, b2);
-				//var d2a = SingleTests.AddR4R4(a2, b2);
+				var d1a = unitTestEngine.Run<float>("Mosa.Test.Collection", "SingleTests", "AddR4R4", a2, b2);
+				var d2a = SingleTests.AddR4R4(a2, b2);
 
-				//var b1b = unitTestEngine.Run<bool>("Mosa.Test.Collection", "ValueTypeTests", "TestValueTypeStaticField");
-				//var b2b = ValueTypeTests.TestValueTypeStaticField();
+				var b1b = unitTestEngine.Run<bool>("Mosa.Test.Collection", "ValueTypeTests", "TestValueTypeStaticField");
+				var b2b = ValueTypeTests.TestValueTypeStaticField();
 
 				var z = unitTestEngine.Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueR8", 1d);
 			}

@@ -15,6 +15,7 @@ namespace Mosa.Tool.Debugger
 		private ConnectionProperties connectionProperties = new ConnectionProperties();
 		private DispatchOutput dispatchOutput = new DispatchOutput();
 		private MethodCaller methodCaller = new MethodCaller();
+		private DisplayView displayView = new DisplayView();
 
 		public string Status { set { toolStripStatusLabel1.Text = value; } }
 
@@ -84,6 +85,11 @@ namespace Mosa.Tool.Debugger
 		{
 			var memoryView = new MemoryView();
 			memoryView.Show(dockPanel, DockState.Document);
+		}
+
+		private void toolStripButton2_Click_1(object sender, EventArgs e)
+		{
+			displayView.Show(dockPanel, DockState.Document);
 		}
 	}
 }

@@ -4,7 +4,7 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 12.0.31101.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{AB88960E-B233-475B-96E4-8C10EEF8622C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{88D3D1D0-85D2-4301-A9EA-3F964CB05415}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{88D3D1D0-85D2-4301-A9EA-3F964CB05415}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}"
 EndProject
@@ -56,7 +56,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.x86", "Mosa.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.CoolWorld.x86", "Mosa.CoolWorld.x86\Mosa.CoolWorld.x86.csproj", "{B21130AE-311F-4F15-B763-0E91EE4C9646}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Collection", "Mosa.Test.Collection\Mosa.Test.Collection.csproj", "{067AAB6B-447A-45BA-9E0D-DFEA886B4F69}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.UnitTest.Collection", "Mosa.UnitTest.Collection\Mosa.UnitTest.Collection.csproj", "{067AAB6B-447A-45BA-9E0D-DFEA886B4F69}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.HelloWorld.x86", "Mosa.HelloWorld.x86\Mosa.HelloWorld.x86.csproj", "{F1776FF2-A727-4FAF-B6BE-D37D6B019038}"
 EndProject
@@ -80,7 +80,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.MosaTypeSyste
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.GUI.Common", "Mosa.Utility.GUI.Common\Mosa.Utility.GUI.Common.csproj", "{5A813793-78E2-413C-AA05-FCDD12B7DB04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Numbers", "Mosa.Test.Numbers\Mosa.Test.Numbers.csproj", "{AD653B6B-EBC7-4E69-93F7-FADA40462648}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.UnitTest.Numbers", "Mosa.UnitTest.Numbers\Mosa.UnitTest.Numbers.csproj", "{AD653B6B-EBC7-4E69-93F7-FADA40462648}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.CodeDomCompiler", "Mosa.Utility.CodeDomCompiler\Mosa.Utility.CodeDomCompiler.csproj", "{7B8FBA4E-D6AC-4DAD-A607-43BA112F8EC1}"
 EndProject
@@ -104,11 +104,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.HardwareSystem", "Mosa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.UnitTest.Engine", "Mosa.UnitTest.Engine\Mosa.UnitTest.Engine.csproj", "{B0776C9D-7F3D-4E6E-8C5D-5F735326C7D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Collection.xUnit", "Mosa.Test.Collection.xUnit\Mosa.Test.Collection.xUnit.csproj", "{2A98B95B-B900-485C-85F7-7CD2944612C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.UnitTest.Collection.xUnit", "Mosa.UnitTest.Collection.xUnit\Mosa.UnitTest.Collection.xUnit.csproj", "{2A98B95B-B900-485C-85F7-7CD2944612C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Workspace.UnitTest.Debug", "Mosa.Workspace.UnitTest.Debug\Mosa.Workspace.UnitTest.Debug.csproj", "{1717C7EB-06ED-434B-BA3C-E46C9644EEDF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.UnitTest.x86", "Mosa.UnitTest.x86\Mosa.UnitTest.x86.csproj", "{44725E46-513F-4CFB-8196-2191399C514B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -563,18 +561,6 @@ Global
 		{1717C7EB-06ED-434B-BA3C-E46C9644EEDF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1717C7EB-06ED-434B-BA3C-E46C9644EEDF}.Release|x86.ActiveCfg = Release|Any CPU
 		{1717C7EB-06ED-434B-BA3C-E46C9644EEDF}.Release|x86.Build.0 = Release|Any CPU
-		{44725E46-513F-4CFB-8196-2191399C514B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44725E46-513F-4CFB-8196-2191399C514B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44725E46-513F-4CFB-8196-2191399C514B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{44725E46-513F-4CFB-8196-2191399C514B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{44725E46-513F-4CFB-8196-2191399C514B}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{44725E46-513F-4CFB-8196-2191399C514B}.Debug|x86.Build.0 = Debug|Any CPU
-		{44725E46-513F-4CFB-8196-2191399C514B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44725E46-513F-4CFB-8196-2191399C514B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{44725E46-513F-4CFB-8196-2191399C514B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{44725E46-513F-4CFB-8196-2191399C514B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{44725E46-513F-4CFB-8196-2191399C514B}.Release|x86.ActiveCfg = Release|Any CPU
-		{44725E46-513F-4CFB-8196-2191399C514B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -623,6 +609,5 @@ Global
 		{B0776C9D-7F3D-4E6E-8C5D-5F735326C7D7} = {88D3D1D0-85D2-4301-A9EA-3F964CB05415}
 		{2A98B95B-B900-485C-85F7-7CD2944612C0} = {88D3D1D0-85D2-4301-A9EA-3F964CB05415}
 		{1717C7EB-06ED-434B-BA3C-E46C9644EEDF} = {AC7C3CDA-E0E8-408C-BB32-DBCBB905E3E1}
-		{44725E46-513F-4CFB-8196-2191399C514B} = {1AB7FA6A-829C-4DCF-BCA6-A27156D8DA26}
 	EndGlobalSection
 EndGlobal
