@@ -24,6 +24,14 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <value>The op code.</value>
 		public OpCode OpCode { get { return opcode; } }
 
+		/// <summary>
+		/// Gets the name of the instruction family.
+		/// </summary>
+		/// <value>
+		/// The name of the instruction family.
+		/// </value>
+		public override string InstructionFamilyName { get { return "IR"; } }
+
 		#endregion Properties
 
 		#region Construction
@@ -77,23 +85,6 @@ namespace Mosa.Compiler.Framework.CIL
 		public virtual bool PushResult
 		{
 			get { return true; }
-		}
-
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <returns>
-		/// A string representation of the operand.
-		/// </returns>
-		public override string ToString()
-		{
-			string code = opcode.ToString();
-			int index = code.IndexOf("Instruction");
-
-			if (index > 0)
-				code = code.Substring(0, index);
-
-			return "CIL." + code;
 		}
 
 		#endregion Methods

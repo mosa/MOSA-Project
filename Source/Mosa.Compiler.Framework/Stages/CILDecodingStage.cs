@@ -4,7 +4,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -121,7 +120,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				var cil = CILInstruction.Get((OpCode)op);
 
-				UpdateCounter("CILDecodingStage.OpCode." + cil.ToString(), count);
+				UpdateCounter("CILDecodingStage.OpCode." + cil.InstructionName, count);
 
 				total = total + count;
 			}
