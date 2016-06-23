@@ -129,9 +129,9 @@ namespace Mosa.Platform.x86.Stages
 
 			// Place the multiboot address into a static field
 			ctx.AppendInstruction(X86.Mov, ecx, multibootEax);
-			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 0), eax);
+			ctx.AppendInstruction(X86.MovStore, null, ecx, zero, eax);
 			ctx.AppendInstruction(X86.Mov, ecx, multibootEbx);
-			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ecx, 0), ebx);
+			ctx.AppendInstruction(X86.MovStore, null, ecx, zero, ebx);
 
 			// call type initializer
 			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
