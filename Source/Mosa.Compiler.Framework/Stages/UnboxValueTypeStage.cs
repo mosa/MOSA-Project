@@ -33,6 +33,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			triggered = true;
 
+			//System.Diagnostics.Debug.WriteLine(this.MethodCompiler.Method.FullName); //temp - remove me
+
 			// Get the this pointer
 			var thisPtr = MethodCompiler.StackLayout.Parameters[0];
 

@@ -47,7 +47,6 @@
 			this.snippetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
-			this.includeTestKorlibToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableSSA = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableOptimizations = new System.Windows.Forms.ToolStripMenuItem();
 			this.enableSparseConditionalConstantPropagation = new System.Windows.Forms.ToolStripMenuItem();
@@ -244,7 +243,6 @@
 			// 
 			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showSizes,
-            this.includeTestKorlibToolStripMenuItem,
             this.enableSSA,
             this.enableOptimizations,
             this.enableSparseConditionalConstantPropagation,
@@ -264,13 +262,6 @@
 			this.showSizes.Size = new System.Drawing.Size(293, 22);
 			this.showSizes.Text = "Show Sizes";
 			this.showSizes.Click += new System.EventHandler(this.showSizes_Click);
-			// 
-			// includeTestKorlibToolStripMenuItem
-			// 
-			this.includeTestKorlibToolStripMenuItem.CheckOnClick = true;
-			this.includeTestKorlibToolStripMenuItem.Name = "includeTestKorlibToolStripMenuItem";
-			this.includeTestKorlibToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
-			this.includeTestKorlibToolStripMenuItem.Text = "Include Test Components";
 			// 
 			// enableSSA
 			// 
@@ -399,7 +390,7 @@
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(689, 425);
+			this.tabControl1.Size = new System.Drawing.Size(687, 425);
 			this.tabControl1.TabIndex = 38;
 			// 
 			// tbStages
@@ -415,7 +406,7 @@
 			this.tbStages.Location = new System.Drawing.Point(4, 25);
 			this.tbStages.Margin = new System.Windows.Forms.Padding(0);
 			this.tbStages.Name = "tbStages";
-			this.tbStages.Size = new System.Drawing.Size(681, 396);
+			this.tbStages.Size = new System.Drawing.Size(679, 396);
 			this.tbStages.TabIndex = 0;
 			this.tbStages.Text = "Instructions";
 			// 
@@ -476,7 +467,7 @@
 			this.tbDebug.Location = new System.Drawing.Point(4, 25);
 			this.tbDebug.Margin = new System.Windows.Forms.Padding(0);
 			this.tbDebug.Name = "tbDebug";
-			this.tbDebug.Size = new System.Drawing.Size(681, 396);
+			this.tbDebug.Size = new System.Drawing.Size(679, 396);
 			this.tbDebug.TabIndex = 1;
 			this.tbDebug.Text = "Debug";
 			// 
@@ -511,7 +502,7 @@
 			this.tbMethodCounters.Controls.Add(this.rbMethodCounters);
 			this.tbMethodCounters.Location = new System.Drawing.Point(4, 25);
 			this.tbMethodCounters.Name = "tbMethodCounters";
-			this.tbMethodCounters.Size = new System.Drawing.Size(681, 396);
+			this.tbMethodCounters.Size = new System.Drawing.Size(679, 396);
 			this.tbMethodCounters.TabIndex = 6;
 			this.tbMethodCounters.Text = "Counters";
 			this.tbMethodCounters.UseVisualStyleBackColor = true;
@@ -536,7 +527,7 @@
 			this.tbGlobalCounters.Location = new System.Drawing.Point(4, 25);
 			this.tbGlobalCounters.Name = "tbGlobalCounters";
 			this.tbGlobalCounters.Padding = new System.Windows.Forms.Padding(3);
-			this.tbGlobalCounters.Size = new System.Drawing.Size(681, 396);
+			this.tbGlobalCounters.Size = new System.Drawing.Size(679, 396);
 			this.tbGlobalCounters.TabIndex = 4;
 			this.tbGlobalCounters.Text = "Global Counters";
 			// 
@@ -560,7 +551,7 @@
 			this.tbLogs.Location = new System.Drawing.Point(4, 25);
 			this.tbLogs.Name = "tbLogs";
 			this.tbLogs.Padding = new System.Windows.Forms.Padding(3);
-			this.tbLogs.Size = new System.Drawing.Size(681, 396);
+			this.tbLogs.Size = new System.Drawing.Size(679, 396);
 			this.tbLogs.TabIndex = 3;
 			this.tbLogs.Text = "Log";
 			// 
@@ -584,7 +575,7 @@
 			this.tbErrors.Location = new System.Drawing.Point(4, 25);
 			this.tbErrors.Name = "tbErrors";
 			this.tbErrors.Padding = new System.Windows.Forms.Padding(3);
-			this.tbErrors.Size = new System.Drawing.Size(681, 396);
+			this.tbErrors.Size = new System.Drawing.Size(679, 396);
 			this.tbErrors.TabIndex = 2;
 			this.tbErrors.Text = "Errors";
 			// 
@@ -607,7 +598,7 @@
 			this.tbExceptions.Location = new System.Drawing.Point(4, 25);
 			this.tbExceptions.Name = "tbExceptions";
 			this.tbExceptions.Padding = new System.Windows.Forms.Padding(3);
-			this.tbExceptions.Size = new System.Drawing.Size(681, 396);
+			this.tbExceptions.Size = new System.Drawing.Size(679, 396);
 			this.tbExceptions.TabIndex = 5;
 			this.tbExceptions.Text = "Exceptions";
 			this.tbExceptions.UseVisualStyleBackColor = true;
@@ -752,7 +743,6 @@
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
 		private System.Windows.Forms.ToolStripButton toolStripButton2;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ToolStripMenuItem includeTestKorlibToolStripMenuItem;
 		private System.Windows.Forms.ToolStripButton toolStripButton4;
 		private System.Windows.Forms.ComboBox cbPlatform;
 		private System.Windows.Forms.ToolStripMenuItem enableSSA;

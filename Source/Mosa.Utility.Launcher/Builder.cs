@@ -158,6 +158,10 @@ namespace Mosa.Utility.Launcher
 					LaunchNDISASM();
 				}
 			}
+			catch(Exception e)
+			{
+				Console.WriteLine(e.ToString());
+			}
 			finally
 			{
 				compiler.Dispose();

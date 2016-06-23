@@ -57,6 +57,8 @@ namespace Mosa.Compiler.Framework.CIL
 			// Push the loaded value
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, type);
 			ctx.MosaType = type;
+
+			//System.Diagnostics.Debug.WriteLine(decoder.Method.FullName); //temp - remove me
 		}
 
 		/// <summary>

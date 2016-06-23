@@ -90,12 +90,7 @@ namespace Mosa.Tool.Explorer
 
 		public void LoadAssembly(string filename)
 		{
-			if (Path.GetFileName(filename) == "Mosa.Test.Collection.dll" || Path.GetFileName(filename) == "Mosa.Kernel.x86Test.dll")
-			{
-				includeTestKorlibToolStripMenuItem.Checked = true;
-			}
-
-			LoadAssembly(filename, includeTestKorlibToolStripMenuItem.Checked, cbPlatform.Text);
+			LoadAssembly(filename, cbPlatform.Text);
 
 			methodDataStore.Clear();
 
@@ -451,20 +446,11 @@ namespace Mosa.Tool.Explorer
 			ShowCodeForm();
 		}
 
-		protected void LoadAssembly(string filename, bool includeTestComponents, string platform)
+		protected void LoadAssembly(string filename, string platform)
 		{
 			Compiler.CompilerOptions.Architecture = GetArchitecture(cbPlatform.Text);
 
 			var moduleLoader = new MosaModuleLoader();
-
-			if (includeTestComponents)
-			{
-				moduleLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
-				moduleLoader.LoadModuleFromFile("mscorlib.dll");
-				moduleLoader.LoadModuleFromFile("Mosa.Runtime.dll");
-				moduleLoader.LoadModuleFromFile("Mosa.Runtime." + platform + ".dll");
-				moduleLoader.LoadModuleFromFile("Mosa.Kernel.x86Test.dll");
-			}
 
 			moduleLoader.AddPrivatePath(Path.GetDirectoryName(filename));
 			moduleLoader.LoadModuleFromFile(filename);
@@ -527,7 +513,7 @@ namespace Mosa.Tool.Explorer
 			{
 				if (!string.IsNullOrEmpty(form.Assembly))
 				{
-					LoadAssembly(form.Assembly, true, cbPlatform.Text);
+					LoadAssembly(form.Assembly, cbPlatform.Text);
 				}
 			}
 		}
