@@ -134,7 +134,13 @@ namespace Mosa.Platform.x86
 
 		public static readonly Movups Movups = new Movups();
 
+		public static readonly MovupsLoad MovupsLoad = new MovupsLoad();
+
+		public static readonly MovupsStore MovupsStore = new MovupsStore();
+
 		public static readonly Movaps Movaps = new Movaps();
+
+		public static readonly MovapsLoad MovapsLoad = new MovapsLoad();
 
 		public static readonly Call Call = new Call();
 

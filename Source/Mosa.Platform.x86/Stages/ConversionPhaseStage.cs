@@ -14,9 +14,10 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[X86.Mov] = Mov;
 			visitationDictionary[X86.Movsx] = Movsx;
 			visitationDictionary[X86.Movzx] = Movzx;
-
 			visitationDictionary[X86.Movsd] = Movsd;
 			visitationDictionary[X86.Movss] = Movss;
+			visitationDictionary[X86.Movups] = Movups;
+			visitationDictionary[X86.Movaps] = Movaps;
 		}
 
 		#region Visitation Methods
@@ -141,6 +142,54 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Result.IsMemoryAddress && (context.Operand1.IsCPURegister /*|| context.Operand1.IsConstant*/))
 			{
 				context.SetInstruction(X86.MovssStore,
+					null,
+					(context.Result.IsLabel || context.Result.IsSymbol || context.Result.IsField)
+						? context.Result
+						: Operand.CreateCPURegister(context.Result.Type, context.Result.EffectiveOffsetBase),
+					Operand.CreateConstant(MethodCompiler.TypeSystem, (int)context.Result.Displacement),
+					context.Operand1
+				);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Movups" /> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Movaps(Context context)
+		{
+			if (context.Result.IsCPURegister && context.Operand1.IsMemoryAddress)
+			{
+				context.SetInstruction(X86.MovapsLoad,
+					context.Result,
+					(context.Operand1.IsLabel || context.Operand1.IsSymbol || context.Operand1.IsField)
+						? context.Operand1
+						: Operand.CreateCPURegister(context.Operand1.Type, context.Operand1.EffectiveOffsetBase),
+					Operand.CreateConstant(MethodCompiler.TypeSystem, (int)context.Operand1.Displacement)
+				);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Movups" /> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Movups(Context context)
+		{
+			if (context.Result.IsCPURegister && context.Operand1.IsMemoryAddress)
+			{
+				context.SetInstruction(X86.MovupsLoad,
+					context.Result,
+					(context.Operand1.IsLabel || context.Operand1.IsSymbol || context.Operand1.IsField)
+						? context.Operand1
+						: Operand.CreateCPURegister(context.Operand1.Type, context.Operand1.EffectiveOffsetBase),
+					Operand.CreateConstant(MethodCompiler.TypeSystem, (int)context.Operand1.Displacement)
+				);
+			}
+
+			if (context.Result.IsMemoryAddress && (context.Operand1.IsCPURegister /*|| context.Operand1.IsConstant*/))
+			{
+				context.SetInstruction(X86.MovupsStore,
 					null,
 					(context.Result.IsLabel || context.Result.IsSymbol || context.Result.IsField)
 						? context.Result
