@@ -8,7 +8,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 movaps instruction.
 	/// </summary>
-	public sealed class MovUPS : X86Instruction
+	public sealed class Movups : X86Instruction
 	{
 		#region Data Members
 
@@ -20,9 +20,9 @@ namespace Mosa.Platform.x86.Instructions
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="MovAPS"/>.
+		/// Initializes a new instance of <see cref="Movaps"/>.
 		/// </summary>
-		public MovUPS() :
+		public Movups() :
 			base(1, 1)
 		{
 		}

@@ -33,10 +33,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			MovzxMememoryToReg(node, emitter);
+			MovzxMemoryToReg(node, emitter);
 		}
 
-		private static void MovzxMememoryToReg(InstructionNode node, MachineCodeEmitter emitter)
+		private static void MovzxMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsRegister);
 
@@ -45,8 +45,6 @@ namespace Mosa.Platform.x86.Instructions
 
 			// memory to register 0000 1111 : 1011 011w: mod reg r / m
 			var opcode = new OpcodeEncoder()
-
-				//.AppendConditionalPrefix(0x66, size == InstructionSize.Size16)  // 8:prefix: 16bit
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
 				.AppendNibble(Bits.b1011)                                       // 4:opcode

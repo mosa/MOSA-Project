@@ -8,16 +8,16 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Representations the x86 MovLoad instruction.
+	/// Representations the x86 MovsdStore instruction.
 	/// </summary>
-	public sealed class MovLoad : X86Instruction
+	public sealed class MovsdStore : X86Instruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="MovLoad"/>.
+		/// Initializes a new instance of <see cref="MovsdStore"/>.
 		/// </summary>
-		public MovLoad() :
+		public MovsdStore() :
 			base(1, 2)
 		{
 		}
@@ -33,24 +33,27 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			MovMemoryToReg(node, emitter);
+			MovsdRegToMemory(node, emitter);
 		}
 
-		private static void MovMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
+		private static void MovsdRegToMemory(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(node.Result.IsRegister);
+			Debug.Assert(node.Operand3.IsRegister);
+			Debug.Assert(node.ResultCount == 0);
+			Debug.Assert(!node.Operand3.IsConstant);
 
-			var size = BaseMethodCompilerStage.GetInstructionSize(node.Size, node.Result);
 			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
 
-			// memory to reg 1000 101w: mod reg r/m
+			// xmmreg1 to mem 1111 0010:0000 1111:0001 0001: mod xmmreg r/m
 			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(0x66, size == InstructionSize.Size16)  // 8:prefix: 16bit
-				.AppendNibble(Bits.b1000)                                       // 4:opcode
-				.Append3Bits(Bits.b101)                                         // 3:opcode
-				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0010)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
 				.AppendMod(true, node.Operand2)                                 // 2:mod
-				.AppendRegister(node.Result.Register)                           // 3:register (destination)
+				.AppendRegister(node.Operand3.Register)                         // 3:register (destination)
 				.AppendRM(node.Operand1)                                        // 3:r/m (source)
 				.AppendConditionalDisplacement(node.Operand2, !node.Operand2.IsConstantZero)    // 8/32:displacement value
 				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory

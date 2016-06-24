@@ -29,10 +29,10 @@ namespace Mosa.Platform.x86.Intrinsic
 			var memSrc1 = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.Void, src, 0);
 			var memSrc2 = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.Void, src, 16);
 
-			context.SetInstruction(X86.MovUPS, InstructionSize.Size128, v1, memSrc1);
-			context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, v2, memSrc2);
-			context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, memDest1, v1);
-			context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, memDest2, v2);
+			context.SetInstruction(X86.Movups, InstructionSize.Size128, v1, memSrc1);
+			context.AppendInstruction(X86.Movups, InstructionSize.Size128, v2, memSrc2);
+			context.AppendInstruction(X86.Movups, InstructionSize.Size128, memDest1, v1);
+			context.AppendInstruction(X86.Movups, InstructionSize.Size128, memDest2, v2);
 		}
 
 		#endregion Methods

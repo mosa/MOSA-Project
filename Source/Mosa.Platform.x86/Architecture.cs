@@ -324,8 +324,8 @@ namespace Mosa.Platform.x86
 				// Large aligned moves allow 128bits to be copied at a time
 				var memSrc = Operand.CreateMemoryAddress(destination.Type.TypeSystem.BuiltIn.Void, srcReg, i);
 				var memDest = Operand.CreateMemoryAddress(destination.Type.TypeSystem.BuiltIn.Void, dstReg, i);
-				context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, tmpLarge, memSrc);
-				context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, memDest, tmpLarge);
+				context.AppendInstruction(X86.Movups, InstructionSize.Size128, tmpLarge, memSrc);
+				context.AppendInstruction(X86.Movups, InstructionSize.Size128, memDest, tmpLarge);
 			}
 			for (int i = largeAlignedTypeSize; i < alignedSize; i += NativeAlignment)
 			{

@@ -26,8 +26,8 @@ namespace Mosa.Platform.x86.Intrinsic
 			var memDest2 = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.Void, dest, 16);
 
 			context.SetInstruction(X86.PXor, InstructionSize.Size128, v0, v0, v0);
-			context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, memDest1, v0);
-			context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, memDest2, v0);
+			context.AppendInstruction(X86.Movups, InstructionSize.Size128, memDest1, v0);
+			context.AppendInstruction(X86.Movups, InstructionSize.Size128, memDest2, v0);
 		}
 
 		#endregion Methods

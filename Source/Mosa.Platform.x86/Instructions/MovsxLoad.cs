@@ -33,10 +33,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			MovsxMememoryToReg(node, emitter);
+			MovsxMemoryToReg(node, emitter);
 		}
 
-		private static void MovsxMememoryToReg(InstructionNode node, MachineCodeEmitter emitter)
+		private static void MovsxMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsRegister);
 
@@ -45,8 +45,6 @@ namespace Mosa.Platform.x86.Instructions
 
 			// memory to reg 0000 1111 : 1011 111w : mod reg r/m
 			var opcode = new OpcodeEncoder()
-
-				//.AppendConditionalPrefix(0x66, size == InstructionSize.Size16)  // 8:prefix: 16bit
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
 				.AppendNibble(Bits.b1011)                                       // 4:opcode
@@ -55,7 +53,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendMod(true, node.Operand2)                                 // 2:mod
 				.AppendRegister(node.Result.Register)                           // 3:register (destination)
 				.AppendRM(node.Operand1)                                        // 3:r/m (source)
-				.AppendConditionalDisplacement(node.Operand2, !node.Operand2.IsConstantZero)      // 8/32:displacement value
+				.AppendConditionalDisplacement(node.Operand2, !node.Operand2.IsConstantZero)    // 8/32:displacement value
 				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
 
 			if (linkreference)
