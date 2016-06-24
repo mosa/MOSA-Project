@@ -5,7 +5,8 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	///
+	/// This stages converts generic x86 instructions to specific load/store-type instructions.
+	/// This is a temporary stage until all the previous stages use the load/store-type instructions
 	/// </summary>
 	public sealed class ConversionPhaseStage : BaseTransformationStage
 	{

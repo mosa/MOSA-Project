@@ -17,6 +17,8 @@ namespace Mosa.Platform.x86.Stages
 	/// </remarks>
 	public sealed class LongOperandTransformationStage : BaseTransformationStage
 	{
+		private Operand ConstantFour;
+
 		protected override void PopulateVisitationDictionary()
 		{
 			visitationDictionary[IRInstruction.ArithmeticShiftRight] = ArithmeticShiftRight;
@@ -50,6 +52,13 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.AddUnsigned] = AddUnsigned;
 			visitationDictionary[IRInstruction.Call] = Call;
 			visitationDictionary[IRInstruction.Return] = Return;
+		}
+
+		protected override void Setup()
+		{
+			base.Setup();
+
+			ConstantFour = Operand.CreateConstant(MethodCompiler.TypeSystem, 4);
 		}
 
 		#region Utility Methods
@@ -663,10 +672,12 @@ namespace Mosa.Platform.x86.Stages
 			{
 				context.SetInstruction(X86.Add, v1, address, offset);
 			}
-			context.AppendInstruction(X86.Mov, v2, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.U4, v1, 0));
-			context.AppendInstruction(X86.Mov, op0L, v2);
-			context.AppendInstruction(X86.Mov, v3, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.U4, v1, 4));
-			context.AppendInstruction(X86.Mov, op0H, v3);
+
+			context.AppendInstruction(X86.MovLoad, v2, v1, ConstantZero);
+			context.AppendInstruction(X86.Mov, op0L, v2);   // fixme: may not be necessary
+
+			context.AppendInstruction(X86.MovLoad, v3, v1, ConstantFour);
+			context.AppendInstruction(X86.Mov, op0H, v3);   // fixme: may not be necessary
 		}
 
 		/// <summary>
@@ -702,8 +713,8 @@ namespace Mosa.Platform.x86.Stages
 				context.SetInstruction(X86.Add, v1, address, offset);
 			}
 
-			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.U4, v1, 0), op0L);
-			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.U4, v1, 4), op0H);
+			context.AppendInstruction(X86.MovStore, null, v1, ConstantZero, op0L);
+			context.AppendInstruction(X86.MovStore, null, v1, ConstantFour, op0H);
 		}
 
 		/// <summary>

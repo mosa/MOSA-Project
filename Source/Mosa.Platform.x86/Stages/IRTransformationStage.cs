@@ -409,7 +409,7 @@ namespace Mosa.Platform.x86.Stages
 
 				var mov = GetMove(result, mem);
 
-				if (result.IsR8 && type.IsR4) // size == InstructionSize.Size32)
+				if (result.IsR8 && type.IsR4)
 				{
 					mov = X86.Cvtss2sd;
 				}
@@ -467,6 +467,7 @@ namespace Mosa.Platform.x86.Stages
 				// Large Aligned moves allow 128bits to be copied at a time
 				var memSrc = Operand.CreateMemoryAddress(MethodCompiler.TypeSystem.BuiltIn.Void, srcReg, i + offset);
 				var memDest = Operand.CreateMemoryAddress(MethodCompiler.TypeSystem.BuiltIn.Void, dstReg, i);
+
 				context.AppendInstruction(X86.Movups, InstructionSize.Size128, tmpLarge, memSrc);
 				context.AppendInstruction(X86.Movups, InstructionSize.Size128, memDest, tmpLarge);
 			}
@@ -651,10 +652,12 @@ namespace Mosa.Platform.x86.Stages
 			int typeSize = TypeLayout.GetTypeSize(type);
 			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
 			int largeAlignedTypeSize = typeSize - (typeSize % LargeAlignment);
+
 			Debug.Assert(typeSize > 0, MethodCompiler.Method.FullName);
 
 			var src = context.Operand1;
 			var dest = context.Result;
+
 			Debug.Assert((src.IsMemoryAddress || src.IsSymbol) && dest.IsMemoryAddress, context.ToString());
 
 			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
@@ -663,6 +666,7 @@ namespace Mosa.Platform.x86.Stages
 			var tmpLarge = Operand.CreateCPURegister(MethodCompiler.TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
 
 			context.SetInstruction(X86.Nop);
+
 			if (src.IsSymbol)
 			{
 				context.AppendInstruction(X86.Mov, srcReg, src);
@@ -671,6 +675,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				context.AppendInstruction(X86.Lea, srcReg, src);
 			}
+
 			context.AppendInstruction(X86.Lea, dstReg, dest);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
@@ -685,7 +690,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				context.AppendInstruction(X86.Mov, InstructionSize.Size32, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
 				context.AppendInstruction(X86.Mov, InstructionSize.Size32, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i), tmp);
-			}
+	     	}
 			for (int i = alignedTypeSize; i < typeSize; i++)
 			{
 				context.AppendInstruction(X86.Mov, InstructionSize.Size8, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
