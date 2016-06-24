@@ -8,16 +8,16 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Representations the x86 MovLoad instruction.
+	/// Representations the x86 MovzxLoad instruction.
 	/// </summary>
-	public sealed class MovLoad : X86Instruction
+	public sealed class MovzxLoad : X86Instruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="MovLoad"/>.
+		/// Initializes a new instance of <see cref="MovzxLoad"/>.
 		/// </summary>
-		public MovLoad() :
+		public MovzxLoad() :
 			base(1, 2)
 		{
 		}
@@ -33,21 +33,24 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			MovMememoryToReg(node, emitter);
+			MovzxMememoryToReg(node, emitter);
 		}
 
-		private static void MovMememoryToReg(InstructionNode node, MachineCodeEmitter emitter)
+		private static void MovzxMememoryToReg(InstructionNode node, MachineCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsRegister);
 
 			var size = BaseMethodCompilerStage.GetInstructionSize(node.Size, node.Result);
 			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
 
-			// memory to reg 1000 101w: mod reg r/m
+			// memory to register 0000 1111 : 1011 011w: mod reg r / m
 			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(0x66, size == InstructionSize.Size16)  // 8:prefix: 16bit
-				.AppendNibble(Bits.b1000)                                       // 4:opcode
-				.Append3Bits(Bits.b101)                                         // 3:opcode
+
+				//.AppendConditionalPrefix(0x66, size == InstructionSize.Size16)  // 8:prefix: 16bit
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b1011)                                       // 4:opcode
+				.Append3Bits(Bits.b011)                                         // 4:opcode
 				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
 				.AppendMod(true, node.Operand2)                                 // 2:mod
 				.AppendRegister(node.Result.Register)                           // 3:register (destination)

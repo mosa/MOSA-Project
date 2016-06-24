@@ -31,6 +31,7 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.IntegerCompare] = IntegerCompare;
 			visitationDictionary[IRInstruction.Jmp] = Jmp;
 			visitationDictionary[IRInstruction.Load] = Load;
+			visitationDictionary[IRInstruction.Load2] = Load2;
 			visitationDictionary[IRInstruction.CompoundLoad] = CompoundLoad;
 			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
 			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
@@ -417,6 +418,17 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		private void Load2(Context context)
+		{
+			Operand result = context.Result;
+			Operand baseOperand = context.Operand1;
+			Operand offsetOperand = context.Operand2;
+			var type = context.MosaType;
+			var size = context.Size;
+
+			context.SetInstruction(X86.MovLoad, size, result, baseOperand, offsetOperand);
+		}
+
 		private void CompoundLoad(Context context)
 		{
 			var type = context.Result.Type;
@@ -497,13 +509,13 @@ namespace Mosa.Platform.x86.Stages
 				}
 				else
 				{
-					context.AppendInstruction(X86.Movsx, destination, Operand.CreateMemoryAddress(type, v1, offset.ConstantSignedLongInteger));
+					context.AppendInstruction(X86.Movsx, size, destination, Operand.CreateMemoryAddress(type, v1, offset.ConstantSignedLongInteger));
 				}
 			}
 			else
 			{
 				context.AppendInstruction(X86.Add, v1, v1, offset);
-				context.AppendInstruction(X86.Movsx, destination, Operand.CreateMemoryAddress(type, v1, 0));
+				context.AppendInstruction(X86.Movsx, size, destination, Operand.CreateMemoryAddress(type, v1, 0));
 			}
 		}
 
@@ -536,13 +548,13 @@ namespace Mosa.Platform.x86.Stages
 				}
 				else
 				{
-					context.AppendInstruction(X86.Movzx, destination, Operand.CreateMemoryAddress(type, v1, offset.ConstantSignedLongInteger));
+					context.AppendInstruction(X86.Movzx, size, destination, Operand.CreateMemoryAddress(type, v1, offset.ConstantSignedLongInteger));
 				}
 			}
 			else
 			{
 				context.AppendInstruction(X86.Add, v1, v1, offset);
-				context.AppendInstruction(X86.Movzx, destination, Operand.CreateMemoryAddress(type, v1, 0));
+				context.AppendInstruction(X86.Movzx, size, destination, Operand.CreateMemoryAddress(type, v1, 0));
 			}
 		}
 

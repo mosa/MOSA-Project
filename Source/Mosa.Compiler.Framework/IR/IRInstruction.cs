@@ -92,6 +92,8 @@ namespace Mosa.Compiler.Framework.IR
 		/// </summary>
 		public static readonly BaseIRInstruction Load = new Load();
 
+		public static readonly BaseIRInstruction Load2 = new Load2();
+
 		/// <summary>
 		///
 		/// </summary>

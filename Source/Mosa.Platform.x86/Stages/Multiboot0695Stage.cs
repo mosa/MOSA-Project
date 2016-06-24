@@ -100,7 +100,7 @@ namespace Mosa.Platform.x86.Stages
 
 				WriteMultibootHeader();
 
-				Linker.CreateSymbol(MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
+				Linker.CreateSymbol(Multiboot0695Stage.MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 				Linker.CreateSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 
 				return;
@@ -108,13 +108,14 @@ namespace Mosa.Platform.x86.Stages
 
 			var typeInitializerSchedulerStage = Compiler.PostCompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
 
-			var ecx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
 			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
-			var multibootEax = Operand.CreateUnmanagedSymbolPointer(TypeSystem, MultibootEAX);
-			var multibootEbx = Operand.CreateUnmanagedSymbolPointer(TypeSystem, MultibootEBX);
+
+			var MultibootEAX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEAX);
+			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEBX);
+
 			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
 			var stackTop = Operand.CreateConstant(TypeSystem.BuiltIn.I4, STACK_ADDRESS);
 
@@ -124,14 +125,12 @@ namespace Mosa.Platform.x86.Stages
 			var ctx = new Context(block);
 
 			// Setup the stack and place the sentinel on the stack to indicate the start of the stack
-			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, esp, 0), stackTop);
-			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, ebp, 0), zero);
+			ctx.AppendInstruction(X86.MovStore, null, esp, zero, stackTop);
+			ctx.AppendInstruction(X86.MovStore, null, ebp, zero, zero);
 
 			// Place the multiboot address into a static field
-			ctx.AppendInstruction(X86.Mov, ecx, multibootEax);
-			ctx.AppendInstruction(X86.MovStore, null, ecx, zero, eax);
-			ctx.AppendInstruction(X86.Mov, ecx, multibootEbx);
-			ctx.AppendInstruction(X86.MovStore, null, ecx, zero, ebx);
+			ctx.AppendInstruction(X86.MovStore, null, MultibootEAX, zero, eax);
+			ctx.AppendInstruction(X86.MovStore, null, multibootEBX, zero, ebx);
 
 			// call type initializer
 			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);

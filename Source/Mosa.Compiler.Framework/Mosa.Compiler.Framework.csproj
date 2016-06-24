@@ -102,6 +102,7 @@
     <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="IR\FilterEnd.cs" />
     <Compile Include="IR\FilterStart.cs" />
+    <Compile Include="IR\Load2.cs" />
     <Compile Include="IR\SetLeaveTarget.cs" />
     <Compile Include="IR\KillAllExcept.cs" />
     <Compile Include="IR\Flow.cs" />
@@ -118,10 +119,6 @@
     <Compile Include="IR\GotoLeaveTarget.cs" />
     <Compile Include="IR\FinallyEnd.cs" />
     <Compile Include="IR\KillAll.cs" />
-    <Compile Include="IR\ParamLoad.cs" />
-    <Compile Include="IR\StackLoad.cs" />
-    <Compile Include="IR\ParamStore.cs" />
-    <Compile Include="IR\StackStore.cs" />
     <Compile Include="IR\TryEnd.cs" />
     <Compile Include="IR\TryStart.cs" />
     <Compile Include="IR\FinallyStart.cs" />

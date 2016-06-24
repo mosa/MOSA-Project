@@ -157,6 +157,16 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		///
 		/// </summary>
+		public static readonly MovzxLoad MovzxLoad = new MovzxLoad();
+
+		/// <summary>
+		///
+		/// </summary>
+		public static readonly MovsxLoad MovsxLoad = new MovsxLoad();
+
+		/// <summary>
+		///
+		/// </summary>
 		public static readonly MovCR MovCR = new MovCR();
 
 		/// <summary>

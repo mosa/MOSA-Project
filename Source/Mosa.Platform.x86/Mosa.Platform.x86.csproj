@@ -100,6 +100,8 @@
     <Compile Include="Instructions\Fld.cs" />
     <Compile Include="Instructions\MovAPS.cs" />
     <Compile Include="Instructions\Movd.cs" />
+    <Compile Include="Instructions\MovzxLoad.cs" />
+    <Compile Include="Instructions\MovsxLoad.cs" />
     <Compile Include="Instructions\Pextrd.cs" />
     <Compile Include="Instructions\MovUPS.cs" />
     <Compile Include="Instructions\MovStore.cs" />
