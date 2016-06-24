@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -18,12 +19,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			Operand result = context.Result;
-			Operand v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.Pointer);
-			Operand operand = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.U1, v1, 0);
+			Debug.Assert(context.Result.IsI4 | context.Result.IsU4);
+			Operand zero = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
 
-			context.SetInstruction(X86.Mov, v1, context.Operand1);
-			context.AppendInstruction(X86.Movzx, InstructionSize.Size8, result, operand);
+			context.SetInstruction(X86.MovzxLoad, InstructionSize.Size8, context.Result, context.Operand1, zero);
 		}
 
 		#endregion Methods

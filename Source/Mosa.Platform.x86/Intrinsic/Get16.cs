@@ -19,14 +19,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			Operand result = context.Result;
-			Operand v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.Pointer);
-			Operand operand = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.U2, v1, 0);
+			Debug.Assert(context.Result.IsI4 | context.Result.IsU4);
+			Operand zero = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
 
-			Debug.Assert(result.IsI4 | result.IsU4);
-
-			context.SetInstruction(X86.Mov, v1, context.Operand1);
-			context.AppendInstruction(X86.Movzx, InstructionSize.Size16, result, operand);
+			context.SetInstruction(X86.MovzxLoad, InstructionSize.Size16, context.Result, context.Operand1, zero);
 		}
 
 		#endregion Methods
