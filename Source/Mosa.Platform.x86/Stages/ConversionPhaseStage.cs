@@ -180,6 +180,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Result.IsCPURegister && context.Operand1.IsMemoryAddress)
 			{
 				context.SetInstruction(X86.MovupsLoad,
+					InstructionSize.Size128,
 					context.Result,
 					(context.Operand1.IsLabel || context.Operand1.IsSymbol || context.Operand1.IsField)
 						? context.Operand1
@@ -191,6 +192,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Result.IsMemoryAddress && (context.Operand1.IsCPURegister /*|| context.Operand1.IsConstant*/))
 			{
 				context.SetInstruction(X86.MovupsStore,
+					InstructionSize.Size128,
 					null,
 					(context.Result.IsLabel || context.Result.IsSymbol || context.Result.IsField)
 						? context.Result

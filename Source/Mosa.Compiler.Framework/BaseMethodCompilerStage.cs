@@ -654,6 +654,14 @@ namespace Mosa.Compiler.Framework
 			return GetInstructionSize(operand);
 		}
 
+		public static InstructionSize GetInstructionSize(InstructionSize size, MosaType type)
+		{
+			if (size != InstructionSize.None)
+				return size;
+
+			return GetInstructionSize(type);
+		}
+
 		public IList<BasicBlock> AddMissingBlocks(IList<BasicBlock> blocks, bool cleanUp)
 		{
 			var list = new List<BasicBlock>(blocks.Count);

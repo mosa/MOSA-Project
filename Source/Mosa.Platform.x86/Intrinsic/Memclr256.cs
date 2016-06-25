@@ -20,14 +20,13 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			var dest = context.Operand1;
 
-			// The size will be 128 bits
 			var v0 = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.Void, SSE2Register.XMM0);
-			var memDest1 = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.Void, dest, 0);
-			var memDest2 = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.Void, dest, 16);
+			var zero = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
+			var offset16 = Operand.CreateConstant(methodCompiler.TypeSystem, 16);
 
 			context.SetInstruction(X86.PXor, InstructionSize.Size128, v0, v0, v0);
-			context.AppendInstruction(X86.Movups, InstructionSize.Size128, memDest1, v0);
-			context.AppendInstruction(X86.Movups, InstructionSize.Size128, memDest2, v0);
+			context.AppendInstruction(X86.MovupsStore, InstructionSize.Size128, dest, zero, v0);
+			context.AppendInstruction(X86.MovupsStore, InstructionSize.Size128, dest, offset16, v0);
 		}
 
 		#endregion Methods
