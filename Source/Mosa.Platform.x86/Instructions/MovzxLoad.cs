@@ -24,6 +24,12 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion Construction
 
+		#region Properties
+
+		public override bool ThreeTwoAddressConversion { get { return false; } }
+
+		#endregion Properties
+
 		#region Methods
 
 		/// <summary>
@@ -43,17 +49,14 @@ namespace Mosa.Platform.x86.Instructions
 			var size = BaseMethodCompilerStage.GetInstructionSize(node.Size, node.Result);
 			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
 
-			// memory to register 0000 1111 : 1011 011w: mod reg r / m
+			// memory to register 0000 1111 : 1011 011w: mod reg r/m
 			var opcode = new OpcodeEncoder()
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
 				.AppendNibble(Bits.b1011)                                       // 4:opcode
 				.Append3Bits(Bits.b011)                                         // 4:opcode
 				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
-				.AppendMod(true, node.Operand2)                                 // 2:mod
-				.AppendRegister(node.Result.Register)                           // 3:register (destination)
-				.AppendRM(node.Operand1)                                        // 3:r/m (source)
-				.AppendConditionalDisplacement(node.Operand2, !node.Operand2.IsConstantZero)      // 8/32:displacement value
+				.ModRegRMSIBDisplacement(node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
 
 			if (linkreference)

@@ -24,6 +24,12 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion Construction
 
+		#region Properties
+
+		public override bool ThreeTwoAddressConversion { get { return false; } }
+
+		#endregion Properties
+
 		#region Methods
 
 		/// <summary>

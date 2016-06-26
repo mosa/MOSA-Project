@@ -24,6 +24,12 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion Construction
 
+		#region Properties
+
+		public override bool ThreeTwoAddressConversion { get { return false; } }
+
+		#endregion Properties
+
 		#region Methods
 
 		/// <summary>
@@ -49,10 +55,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b1000)                                       // 4:opcode
 				.Append3Bits(Bits.b101)                                         // 3:opcode
 				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
-				.AppendMod(true, node.Operand2)                                 // 2:mod
-				.AppendRegister(node.Result.Register)                           // 3:register (destination)
-				.AppendRM(node.Operand1)                                        // 3:r/m (source)
-				.AppendConditionalDisplacement(node.Operand2, !node.Operand2.IsConstantZero)    // 8/32:displacement value
+				.ModRegRMSIBDisplacement(node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
 
 			if (linkreference)

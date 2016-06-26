@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Platform;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -36,7 +39,31 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			emitter.Emit(opcode, node.Operand1, null);
+			LidtMemoryConstant(node, emitter);
+		}
+
+		private static void LidtMemoryConstant(InstructionNode node, MachineCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsConstant);
+
+			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
+
+			// LIDT – Load Interrupt Descriptor Table Register 0000 1111 : 0000 0001 : modA 011 r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
+				.Append3Bits(Bits.b011)                                         // 3:reg
+				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
+				.AppendConditionalDisplacement(node.Operand1, !node.Operand1.IsConstantZero)    // 32:displacement value
+				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
+
+			if (linkreference)
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			else
+				emitter.Emit(opcode);
 		}
 
 		#endregion Methods

@@ -489,35 +489,40 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LoadSignExtended(Context context)
 		{
-			var destination = context.Result;
-			var source = context.Operand1;
-			var type = context.MosaType;
-			var offset = context.Operand2;
-			var size = context.Size;
+			//var destination = context.Result;
+			//var source = context.Operand1;
+			//var type = context.MosaType;
+			//var offset = context.Operand2;
+			//var size = context.Size;
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			//			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(X86.Mov, v1, source);
+			Debug.Assert(!(context.Operand1.IsConstant && context.Operand2.IsConstant));
+			Debug.Assert(context.Size == InstructionSize.Size8 || context.Size == InstructionSize.Size16);
 
-			if (offset.IsConstant)
-			{
-				if (source.IsField)
-				{
-					Debug.Assert(offset.IsConstantZero);
-					Debug.Assert(source.Field.IsStatic);
+			context.SetInstruction(X86.MovsxLoad, context.Size, context.Result, context.Operand1, context.Operand2);
 
-					context.SetInstruction(X86.Movsx, size, destination, source);
-				}
-				else
-				{
-					context.AppendInstruction(X86.Movsx, size, destination, Operand.CreateMemoryAddress(type, v1, offset.ConstantSignedLongInteger));
-				}
-			}
-			else
-			{
-				context.AppendInstruction(X86.Add, v1, v1, offset);
-				context.AppendInstruction(X86.Movsx, size, destination, Operand.CreateMemoryAddress(type, v1, 0));
-			}
+			//context.SetInstruction(X86.Mov, v1, source);
+
+			//if (offset.IsConstant)
+			//{
+			//	if (source.IsField)
+			//	{
+			//		Debug.Assert(offset.IsConstantZero);
+			//		Debug.Assert(source.Field.IsStatic);
+
+			//		context.SetInstruction(X86.Movsx, size, destination, source);
+			//	}
+			//	else
+			//	{
+			//		context.AppendInstruction(X86.Movsx, size, destination, Operand.CreateMemoryAddress(type, v1, offset.ConstantSignedLongInteger));
+			//	}
+			//}
+			//else
+			//{
+			//	context.AppendInstruction(X86.Add, v1, v1, offset);
+			//	context.AppendInstruction(X86.Movsx, size, destination, Operand.CreateMemoryAddress(type, v1, 0));
+			//}
 		}
 
 		/// <summary>
