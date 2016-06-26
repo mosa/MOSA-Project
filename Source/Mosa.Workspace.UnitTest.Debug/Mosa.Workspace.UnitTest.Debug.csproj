@@ -46,9 +46,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Test.Collection\Mosa.Test.Collection.csproj">
+    <ProjectReference Include="..\Mosa.UnitTest.Collection\Mosa.UnitTest.Collection.csproj">
       <Project>{067aab6b-447a-45ba-9e0d-dfea886b4f69}</Project>
-      <Name>Mosa.Test.Collection</Name>
+      <Name>Mosa.UnitTest.Collection</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.UnitTest.Engine\Mosa.UnitTest.Engine.csproj">
       <Project>{b0776c9d-7f3d-4e6e-8c5d-5f735326c7d7}</Project>

@@ -50,6 +50,127 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public virtual bool IgnoreInstructionBasicBlockTargets { get { return false; } }
 
+		/// <summary>
+		/// Gets the name of the base instruction.
+		/// </summary>
+		/// <value>
+		/// The name of the base instruction.
+		/// </value>
+		public virtual string BaseInstructionName
+		{
+			get
+			{
+				string name = GetType().ToString();
+
+				int index = name.LastIndexOf('.');
+
+				if (index > 0)
+					name = name.Substring(index + 1);
+
+				index = name.IndexOf("Instruction");
+
+				if (index > 0)
+					name = name.Substring(0, index);
+
+				index = name.IndexOf("Store");
+
+				if (index < 0)
+					index = name.IndexOf("Load");
+
+				if (index > 0)
+					name = name.Substring(0, index);
+
+				return name;
+			}
+		}
+
+		/// <summary>
+		/// Gets the name of the instruction family.
+		/// </summary>
+		/// <value>
+		/// The name of the instruction family.
+		/// </value>
+		public virtual string InstructionFamilyName
+		{
+			get
+			{
+				string name = GetType().ToString();
+
+				int index = name.LastIndexOf(".Instructions.");
+				int index2 = 0;
+
+				if (index < 0)
+				{
+					index = name.LastIndexOf('.');
+					index2 = name.LastIndexOf('.', index - 1);
+				}
+				else
+				{
+					index2 = name.LastIndexOf('.', index - 1);
+				}
+
+				name = name.Substring(index2 + 1, index - index2 - 1);
+
+				return name;
+			}
+		}
+
+		/// <summary>
+		/// Gets the name of the instruction extension.
+		/// </summary>
+		/// <value>
+		/// The name of the instruction extension.
+		/// </value>
+		public virtual string InstructionExtensionName
+		{
+			get
+			{
+				string name = GetType().ToString();
+				string ext = string.Empty;
+
+				int index = name.LastIndexOf('.');
+
+				name = name.Substring(index + 1);
+
+				if (name.StartsWith("Store"))
+					return string.Empty;
+				else if (name.StartsWith("Load"))
+					return string.Empty;
+				else if (name.EndsWith("Store"))
+					ext = "Store";
+				else if (name.EndsWith("Load"))
+					ext = "Load";
+
+				return ext;
+			}
+		}
+
+		private string cachedInstructionName { get; set; }
+
+		/// <summary>
+		/// Gets the name of the instruction.
+		/// </summary>
+		/// <value>
+		/// The name of the instruction.
+		/// </value>
+		public virtual string InstructionName
+		{
+			get
+			{
+				if (cachedInstructionName == null)
+				{
+					cachedInstructionName = InstructionFamilyName + "." + BaseInstructionName;
+
+					if (!string.IsNullOrWhiteSpace(InstructionExtensionName))
+					{
+						cachedInstructionName = cachedInstructionName + "." + InstructionExtensionName;
+					}
+				}
+
+				return cachedInstructionName;
+			}
+		}
+
 		#endregion Properties
 
 		#region Construction
@@ -85,21 +206,9 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public override string ToString()
+		public virtual string ToString()
 		{
-			string inst = GetType().ToString();
-
-			int index = inst.LastIndexOf(".");
-
-			if (index > 0)
-				inst = inst.Substring(index + 1);
-
-			index = inst.IndexOf("Instruction");
-
-			if (index > 0)
-				inst = inst.Substring(0, index);
-
-			return inst;
+			return InstructionName;
 		}
 
 		/// <summary>
@@ -111,6 +220,7 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public string ToString(InstructionNode node)
 		{
+			// TODO: Copy this method into calling class
 			var sb = new StringBuilder();
 
 			sb.AppendFormat("L_{0:X4}", node.Label);
@@ -120,7 +230,7 @@ namespace Mosa.Compiler.Framework
 			else
 				sb.Append(' ');
 
-			sb.Append(ToString());
+			sb.Append(InstructionName);
 
 			var size = GetSizeString(node.Size);
 

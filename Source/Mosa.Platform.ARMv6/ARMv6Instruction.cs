@@ -132,18 +132,5 @@ namespace Mosa.Platform.ARMv6
 		}
 
 		#endregion Methods
-
-		#region Operand Overrides
-
-		/// <summary>
-		/// Returns a string representation of <see cref="ConstantOperand"/>.
-		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
-		{
-			return "ARMv6." + base.ToString();
-		}
-
-		#endregion Operand Overrides
 	}
 }

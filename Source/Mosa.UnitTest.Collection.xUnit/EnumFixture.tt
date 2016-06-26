@@ -1,0 +1,34 @@
+﻿<#@ include file="../TemplateLibrary.txt" #>
+using Xunit;
+
+namespace Mosa.UnitTest.Collection.xUnit
+{
+	public class EnumFixture : TestFixture
+	{
+<#
+	List<string> members = new List<string>() {"Conversion", "PlusOne1", "PlusOne2", "MinusOne1", "MinusOne2",
+											   "Shl", "Shr", "Mul2", "Div2", "Rem2", "AssignPlusOne", "AssignMinusOne",
+											   "Preincrement", "Predecrement", "Postincrement", "Postdecrement",
+											   "And", "Or", "XOr" };
+	foreach (KeyValuePair<string, string> comparison in Comparisons) {
+		members.Add(comparison.Value + "1");
+		members.Add(comparison.Value + "2");
+		members.Add(comparison.Value + "3");
+	}
+	foreach (bool isSigned in new bool[2] {false, true}) {
+		foreach (KeyValuePair<string, string> numberT in isSigned ? NegativeIntegers : PositiveIntegers) {
+			foreach(string member in members) {
+#>
+		[Fact]
+		public void Enum<#= numberT.Value #>_<#= member #>()
+		{
+			Assert.True(Run<bool>("Mosa.UnitTest.Collection.Enum<#= numberT.Value #>Class.Positive<#= member #>"));
+<#				if (isSigned) {
+#>			Assert.True(Run<bool>("Mosa.UnitTest.Collection.Enum<#= numberT.Value #>Class.Negative<#= member #>"));
+<#				}
+#>		}
+<#			}
+		}
+	}
+#>	}
+}

@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Representations the x86 mov instruction.
+	/// Representations the x86 MovLoad instruction.
 	/// </summary>
 	public sealed class MovLoad : X86Instruction
 	{

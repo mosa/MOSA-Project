@@ -22,6 +22,8 @@ namespace Mosa.Utility.DebugEngine
 
 		private int length = -1;
 
+		private const int MaxBufferSize = 0x20000;
+
 		public Stream Stream
 		{
 			get
@@ -211,7 +213,7 @@ namespace Mosa.Utility.DebugEngine
 				length = GetInteger(12);
 			}
 
-			if (length > 4096 || buffer.Count > 4096)
+			if (length > MaxBufferSize || buffer.Count > MaxBufferSize)
 			{
 				BadDataAbort();
 				return;

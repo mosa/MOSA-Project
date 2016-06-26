@@ -21,19 +21,16 @@ namespace Mosa.Compiler.Framework.IR
 
 		#endregion Construction
 
-		#region Methods
+		#region Properties
 
 		/// <summary>
-		/// Returns a string representation of the context.
+		/// Gets the name of the instruction family.
 		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString()
-		{
-			return "IR." + base.ToString();
-		}
+		/// <value>
+		/// The name of the instruction family.
+		/// </value>
+		public override string InstructionFamilyName { get { return "IR"; } }
 
-		#endregion Methods
+		#endregion Properties
 	}
 }

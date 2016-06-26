@@ -117,9 +117,9 @@
       <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>
       <Name>Mosa.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Test.Collection\Mosa.Test.Collection.csproj">
+    <ProjectReference Include="..\Mosa.UnitTest.Collection\Mosa.UnitTest.Collection.csproj">
       <Project>{067AAB6B-447A-45BA-9E0D-DFEA886B4F69}</Project>
-      <Name>Mosa.Test.Collection</Name>
+      <Name>Mosa.UnitTest.Collection</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

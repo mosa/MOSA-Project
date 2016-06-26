@@ -18,7 +18,7 @@ namespace Mosa.TestWorld.ARMv6
 
 		public static void Test()
 		{
-			Mosa.Test.Collection.UInt32Tests.AddU4U4(1, 2);
+			Mosa.UnitTest.Collection.UInt32Tests.AddU4U4(1, 2);
 		}
 	}
 }

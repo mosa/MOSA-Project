@@ -39,7 +39,7 @@ namespace Mosa.Tool.Debugger
 
 			events.Add(formatted);
 
-			if (listBox1.Items.Count == 25)
+			if (listBox1.Items.Count >= 25)
 			{
 				listBox1.Items.RemoveAt(listBox1.Items.Count - 1);
 			}

@@ -26,7 +26,21 @@ namespace Mosa.Platform.x86
 
 		#region Properties
 
+		/// <summary>
+		/// Gets a value indicating whether [three two address conversion].
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if [three two address conversion]; otherwise, <c>false</c>.
+		/// </value>
 		public virtual bool ThreeTwoAddressConversion { get { return true; } }
+
+		/// <summary>
+		/// Gets the name of the instruction family.
+		/// </summary>
+		/// <value>
+		/// The name of the instruction family.
+		/// </value>
+		public override string InstructionFamilyName { get { return "X86"; } }
 
 		#endregion Properties
 
@@ -66,24 +80,5 @@ namespace Mosa.Platform.x86
 		}
 
 		#endregion Methods
-
-		#region Operand Overrides
-
-		/// <summary>
-		/// Returns a string representation of <see cref="ConstantOperand"/>.
-		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
-		{
-			return "X86." + base.ToString();
-		}
-
-		//TODO
-		public virtual Register[] UsableRegisters
-		{
-			get { return null; }
-		}
-
-		#endregion Operand Overrides
 	}
 }
