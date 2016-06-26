@@ -46,7 +46,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Result.IsRegister);
 
-			var size = BaseMethodCompilerStage.GetInstructionSize(node.Size, node.Result);
 			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
 
 			// memory to reg 0000 1111 : 1011 111w : mod reg r/m
@@ -55,7 +54,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
 				.AppendNibble(Bits.b1011)                                       // 4:opcode
 				.Append3Bits(Bits.b111)                                         // 4:opcode
-				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
+				.AppendWidthBit(node.Size != InstructionSize.Size8)                  // 1:width
 				.ModRegRMSIBDisplacement(node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
 

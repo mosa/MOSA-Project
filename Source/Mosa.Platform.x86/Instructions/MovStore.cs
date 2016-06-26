@@ -55,7 +55,6 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(node.ResultCount == 0);
 			Debug.Assert(!node.Operand3.IsConstant);
 
-			//Debug.Assert(!node.Operand1.IsLabel || !node.Operand1.IsField || !node.Operand1.IsSymbol);
 
 			var size = BaseMethodCompilerStage.GetInstructionSize(node.Size, node.Operand1);
 			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
@@ -80,15 +79,14 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(node.Operand3.IsConstant);
 			Debug.Assert(node.ResultCount == 0);
 
-			var size = BaseMethodCompilerStage.GetInstructionSize(node.Size, node.Operand1);
 			var linkreference = node.Operand3.IsLabel || node.Operand3.IsField || node.Operand3.IsSymbol;
 
 			// immediate to memory 1100 011w: mod 000 r / m : immediate data
 			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(0x66, size == InstructionSize.Size16)  // 8:prefix: 16bit
+				.AppendConditionalPrefix(0x66, node.Size == InstructionSize.Size16)  // 8:prefix: 16bit
 				.AppendNibble(Bits.b1100)                                       // 4:opcode
 				.Append3Bits(Bits.b011)                                         // 3:opcode
-				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
+				.AppendWidthBit(node.Size != InstructionSize.Size8)                  // 1:width
 				.AppendMod(true, node.Operand2)                                 // 2:mod
 				.Append3Bits(Bits.b000)                                         // 3:000
 				.AppendRM(node.Operand1)                                        // 3:r/m (destination)

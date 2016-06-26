@@ -45,6 +45,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Result.IsMemoryAddress && (context.Operand1.IsCPURegister /*|| context.Operand1.IsConstant*/))
 			{
 				context.SetInstruction(X86.MovStore,
+					//InstructionSize.Size32,
 					null,
 					(context.Result.IsLabel || context.Result.IsSymbol || context.Result.IsField)
 						? context.Result

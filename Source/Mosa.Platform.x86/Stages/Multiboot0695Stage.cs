@@ -125,12 +125,12 @@ namespace Mosa.Platform.x86.Stages
 			var ctx = new Context(block);
 
 			// Setup the stack and place the sentinel on the stack to indicate the start of the stack
-			ctx.AppendInstruction(X86.MovStore, null, esp, zero, stackTop);
-			ctx.AppendInstruction(X86.MovStore, null, ebp, zero, zero);
+			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, esp, zero, stackTop);
+			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, ebp, zero, zero);
 
 			// Place the multiboot address into a static field
-			ctx.AppendInstruction(X86.MovStore, null, MultibootEAX, zero, eax);
-			ctx.AppendInstruction(X86.MovStore, null, multibootEBX, zero, ebx);
+			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, MultibootEAX, zero, eax);
+			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEBX, zero, ebx);
 
 			// call type initializer
 			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
