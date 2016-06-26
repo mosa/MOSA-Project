@@ -66,10 +66,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b1000)                                       // 4:opcode
 				.Append3Bits(Bits.b100)                                         // 3:opcode
 				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
-				.AppendMod(true, node.Operand2)                                 // 2:mod
-				.AppendRegister(node.Operand3.Register)                         // 3:register (value)
-				.AppendRM(node.Operand1)                                        // 3:r/m (destination)
-				.AppendConditionalDisplacement(node.Operand2, !node.Operand2.IsConstantZero)      // 8/32:displacement value
+				.ModRegRMSIBDisplacement(node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
 
 			if (linkreference)
