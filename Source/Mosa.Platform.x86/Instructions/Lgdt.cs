@@ -1,6 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Platform;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -9,12 +12,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Lgdt : X86Instruction
 	{
-		#region Data Members
-
-		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0x01 }, 2);
-
-		#endregion Data Members
-
 		#region Construction
 
 		/// <summary>
@@ -30,26 +27,37 @@ namespace Mosa.Platform.x86.Instructions
 		#region Methods
 
 		/// <summary>
-		/// Computes the opcode.
-		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-		{
-			return opcode;
-		}
-
-		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			OpCode code = ComputeOpCode(node.Result, node.Operand1, node.Operand2);
-			emitter.Emit(code, node.Operand1, null);
+			LgdtMemoryConstant(node, emitter);
+		}
+
+		private static void LgdtMemoryConstant(InstructionNode node, MachineCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsConstant);
+
+			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
+
+			// LGDT – Load Global Descriptor Table Register 0000 1111 : 0000 0001 : modA 010 r / m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
+				.Append3Bits(Bits.b010)                                         // 3:reg
+				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
+				.AppendConditionalDisplacement(node.Operand1, !node.Operand1.IsConstantZero)    // 32:displacement value
+				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
+
+			if (linkreference)
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			else
+				emitter.Emit(opcode);
 		}
 
 		#endregion Methods
