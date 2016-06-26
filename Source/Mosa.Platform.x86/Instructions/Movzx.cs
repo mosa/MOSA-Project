@@ -1,7 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Platform;
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -10,13 +13,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Movzx : X86Instruction
 	{
-		#region Data Members
-
-		private static readonly OpCode R_X8 = new OpCode(new byte[] { 0x0F, 0xB6 });
-		private static readonly OpCode R_X16 = new OpCode(new byte[] { 0x0F, 0xB7 });
-
-		#endregion Data Members
-
 		#region Construction
 
 		/// <summary>
@@ -32,33 +28,34 @@ namespace Mosa.Platform.x86.Instructions
 		#region Methods
 
 		/// <summary>
-		/// Computes the opcode.
+		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		/// <param name="node">The node.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			if (!(destination.IsRegister))
-				throw new ArgumentException(@"Destination must be RegisterOperand.", @"destination");
+			MovzxRegToReg(node, emitter);
+		}
 
-			if (source.IsConstant)
-				throw new ArgumentException(@"Source must not be ConstantOperand.", @"source");
+		private static void MovzxRegToReg(InstructionNode node, MachineCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsRegister);
+			Debug.Assert(node.Operand1.IsRegister);
 
-			if (source.IsByte || source.IsBoolean)
-			{
-				if (destination.IsRegister && source.IsRegister) return R_X8;
-				if (destination.IsRegister && source.IsMemoryAddress) return R_X8;
-			}
+			var size = BaseMethodCompilerStage.GetInstructionSize(node.Size, node.Result);
 
-			if (source.IsShort || source.IsChar)
-			{
-				if (destination.IsRegister && source.IsRegister) return R_X16;
-				if (destination.IsRegister && source.IsMemoryAddress) return R_X16;
-			}
+			// register2 to register1 0000 1111 : 1011 011w : 11 reg1 reg2
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                           // 4:opcode
+				.AppendNibble(Bits.b1111)                           // 4:opcode
+				.AppendNibble(Bits.b1011)                           // 4:opcode
+				.Append3Bits(Bits.b011)                             // 4:opcode
+				.AppendWidthBit(size != InstructionSize.Size8)      // 1:width
+				.AppendMod(Bits.b11)                                // 2:mod
+				.AppendRegister(node.Result)                        // 3:register (destination)
+				.AppendRM(node.Operand1);                           // 3:r/m (source)
 
-			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
+			emitter.Emit(opcode);
 		}
 
 		#endregion Methods

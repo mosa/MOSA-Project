@@ -251,7 +251,7 @@ namespace Mosa.Platform.x86.Stages
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
 						newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.NotEqual, result);
-						newBlocks[0].AppendInstruction(X86.Movzx, result, result);
+						newBlocks[0].AppendInstruction(X86.Movzx, InstructionSize.Size8, result, result);
 						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 						break;
@@ -531,37 +531,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LoadZeroExtended(Context context)
 		{
-			var destination = context.Result;
-			var source = context.Operand1;
-			var offset = context.Operand2;
-			var type = context.MosaType;
-			var size = context.Size;
-
-			Debug.Assert(offset != null);
-
-			Operand v1 = AllocateVirtualRegister(source.Type);
-
-			context.SetInstruction(X86.Mov, v1, source);
-
-			if (offset.IsConstant)
-			{
-				if (source.IsField)
-				{
-					Debug.Assert(offset.IsConstantZero);
-					Debug.Assert(source.Field.IsStatic);
-
-					context.SetInstruction(X86.Movzx, size, destination, source);
-				}
-				else
-				{
-					context.AppendInstruction(X86.Movzx, size, destination, Operand.CreateMemoryAddress(type, v1, offset.ConstantSignedLongInteger));
-				}
-			}
-			else
-			{
-				context.AppendInstruction(X86.Add, v1, v1, offset);
-				context.AppendInstruction(X86.Movzx, size, destination, Operand.CreateMemoryAddress(type, v1, 0));
-			}
+			context.AppendInstruction(X86.MovzxLoad, context.Size, context.Result, context.Operand1, context.Operand2);
 		}
 
 		/// <summary>
