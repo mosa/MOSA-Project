@@ -633,27 +633,9 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the size of the instruction.
 		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <returns></returns>
-		public static InstructionSize GetInstructionSize(Operand operand)
-		{
-			return GetInstructionSize(operand.Type);
-		}
-
-		/// <summary>
-		/// Gets the size of the instruction.
-		/// </summary>
 		/// <param name="size">The size.</param>
 		/// <param name="operand">The operand.</param>
 		/// <returns></returns>
-		public static InstructionSize GetInstructionSize(InstructionSize size, Operand operand)
-		{
-			if (size != InstructionSize.None)
-				return size;
-
-			return GetInstructionSize(operand);
-		}
-
 		public static InstructionSize GetInstructionSize(InstructionSize size, MosaType type)
 		{
 			if (size != InstructionSize.None)

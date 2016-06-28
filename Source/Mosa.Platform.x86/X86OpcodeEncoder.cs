@@ -162,6 +162,18 @@ namespace Mosa.Platform.x86
 			return encoder;
 		}
 
+		public static OpcodeEncoder AppendInteger(this OpcodeEncoder encoder, Operand operand, InstructionSize size)
+		{
+			if (size == InstructionSize.Size32)
+				return encoder.AppendIntegerValue(operand.ConstantUnsignedInteger);
+			if (size == InstructionSize.Size8)
+				return encoder.AppendByteValue((byte)operand.ConstantUnsignedInteger);
+			if (size == InstructionSize.Size16)
+				return encoder.AppendShortValue((ushort)operand.ConstantUnsignedInteger);
+
+			throw new InvalidCompilerException("Instruction size invalid");
+		}
+
 		public static OpcodeEncoder ModRegRMSIBDisplacement(this OpcodeEncoder encoder, Operand result, Operand op1, Operand op2)
 		{
 			if (op2.IsConstant)

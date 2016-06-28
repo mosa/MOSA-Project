@@ -1119,6 +1119,8 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ZeroExtendedMove(Context context)
 		{
+			Debug.Assert(context.Size != InstructionSize.None);
+
 			context.ReplaceInstructionOnly(X86.Movzx);
 		}
 

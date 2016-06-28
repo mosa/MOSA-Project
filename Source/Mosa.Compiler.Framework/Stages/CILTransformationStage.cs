@@ -1019,7 +1019,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Result = tmp;
 			context.ResultCount = 1;
 
-			var size = GetInstructionSize(tmp);
+			var size = GetInstructionSize(tmp.Type);
 
 			context.AppendInstruction(IRInstruction.Load, size, result, tmp, ConstantZero);
 			context.MosaType = type;
@@ -1359,7 +1359,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand constantOffset = Operand.CreateConstant(TypeSystem, 8);
 
 			Operand arrayAddress = MethodCompiler.CreateVirtualRegister(arrayOperand.Type.ElementType.ToManagedPointer());
-			var size = GetInstructionSize(arrayLength);
+			var size = GetInstructionSize(arrayLength.Type);
 
 			context.SetInstruction(IRInstruction.Move, arrayAddress, arrayOperand);
 			context.AppendInstruction(IRInstruction.Load, arrayLength, arrayAddress, constantOffset);
@@ -1510,7 +1510,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Result = tmp;
 			context.ResultCount = 1;
 
-			var size = GetInstructionSize(tmp);
+			var size = GetInstructionSize(tmp.Type);
 
 			context.AppendInstruction(IRInstruction.Load, size, result, tmp, ConstantZero);
 			context.MosaType = type;
