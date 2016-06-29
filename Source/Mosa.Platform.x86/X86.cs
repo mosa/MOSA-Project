@@ -154,6 +154,8 @@ namespace Mosa.Platform.x86
 
 		public static readonly CmpXchg CmpXchg = new CmpXchg();
 
+		public static readonly CmpXchgLoad CmpXchgLoad = new CmpXchgLoad();
+
 		public static readonly CpuId CpuId = new CpuId();
 
 		public static readonly Hlt Hlt = new Hlt();

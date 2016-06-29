@@ -280,16 +280,7 @@ namespace Mosa.Platform.x86
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
 			var instruction = BaseTransformationStage.GetMove(destination, source);
-			var size = InstructionSize.None;
-			if (instruction is x86.Instructions.Movsd)
-			{
-				size = InstructionSize.Size64;
-			}
-			else if (instruction is x86.Instructions.Movss)
-			{
-				size = InstructionSize.Size32;
-			}
-			context.AppendInstruction(instruction, size, destination, source);
+			context.AppendInstruction(instruction, /*size,*/ destination, source);
 		}
 
 		/// <summary>
@@ -348,10 +339,12 @@ namespace Mosa.Platform.x86
 			if (source.IsR4)
 			{
 				// TODO
+				throw new CompilerException("R4 not implemented in InsertExchangeInstruction method");
 			}
 			else if (source.IsR8)
 			{
 				// TODO
+				throw new CompilerException("R8 not implemented in InsertExchangeInstruction method");
 			}
 			else
 			{
