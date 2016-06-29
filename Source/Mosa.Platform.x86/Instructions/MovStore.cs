@@ -94,7 +94,7 @@ namespace Mosa.Platform.x86.Instructions
 				.Append3Bits(Bits.b000)                                         // 3:000
 				.AppendRM(node.Operand1)                                        // 3:r/m (destination)
 				.AppendConditionalDisplacement(node.Operand2, !node.Operand2.IsConstantZero)      // 8/32:displacement value
-				.AppendConditionalIntegerValue(node.Operand3.ConstantUnsignedInteger, node.Operand3.IsConstant)     // 32:immediate
+				.AppendInteger(node.Operand3, node.Size)                        // 8/16/32:immediate
 				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
 
 			if (linkreference)

@@ -531,7 +531,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LoadZeroExtended(Context context)
 		{
-			context.AppendInstruction(X86.MovzxLoad, context.Size, context.Result, context.Operand1, context.Operand2);
+			context.SetInstruction(X86.MovzxLoad, context.Size, context.Result, context.Operand1, context.Operand2);
 		}
 
 		/// <summary>

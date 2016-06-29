@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -19,21 +18,9 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			Operand dest = context.Operand1;
-			Operand value = context.Operand2;
-
-			Operand v1 = methodCompiler.CreateVirtualRegister(dest.Type);
-			Operand v2 = methodCompiler.CreateVirtualRegister(value.Type);
-			Operand memory = Operand.CreateMemoryAddress(context.InvokeMethod.Signature.Parameters[1].ParameterType, v1, 0);
-
-			context.SetInstruction(X86.Mov, v1, dest);
-			context.AppendInstruction(X86.Mov, v2, value);
-			context.AppendInstruction(X86.Mov, memory, v2);
-
-			//Operand zero = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
-			//var size = BaseMethodCompilerStage.GetInstructionSize(context.Size, context.InvokeMethod.Signature.Parameters[1].ParameterType);
-
-			//context.SetInstruction(X86.MovStore, size, null, context.Operand1, zero, context.Operand2);
+			Operand zero = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
+			var size = BaseMethodCompilerStage.GetInstructionSize(context.Size, context.InvokeMethod.Signature.Parameters[1].ParameterType);
+			context.SetInstruction(X86.MovStore, size, null, context.Operand1, zero, context.Operand2);
 		}
 
 		#endregion Methods
