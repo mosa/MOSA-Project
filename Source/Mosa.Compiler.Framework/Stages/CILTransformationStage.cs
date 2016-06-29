@@ -314,7 +314,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
 
-			var loadInstruction = IRInstruction.Load;
+			BaseIRInstruction loadInstruction = IRInstruction.Load;
 
 			if (MustSignExtendOnLoad(type))
 			{
@@ -339,7 +339,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var fieldType = context.MosaField.FieldType;
 			var destination = context.Result;
 
-			var loadInstruction = IRInstruction.Load;
+			BaseIRInstruction loadInstruction = IRInstruction.Load;
 
 			if (MustSignExtendOnLoad(fieldType))
 			{
@@ -1019,7 +1019,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Result = tmp;
 			context.ResultCount = 1;
 
-			var size = GetInstructionSize(tmp);
+			var size = GetInstructionSize(tmp.Type);
 
 			context.AppendInstruction(IRInstruction.Load, size, result, tmp, ConstantZero);
 			context.MosaType = type;
@@ -1097,7 +1097,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void BinaryComparison(Context context)
 		{
 			var code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
-			var instruction = context.Operand1.IsR ? IRInstruction.FloatCompare : IRInstruction.IntegerCompare;
+			var instruction = context.Operand1.IsR ? (BaseInstruction)IRInstruction.FloatCompare : (BaseInstruction)IRInstruction.IntegerCompare;
 
 			context.SetInstruction(instruction, code, context.Result, context.Operand1, context.Operand2);
 			context.SetInstruction(instruction, code, context.Result, context.Operand1, context.Operand2);
@@ -1220,7 +1220,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int offset = TypeLayout.GetFieldOffset(field);
 			Operand offsetOperand = Operand.CreateConstant(TypeSystem, offset);
 
-			var loadInstruction = IRInstruction.Load;
+			BaseIRInstruction loadInstruction = IRInstruction.Load;
 
 			if (MustSignExtendOnLoad(field.FieldType))
 			{
@@ -1359,7 +1359,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand constantOffset = Operand.CreateConstant(TypeSystem, 8);
 
 			Operand arrayAddress = MethodCompiler.CreateVirtualRegister(arrayOperand.Type.ElementType.ToManagedPointer());
-			var size = GetInstructionSize(arrayLength);
+			var size = GetInstructionSize(arrayLength.Type);
 
 			context.SetInstruction(IRInstruction.Move, arrayAddress, arrayOperand);
 			context.AppendInstruction(IRInstruction.Load, arrayLength, arrayAddress, constantOffset);
@@ -1410,7 +1410,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Array bounds check
 			AddArrayBoundsCheck(context.InsertBefore(), arrayOperand, arrayIndexOperand);
 
-			var loadInstruction = IRInstruction.Load;
+			BaseIRInstruction loadInstruction = IRInstruction.Load;
 
 			if (MustSignExtendOnLoad(arraySigType.ElementType))
 			{
@@ -1510,7 +1510,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Result = tmp;
 			context.ResultCount = 1;
 
-			var size = GetInstructionSize(tmp);
+			var size = GetInstructionSize(tmp.Type);
 
 			context.AppendInstruction(IRInstruction.Load, size, result, tmp, ConstantZero);
 			context.MosaType = type;
@@ -2083,12 +2083,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (destinationType.IsUI1)
 			{
 				mask = 0xFF;
-				return (destinationType.IsSigned ? IRInstruction.SignExtendedMove : IRInstruction.ZeroExtendedMove);
+				return (destinationType.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove);
 			}
 			else if (destinationType.IsUI2)
 			{
 				mask = 0xFFFF;
-				return destinationType.IsSigned ? IRInstruction.SignExtendedMove : IRInstruction.ZeroExtendedMove;
+				return destinationType.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove;
 			}
 			else if (destinationType.IsUI4)
 			{
@@ -2222,7 +2222,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var destination = context.Result;
 			var size = GetInstructionSize(source.Type);
 
-			var instruction = IRInstruction.Move;
+			BaseIRInstruction instruction = IRInstruction.Move;
 
 			if (MustSignExtendOnLoad(source.Type))
 			{

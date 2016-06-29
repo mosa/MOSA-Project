@@ -2,349 +2,144 @@
 
 namespace Mosa.Compiler.Framework.IR
 {
-	/// <summary>
-	///
-	/// </summary>
 	public static class IRInstruction
 	{
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction AddFloat = new AddFloat();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction AddSigned = new AddSigned();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction AddUnsigned = new AddUnsigned();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction AddressOf = new AddressOf();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction ArithmeticShiftRight = new ArithmeticShiftRight();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Break = new Break();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction DivFloat = new DivFloat();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction DivSigned = new DivSigned();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction DivUnsigned = new DivUnsigned();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Epilogue = new Epilogue();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction FloatCompare = new FloatCompare();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction FloatToIntegerConversion = new FloatToIntegerConversion();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction IntegerCompareBranch = new IntegerCompareBranch();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction IntegerCompare = new IntegerCompare();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction IntegerToFloatConversion = new IntegerToFloatConversion();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Jmp = new Jmp();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Load = new Load();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction CompoundLoad = new CompoundLoad();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction LoadZeroExtended = new LoadZeroExtended();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction LoadSignExtended = new LoadSignExtended();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction LogicalAnd = new LogicalAnd();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction LogicalNot = new LogicalNot();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction LogicalOr = new LogicalOr();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction LogicalXor = new LogicalXor();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Move = new Move();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction CompoundMove = new CompoundMove();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction MulFloat = new MulFloat();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction MulSigned = new MulSigned();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction MulUnsigned = new MulUnsigned();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Phi = new Phi();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Prologue = new Prologue();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction RemFloat = new RemFloat();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction RemSigned = new RemSigned();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction RemUnsigned = new RemUnsigned();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Return = new Return();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction InternalCall = new InternalCall();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction InternalReturn = new InternalReturn();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction ShiftRight = new ShiftRight();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction ShiftLeft = new ShiftLeft();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction SignExtendedMove = new SignExtendedMove();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Store = new Store();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction CompoundStore = new CompoundStore();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction SubFloat = new SubFloat();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction SubSigned = new SubSigned();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction SubUnsigned = new SubUnsigned();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction ZeroExtendedMove = new ZeroExtendedMove();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Call = new Call();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Nop = new Nop();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Switch = new Switch();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Throw = new Throw();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction TryStart = new TryStart();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction ExceptionStart = new ExceptionStart();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction FilterStart = new FilterStart();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction FinallyStart = new FinallyStart();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction TryEnd = new TryEnd();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction ExceptionEnd = new ExceptionEnd();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction FinallyEnd = new FinallyEnd();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction FilterEnd = new FilterEnd();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction GotoLeaveTarget = new GotoLeaveTarget();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction SetLeaveTarget = new SetLeaveTarget();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction IntrinsicMethodCall = new IntrinsicMethodCall();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction BlockEnd = new BlockEnd();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction BlockStart = new BlockStart();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Gen = new Gen();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Kill = new Kill();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction KillAll = new KillAll();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction KillAllExcept = new KillAllExcept();
-
-		/// <summary>
-		///
-		/// </summary>
-		public static readonly BaseIRInstruction Flow = new Flow();
+		public static readonly AddFloat AddFloat = new AddFloat();
+
+		public static readonly AddSigned AddSigned = new AddSigned();
+
+		public static readonly AddUnsigned AddUnsigned = new AddUnsigned();
+
+		public static readonly AddressOf AddressOf = new AddressOf();
+
+		public static readonly ArithmeticShiftRight ArithmeticShiftRight = new ArithmeticShiftRight();
+
+		public static readonly Break Break = new Break();
+
+		public static readonly DivFloat DivFloat = new DivFloat();
+
+		public static readonly DivSigned DivSigned = new DivSigned();
+
+		public static readonly DivUnsigned DivUnsigned = new DivUnsigned();
+
+		public static readonly Epilogue Epilogue = new Epilogue();
+
+		public static readonly FloatCompare FloatCompare = new FloatCompare();
+
+		public static readonly FloatToIntegerConversion FloatToIntegerConversion = new FloatToIntegerConversion();
+
+		public static readonly IntegerCompareBranch IntegerCompareBranch = new IntegerCompareBranch();
+
+		public static readonly IntegerCompare IntegerCompare = new IntegerCompare();
+
+		public static readonly IntegerToFloatConversion IntegerToFloatConversion = new IntegerToFloatConversion();
+
+		public static readonly Jmp Jmp = new Jmp();
+
+		public static readonly Load Load = new Load();
+
+		public static readonly Load2 Load2 = new Load2();
+
+		public static readonly CompoundLoad CompoundLoad = new CompoundLoad();
+
+		public static readonly LoadZeroExtended LoadZeroExtended = new LoadZeroExtended();
+
+		public static readonly LoadSignExtended LoadSignExtended = new LoadSignExtended();
+
+		public static readonly LogicalAnd LogicalAnd = new LogicalAnd();
+
+		public static readonly LogicalNot LogicalNot = new LogicalNot();
+
+		public static readonly LogicalOr LogicalOr = new LogicalOr();
+
+		public static readonly LogicalXor LogicalXor = new LogicalXor();
+
+		public static readonly Move Move = new Move();
+
+		public static readonly CompoundMove CompoundMove = new CompoundMove();
+
+		public static readonly MulFloat MulFloat = new MulFloat();
+
+		public static readonly MulSigned MulSigned = new MulSigned();
+
+		public static readonly MulUnsigned MulUnsigned = new MulUnsigned();
+
+		public static readonly Phi Phi = new Phi();
+
+		public static readonly Prologue Prologue = new Prologue();
+
+		public static readonly RemFloat RemFloat = new RemFloat();
+
+		public static readonly RemSigned RemSigned = new RemSigned();
+
+		public static readonly RemUnsigned RemUnsigned = new RemUnsigned();
+
+		public static readonly Return Return = new Return();
+
+		public static readonly InternalCall InternalCall = new InternalCall();
+
+		public static readonly InternalReturn InternalReturn = new InternalReturn();
+
+		public static readonly ShiftRight ShiftRight = new ShiftRight();
+
+		public static readonly ShiftLeft ShiftLeft = new ShiftLeft();
+
+		public static readonly SignExtendedMove SignExtendedMove = new SignExtendedMove();
+
+		public static readonly Store Store = new Store();
+
+		public static readonly CompoundStore CompoundStore = new CompoundStore();
+
+		public static readonly SubFloat SubFloat = new SubFloat();
+
+		public static readonly SubSigned SubSigned = new SubSigned();
+
+		public static readonly SubUnsigned SubUnsigned = new SubUnsigned();
+
+		public static readonly ZeroExtendedMove ZeroExtendedMove = new ZeroExtendedMove();
+
+		public static readonly Call Call = new Call();
+
+		public static readonly Nop Nop = new Nop();
+
+		public static readonly Switch Switch = new Switch();
+
+		public static readonly Throw Throw = new Throw();
+
+		public static readonly TryStart TryStart = new TryStart();
+
+		public static readonly ExceptionStart ExceptionStart = new ExceptionStart();
+
+		public static readonly FilterStart FilterStart = new FilterStart();
+
+		public static readonly FinallyStart FinallyStart = new FinallyStart();
+
+		public static readonly TryEnd TryEnd = new TryEnd();
+
+		public static readonly ExceptionEnd ExceptionEnd = new ExceptionEnd();
+
+		public static readonly FinallyEnd FinallyEnd = new FinallyEnd();
+
+		public static readonly FilterEnd FilterEnd = new FilterEnd();
+
+		public static readonly GotoLeaveTarget GotoLeaveTarget = new GotoLeaveTarget();
+
+		public static readonly SetLeaveTarget SetLeaveTarget = new SetLeaveTarget();
+
+		public static readonly IntrinsicMethodCall IntrinsicMethodCall = new IntrinsicMethodCall();
+
+		public static readonly BlockEnd BlockEnd = new BlockEnd();
+
+		public static readonly BlockStart BlockStart = new BlockStart();
+
+		public static readonly Gen Gen = new Gen();
+
+		public static readonly Kill Kill = new Kill();
+
+		public static readonly KillAll KillAll = new KillAll();
+
+		public static readonly KillAllExcept KillAllExcept = new KillAllExcept();
+
+		public static readonly Flow Flow = new Flow();
 	}
 }

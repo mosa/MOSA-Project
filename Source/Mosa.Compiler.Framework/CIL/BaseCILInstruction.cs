@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <value>
 		/// The name of the instruction family.
 		/// </value>
-		public override string InstructionFamilyName { get { return "IR"; } }
+		public override string InstructionFamilyName { get { return "CIL"; } }
 
 		#endregion Properties
 

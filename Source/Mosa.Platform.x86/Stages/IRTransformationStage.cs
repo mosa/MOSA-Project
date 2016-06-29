@@ -31,6 +31,7 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.IntegerCompare] = IntegerCompare;
 			visitationDictionary[IRInstruction.Jmp] = Jmp;
 			visitationDictionary[IRInstruction.Load] = Load;
+			visitationDictionary[IRInstruction.Load2] = Load2;
 			visitationDictionary[IRInstruction.CompoundLoad] = CompoundLoad;
 			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
 			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
@@ -250,7 +251,7 @@ namespace Mosa.Platform.x86.Stages
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
 						newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.NotEqual, result);
-						newBlocks[0].AppendInstruction(X86.Movzx, result, result);
+						newBlocks[0].AppendInstruction(X86.Movzx, InstructionSize.Size8, result, result);
 						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 						break;
@@ -408,13 +409,24 @@ namespace Mosa.Platform.x86.Stages
 
 				var mov = GetMove(result, mem);
 
-				if (result.IsR8 && type.IsR4) // size == InstructionSize.Size32)
+				if (result.IsR8 && type.IsR4)
 				{
 					mov = X86.Cvtss2sd;
 				}
 
 				context.AppendInstruction(mov, size, result, mem);
 			}
+		}
+
+		private void Load2(Context context)
+		{
+			Operand result = context.Result;
+			Operand baseOperand = context.Operand1;
+			Operand offsetOperand = context.Operand2;
+			var type = context.MosaType;
+			var size = context.Size;
+
+			context.SetInstruction(X86.MovLoad, size, result, baseOperand, offsetOperand);
 		}
 
 		private void CompoundLoad(Context context)
@@ -453,20 +465,24 @@ namespace Mosa.Platform.x86.Stages
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
 				// Large Aligned moves allow 128bits to be copied at a time
-				var memSrc = Operand.CreateMemoryAddress(MethodCompiler.TypeSystem.BuiltIn.Void, srcReg, i + offset);
-				var memDest = Operand.CreateMemoryAddress(MethodCompiler.TypeSystem.BuiltIn.Void, dstReg, i);
-				context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, tmpLarge, memSrc);
-				context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, memDest, tmpLarge);
+				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
+				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
+				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
+				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
 			}
 			for (int i = largeAlignedTypeSize; i < alignedTypeSize; i += NativeAlignment)
 			{
-				context.AppendInstruction(X86.Mov, InstructionSize.Size32, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i + offset));
-				context.AppendInstruction(X86.Mov, InstructionSize.Size32, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i), tmp);
+				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
+				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
+				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, tmp, srcReg, offset2);
+				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, index, tmp);
 			}
 			for (int i = alignedTypeSize; i < typeSize; i++)
 			{
-				context.AppendInstruction(X86.Mov, InstructionSize.Size8, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i + offset));
-				context.AppendInstruction(X86.Mov, InstructionSize.Size8, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i), tmp);
+				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
+				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
+				context.AppendInstruction(X86.MovzxLoad, InstructionSize.Size8, tmp, srcReg, offset2);
+				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
 			}
 		}
 
@@ -476,35 +492,40 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LoadSignExtended(Context context)
 		{
-			var destination = context.Result;
-			var source = context.Operand1;
-			var type = context.MosaType;
-			var offset = context.Operand2;
-			var size = context.Size;
+			//var destination = context.Result;
+			//var source = context.Operand1;
+			//var type = context.MosaType;
+			//var offset = context.Operand2;
+			//var size = context.Size;
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			//			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(X86.Mov, v1, source);
+			Debug.Assert(!(context.Operand1.IsConstant && context.Operand2.IsConstant));
+			Debug.Assert(context.Size == InstructionSize.Size8 || context.Size == InstructionSize.Size16);
 
-			if (offset.IsConstant)
-			{
-				if (source.IsField)
-				{
-					Debug.Assert(offset.IsConstantZero);
-					Debug.Assert(source.Field.IsStatic);
+			context.SetInstruction(X86.MovsxLoad, context.Size, context.Result, context.Operand1, context.Operand2);
 
-					context.SetInstruction(X86.Movsx, size, destination, source);
-				}
-				else
-				{
-					context.AppendInstruction(X86.Movsx, destination, Operand.CreateMemoryAddress(type, v1, offset.ConstantSignedLongInteger));
-				}
-			}
-			else
-			{
-				context.AppendInstruction(X86.Add, v1, v1, offset);
-				context.AppendInstruction(X86.Movsx, destination, Operand.CreateMemoryAddress(type, v1, 0));
-			}
+			//context.SetInstruction(X86.Mov, v1, source);
+
+			//if (offset.IsConstant)
+			//{
+			//	if (source.IsField)
+			//	{
+			//		Debug.Assert(offset.IsConstantZero);
+			//		Debug.Assert(source.Field.IsStatic);
+
+			//		context.SetInstruction(X86.Movsx, size, destination, source);
+			//	}
+			//	else
+			//	{
+			//		context.AppendInstruction(X86.Movsx, size, destination, Operand.CreateMemoryAddress(type, v1, offset.ConstantSignedLongInteger));
+			//	}
+			//}
+			//else
+			//{
+			//	context.AppendInstruction(X86.Add, v1, v1, offset);
+			//	context.AppendInstruction(X86.Movsx, size, destination, Operand.CreateMemoryAddress(type, v1, 0));
+			//}
 		}
 
 		/// <summary>
@@ -513,37 +534,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LoadZeroExtended(Context context)
 		{
-			var destination = context.Result;
-			var source = context.Operand1;
-			var offset = context.Operand2;
-			var type = context.MosaType;
-			var size = context.Size;
-
-			Debug.Assert(offset != null);
-
-			Operand v1 = AllocateVirtualRegister(source.Type);
-
-			context.SetInstruction(X86.Mov, v1, source);
-
-			if (offset.IsConstant)
-			{
-				if (source.IsField)
-				{
-					Debug.Assert(offset.IsConstantZero);
-					Debug.Assert(source.Field.IsStatic);
-
-					context.SetInstruction(X86.Movzx, size, destination, source);
-				}
-				else
-				{
-					context.AppendInstruction(X86.Movzx, destination, Operand.CreateMemoryAddress(type, v1, offset.ConstantSignedLongInteger));
-				}
-			}
-			else
-			{
-				context.AppendInstruction(X86.Add, v1, v1, offset);
-				context.AppendInstruction(X86.Movzx, destination, Operand.CreateMemoryAddress(type, v1, 0));
-			}
+			context.SetInstruction(X86.MovzxLoad, context.Size, context.Result, context.Operand1, context.Operand2);
 		}
 
 		/// <summary>
@@ -639,10 +630,12 @@ namespace Mosa.Platform.x86.Stages
 			int typeSize = TypeLayout.GetTypeSize(type);
 			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
 			int largeAlignedTypeSize = typeSize - (typeSize % LargeAlignment);
+
 			Debug.Assert(typeSize > 0, MethodCompiler.Method.FullName);
 
 			var src = context.Operand1;
 			var dest = context.Result;
+
 			Debug.Assert((src.IsMemoryAddress || src.IsSymbol) && dest.IsMemoryAddress, context.ToString());
 
 			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
@@ -651,6 +644,7 @@ namespace Mosa.Platform.x86.Stages
 			var tmpLarge = Operand.CreateCPURegister(MethodCompiler.TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
 
 			context.SetInstruction(X86.Nop);
+
 			if (src.IsSymbol)
 			{
 				context.AppendInstruction(X86.Mov, srcReg, src);
@@ -659,25 +653,27 @@ namespace Mosa.Platform.x86.Stages
 			{
 				context.AppendInstruction(X86.Lea, srcReg, src);
 			}
+
 			context.AppendInstruction(X86.Lea, dstReg, dest);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
 				// Large Aligned moves allow 128bits to be copied at a time
-				var memSrc = Operand.CreateMemoryAddress(MethodCompiler.TypeSystem.BuiltIn.Void, srcReg, i);
-				var memDest = Operand.CreateMemoryAddress(MethodCompiler.TypeSystem.BuiltIn.Void, dstReg, i);
-				context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, tmpLarge, memSrc);
-				context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, memDest, tmpLarge);
+				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
+				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
+				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
 			}
 			for (int i = largeAlignedTypeSize; i < alignedTypeSize; i += NativeAlignment)
 			{
-				context.AppendInstruction(X86.Mov, InstructionSize.Size32, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
-				context.AppendInstruction(X86.Mov, InstructionSize.Size32, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i), tmp);
+				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
+				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, tmp, srcReg, index);
+				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, index, tmp);
 			}
 			for (int i = alignedTypeSize; i < typeSize; i++)
 			{
-				context.AppendInstruction(X86.Mov, InstructionSize.Size8, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
-				context.AppendInstruction(X86.Mov, InstructionSize.Size8, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i), tmp);
+				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
+				context.AppendInstruction(X86.MovzxLoad, InstructionSize.Size8, tmp, srcReg, index);
+				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
 			}
 		}
 
@@ -817,17 +813,15 @@ namespace Mosa.Platform.x86.Stages
 			int typeSize = TypeLayout.GetTypeSize(type);
 			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
 			int largeAlignedTypeSize = typeSize - (typeSize % LargeAlignment);
+
 			Debug.Assert(typeSize > 0, MethodCompiler.Method.FullName);
 
-			int offset = 0;
-			if (context.Operand2.IsConstant)
-			{
-				offset = (int)context.Operand2.ConstantSignedLongInteger;
-			}
+			int offset = context.Operand2.IsConstant ? context.Operand2.ConstantSignedInteger : 0;
 
 			var offsetop = context.Operand2;
 			var src = context.Operand3;
 			var dest = context.Operand1;
+
 			Debug.Assert(src.IsMemoryAddress);
 
 			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
@@ -847,20 +841,24 @@ namespace Mosa.Platform.x86.Stages
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
 				// Large Aligned moves allow 128bits to be copied at a time
-				var memSrc = Operand.CreateMemoryAddress(MethodCompiler.TypeSystem.BuiltIn.Void, srcReg, i);
-				var memDest = Operand.CreateMemoryAddress(MethodCompiler.TypeSystem.BuiltIn.Void, dstReg, i + offset);
-				context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, tmpLarge, memSrc);
-				context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, memDest, tmpLarge);
+				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
+				var indexOffset = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
+				context.AppendInstruction(X86.MovupsLoad, InstructionSize.Size128, tmp, srcReg, index);
+				context.AppendInstruction(X86.MovupsStore, InstructionSize.Size128, null, dstReg, indexOffset, tmp);
 			}
 			for (int i = largeAlignedTypeSize; i < alignedTypeSize; i += NativeAlignment)
 			{
-				context.AppendInstruction(X86.Mov, InstructionSize.Size32, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
-				context.AppendInstruction(X86.Mov, InstructionSize.Size32, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i + offset), tmp);
+				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
+				var indexOffset = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
+				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, tmp, srcReg, index);
+				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, indexOffset, tmp);
 			}
 			for (int i = alignedTypeSize; i < typeSize; i++)
 			{
-				context.AppendInstruction(X86.Mov, InstructionSize.Size8, tmp, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, srcReg, i));
-				context.AppendInstruction(X86.Mov, InstructionSize.Size8, Operand.CreateMemoryAddress(TypeSystem.BuiltIn.I4, dstReg, i + offset), tmp);
+				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
+				var indexOffset = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
+				context.AppendInstruction(X86.MovLoad, InstructionSize.Size8, tmp, srcReg, index);
+				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, indexOffset, tmp);
 			}
 		}
 
@@ -1118,6 +1116,8 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ZeroExtendedMove(Context context)
 		{
+			Debug.Assert(context.Size != InstructionSize.None);
+
 			context.ReplaceInstructionOnly(X86.Movzx);
 		}
 

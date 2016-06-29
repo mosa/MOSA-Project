@@ -161,16 +161,17 @@ namespace Mosa.Platform.x86.Stages
 			if (right.IsConstant && (left.IsChar || left.IsShort || left.IsByte))
 			{
 				Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-				Context before = context.InsertBefore();
+				InstructionSize size = left.IsByte ? InstructionSize.Size8 : InstructionSize.Size16;
 
 				if (left.IsSigned)
 				{
-					before.AppendInstruction(X86.Movsx, v2, left);
+					context.InsertBefore().AppendInstruction(X86.Movsx, size, v2, left);
 				}
 				else
 				{
-					before.AppendInstruction(X86.Movzx, v2, left);
+					context.InsertBefore().AppendInstruction(X86.Movzx, size, v2, left);
 				}
+
 				context.Operand1 = v2;
 			}
 		}

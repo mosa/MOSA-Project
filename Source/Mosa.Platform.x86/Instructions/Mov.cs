@@ -73,9 +73,11 @@ namespace Mosa.Platform.x86.Instructions
 				return RM_C;
 			}
 
-			if (destination.IsRegister && source.IsSymbol) return RM_C;
+			if (destination.IsRegister && source.IsSymbol)
+				return RM_C;
 
-			if (destination.IsMemoryAddress && source.IsSymbol) return RM_C;
+			if (destination.IsMemoryAddress && source.IsSymbol)
+				return RM_C;
 
 			if (destination.IsRegister && source.IsRegister)
 			{

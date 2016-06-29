@@ -21,18 +21,15 @@ namespace Mosa.Platform.x86.Intrinsic
 			var dest = context.Operand1;
 			var src = context.Operand2;
 
-			// The size will be 128 bits
-			var v1 = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
-			var v2 = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.Void, SSE2Register.XMM2);
-			var memDest1 = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.Void, dest, 0);
-			var memDest2 = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.Void, dest, 16);
-			var memSrc1 = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.Void, src, 0);
-			var memSrc2 = Operand.CreateMemoryAddress(methodCompiler.TypeSystem.BuiltIn.Void, src, 16);
+			var v0 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.Void);
+			var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.Void);
+			var zero = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
+			var offset16 = Operand.CreateConstant(methodCompiler.TypeSystem, 16);
 
-			context.SetInstruction(X86.MovUPS, InstructionSize.Size128, v1, memSrc1);
-			context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, v2, memSrc2);
-			context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, memDest1, v1);
-			context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, memDest2, v2);
+			context.AppendInstruction(X86.MovupsLoad, InstructionSize.Size128, v0, dest, zero);
+			context.AppendInstruction(X86.MovupsLoad, InstructionSize.Size128, v1, dest, offset16);
+			context.AppendInstruction(X86.MovupsStore, InstructionSize.Size128, null, dest, zero, v0);
+			context.AppendInstruction(X86.MovupsStore, InstructionSize.Size128, null, dest, offset16, v1);
 		}
 
 		#endregion Methods

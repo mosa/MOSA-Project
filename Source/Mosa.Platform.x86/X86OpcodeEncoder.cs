@@ -21,7 +21,7 @@ namespace Mosa.Platform.x86
 
 		public static OpcodeEncoder AppendMod(this OpcodeEncoder encoder, byte value)
 		{
-			return encoder.Append3Bits(value);
+			return encoder.Append2Bits(value);
 		}
 
 		public static OpcodeEncoder AppendRM(this OpcodeEncoder encoder, byte value)
@@ -69,8 +69,19 @@ namespace Mosa.Platform.x86
 		{
 			Debug.Assert(scale == 1 || scale == 2 || scale == 4 || scale == 8);
 
+			int svalue = 0;
+
+			if (scale == 1)
+				svalue = 0;
+			else if (scale == 2)
+				svalue = 1;
+			else if (scale == 4)
+				svalue = 2;
+			else if (scale == 8)
+				svalue = 3;
+
 			// scale
-			encoder.AppendBits(scale, 2);
+			encoder.AppendBits(svalue, 2);
 
 			// index
 			if (index == null)
@@ -96,6 +107,9 @@ namespace Mosa.Platform.x86
 		{
 			if (memory)
 			{
+				if (!displacement.IsConstant)
+					return encoder.Append2Bits(Bits.b00);
+
 				if (displacement.IsConstantZero)
 					return encoder.Append2Bits(Bits.b00);
 
@@ -119,6 +133,20 @@ namespace Mosa.Platform.x86
 			return encoder.AppendIntegerValue(displacement.ConstantUnsignedInteger);
 		}
 
+		public static OpcodeEncoder AppendConditionalDisplacement(this OpcodeEncoder encoder, Operand displacement)
+		{
+			if (!displacement.IsConstant)
+				return encoder;
+
+			if (displacement.IsConstantZero)
+				return encoder;
+
+			if (Is8BitDisplacement(displacement))
+				return encoder.AppendByteValue((byte)displacement.ConstantUnsignedInteger);
+
+			return encoder.AppendIntegerValue(displacement.ConstantUnsignedInteger);
+		}
+
 		public static OpcodeEncoder AppendConditionalREXPrefix(this OpcodeEncoder encoder, bool w, bool r, bool x, bool b, bool include)
 		{
 			if (!include)
@@ -130,6 +158,38 @@ namespace Mosa.Platform.x86
 			encoder.AppendBit(r);
 			encoder.AppendBit(x);
 			encoder.AppendBit(b);
+
+			return encoder;
+		}
+
+		public static OpcodeEncoder AppendInteger(this OpcodeEncoder encoder, Operand operand, InstructionSize size)
+		{
+			if (size == InstructionSize.Size32)
+				return encoder.AppendIntegerValue(operand.ConstantUnsignedInteger);
+			if (size == InstructionSize.Size8)
+				return encoder.AppendByteValue((byte)operand.ConstantUnsignedInteger);
+			if (size == InstructionSize.Size16)
+				return encoder.AppendShortValue((ushort)operand.ConstantUnsignedInteger);
+
+			throw new InvalidCompilerException("Instruction size invalid");
+		}
+
+		public static OpcodeEncoder ModRegRMSIBDisplacement(this OpcodeEncoder encoder, Operand result, Operand op1, Operand op2)
+		{
+			if (op2.IsConstant)
+			{
+				encoder.AppendMod(true, op2);               // 2:mod
+				encoder.AppendRegister(result.Register);    // 3:register (destination)
+				encoder.AppendRM(op1);                      // 3:r/m (source)
+				encoder.AppendConditionalDisplacement(op2); // 8/32:displacement value
+			}
+			else
+			{
+				encoder.AppendMod(Bits.b00);                        // 2:mod
+				encoder.AppendRegister(result.Register);            // 3:register (destination)
+				encoder.AppendRM(Bits.b100);                        // 3:r/m (source)
+				encoder.AppendSIB(1, op2.Register, op1.Register);   // 8:sib (scale, index, base)
+			}
 
 			return encoder;
 		}

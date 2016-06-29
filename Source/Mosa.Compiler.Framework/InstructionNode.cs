@@ -1305,6 +1305,41 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
+		{
+			SetInstruction(instruction, 3, (byte)((result == null) ? 0 : 1));
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			Operand3 = operand3;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
+		{
+			SetInstruction(instruction, 4, (byte)((result == null) ? 0 : 1));
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			Operand3 = operand3;
+			SetOperand(3, operand4);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
 		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
@@ -1422,23 +1457,6 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		/// <param name="operand3">The operand3.</param>
-		public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
-		{
-			SetInstruction(instruction, 3, (byte)((result == null) ? 0 : 1));
-			Result = result;
-			Operand1 = operand1;
-			Operand2 = operand2;
-			Operand3 = operand3;
-		}
-
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
 		/// <param name="size">The size.</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
@@ -1461,6 +1479,22 @@ namespace Mosa.Compiler.Framework
 		public void SetInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2, Operand operand3)
 		{
 			SetInstruction(instruction, result, operand1, operand2, operand3);
+			Size = size;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="size">The size.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		/// <param name="operand4">The operand4.</param>
+		public void SetInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
+		{
+			SetInstruction(instruction, result, operand1, operand2, operand3, operand4);
 			Size = size;
 		}
 

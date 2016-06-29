@@ -4,12 +4,12 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{577B8294-334B-4E02-BE1A-CBA8ABAF8939}</ProjectGuid>
+    <ProjectGuid>{44725E46-513F-4CFB-8196-2191399C514B}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.TestWorld.x86</AssemblyName>
+    <AssemblyName>Mosa.UnitTest.x86</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -18,8 +18,8 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
-    <RootNamespace>Mosa.TestWorld.x86</RootNamespace>
-    <StartupObject>Mosa.TestWorld.x86.Boot</StartupObject>
+    <RootNamespace>Mosa.UnitTest.x86</RootNamespace>
+    <StartupObject>Mosa.UnitTest.x86.Boot</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -84,22 +84,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
-    <Compile Include="Tests\ArrayTest.cs" />
-    <Compile Include="Tests\ComparisonTest.cs" />
-    <Compile Include="Tests\Int64Test.cs" />
-    <Compile Include="Tests\OtherTest.cs" />
-    <Compile Include="Tests\DelegateTest.cs" />
-    <Compile Include="Tests\ExceptionTest.cs" />
-    <Compile Include="Tests\Generic2Test.cs" />
-    <Compile Include="Tests\KernelTest.cs" />
-    <Compile Include="Tests\IsInstanceTest.cs" />
-    <Compile Include="Tests\PlugTest.cs" />
-    <Compile Include="Tests\OptimizationTest.cs" />
-    <Compile Include="Tests\ReflectionTest.cs" />
-    <Compile Include="Tests\ValueTypeTests.cs" />
-    <Compile Include="Tests\StringTest.cs" />
-    <Compile Include="Tests\InterfaceTest.cs" />
-    <Compile Include="Tests\GenericTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Korlib\Korlib.csproj">
