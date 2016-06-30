@@ -369,6 +369,22 @@ namespace Mosa.Platform.x86.Stages
 			var type = context.MosaType;
 			var size = context.Size;
 
+			BaseInstruction loadInstruction = null;
+
+			if (baseOperand.IsR8 && result.IsR8)
+			{
+				loadInstruction = X86.MovsdLoad;
+			}
+			else if (baseOperand.IsR4 && result.IsR4)
+			{
+				loadInstruction = X86.MovssLoad;
+			}
+			{
+				loadInstruction = X86.MovLoad;
+			}
+
+			//System.Diagnostics.Debug.WriteLine(context.ToString());
+
 			if (offsetOperand.IsConstant)
 			{
 				if (baseOperand.IsField)
@@ -383,7 +399,7 @@ namespace Mosa.Platform.x86.Stages
 						mov = X86.Cvtss2sd;
 					}
 
-					context.SetInstruction(GetMove(result, baseOperand), size, result, baseOperand);
+					context.SetInstruction(mov, size, result, baseOperand);
 				}
 				else
 				{

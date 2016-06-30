@@ -1354,15 +1354,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Ldlen(Context context)
 		{
-			Operand arrayOperand = context.Operand1;
-			Operand arrayLength = context.Result;
-			Operand constantOffset = Operand.CreateConstant(TypeSystem, 8);
-
-			Operand arrayAddress = MethodCompiler.CreateVirtualRegister(arrayOperand.Type.ElementType.ToManagedPointer());
-			var size = GetInstructionSize(arrayLength.Type);
-
-			context.SetInstruction(IRInstruction.Move, arrayAddress, arrayOperand);
-			context.AppendInstruction(IRInstruction.Load, arrayLength, arrayAddress, constantOffset);
+			var offset = Operand.CreateConstant(TypeSystem, NativePointerSize * 2);
+			context.SetInstruction(IRInstruction.Load2, InstructionSize.Size32, context.Result, context.Operand1, offset);
 		}
 
 		/// <summary>
