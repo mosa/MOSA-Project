@@ -1403,7 +1403,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Array bounds check
 			AddArrayBoundsCheck(context.InsertBefore(), arrayOperand, arrayIndexOperand);
 
-			BaseIRInstruction loadInstruction = IRInstruction.Load;
+			BaseIRInstruction loadInstruction = IRInstruction.Load;	// todo: change to Load2 once 64-bit support is fixed
 
 			if (MustSignExtendOnLoad(arraySigType.ElementType))
 			{
@@ -1413,6 +1413,10 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
+			//else if (!arraySigType.IsUI8)
+			//{
+			//	loadInstruction = IRInstruction.Load2;
+			//}
 
 			//
 			// The sequence we're emitting is:
@@ -1422,7 +1426,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//      result = *(arrayAddress + offset)
 			//
 			// The array data starts at offset 12 from the array object itself. The 12 is a assumption of x86,
-			// which might change for other platforms. This is automatically calculated using the plaform native pointer size.
+			// which might change for other platforms. This is automatically calculated using the platform native pointer size.
 			//
 
 			var arrayAddress = LoadArrayBaseAddress(context, arraySigType, arrayOperand);
@@ -1431,6 +1435,9 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(elementOffset != null);
 
 			var size = GetInstructionSize(arraySigType.ElementType);
+
+			if (size == InstructionSize.Native)
+				size = Architecture.NativeInstructionSize;
 
 			context.SetInstruction(loadInstruction, size, result, arrayAddress, elementOffset);
 			context.MosaType = arraySigType.ElementType;

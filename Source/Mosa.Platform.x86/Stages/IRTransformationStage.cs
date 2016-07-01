@@ -363,75 +363,78 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void Load(Context context)
 		{
-			Operand result = context.Result;
-			Operand baseOperand = context.Operand1;
-			Operand offsetOperand = context.Operand2;
-			var type = context.MosaType;
-			var size = context.Size;
+			//Operand result = context.Result;
+			//Operand baseOperand = context.Operand1;
+			//Operand offsetOperand = context.Operand2;
+			//var type = context.MosaType;
+			//var size = context.Size;
 
 			BaseInstruction loadInstruction = null;
 
-			if (baseOperand.IsR8 && result.IsR8)
+			if (context.Result.IsR8)
 			{
 				loadInstruction = X86.MovsdLoad;
 			}
-			else if (baseOperand.IsR4 && result.IsR4)
+			else if (context.Result.IsR4)
 			{
 				loadInstruction = X86.MovssLoad;
 			}
+			else
 			{
 				loadInstruction = X86.MovLoad;
 			}
 
-			//System.Diagnostics.Debug.WriteLine(context.ToString());
+			context.SetInstruction(loadInstruction, context.Size, context.Result, context.Operand1, context.Operand2);
 
-			if (offsetOperand.IsConstant)
-			{
-				if (baseOperand.IsField)
-				{
-					Debug.Assert(offsetOperand.IsConstantZero);
-					Debug.Assert(baseOperand.Field.IsStatic);
+			////System.Diagnostics.Debug.WriteLine(context.ToString());
 
-					var mov = GetMove(result, baseOperand);
+			//if (offsetOperand.IsConstant)
+			//{
+			//	if (baseOperand.IsField)
+			//	{
+			//		Debug.Assert(offsetOperand.IsConstantZero);
+			//		Debug.Assert(baseOperand.Field.IsStatic);
 
-					if (result.IsR8 && type.IsR4) // size == InstructionSize.Size32)
-					{
-						mov = X86.Cvtss2sd;
-					}
+			//		var mov = GetMove(result, baseOperand);
 
-					context.SetInstruction(mov, size, result, baseOperand);
-				}
-				else
-				{
-					Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ConstantSignedLongInteger);
+			//		if (result.IsR8 && type.IsR4) // size == InstructionSize.Size32)
+			//		{
+			//			mov = X86.Cvtss2sd;
+			//		}
 
-					var mov = GetMove(result, mem);
+			//		context.SetInstruction(mov, size, result, baseOperand);
+			//	}
+			//	else
+			//	{
+			//		Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ConstantSignedLongInteger);
 
-					if (result.IsR8 && type.IsR4) // size == InstructionSize.Size32)
-					{
-						mov = X86.Cvtss2sd;
-					}
+			//		var mov = GetMove(result, mem);
 
-					context.SetInstruction(mov, size, result, mem);
-				}
-			}
-			else
-			{
-				Operand v1 = AllocateVirtualRegister(baseOperand.Type);
-				Operand mem = Operand.CreateMemoryAddress(v1.Type, v1, 0);
+			//		if (result.IsR8 && type.IsR4) // size == InstructionSize.Size32)
+			//		{
+			//			mov = X86.Cvtss2sd;
+			//		}
 
-				context.SetInstruction(X86.Mov, v1, baseOperand);
-				context.AppendInstruction(X86.Add, v1, v1, offsetOperand);
+			//		context.SetInstruction(mov, size, result, mem);
+			//	}
+			//}
+			//else
+			//{
+			//	Operand v1 = AllocateVirtualRegister(baseOperand.Type);
+			//	Operand mem = Operand.CreateMemoryAddress(v1.Type, v1, 0);
 
-				var mov = GetMove(result, mem);
+			//	context.SetInstruction(X86.Mov, v1, baseOperand);
+			//	context.AppendInstruction(X86.Add, v1, v1, offsetOperand);
 
-				if (result.IsR8 && type.IsR4)
-				{
-					mov = X86.Cvtss2sd;
-				}
+			//	var mov = GetMove(result, mem);
 
-				context.AppendInstruction(mov, size, result, mem);
-			}
+			//	if (result.IsR8 && type.IsR4)
+			//	{
+			//		mov = X86.Cvtss2sd;
+			//	}
+
+			//	context.AppendInstruction(mov, size, result, mem);
+			//}
 		}
 
 		private void Load2(Context context)

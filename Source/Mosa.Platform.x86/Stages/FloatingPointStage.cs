@@ -4,6 +4,8 @@ using Mosa.Compiler.Framework;
 using System;
 using System.Collections.Generic;
 
+// fixme: this stage may not be necessary with the specific load/store instructions
+
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
@@ -26,6 +28,10 @@ namespace Mosa.Platform.x86.Stages
 						continue;
 
 					if (node.Instruction == X86.Jmp || node.Instruction == X86.FarJmp)
+						continue;
+
+					if (node.Instruction == X86.MovsdLoad || node.Instruction == X86.MovssLoad ||
+						node.Instruction == X86.MovsdStore || node.Instruction == X86.MovssStore)
 						continue;
 
 					// Convert any floating point constants into labels
