@@ -47,8 +47,26 @@ namespace Mosa.Platform.x86.Stages
 
 			node.Operand1 = result;
 
-			var move = GetMove(result, operand1);
-			var size = GetInstructionSize(result.Type);
+			X86Instruction move = null;
+			InstructionSize size = InstructionSize.None;
+
+			if (result.Type.IsR4)
+			{
+				move = X86.Movss;
+				size = InstructionSize.Size32;
+			}
+			else if (result.Type.IsR8)
+			{
+				move = X86.Movsd;
+				size = InstructionSize.Size64;
+			}
+			else
+			{
+				move = X86.Mov;
+				size = InstructionSize.Size32;
+			}
+
+			System.Diagnostics.Debug.Assert(move == GetMove(result, operand1));
 
 			var newNode = new InstructionNode(move, result, operand1);
 			newNode.Size = size;

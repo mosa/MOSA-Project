@@ -76,8 +76,19 @@ namespace Mosa.Platform.x86.Stages
 			Operand register = AllocateVirtualRegister(operand.Type);
 			node.Operand1 = register;
 
-			var move = GetMove(register, operand);
-			var size = GetInstructionSize(operand.Type);
+			X86Instruction move = null;
+			InstructionSize size = InstructionSize.None;
+
+			if (register.IsR4)
+			{
+				move = X86.Movss;
+				size = InstructionSize.Size32;
+			}
+			else
+			{
+				move = X86.Movsd;
+				size = InstructionSize.Size64;
+			}
 
 			var newNode = new InstructionNode(move, register, operand);
 			newNode.Size = size;

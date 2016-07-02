@@ -167,7 +167,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public static bool ConditionalBug()
 		{
-			uint address = 0x1000;
+			uint address = 0x3000;
 			Mosa.Runtime.x86.Native.Set8(address, 81);
 			var num = Mosa.Runtime.x86.Native.Get8(address);
 

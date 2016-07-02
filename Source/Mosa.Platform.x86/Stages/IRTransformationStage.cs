@@ -363,12 +363,6 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void Load(Context context)
 		{
-			//Operand result = context.Result;
-			//Operand baseOperand = context.Operand1;
-			//Operand offsetOperand = context.Operand2;
-			//var type = context.MosaType;
-			//var size = context.Size;
-
 			BaseInstruction loadInstruction = null;
 
 			if (context.Result.IsR8)
@@ -385,67 +379,11 @@ namespace Mosa.Platform.x86.Stages
 			}
 
 			context.SetInstruction(loadInstruction, context.Size, context.Result, context.Operand1, context.Operand2);
-
-			////System.Diagnostics.Debug.WriteLine(context.ToString());
-
-			//if (offsetOperand.IsConstant)
-			//{
-			//	if (baseOperand.IsField)
-			//	{
-			//		Debug.Assert(offsetOperand.IsConstantZero);
-			//		Debug.Assert(baseOperand.Field.IsStatic);
-
-			//		var mov = GetMove(result, baseOperand);
-
-			//		if (result.IsR8 && type.IsR4) // size == InstructionSize.Size32)
-			//		{
-			//			mov = X86.Cvtss2sd;
-			//		}
-
-			//		context.SetInstruction(mov, size, result, baseOperand);
-			//	}
-			//	else
-			//	{
-			//		Operand mem = Operand.CreateMemoryAddress(baseOperand.Type, baseOperand, offsetOperand.ConstantSignedLongInteger);
-
-			//		var mov = GetMove(result, mem);
-
-			//		if (result.IsR8 && type.IsR4) // size == InstructionSize.Size32)
-			//		{
-			//			mov = X86.Cvtss2sd;
-			//		}
-
-			//		context.SetInstruction(mov, size, result, mem);
-			//	}
-			//}
-			//else
-			//{
-			//	Operand v1 = AllocateVirtualRegister(baseOperand.Type);
-			//	Operand mem = Operand.CreateMemoryAddress(v1.Type, v1, 0);
-
-			//	context.SetInstruction(X86.Mov, v1, baseOperand);
-			//	context.AppendInstruction(X86.Add, v1, v1, offsetOperand);
-
-			//	var mov = GetMove(result, mem);
-
-			//	if (result.IsR8 && type.IsR4)
-			//	{
-			//		mov = X86.Cvtss2sd;
-			//	}
-
-			//	context.AppendInstruction(mov, size, result, mem);
-			//}
 		}
 
 		private void Load2(Context context)
 		{
-			Operand result = context.Result;
-			Operand baseOperand = context.Operand1;
-			Operand offsetOperand = context.Operand2;
-			var type = context.MosaType;
-			var size = context.Size;
-
-			context.SetInstruction(X86.MovLoad, size, result, baseOperand, offsetOperand);
+			context.SetInstruction(X86.MovLoad, context.Size, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void CompoundLoad(Context context)
@@ -511,40 +449,10 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LoadSignExtended(Context context)
 		{
-			//var destination = context.Result;
-			//var source = context.Operand1;
-			//var type = context.MosaType;
-			//var offset = context.Operand2;
-			//var size = context.Size;
-
-			//			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
 			Debug.Assert(!(context.Operand1.IsConstant && context.Operand2.IsConstant));
 			Debug.Assert(context.Size == InstructionSize.Size8 || context.Size == InstructionSize.Size16);
 
 			context.SetInstruction(X86.MovsxLoad, context.Size, context.Result, context.Operand1, context.Operand2);
-
-			//context.SetInstruction(X86.Mov, v1, source);
-
-			//if (offset.IsConstant)
-			//{
-			//	if (source.IsField)
-			//	{
-			//		Debug.Assert(offset.IsConstantZero);
-			//		Debug.Assert(source.Field.IsStatic);
-
-			//		context.SetInstruction(X86.Movsx, size, destination, source);
-			//	}
-			//	else
-			//	{
-			//		context.AppendInstruction(X86.Movsx, size, destination, Operand.CreateMemoryAddress(type, v1, offset.ConstantSignedLongInteger));
-			//	}
-			//}
-			//else
-			//{
-			//	context.AppendInstruction(X86.Add, v1, v1, offset);
-			//	context.AppendInstruction(X86.Movsx, size, destination, Operand.CreateMemoryAddress(type, v1, 0));
-			//}
 		}
 
 		/// <summary>
@@ -781,6 +689,8 @@ namespace Mosa.Platform.x86.Stages
 			MosaType storeType = context.MosaType;
 			var type = baseOperand.Type;
 			var size = context.Size;
+
+			Debug.WriteLine(context.ToString());
 
 			if (value.IsR8 && type.IsR4) //&& size == InstructionSize.Size32)
 			{
