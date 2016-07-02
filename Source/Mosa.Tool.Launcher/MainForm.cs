@@ -7,10 +7,11 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+using MetroFramework.Forms;
 
 namespace Mosa.Tool.Launcher
 {
-	public partial class MainForm : Form, IBuilderEvent, IStarterEvent
+	public partial class MainForm : MetroForm, IBuilderEvent, IStarterEvent
 	{
 		public Builder Builder { get; private set; }
 
