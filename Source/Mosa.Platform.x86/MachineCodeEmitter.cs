@@ -179,11 +179,19 @@ namespace Mosa.Platform.x86
 
 				var section = (displacement.Method != null) ? SectionKind.Text : SectionKind.ROData;
 
-				var symbol = linker.GetSymbol(displacement.Name, section);
+				// First try finding the symbol in the expected section
+				var symbol = linker.FindSymbol(displacement.Name, section);
 
+				// If no symbol found, look in all sections
 				if (symbol == null)
 				{
 					symbol = linker.FindSymbol(displacement.Name);
+				}
+
+				// Otherwise create the symbol in the expected section
+				if (symbol == null)
+				{
+					symbol = linker.GetSymbol(displacement.Name, section);
 				}
 
 				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, symbol, 0);
