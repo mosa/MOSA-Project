@@ -3,19 +3,19 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// Loads a value from the stack.
+	/// Loads a value from a memory pointer.
 	/// </summary>
 	/// <remarks>
-	/// The stack load instruction is used to load a value from the stack. The types must be compatible.
+	/// The load instruction is used to load a value from a memory pointer and an offset. The types must be compatible.
 	/// </remarks>
-	public sealed class StackLoad : ThreeOperandInstruction
+	public sealed class Load2 : ThreeOperandInstruction
 	{
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="Load"/>.
 		/// </summary>
-		public StackLoad()
+		public Load2()
 		{
 		}
 

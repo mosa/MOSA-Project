@@ -8,21 +8,27 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Representations the x86 Invlpg instruction.
+	/// Representations the x86 MovapsLoad instruction.
 	/// </summary>
-	public sealed class Invlpg : X86Instruction
+	public sealed class MovapsLoad : X86Instruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Invlpg"/>.
+		/// Initializes a new instance of <see cref="MovapsLoad"/>.
 		/// </summary>
-		public Invlpg() :
-			base(0, 1)
+		public MovapsLoad() :
+			base(1, 2)
 		{
 		}
 
 		#endregion Construction
+
+		#region Properties
+
+		public override bool ThreeTwoAddressConversion { get { return false; } }
+
+		#endregion Properties
 
 		#region Methods
 
@@ -33,25 +39,24 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			InvlpgMemory(node, emitter);
+			MovapsMemoryToReg(node, emitter);
 		}
 
-		private static void InvlpgMemory(InstructionNode node, MachineCodeEmitter emitter)
+		private static void MovapsMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsConstant);
+			Debug.Assert(node.Result.IsRegister);
 
 			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
 
-			// INVLPG – Invalidate TLB Entry 0000 1111 : 0000 0001 : mod 111 r/m
+			// mem to xmmreg 1111 0011:0000 1111:0101 1101: mod xmmreg r/m
 			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0011)                                       // 4:opcode
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b0001)                                       // 4:opcode
-				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
-				.Append3Bits(Bits.b010)                                         // 3:reg
-				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
-				.AppendConditionalDisplacement(node.Operand1, !node.Operand1.IsConstantZero)    // 32:displacement value
+				.AppendNibble(Bits.b0101)                                       // 4:opcode
+				.AppendNibble(Bits.b1101)                                       // 4:opcode
+				.ModRegRMSIBDisplacement(node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
 
 			if (linkreference)

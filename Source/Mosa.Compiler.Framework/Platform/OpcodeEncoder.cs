@@ -163,6 +163,13 @@ namespace Mosa.Compiler.Framework.Platform
 			return this;
 		}
 
+		public OpcodeEncoder AppendShortValue(ushort value)
+		{
+			AppendByteValue((byte)(value & 0xFF));
+			AppendByteValue((byte)((value >> 8) & 0xFF));
+			return this;
+		}
+
 		public OpcodeEncoder AppendConditionalIntegerValue(uint value, bool include)
 		{
 			if (include)

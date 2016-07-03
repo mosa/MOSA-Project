@@ -280,16 +280,7 @@ namespace Mosa.Platform.x86
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
 			var instruction = BaseTransformationStage.GetMove(destination, source);
-			var size = InstructionSize.None;
-			if (instruction is x86.Instructions.Movsd)
-			{
-				size = InstructionSize.Size64;
-			}
-			else if (instruction is x86.Instructions.Movss)
-			{
-				size = InstructionSize.Size32;
-			}
-			context.AppendInstruction(instruction, size, destination, source);
+			context.AppendInstruction(instruction, /*size,*/ destination, source);
 		}
 
 		/// <summary>
@@ -301,41 +292,39 @@ namespace Mosa.Platform.x86
 		/// <param name="size">The size.</param>
 		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand source, int size)
 		{
+			Debug.Assert(size > 0);
+			Debug.Assert(source.IsMemoryAddress && destination.IsMemoryAddress);
+
 			const int LargeAlignment = 16;
 			int alignedSize = size - (size % NativeAlignment);
 			int largeAlignedTypeSize = size - (size % LargeAlignment);
-
-			Debug.Assert(size > 0);
-
-			var src = source;
-			var dest = destination;
-
-			Debug.Assert(src.IsMemoryAddress && dest.IsMemoryAddress);
 
 			var srcReg = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
 			var dstReg = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
 			var tmp = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
 			var tmpLarge = Operand.CreateCPURegister(destination.Type.TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
 
-			context.AppendInstruction(X86.Lea, srcReg, src);
-			context.AppendInstruction(X86.Lea, dstReg, dest);
+			context.AppendInstruction(X86.Lea, srcReg, source);
+			context.AppendInstruction(X86.Lea, dstReg, destination);
+
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
 				// Large aligned moves allow 128bits to be copied at a time
-				var memSrc = Operand.CreateMemoryAddress(destination.Type.TypeSystem.BuiltIn.Void, srcReg, i);
-				var memDest = Operand.CreateMemoryAddress(destination.Type.TypeSystem.BuiltIn.Void, dstReg, i);
-				context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, tmpLarge, memSrc);
-				context.AppendInstruction(X86.MovUPS, InstructionSize.Size128, memDest, tmpLarge);
+				var index = Operand.CreateConstant(destination.Type.TypeSystem.BuiltIn.I4, i);
+				context.AppendInstruction(X86.MovupsLoad, InstructionSize.Size128, tmpLarge, srcReg, index);
+				context.AppendInstruction(X86.MovupsStore, InstructionSize.Size128, null, dstReg, index, tmpLarge);
 			}
 			for (int i = largeAlignedTypeSize; i < alignedSize; i += NativeAlignment)
 			{
-				context.AppendInstruction(X86.Mov, InstructionSize.Size32, tmp, Operand.CreateMemoryAddress(src.Type.TypeSystem.BuiltIn.I4, srcReg, i));
-				context.AppendInstruction(X86.Mov, InstructionSize.Size32, Operand.CreateMemoryAddress(dest.Type.TypeSystem.BuiltIn.I4, dstReg, i), tmp);
+				var index = Operand.CreateConstant(destination.Type.TypeSystem.BuiltIn.I4, i);
+				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, tmp, srcReg, index);
+				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, index, tmp);
 			}
 			for (int i = alignedSize; i < size; i++)
 			{
-				context.AppendInstruction(X86.Mov, InstructionSize.Size8, tmp, Operand.CreateMemoryAddress(src.Type.TypeSystem.BuiltIn.I4, srcReg, i));
-				context.AppendInstruction(X86.Mov, InstructionSize.Size8, Operand.CreateMemoryAddress(dest.Type.TypeSystem.BuiltIn.I4, dstReg, i), tmp);
+				var index = Operand.CreateConstant(destination.Type.TypeSystem.BuiltIn.I4, i);
+				context.AppendInstruction(X86.MovLoad, InstructionSize.Size8, tmp, srcReg, index);
+				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
 			}
 		}
 
@@ -350,10 +339,12 @@ namespace Mosa.Platform.x86
 			if (source.IsR4)
 			{
 				// TODO
+				throw new CompilerException("R4 not implemented in InsertExchangeInstruction method");
 			}
 			else if (source.IsR8)
 			{
 				// TODO
+				throw new CompilerException("R8 not implemented in InsertExchangeInstruction method");
 			}
 			else
 			{

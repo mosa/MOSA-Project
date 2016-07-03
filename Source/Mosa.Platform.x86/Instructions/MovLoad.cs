@@ -24,6 +24,12 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion Construction
 
+		#region Properties
+
+		public override bool ThreeTwoAddressConversion { get { return false; } }
+
+		#endregion Properties
+
 		#region Methods
 
 		/// <summary>
@@ -33,21 +39,22 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
+			MovMemoryToReg(node, emitter);
+		}
+
+		private static void MovMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
+		{
 			Debug.Assert(node.Result.IsRegister);
 
-			var size = BaseMethodCompilerStage.GetInstructionSize(node.Size, node.Result);
 			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
 
 			// memory to reg 1000 101w: mod reg r/m
 			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(0x66, size == InstructionSize.Size16)  // 8:prefix: 16bit
+				.AppendConditionalPrefix(0x66, node.Size == InstructionSize.Size16)  // 8:prefix: 16bit
 				.AppendNibble(Bits.b1000)                                       // 4:opcode
 				.Append3Bits(Bits.b101)                                         // 3:opcode
-				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
-				.AppendMod(true, node.Operand2)                                 // 2:mod
-				.AppendRegister(node.Result.Register)                           // 3:register (destination)
-				.AppendRM(node.Operand1)                                        // 3:r/m (source)
-				.AppendConditionalDisplacement(node.Operand2, !node.Operand2.IsConstantZero)      // 8/32:displacement value
+				.AppendWidthBit(node.Size != InstructionSize.Size8)                  // 1:width
+				.ModRegRMSIBDisplacement(node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
 
 			if (linkreference)

@@ -23,14 +23,17 @@ namespace Mosa.Platform.x86.Intrinsic
 			var newval = context.Operand3;
 			var result = context.Result;
 
-			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, x86.GeneralPurposeRegister.EAX);
+			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
+			var zero = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
 			var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
-			var mem1 = Operand.CreateMemoryAddress(pointer.Type, pointer, 0);
 
-			context.SetInstruction(X86.Mov, v1, newval);
-			context.AppendInstruction(X86.Mov, eax, oldval);
+			// Compare EAX with r/m32. If equal, ZF is set and r32 is loaded into r/m32.
+			// Else, clear ZF and load r/m32 into EAX.
+
+			context.SetInstruction(X86.Mov, eax, oldval);
+			context.AppendInstruction(X86.Mov, v1, newval);
 			context.AppendInstruction(X86.Lock);
-			context.AppendInstruction(X86.CmpXchg, mem1, mem1, v1, eax);
+			context.AppendInstruction(X86.CmpXchgLoad, InstructionSize.Size32, eax, eax, pointer, zero, v1);
 			context.AppendInstruction(X86.Setcc, ConditionCode.Equal, result);
 		}
 

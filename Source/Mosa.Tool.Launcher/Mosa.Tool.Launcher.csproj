@@ -64,6 +64,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdParty\dnlib.dll</HintPath>
     </Reference>
+    <Reference Include="MetroFramework">
+      <HintPath>..\..\3rdParty\MetroFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework.Design">
+      <HintPath>..\..\3rdParty\MetroFramework.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="MetroFramework.Fonts">
+      <HintPath>..\..\3rdParty\MetroFramework.Fonts.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
