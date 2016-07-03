@@ -24,3 +24,8 @@ SharpDisasm
 -- https://github.com/spazzarama/SharpDisasm
 -- Simplified BSD License
 -- Used in MOSA for debugging & diagnostic purposes
+
+MetroFramework
+-- https://github.com/thielj/MetroFramework
+-- The MIT License
+-- Used for MOSA Launcher
