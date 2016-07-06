@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.IR
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Load"/>.
+		/// Initializes a new instance of <see cref="LoadZeroExtended"/>.
 		/// </summary>
 		public LoadZeroExtended()
 		{

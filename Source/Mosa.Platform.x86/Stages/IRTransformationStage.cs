@@ -406,8 +406,6 @@ namespace Mosa.Platform.x86.Stages
 			var src = context.Operand1;
 			var dest = context.Result;
 
-			//Debug.Assert(dest.IsMemoryAddress, dest.Name);
-
 			var srcReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var dstReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var tmp = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
@@ -570,8 +568,6 @@ namespace Mosa.Platform.x86.Stages
 			var src = context.Operand1;
 			var dest = context.Result;
 
-			//Debug.Assert((src.IsMemoryAddress || src.IsSymbol) && dest.IsMemoryAddress, context.ToString());
-
 			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 			var dstReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 			var tmp = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
@@ -722,8 +718,6 @@ namespace Mosa.Platform.x86.Stages
 			var offsetop = context.Operand2;
 			var src = context.Operand3;
 			var dest = context.Operand1;
-
-			//Debug.Assert(src.IsMemoryAddress);
 
 			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 			var dstReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);

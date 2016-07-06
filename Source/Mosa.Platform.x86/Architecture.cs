@@ -316,9 +316,6 @@ namespace Mosa.Platform.x86
 		{
 			Debug.Assert(size > 0);
 
-			//Debug.Assert(source.IsMemoryAddress);
-			//Debug.Assert(destination.IsMemoryAddress);
-
 			const int LargeAlignment = 16;
 			int alignedSize = size - (size % NativeAlignment);
 			int largeAlignedTypeSize = size - (size % LargeAlignment);
