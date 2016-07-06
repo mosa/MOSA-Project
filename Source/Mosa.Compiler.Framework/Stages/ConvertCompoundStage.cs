@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (node.Result.IsVirtualRegister && !repl.ContainsKey(node.Result))
 					{
-						repl[node.Result] = MethodCompiler.StackLayout.AddStackLocal(node.MosaType);
+						repl[node.Result] = MethodCompiler.AddStackLocal(node.MosaType);
 					}
 					node.ReplaceInstructionOnly(IRInstruction.CompoundLoad);
 				}
@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (node.Operand3.IsVirtualRegister && !repl.ContainsKey(node.Operand3))
 					{
-						repl[node.Operand3] = MethodCompiler.StackLayout.AddStackLocal(node.MosaType);
+						repl[node.Operand3] = MethodCompiler.AddStackLocal(node.MosaType);
 					}
 					node.ReplaceInstructionOnly(IRInstruction.CompoundStore);
 				}
@@ -94,11 +94,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (node.Result.IsVirtualRegister && !repl.ContainsKey(node.Result))
 					{
-						repl[node.Result] = MethodCompiler.StackLayout.AddStackLocal(node.Result.Type);
+						repl[node.Result] = MethodCompiler.AddStackLocal(node.Result.Type);
 					}
 					if (node.Operand1.IsVirtualRegister && !repl.ContainsKey(node.Operand1))
 					{
-						repl[node.Operand1] = MethodCompiler.StackLayout.AddStackLocal(node.Operand1.Type);
+						repl[node.Operand1] = MethodCompiler.AddStackLocal(node.Operand1.Type);
 					}
 					node.ReplaceInstructionOnly(IRInstruction.CompoundMove);
 				}
@@ -113,7 +113,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (node.Result.IsVirtualRegister && !repl.ContainsKey(node.Result))
 					{
-						repl[node.Result] = MethodCompiler.StackLayout.AddStackLocal(node.Result.Type);
+						repl[node.Result] = MethodCompiler.AddStackLocal(node.Result.Type);
 					}
 				}
 			}

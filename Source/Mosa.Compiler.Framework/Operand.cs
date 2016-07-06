@@ -132,11 +132,6 @@ namespace Mosa.Compiler.Framework
 		public bool IsCPURegister { get; private set; }
 
 		/// <summary>
-		/// Determines if the operand is a memory operand.
-		/// </summary>
-		public bool IsMemoryAddress { get; private set; }
-
-		/// <summary>
 		/// Determines if the operand is a stack local operand.
 		/// </summary>
 		public bool IsStackLocal { get; private set; }
@@ -386,7 +381,6 @@ namespace Mosa.Compiler.Framework
 			IsVirtualRegister = false;
 			IsLabel = false;
 			IsCPURegister = false;
-			IsMemoryAddress = false;
 			IsSSA = false;
 			IsSymbol = false;
 			IsField = false;
@@ -669,22 +663,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a new memory address <see cref="Operand" />.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="offsetBase">The base register.</param>
-		/// <param name="offset">The offset.</param>
-		/// <returns></returns>
-		public static Operand CreateMemoryAddress(MosaType type, Operand offsetBase, long offset)
-		{
-			var operand = new Operand(type);
-			operand.IsMemoryAddress = true;
-			operand.OffsetBase = offsetBase;
-			operand.Displacement = offset;
-			return operand;
-		}
-
-		/// <summary>
 		/// Creates a new symbol <see cref="Operand" /> for the given symbol name.
 		/// </summary>
 		/// <param name="type">The type.</param>
@@ -693,7 +671,6 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateLabel(MosaType type, string label)
 		{
 			var operand = new Operand(type);
-			operand.IsMemoryAddress = true;
 			operand.IsLabel = true;
 			operand.Name = label;
 			operand.Displacement = 0;
@@ -708,7 +685,6 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateField(MosaField field)
 		{
 			var operand = new Operand(field.FieldType);
-			operand.IsMemoryAddress = true;
 			operand.IsField = true;
 			operand.Displacement = 0;
 			operand.Field = field;
@@ -716,41 +692,20 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a new local variable <see cref="Operand" />.
+		/// Creates the stack parameter.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		/// <param name="register">The register.</param>
-		/// <param name="displacement">The displacement.</param>
 		/// <param name="index">The index.</param>
+		/// <param name="displacement">The displacement.</param>
+		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public static Operand CreateParameter(MosaType type, Register register, int displacement, int index, string name)
+		public static Operand CreateStackParameter(MosaType type, int index, int displacement, string name)
 		{
 			var operand = new Operand(type);
-			operand.IsMemoryAddress = true;
 			operand.IsParameter = true;
-			operand.Register = register;
 			operand.Index = index;
 			operand.Displacement = displacement;
 			operand.Name = name;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates the stack local.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="register">The register.</param>
-		/// <param name="index">The index.</param>
-		/// <param name="pinned">if set to <c>true</c> [pinned].</param>
-		/// <returns></returns>
-		public static Operand CreateStackLocal(MosaType type, Register register, int index, bool pinned)
-		{
-			var operand = new Operand(type);
-			operand.IsMemoryAddress = true;
-			operand.Register = register;
-			operand.Index = index;
-			operand.IsStackLocal = true;
-			operand.IsPinned = pinned;
 			return operand;
 		}
 
@@ -786,7 +741,6 @@ namespace Mosa.Compiler.Framework
 			operand.IsVirtualRegister = ssaOperand.IsVirtualRegister;
 			operand.IsLabel = ssaOperand.IsLabel;
 			operand.IsCPURegister = ssaOperand.IsCPURegister;
-			operand.IsMemoryAddress = ssaOperand.IsMemoryAddress;
 			operand.IsSymbol = ssaOperand.IsSymbol;
 			operand.IsField = ssaOperand.IsField;
 			operand.IsParameter = ssaOperand.IsParameter;
@@ -821,18 +775,9 @@ namespace Mosa.Compiler.Framework
 			else if (longOperand.IsField)
 			{
 				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsMemoryAddress = true;
 				operand.IsField = true;
 				operand.Field = longOperand.Field;
 				operand.Type = longOperand.Type;
-				operand.OffsetBase = longOperand.OffsetBase;
-				operand.Displacement = longOperand.Displacement + offset;
-				operand.Register = longOperand.Register;
-			}
-			else if (longOperand.IsMemoryAddress)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsMemoryAddress = true;
 				operand.OffsetBase = longOperand.OffsetBase;
 				operand.Displacement = longOperand.Displacement + offset;
 				operand.Register = longOperand.Register;
@@ -879,18 +824,9 @@ namespace Mosa.Compiler.Framework
 			else if (longOperand.IsField)
 			{
 				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsMemoryAddress = true;
 				operand.IsField = true;
 				operand.Field = longOperand.Field;
 				operand.Type = longOperand.Type;
-				operand.OffsetBase = longOperand.OffsetBase;
-				operand.Displacement = longOperand.Displacement + offset;
-				operand.Register = longOperand.Register;
-			}
-			else if (longOperand.IsMemoryAddress)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsMemoryAddress = true;
 				operand.OffsetBase = longOperand.OffsetBase;
 				operand.Displacement = longOperand.Displacement + offset;
 				operand.Register = longOperand.Register;
@@ -952,21 +888,23 @@ namespace Mosa.Compiler.Framework
 			{
 				sb.AppendFormat("T_{0}", Index);
 			}
-			else if (IsParameter && Name == null)
+			else if (IsParameter)
 			{
-				sb.AppendFormat("P_{0}", Index);
+				sb.AppendFormat("P_{0} ", Index, Name);
 			}
 
 			if (Name != null)
 			{
+				sb.Append(" {");
 				sb.Append(Name);
-				sb.Append(' ');
+				sb.Append("} ");
 			}
 
 			if (IsField)
 			{
-				sb.Append(' ');
+				sb.Append(" {");
 				sb.Append(Field.FullName);
+				sb.Append("} ");
 			}
 
 			if (IsSplitChild)
@@ -1009,31 +947,6 @@ namespace Mosa.Compiler.Framework
 			{
 				sb.AppendFormat(" {0}", Register);
 			}
-			else if (IsMemoryAddress)
-			{
-				sb.Append(' ');
-				if (OffsetBase != null)
-				{
-					if (Displacement > 0)
-						sb.AppendFormat("[{0}+{1:X}h]", OffsetBase.ToString(full), Displacement);
-					else
-						sb.AppendFormat("[{0}-{1:X}h]", OffsetBase.ToString(full), -Displacement);
-				}
-				else if (Register != null)
-				{
-					if (Displacement > 0)
-						sb.AppendFormat("[{0}+{1:X}h]", Register.ToString(), Displacement);
-					else
-						sb.AppendFormat("[{0}-{1:X}h]", Register.ToString(), -Displacement);
-				}
-				else if (IsField && IsSplitChild)
-				{
-					if (Displacement > 0)
-						sb.AppendFormat("+{0:X}h", Displacement);
-					else
-						sb.AppendFormat("-{0:X}h", -Displacement);
-				}
-			}
 
 			if (full)
 			{
@@ -1045,6 +958,7 @@ namespace Mosa.Compiler.Framework
 				{
 					sb.AppendFormat(" [O]");
 				}
+				else
 				{
 					sb.AppendFormat(" [{0}]", ShortenTypeName(Type.FullName));
 				}

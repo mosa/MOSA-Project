@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//System.Diagnostics.Debug.WriteLine(this.MethodCompiler.Method.FullName); //temp - remove me
 
 			// Get the this pointer
-			var thisPtr = MethodCompiler.StackLayout.Parameters[0];
+			var thisPtr = MethodCompiler.Parameters[0];
 
 			var context = new Context(BasicBlocks.PrologueBlock.NextBlocks[0].First);
 

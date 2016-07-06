@@ -13,8 +13,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	{
 		private Dictionary<SlotIndex, MoveHint> moveHints;
 
-		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, StackLayout stackLayout, BaseArchitecture architecture, ITraceFactory traceFactory)
-			: base(basicBlocks, compilerVirtualRegisters, stackLayout, architecture, traceFactory)
+		public GreedyRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, ITraceFactory traceFactory)
+			: base(basicBlocks, virtualRegisters, architecture, addStackLocal, traceFactory)
 		{
 		}
 

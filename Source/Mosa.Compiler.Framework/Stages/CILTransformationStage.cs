@@ -20,6 +20,15 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStage, IPipelineStage
 	{
+		protected Operand stackFrame;
+
+		protected override void Setup()
+		{
+			base.Setup();
+
+			stackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
+		}
+
 		protected override void PopulateVisitationDictionary()
 		{
 			visitationDictionary[CILInstruction.Nop] = Nop;
@@ -261,7 +270,32 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Ldarg(Context context)
 		{
-			ProcessLoadInstruction(context);
+			Debug.Assert(context.Operand1.IsParameter);
+
+			var source = context.Operand1;
+			var destination = context.Result;
+			var size = GetInstructionSize(source.Type);
+
+			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, source.Displacement);
+
+			if (MustSignExtendOnLoad(source.Type))
+			{
+				context.SetInstruction(IRInstruction.LoadSignExtended, size, destination, stackFrame, constant);
+			}
+			else if (MustZeroExtendOnLoad(source.Type))
+			{
+				context.SetInstruction(IRInstruction.LoadZeroExtended, size, destination, stackFrame, constant);
+			}
+			else if (source.Type != null && TypeLayout.IsCompoundType(source.Type))
+			{
+				//fixme: triggers covert compound stage
+				context.SetInstruction(IRInstruction.Move, source, destination);
+				context.MosaType = source.Type;
+			}
+			else
+			{
+				context.SetInstruction(IRInstruction.Load2, size, destination, stackFrame, constant);
+			}
 		}
 
 		/// <summary>
@@ -298,6 +332,17 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Ldc(Context context)
 		{
+			if (context.Operand1.IsConstant)
+			{
+				var source = context.Operand1;
+				var destination = context.Result;
+				var size = GetInstructionSize(source.Type);
+
+				context.SetInstruction(IRInstruction.Move, size, destination, source);
+				return;
+			}
+
+			//fixme: remove when static allocator stage fixed
 			ProcessLoadInstruction(context);
 		}
 
@@ -425,7 +470,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Starg(Context context)
 		{
-			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
+			Debug.Assert(context.Result.IsParameter);
+
+			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, context.Result.Displacement);
+
+			context.SetInstruction(IRInstruction.Store, context.Size, null, stackFrame, constant, context.Operand1);
 		}
 
 		/// <summary>
@@ -892,7 +941,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (TypeLayout.IsCompoundType(thisReference.Type))
 			{
-				var newThis = MethodCompiler.StackLayout.AddStackLocal(thisReference.Type);
+				var newThis = MethodCompiler.AddStackLocal(thisReference.Type);
 
 				var oldThisReference = thisReference;
 				thisReference = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
@@ -1004,7 +1053,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (vmCall == VmCall.Unbox)
 			{
 				Operand adr = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
-				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.StackLayout.AddStackLocal(type));
+				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.AddStackLocal(type));
 
 				context.SetOperand(2, adr);
 				context.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
@@ -1210,7 +1259,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (!userStruct.IsStackLocal)
 				{
 					var originalOperand = userStruct;
-					userStruct = MethodCompiler.StackLayout.AddStackLocal(userStruct.Type);
+					userStruct = MethodCompiler.AddStackLocal(userStruct.Type);
 					context.InsertBefore().SetInstruction(IRInstruction.Move, userStruct, originalOperand);
 				}
 				objectOperand = MethodCompiler.CreateVirtualRegister(userStruct.Type.ToManagedPointer());
@@ -1403,7 +1452,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Array bounds check
 			AddArrayBoundsCheck(context.InsertBefore(), arrayOperand, arrayIndexOperand);
 
-			BaseIRInstruction loadInstruction = IRInstruction.Load;	// todo: change to Load2 once 64-bit support is fixed
+			BaseIRInstruction loadInstruction = IRInstruction.Load; // todo: change to Load2 once 64-bit support is fixed
 
 			if (MustSignExtendOnLoad(arraySigType.ElementType))
 			{
@@ -1413,6 +1462,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
+
 			//else if (!arraySigType.IsUI8)
 			//{
 			//	loadInstruction = IRInstruction.Load2;
@@ -1495,7 +1545,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (vmCall == VmCall.Unbox)
 			{
 				Operand adr = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
-				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.StackLayout.AddStackLocal(type));
+				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.AddStackLocal(type));
 
 				context.SetOperand(2, adr);
 				context.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));

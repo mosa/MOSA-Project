@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker;
@@ -110,9 +111,19 @@ namespace Mosa.Compiler.Framework
 		public BaseCompiler Compiler { get; private set; }
 
 		/// <summary>
-		/// Gets the stack layout.
+		/// Gets the stack.
 		/// </summary>
-		public StackLayout StackLayout { get; private set; }
+		public List<Operand> LocalStack { get; private set; }
+
+		/// <value>
+		/// The size of the stack parameter.
+		/// </value>
+		public int StackParameterSize { get; set; }
+
+		/// <value>
+		/// The size of the stack memory.
+		/// </value>
+		public int StackSize { get; set; }
 
 		/// <summary>
 		/// Gets the virtual register layout.
@@ -127,7 +138,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the parameters.
 		/// </summary>
-		public Operand[] Parameters { get { return StackLayout.Parameters; } }
+		public Operand[] Parameters { get; private set; }
 
 		/// <summary>
 		/// Gets the protected regions.
@@ -187,7 +198,8 @@ namespace Mosa.Compiler.Framework
 			Linker = compiler.Linker;
 			BasicBlocks = basicBlocks ?? new BasicBlocks();
 			Pipeline = new CompilerPipeline();
-			StackLayout = new StackLayout(Architecture, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
+			LocalStack = new List<Operand>();
+			Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
 			VirtualRegisters = new VirtualRegisters(Architecture);
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
@@ -206,27 +218,97 @@ namespace Mosa.Compiler.Framework
 		#region Methods
 
 		/// <summary>
+		/// Adds the stack local.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public Operand AddStackLocal(MosaType type)
+		{
+			var local = Operand.CreateStackLocal(type, LocalStack.Count, false);
+			LocalStack.Add(local);
+			return local;
+		}
+
+		/// <summary>
+		/// Adds the stack local.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public Operand AddStackLocal(MosaType type, bool pinned)
+		{
+			var local = Operand.CreateStackLocal(type, LocalStack.Count, pinned);
+			LocalStack.Add(local);
+			return local;
+		}
+
+		private Operand SetStackParameter(int index, MosaType type, int displacement, string name)
+		{
+			var param = Operand.CreateStackParameter(type, index, displacement, name);
+			Parameters[index] = param;
+			return param;
+		}
+
+		/// <summary>
 		/// Evaluates the parameter operands.
 		/// </summary>
 		protected void EvaluateParameterOperands()
 		{
 			int index = 0;
 
-			// Note: displacement is recalculated later
-			int displacement = 4;
-
 			if (Method.HasThis || Method.HasExplicitThis)
 			{
 				if (Type.IsValueType)
-					StackLayout.SetStackParameter(index++, Type.ToManagedPointer(), displacement, "this");
+					SetStackParameter(index++, Type.ToManagedPointer(), 0, "this");
 				else
-					StackLayout.SetStackParameter(index++, Type, displacement, "this");
+					SetStackParameter(index++, Type, 0, "this");
 			}
 
 			foreach (var parameter in Method.Signature.Parameters)
 			{
-				StackLayout.SetStackParameter(index++, parameter.ParameterType, displacement, parameter.Name);
+				SetStackParameter(index++, parameter.ParameterType, 0, parameter.Name);
 			}
+
+			LayoutParameters();
+		}
+
+		private void LayoutParameters()
+		{
+			int returnSize = 0;
+
+			if (TypeLayout.IsCompoundType(Method.Signature.ReturnType))
+			{
+				returnSize = TypeLayout.GetTypeSize(Method.Signature.ReturnType);
+			}
+
+			int size = LayoutParameters(Architecture.CallingConvention.OffsetOfFirstParameter + returnSize);
+
+			StackParameterSize = size;
+			TypeLayout.SetMethodParameterStackSize(Method, size);
+		}
+
+		private int LayoutParameters(int offsetOfFirst)
+		{
+			int offset = offsetOfFirst;
+
+			foreach (var operand in Parameters)
+			{
+				int size, alignment;
+				Architecture.GetTypeRequirements(TypeLayout, operand.Type, out size, out alignment);
+
+				// adjust split children
+				if (operand.Low != null)
+				{
+					operand.Low.Displacement = offset + (operand.Low.Displacement - operand.Displacement);
+					operand.High.Displacement = offset + (operand.High.Displacement - operand.Displacement);
+				}
+
+				operand.Displacement = offset;
+
+				size = Alignment.AlignUp(size, alignment);
+				offset = offset + size;
+			}
+
+			return offset;
 		}
 
 		/// <summary>
@@ -288,30 +370,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Retrieves the local stack operand at the specified <paramref name="index" />.
-		/// </summary>
-		/// <param name="index">The index of the stack operand to retrieve.</param>
-		/// <returns>
-		/// The operand at the specified index.
-		/// </returns>
-		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index" /> is not valid.</exception>
-		public Operand GetLocalOperand(int index)
-		{
-			return LocalVariables[index];
-		}
-
-		/// <summary>
-		/// Retrieves the parameter operand at the specified <paramref name="index"/>.
-		/// </summary>
-		/// <param name="index">The index of the parameter operand to retrieve.</param>
-		/// <returns>The operand at the specified index.</returns>
-		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
-		public Operand GetParameterOperand(int index)
-		{
-			return StackLayout.Parameters[index];
-		}
-
-		/// <summary>
 		/// Allocates the local variable virtual registers.
 		/// </summary>
 		/// <param name="locals">The locals.</param>
@@ -322,7 +380,18 @@ namespace Mosa.Compiler.Framework
 			int index = 0;
 			foreach (var local in locals)
 			{
-				var operand = StackLayout.AddStackLocal(local.Type, local.IsPinned);
+				bool virt = true;
+
+				// everything is virtual, unless compound
+				if (TypeLayout.IsCompoundType(local.Type))
+					virt = false;
+
+				Operand operand = null;
+
+				if (virt)
+					operand = CreateVirtualRegister(local.Type);
+				else
+					operand = AddStackLocal(local.Type, local.IsPinned);
 
 				LocalVariables[index++] = operand;
 			}

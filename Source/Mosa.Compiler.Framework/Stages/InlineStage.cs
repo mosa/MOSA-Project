@@ -210,7 +210,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsStackLocal)
 			{
-				mappedOperand = MethodCompiler.StackLayout.AddStackLocal(operand.Type, operand.IsPinned);
+				mappedOperand = MethodCompiler.AddStackLocal(operand.Type, operand.IsPinned);
 			}
 			else if (operand.IsVirtualRegister)
 			{

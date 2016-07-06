@@ -115,7 +115,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void CollectStackObjects()
 		{
-			foreach (var local in MethodCompiler.StackLayout.LocalStack)
+			foreach (var local in MethodCompiler.LocalStack)
 			{
 				if (local.Type.IsReferenceType || local.Type.IsManagedPointer)
 				{

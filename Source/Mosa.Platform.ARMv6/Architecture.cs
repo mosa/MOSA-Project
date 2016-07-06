@@ -254,17 +254,26 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="Source">The source.</param>
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
-			context.AppendInstruction(BaseTransformationStage.GetMove(destination, source), destination, source);
+			throw new NotImplementCompilerException();
+		}
+
+		public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
+		{
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
 		/// Create platform compound move.
 		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
+		/// <param name="destinationOffset">The destination offset.</param>
 		/// <param name="source">The source.</param>
+		/// <param name="sourceOffset">The source offset.</param>
 		/// <param name="size">The size.</param>
-		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand source, int size)
+		/// <exception cref="NotImplementCompilerException"></exception>
+		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, int destinationOffset, Operand source, int sourceOffset, int size)
 		{
 			throw new NotImplementCompilerException();
 		}
@@ -341,17 +350,6 @@ namespace Mosa.Platform.ARMv6
 		public override bool IsInstructionMove(BaseInstruction instruction)
 		{
 			return (instruction == ARMv6.Mov);
-		}
-
-		/// <summary>
-		/// Inserts the address of instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source">The source.</param>
-		public override void InsertAddressOfInstruction(Context context, Operand destination, Operand source)
-		{
-			// TODO
 		}
 	}
 }

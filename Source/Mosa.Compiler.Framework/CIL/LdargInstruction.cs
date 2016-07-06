@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 
 			// Push the loaded value onto the evaluation stack
-			var parameterOperand = decoder.Compiler.GetParameterOperand(index);
+			var parameterOperand = decoder.Compiler.Parameters[index];
 			var result = LoadInstruction.CreateResultOperand(decoder, parameterOperand.Type);
 
 			ctx.Operand1 = parameterOperand;

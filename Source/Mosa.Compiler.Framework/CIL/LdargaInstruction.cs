@@ -33,12 +33,10 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			int argIdx;
-
 			// Opcode specific handling
-			argIdx = (int)decoder.Instruction.Operand;
+			int index = (int)decoder.Instruction.Operand;
 
-			var parameterOperand = decoder.Compiler.GetParameterOperand((int)decoder.Instruction.Operand);
+			var parameterOperand = decoder.Compiler.Parameters[index];
 			ctx.Operand1 = parameterOperand;
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(parameterOperand.Type.ToManagedPointer());
 		}

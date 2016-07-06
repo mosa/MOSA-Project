@@ -108,21 +108,18 @@ namespace Mosa.Platform.x86.Stages
 			}
 
 			// Mov can not use ESI or EDI registers with 8 or 16 bit memory or register
-			if (context.Operand1.IsCPURegister && (context.Result.IsMemoryAddress || context.Result.IsCPURegister)
+			if (context.Operand1.IsCPURegister && context.Result.IsCPURegister
 				&& (context.Result.IsByte || context.Result.IsShort || context.Result.IsChar || context.Result.IsBoolean)
 				&& (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
 			{
 				Operand source = context.Operand1;
 				Operand dest = context.Result;
 
-				var replace = (dest.IsMemoryAddress && dest.EffectiveOffsetBase == GeneralPurposeRegister.EAX)
-						? GeneralPurposeRegister.EBX : GeneralPurposeRegister.EAX;
+				Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
-				Operand reg = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, replace);
-
-				context.SetInstruction2(X86.Xchg, reg, source, source, reg);
-				context.AppendInstruction(X86.Mov, dest, reg);
-				context.AppendInstruction2(X86.Xchg, source, reg, reg, source);
+				context.SetInstruction2(X86.Xchg, eax, source, source, eax);
+				context.AppendInstruction(X86.Mov, dest, eax);
+				context.AppendInstruction2(X86.Xchg, source, eax, eax, source);
 			}
 		}
 

@@ -210,8 +210,6 @@ namespace Mosa.Platform.x86
 
 		public static readonly Lock Lock = new Lock();
 
-		public static readonly Fld Fld = new Fld();
-
 		public static readonly Test Test = new Test();
 
 		public static readonly Bts Bts = new Bts();

@@ -50,8 +50,10 @@ namespace Mosa.Compiler.Framework
 			var context = new Context(CreateMethodStructure(methodCompiler, true));
 
 			Operand v1 = methodCompiler.CreateVirtualRegister(thisOperand.Type);
+			Operand v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand.Type);
 
 			context.AppendInstruction(IRInstruction.Move, v1, thisOperand);
+
 			context.AppendInstruction(IRInstruction.Store, size, null, v1, methodPointerOffsetOperand, methodPointerOperand);
 			context.MosaType = methodPointerOperand.Type;
 			context.AppendInstruction(IRInstruction.Store, size, null, v1, instanceOffsetOperand, instanceOperand);

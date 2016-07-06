@@ -31,9 +31,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (destination.IsRegister && third.IsConstant) return RM_C;
 			if (destination.IsRegister && third.IsRegister) return R_RM;
-			if (destination.IsRegister && third.IsMemoryAddress) return R_RM;
-			if (destination.IsMemoryAddress && third.IsRegister) return M_R;
-			if (destination.IsMemoryAddress && third.IsConstant) return RM_C;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

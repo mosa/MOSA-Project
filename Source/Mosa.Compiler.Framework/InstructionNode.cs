@@ -125,20 +125,12 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Uses.Remove(this);
-					if (current.IsMemoryAddress && current.OffsetBase != null)
-					{
-						current.OffsetBase.Uses.Remove(this);
-					}
 				}
 				if (value != null)
 				{
 					if (!value.IsCPURegister && !value.IsConstant)
 					{
 						value.Uses.Add(this);
-					}
-					if (value.IsMemoryAddress && value.OffsetBase != null)
-					{
-						value.OffsetBase.Uses.Add(this);
 					}
 				}
 
@@ -160,20 +152,12 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Uses.Remove(this);
-					if (current.IsMemoryAddress && current.OffsetBase != null)
-					{
-						current.OffsetBase.Uses.Remove(this);
-					}
 				}
 				if (value != null)
 				{
 					if (!value.IsCPURegister && !value.IsConstant)
 					{
 						value.Uses.Add(this);
-					}
-					if (value.IsMemoryAddress && value.OffsetBase != null)
-					{
-						value.OffsetBase.Uses.Add(this);
 					}
 				}
 				operand2 = value;
@@ -194,20 +178,12 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Uses.Remove(this);
-					if (current.IsMemoryAddress && current.OffsetBase != null)
-					{
-						current.OffsetBase.Uses.Remove(this);
-					}
 				}
 				if (value != null)
 				{
 					if (!value.IsCPURegister && !value.IsConstant)
 					{
 						value.Uses.Add(this);
-					}
-					if (value.IsMemoryAddress && value.OffsetBase != null)
-					{
-						value.OffsetBase.Uses.Add(this);
 					}
 				}
 				operand3 = value;
@@ -263,34 +239,12 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Definitions.Remove(this);
-					if (current.IsMemoryAddress)
-					{
-						if (current.OffsetBase != null)
-						{
-							current.OffsetBase.Uses.Remove(this);
-						}
-						if (current.SSAParent != null)
-						{
-							current.SSAParent.Uses.Remove(this);
-						}
-					}
 				}
 				if (value != null)
 				{
 					if (!value.IsCPURegister && !value.IsConstant)
 					{
 						value.Definitions.Add(this);
-					}
-					if (value.IsMemoryAddress)
-					{
-						if (value.OffsetBase != null)
-						{
-							value.OffsetBase.Uses.Add(this);
-						}
-						if (value.SSAParent != null)
-						{
-							value.SSAParent.Uses.Add(this);
-						}
 					}
 				}
 				result = value;
@@ -310,34 +264,12 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Definitions.Remove(this);
-					if (current.IsMemoryAddress)
-					{
-						if (current.OffsetBase != null)
-						{
-							current.OffsetBase.Uses.Remove(this);
-						}
-						if (current.SSAParent != null)
-						{
-							current.SSAParent.Uses.Remove(this);
-						}
-					}
 				}
 				if (value != null)
 				{
 					if (!value.IsCPURegister && !value.IsConstant)
 					{
 						value.Definitions.Add(this);
-					}
-					if (value.IsMemoryAddress)
-					{
-						if (value.OffsetBase != null)
-						{
-							value.OffsetBase.Uses.Add(this);
-						}
-						if (value.SSAParent != null)
-						{
-							value.SSAParent.Uses.Add(this);
-						}
 					}
 				}
 				result2 = value;
@@ -713,10 +645,6 @@ namespace Mosa.Compiler.Framework
 						if (current != null)
 						{
 							current.Uses.Remove(this);
-							if (current.IsMemoryAddress && current.OffsetBase != null)
-							{
-								current.OffsetBase.Uses.Remove(this);
-							}
 						}
 
 						if (operand != null)
@@ -724,10 +652,6 @@ namespace Mosa.Compiler.Framework
 							if (!operand.IsCPURegister & !operand.IsConstant)
 							{
 								operand.Uses.Add(this);
-							}
-							if (operand.IsMemoryAddress && operand.OffsetBase != null)
-							{
-								operand.OffsetBase.Uses.Remove(this);
 							}
 						}
 

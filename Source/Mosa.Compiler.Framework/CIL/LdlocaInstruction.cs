@@ -35,7 +35,10 @@ namespace Mosa.Compiler.Framework.CIL
 
 			// Opcode specific handling
 
-			Operand local = decoder.Compiler.GetLocalOperand((int)decoder.Instruction.Operand);
+			Operand local = decoder.Compiler.LocalVariables[(int)decoder.Instruction.Operand];
+
+			local = decoder.ConvertVirtualRegisterToStackLocal(local);
+
 			ctx.Operand1 = local;
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(local.Type.ToManagedPointer());
 		}

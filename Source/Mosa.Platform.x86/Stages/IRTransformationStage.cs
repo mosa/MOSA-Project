@@ -64,8 +64,8 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.Break] = Break;
 			visitationDictionary[IRInstruction.Nop] = Nop;
 			visitationDictionary[IRInstruction.SignExtendedMove] = SignExtendedMove;
-			visitationDictionary[IRInstruction.Call] = Call;
 			visitationDictionary[IRInstruction.ZeroExtendedMove] = ZeroExtendedMove;
+			visitationDictionary[IRInstruction.Call] = Call;
 			visitationDictionary[IRInstruction.FloatToIntegerConversion] = FloatToIntegerConversion;
 			visitationDictionary[IRInstruction.IntegerToFloatConversion] = IntegerToFloatConversion;
 		}
@@ -132,13 +132,26 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddressOf(Context context)
 		{
-			Operand result = context.Result;
-			Operand register = AllocateVirtualRegister(result.Type);
+			Debug.Assert(context.Operand1.IsStackLocal | context.Operand1.IsParameter | context.Operand1.IsField);
 
-			context.Result = register;
-			context.ReplaceInstructionOnly(X86.Lea);
+			if (context.Operand1.IsField)
+			{
+				context.SetInstruction(X86.Mov, NativeInstructionSize, context.Result, context.Operand1);
+				return;
+			}
 
-			context.AppendInstruction(X86.Mov, NativeInstructionSize, result, register);
+			var stackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
+
+			if (context.Operand1.IsStackLocal)
+			{
+				context.SetInstruction(X86.Lea, NativeInstructionSize, context.Result, stackFrame, context.Operand1);
+			}
+			else
+			{
+				var offset = Operand.CreateConstant(TypeSystem, context.Operand1.Displacement);
+
+				context.SetInstruction(X86.Lea, NativeInstructionSize, context.Result, stackFrame, offset);
+			}
 		}
 
 		/// <summary>
@@ -161,17 +174,6 @@ namespace Mosa.Platform.x86.Stages
 				case ConditionCode.UnsignedGreaterThan: condition = ConditionCode.GreaterThan; break;
 				case ConditionCode.UnsignedLessOrEqual: condition = ConditionCode.LessOrEqual; break;
 				case ConditionCode.UnsignedLessThan: condition = ConditionCode.LessThan; break;
-			}
-
-			// TODO - Move the following to its own pre-IR decomposition stage for this instruction
-			// Swap, if necessary, the operands to place register operand first than memory operand
-			// otherwise the memory operand will have to be loaded into a register
-			if ((condition == ConditionCode.Equal || condition == ConditionCode.NotEqual) && left.IsMemoryAddress && !right.IsMemoryAddress)
-			{
-				// swap order of operands to move
-				var t = left;
-				left = right;
-				right = t;
 			}
 
 			Context before = context.InsertBefore();
@@ -403,16 +405,21 @@ namespace Mosa.Platform.x86.Stages
 			var offsetop = context.Operand2;
 			var src = context.Operand1;
 			var dest = context.Result;
-			Debug.Assert(dest.IsMemoryAddress, dest.Name);
 
-			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
-			var dstReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
-			var tmp = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
-			var tmpLarge = Operand.CreateCPURegister(MethodCompiler.TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
+			//Debug.Assert(dest.IsMemoryAddress, dest.Name);
+
+			var srcReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var dstReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var tmp = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var tmpLarge = Operand.CreateCPURegister(TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
 
 			context.SetInstruction(X86.Nop);
 			context.AppendInstruction(X86.Mov, srcReg, src);
-			context.AppendInstruction(X86.Lea, dstReg, dest);
+
+			Debug.Assert(dest.IsStackLocal);
+			var register = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
+
+			context.AppendInstruction(X86.Lea, dstReg, register, src);
 
 			if (!offsetop.IsConstant)
 			{
@@ -563,12 +570,13 @@ namespace Mosa.Platform.x86.Stages
 			var src = context.Operand1;
 			var dest = context.Result;
 
-			Debug.Assert((src.IsMemoryAddress || src.IsSymbol) && dest.IsMemoryAddress, context.ToString());
+			//Debug.Assert((src.IsMemoryAddress || src.IsSymbol) && dest.IsMemoryAddress, context.ToString());
 
 			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 			var dstReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 			var tmp = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 			var tmpLarge = Operand.CreateCPURegister(MethodCompiler.TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
+			var register = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 
 			context.SetInstruction(X86.Nop);
 
@@ -578,10 +586,14 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				context.AppendInstruction(X86.Lea, srcReg, src);
+				Debug.Assert(src.IsStackLocal);
+
+				context.AppendInstruction(X86.Lea, srcReg, register, src);
 			}
 
-			context.AppendInstruction(X86.Lea, dstReg, dest);
+			Debug.Assert(dest.IsStackLocal || dest.IsParameter);
+
+			context.AppendInstruction(X86.Lea, dstReg, register, dest);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
@@ -676,64 +688,24 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstructionOnly(X86.Shr);
 		}
 
-		/// <summary>
-		/// Visitation function for StoreInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
 		private void Store(Context context)
 		{
-			Operand baseOperand = context.Operand1;
-			Operand offsetOperand = context.Operand2;
-			Operand value = context.Operand3;
+			BaseInstruction storeInstruction = null;
 
-			MosaType storeType = context.MosaType;
-			var type = baseOperand.Type;
-			var size = context.Size;
-
-			Debug.WriteLine(context.ToString());
-
-			if (value.IsR8 && type.IsR4) //&& size == InstructionSize.Size32)
+			if (context.Operand1.IsR8)
 			{
-				Operand xmm1 = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
-				context.InsertBefore().AppendInstruction(X86.Cvtsd2ss, size, xmm1, value);
-				value = xmm1;
+				storeInstruction = X86.MovsdStore;
 			}
-			else if (value.IsMemoryAddress)
+			else if (context.Operand1.IsR4)
 			{
-				Operand v2 = AllocateVirtualRegister(value.Type);
-				context.InsertBefore().AppendInstruction(X86.Mov, size, v2, value);
-				value = v2;
-			}
-
-			if (offsetOperand.IsConstant)
-			{
-				if (baseOperand.IsField)
-				{
-					Debug.Assert(offsetOperand.IsConstantZero);
-					Debug.Assert(baseOperand.Field.IsStatic);
-
-					context.SetInstruction(GetMove(baseOperand, value), size, baseOperand, value);
-				}
-				else
-				{
-					var mem = Operand.CreateMemoryAddress(storeType, baseOperand, offsetOperand.ConstantSignedLongInteger);
-					context.SetInstruction(GetMove(mem, value), size, mem, value);
-				}
+				storeInstruction = X86.MovssStore;
 			}
 			else
 			{
-				if (type.IsUnmanagedPointer)
-					type = storeType.ToUnmanagedPointer();
-				else if (type.IsManagedPointer)
-					type = storeType.ToManagedPointer();
-
-				Operand v1 = AllocateVirtualRegister(type);
-				Operand mem = Operand.CreateMemoryAddress(storeType, v1, 0);
-
-				context.SetInstruction(X86.Mov, v1, baseOperand);
-				context.AppendInstruction(X86.Add, v1, v1, offsetOperand);
-				context.AppendInstruction(GetMove(mem, value), size, mem, value);
+				storeInstruction = X86.MovStore;
 			}
+
+			context.SetInstruction(storeInstruction, context.Size, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
 		private void CompoundStore(Context context)
@@ -751,7 +723,7 @@ namespace Mosa.Platform.x86.Stages
 			var src = context.Operand3;
 			var dest = context.Operand1;
 
-			Debug.Assert(src.IsMemoryAddress);
+			//Debug.Assert(src.IsMemoryAddress);
 
 			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
 			var dstReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
@@ -759,7 +731,12 @@ namespace Mosa.Platform.x86.Stages
 			var tmpLarge = Operand.CreateCPURegister(MethodCompiler.TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
 
 			context.SetInstruction(X86.Nop);
-			context.AppendInstruction(X86.Lea, srcReg, src);
+
+			Debug.Assert(src.IsStackLocal);
+			var register = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
+
+			context.AppendInstruction(X86.Lea, srcReg, register, src);
+
 			context.AppendInstruction(X86.Mov, dstReg, dest);
 
 			if (!offsetop.IsConstant)

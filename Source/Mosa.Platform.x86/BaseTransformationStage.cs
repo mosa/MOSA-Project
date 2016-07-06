@@ -30,14 +30,6 @@ namespace Mosa.Platform.x86
 			{
 				return X86.Cvtsd2ss;
 			}
-			else if (Source.IsR8 && Destination.IsMemoryAddress)
-			{
-				return X86.Movsd;
-			}
-			else if (Source.IsR4 && Destination.IsMemoryAddress)
-			{
-				return X86.Movss;
-			}
 			else
 			{
 				return X86.Mov;

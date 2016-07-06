@@ -40,7 +40,6 @@ namespace Mosa.Platform.x86.Instructions
 				else
 					return R_O;
 			}
-			if ((destination.IsMemoryAddress) && (third.IsRegister)) return M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

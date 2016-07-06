@@ -17,9 +17,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Layout stack variables
 			LayoutStackVariables();
-
-			// Layout parameters
-			LayoutParameters();
 		}
 
 		#region Internals
@@ -30,9 +27,9 @@ namespace Mosa.Compiler.Framework.Stages
 		private void LayoutStackVariables()
 		{
 			// assign increasing stack offsets to each variable
-			int size = LayoutVariables(MethodCompiler.StackLayout.LocalStack, CallingConvention, CallingConvention.OffsetOfFirstLocal, true);
+			int size = LayoutVariables(MethodCompiler.LocalStack, CallingConvention, CallingConvention.OffsetOfFirstLocal, true);
 
-			MethodCompiler.StackLayout.StackSize = size;
+			MethodCompiler.StackSize = size;
 			MethodCompiler.TypeLayout.SetMethodStackSize(MethodCompiler.Method, -size);
 
 			TraceStackLocals();
@@ -45,41 +42,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!trace.Active)
 				return;
 
-			foreach (var local in MethodCompiler.StackLayout.LocalStack)
+			foreach (var local in MethodCompiler.LocalStack)
 			{
 				trace.Log(local.ToString() + ": displacement = " + local.Displacement.ToString());
 			}
-		}
-
-		/// <summary>
-		/// Lays out all parameters of the method.
-		/// </summary>
-		private void LayoutParameters()
-		{
-			var parameters = new List<Operand>();
-
-			int offset = 0;
-
-			if (MethodCompiler.Method.HasThis || MethodCompiler.Method.HasExplicitThis)
-				++offset;
-
-			for (int i = 0; i < MethodCompiler.Method.Signature.Parameters.Count + offset; ++i)
-			{
-				var parameter = MethodCompiler.GetParameterOperand(i);
-
-				parameters.Add(parameter);
-			}
-
-			int returnSize = 0;
-			if (TypeLayout.IsCompoundType(MethodCompiler.Method.Signature.ReturnType))
-			{
-				returnSize = TypeLayout.GetTypeSize(MethodCompiler.Method.Signature.ReturnType);
-			}
-
-			int size = LayoutVariables(parameters, CallingConvention, CallingConvention.OffsetOfFirstParameter + returnSize, false);
-
-			MethodCompiler.StackLayout.StackParameterSize = size;
-			MethodCompiler.TypeLayout.SetMethodParameterStackSize(MethodCompiler.Method, size);
 		}
 
 		/// <summary>

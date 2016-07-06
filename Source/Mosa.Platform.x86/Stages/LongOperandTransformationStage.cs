@@ -663,16 +663,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offset.IsConstant && offset.IsConstantZero)
 			{
-				if (address.IsField)
-				{
-					Debug.Assert(address.Field.IsStatic);
-
-					context.SetInstruction(X86.Lea, v1, address);
-				}
-				else
-				{
-					context.SetInstruction(X86.Mov, v1, address);
-				}
+				context.SetInstruction(X86.Mov, v1, address);
 			}
 			else
 			{
@@ -703,16 +694,7 @@ namespace Mosa.Platform.x86.Stages
 			// Fortunately in 32-bit mode, we can't have 64-bit offsets so a 32-bit add will work.
 			if (offset.IsConstant && offset.IsConstantZero)
 			{
-				if (address.IsField)
-				{
-					Debug.Assert(address.Field.IsStatic);
-
-					context.SetInstruction(X86.Lea, v1, address);
-				}
-				else
-				{
-					context.SetInstruction(X86.Mov, v1, address);
-				}
+				context.SetInstruction(X86.Mov, v1, address);
 			}
 			else
 			{
@@ -773,7 +755,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand op2 = context.Operand2;
 
 			Debug.Assert(op1 != null && op2 != null, @"IntegerCompareInstruction operand not memory!");
-			Debug.Assert(op0.IsMemoryAddress || op0.IsRegister, @"IntegerCompareInstruction result not memory and not register!");
+			Debug.Assert(op0.IsRegister, @"IntegerCompareInstruction result not memory and not register!");
 
 			Operand op1L, op1H, op2L, op2H;
 			SplitLongOperand(op1, out op1L, out op1H);
@@ -1010,8 +992,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void Store(Context context)
 		{
-			//if ((context.MosaType ?? context.Operand3.Type).IsUI8)
-			if (context.MosaType.IsUI8)
+			if (context.Size == InstructionSize.Size64)
 			{
 				ExpandStore(context);
 			}

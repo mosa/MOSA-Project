@@ -50,31 +50,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (source.IsMemoryAddress && third.IsRegister)
-			{
-				if (source.IsByte || third.IsByte)
-					return M_R_8;
-				if (source.IsChar || third.IsChar)
-					return M_R_16;
-				if (source.IsShort || third.IsShort)
-					return M_R_16;
-				return M_R;
-			}
-
-			if (source.IsRegister && third.IsMemoryAddress)
-			{
-				if (third.IsByte || source.IsByte)
-					return R_M_8;
-				if (third.IsChar || source.IsChar)
-					return R_M_16;
-				if (third.IsShort || source.IsShort)
-					return R_M_16;
-				return R_M;
-			}
-
 			if (source.IsRegister && third.IsRegister) return R_R;
-
-			if (source.IsMemoryAddress && third.IsConstant) return M_C;
 
 			if (source.IsRegister && third.IsConstant)
 			{

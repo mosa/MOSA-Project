@@ -189,10 +189,6 @@ namespace Mosa.Platform.x86
 				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, symbol, 0);
 				codeStream.WriteZeroBytes(4);
 			}
-			else if (displacement.IsMemoryAddress && displacement.OffsetBase != null && displacement.OffsetBase.IsConstant)
-			{
-				codeStream.Write((int)(displacement.OffsetBase.ConstantSignedLongInteger + displacement.Displacement), Endianness.Little);
-			}
 			else
 			{
 				codeStream.Write((int)displacement.Displacement, Endianness.Little);
@@ -208,7 +204,7 @@ namespace Mosa.Platform.x86
 			if (op.IsRegister)
 				return; // nothing to do.
 
-			if (op.IsStackLocal || op.IsMemoryAddress)
+			if (op.IsStackLocal)
 			{
 				codeStream.Write((int)op.Displacement, Endianness.Little);
 				return;
@@ -321,8 +317,8 @@ namespace Mosa.Platform.x86
 			// FIXME: Handle the SIB byte
 			sib = null;
 
-			Operand mop1 = op1 != null && op1.IsMemoryAddress ? op1 : null;
-			Operand mop2 = op2 != null && op2.IsMemoryAddress ? op2 : null;
+			Operand mop1 = null;    // not necessary anymore
+			Operand mop2 = null;    // not necessary anymore
 
 			bool op1IsRegister = (op1 != null) && op1.IsRegister;
 			bool op2IsRegister = (op2 != null) && op2.IsRegister;

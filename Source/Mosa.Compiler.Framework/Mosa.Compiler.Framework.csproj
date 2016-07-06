@@ -171,6 +171,7 @@
     <Compile Include="Stages\ConvertCompoundStage.cs" />
     <Compile Include="Stages\MapFileGenerationStage.cs" />
     <Compile Include="Stages\PromoteLocalVariablesStage.cs" />
+    <Compile Include="Stages\StackSlotStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />
     <Compile Include="Stages\EmptyBlockRemovalStage.cs" />
@@ -220,7 +221,6 @@
     <Compile Include="BaseCompilerStage.cs" />
     <Compile Include="Platform\BasePlatformInstruction.cs" />
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
-    <Compile Include="StackLayout.cs" />
     <Compile Include="Stages\PlugStage.cs" />
     <Compile Include="Stages\CILProtectedRegionStage.cs" />
     <Compile Include="IR\ExceptionStart.cs" />

@@ -244,7 +244,7 @@ namespace Mosa.Platform.x86
 			);
 
 			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
-				new ConversionPhaseStage()
+				new FixMovStage()
 			);
 		}
 
@@ -283,17 +283,41 @@ namespace Mosa.Platform.x86
 			context.AppendInstruction(instruction, /*size,*/ destination, source);
 		}
 
+		public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
+		{
+			BaseInstruction instruction = X86.MovStore;
+			InstructionSize size = InstructionSize.Size32;
+
+			if (destination.Type.IsR4)
+			{
+				instruction = X86.MovssStore;
+			}
+			else
+			if (destination.Type.IsR8)
+			{
+				instruction = X86.MovsdStore;
+				size = InstructionSize.Size64;
+			}
+
+			context.AppendInstruction(instruction, size, null, destination, offset, value);
+		}
+
 		/// <summary>
 		/// Create platform compound move.
 		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
+		/// <param name="destinationOffset">The destination offset.</param>
 		/// <param name="source">The source.</param>
+		/// <param name="sourceOffset">The source offset.</param>
 		/// <param name="size">The size.</param>
-		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand source, int size)
+		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, int destinationOffset, Operand source, int sourceOffset, int size)
 		{
 			Debug.Assert(size > 0);
-			Debug.Assert(source.IsMemoryAddress && destination.IsMemoryAddress);
+
+			//Debug.Assert(source.IsMemoryAddress);
+			//Debug.Assert(destination.IsMemoryAddress);
 
 			const int LargeAlignment = 16;
 			int alignedSize = size - (size % NativeAlignment);
@@ -304,8 +328,11 @@ namespace Mosa.Platform.x86
 			var tmp = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
 			var tmpLarge = Operand.CreateCPURegister(destination.Type.TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
 
-			context.AppendInstruction(X86.Lea, srcReg, source);
-			context.AppendInstruction(X86.Lea, dstReg, destination);
+			var destinationOffsetOperand = Operand.CreateConstant(compiler.TypeSystem, destinationOffset);
+			var sourceOffsetOperand = Operand.CreateConstant(compiler.TypeSystem, sourceOffset);
+
+			context.AppendInstruction(X86.Lea, srcReg, destination, destinationOffsetOperand);
+			context.AppendInstruction(X86.Lea, dstReg, source, sourceOffsetOperand);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
@@ -381,17 +408,6 @@ namespace Mosa.Platform.x86
 		public override void InsertCallInstruction(Context context, Operand source)
 		{
 			context.AppendInstruction(X86.Call, null, source);
-		}
-
-		/// <summary>
-		/// Inserts the address of instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source">The source.</param>
-		public override void InsertAddressOfInstruction(Context context, Operand destination, Operand source)
-		{
-			context.AppendInstruction(X86.Lea, destination, source);
 		}
 
 		/// <summary>
