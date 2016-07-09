@@ -49,12 +49,10 @@ namespace Mosa.Compiler.Framework.CIL
 				default: throw new System.NotImplementedException();
 			}
 
-			// Push the loaded value onto the evaluation stack
 			var parameterOperand = decoder.Compiler.Parameters[index];
-			var result = LoadInstruction.CreateResultOperand(decoder, parameterOperand.Type);
 
 			ctx.Operand1 = parameterOperand;
-			ctx.Result = result;
+			ctx.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, parameterOperand.Type);
 		}
 
 		#endregion Methods

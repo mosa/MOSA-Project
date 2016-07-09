@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.CIL
 				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
 
 			// Push the loaded value
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, type);
+			ctx.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, type);
 			ctx.MosaType = type;
 
 			//System.Diagnostics.Debug.WriteLine(decoder.Method.FullName); //temp - remove me

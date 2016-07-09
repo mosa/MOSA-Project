@@ -389,7 +389,10 @@ namespace Mosa.Compiler.Framework
 				Operand operand = null;
 
 				if (virt)
-					operand = CreateVirtualRegister(local.Type);
+				{
+					var stacktype = local.Type.GetStackType();
+					operand = CreateVirtualRegister(stacktype);
+				}
 				else
 					operand = AddStackLocal(local.Type, local.IsPinned);
 

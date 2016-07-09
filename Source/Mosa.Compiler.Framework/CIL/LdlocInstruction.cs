@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			// Push the loaded value onto the evaluation stack
 			var local = decoder.Compiler.LocalVariables[index];
-			var result = LoadInstruction.CreateResultOperand(decoder, local.Type);
+			var result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, local.Type);
 
 			ctx.Operand1 = local;
 			ctx.Result = result;

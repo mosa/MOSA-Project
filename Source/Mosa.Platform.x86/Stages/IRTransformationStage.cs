@@ -558,6 +558,8 @@ namespace Mosa.Platform.x86.Stages
 
 		private void CompoundMove(Context context)
 		{
+			var src = context.Operand1;
+			var dest = context.Result;
 			var type = context.Result.Type;
 			int typeSize = TypeLayout.GetTypeSize(type);
 			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
@@ -565,16 +567,13 @@ namespace Mosa.Platform.x86.Stages
 
 			Debug.Assert(typeSize > 0, MethodCompiler.Method.FullName);
 
-			var src = context.Operand1;
-			var dest = context.Result;
+			var srcReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var dstReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var tmp = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var tmpLarge = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, SSE2Register.XMM1);
+			var stackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 
-			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
-			var dstReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
-			var tmp = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
-			var tmpLarge = Operand.CreateCPURegister(MethodCompiler.TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
-			var register = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
-
-			context.SetInstruction(X86.Nop);
+			context.SetInstruction(IRInstruction.Kill, tmpLarge);
 
 			if (src.IsSymbol)
 			{
@@ -584,12 +583,12 @@ namespace Mosa.Platform.x86.Stages
 			{
 				Debug.Assert(src.IsStackLocal);
 
-				context.AppendInstruction(X86.Lea, srcReg, register, src);
+				context.AppendInstruction(X86.Lea, srcReg, stackFrame, src);
 			}
 
 			Debug.Assert(dest.IsStackLocal || dest.IsParameter);
 
-			context.AppendInstruction(X86.Lea, dstReg, register, dest);
+			context.AppendInstruction(X86.Lea, dstReg, stackFrame, dest);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
@@ -715,23 +714,21 @@ namespace Mosa.Platform.x86.Stages
 
 			int offset = context.Operand2.IsConstant ? context.Operand2.ConstantSignedInteger : 0;
 
-			var offsetop = context.Operand2;
 			var src = context.Operand3;
 			var dest = context.Operand1;
+			var offsetop = context.Operand2;
 
-			var srcReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
-			var dstReg = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
-			var tmp = MethodCompiler.CreateVirtualRegister(dest.Type.TypeSystem.BuiltIn.I4);
-			var tmpLarge = Operand.CreateCPURegister(MethodCompiler.TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
-
-			context.SetInstruction(X86.Nop);
+			var srcReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var dstReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var tmp = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var tmpLarge = Operand.CreateCPURegister(TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
 
 			Debug.Assert(src.IsStackLocal);
 			var register = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 
-			context.AppendInstruction(X86.Lea, srcReg, register, src);
-
+			context.SetInstruction(X86.Lea, srcReg, register, src);
 			context.AppendInstruction(X86.Mov, dstReg, dest);
+			context.AppendInstruction(IRInstruction.Kill, tmpLarge);
 
 			if (!offsetop.IsConstant)
 			{
@@ -743,8 +740,8 @@ namespace Mosa.Platform.x86.Stages
 				// Large Aligned moves allow 128bits to be copied at a time
 				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
 				var indexOffset = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
-				context.AppendInstruction(X86.MovupsLoad, InstructionSize.Size128, tmp, srcReg, index);
-				context.AppendInstruction(X86.MovupsStore, InstructionSize.Size128, null, dstReg, indexOffset, tmp);
+				context.AppendInstruction(X86.MovupsLoad, InstructionSize.Size128, tmpLarge, srcReg, index);
+				context.AppendInstruction(X86.MovupsStore, InstructionSize.Size128, null, dstReg, indexOffset, tmpLarge);
 			}
 			for (int i = largeAlignedTypeSize; i < alignedTypeSize; i += NativeAlignment)
 			{

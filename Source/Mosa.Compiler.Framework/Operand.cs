@@ -784,15 +784,6 @@ namespace Mosa.Compiler.Framework
 				operand.IsConstant = true;
 				operand.ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger & uint.MaxValue;
 			}
-			else if (longOperand.IsField)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsField = true;
-				operand.Field = longOperand.Field;
-				operand.Type = longOperand.Type;
-				operand.Offset = longOperand.Offset + offset;
-				operand.Register = longOperand.Register;
-			}
 			else
 			{
 				operand = new Operand(typeSystem.BuiltIn.U4);
@@ -831,15 +822,6 @@ namespace Mosa.Compiler.Framework
 				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsConstant = true;
 				operand.ConstantUnsignedLongInteger = ((uint)(longOperand.ConstantUnsignedLongInteger >> 32)) & uint.MaxValue;
-			}
-			else if (longOperand.IsField)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsField = true;
-				operand.Field = longOperand.Field;
-				operand.Type = longOperand.Type;
-				operand.Offset = longOperand.Offset + offset;
-				operand.Register = longOperand.Register;
 			}
 			else
 			{
@@ -934,7 +916,7 @@ namespace Mosa.Compiler.Framework
 				sb.Append(" const {");
 
 				if (!IsResolved)
-					sb.Append("unsolved");
+					sb.Append("unresolved");
 				else if (IsNull)
 					sb.Append("null");
 				else if (IsUnsigned || IsBoolean || IsChar || IsPointer)

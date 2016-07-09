@@ -246,6 +246,10 @@ namespace Mosa.Platform.x86
 			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
 				new FixMovStage()
 			);
+
+			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
+				new StopStage()
+			);
 		}
 
 		/// <summary>

@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework.CIL
 				? type = (MosaType)decoder.Instruction.Operand
 				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
 
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, type);
+			ctx.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, type);
 		}
 	}
 }

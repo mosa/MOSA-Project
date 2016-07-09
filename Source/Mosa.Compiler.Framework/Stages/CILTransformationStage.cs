@@ -289,7 +289,7 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (source.Type != null && TypeLayout.IsCompoundType(source.Type))
 			{
 				//fixme: triggers covert compound stage
-				context.SetInstruction(IRInstruction.Move, source, destination);
+				context.SetInstruction(IRInstruction.CompoundMove, destination, source);
 				context.MosaType = source.Type;
 			}
 			else
@@ -464,7 +464,33 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Stloc(Context context)
 		{
-			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
+			if (context.Result.IsVirtualRegister && context.Operand1.IsVirtualRegister)
+			{
+				context.SetInstruction(IRInstruction.Move, context.Size, context.Result, context.Operand1);
+				return;
+			}
+
+			var type = context.MosaType;
+
+			if (TypeLayout.IsCompoundType(context.Operand1.Type))
+			{
+				if (TypeLayout.IsCompoundType(context.Result.Type))
+				{
+					Debug.Assert(!context.Result.IsVirtualRegister);
+					context.SetInstruction(IRInstruction.CompoundMove, context.Size, context.Result, context.Operand1);
+				}
+				else
+				{
+					Debug.Assert(context.Operand1.IsVirtualRegister || context.Operand1.IsConstant);
+					context.SetInstruction(IRInstruction.CompoundStore, context.Size, null, context.Result, ConstantZero, context.Operand1);
+				}
+			}
+			else if (context.Operand1.IsVirtualRegister)
+			{
+				context.SetInstruction(IRInstruction.Store, context.Size, null, stackFrame, context.Result, context.Operand1);
+			}
+
+			context.MosaType = type;
 		}
 
 		/// <summary>
@@ -497,7 +523,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.Store, size, null, context.Operand1, ConstantZero, context.Operand2);
+				context.SetInstruction(IRInstruction.Store, size, null, stackFrame, context.Operand1, context.Operand2);
 			}
 
 			context.MosaType = type;
@@ -1490,7 +1516,9 @@ namespace Mosa.Compiler.Framework.Stages
 			var size = GetInstructionSize(arraySigType.ElementType);
 
 			if (size == InstructionSize.Native)
+			{
 				size = Architecture.NativeInstructionSize;
+			}
 
 			context.SetInstruction(loadInstruction, size, result, arrayAddress, elementOffset);
 			context.MosaType = arraySigType.ElementType;
@@ -1515,8 +1543,20 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var size = GetInstructionSize(arrayType.ElementType);
 
-			context.SetInstruction(IRInstruction.Store, size, null, arrayAddress, elementOffset, value);
-			context.MosaType = arrayType.ElementType;
+			if (TypeLayout.IsCompoundType(value.Type))
+			{
+				Debug.Assert(!value.IsVirtualRegister);
+
+				context.SetInstruction(IRInstruction.CompoundStore, null, arrayAddress, elementOffset, value);
+				context.MosaType = arrayType.ElementType;
+			}
+			else
+			{
+				Debug.Assert(value.IsVirtualRegister);
+
+				context.SetInstruction(IRInstruction.Store, size, null, arrayAddress, elementOffset, value);
+				context.MosaType = arrayType.ElementType;
+			}
 		}
 
 		/// <summary>
@@ -2275,18 +2315,36 @@ namespace Mosa.Compiler.Framework.Stages
 			var destination = context.Result;
 			var size = GetInstructionSize(source.Type);
 
-			BaseIRInstruction instruction = IRInstruction.Move;
-
-			if (MustSignExtendOnLoad(source.Type))
+			if (!source.IsVirtualRegister)
 			{
-				instruction = IRInstruction.SignExtendedMove;
-			}
-			else if (MustZeroExtendOnLoad(source.Type))
-			{
-				instruction = IRInstruction.ZeroExtendedMove;
-			}
+				BaseIRInstruction loadInstruction = IRInstruction.Load;
 
-			context.SetInstruction(instruction, size, destination, source);
+				if (MustSignExtendOnLoad(source.Type))
+				{
+					loadInstruction = IRInstruction.LoadSignExtended;
+				}
+				else if (MustZeroExtendOnLoad(source.Type))
+				{
+					loadInstruction = IRInstruction.LoadZeroExtended;
+				}
+
+				context.SetInstruction(loadInstruction, size, destination, source, ConstantZero);
+			}
+			else
+			{
+				BaseIRInstruction instruction = IRInstruction.Move;
+
+				if (MustSignExtendOnLoad(source.Type))
+				{
+					instruction = IRInstruction.SignExtendedMove;
+				}
+				else if (MustZeroExtendOnLoad(source.Type))
+				{
+					instruction = IRInstruction.ZeroExtendedMove;
+				}
+
+				context.SetInstruction(instruction, size, destination, source);
+			}
 		}
 
 		/// <summary>
