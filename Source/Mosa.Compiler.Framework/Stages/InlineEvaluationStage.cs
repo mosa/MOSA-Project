@@ -301,11 +301,11 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				mappedOperand = Operand.CreateField(operand.Field);
 			}
-			else if (operand.IsConstant)
+			else if (operand.IsCPURegister)
 			{
 				mappedOperand = operand;
 			}
-			else if (operand.IsCPURegister)
+			else if (operand.IsConstant)
 			{
 				mappedOperand = operand;
 			}

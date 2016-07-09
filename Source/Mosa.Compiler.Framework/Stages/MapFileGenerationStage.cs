@@ -3,7 +3,6 @@
 using Mosa.Compiler.Linker;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace Mosa.Compiler.Framework.Stages
 {

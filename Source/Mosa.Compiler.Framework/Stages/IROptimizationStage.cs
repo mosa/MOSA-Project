@@ -423,7 +423,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Definitions.Count != 1)
 				return;
 
-			if (!node.Operand1.IsConstant)
+			if (!node.Operand1.IsResolvedConstant)
 				return;
 
 			Debug.Assert(node.Result.Definitions.Count == 1);
@@ -544,7 +544,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Operand1.Definitions.Count != 1)
 				return;
 
-			if (node.Operand1.IsConstant)
+			if (node.Operand1.IsResolvedConstant)
 				return;
 
 			if (!node.Operand1.IsVirtualRegister)
@@ -620,11 +620,11 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand op1 = node.Operand1;
 			Operand op2 = node.Operand2;
 
-			if (!op1.IsConstant || !op2.IsConstant)
+			if (!op1.IsResolvedConstant || !op2.IsResolvedConstant)
 				return;
 
 			// Divide by zero!
-			if ((node.Instruction == IRInstruction.DivSigned || node.Instruction == IRInstruction.DivUnsigned || node.Instruction == IRInstruction.RemSigned || node.Instruction == IRInstruction.RemUnsigned) && op2.IsConstant && op2.IsConstantZero)
+			if ((node.Instruction == IRInstruction.DivSigned || node.Instruction == IRInstruction.DivUnsigned || node.Instruction == IRInstruction.RemSigned || node.Instruction == IRInstruction.RemUnsigned) && op2.IsConstantZero)
 				return;
 
 			Operand constant = null;
@@ -713,7 +713,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand op1 = node.Operand1;
 			Operand op2 = node.Operand2;
 
-			if (!op1.IsConstant || !op2.IsConstant)
+			if (!(op1.IsResolvedConstant && op2.IsResolvedConstant))
 				return;
 
 			if (!op1.IsValueType || !op2.IsValueType)
@@ -763,7 +763,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand op1 = node.Operand1;
 			Operand op2 = node.Operand2;
 
-			if (op2.IsConstant && !op1.IsConstant && op2.IsConstantZero)
+			if (!op1.IsResolvedConstant && op2.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(node);
 				if (trace.Active) trace.Log("*** ArithmeticSimplificationAdditionAndSubstraction");
@@ -791,7 +791,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (!node.Operand2.IsConstant)
+			if (!node.Operand2.IsResolvedConstant)
 				return;
 
 			Operand result = node.Result;
@@ -859,13 +859,13 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand op1 = node.Operand1;
 			Operand op2 = node.Operand2;
 
-			if (!op2.IsConstant || op2.IsConstantZero)
+			if (!op2.IsResolvedConstant || op2.IsConstantZero)
 			{
 				// Possible divide by zero
 				return;
 			}
 
-			if (op1.IsConstant && op1.IsConstantZero)
+			if (op1.IsResolvedConstant && op1.IsConstantZero)
 			{
 				AddOperandUsageToWorkList(node);
 				if (trace.Active) trace.Log("*** ArithmeticSimplificationDivision");
@@ -877,7 +877,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (op2.IsConstant && op2.IsConstantOne)
+			if (op2.IsResolvedConstant && op2.IsConstantOne)
 			{
 				AddOperandUsageToWorkList(node);
 				if (trace.Active) trace.Log("*** ArithmeticSimplificationDivision");
@@ -925,7 +925,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Definitions.Count != 1)
 				return;
 
-			if (!node.Operand1.IsConstant)
+			if (!node.Operand1.IsResolvedConstant)
 				return;
 
 			Operand result = node.Result;
@@ -1006,7 +1006,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (!node.Operand2.IsConstant)
+			if (!node.Operand2.IsResolvedConstant)
 				return;
 
 			Operand result = node.Result;
@@ -1073,7 +1073,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (!node.Operand2.IsConstant)
+			if (!node.Operand2.IsResolvedConstant)
 				return;
 
 			Operand result = node.Result;
@@ -1133,7 +1133,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand op1 = node.Operand1;
 			Operand op2 = node.Operand2;
 
-			if (!op1.IsConstant || !op2.IsConstant)
+			if (!op1.IsResolvedConstant || !op2.IsResolvedConstant)
 				return;
 
 			Operand result = node.Result;
@@ -1230,10 +1230,10 @@ namespace Mosa.Compiler.Framework.Stages
 				|| node.Instruction == IRInstruction.LogicalXor))
 				return;
 
-			if (node.Operand2.IsConstant)
+			if (node.Operand2.IsResolvedConstant)
 				return;
 
-			if (!node.Operand1.IsConstant)
+			if (!node.Operand1.IsResolvedConstant)
 				return;
 
 			AddOperandUsageToWorkList(node);
@@ -1262,7 +1262,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Definitions.Count != 1)
 				return;
 
-			if (!node.Operand2.IsConstant)
+			if (!node.Operand2.IsResolvedConstant)
 				return;
 
 			if (node.Result.Uses.Count != 1)
@@ -1277,7 +1277,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node2.Result.IsVirtualRegister)
 				return;
 
-			if (!node2.Operand2.IsConstant)
+			if (!node2.Operand2.IsResolvedConstant)
 				return;
 
 			Debug.Assert(node2.Result.Definitions.Count == 1);
@@ -1327,7 +1327,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Definitions.Count != 1)
 				return;
 
-			if (!node.Operand2.IsConstant)
+			if (!node.Operand2.IsResolvedConstant)
 				return;
 
 			if (node.Result.Uses.Count != 1)
@@ -1341,7 +1341,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node2.Result.IsVirtualRegister)
 				return;
 
-			if (!node2.Operand2.IsConstant)
+			if (!node2.Operand2.IsResolvedConstant)
 				return;
 
 			Debug.Assert(node2.Result.Definitions.Count == 1);
@@ -1375,7 +1375,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Definitions.Count != 1)
 				return;
 
-			if (!node.Operand2.IsConstant)
+			if (!node.Operand2.IsResolvedConstant)
 				return;
 
 			if (node.Result.Uses.Count != 1)
@@ -1389,7 +1389,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node2.Result.IsVirtualRegister)
 				return;
 
-			if (!node2.Operand2.IsConstant)
+			if (!node2.Operand2.IsResolvedConstant)
 				return;
 
 			Debug.Assert(node2.Result.Definitions.Count == 1);
@@ -1423,7 +1423,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Definitions.Count != 1)
 				return;
 
-			if (!node.Operand2.IsConstant)
+			if (!node.Operand2.IsResolvedConstant)
 				return;
 
 			if (node.Result.Uses.Count != 1)
@@ -1437,7 +1437,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node2.Result.IsVirtualRegister)
 				return;
 
-			if (!node2.Operand2.IsConstant)
+			if (!node2.Operand2.IsResolvedConstant)
 				return;
 
 			Debug.Assert(node2.Result.Definitions.Count == 1);
@@ -1470,7 +1470,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Definitions.Count != 1)
 				return;
 
-			if (!node.Operand2.IsConstant)
+			if (!node.Operand2.IsResolvedConstant)
 				return;
 
 			if (node.Result.Uses.Count != 1)
@@ -1484,7 +1484,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node2.Result.IsVirtualRegister)
 				return;
 
-			if (!node2.Operand2.IsConstant)
+			if (!node2.Operand2.IsResolvedConstant)
 				return;
 
 			Debug.Assert(node2.Result.Definitions.Count == 1);
@@ -1589,11 +1589,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!(node.ConditionCode == ConditionCode.NotEqual || node.ConditionCode == ConditionCode.Equal))
 				return;
 
-			if (!((node.Operand1.IsVirtualRegister && node.Operand2.IsConstant && node.Operand2.IsConstantZero) ||
-				(node.Operand2.IsVirtualRegister && node.Operand1.IsConstant && node.Operand1.IsConstantZero)))
+			if (!((node.Operand1.IsVirtualRegister && node.Operand2.IsConstantZero) ||
+				(node.Operand2.IsVirtualRegister && node.Operand1.IsConstantZero)))
 				return;
 
-			var operand = (node.Operand2.IsConstant && node.Operand2.IsConstantZero) ? node.Operand1 : node.Operand2;
+			var operand = (node.Operand2.IsConstantZero) ? node.Operand1 : node.Operand2;
 
 			if (operand.Uses.Count != 1)
 				return;
@@ -1632,11 +1632,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!(node.ConditionCode == ConditionCode.NotEqual || node.ConditionCode == ConditionCode.Equal))
 				return;
 
-			if (!((node.Operand1.IsVirtualRegister && node.Operand2.IsConstant && node.Operand2.IsConstantZero) ||
-				(node.Operand2.IsVirtualRegister && node.Operand1.IsConstant && node.Operand1.IsConstantZero)))
+			if (!((node.Operand1.IsVirtualRegister && node.Operand2.IsConstantZero) ||
+				(node.Operand2.IsVirtualRegister && node.Operand1.IsConstantZero)))
 				return;
 
-			var operand = (node.Operand2.IsConstant && node.Operand2.IsConstantZero) ? node.Operand1 : node.Operand2;
+			var operand = (node.Operand2.IsConstantZero) ? node.Operand1 : node.Operand2;
 
 			if (operand.Uses.Count != 1)
 				return;
@@ -1705,7 +1705,7 @@ namespace Mosa.Compiler.Framework.Stages
 				|| node.Instruction == IRInstruction.LoadSignExtended || node.Instruction == IRInstruction.LoadZeroExtended))
 				return;
 
-			if (!node.Operand2.IsConstant)
+			if (!node.Operand2.IsResolvedConstant)
 				return;
 
 			if (!node.Operand1.IsVirtualRegister)
@@ -1720,7 +1720,7 @@ namespace Mosa.Compiler.Framework.Stages
 				node2.Instruction == IRInstruction.AddUnsigned || node2.Instruction == IRInstruction.SubUnsigned))
 				return;
 
-			if (!node2.Operand2.IsConstant)
+			if (!node2.Operand2.IsResolvedConstant)
 				return;
 
 			Operand constant;
@@ -1771,7 +1771,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var operand in node.Operands)
 			{
-				if (!operand.IsConstant)
+				if (!operand.IsResolvedConstant)
 					return;
 
 				if (operand.ConstantUnsignedLongInteger != operand1.ConstantUnsignedLongInteger)
@@ -1865,7 +1865,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (!node.Operand2.IsConstant)
+			if (!node.Operand2.IsResolvedConstant)
 				return;
 
 			if (node.Operand2.ConstantUnsignedLongInteger == 0)
@@ -1921,7 +1921,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (!node.Operand2.IsConstant)
+			if (!node.Operand2.IsResolvedConstant)
 				return;
 
 			if (node.Operand2.ConstantUnsignedLongInteger != 1)
@@ -2123,7 +2123,7 @@ namespace Mosa.Compiler.Framework.Stages
 				node.Instruction == IRInstruction.LogicalXor ||
 				node.Instruction == IRInstruction.LogicalNot)
 			{
-				if (node.Operand1.IsConstant && node.Operand1.IsLong)
+				if (node.Operand1.IsResolvedConstant && node.Operand1.IsLong)
 				{
 					if (trace.Active) trace.Log("*** NormalizeConstantTo32Bit");
 
@@ -2133,7 +2133,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
 					AddOperandUsageToWorkList(node);
 				}
-				if (node.OperandCount >= 2 && node.Operand2.IsConstant && node.Operand2.IsLong)
+				if (node.OperandCount >= 2 && node.Operand2.IsResolvedConstant && node.Operand2.IsLong)
 				{
 					if (trace.Active) trace.Log("*** NormalizeConstantTo32Bit");
 

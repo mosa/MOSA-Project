@@ -39,7 +39,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			Debug.Assert(source.IsRegister);
+			Debug.Assert(source.IsCPURegister);
 
 			return opcode;
 		}

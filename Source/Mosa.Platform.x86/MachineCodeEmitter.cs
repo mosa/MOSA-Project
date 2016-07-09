@@ -160,7 +160,7 @@ namespace Mosa.Platform.x86
 			if (displacement.IsLabel)
 			{
 				// FIXME! remove assertion
-				Debug.Assert(displacement.Displacement == 0);
+				Debug.Assert(displacement.Offset == 0);
 
 				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Name, SectionKind.ROData, 0);
 				codeStream.WriteZeroBytes(4);
@@ -169,13 +169,13 @@ namespace Mosa.Platform.x86
 			{
 				var section = displacement.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Field.FullName, section, (int)displacement.Displacement);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Field.FullName, section, (int)displacement.Offset);
 				codeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsSymbol)
 			{
 				// FIXME! remove assertion
-				Debug.Assert(displacement.Displacement == 0);
+				Debug.Assert(displacement.Offset == 0);
 
 				var section = (displacement.Method != null) ? SectionKind.Text : SectionKind.ROData;
 
@@ -191,7 +191,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
-				codeStream.Write((int)displacement.Displacement, Endianness.Little);
+				codeStream.Write((int)displacement.Offset, Endianness.Little);
 			}
 		}
 
@@ -201,12 +201,12 @@ namespace Mosa.Platform.x86
 		/// <param name="op">The immediate operand to emit.</param>
 		private void WriteImmediate(Operand op)
 		{
-			if (op.IsRegister)
+			if (op.IsCPURegister)
 				return; // nothing to do.
 
 			if (op.IsStackLocal)
 			{
-				codeStream.Write((int)op.Displacement, Endianness.Little);
+				codeStream.Write((int)op.Offset, Endianness.Little);
 				return;
 			}
 
@@ -320,8 +320,8 @@ namespace Mosa.Platform.x86
 			Operand mop1 = null;    // not necessary anymore
 			Operand mop2 = null;    // not necessary anymore
 
-			bool op1IsRegister = (op1 != null) && op1.IsRegister;
-			bool op2IsRegister = (op2 != null) && op2.IsRegister;
+			bool op1IsRegister = (op1 != null) && op1.IsCPURegister;
+			bool op2IsRegister = (op2 != null) && op2.IsCPURegister;
 
 			// Normalize the operand order
 			if (!op1IsRegister && op2IsRegister)
@@ -343,18 +343,6 @@ namespace Mosa.Platform.x86
 				// mod = 11b, reg = rop1, r/m = rop2
 				modRM = (byte)((3 << 6) | (op1.Register.RegisterCode << 3) | op2.Register.RegisterCode);
 			}
-
-			// Check for register/memory combinations
-			else if (mop2 != null && mop2.EffectiveOffsetBase != null)
-			{
-				// mod = 10b, reg = rop1, r/m = mop2
-				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | (byte)mop2.EffectiveOffsetBase.RegisterCode);
-				if (op1 != null)
-					modRM |= (byte)(op1.Register.RegisterCode << 3);
-				displacement = mop2;
-				if (mop2.EffectiveOffsetBase.RegisterCode == 4)
-					sib = 0x24;
-			}
 			else if (mop2 != null)
 			{
 				// mod = 10b, r/m = mop1, reg = rop2
@@ -362,16 +350,6 @@ namespace Mosa.Platform.x86
 				if (op1IsRegister)
 					modRM |= (byte)(op1.Register.RegisterCode << 3);
 				displacement = mop2;
-			}
-			else if (mop1 != null && mop1.EffectiveOffsetBase != null)
-			{
-				// mod = 10b, r/m = mop1, reg = rop2
-				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | mop1.EffectiveOffsetBase.RegisterCode);
-				if (op2IsRegister)
-					modRM |= (byte)(op2.Register.RegisterCode << 3);
-				displacement = mop1;
-				if (mop1.EffectiveOffsetBase.RegisterCode == 4)
-					sib = 0xA4;
 			}
 			else if (mop1 != null)
 			{

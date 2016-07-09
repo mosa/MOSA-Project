@@ -1,8 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -108,11 +106,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		public void Mul(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Result2.IsCPURegister && context.Operand1.IsCPURegister && context.Operand2.IsRegister)
-				if (context.Result.Register == GeneralPurposeRegister.EDX &&
-					context.Result2.Register == GeneralPurposeRegister.EAX &&
-					context.Operand1.Register == GeneralPurposeRegister.EAX)
-					return;
+			if (context.Result.IsCPURegister && context.Result2.IsCPURegister && context.Operand1.IsCPURegister && !context.Operand2.IsConstant &&
+				context.Result.Register == GeneralPurposeRegister.EDX && context.Result2.Register == GeneralPurposeRegister.EAX && context.Operand1.Register == GeneralPurposeRegister.EAX)
+				return;
 
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
@@ -124,7 +120,7 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, eax, operand1);
 
-			if (operand2.IsRegister)
+			if (operand2.IsCPURegister)
 			{
 				context.AppendInstruction2(X86.Mul, edx, eax, eax, operand2);
 			}
@@ -164,7 +160,7 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Mov, EDX, operand1);
 			context.AppendInstruction(X86.Mov, EAX, operand2);
 
-			if (operand3.IsRegister)
+			if (operand3.IsCPURegister)
 			{
 				context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, operand3);
 			}
@@ -221,7 +217,7 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Mov, EDX, operand1);
 			context.AppendInstruction(X86.Mov, EAX, operand2);
 
-			if (operand3.IsRegister)
+			if (operand3.IsCPURegister)
 			{
 				context.AppendInstruction2(X86.IDiv, EDX, EAX, EDX, EAX, operand3);
 			}

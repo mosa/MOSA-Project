@@ -52,24 +52,24 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (destination.Register is SegmentRegister)
 			{
-				if (source.IsRegister) return SEG_RM;
+				if (source.IsCPURegister) return SEG_RM;
 
 				throw new ArgumentException(@"TODO: No opcode for move destination segment register");
 			}
 
 			if (source.Register is SegmentRegister)
 			{
-				if (destination.IsRegister) return RM_SEG;
+				if (destination.IsCPURegister) return RM_SEG;
 
 				throw new ArgumentException(@"TODO: No opcode for move source segment register");
 			}
 
-			if (destination.IsRegister && source.IsConstant) return RM_C;
+			if (destination.IsCPURegister && source.IsConstant) return RM_C;
 
-			if (destination.IsRegister && source.IsSymbol)
+			if (destination.IsCPURegister && source.IsSymbol)
 				return RM_C;
 
-			if (destination.IsRegister && source.IsRegister)
+			if (destination.IsCPURegister && source.IsCPURegister)
 			{
 				Debug.Assert(!((source.IsByte || destination.IsByte) && (source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI)), source.ToString());
 
@@ -78,7 +78,7 @@ namespace Mosa.Platform.x86.Instructions
 				return R_RM;
 			}
 
-			if (destination.IsSymbol && source.IsRegister)
+			if (destination.IsSymbol && source.IsCPURegister)
 			{
 				if (destination.IsByte || destination.IsBoolean) return RM_C_U8;
 				if (destination.IsChar || destination.IsShort) return M_C_16;

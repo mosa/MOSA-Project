@@ -276,7 +276,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var destination = context.Result;
 			var size = GetInstructionSize(source.Type);
 
-			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, source.Displacement);
+			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, source.Offset);
 
 			if (MustSignExtendOnLoad(source.Type))
 			{
@@ -332,7 +332,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Ldc(Context context)
 		{
-			if (context.Operand1.IsConstant)
+			//fixme: uncomment when when static allocator stage fixed
+			//Debug.Assert(context.Operand1.IsConstant);
+
+			if (context.Operand1.IsResolvedConstant)
 			{
 				var source = context.Operand1;
 				var destination = context.Result;
@@ -472,7 +475,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Debug.Assert(context.Result.IsParameter);
 
-			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, context.Result.Displacement);
+			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, context.Result.Offset);
 
 			context.SetInstruction(IRInstruction.Store, context.Size, null, stackFrame, constant, context.Operand1);
 		}

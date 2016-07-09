@@ -3,7 +3,6 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
@@ -39,10 +38,10 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static void CmpXchg(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(node.Result.IsRegister);
-			Debug.Assert(node.Operand1.IsRegister);
-			Debug.Assert(node.Operand2.IsRegister);
-			Debug.Assert(node.GetOperand(3).IsRegister);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+			Debug.Assert(node.GetOperand(3).IsCPURegister);
 			Debug.Assert(node.Result.Register == GeneralPurposeRegister.EAX);
 			Debug.Assert(node.Operand1.Register == GeneralPurposeRegister.EAX);
 			Debug.Assert(node.ResultCount == 1);

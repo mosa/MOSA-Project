@@ -54,7 +54,7 @@ namespace Mosa.Platform.x86.Instructions
 					emitter.WriteByte(0xE9);
 					emitter.EmitCallSite(node.Operand1);
 				}
-				else if (node.Operand1.IsRegister)
+				else if (node.Operand1.IsCPURegister)
 				{
 					emitter.Emit(JMP_R, node.Operand1);
 				}

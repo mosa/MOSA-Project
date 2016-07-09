@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		public void Mov(Context context)
 		{
-			Debug.Assert(!context.Result.IsConstant);
+			Debug.Assert(!context.Result.IsResolvedConstant);
 
 			// Convert moves to float moves, if necessary
 			if (context.Result.IsR4)
@@ -60,7 +60,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand result = context.Result;
 
-			if (!result.IsRegister)
+			if (!result.IsCPURegister)
 			{
 				Operand register = AllocateVirtualRegister(result.Type);
 				context.Result = register;
@@ -77,7 +77,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand result = context.Result;
 			Operand register = AllocateVirtualRegister(result.Type);
 
-			if (!result.IsRegister)
+			if (!result.IsCPURegister)
 			{
 				context.Result = register;
 				context.AppendInstruction(X86.Mov, result, register);
@@ -92,7 +92,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand result = context.Result;
 
-			if (!result.IsRegister)
+			if (!result.IsCPURegister)
 			{
 				Operand register = AllocateVirtualRegister(result.Type);
 				context.Result = register;
@@ -108,7 +108,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand result = context.Result;
 
-			if (!result.IsRegister)
+			if (!result.IsCPURegister)
 			{
 				Operand register = AllocateVirtualRegister(result.Type);
 				context.Result = register;
@@ -216,7 +216,7 @@ namespace Mosa.Platform.x86.Stages
 			if (destinationOperand == null || destinationOperand.IsSymbol)
 				return;
 
-			if (!destinationOperand.IsRegister)
+			if (!destinationOperand.IsCPURegister)
 			{
 				Context before = context.InsertBefore();
 				Operand eax = AllocateVirtualRegister(destinationOperand.Type);

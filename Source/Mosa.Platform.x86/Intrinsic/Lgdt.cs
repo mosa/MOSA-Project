@@ -19,7 +19,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			Debug.Assert(context.Operand1.IsConstant); // only constants are supported
+			Debug.Assert(context.Operand1.IsResolvedConstant); // only constants are supported
 
 			var zero = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
 			var constantx10 = Operand.CreateConstant(methodCompiler.TypeSystem, 0x10);

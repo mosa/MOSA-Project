@@ -44,7 +44,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static void MovupsRegToMemory(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand3.IsRegister);
+			Debug.Assert(node.Operand3.IsCPURegister);
 			Debug.Assert(node.ResultCount == 0);
 			Debug.Assert(!node.Operand3.IsConstant);
 

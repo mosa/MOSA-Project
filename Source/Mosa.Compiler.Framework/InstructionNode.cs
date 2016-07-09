@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister && !value.IsConstant)
+					if (value.IsVirtualRegister || value.IsStackLocal || value.IsParameter)
 					{
 						value.Uses.Add(this);
 					}
@@ -155,7 +155,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister && !value.IsConstant)
+					if (value.IsVirtualRegister || value.IsStackLocal || value.IsParameter)
 					{
 						value.Uses.Add(this);
 					}
@@ -181,7 +181,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister && !value.IsConstant)
+					if (value.IsVirtualRegister || value.IsStackLocal || value.IsParameter)
 					{
 						value.Uses.Add(this);
 					}
@@ -242,7 +242,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister && !value.IsConstant)
+					if (value.IsVirtualRegister || value.IsStackLocal || value.IsParameter)
 					{
 						value.Definitions.Add(this);
 					}
@@ -267,7 +267,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister && !value.IsConstant)
+					if (value.IsVirtualRegister || value.IsStackLocal || value.IsParameter)
 					{
 						value.Definitions.Add(this);
 					}
@@ -545,6 +545,9 @@ namespace Mosa.Compiler.Framework
 			Next = firstnode;
 			firstnode.Previous = this;
 
+			Debug.Assert(this != Next);
+			Debug.Assert(this != Previous);
+
 			//Block.DebugCheck();
 		}
 
@@ -649,7 +652,7 @@ namespace Mosa.Compiler.Framework
 
 						if (operand != null)
 						{
-							if (!operand.IsCPURegister & !operand.IsConstant)
+							if (operand.IsVirtualRegister || operand.IsStackLocal || operand.IsParameter)
 							{
 								operand.Uses.Add(this);
 							}

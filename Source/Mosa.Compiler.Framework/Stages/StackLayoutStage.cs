@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var local in MethodCompiler.LocalStack)
 			{
-				trace.Log(local.ToString() + ": displacement = " + local.Displacement.ToString());
+				trace.Log(local.ToString() + ": displacement = " + local.Offset.ToString());
 			}
 		}
 
@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (skip)
 					{
-						operand.Displacement = 0;
+						operand.Offset = 0;
 						continue;
 					}
 				}
@@ -93,11 +93,11 @@ namespace Mosa.Compiler.Framework.Stages
 				// adjust split children
 				if (operand.Low != null)
 				{
-					operand.Low.Displacement = offset + (operand.Low.Displacement - operand.Displacement);
-					operand.High.Displacement = offset + (operand.High.Displacement - operand.Displacement);
+					operand.Low.Offset = offset + (operand.Low.Offset - operand.Offset);
+					operand.High.Offset = offset + (operand.High.Offset - operand.Offset);
 				}
 
-				operand.Displacement = offset;
+				operand.Offset = offset;
 
 				if (!isLocalVariable)
 				{

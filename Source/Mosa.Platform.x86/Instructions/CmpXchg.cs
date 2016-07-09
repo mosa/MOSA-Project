@@ -39,7 +39,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (destination.IsRegister && source.IsRegister) return RM_R;
+			if (destination.IsCPURegister && source.IsCPURegister) return RM_R;
 
 			throw new ArgumentException(String.Format(@"x86.CmpXchg: No opcode for operand types {0} and {1}.", source, third));
 		}

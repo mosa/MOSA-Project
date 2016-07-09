@@ -53,8 +53,6 @@ namespace Mosa.Tool.Explorer
 
 				//(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 
-				//new StopStage(),
-
 				new PlatformStubStage(),
 				new PlatformEdgeSplitStage(),
 				new GreedyRegisterAllocatorStage(),

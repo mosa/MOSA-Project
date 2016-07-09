@@ -148,7 +148,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				var offset = Operand.CreateConstant(TypeSystem, context.Operand1.Displacement);
+				var offset = Operand.CreateConstant(TypeSystem, context.Operand1.Offset);
 
 				context.SetInstruction(X86.Lea, NativeInstructionSize, context.Result, stackFrame, offset);
 			}
@@ -397,7 +397,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(typeSize > 0, context.Operand2.Name);
 
 			int offset = 0;
-			if (context.Operand2.IsConstant)
+			if (context.Operand2.IsResolvedConstant)
 			{
 				offset = (int)context.Operand2.ConstantSignedLongInteger;
 			}

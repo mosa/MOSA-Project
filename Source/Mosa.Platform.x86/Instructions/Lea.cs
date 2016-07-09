@@ -3,7 +3,6 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
@@ -33,7 +32,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static void LeaAddress(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(node.Result.IsRegister);
+			Debug.Assert(node.Result.IsCPURegister);
 
 			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
 

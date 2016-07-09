@@ -1,9 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -202,7 +200,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var section = symbolOperand.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, pos, 0, symbolOperand.Field.FullName, section, (int)symbolOperand.Displacement);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, pos, 0, symbolOperand.Field.FullName, section, (int)symbolOperand.Offset);
 			}
 			else if (symbolOperand.IsSymbol)
 			{

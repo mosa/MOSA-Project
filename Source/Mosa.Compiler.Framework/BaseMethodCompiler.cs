@@ -298,11 +298,11 @@ namespace Mosa.Compiler.Framework
 				// adjust split children
 				if (operand.Low != null)
 				{
-					operand.Low.Displacement = offset + (operand.Low.Displacement - operand.Displacement);
-					operand.High.Displacement = offset + (operand.High.Displacement - operand.Displacement);
+					operand.Low.Offset = offset + (operand.Low.Offset - operand.Offset);
+					operand.High.Offset = offset + (operand.High.Offset - operand.Offset);
 				}
 
-				operand.Displacement = offset;
+				operand.Offset = offset;
 
 				size = Alignment.AlignUp(size, alignment);
 				offset = offset + size;

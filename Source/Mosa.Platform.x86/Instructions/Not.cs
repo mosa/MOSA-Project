@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (destination.IsRegister)
+			if (destination.IsCPURegister)
 			{
 				if (destination.IsByte) return MR_8;
 				if (destination.IsChar) return MR_16;

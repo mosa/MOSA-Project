@@ -145,7 +145,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (op.Instruction is LdcInstruction)
 				{
-					if (op.Operand1.IsConstant)
+					if (op.Operand1.IsResolvedConstant)
 					{
 						return op.Operand1.ConstantSignedInteger;
 					}

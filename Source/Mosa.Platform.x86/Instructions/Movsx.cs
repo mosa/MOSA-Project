@@ -38,8 +38,8 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static void MovsxRegToReg(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(node.Result.IsRegister);
-			Debug.Assert(node.Operand1.IsRegister);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsCPURegister);
 
 			// register2 to register1 0000 1111 : 1011 111w : 11 reg1 reg2
 			var opcode = new OpcodeEncoder()

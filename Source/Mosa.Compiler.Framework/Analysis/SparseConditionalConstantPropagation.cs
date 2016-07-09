@@ -56,6 +56,10 @@ namespace Mosa.Compiler.Framework.Analysis
 				{
 					Status = VariableStatus.NeverDefined;
 				}
+				else if (operand.IsUnresolvedConstant)
+				{
+					IsOverDefined = true;
+				}
 				else if (operand.IsConstant && operand.IsInteger)
 				{
 					AddConstant(operand.ConstantUnsignedLongInteger);

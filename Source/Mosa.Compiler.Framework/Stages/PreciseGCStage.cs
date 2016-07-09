@@ -78,14 +78,14 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						if (input.Type.IsReferenceType || input.Type.IsManagedPointer)
 						{
-							if (input.IsRegister)
+							if (input.IsCPURegister)
 								registerRangeData[input.Register.Index].UseList.Add(node.Offset);
 							else if (input.IsStackLocal)
 								stackLocalRangeData[stack[input]].UseList.Add(node.Offset);
 						}
 						else
 						{
-							if (input.IsRegister)
+							if (input.IsCPURegister)
 								registerRangeData[input.Register.Index].KillList.Add(node.Offset);
 							else if (input.IsStackLocal)
 								stackLocalRangeData[stack[input]].KillList.Add(node.Offset);
@@ -96,7 +96,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						if (output.Type.IsReferenceType || output.Type.IsManagedPointer)
 						{
-							if (output.IsRegister)
+							if (output.IsCPURegister)
 								registerRangeData[output.Register.Index].GenList.Add(node.Offset);
 							else if (output.IsStackLocal)
 								stackLocalRangeData[stack[output]].GenList.Add(node.Offset);

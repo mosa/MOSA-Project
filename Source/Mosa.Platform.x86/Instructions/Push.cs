@@ -57,7 +57,7 @@ namespace Mosa.Platform.x86.Instructions
 					emitter.Emit(CONST32, node.Operand1, null);
 				return;
 			}
-			if (node.Operand1.IsRegister)
+			if (node.Operand1.IsCPURegister)
 			{
 				if (node.Operand1.Register is SegmentRegister)
 					switch ((node.Operand1.Register as SegmentRegister).Segment)

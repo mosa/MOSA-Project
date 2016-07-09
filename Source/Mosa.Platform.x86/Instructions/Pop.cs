@@ -43,7 +43,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <exception cref="System.InvalidOperationException">@unable to emit opcode for segment register</exception>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			if (node.Result.IsRegister)
+			if (node.Result.IsCPURegister)
 			{
 				if (node.Result.Register is SegmentRegister)
 					switch ((node.Result.Register as SegmentRegister).Segment)

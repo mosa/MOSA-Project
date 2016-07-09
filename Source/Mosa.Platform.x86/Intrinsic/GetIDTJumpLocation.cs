@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			var operand = context.Operand1;
 
-			if (!operand.IsConstant)
+			if (!operand.IsResolvedConstant)
 			{
 				// try to find the constant - a bit of a hack
 				Context ctx = new Context(operand.Definitions[0]);
@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Intrinsic
 				}
 			}
 
-			Debug.Assert(operand.IsConstant);
+			Debug.Assert(operand.IsResolvedConstant);
 
 			int irq = (int)operand.ConstantSignedLongInteger;
 
