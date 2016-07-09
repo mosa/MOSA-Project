@@ -61,7 +61,7 @@ namespace Mosa.Tool.Explorer
 				new BlockOrderingStage(),
 				new GraphVizStage(),
 
-				new StopStage(),
+				//new StopStage(),
 
 				new CodeGenerationStage(compilerOptions.EmitBinary),
 				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null
