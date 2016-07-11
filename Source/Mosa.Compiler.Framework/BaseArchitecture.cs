@@ -160,7 +160,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="source">The source.</param>
 		/// <param name="sourceOffset">The source offset.</param>
 		/// <param name="size">The size.</param>
-		public abstract void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, int destinationOffset, Operand source, int sourceOffset, int size);
+		public abstract void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand destinationOffset, Operand source, Operand sourceOffset, int size);
 
 		/// <summary>
 		/// Create platform exchange registers.

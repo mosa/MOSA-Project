@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void LayoutStackVariables()
 		{
 			// assign increasing stack offsets to each variable
-			int size = LayoutVariables(MethodCompiler.LocalStack, CallingConvention, CallingConvention.OffsetOfFirstLocal, true);
+			int size = LayoutVariables(MethodCompiler.LocalStack, CallingConvention, CallingConvention.OffsetOfFirstLocal);
 
 			MethodCompiler.StackSize = size;
 			MethodCompiler.TypeLayout.SetMethodStackSize(MethodCompiler.Method, -size);
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var local in MethodCompiler.LocalStack)
 			{
-				trace.Log(local.ToString() + ": displacement = " + local.Offset.ToString());
+				trace.Log(local.ToString() + ": offset = " + local.Offset.ToString());
 			}
 		}
 
@@ -53,42 +53,19 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="locals">The enumerable holding all locals.</param>
 		/// <param name="callingConvention">The cc.</param>
-		/// <param name="offsetOfFirst">Specifies the offset of the first stack operand in the list.</param>
-		/// <param name="isLocalVariable">The direction.</param>
+		/// <param name="offsetOfFirste">The offset of firste.</param>
 		/// <returns></returns>
-		private int LayoutVariables(IList<Operand> locals, BaseCallingConvention callingConvention, int offsetOfFirst, bool isLocalVariable)
+		private int LayoutVariables(IList<Operand> locals, BaseCallingConvention callingConvention, int offsetOfFirst)
 		{
 			int offset = offsetOfFirst;
 
 			foreach (var operand in locals)
 			{
-				if (!operand.IsParameter && operand.Uses.Count == 0 && operand.Definitions.Count == 0)
-				{
-					bool skip = false;
-
-					if (operand.Low == null && operand.High == null)
-					{
-						skip = true;
-					}
-					else if (operand.Low.Uses.Count == 0 && operand.Low.Definitions.Count == 0 && operand.High.Uses.Count == 0 && operand.High.Definitions.Count == 0)
-					{
-						skip = true;
-					}
-
-					if (skip)
-					{
-						operand.Offset = 0;
-						continue;
-					}
-				}
-
 				int size, alignment;
 				Architecture.GetTypeRequirements(TypeLayout, operand.Type, out size, out alignment);
-				if (isLocalVariable)
-				{
-					size = Alignment.AlignUp(size, alignment);
-					offset = offset - size;
-				}
+
+				size = Alignment.AlignUp(size, alignment);
+				offset = offset - size;
 
 				// adjust split children
 				if (operand.Low != null)
@@ -98,12 +75,10 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				operand.Offset = offset;
+				operand.IsResolved = true;
 
-				if (!isLocalVariable)
-				{
-					size = Alignment.AlignUp(size, alignment);
-					offset = offset + size;
-				}
+				size = Alignment.AlignUp(size, alignment);
+				offset = offset + size;
 			}
 
 			return offset;

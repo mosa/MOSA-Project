@@ -36,6 +36,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private static readonly Operand[] emptyOperandList = new Operand[0];
 
+		public Operand ConstantZero;
+
 		/// <summary>
 		/// Holds flag that will stop method compiler
 		/// </summary>
@@ -199,6 +201,9 @@ namespace Mosa.Compiler.Framework
 			BasicBlocks = basicBlocks ?? new BasicBlocks();
 			Pipeline = new CompilerPipeline();
 			LocalStack = new List<Operand>();
+
+			ConstantZero = Operand.CreateConstant(TypeSystem, 0);
+
 			Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
 			VirtualRegisters = new VirtualRegisters(Architecture);
 			LocalVariables = emptyOperandList;
@@ -241,9 +246,9 @@ namespace Mosa.Compiler.Framework
 			return local;
 		}
 
-		private Operand SetStackParameter(int index, MosaType type, int displacement, string name)
+		private Operand SetStackParameter(int index, MosaType type, string name)
 		{
-			var param = Operand.CreateStackParameter(type, index, displacement, name);
+			var param = Operand.CreateStackParameter(type, index, name);
 			Parameters[index] = param;
 			return param;
 		}
@@ -258,14 +263,14 @@ namespace Mosa.Compiler.Framework
 			if (Method.HasThis || Method.HasExplicitThis)
 			{
 				if (Type.IsValueType)
-					SetStackParameter(index++, Type.ToManagedPointer(), 0, "this");
+					SetStackParameter(index++, Type.ToManagedPointer(), "this");
 				else
-					SetStackParameter(index++, Type, 0, "this");
+					SetStackParameter(index++, Type, "this");
 			}
 
 			foreach (var parameter in Method.Signature.Parameters)
 			{
-				SetStackParameter(index++, parameter.ParameterType, 0, parameter.Name);
+				SetStackParameter(index++, parameter.ParameterType, parameter.Name);
 			}
 
 			LayoutParameters();
@@ -303,6 +308,7 @@ namespace Mosa.Compiler.Framework
 				}
 
 				operand.Offset = offset;
+				operand.IsResolved = true;
 
 				size = Alignment.AlignUp(size, alignment);
 				offset = offset + size;

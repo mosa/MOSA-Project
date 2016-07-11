@@ -64,8 +64,6 @@ namespace Mosa.Platform.x86.Stages
 				size = InstructionSize.Size32;
 			}
 
-			System.Diagnostics.Debug.Assert(move == GetMove(result, operand1));
-
 			var newNode = new InstructionNode(move, result, operand1);
 			newNode.Size = size;
 			node.Previous.Insert(newNode);

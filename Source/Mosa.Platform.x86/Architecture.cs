@@ -279,8 +279,26 @@ namespace Mosa.Platform.x86
 		/// <param name="source">The source.</param>
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
-			var instruction = BaseTransformationStage.GetMove(destination, source);
-			context.AppendInstruction(instruction, /*size,*/ destination, source);
+			X86Instruction move = null;
+			InstructionSize size = InstructionSize.None;
+
+			if (destination.Type.IsR4)
+			{
+				move = X86.Movss;
+				size = InstructionSize.Size32;
+			}
+			else if (destination.Type.IsR8)
+			{
+				move = X86.Movsd;
+				size = InstructionSize.Size64;
+			}
+			else
+			{
+				move = X86.Mov;
+				size = InstructionSize.Size32;
+			}
+
+			context.AppendInstruction(move, size, destination, source);
 		}
 
 		public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
@@ -312,7 +330,7 @@ namespace Mosa.Platform.x86
 		/// <param name="source">The source.</param>
 		/// <param name="sourceOffset">The source offset.</param>
 		/// <param name="size">The size.</param>
-		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, int destinationOffset, Operand source, int sourceOffset, int size)
+		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand destinationOffset, Operand source, Operand sourceOffset, int size)
 		{
 			Debug.Assert(size > 0);
 
@@ -325,11 +343,8 @@ namespace Mosa.Platform.x86
 			var tmp = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
 			var tmpLarge = Operand.CreateCPURegister(destination.Type.TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
 
-			var destinationOffsetOperand = Operand.CreateConstant(compiler.TypeSystem, destinationOffset);
-			var sourceOffsetOperand = Operand.CreateConstant(compiler.TypeSystem, sourceOffset);
-
-			context.AppendInstruction(X86.Lea, srcReg, destination, destinationOffsetOperand);
-			context.AppendInstruction(X86.Lea, dstReg, source, sourceOffsetOperand);
+			context.AppendInstruction(X86.Lea, srcReg, destination, destinationOffset);
+			context.AppendInstruction(X86.Lea, dstReg, source, sourceOffset);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{

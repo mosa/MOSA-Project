@@ -9,8 +9,6 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage
 	{
-		protected Operand ConstantZero;
-
 		protected delegate void VisitationDelegate(Context context);
 
 		protected Dictionary<BaseInstruction, VisitationDelegate> visitationDictionary;
@@ -18,8 +16,6 @@ namespace Mosa.Compiler.Framework
 		protected override void Setup()
 		{
 			base.Setup();
-
-			ConstantZero = Operand.CreateConstant(MethodCompiler.TypeSystem, 0);
 
 			visitationDictionary = new Dictionary<BaseInstruction, VisitationDelegate>();
 

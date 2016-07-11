@@ -94,6 +94,8 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		protected CompilerMethodData MethodData { get; private set; }
 
+		protected Operand ConstantZero { get { return MethodCompiler.ConstantZero; } }
+
 		#endregion Properties
 
 		#region IPipelineStage Members

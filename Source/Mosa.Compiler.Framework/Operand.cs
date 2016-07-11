@@ -59,7 +59,21 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The offset.
 		/// </value>
-		public long Offset { get; set; }
+		public long Offset
+		{
+			get
+			{
+				Debug.Assert(IsResolved);
+
+				return ConstantSignedLongInteger;
+			}
+			set
+			{
+				Debug.Assert(!IsResolved);
+
+				ConstantSignedLongInteger = value;
+			}
+		}
 
 		/// <summary>
 		/// Retrieves the method.
@@ -716,14 +730,12 @@ namespace Mosa.Compiler.Framework
 		/// <param name="offset">The displacement.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public static Operand CreateStackParameter(MosaType type, int index, int offset, string name)
+		public static Operand CreateStackParameter(MosaType type, int index, string name)
 		{
 			var operand = new Operand(type);
 			operand.IsParameter = true;
 			operand.Index = index;
-			operand.Offset = offset;
 			operand.IsConstant = true;
-			operand.IsResolved = true;
 			operand.Name = name;
 			return operand;
 		}

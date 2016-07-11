@@ -27,16 +27,11 @@ namespace Mosa.Tool.Explorer
 				new OperandAssignmentStage(),
 				new StackSetupStage(),
 
-				//new StopStage(),
 				new CILProtectedRegionStage(),
 				new ExceptionStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-
-				//new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),
-
-				//new StopStage(),
 
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
@@ -52,9 +47,7 @@ namespace Mosa.Tool.Explorer
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 				new IRCleanupStage(),
 
-				//new StopStage(),
-
-				//(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
+				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 
 				new PlatformStubStage(),
 				new PlatformEdgeSplitStage(),
@@ -63,8 +56,6 @@ namespace Mosa.Tool.Explorer
 				new EmptyBlockRemovalStage(),
 				new BlockOrderingStage(),
 				new GraphVizStage(),
-
-				//new StopStage(),
 
 				new CodeGenerationStage(compilerOptions.EmitBinary),
 				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null

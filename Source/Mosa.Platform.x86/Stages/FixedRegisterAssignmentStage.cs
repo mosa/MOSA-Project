@@ -241,15 +241,6 @@ namespace Mosa.Platform.x86.Stages
 			HandleShiftOperation(context, X86.Sar);
 		}
 
-		///// <summary>
-		///// Visitation function for <see cref="IX86Visitor.Sal"/> instructions.
-		///// </summary>
-		///// <param name="context">The context.</param>
-		//public override void Sal(Context context)
-		//{
-		//	HandleShiftOperation(context, X86.Shl);
-		//}
-
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Shl"/> instructions.
 		/// </summary>
