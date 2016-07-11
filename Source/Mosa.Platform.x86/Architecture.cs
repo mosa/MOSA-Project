@@ -242,10 +242,6 @@ namespace Mosa.Platform.x86
 			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
 			);
-
-			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
-				new StopStage()
-			);
 		}
 
 		/// <summary>
@@ -279,26 +275,21 @@ namespace Mosa.Platform.x86
 		/// <param name="source">The source.</param>
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
-			X86Instruction move = null;
-			InstructionSize size = InstructionSize.None;
+			BaseInstruction instruction = X86.Mov;
+			InstructionSize size = InstructionSize.Size32;
 
-			if (destination.Type.IsR4)
+			if (destination.IsR4)
 			{
-				move = X86.Movss;
+				instruction = X86.Movss;
 				size = InstructionSize.Size32;
 			}
-			else if (destination.Type.IsR8)
+			else if (destination.IsR8)
 			{
-				move = X86.Movsd;
+				instruction = X86.Movsd;
 				size = InstructionSize.Size64;
 			}
-			else
-			{
-				move = X86.Mov;
-				size = InstructionSize.Size32;
-			}
 
-			context.AppendInstruction(move, size, destination, source);
+			context.AppendInstruction(instruction, size, destination, source);
 		}
 
 		public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
@@ -306,18 +297,35 @@ namespace Mosa.Platform.x86
 			BaseInstruction instruction = X86.MovStore;
 			InstructionSize size = InstructionSize.Size32;
 
-			if (destination.Type.IsR4)
+			if (value.IsR4)
 			{
 				instruction = X86.MovssStore;
 			}
-			else
-			if (destination.Type.IsR8)
+			else if (value.IsR8)
 			{
 				instruction = X86.MovsdStore;
 				size = InstructionSize.Size64;
 			}
 
 			context.AppendInstruction(instruction, size, null, destination, offset, value);
+		}
+
+		public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
+		{
+			BaseInstruction instruction = X86.MovLoad;
+			InstructionSize size = InstructionSize.Size32;
+
+			if (destination.IsR4)
+			{
+				instruction = X86.MovssLoad;
+			}
+			else if (destination.IsR8)
+			{
+				instruction = X86.MovsdLoad;
+				size = InstructionSize.Size64;
+			}
+
+			context.AppendInstruction(instruction, size, destination, source, offset);
 		}
 
 		/// <summary>

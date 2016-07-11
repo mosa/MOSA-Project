@@ -23,6 +23,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		protected readonly BasicBlocks BasicBlocks;
 		protected readonly BaseArchitecture Architecture;
 		protected readonly AddStackLocalDelegate AddStackLocal;
+		protected readonly Operand StackFrame;
 
 		private readonly int VirtualRegisterCount;
 		private readonly int PhysicalRegisterCount;
@@ -46,13 +47,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected readonly TraceLog Trace;
 
-		public BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, ITraceFactory traceFactory)
+		public BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, Operand stackFrame, ITraceFactory traceFactory)
 		{
 			TraceFactory = traceFactory;
 
 			BasicBlocks = basicBlocks;
 			Architecture = architecture;
 			AddStackLocal = addStackLocal;
+			StackFrame = stackFrame;
 
 			VirtualRegisterCount = virtualRegisters.Count;
 			PhysicalRegisterCount = architecture.RegisterSet.Length;
@@ -1321,7 +1323,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					{
 						var context = new Context(def.Index);
 
-						Architecture.InsertMoveInstruction(context, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
+						Architecture.InsertStoreInstruction(context, register.SpillSlotOperand, StackFrame, liveInterval.AssignedPhysicalOperand);
 
 						context.Marked = true;
 					}
@@ -1443,7 +1445,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (moveResolver == null)
 						continue;
 
-					moveResolver.InsertResolvingMoves(Architecture);
+					moveResolver.InsertResolvingMoves(Architecture, StackFrame);
 				}
 			}
 		}
@@ -1466,7 +1468,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var moveResolver = new MoveResolver(key.Index, !key.IsOnHalfStepForward, moves[key]);
 
-				moveResolver.InsertResolvingMoves(Architecture);
+				moveResolver.InsertResolvingMoves(Architecture, StackFrame);
 
 				if (insertTrace.Active)
 				{

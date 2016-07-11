@@ -36,6 +36,14 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private static readonly Operand[] emptyOperandList = new Operand[0];
 
+		/// <summary>
+		/// The stack frame
+		/// </summary>
+		public Operand StackFrame;
+
+		/// <summary>
+		/// The constant zero
+		/// </summary>
 		public Operand ConstantZero;
 
 		/// <summary>
@@ -203,6 +211,7 @@ namespace Mosa.Compiler.Framework
 			LocalStack = new List<Operand>();
 
 			ConstantZero = Operand.CreateConstant(TypeSystem, 0);
+			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 
 			Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
 			VirtualRegisters = new VirtualRegisters(Architecture);

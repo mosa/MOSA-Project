@@ -263,6 +263,19 @@ namespace Mosa.Platform.ARMv6
 		}
 
 		/// <summary>
+		/// Inserts the load instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="offset">The offset.</param>
+		/// <exception cref="NotImplementCompilerException"></exception>
+		public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
+		{
+			throw new NotImplementCompilerException();
+		}
+
+		/// <summary>
 		/// Create platform compound move.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>

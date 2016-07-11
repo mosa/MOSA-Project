@@ -294,7 +294,10 @@ namespace Mosa.Compiler.Framework
 					return ConstantSingleFloatingPoint == 0;
 				else if (IsNull)
 					return true;
-				throw new InvalidCompilerException();
+				else if (IsStackLocal)
+					return ConstantUnsignedLongInteger == 0;
+				else
+					throw new InvalidCompilerException();
 			}
 		}
 
@@ -319,6 +322,8 @@ namespace Mosa.Compiler.Framework
 					return ConstantSingleFloatingPoint == 1;
 				else if (IsNull)
 					return false;
+				else if (IsStackLocal)
+					return ConstantUnsignedLongInteger == 1;
 				throw new InvalidCompilerException();
 			}
 		}

@@ -96,6 +96,8 @@ namespace Mosa.Compiler.Framework
 
 		protected Operand ConstantZero { get { return MethodCompiler.ConstantZero; } }
 
+		protected Operand StackFrame { get { return MethodCompiler.StackFrame; } }
+
 		#endregion Properties
 
 		#region IPipelineStage Members

@@ -140,17 +140,15 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			}
 
-			var stackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
-
 			if (context.Operand1.IsStackLocal)
 			{
-				context.SetInstruction(X86.Lea, NativeInstructionSize, context.Result, stackFrame, context.Operand1);
+				context.SetInstruction(X86.Lea, NativeInstructionSize, context.Result, StackFrame, context.Operand1);
 			}
 			else
 			{
 				var offset = Operand.CreateConstant(TypeSystem, context.Operand1.Offset);
 
-				context.SetInstruction(X86.Lea, NativeInstructionSize, context.Result, stackFrame, offset);
+				context.SetInstruction(X86.Lea, NativeInstructionSize, context.Result, StackFrame, offset);
 			}
 		}
 
@@ -415,9 +413,8 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov, srcReg, src);
 
 			Debug.Assert(dest.IsStackLocal);
-			var register = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 
-			context.AppendInstruction(X86.Lea, dstReg, register, src);
+			context.AppendInstruction(X86.Lea, dstReg, StackFrame, src);
 
 			if (!offsetop.IsConstant)
 			{
@@ -571,7 +568,6 @@ namespace Mosa.Platform.x86.Stages
 			var dstReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var tmp = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var tmpLarge = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, SSE2Register.XMM1);
-			var stackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 
 			context.SetInstruction(IRInstruction.Kill, tmpLarge);
 
@@ -583,12 +579,12 @@ namespace Mosa.Platform.x86.Stages
 			{
 				Debug.Assert(src.IsOnStack);
 
-				context.AppendInstruction(X86.Lea, srcReg, stackFrame, src);
+				context.AppendInstruction(X86.Lea, srcReg, StackFrame, src);
 			}
 
 			Debug.Assert(dest.IsOnStack);
 
-			context.AppendInstruction(X86.Lea, dstReg, stackFrame, dest);
+			context.AppendInstruction(X86.Lea, dstReg, StackFrame, dest);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
@@ -724,9 +720,8 @@ namespace Mosa.Platform.x86.Stages
 			var tmpLarge = Operand.CreateCPURegister(TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
 
 			Debug.Assert(src.IsStackLocal);
-			var register = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 
-			context.SetInstruction(X86.Lea, srcReg, register, src);
+			context.SetInstruction(X86.Lea, srcReg, StackFrame, src);
 			context.AppendInstruction(X86.Mov, dstReg, dest);
 			context.AppendInstruction(IRInstruction.Kill, tmpLarge);
 

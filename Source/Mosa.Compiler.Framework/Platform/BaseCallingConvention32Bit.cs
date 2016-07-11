@@ -305,9 +305,8 @@ namespace Mosa.Compiler.Framework.Platform
 			}
 			else if (typeLayout.IsCompoundType(operand.Type))
 			{
-				var stackPointerRegister = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.Pointer, architecture.StackFrameRegister);
 				var offset2 = Operand.CreateConstant(compiler.TypeSystem, offset);
-				architecture.InsertCompoundMoveInstruction(compiler, context, scratch, offset2, stackPointerRegister, operand, typeLayout.GetTypeSize(operand.Type));
+				architecture.InsertCompoundMoveInstruction(compiler, context, scratch, offset2, compiler.StackFrame, operand, typeLayout.GetTypeSize(operand.Type));
 			}
 			else
 			{
@@ -351,9 +350,8 @@ namespace Mosa.Compiler.Framework.Platform
 			else if (typeLayout.IsCompoundType(operand.Type))
 			{
 				int size2 = typeLayout.GetTypeSize(operand.Type);
-				var stackPointerRegister = Operand.CreateCPURegister(typeLayout.TypeSystem.BuiltIn.Pointer, architecture.StackFrameRegister);
 				var OffsetOfFirstParameterOperand = Operand.CreateConstant(compiler.TypeSystem, OffsetOfFirstParameter);
-				architecture.InsertCompoundMoveInstruction(compiler, context, stackPointerRegister, OffsetOfFirstParameterOperand, stackPointerRegister, operand, size2);
+				architecture.InsertCompoundMoveInstruction(compiler, context, compiler.StackFrame, OffsetOfFirstParameterOperand, compiler.StackFrame, operand, size2);
 			}
 		}
 

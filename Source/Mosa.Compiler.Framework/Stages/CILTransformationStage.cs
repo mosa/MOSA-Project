@@ -20,13 +20,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStage, IPipelineStage
 	{
-		protected Operand stackFrame;
-
 		protected override void Setup()
 		{
 			base.Setup();
-
-			stackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 		}
 
 		protected override void PopulateVisitationDictionary()
@@ -280,11 +276,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (MustSignExtendOnLoad(source.Type))
 			{
-				context.SetInstruction(IRInstruction.LoadSignExtended, size, destination, stackFrame, constant);
+				context.SetInstruction(IRInstruction.LoadSignExtended, size, destination, StackFrame, constant);
 			}
 			else if (MustZeroExtendOnLoad(source.Type))
 			{
-				context.SetInstruction(IRInstruction.LoadZeroExtended, size, destination, stackFrame, constant);
+				context.SetInstruction(IRInstruction.LoadZeroExtended, size, destination, StackFrame, constant);
 			}
 			else if (source.Type != null && TypeLayout.IsCompoundType(source.Type))
 			{
@@ -294,7 +290,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.Load2, size, destination, stackFrame, constant);
+				context.SetInstruction(IRInstruction.Load2, size, destination, StackFrame, constant);
 			}
 		}
 
@@ -487,7 +483,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (context.Operand1.IsVirtualRegister)
 			{
-				context.SetInstruction(IRInstruction.Store, context.Size, null, stackFrame, context.Result, context.Operand1);
+				context.SetInstruction(IRInstruction.Store, context.Size, null, StackFrame, context.Result, context.Operand1);
 			}
 
 			context.MosaType = type;
@@ -503,7 +499,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, context.Result.Offset);
 
-			context.SetInstruction(IRInstruction.Store, context.Size, null, stackFrame, constant, context.Operand1);
+			context.SetInstruction(IRInstruction.Store, context.Size, null, StackFrame, constant, context.Operand1);
 		}
 
 		/// <summary>
@@ -523,7 +519,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.Store, size, null, stackFrame, context.Operand1, context.Operand2);
+				context.SetInstruction(IRInstruction.Store, size, null, StackFrame, context.Operand1, context.Operand2);
 			}
 
 			context.MosaType = type;

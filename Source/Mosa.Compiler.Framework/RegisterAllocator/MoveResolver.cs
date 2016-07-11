@@ -157,7 +157,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return moves;
 		}
 
-		public void InsertResolvingMoves(BaseArchitecture architecture)
+		public void InsertResolvingMoves(BaseArchitecture architecture, Operand stackFrame)
 		{
 			if (Moves.Count == 0)
 				return;
@@ -181,7 +181,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				if (move.Value == ResolvedMoveType.Move)
 				{
-					architecture.InsertMoveInstruction(context, move.Destination, move.Source);
+					architecture.InsertLoadInstruction(context, move.Destination, stackFrame, move.Source);
 				}
 				else
 				{

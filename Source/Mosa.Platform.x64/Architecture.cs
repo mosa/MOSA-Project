@@ -252,7 +252,28 @@ namespace Mosa.Platform.x64
 			throw new NotImplementCompilerException();
 		}
 
+		/// <summary>
+		/// Inserts the store instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
+		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
+		{
+			throw new NotImplementCompilerException();
+		}
+
+		/// <summary>
+		/// Inserts the load instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="offset">The offset.</param>
+		/// <exception cref="NotImplementCompilerException"></exception>
+		public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
 		{
 			throw new NotImplementCompilerException();
 		}

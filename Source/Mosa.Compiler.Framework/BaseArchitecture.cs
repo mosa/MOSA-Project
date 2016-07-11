@@ -151,6 +151,15 @@ namespace Mosa.Compiler.Framework
 		public abstract void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value);
 
 		/// <summary>
+		/// Inserts the load instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="offset">The offset.</param>
+		public abstract void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset);
+
+		/// <summary>
 		/// Create platform compound move.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>

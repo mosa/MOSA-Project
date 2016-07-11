@@ -174,9 +174,6 @@ namespace Mosa.Platform.x86
 			}
 			else if (displacement.IsSymbol)
 			{
-				// FIXME! remove assertion
-				Debug.Assert(displacement.Offset == 0);
-
 				var section = (displacement.Method != null) ? SectionKind.Text : SectionKind.ROData;
 
 				var symbol = linker.GetSymbol(displacement.Name, section);

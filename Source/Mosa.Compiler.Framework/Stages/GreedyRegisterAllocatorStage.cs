@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			var allocator = new GreedyRegisterAllocator(BasicBlocks, MethodCompiler.VirtualRegisters, Architecture, MethodCompiler.AddStackLocal, this);
+			var allocator = new GreedyRegisterAllocator(BasicBlocks, MethodCompiler.VirtualRegisters, Architecture, MethodCompiler.AddStackLocal, StackFrame, this);
 
 			allocator.Start();
 
