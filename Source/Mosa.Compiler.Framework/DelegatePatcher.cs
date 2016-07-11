@@ -95,7 +95,6 @@ namespace Mosa.Compiler.Framework
 			Operand opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
 			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.I4);
 
-			//Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(methodCompiler.Method.Signature.ReturnType) : null;
 			Operand opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
 			Operand c0 = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
 

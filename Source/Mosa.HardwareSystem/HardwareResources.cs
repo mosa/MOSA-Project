@@ -44,9 +44,8 @@ namespace Mosa.HardwareSystem
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="HardwareResources"/> class.
+		/// Initializes a new instance of the <see cref="HardwareResources" /> class.
 		/// </summary>
-		/// <param name="resourceManager">The resource manager.</param>
 		/// <param name="ioPortRegions">The io port regions.</param>
 		/// <param name="memoryRegions">The memory regions.</param>
 		/// <param name="interruptHandler">The interrupt handler.</param>

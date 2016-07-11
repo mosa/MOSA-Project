@@ -160,7 +160,7 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		protected DriveInfo[] driveInfo;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="IDEController"/> class.
+		/// Initializes a new instance of the <see cref="PCIIDEController"/> class.
 		/// </summary>
 		public PCIIDEController()
 		{
