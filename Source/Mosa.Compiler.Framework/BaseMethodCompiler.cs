@@ -370,6 +370,23 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Allocates the virtual register or stack slot.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public Operand AllocateVirtualRegisterOrStackSlot(MosaType type)
+		{
+			if (TypeLayout.IsCompoundType(type))
+			{
+				return AddStackLocal(type);
+			}
+			else
+			{
+				return CreateVirtualRegister(type.GetStackType());
+			}
+		}
+
+		/// <summary>
 		/// Allocates the local variable virtual registers.
 		/// </summary>
 		/// <param name="locals">The locals.</param>

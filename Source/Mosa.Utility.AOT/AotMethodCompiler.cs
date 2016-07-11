@@ -35,10 +35,10 @@ namespace Mosa.Utility.Aot
 				new ExceptionStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-				new ConvertCompoundStage(),
+
+				//new ConvertCompoundStage(),
 				new UnboxValueTypeStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
-				(compilerOptions.EnableVariablePromotion) ? new PromoteTempVariablesStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,

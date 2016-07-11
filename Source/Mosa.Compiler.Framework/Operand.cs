@@ -144,6 +144,14 @@ namespace Mosa.Compiler.Framework
 		public bool IsParameter { get; private set; }
 
 		/// <summary>
+		/// Gets a value indicating whether this instance is on stack.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is on stack; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsOnStack { get { return IsStackLocal || IsParameter; } }
+
+		/// <summary>
 		/// Determines if the operand is a ssa operand.
 		/// </summary>
 		public bool IsSSA { get; private set; }

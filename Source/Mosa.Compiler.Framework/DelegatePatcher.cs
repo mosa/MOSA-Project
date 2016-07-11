@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework
 			Operand instanceOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, instanceOffset);
 
 			var size = methodCompiler.Architecture.NativeInstructionSize;
-			bool withReturn = (methodCompiler.Method.Signature.ReturnType != null);
+			bool withReturn = (methodCompiler.Method.Signature.ReturnType == null) ? false : !methodCompiler.Method.Signature.ReturnType.IsVoid;
 
 			Context b0 = new Context(CreateMethodStructure(methodCompiler, false));
 			Context b1 = new Context(methodCompiler.BasicBlocks.CreateBlock());
@@ -95,7 +95,8 @@ namespace Mosa.Compiler.Framework
 			Operand opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
 			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.I4);
 
-			Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(methodCompiler.Method.Signature.ReturnType) : null;
+			//Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(methodCompiler.Method.Signature.ReturnType) : null;
+			Operand opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
 			Operand c0 = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
 
 			b0.AppendInstruction(IRInstruction.Load, size, opMethod, thisOperand, methodPointerOffsetOperand);

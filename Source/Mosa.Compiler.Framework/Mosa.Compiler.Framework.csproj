@@ -165,12 +165,9 @@
     <Compile Include="Stages\SparseConditionalConstantPropagationStage.cs" />
     <Compile Include="Stages\MethodExceptionLookupTableStage.cs" />
     <Compile Include="Stages\MethodLookupTableStage.cs" />
-    <Compile Include="Stages\PromoteTempVariablesStage.cs" />
     <Compile Include="Stages\ProtectedRegionLayoutStage.cs" />
     <Compile Include="Stages\ExceptionStage.cs" />
-    <Compile Include="Stages\ConvertCompoundStage.cs" />
     <Compile Include="Stages\MapFileGenerationStage.cs" />
-    <Compile Include="Stages\PromoteLocalVariablesStage.cs" />
     <Compile Include="Stages\StackSlotStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />

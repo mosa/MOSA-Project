@@ -39,7 +39,6 @@ namespace Mosa.Tool.Explorer
 				//new StopStage(),
 
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
-				(compilerOptions.EnableVariablePromotion) ? new PromoteTempVariablesStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
@@ -52,7 +51,8 @@ namespace Mosa.Tool.Explorer
 
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 				new IRCleanupStage(),
-				new StopStage(),
+
+				//new StopStage(),
 
 				//(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 

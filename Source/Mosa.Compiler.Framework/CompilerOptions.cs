@@ -65,14 +65,6 @@ namespace Mosa.Compiler.Framework
 		public int DebugRestrictOptimizationByCount { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether [enable promote temporary variables optimization].
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if [enable promote temporary variables optimization]; otherwise, <c>false</c>.
-		/// </value>
-		public bool EnableVariablePromotion { get; set; }
-
-		/// <summary>
 		/// Gets or sets a value indicating whether [enable conditional constant propagation].
 		/// </summary>
 		/// <value>
@@ -260,7 +252,6 @@ namespace Mosa.Compiler.Framework
 		{
 			EnableSSA = true;
 			EnableOptimizations = true;
-			EnableVariablePromotion = true;
 			EnableSparseConditionalConstantPropagation = true;
 			EnableInlinedMethods = true;
 			BaseAddress = 0x00400000;

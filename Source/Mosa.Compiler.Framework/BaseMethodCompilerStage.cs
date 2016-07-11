@@ -183,6 +183,16 @@ namespace Mosa.Compiler.Framework
 			return MethodCompiler.VirtualRegisters.Allocate(type);
 		}
 
+		/// <summary>
+		/// Allocates the virtual register or stack slot.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public Operand AllocateVirtualRegisterOrStackSlot(MosaType type)
+		{
+			return MethodCompiler.AllocateVirtualRegisterOrStackSlot(type);
+		}
+
 		#endregion Methods
 
 		#region Block Operations

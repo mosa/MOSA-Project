@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (value.IsVirtualRegister || value.IsStackLocal || value.IsParameter)
+					if (value.IsVirtualRegister || value.IsOnStack)
 					{
 						value.Uses.Add(this);
 					}
@@ -155,7 +155,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (value.IsVirtualRegister || value.IsStackLocal || value.IsParameter)
+					if (value.IsVirtualRegister || value.IsOnStack)
 					{
 						value.Uses.Add(this);
 					}
@@ -181,7 +181,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (value.IsVirtualRegister || value.IsStackLocal || value.IsParameter)
+					if (value.IsVirtualRegister || value.IsOnStack)
 					{
 						value.Uses.Add(this);
 					}
@@ -242,7 +242,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (value.IsVirtualRegister || value.IsStackLocal || value.IsParameter)
+					if (value.IsVirtualRegister || value.IsOnStack)
 					{
 						value.Definitions.Add(this);
 					}
@@ -267,7 +267,7 @@ namespace Mosa.Compiler.Framework
 				}
 				if (value != null)
 				{
-					if (value.IsVirtualRegister || value.IsStackLocal || value.IsParameter)
+					if (value.IsVirtualRegister || value.IsOnStack)
 					{
 						value.Definitions.Add(this);
 					}
@@ -652,7 +652,7 @@ namespace Mosa.Compiler.Framework
 
 						if (operand != null)
 						{
-							if (operand.IsVirtualRegister || operand.IsStackLocal || operand.IsParameter)
+							if (operand.IsVirtualRegister || operand.IsOnStack)
 							{
 								operand.Uses.Add(this);
 							}

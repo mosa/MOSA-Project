@@ -116,9 +116,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void Optimize()
 		{
-			if (MethodCompiler.Compiler.CompilerOptions.EnableVariablePromotion)
-				PromoteLocalVariable();
-
 			foreach (var block in BasicBlocks)
 			{
 				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
@@ -156,30 +153,6 @@ namespace Mosa.Compiler.Framework.Stages
 							virtualRegisters.AddIfNew(op);
 					}
 				}
-			}
-
-			bool change = true;
-			while (change)
-			{
-				change = false;
-
-				if (MethodCompiler.Compiler.CompilerOptions.EnableVariablePromotion)
-					if (PromoteLocalVariable())
-						change = true;
-
-				if (ShouldStop)
-					return;
-
-				//if (Reduce64BitOperationsTo32Bit())
-				//	change = true;
-
-				if (change)
-				{
-					ProcessWorkList();
-				}
-
-				if (ShouldStop)
-					return;
 			}
 		}
 

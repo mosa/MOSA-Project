@@ -132,7 +132,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddressOf(Context context)
 		{
-			Debug.Assert(context.Operand1.IsStackLocal | context.Operand1.IsParameter | context.Operand1.IsField);
+			Debug.Assert(context.Operand1.IsOnStack | context.Operand1.IsField);
 
 			if (context.Operand1.IsField)
 			{
@@ -581,12 +581,12 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				Debug.Assert(src.IsStackLocal);
+				Debug.Assert(src.IsOnStack);
 
 				context.AppendInstruction(X86.Lea, srcReg, stackFrame, src);
 			}
 
-			Debug.Assert(dest.IsStackLocal || dest.IsParameter);
+			Debug.Assert(dest.IsOnStack);
 
 			context.AppendInstruction(X86.Lea, dstReg, stackFrame, dest);
 
