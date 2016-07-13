@@ -88,6 +88,35 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
+		public void LoadArguments(string[] args)
+		{
+			for (int i = 0; i < args.Length; i++)
+			{
+				var arg = args[i];
+
+				switch (arg.ToLower())
+				{
+					case "-inline": cbEnableInlinedMethods.Checked = true; continue;
+					case "-inline-off": cbEnableInlinedMethods.Checked = false; continue;
+					case "-threading-off": cbEnableInlinedMethods.Checked = false; continue;
+					case "-no-code": cbEnableBinaryCodeGeneration.Checked = false; continue;
+					case "-no-ssa": cbEnableSSA.Checked = false; continue;
+					case "-no-ir-optimizations": cbEnableOptimizations.Checked = false; continue;
+					case "-no-sparse": cbEnableSparseConditionalConstantPropagation.Checked = false; continue;
+					default: break;
+				}
+
+				if (arg.IndexOf(Path.DirectorySeparatorChar) >= 0)
+				{
+					LoadAssembly(arg);
+				}
+				else
+				{
+					LoadAssembly(Path.Combine(Directory.GetCurrentDirectory(), arg));
+				}
+			}
+		}
+
 		public void LoadAssembly(string filename)
 		{
 			LoadAssembly(filename, cbPlatform.Text);
@@ -211,11 +240,11 @@ namespace Mosa.Tool.Explorer
 
 		private void SetCompilerOptions()
 		{
-			Compiler.CompilerOptions.EnableSSA = enableSSA.Checked;
-			Compiler.CompilerOptions.EnableOptimizations = enableOptimizations.Checked;
-			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = enableSparseConditionalConstantPropagation.Checked;
-			Compiler.CompilerOptions.EmitBinary = enableBinaryCodeGeneration.Checked;
-			Compiler.CompilerOptions.EnableInlinedMethods = enableInlinedMethods.Checked;
+			Compiler.CompilerOptions.EnableSSA = cbEnableSSA.Checked;
+			Compiler.CompilerOptions.EnableOptimizations = cbEnableOptimizations.Checked;
+			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
+			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
+			Compiler.CompilerOptions.EnableInlinedMethods = cbEnableInlinedMethods.Checked;
 		}
 
 		private void CleanGUI()

@@ -2307,24 +2307,24 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">Provides the transformation context.</param>
 		private void ProcessLoadInstruction(Context context)
 		{
-			var source = context.Operand1;
 			var destination = context.Result;
+			var source = context.Operand1;
 			var size = GetInstructionSize(source.Type);
 
 			if (!source.IsVirtualRegister)
 			{
-				BaseIRInstruction loadInstruction = IRInstruction.Load;
+				BaseIRInstruction instruction = IRInstruction.Load;
 
 				if (MustSignExtendOnLoad(source.Type))
 				{
-					loadInstruction = IRInstruction.LoadSignExtended;
+					instruction = IRInstruction.LoadSignExtended;
 				}
 				else if (MustZeroExtendOnLoad(source.Type))
 				{
-					loadInstruction = IRInstruction.LoadZeroExtended;
+					instruction = IRInstruction.LoadZeroExtended;
 				}
 
-				context.SetInstruction(loadInstruction, size, destination, source, ConstantZero);
+				context.SetInstruction(instruction, size, destination, StackFrame, source);
 			}
 			else
 			{

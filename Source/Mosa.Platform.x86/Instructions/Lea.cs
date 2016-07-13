@@ -12,11 +12,17 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Lea : TwoOperandInstruction
 	{
-		#region Data Members
+		#region Properties
 
-		private static readonly OpCode opcode = new OpCode(new byte[] { 0x8D });
+		/// <summary>
+		/// Gets a value indicating whether [three two address conversion].
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if [three two address conversion]; otherwise, <c>false</c>.
+		/// </value>
+		public override bool ThreeTwoAddressConversion { get { return false; } }
 
-		#endregion Data Members
+		#endregion Properties
 
 		#region Methods
 

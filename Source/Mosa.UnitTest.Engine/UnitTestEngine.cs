@@ -63,7 +63,6 @@ namespace Mosa.UnitTest.Engine
 			{
 				EnableSSA = true,
 				EnableIROptimizations = true,
-				EnableVariablePromotion = true,
 				EnableSparseConditionalConstantPropagation = true,
 				Emulator = EmulatorType.Qemu,
 				ImageFormat = ImageFormat.IMG,

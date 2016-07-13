@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using MetroFramework.Forms;
 using Mosa.Compiler.Common;
 using Mosa.Utility.BootImage;
 using Mosa.Utility.Launcher;
@@ -7,7 +8,6 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using MetroFramework.Forms;
 
 namespace Mosa.Tool.Launcher
 {
@@ -56,7 +56,6 @@ namespace Mosa.Tool.Launcher
 		{
 			Options.EnableSSA = cbEnableSSA.Checked;
 			Options.EnableIROptimizations = cbEnableIROptimizations.Checked;
-			Options.EnableVariablePromotion = cbEnableVariablePromotion.Checked;
 			Options.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 			Options.GenerateASMFile = cbGenerateASMFile.Checked;
 			Options.GenerateMapFile = cbGenerateMapFile.Checked;
@@ -163,7 +162,6 @@ namespace Mosa.Tool.Launcher
 		{
 			cbEnableSSA.Checked = Options.EnableSSA;
 			cbEnableIROptimizations.Checked = Options.EnableIROptimizations;
-			cbEnableVariablePromotion.Checked = Options.EnableVariablePromotion;
 			cbEnableSparseConditionalConstantPropagation.Checked = Options.EnableSparseConditionalConstantPropagation;
 			cbGenerateASMFile.Checked = Options.GenerateASMFile;
 			cbGenerateMapFile.Checked = Options.GenerateMapFile;

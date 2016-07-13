@@ -17,10 +17,7 @@ namespace Mosa.Tool.Explorer
 			Application.SetCompatibleTextRenderingDefault(false);
 			var main = new Main();
 
-			if (args.Length != 0)
-			{
-				main.LoadAssembly(args[0]);
-			}
+			main.LoadArguments(args);
 
 			Application.Run(main);
 		}

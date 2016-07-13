@@ -136,9 +136,17 @@ namespace Mosa.TestWorld.x86.Tests
 		public static bool StructNotBoxed()
 		{
 			NotBoxedStruct s = new NotBoxedStruct();
-			s.ToString();
-			s.ToString();
-			s.ToString();
+
+			//s.ToString();
+			//s.ToString();
+			//s.ToString();
+			return s.I == 3;
+		}
+
+		public static bool TestField()
+		{
+			TestClassAA s = new TestClassAA();
+
 			return s.I == 3;
 		}
 
@@ -287,10 +295,10 @@ namespace Mosa.TestWorld.x86.Tests
 
 			internal static bool GetItem(uint index)
 			{
-				//increpmenting a pointer
+				//incrementing a pointer
 				var addr1 = (uint)(pageDirectoryEntries + index);
 
-				//increpmenting a UInt32
+				//incrementing a UInt32
 				var addr2 = pageDirectoryAddress + (index * 4);  //struct PageDirectoryEntry as a size of 4 bytes
 
 				return addr1 == addr2;
@@ -340,5 +348,10 @@ namespace Mosa.TestWorld.x86.Tests
 			A = a;
 			B = b;
 		}
+	}
+
+	public struct TestClassAA
+	{
+		public int I;
 	}
 }

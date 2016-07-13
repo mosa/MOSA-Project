@@ -29,8 +29,6 @@ namespace Mosa.Utility.Launcher
 
 		public bool EnableIROptimizations { get; set; }
 
-		public bool EnableVariablePromotion { get; set; }
-
 		public bool EnableSparseConditionalConstantPropagation { get; set; }
 
 		public bool EnableInlinedMethods { get; set; }
@@ -75,7 +73,6 @@ namespace Mosa.Utility.Launcher
 		{
 			EnableSSA = true;
 			EnableIROptimizations = true;
-			EnableVariablePromotion = true;
 			EnableSparseConditionalConstantPropagation = true;
 			Emulator = EmulatorType.Qemu;
 			ImageFormat = ImageFormat.IMG;
@@ -149,6 +146,10 @@ namespace Mosa.Utility.Launcher
 					case "-relocations-false": EmitRelocations = false; continue;
 					case "-x86-irq-methods": Emitx86IRQMethods = true; continue;
 					case "-x86-irq-methods-false": Emitx86IRQMethods = false; continue;
+					case "-no-ssa": EnableSSA = false; continue;
+					case "-no-ir-optimizations": EnableIROptimizations = false; continue;
+					case "-no-sparse": EnableSparseConditionalConstantPropagation = false; continue;
+
 					default: break;
 				}
 

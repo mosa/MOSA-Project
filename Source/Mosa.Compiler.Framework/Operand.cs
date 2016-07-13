@@ -944,17 +944,23 @@ namespace Mosa.Compiler.Framework
 					sb.Append("unresolved");
 				else if (IsNull)
 					sb.Append("null");
+				else if (IsOnStack)
+					sb.AppendFormat("{0}", ConstantSignedLongInteger);
 				else if (IsUnsigned || IsBoolean || IsChar || IsPointer)
+				{
 					if (IsU8)
 						sb.AppendFormat("{0}", ConstantUnsignedLongInteger);
 					else
 						sb.AppendFormat("{0}", ConstantUnsignedInteger);
+				}
 				else if (IsSigned)
+				{
 					if (IsI8)
 						sb.AppendFormat("{0}", ConstantSignedLongInteger);
 					else
 						sb.AppendFormat("{0}", ConstantSignedInteger);
-				if (IsR8)
+				}
+				else if (IsR8)
 					sb.AppendFormat("{0}", ConstantDoubleFloatingPoint);
 				else if (IsR4)
 					sb.AppendFormat("{0}", ConstantSingleFloatingPoint);
