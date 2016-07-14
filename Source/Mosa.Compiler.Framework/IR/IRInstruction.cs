@@ -4,7 +4,9 @@ namespace Mosa.Compiler.Framework.IR
 {
 	public static class IRInstruction
 	{
-		public static readonly AddFloat AddFloat = new AddFloat();
+		public static readonly AddFloatR4 AddFloatR4 = new AddFloatR4();
+
+		public static readonly AddFloatR8 AddFloatR8 = new AddFloatR8();
 
 		public static readonly AddSigned AddSigned = new AddSigned();
 
@@ -16,11 +18,13 @@ namespace Mosa.Compiler.Framework.IR
 
 		public static readonly Break Break = new Break();
 
-		public static readonly DivFloat DivFloat = new DivFloat();
-
 		public static readonly DivSigned DivSigned = new DivSigned();
 
 		public static readonly DivUnsigned DivUnsigned = new DivUnsigned();
+
+		public static readonly DivFloatR4 DivFloatR4 = new DivFloatR4();
+
+		public static readonly DivFloatR8 DivFloatR8 = new DivFloatR8();
 
 		public static readonly Epilogue Epilogue = new Epilogue();
 
@@ -36,15 +40,17 @@ namespace Mosa.Compiler.Framework.IR
 
 		public static readonly Jmp Jmp = new Jmp();
 
-		public static readonly Load Load = new Load();
+		public static readonly LoadInt LoadInt = new LoadInt();
 
-		public static readonly Load2 Load2 = new Load2();
+		public static readonly LoadFloatR4 LoadFloatR4 = new LoadFloatR4();
 
-		public static readonly CompoundLoad CompoundLoad = new CompoundLoad();
+		public static readonly LoadFloatR8 LoadFloatR8 = new LoadFloatR8();
 
 		public static readonly LoadZeroExtended LoadZeroExtended = new LoadZeroExtended();
 
 		public static readonly LoadSignExtended LoadSignExtended = new LoadSignExtended();
+
+		public static readonly CompoundLoad CompoundLoad = new CompoundLoad();
 
 		public static readonly LogicalAnd LogicalAnd = new LogicalAnd();
 
@@ -58,21 +64,25 @@ namespace Mosa.Compiler.Framework.IR
 
 		public static readonly CompoundMove CompoundMove = new CompoundMove();
 
-		public static readonly MulFloat MulFloat = new MulFloat();
-
 		public static readonly MulSigned MulSigned = new MulSigned();
 
 		public static readonly MulUnsigned MulUnsigned = new MulUnsigned();
+
+		public static readonly MulFloatR4 MulFloatR4 = new MulFloatR4();
+
+		public static readonly MulFloatR8 MulFloatR8 = new MulFloatR8();
 
 		public static readonly Phi Phi = new Phi();
 
 		public static readonly Prologue Prologue = new Prologue();
 
-		public static readonly RemFloat RemFloat = new RemFloat();
-
 		public static readonly RemSigned RemSigned = new RemSigned();
 
 		public static readonly RemUnsigned RemUnsigned = new RemUnsigned();
+
+		public static readonly RemFloatR4 RemFloatR4 = new RemFloatR4();
+
+		public static readonly RemFloatR8 RemFloatR8 = new RemFloatR8();
 
 		public static readonly Return Return = new Return();
 
@@ -90,11 +100,13 @@ namespace Mosa.Compiler.Framework.IR
 
 		public static readonly CompoundStore CompoundStore = new CompoundStore();
 
-		public static readonly SubFloat SubFloat = new SubFloat();
-
 		public static readonly SubSigned SubSigned = new SubSigned();
 
 		public static readonly SubUnsigned SubUnsigned = new SubUnsigned();
+
+		public static readonly SubFloatR4 SubFloatR4 = new SubFloatR4();
+
+		public static readonly SubFloatR8 SubFloatR8 = new SubFloatR8();
 
 		public static readonly ZeroExtendedMove ZeroExtendedMove = new ZeroExtendedMove();
 

@@ -372,9 +372,11 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Call(node);
 			}
-			else if (instruction == IRInstruction.Load ||
+			else if (instruction == IRInstruction.LoadInt ||
 				node.Instruction == IRInstruction.LoadSignExtended ||
-				node.Instruction == IRInstruction.LoadZeroExtended)
+				node.Instruction == IRInstruction.LoadZeroExtended ||
+				node.Instruction == IRInstruction.LoadFloatR4 ||
+				node.Instruction == IRInstruction.LoadFloatR8)
 			{
 				Load(node);
 			}

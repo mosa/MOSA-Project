@@ -274,23 +274,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, source.Offset);
 
-			if (MustSignExtendOnLoad(source.Type))
+			if (source.Type != null && TypeLayout.IsCompoundType(source.Type))
 			{
-				context.SetInstruction(IRInstruction.LoadSignExtended, size, destination, StackFrame, constant);
-			}
-			else if (MustZeroExtendOnLoad(source.Type))
-			{
-				context.SetInstruction(IRInstruction.LoadZeroExtended, size, destination, StackFrame, constant);
-			}
-			else if (source.Type != null && TypeLayout.IsCompoundType(source.Type))
-			{
-				//fixme: triggers covert compound stage
-				context.SetInstruction(IRInstruction.CompoundMove, destination, source);
+				context.SetInstruction(IRInstruction.CompoundLoad, destination, StackFrame, constant, source);
 				context.MosaType = source.Type;
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.Load2, size, destination, StackFrame, constant);
+				var loadInstruction = GetLoadInstruction(source.Type);
+				context.SetInstruction(loadInstruction, size, destination, StackFrame, constant);
 			}
 		}
 
@@ -358,16 +350,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
 
-			BaseIRInstruction loadInstruction = IRInstruction.Load;
-
-			if (MustSignExtendOnLoad(type))
-			{
-				loadInstruction = IRInstruction.LoadSignExtended;
-			}
-			else if (MustZeroExtendOnLoad(type))
-			{
-				loadInstruction = IRInstruction.LoadZeroExtended;
-			}
+			var loadInstruction = GetLoadInstruction(type);
 
 			var size = GetInstructionSize(type);
 			context.SetInstruction(loadInstruction, size, destination, source, ConstantZero);
@@ -383,16 +366,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var fieldType = context.MosaField.FieldType;
 			var destination = context.Result;
 
-			BaseIRInstruction loadInstruction = IRInstruction.Load;
-
-			if (MustSignExtendOnLoad(fieldType))
-			{
-				loadInstruction = IRInstruction.LoadSignExtended;
-			}
-			else if (MustZeroExtendOnLoad(fieldType))
-			{
-				loadInstruction = IRInstruction.LoadZeroExtended;
-			}
+			var loadInstruction = GetLoadInstruction(fieldType);
 
 			var size = GetInstructionSize(fieldType);
 			context.SetInstruction(loadInstruction, size, destination, Operand.CreateField(context.MosaField), ConstantZero);
@@ -703,12 +677,12 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (context.Operand1.IsR4)
 			{
 				Operand minusOne = Operand.CreateConstant(TypeSystem, -1.0f);
-				context.SetInstruction(IRInstruction.MulFloat, context.Result, minusOne, context.Operand1);
+				context.SetInstruction(IRInstruction.MulFloatR4, context.Result, minusOne, context.Operand1);
 			}
 			else if (context.Operand1.IsR8)
 			{
 				Operand minusOne = Operand.CreateConstant(TypeSystem, -1.0d);
-				context.SetInstruction(IRInstruction.MulFloat, context.Result, minusOne, context.Operand1);
+				context.SetInstruction(IRInstruction.MulFloatR8, context.Result, minusOne, context.Operand1);
 			}
 			else
 			{
@@ -820,13 +794,13 @@ namespace Mosa.Compiler.Framework.Stages
 					int methodPointerOffset = (NativePointerSize * 4);
 
 					// Get the TypeDef pointer
-					context.SetInstruction(IRInstruction.Load, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
+					context.SetInstruction(IRInstruction.LoadInt, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 					// Get the MethodDef pointer
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodDefinition, typeDefinition, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
+					context.AppendInstruction(IRInstruction.LoadInt, NativeInstructionSize, methodDefinition, typeDefinition, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
 
 					// Get the address of the method
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+					context.AppendInstruction(IRInstruction.LoadInt, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 				}
 				else
 				{
@@ -847,19 +821,19 @@ namespace Mosa.Compiler.Framework.Stages
 					Operand interfaceMethodTablePtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 					// Get the TypeDef pointer
-					context.SetInstruction(IRInstruction.Load, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
+					context.SetInstruction(IRInstruction.LoadInt, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 					// Get the Interface Slot Table pointer
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, interfaceSlotPtr, typeDefinition, Operand.CreateConstant(TypeSystem, interfaceSlotTableOffset));
+					context.AppendInstruction(IRInstruction.LoadInt, NativeInstructionSize, interfaceSlotPtr, typeDefinition, Operand.CreateConstant(TypeSystem, interfaceSlotTableOffset));
 
 					// Get the Interface Method Table pointer
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant(TypeSystem, interfaceMethodTableOffset));
+					context.AppendInstruction(IRInstruction.LoadInt, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant(TypeSystem, interfaceMethodTableOffset));
 
 					// Get the MethodDef pointer
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
+					context.AppendInstruction(IRInstruction.LoadInt, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
 
 					// Get the address of the method
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+					context.AppendInstruction(IRInstruction.LoadInt, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 				}
 
 				context.AppendInstruction(IRInstruction.Nop);
@@ -1095,7 +1069,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var size = GetInstructionSize(tmp.Type);
 
-			context.AppendInstruction(IRInstruction.Load, size, result, tmp, ConstantZero);
+			var loadInstruction = GetLoadInstruction(result.Type);
+
+			context.AppendInstruction(loadInstruction, size, result, tmp, ConstantZero);
 			context.MosaType = type;
 			return;
 		}
@@ -1121,7 +1097,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!type.IsValueType)
 			{
-				context.ReplaceInstructionOnly(IRInstruction.Move);
+				Debug.Assert(result.IsVirtualRegister);
+				Debug.Assert(value.IsVirtualRegister);
+
+				var moveInstruction = GetMoveInstruction(type);
+				context.ReplaceInstructionOnly(moveInstruction);
 				return;
 			}
 
@@ -1242,7 +1222,6 @@ namespace Mosa.Compiler.Framework.Stages
 			 * into the generated image. This won't work this way forever: As soon as we'll support
 			 * a real AppDomain and real string interning, this code will have to go away and will
 			 * be replaced by a proper VM call.
-			 *
 			 */
 
 			BaseLinker linker = MethodCompiler.Linker;
@@ -1294,16 +1273,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int offset = TypeLayout.GetFieldOffset(field);
 			Operand offsetOperand = Operand.CreateConstant(TypeSystem, offset);
 
-			BaseIRInstruction loadInstruction = IRInstruction.Load;
-
-			if (MustSignExtendOnLoad(field.FieldType))
-			{
-				loadInstruction = IRInstruction.LoadSignExtended;
-			}
-			else if (MustZeroExtendOnLoad(field.FieldType))
-			{
-				loadInstruction = IRInstruction.LoadZeroExtended;
-			}
+			var loadInstruction = GetLoadInstruction(field.FieldType);
 
 			Debug.Assert(offsetOperand != null);
 
@@ -1429,7 +1399,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Ldlen(Context context)
 		{
 			var offset = Operand.CreateConstant(TypeSystem, NativePointerSize * 2);
-			context.SetInstruction(IRInstruction.Load2, InstructionSize.Size32, context.Result, context.Operand1, offset);
+			context.SetInstruction(IRInstruction.LoadInt, InstructionSize.Size32, context.Result, context.Operand1, offset);
 		}
 
 		/// <summary>
@@ -1477,21 +1447,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Array bounds check
 			AddArrayBoundsCheck(context.InsertBefore(), arrayOperand, arrayIndexOperand);
 
-			BaseIRInstruction loadInstruction = IRInstruction.Load; // todo: change to Load2 once 64-bit support is fixed
-
-			if (MustSignExtendOnLoad(arraySigType.ElementType))
-			{
-				loadInstruction = IRInstruction.LoadSignExtended;
-			}
-			else if (MustZeroExtendOnLoad(arraySigType.ElementType))
-			{
-				loadInstruction = IRInstruction.LoadZeroExtended;
-			}
-
-			//else if (!arraySigType.IsUI8)
-			//{
-			//	loadInstruction = IRInstruction.Load2;
-			//}
+			var loadInstruction = GetLoadInstruction(arraySigType.ElementType);
 
 			//
 			// The sequence we're emitting is:
@@ -1601,7 +1557,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var size = GetInstructionSize(tmp.Type);
 
-			context.AppendInstruction(IRInstruction.Load, size, result, tmp, ConstantZero);
+			var loadInstruction = GetLoadInstruction(result.Type);
+
+			context.AppendInstruction(loadInstruction, size, result, tmp, ConstantZero);
 			context.MosaType = type;
 			return;
 		}
@@ -1674,7 +1632,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Add(Context context)
 		{
-			Replace(context, IRInstruction.AddFloat, IRInstruction.AddSigned, IRInstruction.AddUnsigned);
+			Replace(context, IRInstruction.AddFloatR4, IRInstruction.AddFloatR8, IRInstruction.AddSigned, IRInstruction.AddUnsigned);
 		}
 
 		/// <summary>
@@ -1683,7 +1641,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Sub(Context context)
 		{
-			Replace(context, IRInstruction.SubFloat, IRInstruction.SubSigned, IRInstruction.SubUnsigned);
+			Replace(context, IRInstruction.SubFloatR4, IRInstruction.SubFloatR8, IRInstruction.SubSigned, IRInstruction.SubUnsigned);
 		}
 
 		/// <summary>
@@ -1692,7 +1650,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Mul(Context context)
 		{
-			Replace(context, IRInstruction.MulFloat, IRInstruction.MulSigned, IRInstruction.MulUnsigned);
+			Replace(context, IRInstruction.MulFloatR4, IRInstruction.MulFloatR8, IRInstruction.MulSigned, IRInstruction.MulUnsigned);
 		}
 
 		/// <summary>
@@ -1701,7 +1659,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Div(Context context)
 		{
-			Replace(context, IRInstruction.DivFloat, IRInstruction.DivSigned, IRInstruction.DivUnsigned);
+			Replace(context, IRInstruction.DivFloatR4, IRInstruction.DivFloatR8, IRInstruction.DivSigned, IRInstruction.DivUnsigned);
 		}
 
 		/// <summary>
@@ -1710,7 +1668,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Rem(Context context)
 		{
-			Replace(context, IRInstruction.RemFloat, IRInstruction.RemSigned, IRInstruction.RemUnsigned);
+			Replace(context, IRInstruction.RemFloatR4, IRInstruction.RemFloatR8, IRInstruction.RemSigned, IRInstruction.RemUnsigned);
 		}
 
 		#endregion Visitation Methods
@@ -1770,7 +1728,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Get array length
 			var lengthOperand = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.U4);
 			var fixedOffset = Operand.CreateConstant(TypeSystem, (NativePointerSize * 2));
-			context.SetInstruction(IRInstruction.Load, lengthOperand, arrayOperand, fixedOffset);
+			context.SetInstruction(IRInstruction.LoadInt, lengthOperand, arrayOperand, fixedOffset);
 
 			// Now compare length with index
 			// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
@@ -1833,11 +1791,15 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private static void Replace(Context context, BaseInstruction floatingPointInstruction, BaseInstruction signedInstruction, BaseInstruction unsignedInstruction)
+		private static void Replace(Context context, BaseInstruction floatingPointR4Instruction, BaseInstruction floatingPointR8Instruction, BaseInstruction signedInstruction, BaseInstruction unsignedInstruction)
 		{
-			if (context.Result.IsR)
+			if (context.Result.IsR4)
 			{
-				context.ReplaceInstructionOnly(floatingPointInstruction);
+				context.ReplaceInstructionOnly(floatingPointR4Instruction);
+			}
+			else if (context.Result.IsR8)
+			{
+				context.ReplaceInstructionOnly(floatingPointR8Instruction);
 			}
 			else if (context.Result.IsUnsigned)
 			{
@@ -2313,33 +2275,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!source.IsVirtualRegister)
 			{
-				BaseIRInstruction instruction = IRInstruction.Load;
+				var loadInstruction = GetLoadInstruction(source.Type);
 
-				if (MustSignExtendOnLoad(source.Type))
-				{
-					instruction = IRInstruction.LoadSignExtended;
-				}
-				else if (MustZeroExtendOnLoad(source.Type))
-				{
-					instruction = IRInstruction.LoadZeroExtended;
-				}
-
-				context.SetInstruction(instruction, size, destination, StackFrame, source);
+				context.SetInstruction(loadInstruction, size, destination, StackFrame, source);
 			}
 			else
 			{
-				BaseIRInstruction instruction = IRInstruction.Move;
+				var moveInstruction = GetMoveInstruction(source.Type);
 
-				if (MustSignExtendOnLoad(source.Type))
-				{
-					instruction = IRInstruction.SignExtendedMove;
-				}
-				else if (MustZeroExtendOnLoad(source.Type))
-				{
-					instruction = IRInstruction.ZeroExtendedMove;
-				}
-
-				context.SetInstruction(instruction, size, destination, source);
+				context.SetInstruction(moveInstruction, size, destination, source);
 			}
 		}
 
@@ -2408,6 +2352,54 @@ namespace Mosa.Compiler.Framework.Stages
 				return VmCall.Unbox64;
 			else
 				return VmCall.Unbox;
+		}
+
+		private BaseIRInstruction GetLoadInstruction(MosaType type)
+		{
+			BaseIRInstruction instruction = IRInstruction.LoadInt;
+
+			if (MustSignExtendOnLoad(type))
+			{
+				instruction = IRInstruction.LoadSignExtended;
+			}
+			else if (MustZeroExtendOnLoad(type))
+			{
+				instruction = IRInstruction.LoadZeroExtended;
+			}
+			else if (type.IsR4)
+			{
+				instruction = IRInstruction.LoadFloatR4;
+			}
+			else if (type.IsR8)
+			{
+				instruction = IRInstruction.LoadFloatR8;
+			}
+
+			return instruction;
+		}
+
+		private BaseIRInstruction GetMoveInstruction(MosaType type)
+		{
+			BaseIRInstruction instruction = IRInstruction.Move;
+
+			if (MustSignExtendOnLoad(type))
+			{
+				instruction = IRInstruction.SignExtendedMove;
+			}
+			else if (MustZeroExtendOnLoad(type))
+			{
+				instruction = IRInstruction.ZeroExtendedMove;
+			}
+			else if (type.IsR4)
+			{
+				instruction = IRInstruction.Move;
+			}
+			else if (type.IsR8)
+			{
+				instruction = IRInstruction.Move;
+			}
+
+			return instruction;
 		}
 
 		#endregion Internals

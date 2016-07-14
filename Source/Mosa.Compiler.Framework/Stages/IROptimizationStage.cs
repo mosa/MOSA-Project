@@ -338,9 +338,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void DeadCodeElimination(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.ResultCount != 1)
 				return;
 
@@ -384,9 +381,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void SimpleConstantPropagation(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.Move)
 				return;
 
@@ -502,9 +496,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void SimpleForwardCopyPropagation(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.Move)
 				return;
 
@@ -572,9 +563,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ConstantFoldingIntegerOperations(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.AddSigned || node.Instruction == IRInstruction.AddUnsigned ||
 				  node.Instruction == IRInstruction.SubSigned || node.Instruction == IRInstruction.SubUnsigned ||
 				  node.Instruction == IRInstruction.LogicalAnd || node.Instruction == IRInstruction.LogicalOr ||
@@ -673,9 +661,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ConstantFoldingIntegerCompare(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.IntegerCompare)
 				return;
 
@@ -722,9 +707,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationAdditionAndSubstraction(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.AddSigned || node.Instruction == IRInstruction.AddUnsigned
 				|| node.Instruction == IRInstruction.SubSigned || node.Instruction == IRInstruction.SubUnsigned))
 				return;
@@ -755,9 +737,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationMultiplication(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.MulSigned || node.Instruction == IRInstruction.MulUnsigned))
 				return;
 
@@ -819,9 +798,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationDivision(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.DivSigned || node.Instruction == IRInstruction.DivUnsigned))
 				return;
 
@@ -886,9 +862,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void SimplifyExtendedMoveWithConstant(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.ZeroExtendedMove || node.Instruction == IRInstruction.SignExtendedMove))
 				return;
 
@@ -940,9 +913,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationSubtraction(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.SubSigned || node.Instruction == IRInstruction.SubUnsigned))
 				return;
 
@@ -970,9 +940,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationLogicalOperators(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.LogicalAnd || node.Instruction == IRInstruction.LogicalOr))
 				return;
 
@@ -1037,9 +1004,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationShiftOperators(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.ShiftLeft || node.Instruction == IRInstruction.ShiftRight || node.Instruction == IRInstruction.ArithmeticShiftRight))
 				return;
 
@@ -1072,9 +1036,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void RemoveUselessIntegerCompareBranch(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.IntegerCompareBranch)
 				return;
 
@@ -1095,9 +1056,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void FoldIntegerCompareBranch(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.IntegerCompareBranch)
 				return;
 
@@ -1194,9 +1152,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantMoveToRight(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.AddSigned || node.Instruction == IRInstruction.AddUnsigned
 				|| node.Instruction == IRInstruction.MulSigned || node.Instruction == IRInstruction.MulUnsigned
 				|| node.Instruction == IRInstruction.LogicalAnd || node.Instruction == IRInstruction.LogicalOr
@@ -1222,9 +1177,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantFoldingAdditionAndSubstraction(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.AddSigned || node.Instruction == IRInstruction.AddUnsigned
 				|| node.Instruction == IRInstruction.SubSigned || node.Instruction == IRInstruction.SubUnsigned))
 				return;
@@ -1288,9 +1240,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantFoldingLogicalOr(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.LogicalOr)
 				return;
 
@@ -1336,9 +1285,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantFoldingLogicalAnd(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.LogicalAnd)
 				return;
 
@@ -1384,9 +1330,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantFoldingMultiplication(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.MulSigned || node.Instruction == IRInstruction.MulUnsigned))
 				return;
 
@@ -1431,9 +1374,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantFoldingDivision(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.DivSigned || node.Instruction == IRInstruction.DivUnsigned))
 				return;
 
@@ -1481,9 +1421,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ReduceZeroExtendedMove(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.ZeroExtendedMove)
 				return;
 
@@ -1504,9 +1441,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ReduceTruncationAndExpansion(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.ZeroExtendedMove)
 				return;
 
@@ -1553,9 +1487,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CombineIntegerCompareBranch(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.IntegerCompareBranch)
 				return;
 
@@ -1596,9 +1527,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void FoldIntegerCompare(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.IntegerCompare)
 				return;
 
@@ -1645,9 +1573,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void SimplifyExtendedMove(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.ZeroExtendedMove || node.Instruction == IRInstruction.SignExtendedMove))
 				return;
 
@@ -1671,10 +1596,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void FoldLoadStoreOffsets(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
-			if (!(node.Instruction == IRInstruction.Load || node.Instruction == IRInstruction.Store
+			if (!(node.Instruction == IRInstruction.LoadInt || node.Instruction == IRInstruction.Store
 				|| node.Instruction == IRInstruction.LoadSignExtended || node.Instruction == IRInstruction.LoadZeroExtended))
 				return;
 
@@ -1727,9 +1649,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ConstantFoldingPhi(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.Phi)
 				return;
 
@@ -1766,9 +1685,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void SimplifyPhi(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.Phi)
 				return;
 
@@ -1798,9 +1714,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void DeadCodeEliminationPhi(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.Instruction != IRInstruction.Phi)
 				return;
 
@@ -1829,9 +1742,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationRemUnsignedModulus(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.RemUnsigned))
 				return;
 
@@ -1885,9 +1795,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationRemSignedModulus(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (!(node.Instruction == IRInstruction.RemSigned))
 				return;
 
@@ -1990,7 +1897,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Instruction == IRInstruction.DivUnsigned)
 					return false;
 
-				if (node.Instruction == IRInstruction.Load || node.Instruction == IRInstruction.LoadSignExtended || node.Instruction == IRInstruction.LoadZeroExtended)
+				if (node.Instruction == IRInstruction.LoadInt || node.Instruction == IRInstruction.LoadSignExtended || node.Instruction == IRInstruction.LoadZeroExtended)
 					if (node.Result == local)
 						return false;
 
@@ -2082,9 +1989,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void NormalizeConstantTo32Bit(InstructionNode node)
 		{
-			if (node.IsEmpty)
-				return;
-
 			if (node.ResultCount != 1)
 				return;
 

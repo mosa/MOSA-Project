@@ -23,18 +23,19 @@ namespace Mosa.Platform.x86.Stages
 		{
 			visitationDictionary[IRInstruction.AddSigned] = AddSigned;
 			visitationDictionary[IRInstruction.AddUnsigned] = AddUnsigned;
-			visitationDictionary[IRInstruction.AddFloat] = AddFloat;
-			visitationDictionary[IRInstruction.DivFloat] = DivFloat;
+			visitationDictionary[IRInstruction.AddFloatR4] = AddFloatR4;
+			visitationDictionary[IRInstruction.AddFloatR8] = AddFloatR8;
 			visitationDictionary[IRInstruction.AddressOf] = AddressOf;
 			visitationDictionary[IRInstruction.FloatCompare] = FloatCompare;
 			visitationDictionary[IRInstruction.IntegerCompareBranch] = IntegerCompareBranch;
 			visitationDictionary[IRInstruction.IntegerCompare] = IntegerCompare;
 			visitationDictionary[IRInstruction.Jmp] = Jmp;
-			visitationDictionary[IRInstruction.Load] = Load;
-			visitationDictionary[IRInstruction.Load2] = Load2;
-			visitationDictionary[IRInstruction.CompoundLoad] = CompoundLoad;
+			visitationDictionary[IRInstruction.LoadInt] = LoadInt;
+			visitationDictionary[IRInstruction.LoadFloatR4] = LoadFloatR4;
+			visitationDictionary[IRInstruction.LoadFloatR8] = LoadFloatR8;
 			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
 			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
+			visitationDictionary[IRInstruction.CompoundLoad] = CompoundLoad;
 			visitationDictionary[IRInstruction.LogicalAnd] = LogicalAnd;
 			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
 			visitationDictionary[IRInstruction.LogicalXor] = LogicalXor;
@@ -49,17 +50,22 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.ShiftRight] = ShiftRight;
 			visitationDictionary[IRInstruction.Store] = Store;
 			visitationDictionary[IRInstruction.CompoundStore] = CompoundStore;
-			visitationDictionary[IRInstruction.MulFloat] = MulFloat;
-			visitationDictionary[IRInstruction.SubFloat] = SubFloat;
 			visitationDictionary[IRInstruction.SubSigned] = SubSigned;
 			visitationDictionary[IRInstruction.SubUnsigned] = SubUnsigned;
+			visitationDictionary[IRInstruction.SubFloatR4] = SubFloatR4;
+			visitationDictionary[IRInstruction.SubFloatR8] = SubFloatR8;
 			visitationDictionary[IRInstruction.MulSigned] = MulSigned;
 			visitationDictionary[IRInstruction.MulUnsigned] = MulUnsigned;
+			visitationDictionary[IRInstruction.MulFloatR4] = MulFloatR4;
+			visitationDictionary[IRInstruction.MulFloatR8] = MulFloatR8;
 			visitationDictionary[IRInstruction.DivSigned] = DivSigned;
 			visitationDictionary[IRInstruction.DivUnsigned] = DivUnsigned;
+			visitationDictionary[IRInstruction.DivFloatR4] = DivFloatR4;
+			visitationDictionary[IRInstruction.DivFloatR8] = DivFloatR8;
 			visitationDictionary[IRInstruction.RemSigned] = RemSigned;
 			visitationDictionary[IRInstruction.RemUnsigned] = RemUnsigned;
-			visitationDictionary[IRInstruction.RemFloat] = RemFloat;
+			visitationDictionary[IRInstruction.RemFloatR4] = RemFloatR4;
+			visitationDictionary[IRInstruction.RemFloatR8] = RemFloatR8;
 			visitationDictionary[IRInstruction.Switch] = Switch;
 			visitationDictionary[IRInstruction.Break] = Break;
 			visitationDictionary[IRInstruction.Nop] = Nop;
@@ -94,36 +100,52 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for AddFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void AddFloat(Context context)
+		private void AddFloatR4(Context context)
 		{
-			if (context.Result.IsR4)
-			{
-				context.ReplaceInstructionOnly(X86.Addss);
-				context.Size = InstructionSize.Size32;
-			}
-			else
-			{
-				context.ReplaceInstructionOnly(X86.Addsd);
-				context.Size = InstructionSize.Size64;
-			}
+			Debug.Assert(context.Result.IsR4);
+			Debug.Assert(context.Operand1.IsR4);
+
+			context.ReplaceInstructionOnly(X86.Addss);
+			context.Size = InstructionSize.Size32;
+		}
+
+		/// <summary>
+		/// Visitation function for AddFloat.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void AddFloatR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+			Debug.Assert(context.Operand1.IsR8);
+
+			context.ReplaceInstructionOnly(X86.Addsd);
+			context.Size = InstructionSize.Size32;
 		}
 
 		/// <summary>
 		/// Visitation function for DivFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void DivFloat(Context context)
+		private void DivFloatR4(Context context)
 		{
-			if (context.Result.IsR4)
-			{
-				context.ReplaceInstructionOnly(X86.Divss);
-				context.Size = InstructionSize.Size32;
-			}
-			else
-			{
-				context.ReplaceInstructionOnly(X86.Divsd);
-				context.Size = InstructionSize.Size64;
-			}
+			Debug.Assert(context.Result.IsR4);
+			Debug.Assert(context.Operand1.IsR4);
+
+			context.ReplaceInstructionOnly(X86.Divss);
+			context.Size = InstructionSize.Size32;
+		}
+
+		/// <summary>
+		/// Visitation function for DivFloat.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void DivFloatR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+			Debug.Assert(context.Operand1.IsR8);
+
+			context.ReplaceInstructionOnly(X86.Divsd);
+			context.Size = InstructionSize.Size32;
 		}
 
 		/// <summary>
@@ -361,29 +383,26 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LoadInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Load(Context context)
+		private void LoadInt(Context context)
 		{
-			BaseInstruction loadInstruction = null;
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
 
-			if (context.Result.IsR8)
-			{
-				loadInstruction = X86.MovsdLoad;
-			}
-			else if (context.Result.IsR4)
-			{
-				loadInstruction = X86.MovssLoad;
-			}
-			else
-			{
-				loadInstruction = X86.MovLoad;
-			}
-
-			context.SetInstruction(loadInstruction, context.Size, context.Result, context.Operand1, context.Operand2);
+			context.SetInstruction(X86.MovLoad, context.Size, context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void Load2(Context context)
+		private void LoadFloatR4(Context context)
 		{
-			context.SetInstruction(X86.MovLoad, context.Size, context.Result, context.Operand1, context.Operand2);
+			Debug.Assert(context.Result.IsR4);
+
+			context.SetInstruction(X86.MovssLoad, context.Size, context.Result, context.Operand1, context.Operand2);
+		}
+
+		private void LoadFloatR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+
+			context.SetInstruction(X86.MovsdLoad, context.Size, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void CompoundLoad(Context context)
@@ -758,36 +777,52 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MulFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void MulFloat(Context context)
+		private void MulFloatR4(Context context)
 		{
-			if (context.Result.IsR4)
-			{
-				context.ReplaceInstructionOnly(X86.Mulss);
-				context.Size = InstructionSize.Size32;
-			}
-			else
-			{
-				context.ReplaceInstructionOnly(X86.Mulsd);
-				context.Size = InstructionSize.Size64;
-			}
+			Debug.Assert(context.Result.IsR4);
+			Debug.Assert(context.Operand1.IsR4);
+
+			context.ReplaceInstructionOnly(X86.Mulss);
+			context.Size = InstructionSize.Size32;
+		}
+
+		/// <summary>
+		/// Visitation function for MulFloat.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void MulFloatR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+			Debug.Assert(context.Operand1.IsR8);
+
+			context.ReplaceInstructionOnly(X86.Mulsd);
+			context.Size = InstructionSize.Size32;
 		}
 
 		/// <summary>
 		/// Visitation function for SubFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void SubFloat(Context context)
+		private void SubFloatR4(Context context)
 		{
-			if (context.Result.IsR4)
-			{
-				context.ReplaceInstructionOnly(X86.Subss);
-				context.Size = InstructionSize.Size32;
-			}
-			else
-			{
-				context.ReplaceInstructionOnly(X86.Subsd);
-				context.Size = InstructionSize.Size64;
-			}
+			Debug.Assert(context.Result.IsR4);
+			Debug.Assert(context.Operand1.IsR4);
+
+			context.ReplaceInstructionOnly(X86.Subss);
+			context.Size = InstructionSize.Size32;
+		}
+
+		/// <summary>
+		/// Visitation function for SubFloat.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void SubFloatR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+			Debug.Assert(context.Operand1.IsR8);
+
+			context.ReplaceInstructionOnly(X86.Subsd);
+			context.Size = InstructionSize.Size64;
 		}
 
 		/// <summary>
@@ -912,12 +947,35 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for RemFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void RemFloat(Context context)
+		private void RemFloatR4(Context context)
+		{
+			Debug.Assert(context.Result.IsR4);
+			Debug.Assert(context.Operand1.IsR4);
+
+			RemFloat(context, "RemR4");
+		}
+
+		/// <summary>
+		/// Visitation function for RemFloat.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void RemFloatR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+			Debug.Assert(context.Operand1.IsR8);
+
+			RemFloat(context, "RemR8");
+		}
+
+		/// <summary>
+		/// Visitation function for RemFloat.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void RemFloat(Context context, string method)
 		{
 			var result = context.Result;
 			var dividend = context.Operand1;
 			var divisor = context.Operand2;
-			var method = (result.IsR8) ? "RemR8" : "RemR4";
 
 			var type = TypeSystem.GetTypeByName("Mosa.Runtime.x86", "Division");
 

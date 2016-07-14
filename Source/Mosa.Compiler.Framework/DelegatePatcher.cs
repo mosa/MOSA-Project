@@ -98,8 +98,8 @@ namespace Mosa.Compiler.Framework
 			Operand opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
 			Operand c0 = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
 
-			b0.AppendInstruction(IRInstruction.Load, size, opMethod, thisOperand, methodPointerOffsetOperand);
-			b0.AppendInstruction(IRInstruction.Load, size, opInstance, thisOperand, instanceOffsetOperand);
+			b0.AppendInstruction(IRInstruction.LoadInt, size, opMethod, thisOperand, methodPointerOffsetOperand);
+			b0.AppendInstruction(IRInstruction.LoadInt, size, opInstance, thisOperand, instanceOffsetOperand);
 			b0.AppendInstruction(IRInstruction.IntegerCompare, ConditionCode.Equal, opCompare, opInstance, c0);
 			b0.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, opCompare, c0);
 			b0.AddBranchTarget(b2.Block);

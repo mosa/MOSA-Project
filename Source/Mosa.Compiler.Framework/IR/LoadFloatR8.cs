@@ -8,14 +8,14 @@ namespace Mosa.Compiler.Framework.IR
 	/// <remarks>
 	/// The load instruction is used to load a value from a memory pointer and an offset. The types must be compatible.
 	/// </remarks>
-	public sealed class Load : ThreeOperandInstruction
+	public sealed class LoadFloatR8 : ThreeOperandInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Load"/>.
+		/// Initializes a new instance of <see cref="LoadFloatR8"/>.
 		/// </summary>
-		public Load()
+		public LoadFloatR8()
 		{
 		}
 

@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.ArithmeticShiftRight] = ArithmeticShiftRight;
 			visitationDictionary[IRInstruction.IntegerCompareBranch] = IntegerCompareBranch;
 			visitationDictionary[IRInstruction.IntegerCompare] = IntegerCompare;
-			visitationDictionary[IRInstruction.Load] = Load;
+			visitationDictionary[IRInstruction.LoadInt] = Load;
 			visitationDictionary[IRInstruction.CompoundLoad] = CompoundLoad;
 			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
 			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
