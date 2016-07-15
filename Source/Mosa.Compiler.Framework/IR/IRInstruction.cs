@@ -30,13 +30,17 @@ namespace Mosa.Compiler.Framework.IR
 
 		public static readonly FloatCompare FloatCompare = new FloatCompare();
 
-		public static readonly FloatToIntegerConversion FloatToIntegerConversion = new FloatToIntegerConversion();
+		public static readonly FloatR4ToIntegerConversion FloatR4ToIntegerConversion = new FloatR4ToIntegerConversion();
+
+		public static readonly FloatR8ToIntegerConversion FloatR8ToIntegerConversion = new FloatR8ToIntegerConversion();
 
 		public static readonly IntegerCompareBranch IntegerCompareBranch = new IntegerCompareBranch();
 
 		public static readonly IntegerCompare IntegerCompare = new IntegerCompare();
 
-		public static readonly IntegerToFloatConversion IntegerToFloatConversion = new IntegerToFloatConversion();
+		public static readonly IntegerToFloatR4Conversion IntegerToFloatR4Conversion = new IntegerToFloatR4Conversion();
+
+		public static readonly IntegerToFloatR8Conversion IntegerToFloatR8Conversion = new IntegerToFloatR8Conversion();
 
 		public static readonly Jmp Jmp = new Jmp();
 
@@ -96,7 +100,11 @@ namespace Mosa.Compiler.Framework.IR
 
 		public static readonly SignExtendedMove SignExtendedMove = new SignExtendedMove();
 
-		public static readonly Store Store = new Store();
+		public static readonly StoreInt StoreInt = new StoreInt();
+
+		public static readonly StoreFloatR4 StoreFloatR4 = new StoreFloatR4();
+
+		public static readonly StoreFloatR8 StoreFloatR8 = new StoreFloatR8();
 
 		public static readonly CompoundStore CompoundStore = new CompoundStore();
 

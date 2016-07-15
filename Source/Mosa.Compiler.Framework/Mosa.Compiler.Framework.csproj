@@ -104,6 +104,8 @@
     <Compile Include="IR\DivFloatR8.cs" />
     <Compile Include="IR\FilterEnd.cs" />
     <Compile Include="IR\FilterStart.cs" />
+    <Compile Include="IR\FloatR8ToIntegerConversion.cs" />
+    <Compile Include="IR\IntegerToFloatR4Conversion.cs" />
     <Compile Include="IR\LoadFloatR4.cs" />
     <Compile Include="IR\LoadFloatR8.cs" />
     <Compile Include="IR\MulFloatR8.cs" />
@@ -111,6 +113,9 @@
     <Compile Include="IR\SetLeaveTarget.cs" />
     <Compile Include="IR\KillAllExcept.cs" />
     <Compile Include="IR\Flow.cs" />
+    <Compile Include="IR\StoreInt.cs" />
+    <Compile Include="IR\StoreFloatR4.cs" />
+    <Compile Include="IR\StoreFloatR8.cs" />
     <Compile Include="IR\SubFloatR8.cs" />
     <Compile Include="MosaCompiler.cs" />
     <Compile Include="InstructionSize.cs" />
@@ -337,10 +342,10 @@
     <Compile Include="IR\IRInstruction.cs" />
     <Compile Include="IR\Epilogue.cs" />
     <Compile Include="IR\FloatCompare.cs" />
-    <Compile Include="IR\FloatToIntegerConversion.cs" />
+    <Compile Include="IR\FloatR4ToIntegerConversion.cs" />
     <Compile Include="IR\IntegerCompareBranch.cs" />
     <Compile Include="IR\IntegerCompare.cs" />
-    <Compile Include="IR\IntegerToFloatConversion.cs" />
+    <Compile Include="IR\IntegerToFloatR8Conversion.cs" />
     <Compile Include="IR\BaseIRInstruction.cs" />
     <Compile Include="IR\Jmp.cs" />
     <Compile Include="IR\LoadInt.cs" />
@@ -356,7 +361,6 @@
     <Compile Include="IR\ShiftLeft.cs" />
     <Compile Include="IR\ShiftRight.cs" />
     <Compile Include="IR\SignExtendedMove.cs" />
-    <Compile Include="IR\Store.cs" />
     <Compile Include="IR\ThreeOperandInstruction.cs" />
     <Compile Include="IR\TwoOperandInstruction.cs" />
     <Compile Include="IR\ZeroExtendedMove.cs" />

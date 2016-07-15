@@ -48,7 +48,9 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.ArithmeticShiftRight] = ArithmeticShiftRight;
 			visitationDictionary[IRInstruction.ShiftLeft] = ShiftLeft;
 			visitationDictionary[IRInstruction.ShiftRight] = ShiftRight;
-			visitationDictionary[IRInstruction.Store] = Store;
+			visitationDictionary[IRInstruction.StoreInt] = StoreInt;
+			visitationDictionary[IRInstruction.StoreFloatR4] = StoreFloatR4;
+			visitationDictionary[IRInstruction.StoreFloatR8] = StoreFloatR8;
 			visitationDictionary[IRInstruction.CompoundStore] = CompoundStore;
 			visitationDictionary[IRInstruction.SubSigned] = SubSigned;
 			visitationDictionary[IRInstruction.SubUnsigned] = SubUnsigned;
@@ -72,8 +74,10 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.SignExtendedMove] = SignExtendedMove;
 			visitationDictionary[IRInstruction.ZeroExtendedMove] = ZeroExtendedMove;
 			visitationDictionary[IRInstruction.Call] = Call;
-			visitationDictionary[IRInstruction.FloatToIntegerConversion] = FloatToIntegerConversion;
-			visitationDictionary[IRInstruction.IntegerToFloatConversion] = IntegerToFloatConversion;
+			visitationDictionary[IRInstruction.FloatR4ToIntegerConversion] = FloatR4ToIntegerConversion;
+			visitationDictionary[IRInstruction.FloatR8ToIntegerConversion] = FloatR8ToIntegerConversion;
+			visitationDictionary[IRInstruction.IntegerToFloatR4Conversion] = IntegerToFloatR4Conversion;
+			visitationDictionary[IRInstruction.IntegerToFloatR8Conversion] = IntegerToFloatR8Conversion;
 		}
 
 		#region Visitation Methods
@@ -428,8 +432,7 @@ namespace Mosa.Platform.x86.Stages
 			var tmp = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var tmpLarge = Operand.CreateCPURegister(TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
 
-			context.SetInstruction(X86.Nop);
-			context.AppendInstruction(X86.Mov, srcReg, src);
+			context.SetInstruction(X86.Mov, srcReg, src);
 
 			Debug.Assert(dest.IsStackLocal);
 
@@ -439,6 +442,8 @@ namespace Mosa.Platform.x86.Stages
 			{
 				context.AppendInstruction(X86.Add, srcReg, srcReg, offsetop);
 			}
+
+			context.AppendInstruction(IRInstruction.Kill, tmpLarge);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
@@ -698,24 +703,19 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstructionOnly(X86.Shr);
 		}
 
-		private void Store(Context context)
+		private void StoreInt(Context context)
 		{
-			BaseInstruction storeInstruction = null;
+			context.SetInstruction(X86.MovStore, context.Size, null, context.Operand1, context.Operand2, context.Operand3);
+		}
 
-			if (context.Operand1.IsR8)
-			{
-				storeInstruction = X86.MovsdStore;
-			}
-			else if (context.Operand1.IsR4)
-			{
-				storeInstruction = X86.MovssStore;
-			}
-			else
-			{
-				storeInstruction = X86.MovStore;
-			}
+		private void StoreFloatR4(Context context)
+		{
+			context.SetInstruction(X86.MovssStore, context.Size, null, context.Operand1, context.Operand2, context.Operand3);
+		}
 
-			context.SetInstruction(storeInstruction, context.Size, null, context.Operand1, context.Operand2, context.Operand3);
+		private void StoreFloatR8(Context context)
+		{
+			context.SetInstruction(X86.MovsdStore, context.Size, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
 		private void CompoundStore(Context context)
@@ -1075,36 +1075,42 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for FloatingPointToIntegerConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void FloatToIntegerConversion(Context context)
+		private void FloatR4ToIntegerConversion(Context context)
 		{
-			Operand source = context.Operand1;
-			Operand destination = context.Result;
+			Debug.Assert(context.Result.Type.IsI1 || context.Result.Type.IsI2 || context.Result.Type.IsI4);
 
-			if (destination.Type.IsI1 || destination.Type.IsI2 || destination.Type.IsI4)
-			{
-				if (source.IsR8)
-					context.ReplaceInstructionOnly(X86.Cvttsd2si);
-				else
-					context.ReplaceInstructionOnly(X86.Cvttss2si);
-			}
-			else
-			{
-				throw new NotImplementCompilerException();
-			}
+			context.ReplaceInstructionOnly(X86.Cvttss2si);
 		}
 
 		/// <summary>
-		/// Visitation function for IntegerToFloatingPointConversion.
+		/// Visitation function for FloatingPointToIntegerConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void IntegerToFloatConversion(Context context)
+		private void FloatR8ToIntegerConversion(Context context)
 		{
-			if (context.Result.IsR4)
-				context.ReplaceInstructionOnly(X86.Cvtsi2ss);
-			else if (context.Result.IsR8)
-				context.ReplaceInstructionOnly(X86.Cvtsi2sd);
-			else
-				throw new NotSupportedException();
+			Debug.Assert(context.Result.Type.IsI1 || context.Result.Type.IsI2 || context.Result.Type.IsI4);
+
+			context.ReplaceInstructionOnly(X86.Cvttsd2si);
+		}
+
+		/// <summary>
+		/// Visitation function for IntegerToFloatR4Conversion.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void IntegerToFloatR4Conversion(Context context)
+		{
+			Debug.Assert(context.Result.IsR4);
+			context.ReplaceInstructionOnly(X86.Cvtsi2ss);
+		}
+
+		/// <summary>
+		/// Visitation function for IntegerToFloatR8Conversion.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void IntegerToFloatR8Conversion(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+			context.ReplaceInstructionOnly(X86.Cvtsi2sd);
 		}
 
 		#endregion Visitation Methods

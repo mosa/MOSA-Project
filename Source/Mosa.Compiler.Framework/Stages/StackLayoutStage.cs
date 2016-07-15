@@ -76,9 +76,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				operand.Offset = offset;
 				operand.IsResolved = true;
-
-				size = Alignment.AlignUp(size, alignment);
-				offset = offset + size;
 			}
 
 			return offset;

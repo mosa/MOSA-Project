@@ -11,14 +11,14 @@ namespace Mosa.Compiler.Framework.IR
 	/// The second operand is the memory base offset.
 	/// The third is the value to store.
 	/// </remarks>
-	public sealed class Store : BaseIRInstruction
+	public sealed class StoreFloatR8 : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Store"/>.
+		/// Initializes a new instance of <see cref="StoreFloatR8"/>.
 		/// </summary>
-		public Store() :
+		public StoreFloatR8() :
 			base(3, 0)
 		{
 		}

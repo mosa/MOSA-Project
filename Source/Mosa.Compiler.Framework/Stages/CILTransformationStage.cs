@@ -276,7 +276,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (source.Type != null && TypeLayout.IsCompoundType(source.Type))
 			{
-				context.SetInstruction(IRInstruction.CompoundLoad, destination, StackFrame, constant, source);
+				context.SetInstruction(IRInstruction.CompoundLoad, destination, StackFrame, constant);
 				context.MosaType = source.Type;
 			}
 			else
@@ -436,7 +436,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (context.Result.IsVirtualRegister && context.Operand1.IsVirtualRegister)
 			{
-				context.SetInstruction(IRInstruction.Move, context.Size, context.Result, context.Operand1);
+				var moveInstruction = GetMoveInstruction(context.Result.Type);
+
+				context.SetInstruction(moveInstruction, context.Size, context.Result, context.Operand1);
 				return;
 			}
 
@@ -457,7 +459,9 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (context.Operand1.IsVirtualRegister)
 			{
-				context.SetInstruction(IRInstruction.Store, context.Size, null, StackFrame, context.Result, context.Operand1);
+				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+
+				context.SetInstruction(storeInstruction, context.Size, null, StackFrame, context.Result, context.Operand1);
 			}
 
 			context.MosaType = type;
@@ -473,7 +477,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, context.Result.Offset);
 
-			context.SetInstruction(IRInstruction.Store, context.Size, null, StackFrame, constant, context.Operand1);
+			var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+
+			context.SetInstruction(storeInstruction, context.Size, null, StackFrame, constant, context.Operand1);
 		}
 
 		/// <summary>
@@ -493,7 +499,9 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.Store, size, null, StackFrame, context.Operand1, context.Operand2);
+				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+
+				context.SetInstruction(storeInstruction, size, null, StackFrame, context.Operand1, context.Operand2);
 			}
 
 			context.MosaType = type;
@@ -508,7 +516,9 @@ namespace Mosa.Compiler.Framework.Stages
 			var field = context.MosaField;
 			var size = GetInstructionSize(field.FieldType);
 
-			context.SetInstruction(IRInstruction.Store, size, null, Operand.CreateField(field), ConstantZero, context.Operand1);
+			var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+
+			context.SetInstruction(storeInstruction, size, null, Operand.CreateField(field), ConstantZero, context.Operand1);
 			context.MosaType = field.FieldType;
 		}
 
@@ -706,7 +716,74 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Conversion(Context context)
 		{
-			CheckAndConvertInstruction(context);
+			var result = context.Result;
+			var source = context.Operand1;
+
+			int destIndex = GetIndex(result.Type, NativeInstructionSize == InstructionSize.Size32);
+			int srcIndex = GetIndex(source.Type, NativeInstructionSize == InstructionSize.Size32);
+
+			var instruction = convTable[destIndex][srcIndex];
+
+			Debug.Assert(instruction != null);
+
+			uint mask = 0xFFFFFFFF;
+			ComputeExtensionTypeAndMask(result.Type, ref mask);
+
+			if (instruction == IRInstruction.IntegerToFloatR8Conversion && result.IsR4)
+			{
+				context.SetInstruction(IRInstruction.IntegerToFloatR4Conversion, result, source);
+				return;
+			}
+
+			if (instruction != IRInstruction.LogicalAnd)
+			{
+				context.SetInstruction(instruction, result, source);
+				return;
+			}
+
+			if (mask == 0)
+			{
+				Debug.Assert(result.IsInteger);
+
+				// TODO: May not be correct
+				context.SetInstruction(IRInstruction.Move, result, source);
+				return;
+			}
+
+			if (source.IsLong)
+			{
+				Operand temp = AllocateVirtualRegister(result.Type);
+
+				context.SetInstruction(IRInstruction.Move, temp, source);
+				context.AppendInstruction(instruction, result, temp, Operand.CreateConstant(TypeSystem, (int)mask));
+				return;
+			}
+
+			context.SetInstruction(instruction, result, source, Operand.CreateConstant(TypeSystem, (int)mask));
+		}
+
+		private BaseInstruction ComputeExtensionTypeAndMask(MosaType type, ref uint mask)
+		{
+			if (type.IsUI1)
+			{
+				mask = 0xFF;
+				return (type.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove);
+			}
+			else if (type.IsUI2)
+			{
+				mask = 0xFFFF;
+				return type.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove;
+			}
+			else if (type.IsUI4)
+			{
+				mask = 0xFFFFFFFF;
+			}
+			else if (type.IsUI8)
+			{
+				mask = 0x0;
+			}
+
+			return null;
 		}
 
 		/// <summary>
@@ -1314,8 +1391,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var size = GetInstructionSize(fieldType);
 
+			var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+
 			context.SetInstruction(IRInstruction.Move, temp, valueOperand);
-			context.AppendInstruction(IRInstruction.Store, size, null, objectOperand, offsetOperand, temp);
+			context.AppendInstruction(storeInstruction, size, null, objectOperand, offsetOperand, temp);
 			context.MosaType = fieldType;
 		}
 
@@ -1506,7 +1585,9 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Debug.Assert(value.IsVirtualRegister);
 
-				context.SetInstruction(IRInstruction.Store, size, null, arrayAddress, elementOffset, value);
+				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+
+				context.SetInstruction(storeInstruction, size, null, arrayAddress, elementOffset, value);
 				context.MosaType = arrayType.ElementType;
 			}
 		}
@@ -1897,8 +1978,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.LogicalAnd,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
+				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
+				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1912,8 +1993,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.Move,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
+				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
+				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1927,8 +2008,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.Move,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
+				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
+				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1942,8 +2023,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
 				/* U8 */ IRInstruction.Move,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
+				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
+				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1957,8 +2038,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.LogicalAnd,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
+				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
+				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1972,8 +2053,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.Move,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
+				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
+				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1987,8 +2068,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.Move,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
+				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
+				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -2002,40 +2083,40 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
 				/* U8 */ IRInstruction.Move,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
+				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
+				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* R4 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.IntegerToFloatConversion,
-				/* I2 */ IRInstruction.IntegerToFloatConversion,
-				/* I4 */ IRInstruction.IntegerToFloatConversion,
-				/* I8 */ IRInstruction.IntegerToFloatConversion,
-				/* U1 */ IRInstruction.IntegerToFloatConversion,
-				/* U2 */ IRInstruction.IntegerToFloatConversion,
-				/* U4 */ IRInstruction.IntegerToFloatConversion,
-				/* U8 */ IRInstruction.IntegerToFloatConversion,
+				/* I1 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* I2 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* I4 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* I8 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* U1 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* U2 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* U4 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* U8 */ IRInstruction.IntegerToFloatR8Conversion,
 				/* R4 */ IRInstruction.Move,
 				/* R8 */ IRInstruction.Move,
-				/* I  */ IRInstruction.IntegerToFloatConversion,
-				/* U  */ IRInstruction.IntegerToFloatConversion,
+				/* I  */ IRInstruction.IntegerToFloatR8Conversion,
+				/* U  */ IRInstruction.IntegerToFloatR8Conversion,
 				/* Ptr*/ null,
 			},
 			/* R8 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.IntegerToFloatConversion,
-				/* I2 */ IRInstruction.IntegerToFloatConversion,
-				/* I4 */ IRInstruction.IntegerToFloatConversion,
-				/* I8 */ IRInstruction.IntegerToFloatConversion,
-				/* U1 */ IRInstruction.IntegerToFloatConversion,
-				/* U2 */ IRInstruction.IntegerToFloatConversion,
-				/* U4 */ IRInstruction.IntegerToFloatConversion,
-				/* U8 */ IRInstruction.IntegerToFloatConversion,
+				/* I1 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* I2 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* I4 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* I8 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* U1 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* U2 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* U4 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* U8 */ IRInstruction.IntegerToFloatR8Conversion,
 				/* R4 */ IRInstruction.Move,
 				/* R8 */ IRInstruction.Move,
-				/* I  */ IRInstruction.IntegerToFloatConversion,
-				/* U  */ IRInstruction.IntegerToFloatConversion,
+				/* I  */ IRInstruction.IntegerToFloatR8Conversion,
+				/* U  */ IRInstruction.IntegerToFloatR8Conversion,
 				/* Ptr*/ null,
 			},
 			/* I  */ new BaseIRInstruction[13] {
@@ -2047,8 +2128,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
 				/* U8 */ IRInstruction.ZeroExtendedMove,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
+				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
+				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
 				/* I  */ IRInstruction.Move,
 				/* U  */ IRInstruction.Move,
 				/* Ptr*/ IRInstruction.Move,
@@ -2062,8 +2143,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
 				/* U8 */ IRInstruction.Move,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
+				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
+				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
 				/* I  */ IRInstruction.Move,
 				/* U  */ IRInstruction.Move,
 				/* Ptr*/ IRInstruction.Move,
@@ -2084,74 +2165,6 @@ namespace Mosa.Compiler.Framework.Stages
 				/* Ptr*/ IRInstruction.Move,
 			},
 		};
-
-		private void CheckAndConvertInstruction(Context context)
-		{
-			var destinationOperand = context.Result;
-			var sourceOperand = context.Operand1;
-
-			int destIndex = GetIndex(destinationOperand.Type, NativeInstructionSize == InstructionSize.Size32);
-			int srcIndex = GetIndex(sourceOperand.Type, NativeInstructionSize == InstructionSize.Size32);
-
-			var type = convTable[destIndex][srcIndex];
-
-			if (type == null)
-				throw new InvalidCompilerException();
-
-			uint mask = 0xFFFFFFFF;
-			var instruction = ComputeExtensionTypeAndMask(destinationOperand.Type, ref mask);
-
-			if (type == IRInstruction.LogicalAnd)
-			{
-				if (mask == 0)
-				{
-					// TODO: May not be correct
-					context.SetInstruction(IRInstruction.Move, destinationOperand, sourceOperand);
-				}
-				else
-				{
-					if (sourceOperand.IsLong)
-					{
-						Operand temp = AllocateVirtualRegister(destinationOperand.Type);
-
-						context.SetInstruction(IRInstruction.Move, temp, sourceOperand);
-						context.AppendInstruction(type, destinationOperand, temp, Operand.CreateConstant(TypeSystem, (int)mask));
-					}
-					else
-					{
-						context.SetInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant(TypeSystem, (int)mask));
-					}
-				}
-			}
-			else
-			{
-				context.SetInstruction(type, destinationOperand, sourceOperand);
-			}
-		}
-
-		private BaseInstruction ComputeExtensionTypeAndMask(MosaType destinationType, ref uint mask)
-		{
-			if (destinationType.IsUI1)
-			{
-				mask = 0xFF;
-				return (destinationType.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove);
-			}
-			else if (destinationType.IsUI2)
-			{
-				mask = 0xFFFF;
-				return destinationType.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove;
-			}
-			else if (destinationType.IsUI4)
-			{
-				mask = 0xFFFFFFFF;
-			}
-			else if (destinationType.IsUI8)
-			{
-				mask = 0x0;
-			}
-
-			return null;
-		}
 
 		/// <summary>
 		/// Processes external method calls.
@@ -2354,7 +2367,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return VmCall.Unbox;
 		}
 
-		private BaseIRInstruction GetLoadInstruction(MosaType type)
+		private static BaseIRInstruction GetLoadInstruction(MosaType type)
 		{
 			BaseIRInstruction instruction = IRInstruction.LoadInt;
 
@@ -2378,7 +2391,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return instruction;
 		}
 
-		private BaseIRInstruction GetMoveInstruction(MosaType type)
+		private static BaseIRInstruction GetMoveInstruction(MosaType type)
 		{
 			BaseIRInstruction instruction = IRInstruction.Move;
 
@@ -2397,6 +2410,22 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (type.IsR8)
 			{
 				instruction = IRInstruction.Move;
+			}
+
+			return instruction;
+		}
+
+		private static BaseIRInstruction GetStoreInstruction(MosaType type)
+		{
+			BaseIRInstruction instruction = IRInstruction.StoreInt;
+
+			if (type.IsR4)
+			{
+				instruction = IRInstruction.StoreFloatR4;
+			}
+			else if (type.IsR8)
+			{
+				instruction = IRInstruction.StoreFloatR8;
 			}
 
 			return instruction;

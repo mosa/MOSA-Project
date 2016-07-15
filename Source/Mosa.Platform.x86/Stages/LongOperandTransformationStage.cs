@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.ShiftLeft] = ShiftLeft;
 			visitationDictionary[IRInstruction.ShiftRight] = ShiftRight;
 			visitationDictionary[IRInstruction.SignExtendedMove] = SignExtendedMove;
-			visitationDictionary[IRInstruction.Store] = Store;
+			visitationDictionary[IRInstruction.StoreInt] = StoreInt;
 			visitationDictionary[IRInstruction.CompoundStore] = CompoundStore;
 			visitationDictionary[IRInstruction.DivSigned] = DivSigned;
 			visitationDictionary[IRInstruction.DivUnsigned] = DivUnsigned;
@@ -990,7 +990,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for StoreInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Store(Context context)
+		private void StoreInt(Context context)
 		{
 			if (context.Size == InstructionSize.Size64)
 			{

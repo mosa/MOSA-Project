@@ -54,9 +54,9 @@ namespace Mosa.Compiler.Framework
 
 			context.AppendInstruction(IRInstruction.Move, v1, thisOperand);
 
-			context.AppendInstruction(IRInstruction.Store, size, null, v1, methodPointerOffsetOperand, methodPointerOperand);
+			context.AppendInstruction(IRInstruction.StoreInt, size, null, v1, methodPointerOffsetOperand, methodPointerOperand);
 			context.MosaType = methodPointerOperand.Type;
-			context.AppendInstruction(IRInstruction.Store, size, null, v1, instanceOffsetOperand, instanceOperand);
+			context.AppendInstruction(IRInstruction.StoreInt, size, null, v1, instanceOffsetOperand, instanceOperand);
 			context.MosaType = instanceOperand.Type;
 			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
