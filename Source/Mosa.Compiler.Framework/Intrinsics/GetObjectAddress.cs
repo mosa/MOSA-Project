@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 				operand1 = def.Operand1;
 				def.Empty();
 			}
-			context.SetInstruction(IRInstruction.Move, result, operand1);
+			context.SetInstruction(IRInstruction.MoveInteger, result, operand1);
 		}
 	}
 }

@@ -104,8 +104,8 @@
     <Compile Include="IR\MoveInteger.cs" />
     <Compile Include="IR\MoveFloatR8.cs" />
     <Compile Include="IR\MoveFloatR4.cs" />
-    <Compile Include="IR\ConversionFloatR8toFloatR4.cs" />
-    <Compile Include="IR\ConversionFloatR4toFloatR8.cs" />
+    <Compile Include="IR\ConversionFloatR8ToFloatR4.cs" />
+    <Compile Include="IR\ConversionFloatR4ToFloatR8.cs" />
     <Compile Include="IR\DivFloatR8.cs" />
     <Compile Include="IR\FilterEnd.cs" />
     <Compile Include="IR\FilterStart.cs" />
@@ -359,7 +359,6 @@
     <Compile Include="IR\LogicalNot.cs" />
     <Compile Include="IR\LogicalOr.cs" />
     <Compile Include="IR\LogicalXor.cs" />
-    <Compile Include="IR\Move.cs" />
     <Compile Include="IR\OneOperandInstruction.cs" />
     <Compile Include="IR\Phi.cs" />
     <Compile Include="IR\Prologue.cs" />

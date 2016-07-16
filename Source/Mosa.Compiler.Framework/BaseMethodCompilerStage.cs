@@ -608,7 +608,7 @@ namespace Mosa.Compiler.Framework
 						Debug.WriteLine(ctx.ToString());
 		}
 
-		#region Instruction Size Helpers
+		#region Helpers
 
 		/// <summary>
 		/// Gets the size of the instruction.
@@ -684,6 +684,94 @@ namespace Mosa.Compiler.Framework
 			return list;
 		}
 
-		#endregion Instruction Size Helpers
+		/// <summary>
+		/// Determines if the load should sign extend the given source operand.
+		/// </summary>
+		/// <param name="source">The source operand to determine sign extension for.</param>
+		/// <returns>
+		/// True if the given operand should be loaded with its sign extended.
+		/// </returns>
+		private static bool MustSignExtendOnLoad(MosaType source)
+		{
+			return source.IsI1 || source.IsI2;
+		}
+
+		/// <summary>
+		/// Determines if the load should sign extend the given source operand.
+		/// </summary>
+		/// <param name="source">The source operand to determine sign extension for.</param>
+		/// <returns>
+		/// True if the given operand should be loaded with its sign extended.
+		/// </returns>
+		private static bool MustZeroExtendOnLoad(MosaType source)
+		{
+			return source.IsU1 || source.IsU2 || source.IsChar || source.IsBoolean;
+		}
+
+		public static BaseIRInstruction GetLoadInstruction(MosaType type)
+		{
+			BaseIRInstruction instruction = IRInstruction.LoadInteger;
+
+			if (MustSignExtendOnLoad(type))
+			{
+				instruction = IRInstruction.LoadSignExtended;
+			}
+			else if (MustZeroExtendOnLoad(type))
+			{
+				instruction = IRInstruction.LoadZeroExtended;
+			}
+			else if (type.IsR4)
+			{
+				instruction = IRInstruction.LoadFloatR4;
+			}
+			else if (type.IsR8)
+			{
+				instruction = IRInstruction.LoadFloatR8;
+			}
+
+			return instruction;
+		}
+
+		public static BaseIRInstruction GetMoveInstruction(MosaType type)
+		{
+			BaseIRInstruction instruction = IRInstruction.MoveInteger;
+
+			if (MustSignExtendOnLoad(type))
+			{
+				instruction = IRInstruction.SignExtendedMove;
+			}
+			else if (MustZeroExtendOnLoad(type))
+			{
+				instruction = IRInstruction.ZeroExtendedMove;
+			}
+			else if (type.IsR4)
+			{
+				instruction = IRInstruction.MoveFloatR4;
+			}
+			else if (type.IsR8)
+			{
+				instruction = IRInstruction.MoveFloatR4;
+			}
+
+			return instruction;
+		}
+
+		public static BaseIRInstruction GetStoreInstruction(MosaType type)
+		{
+			BaseIRInstruction instruction = IRInstruction.StoreInteger;
+
+			if (type.IsR4)
+			{
+				instruction = IRInstruction.StoreFloatR4;
+			}
+			else if (type.IsR8)
+			{
+				instruction = IRInstruction.StoreFloatR8;
+			}
+
+			return instruction;
+		}
+
+		#endregion Helpers
 	}
 }

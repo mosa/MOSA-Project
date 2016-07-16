@@ -180,7 +180,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var newOperand = Operand.CreateVirtualRegister(operand.Type, -operand.Index);
 
-					newPrologueBlock.BeforeLast.Insert(new InstructionNode(IRInstruction.Move, newOperand, newOp));
+					var moveInstruction = GetMoveInstruction(newOperand.Type);
+
+					var moveNode = new InstructionNode(moveInstruction, newOperand, newOp);
+
+					newPrologueBlock.BeforeLast.Insert(moveNode);
 
 					// redirect map from parameter to virtual register going forward
 					map.Remove(operand);

@@ -40,9 +40,9 @@ namespace Mosa.Compiler.Framework.IR
 
 		public static readonly ConversionIntegerToFloatR8 ConversionIntegerToFloatR8 = new ConversionIntegerToFloatR8();
 
-		public static readonly ConversionFloatR4toFloatR8 ConversionFloatR4toFloatR8 = new ConversionFloatR4toFloatR8();
+		public static readonly ConversionFloatR4ToFloatR8 ConversionFloatR4ToFloatR8 = new ConversionFloatR4ToFloatR8();
 
-		public static readonly ConversionFloatR8toFloatR4 ConversionFloatR8toFloatR4 = new ConversionFloatR8toFloatR4();
+		public static readonly ConversionFloatR8ToFloatR4 ConversionFloatR8ToFloatR4 = new ConversionFloatR8ToFloatR4();
 
 		public static readonly CompareIntegerBranch CompareIntegerBranch = new CompareIntegerBranch();
 
@@ -67,8 +67,6 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly LogicalOr LogicalOr = new LogicalOr();
 
 		public static readonly LogicalXor LogicalXor = new LogicalXor();
-
-		public static readonly Move Move = new Move();
 
 		public static readonly MoveInteger MoveInteger = new MoveInteger();
 

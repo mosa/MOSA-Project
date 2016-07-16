@@ -129,7 +129,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (destination != source)
 			{
-				context.AppendInstruction(IRInstruction.Move, destination, source);
+				var moveInsturction = GetMoveInstruction(destination.Type);
+				context.AppendInstruction(moveInsturction, destination, source);
 			}
 		}
 	}

@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var typeDef = Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, StringClassTypeDefinitionSymbolName);
 			var runtimeTypeHandle = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			var before = context.InsertBefore();
-			before.SetInstruction(IRInstruction.Move, runtimeTypeHandle, typeDef);
+			before.SetInstruction(IRInstruction.MoveInteger, runtimeTypeHandle, typeDef);
 			return runtimeTypeHandle;
 		}
 	}

@@ -363,7 +363,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			var instruction = node.Instruction;
 
-			if (instruction == IRInstruction.Move)
+			if (instruction == IRInstruction.MoveInteger)
 			{
 				Move(node);
 			}

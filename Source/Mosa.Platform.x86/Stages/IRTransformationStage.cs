@@ -39,7 +39,11 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
 			visitationDictionary[IRInstruction.LogicalXor] = LogicalXor;
 			visitationDictionary[IRInstruction.LogicalNot] = LogicalNot;
-			visitationDictionary[IRInstruction.Move] = Move;
+			visitationDictionary[IRInstruction.MoveInteger] = MoveInteger;
+			visitationDictionary[IRInstruction.MoveFloatR4] = MoveFloatR4;
+			visitationDictionary[IRInstruction.MoveFloatR8] = MoveFloatR8;
+			visitationDictionary[IRInstruction.ConversionFloatR4ToFloatR8] = ConversionFloatR4ToFloatR8;
+			visitationDictionary[IRInstruction.ConversionFloatR8ToFloatR4] = ConversionFloatR8ToFloatR4;
 			visitationDictionary[IRInstruction.CompoundMove] = CompoundMove;
 			visitationDictionary[IRInstruction.Return] = Return;
 			visitationDictionary[IRInstruction.InternalCall] = InternalCall;
@@ -514,7 +518,8 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand dest = context.Result;
 
-			context.SetInstruction(X86.Mov, context.Result, context.Operand1);
+			context.SetInstruction(X86.Mov, dest, context.Operand1);
+
 			if (dest.IsByte)
 				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(TypeSystem, 0xFF));
 			else if (dest.IsU2)
@@ -524,46 +529,48 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for MoveInstruction.
+		/// Visitation function for MoveInteger instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Move(Context context)
+		private void ConversionFloatR4ToFloatR8(Context context)
 		{
-			Operand result = context.Result;
-			Operand operand = context.Operand1;
+			context.ReplaceInstructionOnly(X86.Cvtss2sd);
+		}
 
-			X86Instruction instruction = X86.Mov;
-			InstructionSize size = InstructionSize.None;
+		/// <summary>
+		/// Visitation function for MoveInteger instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void ConversionFloatR8ToFloatR4(Context context)
+		{
+			context.ReplaceInstructionOnly(X86.Cvtsd2ss);
+		}
 
-			if (result.IsR)
-			{
-				//Debug.Assert(operand.IsFloatingPoint, @"Move can't convert to floating point type.");
+		/// <summary>
+		/// Visitation function for MoveInteger instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void MoveInteger(Context context)
+		{
+			context.ReplaceInstructionOnly(X86.Mov);
+		}
 
-				if (result.Type == operand.Type)
-				{
-					if (result.IsR4)
-					{
-						instruction = X86.Movss;
-						size = InstructionSize.Size32;
-					}
-					else if (result.IsR8)
-					{
-						instruction = X86.Movsd;
-						size = InstructionSize.Size64;
-					}
-				}
-				else if (result.IsR8)
-				{
-					instruction = X86.Cvtss2sd;
-				}
-				else if (result.IsR4)
-				{
-					instruction = X86.Cvtsd2ss;
-				}
-			}
+		/// <summary>
+		/// Visitation function for MoveFloatR4 instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void MoveFloatR4(Context context)
+		{
+			context.ReplaceInstructionOnly(X86.Movss);
+		}
 
-			context.ReplaceInstructionOnly(instruction);
-			context.Size = size;
+		/// <summary>
+		/// Visitation function for MoveFloatR8 instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void MoveFloatR8(Context context)
+		{
+			context.ReplaceInstructionOnly(X86.Movsd);
 		}
 
 		private void CompoundMove(Context context)

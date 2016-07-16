@@ -259,7 +259,8 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else
 				{
-					context.AppendInstruction(IRInstruction.Move, destination, operand);
+					var moveInstruction = GetMoveInstruction(destination.Type);
+					context.AppendInstruction(moveInstruction, destination, operand);
 				}
 			}
 		}

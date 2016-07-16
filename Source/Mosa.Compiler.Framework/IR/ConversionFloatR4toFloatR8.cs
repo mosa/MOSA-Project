@@ -6,14 +6,14 @@ namespace Mosa.Compiler.Framework.IR
 	///
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.TwoOperandInstruction" />
-	public sealed class ConversionFloatR4toFloatR8 : TwoOperandInstruction
+	public sealed class ConversionFloatR4ToFloatR8 : TwoOperandInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ConversionFloatR4toFloatR8"/> class.
+		/// Initializes a new instance of the <see cref="ConversionFloatR4ToFloatR8"/> class.
 		/// </summary>
-		public ConversionFloatR4toFloatR8()
+		public ConversionFloatR4ToFloatR8()
 		{
 		}
 

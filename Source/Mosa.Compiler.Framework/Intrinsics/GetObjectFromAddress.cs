@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		{
 			var result = context.Result;
 			var operand1 = context.Operand1;
-			context.SetInstruction(IRInstruction.Move, result, operand1);
+			context.SetInstruction(IRInstruction.MoveInteger, result, operand1);
 		}
 	}
 }

@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
 			visitationDictionary[IRInstruction.LogicalXor] = LogicalXor;
 			visitationDictionary[IRInstruction.LogicalNot] = LogicalNot;
-			visitationDictionary[IRInstruction.Move] = Move;
+			visitationDictionary[IRInstruction.MoveInteger] = MoveInteger;
 			visitationDictionary[IRInstruction.CompoundMove] = CompoundMove;
 			visitationDictionary[IRInstruction.ShiftLeft] = ShiftLeft;
 			visitationDictionary[IRInstruction.ShiftRight] = ShiftRight;
@@ -525,7 +525,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Expands the move instruction for 64-bits.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void ExpandMove(Context context)
+		private void ExpandMoveInteger(Context context)
 		{
 			Operand op0L, op0H, op1L, op1H;
 
@@ -534,13 +534,13 @@ namespace Mosa.Platform.x86.Stages
 				SplitLongOperand(context.Result, out op0L, out op0H);
 				SplitLongOperand(context.Operand1, out op1L, out op1H);
 
-				context.SetInstruction(X86.Mov, op0L, op1L);
-				context.AppendInstruction(X86.Mov, op0H, op1H);
+				context.SetInstruction(X86.Mov, InstructionSize.Size32, op0L, op1L);
+				context.AppendInstruction(X86.Mov, InstructionSize.Size32, op0H, op1H);
 			}
 			else
 			{
 				SplitLongOperand(context.Operand1, out op1L, out op1H);
-				context.SetInstruction(X86.Mov, context.Result, op1L);
+				context.SetInstruction(X86.Mov, InstructionSize.Size32, context.Result, op1L);
 			}
 		}
 
@@ -938,11 +938,11 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MoveInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Move(Context context)
+		private void MoveInteger(Context context)
 		{
 			if (AreAny64Bit(context))
 			{
-				ExpandMove(context);
+				ExpandMoveInteger(context);
 			}
 		}
 

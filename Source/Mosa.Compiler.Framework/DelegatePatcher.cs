@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework
 			Operand v1 = methodCompiler.CreateVirtualRegister(thisOperand.Type);
 			Operand v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand.Type);
 
-			context.AppendInstruction(IRInstruction.Move, v1, thisOperand);
+			context.AppendInstruction(IRInstruction.MoveInteger, v1, thisOperand);
 
 			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, methodPointerOffsetOperand, methodPointerOperand);
 			context.MosaType = methodPointerOperand.Type;
@@ -86,7 +86,11 @@ namespace Mosa.Compiler.Framework
 			for (int i = 0; i < methodCompiler.Parameters.Length; i++)
 			{
 				vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
-				b0.AppendInstruction(IRInstruction.Move, vrs[i], methodCompiler.Parameters[i]);
+
+				//fixme: handle structs
+				var moveInstruction = BaseMethodCompilerStage.GetMoveInstruction(vrs[i].Type);
+
+				b0.AppendInstruction(moveInstruction, vrs[i], methodCompiler.Parameters[i]);
 			}
 
 			Operand thisOperand = vrs[0];
