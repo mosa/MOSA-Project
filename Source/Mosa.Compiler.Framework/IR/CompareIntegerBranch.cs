@@ -2,11 +2,11 @@
 
 namespace Mosa.Compiler.Framework.IR
 {
-	public sealed class IntegerCompareBranch : BaseIRInstruction
+	public sealed class CompareIntegerBranch : BaseIRInstruction
 	{
 		#region Construction
 
-		public IntegerCompareBranch()
+		public CompareIntegerBranch()
 			: base(0, 2)
 		{
 		}

@@ -1,10 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -26,11 +24,12 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.AddFloatR4] = AddFloatR4;
 			visitationDictionary[IRInstruction.AddFloatR8] = AddFloatR8;
 			visitationDictionary[IRInstruction.AddressOf] = AddressOf;
-			visitationDictionary[IRInstruction.FloatCompare] = FloatCompare;
-			visitationDictionary[IRInstruction.IntegerCompareBranch] = IntegerCompareBranch;
-			visitationDictionary[IRInstruction.IntegerCompare] = IntegerCompare;
+			visitationDictionary[IRInstruction.CompareFloatR4] = CompareFloatR4;
+			visitationDictionary[IRInstruction.CompareFloatR8] = CompareFloatR8;
+			visitationDictionary[IRInstruction.CompareIntegerBranch] = CompareIntegerBranch;
+			visitationDictionary[IRInstruction.CompareInteger] = CompareInteger;
 			visitationDictionary[IRInstruction.Jmp] = Jmp;
-			visitationDictionary[IRInstruction.LoadInt] = LoadInt;
+			visitationDictionary[IRInstruction.LoadInteger] = LoadInt;
 			visitationDictionary[IRInstruction.LoadFloatR4] = LoadFloatR4;
 			visitationDictionary[IRInstruction.LoadFloatR8] = LoadFloatR8;
 			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
@@ -48,7 +47,7 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.ArithmeticShiftRight] = ArithmeticShiftRight;
 			visitationDictionary[IRInstruction.ShiftLeft] = ShiftLeft;
 			visitationDictionary[IRInstruction.ShiftRight] = ShiftRight;
-			visitationDictionary[IRInstruction.StoreInt] = StoreInt;
+			visitationDictionary[IRInstruction.StoreInteger] = StoreInt;
 			visitationDictionary[IRInstruction.StoreFloatR4] = StoreFloatR4;
 			visitationDictionary[IRInstruction.StoreFloatR8] = StoreFloatR8;
 			visitationDictionary[IRInstruction.CompoundStore] = CompoundStore;
@@ -74,10 +73,10 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.SignExtendedMove] = SignExtendedMove;
 			visitationDictionary[IRInstruction.ZeroExtendedMove] = ZeroExtendedMove;
 			visitationDictionary[IRInstruction.Call] = Call;
-			visitationDictionary[IRInstruction.FloatR4ToIntegerConversion] = FloatR4ToIntegerConversion;
-			visitationDictionary[IRInstruction.FloatR8ToIntegerConversion] = FloatR8ToIntegerConversion;
-			visitationDictionary[IRInstruction.IntegerToFloatR4Conversion] = IntegerToFloatR4Conversion;
-			visitationDictionary[IRInstruction.IntegerToFloatR8Conversion] = IntegerToFloatR8Conversion;
+			visitationDictionary[IRInstruction.ConversionFloatR4ToInteger] = ConversionFloatR4ToInteger;
+			visitationDictionary[IRInstruction.ConversionFloatR8ToInteger] = ConversionFloatR8ToInteger;
+			visitationDictionary[IRInstruction.ConversionIntegerToFloatR4] = ConversionIntegerToFloatR4;
+			visitationDictionary[IRInstruction.ConversionIntegerToFloatR8] = ConversionIntegerToFloatR8;
 		}
 
 		#region Visitation Methods
@@ -182,7 +181,25 @@ namespace Mosa.Platform.x86.Stages
 		/// Floating point compare instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void FloatCompare(Context context)
+		private void CompareFloatR4(Context context)
+		{
+			FloatCompare(context, X86.Ucomiss, InstructionSize.Size32);
+		}
+
+		/// <summary>
+		/// Floating point compare instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void CompareFloatR8(Context context)
+		{
+			FloatCompare(context, X86.Ucomisd, InstructionSize.Size64);
+		}
+
+		/// <summary>
+		/// Floating point compare instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void FloatCompare(Context context, X86Instruction instruction, InstructionSize size)
 		{
 			Operand result = context.Result;
 			Operand left = context.Operand1;
@@ -200,34 +217,8 @@ namespace Mosa.Platform.x86.Stages
 				case ConditionCode.UnsignedLessThan: condition = ConditionCode.LessThan; break;
 			}
 
-			Context before = context.InsertBefore();
-
-			// Compare using the smallest precision
-			if (left.IsR4 && right.IsR8)
-			{
-				Operand rop = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
-				before.SetInstruction(X86.Cvtsd2ss, rop, right);
-				right = rop;
-			}
-			if (left.IsR8 && right.IsR4)
-			{
-				Operand rop = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
-				before.SetInstruction(X86.Cvtsd2ss, rop, left);
-				left = rop;
-			}
-
-			X86Instruction instruction = null;
-			InstructionSize size = InstructionSize.None;
-			if (left.IsR4)
-			{
-				instruction = X86.Ucomiss;
-				size = InstructionSize.Size32;
-			}
-			else
-			{
-				instruction = X86.Ucomisd;
-				size = InstructionSize.Size64;
-			}
+			Debug.Assert(!(left.IsR4 && right.IsR8));
+			Debug.Assert(!(left.IsR8 && right.IsR4));
 
 			switch (condition)
 			{
@@ -255,7 +246,6 @@ namespace Mosa.Platform.x86.Stages
 
 						newBlocks[1].AppendInstruction(X86.Mov, result, ConstantZero);
 						newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
-
 						break;
 					}
 				case ConditionCode.NotEqual:
@@ -279,7 +269,6 @@ namespace Mosa.Platform.x86.Stages
 						newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.NotEqual, result);
 						newBlocks[0].AppendInstruction(X86.Movzx, InstructionSize.Size8, result, result);
 						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
-
 						break;
 					}
 
@@ -338,7 +327,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for IntegerCompareBranchInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void IntegerCompareBranch(Context context)
+		private void CompareIntegerBranch(Context context)
 		{
 			var target = context.BranchTargets[0];
 			var condition = context.ConditionCode;
@@ -353,7 +342,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for IntegerCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void IntegerCompare(Context context)
+		private void CompareInteger(Context context)
 		{
 			var condition = context.ConditionCode;
 			var resultOperand = context.Result;
@@ -1075,7 +1064,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for FloatingPointToIntegerConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void FloatR4ToIntegerConversion(Context context)
+		private void ConversionFloatR4ToInteger(Context context)
 		{
 			Debug.Assert(context.Result.Type.IsI1 || context.Result.Type.IsI2 || context.Result.Type.IsI4);
 
@@ -1086,7 +1075,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for FloatingPointToIntegerConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void FloatR8ToIntegerConversion(Context context)
+		private void ConversionFloatR8ToInteger(Context context)
 		{
 			Debug.Assert(context.Result.Type.IsI1 || context.Result.Type.IsI2 || context.Result.Type.IsI4);
 
@@ -1097,7 +1086,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for IntegerToFloatR4Conversion.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void IntegerToFloatR4Conversion(Context context)
+		private void ConversionIntegerToFloatR4(Context context)
 		{
 			Debug.Assert(context.Result.IsR4);
 			context.ReplaceInstructionOnly(X86.Cvtsi2ss);
@@ -1107,7 +1096,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for IntegerToFloatR8Conversion.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void IntegerToFloatR8Conversion(Context context)
+		private void ConversionIntegerToFloatR8(Context context)
 		{
 			Debug.Assert(context.Result.IsR8);
 			context.ReplaceInstructionOnly(X86.Cvtsi2sd);

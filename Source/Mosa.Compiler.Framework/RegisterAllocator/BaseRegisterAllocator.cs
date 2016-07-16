@@ -1323,7 +1323,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					{
 						var context = new Context(def.Index);
 
-						Architecture.InsertStoreInstruction(context, register.SpillSlotOperand, StackFrame, liveInterval.AssignedPhysicalOperand);
+						Architecture.InsertStoreInstruction(context, StackFrame, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
 
 						context.Marked = true;
 					}

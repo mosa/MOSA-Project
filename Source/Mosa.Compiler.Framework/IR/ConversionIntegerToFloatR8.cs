@@ -5,14 +5,14 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of an integral to floating point conversion operation.
 	/// </summary>
-	public sealed class IntegerToFloatR8Conversion : TwoOperandInstruction
+	public sealed class ConversionIntegerToFloatR8 : TwoOperandInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="IntegerToFloatR8Conversion"/> class.
+		/// Initializes a new instance of the <see cref="ConversionIntegerToFloatR8"/> class.
 		/// </summary>
-		public IntegerToFloatR8Conversion()
+		public ConversionIntegerToFloatR8()
 		{
 		}
 

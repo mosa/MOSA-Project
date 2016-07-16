@@ -729,9 +729,9 @@ namespace Mosa.Compiler.Framework.Stages
 			uint mask = 0xFFFFFFFF;
 			ComputeExtensionTypeAndMask(result.Type, ref mask);
 
-			if (instruction == IRInstruction.IntegerToFloatR8Conversion && result.IsR4)
+			if (instruction == IRInstruction.ConversionIntegerToFloatR8 && result.IsR4)
 			{
-				context.SetInstruction(IRInstruction.IntegerToFloatR4Conversion, result, source);
+				context.SetInstruction(IRInstruction.ConversionIntegerToFloatR4, result, source);
 				return;
 			}
 
@@ -871,13 +871,13 @@ namespace Mosa.Compiler.Framework.Stages
 					int methodPointerOffset = (NativePointerSize * 4);
 
 					// Get the TypeDef pointer
-					context.SetInstruction(IRInstruction.LoadInt, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
+					context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 					// Get the MethodDef pointer
-					context.AppendInstruction(IRInstruction.LoadInt, NativeInstructionSize, methodDefinition, typeDefinition, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
+					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodDefinition, typeDefinition, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
 
 					// Get the address of the method
-					context.AppendInstruction(IRInstruction.LoadInt, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 				}
 				else
 				{
@@ -898,19 +898,19 @@ namespace Mosa.Compiler.Framework.Stages
 					Operand interfaceMethodTablePtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 					// Get the TypeDef pointer
-					context.SetInstruction(IRInstruction.LoadInt, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
+					context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 					// Get the Interface Slot Table pointer
-					context.AppendInstruction(IRInstruction.LoadInt, NativeInstructionSize, interfaceSlotPtr, typeDefinition, Operand.CreateConstant(TypeSystem, interfaceSlotTableOffset));
+					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, interfaceSlotPtr, typeDefinition, Operand.CreateConstant(TypeSystem, interfaceSlotTableOffset));
 
 					// Get the Interface Method Table pointer
-					context.AppendInstruction(IRInstruction.LoadInt, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant(TypeSystem, interfaceMethodTableOffset));
+					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant(TypeSystem, interfaceMethodTableOffset));
 
 					// Get the MethodDef pointer
-					context.AppendInstruction(IRInstruction.LoadInt, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
+					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
 
 					// Get the address of the method
-					context.AppendInstruction(IRInstruction.LoadInt, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 				}
 
 				context.AppendInstruction(IRInstruction.Nop);
@@ -1228,7 +1228,12 @@ namespace Mosa.Compiler.Framework.Stages
 		private void BinaryComparison(Context context)
 		{
 			var code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
-			var instruction = context.Operand1.IsR ? (BaseInstruction)IRInstruction.FloatCompare : (BaseInstruction)IRInstruction.IntegerCompare;
+
+			BaseInstruction instruction = IRInstruction.CompareInteger;
+			if (context.Operand1.IsR4)
+				instruction = IRInstruction.CompareFloatR4;
+			else if (context.Operand1.IsR8)
+				instruction = IRInstruction.CompareFloatR8;
 
 			context.SetInstruction(instruction, code, context.Result, context.Operand1, context.Operand2);
 			context.SetInstruction(instruction, code, context.Result, context.Operand1, context.Operand2);
@@ -1422,13 +1427,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
 			{
-				context.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.NotEqual, null, first, second);
+				context.SetInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.NotEqual, null, first, second);
 				context.AddBranchTarget(target);
 				return;
 			}
 			else if (opcode == CIL.OpCode.Brfalse || opcode == CIL.OpCode.Brfalse_s)
 			{
-				context.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, first, second);
+				context.SetInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, first, second);
 				context.AddBranchTarget(target);
 				return;
 			}
@@ -1450,16 +1455,21 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (first.IsR)
 			{
-				Operand comparisonResult = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-				context.SetInstruction(IRInstruction.FloatCompare, cc, comparisonResult, first, second);
-				context.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, comparisonResult, Operand.CreateConstant(TypeSystem, 1));
-				context.AddBranchTarget(target);
+				Operand result = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+				if (first.IsR4)
+					context.SetInstruction(IRInstruction.CompareFloatR4, cc, result, first, second);
+				else
+					context.SetInstruction(IRInstruction.CompareFloatR8, cc, result, first, second);
+
+				context.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, result, Operand.CreateConstant(TypeSystem, 1));
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.IntegerCompareBranch, cc, null, first, second);
-				context.AddBranchTarget(target);
+				context.SetInstruction(IRInstruction.CompareIntegerBranch, cc, null, first, second);
 			}
+
+			context.AddBranchTarget(target);
 		}
 
 		/// <summary>
@@ -1478,7 +1488,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Ldlen(Context context)
 		{
 			var offset = Operand.CreateConstant(TypeSystem, NativePointerSize * 2);
-			context.SetInstruction(IRInstruction.LoadInt, InstructionSize.Size32, context.Result, context.Operand1, offset);
+			context.SetInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, context.Result, context.Operand1, offset);
 		}
 
 		/// <summary>
@@ -1809,11 +1819,11 @@ namespace Mosa.Compiler.Framework.Stages
 			// Get array length
 			var lengthOperand = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.U4);
 			var fixedOffset = Operand.CreateConstant(TypeSystem, (NativePointerSize * 2));
-			context.SetInstruction(IRInstruction.LoadInt, lengthOperand, arrayOperand, fixedOffset);
+			context.SetInstruction(IRInstruction.LoadInteger, lengthOperand, arrayOperand, fixedOffset);
 
 			// Now compare length with index
 			// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-			context.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
+			context.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
 			context.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
 
 			// Build exception block which is just a call to throw exception
@@ -1978,8 +1988,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.LogicalAnd,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
-				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -1993,8 +2003,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.Move,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
-				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -2008,8 +2018,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.Move,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
-				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -2023,8 +2033,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
 				/* U8 */ IRInstruction.Move,
-				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
-				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -2038,8 +2048,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.LogicalAnd,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
-				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -2053,8 +2063,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.Move,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
-				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -2068,8 +2078,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.Move,
 				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
-				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
@@ -2083,40 +2093,40 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
 				/* U8 */ IRInstruction.Move,
-				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
-				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
 				/* I  */ IRInstruction.LogicalAnd,
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* R4 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* I2 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* I4 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* I8 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* U1 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* U2 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* U4 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* U8 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* I1 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I2 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I4 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I8 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U1 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U2 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U4 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U8 */ IRInstruction.ConversionIntegerToFloatR8,
 				/* R4 */ IRInstruction.Move,
 				/* R8 */ IRInstruction.Move,
-				/* I  */ IRInstruction.IntegerToFloatR8Conversion,
-				/* U  */ IRInstruction.IntegerToFloatR8Conversion,
+				/* I  */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U  */ IRInstruction.ConversionIntegerToFloatR8,
 				/* Ptr*/ null,
 			},
 			/* R8 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* I2 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* I4 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* I8 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* U1 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* U2 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* U4 */ IRInstruction.IntegerToFloatR8Conversion,
-				/* U8 */ IRInstruction.IntegerToFloatR8Conversion,
+				/* I1 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I2 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I4 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I8 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U1 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U2 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U4 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U8 */ IRInstruction.ConversionIntegerToFloatR8,
 				/* R4 */ IRInstruction.Move,
 				/* R8 */ IRInstruction.Move,
-				/* I  */ IRInstruction.IntegerToFloatR8Conversion,
-				/* U  */ IRInstruction.IntegerToFloatR8Conversion,
+				/* I  */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U  */ IRInstruction.ConversionIntegerToFloatR8,
 				/* Ptr*/ null,
 			},
 			/* I  */ new BaseIRInstruction[13] {
@@ -2128,8 +2138,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
 				/* U8 */ IRInstruction.ZeroExtendedMove,
-				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
-				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
 				/* I  */ IRInstruction.Move,
 				/* U  */ IRInstruction.Move,
 				/* Ptr*/ IRInstruction.Move,
@@ -2143,8 +2153,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ IRInstruction.ZeroExtendedMove,
 				/* U4 */ IRInstruction.ZeroExtendedMove,
 				/* U8 */ IRInstruction.Move,
-				/* R4 */ IRInstruction.FloatR4ToIntegerConversion,
-				/* R8 */ IRInstruction.FloatR8ToIntegerConversion,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
 				/* I  */ IRInstruction.Move,
 				/* U  */ IRInstruction.Move,
 				/* Ptr*/ IRInstruction.Move,
@@ -2369,7 +2379,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private static BaseIRInstruction GetLoadInstruction(MosaType type)
 		{
-			BaseIRInstruction instruction = IRInstruction.LoadInt;
+			BaseIRInstruction instruction = IRInstruction.LoadInteger;
 
 			if (MustSignExtendOnLoad(type))
 			{
@@ -2417,7 +2427,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private static BaseIRInstruction GetStoreInstruction(MosaType type)
 		{
-			BaseIRInstruction instruction = IRInstruction.StoreInt;
+			BaseIRInstruction instruction = IRInstruction.StoreInteger;
 
 			if (type.IsR4)
 			{

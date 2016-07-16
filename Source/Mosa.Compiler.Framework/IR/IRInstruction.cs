@@ -28,23 +28,29 @@ namespace Mosa.Compiler.Framework.IR
 
 		public static readonly Epilogue Epilogue = new Epilogue();
 
-		public static readonly FloatCompare FloatCompare = new FloatCompare();
+		public static readonly CompareFloatR4 CompareFloatR4 = new CompareFloatR4();
 
-		public static readonly FloatR4ToIntegerConversion FloatR4ToIntegerConversion = new FloatR4ToIntegerConversion();
+		public static readonly CompareFloatR8 CompareFloatR8 = new CompareFloatR8();
 
-		public static readonly FloatR8ToIntegerConversion FloatR8ToIntegerConversion = new FloatR8ToIntegerConversion();
+		public static readonly ConversionFloatR4ToInteger ConversionFloatR4ToInteger = new ConversionFloatR4ToInteger();
 
-		public static readonly IntegerCompareBranch IntegerCompareBranch = new IntegerCompareBranch();
+		public static readonly ConversionFloatR8ToInteger ConversionFloatR8ToInteger = new ConversionFloatR8ToInteger();
 
-		public static readonly IntegerCompare IntegerCompare = new IntegerCompare();
+		public static readonly ConversionIntegerToFloatR4 ConversionIntegerToFloatR4 = new ConversionIntegerToFloatR4();
 
-		public static readonly IntegerToFloatR4Conversion IntegerToFloatR4Conversion = new IntegerToFloatR4Conversion();
+		public static readonly ConversionIntegerToFloatR8 ConversionIntegerToFloatR8 = new ConversionIntegerToFloatR8();
 
-		public static readonly IntegerToFloatR8Conversion IntegerToFloatR8Conversion = new IntegerToFloatR8Conversion();
+		public static readonly ConversionFloatR4toFloatR8 ConversionFloatR4toFloatR8 = new ConversionFloatR4toFloatR8();
+
+		public static readonly ConversionFloatR8toFloatR4 ConversionFloatR8toFloatR4 = new ConversionFloatR8toFloatR4();
+
+		public static readonly CompareIntegerBranch CompareIntegerBranch = new CompareIntegerBranch();
+
+		public static readonly CompareInteger CompareInteger = new CompareInteger();
 
 		public static readonly Jmp Jmp = new Jmp();
 
-		public static readonly LoadInt LoadInt = new LoadInt();
+		public static readonly LoadInteger LoadInteger = new LoadInteger();
 
 		public static readonly LoadFloatR4 LoadFloatR4 = new LoadFloatR4();
 
@@ -53,8 +59,6 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly LoadZeroExtended LoadZeroExtended = new LoadZeroExtended();
 
 		public static readonly LoadSignExtended LoadSignExtended = new LoadSignExtended();
-
-		public static readonly CompoundLoad CompoundLoad = new CompoundLoad();
 
 		public static readonly LogicalAnd LogicalAnd = new LogicalAnd();
 
@@ -66,7 +70,17 @@ namespace Mosa.Compiler.Framework.IR
 
 		public static readonly Move Move = new Move();
 
+		public static readonly MoveInteger MoveInteger = new MoveInteger();
+
+		public static readonly MoveFloatR4 MoveFloatR4 = new MoveFloatR4();
+
+		public static readonly MoveFloatR8 MoveFloatR8 = new MoveFloatR8();
+
 		public static readonly CompoundMove CompoundMove = new CompoundMove();
+
+		public static readonly CompoundStore CompoundStore = new CompoundStore();
+
+		public static readonly CompoundLoad CompoundLoad = new CompoundLoad();
 
 		public static readonly MulSigned MulSigned = new MulSigned();
 
@@ -75,8 +89,6 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly MulFloatR4 MulFloatR4 = new MulFloatR4();
 
 		public static readonly MulFloatR8 MulFloatR8 = new MulFloatR8();
-
-		public static readonly Phi Phi = new Phi();
 
 		public static readonly Prologue Prologue = new Prologue();
 
@@ -98,15 +110,11 @@ namespace Mosa.Compiler.Framework.IR
 
 		public static readonly ShiftLeft ShiftLeft = new ShiftLeft();
 
-		public static readonly SignExtendedMove SignExtendedMove = new SignExtendedMove();
-
-		public static readonly StoreInt StoreInt = new StoreInt();
+		public static readonly StoreInteger StoreInteger = new StoreInteger();
 
 		public static readonly StoreFloatR4 StoreFloatR4 = new StoreFloatR4();
 
 		public static readonly StoreFloatR8 StoreFloatR8 = new StoreFloatR8();
-
-		public static readonly CompoundStore CompoundStore = new CompoundStore();
 
 		public static readonly SubSigned SubSigned = new SubSigned();
 
@@ -115,6 +123,8 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly SubFloatR4 SubFloatR4 = new SubFloatR4();
 
 		public static readonly SubFloatR8 SubFloatR8 = new SubFloatR8();
+
+		public static readonly SignExtendedMove SignExtendedMove = new SignExtendedMove();
 
 		public static readonly ZeroExtendedMove ZeroExtendedMove = new ZeroExtendedMove();
 
@@ -161,5 +171,7 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly KillAllExcept KillAllExcept = new KillAllExcept();
 
 		public static readonly Flow Flow = new Flow();
+
+		public static readonly Phi Phi = new Phi();
 	}
 }

@@ -22,7 +22,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			var MultibootEBX = Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, Multiboot0695Stage.MultibootEBX);
 
-			context.SetInstruction(IRInstruction.LoadInt, context.Result, MultibootEBX, methodCompiler.ConstantZero);
+			context.SetInstruction(IRInstruction.LoadInteger, context.Result, MultibootEBX, methodCompiler.ConstantZero);
 		}
 
 		#endregion Methods

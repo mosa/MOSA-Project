@@ -3,16 +3,16 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// Intermediate representation of an integer comparison.
+	/// Represents a floating point comparison context.
 	/// </summary>
-	public sealed class IntegerCompare : ThreeOperandInstruction
+	public sealed class CompareFloatR8 : ThreeOperandInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="IntegerCompare"/> class.
+		/// Initializes a new instance of the <see cref="CompareFloatR8"/> class.
 		/// </summary>
-		public IntegerCompare()
+		public CompareFloatR8()
 		{
 		}
 

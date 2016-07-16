@@ -54,9 +54,9 @@ namespace Mosa.Compiler.Framework
 
 			context.AppendInstruction(IRInstruction.Move, v1, thisOperand);
 
-			context.AppendInstruction(IRInstruction.StoreInt, size, null, v1, methodPointerOffsetOperand, methodPointerOperand);
+			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, methodPointerOffsetOperand, methodPointerOperand);
 			context.MosaType = methodPointerOperand.Type;
-			context.AppendInstruction(IRInstruction.StoreInt, size, null, v1, instanceOffsetOperand, instanceOperand);
+			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, instanceOffsetOperand, instanceOperand);
 			context.MosaType = instanceOperand.Type;
 			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
@@ -98,10 +98,10 @@ namespace Mosa.Compiler.Framework
 			Operand opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
 			Operand c0 = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
 
-			b0.AppendInstruction(IRInstruction.LoadInt, size, opMethod, thisOperand, methodPointerOffsetOperand);
-			b0.AppendInstruction(IRInstruction.LoadInt, size, opInstance, thisOperand, instanceOffsetOperand);
-			b0.AppendInstruction(IRInstruction.IntegerCompare, ConditionCode.Equal, opCompare, opInstance, c0);
-			b0.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, opCompare, c0);
+			b0.AppendInstruction(IRInstruction.LoadInteger, size, opMethod, thisOperand, methodPointerOffsetOperand);
+			b0.AppendInstruction(IRInstruction.LoadInteger, size, opInstance, thisOperand, instanceOffsetOperand);
+			b0.AppendInstruction(IRInstruction.CompareInteger, ConditionCode.Equal, opCompare, opInstance, c0);
+			b0.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, opCompare, c0);
 			b0.AddBranchTarget(b2.Block);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 

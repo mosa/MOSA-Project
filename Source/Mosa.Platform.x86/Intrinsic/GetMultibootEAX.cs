@@ -22,7 +22,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			var MultibootEAX = Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, Multiboot0695Stage.MultibootEAX);
 
-			context.SetInstruction(IRInstruction.LoadInt, context.Result, MultibootEAX, methodCompiler.ConstantZero);
+			context.SetInstruction(IRInstruction.LoadInteger, context.Result, MultibootEAX, methodCompiler.ConstantZero);
 		}
 
 		#endregion Methods

@@ -22,9 +22,9 @@ namespace Mosa.Platform.x86.Stages
 		protected override void PopulateVisitationDictionary()
 		{
 			visitationDictionary[IRInstruction.ArithmeticShiftRight] = ArithmeticShiftRight;
-			visitationDictionary[IRInstruction.IntegerCompareBranch] = IntegerCompareBranch;
-			visitationDictionary[IRInstruction.IntegerCompare] = IntegerCompare;
-			visitationDictionary[IRInstruction.LoadInt] = Load;
+			visitationDictionary[IRInstruction.CompareIntegerBranch] = CompareIntegerBranch;
+			visitationDictionary[IRInstruction.CompareInteger] = CompareInteger;
+			visitationDictionary[IRInstruction.LoadInteger] = Load;
 			visitationDictionary[IRInstruction.CompoundLoad] = CompoundLoad;
 			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
 			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.ShiftLeft] = ShiftLeft;
 			visitationDictionary[IRInstruction.ShiftRight] = ShiftRight;
 			visitationDictionary[IRInstruction.SignExtendedMove] = SignExtendedMove;
-			visitationDictionary[IRInstruction.StoreInt] = StoreInt;
+			visitationDictionary[IRInstruction.StoreInteger] = StoreInt;
 			visitationDictionary[IRInstruction.CompoundStore] = CompoundStore;
 			visitationDictionary[IRInstruction.DivSigned] = DivSigned;
 			visitationDictionary[IRInstruction.DivUnsigned] = DivUnsigned;
@@ -826,7 +826,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for IntegerCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void IntegerCompareBranch(Context context)
+		private void CompareIntegerBranch(Context context)
 		{
 			if (context.Operand1.Is64BitInteger || context.Operand2.Is64BitInteger)
 			{
@@ -838,7 +838,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for IntegerCompare.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void IntegerCompare(Context context)
+		private void CompareInteger(Context context)
 		{
 			if (context.Operand1.Is64BitInteger)
 			{
