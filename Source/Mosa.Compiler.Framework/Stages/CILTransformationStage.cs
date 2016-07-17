@@ -1089,7 +1089,7 @@ namespace Mosa.Compiler.Framework.Stages
 				context.SetOperand(1, GetRuntimeTypeHandle(classType, context));
 				context.SetOperand(2, reference);
 				context.OperandCount = 3;
-				context.ResultCount = 1;
+				context.ResultCount = 1;				
 			}
 			else
 			{
