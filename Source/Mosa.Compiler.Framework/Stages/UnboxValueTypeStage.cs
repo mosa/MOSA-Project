@@ -33,15 +33,18 @@ namespace Mosa.Compiler.Framework.Stages
 
 			triggered = true;
 
-			//System.Diagnostics.Debug.WriteLine(this.MethodCompiler.Method.FullName); //temp - remove me
-
 			// Get the this pointer
 			var thisPtr = MethodCompiler.Parameters[0];
 
+			//todo: move this to the end of prologue
 			var context = new Context(BasicBlocks.PrologueBlock.NextBlocks[0].First);
 
 			// Now push the this pointer by two native pointer sizes
-			context.AppendInstruction(IRInstruction.AddSigned, thisPtr, thisPtr, Operand.CreateConstant(TypeSystem, NativePointerSize * 2));
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.TypedRef);
+
+			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, v1, StackFrame, thisPtr);
+			context.AppendInstruction(IRInstruction.AddSigned, NativeInstructionSize, v1, v1, Operand.CreateConstant(TypeSystem.BuiltIn.I4, NativePointerSize * 2));
+			context.AppendInstruction(IRInstruction.StoreInteger, NativeInstructionSize, null, StackFrame, thisPtr, v1);
 		}
 
 		protected override void Finish()

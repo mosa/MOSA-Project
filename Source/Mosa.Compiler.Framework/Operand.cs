@@ -296,8 +296,10 @@ namespace Mosa.Compiler.Framework
 					return true;
 				else if (IsStackLocal)
 					return ConstantUnsignedLongInteger == 0;
-				else
-					throw new InvalidCompilerException();
+				else if (IsParameter)
+					return ConstantUnsignedLongInteger == 0;
+
+				throw new InvalidCompilerException();
 			}
 		}
 
@@ -324,6 +326,9 @@ namespace Mosa.Compiler.Framework
 					return false;
 				else if (IsStackLocal)
 					return ConstantUnsignedLongInteger == 1;
+				else if (IsParameter)
+					return ConstantUnsignedLongInteger == 1;
+
 				throw new InvalidCompilerException();
 			}
 		}
@@ -724,6 +729,7 @@ namespace Mosa.Compiler.Framework
 			operand.IsField = true;
 			operand.Offset = 0;
 			operand.Field = field;
+			operand.IsResolved = true;
 			return operand;
 		}
 

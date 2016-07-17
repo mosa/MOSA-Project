@@ -51,12 +51,15 @@ namespace Mosa.Compiler.Framework
 
 			Operand v1 = methodCompiler.CreateVirtualRegister(thisOperand.Type);
 			Operand v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand.Type);
+			Operand v3 = methodCompiler.CreateVirtualRegister(instanceOperand.Type);
 
-			context.AppendInstruction(IRInstruction.MoveInteger, v1, thisOperand);
+			context.AppendInstruction(IRInstruction.LoadInteger, v1, methodCompiler.StackFrame, thisOperand);
+			context.AppendInstruction(IRInstruction.LoadInteger, v2, methodCompiler.StackFrame, methodPointerOperand);
+			context.AppendInstruction(IRInstruction.LoadInteger, v3, methodCompiler.StackFrame, instanceOperand);
 
-			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, methodPointerOffsetOperand, methodPointerOperand);
+			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, methodPointerOffsetOperand, v2);
 			context.MosaType = methodPointerOperand.Type;
-			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, instanceOffsetOperand, instanceOperand);
+			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, instanceOffsetOperand, v3);
 			context.MosaType = instanceOperand.Type;
 			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
