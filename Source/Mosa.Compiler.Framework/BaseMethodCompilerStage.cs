@@ -197,6 +197,16 @@ namespace Mosa.Compiler.Framework
 			return MethodCompiler.AllocateVirtualRegisterOrStackSlot(type);
 		}
 
+		/// <summary>
+		/// Stores the on stack.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public bool StoreOnStack(MosaType type)
+		{
+			return MethodCompiler.StoreOnStack(type);
+		}
+
 		#endregion Methods
 
 		#region Block Operations
@@ -620,20 +630,17 @@ namespace Mosa.Compiler.Framework
 			if (type.IsPointer)
 				return InstructionSize.Native;
 
-			if (type.IsI4 || type.IsU4)
+			if (type.IsI4 || type.IsU4 || type.IsR4)
 				return InstructionSize.Size32;
+
+			if (type.IsR8 || type.IsUI8)
+				return InstructionSize.Size64;
 
 			if (type.IsUI1 || type.IsBoolean)
 				return InstructionSize.Size8;
 
 			if (type.IsUI2 || type.IsChar)
 				return InstructionSize.Size16;
-
-			if (type.IsR4)
-				return InstructionSize.Size32;
-
-			if (type.IsR8 || type.IsUI8)
-				return InstructionSize.Size64;
 
 			if (type.IsReferenceType)
 				return InstructionSize.Native;

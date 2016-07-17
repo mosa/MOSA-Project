@@ -91,14 +91,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 		public static Operand AllocateVirtualRegisterOrStackSlot(BaseMethodCompiler compiler, MosaType type)
 		{
-			if (compiler.TypeLayout.IsCompoundType(type))
-			{
-				return compiler.AddStackLocal(type);
-			}
-			else
-			{
-				return compiler.CreateVirtualRegister(type.GetStackType());
-			}
+			return compiler.AllocateVirtualRegisterOrStackSlot(type);
 		}
 
 		#endregion Methods

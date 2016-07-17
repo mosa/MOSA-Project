@@ -404,9 +404,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (source.IsFunctionPointer && destination.IsFunctionPointer)
 				return true;
 
-			if (source.Type.IsArray & destination.Type.IsArray & source.Type.ElementType == destination.Type.ElementType)
-				return true;
-
 			if (source.Type.IsUI1 & destination.Type.IsUI1)
 				return true;
 
@@ -446,6 +443,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (source.Type == destination.Type)
 				return true;
 
+			if (source.Type.IsArray & destination.Type.IsArray & source.Type.ElementType == destination.Type.ElementType)
+				return true;
+
 			return false;
 		}
 
@@ -455,7 +455,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void SimpleForwardCopyPropagation(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.MoveInteger)
+			if (!(node.Instruction == IRInstruction.MoveInteger ||
+				node.Instruction == IRInstruction.MoveFloatR4 ||
+				node.Instruction == IRInstruction.MoveFloatR8))
 				return;
 
 			if (!node.Result.IsVirtualRegister)

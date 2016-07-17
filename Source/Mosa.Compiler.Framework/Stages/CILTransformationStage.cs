@@ -274,7 +274,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, source.Offset);
 
-			if (source.Type != null && TypeLayout.IsCompoundType(source.Type))
+			if (source.Type != null && StoreOnStack(source.Type))
 			{
 				context.SetInstruction(IRInstruction.CompoundLoad, destination, StackFrame, constant);
 				context.MosaType = source.Type;
@@ -448,12 +448,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var type = context.MosaType;
 
-			if (TypeLayout.IsCompoundType(context.Operand1.Type))
+			if (StoreOnStack(context.Operand1.Type))
 			{
-				if (TypeLayout.IsCompoundType(context.Result.Type))
+				if (StoreOnStack(context.Result.Type))
 				{
 					Debug.Assert(!context.Result.IsVirtualRegister);
-					context.SetInstruction(IRInstruction.CompoundMove, context.Size, context.Result, context.Operand1);
+					context.SetInstruction(IRInstruction.CompoundMove, context.Result, context.Operand1);
 				}
 				else
 				{
@@ -497,7 +497,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var size = GetInstructionSize(type);
 
-			if (TypeLayout.IsCompoundType(type))
+			if (StoreOnStack(type))
 			{
 				context.SetInstruction(IRInstruction.CompoundStore, size, null, context.Operand1, ConstantZero, context.Operand2);
 			}
@@ -1019,7 +1019,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Context before = context.InsertBefore();
 
-			if (TypeLayout.IsCompoundType(thisReference.Type))
+			if (StoreOnStack(thisReference.Type))
 			{
 				var newThis = MethodCompiler.AddStackLocal(thisReference.Type);
 
@@ -1341,21 +1341,21 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Ldfld(Context context)
 		{
-			Operand resultOperand = context.Result;
-			Operand objectOperand = context.Operand1;
+			Operand result = context.Result;
+			Operand operand = context.Operand1;
 			MosaField field = context.MosaField;
 
-			if (!objectOperand.IsPointer && objectOperand.Type.IsUserValueType)
+			if (!operand.IsPointer && operand.Type.IsUserValueType)
 			{
-				var userStruct = objectOperand;
+				var userStruct = operand;
 				if (!userStruct.IsStackLocal)
 				{
 					var originalOperand = userStruct;
 					userStruct = MethodCompiler.AddStackLocal(userStruct.Type);
 					context.InsertBefore().SetInstruction(IRInstruction.MoveInteger, userStruct, originalOperand);
 				}
-				objectOperand = MethodCompiler.CreateVirtualRegister(userStruct.Type.ToManagedPointer());
-				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, objectOperand, userStruct);
+				operand = MethodCompiler.CreateVirtualRegister(userStruct.Type.ToManagedPointer());
+				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, operand, userStruct);
 			}
 
 			int offset = TypeLayout.GetFieldOffset(field);
@@ -1366,7 +1366,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(offsetOperand != null);
 
 			var size = GetInstructionSize(field.FieldType);
-			context.SetInstruction(loadInstruction, size, resultOperand, objectOperand, offsetOperand);
+			context.SetInstruction(loadInstruction, size, result, operand, offsetOperand);
 			context.MosaType = field.FieldType;
 		}
 
@@ -1592,7 +1592,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var size = GetInstructionSize(arrayType.ElementType);
 
-			if (TypeLayout.IsCompoundType(value.Type))
+			if (StoreOnStack(value.Type))
 			{
 				Debug.Assert(!value.IsVirtualRegister);
 
@@ -2282,7 +2282,11 @@ namespace Mosa.Compiler.Framework.Stages
 			var source = context.Operand1;
 			var size = GetInstructionSize(source.Type);
 
-			if (!source.IsVirtualRegister)
+			if (StoreOnStack(source.Type))
+			{
+				context.SetInstruction(IRInstruction.CompoundMove, destination, source);
+			}
+			else if (!source.IsVirtualRegister)
 			{
 				var loadInstruction = GetLoadInstruction(source.Type);
 

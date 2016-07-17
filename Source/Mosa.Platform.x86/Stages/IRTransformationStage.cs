@@ -582,6 +582,8 @@ namespace Mosa.Platform.x86.Stages
 			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
 			int largeAlignedTypeSize = typeSize - (typeSize % LargeAlignment);
 
+			Debug.Assert(dest.IsOnStack);
+
 			Debug.Assert(typeSize > 0, MethodCompiler.Method.FullName);
 
 			var srcReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
@@ -601,8 +603,6 @@ namespace Mosa.Platform.x86.Stages
 
 				context.AppendInstruction(X86.Lea, srcReg, StackFrame, src);
 			}
-
-			Debug.Assert(dest.IsOnStack);
 
 			context.AppendInstruction(X86.Lea, dstReg, StackFrame, dest);
 
@@ -641,7 +641,7 @@ namespace Mosa.Platform.x86.Stages
 
 				context.Empty();
 
-				CallingConvention.SetReturnValue(MethodCompiler, TypeLayout, context, returnOperand);
+				CallingConvention.SetReturnValue(MethodCompiler, context, returnOperand);
 
 				context.AppendInstruction(X86.Jmp, BasicBlocks.EpilogueBlock);
 			}
@@ -991,7 +991,7 @@ namespace Mosa.Platform.x86.Stages
 			context.InvokeMethod = mosaMethod;
 
 			// Since we are already in IR Transformation Stage we gotta call this now
-			CallingConvention.MakeCall(MethodCompiler, TypeLayout, context);
+			CallingConvention.MakeCall(MethodCompiler, context);
 		}
 
 		/// <summary>
@@ -1052,7 +1052,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				CallingConvention.MakeCall(MethodCompiler, TypeLayout, context);
+				CallingConvention.MakeCall(MethodCompiler, context);
 			}
 		}
 

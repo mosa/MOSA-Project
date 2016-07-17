@@ -289,7 +289,7 @@ namespace Mosa.Compiler.Framework
 		{
 			int returnSize = 0;
 
-			if (TypeLayout.IsCompoundType(Method.Signature.ReturnType))
+			if (StoreOnStack(Method.Signature.ReturnType))
 			{
 				returnSize = TypeLayout.GetTypeSize(Method.Signature.ReturnType);
 			}
@@ -391,7 +391,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand AllocateVirtualRegisterOrStackSlot(MosaType type)
 		{
-			if (TypeLayout.IsCompoundType(type))
+			if (StoreOnStack(type))
 			{
 				return AddStackLocal(type);
 			}
@@ -415,7 +415,7 @@ namespace Mosa.Compiler.Framework
 				bool virt = true;
 
 				// everything is virtual, unless compound
-				if (TypeLayout.IsCompoundType(local.Type))
+				if (StoreOnStack(local.Type))
 					virt = false;
 
 				Operand operand = null;
@@ -503,6 +503,11 @@ namespace Mosa.Compiler.Framework
 		public override string ToString()
 		{
 			return Method.ToString();
+		}
+
+		public bool StoreOnStack(MosaType type)
+		{
+			return type.IsUserValueType;
 		}
 
 		#endregion Methods

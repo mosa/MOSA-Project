@@ -253,7 +253,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var operand = operandStack.Pop();
 				var destination = joinStack.Pop();
 
-				if (TypeLayout.IsCompoundType(operand.Type))
+				if (StoreOnStack(operand.Type))
 				{
 					context.AppendInstruction(IRInstruction.CompoundMove, destination, operand);
 				}

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Linker;
 
 // fixme: this stage may not be necessary with the specific load/store instructions
 
@@ -25,58 +26,44 @@ namespace Mosa.Platform.x86.Stages
 					if (node.IsEmpty || !(node.Instruction is X86Instruction))
 						continue;
 
-					if (node.Instruction == X86.Jmp || node.Instruction == X86.FarJmp)
+					if (node.OperandCount == 0)
 						continue;
 
-					if (node.Instruction == X86.MovsdLoad || node.Instruction == X86.MovssLoad ||
-						node.Instruction == X86.MovsdStore || node.Instruction == X86.MovssStore)
-						continue;
-
-					// Convert any floating point constants into labels
 					EmitFloatingPointConstants(node);
-
-					// No floating point opcode allows both the result and operand to be a memory location
-					// if necessary, load into register first
-					if (node.OperandCount == 1
-						&& node.ResultCount == 1
-						&& (node.Result.IsR || node.Operand1.IsR))
-					{
-						LoadFirstOperandIntoRegister(node);
-					}
 				}
 			}
 		}
 
-		private void LoadFirstOperandIntoRegister(InstructionNode node)
+		/// <summary>
+		/// Emits the constant operands.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		protected void EmitFloatingPointConstants(InstructionNode node)
 		{
-			// load into a register
-			Operand operand = node.Operand1;
-
-			Operand register = AllocateVirtualRegister(operand.Type);
-			node.Operand1 = register;
-
-			X86Instruction move = null;
-			InstructionSize size = InstructionSize.None;
-
-			if (register.IsR4)
+			for (int i = 0; i < node.OperandCount; i++)
 			{
-				move = X86.Movss;
-				size = InstructionSize.Size32;
-			}
-			else
-			{
-				move = X86.Movsd;
-				size = InstructionSize.Size64;
-			}
+				var op = node.GetOperand(i);
 
-			var newNode = new InstructionNode(move, register, operand);
-			newNode.Size = size;
-			node.Previous.Insert(newNode);
-		}
+				if (op == null || !op.IsConstant || !op.IsR)
+					continue;
 
-		private bool IsCommutative(BaseInstruction instruction)
-		{
-			return (instruction == X86.Addsd || instruction == X86.Addss || instruction == X86.Mulsd || instruction == X86.Mulss);
+				var v1 = AllocateVirtualRegister(op.Type);
+
+				var symbol = (op.IsR4) ? MethodCompiler.Linker.GetConstantSymbol(op.ConstantSingleFloatingPoint)
+					: MethodCompiler.Linker.GetConstantSymbol(op.ConstantDoubleFloatingPoint);
+
+				var s1 = Operand.CreateLabel(op.Type, symbol.Name);
+
+				var context = new Context(node);
+
+				var loadInstruction = GetLoadInstruction(node.Result.Type);
+
+				var size = (node.Result.IsR4) ? InstructionSize.Size32 : InstructionSize.Size64;
+
+				context.InsertBefore().SetInstruction(loadInstruction, size, v1, s1, ConstantZero);
+
+				node.SetOperand(i, v1);
+			}
 		}
 	}
 }

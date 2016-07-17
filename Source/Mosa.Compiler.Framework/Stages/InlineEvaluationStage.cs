@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var returnType = method.Method.Signature.ReturnType;
 
-			if (TypeLayout.IsCompoundType(returnType) && !returnType.IsUI8 && !returnType.IsR8)
+			if (StoreOnStack(returnType) && !returnType.IsUI8 && !returnType.IsR8)
 				return false;
 
 			return true;
