@@ -1089,7 +1089,7 @@ namespace Mosa.Compiler.Framework.Stages
 				context.SetOperand(1, GetRuntimeTypeHandle(classType, context));
 				context.SetOperand(2, reference);
 				context.OperandCount = 3;
-				context.ResultCount = 1;				
+				context.ResultCount = 1;
 			}
 			else
 			{
@@ -1506,28 +1506,18 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Ldelema(Context context)
 		{
 			var result = context.Result;
-			var arrayOperand = context.Operand1;
-			var arrayIndexOperand = context.Operand2;
-			var arrayType = arrayOperand.Type;
+			var array = context.Operand1;
+			var arrayIndex = context.Operand2;
+			var arrayType = array.Type;
+
 			Debug.Assert(arrayType.ElementType == result.Type.ElementType);
 
 			// Array bounds check
-			AddArrayBoundsCheck(context.InsertBefore(), arrayOperand, arrayIndexOperand);
+			AddArrayBoundsCheck(context.InsertBefore(), array, arrayIndex);
 
-			//
-			// The sequence we're emitting is:
-			//
-			//      arrayAddress = arrayOperand + 12
-			//      offset = arrayIndexOperand * elementSize
-			//      result = arrayAddress + offset
-			//
-			// The array data starts at offset 12 from the array object itself. The 12 is a assumption of x86,
-			// which might change for other platforms. This is automatically calculated using the plaform native pointer size.
-			//
+			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndex);
 
-			var arrayAddress = LoadArrayBaseAddress(context, arrayType, arrayOperand);
-			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndexOperand);
-			context.SetInstruction(IRInstruction.AddSigned, result, arrayAddress, elementOffset);
+			context.SetInstruction(IRInstruction.AddSigned, result, array, elementOffset);
 		}
 
 		/// <summary>
@@ -1537,40 +1527,35 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Ldelem(Context context)
 		{
 			var result = context.Result;
-			var arrayOperand = context.Operand1;
-			var arrayIndexOperand = context.Operand2;
-			var arraySigType = arrayOperand.Type;
+			var array = context.Operand1;
+			var arrayIndex = context.Operand2;
+			var arrayType = array.Type;
 
 			// Array bounds check
-			AddArrayBoundsCheck(context.InsertBefore(), arrayOperand, arrayIndexOperand);
+			AddArrayBoundsCheck(context.InsertBefore(), array, arrayIndex);
 
-			var loadInstruction = GetLoadInstruction(arraySigType.ElementType);
-
-			//
-			// The sequence we're emitting is:
-			//
-			//      arrayAddress = arrayOperand + 12
-			//      offset = arrayIndexOperand * elementSize
-			//      result = *(arrayAddress + offset)
-			//
-			// The array data starts at offset 12 from the array object itself. The 12 is a assumption of x86,
-			// which might change for other platforms. This is automatically calculated using the platform native pointer size.
-			//
-
-			var arrayAddress = LoadArrayBaseAddress(context, arraySigType, arrayOperand);
-			var elementOffset = CalculateArrayElementOffset(context, arraySigType, arrayIndexOperand);
+			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndex);
 
 			Debug.Assert(elementOffset != null);
 
-			var size = GetInstructionSize(arraySigType.ElementType);
-
-			if (size == InstructionSize.Native)
+			if (StoreOnStack(arrayType.ElementType))
 			{
-				size = Architecture.NativeInstructionSize;
+				context.SetInstruction(IRInstruction.CompoundLoad, result, array, elementOffset);
+				context.MosaType = arrayType.ElementType;
 			}
+			else
+			{
+				var size = GetInstructionSize(arrayType.ElementType);
 
-			context.SetInstruction(loadInstruction, size, result, arrayAddress, elementOffset);
-			context.MosaType = arraySigType.ElementType;
+				if (size == InstructionSize.Native)
+				{
+					size = Architecture.NativeInstructionSize;
+				}
+
+				var loadInstruction = GetLoadInstruction(arrayType.ElementType);
+				context.SetInstruction(loadInstruction, size, result, array, elementOffset);
+				context.MosaType = arrayType.ElementType;
+			}
 		}
 
 		/// <summary>
@@ -1579,16 +1564,15 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Stelem(Context context)
 		{
-			var arrayOperand = context.Operand1;
-			var arrayIndexOperand = context.Operand2;
+			var array = context.Operand1;
+			var arrayIndex = context.Operand2;
 			var value = context.Operand3;
-			var arrayType = arrayOperand.Type;
+			var arrayType = array.Type;
 
 			// Array bounds check
-			AddArrayBoundsCheck(context.InsertBefore(), arrayOperand, arrayIndexOperand);
+			AddArrayBoundsCheck(context.InsertBefore(), array, arrayIndex);
 
-			var arrayAddress = LoadArrayBaseAddress(context, arrayType, arrayOperand);
-			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndexOperand);
+			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndex);
 
 			var size = GetInstructionSize(arrayType.ElementType);
 
@@ -1596,7 +1580,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Debug.Assert(!value.IsVirtualRegister);
 
-				context.SetInstruction(IRInstruction.CompoundStore, null, arrayAddress, elementOffset, value);
+				context.SetInstruction(IRInstruction.CompoundStore, null, array, elementOffset, value);
 				context.MosaType = arrayType.ElementType;
 			}
 			else
@@ -1605,7 +1589,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
 
-				context.SetInstruction(storeInstruction, size, null, arrayAddress, elementOffset, value);
+				context.SetInstruction(storeInstruction, size, null, array, elementOffset, value);
 				context.MosaType = arrayType.ElementType;
 			}
 		}
@@ -1781,37 +1765,24 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="arrayType">The array type.</param>
-		/// <param name="arrayIndexOperand">The index operand.</param>
+		/// <param name="index">The index operand.</param>
 		/// <returns>Element offset operand.</returns>
-		private Operand CalculateArrayElementOffset(Context context, MosaType arrayType, Operand arrayIndexOperand)
+		private Operand CalculateArrayElementOffset(Context context, MosaType arrayType, Operand index)
 		{
-			int elementSizeInBytes = 0, alignment = 0;
-			Architecture.GetTypeRequirements(TypeLayout, arrayType.ElementType, out elementSizeInBytes, out alignment);
+			int size = 0, alignment = 0;
+			Architecture.GetTypeRequirements(TypeLayout, arrayType.ElementType, out size, out alignment);
 
-			var elementOffset = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var elementSizeOperand = Operand.CreateConstant(TypeSystem, elementSizeInBytes);
-			context.InsertBefore().SetInstruction(IRInstruction.MulSigned, elementOffset, arrayIndexOperand, elementSizeOperand);
-
-			return elementOffset;
-		}
-
-		/// <summary>
-		/// Calculates the base of the array elements.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="arrayType">The array type.</param>
-		/// <param name="arrayOperand">The array operand.</param>
-		/// <returns>Base address for array elements.</returns>
-		private Operand LoadArrayBaseAddress(Context context, MosaType arrayType, Operand arrayOperand)
-		{
-			var arrayPointer = arrayType.ElementType.ToManagedPointer();
-
-			var arrayAddress = MethodCompiler.CreateVirtualRegister(arrayPointer);
+			var elementOffset = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var elementSize = Operand.CreateConstant(TypeSystem, size);
 			var fixedOffset = Operand.CreateConstant(TypeSystem, (NativePointerSize * 3));
+			var arrayElement = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.InsertBefore().SetInstruction(IRInstruction.AddSigned, arrayAddress, arrayOperand, fixedOffset);
+			var before = context.InsertBefore();
 
-			return arrayAddress;
+			before.AppendInstruction(IRInstruction.MulSigned, elementOffset, index, elementSize);
+			before.AppendInstruction(IRInstruction.AddSigned, arrayElement, elementOffset, fixedOffset);
+
+			return arrayElement;
 		}
 
 		/// <summary>
