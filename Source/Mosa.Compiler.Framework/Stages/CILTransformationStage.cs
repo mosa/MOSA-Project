@@ -274,7 +274,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, source.Offset);
 
-			if (source.Type != null && StoreOnStack(source.Type))
+			if (StoreOnStack(source.Type))
 			{
 				context.SetInstruction(IRInstruction.CompoundLoad, destination, StackFrame, constant);
 				context.MosaType = source.Type;
@@ -329,8 +329,8 @@ namespace Mosa.Compiler.Framework.Stages
 				var destination = context.Result;
 				var size = GetInstructionSize(source.Type);
 
+				Debug.Assert(!StoreOnStack(destination.Type));
 				var moveInstruction = GetMoveInstruction(destination.Type);
-
 				context.SetInstruction(moveInstruction, size, destination, source);
 
 				return;
@@ -353,11 +353,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
 
-			var loadInstruction = GetLoadInstruction(type);
-
 			var size = GetInstructionSize(type);
-			context.SetInstruction(loadInstruction, size, destination, source, ConstantZero);
-			context.MosaType = type;
+
+			if (StoreOnStack(type))
+			{
+				context.SetInstruction(IRInstruction.CompoundLoad, destination, source, ConstantZero);
+				context.MosaType = type;
+			}
+			else
+			{
+				var loadInstruction = GetLoadInstruction(type);
+				context.SetInstruction(loadInstruction, size, destination, source, ConstantZero);
+				context.MosaType = type;
+			}
 		}
 
 		/// <summary>
@@ -369,11 +377,20 @@ namespace Mosa.Compiler.Framework.Stages
 			var fieldType = context.MosaField.FieldType;
 			var destination = context.Result;
 
-			var loadInstruction = GetLoadInstruction(fieldType);
-
 			var size = GetInstructionSize(fieldType);
-			context.SetInstruction(loadInstruction, size, destination, Operand.CreateField(context.MosaField), ConstantZero);
-			context.MosaType = fieldType;
+			var fieldOperand = Operand.CreateField(context.MosaField);
+
+			if (StoreOnStack(fieldType))
+			{
+				context.SetInstruction(IRInstruction.CompoundLoad, destination, fieldOperand, ConstantZero);
+				context.MosaType = fieldType;
+			}
+			else
+			{
+				var loadInstruction = GetLoadInstruction(fieldType);
+				context.SetInstruction(loadInstruction, size, destination, fieldOperand, ConstantZero);
+				context.MosaType = fieldType;
+			}
 		}
 
 		/// <summary>
@@ -481,9 +498,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, context.Result.Offset);
 
-			var storeInstruction = GetStoreInstruction(context.Operand1.Type);
-
-			context.SetInstruction(storeInstruction, context.Size, null, StackFrame, constant, context.Operand1);
+			if (StoreOnStack(context.Operand1.Type))
+			{
+				context.SetInstruction(IRInstruction.CompoundStore, context.Size, null, StackFrame, constant, context.Operand1);
+			}
+			else
+			{
+				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+				context.SetInstruction(storeInstruction, context.Size, null, StackFrame, constant, context.Operand1);
+			}
 		}
 
 		/// <summary>
@@ -519,11 +542,20 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var field = context.MosaField;
 			var size = GetInstructionSize(field.FieldType);
+			var fieldOperand = Operand.CreateField(field);
 
-			var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+			if (StoreOnStack(field.FieldType))
+			{
+				context.SetInstruction(IRInstruction.CompoundStore, size, null, fieldOperand, ConstantZero, context.Operand1);
+				context.MosaType = field.FieldType;
+			}
+			else
+			{
+				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
 
-			context.SetInstruction(storeInstruction, size, null, Operand.CreateField(field), ConstantZero, context.Operand1);
-			context.MosaType = field.FieldType;
+				context.SetInstruction(storeInstruction, size, null, fieldOperand, ConstantZero, context.Operand1);
+				context.MosaType = field.FieldType;
+			}
 		}
 
 		/// <summary>
@@ -1150,13 +1182,19 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Result = tmp;
 			context.ResultCount = 1;
 
-			var size = GetInstructionSize(tmp.Type);
+			var size = GetInstructionSize(type);
 
-			var loadInstruction = GetLoadInstruction(result.Type);
-
-			context.AppendInstruction(loadInstruction, size, result, tmp, ConstantZero);
-			context.MosaType = type;
-			return;
+			if (StoreOnStack(type))
+			{
+				context.AppendInstruction(IRInstruction.CompoundLoad, result, tmp, ConstantZero);
+				context.MosaType = type;
+			}
+			else
+			{
+				var loadInstruction = GetLoadInstruction(type);
+				context.AppendInstruction(loadInstruction, size, result, tmp, ConstantZero);
+				context.MosaType = type;
+			}
 		}
 
 		/// <summary>
@@ -1361,13 +1399,19 @@ namespace Mosa.Compiler.Framework.Stages
 			int offset = TypeLayout.GetFieldOffset(field);
 			Operand offsetOperand = Operand.CreateConstant(TypeSystem, offset);
 
-			var loadInstruction = GetLoadInstruction(field.FieldType);
-
-			Debug.Assert(offsetOperand != null);
-
 			var size = GetInstructionSize(field.FieldType);
-			context.SetInstruction(loadInstruction, size, result, operand, offsetOperand);
-			context.MosaType = field.FieldType;
+
+			if (StoreOnStack(field.FieldType))
+			{
+				context.SetInstruction(IRInstruction.CompoundLoad, result, operand, ConstantZero);
+				context.MosaType = field.FieldType;
+			}
+			else
+			{
+				var loadInstruction = GetLoadInstruction(field.FieldType);
+				context.SetInstruction(loadInstruction, size, result, operand, ConstantZero);
+				context.MosaType = field.FieldType;
+			}
 		}
 
 		/// <summary>
@@ -1393,7 +1437,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Operand objectOperand = context.Operand1;
 			Operand valueOperand = context.Operand2;
-			Operand temp = MethodCompiler.CreateVirtualRegister(context.MosaField.FieldType);
 
 			int offset = TypeLayout.GetFieldOffset(context.MosaField);
 			Operand offsetOperand = Operand.CreateConstant(TypeSystem, offset);
@@ -1402,13 +1445,21 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var size = GetInstructionSize(fieldType);
 
-			var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+			if (StoreOnStack(fieldType))
+			{
+				context.AppendInstruction(IRInstruction.CompoundStore, size, null, objectOperand, offsetOperand, valueOperand);
+				context.MosaType = fieldType;
+			}
+			else
+			{
+				Operand temp = MethodCompiler.CreateVirtualRegister(context.MosaField.FieldType);
+				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+				var moveInstruction = GetMoveInstruction(temp.Type);
 
-			var moveInstruction = GetMoveInstruction(temp.Type);
-
-			context.SetInstruction(moveInstruction, temp, valueOperand);
-			context.AppendInstruction(storeInstruction, size, null, objectOperand, offsetOperand, temp);
-			context.MosaType = fieldType;
+				context.SetInstruction(moveInstruction, temp, valueOperand);
+				context.AppendInstruction(storeInstruction, size, null, objectOperand, offsetOperand, temp);
+				context.MosaType = fieldType;
+			}
 		}
 
 		/// <summary>
@@ -1640,13 +1691,19 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Result = tmp;
 			context.ResultCount = 1;
 
-			var size = GetInstructionSize(tmp.Type);
+			var size = GetInstructionSize(type);
 
-			var loadInstruction = GetLoadInstruction(result.Type);
-
-			context.AppendInstruction(loadInstruction, size, result, tmp, ConstantZero);
-			context.MosaType = type;
-			return;
+			if (StoreOnStack(type))
+			{
+				context.AppendInstruction(IRInstruction.CompoundLoad, result, tmp, ConstantZero);
+				context.MosaType = type;
+			}
+			else
+			{
+				var loadInstruction = GetLoadInstruction(type);
+				context.AppendInstruction(loadInstruction, size, result, tmp, ConstantZero);
+				context.MosaType = type;
+			}
 		}
 
 		/// <summary>
