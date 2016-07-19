@@ -122,9 +122,9 @@ namespace Mosa.Compiler.Framework.IR
 
 		public static readonly SubFloatR8 SubFloatR8 = new SubFloatR8();
 
-		public static readonly SignExtendedMove SignExtendedMove = new SignExtendedMove();
+		public static readonly MoveSignExtended MoveSignExtended = new MoveSignExtended();
 
-		public static readonly ZeroExtendedMove ZeroExtendedMove = new ZeroExtendedMove();
+		public static readonly MoveZeroExtended MoveZeroExtended = new MoveZeroExtended();
 
 		public static readonly Call Call = new Call();
 

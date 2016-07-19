@@ -823,7 +823,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void SimplifyExtendedMoveWithConstant(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.ZeroExtendedMove || node.Instruction == IRInstruction.SignExtendedMove))
+			if (!(node.Instruction == IRInstruction.MoveZeroExtended || node.Instruction == IRInstruction.MoveSignExtended))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -840,7 +840,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Operand newOperand;
 
-			if (node.Instruction == IRInstruction.ZeroExtendedMove && result.IsUnsigned && op1.IsSigned)
+			if (node.Instruction == IRInstruction.MoveZeroExtended && result.IsUnsigned && op1.IsSigned)
 			{
 				var newConstant = Unsign(op1.Type, op1.ConstantSignedLongInteger);
 				newOperand = Operand.CreateConstant(node.Result.Type, newConstant);
@@ -1382,7 +1382,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ReduceZeroExtendedMove(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.ZeroExtendedMove)
+			if (node.Instruction != IRInstruction.MoveZeroExtended)
 				return;
 
 			if (!node.Operand1.IsVirtualRegister)
@@ -1402,7 +1402,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ReduceTruncationAndExpansion(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.ZeroExtendedMove)
+			if (node.Instruction != IRInstruction.MoveZeroExtended)
 				return;
 
 			if (!node.Operand1.IsVirtualRegister)
@@ -1534,7 +1534,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void SimplifyExtendedMove(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.ZeroExtendedMove || node.Instruction == IRInstruction.SignExtendedMove))
+			if (!(node.Instruction == IRInstruction.MoveZeroExtended || node.Instruction == IRInstruction.MoveSignExtended))
 				return;
 
 			if (!node.Result.IsVirtualRegister || !node.Operand1.IsVirtualRegister)
@@ -1913,7 +1913,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
 						node.SetOperand(i, replacement);
 
-						if (node.Instruction == IRInstruction.ZeroExtendedMove)
+						if (node.Instruction == IRInstruction.MoveZeroExtended)
 						{
 							node.Instruction = IRInstruction.MoveInteger;
 							node.Size = InstructionSize.None;
@@ -1937,7 +1937,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
 						node.SetResult(i, replacement);
 
-						if (node.Instruction == IRInstruction.ZeroExtendedMove)
+						if (node.Instruction == IRInstruction.MoveZeroExtended)
 						{
 							node.Instruction = IRInstruction.MoveInteger;
 							node.Size = InstructionSize.None;

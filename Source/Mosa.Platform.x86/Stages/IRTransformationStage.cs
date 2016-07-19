@@ -74,8 +74,8 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.Switch] = Switch;
 			visitationDictionary[IRInstruction.Break] = Break;
 			visitationDictionary[IRInstruction.Nop] = Nop;
-			visitationDictionary[IRInstruction.SignExtendedMove] = SignExtendedMove;
-			visitationDictionary[IRInstruction.ZeroExtendedMove] = ZeroExtendedMove;
+			visitationDictionary[IRInstruction.MoveSignExtended] = SignExtendedMove;
+			visitationDictionary[IRInstruction.MoveZeroExtended] = ZeroExtendedMove;
 			visitationDictionary[IRInstruction.Call] = Call;
 			visitationDictionary[IRInstruction.ConversionFloatR4ToInteger] = ConversionFloatR4ToInteger;
 			visitationDictionary[IRInstruction.ConversionFloatR8ToInteger] = ConversionFloatR8ToInteger;

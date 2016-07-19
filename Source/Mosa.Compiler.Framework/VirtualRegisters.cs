@@ -60,14 +60,14 @@ namespace Mosa.Compiler.Framework
 			return virtualRegister;
 		}
 
-		public void SplitLongOperand(TypeSystem typeSystem, Operand longOperand, int highOffset, int lowOffset)
+		public void SplitLongOperand(TypeSystem typeSystem, Operand longOperand)
 		{
 			Debug.Assert(longOperand.Is64BitInteger);
 
 			if (longOperand.Low == null && longOperand.High == null)
 			{
-				virtualRegisters.Add(Operand.CreateHighSplitForLong(typeSystem, longOperand, highOffset, virtualRegisters.Count + 1));
-				virtualRegisters.Add(Operand.CreateLowSplitForLong(typeSystem, longOperand, lowOffset, virtualRegisters.Count + 1));
+				virtualRegisters.Add(Operand.CreateLowSplitForLong(typeSystem, longOperand, virtualRegisters.Count + 1));
+				virtualRegisters.Add(Operand.CreateHighSplitForLong(typeSystem, longOperand, virtualRegisters.Count + 1));
 			}
 		}
 

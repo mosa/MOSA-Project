@@ -8,17 +8,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <remarks>
 	/// This instruction takes the source operand and converts to the request size maintaining its sign.
 	/// </remarks>
-	public sealed class SignExtendedMove : TwoOperandInstruction
+	public sealed class MoveZeroExtended : TwoOperandInstruction
 	{
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SignExtendedMove"/>.
-		/// </summary>
-		public SignExtendedMove()
-		{
-		}
-
-		#endregion Construction
 	}
 }

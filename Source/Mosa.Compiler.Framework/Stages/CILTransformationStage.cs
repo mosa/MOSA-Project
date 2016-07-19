@@ -270,7 +270,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var source = context.Operand1;
 			var destination = context.Result;
-			var size = GetInstructionSize(source.Type);
 
 			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, source.Offset);
 
@@ -282,6 +281,8 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				var loadInstruction = GetLoadInstruction(source.Type);
+				var size = GetInstructionSize(source.Type);
+
 				context.SetInstruction(loadInstruction, size, destination, StackFrame, constant);
 			}
 		}
@@ -353,8 +354,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
 
-			var size = GetInstructionSize(type);
-
 			if (StoreOnStack(type))
 			{
 				context.SetInstruction(IRInstruction.CompoundLoad, destination, source, ConstantZero);
@@ -363,6 +362,8 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				var loadInstruction = GetLoadInstruction(type);
+				var size = GetInstructionSize(type);
+
 				context.SetInstruction(loadInstruction, size, destination, source, ConstantZero);
 				context.MosaType = type;
 			}
@@ -518,14 +519,14 @@ namespace Mosa.Compiler.Framework.Stages
 			// This is actually stind.* and stobj - the opcodes have the same meanings
 			var type = context.MosaType;  // pass thru
 
-			var size = GetInstructionSize(type);
-
 			if (StoreOnStack(type))
 			{
-				context.SetInstruction(IRInstruction.CompoundStore, size, null, context.Operand1, ConstantZero, context.Operand2);
+				context.SetInstruction(IRInstruction.CompoundStore, null, context.Operand1, ConstantZero, context.Operand2);
 			}
 			else
 			{
+				var size = GetInstructionSize(type);
+
 				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
 
 				context.SetInstruction(storeInstruction, size, null, StackFrame, context.Operand1, context.Operand2);
@@ -803,12 +804,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.IsUI1)
 			{
 				mask = 0xFF;
-				return (type.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove);
+				return (type.IsSigned ? (BaseInstruction)IRInstruction.MoveSignExtended : (BaseInstruction)IRInstruction.MoveZeroExtended);
 			}
 			else if (type.IsUI2)
 			{
 				mask = 0xFFFF;
-				return type.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove;
+				return type.IsSigned ? (BaseInstruction)IRInstruction.MoveSignExtended : (BaseInstruction)IRInstruction.MoveZeroExtended;
 			}
 			else if (type.IsUI4)
 			{
@@ -2009,11 +2010,11 @@ namespace Mosa.Compiler.Framework.Stages
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* I2 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.SignExtendedMove,
+				/* I1 */ IRInstruction.MoveSignExtended,
 				/* I2 */ IRInstruction.MoveInteger,
 				/* I4 */ IRInstruction.LogicalAnd,
 				/* I8 */ IRInstruction.LogicalAnd,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
+				/* U1 */ IRInstruction.MoveZeroExtended,
 				/* U2 */ IRInstruction.MoveInteger,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
@@ -2024,12 +2025,12 @@ namespace Mosa.Compiler.Framework.Stages
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* I4 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.SignExtendedMove,
-				/* I2 */ IRInstruction.SignExtendedMove,
+				/* I1 */ IRInstruction.MoveSignExtended,
+				/* I2 */ IRInstruction.MoveSignExtended,
 				/* I4 */ IRInstruction.MoveInteger,
 				/* I8 */ IRInstruction.LogicalAnd,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
 				/* U4 */ IRInstruction.MoveInteger,
 				/* U8 */ IRInstruction.LogicalAnd,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
@@ -2039,13 +2040,13 @@ namespace Mosa.Compiler.Framework.Stages
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* I8 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.SignExtendedMove,
-				/* I2 */ IRInstruction.SignExtendedMove,
-				/* I4 */ IRInstruction.SignExtendedMove,
+				/* I1 */ IRInstruction.MoveSignExtended,
+				/* I2 */ IRInstruction.MoveSignExtended,
+				/* I4 */ IRInstruction.MoveSignExtended,
 				/* I8 */ IRInstruction.MoveInteger,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
-				/* U4 */ IRInstruction.ZeroExtendedMove,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
 				/* U8 */ IRInstruction.MoveInteger,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
 				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
@@ -2069,11 +2070,11 @@ namespace Mosa.Compiler.Framework.Stages
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* U2 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.ZeroExtendedMove,
+				/* I1 */ IRInstruction.MoveZeroExtended,
 				/* I2 */ IRInstruction.MoveInteger,
 				/* I4 */ IRInstruction.LogicalAnd,
 				/* I8 */ IRInstruction.LogicalAnd,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
+				/* U1 */ IRInstruction.MoveZeroExtended,
 				/* U2 */ IRInstruction.MoveInteger,
 				/* U4 */ IRInstruction.LogicalAnd,
 				/* U8 */ IRInstruction.LogicalAnd,
@@ -2084,12 +2085,12 @@ namespace Mosa.Compiler.Framework.Stages
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* U4 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.ZeroExtendedMove,
-				/* I2 */ IRInstruction.ZeroExtendedMove,
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveZeroExtended,
 				/* I4 */ IRInstruction.MoveInteger,
 				/* I8 */ IRInstruction.LogicalAnd,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
 				/* U4 */ IRInstruction.MoveInteger,
 				/* U8 */ IRInstruction.LogicalAnd,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
@@ -2099,13 +2100,13 @@ namespace Mosa.Compiler.Framework.Stages
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* U8 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.ZeroExtendedMove,
-				/* I2 */ IRInstruction.ZeroExtendedMove,
-				/* I4 */ IRInstruction.ZeroExtendedMove,
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveZeroExtended,
+				/* I4 */ IRInstruction.MoveZeroExtended,
 				/* I8 */ IRInstruction.MoveInteger,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
-				/* U4 */ IRInstruction.ZeroExtendedMove,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
 				/* U8 */ IRInstruction.MoveInteger,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
 				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
@@ -2144,14 +2145,14 @@ namespace Mosa.Compiler.Framework.Stages
 				/* Ptr*/ null,
 			},
 			/* I  */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.SignExtendedMove,
-				/* I2 */ IRInstruction.SignExtendedMove,
-				/* I4 */ IRInstruction.SignExtendedMove,
+				/* I1 */ IRInstruction.MoveSignExtended,
+				/* I2 */ IRInstruction.MoveSignExtended,
+				/* I4 */ IRInstruction.MoveSignExtended,
 				/* I8 */ IRInstruction.MoveInteger,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
-				/* U4 */ IRInstruction.ZeroExtendedMove,
-				/* U8 */ IRInstruction.ZeroExtendedMove,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
+				/* U8 */ IRInstruction.MoveZeroExtended,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
 				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
 				/* I  */ IRInstruction.MoveInteger,
@@ -2159,13 +2160,13 @@ namespace Mosa.Compiler.Framework.Stages
 				/* Ptr*/ IRInstruction.MoveInteger,
 			},
 			/* U  */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.ZeroExtendedMove,
-				/* I2 */ IRInstruction.ZeroExtendedMove,
-				/* I4 */ IRInstruction.ZeroExtendedMove,
-				/* I8 */ IRInstruction.ZeroExtendedMove,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
-				/* U4 */ IRInstruction.ZeroExtendedMove,
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveZeroExtended,
+				/* I4 */ IRInstruction.MoveZeroExtended,
+				/* I8 */ IRInstruction.MoveZeroExtended,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
 				/* U8 */ IRInstruction.MoveInteger,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
 				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
@@ -2174,14 +2175,14 @@ namespace Mosa.Compiler.Framework.Stages
 				/* Ptr*/ IRInstruction.MoveInteger,
 			},
 			/* Ptr*/ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.ZeroExtendedMove,
-				/* I2 */ IRInstruction.ZeroExtendedMove,
-				/* I4 */ IRInstruction.ZeroExtendedMove,
-				/* I8 */ IRInstruction.ZeroExtendedMove,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
-				/* U4 */ IRInstruction.ZeroExtendedMove,
-				/* U8 */ IRInstruction.ZeroExtendedMove,
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveZeroExtended,
+				/* I4 */ IRInstruction.MoveZeroExtended,
+				/* I8 */ IRInstruction.MoveZeroExtended,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
+				/* U8 */ IRInstruction.MoveZeroExtended,
 				/* R4 */ null,
 				/* R8 */ null,
 				/* I  */ IRInstruction.MoveInteger,

@@ -309,15 +309,15 @@ namespace Mosa.Compiler.Framework
 				int size, alignment;
 				Architecture.GetTypeRequirements(TypeLayout, operand.Type, out size, out alignment);
 
-				// adjust split children
-				if (operand.Low != null)
-				{
-					operand.Low.Offset = offset + (operand.Low.Offset - operand.Offset);
-					operand.High.Offset = offset + (operand.High.Offset - operand.Offset);
-				}
-
 				operand.Offset = offset;
 				operand.IsResolved = true;
+
+				//// adjust split children
+				//if (operand.Low != null)
+				//{
+				//	operand.Low.Offset = offset + (operand.Low.Offset - operand.Offset);
+				//	operand.High.Offset = offset + (operand.High.Offset - operand.Offset);
+				//}
 
 				size = Alignment.AlignUp(size, alignment);
 				offset = offset + size;

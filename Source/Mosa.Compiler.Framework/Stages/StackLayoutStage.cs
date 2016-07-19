@@ -67,12 +67,12 @@ namespace Mosa.Compiler.Framework.Stages
 				size = Alignment.AlignUp(size, alignment);
 				offset = offset - size;
 
-				// adjust split children
-				if (operand.Low != null)
-				{
-					operand.Low.Offset = offset + (operand.Low.Offset - operand.Offset);
-					operand.High.Offset = offset + (operand.High.Offset - operand.Offset);
-				}
+				//// adjust split children
+				//if (operand.Low != null)
+				//{
+				//	operand.Low.Offset = offset + (operand.Low.Offset - operand.Offset);
+				//	operand.High.Offset = offset + (operand.High.Offset - operand.Offset);
+				//}
 
 				operand.Offset = offset;
 				operand.IsResolved = true;

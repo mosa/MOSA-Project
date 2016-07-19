@@ -794,13 +794,13 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates the low 32 bit portion of a 64-bit <see cref="Operand"/>.
+		/// Creates the low 32 bit portion of a 64-bit <see cref="Operand" />.
 		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
 		/// <param name="longOperand">The long operand.</param>
-		/// <param name="offset">The offset.</param>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static Operand CreateLowSplitForLong(TypeSystem typeSystem, Operand longOperand, int offset, int index)
+		public static Operand CreateLowSplitForLong(TypeSystem typeSystem, Operand longOperand, int index)
 		{
 			Debug.Assert(longOperand.IsLong);
 
@@ -833,13 +833,13 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates the high 32 bit portion of a 64-bit <see cref="Operand"/>.
+		/// Creates the high 32 bit portion of a 64-bit <see cref="Operand" />.
 		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
 		/// <param name="longOperand">The long operand.</param>
-		/// <param name="offset">The offset.</param>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static Operand CreateHighSplitForLong(TypeSystem typeSystem, Operand longOperand, int offset, int index)
+		public static Operand CreateHighSplitForLong(TypeSystem typeSystem, Operand longOperand, int index)
 		{
 			Debug.Assert(longOperand.IsLong);
 

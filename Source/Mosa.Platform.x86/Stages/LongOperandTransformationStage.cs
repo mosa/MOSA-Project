@@ -24,8 +24,7 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.ArithmeticShiftRight] = ArithmeticShiftRight;
 			visitationDictionary[IRInstruction.CompareIntegerBranch] = CompareIntegerBranch;
 			visitationDictionary[IRInstruction.CompareInteger] = CompareInteger;
-			visitationDictionary[IRInstruction.LoadInteger] = Load;
-			visitationDictionary[IRInstruction.CompoundLoad] = CompoundLoad;
+			visitationDictionary[IRInstruction.LoadInteger] = LoadInteger;
 			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
 			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
 			visitationDictionary[IRInstruction.LogicalAnd] = LogicalAnd;
@@ -33,12 +32,11 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.LogicalXor] = LogicalXor;
 			visitationDictionary[IRInstruction.LogicalNot] = LogicalNot;
 			visitationDictionary[IRInstruction.MoveInteger] = MoveInteger;
-			visitationDictionary[IRInstruction.CompoundMove] = CompoundMove;
+			visitationDictionary[IRInstruction.MoveSignExtended] = MoveSignExtended;
+			visitationDictionary[IRInstruction.MoveZeroExtended] = MoveZeroExtended;
+			visitationDictionary[IRInstruction.StoreInteger] = StoreInteger;
 			visitationDictionary[IRInstruction.ShiftLeft] = ShiftLeft;
 			visitationDictionary[IRInstruction.ShiftRight] = ShiftRight;
-			visitationDictionary[IRInstruction.SignExtendedMove] = SignExtendedMove;
-			visitationDictionary[IRInstruction.StoreInteger] = StoreInt;
-			visitationDictionary[IRInstruction.CompoundStore] = CompoundStore;
 			visitationDictionary[IRInstruction.DivSigned] = DivSigned;
 			visitationDictionary[IRInstruction.DivUnsigned] = DivUnsigned;
 			visitationDictionary[IRInstruction.MulSigned] = MulSigned;
@@ -47,7 +45,6 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.SubUnsigned] = SubUnsigned;
 			visitationDictionary[IRInstruction.RemSigned] = RemSigned;
 			visitationDictionary[IRInstruction.RemUnsigned] = RemUnsigned;
-			visitationDictionary[IRInstruction.ZeroExtendedMove] = ZeroExtendedMove;
 			visitationDictionary[IRInstruction.AddSigned] = AddSigned;
 			visitationDictionary[IRInstruction.AddUnsigned] = AddUnsigned;
 			visitationDictionary[IRInstruction.Call] = Call;
@@ -67,7 +64,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (operand.Is64BitInteger)
 			{
-				methodCompiler.VirtualRegisters.SplitLongOperand(methodCompiler.TypeSystem, operand, 4, 0);
+				methodCompiler.VirtualRegisters.SplitLongOperand(methodCompiler.TypeSystem, operand);
 				operandLow = operand.Low;
 				operandHigh = operand.High;
 				return;
@@ -78,8 +75,6 @@ namespace Mosa.Platform.x86.Stages
 				operandHigh = ConstantZero;
 				return;
 			}
-
-			//throw new InvalidProgramException("@can not split" + operand.ToString());
 		}
 
 		private void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
@@ -529,17 +524,17 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand op0L, op0H, op1L, op1H;
 
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
+
 			if (context.Result.Is64BitInteger)
 			{
 				SplitLongOperand(context.Result, out op0L, out op0H);
-				SplitLongOperand(context.Operand1, out op1L, out op1H);
 
 				context.SetInstruction(X86.Mov, InstructionSize.Size32, op0L, op1L);
 				context.AppendInstruction(X86.Mov, InstructionSize.Size32, op0H, op1H);
 			}
 			else
 			{
-				SplitLongOperand(context.Operand1, out op1L, out op1H);
 				context.SetInstruction(X86.Mov, InstructionSize.Size32, context.Result, op1L);
 			}
 		}
@@ -657,24 +652,22 @@ namespace Mosa.Platform.x86.Stages
 			Operand op0L, op0H;
 			SplitLongOperand(context.Result, out op0L, out op0H);
 
+			context.SetInstruction(X86.MovLoad, InstructionSize.Size32, op0L, address, offset);
+
+			if (offset.IsResolvedConstant)
+			{
+				var offset2 = offset.IsConstantZero ? ConstantFour : Operand.CreateConstant(TypeSystem, offset.Offset + NativePointerSize);
+				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, op0H, address, offset2);
+				return;
+			}
+
+			Operand op2L, op2H;
+			SplitLongOperand(offset, out op2L, out op2H);
+
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			if (offset.IsConstantZero)
-			{
-				context.SetInstruction(X86.Mov, v1, address);
-			}
-			else
-			{
-				context.SetInstruction(X86.Add, v1, address, offset);
-			}
-
-			context.AppendInstruction(X86.MovLoad, v2, v1, ConstantZero);
-			context.AppendInstruction(X86.Mov, op0L, v2);   // fixme: may not be necessary
-
-			context.AppendInstruction(X86.MovLoad, v3, v1, ConstantFour);
-			context.AppendInstruction(X86.Mov, op0H, v3);   // fixme: may not be necessary
+			context.AppendInstruction(X86.Add, InstructionSize.Size32, v1, op2L, ConstantFour);
+			context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, op0H, address, v1);
 		}
 
 		/// <summary>
@@ -686,23 +679,25 @@ namespace Mosa.Platform.x86.Stages
 			Operand address = context.Operand1;
 			Operand offset = context.Operand2;
 
-			Operand op0L, op0H;
-			SplitLongOperand(context.Operand3, out op0L, out op0H);
+			Operand op3L, op3H;
+			SplitLongOperand(context.Operand3, out op3L, out op3H);
+
+			context.SetInstruction(X86.MovStore, InstructionSize.Size32, null, address, offset, op3L);
+
+			if (offset.IsResolvedConstant)
+			{
+				var offset2 = offset.IsConstantZero ? ConstantFour : Operand.CreateConstant(TypeSystem, offset.Offset + NativePointerSize);
+				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, address, offset2, op3H);
+				return;
+			}
+
+			Operand op2L, op2H;
+			SplitLongOperand(offset, out op2L, out op2H);
 
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			// Fortunately in 32-bit mode, we can't have 64-bit offsets so a 32-bit add will work.
-			if (offset.IsConstantZero)
-			{
-				context.SetInstruction(X86.Mov, v1, address);
-			}
-			else
-			{
-				context.SetInstruction(X86.Add, v1, address, offset);
-			}
-
-			context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, v1, ConstantZero, op0L);
-			context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, v1, ConstantFour, op0H);
+			context.AppendInstruction(X86.Add, InstructionSize.Size32, v1, op2L, ConstantFour);
+			context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, address, v1, op3H);
 		}
 
 		/// <summary>
@@ -794,7 +789,7 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <returns></returns>
-		public static bool AreAny64Bit(Context context)
+		public static bool Any64Bit(Context context)
 		{
 			if (context.Result.Is64BitInteger)
 				return true;
@@ -850,16 +845,12 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for Load.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Load(Context context)
+		private void LoadInteger(Context context)
 		{
 			if (context.Operand1.Is64BitInteger || context.Result.Is64BitInteger)
 			{
 				ExpandLoad(context);
 			}
-		}
-
-		private void CompoundLoad(Context context)
-		{
 		}
 
 		/// <summary>
@@ -868,7 +859,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LoadZeroExtended(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				throw new NotImplementCompilerException("64bit LoadZeroExtended not implemented!");
 			}
@@ -880,7 +871,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LoadSignExtended(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				throw new NotImplementCompilerException("64bit LoadSignExtended not implemented!");
 			}
@@ -892,7 +883,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LogicalAnd(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandAnd(context);
 			}
@@ -904,7 +895,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LogicalOr(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandOr(context);
 			}
@@ -916,7 +907,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LogicalXor(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandXor(context);
 			}
@@ -928,7 +919,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LogicalNot(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandNot(context);
 			}
@@ -940,14 +931,10 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void MoveInteger(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandMoveInteger(context);
 			}
-		}
-
-		private void CompoundMove(Context context)
-		{
 		}
 
 		/// <summary>
@@ -956,7 +943,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ShiftLeft(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandShiftLeft(context);
 			}
@@ -968,7 +955,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ShiftRight(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandShiftRight(context);
 			}
@@ -978,9 +965,9 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SignExtendedMoveInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void SignExtendedMove(Context context)
+		private void MoveSignExtended(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandSignedMove(context);
 			}
@@ -990,16 +977,12 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for StoreInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void StoreInt(Context context)
+		private void StoreInteger(Context context)
 		{
 			if (context.Size == InstructionSize.Size64)
 			{
 				ExpandStore(context);
 			}
-		}
-
-		private void CompoundStore(Context context)
-		{
 		}
 
 		/// <summary>
@@ -1008,7 +991,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void DivSigned(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandDiv(context);
 			}
@@ -1020,7 +1003,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void DivUnsigned(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandUDiv(context);
 			}
@@ -1032,7 +1015,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void MulSigned(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandMul(context);
 			}
@@ -1044,7 +1027,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void MulUnsigned(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandMul(context);
 			}
@@ -1056,7 +1039,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void SubSigned(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandSub(context);
 			}
@@ -1068,7 +1051,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void SubUnsigned(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandSub(context);
 			}
@@ -1080,7 +1063,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void RemSigned(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandRem(context);
 			}
@@ -1092,7 +1075,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void RemUnsigned(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandURem(context);
 			}
@@ -1102,9 +1085,9 @@ namespace Mosa.Platform.x86.Stages
 		/// Zeroes the extended move instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void ZeroExtendedMove(Context context)
+		private void MoveZeroExtended(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandUnsignedMove(context);
 			}
@@ -1116,7 +1099,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddSigned(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandAdd(context);
 			}
@@ -1128,7 +1111,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddUnsigned(Context context)
 		{
-			if (AreAny64Bit(context))
+			if (Any64Bit(context))
 			{
 				ExpandAdd(context);
 			}

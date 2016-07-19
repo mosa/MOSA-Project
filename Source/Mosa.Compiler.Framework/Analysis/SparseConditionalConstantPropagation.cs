@@ -413,8 +413,8 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				AddressOf(node);
 			}
-			else if (instruction == IRInstruction.ZeroExtendedMove ||
-				instruction == IRInstruction.SignExtendedMove)
+			else if (instruction == IRInstruction.MoveZeroExtended ||
+				instruction == IRInstruction.MoveSignExtended)
 			{
 				Move(node);
 			}

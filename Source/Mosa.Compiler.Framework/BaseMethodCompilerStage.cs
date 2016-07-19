@@ -745,11 +745,11 @@ namespace Mosa.Compiler.Framework
 
 			if (MustSignExtendOnLoad(type))
 			{
-				instruction = IRInstruction.SignExtendedMove;
+				instruction = IRInstruction.MoveSignExtended;
 			}
 			else if (MustZeroExtendOnLoad(type))
 			{
-				instruction = IRInstruction.ZeroExtendedMove;
+				instruction = IRInstruction.MoveZeroExtended;
 			}
 			else if (type.IsR4)
 			{
