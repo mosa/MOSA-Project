@@ -26,6 +26,112 @@ namespace Mosa.Platform.x86.Stages
 		#region Visitation Methods
 
 		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Call"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Call(Context context)
+		{
+			if (context.Operand1 == null)
+				return;
+
+			if (!context.Operand1.IsCPURegister)
+				return;
+
+			var before = context.Previous;
+
+			while (before.IsEmpty && !before.IsBlockStartInstruction)
+			{
+				before = before.Previous;
+			}
+
+			if (before == null || before.IsBlockStartInstruction)
+				return;
+
+			if (before.Instruction != X86.Mov)
+				return;
+
+			if (!before.Result.IsCPURegister)
+				return;
+
+			if (context.Operand1.Register != before.Result.Register)
+				return;
+
+			before.SetInstruction(X86.Call, null, before.Operand1);
+			context.Empty();
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.In"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void In(Context context)
+		{
+			var size = context.Size;
+
+			if (size == InstructionSize.Size32)
+				return;
+
+			Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
+
+			// NOTE: Other option is to use Movzx after IN instruction
+			context.InsertBefore().SetInstruction(X86.Mov, context.Result, ConstantZero);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Mov(Context context)
+		{
+			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
+			{
+				context.Empty();
+				return;
+			}
+
+			// Mov can not use ESI or EDI registers with 8 or 16 bit memory or register
+			if (context.Operand1.IsCPURegister && context.Result.IsCPURegister
+				&& (context.Result.IsByte || context.Result.IsShort || context.Result.IsChar || context.Result.IsBoolean)
+				&& (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
+			{
+				Operand source = context.Operand1;
+				Operand dest = context.Result;
+
+				Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+
+				context.SetInstruction2(X86.Xchg, eax, source, source, eax);
+				context.AppendInstruction(X86.Mov, dest, eax);
+				context.AppendInstruction2(X86.Xchg, source, eax, eax, source);
+			}
+		}
+
+		/// <summary>
+		/// Movsds instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Movsd(Context context)
+		{
+			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
+			{
+				context.Empty();
+				return;
+			}
+		}
+
+		/// <summary>
+		/// Movss instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Movss(Context context)
+		{
+			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
+			{
+				context.Empty();
+				return;
+			}
+		}
+
+		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Movsx"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -96,57 +202,12 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
+		/// Visitation function for <see cref="IX86Visitor.Nop"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Mov(Context context)
+		public void Nop(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
-			{
-				context.Empty();
-				return;
-			}
-
-			// Mov can not use ESI or EDI registers with 8 or 16 bit memory or register
-			if (context.Operand1.IsCPURegister && context.Result.IsCPURegister
-				&& (context.Result.IsByte || context.Result.IsShort || context.Result.IsChar || context.Result.IsBoolean)
-				&& (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
-			{
-				Operand source = context.Operand1;
-				Operand dest = context.Result;
-
-				Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-
-				context.SetInstruction2(X86.Xchg, eax, source, source, eax);
-				context.AppendInstruction(X86.Mov, dest, eax);
-				context.AppendInstruction2(X86.Xchg, source, eax, eax, source);
-			}
-		}
-
-		/// <summary>
-		/// Movss instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Movss(Context context)
-		{
-			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
-			{
-				context.Empty();
-				return;
-			}
-		}
-
-		/// <summary>
-		/// Movsds instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Movsd(Context context)
-		{
-			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
-			{
-				context.Empty();
-				return;
-			}
+			context.Empty();
 		}
 
 		/// <summary>
@@ -169,67 +230,6 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Setcc, condition, EAX);
 				context.AppendInstruction2(X86.Xchg, result, EAX, EAX, result);
 			}
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Call"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Call(Context context)
-		{
-			if (context.Operand1 == null)
-				return;
-
-			if (!context.Operand1.IsCPURegister)
-				return;
-
-			var before = context.Previous;
-
-			while (before.IsEmpty && !before.IsBlockStartInstruction)
-			{
-				before = before.Previous;
-			}
-
-			if (before == null || before.IsBlockStartInstruction)
-				return;
-
-			if (before.Instruction != X86.Mov)
-				return;
-
-			if (!before.Result.IsCPURegister)
-				return;
-
-			if (context.Operand1.Register != before.Result.Register)
-				return;
-
-			before.SetInstruction(X86.Call, null, before.Operand1);
-			context.Empty();
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Nop"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Nop(Context context)
-		{
-			context.Empty();
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.In"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void In(Context context)
-		{
-			var size = context.Size;
-
-			if (size == InstructionSize.Size32)
-				return;
-
-			Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
-
-			// NOTE: Other option is to use Movzx after IN instruction
-			context.InsertBefore().SetInstruction(X86.Mov, context.Result, ConstantZero);
 		}
 
 		#endregion Visitation Methods

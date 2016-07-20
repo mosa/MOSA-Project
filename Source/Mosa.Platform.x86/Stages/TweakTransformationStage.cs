@@ -29,114 +29,25 @@ namespace Mosa.Platform.x86.Stages
 		#region Visitation Methods
 
 		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
+		/// Visitation function for <see cref="IX86Visitor.Call"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Mov(Context context)
+		public void Call(Context context)
 		{
-			Debug.Assert(!context.Result.IsResolvedConstant);
+			// FIXME: Result operand should be used instead of Operand1 for the result
+			// FIXME: Move to FixedRegisterAssignmentStage
+			Operand destinationOperand = context.Operand1;
 
-			// Convert moves to float moves, if necessary
-			if (context.Result.IsR4)
+			if (destinationOperand == null || destinationOperand.IsSymbol)
+				return;
+
+			if (!destinationOperand.IsCPURegister)
 			{
-				context.SetInstruction(X86.Movss, InstructionSize.Size32, context.Result, context.Operand1);
-			}
-			else if (context.Result.IsR8)
-			{
-				context.SetInstruction(X86.Movsd, InstructionSize.Size64, context.Result, context.Operand1);
-			}
-			else if (context.Operand1.IsConstant && (context.Result.Type.IsUI1 || context.Result.Type.IsUI2 || context.Result.IsBoolean || context.Result.IsChar))
-			{
-				// Correct source size of constant based on destination size
-				context.Operand1 = Operand.CreateConstant(context.Result.Type, context.Operand1.ConstantUnsignedLongInteger);
-			}
-		}
+				Context before = context.InsertBefore();
+				Operand eax = AllocateVirtualRegister(destinationOperand.Type);
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Cvttsd2si"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Cvttsd2si(Context context)
-		{
-			Operand result = context.Result;
-
-			if (!result.IsCPURegister)
-			{
-				Operand register = AllocateVirtualRegister(result.Type);
-				context.Result = register;
-				context.AppendInstruction(X86.Mov, result, register);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Cvttss2si"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Cvttss2si(Context context)
-		{
-			Operand result = context.Result;
-			Operand register = AllocateVirtualRegister(result.Type);
-
-			if (!result.IsCPURegister)
-			{
-				context.Result = register;
-				context.AppendInstruction(X86.Mov, result, register);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Cvtss2sd" /> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Cvtss2sd(Context context)
-		{
-			Operand result = context.Result;
-
-			if (!result.IsCPURegister)
-			{
-				Operand register = AllocateVirtualRegister(result.Type);
-				context.Result = register;
-				context.AppendInstruction(X86.Movsd, InstructionSize.Size64, result, register);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Cvtsd2ss"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Cvtsd2ss(Context context)
-		{
-			Operand result = context.Result;
-
-			if (!result.IsCPURegister)
-			{
-				Operand register = AllocateVirtualRegister(result.Type);
-				context.Result = register;
-				context.AppendInstruction(X86.Movss, InstructionSize.Size32, result, register);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Movsx"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Movsx(Context context)
-		{
-			if (context.Operand1.IsInt || context.Operand1.IsPointer || !context.Operand1.IsValueType)
-			{
-				context.ReplaceInstructionOnly(X86.Mov);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Movzx"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Movzx(Context context)
-		{
-			if (context.Operand1.IsInt || context.Operand1.IsPointer || !context.Operand1.IsValueType)
-			{
-				context.ReplaceInstructionOnly(X86.Mov);
+				before.SetInstruction(X86.Mov, eax, destinationOperand);
+				context.Operand1 = eax;
 			}
 		}
 
@@ -177,6 +88,118 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Cvtsd2ss"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Cvtsd2ss(Context context)
+		{
+			Operand result = context.Result;
+
+			if (!result.IsCPURegister)
+			{
+				Operand register = AllocateVirtualRegister(result.Type);
+				context.Result = register;
+				context.AppendInstruction(X86.Movss, InstructionSize.Size32, result, register);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Cvtss2sd" /> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Cvtss2sd(Context context)
+		{
+			Operand result = context.Result;
+
+			if (!result.IsCPURegister)
+			{
+				Operand register = AllocateVirtualRegister(result.Type);
+				context.Result = register;
+				context.AppendInstruction(X86.Movsd, InstructionSize.Size64, result, register);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Cvttsd2si"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Cvttsd2si(Context context)
+		{
+			Operand result = context.Result;
+
+			if (!result.IsCPURegister)
+			{
+				Operand register = AllocateVirtualRegister(result.Type);
+				context.Result = register;
+				context.AppendInstruction(X86.Mov, result, register);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Cvttss2si"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Cvttss2si(Context context)
+		{
+			Operand result = context.Result;
+			Operand register = AllocateVirtualRegister(result.Type);
+
+			if (!result.IsCPURegister)
+			{
+				context.Result = register;
+				context.AppendInstruction(X86.Mov, result, register);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Mov(Context context)
+		{
+			Debug.Assert(!context.Result.IsResolvedConstant);
+
+			// Convert moves to float moves, if necessary
+			if (context.Result.IsR4)
+			{
+				context.SetInstruction(X86.Movss, InstructionSize.Size32, context.Result, context.Operand1);
+			}
+			else if (context.Result.IsR8)
+			{
+				context.SetInstruction(X86.Movsd, InstructionSize.Size64, context.Result, context.Operand1);
+			}
+			else if (context.Operand1.IsConstant && (context.Result.Type.IsUI1 || context.Result.Type.IsUI2 || context.Result.IsBoolean || context.Result.IsChar))
+			{
+				// Correct source size of constant based on destination size
+				context.Operand1 = Operand.CreateConstant(context.Result.Type, context.Operand1.ConstantUnsignedLongInteger);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Movsx"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Movsx(Context context)
+		{
+			if (context.Operand1.IsInt || context.Operand1.IsPointer || !context.Operand1.IsValueType)
+			{
+				context.ReplaceInstructionOnly(X86.Mov);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Movzx"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Movzx(Context context)
+		{
+			if (context.Operand1.IsInt || context.Operand1.IsPointer || !context.Operand1.IsValueType)
+			{
+				context.ReplaceInstructionOnly(X86.Mov);
+			}
+		}
+
+		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Sar"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -201,29 +224,6 @@ namespace Mosa.Platform.x86.Stages
 		public void Shr(Context context)
 		{
 			ConvertShiftConstantToByte(context);
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Call"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Call(Context context)
-		{
-			// FIXME: Result operand should be used instead of Operand1 for the result
-			// FIXME: Move to FixedRegisterAssignmentStage
-			Operand destinationOperand = context.Operand1;
-
-			if (destinationOperand == null || destinationOperand.IsSymbol)
-				return;
-
-			if (!destinationOperand.IsCPURegister)
-			{
-				Context before = context.InsertBefore();
-				Operand eax = AllocateVirtualRegister(destinationOperand.Type);
-
-				before.SetInstruction(X86.Mov, eax, destinationOperand);
-				context.Operand1 = eax;
-			}
 		}
 
 		#endregion Visitation Methods
