@@ -218,7 +218,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsVirtualRegister)
 			{
-				mappedOperand = MethodCompiler.CreateVirtualRegister(operand.Type);
+				mappedOperand = AllocateVirtualRegister(operand.Type);
 			}
 			else if (operand.IsField)
 			{

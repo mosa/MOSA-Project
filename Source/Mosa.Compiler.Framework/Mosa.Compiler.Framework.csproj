@@ -101,6 +101,8 @@
     <Compile Include="Intrinsics\Load64.cs" />
     <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="IR\AddFloatR4.cs" />
+    <Compile Include="IR\StableObjectTracking.cs" />
+    <Compile Include="IR\UnstableObjectTracking.cs" />
     <Compile Include="IR\MoveInteger.cs" />
     <Compile Include="IR\MoveFloatR8.cs" />
     <Compile Include="IR\MoveFloatR4.cs" />

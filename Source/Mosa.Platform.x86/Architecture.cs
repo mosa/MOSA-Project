@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker.Elf;
 using Mosa.Compiler.MosaTypeSystem;
@@ -343,19 +344,22 @@ namespace Mosa.Platform.x86
 		/// <param name="size">The size.</param>
 		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand destinationOffset, Operand source, Operand sourceOffset, int size)
 		{
-			Debug.Assert(size > 0);
-
 			const int LargeAlignment = 16;
 			int alignedSize = size - (size % NativeAlignment);
 			int largeAlignedTypeSize = size - (size % LargeAlignment);
 
+			Debug.Assert(size > 0);
+
 			var srcReg = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
 			var dstReg = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
-			var tmp = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
-			var tmpLarge = Operand.CreateCPURegister(destination.Type.TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
+
+			context.AppendInstruction(IRInstruction.UnstableObjectTracking);
 
 			context.AppendInstruction(X86.Lea, srcReg, destination, destinationOffset);
 			context.AppendInstruction(X86.Lea, dstReg, source, sourceOffset);
+
+			var tmp = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
+			var tmpLarge = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.R8);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
@@ -376,6 +380,8 @@ namespace Mosa.Platform.x86
 				context.AppendInstruction(X86.MovLoad, InstructionSize.Size8, tmp, srcReg, index);
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
 			}
+
+			context.AppendInstruction(IRInstruction.UnstableObjectTracking);
 		}
 
 		/// <summary>

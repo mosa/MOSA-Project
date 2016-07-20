@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (baseInstruction != null)
 					{
-						if (node.Size == InstructionSize.Native)
+						if (node.Size == InstructionSize.Native | node.Size == InstructionSize.None)
 						{
 							node.Size = NativeInstructionSize;
 						}

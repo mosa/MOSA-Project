@@ -435,12 +435,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.MosaType != null)
 			{
 				source = Operand.CreateUnmanagedSymbolPointer(TypeSystem, context.MosaType.FullName + Metadata.TypeDefinition);
-				runtimeHandle = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+				runtimeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			}
 			else if (context.MosaField != null)
 			{
 				source = Operand.CreateUnmanagedSymbolPointer(TypeSystem, context.MosaField.FullName + Metadata.FieldDefinition);
-				runtimeHandle = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
+				runtimeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
 			}
 			else
 				throw new NotImplementCompilerException();
@@ -606,7 +606,7 @@ namespace Mosa.Compiler.Framework.Stages
 					typeSize += (alignment - (typeSize % alignment)) % alignment;
 
 					// Create a virtual register to hold our boxed value
-					var boxedValue = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Object);
+					var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
 
 					// Create a new context before the call and set it as a VmCall
 					var before = context.InsertBefore();
@@ -867,7 +867,7 @@ namespace Mosa.Compiler.Framework.Stages
 						typeSize += (alignment - (typeSize % alignment)) % alignment;
 
 						// Create a virtual register to hold our boxed value
-						var boxedValue = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Object);
+						var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
 
 						// Create a new context before the call and set it as a VmCall
 						var before = context.InsertBefore();
@@ -894,9 +894,9 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Operand thisPtr = context.Operand1;
 
-				Operand typeDefinition = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-				Operand methodDefinition = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-				Operand methodPtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+				Operand typeDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+				Operand methodDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+				Operand methodPtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 				if (!method.DeclaringType.IsInterface)
 				{
@@ -931,8 +931,8 @@ namespace Mosa.Compiler.Framework.Stages
 					int methodPointerOffset = (NativePointerSize * 4);
 
 					// Operands to hold pointers
-					Operand interfaceSlotPtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-					Operand interfaceMethodTablePtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+					Operand interfaceSlotPtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+					Operand interfaceMethodTablePtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 					// Get the TypeDef pointer
 					context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
@@ -1057,7 +1057,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var newThis = MethodCompiler.AddStackLocal(thisReference.Type);
 
 				var oldThisReference = thisReference;
-				thisReference = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
+				thisReference = AllocateVirtualRegister(thisReference.Type.ToManagedPointer());
 				before.SetInstruction(IRInstruction.AddressOf, thisReference, newThis);
 
 				for (var node = context.Next; !node.IsBlockEndInstruction; node = node.Next)
@@ -1087,7 +1087,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Operand GetRuntimeTypeHandle(MosaType runtimeType, Context context)
 		{
 			var typeDef = Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
-			var runtimeTypeHandle = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+			var runtimeTypeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			var before = context.InsertBefore();
 			before.SetInstruction(IRInstruction.MoveInteger, runtimeTypeHandle, typeDef);
 			return runtimeTypeHandle;
@@ -1167,7 +1167,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetOperand(1, value);
 			if (vmCall == VmCall.Unbox)
 			{
-				Operand adr = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
+				Operand adr = AllocateVirtualRegister(type.ToManagedPointer());
 				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.AddStackLocal(type));
 
 				context.SetOperand(2, adr);
@@ -1179,7 +1179,7 @@ namespace Mosa.Compiler.Framework.Stages
 				context.OperandCount = 2;
 			}
 
-			Operand tmp = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
+			Operand tmp = AllocateVirtualRegister(type.ToManagedPointer());
 			context.Result = tmp;
 			context.ResultCount = 1;
 
@@ -1250,7 +1250,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetOperand(1, GetRuntimeTypeHandle(type, context));
 			if (vmCall == VmCall.Box)
 			{
-				Operand adr = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
+				Operand adr = AllocateVirtualRegister(type.ToManagedPointer());
 				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, value);
 
 				context.SetOperand(2, adr);
@@ -1393,7 +1393,7 @@ namespace Mosa.Compiler.Framework.Stages
 					userStruct = MethodCompiler.AddStackLocal(userStruct.Type);
 					context.InsertBefore().SetInstruction(IRInstruction.MoveInteger, userStruct, originalOperand);
 				}
-				operand = MethodCompiler.CreateVirtualRegister(userStruct.Type.ToManagedPointer());
+				operand = AllocateVirtualRegister(userStruct.Type.ToManagedPointer());
 				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, operand, userStruct);
 			}
 
@@ -1453,7 +1453,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				Operand temp = MethodCompiler.CreateVirtualRegister(context.MosaField.FieldType);
+				Operand temp = AllocateVirtualRegister(context.MosaField.FieldType);
 				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
 				var moveInstruction = GetMoveInstruction(temp.Type);
 
@@ -1515,7 +1515,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (first.IsR)
 			{
-				Operand result = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
+				Operand result = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 				if (first.IsR4)
 					context.SetInstruction(IRInstruction.CompareFloatR4, cc, result, first, second);
@@ -1676,7 +1676,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetOperand(1, value);
 			if (vmCall == VmCall.Unbox)
 			{
-				Operand adr = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
+				Operand adr = AllocateVirtualRegister(type.ToManagedPointer());
 				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.AddStackLocal(type));
 
 				context.SetOperand(2, adr);
@@ -1688,7 +1688,7 @@ namespace Mosa.Compiler.Framework.Stages
 				context.OperandCount = 2;
 			}
 
-			Operand tmp = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
+			Operand tmp = AllocateVirtualRegister(type.ToManagedPointer());
 			context.Result = tmp;
 			context.ResultCount = 1;
 
@@ -1833,7 +1833,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var elementOffset = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var elementSize = Operand.CreateConstant(TypeSystem, size);
 			var fixedOffset = Operand.CreateConstant(TypeSystem, (NativePointerSize * 3));
-			var arrayElement = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var arrayElement = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			var before = context.InsertBefore();
 
@@ -1856,7 +1856,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var nextContext = Split(context);
 
 			// Get array length
-			var lengthOperand = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var lengthOperand = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			var fixedOffset = Operand.CreateConstant(TypeSystem, (NativePointerSize * 2));
 			context.SetInstruction(IRInstruction.LoadInteger, lengthOperand, arrayOperand, fixedOffset);
 

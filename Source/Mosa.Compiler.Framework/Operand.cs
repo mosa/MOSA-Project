@@ -725,6 +725,8 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateField(MosaField field)
 		{
+			Debug.Assert(field.IsStatic);
+
 			var operand = new Operand(field.FieldType);
 			operand.IsField = true;
 			operand.Offset = 0;

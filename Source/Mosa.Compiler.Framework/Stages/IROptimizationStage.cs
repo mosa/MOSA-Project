@@ -1826,7 +1826,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (!CanReduceTo32Bit(register))
 					continue;
 
-				var v = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.U4);
+				var v = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 				if (trace.Active) trace.Log("*** Reduce64BitOperationsTo32Bit");
 

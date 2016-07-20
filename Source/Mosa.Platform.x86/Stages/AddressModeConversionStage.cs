@@ -42,6 +42,7 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand result = node.Result;
 			Operand operand1 = node.Operand1;
+			int label = node.Label;
 
 			node.Operand1 = result;
 
@@ -66,6 +67,7 @@ namespace Mosa.Platform.x86.Stages
 
 			var newNode = new InstructionNode(move, result, operand1);
 			newNode.Size = size;
+			newNode.Label = label;
 			node.Previous.Insert(newNode);
 
 			return;

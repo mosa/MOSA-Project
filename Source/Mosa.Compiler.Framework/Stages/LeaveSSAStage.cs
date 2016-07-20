@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (operand.SSAVersion == 0)
 					final = operand.SSAParent;
 				else
-					final = MethodCompiler.CreateVirtualRegister(operand.Type);
+					final = AllocateVirtualRegister(operand.Type);
 
 				finalVirtualRegisters.Add(operand, final);
 			}

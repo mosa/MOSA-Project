@@ -171,5 +171,9 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly Flow Flow = new Flow();
 
 		public static readonly Phi Phi = new Phi();
+
+		public static readonly StableObjectTracking StableObjectTracking = new StableObjectTracking();
+
+		public static readonly UnstableObjectTracking UnstableObjectTracking = new UnstableObjectTracking();
 	}
 }

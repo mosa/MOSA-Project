@@ -35,6 +35,8 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
 			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
 			visitationDictionary[IRInstruction.CompoundLoad] = CompoundLoad;
+			visitationDictionary[IRInstruction.CompoundMove] = CompoundMove;
+			visitationDictionary[IRInstruction.CompoundStore] = CompoundStore;
 			visitationDictionary[IRInstruction.LogicalAnd] = LogicalAnd;
 			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
 			visitationDictionary[IRInstruction.LogicalXor] = LogicalXor;
@@ -44,7 +46,6 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.MoveFloatR8] = MoveFloatR8;
 			visitationDictionary[IRInstruction.ConversionFloatR4ToFloatR8] = ConversionFloatR4ToFloatR8;
 			visitationDictionary[IRInstruction.ConversionFloatR8ToFloatR4] = ConversionFloatR8ToFloatR4;
-			visitationDictionary[IRInstruction.CompoundMove] = CompoundMove;
 			visitationDictionary[IRInstruction.Return] = Return;
 			visitationDictionary[IRInstruction.InternalCall] = InternalCall;
 			visitationDictionary[IRInstruction.InternalReturn] = InternalReturn;
@@ -54,7 +55,6 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.StoreInteger] = StoreInt;
 			visitationDictionary[IRInstruction.StoreFloatR4] = StoreFloatR4;
 			visitationDictionary[IRInstruction.StoreFloatR8] = StoreFloatR8;
-			visitationDictionary[IRInstruction.CompoundStore] = CompoundStore;
 			visitationDictionary[IRInstruction.SubSigned] = SubSigned;
 			visitationDictionary[IRInstruction.SubUnsigned] = SubUnsigned;
 			visitationDictionary[IRInstruction.SubFloatR4] = SubFloatR4;
@@ -408,58 +408,47 @@ namespace Mosa.Platform.x86.Stages
 			int typeSize = TypeLayout.GetTypeSize(type);
 			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
 			int largeAlignedTypeSize = typeSize - (typeSize % LargeAlignment);
-			Debug.Assert(typeSize > 0, context.Operand2.Name);
+			Debug.Assert(typeSize > 0);
 
-			int offset = 0;
-			if (context.Operand2.IsResolvedConstant)
-			{
-				offset = (int)context.Operand2.ConstantSignedLongInteger;
-			}
-
-			var offsetop = context.Operand2;
-			var src = context.Operand1;
 			var dest = context.Result;
+			var src = context.Operand1;
+			var srcOffset = context.Operand2;
 
-			var srcReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var dstReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var tmp = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var tmpLarge = Operand.CreateCPURegister(TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
+			var srcReg = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var dstReg = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(X86.Mov, srcReg, src);
+			context.SetInstruction(IRInstruction.UnstableObjectTracking);
 
-			Debug.Assert(dest.IsStackLocal);
+			context.AppendInstruction(X86.Lea, srcReg, src, srcOffset);
+			context.AppendInstruction(X86.Lea, dstReg, StackFrame, dest);
 
-			context.AppendInstruction(X86.Lea, dstReg, StackFrame, src);
-
-			if (!offsetop.IsConstant)
-			{
-				context.AppendInstruction(X86.Add, srcReg, srcReg, offsetop);
-			}
-
-			context.AppendInstruction(IRInstruction.Kill, tmpLarge);
+			var tmp = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var tmpLarge = AllocateVirtualRegister(TypeSystem.BuiltIn.R8);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
-				// Large Aligned moves allow 128bits to be copied at a time
+				// Large Aligned moves 128bits at a time
 				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
+				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
 				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
 			}
 			for (int i = largeAlignedTypeSize; i < alignedTypeSize; i += NativeAlignment)
 			{
 				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
+				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, tmp, srcReg, offset2);
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, index, tmp);
 			}
 			for (int i = alignedTypeSize; i < typeSize; i++)
 			{
 				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
+				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovzxLoad, InstructionSize.Size8, tmp, srcReg, offset2);
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
 			}
+
+			context.SetInstruction(IRInstruction.StableObjectTracking);
 		}
 
 		/// <summary>
@@ -582,33 +571,24 @@ namespace Mosa.Platform.x86.Stages
 			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
 			int largeAlignedTypeSize = typeSize - (typeSize % LargeAlignment);
 
+			Debug.Assert(typeSize > 0);
 			Debug.Assert(dest.IsOnStack);
+			Debug.Assert(src.IsOnStack);
 
-			Debug.Assert(typeSize > 0, MethodCompiler.Method.FullName);
+			var srcReg = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var dstReg = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			var srcReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var dstReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var tmp = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var tmpLarge = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, SSE2Register.XMM1);
+			context.SetInstruction(IRInstruction.UnstableObjectTracking);
 
-			context.SetInstruction(IRInstruction.Kill, tmpLarge);
-
-			if (src.IsSymbol)
-			{
-				context.AppendInstruction(X86.Mov, srcReg, src);
-			}
-			else
-			{
-				Debug.Assert(src.IsOnStack);
-
-				context.AppendInstruction(X86.Lea, srcReg, StackFrame, src);
-			}
-
+			context.AppendInstruction(X86.Lea, srcReg, StackFrame, src);
 			context.AppendInstruction(X86.Lea, dstReg, StackFrame, dest);
+
+			var tmp = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var tmpLarge = AllocateVirtualRegister(TypeSystem.BuiltIn.R8);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
-				// Large Aligned moves allow 128bits to be copied at a time
+				// Large Aligned moves 128bits at a time
 				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
 				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
@@ -625,6 +605,8 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.MovzxLoad, InstructionSize.Size8, tmp, srcReg, index);
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
 			}
+
+			context.SetInstruction(IRInstruction.StableObjectTracking);
 		}
 
 		/// <summary>
@@ -721,52 +703,49 @@ namespace Mosa.Platform.x86.Stages
 			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
 			int largeAlignedTypeSize = typeSize - (typeSize % LargeAlignment);
 
-			Debug.Assert(typeSize > 0, MethodCompiler.Method.FullName);
-
-			int offset = context.Operand2.IsConstant ? context.Operand2.ConstantSignedInteger : 0;
+			Debug.Assert(typeSize > 0);
 
 			var src = context.Operand3;
 			var dest = context.Operand1;
-			var offsetop = context.Operand2;
+			var destOffset = context.Operand2;
 
-			var srcReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var dstReg = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var tmp = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var tmpLarge = Operand.CreateCPURegister(TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
+			var srcReg = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var dstReg = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			Debug.Assert(src.IsStackLocal);
 
-			context.SetInstruction(X86.Lea, srcReg, StackFrame, src);
-			context.AppendInstruction(X86.Mov, dstReg, dest);
-			context.AppendInstruction(IRInstruction.Kill, tmpLarge);
+			context.SetInstruction(IRInstruction.UnstableObjectTracking);
 
-			if (!offsetop.IsConstant)
-			{
-				context.AppendInstruction(X86.Add, dstReg, dstReg, offsetop);
-			}
+			context.AppendInstruction(X86.Lea, srcReg, StackFrame, src);
+			context.AppendInstruction(X86.Lea, dstReg, dest, destOffset);
+
+			var tmp = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var tmpLarge = AllocateVirtualRegister(TypeSystem.BuiltIn.R8);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
-				// Large Aligned moves allow 128bits to be copied at a time
+				// Large Aligned moves 128bits at a time
 				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var indexOffset = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
+				var indexOffset = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovupsLoad, InstructionSize.Size128, tmpLarge, srcReg, index);
 				context.AppendInstruction(X86.MovupsStore, InstructionSize.Size128, null, dstReg, indexOffset, tmpLarge);
 			}
 			for (int i = largeAlignedTypeSize; i < alignedTypeSize; i += NativeAlignment)
 			{
 				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var indexOffset = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
+				var indexOffset = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, tmp, srcReg, index);
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, indexOffset, tmp);
 			}
 			for (int i = alignedTypeSize; i < typeSize; i++)
 			{
 				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var indexOffset = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
-				context.AppendInstruction(X86.MovLoad, InstructionSize.Size8, tmp, srcReg, index);
+				var indexOffset = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
+				context.AppendInstruction(X86.MovzxLoad, InstructionSize.Size8, tmp, srcReg, index);
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, indexOffset, tmp);
 			}
+
+			context.SetInstruction(IRInstruction.StableObjectTracking);
 		}
 
 		/// <summary>

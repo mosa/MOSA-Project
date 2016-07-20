@@ -82,9 +82,9 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			Operand staticAddress = Operand.CreateManagedSymbol(assignmentField.FieldType, symbolName.Name);
-			Operand result1 = MethodCompiler.CreateVirtualRegister(assignmentField.FieldType);
+			Operand result1 = AllocateVirtualRegister(assignmentField.FieldType);
 
-			//Operand result2 = MethodCompiler.CreateVirtualRegister(assignmentField.FieldType);
+			//Operand result2 = AllocateVirtualRegister(assignmentField.FieldType);
 
 			// Issue a load request before the newobj and before the assignment.
 			new Context(allocation).InsertBefore().SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), result1, staticAddress);
