@@ -595,7 +595,9 @@ namespace Mosa.Compiler.Framework
 			operand.IsField = true;
 			operand.Offset = 0;
 			operand.Field = field;
-			operand.IsResolved = true;
+
+			//operand.IsResolved = true;
+			operand.IsConstant = true;
 			return operand;
 		}
 
@@ -650,6 +652,7 @@ namespace Mosa.Compiler.Framework
 			operand.IsLabel = true;
 			operand.Name = label;
 			operand.Offset = 0;
+			operand.IsConstant = true;
 			return operand;
 		}
 
@@ -721,25 +724,25 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the SSA <see cref="Operand"/>.
 		/// </summary>
-		/// <param name="ssaOperand">The ssa operand.</param>
-		/// <param name="ssaVersion">The ssa version.</param>
+		/// <param name="ssa">The ssa operand.</param>
+		/// <param name="version">The ssa version.</param>
 		/// <returns></returns>
-		public static Operand CreateSSA(Operand ssaOperand, int ssaVersion)
+		public static Operand CreateSSA(Operand ssa, int version)
 		{
-			Debug.Assert(ssaOperand.IsVirtualRegister);
-			Debug.Assert(!ssaOperand.IsConstant);
-			Debug.Assert(!ssaOperand.IsParameter);
-			Debug.Assert(!ssaOperand.IsStackLocal);
-			Debug.Assert(!ssaOperand.IsCPURegister);
-			Debug.Assert(!ssaOperand.IsLabel);
-			Debug.Assert(!ssaOperand.IsSymbol);
-			Debug.Assert(!ssaOperand.IsField);
+			Debug.Assert(ssa.IsVirtualRegister);
+			Debug.Assert(!ssa.IsConstant);
+			Debug.Assert(!ssa.IsParameter);
+			Debug.Assert(!ssa.IsStackLocal);
+			Debug.Assert(!ssa.IsCPURegister);
+			Debug.Assert(!ssa.IsLabel);
+			Debug.Assert(!ssa.IsSymbol);
+			Debug.Assert(!ssa.IsField);
 
-			var operand = new Operand(ssaOperand.Type);
+			var operand = new Operand(ssa.Type);
 			operand.IsVirtualRegister = true;
 			operand.IsSSA = true;
-			operand.SSAParent = ssaOperand;
-			operand.SSAVersion = ssaVersion;
+			operand.SSAParent = ssa;
+			operand.SSAVersion = version;
 			return operand;
 		}
 
@@ -793,6 +796,7 @@ namespace Mosa.Compiler.Framework
 			operand.IsSymbol = true;
 			operand.Name = name;
 			operand.StringData = data;
+			operand.IsConstant = true;
 			return operand;
 		}
 

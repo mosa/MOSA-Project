@@ -708,9 +708,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LoadSignExtended(Context context)
 		{
-			Debug.Assert(!(context.Operand1.IsConstant && context.Operand2.IsConstant));
 			Debug.Assert(context.Size == InstructionSize.Size8 || context.Size == InstructionSize.Size16);
-
 			context.SetInstruction(X86.MovsxLoad, context.Size, context.Result, context.Operand1, context.Operand2);
 		}
 
@@ -720,6 +718,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LoadZeroExtended(Context context)
 		{
+			Debug.Assert(context.Size == InstructionSize.Size8 || context.Size == InstructionSize.Size16);
 			context.SetInstruction(X86.MovzxLoad, context.Size, context.Result, context.Operand1, context.Operand2);
 		}
 

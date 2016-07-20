@@ -42,23 +42,24 @@ namespace Mosa.Platform.x86.Stages
 		{
 			for (int i = 0; i < node.OperandCount; i++)
 			{
-				var op = node.GetOperand(i);
+				var operand = node.GetOperand(i);
 
-				if (op == null || !op.IsConstant || !op.IsR)
+				if (operand == null || !operand.IsConstant || !operand.IsR)
 					continue;
 
-				var v1 = AllocateVirtualRegister(op.Type);
+				var v1 = AllocateVirtualRegister(operand.Type);
 
-				var symbol = (op.IsR4) ? MethodCompiler.Linker.GetConstantSymbol(op.ConstantSingleFloatingPoint)
-					: MethodCompiler.Linker.GetConstantSymbol(op.ConstantDoubleFloatingPoint);
+				var symbol = (operand.IsR4) ?
+					MethodCompiler.Linker.GetConstantSymbol(operand.ConstantSingleFloatingPoint)
+					: MethodCompiler.Linker.GetConstantSymbol(operand.ConstantDoubleFloatingPoint);
 
-				var s1 = Operand.CreateLabel(op.Type, symbol.Name);
+				var s1 = Operand.CreateLabel(operand.Type, symbol.Name);
 
 				var context = new Context(node);
 
-				var loadInstruction = GetLoadInstruction(node.Result.Type);
+				var loadInstruction = GetLoadInstruction(operand.Type);
 
-				var size = (node.Result.IsR4) ? InstructionSize.Size32 : InstructionSize.Size64;
+				var size = (operand.IsR4) ? InstructionSize.Size32 : InstructionSize.Size64;
 
 				context.InsertBefore().SetInstruction(loadInstruction, size, v1, s1, ConstantZero);
 

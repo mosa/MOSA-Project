@@ -200,7 +200,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var section = symbolOperand.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, pos, 0, symbolOperand.Field.FullName, section, (int)symbolOperand.Offset);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, pos, 0, symbolOperand.Field.FullName, section, 0);
 			}
 			else if (symbolOperand.IsSymbol)
 			{
