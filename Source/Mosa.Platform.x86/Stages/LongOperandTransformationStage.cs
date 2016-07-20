@@ -21,34 +21,34 @@ namespace Mosa.Platform.x86.Stages
 
 		protected override void PopulateVisitationDictionary()
 		{
+			visitationDictionary[IRInstruction.AddSigned] = AddSigned;
+			visitationDictionary[IRInstruction.AddUnsigned] = AddUnsigned;
 			visitationDictionary[IRInstruction.ArithmeticShiftRight] = ArithmeticShiftRight;
-			visitationDictionary[IRInstruction.CompareIntegerBranch] = CompareIntegerBranch;
+			visitationDictionary[IRInstruction.Call] = Call;
 			visitationDictionary[IRInstruction.CompareInteger] = CompareInteger;
+			visitationDictionary[IRInstruction.CompareIntegerBranch] = CompareIntegerBranch;
+			visitationDictionary[IRInstruction.DivSigned] = DivSigned;
+			visitationDictionary[IRInstruction.DivUnsigned] = DivUnsigned;
 			visitationDictionary[IRInstruction.LoadInteger] = LoadInteger;
-			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
 			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
+			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
 			visitationDictionary[IRInstruction.LogicalAnd] = LogicalAnd;
+			visitationDictionary[IRInstruction.LogicalNot] = LogicalNot;
 			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
 			visitationDictionary[IRInstruction.LogicalXor] = LogicalXor;
-			visitationDictionary[IRInstruction.LogicalNot] = LogicalNot;
 			visitationDictionary[IRInstruction.MoveInteger] = MoveInteger;
 			visitationDictionary[IRInstruction.MoveSignExtended] = MoveSignExtended;
 			visitationDictionary[IRInstruction.MoveZeroExtended] = MoveZeroExtended;
-			visitationDictionary[IRInstruction.StoreInteger] = StoreInteger;
-			visitationDictionary[IRInstruction.ShiftLeft] = ShiftLeft;
-			visitationDictionary[IRInstruction.ShiftRight] = ShiftRight;
-			visitationDictionary[IRInstruction.DivSigned] = DivSigned;
-			visitationDictionary[IRInstruction.DivUnsigned] = DivUnsigned;
 			visitationDictionary[IRInstruction.MulSigned] = MulSigned;
 			visitationDictionary[IRInstruction.MulUnsigned] = MulUnsigned;
-			visitationDictionary[IRInstruction.SubSigned] = SubSigned;
-			visitationDictionary[IRInstruction.SubUnsigned] = SubUnsigned;
 			visitationDictionary[IRInstruction.RemSigned] = RemSigned;
 			visitationDictionary[IRInstruction.RemUnsigned] = RemUnsigned;
-			visitationDictionary[IRInstruction.AddSigned] = AddSigned;
-			visitationDictionary[IRInstruction.AddUnsigned] = AddUnsigned;
-			visitationDictionary[IRInstruction.Call] = Call;
 			visitationDictionary[IRInstruction.Return] = Return;
+			visitationDictionary[IRInstruction.ShiftLeft] = ShiftLeft;
+			visitationDictionary[IRInstruction.ShiftRight] = ShiftRight;
+			visitationDictionary[IRInstruction.StoreInteger] = StoreInteger;
+			visitationDictionary[IRInstruction.SubSigned] = SubSigned;
+			visitationDictionary[IRInstruction.SubUnsigned] = SubUnsigned;
 		}
 
 		protected override void Setup()

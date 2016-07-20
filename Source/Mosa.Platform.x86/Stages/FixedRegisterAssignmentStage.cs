@@ -12,18 +12,18 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			visitationDictionary[X86.In] = In;
-			visitationDictionary[X86.Out] = Out;
 			visitationDictionary[X86.Cdq] = Cdq;
-			visitationDictionary[X86.Mul] = Mul;
 			visitationDictionary[X86.Div] = Div;
-			visitationDictionary[X86.IMul] = IMul;
 			visitationDictionary[X86.IDiv] = IDiv;
-			visitationDictionary[X86.Sar] = Sar;
-			visitationDictionary[X86.Shr] = Shr;
-			visitationDictionary[X86.Shl] = Shl;
+			visitationDictionary[X86.IMul] = IMul;
+			visitationDictionary[X86.In] = In;
+			visitationDictionary[X86.Mul] = Mul;
+			visitationDictionary[X86.Out] = Out;
 			visitationDictionary[X86.Rcr] = Rcr;
+			visitationDictionary[X86.Sar] = Sar;
+			visitationDictionary[X86.Shl] = Shl;
 			visitationDictionary[X86.Shld] = Shld;
+			visitationDictionary[X86.Shr] = Shr;
 			visitationDictionary[X86.Shrd] = Shrd;
 		}
 

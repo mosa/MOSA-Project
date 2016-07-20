@@ -12,15 +12,15 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
+			visitationDictionary[X86.Call] = Call;
+			visitationDictionary[X86.In] = In;
 			visitationDictionary[X86.Mov] = Mov;
+			visitationDictionary[X86.Movsd] = Movsd;
+			visitationDictionary[X86.Movss] = Movss;
 			visitationDictionary[X86.Movsx] = Movsx;
 			visitationDictionary[X86.Movzx] = Movzx;
-			visitationDictionary[X86.Movss] = Movss;
-			visitationDictionary[X86.Movsd] = Movsd;
-			visitationDictionary[X86.Setcc] = Setcc;
-			visitationDictionary[X86.Call] = Call;
 			visitationDictionary[X86.Nop] = Nop;
-			visitationDictionary[X86.In] = In;
+			visitationDictionary[X86.Setcc] = Setcc;
 		}
 
 		#region Visitation Methods
