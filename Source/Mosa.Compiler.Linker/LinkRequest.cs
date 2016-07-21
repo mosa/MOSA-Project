@@ -72,6 +72,8 @@ namespace Mosa.Compiler.Linker
 			Debug.Assert(patchSymbol != null);
 			Debug.Assert(referenceSymbol != null);
 
+			//Debug.Assert(relativeBase == 0);
+
 			LinkType = linkType;
 			PatchType = patchType;
 

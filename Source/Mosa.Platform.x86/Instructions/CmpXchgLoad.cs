@@ -63,7 +63,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
 
 			if (linkreference)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+				emitter.Emit(opcode, node.Operand2, (opcode.Size - 32) / 8);
 			else
 				emitter.Emit(opcode);
 		}

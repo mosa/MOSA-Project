@@ -294,7 +294,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
 			}
 
-			context.SetInstruction(IRInstruction.StableObjectTracking);
+			context.AppendInstruction(IRInstruction.StableObjectTracking);
 		}
 
 		private void CompoundMove(Context context)
@@ -341,7 +341,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
 			}
 
-			context.SetInstruction(IRInstruction.StableObjectTracking);
+			context.AppendInstruction(IRInstruction.StableObjectTracking);
 		}
 
 		private void CompoundStore(Context context)
@@ -393,7 +393,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, indexOffset, tmp);
 			}
 
-			context.SetInstruction(IRInstruction.StableObjectTracking);
+			context.AppendInstruction(IRInstruction.StableObjectTracking);
 		}
 
 		/// <summary>

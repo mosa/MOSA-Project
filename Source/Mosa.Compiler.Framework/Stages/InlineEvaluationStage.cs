@@ -300,7 +300,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (operand.Uses.Count != 0 || operand.Definitions.Count != 0)
 				{
-					mappedOperand = Operand.CreateVirtualRegister(operand.Type, operand.Index, operand.Name);
+					mappedOperand = Operand.CreateVirtualRegister(operand.Type, operand.Index);
 				}
 			}
 			else if (operand.IsField)

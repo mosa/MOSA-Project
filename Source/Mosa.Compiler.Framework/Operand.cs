@@ -844,22 +844,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a new virtual register <see cref="Operand" />.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="index">The index.</param>
-		/// <param name="name">The name.</param>
-		/// <returns></returns>
-		public static Operand CreateVirtualRegister(MosaType type, int index, string name)
-		{
-			var operand = new Operand(type);
-			operand.IsVirtualRegister = true;
-			operand.Name = name;
-			operand.Index = index;
-			return operand;
-		}
-
-		/// <summary>
 		/// Gets the null constant <see cref="Operand"/>.
 		/// </summary>
 		/// <returns></returns>
@@ -913,44 +897,35 @@ namespace Mosa.Compiler.Framework
 			{
 				sb.AppendFormat("V_{0}", Index);
 			}
+			else if (IsParameter)
+			{
+				sb.AppendFormat("P_{0} ", Index);
+			}
 			else if (IsStackLocal && Name == null)
 			{
 				sb.AppendFormat("T_{0}", Index);
 			}
-			else if (IsParameter)
+			else if (IsField)
 			{
-				sb.AppendFormat("P_{0} ", Index, Name);
-			}
-
-			if (Name != null)
-			{
-				sb.Append(" {");
-				sb.Append(Name);
-				sb.Append("} ");
-			}
-
-			if (IsField)
-			{
-				sb.Append(" {");
+				sb.Append(" <");
 				sb.Append(Field.FullName);
-				sb.Append("} ");
+				sb.Append("> ");
+			}
+			else if (Name != null)
+			{
+				sb.Append(" <");
+				sb.Append(Name);
+				sb.Append("> ");
 			}
 
 			if (IsSplitChild)
 			{
-				sb.Append(' ');
-
-				sb.Append("(" + SplitParent.ToString(full) + ")");
-
-				if (SplitParent.High == this)
-					sb.Append("/high");
-				else
-					sb.Append("/low");
+				sb.AppendFormat(" <V_{0}_{1}>", SplitParent.Index, (SplitParent.High == this) ? "High" : "Low");
 			}
 
 			if (IsConstant)
 			{
-				sb.Append(" const {");
+				sb.Append(" const=");
 
 				if (!IsResolved)
 					sb.Append("unresolved");
@@ -977,7 +952,7 @@ namespace Mosa.Compiler.Framework
 				else if (IsR4)
 					sb.AppendFormat("{0}", ConstantSingleFloatingPoint);
 
-				sb.Append('}');
+				sb.Append(' ');
 			}
 			else if (IsCPURegister)
 			{

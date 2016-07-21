@@ -98,7 +98,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
 
 			if (linkreference)
-				emitter.Emit(opcode, node.Operand1, 24 / 8);
+				emitter.Emit(opcode, node.Operand3, 24 / 8);
 			else
 				emitter.Emit(opcode);
 		}
@@ -126,7 +126,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendInteger(node.Operand3, node.Size);                       // 8/16/32:immediate
 
 			if (linkreference)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - (int)node.Size) / 8);
+				emitter.Emit(opcode, node.Operand3, (opcode.Size - (int)node.Size) / 8);
 			else
 				emitter.Emit(opcode);
 		}
