@@ -717,66 +717,60 @@ namespace Mosa.Compiler.Framework
 
 		public static BaseIRInstruction GetLoadInstruction(MosaType type)
 		{
-			BaseIRInstruction instruction = IRInstruction.LoadInteger;
-
 			if (MustSignExtendOnLoad(type))
 			{
-				instruction = IRInstruction.LoadSignExtended;
+				return IRInstruction.LoadSignExtended;
 			}
 			else if (MustZeroExtendOnLoad(type))
 			{
-				instruction = IRInstruction.LoadZeroExtended;
+				return IRInstruction.LoadZeroExtended;
 			}
 			else if (type.IsR4)
 			{
-				instruction = IRInstruction.LoadFloatR4;
+				return IRInstruction.LoadFloatR4;
 			}
 			else if (type.IsR8)
 			{
-				instruction = IRInstruction.LoadFloatR8;
+				return IRInstruction.LoadFloatR8;
 			}
 
-			return instruction;
+			return IRInstruction.LoadInteger;
 		}
 
 		public static BaseIRInstruction GetMoveInstruction(MosaType type)
 		{
-			BaseIRInstruction instruction = IRInstruction.MoveInteger;
-
 			if (MustSignExtendOnLoad(type))
 			{
-				instruction = IRInstruction.MoveSignExtended;
+				return IRInstruction.MoveSignExtended;
 			}
 			else if (MustZeroExtendOnLoad(type))
 			{
-				instruction = IRInstruction.MoveZeroExtended;
+				return IRInstruction.MoveZeroExtended;
 			}
 			else if (type.IsR4)
 			{
-				instruction = IRInstruction.MoveFloatR4;
+				return IRInstruction.MoveFloatR4;
 			}
 			else if (type.IsR8)
 			{
-				instruction = IRInstruction.MoveFloatR4;
+				return IRInstruction.MoveFloatR4;
 			}
 
-			return instruction;
+			return IRInstruction.MoveInteger;
 		}
 
 		public static BaseIRInstruction GetStoreInstruction(MosaType type)
 		{
-			BaseIRInstruction instruction = IRInstruction.StoreInteger;
-
 			if (type.IsR4)
 			{
-				instruction = IRInstruction.StoreFloatR4;
+				return IRInstruction.StoreFloatR4;
 			}
 			else if (type.IsR8)
 			{
-				instruction = IRInstruction.StoreFloatR8;
+				return IRInstruction.StoreFloatR8;
 			}
 
-			return instruction;
+			return IRInstruction.StoreInteger;
 		}
 
 		#endregion Helpers

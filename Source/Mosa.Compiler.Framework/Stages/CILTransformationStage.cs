@@ -1022,13 +1022,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(field.FieldType))
 			{
-				context.SetInstruction(IRInstruction.CompoundLoad, result, operand, ConstantZero);
+				context.SetInstruction(IRInstruction.CompoundLoad, result, operand, offsetOperand);
 				context.MosaType = field.FieldType;
 			}
 			else
 			{
 				var loadInstruction = GetLoadInstruction(field.FieldType);
-				context.SetInstruction(loadInstruction, size, result, operand, ConstantZero);
+				context.SetInstruction(loadInstruction, size, result, operand, offsetOperand);
 				context.MosaType = field.FieldType;
 			}
 		}
