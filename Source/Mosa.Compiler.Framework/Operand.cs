@@ -175,7 +175,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Determines if the operand is a runtime member operand.
 		/// </summary>
-		public bool IsField { get; private set; }
+		public bool IsStaticField { get; private set; }
 
 		public bool IsFunctionPointer { get { return Type.IsFunctionPointer; } }
 
@@ -301,6 +301,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsValueType { get { return underlyingType.IsValueType; } }
 
+		public bool IsLinkerResolved { get { return IsLabel || IsStaticField || IsSymbol; } }
+
 		/// <summary>
 		/// Determines if the operand is a virtual register operand.
 		/// </summary>
@@ -412,7 +414,7 @@ namespace Mosa.Compiler.Framework
 			IsCPURegister = false;
 			IsSSA = false;
 			IsSymbol = false;
-			IsField = false;
+			IsStaticField = false;
 			IsParameter = false;
 			IsResolved = false;
 		}
@@ -592,12 +594,53 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(field.IsStatic);
 
 			var operand = new Operand(field.FieldType);
-			operand.IsField = true;
+			operand.IsStaticField = true;
 			operand.Offset = 0;
 			operand.Field = field;
 
 			//operand.IsResolved = true;
 			operand.IsConstant = true;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the low 32 bit portion of a 64-bit <see cref="Operand" />.
+		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="longOperand">The long operand.</param>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public static Operand CreateLowSplitForLong(TypeSystem typeSystem, Operand longOperand, int index)
+		{
+			Debug.Assert(longOperand.IsLong);
+			Debug.Assert(longOperand.SplitParent == null);
+			Debug.Assert(longOperand.Low == null);
+
+			Operand operand = null;
+
+			if (longOperand.IsResolvedConstant)
+			{
+				operand = new Operand(typeSystem.BuiltIn.U4);
+				operand.IsConstant = true;
+				operand.IsResolved = true;
+				operand.ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger & uint.MaxValue;
+			}
+			else if (longOperand.IsVirtualRegister)
+			{
+				operand = new Operand(typeSystem.BuiltIn.U4);
+				operand.IsVirtualRegister = true;
+			}
+			else if (longOperand.IsStackLocal)
+			{
+				operand = longOperand;
+			}
+
+			Debug.Assert(operand != null);
+
+			operand.SplitParent = longOperand;
+			operand.Index = index;
+			longOperand.Low = operand;
+
 			return operand;
 		}
 
@@ -611,32 +654,36 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateHighSplitForLong(TypeSystem typeSystem, Operand longOperand, int index)
 		{
 			Debug.Assert(longOperand.IsLong);
-
-			Debug.Assert(longOperand.SplitParent == null);
+			Debug.Assert(longOperand.SplitParent == null || longOperand.SplitParent == longOperand);
 			Debug.Assert(longOperand.High == null);
 
-			Operand operand;
+			Operand operand = null;
 
-			if (longOperand.IsConstant)
+			if (longOperand.IsResolvedConstant)
 			{
 				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsConstant = true;
+				operand.IsResolved = true;
 				operand.ConstantUnsignedLongInteger = ((uint)(longOperand.ConstantUnsignedLongInteger >> 32)) & uint.MaxValue;
 			}
-			else
+			else if (longOperand.IsVirtualRegister)
 			{
 				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsVirtualRegister = true;
 			}
+			else if (longOperand.IsStackLocal)
+			{
+				operand = new Operand(typeSystem.BuiltIn.U4);
+				operand.IsConstant = true;
+				operand.IsResolved = true;
+			}
+
+			Debug.Assert(operand != null);
 
 			operand.SplitParent = longOperand;
-
-			//operand.SplitParent = longOperand;
-
-			Debug.Assert(longOperand.High == null);
+			operand.Index = index;
 			longOperand.High = operand;
 
-			operand.Index = index;
 			return operand;
 		}
 
@@ -653,45 +700,6 @@ namespace Mosa.Compiler.Framework
 			operand.Name = label;
 			operand.Offset = 0;
 			operand.IsConstant = true;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates the low 32 bit portion of a 64-bit <see cref="Operand" />.
-		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
-		/// <param name="longOperand">The long operand.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		public static Operand CreateLowSplitForLong(TypeSystem typeSystem, Operand longOperand, int index)
-		{
-			Debug.Assert(longOperand.IsLong);
-
-			Debug.Assert(longOperand.SplitParent == null);
-			Debug.Assert(longOperand.Low == null);
-
-			Operand operand;
-
-			if (longOperand.IsConstant)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsConstant = true;
-				operand.ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger & uint.MaxValue;
-			}
-			else
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsVirtualRegister = true;
-			}
-
-			operand.SplitParent = longOperand;
-
-			Debug.Assert(longOperand.Low == null);
-			longOperand.Low = operand;
-
-			operand.Index = index;
-
-			//operand.sequence = index;
 			return operand;
 		}
 
@@ -736,7 +744,7 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(!ssa.IsCPURegister);
 			Debug.Assert(!ssa.IsLabel);
 			Debug.Assert(!ssa.IsSymbol);
-			Debug.Assert(!ssa.IsField);
+			Debug.Assert(!ssa.IsStaticField);
 
 			var operand = new Operand(ssa.Type);
 			operand.IsVirtualRegister = true;
@@ -896,6 +904,11 @@ namespace Mosa.Compiler.Framework
 			if (IsVirtualRegister)
 			{
 				sb.AppendFormat("V_{0}", Index);
+
+				if (IsSplitChild)
+				{
+					sb.AppendFormat(" <V_{0}_{1}>", SplitParent.Index, (SplitParent.High == this) ? "High" : "Low");
+				}
 			}
 			else if (IsParameter)
 			{
@@ -905,7 +918,7 @@ namespace Mosa.Compiler.Framework
 			{
 				sb.AppendFormat("T_{0}", Index);
 			}
-			else if (IsField)
+			else if (IsStaticField)
 			{
 				sb.Append(" <");
 				sb.Append(Field.FullName);
@@ -916,11 +929,6 @@ namespace Mosa.Compiler.Framework
 				sb.Append(" <");
 				sb.Append(Name);
 				sb.Append("> ");
-			}
-
-			if (IsSplitChild)
-			{
-				sb.AppendFormat(" <V_{0}_{1}>", SplitParent.Index, (SplitParent.High == this) ? "High" : "Low");
 			}
 
 			if (IsConstant)

@@ -437,7 +437,7 @@ namespace Mosa.Platform.x86.Stages
 			return false;
 		}
 
-		public static void SplitLongOperand(BaseMethodCompiler methodCompiler, Operand operand, out Operand operandLow, out Operand operandHigh, Operand ConstantZero)
+		public static void SplitLongOperand(BaseMethodCompiler methodCompiler, Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
 			if (operand.Is64BitInteger)
 			{
@@ -449,7 +449,7 @@ namespace Mosa.Platform.x86.Stages
 			else
 			{
 				operandLow = operand;
-				operandHigh = ConstantZero;
+				operandHigh = methodCompiler.ConstantZero;
 				return;
 			}
 		}
@@ -1158,7 +1158,7 @@ namespace Mosa.Platform.x86.Stages
 
 		private void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
-			SplitLongOperand(MethodCompiler, operand, out operandLow, out operandHigh, ConstantZero);
+			SplitLongOperand(MethodCompiler, operand, out operandLow, out operandHigh);
 		}
 
 		#endregion Utility Methods

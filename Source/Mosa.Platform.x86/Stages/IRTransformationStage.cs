@@ -117,9 +117,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddressOf(Context context)
 		{
-			Debug.Assert(context.Operand1.IsOnStack | context.Operand1.IsField);
+			Debug.Assert(context.Operand1.IsOnStack | context.Operand1.IsStaticField);
 
-			if (context.Operand1.IsField)
+			if (context.Operand1.IsStaticField)
 			{
 				context.SetInstruction(X86.Mov, NativeInstructionSize, context.Result, context.Operand1);
 				return;

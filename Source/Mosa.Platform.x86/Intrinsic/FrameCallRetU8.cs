@@ -30,7 +30,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			Operand op0L, op0H;
 
-			LongOperandTransformationStage.SplitLongOperand(methodCompiler, result, out op0L, out op0H, null);
+			LongOperandTransformationStage.SplitLongOperand(methodCompiler, result, out op0L, out op0H);
 
 			context.SetInstruction(X86.Call, null, methodAddress);
 			context.AppendInstruction(IRInstruction.Gen, eax);

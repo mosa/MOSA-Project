@@ -303,7 +303,7 @@ namespace Mosa.Compiler.Framework.Stages
 					mappedOperand = Operand.CreateVirtualRegister(operand.Type, operand.Index);
 				}
 			}
-			else if (operand.IsField)
+			else if (operand.IsStaticField)
 			{
 				mappedOperand = Operand.CreateField(operand.Field);
 			}

@@ -46,7 +46,7 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(node.Operand1.Register == GeneralPurposeRegister.EAX);
 			Debug.Assert(node.ResultCount == 1);
 
-			var linkreference = node.Operand2.IsLabel || node.Operand2.IsField || node.Operand2.IsSymbol;
+			var linkreference = node.Operand2.IsLabel || node.Operand2.IsStaticField || node.Operand2.IsSymbol;
 
 			// Compare EAX with r/m32. If equal, ZF is set and r32 is loaded into r/m32.
 			// Else, clear ZF and load r/m32 into EAX.

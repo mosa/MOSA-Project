@@ -43,7 +43,7 @@ namespace Mosa.Platform.x86.Instructions
 			{
 				MovImmediateToFixedMemory(node, emitter);
 			}
-			else if (node.Operand3.IsConstant || node.Operand3.IsLabel || node.Operand3.IsField || node.Operand3.IsSymbol)
+			else if (node.Operand3.IsConstant || node.Operand3.IsLabel || node.Operand3.IsStaticField || node.Operand3.IsSymbol)
 			{
 				MovImmediateToMemory(node, emitter);
 			}
@@ -60,7 +60,7 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(!node.Operand3.IsConstant);
 
 			var size = BaseMethodCompilerStage.GetInstructionSize(node.Size, node.Operand1.Type);
-			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
+			var linkreference = node.Operand1.IsLabel || node.Operand1.IsStaticField || node.Operand1.IsSymbol;
 
 			// reg to memory       1000 100w: mod reg r/m
 			var opcode = new OpcodeEncoder()
@@ -82,8 +82,6 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(node.Operand3.IsConstant);
 			Debug.Assert(node.ResultCount == 0);
 
-			var linkreference = node.Operand3.IsLabel || node.Operand3.IsField || node.Operand3.IsSymbol;
-
 			// immediate to memory 1100 011w: mod 000 r/m : immediate data
 			var opcode = new OpcodeEncoder()
 				.AppendConditionalPrefix(0x66, node.Size == InstructionSize.Size16)  // 8:prefix: 16bit
@@ -95,10 +93,10 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendRM(node.Operand1)                                        // 3:r/m (destination)
 				.AppendConditionalDisplacement(node.Operand2, !node.Operand2.IsConstantZero)      // 8/32:displacement value
 				.AppendInteger(node.Operand3, node.Size)                        // 8/16/32:immediate
-				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
+				.AppendConditionalIntegerValue(0, node.Operand3.IsLinkerResolved);               // 32:memory
 
-			if (linkreference)
-				emitter.Emit(opcode, node.Operand3, 24 / 8);
+			if (node.Operand3.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand3, 24 / 8, node.Operand2.ConstantSignedInteger);
 			else
 				emitter.Emit(opcode);
 		}
@@ -106,11 +104,8 @@ namespace Mosa.Platform.x86.Instructions
 		private static void MovImmediateToFixedMemory(InstructionNode node, MachineCodeEmitter emitter)
 		{
 			Debug.Assert(node.Operand1.IsConstant);
-			Debug.Assert(node.Operand2.IsConstantZero);
 			Debug.Assert(node.Operand3.IsConstant);
 			Debug.Assert(node.ResultCount == 0);
-
-			var linkreference = node.Operand3.IsLabel || node.Operand3.IsField || node.Operand3.IsSymbol;
 
 			// immediate to memory 1100 011w: mod 000 r/m : immediate data
 			var opcode = new OpcodeEncoder()
@@ -121,12 +116,12 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendMod(Bits.b00)                                            // 2:mod (000)
 				.Append3Bits(Bits.b000)                                         // 3:source (000)
 				.AppendRM(node.Operand1)                                        // 3:r/m (destination)
-				.AppendConditionalDisplacement(node.Operand1, !linkreference)   // 32:displacement value
-				.AppendConditionalIntegerValue(0, linkreference)                // 32:memory
+				.AppendConditionalDisplacement(node.Operand1, !node.Operand1.IsLinkerResolved)   // 32:displacement value
+				.AppendConditionalIntegerValue(0, node.Operand1.IsLinkerResolved)  // 32:memory
 				.AppendInteger(node.Operand3, node.Size);                       // 8/16/32:immediate
 
-			if (linkreference)
-				emitter.Emit(opcode, node.Operand3, (opcode.Size - (int)node.Size) / 8);
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - (int)node.Size) / 8, node.Operand2.ConstantSignedInteger);
 			else
 				emitter.Emit(opcode);
 		}

@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			Operand op0L, op0H;
 
-			LongOperandTransformationStage.SplitLongOperand(methodCompiler, n, out op0L, out op0H, null);
+			LongOperandTransformationStage.SplitLongOperand(methodCompiler, n, out op0L, out op0H);
 
 			context.SetInstruction2(X86.Div, result2, result, op0H, op0L, d);
 		}

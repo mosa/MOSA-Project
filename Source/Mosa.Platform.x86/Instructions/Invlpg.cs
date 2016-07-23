@@ -40,7 +40,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Operand1.IsConstant);
 
-			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
+			var linkreference = node.Operand1.IsLabel || node.Operand1.IsStaticField || node.Operand1.IsSymbol;
 
 			// INVLPG – Invalidate TLB Entry 0000 1111 : 0000 0001 : mod 111 r/m
 			var opcode = new OpcodeEncoder()

@@ -46,7 +46,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 
-			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
+			var linkreference = node.Operand1.IsLabel || node.Operand1.IsStaticField || node.Operand1.IsSymbol;
 
 			// mem to xmmreg1 1111 0010:0000 1111:0001 0000: mod xmmreg r/m
 			var opcode = new OpcodeEncoder()

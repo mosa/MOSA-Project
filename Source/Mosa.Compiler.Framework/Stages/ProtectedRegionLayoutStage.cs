@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var name = MethodCompiler.Method.FullName + Metadata.ProtectedRegionTable + "$" + sectioncount.ToString();
 					var protectedRegionDefinition = CreateProtectedRegionDefinition(name, (uint)start, (uint)end, handler, region.Handler.ExceptionHandlerType, region.Handler.Type);
-					MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionTableSymbol, (int)writer.Position, 0, protectedRegionDefinition, 0);
+					MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionTableSymbol, (int)writer.Position, protectedRegionDefinition, 0);
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 					if (trace.Active)
@@ -116,7 +116,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				// Store method table pointer of the exception object type
 				// The VES exception runtime will uses this to compare exception object types
-				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionDefinitionSymbol, (int)writer1.Position, 0, exceptionType.FullName + Metadata.TypeDefinition, SectionKind.ROData, 0);
+				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionDefinitionSymbol, (int)writer1.Position, SectionKind.ROData, exceptionType.FullName + Metadata.TypeDefinition, 0);
 			}
 			else if (handlerType == ExceptionHandlerType.Filter)
 			{

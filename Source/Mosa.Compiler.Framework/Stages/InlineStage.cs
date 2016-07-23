@@ -220,7 +220,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				mappedOperand = AllocateVirtualRegister(operand.Type);
 			}
-			else if (operand.IsField)
+			else if (operand.IsStaticField)
 			{
 				mappedOperand = Operand.CreateField(operand.Field);
 			}

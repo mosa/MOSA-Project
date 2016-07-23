@@ -46,7 +46,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Operand1.IsConstant);
 
-			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
+			var linkreference = node.Operand1.IsLabel || node.Operand1.IsStaticField || node.Operand1.IsSymbol;
 
 			// LIDT – Load Interrupt Descriptor Table Register 0000 1111 : 0000 0001 : modA 011 r/m
 			var opcode = new OpcodeEncoder()

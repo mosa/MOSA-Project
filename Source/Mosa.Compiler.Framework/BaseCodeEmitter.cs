@@ -186,21 +186,21 @@ namespace Mosa.Compiler.Framework
 			opcode.WriteTo(codeStream);
 		}
 
-		public void Emit(OpcodeEncoder opcode, Operand symbolOperand, int symbolOffset)
+		public void Emit(OpcodeEncoder opcode, Operand symbolOperand, int patchOffset, int referenceOffset = 0)
 		{
-			int pos = (int)codeStream.Position + symbolOffset;
+			int pos = (int)codeStream.Position + patchOffset;
 
 			Emit(opcode);
 
 			if (symbolOperand.IsLabel)
 			{
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, pos, 0, symbolOperand.Name, SectionKind.ROData, 0);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, pos, SectionKind.ROData, symbolOperand.Name, referenceOffset);
 			}
-			else if (symbolOperand.IsField)
+			else if (symbolOperand.IsStaticField)
 			{
 				var section = symbolOperand.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, pos, 0, symbolOperand.Field.FullName, section, 0);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, pos, section, symbolOperand.Field.FullName, referenceOffset);
 			}
 			else if (symbolOperand.IsSymbol)
 			{
@@ -213,7 +213,7 @@ namespace Mosa.Compiler.Framework
 					symbol = linker.FindSymbol(symbolOperand.Name);
 				}
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, pos, 0, symbol, 0);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, pos, symbol, referenceOffset);
 			}
 		}
 

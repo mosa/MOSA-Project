@@ -24,12 +24,11 @@ namespace Mosa.Platform.x86
 			linker.Link(
 				LinkType.RelativeOffset,
 				PatchType.I4,
+				SectionKind.Text,
 				MethodName,
-				SectionKind.Text,
 				(int)codeStream.Position,
-				-4,
-				symbolOperand.Name,
 				SectionKind.Text,
+				symbolOperand.Name,
 				0
 			);
 
@@ -109,7 +108,7 @@ namespace Mosa.Platform.x86
 				WriteImmediate(dest);
 			else if (dest.IsSymbol)
 				WriteDisplacement(dest);
-			else if (src != null && src.IsConstant)
+			else if (src != null && src.IsResolvedConstant)
 				WriteImmediate(src);
 			else if (src != null && src.IsSymbol)
 				WriteDisplacement(src);
@@ -159,21 +158,25 @@ namespace Mosa.Platform.x86
 		{
 			if (displacement.IsLabel)
 			{
+				Debug.Assert(displacement.IsUnresolvedConstant);
+
 				// FIXME! remove assertion
 				Debug.Assert(displacement.Offset == 0);
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Name, SectionKind.ROData, 0);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, SectionKind.ROData, displacement.Name, 0);
 				codeStream.WriteZeroBytes(4);
 			}
-			else if (displacement.IsField)
+			else if (displacement.IsStaticField)
 			{
+				Debug.Assert(displacement.IsUnresolvedConstant);
 				var section = displacement.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Field.FullName, section, (int)displacement.Offset);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, section, displacement.Field.FullName, (int)displacement.Offset);
 				codeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsSymbol)
 			{
+				Debug.Assert(displacement.IsUnresolvedConstant);
 				var section = (displacement.Method != null) ? SectionKind.Text : SectionKind.ROData;
 
 				var symbol = linker.GetSymbol(displacement.Name, section);
@@ -183,7 +186,7 @@ namespace Mosa.Platform.x86
 					symbol = linker.FindSymbol(displacement.Name);
 				}
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, symbol, 0);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, symbol, 0);
 				codeStream.WriteZeroBytes(4);
 			}
 			else
@@ -207,10 +210,7 @@ namespace Mosa.Platform.x86
 				return;
 			}
 
-			if (!op.IsConstant)
-			{
-				throw new InvalidCompilerException();
-			}
+			Debug.Assert(op.IsResolvedConstant);
 
 			if (op.IsI1)
 				codeStream.WriteByte((byte)op.ConstantSignedInteger);
@@ -290,7 +290,7 @@ namespace Mosa.Platform.x86
 		{
 			codeStream.WriteByte(0xEA);
 
-			linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 6, MethodName, SectionKind.Text, (int)codeStream.Position);
+			linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, SectionKind.Text, MethodName, (int)codeStream.Position + 6);
 
 			codeStream.WriteZeroBytes(4);
 			codeStream.WriteByte(0x08);
