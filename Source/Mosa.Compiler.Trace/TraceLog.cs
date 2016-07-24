@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Trace
 			Lines.Add(line);
 		}
 
-		public void Log(IList<string> lines)
+		public void Log(IEnumerable<string> lines)
 		{
 			if (!Active)
 				return;

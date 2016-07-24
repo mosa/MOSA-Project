@@ -124,6 +124,15 @@ namespace Mosa.Compiler.Linker
 			return CreateSymbol(name, kind, 0);
 		}
 
+		public LinkerSymbol FindSymbol(string name, SectionKind kind)
+		{
+			var section = LinkerSections[(int)kind];
+
+			Debug.Assert(section != null);
+
+			return section.GetSymbol(name);
+		}
+
 		public LinkerSymbol FindSymbol(string name)
 		{
 			foreach (var kind in SectionList)
