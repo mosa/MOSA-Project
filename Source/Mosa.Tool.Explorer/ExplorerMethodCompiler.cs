@@ -57,7 +57,8 @@ namespace Mosa.Tool.Explorer
 				new BlockOrderingStage(),
 				new GraphVizStage(),
 				new CodeGenerationStage(compilerOptions.EmitBinary),
-				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null
+				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null,
+				(compilerOptions.EmitBinary) ? new DisassemblyStage() : null
 			});
 		}
 	}
