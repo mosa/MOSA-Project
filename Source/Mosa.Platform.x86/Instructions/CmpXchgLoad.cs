@@ -46,8 +46,6 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(node.Operand1.Register == GeneralPurposeRegister.EAX);
 			Debug.Assert(node.ResultCount == 1);
 
-			var linkreference = node.Operand2.IsLabel || node.Operand2.IsStaticField || node.Operand2.IsSymbol;
-
 			// Compare EAX with r/m32. If equal, ZF is set and r32 is loaded into r/m32.
 			// Else, clear ZF and load r/m32 into EAX.
 
@@ -60,9 +58,9 @@ namespace Mosa.Platform.x86.Instructions
 				.Append3Bits(Bits.b000)                                         // 3:opcode
 				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
 				.ModRegRMSIBDisplacement(node.GetOperand(3), node.Operand2, node.Operand3) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
+				.AppendConditionalIntegerValue(0, node.Operand2.IsLinkerResolved);               // 32:memory
 
-			if (linkreference)
+			if (node.Operand2.IsLinkerResolved)
 				emitter.Emit(opcode, node.Operand2, (opcode.Size - 32) / 8);
 			else
 				emitter.Emit(opcode);

@@ -12,7 +12,7 @@ namespace Mosa.Tool.XmlTo
 		private static int Main(string[] args)
 		{
 			Console.WriteLine();
-			Console.WriteLine("XMLTo v0.1 [www.mosa-project.org]");
+			Console.WriteLine("Mosa.Tool.XMLTo v0.1 [www.mosa-project.org]");
 			Console.WriteLine("Copyright 2010. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();

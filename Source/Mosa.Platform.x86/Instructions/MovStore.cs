@@ -43,7 +43,7 @@ namespace Mosa.Platform.x86.Instructions
 			{
 				MovImmediateToFixedMemory(node, emitter);
 			}
-			else if (node.Operand3.IsConstant || node.Operand3.IsLabel || node.Operand3.IsStaticField || node.Operand3.IsSymbol)
+			else if (node.Operand3.IsConstant || node.Operand3.IsLinkerResolved)
 			{
 				MovImmediateToMemory(node, emitter);
 			}
@@ -59,19 +59,16 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(node.ResultCount == 0);
 			Debug.Assert(!node.Operand3.IsConstant);
 
-			var size = BaseMethodCompilerStage.GetInstructionSize(node.Size, node.Operand1.Type);
-			var linkreference = node.Operand1.IsLabel || node.Operand1.IsStaticField || node.Operand1.IsSymbol;
-
 			// reg to memory       1000 100w: mod reg r/m
 			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(0x66, size == InstructionSize.Size16)  // 8:prefix: 16bit
+				.AppendConditionalPrefix(0x66, node.Size == InstructionSize.Size16)  // 8:prefix: 16bit
 				.AppendNibble(Bits.b1000)                                       // 4:opcode
 				.Append3Bits(Bits.b100)                                         // 3:opcode
-				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
+				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
 				.ModRegRMSIBDisplacement(node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
+				.AppendConditionalIntegerValue(0, node.Operand1.IsLinkerResolved);               // 32:memory
 
-			if (linkreference)
+			if (node.Operand1.IsLinkerResolved)
 				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
 			else
 				emitter.Emit(opcode);

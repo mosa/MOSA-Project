@@ -40,8 +40,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Operand1.IsConstant);
 
-			var linkreference = node.Operand1.IsLabel || node.Operand1.IsStaticField || node.Operand1.IsSymbol;
-
 			// INVLPG – Invalidate TLB Entry 0000 1111 : 0000 0001 : mod 111 r/m
 			var opcode = new OpcodeEncoder()
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
@@ -52,9 +50,9 @@ namespace Mosa.Platform.x86.Instructions
 				.Append3Bits(Bits.b010)                                         // 3:reg
 				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
 				.AppendConditionalDisplacement(node.Operand1, !node.Operand1.IsConstantZero)    // 32:displacement value
-				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
+				.AppendConditionalIntegerValue(0, node.Operand1.IsLinkerResolved);               // 32:memory
 
-			if (linkreference)
+			if (node.Operand1.IsLinkerResolved)
 				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
 			else
 				emitter.Emit(opcode);

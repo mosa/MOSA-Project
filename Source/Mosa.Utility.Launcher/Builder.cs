@@ -331,6 +331,7 @@ namespace Mosa.Utility.Launcher
 
 		private void LaunchNDISASM()
 		{
+			//todo: replace with fields from options
 			string arg = "-b 32 -o0x400030 -e 0x1030 " + Quote(CompiledFile);
 
 			var asmfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".asm");

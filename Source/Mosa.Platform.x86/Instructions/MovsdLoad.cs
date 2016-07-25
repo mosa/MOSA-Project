@@ -46,8 +46,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 
-			var linkreference = node.Operand1.IsLabel || node.Operand1.IsStaticField || node.Operand1.IsSymbol;
-
 			// mem to xmmreg1 1111 0010:0000 1111:0001 0000: mod xmmreg r/m
 			var opcode = new OpcodeEncoder()
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
@@ -57,9 +55,9 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b0001)                                       // 4:opcode
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
 				.ModRegRMSIBDisplacement(node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
+				.AppendConditionalIntegerValue(0, node.Operand1.IsLinkerResolved);               // 32:memory
 
-			if (linkreference)
+			if (node.Operand1.IsLinkerResolved)
 				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
 			else
 				emitter.Emit(opcode);
