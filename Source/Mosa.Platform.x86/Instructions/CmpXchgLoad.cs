@@ -51,14 +51,14 @@ namespace Mosa.Platform.x86.Instructions
 
 			// memory, register 0000 1111 : 1011 000w : mod reg r/m
 			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(0x66, node.Size == InstructionSize.Size16)  // 8:prefix: 16bit
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
 				.AppendNibble(Bits.b1011)                                       // 4:opcode
 				.Append3Bits(Bits.b000)                                         // 3:opcode
 				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
 				.ModRegRMSIBDisplacement(node.GetOperand(3), node.Operand2, node.Operand3) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(0, node.Operand2.IsLinkerResolved);               // 32:memory
+				.AppendConditionalIntegerValue(node.Operand2.IsLinkerResolved, 0);               // 32:memory
 
 			if (node.Operand2.IsLinkerResolved)
 				emitter.Emit(opcode, node.Operand2, (opcode.Size - 32) / 8);

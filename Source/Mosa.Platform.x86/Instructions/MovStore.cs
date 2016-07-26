@@ -39,13 +39,19 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
+			Debug.Assert(node.ResultCount == 0);
+
 			if (node.Operand1.IsConstant && node.Operand3.IsConstant)
 			{
 				MovImmediateToFixedMemory(node, emitter);
 			}
-			else if (node.Operand3.IsConstant || node.Operand3.IsLinkerResolved)
+			else if (node.Operand3.IsConstant)
 			{
 				MovImmediateToMemory(node, emitter);
+			}
+			else if (node.Operand1.IsConstant && node.Operand3.IsCPURegister)
+			{
+				MovRegToFixedMemory(node, emitter);
 			}
 			else
 			{
@@ -53,44 +59,22 @@ namespace Mosa.Platform.x86.Instructions
 			}
 		}
 
-		private static void MovRegToMemory(InstructionNode node, MachineCodeEmitter emitter)
-		{
-			Debug.Assert(node.Operand3.IsCPURegister);
-			Debug.Assert(node.ResultCount == 0);
-			Debug.Assert(!node.Operand3.IsConstant);
-
-			// reg to memory       1000 100w: mod reg r/m
-			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(0x66, node.Size == InstructionSize.Size16)  // 8:prefix: 16bit
-				.AppendNibble(Bits.b1000)                                       // 4:opcode
-				.Append3Bits(Bits.b100)                                         // 3:opcode
-				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
-				.ModRegRMSIBDisplacement(node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(0, node.Operand1.IsLinkerResolved);               // 32:memory
-
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
-			else
-				emitter.Emit(opcode);
-		}
-
 		private static void MovImmediateToMemory(InstructionNode node, MachineCodeEmitter emitter)
 		{
 			Debug.Assert(node.Operand3.IsConstant);
-			Debug.Assert(node.ResultCount == 0);
 
-			// immediate to memory 1100 011w: mod 000 r/m : immediate data
+			// immediate to memory	1100 011w: mod 000 r/m : immediate data
 			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(0x66, node.Size == InstructionSize.Size16)  // 8:prefix: 16bit
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
 				.AppendNibble(Bits.b1100)                                       // 4:opcode
 				.Append3Bits(Bits.b011)                                         // 3:opcode
 				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
 				.AppendMod(true, node.Operand2)                                 // 2:mod
 				.Append3Bits(Bits.b000)                                         // 3:000
 				.AppendRM(node.Operand1)                                        // 3:r/m (destination)
-				.AppendConditionalDisplacement(node.Operand2, !node.Operand2.IsConstantZero)      // 8/32:displacement value
+				.AppendConditionalDisplacement(!node.Operand2.IsConstantZero, node.Operand2) // 8/32:displacement value
 				.AppendInteger(node.Operand3, node.Size)                        // 8/16/32:immediate
-				.AppendConditionalIntegerValue(0, node.Operand3.IsLinkerResolved);               // 32:memory
+				.AppendConditionalIntegerValue(node.Operand3.IsLinkerResolved, 0); // 32:memory
 
 			if (node.Operand3.IsLinkerResolved)
 				emitter.Emit(opcode, node.Operand3, 24 / 8, node.Operand2.ConstantSignedInteger);
@@ -102,23 +86,74 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Operand1.IsConstant);
 			Debug.Assert(node.Operand3.IsConstant);
-			Debug.Assert(node.ResultCount == 0);
 
-			// immediate to memory 1100 011w: mod 000 r/m : immediate data
+			// immediate to memory	1100 011w: mod 000 r/m : immediate data
 			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(0x66, node.Size == InstructionSize.Size16)  // 8:prefix: 16bit
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
 				.AppendNibble(Bits.b1100)                                       // 4:opcode
 				.Append3Bits(Bits.b011)                                         // 3:opcode
 				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
-				.AppendMod(Bits.b00)                                            // 2:mod (000)
+
+				.AppendMod(Bits.b00)                                            // 2:mod (00)
 				.Append3Bits(Bits.b000)                                         // 3:source (000)
 				.AppendRM(node.Operand1)                                        // 3:r/m (destination)
-				.AppendConditionalDisplacement(node.Operand1, !node.Operand1.IsLinkerResolved)   // 32:displacement value
-				.AppendConditionalIntegerValue(0, node.Operand1.IsLinkerResolved)  // 32:memory
+
+				.AppendConditionalDisplacement(!node.Operand1.IsLinkerResolved, node.Operand1)   // 32:displacement value
+
+				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0)  // 32:memory
 				.AppendInteger(node.Operand3, node.Size);                       // 8/16/32:immediate
 
 			if (node.Operand1.IsLinkerResolved)
 				emitter.Emit(opcode, node.Operand1, (opcode.Size - (int)node.Size) / 8, node.Operand2.ConstantSignedInteger);
+			else
+				emitter.Emit(opcode);
+		}
+
+		private static void MovRegToFixedMemory(InstructionNode node, MachineCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand3.IsCPURegister);
+			Debug.Assert(!node.Operand3.IsConstant);
+			Debug.Assert(node.Operand1.IsConstant);
+
+			// reg to memory	1000 100w: mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
+				.AppendNibble(Bits.b1000)                                       // 4:opcode
+				.Append3Bits(Bits.b100)                                         // 3:opcode
+				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
+
+				.AppendMod(Bits.b00)                                            // 2:mod (00)
+				.AppendRegister(node.Operand3)                                  // 3:source
+				.AppendRegister(Bits.b101)                                      // 3:r/m (101=Fixed Displacement)
+
+				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0)  // 32:memory
+				.AppendConditionalIntegerValue(!node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger);   // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			else
+				emitter.Emit(opcode);
+		}
+
+		private static void MovRegToMemory(InstructionNode node, MachineCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand3.IsCPURegister);
+			Debug.Assert(!node.Operand3.IsConstant);
+
+			// reg to memory	1000 100w: mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
+
+				.AppendNibble(Bits.b1000)                                       // 4:opcode
+				.Append3Bits(Bits.b100)                                         // 3:opcode
+				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
+
+				.ModRegRMSIBDisplacement(node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+
+				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0); // 32:displacement
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
 			else
 				emitter.Emit(opcode);
 		}

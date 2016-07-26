@@ -55,7 +55,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b0101)                                       // 4:opcode
 				.AppendNibble(Bits.b1101)                                       // 4:opcode
 				.ModRegRMSIBDisplacement(node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(0, node.Operand1.IsLinkerResolved);               // 32:memory
+				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
 				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);

@@ -170,7 +170,7 @@ namespace Mosa.Compiler.Framework.Platform
 			return this;
 		}
 
-		public OpcodeEncoder AppendConditionalIntegerValue(uint value, bool include)
+		public OpcodeEncoder AppendConditionalIntegerValue(bool include, uint value)
 		{
 			if (include)
 				return AppendIntegerValue(value);

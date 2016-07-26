@@ -9,6 +9,11 @@ namespace Mosa.Platform.x86
 {
 	public static class X86OpcodeEncoderExtensions
 	{
+		public static OpcodeEncoder AppendRegister(this OpcodeEncoder encoder, int value)
+		{
+			return encoder.Append3Bits(value);
+		}
+
 		public static OpcodeEncoder AppendRegister(this OpcodeEncoder encoder, Register register)
 		{
 			return encoder.Append3Bits(register.RegisterCode);
@@ -52,7 +57,7 @@ namespace Mosa.Platform.x86
 			return encoder.AppendByte(value);
 		}
 
-		public static OpcodeEncoder AppendConditionalPrefix(this OpcodeEncoder encoder, byte value, bool include)
+		public static OpcodeEncoder AppendConditionalPrefix(this OpcodeEncoder encoder, bool include, byte value)
 		{
 			if (include)
 				encoder.AppendByte(value);
@@ -122,7 +127,7 @@ namespace Mosa.Platform.x86
 			return encoder.Append2Bits(Bits.b11);
 		}
 
-		public static OpcodeEncoder AppendConditionalDisplacement(this OpcodeEncoder encoder, Operand displacement, bool include)
+		public static OpcodeEncoder AppendConditionalDisplacement(this OpcodeEncoder encoder, bool include, Operand displacement)
 		{
 			if (!include)
 				return encoder;
@@ -147,7 +152,7 @@ namespace Mosa.Platform.x86
 			return encoder.AppendIntegerValue(displacement.ConstantUnsignedInteger);
 		}
 
-		public static OpcodeEncoder AppendConditionalREXPrefix(this OpcodeEncoder encoder, bool w, bool r, bool x, bool b, bool include)
+		public static OpcodeEncoder AppendConditionalREXPrefix(this OpcodeEncoder encoder, bool include, bool w, bool r, bool x, bool b)
 		{
 			if (!include)
 				return encoder;

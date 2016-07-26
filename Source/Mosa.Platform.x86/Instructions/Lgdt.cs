@@ -49,8 +49,8 @@ namespace Mosa.Platform.x86.Instructions
 				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
 				.Append3Bits(Bits.b010)                                         // 3:reg
 				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
-				.AppendConditionalDisplacement(node.Operand1, !node.Operand1.IsConstantZero)    // 32:displacement value
-				.AppendConditionalIntegerValue(0, node.Operand1.IsLinkerResolved);               // 32:memory
+				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
+				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
 				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
