@@ -30,8 +30,8 @@ namespace Mosa.Tool.Disassembler.Intel
 					case "-offset": FileOffset = args[++i].ParseHexOrDecimal(); continue;
 					case "-address": StartingAddress = args[++i].ParseHexOrDecimal(); continue;
 					case "-len": StartingAddress = args[++i].ParseHexOrDecimal(); continue;
-					case "-o": OutputFile = args[i++].Trim(); continue;
-					case "-output": OutputFile = args[i++].Trim(); continue;
+					case "-o": OutputFile = args[++i].Trim(); continue;
+					case "-output": OutputFile = args[++i].Trim(); continue;
 
 					default: break;
 				}

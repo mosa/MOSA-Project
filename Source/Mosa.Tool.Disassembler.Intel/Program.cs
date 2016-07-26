@@ -48,10 +48,13 @@ namespace Mosa.Tool.Disassembler.Intel
 				//using (var disasm = new SharpDisasm.Disassembler(code, ArchitectureMode.x86_32, options.StartingAddress, true, Vendor.Any, options.FileOffset))
 				using (var disasm = new SharpDisasm.Disassembler(code, ArchitectureMode.x86_32, options.StartingAddress, true, Vendor.Any))
 				{
-					foreach (var instruction in disasm.Disassemble())
+					using (var dest = File.CreateText(options.OutputFile))
 					{
-						var inst = translator.Translate(instruction);
-						Console.Out.WriteLine(inst);
+						foreach (var instruction in disasm.Disassemble())
+						{
+							var inst = translator.Translate(instruction);
+							dest.WriteLine(inst);
+						}
 					}
 				}
 

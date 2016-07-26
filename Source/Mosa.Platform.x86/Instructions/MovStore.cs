@@ -85,6 +85,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static void MovImmediateToFixedMemory(InstructionNode node, MachineCodeEmitter emitter)
 		{
 			Debug.Assert(node.Operand1.IsConstant);
+			Debug.Assert(node.Operand2.IsResolvedConstant);
 			Debug.Assert(node.Operand3.IsConstant);
 
 			// immediate to memory	1100 011w: mod 000 r/m : immediate data
@@ -103,8 +104,13 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0)  // 32:memory
 				.AppendInteger(node.Operand3, node.Size);                       // 8/16/32:immediate
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - (int)node.Size) / 8, node.Operand2.ConstantSignedInteger);
+			if (node.Operand1.IsLinkerResolved && !node.Operand3.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, 2, node.Operand2.ConstantSignedInteger);
+			else if (node.Operand1.IsLinkerResolved && node.Operand3.IsLinkerResolved)
+			{
+				// fixme: trouble!
+				throw new NotImplementCompilerException("not here");
+			}
 			else
 				emitter.Emit(opcode);
 		}
