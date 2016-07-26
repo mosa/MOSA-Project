@@ -130,7 +130,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendConditionalIntegerValue(!node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger);   // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8, node.Operand2.ConstantSignedInteger);
 			else
 				emitter.Emit(opcode);
 		}
