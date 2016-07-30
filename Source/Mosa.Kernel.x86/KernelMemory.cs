@@ -34,5 +34,11 @@ namespace Mosa.Kernel.x86
 			used = used + size;
 			return at;
 		}
+
+		static public void SetInitialMemory(uint address, uint size)
+		{
+			heap = address;
+			allocated = size;
+		}
 	}
 }

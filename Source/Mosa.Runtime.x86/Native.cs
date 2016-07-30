@@ -257,6 +257,9 @@ namespace Mosa.Runtime.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.FrameCallRetR8, Mosa.Platform.x86")]
 		public extern static ulong FrameCallRetR8(uint eip);
 
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.FrameIRet, Mosa.Platform.x86")]
+		public extern static void FrameIRet(uint esp, uint ebp);
+
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.AllocateStackSpace, Mosa.Platform.x86")]
 		public extern static uint AllocateStackSpace(uint size);
 

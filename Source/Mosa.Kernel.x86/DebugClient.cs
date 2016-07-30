@@ -30,6 +30,9 @@ namespace Mosa.Kernel.x86
 			public const int WriteMemory = 1011;
 			public const int ReadCR3 = 1012;
 			public const int Scattered32BitReadMemory = 1013;
+			public const int ClearMemory = 1014;
+
+			public const int SoftReset = 1111;
 
 			public const int ExecuteUnitTest = 2000;
 			public const int AbortUnitTest = 2001;
@@ -48,6 +51,8 @@ namespace Mosa.Kernel.x86
 
 		private static bool ready = false;
 		private static bool readysent = false;
+
+		private static uint current_irq = 0;
 
 		public static void Setup(ushort com)
 		{
@@ -171,10 +176,12 @@ namespace Mosa.Kernel.x86
 			return (uint)GetInt32(offset);
 		}
 
-		public static void Process(uint interrupt)
+		internal static void Process(uint irq)
 		{
 			if (!enabled)
 				return;
+
+			current_irq = irq;
 
 			if (ready)
 			{
@@ -267,6 +274,8 @@ namespace Mosa.Kernel.x86
 				case DebugCode.ReadCR3: SendResponse(id, DebugCode.ReadCR3, (int)Native.GetCR3()); return;
 				case DebugCode.Scattered32BitReadMemory: Scattered32BitReadMemory(); return;
 				case DebugCode.WriteMemory: WriteMemory(); return;
+				case DebugCode.ClearMemory: ClearMemory(); return;
+				case DebugCode.SoftReset: SoftReset(); return;
 				case DebugCode.ExecuteUnitTest: QueueUnitTest(); return;
 
 				default: return;
@@ -334,6 +343,31 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
+		private static void ClearMemory()
+		{
+			int id = GetInt32(4);
+			uint start = GetUInt32(20);
+			uint bytes = GetUInt32(24);
+
+			SendResponse(id, DebugCode.ClearMemory);
+
+			uint at = 0;
+
+			while (at + 4 < bytes)
+			{
+				Native.Set32(start + at, 0);
+
+				at = at + 4;
+			}
+
+			while (at < bytes)
+			{
+				Native.Set8(start + at, 0);
+
+				at = at + 1;
+			}
+		}
+
 		private static void QueueUnitTest()
 		{
 			int id = GetInt32(4);
@@ -358,6 +392,27 @@ namespace Mosa.Kernel.x86
 		private static void ProcessTestUnitQueue()
 		{
 			UnitTestQueue.ProcessQueue();
+		}
+
+		private static void SoftReset()
+		{
+			int id = GetInt32(4);
+			uint address = GetUInt32(20);
+
+			SendResponse(id, DebugCode.SoftReset);
+
+			// Setup stack
+
+			// IRET will pop in this order: EIP, CS, and EFLAGS registers
+			Native.Set32(Address.InitialStack + 0, address);    // EIP
+			Native.Set32(Address.InitialStack + 4, 0);          // CS
+			Native.Set32(Address.InitialStack + 8, 0);          // EFLAGS
+
+			// clear the interrupt
+			if (current_irq != 0)
+				PIC.SendEndOfInterrupt(current_irq);
+
+			Native.FrameIRet(Address.InitialStack, Address.InitialStack);
 		}
 	}
 }

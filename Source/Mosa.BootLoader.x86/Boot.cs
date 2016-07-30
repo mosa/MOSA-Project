@@ -2,7 +2,7 @@
 
 using Mosa.Kernel.x86;
 
-namespace Mosa.UnitTest.x86
+namespace Mosa.BootLoader.x86
 {
 	/// <summary>
 	///
@@ -16,27 +16,36 @@ namespace Mosa.UnitTest.x86
 		/// </summary>
 		public static void Main()
 		{
-			Kernel.x86.Kernel.Setup();
+			KernelMemory.SetInitialMemory(0x01000000, 0x01000000);
+
+			IDT.SetInterruptHandler(null);
+			Panic.Setup();
+			DebugClient.Setup(Serial.COM1);
+
+			// Initialize interrupts
+			PIC.Setup();
+			IDT.Setup();
+			GDT.Setup();
+
+			Runtime.Internal.Setup();
 
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
-			EnterUnitTestMode();
+			EnterTestReadyLoop();
 		}
 
-		public static void EnterUnitTestMode()
+		public static void EnterTestReadyLoop()
 		{
 			Screen.Color = 0x0;
 			Screen.Clear();
 			Screen.GotoTop();
 			Screen.Color = 0x0E;
-			Screen.Write("MOSA OS Version 1.4 - Unit Test Mode Kernel");
+			Screen.Write("MOSA OS Version 1.6 - Bootloader");
 			Screen.NextLine();
 			Screen.NextLine();
 
 			UnitTestQueue.Setup();
 			UnitTestRunner.Setup();
-
-			DebugClient.Setup(Serial.COM1);
 
 			UnitTestRunner.EnterTestReadyLoop();
 		}
@@ -65,11 +74,6 @@ namespace Mosa.UnitTest.x86
 			Screen.Row = r;
 			Screen.Color = col;
 			Screen.BackgroundColor = back;
-		}
-
-		private static void ForceTestCollection()
-		{
-			Mosa.UnitTest.Collection.OptimizationTest.OptimizationTest1();
 		}
 	}
 }

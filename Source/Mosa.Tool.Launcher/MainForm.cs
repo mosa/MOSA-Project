@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using MetroFramework.Forms;
 using Mosa.Compiler.Common;
 using Mosa.Utility.BootImage;
 using Mosa.Utility.Launcher;
@@ -7,7 +8,6 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using MetroFramework.Forms;
 
 namespace Mosa.Tool.Launcher
 {
@@ -295,7 +295,7 @@ namespace Mosa.Tool.Launcher
 
 			Refresh();
 
-			if (Options.AutoLaunch)
+			if (Options.AutoStart)
 				CompileBuildAndStart();
 		}
 
@@ -378,7 +378,15 @@ namespace Mosa.Tool.Launcher
 					finally
 					{
 						if (!Builder.HasCompileError)
-							OnCompileCompleted();
+						{
+							if (Builder.Options.LaunchEmulator)
+								OnCompileCompleted();
+
+							if (Options.ExitOnLaunch)
+							{
+								Application.Exit();
+							}
+						}
 					}
 				}
 			));
@@ -414,14 +422,11 @@ namespace Mosa.Tool.Launcher
 			if (CheckKeyPressed())
 				return;
 
-			Starter = new Starter(Options, AppLocations, Builder.ImageFile, this);
+			string imageFile = Options.BootLoaderImage == null ? Options.BootLoaderImage : Builder.ImageFile;
+
+			Starter = new Starter(Options, AppLocations, imageFile, this);
 
 			Starter.Launch();
-
-			if (Options.ExitOnLaunch)
-			{
-				Application.Exit();
-			}
 		}
 
 		private bool CheckKeyPressed()

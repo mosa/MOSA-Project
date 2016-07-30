@@ -5,6 +5,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.Trace;
 using SharpDisasm;
 using System;
+using System.Text;
 
 namespace Mosa.Tool.Explorer
 {
@@ -23,7 +24,14 @@ namespace Mosa.Tool.Explorer
 
 		protected override void Run()
 		{
+			TraceDisassembly();
+			TracePatchRequests();
+		}
+
+		protected void TraceDisassembly()
+		{
 			var trace = CreateTraceLog();
+
 			if (!trace.Active)
 				return;
 
@@ -80,6 +88,27 @@ namespace Mosa.Tool.Explorer
 			{
 				trace.Log($"Unable to continue disassembly, error encountered\r\n{e.ToString()}");
 				NewCompilerTraceEvent(CompilerEvent.Error, $"Failed disassembly for method {this.MethodCompiler.Method}");
+			}
+		}
+
+		protected void TracePatchRequests()
+		{
+			var trace = CreateTraceLog("Patch-Requests");
+
+			if (!trace.Active)
+				return;
+
+			var symbol = MethodCompiler.Linker.FindSymbol(MethodCompiler.Method.FullName, SectionKind.Text);
+
+			foreach (var request in symbol.LinkRequests)
+			{
+				trace.Log(String.Format("{0:x8} -> [{1}] +{2:x} [{3}] {4}",
+					request.PatchOffset,
+					request.LinkType.ToString(),
+					request.ReferenceOffset,
+					request.ReferenceSymbol.SectionKind.ToString(),
+					request.ReferenceSymbol.Name
+				));
 			}
 		}
 	}

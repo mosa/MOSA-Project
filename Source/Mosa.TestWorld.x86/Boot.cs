@@ -20,8 +20,6 @@ namespace Mosa.TestWorld.x86
 		public static void Main()
 		{
 			Start();
-
-			//EnterDebugger();
 		}
 
 		public static void Start()
