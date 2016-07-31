@@ -404,15 +404,15 @@ namespace Mosa.Kernel.x86
 			// Setup stack
 
 			// IRET will pop in this order: EIP, CS, and EFLAGS registers
-			Native.Set32(Address.InitialStack + 0, address);    // EIP
-			Native.Set32(Address.InitialStack + 4, 0);          // CS
-			Native.Set32(Address.InitialStack + 8, 0);          // EFLAGS
+			Native.Set32(Address.InitialStack - 8, address);    // EIP
+			Native.Set32(Address.InitialStack - 4, 0);          // CS
+			Native.Set32(Address.InitialStack + 0, 0);          // EFLAGS
 
 			// clear the interrupt
 			if (current_irq != 0)
 				PIC.SendEndOfInterrupt(current_irq);
 
-			Native.FrameIRet(Address.InitialStack, Address.InitialStack);
+			Native.FrameIRet(Address.InitialStack + 8, Address.InitialStack);
 		}
 	}
 }
