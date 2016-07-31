@@ -173,13 +173,11 @@
     <Compile Include="Intrinsic\GetCR3.cs" />
     <Compile Include="Intrinsic\GetCR4.cs" />
     <Compile Include="Intrinsic\In8.cs" />
-    <Compile Include="Intrinsic\RestoreContext.cs" />
     <Compile Include="Intrinsic\SetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\SetCR0.cs" />
     <Compile Include="Intrinsic\SetCR2.cs" />
     <Compile Include="Intrinsic\SetCR3.cs" />
     <Compile Include="Intrinsic\SetCR4.cs" />
-    <Compile Include="Intrinsic\SwitchTask.cs" />
     <Compile Include="Intrinsic\Get8.cs" />
     <Compile Include="Intrinsic\Hlt.cs" />
     <Compile Include="Intrinsic\Set.cs" />

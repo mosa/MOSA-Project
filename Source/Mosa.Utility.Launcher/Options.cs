@@ -13,9 +13,14 @@ namespace Mosa.Utility.Launcher
 
 		public string DestinationDirectory { get; set; }
 
+		public bool AutoStart { get; set; }
+
+		public bool LaunchEmulator { get; set; }
+
 		public bool ExitOnLaunch { get; set; }
 
 		public bool AutoLaunch { get; set; }
+
 
 		public EmulatorType Emulator { get; set; }
 
@@ -98,6 +103,7 @@ namespace Mosa.Utility.Launcher
 			EmitRelocations = false;
 			EmitSymbols = false;
 			Emitx86IRQMethods = true;
+			LaunchEmulator = true;
 		}
 
 		public void LoadArguments(string[] args)
@@ -110,7 +116,10 @@ namespace Mosa.Utility.Launcher
 				{
 					case "-e": ExitOnLaunch = true; continue;
 					case "-q": ExitOnLaunch = true; continue;
-					case "-a": AutoLaunch = true; continue;
+					case "-a": AutoStart = true; continue;
+					case "-l": LaunchEmulator = true; continue;
+					case "-launch": LaunchEmulator = true; continue;
+					case "-launch-off": LaunchEmulator = false; continue;
 					case "-map": GenerateMapFile = true; continue;
 					case "-asm": GenerateASMFile = true; continue;
 					case "-qemu": Emulator = EmulatorType.Qemu; continue;

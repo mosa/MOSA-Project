@@ -293,7 +293,7 @@ namespace Mosa.Tool.Launcher
 
 			Refresh();
 
-			if (Options.AutoLaunch)
+			if (Options.AutoStart)
 				CompileBuildAndStart();
 		}
 
@@ -376,7 +376,15 @@ namespace Mosa.Tool.Launcher
 					finally
 					{
 						if (!Builder.HasCompileError)
-							OnCompileCompleted();
+						{
+							if (Builder.Options.LaunchEmulator)
+								OnCompileCompleted();
+
+							if (Options.ExitOnLaunch)
+							{
+								Application.Exit();
+							}
+						}
 					}
 				}
 			));
@@ -415,11 +423,6 @@ namespace Mosa.Tool.Launcher
 			Starter = new Starter(Options, AppLocations, Builder.ImageFile, this);
 
 			Starter.Launch();
-
-			if (Options.ExitOnLaunch)
-			{
-				Application.Exit();
-			}
 		}
 
 		private bool CheckKeyPressed()
