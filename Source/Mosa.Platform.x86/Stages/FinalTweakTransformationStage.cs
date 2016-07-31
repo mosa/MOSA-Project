@@ -1,4 +1,4 @@
-A// Copyright (c) MOSA Project. Licensed under the New BSD License.
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
 using System.Diagnostics;
@@ -14,9 +14,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			visitationDictionary[X86.Mov] = Mov;
 			visitationDictionary[X86.Movsx] = Movsx;
-			visitationDictionary[X86.MovsxLoad] = MovsxLoad;
 			visitationDictionary[X86.Movzx] = Movzx;
-			visitationDictionary[X86.MovzxLoad] = MovzxLoad;
 			visitationDictionary[X86.Movss] = Movss;
 			visitationDictionary[X86.Movsd] = Movsd;
 			visitationDictionary[X86.Setcc] = Setcc;
@@ -27,6 +25,10 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Visitation Methods
 
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Movsx"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		public void Movsx(Context context)
 		{
 			// Movsx can not use ESI or EDI registers
@@ -37,7 +39,7 @@ namespace Mosa.Platform.x86.Stages
 
 				if (source.Register != dest.Register)
 				{
-					context.SetInstruction(X86.Mov, InstructionSize.Size32, dest, source);
+					context.SetInstruction(X86.Mov, dest, source);
 				}
 				else
 				{
@@ -59,32 +61,10 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		public void MovsxLoad(Context context)
-		{
-			// Movsx can not use ESI or EDI registers
-			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
-			{
-				Operand dest = context.Result;
-				Operand source = context.Operand1;
-				Operand offset = context.Operand2;
-
-				context.SetInstruction(X86.MovLoad, InstructionSize.Size32, dest, source, offset);
-
-				if (source.IsShort || source.IsChar)
-				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x0000ffff));
-					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00010000));
-					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00010000));
-				}
-				else if (source.IsByte || source.IsBoolean)
-				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x000000ff));
-					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00000100));
-					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00000100));
-				}
-			}
-		}
-
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Movzx"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		public void Movzx(Context context)
 		{
 			// Movsx can not use ESI or EDI registers
@@ -115,29 +95,10 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		public void MovzxLoad(Context context)
-		{
-			// Movsx can not use ESI or EDI registers
-			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
-			{
-				Debug.Assert(context.Result.IsCPURegister);
-
-				Operand dest = context.Result;
-				Operand source = context.Operand1;
-
-				context.SetInstruction(X86.MovLoad, dest, source);
-
-				if (dest.IsShort || dest.IsChar)
-				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(TypeSystem, 0xffff));
-				}
-				else if (dest.IsByte || dest.IsBoolean)
-				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(TypeSystem, 0xff));
-				}
-			}
-		}
-
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		public void Mov(Context context)
 		{
 			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
@@ -165,6 +126,10 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		/// <summary>
+		/// Movss instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
 		public void Movss(Context context)
 		{
 			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
@@ -174,6 +139,10 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		/// <summary>
+		/// Movsds instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
 		public void Movsd(Context context)
 		{
 			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
@@ -183,6 +152,10 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Setcc"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		public void Setcc(Context context)
 		{
 			Debug.Assert(context.Result.IsCPURegister);
@@ -201,6 +174,10 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Call"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		public void Call(Context context)
 		{
 			if (context.Operand1 == null)
@@ -232,11 +209,19 @@ namespace Mosa.Platform.x86.Stages
 			context.Empty();
 		}
 
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Nop"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		public void Nop(Context context)
 		{
 			context.Empty();
 		}
 
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.In"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		public void In(Context context)
 		{
 			var size = context.Size;
