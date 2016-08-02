@@ -16,6 +16,7 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[X86.In] = In;
 			visitationDictionary[X86.Mov] = Mov;
 			visitationDictionary[X86.MovLoad] = MovLoad;
+			visitationDictionary[X86.MovStore] = MovStore;
 			visitationDictionary[X86.Movsd] = Movsd;
 			visitationDictionary[X86.Movss] = Movss;
 			visitationDictionary[X86.Movsx] = Movsx;
@@ -61,7 +62,10 @@ namespace Mosa.Platform.x86.Stages
 
 		public void In(Context context)
 		{
-			if (!(context.Size == InstructionSize.Size16 || context.Size == InstructionSize.Size8))
+			var size = context.Size;
+
+			// Mov can not use ESI or EDI registers for 8/16bit values
+			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
 				return;
 
 			Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
@@ -78,48 +82,74 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			}
 
-			// Mov can not use ESI or EDI registers with 8 or 16 bit memory or register
-			if (!(context.Size == InstructionSize.Size16 || context.Size == InstructionSize.Size8))
+			var size = context.Size;
+
+			// Mov can not use ESI or EDI registers for 8/16bit values
+			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
 				return;
 
-			if (context.Operand1.IsCPURegister && context.Result.IsCPURegister &&
-				(context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
+			Operand source = context.Operand1;
+
+			if (source.IsCPURegister && source.IsCPURegister && (source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI))
 			{
-				Operand source = context.Operand1;
-				Operand dest = context.Result;
+				Operand result = context.Result;
 
 				Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
 				context.SetInstruction2(X86.Xchg, eax, source, source, eax);
-				context.AppendInstruction(X86.Mov, dest, eax);
+				context.AppendInstruction(X86.Mov, result, eax);
 				context.AppendInstruction2(X86.Xchg, source, eax, eax, source);
 			}
 		}
 
 		public void MovLoad(Context context)
 		{
+			var size = context.Size;
+
 			// Mov can not use ESI or EDI registers for 8/16bit values
-			if (!(context.Size == InstructionSize.Size16 || context.Size == InstructionSize.Size8))
+			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
 				return;
 
-			if (context.Operand1.IsCPURegister && context.Result.IsCPURegister &&
-				(context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
+			Operand result = context.Result;
+
+			if (result.IsCPURegister && (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI))
 			{
-				Operand dest = context.Result;
 				Operand source = context.Operand1;
 				Operand offset = context.Operand2;
-				InstructionSize size = context.Size;
 
-				context.SetInstruction(X86.MovLoad, InstructionSize.Size32, dest, source, offset);
+				context.SetInstruction(X86.MovLoad, InstructionSize.Size32, result, source, offset);
 
 				if (size == InstructionSize.Size16)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x0000ffff));
+					context.AppendInstruction(X86.And, result, result, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x0000ffff));
 				}
 				else if (size == InstructionSize.Size8)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x000000ff));
+					context.AppendInstruction(X86.And, result, result, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x000000ff));
 				}
+			}
+		}
+
+		public void MovStore(Context context)
+		{
+			var size = context.Size;
+
+			// Mov can not use ESI or EDI registers for 8/16bit values
+			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
+				return;
+
+			Operand value = context.Operand3;
+
+			if (value.IsCPURegister && (value.Register == GeneralPurposeRegister.ESI || value.Register == GeneralPurposeRegister.EDI))
+			{
+				Operand dest = context.Operand1;
+				Operand offset = context.Operand2;
+
+				Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+
+				context.SetInstruction2(X86.Xchg, eax, value, value, eax);
+				context.AppendInstruction(X86.MovStore, size, null, dest, offset, eax);
+				context.AppendInstruction2(X86.Xchg, eax, value, eax, value);
 			}
 		}
 
@@ -143,16 +173,21 @@ namespace Mosa.Platform.x86.Stages
 
 		public void Movsx(Context context)
 		{
-			// Movsx can not use ESI or EDI registers
-			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
+			var size = context.Size;
+
+			// Mov can not use ESI or EDI registers for 8/16bit values
+			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
+				return;
+
+			Operand result = context.Operand1;
+
+			if (result.IsCPURegister && (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI))
 			{
 				Operand dest = context.Result;
-				Operand source = context.Operand1;
-				InstructionSize size = context.Size;
 
-				if (source.Register != dest.Register)
+				if (result.Register != dest.Register)
 				{
-					context.SetInstruction(X86.Mov, dest, source);
+					context.SetInstruction(X86.Mov, dest, result);
 				}
 				else
 				{
@@ -176,48 +211,55 @@ namespace Mosa.Platform.x86.Stages
 
 		public void MovsxLoad(Context context)
 		{
-			// Movsx can not use ESI or EDI registers for 8/16bit values
-			if (!(context.Size == InstructionSize.Size16 || context.Size == InstructionSize.Size8))
+			var size = context.Size;
+
+			// Mov can not use ESI or EDI registers for 8/16bit values
+			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
 				return;
 
-			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
+			Operand result = context.Result;
+
+			if (result.IsCPURegister && (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI))
 			{
-				Operand dest = context.Result;
 				Operand source = context.Operand1;
 				Operand offset = context.Operand2;
-				InstructionSize size = context.Size;
 
-				context.SetInstruction(X86.MovLoad, InstructionSize.Size32, dest, source, offset);
+				context.SetInstruction(X86.MovLoad, InstructionSize.Size32, result, source, offset);
 
 				if (size == InstructionSize.Size16)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x0000ffff));
-					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00010000));
-					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00010000));
+					context.AppendInstruction(X86.And, result, result, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x0000ffff));
+					context.AppendInstruction(X86.Xor, result, result, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00010000));
+					context.AppendInstruction(X86.Sub, result, result, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00010000));
 				}
 				else if (size == InstructionSize.Size8)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x000000ff));
-					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00000100));
-					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00000100));
+					context.AppendInstruction(X86.And, result, result, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x000000ff));
+					context.AppendInstruction(X86.Xor, result, result, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00000100));
+					context.AppendInstruction(X86.Sub, result, result, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00000100));
 				}
 			}
 		}
 
 		public void Movzx(Context context)
 		{
-			// Movsx can not use ESI or EDI registers
-			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
+			var size = context.Size;
+
+			// Mov can not use ESI or EDI registers for 8/16bit values
+			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
+				return;
+
+			Operand result = context.Result;
+
+			if (result.IsCPURegister && (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI))
 			{
 				Debug.Assert(context.Result.IsCPURegister);
 
-				Operand dest = context.Result;
 				Operand source = context.Operand1;
-				InstructionSize size = context.Size;
 
-				if (source.Register != dest.Register)
+				if (source.Register != result.Register)
 				{
-					context.SetInstruction(X86.Mov, dest, source);
+					context.SetInstruction(X86.Mov, result, source);
 				}
 				else
 				{
@@ -226,39 +268,41 @@ namespace Mosa.Platform.x86.Stages
 
 				if (size == InstructionSize.Size16)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(TypeSystem, 0xffff));
+					context.AppendInstruction(X86.And, result, result, Operand.CreateConstant(TypeSystem, 0xffff));
 				}
 				else if (size == InstructionSize.Size8)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(TypeSystem, 0xff));
+					context.AppendInstruction(X86.And, result, result, Operand.CreateConstant(TypeSystem, 0xff));
 				}
 			}
 		}
 
 		public void MovzxLoad(Context context)
 		{
-			// Movzx can not use ESI or EDI registers for 8/16bit values
-			if (!(context.Size == InstructionSize.Size16 || context.Size == InstructionSize.Size8))
+			var size = context.Size;
+
+			// Mov can not use ESI or EDI registers for 8/16bit values
+			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
 				return;
 
-			if (context.Operand1.IsCPURegister && (context.Operand1.Register == GeneralPurposeRegister.ESI || context.Operand1.Register == GeneralPurposeRegister.EDI))
+			Operand result = context.Result;
+
+			if (result.IsCPURegister && (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI))
 			{
 				Debug.Assert(context.Result.IsCPURegister);
 
-				Operand dest = context.Result;
 				Operand source = context.Operand1;
 				Operand offset = context.Operand2;
-				InstructionSize size = context.Size;
 
-				context.SetInstruction(X86.MovLoad, InstructionSize.Size32, dest, source, offset);
+				context.SetInstruction(X86.MovLoad, InstructionSize.Size32, result, source, offset);
 
 				if (size == InstructionSize.Size16)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(TypeSystem, 0xffff));
+					context.AppendInstruction(X86.And, result, result, Operand.CreateConstant(TypeSystem, 0xffff));
 				}
 				else if (size == InstructionSize.Size8)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(TypeSystem, 0xff));
+					context.AppendInstruction(X86.And, result, result, Operand.CreateConstant(TypeSystem, 0xff));
 				}
 			}
 		}
@@ -272,10 +316,11 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Debug.Assert(context.Result.IsCPURegister);
 
+			Operand result = context.Result;
+
 			// SETcc can not use with ESI or EDI registers
-			if (context.Result.IsCPURegister && (context.Result.Register == GeneralPurposeRegister.ESI || context.Result.Register == GeneralPurposeRegister.EDI))
+			if (result.IsCPURegister && (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI))
 			{
-				Operand result = context.Result;
 				var condition = context.ConditionCode;
 
 				Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
