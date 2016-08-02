@@ -36,6 +36,7 @@ namespace Mosa.UnitTest.Engine
 		private bool processStarted = false;
 		private int retries = 0;
 		private bool restartVM = false;
+		private bool imageSent = false;
 		private volatile bool ready = false;
 
 		private Stopwatch stopwatch = new Stopwatch();
@@ -263,6 +264,7 @@ namespace Mosa.UnitTest.Engine
 
 			processStarted = !fatalError;
 			ready = false;
+			imageSent = false;
 		}
 
 		public void ConnectToDebugEngine()
@@ -283,6 +285,7 @@ namespace Mosa.UnitTest.Engine
 
 				retries++;
 				ready = false;
+				imageSent = false;
 
 				try
 				{
@@ -342,6 +345,81 @@ namespace Mosa.UnitTest.Engine
 			}
 		}
 
+		public void SendImage()
+		{
+			var bss = linker.LinkerSections[(int)SectionKind.BSS];
+
+			var message = new DebugMessage(
+				DebugCode.ClearMemory,
+				new int[] { (int)bss.VirtualAddress, (int)bss.Size },
+				UnitTestResults
+			);
+
+			debugServerEngine.SendCommand(message);
+
+			foreach (var symbol in linker.Symbols)
+			{
+				Console.WriteLine(symbol.Name);
+
+				if (symbol.SectionKind == SectionKind.BSS)
+					continue;
+
+				if (symbol.Size == 0)
+					continue;
+
+				int address = (int)symbol.VirtualAddress;
+				int size = (int)symbol.Size;
+
+				symbol.Stream.Position = 0;
+
+				int left = size;
+
+				while (left > 0)
+				{
+					if (size > 2048)
+						size = 2048;
+
+					left = left - size;
+
+					var bytes = new List<byte>(size + 8);
+
+					bytes.Add((byte)(address & 0xFF));
+					bytes.Add((byte)((address >> 8) & 0xFF));
+					bytes.Add((byte)((address >> 16) & 0xFF));
+					bytes.Add((byte)((address >> 24) & 0xFF));
+
+					bytes.Add((byte)(size & 0xFF));
+					bytes.Add((byte)((size >> 8) & 0xFF));
+					bytes.Add((byte)((size >> 16) & 0xFF));
+					bytes.Add((byte)((size >> 24) & 0xFF));
+
+					address = address + size;
+
+					while (size > 0)
+					{
+						var b = symbol.Stream.ReadByte();
+
+						bytes.Add((byte)b);
+
+						size--;
+					}
+
+					var method = new DebugMessage(
+						DebugCode.WriteMemory,
+						bytes,
+						UnitTestResults
+					);
+
+					debugServerEngine.SendCommand(method);
+				}
+			}
+
+			// todo - wait until all messages are acknowledged
+
+			imageSent = true;
+			return;
+		}
+
 		public bool PrepareUnitTest()
 		{
 			lock (this)
@@ -373,6 +451,11 @@ namespace Mosa.UnitTest.Engine
 				if (!ready)
 				{
 					WaitForReady();
+				}
+
+				if (ready && !imageSent)
+				{
+					SendImage();
 				}
 
 				if (fatalError)
