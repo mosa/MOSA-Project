@@ -422,7 +422,7 @@ namespace Mosa.Tool.Launcher
 			if (CheckKeyPressed())
 				return;
 
-			string imageFile = Options.BootLoaderImage == null ? Options.BootLoaderImage : Builder.ImageFile;
+			string imageFile = Options.BootLoaderImage != null ? Options.BootLoaderImage : Builder.ImageFile;
 
 			Starter = new Starter(Options, AppLocations, imageFile, this);
 

@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="IUnitTestMessage.cs" />
+    <Compile Include="UnitTestMessage.cs" />
     <Compile Include="UnitTestRequest.cs" />
     <Compile Include="UnitTestEngine.cs" />
   </ItemGroup>

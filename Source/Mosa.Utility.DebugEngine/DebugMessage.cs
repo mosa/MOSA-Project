@@ -12,7 +12,7 @@ namespace Mosa.Utility.DebugEngine
 
 		public int Code { get; private set; }
 
-		public List<byte> CommandData { get; private set; }
+		public IList<byte> CommandData { get; private set; }
 
 		public List<byte> ResponseData { get; internal set; }
 
@@ -22,7 +22,7 @@ namespace Mosa.Utility.DebugEngine
 
 		public object Other { get; set; }
 
-		public DebugMessage(int code, List<byte> data)
+		public DebugMessage(int code, IList<byte> data)
 		{
 			Code = code;
 			CommandData = data;
@@ -53,7 +53,13 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
-		public DebugMessage(int code, List<byte> data, CallBack callback)
+		public DebugMessage(int code, IList<int> data, CallBack callback)
+		: this(code, data)
+		{
+			CallBack = callback;
+		}
+
+		public DebugMessage(int code, IList<byte> data, CallBack callback)
 		: this(code, data)
 		{
 			CallBack = callback;

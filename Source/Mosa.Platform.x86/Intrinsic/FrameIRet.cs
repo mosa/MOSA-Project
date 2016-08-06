@@ -20,7 +20,6 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Operand v0 = context.Operand1;
 			Operand v1 = context.Operand2;
-			Operand v2 = context.Operand3;
 
 			Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 			Operand ebp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
@@ -32,11 +31,10 @@ namespace Mosa.Platform.x86.Intrinsic
 			// Move all virtual registers into physical registers - necessary since stack frame pointer will change
 			context.SetInstruction(X86.Mov, eax, v0);
 			context.AppendInstruction(X86.Mov, ebx, v1);
-			context.AppendInstruction(X86.Mov, ecx, v2);
 
 			// Update the frame and stack registers
-			context.AppendInstruction(X86.Mov, ebp, ecx);
-			context.AppendInstruction(X86.Mov, esp, ebx);
+			context.AppendInstruction(X86.Mov, ebp, ebx);
+			context.AppendInstruction(X86.Mov, esp, eax);
 			context.AppendInstruction(X86.IRetd);
 
 			// future - common code (refactor opportunity)

@@ -2,14 +2,18 @@
 
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Utility.DebugEngine;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.UnitTest.Engine
 {
-	internal class UnitTestRequest
+	internal class UnitTestRequest : IUnitTestMessage
 	{
+		int IUnitTestMessage.DebugCode { get { return DebugCode.ExecuteUnitTest; } }
+		IList<byte> IUnitTestMessage.MessageAsBytes { get { return null; } }
+
 		public string ID { get; set; }
 		public string MethodNamespaceName { get; set; }
 		public string MethodTypeName { get; set; }
@@ -85,22 +89,25 @@ namespace Mosa.UnitTest.Engine
 			return null;
 		}
 
-		public List<int> CreateRequestMessage()
+		IList<int> IUnitTestMessage.MessageAsInts
 		{
-			var cmd = new List<int>(4 + 4 + 4 + RuntimeMethod.Signature.Parameters.Count);
-
-			cmd.Add((int)Address);
-			cmd.Add(GetReturnResultType(RuntimeMethod.Signature.ReturnType));
-			cmd.Add(0);
-
-			foreach (var parm in Parameters)
+			get
 			{
-				AddParameters(cmd, parm);
+				var cmd = new List<int>(4 + 4 + 4 + RuntimeMethod.Signature.Parameters.Count);
+
+				cmd.Add((int)Address);
+				cmd.Add(GetReturnResultType(RuntimeMethod.Signature.ReturnType));
+				cmd.Add(0);
+
+				foreach (var parm in Parameters)
+				{
+					AddParameters(cmd, parm);
+				}
+
+				cmd[2] = cmd.Count - 3;
+
+				return cmd;
 			}
-
-			cmd[2] = cmd.Count - 3;
-
-			return cmd;
 		}
 
 		private static int GetReturnResultType(MosaType type)

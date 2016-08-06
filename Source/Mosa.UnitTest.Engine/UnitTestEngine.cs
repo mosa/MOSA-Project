@@ -48,8 +48,8 @@ namespace Mosa.UnitTest.Engine
 
 		private const int DefaultMaxSentQueue = 100;
 
-		private Queue<UnitTestRequest> queue = new Queue<UnitTestRequest>();
-		private HashSet<UnitTestRequest> sent = new HashSet<UnitTestRequest>();
+		private Queue<IUnitTestMessage> queue = new Queue<IUnitTestMessage>();
+		private HashSet<IUnitTestMessage> sent = new HashSet<IUnitTestMessage>();
 
 		private int MaxSentQueue = DefaultMaxSentQueue;
 
@@ -90,7 +90,8 @@ namespace Mosa.UnitTest.Engine
 				DebugConnectionPort = 9999,
 				ExitOnLaunch = true,
 				GenerateASMFile = true,
-				GenerateMapFile = true
+				GenerateMapFile = true,
+				BootLoaderImage = @"..\Tests\BootImage\Mosa.UnitTest.x86.img"
 			};
 
 			AppLocations = new AppLocations();
@@ -116,7 +117,7 @@ namespace Mosa.UnitTest.Engine
 				TestAssemblyPath = AppContext.BaseDirectory;
 
 			if (TestSuiteFile == null)
-				TestSuiteFile = "Mosa.UnitTest." + Platform + ".exe";
+				TestSuiteFile = "Mosa.UnitTests." + Platform + ".exe";
 		}
 
 		private void ProcessQueue()
@@ -125,30 +126,29 @@ namespace Mosa.UnitTest.Engine
 			{
 				while (!processThreadAbort)
 				{
-					//Thread.Sleep(5);   // temporary
-
-					// todo - wait for pulse (or timeout)
-
-					UnitTestRequest request = null;
+					IUnitTestMessage message = null;
 
 					lock (queue)
 					{
 						// check if queue has requests or too many have already been sent
 						if (queue.Count <= 0 || sent.Count > MaxSentQueue)
 						{
+							Thread.Sleep(5);
 							continue;
 						}
 
-						request = queue.Dequeue();
+						message = queue.Dequeue();
 					}
 
 					PrepareUnitTest();
 
-					var message = new DebugMessage(DebugCode.ExecuteUnitTest, request.CreateRequestMessage());
-					message.CallBack = UnitTestResults;
-					message.Other = request;
+					var debugeMessage = (message.MessageAsBytes != null) ?
+					  new DebugMessage(message.DebugCode, message.MessageAsBytes, MessageCallBack)
+					: new DebugMessage(message.DebugCode, message.MessageAsInts, MessageCallBack);
 
-					debugServerEngine.SendCommand(message);
+					debugeMessage.Other = message;
+
+					debugServerEngine.SendCommand(debugeMessage);
 				}
 			}
 			catch (Exception e)
@@ -157,28 +157,44 @@ namespace Mosa.UnitTest.Engine
 			}
 		}
 
-		private void UnitTestResults(DebugMessage response)
+		private void MessageCallBack(DebugMessage response)
 		{
 			if (response == null)
 				return;
 
-			lock (this)
+			var message = response.Other as IUnitTestMessage;
+
+			lock (queue)
 			{
 				//Console.WriteLine(response.ToString());
 
-				var request = response.Other as UnitTestRequest;
+				sent.Remove(message);
 
-				sent.Remove(request);
+				// being conservative and still maintain lock for a bit more
 
-				request.ParseResultData(response.ResponseData);
+				if (message is UnitTestRequest)
+				{
+					(message as UnitTestRequest).ParseResultData(response.ResponseData);
+				}
 			}
 		}
 
-		private void QueueUnitTest(UnitTestRequest request)
+		private void QueueMessage(IUnitTestMessage request)
 		{
 			lock (queue)
 			{
 				queue.Enqueue(request);
+			}
+		}
+
+		private bool IsQueueEmpty
+		{
+			get
+			{
+				lock (queue)
+				{
+					return queue.Count == 0 && sent.Count == 0;
+				}
 			}
 		}
 
@@ -190,7 +206,7 @@ namespace Mosa.UnitTest.Engine
 
 			request.Resolve(typeSystem, linker);
 
-			QueueUnitTest(request);
+			QueueMessage(request);
 
 			while (!request.HasResult)
 			{
@@ -242,7 +258,7 @@ namespace Mosa.UnitTest.Engine
 
 			linker = builder.Linker;
 			typeSystem = builder.TypeSystem;
-			imagefile = builder.ImageFile;
+			imagefile = Options.BootLoaderImage; // builder.ImageFile;
 
 			fatalError = builder.HasCompileError;
 			compiled = !fatalError;
@@ -349,13 +365,14 @@ namespace Mosa.UnitTest.Engine
 		{
 			var bss = linker.LinkerSections[(int)SectionKind.BSS];
 
-			var message = new DebugMessage(
-				DebugCode.ClearMemory,
-				new int[] { (int)bss.VirtualAddress, (int)bss.Size },
-				UnitTestResults
-			);
+			var message = new UnitTestMessage(DebugCode.ClearMemory, new int[] { (int)bss.VirtualAddress, (int)bss.Size });
 
-			debugServerEngine.SendCommand(message);
+			QueueMessage(message);
+
+			while (!IsQueueEmpty)
+			{
+				Thread.Sleep(10);
+			}
 
 			foreach (var symbol in linker.Symbols)
 			{
@@ -376,8 +393,8 @@ namespace Mosa.UnitTest.Engine
 
 				while (left > 0)
 				{
-					if (size > 2048)
-						size = 2048;
+					if (size > 2048 / 4)
+						size = 2048 / 4;
 
 					left = left - size;
 
@@ -404,17 +421,16 @@ namespace Mosa.UnitTest.Engine
 						size--;
 					}
 
-					var method = new DebugMessage(
-						DebugCode.WriteMemory,
-						bytes,
-						UnitTestResults
-					);
+					var message2 = new UnitTestMessage(DebugCode.WriteMemory, bytes);
 
-					debugServerEngine.SendCommand(method);
+					QueueMessage(message2);
 				}
 			}
 
-			// todo - wait until all messages are acknowledged
+			while (!IsQueueEmpty)
+			{
+				Thread.Sleep(10);
+			}
 
 			imageSent = true;
 			return;
