@@ -144,11 +144,28 @@ namespace Mosa.Platform.x86.Stages
 				Operand dest = context.Operand1;
 				Operand offset = context.Operand2;
 
-				Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+				Operand temporaryRegister = null;
 
-				context.SetInstruction2(X86.Xchg, eax, value, value, eax);
-				context.AppendInstruction(X86.MovStore, size, null, dest, offset, eax);
-				context.AppendInstruction2(X86.Xchg, eax, value, eax, value);
+				if (dest.Register != GeneralPurposeRegister.EAX && offset.Register != GeneralPurposeRegister.EAX)
+				{
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+				}
+				else if (dest.Register != GeneralPurposeRegister.EBX && offset.Register != GeneralPurposeRegister.EBX)
+				{
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
+				}
+				else if (dest.Register != GeneralPurposeRegister.ECX && offset.Register != GeneralPurposeRegister.ECX)
+				{
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+				}
+				else
+				{
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+				}
+
+				context.SetInstruction2(X86.Xchg, temporaryRegister, value, value, temporaryRegister);
+				context.AppendInstruction(X86.MovStore, size, null, dest, offset, temporaryRegister);
+				context.AppendInstruction2(X86.Xchg, temporaryRegister, value, temporaryRegister, value);
 			}
 		}
 

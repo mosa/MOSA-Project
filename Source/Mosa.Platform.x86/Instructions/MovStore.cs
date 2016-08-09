@@ -69,10 +69,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b1100)                                       // 4:opcode
 				.Append3Bits(Bits.b011)                                         // 3:opcode
 				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
-				.AppendMod(true, node.Operand2)                                 // 2:mod
-				.Append3Bits(Bits.b000)                                         // 3:000
-				.AppendRM(node.Operand1)                                        // 3:r/m (destination)
-				.AppendConditionalDisplacement(!node.Operand2.IsConstantZero, node.Operand2) // 8/32:displacement value
+				.ModRegRMSIBDisplacement(true, node.Operand1, node.Operand3, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 				.AppendInteger(node.Operand3, node.Size)                        // 8/16/32:immediate
 				.AppendConditionalIntegerValue(node.Operand3.IsLinkerResolved, 0); // 32:memory
 
@@ -154,7 +151,7 @@ namespace Mosa.Platform.x86.Instructions
 				.Append3Bits(Bits.b100)                                         // 3:opcode
 				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
 
-				.ModRegRMSIBDisplacement(node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.ModRegRMSIBDisplacement(true, node.Operand1, node.Operand3, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 
 				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0); // 32:displacement
 
