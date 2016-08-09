@@ -76,7 +76,10 @@ namespace Mosa.Platform.x86.Stages
 
 		public void Mov(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
+			Operand source = context.Operand1;
+			Operand result = context.Result;
+
+			if (result.IsCPURegister && source.IsCPURegister && result.Register == source.Register)
 			{
 				context.Empty();
 				return;
@@ -88,12 +91,8 @@ namespace Mosa.Platform.x86.Stages
 			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
 				return;
 
-			Operand source = context.Operand1;
-
 			if (source.IsCPURegister && source.IsCPURegister && (source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI))
 			{
-				Operand result = context.Result;
-
 				Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
 				context.SetInstruction2(X86.Xchg, eax, source, source, eax);
