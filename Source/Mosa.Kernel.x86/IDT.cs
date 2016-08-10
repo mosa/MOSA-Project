@@ -346,7 +346,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="stack">The stack.</param>
 		private unsafe static void ProcessInterrupt(IDTStack* stack)
 		{
-			DebugClient.Process(stack->Interrupt);
+			Debugger.Process(stack->Interrupt);
 
 			switch (stack->Interrupt)
 			{

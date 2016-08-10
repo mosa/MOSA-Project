@@ -72,7 +72,7 @@
     <Compile Include="Helpers\Assert.cs" />
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="ConsoleSession.cs" />
-    <Compile Include="DebugClient.cs" />
+    <Compile Include="Debugger.cs" />
     <Compile Include="Serial.cs" />
     <Compile Include="KernelMemory.cs" />
     <Compile Include="CMOS.cs" />

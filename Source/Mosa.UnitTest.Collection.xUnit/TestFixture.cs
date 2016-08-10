@@ -5,12 +5,12 @@ using Xunit;
 
 namespace Mosa.UnitTest.Collection.xUnit
 {
-	public class TestFixture : BaseTestFixture, IClassFixture<UnitTestFixture2>
+	public class TestFixture : BaseTestFixture, IClassFixture<UnitTestFixture>
 	{
 		protected T Run<T>(string ns, string type, string method, params object[] parameters)
 		{
 			// Get test system
-			var unitTestEngine = UnitTestFixture2.UnitTestEngine;
+			var unitTestEngine = UnitTestFixture.UnitTestEngine;
 
 			// execute test
 			return unitTestEngine.Run<T>(ns, type, method, parameters);

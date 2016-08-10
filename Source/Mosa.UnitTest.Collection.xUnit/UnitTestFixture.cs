@@ -5,7 +5,7 @@ using System;
 
 namespace Mosa.UnitTest.Collection.xUnit
 {
-	public class UnitTestFixture2 : IDisposable
+	public class UnitTestFixture : IDisposable
 	{
 		public static UnitTestEngine UnitTestEngine { get; private set; }
 
@@ -13,7 +13,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 
 		private static object sync = new object();
 
-		public UnitTestFixture2()
+		public UnitTestFixture()
 		{
 			lock (sync)
 			{

@@ -20,7 +20,7 @@ namespace Mosa.BootLoader.x86
 
 			IDT.SetInterruptHandler(null);
 			Panic.Setup();
-			DebugClient.Setup(Serial.COM1);
+			Debugger.Setup(Serial.COM1);
 
 			// Initialize interrupts
 			PIC.Setup();

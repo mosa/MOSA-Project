@@ -109,17 +109,23 @@ namespace Mosa.Utility.DebugEngine
 			SendMagic();
 			SendInteger(message.ID);
 			SendInteger(message.Code);
+
 			if (message.CommandData == null)
 			{
 				SendInteger(0);
-				SendInteger(message.Checksum);
+
+				SendInteger(0); // checksum
 			}
 			else
 			{
-				SendInteger(message.CommandData.Count);
-				SendInteger(message.Checksum);
+				SendInteger(message.CommandData.Count); // length
+
 				foreach (var b in message.CommandData)
+				{
 					SendByte(b);
+				}
+
+				SendInteger(0); // checksum
 			}
 		}
 
@@ -163,18 +169,21 @@ namespace Mosa.Utility.DebugEngine
 			int id = GetInteger(4);
 			int code = GetInteger(8);
 			int len = GetInteger(12);
-			int checksum = GetInteger(16);
+			int checksum = GetInteger(len);
 
 			var data = new List<byte>();
+
 			for (int i = 0; i < len; i++)
-				data.Add(buffer[i + 20]);
+			{
+				data.Add(buffer[i + 16]);
+			}
 
 			PostResponse(id, code, data);
 
 			return true;
 		}
 
-		// Message format:	[MAGIC]-ID-CODE-LEN-CHECKSUM-DATA
+		// Message format:	// [0]MAGIC[4]ID[8]CODE[12]LEN[16]DATA[LEN]CHECKSUM
 
 		private void BadDataAbort()
 		{

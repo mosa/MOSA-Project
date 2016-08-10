@@ -39,7 +39,7 @@ namespace Mosa.Kernel.x86
 		{
 			uint testCount = 0;
 
-			DebugClient.Ready();
+			Debugger.Ready();
 
 			Screen.Write("Waiting for unit tests...");
 			Screen.NextLine();

@@ -38,7 +38,7 @@ namespace Mosa.TestWorld.x86
 			Screen.Write("!");
 			Screen.Write(" ");
 
-			DebugClient.Setup(Serial.COM1);
+			Debugger.Setup(Serial.COM1);
 			Screen.Write('0');
 			IDT.SetInterruptHandler(null);
 			Screen.Write('1');
@@ -190,7 +190,7 @@ namespace Mosa.TestWorld.x86
 			Screen.NextLine();
 			Screen.NextLine();
 
-			DebugClient.Setup(Serial.COM1);
+			Debugger.Setup(Serial.COM1);
 
 			while (true)
 			{

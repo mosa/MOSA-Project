@@ -18,7 +18,7 @@ namespace Mosa.Utility.DebugEngine
 
 		public CallBack CallBack { get; set; }
 
-		public int Checksum { get { return 0; } }
+		//public int Checksum { get { return 0; } }
 
 		public object Other { get; set; }
 

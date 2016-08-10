@@ -63,7 +63,7 @@ namespace Mosa.Kernel.x86
 			while (true)
 			{
 				// keep debugger running
-				DebugClient.Process(0);
+				Debugger.Process(0);
 
 				//Native.Hlt();
 			}
