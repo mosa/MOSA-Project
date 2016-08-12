@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.BootImage;
@@ -7,7 +8,6 @@ using Mosa.Utility.DebugEngine;
 using Mosa.Utility.Launcher;
 using System;
 using System.Collections.Generic;
-
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
@@ -41,15 +41,13 @@ namespace Mosa.UnitTest.Engine
 
 		private Stopwatch stopwatch = new Stopwatch();
 
-		//private volatile List<byte> resultData = null;
-
 		private const uint MaxRetries = 10;
 		private const uint RetryDelay = 1; // 1- seconds
 
 		private const int DefaultMaxSentQueue = 100;
 
-		private Queue<IUnitTestMessage> queue = new Queue<IUnitTestMessage>();
-		private HashSet<IUnitTestMessage> sent = new HashSet<IUnitTestMessage>();
+		private Queue<DebugMessage> queue = new Queue<DebugMessage>();
+		private HashSet<DebugMessage> sent = new HashSet<DebugMessage>();
 
 		private int MaxSentQueue = DefaultMaxSentQueue;
 
@@ -91,7 +89,7 @@ namespace Mosa.UnitTest.Engine
 				ExitOnLaunch = true,
 				GenerateASMFile = true,
 				GenerateMapFile = true,
-				BootLoaderImage = @"..\Tests\BootImage\Mosa.UnitTest.x86.img"
+				BootLoaderImage = @"..\Tests\BootImage\Mosa.BootLoader.x86.img"
 			};
 
 			AppLocations = new AppLocations();
@@ -126,7 +124,7 @@ namespace Mosa.UnitTest.Engine
 			{
 				while (!processThreadAbort)
 				{
-					IUnitTestMessage message = null;
+					DebugMessage message = null;
 
 					lock (queue)
 					{
@@ -142,13 +140,10 @@ namespace Mosa.UnitTest.Engine
 
 					PrepareUnitTest();
 
-					var debugeMessage = (message.MessageAsBytes != null) ?
-					  new DebugMessage(message.DebugCode, message.MessageAsBytes, MessageCallBack)
-					: new DebugMessage(message.DebugCode, message.MessageAsInts, MessageCallBack);
+					message.Other = message;
+					message.CallBack = MessageCallBack;
 
-					debugeMessage.Other = message;
-
-					debugServerEngine.SendCommand(debugeMessage);
+					debugServerEngine.SendCommand(message);
 				}
 			}
 			catch (Exception e)
@@ -162,24 +157,22 @@ namespace Mosa.UnitTest.Engine
 			if (response == null)
 				return;
 
-			var message = response.Other as IUnitTestMessage;
-
 			lock (queue)
 			{
 				//Console.WriteLine(response.ToString());
 
-				sent.Remove(message);
+				sent.Remove(response);
+			}
 
-				// being conservative and still maintain lock for a bit more
+			var message = response.Other as UnitTestRequest;
 
-				if (message is UnitTestRequest)
-				{
-					(message as UnitTestRequest).ParseResultData(response.ResponseData);
-				}
+			if (message != null)
+			{
+				message.ParseResultData(response.ResponseData);
 			}
 		}
 
-		private void QueueMessage(IUnitTestMessage request)
+		private void QueueMessage(DebugMessage request)
 		{
 			lock (queue)
 			{
@@ -206,7 +199,9 @@ namespace Mosa.UnitTest.Engine
 
 			request.Resolve(typeSystem, linker);
 
-			QueueMessage(request);
+			var message = new DebugMessage(DebugCode.ExecuteUnitTest, request.Message);
+
+			QueueMessage(message);
 
 			while (!request.HasResult)
 			{
@@ -361,18 +356,98 @@ namespace Mosa.UnitTest.Engine
 			}
 		}
 
+		private volatile bool wait = false;
+
+		public void SendMessageAndWait(DebugMessage message)
+		{
+			wait = true;
+
+			message.CallBack = Acknowledge;
+
+			debugServerEngine.SendCommand(message);
+
+			while (wait)
+			{
+				Thread.Sleep(5);
+			}
+		}
+
+		public void Acknowledge(DebugMessage message)
+		{
+			wait = false;
+		}
+
 		public void SendImage()
 		{
 			var bss = linker.LinkerSections[(int)SectionKind.BSS];
 
-			var message = new UnitTestMessage(DebugCode.ClearMemory, new int[] { (int)bss.VirtualAddress, (int)bss.Size });
+			var message = new DebugMessage(DebugCode.ClearMemory, new int[] { (int)bss.VirtualAddress, (int)bss.Size });
 
-			QueueMessage(message);
+			SendMessageAndWait(message);
 
-			while (!IsQueueEmpty)
+			foreach (var section in linker.LinkerSections)
 			{
-				Thread.Sleep(10);
+				if (section.SectionKind == SectionKind.BSS)
+					continue;
+
+				var stream = new MemoryStream((int)section.Size);
+
+				// similar code in the Section.WriteTo method
+				foreach (var symbol in section.Symbols)
+				{
+					stream.Seek(symbol.SectionOffset, SeekOrigin.Begin);
+					if (symbol.IsDataAvailable)
+					{
+						symbol.Stream.Position = 0;
+						symbol.Stream.WriteTo(stream);
+					}
+				}
+
+				stream.WriteZeroBytes((int)(section.AlignedSize - stream.Position));
+				stream.Position = 0;
+
+				var array = stream.ToArray();
+				uint at = 0;
+
+				while (at < array.Length)
+				{
+					uint size = (uint)array.Length - at;
+
+					if (size > 1024) size = 1024;
+
+					var bytes = new byte[size + 8];
+
+					Array.Copy(array, at, bytes, 8, size);
+
+					uint address = (uint)(section.VirtualAddress + at);
+					Console.WriteLine(section.SectionKind.ToString() + " : 0x" + address.ToString("X"));
+
+					bytes[0] = (byte)(address & 0xFF);
+					bytes[1] = (byte)((address >> 8) & 0xFF);
+					bytes[2] = (byte)((address >> 16) & 0xFF);
+					bytes[3] = (byte)((address >> 24) & 0xFF);
+
+					bytes[4] = (byte)(size & 0xFF);
+					bytes[5] = (byte)((size >> 8) & 0xFF);
+					bytes[6] = (byte)((size >> 16) & 0xFF);
+					bytes[7] = (byte)((size >> 24) & 0xFF);
+
+					message = new DebugMessage(DebugCode.WriteMemory, bytes);
+
+					SendMessageAndWait(message);
+
+					at = at + size;
+				}
 			}
+		}
+
+		public void SendImage2()
+		{
+			var bss = linker.LinkerSections[(int)SectionKind.BSS];
+
+			var message = new DebugMessage(DebugCode.ClearMemory, new int[] { (int)bss.VirtualAddress, (int)bss.Size });
+
+			SendMessageAndWait(message);
 
 			foreach (var symbol in linker.Symbols)
 			{
@@ -421,15 +496,10 @@ namespace Mosa.UnitTest.Engine
 						size--;
 					}
 
-					var message2 = new UnitTestMessage(DebugCode.WriteMemory, bytes);
+					message = new DebugMessage(DebugCode.WriteMemory, bytes);
 
-					QueueMessage(message2);
+					SendMessageAndWait(message);
 				}
-			}
-
-			while (!IsQueueEmpty)
-			{
-				Thread.Sleep(10);
 			}
 
 			imageSent = true;

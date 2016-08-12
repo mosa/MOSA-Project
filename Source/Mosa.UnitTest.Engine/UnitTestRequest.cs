@@ -9,11 +9,8 @@ using System.Diagnostics;
 
 namespace Mosa.UnitTest.Engine
 {
-	internal class UnitTestRequest : IUnitTestMessage
+	internal class UnitTestRequest
 	{
-		int IUnitTestMessage.DebugCode { get { return DebugCode.ExecuteUnitTest; } }
-		IList<byte> IUnitTestMessage.MessageAsBytes { get { return null; } }
-
 		public string ID { get; set; }
 		public string MethodNamespaceName { get; set; }
 		public string MethodTypeName { get; set; }
@@ -89,7 +86,7 @@ namespace Mosa.UnitTest.Engine
 			return null;
 		}
 
-		IList<int> IUnitTestMessage.MessageAsInts
+		public IList<int> Message
 		{
 			get
 			{

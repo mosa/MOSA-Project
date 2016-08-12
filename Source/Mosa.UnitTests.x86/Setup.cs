@@ -14,6 +14,16 @@ namespace Mosa.UnitTests.x86
 		/// </summary>
 		public static void Main()
 		{
+			Screen.Color = 0x0;
+			Screen.Clear();
+			Screen.GotoTop();
+			Screen.Color = 0x0E;
+			Screen.Write('M');
+			Screen.Write('O');
+			Screen.Write('S');
+			Screen.Write('A');
+			Screen.Write(' ');
+
 			KernelMemory.SetInitialMemory(0x02000000, 0x08000000);
 
 			Runtime.Internal.Setup();

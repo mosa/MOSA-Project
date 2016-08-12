@@ -204,7 +204,7 @@ namespace Mosa.Kernel.x86
 
 		private static uint GetLength()
 		{
-			return GetUInt32(16);
+			return GetUInt32(12);
 		}
 
 		private static int GetCheckSum()
