@@ -13,9 +13,6 @@ namespace Mosa.Kernel.x86
 		public const uint PageFrameAllocator = 0x00C00000; // 12MB
 		public const uint PageTable = 0x01000000; // 16MB
 
-		public const uint TSS = 0x0; // TODO
-		public const uint TSSSize = 0x68;
-
 		public const uint VirtualPageAllocator = 0x01400000; // 20MB
 
 		public const uint GCInitialMemory = 0x02000000; // 8MB
@@ -25,10 +22,10 @@ namespace Mosa.Kernel.x86
 
 		public const uint InitialStack = 0x00009000;
 
-		public const uint DebuggerBuffer = 0x00001000;
+		public const uint DebuggerBuffer = 0x00001000; // Size: 5KB
 
-		public const uint UnitTestStack = 0x00002000;   // 8K (stack grows down)
-		public const uint UnitTestQueueStart = 0x00004000;
-		public const uint UnitTestQueueEnd = 0x00005000;
+		public const uint UnitTestStack = 0x00008000;   // (stack grows down)
+		public const uint UnitTestQueueStart = 0x00005000;
+		public const uint UnitTestQueueEnd = 0x00006000;
 	}
 }

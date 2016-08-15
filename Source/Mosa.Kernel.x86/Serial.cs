@@ -30,8 +30,8 @@ namespace Mosa.Kernel.x86
 			// Enable DLAB (set baud rate divisor)
 			Native.Out8((ushort)(com + COM_ModemControl), 0x80);
 
-			// Set divisor to 3 (lo byte) 38400 baud
-			Native.Out8((ushort)(com + COM_Data), 0x03);
+			// Set divisor to 1 (lo byte) 115200 baud
+			Native.Out8((ushort)(com + COM_Data), 0x01);
 
 			// (hi byte)
 			Native.Out8((ushort)(com + COM_Interrupt), 0x00);

@@ -40,6 +40,8 @@ namespace Mosa.Kernel.x86
 
 		#endregion Codes
 
+		private const int MaxBuffer = 4096 + 48;
+
 		private static bool enabled = false;
 
 		private static ushort com = Serial.COM1;
@@ -279,7 +281,7 @@ namespace Mosa.Kernel.x86
 				length = GetInt32(12);
 			}
 
-			if (length > 4096 || index > 4096)
+			if (length > MaxBuffer || index > MaxBuffer)
 			{
 				BadDataAbort();
 				return true;
@@ -298,9 +300,8 @@ namespace Mosa.Kernel.x86
 		{
 			// [0]MAGIC[4]ID[8]CODE[12]LEN[16]DATA[LEN]CHECKSUM
 
-			int checksum = GetCheckSum();
-
 			// TODO: validate checksum
+			//int checksum = GetCheckSum();
 
 			switch (GetCode())
 			{
@@ -359,8 +360,6 @@ namespace Mosa.Kernel.x86
 			uint start = GetUInt32(16);
 			uint bytes = GetUInt32(20);
 
-			SendResponse(id, DebugCode.WriteMemory);
-
 			uint at = 0;
 
 			while (at + 4 < bytes)
@@ -380,6 +379,8 @@ namespace Mosa.Kernel.x86
 
 				at = at + 1;
 			}
+
+			SendResponse(id, DebugCode.WriteMemory);
 		}
 
 		private static void ClearMemory()
@@ -387,8 +388,6 @@ namespace Mosa.Kernel.x86
 			int id = GetID();
 			uint start = GetUInt32(16);
 			uint bytes = GetUInt32(20);
-
-			SendResponse(id, DebugCode.ClearMemory);
 
 			uint at = 0;
 
@@ -405,6 +404,8 @@ namespace Mosa.Kernel.x86
 
 				at = at + 1;
 			}
+
+			SendResponse(id, DebugCode.ClearMemory);
 		}
 
 		private static void QueueUnitTest()

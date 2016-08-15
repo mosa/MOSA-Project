@@ -22,7 +22,9 @@ namespace Mosa.Utility.DebugEngine
 
 		private int length = -1;
 
-		private const int MaxBufferSize = 0x20000;
+		private const int MaxBufferSize = 0x5000;
+		private byte[] sendpacket = new byte[MaxBufferSize];
+		private int sendpacketsize = 0;
 
 		public Stream Stream
 		{
@@ -83,50 +85,54 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
-		private void SendByte(int b)
+		private void SendPacket()
 		{
-			stream.WriteByte((byte)b);
+			stream.Write(sendpacket, 0, sendpacketsize);
+			sendpacketsize = 0;
 		}
 
-		private void SendInteger(int i)
+		private void AddSendPacket(byte b)
 		{
-			SendByte(i & 0xFF);
-			SendByte(i >> 8 & 0xFF);
-			SendByte(i >> 16 & 0xFF);
-			SendByte(i >> 24 & 0xFF);
+			sendpacket[sendpacketsize++] = b;
 		}
 
-		private void SendMagic()
+		private void AddSendPacket(int i)
 		{
-			SendByte('M');
-			SendByte('O');
-			SendByte('S');
-			SendByte('A');
+			AddSendPacket((byte)(i & 0xFF));
+			AddSendPacket((byte)(i >> 8 & 0xFF));
+			AddSendPacket((byte)(i >> 16 & 0xFF));
+			AddSendPacket((byte)(i >> 24 & 0xFF));
 		}
 
 		private void SendCommandMessage(DebugMessage message)
 		{
-			SendMagic();
-			SendInteger(message.ID);
-			SendInteger(message.Code);
+			AddSendPacket((byte)'M');
+			AddSendPacket((byte)'O');
+			AddSendPacket((byte)'S');
+			AddSendPacket((byte)'A');
+
+			AddSendPacket(message.ID);
+			AddSendPacket(message.Code);
 
 			if (message.CommandData == null)
 			{
-				SendInteger(0);
+				AddSendPacket(0);
 
-				SendInteger(0); // checksum
+				AddSendPacket(0); // checksum
 			}
 			else
 			{
-				SendInteger(message.CommandData.Count); // length
+				AddSendPacket(message.CommandData.Count); // length
 
 				foreach (var b in message.CommandData)
 				{
-					SendByte(b);
+					AddSendPacket(b);
 				}
 
-				SendInteger(0); // checksum
+				AddSendPacket(0); // checksum
 			}
+
+			SendPacket();
 		}
 
 		private void PostResponse(int id, int code, List<byte> data)

@@ -80,12 +80,13 @@ namespace Mosa.UnitTest.Engine
 				Width = 640,
 				Height = 480,
 				Depth = 32,
-				BaseAddress = 0x00400000,
+				BaseAddress = 0x00500000,//0x00400000,
 				EmitRelocations = false,
 				EmitSymbols = false,
 				Emitx86IRQMethods = true,
 				DebugConnectionOption = DebugConnectionOption.TCPServer,
 				DebugConnectionPort = 9999,
+				DebugPipeName = "MOSA",
 				ExitOnLaunch = true,
 				GenerateASMFile = true,
 				GenerateMapFile = true,
@@ -368,7 +369,7 @@ namespace Mosa.UnitTest.Engine
 
 			while (wait)
 			{
-				Thread.Sleep(5);
+				//Thread.Sleep(5);
 			}
 		}
 
@@ -413,14 +414,15 @@ namespace Mosa.UnitTest.Engine
 				{
 					uint size = (uint)array.Length - at;
 
-					if (size > 1024) size = 1024;
+					uint maxsize = 1024;
+
+					if (size > maxsize) size = maxsize;
 
 					var bytes = new byte[size + 8];
 
 					Array.Copy(array, at, bytes, 8, size);
 
 					uint address = (uint)(section.VirtualAddress + at);
-					Console.WriteLine(section.SectionKind.ToString() + " : 0x" + address.ToString("X"));
 
 					bytes[0] = (byte)(address & 0xFF);
 					bytes[1] = (byte)((address >> 8) & 0xFF);
@@ -433,6 +435,8 @@ namespace Mosa.UnitTest.Engine
 					bytes[7] = (byte)((size >> 24) & 0xFF);
 
 					message = new DebugMessage(DebugCode.WriteMemory, bytes);
+
+					Console.WriteLine(section.SectionKind.ToString() + " @ 0x" + address.ToString("X") + " [size: " + size.ToString() + "]");
 
 					SendMessageAndWait(message);
 
