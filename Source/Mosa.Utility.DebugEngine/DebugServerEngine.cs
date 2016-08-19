@@ -22,7 +22,7 @@ namespace Mosa.Utility.DebugEngine
 
 		private int length = -1;
 
-		private const int MaxBufferSize = 0x5000;
+		private const int MaxBufferSize = 64 * 1024 + 64;
 		private byte[] sendpacket = new byte[MaxBufferSize];
 		private int sendpacketsize = 0;
 

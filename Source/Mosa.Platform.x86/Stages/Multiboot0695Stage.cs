@@ -100,7 +100,7 @@ namespace Mosa.Platform.x86.Stages
 
 				WriteMultibootHeader();
 
-				Linker.CreateSymbol(Multiboot0695Stage.MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
+				Linker.CreateSymbol(MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 				Linker.CreateSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 
 				return;
@@ -113,7 +113,7 @@ namespace Mosa.Platform.x86.Stages
 			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
 			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
-			var MultibootEAX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEAX);
+			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEAX);
 			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEBX);
 
 			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
@@ -129,7 +129,7 @@ namespace Mosa.Platform.x86.Stages
 			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, ebp, zero, zero);
 
 			// Place the multiboot address into a static field
-			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, MultibootEAX, zero, eax);
+			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEAX, zero, eax);
 			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEBX, zero, ebx);
 
 			// call type initializer

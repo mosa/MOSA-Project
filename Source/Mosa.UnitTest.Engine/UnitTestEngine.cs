@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Lzf;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
@@ -141,7 +142,6 @@ namespace Mosa.UnitTest.Engine
 
 					PrepareUnitTest();
 
-					message.Other = message;
 					message.CallBack = MessageCallBack;
 
 					debugServerEngine.SendCommand(message);
@@ -160,7 +160,7 @@ namespace Mosa.UnitTest.Engine
 
 			lock (queue)
 			{
-				//Console.WriteLine(response.ToString());
+				Console.WriteLine(response.ToString());
 
 				sent.Remove(response);
 			}
@@ -201,6 +201,7 @@ namespace Mosa.UnitTest.Engine
 			request.Resolve(typeSystem, linker);
 
 			var message = new DebugMessage(DebugCode.ExecuteUnitTest, request.Message);
+			message.Other = request;
 
 			QueueMessage(message);
 
@@ -380,11 +381,20 @@ namespace Mosa.UnitTest.Engine
 
 		public void SendImage()
 		{
+			uint maxsize = 1024 * 8;
+
+			LZF lzf = new LZF();
+
+			uint compressSize = 0;
+			uint originalSize = 0;
+
 			var bss = linker.LinkerSections[(int)SectionKind.BSS];
 
 			var message = new DebugMessage(DebugCode.ClearMemory, new int[] { (int)bss.VirtualAddress, (int)bss.Size });
 
 			SendMessageAndWait(message);
+
+			var compressed = new byte[maxsize * 2];
 
 			foreach (var section in linker.LinkerSections)
 			{
@@ -414,97 +424,48 @@ namespace Mosa.UnitTest.Engine
 				{
 					uint size = (uint)array.Length - at;
 
-					uint maxsize = 1024;
-
 					if (size > maxsize) size = maxsize;
 
-					var bytes = new byte[size + 8];
+					// compress
+					var raw = new byte[size];
+					Array.Copy(array, at, raw, 0, size);
 
-					Array.Copy(array, at, bytes, 8, size);
+					var len = lzf.Compress(raw, raw.Length, compressed, compressed.Length);
 
+					compressSize = compressSize + (uint)len;
+					originalSize = originalSize + size;
+
+					// data
+					//var data = new byte[len + 8];
+					var data = new byte[size + 8];
 					uint address = (uint)(section.VirtualAddress + at);
 
-					bytes[0] = (byte)(address & 0xFF);
-					bytes[1] = (byte)((address >> 8) & 0xFF);
-					bytes[2] = (byte)((address >> 16) & 0xFF);
-					bytes[3] = (byte)((address >> 24) & 0xFF);
+					data[0] = (byte)(address & 0xFF);
+					data[1] = (byte)((address >> 8) & 0xFF);
+					data[2] = (byte)((address >> 16) & 0xFF);
+					data[3] = (byte)((address >> 24) & 0xFF);
+					data[4] = (byte)(len & 0xFF);
+					data[5] = (byte)((len >> 8) & 0xFF);
+					data[6] = (byte)((len >> 16) & 0xFF);
+					data[7] = (byte)((len >> 24) & 0xFF);
 
-					bytes[4] = (byte)(size & 0xFF);
-					bytes[5] = (byte)((size >> 8) & 0xFF);
-					bytes[6] = (byte)((size >> 16) & 0xFF);
-					bytes[7] = (byte)((size >> 24) & 0xFF);
+					//Array.Copy(compressed, 0, data, 8, len);
+					Array.Copy(raw, 0, data, 8, size);
 
-					message = new DebugMessage(DebugCode.WriteMemory, bytes);
+					//message = new DebugMessage(DebugCode.CompressedWriteMemory, data);
+					message = new DebugMessage(DebugCode.WriteMemory, data);
 
-					Console.WriteLine(section.SectionKind.ToString() + " @ 0x" + address.ToString("X") + " [size: " + size.ToString() + "]");
+					Console.WriteLine(section.SectionKind.ToString() + " @ 0x" + address.ToString("X") + " [size: " + size.ToString() + " compressed: " + len.ToString() + "]");
 
 					SendMessageAndWait(message);
 
 					at = at + size;
 				}
 			}
-		}
 
-		public void SendImage2()
-		{
-			var bss = linker.LinkerSections[(int)SectionKind.BSS];
-
-			var message = new DebugMessage(DebugCode.ClearMemory, new int[] { (int)bss.VirtualAddress, (int)bss.Size });
-
-			SendMessageAndWait(message);
-
-			foreach (var symbol in linker.Symbols)
-			{
-				Console.WriteLine(symbol.Name);
-
-				if (symbol.SectionKind == SectionKind.BSS)
-					continue;
-
-				if (symbol.Size == 0)
-					continue;
-
-				int address = (int)symbol.VirtualAddress;
-				int size = (int)symbol.Size;
-
-				symbol.Stream.Position = 0;
-
-				int left = size;
-
-				while (left > 0)
-				{
-					if (size > 2048 / 4)
-						size = 2048 / 4;
-
-					left = left - size;
-
-					var bytes = new List<byte>(size + 8);
-
-					bytes.Add((byte)(address & 0xFF));
-					bytes.Add((byte)((address >> 8) & 0xFF));
-					bytes.Add((byte)((address >> 16) & 0xFF));
-					bytes.Add((byte)((address >> 24) & 0xFF));
-
-					bytes.Add((byte)(size & 0xFF));
-					bytes.Add((byte)((size >> 8) & 0xFF));
-					bytes.Add((byte)((size >> 16) & 0xFF));
-					bytes.Add((byte)((size >> 24) & 0xFF));
-
-					address = address + size;
-
-					while (size > 0)
-					{
-						var b = symbol.Stream.ReadByte();
-
-						bytes.Add((byte)b);
-
-						size--;
-					}
-
-					message = new DebugMessage(DebugCode.WriteMemory, bytes);
-
-					SendMessageAndWait(message);
-				}
-			}
+			Console.WriteLine("Original: " + originalSize.ToString());
+			Console.WriteLine("Compressed: " + compressSize.ToString());
+			Console.WriteLine("Compacted: " + (compressSize * 100 / originalSize).ToString());
 
 			imageSent = true;
 			return;

@@ -20,12 +20,12 @@ namespace Mosa.Kernel.x86
 		public const uint ReserveMemory = 0x03000000; // 48MB
 		public const uint MaximumMemory = 0xFFFFFFFF; // 4GB
 
-		public const uint InitialStack = 0x00009000;
+		public const uint InitialStack = 0x00100000;
 
-		public const uint DebuggerBuffer = 0x00001000; // Size: 5KB
+		public const uint UnitTestStack = 0x00004000;   // (stack grows down)
+		public const uint UnitTestQueueStart = 0x00006000;
+		public const uint UnitTestQueueEnd = 0x00007000;
 
-		public const uint UnitTestStack = 0x00008000;   // (stack grows down)
-		public const uint UnitTestQueueStart = 0x00005000;
-		public const uint UnitTestQueueEnd = 0x00006000;
+		public const uint DebuggerBuffer = 0x00010000;
 	}
 }

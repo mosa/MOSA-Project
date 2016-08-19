@@ -58,7 +58,7 @@ namespace Mosa.Kernel.x86
 		{
 			while (!IsDataReady(com))
 			{
-				Native.Hlt();
+				//Native.Hlt();
 			}
 
 			return Native.In8(com);

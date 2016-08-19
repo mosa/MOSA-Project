@@ -53,10 +53,11 @@ namespace Mosa.Workspace.UnitTest.Debug
 			for (int i = 0; i < 1; i++)
 			{
 				int value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 1, 2);
-				//value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 3, 4);
-				//value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 5, 6);
-				//value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 7, 8);
-				//value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 9, 0);
+
+				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 3, 4);
+				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 5, 6);
+				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 7, 8);
+				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 9, 0);
 
 				//double a1 = 7;
 				//double b1 = 9;

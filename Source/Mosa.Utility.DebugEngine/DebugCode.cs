@@ -23,6 +23,8 @@ namespace Mosa.Utility.DebugEngine
 		public const int Scattered32BitReadMemory = 1013;
 		public const int ClearMemory = 1014;
 
+		public const int CompressedWriteMemory = 1021;
+
 		public const int SoftReset = 1111;
 
 		public const int ExecuteUnitTest = 2000;

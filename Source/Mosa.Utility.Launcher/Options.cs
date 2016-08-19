@@ -159,6 +159,7 @@ namespace Mosa.Utility.Launcher
 					case "-video": VBEVideo = true; continue;
 					case "-base": BaseAddress = args[++i].ParseHexOrDecimal(); continue;
 					case "-destination-dir": DestinationDirectory = args[++i]; continue;
+					case "-dest": DestinationDirectory = args[++i]; continue;
 					case "-symbols": EmitSymbols = true; continue;
 					case "-symbols-false": EmitSymbols = false; continue;
 					case "-relocations": EmitRelocations = true; continue;

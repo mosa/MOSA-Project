@@ -29,3 +29,8 @@ MetroFramework
 -- https://github.com/thielj/MetroFramework
 -- The MIT License
 -- Used for MOSA Launcher
+
+LZF
+-- https://csharplzfcompression.codeplex.com
+-- Simplified BSD License
+-- Used in MOSA for simple compression/decompression

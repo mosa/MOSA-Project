@@ -37,6 +37,17 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
+		public DebugMessage(int code, byte[] data, int length)
+		{
+			Code = code;
+			CommandData = new List<byte>(data.Length);
+
+			for (int i = 0; i < length; i++)
+			{
+				CommandData.Add(data[i]);
+			}
+		}
+
 		public DebugMessage(int code, IList<int> data)
 		{
 			Code = code;

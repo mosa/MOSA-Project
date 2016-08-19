@@ -32,6 +32,8 @@ namespace Mosa.Kernel.x86
 			public const int Scattered32BitReadMemory = 1013;
 			public const int ClearMemory = 1014;
 
+			public const int CompressedWriteMemory = 1021;
+
 			public const int SoftReset = 1111;
 
 			public const int ExecuteUnitTest = 2000;
@@ -40,7 +42,7 @@ namespace Mosa.Kernel.x86
 
 		#endregion Codes
 
-		private const int MaxBuffer = 4096 + 48;
+		private const int MaxBuffer = (1024 * 64) + 64;
 
 		private static bool enabled = false;
 
@@ -59,11 +61,11 @@ namespace Mosa.Kernel.x86
 
 		public static void Setup(ushort com)
 		{
-			enabled = true;
-			ready = false;
-			readysent = false;
 			Serial.SetupPort(com);
 			Debugger.com = com;
+			ready = false;
+			readysent = false;
+			enabled = true;
 		}
 
 		public static void Ready()
@@ -106,15 +108,6 @@ namespace Mosa.Kernel.x86
 			SendInteger((uint)((i >> 32) & 0xFFFFFFFF));
 		}
 
-		private static void SendMagic()
-		{
-			SendByte('M');
-			SendByte('O');
-			SendByte('S');
-			SendByte('A');
-			sendchecksum = 0;
-		}
-
 		private static void SendCheckSum()
 		{
 			SendRawByte((byte)(sendchecksum & 0xFF));
@@ -127,9 +120,22 @@ namespace Mosa.Kernel.x86
 
 		private static void SendResponseStart(int id, int code, int len)
 		{
-			SendMagic();
+			// Magic
+			SendByte('M');
+			SendByte('O');
+			SendByte('S');
+			SendByte('A');
+
+			// Clear checksum
+			sendchecksum = 0;
+
+			// ID
 			SendInteger(id);
+
+			// Code
 			SendInteger(code);
+
+			// Length
 			SendInteger(len);
 		}
 
@@ -310,6 +316,7 @@ namespace Mosa.Kernel.x86
 				case DebugCode.ReadCR3: SendResponse(GetID(), DebugCode.ReadCR3, (int)Native.GetCR3()); return;
 				case DebugCode.Scattered32BitReadMemory: Scattered32BitReadMemory(); return;
 				case DebugCode.WriteMemory: WriteMemory(); return;
+				case DebugCode.CompressedWriteMemory: CompressedWriteMemory(); return;
 				case DebugCode.ClearMemory: ClearMemory(); return;
 				case DebugCode.SoftReset: SoftReset(); return;
 				case DebugCode.ExecuteUnitTest: QueueUnitTest(); return;
@@ -360,6 +367,8 @@ namespace Mosa.Kernel.x86
 			uint start = GetUInt32(16);
 			uint bytes = GetUInt32(20);
 
+			SendResponse(id, DebugCode.WriteMemory);
+
 			uint at = 0;
 
 			while (at + 4 < bytes)
@@ -379,8 +388,19 @@ namespace Mosa.Kernel.x86
 
 				at = at + 1;
 			}
+		}
 
-			SendResponse(id, DebugCode.WriteMemory);
+		private static void CompressedWriteMemory()
+		{
+			int id = GetID();
+			uint start = GetUInt32(16);
+			uint size = GetUInt32(20);
+
+			//uint unsize = GetUInt32(24);
+
+			SendResponse(id, DebugCode.CompressedWriteMemory);
+
+			LZF.Decompress(Address.DebuggerBuffer + 24, size, start, 1024 * 32); // next more than 32Kb
 		}
 
 		private static void ClearMemory()
