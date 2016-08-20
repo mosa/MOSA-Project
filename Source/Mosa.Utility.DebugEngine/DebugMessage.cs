@@ -106,6 +106,8 @@ namespace Mosa.Utility.DebugEngine
 				case DebugCode.ReadCR3: return "ReadCR3";
 				case DebugCode.ReadMemory: return "ReadMemory";
 				case DebugCode.Scattered32BitReadMemory: return "Scattered32BitReadMemory";
+				case DebugCode.WriteMemory: return "WriteMemory";
+				case DebugCode.CompressedWriteMemory: return "CompressedWriteMemory";
 				case DebugCode.SendNumber: return "#: " + ((ResponseData[0] << 24) | (ResponseData[1] << 16) | (ResponseData[2] << 8) | ResponseData[3]).ToString();
 				default: return "Code: " + Code.ToString();
 			}

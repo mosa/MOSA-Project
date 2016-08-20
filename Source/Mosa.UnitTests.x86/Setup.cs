@@ -24,7 +24,7 @@ namespace Mosa.UnitTests.x86
 			Screen.Write('A');
 			Screen.Write(' ');
 
-			KernelMemory.SetInitialMemory(0x02000000, 0x08000000);
+			KernelMemory.SetInitialMemory(Address.GCInitialMemory_UnitTest, 0x01000000);
 
 			Runtime.Internal.Setup();
 		}

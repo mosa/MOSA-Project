@@ -16,7 +16,7 @@ namespace Mosa.BootLoader.x86
 		/// </summary>
 		public static void Main()
 		{
-			KernelMemory.SetInitialMemory(0x01000000, 0x01000000);
+			KernelMemory.SetInitialMemory(Address.GCInitialMemory_BootLoader, 0x01000000);
 
 			IDT.SetInterruptHandler(null);
 			Panic.Setup();

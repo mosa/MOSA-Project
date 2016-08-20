@@ -9,15 +9,17 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class UnitTestQueue
 	{
-		private static uint queueNext = Address.UnitTestQueueStart;
-		private static uint queueCurrent = Address.UnitTestQueueStart;
+		private static uint queueNext = Address.UnitTestQueue;
+		private static uint queueCurrent = Address.UnitTestQueue;
 		private static uint count = 0;
 		private static uint tick = 0;
 
+		private static uint TestQueueSize = 0x00001000;
+
 		public static void Setup()
 		{
-			queueNext = Address.UnitTestQueueStart;
-			queueCurrent = Address.UnitTestQueueStart;
+			queueNext = Address.UnitTestQueue;
+			queueCurrent = Address.UnitTestQueue;
 			count = 0;
 
 			Native.Set32(queueNext, 0);
@@ -27,15 +29,15 @@ namespace Mosa.Kernel.x86
 		{
 			uint len = end - start;
 
-			if (queueNext + len + 32 >= Address.UnitTestQueueEnd)
+			if (queueNext + len + 32 >= TestQueueSize)
 			{
-				if (Address.UnitTestQueueStart + len + 32 >= queueCurrent)
+				if (Address.UnitTestQueue + len + 32 >= queueCurrent)
 					return false; // no space
 
 				Native.Set32(queueNext, uint.MaxValue); // mark jump to front
 
 				// cycle to front
-				queueNext = Address.UnitTestQueueStart;
+				queueNext = Address.UnitTestQueue;
 			}
 
 			Native.Set32(queueNext, len + 4);
@@ -71,7 +73,7 @@ namespace Mosa.Kernel.x86
 
 			if (marker == uint.MaxValue)
 			{
-				queueCurrent = Address.UnitTestQueueStart;
+				queueCurrent = Address.UnitTestQueue;
 			}
 
 			uint len = Native.Get32(queueCurrent);

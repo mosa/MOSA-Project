@@ -55,9 +55,10 @@ namespace Mosa.Workspace.UnitTest.Debug
 				int value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 1, 2);
 
 				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 3, 4);
-				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 5, 6);
-				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 7, 8);
-				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 9, 0);
+
+				//value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 5, 6);
+				//value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 7, 8);
+				//value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 9, 0);
 
 				//double a1 = 7;
 				//double b1 = 9;
@@ -75,6 +76,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 				//var b2b = ValueTypeTests.TestValueTypeStaticField();
 
 				//var z = unitTestEngine.Run<bool>("Mosa.UnitTest.Collection", "LdlocaTests", "LdlocaCheckValueR8", 1d);
+				return;
 			}
 
 			Console.WriteLine("Thread End: " + Thread.CurrentThread.Name);

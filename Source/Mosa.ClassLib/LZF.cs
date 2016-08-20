@@ -77,7 +77,9 @@ namespace Lzf
 		/// <param name="outputLength">Length of the compression buffer (should be bigger than the input buffer)</param>
 		public int Compress(byte[] input, int inputLength, byte[] output, int outputLength)
 		{
-			Array.Clear(HashTable, 0, (int)HSIZE);
+			//Array.Clear(HashTable, 0, (int)HSIZE);
+			for (int i = 0; i < HSIZE; i++)
+				HashTable[i] = 0;
 
 			long hslot;
 			uint iidx = 0;
