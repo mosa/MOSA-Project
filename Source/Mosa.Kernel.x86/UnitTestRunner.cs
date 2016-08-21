@@ -17,7 +17,7 @@ namespace Mosa.Kernel.x86
 		private static int testResultReady = 0;
 		private static int testResultReported = 0;
 
-		private static int testID = 0;
+		private static uint testID = 0;
 		private static uint testParameters = 0;
 		private static uint testMethodAddress = 0;
 		private static uint testResultType = 0;
@@ -122,7 +122,7 @@ namespace Mosa.Kernel.x86
 			testResultType = type;
 		}
 
-		public static void StartTest(int id)
+		public static void StartTest(uint id)
 		{
 			testID = id;
 			testResultReady = 0;
@@ -134,7 +134,7 @@ namespace Mosa.Kernel.x86
 			return (testResultReported == 1 && testReady == 0);
 		}
 
-		public static bool GetResult(out ulong result, out int id)
+		public static bool GetResult(out ulong result, out uint id)
 		{
 			result = testResult;
 			id = testID;

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Lzf;
+using Mosa.ClassLib;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
@@ -510,13 +511,20 @@ namespace Mosa.UnitTest.Engine
 					var raw = new byte[size];
 					Array.Copy(array, at, raw, 0, size);
 
+					uint crc = CRC.InitialCRC;
+
+					for (int i = 0; i < size; i++)
+					{
+						crc = CRC.Update(crc, raw[i]);
+					}
+
 					var len = lzf.Compress(raw, raw.Length, compressed, compressed.Length);
 
 					compressSize = compressSize + (uint)len;
 					originalSize = originalSize + size;
 
 					// data
-					var data = new byte[len + 8];
+					var data = new byte[len + 16];
 					uint address = (uint)(section.VirtualAddress + at);
 
 					data[0] = (byte)(address & 0xFF);
@@ -529,7 +537,17 @@ namespace Mosa.UnitTest.Engine
 					data[6] = (byte)((len >> 16) & 0xFF);
 					data[7] = (byte)((len >> 24) & 0xFF);
 
-					Array.Copy(compressed, 0, data, 8, len);
+					data[8] = (byte)(size & 0xFF);
+					data[9] = (byte)((size >> 8) & 0xFF);
+					data[10] = (byte)((size >> 16) & 0xFF);
+					data[11] = (byte)((size >> 24) & 0xFF);
+
+					data[12] = (byte)(crc & 0xFF);
+					data[13] = (byte)((crc >> 8) & 0xFF);
+					data[14] = (byte)((crc >> 16) & 0xFF);
+					data[15] = (byte)((crc >> 24) & 0xFF);
+
+					Array.Copy(compressed, 0, data, 16, len);
 
 					message = new DebugMessage(DebugCode.CompressedWriteMemory, data);
 
@@ -584,7 +602,7 @@ namespace Mosa.UnitTest.Engine
 
 				if (ready && !imageSent)
 				{
-					SendImage();
+					SendImageCompressed();
 				}
 
 				if (fatalError)

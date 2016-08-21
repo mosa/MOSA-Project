@@ -32,6 +32,7 @@ namespace Mosa.Kernel.x86
 			public const int ReadCR3 = 1012;
 			public const int Scattered32BitReadMemory = 1013;
 			public const int ClearMemory = 1014;
+			public const int GetMemoryCRC = 1015;
 
 			public const int CompressedWriteMemory = 1021;
 
@@ -115,7 +116,7 @@ namespace Mosa.Kernel.x86
 
 		// MAGIC-ID-CODE-LEN-DATA-CHECKSUM
 
-		private static void SendResponseStart(int id, int code, int len)
+		private static void SendResponseStart(uint id, int code, int len)
 		{
 			// Magic
 			SendByte('M');
@@ -136,20 +137,20 @@ namespace Mosa.Kernel.x86
 			SendInteger(len);
 		}
 
-		private static void SendResponse(int id, int code)
+		private static void SendResponse(uint id, int code)
 		{
 			SendResponseStart(id, code, 0);
 			SendCRC();
 		}
 
-		private static void SendResponse(int id, int code, int data)
+		private static void SendResponse(uint id, int code, int data)
 		{
 			SendResponseStart(id, code, 4);
 			SendInteger(data);
 			SendCRC();
 		}
 
-		private static void SendResponse(int id, int code, ulong data)
+		private static void SendResponse(uint id, int code, ulong data)
 		{
 			SendResponseStart(id, code, 8);
 			SendInteger(data);
@@ -196,9 +197,9 @@ namespace Mosa.Kernel.x86
 			return GetInt32(0);
 		}
 
-		private static int GetID()
+		private static uint GetID()
 		{
-			return GetInt32(4);
+			return GetUInt32(4);
 		}
 
 		private static int GetCode()
@@ -319,7 +320,7 @@ namespace Mosa.Kernel.x86
 			// [0]MAGIC[4]ID[8]CODE[12]LEN[16]DATA[LEN]CHECKSUM
 
 			int code = GetCode();
-			int id = GetID();
+			uint id = GetID();
 			uint len = GetLength();
 			uint receivedCRC = GetCRC();
 
@@ -328,8 +329,9 @@ namespace Mosa.Kernel.x86
 			Screen.Row = 10;
 			Screen.Column = 0;
 			Screen.Write("[Data]");
+			Screen.NextLine();
 			Screen.Write(" ID: ");
-			Screen.Write((uint)id, 10, 7);
+			Screen.Write((uint)id, 10, 5);
 			Screen.Write(" Code: ");
 			Screen.Write((uint)code, 10, 4);
 			Screen.Write(" Len: ");
@@ -357,14 +359,14 @@ namespace Mosa.Kernel.x86
 				case DebugCode.ClearMemory: ClearMemory(); return;
 				case DebugCode.SoftReset: SoftReset(); return;
 				case DebugCode.ExecuteUnitTest: QueueUnitTest(); return;
-
+				case DebugCode.GetMemoryCRC: GetMemoryCRC(); return;
 				default: return;
 			}
 		}
 
 		private static void ReadMemory()
 		{
-			int id = GetID();
+			uint id = GetID();
 			uint start = (uint)GetInt32(16);
 			uint bytes = (uint)GetInt32(20);
 
@@ -383,7 +385,7 @@ namespace Mosa.Kernel.x86
 
 		private static void Scattered32BitReadMemory()
 		{
-			int id = GetID();
+			uint id = GetID();
 			int count = GetInt32(12) / 4;
 
 			SendResponseStart(id, DebugCode.Scattered32BitReadMemory, count * 8);
@@ -400,7 +402,7 @@ namespace Mosa.Kernel.x86
 
 		private static void WriteMemory()
 		{
-			int id = GetID();
+			uint id = GetID();
 			uint address = GetUInt32(16);
 			uint length = GetUInt32(20);
 
@@ -428,9 +430,10 @@ namespace Mosa.Kernel.x86
 
 			Screen.Row = 12;
 			Screen.Column = 0;
-			Screen.Write("[Write]");
+			Screen.Write("[WriteMemory]");
+			Screen.NextLine();
 			Screen.Write(" ID: ");
-			Screen.Write((uint)id, 10, 7);
+			Screen.Write((uint)id, 10, 5);
 			Screen.Write(" Address: ");
 			Screen.Write(address, 16, 8);
 			Screen.Write(" Len: ");
@@ -439,28 +442,41 @@ namespace Mosa.Kernel.x86
 
 		private static void CompressedWriteMemory()
 		{
-			int id = GetID();
+			uint id = GetID();
 			uint address = GetUInt32(16);
 			uint length = GetUInt32(20);
+			uint size = GetUInt32(24);
+			uint uncompresscrc = GetUInt32(28);
 
-			SendResponse(id, DebugCode.CompressedWriteMemory);
+			LZF.Decompress(Address.DebuggerBuffer + 32, length, address, size);
 
-			LZF.Decompress(Address.DebuggerBuffer + 24, length, address, 1024 * 32); // more than 32Kb
+			uint computedcrc = ComputeMemoryCRC(address, size);
 
 			Screen.Row = 12;
 			Screen.Column = 0;
 			Screen.Write("[Compressed Write]");
+			Screen.NextLine();
 			Screen.Write(" ID: ");
-			Screen.Write((uint)id, 10, 7);
+			Screen.Write((uint)id, 10, 5);
 			Screen.Write(" Address: ");
 			Screen.Write(address, 16, 8);
 			Screen.Write(" Len: ");
 			Screen.Write(length, 10, 5);
+			Screen.Write(" Size: ");
+			Screen.Write(size, 10, 5);
+			Screen.Write(" CRC: ");
+			Screen.Write(uncompresscrc, 16, 8);
+			Screen.NextLine();
+
+			Screen.Write("-> Computed CRC: ");
+			Screen.Write(computedcrc, 16, 8);
+
+			SendResponse(id, DebugCode.CompressedWriteMemory);
 		}
 
 		private static void ClearMemory()
 		{
-			int id = GetID();
+			uint id = GetID();
 			uint start = GetUInt32(16);
 			uint bytes = GetUInt32(20);
 
@@ -483,9 +499,35 @@ namespace Mosa.Kernel.x86
 			SendResponse(id, DebugCode.ClearMemory);
 		}
 
+		private static void GetMemoryCRC()
+		{
+			uint id = GetID();
+			uint start = GetUInt32(16);
+			uint length = GetUInt32(20);
+
+			uint crc = ComputeMemoryCRC(start, length);
+
+			SendResponseStart(id, DebugCode.GetMemoryCRC, 4);
+			SendInteger(crc);
+			SendCRC();
+		}
+
+		private static uint ComputeMemoryCRC(uint start, uint length)
+		{
+			uint crc = CRC.InitialCRC;
+
+			for (uint i = start; i < start + length; i++)
+			{
+				byte b = Native.Get8(i);
+				crc = CRC.Update(crc, b);
+			}
+
+			return crc;
+		}
+
 		private static void QueueUnitTest()
 		{
-			int id = GetID();
+			uint id = GetID();
 
 			var start = Address.DebuggerBuffer + 16;
 			uint end = start + GetLength();
@@ -496,7 +538,7 @@ namespace Mosa.Kernel.x86
 		private static void SendTestUnitResponse()
 		{
 			ulong result;
-			int id;
+			uint id;
 
 			if (UnitTestRunner.GetResult(out result, out id))
 			{
@@ -511,7 +553,7 @@ namespace Mosa.Kernel.x86
 
 		private static void SoftReset()
 		{
-			int id = GetID();
+			uint id = GetID();
 			uint address = GetUInt32(16);
 
 			SendResponse(id, DebugCode.SoftReset);

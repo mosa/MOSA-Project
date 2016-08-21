@@ -25,7 +25,7 @@ namespace Mosa.Kernel.x86
 			Native.Set32(queueNext, 0);
 		}
 
-		public static bool QueueUnitTest(int id, uint start, uint end)
+		public static bool QueueUnitTest(uint id, uint start, uint end)
 		{
 			uint len = end - start;
 			if (queueNext + len + 32 >= Address.UnitTestQueue + TestQueueSize)
@@ -96,9 +96,10 @@ namespace Mosa.Kernel.x86
 
 			Screen.Row = 14;
 			Screen.Column = 0;
-			Screen.Write("[Test]");
+			Screen.Write("[Unit Test]");
+			Screen.NextLine();
 			Screen.Write(" ID: ");
-			Screen.Write(id, 10, 7);
+			Screen.Write(id, 10, 5);
 			Screen.Write(" Address: ");
 			Screen.Write(address, 16, 8);
 			Screen.Write(" Param: ");
@@ -108,7 +109,7 @@ namespace Mosa.Kernel.x86
 			Screen.Write(" - Cnt: ");
 			Screen.Write(count, 10, 4);
 
-			UnitTestRunner.StartTest((int)id);
+			UnitTestRunner.StartTest(id);
 		}
 	}
 }
