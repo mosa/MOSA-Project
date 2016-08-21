@@ -28,8 +28,7 @@ namespace Mosa.Kernel.x86
 		public static bool QueueUnitTest(int id, uint start, uint end)
 		{
 			uint len = end - start;
-
-			if (queueNext + len + 32 >= TestQueueSize)
+			if (queueNext + len + 32 >= Address.UnitTestQueue + TestQueueSize)
 			{
 				if (Address.UnitTestQueue + len + 32 >= queueCurrent)
 					return false; // no space
@@ -95,9 +94,9 @@ namespace Mosa.Kernel.x86
 			queueCurrent = queueCurrent + len + 4;
 			--count;
 
-			Screen.Row = 10;
+			Screen.Row = 14;
 			Screen.Column = 0;
-			Screen.Write("Test:");
+			Screen.Write("[Test]");
 			Screen.Write(" ID: ");
 			Screen.Write(id, 10, 7);
 			Screen.Write(" Address: ");

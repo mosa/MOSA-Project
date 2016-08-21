@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.ClassLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +26,7 @@ namespace Mosa.Utility.DebugEngine
 		private const int MaxBufferSize = 64 * 1024 + 64;
 		private byte[] sendpacket = new byte[MaxBufferSize];
 		private int sendpacketsize = 0;
+		private uint crc = CRC.InitialCRC;
 
 		public Stream Stream
 		{
@@ -94,6 +96,8 @@ namespace Mosa.Utility.DebugEngine
 		private void AddSendPacket(byte b)
 		{
 			sendpacket[sendpacketsize++] = b;
+
+			crc = CRC.Update(crc, b);
 		}
 
 		private void AddSendPacket(int i)
@@ -110,6 +114,8 @@ namespace Mosa.Utility.DebugEngine
 			AddSendPacket((byte)'O');
 			AddSendPacket((byte)'S');
 			AddSendPacket((byte)'A');
+
+			crc = CRC.InitialCRC; // initialize the CRC (at the right spot)
 
 			AddSendPacket(message.ID);
 			AddSendPacket(message.Code);
@@ -129,7 +135,7 @@ namespace Mosa.Utility.DebugEngine
 					AddSendPacket(b);
 				}
 
-				AddSendPacket(0); // checksum
+				AddSendPacket((int)crc); // checksum
 			}
 
 			SendPacket();

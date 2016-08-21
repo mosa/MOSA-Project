@@ -381,7 +381,87 @@ namespace Mosa.UnitTest.Engine
 
 		public void SendImage()
 		{
-			uint maxsize = 1024 * 8;
+			uint maxsize = 1024 * 16;
+
+			uint originalSize = 0;
+
+			var bss = linker.LinkerSections[(int)SectionKind.BSS];
+
+			var message = new DebugMessage(DebugCode.ClearMemory, new int[] { (int)bss.VirtualAddress, (int)bss.Size });
+
+			SendMessageAndWait(message);
+
+			var compressed = new byte[maxsize * 2];
+
+			foreach (var section in linker.LinkerSections)
+			{
+				if (section.SectionKind == SectionKind.BSS)
+					continue;
+
+				var stream = new MemoryStream((int)section.Size);
+
+				// similar code in the Section.WriteTo method
+				foreach (var symbol in section.Symbols)
+				{
+					stream.Seek(symbol.SectionOffset, SeekOrigin.Begin);
+					if (symbol.IsDataAvailable)
+					{
+						symbol.Stream.Position = 0;
+						symbol.Stream.WriteTo(stream);
+					}
+				}
+
+				stream.WriteZeroBytes((int)(section.AlignedSize - stream.Position));
+				stream.Position = 0;
+
+				var array = stream.ToArray();
+				uint at = 0;
+
+				while (at < array.Length)
+				{
+					uint size = (uint)array.Length - at;
+
+					if (size > maxsize) size = maxsize;
+
+					var raw = new byte[size];
+					Array.Copy(array, at, raw, 0, size);
+
+					originalSize = originalSize + size;
+
+					var data = new byte[size + 8];
+					uint address = (uint)(section.VirtualAddress + at);
+
+					data[0] = (byte)(address & 0xFF);
+					data[1] = (byte)((address >> 8) & 0xFF);
+					data[2] = (byte)((address >> 16) & 0xFF);
+					data[3] = (byte)((address >> 24) & 0xFF);
+
+					data[4] = (byte)(size & 0xFF);
+					data[5] = (byte)((size >> 8) & 0xFF);
+					data[6] = (byte)((size >> 16) & 0xFF);
+					data[7] = (byte)((size >> 24) & 0xFF);
+
+					Array.Copy(raw, 0, data, 8, size);
+
+					message = new DebugMessage(DebugCode.WriteMemory, data);
+
+					Console.WriteLine(section.SectionKind.ToString() + " @ 0x" + address.ToString("X") + " [size: " + size.ToString() + "]");
+
+					SendMessageAndWait(message);
+
+					at = at + size;
+				}
+			}
+
+			Console.WriteLine("Total Size: " + originalSize.ToString());
+
+			imageSent = true;
+			return;
+		}
+
+		public void SendImageCompressed()
+		{
+			uint maxsize = 1024 * 16;
 
 			LZF lzf = new LZF();
 
@@ -436,24 +516,22 @@ namespace Mosa.UnitTest.Engine
 					originalSize = originalSize + size;
 
 					// data
-					//var data = new byte[len + 8];
-					var data = new byte[size + 8];
+					var data = new byte[len + 8];
 					uint address = (uint)(section.VirtualAddress + at);
 
 					data[0] = (byte)(address & 0xFF);
 					data[1] = (byte)((address >> 8) & 0xFF);
 					data[2] = (byte)((address >> 16) & 0xFF);
 					data[3] = (byte)((address >> 24) & 0xFF);
+
 					data[4] = (byte)(len & 0xFF);
 					data[5] = (byte)((len >> 8) & 0xFF);
 					data[6] = (byte)((len >> 16) & 0xFF);
 					data[7] = (byte)((len >> 24) & 0xFF);
 
-					//Array.Copy(compressed, 0, data, 8, len);
-					Array.Copy(raw, 0, data, 8, size);
+					Array.Copy(compressed, 0, data, 8, len);
 
-					//message = new DebugMessage(DebugCode.CompressedWriteMemory, data);
-					message = new DebugMessage(DebugCode.WriteMemory, data);
+					message = new DebugMessage(DebugCode.CompressedWriteMemory, data);
 
 					Console.WriteLine(section.SectionKind.ToString() + " @ 0x" + address.ToString("X") + " [size: " + size.ToString() + " compressed: " + len.ToString() + "]");
 

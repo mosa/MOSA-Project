@@ -47,8 +47,6 @@
  * of this file under either the BSD or the GPL.
  */
 
-using System;
-
 namespace Lzf
 {
 	/// <summary>
