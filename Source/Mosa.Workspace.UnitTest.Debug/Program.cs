@@ -55,14 +55,15 @@ namespace Mosa.Workspace.UnitTest.Debug
 
 				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 3, 4);
 
-				//value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 5, 6);
-				//value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 7, 8);
-				//value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 9, 0);
+				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 5, 6);
+				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 7, 8);
+				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 9, 0);
 
-				//double a1 = 7;
-				//double b1 = 9;
+				double a1 = 7;
+				double b1 = 9;
 
-				//var d1 = unitTestEngine.Run<double>("Mosa.UnitTest.Collection", "DoubleTests", "AddR8R8", a1, b1);
+				var d1 = unitTestEngine.Run<double>("Mosa.UnitTest.Collection", "DoubleTests", "AddR8R8", a1, b1);
+
 				//var d2 = DoubleTests.AddR8R8(a1, b1);
 
 				//float a2 = 7;

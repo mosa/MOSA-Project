@@ -326,11 +326,12 @@ namespace Mosa.Kernel.x86
 
 			uint computedCRC = ComputeCRC();
 
-			Screen.Row = 10;
-			Screen.Column = 0;
+			Screen.Goto(13, 0);
+			Screen.ClearRow();
 			Screen.Write("[Data]");
 			Screen.NextLine();
-			Screen.Write(" ID: ");
+			Screen.ClearRow();
+			Screen.Write("ID: ");
 			Screen.Write((uint)id, 10, 5);
 			Screen.Write(" Code: ");
 			Screen.Write((uint)code, 10, 4);
@@ -338,13 +339,11 @@ namespace Mosa.Kernel.x86
 			Screen.Write(len, 10, 5);
 			Screen.Write(" CRC: ");
 			Screen.Write(receivedCRC, 16, 8);
-			Screen.Write(" CRC: ");
-			Screen.Write(computedCRC, 16, 8);
 
-			if (receivedCRC != computedCRC)
-				Screen.Write(" MISMATCHED");
+			if (receivedCRC == computedCRC)
+				Screen.Write(" OK");
 			else
-				Screen.Write("           ");
+				Screen.Write(" BAD");
 
 			// TODO: if crc is invalid
 
@@ -428,11 +427,12 @@ namespace Mosa.Kernel.x86
 				at = at + 1;
 			}
 
-			Screen.Row = 12;
-			Screen.Column = 0;
+			Screen.Goto(15, 0);
+			Screen.ClearRow();
 			Screen.Write("[WriteMemory]");
 			Screen.NextLine();
-			Screen.Write(" ID: ");
+			Screen.ClearRow();
+			Screen.Write("ID: ");
 			Screen.Write((uint)id, 10, 5);
 			Screen.Write(" Address: ");
 			Screen.Write(address, 16, 8);
@@ -452,11 +452,12 @@ namespace Mosa.Kernel.x86
 
 			uint computedcrc = ComputeMemoryCRC(address, size);
 
-			Screen.Row = 12;
-			Screen.Column = 0;
-			Screen.Write("[Compressed Write]");
+			Screen.Goto(15, 0);
+			Screen.ClearRow();
+			Screen.Write("[CompressedWriteMemory]");
 			Screen.NextLine();
-			Screen.Write(" ID: ");
+			Screen.ClearRow();
+			Screen.Write("ID: ");
 			Screen.Write((uint)id, 10, 5);
 			Screen.Write(" Address: ");
 			Screen.Write(address, 16, 8);
@@ -466,10 +467,11 @@ namespace Mosa.Kernel.x86
 			Screen.Write(size, 10, 5);
 			Screen.Write(" CRC: ");
 			Screen.Write(uncompresscrc, 16, 8);
-			Screen.NextLine();
 
-			Screen.Write("-> Computed CRC: ");
-			Screen.Write(computedcrc, 16, 8);
+			if (uncompresscrc == computedcrc)
+				Screen.Write(" OK");
+			else
+				Screen.Write(" BAD");
 
 			SendResponse(id, DebugCode.CompressedWriteMemory);
 		}

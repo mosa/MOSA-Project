@@ -60,7 +60,7 @@ namespace Lzf
 		/// </summary>
 		private readonly long[] HashTable = new long[HSIZE];
 
-		private const uint HLOG = 14;
+		private const uint HLOG = 15;
 		private const uint HSIZE = (1 << (int)HLOG);
 		private const uint MAX_LIT = (1 << 5);
 		private const uint MAX_OFF = (1 << 13);
@@ -97,7 +97,9 @@ namespace Lzf
 					reference = HashTable[hslot];
 					HashTable[hslot] = (long)iidx;
 
-					if ((off = iidx - reference - 1) < MAX_OFF
+					off = iidx - reference - 1;
+
+					if (off < MAX_OFF
 						&& iidx + 4 < inputLength
 						&& reference > 0
 						&& input[reference + 0] == input[iidx + 0]

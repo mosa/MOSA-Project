@@ -462,7 +462,7 @@ namespace Mosa.UnitTest.Engine
 
 		public void SendImageCompressed()
 		{
-			uint maxsize = 1024 * 16;
+			uint maxsize = 1024 * 64;
 
 			LZF lzf = new LZF();
 

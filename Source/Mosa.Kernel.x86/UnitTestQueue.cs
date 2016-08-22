@@ -94,18 +94,19 @@ namespace Mosa.Kernel.x86
 			queueCurrent = queueCurrent + len + 4;
 			--count;
 
-			Screen.Row = 14;
-			Screen.Column = 0;
+			Screen.Goto(17, 0);
+			Screen.ClearRow();
 			Screen.Write("[Unit Test]");
 			Screen.NextLine();
-			Screen.Write(" ID: ");
+			Screen.ClearRow();
+			Screen.Write("ID: ");
 			Screen.Write(id, 10, 5);
 			Screen.Write(" Address: ");
 			Screen.Write(address, 16, 8);
 			Screen.Write(" Param: ");
-			Screen.Write(paramcnt, 16, 2);
+			Screen.Write(paramcnt, 10, 2);
 			Screen.Write(" Len: ");
-			Screen.Write(len, 16, 8);
+			Screen.Write(len, 10, 4);
 			Screen.Write(" - Cnt: ");
 			Screen.Write(count, 10, 4);
 

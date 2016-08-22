@@ -60,14 +60,13 @@ namespace Mosa.Kernel.x86
 			{
 				if (testReady == 1)
 				{
-					Screen.Row = row;
-					Screen.Column = 0;
+					Screen.Goto(row, 0);
+					Screen.ClearRow();
 
 					Screen.Write("Test #: ");
 					Screen.Write(++testCount, 10, 7);
-					Screen.Write(" ---");
+					Screen.Write(" [X  ]");
 					Screen.Column = Screen.Column - 3;
-					Screen.Write("1");
 
 					testResult = 0;
 					testResultReady = 0;
@@ -93,11 +92,11 @@ namespace Mosa.Kernel.x86
 
 					testResultReady = 1;
 
-					Screen.Write("2");
+					Screen.Write("X");
 
 					Native.Int(255);
 
-					Screen.Write("3");
+					Screen.Write("X");
 				}
 			}
 		}

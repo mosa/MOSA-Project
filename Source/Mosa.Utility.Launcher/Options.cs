@@ -155,6 +155,9 @@ namespace Mosa.Utility.Launcher
 					case "-syslinux-3.72": BootLoader = BootLoader.Syslinux_3_72; continue;
 					case "-inline": EnableInlinedMethods = true; continue;
 					case "-inline-off": EnableInlinedMethods = false; continue;
+					case "-optimization-ir-off": EnableIROptimizations = false; continue;
+					case "-optimization-sccp-off": EnableSparseConditionalConstantPropagation = false; continue;
+					case "-all-optimization-off": EnableIROptimizations = false; EnableSparseConditionalConstantPropagation = false; EnableInlinedMethods = false; EnableSSA = false; continue;
 					case "-threading-off": UseMultipleThreadCompiler = false; continue;
 					case "-video": VBEVideo = true; continue;
 					case "-base": BaseAddress = args[++i].ParseHexOrDecimal(); continue;
