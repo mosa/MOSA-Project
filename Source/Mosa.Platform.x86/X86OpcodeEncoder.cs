@@ -183,12 +183,25 @@ namespace Mosa.Platform.x86
 		{
 			if (offsetDestination && source.IsConstant)
 			{
-				encoder.AppendMod(true, offset);                                  // 2:mod
+				var baseEBP = destination.Register == GeneralPurposeRegister.EBP;
+				if (baseEBP && offset.IsCPURegister)
+				{
+					encoder.AppendMod(Bits.b01);                                  // 2:mod
+				}
+				else
+				{
+					encoder.AppendMod(true, offset);                              // 2:mod
+				}
+
 				encoder.AppendRegister(Bits.b000);                                // 3:register (destination)
 				if (offset.IsCPURegister)
 				{
 					encoder.AppendRM(Bits.b100);                                  // 3:r/m (source)
 					encoder.AppendSIB(1, offset.Register, destination.Register);  // 8:sib (scale, index, base)
+					if (baseEBP)
+					{
+						encoder.AppendByteValue(0x0);                             // 8:displacement value
+					}
 				}
 				else
 				{
@@ -218,15 +231,15 @@ namespace Mosa.Platform.x86
 				// b01 with a 1 byte displacement
 				// b10 with a 4 byte displacement
 				var @base = offsetDestination ? destination : source;
-				var @baseEBP = @base.Register == GeneralPurposeRegister.EBP;
+				var baseEBP = @base.Register == GeneralPurposeRegister.EBP;
 
-				encoder.AppendMod(@baseEBP ? Bits.b01 : Bits.b00);                // 2:mod
+				encoder.AppendMod(baseEBP ? Bits.b01 : Bits.b00);                 // 2:mod
 				encoder.AppendRegister(destination.Register);                     // 3:register (destination)
 				encoder.AppendRM(Bits.b100);                                      // 3:r/m (source)
 				encoder.AppendSIB(1, offset.Register, @base.Register);            // 8:sib (scale, index, base)
-				if (@baseEBP)
+				if (baseEBP)
 				{
-					encoder.AppendByteValue(0x0);
+					encoder.AppendByteValue(0x0);                                 // 8:displacement value
 				}
 			}
 
