@@ -63,6 +63,8 @@ namespace Mosa.Platform.x86.Stages
 
 			var typeInitializerSchedulerStage = Compiler.PostCompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
 			typeInitializerSchedulerStage.Schedule(setupMethod);
+
+			//TODO99: Plug this method into Mosa.Runtime.StartUp.PostBootStage2
 		}
 	}
 }

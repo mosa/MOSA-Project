@@ -77,6 +77,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			//TODO99: Plug TypeSystem.EntryPoint into Mosa.Runtime.StartUp.Application()
+
 			if (TypeSystem.EntryPoint != null)
 			{
 				Schedule(TypeSystem.EntryPoint);

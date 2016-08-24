@@ -96,6 +96,7 @@ namespace Mosa.Platform.x86.Stages
 
 				multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
 
+				//TODO99: Remove next line and add new compiler stage that sets the EntryPoint to Mosa.Runtime.StartUp.Start()
 				Linker.EntryPoint = Linker.GetSymbol(multibootMethod.FullName, SectionKind.Text);
 
 				WriteMultibootHeader();
@@ -132,6 +133,8 @@ namespace Mosa.Platform.x86.Stages
 			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEAX, zero, eax);
 			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEBX, zero, ebx);
 
+			//TODO99: don't call the initializer, just return
+
 			// call type initializer
 			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
 			ctx.AppendInstruction(X86.Call, null, entryPoint);
@@ -140,6 +143,8 @@ namespace Mosa.Platform.x86.Stages
 			ctx.AppendInstruction(X86.Ret);
 
 			Compiler.CompileMethod(multibootMethod, basicBlocks, 0);
+
+			//TODO99: Plug this method into Mosa.Runtime.StartUp.PostBoot
 		}
 
 		#region Internals
