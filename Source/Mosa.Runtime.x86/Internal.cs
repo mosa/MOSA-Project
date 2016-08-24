@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime.x86

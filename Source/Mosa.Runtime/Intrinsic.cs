@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace Mosa.Runtime
 {
