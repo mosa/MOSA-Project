@@ -72,9 +72,6 @@ namespace Mosa.TestWorld.x86
 			Console.BackgroundColor = 1;
 			Console.WriteLine();
 			Console.WriteLine();
-			Console.Write("!MOSA is alive!");
-
-			Console.WriteLine();
 
 			KernelTest.RunTests();
 

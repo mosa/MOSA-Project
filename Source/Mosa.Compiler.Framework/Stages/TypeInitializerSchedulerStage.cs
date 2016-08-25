@@ -30,6 +30,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private BasicBlocks basicBlocks;
 
+		private MosaMethod typeInitializerMethod;
+
 		#endregion Data Members
 
 		#region Construction
@@ -65,15 +67,18 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Construction
 
-		protected override void RunPostCompile()
+		protected override void RunPreCompile()
 		{
-			var typeInitializerMethod = Compiler.CreateLinkerMethod(TypeInitializerName);
-
-			Compiler.CompileMethod(typeInitializerMethod, basicBlocks);
+			typeInitializerMethod = Compiler.CreateLinkerMethod(TypeInitializerName);
 
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
 			var startUpMethod = startUpType.FindMethodByName("Assembly");
 			Compiler.PlugSystem.CreatePlug(typeInitializerMethod, startUpMethod);
+		}
+
+		protected override void RunPostCompile()
+		{
+			Compiler.CompileMethod(typeInitializerMethod, basicBlocks);
 		}
 
 		#region Methods
