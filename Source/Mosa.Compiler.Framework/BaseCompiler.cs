@@ -28,12 +28,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the pre compile pipeline.
 		/// </summary>
-		public CompilerPipeline PreCompilePipeline { get; private set; }
-
-		/// <summary>
-		/// Gets the post compile pipeline.
-		/// </summary>
-		public CompilerPipeline PostCompilePipeline { get; private set; }
+		public CompilerPipeline CompilePipeline { get; private set; }
 
 		/// <summary>
 		/// Gets the type system.
@@ -120,8 +115,7 @@ namespace Mosa.Compiler.Framework
 			CompilationScheduler = Compiler.CompilationScheduler;
 			Linker = compiler.Linker;
 
-			PreCompilePipeline = new CompilerPipeline();
-			PostCompilePipeline = new CompilerPipeline();
+			CompilePipeline = new CompilerPipeline();
 			GlobalCounters = new Counters();
 			PlugSystem = new PlugSystem();
 			CompilerData = new CompilerData();
@@ -150,10 +144,7 @@ namespace Mosa.Compiler.Framework
 			ExtendCompilerSetup();
 
 			// Build the default pre-compiler pipeline
-			Architecture.ExtendPreCompilerPipeline(PreCompilePipeline);
-
-			// Build the default post-compiler pipeline
-			Architecture.ExtendPostCompilerPipeline(PostCompilePipeline);
+			Architecture.ExtendCompilerPipeline(CompilePipeline);
 		}
 
 		/// <summary>
@@ -169,7 +160,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="method">The method.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="threadID">The thread identifier.</param>
-		public void CompileMethod(MosaMethod method, BasicBlocks basicBlocks, int threadID)
+		public void CompileMethod(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0)
 		{
 			NewCompilerTraceEvent(CompilerEvent.CompilingMethod, method.FullName, threadID);
 
@@ -186,7 +177,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="threadID">The thread identifier.</param>
 		/// <returns></returns>
-		protected abstract BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID);
+		protected abstract BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0);
 
 		/// <summary>
 		/// Compiles the linker method.
@@ -207,24 +198,17 @@ namespace Mosa.Compiler.Framework
 		/// </remarks>
 		internal void PreCompile()
 		{
-			foreach (ICompilerStage stage in PreCompilePipeline)
+			foreach (ICompilerStage stage in CompilePipeline)
 			{
-				// Setup Compiler
 				stage.Initialize(this);
 			}
 
-			foreach (ICompilerStage stage in PostCompilePipeline)
-			{
-				// Setup Compiler
-				stage.Initialize(this);
-			}
-
-			foreach (ICompilerStage stage in PreCompilePipeline)
+			foreach (ICompilerStage stage in CompilePipeline)
 			{
 				NewCompilerTraceEvent(CompilerEvent.CompilerStageStart, stage.Name);
 
 				// Execute stage
-				stage.Execute();
+				stage.ExecutePreCompile();
 
 				NewCompilerTraceEvent(CompilerEvent.CompilerStageEnd, stage.Name);
 			}
@@ -336,17 +320,15 @@ namespace Mosa.Compiler.Framework
 		/// </remarks>
 		internal void PostCompile()
 		{
-			foreach (ICompilerStage stage in PostCompilePipeline)
+			foreach (ICompilerStage stage in CompilePipeline)
 			{
 				NewCompilerTraceEvent(CompilerEvent.CompilerStageStart, stage.Name);
 
 				// Execute stage
-				stage.Execute();
+				stage.ExecutePostCompile();
 
 				NewCompilerTraceEvent(CompilerEvent.CompilerStageEnd, stage.Name);
 			}
-
-			// TODO: Add compiler option
 
 			// Sum up the counters
 			foreach (var methodData in CompilerData.MethodData)

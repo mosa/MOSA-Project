@@ -191,23 +191,19 @@ namespace Mosa.Platform.x86
 		/// Extends the pre-compiler pipeline with x86 compiler stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendPreCompilerPipeline(CompilerPipeline compilerPipeline)
+		public override void ExtendCompilerPipeline(CompilerPipeline compilerPipeline)
 		{
-			compilerPipeline.InsertAfterFirst<ICompilerStage>(
+			compilerPipeline.Add(
+				new StartUpStage()
+			);
+
+			compilerPipeline.Add(
 				new InterruptVectorStage()
 			);
 
-			compilerPipeline.InsertAfterLast<ICompilerStage>(
-				new SSESetupStage()
+			compilerPipeline.Add(
+				new SSEInitStage()
 			);
-		}
-
-		/// <summary>
-		/// Extends the post-compiler pipeline with x86 compiler stages.
-		/// </summary>
-		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendPostCompilerPipeline(CompilerPipeline compilerPipeline)
-		{
 		}
 
 		/// <summary>

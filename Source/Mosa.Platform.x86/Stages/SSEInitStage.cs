@@ -1,31 +1,18 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	/// Sets up SSE before any code that relies on SSE runs.
 	/// </summary>
-	public sealed class SSESetupStage : BaseCompilerStage
+	public sealed class SSEInitStage : BaseCompilerStage
 	{
-		#region Data members
-
-		/// <summary>
-		/// The SSE setup method
-		/// </summary>
-		private MosaMethod setupMethod;
-
-		#endregion Data members
-
-		protected override void Run()
+		protected override void RunPreCompile()
 		{
-			Debug.Assert(setupMethod == null, "SSE setup method already generated!");
-
-			setupMethod = Compiler.CreateLinkerMethod("SSEInit");
+			var sseInitMethod = Compiler.CreateLinkerMethod("SSEInit");
 
 			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
 			var cr0 = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, ControlRegister.CR0);
@@ -59,12 +46,11 @@ namespace Mosa.Platform.x86.Stages
 
 			ctx.AppendInstruction(X86.Ret);
 
-			Compiler.CompileMethod(setupMethod, basicBlocks, 0);
+			Compiler.CompileMethod(sseInitMethod, basicBlocks);
 
-			var typeInitializerSchedulerStage = Compiler.PostCompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
-			typeInitializerSchedulerStage.Schedule(setupMethod);
-
-			//TODO99: Plug this method into Mosa.Runtime.StartUp.PostBootStage2
+			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
+			var startUpMethod = startUpType.FindMethodByName("Stage2");
+			Compiler.PlugSystem.CreatePlug(sseInitMethod, startUpMethod);
 		}
 	}
 }

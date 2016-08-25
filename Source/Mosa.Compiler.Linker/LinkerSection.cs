@@ -58,6 +58,15 @@ namespace Mosa.Compiler.Linker
 			return symbol;
 		}
 
+		internal void SetFirst(LinkerSymbol symbol)
+		{
+			lock (mylock)
+			{
+				Symbols.Remove(symbol);
+				Symbols.Insert(0, symbol);
+			}
+		}
+
 		internal void ResolveLayout(uint fileOffset, ulong virtualAddress)
 		{
 			VirtualAddress = virtualAddress;

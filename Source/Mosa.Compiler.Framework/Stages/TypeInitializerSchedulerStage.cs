@@ -65,28 +65,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Construction
 
-		#region Properties
-
-		/// <summary>
-		/// Gets the initializer method.
-		/// </summary>
-		/// <value>The method.</value>
-		public MosaMethod TypeInitializerMethod { get; private set; }
-
-		#endregion Properties
-
-		protected override void Run()
+		protected override void RunPostCompile()
 		{
-			//TODO99: Plug TypeSystem.EntryPoint into Mosa.Runtime.StartUp.Application()
+			var typeInitializerMethod = Compiler.CreateLinkerMethod(TypeInitializerName);
 
-			if (TypeSystem.EntryPoint != null)
-			{
-				Schedule(TypeSystem.EntryPoint);
-			}
+			Compiler.CompileMethod(typeInitializerMethod, basicBlocks);
 
-			TypeInitializerMethod = Compiler.CreateLinkerMethod(TypeInitializerName);
-
-			Compiler.CompileMethod(TypeInitializerMethod, basicBlocks, 0);
+			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
+			var startUpMethod = startUpType.FindMethodByName("Assembly");
+			Compiler.PlugSystem.CreatePlug(typeInitializerMethod, startUpMethod);
 		}
 
 		#region Methods

@@ -1,29 +1,48 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Runtime.CompilerServices;
+
 namespace Mosa.Runtime
 {
 	public static class StartUp
 	{
-		public static void Start()
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static void Initialize()
 		{
-			PostBoot();
-			PostBootStage2();
+			Stage1();
+			Stage2();
+			Memory();
+			Assembly();
 			Kernel();
 			Application();
 		}
 
-		public static void PostBoot()
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static void Stage1()
 		{
 		}
 
-		public static void PostBootStage2()
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static void Stage2()
 		{
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static void Memory()
+		{
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static void Assembly()
+		{
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void Kernel()
 		{
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void Application()
 		{
 		}

@@ -155,27 +155,9 @@ namespace Mosa.Platform.x64
 		/// Extends the pre compiler pipeline with x64 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendPreCompilerPipeline(CompilerPipeline compilerPipeline)
+		public override void ExtendCompilerPipeline(CompilerPipeline compilerPipeline)
 		{
-			//assemblyCompilerPipeline.InsertAfterFirst<ICompilerStage>(
-			//    new InterruptVectorStage()
-			//);
-
-			//assemblyCompilerPipeline.InsertAfterFirst<InterruptVectorStage>(
-			//    new ExceptionVectorStage()
-			//);
-
-			//assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(
-			//    new MethodTableBuilderStage()
-			//);
-		}
-
-		/// <summary>
-		/// Extends the post compiler pipeline with x64 specific stages.
-		/// </summary>
-		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendPostCompilerPipeline(CompilerPipeline compilerPipeline)
-		{
+			// TODO
 		}
 
 		/// <summary>
@@ -184,23 +166,7 @@ namespace Mosa.Platform.x64
 		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
 		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
 		{
-			//methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
-			//    new IMethodCompilerStage[]
-			//    {
-			//        new LongOperandTransformationStage(),
-			//        new AddressModeConversionStage(),
-			//        new IRTransformationStage(),
-			//        new TweakTransformationStage(),
-			//        new MemToMemConversionStage(),
-			//    });
-
-			//methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
-			//    new SimplePeepholeOptimizationStage()
-			//);
-
-			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
-			//    new ExceptionLayoutStage()
-			//);
+			// TODO
 		}
 
 		/// <summary>

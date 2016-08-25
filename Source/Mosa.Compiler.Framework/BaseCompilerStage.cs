@@ -77,9 +77,20 @@ namespace Mosa.Compiler.Framework
 			Setup();
 		}
 
-		void ICompilerStage.Execute()
+		/// <summary>
+		/// Executes the pre compile phase.
+		/// </summary>
+		void ICompilerStage.ExecutePreCompile()
 		{
-			Run();
+			RunPreCompile();
+		}
+
+		/// <summary>
+		/// Executes the post compile phase.
+		/// </summary>
+		void ICompilerStage.ExecutePostCompile()
+		{
+			RunPostCompile();
 		}
 
 		#endregion ICompilerStage members
@@ -94,9 +105,16 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Runs this stage.
+		/// Runs pre compile stage.
 		/// </summary>
-		protected virtual void Run()
+		protected virtual void RunPreCompile()
+		{
+		}
+
+		/// <summary>
+		/// Runs post compile stage.
+		/// </summary>
+		protected virtual void RunPostCompile()
 		{
 		}
 
