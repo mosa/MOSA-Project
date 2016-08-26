@@ -8,10 +8,9 @@ namespace Mosa.Runtime
 		{
 			Stage1();
 			Stage2();
-			InitialMemory();
-			Assembly();
-			Kernel();
-			Application();
+			SetInitialMemory();
+			InitializeAssembly();
+			StartApplication();
 		}
 
 		public static void Stage1()
@@ -22,19 +21,15 @@ namespace Mosa.Runtime
 		{
 		}
 
-		public static void InitialMemory()
+		public static void SetInitialMemory()
 		{
 		}
 
-		public static void Assembly()
+		public static void InitializeAssembly()
 		{
 		}
 
-		public static void Kernel()
-		{
-		}
-
-		public static void Application()
+		public static void StartApplication()
 		{
 		}
 	}

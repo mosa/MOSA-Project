@@ -10,8 +10,8 @@ namespace Mosa.UnitTests.x86
 	/// </summary>
 	public static class Boot
 	{
-		[Method("Mosa.Runtime.StartUp.InitialMemory")]
-		public static void InitialMemory()
+		[Method("Mosa.Runtime.StartUp.SetInitialMemory")]
+		public static void SetInitialMemory()
 		{
 			KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
 		}
@@ -32,6 +32,10 @@ namespace Mosa.UnitTests.x86
 			Screen.Write(' ');
 
 			Runtime.Internal.Setup();
+
+			while (true)
+			{
+			}
 		}
 
 		private static void ForceTestCollection()

@@ -100,8 +100,6 @@ namespace Mosa.Platform.x86.Stages
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
 			var startUpMethod = startUpType.FindMethodByName("Stage1");
 			Compiler.PlugSystem.CreatePlug(multibootMethod, startUpMethod);
-
-			return;
 		}
 
 		protected override void RunPostCompile()

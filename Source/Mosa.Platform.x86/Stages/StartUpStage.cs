@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Stages
 		protected override void RunPreCompile()
 		{
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
-			var startUpMethod = startUpType.FindMethodByName("Application");
+			var startUpMethod = startUpType.FindMethodByName("StartApplication");
 
 			Compiler.PlugSystem.CreatePlug(TypeSystem.EntryPoint, startUpMethod);
 

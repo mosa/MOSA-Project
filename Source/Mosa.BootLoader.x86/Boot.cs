@@ -10,8 +10,8 @@ namespace Mosa.BootLoader.x86
 	/// </summary>
 	public static class Boot
 	{
-		[Method("Mosa.Runtime.StartUp.InitialMemory")]
-		public static void InitialMemory()
+		[Method("Mosa.Runtime.StartUp.SetInitialMemory")]
+		public static void SetInitialMemory()
 		{
 			KernelMemory.SetInitialMemory(Address.GCInitialMemory_BootLoader, 0x01000000);
 		}
