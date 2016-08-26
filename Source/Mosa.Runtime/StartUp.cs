@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Runtime.CompilerServices;
-
 namespace Mosa.Runtime
 {
 	public static class StartUp
@@ -10,7 +8,7 @@ namespace Mosa.Runtime
 		{
 			Stage1();
 			Stage2();
-			Memory();
+			InitialMemory();
 			Assembly();
 			Kernel();
 			Application();
@@ -24,7 +22,7 @@ namespace Mosa.Runtime
 		{
 		}
 
-		public static void Memory()
+		public static void InitialMemory()
 		{
 		}
 

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.x86;
+using Mosa.Runtime.Plug;
 
 namespace Mosa.BootLoader.x86
 {
@@ -9,6 +10,12 @@ namespace Mosa.BootLoader.x86
 	/// </summary>
 	public static class Boot
 	{
+		[Method("Mosa.Runtime.StartUp.InitialMemory")]
+		public static void InitialMemory()
+		{
+			KernelMemory.SetInitialMemory(Address.GCInitialMemory_BootLoader, 0x01000000);
+		}
+
 		private static uint counter = 0;
 
 		/// <summary>
@@ -16,8 +23,6 @@ namespace Mosa.BootLoader.x86
 		/// </summary>
 		public static void Main()
 		{
-			KernelMemory.SetInitialMemory(Address.GCInitialMemory_BootLoader, 0x01000000);
-
 			IDT.SetInterruptHandler(null);
 			Panic.Setup();
 			Debugger.Setup(Serial.COM1);

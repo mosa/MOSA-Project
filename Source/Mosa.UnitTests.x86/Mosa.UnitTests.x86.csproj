@@ -19,7 +19,7 @@
     <AppDesignerFolder>
     </AppDesignerFolder>
     <RootNamespace>Mosa.UnitTests.x86</RootNamespace>
-    <StartupObject>Mosa.UnitTests.x86.Setup</StartupObject>
+    <StartupObject>Mosa.UnitTests.x86.Boot</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -83,7 +83,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Setup.cs" />
+    <Compile Include="Boot.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Korlib\Korlib.csproj">

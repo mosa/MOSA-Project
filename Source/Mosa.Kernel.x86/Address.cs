@@ -14,10 +14,10 @@ namespace Mosa.Kernel.x86
 		public const uint PageTable = 0x01000000;  // 16MB [Size=4MB]
 		public const uint VirtualPageAllocator = 0x01400000;  // 20MB [Size=32KB]
 
-		public const uint GCInitialMemory_BootLoader = 0x02000000;  // 32MB [Size=1MB]
-		public const uint GCInitialMemory_UnitTest = 0x02100000;  // 33MB [Size=1MB]
+		public const uint GCInitialMemory = 0x03000000;  // 48MB [Size=16MB]
+		public const uint GCInitialMemory_BootLoader = 0x02000000;  // 32MB [Size=16MB]
 
-		public const uint ReserveMemory = 0x04000000;  // 64MB
+		public const uint ReserveMemory = 0x08000000;  // 128MB
 		public const uint MaximumMemory = 0xFFFFFFFF;  // 4GB
 
 		public const uint UnitTestStack = 0x00004000;  // 4KB (stack grows down)

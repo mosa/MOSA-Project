@@ -1,14 +1,21 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.x86;
+using Mosa.Runtime.Plug;
 
 namespace Mosa.UnitTests.x86
 {
 	/// <summary>
 	///
 	/// </summary>
-	public static class Setup
+	public static class Boot
 	{
+		[Method("Mosa.Runtime.StartUp.InitialMemory")]
+		public static void InitialMemory()
+		{
+			KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
+		}
+
 		/// <summary>
 		/// Main
 		/// </summary>
@@ -24,14 +31,12 @@ namespace Mosa.UnitTests.x86
 			Screen.Write('A');
 			Screen.Write(' ');
 
-			KernelMemory.SetInitialMemory(Address.GCInitialMemory_UnitTest, 0x01000000);
-
 			Runtime.Internal.Setup();
 		}
 
 		private static void ForceTestCollection()
 		{
-			// force assembly to be loaded
+			// required to force assembly to be referenced and loaded
 			Mosa.UnitTest.Collection.OptimizationTest.OptimizationTest1();
 		}
 	}
