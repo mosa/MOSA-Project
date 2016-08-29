@@ -16,6 +16,8 @@ namespace Mosa.Workspace.UnitTest.Debug
 		{
 			Stopwatch stopwatch = new Stopwatch();
 
+			//unitTestEngine.Options.BootLoaderImage = @"..\Tests\BootImage\Mosa.BootLoader.x86.img"
+
 			unitTestEngine.Initialize();
 
 			stopwatch.Start();

@@ -2,7 +2,6 @@
 
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
-using Mosa.Runtime.x86;
 
 namespace Mosa.UnitTests.x86
 {
@@ -22,12 +21,39 @@ namespace Mosa.UnitTests.x86
 		/// </summary>
 		public static void Main()
 		{
-			Runtime.Internal.Setup();
+			Setup();
 
-			while (true)
-			{
-				Native.Hlt();
-			}
+			EnterTestReadyLoop();
+		}
+
+		private static void Setup()
+		{
+			IDT.SetInterruptHandler(null);
+			Panic.Setup();
+			Debugger.Setup(Serial.COM1);
+
+			// Initialize interrupts
+			PIC.Setup();
+			IDT.Setup();
+			GDT.Setup();
+
+			Runtime.Internal.Setup();
+		}
+
+		public static void EnterTestReadyLoop()
+		{
+			Screen.Color = 0x0;
+			Screen.Clear();
+			Screen.GotoTop();
+			Screen.Color = 0x0E;
+			Screen.Write("MOSA OS Version 1.6 - UnitTest");
+			Screen.NextLine();
+			Screen.NextLine();
+
+			UnitTestQueue.Setup();
+			UnitTestRunner.Setup();
+
+			UnitTestRunner.EnterTestReadyLoop();
 		}
 
 		private static void ForceTestCollection()

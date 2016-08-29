@@ -93,7 +93,8 @@ namespace Mosa.UnitTest.Engine
 				ExitOnLaunch = true,
 				GenerateASMFile = true,
 				GenerateMapFile = true,
-				BootLoaderImage = @"..\Tests\BootImage\Mosa.BootLoader.x86.img"
+
+				//BootLoaderImage = @"..\Tests\BootImage\Mosa.BootLoader.x86.img"
 			};
 
 			AppLocations = new AppLocations();
@@ -162,7 +163,7 @@ namespace Mosa.UnitTest.Engine
 
 			lock (queue)
 			{
-				Console.WriteLine(response.ToString());
+				//Console.WriteLine(response.ToString());
 
 				sent.Remove(response);
 			}
@@ -307,7 +308,7 @@ namespace Mosa.UnitTest.Engine
 
 			linker = builder.Linker;
 			typeSystem = builder.TypeSystem;
-			imagefile = Options.BootLoaderImage; // builder.ImageFile;
+			imagefile = Options.BootLoaderImage != null ? Options.BootLoaderImage : builder.ImageFile;
 
 			fatalError = builder.HasCompileError;
 			compiled = !fatalError;
@@ -661,6 +662,15 @@ namespace Mosa.UnitTest.Engine
 				if (!ready)
 				{
 					WaitForReady();
+				}
+
+				if (ready && !imageSent)
+				{
+					if (Options.BootLoaderImage == null)
+					{
+						imageSent = true;
+						kernelInit = true;
+					}
 				}
 
 				if (ready && !imageSent)

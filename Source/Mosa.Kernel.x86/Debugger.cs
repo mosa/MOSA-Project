@@ -298,23 +298,35 @@ namespace Mosa.Kernel.x86
 			Native.Set8(Address.DebuggerBuffer + index, b);
 			index++;
 
-			int length = 0;
+			uint length = 0;
 
 			if (index >= 16)
 			{
-				length = GetInt32(12);
+				length = GetLength();
 
 				if (length > MaxBuffer || index > MaxBuffer)
 				{
 					BadDataAbort();
 					return true;
 				}
+
+				if (length + 20 == index)
+				{
+					ProcessCommand();
+					ResetBuffer();
+				}
 			}
 
-			if (length > 0 && length + 20 == index)
+			Screen.Goto(24, 0);
+			Screen.Write("INDEX: ");
+			Screen.Write(index, 10, 5);
+			Screen.Write(" LENGTH: ");
+			Screen.Write((uint)length, 10, 5);
+
+			unsafe
 			{
-				ProcessCommand();
-				ResetBuffer();
+				Screen.Write(" EIP: ");
+				Screen.Write((uint)idt_stack->EIP, 16, 8);
 			}
 
 			return true;
@@ -569,7 +581,7 @@ namespace Mosa.Kernel.x86
 
 			Screen.Goto(15, 0);
 			Screen.ClearRow();
-			Screen.Write("[SoftReset]");
+			Screen.Write("[HardJump]");
 			Screen.NextLine();
 			Screen.ClearRow();
 			Screen.Write("ID: ");
