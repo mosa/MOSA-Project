@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private const string PlugTypeAttribute = "Mosa.Runtime.Plug.TypeAttribute";
 		private const string PlugMethodAttribute = "Mosa.Runtime.Plug.MethodAttribute";
 
-		protected override void Run()
+		protected override void RunPreCompile()
 		{
 			foreach (var type in TypeSystem.AllTypes)
 			{

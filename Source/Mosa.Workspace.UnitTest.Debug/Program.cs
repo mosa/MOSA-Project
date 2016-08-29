@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.UnitTest.Collection;
 using Mosa.UnitTest.Engine;
 using System;
 using System.Collections.Generic;
@@ -16,6 +15,8 @@ namespace Mosa.Workspace.UnitTest.Debug
 		private static void Main(string[] args)
 		{
 			Stopwatch stopwatch = new Stopwatch();
+
+			//unitTestEngine.Options.BootLoaderImage = @"..\Tests\BootImage\Mosa.BootLoader.x86.img"
 
 			unitTestEngine.Initialize();
 
@@ -53,7 +54,9 @@ namespace Mosa.Workspace.UnitTest.Debug
 			for (int i = 0; i < 1; i++)
 			{
 				int value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 1, 2);
+
 				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 3, 4);
+
 				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 5, 6);
 				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 7, 8);
 				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 9, 0);
@@ -62,18 +65,20 @@ namespace Mosa.Workspace.UnitTest.Debug
 				double b1 = 9;
 
 				var d1 = unitTestEngine.Run<double>("Mosa.UnitTest.Collection", "DoubleTests", "AddR8R8", a1, b1);
-				var d2 = DoubleTests.AddR8R8(a1, b1);
 
-				float a2 = 7;
-				float b2 = 9;
+				//var d2 = DoubleTests.AddR8R8(a1, b1);
 
-				var d1a = unitTestEngine.Run<float>("Mosa.UnitTest.Collection", "SingleTests", "AddR4R4", a2, b2);
-				var d2a = SingleTests.AddR4R4(a2, b2);
+				//float a2 = 7;
+				//float b2 = 9;
 
-				var b1b = unitTestEngine.Run<bool>("Mosa.UnitTest.Collection", "ValueTypeTests", "TestValueTypeStaticField");
-				var b2b = ValueTypeTests.TestValueTypeStaticField();
+				//var d1a = unitTestEngine.Run<float>("Mosa.UnitTest.Collection", "SingleTests", "AddR4R4", a2, b2);
+				//var d2a = SingleTests.AddR4R4(a2, b2);
 
-				var z = unitTestEngine.Run<bool>("Mosa.UnitTest.Collection", "LdlocaTests", "LdlocaCheckValueR8", 1d);
+				//var b1b = unitTestEngine.Run<bool>("Mosa.UnitTest.Collection", "ValueTypeTests", "TestValueTypeStaticField");
+				//var b2b = ValueTypeTests.TestValueTypeStaticField();
+
+				//var z = unitTestEngine.Run<bool>("Mosa.UnitTest.Collection", "LdlocaTests", "LdlocaCheckValueR8", 1d);
+				return;
 			}
 
 			Console.WriteLine("Thread End: " + Thread.CurrentThread.Name);

@@ -12,17 +12,15 @@ namespace Mosa.Utility.DebugEngine
 
 		public int Code { get; private set; }
 
-		public List<byte> CommandData { get; private set; }
+		public IList<byte> CommandData { get; private set; }
 
 		public List<byte> ResponseData { get; internal set; }
 
 		public CallBack CallBack { get; set; }
 
-		public int Checksum { get { return 0; } }
-
 		public object Other { get; set; }
 
-		public DebugMessage(int code, List<byte> data)
+		public DebugMessage(int code, IList<byte> data)
 		{
 			Code = code;
 			CommandData = data;
@@ -36,6 +34,17 @@ namespace Mosa.Utility.DebugEngine
 			foreach (byte b in data)
 			{
 				CommandData.Add(b);
+			}
+		}
+
+		public DebugMessage(int code, byte[] data, int length)
+		{
+			Code = code;
+			CommandData = new List<byte>(data.Length);
+
+			for (int i = 0; i < length; i++)
+			{
+				CommandData.Add(data[i]);
 			}
 		}
 
@@ -53,7 +62,13 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
-		public DebugMessage(int code, List<byte> data, CallBack callback)
+		public DebugMessage(int code, IList<int> data, CallBack callback)
+		: this(code, data)
+		{
+			CallBack = callback;
+		}
+
+		public DebugMessage(int code, IList<byte> data, CallBack callback)
 		: this(code, data)
 		{
 			CallBack = callback;
@@ -91,6 +106,8 @@ namespace Mosa.Utility.DebugEngine
 				case DebugCode.ReadCR3: return "ReadCR3";
 				case DebugCode.ReadMemory: return "ReadMemory";
 				case DebugCode.Scattered32BitReadMemory: return "Scattered32BitReadMemory";
+				case DebugCode.WriteMemory: return "WriteMemory";
+				case DebugCode.CompressedWriteMemory: return "CompressedWriteMemory";
 				case DebugCode.SendNumber: return "#: " + ((ResponseData[0] << 24) | (ResponseData[1] << 16) | (ResponseData[2] << 8) | ResponseData[3]).ToString();
 				default: return "Code: " + Code.ToString();
 			}

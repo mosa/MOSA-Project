@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.Stages
 				NativePatchType = PatchType.I8;
 		}
 
-		protected override void Run()
+		protected override void RunPostCompile()
 		{
 			CreateDefinitionTables();
 		}

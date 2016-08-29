@@ -61,9 +61,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CRC.cs" />
     <Compile Include="BinaryFormat.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LZF.cs" />
     <Compile Include="Math.cs">
       <SubType>Code</SubType>
     </Compile>

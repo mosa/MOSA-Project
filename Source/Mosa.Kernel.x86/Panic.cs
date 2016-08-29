@@ -63,7 +63,10 @@ namespace Mosa.Kernel.x86
 			while (true)
 			{
 				// keep debugger running
-				DebugClient.Process(0);
+				unsafe
+				{
+					Debugger.Process(null);
+				}
 
 				//Native.Hlt();
 			}
@@ -86,6 +89,8 @@ namespace Mosa.Kernel.x86
 			Screen.Write(EBX, 16, 8);
 			Screen.Write(" ECX: ");
 			Screen.Write(ECX, 16, 8);
+			Screen.Write(" CS: ");
+			Screen.Write(CS, 16, 8);
 			Screen.NextLine();
 			Screen.Write("EDX: ");
 			Screen.Write(EDX, 16, 8);
@@ -93,11 +98,10 @@ namespace Mosa.Kernel.x86
 			Screen.Write(EDI, 16, 8);
 			Screen.Write(" EDX: ");
 			Screen.Write(EDX, 16, 8);
-			Screen.NextLine();
-			Screen.Write("IRQ: ");
-			Screen.Write(Interrupt, 16, 2);
 			Screen.Write(" ERROR: ");
 			Screen.Write(ErrorCode, 16, 2);
+			Screen.Write(" IRQ: ");
+			Screen.Write(Interrupt, 16, 2);
 			Screen.NextLine();
 		}
 

@@ -206,7 +206,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		/// A <see cref="System.String"/> that represents this instance.
 		/// </returns>
-		public virtual string ToString()
+		public override string ToString()
 		{
 			return InstructionName;
 		}

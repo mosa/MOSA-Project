@@ -3,7 +3,6 @@
 using Mosa.Compiler.Linker;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -28,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 			MapFile = CompilerOptions.MapFile;
 		}
 
-		protected override void Run()
+		protected override void RunPostCompile()
 		{
 			if (string.IsNullOrEmpty(MapFile))
 				return;

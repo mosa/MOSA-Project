@@ -1,5 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Lzf;
+using Mosa.ClassLib;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.BootImage;
@@ -7,7 +10,6 @@ using Mosa.Utility.DebugEngine;
 using Mosa.Utility.Launcher;
 using System;
 using System.Collections.Generic;
-
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
@@ -36,19 +38,19 @@ namespace Mosa.UnitTest.Engine
 		private bool processStarted = false;
 		private int retries = 0;
 		private bool restartVM = false;
+		private bool imageSent = false;
+		private bool kernelInit = false;
 		private volatile bool ready = false;
 
 		private Stopwatch stopwatch = new Stopwatch();
-
-		//private volatile List<byte> resultData = null;
 
 		private const uint MaxRetries = 10;
 		private const uint RetryDelay = 1; // 1- seconds
 
 		private const int DefaultMaxSentQueue = 100;
 
-		private Queue<UnitTestRequest> queue = new Queue<UnitTestRequest>();
-		private HashSet<UnitTestRequest> sent = new HashSet<UnitTestRequest>();
+		private Queue<DebugMessage> queue = new Queue<DebugMessage>();
+		private HashSet<DebugMessage> sent = new HashSet<DebugMessage>();
 
 		private int MaxSentQueue = DefaultMaxSentQueue;
 
@@ -81,15 +83,18 @@ namespace Mosa.UnitTest.Engine
 				Width = 640,
 				Height = 480,
 				Depth = 32,
-				BaseAddress = 0x00400000,
+				BaseAddress = 0x00500000,//0x00400000,
 				EmitRelocations = false,
 				EmitSymbols = false,
 				Emitx86IRQMethods = true,
 				DebugConnectionOption = DebugConnectionOption.TCPServer,
 				DebugConnectionPort = 9999,
+				DebugPipeName = "MOSA",
 				ExitOnLaunch = true,
 				GenerateASMFile = true,
-				GenerateMapFile = true
+				GenerateMapFile = true,
+
+				//BootLoaderImage = @"..\Tests\BootImage\Mosa.BootLoader.x86.img"
 			};
 
 			AppLocations = new AppLocations();
@@ -115,7 +120,7 @@ namespace Mosa.UnitTest.Engine
 				TestAssemblyPath = AppContext.BaseDirectory;
 
 			if (TestSuiteFile == null)
-				TestSuiteFile = "Mosa.UnitTest." + Platform + ".exe";
+				TestSuiteFile = "Mosa.UnitTests." + Platform + ".exe";
 		}
 
 		private void ProcessQueue()
@@ -124,28 +129,23 @@ namespace Mosa.UnitTest.Engine
 			{
 				while (!processThreadAbort)
 				{
-					//Thread.Sleep(5);   // temporary
-
-					// todo - wait for pulse (or timeout)
-
-					UnitTestRequest request = null;
+					DebugMessage message = null;
 
 					lock (queue)
 					{
 						// check if queue has requests or too many have already been sent
 						if (queue.Count <= 0 || sent.Count > MaxSentQueue)
 						{
+							Thread.Sleep(5);
 							continue;
 						}
 
-						request = queue.Dequeue();
+						message = queue.Dequeue();
 					}
 
 					PrepareUnitTest();
 
-					var message = new DebugMessage(DebugCode.ExecuteUnitTest, request.CreateRequestMessage());
-					message.CallBack = UnitTestResults;
-					message.Other = request;
+					message.CallBack = MessageCallBack;
 
 					debugServerEngine.SendCommand(message);
 				}
@@ -156,29 +156,93 @@ namespace Mosa.UnitTest.Engine
 			}
 		}
 
-		private void UnitTestResults(DebugMessage response)
+		private void MessageCallBack(DebugMessage response)
 		{
 			if (response == null)
 				return;
 
-			lock (this)
+			lock (queue)
 			{
 				//Console.WriteLine(response.ToString());
 
-				var request = response.Other as UnitTestRequest;
+				sent.Remove(response);
+			}
 
-				sent.Remove(request);
+			var message = response.Other as UnitTestRequest;
 
-				request.ParseResultData(response.ResponseData);
+			if (message != null)
+			{
+				message.ParseResultData(response.ResponseData);
 			}
 		}
 
-		private void QueueUnitTest(UnitTestRequest request)
+		private void QueueMessage(DebugMessage request)
 		{
 			lock (queue)
 			{
 				queue.Enqueue(request);
 			}
+		}
+
+		private bool IsQueueEmpty
+		{
+			get
+			{
+				lock (queue)
+				{
+					return queue.Count == 0 && sent.Count == 0;
+				}
+			}
+		}
+
+		public static MosaMethod FindMethod(TypeSystem typeSystem, string ns, string type, string method, params object[] parameters)
+		{
+			foreach (var t in typeSystem.AllTypes)
+			{
+				if (t.Name != type)
+					continue;
+
+				if (!string.IsNullOrEmpty(ns))
+					if (t.Namespace != ns)
+						continue;
+
+				foreach (var m in t.Methods)
+				{
+					if (m.Name == method)
+					{
+						if (m.Signature.Parameters.Count == parameters.Length)
+						{
+							return m;
+						}
+					}
+				}
+
+				break;
+			}
+
+			return null;
+		}
+
+		public static ulong GetMethodAddress(MosaMethod method, BaseLinker linker)
+		{
+			var symbol = linker.GetSymbol(method.FullName, SectionKind.Text);
+
+			return symbol.VirtualAddress;
+		}
+
+		public static ulong GetMethodAddress(TypeSystem typeSystem, BaseLinker linker, string ns, string type, string method, params object[] parameters)
+		{
+			var mosaMethod = FindMethod(
+				typeSystem,
+				ns,
+				type,
+				method,
+				parameters
+			);
+
+			Debug.Assert(mosaMethod != null, ns + "." + type + "." + method);
+
+			return GetMethodAddress(mosaMethod, linker);
 		}
 
 		public T Run<T>(string ns, string type, string method, params object[] parameters)
@@ -189,11 +253,14 @@ namespace Mosa.UnitTest.Engine
 
 			request.Resolve(typeSystem, linker);
 
-			QueueUnitTest(request);
+			var message = new DebugMessage(DebugCode.ExecuteUnitTest, request.Message);
+			message.Other = request;
+
+			QueueMessage(message);
 
 			while (!request.HasResult)
 			{
-				Thread.Sleep(5); // temporary
+				Thread.Sleep(5);
 			}
 
 			var result = request.Result;
@@ -241,7 +308,7 @@ namespace Mosa.UnitTest.Engine
 
 			linker = builder.Linker;
 			typeSystem = builder.TypeSystem;
-			imagefile = builder.ImageFile;
+			imagefile = Options.BootLoaderImage != null ? Options.BootLoaderImage : builder.ImageFile;
 
 			fatalError = builder.HasCompileError;
 			compiled = !fatalError;
@@ -263,6 +330,8 @@ namespace Mosa.UnitTest.Engine
 
 			processStarted = !fatalError;
 			ready = false;
+			imageSent = false;
+			kernelInit = false;
 		}
 
 		public void ConnectToDebugEngine()
@@ -283,6 +352,7 @@ namespace Mosa.UnitTest.Engine
 
 				retries++;
 				ready = false;
+				imageSent = false;
 
 				try
 				{
@@ -342,6 +412,225 @@ namespace Mosa.UnitTest.Engine
 			}
 		}
 
+		private volatile bool wait = false;
+
+		public void SendMessageAndWait(DebugMessage message)
+		{
+			wait = true;
+
+			message.CallBack = Acknowledge;
+
+			debugServerEngine.SendCommand(message);
+
+			while (wait)
+			{
+				//Thread.Sleep(5);
+			}
+		}
+
+		public void Acknowledge(DebugMessage message)
+		{
+			wait = false;
+		}
+
+		public void SendImage()
+		{
+			uint maxsize = 1024 * 16;
+
+			uint originalSize = 0;
+
+			var bss = linker.LinkerSections[(int)SectionKind.BSS];
+
+			var message = new DebugMessage(DebugCode.ClearMemory, new int[] { (int)bss.VirtualAddress, (int)bss.Size });
+
+			SendMessageAndWait(message);
+
+			var compressed = new byte[maxsize * 2];
+
+			foreach (var section in linker.LinkerSections)
+			{
+				if (section.SectionKind == SectionKind.BSS)
+					continue;
+
+				var stream = new MemoryStream((int)section.Size);
+
+				// similar code in the Section.WriteTo method
+				foreach (var symbol in section.Symbols)
+				{
+					stream.Seek(symbol.SectionOffset, SeekOrigin.Begin);
+					if (symbol.IsDataAvailable)
+					{
+						symbol.Stream.Position = 0;
+						symbol.Stream.WriteTo(stream);
+					}
+				}
+
+				stream.WriteZeroBytes((int)(section.AlignedSize - stream.Position));
+				stream.Position = 0;
+
+				var array = stream.ToArray();
+				uint at = 0;
+
+				while (at < array.Length)
+				{
+					uint size = (uint)array.Length - at;
+
+					if (size > maxsize) size = maxsize;
+
+					var raw = new byte[size];
+					Array.Copy(array, at, raw, 0, size);
+
+					originalSize = originalSize + size;
+
+					var data = new byte[size + 8];
+					uint address = (uint)(section.VirtualAddress + at);
+
+					data[0] = (byte)(address & 0xFF);
+					data[1] = (byte)((address >> 8) & 0xFF);
+					data[2] = (byte)((address >> 16) & 0xFF);
+					data[3] = (byte)((address >> 24) & 0xFF);
+
+					data[4] = (byte)(size & 0xFF);
+					data[5] = (byte)((size >> 8) & 0xFF);
+					data[6] = (byte)((size >> 16) & 0xFF);
+					data[7] = (byte)((size >> 24) & 0xFF);
+
+					Array.Copy(raw, 0, data, 8, size);
+
+					message = new DebugMessage(DebugCode.WriteMemory, data);
+
+					Console.WriteLine(section.SectionKind.ToString() + " @ 0x" + address.ToString("X") + " [size: " + size.ToString() + "]");
+
+					SendMessageAndWait(message);
+
+					at = at + size;
+				}
+			}
+
+			Console.WriteLine("Total Size: " + originalSize.ToString());
+
+			imageSent = true;
+			return;
+		}
+
+		public void SendImageCompressed()
+		{
+			uint maxsize = 1024 * 64;
+
+			LZF lzf = new LZF();
+
+			uint compressSize = 0;
+			uint originalSize = 0;
+
+			var bss = linker.LinkerSections[(int)SectionKind.BSS];
+
+			var message = new DebugMessage(DebugCode.ClearMemory, new int[] { (int)bss.VirtualAddress, (int)bss.Size });
+
+			SendMessageAndWait(message);
+
+			var compressed = new byte[maxsize * 2];
+
+			foreach (var section in linker.LinkerSections)
+			{
+				if (section.SectionKind == SectionKind.BSS)
+					continue;
+
+				var stream = new MemoryStream((int)section.Size);
+
+				// similar code in the Section.WriteTo method
+				foreach (var symbol in section.Symbols)
+				{
+					stream.Seek(symbol.SectionOffset, SeekOrigin.Begin);
+					if (symbol.IsDataAvailable)
+					{
+						symbol.Stream.Position = 0;
+						symbol.Stream.WriteTo(stream);
+					}
+				}
+
+				stream.WriteZeroBytes((int)(section.AlignedSize - stream.Position));
+				stream.Position = 0;
+
+				var array = stream.ToArray();
+				uint at = 0;
+
+				while (at < array.Length)
+				{
+					uint size = (uint)array.Length - at;
+
+					if (size > maxsize) size = maxsize;
+
+					// compress
+					var raw = new byte[size];
+					Array.Copy(array, at, raw, 0, size);
+
+					uint crc = CRC.InitialCRC;
+
+					for (int i = 0; i < size; i++)
+					{
+						crc = CRC.Update(crc, raw[i]);
+					}
+
+					var len = lzf.Compress(raw, raw.Length, compressed, compressed.Length);
+
+					compressSize = compressSize + (uint)len;
+					originalSize = originalSize + size;
+
+					// data
+					var data = new byte[len + 16];
+					uint address = (uint)(section.VirtualAddress + at);
+
+					data[0] = (byte)(address & 0xFF);
+					data[1] = (byte)((address >> 8) & 0xFF);
+					data[2] = (byte)((address >> 16) & 0xFF);
+					data[3] = (byte)((address >> 24) & 0xFF);
+
+					data[4] = (byte)(len & 0xFF);
+					data[5] = (byte)((len >> 8) & 0xFF);
+					data[6] = (byte)((len >> 16) & 0xFF);
+					data[7] = (byte)((len >> 24) & 0xFF);
+
+					data[8] = (byte)(size & 0xFF);
+					data[9] = (byte)((size >> 8) & 0xFF);
+					data[10] = (byte)((size >> 16) & 0xFF);
+					data[11] = (byte)((size >> 24) & 0xFF);
+
+					data[12] = (byte)(crc & 0xFF);
+					data[13] = (byte)((crc >> 8) & 0xFF);
+					data[14] = (byte)((crc >> 16) & 0xFF);
+					data[15] = (byte)((crc >> 24) & 0xFF);
+
+					Array.Copy(compressed, 0, data, 16, len);
+
+					message = new DebugMessage(DebugCode.CompressedWriteMemory, data);
+
+					Console.WriteLine(section.SectionKind.ToString() + " @ 0x" + address.ToString("X") + " [size: " + size.ToString() + " compressed: " + len.ToString() + "]");
+
+					SendMessageAndWait(message);
+
+					at = at + size;
+				}
+			}
+
+			Console.WriteLine("Original: " + originalSize.ToString());
+			Console.WriteLine("Compressed: " + compressSize.ToString());
+			Console.WriteLine("Compacted: " + (compressSize * 100 / originalSize).ToString());
+
+			kernelInit = false;
+			imageSent = true;
+		}
+
+		public void PrepareKernel()
+		{
+			ulong address = GetMethodAddress(typeSystem, linker, "Mosa.Runtime", "StartUp", "Initialize", new object[] { });
+
+			var message = new DebugMessage(DebugCode.HardJump, new int[] { (int)address });
+
+			SendMessageAndWait(message);
+
+			kernelInit = true;
+		}
+
 		public bool PrepareUnitTest()
 		{
 			lock (this)
@@ -373,6 +662,25 @@ namespace Mosa.UnitTest.Engine
 				if (!ready)
 				{
 					WaitForReady();
+				}
+
+				if (ready && !imageSent)
+				{
+					if (Options.BootLoaderImage == null)
+					{
+						imageSent = true;
+						kernelInit = true;
+					}
+				}
+
+				if (ready && !imageSent)
+				{
+					SendImageCompressed();
+				}
+
+				if (ready && imageSent && !kernelInit)
+				{
+					PrepareKernel();
 				}
 
 				if (fatalError)

@@ -15,14 +15,10 @@ namespace Mosa.Utility.Aot
 		{
 			var bootStage = CompilerOptions.BootStageFactory != null ? CompilerOptions.BootStageFactory() : null;
 
-			PreCompilePipeline.Add(new ICompilerStage[] {
+			CompilePipeline.Add(new ICompilerStage[] {
 				bootStage,
 				new PlugStage(),
-			});
-
-			PostCompilePipeline.Add(new ICompilerStage[] {
 				new TypeInitializerSchedulerStage(),
-				bootStage,
 				new MethodLookupTableStage(),
 				new MethodExceptionLookupTableStage(),
 				new MetadataStage(),

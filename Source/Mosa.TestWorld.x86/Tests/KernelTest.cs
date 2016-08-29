@@ -63,7 +63,7 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			Console = Boot.Console;
 
-			Console.Goto(4, 0);
+			Console.Goto(2, 0);
 			Console.Color = Colors.Yellow;
 			Console.Write("[");
 			Console.Color = Colors.White;

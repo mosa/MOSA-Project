@@ -88,32 +88,32 @@ namespace Mosa.Platform.x86.Stages
 			Depth = CompilerOptions.GetCustomOptionAsInteger("multiboot.depth", 0);
 		}
 
-		protected override void Run()
+		protected override void RunPreCompile()
 		{
-			if (multibootMethod == null)
-			{
-				multibootHeader = Linker.CreateSymbol(MultibootHeaderSymbolName, SectionKind.Text, 1, 0x30);
+			multibootHeader = Linker.CreateSymbol(MultibootHeaderSymbolName, SectionKind.Text, 1, 0x30);
 
-				multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
+			multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
 
-				Linker.EntryPoint = Linker.GetSymbol(multibootMethod.FullName, SectionKind.Text);
+			Linker.CreateSymbol(MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
+			Linker.CreateSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 
-				WriteMultibootHeader();
+			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
+			var startUpMethod = startUpType.FindMethodByName("Stage1");
+			Compiler.PlugSystem.CreatePlug(multibootMethod, startUpMethod);
+		}
 
-				Linker.CreateSymbol(Multiboot0695Stage.MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
-				Linker.CreateSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
+		protected override void RunPostCompile()
+		{
+			WriteMultibootHeader();
 
-				return;
-			}
-
-			var typeInitializerSchedulerStage = Compiler.PostCompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
+			var typeInitializerSchedulerStage = Compiler.CompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
 			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
-			var MultibootEAX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEAX);
+			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEAX);
 			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEBX);
 
 			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
@@ -129,17 +129,15 @@ namespace Mosa.Platform.x86.Stages
 			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, ebp, zero, zero);
 
 			// Place the multiboot address into a static field
-			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, MultibootEAX, zero, eax);
+			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEAX, zero, eax);
 			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEBX, zero, ebx);
-
-			// call type initializer
-			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, typeInitializerSchedulerStage.TypeInitializerMethod);
-			ctx.AppendInstruction(X86.Call, null, entryPoint);
 
 			// should never get here
 			ctx.AppendInstruction(X86.Ret);
 
-			Compiler.CompileMethod(multibootMethod, basicBlocks, 0);
+			Compiler.CompileMethod(multibootMethod, basicBlocks);
+
+			Linker.SetFirst(multibootHeader);
 		}
 
 		#region Internals
@@ -156,7 +154,11 @@ namespace Mosa.Platform.x86.Stages
 		{
 			// HACK: According to the multiboot specification this header must be within the first 8K of the
 			// kernel binary. Since the text section is always first, this should take care of the problem.
-			//multibootHeader = Linker.GetSymbol(MultibootHeaderSymbolName, SectionKind.Text);
+
+			LinkerSymbol entryPoint = Linker.EntryPoint;
+
+			//entryPoint = Linker.GetSymbol(MultibootHeaderSymbolName, SectionKind.Text);
+
 			var stream = multibootHeader.Stream;
 
 			var writer = new BinaryWriter(stream, Encoding.ASCII);
@@ -192,7 +194,7 @@ namespace Mosa.Platform.x86.Stages
 			writer.Write(0);
 
 			// entry_addr - address of the entry point to invoke
-			Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, multibootHeader, (int)stream.Position, 0, Linker.EntryPoint, 0);
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, multibootHeader, (int)stream.Position, 0, entryPoint, 0);
 			writer.Write(0);
 
 			// Write video settings if video has been specified, otherwise pad

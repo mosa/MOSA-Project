@@ -21,6 +21,11 @@ namespace Mosa.Utility.DebugEngine
 		public const int WriteMemory = 1011;
 		public const int ReadCR3 = 1012;
 		public const int Scattered32BitReadMemory = 1013;
+		public const int ClearMemory = 1014;
+
+		public const int CompressedWriteMemory = 1021;
+
+		public const int HardJump = 1111;
 
 		public const int ExecuteUnitTest = 2000;
 		public const int AbortUnitTest = 2001;

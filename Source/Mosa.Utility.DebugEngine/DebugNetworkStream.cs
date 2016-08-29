@@ -9,6 +9,7 @@ namespace Mosa.Utility.DebugEngine
 		public DebugNetworkStream(Socket socket, bool ownsSocket) :
 			base(socket, ownsSocket)
 		{
+			socket.NoDelay = true;
 		}
 
 		public bool IsConnected { get { return Socket.Connected; } }
