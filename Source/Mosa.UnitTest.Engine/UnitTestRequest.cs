@@ -35,7 +35,7 @@ namespace Mosa.UnitTest.Engine
 		public void Resolve(TypeSystem typeSystem, BaseLinker linker)
 		{
 			// Find the test method to execute
-			RuntimeMethod = FindMethod(
+			RuntimeMethod = UnitTestEngine.FindMethod(
 				typeSystem,
 				MethodNamespaceName,
 				MethodTypeName,
@@ -43,11 +43,7 @@ namespace Mosa.UnitTest.Engine
 				Parameters
 			);
 
-			Debug.Assert(RuntimeMethod != null, MethodNamespaceName + "." + MethodTypeName + "." + MethodName);
-
-			var symbol = linker.GetSymbol(RuntimeMethod.FullName, SectionKind.Text);
-
-			Address = symbol.VirtualAddress;
+			Address = UnitTestEngine.GetMethodAddress(RuntimeMethod, linker);
 		}
 
 		public object ParseResultData(List<byte> data)
@@ -55,34 +51,6 @@ namespace Mosa.UnitTest.Engine
 			Result = GetResult(RuntimeMethod.Signature.ReturnType, data);
 
 			return Result;
-		}
-
-		private MosaMethod FindMethod(TypeSystem typeSystem, string ns, string type, string method, params object[] parameters)
-		{
-			foreach (var t in typeSystem.AllTypes)
-			{
-				if (t.Name != type)
-					continue;
-
-				if (!string.IsNullOrEmpty(ns))
-					if (t.Namespace != ns)
-						continue;
-
-				foreach (var m in t.Methods)
-				{
-					if (m.Name == method)
-					{
-						if (m.Signature.Parameters.Count == parameters.Length)
-						{
-							return m;
-						}
-					}
-				}
-
-				break;
-			}
-
-			return null;
 		}
 
 		public IList<int> Message

@@ -2,6 +2,7 @@
 
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
+using Mosa.Runtime.x86;
 
 namespace Mosa.UnitTests.x86
 {
@@ -21,20 +22,11 @@ namespace Mosa.UnitTests.x86
 		/// </summary>
 		public static void Main()
 		{
-			Screen.Color = 0x0;
-			Screen.Clear();
-			Screen.GotoTop();
-			Screen.Color = 0x0E;
-			Screen.Write('M');
-			Screen.Write('O');
-			Screen.Write('S');
-			Screen.Write('A');
-			Screen.Write(' ');
-
 			Runtime.Internal.Setup();
 
 			while (true)
 			{
+				Native.Hlt();
 			}
 		}
 

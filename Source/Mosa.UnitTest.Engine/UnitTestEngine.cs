@@ -39,6 +39,7 @@ namespace Mosa.UnitTest.Engine
 		private int retries = 0;
 		private bool restartVM = false;
 		private bool imageSent = false;
+		private bool kernelInit = false;
 		private volatile bool ready = false;
 
 		private Stopwatch stopwatch = new Stopwatch();
@@ -193,6 +194,56 @@ namespace Mosa.UnitTest.Engine
 			}
 		}
 
+		public static MosaMethod FindMethod(TypeSystem typeSystem, string ns, string type, string method, params object[] parameters)
+		{
+			foreach (var t in typeSystem.AllTypes)
+			{
+				if (t.Name != type)
+					continue;
+
+				if (!string.IsNullOrEmpty(ns))
+					if (t.Namespace != ns)
+						continue;
+
+				foreach (var m in t.Methods)
+				{
+					if (m.Name == method)
+					{
+						if (m.Signature.Parameters.Count == parameters.Length)
+						{
+							return m;
+						}
+					}
+				}
+
+				break;
+			}
+
+			return null;
+		}
+
+		public static ulong GetMethodAddress(MosaMethod method, BaseLinker linker)
+		{
+			var symbol = linker.GetSymbol(method.FullName, SectionKind.Text);
+
+			return symbol.VirtualAddress;
+		}
+
+		public static ulong GetMethodAddress(TypeSystem typeSystem, BaseLinker linker, string ns, string type, string method, params object[] parameters)
+		{
+			var mosaMethod = FindMethod(
+				typeSystem,
+				ns,
+				type,
+				method,
+				parameters
+			);
+
+			Debug.Assert(mosaMethod != null, ns + "." + type + "." + method);
+
+			return GetMethodAddress(mosaMethod, linker);
+		}
+
 		public T Run<T>(string ns, string type, string method, params object[] parameters)
 		{
 			CheckCompiled();
@@ -208,7 +259,7 @@ namespace Mosa.UnitTest.Engine
 
 			while (!request.HasResult)
 			{
-				Thread.Sleep(5); // temporary
+				Thread.Sleep(5);
 			}
 
 			var result = request.Result;
@@ -279,6 +330,7 @@ namespace Mosa.UnitTest.Engine
 			processStarted = !fatalError;
 			ready = false;
 			imageSent = false;
+			kernelInit = false;
 		}
 
 		public void ConnectToDebugEngine()
@@ -563,8 +615,19 @@ namespace Mosa.UnitTest.Engine
 			Console.WriteLine("Compressed: " + compressSize.ToString());
 			Console.WriteLine("Compacted: " + (compressSize * 100 / originalSize).ToString());
 
+			kernelInit = false;
 			imageSent = true;
-			return;
+		}
+
+		public void PrepareKernel()
+		{
+			ulong address = GetMethodAddress(typeSystem, linker, "Mosa.Runtime", "StartUp", "Initialize", new object[] { });
+
+			var message = new DebugMessage(DebugCode.HardJump, new int[] { (int)address });
+
+			SendMessageAndWait(message);
+
+			kernelInit = true;
 		}
 
 		public bool PrepareUnitTest()
@@ -603,6 +666,11 @@ namespace Mosa.UnitTest.Engine
 				if (ready && !imageSent)
 				{
 					SendImageCompressed();
+				}
+
+				if (ready && imageSent && !kernelInit)
+				{
+					PrepareKernel();
 				}
 
 				if (fatalError)

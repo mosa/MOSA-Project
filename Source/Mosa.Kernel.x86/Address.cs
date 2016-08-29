@@ -4,7 +4,7 @@ namespace Mosa.Kernel.x86
 {
 	public static class Address
 	{
-		public const uint InitialStack = 0x000F0000; // 240KB (stack grows down)
+		public const uint InitialStack = 0x000F0000; // ???KB (stack grows down)
 
 		public const uint PageDirectory = 0x00B00000;  // 12MB [Size=4KB]
 		public const uint GDTTable = 0x00B10000;  // 12MB+ [Size=1KB]

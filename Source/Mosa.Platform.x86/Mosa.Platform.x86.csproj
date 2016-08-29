@@ -131,6 +131,7 @@
     <Compile Include="Intrinsic\Get32.cs" />
     <Compile Include="Intrinsic\Get16.cs" />
     <Compile Include="Intrinsic\FrameJump.cs" />
+    <Compile Include="Intrinsic\GetCS.cs" />
     <Compile Include="Intrinsic\GetFS.cs" />
     <Compile Include="Intrinsic\GetExceptionRegister.cs" />
     <Compile Include="Intrinsic\GetMethodExceptionLookupTable.cs" />

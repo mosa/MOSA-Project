@@ -36,7 +36,7 @@ namespace Mosa.Kernel.x86
 
 			public const int CompressedWriteMemory = 1021;
 
-			public const int SoftReset = 1111;
+			public const int HardJump = 1111;
 
 			public const int ExecuteUnitTest = 2000;
 			public const int AbortUnitTest = 2001;
@@ -58,7 +58,7 @@ namespace Mosa.Kernel.x86
 		private static bool ready = false;
 		private static bool readysent = false;
 
-		private static uint current_irq = 0;
+		private unsafe static IDTStack* idt_stack;
 
 		public static void Setup(ushort com)
 		{
@@ -231,12 +231,17 @@ namespace Mosa.Kernel.x86
 			return crc;
 		}
 
-		internal static void Process(uint irq)
+		internal unsafe static void Process(IDTStack* stack)
+		{
+			idt_stack = stack;
+
+			Process();
+		}
+
+		internal static void Process()
 		{
 			if (!enabled)
 				return;
-
-			current_irq = irq;
 
 			if (ready)
 			{
@@ -356,7 +361,7 @@ namespace Mosa.Kernel.x86
 				case DebugCode.WriteMemory: WriteMemory(); return;
 				case DebugCode.CompressedWriteMemory: CompressedWriteMemory(); return;
 				case DebugCode.ClearMemory: ClearMemory(); return;
-				case DebugCode.SoftReset: SoftReset(); return;
+				case DebugCode.HardJump: HardJump(); return;
 				case DebugCode.ExecuteUnitTest: QueueUnitTest(); return;
 				case DebugCode.GetMemoryCRC: GetMemoryCRC(); return;
 				default: return;
@@ -553,25 +558,24 @@ namespace Mosa.Kernel.x86
 			UnitTestQueue.ProcessQueue();
 		}
 
-		private static void SoftReset()
+		private unsafe static void HardJump()
 		{
 			uint id = GetID();
 			uint address = GetUInt32(16);
 
-			SendResponse(id, DebugCode.SoftReset);
+			SendResponse(id, DebugCode.HardJump);
 
-			// Setup stack
+			idt_stack->EIP = address;
 
-			// IRET will pop in this order: EIP, CS, and EFLAGS registers
-			Native.Set32(Address.InitialStack - 8, address);    // EIP
-			Native.Set32(Address.InitialStack - 4, 0);          // CS
-			Native.Set32(Address.InitialStack + 0, 0);          // EFLAGS
-
-			// clear the interrupt
-			if (current_irq != 0)
-				PIC.SendEndOfInterrupt(current_irq);
-
-			Native.FrameIRet(Address.InitialStack + 8, Address.InitialStack);
+			Screen.Goto(15, 0);
+			Screen.ClearRow();
+			Screen.Write("[SoftReset]");
+			Screen.NextLine();
+			Screen.ClearRow();
+			Screen.Write("ID: ");
+			Screen.Write((uint)id, 10, 5);
+			Screen.Write(" Address: ");
+			Screen.Write(address, 16, 8);
 		}
 	}
 }

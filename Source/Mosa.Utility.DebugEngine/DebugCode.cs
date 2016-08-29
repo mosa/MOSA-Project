@@ -25,7 +25,7 @@ namespace Mosa.Utility.DebugEngine
 
 		public const int CompressedWriteMemory = 1021;
 
-		public const int SoftReset = 1111;
+		public const int HardJump = 1111;
 
 		public const int ExecuteUnitTest = 2000;
 		public const int AbortUnitTest = 2001;

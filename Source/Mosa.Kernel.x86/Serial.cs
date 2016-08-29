@@ -68,7 +68,7 @@ namespace Mosa.Kernel.x86
 		{
 			while ((Native.In8((ushort)(com + COM_ModemStatus)) & 0x20) == 0x0)
 			{
-				Native.Hlt();
+				//Native.Hlt();
 			}
 		}
 
