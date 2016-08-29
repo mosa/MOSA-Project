@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Stages
 	/// </summary>
 	public sealed class InterruptVectorStage : BaseCompilerStage
 	{
-		protected override void Run()
+		protected override void RunPreCompile()
 		{
 			CreateInterruptVectors();
 		}
@@ -57,7 +57,7 @@ namespace Mosa.Platform.x86.Stages
 				ctx.AppendInstruction(X86.IRetd);
 
 				var interruptMethod = Compiler.CreateLinkerMethod("InterruptISR" + i.ToString());
-				Compiler.CompileMethod(interruptMethod, basicBlocks, 0);
+				Compiler.CompileMethod(interruptMethod, basicBlocks);
 			}
 		}
 

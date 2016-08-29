@@ -19,8 +19,6 @@ namespace Mosa.Utility.Launcher
 
 		public bool ExitOnLaunch { get; set; }
 
-		public bool AutoLaunch { get; set; }
-
 
 		public EmulatorType Emulator { get; set; }
 
@@ -63,16 +61,24 @@ namespace Mosa.Utility.Launcher
 		public bool UseMultipleThreadCompiler { get; set; }
 
 		public BootLoader BootLoader { get; set; }
+
 		public bool VBEVideo { get; set; }
+
 		public int Width { get; set; }
+
 		public int Height { get; set; }
+
 		public int Depth { get; set; }
 
 		public ulong BaseAddress { get; set; }
+
 		public bool EmitSymbols { get; set; }
+
 		public bool EmitRelocations { get; set; }
 
 		public bool Emitx86IRQMethods { get; set; }
+
+		public string BootLoaderImage { get; set; }
 
 		public Options()
 		{
@@ -104,6 +110,7 @@ namespace Mosa.Utility.Launcher
 			EmitSymbols = false;
 			Emitx86IRQMethods = true;
 			LaunchEmulator = true;
+			BootLoaderImage = null;
 		}
 
 		public void LoadArguments(string[] args)
@@ -146,16 +153,21 @@ namespace Mosa.Utility.Launcher
 					case "-syslinux-3.72": BootLoader = BootLoader.Syslinux_3_72; continue;
 					case "-inline": EnableInlinedMethods = true; continue;
 					case "-inline-off": EnableInlinedMethods = false; continue;
+					case "-optimization-ir-off": EnableIROptimizations = false; continue;
+					case "-optimization-sccp-off": EnableSparseConditionalConstantPropagation = false; continue;
+					case "-all-optimization-off": EnableIROptimizations = false; EnableSparseConditionalConstantPropagation = false; EnableInlinedMethods = false; EnableSSA = false; continue;
 					case "-threading-off": UseMultipleThreadCompiler = false; continue;
 					case "-video": VBEVideo = true; continue;
 					case "-base": BaseAddress = args[++i].ParseHexOrDecimal(); continue;
+					case "-destination-dir": DestinationDirectory = args[++i]; continue;
+					case "-dest": DestinationDirectory = args[++i]; continue;
 					case "-symbols": EmitSymbols = true; continue;
 					case "-symbols-false": EmitSymbols = false; continue;
 					case "-relocations": EmitRelocations = true; continue;
 					case "-relocations-false": EmitRelocations = false; continue;
 					case "-x86-irq-methods": Emitx86IRQMethods = true; continue;
 					case "-x86-irq-methods-false": Emitx86IRQMethods = false; continue;
-					case "-no-ssa": EnableSSA = false; continue;
+					case "-bootloader-image": BootLoaderImage = args[++i]; continue;
 					case "-no-ir-optimizations": EnableIROptimizations = false; continue;
 					case "-no-sparse": EnableSparseConditionalConstantPropagation = false; continue;
 

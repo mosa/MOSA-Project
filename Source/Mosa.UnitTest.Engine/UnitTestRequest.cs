@@ -35,7 +35,7 @@ namespace Mosa.UnitTest.Engine
 		public void Resolve(TypeSystem typeSystem, BaseLinker linker)
 		{
 			// Find the test method to execute
-			RuntimeMethod = FindMethod(
+			RuntimeMethod = UnitTestEngine.FindMethod(
 				typeSystem,
 				MethodNamespaceName,
 				MethodTypeName,
@@ -43,11 +43,7 @@ namespace Mosa.UnitTest.Engine
 				Parameters
 			);
 
-			Debug.Assert(RuntimeMethod != null, MethodNamespaceName + "." + MethodTypeName + "." + MethodName);
-
-			var symbol = linker.GetSymbol(RuntimeMethod.FullName, SectionKind.Text);
-
-			Address = symbol.VirtualAddress;
+			Address = UnitTestEngine.GetMethodAddress(RuntimeMethod, linker);
 		}
 
 		public object ParseResultData(List<byte> data)
@@ -57,50 +53,25 @@ namespace Mosa.UnitTest.Engine
 			return Result;
 		}
 
-		private MosaMethod FindMethod(TypeSystem typeSystem, string ns, string type, string method, params object[] parameters)
+		public IList<int> Message
 		{
-			foreach (var t in typeSystem.AllTypes)
+			get
 			{
-				if (t.Name != type)
-					continue;
+				var cmd = new List<int>(4 + 4 + 4 + RuntimeMethod.Signature.Parameters.Count);
 
-				if (!string.IsNullOrEmpty(ns))
-					if (t.Namespace != ns)
-						continue;
+				cmd.Add((int)Address);
+				cmd.Add(GetReturnResultType(RuntimeMethod.Signature.ReturnType));
+				cmd.Add(0);
 
-				foreach (var m in t.Methods)
+				foreach (var parm in Parameters)
 				{
-					if (m.Name == method)
-					{
-						if (m.Signature.Parameters.Count == parameters.Length)
-						{
-							return m;
-						}
-					}
+					AddParameters(cmd, parm);
 				}
 
-				break;
+				cmd[2] = cmd.Count - 3;
+
+				return cmd;
 			}
-
-			return null;
-		}
-
-		public List<int> CreateRequestMessage()
-		{
-			var cmd = new List<int>(4 + 4 + 4 + RuntimeMethod.Signature.Parameters.Count);
-
-			cmd.Add((int)Address);
-			cmd.Add(GetReturnResultType(RuntimeMethod.Signature.ReturnType));
-			cmd.Add(0);
-
-			foreach (var parm in Parameters)
-			{
-				AddParameters(cmd, parm);
-			}
-
-			cmd[2] = cmd.Count - 3;
-
-			return cmd;
 		}
 
 		private static int GetReturnResultType(MosaType type)

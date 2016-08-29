@@ -79,8 +79,8 @@ namespace Mosa.Tool.Explorer
 					// Disassemble each instruction and output to trace
 					foreach (var instruction in disasm.Disassemble())
 					{
-						var inst = translator.Translate(instruction);
-						trace.Log(inst);
+						var asString = translator.Translate(instruction);
+						trace.Log(asString);
 					}
 				}
 			}

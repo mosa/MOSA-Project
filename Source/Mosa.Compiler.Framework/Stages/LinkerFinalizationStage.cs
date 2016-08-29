@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class LinkerFinalizationStage : BaseCompilerStage
 	{
-		protected override void Run()
+		protected override void RunPostCompile()
 		{
 			using (var file = new FileStream(CompilerOptions.OutputFile, FileMode.Create))
 			{

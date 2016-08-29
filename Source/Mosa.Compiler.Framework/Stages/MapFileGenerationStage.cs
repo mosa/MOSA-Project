@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 			MapFile = CompilerOptions.MapFile;
 		}
 
-		protected override void Run()
+		protected override void RunPostCompile()
 		{
 			if (string.IsNullOrEmpty(MapFile))
 				return;

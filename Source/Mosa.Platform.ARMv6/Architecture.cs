@@ -177,27 +177,9 @@ namespace Mosa.Platform.ARMv6
 		/// Extends the assembly compiler pipeline with ARMv6 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendPreCompilerPipeline(CompilerPipeline compilerPipeline)
+		public override void ExtendCompilerPipeline(CompilerPipeline compilerPipeline)
 		{
-			//assemblyCompilerPipeline.InsertAfterFirst<ICompilerStage>(
-			//    new InterruptVectorStage()
-			//);
-
-			//assemblyCompilerPipeline.InsertAfterFirst<InterruptVectorStage>(
-			//    new ExceptionVectorStage()
-			//);
-
-			//assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(
-			//    new MethodTableBuilderStage()
-			//);
-		}
-
-		/// <summary>
-		/// Extends the post compiler pipeline with ARMv6 specific stages.
-		/// </summary>
-		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendPostCompilerPipeline(CompilerPipeline compilerPipeline)
-		{
+			// TODO
 		}
 
 		/// <summary>

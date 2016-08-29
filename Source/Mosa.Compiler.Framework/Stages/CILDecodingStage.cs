@@ -40,10 +40,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			// No CIL decoding if this is a linker generated method
-			if (MethodCompiler.Method.IsLinkerGenerated)
-				return;
-
 			if (IsPlugged)
 			{
 				var plugMethod = MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method);
@@ -56,6 +52,10 @@ namespace Mosa.Compiler.Framework.Stages
 				BasicBlocks.AddHeadBlock(context.Block);
 				return;
 			}
+
+			// No CIL decoding if this is a linker generated method
+			if (MethodCompiler.Method.IsLinkerGenerated)
+				return;
 
 			if (MethodCompiler.Method.Code.Count == 0)
 			{

@@ -189,6 +189,13 @@ namespace Mosa.Compiler.Linker
 			return symbol;
 		}
 
+		public void SetFirst(LinkerSymbol symbol)
+		{
+			var section = LinkerSections[(int)symbol.SectionKind];
+
+			section.SetFirst(symbol);
+		}
+
 		private void FinalizeLayout()
 		{
 			LayoutObjectsAndSections();

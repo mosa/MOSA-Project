@@ -15,7 +15,7 @@ namespace Mosa.Kernel.x86
 			// At this stage, allocating memory does not work, so you are only allowed to use ValueTypes or static classes.
 			IDT.SetInterruptHandler(null);
 			Panic.Setup();
-			DebugClient.Setup(Serial.COM1);
+			Debugger.Setup(Serial.COM1);
 
 			// Initialize interrupts
 			PIC.Setup();

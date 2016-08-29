@@ -420,7 +420,9 @@ namespace Mosa.Tool.Launcher
 			if (CheckKeyPressed())
 				return;
 
-			Starter = new Starter(Options, AppLocations, Builder.ImageFile, this);
+			string imageFile = Options.BootLoaderImage != null ? Options.BootLoaderImage : Builder.ImageFile;
+
+			Starter = new Starter(Options, AppLocations, imageFile, this);
 
 			Starter.Launch();
 		}

@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.ClassLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,7 +23,10 @@ namespace Mosa.Utility.DebugEngine
 
 		private int length = -1;
 
-		private const int MaxBufferSize = 0x20000;
+		private const int MaxBufferSize = 64 * 1024 + 64;
+		private byte[] sendpacket = new byte[MaxBufferSize];
+		private int sendpacketsize = 0;
+		private uint crc = CRC.InitialCRC;
 
 		public Stream Stream
 		{
@@ -83,44 +87,58 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
-		private void SendByte(int b)
+		private void SendPacket()
 		{
-			stream.WriteByte((byte)b);
+			stream.Write(sendpacket, 0, sendpacketsize);
+			sendpacketsize = 0;
 		}
 
-		private void SendInteger(int i)
+		private void AddSendPacket(byte b)
 		{
-			SendByte(i & 0xFF);
-			SendByte(i >> 8 & 0xFF);
-			SendByte(i >> 16 & 0xFF);
-			SendByte(i >> 24 & 0xFF);
+			sendpacket[sendpacketsize++] = b;
+
+			crc = CRC.Update(crc, b);
 		}
 
-		private void SendMagic()
+		private void AddSendPacket(int i)
 		{
-			SendByte('M');
-			SendByte('O');
-			SendByte('S');
-			SendByte('A');
+			AddSendPacket((byte)(i & 0xFF));
+			AddSendPacket((byte)(i >> 8 & 0xFF));
+			AddSendPacket((byte)(i >> 16 & 0xFF));
+			AddSendPacket((byte)(i >> 24 & 0xFF));
 		}
 
 		private void SendCommandMessage(DebugMessage message)
 		{
-			SendMagic();
-			SendInteger(message.ID);
-			SendInteger(message.Code);
+			AddSendPacket((byte)'M');
+			AddSendPacket((byte)'O');
+			AddSendPacket((byte)'S');
+			AddSendPacket((byte)'A');
+
+			crc = CRC.InitialCRC; // initialize the CRC (at the right spot)
+
+			AddSendPacket(message.ID);
+			AddSendPacket(message.Code);
+
 			if (message.CommandData == null)
 			{
-				SendInteger(0);
-				SendInteger(message.Checksum);
+				AddSendPacket(0);
+
+				AddSendPacket(0); // checksum
 			}
 			else
 			{
-				SendInteger(message.CommandData.Count);
-				SendInteger(message.Checksum);
+				AddSendPacket(message.CommandData.Count); // length
+
 				foreach (var b in message.CommandData)
-					SendByte(b);
+				{
+					AddSendPacket(b);
+				}
+
+				AddSendPacket((int)crc); // checksum
 			}
+
+			SendPacket();
 		}
 
 		private void PostResponse(int id, int code, List<byte> data)
@@ -163,18 +181,21 @@ namespace Mosa.Utility.DebugEngine
 			int id = GetInteger(4);
 			int code = GetInteger(8);
 			int len = GetInteger(12);
-			int checksum = GetInteger(16);
+			int checksum = GetInteger(len);
 
 			var data = new List<byte>();
+
 			for (int i = 0; i < len; i++)
-				data.Add(buffer[i + 20]);
+			{
+				data.Add(buffer[i + 16]);
+			}
 
 			PostResponse(id, code, data);
 
 			return true;
 		}
 
-		// Message format:	[MAGIC]-ID-CODE-LEN-CHECKSUM-DATA
+		// Message format:	// [0]MAGIC[4]ID[8]CODE[12]LEN[16]DATA[LEN]CHECKSUM
 
 		private void BadDataAbort()
 		{

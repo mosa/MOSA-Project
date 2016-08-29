@@ -25,12 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 				NativePatchType = PatchType.I8;
 		}
 
-		protected override void Run()
-		{
-			CreateMethodLookupTable();
-		}
-
-		protected void CreateMethodLookupTable()
+		protected override void RunPostCompile()
 		{
 			// Emit assembly list
 			var methodLookupTable = Linker.CreateSymbol(Metadata.MethodLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);

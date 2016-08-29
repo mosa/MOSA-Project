@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Executes this stage.
 		/// </summary>
-		protected override void Run()
+		protected override void RunPostCompile()
 		{
 			CreateTables();
 		}

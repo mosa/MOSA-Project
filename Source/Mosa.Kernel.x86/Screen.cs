@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime.x86;
 using Mosa.Runtime;
+using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
 {
@@ -199,6 +199,21 @@ namespace Mosa.Kernel.x86
 		public static void UpdateCursor()
 		{
 			SetCursor(Row, Column);
+		}
+
+		public static void ClearRow()
+		{
+			uint c = Column;
+			uint r = Row;
+
+			Column = 0;
+
+			for (int i = 0; i < Columns; i++)
+			{
+				Write(' ');
+			}
+
+			Goto(r, c);
 		}
 
 		/// <summary>

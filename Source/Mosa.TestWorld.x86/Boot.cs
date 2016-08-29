@@ -20,8 +20,6 @@ namespace Mosa.TestWorld.x86
 		public static void Main()
 		{
 			Start();
-
-			//EnterDebugger();
 		}
 
 		public static void Start()
@@ -40,7 +38,7 @@ namespace Mosa.TestWorld.x86
 			Screen.Write("!");
 			Screen.Write(" ");
 
-			DebugClient.Setup(Serial.COM1);
+			Debugger.Setup(Serial.COM1);
 			Screen.Write('0');
 			IDT.SetInterruptHandler(null);
 			Screen.Write('1');
@@ -73,9 +71,6 @@ namespace Mosa.TestWorld.x86
 			Console.Color = 0x0E;
 			Console.BackgroundColor = 1;
 			Console.WriteLine();
-			Console.WriteLine();
-			Console.Write("!MOSA is alive!");
-
 			Console.WriteLine();
 
 			KernelTest.RunTests();
@@ -192,7 +187,7 @@ namespace Mosa.TestWorld.x86
 			Screen.NextLine();
 			Screen.NextLine();
 
-			DebugClient.Setup(Serial.COM1);
+			Debugger.Setup(Serial.COM1);
 
 			while (true)
 			{

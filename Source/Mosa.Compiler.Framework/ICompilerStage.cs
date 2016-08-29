@@ -14,8 +14,13 @@ namespace Mosa.Compiler.Framework
 		void Initialize(BaseCompiler compiler);
 
 		/// <summary>
-		/// Performs stage specific processing on the compiler context.
+		/// Executes the pre compile phase
 		/// </summary>
-		void Execute();
+		void ExecutePreCompile();
+
+		/// <summary>
+		/// Executes the post compile phase
+		/// </summary>
+		void ExecutePostCompile();
 	}
 }
