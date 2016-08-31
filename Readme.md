@@ -74,7 +74,7 @@ The [EditorConfig](http://editorconfig.org/) plugin is recommended for MOSA cont
 
 Install [Mono](http://www.mono-project.com) and [Qemu](http://wiki.qemu.org/Main_Page).
 
-The minimal supported version of Mono is 4.4, this is not in some distributions repositories and must be added manually.
+The minimum supported version of Mono is 4.4, this is not in some distributions repositories and must be added manually.
 A tutorial on how to do this can be found at the following URL.
 [http://www.mono-project.com/download/#download-lin](http://www.mono-project.com/download/#download-lin)
 
