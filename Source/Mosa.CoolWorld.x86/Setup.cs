@@ -134,7 +134,7 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			Boot.Console.Write("Finding file systems...");
-			var filesystem = deviceManager.GetDevices(new IsPartitionDevice());
+			//var filesystem = deviceManager.GetDevices(new IsPartitionDevice());
 
 			//Boot.Console.WriteLine("[Completed: " + filesystem.Count.ToString() + " found]");
 			foreach (var partition in partitions)

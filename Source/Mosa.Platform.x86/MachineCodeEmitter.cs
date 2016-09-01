@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86
 				(int)codeStream.Position,
 				SectionKind.Text,
 				symbolOperand.Name,
-				0
+				-4
 			);
 
 			codeStream.WriteZeroBytes(4);

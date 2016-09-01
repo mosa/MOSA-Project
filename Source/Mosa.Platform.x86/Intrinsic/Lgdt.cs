@@ -38,7 +38,6 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			Debug.Assert(operand1.IsConstant); // only constants are supported
 
-			var zero = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
 			var constantx10 = Operand.CreateConstant(methodCompiler.TypeSystem, 0x10);
 
 			Operand ax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, GeneralPurposeRegister.EAX);

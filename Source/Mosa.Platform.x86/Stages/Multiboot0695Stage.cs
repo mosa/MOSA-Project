@@ -106,7 +106,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			WriteMultibootHeader();
 
-			var typeInitializerSchedulerStage = Compiler.CompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
+			//var typeInitializerSchedulerStage = Compiler.CompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);

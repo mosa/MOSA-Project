@@ -47,7 +47,7 @@
  * of this file under either the BSD or the GPL.
  */
 
-namespace Lzf
+namespace Mosa.ClassLib
 {
 	/// <summary>
 	/// Improved C# LZF Compressor, a very small data compression library. The compression algorithm is extremely fast.

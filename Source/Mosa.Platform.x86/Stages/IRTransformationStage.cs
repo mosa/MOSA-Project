@@ -275,7 +275,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				// Large Aligned moves 128bits at a time
 				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
+				//var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
 				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
 			}
