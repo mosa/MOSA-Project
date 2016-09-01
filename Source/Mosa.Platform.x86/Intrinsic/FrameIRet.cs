@@ -26,7 +26,6 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			Operand ebx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
-			Operand ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 
 			// Move all virtual registers into physical registers - necessary since stack frame pointer will change
 			context.SetInstruction(X86.Mov, eax, v0);

@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Lzf;
 using Mosa.ClassLib;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
@@ -116,7 +115,11 @@ namespace Mosa.UnitTest.Engine
 				Platform = "x86";
 
 			if (TestAssemblyPath == null)
+#if __MonoCS__
+				TestAssemblyPath = AppDomain.CurrentDomain.BaseDirectory;
+#else
 				TestAssemblyPath = AppContext.BaseDirectory;
+#endif
 
 			if (TestSuiteFile == null)
 				TestSuiteFile = "Mosa.UnitTests." + Platform + ".exe";
