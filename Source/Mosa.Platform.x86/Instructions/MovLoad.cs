@@ -39,7 +39,14 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			MovMemoryToReg(node, emitter);
+			if (node.Operand1.IsConstant && node.Result.IsCPURegister)
+			{
+				MovFixedMemoryToReg(node, emitter);
+			}
+			else
+			{
+				MovMemoryToReg(node, emitter);
+			}
 		}
 
 		private static void MovMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
@@ -57,6 +64,28 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (node.Operand1.IsLinkerResolved)
 				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			else
+				emitter.Emit(opcode);
+		}
+
+		private static void MovFixedMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsLinkerResolved);
+
+			// memory to reg 1000 101w: mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66) // 8:prefix: 16bit
+				.AppendNibble(Bits.b1000)                                           // 4:opcode
+				.Append3Bits(Bits.b101)                                             // 3:opcode
+				.AppendWidthBit(node.Size != InstructionSize.Size8)                 // 1:width
+				.AppendMod(Bits.b00)                                                // 2:mod
+				.AppendRegister(node.Result.Register)                               // 3:register (destination)
+				.AppendRM(Bits.b101)                                                // 3:r/m (source)
+				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);  // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8, node.Operand2.ConstantSignedInteger);
 			else
 				emitter.Emit(opcode);
 		}
