@@ -1517,7 +1517,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(fieldType))
 			{
-				context.AppendInstruction(IRInstruction.CompoundStore, size, null, objectOperand, offsetOperand, valueOperand);
+				context.SetInstruction(IRInstruction.CompoundStore, size, null, objectOperand, offsetOperand, valueOperand);
 				context.MosaType = fieldType;
 			}
 			else
