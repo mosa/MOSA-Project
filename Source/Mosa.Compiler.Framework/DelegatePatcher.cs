@@ -92,8 +92,9 @@ namespace Mosa.Compiler.Framework
 
 				//fixme: handle structs
 				var moveInstruction = BaseMethodCompilerStage.GetMoveInstruction(vrs[i].Type);
+				var moveSize = BaseMethodCompilerStage.GetInstructionSize(vrs[i].Type);
 
-				b0.AppendInstruction(moveInstruction, vrs[i], methodCompiler.Parameters[i]);
+				b0.AppendInstruction(moveInstruction, size, vrs[i], methodCompiler.Parameters[i]);
 			}
 
 			Operand thisOperand = vrs[0];

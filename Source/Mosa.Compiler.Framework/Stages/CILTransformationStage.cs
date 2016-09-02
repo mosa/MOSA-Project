@@ -690,6 +690,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int srcIndex = GetIndex(source.Type, NativeInstructionSize == InstructionSize.Size32);
 
 			var instruction = convTable[destIndex][srcIndex];
+			var size = GetInstructionSize(result.Type);
 
 			Debug.Assert(instruction != null);
 
@@ -698,13 +699,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (instruction == IRInstruction.ConversionIntegerToFloatR8 && result.IsR4)
 			{
-				context.SetInstruction(IRInstruction.ConversionIntegerToFloatR4, result, source);
+				context.SetInstruction(IRInstruction.ConversionIntegerToFloatR4, size, result, source);
 				return;
 			}
 
 			if (instruction != IRInstruction.LogicalAnd)
 			{
-				context.SetInstruction(instruction, result, source);
+				context.SetInstruction(instruction, size, result, source);
 				return;
 			}
 
@@ -713,7 +714,7 @@ namespace Mosa.Compiler.Framework.Stages
 				Debug.Assert(result.IsInteger);
 
 				// TODO: May not be correct
-				context.SetInstruction(IRInstruction.MoveInteger, result, source);
+				context.SetInstruction(IRInstruction.MoveInteger, size, result, source);
 				return;
 			}
 
@@ -721,12 +722,12 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Operand temp = AllocateVirtualRegister(result.Type);
 
-				context.SetInstruction(IRInstruction.MoveInteger, temp, source);
-				context.AppendInstruction(instruction, result, temp, Operand.CreateConstant(TypeSystem, (int)mask));
+				context.SetInstruction(IRInstruction.MoveInteger, size, temp, source);
+				context.AppendInstruction(instruction, size, result, temp, Operand.CreateConstant(TypeSystem, (int)mask));
 				return;
 			}
 
-			context.SetInstruction(instruction, result, source, Operand.CreateConstant(TypeSystem, (int)mask));
+			context.SetInstruction(instruction, size, result, source, Operand.CreateConstant(TypeSystem, (int)mask));
 		}
 
 		/// <summary>
@@ -1521,14 +1522,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				//Operand temp = AllocateVirtualRegister(context.MosaField.FieldType);
 				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
-
-				//var moveInstruction = GetMoveInstruction(temp.Type);
-
-				//context.SetInstruction(moveInstruction, temp, valueOperand);
-				//context.AppendInstruction(storeInstruction, size, null, objectOperand, offsetOperand, temp);
-				context.AppendInstruction(storeInstruction, size, null, objectOperand, offsetOperand, valueOperand);
+				context.SetInstruction(storeInstruction, size, null, objectOperand, offsetOperand, valueOperand);
 				context.MosaType = fieldType;
 			}
 		}
