@@ -1521,12 +1521,14 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				Operand temp = AllocateVirtualRegister(context.MosaField.FieldType);
+				//Operand temp = AllocateVirtualRegister(context.MosaField.FieldType);
 				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
-				var moveInstruction = GetMoveInstruction(temp.Type);
 
-				context.SetInstruction(moveInstruction, temp, valueOperand);
-				context.AppendInstruction(storeInstruction, size, null, objectOperand, offsetOperand, temp);
+				//var moveInstruction = GetMoveInstruction(temp.Type);
+
+				//context.SetInstruction(moveInstruction, temp, valueOperand);
+				//context.AppendInstruction(storeInstruction, size, null, objectOperand, offsetOperand, temp);
+				context.AppendInstruction(storeInstruction, size, null, objectOperand, offsetOperand, valueOperand);
 				context.MosaType = fieldType;
 			}
 		}
