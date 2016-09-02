@@ -91,10 +91,10 @@ namespace Mosa.Compiler.Framework
 				vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
 
 				//fixme: handle structs
-				var moveInstruction = BaseMethodCompilerStage.GetMoveInstruction(vrs[i].Type);
+				var loadInstruction = BaseMethodCompilerStage.GetLoadInstruction(vrs[i].Type);
 				var moveSize = BaseMethodCompilerStage.GetInstructionSize(vrs[i].Type);
 
-				b0.AppendInstruction(moveInstruction, size, vrs[i], methodCompiler.Parameters[i]);
+				b0.AppendInstruction(loadInstruction, moveSize, vrs[i], methodCompiler.StackFrame, methodCompiler.Parameters[i]);
 			}
 
 			Operand thisOperand = vrs[0];
