@@ -14,7 +14,6 @@ namespace Mosa.Platform.x86.Stages
 		{
 			visitationDictionary[X86.Call] = Call;
 			visitationDictionary[X86.Cmp] = Cmp;
-			visitationDictionary[X86.Mov] = Mov;
 			visitationDictionary[X86.Sar] = Sar;
 			visitationDictionary[X86.Shl] = Shl;
 			visitationDictionary[X86.Shr] = Shr;
@@ -59,22 +58,6 @@ namespace Mosa.Platform.x86.Stages
 
 				context.InsertBefore().AppendInstruction(X86.Mov, v1, left);
 				context.Operand1 = v1;
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Mov"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Mov(Context context)
-		{
-			Debug.Assert(!context.Result.IsResolvedConstant);
-
-			// fixme: may not be necessary
-			if (context.Operand1.IsConstant && (context.Result.Type.IsUI1 || context.Result.Type.IsUI2 || context.Result.IsBoolean || context.Result.IsChar))
-			{
-				// Correct source size of constant based on destination size
-				context.Operand1 = Operand.CreateConstant(context.Result.Type, context.Operand1.ConstantUnsignedLongInteger);
 			}
 		}
 
