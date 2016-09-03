@@ -79,7 +79,9 @@ namespace Mosa.Platform.x86.Stages
 			Operand source = context.Operand1;
 			Operand result = context.Result;
 
-			if (result.IsCPURegister && source.IsCPURegister && result.Register == source.Register)
+			Debug.Assert(result.IsCPURegister);
+
+			if (source.IsCPURegister && result.Register == source.Register)
 			{
 				context.Empty();
 				return;
@@ -91,7 +93,7 @@ namespace Mosa.Platform.x86.Stages
 			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
 				return;
 
-			if (source.IsCPURegister && source.IsCPURegister && (source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI))
+			if (source.IsCPURegister && (source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI))
 			{
 				Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
@@ -111,7 +113,9 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand result = context.Result;
 
-			if (result.IsCPURegister && (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI))
+			Debug.Assert(result.IsCPURegister);
+
+			if (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI)
 			{
 				Operand source = context.Operand1;
 				Operand offset = context.Operand2;
@@ -171,7 +175,10 @@ namespace Mosa.Platform.x86.Stages
 
 		public void Movsd(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
+			Debug.Assert(context.Result.IsCPURegister);
+			Debug.Assert(context.Operand1.IsCPURegister);
+
+			if (context.Result.Register == context.Operand1.Register)
 			{
 				context.Empty();
 				return;
@@ -180,7 +187,10 @@ namespace Mosa.Platform.x86.Stages
 
 		public void Movss(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister && context.Result.Register == context.Operand1.Register)
+			Debug.Assert(context.Result.IsCPURegister);
+			Debug.Assert(context.Operand1.IsCPURegister);
+
+			if (context.Result.Register == context.Operand1.Register)
 			{
 				context.Empty();
 				return;
@@ -197,7 +207,9 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand result = context.Operand1;
 
-			if (result.IsCPURegister && (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI))
+			Debug.Assert(result.IsCPURegister);
+
+			if (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI)
 			{
 				Operand dest = context.Result;
 
@@ -235,7 +247,9 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand result = context.Result;
 
-			if (result.IsCPURegister && (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI))
+			Debug.Assert(result.IsCPURegister);
+
+			if (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI)
 			{
 				Operand source = context.Operand1;
 				Operand offset = context.Operand2;
@@ -267,7 +281,9 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand result = context.Result;
 
-			if (result.IsCPURegister && (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI))
+			Debug.Assert(result.IsCPURegister);
+
+			if (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI)
 			{
 				Debug.Assert(context.Result.IsCPURegister);
 
@@ -303,7 +319,9 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand result = context.Result;
 
-			if (result.IsCPURegister && (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI))
+			Debug.Assert(result.IsCPURegister);
+
+			if (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI)
 			{
 				Debug.Assert(context.Result.IsCPURegister);
 
@@ -334,8 +352,10 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand result = context.Result;
 
+			Debug.Assert(result.IsCPURegister);
+
 			// SETcc can not use with ESI or EDI registers
-			if (result.IsCPURegister && (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI))
+			if (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI)
 			{
 				var condition = context.ConditionCode;
 
