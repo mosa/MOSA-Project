@@ -226,9 +226,13 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Cmp, null, operand1, operand2);
 
 			if (resultOperand.IsUnsigned || resultOperand.IsChar)
+			{
 				context.AppendInstruction(X86.Setcc, condition.GetUnsigned(), v1);
+			}
 			else
+			{
 				context.AppendInstruction(X86.Setcc, condition, v1);
+			}
 
 			context.AppendInstruction(X86.Mov, resultOperand, v1);
 		}
@@ -275,6 +279,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				// Large Aligned moves 128bits at a time
 				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
+
 				//var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
 				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
@@ -588,9 +593,8 @@ namespace Mosa.Platform.x86.Stages
 						context.AppendInstruction(instruction, size, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
-
 						newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.NotEqual, result);
-						newBlocks[0].AppendInstruction(X86.Movzx, InstructionSize.Size8, result, result);
+						//newBlocks[0].AppendInstruction(X86.Movzx, InstructionSize.Size8, result, result);
 						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
 						break;
 					}

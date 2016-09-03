@@ -15,7 +15,6 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[X86.Call] = Call;
 			visitationDictionary[X86.Cmp] = Cmp;
 			visitationDictionary[X86.Mov] = Mov;
-			visitationDictionary[X86.Movzx] = Movzx;
 			visitationDictionary[X86.Sar] = Sar;
 			visitationDictionary[X86.Shl] = Shl;
 			visitationDictionary[X86.Shr] = Shr;
@@ -52,35 +51,14 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		public void Cmp(Context context)
 		{
-			// fixme: may not be necessary
-
 			Operand left = context.Operand1;
-			Operand right = context.Operand2;
 
 			if (left.IsConstant)
 			{
 				Operand v1 = AllocateVirtualRegister(left.Type);
-				Context before = context.InsertBefore();
 
-				before.AppendInstruction(X86.Mov, v1, left);
+				context.InsertBefore().AppendInstruction(X86.Mov, v1, left);
 				context.Operand1 = v1;
-			}
-
-			if (right.IsConstant && (left.IsChar || left.IsShort || left.IsByte))
-			{
-				Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-				InstructionSize size = left.IsByte ? InstructionSize.Size8 : InstructionSize.Size16;
-
-				if (left.IsSigned)
-				{
-					context.InsertBefore().AppendInstruction(X86.Movsx, size, v2, left);
-				}
-				else
-				{
-					context.InsertBefore().AppendInstruction(X86.Movzx, size, v2, left);
-				}
-
-				context.Operand1 = v2;
 			}
 		}
 
@@ -97,19 +75,6 @@ namespace Mosa.Platform.x86.Stages
 			{
 				// Correct source size of constant based on destination size
 				context.Operand1 = Operand.CreateConstant(context.Result.Type, context.Operand1.ConstantUnsignedLongInteger);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Movzx"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Movzx(Context context)
-		{
-			// fixme: may not be necessary
-			if (context.Operand1.IsInt || context.Operand1.IsPointer || !context.Operand1.IsValueType)
-			{
-				context.ReplaceInstructionOnly(X86.Mov);
 			}
 		}
 
