@@ -140,6 +140,7 @@
     <Compile Include="Intrinsic\Int.cs" />
     <Compile Include="Intrinsic\In16.cs" />
     <Compile Include="Intrinsic\In32.cs" />
+    <Compile Include="Intrinsic\Helper.cs" />
     <Compile Include="Intrinsic\Memclr256.cs" />
     <Compile Include="Intrinsic\Memcpy256.cs" />
     <Compile Include="Intrinsic\Out16.cs" />
