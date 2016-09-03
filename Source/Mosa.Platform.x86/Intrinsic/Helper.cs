@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using System.Diagnostics;

@@ -594,6 +594,7 @@ namespace Mosa.Platform.x86.Stages
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 						newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.NotEqual, result);
+
 						//newBlocks[0].AppendInstruction(X86.Movzx, InstructionSize.Size8, result, result);
 						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
 						break;
