@@ -54,6 +54,9 @@ namespace Mosa.Tool.Disassembler.Intel
 						{
 							var inst = translator.Translate(instruction);
 							dest.WriteLine(inst);
+
+							if (options.Length != 0 && instruction.PC > options.StartingAddress + options.Length)
+								break;
 						}
 					}
 				}

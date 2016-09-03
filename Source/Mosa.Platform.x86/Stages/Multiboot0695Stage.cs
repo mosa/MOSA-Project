@@ -132,7 +132,6 @@ namespace Mosa.Platform.x86.Stages
 			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEAX, zero, eax);
 			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEBX, zero, ebx);
 
-			// should never get here
 			ctx.AppendInstruction(X86.Ret);
 
 			Compiler.CompileMethod(multibootMethod, basicBlocks);

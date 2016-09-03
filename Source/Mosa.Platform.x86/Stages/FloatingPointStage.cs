@@ -54,13 +54,16 @@ namespace Mosa.Platform.x86.Stages
 
 				var s1 = Operand.CreateLabel(operand.Type, symbol.Name);
 
-				var context = new Context(node);
+				var before = new Context(node).InsertBefore();
 
-				var loadInstruction = GetLoadInstruction(operand.Type);
-
-				var size = (operand.IsR4) ? InstructionSize.Size32 : InstructionSize.Size64;
-
-				context.InsertBefore().SetInstruction(loadInstruction, size, v1, s1, ConstantZero);
+				if (operand.IsR4)
+				{
+					before.SetInstruction(X86.MovssLoad, InstructionSize.Size32, v1, s1, ConstantZero);
+				}
+				else
+				{
+					before.SetInstruction(X86.MovsdLoad, InstructionSize.Size64, v1, s1, ConstantZero);
+				}
 
 				node.SetOperand(i, v1);
 			}
