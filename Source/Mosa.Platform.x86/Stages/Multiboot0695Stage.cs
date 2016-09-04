@@ -24,6 +24,11 @@ namespace Mosa.Platform.x86.Stages
 		#region Constants
 
 		/// <summary>
+		/// This address is the top of the initial kernel stack.
+		/// </summary>
+		private const uint STACK_ADDRESS = 0x000F0000 - 8;
+
+		/// <summary>
 		/// Magic value in the multiboot header.
 		/// </summary>
 		private const uint HEADER_MB_MAGIC = 0x1BADB002U;
@@ -52,11 +57,6 @@ namespace Mosa.Platform.x86.Stages
 		/// instead of the executable header.
 		/// </summary>
 		private const uint HEADER_MB_FLAG_NON_ELF_BINARY = 0x00010000U;
-
-		/// <summary>
-		/// This address is the top of the initial kernel stack.
-		/// </summary>
-		private const uint STACK_ADDRESS = 0x003FFFFC;
 
 		#endregion Constants
 
@@ -91,22 +91,18 @@ namespace Mosa.Platform.x86.Stages
 		{
 			multibootHeader = Linker.CreateSymbol(MultibootHeaderSymbolName, SectionKind.Text, 1, 0x30);
 
-			multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
-
 			Linker.CreateSymbol(MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 			Linker.CreateSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 
-			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
-			var startUpMethod = startUpType.FindMethodByName("Stage1");
-			Compiler.PlugSystem.CreatePlug(multibootMethod, startUpMethod);
+			multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
+
+			var multibootSymbol = Linker.GetSymbol(multibootMethod.FullName, SectionKind.Text);
+
+			Linker.EntryPoint = multibootSymbol;
 		}
 
 		protected override void RunPostCompile()
 		{
-			WriteMultibootHeader();
-
-			//var typeInitializerSchedulerStage = Compiler.CompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
-
 			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
@@ -115,8 +111,9 @@ namespace Mosa.Platform.x86.Stages
 			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEAX);
 			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEBX);
 
-			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
 			var stackTop = Operand.CreateConstant(TypeSystem.BuiltIn.I4, STACK_ADDRESS);
+			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
+			var four = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 4);
 
 			var basicBlocks = new BasicBlocks();
 			var block = basicBlocks.CreateBlock();
@@ -124,18 +121,26 @@ namespace Mosa.Platform.x86.Stages
 			var ctx = new Context(block);
 
 			// Setup the stack and place the sentinel on the stack to indicate the start of the stack
-			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, esp, zero, stackTop);
-			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, ebp, zero, zero);
+			ctx.AppendInstruction(X86.Mov, InstructionSize.Size32, esp, stackTop);
+			ctx.AppendInstruction(X86.Mov, InstructionSize.Size32, ebp, stackTop);
+			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, esp, zero, zero);
+			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, esp, four, zero);
 
 			// Place the multiboot address into a static field
 			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEAX, zero, eax);
 			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEBX, zero, ebx);
 
+			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
+			var startUpMethod = startUpType.FindMethodByName("Initialize");
+
+			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, startUpMethod);
+			ctx.AppendInstruction(X86.Call, null, entryPoint);
+
 			ctx.AppendInstruction(X86.Ret);
 
 			Compiler.CompileMethod(multibootMethod, basicBlocks);
 
-			Linker.SetFirst(multibootHeader);
+			WriteMultibootHeader();
 		}
 
 		#region Internals
@@ -150,12 +155,8 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="entryPoint">The virtualAddress of the multiboot compliant entry point.</param>
 		private void WriteMultibootHeader()
 		{
-			// HACK: According to the multiboot specification this header must be within the first 8K of the
-			// kernel binary. Since the text section is always first, this should take care of the problem.
-
-			LinkerSymbol entryPoint = Linker.EntryPoint;
-
-			//entryPoint = Linker.GetSymbol(MultibootHeaderSymbolName, SectionKind.Text);
+			// According to the multiboot specification this header must be within the first 8K of the kernel binary.
+			Linker.SetFirst(multibootHeader);
 
 			var stream = multibootHeader.Stream;
 
@@ -192,7 +193,7 @@ namespace Mosa.Platform.x86.Stages
 			writer.Write(0);
 
 			// entry_addr - address of the entry point to invoke
-			Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, multibootHeader, (int)stream.Position, entryPoint, 0);
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, multibootHeader, (int)stream.Position, Linker.EntryPoint, 0);
 			writer.Write(0);
 
 			// Write video settings if video has been specified, otherwise pad
