@@ -152,13 +152,14 @@ namespace Mosa.Utility.Launcher
 			if (string.IsNullOrEmpty(GDB))
 			{
 				// find GDB
-				mkisofs = TryFind(
+				GDB = TryFind(
 					new string[] { "gdb.exe" },
 					new string[] {
 					CombineParameterAndDirectory("MOSA",@"Tools\gdb"),
 					CombineParameterAndDirectory("MOSA",@"gdb"),
 					@"..\Tools\gdb",
 					@"Tools\gdb",
+					@"C:\MinGW\bin",
 					@"/bin"
 				}
 				);

@@ -28,10 +28,6 @@ grub
 - http://www.gnu.org/software/grub/
 - Version 0.97
 
-peter-bochs
-- GNU License
-- http://code.google.com/p/peter-bochs/
-
 ndisasm
 - Simplified BSD License
 - http://www.nasm.us/
@@ -54,5 +50,4 @@ nuget
 gdb
 - GPL License v1.3
 - https://www.gnu.org/software/gdb/
-- binary form: http://www.equation.com/servlet/equation.cmd?fa=gdb
-- Version: 7.7.50-20140303
+- Version: 7.6.1

@@ -29,6 +29,18 @@ namespace Mosa.Utility.Launcher
 
 		public Process Launch()
 		{
+			var process = LaunchVM();
+
+			if (Options.LaunchGDB)
+			{
+				LaunchGDB();
+			}
+
+			return process;
+		}
+
+		private Process LaunchVM()
+		{
 			switch (Options.Emulator)
 			{
 				case EmulatorType.Qemu: return LaunchQemu(!Options.ExitOnLaunch);
@@ -64,7 +76,7 @@ namespace Mosa.Utility.Launcher
 
 			if (Options.EnableQemuGDB)
 			{
-				arg = arg + " -s";
+				arg = arg + " -s";  // -gdb tcp::1234
 			}
 
 			if (Options.ImageFormat == ImageFormat.ISO)
@@ -166,6 +178,13 @@ namespace Mosa.Utility.Launcher
 			string arg = Quote(configfile);
 
 			return LaunchApplication(AppLocations.VMwarePlayer, arg, getOutput);
+		}
+
+		private void LaunchGDB()
+		{
+			string arg = string.Empty;
+
+			LaunchConsoleApplication(AppLocations.GDB, arg);
 		}
 	}
 }
