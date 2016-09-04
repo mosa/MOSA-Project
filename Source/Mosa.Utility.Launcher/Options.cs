@@ -19,7 +19,6 @@ namespace Mosa.Utility.Launcher
 
 		public bool ExitOnLaunch { get; set; }
 
-
 		public EmulatorType Emulator { get; set; }
 
 		public bool MOSADebugger { get; set; }
@@ -37,6 +36,8 @@ namespace Mosa.Utility.Launcher
 		public bool EnableInlinedMethods { get; set; }
 
 		public int InlinedIRMaximum { get; set; }
+
+		public bool GenerateNASMFile { get; set; }
 
 		public bool GenerateASMFile { get; set; }
 
@@ -111,6 +112,7 @@ namespace Mosa.Utility.Launcher
 			Emitx86IRQMethods = true;
 			LaunchEmulator = true;
 			BootLoaderImage = null;
+			GenerateASMFile = false;
 		}
 
 		public void LoadArguments(string[] args)
@@ -129,6 +131,7 @@ namespace Mosa.Utility.Launcher
 					case "-launch-off": LaunchEmulator = false; continue;
 					case "-map": GenerateMapFile = true; continue;
 					case "-asm": GenerateASMFile = true; continue;
+					case "-nasm": GenerateNASMFile = true; continue;
 					case "-qemu": Emulator = EmulatorType.Qemu; continue;
 					case "-vmware": Emulator = EmulatorType.VMware; continue;
 					case "-bochs": Emulator = EmulatorType.Bochs; continue;

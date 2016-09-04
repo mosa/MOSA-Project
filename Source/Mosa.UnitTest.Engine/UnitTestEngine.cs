@@ -89,6 +89,7 @@ namespace Mosa.UnitTest.Engine
 				DebugConnectionPort = 9999,
 				DebugPipeName = "MOSA",
 				ExitOnLaunch = true,
+				GenerateNASMFile = true,
 				GenerateASMFile = true,
 				GenerateMapFile = true,
 

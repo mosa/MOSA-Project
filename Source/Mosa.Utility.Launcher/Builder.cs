@@ -7,6 +7,8 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
 using Mosa.Utility.Aot;
 using Mosa.Utility.BootImage;
+using SharpDisasm;
+using SharpDisasm.Translators;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +34,8 @@ namespace Mosa.Utility.Launcher
 		public BaseLinker Linker { get; private set; }
 
 		public TypeSystem TypeSystem { get; private set; }
+
+		private static uint MultibootHeaderLength = 3 * 16;
 
 		protected ITraceListener traceListener;
 
@@ -152,9 +156,14 @@ namespace Mosa.Utility.Launcher
 
 				HasCompileError = false;
 
-				if (Options.GenerateASMFile)
+				if (Options.GenerateNASMFile)
 				{
 					LaunchNDISASM();
+				}
+
+				if (Options.GenerateASMFile)
+				{
+					GenerateASMFile();
 				}
 			}
 			catch (Exception e)
@@ -331,15 +340,65 @@ namespace Mosa.Utility.Launcher
 
 		private void LaunchNDISASM()
 		{
-			string arg = "-b 32 -o0x" + (Options.BaseAddress + 3 * 16).ToString("x") + " -e 0x1030 " + Quote(CompiledFile);
+			var textSection = Linker.LinkerSections[(int)SectionKind.Text];
 
-			var asmfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".asm");
+			uint multibootHeaderLength = MultibootHeaderLength;
+			ulong startingAddress = textSection.VirtualAddress + multibootHeaderLength;
+			uint fileOffset = textSection.FileOffset + multibootHeaderLength;
+
+			//string arg = "-b 32 -o0x" + (Options.BaseAddress + 3 * 16).ToString("x") + " -e 0x1030 " + Quote(CompiledFile);
+			string arg = "-b 32 -o0x" + startingAddress.ToString("x") + " -e0x" + fileOffset.ToString("x") + " " + Quote(CompiledFile);
+
+			var nasmfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".nasm");
 
 			var process = LaunchApplication(AppLocations.NDISASM, arg);
 
 			var output = GetOutput(process);
 
-			File.WriteAllText(asmfile, output);
+			File.WriteAllText(nasmfile, output);
+		}
+
+		private void GenerateASMFile()
+		{
+			// Need a new instance of translator every time as they aren't thread safe
+			var translator = new IntelTranslator();
+
+			// Configure the translator to output instruction addresses and instruction binary as hex
+			translator.IncludeAddress = true;
+			translator.IncludeBinary = true;
+
+			var asmfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".asm");
+
+			var textSection = Linker.LinkerSections[(int)SectionKind.Text];
+
+			uint multibootHeaderLength = MultibootHeaderLength;
+			ulong startingAddress = textSection.VirtualAddress + multibootHeaderLength;
+			uint fileOffset = textSection.FileOffset + multibootHeaderLength;
+			uint length = textSection.Size;
+
+			var code2 = File.ReadAllBytes(CompiledFile);
+
+			var code = new byte[code2.Length];
+
+			for (ulong i = fileOffset; i < (ulong)code2.Length; i++)
+			{
+				code[i - fileOffset] = code2[i];
+			}
+
+			using (var disasm = new SharpDisasm.Disassembler(code, ArchitectureMode.x86_32, startingAddress, true, Vendor.Any))
+			{
+				using (var dest = File.CreateText(asmfile))
+				{
+					foreach (var instruction in disasm.Disassemble())
+					{
+						var inst = translator.Translate(instruction);
+						dest.WriteLine(inst);
+
+						if (instruction.PC > startingAddress + length)
+							break;
+					}
+				}
+			}
 		}
 
 		/// <summary>
