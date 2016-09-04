@@ -79,6 +79,8 @@
 			this.cbEnableIROptimizations = new MetroFramework.Controls.MetroCheckBox();
 			this.cbEnableSSA = new MetroFramework.Controls.MetroCheckBox();
 			this.tabAdvanced = new MetroFramework.Controls.MetroTabPage();
+			this.groupBox15 = new System.Windows.Forms.GroupBox();
+			this.cbEnableQemuGDB = new MetroFramework.Controls.MetroCheckBox();
 			this.groupBox14 = new System.Windows.Forms.GroupBox();
 			this.cbEmitx86IRQMethods = new MetroFramework.Controls.MetroCheckBox();
 			this.groupBox13 = new System.Windows.Forms.GroupBox();
@@ -111,8 +113,7 @@
 			this.tabCounters = new MetroFramework.Controls.MetroTabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.groupBox15 = new System.Windows.Forms.GroupBox();
-			this.cbEnableQemuGDB = new MetroFramework.Controls.MetroCheckBox();
+			this.cbLaunchGDB = new MetroFramework.Controls.MetroCheckBox();
 			this.tbApplicationLocations.SuspendLayout();
 			this.tabOptions.SuspendLayout();
 			this.groupBox12.SuspendLayout();
@@ -125,6 +126,7 @@
 			this.groupBox3.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.tabAdvanced.SuspendLayout();
+			this.groupBox15.SuspendLayout();
 			this.groupBox14.SuspendLayout();
 			this.groupBox13.SuspendLayout();
 			this.tabApplicationLocations.SuspendLayout();
@@ -135,7 +137,6 @@
 			this.groupBox7.SuspendLayout();
 			this.tabOutput.SuspendLayout();
 			this.tabCounters.SuspendLayout();
-			this.groupBox15.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -833,12 +834,38 @@
 			this.tabAdvanced.VerticalScrollbarHighlightOnWheel = false;
 			this.tabAdvanced.VerticalScrollbarSize = 10;
 			// 
+			// groupBox15
+			// 
+			this.groupBox15.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.groupBox15.Controls.Add(this.cbLaunchGDB);
+			this.groupBox15.Controls.Add(this.cbEnableQemuGDB);
+			this.groupBox15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox15.Location = new System.Drawing.Point(220, 24);
+			this.groupBox15.Name = "groupBox15";
+			this.groupBox15.Size = new System.Drawing.Size(206, 118);
+			this.groupBox15.TabIndex = 44;
+			this.groupBox15.TabStop = false;
+			this.groupBox15.Text = "Debugger:";
+			// 
+			// cbEnableQemuGDB
+			// 
+			this.cbEnableQemuGDB.AutoSize = true;
+			this.cbEnableQemuGDB.Checked = true;
+			this.cbEnableQemuGDB.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableQemuGDB.Location = new System.Drawing.Point(6, 28);
+			this.cbEnableQemuGDB.Name = "cbEnableQemuGDB";
+			this.cbEnableQemuGDB.Size = new System.Drawing.Size(121, 15);
+			this.cbEnableQemuGDB.TabIndex = 6;
+			this.cbEnableQemuGDB.Text = "Enable QEMU GDB";
+			this.cbEnableQemuGDB.UseCustomBackColor = true;
+			this.cbEnableQemuGDB.UseSelectable = true;
+			// 
 			// groupBox14
 			// 
 			this.groupBox14.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.groupBox14.Controls.Add(this.cbEmitx86IRQMethods);
 			this.groupBox14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox14.Location = new System.Drawing.Point(248, 18);
+			this.groupBox14.Location = new System.Drawing.Point(432, 24);
 			this.groupBox14.Name = "groupBox14";
 			this.groupBox14.Size = new System.Drawing.Size(206, 66);
 			this.groupBox14.TabIndex = 43;
@@ -1255,30 +1282,18 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
-			// groupBox15
+			// cbLaunchGDB
 			// 
-			this.groupBox15.BackColor = System.Drawing.SystemColors.ControlLightLight;
-			this.groupBox15.Controls.Add(this.cbEnableQemuGDB);
-			this.groupBox15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.groupBox15.Location = new System.Drawing.Point(248, 90);
-			this.groupBox15.Name = "groupBox15";
-			this.groupBox15.Size = new System.Drawing.Size(206, 66);
-			this.groupBox15.TabIndex = 44;
-			this.groupBox15.TabStop = false;
-			this.groupBox15.Text = "Debugger:";
-			// 
-			// cbEnableQEMUDebugger
-			// 
-			this.cbEnableQemuGDB.AutoSize = true;
-			this.cbEnableQemuGDB.Checked = true;
-			this.cbEnableQemuGDB.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbEnableQemuGDB.Location = new System.Drawing.Point(6, 28);
-			this.cbEnableQemuGDB.Name = "cbEnableQEMUDebugger";
-			this.cbEnableQemuGDB.Size = new System.Drawing.Size(150, 15);
-			this.cbEnableQemuGDB.TabIndex = 6;
-			this.cbEnableQemuGDB.Text = "Enable QEMU Debugger";
-			this.cbEnableQemuGDB.UseCustomBackColor = true;
-			this.cbEnableQemuGDB.UseSelectable = true;
+			this.cbLaunchGDB.AutoSize = true;
+			this.cbLaunchGDB.Checked = true;
+			this.cbLaunchGDB.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbLaunchGDB.Location = new System.Drawing.Point(6, 51);
+			this.cbLaunchGDB.Name = "cbLaunchGDB";
+			this.cbLaunchGDB.Size = new System.Drawing.Size(88, 15);
+			this.cbLaunchGDB.TabIndex = 7;
+			this.cbLaunchGDB.Text = "Launch GDB";
+			this.cbLaunchGDB.UseCustomBackColor = true;
+			this.cbLaunchGDB.UseSelectable = true;
 			// 
 			// MainForm
 			// 
@@ -1318,6 +1333,8 @@
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.tabAdvanced.ResumeLayout(false);
+			this.groupBox15.ResumeLayout(false);
+			this.groupBox15.PerformLayout();
 			this.groupBox14.ResumeLayout(false);
 			this.groupBox14.PerformLayout();
 			this.groupBox13.ResumeLayout(false);
@@ -1335,8 +1352,6 @@
 			this.groupBox7.PerformLayout();
 			this.tabOutput.ResumeLayout(false);
 			this.tabCounters.ResumeLayout(false);
-			this.groupBox15.ResumeLayout(false);
-			this.groupBox15.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1427,5 +1442,6 @@
 		private MetroFramework.Controls.MetroCheckBox cbGenerateASMFile;
 		private System.Windows.Forms.GroupBox groupBox15;
 		private MetroFramework.Controls.MetroCheckBox cbEnableQemuGDB;
+		private MetroFramework.Controls.MetroCheckBox cbLaunchGDB;
 	}
 }

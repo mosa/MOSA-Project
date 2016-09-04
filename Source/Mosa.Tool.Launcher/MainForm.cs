@@ -62,6 +62,7 @@ namespace Mosa.Tool.Launcher
 			Options.GenerateMapFile = cbGenerateMapFile.Checked;
 			Options.ExitOnLaunch = cbExitOnLaunch.Checked;
 			Options.EnableQemuGDB = cbEnableQemuGDB.Checked;
+			Options.LaunchGDB = cbLaunchGDB.Checked;
 			Options.UseMultipleThreadCompiler = cbCompilerUsesMultipleThreads.Checked;
 			Options.MemoryInMB = (uint)nmMemory.Value;
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
@@ -169,6 +170,7 @@ namespace Mosa.Tool.Launcher
 			cbGenerateMapFile.Checked = Options.GenerateMapFile;
 			cbExitOnLaunch.Checked = Options.ExitOnLaunch;
 			cbEnableQemuGDB.Checked = Options.EnableQemuGDB;
+			cbLaunchGDB.Checked = Options.LaunchGDB;
 			cbInlinedMethods.Checked = Options.EnableInlinedMethods;
 			cbCompilerUsesMultipleThreads.Checked = Options.UseMultipleThreadCompiler;
 			nmMemory.Value = Options.MemoryInMB;
