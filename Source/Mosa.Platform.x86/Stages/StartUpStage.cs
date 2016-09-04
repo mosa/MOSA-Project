@@ -18,9 +18,12 @@ namespace Mosa.Platform.x86.Stages
 
 			Compiler.PlugSystem.CreatePlug(TypeSystem.EntryPoint, startUpMethod);
 
-			var startUpInitializeMethod = startUpType.FindMethodByName("Initialize");
+			if (Linker.EntryPoint == null)
+			{
+				var startUpInitializeMethod = startUpType.FindMethodByName("Initialize");
 
-			Linker.EntryPoint = Linker.GetSymbol(startUpInitializeMethod.FullName, SectionKind.Text);
+				Linker.EntryPoint = Linker.GetSymbol(startUpInitializeMethod.FullName, SectionKind.Text);
+			}
 		}
 	}
 }
