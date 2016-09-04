@@ -3,7 +3,8 @@ These tools are used by the MOSA project under their respective licenses.
 qemu
 - GPL License
 - http://www.qemu.org
-- Version: 2.4.0.1
+- binary form: http://qemu.weilnetz.de/
+- Version: 2.7.0
 
 bochs
 - LGPL License
@@ -42,10 +43,16 @@ xunit
 - Version: Build 1705
 
 mkisofs
-- GPLv2
+- GPLv2 License
 - http://code.google.com/p/mkisofs-md5/
 - Version: 2.01
 
 nuget
 - Apache License, Version 2.0
 - http://docs.nuget.org/consume/Command-Line-Reference
+
+gdb
+- GPL License v1.3
+- https://www.gnu.org/software/gdb/
+- binary form: http://www.equation.com/servlet/equation.cmd?fa=gdb
+- Version: 7.7.50-20140303
