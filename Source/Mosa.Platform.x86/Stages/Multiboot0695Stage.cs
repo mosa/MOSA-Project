@@ -24,6 +24,11 @@ namespace Mosa.Platform.x86.Stages
 		#region Constants
 
 		/// <summary>
+		/// This address is the top of the initial kernel stack.
+		/// </summary>
+		private const uint STACK_ADDRESS = 0x000F0000 - 8;
+
+		/// <summary>
 		/// Magic value in the multiboot header.
 		/// </summary>
 		private const uint HEADER_MB_MAGIC = 0x1BADB002U;
@@ -52,11 +57,6 @@ namespace Mosa.Platform.x86.Stages
 		/// instead of the executable header.
 		/// </summary>
 		private const uint HEADER_MB_FLAG_NON_ELF_BINARY = 0x00010000U;
-
-		/// <summary>
-		/// This address is the top of the initial kernel stack.
-		/// </summary>
-		private const uint STACK_ADDRESS = 0x00400000; // 0x003FFFFC
 
 		#endregion Constants
 
