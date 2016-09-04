@@ -1316,21 +1316,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Context before = context.InsertBefore();
 
-			if (StoreOnStack(thisReference.Type))
-			{
-				var newThis = MethodCompiler.AddStackLocal(thisReference.Type);
-
-				var oldThisReference = thisReference;
-				thisReference = AllocateVirtualRegister(thisReference.Type.ToManagedPointer());
-				before.SetInstruction(IRInstruction.AddressOf, thisReference, newThis);
-
-				for (var node = context.Next; !node.IsBlockEndInstruction; node = node.Next)
-					if (!node.IsEmpty)
-						for (int i = 0; i < node.OperandCount; i++)
-							if (node.GetOperand(i) == oldThisReference)
-								node.SetOperand(i, newThis);
-			}
-			else
+			if (!StoreOnStack(thisReference.Type))
 			{
 				ReplaceWithVmCall(before, VmCall.AllocateObject);
 
