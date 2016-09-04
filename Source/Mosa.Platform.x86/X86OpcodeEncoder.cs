@@ -152,6 +152,16 @@ namespace Mosa.Platform.x86
 			return encoder.AppendIntegerValue(displacement.ConstantUnsignedInteger);
 		}
 
+		public static OpcodeEncoder AppendRequiredDisplacement(this OpcodeEncoder encoder, Operand displacement)
+		{
+			Debug.Assert(displacement.IsConstant);
+
+			if (Is8BitDisplacement(displacement))
+				return encoder.AppendByteValue((byte)displacement.ConstantUnsignedInteger);
+
+			return encoder.AppendIntegerValue(displacement.ConstantUnsignedInteger);
+		}
+
 		public static OpcodeEncoder AppendConditionalREXPrefix(this OpcodeEncoder encoder, bool include, bool w, bool r, bool x, bool b)
 		{
 			if (!include)
@@ -184,46 +194,68 @@ namespace Mosa.Platform.x86
 			if (offsetDestination && source.IsConstant)
 			{
 				var baseEBP = destination.Register == GeneralPurposeRegister.EBP;
-				if (baseEBP && offset.IsCPURegister)
+				if (baseEBP)
 				{
-					encoder.AppendMod(Bits.b01);                                  // 2:mod
-				}
-				else
-				{
-					encoder.AppendMod(true, offset);                              // 2:mod
-				}
-
-				encoder.AppendRegister(Bits.b000);                                // 3:register (destination)
-				if (offset.IsCPURegister)
-				{
-					encoder.AppendRM(Bits.b100);                                  // 3:r/m (source)
-					encoder.AppendSIB(1, offset.Register, destination.Register);  // 8:sib (scale, index, base)
-					if (baseEBP)
+					if (offset.IsCPURegister || Is8BitDisplacement(offset))
 					{
-						encoder.AppendByteValue(0x0);                             // 8:displacement value
+						encoder.AppendMod(Bits.b01);                                    // 2:mod
+					}
+					else
+					{
+						encoder.AppendMod(Bits.b10);                                    // 2:mod
 					}
 				}
 				else
 				{
-					encoder.AppendRM(destination);                                // 3:r/m (source)
-					encoder.AppendConditionalDisplacement(offset);                // 8/32:displacement value
+					encoder.AppendMod(true, offset);                                    // 2:mod
+				}
+
+				encoder.AppendRegister(Bits.b000);                                      // 3:register (destination)
+
+				if (offset.IsCPURegister)
+				{
+					encoder.AppendRM(Bits.b100);                                        // 3:r/m (source)
+					encoder.AppendSIB(1, offset.Register, destination.Register);        // 8:sib (scale, index, base)
+					if (baseEBP)
+					{
+						encoder.AppendByteValue(0x0);                                   // 8:displacement value
+					}
+				}
+				else if (destination.Register == GeneralPurposeRegister.ESP)
+				{
+					// When destination is ESP we must use SIB
+					encoder.AppendRM(Bits.b100);                                        // 3:r/m (source)
+					encoder.AppendSIB(1, destination.Register, destination.Register);   // 8:sib (scale, index, base)
+					encoder.AppendConditionalDisplacement(offset);                      // 8/32:displacement value
+				}
+				else
+				{
+					encoder.AppendRM(destination);                                      // 3:r/m (source)
+					if (baseEBP)
+					{
+						encoder.AppendRequiredDisplacement(offset);                     // 8/32:displacement value
+					}
+					else
+					{
+						encoder.AppendConditionalDisplacement(offset);                  // 8/32:displacement value
+					}
 				}
 			}
 			else if (offset.IsConstant)
 			{
 				// When source is ESP we must use SIB
-				encoder.AppendMod(true, offset);                                  // 2:mod
-				encoder.AppendRegister(destination.Register);                     // 3:register (destination)
+				encoder.AppendMod(true, offset);                                        // 2:mod
+				encoder.AppendRegister(destination.Register);                           // 3:register (destination)
 				if (source.Register == GeneralPurposeRegister.ESP)
 				{
-					encoder.AppendRM(Bits.b100);                                  // 3:r/m (source)
-					encoder.AppendSIB(1, source.Register, source.Register);       // 8:sib (scale, index, base)
+					encoder.AppendRM(Bits.b100);                                        // 3:r/m (source)
+					encoder.AppendSIB(1, source.Register, source.Register);             // 8:sib (scale, index, base)
 				}
 				else
 				{
-					encoder.AppendRM(source);                                     // 3:r/m (source)
+					encoder.AppendRM(source);                                           // 3:r/m (source)
 				}
-				encoder.AppendConditionalDisplacement(offset);                    // 8/32:displacement value
+				encoder.AppendConditionalDisplacement(offset);                          // 8/32:displacement value
 			}
 			else
 			{
@@ -233,13 +265,13 @@ namespace Mosa.Platform.x86
 				var @base = offsetDestination ? destination : source;
 				var baseEBP = @base.Register == GeneralPurposeRegister.EBP;
 
-				encoder.AppendMod(baseEBP ? Bits.b01 : Bits.b00);                 // 2:mod
-				encoder.AppendRegister(destination.Register);                     // 3:register (destination)
-				encoder.AppendRM(Bits.b100);                                      // 3:r/m (source)
-				encoder.AppendSIB(1, offset.Register, @base.Register);            // 8:sib (scale, index, base)
+				encoder.AppendMod(baseEBP ? Bits.b01 : Bits.b00);                       // 2:mod
+				encoder.AppendRegister(destination.Register);                           // 3:register (destination)
+				encoder.AppendRM(Bits.b100);                                            // 3:r/m (source)
+				encoder.AppendSIB(1, offset.Register, @base.Register);                  // 8:sib (scale, index, base)
 				if (baseEBP)
 				{
-					encoder.AppendByteValue(0x0);                                 // 8:displacement value
+					encoder.AppendByteValue(0x0);                                       // 8:displacement value
 				}
 			}
 
