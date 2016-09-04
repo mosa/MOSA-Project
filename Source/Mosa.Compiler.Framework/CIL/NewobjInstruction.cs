@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Framework.CIL
 			decoder.Compiler.Scheduler.TrackTypeAllocated(context.InvokeMethod.DeclaringType);
 
 			// Set a return value according to the type of the object allocated
-			context.Result = decoder.Compiler.CreateVirtualRegister(ctor.DeclaringType);
+			context.Result = decoder.Compiler.AllocateVirtualRegisterOrStackSlot(ctor.DeclaringType);
 			context.ResultCount = 1;
 		}
 

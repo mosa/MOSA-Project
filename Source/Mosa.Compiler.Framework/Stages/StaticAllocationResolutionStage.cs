@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if (node.Instruction is NewobjInstruction || node.Instruction is NewarrInstruction)
+					if ((node.Instruction is NewobjInstruction && !StoreOnStack(node.Result.Type)) || node.Instruction is NewarrInstruction)
 					{
 						list.Add(node);
 					}
