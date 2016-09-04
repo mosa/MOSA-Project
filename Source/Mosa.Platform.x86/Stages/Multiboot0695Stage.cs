@@ -56,7 +56,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// This address is the top of the initial kernel stack.
 		/// </summary>
-		private const uint STACK_ADDRESS = 0x003FFFFC;
+		private const uint STACK_ADDRESS = 0x00400000; // 0x003FFFFC
 
 		#endregion Constants
 
@@ -96,7 +96,9 @@ namespace Mosa.Platform.x86.Stages
 
 			multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
 
-			Linker.EntryPoint = multibootHeader;
+			var multibootSymbol = Linker.GetSymbol(multibootMethod.FullName, SectionKind.Text);
+
+			Linker.EntryPoint = multibootSymbol;
 		}
 
 		protected override void RunPostCompile()
@@ -109,8 +111,9 @@ namespace Mosa.Platform.x86.Stages
 			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEAX);
 			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEBX);
 
-			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
 			var stackTop = Operand.CreateConstant(TypeSystem.BuiltIn.I4, STACK_ADDRESS);
+			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
+			var four = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 4);
 
 			var basicBlocks = new BasicBlocks();
 			var block = basicBlocks.CreateBlock();
@@ -118,8 +121,10 @@ namespace Mosa.Platform.x86.Stages
 			var ctx = new Context(block);
 
 			// Setup the stack and place the sentinel on the stack to indicate the start of the stack
-			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, esp, zero, stackTop);
-			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, ebp, zero, zero);
+			ctx.AppendInstruction(X86.Mov, InstructionSize.Size32, esp, stackTop);
+			ctx.AppendInstruction(X86.Mov, InstructionSize.Size32, ebp, stackTop);
+			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, esp, zero, zero);
+			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, esp, four, zero);
 
 			// Place the multiboot address into a static field
 			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEAX, zero, eax);
