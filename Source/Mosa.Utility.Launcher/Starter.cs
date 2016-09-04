@@ -42,15 +42,6 @@ namespace Mosa.Utility.Launcher
 		{
 			string arg = " -L " + Quote(AppLocations.QEMUBIOSDirectory);
 
-			if (Options.ImageFormat == ImageFormat.ISO)
-			{
-				arg = arg + " -cdrom " + Quote(ImageFile);
-			}
-			else
-			{
-				arg = arg + " -hda " + Quote(ImageFile);
-			}
-
 			if (Options.PlatformType == PlatformType.X86)
 			{
 				arg = arg + " -cpu qemu32,+sse4.1";
@@ -69,6 +60,20 @@ namespace Mosa.Utility.Launcher
 			else if (Options.DebugConnectionOption == DebugConnectionOption.TCPClient)
 			{
 				arg = arg + " -serial tcp:" + Options.DebugConnectionAddress + ":" + Options.DebugConnectionPort.ToString() + ",client,nowait";
+			}
+
+			if (Options.EnableQemuGDB)
+			{
+				arg = arg + " -s";
+			}
+
+			if (Options.ImageFormat == ImageFormat.ISO)
+			{
+				arg = arg + " -cdrom " + Quote(ImageFile);
+			}
+			else
+			{
+				arg = arg + " -hda " + Quote(ImageFile);
 			}
 
 			return LaunchApplication(AppLocations.QEMU, arg, getOutput);

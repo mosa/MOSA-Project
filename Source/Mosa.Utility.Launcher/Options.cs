@@ -21,8 +21,6 @@ namespace Mosa.Utility.Launcher
 
 		public EmulatorType Emulator { get; set; }
 
-		public bool MOSADebugger { get; set; }
-
 		public ImageFormat ImageFormat { get; set; }
 
 		public uint MemoryInMB { get; set; }
@@ -81,6 +79,10 @@ namespace Mosa.Utility.Launcher
 
 		public string BootLoaderImage { get; set; }
 
+		public bool EnableQemuGDB { get; set; }
+
+		public bool LaunchGDB { get; set; }
+
 		public Options()
 		{
 			EnableSSA = true;
@@ -113,6 +115,8 @@ namespace Mosa.Utility.Launcher
 			LaunchEmulator = true;
 			BootLoaderImage = null;
 			GenerateASMFile = false;
+			EnableQemuGDB = false;
+			LaunchGDB = false;
 		}
 
 		public void LoadArguments(string[] args)
@@ -135,7 +139,6 @@ namespace Mosa.Utility.Launcher
 					case "-qemu": Emulator = EmulatorType.Qemu; continue;
 					case "-vmware": Emulator = EmulatorType.VMware; continue;
 					case "-bochs": Emulator = EmulatorType.Bochs; continue;
-					case "-debugger": MOSADebugger = true; continue;
 					case "-vhd": ImageFormat = ImageFormat.VHD; continue;
 					case "-img": ImageFormat = ImageFormat.IMG; continue;
 					case "-vdi": ImageFormat = ImageFormat.VDI; continue;
@@ -173,6 +176,8 @@ namespace Mosa.Utility.Launcher
 					case "-bootloader-image": BootLoaderImage = args[++i]; continue;
 					case "-no-ir-optimizations": EnableIROptimizations = false; continue;
 					case "-no-sparse": EnableSparseConditionalConstantPropagation = false; continue;
+					case "-qemu-gdb": EnableQemuGDB = true; continue;
+					case "-gdb": LaunchGDB = true; continue;
 
 					default: break;
 				}

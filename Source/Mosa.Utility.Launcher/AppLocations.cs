@@ -22,6 +22,8 @@ namespace Mosa.Utility.Launcher
 
 		public string mkisofs { get; set; }
 
+		public string GDB { get; set; }
+
 		// TODO: The following methods should be placed in another class, possibly as a class extension
 
 		public void FindApplications()
@@ -142,6 +144,21 @@ namespace Mosa.Utility.Launcher
 					CombineParameterAndDirectory("MOSA",@"mkisofs"),
 					@"..\Tools\mkisofs",
 					@"Tools\mkisofs",
+					@"/bin"
+				}
+				);
+			}
+
+			if (string.IsNullOrEmpty(GDB))
+			{
+				// find GDB
+				mkisofs = TryFind(
+					new string[] { "gdb.exe" },
+					new string[] {
+					CombineParameterAndDirectory("MOSA",@"Tools\gdb"),
+					CombineParameterAndDirectory("MOSA",@"gdb"),
+					@"..\Tools\gdb",
+					@"Tools\gdb",
 					@"/bin"
 				}
 				);

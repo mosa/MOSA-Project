@@ -346,7 +346,6 @@ namespace Mosa.Utility.Launcher
 			ulong startingAddress = textSection.VirtualAddress + multibootHeaderLength;
 			uint fileOffset = textSection.FileOffset + multibootHeaderLength;
 
-			//string arg = "-b 32 -o0x" + (Options.BaseAddress + 3 * 16).ToString("x") + " -e 0x1030 " + Quote(CompiledFile);
 			string arg = "-b 32 -o0x" + startingAddress.ToString("x") + " -e0x" + fileOffset.ToString("x") + " " + Quote(CompiledFile);
 
 			var nasmfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".nasm");

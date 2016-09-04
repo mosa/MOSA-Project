@@ -42,8 +42,8 @@
 			this.cbDebugConnectionOption = new MetroFramework.Controls.MetroComboBox();
 			this.label8 = new MetroFramework.Controls.MetroLabel();
 			this.checkBox1 = new MetroFramework.Controls.MetroCheckBox();
-			this.cbMOSADebugger = new MetroFramework.Controls.MetroCheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.cbGenerateASMFile = new MetroFramework.Controls.MetroCheckBox();
 			this.cbGenerateNASMFile = new MetroFramework.Controls.MetroCheckBox();
 			this.cbGenerateMapFile = new MetroFramework.Controls.MetroCheckBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -111,7 +111,8 @@
 			this.tabCounters = new MetroFramework.Controls.MetroTabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.cbGenerateASMFile = new MetroFramework.Controls.MetroCheckBox();
+			this.groupBox15 = new System.Windows.Forms.GroupBox();
+			this.cbEnableQemuGDB = new MetroFramework.Controls.MetroCheckBox();
 			this.tbApplicationLocations.SuspendLayout();
 			this.tabOptions.SuspendLayout();
 			this.groupBox12.SuspendLayout();
@@ -134,6 +135,7 @@
 			this.groupBox7.SuspendLayout();
 			this.tabOutput.SuspendLayout();
 			this.tabCounters.SuspendLayout();
+			this.groupBox15.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -169,7 +171,7 @@
 			this.tbApplicationLocations.Margin = new System.Windows.Forms.Padding(0);
 			this.tbApplicationLocations.Multiline = true;
 			this.tbApplicationLocations.Name = "tbApplicationLocations";
-			this.tbApplicationLocations.SelectedIndex = 0;
+			this.tbApplicationLocations.SelectedIndex = 1;
 			this.tbApplicationLocations.Size = new System.Drawing.Size(661, 439);
 			this.tbApplicationLocations.Style = MetroFramework.MetroColorStyle.Green;
 			this.tbApplicationLocations.TabIndex = 22;
@@ -248,7 +250,6 @@
 			this.groupBox5.Controls.Add(this.cbDebugConnectionOption);
 			this.groupBox5.Controls.Add(this.label8);
 			this.groupBox5.Controls.Add(this.checkBox1);
-			this.groupBox5.Controls.Add(this.cbMOSADebugger);
 			this.groupBox5.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox5.Location = new System.Drawing.Point(243, 203);
 			this.groupBox5.Name = "groupBox5";
@@ -268,7 +269,7 @@
             "Pipe",
             "TCP Server",
             "TCP Client"});
-			this.cbDebugConnectionOption.Location = new System.Drawing.Point(7, 93);
+			this.cbDebugConnectionOption.Location = new System.Drawing.Point(7, 64);
 			this.cbDebugConnectionOption.Name = "cbDebugConnectionOption";
 			this.cbDebugConnectionOption.Size = new System.Drawing.Size(120, 29);
 			this.cbDebugConnectionOption.Style = MetroFramework.MetroColorStyle.Green;
@@ -280,7 +281,7 @@
 			// 
 			this.label8.AutoSize = true;
 			this.label8.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-			this.label8.Location = new System.Drawing.Point(6, 71);
+			this.label8.Location = new System.Drawing.Point(6, 42);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(127, 19);
 			this.label8.TabIndex = 35;
@@ -291,7 +292,7 @@
 			// 
 			this.checkBox1.AutoSize = true;
 			this.checkBox1.Enabled = false;
-			this.checkBox1.Location = new System.Drawing.Point(9, 41);
+			this.checkBox1.Location = new System.Drawing.Point(7, 23);
 			this.checkBox1.Name = "checkBox1";
 			this.checkBox1.Size = new System.Drawing.Size(112, 15);
 			this.checkBox1.Style = MetroFramework.MetroColorStyle.Green;
@@ -299,19 +300,6 @@
 			this.checkBox1.Text = "MOSA Debugger";
 			this.checkBox1.UseCustomBackColor = true;
 			this.checkBox1.UseSelectable = true;
-			// 
-			// cbMOSADebugger
-			// 
-			this.cbMOSADebugger.AutoSize = true;
-			this.cbMOSADebugger.Enabled = false;
-			this.cbMOSADebugger.Location = new System.Drawing.Point(9, 18);
-			this.cbMOSADebugger.Name = "cbMOSADebugger";
-			this.cbMOSADebugger.Size = new System.Drawing.Size(134, 15);
-			this.cbMOSADebugger.Style = MetroFramework.MetroColorStyle.Green;
-			this.cbMOSADebugger.TabIndex = 13;
-			this.cbMOSADebugger.Text = "MOSA TinySimulator";
-			this.cbMOSADebugger.UseCustomBackColor = true;
-			this.cbMOSADebugger.UseSelectable = true;
 			// 
 			// groupBox2
 			// 
@@ -326,6 +314,18 @@
 			this.groupBox2.TabIndex = 29;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Diagnostic Output:";
+			// 
+			// cbGenerateASMFile
+			// 
+			this.cbGenerateASMFile.AutoSize = true;
+			this.cbGenerateASMFile.Location = new System.Drawing.Point(273, 19);
+			this.cbGenerateASMFile.Name = "cbGenerateASMFile";
+			this.cbGenerateASMFile.Size = new System.Drawing.Size(119, 15);
+			this.cbGenerateASMFile.Style = MetroFramework.MetroColorStyle.Green;
+			this.cbGenerateASMFile.TabIndex = 15;
+			this.cbGenerateASMFile.Text = "Generate ASM File";
+			this.cbGenerateASMFile.UseCustomBackColor = true;
+			this.cbGenerateASMFile.UseSelectable = true;
 			// 
 			// cbGenerateNASMFile
 			// 
@@ -546,7 +546,7 @@
 			this.tbMode.Enabled = false;
 			this.tbMode.Lines = new string[] {
         "{Mode}"};
-			this.tbMode.Location = new System.Drawing.Point(524, 78);
+			this.tbMode.Location = new System.Drawing.Point(535, 83);
 			this.tbMode.MaxLength = 32767;
 			this.tbMode.Name = "tbMode";
 			this.tbMode.PasswordChar = '\0';
@@ -564,7 +564,7 @@
 			// cbVBEVideo
 			// 
 			this.cbVBEVideo.AutoSize = true;
-			this.cbVBEVideo.Location = new System.Drawing.Point(408, 80);
+			this.cbVBEVideo.Location = new System.Drawing.Point(412, 86);
 			this.cbVBEVideo.Name = "cbVBEVideo";
 			this.cbVBEVideo.Size = new System.Drawing.Size(117, 15);
 			this.cbVBEVideo.TabIndex = 37;
@@ -594,7 +594,7 @@
             "Syslinux 6.03",
             "Grub 0.97",
             "Grub 2.00"});
-			this.cbBootLoader.Location = new System.Drawing.Point(272, 78);
+			this.cbBootLoader.Location = new System.Drawing.Point(273, 78);
 			this.cbBootLoader.Name = "cbBootLoader";
 			this.cbBootLoader.Size = new System.Drawing.Size(127, 29);
 			this.cbBootLoader.Style = MetroFramework.MetroColorStyle.Green;
@@ -816,6 +816,7 @@
 			// 
 			// tabAdvanced
 			// 
+			this.tabAdvanced.Controls.Add(this.groupBox15);
 			this.tabAdvanced.Controls.Add(this.groupBox14);
 			this.tabAdvanced.Controls.Add(this.groupBox13);
 			this.tabAdvanced.HorizontalScrollbarBarColor = true;
@@ -839,7 +840,7 @@
 			this.groupBox14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox14.Location = new System.Drawing.Point(248, 18);
 			this.groupBox14.Name = "groupBox14";
-			this.groupBox14.Size = new System.Drawing.Size(206, 124);
+			this.groupBox14.Size = new System.Drawing.Size(206, 66);
 			this.groupBox14.TabIndex = 43;
 			this.groupBox14.TabStop = false;
 			this.groupBox14.Text = "Other:";
@@ -1254,17 +1255,30 @@
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
 			// 
-			// cbGenerateASMFile
+			// groupBox15
 			// 
-			this.cbGenerateASMFile.AutoSize = true;
-			this.cbGenerateASMFile.Location = new System.Drawing.Point(273, 19);
-			this.cbGenerateASMFile.Name = "cbGenerateASMFile";
-			this.cbGenerateASMFile.Size = new System.Drawing.Size(119, 15);
-			this.cbGenerateASMFile.Style = MetroFramework.MetroColorStyle.Green;
-			this.cbGenerateASMFile.TabIndex = 15;
-			this.cbGenerateASMFile.Text = "Generate ASM File";
-			this.cbGenerateASMFile.UseCustomBackColor = true;
-			this.cbGenerateASMFile.UseSelectable = true;
+			this.groupBox15.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.groupBox15.Controls.Add(this.cbEnableQemuGDB);
+			this.groupBox15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.groupBox15.Location = new System.Drawing.Point(248, 90);
+			this.groupBox15.Name = "groupBox15";
+			this.groupBox15.Size = new System.Drawing.Size(206, 66);
+			this.groupBox15.TabIndex = 44;
+			this.groupBox15.TabStop = false;
+			this.groupBox15.Text = "Debugger:";
+			// 
+			// cbEnableQEMUDebugger
+			// 
+			this.cbEnableQemuGDB.AutoSize = true;
+			this.cbEnableQemuGDB.Checked = true;
+			this.cbEnableQemuGDB.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableQemuGDB.Location = new System.Drawing.Point(6, 28);
+			this.cbEnableQemuGDB.Name = "cbEnableQEMUDebugger";
+			this.cbEnableQemuGDB.Size = new System.Drawing.Size(150, 15);
+			this.cbEnableQemuGDB.TabIndex = 6;
+			this.cbEnableQemuGDB.Text = "Enable QEMU Debugger";
+			this.cbEnableQemuGDB.UseCustomBackColor = true;
+			this.cbEnableQemuGDB.UseSelectable = true;
 			// 
 			// MainForm
 			// 
@@ -1321,6 +1335,8 @@
 			this.groupBox7.PerformLayout();
 			this.tabOutput.ResumeLayout(false);
 			this.tabCounters.ResumeLayout(false);
+			this.groupBox15.ResumeLayout(false);
+			this.groupBox15.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -1382,7 +1398,6 @@
 		private MetroFramework.Controls.MetroButton button8;
 		private System.Windows.Forms.GroupBox groupBox5;
 		private MetroFramework.Controls.MetroCheckBox checkBox1;
-		private MetroFramework.Controls.MetroCheckBox cbMOSADebugger;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private MetroFramework.Controls.MetroCheckBox cbGenerateNASMFile;
 		private MetroFramework.Controls.MetroCheckBox cbGenerateMapFile;
@@ -1410,5 +1425,7 @@
 		private MetroFramework.Controls.MetroCheckBox cbEmitx86IRQMethods;
         private MetroFramework.Controls.MetroLabel lbDestinationDirectory;
 		private MetroFramework.Controls.MetroCheckBox cbGenerateASMFile;
+		private System.Windows.Forms.GroupBox groupBox15;
+		private MetroFramework.Controls.MetroCheckBox cbEnableQemuGDB;
 	}
 }
