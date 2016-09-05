@@ -157,10 +157,10 @@ namespace Mosa.Utility.Launcher
 						CombineParameterAndDirectory("MOSA",@"gdb"),
 						@"..\Tools\gdb",
 						@"Tools\gdb",
-						@"C:\MinGW\bin",
-						@"C:\Mingw-w64\bin",
-						@"C:\cygwin\bin",
 						@"C:\cygwin64\bin",
+						@"C:\cygwin\bin",
+						@"C:\Mingw-w64\bin",
+						@"C:\MinGW\bin",
 						@"/bin"
 					}
 				);
