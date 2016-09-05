@@ -50,11 +50,11 @@ namespace Mosa.Platform.x86.Instructions
 			if (node.Operand1.IsConstant)
 			{
 				if (node.Operand1.IsByte)
-					emitter.Emit(CONST8, node.Operand1, null);
+					emitter.Emit(CONST8, node.Operand1);
 				else if (node.Operand1.IsShort || node.Operand1.IsChar)
-					emitter.Emit(CONST16, node.Operand1, null);
+					emitter.Emit(CONST16, node.Operand1);
 				else if (node.Operand1.IsInt)
-					emitter.Emit(CONST32, node.Operand1, null);
+					emitter.Emit(CONST32, node.Operand1);
 				return;
 			}
 			if (node.Operand1.IsCPURegister)
@@ -62,12 +62,12 @@ namespace Mosa.Platform.x86.Instructions
 				if (node.Operand1.Register is SegmentRegister)
 					switch ((node.Operand1.Register as SegmentRegister).Segment)
 					{
-						case SegmentRegister.SegmentType.CS: emitter.Emit(PUSH_CS, null, null); return;
-						case SegmentRegister.SegmentType.SS: emitter.Emit(PUSH_SS, null, null); return;
-						case SegmentRegister.SegmentType.DS: emitter.Emit(PUSH_DS, null, null); return;
-						case SegmentRegister.SegmentType.ES: emitter.Emit(PUSH_ES, null, null); return;
-						case SegmentRegister.SegmentType.FS: emitter.Emit(PUSH_FS, null, null); return;
-						case SegmentRegister.SegmentType.GS: emitter.Emit(PUSH_GS, null, null); return;
+						case SegmentRegister.SegmentType.CS: emitter.Emit(PUSH_CS); return;
+						case SegmentRegister.SegmentType.SS: emitter.Emit(PUSH_SS); return;
+						case SegmentRegister.SegmentType.DS: emitter.Emit(PUSH_DS); return;
+						case SegmentRegister.SegmentType.ES: emitter.Emit(PUSH_ES); return;
+						case SegmentRegister.SegmentType.FS: emitter.Emit(PUSH_FS); return;
+						case SegmentRegister.SegmentType.GS: emitter.Emit(PUSH_GS); return;
 						default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
 					}
 			}
