@@ -56,7 +56,7 @@ namespace Mosa.Platform.x86.Instructions
 			{
 				if (node.Operand2.IsConstantOne)
 				{
-					emitter.Emit(C1, node.Result, null);
+					emitter.Emit(C1, node.Result);
 				}
 				else
 				{
@@ -65,7 +65,7 @@ namespace Mosa.Platform.x86.Instructions
 			}
 			else
 			{
-				emitter.Emit(RM, node.Operand1, null);
+				emitter.Emit(RM, node.Operand1);
 			}
 		}
 

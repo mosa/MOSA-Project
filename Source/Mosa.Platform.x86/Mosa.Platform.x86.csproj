@@ -232,7 +232,6 @@
     <Compile Include="Intrinsic\BochsDebug.cs" />
     <Compile Include="Instructions\Cld.cs" />
     <Compile Include="Instructions\Cli.cs" />
-    <Compile Include="Instructions\CmpXchg.cs" />
     <Compile Include="Instructions\CpuId.cs" />
     <Compile Include="Instructions\Hlt.cs" />
     <Compile Include="Instructions\In.cs" />

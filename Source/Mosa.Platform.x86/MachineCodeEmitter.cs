@@ -50,27 +50,36 @@ namespace Mosa.Platform.x86
 		/// Emits the specified op code.
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
-		/// <param name="dest">The dest.</param>
+		public void Emit(OpCode opCode)
+		{
+			// Write the opcode
+			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+		}
+
+		/// <summary>
+		/// Emits the specified op code.
+		/// </summary>
+		/// <param name="opCode">The op code.</param>
+		/// <param name="dest">The destination operand.</param>
 		public void Emit(OpCode opCode, Operand dest)
 		{
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
-			byte? sib = null, modRM = null;
-			Operand displacement = null;
+			byte? modRM = null;
 
 			// Write the mod R/M byte
-			modRM = CalculateModRM(opCode.RegField, dest, null, out sib, out displacement);
+			modRM = CalculateModRM(opCode.RegField, dest, null);
 			if (modRM != null)
 			{
 				codeStream.WriteByte(modRM.Value);
-				if (sib.HasValue)
-					codeStream.WriteByte(sib.Value);
 			}
 
-			// Add displacement to the code
-			if (displacement != null)
-				WriteDisplacement(displacement);
+			// Add immediate bytes
+			if (dest.IsConstant)
+				WriteImmediate(dest);
+			else if (dest.IsSymbol)
+				WriteDisplacement(dest);
 		}
 
 		/// <summary>
@@ -84,24 +93,16 @@ namespace Mosa.Platform.x86
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
-			if (dest == null && src == null)
-				return;
+			Debug.Assert(!(dest == null && src == null));
 
-			byte? sib = null, modRM = null;
-			Operand displacement = null;
+			byte? modRM = null;
 
 			// Write the mod R/M byte
-			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
+			modRM = CalculateModRM(opCode.RegField, dest, src);
 			if (modRM != null)
 			{
 				codeStream.WriteByte(modRM.Value);
-				if (sib.HasValue)
-					codeStream.WriteByte(sib.Value);
 			}
-
-			// Add displacement to the code
-			if (displacement != null)
-				WriteDisplacement(displacement);
 
 			// Add immediate bytes
 			if (dest.IsConstant)
@@ -126,24 +127,16 @@ namespace Mosa.Platform.x86
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
-			if (dest == null && src == null)
-				return;
+			Debug.Assert(!(dest == null && src == null));
 
-			byte? sib = null, modRM = null;
-			Operand displacement = null;
+			byte? modRM = null;
 
 			// Write the mod R/M byte
-			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
+			modRM = CalculateModRM(opCode.RegField, dest, src);
 			if (modRM != null)
 			{
 				codeStream.WriteByte(modRM.Value);
-				if (sib.HasValue)
-					codeStream.WriteByte(sib.Value);
 			}
-
-			// Add displacement to the code
-			if (displacement != null)
-				WriteDisplacement(displacement);
 
 			// Add immediate bytes
 			if (third != null && third.IsConstant)
@@ -209,8 +202,7 @@ namespace Mosa.Platform.x86
 		/// <param name="op">The immediate operand to emit.</param>
 		private void WriteImmediate(Operand op)
 		{
-			if (op.IsCPURegister)
-				return; // nothing to do.
+			Debug.Assert(!op.IsCPURegister);
 
 			if (op.IsStackLocal)
 			{
@@ -311,34 +303,15 @@ namespace Mosa.Platform.x86
 		/// <param name="regField">The modR/M regfield value.</param>
 		/// <param name="op1">The destination operand.</param>
 		/// <param name="op2">The source operand.</param>
-		/// <param name="sib">A potential SIB byte to emit.</param>
-		/// <param name="displacement">An immediate displacement to emit.</param>
 		/// <returns>The value of the modR/M byte.</returns>
-		private static byte? CalculateModRM(byte? regField, Operand op1, Operand op2, out byte? sib, out Operand displacement)
+		private static byte? CalculateModRM(byte? regField, Operand op1, Operand op2)
 		{
 			byte? modRM = null;
-			displacement = null;
-
-			// FIXME: Handle the SIB byte
-			sib = null;
-
-			Operand mop1 = null;    // not necessary anymore
-			Operand mop2 = null;    // not necessary anymore
 
 			bool op1IsRegister = (op1 != null) && op1.IsCPURegister;
 			bool op2IsRegister = (op2 != null) && op2.IsCPURegister;
 
-			// Normalize the operand order
-			if (!op1IsRegister && op2IsRegister)
-			{
-				// Swap the memory operands
-				op1 = op2;
-				op2 = null;
-				mop2 = mop1;
-				mop1 = null;
-				op1IsRegister = op2IsRegister;
-				op2IsRegister = false;
-			}
+			Debug.Assert(!(!op1IsRegister && op2IsRegister));
 
 			if (regField != null)
 				modRM = (byte)(regField.Value << 3);
@@ -347,22 +320,6 @@ namespace Mosa.Platform.x86
 			{
 				// mod = 11b, reg = rop1, r/m = rop2
 				modRM = (byte)((3 << 6) | (op1.Register.RegisterCode << 3) | op2.Register.RegisterCode);
-			}
-			else if (mop2 != null)
-			{
-				// mod = 10b, r/m = mop1, reg = rop2
-				modRM = (byte)(modRM.GetValueOrDefault() | 5);
-				if (op1IsRegister)
-					modRM |= (byte)(op1.Register.RegisterCode << 3);
-				displacement = mop2;
-			}
-			else if (mop1 != null)
-			{
-				// mod = 10b, r/m = mop1, reg = rop2
-				modRM = (byte)(modRM.GetValueOrDefault() | 5);
-				if (op2IsRegister)
-					modRM |= (byte)(op2.Register.RegisterCode << 3);
-				displacement = mop1;
 			}
 			else if (op1IsRegister)
 			{

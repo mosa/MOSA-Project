@@ -129,6 +129,8 @@ namespace Mosa.Platform.x86
 
 		public static OpcodeEncoder AppendConditionalDisplacement(this OpcodeEncoder encoder, bool include, Operand displacement)
 		{
+			Debug.Assert(displacement.IsConstant);
+
 			if (!include)
 				return encoder;
 
@@ -145,16 +147,6 @@ namespace Mosa.Platform.x86
 
 			if (displacement.IsConstantZero)
 				return encoder;
-
-			if (Is8BitDisplacement(displacement))
-				return encoder.AppendByteValue((byte)displacement.ConstantUnsignedInteger);
-
-			return encoder.AppendIntegerValue(displacement.ConstantUnsignedInteger);
-		}
-
-		public static OpcodeEncoder AppendRequiredDisplacement(this OpcodeEncoder encoder, Operand displacement)
-		{
-			Debug.Assert(displacement.IsConstant);
 
 			if (Is8BitDisplacement(displacement))
 				return encoder.AppendByteValue((byte)displacement.ConstantUnsignedInteger);
@@ -233,7 +225,7 @@ namespace Mosa.Platform.x86
 					encoder.AppendRM(destination);                                      // 3:r/m (source)
 					if (baseEBP)
 					{
-						encoder.AppendRequiredDisplacement(offset);                     // 8/32:displacement value
+						encoder.AppendConditionalDisplacement(true, offset);                     // 8/32:displacement value
 					}
 					else
 					{

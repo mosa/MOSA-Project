@@ -21,7 +21,6 @@ namespace Mosa.Platform.x86
 		public static readonly Cli Cli = new Cli();
 		public static readonly Cmovcc Cmovcc = new Cmovcc();
 		public static readonly Cmp Cmp = new Cmp();
-		public static readonly CmpXchg CmpXchg = new CmpXchg();
 		public static readonly CmpXchgLoad CmpXchgLoad = new CmpXchgLoad();
 		public static readonly Comisd Comisd = new Comisd();
 		public static readonly Comiss Comiss = new Comiss();

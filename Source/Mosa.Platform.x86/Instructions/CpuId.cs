@@ -36,7 +36,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			emitter.Emit(opcode, null, null);
+			emitter.Emit(opcode);
 		}
 
 		#endregion Methods
