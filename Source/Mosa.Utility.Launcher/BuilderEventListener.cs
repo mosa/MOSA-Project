@@ -19,7 +19,9 @@ namespace Mosa.Utility.Launcher
 		{
 			lock (mylock)
 			{
-				if (compilerStage == CompilerEvent.CompilerStageStart || compilerStage == CompilerEvent.CompilerStageEnd || compilerStage == CompilerEvent.Exception)
+				if (compilerStage == CompilerEvent.PreCompileStageStart || compilerStage == CompilerEvent.PreCompileStageEnd ||
+					compilerStage == CompilerEvent.PostCompileStageStart || compilerStage == CompilerEvent.PostCompileStageEnd ||
+					compilerStage == CompilerEvent.Exception)
 				{
 					string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - builder.CompileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + message;
 

@@ -35,7 +35,7 @@ namespace Mosa.Utility.Launcher
 
 		public TypeSystem TypeSystem { get; private set; }
 
-		private static uint MultibootHeaderLength = 3 * 16;
+		public const uint MultibootHeaderLength = 3 * 16;
 
 		protected ITraceListener traceListener;
 

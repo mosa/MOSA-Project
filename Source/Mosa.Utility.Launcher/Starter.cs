@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Linker;
 using Mosa.Utility.BootImage;
 using System;
 using System.Diagnostics;
@@ -14,11 +15,21 @@ namespace Mosa.Utility.Launcher
 
 		public string ImageFile { get; private set; }
 
+		public BaseLinker Linker { get; private set; }
+
 		public Starter(Options options, AppLocations appLocations, string imagefile, IStarterEvent launcherEvent)
 			: base(options, appLocations)
 		{
 			ImageFile = imagefile;
 			LauncherEvent = launcherEvent;
+		}
+
+		public Starter(Options options, AppLocations appLocations, string imagefile, IStarterEvent launcherEvent, BaseLinker linker)
+			: base(options, appLocations)
+		{
+			ImageFile = imagefile;
+			LauncherEvent = launcherEvent;
+			Linker = linker;
 		}
 
 		protected override void OutputEvent(string status)
@@ -182,7 +193,29 @@ namespace Mosa.Utility.Launcher
 
 		private void LaunchGDB()
 		{
-			string arg = string.Empty;
+			var gdbscript = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".gdb");
+
+			string arg = " -d " + Quote(Options.DestinationDirectory);
+
+			arg = arg + " -s " + Quote(Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin"));
+
+			arg = arg + " -x " + Quote(gdbscript);
+
+			var textSection = Linker.LinkerSections[(int)SectionKind.Text];
+
+			uint multibootHeaderLength = Builder.MultibootHeaderLength;
+			ulong startingAddress = textSection.VirtualAddress + multibootHeaderLength;
+
+			var sb = new StringBuilder();
+
+			sb.AppendLine("target remote localhost:1234");
+			sb.AppendLine("set confirm off ");
+			sb.AppendLine("set disassemble-next-line on");
+			sb.AppendLine("set disassembly-flavor intel");
+			sb.AppendLine("break *0x" + startingAddress.ToString("x"));
+			sb.AppendLine("c");
+
+			File.WriteAllText(gdbscript, sb.ToString());
 
 			LaunchConsoleApplication(AppLocations.GDB, arg);
 		}

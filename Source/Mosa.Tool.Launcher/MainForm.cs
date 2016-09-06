@@ -426,7 +426,7 @@ namespace Mosa.Tool.Launcher
 
 			string imageFile = Options.BootLoaderImage != null ? Options.BootLoaderImage : Builder.ImageFile;
 
-			Starter = new Starter(Options, AppLocations, imageFile, this);
+			Starter = new Starter(Options, AppLocations, imageFile, this, Builder.Linker);
 
 			Starter.Launch();
 		}
