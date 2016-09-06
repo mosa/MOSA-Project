@@ -158,9 +158,10 @@ namespace Mosa.Utility.Launcher
 						@"..\Tools\gdb",
 						@"Tools\gdb",
 						@"C:\cygwin64\bin",
+						@"C:\mingw64\bin",
 						@"C:\cygwin\bin",
-						@"C:\Mingw-w64\bin",
-						@"C:\MinGW\bin",
+						@"C:\mingw32\bin",
+						@"C:\mingw\bin",
 						@"/bin"
 					}
 				);

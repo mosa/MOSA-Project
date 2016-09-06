@@ -76,7 +76,7 @@ namespace Mosa.Utility.Launcher
 
 			if (Options.EnableQemuGDB)
 			{
-				arg = arg + " -s";  // -gdb tcp::1234
+				arg = arg + " -S -gdb tcp::1234";
 			}
 
 			if (Options.ImageFormat == ImageFormat.ISO)
