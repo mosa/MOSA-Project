@@ -169,7 +169,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// Gotos the specified row and column.
+		/// Goto the specified row and column.
 		/// </summary>
 		/// <param name="row">The row.</param>
 		/// <param name="col">The col.</param>

@@ -24,9 +24,7 @@ namespace Mosa.TestWorld.x86
 
 		public static void Start()
 		{
-			Screen.Color = 0x0;
 			Screen.Clear();
-			Screen.GotoTop();
 			Screen.Color = 0x0E;
 			Screen.Write('M');
 			Screen.Write('O');

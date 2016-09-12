@@ -370,6 +370,16 @@ namespace Mosa.Utility.Launcher
 
 			var textSection = Linker.LinkerSections[(int)SectionKind.Text];
 
+			var map = new Dictionary<ulong, string>();
+
+			foreach (var symbol in Linker.Symbols)
+			{
+				if (map.ContainsKey(symbol.VirtualAddress))
+					continue;
+
+				map.Add(symbol.VirtualAddress, symbol.Name);
+			}
+
 			uint multibootHeaderLength = MultibootHeaderLength;
 			ulong startingAddress = textSection.VirtualAddress + multibootHeaderLength;
 			uint fileOffset = textSection.FileOffset + multibootHeaderLength;
@@ -388,10 +398,20 @@ namespace Mosa.Utility.Launcher
 			{
 				using (var dest = File.CreateText(asmfile))
 				{
+					if (map.ContainsKey(startingAddress))
+					{
+						dest.WriteLine("; " + map[startingAddress]);
+					}
+
 					foreach (var instruction in disasm.Disassemble())
 					{
 						var inst = translator.Translate(instruction);
 						dest.WriteLine(inst);
+
+						if (map.ContainsKey(instruction.PC))
+						{
+							dest.WriteLine("; " + map[instruction.PC]);
+						}
 
 						if (instruction.PC > startingAddress + length)
 							break;
