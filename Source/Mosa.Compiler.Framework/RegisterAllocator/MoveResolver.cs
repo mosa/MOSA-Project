@@ -86,6 +86,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (other != -1)
 						continue;
 
+					Debug.Assert(move.Destination.IsCPURegister);
+					Debug.Assert(move.Source.IsCPURegister);
+
 					moves.Add(move.Source, move.Destination, ResolvedMoveType.Move);
 
 					Moves.RemoveAt(i);
@@ -115,9 +118,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (other == -1)
 						continue;
 
-					moves.Add(Moves[other].Source, move.Source, ResolvedMoveType.Exchange);
+					Debug.Assert(Moves[other].Source.IsCPURegister);
+					Debug.Assert(move.Source.IsCPURegister);
 
-					//Moves[other].Source = move.Source;
+					moves.Add(Moves[other].Source, move.Source, ResolvedMoveType.Exchange);
+					
 					Moves[other] = new Move(move.Source, Moves[other].Destination);
 
 					Moves.RemoveAt(i);
@@ -141,6 +146,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 					continue;
+
+				Debug.Assert(move.Destination.IsCPURegister);
+				Debug.Assert(move.Source.IsCPURegister);
 
 				moves.Add(move.Destination, move.Source, ResolvedMoveType.Move);
 			}
@@ -179,9 +187,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var move in moves)
 			{
+				Debug.Assert(move.Destination.IsCPURegister);
+				Debug.Assert(move.Source.IsCPURegister);
+
 				if (move.Value == ResolvedMoveType.Move)
 				{
-					architecture.InsertLoadInstruction(context, move.Destination, stackFrame, move.Source);
+					architecture.InsertMoveInstruction(context, move.Destination, move.Source);
 				}
 				else
 				{
