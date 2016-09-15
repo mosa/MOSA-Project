@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public class MoveResolver
 	{
-		public enum ResolvedMoveType { Move, Exchange };
+		public enum ResolvedMoveType { Move, Exchange, Load };
 
 		public class ResolvedMoveList : List<MoveExtended<ResolvedMoveType>>
 		{
@@ -87,9 +87,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						continue;
 
 					Debug.Assert(move.Destination.IsCPURegister);
-					Debug.Assert(move.Source.IsCPURegister);
 
-					moves.Add(move.Source, move.Destination, ResolvedMoveType.Move);
+					moves.Add(move.Source, move.Destination, move.Source.IsCPURegister ? ResolvedMoveType.Move : ResolvedMoveType.Load);
 
 					Moves.RemoveAt(i);
 
@@ -122,7 +121,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					Debug.Assert(move.Source.IsCPURegister);
 
 					moves.Add(Moves[other].Source, move.Source, ResolvedMoveType.Exchange);
-					
+
 					Moves[other] = new Move(move.Source, Moves[other].Destination);
 
 					Moves.RemoveAt(i);
@@ -188,15 +187,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			foreach (var move in moves)
 			{
 				Debug.Assert(move.Destination.IsCPURegister);
-				Debug.Assert(move.Source.IsCPURegister);
 
-				if (move.Value == ResolvedMoveType.Move)
+				switch (move.Value)
 				{
-					architecture.InsertMoveInstruction(context, move.Destination, move.Source);
-				}
-				else
-				{
-					architecture.InsertExchangeInstruction(context, move.Destination, move.Source);
+					case ResolvedMoveType.Move: architecture.InsertMoveInstruction(context, move.Destination, move.Source); break;
+					case ResolvedMoveType.Exchange: architecture.InsertExchangeInstruction(context, move.Destination, move.Source); break;
+					case ResolvedMoveType.Load: architecture.InsertLoadInstruction(context, move.Destination, stackFrame, move.Source); break;
 				}
 
 				context.Marked = true;
