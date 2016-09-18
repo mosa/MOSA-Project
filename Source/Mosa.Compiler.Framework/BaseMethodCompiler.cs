@@ -335,23 +335,15 @@ namespace Mosa.Compiler.Framework
 
 			foreach (IMethodCompilerStage stage in Pipeline)
 			{
-				//try
 				{
 					stage.Initialize(this);
 					stage.Execute();
 
-					Mosa.Compiler.Trace.InstructionLogger.Run(this, stage);
+					InstructionLogger.Run(this, stage);
 
 					if (stop)
 						break;
 				}
-
-				//catch (Exception e)
-				//{
-				//	//	Trace.TraceListener.SubmitDebugStageInformation(Method, stage.Name + "-Exception", e.ToString());
-				//	Trace.TraceListener.OnNewCompilerTraceEvent(CompilerEvent.Exception, Method.FullName + " @ " + stage.Name, ThreadID);
-				//	return;
-				//}
 			}
 
 			InitializeType();

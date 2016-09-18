@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private List<InstructionNode> ScanForNewOperators()
 		{
-			List<InstructionNode> list = new List<InstructionNode>();
+			var list = new List<InstructionNode>();
 
 			foreach (var block in BasicBlocks)
 			{
