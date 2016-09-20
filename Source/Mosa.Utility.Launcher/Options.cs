@@ -21,8 +21,6 @@ namespace Mosa.Utility.Launcher
 
 		public EmulatorType Emulator { get; set; }
 
-		public bool MOSADebugger { get; set; }
-
 		public ImageFormat ImageFormat { get; set; }
 
 		public uint MemoryInMB { get; set; }
@@ -38,6 +36,8 @@ namespace Mosa.Utility.Launcher
 		public bool EnableInlinedMethods { get; set; }
 
 		public int InlinedIRMaximum { get; set; }
+
+		public bool GenerateNASMFile { get; set; }
 
 		public bool GenerateASMFile { get; set; }
 
@@ -81,11 +81,14 @@ namespace Mosa.Utility.Launcher
 
 		public string BootLoaderImage { get; set; }
 
+		public bool EnableQemuGDB { get; set; }
+
+		public bool LaunchGDB { get; set; }
+
 		public Options()
 		{
 			EnableSSA = true;
 			EnableIROptimizations = true;
-			EnableVariablePromotion = true;
 			EnableSparseConditionalConstantPropagation = true;
 			Emulator = EmulatorType.Qemu;
 			ImageFormat = ImageFormat.IMG;
@@ -113,6 +116,9 @@ namespace Mosa.Utility.Launcher
 			Emitx86IRQMethods = true;
 			LaunchEmulator = true;
 			BootLoaderImage = null;
+			GenerateASMFile = false;
+			EnableQemuGDB = false;
+			LaunchGDB = false;
 		}
 
 		public void LoadArguments(string[] args)
@@ -131,10 +137,10 @@ namespace Mosa.Utility.Launcher
 					case "-launch-off": LaunchEmulator = false; continue;
 					case "-map": GenerateMapFile = true; continue;
 					case "-asm": GenerateASMFile = true; continue;
+					case "-nasm": GenerateNASMFile = true; continue;
 					case "-qemu": Emulator = EmulatorType.Qemu; continue;
 					case "-vmware": Emulator = EmulatorType.VMware; continue;
 					case "-bochs": Emulator = EmulatorType.Bochs; continue;
-					case "-debugger": MOSADebugger = true; continue;
 					case "-vhd": ImageFormat = ImageFormat.VHD; continue;
 					case "-img": ImageFormat = ImageFormat.IMG; continue;
 					case "-vdi": ImageFormat = ImageFormat.VDI; continue;
@@ -170,6 +176,11 @@ namespace Mosa.Utility.Launcher
 					case "-x86-irq-methods": Emitx86IRQMethods = true; continue;
 					case "-x86-irq-methods-false": Emitx86IRQMethods = false; continue;
 					case "-bootloader-image": BootLoaderImage = args[++i]; continue;
+					case "-no-ir-optimizations": EnableIROptimizations = false; continue;
+					case "-no-sparse": EnableSparseConditionalConstantPropagation = false; continue;
+					case "-qemu-gdb": EnableQemuGDB = true; continue;
+					case "-gdb": LaunchGDB = true; continue;
+
 					default: break;
 				}
 

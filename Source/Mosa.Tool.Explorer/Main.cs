@@ -213,7 +213,6 @@ namespace Mosa.Tool.Explorer
 		{
 			Compiler.CompilerOptions.EnableSSA = enableSSA.Checked;
 			Compiler.CompilerOptions.EnableOptimizations = enableOptimizations.Checked;
-			Compiler.CompilerOptions.EnableVariablePromotion = enableVariablePromotion.Checked;
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = enableSparseConditionalConstantPropagation.Checked;
 			Compiler.CompilerOptions.EmitBinary = enableBinaryCodeGeneration.Checked;
 			Compiler.CompilerOptions.EnableInlinedMethods = enableInlinedMethods.Checked;

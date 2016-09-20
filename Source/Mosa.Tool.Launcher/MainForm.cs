@@ -56,12 +56,13 @@ namespace Mosa.Tool.Launcher
 		{
 			Options.EnableSSA = cbEnableSSA.Checked;
 			Options.EnableIROptimizations = cbEnableIROptimizations.Checked;
-			Options.EnableVariablePromotion = cbEnableVariablePromotion.Checked;
 			Options.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
+			Options.GenerateNASMFile = cbGenerateNASMFile.Checked;
 			Options.GenerateASMFile = cbGenerateASMFile.Checked;
 			Options.GenerateMapFile = cbGenerateMapFile.Checked;
 			Options.ExitOnLaunch = cbExitOnLaunch.Checked;
-			Options.MOSADebugger = cbMOSADebugger.Checked;
+			Options.EnableQemuGDB = cbEnableQemuGDB.Checked;
+			Options.LaunchGDB = cbLaunchGDB.Checked;
 			Options.UseMultipleThreadCompiler = cbCompilerUsesMultipleThreads.Checked;
 			Options.MemoryInMB = (uint)nmMemory.Value;
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
@@ -163,12 +164,13 @@ namespace Mosa.Tool.Launcher
 		{
 			cbEnableSSA.Checked = Options.EnableSSA;
 			cbEnableIROptimizations.Checked = Options.EnableIROptimizations;
-			cbEnableVariablePromotion.Checked = Options.EnableVariablePromotion;
 			cbEnableSparseConditionalConstantPropagation.Checked = Options.EnableSparseConditionalConstantPropagation;
+			cbGenerateNASMFile.Checked = Options.GenerateNASMFile;
 			cbGenerateASMFile.Checked = Options.GenerateASMFile;
 			cbGenerateMapFile.Checked = Options.GenerateMapFile;
 			cbExitOnLaunch.Checked = Options.ExitOnLaunch;
-			cbMOSADebugger.Checked = Options.MOSADebugger;
+			cbEnableQemuGDB.Checked = Options.EnableQemuGDB;
+			cbLaunchGDB.Checked = Options.LaunchGDB;
 			cbInlinedMethods.Checked = Options.EnableInlinedMethods;
 			cbCompilerUsesMultipleThreads.Checked = Options.UseMultipleThreadCompiler;
 			nmMemory.Value = Options.MemoryInMB;
@@ -424,7 +426,7 @@ namespace Mosa.Tool.Launcher
 
 			string imageFile = Options.BootLoaderImage != null ? Options.BootLoaderImage : Builder.ImageFile;
 
-			Starter = new Starter(Options, AppLocations, imageFile, this);
+			Starter = new Starter(Options, AppLocations, imageFile, this, Builder.Linker);
 
 			Starter.Launch();
 		}

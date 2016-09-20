@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Linker;
 using Mosa.Utility.BootImage;
 using System;
 using System.Diagnostics;
@@ -14,11 +15,21 @@ namespace Mosa.Utility.Launcher
 
 		public string ImageFile { get; private set; }
 
+		public BaseLinker Linker { get; private set; }
+
 		public Starter(Options options, AppLocations appLocations, string imagefile, IStarterEvent launcherEvent)
 			: base(options, appLocations)
 		{
 			ImageFile = imagefile;
 			LauncherEvent = launcherEvent;
+		}
+
+		public Starter(Options options, AppLocations appLocations, string imagefile, IStarterEvent launcherEvent, BaseLinker linker)
+			: base(options, appLocations)
+		{
+			ImageFile = imagefile;
+			LauncherEvent = launcherEvent;
+			Linker = linker;
 		}
 
 		protected override void OutputEvent(string status)
@@ -28,6 +39,18 @@ namespace Mosa.Utility.Launcher
 		}
 
 		public Process Launch()
+		{
+			var process = LaunchVM();
+
+			if (Options.LaunchGDB)
+			{
+				LaunchGDB();
+			}
+
+			return process;
+		}
+
+		private Process LaunchVM()
 		{
 			switch (Options.Emulator)
 			{
@@ -41,15 +64,6 @@ namespace Mosa.Utility.Launcher
 		private Process LaunchQemu(bool getOutput)
 		{
 			string arg = " -L " + Quote(AppLocations.QEMUBIOSDirectory);
-
-			if (Options.ImageFormat == ImageFormat.ISO)
-			{
-				arg = arg + " -cdrom " + Quote(ImageFile);
-			}
-			else
-			{
-				arg = arg + " -hda " + Quote(ImageFile);
-			}
 
 			if (Options.PlatformType == PlatformType.X86)
 			{
@@ -69,6 +83,20 @@ namespace Mosa.Utility.Launcher
 			else if (Options.DebugConnectionOption == DebugConnectionOption.TCPClient)
 			{
 				arg = arg + " -serial tcp:" + Options.DebugConnectionAddress + ":" + Options.DebugConnectionPort.ToString() + ",client,nowait";
+			}
+
+			if (Options.EnableQemuGDB)
+			{
+				arg = arg + " -S -gdb tcp::1234";
+			}
+
+			if (Options.ImageFormat == ImageFormat.ISO)
+			{
+				arg = arg + " -cdrom " + Quote(ImageFile);
+			}
+			else
+			{
+				arg = arg + " -hda " + Quote(ImageFile);
 			}
 
 			return LaunchApplication(AppLocations.QEMU, arg, getOutput);
@@ -161,6 +189,35 @@ namespace Mosa.Utility.Launcher
 			string arg = Quote(configfile);
 
 			return LaunchApplication(AppLocations.VMwarePlayer, arg, getOutput);
+		}
+
+		private void LaunchGDB()
+		{
+			var gdbscript = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".gdb");
+
+			string arg = " -d " + Quote(Options.DestinationDirectory);
+
+			arg = arg + " -s " + Quote(Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin"));
+
+			arg = arg + " -x " + Quote(gdbscript);
+
+			var textSection = Linker.LinkerSections[(int)SectionKind.Text];
+
+			uint multibootHeaderLength = Builder.MultibootHeaderLength;
+			ulong startingAddress = textSection.VirtualAddress + multibootHeaderLength;
+
+			var sb = new StringBuilder();
+
+			sb.AppendLine("target remote localhost:1234");
+			sb.AppendLine("set confirm off ");
+			sb.AppendLine("set disassemble-next-line on");
+			sb.AppendLine("set disassembly-flavor intel");
+			sb.AppendLine("break *0x" + startingAddress.ToString("x"));
+			sb.AppendLine("c");
+
+			File.WriteAllText(gdbscript, sb.ToString());
+
+			LaunchConsoleApplication(AppLocations.GDB, arg);
 		}
 	}
 }

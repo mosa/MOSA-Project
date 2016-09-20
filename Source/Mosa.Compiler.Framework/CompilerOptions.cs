@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if [enable promote temporary variables optimization]; otherwise, <c>false</c>.
 		/// </value>
-		public bool EnableVariablePromotion { get; set; }
+		public bool EnableVariablePromotion { get { return EnableOptimizations; } }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable conditional constant propagation].
@@ -260,7 +260,6 @@ namespace Mosa.Compiler.Framework
 		{
 			EnableSSA = true;
 			EnableOptimizations = true;
-			EnableVariablePromotion = true;
 			EnableSparseConditionalConstantPropagation = true;
 			EnableInlinedMethods = true;
 			BaseAddress = 0x00400000;
