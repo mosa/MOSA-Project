@@ -914,7 +914,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Ldc(Context context)
 		{
-			Debug.Assert(context.Operand1.IsConstant);
+			Debug.Assert(context.Operand1.IsConstant || context.Operand1.IsVirtualRegister);
 
 			var source = context.Operand1;
 			var destination = context.Result;
