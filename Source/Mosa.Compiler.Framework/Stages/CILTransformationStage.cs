@@ -914,24 +914,15 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Ldc(Context context)
 		{
-			//fixme: uncomment when when static allocator stage fixed
-			//Debug.Assert(context.Operand1.IsConstant);
+			Debug.Assert(context.Operand1.IsConstant);
 
-			if (context.Operand1.IsResolvedConstant)
-			{
-				var source = context.Operand1;
-				var destination = context.Result;
-				var size = GetInstructionSize(source.Type);
+			var source = context.Operand1;
+			var destination = context.Result;
+			var size = GetInstructionSize(source.Type);
 
-				Debug.Assert(!StoreOnStack(destination.Type));
-				var moveInstruction = GetMoveInstruction(destination.Type);
-				context.SetInstruction(moveInstruction, size, destination, source);
-
-				return;
-			}
-
-			//fixme: remove when static allocator stage fixed
-			ProcessLoadInstruction(context);
+			Debug.Assert(!StoreOnStack(destination.Type));
+			var moveInstruction = GetMoveInstruction(destination.Type);
+			context.SetInstruction(moveInstruction, size, destination, source);
 		}
 
 		/// <summary>
