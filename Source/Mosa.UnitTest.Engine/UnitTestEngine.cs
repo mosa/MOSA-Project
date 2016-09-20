@@ -62,9 +62,11 @@ namespace Mosa.UnitTest.Engine
 		{
 			Options = new Options()
 			{
-				EnableSSA = true,
-				EnableIROptimizations = true,
-				EnableSparseConditionalConstantPropagation = true,
+				EnableSSA = false,
+				EnableIROptimizations = false,
+				EnableSparseConditionalConstantPropagation = false,
+				EnableInlinedMethods = false,
+
 				Emulator = EmulatorType.Qemu,
 				ImageFormat = ImageFormat.IMG,
 				BootFormat = BootFormat.Multiboot_0_7,
@@ -74,7 +76,6 @@ namespace Mosa.UnitTest.Engine
 				DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"),
 				FileSystem = FileSystem.FAT16,
 				UseMultipleThreadCompiler = true,
-				EnableInlinedMethods = true,
 				InlinedIRMaximum = 8,
 				BootLoader = BootLoader.Syslinux_3_72,
 				VBEVideo = false,
