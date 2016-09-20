@@ -26,7 +26,7 @@ SharpDisasm
 -- Used in MOSA for debugging & diagnostic purposes
 
 MetroFramework
--- https://github.com/thielj/MetroFramework
+-- https://github.com/dennismagno/metroframework-modern-ui
 -- The MIT License
 -- Used for MOSA Launcher
 
