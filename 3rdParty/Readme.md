@@ -13,7 +13,7 @@ xUnit.Net - Unit testing tool for the .NET Framework
 Farm-Fresh Web Icons
 - http://www.fatcow.com/free-icons
 - Creative Commons Attribution 3.0 License
-- Used in the MOSA Tool Graphical User Interfaces
+- Used in the MOSA Tool graphical user interface and icons
 
 dnlib (dnlib.dll)
 - https://bitbucket.org/0xd4d/dnlib
@@ -23,12 +23,12 @@ dnlib (dnlib.dll)
 SharpDisasm
 -- https://github.com/spazzarama/SharpDisasm
 -- Simplified BSD License
--- Used in MOSA for debugging & diagnostic purposes
+-- Used in MOSA for debugging & diagnostics
 
 MetroFramework
 -- https://github.com/dennismagno/metroframework-modern-ui
 -- The MIT License
--- Used for MOSA Launcher
+-- Used in MOSA Launcher
 
 LZF
 -- https://csharplzfcompression.codeplex.com
