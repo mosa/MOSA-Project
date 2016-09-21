@@ -46,7 +46,7 @@ namespace Mosa.UnitTest.Engine
 		private const uint MaxRetries = 10;
 		private const uint RetryDelay = 1; // 1- seconds
 
-		private const int DefaultMaxSentQueue = 100;
+		private const int DefaultMaxSentQueue = 1; // 100
 
 		private Queue<DebugMessage> queue = new Queue<DebugMessage>();
 		private HashSet<DebugMessage> sent = new HashSet<DebugMessage>();
@@ -152,6 +152,8 @@ namespace Mosa.UnitTest.Engine
 					message.CallBack = MessageCallBack;
 
 					debugServerEngine.SendCommand(message);
+
+					Console.WriteLine((message.Other as UnitTestRequest).MethodTypeName + "." + (message.Other as UnitTestRequest).MethodName);
 				}
 			}
 			catch (Exception e)
