@@ -1094,7 +1094,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (StoreOnStack(type))
 			{
 				context.SetInstruction(IRInstruction.CompoundLoad, destination, source, ConstantZero);
-				context.MosaType = type;
 			}
 			else
 			{
@@ -1102,8 +1101,9 @@ namespace Mosa.Compiler.Framework.Stages
 				var size = GetInstructionSize(type);
 
 				context.SetInstruction(loadInstruction, size, destination, source, ConstantZero);
-				context.MosaType = type;
 			}
+
+			context.MosaType = type;
 		}
 
 		/// <summary>
@@ -1560,10 +1560,9 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				var size = GetInstructionSize(type);
+				var storeInstruction = GetStoreInstruction(type);
 
-				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
-
-				context.SetInstruction(storeInstruction, size, null, StackFrame, context.Operand1, context.Operand2);
+				context.SetInstruction(storeInstruction, size, null, context.Operand1, ConstantZero, context.Operand2);
 			}
 
 			context.MosaType = type;
