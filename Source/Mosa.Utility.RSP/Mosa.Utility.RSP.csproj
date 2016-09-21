@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mosa.Utility.RSP</RootNamespace>
     <AssemblyName>Mosa.Utility.RSP</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectGuid>{5B810793-78E2-413C-CC05-FCDD12B7DB04}</ProjectGuid>
     <TargetFrameworkProfile />

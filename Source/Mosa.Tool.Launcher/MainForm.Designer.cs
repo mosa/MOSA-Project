@@ -43,6 +43,7 @@
 			this.label8 = new MetroFramework.Controls.MetroLabel();
 			this.checkBox1 = new MetroFramework.Controls.MetroCheckBox();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.cbGenerateNASMFile = new MetroFramework.Controls.MetroCheckBox();
 			this.cbGenerateASMFile = new MetroFramework.Controls.MetroCheckBox();
 			this.cbGenerateMapFile = new MetroFramework.Controls.MetroCheckBox();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -112,7 +113,6 @@
 			this.tabCounters = new MetroFramework.Controls.MetroTabPage();
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.cbGenerateNASMFile = new MetroFramework.Controls.MetroCheckBox();
 			this.tbApplicationLocations.SuspendLayout();
 			this.tabOptions.SuspendLayout();
 			this.groupBox12.SuspendLayout();
@@ -314,6 +314,18 @@
 			this.groupBox2.TabIndex = 29;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Diagnostic Output:";
+			// 
+			// cbGenerateNASMFile
+			// 
+			this.cbGenerateNASMFile.AutoSize = true;
+			this.cbGenerateNASMFile.Location = new System.Drawing.Point(166, 19);
+			this.cbGenerateNASMFile.Name = "cbGenerateNASMFile";
+			this.cbGenerateNASMFile.Size = new System.Drawing.Size(81, 15);
+			this.cbGenerateNASMFile.Style = MetroFramework.MetroColorStyle.Blue;
+			this.cbGenerateNASMFile.TabIndex = 47;
+			this.cbGenerateNASMFile.Text = " NASM File";
+			this.cbGenerateNASMFile.UseCustomBackColor = true;
+			this.cbGenerateNASMFile.UseSelectable = true;
 			// 
 			// cbGenerateASMFile
 			// 
@@ -542,6 +554,7 @@
 			this.tbMode.SelectedText = "";
 			this.tbMode.SelectionLength = 0;
 			this.tbMode.SelectionStart = 0;
+			this.tbMode.ShortcutsEnabled = true;
 			this.tbMode.Size = new System.Drawing.Size(89, 20);
 			this.tbMode.TabIndex = 38;
 			this.tbMode.Text = "{Mode}";
@@ -927,6 +940,7 @@
 			this.tbBaseAddress.SelectedText = "";
 			this.tbBaseAddress.SelectionLength = 0;
 			this.tbBaseAddress.SelectionStart = 0;
+			this.tbBaseAddress.ShortcutsEnabled = true;
 			this.tbBaseAddress.Size = new System.Drawing.Size(89, 20);
 			this.tbBaseAddress.TabIndex = 41;
 			this.tbBaseAddress.Text = "0x00400000";
@@ -1234,7 +1248,7 @@
 			this.rtbOutput.Location = new System.Drawing.Point(0, 0);
 			this.rtbOutput.Name = "rtbOutput";
 			this.rtbOutput.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-			this.rtbOutput.Size = new System.Drawing.Size(582, 409);
+			this.rtbOutput.Size = new System.Drawing.Size(653, 409);
 			this.rtbOutput.TabIndex = 0;
 			this.rtbOutput.Text = "";
 			this.rtbOutput.WordWrap = false;
@@ -1262,10 +1276,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbCounters.Font = new System.Drawing.Font("Consolas", 8F);
-			this.rtbCounters.Location = new System.Drawing.Point(0, 1);
+			this.rtbCounters.Location = new System.Drawing.Point(0, 0);
 			this.rtbCounters.Name = "rtbCounters";
 			this.rtbCounters.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-			this.rtbCounters.Size = new System.Drawing.Size(582, 411);
+			this.rtbCounters.Size = new System.Drawing.Size(653, 412);
 			this.rtbCounters.TabIndex = 1;
 			this.rtbCounters.Text = "";
 			this.rtbCounters.WordWrap = false;
@@ -1275,18 +1289,6 @@
 			this.openFileDialog2.DefaultExt = "*.exe";
 			this.openFileDialog2.Filter = "Executable|*.exe";
 			this.openFileDialog2.Title = "Select Assembly";
-			// 
-			// cbGenerateNASMFile
-			// 
-			this.cbGenerateNASMFile.AutoSize = true;
-			this.cbGenerateNASMFile.Location = new System.Drawing.Point(166, 19);
-			this.cbGenerateNASMFile.Name = "cbGenerateNASMFile";
-			this.cbGenerateNASMFile.Size = new System.Drawing.Size(81, 15);
-			this.cbGenerateNASMFile.Style = MetroFramework.MetroColorStyle.Blue;
-			this.cbGenerateNASMFile.TabIndex = 47;
-			this.cbGenerateNASMFile.Text = " NASM File";
-			this.cbGenerateNASMFile.UseCustomBackColor = true;
-			this.cbGenerateNASMFile.UseSelectable = true;
 			// 
 			// MainForm
 			// 
