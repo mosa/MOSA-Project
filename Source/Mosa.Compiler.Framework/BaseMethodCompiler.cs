@@ -513,7 +513,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			return false;
+			return type.IsUserValueType;
 		}
 
 		#endregion Methods
