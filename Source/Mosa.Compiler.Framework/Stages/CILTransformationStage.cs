@@ -515,7 +515,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MosaMethod method = context.InvokeMethod;
 			Operand resultOperand = context.Result;
-			List<Operand> operands = new List<Operand>(context.Operands);
+			var operands = new List<Operand>(context.Operands);
 
 			if (context.Previous.Instruction is ConstrainedPrefixInstruction)
 			{

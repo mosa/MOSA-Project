@@ -499,7 +499,21 @@ namespace Mosa.Compiler.Framework
 
 		public bool StoreOnStack(MosaType type)
 		{
-			return type.IsUserValueType;
+			if (type.IsReferenceType)
+				return false;
+
+			if (type.IsUserValueType)
+			{
+				if (type.Fields != null)
+				{
+					if (type.Fields.Count == 1)
+					{
+						return type.Fields[0].FieldType.IsUserValueType;
+					}
+				}
+			}
+
+			return false;
 		}
 
 		#endregion Methods
