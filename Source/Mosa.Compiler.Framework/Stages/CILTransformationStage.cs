@@ -994,35 +994,71 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand operand = context.Operand1;
 			MosaField field = context.MosaField;
 
-			if (!operand.IsPointer && operand.Type.IsUserValueType)
-			{
-				var userStruct = operand;
-				if (!userStruct.IsStackLocal)
-				{
-					var originalOperand = userStruct;
-					userStruct = MethodCompiler.AddStackLocal(userStruct.Type);
-					context.InsertBefore().SetInstruction(IRInstruction.MoveInteger, userStruct, originalOperand);
-				}
-				operand = AllocateVirtualRegister(userStruct.Type.ToManagedPointer());
-				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, operand, userStruct);
-			}
-
 			int offset = TypeLayout.GetFieldOffset(field);
-			Operand offsetOperand = Operand.CreateConstant(TypeSystem, offset);
 
-			var size = GetInstructionSize(field.FieldType);
+			if (!result.IsOnStack && !StoreOnStack(operand.Type) && !operand.IsReferenceType)
+			{
+				//EXAMPLE:
+				//  CIL.Ldfld V_13 [System.IntPtr] <= V_12 [System.RuntimeMethodHandle] {f:System.IntPtr System.RuntimeMethodHandle::m_ptr}
+				//TRANSFORM:
+				//  IR.Move V_13[System.IntPtr] <= V_12[System.RuntimeMethodHandle]
 
-			if (StoreOnStack(field.FieldType))
-			{
-				context.SetInstruction(IRInstruction.CompoundLoad, result, operand, offsetOperand);
-				context.MosaType = field.FieldType;
+				// simple move
+				Debug.Assert(result.IsVirtualRegister);
+
+				var moveInstruction = GetMoveInstruction(result.Type);
+				var size = GetInstructionSize(result.Type);
+
+				context.SetInstruction(moveInstruction, size, result, operand);
+
+				return;
 			}
-			else
+
+			if (!StoreOnStack(result.Type) && operand.IsOnStack)
 			{
-				var loadInstruction = GetLoadInstruction(field.FieldType);
-				context.SetInstruction(loadInstruction, size, result, operand, offsetOperand);
-				context.MosaType = field.FieldType;
+				//EXAMPLE:
+				//  CIL.Ldfld V_5 [I4] <= T_2 const= unresolved[Mosa.TestWorld.x86.Tests.Pair] { f: System.Int32 Mosa.TestWorld.x86.Tests.Pair::A}
+
+				var loadInstruction = GetLoadInstruction(result.Type);
+				var size = GetInstructionSize(result.Type);
+				var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
+				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+
+				context.SetInstruction(IRInstruction.AddressOf, address, operand);
+				context.AppendInstruction(loadInstruction, size, result, address, fixedOffset);
+
+				return;
 			}
+
+			if (!StoreOnStack(result.Type) && !operand.IsOnStack)
+			{
+				//EXAMPLE:
+				//  CIL.Ldfld V_30 [O] <= V_29 [O] {f:Mosa.Kernel.x86.ConsoleSession Mosa.Kernel.x86.ConsoleManager::Boot}
+
+				var loadInstruction = GetLoadInstruction(result.Type);
+				var size = GetInstructionSize(result.Type);
+				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+
+				context.AppendInstruction(loadInstruction, size, result, operand, fixedOffset);
+
+				return;
+			}
+
+			if (result.IsOnStack && !operand.IsOnStack)
+			{
+				//EXAMPLE:
+				//  CIL.Ldfld T_1 const=unresolved [System.Reflection.CustomAttributeTypedArgument] <= V_1 [System.Reflection.CustomAttributeNamedArgument&] {f:System.Reflection.CustomAttributeTypedArgument System.Reflection.CustomAttributeNamedArgument::typedArgument}
+
+				var size = GetInstructionSize(result.Type);
+				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+
+				context.SetInstruction(IRInstruction.CompoundLoad, size, result, operand, fixedOffset);
+				context.MosaType = result.Type;
+
+				return;
+			}
+
+			throw new CompilerException("Error transforming CIL.Ldfld");
 		}
 
 		/// <summary>
