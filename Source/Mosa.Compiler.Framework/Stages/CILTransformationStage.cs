@@ -996,7 +996,21 @@ namespace Mosa.Compiler.Framework.Stages
 
 			int offset = TypeLayout.GetFieldOffset(field);
 
-			if (!result.IsOnStack && !StoreOnStack(operand.Type) && !operand.IsReferenceType)
+			if (!result.IsOnStack && !StoreOnStack(operand.Type) && !operand.IsReferenceType && operand.IsPointer)
+			{
+				//EXAMPLE:
+				//  CIL.Ldfld V_3 [U4*] <= V_2 [Mosa.Runtime.MetadataMethodStruct*] {f:System.UInt32* Mosa.Runtime.MetadataMethodStruct::Name}
+
+				var loadInstruction = GetLoadInstruction(field.FieldType);
+				var size = GetInstructionSize(field.FieldType);
+				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+
+				context.SetInstruction(loadInstruction, size, result, operand, fixedOffset);
+
+				return;
+			}
+
+			if (!result.IsOnStack && !StoreOnStack(operand.Type) && !operand.IsReferenceType && !operand.IsPointer)
 			{
 				//EXAMPLE:
 				//  CIL.Ldfld V_13 [System.IntPtr] <= V_12 [System.RuntimeMethodHandle] {f:System.IntPtr System.RuntimeMethodHandle::m_ptr}
@@ -1006,8 +1020,8 @@ namespace Mosa.Compiler.Framework.Stages
 				// simple move
 				Debug.Assert(result.IsVirtualRegister);
 
-				var moveInstruction = GetMoveInstruction(result.Type);
-				var size = GetInstructionSize(result.Type);
+				var moveInstruction = GetMoveInstruction(field.FieldType);
+				var size = GetInstructionSize(field.FieldType);
 
 				context.SetInstruction(moveInstruction, size, result, operand);
 
@@ -1019,8 +1033,8 @@ namespace Mosa.Compiler.Framework.Stages
 				//EXAMPLE:
 				//  CIL.Ldfld V_5 [I4] <= T_2 const= unresolved[Mosa.TestWorld.x86.Tests.Pair] { f: System.Int32 Mosa.TestWorld.x86.Tests.Pair::A}
 
-				var loadInstruction = GetLoadInstruction(result.Type);
-				var size = GetInstructionSize(result.Type);
+				var loadInstruction = GetLoadInstruction(field.FieldType);
+				var size = GetInstructionSize(field.FieldType);
 				var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
 				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
 
@@ -1035,11 +1049,11 @@ namespace Mosa.Compiler.Framework.Stages
 				//EXAMPLE:
 				//  CIL.Ldfld V_30 [O] <= V_29 [O] {f:Mosa.Kernel.x86.ConsoleSession Mosa.Kernel.x86.ConsoleManager::Boot}
 
-				var loadInstruction = GetLoadInstruction(result.Type);
-				var size = GetInstructionSize(result.Type);
+				var loadInstruction = GetLoadInstruction(field.FieldType);
+				var size = GetInstructionSize(field.FieldType);
 				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
 
-				context.AppendInstruction(loadInstruction, size, result, operand, fixedOffset);
+				context.SetInstruction(loadInstruction, size, result, operand, fixedOffset);
 
 				return;
 			}
@@ -1049,11 +1063,11 @@ namespace Mosa.Compiler.Framework.Stages
 				//EXAMPLE:
 				//  CIL.Ldfld T_1 const=unresolved [System.Reflection.CustomAttributeTypedArgument] <= V_1 [System.Reflection.CustomAttributeNamedArgument&] {f:System.Reflection.CustomAttributeTypedArgument System.Reflection.CustomAttributeNamedArgument::typedArgument}
 
-				var size = GetInstructionSize(result.Type);
+				var size = GetInstructionSize(field.FieldType);
 				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
 
 				context.SetInstruction(IRInstruction.CompoundLoad, size, result, operand, fixedOffset);
-				context.MosaType = result.Type;
+				context.MosaType = field.FieldType;
 
 				return;
 			}
