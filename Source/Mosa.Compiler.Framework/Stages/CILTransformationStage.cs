@@ -1549,7 +1549,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+				var storeInstruction = GetStoreInstruction(fieldType);
 				context.SetInstruction(storeInstruction, size, null, objectOperand, offsetOperand, valueOperand);
 				context.MosaType = fieldType;
 			}
