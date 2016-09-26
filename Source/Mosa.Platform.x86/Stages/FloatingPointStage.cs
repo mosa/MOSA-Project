@@ -46,6 +46,9 @@ namespace Mosa.Platform.x86.Stages
 				if (operand == null || !operand.IsConstant || !operand.IsR)
 					continue;
 
+				if (operand.IsUnresolvedConstant)
+					continue;
+
 				var v1 = AllocateVirtualRegister(operand.Type);
 
 				var symbol = (operand.IsR4) ?
