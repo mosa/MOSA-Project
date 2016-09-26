@@ -59,8 +59,8 @@ namespace Mosa.Platform.x86.Instructions
 
 				// This opcode has a directionality bit, and it is set to 0
 				// This means we must swap around operand1 and operand3
-				.ModRegRMSIBDisplacement(true, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
+				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);          // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
 				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);

@@ -46,7 +46,7 @@ namespace Mosa.UnitTest.Engine
 		private const uint MaxRetries = 10;
 		private const uint RetryDelay = 1; // 1- seconds
 
-		private const int DefaultMaxSentQueue = 20; // 100
+		private const int DefaultMaxSentQueue = 10; // 100
 
 		private Queue<DebugMessage> queue = new Queue<DebugMessage>();
 		private HashSet<DebugMessage> sent = new HashSet<DebugMessage>();

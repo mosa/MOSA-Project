@@ -178,7 +178,6 @@ namespace Mosa.Kernel.x86
 			{
 				SetMultibootLocation(address);
 			}
-			CountMemoryMap();
 		}
 
 		/// <summary>
@@ -189,6 +188,8 @@ namespace Mosa.Kernel.x86
 		{
 			MultibootAddress = address;
 			multiBootInfo = (MultiBootInfo*)address;
+
+			CountMemoryMap();
 		}
 
 		/// <summary>
