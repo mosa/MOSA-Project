@@ -406,7 +406,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private SlotIndex GetUpperOptimalSplitLocation(LiveInterval liveInterval, SlotIndex at)
 		{
-			if (Trace.Active) Trace.Log("-High Splitting: " + liveInterval.ToString() + " move: " + at.ToString());
+			if (Trace.Active) Trace.Log("--High Splitting: " + liveInterval.ToString() + " move: " + at.ToString());
 
 			var a = liveInterval.End;
 

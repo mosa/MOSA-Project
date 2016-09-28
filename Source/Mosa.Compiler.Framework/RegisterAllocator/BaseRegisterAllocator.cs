@@ -1029,7 +1029,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					if (intersections.Count != 0)
 					{
-						if (Trace.Active) Trace.Log("  Evicting live newIntervals");
+						if (Trace.Active) Trace.Log("  Evicting live intervals");
 
 						track.Evict(intersections);
 

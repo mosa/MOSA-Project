@@ -937,29 +937,30 @@ namespace Mosa.Compiler.Framework.Stages
 			var arrayType = array.Type;
 
 			// Array bounds check
-			AddArrayBoundsCheck(context.InsertBefore(), array, arrayIndex);
+			AddArrayBoundsCheck(context, array, arrayIndex);
 
+			var arrayAddress = LoadArrayBaseAddress(context, arrayType, array);
 			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndex);
 
 			Debug.Assert(elementOffset != null);
 
 			if (StoreOnStack(arrayType.ElementType))
 			{
-				context.SetInstruction(IRInstruction.CompoundLoad, result, array, elementOffset);
+				context.SetInstruction(IRInstruction.CompoundLoad, result, arrayAddress, elementOffset);
 				context.MosaType = arrayType.ElementType;
 			}
 			else
 			{
+				var loadInstruction = GetLoadInstruction(arrayType.ElementType);
+
 				var size = GetInstructionSize(arrayType.ElementType);
 
-				if (size == InstructionSize.Native)
-				{
-					size = Architecture.NativeInstructionSize;
-				}
+				//if (size == InstructionSize.Native)
+				//{
+				//	size = Architecture.NativeInstructionSize;
+				//}
 
-				var loadInstruction = GetLoadInstruction(arrayType.ElementType);
-				context.SetInstruction(loadInstruction, size, result, array, elementOffset);
-				context.MosaType = arrayType.ElementType;
+				context.SetInstruction(loadInstruction, size, result, arrayAddress, elementOffset);
 			}
 		}
 
@@ -977,11 +978,12 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(arrayType.ElementType == result.Type.ElementType);
 
 			// Array bounds check
-			AddArrayBoundsCheck(context.InsertBefore(), array, arrayIndex);
+			AddArrayBoundsCheck(context, array, arrayIndex);
 
+			var arrayAddress = LoadArrayBaseAddress(context, arrayType, array);
 			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndex);
 
-			context.SetInstruction(IRInstruction.AddSigned, result, array, elementOffset);
+			context.SetInstruction(IRInstruction.AddSigned, result, arrayAddress, elementOffset);
 		}
 
 		/// <summary>
@@ -1502,27 +1504,22 @@ namespace Mosa.Compiler.Framework.Stages
 			var arrayType = array.Type;
 
 			// Array bounds check
-			AddArrayBoundsCheck(context.InsertBefore(), array, arrayIndex);
+			AddArrayBoundsCheck(context, array, arrayIndex);
 
+			var arrayAddress = LoadArrayBaseAddress(context, arrayType, array);
 			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndex);
-
-			var size = GetInstructionSize(arrayType.ElementType);
 
 			if (StoreOnStack(value.Type))
 			{
-				Debug.Assert(!value.IsVirtualRegister);
-
-				context.SetInstruction(IRInstruction.CompoundStore, null, array, elementOffset, value);
+				context.SetInstruction(IRInstruction.CompoundStore, null, arrayAddress, elementOffset, value);
 				context.MosaType = arrayType.ElementType;
 			}
 			else
 			{
-				Debug.Assert(value.IsVirtualRegister);
-
 				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+				var size = GetInstructionSize(arrayType.ElementType);
 
-				context.SetInstruction(storeInstruction, size, null, array, elementOffset, value);
-				context.MosaType = arrayType.ElementType;
+				context.SetInstruction(storeInstruction, size, null, arrayAddress, elementOffset, value);
 			}
 		}
 
@@ -2130,19 +2127,22 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="arrayIndexOperand">The index operand.</param>
 		private void AddArrayBoundsCheck(Context context, Operand arrayOperand, Operand arrayIndexOperand)
 		{
+			var before = context.InsertBefore();
+
 			// First create new block and split current block
 			var exceptionContext = CreateNewBlockContexts(1)[0];
-			var nextContext = Split(context);
+			var nextContext = Split(before);
 
 			// Get array length
 			var lengthOperand = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			var fixedOffset = Operand.CreateConstant(TypeSystem, (NativePointerSize * 2));
-			context.SetInstruction(IRInstruction.LoadInteger, lengthOperand, arrayOperand, fixedOffset);
+			var fixedOffset = Operand.CreateConstant(TypeSystem, NativePointerSize * 2);
+
+			before.SetInstruction(IRInstruction.LoadInteger, lengthOperand, arrayOperand, fixedOffset);
 
 			// Now compare length with index
 			// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-			context.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
-			context.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
+			before.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
+			before.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
 
 			// Build exception block which is just a call to throw exception
 			var method = InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
@@ -2181,13 +2181,30 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var elementOffset = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var elementSize = Operand.CreateConstant(TypeSystem, size);
-			var fixedOffset = Operand.CreateConstant(TypeSystem, (NativePointerSize * 3));
-			var arrayElement = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			var before = context.InsertBefore();
 
 			before.AppendInstruction(IRInstruction.MulSigned, elementOffset, index, elementSize);
-			before.AppendInstruction(IRInstruction.AddSigned, arrayElement, elementOffset, fixedOffset);
+
+			return elementOffset;
+		}
+
+		/// <summary>
+		/// Calculates the base of the array elements.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="arrayType">The array type.</param>
+		/// <returns>
+		/// Base address for array elements.
+		/// </returns>
+		private Operand LoadArrayBaseAddress(Context context, MosaType arrayType, Operand array)
+		{
+			var fixedOffset = Operand.CreateConstant(TypeSystem, NativePointerSize * 3);
+			var arrayElement = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			var before = context.InsertBefore();
+
+			before.AppendInstruction(IRInstruction.AddSigned, arrayElement, array, fixedOffset);
 
 			return arrayElement;
 		}

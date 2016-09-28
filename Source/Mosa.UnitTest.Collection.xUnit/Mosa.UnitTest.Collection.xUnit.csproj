@@ -79,10 +79,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseUnitTest.cs" />
+    <Compile Include="EnumFixture.cs" />
     <Compile Include="FibonacciFixture.cs" />
+    <Compile Include="NewObjectFixture.cs" />
+    <Compile Include="OptimizationFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegisterAllocatorFixture.cs" />
     <Compile Include="StaticFieldFixture.cs" />
-    <Compile Include="StructureFixture.cs" />
+    <Compile Include="StringFixture.cs" />
+    <Compile Include="SwitchFixture.cs" />
     <Compile Include="TestFixture.cs" />
     <Compile Include="UnitTestFixture.cs" />
     <Compile Include="WhileFixture.cs" />
