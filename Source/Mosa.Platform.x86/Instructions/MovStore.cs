@@ -152,8 +152,8 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
 
 				// This opcode has a directionality bit, and it is set to 0
-				// This means we must swap around operand1 and operand3
-				.ModRegRMSIBDisplacement(true, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				// This means we must swap around operand1 and operand3, and set offsetDestination to false
+				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 
 				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0); // 32:displacement
 

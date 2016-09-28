@@ -1074,6 +1074,21 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
+			if (result.IsOnStack && operand.IsOnStack)
+			{
+				//EXAMPLE:
+				//  CIL.Ldfld T_5 const=unresolved [Mosa.UnitTest.Collection.ValueTypeTests+valuetype] <= T_4 const=unresolved [Mosa.UnitTest.Collection.ValueTypeTests+valuewrapper] {f:Mosa.UnitTest.Collection.ValueTypeTests+valuetype Mosa.UnitTest.Collection.ValueTypeTests+valuewrapper::content}
+
+				var size = GetInstructionSize(field.FieldType);
+				var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
+				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+
+				context.SetInstruction(IRInstruction.AddressOf, address, operand);
+				context.AppendInstruction(IRInstruction.CompoundLoad, size, result, address, fixedOffset);
+
+				return;
+			}
+
 			throw new CompilerException("Error transforming CIL.Ldfld");
 		}
 

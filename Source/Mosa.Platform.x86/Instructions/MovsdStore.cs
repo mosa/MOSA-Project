@@ -58,7 +58,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b0001)                                       // 4:opcode
 
 				// This opcode has a directionality bit, and it is set to 0
-				// This means we must swap around operand1 and operand3
+				// This means we must swap around operand1 and operand3, and set offsetDestination to false
 				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);          // 32:memory
 
