@@ -53,6 +53,7 @@ namespace Mosa.Utility.Aot
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 				new PlatformStubStage(),
 				new PlatformEdgeSplitStage(),
+				new VirtualRegisterRenameStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 				new EmptyBlockRemovalStage(),

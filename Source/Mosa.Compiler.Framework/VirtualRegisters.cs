@@ -73,5 +73,11 @@ namespace Mosa.Compiler.Framework
 		{
 			return GetEnumerator();
 		}
+
+		internal void ReOrdered(Operand virtualRegister, int index)
+		{
+			virtualRegisters[index - 1] = virtualRegister;
+			virtualRegister.RenameIndex(index);
+		}
 	}
 }

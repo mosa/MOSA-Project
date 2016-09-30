@@ -1039,6 +1039,11 @@ namespace Mosa.Compiler.Framework
 			return value;
 		}
 
+		internal void RenameIndex(int index)
+		{
+			Index = index;
+		}
+
 		#region Object Overrides
 
 		public override string ToString()

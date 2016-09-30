@@ -53,6 +53,7 @@ namespace Mosa.Tool.Explorer
 
 				new PlatformStubStage(),
 				new PlatformEdgeSplitStage(),
+				new VirtualRegisterRenameStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 				new EmptyBlockRemovalStage(),

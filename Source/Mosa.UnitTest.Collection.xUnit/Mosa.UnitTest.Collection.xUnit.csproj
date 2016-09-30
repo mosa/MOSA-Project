@@ -89,6 +89,7 @@
     <Compile Include="StringFixture.cs" />
     <Compile Include="SwitchFixture.cs" />
     <Compile Include="TestFixture.cs" />
+    <Compile Include="UInt32Fixture.cs" />
     <Compile Include="UnitTestFixture.cs" />
     <Compile Include="WhileFixture.cs" />
   </ItemGroup>
