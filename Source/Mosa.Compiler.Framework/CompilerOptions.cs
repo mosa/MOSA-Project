@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if [enable promote temporary variables optimization]; otherwise, <c>false</c>.
 		/// </value>
-		public bool EnableVariablePromotion { get { return EnableOptimizations; } }
+		public bool EnableVariablePromotion { get { return true; } }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable conditional constant propagation].
