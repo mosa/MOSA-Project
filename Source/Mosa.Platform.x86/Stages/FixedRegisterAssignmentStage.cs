@@ -187,24 +187,24 @@ namespace Mosa.Platform.x86.Stages
 			Operand result = context.Result;
 			Operand result2 = context.Result2;
 
-			Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			Operand EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 
-			context.SetInstruction(X86.Mov, eax, operand1);
+			context.SetInstruction(X86.Mov, EAX, operand1);
 
 			if (operand2.IsCPURegister)
 			{
-				context.AppendInstruction2(X86.Mul, edx, eax, eax, operand2);
+				context.AppendInstruction2(X86.Mul, EDX, EAX, EAX, operand2);
 			}
 			else
 			{
 				Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				context.AppendInstruction(X86.Mov, v3, operand2);
-				context.AppendInstruction2(X86.Mul, edx, eax, eax, v3);
+				context.AppendInstruction2(X86.Mul, EDX, EAX, EAX, v3);
 			}
 
-			context.AppendInstruction(X86.Mov, result, edx);
-			context.AppendInstruction(X86.Mov, result2, eax);
+			context.AppendInstruction(X86.Mov, result, EDX);
+			context.AppendInstruction(X86.Mov, result2, EAX);
 		}
 
 		/// <summary>
