@@ -79,6 +79,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseUnitTest.cs" />
+    <Compile Include="BooleanFixture.cs" />
+    <Compile Include="CallOrderFixture.cs" />
+    <Compile Include="CallVirtualFixture.cs" />
+    <Compile Include="CharFixture.cs" />
     <Compile Include="EnumFixture.cs" />
     <Compile Include="FibonacciFixture.cs" />
     <Compile Include="NewObjectFixture.cs" />
