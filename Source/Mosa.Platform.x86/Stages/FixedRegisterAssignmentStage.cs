@@ -192,17 +192,16 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, EAX, operand1);
 
-			if (operand2.IsCPURegister)
-			{
-				context.AppendInstruction2(X86.Mul, EDX, EAX, EAX, operand2);
-			}
-			else
+			if (operand2.IsConstant)
 			{
 				Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				context.AppendInstruction(X86.Mov, v3, operand2);
-				context.AppendInstruction2(X86.Mul, EDX, EAX, EAX, v3);
+				operand2 = v3;
 			}
 
+			Debug.Assert(operand2.IsCPURegister || operand2.IsVirtualRegister);
+
+			context.AppendInstruction2(X86.Mul, EDX, EAX, EAX, operand2);
 			context.AppendInstruction(X86.Mov, result, EDX);
 			context.AppendInstruction(X86.Mov, result2, EAX);
 		}
