@@ -87,7 +87,6 @@
     <Compile Include="FibonacciFixture.cs" />
     <Compile Include="Int16Fixture.cs" />
     <Compile Include="Int32Fixture.cs" />
-    <Compile Include="Int64Fixture.cs" />
     <Compile Include="Int8Fixture.cs" />
     <Compile Include="NewObjectFixture.cs" />
     <Compile Include="OptimizationFixture.cs" />
@@ -99,7 +98,6 @@
     <Compile Include="TestFixture.cs" />
     <Compile Include="UInt16Fixture.cs" />
     <Compile Include="UInt32Fixture.cs" />
-    <Compile Include="UInt64Fixture.cs" />
     <Compile Include="UInt8Fixture.cs" />
     <Compile Include="UnitTestFixture.cs" />
     <Compile Include="WhileFixture.cs" />
