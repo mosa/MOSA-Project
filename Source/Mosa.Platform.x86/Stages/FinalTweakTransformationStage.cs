@@ -167,7 +167,7 @@ namespace Mosa.Platform.x86.Stages
 
 				context.SetInstruction2(X86.Xchg, temporaryRegister, value, value, temporaryRegister);
 				context.AppendInstruction(X86.MovStore, size, null, dest, offset, temporaryRegister);
-				context.AppendInstruction2(X86.Xchg, temporaryRegister, value, temporaryRegister, value);
+				context.AppendInstruction2(X86.Xchg, value, temporaryRegister, temporaryRegister, value);
 			}
 		}
 
