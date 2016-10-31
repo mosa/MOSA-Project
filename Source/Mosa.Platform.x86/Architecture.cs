@@ -346,8 +346,8 @@ namespace Mosa.Platform.x86
 
 			context.AppendInstruction(IRInstruction.UnstableObjectTracking);
 
-			context.AppendInstruction(X86.Lea, srcReg, destination, destinationOffset);
-			context.AppendInstruction(X86.Lea, dstReg, source, sourceOffset);
+			context.AppendInstruction(X86.Lea, srcReg, source, sourceOffset);
+			context.AppendInstruction(X86.Lea, dstReg, destination, destinationOffset);
 
 			var tmp = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
 			var tmpLarge = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.R8);
