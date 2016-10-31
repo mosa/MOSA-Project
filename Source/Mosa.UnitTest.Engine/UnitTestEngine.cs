@@ -153,7 +153,7 @@ namespace Mosa.UnitTest.Engine
 
 					debugServerEngine.SendCommand(message);
 
-					Console.WriteLine((message.Other as UnitTestRequest).MethodTypeName + "." + (message.Other as UnitTestRequest).MethodName);
+					//Console.WriteLine((message.Other as UnitTestRequest).MethodTypeName + "." + (message.Other as UnitTestRequest).MethodName);
 				}
 			}
 			catch (Exception e)
