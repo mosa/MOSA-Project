@@ -94,7 +94,7 @@ namespace Mosa.Kernel.x86
 
 					Screen.Write("X");
 
-					//Native.Int(255);
+					Native.Int(255);
 
 					Screen.Write("X");
 				}

@@ -78,6 +78,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayFixture.cs" />
+    <Compile Include="ArrayLayoutFixture.cs" />
     <Compile Include="BaseUnitTest.cs" />
     <Compile Include="BooleanFixture.cs" />
     <Compile Include="CallOrderFixture.cs" />
