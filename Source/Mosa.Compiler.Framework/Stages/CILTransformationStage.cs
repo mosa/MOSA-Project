@@ -1531,7 +1531,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+				var storeInstruction = GetStoreInstruction(value.Type);
 				var size = GetInstructionSize(arrayType.ElementType);
 
 				context.SetInstruction(storeInstruction, size, null, arrayAddress, elementOffset, value);

@@ -124,7 +124,9 @@ namespace Mosa.UnitTest.Engine
 #endif
 
 			if (TestSuiteFile == null)
+			{
 				TestSuiteFile = "Mosa.UnitTests." + Platform + ".exe";
+			}
 		}
 
 		private void ProcessQueue()

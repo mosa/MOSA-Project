@@ -83,14 +83,27 @@
     <Compile Include="BaseUnitTest.cs" />
     <Compile Include="BooleanFixture.cs" />
     <Compile Include="BoxingFixture.cs" />
-    <Compile Include="CallFixture.cs" />
+    <Compile Include="CallFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CallFixture.tt</DependentUpon>
+    </Compile>
     <Compile Include="CallOrderFixture.cs" />
     <Compile Include="CallVirtualFixture.cs" />
     <Compile Include="CharFixture.cs" />
-    <Compile Include="ComparisonFixture.cs" />
+    <Compile Include="ComparisonFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ComparisonFixture.tt</DependentUpon>
+    </Compile>
     <Compile Include="DelegateFixture.cs" />
     <Compile Include="DerivedNewObjectFixture.cs" />
-    <Compile Include="EnumFixture.cs" />
+    <Compile Include="DoubleFixture.cs" />
+    <Compile Include="EnumFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EnumFixture.tt</DependentUpon>
+    </Compile>
     <Compile Include="FibonacciFixture.cs" />
     <Compile Include="GenericCallFixture.cs" />
     <Compile Include="Int16Fixture.cs" />
@@ -98,10 +111,12 @@
     <Compile Include="Int8Fixture.cs" />
     <Compile Include="InterfaceFixture.cs" />
     <Compile Include="IsInstFixture.cs" />
+    <Compile Include="LdargaFixture.cs" />
     <Compile Include="NewObjectFixture.cs" />
     <Compile Include="OptimizationFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterAllocatorFixture.cs" />
+    <Compile Include="SingleFixture.cs" />
     <Compile Include="StaticFieldFixture.cs" />
     <Compile Include="StringFixture.cs" />
     <Compile Include="SwitchFixture.cs" />
@@ -119,6 +134,20 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="CallFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CallFixture1.cs</LastGenOutput>
+    </Content>
+    <Content Include="ComparisonFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ComparisonFixture.cs</LastGenOutput>
+    </Content>
+    <Content Include="EnumFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>EnumFixture.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -126,7 +155,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.2.0-beta3-build1187\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.2.0-beta3-build1187\build\net20\xunit.runner.visualstudio.props'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

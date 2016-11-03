@@ -95,12 +95,6 @@ namespace Mosa.UnitTest.Collection
 			return (o is IBB);
 		}
 
-		//public static bool IsInstI4ToI4()
-		//{
-		//	object o = (int)1;
-		//	return (o is int);
-		//}
-
 		public static bool IsInstI4ToI4(int i)
 		{
 			object o = i;
