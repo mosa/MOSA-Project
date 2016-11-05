@@ -1600,7 +1600,9 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
 
-				context.SetInstruction(storeInstruction, context.Size, null, StackFrame, context.Result, context.Operand1);
+				var size = GetInstructionSize(context.Operand1.Type);
+
+				context.SetInstruction(storeInstruction, size, null, StackFrame, context.Result, context.Operand1);
 			}
 
 			context.MosaType = type;

@@ -328,6 +328,19 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
+			foreach (var node in operand.Definitions.ToArray())
+			{
+				for (int i = 0; i < node.ResultCount; i++)
+				{
+					var op = node.GetResult(i);
+
+					if (operand == op)
+					{
+						node.SetResult(i, stackLocal);
+					}
+				}
+			}
+
 			return stackLocal;
 		}
 

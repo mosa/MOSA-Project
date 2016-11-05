@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class UnboxAnyInstruction : UnaryInstruction
+	internal sealed class UnboxAnyInstruction : UnaryInstruction
 	{
 		#region Construction
 

@@ -104,14 +104,22 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EnumFixture.tt</DependentUpon>
     </Compile>
+    <Compile Include="ExceptionHandlingFixture.cs" />
     <Compile Include="FibonacciFixture.cs" />
+    <Compile Include="ForeachFixture.cs" />
     <Compile Include="GenericCallFixture.cs" />
     <Compile Include="Int16Fixture.cs" />
     <Compile Include="Int32Fixture.cs" />
+    <Compile Include="Int64Fixture.cs" />
     <Compile Include="Int8Fixture.cs" />
     <Compile Include="InterfaceFixture.cs" />
     <Compile Include="IsInstFixture.cs" />
     <Compile Include="LdargaFixture.cs" />
+    <Compile Include="LdlocaFixture.cs">
+      <DependentUpon>LdlocaFixture.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Include="NewObjectFixture.cs" />
     <Compile Include="OptimizationFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -123,6 +131,7 @@
     <Compile Include="TestFixture.cs" />
     <Compile Include="UInt16Fixture.cs" />
     <Compile Include="UInt32Fixture.cs" />
+    <Compile Include="UInt64Fixture.cs" />
     <Compile Include="UInt8Fixture.cs" />
     <Compile Include="UnitTestFixture.cs" />
     <Compile Include="WhileFixture.cs" />
@@ -146,6 +155,10 @@
     <Content Include="EnumFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>EnumFixture.cs</LastGenOutput>
+    </Content>
+    <Content Include="LdlocaFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LdlocaFixture.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
