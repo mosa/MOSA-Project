@@ -238,9 +238,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand AddStackLocal(MosaType type)
 		{
-			var local = Operand.CreateStackLocal(type, LocalStack.Count, false);
-			LocalStack.Add(local);
-			return local;
+			return AddStackLocal(type, false);
 		}
 
 		/// <summary>
@@ -404,21 +402,17 @@ namespace Mosa.Compiler.Framework
 			int index = 0;
 			foreach (var local in locals)
 			{
-				bool virt = true;
-
-				// everything is virtual, unless compound
-				if (StoreOnStack(local.Type))
-					virt = false;
-
 				Operand operand = null;
 
-				if (virt)
+				if (!StoreOnStack(local.Type))
 				{
 					var stacktype = local.Type.GetStackType();
 					operand = CreateVirtualRegister(stacktype);
 				}
 				else
+				{
 					operand = AddStackLocal(local.Type, local.IsPinned);
+				}
 
 				LocalVariables[index++] = operand;
 			}

@@ -123,16 +123,16 @@ namespace Mosa.Compiler.Framework
 					return false;
 				else if (IsInteger || IsBoolean || IsChar || IsPointer)
 					return ConstantUnsignedLongInteger == 1;
+				else if (IsStackLocal)
+					return ConstantUnsignedLongInteger == 1;
+				else if (IsParameter)
+					return ConstantUnsignedLongInteger == 1;
 				else if (IsR8)
 					return ConstantDoubleFloatingPoint == 1;
 				else if (IsR4)
 					return ConstantSingleFloatingPoint == 1;
 				else if (IsNull)
 					return false;
-				else if (IsStackLocal)
-					return ConstantUnsignedLongInteger == 1;
-				else if (IsParameter)
-					return ConstantUnsignedLongInteger == 1;
 
 				throw new InvalidCompilerException();
 			}
@@ -152,16 +152,16 @@ namespace Mosa.Compiler.Framework
 					return false;
 				else if (IsInteger || IsBoolean || IsChar || IsPointer)
 					return ConstantUnsignedLongInteger == 0;
+				else if (IsStackLocal)
+					return ConstantUnsignedLongInteger == 0;
+				else if (IsParameter)
+					return ConstantUnsignedLongInteger == 0;
 				else if (IsR8)
 					return ConstantDoubleFloatingPoint == 0;
 				else if (IsR4)
 					return ConstantSingleFloatingPoint == 0;
 				else if (IsNull)
 					return true;
-				else if (IsStackLocal)
-					return ConstantUnsignedLongInteger == 0;
-				else if (IsParameter)
-					return ConstantUnsignedLongInteger == 0;
 
 				throw new InvalidCompilerException();
 			}

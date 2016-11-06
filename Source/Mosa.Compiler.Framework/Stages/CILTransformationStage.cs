@@ -1573,34 +1573,25 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Stloc(Context context)
 		{
+			var type = context.Operand1.Type;
+			var size = GetInstructionSize(type);
+
 			if (context.Result.IsVirtualRegister && context.Operand1.IsVirtualRegister)
 			{
 				var moveInstruction = GetMoveInstruction(context.Result.Type);
 
-				context.SetInstruction(moveInstruction, context.Size, context.Result, context.Operand1);
+				context.SetInstruction(moveInstruction, size, context.Result, context.Operand1);
 				return;
 			}
 
-			var type = context.MosaType;
-
-			if (StoreOnStack(context.Operand1.Type))
+			if (StoreOnStack(type))
 			{
-				if (StoreOnStack(context.Result.Type))
-				{
-					Debug.Assert(!context.Result.IsVirtualRegister);
-					context.SetInstruction(IRInstruction.CompoundMove, context.Result, context.Operand1);
-				}
-				else
-				{
-					Debug.Assert(context.Operand1.IsVirtualRegister || context.Operand1.IsConstant);
-					context.SetInstruction(IRInstruction.CompoundStore, context.Size, null, context.Result, ConstantZero, context.Operand1);
-				}
+				Debug.Assert(!context.Result.IsVirtualRegister);
+				context.SetInstruction(IRInstruction.CompoundMove, context.Result, context.Operand1);
 			}
 			else if (context.Operand1.IsVirtualRegister)
 			{
-				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
-
-				var size = GetInstructionSize(context.Operand1.Type);
+				var storeInstruction = GetStoreInstruction(type);
 
 				context.SetInstruction(storeInstruction, size, null, StackFrame, context.Result, context.Operand1);
 			}
