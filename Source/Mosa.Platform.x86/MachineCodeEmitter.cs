@@ -111,7 +111,7 @@ namespace Mosa.Platform.x86
 				WriteDisplacement(dest);
 			else if (src != null && src.IsResolvedConstant)
 				WriteImmediate(src);
-			else if (src != null && src.IsSymbol)
+			else if (src != null && (src.IsSymbol || src.IsStaticField))
 				WriteDisplacement(src);
 		}
 
@@ -164,7 +164,7 @@ namespace Mosa.Platform.x86
 				Debug.Assert(displacement.IsUnresolvedConstant);
 				var section = displacement.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, section, displacement.Field.FullName, (int)displacement.Offset);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, section, displacement.Field.FullName, 0);
 				codeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsSymbol)
