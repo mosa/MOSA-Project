@@ -350,7 +350,13 @@ namespace Mosa.UnitTest.Numbers
 
 		public static IEnumerable<long> I8Mini
 		{
-			get { yield return 0; yield return 1; yield return long.MinValue; yield return long.MaxValue; }
+			get
+			{
+				yield return 0;
+				yield return 1;
+				yield return long.MinValue;
+				yield return long.MaxValue;
+			}
 		}
 
 		#endregion I8 Types

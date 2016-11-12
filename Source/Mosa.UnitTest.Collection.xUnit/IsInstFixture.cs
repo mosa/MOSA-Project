@@ -80,9 +80,21 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		[Fact]
+		public void IsInstI4ToU4()
+		{
+			Assert.Equal(IsInstTests.IsInstI4ToU4(), Run<bool>("Mosa.UnitTest.Collection.IsInstTests.IsInstI4ToU4"));
+		}
+
+		[Fact]
 		public void IsInstU4ToI4()
 		{
 			Assert.Equal(IsInstTests.IsInstU4ToI4(), Run<bool>("Mosa.UnitTest.Collection.IsInstTests.IsInstU4ToI4"));
+		}
+
+		[Fact]
+		public void IsInstU4ToU4()
+		{
+			Assert.Equal(IsInstTests.IsInstU4ToU4(), Run<bool>("Mosa.UnitTest.Collection.IsInstTests.IsInstU4ToU4"));
 		}
 
 		[Fact]
@@ -95,12 +107,6 @@ namespace Mosa.UnitTest.Collection.xUnit
 		public void IsInstU8ToU8()
 		{
 			Assert.Equal(IsInstTests.IsInstU8ToU8(), Run<bool>("Mosa.UnitTest.Collection.IsInstTests.IsInstU8ToU8"));
-		}
-
-		[Fact]
-		public void IsInstI4ToU4()
-		{
-			Assert.Equal(IsInstTests.IsInstI4ToU4(), Run<bool>("Mosa.UnitTest.Collection.IsInstTests.IsInstI4ToU4"));
 		}
 
 		[Fact]
