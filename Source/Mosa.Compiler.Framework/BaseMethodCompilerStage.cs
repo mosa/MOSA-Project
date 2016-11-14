@@ -753,7 +753,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else if (type.IsR8)
 			{
-				return IRInstruction.MoveFloatR4;
+				return IRInstruction.MoveFloatR8;
 			}
 
 			return IRInstruction.MoveInteger;
