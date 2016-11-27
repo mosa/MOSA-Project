@@ -21,29 +21,19 @@ namespace Mosa.Tool.Explorer
 		private CodeForm form = new CodeForm();
 
 		private DateTime compileStartTime;
-		private List<string> currentInstructionLines;
 
 		private MosaCompiler Compiler = new MosaCompiler();
-
-		private Dictionary<MosaMethod, MethodData> methodDataStore = new Dictionary<MosaMethod, MethodData>();
 
 		private enum CompileStage { Nothing, Loaded, PreCompiled, Compiled };
 
 		private CompileStage Stage = CompileStage.Nothing;
 
-		private class MethodData
-		{
-			public List<string> OrderedStageNames = new List<string>();
-			public List<string> OrderedDebugStageNames = new List<string>();
-			public Dictionary<string, List<string>> InstructionLogs = new Dictionary<string, List<string>>();
-			public Dictionary<string, List<string>> DebugLogs = new Dictionary<string, List<string>>();
-			public List<string> CounterData = new List<string>();
-		}
-
 		private StringBuilder compileLog = new StringBuilder();
 		private StringBuilder counterLog = new StringBuilder();
 		private StringBuilder errorLog = new StringBuilder();
 		private StringBuilder exceptionLog = new StringBuilder();
+
+		private MethodStore methodStore = new MethodStore();
 
 		public Main()
 		{
@@ -121,7 +111,7 @@ namespace Mosa.Tool.Explorer
 		{
 			LoadAssembly(filename, cbPlatform.Text);
 
-			methodDataStore.Clear();
+			methodStore.Clear();
 
 			SetStatus("Assemblies Loaded!");
 		}
@@ -182,62 +172,6 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private MethodData GetMethodData(MosaMethod method, bool create)
-		{
-			lock (methodDataStore)
-			{
-				MethodData methodData = null;
-
-				if (!methodDataStore.TryGetValue(method, out methodData))
-				{
-					if (create)
-					{
-						methodData = new MethodData();
-						methodDataStore.Add(method, methodData);
-					}
-				}
-				return methodData;
-			}
-		}
-
-		private void SubmitInstructionTraceInformation(MosaMethod method, string stage, List<string> lines)
-		{
-			var methodData = GetMethodData(method, true);
-
-			lock (methodData)
-			{
-				methodData.OrderedStageNames.AddIfNew(stage);
-
-				methodData.InstructionLogs.Remove(stage);
-
-				methodData.InstructionLogs.Add(stage, lines);
-			}
-		}
-
-		private void SubmitDebugStageInformation(MosaMethod method, string stage, List<string> lines)
-		{
-			var methodData = GetMethodData(method, true);
-
-			lock (methodData)
-			{
-				methodData.OrderedDebugStageNames.AddIfNew(stage);
-
-				methodData.DebugLogs.Remove(stage);
-
-				methodData.DebugLogs.Add(stage, lines);
-			}
-		}
-
-		private void SubmitMethodCounterInformation(MosaMethod method, List<string> lines)
-		{
-			var methodData = GetMethodData(method, true);
-
-			lock (methodData)
-			{
-				methodData.CounterData = lines;
-			}
-		}
-
 		private void SetCompilerOptions()
 		{
 			Compiler.CompilerOptions.EnableSSA = cbEnableSSA.Checked;
@@ -275,7 +209,7 @@ namespace Mosa.Tool.Explorer
 			{
 				CleanGUI();
 
-				methodDataStore.Clear();
+				methodStore.Clear();
 
 				toolStrip1.Enabled = false;
 
@@ -337,16 +271,6 @@ namespace Mosa.Tool.Explorer
 			Compile();
 		}
 
-		private T GetCurrentNode<T>() where T : class
-		{
-			if (treeView.SelectedNode == null)
-				return null;
-
-			T node = treeView.SelectedNode as T;
-
-			return node;
-		}
-
 		private void PreCompile()
 		{
 			if (Stage == CompileStage.Loaded)
@@ -358,76 +282,201 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
+		private T GetCurrentNode<T>() where T : class
 		{
-			tbResult.Text = string.Empty;
+			if (treeView.SelectedNode == null)
+				return null;
 
+			T node = treeView.SelectedNode as T;
+
+			return node;
+		}
+
+		private ViewNode<MosaMethod> GetCurrentNode()
+		{
+			var node = GetCurrentNode<ViewNode<MosaMethod>>();
+			return node;
+		}
+
+		private MosaMethod GetCurrentType()
+		{
 			var node = GetCurrentNode<ViewNode<MosaMethod>>();
 
 			if (node == null)
-				return;
+				return null;
+			else
+				return node.Type;
+		}
 
-			PreCompile();
+		private string GetCurrentStage()
+		{
+			string stage = cbStages.SelectedItem.ToString();
+			return stage;
+		}
 
-			if (!Compiler.CompilationScheduler.IsScheduled(node.Type))
-			{
-				Compiler.Schedule(node.Type);
+		private string GetDebugStage()
+		{
+			string stage = cbDebugStages.SelectedItem.ToString();
+			return stage;
+		}
 
-				Compiler.Compile();
-			}
+		private List<string> GetCurrentDebugLines()
+		{
+			var type = GetCurrentType();
 
-			var methodData = GetMethodData(node.Type, false);
+			if (type == null)
+				return null;
+
+			var methodData = methodStore.GetMethodData(type, false);
 
 			if (methodData == null)
+				return null;
+
+			string stage = GetDebugStage();
+
+			var lines = methodData.DebugLogs[stage];
+
+			return lines;
+		}
+
+		private List<string> GetCurrentLines()
+		{
+			var type = GetCurrentType();
+
+			if (type == null)
+				return null;
+
+			var methodData = methodStore.GetMethodData(type, false);
+
+			if (methodData == null)
+				return null;
+
+			string stage = GetCurrentStage();
+
+			var lines = methodData.InstructionLogs[stage];
+
+			return lines;
+		}
+
+		private void UpdateStages()
+		{
+			var type = GetCurrentType();
+
+			if (type == null)
 				return;
 
 			cbStages.Items.Clear();
 
-			foreach (string stage in methodData.OrderedStageNames)
-				cbStages.Items.Add(stage);
-
-			cbStages.SelectedIndex = 0;
-
-			cbDebugStages.Items.Clear();
-
-			foreach (string stage in methodData.OrderedDebugStageNames)
-				cbDebugStages.Items.Add(stage);
-
-			if (cbDebugStages.Items.Count > 0)
-				cbDebugStages.SelectedIndex = 0;
-
-			rbMethodCounters.Text = CreateText(methodData.CounterData);
-		}
-
-		private void cbStages_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			currentInstructionLines = null;
-
-			var node = GetCurrentNode<ViewNode<MosaMethod>>();
-
-			if (node == null)
-				return;
-
-			var methodData = GetMethodData(node.Type, false);
+			var methodData = methodStore.GetMethodData(type, false);
 
 			if (methodData == null)
 				return;
 
-			string stage = cbStages.SelectedItem.ToString();
+			foreach (string stage in methodData.OrderedStageNames)
+			{
+				cbStages.Items.Add(stage);
+			}
 
-			currentInstructionLines = methodData.InstructionLogs[stage];
-			var previousItemLabel = cbLabels.SelectedItem;
+			cbStages.SelectedIndex = 0;
+		}
+
+		private void UpdateDebugStages()
+		{
+			var type = GetCurrentType();
+
+			if (type == null)
+				return;
+
+			cbDebugStages.Items.Clear();
+
+			var methodData = methodStore.GetMethodData(type, false);
+
+			if (methodData == null)
+				return;
+
+			foreach (string stage in methodData.OrderedDebugStageNames)
+			{
+				cbDebugStages.Items.Add(stage);
+			}
+
+			if (cbDebugStages.Items.Count > 0)
+			{
+				cbDebugStages.SelectedIndex = 0;
+			}
+		}
+
+		private void UpdateCounters()
+		{
+			var type = GetCurrentType();
+
+			if (type == null)
+				return;
+
+			rbMethodCounters.Text = string.Empty;
+
+			var methodData = methodStore.GetMethodData(type, false);
+
+			if (methodData == null)
+				return;
+
+			rbMethodCounters.Text = CreateText(methodData.CounterData);
+		}
+
+		private void UpdateLabels()
+		{
+			var lines = GetCurrentLines();
 
 			cbLabels.Items.Clear();
 			cbLabels.Items.Add("All");
 
-			foreach (string line in currentInstructionLines)
+			foreach (string line in lines)
 			{
 				if (line.StartsWith("Block #"))
 				{
 					cbLabels.Items.Add(line.Substring(line.IndexOf("L_")));
 				}
 			}
+		}
+
+		private void UpdateDebugResults()
+		{
+			rbDebugResult.Text = string.Empty;
+
+			var lines = GetCurrentDebugLines();
+
+			if (lines == null)
+				return;
+
+			rbDebugResult.Text = CreateText(lines);
+		}
+
+		private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+			tbResult.Text = string.Empty;
+
+			var type = GetCurrentType();
+
+			if (type == null)
+				return;
+
+			PreCompile();
+
+			if (!Compiler.CompilationScheduler.IsScheduled(type))
+			{
+				Compiler.Schedule(type);
+				Compiler.Compile();
+			}
+
+			UpdateStages();
+			UpdateDebugStages();
+			UpdateCounters();
+		}
+
+		private void cbStages_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var previousItemLabel = cbLabels.SelectedItem;
+
+			UpdateLabels();
 
 			if (previousItemLabel != null && cbLabels.Items.Contains(previousItemLabel))
 				cbLabels.SelectedItem = previousItemLabel;
@@ -439,29 +488,7 @@ namespace Mosa.Tool.Explorer
 
 		private void cbDebugStages_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			var node = GetCurrentNode<ViewNode<MosaMethod>>();
-
-			if (node == null)
-				return;
-
-			var methodData = GetMethodData(node.Type, false);
-
-			if (methodData == null)
-				return;
-
-			string stage = cbDebugStages.SelectedItem.ToString();
-
-			if (methodData.DebugLogs.ContainsKey(stage))
-			{
-				if (currentInstructionLines == null)
-					rbOtherResult.Text = string.Empty;
-				else
-					rbOtherResult.Text = CreateText(methodData.DebugLogs[stage]);
-			}
-			else
-			{
-				rbOtherResult.Text = string.Empty;
-			}
+			UpdateDebugResults();
 		}
 
 		private void snippetToolStripMenuItem_Click(object sender, EventArgs e)
@@ -492,47 +519,6 @@ namespace Mosa.Tool.Explorer
 			Stage = CompileStage.Loaded;
 		}
 
-		protected void LoadAssemblyDebugInfo(string assemblyFileName)
-		{
-			string dbgFile = Path.ChangeExtension(assemblyFileName, "pdb");
-
-			if (File.Exists(dbgFile))
-			{
-				tbResult.AppendText("File: " + dbgFile + "\n");
-				tbResult.AppendText("======================\n");
-				using (FileStream fileStream = new FileStream(dbgFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-				{
-					using (PdbReader reader = new PdbReader(fileStream))
-					{
-						tbResult.AppendText("Global targetSymbols: \n");
-						tbResult.AppendText("======================\n");
-						foreach (CvSymbol symbol in reader.GlobalSymbols)
-						{
-							tbResult.AppendText(symbol.ToString() + "\n");
-						}
-
-						tbResult.AppendText("Types:\n");
-						foreach (PdbType type in reader.Types)
-						{
-							tbResult.AppendText(type.Name + "\n");
-							tbResult.AppendText("======================\n");
-							tbResult.AppendText("Symbols:\n");
-							foreach (CvSymbol symbol in type.Symbols)
-							{
-								tbResult.AppendText("\t" + symbol.ToString() + "\n");
-							}
-
-							tbResult.AppendText("Lines:\n");
-							foreach (CvLine line in type.LineNumbers)
-							{
-								tbResult.AppendText("\t" + line.ToString() + "\n");
-							}
-						}
-					}
-				}
-			}
-		}
-
 		private void ShowCodeForm()
 		{
 			form.ShowDialog();
@@ -555,20 +541,17 @@ namespace Mosa.Tool.Explorer
 		{
 			SetStatus(string.Empty);
 
-			if (currentInstructionLines == null)
-			{
-				tbResult.Text = string.Empty;
-				return;
-			}
+			var lines = GetCurrentLines();
 
-			var node = GetCurrentNode<ViewNode<MosaMethod>>();
+			var type = GetCurrentType();
 
-			if (node == null)
-				return;
+			SetStatus(type.FullName);
 
-			SetStatus(node.Type.FullName);
+			if (cbLabels.SelectedIndex == 0)
 
-			tbResult.Text = GetCurrentStageInstructions(currentInstructionLines);
+				tbResult.Text = methodStore.GetStageInstructions(lines, string.Empty);
+			else
+				tbResult.Text = methodStore.GetStageInstructions(lines, cbLabels.SelectedItem as string);
 		}
 
 		private string CreateText(List<string> list)
@@ -581,58 +564,6 @@ namespace Mosa.Tool.Explorer
 			foreach (var l in list)
 			{
 				result.AppendLine(l);
-			}
-
-			return result.ToString();
-		}
-
-		private string GetCurrentStageInstructions(List<string> lines)
-		{
-			var result = new StringBuilder();
-
-			if (lines == null)
-				return string.Empty;
-
-			if (cbLabels.SelectedIndex == 0)
-			{
-				foreach (string line in lines)
-				{
-					if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
-						continue;
-
-					result.Append(line);
-					result.Append("\n");
-				}
-
-				return result.ToString();
-			}
-
-			string blockLabel = cbLabels.SelectedItem as string;
-
-			bool inBlock = false;
-
-			foreach (string l in lines)
-			{
-				string line = l;
-
-				if ((!inBlock) && line.StartsWith("Block #") && line.EndsWith(blockLabel))
-				{
-					inBlock = true;
-				}
-
-				if (inBlock)
-				{
-					if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
-						continue;
-
-					result.Append(line);
-					result.Append("\n");
-
-					if (line.StartsWith("  Next:"))
-					{
-						return result.ToString();
-					}
-				}
 			}
 
 			return result.ToString();
@@ -683,26 +614,65 @@ namespace Mosa.Tool.Explorer
 				if (traceLog.Section != null)
 					stagesection = stagesection + "-" + traceLog.Section;
 
-				SubmitDebugStageInformation(traceLog.Method, stagesection, traceLog.Lines);
+				methodStore.SetDebugStageInformation(traceLog.Method, stagesection, traceLog.Lines);
 			}
 			else if (traceLog.Type == TraceType.Counters)
 			{
-				SubmitMethodCounterInformation(traceLog.Method, traceLog.Lines);
+				methodStore.SetMethodCounterInformation(traceLog.Method, traceLog.Lines);
 			}
 			else if (traceLog.Type == TraceType.InstructionList)
 			{
-				SubmitInstructionTraceInformation(traceLog.Method, traceLog.Stage, traceLog.Lines);
+				methodStore.SetInstructionTraceInformation(traceLog.Method, traceLog.Stage, traceLog.Lines);
 			}
 		}
 
-		private void dumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)
+		protected void LoadAssemblyDebugInfo(string assemblyFileName)
 		{
-			var node = GetCurrentNode<ViewNode<MosaMethod>>();
+			string dbgFile = Path.ChangeExtension(assemblyFileName, "pdb");
 
-			if (node == null)
+			if (File.Exists(dbgFile))
+			{
+				tbResult.AppendText("File: " + dbgFile + "\n");
+				tbResult.AppendText("======================\n");
+				using (FileStream fileStream = new FileStream(dbgFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+				{
+					using (PdbReader reader = new PdbReader(fileStream))
+					{
+						tbResult.AppendText("Global targetSymbols: \n");
+						tbResult.AppendText("======================\n");
+						foreach (CvSymbol symbol in reader.GlobalSymbols)
+						{
+							tbResult.AppendText(symbol.ToString() + "\n");
+						}
+
+						tbResult.AppendText("Types:\n");
+						foreach (PdbType type in reader.Types)
+						{
+							tbResult.AppendText(type.Name + "\n");
+							tbResult.AppendText("======================\n");
+							tbResult.AppendText("Symbols:\n");
+							foreach (CvSymbol symbol in type.Symbols)
+							{
+								tbResult.AppendText("\t" + symbol.ToString() + "\n");
+							}
+
+							tbResult.AppendText("Lines:\n");
+							foreach (CvLine line in type.LineNumbers)
+							{
+								tbResult.AppendText("\t" + line.ToString() + "\n");
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private void DumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var type = GetCurrentType();
+
+			if (type == null)
 				return;
-
-			var type = node.Type.FullName;
 
 			if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
 			{
@@ -714,7 +684,7 @@ namespace Mosa.Tool.Explorer
 				{
 					cbStages_SelectedIndexChanged(null, null);
 
-					string stage = cbStages.SelectedItem.ToString();
+					string stage = GetCurrentStage();
 					var result = tbResult.Text.Replace("\n", "\r\n");
 
 					File.WriteAllText(Path.Combine(path, stage + "-stage.txt"), result);
@@ -731,8 +701,8 @@ namespace Mosa.Tool.Explorer
 				{
 					cbDebugStages_SelectedIndexChanged(null, null);
 
-					string stage = cbDebugStages.SelectedItem.ToString();
-					var result = rbOtherResult.Text.Replace("\n", "\r\n");
+					string stage = GetDebugStage();
+					var result = rbDebugResult.Text.Replace("\n", "\r\n");
 
 					File.WriteAllText(Path.Combine(path, stage + "-debug.txt"), result);
 
