@@ -314,29 +314,16 @@ namespace Mosa.Tool.Explorer
 			return stage;
 		}
 
-		private string GetDebugStage()
+		private string GetCurrentDebugStage()
 		{
 			string stage = cbDebugStages.SelectedItem.ToString();
 			return stage;
 		}
 
-		private List<string> GetCurrentDebugLines()
+		private string GetCurrentLabel()
 		{
-			var type = GetCurrentType();
-
-			if (type == null)
-				return null;
-
-			var methodData = methodStore.GetMethodData(type, false);
-
-			if (methodData == null)
-				return null;
-
-			string stage = GetDebugStage();
-
-			var lines = methodData.DebugLogs[stage];
-
-			return lines;
+			string label = cbLabels.SelectedItem as string;
+			return label;
 		}
 
 		private List<string> GetCurrentLines()
@@ -354,6 +341,25 @@ namespace Mosa.Tool.Explorer
 			string stage = GetCurrentStage();
 
 			var lines = methodData.InstructionLogs[stage];
+
+			return lines;
+		}
+
+		private List<string> GetCurrentDebugLines()
+		{
+			var type = GetCurrentType();
+
+			if (type == null)
+				return null;
+
+			var methodData = methodStore.GetMethodData(type, false);
+
+			if (methodData == null)
+				return null;
+
+			string stage = GetCurrentDebugStage();
+
+			var lines = methodData.DebugLogs[stage];
 
 			return lines;
 		}
@@ -429,13 +435,35 @@ namespace Mosa.Tool.Explorer
 			cbLabels.Items.Clear();
 			cbLabels.Items.Add("All");
 
-			foreach (string line in lines)
+			foreach (var line in lines)
 			{
 				if (line.StartsWith("Block #"))
 				{
 					cbLabels.Items.Add(line.Substring(line.IndexOf("L_")));
 				}
 			}
+		}
+
+		private void UpdateResults()
+		{
+			tbResult.Text = string.Empty;
+
+			var type = GetCurrentType();
+			var lines = GetCurrentLines();
+			var label = GetCurrentLabel();
+
+			if (type == null)
+				return;
+
+			SetStatus(type.FullName);
+
+			if (lines == null)
+				return;
+
+			if (string.IsNullOrWhiteSpace(label) || label == "All")
+				tbResult.Text = methodStore.GetStageInstructions(lines, string.Empty);
+			else
+				tbResult.Text = methodStore.GetStageInstructions(lines, label);
 		}
 
 		private void UpdateDebugResults()
@@ -539,19 +567,7 @@ namespace Mosa.Tool.Explorer
 
 		private void cbLabels_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			SetStatus(string.Empty);
-
-			var lines = GetCurrentLines();
-
-			var type = GetCurrentType();
-
-			SetStatus(type.FullName);
-
-			if (cbLabels.SelectedIndex == 0)
-
-				tbResult.Text = methodStore.GetStageInstructions(lines, string.Empty);
-			else
-				tbResult.Text = methodStore.GetStageInstructions(lines, cbLabels.SelectedItem as string);
+			UpdateResults();
 		}
 
 		private string CreateText(List<string> list)
@@ -701,7 +717,7 @@ namespace Mosa.Tool.Explorer
 				{
 					cbDebugStages_SelectedIndexChanged(null, null);
 
-					string stage = GetDebugStage();
+					string stage = GetCurrentDebugStage();
 					var result = rbDebugResult.Text.Replace("\n", "\r\n");
 
 					File.WriteAllText(Path.Combine(path, stage + "-debug.txt"), result);
