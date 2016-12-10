@@ -1372,6 +1372,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var classType = context.InvokeMethod.DeclaringType;
 			var thisReference = context.Result;
 
+			var operands = new List<Operand>(context.Operands);
+
 			Context before = context.InsertBefore();
 
 			if (!StoreOnStack(thisReference.Type))
@@ -1383,11 +1385,16 @@ namespace Mosa.Compiler.Framework.Stages
 				before.OperandCount = 3;
 				before.Result = thisReference;
 				before.ResultCount = 1;
-			}
 
-			// Result is the this pointer, now invoke the real constructor
-			var operands = new List<Operand>(context.Operands);
-			operands.Insert(0, thisReference);
+				operands.Insert(0, thisReference);
+			}
+			else
+			{
+				var newThis = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
+				before.SetInstruction(IRInstruction.AddressOf, newThis, thisReference);
+
+				operands.Insert(0, newThis);
+			}
 
 			ProcessInvokeInstruction(context, context.InvokeMethod, null, operands);
 		}
