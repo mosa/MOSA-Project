@@ -7,6 +7,7 @@ namespace Mosa.TestWorld.x86.Tests
 		public Int64Test()
 			: base("Int64")
 		{
+			testMethods.AddLast(Int64Test0);
 			testMethods.AddLast(Int64Test1);
 			testMethods.AddLast(Int64Test2);
 			testMethods.AddLast(Int64Test3);
@@ -17,6 +18,13 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.AddLast(Int64Test8);
 			testMethods.AddLast(Int64Test9);
 			testMethods.AddLast(Int64Test10);
+		}
+
+		public static bool Int64Test0()
+		{
+			ulong var1 = 1uL;
+			ulong var2 = 1uL;
+			return (var1 / var2) == 1uL;
 		}
 
 		public static bool Int64Test1()
