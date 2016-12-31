@@ -2,19 +2,7 @@
 
 namespace Mosa.Runtime.x86
 {
-	public unsafe struct Long
-	{
-		public uint _lo;
-		public int _hi;
-	}
-
-	public unsafe struct ULong
-	{
-		public uint _lo;
-		public uint _hi;
-	}
-
-	public unsafe static class Division
+	internal static class Division
 	{
 		/* Single and Double Remainder */
 
@@ -127,19 +115,15 @@ namespace Mosa.Runtime.x86
 			remainder = 0;
 			for (int i = 0; i < 65; i++)
 			{
-				// Left shift Remainder:Quotient by 1
 				remainder <<= 1;
+
 				if (isFlipped)
 				{
-					fixed (ulong* ptr = &remainder)
-					{
-						((ULong*)ptr)->_lo |= 1;
-					}
+					remainder |= 1;
 				}
-				fixed (ulong* ptr = &quotient)
-				{
-					isFlipped = (((ULong*)ptr)->_hi & 0x80000000) == 0x80000000;
-				}
+
+				isFlipped = (quotient & 0x8000000000000000) != 0;
+
 				quotient <<= 1;
 
 				if (remainder >= divisor)
@@ -212,13 +196,14 @@ namespace Mosa.Runtime.x86
 
 			for (int i = 0; i < 65; i++)
 			{
-				// Left shift Remainder:Quotient by 1
 				uRemainder <<= 1;
 				if (isFlipped)
 				{
-					((ULong*)&uRemainder)->_lo |= 1;
+					uRemainder |= 1;
 				}
-				isFlipped = (((ULong*)&uQuotient)->_hi & 0x80000000) == 0x80000000;
+
+				isFlipped = (uQuotient & 0x8000000000000000) != 0;
+
 				uQuotient <<= 1;
 
 				if (uRemainder >= uDivisor)
@@ -236,25 +221,21 @@ namespace Mosa.Runtime.x86
 			// Adjust sign of the results.
 			if (quotient != 0)
 			{
-				fixed (long* ptr = &quotient)
-				{
-					int oldSign = ((((Long*)ptr)->_hi & 0x80000000) == 0x80000000) ? -1 : 1;
-					if ((oldSign == -1 && quotientSign == -1))
-						quotient += 1;
+				int oldSign = ((ulong)quotient & 0x8000000000000000) != 0 ? -1 : 1;
 
-					quotient *= quotientSign;
-				}
+				if ((oldSign == -1 && quotientSign == -1))
+					quotient += 1;
+
+				quotient *= quotientSign;
 			}
+
 			if (remainder != 0)
 			{
-				fixed (long* ptr = &remainder)
-				{
-					int oldSign = ((((Long*)ptr)->_hi & 0x80000000) == 0x80000000) ? -1 : 1;
-					if ((oldSign == -1 && remainderSign == -1))
-						remainder += 1;
+				int oldSign = ((ulong)remainder & 0x8000000000000000) != 0 ? -1 : 1;
+				if ((oldSign == -1 && remainderSign == -1))
+					remainder += 1;
 
-					remainder *= remainderSign;
-				}
+				remainder *= remainderSign;
 			}
 		}
 	}

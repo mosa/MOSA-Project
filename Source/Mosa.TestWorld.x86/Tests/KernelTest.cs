@@ -89,6 +89,7 @@ namespace Mosa.TestWorld.x86.Tests
 			var int64Test = new Int64Test();
 			var otherTest = new OtherTest();
 
+			int64Test.Test();
 			delegateTest.Test();
 			stringTest.Test();
 			interfaceTest.Test();
@@ -102,7 +103,6 @@ namespace Mosa.TestWorld.x86.Tests
 
 			//reflectionTest.Test();
 			arrayTest.Test();
-			int64Test.Test();
 			otherTest.Test();
 		}
 
