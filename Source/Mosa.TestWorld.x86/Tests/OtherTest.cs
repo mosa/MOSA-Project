@@ -137,9 +137,9 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			NotBoxedStruct s = new NotBoxedStruct();
 
-			//s.ToString();
-			//s.ToString();
-			//s.ToString();
+			s.ToString();
+			s.ToString();
+			s.ToString();
 			return s.I == 3;
 		}
 
