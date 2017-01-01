@@ -848,7 +848,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand reference = context.Operand1;
 			Operand result = context.Result;
 
-			MosaType classType = result.Type;
+			MosaType classType = context.MosaType;
 
 			if (!classType.IsInterface)
 			{

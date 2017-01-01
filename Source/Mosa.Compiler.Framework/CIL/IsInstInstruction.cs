@@ -37,6 +37,7 @@ namespace Mosa.Compiler.Framework.CIL
 			var type = (MosaType)decoder.Instruction.Operand;
 
 			ctx.Result = decoder.Compiler.AllocateVirtualRegisterOrStackSlot(type);
+			ctx.MosaType = type;
 			ctx.ResultCount = 1;
 		}
 
