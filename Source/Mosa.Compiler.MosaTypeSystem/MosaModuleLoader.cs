@@ -18,8 +18,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public MosaModuleLoader()
 		{
 			Modules = new List<ModuleDefMD>();
-			Resolver = new AssemblyResolver(null, false, false);
-			var typeResolver = new dnlib.DotNet.Resolver(Resolver);
+			Resolver = new AssemblyResolver(null, false) { UseGAC = false };
+			var typeResolver = new Resolver(Resolver);
 			Resolver.DefaultModuleContext = new ModuleContext(Resolver, typeResolver);
 			Resolver.EnableTypeDefCache = true;
 		}
@@ -65,9 +65,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public void AddPrivatePath(IEnumerable<string> assemblyPaths)
 		{
 			foreach (string path in assemblyPaths)
-			{
 				AddPrivatePath(Path.GetDirectoryName(path));
-			}
 		}
 
 		/// <summary>

@@ -17,18 +17,18 @@ namespace Mosa.Utility.GUI.Common
 
 			foreach (var module in typeSystem.Modules)
 			{
-				List<TreeNode> namespaces = new List<TreeNode>();
+				var namespaces = new List<TreeNode>();
 
-				TreeNode moduleNode = new TreeNode(module.Name);
+				var moduleNode = new TreeNode(module.Name);
 				treeView.Nodes.Add(moduleNode);
 
-				List<MosaType> typeList = (new List<MosaType>(module.Types.Values)).OrderBy(o => o.FullName).ToList();
+				var typeList = (new List<MosaType>(module.Types.Values)).OrderBy(o => o.FullName).ToList();
 
-				foreach (MosaType type in typeList)
+				foreach (var type in typeList)
 				{
 					TreeNode namespaceNode = null;
 					string @namespace = (string.IsNullOrWhiteSpace(type.Namespace)) ? "[No Namespace]" : type.Namespace;
-					foreach (TreeNode node in namespaces)
+					foreach (var node in namespaces)
 					{
 						if (node.Text.Equals(@namespace))
 						{
@@ -44,50 +44,50 @@ namespace Mosa.Utility.GUI.Common
 						namespaces.Add(namespaceNode);
 					}
 
-					TreeNode typeNode = new TreeNode(type.FullName);
+					var typeNode = new TreeNode(type.FullName);
 					namespaceNode.Nodes.Add(typeNode);
 
 					if (type.BaseType != null)
 					{
-						TreeNode baseTypeNode = new TreeNode("Base Type: " + type.BaseType.FullName);
+						var baseTypeNode = new TreeNode("Base Type: " + type.BaseType.FullName);
 						typeNode.Nodes.Add(baseTypeNode);
 					}
 
 					if (type.DeclaringType != null)
 					{
-						TreeNode declaringTypeNode = new TreeNode("Declaring Type: " + type.DeclaringType.FullName);
+						var declaringTypeNode = new TreeNode("Declaring Type: " + type.DeclaringType.FullName);
 						typeNode.Nodes.Add(declaringTypeNode);
 					}
 
 					if (type.ElementType != null)
 					{
-						TreeNode elementTypeNode = new TreeNode("Element Type: " + type.ElementType.FullName);
+						var elementTypeNode = new TreeNode("Element Type: " + type.ElementType.FullName);
 						typeNode.Nodes.Add(elementTypeNode);
 					}
 
 					if (type.Interfaces.Count != 0)
 					{
-						TreeNode interfacesNodes = new TreeNode("Interfaces");
+						var interfacesNodes = new TreeNode("Interfaces");
 						typeNode.Nodes.Add(interfacesNodes);
 
-						foreach (MosaType interfaceType in type.Interfaces)
+						foreach (var interfaceType in type.Interfaces)
 						{
-							TreeNode interfaceNode = new TreeNode(interfaceType.FullName);
+							var interfaceNode = new TreeNode(interfaceType.FullName);
 							interfacesNodes.Nodes.Add(interfaceNode);
 						}
 					}
 
 					if (type.Fields.Count != 0)
 					{
-						TreeNode fieldsNode = new TreeNode("Fields");
+						var fieldsNode = new TreeNode("Fields");
 						if (showSizes)
 							fieldsNode.Text = fieldsNode.Text + " (Count: " + type.Fields.Count.ToString() + " - Size: " + typeLayout.GetTypeSize(type).ToString() + ")";
 
 						typeNode.Nodes.Add(fieldsNode);
 
-						foreach (MosaField field in type.Fields)
+						foreach (var field in type.Fields)
 						{
-							TreeNode fieldNode = new TreeNode(field.ShortName);
+							var fieldNode = new TreeNode(field.ShortName);
 							fieldsNode.Nodes.Add(fieldNode);
 
 							if (field.IsStatic)
@@ -107,20 +107,20 @@ namespace Mosa.Utility.GUI.Common
 
 					if (type.Properties.Count != 0)
 					{
-						TreeNode propertiesNode = new TreeNode("Properties");
+						var propertiesNode = new TreeNode("Properties");
 						if (showSizes)
 							propertiesNode.Text = propertiesNode.Text + " (Count: " + type.Properties.Count.ToString() + ")";
 
 						typeNode.Nodes.Add(propertiesNode);
 
-						foreach (MosaProperty property in type.Properties)
+						foreach (var property in type.Properties)
 						{
-							TreeNode propertyNode = new ViewNode<MosaProperty>(property, property.ShortName);
+							var propertyNode = new ViewNode<MosaProperty>(property, property.ShortName);
 							propertiesNode.Nodes.Add(propertyNode);
 
 							if (property.GetterMethod != null)
 							{
-								TreeNode getterNode = new ViewNode<MosaMethod>(property.GetterMethod, property.GetterMethod.ShortName);
+								var getterNode = new ViewNode<MosaMethod>(property.GetterMethod, property.GetterMethod.ShortName);
 								propertyNode.Nodes.Add(getterNode);
 
 								if (property.GetterMethod.IsStatic)
@@ -146,7 +146,7 @@ namespace Mosa.Utility.GUI.Common
 
 								if (property.GetterMethod.GenericArguments.Count != 0)
 								{
-									TreeNode genericParameterNodes = new TreeNode("Generic Arguments Types");
+									var genericParameterNodes = new TreeNode("Generic Arguments Types");
 									getterNode.Nodes.Add(genericParameterNodes);
 
 									foreach (var genericParameter in property.GetterMethod.GenericArguments)
@@ -159,7 +159,7 @@ namespace Mosa.Utility.GUI.Common
 
 							if (property.SetterMethod != null)
 							{
-								TreeNode setterNode = new ViewNode<MosaMethod>(property.SetterMethod, property.SetterMethod.ShortName);
+								var setterNode = new ViewNode<MosaMethod>(property.SetterMethod, property.SetterMethod.ShortName);
 								propertyNode.Nodes.Add(setterNode);
 
 								if (property.SetterMethod.IsStatic)
@@ -185,12 +185,12 @@ namespace Mosa.Utility.GUI.Common
 
 								if (property.SetterMethod.GenericArguments.Count != 0)
 								{
-									TreeNode genericParameterNodes = new TreeNode("Generic Arguments Types");
+									var genericParameterNodes = new TreeNode("Generic Arguments Types");
 									setterNode.Nodes.Add(genericParameterNodes);
 
 									foreach (var genericParameter in property.SetterMethod.GenericArguments)
 									{
-										TreeNode GenericParameterNode = new TreeNode(genericParameter.Name);
+										var GenericParameterNode = new TreeNode(genericParameter.Name);
 										genericParameterNodes.Nodes.Add(GenericParameterNode);
 									}
 								}
@@ -200,14 +200,14 @@ namespace Mosa.Utility.GUI.Common
 
 					if (type.Methods.Count != 0)
 					{
-						TreeNode methodsNode = new TreeNode("Methods");
+						var methodsNode = new TreeNode("Methods");
 						typeNode.Nodes.Add(methodsNode);
 
 						foreach (MosaMethod method in type.Methods)
 						{
 							if (method.ShortName.StartsWith("set_") || method.ShortName.StartsWith("get_")) continue;
 
-							TreeNode methodNode = new ViewNode<MosaMethod>(method, method.ShortName);
+							var methodNode = new ViewNode<MosaMethod>(method, method.ShortName);
 							methodsNode.Nodes.Add(methodNode);
 
 							if (method.IsStatic)
@@ -233,12 +233,12 @@ namespace Mosa.Utility.GUI.Common
 
 							if (method.GenericArguments.Count != 0)
 							{
-								TreeNode genericParameterNodes = new TreeNode("Generic Arguments Types");
+								var genericParameterNodes = new TreeNode("Generic Arguments Types");
 								methodNode.Nodes.Add(genericParameterNodes);
 
 								foreach (var genericParameter in method.GenericArguments)
 								{
-									TreeNode GenericParameterNode = new TreeNode(genericParameter.Name);
+									var GenericParameterNode = new TreeNode(genericParameter.Name);
 									genericParameterNodes.Nodes.Add(GenericParameterNode);
 								}
 							}
@@ -247,12 +247,12 @@ namespace Mosa.Utility.GUI.Common
 
 					if (typeLayout.GetMethodTable(type) != null)
 					{
-						TreeNode methodTableNode = new TreeNode("Method Table");
+						var methodTableNode = new TreeNode("Method Table");
 						typeNode.Nodes.Add(methodTableNode);
 
-						foreach (MosaMethod method in typeLayout.GetMethodTable(type))
+						foreach (var method in typeLayout.GetMethodTable(type))
 						{
-							TreeNode methodNode = new ViewNode<MosaMethod>(method, method.ShortName);
+							var methodNode = new ViewNode<MosaMethod>(method, method.ShortName);
 							methodTableNode.Nodes.Add(methodNode);
 						}
 					}

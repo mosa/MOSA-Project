@@ -47,7 +47,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MethodStore.cs" />
     <Compile Include="TypeSystemTree.cs" />
+    <Compile Include="MethodData.cs" />
     <Compile Include="ViewNode.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +64,10 @@
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
       <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Trace\Mosa.Compiler.Trace.csproj">
+      <Project>{540beac7-a2c3-4c46-9f4a-e6e1df4ef6fc}</Project>
+      <Name>Mosa.Compiler.Trace</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
