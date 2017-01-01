@@ -997,11 +997,14 @@ namespace Mosa.Compiler.Framework.Stages
 			MosaField field = context.MosaField;
 
 			int offset = TypeLayout.GetFieldOffset(field);
+			bool isPointer = operand.IsPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
 
-			if (!result.IsOnStack && !StoreOnStack(operand.Type) && !operand.IsReferenceType && operand.IsPointer)
+			if (!result.IsOnStack && !StoreOnStack(operand.Type) && !operand.IsReferenceType && isPointer)
 			{
 				//EXAMPLE:
 				//  CIL.Ldfld V_3 [U4*] <= V_2 [Mosa.Runtime.MetadataMethodStruct*] {f:System.UInt32* Mosa.Runtime.MetadataMethodStruct::Name}
+				//EXAMPLE:
+				//  CIL.Ldfld V_26 [I4] <= V_61 [System.IntPtr] {f:System.UInt32 Mosa.Runtime.x86.ULong::_hi}
 
 				var loadInstruction = GetLoadInstruction(field.FieldType);
 				var size = GetInstructionSize(field.FieldType);
@@ -1012,7 +1015,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (!result.IsOnStack && !StoreOnStack(operand.Type) && !operand.IsReferenceType && !operand.IsPointer)
+			if (!result.IsOnStack && !StoreOnStack(operand.Type) && !operand.IsReferenceType && !isPointer)
 			{
 				//EXAMPLE:
 				//  CIL.Ldfld V_13 [System.IntPtr] <= V_12 [System.RuntimeMethodHandle] {f:System.IntPtr System.RuntimeMethodHandle::m_ptr}

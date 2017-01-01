@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			switch (opcode)
 			{
-				case OpCode.Conv_u: goto case OpCode.Conv_i;
+				case OpCode.Conv_u: resultType = compiler.TypeSystem.BuiltIn.U; break;
 				case OpCode.Conv_i: resultType = compiler.TypeSystem.BuiltIn.I; break;
 				case OpCode.Conv_i1: resultType = compiler.TypeSystem.BuiltIn.I1; break;
 				case OpCode.Conv_i2: resultType = compiler.TypeSystem.BuiltIn.I2; break;
@@ -52,9 +52,9 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Conv_u4: resultType = compiler.TypeSystem.BuiltIn.U4; break;
 				case OpCode.Conv_u8: resultType = compiler.TypeSystem.BuiltIn.U8; break;
 				case OpCode.Conv_ovf_i: goto case OpCode.Conv_i;
-				case OpCode.Conv_ovf_u: goto case OpCode.Conv_i;
+				case OpCode.Conv_ovf_u: goto case OpCode.Conv_u;
 				case OpCode.Conv_ovf_i_un: goto case OpCode.Conv_i;
-				case OpCode.Conv_ovf_u_un: goto case OpCode.Conv_i;
+				case OpCode.Conv_ovf_u_un: goto case OpCode.Conv_u;
 				case OpCode.Conv_r_un: resultType = compiler.TypeSystem.BuiltIn.R8; break;
 				default: throw new NotSupportedException(@"Overflow checking conversions not supported.");
 			}
