@@ -74,7 +74,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendConditionalIntegerValue(node.Operand3.IsLinkerResolved, 0); // 32:memory
 
 			if (node.Operand3.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand3, 24 / 8, node.Operand2.ConstantSignedInteger);
+				emitter.Emit(opcode, node.Operand3, 24 / 8 + (node.Size == InstructionSize.Size16 ? 1 : 0), node.Operand2.ConstantSignedInteger);
 			else
 				emitter.Emit(opcode);
 		}
@@ -102,12 +102,9 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendInteger(node.Operand3, node.Size);                       // 8/16/32:immediate
 
 			if (node.Operand1.IsLinkerResolved && !node.Operand3.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, 2, node.Operand2.ConstantSignedInteger);
+				emitter.Emit(opcode, node.Operand1, 2 + (node.Size == InstructionSize.Size16 ? 1 : 0), node.Operand2.ConstantSignedInteger);
 			else if (node.Operand1.IsLinkerResolved && node.Operand3.IsLinkerResolved)
-			{
-				// fixme: trouble!
-				throw new NotImplementCompilerException("not here");
-			}
+				throw new NotImplementCompilerException("not here");    // fixme: trouble!
 			else
 				emitter.Emit(opcode);
 		}
@@ -133,7 +130,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendConditionalIntegerValue(!node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger);   // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8, node.Operand2.ConstantSignedInteger);
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8 + (node.Size == InstructionSize.Size16 ? 1 : 0), node.Operand2.ConstantSignedInteger);
 			else
 				emitter.Emit(opcode);
 		}
