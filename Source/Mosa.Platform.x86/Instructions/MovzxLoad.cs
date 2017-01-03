@@ -46,18 +46,24 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 
+			int patchOffset;
+
+			// WARNING: DO NOT USE 0x66 PREFIX WITH THIS INSTRUCTION
+			// We currently don't have the ability to load into 16bit registers
+
 			// memory to register 0000 1111 : 1011 011w: mod reg r/m
 			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b1011)                                       // 4:opcode
-				.Append3Bits(Bits.b011)                                         // 4:opcode
-				.AppendWidthBit(node.Size != InstructionSize.Size8)                  // 1:width
+				.AppendNibble(Bits.b0000)                                           // 4:opcode
+				.AppendNibble(Bits.b1111)                                           // 4:opcode
+				.AppendNibble(Bits.b1011)                                           // 4:opcode
+				.Append3Bits(Bits.b011)                                             // 3:opcode
+				.AppendWidthBit(node.Size != InstructionSize.Size8)                 // 1:width
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out patchOffset) // 32:memory
+				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+				emitter.Emit(opcode, node.Operand1, patchOffset);
 			else
 				emitter.Emit(opcode);
 		}

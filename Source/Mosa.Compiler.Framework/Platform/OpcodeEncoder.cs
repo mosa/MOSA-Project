@@ -177,5 +177,19 @@ namespace Mosa.Compiler.Framework.Platform
 			else
 				return this;
 		}
+
+		public OpcodeEncoder AppendConditionalPatchPlaceholder(bool include, out int position)
+		{
+			if (include)
+			{
+				position = (Size / 8);
+				return AppendIntegerValue(0x0);
+			}
+			else
+			{
+				position = -1;
+				return this;
+			}
+		}
 	}
 }
