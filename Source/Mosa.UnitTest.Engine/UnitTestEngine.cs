@@ -63,7 +63,7 @@ namespace Mosa.UnitTest.Engine
 			Options = new Options()
 			{
 				EnableSSA = true,
-				EnableIROptimizations = false,
+				EnableIROptimizations = true,
 				EnableSparseConditionalConstantPropagation = true,
 				EnableInlinedMethods = false,
 
