@@ -175,7 +175,7 @@ namespace Mosa.Tool.Explorer
 		private void SetCompilerOptions()
 		{
 			Compiler.CompilerOptions.EnableSSA = cbEnableSSA.Checked;
-			Compiler.CompilerOptions.EnableOptimizations = cbEnableOptimizations.Checked;
+			Compiler.CompilerOptions.EnableIROptimizations = cbEnableOptimizations.Checked;
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
 			Compiler.CompilerOptions.EnableInlinedMethods = cbEnableInlinedMethods.Checked;

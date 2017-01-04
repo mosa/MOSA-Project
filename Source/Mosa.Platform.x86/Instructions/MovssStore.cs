@@ -48,6 +48,8 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(node.ResultCount == 0);
 			Debug.Assert(!node.Operand3.IsConstant);
 
+			int patchOffset;
+
 			// xmmreg1 to mem 1111 0011:0000 1111:0001 0001: mod xmmreg r/m
 			var opcode = new OpcodeEncoder()
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
@@ -60,10 +62,10 @@ namespace Mosa.Platform.x86.Instructions
 				// This opcode has a directionality bit, and it is set to 0
 				// This means we must swap around operand1 and operand3, and set offsetDestination to false
 				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);          // 32:memory
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out patchOffset); // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+				emitter.Emit(opcode, node.Operand1, patchOffset);
 			else
 				emitter.Emit(opcode);
 		}

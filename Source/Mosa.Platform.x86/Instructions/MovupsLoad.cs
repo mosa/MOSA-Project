@@ -46,6 +46,8 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 
+			int patchOffset;
+
 			// mem to xmmreg1 0000 1111:0001 0000: mod xmmreg r/m
 			var opcode = new OpcodeEncoder()
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
@@ -56,10 +58,10 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendRegister(node.Result.Register)                           // 3:register (destination)
 				.AppendRM(node.Operand1)                                        // 3:r/m (source)
 				.AppendConditionalDisplacement(!node.Operand2.IsConstantZero, node.Operand2)    // 8/32:displacement value
-				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out patchOffset); // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+				emitter.Emit(opcode, node.Operand1, patchOffset);
 			else
 				emitter.Emit(opcode);
 		}

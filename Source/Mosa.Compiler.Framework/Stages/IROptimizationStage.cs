@@ -183,7 +183,7 @@ namespace Mosa.Compiler.Framework.Stages
 				CombineIntegerCompareBranch,
 				FoldIntegerCompare,
 				RemoveUselessIntegerCompareBranch,
-				FoldIntegerCompareBranch,
+				ConstantFoldIntegerCompareBranch,
 				ReduceTruncationAndExpansion,
 				SimplifyExtendedMoveWithConstant,
 				SimplifyExtendedMove,
@@ -363,6 +363,9 @@ namespace Mosa.Compiler.Framework.Stages
 				if (useNode.Instruction == IRInstruction.AddressOf)
 					continue;
 
+				if (!(useNode.Instruction == IRInstruction.StoreInteger && useNode.Size == InstructionSize.Size16))
+					continue;
+
 				bool propogated = false;
 
 				for (int i = 0; i < useNode.OperandCount; i++)
@@ -375,11 +378,18 @@ namespace Mosa.Compiler.Framework.Stages
 
 						if (trace.Active) trace.Log("*** SimpleConstantPropagation");
 						if (trace.Active) trace.Log("BEFORE:\t" + useNode.ToString());
+
+						//Debug.WriteLine(MethodCompiler.Method.FullName);
+
+						//Debug.WriteLine("BEFORE:\t" + useNode.ToString());
+
 						AddOperandUsageToWorkList(operand);
 						useNode.SetOperand(i, source);
 						simpleConstantPropagationCount++;
 						changeCount++;
 						if (trace.Active) trace.Log("AFTER: \t" + useNode.ToString());
+
+						//Debug.WriteLine("AFTER:\t" + useNode.ToString());
 					}
 				}
 
@@ -1015,7 +1025,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Folds integer compare branch.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void FoldIntegerCompareBranch(InstructionNode node)
+		private void ConstantFoldIntegerCompareBranch(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.CompareIntegerBranch)
 				return;

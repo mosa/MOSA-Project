@@ -78,7 +78,7 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerFactory = delegate { return new AotCompiler(); };
 
 				compiler.CompilerOptions.EnableSSA = Options.EnableSSA;
-				compiler.CompilerOptions.EnableOptimizations = Options.EnableIROptimizations;
+				compiler.CompilerOptions.EnableIROptimizations = Options.EnableIROptimizations;
 				compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = Options.EnableSparseConditionalConstantPropagation;
 				compiler.CompilerOptions.EnableInlinedMethods = Options.EnableInlinedMethods;
 				compiler.CompilerOptions.InlinedIRMaximum = Options.InlinedIRMaximum;

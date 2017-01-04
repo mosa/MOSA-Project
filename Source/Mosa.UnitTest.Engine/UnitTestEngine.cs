@@ -62,9 +62,9 @@ namespace Mosa.UnitTest.Engine
 		{
 			Options = new Options()
 			{
-				EnableSSA = false,
+				EnableSSA = true,
 				EnableIROptimizations = false,
-				EnableSparseConditionalConstantPropagation = false,
+				EnableSparseConditionalConstantPropagation = true,
 				EnableInlinedMethods = false,
 
 				Emulator = EmulatorType.Qemu,
