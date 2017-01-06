@@ -34,6 +34,12 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.HasDoNotInlineAttribute = false;
 			MethodData.HasAddressOfInstruction = false;
 
+			// hack
+			if (method.HasThis || method.HasExplicitThis || method.Signature.Parameters.Count != 0)
+			{
+				MethodData.HasAddressOfInstruction = true;
+			}
+
 			int totalIRCount = 0;
 			int totalNonIRCount = 0;
 
@@ -220,7 +226,6 @@ namespace Mosa.Compiler.Framework.Stages
 					for (int i = 0; i < node.ResultCount; i++)
 					{
 						var op = node.GetResult(i);
-
 						var newOp = Map(op, map);
 
 						newNode.SetResult(i, newOp);
@@ -230,7 +235,6 @@ namespace Mosa.Compiler.Framework.Stages
 					for (int i = 0; i < node.OperandCount; i++)
 					{
 						var op = node.GetOperand(i);
-
 						var newOp = Map(op, map);
 
 						newNode.SetOperand(i, newOp);
