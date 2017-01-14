@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// the sign of the shifted value (inserting ones if it is negative), use the
 	/// <see cref="ArithmeticShiftRight"/> instead.
 	/// </remarks>
-	public sealed class ShiftRight : ThreeOperandInstruction
+	public sealed class ShiftRight : BaseThreeOperandInstruction
 	{
 		#region Construction
 

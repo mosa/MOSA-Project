@@ -31,9 +31,9 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.CompareFloatR8] = CompareFloatR8;
 			visitationDictionary[IRInstruction.CompareInteger] = CompareInteger;
 			visitationDictionary[IRInstruction.CompareIntegerBranch] = CompareIntegerBranch;
-			visitationDictionary[IRInstruction.CompoundLoad] = CompoundLoad;
-			visitationDictionary[IRInstruction.CompoundMove] = CompoundMove;
-			visitationDictionary[IRInstruction.CompoundStore] = CompoundStore;
+			visitationDictionary[IRInstruction.LoadCompound] = CompoundLoad;
+			visitationDictionary[IRInstruction.MoveCompound] = CompoundMove;
+			visitationDictionary[IRInstruction.StoreCompound] = CompoundStore;
 			visitationDictionary[IRInstruction.ConversionFloatR4ToFloatR8] = ConversionFloatR4ToFloatR8;
 			visitationDictionary[IRInstruction.ConversionFloatR4ToInteger] = ConversionFloatR4ToInteger;
 			visitationDictionary[IRInstruction.ConversionFloatR8ToFloatR4] = ConversionFloatR8ToFloatR4;

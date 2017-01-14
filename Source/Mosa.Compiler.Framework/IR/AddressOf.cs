@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// The address of instruction is used to retrieve the memory address
 	/// of its sole operand. The operand may not represent a register.
 	/// </remarks>
-	public sealed class AddressOf : TwoOperandInstruction
+	public sealed class AddressOf : BaseTwoOperandInstruction
 	{
 		#region Construction
 

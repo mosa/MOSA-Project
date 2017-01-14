@@ -131,7 +131,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (StoreOnStack(destination.Type))
 				{
-					context.AppendInstruction(IRInstruction.CompoundMove, destination, source);
+					context.AppendInstruction(IRInstruction.MoveCompound, destination, source);
 					context.MosaType = destination.Type;
 				}
 				else

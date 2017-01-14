@@ -3,9 +3,9 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	///
+	/// Stores a value to a memory pointer.
 	/// </summary>
-	public sealed class Throw : BaseOneOperandInstruction
+	public sealed class StoreParameterFloatR4 : BaseStoreParameterInstruction
 	{
 	}
 }

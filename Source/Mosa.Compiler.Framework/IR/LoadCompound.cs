@@ -2,10 +2,9 @@
 
 namespace Mosa.Compiler.Framework.IR
 {
-	public sealed class CompoundStore : BaseIRInstruction
+	public sealed class LoadCompound : BaseThreeOperandInstruction
 	{
-		public CompoundStore()
-			: base(3, 0)
+		public LoadCompound()
 		{
 		}
 	}

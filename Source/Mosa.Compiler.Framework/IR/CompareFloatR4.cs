@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Represents a floating point comparison context.
 	/// </summary>
-	public sealed class CompareFloatR4 : ThreeOperandInstruction
+	public sealed class CompareFloatR4 : BaseThreeOperandInstruction
 	{
 		#region Construction
 

@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// is statically or dynamically equal to or larger than the number of bits in the first
 	/// operand, the result is undefined.
 	/// </remarks>
-	public sealed class SubFloatR4 : ThreeOperandInstruction
+	public sealed class SubFloatR4 : BaseThreeOperandInstruction
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubFloatR4"/>.

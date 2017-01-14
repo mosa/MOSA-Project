@@ -6,26 +6,26 @@ namespace Mosa.Compiler.Framework.IR
 	/// Abstract base class for IR instructions with one operand.
 	/// </summary>
 	/// <remarks>
-	/// The <see cref="OneOperandInstruction"/> is the base class for
+	/// The <see cref="BaseOneOperandInstruction"/> is the base class for
 	/// IR instructions using one operand.
 	/// </remarks>
-	public abstract class OneOperandInstruction : BaseIRInstruction
+	public abstract class BaseOneOperandInstruction : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="ThreeOperandInstruction"/>.
+		/// Initializes a new instance of <see cref="BaseThreeOperandInstruction"/>.
 		/// </summary>
-		public OneOperandInstruction() :
+		public BaseOneOperandInstruction() :
 			base(1, 0)
 		{
 		}
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="TwoOperandInstruction"/>.
+		/// Initializes a new instance of <see cref="BaseTwoOperandInstruction"/>.
 		/// </summary>
 		/// <param name="op">The unary operand of this instruction.</param>
-		public OneOperandInstruction(Operand op) :
+		public BaseOneOperandInstruction(Operand op) :
 			base(1, 0)
 		{
 		}

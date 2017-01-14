@@ -887,7 +887,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(source.Type))
 			{
-				context.SetInstruction(IRInstruction.CompoundLoad, destination, StackFrame, constant);
+				context.SetInstruction(IRInstruction.LoadCompound, destination, StackFrame, constant);
 				context.MosaType = source.Type;
 			}
 			else
@@ -946,7 +946,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(arrayType.ElementType))
 			{
-				context.SetInstruction(IRInstruction.CompoundLoad, result, arrayAddress, elementOffset);
+				context.SetInstruction(IRInstruction.LoadCompound, result, arrayAddress, elementOffset);
 				context.MosaType = arrayType.ElementType;
 			}
 			else
@@ -1071,7 +1071,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var size = GetInstructionSize(field.FieldType);
 				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
 
-				context.SetInstruction(IRInstruction.CompoundLoad, size, result, operand, fixedOffset);
+				context.SetInstruction(IRInstruction.LoadCompound, size, result, operand, fixedOffset);
 				context.MosaType = field.FieldType;
 
 				return;
@@ -1087,7 +1087,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
 
 				context.SetInstruction(IRInstruction.AddressOf, address, operand);
-				context.AppendInstruction(IRInstruction.CompoundLoad, size, result, address, fixedOffset);
+				context.AppendInstruction(IRInstruction.LoadCompound, size, result, address, fixedOffset);
 
 				return;
 			}
@@ -1163,7 +1163,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(type))
 			{
-				context.SetInstruction(IRInstruction.CompoundLoad, destination, source, ConstantZero);
+				context.SetInstruction(IRInstruction.LoadCompound, destination, source, ConstantZero);
 			}
 			else
 			{
@@ -1190,7 +1190,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(fieldType))
 			{
-				context.SetInstruction(IRInstruction.CompoundLoad, destination, fieldOperand, ConstantZero);
+				context.SetInstruction(IRInstruction.LoadCompound, destination, fieldOperand, ConstantZero);
 				context.MosaType = fieldType;
 			}
 			else
@@ -1508,7 +1508,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(context.Operand1.Type))
 			{
-				context.SetInstruction(IRInstruction.CompoundStore, context.Size, null, StackFrame, constant, context.Operand1);
+				context.SetInstruction(IRInstruction.StoreCompound, context.Size, null, StackFrame, constant, context.Operand1);
 			}
 			else
 			{
@@ -1536,7 +1536,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(value.Type))
 			{
-				context.SetInstruction(IRInstruction.CompoundStore, null, arrayAddress, elementOffset, value);
+				context.SetInstruction(IRInstruction.StoreCompound, null, arrayAddress, elementOffset, value);
 				context.MosaType = arrayType.ElementType;
 			}
 			else
@@ -1566,7 +1566,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(fieldType))
 			{
-				context.SetInstruction(IRInstruction.CompoundStore, size, null, objectOperand, offsetOperand, valueOperand);
+				context.SetInstruction(IRInstruction.StoreCompound, size, null, objectOperand, offsetOperand, valueOperand);
 				context.MosaType = fieldType;
 			}
 			else
@@ -1597,7 +1597,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (StoreOnStack(type))
 			{
 				Debug.Assert(!context.Result.IsVirtualRegister);
-				context.SetInstruction(IRInstruction.CompoundMove, context.Result, context.Operand1);
+				context.SetInstruction(IRInstruction.MoveCompound, context.Result, context.Operand1);
 			}
 			else if (context.Operand1.IsVirtualRegister)
 			{
@@ -1620,7 +1620,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(type))
 			{
-				context.SetInstruction(IRInstruction.CompoundStore, null, context.Operand1, ConstantZero, context.Operand2);
+				context.SetInstruction(IRInstruction.StoreCompound, null, context.Operand1, ConstantZero, context.Operand2);
 			}
 			else
 			{
@@ -1645,7 +1645,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(field.FieldType))
 			{
-				context.SetInstruction(IRInstruction.CompoundStore, size, null, fieldOperand, ConstantZero, context.Operand1);
+				context.SetInstruction(IRInstruction.StoreCompound, size, null, fieldOperand, ConstantZero, context.Operand1);
 				context.MosaType = field.FieldType;
 			}
 			else
@@ -1771,7 +1771,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(type))
 			{
-				context.AppendInstruction(IRInstruction.CompoundLoad, result, tmp, ConstantZero);
+				context.AppendInstruction(IRInstruction.LoadCompound, result, tmp, ConstantZero);
 				context.MosaType = type;
 			}
 			else
@@ -1832,7 +1832,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(type))
 			{
-				context.AppendInstruction(IRInstruction.CompoundLoad, result, tmp, ConstantZero);
+				context.AppendInstruction(IRInstruction.LoadCompound, result, tmp, ConstantZero);
 				context.MosaType = type;
 			}
 			else
@@ -2377,7 +2377,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(source.Type))
 			{
-				context.SetInstruction(IRInstruction.CompoundMove, destination, source);
+				context.SetInstruction(IRInstruction.MoveCompound, destination, source);
 			}
 			else if (!source.IsVirtualRegister)
 			{

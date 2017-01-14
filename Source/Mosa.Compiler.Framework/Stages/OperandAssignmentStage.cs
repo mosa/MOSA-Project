@@ -255,7 +255,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (StoreOnStack(operand.Type))
 				{
-					context.AppendInstruction(IRInstruction.CompoundMove, destination, operand);
+					context.AppendInstruction(IRInstruction.MoveCompound, destination, operand);
 				}
 				else
 				{

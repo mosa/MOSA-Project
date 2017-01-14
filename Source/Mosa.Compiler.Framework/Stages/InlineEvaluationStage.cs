@@ -187,7 +187,7 @@ namespace Mosa.Compiler.Framework.Stages
 					var newOperand = Operand.CreateVirtualRegister(operand.Type, -operand.Index);
 
 					var moveInstruction = StoreOnStack(newOperand.Type)
-						? IRInstruction.CompoundMove
+						? IRInstruction.MoveCompound
 						: GetMoveInstruction(newOperand.Type);
 
 					var moveNode = new InstructionNode(moveInstruction, newOperand, newOp);

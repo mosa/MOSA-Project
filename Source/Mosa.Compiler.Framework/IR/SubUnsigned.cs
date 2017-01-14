@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// is statically or dynamically equal to or larger than the number of bits in the first
 	/// operand, the result is undefined.
 	/// </remarks>
-	public sealed class SubUnsigned : ThreeOperandInstruction
+	public sealed class SubUnsigned : BaseThreeOperandInstruction
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SubUnsigned"/>.

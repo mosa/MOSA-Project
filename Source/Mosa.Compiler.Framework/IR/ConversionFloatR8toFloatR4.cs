@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class ConversionFloatR8ToFloatR4 : TwoOperandInstruction
+	public sealed class ConversionFloatR8ToFloatR4 : BaseTwoOperandInstruction
 	{
 		#region Construction
 

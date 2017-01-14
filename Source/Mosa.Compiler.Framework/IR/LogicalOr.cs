@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of the or context.
 	/// </summary>
-	public sealed class LogicalOr : ThreeOperandInstruction
+	public sealed class LogicalOr : BaseThreeOperandInstruction
 	{
 		#region Construction
 

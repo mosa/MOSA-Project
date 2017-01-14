@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of the exclusive-or operation.
 	/// </summary>
-	public sealed class LogicalXor : ThreeOperandInstruction
+	public sealed class LogicalXor : BaseThreeOperandInstruction
 	{
 		#region Construction
 
