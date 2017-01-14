@@ -704,28 +704,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
-			{
-				// Large Aligned moves allow 128bits to be copied at a time
-				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
-				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, offset2);
-				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
-			}
-			for (int i = largeAlignedTypeSize; i < alignedTypeSize; i += NativeAlignment)
-			{
-				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
-				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, tmp, srcReg, offset2);
-				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, index, tmp);
-			}
-			for (int i = alignedTypeSize; i < typeSize; i++)
-			{
-				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
-				context.AppendInstruction(X86.MovzxLoad, InstructionSize.Size8, tmp, srcReg, offset2);
-				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
-			}
+			context.SetInstruction(X86.MovLoad, context.Size, context.Result, context.Operand1, context.Operand2);
 		}
 
 		/// <summary>
