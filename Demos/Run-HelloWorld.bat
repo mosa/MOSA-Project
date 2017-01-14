@@ -1,1 +1,1 @@
-start ..\bin\Mosa.Tool.Launcher.exe -q -a -qemu  -threading-off -all-optimization-off ..\bin\Mosa.HelloWorld.x86.exe
+start ..\bin\Mosa.Tool.Launcher.exe -q -a -qemu ..\bin\Mosa.HelloWorld.x86.exe
