@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var handler = BasicBlocks.GetByLabel(clause.HandlerStart);
 
-					var exceptionObject = MethodCompiler.CreateVirtualRegister(clause.Type);
+					var exceptionObject = AllocateVirtualRegister(clause.Type);
 
 					var context = new Context(handler);
 
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var handler = BasicBlocks.GetByLabel(clause.HandlerStart);
 
-						var exceptionObject = MethodCompiler.CreateVirtualRegister(objectType);
+						var exceptionObject = AllocateVirtualRegister(objectType);
 
 						var context = new Context(handler);
 
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var handler = BasicBlocks.GetByLabel(clause.FilterStart.Value);
 
-						var exceptionObject = MethodCompiler.CreateVirtualRegister(objectType);
+						var exceptionObject = AllocateVirtualRegister(objectType);
 
 						var context = new Context(handler);
 

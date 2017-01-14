@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Trace
 
 			var traceLog = new TraceLog(TraceType.InstructionList, method, stage, true);
 
-			traceLog.Log(String.Format("IR representation of method {0} after stage {1}:", method.FullName, stage));
+			traceLog.Log(String.Format("{0} after stage {1}:", method.FullName, stage));
 			traceLog.Log();
 
 			if (basicBlocks.Count > 0)

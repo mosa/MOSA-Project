@@ -31,6 +31,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private BasicBlock block;
 
+		/// <summary>
+		/// The counts
+		/// </summary>
 		private int[] counts;
 
 		#endregion Data members
@@ -291,8 +294,56 @@ namespace Mosa.Compiler.Framework.Stages
 			return GetBlockByLabel(label);
 		}
 
-		#endregion IInstructionDecoder Members
+		Operand IInstructionDecoder.ConvertVirtualRegisterToStackLocal(Operand operand)
+		{
+			if (operand.IsStackLocal)
+				return operand;
 
-		//var trace = CreateTraceLog("Inlined");
+			int index = 0;
+
+			foreach (var op in MethodCompiler.LocalVariables)
+			{
+				if (op == operand)
+					break;
+
+				index++;
+			}
+
+			var local = MethodCompiler.Method.LocalVariables[index];
+
+			var stackLocal = MethodCompiler.AddStackLocal(local.Type, local.IsPinned);
+
+			MethodCompiler.LocalVariables[index] = stackLocal;
+
+			foreach (var node in operand.Uses.ToArray())
+			{
+				for (int i = 0; i < node.OperandCount; i++)
+				{
+					var op = node.GetOperand(i);
+
+					if (operand == op)
+					{
+						node.SetOperand(i, stackLocal);
+					}
+				}
+			}
+
+			foreach (var node in operand.Definitions.ToArray())
+			{
+				for (int i = 0; i < node.ResultCount; i++)
+				{
+					var op = node.GetResult(i);
+
+					if (operand == op)
+					{
+						node.SetResult(i, stackLocal);
+					}
+				}
+			}
+
+			return stackLocal;
+		}
+
+		#endregion IInstructionDecoder Members
 	}
 }

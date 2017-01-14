@@ -2,8 +2,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using System;
-using System.Collections.Generic;
 
 namespace Mosa.Platform.ARMv6.Stages
 {

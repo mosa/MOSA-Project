@@ -1,5 +1,6 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.Reflection;
 using System.Runtime.InteropServices;
 using Xunit;
 
@@ -32,5 +33,6 @@ using Xunit;
 //
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: CollectionBehavior(MaxParallelThreads = 64)]
 
 //[assembly: CollectionBehavior(CollectionBehavior.CollectionPerClass, MaxParallelThreads = 64, DisableTestParallelization = false)]

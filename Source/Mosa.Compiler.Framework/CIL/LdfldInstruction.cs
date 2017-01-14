@@ -38,8 +38,8 @@ namespace Mosa.Compiler.Framework.CIL
 
 			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
 
+			ctx.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, field.FieldType);
 			ctx.MosaField = field;
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, field.FieldType);
 		}
 
 		#endregion Methods

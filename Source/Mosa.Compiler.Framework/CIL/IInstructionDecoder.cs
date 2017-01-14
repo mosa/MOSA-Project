@@ -38,5 +38,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <param name="label">The label.</param>
 		/// <returns></returns>
 		BasicBlock GetBlock(int label);
+
+		Operand ConvertVirtualRegisterToStackLocal(Operand virtualRegister);
 	}
 }

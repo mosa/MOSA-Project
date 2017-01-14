@@ -10,16 +10,10 @@ rmdir /q /s source
 mkdir source
 
 %GIT% clone --branch v1.6.0-mosa --depth 1 https://github.com/mosa/dnlib.git source/dnlib
-%GIT% clone --branch v2.10.0.beta1-mosa  --depth 1 https://github.com/mosa/dockpanelsuite.git source/dockpanelsuite
 
 %MSBUILD% /nologo /m /p:BuildInParallel=true /p:Configuration=Release /p:Platform="Any CPU" source/dnlib\dnlib.sln
 
-cd source/dockpanelsuite
-CALL all.bat
-cd ..
-
 copy dnlib\Release\bin\dnlib.dll ..
-copy dockpanelsuite\bin\net40\WeifenLuo.WinFormsUI.Docking.dll ..
 
 pause
 

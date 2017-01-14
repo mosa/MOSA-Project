@@ -9,6 +9,11 @@ namespace Mosa.Platform.x86
 {
 	public static class X86OpcodeEncoderExtensions
 	{
+		public static OpcodeEncoder AppendRegister(this OpcodeEncoder encoder, int value)
+		{
+			return encoder.Append3Bits(value);
+		}
+
 		public static OpcodeEncoder AppendRegister(this OpcodeEncoder encoder, Register register)
 		{
 			return encoder.Append3Bits(register.RegisterCode);
@@ -52,7 +57,7 @@ namespace Mosa.Platform.x86
 			return encoder.AppendByte(value);
 		}
 
-		public static OpcodeEncoder AppendConditionalPrefix(this OpcodeEncoder encoder, byte value, bool include)
+		public static OpcodeEncoder AppendConditionalPrefix(this OpcodeEncoder encoder, bool include, byte value)
 		{
 			if (include)
 				encoder.AppendByte(value);
@@ -122,8 +127,10 @@ namespace Mosa.Platform.x86
 			return encoder.Append2Bits(Bits.b11);
 		}
 
-		public static OpcodeEncoder AppendConditionalDisplacement(this OpcodeEncoder encoder, Operand displacement, bool include)
+		public static OpcodeEncoder AppendConditionalDisplacement(this OpcodeEncoder encoder, bool include, Operand displacement)
 		{
+			Debug.Assert(displacement.IsConstant);
+
 			if (!include)
 				return encoder;
 
@@ -147,7 +154,7 @@ namespace Mosa.Platform.x86
 			return encoder.AppendIntegerValue(displacement.ConstantUnsignedInteger);
 		}
 
-		public static OpcodeEncoder AppendConditionalREXPrefix(this OpcodeEncoder encoder, bool w, bool r, bool x, bool b, bool include)
+		public static OpcodeEncoder AppendConditionalREXPrefix(this OpcodeEncoder encoder, bool include, bool w, bool r, bool x, bool b)
 		{
 			if (!include)
 				return encoder;
@@ -174,21 +181,90 @@ namespace Mosa.Platform.x86
 			throw new InvalidCompilerException("Instruction size invalid");
 		}
 
-		public static OpcodeEncoder ModRegRMSIBDisplacement(this OpcodeEncoder encoder, Operand result, Operand op1, Operand op2)
+		public static OpcodeEncoder ModRegRMSIBDisplacement(this OpcodeEncoder encoder, bool offsetDestination, Operand destination, Operand source, Operand offset)
 		{
-			if (op2.IsConstant)
+			if (offsetDestination && source.IsConstant)
 			{
-				encoder.AppendMod(true, op2);               // 2:mod
-				encoder.AppendRegister(result.Register);    // 3:register (destination)
-				encoder.AppendRM(op1);                      // 3:r/m (source)
-				encoder.AppendConditionalDisplacement(op2); // 8/32:displacement value
+				var baseEBP = destination.Register == GeneralPurposeRegister.EBP;
+				if (baseEBP)
+				{
+					if (offset.IsCPURegister || Is8BitDisplacement(offset))
+					{
+						encoder.AppendMod(Bits.b01);                                    // 2:mod
+					}
+					else
+					{
+						encoder.AppendMod(Bits.b10);                                    // 2:mod
+					}
+				}
+				else
+				{
+					encoder.AppendMod(true, offset);                                    // 2:mod
+				}
+
+				encoder.AppendRegister(Bits.b000);                                      // 3:register (destination)
+
+				if (offset.IsCPURegister)
+				{
+					encoder.AppendRM(Bits.b100);                                        // 3:r/m (source)
+					encoder.AppendSIB(1, offset.Register, destination.Register);        // 8:sib (scale, index, base)
+					if (baseEBP)
+					{
+						encoder.AppendByteValue(0x0);                                   // 8:displacement value
+					}
+				}
+				else if (destination.Register == GeneralPurposeRegister.ESP)
+				{
+					// When destination is ESP we must use SIB
+					encoder.AppendRM(Bits.b100);                                        // 3:r/m (source)
+					encoder.AppendSIB(1, destination.Register, destination.Register);   // 8:sib (scale, index, base)
+					encoder.AppendConditionalDisplacement(offset);                      // 8/32:displacement value
+				}
+				else
+				{
+					encoder.AppendRM(destination);                                      // 3:r/m (source)
+					if (baseEBP)
+					{
+						encoder.AppendConditionalDisplacement(true, offset);                     // 8/32:displacement value
+					}
+					else
+					{
+						encoder.AppendConditionalDisplacement(offset);                  // 8/32:displacement value
+					}
+				}
+			}
+			else if (offset.IsConstant)
+			{
+				// When source is ESP we must use SIB
+				encoder.AppendMod(true, offset);                                        // 2:mod
+				encoder.AppendRegister(destination.Register);                           // 3:register (destination)
+				if (source.Register == GeneralPurposeRegister.ESP)
+				{
+					encoder.AppendRM(Bits.b100);                                        // 3:r/m (source)
+					encoder.AppendSIB(1, source.Register, source.Register);             // 8:sib (scale, index, base)
+				}
+				else
+				{
+					encoder.AppendRM(source);                                           // 3:r/m (source)
+				}
+				encoder.AppendConditionalDisplacement(offset);                          // 8/32:displacement value
 			}
 			else
 			{
-				encoder.AppendMod(Bits.b00);                        // 2:mod
-				encoder.AppendRegister(result.Register);            // 3:register (destination)
-				encoder.AppendRM(Bits.b100);                        // 3:r/m (source)
-				encoder.AppendSIB(1, op2.Register, op1.Register);   // 8:sib (scale, index, base)
+				// When EBP is the base we must set the mod to either:
+				// b01 with a 1 byte displacement
+				// b10 with a 4 byte displacement
+				var @base = offsetDestination ? destination : source;
+				var baseEBP = @base.Register == GeneralPurposeRegister.EBP;
+
+				encoder.AppendMod(baseEBP ? Bits.b01 : Bits.b00);                       // 2:mod
+				encoder.AppendRegister(destination.Register);                           // 3:register (destination)
+				encoder.AppendRM(Bits.b100);                                            // 3:r/m (source)
+				encoder.AppendSIB(1, offset.Register, @base.Register);                  // 8:sib (scale, index, base)
+				if (baseEBP)
+				{
+					encoder.AppendByteValue(0x0);                                       // 8:displacement value
+				}
 			}
 
 			return encoder;

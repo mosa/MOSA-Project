@@ -1,8 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -14,71 +12,22 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			visitationDictionary[X86.In] = In;
-			visitationDictionary[X86.Out] = Out;
 			visitationDictionary[X86.Cdq] = Cdq;
-			visitationDictionary[X86.Mul] = Mul;
 			visitationDictionary[X86.Div] = Div;
-			visitationDictionary[X86.IMul] = IMul;
 			visitationDictionary[X86.IDiv] = IDiv;
-			visitationDictionary[X86.Sar] = Sar;
-			visitationDictionary[X86.Shr] = Shr;
-			visitationDictionary[X86.Shl] = Shl;
+			visitationDictionary[X86.IMul] = IMul;
+			visitationDictionary[X86.In] = In;
+			visitationDictionary[X86.Mul] = Mul;
+			visitationDictionary[X86.Out] = Out;
 			visitationDictionary[X86.Rcr] = Rcr;
+			visitationDictionary[X86.Sar] = Sar;
+			visitationDictionary[X86.Shl] = Shl;
 			visitationDictionary[X86.Shld] = Shld;
+			visitationDictionary[X86.Shr] = Shr;
 			visitationDictionary[X86.Shrd] = Shrd;
 		}
 
 		#region Visitation Methods
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.In"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void In(Context context)
-		{
-			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister &&
-				context.Result.Register == GeneralPurposeRegister.EAX &&
-				(context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
-				return;
-
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-
-			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
-			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
-
-			var size = context.Size;
-
-			context.SetInstruction(X86.Mov, EDX, operand1);
-			context.AppendInstruction(X86.In, size, EAX, EDX);
-			context.AppendInstruction(X86.Mov, result, EAX);
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Out"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Out(Context context)
-		{
-			// TRANSFORM: OUT <= EDX, EAX && OUT <= imm8, EAX
-			var size = context.Size;
-
-			if (context.Operand1.IsCPURegister && context.Operand2.IsCPURegister &&
-				(context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant) &&
-				context.Operand2.Register == GeneralPurposeRegister.EAX)
-				return;
-
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-
-			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
-			Operand EAX = Operand.CreateCPURegister(operand2.Type, GeneralPurposeRegister.EAX);
-
-			context.SetInstruction(X86.Mov, EDX, operand1);
-			context.AppendInstruction(X86.Mov, EAX, operand2);
-			context.AppendInstruction(X86.Out, size, null, EDX, EAX);
-		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Cdq"/> instructions.
@@ -100,43 +49,6 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction2(X86.Cdq, EDX, EAX, EAX);
 			context.AppendInstruction(X86.Mov, result, EDX);
 			context.AppendInstruction(X86.Mov, result2, EAX);
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Mul"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Mul(Context context)
-		{
-			if (context.Result.IsCPURegister && context.Result2.IsCPURegister && context.Operand1.IsCPURegister && context.Operand2.IsRegister)
-				if (context.Result.Register == GeneralPurposeRegister.EDX &&
-					context.Result2.Register == GeneralPurposeRegister.EAX &&
-					context.Operand1.Register == GeneralPurposeRegister.EAX)
-					return;
-
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-			Operand result = context.Result;
-			Operand result2 = context.Result2;
-
-			Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-
-			context.SetInstruction(X86.Mov, eax, operand1);
-
-			if (operand2.IsRegister)
-			{
-				context.AppendInstruction2(X86.Mul, edx, eax, eax, operand2);
-			}
-			else
-			{
-				Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-				context.AppendInstruction(X86.Mov, v3, operand2);
-				context.AppendInstruction2(X86.Mul, edx, eax, eax, v3);
-			}
-
-			context.AppendInstruction(X86.Mov, result, edx);
-			context.AppendInstruction(X86.Mov, result2, eax);
 		}
 
 		/// <summary>
@@ -164,7 +76,7 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Mov, EDX, operand1);
 			context.AppendInstruction(X86.Mov, EAX, operand2);
 
-			if (operand3.IsRegister)
+			if (operand3.IsCPURegister)
 			{
 				context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, operand3);
 			}
@@ -177,22 +89,6 @@ namespace Mosa.Platform.x86.Stages
 
 			context.AppendInstruction(X86.Mov, result2, EAX);
 			context.AppendInstruction(X86.Mov, result, EDX);
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.IMul" /> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void IMul(Context context)
-		{
-			if (!context.Operand2.IsConstant)
-				return;
-
-			Operand v1 = AllocateVirtualRegister(context.Operand2.Type);
-			Operand operand2 = context.Operand2;
-
-			context.Operand2 = v1;
-			context.InsertBefore().SetInstruction(X86.Mov, v1, operand2);
 		}
 
 		/// <summary>
@@ -221,7 +117,7 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Mov, EDX, operand1);
 			context.AppendInstruction(X86.Mov, EAX, operand2);
 
-			if (operand3.IsRegister)
+			if (operand3.IsCPURegister)
 			{
 				context.AppendInstruction2(X86.IDiv, EDX, EAX, EDX, EAX, operand3);
 			}
@@ -237,39 +133,102 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Sar"/> instructions.
+		/// Visitation function for <see cref="IX86Visitor.IMul" /> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Sar(Context context)
+		public void IMul(Context context)
 		{
-			HandleShiftOperation(context, X86.Sar);
-		}
+			if (!context.Operand2.IsConstant)
+				return;
 
-		///// <summary>
-		///// Visitation function for <see cref="IX86Visitor.Sal"/> instructions.
-		///// </summary>
-		///// <param name="context">The context.</param>
-		//public override void Sal(Context context)
-		//{
-		//	HandleShiftOperation(context, X86.Shl);
-		//}
+			Operand v1 = AllocateVirtualRegister(context.Operand2.Type);
+			Operand operand2 = context.Operand2;
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Shl"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Shl(Context context)
-		{
-			HandleShiftOperation(context, X86.Shl);
+			context.Operand2 = v1;
+			context.InsertBefore().SetInstruction(X86.Mov, v1, operand2);
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Shr"/> instructions.
+		/// Visitation function for <see cref="IX86Visitor.In"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Shr(Context context)
+		public void In(Context context)
 		{
-			HandleShiftOperation(context, X86.Shr);
+			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister &&
+				context.Result.Register == GeneralPurposeRegister.EAX &&
+				(context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
+				return;
+
+			Operand result = context.Result;
+			Operand operand1 = context.Operand1;
+
+			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
+			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
+
+			var size = context.Size;
+
+			context.SetInstruction(X86.Mov, EDX, operand1);
+			context.AppendInstruction(X86.In, size, EAX, EDX);
+			context.AppendInstruction(X86.Mov, result, EAX);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Mul"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Mul(Context context)
+		{
+			if (context.Result.IsCPURegister && context.Result2.IsCPURegister && context.Operand1.IsCPURegister && !context.Operand2.IsConstant &&
+				context.Result.Register == GeneralPurposeRegister.EDX && context.Result2.Register == GeneralPurposeRegister.EAX && context.Operand1.Register == GeneralPurposeRegister.EAX)
+				return;
+
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+			Operand result = context.Result;
+			Operand result2 = context.Result2;
+
+			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			Operand EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+
+			context.SetInstruction(X86.Mov, EAX, operand1);
+
+			if (operand2.IsConstant)
+			{
+				Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				context.AppendInstruction(X86.Mov, v3, operand2);
+				operand2 = v3;
+			}
+
+			Debug.Assert(operand2.IsCPURegister || operand2.IsVirtualRegister);
+
+			context.AppendInstruction2(X86.Mul, EDX, EAX, EAX, operand2);
+			context.AppendInstruction(X86.Mov, result, EDX);
+			context.AppendInstruction(X86.Mov, result2, EAX);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Out"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Out(Context context)
+		{
+			// TRANSFORM: OUT <= EDX, EAX && OUT <= imm8, EAX
+			var size = context.Size;
+
+			if (context.Operand1.IsCPURegister && context.Operand2.IsCPURegister &&
+				(context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant) &&
+				context.Operand2.Register == GeneralPurposeRegister.EAX)
+				return;
+
+			Operand operand1 = context.Operand1;
+			Operand operand2 = context.Operand2;
+
+			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
+			Operand EAX = Operand.CreateCPURegister(operand2.Type, GeneralPurposeRegister.EAX);
+
+			context.SetInstruction(X86.Mov, EDX, operand1);
+			context.AppendInstruction(X86.Mov, EAX, operand2);
+			context.AppendInstruction(X86.Out, size, null, EDX, EAX);
 		}
 
 		/// <summary>
@@ -279,6 +238,24 @@ namespace Mosa.Platform.x86.Stages
 		public void Rcr(Context context)
 		{
 			HandleShiftOperation(context, X86.Rcr);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Sar"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Sar(Context context)
+		{
+			HandleShiftOperation(context, X86.Sar);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Shl"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Shl(Context context)
+		{
+			HandleShiftOperation(context, X86.Shl);
 		}
 
 		/// <summary>
@@ -304,6 +281,15 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, ECX, operand3);
 			context.AppendInstruction(X86.Shld, result, operand1, operand2, ECX);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.Shr"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void Shr(Context context)
+		{
+			HandleShiftOperation(context, X86.Shr);
 		}
 
 		/// <summary>

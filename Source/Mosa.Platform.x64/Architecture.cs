@@ -215,19 +215,49 @@ namespace Mosa.Platform.x64
 		/// <param name="source">The source.</param>
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
-			// TODO
+			throw new NotImplementCompilerException();
+		}
+
+		/// <summary>
+		/// Inserts the store instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
+		/// <exception cref="NotImplementCompilerException"></exception>
+		public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
+		{
+			throw new NotImplementCompilerException();
+		}
+
+		/// <summary>
+		/// Inserts the load instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="offset">The offset.</param>
+		/// <exception cref="NotImplementCompilerException"></exception>
+		public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
+		{
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
 		/// Create platform compound move.
 		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
+		/// <param name="destinationOffset">The destination offset.</param>
 		/// <param name="source">The source.</param>
+		/// <param name="sourceOffset">The source offset.</param>
 		/// <param name="size">The size.</param>
-		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand source, int size)
+		/// <exception cref="NotImplementCompilerException"></exception>
+		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand destinationOffset, Operand source, Operand sourceOffset, int size)
 		{
-			// TODO
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -238,7 +268,7 @@ namespace Mosa.Platform.x64
 		/// <param name="source">The source.</param>
 		public override void InsertExchangeInstruction(Context context, Operand destination, Operand source)
 		{
-			// TODO
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -249,7 +279,7 @@ namespace Mosa.Platform.x64
 		/// <param name="source">The source.</param>
 		public override void InsertJumpInstruction(Context context, Operand destination)
 		{
-			// TODO
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -259,7 +289,7 @@ namespace Mosa.Platform.x64
 		/// <param name="Destination">The destination.</param>
 		public override void InsertJumpInstruction(Context context, BasicBlock Destination)
 		{
-			// TODO
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -269,7 +299,7 @@ namespace Mosa.Platform.x64
 		/// <param name="source">The source.</param>
 		public override void InsertCallInstruction(Context context, Operand source)
 		{
-			// TODO
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -280,7 +310,7 @@ namespace Mosa.Platform.x64
 		/// <param name="Source">The source.</param>
 		public override void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
-			// TODO
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -291,7 +321,7 @@ namespace Mosa.Platform.x64
 		/// <param name="Source">The source.</param>
 		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
-			// TODO
+			throw new NotImplementCompilerException();
 		}
 
 		/// <summary>
@@ -303,17 +333,6 @@ namespace Mosa.Platform.x64
 		{
 			// TODO
 			return false;
-		}
-
-		/// <summary>
-		/// Inserts the address of instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source">The source.</param>
-		public override void InsertAddressOfInstruction(Context context, Operand destination, Operand source)
-		{
-			// TODO
 		}
 	}
 }

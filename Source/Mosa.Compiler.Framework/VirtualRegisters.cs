@@ -37,37 +37,27 @@ namespace Mosa.Compiler.Framework
 		/// Allocates the virtual register.
 		/// </summary>
 		/// <param name="type">The type.</param>
+		/// <param name="name">The name.</param>
 		/// <returns></returns>
 		public Operand Allocate(MosaType type)
 		{
-			return Allocate(type, null);
-		}
-
-		/// <summary>
-		/// Allocates the virtual register.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="name">The name.</param>
-		/// <returns></returns>
-		public Operand Allocate(MosaType type, string name)
-		{
 			int index = virtualRegisters.Count + 1;
 
-			Operand virtualRegister = name == null ? Operand.CreateVirtualRegister(type, index) : Operand.CreateVirtualRegister(type, index, name);
+			Operand virtualRegister = Operand.CreateVirtualRegister(type, index);
 
 			virtualRegisters.Add(virtualRegister);
 
 			return virtualRegister;
 		}
 
-		public void SplitLongOperand(TypeSystem typeSystem, Operand longOperand, int highOffset, int lowOffset)
+		public void SplitLongOperand(TypeSystem typeSystem, Operand longOperand)
 		{
 			Debug.Assert(longOperand.Is64BitInteger);
 
 			if (longOperand.Low == null && longOperand.High == null)
 			{
-				virtualRegisters.Add(Operand.CreateHighSplitForLong(typeSystem, longOperand, highOffset, virtualRegisters.Count + 1));
-				virtualRegisters.Add(Operand.CreateLowSplitForLong(typeSystem, longOperand, lowOffset, virtualRegisters.Count + 1));
+				virtualRegisters.Add(Operand.CreateLowSplitForLong(typeSystem, longOperand, virtualRegisters.Count + 1));
+				virtualRegisters.Add(Operand.CreateHighSplitForLong(typeSystem, longOperand, virtualRegisters.Count + 1));
 			}
 		}
 

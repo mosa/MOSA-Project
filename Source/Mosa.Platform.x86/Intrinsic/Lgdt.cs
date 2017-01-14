@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.IR;
-using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -21,40 +18,24 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			//Debug.Assert(context.Operand1.IsConstant); // only constants are supported
-			var operand1 = context.Operand1;
+			Helper.FoldOperand1ToConstant(context);
 
-			// HACK --- for when optimizations are turned off
-			if (!operand1.IsConstant)
-			{
-				if (operand1.Definitions.Count == 1)
-				{
-					var node = operand1.Definitions[0];
-
-					if (node.Instruction == IRInstruction.Move && node.Operand1.IsConstant)
-						operand1 = node.Operand1;
-				}
-			}
-
-			Debug.Assert(operand1.IsConstant); // only constants are supported
-
-			var zero = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
 			var constantx10 = Operand.CreateConstant(methodCompiler.TypeSystem, 0x10);
 
-			Operand ax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, GeneralPurposeRegister.EAX);
+			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			Operand ds = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.DS);
 			Operand es = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.ES);
 			Operand fs = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.FS);
 			Operand gs = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.GS);
 			Operand ss = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.SS);
 
-			context.SetInstruction(X86.Lgdt, null, operand1);
-			context.AppendInstruction(X86.Mov, ax, constantx10);
-			context.AppendInstruction(X86.Mov, ds, ax);
-			context.AppendInstruction(X86.Mov, es, ax);
-			context.AppendInstruction(X86.Mov, fs, ax);
-			context.AppendInstruction(X86.Mov, gs, ax);
-			context.AppendInstruction(X86.Mov, ss, ax);
+			context.SetInstruction(X86.Lgdt, null, context.Operand1);
+			context.AppendInstruction(X86.Mov, eax, constantx10);
+			context.AppendInstruction(X86.Mov, ds, eax);
+			context.AppendInstruction(X86.Mov, es, eax);
+			context.AppendInstruction(X86.Mov, fs, eax);
+			context.AppendInstruction(X86.Mov, gs, eax);
+			context.AppendInstruction(X86.Mov, ss, eax);
 			context.AppendInstruction(X86.FarJmp);
 		}
 

@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Lzf;
 using Mosa.ClassLib;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
@@ -47,7 +46,7 @@ namespace Mosa.UnitTest.Engine
 		private const uint MaxRetries = 10;
 		private const uint RetryDelay = 1; // 1- seconds
 
-		private const int DefaultMaxSentQueue = 100;
+		private const int DefaultMaxSentQueue = 10; // 100
 
 		private Queue<DebugMessage> queue = new Queue<DebugMessage>();
 		private HashSet<DebugMessage> sent = new HashSet<DebugMessage>();
@@ -65,8 +64,9 @@ namespace Mosa.UnitTest.Engine
 			{
 				EnableSSA = true,
 				EnableIROptimizations = true,
-				EnableVariablePromotion = true,
 				EnableSparseConditionalConstantPropagation = true,
+				EnableInlinedMethods = false,
+
 				Emulator = EmulatorType.Qemu,
 				ImageFormat = ImageFormat.IMG,
 				BootFormat = BootFormat.Multiboot_0_7,
@@ -76,7 +76,6 @@ namespace Mosa.UnitTest.Engine
 				DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"),
 				FileSystem = FileSystem.FAT16,
 				UseMultipleThreadCompiler = true,
-				EnableInlinedMethods = true,
 				InlinedIRMaximum = 8,
 				BootLoader = BootLoader.Syslinux_3_72,
 				VBEVideo = false,
@@ -91,6 +90,7 @@ namespace Mosa.UnitTest.Engine
 				DebugConnectionPort = 9999,
 				DebugPipeName = "MOSA",
 				ExitOnLaunch = true,
+				GenerateNASMFile = true,
 				GenerateASMFile = true,
 				GenerateMapFile = true,
 
@@ -117,10 +117,16 @@ namespace Mosa.UnitTest.Engine
 				Platform = "x86";
 
 			if (TestAssemblyPath == null)
+#if __MonoCS__
+				TestAssemblyPath = AppDomain.CurrentDomain.BaseDirectory;
+#else
 				TestAssemblyPath = AppContext.BaseDirectory;
+#endif
 
 			if (TestSuiteFile == null)
+			{
 				TestSuiteFile = "Mosa.UnitTests." + Platform + ".exe";
+			}
 		}
 
 		private void ProcessQueue()
@@ -148,6 +154,8 @@ namespace Mosa.UnitTest.Engine
 					message.CallBack = MessageCallBack;
 
 					debugServerEngine.SendCommand(message);
+
+					//Console.WriteLine((message.Other as UnitTestRequest).MethodTypeName + "." + (message.Other as UnitTestRequest).MethodName);
 				}
 			}
 			catch (Exception e)

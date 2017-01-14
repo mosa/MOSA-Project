@@ -317,17 +317,17 @@ namespace Mosa.Kernel.x86
 				}
 			}
 
-			Screen.Goto(24, 0);
-			Screen.Write("INDEX: ");
-			Screen.Write(index, 10, 5);
-			Screen.Write(" LENGTH: ");
-			Screen.Write((uint)length, 10, 5);
+			//Screen.Goto(24, 0);
+			//Screen.Write("INDEX: ");
+			//Screen.Write(index, 10, 5);
+			//Screen.Write(" LENGTH: ");
+			//Screen.Write((uint)length, 10, 5);
 
-			unsafe
-			{
-				Screen.Write(" EIP: ");
-				Screen.Write((uint)idt_stack->EIP, 16, 8);
-			}
+			//unsafe
+			//{
+			//	Screen.Write(" EIP: ");
+			//	Screen.Write((uint)idt_stack->EIP, 16, 8);
+			//}
 
 			return true;
 		}

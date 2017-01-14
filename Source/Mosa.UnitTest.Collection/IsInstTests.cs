@@ -95,22 +95,28 @@ namespace Mosa.UnitTest.Collection
 			return (o is IBB);
 		}
 
-		//public static bool IsInstI4ToI4()
-		//{
-		//	object o = (int)1;
-		//	return (o is int);
-		//}
-
 		public static bool IsInstI4ToI4(int i)
 		{
-			object o = i;
+			object o = (int)i;
 			return (o is int);
+		}
+
+		public static bool IsInstU4ToU4()
+		{
+			object o = (uint)1;
+			return (o is uint);
+		}
+
+		public static bool IsInstI4ToU4()
+		{
+			object o = 1;
+			return (o is uint);
 		}
 
 		public static bool IsInstU4ToI4()
 		{
 			object o = (uint)1;
-			return (o is uint);
+			return (o is int);
 		}
 
 		public static bool IsInstI8ToI8()
@@ -123,12 +129,6 @@ namespace Mosa.UnitTest.Collection
 		{
 			object o = (ulong)1;
 			return (o is ulong);
-		}
-
-		public static bool IsInstI4ToU4()
-		{
-			object o = 1;
-			return (o is uint);
 		}
 
 		public static bool IsInstI1ToI1()

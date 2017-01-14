@@ -22,28 +22,96 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			visitationDictionary[CILInstruction.Nop] = Nop;
+			visitationDictionary[CILInstruction.Add] = Add;
+			visitationDictionary[CILInstruction.And] = BinaryLogic;
+			visitationDictionary[CILInstruction.Beq] = BinaryBranch;
+			visitationDictionary[CILInstruction.Beq_s] = BinaryBranch;
+			visitationDictionary[CILInstruction.Bge] = BinaryBranch;
+			visitationDictionary[CILInstruction.Bge_s] = BinaryBranch;
+			visitationDictionary[CILInstruction.Bge_un] = BinaryBranch;
+			visitationDictionary[CILInstruction.Bge_un_s] = BinaryBranch;
+			visitationDictionary[CILInstruction.Bgt] = BinaryBranch;
+			visitationDictionary[CILInstruction.Bgt_s] = BinaryBranch;
+			visitationDictionary[CILInstruction.Bgt_un] = BinaryBranch;
+			visitationDictionary[CILInstruction.Bgt_un_s] = BinaryBranch;
+			visitationDictionary[CILInstruction.Ble] = BinaryBranch;
+			visitationDictionary[CILInstruction.Ble_s] = BinaryBranch;
+			visitationDictionary[CILInstruction.Ble_un] = BinaryBranch;
+			visitationDictionary[CILInstruction.Ble_un_s] = BinaryBranch;
+			visitationDictionary[CILInstruction.Blt] = BinaryBranch;
+			visitationDictionary[CILInstruction.Blt_s] = BinaryBranch;
+			visitationDictionary[CILInstruction.Blt_un] = BinaryBranch;
+			visitationDictionary[CILInstruction.Blt_un_s] = BinaryBranch;
+			visitationDictionary[CILInstruction.Bne_un] = BinaryBranch;
+			visitationDictionary[CILInstruction.Bne_un_s] = BinaryBranch;
+			visitationDictionary[CILInstruction.Box] = Box;
+			visitationDictionary[CILInstruction.Br] = Branch;
+			visitationDictionary[CILInstruction.Br_s] = Branch;
 			visitationDictionary[CILInstruction.Break] = Break;
+			visitationDictionary[CILInstruction.Brfalse] = UnaryBranch;
+			visitationDictionary[CILInstruction.Brfalse_s] = UnaryBranch;
+			visitationDictionary[CILInstruction.Brtrue] = UnaryBranch;
+			visitationDictionary[CILInstruction.Brtrue_s] = UnaryBranch;
+			visitationDictionary[CILInstruction.Call] = Call;
+			visitationDictionary[CILInstruction.Calli] = Calli;
+			visitationDictionary[CILInstruction.Callvirt] = Callvirt;
+			visitationDictionary[CILInstruction.Castclass] = Castclass;
+			visitationDictionary[CILInstruction.Ceq] = BinaryComparison;
+			visitationDictionary[CILInstruction.Cgt] = BinaryComparison;
+			visitationDictionary[CILInstruction.Cgt_un] = BinaryComparison;
+			visitationDictionary[CILInstruction.Clt] = BinaryComparison;
+			visitationDictionary[CILInstruction.Clt_un] = BinaryComparison;
+			visitationDictionary[CILInstruction.Conv_i] = Conversion;
+			visitationDictionary[CILInstruction.Conv_i1] = Conversion;
+			visitationDictionary[CILInstruction.Conv_i2] = Conversion;
+			visitationDictionary[CILInstruction.Conv_i4] = Conversion;
+			visitationDictionary[CILInstruction.Conv_i8] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_i] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_i_un] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_i1] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_i1_un] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_i2] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_i2_un] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_i4] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_i4_un] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_i8] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_i8_un] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_u] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_u_un] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_u1] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_u1_un] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_u2] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_u2_un] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_u4] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_u4_un] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_u8] = Conversion;
+			visitationDictionary[CILInstruction.Conv_ovf_u8_un] = Conversion;
+			visitationDictionary[CILInstruction.Conv_r_un] = Conversion;
+			visitationDictionary[CILInstruction.Conv_r4] = Conversion;
+			visitationDictionary[CILInstruction.Conv_r8] = Conversion;
+			visitationDictionary[CILInstruction.Conv_u] = Conversion;
+			visitationDictionary[CILInstruction.Conv_u1] = Conversion;
+			visitationDictionary[CILInstruction.Conv_u2] = Conversion;
+			visitationDictionary[CILInstruction.Conv_u4] = Conversion;
+			visitationDictionary[CILInstruction.Conv_u8] = Conversion;
+			visitationDictionary[CILInstruction.Cpblk] = Cpblk;
+			visitationDictionary[CILInstruction.Div] = Div;
+			visitationDictionary[CILInstruction.Div_un] = BinaryLogic;
+			visitationDictionary[CILInstruction.Dup] = Dup;
+			visitationDictionary[CILInstruction.Endfilter] = Endfilter;
+			visitationDictionary[CILInstruction.Endfinally] = Endfinally;
+			visitationDictionary[CILInstruction.Initblk] = Initblk;
+			visitationDictionary[CILInstruction.InitObj] = InitObj;
+			visitationDictionary[CILInstruction.Isinst] = IsInst;
+			visitationDictionary[CILInstruction.Ldarg] = Ldarg;
 			visitationDictionary[CILInstruction.Ldarg_0] = Ldarg;
 			visitationDictionary[CILInstruction.Ldarg_1] = Ldarg;
 			visitationDictionary[CILInstruction.Ldarg_2] = Ldarg;
 			visitationDictionary[CILInstruction.Ldarg_3] = Ldarg;
-			visitationDictionary[CILInstruction.Ldloc_0] = Ldloc;
-			visitationDictionary[CILInstruction.Ldloc_1] = Ldloc;
-			visitationDictionary[CILInstruction.Ldloc_2] = Ldloc;
-			visitationDictionary[CILInstruction.Ldloc_3] = Ldloc;
-			visitationDictionary[CILInstruction.Stloc_0] = Stloc;
-			visitationDictionary[CILInstruction.Stloc_1] = Stloc;
-			visitationDictionary[CILInstruction.Stloc_2] = Stloc;
-			visitationDictionary[CILInstruction.Stloc_3] = Stloc;
 			visitationDictionary[CILInstruction.Ldarg_s] = Ldarg;
+			visitationDictionary[CILInstruction.Ldarga] = Ldarga;
 			visitationDictionary[CILInstruction.Ldarga_s] = Ldarga;
-			visitationDictionary[CILInstruction.Starg_s] = Starg;
-			visitationDictionary[CILInstruction.Ldloc_s] = Ldloc;
-			visitationDictionary[CILInstruction.Ldloca_s] = Ldloca;
-			visitationDictionary[CILInstruction.Stloc_s] = Stloc;
-			visitationDictionary[CILInstruction.Ldnull] = Ldc;
-			visitationDictionary[CILInstruction.Ldc_i4_m1] = Ldc;
+			visitationDictionary[CILInstruction.Ldc_i4] = Ldc;
 			visitationDictionary[CILInstruction.Ldc_i4_0] = Ldc;
 			visitationDictionary[CILInstruction.Ldc_i4_1] = Ldc;
 			visitationDictionary[CILInstruction.Ldc_i4_2] = Ldc;
@@ -53,129 +121,75 @@ namespace Mosa.Compiler.Framework.Stages
 			visitationDictionary[CILInstruction.Ldc_i4_6] = Ldc;
 			visitationDictionary[CILInstruction.Ldc_i4_7] = Ldc;
 			visitationDictionary[CILInstruction.Ldc_i4_8] = Ldc;
+			visitationDictionary[CILInstruction.Ldc_i4_m1] = Ldc;
 			visitationDictionary[CILInstruction.Ldc_i4_s] = Ldc;
-			visitationDictionary[CILInstruction.Ldc_i4] = Ldc;
 			visitationDictionary[CILInstruction.Ldc_i8] = Ldc;
 			visitationDictionary[CILInstruction.Ldc_r4] = Ldc;
 			visitationDictionary[CILInstruction.Ldc_r8] = Ldc;
-			visitationDictionary[CILInstruction.Dup] = Dup;
-			visitationDictionary[CILInstruction.Pop] = Pop;
-
-			//visitationDictionary[CILInstruction.Jmp] = Jmp;
-			visitationDictionary[CILInstruction.Call] = Call;
-			visitationDictionary[CILInstruction.Calli] = Calli;
-			visitationDictionary[CILInstruction.Ret] = Ret;
-			visitationDictionary[CILInstruction.Br_s] = Branch;
-			visitationDictionary[CILInstruction.Brfalse_s] = UnaryBranch;
-			visitationDictionary[CILInstruction.Brtrue_s] = UnaryBranch;
-			visitationDictionary[CILInstruction.Beq_s] = BinaryBranch;
-			visitationDictionary[CILInstruction.Bge_s] = BinaryBranch;
-			visitationDictionary[CILInstruction.Bgt_s] = BinaryBranch;
-			visitationDictionary[CILInstruction.Ble_s] = BinaryBranch;
-			visitationDictionary[CILInstruction.Blt_s] = BinaryBranch;
-			visitationDictionary[CILInstruction.Bne_un_s] = BinaryBranch;
-			visitationDictionary[CILInstruction.Bge_un_s] = BinaryBranch;
-			visitationDictionary[CILInstruction.Bgt_un_s] = BinaryBranch;
-			visitationDictionary[CILInstruction.Ble_un_s] = BinaryBranch;
-			visitationDictionary[CILInstruction.Blt_un_s] = BinaryBranch;
-			visitationDictionary[CILInstruction.Br] = Branch;
-			visitationDictionary[CILInstruction.Brfalse] = UnaryBranch;
-			visitationDictionary[CILInstruction.Brtrue] = UnaryBranch;
-			visitationDictionary[CILInstruction.Beq] = BinaryBranch;
-			visitationDictionary[CILInstruction.Bge] = BinaryBranch;
-			visitationDictionary[CILInstruction.Bgt] = BinaryBranch;
-			visitationDictionary[CILInstruction.Ble] = BinaryBranch;
-			visitationDictionary[CILInstruction.Blt] = BinaryBranch;
-			visitationDictionary[CILInstruction.Bne_un] = BinaryBranch;
-			visitationDictionary[CILInstruction.Bge_un] = BinaryBranch;
-			visitationDictionary[CILInstruction.Bgt_un] = BinaryBranch;
-			visitationDictionary[CILInstruction.Ble_un] = BinaryBranch;
-			visitationDictionary[CILInstruction.Blt_un] = BinaryBranch;
-			visitationDictionary[CILInstruction.Switch] = Switch;
-			visitationDictionary[CILInstruction.Ldind_i1] = Ldobj;
-			visitationDictionary[CILInstruction.Ldind_u1] = Ldobj;
-			visitationDictionary[CILInstruction.Ldind_i2] = Ldobj;
-			visitationDictionary[CILInstruction.Ldind_u2] = Ldobj;
-			visitationDictionary[CILInstruction.Ldind_i4] = Ldobj;
-			visitationDictionary[CILInstruction.Ldind_u4] = Ldobj;
-			visitationDictionary[CILInstruction.Ldind_i8] = Ldobj;
-			visitationDictionary[CILInstruction.Ldind_i] = Ldobj;
-			visitationDictionary[CILInstruction.Ldind_r4] = Ldobj;
-			visitationDictionary[CILInstruction.Ldind_r8] = Ldobj;
-			visitationDictionary[CILInstruction.Ldind_ref] = Ldobj;
-			visitationDictionary[CILInstruction.Stind_ref] = Stobj;
-			visitationDictionary[CILInstruction.Stind_i1] = Stobj;
-			visitationDictionary[CILInstruction.Stind_i2] = Stobj;
-			visitationDictionary[CILInstruction.Stind_i4] = Stobj;
-			visitationDictionary[CILInstruction.Stind_i8] = Stobj;
-			visitationDictionary[CILInstruction.Stind_r4] = Stobj;
-			visitationDictionary[CILInstruction.Stind_r8] = Stobj;
-			visitationDictionary[CILInstruction.Add] = Add;
-			visitationDictionary[CILInstruction.Sub] = Sub;
-			visitationDictionary[CILInstruction.Mul] = Mul;
-			visitationDictionary[CILInstruction.Div] = Div;
-			visitationDictionary[CILInstruction.Div_un] = BinaryLogic;
-			visitationDictionary[CILInstruction.Rem] = Rem;
-			visitationDictionary[CILInstruction.Rem_un] = BinaryLogic;
-			visitationDictionary[CILInstruction.And] = BinaryLogic;
-			visitationDictionary[CILInstruction.Or] = BinaryLogic;
-			visitationDictionary[CILInstruction.Xor] = BinaryLogic;
-			visitationDictionary[CILInstruction.Shl] = Shift;
-			visitationDictionary[CILInstruction.Shr] = Shift;
-			visitationDictionary[CILInstruction.Shr_un] = Shift;
-			visitationDictionary[CILInstruction.Neg] = Neg;
-			visitationDictionary[CILInstruction.Not] = Not;
-			visitationDictionary[CILInstruction.Conv_i1] = Conversion;
-			visitationDictionary[CILInstruction.Conv_i2] = Conversion;
-			visitationDictionary[CILInstruction.Conv_i4] = Conversion;
-			visitationDictionary[CILInstruction.Conv_i8] = Conversion;
-			visitationDictionary[CILInstruction.Conv_r4] = Conversion;
-			visitationDictionary[CILInstruction.Conv_r8] = Conversion;
-			visitationDictionary[CILInstruction.Conv_u4] = Conversion;
-			visitationDictionary[CILInstruction.Conv_u8] = Conversion;
-			visitationDictionary[CILInstruction.Callvirt] = Callvirt;
-
-			//visitationDictionary[CILInstruction.Cpobj] = Cpobj;
-			visitationDictionary[CILInstruction.Ldobj] = Ldobj;
-			visitationDictionary[CILInstruction.Ldstr] = Ldstr;
-			visitationDictionary[CILInstruction.Newobj] = Newobj;
-			visitationDictionary[CILInstruction.Castclass] = Castclass;
-			visitationDictionary[CILInstruction.Isinst] = IsInst;
-			visitationDictionary[CILInstruction.Conv_r_un] = Conversion;
-			visitationDictionary[CILInstruction.Unbox] = Unbox;
-			visitationDictionary[CILInstruction.Throw] = Throw;
-			visitationDictionary[CILInstruction.Ldfld] = Ldfld;
-			visitationDictionary[CILInstruction.Ldflda] = Ldflda;
-			visitationDictionary[CILInstruction.Stfld] = Stfld;
-			visitationDictionary[CILInstruction.Ldsfld] = Ldsfld;
-			visitationDictionary[CILInstruction.Ldsflda] = Ldsflda;
-			visitationDictionary[CILInstruction.Stsfld] = Stsfld;
-			visitationDictionary[CILInstruction.Stobj] = Stobj;
-			visitationDictionary[CILInstruction.Conv_ovf_i1_un] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_i2_un] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_i4_un] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_i8_un] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_u1_un] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_u2_un] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_u4_un] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_u8_un] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_i_un] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_u_un] = Conversion;
-			visitationDictionary[CILInstruction.Box] = Box;
-			visitationDictionary[CILInstruction.Newarr] = Newarr;
-			visitationDictionary[CILInstruction.Ldlen] = Ldlen;
-			visitationDictionary[CILInstruction.Ldelema] = Ldelema;
-			visitationDictionary[CILInstruction.Ldelem_i1] = Ldelem;
-			visitationDictionary[CILInstruction.Ldelem_u1] = Ldelem;
-			visitationDictionary[CILInstruction.Ldelem_i2] = Ldelem;
-			visitationDictionary[CILInstruction.Ldelem_u2] = Ldelem;
-			visitationDictionary[CILInstruction.Ldelem_i4] = Ldelem;
-			visitationDictionary[CILInstruction.Ldelem_u4] = Ldelem;
-			visitationDictionary[CILInstruction.Ldelem_i8] = Ldelem;
+			visitationDictionary[CILInstruction.Ldelem] = Ldelem;
 			visitationDictionary[CILInstruction.Ldelem_i] = Ldelem;
+			visitationDictionary[CILInstruction.Ldelem_i1] = Ldelem;
+			visitationDictionary[CILInstruction.Ldelem_i2] = Ldelem;
+			visitationDictionary[CILInstruction.Ldelem_i4] = Ldelem;
+			visitationDictionary[CILInstruction.Ldelem_i8] = Ldelem;
 			visitationDictionary[CILInstruction.Ldelem_r4] = Ldelem;
 			visitationDictionary[CILInstruction.Ldelem_r8] = Ldelem;
 			visitationDictionary[CILInstruction.Ldelem_ref] = Ldelem;
+			visitationDictionary[CILInstruction.Ldelem_u1] = Ldelem;
+			visitationDictionary[CILInstruction.Ldelem_u2] = Ldelem;
+			visitationDictionary[CILInstruction.Ldelem_u4] = Ldelem;
+			visitationDictionary[CILInstruction.Ldelema] = Ldelema;
+			visitationDictionary[CILInstruction.Ldfld] = Ldfld;
+			visitationDictionary[CILInstruction.Ldflda] = Ldflda;
+			visitationDictionary[CILInstruction.Ldftn] = Ldftn;
+			visitationDictionary[CILInstruction.Ldind_i] = Ldobj;
+			visitationDictionary[CILInstruction.Ldind_i1] = Ldobj;
+			visitationDictionary[CILInstruction.Ldind_i2] = Ldobj;
+			visitationDictionary[CILInstruction.Ldind_i4] = Ldobj;
+			visitationDictionary[CILInstruction.Ldind_i8] = Ldobj;
+			visitationDictionary[CILInstruction.Ldind_r4] = Ldobj;
+			visitationDictionary[CILInstruction.Ldind_r8] = Ldobj;
+			visitationDictionary[CILInstruction.Ldind_ref] = Ldobj;
+			visitationDictionary[CILInstruction.Ldind_u1] = Ldobj;
+			visitationDictionary[CILInstruction.Ldind_u2] = Ldobj;
+			visitationDictionary[CILInstruction.Ldind_u4] = Ldobj;
+			visitationDictionary[CILInstruction.Ldlen] = Ldlen;
+			visitationDictionary[CILInstruction.Ldloc] = Ldloc;
+			visitationDictionary[CILInstruction.Ldloc_0] = Ldloc;
+			visitationDictionary[CILInstruction.Ldloc_1] = Ldloc;
+			visitationDictionary[CILInstruction.Ldloc_2] = Ldloc;
+			visitationDictionary[CILInstruction.Ldloc_3] = Ldloc;
+			visitationDictionary[CILInstruction.Ldloc_s] = Ldloc;
+			visitationDictionary[CILInstruction.Ldloca] = Ldloca;
+			visitationDictionary[CILInstruction.Ldloca_s] = Ldloca;
+			visitationDictionary[CILInstruction.Ldnull] = Ldc;
+			visitationDictionary[CILInstruction.Ldobj] = Ldobj;
+			visitationDictionary[CILInstruction.Ldsfld] = Ldsfld;
+			visitationDictionary[CILInstruction.Ldsflda] = Ldsflda;
+			visitationDictionary[CILInstruction.Ldstr] = Ldstr;
+			visitationDictionary[CILInstruction.Ldtoken] = Ldtoken;
+			visitationDictionary[CILInstruction.Ldvirtftn] = Ldvirtftn;
+			visitationDictionary[CILInstruction.Leave] = Leave;
+			visitationDictionary[CILInstruction.Leave_s] = Leave;
+			visitationDictionary[CILInstruction.Mul] = Mul;
+			visitationDictionary[CILInstruction.Neg] = Neg;
+			visitationDictionary[CILInstruction.Newarr] = Newarr;
+			visitationDictionary[CILInstruction.Newobj] = Newobj;
+			visitationDictionary[CILInstruction.Nop] = Nop;
+			visitationDictionary[CILInstruction.Not] = Not;
+			visitationDictionary[CILInstruction.Or] = BinaryLogic;
+			visitationDictionary[CILInstruction.Pop] = Pop;
+			visitationDictionary[CILInstruction.Rem] = Rem;
+			visitationDictionary[CILInstruction.Rem_un] = BinaryLogic;
+			visitationDictionary[CILInstruction.Ret] = Ret;
+			visitationDictionary[CILInstruction.Rethrow] = Rethrow;
+			visitationDictionary[CILInstruction.Shl] = Shift;
+			visitationDictionary[CILInstruction.Shr] = Shift;
+			visitationDictionary[CILInstruction.Shr_un] = Shift;
+			visitationDictionary[CILInstruction.Sizeof] = Sizeof;
+			visitationDictionary[CILInstruction.Starg] = Starg;
+			visitationDictionary[CILInstruction.Starg_s] = Starg;
+			visitationDictionary[CILInstruction.Stelem] = Stelem;
 			visitationDictionary[CILInstruction.Stelem_i] = Stelem;
 			visitationDictionary[CILInstruction.Stelem_i1] = Stelem;
 			visitationDictionary[CILInstruction.Stelem_i2] = Stelem;
@@ -184,296 +198,240 @@ namespace Mosa.Compiler.Framework.Stages
 			visitationDictionary[CILInstruction.Stelem_r4] = Stelem;
 			visitationDictionary[CILInstruction.Stelem_r8] = Stelem;
 			visitationDictionary[CILInstruction.Stelem_ref] = Stelem;
-			visitationDictionary[CILInstruction.Ldelem] = Ldelem;
-			visitationDictionary[CILInstruction.Stelem] = Stelem;
+			visitationDictionary[CILInstruction.Stfld] = Stfld;
+			visitationDictionary[CILInstruction.Stind_i] = Stobj;
+			visitationDictionary[CILInstruction.Stind_i1] = Stobj;
+			visitationDictionary[CILInstruction.Stind_i2] = Stobj;
+			visitationDictionary[CILInstruction.Stind_i4] = Stobj;
+			visitationDictionary[CILInstruction.Stind_i8] = Stobj;
+			visitationDictionary[CILInstruction.Stind_r4] = Stobj;
+			visitationDictionary[CILInstruction.Stind_r8] = Stobj;
+			visitationDictionary[CILInstruction.Stind_ref] = Stobj;
+			visitationDictionary[CILInstruction.Stloc] = Stloc;
+			visitationDictionary[CILInstruction.Stloc_0] = Stloc;
+			visitationDictionary[CILInstruction.Stloc_1] = Stloc;
+			visitationDictionary[CILInstruction.Stloc_2] = Stloc;
+			visitationDictionary[CILInstruction.Stloc_3] = Stloc;
+			visitationDictionary[CILInstruction.Stloc_s] = Stloc;
+			visitationDictionary[CILInstruction.Stobj] = Stobj;
+			visitationDictionary[CILInstruction.Stsfld] = Stsfld;
+			visitationDictionary[CILInstruction.Sub] = Sub;
+			visitationDictionary[CILInstruction.Switch] = Switch;
+			visitationDictionary[CILInstruction.Throw] = Throw;
+			visitationDictionary[CILInstruction.Unbox] = Unbox;
 			visitationDictionary[CILInstruction.Unbox_any] = UnboxAny;
-			visitationDictionary[CILInstruction.Conv_ovf_i1] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_u1] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_i2] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_u2] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_i4] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_u4] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_i8] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_u8] = Conversion;
-
-			//visitationDictionary[CILInstruction.Refanyval] = Refanyval;
-			//visitationDictionary[CILInstruction.Ckfinite] = Ckfinite;
-			//visitationDictionary[CILInstruction.Mkrefany] = Mkrefany;
-			visitationDictionary[CILInstruction.Ldtoken] = Ldtoken;
-			visitationDictionary[CILInstruction.Conv_u2] = Conversion;
-			visitationDictionary[CILInstruction.Conv_u1] = Conversion;
-			visitationDictionary[CILInstruction.Conv_i] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_i] = Conversion;
-			visitationDictionary[CILInstruction.Conv_ovf_u] = Conversion;
+			visitationDictionary[CILInstruction.Xor] = BinaryLogic;
 
 			//visitationDictionary[CILInstruction.Add_ovf] = Add_ovf;
 			//visitationDictionary[CILInstruction.Add_ovf_un] = Add_ovf_un;
+			//visitationDictionary[CILInstruction.Arglist] = Arglist;
+			//visitationDictionary[CILInstruction.Ckfinite] = Ckfinite;
+			//visitationDictionary[CILInstruction.Cpobj] = Cpobj;
+			//visitationDictionary[CILInstruction.Jmp] = Jmp;
+			//visitationDictionary[CILInstruction.Localalloc] = Localalloc;
+			//visitationDictionary[CILInstruction.Mkrefany] = Mkrefany;
 			//visitationDictionary[CILInstruction.Mul_ovf] = Mul_ovf;
 			//visitationDictionary[CILInstruction.Mul_ovf_un] = Mul_ovf_un;
-			//visitationDictionary[CILInstruction.Sub_ovf] = Sub_ovf;
-			//visitationDictionary[CILInstruction.Sub_ovf_un] = Sub_ovf_un;
-			visitationDictionary[CILInstruction.Endfinally] = Endfinally;
-			visitationDictionary[CILInstruction.Leave] = Leave;
-			visitationDictionary[CILInstruction.Leave_s] = Leave;
-			visitationDictionary[CILInstruction.Stind_i] = Stobj;
-			visitationDictionary[CILInstruction.Conv_u] = Conversion;
-
-			//visitationDictionary[CILInstruction.Arglist] = Arglist;
-			visitationDictionary[CILInstruction.Ceq] = BinaryComparison;
-			visitationDictionary[CILInstruction.Cgt] = BinaryComparison;
-			visitationDictionary[CILInstruction.Cgt_un] = BinaryComparison;
-			visitationDictionary[CILInstruction.Clt] = BinaryComparison;
-			visitationDictionary[CILInstruction.Clt_un] = BinaryComparison;
-			visitationDictionary[CILInstruction.Ldftn] = Ldftn;
-			visitationDictionary[CILInstruction.Ldvirtftn] = Ldvirtftn;
-			visitationDictionary[CILInstruction.Ldarg] = Ldarg;
-			visitationDictionary[CILInstruction.Ldarga] = Ldarga;
-			visitationDictionary[CILInstruction.Starg] = Starg;
-			visitationDictionary[CILInstruction.Ldloc] = Ldloc;
-			visitationDictionary[CILInstruction.Ldloca] = Ldloca;
-			visitationDictionary[CILInstruction.Stloc] = Stloc;
-
-			//visitationDictionary[CILInstruction.Localalloc] = Localalloc;
-			visitationDictionary[CILInstruction.Endfilter] = Endfilter;
-
+			//visitationDictionary[CILInstruction.PreConstrained] = PreConstrained;
+			//visitationDictionary[CILInstruction.PreNo] = PreNo;
+			//visitationDictionary[CILInstruction.PreReadOnly] = PreReadOnly;
+			//visitationDictionary[CILInstruction.PreTail] = PreTail;
 			//visitationDictionary[CILInstruction.PreUnaligned] = PreUnaligned;
 			//visitationDictionary[CILInstruction.PreVolatile] = PreVolatile;
-			//visitationDictionary[CILInstruction.PreTail] = PreTail;
-			visitationDictionary[CILInstruction.InitObj] = InitObj;
-
-			//visitationDictionary[CILInstruction.PreConstrained] = PreConstrained;
-			visitationDictionary[CILInstruction.Cpblk] = Cpblk;
-			visitationDictionary[CILInstruction.Initblk] = Initblk;
-
-			//visitationDictionary[CILInstruction.PreNo] = PreNo;
-			visitationDictionary[CILInstruction.Rethrow] = Rethrow;
-			visitationDictionary[CILInstruction.Sizeof] = Sizeof;
-
 			//visitationDictionary[CILInstruction.Refanytype] = Refanytype;
-			//visitationDictionary[CILInstruction.PreReadOnly] = PreReadOnly;
+			//visitationDictionary[CILInstruction.Refanyval] = Refanyval;
+			//visitationDictionary[CILInstruction.Sub_ovf] = Sub_ovf;
+			//visitationDictionary[CILInstruction.Sub_ovf_un] = Sub_ovf_un;
+		}
+
+		protected override void Setup()
+		{
+			base.Setup();
 		}
 
 		#region Visitation Methods
 
 		/// <summary>
-		/// Visitation function for Ldarg instruction.
+		/// Visitation function for Add instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Ldarg(Context context)
+		private void Add(Context context)
 		{
-			ProcessLoadInstruction(context);
+			Replace(context, IRInstruction.AddFloatR4, IRInstruction.AddFloatR8, IRInstruction.AddSigned, IRInstruction.AddUnsigned);
 		}
 
 		/// <summary>
-		/// Visitation function for Ldarga instruction.
+		/// Visitation function for BinaryBranch instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Ldarga(Context context)
+		private void BinaryBranch(Context context)
 		{
-			context.ReplaceInstructionOnly(IRInstruction.AddressOf);
+			var target = context.BranchTargets[0];
+
+			ConditionCode cc = ConvertCondition(((CIL.BaseCILInstruction)context.Instruction).OpCode);
+			Operand first = context.Operand1;
+			Operand second = context.Operand2;
+
+			if (first.IsR)
+			{
+				Operand result = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+				if (first.IsR4)
+					context.SetInstruction(IRInstruction.CompareFloatR4, cc, result, first, second);
+				else
+					context.SetInstruction(IRInstruction.CompareFloatR8, cc, result, first, second);
+
+				context.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, result, Operand.CreateConstant(TypeSystem, 1));
+			}
+			else
+			{
+				context.SetInstruction(IRInstruction.CompareIntegerBranch, cc, null, first, second);
+			}
+
+			context.AddBranchTarget(target);
 		}
 
 		/// <summary>
-		/// Visitation function for Ldloc instruction.
+		/// Visitation function for BinaryComparison instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Ldloc(Context context)
+		private void BinaryComparison(Context context)
 		{
-			Debug.Assert(context.MosaType == null);
-			ProcessLoadInstruction(context);
+			var code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
+
+			BaseInstruction instruction = IRInstruction.CompareInteger;
+			if (context.Operand1.IsR4)
+				instruction = IRInstruction.CompareFloatR4;
+			else if (context.Operand1.IsR8)
+				instruction = IRInstruction.CompareFloatR8;
+
+			context.SetInstruction(instruction, code, context.Result, context.Operand1, context.Operand2);
+			context.SetInstruction(instruction, code, context.Result, context.Operand1, context.Operand2);
 		}
 
 		/// <summary>
-		/// Visitation function for Ldloca instruction.
+		/// Visitation function for BinaryLogic instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Ldloca(Context context)
+		private void BinaryLogic(Context context)
 		{
-			context.ReplaceInstructionOnly(IRInstruction.AddressOf);
+			if (context.Operand1.Type.IsEnum)
+			{
+				var type = context.Operand1.Type;
+				var operand = Operand.CreateField(type.Fields[0]);
+				context.SetOperand(0, operand);
+			}
+
+			if (context.Operand2.Type.IsEnum)
+			{
+				var type = context.Operand2.Type;
+				var operand = Operand.CreateField(type.Fields[0]);
+				context.SetOperand(1, operand);
+			}
+
+			switch ((context.Instruction as CIL.BaseCILInstruction).OpCode)
+			{
+				case CIL.OpCode.And: context.SetInstruction(IRInstruction.LogicalAnd, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Or: context.SetInstruction(IRInstruction.LogicalOr, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Xor: context.SetInstruction(IRInstruction.LogicalXor, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Div_un: context.SetInstruction(IRInstruction.DivUnsigned, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Rem_un: context.SetInstruction(IRInstruction.RemUnsigned, context.Result, context.Operand1, context.Operand2); break;
+				default: throw new InvalidCompilerException();
+			}
 		}
 
 		/// <summary>
-		/// Visitation function for Ldc instruction.
+		/// Visitation function for Box instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Ldc(Context context)
+		private void Box(Context context)
 		{
-			ProcessLoadInstruction(context);
-		}
-
-		/// <summary>
-		/// Visitation function for Ldobj instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Ldobj(Context context)
-		{
-			Operand destination = context.Result;
-			Operand source = context.Operand1;
-
+			var value = context.Operand1;
+			var result = context.Result;
 			var type = context.MosaType;
 
-			// This is actually ldind.* and ldobj - the opcodes have the same meanings
-
-			BaseIRInstruction loadInstruction = IRInstruction.Load;
-
-			if (MustSignExtendOnLoad(type))
+			if (!type.IsValueType)
 			{
-				loadInstruction = IRInstruction.LoadSignExtended;
-			}
-			else if (MustZeroExtendOnLoad(type))
-			{
-				loadInstruction = IRInstruction.LoadZeroExtended;
+				Debug.Assert(result.IsVirtualRegister);
+				Debug.Assert(value.IsVirtualRegister);
+
+				var moveInstruction = GetMoveInstruction(type);
+				context.ReplaceInstructionOnly(moveInstruction);
+				return;
 			}
 
-			var size = GetInstructionSize(type);
-			context.SetInstruction(loadInstruction, size, destination, source, ConstantZero);
-			context.MosaType = type;
-		}
+			int typeSize = TypeLayout.GetTypeSize(type);
+			int alignment = TypeLayout.NativePointerAlignment;
+			typeSize += (alignment - (typeSize % alignment)) % alignment;
 
-		/// <summary>
-		/// Visitation function for Ldsfld instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Ldsfld(Context context)
-		{
-			var fieldType = context.MosaField.FieldType;
-			var destination = context.Result;
+			VmCall vmCall = VmCall.Box32;
 
-			BaseIRInstruction loadInstruction = IRInstruction.Load;
-
-			if (MustSignExtendOnLoad(fieldType))
-			{
-				loadInstruction = IRInstruction.LoadSignExtended;
-			}
-			else if (MustZeroExtendOnLoad(fieldType))
-			{
-				loadInstruction = IRInstruction.LoadZeroExtended;
-			}
-
-			var size = GetInstructionSize(fieldType);
-			context.SetInstruction(loadInstruction, size, destination, Operand.CreateField(context.MosaField), ConstantZero);
-			context.MosaType = fieldType;
-		}
-
-		/// <summary>
-		/// Visitation function for Ldsflda instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Ldsflda(Context context)
-		{
-			context.SetInstruction(IRInstruction.AddressOf, context.Result, Operand.CreateField(context.MosaField));
-		}
-
-		/// <summary>
-		/// Visitation function for Ldftn instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Ldftn(Context context)
-		{
-			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbolFromMethod(TypeSystem, context.InvokeMethod));
-		}
-
-		/// <summary>
-		/// Visitation function for Ldvirtftn instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Ldvirtftn(Context context)
-		{
-			ReplaceWithVmCall(context, VmCall.GetVirtualFunctionPtr);
-		}
-
-		/// <summary>
-		/// Visitation function for Ldtoken instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Ldtoken(Context context)
-		{
-			// TODO: remove VmCall.GetHandleForToken?
-
-			Operand source;
-			Operand runtimeHandle;
-			if (context.MosaType != null)
-			{
-				source = Operand.CreateUnmanagedSymbolPointer(TypeSystem, context.MosaType.FullName + Metadata.TypeDefinition);
-				runtimeHandle = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
-			}
-			else if (context.MosaField != null)
-			{
-				source = Operand.CreateUnmanagedSymbolPointer(TypeSystem, context.MosaField.FullName + Metadata.FieldDefinition);
-				runtimeHandle = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
-			}
+			if (type.IsR4)
+				vmCall = VmCall.BoxR4;
+			else if (type.IsR8)
+				vmCall = VmCall.BoxR8;
+			else if (typeSize <= 4)
+				vmCall = VmCall.Box32;
+			else if (typeSize == 8)
+				vmCall = VmCall.Box64;
 			else
-				throw new NotImplementCompilerException();
+				vmCall = VmCall.Box;
 
-			Operand destination = context.Result;
-			context.SetInstruction(IRInstruction.Move, runtimeHandle, source);
-			context.AppendInstruction(IRInstruction.Move, destination, runtimeHandle);
-		}
+			context.SetInstruction(IRInstruction.Nop);
+			ReplaceWithVmCall(context, vmCall);
 
-		/// <summary>
-		/// Visitation function for Stloc instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Stloc(Context context)
-		{
-			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
-		}
-
-		/// <summary>
-		/// Visitation function for Starg instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Starg(Context context)
-		{
-			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
-		}
-
-		/// <summary>
-		/// Visitation function for Stobj instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Stobj(Context context)
-		{
-			// This is actually stind.* and stobj - the opcodes have the same meanings
-			var type = context.MosaType;  // pass thru
-
-			var size = GetInstructionSize(type);
-
-			if (TypeLayout.IsCompoundType(type))
+			context.SetOperand(1, GetRuntimeTypeHandle(type, context));
+			if (vmCall == VmCall.Box)
 			{
-				context.SetInstruction(IRInstruction.CompoundStore, size, null, context.Operand1, ConstantZero, context.Operand2);
+				Operand adr = AllocateVirtualRegister(type.ToManagedPointer());
+				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, value);
+
+				context.SetOperand(2, adr);
+				context.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
+				context.OperandCount = 4;
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.Store, size, null, context.Operand1, ConstantZero, context.Operand2);
+				context.SetOperand(2, value);
+				context.OperandCount = 3;
 			}
-
-			context.MosaType = type;
+			context.Result = result;
+			context.ResultCount = 1;
 		}
 
 		/// <summary>
-		/// Visitation function for Stsfld instruction.
+		/// Visitation function for Branch instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Stsfld(Context context)
+		private void Branch(Context context)
 		{
-			var field = context.MosaField;
-			var size = GetInstructionSize(field.FieldType);
-
-			context.SetInstruction(IRInstruction.Store, size, null, Operand.CreateField(field), ConstantZero, context.Operand1);
-			context.MosaType = field.FieldType;
+			context.ReplaceInstructionOnly(IRInstruction.Jmp);
 		}
 
 		/// <summary>
-		/// Visitation function for Dup instruction.
+		/// Visitation function for Break instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Dup(Context context)
+		private void Break(Context context)
 		{
-			Debug.Assert(false); // should never get here
+			context.SetInstruction(IRInstruction.Break);
+		}
 
-			// We don't need the dup anymore.
-			context.Empty();
+		private int CalculateInterfaceSlot(MosaType interaceType)
+		{
+			return TypeLayout.GetInterfaceSlotOffset(interaceType);
+		}
+
+		private int CalculateInterfaceSlotOffset(MosaMethod invokeTarget)
+		{
+			return CalculateInterfaceSlot(invokeTarget.DeclaringType) * NativePointerSize;
+		}
+
+		private int CalculateMethodTableOffset(MosaMethod invokeTarget)
+		{
+			int slot = TypeLayout.GetMethodTableOffset(invokeTarget);
+
+			return (NativePointerSize * slot);
 		}
 
 		/// <summary>
@@ -511,7 +469,7 @@ namespace Mosa.Compiler.Framework.Stages
 					typeSize += (alignment - (typeSize % alignment)) % alignment;
 
 					// Create a virtual register to hold our boxed value
-					var boxedValue = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Object);
+					var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
 
 					// Create a new context before the call and set it as a VmCall
 					var before = context.InsertBefore();
@@ -534,19 +492,6 @@ namespace Mosa.Compiler.Framework.Stages
 			ProcessInvokeInstruction(context, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
 		}
 
-		private bool OverridesMethod(MosaMethod method)
-		{
-			if (method.Overrides == null)
-				return false;
-			if (method.DeclaringType.BaseType.Name.Equals("ValueType"))
-				return true;
-			if (method.DeclaringType.BaseType.Name.Equals("Object"))
-				return true;
-			if (method.DeclaringType.BaseType.Name.Equals("Enum"))
-				return true;
-			return false;
-		}
-
 		/// <summary>
 		/// Visitation function for Calli instruction.
 		/// </summary>
@@ -560,108 +505,6 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for Ret instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Ret(Context context)
-		{
-			context.ReplaceInstructionOnly(IRInstruction.Return);
-		}
-
-		/// <summary>
-		/// Visitation function for BinaryLogic instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void BinaryLogic(Context context)
-		{
-			if (context.Operand1.Type.IsEnum)
-			{
-				var type = context.Operand1.Type;
-				var operand = Operand.CreateField(type.Fields[0]);
-				context.SetOperand(0, operand);
-			}
-
-			if (context.Operand2.Type.IsEnum)
-			{
-				var type = context.Operand2.Type;
-				var operand = Operand.CreateField(type.Fields[0]);
-				context.SetOperand(1, operand);
-			}
-
-			switch ((context.Instruction as CIL.BaseCILInstruction).OpCode)
-			{
-				case CIL.OpCode.And: context.SetInstruction(IRInstruction.LogicalAnd, context.Result, context.Operand1, context.Operand2); break;
-				case CIL.OpCode.Or: context.SetInstruction(IRInstruction.LogicalOr, context.Result, context.Operand1, context.Operand2); break;
-				case CIL.OpCode.Xor: context.SetInstruction(IRInstruction.LogicalXor, context.Result, context.Operand1, context.Operand2); break;
-				case CIL.OpCode.Div_un: context.SetInstruction(IRInstruction.DivUnsigned, context.Result, context.Operand1, context.Operand2); break;
-				case CIL.OpCode.Rem_un: context.SetInstruction(IRInstruction.RemUnsigned, context.Result, context.Operand1, context.Operand2); break;
-				default: throw new InvalidCompilerException();
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for Shift instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Shift(Context context)
-		{
-			switch ((context.Instruction as CIL.BaseCILInstruction).OpCode)
-			{
-				case CIL.OpCode.Shl: context.SetInstruction(IRInstruction.ShiftLeft, context.Result, context.Operand1, context.Operand2); break;
-				case CIL.OpCode.Shr: context.SetInstruction(IRInstruction.ArithmeticShiftRight, context.Result, context.Operand1, context.Operand2); break;
-				case CIL.OpCode.Shr_un: context.SetInstruction(IRInstruction.ShiftRight, context.Result, context.Operand1, context.Operand2); break;
-				default: throw new InvalidCompilerException();
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for Neg instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Neg(Context context)
-		{
-			//FUTURE: Add IRInstruction.Negate
-			if (context.Operand1.IsUnsigned)
-			{
-				Operand zero = Operand.CreateConstant(context.Operand1.Type, 0);
-				context.SetInstruction(IRInstruction.SubUnsigned, context.Result, zero, context.Operand1);
-			}
-			else if (context.Operand1.IsR4)
-			{
-				Operand minusOne = Operand.CreateConstant(TypeSystem, -1.0f);
-				context.SetInstruction(IRInstruction.MulFloat, context.Result, minusOne, context.Operand1);
-			}
-			else if (context.Operand1.IsR8)
-			{
-				Operand minusOne = Operand.CreateConstant(TypeSystem, -1.0d);
-				context.SetInstruction(IRInstruction.MulFloat, context.Result, minusOne, context.Operand1);
-			}
-			else
-			{
-				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1);
-				context.SetInstruction(IRInstruction.MulSigned, context.Result, minusOne, context.Operand1);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for Not instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Not(Context context)
-		{
-			context.SetInstruction(IRInstruction.LogicalNot, context.Result, context.Operand1);
-		}
-
-		/// <summary>
-		/// Visitation function for Conversion instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Conversion(Context context)
-		{
-			CheckAndConvertInstruction(context);
-		}
-
-		/// <summary>
 		/// Visitation function for Callvirt instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -672,7 +515,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MosaMethod method = context.InvokeMethod;
 			Operand resultOperand = context.Result;
-			List<Operand> operands = new List<Operand>(context.Operands);
+			var operands = new List<Operand>(context.Operands);
 
 			if (context.Previous.Instruction is ConstrainedPrefixInstruction)
 			{
@@ -705,7 +548,7 @@ namespace Mosa.Compiler.Framework.Stages
 						typeSize += (alignment - (typeSize % alignment)) % alignment;
 
 						// Create a virtual register to hold our boxed value
-						var boxedValue = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Object);
+						var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
 
 						// Create a new context before the call and set it as a VmCall
 						var before = context.InsertBefore();
@@ -732,9 +575,9 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Operand thisPtr = context.Operand1;
 
-				Operand typeDefinition = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-				Operand methodDefinition = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-				Operand methodPtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+				Operand typeDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+				Operand methodDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+				Operand methodPtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 				if (!method.DeclaringType.IsInterface)
 				{
@@ -746,13 +589,13 @@ namespace Mosa.Compiler.Framework.Stages
 					int methodPointerOffset = (NativePointerSize * 4);
 
 					// Get the TypeDef pointer
-					context.SetInstruction(IRInstruction.Load, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
+					context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 					// Get the MethodDef pointer
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodDefinition, typeDefinition, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
+					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodDefinition, typeDefinition, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
 
 					// Get the address of the method
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 				}
 				else
 				{
@@ -769,23 +612,23 @@ namespace Mosa.Compiler.Framework.Stages
 					int methodPointerOffset = (NativePointerSize * 4);
 
 					// Operands to hold pointers
-					Operand interfaceSlotPtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-					Operand interfaceMethodTablePtr = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+					Operand interfaceSlotPtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+					Operand interfaceMethodTablePtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 					// Get the TypeDef pointer
-					context.SetInstruction(IRInstruction.Load, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
+					context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 					// Get the Interface Slot Table pointer
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, interfaceSlotPtr, typeDefinition, Operand.CreateConstant(TypeSystem, interfaceSlotTableOffset));
+					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, interfaceSlotPtr, typeDefinition, Operand.CreateConstant(TypeSystem, interfaceSlotTableOffset));
 
 					// Get the Interface Method Table pointer
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant(TypeSystem, interfaceMethodTableOffset));
+					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant(TypeSystem, interfaceMethodTableOffset));
 
 					// Get the MethodDef pointer
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
+					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
 
 					// Get the address of the method
-					context.AppendInstruction(IRInstruction.Load, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 				}
 
 				context.AppendInstruction(IRInstruction.Nop);
@@ -797,6 +640,145 @@ namespace Mosa.Compiler.Framework.Stages
 				// we have to make this explicitly somehow.
 				ProcessInvokeInstruction(context, method, resultOperand, operands);
 			}
+		}
+
+		/// <summary>
+		/// Visitation function for Castclass instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Castclass(Context context)
+		{
+			// TODO!
+			//ReplaceWithVmCall(context, VmCall.Castclass);
+			context.ReplaceInstructionOnly(IRInstruction.MoveInteger); // HACK!
+		}
+
+		private BaseInstruction ComputeExtensionTypeAndMask(MosaType type, ref uint mask)
+		{
+			if (type.IsUI1)
+			{
+				mask = 0xFF;
+				return (type.IsSigned ? (BaseInstruction)IRInstruction.MoveSignExtended : (BaseInstruction)IRInstruction.MoveZeroExtended);
+			}
+			else if (type.IsUI2)
+			{
+				mask = 0xFFFF;
+				return type.IsSigned ? (BaseInstruction)IRInstruction.MoveSignExtended : (BaseInstruction)IRInstruction.MoveZeroExtended;
+			}
+			else if (type.IsUI4)
+			{
+				mask = 0xFFFFFFFF;
+			}
+			else if (type.IsUI8)
+			{
+				mask = 0x0;
+			}
+
+			return null;
+		}
+
+		/// <summary>
+		/// Visitation function for Conversion instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Conversion(Context context)
+		{
+			var result = context.Result;
+			var source = context.Operand1;
+
+			int destIndex = GetIndex(result.Type, NativeInstructionSize == InstructionSize.Size32);
+			int srcIndex = GetIndex(source.Type, NativeInstructionSize == InstructionSize.Size32);
+
+			var instruction = convTable[destIndex][srcIndex];
+			var size = GetInstructionSize(result.Type);
+
+			Debug.Assert(instruction != null);
+
+			uint mask = 0xFFFFFFFF;
+			ComputeExtensionTypeAndMask(result.Type, ref mask);
+
+			if (instruction == IRInstruction.ConversionIntegerToFloatR8 && result.IsR4)
+			{
+				context.SetInstruction(IRInstruction.ConversionIntegerToFloatR4, size, result, source);
+				return;
+			}
+
+			if (instruction != IRInstruction.LogicalAnd)
+			{
+				context.SetInstruction(instruction, size, result, source);
+				return;
+			}
+
+			if (mask == 0)
+			{
+				Debug.Assert(result.IsInteger);
+
+				// TODO: May not be correct
+				context.SetInstruction(IRInstruction.MoveInteger, size, result, source);
+				return;
+			}
+
+			if (source.IsLong)
+			{
+				Operand temp = AllocateVirtualRegister(result.Type);
+
+				context.SetInstruction(IRInstruction.MoveInteger, size, temp, source);
+				context.AppendInstruction(instruction, size, result, temp, Operand.CreateConstant(TypeSystem, (int)mask));
+				return;
+			}
+
+			context.SetInstruction(instruction, size, result, source, Operand.CreateConstant(TypeSystem, (int)mask));
+		}
+
+		/// <summary>
+		/// Visitation function for Cpblk instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Cpblk(Context context)
+		{
+			ReplaceWithVmCall(context, VmCall.MemoryCopy);
+		}
+
+		/// <summary>
+		/// Visitation function for Div instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Div(Context context)
+		{
+			Replace(context, IRInstruction.DivFloatR4, IRInstruction.DivFloatR8, IRInstruction.DivSigned, IRInstruction.DivUnsigned);
+		}
+
+		/// <summary>
+		/// Visitation function for Dup instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Dup(Context context)
+		{
+			Debug.Assert(false); // should never get here
+
+			// We don't need the dup anymore.
+			context.Empty();
+		}
+
+		/// <summary>
+		/// Visitation function for Endfilter instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Endfilter(Context context)
+		{
+			throw new InvalidCompilerException();
+
+			// Move this transformation to ProtectedRegionStage
+			//context.SetInstruction(IRInstruction.FilterEnd, context.Operand1);
+		}
+
+		/// <summary>
+		/// Visitation function for Endfinally instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Endfinally(Context context)
+		{
+			throw new InvalidCompilerException();
 		}
 
 		private MosaMethod GetMethodOrOverride(MosaType type, MosaMethod method)
@@ -819,29 +801,534 @@ namespace Mosa.Compiler.Framework.Stages
 			return method;
 		}
 
-		private bool TypeContainsMethodObjective(MosaType type, MosaMethod method)
+		private Operand GetRuntimeTypeHandle(MosaType runtimeType, Context context)
 		{
-			foreach (var m in type.Methods)
-				if (((object)m).Equals(method))
-					return true;
-			return false;
+			var typeDef = Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
+			var runtimeTypeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+			var before = context.InsertBefore();
+			before.SetInstruction(IRInstruction.MoveInteger, runtimeTypeHandle, typeDef);
+			return runtimeTypeHandle;
 		}
 
-		private int CalculateMethodTableOffset(MosaMethod invokeTarget)
+		/// <summary>
+		/// Visitation function for Initblk instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Initblk(Context context)
 		{
-			int slot = TypeLayout.GetMethodTableOffset(invokeTarget);
-
-			return (NativePointerSize * slot);
+			ReplaceWithVmCall(context, VmCall.MemorySet);
 		}
 
-		private int CalculateInterfaceSlotOffset(MosaMethod invokeTarget)
+		/// <summary>
+		/// Visitation function for InitObj instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void InitObj(Context context)
 		{
-			return CalculateInterfaceSlot(invokeTarget.DeclaringType) * NativePointerSize;
+			// Get the ptr and clear context
+			Operand ptr = context.Operand1;
+			context.SetInstruction(IRInstruction.Nop);
+
+			// Setup context for VmCall
+			ReplaceWithVmCall(context, VmCall.MemorySet);
+
+			// Set the operands
+			context.SetOperand(1, ptr);
+			context.SetOperand(2, ConstantZero);
+			context.SetOperand(3, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(ptr.Type.ElementType)));
+			context.OperandCount = 4;
 		}
 
-		private int CalculateInterfaceSlot(MosaType interaceType)
+		/// <summary>
+		/// Visitation function for Isinst instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void IsInst(Context context)
 		{
-			return TypeLayout.GetInterfaceSlotOffset(interaceType);
+			Operand reference = context.Operand1;
+			Operand result = context.Result;
+
+			MosaType classType = context.MosaType;
+
+			if (!classType.IsInterface)
+			{
+				ReplaceWithVmCall(context, VmCall.IsInstanceOfType);
+
+				context.SetOperand(1, GetRuntimeTypeHandle(classType, context));
+				context.SetOperand(2, reference);
+				context.OperandCount = 3;
+				context.ResultCount = 1;
+			}
+			else
+			{
+				int slot = CalculateInterfaceSlot(classType);
+
+				ReplaceWithVmCall(context, VmCall.IsInstanceOfInterfaceType);
+
+				context.SetOperand(1, Operand.CreateConstant(TypeSystem, slot));
+				context.SetOperand(2, reference);
+				context.OperandCount = 3;
+				context.ResultCount = 1;
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for Ldarg instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldarg(Context context)
+		{
+			Debug.Assert(context.Operand1.IsParameter);
+
+			var source = context.Operand1;
+			var destination = context.Result;
+
+			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, source.Offset);
+
+			if (StoreOnStack(source.Type))
+			{
+				context.SetInstruction(IRInstruction.CompoundLoad, destination, StackFrame, constant);
+				context.MosaType = source.Type;
+			}
+			else
+			{
+				var loadInstruction = GetLoadInstruction(source.Type);
+				var size = GetInstructionSize(source.Type);
+
+				context.SetInstruction(loadInstruction, size, destination, StackFrame, constant);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for Ldarga instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldarga(Context context)
+		{
+			context.ReplaceInstructionOnly(IRInstruction.AddressOf);
+		}
+
+		/// <summary>
+		/// Visitation function for Ldc instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldc(Context context)
+		{
+			Debug.Assert(context.Operand1.IsConstant || context.Operand1.IsVirtualRegister);
+
+			var source = context.Operand1;
+			var destination = context.Result;
+			var size = GetInstructionSize(source.Type);
+
+			Debug.Assert(!StoreOnStack(destination.Type));
+			var moveInstruction = GetMoveInstruction(destination.Type);
+			context.SetInstruction(moveInstruction, size, destination, source);
+		}
+
+		/// <summary>
+		/// Visitation function for Ldelem instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldelem(Context context)
+		{
+			var result = context.Result;
+			var array = context.Operand1;
+			var arrayIndex = context.Operand2;
+			var arrayType = array.Type;
+
+			// Array bounds check
+			AddArrayBoundsCheck(context, array, arrayIndex);
+
+			var arrayAddress = LoadArrayBaseAddress(context, arrayType, array);
+			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndex);
+
+			Debug.Assert(elementOffset != null);
+
+			if (StoreOnStack(arrayType.ElementType))
+			{
+				context.SetInstruction(IRInstruction.CompoundLoad, result, arrayAddress, elementOffset);
+				context.MosaType = arrayType.ElementType;
+			}
+			else
+			{
+				var loadInstruction = GetLoadInstruction(arrayType.ElementType);
+
+				var size = GetInstructionSize(arrayType.ElementType);
+
+				//if (size == InstructionSize.Native)
+				//{
+				//	size = Architecture.NativeInstructionSize;
+				//}
+
+				context.SetInstruction(loadInstruction, size, result, arrayAddress, elementOffset);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for Ldelema instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldelema(Context context)
+		{
+			var result = context.Result;
+			var array = context.Operand1;
+			var arrayIndex = context.Operand2;
+			var arrayType = array.Type;
+
+			Debug.Assert(arrayType.ElementType == result.Type.ElementType);
+
+			// Array bounds check
+			AddArrayBoundsCheck(context, array, arrayIndex);
+
+			var arrayAddress = LoadArrayBaseAddress(context, arrayType, array);
+			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndex);
+
+			context.SetInstruction(IRInstruction.AddSigned, result, arrayAddress, elementOffset);
+		}
+
+		/// <summary>
+		/// Visitation function for Ldfld instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldfld(Context context)
+		{
+			Operand result = context.Result;
+			Operand operand = context.Operand1;
+			MosaField field = context.MosaField;
+
+			int offset = TypeLayout.GetFieldOffset(field);
+			bool isPointer = operand.IsPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
+
+			if (!result.IsOnStack && !StoreOnStack(operand.Type) && !operand.IsReferenceType && isPointer)
+			{
+				//EXAMPLE:
+				//  CIL.Ldfld V_3 [U4*] <= V_2 [Mosa.Runtime.MetadataMethodStruct*] {f:System.UInt32* Mosa.Runtime.MetadataMethodStruct::Name}
+				//EXAMPLE:
+				//  CIL.Ldfld V_26 [I4] <= V_61 [System.IntPtr] {f:System.UInt32 Mosa.Runtime.x86.ULong::_hi}
+
+				var loadInstruction = GetLoadInstruction(field.FieldType);
+				var size = GetInstructionSize(field.FieldType);
+				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+
+				context.SetInstruction(loadInstruction, size, result, operand, fixedOffset);
+
+				return;
+			}
+
+			if (!result.IsOnStack && !StoreOnStack(operand.Type) && !operand.IsReferenceType && !isPointer)
+			{
+				//EXAMPLE:
+				//  CIL.Ldfld V_13 [System.IntPtr] <= V_12 [System.RuntimeMethodHandle] {f:System.IntPtr System.RuntimeMethodHandle::m_ptr}
+				//TRANSFORM:
+				//  IR.Move V_13[System.IntPtr] <= V_12[System.RuntimeMethodHandle]
+
+				// simple move
+				Debug.Assert(result.IsVirtualRegister);
+
+				var moveInstruction = GetMoveInstruction(field.FieldType);
+				var size = GetInstructionSize(field.FieldType);
+
+				context.SetInstruction(moveInstruction, size, result, operand);
+
+				return;
+			}
+
+			if (!StoreOnStack(result.Type) && operand.IsOnStack)
+			{
+				//EXAMPLE:
+				//  CIL.Ldfld V_5 [I4] <= T_2 const= unresolved[Mosa.TestWorld.x86.Tests.Pair] { f: System.Int32 Mosa.TestWorld.x86.Tests.Pair::A}
+
+				var loadInstruction = GetLoadInstruction(field.FieldType);
+				var size = GetInstructionSize(field.FieldType);
+				var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
+				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+
+				context.SetInstruction(IRInstruction.AddressOf, address, operand);
+				context.AppendInstruction(loadInstruction, size, result, address, fixedOffset);
+
+				return;
+			}
+
+			if (!StoreOnStack(result.Type) && !operand.IsOnStack)
+			{
+				//EXAMPLE:
+				//  CIL.Ldfld V_30 [O] <= V_29 [O] {f:Mosa.Kernel.x86.ConsoleSession Mosa.Kernel.x86.ConsoleManager::Boot}
+
+				var loadInstruction = GetLoadInstruction(field.FieldType);
+				var size = GetInstructionSize(field.FieldType);
+				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+
+				context.SetInstruction(loadInstruction, size, result, operand, fixedOffset);
+
+				return;
+			}
+
+			if (result.IsOnStack && !operand.IsOnStack)
+			{
+				//EXAMPLE:
+				//  CIL.Ldfld T_1 const=unresolved [System.Reflection.CustomAttributeTypedArgument] <= V_1 [System.Reflection.CustomAttributeNamedArgument&] {f:System.Reflection.CustomAttributeTypedArgument System.Reflection.CustomAttributeNamedArgument::typedArgument}
+
+				var size = GetInstructionSize(field.FieldType);
+				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+
+				context.SetInstruction(IRInstruction.CompoundLoad, size, result, operand, fixedOffset);
+				context.MosaType = field.FieldType;
+
+				return;
+			}
+
+			if (result.IsOnStack && operand.IsOnStack)
+			{
+				//EXAMPLE:
+				//  CIL.Ldfld T_5 const=unresolved [Mosa.UnitTest.Collection.ValueTypeTests+valuetype] <= T_4 const=unresolved [Mosa.UnitTest.Collection.ValueTypeTests+valuewrapper] {f:Mosa.UnitTest.Collection.ValueTypeTests+valuetype Mosa.UnitTest.Collection.ValueTypeTests+valuewrapper::content}
+
+				var size = GetInstructionSize(field.FieldType);
+				var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
+				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+
+				context.SetInstruction(IRInstruction.AddressOf, address, operand);
+				context.AppendInstruction(IRInstruction.CompoundLoad, size, result, address, fixedOffset);
+
+				return;
+			}
+
+			throw new CompilerException("Error transforming CIL.Ldfld");
+		}
+
+		/// <summary>
+		/// Visitation function for Ldflda instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldflda(Context context)
+		{
+			Operand fieldAddress = context.Result;
+			Operand objectOperand = context.Operand1;
+
+			int offset = TypeLayout.GetFieldOffset(context.MosaField);
+			Operand fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+
+			context.SetInstruction(IRInstruction.AddUnsigned, fieldAddress, objectOperand, fixedOffset);
+		}
+
+		/// <summary>
+		/// Visitation function for Ldftn instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldftn(Context context)
+		{
+			context.SetInstruction(IRInstruction.MoveInteger, context.Result, Operand.CreateSymbolFromMethod(TypeSystem, context.InvokeMethod));
+		}
+
+		/// <summary>
+		/// Visitation function for Ldlen instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldlen(Context context)
+		{
+			var offset = Operand.CreateConstant(TypeSystem, NativePointerSize * 2);
+			context.SetInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, context.Result, context.Operand1, offset);
+		}
+
+		/// <summary>
+		/// Visitation function for Ldloc instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldloc(Context context)
+		{
+			Debug.Assert(context.MosaType == null);
+			ProcessLoadInstruction(context);
+		}
+
+		/// <summary>
+		/// Visitation function for Ldloca instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldloca(Context context)
+		{
+			context.ReplaceInstructionOnly(IRInstruction.AddressOf);
+		}
+
+		/// <summary>
+		/// Visitation function for Ldobj instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldobj(Context context)
+		{
+			Operand destination = context.Result;
+			Operand source = context.Operand1;
+
+			var type = context.MosaType;
+
+			// This is actually ldind.* and ldobj - the opcodes have the same meanings
+
+			if (StoreOnStack(type))
+			{
+				context.SetInstruction(IRInstruction.CompoundLoad, destination, source, ConstantZero);
+			}
+			else
+			{
+				var loadInstruction = GetLoadInstruction(type);
+				var size = GetInstructionSize(type);
+
+				context.SetInstruction(loadInstruction, size, destination, source, ConstantZero);
+			}
+
+			context.MosaType = type;
+		}
+
+		/// <summary>
+		/// Visitation function for Ldsfld instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldsfld(Context context)
+		{
+			var fieldType = context.MosaField.FieldType;
+			var destination = context.Result;
+
+			var size = GetInstructionSize(fieldType);
+			var fieldOperand = Operand.CreateField(context.MosaField);
+
+			if (StoreOnStack(fieldType))
+			{
+				context.SetInstruction(IRInstruction.CompoundLoad, destination, fieldOperand, ConstantZero);
+				context.MosaType = fieldType;
+			}
+			else
+			{
+				var loadInstruction = GetLoadInstruction(fieldType);
+				context.SetInstruction(loadInstruction, size, destination, fieldOperand, ConstantZero);
+				context.MosaType = fieldType;
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for Ldsflda instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldsflda(Context context)
+		{
+			context.SetInstruction(IRInstruction.AddressOf, context.Result, Operand.CreateField(context.MosaField));
+		}
+
+		/// <summary>
+		/// Visitation function for Ldstr instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldstr(Context context)
+		{
+			/*
+			 * This requires a special memory layout for strings as they are interned by the compiler
+			 * into the generated image. This won't work this way forever: As soon as we'll support
+			 * a real AppDomain and real string interning, this code will have to go away and will
+			 * be replaced by a proper VM call.
+			 */
+
+			BaseLinker linker = MethodCompiler.Linker;
+			string symbolName = context.Operand1.Name;
+			string stringdata = context.Operand1.StringData;
+
+			context.SetInstruction(IRInstruction.MoveInteger, context.Result, context.Operand1);
+
+			var symbol = linker.CreateSymbol(symbolName, SectionKind.ROData, NativeAlignment, NativePointerSize * 3 + stringdata.Length * 2);
+			var stream = symbol.Stream;
+
+			// Type Definition and sync block
+			linker.Link(LinkType.AbsoluteAddress, PatchType.I4, symbol, 0, SectionKind.ROData, "System.String" + Metadata.TypeDefinition, 0);
+
+			stream.WriteZeroBytes(NativePointerSize * 2);
+
+			// String length field
+			stream.Write(BitConverter.GetBytes(stringdata.Length), 0, NativePointerSize);
+
+			// String data
+			var stringData = Encoding.Unicode.GetBytes(stringdata);
+			Debug.Assert(stringData.Length == stringdata.Length * 2, "Byte array of string data doesn't match expected string data length");
+			stream.Write(stringData);
+		}
+
+		/// <summary>
+		/// Visitation function for Ldtoken instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldtoken(Context context)
+		{
+			// TODO: remove VmCall.GetHandleForToken?
+
+			Operand source;
+			Operand runtimeHandle;
+
+			if (context.MosaType != null)
+			{
+				source = Operand.CreateUnmanagedSymbolPointer(TypeSystem, context.MosaType.FullName + Metadata.TypeDefinition);
+				runtimeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+			}
+			else if (context.MosaField != null)
+			{
+				source = Operand.CreateUnmanagedSymbolPointer(TypeSystem, context.MosaField.FullName + Metadata.FieldDefinition);
+				runtimeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
+			}
+			else
+				throw new NotImplementCompilerException();
+
+			Operand destination = context.Result;
+			context.SetInstruction(IRInstruction.MoveInteger, runtimeHandle, source);
+			context.AppendInstruction(IRInstruction.MoveInteger, destination, runtimeHandle);
+		}
+
+		/// <summary>
+		/// Visitation function for Ldvirtftn instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Ldvirtftn(Context context)
+		{
+			ReplaceWithVmCall(context, VmCall.GetVirtualFunctionPtr);
+		}
+
+		/// <summary>
+		/// Visitation function for Leave instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Leave(Context context)
+		{
+			throw new InvalidCompilerException();
+		}
+
+		/// <summary>
+		/// Visitation function for Mul instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Mul(Context context)
+		{
+			Replace(context, IRInstruction.MulFloatR4, IRInstruction.MulFloatR8, IRInstruction.MulSigned, IRInstruction.MulUnsigned);
+		}
+
+		/// <summary>
+		/// Visitation function for Neg instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Neg(Context context)
+		{
+			//FUTURE: Add IRInstruction.Negate
+			if (context.Operand1.IsUnsigned)
+			{
+				Operand zero = Operand.CreateConstant(context.Operand1.Type, 0);
+				context.SetInstruction(IRInstruction.SubUnsigned, context.Result, zero, context.Operand1);
+			}
+			else if (context.Operand1.IsR4)
+			{
+				Operand minusOne = Operand.CreateConstant(TypeSystem, -1.0f);
+				context.SetInstruction(IRInstruction.MulFloatR4, context.Result, minusOne, context.Operand1);
+			}
+			else if (context.Operand1.IsR8)
+			{
+				Operand minusOne = Operand.CreateConstant(TypeSystem, -1.0d);
+				context.SetInstruction(IRInstruction.MulFloatR8, context.Result, minusOne, context.Operand1);
+			}
+			else
+			{
+				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1);
+				context.SetInstruction(IRInstruction.MulSigned, context.Result, minusOne, context.Operand1);
+			}
 		}
 
 		/// <summary>
@@ -888,23 +1375,11 @@ namespace Mosa.Compiler.Framework.Stages
 			var classType = context.InvokeMethod.DeclaringType;
 			var thisReference = context.Result;
 
+			var operands = new List<Operand>(context.Operands);
+
 			Context before = context.InsertBefore();
 
-			if (TypeLayout.IsCompoundType(thisReference.Type))
-			{
-				var newThis = MethodCompiler.StackLayout.AddStackLocal(thisReference.Type);
-
-				var oldThisReference = thisReference;
-				thisReference = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
-				before.SetInstruction(IRInstruction.AddressOf, thisReference, newThis);
-
-				for (var node = context.Next; !node.IsBlockEndInstruction; node = node.Next)
-					if (!node.IsEmpty)
-						for (int i = 0; i < node.OperandCount; i++)
-							if (node.GetOperand(i) == oldThisReference)
-								node.SetOperand(i, newThis);
-			}
-			else
+			if (!StoreOnStack(thisReference.Type))
 			{
 				ReplaceWithVmCall(before, VmCall.AllocateObject);
 
@@ -913,221 +1388,18 @@ namespace Mosa.Compiler.Framework.Stages
 				before.OperandCount = 3;
 				before.Result = thisReference;
 				before.ResultCount = 1;
-			}
 
-			// Result is the this pointer, now invoke the real constructor
-			var operands = new List<Operand>(context.Operands);
-			operands.Insert(0, thisReference);
+				operands.Insert(0, thisReference);
+			}
+			else
+			{
+				var newThis = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
+				before.SetInstruction(IRInstruction.AddressOf, newThis, thisReference);
+
+				operands.Insert(0, newThis);
+			}
 
 			ProcessInvokeInstruction(context, context.InvokeMethod, null, operands);
-		}
-
-		private Operand GetRuntimeTypeHandle(MosaType runtimeType, Context context)
-		{
-			var typeDef = Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
-			var runtimeTypeHandle = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
-			var before = context.InsertBefore();
-			before.SetInstruction(IRInstruction.Move, runtimeTypeHandle, typeDef);
-			return runtimeTypeHandle;
-		}
-
-		/// <summary>
-		/// Visitation function for Castclass instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Castclass(Context context)
-		{
-			// TODO!
-			//ReplaceWithVmCall(context, VmCall.Castclass);
-			context.ReplaceInstructionOnly(IRInstruction.Move); // HACK!
-		}
-
-		/// <summary>
-		/// Visitation function for Isinst instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void IsInst(Context context)
-		{
-			Operand reference = context.Operand1;
-			Operand result = context.Result;
-
-			MosaType classType = result.Type;
-
-			if (!classType.IsInterface)
-			{
-				ReplaceWithVmCall(context, VmCall.IsInstanceOfType);
-
-				context.SetOperand(1, GetRuntimeTypeHandle(classType, context));
-				context.SetOperand(2, reference);
-				context.OperandCount = 3;
-				context.ResultCount = 1;
-			}
-			else
-			{
-				int slot = CalculateInterfaceSlot(classType);
-
-				ReplaceWithVmCall(context, VmCall.IsInstanceOfInterfaceType);
-
-				context.SetOperand(1, Operand.CreateConstant(TypeSystem, slot));
-				context.SetOperand(2, reference);
-				context.OperandCount = 3;
-				context.ResultCount = 1;
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for Unbox.Any instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void UnboxAny(Context context)
-		{
-			var value = context.Operand1;
-			var result = context.Result;
-			var type = context.MosaType;
-
-			if (!type.IsValueType)
-			{
-				context.ReplaceInstructionOnly(IRInstruction.Move);
-				return;
-			}
-
-			int typeSize = TypeLayout.GetTypeSize(type);
-			int alignment = TypeLayout.NativePointerAlignment;
-			typeSize += (alignment - (typeSize % alignment)) % alignment;
-
-			var vmCall = ToVmUnboxCall(typeSize);
-
-			context.SetInstruction(IRInstruction.Nop);
-			ReplaceWithVmCall(context, vmCall);
-
-			context.SetOperand(1, value);
-			if (vmCall == VmCall.Unbox)
-			{
-				Operand adr = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
-				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.StackLayout.AddStackLocal(type));
-
-				context.SetOperand(2, adr);
-				context.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
-				context.OperandCount = 4;
-			}
-			else
-			{
-				context.OperandCount = 2;
-			}
-
-			Operand tmp = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
-			context.Result = tmp;
-			context.ResultCount = 1;
-
-			var size = GetInstructionSize(tmp.Type);
-
-			context.AppendInstruction(IRInstruction.Load, size, result, tmp, ConstantZero);
-			context.MosaType = type;
-			return;
-		}
-
-		/// <summary>
-		/// Visitation function for Throw instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Throw(Context context)
-		{
-			throw new InvalidCompilerException();
-		}
-
-		/// <summary>
-		/// Visitation function for Box instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Box(Context context)
-		{
-			var value = context.Operand1;
-			var result = context.Result;
-			var type = context.MosaType;
-
-			if (!type.IsValueType)
-			{
-				context.ReplaceInstructionOnly(IRInstruction.Move);
-				return;
-			}
-
-			int typeSize = TypeLayout.GetTypeSize(type);
-			int alignment = TypeLayout.NativePointerAlignment;
-			typeSize += (alignment - (typeSize % alignment)) % alignment;
-
-			VmCall vmCall = VmCall.Box32;
-
-			if (type.IsR4)
-				vmCall = VmCall.BoxR4;
-			else if (type.IsR8)
-				vmCall = VmCall.BoxR8;
-			else if (typeSize <= 4)
-				vmCall = VmCall.Box32;
-			else if (typeSize == 8)
-				vmCall = VmCall.Box64;
-			else
-				vmCall = VmCall.Box;
-
-			context.SetInstruction(IRInstruction.Nop);
-			ReplaceWithVmCall(context, vmCall);
-
-			context.SetOperand(1, GetRuntimeTypeHandle(type, context));
-			if (vmCall == VmCall.Box)
-			{
-				Operand adr = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
-				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, value);
-
-				context.SetOperand(2, adr);
-				context.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
-				context.OperandCount = 4;
-			}
-			else
-			{
-				context.SetOperand(2, value);
-				context.OperandCount = 3;
-			}
-			context.Result = result;
-			context.ResultCount = 1;
-		}
-
-		/// <summary>
-		/// Visitation function for BinaryComparison instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void BinaryComparison(Context context)
-		{
-			var code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
-			var instruction = context.Operand1.IsR ? (BaseInstruction)IRInstruction.FloatCompare : (BaseInstruction)IRInstruction.IntegerCompare;
-
-			context.SetInstruction(instruction, code, context.Result, context.Operand1, context.Operand2);
-			context.SetInstruction(instruction, code, context.Result, context.Operand1, context.Operand2);
-		}
-
-		/// <summary>
-		/// Visitation function for Cpblk instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Cpblk(Context context)
-		{
-			ReplaceWithVmCall(context, VmCall.MemoryCopy);
-		}
-
-		/// <summary>
-		/// Visitation function for Initblk instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Initblk(Context context)
-		{
-			ReplaceWithVmCall(context, VmCall.MemorySet);
-		}
-
-		/// <summary>
-		/// Visitation function for Rethrow instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Rethrow(Context context)
-		{
-			ReplaceWithVmCall(context, VmCall.Rethrow);
 		}
 
 		/// <summary>
@@ -1140,6 +1412,28 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
+		/// Visitation function for Not instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Not(Context context)
+		{
+			context.SetInstruction(IRInstruction.LogicalNot, context.Result, context.Operand1);
+		}
+
+		private bool OverridesMethod(MosaMethod method)
+		{
+			if (method.Overrides == null)
+				return false;
+			if (method.DeclaringType.BaseType.Name.Equals("ValueType"))
+				return true;
+			if (method.DeclaringType.BaseType.Name.Equals("Object"))
+				return true;
+			if (method.DeclaringType.BaseType.Name.Equals("Enum"))
+				return true;
+			return false;
+		}
+
+		/// <summary>
 		/// Visitation function for Pop instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -1149,108 +1443,109 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for Break instruction.
+		/// Visitation function for Rem instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Break(Context context)
+		private void Rem(Context context)
 		{
-			context.SetInstruction(IRInstruction.Break);
+			Replace(context, IRInstruction.RemFloatR4, IRInstruction.RemFloatR8, IRInstruction.RemSigned, IRInstruction.RemUnsigned);
 		}
 
 		/// <summary>
-		/// Visitation function for Ldstr instruction.
+		/// Visitation function for Ret instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Ldstr(Context context)
+		private void Ret(Context context)
 		{
-			/*
-			 * This requires a special memory layout for strings as they are interned by the compiler
-			 * into the generated image. This won't work this way forever: As soon as we'll support
-			 * a real AppDomain and real string interning, this code will have to go away and will
-			 * be replaced by a proper VM call.
-			 *
-			 */
-
-			BaseLinker linker = MethodCompiler.Linker;
-			string symbolName = context.Operand1.Name;
-			string stringdata = context.Operand1.StringData;
-
-			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
-
-			var symbol = linker.CreateSymbol(symbolName, SectionKind.ROData, NativeAlignment, NativePointerSize * 3 + stringdata.Length * 2);
-			var stream = symbol.Stream;
-
-			// Type Definition and sync block
-			linker.Link(LinkType.AbsoluteAddress, PatchType.I4, symbol, 0, 0, "System.String" + Metadata.TypeDefinition, SectionKind.ROData, 0);
-
-			stream.WriteZeroBytes(NativePointerSize * 2);
-
-			// String length field
-			stream.Write(BitConverter.GetBytes(stringdata.Length), 0, NativePointerSize);
-
-			// String data
-			var stringData = Encoding.Unicode.GetBytes(stringdata);
-			Debug.Assert(stringData.Length == stringdata.Length * 2, "Byte array of string data doesn't match expected string data length");
-			stream.Write(stringData);
+			context.ReplaceInstructionOnly(IRInstruction.Return);
 		}
 
 		/// <summary>
-		/// Visitation function for Ldfld instruction.
+		/// Visitation function for Rethrow instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Ldfld(Context context)
+		private void Rethrow(Context context)
 		{
-			Operand resultOperand = context.Result;
-			Operand objectOperand = context.Operand1;
-			MosaField field = context.MosaField;
-
-			if (!objectOperand.IsPointer && objectOperand.Type.IsUserValueType)
-			{
-				var userStruct = objectOperand;
-				if (!userStruct.IsStackLocal)
-				{
-					var originalOperand = userStruct;
-					userStruct = MethodCompiler.StackLayout.AddStackLocal(userStruct.Type);
-					context.InsertBefore().SetInstruction(IRInstruction.Move, userStruct, originalOperand);
-				}
-				objectOperand = MethodCompiler.CreateVirtualRegister(userStruct.Type.ToManagedPointer());
-				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, objectOperand, userStruct);
-			}
-
-			int offset = TypeLayout.GetFieldOffset(field);
-			Operand offsetOperand = Operand.CreateConstant(TypeSystem, offset);
-
-			BaseIRInstruction loadInstruction = IRInstruction.Load;
-
-			if (MustSignExtendOnLoad(field.FieldType))
-			{
-				loadInstruction = IRInstruction.LoadSignExtended;
-			}
-			else if (MustZeroExtendOnLoad(field.FieldType))
-			{
-				loadInstruction = IRInstruction.LoadZeroExtended;
-			}
-
-			Debug.Assert(offsetOperand != null);
-
-			var size = GetInstructionSize(field.FieldType);
-			context.SetInstruction(loadInstruction, size, resultOperand, objectOperand, offsetOperand);
-			context.MosaType = field.FieldType;
+			ReplaceWithVmCall(context, VmCall.Rethrow);
 		}
 
 		/// <summary>
-		/// Visitation function for Ldflda instruction.
+		/// Visitation function for Shift instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Ldflda(Context context)
+		private void Shift(Context context)
 		{
-			Operand fieldAddress = context.Result;
-			Operand objectOperand = context.Operand1;
+			switch ((context.Instruction as CIL.BaseCILInstruction).OpCode)
+			{
+				case CIL.OpCode.Shl: context.SetInstruction(IRInstruction.ShiftLeft, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Shr: context.SetInstruction(IRInstruction.ArithmeticShiftRight, context.Result, context.Operand1, context.Operand2); break;
+				case CIL.OpCode.Shr_un: context.SetInstruction(IRInstruction.ShiftRight, context.Result, context.Operand1, context.Operand2); break;
+				default: throw new InvalidCompilerException();
+			}
+		}
 
-			int offset = TypeLayout.GetFieldOffset(context.MosaField);
-			Operand fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+		/// <summary>
+		/// Visitation function for Sizeof instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Sizeof(Context context)
+		{
+			var type = context.MosaType;
+			context.MosaType = null;
+			var size = type.IsPointer ? TypeLayout.NativePointerSize : MethodCompiler.TypeLayout.GetTypeSize(type);
+			context.SetInstruction(IRInstruction.MoveInteger, context.Result, Operand.CreateConstant(TypeSystem, size));
+		}
 
-			context.SetInstruction(IRInstruction.AddUnsigned, fieldAddress, objectOperand, fixedOffset);
+		/// <summary>
+		/// Visitation function for Starg instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Starg(Context context)
+		{
+			Debug.Assert(context.Result.IsParameter);
+
+			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, context.Result.Offset);
+
+			if (StoreOnStack(context.Operand1.Type))
+			{
+				context.SetInstruction(IRInstruction.CompoundStore, context.Size, null, StackFrame, constant, context.Operand1);
+			}
+			else
+			{
+				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+				context.SetInstruction(storeInstruction, context.Size, null, StackFrame, constant, context.Operand1);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for Stelem instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Stelem(Context context)
+		{
+			var array = context.Operand1;
+			var arrayIndex = context.Operand2;
+			var value = context.Operand3;
+			var arrayType = array.Type;
+
+			// Array bounds check
+			AddArrayBoundsCheck(context, array, arrayIndex);
+
+			var arrayAddress = LoadArrayBaseAddress(context, arrayType, array);
+			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndex);
+
+			if (StoreOnStack(value.Type))
+			{
+				context.SetInstruction(IRInstruction.CompoundStore, null, arrayAddress, elementOffset, value);
+				context.MosaType = arrayType.ElementType;
+			}
+			else
+			{
+				var storeInstruction = GetStoreInstruction(value.Type);
+				var size = GetInstructionSize(arrayType.ElementType);
+
+				context.SetInstruction(storeInstruction, size, null, arrayAddress, elementOffset, value);
+			}
 		}
 
 		/// <summary>
@@ -1261,7 +1556,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Operand objectOperand = context.Operand1;
 			Operand valueOperand = context.Operand2;
-			Operand temp = MethodCompiler.CreateVirtualRegister(context.MosaField.FieldType);
 
 			int offset = TypeLayout.GetFieldOffset(context.MosaField);
 			Operand offsetOperand = Operand.CreateConstant(TypeSystem, offset);
@@ -1270,18 +1564,132 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var size = GetInstructionSize(fieldType);
 
-			context.SetInstruction(IRInstruction.Move, temp, valueOperand);
-			context.AppendInstruction(IRInstruction.Store, size, null, objectOperand, offsetOperand, temp);
-			context.MosaType = fieldType;
+			if (StoreOnStack(fieldType))
+			{
+				context.SetInstruction(IRInstruction.CompoundStore, size, null, objectOperand, offsetOperand, valueOperand);
+				context.MosaType = fieldType;
+			}
+			else
+			{
+				var storeInstruction = GetStoreInstruction(fieldType);
+				context.SetInstruction(storeInstruction, size, null, objectOperand, offsetOperand, valueOperand);
+				context.MosaType = fieldType;
+			}
 		}
 
 		/// <summary>
-		/// Visitation function for Branch instruction.
+		/// Visitation function for Stloc instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Branch(Context context)
+		private void Stloc(Context context)
 		{
-			context.ReplaceInstructionOnly(IRInstruction.Jmp);
+			var type = context.Operand1.Type;
+			var size = GetInstructionSize(type);
+
+			if (context.Result.IsVirtualRegister && context.Operand1.IsVirtualRegister)
+			{
+				var moveInstruction = GetMoveInstruction(context.Result.Type);
+
+				context.SetInstruction(moveInstruction, size, context.Result, context.Operand1);
+				return;
+			}
+
+			if (StoreOnStack(type))
+			{
+				Debug.Assert(!context.Result.IsVirtualRegister);
+				context.SetInstruction(IRInstruction.CompoundMove, context.Result, context.Operand1);
+			}
+			else if (context.Operand1.IsVirtualRegister)
+			{
+				var storeInstruction = GetStoreInstruction(type);
+
+				context.SetInstruction(storeInstruction, size, null, StackFrame, context.Result, context.Operand1);
+			}
+
+			context.MosaType = type;
+		}
+
+		/// <summary>
+		/// Visitation function for Stobj instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Stobj(Context context)
+		{
+			// This is actually stind.* and stobj - the opcodes have the same meanings
+			var type = context.MosaType;  // pass thru
+
+			if (StoreOnStack(type))
+			{
+				context.SetInstruction(IRInstruction.CompoundStore, null, context.Operand1, ConstantZero, context.Operand2);
+			}
+			else
+			{
+				var size = GetInstructionSize(type);
+				var storeInstruction = GetStoreInstruction(type);
+
+				context.SetInstruction(storeInstruction, size, null, context.Operand1, ConstantZero, context.Operand2);
+			}
+
+			context.MosaType = type;
+		}
+
+		/// <summary>
+		/// Visitation function for Stsfld instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Stsfld(Context context)
+		{
+			var field = context.MosaField;
+			var size = GetInstructionSize(field.FieldType);
+			var fieldOperand = Operand.CreateField(field);
+
+			if (StoreOnStack(field.FieldType))
+			{
+				context.SetInstruction(IRInstruction.CompoundStore, size, null, fieldOperand, ConstantZero, context.Operand1);
+				context.MosaType = field.FieldType;
+			}
+			else
+			{
+				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
+
+				context.SetInstruction(storeInstruction, size, null, fieldOperand, ConstantZero, context.Operand1);
+				context.MosaType = field.FieldType;
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for Sub instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Sub(Context context)
+		{
+			Replace(context, IRInstruction.SubFloatR4, IRInstruction.SubFloatR8, IRInstruction.SubSigned, IRInstruction.SubUnsigned);
+		}
+
+		/// <summary>
+		/// Visitation function for Switch instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Switch(Context context)
+		{
+			context.ReplaceInstructionOnly(IRInstruction.Switch);
+		}
+
+		/// <summary>
+		/// Visitation function for Throw instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Throw(Context context)
+		{
+			throw new InvalidCompilerException();
+		}
+
+		private bool TypeContainsMethodObjective(MosaType type, MosaMethod method)
+		{
+			foreach (var m in type.Methods)
+				if (((object)m).Equals(method))
+					return true;
+			return false;
 		}
 
 		/// <summary>
@@ -1299,171 +1707,18 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
 			{
-				context.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.NotEqual, null, first, second);
+				context.SetInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.NotEqual, null, first, second);
 				context.AddBranchTarget(target);
 				return;
 			}
 			else if (opcode == CIL.OpCode.Brfalse || opcode == CIL.OpCode.Brfalse_s)
 			{
-				context.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, first, second);
+				context.SetInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, first, second);
 				context.AddBranchTarget(target);
 				return;
 			}
 
 			throw new NotImplementCompilerException(@"CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
-		}
-
-		/// <summary>
-		/// Visitation function for BinaryBranch instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void BinaryBranch(Context context)
-		{
-			var target = context.BranchTargets[0];
-
-			ConditionCode cc = ConvertCondition(((CIL.BaseCILInstruction)context.Instruction).OpCode);
-			Operand first = context.Operand1;
-			Operand second = context.Operand2;
-
-			if (first.IsR)
-			{
-				Operand comparisonResult = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-				context.SetInstruction(IRInstruction.FloatCompare, cc, comparisonResult, first, second);
-				context.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, comparisonResult, Operand.CreateConstant(TypeSystem, 1));
-				context.AddBranchTarget(target);
-			}
-			else
-			{
-				context.SetInstruction(IRInstruction.IntegerCompareBranch, cc, null, first, second);
-				context.AddBranchTarget(target);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for Switch instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Switch(Context context)
-		{
-			context.ReplaceInstructionOnly(IRInstruction.Switch);
-		}
-
-		/// <summary>
-		/// Visitation function for Ldlen instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Ldlen(Context context)
-		{
-			Operand arrayOperand = context.Operand1;
-			Operand arrayLength = context.Result;
-			Operand constantOffset = Operand.CreateConstant(TypeSystem, 8);
-
-			Operand arrayAddress = MethodCompiler.CreateVirtualRegister(arrayOperand.Type.ElementType.ToManagedPointer());
-			var size = GetInstructionSize(arrayLength.Type);
-
-			context.SetInstruction(IRInstruction.Move, arrayAddress, arrayOperand);
-			context.AppendInstruction(IRInstruction.Load, arrayLength, arrayAddress, constantOffset);
-		}
-
-		/// <summary>
-		/// Visitation function for Ldelema instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Ldelema(Context context)
-		{
-			var result = context.Result;
-			var arrayOperand = context.Operand1;
-			var arrayIndexOperand = context.Operand2;
-			var arrayType = arrayOperand.Type;
-			Debug.Assert(arrayType.ElementType == result.Type.ElementType);
-
-			// Array bounds check
-			AddArrayBoundsCheck(context.InsertBefore(), arrayOperand, arrayIndexOperand);
-
-			//
-			// The sequence we're emitting is:
-			//
-			//      arrayAddress = arrayOperand + 12
-			//      offset = arrayIndexOperand * elementSize
-			//      result = arrayAddress + offset
-			//
-			// The array data starts at offset 12 from the array object itself. The 12 is a assumption of x86,
-			// which might change for other platforms. This is automatically calculated using the plaform native pointer size.
-			//
-
-			var arrayAddress = LoadArrayBaseAddress(context, arrayType, arrayOperand);
-			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndexOperand);
-			context.SetInstruction(IRInstruction.AddSigned, result, arrayAddress, elementOffset);
-		}
-
-		/// <summary>
-		/// Visitation function for Ldelem instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Ldelem(Context context)
-		{
-			var result = context.Result;
-			var arrayOperand = context.Operand1;
-			var arrayIndexOperand = context.Operand2;
-			var arraySigType = arrayOperand.Type;
-
-			// Array bounds check
-			AddArrayBoundsCheck(context.InsertBefore(), arrayOperand, arrayIndexOperand);
-
-			BaseIRInstruction loadInstruction = IRInstruction.Load;
-
-			if (MustSignExtendOnLoad(arraySigType.ElementType))
-			{
-				loadInstruction = IRInstruction.LoadSignExtended;
-			}
-			else if (MustZeroExtendOnLoad(arraySigType.ElementType))
-			{
-				loadInstruction = IRInstruction.LoadZeroExtended;
-			}
-
-			//
-			// The sequence we're emitting is:
-			//
-			//      arrayAddress = arrayOperand + 12
-			//      offset = arrayIndexOperand * elementSize
-			//      result = *(arrayAddress + offset)
-			//
-			// The array data starts at offset 12 from the array object itself. The 12 is a assumption of x86,
-			// which might change for other platforms. This is automatically calculated using the plaform native pointer size.
-			//
-
-			var arrayAddress = LoadArrayBaseAddress(context, arraySigType, arrayOperand);
-			var elementOffset = CalculateArrayElementOffset(context, arraySigType, arrayIndexOperand);
-
-			Debug.Assert(elementOffset != null);
-
-			var size = GetInstructionSize(arraySigType.ElementType);
-
-			context.SetInstruction(loadInstruction, size, result, arrayAddress, elementOffset);
-			context.MosaType = arraySigType.ElementType;
-		}
-
-		/// <summary>
-		/// Visitation function for Stelem instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Stelem(Context context)
-		{
-			var arrayOperand = context.Operand1;
-			var arrayIndexOperand = context.Operand2;
-			var value = context.Operand3;
-			var arrayType = arrayOperand.Type;
-
-			// Array bounds check
-			AddArrayBoundsCheck(context.InsertBefore(), arrayOperand, arrayIndexOperand);
-
-			var arrayAddress = LoadArrayBaseAddress(context, arrayType, arrayOperand);
-			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndexOperand);
-
-			var size = GetInstructionSize(arrayType.ElementType);
-
-			context.SetInstruction(IRInstruction.Store, size, null, arrayAddress, elementOffset, value);
-			context.MosaType = arrayType.ElementType;
 		}
 
 		/// <summary>
@@ -1478,7 +1733,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!type.IsValueType)
 			{
-				context.ReplaceInstructionOnly(IRInstruction.Move);
+				var moveInstruction = GetMoveInstruction(type);
+
+				context.ReplaceInstructionOnly(moveInstruction);
 				return;
 			}
 
@@ -1494,8 +1751,8 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetOperand(1, value);
 			if (vmCall == VmCall.Unbox)
 			{
-				Operand adr = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
-				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.StackLayout.AddStackLocal(type));
+				Operand adr = AllocateVirtualRegister(type.ToManagedPointer());
+				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.AddStackLocal(type));
 
 				context.SetOperand(2, adr);
 				context.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
@@ -1506,195 +1763,287 @@ namespace Mosa.Compiler.Framework.Stages
 				context.OperandCount = 2;
 			}
 
-			Operand tmp = MethodCompiler.CreateVirtualRegister(type.ToManagedPointer());
+			Operand tmp = AllocateVirtualRegister(type.ToManagedPointer());
 			context.Result = tmp;
 			context.ResultCount = 1;
 
-			var size = GetInstructionSize(tmp.Type);
+			var size = GetInstructionSize(type);
 
-			context.AppendInstruction(IRInstruction.Load, size, result, tmp, ConstantZero);
-			context.MosaType = type;
-			return;
+			if (StoreOnStack(type))
+			{
+				context.AppendInstruction(IRInstruction.CompoundLoad, result, tmp, ConstantZero);
+				context.MosaType = type;
+			}
+			else
+			{
+				var loadInstruction = GetLoadInstruction(type);
+				context.AppendInstruction(loadInstruction, size, result, tmp, ConstantZero);
+				context.MosaType = type;
+			}
 		}
 
 		/// <summary>
-		/// Visitation function for Endfinally instruction.
+		/// Visitation function for Unbox.Any instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Endfinally(Context context)
+		private void UnboxAny(Context context)
 		{
-			throw new InvalidCompilerException();
-		}
-
-		/// <summary>
-		/// Visitation function for Leave instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Leave(Context context)
-		{
-			throw new InvalidCompilerException();
-		}
-
-		/// <summary>
-		/// Visitation function for Endfilter instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Endfilter(Context context)
-		{
-			throw new InvalidCompilerException();
-
-			// Move this transformation to ProtectedRegionStage
-			//context.SetInstruction(IRInstruction.FilterEnd, context.Operand1);
-		}
-
-		/// <summary>
-		/// Visitation function for InitObj instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void InitObj(Context context)
-		{
-			// Get the ptr and clear context
-			Operand ptr = context.Operand1;
-			context.SetInstruction(IRInstruction.Nop);
-
-			// Setup context for VmCall
-			ReplaceWithVmCall(context, VmCall.MemorySet);
-
-			// Set the operands
-			context.SetOperand(1, ptr);
-			context.SetOperand(2, ConstantZero);
-			context.SetOperand(3, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(ptr.Type.ElementType)));
-			context.OperandCount = 4;
-		}
-
-		/// <summary>
-		/// Visitation function for Sizeof instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Sizeof(Context context)
-		{
+			var value = context.Operand1;
+			var result = context.Result;
 			var type = context.MosaType;
-			context.MosaType = null;
-			var size = type.IsPointer ? TypeLayout.NativePointerSize : MethodCompiler.TypeLayout.GetTypeSize(type);
-			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateConstant(TypeSystem, size));
-		}
 
-		/// <summary>
-		/// Visitation function for Add instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Add(Context context)
-		{
-			Replace(context, IRInstruction.AddFloat, IRInstruction.AddSigned, IRInstruction.AddUnsigned);
-		}
+			if (!type.IsValueType)
+			{
+				var moveInstruction = GetMoveInstruction(type);
 
-		/// <summary>
-		/// Visitation function for Sub instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Sub(Context context)
-		{
-			Replace(context, IRInstruction.SubFloat, IRInstruction.SubSigned, IRInstruction.SubUnsigned);
-		}
+				context.ReplaceInstructionOnly(moveInstruction);
+				return;
+			}
 
-		/// <summary>
-		/// Visitation function for Mul instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Mul(Context context)
-		{
-			Replace(context, IRInstruction.MulFloat, IRInstruction.MulSigned, IRInstruction.MulUnsigned);
-		}
+			int typeSize = TypeLayout.GetTypeSize(type);
+			int alignment = TypeLayout.NativePointerAlignment;
+			typeSize += (alignment - (typeSize % alignment)) % alignment;
 
-		/// <summary>
-		/// Visitation function for Div instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Div(Context context)
-		{
-			Replace(context, IRInstruction.DivFloat, IRInstruction.DivSigned, IRInstruction.DivUnsigned);
-		}
+			var vmCall = ToVmUnboxCall(typeSize);
 
-		/// <summary>
-		/// Visitation function for Rem instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Rem(Context context)
-		{
-			Replace(context, IRInstruction.RemFloat, IRInstruction.RemSigned, IRInstruction.RemUnsigned);
+			context.SetInstruction(IRInstruction.Nop);
+			ReplaceWithVmCall(context, vmCall);
+
+			context.SetOperand(1, value);
+			if (vmCall == VmCall.Unbox)
+			{
+				Operand adr = AllocateVirtualRegister(type.ToManagedPointer());
+				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.AddStackLocal(type));
+
+				context.SetOperand(2, adr);
+				context.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
+				context.OperandCount = 4;
+			}
+			else
+			{
+				context.OperandCount = 2;
+			}
+
+			Operand tmp = AllocateVirtualRegister(type.ToManagedPointer());
+			context.Result = tmp;
+			context.ResultCount = 1;
+
+			var size = GetInstructionSize(type);
+
+			if (StoreOnStack(type))
+			{
+				context.AppendInstruction(IRInstruction.CompoundLoad, result, tmp, ConstantZero);
+				context.MosaType = type;
+			}
+			else
+			{
+				var loadInstruction = GetLoadInstruction(type);
+				context.AppendInstruction(loadInstruction, size, result, tmp, ConstantZero);
+				context.MosaType = type;
+			}
 		}
 
 		#endregion Visitation Methods
 
 		#region Internals
 
-		/// <summary>
-		/// Calculates the element offset for the specified index.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="arrayType">The array type.</param>
-		/// <param name="arrayIndexOperand">The index operand.</param>
-		/// <returns>Element offset operand.</returns>
-		private Operand CalculateArrayElementOffset(Context context, MosaType arrayType, Operand arrayIndexOperand)
-		{
-			int elementSizeInBytes = 0, alignment = 0;
-			Architecture.GetTypeRequirements(TypeLayout, arrayType.ElementType, out elementSizeInBytes, out alignment);
-
-			var elementOffset = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var elementSizeOperand = Operand.CreateConstant(TypeSystem, elementSizeInBytes);
-			context.InsertBefore().SetInstruction(IRInstruction.MulSigned, elementOffset, arrayIndexOperand, elementSizeOperand);
-
-			return elementOffset;
-		}
-
-		/// <summary>
-		/// Calculates the base of the array elements.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="arrayType">The array type.</param>
-		/// <param name="arrayOperand">The array operand.</param>
-		/// <returns>Base address for array elements.</returns>
-		private Operand LoadArrayBaseAddress(Context context, MosaType arrayType, Operand arrayOperand)
-		{
-			var arrayPointer = arrayType.ElementType.ToManagedPointer();
-
-			var arrayAddress = MethodCompiler.CreateVirtualRegister(arrayPointer);
-			var fixedOffset = Operand.CreateConstant(TypeSystem, (NativePointerSize * 3));
-
-			context.InsertBefore().SetInstruction(IRInstruction.AddSigned, arrayAddress, arrayOperand, fixedOffset);
-
-			return arrayAddress;
-		}
-
-		/// <summary>
-		/// Adds bounds check to the array access.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="arrayOperand">The array operand.</param>
-		/// <param name="arrayIndexOperand">The index operand.</param>
-		private void AddArrayBoundsCheck(Context context, Operand arrayOperand, Operand arrayIndexOperand)
-		{
-			// First create new block and split current block
-			var exceptionContext = CreateNewBlockContexts(1)[0];
-			var nextContext = Split(context);
-
-			// Get array length
-			var lengthOperand = MethodCompiler.CreateVirtualRegister(TypeSystem.BuiltIn.U4);
-			var fixedOffset = Operand.CreateConstant(TypeSystem, (NativePointerSize * 2));
-			context.SetInstruction(IRInstruction.Load, lengthOperand, arrayOperand, fixedOffset);
-
-			// Now compare length with index
-			// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-			context.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
-			context.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
-
-			// Build exception block which is just a call to throw exception
-			var method = InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
-			var symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			exceptionContext.AppendInstruction(IRInstruction.Call, null, symbolOperand);
-			exceptionContext.InvokeMethod = method;
-		}
+		private static readonly BaseIRInstruction[][] convTable = new BaseIRInstruction[13][] {
+			/* I1 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveInteger,
+				/* I2 */ IRInstruction.LogicalAnd,
+				/* I4 */ IRInstruction.LogicalAnd,
+				/* I8 */ IRInstruction.LogicalAnd,
+				/* U1 */ IRInstruction.MoveInteger,
+				/* U2 */ IRInstruction.LogicalAnd,
+				/* U4 */ IRInstruction.LogicalAnd,
+				/* U8 */ IRInstruction.LogicalAnd,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
+			},
+			/* I2 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveSignExtended,
+				/* I2 */ IRInstruction.MoveInteger,
+				/* I4 */ IRInstruction.LogicalAnd,
+				/* I8 */ IRInstruction.LogicalAnd,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveInteger,
+				/* U4 */ IRInstruction.LogicalAnd,
+				/* U8 */ IRInstruction.LogicalAnd,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
+			},
+			/* I4 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveSignExtended,
+				/* I2 */ IRInstruction.MoveSignExtended,
+				/* I4 */ IRInstruction.MoveInteger,
+				/* I8 */ IRInstruction.LogicalAnd,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveInteger,
+				/* U8 */ IRInstruction.LogicalAnd,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
+			},
+			/* I8 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveSignExtended,
+				/* I2 */ IRInstruction.MoveSignExtended,
+				/* I4 */ IRInstruction.MoveSignExtended,
+				/* I8 */ IRInstruction.MoveInteger,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
+				/* U8 */ IRInstruction.MoveInteger,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
+			},
+			/* U1 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveInteger,
+				/* I2 */ IRInstruction.LogicalAnd,
+				/* I4 */ IRInstruction.LogicalAnd,
+				/* I8 */ IRInstruction.LogicalAnd,
+				/* U1 */ IRInstruction.MoveInteger,
+				/* U2 */ IRInstruction.LogicalAnd,
+				/* U4 */ IRInstruction.LogicalAnd,
+				/* U8 */ IRInstruction.LogicalAnd,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
+			},
+			/* U2 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveInteger,
+				/* I4 */ IRInstruction.LogicalAnd,
+				/* I8 */ IRInstruction.LogicalAnd,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveInteger,
+				/* U4 */ IRInstruction.LogicalAnd,
+				/* U8 */ IRInstruction.LogicalAnd,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
+			},
+			/* U4 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveZeroExtended,
+				/* I4 */ IRInstruction.MoveInteger,
+				/* I8 */ IRInstruction.LogicalAnd,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveInteger,
+				/* U8 */ IRInstruction.LogicalAnd,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
+			},
+			/* U8 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveZeroExtended,
+				/* I4 */ IRInstruction.MoveZeroExtended,
+				/* I8 */ IRInstruction.MoveInteger,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
+				/* U8 */ IRInstruction.MoveInteger,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
+			},
+			/* R4 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I2 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I4 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I8 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U1 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U2 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U4 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U8 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* R4 */ IRInstruction.MoveFloatR4,
+				/* R8 */ IRInstruction.ConversionFloatR4ToFloatR8,
+				/* I  */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U  */ IRInstruction.ConversionIntegerToFloatR8,
+				/* Ptr*/ null,
+			},
+			/* R8 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I2 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I4 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I8 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U1 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U2 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U4 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U8 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* R4 */ IRInstruction.ConversionFloatR8ToFloatR4,
+				/* R8 */ IRInstruction.MoveFloatR8,
+				/* I  */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U  */ IRInstruction.ConversionIntegerToFloatR8,
+				/* Ptr*/ null,
+			},
+			/* I  */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveSignExtended,
+				/* I2 */ IRInstruction.MoveSignExtended,
+				/* I4 */ IRInstruction.MoveSignExtended,
+				/* I8 */ IRInstruction.MoveInteger,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
+				/* U8 */ IRInstruction.MoveZeroExtended,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.MoveInteger,
+				/* U  */ IRInstruction.MoveInteger,
+				/* Ptr*/ IRInstruction.MoveInteger,
+			},
+			/* U  */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveZeroExtended,
+				/* I4 */ IRInstruction.MoveZeroExtended,
+				/* I8 */ IRInstruction.MoveZeroExtended,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
+				/* U8 */ IRInstruction.MoveInteger,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.MoveInteger,
+				/* U  */ IRInstruction.MoveInteger,
+				/* Ptr*/ IRInstruction.MoveInteger,
+			},
+			/* Ptr*/ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveZeroExtended,
+				/* I4 */ IRInstruction.MoveZeroExtended,
+				/* I8 */ IRInstruction.MoveZeroExtended,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
+				/* U8 */ IRInstruction.MoveZeroExtended,
+				/* R4 */ null,
+				/* R8 */ null,
+				/* I  */ IRInstruction.MoveInteger,
+				/* U  */ IRInstruction.MoveInteger,
+				/* Ptr*/ IRInstruction.MoveInteger,
+			},
+		};
 
 		/// <summary>
 		/// Converts the specified opcode.
@@ -1744,22 +2093,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private static void Replace(Context context, BaseInstruction floatingPointInstruction, BaseInstruction signedInstruction, BaseInstruction unsignedInstruction)
-		{
-			if (context.Result.IsR)
-			{
-				context.ReplaceInstructionOnly(floatingPointInstruction);
-			}
-			else if (context.Result.IsUnsigned)
-			{
-				context.ReplaceInstructionOnly(unsignedInstruction);
-			}
-			else
-			{
-				context.ReplaceInstructionOnly(signedInstruction);
-			}
-		}
-
 		/// <summary>
 		/// Determines if a store is silently truncating the value.
 		/// </summary>
@@ -1784,28 +2117,131 @@ namespace Mosa.Compiler.Framework.Stages
 			return false;
 		}
 
-		/// <summary>
-		/// Determines if the load should sign extend the given source operand.
-		/// </summary>
-		/// <param name="source">The source operand to determine sign extension for.</param>
-		/// <returns>
-		/// True if the given operand should be loaded with its sign extended.
-		/// </returns>
-		private static bool MustSignExtendOnLoad(MosaType source)
+		private static void Replace(Context context, BaseInstruction floatingPointR4Instruction, BaseInstruction floatingPointR8Instruction, BaseInstruction signedInstruction, BaseInstruction unsignedInstruction)
 		{
-			return source.IsI1 || source.IsI2;
+			if (context.Result.IsR4)
+			{
+				context.ReplaceInstructionOnly(floatingPointR4Instruction);
+			}
+			else if (context.Result.IsR8)
+			{
+				context.ReplaceInstructionOnly(floatingPointR8Instruction);
+			}
+			else if (context.Result.IsUnsigned)
+			{
+				context.ReplaceInstructionOnly(unsignedInstruction);
+			}
+			else
+			{
+				context.ReplaceInstructionOnly(signedInstruction);
+			}
 		}
 
 		/// <summary>
-		/// Determines if the load should sign extend the given source operand.
+		/// Adds bounds check to the array access.
 		/// </summary>
-		/// <param name="source">The source operand to determine sign extension for.</param>
-		/// <returns>
-		/// True if the given operand should be loaded with its sign extended.
-		/// </returns>
-		private static bool MustZeroExtendOnLoad(MosaType source)
+		/// <param name="context">The context.</param>
+		/// <param name="arrayOperand">The array operand.</param>
+		/// <param name="arrayIndexOperand">The index operand.</param>
+		private void AddArrayBoundsCheck(Context context, Operand arrayOperand, Operand arrayIndexOperand)
 		{
-			return source.IsU1 || source.IsU2 || source.IsChar || source.IsBoolean;
+			var before = context.InsertBefore();
+
+			// First create new block and split current block
+			var exceptionContext = CreateNewBlockContexts(1)[0];
+			var nextContext = Split(before);
+
+			// Get array length
+			var lengthOperand = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var fixedOffset = Operand.CreateConstant(TypeSystem, NativePointerSize * 2);
+
+			before.SetInstruction(IRInstruction.LoadInteger, lengthOperand, arrayOperand, fixedOffset);
+
+			// Now compare length with index
+			// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
+			before.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
+			before.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
+
+			// Build exception block which is just a call to throw exception
+			var method = InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
+			var symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
+
+			exceptionContext.AppendInstruction(IRInstruction.Call, null, symbolOperand);
+			exceptionContext.InvokeMethod = method;
+		}
+
+		private string BuildInternalCallName(MosaMethod method)
+		{
+			string name = method.Name;
+			if (name == @".ctor")
+			{
+				name = @"Create" + method.DeclaringType.Name;
+			}
+			else
+			{
+				name = @"Internal" + name;
+			}
+
+			return name;
+		}
+
+		/// <summary>
+		/// Calculates the element offset for the specified index.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="arrayType">The array type.</param>
+		/// <param name="index">The index operand.</param>
+		/// <returns>Element offset operand.</returns>
+		private Operand CalculateArrayElementOffset(Context context, MosaType arrayType, Operand index)
+		{
+			int size = 0, alignment = 0;
+			Architecture.GetTypeRequirements(TypeLayout, arrayType.ElementType, out size, out alignment);
+
+			var elementOffset = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var elementSize = Operand.CreateConstant(TypeSystem, size);
+
+			var before = context.InsertBefore();
+
+			before.AppendInstruction(IRInstruction.MulSigned, elementOffset, index, elementSize);
+
+			return elementOffset;
+		}
+
+		/// <summary>
+		/// Calculates the base of the array elements.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="arrayType">The array type.</param>
+		/// <returns>
+		/// Base address for array elements.
+		/// </returns>
+		private Operand LoadArrayBaseAddress(Context context, MosaType arrayType, Operand array)
+		{
+			var fixedOffset = Operand.CreateConstant(TypeSystem, NativePointerSize * 3);
+			var arrayElement = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			var before = context.InsertBefore();
+
+			before.AppendInstruction(IRInstruction.AddSigned, arrayElement, array, fixedOffset);
+
+			return arrayElement;
+		}
+
+		private bool CanSkipDueToRecursiveSystemObjectCtorCall(Context context)
+		{
+			var currentMethod = MethodCompiler.Method;
+			var invokeTarget = context.InvokeMethod;
+
+			// Skip recursive System.Object ctor calls.
+			if (currentMethod.DeclaringType.FullName == @"System.Object" &&
+				currentMethod.Name == @".ctor" &&
+				invokeTarget.DeclaringType.FullName == @"System.Object" &&
+				invokeTarget.Name == @".ctor")
+			{
+				return true;
+			}
+
+			return false;
 		}
 
 		/// <summary>
@@ -1834,272 +2270,6 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (!type.IsValueType) return 12;
 
 			throw new InvalidCompilerException();
-		}
-
-		private static readonly BaseIRInstruction[][] convTable = new BaseIRInstruction[13][] {
-			/* I1 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.Move,
-				/* I2 */ IRInstruction.LogicalAnd,
-				/* I4 */ IRInstruction.LogicalAnd,
-				/* I8 */ IRInstruction.LogicalAnd,
-				/* U1 */ IRInstruction.Move,
-				/* U2 */ IRInstruction.LogicalAnd,
-				/* U4 */ IRInstruction.LogicalAnd,
-				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
-			},
-			/* I2 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.SignExtendedMove,
-				/* I2 */ IRInstruction.Move,
-				/* I4 */ IRInstruction.LogicalAnd,
-				/* I8 */ IRInstruction.LogicalAnd,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.Move,
-				/* U4 */ IRInstruction.LogicalAnd,
-				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
-			},
-			/* I4 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.SignExtendedMove,
-				/* I2 */ IRInstruction.SignExtendedMove,
-				/* I4 */ IRInstruction.Move,
-				/* I8 */ IRInstruction.LogicalAnd,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
-				/* U4 */ IRInstruction.Move,
-				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
-			},
-			/* I8 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.SignExtendedMove,
-				/* I2 */ IRInstruction.SignExtendedMove,
-				/* I4 */ IRInstruction.SignExtendedMove,
-				/* I8 */ IRInstruction.Move,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
-				/* U4 */ IRInstruction.ZeroExtendedMove,
-				/* U8 */ IRInstruction.Move,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
-			},
-			/* U1 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.Move,
-				/* I2 */ IRInstruction.LogicalAnd,
-				/* I4 */ IRInstruction.LogicalAnd,
-				/* I8 */ IRInstruction.LogicalAnd,
-				/* U1 */ IRInstruction.Move,
-				/* U2 */ IRInstruction.LogicalAnd,
-				/* U4 */ IRInstruction.LogicalAnd,
-				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
-			},
-			/* U2 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.ZeroExtendedMove,
-				/* I2 */ IRInstruction.Move,
-				/* I4 */ IRInstruction.LogicalAnd,
-				/* I8 */ IRInstruction.LogicalAnd,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.Move,
-				/* U4 */ IRInstruction.LogicalAnd,
-				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
-			},
-			/* U4 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.ZeroExtendedMove,
-				/* I2 */ IRInstruction.ZeroExtendedMove,
-				/* I4 */ IRInstruction.Move,
-				/* I8 */ IRInstruction.LogicalAnd,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
-				/* U4 */ IRInstruction.Move,
-				/* U8 */ IRInstruction.LogicalAnd,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
-			},
-			/* U8 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.ZeroExtendedMove,
-				/* I2 */ IRInstruction.ZeroExtendedMove,
-				/* I4 */ IRInstruction.ZeroExtendedMove,
-				/* I8 */ IRInstruction.Move,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
-				/* U4 */ IRInstruction.ZeroExtendedMove,
-				/* U8 */ IRInstruction.Move,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
-			},
-			/* R4 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.IntegerToFloatConversion,
-				/* I2 */ IRInstruction.IntegerToFloatConversion,
-				/* I4 */ IRInstruction.IntegerToFloatConversion,
-				/* I8 */ IRInstruction.IntegerToFloatConversion,
-				/* U1 */ IRInstruction.IntegerToFloatConversion,
-				/* U2 */ IRInstruction.IntegerToFloatConversion,
-				/* U4 */ IRInstruction.IntegerToFloatConversion,
-				/* U8 */ IRInstruction.IntegerToFloatConversion,
-				/* R4 */ IRInstruction.Move,
-				/* R8 */ IRInstruction.Move,
-				/* I  */ IRInstruction.IntegerToFloatConversion,
-				/* U  */ IRInstruction.IntegerToFloatConversion,
-				/* Ptr*/ null,
-			},
-			/* R8 */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.IntegerToFloatConversion,
-				/* I2 */ IRInstruction.IntegerToFloatConversion,
-				/* I4 */ IRInstruction.IntegerToFloatConversion,
-				/* I8 */ IRInstruction.IntegerToFloatConversion,
-				/* U1 */ IRInstruction.IntegerToFloatConversion,
-				/* U2 */ IRInstruction.IntegerToFloatConversion,
-				/* U4 */ IRInstruction.IntegerToFloatConversion,
-				/* U8 */ IRInstruction.IntegerToFloatConversion,
-				/* R4 */ IRInstruction.Move,
-				/* R8 */ IRInstruction.Move,
-				/* I  */ IRInstruction.IntegerToFloatConversion,
-				/* U  */ IRInstruction.IntegerToFloatConversion,
-				/* Ptr*/ null,
-			},
-			/* I  */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.SignExtendedMove,
-				/* I2 */ IRInstruction.SignExtendedMove,
-				/* I4 */ IRInstruction.SignExtendedMove,
-				/* I8 */ IRInstruction.Move,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
-				/* U4 */ IRInstruction.ZeroExtendedMove,
-				/* U8 */ IRInstruction.ZeroExtendedMove,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
-				/* I  */ IRInstruction.Move,
-				/* U  */ IRInstruction.Move,
-				/* Ptr*/ IRInstruction.Move,
-			},
-			/* U  */ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.ZeroExtendedMove,
-				/* I2 */ IRInstruction.ZeroExtendedMove,
-				/* I4 */ IRInstruction.ZeroExtendedMove,
-				/* I8 */ IRInstruction.ZeroExtendedMove,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
-				/* U4 */ IRInstruction.ZeroExtendedMove,
-				/* U8 */ IRInstruction.Move,
-				/* R4 */ IRInstruction.FloatToIntegerConversion,
-				/* R8 */ IRInstruction.FloatToIntegerConversion,
-				/* I  */ IRInstruction.Move,
-				/* U  */ IRInstruction.Move,
-				/* Ptr*/ IRInstruction.Move,
-			},
-			/* Ptr*/ new BaseIRInstruction[13] {
-				/* I1 */ IRInstruction.ZeroExtendedMove,
-				/* I2 */ IRInstruction.ZeroExtendedMove,
-				/* I4 */ IRInstruction.ZeroExtendedMove,
-				/* I8 */ IRInstruction.ZeroExtendedMove,
-				/* U1 */ IRInstruction.ZeroExtendedMove,
-				/* U2 */ IRInstruction.ZeroExtendedMove,
-				/* U4 */ IRInstruction.ZeroExtendedMove,
-				/* U8 */ IRInstruction.ZeroExtendedMove,
-				/* R4 */ null,
-				/* R8 */ null,
-				/* I  */ IRInstruction.Move,
-				/* U  */ IRInstruction.Move,
-				/* Ptr*/ IRInstruction.Move,
-			},
-		};
-
-		private void CheckAndConvertInstruction(Context context)
-		{
-			var destinationOperand = context.Result;
-			var sourceOperand = context.Operand1;
-
-			int destIndex = GetIndex(destinationOperand.Type, NativeInstructionSize == InstructionSize.Size32);
-			int srcIndex = GetIndex(sourceOperand.Type, NativeInstructionSize == InstructionSize.Size32);
-
-			var type = convTable[destIndex][srcIndex];
-
-			if (type == null)
-				throw new InvalidCompilerException();
-
-			uint mask = 0xFFFFFFFF;
-			var instruction = ComputeExtensionTypeAndMask(destinationOperand.Type, ref mask);
-
-			if (type == IRInstruction.LogicalAnd)
-			{
-				if (mask == 0)
-				{
-					// TODO: May not be correct
-					context.SetInstruction(IRInstruction.Move, destinationOperand, sourceOperand);
-				}
-				else
-				{
-					if (sourceOperand.IsLong)
-					{
-						Operand temp = AllocateVirtualRegister(destinationOperand.Type);
-
-						context.SetInstruction(IRInstruction.Move, temp, sourceOperand);
-						context.AppendInstruction(type, destinationOperand, temp, Operand.CreateConstant(TypeSystem, (int)mask));
-					}
-					else
-					{
-						context.SetInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant(TypeSystem, (int)mask));
-					}
-				}
-			}
-			else
-			{
-				context.SetInstruction(type, destinationOperand, sourceOperand);
-			}
-		}
-
-		private BaseInstruction ComputeExtensionTypeAndMask(MosaType destinationType, ref uint mask)
-		{
-			if (destinationType.IsUI1)
-			{
-				mask = 0xFF;
-				return (destinationType.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove);
-			}
-			else if (destinationType.IsUI2)
-			{
-				mask = 0xFFFF;
-				return destinationType.IsSigned ? (BaseInstruction)IRInstruction.SignExtendedMove : (BaseInstruction)IRInstruction.ZeroExtendedMove;
-			}
-			else if (destinationType.IsUI4)
-			{
-				mask = 0xFFFFFFFF;
-			}
-			else if (destinationType.IsUI8)
-			{
-				mask = 0x0;
-			}
-
-			return null;
 		}
 
 		/// <summary>
@@ -2194,23 +2364,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private bool CanSkipDueToRecursiveSystemObjectCtorCall(Context context)
-		{
-			var currentMethod = MethodCompiler.Method;
-			var invokeTarget = context.InvokeMethod;
-
-			// Skip recursive System.Object ctor calls.
-			if (currentMethod.DeclaringType.FullName == @"System.Object" &&
-				currentMethod.Name == @".ctor" &&
-				invokeTarget.DeclaringType.FullName == @"System.Object" &&
-				invokeTarget.Name == @".ctor")
-			{
-				return true;
-			}
-
-			return false;
-		}
-
 		/// <summary>
 		/// Replaces the IL load instruction by an appropriate IR move instruction or removes it entirely, if
 		/// it is a native size.
@@ -2218,44 +2371,26 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">Provides the transformation context.</param>
 		private void ProcessLoadInstruction(Context context)
 		{
-			var source = context.Operand1;
 			var destination = context.Result;
+			var source = context.Operand1;
 			var size = GetInstructionSize(source.Type);
 
-			BaseIRInstruction instruction = IRInstruction.Move;
-
-			if (MustSignExtendOnLoad(source.Type))
+			if (StoreOnStack(source.Type))
 			{
-				instruction = IRInstruction.SignExtendedMove;
+				context.SetInstruction(IRInstruction.CompoundMove, destination, source);
 			}
-			else if (MustZeroExtendOnLoad(source.Type))
+			else if (!source.IsVirtualRegister)
 			{
-				instruction = IRInstruction.ZeroExtendedMove;
+				var loadInstruction = GetLoadInstruction(source.Type);
+
+				context.SetInstruction(loadInstruction, size, destination, StackFrame, source);
 			}
-
-			context.SetInstruction(instruction, size, destination, source);
-		}
-
-		/// <summary>
-		/// Replaces the instruction with an internal call.
-		/// </summary>
-		/// <param name="context">The transformation context.</param>
-		/// <param name="internalCallTarget">The internal call target.</param>
-		private void ReplaceWithVmCall(Context context, VmCall internalCallTarget)
-		{
-			var method = InternalRuntimeType.FindMethodByName(internalCallTarget.ToString());
-
-			if (method == null)
+			else
 			{
-				method = PlatformInternalRuntimeType.FindMethodByName(internalCallTarget.ToString());
+				var moveInstruction = GetMoveInstruction(source.Type);
+
+				context.SetInstruction(moveInstruction, size, destination, source);
 			}
-
-			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());
-
-			context.ReplaceInstructionOnly(IRInstruction.Call);
-			context.SetOperand(0, Operand.CreateSymbolFromMethod(TypeSystem, method));
-			context.OperandCount = 1;
-			context.InvokeMethod = method;
 		}
 
 		private bool ReplaceWithInternalCall(Context context)
@@ -2278,19 +2413,26 @@ namespace Mosa.Compiler.Framework.Stages
 			return true;
 		}
 
-		private string BuildInternalCallName(MosaMethod method)
+		/// <summary>
+		/// Replaces the instruction with an internal call.
+		/// </summary>
+		/// <param name="context">The transformation context.</param>
+		/// <param name="internalCallTarget">The internal call target.</param>
+		private void ReplaceWithVmCall(Context context, VmCall internalCallTarget)
 		{
-			string name = method.Name;
-			if (name == @".ctor")
+			var method = InternalRuntimeType.FindMethodByName(internalCallTarget.ToString());
+
+			if (method == null)
 			{
-				name = @"Create" + method.DeclaringType.Name;
-			}
-			else
-			{
-				name = @"Internal" + name;
+				method = PlatformInternalRuntimeType.FindMethodByName(internalCallTarget.ToString());
 			}
 
-			return name;
+			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());
+
+			context.ReplaceInstructionOnly(IRInstruction.Call);
+			context.SetOperand(0, Operand.CreateSymbolFromMethod(TypeSystem, method));
+			context.OperandCount = 1;
+			context.InvokeMethod = method;
 		}
 
 		private VmCall ToVmUnboxCall(int typeSize)

@@ -67,7 +67,7 @@ namespace Mosa.Platform.ARMv6
 		/// <exception cref="InvalidCompilerException"></exception>
 		protected void EmitDataProcessingInstruction(InstructionNode node, MachineCodeEmitter emitter, byte opcode)
 		{
-			if (node.Operand2.IsRegister && node.Operand3.IsShift)
+			if (node.Operand2.IsCPURegister && node.Operand3.IsShift)
 			{
 				emitter.EmitInstructionWithRegister(node.ConditionCode, opcode, node.UpdateStatus, node.Operand1.Register.Index, node.Result.Register.Index, node.Operand3.ShiftType, node.Operand2.Register.Index);
 			}
@@ -88,7 +88,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="emitter">The emitter.</param>
 		protected void EmitMultiplyInstruction(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			if (!node.Operand3.IsRegister)
+			if (!node.Operand3.IsCPURegister)
 			{
 				emitter.EmitMultiply(node.ConditionCode, node.UpdateStatus, node.Operand1.Register.Index, node.Result.Register.Index, node.Operand2.Register.Index);
 			}

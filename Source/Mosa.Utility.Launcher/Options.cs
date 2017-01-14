@@ -29,8 +29,6 @@ namespace Mosa.Utility.Launcher
 
 		public bool EnableIROptimizations { get; set; }
 
-		public bool EnableVariablePromotion { get; set; }
-
 		public bool EnableSparseConditionalConstantPropagation { get; set; }
 
 		public bool EnableInlinedMethods { get; set; }
@@ -164,6 +162,7 @@ namespace Mosa.Utility.Launcher
 					case "-optimization-ir-off": EnableIROptimizations = false; continue;
 					case "-optimization-sccp-off": EnableSparseConditionalConstantPropagation = false; continue;
 					case "-all-optimization-off": EnableIROptimizations = false; EnableSparseConditionalConstantPropagation = false; EnableInlinedMethods = false; EnableSSA = false; continue;
+					case "-inline-level": InlinedIRMaximum = (int)args[++i].ParseHexOrDecimal(); continue;
 					case "-threading-off": UseMultipleThreadCompiler = false; continue;
 					case "-video": VBEVideo = true; continue;
 					case "-base": BaseAddress = args[++i].ParseHexOrDecimal(); continue;

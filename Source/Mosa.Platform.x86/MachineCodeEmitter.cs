@@ -24,13 +24,12 @@ namespace Mosa.Platform.x86
 			linker.Link(
 				LinkType.RelativeOffset,
 				PatchType.I4,
+				SectionKind.Text,
 				MethodName,
-				SectionKind.Text,
 				(int)codeStream.Position,
-				-4,
-				symbolOperand.Name,
 				SectionKind.Text,
-				0
+				symbolOperand.Name,
+				-4
 			);
 
 			codeStream.WriteZeroBytes(4);
@@ -51,27 +50,36 @@ namespace Mosa.Platform.x86
 		/// Emits the specified op code.
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
-		/// <param name="dest">The dest.</param>
+		public void Emit(OpCode opCode)
+		{
+			// Write the opcode
+			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+		}
+
+		/// <summary>
+		/// Emits the specified op code.
+		/// </summary>
+		/// <param name="opCode">The op code.</param>
+		/// <param name="dest">The destination operand.</param>
 		public void Emit(OpCode opCode, Operand dest)
 		{
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
-			byte? sib = null, modRM = null;
-			Operand displacement = null;
+			byte? modRM = null;
 
 			// Write the mod R/M byte
-			modRM = CalculateModRM(opCode.RegField, dest, null, out sib, out displacement);
+			modRM = CalculateModRM(opCode.RegField, dest, null);
 			if (modRM != null)
 			{
 				codeStream.WriteByte(modRM.Value);
-				if (sib.HasValue)
-					codeStream.WriteByte(sib.Value);
 			}
 
-			// Add displacement to the code
-			if (displacement != null)
-				WriteDisplacement(displacement);
+			// Add immediate bytes
+			if (dest.IsConstant)
+				WriteImmediate(dest);
+			else if (dest.IsSymbol)
+				WriteDisplacement(dest);
 		}
 
 		/// <summary>
@@ -85,33 +93,25 @@ namespace Mosa.Platform.x86
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
-			if (dest == null && src == null)
-				return;
+			Debug.Assert(!(dest == null && src == null));
 
-			byte? sib = null, modRM = null;
-			Operand displacement = null;
+			byte? modRM = null;
 
 			// Write the mod R/M byte
-			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
+			modRM = CalculateModRM(opCode.RegField, dest, src);
 			if (modRM != null)
 			{
 				codeStream.WriteByte(modRM.Value);
-				if (sib.HasValue)
-					codeStream.WriteByte(sib.Value);
 			}
-
-			// Add displacement to the code
-			if (displacement != null)
-				WriteDisplacement(displacement);
 
 			// Add immediate bytes
 			if (dest.IsConstant)
 				WriteImmediate(dest);
 			else if (dest.IsSymbol)
 				WriteDisplacement(dest);
-			else if (src != null && src.IsConstant)
+			else if (src != null && src.IsResolvedConstant)
 				WriteImmediate(src);
-			else if (src != null && src.IsSymbol)
+			else if (src != null && (src.IsSymbol || src.IsStaticField))
 				WriteDisplacement(src);
 		}
 
@@ -127,24 +127,16 @@ namespace Mosa.Platform.x86
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
-			if (dest == null && src == null)
-				return;
+			Debug.Assert(!(dest == null && src == null));
 
-			byte? sib = null, modRM = null;
-			Operand displacement = null;
+			byte? modRM = null;
 
 			// Write the mod R/M byte
-			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
+			modRM = CalculateModRM(opCode.RegField, dest, src);
 			if (modRM != null)
 			{
 				codeStream.WriteByte(modRM.Value);
-				if (sib.HasValue)
-					codeStream.WriteByte(sib.Value);
 			}
-
-			// Add displacement to the code
-			if (displacement != null)
-				WriteDisplacement(displacement);
 
 			// Add immediate bytes
 			if (third != null && third.IsConstant)
@@ -159,43 +151,48 @@ namespace Mosa.Platform.x86
 		{
 			if (displacement.IsLabel)
 			{
-				// FIXME! remove assertion
-				Debug.Assert(displacement.Displacement == 0);
+				Debug.Assert(displacement.IsUnresolvedConstant);
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Name, SectionKind.ROData, 0);
+				// FIXME! remove assertion
+				Debug.Assert(displacement.Offset == 0);
+
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, SectionKind.ROData, displacement.Name, 0);
 				codeStream.WriteZeroBytes(4);
 			}
-			else if (displacement.IsField)
+			else if (displacement.IsStaticField)
 			{
+				Debug.Assert(displacement.IsUnresolvedConstant);
 				var section = displacement.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, displacement.Field.FullName, section, (int)displacement.Displacement);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, section, displacement.Field.FullName, 0);
 				codeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsSymbol)
 			{
-				// FIXME! remove assertion
-				Debug.Assert(displacement.Displacement == 0);
-
+				Debug.Assert(displacement.IsUnresolvedConstant);
 				var section = (displacement.Method != null) ? SectionKind.Text : SectionKind.ROData;
 
-				var symbol = linker.GetSymbol(displacement.Name, section);
+				// First try finding the symbol in the expected section
+				var symbol = linker.FindSymbol(displacement.Name, section);
 
+				// If no symbol found, look in all sections
 				if (symbol == null)
 				{
 					symbol = linker.FindSymbol(displacement.Name);
 				}
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 0, symbol, 0);
+				// Otherwise create the symbol in the expected section
+				if (symbol == null)
+				{
+					symbol = linker.GetSymbol(displacement.Name, section);
+				}
+
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, symbol, 0);
 				codeStream.WriteZeroBytes(4);
-			}
-			else if (displacement.IsMemoryAddress && displacement.OffsetBase != null && displacement.OffsetBase.IsConstant)
-			{
-				codeStream.Write((int)(displacement.OffsetBase.ConstantSignedLongInteger + displacement.Displacement), Endianness.Little);
 			}
 			else
 			{
-				codeStream.Write((int)displacement.Displacement, Endianness.Little);
+				codeStream.Write((int)displacement.Offset, Endianness.Little);
 			}
 		}
 
@@ -205,19 +202,15 @@ namespace Mosa.Platform.x86
 		/// <param name="op">The immediate operand to emit.</param>
 		private void WriteImmediate(Operand op)
 		{
-			if (op.IsRegister)
-				return; // nothing to do.
+			Debug.Assert(!op.IsCPURegister);
 
-			if (op.IsStackLocal || op.IsMemoryAddress)
+			if (op.IsStackLocal)
 			{
-				codeStream.Write((int)op.Displacement, Endianness.Little);
+				codeStream.Write((int)op.Offset, Endianness.Little);
 				return;
 			}
 
-			if (!op.IsConstant)
-			{
-				throw new InvalidCompilerException();
-			}
+			Debug.Assert(op.IsResolvedConstant);
 
 			if (op.IsI1)
 				codeStream.WriteByte((byte)op.ConstantSignedInteger);
@@ -297,7 +290,7 @@ namespace Mosa.Platform.x86
 		{
 			codeStream.WriteByte(0xEA);
 
-			linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, (int)codeStream.Position, 6, MethodName, SectionKind.Text, (int)codeStream.Position);
+			linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, SectionKind.Text, MethodName, (int)codeStream.Position + 6);
 
 			codeStream.WriteZeroBytes(4);
 			codeStream.WriteByte(0x08);
@@ -310,34 +303,15 @@ namespace Mosa.Platform.x86
 		/// <param name="regField">The modR/M regfield value.</param>
 		/// <param name="op1">The destination operand.</param>
 		/// <param name="op2">The source operand.</param>
-		/// <param name="sib">A potential SIB byte to emit.</param>
-		/// <param name="displacement">An immediate displacement to emit.</param>
 		/// <returns>The value of the modR/M byte.</returns>
-		private static byte? CalculateModRM(byte? regField, Operand op1, Operand op2, out byte? sib, out Operand displacement)
+		private static byte? CalculateModRM(byte? regField, Operand op1, Operand op2)
 		{
 			byte? modRM = null;
-			displacement = null;
 
-			// FIXME: Handle the SIB byte
-			sib = null;
+			bool op1IsRegister = (op1 != null) && op1.IsCPURegister;
+			bool op2IsRegister = (op2 != null) && op2.IsCPURegister;
 
-			Operand mop1 = op1 != null && op1.IsMemoryAddress ? op1 : null;
-			Operand mop2 = op2 != null && op2.IsMemoryAddress ? op2 : null;
-
-			bool op1IsRegister = (op1 != null) && op1.IsRegister;
-			bool op2IsRegister = (op2 != null) && op2.IsRegister;
-
-			// Normalize the operand order
-			if (!op1IsRegister && op2IsRegister)
-			{
-				// Swap the memory operands
-				op1 = op2;
-				op2 = null;
-				mop2 = mop1;
-				mop1 = null;
-				op1IsRegister = op2IsRegister;
-				op2IsRegister = false;
-			}
+			Debug.Assert(!(!op1IsRegister && op2IsRegister));
 
 			if (regField != null)
 				modRM = (byte)(regField.Value << 3);
@@ -346,44 +320,6 @@ namespace Mosa.Platform.x86
 			{
 				// mod = 11b, reg = rop1, r/m = rop2
 				modRM = (byte)((3 << 6) | (op1.Register.RegisterCode << 3) | op2.Register.RegisterCode);
-			}
-
-			// Check for register/memory combinations
-			else if (mop2 != null && mop2.EffectiveOffsetBase != null)
-			{
-				// mod = 10b, reg = rop1, r/m = mop2
-				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | (byte)mop2.EffectiveOffsetBase.RegisterCode);
-				if (op1 != null)
-					modRM |= (byte)(op1.Register.RegisterCode << 3);
-				displacement = mop2;
-				if (mop2.EffectiveOffsetBase.RegisterCode == 4)
-					sib = 0x24;
-			}
-			else if (mop2 != null)
-			{
-				// mod = 10b, r/m = mop1, reg = rop2
-				modRM = (byte)(modRM.GetValueOrDefault() | 5);
-				if (op1IsRegister)
-					modRM |= (byte)(op1.Register.RegisterCode << 3);
-				displacement = mop2;
-			}
-			else if (mop1 != null && mop1.EffectiveOffsetBase != null)
-			{
-				// mod = 10b, r/m = mop1, reg = rop2
-				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | mop1.EffectiveOffsetBase.RegisterCode);
-				if (op2IsRegister)
-					modRM |= (byte)(op2.Register.RegisterCode << 3);
-				displacement = mop1;
-				if (mop1.EffectiveOffsetBase.RegisterCode == 4)
-					sib = 0xA4;
-			}
-			else if (mop1 != null)
-			{
-				// mod = 10b, r/m = mop1, reg = rop2
-				modRM = (byte)(modRM.GetValueOrDefault() | 5);
-				if (op2IsRegister)
-					modRM |= (byte)(op2.Register.RegisterCode << 3);
-				displacement = mop1;
 			}
 			else if (op1IsRegister)
 			{

@@ -145,7 +145,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.BranchTargetsCount == 0)
 						continue;
 
-					if (node.Instruction == IRInstruction.IntegerCompareBranch)
+					if (node.Instruction == IRInstruction.CompareIntegerBranch)
 					{
 						if (trace.Active) trace.Log("*** RemoveBranchesToDeadBlocks");
 						if (trace.Active) trace.Log("REMOVED:\t" + node.ToString());
@@ -159,7 +159,7 @@ namespace Mosa.Compiler.Framework.Stages
 						node.UpdateBranchTarget(0, otherBlock);
 						if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
 					}
-					else if (node.Instruction == IRInstruction.IntegerCompareBranch)
+					else if (node.Instruction == IRInstruction.CompareIntegerBranch)
 					{
 						return;
 					}

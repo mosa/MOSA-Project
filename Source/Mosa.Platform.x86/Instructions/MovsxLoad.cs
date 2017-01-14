@@ -44,22 +44,26 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static void MovsxMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(node.Result.IsRegister);
+			Debug.Assert(node.Result.IsCPURegister);
 
-			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
+			int patchOffset;
+
+			// WARNING: DO NOT USE 0x66 PREFIX WITH THIS INSTRUCTION
+			// We currently don't have the ability to load into 16bit registers
 
 			// memory to reg 0000 1111 : 1011 111w : mod reg r/m
 			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b1011)                                       // 4:opcode
-				.Append3Bits(Bits.b111)                                         // 4:opcode
-				.AppendWidthBit(node.Size != InstructionSize.Size8)                  // 1:width
-				.ModRegRMSIBDisplacement(node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
+				.AppendNibble(Bits.b0000)                                           // 4:opcode
+				.AppendNibble(Bits.b1111)                                           // 4:opcode
+				.AppendNibble(Bits.b1011)                                           // 4:opcode
+				.Append3Bits(Bits.b111)                                             // 3:opcode
+				.AppendWidthBit(node.Size != InstructionSize.Size8)                 // 1:width
+				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out patchOffset) // 32:memory
+				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
 
-			if (linkreference)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
 			else
 				emitter.Emit(opcode);
 		}

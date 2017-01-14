@@ -122,7 +122,11 @@ namespace Mosa.Compiler.Framework.Stages
 						if (callNode.Result != null)
 						{
 							var newOp = Map(node.Operand1, map, callNode);
-							newBlock.BeforeLast.Insert(new InstructionNode(IRInstruction.Move, callNode.Result, newOp));
+							var moveInsturction = GetMoveInstruction(callNode.Result.Type);
+
+							var moveNode = new InstructionNode(moveInsturction, callNode.Result, newOp);
+
+							newBlock.BeforeLast.Insert(moveNode);
 						}
 						newBlock.BeforeLast.Insert(new InstructionNode(IRInstruction.Jmp, nextBlock));
 
@@ -210,21 +214,21 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsStackLocal)
 			{
-				mappedOperand = MethodCompiler.StackLayout.AddStackLocal(operand.Type, operand.IsPinned);
+				mappedOperand = MethodCompiler.AddStackLocal(operand.Type, operand.IsPinned);
 			}
 			else if (operand.IsVirtualRegister)
 			{
-				mappedOperand = MethodCompiler.CreateVirtualRegister(operand.Type);
+				mappedOperand = AllocateVirtualRegister(operand.Type);
 			}
-			else if (operand.IsField)
+			else if (operand.IsStaticField)
 			{
 				mappedOperand = Operand.CreateField(operand.Field);
 			}
-			else if (operand.IsConstant)
+			else if (operand.IsCPURegister)
 			{
 				mappedOperand = operand;
 			}
-			else if (operand.IsCPURegister)
+			else if (operand.IsConstant)
 			{
 				mappedOperand = operand;
 			}

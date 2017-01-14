@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (operand.SSAVersion == 0)
 					final = operand.SSAParent;
 				else
-					final = MethodCompiler.CreateVirtualRegister(operand.Type);
+					final = AllocateVirtualRegister(operand.Type);
 
 				finalVirtualRegisters.Add(operand, final);
 			}
@@ -116,7 +116,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.GotoPrevious();
 
-			while (context.IsEmpty || context.Instruction is IntegerCompareBranch || context.Instruction is Jmp)
+			while (context.IsEmpty || context.Instruction is CompareIntegerBranch || context.Instruction is Jmp)
 			{
 				context.GotoPrevious();
 			}
@@ -129,7 +129,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (destination != source)
 			{
-				context.AppendInstruction(IRInstruction.Move, destination, source);
+				if (StoreOnStack(destination.Type))
+				{
+					context.AppendInstruction(IRInstruction.CompoundMove, destination, source);
+					context.MosaType = destination.Type;
+				}
+				else
+				{
+					var moveInstruction = GetMoveInstruction(destination.Type);
+					context.AppendInstruction(moveInstruction, destination, source);
+				}
 			}
 		}
 	}

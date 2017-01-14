@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private List<InstructionNode> ScanForNewOperators()
 		{
-			List<InstructionNode> list = new List<InstructionNode>();
+			var list = new List<InstructionNode>();
 
 			foreach (var block in BasicBlocks)
 			{
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if (node.Instruction is NewobjInstruction || node.Instruction is NewarrInstruction)
+					if ((node.Instruction is NewobjInstruction && !StoreOnStack(node.Result.Type)) || node.Instruction is NewarrInstruction)
 					{
 						list.Add(node);
 					}
@@ -78,13 +78,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (typeDefinitionSymbol != null)
 			{
-				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, symbolName, 0, 0, typeDefinitionSymbol, SectionKind.ROData, 0);
+				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, symbolName, 0, SectionKind.ROData, typeDefinitionSymbol, 0);
 			}
 
 			Operand staticAddress = Operand.CreateManagedSymbol(assignmentField.FieldType, symbolName.Name);
-			Operand result1 = MethodCompiler.CreateVirtualRegister(assignmentField.FieldType);
+			Operand result1 = AllocateVirtualRegister(assignmentField.FieldType);
 
-			//Operand result2 = MethodCompiler.CreateVirtualRegister(assignmentField.FieldType);
+			//Operand result2 = AllocateVirtualRegister(assignmentField.FieldType);
 
 			// Issue a load request before the newobj and before the assignment.
 			new Context(allocation).InsertBefore().SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), result1, staticAddress);
@@ -145,7 +145,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (op.Instruction is LdcInstruction)
 				{
-					if (op.Operand1.IsConstant)
+					if (op.Operand1.IsResolvedConstant)
 					{
 						return op.Operand1.ConstantSignedInteger;
 					}

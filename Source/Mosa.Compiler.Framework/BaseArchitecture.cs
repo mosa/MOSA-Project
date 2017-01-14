@@ -136,14 +136,34 @@ namespace Mosa.Compiler.Framework
 		public abstract void InsertMoveInstruction(Context context, Operand destination, Operand source);
 
 		/// <summary>
+		/// Inserts the store instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
+		public abstract void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value);
+
+		/// <summary>
+		/// Inserts the load instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="offset">The offset.</param>
+		public abstract void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset);
+
+		/// <summary>
 		/// Create platform compound move.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
+		/// <param name="destinationOffset">The destination offset.</param>
 		/// <param name="source">The source.</param>
+		/// <param name="sourceOffset">The source offset.</param>
 		/// <param name="size">The size.</param>
-		public abstract void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand source, int size);
+		public abstract void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand destinationOffset, Operand source, Operand sourceOffset, int size);
 
 		/// <summary>
 		/// Create platform exchange registers.
@@ -166,14 +186,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
 		public abstract void InsertJumpInstruction(Context context, BasicBlock destination);
-
-		/// <summary>
-		/// Inserts the address of instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source">The source.</param>
-		public abstract void InsertAddressOfInstruction(Context context, Operand destination, Operand source);
 
 		/// <summary>
 		/// Inserts the call instruction.

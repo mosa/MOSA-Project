@@ -554,6 +554,7 @@
 			this.tbMode.SelectedText = "";
 			this.tbMode.SelectionLength = 0;
 			this.tbMode.SelectionStart = 0;
+			this.tbMode.ShortcutsEnabled = true;
 			this.tbMode.Size = new System.Drawing.Size(89, 20);
 			this.tbMode.TabIndex = 38;
 			this.tbMode.Text = "{Mode}";
@@ -939,6 +940,7 @@
 			this.tbBaseAddress.SelectedText = "";
 			this.tbBaseAddress.SelectionLength = 0;
 			this.tbBaseAddress.SelectionStart = 0;
+			this.tbBaseAddress.ShortcutsEnabled = true;
 			this.tbBaseAddress.Size = new System.Drawing.Size(89, 20);
 			this.tbBaseAddress.TabIndex = 41;
 			this.tbBaseAddress.Text = "0x00400000";
@@ -1300,7 +1302,7 @@
 			this.Resizable = false;
 			this.ShadowType = MetroFramework.Forms.MetroFormShadowType.AeroShadow;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-			this.Text = "MOSA Launcher v1.6";
+			this.Text = "MOSA Launcher v1.7";
 			this.Theme = MetroFramework.MetroThemeStyle.Dark;
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.Shown += new System.EventHandler(this.MainForm_Shown);

@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public class MoveResolver
 	{
-		public enum ResolvedMoveType { Move, Exchange };
+		public enum ResolvedMoveType { Move, Exchange, Load };
 
 		public class ResolvedMoveList : List<MoveExtended<ResolvedMoveType>>
 		{
@@ -86,7 +86,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (other != -1)
 						continue;
 
-					moves.Add(move.Source, move.Destination, ResolvedMoveType.Move);
+					Debug.Assert(move.Destination.IsCPURegister);
+
+					moves.Add(move.Source, move.Destination, move.Source.IsCPURegister ? ResolvedMoveType.Move : ResolvedMoveType.Load);
 
 					Moves.RemoveAt(i);
 
@@ -115,9 +117,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (other == -1)
 						continue;
 
+					Debug.Assert(Moves[other].Source.IsCPURegister);
+					Debug.Assert(move.Source.IsCPURegister);
+
 					moves.Add(Moves[other].Source, move.Source, ResolvedMoveType.Exchange);
 
-					//Moves[other].Source = move.Source;
 					Moves[other] = new Move(move.Source, Moves[other].Destination);
 
 					Moves.RemoveAt(i);
@@ -142,6 +146,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (!(move.Source.IsCPURegister || move.Destination.IsCPURegister))
 					continue;
 
+				Debug.Assert(move.Destination.IsCPURegister);
+				Debug.Assert(move.Source.IsCPURegister);
+
 				moves.Add(move.Destination, move.Source, ResolvedMoveType.Move);
 			}
 		}
@@ -157,7 +164,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return moves;
 		}
 
-		public void InsertResolvingMoves(BaseArchitecture architecture)
+		public void InsertResolvingMoves(BaseArchitecture architecture, Operand stackFrame)
 		{
 			if (Moves.Count == 0)
 				return;
@@ -179,13 +186,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var move in moves)
 			{
-				if (move.Value == ResolvedMoveType.Move)
+				Debug.Assert(move.Destination.IsCPURegister);
+
+				switch (move.Value)
 				{
-					architecture.InsertMoveInstruction(context, move.Destination, move.Source);
-				}
-				else
-				{
-					architecture.InsertExchangeInstruction(context, move.Destination, move.Source);
+					case ResolvedMoveType.Move: architecture.InsertMoveInstruction(context, move.Destination, move.Source); break;
+					case ResolvedMoveType.Exchange: architecture.InsertExchangeInstruction(context, move.Destination, move.Source); break;
+					case ResolvedMoveType.Load: architecture.InsertLoadInstruction(context, move.Destination, stackFrame, move.Source); break;
 				}
 
 				context.Marked = true;

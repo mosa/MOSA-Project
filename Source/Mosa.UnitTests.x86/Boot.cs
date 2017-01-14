@@ -37,7 +37,7 @@ namespace Mosa.UnitTests.x86
 			IDT.Setup();
 			GDT.Setup();
 
-			Runtime.Internal.Setup();
+			//Runtime.Internal.Setup();
 		}
 
 		public static void EnterTestReadyLoop()

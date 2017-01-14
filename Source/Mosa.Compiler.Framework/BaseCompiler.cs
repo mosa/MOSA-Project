@@ -205,12 +205,12 @@ namespace Mosa.Compiler.Framework
 
 			foreach (ICompilerStage stage in CompilePipeline)
 			{
-				NewCompilerTraceEvent(CompilerEvent.CompilerStageStart, stage.Name);
+				NewCompilerTraceEvent(CompilerEvent.PreCompileStageStart, stage.Name);
 
 				// Execute stage
 				stage.ExecutePreCompile();
 
-				NewCompilerTraceEvent(CompilerEvent.CompilerStageEnd, stage.Name);
+				NewCompilerTraceEvent(CompilerEvent.PreCompileStageEnd, stage.Name);
 			}
 		}
 
@@ -322,12 +322,12 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (ICompilerStage stage in CompilePipeline)
 			{
-				NewCompilerTraceEvent(CompilerEvent.CompilerStageStart, stage.Name);
+				NewCompilerTraceEvent(CompilerEvent.PostCompileStageStart, stage.Name);
 
 				// Execute stage
 				stage.ExecutePostCompile();
 
-				NewCompilerTraceEvent(CompilerEvent.CompilerStageEnd, stage.Name);
+				NewCompilerTraceEvent(CompilerEvent.PostCompileStageEnd, stage.Name);
 			}
 
 			// Sum up the counters

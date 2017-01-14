@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
@@ -17,7 +16,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, Metadata.AssembliesTable));
+			context.SetInstruction(IRInstruction.MoveInteger, context.Result, Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, Metadata.AssembliesTable));
 		}
 
 		#endregion Methods

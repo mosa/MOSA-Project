@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Xunit;
-using Xunit.Extensions;
 
 namespace Mosa.UnitTest.Collection.xUnit
 {

@@ -33,14 +33,13 @@ namespace Mosa.Platform.x86.Instructions
 			if (third.IsConstant)
 				return O_C;
 
-			if (destination.IsRegister)
+			if (destination.IsCPURegister)
 			{
 				if (third.IsChar)
 					return R_O_16;
 				else
 					return R_O;
 			}
-			if ((destination.IsMemoryAddress) && (third.IsRegister)) return M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
