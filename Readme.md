@@ -68,8 +68,15 @@ The [EditorConfig](http://editorconfig.org/) plugin is recommended for MOSA cont
 
 **Linux**
 
+
+
 Install [Mono](http://www.mono-project.com) and [Qemu](http://wiki.qemu.org/Main_Page).
 
+The minimum supported version of Mono is 4.4, this is not in some distributions repositories and must be added manually.
+A tutorial on how to do this can be found at the following URL.
+[http://www.mono-project.com/download/#download-lin](http://www.mono-project.com/download/#download-lin)
+
+If using the APT package manager you can use the following command to quickly set up QEMU and Mono
 <pre>
 sudo apt-get -y install mono-devel qemu
 </pre>

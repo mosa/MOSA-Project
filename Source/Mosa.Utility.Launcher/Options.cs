@@ -175,6 +175,8 @@ namespace Mosa.Utility.Launcher
 					case "-x86-irq-methods": Emitx86IRQMethods = true; continue;
 					case "-x86-irq-methods-false": Emitx86IRQMethods = false; continue;
 					case "-bootloader-image": BootLoaderImage = args[++i]; continue;
+					case "-no-ir-optimizations": EnableIROptimizations = false; continue;
+					case "-no-sparse": EnableSparseConditionalConstantPropagation = false; continue;
 					case "-qemu-gdb": EnableQemuGDB = true; continue;
 					case "-gdb": LaunchGDB = true; continue;
 

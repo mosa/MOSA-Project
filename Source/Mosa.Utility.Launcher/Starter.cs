@@ -212,7 +212,6 @@ namespace Mosa.Utility.Launcher
 			sb.AppendLine("set confirm off ");
 			sb.AppendLine("set disassemble-next-line on");
 			sb.AppendLine("set disassembly-flavor intel");
-			sb.AppendLine("set pagination off");
 			sb.AppendLine("break *0x" + startingAddress.ToString("x"));
 			sb.AppendLine("c");
 

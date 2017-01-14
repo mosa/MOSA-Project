@@ -1248,7 +1248,7 @@
 			this.rtbOutput.Location = new System.Drawing.Point(0, 0);
 			this.rtbOutput.Name = "rtbOutput";
 			this.rtbOutput.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-			this.rtbOutput.Size = new System.Drawing.Size(653, 409);
+			this.rtbOutput.Size = new System.Drawing.Size(582, 409);
 			this.rtbOutput.TabIndex = 0;
 			this.rtbOutput.Text = "";
 			this.rtbOutput.WordWrap = false;
@@ -1276,10 +1276,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbCounters.Font = new System.Drawing.Font("Consolas", 8F);
-			this.rtbCounters.Location = new System.Drawing.Point(0, 0);
+			this.rtbCounters.Location = new System.Drawing.Point(0, 1);
 			this.rtbCounters.Name = "rtbCounters";
 			this.rtbCounters.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-			this.rtbCounters.Size = new System.Drawing.Size(653, 412);
+			this.rtbCounters.Size = new System.Drawing.Size(582, 411);
 			this.rtbCounters.TabIndex = 1;
 			this.rtbCounters.Text = "";
 			this.rtbCounters.WordWrap = false;
