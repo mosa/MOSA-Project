@@ -467,7 +467,7 @@ namespace Mosa.Platform.x86.Stages
 				// Large Aligned moves allow 128bits to be copied at a time
 				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
 				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i + offset);
-				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
+				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, offset2);
 				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
 			}
 			for (int i = largeAlignedTypeSize; i < alignedTypeSize; i += NativeAlignment)
