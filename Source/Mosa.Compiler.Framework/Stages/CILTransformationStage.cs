@@ -880,22 +880,19 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Debug.Assert(context.Operand1.IsParameter);
 
-			var source = context.Operand1;
-			var destination = context.Result;
-
-			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, source.Offset);
-
-			if (StoreOnStack(source.Type))
+			if (StoreOnStack(context.Operand1.Type))
 			{
-				context.SetInstruction(IRInstruction.LoadCompound, destination, StackFrame, constant);
-				context.MosaType = source.Type;
+				var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, context.Operand1.Offset);
+
+				context.SetInstruction(IRInstruction.LoadCompound, context.Result, StackFrame, constant);
+				context.MosaType = context.Operand1.Type;
 			}
 			else
 			{
-				var loadInstruction = GetLoadParameterInstruction(source.Type);
-				var size = GetInstructionSize(source.Type);
+				var loadInstruction = GetLoadParameterInstruction(context.Operand1.Type);
+				var size = GetInstructionSize(context.Operand1.Type);
 
-				context.SetInstruction(loadInstruction, size, destination, source);
+				context.SetInstruction(loadInstruction, size, context.Result, context.Operand1);
 			}
 		}
 
@@ -1504,16 +1501,15 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Debug.Assert(context.Result.IsParameter);
 
-			var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, context.Result.Offset);
-
 			if (StoreOnStack(context.Operand1.Type))
 			{
+				var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, context.Result.Offset);
 				context.SetInstruction(IRInstruction.StoreCompound, context.Size, null, StackFrame, constant, context.Operand1);
 			}
 			else
 			{
-				var storeInstruction = GetStoreInstruction(context.Operand1.Type);
-				context.SetInstruction(storeInstruction, context.Size, null, StackFrame, constant, context.Operand1);
+				var storeInstruction = GetStoreParameterInstruction(context.Operand1.Type);
+				context.SetInstruction(storeInstruction, context.Size, null, context.Result, context.Operand1);
 			}
 		}
 

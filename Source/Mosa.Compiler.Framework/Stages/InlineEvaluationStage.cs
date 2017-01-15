@@ -63,6 +63,14 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						MethodData.HasAddressOfInstruction = true;
 					}
+
+					// hack
+					if (node.Instruction == IRInstruction.LoadCompound ||
+						node.Instruction == IRInstruction.StoreCompound ||
+						node.Instruction == IRInstruction.MoveCompound)
+					{
+						MethodData.HasAddressOfInstruction = true;
+					}
 				}
 
 				if (block.PreviousBlocks.Count > 1)

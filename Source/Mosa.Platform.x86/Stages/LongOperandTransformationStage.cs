@@ -50,6 +50,7 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.ShiftLeft] = ShiftLeft;
 			visitationDictionary[IRInstruction.ShiftRight] = ShiftRight;
 			visitationDictionary[IRInstruction.StoreInteger] = StoreInteger;
+			visitationDictionary[IRInstruction.StoreParameterInteger] = StoreParameterInteger;
 			visitationDictionary[IRInstruction.SubSigned] = SubSigned;
 			visitationDictionary[IRInstruction.SubUnsigned] = SubUnsigned;
 		}
@@ -407,6 +408,18 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Size == InstructionSize.Size64)
 			{
 				ExpandStore(context);
+			}
+		}
+
+		/// <summary>
+		/// Visitation function for StoreInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void StoreParameterInteger(Context context)
+		{
+			if (context.Size == InstructionSize.Size64)
+			{
+				ExpandStoreParameter(context);
 			}
 		}
 
@@ -1050,6 +1063,22 @@ namespace Mosa.Platform.x86.Stages
 
 			context.AppendInstruction(X86.Add, InstructionSize.Size32, v1, op2L, ConstantFour);
 			context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, address, v1, op3H);
+		}
+
+		/// <summary>
+		/// Expands the store instruction for 64-bits.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void ExpandStoreParameter(Context context)
+		{
+			Operand op0L, op0H;
+			SplitLongOperand(context.Operand1, out op0L, out op0H);
+
+			Operand op1L, op1H;
+			SplitLongOperand(context.Operand2, out op1L, out op1H);
+
+			context.SetInstruction(X86.MovStore, InstructionSize.Size32, null, StackFrame, op0L, op1L);
+			context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, StackFrame, op0H, op1H);
 		}
 
 		/// <summary>

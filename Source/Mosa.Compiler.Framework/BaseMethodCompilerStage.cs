@@ -795,6 +795,20 @@ namespace Mosa.Compiler.Framework
 			return IRInstruction.StoreInteger;
 		}
 
+		public static BaseIRInstruction GetStoreParameterInstruction(MosaType type)
+		{
+			if (type.IsR4)
+			{
+				return IRInstruction.StoreParameterFloatR4;
+			}
+			else if (type.IsR8)
+			{
+				return IRInstruction.StoreParameterFloatR8;
+			}
+
+			return IRInstruction.StoreParameterInteger;
+		}
+
 		#endregion Helpers
 	}
 }

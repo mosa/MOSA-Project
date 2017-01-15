@@ -80,7 +80,10 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.ShiftRight] = ShiftRight;
 			visitationDictionary[IRInstruction.StoreFloatR4] = StoreFloatR4;
 			visitationDictionary[IRInstruction.StoreFloatR8] = StoreFloatR8;
-			visitationDictionary[IRInstruction.StoreInteger] = StoreInt;
+			visitationDictionary[IRInstruction.StoreInteger] = StoreInteger;
+			visitationDictionary[IRInstruction.StoreParameterFloatR4] = StoreParameterFloatR4;
+			visitationDictionary[IRInstruction.StoreParameterFloatR8] = StoreParameterFloatR8;
+			visitationDictionary[IRInstruction.StoreParameterInteger] = StoreParameterInteger;
 			visitationDictionary[IRInstruction.SubFloatR4] = SubFloatR4;
 			visitationDictionary[IRInstruction.SubFloatR8] = SubFloatR8;
 			visitationDictionary[IRInstruction.SubSigned] = SubSigned;
@@ -1049,9 +1052,24 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.MovsdStore, context.Size, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
-		private void StoreInt(Context context)
+		private void StoreInteger(Context context)
 		{
 			context.SetInstruction(X86.MovStore, context.Size, null, context.Operand1, context.Operand2, context.Operand3);
+		}
+
+		private void StoreParameterFloatR4(Context context)
+		{
+			context.SetInstruction(X86.MovssStore, context.Size, null, StackFrame, context.Operand1, context.Operand2);
+		}
+
+		private void StoreParameterFloatR8(Context context)
+		{
+			context.SetInstruction(X86.MovsdStore, context.Size, null, StackFrame, context.Operand1, context.Operand2);
+		}
+
+		private void StoreParameterInteger(Context context)
+		{
+			context.SetInstruction(X86.MovStore, context.Size, null, StackFrame, context.Operand1, context.Operand2);
 		}
 
 		/// <summary>
