@@ -31,9 +31,9 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.CompareFloatR8] = CompareFloatR8;
 			visitationDictionary[IRInstruction.CompareInteger] = CompareInteger;
 			visitationDictionary[IRInstruction.CompareIntegerBranch] = CompareIntegerBranch;
-			visitationDictionary[IRInstruction.LoadCompound] = CompoundLoad;
-			visitationDictionary[IRInstruction.MoveCompound] = CompoundMove;
-			visitationDictionary[IRInstruction.StoreCompound] = CompoundStore;
+			visitationDictionary[IRInstruction.LoadCompound] = LoadCompound;
+			visitationDictionary[IRInstruction.MoveCompound] = MoveCompound;
+			visitationDictionary[IRInstruction.StoreCompound] = StoreCompound;
 			visitationDictionary[IRInstruction.ConversionFloatR4ToFloatR8] = ConversionFloatR4ToFloatR8;
 			visitationDictionary[IRInstruction.ConversionFloatR4ToInteger] = ConversionFloatR4ToInteger;
 			visitationDictionary[IRInstruction.ConversionFloatR8ToFloatR4] = ConversionFloatR8ToFloatR4;
@@ -52,6 +52,8 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.LoadInteger] = LoadInt;
 			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
 			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
+			visitationDictionary[IRInstruction.LoadParameterFloatR4] = LoadParameterFloatR4;
+			visitationDictionary[IRInstruction.LoadParameterFloatR8] = LoadParameterFloatR8;
 			visitationDictionary[IRInstruction.LogicalAnd] = LogicalAnd;
 			visitationDictionary[IRInstruction.LogicalNot] = LogicalNot;
 			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
@@ -252,7 +254,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Branch, condition, target);
 		}
 
-		private void CompoundLoad(Context context)
+		private void LoadCompound(Context context)
 		{
 			var type = context.Result.Type;
 			int typeSize = TypeLayout.GetTypeSize(type);
@@ -302,7 +304,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(IRInstruction.StableObjectTracking);
 		}
 
-		private void CompoundMove(Context context)
+		private void MoveCompound(Context context)
 		{
 			var src = context.Operand1;
 			var dest = context.Result;
@@ -349,7 +351,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(IRInstruction.StableObjectTracking);
 		}
 
-		private void CompoundStore(Context context)
+		private void StoreCompound(Context context)
 		{
 			var type = context.Operand3.Type;
 			int typeSize = TypeLayout.GetTypeSize(type);
@@ -679,6 +681,20 @@ namespace Mosa.Platform.x86.Stages
 		private void Jmp(Context context)
 		{
 			context.ReplaceInstructionOnly(X86.Jmp);
+		}
+
+		private void LoadParameterFloatR4(Context context)
+		{
+			Debug.Assert(context.Result.IsR4);
+
+			context.SetInstruction(X86.MovssLoad, context.Size, context.Result, StackFrame, context.Operand1);
+		}
+
+		private void LoadParameterFloatR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+
+			context.SetInstruction(X86.MovsdLoad, context.Size, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadFloatR4(Context context)
