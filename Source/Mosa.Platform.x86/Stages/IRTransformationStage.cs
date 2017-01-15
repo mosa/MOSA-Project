@@ -49,11 +49,14 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.Jmp] = Jmp;
 			visitationDictionary[IRInstruction.LoadFloatR4] = LoadFloatR4;
 			visitationDictionary[IRInstruction.LoadFloatR8] = LoadFloatR8;
-			visitationDictionary[IRInstruction.LoadInteger] = LoadInt;
+			visitationDictionary[IRInstruction.LoadInteger] = LoadInteger;
 			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
 			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
 			visitationDictionary[IRInstruction.LoadParameterFloatR4] = LoadParameterFloatR4;
 			visitationDictionary[IRInstruction.LoadParameterFloatR8] = LoadParameterFloatR8;
+			visitationDictionary[IRInstruction.LoadParameterInteger] = LoadParameterInteger;
+			visitationDictionary[IRInstruction.LoadParameterSignExtended] = LoadParameterSignExtended;
+			visitationDictionary[IRInstruction.LoadParameterZeroExtended] = LoadParameterZeroExtended;
 			visitationDictionary[IRInstruction.LogicalAnd] = LogicalAnd;
 			visitationDictionary[IRInstruction.LogicalNot] = LogicalNot;
 			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
@@ -697,6 +700,26 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.MovsdLoad, context.Size, context.Result, StackFrame, context.Operand1);
 		}
 
+		private void LoadParameterInteger(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+
+			context.SetInstruction(X86.MovLoad, context.Size, context.Result, StackFrame, context.Operand1);
+		}
+
+		private void LoadParameterSignExtended(Context context)
+		{
+			Debug.Assert(context.Size == InstructionSize.Size8 || context.Size == InstructionSize.Size16);
+			context.SetInstruction(X86.MovsxLoad, context.Size, context.Result, StackFrame, context.Operand1);
+		}
+
+		private void LoadParameterZeroExtended(Context context)
+		{
+			Debug.Assert(context.Size == InstructionSize.Size8 || context.Size == InstructionSize.Size16);
+			context.SetInstruction(X86.MovzxLoad, context.Size, context.Result, StackFrame, context.Operand1);
+		}
+
 		private void LoadFloatR4(Context context)
 		{
 			Debug.Assert(context.Result.IsR4);
@@ -711,11 +734,7 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.MovsdLoad, context.Size, context.Result, context.Operand1, context.Operand2);
 		}
 
-		/// <summary>
-		/// Visitation function for LoadInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void LoadInt(Context context)
+		private void LoadInteger(Context context)
 		{
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);

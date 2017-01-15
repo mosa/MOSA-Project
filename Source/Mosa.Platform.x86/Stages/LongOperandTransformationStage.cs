@@ -32,6 +32,9 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.LoadInteger] = LoadInteger;
 			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
 			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
+			visitationDictionary[IRInstruction.LoadParameterInteger] = LoadParameterInteger;
+			visitationDictionary[IRInstruction.LoadParameterSignExtended] = LoadParameterSignExtended;
+			visitationDictionary[IRInstruction.LoadParameterZeroExtended] = LoadParameterZeroExtended;
 			visitationDictionary[IRInstruction.LogicalAnd] = LogicalAnd;
 			visitationDictionary[IRInstruction.LogicalNot] = LogicalNot;
 			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
@@ -178,16 +181,34 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		private void LoadParameterInteger(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+
+			if (context.Operand1.Is64BitInteger || context.Result.Is64BitInteger)
+			{
+				ExpandLoadParameter(context);
+			}
+		}
+
+		private void LoadParameterSignExtended(Context context)
+		{
+			Debug.Assert(!Any64Bit(context));
+		}
+
+		private void LoadParameterZeroExtended(Context context)
+		{
+			Debug.Assert(!Any64Bit(context));
+		}
+
 		/// <summary>
 		/// Visitation function for Load Sign Extended.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		private void LoadSignExtended(Context context)
 		{
-			if (Any64Bit(context))
-			{
-				throw new NotImplementCompilerException("64bit LoadSignExtended not implemented!");
-			}
+			Debug.Assert(!Any64Bit(context));
 		}
 
 		/// <summary>
@@ -196,10 +217,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LoadZeroExtended(Context context)
 		{
-			if (Any64Bit(context))
-			{
-				throw new NotImplementCompilerException("64bit LoadZeroExtended not implemented!");
-			}
+			Debug.Assert(!Any64Bit(context));
 		}
 
 		/// <summary>
@@ -658,6 +676,22 @@ namespace Mosa.Platform.x86.Stages
 			context.Operand3 = op2;
 			context.OperandCount = 3;
 			context.ResultCount = 1;
+		}
+
+		/// <summary>
+		/// Expands the load instruction for 64-bits.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void ExpandLoadParameter(Context context)
+		{
+			Operand op0L, op0H;
+			SplitLongOperand(context.Result, out op0L, out op0H);
+
+			Operand op1L, op1H;
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
+
+			context.SetInstruction(X86.MovLoad, InstructionSize.Size32, op0L, StackFrame, op1L);
+			context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, op0H, StackFrame, op1H);
 		}
 
 		/// <summary>

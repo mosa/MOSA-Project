@@ -892,18 +892,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				var loadInstruction = GetLoadInstruction(source.Type);
+				var loadInstruction = GetLoadParameterInstruction(source.Type);
 				var size = GetInstructionSize(source.Type);
 
-				context.SetInstruction(loadInstruction, size, destination, StackFrame, constant);
-
-				//hack
-				if (loadInstruction == IRInstruction.LoadFloatR4 ||
-					loadInstruction == IRInstruction.LoadFloatR8)
-				{
-					loadInstruction = GetLoadParameterInstruction(source.Type);
-					context.SetInstruction(loadInstruction, size, destination, source);
-				}
+				context.SetInstruction(loadInstruction, size, destination, source);
 			}
 		}
 
