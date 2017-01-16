@@ -34,12 +34,6 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.HasDoNotInlineAttribute = false;
 			MethodData.HasAddressOfInstruction = false;
 
-			// hack
-			if (method.HasThis || method.HasExplicitThis || method.Signature.Parameters.Count != 0)
-			{
-				MethodData.HasAddressOfInstruction = true;
-			}
-
 			int totalIRCount = 0;
 			int totalNonIRCount = 0;
 
@@ -60,14 +54,6 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 
 					if (node.Instruction == IRInstruction.AddressOf)
-					{
-						MethodData.HasAddressOfInstruction = true;
-					}
-
-					// hack
-					if (node.Instruction == IRInstruction.LoadCompound ||
-						node.Instruction == IRInstruction.StoreCompound ||
-						node.Instruction == IRInstruction.MoveCompound)
 					{
 						MethodData.HasAddressOfInstruction = true;
 					}

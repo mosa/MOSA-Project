@@ -174,33 +174,72 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.InvokeMethod != null)
 						newNode.InvokeMethod = node.InvokeMethod;
 
-					// update loads
-					if (newNode.Instruction == IRInstruction.LoadParameterFloatR4)
-					{
-						newNode.Instruction = IRInstruction.MoveFloatR4;
-					}
-					else if (newNode.Instruction == IRInstruction.LoadParameterFloatR8)
-					{
-						newNode.Instruction = IRInstruction.MoveFloatR8;
-					}
-					else if (newNode.Instruction == IRInstruction.LoadParameterInteger)
-					{
-						newNode.Instruction = IRInstruction.MoveInteger;
-					}
-					else if (newNode.Instruction == IRInstruction.LoadParameterSignExtended)
-					{
-						newNode.Instruction = IRInstruction.MoveSignExtended;
-					}
-					else if (newNode.Instruction == IRInstruction.LoadParameterZeroExtended)
-					{
-						newNode.Instruction = IRInstruction.MoveZeroExtended;
-					}
+					UpdateParameterInstructions(newNode);
 
 					newBlock.BeforeLast.Insert(newNode);
 				}
 			}
 
 			callNode.SetInstruction(IRInstruction.Jmp, mapBlocks[blocks.PrologueBlock]);
+		}
+
+		private static void UpdateParameterInstructions(InstructionNode newNode)
+		{
+			if (newNode.Instruction == IRInstruction.LoadParameterFloatR4)
+			{
+				newNode.Instruction = IRInstruction.MoveFloatR4;
+			}
+			else if (newNode.Instruction == IRInstruction.LoadParameterFloatR8)
+			{
+				newNode.Instruction = IRInstruction.MoveFloatR8;
+			}
+			else if (newNode.Instruction == IRInstruction.LoadParameterInteger)
+			{
+				newNode.Instruction = IRInstruction.MoveInteger;
+			}
+			else if (newNode.Instruction == IRInstruction.LoadParameterSignExtended)
+			{
+				newNode.Instruction = IRInstruction.MoveSignExtended;
+			}
+			else if (newNode.Instruction == IRInstruction.LoadParameterZeroExtended)
+			{
+				newNode.Instruction = IRInstruction.MoveZeroExtended;
+			}
+			else if (newNode.Instruction == IRInstruction.StoreParameterInteger)
+			{
+				newNode.Instruction = IRInstruction.MoveInteger;
+				newNode.Result = newNode.Operand1;
+				newNode.ResultCount = 1;
+				newNode.Operand1 = newNode.Operand2;
+				newNode.Operand2 = null;
+				newNode.OperandCount = 1;
+			}
+			else if (newNode.Instruction == IRInstruction.StoreParameterFloatR4)
+			{
+				newNode.Instruction = IRInstruction.MoveFloatR4;
+				newNode.Result = newNode.Operand1;
+				newNode.ResultCount = 1;
+				newNode.Operand1 = newNode.Operand2;
+				newNode.Operand2 = null;
+				newNode.OperandCount = 1;
+			}
+			else if (newNode.Instruction == IRInstruction.StoreParameterFloatR8)
+			{
+				newNode.Instruction = IRInstruction.MoveFloatR8;
+				newNode.Result = newNode.Operand1;
+				newNode.ResultCount = 1;
+				newNode.Operand1 = newNode.Operand2;
+				newNode.Operand2 = null;
+				newNode.OperandCount = 1;
+			}
+			else if (newNode.Instruction == IRInstruction.StoreParameterCompound)
+			{
+				newNode.Instruction = IRInstruction.MoveCompound;
+			}
+			else if (newNode.Instruction == IRInstruction.LoadParameterCompound)
+			{
+				newNode.Instruction = IRInstruction.MoveCompound;
+			}
 		}
 
 		private Operand Map(Operand operand, Dictionary<Operand, Operand> map, InstructionNode callNode)
