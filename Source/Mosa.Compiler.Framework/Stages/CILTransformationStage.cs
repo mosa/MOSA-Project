@@ -882,9 +882,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(context.Operand1.Type))
 			{
-				var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, context.Operand1.Offset);
-
-				context.SetInstruction(IRInstruction.LoadCompound, context.Result, StackFrame, constant);
+				context.SetInstruction(IRInstruction.LoadParameterCompound, context.Result, context.Operand1);
 				context.MosaType = context.Operand1.Type;
 			}
 			else
@@ -1503,8 +1501,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StoreOnStack(context.Operand1.Type))
 			{
-				var constant = Operand.CreateConstant(TypeSystem.BuiltIn.I4, context.Result.Offset);
-				context.SetInstruction(IRInstruction.StoreCompound, context.Size, null, StackFrame, constant, context.Operand1);
+				context.SetInstruction(IRInstruction.StoreParameterCompound, context.Size, null, context.Result, context.Operand1);
+				context.MosaType = context.Result.Type; // may not be necessary
 			}
 			else
 			{

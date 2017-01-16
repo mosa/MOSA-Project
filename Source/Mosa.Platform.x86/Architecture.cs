@@ -305,6 +305,13 @@ namespace Mosa.Platform.x86
 			context.AppendInstruction(instruction, size, null, destination, offset, value);
 		}
 
+		/// <summary>
+		/// Inserts the load instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="offset">The offset.</param>
 		public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
 		{
 			BaseInstruction instruction = X86.MovLoad;
@@ -328,12 +335,12 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="context">The context.</param>
+		/// <param name="destinationBase">The destination base.</param>
 		/// <param name="destination">The destination.</param>
-		/// <param name="destinationOffset">The destination offset.</param>
+		/// <param name="sourceBase">The source base.</param>
 		/// <param name="source">The source.</param>
-		/// <param name="sourceOffset">The source offset.</param>
 		/// <param name="size">The size.</param>
-		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand destinationOffset, Operand source, Operand sourceOffset, int size)
+		public override void InsertCompoundCopy(BaseMethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
 		{
 			const int LargeAlignment = 16;
 			int alignedSize = size - (size % NativeAlignment);
@@ -341,33 +348,33 @@ namespace Mosa.Platform.x86
 
 			Debug.Assert(size > 0);
 
-			var srcReg = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
-			var dstReg = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
+			var srcReg = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+			var dstReg = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
 
 			context.AppendInstruction(IRInstruction.UnstableObjectTracking);
 
-			context.AppendInstruction(X86.Lea, srcReg, source, sourceOffset);
-			context.AppendInstruction(X86.Lea, dstReg, destination, destinationOffset);
+			context.AppendInstruction(X86.Lea, srcReg, sourceBase, source);
+			context.AppendInstruction(X86.Lea, dstReg, destinationBase, destination);
 
-			var tmp = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
-			var tmpLarge = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.R8);
+			var tmp = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+			var tmpLarge = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.R8);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
 				// Large aligned moves allow 128bits to be copied at a time
-				var index = Operand.CreateConstant(destination.Type.TypeSystem.BuiltIn.I4, i);
+				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovupsLoad, InstructionSize.Size128, tmpLarge, srcReg, index);
 				context.AppendInstruction(X86.MovupsStore, InstructionSize.Size128, null, dstReg, index, tmpLarge);
 			}
 			for (int i = largeAlignedTypeSize; i < alignedSize; i += NativeAlignment)
 			{
-				var index = Operand.CreateConstant(destination.Type.TypeSystem.BuiltIn.I4, i);
+				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, tmp, srcReg, index);
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, index, tmp);
 			}
 			for (int i = alignedSize; i < size; i++)
 			{
-				var index = Operand.CreateConstant(destination.Type.TypeSystem.BuiltIn.I4, i);
+				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovLoad, InstructionSize.Size8, tmp, srcReg, index);
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
 			}

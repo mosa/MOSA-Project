@@ -192,7 +192,7 @@ namespace Mosa.Compiler.Framework.Platform
 				Debug.Assert(result.IsStackLocal);
 				int size = compiler.TypeLayout.GetTypeSize(result.Type);
 				var stackPointerRegister = Operand.CreateCPURegister(compiler.TypeSystem.BuiltIn.Pointer, architecture.StackPointerRegister);
-				architecture.InsertCompoundMoveInstruction(compiler, context, result, result, stackPointerRegister, compiler.ConstantZero, size);
+				architecture.InsertCompoundCopy(compiler, context, result, result, stackPointerRegister, compiler.ConstantZero, size);
 			}
 			else
 			{
@@ -306,7 +306,7 @@ namespace Mosa.Compiler.Framework.Platform
 			else if (compiler.StoreOnStack(operand.Type))
 			{
 				var offset2 = Operand.CreateConstant(compiler.TypeSystem, offset);
-				architecture.InsertCompoundMoveInstruction(compiler, context, scratch, offset2, compiler.StackFrame, operand, compiler.TypeLayout.GetTypeSize(operand.Type));
+				architecture.InsertCompoundCopy(compiler, context, scratch, offset2, compiler.StackFrame, operand, compiler.TypeLayout.GetTypeSize(operand.Type));
 			}
 			else
 			{
@@ -351,7 +351,7 @@ namespace Mosa.Compiler.Framework.Platform
 			{
 				int size2 = compiler.TypeLayout.GetTypeSize(operand.Type);
 				var OffsetOfFirstParameterOperand = Operand.CreateConstant(compiler.TypeSystem, OffsetOfFirstParameter);
-				architecture.InsertCompoundMoveInstruction(compiler, context, compiler.StackFrame, OffsetOfFirstParameterOperand, compiler.StackFrame, operand, size2);
+				architecture.InsertCompoundCopy(compiler, context, compiler.StackFrame, OffsetOfFirstParameterOperand, compiler.StackFrame, operand, size2);
 			}
 		}
 

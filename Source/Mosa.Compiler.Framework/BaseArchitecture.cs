@@ -158,12 +158,12 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="destinationOffset">The destination offset.</param>
-		/// <param name="source">The source.</param>
-		/// <param name="sourceOffset">The source offset.</param>
+		/// <param name="destinationBase">The destination.</param>
+		/// <param name="destination">The destination offset.</param>
+		/// <param name="sourceBase">The source.</param>
+		/// <param name="source">The source offset.</param>
 		/// <param name="size">The size.</param>
-		public abstract void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand destinationOffset, Operand source, Operand sourceOffset, int size);
+		public abstract void InsertCompoundCopy(BaseMethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size);
 
 		/// <summary>
 		/// Create platform exchange registers.

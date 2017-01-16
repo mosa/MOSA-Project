@@ -57,6 +57,7 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.LoadParameterInteger] = LoadParameterInteger;
 			visitationDictionary[IRInstruction.LoadParameterSignExtended] = LoadParameterSignExtended;
 			visitationDictionary[IRInstruction.LoadParameterZeroExtended] = LoadParameterZeroExtended;
+			visitationDictionary[IRInstruction.LoadParameterCompound] = LoadParameterCompound;
 			visitationDictionary[IRInstruction.LogicalAnd] = LogicalAnd;
 			visitationDictionary[IRInstruction.LogicalNot] = LogicalNot;
 			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
@@ -84,6 +85,7 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.StoreParameterFloatR4] = StoreParameterFloatR4;
 			visitationDictionary[IRInstruction.StoreParameterFloatR8] = StoreParameterFloatR8;
 			visitationDictionary[IRInstruction.StoreParameterInteger] = StoreParameterInteger;
+			visitationDictionary[IRInstruction.StoreParameterCompound] = StoreParameterCompound;
 			visitationDictionary[IRInstruction.SubFloatR4] = SubFloatR4;
 			visitationDictionary[IRInstruction.SubFloatR8] = SubFloatR8;
 			visitationDictionary[IRInstruction.SubSigned] = SubSigned;
@@ -262,151 +264,33 @@ namespace Mosa.Platform.x86.Stages
 
 		private void LoadCompound(Context context)
 		{
-			var type = context.Result.Type;
-			int typeSize = TypeLayout.GetTypeSize(type);
-			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
-			int largeAlignedTypeSize = typeSize - (typeSize % LargeAlignment);
-			Debug.Assert(typeSize > 0);
+			CopyCompound(context, context.Result.Type, StackFrame, context.Result, context.Operand1, context.Operand2);
+		}
 
-			var dest = context.Result;
-			var src = context.Operand1;
-			var srcOffset = context.Operand2;
-
-			var srcReg = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var dstReg = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(IRInstruction.UnstableObjectTracking);
-
-			context.AppendInstruction(X86.Lea, srcReg, src, srcOffset);
-			context.AppendInstruction(X86.Lea, dstReg, StackFrame, dest);
-
-			var tmp = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var tmpLarge = AllocateVirtualRegister(TypeSystem.BuiltIn.R8);
-
-			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
-			{
-				// Large Aligned moves 128bits at a time
-				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-
-				//var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
-				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
-			}
-			for (int i = largeAlignedTypeSize; i < alignedTypeSize; i += NativeAlignment)
-			{
-				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, tmp, srcReg, offset2);
-				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, index, tmp);
-			}
-			for (int i = alignedTypeSize; i < typeSize; i++)
-			{
-				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var offset2 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				context.AppendInstruction(X86.MovzxLoad, InstructionSize.Size8, tmp, srcReg, offset2);
-				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
-			}
-
-			context.AppendInstruction(IRInstruction.StableObjectTracking);
+		private void LoadParameterCompound(Context context)
+		{
+			CopyCompound(context, context.Result.Type, StackFrame, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void MoveCompound(Context context)
 		{
-			var src = context.Operand1;
-			var dest = context.Result;
-			var type = context.Result.Type;
-			int typeSize = TypeLayout.GetTypeSize(type);
-			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
-			int largeAlignedTypeSize = typeSize - (typeSize % LargeAlignment);
-
-			Debug.Assert(typeSize > 0);
-			Debug.Assert(dest.IsOnStack);
-			Debug.Assert(src.IsOnStack);
-
-			var srcReg = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var dstReg = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(IRInstruction.UnstableObjectTracking);
-
-			context.AppendInstruction(X86.Lea, srcReg, StackFrame, src);
-			context.AppendInstruction(X86.Lea, dstReg, StackFrame, dest);
-
-			var tmp = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var tmpLarge = AllocateVirtualRegister(TypeSystem.BuiltIn.R8);
-
-			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
-			{
-				// Large Aligned moves 128bits at a time
-				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
-				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
-			}
-			for (int i = largeAlignedTypeSize; i < alignedTypeSize; i += NativeAlignment)
-			{
-				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, tmp, srcReg, index);
-				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, index, tmp);
-			}
-			for (int i = alignedTypeSize; i < typeSize; i++)
-			{
-				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				context.AppendInstruction(X86.MovzxLoad, InstructionSize.Size8, tmp, srcReg, index);
-				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
-			}
-
-			context.AppendInstruction(IRInstruction.StableObjectTracking);
+			CopyCompound(context, context.Result.Type, StackFrame, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void StoreCompound(Context context)
 		{
-			var type = context.Operand3.Type;
-			int typeSize = TypeLayout.GetTypeSize(type);
-			int alignedTypeSize = typeSize - (typeSize % NativeAlignment);
-			int largeAlignedTypeSize = typeSize - (typeSize % LargeAlignment);
+			CopyCompound(context, context.Operand3.Type, context.Operand1, context.Operand2, StackFrame, context.Operand3);
+		}
 
-			Debug.Assert(typeSize > 0);
+		private void StoreParameterCompound(Context context)
+		{
+			CopyCompound(context, context.Operand2.Type, StackFrame, context.Operand1, StackFrame, context.Operand2);
+		}
 
-			var src = context.Operand3;
-			var dest = context.Operand1;
-			var destOffset = context.Operand2;
-
-			var srcReg = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var dstReg = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			Debug.Assert(src.IsStackLocal);
-
-			context.SetInstruction(IRInstruction.UnstableObjectTracking);
-
-			context.AppendInstruction(X86.Lea, srcReg, StackFrame, src);
-			context.AppendInstruction(X86.Lea, dstReg, dest, destOffset);
-
-			var tmp = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var tmpLarge = AllocateVirtualRegister(TypeSystem.BuiltIn.R8);
-
-			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
-			{
-				// Large Aligned moves 128bits at a time
-				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var indexOffset = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				context.AppendInstruction(X86.MovupsLoad, InstructionSize.Size128, tmpLarge, srcReg, index);
-				context.AppendInstruction(X86.MovupsStore, InstructionSize.Size128, null, dstReg, indexOffset, tmpLarge);
-			}
-			for (int i = largeAlignedTypeSize; i < alignedTypeSize; i += NativeAlignment)
-			{
-				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var indexOffset = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, tmp, srcReg, index);
-				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, indexOffset, tmp);
-			}
-			for (int i = alignedTypeSize; i < typeSize; i++)
-			{
-				var index = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				var indexOffset = Operand.CreateConstant(TypeSystem.BuiltIn.I4, i);
-				context.AppendInstruction(X86.MovzxLoad, InstructionSize.Size8, tmp, srcReg, index);
-				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, indexOffset, tmp);
-			}
-
-			context.AppendInstruction(IRInstruction.StableObjectTracking);
+		private void CopyCompound(Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
+		{
+			context.Empty();
+			Architecture.InsertCompoundCopy(MethodCompiler, context, destinationBase, destination, sourceBase, source, TypeLayout.GetTypeSize(type));
 		}
 
 		/// <summary>
