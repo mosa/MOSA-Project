@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of the and instruction.
 	/// </summary>
-	public sealed class LogicalAnd : ThreeOperandInstruction
+	public sealed class LogicalAnd : BaseThreeOperandInstruction
 	{
 		#region Construction
 

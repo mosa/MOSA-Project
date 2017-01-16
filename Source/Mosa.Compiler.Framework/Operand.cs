@@ -618,7 +618,14 @@ namespace Mosa.Compiler.Framework
 
 			Operand operand = null;
 
-			if (longOperand.IsResolvedConstant)
+			if (longOperand.IsParameter)
+			{
+				operand = CreateStackParameter(longOperand.Type, longOperand.Index, longOperand.Name + " (Low)");
+				operand.Offset = longOperand.Offset;
+				operand.IsResolved = true;
+				operand.ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger;
+			}
+			else if (longOperand.IsResolvedConstant)
 			{
 				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsConstant = true;
@@ -659,7 +666,14 @@ namespace Mosa.Compiler.Framework
 
 			Operand operand = null;
 
-			if (longOperand.IsResolvedConstant)
+			if (longOperand.IsParameter)
+			{
+				operand = CreateStackParameter(longOperand.Type, longOperand.Index, longOperand.Name + " (High)");
+				operand.Offset = longOperand.Offset + 4;
+				operand.IsResolved = true;
+				operand.ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger + 4;
+			}
+			else if (longOperand.IsResolvedConstant)
 			{
 				operand = new Operand(typeSystem.BuiltIn.U4);
 				operand.IsConstant = true;

@@ -376,7 +376,12 @@ namespace Mosa.Compiler.Framework.Analysis
 				instruction == IRInstruction.LoadSignExtended ||
 				instruction == IRInstruction.LoadZeroExtended ||
 				instruction == IRInstruction.LoadFloatR4 ||
-				instruction == IRInstruction.LoadFloatR8)
+				instruction == IRInstruction.LoadFloatR8 ||
+				instruction == IRInstruction.LoadParameterInteger ||
+				instruction == IRInstruction.LoadParameterSignExtended ||
+				instruction == IRInstruction.LoadParameterZeroExtended ||
+				instruction == IRInstruction.LoadParameterFloatR4 ||
+				instruction == IRInstruction.LoadParameterFloatR8)
 			{
 				Load(node);
 			}

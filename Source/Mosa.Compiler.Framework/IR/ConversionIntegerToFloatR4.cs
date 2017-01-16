@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of an integral to floating point conversion operation.
 	/// </summary>
-	public sealed class ConversionIntegerToFloatR4 : TwoOperandInstruction
+	public sealed class ConversionIntegerToFloatR4 : BaseTwoOperandInstruction
 	{
 		#region Construction
 

@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of the unsigned remainder operation.
 	/// </summary>
-	public sealed class RemUnsigned : ThreeOperandInstruction
+	public sealed class RemUnsigned : BaseThreeOperandInstruction
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RemUnsigned"/> class.

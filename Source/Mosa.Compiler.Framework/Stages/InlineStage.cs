@@ -174,6 +174,28 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.InvokeMethod != null)
 						newNode.InvokeMethod = node.InvokeMethod;
 
+					// update loads
+					if (newNode.Instruction == IRInstruction.LoadParameterFloatR4)
+					{
+						newNode.Instruction = IRInstruction.MoveFloatR4;
+					}
+					else if (newNode.Instruction == IRInstruction.LoadParameterFloatR8)
+					{
+						newNode.Instruction = IRInstruction.MoveFloatR8;
+					}
+					else if (newNode.Instruction == IRInstruction.LoadParameterInteger)
+					{
+						newNode.Instruction = IRInstruction.MoveInteger;
+					}
+					else if (newNode.Instruction == IRInstruction.LoadParameterSignExtended)
+					{
+						newNode.Instruction = IRInstruction.MoveSignExtended;
+					}
+					else if (newNode.Instruction == IRInstruction.LoadParameterZeroExtended)
+					{
+						newNode.Instruction = IRInstruction.MoveZeroExtended;
+					}
+
 					newBlock.BeforeLast.Insert(newNode);
 				}
 			}

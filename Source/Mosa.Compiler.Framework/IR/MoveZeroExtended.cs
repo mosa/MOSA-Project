@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <remarks>
 	/// This instruction takes the source operand and converts to the request size maintaining its sign.
 	/// </remarks>
-	public sealed class MoveZeroExtended : TwoOperandInstruction
+	public sealed class MoveZeroExtended : BaseTwoOperandInstruction
 	{
 	}
 }

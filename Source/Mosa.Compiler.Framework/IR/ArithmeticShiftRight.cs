@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// The most significant bits will be filled sign extended by this context. To fill
 	/// them with zeroes, use <see cref="ShiftRight"/> instead.
 	/// </remarks>
-	public sealed class ArithmeticShiftRight : ThreeOperandInstruction
+	public sealed class ArithmeticShiftRight : BaseThreeOperandInstruction
 	{
 		#region Construction
 

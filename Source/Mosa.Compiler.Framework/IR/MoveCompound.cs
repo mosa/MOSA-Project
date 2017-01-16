@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.IR
 {
-	public sealed class CompoundMove : TwoOperandInstruction
+	public sealed class MoveCompound : BaseTwoOperandInstruction
 	{
-		public CompoundMove()
+		public MoveCompound()
 		{
 		}
 	}

@@ -5,8 +5,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	///
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IR.TwoOperandInstruction" />
-	public sealed class MoveInteger : TwoOperandInstruction
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseTwoOperandInstruction" />
+	public sealed class MoveInteger : BaseTwoOperandInstruction
 	{
 		#region Construction
 

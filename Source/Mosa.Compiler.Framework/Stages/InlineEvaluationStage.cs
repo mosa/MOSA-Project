@@ -63,6 +63,14 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						MethodData.HasAddressOfInstruction = true;
 					}
+
+					// hack
+					if (node.Instruction == IRInstruction.LoadCompound ||
+						node.Instruction == IRInstruction.StoreCompound ||
+						node.Instruction == IRInstruction.MoveCompound)
+					{
+						MethodData.HasAddressOfInstruction = true;
+					}
 				}
 
 				if (block.PreviousBlocks.Count > 1)
@@ -187,7 +195,7 @@ namespace Mosa.Compiler.Framework.Stages
 					var newOperand = Operand.CreateVirtualRegister(operand.Type, -operand.Index);
 
 					var moveInstruction = StoreOnStack(newOperand.Type)
-						? IRInstruction.CompoundMove
+						? IRInstruction.MoveCompound
 						: GetMoveInstruction(newOperand.Type);
 
 					var moveNode = new InstructionNode(moveInstruction, newOperand, newOp);
