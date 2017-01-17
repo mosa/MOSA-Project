@@ -23,7 +23,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private int arithmeticSimplificationLogicalOperatorsCount = 0;
 		private int arithmeticSimplificationShiftOperators = 0;
 		private int simpleConstantPropagationCount = 0;
-		private int simpleForwardCopyPropagationCount = 0;
+		private int forwardPropagateMove = 0;
+		private int forwardPropagateCompoundMove = 0;
 		private int deadCodeEliminationCount = 0;
 		private int reduceTruncationAndExpansionCount = 0;
 		private int constantFoldingIntegerOperationsCount = 0;
@@ -94,7 +95,8 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.ArithmeticSimplificationShiftOperators", arithmeticSimplificationShiftOperators);
 			UpdateCounter("IROptimizations.ArithmeticSimplificationModulus", arithmeticSimplificationModulus);
 			UpdateCounter("IROptimizations.SimpleConstantPropagation", simpleConstantPropagationCount);
-			UpdateCounter("IROptimizations.SimpleForwardCopyPropagation", simpleForwardCopyPropagationCount);
+			UpdateCounter("IROptimizations.ForwardPropagateMove", forwardPropagateMove);
+			UpdateCounter("IROptimizations.ForwardPropagateCompoundMove", forwardPropagateCompoundMove);
 			UpdateCounter("IROptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranchCount);
 			UpdateCounter("IROptimizations.FoldIntegerCompare", foldIntegerCompareCount);
 			UpdateCounter("IROptimizations.FoldLoadStoreOffsets", foldLoadStoreOffsetsCount);
@@ -107,7 +109,6 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.SimplifyExtendedMoveWithConstant", simplifyExtendedMoveWithConstantCount);
 			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhiCount);
 			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
-			UpdateCounter("IROptimizations.PromoteLocalVariable", promoteLocalVariableCount);
 			UpdateCounter("IROptimizations.Reduce64BitOperationsTo32Bit", reduce64BitOperationsTo32BitCount);
 			UpdateCounter("IROptimizations.RemoveUselessIntegerCompareBranch", removeUselessIntegerCompareBranch);
 
@@ -161,7 +162,8 @@ namespace Mosa.Compiler.Framework.Stages
 			return new List<Transformation>()
 			{
 				SimpleConstantPropagation,
-				SimpleForwardCopyPropagation,
+				ForwardPropagateMove,
+				ForwardPropagateCompoundMove,
 				DeadCodeElimination,
 				ConstantFoldingIntegerOperations,
 				ConstantMoveToRight,
@@ -454,7 +456,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Simple copy propagation.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void SimpleForwardCopyPropagation(InstructionNode node)
+		private void ForwardPropagateMove(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.MoveInteger ||
 				node.Instruction == IRInstruction.MoveFloatR4 ||
@@ -503,7 +505,57 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log("*** SimpleForwardCopyPropagation");
 						if (trace.Active) trace.Log("BEFORE:\t" + useNode.ToString());
 						useNode.SetOperand(i, source);
-						simpleForwardCopyPropagationCount++;
+						forwardPropagateMove++;
+						changeCount++;
+						if (trace.Active) trace.Log("AFTER: \t" + useNode.ToString());
+					}
+				}
+			}
+
+			Debug.Assert(destination.Uses.Count == 0);
+
+			if (trace.Active) trace.Log("REMOVED:\t" + node.ToString());
+			AddOperandUsageToWorkList(node);
+			node.SetInstruction(IRInstruction.Nop);
+			instructionsRemovedCount++;
+			changeCount++;
+		}
+
+		/// <summary>
+		/// Simple copy propagation.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void ForwardPropagateCompoundMove(InstructionNode node)
+		{
+			if (!(node.Instruction == IRInstruction.MoveCompound))
+				return;
+
+			if (node.Result.Definitions.Count != 1)
+				return;
+
+			if (node.Operand1.Definitions.Count != 1)
+				return;
+
+			Operand destination = node.Result;
+			Operand source = node.Operand1;
+
+			Debug.Assert(destination != source);
+
+			// for each statement T that uses operand, substituted c in statement T
+			AddOperandUsageToWorkList(node);
+
+			foreach (var useNode in destination.Uses.ToArray())
+			{
+				for (int i = 0; i < useNode.OperandCount; i++)
+				{
+					var operand = useNode.GetOperand(i);
+
+					if (destination == operand)
+					{
+						if (trace.Active) trace.Log("*** FoldCompoundCopyPropagation");
+						if (trace.Active) trace.Log("BEFORE:\t" + useNode.ToString());
+						useNode.SetOperand(i, source);
+						forwardPropagateCompoundMove++;
 						changeCount++;
 						if (trace.Active) trace.Log("AFTER: \t" + useNode.ToString());
 					}
