@@ -61,7 +61,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
 		/// <exception cref="System.NotSupportedException"></exception>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			byte[] opcode = null;
 

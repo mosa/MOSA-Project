@@ -12,9 +12,9 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly OpCode C = new OpCode(new byte[] { 0xC1 }, 5);
-		private static readonly OpCode C1 = new OpCode(new byte[] { 0xD1 }, 5);
-		private static readonly OpCode RM = new OpCode(new byte[] { 0xD3 }, 5);
+		private static readonly LegacyOpCode C = new LegacyOpCode(new byte[] { 0xC1 }, 5);
+		private static readonly LegacyOpCode C1 = new LegacyOpCode(new byte[] { 0xD1 }, 5);
+		private static readonly LegacyOpCode RM = new LegacyOpCode(new byte[] { 0xD3 }, 5);
 
 		#endregion Data Members
 
@@ -40,7 +40,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
 		/// <exception cref="System.ArgumentException"></exception>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		internal override LegacyOpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			throw new NotSupportedException();
 		}
@@ -50,7 +50,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			if (node.Operand2.IsConstant)
 			{

@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly OpCode POP = new OpCode(new byte[] { 0x8F }, 0);
-		private static readonly OpCode POP_DS = new OpCode(new byte[] { 0x1F });
-		private static readonly OpCode POP_ES = new OpCode(new byte[] { 0x07 });
-		private static readonly OpCode POP_FS = new OpCode(new byte[] { 0x17 });
-		private static readonly OpCode POP_GS = new OpCode(new byte[] { 0x0F, 0xA1 });
-		private static readonly OpCode POP_SS = new OpCode(new byte[] { 0x0F, 0xA9 });
+		private static readonly LegacyOpCode POP = new LegacyOpCode(new byte[] { 0x8F }, 0);
+		private static readonly LegacyOpCode POP_DS = new LegacyOpCode(new byte[] { 0x1F });
+		private static readonly LegacyOpCode POP_ES = new LegacyOpCode(new byte[] { 0x07 });
+		private static readonly LegacyOpCode POP_FS = new LegacyOpCode(new byte[] { 0x17 });
+		private static readonly LegacyOpCode POP_GS = new LegacyOpCode(new byte[] { 0x0F, 0xA1 });
+		private static readonly LegacyOpCode POP_SS = new LegacyOpCode(new byte[] { 0x0F, 0xA9 });
 
 		#endregion Data Members
 
@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
 		/// <exception cref="System.InvalidOperationException">@unable to emit opcode for segment register</exception>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			if (node.Result.IsCPURegister)
 			{

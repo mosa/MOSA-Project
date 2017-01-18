@@ -27,10 +27,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="node">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			Debug.Assert(node.Result == node.Operand1);
-			OpCode opCode = ComputeOpCode(node.Result, node.Operand1, node.Operand2);
+			LegacyOpCode opCode = ComputeOpCode(node.Result, node.Operand1, node.Operand2);
 			emitter.Emit(opCode, node.Result, node.Operand2);
 		}
 	}

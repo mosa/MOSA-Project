@@ -12,22 +12,22 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly OpCode E = new OpCode(new byte[] { 0x0F, 0x94 });
-		private static readonly OpCode LT = new OpCode(new byte[] { 0x0F, 0x9C });
-		private static readonly OpCode LE = new OpCode(new byte[] { 0x0F, 0x9E });
-		private static readonly OpCode GE = new OpCode(new byte[] { 0x0F, 0x9D });
-		private static readonly OpCode GT = new OpCode(new byte[] { 0x0F, 0x9F });
-		private static readonly OpCode NE = new OpCode(new byte[] { 0x0F, 0x95 });
-		private static readonly OpCode UGE = new OpCode(new byte[] { 0x0F, 0x93 }); // SETAE, SETNB, SETNC
-		private static readonly OpCode UGT = new OpCode(new byte[] { 0x0F, 0x97 }); // SETNBE, SETA
-		private static readonly OpCode ULE = new OpCode(new byte[] { 0x0F, 0x96 }); // SETBE, SETNA
-		private static readonly OpCode ULT = new OpCode(new byte[] { 0x0F, 0x92 }); // SETNAE, SETB, SETC
-		private static readonly OpCode P = new OpCode(new byte[] { 0x0F, 0x9A });
-		private static readonly OpCode NP = new OpCode(new byte[] { 0x0F, 0x9B });
-		private static readonly OpCode NC = new OpCode(new byte[] { 0x0F, 0x93 });
-		private static readonly OpCode C = new OpCode(new byte[] { 0x0F, 0x92 });
-		private static readonly OpCode Z = new OpCode(new byte[] { 0x0F, 0x94 });
-		private static readonly OpCode NZ = new OpCode(new byte[] { 0x0F, 0x95 });
+		private static readonly LegacyOpCode E = new LegacyOpCode(new byte[] { 0x0F, 0x94 });
+		private static readonly LegacyOpCode LT = new LegacyOpCode(new byte[] { 0x0F, 0x9C });
+		private static readonly LegacyOpCode LE = new LegacyOpCode(new byte[] { 0x0F, 0x9E });
+		private static readonly LegacyOpCode GE = new LegacyOpCode(new byte[] { 0x0F, 0x9D });
+		private static readonly LegacyOpCode GT = new LegacyOpCode(new byte[] { 0x0F, 0x9F });
+		private static readonly LegacyOpCode NE = new LegacyOpCode(new byte[] { 0x0F, 0x95 });
+		private static readonly LegacyOpCode UGE = new LegacyOpCode(new byte[] { 0x0F, 0x93 }); // SETAE, SETNB, SETNC
+		private static readonly LegacyOpCode UGT = new LegacyOpCode(new byte[] { 0x0F, 0x97 }); // SETNBE, SETA
+		private static readonly LegacyOpCode ULE = new LegacyOpCode(new byte[] { 0x0F, 0x96 }); // SETBE, SETNA
+		private static readonly LegacyOpCode ULT = new LegacyOpCode(new byte[] { 0x0F, 0x92 }); // SETNAE, SETB, SETC
+		private static readonly LegacyOpCode P = new LegacyOpCode(new byte[] { 0x0F, 0x9A });
+		private static readonly LegacyOpCode NP = new LegacyOpCode(new byte[] { 0x0F, 0x9B });
+		private static readonly LegacyOpCode NC = new LegacyOpCode(new byte[] { 0x0F, 0x93 });
+		private static readonly LegacyOpCode C = new LegacyOpCode(new byte[] { 0x0F, 0x92 });
+		private static readonly LegacyOpCode Z = new LegacyOpCode(new byte[] { 0x0F, 0x94 });
+		private static readonly LegacyOpCode NZ = new LegacyOpCode(new byte[] { 0x0F, 0x95 });
 
 		#endregion Data Members
 
@@ -51,9 +51,9 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
 		/// <exception cref="System.NotSupportedException"></exception>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
-			OpCode opcode;
+			LegacyOpCode opcode;
 
 			switch (node.ConditionCode)
 			{

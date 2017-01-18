@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		#region Methods
 
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 			Debug.Assert(node.Operand1.IsCPURegister);

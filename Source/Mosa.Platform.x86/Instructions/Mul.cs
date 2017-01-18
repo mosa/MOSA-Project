@@ -11,7 +11,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF7 }, 4);
+		private static readonly LegacyOpCode opcode = new LegacyOpCode(new byte[] { 0xF7 }, 4);
 
 		#endregion Data Members
 
@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			emitter.Emit(opcode, node.Operand2);
 		}

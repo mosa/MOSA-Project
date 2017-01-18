@@ -13,11 +13,11 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly OpCode R_8 = new OpCode(new byte[] { 0xEE });
-		private static readonly OpCode R_32 = new OpCode(new byte[] { 0xEF });
+		private static readonly LegacyOpCode R_8 = new LegacyOpCode(new byte[] { 0xEE });
+		private static readonly LegacyOpCode R_32 = new LegacyOpCode(new byte[] { 0xEF });
 
-		private static readonly OpCode C_8 = new OpCode(new byte[] { 0xE6 });
-		private static readonly OpCode C_32 = new OpCode(new byte[] { 0xE7 });
+		private static readonly LegacyOpCode C_8 = new LegacyOpCode(new byte[] { 0xE6 });
+		private static readonly LegacyOpCode C_32 = new LegacyOpCode(new byte[] { 0xE7 });
 
 		#endregion Data Members
 
@@ -39,7 +39,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="source">The source operand.</param>
 		/// <returns></returns>
 		/// <exception cref="NotImplementCompilerException"></exception>
-		private OpCode ComputeOpCode(InstructionSize size, Operand destination, Operand source)
+		private LegacyOpCode ComputeOpCode(InstructionSize size, Operand destination, Operand source)
 		{
 			Debug.Assert(destination.IsConstant || destination.IsCPURegister);
 			Debug.Assert(size != InstructionSize.None);
@@ -71,7 +71,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			var opCode = ComputeOpCode(node.Size, node.Operand1, node.Operand2);
 

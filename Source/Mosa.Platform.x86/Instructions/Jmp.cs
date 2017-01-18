@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 		#region Data Members
 
 		private static readonly byte[] JMP = new byte[] { 0xE9 };
-		private static readonly OpCode JMP_R = new OpCode(new byte[] { 0xFF }, 4);
+		private static readonly LegacyOpCode JMP_R = new LegacyOpCode(new byte[] { 0xFF }, 4);
 
 		#endregion Data Members
 
@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			if (node.Operand1 == null)
 			{

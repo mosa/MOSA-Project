@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			if (node.Operand1.IsConstant && node.Result.IsCPURegister)
 			{
@@ -49,7 +49,7 @@ namespace Mosa.Platform.x86.Instructions
 			}
 		}
 
-		private static void MovMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
+		private static void MovMemoryToReg(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 
@@ -70,7 +70,7 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.Emit(opcode);
 		}
 
-		private static void MovFixedMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
+		private static void MovFixedMemoryToReg(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 			Debug.Assert(node.Operand1.IsLinkerResolved);

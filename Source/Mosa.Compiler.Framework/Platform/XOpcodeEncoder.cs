@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Mosa.Compiler.Framework.Platform
 {
-	public sealed class OpcodeEncoder
+	public sealed class OpcodeEncoder : BaseOpcodeEncoder
 	{
 		private ulong data1 = 0;
 		private ulong data2 = 0;
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Platform
 			}
 		}
 
-		public void WriteTo(Stream writer)
+		public override void WriteTo(Stream writer)
 		{
 			Debug.Assert(Size % 8 == 0);
 

@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Platform;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
@@ -37,7 +36,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.ResultCount == 0);
 
@@ -59,7 +58,7 @@ namespace Mosa.Platform.x86.Instructions
 			}
 		}
 
-		private static void MovImmediateToMemory(InstructionNode node, MachineCodeEmitter emitter)
+		private static void MovImmediateToMemory(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Operand3.IsConstant);
 
@@ -81,7 +80,7 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.Emit(opcode);
 		}
 
-		private static void MovImmediateToFixedMemory(InstructionNode node, MachineCodeEmitter emitter)
+		private static void MovImmediateToFixedMemory(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Operand1.IsConstant);
 			Debug.Assert(node.Operand2.IsResolvedConstant);
@@ -116,7 +115,7 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.Emit(opcode);
 		}
 
-		private static void MovRegToFixedMemory(InstructionNode node, MachineCodeEmitter emitter)
+		private static void MovRegToFixedMemory(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Operand3.IsCPURegister);
 			Debug.Assert(!node.Operand3.IsConstant);
@@ -144,7 +143,7 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.Emit(opcode);
 		}
 
-		private static void MovRegToMemory(InstructionNode node, MachineCodeEmitter emitter)
+		private static void MovRegToMemory(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Operand3.IsCPURegister);
 			Debug.Assert(!node.Operand3.IsConstant);
