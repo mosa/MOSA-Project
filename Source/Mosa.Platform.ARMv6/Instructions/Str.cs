@@ -29,7 +29,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		protected override void Emit(InstructionNode node, ARMv6CodeEmitter emitter)
 		{
 			EmitMemoryLoadStore(node, emitter, TransferType.Store);
 		}
