@@ -23,18 +23,6 @@ namespace Mosa.Compiler.Framework
 					{
 						yield return operand;
 					}
-					else if (operand.IsMemoryAddress && operand.OffsetBase != null)
-					{
-						yield return operand.OffsetBase;
-					}
-				}
-
-				foreach (var operand in node.Results)
-				{
-					if (operand.IsMemoryAddress && operand.OffsetBase != null)
-					{
-						yield return operand.OffsetBase;
-					}
 				}
 			}
 		}

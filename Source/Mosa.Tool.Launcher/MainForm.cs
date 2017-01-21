@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using MetroFramework.Forms;
 using Mosa.Compiler.Common;
 using Mosa.Utility.BootImage;
 using Mosa.Utility.Launcher;
@@ -7,7 +8,6 @@ using System;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using MetroFramework.Forms;
 
 namespace Mosa.Tool.Launcher
 {
@@ -56,12 +56,13 @@ namespace Mosa.Tool.Launcher
 		{
 			Options.EnableSSA = cbEnableSSA.Checked;
 			Options.EnableIROptimizations = cbEnableIROptimizations.Checked;
-			Options.EnableVariablePromotion = cbEnableVariablePromotion.Checked;
 			Options.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
+			Options.GenerateNASMFile = cbGenerateNASMFile.Checked;
 			Options.GenerateASMFile = cbGenerateASMFile.Checked;
 			Options.GenerateMapFile = cbGenerateMapFile.Checked;
 			Options.ExitOnLaunch = cbExitOnLaunch.Checked;
-			Options.MOSADebugger = cbMOSADebugger.Checked;
+			Options.EnableQemuGDB = cbEnableQemuGDB.Checked;
+			Options.LaunchGDB = cbLaunchGDB.Checked;
 			Options.UseMultipleThreadCompiler = cbCompilerUsesMultipleThreads.Checked;
 			Options.MemoryInMB = (uint)nmMemory.Value;
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
@@ -163,12 +164,13 @@ namespace Mosa.Tool.Launcher
 		{
 			cbEnableSSA.Checked = Options.EnableSSA;
 			cbEnableIROptimizations.Checked = Options.EnableIROptimizations;
-			cbEnableVariablePromotion.Checked = Options.EnableVariablePromotion;
 			cbEnableSparseConditionalConstantPropagation.Checked = Options.EnableSparseConditionalConstantPropagation;
+			cbGenerateNASMFile.Checked = Options.GenerateNASMFile;
 			cbGenerateASMFile.Checked = Options.GenerateASMFile;
 			cbGenerateMapFile.Checked = Options.GenerateMapFile;
 			cbExitOnLaunch.Checked = Options.ExitOnLaunch;
-			cbMOSADebugger.Checked = Options.MOSADebugger;
+			cbEnableQemuGDB.Checked = Options.EnableQemuGDB;
+			cbLaunchGDB.Checked = Options.LaunchGDB;
 			cbInlinedMethods.Checked = Options.EnableInlinedMethods;
 			cbCompilerUsesMultipleThreads.Checked = Options.UseMultipleThreadCompiler;
 			nmMemory.Value = Options.MemoryInMB;
@@ -295,7 +297,7 @@ namespace Mosa.Tool.Launcher
 
 			Refresh();
 
-			if (Options.AutoLaunch)
+			if (Options.AutoStart)
 				CompileBuildAndStart();
 		}
 
@@ -378,7 +380,15 @@ namespace Mosa.Tool.Launcher
 					finally
 					{
 						if (!Builder.HasCompileError)
-							OnCompileCompleted();
+						{
+							if (Builder.Options.LaunchEmulator)
+								OnCompileCompleted();
+
+							if (Options.ExitOnLaunch)
+							{
+								Application.Exit();
+							}
+						}
 					}
 				}
 			));
@@ -414,14 +424,11 @@ namespace Mosa.Tool.Launcher
 			if (CheckKeyPressed())
 				return;
 
-			Starter = new Starter(Options, AppLocations, Builder.ImageFile, this);
+			string imageFile = Options.BootLoaderImage != null ? Options.BootLoaderImage : Builder.ImageFile;
+
+			Starter = new Starter(Options, AppLocations, imageFile, this, Builder.Linker);
 
 			Starter.Launch();
-
-			if (Options.ExitOnLaunch)
-			{
-				Application.Exit();
-			}
 		}
 
 		private bool CheckKeyPressed()

@@ -250,7 +250,7 @@ namespace Mosa.Utility.BootImage
 			}
 		}
 
-		protected class Extent
+		private class Extent
 		{
 			public ulong Start { get; set; }
 			public ushort Length { get; set; }

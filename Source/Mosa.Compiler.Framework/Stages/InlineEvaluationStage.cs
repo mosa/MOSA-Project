@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var returnType = method.Method.Signature.ReturnType;
 
-			if (TypeLayout.IsCompoundType(returnType) && !returnType.IsUI8 && !returnType.IsR8)
+			if (StoreOnStack(returnType) && !returnType.IsUI8 && !returnType.IsR8)
 				return false;
 
 			return true;
@@ -180,7 +180,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var newOperand = Operand.CreateVirtualRegister(operand.Type, -operand.Index);
 
-					newPrologueBlock.BeforeLast.Insert(new InstructionNode(IRInstruction.Move, newOperand, newOp));
+					var moveInstruction = StoreOnStack(newOperand.Type)
+						? IRInstruction.MoveCompound
+						: GetMoveInstruction(newOperand.Type);
+
+					var moveNode = new InstructionNode(moveInstruction, newOperand, newOp);
+
+					newPrologueBlock.BeforeLast.Insert(moveNode);
 
 					// redirect map from parameter to virtual register going forward
 					map.Remove(operand);
@@ -214,7 +220,6 @@ namespace Mosa.Compiler.Framework.Stages
 					for (int i = 0; i < node.ResultCount; i++)
 					{
 						var op = node.GetResult(i);
-
 						var newOp = Map(op, map);
 
 						newNode.SetResult(i, newOp);
@@ -224,7 +229,6 @@ namespace Mosa.Compiler.Framework.Stages
 					for (int i = 0; i < node.OperandCount; i++)
 					{
 						var op = node.GetOperand(i);
-
 						var newOp = Map(op, map);
 
 						newNode.SetOperand(i, newOp);
@@ -288,24 +292,24 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsStackLocal)
 			{
-				mappedOperand = Operand.CreateStackLocal(operand.Type, operand.Register, operand.Index, operand.IsPinned);
+				mappedOperand = Operand.CreateStackLocal(operand.Type, operand.Index, operand.IsPinned);
 			}
 			else if (operand.IsVirtualRegister)
 			{
 				if (operand.Uses.Count != 0 || operand.Definitions.Count != 0)
 				{
-					mappedOperand = Operand.CreateVirtualRegister(operand.Type, operand.Index, operand.Name);
+					mappedOperand = Operand.CreateVirtualRegister(operand.Type, operand.Index);
 				}
 			}
-			else if (operand.IsField)
+			else if (operand.IsStaticField)
 			{
 				mappedOperand = Operand.CreateField(operand.Field);
 			}
-			else if (operand.IsConstant)
+			else if (operand.IsCPURegister)
 			{
 				mappedOperand = operand;
 			}
-			else if (operand.IsCPURegister)
+			else if (operand.IsConstant)
 			{
 				mappedOperand = operand;
 			}

@@ -28,7 +28,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.Label label2;
 			System.Windows.Forms.Label label1;
 			System.Windows.Forms.Label stageLabel;
 			System.Windows.Forms.Label label3;
@@ -47,12 +46,11 @@
 			this.snippetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
-			this.enableSSA = new System.Windows.Forms.ToolStripMenuItem();
-			this.enableOptimizations = new System.Windows.Forms.ToolStripMenuItem();
-			this.enableSparseConditionalConstantPropagation = new System.Windows.Forms.ToolStripMenuItem();
-			this.enableBinaryCodeGeneration = new System.Windows.Forms.ToolStripMenuItem();
-			this.enableVariablePromotion = new System.Windows.Forms.ToolStripMenuItem();
-			this.enableInlinedMethods = new System.Windows.Forms.ToolStripMenuItem();
+			this.cbEnableSSA = new System.Windows.Forms.ToolStripMenuItem();
+			this.cbEnableOptimizations = new System.Windows.Forms.ToolStripMenuItem();
+			this.cbEnableSparseConditionalConstantPropagation = new System.Windows.Forms.ToolStripMenuItem();
+			this.cbEnableBinaryCodeGeneration = new System.Windows.Forms.ToolStripMenuItem();
+			this.cbEnableInlinedMethods = new System.Windows.Forms.ToolStripMenuItem();
 			this.advanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.dumpAllMethodStagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -60,13 +58,12 @@
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.tbStages = new System.Windows.Forms.TabPage();
-			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.cbLabels = new System.Windows.Forms.ComboBox();
 			this.cbStages = new System.Windows.Forms.ComboBox();
 			this.tbResult = new System.Windows.Forms.RichTextBox();
 			this.tbDebug = new System.Windows.Forms.TabPage();
 			this.cbDebugStages = new System.Windows.Forms.ComboBox();
-			this.rbOtherResult = new System.Windows.Forms.RichTextBox();
+			this.rbDebugResult = new System.Windows.Forms.RichTextBox();
 			this.tbMethodCounters = new System.Windows.Forms.TabPage();
 			this.rbMethodCounters = new System.Windows.Forms.RichTextBox();
 			this.tbGlobalCounters = new System.Windows.Forms.TabPage();
@@ -85,7 +82,6 @@
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.cbPlatform = new System.Windows.Forms.ComboBox();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-			label2 = new System.Windows.Forms.Label();
 			label1 = new System.Windows.Forms.Label();
 			stageLabel = new System.Windows.Forms.Label();
 			label3 = new System.Windows.Forms.Label();
@@ -105,17 +101,6 @@
 			this.tbExceptions.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// label2
-			// 
-			label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			label2.Location = new System.Drawing.Point(467, 8);
-			label2.Margin = new System.Windows.Forms.Padding(4);
-			label2.Name = "label2";
-			label2.Size = new System.Drawing.Size(63, 20);
-			label2.TabIndex = 43;
-			label2.Text = "IL Label:";
-			label2.Visible = false;
 			// 
 			// label1
 			// 
@@ -243,12 +228,11 @@
 			// 
 			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showSizes,
-            this.enableSSA,
-            this.enableOptimizations,
-            this.enableSparseConditionalConstantPropagation,
-            this.enableBinaryCodeGeneration,
-            this.enableVariablePromotion,
-            this.enableInlinedMethods});
+            this.cbEnableSSA,
+            this.cbEnableOptimizations,
+            this.cbEnableSparseConditionalConstantPropagation,
+            this.cbEnableBinaryCodeGeneration,
+            this.cbEnableInlinedMethods});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
 			this.optionsToolStripMenuItem.Text = "Options";
@@ -263,59 +247,50 @@
 			this.showSizes.Text = "Show Sizes";
 			this.showSizes.Click += new System.EventHandler(this.showSizes_Click);
 			// 
-			// enableSSA
+			// cbEnableSSA
 			// 
-			this.enableSSA.Checked = true;
-			this.enableSSA.CheckOnClick = true;
-			this.enableSSA.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.enableSSA.Name = "enableSSA";
-			this.enableSSA.Size = new System.Drawing.Size(293, 22);
-			this.enableSSA.Text = "Enable SSA";
+			this.cbEnableSSA.Checked = true;
+			this.cbEnableSSA.CheckOnClick = true;
+			this.cbEnableSSA.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableSSA.Name = "cbEnableSSA";
+			this.cbEnableSSA.Size = new System.Drawing.Size(293, 22);
+			this.cbEnableSSA.Text = "Enable SSA";
 			// 
-			// enableOptimizations
+			// cbEnableOptimizations
 			// 
-			this.enableOptimizations.Checked = true;
-			this.enableOptimizations.CheckOnClick = true;
-			this.enableOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.enableOptimizations.Name = "enableOptimizations";
-			this.enableOptimizations.Size = new System.Drawing.Size(293, 22);
-			this.enableOptimizations.Text = "Enable Optimizations";
+			this.cbEnableOptimizations.Checked = true;
+			this.cbEnableOptimizations.CheckOnClick = true;
+			this.cbEnableOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableOptimizations.Name = "cbEnableOptimizations";
+			this.cbEnableOptimizations.Size = new System.Drawing.Size(293, 22);
+			this.cbEnableOptimizations.Text = "Enable Optimizations";
 			// 
-			// enableSparseConditionalConstantPropagation
+			// cbEnableSparseConditionalConstantPropagation
 			// 
-			this.enableSparseConditionalConstantPropagation.Checked = true;
-			this.enableSparseConditionalConstantPropagation.CheckOnClick = true;
-			this.enableSparseConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.enableSparseConditionalConstantPropagation.Name = "enableSparseConditionalConstantPropagation";
-			this.enableSparseConditionalConstantPropagation.Size = new System.Drawing.Size(293, 22);
-			this.enableSparseConditionalConstantPropagation.Text = "Enable Conditional Constant Propagation";
+			this.cbEnableSparseConditionalConstantPropagation.Checked = true;
+			this.cbEnableSparseConditionalConstantPropagation.CheckOnClick = true;
+			this.cbEnableSparseConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableSparseConditionalConstantPropagation.Name = "cbEnableSparseConditionalConstantPropagation";
+			this.cbEnableSparseConditionalConstantPropagation.Size = new System.Drawing.Size(293, 22);
+			this.cbEnableSparseConditionalConstantPropagation.Text = "Enable Conditional Constant Propagation";
 			// 
-			// enableBinaryCodeGeneration
+			// cbEnableBinaryCodeGeneration
 			// 
-			this.enableBinaryCodeGeneration.Checked = true;
-			this.enableBinaryCodeGeneration.CheckOnClick = true;
-			this.enableBinaryCodeGeneration.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.enableBinaryCodeGeneration.Name = "enableBinaryCodeGeneration";
-			this.enableBinaryCodeGeneration.Size = new System.Drawing.Size(293, 22);
-			this.enableBinaryCodeGeneration.Text = "Enable Binary Code Generation";
+			this.cbEnableBinaryCodeGeneration.Checked = true;
+			this.cbEnableBinaryCodeGeneration.CheckOnClick = true;
+			this.cbEnableBinaryCodeGeneration.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableBinaryCodeGeneration.Name = "cbEnableBinaryCodeGeneration";
+			this.cbEnableBinaryCodeGeneration.Size = new System.Drawing.Size(293, 22);
+			this.cbEnableBinaryCodeGeneration.Text = "Enable Binary Code Generation";
 			// 
-			// enableVariablePromotion
+			// cbEnableInlinedMethods
 			// 
-			this.enableVariablePromotion.Checked = true;
-			this.enableVariablePromotion.CheckOnClick = true;
-			this.enableVariablePromotion.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.enableVariablePromotion.Name = "enableVariablePromotion";
-			this.enableVariablePromotion.Size = new System.Drawing.Size(293, 22);
-			this.enableVariablePromotion.Text = "Enable Variable Promotion";
-			// 
-			// enableInlinedMethods
-			// 
-			this.enableInlinedMethods.Checked = true;
-			this.enableInlinedMethods.CheckOnClick = true;
-			this.enableInlinedMethods.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.enableInlinedMethods.Name = "enableInlinedMethods";
-			this.enableInlinedMethods.Size = new System.Drawing.Size(293, 22);
-			this.enableInlinedMethods.Text = "Enable Inlined Methods";
+			this.cbEnableInlinedMethods.Checked = true;
+			this.cbEnableInlinedMethods.CheckOnClick = true;
+			this.cbEnableInlinedMethods.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableInlinedMethods.Name = "cbEnableInlinedMethods";
+			this.cbEnableInlinedMethods.Size = new System.Drawing.Size(293, 22);
+			this.cbEnableInlinedMethods.Text = "Enable Inlined Methods";
 			// 
 			// advanceToolStripMenuItem
 			// 
@@ -330,7 +305,7 @@
 			this.dumpAllMethodStagesToolStripMenuItem.Name = "dumpAllMethodStagesToolStripMenuItem";
 			this.dumpAllMethodStagesToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
 			this.dumpAllMethodStagesToolStripMenuItem.Text = "Dump All Method Stages";
-			this.dumpAllMethodStagesToolStripMenuItem.Click += new System.EventHandler(this.dumpAllMethodStagesToolStripMenuItem_Click);
+			this.dumpAllMethodStagesToolStripMenuItem.Click += new System.EventHandler(this.DumpAllMethodStagesToolStripMenuItem_Click);
 			// 
 			// openFileDialog
 			// 
@@ -390,14 +365,12 @@
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(685, 425);
+			this.tabControl1.Size = new System.Drawing.Size(679, 425);
 			this.tabControl1.TabIndex = 38;
 			// 
 			// tbStages
 			// 
 			this.tbStages.BackColor = System.Drawing.Color.Gainsboro;
-			this.tbStages.Controls.Add(label2);
-			this.tbStages.Controls.Add(this.textBox1);
 			this.tbStages.Controls.Add(label1);
 			this.tbStages.Controls.Add(this.cbLabels);
 			this.tbStages.Controls.Add(this.cbStages);
@@ -406,17 +379,9 @@
 			this.tbStages.Location = new System.Drawing.Point(4, 25);
 			this.tbStages.Margin = new System.Windows.Forms.Padding(0);
 			this.tbStages.Name = "tbStages";
-			this.tbStages.Size = new System.Drawing.Size(677, 396);
+			this.tbStages.Size = new System.Drawing.Size(671, 396);
 			this.tbStages.TabIndex = 0;
 			this.tbStages.Text = "Instructions";
-			// 
-			// textBox1
-			// 
-			this.textBox1.Location = new System.Drawing.Point(537, 5);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(76, 23);
-			this.textBox1.TabIndex = 42;
-			this.textBox1.Visible = false;
 			// 
 			// cbLabels
 			// 
@@ -463,11 +428,11 @@
 			this.tbDebug.BackColor = System.Drawing.Color.Gainsboro;
 			this.tbDebug.Controls.Add(this.cbDebugStages);
 			this.tbDebug.Controls.Add(label3);
-			this.tbDebug.Controls.Add(this.rbOtherResult);
+			this.tbDebug.Controls.Add(this.rbDebugResult);
 			this.tbDebug.Location = new System.Drawing.Point(4, 25);
 			this.tbDebug.Margin = new System.Windows.Forms.Padding(0);
 			this.tbDebug.Name = "tbDebug";
-			this.tbDebug.Size = new System.Drawing.Size(677, 396);
+			this.tbDebug.Size = new System.Drawing.Size(671, 396);
 			this.tbDebug.TabIndex = 1;
 			this.tbDebug.Text = "Debug";
 			// 
@@ -486,23 +451,23 @@
 			// 
 			// rbOtherResult
 			// 
-			this.rbOtherResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			this.rbDebugResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.rbOtherResult.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.rbOtherResult.Location = new System.Drawing.Point(0, 32);
-			this.rbOtherResult.Name = "rbOtherResult";
-			this.rbOtherResult.Size = new System.Drawing.Size(674, 365);
-			this.rbOtherResult.TabIndex = 32;
-			this.rbOtherResult.Text = "";
-			this.rbOtherResult.WordWrap = false;
+			this.rbDebugResult.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.rbDebugResult.Location = new System.Drawing.Point(0, 32);
+			this.rbDebugResult.Name = "rbOtherResult";
+			this.rbDebugResult.Size = new System.Drawing.Size(674, 365);
+			this.rbDebugResult.TabIndex = 32;
+			this.rbDebugResult.Text = "";
+			this.rbDebugResult.WordWrap = false;
 			// 
 			// tbMethodCounters
 			// 
 			this.tbMethodCounters.Controls.Add(this.rbMethodCounters);
 			this.tbMethodCounters.Location = new System.Drawing.Point(4, 25);
 			this.tbMethodCounters.Name = "tbMethodCounters";
-			this.tbMethodCounters.Size = new System.Drawing.Size(677, 396);
+			this.tbMethodCounters.Size = new System.Drawing.Size(671, 396);
 			this.tbMethodCounters.TabIndex = 6;
 			this.tbMethodCounters.Text = "Counters";
 			this.tbMethodCounters.UseVisualStyleBackColor = true;
@@ -527,7 +492,7 @@
 			this.tbGlobalCounters.Location = new System.Drawing.Point(4, 25);
 			this.tbGlobalCounters.Name = "tbGlobalCounters";
 			this.tbGlobalCounters.Padding = new System.Windows.Forms.Padding(3);
-			this.tbGlobalCounters.Size = new System.Drawing.Size(677, 396);
+			this.tbGlobalCounters.Size = new System.Drawing.Size(671, 396);
 			this.tbGlobalCounters.TabIndex = 4;
 			this.tbGlobalCounters.Text = "Global Counters";
 			// 
@@ -551,7 +516,7 @@
 			this.tbLogs.Location = new System.Drawing.Point(4, 25);
 			this.tbLogs.Name = "tbLogs";
 			this.tbLogs.Padding = new System.Windows.Forms.Padding(3);
-			this.tbLogs.Size = new System.Drawing.Size(677, 396);
+			this.tbLogs.Size = new System.Drawing.Size(671, 396);
 			this.tbLogs.TabIndex = 3;
 			this.tbLogs.Text = "Log";
 			// 
@@ -575,7 +540,7 @@
 			this.tbErrors.Location = new System.Drawing.Point(4, 25);
 			this.tbErrors.Name = "tbErrors";
 			this.tbErrors.Padding = new System.Windows.Forms.Padding(3);
-			this.tbErrors.Size = new System.Drawing.Size(677, 396);
+			this.tbErrors.Size = new System.Drawing.Size(671, 396);
 			this.tbErrors.TabIndex = 2;
 			this.tbErrors.Text = "Errors";
 			// 
@@ -598,7 +563,7 @@
 			this.tbExceptions.Location = new System.Drawing.Point(4, 25);
 			this.tbExceptions.Name = "tbExceptions";
 			this.tbExceptions.Padding = new System.Windows.Forms.Padding(3);
-			this.tbExceptions.Size = new System.Drawing.Size(677, 396);
+			this.tbExceptions.Size = new System.Drawing.Size(671, 396);
 			this.tbExceptions.TabIndex = 5;
 			this.tbExceptions.Text = "Exceptions";
 			this.tbExceptions.UseVisualStyleBackColor = true;
@@ -696,7 +661,7 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "Main";
-			this.Text = "MOSA Explorer v1.5.4";
+			this.Text = "MOSA Explorer v1.6.0";
 			this.Load += new System.EventHandler(this.Main_Load);
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
@@ -708,7 +673,6 @@
 			this.splitContainer1.ResumeLayout(false);
 			this.tabControl1.ResumeLayout(false);
 			this.tbStages.ResumeLayout(false);
-			this.tbStages.PerformLayout();
 			this.tbDebug.ResumeLayout(false);
 			this.tbMethodCounters.ResumeLayout(false);
 			this.tbGlobalCounters.ResumeLayout(false);
@@ -745,19 +709,18 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripButton toolStripButton4;
 		private System.Windows.Forms.ComboBox cbPlatform;
-		private System.Windows.Forms.ToolStripMenuItem enableSSA;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableSSA;
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tbStages;
-		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.ComboBox cbLabels;
 		private System.Windows.Forms.ComboBox cbStages;
 		private System.Windows.Forms.RichTextBox tbResult;
 		private System.Windows.Forms.TabPage tbDebug;
 		private System.Windows.Forms.ComboBox cbDebugStages;
-		private System.Windows.Forms.RichTextBox rbOtherResult;
-		private System.Windows.Forms.ToolStripMenuItem enableBinaryCodeGeneration;
+		private System.Windows.Forms.RichTextBox rbDebugResult;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableBinaryCodeGeneration;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-		private System.Windows.Forms.ToolStripMenuItem enableOptimizations;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableOptimizations;
 		private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
 		private System.Windows.Forms.TabPage tbErrors;
@@ -766,11 +729,10 @@
 		private System.Windows.Forms.RichTextBox rbLog;
 		private System.Windows.Forms.TabPage tbGlobalCounters;
 		private System.Windows.Forms.RichTextBox rbGlobalCounters;
-		private System.Windows.Forms.ToolStripMenuItem enableSparseConditionalConstantPropagation;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableSparseConditionalConstantPropagation;
 		private System.Windows.Forms.TabPage tbExceptions;
 		private System.Windows.Forms.RichTextBox rbException;
-		private System.Windows.Forms.ToolStripMenuItem enableInlinedMethods;
-		private System.Windows.Forms.ToolStripMenuItem enableVariablePromotion;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableInlinedMethods;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
 		private System.Windows.Forms.ToolStripMenuItem advanceToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem dumpAllMethodStagesToolStripMenuItem;

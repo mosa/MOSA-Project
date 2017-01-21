@@ -5,7 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class Throw : OneOperandInstruction
+	public sealed class Throw : BaseOneOperandInstruction
 	{
 	}
 }

@@ -204,9 +204,9 @@ namespace Mosa.Compiler.Framework
 		/// Returns a string representation of the context.
 		/// </summary>
 		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
+		/// A <see cref="System.String" /> that represents this instance.
 		/// </returns>
-		public virtual string ToString()
+		public override string ToString()
 		{
 			return InstructionName;
 		}
@@ -346,25 +346,25 @@ namespace Mosa.Compiler.Framework
 		{
 			switch (conditioncode)
 			{
-				case ConditionCode.Equal: return @"equal";
-				case ConditionCode.GreaterOrEqual: return @"greater or equal";
-				case ConditionCode.GreaterThan: return @"greater";
-				case ConditionCode.LessOrEqual: return @"less or equal";
-				case ConditionCode.LessThan: return @"less";
-				case ConditionCode.NotEqual: return @"not equal";
-				case ConditionCode.UnsignedGreaterOrEqual: return @"greater or equal (U)";
-				case ConditionCode.UnsignedGreaterThan: return @"greater (U)";
-				case ConditionCode.UnsignedLessOrEqual: return @"less or equal (U)";
-				case ConditionCode.UnsignedLessThan: return @"less (U)";
-				case ConditionCode.NotSigned: return @"not signed";
-				case ConditionCode.Signed: return @"signed";
-				case ConditionCode.Zero: return @"zero";
-				case ConditionCode.NotZero: return @"not zero";
-				case ConditionCode.Parity: return @"parity";
-				case ConditionCode.NoParity: return @"no parity";
-				case ConditionCode.Carry: return @"carry";
-				case ConditionCode.NoCarry: return @"no carry";
-				case ConditionCode.Always: return @"always";
+				case ConditionCode.Equal: return "==";
+				case ConditionCode.GreaterOrEqual: return ">=";
+				case ConditionCode.GreaterThan: return ">";
+				case ConditionCode.LessOrEqual: return "<=";
+				case ConditionCode.LessThan: return "<";
+				case ConditionCode.NotEqual: return "!=";
+				case ConditionCode.UnsignedGreaterOrEqual: return ">= (U)";
+				case ConditionCode.UnsignedGreaterThan: return "> (U)";
+				case ConditionCode.UnsignedLessOrEqual: return "<= (U)";
+				case ConditionCode.UnsignedLessThan: return "< (U)";
+				case ConditionCode.NotSigned: return "not signed";
+				case ConditionCode.Signed: return "signed";
+				case ConditionCode.Zero: return "zero";
+				case ConditionCode.NotZero: return "not zero";
+				case ConditionCode.Parity: return "parity";
+				case ConditionCode.NoParity: return "no parity";
+				case ConditionCode.Carry: return "carry";
+				case ConditionCode.NoCarry: return "no carry";
+				case ConditionCode.Always: return "always";
 
 				default: throw new NotSupportedException();
 			}

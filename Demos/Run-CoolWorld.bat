@@ -1,1 +1,1 @@
-start ..\bin\Mosa.Tool.Launcher.exe -q -a --vmdk ..\bin\Mosa.CoolWorld.x86.exe
+start ..\bin\Mosa.Tool.Launcher.exe -q -a --vmdk -map ..\bin\Mosa.CoolWorld.x86.exe

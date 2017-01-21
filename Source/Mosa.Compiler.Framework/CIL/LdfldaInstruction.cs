@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.CIL
 			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
 
 			ctx.MosaField = field;
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, field.FieldType.ToManagedPointer());
+			ctx.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, field.FieldType.ToManagedPointer());
 		}
 
 		#endregion Methods

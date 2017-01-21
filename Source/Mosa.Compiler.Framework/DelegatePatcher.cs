@@ -50,11 +50,16 @@ namespace Mosa.Compiler.Framework
 			var context = new Context(CreateMethodStructure(methodCompiler, true));
 
 			Operand v1 = methodCompiler.CreateVirtualRegister(thisOperand.Type);
+			Operand v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand.Type);
+			Operand v3 = methodCompiler.CreateVirtualRegister(instanceOperand.Type);
 
-			context.AppendInstruction(IRInstruction.Move, v1, thisOperand);
-			context.AppendInstruction(IRInstruction.Store, size, null, v1, methodPointerOffsetOperand, methodPointerOperand);
+			context.AppendInstruction(IRInstruction.LoadInteger, v1, methodCompiler.StackFrame, thisOperand);
+			context.AppendInstruction(IRInstruction.LoadInteger, v2, methodCompiler.StackFrame, methodPointerOperand);
+			context.AppendInstruction(IRInstruction.LoadInteger, v3, methodCompiler.StackFrame, instanceOperand);
+
+			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, methodPointerOffsetOperand, v2);
 			context.MosaType = methodPointerOperand.Type;
-			context.AppendInstruction(IRInstruction.Store, size, null, v1, instanceOffsetOperand, instanceOperand);
+			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, instanceOffsetOperand, v3);
 			context.MosaType = instanceOperand.Type;
 			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
@@ -72,7 +77,7 @@ namespace Mosa.Compiler.Framework
 			Operand instanceOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, instanceOffset);
 
 			var size = methodCompiler.Architecture.NativeInstructionSize;
-			bool withReturn = (methodCompiler.Method.Signature.ReturnType != null);
+			bool withReturn = (methodCompiler.Method.Signature.ReturnType == null) ? false : !methodCompiler.Method.Signature.ReturnType.IsVoid;
 
 			Context b0 = new Context(CreateMethodStructure(methodCompiler, false));
 			Context b1 = new Context(methodCompiler.BasicBlocks.CreateBlock());
@@ -84,7 +89,12 @@ namespace Mosa.Compiler.Framework
 			for (int i = 0; i < methodCompiler.Parameters.Length; i++)
 			{
 				vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
-				b0.AppendInstruction(IRInstruction.Move, vrs[i], methodCompiler.Parameters[i]);
+
+				//fixme: handle structs
+				var loadInstruction = BaseMethodCompilerStage.GetLoadInstruction(vrs[i].Type);
+				var moveSize = BaseMethodCompilerStage.GetInstructionSize(vrs[i].Type);
+
+				b0.AppendInstruction(loadInstruction, moveSize, vrs[i], methodCompiler.StackFrame, methodCompiler.Parameters[i]);
 			}
 
 			Operand thisOperand = vrs[0];
@@ -93,13 +103,13 @@ namespace Mosa.Compiler.Framework
 			Operand opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
 			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.I4);
 
-			Operand opReturn = withReturn ? methodCompiler.VirtualRegisters.Allocate(methodCompiler.Method.Signature.ReturnType) : null;
+			Operand opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
 			Operand c0 = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
 
-			b0.AppendInstruction(IRInstruction.Load, size, opMethod, thisOperand, methodPointerOffsetOperand);
-			b0.AppendInstruction(IRInstruction.Load, size, opInstance, thisOperand, instanceOffsetOperand);
-			b0.AppendInstruction(IRInstruction.IntegerCompare, ConditionCode.Equal, opCompare, opInstance, c0);
-			b0.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, opCompare, c0);
+			b0.AppendInstruction(IRInstruction.LoadInteger, size, opMethod, thisOperand, methodPointerOffsetOperand);
+			b0.AppendInstruction(IRInstruction.LoadInteger, size, opInstance, thisOperand, instanceOffsetOperand);
+			b0.AppendInstruction(IRInstruction.CompareInteger, ConditionCode.Equal, opCompare, opInstance, c0);
+			b0.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, opCompare, c0);
 			b0.AddBranchTarget(b2.Block);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 

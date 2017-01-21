@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 				NativePatchType = PatchType.I8;
 		}
 
-		protected override void Run()
+		protected override void RunPostCompile()
 		{
 			CreateMethodExceptionLookupTable();
 		}
@@ -86,15 +86,15 @@ namespace Mosa.Compiler.Framework.Stages
 							continue;
 
 						// 1. Pointer to Method
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, 0, method.FullName, SectionKind.Text, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, SectionKind.Text, method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 2. Size of Method
-						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, (int)writer.Position, 0, method.FullName, SectionKind.Text, 0);
+						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, (int)writer.Position, SectionKind.Text, method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 3. Pointer to Method Definition
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, 0, method.FullName + Metadata.MethodDefinition, SectionKind.ROData, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, SectionKind.ROData, method.FullName + Metadata.MethodDefinition, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 					}
 				}

@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker.Elf;
 using Mosa.Compiler.MosaTypeSystem;
@@ -191,23 +192,19 @@ namespace Mosa.Platform.x86
 		/// Extends the pre-compiler pipeline with x86 compiler stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendPreCompilerPipeline(CompilerPipeline compilerPipeline)
+		public override void ExtendCompilerPipeline(CompilerPipeline compilerPipeline)
 		{
-			compilerPipeline.InsertAfterFirst<ICompilerStage>(
+			compilerPipeline.Add(
+				new StartUpStage()
+			);
+
+			compilerPipeline.Add(
 				new InterruptVectorStage()
 			);
 
-			compilerPipeline.InsertAfterLast<ICompilerStage>(
-				new SSESetupStage()
+			compilerPipeline.Add(
+				new SSEInitStage()
 			);
-		}
-
-		/// <summary>
-		/// Extends the post-compiler pipeline with x86 compiler stages.
-		/// </summary>
-		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendPostCompilerPipeline(CompilerPipeline compilerPipeline)
-		{
 		}
 
 		/// <summary>
@@ -219,12 +216,10 @@ namespace Mosa.Platform.x86
 			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
-					//new CheckOperandCountStage(),
 					new PlatformIntrinsicStage(),
 					new LongOperandTransformationStage(),
 					new IRTransformationStage(),
 					new TweakTransformationStage(),
-
 					new FixedRegisterAssignmentStage(),
 					new SimpleDeadCodeRemovalStage(),
 					new AddressModeConversionStage(),
@@ -241,10 +236,6 @@ namespace Mosa.Platform.x86
 
 			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
-			);
-
-			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
-				new ConversionPhaseStage()
 			);
 		}
 
@@ -279,53 +270,116 @@ namespace Mosa.Platform.x86
 		/// <param name="source">The source.</param>
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
-			var instruction = BaseTransformationStage.GetMove(destination, source);
-			context.AppendInstruction(instruction, /*size,*/ destination, source);
+			BaseInstruction instruction = X86.Mov;
+			InstructionSize size = InstructionSize.Size32;
+
+			if (destination.IsR4)
+			{
+				instruction = X86.Movss;
+				size = InstructionSize.Size32;
+			}
+			else if (destination.IsR8)
+			{
+				instruction = X86.Movsd;
+				size = InstructionSize.Size64;
+			}
+
+			context.AppendInstruction(instruction, size, destination, source);
+		}
+
+		public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
+		{
+			BaseInstruction instruction = X86.MovStore;
+			InstructionSize size = InstructionSize.Size32;
+
+			if (value.IsR4)
+			{
+				instruction = X86.MovssStore;
+			}
+			else if (value.IsR8)
+			{
+				instruction = X86.MovsdStore;
+				size = InstructionSize.Size64;
+			}
+
+			context.AppendInstruction(instruction, size, null, destination, offset, value);
+		}
+
+		/// <summary>
+		/// Inserts the load instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="offset">The offset.</param>
+		public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
+		{
+			BaseInstruction instruction = X86.MovLoad;
+			InstructionSize size = InstructionSize.Size32;
+
+			if (destination.IsR4)
+			{
+				instruction = X86.MovssLoad;
+			}
+			else if (destination.IsR8)
+			{
+				instruction = X86.MovsdLoad;
+				size = InstructionSize.Size64;
+			}
+
+			context.AppendInstruction(instruction, size, destination, source, offset);
 		}
 
 		/// <summary>
 		/// Create platform compound move.
 		/// </summary>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="context">The context.</param>
+		/// <param name="destinationBase">The destination base.</param>
 		/// <param name="destination">The destination.</param>
+		/// <param name="sourceBase">The source base.</param>
 		/// <param name="source">The source.</param>
 		/// <param name="size">The size.</param>
-		public override void InsertCompoundMoveInstruction(BaseMethodCompiler compiler, Context context, Operand destination, Operand source, int size)
+		public override void InsertCompoundCopy(BaseMethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
 		{
-			Debug.Assert(size > 0);
-			Debug.Assert(source.IsMemoryAddress && destination.IsMemoryAddress);
-
 			const int LargeAlignment = 16;
 			int alignedSize = size - (size % NativeAlignment);
 			int largeAlignedTypeSize = size - (size % LargeAlignment);
 
-			var srcReg = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
-			var dstReg = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
-			var tmp = compiler.CreateVirtualRegister(destination.Type.TypeSystem.BuiltIn.I4);
-			var tmpLarge = Operand.CreateCPURegister(destination.Type.TypeSystem.BuiltIn.Void, SSE2Register.XMM1);
+			Debug.Assert(size > 0);
 
-			context.AppendInstruction(X86.Lea, srcReg, source);
-			context.AppendInstruction(X86.Lea, dstReg, destination);
+			var srcReg = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+			var dstReg = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+
+			context.AppendInstruction(IRInstruction.UnstableObjectTracking);
+
+			context.AppendInstruction(X86.Lea, srcReg, sourceBase, source);
+			context.AppendInstruction(X86.Lea, dstReg, destinationBase, destination);
+
+			var tmp = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+			var tmpLarge = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.R8);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
 				// Large aligned moves allow 128bits to be copied at a time
-				var index = Operand.CreateConstant(destination.Type.TypeSystem.BuiltIn.I4, i);
+				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovupsLoad, InstructionSize.Size128, tmpLarge, srcReg, index);
 				context.AppendInstruction(X86.MovupsStore, InstructionSize.Size128, null, dstReg, index, tmpLarge);
 			}
 			for (int i = largeAlignedTypeSize; i < alignedSize; i += NativeAlignment)
 			{
-				var index = Operand.CreateConstant(destination.Type.TypeSystem.BuiltIn.I4, i);
+				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, tmp, srcReg, index);
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, index, tmp);
 			}
 			for (int i = alignedSize; i < size; i++)
 			{
-				var index = Operand.CreateConstant(destination.Type.TypeSystem.BuiltIn.I4, i);
+				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovLoad, InstructionSize.Size8, tmp, srcReg, index);
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
 			}
+
+			context.AppendInstruction(IRInstruction.UnstableObjectTracking);
 		}
 
 		/// <summary>
@@ -381,17 +435,6 @@ namespace Mosa.Platform.x86
 		public override void InsertCallInstruction(Context context, Operand source)
 		{
 			context.AppendInstruction(X86.Call, null, source);
-		}
-
-		/// <summary>
-		/// Inserts the address of instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source">The source.</param>
-		public override void InsertAddressOfInstruction(Context context, Operand destination, Operand source)
-		{
-			context.AppendInstruction(X86.Lea, destination, source);
 		}
 
 		/// <summary>

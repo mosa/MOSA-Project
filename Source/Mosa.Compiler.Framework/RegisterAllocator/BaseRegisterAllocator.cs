@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
 using System;
 using System.Collections;
@@ -17,9 +18,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	/// </summary>
 	public abstract class BaseRegisterAllocator
 	{
+		public delegate Operand AddStackLocalDelegate(MosaType type);
+
 		protected readonly BasicBlocks BasicBlocks;
 		protected readonly BaseArchitecture Architecture;
-		private readonly StackLayout StackLayout;
+		protected readonly AddStackLocalDelegate AddStackLocal;
+		protected readonly Operand StackFrame;
 
 		private readonly int VirtualRegisterCount;
 		private readonly int PhysicalRegisterCount;
@@ -43,15 +47,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected readonly TraceLog Trace;
 
-		public BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters compilerVirtualRegisters, StackLayout stackLayout, BaseArchitecture architecture, ITraceFactory traceFactory)
+		public BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, Operand stackFrame, ITraceFactory traceFactory)
 		{
 			TraceFactory = traceFactory;
 
 			BasicBlocks = basicBlocks;
-			StackLayout = stackLayout;
 			Architecture = architecture;
+			AddStackLocal = addStackLocal;
+			StackFrame = stackFrame;
 
-			VirtualRegisterCount = compilerVirtualRegisters.Count;
+			VirtualRegisterCount = virtualRegisters.Count;
 			PhysicalRegisterCount = architecture.RegisterSet.Length;
 			RegisterCount = VirtualRegisterCount + PhysicalRegisterCount;
 
@@ -80,7 +85,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 
 			// Setup extended virtual registers
-			foreach (var virtualRegister in compilerVirtualRegisters)
+			foreach (var virtualRegister in virtualRegisters)
 			{
 				Debug.Assert(virtualRegister.Index == VirtualRegisters.Count - PhysicalRegisterCount + 1);
 
@@ -1024,7 +1029,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					if (intersections.Count != 0)
 					{
-						if (Trace.Active) Trace.Log("  Evicting live newIntervals");
+						if (Trace.Active) Trace.Log("  Evicting live intervals");
 
 						track.Evict(intersections);
 
@@ -1284,7 +1289,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					continue;
 
 				Debug.Assert(register.IsVirtualRegister);
-				register.SpillSlotOperand = StackLayout.AddStackLocal(register.VirtualRegisterOperand.Type);
+				register.SpillSlotOperand = AddStackLocal(register.VirtualRegisterOperand.Type);
 			}
 		}
 
@@ -1318,7 +1323,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					{
 						var context = new Context(def.Index);
 
-						Architecture.InsertMoveInstruction(context, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
+						Architecture.InsertStoreInstruction(context, StackFrame, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
 
 						context.Marked = true;
 					}
@@ -1354,21 +1359,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var operand = node.GetOperand(i);
 
-				if (operand.IsVirtualRegister)
+				if (operand == old)
 				{
-					if (operand == old)
-					{
-						node.SetOperand(i, replacement);
-						continue;
-					}
-				}
-				else if (operand.IsMemoryAddress && operand.OffsetBase != null)
-				{
-					if (operand.OffsetBase == old)
-					{
-						// FIXME: Creates a lot of duplicate single operands
-						node.SetOperand(i, Operand.CreateMemoryAddress(operand.Type, replacement, operand.Displacement));
-					}
+					node.SetOperand(i, replacement);
 				}
 			}
 
@@ -1376,21 +1369,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var operand = node.GetResult(i);
 
-				if (operand.IsVirtualRegister)
+				if (operand == old)
 				{
-					if (operand == old)
-					{
-						node.SetResult(i, replacement);
-						continue;
-					}
-				}
-				else if (operand.IsMemoryAddress && operand.OffsetBase != null)
-				{
-					if (operand.OffsetBase == old)
-					{
-						// FIXME: Creates a lot of duplicate single operands
-						node.SetResult(i, Operand.CreateMemoryAddress(operand.Type, replacement, operand.Displacement));
-					}
+					node.SetResult(i, replacement);
 				}
 			}
 		}
@@ -1399,7 +1380,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			var resolverTrace = CreateTrace("ResolveDataFlow");
 
-			MoveResolver[,] moveResolvers = new MoveResolver[2, BasicBlocks.Count];
+			var moveResolvers = new MoveResolver[2, BasicBlocks.Count];
 
 			foreach (var from in ExtendedBlocks)
 			{
@@ -1464,7 +1445,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (moveResolver == null)
 						continue;
 
-					moveResolver.InsertResolvingMoves(Architecture);
+					moveResolver.InsertResolvingMoves(Architecture, StackFrame);
 				}
 			}
 		}
@@ -1487,7 +1468,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var moveResolver = new MoveResolver(key.Index, !key.IsOnHalfStepForward, moves[key]);
 
-				moveResolver.InsertResolvingMoves(Architecture);
+				moveResolver.InsertResolvingMoves(Architecture, StackFrame);
 
 				if (insertTrace.Active)
 				{

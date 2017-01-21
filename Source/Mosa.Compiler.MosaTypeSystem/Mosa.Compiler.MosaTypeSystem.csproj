@@ -14,7 +14,7 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <RootNamespace>Mosa.Compiler.MosaTypeSystem</RootNamespace>
     <FileUpgradeFlags>
@@ -40,7 +40,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
-    <NoWarn>0414</NoWarn>
+    <NoWarn>0414,1685</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -65,7 +65,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="dnlib, Version=1.0.1.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
+    <Reference Include="dnlib, Version=1.6.0.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\3rdParty\dnlib.dll</HintPath>
     </Reference>
@@ -78,6 +78,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GenericArgumentResolver.cs" />
     <Compile Include="IMetadata.cs" />
     <Compile Include="IModuleLoader.cs" />
     <Compile Include="Metadata\MetadataResolver.cs" />

@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// 	<c>true</c> if [enable IR optimizations]; otherwise, <c>false</c>.
 		/// </value>
-		public bool EnableOptimizations { get; set; }
+		public bool EnableIROptimizations { get; set; }
 
 		/// <summary>
 		/// Gets or sets the debug restrict optimization by count.
@@ -63,14 +63,6 @@ namespace Mosa.Compiler.Framework
 		/// The debug restrict optimization by count.
 		/// </value>
 		public int DebugRestrictOptimizationByCount { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether [enable promote temporary variables optimization].
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if [enable promote temporary variables optimization]; otherwise, <c>false</c>.
-		/// </value>
-		public bool EnableVariablePromotion { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable conditional constant propagation].
@@ -259,8 +251,7 @@ namespace Mosa.Compiler.Framework
 		public CompilerOptions()
 		{
 			EnableSSA = true;
-			EnableOptimizations = true;
-			EnableVariablePromotion = true;
+			EnableIROptimizations = true;
 			EnableSparseConditionalConstantPropagation = true;
 			EnableInlinedMethods = true;
 			BaseAddress = 0x00400000;
@@ -271,7 +262,7 @@ namespace Mosa.Compiler.Framework
 			DebugRestrictOptimizationByCount = 0;
 			EmitSymbols = true;
 			EmitRelocations = true;
-			TwoPassOptimizationStages = true;
+			TwoPassOptimizationStages = false;
 			EnableStatistics = true;
 		}
 	}

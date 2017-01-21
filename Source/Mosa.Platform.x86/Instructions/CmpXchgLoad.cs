@@ -3,7 +3,6 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
@@ -39,32 +38,30 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static void CmpXchg(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(node.Result.IsRegister);
-			Debug.Assert(node.Operand1.IsRegister);
-			Debug.Assert(node.Operand2.IsRegister);
-			Debug.Assert(node.GetOperand(3).IsRegister);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+			Debug.Assert(node.GetOperand(3).IsCPURegister);
 			Debug.Assert(node.Result.Register == GeneralPurposeRegister.EAX);
 			Debug.Assert(node.Operand1.Register == GeneralPurposeRegister.EAX);
 			Debug.Assert(node.ResultCount == 1);
-
-			var linkreference = node.Operand2.IsLabel || node.Operand2.IsField || node.Operand2.IsSymbol;
 
 			// Compare EAX with r/m32. If equal, ZF is set and r32 is loaded into r/m32.
 			// Else, clear ZF and load r/m32 into EAX.
 
 			// memory, register 0000 1111 : 1011 000w : mod reg r/m
 			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(0x66, node.Size == InstructionSize.Size16)  // 8:prefix: 16bit
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
 				.AppendNibble(Bits.b1011)                                       // 4:opcode
 				.Append3Bits(Bits.b000)                                         // 3:opcode
 				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
-				.ModRegRMSIBDisplacement(node.GetOperand(3), node.Operand2, node.Operand3) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
+				.ModRegRMSIBDisplacement(true, node.GetOperand(3), node.Operand2, node.Operand3) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalIntegerValue(node.Operand2.IsLinkerResolved, 0);               // 32:memory
 
-			if (linkreference)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			if (node.Operand2.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand2, (opcode.Size - 32) / 8);
 			else
 				emitter.Emit(opcode);
 		}

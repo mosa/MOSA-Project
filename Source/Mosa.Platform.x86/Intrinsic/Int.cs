@@ -18,6 +18,8 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
+			Helper.FoldOperand1ToConstant(context);
+
 			context.SetInstruction(X86.Int, InstructionSize.Size8, context.Result, context.Operand1);
 		}
 

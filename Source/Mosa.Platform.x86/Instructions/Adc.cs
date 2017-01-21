@@ -29,11 +29,8 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (destination.IsRegister && third.IsConstant) return RM_C;
-			if (destination.IsRegister && third.IsRegister) return R_RM;
-			if (destination.IsRegister && third.IsMemoryAddress) return R_RM;
-			if (destination.IsMemoryAddress && third.IsRegister) return M_R;
-			if (destination.IsMemoryAddress && third.IsConstant) return RM_C;
+			if (destination.IsCPURegister && third.IsConstant) return RM_C;
+			if (destination.IsCPURegister && third.IsCPURegister) return R_RM;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

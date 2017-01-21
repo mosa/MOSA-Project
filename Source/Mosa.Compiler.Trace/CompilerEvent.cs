@@ -7,8 +7,10 @@ namespace Mosa.Compiler.Trace
 		CompilingMethod,
 		CompilingType,
 		Linking,
-		CompilerStageStart,
-		CompilerStageEnd,
+		PreCompileStageStart,
+		PreCompileStageEnd,
+		PostCompileStageStart,
+		PostCompileStageEnd,
 		DebugInfo,
 		SchedulingType,
 		SchedulingMethod,
@@ -32,8 +34,10 @@ namespace Mosa.Compiler.Trace
 				case CompilerEvent.SchedulingMethod: return "Scheduling Method";
 				case CompilerEvent.Linking: return "Linking";
 				case CompilerEvent.DebugInfo: return "Debug Info";
-				case CompilerEvent.CompilerStageStart: return "Stage Started";
-				case CompilerEvent.CompilerStageEnd: return "Stage Ended";
+				case CompilerEvent.PreCompileStageStart: return "Pre-Compile Stage Started";
+				case CompilerEvent.PreCompileStageEnd: return "Pre-Compile Stage Ended";
+				case CompilerEvent.PostCompileStageStart: return "Post-Compile Stage Started";
+				case CompilerEvent.PostCompileStageEnd: return "Post-Compile Stage Ended";
 				case CompilerEvent.Error: return "Error";
 				case CompilerEvent.Exception: return "Exception";
 				case CompilerEvent.Warning: return "Warning";

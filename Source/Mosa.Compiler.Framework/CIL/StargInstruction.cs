@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			// The argument is the result
-			ctx.Result = decoder.Compiler.GetParameterOperand((int)decoder.Instruction.Operand);
+			ctx.Result = decoder.Compiler.Parameters[(int)decoder.Instruction.Operand];
 
 			// FIXME: Do some type compatibility checks
 			// See verification for this instruction and

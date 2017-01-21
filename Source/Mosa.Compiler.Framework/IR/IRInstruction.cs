@@ -4,142 +4,101 @@ namespace Mosa.Compiler.Framework.IR
 {
 	public static class IRInstruction
 	{
-		public static readonly AddFloat AddFloat = new AddFloat();
-
-		public static readonly AddSigned AddSigned = new AddSigned();
-
-		public static readonly AddUnsigned AddUnsigned = new AddUnsigned();
-
+		public static readonly AddFloatR4 AddFloatR4 = new AddFloatR4();
+		public static readonly AddFloatR8 AddFloatR8 = new AddFloatR8();
 		public static readonly AddressOf AddressOf = new AddressOf();
-
+		public static readonly AddSigned AddSigned = new AddSigned();
+		public static readonly AddUnsigned AddUnsigned = new AddUnsigned();
 		public static readonly ArithmeticShiftRight ArithmeticShiftRight = new ArithmeticShiftRight();
-
-		public static readonly Break Break = new Break();
-
-		public static readonly DivFloat DivFloat = new DivFloat();
-
-		public static readonly DivSigned DivSigned = new DivSigned();
-
-		public static readonly DivUnsigned DivUnsigned = new DivUnsigned();
-
-		public static readonly Epilogue Epilogue = new Epilogue();
-
-		public static readonly FloatCompare FloatCompare = new FloatCompare();
-
-		public static readonly FloatToIntegerConversion FloatToIntegerConversion = new FloatToIntegerConversion();
-
-		public static readonly IntegerCompareBranch IntegerCompareBranch = new IntegerCompareBranch();
-
-		public static readonly IntegerCompare IntegerCompare = new IntegerCompare();
-
-		public static readonly IntegerToFloatConversion IntegerToFloatConversion = new IntegerToFloatConversion();
-
-		public static readonly Jmp Jmp = new Jmp();
-
-		public static readonly Load Load = new Load();
-
-		public static readonly Load2 Load2 = new Load2();
-
-		public static readonly CompoundLoad CompoundLoad = new CompoundLoad();
-
-		public static readonly LoadZeroExtended LoadZeroExtended = new LoadZeroExtended();
-
-		public static readonly LoadSignExtended LoadSignExtended = new LoadSignExtended();
-
-		public static readonly LogicalAnd LogicalAnd = new LogicalAnd();
-
-		public static readonly LogicalNot LogicalNot = new LogicalNot();
-
-		public static readonly LogicalOr LogicalOr = new LogicalOr();
-
-		public static readonly LogicalXor LogicalXor = new LogicalXor();
-
-		public static readonly Move Move = new Move();
-
-		public static readonly CompoundMove CompoundMove = new CompoundMove();
-
-		public static readonly MulFloat MulFloat = new MulFloat();
-
-		public static readonly MulSigned MulSigned = new MulSigned();
-
-		public static readonly MulUnsigned MulUnsigned = new MulUnsigned();
-
-		public static readonly Phi Phi = new Phi();
-
-		public static readonly Prologue Prologue = new Prologue();
-
-		public static readonly RemFloat RemFloat = new RemFloat();
-
-		public static readonly RemSigned RemSigned = new RemSigned();
-
-		public static readonly RemUnsigned RemUnsigned = new RemUnsigned();
-
-		public static readonly Return Return = new Return();
-
-		public static readonly InternalCall InternalCall = new InternalCall();
-
-		public static readonly InternalReturn InternalReturn = new InternalReturn();
-
-		public static readonly ShiftRight ShiftRight = new ShiftRight();
-
-		public static readonly ShiftLeft ShiftLeft = new ShiftLeft();
-
-		public static readonly SignExtendedMove SignExtendedMove = new SignExtendedMove();
-
-		public static readonly Store Store = new Store();
-
-		public static readonly CompoundStore CompoundStore = new CompoundStore();
-
-		public static readonly SubFloat SubFloat = new SubFloat();
-
-		public static readonly SubSigned SubSigned = new SubSigned();
-
-		public static readonly SubUnsigned SubUnsigned = new SubUnsigned();
-
-		public static readonly ZeroExtendedMove ZeroExtendedMove = new ZeroExtendedMove();
-
-		public static readonly Call Call = new Call();
-
-		public static readonly Nop Nop = new Nop();
-
-		public static readonly Switch Switch = new Switch();
-
-		public static readonly Throw Throw = new Throw();
-
-		public static readonly TryStart TryStart = new TryStart();
-
-		public static readonly ExceptionStart ExceptionStart = new ExceptionStart();
-
-		public static readonly FilterStart FilterStart = new FilterStart();
-
-		public static readonly FinallyStart FinallyStart = new FinallyStart();
-
-		public static readonly TryEnd TryEnd = new TryEnd();
-
-		public static readonly ExceptionEnd ExceptionEnd = new ExceptionEnd();
-
-		public static readonly FinallyEnd FinallyEnd = new FinallyEnd();
-
-		public static readonly FilterEnd FilterEnd = new FilterEnd();
-
-		public static readonly GotoLeaveTarget GotoLeaveTarget = new GotoLeaveTarget();
-
-		public static readonly SetLeaveTarget SetLeaveTarget = new SetLeaveTarget();
-
-		public static readonly IntrinsicMethodCall IntrinsicMethodCall = new IntrinsicMethodCall();
-
 		public static readonly BlockEnd BlockEnd = new BlockEnd();
-
 		public static readonly BlockStart BlockStart = new BlockStart();
-
-		public static readonly Gen Gen = new Gen();
-
-		public static readonly Kill Kill = new Kill();
-
-		public static readonly KillAll KillAll = new KillAll();
-
-		public static readonly KillAllExcept KillAllExcept = new KillAllExcept();
-
+		public static readonly Break Break = new Break();
+		public static readonly Call Call = new Call();
+		public static readonly CompareFloatR4 CompareFloatR4 = new CompareFloatR4();
+		public static readonly CompareFloatR8 CompareFloatR8 = new CompareFloatR8();
+		public static readonly CompareInteger CompareInteger = new CompareInteger();
+		public static readonly CompareIntegerBranch CompareIntegerBranch = new CompareIntegerBranch();
+		public static readonly ConversionFloatR4ToFloatR8 ConversionFloatR4ToFloatR8 = new ConversionFloatR4ToFloatR8();
+		public static readonly ConversionFloatR4ToInteger ConversionFloatR4ToInteger = new ConversionFloatR4ToInteger();
+		public static readonly ConversionFloatR8ToFloatR4 ConversionFloatR8ToFloatR4 = new ConversionFloatR8ToFloatR4();
+		public static readonly ConversionFloatR8ToInteger ConversionFloatR8ToInteger = new ConversionFloatR8ToInteger();
+		public static readonly ConversionIntegerToFloatR4 ConversionIntegerToFloatR4 = new ConversionIntegerToFloatR4();
+		public static readonly ConversionIntegerToFloatR8 ConversionIntegerToFloatR8 = new ConversionIntegerToFloatR8();
+		public static readonly DivFloatR4 DivFloatR4 = new DivFloatR4();
+		public static readonly DivFloatR8 DivFloatR8 = new DivFloatR8();
+		public static readonly DivSigned DivSigned = new DivSigned();
+		public static readonly DivUnsigned DivUnsigned = new DivUnsigned();
+		public static readonly Epilogue Epilogue = new Epilogue();
+		public static readonly ExceptionEnd ExceptionEnd = new ExceptionEnd();
+		public static readonly ExceptionStart ExceptionStart = new ExceptionStart();
+		public static readonly FilterEnd FilterEnd = new FilterEnd();
+		public static readonly FilterStart FilterStart = new FilterStart();
+		public static readonly FinallyEnd FinallyEnd = new FinallyEnd();
+		public static readonly FinallyStart FinallyStart = new FinallyStart();
 		public static readonly Flow Flow = new Flow();
+		public static readonly Gen Gen = new Gen();
+		public static readonly GotoLeaveTarget GotoLeaveTarget = new GotoLeaveTarget();
+		public static readonly InternalCall InternalCall = new InternalCall();
+		public static readonly InternalReturn InternalReturn = new InternalReturn();
+		public static readonly IntrinsicMethodCall IntrinsicMethodCall = new IntrinsicMethodCall();
+		public static readonly Jmp Jmp = new Jmp();
+		public static readonly Kill Kill = new Kill();
+		public static readonly KillAll KillAll = new KillAll();
+		public static readonly KillAllExcept KillAllExcept = new KillAllExcept();
+		public static readonly LoadCompound LoadCompound = new LoadCompound();
+		public static readonly LoadFloatR4 LoadFloatR4 = new LoadFloatR4();
+		public static readonly LoadFloatR8 LoadFloatR8 = new LoadFloatR8();
+		public static readonly LoadInteger LoadInteger = new LoadInteger();
+		public static readonly LoadSignExtended LoadSignExtended = new LoadSignExtended();
+		public static readonly LoadZeroExtended LoadZeroExtended = new LoadZeroExtended();
+		public static readonly LoadParameterCompound LoadParameterCompound = new LoadParameterCompound();
+		public static readonly LoadParameterFloatR4 LoadParameterFloatR4 = new LoadParameterFloatR4();
+		public static readonly LoadParameterFloatR8 LoadParameterFloatR8 = new LoadParameterFloatR8();
+		public static readonly LoadParameterInteger LoadParameterInteger = new LoadParameterInteger();
+		public static readonly LoadParameterSignExtended LoadParameterSignExtended = new LoadParameterSignExtended();
+		public static readonly LoadParameterZeroExtended LoadParameterZeroExtended = new LoadParameterZeroExtended();
+		public static readonly LogicalAnd LogicalAnd = new LogicalAnd();
+		public static readonly LogicalNot LogicalNot = new LogicalNot();
+		public static readonly LogicalOr LogicalOr = new LogicalOr();
+		public static readonly LogicalXor LogicalXor = new LogicalXor();
+		public static readonly MoveCompound MoveCompound = new MoveCompound();
+		public static readonly MoveFloatR4 MoveFloatR4 = new MoveFloatR4();
+		public static readonly MoveFloatR8 MoveFloatR8 = new MoveFloatR8();
+		public static readonly MoveInteger MoveInteger = new MoveInteger();
+		public static readonly MoveSignExtended MoveSignExtended = new MoveSignExtended();
+		public static readonly MoveZeroExtended MoveZeroExtended = new MoveZeroExtended();
+		public static readonly MulFloatR4 MulFloatR4 = new MulFloatR4();
+		public static readonly MulFloatR8 MulFloatR8 = new MulFloatR8();
+		public static readonly MulSigned MulSigned = new MulSigned();
+		public static readonly MulUnsigned MulUnsigned = new MulUnsigned();
+		public static readonly Nop Nop = new Nop();
+		public static readonly Phi Phi = new Phi();
+		public static readonly Prologue Prologue = new Prologue();
+		public static readonly RemFloatR4 RemFloatR4 = new RemFloatR4();
+		public static readonly RemFloatR8 RemFloatR8 = new RemFloatR8();
+		public static readonly RemSigned RemSigned = new RemSigned();
+		public static readonly RemUnsigned RemUnsigned = new RemUnsigned();
+		public static readonly Return Return = new Return();
+		public static readonly SetLeaveTarget SetLeaveTarget = new SetLeaveTarget();
+		public static readonly ShiftLeft ShiftLeft = new ShiftLeft();
+		public static readonly ShiftRight ShiftRight = new ShiftRight();
+		public static readonly StableObjectTracking StableObjectTracking = new StableObjectTracking();
+		public static readonly StoreCompound StoreCompound = new StoreCompound();
+		public static readonly StoreFloatR4 StoreFloatR4 = new StoreFloatR4();
+		public static readonly StoreFloatR8 StoreFloatR8 = new StoreFloatR8();
+		public static readonly StoreInteger StoreInteger = new StoreInteger();
+		public static readonly StoreParameterCompound StoreParameterCompound = new StoreParameterCompound();
+		public static readonly StoreParameterFloatR4 StoreParameterFloatR4 = new StoreParameterFloatR4();
+		public static readonly StoreParameterFloatR8 StoreParameterFloatR8 = new StoreParameterFloatR8();
+		public static readonly StoreParameterInteger StoreParameterInteger = new StoreParameterInteger();
+		public static readonly SubFloatR4 SubFloatR4 = new SubFloatR4();
+		public static readonly SubFloatR8 SubFloatR8 = new SubFloatR8();
+		public static readonly SubSigned SubSigned = new SubSigned();
+		public static readonly SubUnsigned SubUnsigned = new SubUnsigned();
+		public static readonly Switch Switch = new Switch();
+		public static readonly Throw Throw = new Throw();
+		public static readonly TryEnd TryEnd = new TryEnd();
+		public static readonly TryStart TryStart = new TryStart();
+		public static readonly UnstableObjectTracking UnstableObjectTracking = new UnstableObjectTracking();
 	}
 }

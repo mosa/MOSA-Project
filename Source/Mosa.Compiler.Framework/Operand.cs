@@ -17,208 +17,12 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
-		/// Holds a list of instructions, which define this operand.
-		/// </summary>
-		public List<InstructionNode> Definitions { get; private set; }
-
-		/// <summary>
-		/// Holds a list of instructions, which use this operand.
-		/// </summary>
-		public List<InstructionNode> Uses { get; private set; }
-
-		/// <summary>
-		/// Returns the type of the operand.
-		/// </summary>
-		public MosaType Type { get; private set; }
-
-		/// <summary>
-		/// Retrieves the register, where the operand is located.
-		/// </summary>
-		public Register Register { get; private set; }
-
-		/// <summary>
-		/// Retrieves the offset base.
-		/// </summary>
-		public Operand OffsetBase { get; private set; }
-
-		/// <summary>
-		/// Gets the effective base.
-		/// </summary>
-		/// <value>
-		/// The effective base.
-		/// </value>
-		public Register EffectiveOffsetBase { get { return OffsetBase != null ? OffsetBase.Register : Register; } }
-
-		/// <summary>
-		/// Gets the base operand.
-		/// </summary>
-		public Operand SSAParent { get; private set; }
-
-		/// <summary>
-		/// Holds the address offset if used together with a base register or the absolute address, if register is null.
-		/// </summary>
-		/// <value>
-		/// The offset.
-		/// </value>
-		public long Displacement { get; set; }
-
-		/// <summary>
-		/// Retrieves the method.
-		/// </summary>
-		public MosaMethod Method { get; private set; }
-
-		/// <summary>
-		/// Retrieves the field.
-		/// </summary>
-		public MosaField Field { get; private set; }
-
-		/// <summary>
-		/// Gets the ssa version.
-		/// </summary>
-		public int SSAVersion { get; private set; }
-
-		/// <summary>
-		/// Gets or sets the low operand.
-		/// </summary>
-		/// <value>
-		/// The low operand.
-		/// </value>
-		public Operand Low { get; private set; }
-
-		/// <summary>
-		/// Gets or sets the high operand.
-		/// </summary>
-		/// <value>
-		/// The high operand.
-		/// </value>
-		public Operand High { get; private set; }
-
-		/// <summary>
-		/// Gets the split64 parent.
-		/// </summary>
-		/// <value>
-		/// The split64 parent.
-		/// </value>
-		public Operand SplitParent { get; private set; }
-
-		/// <summary>
-		/// Determines if the operand is a constant variable.
-		/// </summary>
-		public bool IsConstant { get; private set; }
-
-		/// <summary>
-		/// Determines if the operand is a symbol operand.
-		/// </summary>
-		public bool IsSymbol { get; private set; }
-
-		/// <summary>
-		/// Determines if the operand is a label operand.
-		/// </summary>
-		public bool IsLabel { get; private set; }
-
-		/// <summary>
-		/// Determines if the operand is a register.
-		/// </summary>
-		public bool IsRegister { get { return IsVirtualRegister || IsCPURegister; } }
-
-		/// <summary>
-		/// Determines if the operand is a virtual register operand.
-		/// </summary>
-		public bool IsVirtualRegister { get; private set; }
-
-		/// <summary>
-		/// Determines if the operand is a cpu register operand.
-		/// </summary>
-		public bool IsCPURegister { get; private set; }
-
-		/// <summary>
-		/// Determines if the operand is a memory operand.
-		/// </summary>
-		public bool IsMemoryAddress { get; private set; }
-
-		/// <summary>
-		/// Determines if the operand is a stack local operand.
-		/// </summary>
-		public bool IsStackLocal { get; private set; }
-
-		/// <summary>
-		/// Determines if the operand is a runtime member operand.
-		/// </summary>
-		public bool IsField { get; private set; }
-
-		/// <summary>
-		/// Determines if the operand is a local variable operand.
-		/// </summary>
-		public bool IsParameter { get; private set; }
-
-		/// <summary>
-		/// Determines if the operand is a ssa operand.
-		/// </summary>
-		public bool IsSSA { get; private set; }
-
-		/// <summary>
-		/// Gets a value indicating whether this instance is split64 child.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is split64 child; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsSplitChild { get { return SplitParent != null && !IsSSA; } }
-
-		/// <summary>
-		/// Determines if the operand is a shift operand.
-		/// </summary>
-		public bool IsShift { get; private set; }
-
-		/// <summary>
-		/// Gets the name.
-		/// </summary>
-		/// <value>The name.</value>
-		public string Name { get; private set; }
-
-		/// <summary>
-		/// Gets the index.
-		/// </summary>
-		public int Index { get; private set; }
-
-		/// <summary>
-		/// Gets the constant long integer.
-		/// </summary>
-		/// <value>
-		/// The constant long integer.
-		/// </value>
-		public ulong ConstantUnsignedLongInteger { get; private set; }
-
-		/// <summary>
-		/// Gets the constant integer.
-		/// </summary>
-		/// <value>
-		/// The constant integer.
-		/// </value>
-		public uint ConstantUnsignedInteger { get { return (uint)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = value; } }
-
-		/// <summary>
 		/// Gets the constant double float point.
 		/// </summary>
 		/// <value>
 		/// The constant double float point.
 		/// </value>
 		public double ConstantDoubleFloatingPoint { get; private set; }
-
-		/// <summary>
-		/// Gets the single double float point.
-		/// </summary>
-		/// <value>
-		/// The single double float point.
-		/// </value>
-		public float ConstantSingleFloatingPoint { get; private set; }
-
-		/// <summary>
-		/// Gets or sets the constant signed long integer.
-		/// </summary>
-		/// <value>
-		/// The constant signed long integer.
-		/// </value>
-		public long ConstantSignedLongInteger { get { return (long)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = (ulong)value; } }
 
 		/// <summary>
 		/// Gets or sets the constant signed integer.
@@ -229,20 +33,59 @@ namespace Mosa.Compiler.Framework
 		public int ConstantSignedInteger { get { return (int)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = (ulong)value; } }
 
 		/// <summary>
-		/// Gets the string data.
+		/// Gets or sets the constant signed long integer.
 		/// </summary>
 		/// <value>
-		/// The string data.
+		/// The constant signed long integer.
 		/// </value>
-		public string StringData { get; private set; }
+		public long ConstantSignedLongInteger { get { return (long)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = (ulong)value; } }
 
 		/// <summary>
-		/// Gets a value indicating whether [is null].
+		/// Gets the single double float point.
 		/// </summary>
 		/// <value>
-		///   <c>true</c> if [is null]; otherwise, <c>false</c>.
+		/// The single double float point.
 		/// </value>
-		public bool IsNull { get; private set; }
+		public float ConstantSingleFloatingPoint { get; private set; }
+
+		/// <summary>
+		/// Gets the constant integer.
+		/// </summary>
+		/// <value>
+		/// The constant integer.
+		/// </value>
+		public uint ConstantUnsignedInteger { get { return (uint)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = value; } }
+
+		/// <summary>
+		/// Gets the constant long integer.
+		/// </summary>
+		/// <value>
+		/// The constant long integer.
+		/// </value>
+		public ulong ConstantUnsignedLongInteger { get; set; }
+
+		/// <summary>
+		/// Holds a list of instructions, which define this operand.
+		/// </summary>
+		public List<InstructionNode> Definitions { get; private set; }
+
+		/// <summary>
+		/// Retrieves the field.
+		/// </summary>
+		public MosaField Field { get; private set; }
+
+		/// <summary>
+		/// Gets or sets the high operand.
+		/// </summary>
+		/// <value>
+		/// The high operand.
+		/// </value>
+		public Operand High { get; private set; }
+
+		/// <summary>
+		/// Gets the index.
+		/// </summary>
+		public int Index { get; private set; }
 
 		/// <summary>
 		/// Gets a value indicating whether [is 64 bit integer].
@@ -252,37 +95,18 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool Is64BitInteger { get { return IsLong; } }
 
-		/// <summary>
-		/// Gets the type of the shift.
-		/// </summary>
-		/// <value>
-		/// The type of the shift.
-		/// </value>
-		public ShiftType ShiftType { get; private set; }
+		public bool IsArray { get { return Type.IsArray; } }
+
+		public bool IsBoolean { get { return Type.IsBoolean; } }
+
+		public bool IsByte { get { return underlyingType.IsUI1; } }
+
+		public bool IsChar { get { return underlyingType.IsChar; } }
 
 		/// <summary>
-		/// Gets a value indicating whether [is constant zero].
+		/// Determines if the operand is a constant variable.
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [is constant zero]; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsConstantZero
-		{
-			get
-			{
-				if (!IsConstant)
-					return false;
-				else if (IsInteger || IsBoolean || IsChar || IsPointer)
-					return ConstantUnsignedLongInteger == 0;
-				else if (IsR8)
-					return ConstantDoubleFloatingPoint == 0;
-				else if (IsR4)
-					return ConstantSingleFloatingPoint == 0;
-				else if (IsNull)
-					return true;
-				throw new InvalidCompilerException();
-			}
-		}
+		public bool IsConstant { get; private set; }
 
 		/// <summary>
 		/// Gets a value indicating whether [is constant one].
@@ -295,9 +119,13 @@ namespace Mosa.Compiler.Framework
 		{
 			get
 			{
-				if (!IsConstant)
+				if (!IsResolvedConstant)
 					return false;
 				else if (IsInteger || IsBoolean || IsChar || IsPointer)
+					return ConstantUnsignedLongInteger == 1;
+				else if (IsStackLocal)
+					return ConstantUnsignedLongInteger == 1;
+				else if (IsParameter)
 					return ConstantUnsignedLongInteger == 1;
 				else if (IsR8)
 					return ConstantDoubleFloatingPoint == 1;
@@ -305,71 +133,269 @@ namespace Mosa.Compiler.Framework
 					return ConstantSingleFloatingPoint == 1;
 				else if (IsNull)
 					return false;
+
 				throw new InvalidCompilerException();
 			}
 		}
 
-		public bool IsR { get { return underlyingType.IsR; } }
+		/// <summary>
+		/// Gets a value indicating whether [is constant zero].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [is constant zero]; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsConstantZero
+		{
+			get
+			{
+				if (!IsResolvedConstant)
+					return false;
+				else if (IsInteger || IsBoolean || IsChar || IsPointer)
+					return ConstantUnsignedLongInteger == 0;
+				else if (IsStackLocal)
+					return ConstantUnsignedLongInteger == 0;
+				else if (IsParameter)
+					return ConstantUnsignedLongInteger == 0;
+				else if (IsR8)
+					return ConstantDoubleFloatingPoint == 0;
+				else if (IsR4)
+					return ConstantSingleFloatingPoint == 0;
+				else if (IsNull)
+					return true;
 
-		public bool IsR8 { get { return underlyingType.IsR8; } }
+				throw new InvalidCompilerException();
+			}
+		}
 
-		public bool IsR4 { get { return underlyingType.IsR4; } }
+		/// <summary>
+		/// Determines if the operand is a cpu register operand.
+		/// </summary>
+		public bool IsCPURegister { get; private set; }
 
-		public bool IsInteger { get { return underlyingType.IsInteger; } }
-
-		public bool IsSigned { get { return underlyingType.IsSigned; } }
-
-		public bool IsUnsigned { get { return underlyingType.IsUnsigned; } }
-
-		public bool IsU1 { get { return underlyingType.IsU1; } }
-
-		public bool IsI1 { get { return underlyingType.IsI1; } }
-
-		public bool IsU2 { get { return underlyingType.IsU2; } }
-
-		public bool IsI2 { get { return underlyingType.IsI2; } }
-
-		public bool IsU4 { get { return underlyingType.IsU4; } }
-
-		public bool IsI4 { get { return underlyingType.IsI4; } }
-
-		public bool IsU8 { get { return underlyingType.IsU8; } }
-
-		public bool IsI8 { get { return underlyingType.IsI8; } }
-
-		public bool IsByte { get { return underlyingType.IsUI1; } }
-
-		public bool IsShort { get { return underlyingType.IsUI2; } }
-
-		public bool IsChar { get { return underlyingType.IsChar; } }
-
-		public bool IsInt { get { return underlyingType.IsUI4; } }
-
-		public bool IsLong { get { return underlyingType.IsUI8; } }
-
-		public bool IsBoolean { get { return Type.IsBoolean; } }
-
-		public bool IsPointer { get { return Type.IsPointer; } }
-
-		public bool IsManagedPointer { get { return Type.IsManagedPointer; } }
-
-		public bool IsUnmanagedPointer { get { return Type.IsUnmanagedPointer; } }
+		/// <summary>
+		/// Determines if the operand is a runtime member operand.
+		/// </summary>
+		public bool IsStaticField { get; private set; }
 
 		public bool IsFunctionPointer { get { return Type.IsFunctionPointer; } }
 
-		public bool IsValueType { get { return underlyingType.IsValueType; } }
-
-		public bool IsArray { get { return Type.IsArray; } }
-
 		public bool IsI { get { return underlyingType.IsI; } }
 
-		public bool IsU { get { return underlyingType.IsU; } }
+		public bool IsI1 { get { return underlyingType.IsI1; } }
+
+		public bool IsI2 { get { return underlyingType.IsI2; } }
+
+		public bool IsI4 { get { return underlyingType.IsI4; } }
+
+		public bool IsI8 { get { return underlyingType.IsI8; } }
+
+		public bool IsInt { get { return underlyingType.IsUI4; } }
+
+		public bool IsInteger { get { return underlyingType.IsInteger; } }
+
+		/// <summary>
+		/// Determines if the operand is a label operand.
+		/// </summary>
+		public bool IsLabel { get; private set; }
+
+		public bool IsLong { get { return underlyingType.IsUI8; } }
+
+		public bool IsManagedPointer { get { return Type.IsManagedPointer; } }
+
+		/// <summary>
+		/// Gets a value indicating whether [is null].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [is null]; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsNull { get; private set; }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is on stack.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is on stack; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsOnStack { get { return IsStackLocal || IsParameter; } }
+
+		/// <summary>
+		/// Determines if the operand is a local variable operand.
+		/// </summary>
+		public bool IsParameter { get; private set; }
+
+		public bool IsPinned { get; private set; }
+
+		public bool IsPointer { get { return Type.IsPointer; } }
+
+		public bool IsR { get { return underlyingType.IsR; } }
+
+		public bool IsR4 { get { return underlyingType.IsR4; } }
+
+		public bool IsR8 { get { return underlyingType.IsR8; } }
 
 		public bool IsReferenceType { get { return Type.IsReferenceType; } }
 
-		private MosaType underlyingType { get { return Type.GetEnumUnderlyingType(); } }
+		public bool IsResolved { get; set; }
 
-		public bool IsPinned { get; private set; }
+		/// <summary>
+		/// Gets a value indicating whether this instance is resolved constant.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is resolved constant; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsResolvedConstant { get { return IsConstant && IsResolved; } }
+
+		/// <summary>
+		/// Determines if the operand is a shift operand.
+		/// </summary>
+		public bool IsShift { get; private set; }
+
+		public bool IsShort { get { return underlyingType.IsUI2; } }
+
+		public bool IsSigned { get { return underlyingType.IsSigned; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is split64 child.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is split64 child; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsSplitChild { get { return SplitParent != null && !IsSSA; } }
+
+		/// <summary>
+		/// Determines if the operand is a ssa operand.
+		/// </summary>
+		public bool IsSSA { get; private set; }
+
+		/// <summary>
+		/// Determines if the operand is a local stack operand.
+		/// </summary>
+		public bool IsStackLocal { get; private set; }
+
+		/// <summary>
+		/// Determines if the operand is a symbol operand.
+		/// </summary>
+		public bool IsSymbol { get; private set; }
+
+		public bool IsU { get { return underlyingType.IsU; } }
+
+		public bool IsU1 { get { return underlyingType.IsU1; } }
+
+		public bool IsU2 { get { return underlyingType.IsU2; } }
+
+		public bool IsU4 { get { return underlyingType.IsU4; } }
+
+		public bool IsU8 { get { return underlyingType.IsU8; } }
+
+		public bool IsUnmanagedPointer { get { return Type.IsUnmanagedPointer; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is unresolved constant.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is unresolved constant; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsUnresolvedConstant { get { return IsConstant && !IsResolved; } }
+
+		public bool IsUnsigned { get { return underlyingType.IsUnsigned; } }
+
+		public bool IsValueType { get { return underlyingType.IsValueType; } }
+
+		public bool IsLinkerResolved { get { return IsLabel || IsStaticField || IsSymbol; } }
+
+		/// <summary>
+		/// Determines if the operand is a virtual register operand.
+		/// </summary>
+		public bool IsVirtualRegister { get; private set; }
+
+		/// <summary>
+		/// Gets or sets the low operand.
+		/// </summary>
+		/// <value>
+		/// The low operand.
+		/// </value>
+		public Operand Low { get; private set; }
+
+		/// <summary>
+		/// Retrieves the method.
+		/// </summary>
+		public MosaMethod Method { get; private set; }
+
+		/// <summary>
+		/// Gets the name.
+		/// </summary>
+		/// <value>The name.</value>
+		public string Name { get; private set; }
+
+		/// <value>
+		/// The offset.
+		/// </value>
+		public long Offset
+		{
+			get
+			{
+				Debug.Assert(IsResolved);
+
+				return ConstantSignedLongInteger;
+			}
+			set
+			{
+				Debug.Assert(!IsResolved);
+
+				ConstantSignedLongInteger = value;
+			}
+		}
+
+		/// <summary>
+		/// Retrieves the register, where the operand is located.
+		/// </summary>
+		public Register Register { get; private set; }
+
+		/// <summary>
+		/// Gets the type of the shift.
+		/// </summary>
+		/// <value>
+		/// The type of the shift.
+		/// </value>
+		public ShiftType ShiftType { get; private set; }
+
+		/// <summary>
+		/// Gets the split64 parent.
+		/// </summary>
+		/// <value>
+		/// The split64 parent.
+		/// </value>
+		public Operand SplitParent { get; private set; }
+
+		/// <summary>
+		/// Gets the base operand.
+		/// </summary>
+		public Operand SSAParent { get; private set; }
+
+		/// <summary>
+		/// Gets the ssa version.
+		/// </summary>
+		public int SSAVersion { get; private set; }
+
+		/// <summary>
+		/// Gets the string data.
+		/// </summary>
+		/// <value>
+		/// The string data.
+		/// </value>
+		public string StringData { get; private set; }
+
+		/// <summary>
+		/// Returns the type of the operand.
+		/// </summary>
+		public MosaType Type { get; private set; }
+
+		/// <summary>
+		/// Holds a list of instructions, which use this operand.
+		/// </summary>
+		public List<InstructionNode> Uses { get; private set; }
+
+		private MosaType underlyingType { get { return Type.GetEnumUnderlyingType(); } }
 
 		#endregion Properties
 
@@ -386,11 +412,11 @@ namespace Mosa.Compiler.Framework
 			IsVirtualRegister = false;
 			IsLabel = false;
 			IsCPURegister = false;
-			IsMemoryAddress = false;
 			IsSSA = false;
 			IsSymbol = false;
-			IsField = false;
+			IsStaticField = false;
 			IsParameter = false;
+			IsResolved = false;
 		}
 
 		/// <summary>
@@ -398,7 +424,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type of the operand.</param>
 		private Operand(MosaType type)
-			: this()
+				: this()
 		{
 			Debug.Assert(type != null);
 			Type = type;
@@ -409,10 +435,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="shiftType">Type of the shift.</param>
 		private Operand(ShiftType shiftType)
-			: this()
+				: this()
 		{
 			ShiftType = shiftType;
 			IsShift = true;
+			IsResolved = true;
 		}
 
 		#endregion Construction
@@ -434,6 +461,7 @@ namespace Mosa.Compiler.Framework
 			operand.IsConstant = true;
 			operand.ConstantUnsignedLongInteger = value;
 			operand.IsNull = (type.IsReferenceType && value == 0);
+			operand.IsResolved = true;
 
 			if (type.IsReferenceType && value != 0)
 			{
@@ -487,6 +515,7 @@ namespace Mosa.Compiler.Framework
 			var operand = new Operand(typeSystem.BuiltIn.I4);
 			operand.IsConstant = true;
 			operand.ConstantSignedLongInteger = value;
+			operand.IsResolved = true;
 			return operand;
 		}
 
@@ -503,6 +532,7 @@ namespace Mosa.Compiler.Framework
 			var operand = new Operand(typeSystem.BuiltIn.I8);
 			operand.IsConstant = true;
 			operand.ConstantSignedLongInteger = value;
+			operand.IsResolved = true;
 			return operand;
 		}
 
@@ -519,6 +549,7 @@ namespace Mosa.Compiler.Framework
 			var operand = new Operand(typeSystem.BuiltIn.R4);
 			operand.IsConstant = true;
 			operand.ConstantSingleFloatingPoint = value;
+			operand.IsResolved = true;
 			return operand;
 		}
 
@@ -535,47 +566,154 @@ namespace Mosa.Compiler.Framework
 			var operand = new Operand(typeSystem.BuiltIn.R8);
 			operand.IsConstant = true;
 			operand.ConstantDoubleFloatingPoint = value;
+			operand.IsResolved = true;
 			return operand;
 		}
 
 		/// <summary>
-		/// Gets the null constant <see cref="Operand"/>.
+		/// Creates a new physical register <see cref="Operand" />.
 		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		public static Operand GetNull(TypeSystem typeSystem)
+		public static Operand CreateCPURegister(MosaType type, Register register)
 		{
-			var operand = new Operand(typeSystem.BuiltIn.Object);
-			operand.IsNull = true;
+			var operand = new Operand(type);
+			operand.IsCPURegister = true;
+			operand.Register = register;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new runtime member <see cref="Operand"/>.
+		/// </summary>
+		/// <param name="field">The field.</param>
+		/// <returns></returns>
+		public static Operand CreateField(MosaField field)
+		{
+			Debug.Assert(field.IsStatic);
+
+			var operand = new Operand(field.FieldType);
+			operand.IsStaticField = true;
+			operand.Offset = 0;
+			operand.Field = field;
+
+			//operand.IsResolved = true;
 			operand.IsConstant = true;
 			return operand;
 		}
 
 		/// <summary>
-		/// Creates the symbol.
+		/// Creates the low 32 bit portion of a 64-bit <see cref="Operand" />.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
-		/// <param name="name">The name.</param>
+		/// <param name="longOperand">The long operand.</param>
+		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static Operand CreateUnmanagedSymbolPointer(TypeSystem typeSystem, string name)
+		public static Operand CreateLowSplitForLong(TypeSystem typeSystem, Operand longOperand, int index)
 		{
-			var operand = new Operand(typeSystem.BuiltIn.Pointer);
-			operand.IsSymbol = true;
-			operand.Name = name;
+			Debug.Assert(longOperand.IsLong);
+			Debug.Assert(longOperand.SplitParent == null);
+			Debug.Assert(longOperand.Low == null);
+
+			Operand operand = null;
+
+			if (longOperand.IsParameter)
+			{
+				operand = CreateStackParameter(longOperand.Type, longOperand.Index, longOperand.Name + " (Low)");
+				operand.Offset = longOperand.Offset;
+				operand.IsResolved = true;
+				operand.ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger;
+			}
+			else if (longOperand.IsResolvedConstant)
+			{
+				operand = new Operand(typeSystem.BuiltIn.U4);
+				operand.IsConstant = true;
+				operand.IsResolved = true;
+				operand.ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger & uint.MaxValue;
+			}
+			else if (longOperand.IsVirtualRegister)
+			{
+				operand = new Operand(typeSystem.BuiltIn.U4);
+				operand.IsVirtualRegister = true;
+			}
+			else if (longOperand.IsStackLocal)
+			{
+				operand = longOperand;
+			}
+
+			Debug.Assert(operand != null);
+
+			operand.SplitParent = longOperand;
+			operand.Index = index;
+			longOperand.Low = operand;
+
 			return operand;
 		}
 
 		/// <summary>
-		/// Creates the symbol.
+		/// Creates the high 32 bit portion of a 64-bit <see cref="Operand" />.
+		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="longOperand">The long operand.</param>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public static Operand CreateHighSplitForLong(TypeSystem typeSystem, Operand longOperand, int index)
+		{
+			Debug.Assert(longOperand.IsLong);
+			Debug.Assert(longOperand.SplitParent == null || longOperand.SplitParent == longOperand);
+			Debug.Assert(longOperand.High == null);
+
+			Operand operand = null;
+
+			if (longOperand.IsParameter)
+			{
+				operand = CreateStackParameter(longOperand.Type, longOperand.Index, longOperand.Name + " (High)");
+				operand.Offset = longOperand.Offset + 4;
+				operand.IsResolved = true;
+				operand.ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger + 4;
+			}
+			else if (longOperand.IsResolvedConstant)
+			{
+				operand = new Operand(typeSystem.BuiltIn.U4);
+				operand.IsConstant = true;
+				operand.IsResolved = true;
+				operand.ConstantUnsignedLongInteger = ((uint)(longOperand.ConstantUnsignedLongInteger >> 32)) & uint.MaxValue;
+			}
+			else if (longOperand.IsVirtualRegister)
+			{
+				operand = new Operand(typeSystem.BuiltIn.U4);
+				operand.IsVirtualRegister = true;
+			}
+			else if (longOperand.IsStackLocal)
+			{
+				operand = new Operand(typeSystem.BuiltIn.U4);
+				operand.IsConstant = true;
+				operand.IsResolved = true;
+			}
+
+			Debug.Assert(operand != null);
+
+			operand.SplitParent = longOperand;
+			operand.Index = index;
+			longOperand.High = operand;
+
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new symbol <see cref="Operand" /> for the given symbol name.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		/// <param name="name">The name.</param>
+		/// <param name="label">The label.</param>
 		/// <returns></returns>
-		private static Operand CreateManagedSymbolPointer(MosaType type, string name)
+		public static Operand CreateLabel(MosaType type, string label)
 		{
-			// NOTE: Not being used
-			var operand = new Operand(type.ToManagedPointer());
-			operand.IsSymbol = true;
-			operand.Name = name;
+			var operand = new Operand(type);
+			operand.IsLabel = true;
+			operand.Name = label;
+			operand.Offset = 0;
+			operand.IsConstant = true;
 			return operand;
 		}
 
@@ -589,6 +727,78 @@ namespace Mosa.Compiler.Framework
 		{
 			var operand = new Operand(type);
 			operand.IsSymbol = true;
+			operand.Name = name;
+			operand.IsConstant = true;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the shifter.
+		/// </summary>
+		/// <param name="shiftType">Type of the shift.</param>
+		/// <returns></returns>
+		public static Operand CreateShifter(ShiftType shiftType)
+		{
+			var operand = new Operand(shiftType);
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the SSA <see cref="Operand"/>.
+		/// </summary>
+		/// <param name="ssa">The ssa operand.</param>
+		/// <param name="version">The ssa version.</param>
+		/// <returns></returns>
+		public static Operand CreateSSA(Operand ssa, int version)
+		{
+			Debug.Assert(ssa.IsVirtualRegister);
+			Debug.Assert(!ssa.IsConstant);
+			Debug.Assert(!ssa.IsParameter);
+			Debug.Assert(!ssa.IsStackLocal);
+			Debug.Assert(!ssa.IsCPURegister);
+			Debug.Assert(!ssa.IsLabel);
+			Debug.Assert(!ssa.IsSymbol);
+			Debug.Assert(!ssa.IsStaticField);
+
+			var operand = new Operand(ssa.Type);
+			operand.IsVirtualRegister = true;
+			operand.IsSSA = true;
+			operand.SSAParent = ssa;
+			operand.SSAVersion = version;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the stack local.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="index">The index.</param>
+		/// <param name="pinned">if set to <c>true</c> [pinned].</param>
+		/// <returns></returns>
+		public static Operand CreateStackLocal(MosaType type, int index, bool pinned)
+		{
+			var operand = new Operand(type);
+			operand.Index = index;
+			operand.IsStackLocal = true;
+			operand.IsConstant = true;
+			operand.IsPinned = pinned;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the stack parameter.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="index">The index.</param>
+		/// <param name="offset">The displacement.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public static Operand CreateStackParameter(MosaType type, int index, string name)
+		{
+			var operand = new Operand(type);
+			operand.IsParameter = true;
+			operand.Index = index;
+			operand.IsConstant = true;
 			operand.Name = name;
 			return operand;
 		}
@@ -608,6 +818,7 @@ namespace Mosa.Compiler.Framework
 			operand.IsSymbol = true;
 			operand.Name = name;
 			operand.StringData = data;
+			operand.IsConstant = true;
 			return operand;
 		}
 
@@ -621,6 +832,22 @@ namespace Mosa.Compiler.Framework
 		{
 			var operand = CreateUnmanagedSymbolPointer(typeSystem, method.FullName);
 			operand.Method = method;
+			operand.IsConstant = true;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the symbol.
+		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public static Operand CreateUnmanagedSymbolPointer(TypeSystem typeSystem, string name)
+		{
+			var operand = new Operand(typeSystem.BuiltIn.Pointer);
+			operand.IsSymbol = true;
+			operand.Name = name;
+			operand.IsConstant = true;
 			return operand;
 		}
 
@@ -639,287 +866,31 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a new virtual register <see cref="Operand" />.
+		/// Gets the null constant <see cref="Operand"/>.
+		/// </summary>
+		/// <returns></returns>
+		public static Operand GetNull(TypeSystem typeSystem)
+		{
+			var operand = new Operand(typeSystem.BuiltIn.Object);
+			operand.IsNull = true;
+			operand.IsConstant = true;
+			operand.IsResolved = true;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the symbol.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		/// <param name="index">The index.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public static Operand CreateVirtualRegister(MosaType type, int index, string name)
+		private static Operand CreateManagedSymbolPointer(MosaType type, string name)
 		{
-			var operand = new Operand(type);
-			operand.IsVirtualRegister = true;
+			// NOTE: Not being used
+			var operand = new Operand(type.ToManagedPointer());
+			operand.IsSymbol = true;
 			operand.Name = name;
-			operand.Index = index;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new physical register <see cref="Operand" />.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="register">The register.</param>
-		/// <returns></returns>
-		public static Operand CreateCPURegister(MosaType type, Register register)
-		{
-			var operand = new Operand(type);
-			operand.IsCPURegister = true;
-			operand.Register = register;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new memory address <see cref="Operand" />.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="offsetBase">The base register.</param>
-		/// <param name="offset">The offset.</param>
-		/// <returns></returns>
-		public static Operand CreateMemoryAddress(MosaType type, Operand offsetBase, long offset)
-		{
-			var operand = new Operand(type);
-			operand.IsMemoryAddress = true;
-			operand.OffsetBase = offsetBase;
-			operand.Displacement = offset;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new symbol <see cref="Operand" /> for the given symbol name.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="label">The label.</param>
-		/// <returns></returns>
-		public static Operand CreateLabel(MosaType type, string label)
-		{
-			var operand = new Operand(type);
-			operand.IsMemoryAddress = true;
-			operand.IsLabel = true;
-			operand.Name = label;
-			operand.Displacement = 0;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new runtime member <see cref="Operand"/>.
-		/// </summary>
-		/// <param name="field">The field.</param>
-		/// <returns></returns>
-		public static Operand CreateField(MosaField field)
-		{
-			var operand = new Operand(field.FieldType);
-			operand.IsMemoryAddress = true;
-			operand.IsField = true;
-			operand.Displacement = 0;
-			operand.Field = field;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates a new local variable <see cref="Operand" />.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="register">The register.</param>
-		/// <param name="displacement">The displacement.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		public static Operand CreateParameter(MosaType type, Register register, int displacement, int index, string name)
-		{
-			var operand = new Operand(type);
-			operand.IsMemoryAddress = true;
-			operand.IsParameter = true;
-			operand.Register = register;
-			operand.Index = index;
-			operand.Displacement = displacement;
-			operand.Name = name;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates the stack local.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="register">The register.</param>
-		/// <param name="index">The index.</param>
-		/// <param name="pinned">if set to <c>true</c> [pinned].</param>
-		/// <returns></returns>
-		public static Operand CreateStackLocal(MosaType type, Register register, int index, bool pinned)
-		{
-			var operand = new Operand(type);
-			operand.IsMemoryAddress = true;
-			operand.Register = register;
-			operand.Index = index;
-			operand.IsStackLocal = true;
-			operand.IsPinned = pinned;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates the stack local.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="index">The index.</param>
-		/// <param name="pinned">if set to <c>true</c> [pinned].</param>
-		/// <returns></returns>
-		public static Operand CreateStackLocal(MosaType type, int index, bool pinned)
-		{
-			var operand = new Operand(type);
-			operand.Index = index;
-			operand.IsStackLocal = true;
-			operand.IsPinned = pinned;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates the SSA <see cref="Operand"/>.
-		/// </summary>
-		/// <param name="ssaOperand">The ssa operand.</param>
-		/// <param name="ssaVersion">The ssa version.</param>
-		/// <returns></returns>
-		public static Operand CreateSSA(Operand ssaOperand, int ssaVersion)
-		{
-			var operand = new Operand(ssaOperand.Type);
-			operand.IsParameter = ssaOperand.IsParameter;
-			operand.IsStackLocal = ssaOperand.IsStackLocal;
-			operand.IsShift = ssaOperand.IsShift;
-			operand.IsConstant = ssaOperand.IsConstant;
-			operand.IsVirtualRegister = ssaOperand.IsVirtualRegister;
-			operand.IsLabel = ssaOperand.IsLabel;
-			operand.IsCPURegister = ssaOperand.IsCPURegister;
-			operand.IsMemoryAddress = ssaOperand.IsMemoryAddress;
-			operand.IsSymbol = ssaOperand.IsSymbol;
-			operand.IsField = ssaOperand.IsField;
-			operand.IsParameter = ssaOperand.IsParameter;
-			operand.IsSSA = true;
-			operand.SSAParent = ssaOperand;
-			operand.SSAVersion = ssaVersion;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates the low 32 bit portion of a 64-bit <see cref="Operand"/>.
-		/// </summary>
-		/// <param name="longOperand">The long operand.</param>
-		/// <param name="offset">The offset.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		public static Operand CreateLowSplitForLong(TypeSystem typeSystem, Operand longOperand, int offset, int index)
-		{
-			Debug.Assert(longOperand.IsLong);
-
-			Debug.Assert(longOperand.SplitParent == null);
-			Debug.Assert(longOperand.Low == null);
-
-			Operand operand;
-
-			if (longOperand.IsConstant)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsConstant = true;
-				operand.ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger & uint.MaxValue;
-			}
-			else if (longOperand.IsField)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsMemoryAddress = true;
-				operand.IsField = true;
-				operand.Field = longOperand.Field;
-				operand.Type = longOperand.Type;
-				operand.OffsetBase = longOperand.OffsetBase;
-				operand.Displacement = longOperand.Displacement + offset;
-				operand.Register = longOperand.Register;
-			}
-			else if (longOperand.IsMemoryAddress)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsMemoryAddress = true;
-				operand.OffsetBase = longOperand.OffsetBase;
-				operand.Displacement = longOperand.Displacement + offset;
-				operand.Register = longOperand.Register;
-			}
-			else
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsVirtualRegister = true;
-			}
-
-			operand.SplitParent = longOperand;
-
-			Debug.Assert(longOperand.Low == null);
-			longOperand.Low = operand;
-
-			operand.Index = index;
-
-			//operand.sequence = index;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates the high 32 bit portion of a 64-bit <see cref="Operand"/>.
-		/// </summary>
-		/// <param name="longOperand">The long operand.</param>
-		/// <param name="offset">The offset.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		public static Operand CreateHighSplitForLong(TypeSystem typeSystem, Operand longOperand, int offset, int index)
-		{
-			Debug.Assert(longOperand.IsLong);
-
-			Debug.Assert(longOperand.SplitParent == null);
-			Debug.Assert(longOperand.High == null);
-
-			Operand operand;
-
-			if (longOperand.IsConstant)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsConstant = true;
-				operand.ConstantUnsignedLongInteger = ((uint)(longOperand.ConstantUnsignedLongInteger >> 32)) & uint.MaxValue;
-			}
-			else if (longOperand.IsField)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsMemoryAddress = true;
-				operand.IsField = true;
-				operand.Field = longOperand.Field;
-				operand.Type = longOperand.Type;
-				operand.OffsetBase = longOperand.OffsetBase;
-				operand.Displacement = longOperand.Displacement + offset;
-				operand.Register = longOperand.Register;
-			}
-			else if (longOperand.IsMemoryAddress)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsMemoryAddress = true;
-				operand.OffsetBase = longOperand.OffsetBase;
-				operand.Displacement = longOperand.Displacement + offset;
-				operand.Register = longOperand.Register;
-			}
-			else
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4);
-				operand.IsVirtualRegister = true;
-			}
-
-			operand.SplitParent = longOperand;
-
-			//operand.SplitParent = longOperand;
-
-			Debug.Assert(longOperand.High == null);
-			longOperand.High = operand;
-
-			operand.Index = index;
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates the shifter.
-		/// </summary>
-		/// <param name="shiftType">Type of the shift.</param>
-		/// <returns></returns>
-		public static Operand CreateShifter(ShiftType shiftType)
-		{
-			var operand = new Operand(shiftType);
+			operand.IsConstant = true;
 			return operand;
 		}
 
@@ -947,92 +918,67 @@ namespace Mosa.Compiler.Framework
 			if (IsVirtualRegister)
 			{
 				sb.AppendFormat("V_{0}", Index);
+
+				if (IsSplitChild)
+				{
+					sb.AppendFormat(" <V_{0}_{1}>", SplitParent.Index, (SplitParent.High == this) ? "High" : "Low");
+				}
+			}
+			else if (IsParameter)
+			{
+				sb.AppendFormat("P_{0} ", Index);
 			}
 			else if (IsStackLocal && Name == null)
 			{
 				sb.AppendFormat("T_{0}", Index);
 			}
-			else if (IsParameter && Name == null)
+			else if (IsStaticField)
 			{
-				sb.AppendFormat("P_{0}", Index);
-			}
-
-			if (Name != null)
-			{
-				sb.Append(Name);
-				sb.Append(' ');
-			}
-
-			if (IsField)
-			{
-				sb.Append(' ');
+				sb.Append(" <");
 				sb.Append(Field.FullName);
+				sb.Append("> ");
 			}
-
-			if (IsSplitChild)
+			else if (Name != null)
 			{
-				sb.Append(' ');
-
-				sb.Append("(" + SplitParent.ToString(full) + ")");
-
-				if (SplitParent.High == this)
-					sb.Append("/high");
-				else
-					sb.Append("/low");
+				sb.Append(" <");
+				sb.Append(Name);
+				sb.Append("> ");
 			}
 
 			if (IsConstant)
 			{
-				sb.Append(" const {");
+				sb.Append(" const=");
 
-				if (IsNull)
+				if (!IsResolved)
+					sb.Append("unresolved");
+				else if (IsNull)
 					sb.Append("null");
+				else if (IsOnStack)
+					sb.AppendFormat("{0}", ConstantSignedLongInteger);
 				else if (IsUnsigned || IsBoolean || IsChar || IsPointer)
+				{
 					if (IsU8)
 						sb.AppendFormat("{0}", ConstantUnsignedLongInteger);
 					else
 						sb.AppendFormat("{0}", ConstantUnsignedInteger);
+				}
 				else if (IsSigned)
+				{
 					if (IsI8)
 						sb.AppendFormat("{0}", ConstantSignedLongInteger);
 					else
 						sb.AppendFormat("{0}", ConstantSignedInteger);
-				if (IsR8)
+				}
+				else if (IsR8)
 					sb.AppendFormat("{0}", ConstantDoubleFloatingPoint);
 				else if (IsR4)
 					sb.AppendFormat("{0}", ConstantSingleFloatingPoint);
 
-				sb.Append('}');
+				sb.Append(' ');
 			}
-
-			if (IsCPURegister)
+			else if (IsCPURegister)
 			{
 				sb.AppendFormat(" {0}", Register);
-			}
-			else if (IsMemoryAddress)
-			{
-				sb.Append(' ');
-				if (OffsetBase != null)
-				{
-					if (Displacement > 0)
-						sb.AppendFormat("[{0}+{1:X}h]", OffsetBase.ToString(full), Displacement);
-					else
-						sb.AppendFormat("[{0}-{1:X}h]", OffsetBase.ToString(full), -Displacement);
-				}
-				else if (Register != null)
-				{
-					if (Displacement > 0)
-						sb.AppendFormat("[{0}+{1:X}h]", Register.ToString(), Displacement);
-					else
-						sb.AppendFormat("[{0}-{1:X}h]", Register.ToString(), -Displacement);
-				}
-				else if (IsField && IsSplitChild)
-				{
-					if (Displacement > 0)
-						sb.AppendFormat("+{0:X}h", Displacement);
-					else
-						sb.AppendFormat("-{0:X}h", -Displacement);
-				}
 			}
 
 			if (full)
@@ -1045,6 +991,7 @@ namespace Mosa.Compiler.Framework
 				{
 					sb.AppendFormat(" [O]");
 				}
+				else
 				{
 					sb.AppendFormat(" [{0}]", ShortenTypeName(Type.FullName));
 				}
@@ -1104,6 +1051,11 @@ namespace Mosa.Compiler.Framework
 			}
 
 			return value;
+		}
+
+		internal void RenameIndex(int index)
+		{
+			Index = index;
 		}
 
 		#region Object Overrides

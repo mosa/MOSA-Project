@@ -4,30 +4,24 @@ namespace Mosa.Kernel.x86
 {
 	public static class Address
 	{
-		public const uint PageDirectory = 0x00200000; // 2MB Offset 0KB - Size 64KB
-		public const uint GDTTable = 0x00210000; // 2MB Offset 64KB - Size 64KB
-		public const uint IDTTable = 0x00220000; // 2MB Offset 128KB - Size 64KB
-		public const uint ProcessSlots = 0x00230000; // 2MB Offset 192KB - Size 64KB
-		public const uint TaskSlots = 0x00240000; // 2MB Offset 256KB - Size 320KB
+		public const uint InitialStack = 0x000F0000; // ???KB (stack grows down)
 
-		public const uint PageFrameAllocator = 0x00C00000; // 12MB
-		public const uint PageTable = 0x01000000; // 16MB
+		public const uint PageDirectory = 0x00B00000;  // 12MB [Size=4KB]
+		public const uint GDTTable = 0x00B10000;  // 12MB+ [Size=1KB]
+		public const uint IDTTable = 0x00B11000;  // 12MB+ [Size=1KB]
 
-		public const uint TSS = 0x0; // TODO
-		public const uint TSSSize = 0x68;
+		public const uint PageFrameAllocator = 0x00C00000;  // 13MB [Size=4MB]
+		public const uint PageTable = 0x01000000;  // 16MB [Size=4MB]
+		public const uint VirtualPageAllocator = 0x01400000;  // 20MB [Size=32KB]
 
-		public const uint VirtualPageAllocator = 0x01400000; // 20MB
+		public const uint GCInitialMemory = 0x03000000;  // 48MB [Size=16MB]
+		public const uint GCInitialMemory_BootLoader = 0x02000000;  // 32MB [Size=16MB]
 
-		public const uint GCInitialMemory = 0x02000000; // 8MB
+		public const uint ReserveMemory = 0x08000000;  // 128MB
+		public const uint MaximumMemory = 0xFFFFFFFF;  // 4GB
 
-		public const uint ReserveMemory = 0x03000000; // 48MB
-		public const uint MaximumMemory = 0xFFFFFFFF; // 4GB
-
-		public const uint DebuggerBuffer = 0x00001000;
-
-		public const uint UnitTestStack = 0x00002000;   // 8K (stack grows down)
-
-		public const uint UnitTestQueueStart = 0x00004000;
-		public const uint UnitTestQueueEnd = 0x00005000;
+		public const uint UnitTestStack = 0x00004000;  // 4KB (stack grows down)
+		public const uint UnitTestQueue = 0x00005000;  // 5KB [Size=1KB]
+		public const uint DebuggerBuffer = 0x00010000;  // 16KB [Size=64KB]
 	}
 }

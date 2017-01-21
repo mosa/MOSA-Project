@@ -1,7 +1,5 @@
 [![Build status][build-status-image]][build-status]   [![License][github-license]][github-license-link]  [![Issues][github-issues]][github-issues-link]  [![Stars][github-stars]][github-stars-link]  [![Forks][github-forks]][github-forks-link]  [![Gitter Chat][gitter-image]][gitter-chat]
 
-[![Issue Stats][pull-requests-image]][pull-requests]  [![Issue Stats][issues-closed-image]][issues-closed]
-
 [![Bountysource][bounty-image]][bounty-issues]  
 
 [build-status-image]: https://ci.appveyor.com/api/projects/status/gmeosk7sa6su8rb3/branch/master?svg=true
@@ -70,8 +68,15 @@ The [EditorConfig](http://editorconfig.org/) plugin is recommended for MOSA cont
 
 **Linux**
 
+
+
 Install [Mono](http://www.mono-project.com) and [Qemu](http://wiki.qemu.org/Main_Page).
 
+The minimum supported version of Mono is 4.4, this is not in some distributions repositories and must be added manually.
+A tutorial on how to do this can be found at the following URL.
+[http://www.mono-project.com/download/#download-lin](http://www.mono-project.com/download/#download-lin)
+
+If using the APT package manager you can use the following command to quickly set up QEMU and Mono
 <pre>
 sudo apt-get -y install mono-devel qemu
 </pre>

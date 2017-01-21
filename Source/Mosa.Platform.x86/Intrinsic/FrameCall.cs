@@ -21,10 +21,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand methodAddress = context.Operand1;
 			Operand newESP = context.Operand2;
 
-			Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
-			Operand edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-
-			context.AppendInstruction(X86.Call, null, methodAddress);
+			context.SetInstruction(X86.Call, null, methodAddress);
 		}
 
 		#endregion Methods

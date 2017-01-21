@@ -14,7 +14,7 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <RootNamespace>Mosa.Compiler.Framework</RootNamespace>
     <FileUpgradeFlags>
@@ -100,12 +100,44 @@
     <Compile Include="Intrinsics\GetObjectFromAddress.cs" />
     <Compile Include="Intrinsics\Load64.cs" />
     <Compile Include="Intrinsics\InternalsForArray.cs" />
+    <Compile Include="IR\AddFloatR4.cs" />
+    <Compile Include="IR\BaseStoreParameterInstruction.cs" />
+    <Compile Include="IR\LoadParameterCompound.cs" />
+    <Compile Include="IR\LoadParameterFloatR4.cs" />
+    <Compile Include="IR\LoadParameterFloatR8.cs" />
+    <Compile Include="IR\LoadParameterInteger.cs" />
+    <Compile Include="IR\LoadParameterSignExtended.cs" />
+    <Compile Include="IR\LoadParameterZeroExtended.cs" />
+    <Compile Include="IR\StableObjectTracking.cs" />
+    <Compile Include="IR\StoreParameterCompound.cs" />
+    <Compile Include="IR\StoreParameterFloatR4.cs" />
+    <Compile Include="IR\StoreParameterFloatR8.cs" />
+    <Compile Include="IR\StoreParameterInteger.cs" />
+    <Compile Include="IR\BaseLoadParameterInstruction.cs" />
+    <Compile Include="IR\UnstableObjectTracking.cs" />
+    <Compile Include="IR\MoveInteger.cs" />
+    <Compile Include="IR\MoveFloatR8.cs" />
+    <Compile Include="IR\MoveFloatR4.cs" />
+    <Compile Include="IR\ConversionFloatR8ToFloatR4.cs" />
+    <Compile Include="IR\ConversionFloatR4ToFloatR8.cs" />
+    <Compile Include="IR\DivFloatR8.cs" />
     <Compile Include="IR\FilterEnd.cs" />
     <Compile Include="IR\FilterStart.cs" />
-    <Compile Include="IR\Load2.cs" />
+    <Compile Include="IR\CompareFloatR4.cs" />
+    <Compile Include="IR\CompareFloatR8.cs" />
+    <Compile Include="IR\ConversionFloatR8ToInteger.cs" />
+    <Compile Include="IR\ConversionIntegerToFloatR4.cs" />
+    <Compile Include="IR\LoadFloatR4.cs" />
+    <Compile Include="IR\LoadFloatR8.cs" />
+    <Compile Include="IR\MulFloatR8.cs" />
+    <Compile Include="IR\RemFloatR8.cs" />
     <Compile Include="IR\SetLeaveTarget.cs" />
     <Compile Include="IR\KillAllExcept.cs" />
     <Compile Include="IR\Flow.cs" />
+    <Compile Include="IR\StoreInteger.cs" />
+    <Compile Include="IR\StoreFloatR4.cs" />
+    <Compile Include="IR\StoreFloatR8.cs" />
+    <Compile Include="IR\SubFloatR8.cs" />
     <Compile Include="MosaCompiler.cs" />
     <Compile Include="InstructionSize.cs" />
     <Compile Include="Intrinsics\GetObjectAddress.cs" />
@@ -124,9 +156,9 @@
     <Compile Include="IR\FinallyStart.cs" />
     <Compile Include="IR\Kill.cs" />
     <Compile Include="IR\Gen.cs" />
-    <Compile Include="IR\CompoundLoad.cs" />
-    <Compile Include="IR\CompoundMove.cs" />
-    <Compile Include="IR\CompoundStore.cs" />
+    <Compile Include="IR\LoadCompound.cs" />
+    <Compile Include="IR\MoveCompound.cs" />
+    <Compile Include="IR\StoreCompound.cs" />
     <Compile Include="Analysis\IBlockOrderAnalysis.cs" />
     <Compile Include="Metadata.cs">
       <SubType>
@@ -165,12 +197,10 @@
     <Compile Include="Stages\SparseConditionalConstantPropagationStage.cs" />
     <Compile Include="Stages\MethodExceptionLookupTableStage.cs" />
     <Compile Include="Stages\MethodLookupTableStage.cs" />
-    <Compile Include="Stages\PromoteTempVariablesStage.cs" />
     <Compile Include="Stages\ProtectedRegionLayoutStage.cs" />
     <Compile Include="Stages\ExceptionStage.cs" />
-    <Compile Include="Stages\ConvertCompoundStage.cs" />
     <Compile Include="Stages\MapFileGenerationStage.cs" />
-    <Compile Include="Stages\PromoteLocalVariablesStage.cs" />
+    <Compile Include="Stages\StackSlotStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />
     <Compile Include="Stages\EmptyBlockRemovalStage.cs" />
@@ -195,6 +225,7 @@
     <Compile Include="Stages\TypeInitializerSchedulerStage.cs" />
     <Compile Include="MosaTypeLayout.cs" />
     <Compile Include="Stages\UnboxValueTypeStage.cs" />
+    <Compile Include="Stages\VirtualRegisterRenameStage.cs" />
     <Compile Include="VirtualRegisters.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
     <Compile Include="BaseInstruction.cs" />
@@ -220,7 +251,6 @@
     <Compile Include="BaseCompilerStage.cs" />
     <Compile Include="Platform\BasePlatformInstruction.cs" />
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
-    <Compile Include="StackLayout.cs" />
     <Compile Include="Stages\PlugStage.cs" />
     <Compile Include="Stages\CILProtectedRegionStage.cs" />
     <Compile Include="IR\ExceptionStart.cs" />
@@ -234,20 +264,20 @@
     <Compile Include="Stages\StaticAllocationResolutionStage.cs" />
     <Compile Include="IR\Throw.cs" />
     <Compile Include="Intrinsics\InternalAllocateString.cs" />
-    <Compile Include="IR\AddFloat.cs" />
+    <Compile Include="IR\AddFloatR8.cs" />
     <Compile Include="IR\AddSigned.cs" />
     <Compile Include="IR\AddUnsigned.cs" />
     <Compile Include="IR\Break.cs" />
-    <Compile Include="IR\DivFloat.cs" />
+    <Compile Include="IR\DivFloatR4.cs" />
     <Compile Include="IR\DivSigned.cs" />
     <Compile Include="IR\DivUnsigned.cs" />
-    <Compile Include="IR\MulFloat.cs" />
+    <Compile Include="IR\MulFloatR4.cs" />
     <Compile Include="IR\MulSigned.cs" />
     <Compile Include="IR\MulUnsigned.cs" />
-    <Compile Include="IR\RemFloat.cs" />
+    <Compile Include="IR\RemFloatR4.cs" />
     <Compile Include="IR\RemSigned.cs" />
     <Compile Include="IR\RemUnsigned.cs" />
-    <Compile Include="IR\SubFloat.cs" />
+    <Compile Include="IR\SubFloatR4.cs" />
     <Compile Include="IR\SubSigned.cs" />
     <Compile Include="IR\SubUnsigned.cs" />
     <Compile Include="IR\Switch.cs" />
@@ -333,30 +363,27 @@
     <Compile Include="IR\Nop.cs" />
     <Compile Include="IR\IRInstruction.cs" />
     <Compile Include="IR\Epilogue.cs" />
-    <Compile Include="IR\FloatCompare.cs" />
-    <Compile Include="IR\FloatToIntegerConversion.cs" />
-    <Compile Include="IR\IntegerCompareBranch.cs" />
-    <Compile Include="IR\IntegerCompare.cs" />
-    <Compile Include="IR\IntegerToFloatConversion.cs" />
+    <Compile Include="IR\ConversionFloatR4ToInteger.cs" />
+    <Compile Include="IR\CompareIntegerBranch.cs" />
+    <Compile Include="IR\CompareInteger.cs" />
+    <Compile Include="IR\ConversionIntegerToFloatR8.cs" />
     <Compile Include="IR\BaseIRInstruction.cs" />
     <Compile Include="IR\Jmp.cs" />
-    <Compile Include="IR\Load.cs" />
+    <Compile Include="IR\LoadInteger.cs" />
     <Compile Include="IR\LogicalAnd.cs" />
     <Compile Include="IR\LogicalNot.cs" />
     <Compile Include="IR\LogicalOr.cs" />
     <Compile Include="IR\LogicalXor.cs" />
-    <Compile Include="IR\Move.cs" />
-    <Compile Include="IR\OneOperandInstruction.cs" />
+    <Compile Include="IR\BaseOneOperandInstruction.cs" />
     <Compile Include="IR\Phi.cs" />
     <Compile Include="IR\Prologue.cs" />
     <Compile Include="IR\Return.cs" />
     <Compile Include="IR\ShiftLeft.cs" />
     <Compile Include="IR\ShiftRight.cs" />
-    <Compile Include="IR\SignExtendedMove.cs" />
-    <Compile Include="IR\Store.cs" />
-    <Compile Include="IR\ThreeOperandInstruction.cs" />
-    <Compile Include="IR\TwoOperandInstruction.cs" />
-    <Compile Include="IR\ZeroExtendedMove.cs" />
+    <Compile Include="IR\MoveSignExtended.cs" />
+    <Compile Include="IR\BaseThreeOperandInstruction.cs" />
+    <Compile Include="IR\BaseTwoOperandInstruction.cs" />
+    <Compile Include="IR\MoveZeroExtended.cs" />
     <Compile Include="CIL\NopInstruction.cs" />
     <Compile Include="InstructionNode.cs" />
     <Compile Include="CIL\BaseCILInstruction.cs" />

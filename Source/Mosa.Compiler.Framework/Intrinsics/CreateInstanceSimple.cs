@@ -22,7 +22,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var result = context.Result;
 
 			context.SetInstruction(IRInstruction.Call, null, ctor, thisObject);
-			context.AppendInstruction(IRInstruction.Move, result, thisObject);
+			context.AppendInstruction(IRInstruction.MoveInteger, result, thisObject);
 		}
 
 		#endregion Methods

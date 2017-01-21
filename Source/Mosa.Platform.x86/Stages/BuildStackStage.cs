@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Stages
 			if (IsPlugged)
 				return;
 
-			Debug.Assert((MethodCompiler.StackLayout.StackSize % 4) == 0, @"Stack size of interrupt can't be divided by 4!!");
+			Debug.Assert((MethodCompiler.StackSize % 4) == 0, @"Stack size of interrupt can't be divided by 4!!");
 
 			UpdatePrologue();
 			UpdateEpilogue();
@@ -70,9 +70,9 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Push, null, ebp);
 			context.AppendInstruction(X86.Mov, ebp, esp);
 
-			if (MethodCompiler.StackLayout.StackSize != 0)
+			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(TypeSystem, -MethodCompiler.StackLayout.StackSize));
+				context.AppendInstruction(X86.Sub, esp, esp, Operand.CreateConstant(TypeSystem, -MethodCompiler.StackSize));
 			}
 		}
 
@@ -87,9 +87,9 @@ namespace Mosa.Platform.x86.Stages
 
 			context.Empty();
 
-			if (MethodCompiler.StackLayout.StackSize != 0)
+			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(TypeSystem, -MethodCompiler.StackLayout.StackSize));
+				context.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(TypeSystem, -MethodCompiler.StackSize));
 			}
 
 			context.AppendInstruction(X86.Pop, ebp);

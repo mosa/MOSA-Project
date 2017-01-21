@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mosa.Utility.DebugEngine</RootNamespace>
     <AssemblyName>Mosa.Utility.DebugEngine</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectGuid>{5B810793-78E2-413C-AA05-FCDD12B7DB04}</ProjectGuid>
     <TargetFrameworkProfile />
@@ -46,6 +46,12 @@
     <Compile Include="DebugNetworkStream.cs" />
     <Compile Include="DebugServerEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
+      <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
+      <Name>Mosa.ClassLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

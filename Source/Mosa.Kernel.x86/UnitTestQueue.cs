@@ -9,33 +9,34 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class UnitTestQueue
 	{
-		private static uint queueNext = Address.UnitTestQueueStart;
-		private static uint queueCurrent = Address.UnitTestQueueStart;
+		private static uint queueNext = Address.UnitTestQueue;
+		private static uint queueCurrent = Address.UnitTestQueue;
 		private static uint count = 0;
 		private static uint tick = 0;
 
+		private static uint TestQueueSize = 0x00001000;
+
 		public static void Setup()
 		{
-			queueNext = Address.UnitTestQueueStart;
-			queueCurrent = Address.UnitTestQueueStart;
+			queueNext = Address.UnitTestQueue;
+			queueCurrent = Address.UnitTestQueue;
 			count = 0;
 
 			Native.Set32(queueNext, 0);
 		}
 
-		public static bool QueueUnitTest(int id, uint start, uint end)
+		public static bool QueueUnitTest(uint id, uint start, uint end)
 		{
 			uint len = end - start;
-
-			if (queueNext + len + 32 >= Address.UnitTestQueueEnd)
+			if (queueNext + len + 32 >= Address.UnitTestQueue + TestQueueSize)
 			{
-				if (Address.UnitTestQueueStart + len + 32 >= queueCurrent)
+				if (Address.UnitTestQueue + len + 32 >= queueCurrent)
 					return false; // no space
 
 				Native.Set32(queueNext, uint.MaxValue); // mark jump to front
 
 				// cycle to front
-				queueNext = Address.UnitTestQueueStart;
+				queueNext = Address.UnitTestQueue;
 			}
 
 			Native.Set32(queueNext, len + 4);
@@ -71,7 +72,7 @@ namespace Mosa.Kernel.x86
 
 			if (marker == uint.MaxValue)
 			{
-				queueCurrent = Address.UnitTestQueueStart;
+				queueCurrent = Address.UnitTestQueue;
 			}
 
 			uint len = Native.Get32(queueCurrent);
@@ -93,21 +94,23 @@ namespace Mosa.Kernel.x86
 			queueCurrent = queueCurrent + len + 4;
 			--count;
 
-			Screen.Row = 10;
-			Screen.Column = 0;
-			Screen.Write("Test:");
-			Screen.Write(" ID: ");
-			Screen.Write(id, 10, 7);
+			Screen.Goto(17, 0);
+			Screen.ClearRow();
+			Screen.Write("[Unit Test]");
+			Screen.NextLine();
+			Screen.ClearRow();
+			Screen.Write("ID: ");
+			Screen.Write(id, 10, 5);
 			Screen.Write(" Address: ");
 			Screen.Write(address, 16, 8);
 			Screen.Write(" Param: ");
-			Screen.Write(paramcnt, 16, 2);
+			Screen.Write(paramcnt, 10, 2);
 			Screen.Write(" Len: ");
-			Screen.Write(len, 16, 8);
+			Screen.Write(len, 10, 4);
 			Screen.Write(" - Cnt: ");
 			Screen.Write(count, 10, 4);
 
-			UnitTestRunner.StartTest((int)id);
+			UnitTestRunner.StartTest(id);
 		}
 	}
 }

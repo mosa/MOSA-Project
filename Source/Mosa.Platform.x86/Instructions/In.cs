@@ -76,11 +76,11 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (node.Operand1.IsConstant)
 			{
-				emitter.Emit(opCode, node.Operand1, null);
+				emitter.Emit(opCode, node.Operand1);
 			}
 			else
 			{
-				emitter.Emit(opCode, null, null);
+				emitter.Emit(opCode);
 			}
 		}
 

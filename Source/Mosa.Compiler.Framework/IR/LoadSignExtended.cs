@@ -8,12 +8,12 @@ namespace Mosa.Compiler.Framework.IR
 	/// <remarks>
 	/// The load instruction is used to load a value from a memory pointer and an offset. The types must be compatible.
 	/// </remarks>
-	public sealed class LoadSignExtended : ThreeOperandInstruction
+	public sealed class LoadSignExtended : BaseThreeOperandInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Load"/>.
+		/// Initializes a new instance of <see cref="LoadSignExtended"/>.
 		/// </summary>
 		public LoadSignExtended()
 		{

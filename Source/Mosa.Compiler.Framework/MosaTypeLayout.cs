@@ -101,11 +101,11 @@ namespace Mosa.Compiler.Framework
 		/// <param name="nativePointerAlignment">The native pointer alignment.</param>
 		public MosaTypeLayout(TypeSystem typeSystem, int nativePointerSize, int nativePointerAlignment)
 		{
+			Debug.Assert(nativePointerSize == 4 || nativePointerSize == 8);
+
 			NativePointerAlignment = nativePointerAlignment;
 			NativePointerSize = nativePointerSize;
 			TypeSystem = typeSystem;
-
-			Debug.Assert(nativePointerSize >= 4);
 
 			ResolveLayouts();
 		}

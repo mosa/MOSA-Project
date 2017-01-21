@@ -27,6 +27,11 @@ namespace Mosa.UnitTest.Collection
 			public valuetype content;
 		}
 
+		private struct valuewrapper
+		{
+			public valuetype content;
+		}
+
 		public static bool TestValueTypeVariable()
 		{
 			valuetype p = new valuetype();
@@ -62,6 +67,21 @@ namespace Mosa.UnitTest.Collection
 			wrapper obj = new wrapper();
 			obj.content = p;
 			return obj.content.a == 1 && obj.content.b == 7 & obj.content.c == 21 && obj.content.d == 171;
+		}
+
+		public static bool TestNestedValueTypeField()
+		{
+			valuetype p = new valuetype();
+			p.a = 1;
+			p.b = 7;
+			p.c = 21;
+			p.d = 171;
+
+			valuewrapper val = new valuewrapper();
+			val.content = p;
+
+			valuetype r = val.content;
+			return r.a == 1 && r.b == 7 & r.c == 21 && r.d == 171;
 		}
 
 		private static bool ParameterOk(valuetype p)

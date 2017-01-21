@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\xunit.runner.visualstudio.2.2.0-beta1-build1144\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.2.0-beta1-build1144\build\net20\xunit.runner.visualstudio.props')" />
+  <Import Project="..\packages\xunit.runner.visualstudio.2.2.0-beta3-build1187\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\packages\xunit.runner.visualstudio.2.2.0-beta3-build1187\build\net20\xunit.runner.visualstudio.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mosa.UnitTest.Collection.xUnit</RootNamespace>
     <AssemblyName>Mosa.UnitTest.Collection.xUnit</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
@@ -43,19 +43,19 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.abstractions.2.0.0\lib\net35\xunit.abstractions.dll</HintPath>
+      <HintPath>..\packages\xunit.abstractions.2.0.1\lib\net35\xunit.abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="xunit.assert, Version=2.2.0.3239, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.assert.2.2.0-beta1-build3239\lib\dotnet\xunit.assert.dll</HintPath>
+    <Reference Include="xunit.assert, Version=2.2.0.3402, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.assert.2.2.0-beta3-build3402\lib\netstandard1.0\xunit.assert.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="xunit.core, Version=2.2.0.3239, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.extensibility.core.2.2.0-beta1-build3239\lib\dotnet\xunit.core.dll</HintPath>
+    <Reference Include="xunit.core, Version=2.2.0.3402, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.core.2.2.0-beta3-build3402\lib\net45\xunit.core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="xunit.execution.desktop, Version=2.2.0.3239, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\packages\xunit.extensibility.execution.2.2.0-beta1-build3239\lib\net45\xunit.execution.desktop.dll</HintPath>
+    <Reference Include="xunit.execution.desktop, Version=2.2.0.3402, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\packages\xunit.extensibility.execution.2.2.0-beta3-build3402\lib\net45\xunit.execution.desktop.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -106,11 +106,7 @@
     </Compile>
     <Compile Include="ExceptionHandlingFixture.cs" />
     <Compile Include="FibonacciFixture.cs" />
-    <Compile Include="ForeachFixture.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ForeachFixture.tt</DependentUpon>
-    </Compile>
+    <Compile Include="ForeachFixture.cs" />
     <Compile Include="GenericCallFixture.cs" />
     <Compile Include="Int16Fixture.cs" />
     <Compile Include="Int32Fixture.cs" />
@@ -120,11 +116,10 @@
     <Compile Include="IsInstFixture.cs" />
     <Compile Include="LdargaFixture.cs" />
     <Compile Include="LdlocaFixture.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>LdlocaFixture.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="LinkedListFixture.cs" />
     <Compile Include="ListFixture.cs" />
     <Compile Include="NewObjectFixture.cs" />
     <Compile Include="OptimizationFixture.cs" />
@@ -134,11 +129,7 @@
     <Compile Include="SingleFixture.cs" />
     <Compile Include="StaticFieldFixture.cs" />
     <Compile Include="StringFixture.cs" />
-    <Compile Include="StructureFixture.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StructureFixture.tt</DependentUpon>
-    </Compile>
+    <Compile Include="StructureFixture.cs" />
     <Compile Include="SwitchFixture.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -163,7 +154,7 @@
   <ItemGroup>
     <Content Include="CallFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CallFixture.cs</LastGenOutput>
+      <LastGenOutput>CallFixture1.cs</LastGenOutput>
     </Content>
     <Content Include="ComparisonFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -173,17 +164,9 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>EnumFixture.cs</LastGenOutput>
     </Content>
-    <Content Include="ForeachFixture.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ForeachFixture.cs</LastGenOutput>
-    </Content>
     <Content Include="LdlocaFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LdlocaFixture.cs</LastGenOutput>
-    </Content>
-    <Content Include="StructureFixture.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>StructureFixture.cs</LastGenOutput>
     </Content>
     <Content Include="SwitchFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -195,9 +178,9 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.2.0-beta1-build1144\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.2.0-beta1-build1144\build\net20\xunit.runner.visualstudio.props'))" />
+    <Error Condition="!Exists('..\packages\xunit.runner.visualstudio.2.2.0-beta3-build1187\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\xunit.runner.visualstudio.2.2.0-beta3-build1187\build\net20\xunit.runner.visualstudio.props'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

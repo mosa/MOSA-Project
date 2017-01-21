@@ -17,7 +17,7 @@ namespace Mosa.Kernel.x86
 		private static int testResultReady = 0;
 		private static int testResultReported = 0;
 
-		private static int testID = 0;
+		private static uint testID = 0;
 		private static uint testParameters = 0;
 		private static uint testMethodAddress = 0;
 		private static uint testResultType = 0;
@@ -39,7 +39,7 @@ namespace Mosa.Kernel.x86
 		{
 			uint testCount = 0;
 
-			DebugClient.Ready();
+			Debugger.Ready();
 
 			Screen.Write("Waiting for unit tests...");
 			Screen.NextLine();
@@ -60,11 +60,14 @@ namespace Mosa.Kernel.x86
 			{
 				if (testReady == 1)
 				{
-					Screen.Row = row;
-					Screen.Column = 0;
+					Screen.Goto(row, 0);
+					Screen.ClearRow();
 
 					Screen.Write("Test #: ");
 					Screen.Write(++testCount, 10, 7);
+
+					//Screen.Write(" [X  ]");
+					//Screen.Column = Screen.Column - 3;
 
 					testResult = 0;
 					testResultReady = 0;
@@ -90,7 +93,11 @@ namespace Mosa.Kernel.x86
 
 					testResultReady = 1;
 
+					//Screen.Write("X");
+
 					Native.Int(255);
+
+					//Screen.Write("X");
 				}
 			}
 		}
@@ -115,7 +122,7 @@ namespace Mosa.Kernel.x86
 			testResultType = type;
 		}
 
-		public static void StartTest(int id)
+		public static void StartTest(uint id)
 		{
 			testID = id;
 			testResultReady = 0;
@@ -127,7 +134,7 @@ namespace Mosa.Kernel.x86
 			return (testResultReported == 1 && testReady == 0);
 		}
 
-		public static bool GetResult(out ulong result, out int id)
+		public static bool GetResult(out ulong result, out uint id)
 		{
 			result = testResult;
 			id = testID;

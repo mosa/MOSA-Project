@@ -1,9 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -188,34 +186,42 @@ namespace Mosa.Compiler.Framework
 			opcode.WriteTo(codeStream);
 		}
 
-		public void Emit(OpcodeEncoder opcode, Operand symbolOperand, int symbolOffset)
+		public void Emit(OpcodeEncoder opcode, Operand symbolOperand, int patchOffset, int referenceOffset = 0)
 		{
-			int pos = (int)codeStream.Position + symbolOffset;
+			int pos = (int)codeStream.Position + patchOffset;
 
 			Emit(opcode);
 
 			if (symbolOperand.IsLabel)
 			{
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, pos, 0, symbolOperand.Name, SectionKind.ROData, 0);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, pos, SectionKind.ROData, symbolOperand.Name, referenceOffset);
 			}
-			else if (symbolOperand.IsField)
+			else if (symbolOperand.IsStaticField)
 			{
 				var section = symbolOperand.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, pos, 0, symbolOperand.Field.FullName, section, (int)symbolOperand.Displacement);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, pos, section, symbolOperand.Field.FullName, referenceOffset);
 			}
 			else if (symbolOperand.IsSymbol)
 			{
 				var section = symbolOperand.Method != null ? SectionKind.Text : SectionKind.ROData;
 
-				var symbol = linker.GetSymbol(symbolOperand.Name, section);
+				// First try finding the symbol in the expected section
+				var symbol = linker.FindSymbol(symbolOperand.Name, section);
 
+				// If no symbol found, look in all sections
 				if (symbol == null)
 				{
 					symbol = linker.FindSymbol(symbolOperand.Name);
 				}
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, SectionKind.Text, pos, 0, symbol, 0);
+				// Otherwise create the symbol in the expected section
+				if (symbol == null)
+				{
+					symbol = linker.GetSymbol(symbolOperand.Name, section);
+				}
+
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, pos, symbol, referenceOffset);
 			}
 		}
 

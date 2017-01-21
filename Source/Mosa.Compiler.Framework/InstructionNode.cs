@@ -125,20 +125,12 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Uses.Remove(this);
-					if (current.IsMemoryAddress && current.OffsetBase != null)
-					{
-						current.OffsetBase.Uses.Remove(this);
-					}
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister && !value.IsConstant)
+					if (value.IsVirtualRegister || value.IsOnStack)
 					{
 						value.Uses.Add(this);
-					}
-					if (value.IsMemoryAddress && value.OffsetBase != null)
-					{
-						value.OffsetBase.Uses.Add(this);
 					}
 				}
 
@@ -160,20 +152,12 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Uses.Remove(this);
-					if (current.IsMemoryAddress && current.OffsetBase != null)
-					{
-						current.OffsetBase.Uses.Remove(this);
-					}
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister && !value.IsConstant)
+					if (value.IsVirtualRegister || value.IsOnStack)
 					{
 						value.Uses.Add(this);
-					}
-					if (value.IsMemoryAddress && value.OffsetBase != null)
-					{
-						value.OffsetBase.Uses.Add(this);
 					}
 				}
 				operand2 = value;
@@ -194,20 +178,12 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Uses.Remove(this);
-					if (current.IsMemoryAddress && current.OffsetBase != null)
-					{
-						current.OffsetBase.Uses.Remove(this);
-					}
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister && !value.IsConstant)
+					if (value.IsVirtualRegister || value.IsOnStack)
 					{
 						value.Uses.Add(this);
-					}
-					if (value.IsMemoryAddress && value.OffsetBase != null)
-					{
-						value.OffsetBase.Uses.Add(this);
 					}
 				}
 				operand3 = value;
@@ -263,34 +239,12 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Definitions.Remove(this);
-					if (current.IsMemoryAddress)
-					{
-						if (current.OffsetBase != null)
-						{
-							current.OffsetBase.Uses.Remove(this);
-						}
-						if (current.SSAParent != null)
-						{
-							current.SSAParent.Uses.Remove(this);
-						}
-					}
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister && !value.IsConstant)
+					if (value.IsVirtualRegister || value.IsOnStack)
 					{
 						value.Definitions.Add(this);
-					}
-					if (value.IsMemoryAddress)
-					{
-						if (value.OffsetBase != null)
-						{
-							value.OffsetBase.Uses.Add(this);
-						}
-						if (value.SSAParent != null)
-						{
-							value.SSAParent.Uses.Add(this);
-						}
 					}
 				}
 				result = value;
@@ -310,34 +264,12 @@ namespace Mosa.Compiler.Framework
 				if (current != null)
 				{
 					current.Definitions.Remove(this);
-					if (current.IsMemoryAddress)
-					{
-						if (current.OffsetBase != null)
-						{
-							current.OffsetBase.Uses.Remove(this);
-						}
-						if (current.SSAParent != null)
-						{
-							current.SSAParent.Uses.Remove(this);
-						}
-					}
 				}
 				if (value != null)
 				{
-					if (!value.IsCPURegister && !value.IsConstant)
+					if (value.IsVirtualRegister || value.IsOnStack)
 					{
 						value.Definitions.Add(this);
-					}
-					if (value.IsMemoryAddress)
-					{
-						if (value.OffsetBase != null)
-						{
-							value.OffsetBase.Uses.Add(this);
-						}
-						if (value.SSAParent != null)
-						{
-							value.SSAParent.Uses.Add(this);
-						}
 					}
 				}
 				result2 = value;
@@ -613,6 +545,9 @@ namespace Mosa.Compiler.Framework
 			Next = firstnode;
 			firstnode.Previous = this;
 
+			Debug.Assert(this != Next);
+			Debug.Assert(this != Previous);
+
 			//Block.DebugCheck();
 		}
 
@@ -713,21 +648,13 @@ namespace Mosa.Compiler.Framework
 						if (current != null)
 						{
 							current.Uses.Remove(this);
-							if (current.IsMemoryAddress && current.OffsetBase != null)
-							{
-								current.OffsetBase.Uses.Remove(this);
-							}
 						}
 
 						if (operand != null)
 						{
-							if (!operand.IsCPURegister & !operand.IsConstant)
+							if (operand.IsVirtualRegister || operand.IsOnStack)
 							{
 								operand.Uses.Add(this);
-							}
-							if (operand.IsMemoryAddress && operand.OffsetBase != null)
-							{
-								operand.OffsetBase.Uses.Remove(this);
 							}
 						}
 

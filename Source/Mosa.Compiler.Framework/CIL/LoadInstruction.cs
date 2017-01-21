@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.MosaTypeSystem;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -31,10 +29,5 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		#endregion Construction
-
-		public static Operand CreateResultOperand(IInstructionDecoder decoder, MosaType type)
-		{
-			return decoder.Compiler.CreateVirtualRegister(type.GetStackType());
-		}
 	}
 }

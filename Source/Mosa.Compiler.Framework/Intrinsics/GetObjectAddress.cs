@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
@@ -33,14 +33,8 @@ namespace Mosa.Compiler.Framework.Intrinsics
 
 				operand1 = def.Operand1;
 				def.Empty();
-
-				if (operand1.IsMemoryAddress)
-				{
-					context.SetInstruction(IRInstruction.AddressOf, result, operand1);
-					return;
-				}
 			}
-			context.SetInstruction(IRInstruction.Move, result, operand1);
+			context.SetInstruction(IRInstruction.MoveInteger, result, operand1);
 		}
 	}
 }

@@ -115,16 +115,24 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active)
 						{
 							trace.Log(String.Format("Block #{0} - Label L_{1:X4}", block.Sequence, block.Label)
-								   + (BasicBlocks.IsHeadBlock(block) ? " [Header]" : string.Empty));
+								+ (BasicBlocks.IsHeadBlock(block) ? " [Header]" : string.Empty));
 						}
 					}
 
 					if (node.Instruction.IgnoreDuringCodeGeneration)
 						continue;
 
-					if (node.Instruction is BasePlatformInstruction)
+					var baseInstruction = node.Instruction as BasePlatformInstruction;
+
+					if (baseInstruction != null)
 					{
-						EmitInstruction(node, codeEmitter);
+						if (node.Size == InstructionSize.Native | node.Size == InstructionSize.None)
+						{
+							node.Size = NativeInstructionSize;
+						}
+
+						baseInstruction.Emit(node, codeEmitter);
+
 						generatedInstructionCount++;
 
 						if (trace.Active) trace.Log(node.Offset.ToString() + " - /0x" + node.Offset.ToString("X") + " : " + node.ToString());
@@ -138,16 +146,6 @@ namespace Mosa.Compiler.Framework.Stages
 				BlockEnd(block);
 				generatedBlockCount++;
 			}
-		}
-
-		/// <summary>
-		/// Emits the instruction.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		/// <param name="codeEmitter">The code emitter.</param>
-		protected virtual void EmitInstruction(InstructionNode node, BaseCodeEmitter codeEmitter)
-		{
-			(node.Instruction as BasePlatformInstruction).Emit(node, codeEmitter);
 		}
 
 		/// <summary>

@@ -87,36 +87,36 @@ namespace Mosa.Compiler.Linker
 			LinkerSections[(int)section.SectionKind] = section;
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, int relativeBase, LinkerSymbol referenceSymbol, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, LinkerSymbol referenceSymbol, int referenceOffset)
 		{
 			lock (mylock)
 			{
-				var linkRequest = new LinkRequest(linkType, patchType, patchSymbol, patchOffset, relativeBase, referenceSymbol, referenceOffset);
+				var linkRequest = new LinkRequest(linkType, patchType, patchSymbol, patchOffset, referenceSymbol, referenceOffset);
 
 				patchSymbol.AddPatch(linkRequest);
 			}
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, string patchSymbolName, SectionKind patchKind, int patchOffset, int relativeBase, string referenceSymbolName, SectionKind referenceKind, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, SectionKind patchKind, string patchSymbolName, int patchOffset, SectionKind referenceKind, string referenceSymbolName, int referenceOffset)
 		{
 			var referenceSymbol = GetSymbol(referenceSymbolName, referenceKind);
 			var patchObject = GetSymbol(patchSymbolName, patchKind);
 
-			Link(linkType, patchType, patchObject, patchOffset, relativeBase, referenceSymbol, referenceOffset);
+			Link(linkType, patchType, patchObject, patchOffset, referenceSymbol, referenceOffset);
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, string patchSymbolName, SectionKind patchKind, int patchOffset, int relativeBase, LinkerSymbol referenceSymbol, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, SectionKind patchKind, string patchSymbolName, int patchOffset, LinkerSymbol referenceSymbol, int referenceOffset)
 		{
 			var patchObject = GetSymbol(patchSymbolName, patchKind);
 
-			Link(linkType, patchType, patchObject, patchOffset, relativeBase, referenceSymbol, referenceOffset);
+			Link(linkType, patchType, patchObject, patchOffset, referenceSymbol, referenceOffset);
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, int relativeBase, string referenceSymbolName, SectionKind referenceKind, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, SectionKind referenceKind, string referenceSymbolName, int referenceOffset)
 		{
 			var referenceObject = GetSymbol(referenceSymbolName, referenceKind);
 
-			Link(linkType, patchType, patchSymbol, patchOffset, relativeBase, referenceObject, referenceOffset);
+			Link(linkType, patchType, patchSymbol, patchOffset, referenceObject, referenceOffset);
 		}
 
 		public LinkerSymbol GetSymbol(string name, SectionKind kind)
@@ -189,6 +189,13 @@ namespace Mosa.Compiler.Linker
 			return symbol;
 		}
 
+		public void SetFirst(LinkerSymbol symbol)
+		{
+			var section = LinkerSections[(int)symbol.SectionKind];
+
+			section.SetFirst(symbol);
+		}
+
 		private void FinalizeLayout()
 		{
 			LayoutObjectsAndSections();
@@ -216,14 +223,14 @@ namespace Mosa.Compiler.Linker
 		{
 			foreach (var symbol in Symbols)
 			{
-				symbol.PreHash = symbol.ComputeMD5Hash();
+				//symbol.PreHash = symbol.ComputeMD5Hash();
 
 				foreach (var linkRequest in symbol.LinkRequests)
 				{
 					ApplyPatch(linkRequest);
 				}
 
-				symbol.PostHash = symbol.ComputeMD5Hash();
+				//symbol.PostHash = symbol.ComputeMD5Hash();
 			}
 		}
 
@@ -237,7 +244,7 @@ namespace Mosa.Compiler.Linker
 			}
 			else
 			{
-				ulong targetAddress = linkRequest.ReferenceSymbol.VirtualAddress + (ulong)linkRequest.ReferenceOffset;
+				value = linkRequest.ReferenceSymbol.VirtualAddress + (ulong)linkRequest.ReferenceOffset;
 
 				if (linkRequest.LinkType == LinkType.AbsoluteAddress)
 				{
@@ -248,13 +255,8 @@ namespace Mosa.Compiler.Linker
 				else
 				{
 					// Change the absolute into a relative offset
-					targetAddress = targetAddress - (linkRequest.PatchSymbol.VirtualAddress + (ulong)linkRequest.PatchOffset);
+					value = value - (linkRequest.PatchSymbol.VirtualAddress + (ulong)linkRequest.PatchOffset);
 				}
-
-				targetAddress = targetAddress + (ulong)linkRequest.RelativeBase;
-
-				//value = Patch.GetResult(linkRequest.PatchType.Patches, targetAddress);
-				value = targetAddress;
 			}
 
 			linkRequest.PatchSymbol.ApplyPatch(

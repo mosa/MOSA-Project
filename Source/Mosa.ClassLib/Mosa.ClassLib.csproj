@@ -14,7 +14,7 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
@@ -61,9 +61,11 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="CRC.cs" />
     <Compile Include="BinaryFormat.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LZF.cs" />
     <Compile Include="Math.cs">
       <SubType>Code</SubType>
     </Compile>

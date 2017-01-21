@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker;
@@ -34,6 +35,16 @@ namespace Mosa.Compiler.Framework
 		/// The empty operand list
 		/// </summary>
 		private static readonly Operand[] emptyOperandList = new Operand[0];
+
+		/// <summary>
+		/// The stack frame
+		/// </summary>
+		public Operand StackFrame;
+
+		/// <summary>
+		/// The constant zero
+		/// </summary>
+		public Operand ConstantZero;
 
 		/// <summary>
 		/// Holds flag that will stop method compiler
@@ -110,9 +121,19 @@ namespace Mosa.Compiler.Framework
 		public BaseCompiler Compiler { get; private set; }
 
 		/// <summary>
-		/// Gets the stack layout.
+		/// Gets the stack.
 		/// </summary>
-		public StackLayout StackLayout { get; private set; }
+		public List<Operand> LocalStack { get; private set; }
+
+		/// <value>
+		/// The size of the stack parameter.
+		/// </value>
+		public int StackParameterSize { get; set; }
+
+		/// <value>
+		/// The size of the stack memory.
+		/// </value>
+		public int StackSize { get; set; }
 
 		/// <summary>
 		/// Gets the virtual register layout.
@@ -127,7 +148,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the parameters.
 		/// </summary>
-		public Operand[] Parameters { get { return StackLayout.Parameters; } }
+		public Operand[] Parameters { get; private set; }
 
 		/// <summary>
 		/// Gets the protected regions.
@@ -187,7 +208,12 @@ namespace Mosa.Compiler.Framework
 			Linker = compiler.Linker;
 			BasicBlocks = basicBlocks ?? new BasicBlocks();
 			Pipeline = new CompilerPipeline();
-			StackLayout = new StackLayout(Architecture, method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0));
+			LocalStack = new List<Operand>();
+
+			ConstantZero = Operand.CreateConstant(TypeSystem, 0);
+			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
+
+			Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
 			VirtualRegisters = new VirtualRegisters(Architecture);
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
@@ -206,27 +232,96 @@ namespace Mosa.Compiler.Framework
 		#region Methods
 
 		/// <summary>
+		/// Adds the stack local.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public Operand AddStackLocal(MosaType type)
+		{
+			return AddStackLocal(type, false);
+		}
+
+		/// <summary>
+		/// Adds the stack local.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public Operand AddStackLocal(MosaType type, bool pinned)
+		{
+			var local = Operand.CreateStackLocal(type, LocalStack.Count, pinned);
+			LocalStack.Add(local);
+			return local;
+		}
+
+		private Operand SetStackParameter(int index, MosaType type, string name)
+		{
+			var param = Operand.CreateStackParameter(type, index, name);
+			Parameters[index] = param;
+			return param;
+		}
+
+		/// <summary>
 		/// Evaluates the parameter operands.
 		/// </summary>
 		protected void EvaluateParameterOperands()
 		{
 			int index = 0;
 
-			// Note: displacement is recalculated later
-			int displacement = 4;
-
 			if (Method.HasThis || Method.HasExplicitThis)
 			{
 				if (Type.IsValueType)
-					StackLayout.SetStackParameter(index++, Type.ToManagedPointer(), displacement, "this");
+					SetStackParameter(index++, Type.ToManagedPointer(), "this");
 				else
-					StackLayout.SetStackParameter(index++, Type, displacement, "this");
+					SetStackParameter(index++, Type, "this");
 			}
 
 			foreach (var parameter in Method.Signature.Parameters)
 			{
-				StackLayout.SetStackParameter(index++, parameter.ParameterType, displacement, parameter.Name);
+				SetStackParameter(index++, parameter.ParameterType, parameter.Name);
 			}
+
+			LayoutParameters();
+		}
+
+		private void LayoutParameters()
+		{
+			int returnSize = 0;
+
+			if (StoreOnStack(Method.Signature.ReturnType))
+			{
+				returnSize = TypeLayout.GetTypeSize(Method.Signature.ReturnType);
+			}
+
+			int size = LayoutParameters(Architecture.CallingConvention.OffsetOfFirstParameter + returnSize);
+
+			StackParameterSize = size;
+			TypeLayout.SetMethodParameterStackSize(Method, size);
+		}
+
+		private int LayoutParameters(int offsetOfFirst)
+		{
+			int offset = offsetOfFirst;
+
+			foreach (var operand in Parameters)
+			{
+				int size, alignment;
+				Architecture.GetTypeRequirements(TypeLayout, operand.Type, out size, out alignment);
+
+				operand.Offset = offset;
+				operand.IsResolved = true;
+
+				//// adjust split children
+				//if (operand.Low != null)
+				//{
+				//	operand.Low.Offset = offset + (operand.Low.Offset - operand.Offset);
+				//	operand.High.Offset = offset + (operand.High.Offset - operand.Offset);
+				//}
+
+				size = Alignment.AlignUp(size, alignment);
+				offset = offset + size;
+			}
+
+			return offset;
 		}
 
 		/// <summary>
@@ -238,23 +333,15 @@ namespace Mosa.Compiler.Framework
 
 			foreach (IMethodCompilerStage stage in Pipeline)
 			{
-				//try
 				{
 					stage.Initialize(this);
 					stage.Execute();
 
-					Mosa.Compiler.Trace.InstructionLogger.Run(this, stage);
+					InstructionLogger.Run(this, stage);
 
 					if (stop)
 						break;
 				}
-
-				//catch (Exception e)
-				//{
-				//	//	Trace.TraceListener.SubmitDebugStageInformation(Method, stage.Name + "-Exception", e.ToString());
-				//	Trace.TraceListener.OnNewCompilerTraceEvent(CompilerEvent.Exception, Method.FullName + " @ " + stage.Name, ThreadID);
-				//	return;
-				//}
 			}
 
 			InitializeType();
@@ -288,27 +375,20 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Retrieves the local stack operand at the specified <paramref name="index" />.
+		/// Allocates the virtual register or stack slot.
 		/// </summary>
-		/// <param name="index">The index of the stack operand to retrieve.</param>
-		/// <returns>
-		/// The operand at the specified index.
-		/// </returns>
-		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index" /> is not valid.</exception>
-		public Operand GetLocalOperand(int index)
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public Operand AllocateVirtualRegisterOrStackSlot(MosaType type)
 		{
-			return LocalVariables[index];
-		}
-
-		/// <summary>
-		/// Retrieves the parameter operand at the specified <paramref name="index"/>.
-		/// </summary>
-		/// <param name="index">The index of the parameter operand to retrieve.</param>
-		/// <returns>The operand at the specified index.</returns>
-		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
-		public Operand GetParameterOperand(int index)
-		{
-			return StackLayout.Parameters[index];
+			if (StoreOnStack(type))
+			{
+				return AddStackLocal(type);
+			}
+			else
+			{
+				return CreateVirtualRegister(type.GetStackType());
+			}
 		}
 
 		/// <summary>
@@ -322,7 +402,17 @@ namespace Mosa.Compiler.Framework
 			int index = 0;
 			foreach (var local in locals)
 			{
-				var operand = StackLayout.AddStackLocal(local.Type, local.IsPinned);
+				Operand operand = null;
+
+				if (!StoreOnStack(local.Type) && !local.IsPinned)
+				{
+					var stacktype = local.Type.GetStackType();
+					operand = CreateVirtualRegister(stacktype);
+				}
+				else
+				{
+					operand = AddStackLocal(local.Type, local.IsPinned);
+				}
 
 				LocalVariables[index++] = operand;
 			}
@@ -344,7 +434,7 @@ namespace Mosa.Compiler.Framework
 		{
 			if (Method.IsSpecialName && Method.IsRTSpecialName && Method.IsStatic && Method.Name == ".cctor")
 			{
-				typeInitializer = Compiler.PostCompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
+				typeInitializer = Compiler.CompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 				if (typeInitializer == null)
 					return;
@@ -399,6 +489,25 @@ namespace Mosa.Compiler.Framework
 		public override string ToString()
 		{
 			return Method.ToString();
+		}
+
+		public bool StoreOnStack(MosaType type)
+		{
+			if (type.IsReferenceType)
+				return false;
+
+			if (type.IsUserValueType)
+			{
+				if (type.Fields != null)
+				{
+					if (type.Fields.Count == 1)
+					{
+						return type.Fields[0].FieldType.IsUserValueType;
+					}
+				}
+			}
+
+			return type.IsUserValueType;
 		}
 
 		#endregion Methods

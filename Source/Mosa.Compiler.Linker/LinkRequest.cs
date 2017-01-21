@@ -35,11 +35,6 @@ namespace Mosa.Compiler.Linker
 		public int PatchOffset { get; private set; }
 
 		/// <summary>
-		/// Determines the relative base of the link request.
-		/// </summary>
-		public int RelativeBase { get; private set; }
-
-		/// <summary>
 		/// Gets the reference symbol.
 		/// </summary>
 		/// <value>
@@ -64,10 +59,10 @@ namespace Mosa.Compiler.Linker
 		/// <param name="patchType">Type of the patch.</param>
 		/// <param name="patchSymbol">The patch symbol.</param>
 		/// <param name="patchOffset">The patch offset.</param>
-		/// <param name="relativeBase">The relative base.</param>
 		/// <param name="referenceSymbol">The reference symbol.</param>
 		/// <param name="referenceOffset">The reference offset.</param>
-		public LinkRequest(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, int relativeBase, LinkerSymbol referenceSymbol, int referenceOffset)
+		///
+		public LinkRequest(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, LinkerSymbol referenceSymbol, int referenceOffset)
 		{
 			Debug.Assert(patchSymbol != null);
 			Debug.Assert(referenceSymbol != null);
@@ -78,7 +73,6 @@ namespace Mosa.Compiler.Linker
 			PatchSymbol = patchSymbol;
 			PatchOffset = patchOffset;
 
-			RelativeBase = relativeBase;
 			ReferenceSymbol = referenceSymbol;
 			ReferenceOffset = referenceOffset;
 		}

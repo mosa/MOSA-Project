@@ -14,7 +14,7 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
@@ -67,6 +67,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Address.cs" />
+    <Compile Include="IDTStack.cs" />
+    <Compile Include="LZF.cs" />
     <Compile Include="UnitTestQueue.cs" />
     <Compile Include="UnitTestRunner.cs" />
     <Compile Include="Helpers\Assert.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="ConsoleSession.cs" />
     <Compile Include="DebugClient.cs" />
     <Compile Include="Helpers\DebugImplementation.cs" />
+    <Compile Include="Debugger.cs" />
     <Compile Include="Serial.cs" />
     <Compile Include="KernelMemory.cs" />
     <Compile Include="CMOS.cs" />

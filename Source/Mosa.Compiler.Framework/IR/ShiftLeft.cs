@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// is statically or dynamically equal to or larger than the number of bits in the first
 	/// operand, the result is undefined.
 	/// </remarks>
-	public sealed class ShiftLeft : ThreeOperandInstruction
+	public sealed class ShiftLeft : BaseThreeOperandInstruction
 	{
 		#region Construction
 

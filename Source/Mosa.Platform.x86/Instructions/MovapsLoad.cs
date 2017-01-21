@@ -44,9 +44,9 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static void MovapsMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(node.Result.IsRegister);
+			Debug.Assert(node.Result.IsCPURegister);
 
-			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
+			int patchOffset;
 
 			// mem to xmmreg 1111 0011:0000 1111:0101 1101: mod xmmreg r/m
 			var opcode = new OpcodeEncoder()
@@ -56,11 +56,11 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
 				.AppendNibble(Bits.b0101)                                       // 4:opcode
 				.AppendNibble(Bits.b1101)                                       // 4:opcode
-				.ModRegRMSIBDisplacement(node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
+				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out patchOffset); // 32:memory
 
-			if (linkreference)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
 			else
 				emitter.Emit(opcode);
 		}

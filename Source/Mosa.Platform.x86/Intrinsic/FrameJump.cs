@@ -43,6 +43,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.Mov, esp, ebx);
 			context.AppendInstruction(X86.Jmp, null, eax);
 
+			// future - common code (refactor opportunity)
 			context.GotoNext();
 
 			// Remove all remaining instructions in block and clear next block list

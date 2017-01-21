@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.CIL
 				default: throw new NotImplementedException();
 			}
 
-			ctx.Result = decoder.Compiler.GetLocalOperand(index);
+			ctx.Result = decoder.Compiler.LocalVariables[index];
 		}
 
 		#endregion Methods

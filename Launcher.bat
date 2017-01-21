@@ -1,1 +1,1 @@
-start bin\Mosa.Tool.Launcher.exe -qemu bin\Mosa.CoolWorld.x86.exe
+start bin\Mosa.Tool.Launcher.exe -qemu bin\Mosa.HelloWorld.x86.exe

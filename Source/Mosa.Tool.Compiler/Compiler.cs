@@ -175,15 +175,9 @@ namespace Mosa.Tool.Compiler
 			);
 
 			optionSet.Add(
-				@"optimize|enable-optimizations|ssa-optimize",
+				@"optimize-ir|enable-ir-optimizations",
 				@"Performs single static assignments optimizations.",
-				enable => compiler.CompilerOptions.EnableOptimizations = enable != null
-			);
-
-			optionSet.Add(
-				@"promote-variables|enable-variable-promotion",
-				@"Enables variable promotion optimization.",
-				enable => compiler.CompilerOptions.EnableVariablePromotion = enable != null
+				enable => compiler.CompilerOptions.EnableIROptimizations = enable != null
 			);
 
 			optionSet.Add(

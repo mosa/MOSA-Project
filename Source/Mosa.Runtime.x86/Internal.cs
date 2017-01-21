@@ -3,7 +3,6 @@
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime.x86

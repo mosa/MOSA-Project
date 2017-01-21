@@ -70,6 +70,22 @@ namespace Mosa.Utility.Launcher
 			return Process.Start(start);
 		}
 
+		protected Process LaunchConsoleApplication(string app, string args)
+		{
+			AddOutput("Launching Application: " + app);
+			AddOutput("Arguments: " + args);
+
+			var start = new ProcessStartInfo();
+			start.FileName = app;
+			start.Arguments = args;
+			start.UseShellExecute = false;
+			start.CreateNoWindow = false;
+			start.RedirectStandardOutput = false;
+			start.RedirectStandardError = false;
+
+			return Process.Start(start);
+		}
+
 		protected string GetOutput(Process process)
 		{
 			var output = process.StandardOutput.ReadToEnd();

@@ -25,10 +25,7 @@ namespace Mosa.UnitTest.Numbers
 
 			list.AddIfNew<char>((char)1);
 			list.AddIfNew<char>((char)2);
-			list.AddIfNew<char>((char)32);
 			list.AddIfNew<char>((char)127);
-			list.AddIfNew<char>((char)255);
-			list.AddIfNew<char>((char)256);
 			list.AddIfNew<char>(char.MinValue);
 			list.AddIfNew<char>(char.MaxValue);
 			list.AddIfNew<char>('0');

@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Text;
-
 namespace Mosa.UnitTest.Collection
 {
 	public static class StringTests

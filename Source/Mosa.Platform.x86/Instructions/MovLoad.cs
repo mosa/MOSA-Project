@@ -39,26 +39,58 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			MovMemoryToReg(node, emitter);
+			if (node.Operand1.IsConstant && node.Result.IsCPURegister)
+			{
+				MovFixedMemoryToReg(node, emitter);
+			}
+			else
+			{
+				MovMemoryToReg(node, emitter);
+			}
 		}
 
 		private static void MovMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(node.Result.IsRegister);
+			Debug.Assert(node.Result.IsCPURegister);
 
-			var linkreference = node.Operand1.IsLabel || node.Operand1.IsField || node.Operand1.IsSymbol;
+			int patchOffset;
 
 			// memory to reg 1000 101w: mod reg r/m
 			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(0x66, node.Size == InstructionSize.Size16)  // 8:prefix: 16bit
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
 				.AppendNibble(Bits.b1000)                                       // 4:opcode
 				.Append3Bits(Bits.b101)                                         // 3:opcode
 				.AppendWidthBit(node.Size != InstructionSize.Size8)                  // 1:width
-				.ModRegRMSIBDisplacement(node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(0, linkreference);               // 32:memory
+				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out patchOffset); // 32:memory
 
-			if (linkreference)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
+			else
+				emitter.Emit(opcode);
+		}
+
+		private static void MovFixedMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsLinkerResolved);
+
+			int patchOffset;
+
+			// memory to reg 1000 101w: mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66) // 8:prefix: 16bit
+				.AppendNibble(Bits.b1000)                                           // 4:opcode
+				.Append3Bits(Bits.b101)                                             // 3:opcode
+				.AppendWidthBit(node.Size != InstructionSize.Size8)                 // 1:width
+				.AppendMod(Bits.b00)                                                // 2:mod
+				.AppendRegister(node.Result.Register)                               // 3:register (destination)
+				.AppendRM(Bits.b101)                                                // 3:r/m (source)
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out patchOffset) // 32:memory
+				.AppendConditionalIntegerValue(!node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
 			else
 				emitter.Emit(opcode);
 		}

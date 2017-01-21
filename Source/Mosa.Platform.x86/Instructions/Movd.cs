@@ -28,8 +28,8 @@ namespace Mosa.Platform.x86.Instructions
 
 		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
 		{
-			Debug.Assert(node.Result.IsRegister);
-			Debug.Assert(node.Operand1.IsRegister);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsCPURegister);
 
 			// reg from mmxreg
 			// 0000 1111:0111 1110: 11 mmxreg reg

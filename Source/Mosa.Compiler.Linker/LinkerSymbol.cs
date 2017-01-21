@@ -92,25 +92,23 @@ namespace Mosa.Compiler.Linker
 
 		public string ComputeMD5Hash()
 		{
-			return string.Empty;
+			var md5 = MD5.Create();
 
-			//var md5 = MD5.Create();
+			if (Stream == null)
+				return string.Empty;
 
-			//if (Stream == null)
-			//	return string.Empty;
+			Stream.Position = 0;
 
-			//Stream.Position = 0;
+			var hash = md5.ComputeHash(Stream);
 
-			//var hash = md5.ComputeHash(Stream);
+			var s = new StringBuilder();
 
-			//var s = new StringBuilder();
+			for (int i = 0; i < hash.Length; i++)
+			{
+				s.Append(hash[i].ToString("X2"));
+			}
 
-			//for (int i = 0; i < hash.Length; i++)
-			//{
-			//	s.Append(hash[i].ToString("X2"));
-			//}
-
-			//return s.ToString();
+			return s.ToString();
 		}
 	}
 }

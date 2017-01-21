@@ -213,7 +213,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var operand in operandStack)
 			{
-				joinStack.Push(MethodCompiler.CreateVirtualRegister(operand.Type));
+				joinStack.Push(AllocateVirtualRegisterOrStackSlot(operand.Type));
 			}
 
 			foreach (var b in block.PreviousBlocks)
@@ -252,7 +252,16 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var operand = operandStack.Pop();
 				var destination = joinStack.Pop();
-				context.AppendInstruction(IRInstruction.Move, destination, operand);
+
+				if (StoreOnStack(operand.Type))
+				{
+					context.AppendInstruction(IRInstruction.MoveCompound, destination, operand);
+				}
+				else
+				{
+					var moveInstruction = GetMoveInstruction(destination.Type);
+					context.AppendInstruction(moveInstruction, destination, operand);
+				}
 			}
 		}
 
