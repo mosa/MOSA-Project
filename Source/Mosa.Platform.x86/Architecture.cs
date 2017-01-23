@@ -379,7 +379,7 @@ namespace Mosa.Platform.x86
 				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
 			}
 
-			context.AppendInstruction(IRInstruction.UnstableObjectTracking);
+			context.AppendInstruction(IRInstruction.StableObjectTracking);
 		}
 
 		/// <summary>

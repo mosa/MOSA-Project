@@ -179,10 +179,11 @@ namespace Mosa.Runtime.x86
 			DebugOutput(code);
 		}
 
-		public static void Fault(uint code)
+		public static void Fault(uint code, uint extra = 0)
 		{
 			DebugOutput(code);
-			System.Diagnostics.Debug.Fail("Fault: " + ((int)code).ToString("hex"));
+			DebugOutput(extra);
+			System.Diagnostics.Debug.Fail("Fault: " + ((int)code).ToString("hex") + " , Extra: " + ((int)extra).ToString("hex"));
 		}
 
 		public static MDMethodDefinition* GetMethodDefinition(uint address)
@@ -392,14 +393,14 @@ namespace Mosa.Runtime.x86
 
 			uint stackFrame = GetStackFrame(1);
 
-			for (;;)
+			for (uint i = 0;; i++)
 			{
 				uint returnAddress = GetReturnAddressFromStackFrame(stackFrame);
 
 				if (returnAddress == 0)
 				{
 					// hit the top of stack!
-					Fault(0XBAD00002);
+					Fault(0XBAD00002, i);
 				}
 
 				var exceptionType = (MDTypeDefinition*)Intrinsic.Load32(exceptionObject);
