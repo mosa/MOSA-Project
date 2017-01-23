@@ -53,9 +53,9 @@ namespace Mosa.Compiler.Framework
 			Operand v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand.Type);
 			Operand v3 = methodCompiler.CreateVirtualRegister(instanceOperand.Type);
 
-			context.AppendInstruction(IRInstruction.LoadInteger, v1, methodCompiler.StackFrame, thisOperand);
-			context.AppendInstruction(IRInstruction.LoadInteger, v2, methodCompiler.StackFrame, methodPointerOperand);
-			context.AppendInstruction(IRInstruction.LoadInteger, v3, methodCompiler.StackFrame, instanceOperand);
+			context.AppendInstruction(IRInstruction.LoadParameterInteger, v1, thisOperand);
+			context.AppendInstruction(IRInstruction.LoadParameterInteger, v2, methodPointerOperand);
+			context.AppendInstruction(IRInstruction.LoadParameterInteger, v3, instanceOperand);
 
 			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, methodPointerOffsetOperand, v2);
 			context.MosaType = methodPointerOperand.Type;
@@ -88,13 +88,23 @@ namespace Mosa.Compiler.Framework
 
 			for (int i = 0; i < methodCompiler.Parameters.Length; i++)
 			{
-				vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
+				var type = methodCompiler.Parameters[i].Type;
 
-				//fixme: handle structs
-				var loadInstruction = BaseMethodCompilerStage.GetLoadInstruction(vrs[i].Type);
-				var moveSize = BaseMethodCompilerStage.GetInstructionSize(vrs[i].Type);
+				if (methodCompiler.StoreOnStack(type))
+				{
+					//fixme: handle structs
+					System.Diagnostics.Debug.Assert(false);
+				}
+				else
+				{
+					vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
 
-				b0.AppendInstruction(loadInstruction, moveSize, vrs[i], methodCompiler.StackFrame, methodCompiler.Parameters[i]);
+					var loadInstruction = BaseMethodCompilerStage.GetLoadParameterInstruction(vrs[i].Type);
+					var loadsize = BaseMethodCompilerStage.GetInstructionSize(vrs[i].Type);
+
+					b0.AppendInstruction(loadInstruction, loadsize, vrs[i], methodCompiler.Parameters[i]);
+					b0.MosaType = type;
+				}
 			}
 
 			Operand thisOperand = vrs[0];
