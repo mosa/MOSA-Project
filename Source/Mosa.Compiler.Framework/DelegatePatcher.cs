@@ -92,8 +92,8 @@ namespace Mosa.Compiler.Framework
 
 				if (methodCompiler.StoreOnStack(type))
 				{
-					//fixme: handle structs
-					System.Diagnostics.Debug.Assert(false);
+					b0.AppendInstruction(IRInstruction.LoadParameterCompound, vrs[i], methodCompiler.Parameters[i]);
+					b0.MosaType = type;
 				}
 				else
 				{
