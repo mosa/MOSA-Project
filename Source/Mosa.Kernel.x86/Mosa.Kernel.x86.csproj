@@ -74,6 +74,7 @@
     <Compile Include="Helpers\Assert.cs" />
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="ConsoleSession.cs" />
+    <Compile Include="Helpers\DebugImplementation.cs" />
     <Compile Include="Debugger.cs" />
     <Compile Include="Serial.cs" />
     <Compile Include="KernelMemory.cs" />

@@ -293,6 +293,22 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Inserts an instruction before the current instruction.
+		/// </summary>
+		/// <returns></returns>
+		public Context InsertAfter()
+		{
+			Debug.Assert(!IsBlockStartInstruction);
+
+			var node = new InstructionNode();
+			node.Label = Label;
+
+			Node.Insert(node);
+
+			return new Context(node);
+		}
+
+		/// <summary>
 		/// Empties this context.
 		/// </summary>
 		public void Empty()

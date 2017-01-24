@@ -8,6 +8,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mosa.Compiler.Framework
 {
@@ -500,9 +501,10 @@ namespace Mosa.Compiler.Framework
 			{
 				if (type.Fields != null)
 				{
-					if (type.Fields.Count == 1)
+					var nonStaticFields = type.Fields.Where(x => !x.IsStatic).ToList();
+					if (nonStaticFields.Count == 1)
 					{
-						return type.Fields[0].FieldType.IsUserValueType;
+						return nonStaticFields[0].FieldType.IsUserValueType;
 					}
 				}
 			}

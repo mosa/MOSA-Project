@@ -1,16 +1,16 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using System.Collections.Generic;
 using System.Reflection;
-using Mosa.Runtime;
 
 namespace System
 {
 	public sealed unsafe class RuntimeAssembly : Assembly
 	{
-		internal MetadataAssemblyStruct* assemblyStruct;
-		internal LinkedList<RuntimeType> typeList = new LinkedList<RuntimeType>();
-		internal LinkedList<RuntimeTypeHandle> typeHandles = new LinkedList<RuntimeTypeHandle>();
+		internal MDAssemblyDefinition* assemblyDefinition;
+		internal readonly LinkedList<RuntimeType> typeList;
+		internal readonly LinkedList<RuntimeTypeHandle> typeHandles;
 		internal LinkedList<RuntimeTypeInfo> typeInfoList = null;
 		internal LinkedList<CustomAttributeData> customAttributesData = null;
 
@@ -23,15 +23,14 @@ namespace System
 				if (customAttributesData == null)
 				{
 					// Custom Attributes Data - Lazy load
-					customAttributesData = new LinkedList<CustomAttributeData>();
-					if (assemblyStruct->CustomAttributes != null)
+					if (assemblyDefinition->CustomAttributes != null)
 					{
-						var customAttributesTablePtr = assemblyStruct->CustomAttributes;
-						var customAttributesCount = customAttributesTablePtr[0];
-						customAttributesTablePtr++;
+						var customAttributesTablePtr = assemblyDefinition->CustomAttributes;
+						var customAttributesCount = customAttributesTablePtr->NumberOfAttributes;
+						customAttributesData = new LinkedList<CustomAttributeData>();
 						for (uint i = 0; i < customAttributesCount; i++)
 						{
-							var cad = new RuntimeCustomAttributeData((MetadataCAStruct*)customAttributesTablePtr[i]);
+							var cad = new RuntimeCustomAttributeData(customAttributesTablePtr->GetCustomAttribute(i));
 							customAttributesData.AddLast(cad);
 						}
 					}
@@ -69,27 +68,31 @@ namespace System
 		{
 			get
 			{
-				var types = new LinkedList<Type>();
+				var list = new LinkedList<RuntimeType>();
 				foreach (RuntimeType type in typeList)
 				{
 					if ((type.attributes & TypeAttributes.VisibilityMask) != TypeAttributes.Public)
 						continue;
-					types.AddLast(type);
+					list.AddLast(type);
 				}
-				return types;
+				return list;
 			}
 		}
 
-		internal RuntimeAssembly(uint* pointer)
+		internal RuntimeAssembly(MDAssemblyDefinition* pointer)
 		{
-			assemblyStruct = (MetadataAssemblyStruct*)pointer;
-			fullName = Mosa.Runtime.Internal.InitializeMetadataString(assemblyStruct->Name);
+			assemblyDefinition = pointer;
+			fullName = assemblyDefinition->Name;
 
-			uint typeCount = (*assemblyStruct).NumberOfTypes;
+			uint typeCount = assemblyDefinition->NumberOfTypes;
+
+			typeList = new LinkedList<RuntimeType>();
+			typeHandles = new LinkedList<RuntimeTypeHandle>();
+
 			for (uint i = 0; i < typeCount; i++)
 			{
 				var handle = new RuntimeTypeHandle();
-				((uint**)&handle)[0] = (uint*)MetadataAssemblyStruct.GetTypeDefinitionAddress(assemblyStruct, i);
+				((uint**)&handle)[0] = (uint*)assemblyDefinition->GetTypeDefinition(i);
 
 				if (typeHandles.Contains(handle))
 					continue;

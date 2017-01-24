@@ -293,21 +293,52 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				if (type.DeclaringType != null && type.DeclaringType != type.ElementType)
 				{
-					fName.Append(type.DeclaringType.FullName);
+					if (!string.IsNullOrEmpty(type.Namespace))
+					{
+						fName.Append(type.Namespace);
+						fName.Append(".");
+					}
+
+					fName.Append(type.DeclaringType.ShortName);
 					fName.Append("+");
-					sName.Append(type.DeclaringType.Name);
+					sName.Append(type.DeclaringType.ShortName);
 					sName.Append("+");
+
+					fName.Append(type.Name);
+					fName.Append(type.Signature);
+					sName.Append(type.Name);
+					sName.Append(type.Signature);
+
+					type.FullName = fName.ToString();
+					type.ShortName = sName.ToString();
+
 				}
-				else if (!string.IsNullOrEmpty(type.Namespace))
+				else if (type.DeclaringType != null)
 				{
-					fName.Append(type.Namespace);
-					fName.Append(".");
+					fName.Append(type.ElementType.FullName);
+					fName.Append(type.Signature);
+					sName.Append(type.ElementType.ShortName);
+					sName.Append(type.Signature);
+
+					type.FullName = fName.ToString();
+					type.ShortName = sName.ToString();
 				}
-				fName.Append(type.Name);
-				fName.Append(type.Signature);
-				type.FullName = fName.ToString();
-				sName.Append(type.Name);
-				type.ShortName = sName.ToString();
+				else
+				{
+					if (!string.IsNullOrEmpty(type.Namespace))
+					{
+						fName.Append(type.Namespace);
+						fName.Append(".");
+					}
+
+					fName.Append(type.Name);
+					fName.Append(type.Signature);
+					sName.Append(type.Name);
+					sName.Append(type.Signature);
+
+					type.FullName = fName.ToString();
+					type.ShortName = sName.ToString();
+				}
 			}
 		}
 	}

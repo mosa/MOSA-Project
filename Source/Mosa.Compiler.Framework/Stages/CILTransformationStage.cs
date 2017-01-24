@@ -827,16 +827,30 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			// Get the ptr and clear context
 			Operand ptr = context.Operand1;
-			context.SetInstruction(IRInstruction.Nop);
 
-			// Setup context for VmCall
-			ReplaceWithVmCall(context, VmCall.MemorySet);
+			// According to ECMA Spec, if the pointer element type is a reference type then
+			// this instruction is the equivalent of ldnull followed by stind.ref
 
-			// Set the operands
-			context.SetOperand(1, ptr);
-			context.SetOperand(2, ConstantZero);
-			context.SetOperand(3, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(ptr.Type.ElementType)));
-			context.OperandCount = 4;
+			var type = ptr.Type.ElementType;
+			if (type.IsReferenceType)
+			{
+				var size = GetInstructionSize(type);
+				context.SetInstruction(IRInstruction.StoreInteger, size, null, ptr, ConstantZero, Operand.GetNull(TypeSystem));
+				context.MosaType = type;
+			}
+			else
+			{
+				context.SetInstruction(IRInstruction.Nop);
+
+				// Setup context for VmCall
+				ReplaceWithVmCall(context, VmCall.MemorySet);
+
+				// Set the operands
+				context.SetOperand(1, ptr);
+				context.SetOperand(2, ConstantZero);
+				context.SetOperand(3, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(type)));
+				context.OperandCount = 4;
+			}
 		}
 
 		/// <summary>
@@ -1374,8 +1388,36 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Context before = context.InsertBefore();
 
-			if (!StoreOnStack(thisReference.Type))
+			// If the type is value type we don't need to call AllocateObject
+			if (StoreOnStack(thisReference.Type))
 			{
+				Debug.Assert(thisReference.Uses.Count <= 1, "Usages too high");
+
+				var newThis = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
+				before.SetInstruction(IRInstruction.AddressOf, newThis, thisReference);
+
+				operands.Insert(0, newThis);
+			}
+			else if (thisReference.Type.IsValueType)
+			{
+				Debug.Assert(thisReference.Uses.Count <= 1, "Usages too high");
+
+				var newThis = MethodCompiler.AddStackLocal(thisReference.Type);
+
+				var newThisReference = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
+				before.SetInstruction(IRInstruction.AddressOf, newThisReference, newThis);
+
+				operands.Insert(0, newThisReference);
+
+				var after = context.InsertAfter();
+				var size = GetInstructionSize(newThis.Type);
+				var loadInstruction = GetLoadInstruction(newThis.Type);
+				after.SetInstruction(loadInstruction, thisReference, StackFrame, newThis);
+			}
+			else
+			{
+				Debug.Assert(thisReference.Type.IsReferenceType, $"VmCall.AllocateObject only needs to be called for reference types. Type: {thisReference.Type}");
+
 				ReplaceWithVmCall(before, VmCall.AllocateObject);
 
 				before.SetOperand(1, GetRuntimeTypeHandle(classType, before));
@@ -1385,13 +1427,6 @@ namespace Mosa.Compiler.Framework.Stages
 				before.ResultCount = 1;
 
 				operands.Insert(0, thisReference);
-			}
-			else
-			{
-				var newThis = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
-				before.SetInstruction(IRInstruction.AddressOf, newThis, thisReference);
-
-				operands.Insert(0, newThis);
 			}
 
 			ProcessInvokeInstruction(context, context.InvokeMethod, null, operands);

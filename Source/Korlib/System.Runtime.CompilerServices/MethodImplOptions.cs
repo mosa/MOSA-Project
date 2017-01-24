@@ -10,6 +10,7 @@ namespace System.Runtime.CompilerServices
 		Synchronized = 32,
 		NoOptimization = 64,
 		PreserveSig = 128,
+		AggressiveInlining = 256,
 		InternalCall = 4096,
 	}
 }

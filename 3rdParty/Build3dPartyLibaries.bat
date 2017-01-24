@@ -4,7 +4,7 @@ if exist "%ProgramFiles(x86)%\MSBuild\14.0\Bin" set MSBUILDPATH="%ProgramFiles(x
 
 set MSBUILD=%MSBUILDPATH%\msbuild.exe
 
-set GIT="%ProgramFiles(x86)%\Git\bin\git.exe" 
+set GIT="%ProgramFiles%\Git\bin\git.exe" 
 
 rmdir /q /s source
 mkdir source

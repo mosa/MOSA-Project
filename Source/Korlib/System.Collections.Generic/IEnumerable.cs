@@ -3,10 +3,10 @@
 namespace System.Collections.Generic
 {
 	/// <summary>
-	///
+	/// Exposes the enumerator, which supports a simple iteration over a collection of a specified type.
 	/// </summary>
-	/// <typeparam name="T"></typeparam>
-	public interface IEnumerable<T> : IEnumerable
+	/// <typeparam name="T">The type of objects to enumerate.</typeparam>
+	public interface IEnumerable<out T> : IEnumerable
 	{
 		/// <summary>
 		/// Gets the enumerator.

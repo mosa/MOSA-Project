@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
+using Mosa.Runtime.Plug;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -9,7 +11,7 @@ namespace Mosa.Runtime.x86
 	{
 		internal const uint NativeIntSize = 4;
 
-		public static bool IsTypeInInheritanceChain(MetadataTypeStruct* typeDefinition, MetadataTypeStruct* chain)
+		public static bool IsTypeInInheritanceChain(MDTypeDefinition* typeDefinition, MDTypeDefinition* chain)
 		{
 			while (chain != null)
 			{
@@ -27,9 +29,9 @@ namespace Mosa.Runtime.x86
 			if (obj == null)
 				return null;
 
-			MetadataTypeStruct* typeDefinition = (MetadataTypeStruct*)((uint**)&handle)[0];
+			MDTypeDefinition* typeDefinition = (MDTypeDefinition*)((uint**)&handle)[0];
 
-			MetadataTypeStruct* objTypeDefinition = (MetadataTypeStruct*)((uint*)obj)[0];
+			MDTypeDefinition* objTypeDefinition = (MDTypeDefinition*)((uint*)obj)[0];
 
 			if (IsTypeInInheritanceChain(typeDefinition, objTypeDefinition))
 				return obj;
@@ -39,7 +41,7 @@ namespace Mosa.Runtime.x86
 
 		public static void* IsInstanceOfInterfaceType(int interfaceSlot, void* obj)
 		{
-			MetadataTypeStruct* objTypeDefinition = (MetadataTypeStruct*)((uint*)obj)[0];
+			MDTypeDefinition* objTypeDefinition = (MDTypeDefinition*)((uint*)obj)[0];
 
 			if (objTypeDefinition == null)
 				return null;
@@ -60,6 +62,7 @@ namespace Mosa.Runtime.x86
 			return obj;
 		}
 
+		[Method("Mosa.Runtime.Internal.MemoryCopy")]
 		public static void MemoryCopy(void* dest, void* src, uint count)
 		{
 			ulong* _dest = (ulong*)dest;
@@ -82,11 +85,12 @@ namespace Mosa.Runtime.x86
 				__dest[index] = __src[index];
 		}
 
-		public static void MemorySet(uint dest, byte value, uint count)
+		[Method("Mosa.Runtime.Internal.MemorySet")]
+		public static void MemorySet(void* dest, byte value, uint count)
 		{
 			// TEMP: assigning the method parameters into local variables forces the compiler to load the values
 			// into virtual registers, which unlocks the optimizer to generate much better code quality.
-			uint dst = dest;
+			uint dst = (uint)dest;
 			uint cnt = count;
 
 			uint e3 = dst + cnt;
@@ -114,11 +118,12 @@ namespace Mosa.Runtime.x86
 			}
 		}
 
-		public static void MemoryClear(uint dest, uint count)
+		[Method("Mosa.Runtime.Internal.MemoryClear")]
+		public static void MemoryClear(void* dest, uint count)
 		{
 			// TEMP: assigning the method parameters into local variables forces the compiler to load the values
 			// into virtual registers, which unlocks the optimizer to generate much better code quality.
-			uint dst = dest;
+			uint dst = (uint)dest;
 			uint cnt = count;
 
 			uint e3 = dst + cnt;
@@ -174,12 +179,14 @@ namespace Mosa.Runtime.x86
 			DebugOutput(code);
 		}
 
-		public static void Fault(uint code)
+		public static void Fault(uint code, uint extra = 0)
 		{
 			DebugOutput(code);
+			DebugOutput(extra);
+			System.Diagnostics.Debug.Fail("Fault: " + ((int)code).ToString("hex") + " , Extra: " + ((int)extra).ToString("hex"));
 		}
 
-		public static MetadataMethodStruct* GetMethodDefinition(uint address)
+		public static MDMethodDefinition* GetMethodDefinition(uint address)
 		{
 			uint table = Native.GetMethodLookupTable();
 			uint entries = Intrinsic.Load32(table);
@@ -193,7 +200,7 @@ namespace Mosa.Runtime.x86
 
 				if (address >= addr && address < addr + size)
 				{
-					return (MetadataMethodStruct*)Intrinsic.Load32(table, NativeIntSize * 2);
+					return (MDMethodDefinition*)Intrinsic.Load32(table, NativeIntSize * 2);
 				}
 
 				table = table + (NativeIntSize * 3);
@@ -204,7 +211,7 @@ namespace Mosa.Runtime.x86
 			return null;
 		}
 
-		public static MetadataMethodStruct* GetMethodDefinitionViaMethodExceptionLookup(uint address)
+		public static MDMethodDefinition* GetMethodDefinitionViaMethodExceptionLookup(uint address)
 		{
 			uint table = Native.GetMethodExceptionLookupTable();
 
@@ -222,7 +229,7 @@ namespace Mosa.Runtime.x86
 
 				if (address >= addr && address < addr + size)
 				{
-					return (MetadataMethodStruct*)Intrinsic.Load32(table, NativeIntSize * 2);
+					return (MDMethodDefinition*)Intrinsic.Load32(table, NativeIntSize * 2);
 				}
 
 				table = table + (NativeIntSize * 3);
@@ -233,7 +240,7 @@ namespace Mosa.Runtime.x86
 			return null;
 		}
 
-		public static MetadataPRDefinitionStruct* GetProtectedRegionEntryByAddress(uint address, MetadataTypeStruct* exceptionType, MetadataMethodStruct* methodDef)
+		public static MDProtectedRegionDefinition* GetProtectedRegionEntryByAddress(uint address, MDTypeDefinition* exceptionType, MDMethodDefinition* methodDef)
 		{
 			var protectedRegionTable = methodDef->ProtectedRegionTable;
 
@@ -246,16 +253,16 @@ namespace Mosa.Runtime.x86
 				return null;
 
 			uint offset = address - method;
-			int entries = protectedRegionTable->NumberOfRegions;
+			uint entries = protectedRegionTable->NumberOfRegions;
 
-			int entry = 0;
-			MetadataPRDefinitionStruct* protectedRegionDef = null;
+			uint entry = 0;
+			MDProtectedRegionDefinition* protectedRegionDef = null;
 			uint currentStart = uint.MinValue;
 			uint currentEnd = uint.MaxValue;
 
 			while (entry < entries)
 			{
-				var prDef = MetadataPRTableStruct.GetProtectedRegionDefinitionAddress(protectedRegionTable, (uint)entry);
+				var prDef = protectedRegionTable->GetProtectedRegionDefinition(entry);
 
 				uint start = prDef->StartOffset;
 				uint end = prDef->EndOffset;
@@ -330,13 +337,13 @@ namespace Mosa.Runtime.x86
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static MetadataMethodStruct* GetMethodDefinitionFromStackFrameDepth(uint depth)
+		public static MDMethodDefinition* GetMethodDefinitionFromStackFrameDepth(uint depth)
 		{
 			return GetMethodDefinitionFromStackFrameDepth(depth, 0);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static MetadataMethodStruct* GetMethodDefinitionFromStackFrameDepth(uint depth, uint ebp)
+		public static MDMethodDefinition* GetMethodDefinitionFromStackFrameDepth(uint depth, uint ebp)
 		{
 			if (ebp == 0)
 				ebp = Native.GetEBP();
@@ -386,17 +393,17 @@ namespace Mosa.Runtime.x86
 
 			uint stackFrame = GetStackFrame(1);
 
-			for (;;)
+			for (uint i = 0;; i++)
 			{
 				uint returnAddress = GetReturnAddressFromStackFrame(stackFrame);
 
 				if (returnAddress == 0)
 				{
 					// hit the top of stack!
-					Fault(0XBAD00002);
+					Fault(0XBAD00002, i);
 				}
 
-				var exceptionType = (MetadataTypeStruct*)Intrinsic.Load32(exceptionObject);
+				var exceptionType = (MDTypeDefinition*)Intrinsic.Load32(exceptionObject);
 
 				var methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAddress);
 

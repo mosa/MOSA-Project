@@ -17,10 +17,10 @@ namespace Mosa.Compiler.MosaTypeSystem
 				{
 					if (i != 0)
 						result.Append(", ");
-					result.Append(sig.Parameters[i].ParameterType.Name);
+					result.Append(sig.Parameters[i].ParameterType.ShortName);
 				}
 				result.Append(") : ");
-				result.Append(sig.ReturnType.Name);
+				result.Append(sig.ReturnType.ShortName);
 				return result.ToString();
 			}
 			else
@@ -43,11 +43,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public static void UpdateType(MosaType type)
 		{
 			StringBuilder result = new StringBuilder();
-			if (type.ElementType != null)
-			{
-				result.Append(type.ElementType.Signature);
-			}
-			if (type.GenericArguments.Count > 0)
+
+			if (type.GenericArguments?.Count > 0)
 			{
 				result.Append("<");
 				for (int i = 0; i < type.GenericArguments.Count; i++)
