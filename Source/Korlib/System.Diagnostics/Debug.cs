@@ -48,8 +48,7 @@ namespace System.Diagnostics
 		[Conditional("DEBUG")]
 		public static void Assert(bool condition, string message, string detailMessage)
 		{
-			//throw new NotImplementedException(); //Plug
-			return;
+			throw new NotImplementedException(); //Plug
 		}
 
 		[Conditional("DEBUG")]

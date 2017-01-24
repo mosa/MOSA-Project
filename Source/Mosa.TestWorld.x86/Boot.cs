@@ -57,7 +57,7 @@ namespace Mosa.TestWorld.x86
 			GC.Setup();
 			Screen.Write('9');
 
-			//Runtime.Setup();
+			Runtime.Internal.Setup();
 			Screen.Write('A');
 			IDT.SetInterruptHandler(ProcessInterrupt);
 			Screen.Write('B');
@@ -111,7 +111,7 @@ namespace Mosa.TestWorld.x86
 				if (methodDef == null)
 					return;
 
-				string caller = Mosa.Runtime.Internal.GetMethodDefinitionName(methodDef);
+				string caller = methodDef->Name;
 
 				if (caller == null)
 					return;

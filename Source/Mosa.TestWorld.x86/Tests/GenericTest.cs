@@ -16,6 +16,8 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.AddLast(GenericTest7);
 			testMethods.AddLast(GenericTest8);
 			testMethods.AddLast(GenericTest9);
+
+			//testMethods.AddLast(GenericTest10);
 		}
 
 		public static bool GenericTest1()
@@ -120,9 +122,22 @@ namespace Mosa.TestWorld.x86.Tests
 
 			return (genericObject.ReturnIt() == 10);
 		}
+
+		public static bool GenericTest10()
+		{
+			var genericObject = new GenericClassTest<TestObjectInherit>();
+			genericObject.SetValue(new TestObjectInherit(5, 9, 6));
+
+			IGenericInterface<TestObject> genericInterface = genericObject;
+
+			TestObject objBase = genericInterface.ReturnIt();
+			TestObjectInherit objDerived = (TestObjectInherit)objBase;
+
+			return (objDerived.A == 5 && objDerived.B == 9 && objDerived.C == 6);
+		}
 	}
 
-	public interface IGenericInterface<T>
+	public interface IGenericInterface<out T>
 	{
 		int Return10();
 
@@ -163,6 +178,19 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			A = a;
 			B = b;
+		}
+	}
+
+	public class TestObjectInherit : TestObject
+	{
+		public int C;
+
+		public TestObjectInherit(int a, int b, int c)
+			: base(a, b)
+		{
+			A = a;
+			B = b;
+			C = c;
 		}
 	}
 }

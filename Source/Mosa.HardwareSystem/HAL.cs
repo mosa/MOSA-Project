@@ -43,7 +43,7 @@ namespace Mosa.HardwareSystem
 		/// <param name="irq">The irq.</param>
 		public static void ProcessInterrupt(byte irq)
 		{
-			handleInterrupt(irq);
+			handleInterrupt?.Invoke(irq);
 		}
 
 		/// <summary>

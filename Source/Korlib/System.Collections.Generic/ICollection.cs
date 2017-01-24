@@ -46,13 +46,17 @@ namespace System.Collections.Generic
 		bool Contains(T item);
 
 		/// <summary>
-		///
+		/// Copies the elements of the <see cref="T:ICollection`1"/> to an <see cref="T:Array"/>, starting at a particular <see cref="T:Array"/> index.
 		/// </summary>
+		/// <param name="array">The one-dimensional <see cref="T:Array"/> that is the destination of the elements copied from <see cref="T:ICollection`1"/>. The <see cref="T:Array"/> must have zero-based indexing.</param>
+		/// <param name="arrayIndex">The zero-based index in array at which copying begins.</param>
 		void CopyTo(T[] array, int arrayIndex);
 
 		/// <summary>
-		///
+		/// Removes the first occurrence of a specific object from the <see cref="T:ICollection`1"/>.
 		/// </summary>
+		/// <param name="item">The object to remove from the <see cref="T:ICollection`1"/>.</param>
+		/// <returns>true if item was successfully removed from the <see cref="T:ICollection`1"/>; otherwise, false. This method also returns false if item is not found in the original <see cref="T:ICollection`1"/>.</returns>
 		bool Remove(T item);
 	}
 }

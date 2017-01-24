@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime.x86;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.x86
 {
@@ -16,7 +16,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="length">The length of bytes to clear.</param>
 		public static void Clear(uint destination, uint length)
 		{
-			Runtime.x86.Internal.MemoryClear(destination, length);
+			MemoryClear(destination, length);
 		}
 
 		/// <summary>
@@ -27,7 +27,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="length">The length of bytes to copy.</param>
 		public static void Copy(uint source, uint destination, uint length)
 		{
-			Memcpy(destination, source, length);
+			MemoryCopy(destination, source, length);
 		}
 
 		/// <summary>
@@ -38,12 +38,22 @@ namespace Mosa.Kernel.x86
 		/// <param name="length">The length of bytes to set.</param>
 		public static void Set(uint destination, byte value, uint length)
 		{
-			Runtime.x86.Internal.MemorySet(destination, value, length);
+			MemorySet(destination, value, length);
 		}
 
-		private unsafe static void Memcpy(uint destination, uint source, uint count)
+		private unsafe static void MemoryClear(uint destination, uint count)
 		{
-			Runtime.x86.Internal.MemoryCopy((void*)destination, (void*)source, count);
+			Internal.MemoryClear((void*)destination, count);
+		}
+
+		private unsafe static void MemoryCopy(uint destination, uint source, uint count)
+		{
+			Internal.MemoryCopy((void*)destination, (void*)source, count);
+		}
+
+		private unsafe static void MemorySet(uint destination, byte value, uint count)
+		{
+			Internal.MemorySet((void*)destination, value, count);
 		}
 	}
 }

@@ -157,25 +157,38 @@ namespace Mosa.Runtime
 
 		#endregion (Un)Boxing
 
+		#region Memory Manipulation
+
+		public static void MemoryCopy(void* dest, void* src, uint count)
+		{
+			// PLUGGED
+			throw new NotImplementedException();
+		}
+
+		public static void MemorySet(void* dest, byte value, uint count)
+		{
+			// PLUGGED
+			throw new NotImplementedException();
+		}
+
+		public static void MemoryClear(void* dest, uint count)
+		{
+			// PLUGGED
+			throw new NotImplementedException();
+		}
+
+		#endregion Memory Manipulation
+
 		#region Metadata
 
-		internal static LinkedList<RuntimeAssembly> Assemblies;
-
-		public static string InitializeMetadataString(uint* ptr)
-		{
-			return (string)Intrinsic.GetObjectFromAddress(ptr);
-		}
-
-		public static string GetMethodDefinitionName(MetadataMethodStruct* methodDef)
-		{
-			return InitializeMetadataString(methodDef->Name);
-		}
+		internal static LinkedList<RuntimeAssembly> Assemblies = null;
 
 		public static void Setup()
 		{
 			// Get AssemblyListTable and Assembly count
-			uint* assemblyListTable = Intrinsic.GetAssemblyListTable();
-			uint assemblyCount = assemblyListTable[0];
+			Ptr assemblyListTable = Intrinsic.GetAssemblyListTable();
+			uint assemblyCount = (uint)assemblyListTable.Dereference(0);
+			assemblyListTable.Increment();
 
 			Assemblies = new LinkedList<RuntimeAssembly>();
 
@@ -183,7 +196,7 @@ namespace Mosa.Runtime
 			for (uint i = 0; i < assemblyCount; i++)
 			{
 				// Get the pointer to the Assembly Metadata
-				uint* ptr = (uint*)(assemblyListTable[1 + i]);
+				MDAssemblyDefinition* ptr = (MDAssemblyDefinition*)(assemblyListTable.Dereference(i));
 				Assemblies.AddLast(new RuntimeAssembly(ptr));
 			}
 		}

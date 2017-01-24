@@ -23,7 +23,7 @@ namespace Mosa.Runtime
 
 		public static void InitializeArray(uint* array, RuntimeFieldHandle handle)
 		{
-			var fieldDefinition = (MetadataFieldDefinitionStruct*)((uint**)&handle)[0];
+			var fieldDefinition = (MDFieldDefinition*)((uint**)&handle)[0];
 			byte* arrayElements = (byte*)(array + 3);
 
 			// See FieldDefinition for format of field handle
@@ -55,14 +55,14 @@ namespace Mosa.Runtime
 		{
 			// Cheat
 			var handle = type.TypeHandle;
-			var typeStruct = (MetadataTypeStruct*)((uint**)&handle)[0];
+			var typeDefinition = (MDTypeDefinition*)((uint**)&handle)[0];
 
-			if (typeStruct->DefaultConstructor == null)
+			if (typeDefinition->DefaultConstructor == null)
 				throw new ArgumentException("Type has no parameterless constructor.");
 
-			var thisObject = Internal.AllocateObject(type.TypeHandle, typeStruct->Size);
+			var thisObject = Internal.AllocateObject(type.TypeHandle, typeDefinition->Size);
 
-			return Intrinsic.CreateInstanceSimple(typeStruct->DefaultConstructor->Method, thisObject);
+			return Intrinsic.CreateInstanceSimple(typeDefinition->DefaultConstructor->Method, thisObject);
 		}
 	}
 }

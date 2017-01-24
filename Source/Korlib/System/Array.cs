@@ -36,9 +36,9 @@ namespace System
 		public void SetValue(object value, params int[] indices)
 		{
 			if (indices == null)
-				throw new ArgumentNullException("indices");
+				throw new ArgumentNullException(nameof(indices));
 			if (Rank != indices.Length)
-				throw new ArgumentException("The number of dimensions in the current Array is not equal to the number of elements in indices.", "indices");
+				throw new ArgumentException("The number of dimensions in the current Array is not equal to the number of elements in indices.", nameof(indices));
 
 			// TODO
 		}
@@ -49,23 +49,24 @@ namespace System
 		public object GetValue(params int[] indices)
 		{
 			if (indices == null)
-				throw new ArgumentNullException("indices");
+				throw new ArgumentNullException(nameof(indices));
 			if (Rank != indices.Length)
-				throw new ArgumentException("The number of dimensions in the current Array is not equal to the number of elements in indices.", "indices");
+				throw new ArgumentException("The number of dimensions in the current Array is not equal to the number of elements in indices.", nameof(indices));
 
 			// TODO
 			return null;
 		}
 
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		private static extern void Copy(Array sourceArray, int sourceIndex, Array destinationArray, int destinationIndex, int length, bool reliable);
+
 		/// <summary>
-		///
+		/// Copies a range of elements from an Array starting at the specified source index and pastes them to another Array starting at the specified destination index.
+		/// The length and the indexes are specified as 32-bit integers.
 		/// </summary>
 		public static void Copy(Array sourceArray, int sourceIndex, Array destinationArray, int destinationIndex, int length)
 		{
-			for (int s = 0, d = destinationIndex; s < length; s++, d++)
-			{
-				sourceArray.SetValue(destinationArray.GetValue(d), s + sourceIndex);
-			}
+			Copy(sourceArray, sourceIndex, destinationArray, destinationIndex, length, true);
 		}
 
 		[MethodImpl(MethodImplOptions.InternalCall)]

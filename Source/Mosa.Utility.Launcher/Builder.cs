@@ -73,7 +73,7 @@ namespace Mosa.Utility.Launcher
 			{
 				CompileStartTime = DateTime.Now;
 
-				CompiledFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin");
+				CompiledFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.bin");
 
 				compiler.CompilerFactory = delegate { return new AotCompiler(); };
 
@@ -101,7 +101,7 @@ namespace Mosa.Utility.Launcher
 
 				if (Options.GenerateMapFile)
 				{
-					compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".map");
+					compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.map");
 				}
 
 				if (!Directory.Exists(Options.DestinationDirectory))
@@ -118,7 +118,7 @@ namespace Mosa.Utility.Launcher
 				}
 				else if (!File.Exists(Options.SourceFile))
 				{
-					AddOutput(string.Format("File {0} does not exists", Options.SourceFile));
+					AddOutput($"File {Options.SourceFile} does not exists");
 					return;
 				}
 
@@ -251,17 +251,9 @@ namespace Mosa.Utility.Launcher
 			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetResource(@"syslinux", "syslinux.cfg"));
 			File.Copy(compiledFile, Path.Combine(isoDirectory, "main.exe"));
 
-			ImageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".iso");
+			ImageFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.iso");
 
-			string arg =
-				"-relaxed-filenames" +
-				" -J -R" +
-				" -o " + Quote(ImageFile) +
-				" -b isolinux.bin" +
-				" -no-emul-boot" +
-				" -boot-load-size 4" +
-				" -boot-info-table " +
-				Quote(isoDirectory);
+			string arg = $"-relaxed-filenames -J -R -o {Quote(ImageFile)} -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
 
 			LaunchApplication(AppLocations.mkisofs, arg, true);
 		}
@@ -305,36 +297,20 @@ namespace Mosa.Utility.Launcher
 
 			File.Copy(compiledFile, Path.Combine(isoDirectory, "boot", "main.exe"));
 
-			ImageFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".iso");
+			ImageFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.iso");
 
-			string arg =
-				"-relaxed-filenames" +
-				" -J -R" +
-				" -o " + Quote(ImageFile) +
-				" -b " + Quote(loader) +
-				" -no-emul-boot" +
-				" -boot-load-size 4" +
-				" -boot-info-table " +
-				Quote(isoDirectory);
+			string arg = $"-relaxed-filenames -J -R -o {Quote(ImageFile)} -b {Quote(loader)} -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
 
 			LaunchApplication(AppLocations.mkisofs, arg, true);
 		}
 
 		private void CreateVMDK(string compiledFile)
 		{
-			var vmdkFile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".vmdk");
+			var vmdkFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.vmdk");
 
-			string arg =
-				"convert" +
-				" -f" +
-				" raw" +
-				" -O" +
-				" vmdk " +
-				Quote(ImageFile) + " " +
-				Quote(vmdkFile);
+			string arg = $"convert -f raw -O vmdk {Quote(ImageFile)} {Quote(vmdkFile)}";
 
 			ImageFile = vmdkFile;
-
 			LaunchApplication(AppLocations.QEMUImg, arg, true);
 		}
 
@@ -346,9 +322,9 @@ namespace Mosa.Utility.Launcher
 			ulong startingAddress = textSection.VirtualAddress + multibootHeaderLength;
 			uint fileOffset = textSection.FileOffset + multibootHeaderLength;
 
-			string arg = "-b 32 -o0x" + startingAddress.ToString("x") + " -e0x" + fileOffset.ToString("x") + " " + Quote(CompiledFile);
+			string arg = $"-b 32 -o0x{startingAddress.ToString("x")} -e0x{fileOffset.ToString("x")} {Quote(CompiledFile)}";
 
-			var nasmfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".nasm");
+			var nasmfile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.nasm");
 
 			var process = LaunchApplication(AppLocations.NDISASM, arg);
 
