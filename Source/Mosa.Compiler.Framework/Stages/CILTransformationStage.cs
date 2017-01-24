@@ -1796,8 +1796,6 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Result = tmp;
 			context.ResultCount = 1;
 
-			var size = GetInstructionSize(type);
-
 			if (StoreOnStack(type))
 			{
 				context.AppendInstruction(IRInstruction.LoadCompound, result, tmp, ConstantZero);
@@ -1806,6 +1804,8 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				var loadInstruction = GetLoadInstruction(type);
+				var size = GetInstructionSize(type);
+
 				context.AppendInstruction(loadInstruction, size, result, tmp, ConstantZero);
 				context.MosaType = type;
 			}

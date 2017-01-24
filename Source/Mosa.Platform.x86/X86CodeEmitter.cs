@@ -11,10 +11,8 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// An x86 machine code emitter.
 	/// </summary>
-	public sealed class MachineCodeEmitter : BaseCodeEmitter
+	public sealed class X86CodeEmitter : BaseCodeEmitter
 	{
-		#region Code Generation
-
 		/// <summary>
 		/// Calls the specified target.
 		/// </summary>
@@ -47,10 +45,81 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
+		/// Emits the relative branch target.
+		/// </summary>
+		/// <param name="label">The label.</param>
+		private void EmitRelativeBranchTarget(int label)
+		{
+			// The relative offset of the label
+			int relOffset = 0;
+
+			// The position in the code stream of the label
+			int position;
+
+			// Did we see the label?
+			if (TryGetLabel(label, out position))
+			{
+				// Yes, calculate the relative offset
+				relOffset = position - ((int)codeStream.Position + 4);
+			}
+			else
+			{
+				// Forward jump, we can't resolve yet - store a patch
+				AddPatch(label, (int)codeStream.Position);
+			}
+
+			// Emit the relative jump offset (zero if we don't know it yet!)
+			codeStream.Write(relOffset, Endianness.Little);
+		}
+
+		public override void ResolvePatches()
+		{
+			// Save the current position
+			long currentPosition = codeStream.Position;
+
+			foreach (var p in patches)
+			{
+				int labelPosition;
+				if (!TryGetLabel(p.Label, out labelPosition))
+				{
+					throw new ArgumentException("Missing label while resolving patches.", "label=" + labelPosition.ToString());
+				}
+
+				codeStream.Position = p.Position;
+
+				// Compute relative branch offset
+				int relOffset = labelPosition - ((int)p.Position + 4);
+
+				// Write relative offset to stream
+				var bytes = BitConverter.GetBytes(relOffset);
+				codeStream.Write(bytes, 0, bytes.Length);
+			}
+
+			// Reset the position
+			codeStream.Position = currentPosition;
+		}
+
+		/// <summary>
+		/// Emits a far jump to next instruction.
+		/// </summary>
+		public void EmitFarJumpToNextInstruction()
+		{
+			codeStream.WriteByte(0xEA);
+
+			linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, SectionKind.Text, MethodName, (int)codeStream.Position + 6);
+
+			codeStream.WriteZeroBytes(4);
+			codeStream.WriteByte(0x08);
+			codeStream.WriteByte(0x00);
+		}
+
+		#region Legacy Opcode Methods
+
+		/// <summary>
 		/// Emits the specified op code.
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
-		public void Emit(OpCode opCode)
+		internal void Emit(LegacyOpCode opCode)
 		{
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
@@ -61,7 +130,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
 		/// <param name="dest">The destination operand.</param>
-		public void Emit(OpCode opCode, Operand dest)
+		internal void Emit(LegacyOpCode opCode, Operand dest)
 		{
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
@@ -88,7 +157,7 @@ namespace Mosa.Platform.x86
 		/// <param name="opCode">The op code.</param>
 		/// <param name="dest">The destination operand.</param>
 		/// <param name="src">The source operand.</param>
-		public void Emit(OpCode opCode, Operand dest, Operand src)
+		internal void Emit(LegacyOpCode opCode, Operand dest, Operand src)
 		{
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
@@ -122,7 +191,7 @@ namespace Mosa.Platform.x86
 		/// <param name="dest">The dest.</param>
 		/// <param name="src">The source.</param>
 		/// <param name="third">The third.</param>
-		public void Emit(OpCode opCode, Operand dest, Operand src, Operand third)
+		internal void Emit(LegacyOpCode opCode, Operand dest, Operand src, Operand third)
 		{
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
@@ -229,75 +298,6 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Emits the relative branch target.
-		/// </summary>
-		/// <param name="label">The label.</param>
-		private void EmitRelativeBranchTarget(int label)
-		{
-			// The relative offset of the label
-			int relOffset = 0;
-
-			// The position in the code stream of the label
-			int position;
-
-			// Did we see the label?
-			if (TryGetLabel(label, out position))
-			{
-				// Yes, calculate the relative offset
-				relOffset = position - ((int)codeStream.Position + 4);
-			}
-			else
-			{
-				// Forward jump, we can't resolve yet - store a patch
-				AddPatch(label, (int)codeStream.Position);
-			}
-
-			// Emit the relative jump offset (zero if we don't know it yet!)
-			codeStream.Write(relOffset, Endianness.Little);
-		}
-
-		public override void ResolvePatches()
-		{
-			// Save the current position
-			long currentPosition = codeStream.Position;
-
-			foreach (var p in patches)
-			{
-				int labelPosition;
-				if (!TryGetLabel(p.Label, out labelPosition))
-				{
-					throw new ArgumentException("Missing label while resolving patches.", "label=" + labelPosition.ToString());
-				}
-
-				codeStream.Position = p.Position;
-
-				// Compute relative branch offset
-				int relOffset = labelPosition - ((int)p.Position + 4);
-
-				// Write relative offset to stream
-				var bytes = BitConverter.GetBytes(relOffset);
-				codeStream.Write(bytes, 0, bytes.Length);
-			}
-
-			// Reset the position
-			codeStream.Position = currentPosition;
-		}
-
-		/// <summary>
-		/// Emits a far jump to next instruction.
-		/// </summary>
-		public void EmitFarJumpToNextInstruction()
-		{
-			codeStream.WriteByte(0xEA);
-
-			linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, SectionKind.Text, MethodName, (int)codeStream.Position + 6);
-
-			codeStream.WriteZeroBytes(4);
-			codeStream.WriteByte(0x08);
-			codeStream.WriteByte(0x00);
-		}
-
-		/// <summary>
 		/// Calculates the value of the modR/M byte and SIB bytes.
 		/// </summary>
 		/// <param name="regField">The modR/M regfield value.</param>
@@ -329,6 +329,6 @@ namespace Mosa.Platform.x86
 			return modRM;
 		}
 
-		#endregion Code Generation
+		#endregion Legacy Opcode Methods
 	}
 }

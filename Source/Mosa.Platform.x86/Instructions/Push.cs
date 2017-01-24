@@ -12,16 +12,16 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly OpCode PUSH = new OpCode(new byte[] { 0xFF }, 6);
-		private static readonly OpCode CONST8 = new OpCode(new byte[] { 0x6A });
-		private static readonly OpCode CONST16 = new OpCode(new byte[] { 0x66, 0x68 });
-		private static readonly OpCode CONST32 = new OpCode(new byte[] { 0x68 });
-		private static readonly OpCode PUSH_CS = new OpCode(new byte[] { 0x0E });
-		private static readonly OpCode PUSH_SS = new OpCode(new byte[] { 0x16 });
-		private static readonly OpCode PUSH_DS = new OpCode(new byte[] { 0x1E });
-		private static readonly OpCode PUSH_ES = new OpCode(new byte[] { 0x06 });
-		private static readonly OpCode PUSH_FS = new OpCode(new byte[] { 0x0F, 0xA0 });
-		private static readonly OpCode PUSH_GS = new OpCode(new byte[] { 0x0F, 0xA8 });
+		private static readonly LegacyOpCode PUSH = new LegacyOpCode(new byte[] { 0xFF }, 6);
+		private static readonly LegacyOpCode CONST8 = new LegacyOpCode(new byte[] { 0x6A });
+		private static readonly LegacyOpCode CONST16 = new LegacyOpCode(new byte[] { 0x66, 0x68 });
+		private static readonly LegacyOpCode CONST32 = new LegacyOpCode(new byte[] { 0x68 });
+		private static readonly LegacyOpCode PUSH_CS = new LegacyOpCode(new byte[] { 0x0E });
+		private static readonly LegacyOpCode PUSH_SS = new LegacyOpCode(new byte[] { 0x16 });
+		private static readonly LegacyOpCode PUSH_DS = new LegacyOpCode(new byte[] { 0x1E });
+		private static readonly LegacyOpCode PUSH_ES = new LegacyOpCode(new byte[] { 0x06 });
+		private static readonly LegacyOpCode PUSH_FS = new LegacyOpCode(new byte[] { 0x0F, 0xA0 });
+		private static readonly LegacyOpCode PUSH_GS = new LegacyOpCode(new byte[] { 0x0F, 0xA8 });
 
 		#endregion Data Members
 
@@ -45,7 +45,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
 		/// <exception cref="System.InvalidOperationException">@unable to emit opcode for segment register</exception>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			if (node.Operand1.IsConstant)
 			{

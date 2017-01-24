@@ -13,17 +13,17 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly OpCode RM_C = new OpCode(new byte[] { 0xC7 }, 0); // Move imm32 to r/m32
-		private static readonly OpCode RM_C_U8 = new OpCode(new byte[] { 0xC6 }, 0); // Move imm8 to r/m8
-		private static readonly OpCode R_RM_16 = new OpCode(new byte[] { 0x66, 0x8B });
-		private static readonly OpCode RM_R_U8 = new OpCode(new byte[] { 0x88 });
-		private static readonly OpCode R_RM = new OpCode(new byte[] { 0x8B });
-		private static readonly OpCode M_R = new OpCode(new byte[] { 0x89 });
-		private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x89 });
-		private static readonly OpCode RM_U8 = new OpCode(new byte[] { 0x8A }); // Move r/m8 to R8
-		private static readonly OpCode M_C_16 = new OpCode(new byte[] { 0x66, 0xC7 });
-		private static readonly OpCode SEG_RM = new OpCode(new byte[] { 0x8E }); // Move r/m to seg
-		private static readonly OpCode RM_SEG = new OpCode(new byte[] { 0x8C }); // Move seg to r/m
+		private static readonly LegacyOpCode RM_C = new LegacyOpCode(new byte[] { 0xC7 }, 0); // Move imm32 to r/m32
+		private static readonly LegacyOpCode RM_C_U8 = new LegacyOpCode(new byte[] { 0xC6 }, 0); // Move imm8 to r/m8
+		private static readonly LegacyOpCode R_RM_16 = new LegacyOpCode(new byte[] { 0x66, 0x8B });
+		private static readonly LegacyOpCode RM_R_U8 = new LegacyOpCode(new byte[] { 0x88 });
+		private static readonly LegacyOpCode R_RM = new LegacyOpCode(new byte[] { 0x8B });
+		private static readonly LegacyOpCode M_R = new LegacyOpCode(new byte[] { 0x89 });
+		private static readonly LegacyOpCode M_R_16 = new LegacyOpCode(new byte[] { 0x66, 0x89 });
+		private static readonly LegacyOpCode RM_U8 = new LegacyOpCode(new byte[] { 0x8A }); // Move r/m8 to R8
+		private static readonly LegacyOpCode M_C_16 = new LegacyOpCode(new byte[] { 0x66, 0xC7 });
+		private static readonly LegacyOpCode SEG_RM = new LegacyOpCode(new byte[] { 0x8E }); // Move r/m to seg
+		private static readonly LegacyOpCode RM_SEG = new LegacyOpCode(new byte[] { 0x8C }); // Move seg to r/m
 
 		#endregion Data Members
 
@@ -48,7 +48,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		internal override LegacyOpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			if (destination.Register is SegmentRegister)
 			{
@@ -93,9 +93,9 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(node.Result, node.Operand1, null);
+			LegacyOpCode opCode = ComputeOpCode(node.Result, node.Operand1, null);
 			emitter.Emit(opCode, node.Result, node.Operand1);
 		}
 

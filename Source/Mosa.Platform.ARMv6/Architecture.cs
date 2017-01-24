@@ -225,7 +225,7 @@ namespace Mosa.Platform.ARMv6
 		/// <returns></returns>
 		public override BaseCodeEmitter GetCodeEmitter()
 		{
-			return new MachineCodeEmitter();
+			return new ARMv6CodeEmitter();
 		}
 
 		/// <summary>

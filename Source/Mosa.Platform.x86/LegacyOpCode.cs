@@ -5,7 +5,7 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// x86 OpCode
 	/// </summary>
-	public class OpCode
+	internal sealed class LegacyOpCode
 	{
 		/// <summary>
 		/// Byte code
@@ -18,21 +18,21 @@ namespace Mosa.Platform.x86
 		internal byte? RegField;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="OpCode"/> class.
+		/// Initializes a new instance of the <see cref="LegacyOpCode"/> class.
 		/// </summary>
 		/// <param name="code">The corresponding opcodes</param>
 		/// <param name="regField">Additional parameter field</param>
-		internal OpCode(byte[] code, byte? regField)
+		internal LegacyOpCode(byte[] code, byte? regField)
 		{
 			Code = code;
 			RegField = regField;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="OpCode"/> struct.
+		/// Initializes a new instance of the <see cref="LegacyOpCode"/> struct.
 		/// </summary>
 		/// <param name="code">The corresponding opcodes</param>
-		internal OpCode(byte[] code)
+		internal LegacyOpCode(byte[] code)
 		{
 			Code = code;
 			RegField = null;

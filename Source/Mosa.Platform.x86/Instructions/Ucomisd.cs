@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly OpCode opcode = new OpCode(new byte[] { 0x66, 0x0F, 0x2E });
+		private static readonly LegacyOpCode opcode = new LegacyOpCode(new byte[] { 0x66, 0x0F, 0x2E });
 
 		#endregion Data Members
 
@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		internal override LegacyOpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			Debug.Assert(source.IsCPURegister);
 
@@ -49,11 +49,11 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			Debug.Assert(node.Result == null);
 
-			OpCode opCode = ComputeOpCode(null, node.Operand1, node.Operand2);
+			LegacyOpCode opCode = ComputeOpCode(null, node.Operand1, node.Operand2);
 			emitter.Emit(opCode, node.Operand1, node.Operand2);
 		}
 

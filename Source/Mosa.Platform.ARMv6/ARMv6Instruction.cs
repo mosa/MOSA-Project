@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.ARMv6
 {
@@ -35,7 +36,7 @@ namespace Mosa.Platform.ARMv6
 		/// <returns></returns>
 		protected virtual uint ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			throw new System.Exception("opcode not implemented for this instruction");
+			throw new Exception("opcode not implemented for this instruction");
 		}
 
 		/// <summary>
@@ -43,7 +44,7 @@ namespace Mosa.Platform.ARMv6
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected virtual void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		protected virtual void Emit(InstructionNode node, ARMv6CodeEmitter emitter)
 		{
 			// TODO: Check x86 Implementation
 		}
@@ -55,7 +56,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="emitter">The emitter.</param>
 		public void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Emit(node, emitter as MachineCodeEmitter);
+			Emit(node, emitter as ARMv6CodeEmitter);
 		}
 
 		/// <summary>
@@ -65,7 +66,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="emitter">The emitter.</param>
 		/// <param name="opcode">The opcode.</param>
 		/// <exception cref="InvalidCompilerException"></exception>
-		protected void EmitDataProcessingInstruction(InstructionNode node, MachineCodeEmitter emitter, byte opcode)
+		protected void EmitDataProcessingInstruction(InstructionNode node, ARMv6CodeEmitter emitter, byte opcode)
 		{
 			if (node.Operand2.IsCPURegister && node.Operand3.IsShift)
 			{
@@ -86,7 +87,7 @@ namespace Mosa.Platform.ARMv6
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected void EmitMultiplyInstruction(InstructionNode node, MachineCodeEmitter emitter)
+		protected void EmitMultiplyInstruction(InstructionNode node, ARMv6CodeEmitter emitter)
 		{
 			if (!node.Operand3.IsCPURegister)
 			{
@@ -98,7 +99,7 @@ namespace Mosa.Platform.ARMv6
 			}
 		}
 
-		protected void EmitMemoryLoadStore(InstructionNode node, MachineCodeEmitter emitter, TransferType transferType)
+		protected void EmitMemoryLoadStore(InstructionNode node, ARMv6CodeEmitter emitter, TransferType transferType)
 		{
 			if (node.Operand2.IsConstant)
 			{

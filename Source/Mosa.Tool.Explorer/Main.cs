@@ -111,6 +111,10 @@ namespace Mosa.Tool.Explorer
 		{
 			LoadAssembly(filename, cbPlatform.Text);
 
+			UpdateTree();
+
+			Stage = CompileStage.Loaded;
+
 			methodStore.Clear();
 
 			SetStatus("Assemblies Loaded!");
@@ -179,6 +183,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
 			Compiler.CompilerOptions.EnableInlinedMethods = cbEnableInlinedMethods.Checked;
+			Compiler.CompilerOptions.InlinedIRMaximum = 20;
 		}
 
 		private void CleanGUI()
@@ -531,7 +536,7 @@ namespace Mosa.Tool.Explorer
 
 		protected void LoadAssembly(string filename, string platform)
 		{
-			Compiler.CompilerOptions.Architecture = GetArchitecture(cbPlatform.Text);
+			Compiler.CompilerOptions.Architecture = GetArchitecture(platform);
 
 			var moduleLoader = new MosaModuleLoader();
 
@@ -540,11 +545,9 @@ namespace Mosa.Tool.Explorer
 
 			var metadata = moduleLoader.CreateMetadata();
 
-			Compiler.Load(TypeSystem.Load(metadata));
+			var typeSystem = TypeSystem.Load(metadata);
 
-			UpdateTree();
-
-			Stage = CompileStage.Loaded;
+			Compiler.Load(typeSystem);
 		}
 
 		private void ShowCodeForm()
@@ -555,7 +558,7 @@ namespace Mosa.Tool.Explorer
 			{
 				if (!string.IsNullOrEmpty(form.Assembly))
 				{
-					LoadAssembly(form.Assembly, cbPlatform.Text);
+					LoadAssembly(form.Assembly);
 				}
 			}
 		}
@@ -728,6 +731,11 @@ namespace Mosa.Tool.Explorer
 					cbDebugStages.SelectedIndex++;
 				}
 			}
+		}
+
+		private void cbPlatform_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			//
 		}
 	}
 }

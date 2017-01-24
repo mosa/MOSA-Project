@@ -12,8 +12,8 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly OpCode R_RM = new OpCode(new byte[] { 0xF2, 0x0F, 0x10 });
-		private static readonly OpCode RM_R = new OpCode(new byte[] { 0xF2, 0x0F, 0x11 });
+		private static readonly LegacyOpCode R_RM = new LegacyOpCode(new byte[] { 0xF2, 0x0F, 0x10 });
+		private static readonly LegacyOpCode RM_R = new LegacyOpCode(new byte[] { 0xF2, 0x0F, 0x11 });
 
 		#endregion Data Members
 
@@ -38,7 +38,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		internal override LegacyOpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			if (destination.IsCPURegister) return R_RM;
 

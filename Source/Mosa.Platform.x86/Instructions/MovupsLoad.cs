@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Platform;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
@@ -37,12 +36,12 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			MovupsMemoryToReg(node, emitter);
 		}
 
-		private static void MovupsMemoryToReg(InstructionNode node, MachineCodeEmitter emitter)
+		private static void MovupsMemoryToReg(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 

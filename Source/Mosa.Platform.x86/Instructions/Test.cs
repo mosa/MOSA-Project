@@ -12,19 +12,19 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Member
 
-		private static readonly OpCode M_R = new OpCode(new byte[] { 0x85 });
+		private static readonly LegacyOpCode M_R = new LegacyOpCode(new byte[] { 0x85 });
 
 		//private static readonly OpCode R_M = new OpCode(new byte[] { 0x3B });
-		private static readonly OpCode R_R = new OpCode(new byte[] { 0x85 });
+		private static readonly LegacyOpCode R_R = new LegacyOpCode(new byte[] { 0x85 });
 
-		private static readonly OpCode M_C = new OpCode(new byte[] { 0xF7 }, 0);
-		private static readonly OpCode R_C = new OpCode(new byte[] { 0xF7 }, 0);
-		private static readonly OpCode R_C_8 = new OpCode(new byte[] { 0xF6 }, 0);
-		private static readonly OpCode R_C_16 = new OpCode(new byte[] { 0x66, 0xF7 }, 0);
-		private static readonly OpCode M_R_8 = new OpCode(new byte[] { 0x84 });
+		private static readonly LegacyOpCode M_C = new LegacyOpCode(new byte[] { 0xF7 }, 0);
+		private static readonly LegacyOpCode R_C = new LegacyOpCode(new byte[] { 0xF7 }, 0);
+		private static readonly LegacyOpCode R_C_8 = new LegacyOpCode(new byte[] { 0xF6 }, 0);
+		private static readonly LegacyOpCode R_C_16 = new LegacyOpCode(new byte[] { 0x66, 0xF7 }, 0);
+		private static readonly LegacyOpCode M_R_8 = new LegacyOpCode(new byte[] { 0x84 });
 
 		//private static readonly OpCode R_M_8 = new OpCode(new byte[] { 0x3A });
-		private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x85 });
+		private static readonly LegacyOpCode M_R_16 = new LegacyOpCode(new byte[] { 0x66, 0x85 });
 
 		//private static readonly OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x3B });
 
@@ -51,7 +51,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		internal override LegacyOpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			if (source.IsCPURegister && third.IsCPURegister) return R_R;
 
@@ -74,9 +74,9 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(InstructionNode node, MachineCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(null, node.Operand1, node.Operand2);
+			LegacyOpCode opCode = ComputeOpCode(null, node.Operand1, node.Operand2);
 			emitter.Emit(opCode, node.Operand1, node.Operand2);
 		}
 

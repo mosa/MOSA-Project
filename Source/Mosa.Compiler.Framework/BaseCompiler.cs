@@ -108,6 +108,7 @@ namespace Mosa.Compiler.Framework
 			Compiler = compiler;
 
 			Architecture = Compiler.CompilerOptions.Architecture;
+
 			TypeSystem = Compiler.TypeSystem;
 			TypeLayout = Compiler.TypeLayout;
 			CompilerTrace = Compiler.CompilerTrace;

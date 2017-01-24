@@ -157,8 +157,9 @@
     <Compile Include="Instructions\Wfe.cs" />
     <Compile Include="Instructions\Wfi.cs" />
     <Compile Include="Instructions\Yield.cs" />
-    <Compile Include="MachineCodeEmitter.cs" />
+    <Compile Include="ARMv6CodeEmitter.cs" />
     <Compile Include="Stages\IRTransformationStage.cs" />
+    <Compile Include="ARMv6OpcodeEncoder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Intrinsic\" />

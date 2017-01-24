@@ -20,7 +20,7 @@ namespace Mosa.Platform.ARMv6
 	/// <summary>
 	/// An ARMv6 machine code emitter.
 	/// </summary>
-	public sealed class MachineCodeEmitter : BaseCodeEmitter
+	public sealed class ARMv6CodeEmitter : BaseCodeEmitter
 	{
 		#region Code Generation Members
 

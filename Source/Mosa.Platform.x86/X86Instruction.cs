@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
+using System;
 
 namespace Mosa.Platform.x86
 {
@@ -53,7 +54,22 @@ namespace Mosa.Platform.x86
 		/// <param name="emitter">The emitter.</param>
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Emit(node, emitter as MachineCodeEmitter);
+			EmitLegacy(node, emitter as X86CodeEmitter);
+		}
+
+		#endregion Methods
+
+		#region Legacy Opcode Methods
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <param name="emitter">The emitter.</param>
+		internal virtual void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		{
+			var opCode = ComputeOpCode(node.Result, node.Operand1, node.Operand2);
+			emitter.Emit(opCode, node.Result, node.Operand1, node.Operand2);
 		}
 
 		/// <summary>
@@ -63,22 +79,12 @@ namespace Mosa.Platform.x86
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-		protected virtual OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		/// <exception cref="System.Exception">opcode not implemented for this instruction</exception>
+		internal virtual LegacyOpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			throw new System.Exception("opcode not implemented for this instruction");
+			throw new Exception("opcode not implemented for this instruction");
 		}
 
-		/// <summary>
-		/// Emits the specified platform instruction.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		/// <param name="emitter">The emitter.</param>
-		protected virtual void Emit(InstructionNode node, MachineCodeEmitter emitter)
-		{
-			OpCode opCode = ComputeOpCode(node.Result, node.Operand1, node.Operand2);
-			emitter.Emit(opCode, node.Result, node.Operand1, node.Operand2);
-		}
-
-		#endregion Methods
+		#endregion Legacy Opcode Methods
 	}
 }

@@ -181,12 +181,12 @@ namespace Mosa.Compiler.Framework
 		/// Emits the specified opcode.
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
-		public void Emit(OpcodeEncoder opcode)
+		public void Emit(BaseOpcodeEncoder opcode)
 		{
 			opcode.WriteTo(codeStream);
 		}
 
-		public void Emit(OpcodeEncoder opcode, Operand symbolOperand, int patchOffset, int referenceOffset = 0)
+		public void Emit(BaseOpcodeEncoder opcode, Operand symbolOperand, int patchOffset, int referenceOffset = 0)
 		{
 			int pos = (int)codeStream.Position + patchOffset;
 

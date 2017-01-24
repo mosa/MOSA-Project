@@ -259,7 +259,7 @@ namespace Mosa.Platform.x86
 		/// <returns></returns>
 		public override BaseCodeEmitter GetCodeEmitter()
 		{
-			return new MachineCodeEmitter();
+			return new X86CodeEmitter();
 		}
 
 		/// <summary>

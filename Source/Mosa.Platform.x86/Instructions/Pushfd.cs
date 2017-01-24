@@ -11,7 +11,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data members
 
-		private static readonly OpCode opcode = new OpCode(new byte[] { 0x9C });
+		private static readonly LegacyOpCode opcode = new LegacyOpCode(new byte[] { 0x9C });
 
 		#endregion Data members
 
@@ -36,7 +36,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="source"></param>
 		/// <param name="third"></param>
 		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		internal override LegacyOpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			return opcode;
 		}
