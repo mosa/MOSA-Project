@@ -1,4 +1,4 @@
-The MOSA Ahead-Of-Time (AOT) Compiler is used to create native code binaries and bootable kernel images from managed code. The compiler uses the facilities provided by the MOSA Compiler Framework. 
+The MOSA Ahead-Of-Time (AOT) Compiler is used to create native code binaries and bootable kernel images from managed code. The compiler uses the facilities provided by the MOSA Compiler Framework.
 
 ### General Usage
 
@@ -38,7 +38,6 @@ The compiler command line switches are split into various categories described b
 |-----------|-----------|
 | -ssa | Enabled transformation of IR code into [Static Single Assignment (SSA) form](http://en.wikipedia.org/wiki/Static_single_assignment_form) |
 | -optimize | Enabled optimization; such as [strength reduction](http://en.wikipedia.org/wiki/Strength_reduction), [constant folding](http://en.wikipedia.org/wiki/Constant_folding), [copy propagation](http://en.wikipedia.org/wiki/Copy_propagation) and [dead code elimination](http://en.wikipedia.org/wiki/Dead_code_elimination) |
-| -promote-temps | Enables temporary variables promotion optimization |
 | -sa | Performs static allocations at compile time |
 
 ### Linker
@@ -58,19 +57,19 @@ The compiler command line switches are split into various categories described b
 
 The following examples show the usage of mosacl for certain tasks.
 
-**Creating a native portable executable for a managed executable**
+**Create an ELF executable for a managed executable**
 
 <pre>
 mosacl -a=x86 -f=ELF32 -o name-native.exe name.exe
 </pre>
 
-**Generating a map file for a binary**
+**Generate a map file for a binary**
 
 <pre>
 mosacl -a=x86 -f=ELF32 --map=name-native.map -o name-native.exe name.exe
 </pre>
 
-**Creating a bootable kernel image using the portable executable format and a multiboot compliant bootloader**
+**Create a bootable kernel image using the ELF format and a multiboot compliant bootloader**
 
 <pre>
 mosacl -a=x86 -f=ELF32 -b=mb0.7 -o kernel-image.exe kernel.exe
