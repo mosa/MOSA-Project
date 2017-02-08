@@ -78,7 +78,7 @@ namespace Mosa.Utility.Launcher
 			}
 			else if (Options.DebugConnectionOption == DebugConnectionOption.TCPServer)
 			{
-				arg = arg + " -serial tcp:" + Options.DebugConnectionAddress + ":" + Options.DebugConnectionPort.ToString() + ",server,nowait,nodelay";
+				arg = arg + " -serial tcp:" + Options.DebugConnectionAddress + ":" + Options.DebugConnectionPort.ToString() + ",server,nowait";
 			}
 			else if (Options.DebugConnectionOption == DebugConnectionOption.TCPClient)
 			{

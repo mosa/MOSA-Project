@@ -44,6 +44,7 @@
     <Compile Include="DebugCode.cs" />
     <Compile Include="DebugMessage.cs" />
     <Compile Include="DebugNetworkStream.cs" />
+    <Compile Include="Packet.cs" />
     <Compile Include="DebugServerEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
