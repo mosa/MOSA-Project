@@ -154,7 +154,7 @@
   <ItemGroup>
     <Content Include="CallFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>CallFixture1.cs</LastGenOutput>
+      <LastGenOutput>CallFixture.cs</LastGenOutput>
     </Content>
     <Content Include="ComparisonFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
