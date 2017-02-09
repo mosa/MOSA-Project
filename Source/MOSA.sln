@@ -97,13 +97,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Runtime", "Mosa.Runtime\Mosa.Runtime.csproj", "{77961864-DB33-4189-804F-D774022C96E2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workspaces", "Workspaces", "{AC7C3CDA-E0E8-408C-BB32-DBCBB905E3E1}"
-	ProjectSection(SolutionItems) = preProject
-		..\Art\MOSA Debugger.png = ..\Art\MOSA Debugger.png
-		..\Art\MOSA Launcher Output.png = ..\Art\MOSA Launcher Output.png
-		..\Art\MOSA Launcher.png = ..\Art\MOSA Launcher.png
-		..\Art\MOSA QEMU CoolWorld.png = ..\Art\MOSA QEMU CoolWorld.png
-		..\Art\MOSA QEMU TestWorld.png = ..\Art\MOSA QEMU TestWorld.png
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Workspace.FileSystem.Debug", "Mosa.Workspace.FileSystem.Debug\Mosa.Workspace.FileSystem.Debug.csproj", "{A8765C3C-1194-4A3A-8579-745CA47C36D3}"
 EndProject
