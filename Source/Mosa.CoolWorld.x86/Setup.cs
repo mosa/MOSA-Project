@@ -105,7 +105,7 @@ namespace Mosa.CoolWorld.x86
 			foreach (var device in diskcontrollers)
 			{
 				Boot.Console.Write("Found controller ");
-				Boot.InBrackets(device.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
+				Boot.InBrackets(device.Name, Mosa.Kernel.x86.Color.White, Mosa.Kernel.x86.Color.LightGreen);
 				Boot.Console.WriteLine();
 			}
 
@@ -115,7 +115,7 @@ namespace Mosa.CoolWorld.x86
 			foreach (var disk in disks)
 			{
 				Boot.Console.Write("Spinning up disk ");
-				Boot.InBrackets(disk.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
+				Boot.InBrackets(disk.Name, Mosa.Kernel.x86.Color.White, Mosa.Kernel.x86.Color.LightGreen);
 				Boot.Console.Write(" " + (disk as IDiskDevice).TotalBlocks.ToString() + " blocks");
 				Boot.Console.WriteLine();
 			}
@@ -128,7 +128,7 @@ namespace Mosa.CoolWorld.x86
 			foreach (var partition in partitions)
 			{
 				Boot.Console.Write("Opening partition: ");
-				Boot.InBrackets(partition.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
+				Boot.InBrackets(partition.Name, Mosa.Kernel.x86.Color.White, Mosa.Kernel.x86.Color.LightGreen);
 				Boot.Console.Write(" " + (partition as IPartitionDevice).BlockCount.ToString() + " blocks");
 				Boot.Console.WriteLine();
 			}
@@ -356,7 +356,7 @@ namespace Mosa.CoolWorld.x86
 			hardwareDevice.Setup(hardwareResources);
 
 			Boot.Console.Write("Adding device ");
-			Boot.InBrackets(hardwareDevice.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
+			Boot.InBrackets(hardwareDevice.Name, Mosa.Kernel.x86.Color.White, Mosa.Kernel.x86.Color.LightGreen);
 			Boot.Console.WriteLine();
 
 			deviceManager.Add(hardwareDevice);

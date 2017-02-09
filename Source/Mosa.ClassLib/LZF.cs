@@ -51,7 +51,6 @@ namespace Mosa.ClassLib
 {
 	/// <summary>
 	/// Improved C# LZF Compressor, a very small data compression library. The compression algorithm is extremely fast.
-
 	/// </summary>
 	public sealed class LZF
 	{
@@ -73,6 +72,7 @@ namespace Mosa.ClassLib
 		/// <param name="inputLength">Length of the data to compress</param>
 		/// <param name="output">Reference to a buffer which will contain the compressed data</param>
 		/// <param name="outputLength">Length of the compression buffer (should be bigger than the input buffer)</param>
+		/// <returns></returns>
 		public int Compress(byte[] input, int inputLength, byte[] output, int outputLength)
 		{
 			//Array.Clear(HashTable, 0, (int)HSIZE);

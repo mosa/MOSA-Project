@@ -53,7 +53,6 @@ namespace Mosa.Kernel.x86
 {
 	/// <summary>
 	/// Improved C# LZF Compressor, a very small data compression library. The compression algorithm is extremely fast.
-
 	/// </summary>
 	public static class LZF
 	{
@@ -64,6 +63,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="inputLength">Length of the data to decompress</param>
 		/// <param name="output">Reference to a buffer which will contain the decompressed data</param>
 		/// <param name="outputLength">The size of the decompressed archive in the output buffer</param>
+		/// <returns></returns>
 		public static bool Decompress(uint input, uint inputLength, uint output, uint outputLength)
 		{
 			uint iidx = 0;

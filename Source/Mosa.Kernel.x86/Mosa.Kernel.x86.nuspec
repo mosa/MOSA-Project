@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>Mosa.Kernel.x86</id>
+		<version>1.0.0.0</version>
+		<title>Mosa.Kernel.x86 Library</title>
+		<authors>MOSA Project</authors>
+		<owners>MOSA Project</owners>
+		<licenseUrl>https://github.com/mosa/MOSA-Project/blob/master/LICENSE.txt</licenseUrl>
+		<projectUrl>http://www.mosa-project.org</projectUrl>
+		<iconUrl>https://raw.githubusercontent.com/tgiphil/MOSA-Project/VSIXProject/Source/Art/Mosa%20Icon.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>MOSA kernel for x86</description>
+		<releaseNotes></releaseNotes>
+		<copyright>Copyright © 2017</copyright>
+		<tags>MOSA Compiler</tags>
+		<dependencies>
+			<dependency id="Mosa.Korlib" version="1.0.0" />
+			<dependency id="Mosa.ClassLib" version="1.0.0" />
+			<dependency id="Mosa.Runtime" version="1.0.0" />
+			<dependency id="Mosa.Runtime.x86" version="1.0.0" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="..\..\bin\Mosa.Kernel.x86.dll" target="lib" />
+	</files>
+</package>

@@ -44,12 +44,12 @@ namespace Mosa.TestWorld.x86.Tests
 
 			if (flag)
 			{
-				Console.Color = Colors.White;
+				Console.Color = Color.White;
 				Console.Write("+");
 			}
 			else
 			{
-				Console.Color = Colors.Red;
+				Console.Color = Color.Red;
 				Console.Write("X");
 			}
 
@@ -64,15 +64,15 @@ namespace Mosa.TestWorld.x86.Tests
 			Console = Boot.Console;
 
 			Console.Goto(2, 0);
-			Console.Color = Colors.Yellow;
+			Console.Color = Color.Yellow;
 			Console.Write("[");
-			Console.Color = Colors.White;
+			Console.Color = Color.White;
 			Console.Write("Tests");
-			Console.Color = Colors.Yellow;
+			Console.Color = Color.Yellow;
 			Console.Write("]");
 			Console.WriteLine();
 			Console.WriteLine();
-			Console.Color = Colors.Yellow;
+			Console.Color = Color.Yellow;
 
 			var delegateTest = new DelegateTest();
 			var stringTest = new StringTest();
@@ -108,7 +108,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public void Test()
 		{
-			Console.Color = Colors.Yellow;
+			Console.Color = Color.Yellow;
 			Console.Write(testName);
 
 			int len = 15 - testName.Length;

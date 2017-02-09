@@ -1,0 +1,29 @@
+build:
+  verbosity: minimal
+  parallel: true
+  project: Source\MOSA.sln
+  publish_nuget: true
+
+configuration: Release
+platform: Any CPU
+
+shallow_clone: true
+
+install:
+  - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
+
+before_build:
+  - nuget restore -Verbosity quiet Source\MOSA.sln
+  - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
+  - ps: Vsix-TokenReplacement Source\Mosa.VisualStudio.Extension\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
+
+build_script:
+#  - msbuild /m /p:BuildInParallel=true /p:Configuration=Release /p:Platform="Any CPU" /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m Source\MOSA.sln
+
+after_test:
+  - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
+
+nuget:
+  project_feed: true
+
+test: off
