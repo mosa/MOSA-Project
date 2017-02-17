@@ -31,13 +31,13 @@ namespace Mosa.CoolWorld.x86
 
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
-			Console.Color = Colors.White;
-			Console.BackgroundColor = Colors.Green;
+			Console.Color = Color.White;
+			Console.BackgroundColor = Color.Green;
 
 			Console.Write(@"                   MOSA OS Version 1.4 - Compiler Version 1.4");
 			FillLine();
-			Console.Color = Colors.White;
-			Console.BackgroundColor = Colors.Black;
+			Console.Color = Color.White;
+			Console.BackgroundColor = Color.Black;
 
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 			Setup.Initialize();
@@ -45,7 +45,7 @@ namespace Mosa.CoolWorld.x86
 			Console.WriteLine("> Adding hardware devices...");
 			Setup.Start();
 
-			Console.Color = Colors.White;
+			Console.Color = Color.White;
 			Console.WriteLine();
 
 			Debug = ConsoleManager.Controller.Debug;
@@ -116,8 +116,8 @@ namespace Mosa.CoolWorld.x86
 			byte back = Console.BackgroundColor;
 			uint sr = Console.ScrollRow;
 
-			Console.Color = Colors.Cyan;
-			Console.BackgroundColor = Colors.Black;
+			Console.Color = Color.Cyan;
+			Console.BackgroundColor = Color.Black;
 			Console.Row = 24;
 			Console.Column = 0;
 			Console.ScrollRow = Console.Rows;

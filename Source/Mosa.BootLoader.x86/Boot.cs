@@ -66,8 +66,8 @@ namespace Mosa.BootLoader.x86
 
 			Screen.Column = 60;
 			Screen.Row = 24;
-			Screen.Color = Colors.Cyan;
-			Screen.BackgroundColor = Colors.Black;
+			Screen.Color = Color.Cyan;
+			Screen.BackgroundColor = Color.Black;
 
 			Screen.Write(counter, 10, 7);
 			Screen.Write(':');

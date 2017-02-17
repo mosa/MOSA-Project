@@ -137,8 +137,8 @@ namespace Mosa.TestWorld.x86
 
 			Console.Column = 50;
 			Console.Row = 24;
-			Console.Color = Colors.Cyan;
-			Console.BackgroundColor = Colors.Black;
+			Console.Color = Color.Cyan;
+			Console.BackgroundColor = Color.Black;
 
 			Console.Write(counter, 10, 7);
 			Console.Write(':');

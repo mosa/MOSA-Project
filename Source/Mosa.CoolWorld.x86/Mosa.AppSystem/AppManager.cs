@@ -126,8 +126,8 @@ namespace Mosa.AppSystem
 			byte back = debug.BackgroundColor;
 			uint sr = debug.ScrollRow;
 
-			debug.Color = Colors.Cyan;
-			debug.BackgroundColor = Colors.Black;
+			debug.Color = Kernel.x86.Color.Cyan;
+			debug.BackgroundColor = Kernel.x86.Color.Black;
 			debug.Row = 24;
 			debug.Column = 0;
 			debug.ScrollRow = debug.Rows;

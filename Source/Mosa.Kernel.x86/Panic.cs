@@ -33,11 +33,11 @@ namespace Mosa.Kernel.x86
 		{
 			IDT.SetInterruptHandler(null);
 
-			Screen.BackgroundColor = Colors.Blue;
+			Screen.BackgroundColor = Color.Blue;
 
 			Screen.Clear();
 			Screen.Goto(1, 0);
-			Screen.Color = Colors.White;
+			Screen.Color = Color.White;
 			Screen.Write("*** Kernel Panic ***");
 
 			if (firstError)
