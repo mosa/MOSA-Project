@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26206.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 12.0.31101.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{AB88960E-B233-475B-96E4-8C10EEF8622C}"
 EndProject
@@ -11,47 +11,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OS", "OS", "{1AB7FA6A-829C-4DCF-BCA6-A27156D8DA26}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kernel", "Kernel", "{FF773BDF-A20C-4A5F-BFF9-F422C2AFF3CE}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{E808AF53-3054-497B-B7C5-DEA4FDED0806}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compiler", "Compiler", "{DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{90065B0F-1BFE-40D8-AED5-11096B2535B0}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtimes", "Runtimes", "{3C5A2C4B-FD05-42B3-B6C6-C366DF978A62}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workspaces", "Workspaces", "{AC7C3CDA-E0E8-408C-BB32-DBCBB905E3E1}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Screenshots", "Screenshots", "{D30D7194-59AD-4B6F-8DB9-F1CCE0483E99}"
-	ProjectSection(SolutionItems) = preProject
-		..\Documentation\Screenshots\MOSA Debugger.png = ..\Documentation\Screenshots\MOSA Debugger.png
-		..\Documentation\Screenshots\MOSA Launcher Output.png = ..\Documentation\Screenshots\MOSA Launcher Output.png
-		..\Documentation\Screenshots\MOSA Launcher.png = ..\Documentation\Screenshots\MOSA Launcher.png
-		..\Documentation\Screenshots\MOSA QEMU CoolWorld.png = ..\Documentation\Screenshots\MOSA QEMU CoolWorld.png
-		..\Documentation\Screenshots\MOSA QEMU TestWorld.png = ..\Documentation\Screenshots\MOSA QEMU TestWorld.png
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!Documentation", "!Documentation", "{D60671B4-A7D3-4550-BDEE-6BA70CD35B5B}"
-	ProjectSection(SolutionItems) = preProject
-		..\LICENSE.txt = ..\LICENSE.txt
-		..\Readme.md = ..\Readme.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compiler", "Compiler", "{6BCE96BF-7EDF-48C2-ADE3-8925BF9E107F}"
-	ProjectSection(SolutionItems) = preProject
-		..\Documentation\Compiler\AOT Compiler.md = ..\Documentation\Compiler\AOT Compiler.md
-		..\Documentation\Compiler\IR Optimizations.md = ..\Documentation\Compiler\IR Optimizations.md
-		..\Documentation\Compiler\TypeSystem.md = ..\Documentation\Compiler\TypeSystem.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{849C084E-68A5-45C7-A18B-85077E212E9B}"
-	ProjectSection(SolutionItems) = preProject
-		..\Documentation\Runtime\MemoryUsageMap.txt = ..\Documentation\Runtime\MemoryUsageMap.txt
-		..\Documentation\Runtime\MOSA-Runtime-Tables.gv = ..\Documentation\Runtime\MOSA-Runtime-Tables.gv
-		..\Documentation\Runtime\MOSA-Runtime-Tables.png = ..\Documentation\Runtime\MOSA-Runtime-Tables.png
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VisualStudio", "VisualStudio", "{1F29608A-4C39-42C7-B981-154F92B9EDAC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.Compiler", "Mosa.Tool.Compiler\Mosa.Tool.Compiler.csproj", "{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}"
 EndProject
@@ -73,7 +32,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Korlib", "Korlib\Korlib.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Kernel.x86", "Mosa.Kernel.x86\Mosa.Kernel.x86.csproj", "{FF099D48-3FA5-4ED6-BBA0-1497D734962A}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{E808AF53-3054-497B-B7C5-DEA4FDED0806}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Runtime.x86", "Mosa.Runtime.x86\Mosa.Runtime.x86.csproj", "{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compiler", "Compiler", "{DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Pdb", "Mosa.Compiler.Pdb\Mosa.Compiler.Pdb.csproj", "{F970F8CB-8FF1-4244-9A31-D00C6D7AABE5}"
 EndProject
@@ -82,6 +45,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.Explorer", "Mosa.Tool.Explorer\Mosa.Tool.Explorer.csproj", "{49D8DA65-FC99-4C63-ADC6-1B07260F674F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Trace", "Mosa.Compiler.Trace\Mosa.Compiler.Trace.csproj", "{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{90065B0F-1BFE-40D8-AED5-11096B2535B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.BootImage", "Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj", "{65F7691A-B355-4D98-BB97-0B19F13E2190}"
 EndProject
@@ -127,7 +92,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.Aot", "Mosa.Ut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.Launcher", "Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj", "{B69C2F31-5161-47AA-9FD3-2F2F2BCCF659}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtimes", "Runtimes", "{3C5A2C4B-FD05-42B3-B6C6-C366DF978A62}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Runtime", "Mosa.Runtime\Mosa.Runtime.csproj", "{77961864-DB33-4189-804F-D774022C96E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workspaces", "Workspaces", "{AC7C3CDA-E0E8-408C-BB32-DBCBB905E3E1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Workspace.FileSystem.Debug", "Mosa.Workspace.FileSystem.Debug\Mosa.Workspace.FileSystem.Debug.csproj", "{A8765C3C-1194-4A3A-8579-745CA47C36D3}"
 EndProject
@@ -148,6 +117,37 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.RSP", "Mosa.Utility.RSP\Mosa.Utility.RSP.csproj", "{5B810793-78E2-413C-CC05-FCDD12B7DB04}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Workspace.GDB.Debug", "Mosa.Workspace.GDB.Debug\Mosa.Workspace.GDB.Debug.csproj", "{1717C7EB-06ED-434B-BA3C-E4FF9644EEDF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Screenshots", "Screenshots", "{D30D7194-59AD-4B6F-8DB9-F1CCE0483E99}"
+	ProjectSection(SolutionItems) = preProject
+		..\Documentation\Screenshots\MOSA Debugger.png = ..\Documentation\Screenshots\MOSA Debugger.png
+		..\Documentation\Screenshots\MOSA Launcher Output.png = ..\Documentation\Screenshots\MOSA Launcher Output.png
+		..\Documentation\Screenshots\MOSA Launcher.png = ..\Documentation\Screenshots\MOSA Launcher.png
+		..\Documentation\Screenshots\MOSA QEMU CoolWorld.png = ..\Documentation\Screenshots\MOSA QEMU CoolWorld.png
+		..\Documentation\Screenshots\MOSA QEMU TestWorld.png = ..\Documentation\Screenshots\MOSA QEMU TestWorld.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "!Documentation", "!Documentation", "{D60671B4-A7D3-4550-BDEE-6BA70CD35B5B}"
+	ProjectSection(SolutionItems) = preProject
+		..\LICENSE.txt = ..\LICENSE.txt
+		..\Readme.md = ..\Readme.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Compiler", "Compiler", "{6BCE96BF-7EDF-48C2-ADE3-8925BF9E107F}"
+	ProjectSection(SolutionItems) = preProject
+		..\Documentation\Compiler\AOT Compiler.md = ..\Documentation\Compiler\AOT Compiler.md
+		..\Documentation\Compiler\IR Optimizations.md = ..\Documentation\Compiler\IR Optimizations.md
+		..\Documentation\Compiler\TypeSystem.md = ..\Documentation\Compiler\TypeSystem.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{849C084E-68A5-45C7-A18B-85077E212E9B}"
+	ProjectSection(SolutionItems) = preProject
+		..\Documentation\Runtime\MemoryUsageMap.txt = ..\Documentation\Runtime\MemoryUsageMap.txt
+		..\Documentation\Runtime\MOSA-Runtime-Tables.gv = ..\Documentation\Runtime\MOSA-Runtime-Tables.gv
+		..\Documentation\Runtime\MOSA-Runtime-Tables.png = ..\Documentation\Runtime\MOSA-Runtime-Tables.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VisualStudio", "VisualStudio", "{1F29608A-4C39-42C7-B981-154F92B9EDAC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.VisualStudio.VSIXProject", "Mosa.VisualStudio.VSIXProject\Mosa.VisualStudio.VSIXProject.csproj", "{F8F7A449-5FC5-4C4C-83D2-5BB5F4AA55CA}"
 EndProject
@@ -681,9 +681,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{D30D7194-59AD-4B6F-8DB9-F1CCE0483E99} = {D60671B4-A7D3-4550-BDEE-6BA70CD35B5B}
-		{6BCE96BF-7EDF-48C2-ADE3-8925BF9E107F} = {D60671B4-A7D3-4550-BDEE-6BA70CD35B5B}
-		{849C084E-68A5-45C7-A18B-85077E212E9B} = {D60671B4-A7D3-4550-BDEE-6BA70CD35B5B}
 		{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
 		{75A12A8A-8C8F-4D1E-801B-689D8F781BF4} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}
 		{27A3C89C-1967-45FF-A77E-94F44995C42C} = {E808AF53-3054-497B-B7C5-DEA4FDED0806}
@@ -732,6 +729,9 @@ Global
 		{D9A2A321-F63A-495D-905F-EF7C84E4BB81} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
 		{5B810793-78E2-413C-CC05-FCDD12B7DB04} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
 		{1717C7EB-06ED-434B-BA3C-E4FF9644EEDF} = {AC7C3CDA-E0E8-408C-BB32-DBCBB905E3E1}
+		{D30D7194-59AD-4B6F-8DB9-F1CCE0483E99} = {D60671B4-A7D3-4550-BDEE-6BA70CD35B5B}
+		{6BCE96BF-7EDF-48C2-ADE3-8925BF9E107F} = {D60671B4-A7D3-4550-BDEE-6BA70CD35B5B}
+		{849C084E-68A5-45C7-A18B-85077E212E9B} = {D60671B4-A7D3-4550-BDEE-6BA70CD35B5B}
 		{F8F7A449-5FC5-4C4C-83D2-5BB5F4AA55CA} = {1F29608A-4C39-42C7-B981-154F92B9EDAC}
 	EndGlobalSection
 EndGlobal
