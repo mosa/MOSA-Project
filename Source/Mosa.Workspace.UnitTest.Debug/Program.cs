@@ -51,7 +51,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 		{
 			Console.WriteLine("Thread Start: " + Thread.CurrentThread.Name);
 
-			for (int i = 0; i < 1; i++)
+			for (int i = 0; i < 2; i++)
 			{
 				int value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 1, 2);
 

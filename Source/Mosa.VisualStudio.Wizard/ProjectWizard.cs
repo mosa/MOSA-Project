@@ -6,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-// gacutil -i <assembly name>
-
 namespace Mosa.VisualStudio.Wizard
 {
 	public class ProjectWizard : IWizard
