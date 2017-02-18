@@ -151,6 +151,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.VisualStudio.Wizard", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Starter.x86", "Mosa.Starter.x86\Mosa.Starter.x86.csproj", "{F1776FF2-A727-4FAF-B6BE-D37D6B019031}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.VisualStudio.Template", "Mosa.VisualStudio.Template\Mosa.VisualStudio.Template.csproj", "{FD266261-809F-483C-99CF-F26A7C143E52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -678,6 +680,18 @@ Global
 		{F1776FF2-A727-4FAF-B6BE-D37D6B019031}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F1776FF2-A727-4FAF-B6BE-D37D6B019031}.Release|x86.ActiveCfg = Release|Any CPU
 		{F1776FF2-A727-4FAF-B6BE-D37D6B019031}.Release|x86.Build.0 = Release|Any CPU
+		{FD266261-809F-483C-99CF-F26A7C143E52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD266261-809F-483C-99CF-F26A7C143E52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD266261-809F-483C-99CF-F26A7C143E52}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FD266261-809F-483C-99CF-F26A7C143E52}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FD266261-809F-483C-99CF-F26A7C143E52}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FD266261-809F-483C-99CF-F26A7C143E52}.Debug|x86.Build.0 = Debug|Any CPU
+		{FD266261-809F-483C-99CF-F26A7C143E52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD266261-809F-483C-99CF-F26A7C143E52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD266261-809F-483C-99CF-F26A7C143E52}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FD266261-809F-483C-99CF-F26A7C143E52}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FD266261-809F-483C-99CF-F26A7C143E52}.Release|x86.ActiveCfg = Release|Any CPU
+		{FD266261-809F-483C-99CF-F26A7C143E52}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -735,5 +749,6 @@ Global
 		{1717C7EB-06ED-434B-BA3C-E4FF9644EEDF} = {AC7C3CDA-E0E8-408C-BB32-DBCBB905E3E1}
 		{0B0260F3-A2BF-4AC4-8D28-9ADE1EBC697C} = {1F29608A-4C39-42C7-B981-154F92B9EDAC}
 		{F1776FF2-A727-4FAF-B6BE-D37D6B019031} = {1AB7FA6A-829C-4DCF-BCA6-A27156D8DA26}
+		{FD266261-809F-483C-99CF-F26A7C143E52} = {1F29608A-4C39-42C7-B981-154F92B9EDAC}
 	EndGlobalSection
 EndGlobal

@@ -4,6 +4,7 @@ using EnvDTE;
 using Microsoft.VisualStudio.TemplateWizard;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 // gacutil -i <assembly name>
 
@@ -29,6 +30,7 @@ namespace Mosa.VisualStudio.Wizard
 
 		void IWizard.RunStarted(object automationObject, Dictionary<string, string> replacementsDictionary, WizardRunKind runKind, object[] customParams)
 		{
+			MessageBox.Show("Started!");
 		}
 
 		bool IWizard.ShouldAddProjectItem(string filePath)
