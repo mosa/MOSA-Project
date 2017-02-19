@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
 	<Metadata>
-		<Identity Id="Mosa.VisualStudio.VSIX.Company.f38a7e02-2e34-4d1b-bbc9-d1ef9cdf0482" Version="1.0" Language="en-US" Publisher="Company" />
-		<DisplayName>Mosa.VisualStudio.VSIX</DisplayName>
+		<Identity Id="Mosa.VisualStudio.Extension.Company.f38a7e02-2e34-4d1b-bbc9-d1ef9cdf0482" Version="1.0" Language="en-US" Publisher="Company" />
+		<DisplayName>Mosa.VisualStudio.Extension</DisplayName>
 		<Description xml:space="preserve">A Visual Studio extension to support the MOSA Project.</Description>
 		<MoreInfo>http://www.mosa-project.org</MoreInfo>
 		<Icon>Icon.ico</Icon>

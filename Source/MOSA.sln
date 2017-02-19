@@ -153,12 +153,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Starter.x86", "Mosa.St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.VisualStudio.Template", "Mosa.VisualStudio.Template\Mosa.VisualStudio.Template.csproj", "{FD266261-809F-483C-99CF-F26A7C143E52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.VisualStudio.VSIX", "Mosa.VisualStudio.VSIX\Mosa.VisualStudio.VSIX.csproj", "{88BD905E-2936-4B56-873A-64A30AB884CA}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{F0EFF742-92D5-4219-939A-8F6F8DAB24E5}"
 	ProjectSection(SolutionItems) = preProject
 		..\appveyor.yml = ..\appveyor.yml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.VisualStudio.Extension", "Mosa.VisualStudio.Extension\Mosa.VisualStudio.Extension.csproj", "{88BD905E-2936-4B56-873A-64A30AB884CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

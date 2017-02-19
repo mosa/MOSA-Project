@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Globalization;
 using Microsoft.VisualStudio.Shell;
 
-namespace Mosa.VisualStudio.VSIXProject
+namespace Mosa.VisualStudio.Extension
 {
 	[PackageRegistration(UseManagedResourcesOnly = true)]
 	[InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)]

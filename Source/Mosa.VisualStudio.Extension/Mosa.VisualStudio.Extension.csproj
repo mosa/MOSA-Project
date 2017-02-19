@@ -20,8 +20,8 @@
     <ProjectGuid>{88BD905E-2936-4B56-873A-64A30AB884CA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.VisualStudio.VSIX</RootNamespace>
-    <AssemblyName>Mosa.VisualStudio.VSIX</AssemblyName>
+    <RootNamespace>Mosa.VisualStudio.Extension</RootNamespace>
+    <AssemblyName>Mosa.VisualStudio.Extension</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
