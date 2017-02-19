@@ -1,27 +1,17 @@
-image: Visual Studio 2015
-
-install:
-- ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
-
-before_build:
-  - cmd: nuget restore Source\MOSA.sln
-  - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
-  - ps: Vsix-TokenReplacement Mosa.VisualStudio.VSIX\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
-
-build_script:
-  - nuget restore -Verbosity quiet
-  - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
-
-after_test:
-  - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
-
-build:
-  verbosity: minimal
-
-test: off
+version: 1.0.{build}
 
 shallow_clone: true
 
 nuget:
+
   project_feed: true
 
+before_build:
+
+- cmd: nuget restore Source\MOSA.sln
+
+build:
+
+  verbosity: minimal
+
+test: off
