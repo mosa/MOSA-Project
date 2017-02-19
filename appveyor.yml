@@ -1,6 +1,6 @@
 
 install:
-- ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
+  - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
 
 before_build:
   - cmd: nuget restore Source\MOSA.sln
@@ -13,8 +13,6 @@ build_script:
 
 after_test:
   - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
-
-shallow_clone: true
 
 nuget:
   project_feed: true
