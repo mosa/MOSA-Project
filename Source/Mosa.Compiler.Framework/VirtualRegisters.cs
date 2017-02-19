@@ -37,7 +37,6 @@ namespace Mosa.Compiler.Framework
 		/// Allocates the virtual register.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		/// <param name="name">The name.</param>
 		/// <returns></returns>
 		public Operand Allocate(MosaType type)
 		{

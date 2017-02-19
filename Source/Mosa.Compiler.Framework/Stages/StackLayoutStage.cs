@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="locals">The enumerable holding all locals.</param>
 		/// <param name="callingConvention">The cc.</param>
-		/// <param name="offsetOfFirste">The offset of firste.</param>
+		/// <param name="offsetOfFirst">The offset of first.</param>
 		/// <returns></returns>
 		private int LayoutVariables(IList<Operand> locals, BaseCallingConvention callingConvention, int offsetOfFirst)
 		{

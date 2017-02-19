@@ -60,6 +60,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>0414,1685</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />

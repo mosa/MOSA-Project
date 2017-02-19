@@ -14,7 +14,6 @@ namespace Mosa.Compiler.Framework
 		/// Expands method call instruction represented by the context to perform the method call.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
 		public abstract void MakeCall(BaseMethodCompiler compiler, Context context);
 
@@ -23,7 +22,6 @@ namespace Mosa.Compiler.Framework
 		/// value of a method.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
 		public abstract void SetReturnValue(BaseMethodCompiler compiler, Context context, Operand operand);

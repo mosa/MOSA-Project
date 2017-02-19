@@ -53,7 +53,6 @@ namespace Mosa.Kernel.x86
 {
 	/// <summary>
 	/// Improved C# LZF Compressor, a very small data compression library. The compression algorithm is extremely fast.
-
 	/// </summary>
 	public static class LZF
 	{
