@@ -36,6 +36,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\bin\Mosa.Utility.GUI.Common.xml</DocumentationFile>
     <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="dnlib, Version=1.0.1.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
