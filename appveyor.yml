@@ -10,7 +10,7 @@ before_build:
 
 build_script:
   - nuget restore -Verbosity quiet Source\MOSA.sln
-  - msbuild /p:configuration=Release /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m
+  - msbuild /m /p:BuildInParallel=true /p:Configuration=Release /p:Platform="Any CPU" /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m Source\MOSA.sln
 
 after_test:
   - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
