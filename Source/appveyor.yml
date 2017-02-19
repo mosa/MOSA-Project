@@ -4,6 +4,7 @@ install:
 - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
 
 before_build:
+  - cmd: nuget restore Source\MOSA.sln
   - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
   - ps: Vsix-TokenReplacement Mosa.VisualStudio.VSIX\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
 
@@ -14,5 +15,13 @@ build_script:
 after_test:
   - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
 
+build:
+  verbosity: minimal
+
 test: off
+
+shallow_clone: true
+
+nuget:
+  project_feed: true
 
