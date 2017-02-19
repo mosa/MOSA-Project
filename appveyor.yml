@@ -5,7 +5,7 @@ install:
 before_build:
   - cmd: nuget restore Source\MOSA.sln
   - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
-  - ps: Vsix-TokenReplacement Mosa.VisualStudio.VSIX\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
+  - ps: Vsix-TokenReplacement Mosa.VisualStudio.Extension\source.extension.cs 'Version = "([0-9\\.]+)"' 'Version = "{version}"'
 
 build_script:
   - nuget restore -Verbosity quiet
