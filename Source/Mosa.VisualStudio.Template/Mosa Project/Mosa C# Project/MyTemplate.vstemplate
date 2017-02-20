@@ -1,6 +1,6 @@
 <VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
   <TemplateData>
-    <Name>Mosa C# Starter Project</Name>
+    <Name>MOSA C# Starter Project</Name>
     <Description>A project for creating a MOSA application</Description>
     <ProjectType>CSharp</ProjectType>
     <ProjectSubType>
@@ -18,7 +18,8 @@
       <ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Boot.cs">Boot.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
-    </Project>
+	  <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">packages.config</ProjectItem>
+	</Project>
   </TemplateContent>
 	<WizardExtension>
 		<Assembly>Mosa.VisualStudio.Wizard, Version=1.0.0.0, Culture=Neutral, PublicKeyToken=17c939fa67930d5f</Assembly>

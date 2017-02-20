@@ -102,6 +102,11 @@
     <Compile Include="SimpleStackTraceEntry.cs" />
     <Compile Include="_StringBuffer.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Mosa.Runtime.nuspec">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>

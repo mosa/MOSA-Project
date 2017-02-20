@@ -2,7 +2,7 @@
 
 using Mosa.Kernel.x86;
 
-namespace $safeprojectname$
+namespace Mosa.Starter.x86
 {
 	public static class Program
 	{

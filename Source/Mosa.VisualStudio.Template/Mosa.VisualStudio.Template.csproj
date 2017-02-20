@@ -36,22 +36,27 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Mosa Project\Mosa C# Project\Mosa.Starter.x86.csproj">
+    <Content Include="MOSA Project\MOSA C# Project\Mosa.Starter.x86.csproj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Mosa Project\Mosa C# Project\MyTemplate.vstemplate">
+    <Content Include="MOSA Project\MOSA C# Project\MyTemplate.vstemplate">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Mosa Project\Mosa C# Project\__TemplateIcon.ico">
+    <Content Include="MOSA Project\MOSA C# Project\__TemplateIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Mosa Project\Mosa C# Project\app.config">
+    <Content Include="MOSA Project\MOSA C# Project\app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Mosa Project\Mosa C# Project\Boot.cs">
+    <Content Include="MOSA Project\MOSA C# Project\Boot.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Mosa Project\Mosa C# Project\Program.cs">
+    <Content Include="MOSA Project\MOSA C# Project\Program.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="MOSA Project\MOSA C# Project\packages.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -59,7 +64,6 @@
     <Copy SourceFiles="@(Content)" DestinationFiles="@(Content->'$(OutputPath)%(RelativeDir)%(Filename)%(Extension)')" />
   </Target>
   <Target Name="Clean">
-    <Exec Command="rd /s /q $(OutputPath)" Condition="Exists($(OutputPath))" />
   </Target>
   <Target Name="Rebuild" DependsOnTargets="Clean;Build">
   </Target>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>Mosa.Korlib</id>
+		<version>1.0.0.0</version>
+		<title>Mosa.Korlib Library</title>
+		<authors>MOSA Project</authors>
+		<owners>MOSA Project</owners>
+		<licenseUrl>https://github.com/mosa/MOSA-Project/blob/master/LICENSE.txt</licenseUrl>
+		<projectUrl>http://www.mosa-project.org</projectUrl>
+		<iconUrl>https://raw.githubusercontent.com/tgiphil/MOSA-Project/VSIXProject/Source/Art/Mosa%20Icon.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>MOSA implementation of corlib</description>
+		<releaseNotes></releaseNotes>
+		<copyright>Copyright 2017</copyright>
+		<tags>MOSA Compiler corlib</tags>
+	</metadata>
+	<files>
+		<file src="..\..\bin\mscorlib.dll" target="lib" />
+	</files>
+</package>
