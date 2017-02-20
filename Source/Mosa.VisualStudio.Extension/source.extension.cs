@@ -5,14 +5,14 @@
 // ------------------------------------------------------------------------------
 namespace Mosa.VisualStudio.Extension
 {
-    static class Vsix
-    {
-        public const string Id = "Mosa.VisualStudio.Extension.Company.f38a7e02-2e34-4d1b-bbc9-d1ef9cdf0482";
-        public const string Name = "Mosa.VisualStudio.Extension";
-        public const string Description = @"A Visual Studio extension to support the MOSA Project.";
-        public const string Language = "en-US";
-        public const string Version = "1.0";
-        public const string Author = "Company";
-        public const string Tags = "";
-    }
+				static class Vsix
+				{
+								public const string Id = "Mosa.VisualStudio.Extension.Company.f38a7e02-2e34-4d1b-bbc9-d1ef9cdf0482";
+								public const string Name = "Mosa.VisualStudio.Extension";
+								public const string Description = @"A Visual Studio extension to support the MOSA Project.";
+								public const string Language = "en-US";
+								public const string Version = "1.0";
+								public const string Author = "Company";
+								public const string Tags = "";
+				}
 }

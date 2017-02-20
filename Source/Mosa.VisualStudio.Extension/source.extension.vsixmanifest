@@ -5,7 +5,7 @@
 		<DisplayName>Mosa.VisualStudio.Extension</DisplayName>
 		<Description xml:space="preserve">A Visual Studio extension to support the MOSA Project.</Description>
 		<MoreInfo>http://www.mosa-project.org</MoreInfo>
-		<Icon>Icon.ico</Icon>
+		<Icon>Mosa Icon.png</Icon>
 	</Metadata>
 	<Installation>
 		<InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
