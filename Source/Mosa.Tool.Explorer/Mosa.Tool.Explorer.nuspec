@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>Mosa.Tool.Explorer</id>
-		<version>1.0.0.0</version>
+		<version>1.0.1.0</version>
 		<title>Mosa.Tool.Explorer</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
@@ -14,5 +14,17 @@
 		<releaseNotes></releaseNotes>
 		<copyright>Copyright © 2017</copyright>
 		<tags>MOSA Compiler</tags>
+		<dependencies>
+			<dependency id="Mosa.Compiler.Framework" version="1.0.0" />
+			<dependency id="SharpDisam" version="1.1.5" />
+		</dependencies>
 	</metadata>
+	<files>
+		<file src="..\..\bin\Mosa.Tool.Explorer.exe" target="tools" />
+		<file src="..\..\bin\Mosa.Compiler.Pdb.dll" target="lib" />
+		<file src="..\..\bin\Mosa.Platform.ARMv6.dll" target="lib" />
+		<file src="..\..\bin\Mosa.Platform.x86.dll" target="lib" />
+		<file src="..\..\bin\Mosa.Utility.CodeDomCompiler.dll" target="lib" />
+		<file src="..\..\bin\Mosa.Utility.GUI.Common.dll" target="lib" />
+	</files>
 </package>
