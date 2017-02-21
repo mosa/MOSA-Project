@@ -1,7 +1,8 @@
-build: on
+build:
   verbosity: minimal
   parallel: true
   project: Source\MOSA.sln
+  on
 
 configuration: Release
 platform: Any CPU
