@@ -1,4 +1,4 @@
-build:
+build: on
   verbosity: minimal
   parallel: true
   project: Source\MOSA.sln
