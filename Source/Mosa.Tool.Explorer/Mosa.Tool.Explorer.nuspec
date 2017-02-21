@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <package >
 	<metadata>
-		<id>$id$</id>
-		<version>$version$</version>
+		<id>Mosa.Tool.Explorer</id>
+		<version>1.0.0.0</version>
 		<title>Mosa.Tool.Explorer</title>
-		<authors>$author$</authors>
+		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
 		<licenseUrl>https://github.com/mosa/MOSA-Project/blob/master/LICENSE.txt</licenseUrl>
 		<projectUrl>http://www.mosa-project.org</projectUrl>
@@ -12,7 +12,7 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>MOSA Explorer Tool</description>
 		<releaseNotes></releaseNotes>
-		<copyright>$copyright$</copyright>
+		<copyright>Copyright © 2017</copyright>
 		<tags>MOSA Compiler</tags>
 	</metadata>
 </package>

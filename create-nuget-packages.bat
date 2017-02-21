@@ -7,4 +7,9 @@ cd bin\nupkg
 ..\..\Tools\nuget\nuget.exe pack ..\..\Source\Mosa.Runtime.x86\Mosa.Runtime.x86.nuspec
 ..\..\Tools\nuget\nuget.exe pack ..\..\Source\Mosa.ClassLib\Mosa.ClassLib.nuspec
 
+..\..\Tools\nuget\nuget.exe pack ..\..\Source\Mosa.Tool.Explorer\Mosa.Tool.Explorer.nuspec -IncludeReferencedProjects
+..\..\Tools\nuget\nuget.exe pack ..\..\Source\Mosa.Tool.Launcher\Mosa.Tool.Launcher.nuspec -IncludeReferencedProjects
+..\..\Tools\nuget\nuget.exe pack ..\..\Source\Mosa.Tool.Compiler\Mosa.Tool.Compiler.nuspec -IncludeReferencedProjects
+
+
 pause
