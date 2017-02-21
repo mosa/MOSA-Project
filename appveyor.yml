@@ -1,3 +1,10 @@
+build:
+  verbosity: minimal
+  parallel: true
+  project: Source\MOSA.sln
+
+configuration: Release
+platform: Any CPU
 
 shallow_clone: true
 
@@ -10,15 +17,12 @@ before_build:
 
 build_script:
   - nuget restore -Verbosity quiet Source\MOSA.sln
-  - msbuild /m /p:BuildInParallel=true /p:Configuration=Release /p:Platform="Any CPU" /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m Source\MOSA.sln
+#  - msbuild /m /p:BuildInParallel=true /p:Configuration=Release /p:Platform="Any CPU" /p:DeployExtension=false /p:ZipPackageCompressionLevel=normal /v:m Source\MOSA.sln
 
 after_test:
   - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
 
 nuget:
   project_feed: true
-
-build:
-  verbosity: minimal
 
 test: off
