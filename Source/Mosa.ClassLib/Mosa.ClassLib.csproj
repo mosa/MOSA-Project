@@ -69,6 +69,7 @@
     <Compile Include="Math.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RedBlackTree.cs" />
   </ItemGroup>
   <ItemGroup>

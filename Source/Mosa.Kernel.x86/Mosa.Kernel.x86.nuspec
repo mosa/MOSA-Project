@@ -12,7 +12,7 @@
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>MOSA kernel for x86</description>
 		<releaseNotes></releaseNotes>
-		<copyright>Copyright 2017</copyright>
+		<copyright>Copyright © 2017</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
 			<dependency id="Mosa.Korlib" version="1.0.0" />
