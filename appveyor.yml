@@ -2,6 +2,7 @@ build:
   verbosity: minimal
   parallel: true
   project: Source\MOSA.sln
+  publish_nuget: true
 
 configuration: Release
 platform: Any CPU

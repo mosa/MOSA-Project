@@ -20,8 +20,8 @@
 	</metadata>
 	<files>
 		<file src="..\..\bin\mosacl.exe" target="tools" />
-		<file src="..\..\bin\Mosa.Platform.ARMv6.dll" target="lib" />
-		<file src="..\..\bin\Mosa.Platform.x86.dll" target="lib" />
-		<file src="..\..\bin\Mosa.Utility.Aot.dll" target="lib" />
+		<file src="..\..\bin\Mosa.Platform.ARMv6.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Platform.x86.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.Aot.dll" target="tools" />
 	</files>
 </package>
