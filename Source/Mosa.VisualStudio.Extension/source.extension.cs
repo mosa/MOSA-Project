@@ -12,7 +12,7 @@ namespace Mosa.VisualStudio.Extension
 								public const string Description = @"A Visual Studio extension to support the MOSA Project.";
 								public const string Language = "en-US";
 								public const string Version = "1.0";
-								public const string Author = "Company";
+								public const string Author = "MOSA Project";
 								public const string Tags = "";
 				}
 }
