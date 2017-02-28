@@ -114,9 +114,9 @@ namespace Mosa.UnitTest.Collection
 
 		public static bool PopulateList()
 		{
-			var list = Populate(9);
+			var list = Populate(6);
 
-			return list.Count == 9;
+			return list.Count == 6;
 		}
 
 		private static int SumAll(List<int> list)
@@ -131,16 +131,31 @@ namespace Mosa.UnitTest.Collection
 			return sum;
 		}
 
+		public static bool CheckPopulate()
+		{
+			int size = 50;
+
+			var list = Populate(size);
+
+			for (int i = 0; i < size; i++)
+			{
+				if (list[i] != i * 101)
+					return false;
+			}
+
+			return true;
+		}
+
 		public static int Foreach()
 		{
-			var list = Populate(10);
+			var list = Populate(6);
 
 			return SumAll(list);
 		}
 
 		public static int ForeachNested()
 		{
-			var list = Populate(3);
+			var list = Populate(6);
 			int sum = 0;
 
 			foreach (var item in list)
