@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <summary>
 		/// Expands method call instruction represented by the context to perform the method call.
 		/// </summary>
-		/// <param name="typeLayout">The type layouts.</param>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="context">The context.</param>
 		public override void MakeCall(BaseMethodCompiler compiler, Context context)
 		{
@@ -130,7 +130,7 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <summary>
 		/// Reserves the stack size for call.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="stackSize">Size of the stack.</param>
 		/// <param name="scratch">The scratch.</param>
@@ -148,7 +148,7 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <summary>
 		/// Frees the stack after call.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
+		/// <param name="compiler">The compiler.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="stackSize">Size of the stack.</param>
 		private void FreeStackAfterCall(BaseMethodCompiler compiler, Context context, int stackSize)
@@ -164,7 +164,6 @@ namespace Mosa.Compiler.Framework.Platform
 		/// Cleanups the return value.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="result">The result.</param>
 		private void CleanupReturnValue(BaseMethodCompiler compiler, Context context, Operand result)
@@ -206,7 +205,6 @@ namespace Mosa.Compiler.Framework.Platform
 		/// Calculates the remaining space.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="method">The method.</param>
 		/// <param name="operands">The operand stack.</param>
@@ -248,7 +246,6 @@ namespace Mosa.Compiler.Framework.Platform
 		/// Calculates the remaining space.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="operands">The operand stack.</param>
 		/// <param name="space">The space.</param>
@@ -273,7 +270,6 @@ namespace Mosa.Compiler.Framework.Platform
 		/// Pushes the specified instructions.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		/// <param name="typeLayout">The type layout.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="operand">The op.</param>
 		/// <param name="offset">Size of the stack.</param>
@@ -319,7 +315,6 @@ namespace Mosa.Compiler.Framework.Platform
 		/// value of a method.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		/// <param name="typeLayout">The type layouts.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
 		public override void SetReturnValue(BaseMethodCompiler compiler, Context context, Operand operand)

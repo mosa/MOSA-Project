@@ -79,6 +79,12 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		[Fact]
+		public void CheckPopulate()
+		{
+			Assert.Equal(Mosa.UnitTest.Collection.ListTests.CheckPopulate(), Run<bool>("Mosa.UnitTest.Collection.ListTests.CheckPopulate"));
+		}
+
+		[Fact]
 		public void ForeachNested()
 		{
 			Assert.Equal(Mosa.UnitTest.Collection.ListTests.ForeachNested(), Run<int>("Mosa.UnitTest.Collection.ListTests.ForeachNested"));

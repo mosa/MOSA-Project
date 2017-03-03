@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.ClassLib;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Pipes;
 
@@ -24,9 +24,6 @@ namespace Mosa.Utility.DebugEngine
 		private int length = -1;
 
 		private const int MaxBufferSize = 64 * 1024 + 64;
-		private byte[] sendpacket = new byte[MaxBufferSize];
-		private int sendpacketsize = 0;
-		private uint crc = CRC.InitialCRC;
 
 		public Stream Stream
 		{
@@ -64,7 +61,67 @@ namespace Mosa.Utility.DebugEngine
 
 				message.ID = ++nextID;
 				pending.Add(message.ID, message);
-				SendCommandMessage(message);
+
+				var packet = CreatePacket(message);
+				SendPacket(packet);
+
+				return true;
+			}
+		}
+
+		public bool SendCommand(List<DebugMessage> messages)
+		{
+			foreach (var message in messages)
+			{
+				if (!SendCommand(message))
+					return false;
+			}
+
+			return true;
+		}
+
+		private static Stopwatch stopwatch = new Stopwatch();
+		private static int packetCnt = 0;
+
+		public bool SendCommand2(List<DebugMessage> messages)
+		{
+			lock (sync)
+			{
+				if (!stopwatch.IsRunning)
+				{
+					stopwatch.Start();
+				}
+
+				if (!IsConnected)
+					return false;
+
+				var packets = new Packet();
+
+				foreach (var message in messages)
+				{
+					message.ID = ++nextID;
+					pending.Add(message.ID, message);
+
+					var packet = CreatePacket(message);
+
+					packets.AppendPacket(packet);
+				}
+
+				SendPacket(packets);
+				packetCnt = packetCnt + messages.Count;
+
+				//Console.Write(packetCnt);
+				//Console.Write(' ');
+				//Console.Write(stopwatch.Elapsed.TotalSeconds);
+				//Console.Write(' ');
+
+				//if (stopwatch.Elapsed.TotalSeconds > 0)
+				//	Console.Write(packetCnt / stopwatch.Elapsed.TotalSeconds);
+				//else
+				//	Console.Write('0');
+
+				//Console.Write(' ');
+				//Console.WriteLine(messages.Count);
 
 				return true;
 			}
@@ -87,58 +144,46 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
-		private void SendPacket()
+		private void SendPacket(Packet packet)
 		{
-			stream.Write(sendpacket, 0, sendpacketsize);
-			sendpacketsize = 0;
+			var send = packet.Data.ToArray();
+
+			stream.Write(send, 0, send.Length);
 		}
 
-		private void AddSendPacket(byte b)
+		private Packet CreatePacket(DebugMessage message)
 		{
-			sendpacket[sendpacketsize++] = b;
+			var packet = new Packet();
 
-			crc = CRC.Update(crc, b);
-		}
+			packet.Add((byte)'M');
+			packet.Add((byte)'O');
+			packet.Add((byte)'S');
+			packet.Add((byte)'A');
 
-		private void AddSendPacket(int i)
-		{
-			AddSendPacket((byte)(i & 0xFF));
-			AddSendPacket((byte)(i >> 8 & 0xFF));
-			AddSendPacket((byte)(i >> 16 & 0xFF));
-			AddSendPacket((byte)(i >> 24 & 0xFF));
-		}
+			packet.StartCRC();
 
-		private void SendCommandMessage(DebugMessage message)
-		{
-			AddSendPacket((byte)'M');
-			AddSendPacket((byte)'O');
-			AddSendPacket((byte)'S');
-			AddSendPacket((byte)'A');
-
-			crc = CRC.InitialCRC; // initialize the CRC (at the right spot)
-
-			AddSendPacket(message.ID);
-			AddSendPacket(message.Code);
+			packet.Add(message.ID);
+			packet.Add(message.Code);
 
 			if (message.CommandData == null)
 			{
-				AddSendPacket(0);
+				packet.Add(0);
 
-				AddSendPacket(0); // checksum
+				packet.Add(0); // checksum
 			}
 			else
 			{
-				AddSendPacket(message.CommandData.Count); // length
+				packet.Add(message.CommandData.Count); // length
 
 				foreach (var b in message.CommandData)
 				{
-					AddSendPacket(b);
+					packet.Add(b);
 				}
 
-				AddSendPacket((int)crc); // checksum
+				packet.AppendCRC();
 			}
 
-			SendPacket();
+			return packet;
 		}
 
 		private void PostResponse(int id, int code, List<byte> data)

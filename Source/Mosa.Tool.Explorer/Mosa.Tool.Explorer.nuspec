@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>Mosa.Tool.Explorer</id>
+		<version>1.0.1.0</version>
+		<title>Mosa.Tool.Explorer</title>
+		<authors>MOSA Project</authors>
+		<owners>MOSA Project</owners>
+		<licenseUrl>https://github.com/mosa/MOSA-Project/blob/master/LICENSE.txt</licenseUrl>
+		<projectUrl>http://www.mosa-project.org</projectUrl>
+		<iconUrl>https://raw.githubusercontent.com/tgiphil/MOSA-Project/VSIXProject/Source/Art/Mosa%20Icon.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>MOSA Explorer Tool</description>
+		<releaseNotes></releaseNotes>
+		<copyright>Copyright © 2017</copyright>
+		<tags>MOSA Compiler</tags>
+		<dependencies>
+			<dependency id="Mosa.Compiler.Framework" version="1.0.0" />
+			<dependency id="SharpDisam" version="1.1.5" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="..\..\bin\Mosa.Tool.Explorer.exe" target="tools" />
+		<file src="..\..\bin\Mosa.Compiler.Pdb.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Platform.ARMv6.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Platform.x86.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.CodeDomCompiler.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.GUI.Common.dll" target="tools" />
+	</files>
+</package>

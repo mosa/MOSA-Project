@@ -104,7 +104,7 @@ namespace Mosa.UnitTest.Collection
 		{
 			var list = new List<int>();
 
-			for (int i = 1; i < count; i++)
+			for (int i = 0; i < count; i++)
 			{
 				list.Add(101 * i);
 			}
@@ -114,9 +114,9 @@ namespace Mosa.UnitTest.Collection
 
 		public static bool PopulateList()
 		{
-			var list = Populate(9);
+			var list = Populate(6);
 
-			return list.Count == 9;
+			return list.Count == 6;
 		}
 
 		private static int SumAll(List<int> list)
@@ -131,6 +131,21 @@ namespace Mosa.UnitTest.Collection
 			return sum;
 		}
 
+		public static bool CheckPopulate()
+		{
+			int size = 50;
+
+			var list = Populate(size);
+
+			for (int i = 0; i < size; i++)
+			{
+				if (list[i] != 101 * i)
+					return false;
+			}
+
+			return true;
+		}
+
 		public static int Foreach()
 		{
 			var list = Populate(10);
@@ -140,7 +155,7 @@ namespace Mosa.UnitTest.Collection
 
 		public static int ForeachNested()
 		{
-			var list = Populate(3);
+			var list = Populate(9);
 			int sum = 0;
 
 			foreach (var item in list)
@@ -158,7 +173,8 @@ namespace Mosa.UnitTest.Collection
 
 		public static int ForeachBreak()
 		{
-			List<Holder2> holderList = new List<Holder2>();
+			var holderList = new List<Holder2>();
+
 			for (int i = 1; i < 10; i++)
 			{
 				var p = new Holder2(10 * i, 20 * i, 30 * i);

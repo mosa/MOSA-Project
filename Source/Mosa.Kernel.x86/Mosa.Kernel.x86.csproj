@@ -79,7 +79,7 @@
     <Compile Include="Serial.cs" />
     <Compile Include="KernelMemory.cs" />
     <Compile Include="CMOS.cs" />
-    <Compile Include="Colors.cs" />
+    <Compile Include="Color.cs" />
     <Compile Include="CpuInfo.cs" />
     <Compile Include="GDT.cs" />
     <Compile Include="IDT.cs" />
@@ -115,6 +115,11 @@
       <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>
       <Name>Mosa.Runtime</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Mosa.Kernel.x86.nuspec">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

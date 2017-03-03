@@ -70,7 +70,10 @@ namespace System.Collections.Generic
 
 		public int Capacity
 		{
-			get { return _items.Length; }
+			get
+			{
+				return _items.Length;
+			}
 			set
 			{
 				if (value < _size)
@@ -82,7 +85,7 @@ namespace System.Collections.Generic
 					{
 						T[] newItems = new T[value];
 						if (_size > 0)
-							Array.Copy(_items, 0, newItems, 0, _size);
+							Copy(_items, 0, newItems, 0, _size);
 						_items = newItems;
 					}
 					else
@@ -91,6 +94,19 @@ namespace System.Collections.Generic
 					}
 				}
 			}
+		}
+
+		private void Copy(T[] source, int sourceIndex, T[] destination, int destinationIndex, int size)
+		{
+			for (int i = 0; i < size; i++)
+			{
+				destination[i + destinationIndex] = source[i + sourceIndex];
+			}
+		}
+
+		private void Copy(T[] source, int sourceIndex, Array destination, int destinationIndex, int size)
+		{
+			Copy(source, sourceIndex, (T[])destination, destinationIndex, size);
 		}
 
 		int ICollection.Count
@@ -219,12 +235,12 @@ namespace System.Collections.Generic
 			if (arrayIndex < 0)
 				throw new ArgumentOutOfRangeException(nameof(arrayIndex));
 
-			Array.Copy(_items, 0, array, arrayIndex, _size);
+			Copy(_items, 0, array, arrayIndex, _size);
 		}
 
 		void ICollection.CopyTo(Array array, int arrayIndex)
 		{
-			Array.Copy(_items, 0, array, arrayIndex, _size);
+			Copy(_items, 0, array, arrayIndex, _size);
 		}
 
 		public Enumerator GetEnumerator()

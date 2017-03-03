@@ -46,7 +46,7 @@ namespace Mosa.UnitTest.Engine
 		private const uint MaxRetries = 10;
 		private const uint RetryDelay = 1; // 1- seconds
 
-		private const int DefaultMaxSentQueue = 10; // 100
+		private const int DefaultMaxSentQueue = 64; // 100
 
 		private Queue<DebugMessage> queue = new Queue<DebugMessage>();
 		private HashSet<DebugMessage> sent = new HashSet<DebugMessage>();
@@ -65,7 +65,7 @@ namespace Mosa.UnitTest.Engine
 				EnableSSA = true,
 				EnableIROptimizations = true,
 				EnableSparseConditionalConstantPropagation = true,
-				EnableInlinedMethods = false,
+				EnableInlinedMethods = true,
 
 				Emulator = EmulatorType.Qemu,
 				ImageFormat = ImageFormat.IMG,
@@ -127,10 +127,15 @@ namespace Mosa.UnitTest.Engine
 			{
 				TestSuiteFile = "Mosa.UnitTests." + Platform + ".exe";
 			}
+
+			//ThreadPool.SetMaxThreads(64, 64);
 		}
 
 		private void ProcessQueue()
 		{
+			List<DebugMessage> messages = new List<DebugMessage>(64);
+			DateTime last = DateTime.Now;
+
 			try
 			{
 				while (!processThreadAbort)
@@ -142,18 +147,36 @@ namespace Mosa.UnitTest.Engine
 						// check if queue has requests or too many have already been sent
 						if (queue.Count <= 0 || sent.Count > MaxSentQueue)
 						{
-							Thread.Sleep(5);
-							continue;
+							Thread.Sleep(10);
 						}
-
-						message = queue.Dequeue();
+						else
+						{
+							message = queue.Dequeue();
+						}
 					}
 
-					PrepareUnitTest();
+					if (message != null)
+					{
+						PrepareUnitTest();
 
-					message.CallBack = MessageCallBack;
+						message.CallBack = MessageCallBack;
 
-					debugServerEngine.SendCommand(message);
+						messages.Add(message);
+					}
+
+					DateTime now = DateTime.Now;
+
+					if (messages.Count != 0)
+					{
+						if (messages.Count > 64 || now.Ticks - last.Ticks > 250000)
+						{
+							debugServerEngine.SendCommand2(messages);
+
+							messages.Clear();
+
+							last = now;
+						}
+					}
 
 					//Console.WriteLine((message.Other as UnitTestRequest).MethodTypeName + "." + (message.Other as UnitTestRequest).MethodName);
 				}
@@ -432,7 +455,7 @@ namespace Mosa.UnitTest.Engine
 
 			while (wait)
 			{
-				//Thread.Sleep(5);
+				Thread.Sleep(5);
 			}
 		}
 

@@ -790,7 +790,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="index">The index.</param>
-		/// <param name="offset">The displacement.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
 		public static Operand CreateStackParameter(MosaType type, int index, string name)

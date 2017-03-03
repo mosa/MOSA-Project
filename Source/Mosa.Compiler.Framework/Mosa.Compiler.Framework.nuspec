@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>Mosa.Compiler.Framework</id>
+		<version>1.0.0.0</version>
+		<title>Mosa.Compiler.Framework</title>
+		<authors>MOSA Project</authors>
+		<owners>MOSA Project</owners>
+		<licenseUrl>https://github.com/mosa/MOSA-Project/blob/master/LICENSE.txt</licenseUrl>
+		<projectUrl>http://www.mosa-project.org</projectUrl>
+		<iconUrl>https://raw.githubusercontent.com/tgiphil/MOSA-Project/VSIXProject/Source/Art/Mosa%20Icon.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>MOSA Compiler Framework</description>
+		<releaseNotes></releaseNotes>
+		<copyright>Copyright © 2017</copyright>
+		<tags>MOSA Compiler</tags>
+	</metadata>
+	<files>
+		<file src="..\..\bin\Mosa.Compiler.Framework.dll" target="lib" />
+		<file src="..\..\bin\Mosa.Compiler.Common.dll" target="lib" />
+		<file src="..\..\bin\Mosa.Compiler.Linker.dll" target="lib" />
+		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.dll" target="lib" />
+		<file src="..\..\bin\Mosa.Compiler.Trace.dll" target="lib" />
+		<file src="..\..\bin\dnlib.dll" target="lib" />
+	</files>
+</package>
