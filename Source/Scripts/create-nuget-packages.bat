@@ -1,5 +1,5 @@
-mkdir bin\nupkg
-cd bin\nupkg
+mkdir ..\..\bin\nupkg
+cd ..\..\bin\nupkg
 
 ..\..\Tools\nuget\nuget.exe pack ..\..\Source\Korlib\Korlib.nuspec
 ..\..\Tools\nuget\nuget.exe pack ..\..\Source\Mosa.Runtime\Mosa.Runtime.nuspec
