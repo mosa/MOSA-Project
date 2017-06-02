@@ -450,6 +450,7 @@ namespace Mosa.Kernel.x86
 			Panic.ErrorCode = stack->ErrorCode;
 			Panic.EFLAGS = stack->EFLAGS;
 			Panic.Interrupt = stack->Interrupt;
+			Panic.CR2 = Native.GetCR2();
 			Panic.Error(message);
 		}
 	}
