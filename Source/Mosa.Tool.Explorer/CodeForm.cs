@@ -22,17 +22,17 @@ namespace Mosa.Tool.Explorer
 		{
 			DialogResult = DialogResult.None;
 
-			CompilerSettings settings = new CompilerSettings();
+			var settings = new CompilerSettings();
 			settings.CodeSource = SourceCode;
 			settings.AddReference("mscorlib.dll");
 
-			CompilerResults results = Mosa.Utility.CodeDomCompiler.Compiler.ExecuteCompiler(settings);
+			var results = Utility.CodeDomCompiler.Compiler.ExecuteCompiler(settings);
 
 			if (results.Errors.HasErrors)
 			{
 				tbErrors.Text = string.Empty;
 
-				foreach (CompilerError error in results.Errors)
+				foreach (var error in results.Errors)
 				{
 					tbErrors.AppendText(error.ToString());
 					tbErrors.AppendText("\n");
