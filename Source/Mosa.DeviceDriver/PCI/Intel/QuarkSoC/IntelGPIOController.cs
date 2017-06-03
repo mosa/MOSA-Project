@@ -8,7 +8,7 @@ namespace Mosa.DeviceDriver.PCI.Intel.QuarkSoC
 {
 	/// <summary>
 	/// </summary>
-	[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x0934, ClassCode = 0X0C, SubClassCode = 0x80, ProgIF = 0x00, RevisionID = 0x10, Platforms = PlatformArchitecture.X86AndX64)]
+	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x0934, ClassCode = 0X0C, SubClassCode = 0x80, ProgIF = 0x00, RevisionID = 0x10, Platforms = PlatformArchitecture.X86AndX64)]
 	public class IntelGPIOController : HardwareDevice
 	{
 		/// <summary>

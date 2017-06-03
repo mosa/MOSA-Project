@@ -83,6 +83,7 @@ namespace Mosa.CoolWorld.x86
 			// Find all drivers
 			Boot.Console.Write("Finding Drivers...");
 			deviceDriverRegistry.RegisterBuiltInDeviceDrivers();
+
 			var count = deviceDriverRegistry.GetPCIDeviceDrivers().Count + deviceDriverRegistry.GetISADeviceDrivers().Count;
 			Boot.Console.WriteLine("[Completed: " + count.ToString() + " found]");
 
@@ -134,6 +135,7 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			Boot.Console.Write("Finding file systems...");
+
 			//var filesystem = deviceManager.GetDevices(new IsPartitionDevice());
 
 			//Boot.Console.WriteLine("[Completed: " + filesystem.Count.ToString() + " found]");

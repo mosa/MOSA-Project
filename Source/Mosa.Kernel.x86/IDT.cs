@@ -408,7 +408,22 @@ namespace Mosa.Kernel.x86
 						Error(stack, "Null Pointer Exception");
 					}
 
+					uint r = Screen.Row;
+					uint c = Screen.Column;
+					Screen.Goto(10, 0);
+					Screen.Write(stack->EIP, 16, 8);
+					Screen.Write(' ');
+					Screen.Write(cr2, 16, 8);
+
+					if (cr2 >= 0xFFFFF000)
+					{
+						Error(stack, "Invalid Access Above 0xFFFFF000");
+					}
+
 					uint physicalpage = PageFrameAllocator.Allocate();
+
+					Screen.Write(' ');
+					Screen.Write(physicalpage, 16, 8);
 
 					if (physicalpage == 0x0)
 					{
@@ -416,6 +431,12 @@ namespace Mosa.Kernel.x86
 					}
 
 					PageTable.MapVirtualAddressToPhysical(cr2, physicalpage);
+
+					uint pp = PageTable.GetPhysicalAddressFromVirtual(cr2);
+
+					Screen.Write(' ');
+					Screen.Write(pp, 16, 8);
+					Screen.Goto(r, c);
 
 					break;
 

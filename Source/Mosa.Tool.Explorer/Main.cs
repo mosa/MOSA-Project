@@ -106,9 +106,9 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		public void LoadAssembly(string filename)
+		public void LoadAssembly(string filename, string includeDirectory = null)
 		{
-			LoadAssembly(filename, cbPlatform.Text);
+			LoadAssembly(filename, cbPlatform.Text, includeDirectory);
 
 			UpdateTree();
 
@@ -533,11 +533,14 @@ namespace Mosa.Tool.Explorer
 			ShowCodeForm();
 		}
 
-		protected void LoadAssembly(string filename, string platform)
+		protected void LoadAssembly(string filename, string platform, string includeDirectory = null)
 		{
 			Compiler.CompilerOptions.Architecture = GetArchitecture(platform);
 
 			var moduleLoader = new MosaModuleLoader();
+
+			if (includeDirectory != null)
+				moduleLoader.AddPrivatePath(includeDirectory);
 
 			moduleLoader.AddPrivatePath(Path.GetDirectoryName(filename));
 			moduleLoader.LoadModuleFromFile(filename);
@@ -557,7 +560,7 @@ namespace Mosa.Tool.Explorer
 			{
 				if (!string.IsNullOrEmpty(form.Assembly))
 				{
-					LoadAssembly(form.Assembly);
+					LoadAssembly(form.Assembly, AppDomain.CurrentDomain.BaseDirectory);
 				}
 			}
 		}

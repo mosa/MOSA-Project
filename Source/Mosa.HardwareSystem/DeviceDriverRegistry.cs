@@ -110,7 +110,9 @@ namespace Mosa.HardwareSystem
 		public void RegisterBuiltInDeviceDrivers()
 		{
 			foreach (var assembly in Assembly.GetAssemblies())
+			{
 				RegisterDeviceDrivers(assembly);
+			}
 		}
 
 		/// <summary>
