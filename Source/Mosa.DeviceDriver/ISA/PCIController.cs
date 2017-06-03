@@ -7,7 +7,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// <summary>
 	///
 	/// </summary>
-	[ISADeviceDriver(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
+	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
 	public class PCIController : HardwareDevice, IDevice, IHardwareDevice, IPCIController
 	{
 		#region Definitions

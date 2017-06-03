@@ -415,9 +415,10 @@ namespace Mosa.Kernel.x86
 					Screen.Write(' ');
 					Screen.Write(cr2, 16, 8);
 
-					if (cr2 >= 0xFFFFF000)
+					if (cr2 >= 0xF0000000u)
 					{
-						Error(stack, "Invalid Access Above 0xFFFFF000");
+						Error(stack, "Invalid Access Above 0xF0000000");
+						break;
 					}
 
 					uint physicalpage = PageFrameAllocator.Allocate();
@@ -428,6 +429,7 @@ namespace Mosa.Kernel.x86
 					if (physicalpage == 0x0)
 					{
 						Error(stack, "Out of Memory");
+						break;
 					}
 
 					PageTable.MapVirtualAddressToPhysical(cr2, physicalpage);

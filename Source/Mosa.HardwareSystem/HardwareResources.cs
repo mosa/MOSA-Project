@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.HardwareSystem.PCI;
+using System.Collections.Generic;
 
 namespace Mosa.HardwareSystem
 {
@@ -12,12 +13,12 @@ namespace Mosa.HardwareSystem
 		/// <summary>
 		///
 		/// </summary>
-		private IOPortRegion[] ioPortRegions;
+		private List<IOPortRegion> ioPortRegions;
 
 		/// <summary>
 		///
 		/// </summary>
-		private MemoryRegion[] memoryRegions;
+		private List<MemoryRegion> memoryRegions;
 
 		/// <summary>
 		///
@@ -36,7 +37,7 @@ namespace Mosa.HardwareSystem
 		/// <param name="ioPortRegions">The io port regions.</param>
 		/// <param name="memoryRegions">The memory regions.</param>
 		/// <param name="interruptHandler">The interrupt handler.</param>
-		public HardwareResources(IOPortRegion[] ioPortRegions, MemoryRegion[] memoryRegions, InterruptHandler interruptHandler)
+		public HardwareResources(List<IOPortRegion> ioPortRegions, List<MemoryRegion> memoryRegions, InterruptHandler interruptHandler)
 		{
 			this.ioPortRegions = ioPortRegions;
 			this.memoryRegions = memoryRegions;
@@ -50,7 +51,7 @@ namespace Mosa.HardwareSystem
 		/// <param name="memoryRegions">The memory regions.</param>
 		/// <param name="interruptHandler">The interrupt handler.</param>
 		/// <param name="deviceResource">The device resource.</param>
-		public HardwareResources(IOPortRegion[] ioPortRegions, MemoryRegion[] memoryRegions, InterruptHandler interruptHandler, IPCIDeviceResource deviceResource)
+		public HardwareResources(List<IOPortRegion> ioPortRegions, List<MemoryRegion> memoryRegions, InterruptHandler interruptHandler, IPCIDeviceResource deviceResource)
 		{
 			this.ioPortRegions = ioPortRegions;
 			this.memoryRegions = memoryRegions;
@@ -82,13 +83,13 @@ namespace Mosa.HardwareSystem
 		/// Gets the IO point region count.
 		/// </summary>
 		/// <value>The IO point region count.</value>
-		public byte IOPointRegionCount { get { return (byte)ioPortRegions.Length; } }
+		public byte IOPointRegionCount { get { return (byte)ioPortRegions.Count; } }
 
 		/// <summary>
 		/// Gets the memory region count.
 		/// </summary>
 		/// <value>The memory region count.</value>
-		public byte MemoryRegionCount { get { return (byte)memoryRegions.Length; } }
+		public byte MemoryRegionCount { get { return (byte)memoryRegions.Count; } }
 
 		/// <summary>
 		/// Gets the IO port.

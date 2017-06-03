@@ -1,7 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.AppSystem;
+using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.ScanCodeMap;
+using Mosa.HardwareSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 
@@ -39,14 +41,23 @@ namespace Mosa.CoolWorld.x86
 			Console.Color = Color.White;
 			Console.BackgroundColor = Color.Black;
 
+			// Setup hardware abstraction interface
 			Console.WriteLine("> Initializing hardware abstraction layer...");
-			Setup.Initialize();
+
+			var hardware = new Mosa.CoolWorld.x86.HAL.Hardware();
+			HardwareSystem.Setup.Initialize(hardware);
 
 			Console.WriteLine("> Adding hardware devices...");
-			Setup.Start();
+			HardwareSystem.Setup.Start();
 
 			Console.Color = Color.White;
 			Console.WriteLine();
+
+			// Get StandardKeyboard
+			var standardKeyboard = (StandardKeyboard)HardwareSystem.Setup.DeviceManager.GetDevices(new WithName("StandardKeyboard")).First.Value;
+
+			if (standardKeyboard == null)
+				Console.WriteLine("No Keyboard");
 
 			Debug = ConsoleManager.Controller.Debug;
 
@@ -54,7 +65,7 @@ namespace Mosa.CoolWorld.x86
 			var keymap = new US();
 
 			// setup keyboard (state machine)
-			var keyboard = new Mosa.DeviceSystem.Keyboard(Setup.StandardKeyboard, keymap);
+			var keyboard = new Mosa.DeviceSystem.Keyboard(standardKeyboard, keymap);
 
 			// setup app manager
 			var manager = new AppManager(Console, keyboard);
@@ -62,22 +73,6 @@ namespace Mosa.CoolWorld.x86
 			IDT.SetInterruptHandler(manager.ProcessInterrupt);
 
 			manager.Start();
-		}
-
-		public static void WaitForKey()
-		{
-			// wait for key press
-
-			while (true)
-			{
-				byte scancode = Setup.StandardKeyboard.GetScanCode();
-
-				if (scancode != 0)
-				{
-					break;
-				}
-				Native.Hlt();
-			}
 		}
 
 		public static void ForeverLoop()

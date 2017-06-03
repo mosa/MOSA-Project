@@ -45,7 +45,7 @@ namespace Mosa.AppSystem
 			// get the key board input and directs it to the active application
 			var key = keyboard.GetKeyPressed();
 
-			if (key == null)
+			if (key.KeyType == KeyType.NoKey)
 				return;
 
 			if (key.KeyType == KeyType.F1)
