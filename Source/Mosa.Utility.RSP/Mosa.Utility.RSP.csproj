@@ -43,12 +43,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checksum.cs" />
+    <Compile Include="Command\ClearBreakPoint.cs" />
+    <Compile Include="Command\ReadRegister.cs" />
+    <Compile Include="Command\SetBreakPoint.cs" />
+    <Compile Include="Command\ReadMemory.cs" />
     <Compile Include="PacketBinConverter.cs" />
-    <Compile Include="ReplyPacket.cs" />
-    <Compile Include="CommandPacket.cs" />
+    <Compile Include="Command\GeneralRegisterRead.cs" />
+    <Compile Include="Command\Step.cs" />
+    <Compile Include="BaseCommand.cs" />
     <Compile Include="GDBNetworkStream.cs" />
     <Compile Include="GDBClient.cs" />
-    <Compile Include="Packets\ContinueCommand.cs" />
+    <Compile Include="Command\Continue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rle.cs" />
   </ItemGroup>

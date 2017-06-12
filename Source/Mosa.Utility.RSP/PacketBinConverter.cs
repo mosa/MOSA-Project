@@ -23,7 +23,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
 using System.Text;
 
 namespace Mosa.Utility.RSP
@@ -32,19 +31,16 @@ namespace Mosa.Utility.RSP
 	{
 		private static readonly Encoding TextEncoding = Encoding.ASCII;
 
-		private const string Prefix = "$";
-		private const string Suffix = "#";
+		private const char Prefix = '$';
+		private const char Suffix = '#';
 
-		public static byte[] ToBinary(CommandPacket packet)
+		public static byte[] ToBinary(BaseCommand packet)
 		{
-			string dataText = packet.Pack;
-			byte[] dataBin = TextEncoding.GetBytes(dataText);
-
-			StringBuilder binPacket = new StringBuilder();
+			var binPacket = new StringBuilder();
 			binPacket.Append(PacketBinConverter.Prefix);
-			binPacket.Append(dataText);
+			binPacket.Append(packet.Pack);
 			binPacket.Append(PacketBinConverter.Suffix);
-			binPacket.Append(Checksum.Calculate(dataBin).ToString("x2"));
+			binPacket.Append(Checksum.Calculate(TextEncoding.GetBytes(packet.Pack)).ToString("x2"));
 
 			return TextEncoding.GetBytes(binPacket.ToString());
 		}
@@ -72,10 +68,10 @@ namespace Mosa.Utility.RSP
 			if (data.Length < 4)
 				return false;
 
-			if (data[0] != Prefix[0])
+			if (data[0] != Prefix)
 				return false;
 
-			if (data[data.Length - 3] != Suffix[0])
+			if (data[data.Length - 3] != Suffix)
 				return false;
 
 			return true;

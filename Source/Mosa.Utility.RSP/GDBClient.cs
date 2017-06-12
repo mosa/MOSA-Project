@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.ClassLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,20 +7,19 @@ using System.IO.Pipes;
 
 namespace Mosa.Utility.RSP
 {
-	public delegate void CallBack(ReplayPacket replayPacket);
+	public delegate void CallBack(BaseCommand command);
 
 	public sealed class GDBClient
 	{
-		private byte PacketSeperator = (byte)'$';
-
 		private object sync = new object();
 		private Stream stream = null;
+
 		private byte[] receivedData = new byte[1];
-		private Queue<byte> packetData = new Queue<byte>();
-		private int packetSeperatorCount;
-		private Queue<CommandPacket> commandPackets = new Queue<CommandPacket>();
-		private Dictionary<CommandPacket, CallBack> callBacks = new Dictionary<CommandPacket, CallBack>();
-		private CommandPacket currentCommandPacket = null;
+		private List<byte> receivedPacketData = new List<byte>();
+
+		private Queue<BaseCommand> commandQueue = new Queue<BaseCommand>();
+
+		private BaseCommand currentCommand = null;
 
 		public Stream Stream
 		{
@@ -35,7 +33,7 @@ namespace Mosa.Utility.RSP
 
 				if (IsConnected)
 				{
-					stream.BeginRead(receivedData, 0, 1, ReadAsyncCallback, null);
+					SetReadCallBack();
 				}
 			}
 		}
@@ -61,20 +59,9 @@ namespace Mosa.Utility.RSP
 			}
 		}
 
-		private void AddPacketData(byte data)
+		private void SetReadCallBack()
 		{
-			lock (sync)
-			{
-				packetData.Enqueue(data);
-
-				if (data == PacketSeperator)
-				{
-					packetSeperatorCount++;
-				}
-			}
-
-			// if packetSeperatorCount > 0
-			// todo
+			stream.BeginRead(receivedData, 0, 1, ReadAsyncCallback, null);
 		}
 
 		private void ReadAsyncCallback(IAsyncResult ar)
@@ -83,53 +70,90 @@ namespace Mosa.Utility.RSP
 			{
 				stream.EndRead(ar);
 
-				AddPacketData(receivedData[0]);
+				var data = receivedData[0];
 
-				stream.BeginRead(receivedData, 0, 1, ReadAsyncCallback, null);
+				lock (sync)
+				{
+					receivedPacketData.Add(data);
+
+					Console.Write((char)data);
+
+					IncomingPatcket();
+				}
+
+				SetReadCallBack();
 			}
 			catch
 			{
 				// nothing for now
 			}
+
+			// try to send more packets
+			SendPackets();
 		}
 
-		public void SendCommandAsync(CommandPacket commandPacket, CallBack callBack)
+		public void SendCommandAsync(BaseCommand command)
 		{
 			lock (sync)
 			{
-				commandPackets.Enqueue(commandPacket);
-
-				if (callBack != null)
-				{
-					callBacks.Add(commandPacket, callBack);
-				}
+				commandQueue.Enqueue(command);
 			}
 
-			// send now if possible
-			SendPacket();
+			// try to send more packets
+			SendPackets();
 		}
 
-		private void SendPacket()
+		private void SendPackets()
 		{
 			lock (sync)
 			{
-				// waiting for current command to reply or wait for command to send
-				if (currentCommandPacket != null || commandPackets.Count == 0)
+				// waiting for current command to reply
+				if (currentCommand != null)
 					return;
 
-				var commandPacket = commandPackets.Dequeue();
+				if (commandQueue.Count == 0)
+					return;
 
-				SendPacketData(commandPacket);
+				currentCommand = commandQueue.Dequeue();
+
+				var data = PacketBinConverter.ToBinary(currentCommand);
+				stream.Write(data, 0, data.Length);
 			}
 		}
 
-		private void SendPacketData(CommandPacket commandPacket)
+		private void IncomingPatcket()
 		{
-			var data = PacketBinConverter.ToBinary(commandPacket);
+			int len = receivedPacketData.Count;
 
-			currentCommandPacket = commandPacket;
+			if (len == 0)
+				return;
 
-			stream.Write(data, 0, data.Length);
+			if (len == 1 && receivedPacketData[0] == '+')
+			{
+				receivedPacketData.Clear();
+				return;
+			}
+
+			if (len == 1 && receivedPacketData[0] == '-')
+			{
+				// todo: re-transmit
+				receivedPacketData.Clear();
+				return;
+			}
+
+			if (len > 4 && receivedPacketData[0] == '$' && receivedPacketData[len - 3] == '#')
+			{
+				currentCommand.ResponseData = new List<byte>(receivedPacketData);
+
+				currentCommand.Callback?.Invoke(currentCommand);
+
+				receivedPacketData.Clear();
+				currentCommand = null;
+
+				return;
+			}
+
+			return;
 		}
 	}
 }
