@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Implements a key
 	/// </summary>
-	public struct Key
+	public class Key
 	{
 		/// <summary>
 		/// Gets or sets the special key.
@@ -37,16 +37,16 @@ namespace Mosa.DeviceSystem
 		/// <value><c>true</c> if shift key pressed; otherwise, <c>false</c>.</value>
 		public bool Shift { get; set; }
 
-		///// <summary>
-		///// Initializes a new instance of the <see cref="Key"/> class.
-		///// </summary>
-		//public Key()
-		//{
-		//	KeyType = KeyType.NoKey;
-		//	Character = (char)0x00;
-		//	Control = false;
-		//	Alt = false;
-		//	Shift = false;
-		//}
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Key"/> class.
+		/// </summary>
+		public Key()
+		{
+			KeyType = KeyType.NoKey;
+			Character = (char)0x00;
+			Control = false;
+			Alt = false;
+			Shift = false;
+		}
 	}
 }

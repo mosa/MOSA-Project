@@ -104,6 +104,11 @@ namespace Mosa.Utility.Launcher
 					compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.map");
 				}
 
+				if (Options.GenerateDebugFile)
+				{
+					compiler.CompilerOptions.DebugFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.debug");
+				}
+
 				if (!Directory.Exists(Options.DestinationDirectory))
 				{
 					Directory.CreateDirectory(Options.DestinationDirectory);
@@ -168,7 +173,7 @@ namespace Mosa.Utility.Launcher
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.ToString());
+				AddOutput(e.ToString());
 			}
 			finally
 			{

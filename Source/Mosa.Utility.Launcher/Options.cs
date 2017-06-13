@@ -41,6 +41,8 @@ namespace Mosa.Utility.Launcher
 
 		public bool GenerateMapFile { get; set; }
 
+		public bool GenerateDebugFile { get; set; }
+
 		public LinkerFormatType LinkerFormatType { get; set; }
 
 		public BootFormat BootFormat { get; set; }
@@ -117,6 +119,7 @@ namespace Mosa.Utility.Launcher
 			GenerateASMFile = false;
 			EnableQemuGDB = false;
 			LaunchGDB = false;
+			GenerateDebugFile = false;
 		}
 
 		public void LoadArguments(string[] args)
@@ -134,6 +137,7 @@ namespace Mosa.Utility.Launcher
 					case "-launch": LaunchEmulator = true; continue;
 					case "-launch-off": LaunchEmulator = false; continue;
 					case "-map": GenerateMapFile = true; continue;
+					case "-debuginfo": GenerateDebugFile = true; continue;
 					case "-asm": GenerateASMFile = true; continue;
 					case "-nasm": GenerateNASMFile = true; continue;
 					case "-qemu": Emulator = EmulatorType.Qemu; continue;

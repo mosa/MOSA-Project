@@ -93,6 +93,7 @@ namespace Mosa.UnitTest.Engine
 				GenerateNASMFile = true,
 				GenerateASMFile = true,
 				GenerateMapFile = true,
+				GenerateDebugFile = false,
 
 				//BootLoaderImage = @"..\Tests\BootImage\Mosa.BootLoader.x86.img"
 			};

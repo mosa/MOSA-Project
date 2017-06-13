@@ -143,7 +143,7 @@ namespace Mosa.DeviceSystem
 			byte scanCode = keyboardDevice.GetScanCode();
 
 			if (scanCode == 0)
-				return new Key() { KeyType = KeyType.NoKey };
+				return null;
 
 			var keyEvent = scanCodeMap.ConvertScanCode(scanCode);
 
@@ -180,7 +180,7 @@ namespace Mosa.DeviceSystem
 			else if (keyEvent.KeyType == KeyType.RightShift)
 				RightShift = (keyEvent.KeyPress == KeyEvent.KeyPressType.Make);
 
-			return new Key() { KeyType = KeyType.NoKey };
+			return null;
 		}
 	}
 }
