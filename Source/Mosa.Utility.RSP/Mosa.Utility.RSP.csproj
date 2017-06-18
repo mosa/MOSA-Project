@@ -43,11 +43,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Checksum.cs" />
-    <Compile Include="Command\ClearBreakPoint.cs" />
-    <Compile Include="Command\ReadRegister.cs" />
+    <Compile Include="Command\ClearAccessWatchPoint.cs" />
     <Compile Include="Command\SetBreakPoint.cs" />
+    <Compile Include="Command\ClearBreakPoint.cs" />
+    <Compile Include="Command\ClearSoftwareBreakPoint.cs" />
+    <Compile Include="Command\ClearHardwareBreakPoint.cs" />
+    <Compile Include="Command\ReadRegister.cs" />
+    <Compile Include="Command\SetHardwareBreakPoint.cs" />
+    <Compile Include="Command\SetAccessWatchPoint.cs" />
+    <Compile Include="Command\ClearReadWatchPoint.cs" />
+    <Compile Include="Command\SetReadWatchPoint.cs" />
+    <Compile Include="Command\ClearWriteWatchPoint.cs" />
+    <Compile Include="Command\SetWriteWatchPoint.cs" />
+    <Compile Include="Command\SetSoftwareBreakPoint.cs" />
     <Compile Include="Command\ReadMemory.cs" />
-    <Compile Include="PacketBinConverter.cs" />
     <Compile Include="Command\GeneralRegisterRead.cs" />
     <Compile Include="Command\Step.cs" />
     <Compile Include="BaseCommand.cs" />

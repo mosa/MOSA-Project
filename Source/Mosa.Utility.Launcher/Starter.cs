@@ -196,9 +196,7 @@ namespace Mosa.Utility.Launcher
 			var gdbscript = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".gdb");
 
 			string arg = " -d " + Quote(Options.DestinationDirectory);
-
 			arg = arg + " -s " + Quote(Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin"));
-
 			arg = arg + " -x " + Quote(gdbscript);
 
 			var textSection = Linker.LinkerSections[(int)SectionKind.Text];

@@ -4,13 +4,21 @@ namespace Mosa.Utility.RSP.Command
 {
 	public class ReadRegister : BaseCommand
 	{
-		public int Register;
+		public int Register { get; private set; }
 
 		protected override string PackArguments { get { return Register.ToString("x"); } }
 
 		public ReadRegister(int register, CallBack callBack = null) : base("p", callBack)
 		{
 			Register = register;
+		}
+
+		internal override void Decode()
+		{
+			StandardErrorCheck();
+
+			if (!IsResponseOk)
+				return;
 		}
 	}
 }

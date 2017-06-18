@@ -4,13 +4,18 @@ namespace Mosa.Utility.RSP.Command
 {
 	public class ClearBreakPoint : BaseCommand
 	{
-		public ulong Address;
+		protected byte Type;
 
-		protected override string PackArguments { get { return Address.ToString("x") + ",C"; } }
+		public ulong Address { get; private set; }
+		public ulong Size { get; private set; }
 
-		public ClearBreakPoint(ulong address, bool set, CallBack callBack = null) : base("B", callBack)
+		protected override string PackArguments { get { return Type.ToString() + "," + Address.ToString("x") + "," + Size.ToString("x"); } }
+
+		public ClearBreakPoint(ulong address, byte size, byte type, CallBack callBack = null) : base("z", callBack)
 		{
 			Address = address;
+			Size = size;
+			Type = type;
 		}
 	}
 }
