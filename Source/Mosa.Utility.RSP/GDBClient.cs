@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
+using System.Net.Sockets;
 using System.Text;
 
 namespace Mosa.Utility.RSP
@@ -18,7 +19,7 @@ namespace Mosa.Utility.RSP
 		private const char Suffix = '#';
 
 		private object sync = new object();
-		private Stream stream = null;
+		private GDBNetworkStream stream = null;
 
 		private byte[] receivedByte = new byte[1];
 		private List<byte> receivedData = new List<byte>();
@@ -29,7 +30,7 @@ namespace Mosa.Utility.RSP
 
 		private static byte[] breakData = new byte[1] { 3 };
 
-		public Stream Stream
+		public GDBNetworkStream Stream
 		{
 			get
 			{
@@ -46,8 +47,9 @@ namespace Mosa.Utility.RSP
 			}
 		}
 
-		public GDBClient()
+		public GDBClient(GDBNetworkStream stream = null)
 		{
+			Stream = stream;
 		}
 
 		public bool IsConnected
@@ -57,13 +59,7 @@ namespace Mosa.Utility.RSP
 				if (stream == null)
 					return false;
 
-				if (stream is NamedPipeClientStream)
-					return (stream as NamedPipeClientStream).IsConnected;
-
-				if (stream is GDBNetworkStream)
-					return (stream as GDBNetworkStream).IsConnected;
-
-				return false;
+				return stream.IsConnected;
 			}
 		}
 

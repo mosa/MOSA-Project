@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Checksum.cs" />
     <Compile Include="Command\ClearAccessWatchPoint.cs" />
+    <Compile Include="Command\GetRegisters.cs" />
     <Compile Include="Command\SetBreakPoint.cs" />
     <Compile Include="Command\ClearBreakPoint.cs" />
     <Compile Include="Command\ClearSoftwareBreakPoint.cs" />

@@ -22,12 +22,5 @@ namespace Mosa.Utility.RSP.Command
 			if (!IsResponseOk)
 				return;
 		}
-
-		public int ReceivedBytes { get { return IsResponseOk ? ResponseData.Length / 2 : 0; } }
-
-		public byte GetReceivedByte(int i)
-		{
-			return GDBClient.HexToDecimal(ResponseData[i * 2], ResponseData[(i * 2) + 1]);
-		}
 	}
 }

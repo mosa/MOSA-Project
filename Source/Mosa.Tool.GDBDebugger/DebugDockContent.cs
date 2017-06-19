@@ -9,11 +9,12 @@ namespace Mosa.Tool.GDBDebugger
 		protected MainForm MainForm;
 
 		public DebugDockContent()
-		{ }
-
-		public DebugDockContent(MainForm mainForm)
 		{
 			InitializeComponent();
+		}
+
+		public DebugDockContent(MainForm mainForm) : this()
+		{
 			MainForm = mainForm;
 		}
 

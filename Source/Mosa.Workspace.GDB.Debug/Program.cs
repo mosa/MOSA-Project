@@ -21,17 +21,17 @@ namespace Mosa.Workspace.UnitTest.Debug
 
 			//gdbClient.SendCommandAsync(new SetSoftwareBreakPoint(0x400030, 1, Response));
 			gdbClient.SendCommandAsync(new SetSoftwareBreakPoint(0x4571B9, 1, Response));
-			gdbClient.SendCommandAsync(new ReadRegister(0, ReadRegister));
+			gdbClient.SendCommandAsync(new GetRegisters(GetRegisters));
 			gdbClient.SendCommandAsync(new Continue(Response));
 
 			Thread.Sleep(2000);
 			gdbClient.SendBreak();
-			gdbClient.SendCommandAsync(new ReadRegister(0, ReadRegister));
+			gdbClient.SendCommandAsync(new GetRegisters(GetRegisters));
 			gdbClient.SendCommandAsync(new Continue(Response));
 
 			Thread.Sleep(2000);
 			gdbClient.SendBreak();
-			gdbClient.SendCommandAsync(new ReadRegister(0, ReadRegister));
+			gdbClient.SendCommandAsync(new GetRegisters(GetRegisters));
 
 			//0x400030
 			//gdbClient.SendCommandAsync(new GeneralRegisterRead(Response));
@@ -68,6 +68,16 @@ namespace Mosa.Workspace.UnitTest.Debug
 			Console.WriteLine("RESPONSE: " + command.ResponseAsString);
 
 			var rr = command as ReadRegister;
+
+			return;
+		}
+
+		private static void GetRegisters(BaseCommand command)
+		{
+			Console.WriteLine("COMMAND: " + command.Pack);
+			Console.WriteLine("RESPONSE: " + command.ResponseAsString);
+
+			var rr = command as GetRegisters;
 
 			return;
 		}

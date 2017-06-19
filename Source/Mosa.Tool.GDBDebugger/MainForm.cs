@@ -1,9 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Utility.RSP;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -11,20 +9,24 @@ namespace Mosa.Tool.GDBDebugger
 {
 	public partial class MainForm : Form
 	{
+		private OutputView outputView;
+
 		//private AssembliesView assembliesView;
-		//private RegisterView registersView;
+		private RegisterView registersView;
+
 		//private DisplayView displayView;
-		//private ControlView controlView;
+		private ControlView controlView;
+
 		//private CallStackView callStackView;
 		//private StackFrameView stackFrameView;
 		//private StackView stackView;
 		//private FlagView flagView;
-		//private StatusView statusView;
+		private StatusView statusView;
+
 		//private HistoryView historyView;
 		//private SymbolView symbolView;
 		//private WatchView watchView;
 		//private BreakPointView breakPointView;
-		//private OutputView outputView;
 		//private ScriptView scriptView;
 		//private DisassemblyView disassemblyView;
 
@@ -36,20 +38,25 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			InitializeComponent();
 
+			outputView = new OutputView(this);
+
 			//assembliesView = new AssembliesView(this);
-			//registersView = new RegisterView(this);
+			registersView = new RegisterView(this);
+
 			//displayView = new DisplayView(this);
-			//controlView = new ControlView(this);
+			controlView = new ControlView(this);
+
 			//callStackView = new CallStackView(this);
 			//stackFrameView = new StackFrameView(this);
 			//stackView = new StackView(this);
 			//flagView = new FlagView(this);
-			//statusView = new StatusView(this);
+			statusView = new StatusView(this);
+
 			//historyView = new HistoryView(this);
 			//symbolView = new SymbolView(this);
 			//watchView = new WatchView(this);
 			//breakPointView = new BreakPointView(this);
-			//outputView = new OutputView(this);
+
 			//scriptView = new ScriptView(this);
 			//disassemblyView = new DisassemblyView(this);
 		}
@@ -59,8 +66,9 @@ namespace Mosa.Tool.GDBDebugger
 			dockPanel.SuspendLayout(true);
 			dockPanel.DockTopPortion = 150;
 
-			//statusView.Show(dockPanel, DockState.DockTop);
-			//controlView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
+			statusView.Show(dockPanel, DockState.DockTop);
+			controlView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
+
 			//callStackView.Show(controlView.PanelPane, DockAlignment.Bottom, 0.50);
 			//disassemblyView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
 
@@ -70,7 +78,8 @@ namespace Mosa.Tool.GDBDebugger
 			//displayView.Show(dockPanel, DockState.Document);
 			//historyView.Show(dockPanel, DockState.Document);
 			//assembliesView.Show(dockPanel, DockState.Document);
-			//outputView.Show(dockPanel, DockState.Document);
+			outputView.Show(dockPanel, DockState.Document);
+
 			//scriptView.Show(dockPanel, DockState.Document);
 			//symbolView.Show(dockPanel, DockState.Document);
 
@@ -79,9 +88,14 @@ namespace Mosa.Tool.GDBDebugger
 			//stackView.Show(dockPanel, DockState.DockRight);
 			//stackFrameView.Show(dockPanel, DockState.DockRight);
 
-			//registersView.Show();
+			registersView.Show();
 
 			dockPanel.ResumeLayout(true, true);
+		}
+
+		public void AddOutput(string line)
+		{
+			outputView.AddOutput(line);
 		}
 
 		public static string Format(object value)
@@ -119,15 +133,19 @@ namespace Mosa.Tool.GDBDebugger
 			return Format(value);
 		}
 
-		public void UpdateAllDocks()
+		private void UpdateAllDocks()
 		{
 			foreach (var dock in dockPanel.Contents)
 			{
-				if (dock.DockHandler.Content is DebugDockContent)
+				if (dock.DockHandler.Content is DebugDockContent debugdock)
 				{
-					(dock.DockHandler.Content as DebugDockContent).UpdateDock();
+					debugdock.UpdateDock();
 				}
 			}
+		}
+
+		private void toolStripButton1_Click(object sender, EventArgs e)
+		{
 		}
 	}
 }
