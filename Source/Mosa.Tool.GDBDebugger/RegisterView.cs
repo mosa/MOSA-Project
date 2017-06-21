@@ -21,10 +21,16 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			dataGridView1.Rows.Clear();
 
-			//foreach (var name in simState.RegisterList)
-			//{
-			//	dataGridView1.Rows.Add(name, MainForm.Format(simState.GetRegister(name)));
-			//}
+			if (Platform == null)
+				return;
+
+			if (Platform.Registers == null)
+				return;
+
+			foreach (var register in MainForm.GDBConnector.Platform.Registers)
+			{
+				dataGridView1.Rows.Add(register.Name, register.ToHex());
+			}
 		}
 	}
 }

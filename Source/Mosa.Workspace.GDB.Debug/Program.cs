@@ -44,7 +44,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 			return;
 		}
 
-		private static void Response(BaseCommand command)
+		private static void Response(GDBCommand command)
 		{
 			Console.WriteLine("COMMAND: " + command.Pack);
 			Console.WriteLine("RESPONSE: " + command.ResponseAsString);
@@ -52,7 +52,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 			return;
 		}
 
-		private static void ReadMemory(BaseCommand command)
+		private static void ReadMemory(GDBCommand command)
 		{
 			Console.WriteLine("COMMAND: " + command.Pack);
 			Console.WriteLine("RESPONSE: " + command.ResponseAsString);
@@ -62,7 +62,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 			return;
 		}
 
-		private static void ReadRegister(BaseCommand command)
+		private static void ReadRegister(GDBCommand command)
 		{
 			Console.WriteLine("COMMAND: " + command.Pack);
 			Console.WriteLine("RESPONSE: " + command.ResponseAsString);
@@ -72,7 +72,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 			return;
 		}
 
-		private static void GetRegisters(BaseCommand command)
+		private static void GetRegisters(GDBCommand command)
 		{
 			Console.WriteLine("COMMAND: " + command.Pack);
 			Console.WriteLine("RESPONSE: " + command.ResponseAsString);

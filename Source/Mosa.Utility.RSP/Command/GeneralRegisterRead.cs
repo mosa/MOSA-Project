@@ -2,7 +2,7 @@
 
 namespace Mosa.Utility.RSP.Command
 {
-	public class GeneralRegisterRead : BaseCommand
+	public class GeneralRegisterRead : GDBCommand
 	{
 		public GeneralRegisterRead(CallBack callBack = null) : base("g", callBack)
 		{

@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Utility.RSP;
+using Mosa.Tool.GDBDebugger.GDB;
 using System;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -32,11 +32,14 @@ namespace Mosa.Tool.GDBDebugger
 
 		public string Status { set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
 
-		public bool Display32 { get; private set; }
+		public Connector GDBConnector { get; private set; }
 
 		public MainForm()
 		{
 			InitializeComponent();
+
+			GDBConnector = new Connector(new X86Platform(), 2345);
+			GDBConnector.OnStatusChange = UpdateAll;
 
 			outputView = new OutputView(this);
 
@@ -83,7 +86,8 @@ namespace Mosa.Tool.GDBDebugger
 			//scriptView.Show(dockPanel, DockState.Document);
 			//symbolView.Show(dockPanel, DockState.Document);
 
-			//registersView.Show(dockPanel, DockState.DockRight);
+			registersView.Show(dockPanel, DockState.DockRight);
+
 			//flagView.Show(dockPanel, DockState.DockRight);
 			//stackView.Show(dockPanel, DockState.DockRight);
 			//stackFrameView.Show(dockPanel, DockState.DockRight);
@@ -98,39 +102,14 @@ namespace Mosa.Tool.GDBDebugger
 			outputView.AddOutput(line);
 		}
 
-		public static string Format(object value)
+		private void UpdateAll()
 		{
-			if (value is string)
-				return value as string;
-			else if (value is uint)
-				return "0x" + ((uint)value).ToString("X8");
-			else if (value is int)
-				return "0x" + ((int)value).ToString("X8");
-			else if (value is ulong)
-				return "0x" + ((ulong)value).ToString("X16");
-			else if (value is long)
-				return "0x" + ((long)value).ToString("X16");
-			else if (value is double)
-				return ((double)value).ToString();
-			else if (value is float)
-				return ((float)value).ToString();
-			else if (value is bool)
-				return (bool)value ? "TRUE" : "FALSE";
-
-			return value.ToString();
-		}
-
-		public static string Format(object value, bool display32)
-		{
-			if (display32)
+			MethodInvoker method = delegate ()
 			{
-				if (value is ulong)
-					return "0x" + ((ulong)value).ToString("X8");
-				else if (value is long)
-					return "0x" + ((long)value).ToString("X8");
-			}
+				UpdateAllDocks();
+			};
 
-			return Format(value);
+			BeginInvoke(method);
 		}
 
 		private void UpdateAllDocks()
@@ -144,8 +123,19 @@ namespace Mosa.Tool.GDBDebugger
 			}
 		}
 
-		private void toolStripButton1_Click(object sender, EventArgs e)
+		private void btnConnect_Click(object sender, EventArgs e)
 		{
+			Connect(2345);
+		}
+
+		private void Connect(int port)
+		{
+			if (GDBConnector != null)
+				GDBConnector.Disconnect();
+
+			GDBConnector = new Connector(new X86Platform(), 2345);
+
+			GDBConnector.OnStatusChange = UpdateAll;
 		}
 	}
 }

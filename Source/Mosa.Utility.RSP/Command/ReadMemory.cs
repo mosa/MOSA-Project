@@ -2,7 +2,7 @@
 
 namespace Mosa.Utility.RSP.Command
 {
-	public class ReadMemory : BaseCommand
+	public class ReadMemory : GDBCommand
 	{
 		public ulong Address { get; private set; }
 		public int SentBytes { get; private set; }

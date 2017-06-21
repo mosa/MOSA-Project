@@ -1,12 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Tool.GDBDebugger.GDB;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Mosa.Tool.GDBDebugger.GDB
 {
 	public class Register
@@ -22,8 +15,20 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 		public Register(RegisterDefinition definition, ulong value)
 		{
-			definition = Definition;
+			Definition = definition;
 			Value = value;
+		}
+
+		public string ToHex()
+		{
+			switch (Size)
+			{
+				case 1: return "0x" + ((uint)Value).ToString("X1");
+				case 2: return "0x" + ((uint)Value).ToString("X2");
+				case 4: return "0x" + ((uint)Value).ToString("X4");
+				case 8: return "0x" + ((ulong)Value).ToString("X8");
+				default: return "N/A";
+			}
 		}
 	}
 }

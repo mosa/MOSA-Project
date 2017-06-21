@@ -2,7 +2,7 @@
 
 namespace Mosa.Utility.RSP.Command
 {
-	public class Continue : BaseCommand
+	public class Continue : GDBCommand
 	{
 		public Continue(CallBack callBack = null) : base("c", callBack)
 		{

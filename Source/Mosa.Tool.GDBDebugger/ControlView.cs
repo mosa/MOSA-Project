@@ -14,7 +14,7 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void btnStep_Click(object sender, EventArgs e)
 		{
-			//MainForm.ExecuteSteps(1);
+			MainForm.GDBConnector.Step();
 		}
 
 		private void btnStepN_Click(object sender, EventArgs e)
@@ -31,12 +31,12 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void btnStart_Click(object sender, EventArgs e)
 		{
-			//MainForm.Start();
+			MainForm.GDBConnector.Continue();
 		}
 
 		private void btnStop_Click(object sender, EventArgs e)
 		{
-			//MainForm.Stop();
+			MainForm.GDBConnector.Break();
 		}
 
 		private void btnStepOver_Click(object sender, EventArgs e)

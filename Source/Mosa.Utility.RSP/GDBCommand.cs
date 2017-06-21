@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Mosa.Utility.RSP
 {
-	public abstract class BaseCommand
+	public abstract class GDBCommand
 	{
 		public string CommandName { get; protected set; }
 
@@ -20,7 +20,7 @@ namespace Mosa.Utility.RSP
 
 		public CallBack Callback { get; private set; }
 
-		public BaseCommand(string commandName, CallBack callBack)
+		public GDBCommand(string commandName, CallBack callBack)
 		{
 			CommandName = commandName;
 			Callback = callBack;
@@ -38,24 +38,24 @@ namespace Mosa.Utility.RSP
 
 		public int ReceivedBytes { get { return IsResponseOk ? ResponseData.Length / 2 : 0; } }
 
-		public byte GetReceivedByte(int i)
+		public byte GetByte(int i)
 		{
 			return GDBClient.HexToDecimal(ResponseData[i * 2], ResponseData[(i * 2) + 1]);
 		}
 
-		public ushort GetReceivedWord(int i)
+		public ulong GetInteger(int index, int size)
 		{
-			return (ushort)(GetReceivedByte(i) | (GetReceivedByte(i + 2) << 8));
-		}
+			index = index * 2;
+			ulong value = 0;
 
-		public ushort GetReceivedInteger(int i)
-		{
-			return (ushort)(GetReceivedWord(i) | (GetReceivedWord(i + 3) << 16));
-		}
+			for (int i = index + (size * 2) - 2; i >= index; i = i - 2)
+			{
+				var b = GDBClient.HexToDecimal(ResponseData[i + 1], ResponseData[i]);
+				value = value << 8;
+				value = value | b;
+			}
 
-		public ulong GetReceivedLong(int i)
-		{
-			return (ulong)(GetReceivedInteger(i) | (GetReceivedInteger(i + 7) << 32));
+			return value;
 		}
 	}
 }

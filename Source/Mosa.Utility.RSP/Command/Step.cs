@@ -2,7 +2,7 @@
 
 namespace Mosa.Utility.RSP.Command
 {
-	public class Step : BaseCommand
+	public class Step : GDBCommand
 	{
 		public Step(CallBack callBack = null) : base("s", callBack)
 		{

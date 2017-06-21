@@ -2,14 +2,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.IO.Pipes;
-using System.Net.Sockets;
+using System.Diagnostics;
 using System.Text;
 
 namespace Mosa.Utility.RSP
 {
-	public delegate void CallBack(BaseCommand command);
+	public delegate void CallBack(GDBCommand command);
 
 	public sealed class GDBClient
 	{
@@ -24,9 +22,9 @@ namespace Mosa.Utility.RSP
 		private byte[] receivedByte = new byte[1];
 		private List<byte> receivedData = new List<byte>();
 
-		private Queue<BaseCommand> commandQueue = new Queue<BaseCommand>();
+		private Queue<GDBCommand> commandQueue = new Queue<GDBCommand>();
 
-		private BaseCommand currentCommand = null;
+		private GDBCommand currentCommand = null;
 
 		private static byte[] breakData = new byte[1] { 3 };
 
@@ -80,7 +78,7 @@ namespace Mosa.Utility.RSP
 				{
 					receivedData.Add(data);
 
-					Console.Write((char)data);
+					Debug.Write((char)data);
 
 					IncomingPatcket();
 				}
@@ -96,7 +94,7 @@ namespace Mosa.Utility.RSP
 			SendPackets();
 		}
 
-		public void SendCommandAsync(BaseCommand command)
+		public void SendCommandAsync(GDBCommand command)
 		{
 			lock (sync)
 			{
@@ -128,7 +126,7 @@ namespace Mosa.Utility.RSP
 
 				currentCommand = commandQueue.Dequeue();
 
-				Console.WriteLine("SENT: " + currentCommand.Pack);
+				Debug.WriteLine("SENT: " + currentCommand.Pack);
 
 				var data = ToBinary(currentCommand);
 				stream.Write(data, 0, data.Length);
@@ -141,6 +139,13 @@ namespace Mosa.Utility.RSP
 
 			if (len == 0)
 				return;
+
+			if (currentCommand == null && len == 0)
+			{
+				// ignore if no current command
+				receivedData.Clear();
+				return;
+			}
 
 			if (len == 1 && receivedData[0] == '+')
 			{
@@ -157,7 +162,7 @@ namespace Mosa.Utility.RSP
 
 			if (len >= 4 && receivedData[0] == '$' && receivedData[len - 3] == '#')
 			{
-				Console.WriteLine();
+				Debug.WriteLine(string.Empty);
 
 				var data = Rle.Decode(receivedData, 1, receivedData.Count - 3).ToArray();
 
@@ -183,10 +188,11 @@ namespace Mosa.Utility.RSP
 					currentCommand.Decode();
 				}
 
-				currentCommand.Callback?.Invoke(currentCommand);
-
-				receivedData.Clear();
+				var cmd = currentCommand;
 				currentCommand = null;
+				receivedData.Clear();
+
+				cmd.Callback?.Invoke(cmd);
 
 				return;
 			}
@@ -194,7 +200,7 @@ namespace Mosa.Utility.RSP
 			return;
 		}
 
-		private static byte[] ToBinary(BaseCommand packet)
+		private static byte[] ToBinary(GDBCommand packet)
 		{
 			var binPacket = new StringBuilder();
 			binPacket.Append(Prefix);

@@ -34,7 +34,6 @@ namespace Mosa.Tool.GDBDebugger
             this.btnStepN = new System.Windows.Forms.Button();
             this.tbSteps = new System.Windows.Forms.TextBox();
             this.btnStep = new System.Windows.Forms.Button();
-            this.btnStepOver = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnPause
@@ -58,7 +57,7 @@ namespace Mosa.Tool.GDBDebugger
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(80, 23);
             this.btnStart.TabIndex = 24;
-            this.btnStart.Text = "Start";
+            this.btnStart.Text = "Continue";
             this.btnStart.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
@@ -80,7 +79,7 @@ namespace Mosa.Tool.GDBDebugger
             // 
             this.btnStepN.Image = ((System.Drawing.Image)(resources.GetObject("btnStepN.Image")));
             this.btnStepN.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnStepN.Location = new System.Drawing.Point(410, 5);
+            this.btnStepN.Location = new System.Drawing.Point(329, 5);
             this.btnStepN.Name = "btnStepN";
             this.btnStepN.Size = new System.Drawing.Size(80, 23);
             this.btnStepN.TabIndex = 22;
@@ -91,7 +90,7 @@ namespace Mosa.Tool.GDBDebugger
             // 
             // tbSteps
             // 
-            this.tbSteps.Location = new System.Drawing.Point(496, 7);
+            this.tbSteps.Location = new System.Drawing.Point(415, 7);
             this.tbSteps.Name = "tbSteps";
             this.tbSteps.Size = new System.Drawing.Size(55, 20);
             this.tbSteps.TabIndex = 20;
@@ -101,7 +100,7 @@ namespace Mosa.Tool.GDBDebugger
             // 
             this.btnStep.Image = ((System.Drawing.Image)(resources.GetObject("btnStep.Image")));
             this.btnStep.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnStep.Location = new System.Drawing.Point(329, 5);
+            this.btnStep.Location = new System.Drawing.Point(248, 5);
             this.btnStep.Name = "btnStep";
             this.btnStep.Size = new System.Drawing.Size(80, 23);
             this.btnStep.TabIndex = 0;
@@ -110,25 +109,11 @@ namespace Mosa.Tool.GDBDebugger
             this.btnStep.UseVisualStyleBackColor = true;
             this.btnStep.Click += new System.EventHandler(this.btnStep_Click);
             // 
-            // btnStepOver
-            // 
-            this.btnStepOver.Image = ((System.Drawing.Image)(resources.GetObject("btnStepOver.Image")));
-            this.btnStepOver.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnStepOver.Location = new System.Drawing.Point(248, 5);
-            this.btnStepOver.Name = "btnStepOver";
-            this.btnStepOver.Size = new System.Drawing.Size(80, 23);
-            this.btnStepOver.TabIndex = 31;
-            this.btnStepOver.Text = "Step Over";
-            this.btnStepOver.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnStepOver.UseVisualStyleBackColor = true;
-            this.btnStepOver.Click += new System.EventHandler(this.btnStepOver_Click);
-            // 
             // ControlView
             // 
-            this.ClientSize = new System.Drawing.Size(562, 36);
+            this.ClientSize = new System.Drawing.Size(478, 36);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
-            this.Controls.Add(this.btnStepOver);
             this.Controls.Add(this.btnPause);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.btnRestart);
@@ -160,7 +145,6 @@ namespace Mosa.Tool.GDBDebugger
 		private System.Windows.Forms.Button btnRestart;
 		private System.Windows.Forms.Button btnStart;
 		private System.Windows.Forms.Button btnPause;
-		private System.Windows.Forms.Button btnStepOver;
 
 
 

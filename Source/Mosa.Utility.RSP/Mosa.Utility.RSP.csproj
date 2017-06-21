@@ -60,7 +60,7 @@
     <Compile Include="Command\ReadMemory.cs" />
     <Compile Include="Command\GeneralRegisterRead.cs" />
     <Compile Include="Command\Step.cs" />
-    <Compile Include="BaseCommand.cs" />
+    <Compile Include="GDBCommand.cs" />
     <Compile Include="GDBNetworkStream.cs" />
     <Compile Include="GDBClient.cs" />
     <Compile Include="Command\Continue.cs" />

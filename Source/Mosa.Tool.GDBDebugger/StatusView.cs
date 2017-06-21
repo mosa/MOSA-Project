@@ -12,12 +12,16 @@ namespace Mosa.Tool.GDBDebugger
 
 		public override void UpdateDock()
 		{
-			//var currentInstruction = simState.Instruction;
+			if (Platform == null)
+				return;
+
+			if (Platform.Registers == null)
+				return;
+
+			tbIP.Text = Platform.InstructionPointer.ToHex();
+
 			//var nextInstruction = SimCPU.GetOpcode(simState.NextIP);
-
 			//textBox3.Text = nextInstruction != null ? nextInstruction.ToString() : "-BLANK-";
-
-			//textBox4.Text = "0x" + simState.IP.ToString("X8");
 
 			Refresh();
 		}

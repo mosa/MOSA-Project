@@ -29,7 +29,7 @@ namespace Mosa.Tool.GDBDebugger
 		{
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.tbIP = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -54,11 +54,11 @@ namespace Mosa.Tool.GDBDebugger
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(3, 22);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.ReadOnly = true;
-            this.textBox4.Size = new System.Drawing.Size(87, 20);
-            this.textBox4.TabIndex = 30;
+            this.tbIP.Location = new System.Drawing.Point(3, 22);
+            this.tbIP.Name = "textBox4";
+            this.tbIP.ReadOnly = true;
+            this.tbIP.Size = new System.Drawing.Size(87, 20);
+            this.tbIP.TabIndex = 30;
             // 
             // label3
             // 
@@ -75,7 +75,7 @@ namespace Mosa.Tool.GDBDebugger
             this.CloseButton = false;
             this.CloseButtonVisible = false;
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.tbIP);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.label8);
             this.HideOnClose = true;
@@ -95,7 +95,7 @@ namespace Mosa.Tool.GDBDebugger
 
 		private System.Windows.Forms.TextBox textBox2;
 		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.TextBox textBox4;
+		private System.Windows.Forms.TextBox tbIP;
 		private System.Windows.Forms.Label label3;
 
 

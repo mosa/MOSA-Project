@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Utility.RSP;
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.Tool.GDBDebugger.GDB
@@ -61,34 +60,24 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			new RegisterDefinition(49,"mm7",8,452),
 		};
 
-		public static List<Register> Parse(BaseCommand command)
+		public const int StackPointerIndex = 4;
+		public const int StackFrameIndex = 5;
+		public const int InstructionPointerIndex = 8;
+		public const int StatusFlagIndex = 9;
+
+		public static List<Register> Parse(GDBCommand command)
 		{
 			var registers = new List<Register>();
 
 			foreach (var definition in Registers)
 			{
-				if (definition.Name == "st0") // future: parse remainer
+				if (definition.Name == "st0") // future: parse remainder
 					break;
 
-				ulong value = 0;
-
-				switch (definition.Size)
-				{
-					case 1: value = command.GetReceivedByte(definition.Offset); break;
-					case 2: value = command.GetReceivedWord(definition.Offset); break;
-					case 4: value = command.GetReceivedInteger(definition.Offset); break;
-					case 8: value = command.GetReceivedLong(definition.Offset); break;
-					default: throw new InvalidProgramException("Invalid definition size");
-				}
-
-				//for (int i = definition.Offset; i < definition.Size; i = i + 2)
-				//{
-				//	var b = GDBClient.HexToDecimal(data[i + 1], data[i]);
-				//	value = value << 8;
-				//	value = value | b;
-				//}
+				ulong value = command.GetInteger(definition.Offset, definition.Size);
 
 				var register = new Register(definition, value);
+
 				registers.Add(register);
 			}
 

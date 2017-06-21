@@ -2,7 +2,7 @@
 
 namespace Mosa.Utility.RSP.Command
 {
-	public class ClearBreakPoint : BaseCommand
+	public class ClearBreakPoint : GDBCommand
 	{
 		protected byte Type;
 

@@ -2,7 +2,7 @@
 
 namespace Mosa.Utility.RSP.Command
 {
-	public class ReadRegister : BaseCommand
+	public class ReadRegister : GDBCommand
 	{
 		public int Register { get; private set; }
 
