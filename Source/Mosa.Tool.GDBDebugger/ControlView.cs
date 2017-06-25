@@ -38,24 +38,5 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			MainForm.GDBConnector.Break();
 		}
-
-		private void btnStepOver_Click(object sender, EventArgs e)
-		{
-			//if (SimCPU == null)
-			//	return;
-
-			//if (SimCPU.LastInstruction.Opcode.FlowType == OpcodeFlowType.Call || SimCPU.LastInstruction.Opcode.FlowType == OpcodeFlowType.Normal)
-			//{
-			//	ulong ip = SimCPU.LastProgramCounter + SimCPU.CurrentInstruction.OpcodeSize;
-
-			//	SimCPU.Monitor.StepOverBreakPoint = ip;
-			//	MainForm.Start();
-			//}
-			//else
-			//{
-			//	SimCPU.Monitor.StepOverBreakPoint = 0;
-			//	MainForm.ExecuteSteps(1);
-			//}
-		}
 	}
 }

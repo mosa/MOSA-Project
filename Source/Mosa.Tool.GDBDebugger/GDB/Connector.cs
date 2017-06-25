@@ -2,11 +2,14 @@
 
 using Mosa.Utility.RSP;
 using Mosa.Utility.RSP.Command;
+using System.Collections.Generic;
 using System.Net.Sockets;
 
 namespace Mosa.Tool.GDBDebugger.GDB
 {
-	public delegate void OnStatusChange();
+	public delegate void OnPause();
+
+	public delegate void OnMemoryRead(byte[] bytes);
 
 	public class Connector
 	{
@@ -15,11 +18,14 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		public TcpClient TcpClient { get; set; }
 		public GDBClient GDBClient { get; set; }
 
-		public OnStatusChange OnStatusChange { get; set; }
+		public OnPause OnPause { get; set; }
 
-		public bool IsRunning { get; set; } = false;
+		public bool IsRunning { get { return !IsPaused; } }
+		public bool IsPaused { get; set; } = true;
 
 		public BasePlatform Platform { get; set; }
+
+		protected Dictionary<GDBCommand, OnMemoryRead> OnMemoryReadMap = new Dictionary<GDBCommand, GDB.OnMemoryRead>();
 
 		public Connector(BasePlatform platform)
 		{
@@ -78,13 +84,13 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 			GDBClient.SendCommandAsync(command);
 
-			IsRunning = true;
+			IsPaused = false;
 		}
 
 		public void Break()
 		{
 			GDBClient.SendBreak();
-			IsRunning = false;
+			IsPaused = true;
 		}
 
 		public void GetRegisters()
@@ -94,42 +100,59 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			GDBClient.SendCommandAsync(command);
 		}
 
+		public void ReadMemory(ulong address, int size, OnMemoryRead onMemoryRead)
+		{
+			var command = new ReadMemory(address, size, OnMemoryRead);
+
+			OnMemoryReadMap.Add(command, onMemoryRead);
+
+			GDBClient.SendCommandAsync(command);
+		}
+
 		private void OnStop(GDBCommand command)
 		{
-			IsRunning = false;
+			IsPaused = true;
 
 			GetRegisters();
 
-			CallOnChange();
+			CallOnPause();
 		}
 
 		private void OnStep(GDBCommand command)
 		{
-			IsRunning = false;
+			IsPaused = true;
 
 			GetRegisters();
 
-			CallOnChange();
+			CallOnPause();
 		}
 
 		private void OnCompetion(GDBCommand command)
 		{
-			IsRunning = false;
-			CallOnChange();
+			IsPaused = true;
 		}
 
 		private void OnGetRegisters(GDBCommand command)
 		{
-			IsRunning = false;
+			IsPaused = true;
 
 			Platform.Parse(command);
-
-			CallOnChange();
 		}
 
-		private void CallOnChange()
+		private void CallOnPause()
 		{
-			OnStatusChange?.Invoke();
+			OnPause?.Invoke();
+		}
+
+		private void OnMemoryRead(GDBCommand command)
+		{
+			var bytes = command.GetAllBytes();
+
+			var invoke = OnMemoryReadMap[command];
+
+			OnMemoryReadMap.Remove(command);
+
+			invoke(bytes);
 		}
 	}
 }

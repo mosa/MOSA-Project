@@ -39,7 +39,7 @@ namespace Mosa.Tool.GDBDebugger
 			InitializeComponent();
 
 			GDBConnector = new Connector(new X86Platform(), 2345);
-			GDBConnector.OnStatusChange = UpdateAll;
+			GDBConnector.OnPause = OnPause;
 
 			outputView = new OutputView(this);
 
@@ -62,6 +62,8 @@ namespace Mosa.Tool.GDBDebugger
 
 			//scriptView = new ScriptView(this);
 			//disassemblyView = new DisassemblyView(this);
+
+			UpdateAllDocks();
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -102,8 +104,11 @@ namespace Mosa.Tool.GDBDebugger
 			outputView.AddOutput(line);
 		}
 
-		private void UpdateAll()
+		private void OnPause()
 		{
+			if (!GDBConnector.IsPaused) // double check
+				return;
+
 			MethodInvoker method = delegate ()
 			{
 				UpdateAllDocks();
@@ -135,7 +140,13 @@ namespace Mosa.Tool.GDBDebugger
 
 			GDBConnector = new Connector(new X86Platform(), 2345);
 
-			GDBConnector.OnStatusChange = UpdateAll;
+			GDBConnector.OnPause = OnPause;
+		}
+
+		private void btnViewMemory_Click(object sender, EventArgs e)
+		{
+			var memoryView = new MemoryView(this);
+			memoryView.Show(dockPanel, DockState.Document);
 		}
 	}
 }

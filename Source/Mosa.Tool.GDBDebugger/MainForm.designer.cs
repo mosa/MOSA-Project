@@ -92,6 +92,7 @@
             this.btnViewMemory.Name = "btnViewMemory";
             this.btnViewMemory.Size = new System.Drawing.Size(100, 22);
             this.btnViewMemory.Text = "View Memory";
+            this.btnViewMemory.Click += new System.EventHandler(this.btnViewMemory_Click);
             // 
             // statusStrip1
             // 

@@ -76,6 +76,12 @@
     <Compile Include="MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MemoryView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MemoryView.designer.cs">
+      <DependentUpon>MemoryView.cs</DependentUpon>
+    </Compile>
     <Compile Include="OutputView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DebugDockContent.resx">
       <DependentUpon>DebugDockContent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MemoryView.resx">
+      <DependentUpon>MemoryView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OutputView.resx">
       <DependentUpon>OutputView.cs</DependentUpon>

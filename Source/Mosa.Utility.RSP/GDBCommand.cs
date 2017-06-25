@@ -57,5 +57,17 @@ namespace Mosa.Utility.RSP
 
 			return value;
 		}
+
+		public byte[] GetAllBytes()
+		{
+			var bytes = new byte[ResponseData.Length / 2];
+
+			for (int i = 0; i < bytes.Length; i++)
+			{
+				bytes[i] = GetByte(i);
+			}
+
+			return bytes;
+		}
 	}
 }
