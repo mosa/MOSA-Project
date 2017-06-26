@@ -23,7 +23,15 @@ namespace Mosa.Tool.GDBDebugger
 		public Connector GDBConnector { get { return MainForm.GDBConnector; } }
 		public BasePlatform Platform { get { return (GDBConnector == null ? null : GDBConnector.Platform); } }
 
-		public virtual void UpdateDock()
-		{ }
+		public bool IsRunning { get { return GDBConnector.IsRunning; } }
+		public bool IsPaused { get { return GDBConnector.IsPaused; } }
+
+		public virtual void OnPause()
+		{
+		}
+
+		public virtual void OnRunning()
+		{
+		}
 	}
 }

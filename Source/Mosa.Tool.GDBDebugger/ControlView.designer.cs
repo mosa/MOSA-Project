@@ -111,7 +111,7 @@ namespace Mosa.Tool.GDBDebugger
             // 
             // ControlView
             // 
-            this.ClientSize = new System.Drawing.Size(478, 36);
+            this.ClientSize = new System.Drawing.Size(477, 36);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
             this.Controls.Add(this.btnPause);

@@ -10,7 +10,13 @@ namespace Mosa.Tool.GDBDebugger
 			InitializeComponent();
 		}
 
-		public override void UpdateDock()
+		public override void OnRunning()
+		{
+			txtInstruction.Text = "Running...";
+			tbIP.Text = string.Empty;
+		}
+
+		public override void OnPause()
 		{
 			if (Platform == null)
 				return;
@@ -18,10 +24,10 @@ namespace Mosa.Tool.GDBDebugger
 			if (Platform.Registers == null)
 				return;
 
-			tbIP.Text = Platform.InstructionPointer.ToHex();
+			// todo: get memory and decode instruction
 
-			//var nextInstruction = SimCPU.GetOpcode(simState.NextIP);
-			//textBox3.Text = nextInstruction != null ? nextInstruction.ToString() : "-BLANK-";
+			tbIP.Text = Platform.InstructionPointer.ToHex();
+			txtInstruction.Text = string.Empty; // todo
 
 			Refresh();
 		}

@@ -7,7 +7,9 @@ using System.Net.Sockets;
 
 namespace Mosa.Tool.GDBDebugger.GDB
 {
-	public delegate void OnPause();
+	public delegate void OnStatusChange();
+
+	public delegate void OnLogEvent(string description);
 
 	public delegate void OnMemoryRead(byte[] bytes);
 
@@ -18,7 +20,8 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		public TcpClient TcpClient { get; set; }
 		public GDBClient GDBClient { get; set; }
 
-		public OnPause OnPause { get; set; }
+		public OnStatusChange OnPause { get; set; }
+		public OnStatusChange OnRunning { get; set; }
 
 		public bool IsRunning { get { return !IsPaused; } }
 		public bool IsPaused { get; set; } = true;
@@ -50,6 +53,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 				return false;
 
 			Break();
+			GetRegisters();
 
 			return true;
 		}
@@ -73,6 +77,8 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			var command = new Step(OnStep);
 
 			GDBClient.SendCommandAsync(command);
+
+			CallOnRunning();
 		}
 
 		public void Continue()
@@ -85,6 +91,8 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			GDBClient.SendCommandAsync(command);
 
 			IsPaused = false;
+
+			CallOnRunning();
 		}
 
 		public void Break()
@@ -114,8 +122,6 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			IsPaused = true;
 
 			GetRegisters();
-
-			CallOnPause();
 		}
 
 		private void OnStep(GDBCommand command)
@@ -124,7 +130,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 			GetRegisters();
 
-			CallOnPause();
+			CallOnRunning();
 		}
 
 		private void OnCompetion(GDBCommand command)
@@ -137,11 +143,18 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			IsPaused = true;
 
 			Platform.Parse(command);
+
+			CallOnPause();
 		}
 
 		private void CallOnPause()
 		{
 			OnPause?.Invoke();
+		}
+
+		private void CallOnRunning()
+		{
+			OnRunning?.Invoke();
 		}
 
 		private void OnMemoryRead(GDBCommand command)

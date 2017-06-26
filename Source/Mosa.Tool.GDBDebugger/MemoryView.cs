@@ -21,10 +21,15 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			InitializeComponent();
 			tbMemory.Text = "0xB8000";
-			UpdateDock();
+			Query();
 		}
 
-		public override void UpdateDock()
+		public override void OnRunning()
+		{
+			lbMemory.Clear();
+		}
+
+		public override void OnPause()
 		{
 			Query();
 		}
@@ -48,51 +53,50 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void UpdateDisplay(byte[] bytes)
 		{
-			try
+			ulong at = Address;
+
+			var newlines = new string[Rows];
+
+			for (int line = 0; line < Rows; line++)
 			{
-				ulong at = Address;
+				string l = at.ToString("X").PadLeft(8, '0') + ':';
+				string d = string.Empty;
 
-				string[] newlines = new string[Rows];
-
-				for (int line = 0; line < Rows; line++)
+				for (int x = 0; x < Columns; x++)
 				{
-					string l = at.ToString("X").PadLeft(8, '0') + ':';
-					string d = string.Empty;
+					int index = (line * Columns) + x;
 
-					for (int x = 0; x < Columns; x++)
-					{
-						byte mem = bytes[(line * Columns) + x];
+					if (index >= bytes.Length)
+						break;
 
-						if (x % 4 == 0) l = l + ' ';
-						l = l + mem.ToString("X").PadLeft(2, '0');
-						char b = (char)mem;
-						d = d + (char.IsLetterOrDigit(b) ? b : '.');
-						at++;
-					}
+					byte mem = bytes[index];
 
-					newlines[line] = l + ' ' + d;
+					if (x % 4 == 0) l = l + ' ';
+					l = l + mem.ToString("X").PadLeft(2, '0');
+					char b = (char)mem;
+					d = d + (char.IsLetterOrDigit(b) ? b : '.');
+					at++;
 				}
 
-				lbMemory.Lines = newlines;
+				newlines[line] = l + ' ' + d;
+			}
 
-				Status = string.Empty;
-			}
-			catch (Exception e)
-			{
-				Status = "Error: " + e.ToString();
-			}
+			lbMemory.Lines = newlines;
 		}
 
 		private void Query()
 		{
-			if (!GDBConnector.IsPaused)
-				return;
-
-			Rows = lbMemory.Height / (lbMemory.Font.Height + 2);
 			Columns = (lbMemory.Width - 100) / ((int)lbMemory.Font.Size * 3);
+			Rows = lbMemory.Height / (lbMemory.Font.Height + 2);
 
 			Address = ParseMemoryAddress();
 			Bytes = Rows * Columns;
+
+			if (Bytes > 0x800)
+			{
+				Rows = 0x800 / Columns;
+				Bytes = Rows * Columns;
+			}
 
 			GDBConnector.ReadMemory(Address, Bytes, OnMemoryRead);
 		}

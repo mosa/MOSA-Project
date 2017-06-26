@@ -37,6 +37,10 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.btnPaused = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnRunning = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -56,7 +60,7 @@
             this.dockPanel.Location = new System.Drawing.Point(0, 28);
             this.dockPanel.Name = "dockPanel";
             this.dockPanel.RightToLeftLayout = true;
-            this.dockPanel.Size = new System.Drawing.Size(856, 392);
+            this.dockPanel.Size = new System.Drawing.Size(799, 150);
             this.dockPanel.TabIndex = 0;
             // 
             // toolStrip1
@@ -64,10 +68,13 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnConnect,
             this.toolStripSeparator1,
-            this.btnViewMemory});
+            this.btnViewMemory,
+            this.toolStripSeparator,
+            this.btnPaused,
+            this.btnRunning});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(856, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(799, 25);
             this.toolStrip1.TabIndex = 28;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -97,17 +104,18 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 423);
+            this.toolStripStatusLabel1,
+            this.toolStripSeparator2});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 180);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(856, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(799, 23);
             this.statusStrip1.TabIndex = 29;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(42, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(42, 18);
             this.toolStripStatusLabel1.Text = "Ready!";
             // 
             // openFileDialog
@@ -115,11 +123,40 @@
             this.openFileDialog.DefaultExt = "exe";
             this.openFileDialog.Filter = "Executable|*.exe|Library|*.dll|All Files|*.*";
             // 
+            // toolStripSeparator
+            // 
+            this.toolStripSeparator.Name = "toolStripSeparator";
+            this.toolStripSeparator.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnPaused
+            // 
+            this.btnPaused.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnPaused.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnPaused.Image = ((System.Drawing.Image)(resources.GetObject("btnPaused.Image")));
+            this.btnPaused.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPaused.Name = "btnPaused";
+            this.btnPaused.Size = new System.Drawing.Size(23, 22);
+            this.btnPaused.Text = "He&lp";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 23);
+            // 
+            // btnRunning
+            // 
+            this.btnRunning.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.btnRunning.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnRunning.Image = ((System.Drawing.Image)(resources.GetObject("btnRunning.Image")));
+            this.btnRunning.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRunning.Name = "btnRunning";
+            this.btnRunning.Size = new System.Drawing.Size(23, 22);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(856, 445);
+            this.ClientSize = new System.Drawing.Size(799, 203);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.dockPanel);
@@ -147,5 +184,9 @@
 		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
+		private System.Windows.Forms.ToolStripButton btnPaused;
+		private System.Windows.Forms.ToolStripButton btnRunning;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 	}
 }

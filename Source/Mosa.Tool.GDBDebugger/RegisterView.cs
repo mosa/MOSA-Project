@@ -10,14 +10,15 @@ namespace Mosa.Tool.GDBDebugger
 			: base(mainForm)
 		{
 			InitializeComponent();
+			dataGridView1.Rows.Clear();
 		}
 
-		private void GeneralPurposeRegistersView_Load(object sender, EventArgs e)
+		public override void OnRunning()
 		{
 			dataGridView1.Rows.Clear();
 		}
 
-		public override void UpdateDock()
+		public override void OnPause()
 		{
 			dataGridView1.Rows.Clear();
 

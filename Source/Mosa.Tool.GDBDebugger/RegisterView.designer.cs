@@ -114,8 +114,7 @@ namespace Mosa.Tool.GDBDebugger
 			this.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;
 			this.TabText = "Registers";
-			this.Text = "Registers";
-			this.Load += new System.EventHandler(this.GeneralPurposeRegistersView_Load);
+			this.Text = "Registers";			
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.ResumeLayout(false);
 

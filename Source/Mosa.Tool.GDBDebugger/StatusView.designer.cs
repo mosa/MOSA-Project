@@ -27,21 +27,21 @@ namespace Mosa.Tool.GDBDebugger
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.txtInstruction = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.tbIP = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // textBox2
+            // txtInstruction
             // 
-            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtInstruction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Location = new System.Drawing.Point(96, 22);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(273, 20);
-            this.textBox2.TabIndex = 27;
+            this.txtInstruction.Location = new System.Drawing.Point(96, 22);
+            this.txtInstruction.Name = "txtInstruction";
+            this.txtInstruction.ReadOnly = true;
+            this.txtInstruction.Size = new System.Drawing.Size(273, 20);
+            this.txtInstruction.TabIndex = 27;
             // 
             // label8
             // 
@@ -52,10 +52,10 @@ namespace Mosa.Tool.GDBDebugger
             this.label8.TabIndex = 26;
             this.label8.Text = "Next Instruction:";
             // 
-            // textBox4
+            // tbIP
             // 
             this.tbIP.Location = new System.Drawing.Point(3, 22);
-            this.tbIP.Name = "textBox4";
+            this.tbIP.Name = "tbIP";
             this.tbIP.ReadOnly = true;
             this.tbIP.Size = new System.Drawing.Size(87, 20);
             this.tbIP.TabIndex = 30;
@@ -76,7 +76,7 @@ namespace Mosa.Tool.GDBDebugger
             this.CloseButtonVisible = false;
             this.Controls.Add(this.label3);
             this.Controls.Add(this.tbIP);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.txtInstruction);
             this.Controls.Add(this.label8);
             this.HideOnClose = true;
             this.MaximizeBox = false;
@@ -93,7 +93,7 @@ namespace Mosa.Tool.GDBDebugger
 		}
 		#endregion
 
-		private System.Windows.Forms.TextBox textBox2;
+		private System.Windows.Forms.TextBox txtInstruction;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.TextBox tbIP;
 		private System.Windows.Forms.Label label3;

@@ -38,8 +38,7 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			InitializeComponent();
 
-			GDBConnector = new Connector(new X86Platform(), 2345);
-			GDBConnector.OnPause = OnPause;
+			Connect(2345);
 
 			outputView = new OutputView(this);
 
@@ -62,8 +61,6 @@ namespace Mosa.Tool.GDBDebugger
 
 			//scriptView = new ScriptView(this);
 			//disassemblyView = new DisassemblyView(this);
-
-			UpdateAllDocks();
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -106,24 +103,42 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void OnPause()
 		{
-			if (!GDBConnector.IsPaused) // double check
-				return;
-
 			MethodInvoker method = delegate ()
 			{
-				UpdateAllDocks();
+				NotifyPause();
 			};
 
 			BeginInvoke(method);
 		}
 
-		private void UpdateAllDocks()
+		private void OnRunning()
+		{
+			MethodInvoker method = delegate ()
+			{
+				NotifyRunning();
+			};
+
+			BeginInvoke(method);
+		}
+
+		private void NotifyPause()
 		{
 			foreach (var dock in dockPanel.Contents)
 			{
 				if (dock.DockHandler.Content is DebugDockContent debugdock)
 				{
-					debugdock.UpdateDock();
+					debugdock.OnPause();
+				}
+			}
+		}
+
+		private void NotifyRunning()
+		{
+			foreach (var dock in dockPanel.Contents)
+			{
+				if (dock.DockHandler.Content is DebugDockContent debugdock)
+				{
+					debugdock.OnRunning();
 				}
 			}
 		}
@@ -141,6 +156,7 @@ namespace Mosa.Tool.GDBDebugger
 			GDBConnector = new Connector(new X86Platform(), 2345);
 
 			GDBConnector.OnPause = OnPause;
+			GDBConnector.OnRunning = OnRunning;
 		}
 
 		private void btnViewMemory_Click(object sender, EventArgs e)
