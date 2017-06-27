@@ -50,7 +50,7 @@ namespace Mosa.Utility.RSP
 
 			for (int i = index + (size * 2) - 2; i >= index; i = i - 2)
 			{
-				var b = GDBClient.HexToDecimal(ResponseData[i + 1], ResponseData[i]);
+				var b = GDBClient.HexToDecimal(ResponseData[i], ResponseData[i + 1]);
 				value = value << 8;
 				value = value | b;
 			}

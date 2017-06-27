@@ -56,14 +56,25 @@
     <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=2.15.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
       <HintPath>..\packages\DockPanelSuite.ThemeVS2015.2.15.0\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDisasm, Version=1.1.5.0, Culture=neutral, PublicKeyToken=71afd155bcebae3e, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDisasm.1.1.5\lib\net45\SharpDisasm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="WatchEntry.cs" />
+    <Compile Include="BreakPoint.cs" />
     <Compile Include="ControlView.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ControlView.designer.cs">
       <DependentUpon>ControlView.cs</DependentUpon>
     </Compile>
+    <Compile Include="DebugInfo\LoadDebugData.cs" />
+    <Compile Include="DebugInfo\DebugSource.cs" />
+    <Compile Include="DebugInfo\Section.cs" />
+    <Compile Include="DebugInfo\Instruction.cs" />
+    <Compile Include="DebugInfo\Symbol.cs" />
     <Compile Include="GDB\X86Platform.cs" />
     <Compile Include="GDB\BasePlatform.cs" />
     <Compile Include="GDB\Register.cs" />

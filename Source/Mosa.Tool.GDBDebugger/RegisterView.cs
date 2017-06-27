@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.Tool.GDBDebugger
 {
 	public partial class RegisterView : DebugDockContent

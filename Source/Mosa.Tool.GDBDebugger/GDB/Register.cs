@@ -21,14 +21,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 		public string ToHex()
 		{
-			switch (Size)
-			{
-				case 1: return "0x" + ((uint)Value).ToString("X2");
-				case 2: return "0x" + ((uint)Value).ToString("X4");
-				case 4: return "0x" + ((uint)Value).ToString("X8");
-				case 8: return "0x" + ((ulong)Value).ToString("X16");
-				default: return "N/A";
-			}
+			return BasePlatform.ToHex(Value, Size);
 		}
 	}
 }

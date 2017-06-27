@@ -42,10 +42,10 @@ namespace Mosa.Compiler.Framework.Stages
 		private void EmitSections()
 		{
 			writer.WriteLine("[Sections]");
-			writer.WriteLine("Offset\tAddress\tLength\tName\tClass");
+			writer.WriteLine("Address\tOffset\t\tSize\tKind\tName");
 			foreach (var section in Linker.LinkerSections)
 			{
-				writer.WriteLine("{0:x16}\t{1:x16}\t{2:x16}\t{3}\t{4}", section.FileOffset, section.VirtualAddress, section.Size, section.Name, section.SectionKind);
+				writer.WriteLine("{0:x16}\t{1:x16}\t{2:x16}\t{3}\t{4}", section.VirtualAddress, section.FileOffset, section.Size, section.SectionKind.ToString(), section.Name);
 			}
 		}
 
