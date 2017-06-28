@@ -272,6 +272,20 @@ namespace Mosa.UnitTest.Collection
 
 		#endregion InstanceDelegate
 
+		private delegate int ReturnInt();
+
+		private class MyDelegateObject
+		{
+			public ReturnInt Delegate;
+		}
+
+		public static int InlineDelegate()
+		{
+			var o = new MyDelegateObject { Delegate = delegate { return 124; } };
+
+			return o.Delegate();
+		}
+
 		private class Worker
 		{
 			public int Value = 10;
