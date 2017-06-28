@@ -21,7 +21,6 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			InitializeComponent();
 			tbMemory.Text = "0xB8000";
-			Query();
 		}
 
 		public override void OnRunning()
@@ -51,7 +50,7 @@ namespace Mosa.Tool.GDBDebugger
 			return value;
 		}
 
-		private void UpdateDisplay(byte[] bytes)
+		private void UpdateDisplay(ulong address, byte[] bytes)
 		{
 			ulong at = Address;
 
@@ -106,17 +105,30 @@ namespace Mosa.Tool.GDBDebugger
 			Query();
 		}
 
-		private void OnMemoryRead(byte[] bytes)
+		private void OnMemoryRead(ulong address, byte[] bytes)
 		{
 			if (bytes.Length != Bytes)
 				return;
 
 			MethodInvoker method = delegate ()
 			{
-				UpdateDisplay(bytes);
+				UpdateDisplay(address, bytes);
 			};
 
 			BeginInvoke(method);
+		}
+
+		private void MemoryView_Load(object sender, EventArgs e)
+		{
+			Query();
+		}
+
+		private void tbMemory_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				Query();
+			}
 		}
 	}
 }

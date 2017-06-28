@@ -18,7 +18,8 @@ namespace Mosa.Tool.GDBDebugger
 		private ControlView controlView;
 
 		//private CallStackView callStackView;
-		//private StackFrameView stackFrameView;
+		private StackFrameView stackFrameView;
+
 		//private StackView stackView;
 		//private FlagView flagView;
 		private StatusView statusView;
@@ -49,7 +50,8 @@ namespace Mosa.Tool.GDBDebugger
 			controlView = new ControlView(this);
 
 			//callStackView = new CallStackView(this);
-			//stackFrameView = new StackFrameView(this);
+			stackFrameView = new StackFrameView(this);
+
 			//stackView = new StackView(this);
 			//flagView = new FlagView(this);
 			statusView = new StatusView(this);
@@ -89,9 +91,12 @@ namespace Mosa.Tool.GDBDebugger
 
 			//flagView.Show(dockPanel, DockState.DockRight);
 			//stackView.Show(dockPanel, DockState.DockRight);
-			//stackFrameView.Show(dockPanel, DockState.DockRight);
+			stackFrameView.Show(dockPanel, DockState.DockRight);
 
 			registersView.Show();
+
+			var memoryView = new MemoryView(this);
+			memoryView.Show(dockPanel, DockState.Document);
 
 			dockPanel.ResumeLayout(true, true);
 		}

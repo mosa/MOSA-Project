@@ -28,35 +28,34 @@ namespace Mosa.Tool.GDBDebugger
 			if (Platform.Registers == null)
 				return;
 
-			// todo: get memory and decode instruction
-
 			tbIP.Text = Platform.InstructionPointer.ToHex();
-			txtInstruction.Text = string.Empty; // todo
+			txtInstruction.Text = string.Empty;
 
 			GDBConnector.ReadMemory(Platform.InstructionPointer.Value, 16, OnMemoryRead);
-
-			//Refresh();
 		}
 
-		private void OnMemoryRead(byte[] bytes)
+		private void OnMemoryRead(ulong address, byte[] bytes)
 		{
 			MethodInvoker method = delegate ()
 			{
-				UpdateDisplay(bytes);
+				UpdateDisplay(address, bytes);
 			};
 
 			BeginInvoke(method);
 		}
 
-		private void UpdateDisplay(byte[] memory)
+		private void UpdateDisplay(ulong address, byte[] memory)
 		{
+			if (address != Platform.InstructionPointer.Value)
+				return;
+
 			// Determine the architecture mode
 			ArchitectureMode mode = ArchitectureMode.x86_64; // todo:
 
 			try
 			{
 				// Create the disassembler
-				using (var disasm = new Disassembler(memory, mode, Platform.InstructionPointer.Value, true))
+				using (var disasm = new Disassembler(memory, mode, address, true))
 				{
 					// Need a new instance of translator every time as they aren't thread safe
 					var translator = new SharpDisasm.Translators.IntelTranslator();
@@ -72,11 +71,6 @@ namespace Mosa.Tool.GDBDebugger
 						txtInstruction.Text = asm;
 						break;
 					}
-
-					//var disassembled = disasm.Disassemble();
-					//var instruction = disassembled.GetEnumerator().Current;
-					//var asm = translator.Translate(instruction);
-					//txtInstruction.Text = asm;
 				}
 			}
 			catch

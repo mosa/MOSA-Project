@@ -11,7 +11,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 	public delegate void OnLogEvent(string description);
 
-	public delegate void OnMemoryRead(byte[] bytes);
+	public delegate void OnMemoryRead(ulong address, byte[] bytes);
 
 	public class Connector
 	{
@@ -165,7 +165,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 			OnMemoryReadMap.Remove(command);
 
-			invoke(bytes);
+			invoke((command as ReadMemory).Address, bytes);
 		}
 	}
 }

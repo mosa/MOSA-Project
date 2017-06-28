@@ -66,6 +66,7 @@ namespace Mosa.Tool.GDBDebugger
             this.tbMemory.Size = new System.Drawing.Size(100, 25);
             this.tbMemory.Text = "0x200000";
             this.tbMemory.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbMemory.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbMemory_KeyDown);
             // 
             // toolStripSeparator1
             // 
@@ -102,6 +103,7 @@ namespace Mosa.Tool.GDBDebugger
             this.Controls.Add(this.toolStrip1);
             this.Name = "MemoryView";
             this.Text = "Memory View";
+            this.Load += new System.EventHandler(this.MemoryView_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
