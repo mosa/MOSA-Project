@@ -274,12 +274,21 @@ namespace Mosa.UnitTest.Collection
 
 		private delegate int ReturnInt();
 
+		public static int InlineDelegate1()
+		{
+			ReturnInt o = delegate { return 124; };
+
+			var i = o();
+
+			return i;
+		}
+
 		private class MyDelegateObject
 		{
 			public ReturnInt Delegate;
 		}
 
-		public static int InlineDelegate()
+		public static int InlineDelegate2()
 		{
 			var o = new MyDelegateObject { Delegate = delegate { return 124; } };
 
