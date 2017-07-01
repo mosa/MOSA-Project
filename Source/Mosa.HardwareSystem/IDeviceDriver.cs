@@ -2,14 +2,16 @@
 
 namespace Mosa.HardwareSystem
 {
-	/// <summary>
-	///
-	/// </summary>
+	public delegate IDevice InstantiateDevice();
+
 	public interface IDeviceDriver
 	{
-		/// <summary>
-		///
-		/// </summary>
 		PlatformArchitecture Platforms { get; }
+
+		DeviceBusType BusType { get; }
+
+		string Name { get; }
+
+		InstantiateDevice Factory { get; }
 	}
 }

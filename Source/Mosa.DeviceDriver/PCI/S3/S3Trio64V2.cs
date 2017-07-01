@@ -8,7 +8,7 @@ namespace Mosa.DeviceDriver.PCI.S3
 	/// <summary>
 	/// S3 Trio64 V2 Graphics Device Driver
 	/// </summary>
-	[PCIDeviceDriver(VendorID = 0x5333, DeviceID = 0x8811, Platforms = PlatformArchitecture.X86AndX64)]
+	//[PCIDeviceDriver(VendorID = 0x5333, DeviceID = 0x8811, Platforms = PlatformArchitecture.X86AndX64)]
 	public class S3Trio64V2 : HardwareDevice, IDevice, IPixelPaletteGraphicsDevice
 	{
 		/// <summary>

@@ -48,6 +48,9 @@ namespace Mosa.AppSystem
 			if (key == null)
 				return;
 
+			if (key.KeyType == KeyType.NoKey)
+				return;
+
 			if (key.KeyType == KeyType.F1)
 			{
 				SetCurrentApplication(currentApp);

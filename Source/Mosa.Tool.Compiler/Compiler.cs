@@ -163,6 +163,15 @@ namespace Mosa.Tool.Compiler
 			);
 
 			optionSet.Add(
+				"debug-info=",
+				"Generate a debug info {file} of the produced binary.",
+				delegate (string file)
+				{
+					compiler.CompilerOptions.DebugFile = file;
+				}
+			);
+
+			optionSet.Add(
 				@"sa|enable-static-alloc",
 				@"Performs static allocations at compile time.",
 				enable => compiler.CompilerOptions.EnableStaticAllocations = enable != null

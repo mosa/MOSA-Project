@@ -19,7 +19,7 @@ namespace Mosa.HelloWorld.x86
 		/// </summary>
 		public static void Main()
 		{
-			Mosa.Kernel.x86.Kernel.Setup();
+			Kernel.x86.Kernel.Setup();
 
 			Console = ConsoleManager.Controller.Boot;
 

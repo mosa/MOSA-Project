@@ -13,11 +13,11 @@ namespace Mosa.DeviceDriver.PCI.AMD
 	/// <summary>
 	/// AMDPCNet Network Chip
 	/// </summary>
-	[PCIDeviceDriver(VendorID = 0x1022, DeviceID = 0x2000, Platforms = PlatformArchitecture.X86AndX64)]
-	[DeviceDriverPhysicalMemory(MemorySize = 7 * 4, MemoryAlignment = 4, RestrictUnder4G = true)]
-	[DeviceDriverPhysicalMemory(MemorySize = 80 * 4, MemoryAlignment = 16, RestrictUnder4G = true)]
-	[DeviceDriverPhysicalMemory(MemorySize = 80 * 4, MemoryAlignment = 16, RestrictUnder4G = true)]
-	[DeviceDriverPhysicalMemory(MemorySize = 2048 * 32, MemoryAlignment = 1, RestrictUnder4G = true)]
+	//[PCIDeviceDriver(VendorID = 0x1022, DeviceID = 0x2000, Platforms = PlatformArchitecture.X86AndX64)]
+	//[DeviceDriverPhysicalMemory(MemorySize = 7 * 4, MemoryAlignment = 4, RestrictUnder4G = true)]
+	//[DeviceDriverPhysicalMemory(MemorySize = 80 * 4, MemoryAlignment = 16, RestrictUnder4G = true)]
+	//[DeviceDriverPhysicalMemory(MemorySize = 80 * 4, MemoryAlignment = 16, RestrictUnder4G = true)]
+	//[DeviceDriverPhysicalMemory(MemorySize = 2048 * 32, MemoryAlignment = 1, RestrictUnder4G = true)]
 	public class AMDPCNet : HardwareDevice, INetworkDevice
 	{
 		#region Memory and Ports

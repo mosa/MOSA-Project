@@ -5,7 +5,6 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.Trace;
 using SharpDisasm;
 using System;
-using System.Text;
 
 namespace Mosa.Tool.Explorer
 {

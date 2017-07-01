@@ -43,6 +43,12 @@ namespace Mosa.Compiler.Framework
 		public string MapFile { get; set; }
 
 		/// <summary>
+		/// Gets or sets the map file.
+		/// </summary>
+		/// <value>The map file.</value>
+		public string DebugFile { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether SSA is enabled.
 		/// </summary>
 		/// <value><c>true</c> if SSA is enabled; otherwise, <c>false</c>.</value>

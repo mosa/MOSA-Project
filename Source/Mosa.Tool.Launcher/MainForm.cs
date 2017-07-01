@@ -64,7 +64,7 @@ namespace Mosa.Tool.Launcher
 			Options.EnableQemuGDB = cbEnableQemuGDB.Checked;
 			Options.LaunchGDB = cbLaunchGDB.Checked;
 			Options.UseMultipleThreadCompiler = cbCompilerUsesMultipleThreads.Checked;
-			Options.MemoryInMB = (uint)nmMemory.Value;
+			Options.EmulatorMemoryInMB = (uint)nmMemory.Value;
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
 
@@ -173,7 +173,7 @@ namespace Mosa.Tool.Launcher
 			cbLaunchGDB.Checked = Options.LaunchGDB;
 			cbInlinedMethods.Checked = Options.EnableInlinedMethods;
 			cbCompilerUsesMultipleThreads.Checked = Options.UseMultipleThreadCompiler;
-			nmMemory.Value = Options.MemoryInMB;
+			nmMemory.Value = Options.EmulatorMemoryInMB;
 			cbVBEVideo.Checked = Options.VBEVideo;
 
 			tbBaseAddress.Text = "0x" + Options.BaseAddress.ToString("x8");

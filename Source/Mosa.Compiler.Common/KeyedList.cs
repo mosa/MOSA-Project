@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Common
 
 		public Dictionary<T, List<V>>.KeyCollection Keys { get { return Collection.Keys; } }
 
-		public List<V> this[T index] { get { return Collection[index]; } }
+		public List<V> this[T index] { get { return Collection.ContainsKey(index) ? Collection[index] : null; } }
 
 		public KeyedList()
 		{

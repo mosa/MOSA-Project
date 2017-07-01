@@ -9,9 +9,9 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class KernelMemory
 	{
-		static private uint heap = Address.GCInitialMemory;
-		static private uint allocated = 0x01000000;
-		static private uint used = 0;
+		static private uint heapStart = Address.GCInitialMemory;
+		static private uint heapSize = 0x02000000;
+		static private uint heapUsed = 0;
 
 		[Method("Mosa.Runtime.GC.AllocateMemory")]
 		static unsafe private void* _AllocateMemory(uint size)
@@ -21,24 +21,24 @@ namespace Mosa.Kernel.x86
 
 		static public uint AllocateMemory(uint size)
 		{
-			if ((heap == 0) || (size > (allocated - used)))
+			if (heapStart == 0 || (heapSize - heapUsed) < size)
 			{
 				// Go allocate memory
-
-				allocated = 1024 * 1024 * 8; // 8Mb
-				heap = VirtualPageAllocator.Reserve(allocated);
-				used = 0;
+				heapSize = 1024 * 1023 * 8; // 8Mb
+				heapStart = VirtualPageAllocator.Reserve(heapSize);
+				heapUsed = 0;
 			}
 
-			uint at = heap + used;
-			used = used + size;
+			uint at = heapStart + heapUsed;
+			heapUsed = heapUsed + size;
 			return at;
 		}
 
 		static public void SetInitialMemory(uint address, uint size)
 		{
-			heap = address;
-			allocated = size;
+			heapStart = address;
+			heapSize = size;
+			heapUsed = 0;
 		}
 	}
 }

@@ -23,7 +23,8 @@ namespace Mosa.Utility.Aot
 				new MethodExceptionLookupTableStage(),
 				new MetadataStage(),
 				new LinkerFinalizationStage(),
-				CompilerOptions.MapFile != null ? new MapFileGenerationStage() : null
+				CompilerOptions.MapFile != null ? new MapFileGenerationStage() : null,
+				CompilerOptions.DebugFile != null ? new DebugFileGenerationStage() : null
 			});
 		}
 

@@ -17,7 +17,7 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 	/// </summary>
 	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x7010, Platforms = PlatformArchitecture.X86AndX64)]
 	//, ProgIF = 0x80
-	[PCIDeviceDriver(ClassCode = 0x01, SubClassCode = 0x01, Platforms = PlatformArchitecture.X86AndX64)]
+	//[PCIDeviceDriver(ClassCode = 0x01, SubClassCode = 0x01, Platforms = PlatformArchitecture.X86AndX64)]
 	public class PCIIDEController : HardwareDevice, IDiskControllerDevice
 	{
 		#region Definitions

@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mosa.Tool.GDBDebugger</RootNamespace>
+    <AssemblyName>Mosa.Tool.GDBDebugger</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectGuid>{DFD831EA-79D8-49FC-8923-3AFFDA1283B9}</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\bin\Mosa.Tool.GDBDebugger.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Mosa.Tool.GDBDebugger.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>..\..\3rdParty\app-icons\bug.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WeifenLuo.WinFormsUI.Docking, Version=2.15.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.2.15.0\lib\net40\WeifenLuo.WinFormsUI.Docking.dll</HintPath>
+    </Reference>
+    <Reference Include="WeifenLuo.WinFormsUI.Docking.ThemeVS2015, Version=2.15.0.0, Culture=neutral, PublicKeyToken=5cded1a1a0a7b481, processorArchitecture=MSIL">
+      <HintPath>..\packages\DockPanelSuite.ThemeVS2015.2.15.0\lib\net40\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDisasm, Version=1.1.5.0, Culture=neutral, PublicKeyToken=71afd155bcebae3e, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDisasm.1.1.5\lib\net45\SharpDisasm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Options.cs" />
+    <Compile Include="View\BreakPointView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\BreakPointView.designer.cs">
+      <DependentUpon>BreakPointView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\StackFrameView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\StackFrameView.designer.cs">
+      <DependentUpon>StackFrameView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\SymbolView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\SymbolView.designer.cs">
+      <DependentUpon>SymbolView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\WatchView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\WatchView.designer.cs">
+      <DependentUpon>WatchView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Watch.cs" />
+    <Compile Include="BreakPoint.cs" />
+    <Compile Include="View\ControlView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ControlView.designer.cs">
+      <DependentUpon>ControlView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DebugData\LoadDebugData.cs" />
+    <Compile Include="DebugData\DebugSource.cs" />
+    <Compile Include="DebugData\Section.cs" />
+    <Compile Include="DebugData\Instruction.cs" />
+    <Compile Include="DebugData\Symbol.cs" />
+    <Compile Include="GDB\X86Platform.cs" />
+    <Compile Include="GDB\BasePlatform.cs" />
+    <Compile Include="GDB\Register.cs" />
+    <Compile Include="GDB\Connector.cs" />
+    <Compile Include="GDB\X86.cs" />
+    <Compile Include="GDB\RegisterDefinition.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MemoryView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\MemoryView.designer.cs">
+      <DependentUpon>MemoryView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\OutputView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\OutputView.designer.cs">
+      <DependentUpon>OutputView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DebugDockContent.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DebugDockContent.designer.cs">
+      <DependentUpon>DebugDockContent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="View\RegisterView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\RegisterView.designer.cs">
+      <DependentUpon>RegisterView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\StatusView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\StatusView.designer.cs">
+      <DependentUpon>StatusView.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
+      <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
+      <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj">
+      <Project>{65F7691A-B355-4D98-BB97-0B19F13E2190}</Project>
+      <Name>Mosa.Utility.BootImage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.DebugEngine\Mosa.Utility.DebugEngine.csproj">
+      <Project>{5B810793-78E2-413C-AA05-FCDD12B7DB04}</Project>
+      <Name>Mosa.Utility.DebugEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj">
+      <Project>{B69C2F31-5161-47AA-9FD3-2F2F2BCCF659}</Project>
+      <Name>Mosa.Utility.Launcher</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.RSP\Mosa.Utility.RSP.csproj">
+      <Project>{5b810793-78e2-413c-cc05-fcdd12b7db04}</Project>
+      <Name>Mosa.Utility.RSP</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="View\BreakPointView.resx">
+      <DependentUpon>BreakPointView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ControlView.resx">
+      <DependentUpon>ControlView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DebugDockContent.resx">
+      <DependentUpon>DebugDockContent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\MemoryView.resx">
+      <DependentUpon>MemoryView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\OutputView.resx">
+      <DependentUpon>OutputView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\RegisterView.resx">
+      <DependentUpon>RegisterView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\StackFrameView.resx">
+      <DependentUpon>StackFrameView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\StatusView.resx">
+      <DependentUpon>StatusView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\SymbolView.resx">
+      <DependentUpon>SymbolView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\WatchView.resx">
+      <DependentUpon>WatchView.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+			 Other similar extension points exist, see Microsoft.Common.targets.
+	<Target Name="BeforeBuild">
+	</Target>
+	<Target Name="AfterBuild">
+	</Target>
+	-->
+</Project>
