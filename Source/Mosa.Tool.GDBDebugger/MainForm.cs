@@ -175,31 +175,31 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			foreach (var dock in dockPanel.Contents)
 			{
-				if (dock.DockHandler.Content is DebugDockContent debugdock)
+                if (dock.DockHandler.Content is DebugDockContent debugdock)
 				{
-					debugdock.OnBreakpointChange();
-				}
-			}
+                    debugdock.OnBreakpointChange();
+                }
+            }
 		}
 
 		private void NotifyWatchChange()
 		{
 			foreach (var dock in dockPanel.Contents)
 			{
-				if (dock.DockHandler.Content is DebugDockContent debugdock)
-				{
-					debugdock.OnWatchChange();
-				}
-			}
+                if (dock.DockHandler.Content is DebugDockContent debugdock)
+                {
+                    debugdock.OnWatchChange();
+                }
+            }
 		}
 
 		private void btnConnect_Click(object sender, EventArgs e)
 		{
             using (ConnectWindow connect = new ConnectWindow())
             {
-                if(connect.ShowDialog(this) == DialogResult.OK)
+                if (connect.ShowDialog(this) == DialogResult.OK)
                 {
-                    ConnectDebugger(GDBConnector);
+                    ConnectDebugger(connect.Debugger);
                 }
             }
 		}
