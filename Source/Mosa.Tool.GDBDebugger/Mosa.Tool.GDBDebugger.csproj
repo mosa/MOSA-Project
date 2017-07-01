@@ -63,6 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Options.cs" />
+    <Compile Include="View\BreakPointView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\BreakPointView.designer.cs">
+      <DependentUpon>BreakPointView.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\StackFrameView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -168,6 +174,9 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="View\BreakPointView.resx">
+      <DependentUpon>BreakPointView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\ControlView.resx">
       <DependentUpon>ControlView.cs</DependentUpon>
     </EmbeddedResource>

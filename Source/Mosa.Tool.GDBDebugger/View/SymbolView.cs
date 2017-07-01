@@ -4,13 +4,14 @@ using Mosa.Tool.GDBDebugger.DebugData;
 using Mosa.Tool.GDBDebugger.GDB;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.GDBDebugger.View
 {
 	public partial class SymbolView : DebugDockContent
 	{
-		private List<SymbolEntry> symbols;
+		private List<SymbolEntry> symbols = new List<SymbolEntry>();
 
 		private class SymbolEntry
 		{
@@ -22,7 +23,8 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			public string Address { get { return BasePlatform.ToHex(Symbol.Address, Symbol.Size); } }
 
-			private Symbol Symbol;
+			//[Browsable(false)]
+			public Symbol Symbol { get; }
 
 			public SymbolEntry(Symbol symbol)
 			{
@@ -44,9 +46,6 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		public void CreateEntries()
 		{
-			//if (MainForm.Compiler.Linker == null)
-			//	return;
-
 			symbols = new List<SymbolEntry>();
 
 			string filter = toolStripTextBox1.Text.Trim();
@@ -127,7 +126,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (clickedSymbolEntry == null)
 				return;
 
-			//MainForm.AddBreakpoint(clickedSymbolEntry.Name, clickedSymbolEntry.LinkerSymbol.VirtualAddress);
+			MainForm.AddBreakPoint(clickedSymbolEntry.Symbol.Address, clickedSymbolEntry.Name);
 		}
 
 		private void MenuItem3_Click(Object sender, EventArgs e)

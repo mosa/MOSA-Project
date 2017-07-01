@@ -4,6 +4,7 @@ using Mosa.Tool.GDBDebugger.DebugData;
 using Mosa.Tool.GDBDebugger.GDB;
 using Mosa.Tool.GDBDebugger.View;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -30,7 +31,8 @@ namespace Mosa.Tool.GDBDebugger
 		private SymbolView symbolView;
 
 		//private WatchView watchView;
-		//private BreakPointView breakPointView;
+		private BreakPointView breakPointView;
+
 		//private ScriptView scriptView;
 		//private DisassemblyView disassemblyView;
 
@@ -38,15 +40,14 @@ namespace Mosa.Tool.GDBDebugger
 
 		public Connector GDBConnector { get; private set; }
 
-		public Options Options { get; private set; }
+		public Options Options { get; private set; } = new Options();
 
-		public DebugSource DebugSource { get; private set; }
+		public DebugSource DebugSource { get; private set; } = new DebugSource();
+
+		public List<BreakPoint> BreakPoints { get; private set; } = new List<BreakPoint>();
 
 		public MainForm()
 		{
-			Options = new Options();
-			DebugSource = new DebugSource();
-
 			InitializeComponent();
 
 			outputView = new OutputView(this);
@@ -68,7 +69,7 @@ namespace Mosa.Tool.GDBDebugger
 			symbolView = new SymbolView(this);
 
 			//watchView = new WatchView(this);
-			//breakPointView = new BreakPointView(this);
+			breakPointView = new BreakPointView(this);
 
 			//scriptView = new ScriptView(this);
 			//disassemblyView = new DisassemblyView(this);
@@ -85,7 +86,8 @@ namespace Mosa.Tool.GDBDebugger
 			//callStackView.Show(controlView.PanelPane, DockAlignment.Bottom, 0.50);
 			//disassemblyView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
 
-			//breakPointView.Show(dockPanel, DockState.DockBottom);
+			breakPointView.Show(dockPanel, DockState.DockBottom);
+
 			//watchView.Show(breakPointView.PanelPane, DockAlignment.Right, 0.50);
 
 			//displayView.Show(dockPanel, DockState.Document);
@@ -110,7 +112,9 @@ namespace Mosa.Tool.GDBDebugger
 			dockPanel.ResumeLayout(true, true);
 
 			if (Options.AutoConnect)
+			{
 				Connect();
+			}
 
 			if (Options.DebugInfoFile != null)
 			{
@@ -185,6 +189,22 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			var memoryView = new MemoryView(this);
 			memoryView.Show(dockPanel, DockState.Document);
+		}
+
+		public void AddBreakPoint(BreakPoint breakpoint)
+		{
+			BreakPoints.Add(breakpoint);
+		}
+
+		public void AddBreakPoint(ulong address, string name = null)
+		{
+			var breakpoint = new BreakPoint(name, address);
+			BreakPoints.Add(breakpoint);
+		}
+
+		public void RemoveBreakPoint(BreakPoint breakpoint)
+		{
+			BreakPoints.Remove(breakpoint);
 		}
 	}
 }
