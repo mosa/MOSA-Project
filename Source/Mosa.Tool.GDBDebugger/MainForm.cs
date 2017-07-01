@@ -149,51 +149,51 @@ namespace Mosa.Tool.GDBDebugger
 			BeginInvoke(method);
 		}
 
-		private void NotifyPause()
-		{
-			foreach (var dock in dockPanel.Contents)
-			{
-				if (dock.DockHandler.Content is DebugDockContent)
+        private void NotifyPause()
+        {
+            foreach (var dock in dockPanel.Contents)
+            {
+                if (dock.DockHandler.Content is DebugDockContent debugdock)
 				{
-					((DebugDockContent)dock.DockHandler.Content).OnPause();
-				}
-			}
-		}
+                    debugdock.OnPause();
+                }
+            }
+        }
 
-		private void NotifyRunning()
-		{
-			foreach (var dock in dockPanel.Contents)
-			{
-				if (dock.DockHandler.Content is DebugDockContent)
+        private void NotifyRunning()
+        {
+            foreach (var dock in dockPanel.Contents)
+            {
+                if (dock.DockHandler.Content is DebugDockContent debugdock)
 				{
-					((DebugDockContent)dock.DockHandler.Content).OnRunning();
-				}
-			}
-		}
+                    debugdock.OnRunning();
+                }
+            }
+        }
 
-		private void NotifyBreakPointChange()
-		{
-			foreach (var dock in dockPanel.Contents)
-			{
+        private void NotifyBreakPointChange()
+        {
+            foreach (var dock in dockPanel.Contents)
+            {
                 if (dock.DockHandler.Content is DebugDockContent debugdock)
 				{
                     debugdock.OnBreakpointChange();
                 }
             }
-		}
+        }
 
-		private void NotifyWatchChange()
-		{
-			foreach (var dock in dockPanel.Contents)
-			{
+        private void NotifyWatchChange()
+        {
+            foreach (var dock in dockPanel.Contents)
+            {
                 if (dock.DockHandler.Content is DebugDockContent debugdock)
-                {
+				{
                     debugdock.OnWatchChange();
                 }
             }
-		}
+        }
 
-		private void btnConnect_Click(object sender, EventArgs e)
+        private void btnConnect_Click(object sender, EventArgs e)
 		{
             using (ConnectWindow connect = new ConnectWindow())
             {
