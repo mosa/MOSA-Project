@@ -1,12 +1,26 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Tool.GDBDebugger.GDB;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.GDBDebugger.View
 {
 	public partial class StackFrameView : DebugDockContent
 	{
+		private class StackEntry
+		{
+			public string Offset { get; set; }
+
+			public string Address { get; set; }
+
+			public string Value { get; set; }
+
+			[Browsable(false)]
+			public int Index { get; set; }
+		}
+
 		public StackFrameView(MainForm mainForm)
 			: base(mainForm)
 		{
@@ -15,7 +29,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		public override void OnRunning()
 		{
-			listBox1.Items.Clear();
+			dataGridView1.DataSource = null;
 		}
 
 		public override void OnPause()
@@ -51,7 +65,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private void UpdateDisplay(ulong address, byte[] memory)
 		{
-			listBox1.Items.Clear();
+			var list = new List<StackEntry>();
 
 			int size = 4; // fixme
 
@@ -60,13 +74,20 @@ namespace Mosa.Tool.GDBDebugger.View
 				ulong value = (ulong)(memory[i] | (memory[i + 1] << 8) | (memory[i + 2] << 16) | (memory[i + 3] << 24));
 
 				var at = address + (ulong)i;
-				var hexValue = BasePlatform.ToHex(value, size);
-				var hexAddress = BasePlatform.ToHex(at, size);
 
-				listBox1.Items.Add(listBox1.Items.Count.ToString("D2") + ": " + hexValue + " [" + Platform.StackFrame.Name.ToUpper() + "+" + (Platform.StackFrame.Value - at).ToString().PadLeft(2, '0') + "]");
+				var entry = new StackEntry()
+				{
+					Address = BasePlatform.ToHex(at, size),
+					Value = BasePlatform.ToHex(value, size),
+					Offset = Platform.StackFrame.Name.ToUpper() + "-" + (Platform.StackFrame.Value - at).ToString().PadLeft(2, '0'),
+					Index = list.Count,
+				};
 
-				//listBox1.Items.Add("[" + Platform.StackFrame.Name + "+" + (Platform.StackFrame.Value - at).ToString().PadLeft(2, '0') + "] " + hexValue);
+				list.Add(entry);
 			}
+
+			dataGridView1.DataSource = list;
+			dataGridView1.AutoResizeColumns();
 		}
 	}
 }

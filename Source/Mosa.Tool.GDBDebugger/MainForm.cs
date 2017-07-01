@@ -14,7 +14,6 @@ namespace Mosa.Tool.GDBDebugger
 	{
 		private OutputView outputView;
 
-		//private AssembliesView assembliesView;
 		private RegisterView registersView;
 
 		//private DisplayView displayView;
@@ -27,14 +26,11 @@ namespace Mosa.Tool.GDBDebugger
 		//private FlagView flagView;
 		private StatusView statusView;
 
-		//private HistoryView historyView;
 		private SymbolView symbolView;
-
 		private WatchView watchView;
 		private BreakPointView breakPointView;
 
 		//private ScriptView scriptView;
-		//private DisassemblyView disassemblyView;
 
 		public string Status { set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
 
@@ -54,7 +50,6 @@ namespace Mosa.Tool.GDBDebugger
 
 			outputView = new OutputView(this);
 
-			//assembliesView = new AssembliesView(this);
 			registersView = new RegisterView(this);
 
 			//displayView = new DisplayView(this);
@@ -66,15 +61,11 @@ namespace Mosa.Tool.GDBDebugger
 			//stackView = new StackView(this);
 			//flagView = new FlagView(this);
 			statusView = new StatusView(this);
-
-			//historyView = new HistoryView(this);
 			symbolView = new SymbolView(this);
-
 			watchView = new WatchView(this);
 			breakPointView = new BreakPointView(this);
 
 			//scriptView = new ScriptView(this);
-			//disassemblyView = new DisassemblyView(this);
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -86,20 +77,14 @@ namespace Mosa.Tool.GDBDebugger
 			controlView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
 
 			//callStackView.Show(controlView.PanelPane, DockAlignment.Bottom, 0.50);
-			//disassemblyView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
-
 			breakPointView.Show(dockPanel, DockState.DockBottom);
-
 			watchView.Show(breakPointView.PanelPane, DockAlignment.Right, 0.50);
 
 			//displayView.Show(dockPanel, DockState.Document);
-			//historyView.Show(dockPanel, DockState.Document);
-			//assembliesView.Show(dockPanel, DockState.Document);
 			outputView.Show(dockPanel, DockState.Document);
 
 			//scriptView.Show(dockPanel, DockState.Document);
 			symbolView.Show(dockPanel, DockState.Document);
-
 			registersView.Show(dockPanel, DockState.DockRight);
 
 			//flagView.Show(dockPanel, DockState.DockRight);
