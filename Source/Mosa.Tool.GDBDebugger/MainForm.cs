@@ -151,9 +151,9 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			foreach (var dock in dockPanel.Contents)
 			{
-				if (dock.DockHandler.Content is DebugDockContent debugdock)
+				if (dock.DockHandler.Content is DebugDockContent)
 				{
-					debugdock.OnPause();
+					((DebugDockContent)dock.DockHandler.Content).OnPause();
 				}
 			}
 		}
@@ -162,30 +162,69 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			foreach (var dock in dockPanel.Contents)
 			{
-				if (dock.DockHandler.Content is DebugDockContent debugdock)
+				if (dock.DockHandler.Content is DebugDockContent)
 				{
-					debugdock.OnRunning();
+					((DebugDockContent)dock.DockHandler.Content).OnRunning();
 				}
 			}
 		}
 
 		private void btnConnect_Click(object sender, EventArgs e)
 		{
-			Connect();
+            using (ConnectWindow connect = new ConnectWindow())
+            {
+                if(connect.ShowDialog(this) == DialogResult.OK)
+                {
+                    ConnectDebugger(GDBConnector);
+                }
+            }
 		}
 
-		private void Connect()
-		{
-			if (GDBConnector != null)
-				GDBConnector.Disconnect();
+        private void btnDebugQemu_Click(object sender, EventArgs e)
+        {
+            using (DebugQemuWindow debug = new DebugQemuWindow(Options))
+            {
+                if(debug.ShowDialog(this) == DialogResult.OK)
+                {
+                    //TODO: Put this somewhere + add event handler for user exit.
+                    //debug.QEMUProcess
 
-			GDBConnector = new Connector(new X86Platform(), Options.GDBPort); //fixme: hardcoded platform
+                    ConnectDebugger(debug.Debugger);
+                }
+            }
+        }
 
-			GDBConnector.OnPause = OnPause;
-			GDBConnector.OnRunning = OnRunning;
-		}
+        private void Connect()
+        {
+            ConnectDebugger(new Connector(new X86Platform()));
+        }
 
-		private void btnViewMemory_Click(object sender, EventArgs e)
+        private void ConnectDebugger(Connector connector)
+        {
+            //Cursor?
+            Cursor = Cursors.WaitCursor;
+
+            if (GDBConnector != null)
+                GDBConnector.Disconnect();
+
+            if (connector.Connect())
+            {
+                GDBConnector = connector;
+
+                GDBConnector.OnPause = OnPause;
+                GDBConnector.OnRunning = OnRunning;
+
+                Status = "Connected";
+            }
+            else
+            {
+                MessageBox.Show(this, "Failed to connect to remote!", "Connection error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            Cursor = Cursors.Default;
+        }
+
+        private void btnViewMemory_Click(object sender, EventArgs e)
 		{
 			var memoryView = new MemoryView(this);
 			memoryView.Show(dockPanel, DockState.Document);
@@ -206,5 +245,5 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			BreakPoints.Remove(breakpoint);
 		}
-	}
+    }
 }

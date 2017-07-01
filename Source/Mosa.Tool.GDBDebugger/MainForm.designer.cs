@@ -39,6 +39,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.btnDebugQemu = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -65,6 +66,7 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnConnect,
+            this.btnDebugQemu,
             this.toolStripSeparator1,
             this.btnViewMemory,
             this.toolStripSeparator});
@@ -129,6 +131,15 @@
             this.openFileDialog.DefaultExt = "exe";
             this.openFileDialog.Filter = "Executable|*.exe|Library|*.dll|All Files|*.*";
             // 
+            // btnDebugQemu
+            // 
+            this.btnDebugQemu.Image = ((System.Drawing.Image)(resources.GetObject("btnDebugQemu.Image")));
+            this.btnDebugQemu.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDebugQemu.Name = "btnDebugQemu";
+            this.btnDebugQemu.Size = new System.Drawing.Size(99, 22);
+            this.btnDebugQemu.Text = "Debug QEMU";
+            this.btnDebugQemu.Click += new System.EventHandler(this.btnDebugQemu_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -163,5 +174,6 @@
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-	}
+        private System.Windows.Forms.ToolStripButton btnDebugQemu;
+    }
 }
