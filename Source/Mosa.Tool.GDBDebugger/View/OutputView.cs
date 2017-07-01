@@ -3,7 +3,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Mosa.Tool.GDBDebugger
+namespace Mosa.Tool.GDBDebugger.View
 {
 	public partial class OutputView : DebugDockContent
 	{

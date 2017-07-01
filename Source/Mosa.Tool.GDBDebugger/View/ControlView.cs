@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Mosa.Tool.GDBDebugger
+namespace Mosa.Tool.GDBDebugger.View
 {
 	public partial class ControlView : DebugDockContent
 	{

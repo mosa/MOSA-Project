@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Tool.GDBDebugger
+namespace Mosa.Tool.GDBDebugger.View
 {
 	partial class MemoryView
 	{

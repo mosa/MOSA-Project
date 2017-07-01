@@ -63,18 +63,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Options.cs" />
-    <Compile Include="StackFrameView.cs">
+    <Compile Include="View\StackFrameView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StackFrameView.designer.cs">
+    <Compile Include="View\StackFrameView.designer.cs">
       <DependentUpon>StackFrameView.cs</DependentUpon>
     </Compile>
     <Compile Include="WatchEntry.cs" />
     <Compile Include="BreakPoint.cs" />
-    <Compile Include="ControlView.cs">
+    <Compile Include="View\ControlView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ControlView.designer.cs">
+    <Compile Include="View\ControlView.designer.cs">
       <DependentUpon>ControlView.cs</DependentUpon>
     </Compile>
     <Compile Include="DebugInfo\LoadDebugData.cs" />
@@ -94,16 +94,16 @@
     <Compile Include="MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MemoryView.cs">
+    <Compile Include="View\MemoryView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MemoryView.designer.cs">
+    <Compile Include="View\MemoryView.designer.cs">
       <DependentUpon>MemoryView.cs</DependentUpon>
     </Compile>
-    <Compile Include="OutputView.cs">
+    <Compile Include="View\OutputView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OutputView.designer.cs">
+    <Compile Include="View\OutputView.designer.cs">
       <DependentUpon>OutputView.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -119,16 +119,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="RegisterView.cs">
+    <Compile Include="View\RegisterView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RegisterView.designer.cs">
+    <Compile Include="View\RegisterView.designer.cs">
       <DependentUpon>RegisterView.cs</DependentUpon>
     </Compile>
-    <Compile Include="StatusView.cs">
+    <Compile Include="View\StatusView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="StatusView.designer.cs">
+    <Compile Include="View\StatusView.designer.cs">
       <DependentUpon>StatusView.cs</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -162,7 +162,7 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ControlView.resx">
+    <EmbeddedResource Include="View\ControlView.resx">
       <DependentUpon>ControlView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
@@ -171,23 +171,23 @@
     <EmbeddedResource Include="DebugDockContent.resx">
       <DependentUpon>DebugDockContent.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MemoryView.resx">
+    <EmbeddedResource Include="View\MemoryView.resx">
       <DependentUpon>MemoryView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OutputView.resx">
+    <EmbeddedResource Include="View\OutputView.resx">
       <DependentUpon>OutputView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="RegisterView.resx">
+    <EmbeddedResource Include="View\RegisterView.resx">
       <DependentUpon>RegisterView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StackFrameView.resx">
+    <EmbeddedResource Include="View\StackFrameView.resx">
       <DependentUpon>StackFrameView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="StatusView.resx">
+    <EmbeddedResource Include="View\StatusView.resx">
       <DependentUpon>StatusView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

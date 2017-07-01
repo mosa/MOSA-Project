@@ -4,7 +4,7 @@ using Mosa.Tool.GDBDebugger.GDB;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace Mosa.Tool.GDBDebugger
+namespace Mosa.Tool.GDBDebugger.View
 {
 	public partial class StackFrameView : DebugDockContent
 	{

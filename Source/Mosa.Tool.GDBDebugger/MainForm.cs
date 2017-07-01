@@ -2,6 +2,7 @@
 
 using Mosa.Tool.GDBDebugger.DebugInfo;
 using Mosa.Tool.GDBDebugger.GDB;
+using Mosa.Tool.GDBDebugger.View;
 using System;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;

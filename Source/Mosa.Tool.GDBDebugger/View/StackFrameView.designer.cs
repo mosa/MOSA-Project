@@ -1,4 +1,4 @@
-namespace Mosa.Tool.GDBDebugger
+namespace Mosa.Tool.GDBDebugger.View
 {
 	partial class StackFrameView : DebugDockContent
     {
