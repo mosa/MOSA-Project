@@ -58,7 +58,7 @@ namespace Mosa.Tool.GDBDebugger
         {
             using (OpenFileDialog imageDialog = new OpenFileDialog())
             {
-                imageDialog.Filter = "IMG files (*.img)|*.img|ISO files (*.iso)|*.iso";
+                imageDialog.Filter = "Supported files (*.iso,*.img)|*.iso;*.img|IMG files (*.img)|*.img|ISO files (*.iso)|*.iso";
 
                 if(imageDialog.ShowDialog(this) == DialogResult.OK)
                 {
