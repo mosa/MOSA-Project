@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Tool.GDBDebugger.GDB;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.GDBDebugger.View

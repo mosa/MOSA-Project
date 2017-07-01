@@ -203,10 +203,17 @@ namespace Mosa.Tool.GDBDebugger
 			if (GDBConnector != null)
 				GDBConnector.Disconnect();
 
-			GDBConnector = new Connector(new X86Platform(), Options.GDBPort); //fixme: hardcoded platform
+			GDBConnector = new Connector(new X86Platform());
+
+			GDBConnector.Connect(Options.GDBPort);
 
 			GDBConnector.OnPause = OnPause;
 			GDBConnector.OnRunning = OnRunning;
+
+			if (!GDBConnector.IsConnected)
+			{
+				MessageBox.Show($"Could not connect to 'localhost' on port {Options.GDBPort}.");
+			}
 		}
 
 		private void btnViewMemory_Click(object sender, EventArgs e)
@@ -218,42 +225,38 @@ namespace Mosa.Tool.GDBDebugger
 		public void AddBreakPoint(BreakPoint breakpoint)
 		{
 			BreakPoints.Add(breakpoint);
-			GDBConnector.AddBreakPoint(breakpoint);
+			GDBConnector.AddBreakPoint(breakpoint.Address);
 			NotifyBreakPointChange();
 		}
 
 		public void AddBreakPoint(ulong address, string name = null)
 		{
 			var breakpoint = new BreakPoint(name, address);
-			GDBConnector.AddBreakPoint(breakpoint);
 			AddBreakPoint(breakpoint);
 		}
 
 		public void RemoveBreakPoint(BreakPoint breakpoint)
 		{
 			BreakPoints.Remove(breakpoint);
-			GDBConnector.ClearBreakPoint(breakpoint);
+			GDBConnector.ClearBreakPoint(breakpoint.Address);
 			NotifyBreakPointChange();
 		}
 
 		public void AddWatch(Watch watch)
 		{
 			Watchs.Add(watch);
-			// TODO
 			NotifyWatchChange();
 		}
 
 		public void AddWatch(string name, ulong address, int size, bool signed = false)
 		{
 			var watch = new Watch(name, address, size, signed);
-			// TODO
 			AddWatch(watch);
 		}
 
 		public void RemoveWatch(Watch watch)
 		{
 			Watchs.Remove(watch);
-			// TODO
 			NotifyWatchChange();
 		}
 	}

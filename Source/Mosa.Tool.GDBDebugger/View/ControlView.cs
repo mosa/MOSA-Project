@@ -24,7 +24,6 @@ namespace Mosa.Tool.GDBDebugger.View
 			try
 			{
 				steps = Convert.ToUInt32(tbSteps.Text);
-
 			}
 			catch
 			{
