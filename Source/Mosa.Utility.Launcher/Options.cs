@@ -23,7 +23,7 @@ namespace Mosa.Utility.Launcher
 
 		public ImageFormat ImageFormat { get; set; }
 
-		public uint MemoryInMB { get; set; }
+		public uint EmulatorMemoryInMB { get; set; }
 
 		public bool EnableSSA { get; set; }
 
@@ -95,7 +95,7 @@ namespace Mosa.Utility.Launcher
 			BootFormat = BootFormat.Multiboot_0_7;
 			PlatformType = PlatformType.X86;
 			LinkerFormatType = LinkerFormatType.Elf32;
-			MemoryInMB = 128;
+			EmulatorMemoryInMB = 128;
 			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
 			FileSystem = FileSystem.FAT16;
 			DebugConnectionOption = DebugConnectionOption.None;

@@ -72,7 +72,7 @@ namespace Mosa.UnitTest.Engine
 				BootFormat = BootFormat.Multiboot_0_7,
 				PlatformType = PlatformType.X86,
 				LinkerFormatType = LinkerFormatType.Elf32,
-				MemoryInMB = 128,
+				EmulatorMemoryInMB = 128,
 				DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"),
 				FileSystem = FileSystem.FAT16,
 				UseMultipleThreadCompiler = true,

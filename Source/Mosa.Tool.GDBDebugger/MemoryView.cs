@@ -85,6 +85,9 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void Query()
 		{
+			if (!IsConnected || !IsPaused)
+				return;
+
 			Columns = (lbMemory.Width - 100) / ((int)lbMemory.Font.Size * 3);
 			Rows = lbMemory.Height / (lbMemory.Font.Height + 2);
 

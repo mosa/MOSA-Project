@@ -23,6 +23,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		public OnStatusChange OnPause { get; set; }
 		public OnStatusChange OnRunning { get; set; }
 
+		public bool IsConnected { get { return GDBClient.IsConnected; } }
 		public bool IsRunning { get { return !IsPaused; } }
 		public bool IsPaused { get; set; } = true;
 
@@ -45,6 +46,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		{
 			Disconnect();
 
+			// todo: better error handling
 			TcpClient = new TcpClient("localhost", port);
 			var stream = new GDBNetworkStream(TcpClient.Client, true);
 			GDBClient = new GDBClient(stream);

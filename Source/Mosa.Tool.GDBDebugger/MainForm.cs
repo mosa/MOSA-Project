@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Tool.GDBDebugger.DebugInfo;
 using Mosa.Tool.GDBDebugger.GDB;
 using System;
 using System.Windows.Forms;
@@ -35,11 +36,16 @@ namespace Mosa.Tool.GDBDebugger
 
 		public Connector GDBConnector { get; private set; }
 
+		public Options Options { get; private set; }
+
+		public DebugSource DebugSource { get; private set; }
+
 		public MainForm()
 		{
-			InitializeComponent();
+			Options = new Options();
+			DebugSource = new DebugSource();
 
-			Connect(2345);
+			InitializeComponent();
 
 			outputView = new OutputView(this);
 
@@ -99,6 +105,14 @@ namespace Mosa.Tool.GDBDebugger
 			memoryView.Show(dockPanel, DockState.Document);
 
 			dockPanel.ResumeLayout(true, true);
+
+			if (Options.AutoConnect)
+				Connect();
+
+			if (Options.DebugInfoFile != null)
+			{
+				LoadDebugData.LoadDebugInfo(Options.DebugInfoFile, DebugSource);
+			}
 		}
 
 		public void AddOutput(string line)
@@ -150,15 +164,15 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void btnConnect_Click(object sender, EventArgs e)
 		{
-			Connect(2345);
+			Connect();
 		}
 
-		private void Connect(int port)
+		private void Connect()
 		{
 			if (GDBConnector != null)
 				GDBConnector.Disconnect();
 
-			GDBConnector = new Connector(new X86Platform(), 2345);
+			GDBConnector = new Connector(new X86Platform(), Options.GDBPort); //fixme: hardcoded platform
 
 			GDBConnector.OnPause = OnPause;
 			GDBConnector.OnRunning = OnRunning;

@@ -283,16 +283,43 @@ namespace Mosa.UnitTest.Collection
 			return i;
 		}
 
+		private static ReturnInt here;
+
+		public static int InlineDelegate2()
+		{
+			here = delegate { return 124; };
+
+			var i = here();
+
+			return i;
+		}
+
 		private class MyDelegateObject
 		{
 			public ReturnInt Delegate;
 		}
 
-		public static int InlineDelegate2()
+		public static int InlineDelegate3()
 		{
 			var o = new MyDelegateObject { Delegate = delegate { return 124; } };
 
 			return o.Delegate();
+		}
+
+		private static MyDelegateObject myObject = new MyDelegateObject();
+
+		public static int InlineDelegate4()
+		{
+			myObject.Delegate = delegate { return 124; };
+
+			return 0;
+		}
+
+		public static int InlineDelegate5()
+		{
+			myObject.Delegate = delegate { return 124; };
+
+			return myObject.Delegate();
 		}
 
 		private class Worker

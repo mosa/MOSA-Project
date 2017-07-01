@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Options.cs" />
     <Compile Include="StackFrameView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,9 +137,17 @@
       <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
       <Name>Mosa.Compiler.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj">
+      <Project>{65F7691A-B355-4D98-BB97-0B19F13E2190}</Project>
+      <Name>Mosa.Utility.BootImage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Utility.DebugEngine\Mosa.Utility.DebugEngine.csproj">
       <Project>{5B810793-78E2-413C-AA05-FCDD12B7DB04}</Project>
       <Name>Mosa.Utility.DebugEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj">
+      <Project>{B69C2F31-5161-47AA-9FD3-2F2F2BCCF659}</Project>
+      <Name>Mosa.Utility.Launcher</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Utility.RSP\Mosa.Utility.RSP.csproj">
       <Project>{5b810793-78e2-413c-cc05-fcdd12b7db04}</Project>

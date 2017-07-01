@@ -115,5 +115,23 @@ namespace Mosa.UnitTest.Collection.xUnit
 		{
 			Assert.Equal(DelegateTests.InlineDelegate2(), Run<int>("Mosa.UnitTest.Collection.DelegateTests.InlineDelegate2"));
 		}
+
+		[Fact]
+		public void InlineDelegate3()
+		{
+			Assert.Equal(DelegateTests.InlineDelegate3(), Run<int>("Mosa.UnitTest.Collection.DelegateTests.InlineDelegate3"));
+		}
+
+		[Fact]
+		public void InlineDelegate4()
+		{
+			Assert.Equal(DelegateTests.InlineDelegate4(), Run<int>("Mosa.UnitTest.Collection.DelegateTests.InlineDelegate4"));
+		}
+
+		[Fact]
+		public void InlineDelegate5()
+		{
+			Assert.Equal(DelegateTests.InlineDelegate5(), Run<int>("Mosa.UnitTest.Collection.DelegateTests.InlineDelegate5"));
+		}
 	}
 }

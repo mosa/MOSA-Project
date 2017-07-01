@@ -118,7 +118,7 @@ namespace Mosa.Utility.Launcher
 
 			var sb = new StringBuilder();
 
-			sb.AppendLine("megs: " + Options.MemoryInMB.ToString());
+			sb.AppendLine("megs: " + Options.EmulatorMemoryInMB.ToString());
 			sb.AppendLine("ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
 			sb.AppendLine("cpuid: mmx=1,sep=1," + simd + "=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1");
 			sb.AppendLine("boot: cdrom,disk");
@@ -157,7 +157,7 @@ namespace Mosa.Utility.Launcher
 			sb.AppendLine(".encoding = \"windows-1252\"");
 			sb.AppendLine("config.version = \"8\"");
 			sb.AppendLine("virtualHW.version = \"4\"");
-			sb.AppendLine("memsize = " + Quote(Options.MemoryInMB.ToString()));
+			sb.AppendLine("memsize = " + Quote(Options.EmulatorMemoryInMB.ToString()));
 
 			sb.AppendLine("displayName = \"MOSA - " + Path.GetFileNameWithoutExtension(Options.SourceFile) + "\"");
 			sb.AppendLine("guestOS = \"other\"");
