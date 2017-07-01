@@ -218,38 +218,42 @@ namespace Mosa.Tool.GDBDebugger
 		public void AddBreakPoint(BreakPoint breakpoint)
 		{
 			BreakPoints.Add(breakpoint);
+			GDBConnector.AddBreakPoint(breakpoint);
 			NotifyBreakPointChange();
 		}
 
 		public void AddBreakPoint(ulong address, string name = null)
 		{
 			var breakpoint = new BreakPoint(name, address);
+			GDBConnector.AddBreakPoint(breakpoint);
 			AddBreakPoint(breakpoint);
 		}
 
 		public void RemoveBreakPoint(BreakPoint breakpoint)
 		{
 			BreakPoints.Remove(breakpoint);
+			GDBConnector.ClearBreakPoint(breakpoint);
 			NotifyBreakPointChange();
 		}
 
 		public void AddWatch(Watch watch)
 		{
 			Watchs.Add(watch);
-
+			// TODO
 			NotifyWatchChange();
 		}
 
 		public void AddWatch(string name, ulong address, int size, bool signed = false)
 		{
 			var watch = new Watch(name, address, size, signed);
+			// TODO
 			AddWatch(watch);
 		}
 
 		public void RemoveWatch(Watch watch)
 		{
 			Watchs.Remove(watch);
-
+			// TODO
 			NotifyWatchChange();
 		}
 	}
