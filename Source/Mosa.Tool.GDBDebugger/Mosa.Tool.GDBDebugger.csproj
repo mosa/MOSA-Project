@@ -83,11 +83,11 @@
     <Compile Include="View\ControlView.designer.cs">
       <DependentUpon>ControlView.cs</DependentUpon>
     </Compile>
-    <Compile Include="DebugInfo\LoadDebugData.cs" />
-    <Compile Include="DebugInfo\DebugSource.cs" />
-    <Compile Include="DebugInfo\Section.cs" />
-    <Compile Include="DebugInfo\Instruction.cs" />
-    <Compile Include="DebugInfo\Symbol.cs" />
+    <Compile Include="DebugData\LoadDebugData.cs" />
+    <Compile Include="DebugData\DebugSource.cs" />
+    <Compile Include="DebugData\Section.cs" />
+    <Compile Include="DebugData\Instruction.cs" />
+    <Compile Include="DebugData\Symbol.cs" />
     <Compile Include="GDB\X86Platform.cs" />
     <Compile Include="GDB\BasePlatform.cs" />
     <Compile Include="GDB\Register.cs" />

@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Tool.GDBDebugger.DebugInfo;
+using Mosa.Tool.GDBDebugger.DebugData;
 using Mosa.Tool.GDBDebugger.GDB;
 using System;
 using System.Collections.Generic;

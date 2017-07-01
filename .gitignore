@@ -8,9 +8,9 @@
 # Build results
 
 [Oo]bj/
-[Bb]in
-[Dd]ebug*/
-[Rr]elease*/
+[Bb]in/
+[Dd]ebug/
+[Rr]elease/
 
 *.[Oo]bj
 *.suo
