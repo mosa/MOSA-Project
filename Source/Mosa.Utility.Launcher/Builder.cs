@@ -96,7 +96,7 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.BaseAddress = Options.BaseAddress;
 				compiler.CompilerOptions.EmitSymbols = Options.EmitSymbols;
 				compiler.CompilerOptions.EmitRelocations = Options.EmitRelocations;
-
+				
 				compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
 
 				if (Options.GenerateMapFile)
