@@ -6,6 +6,7 @@ build:
 
 configuration: Release
 platform: Any CPU
+image: Visual Studio 2017
 
 shallow_clone: true
 
