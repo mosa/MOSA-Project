@@ -81,7 +81,13 @@
     <Compile Include="View\SymbolView.designer.cs">
       <DependentUpon>SymbolView.cs</DependentUpon>
     </Compile>
-    <Compile Include="WatchEntry.cs" />
+    <Compile Include="View\WatchView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\WatchView.designer.cs">
+      <DependentUpon>WatchView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Watch.cs" />
     <Compile Include="BreakPoint.cs" />
     <Compile Include="View\ControlView.cs">
       <SubType>Form</SubType>
@@ -207,6 +213,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\SymbolView.resx">
       <DependentUpon>SymbolView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\WatchView.resx">
+      <DependentUpon>WatchView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

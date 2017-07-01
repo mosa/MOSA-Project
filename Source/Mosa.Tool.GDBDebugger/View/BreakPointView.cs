@@ -31,14 +31,23 @@ namespace Mosa.Tool.GDBDebugger.View
 			InitializeComponent();
 			dataGridView1.DataSource = breakpoints;
 			dataGridView1.AutoResizeColumns();
-			dataGridView1.Columns[0].Width = 250;
+			dataGridView1.Columns[0].Width = 400;
+		}
+
+		public override void OnBreakpointChange()
+		{
+			breakpoints.Clear();
+			foreach (var breakpoint in MainForm.BreakPoints)
+			{
+				breakpoints.Add(new BreakPointEntry(breakpoint));
+			}
 		}
 
 		public void AddBreakPoint(string name, ulong address)
 		{
 			var breakpoint = new BreakPoint(name, address);
 
-			breakpoints.Add(new BreakPointEntry(breakpoint));
+			//breakpoints.Add(new BreakPointEntry(breakpoint));
 
 			MainForm.AddBreakPoint(breakpoint);
 		}
@@ -55,7 +64,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			var breakPointEntry = row as BreakPointEntry;
 
-			breakpoints.Remove(breakPointEntry);
+			//breakpoints.Remove(breakPointEntry);
 
 			MainForm.RemoveBreakPoint(breakPointEntry.BreakPoint);
 		}
@@ -90,7 +99,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (breakPointEntry == null)
 				return;
 
-			breakpoints.Remove(breakPointEntry);
+			//breakpoints.Remove(breakPointEntry);
 
 			MainForm.RemoveBreakPoint(breakPointEntry.BreakPoint);
 		}

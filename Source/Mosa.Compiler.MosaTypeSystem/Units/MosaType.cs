@@ -311,7 +311,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 					type.FullName = fName.ToString();
 					type.ShortName = sName.ToString();
-
 				}
 				else if (type.DeclaringType != null)
 				{
