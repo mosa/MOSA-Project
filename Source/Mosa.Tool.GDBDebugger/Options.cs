@@ -50,7 +50,7 @@ namespace Mosa.Tool.GDBDebugger
 					case "-port": GDBPort = (int)args[++i].ParseHexOrDecimal(); continue;
 					case "-image": ImageFile = args[++i]; continue;
 					case "-connect": AutoConnect = true; continue;
-					case "-debugFile": DebugInfoFile = args[++i]; continue;
+					case "-debugfile": DebugInfoFile = args[++i]; continue;
 					case "-qemu": Emulator = EmulatorType.Qemu; continue;
 					case "-vmware": Emulator = EmulatorType.VMware; continue;
 					case "-bochs": Emulator = EmulatorType.Bochs; continue;

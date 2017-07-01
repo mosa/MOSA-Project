@@ -30,11 +30,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (string.IsNullOrEmpty(DebugFile))
 				return;
 
-			writer = new StreamWriter(DebugFile);
-
-			EmitSections();
-			EmitSymbols();
-			EmitEntryPoint();
+			using (writer = new StreamWriter(DebugFile))
+			{
+				EmitSections();
+				EmitSymbols();
+				EmitEntryPoint();
+			}
 		}
 
 		#region Internals
@@ -42,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void EmitSections()
 		{
 			writer.WriteLine("[Sections]");
-			writer.WriteLine("Address\tOffset\t\tSize\tKind\tName");
+			writer.WriteLine("Address\tOffset\tSize\tKind\tName");
 			foreach (var section in Linker.LinkerSections)
 			{
 				writer.WriteLine("{0:x16}\t{1:x16}\t{2:x16}\t{3}\t{4}", section.VirtualAddress, section.FileOffset, section.Size, section.SectionKind.ToString(), section.Name);
@@ -62,12 +63,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void EmitEntryPoint()
 		{
-			var entryPoint = Linker.EntryPoint;
-			if (entryPoint != null)
+			if (Linker.EntryPoint != null)
 			{
 				writer.WriteLine("[EntryPoint]");
-				writer.WriteLine("Name\tAddress");
-				writer.WriteLine("{0}\t{1}", entryPoint.Name, entryPoint.VirtualAddress);
+				writer.WriteLine("Address\tName");
+				writer.WriteLine("{0}\t{1}", Linker.EntryPoint.VirtualAddress, Linker.EntryPoint.Name);
 			}
 		}
 

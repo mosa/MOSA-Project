@@ -20,5 +20,18 @@ namespace Mosa.Compiler.Common
 
 			return Convert.ToUInt32(nbr, digits);
 		}
+
+		public static ulong ParseHex(this string value)
+		{
+			string nbr = value.ToUpper().Trim();
+			int where = nbr.IndexOf('X');
+
+			if (where >= 0)
+			{
+				nbr = nbr.Substring(where + 1);
+			}
+
+			return Convert.ToUInt64(value, 16);
+		}
 	}
 }

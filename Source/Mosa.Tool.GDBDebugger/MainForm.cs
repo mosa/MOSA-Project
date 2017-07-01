@@ -27,7 +27,8 @@ namespace Mosa.Tool.GDBDebugger
 		private StatusView statusView;
 
 		//private HistoryView historyView;
-		//private SymbolView symbolView;
+		private SymbolView symbolView;
+
 		//private WatchView watchView;
 		//private BreakPointView breakPointView;
 		//private ScriptView scriptView;
@@ -64,7 +65,8 @@ namespace Mosa.Tool.GDBDebugger
 			statusView = new StatusView(this);
 
 			//historyView = new HistoryView(this);
-			//symbolView = new SymbolView(this);
+			symbolView = new SymbolView(this);
+
 			//watchView = new WatchView(this);
 			//breakPointView = new BreakPointView(this);
 
@@ -92,7 +94,7 @@ namespace Mosa.Tool.GDBDebugger
 			outputView.Show(dockPanel, DockState.Document);
 
 			//scriptView.Show(dockPanel, DockState.Document);
-			//symbolView.Show(dockPanel, DockState.Document);
+			symbolView.Show(dockPanel, DockState.Document);
 
 			registersView.Show(dockPanel, DockState.DockRight);
 
