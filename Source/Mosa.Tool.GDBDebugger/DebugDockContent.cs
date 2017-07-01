@@ -34,5 +34,13 @@ namespace Mosa.Tool.GDBDebugger
 		public virtual void OnRunning()
 		{
 		}
+
+		public virtual void OnBreakpointChange()
+		{
+		}
+
+		public virtual void OnWatchChange()
+		{
+		}
 	}
 }

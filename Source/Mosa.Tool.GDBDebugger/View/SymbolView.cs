@@ -11,19 +11,21 @@ namespace Mosa.Tool.GDBDebugger.View
 {
 	public partial class SymbolView : DebugDockContent
 	{
-		private List<SymbolEntry> symbols = new List<SymbolEntry>();
+		private List<SymbolEntry> symbols;
 
 		private class SymbolEntry
 		{
 			public string Name { get { return Symbol.Name; } }
 
+			[Browsable(false)]
 			public int Size { get { return Symbol.Size; } }
-
-			public string Kind { get { return Symbol.Kind; } }
 
 			public string Address { get { return BasePlatform.ToHex(Symbol.Address, Symbol.Size); } }
 
-			//[Browsable(false)]
+			[Browsable(false)]
+			public string Kind { get { return Symbol.Kind; } }
+
+			[Browsable(false)]
 			public Symbol Symbol { get; }
 
 			public SymbolEntry(Symbol symbol)
@@ -118,7 +120,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (clickedSymbolEntry == null)
 				return;
 
-			//MainForm.AddWatch(clickedSymbolEntry.Name, clickedSymbolEntry.LinkerSymbol.VirtualAddress, (int)clickedSymbolEntry.LinkerSymbol.Size);
+			MainForm.AddWatch(clickedSymbolEntry.Name, clickedSymbolEntry.Symbol.Address, clickedSymbolEntry.Size);
 		}
 
 		private void MenuItem2_Click(Object sender, EventArgs e)

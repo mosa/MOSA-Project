@@ -2,7 +2,7 @@
 
 namespace Mosa.Tool.GDBDebugger
 {
-	public class WatchEntry
+	public class Watch
 	{
 		public string Name { get; private set; }
 
@@ -12,7 +12,7 @@ namespace Mosa.Tool.GDBDebugger
 
 		public bool Signed { get; private set; }
 
-		public WatchEntry(string name, ulong address, int size, bool signed = false)
+		public Watch(string name, ulong address, int size, bool signed = false)
 		{
 			Name = name;
 			Address = address;

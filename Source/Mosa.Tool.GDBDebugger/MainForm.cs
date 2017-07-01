@@ -30,7 +30,7 @@ namespace Mosa.Tool.GDBDebugger
 		//private HistoryView historyView;
 		private SymbolView symbolView;
 
-		//private WatchView watchView;
+		private WatchView watchView;
 		private BreakPointView breakPointView;
 
 		//private ScriptView scriptView;
@@ -45,6 +45,8 @@ namespace Mosa.Tool.GDBDebugger
 		public DebugSource DebugSource { get; private set; } = new DebugSource();
 
 		public List<BreakPoint> BreakPoints { get; private set; } = new List<BreakPoint>();
+
+		public List<Watch> Watchs { get; private set; } = new List<Watch>();
 
 		public MainForm()
 		{
@@ -68,7 +70,7 @@ namespace Mosa.Tool.GDBDebugger
 			//historyView = new HistoryView(this);
 			symbolView = new SymbolView(this);
 
-			//watchView = new WatchView(this);
+			watchView = new WatchView(this);
 			breakPointView = new BreakPointView(this);
 
 			//scriptView = new ScriptView(this);
@@ -88,7 +90,7 @@ namespace Mosa.Tool.GDBDebugger
 
 			breakPointView.Show(dockPanel, DockState.DockBottom);
 
-			//watchView.Show(breakPointView.PanelPane, DockAlignment.Right, 0.50);
+			watchView.Show(breakPointView.PanelPane, DockAlignment.Right, 0.50);
 
 			//displayView.Show(dockPanel, DockState.Document);
 			//historyView.Show(dockPanel, DockState.Document);
@@ -169,6 +171,28 @@ namespace Mosa.Tool.GDBDebugger
 			}
 		}
 
+		private void NotifyBreakPointChange()
+		{
+			foreach (var dock in dockPanel.Contents)
+			{
+				if (dock.DockHandler.Content is DebugDockContent debugdock)
+				{
+					debugdock.OnBreakpointChange();
+				}
+			}
+		}
+
+		private void NotifyWatchChange()
+		{
+			foreach (var dock in dockPanel.Contents)
+			{
+				if (dock.DockHandler.Content is DebugDockContent debugdock)
+				{
+					debugdock.OnWatchChange();
+				}
+			}
+		}
+
 		private void btnConnect_Click(object sender, EventArgs e)
 		{
             using (ConnectWindow connect = new ConnectWindow())
@@ -233,17 +257,39 @@ namespace Mosa.Tool.GDBDebugger
 		public void AddBreakPoint(BreakPoint breakpoint)
 		{
 			BreakPoints.Add(breakpoint);
+			NotifyBreakPointChange();
 		}
 
 		public void AddBreakPoint(ulong address, string name = null)
 		{
 			var breakpoint = new BreakPoint(name, address);
-			BreakPoints.Add(breakpoint);
+			AddBreakPoint(breakpoint);
 		}
 
 		public void RemoveBreakPoint(BreakPoint breakpoint)
 		{
 			BreakPoints.Remove(breakpoint);
+			NotifyBreakPointChange();
+		}
+
+		public void AddWatch(Watch watch)
+		{
+			Watchs.Add(watch);
+
+			NotifyWatchChange();
+		}
+
+		public void AddWatch(string name, ulong address, int size, bool signed = false)
+		{
+			var watch = new Watch(name, address, size, signed);
+			AddWatch(watch);
+		}
+
+		public void RemoveWatch(Watch watch)
+		{
+			Watchs.Remove(watch);
+
+			NotifyWatchChange();
 		}
     }
 }
