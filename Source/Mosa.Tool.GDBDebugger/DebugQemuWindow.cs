@@ -31,6 +31,12 @@ namespace Mosa.Tool.GDBDebugger
             _options = options;
         }
 
+        private void DebugQemuWindow_Load(object sender, EventArgs e)
+        {
+            tbQEMU.Text = _options.QEMUExe;
+            tbBIOSDirectory.Text = _options.QEMUBiosDirectory;
+        }
+
         private void btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
@@ -80,7 +86,9 @@ namespace Mosa.Tool.GDBDebugger
 
         private void CheckDebugButton(object sender, EventArgs e)
         {
-            btnDebug.Enabled = (!string.IsNullOrEmpty(tbImage.Text) && File.Exists(tbImage.Text));
+            btnDebug.Enabled = (!string.IsNullOrEmpty(tbImage.Text) && File.Exists(tbImage.Text) &&
+                                !string.IsNullOrEmpty(tbQEMU.Text) && File.Exists(tbQEMU.Text) &&
+                                !string.IsNullOrEmpty(tbBIOSDirectory.Text) && Directory.Exists(tbBIOSDirectory.Text));
         }
 
         private string ResolvePath(string path)
@@ -93,13 +101,6 @@ namespace Mosa.Tool.GDBDebugger
 
         private bool LaunchAndDebug()
         {
-            if (!File.Exists(ResolvePath(_options.QEMUExe)) || !Directory.Exists(ResolvePath(_options.QEMUBiosDirectory)))
-            {
-                MessageBox.Show(this, "CHeck QEMU setup.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-                return false;
-            }
-
             int debugPort = 1234;
 
             QEMUProcess = StartQEMU(debugPort);
@@ -112,9 +113,9 @@ namespace Mosa.Tool.GDBDebugger
         private Process StartQEMU(int debugPort)
         {
             ProcessStartInfo info = new ProcessStartInfo();
-            info.FileName = _options.QEMUExe;
+            info.FileName = tbQEMU.Text;
 
-            info.Arguments = " -L \"" + _options.QEMUBiosDirectory + "\"";
+            info.Arguments = " -L \"" + tbBIOSDirectory.Text + "\"";
 
             //TODO: Check platform
             info.Arguments = info.Arguments + " -cpu qemu32,+sse4.1";
