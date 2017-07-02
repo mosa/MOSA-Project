@@ -11,8 +11,11 @@ namespace Mosa.Tool.GDBDebugger.View
 {
 	public partial class SymbolView : DebugDockContent
 	{
+<<<<<<< HEAD
 		private List<SymbolEntry> symbols;
 
+=======
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 		private class SymbolEntry
 		{
 			public string Name { get { return Symbol.Name; } }
@@ -48,7 +51,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		public void CreateEntries()
 		{
-			symbols = new List<SymbolEntry>();
+			var symbols = new List<SymbolEntry>();
 
 			string filter = toolStripTextBox1.Text.Trim();
 			string kind = toolStripComboBox1.SelectedIndex < 1 ? string.Empty : toolStripComboBox1.SelectedItem.ToString().Trim();

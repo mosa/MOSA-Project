@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System.Windows.Forms;
 
 namespace Mosa.Tool.GDBDebugger.View
 {
@@ -19,9 +20,17 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private void btnStepN_Click(object sender, EventArgs e)
 		{
-			uint steps = Convert.ToUInt32(tbSteps.Text);
-
-			//MainForm.ExecuteSteps(steps);
+			uint steps = 0;
+			try
+			{
+				steps = Convert.ToUInt32(tbSteps.Text);
+			}
+			catch
+			{
+				MessageBox.Show($"Invalid input, '{tbSteps.Text}' is not a valid number.");
+				return;
+			}
+			GDBConnector.StepN(steps);
 		}
 
 		private void btnRestart_Click(object sender, EventArgs e)
