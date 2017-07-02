@@ -39,14 +39,15 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.btnDebugQEMU = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dockPanel
             // 
-            this.dockPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.dockPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dockPanel.DockBackColor = System.Drawing.SystemColors.AppWorkspace;
             this.dockPanel.DockBottomPortion = 150D;
@@ -65,6 +66,7 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnConnect,
+            this.btnDebugQEMU,
             this.toolStripSeparator1,
             this.btnViewMemory,
             this.toolStripSeparator});
@@ -129,6 +131,15 @@
             this.openFileDialog.DefaultExt = "exe";
             this.openFileDialog.Filter = "Executable|*.exe|Library|*.dll|All Files|*.*";
             // 
+            // btnDebugQEMU
+            // 
+            this.btnDebugQEMU.Image = ((System.Drawing.Image)(resources.GetObject("btnDebugQEMU.Image")));
+            this.btnDebugQEMU.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDebugQEMU.Name = "btnDebugQEMU";
+            this.btnDebugQEMU.Size = new System.Drawing.Size(99, 22);
+            this.btnDebugQEMU.Text = "Debug QEMU";
+            this.btnDebugQEMU.Click += new System.EventHandler(this.btnDebugQEMU_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -163,5 +174,6 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton btnDebugQEMU;
     }
 }
