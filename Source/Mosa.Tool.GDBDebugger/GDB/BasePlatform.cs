@@ -23,7 +23,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 				case 1: return "0x" + ((uint)value).ToString("X2");
 				case 2: return "0x" + ((uint)value).ToString("X4");
 				case 4: return "0x" + ((uint)value).ToString("X8");
-				case 8: return "0x" + ((ulong)value).ToString("X16");
+				case 8: return "0x" + value.ToString("X16");
 				default: return "N/A";
 			}
 		}

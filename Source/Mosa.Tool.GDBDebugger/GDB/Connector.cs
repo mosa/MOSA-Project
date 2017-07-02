@@ -25,7 +25,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		public OnStatusChange OnPause { get; set; }
 		public OnStatusChange OnRunning { get; set; }
 
-		public bool IsConnected { get { return GDBClient.IsConnected; } }
+		public bool IsConnected { get { return GDBClient == null ? false : GDBClient.IsConnected; } }
 		public bool IsRunning { get { return !IsPaused; } }
 		public bool IsPaused { get; set; } = true;
 
@@ -38,6 +38,9 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		public Connector(BasePlatform platform)
 		{
 			Platform = platform;
+			
+			ConnectionHost = DefaultConnectionHost;
+            ConnectionPort = DefaultConnectionPort;
 		}
 
 		public Connector(BasePlatform platform, string host = DefaultConnectionHost, int port = DefaultConnectionPort)
@@ -52,12 +55,18 @@ namespace Mosa.Tool.GDBDebugger.GDB
             return Connect(ConnectionHost, ConnectionPort);
         }
 
+		public bool Connect(int port)
+		{
+			return Connect(ConnectionHost, port);
+		}
+		
 		public bool Connect(string host, int port)
 		{
-			Disconnect();
+			try
+			{
+				Disconnect();
 
-            try
-            {
+
                 TcpClient = new TcpClient();
                 TcpClient.Connect(host, port);
 
@@ -74,7 +83,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
             {
                 return false;
             }
-
+			
 			return true;
 		}
 
@@ -90,7 +99,9 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		}
 
 		public void Restart()
-		{ }
+		{
+			//todo
+		}
 
 		public void Step()
 		{
@@ -99,6 +110,29 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			GDBClient.SendCommandAsync(command);
 
 			CallOnRunning();
+		}
+
+		public void AddBreakPoint(ulong address)
+		{
+			var command1 = new SetBreakPoint(address, 4, 0);
+			GDBClient.SendCommandAsync(command1);
+		}
+
+		public void ClearBreakPoint(ulong address)
+		{
+			var command = new ClearBreakPoint(address, 4, 0);
+			GDBClient.SendCommandAsync(command);
+		}
+
+		public void StepN(uint stepCount)
+		{
+			var command = new Step();
+			for (uint currentStep = 0; currentStep < stepCount - 1; currentStep++)
+			{
+				GDBClient.SendCommandAsync(command);
+			}
+
+			Step();
 		}
 
 		public void Continue()

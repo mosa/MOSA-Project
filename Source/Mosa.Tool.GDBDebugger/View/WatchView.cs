@@ -12,18 +12,31 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private class WatchEntry
 		{
+<<<<<<< HEAD
 			public ulong Address { get { return Watch.Address; } }
 
 			public string Name { get { return Watch.Name; } }
 
 			public int Size { get { return Watch.Size; } }
 
+=======
+			public string Address { get { return "0x" + Watch.Address.ToString((Watch.Address <= uint.MaxValue) ? "X4" : "X8"); } }
+
+			public string Name { get { return Watch.Name; } }
+
+			[Browsable(false)]
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 			public bool Signed { get { return Watch.Signed; } }
 
 			public string HexValue { get; set; }
 
 			public ulong Value { get; set; }
 
+<<<<<<< HEAD
+=======
+			public int Size { get { return Watch.Size; } }
+
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 			[Browsable(false)]
 			public Watch Watch;
 
@@ -49,7 +62,11 @@ namespace Mosa.Tool.GDBDebugger.View
 				watch.Value = 0;
 				watch.HexValue = string.Empty;
 
+<<<<<<< HEAD
 				GDBConnector.ReadMemory(watch.Address, watch.Size, OnMemoryRead);
+=======
+				GDBConnector.ReadMemory(watch.Watch.Address, watch.Size, OnMemoryRead);
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 			}
 
 			Refresh();
@@ -80,7 +97,11 @@ namespace Mosa.Tool.GDBDebugger.View
 		{
 			foreach (var watch in watches)
 			{
+<<<<<<< HEAD
 				if (watch.Address != address || watch.Size != bytes.Length)
+=======
+				if (watch.Watch.Address != address || watch.Size != bytes.Length)
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 					continue;
 
 				watch.Value = ToLong(bytes, bytes.Length);

@@ -14,7 +14,6 @@ namespace Mosa.Tool.GDBDebugger
 	{
 		private OutputView outputView;
 
-		//private AssembliesView assembliesView;
 		private RegisterView registersView;
 
 		//private DisplayView displayView;
@@ -27,14 +26,15 @@ namespace Mosa.Tool.GDBDebugger
 		//private FlagView flagView;
 		private StatusView statusView;
 
-		//private HistoryView historyView;
 		private SymbolView symbolView;
+<<<<<<< HEAD
 
+=======
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 		private WatchView watchView;
 		private BreakPointView breakPointView;
 
 		//private ScriptView scriptView;
-		//private DisassemblyView disassemblyView;
 
 		public string Status { set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
 
@@ -54,7 +54,6 @@ namespace Mosa.Tool.GDBDebugger
 
 			outputView = new OutputView(this);
 
-			//assembliesView = new AssembliesView(this);
 			registersView = new RegisterView(this);
 
 			//displayView = new DisplayView(this);
@@ -66,15 +65,15 @@ namespace Mosa.Tool.GDBDebugger
 			//stackView = new StackView(this);
 			//flagView = new FlagView(this);
 			statusView = new StatusView(this);
-
-			//historyView = new HistoryView(this);
 			symbolView = new SymbolView(this);
+<<<<<<< HEAD
 
+=======
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 			watchView = new WatchView(this);
 			breakPointView = new BreakPointView(this);
 
 			//scriptView = new ScriptView(this);
-			//disassemblyView = new DisassemblyView(this);
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -86,20 +85,18 @@ namespace Mosa.Tool.GDBDebugger
 			controlView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
 
 			//callStackView.Show(controlView.PanelPane, DockAlignment.Bottom, 0.50);
-			//disassemblyView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
-
 			breakPointView.Show(dockPanel, DockState.DockBottom);
+<<<<<<< HEAD
 
+=======
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 			watchView.Show(breakPointView.PanelPane, DockAlignment.Right, 0.50);
 
 			//displayView.Show(dockPanel, DockState.Document);
-			//historyView.Show(dockPanel, DockState.Document);
-			//assembliesView.Show(dockPanel, DockState.Document);
 			outputView.Show(dockPanel, DockState.Document);
 
 			//scriptView.Show(dockPanel, DockState.Document);
 			symbolView.Show(dockPanel, DockState.Document);
-
 			registersView.Show(dockPanel, DockState.DockRight);
 
 			//flagView.Show(dockPanel, DockState.DockRight);
@@ -193,7 +190,33 @@ namespace Mosa.Tool.GDBDebugger
             }
         }
 
+<<<<<<< HEAD
         private void btnConnect_Click(object sender, EventArgs e)
+=======
+		private void NotifyBreakPointChange()
+		{
+			foreach (var dock in dockPanel.Contents)
+			{
+				if (dock.DockHandler.Content is DebugDockContent debugdock)
+				{
+					debugdock.OnBreakpointChange();
+				}
+			}
+		}
+
+		private void NotifyWatchChange()
+		{
+			foreach (var dock in dockPanel.Contents)
+			{
+				if (dock.DockHandler.Content is DebugDockContent debugdock)
+				{
+					debugdock.OnWatchChange();
+				}
+			}
+		}
+
+		private void btnConnect_Click(object sender, EventArgs e)
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 		{
             using (ConnectWindow connect = new ConnectWindow())
             {
@@ -204,6 +227,7 @@ namespace Mosa.Tool.GDBDebugger
             }
 		}
 
+<<<<<<< HEAD
         private void btnDebugQemu_Click(object sender, EventArgs e)
         {
             using (DebugQemuWindow debug = new DebugQemuWindow(Options))
@@ -249,6 +273,27 @@ namespace Mosa.Tool.GDBDebugger
         }
 
         private void btnViewMemory_Click(object sender, EventArgs e)
+=======
+		private void Connect()
+		{
+			if (GDBConnector != null)
+				GDBConnector.Disconnect();
+
+			GDBConnector = new Connector(new X86Platform());
+
+			GDBConnector.Connect(Options.GDBPort);
+
+			GDBConnector.OnPause = OnPause;
+			GDBConnector.OnRunning = OnRunning;
+
+			if (!GDBConnector.IsConnected)
+			{
+				MessageBox.Show($"Could not connect to 'localhost' on port {Options.GDBPort}.");
+			}
+		}
+
+		private void btnViewMemory_Click(object sender, EventArgs e)
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 		{
 			var memoryView = new MemoryView(this);
 			memoryView.Show(dockPanel, DockState.Document);
@@ -257,6 +302,10 @@ namespace Mosa.Tool.GDBDebugger
 		public void AddBreakPoint(BreakPoint breakpoint)
 		{
 			BreakPoints.Add(breakpoint);
+<<<<<<< HEAD
+=======
+			GDBConnector.AddBreakPoint(breakpoint.Address);
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 			NotifyBreakPointChange();
 		}
 
@@ -269,13 +318,20 @@ namespace Mosa.Tool.GDBDebugger
 		public void RemoveBreakPoint(BreakPoint breakpoint)
 		{
 			BreakPoints.Remove(breakpoint);
+<<<<<<< HEAD
+=======
+			GDBConnector.ClearBreakPoint(breakpoint.Address);
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 			NotifyBreakPointChange();
 		}
 
 		public void AddWatch(Watch watch)
 		{
 			Watchs.Add(watch);
+<<<<<<< HEAD
 
+=======
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 			NotifyWatchChange();
 		}
 
@@ -288,7 +344,10 @@ namespace Mosa.Tool.GDBDebugger
 		public void RemoveWatch(Watch watch)
 		{
 			Watchs.Remove(watch);
+<<<<<<< HEAD
 
+=======
+>>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 			NotifyWatchChange();
 		}
     }
