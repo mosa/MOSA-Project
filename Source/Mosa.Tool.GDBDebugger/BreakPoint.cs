@@ -4,9 +4,9 @@ namespace Mosa.Tool.GDBDebugger
 {
 	public class BreakPoint
 	{
-		public string Name { get; private set; }
+		public string Name { get; }
 
-		public ulong Address { get; private set; }
+		public ulong Address { get; }
 
 		public BreakPoint(ulong address)
 		{

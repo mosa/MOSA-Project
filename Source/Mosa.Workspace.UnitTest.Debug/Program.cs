@@ -10,9 +10,9 @@ namespace Mosa.Workspace.UnitTest.Debug
 {
 	internal class Program
 	{
-		private static UnitTestEngine unitTestEngine = new UnitTestEngine();
+		private static readonly UnitTestEngine unitTestEngine = new UnitTestEngine();
 
-		private static void Main(string[] args)
+		private static void Main()
 		{
 			Stopwatch stopwatch = new Stopwatch();
 
@@ -26,8 +26,10 @@ namespace Mosa.Workspace.UnitTest.Debug
 
 			for (int i = 0; i < 1; i++)
 			{
-				var thread = new Thread(LaunchTest);
-				thread.Name = "#" + i.ToString();
+				var thread = new Thread(LaunchTest)
+				{
+					Name = "#" + i.ToString()
+				};
 
 				//thread.IsBackground = true;
 				thread.Start();
