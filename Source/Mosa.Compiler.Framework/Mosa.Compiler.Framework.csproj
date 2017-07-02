@@ -475,7 +475,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Mosa.Compiler.Framework.nuspec" />
-    <None Include="Mosa.Compiler.Framework.ruleset" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
