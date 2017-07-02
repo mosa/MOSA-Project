@@ -3,6 +3,7 @@
 using Mosa.Utility.RSP;
 using Mosa.Utility.RSP.Command;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 
 namespace Mosa.Tool.GDBDebugger.GDB
@@ -29,6 +30,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 		public BasePlatform Platform { get; set; }
 
+		protected List<ulong> BreakPoints = new List<ulong>();
 		protected Dictionary<GDBCommand, OnMemoryRead> OnMemoryReadMap = new Dictionary<GDBCommand, GDB.OnMemoryRead>();
 
 		public Connector(BasePlatform platform)
@@ -80,34 +82,41 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		{
 			var command = new Step(OnStep);
 
+			var bps = ClearBreakpointsInternal();
 			GDBClient.SendCommandAsync(command);
+			RestoreBreakpointsInternal(bps);
 
 			CallOnRunning();
 		}
 
 		public void AddBreakPoint(ulong address)
 		{
-			var command = new SetBreakPoint(address, 4, 0);
-			// Need to break and continue that the Breakpoint is recognized
-			// TODO: Research
-			Break();
-			Continue();
+			bool wasRunning = IsRunning && !IsPaused;
+			if (IsRunning)
+			{
+				Break();
+			}
+			BreakPoints.Add(address);
+			var command = new SetBreakPoint(address, 4, 0, (GDBCommand c) => OnSetBreakpoint(c, wasRunning));
 			GDBClient.SendCommandAsync(command);
 		}
 
 		public void ClearBreakPoint(ulong address)
 		{
 			var command = new ClearBreakPoint(address, 4, 0);
+			BreakPoints.Remove(address);
 			GDBClient.SendCommandAsync(command);
 		}
 
 		public void StepN(uint stepCount)
 		{
+			var bps = ClearBreakpointsInternal();
 			var command = new Step();
 			for (uint currentStep = 0; currentStep < stepCount - 1; currentStep++)
 			{
 				GDBClient.SendCommandAsync(command);
 			}
+			RestoreBreakpointsInternal(bps);
 
 			Step();
 		}
@@ -117,13 +126,39 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			if (IsRunning)
 				return;
 
+			ClearBreakpointsStepAndRestore();
 			var command = new Continue(OnStop);
-
 			GDBClient.SendCommandAsync(command);
 
 			IsPaused = false;
 
 			CallOnRunning();
+		}
+
+		private void ClearBreakpointsStepAndRestore()
+		{
+			var bps = ClearBreakpointsInternal();
+			var step = new Step();
+			GDBClient.SendCommandAsync(step);
+			RestoreBreakpointsInternal(bps);
+		}
+
+		private List<ulong> ClearBreakpointsInternal()
+		{
+			var bps = BreakPoints.ToList();
+			foreach (var bp in bps)
+			{
+				ClearBreakPoint(bp);
+			}
+			return bps;
+		}
+
+		private void RestoreBreakpointsInternal(IEnumerable<ulong> breakpoints)
+		{
+			foreach (var bp in breakpoints)
+			{
+				AddBreakPoint(bp);
+			}
 		}
 
 		public void Break()
@@ -162,6 +197,14 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			GetRegisters();
 
 			CallOnRunning();
+		}
+
+		private void OnSetBreakpoint(GDBCommand command, bool wasRunning)
+		{
+			if (wasRunning)
+			{
+				Continue();
+			}
 		}
 
 		private void OnCompetion(GDBCommand command)
