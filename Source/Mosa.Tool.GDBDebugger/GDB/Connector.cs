@@ -2,6 +2,7 @@
 
 using Mosa.Utility.RSP;
 using Mosa.Utility.RSP.Command;
+using System;
 using System.Collections.Generic;
 using System.Net.Sockets;
 
@@ -15,7 +16,8 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 	public class Connector
 	{
-		public const int DefaultConnectionPort = 1234;
+        public const string DefaultConnectionHost = "localhost";
+        public const int DefaultConnectionPort = 1234;
 
 		public TcpClient TcpClient { get; set; }
 		public GDBClient GDBClient { get; set; }
@@ -27,6 +29,8 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		public bool IsRunning { get { return !IsPaused; } }
 		public bool IsPaused { get; set; } = true;
 
+        public string ConnectionHost { get; set; }
+        public int ConnectionPort { get; set; }
 		public BasePlatform Platform { get; set; }
 
 		protected Dictionary<GDBCommand, OnMemoryRead> OnMemoryReadMap = new Dictionary<GDBCommand, GDB.OnMemoryRead>();
@@ -34,30 +38,53 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		public Connector(BasePlatform platform)
 		{
 			Platform = platform;
+			
+			ConnectionHost = DefaultConnectionHost;
+            ConnectionPort = DefaultConnectionPort;
 		}
 
+		public Connector(BasePlatform platform, string host = DefaultConnectionHost, int port = DefaultConnectionPort)
+			: this(platform)
+		{
+            ConnectionHost = host;
+            ConnectionPort = port;
+        }
+
+        public bool Connect()
+        {
+            return Connect(ConnectionHost, ConnectionPort);
+        }
+
 		public bool Connect(int port)
+		{
+			return Connect(ConnectionHost, port);
+		}
+		
+		public bool Connect(string host, int port)
 		{
 			try
 			{
 				Disconnect();
 
-				TcpClient = new TcpClient("localhost", port);
-				var stream = new GDBNetworkStream(TcpClient.Client, true);
-				GDBClient = new GDBClient(stream);
 
-				if (!GDBClient.IsConnected)
-					return false;
+                TcpClient = new TcpClient();
+                TcpClient.Connect(host, port);
 
-				Break();
-				GetRegisters();
+                var stream = new GDBNetworkStream(TcpClient.Client, true);
+                GDBClient = new GDBClient(stream);
 
-				return true;
-			}
-			catch
-			{
-				return false;
-			}
+                if (!GDBClient.IsConnected)
+                    return false;
+
+                Break();
+                GetRegisters();
+            }
+            catch(SocketException)
+            {
+                return false;
+            }
+			
+			return true;
 		}
 
 		public void Disconnect()
