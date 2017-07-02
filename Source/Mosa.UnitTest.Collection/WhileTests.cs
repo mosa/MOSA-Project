@@ -44,7 +44,7 @@ namespace Mosa.UnitTest.Collection
 
 		public static bool WhileContinueBreak()
 		{
-			int limit = 20;
+			const int limit = 20;
 			int count = 0;
 
 			while (true)
@@ -67,7 +67,7 @@ namespace Mosa.UnitTest.Collection
 		public static bool WhileContinueBreak2()
 		{
 			int start = 0;
-			int limit = 20;
+			const int limit = 20;
 			int count = 0;
 
 			while (true)

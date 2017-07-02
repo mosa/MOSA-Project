@@ -17,9 +17,9 @@ namespace Mosa.Compiler.Framework
 
 		public CompilerOptions CompilerOptions { get; set; }
 
-		public CompilerTrace CompilerTrace { get; private set; }
+		public CompilerTrace CompilerTrace { get; }
 
-		protected MosaModuleLoader ModuleLoader { get; private set; }
+		protected MosaModuleLoader ModuleLoader { get; }
 
 		public TypeSystem TypeSystem { get; private set; }
 
@@ -39,6 +39,8 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a list of input file names.
 		/// </summary>
+		/// <param name="inputFiles">The input files.</param>
+		/// <returns></returns>
 		private static IEnumerable<string> GetInputFileNames(List<FileInfo> inputFiles)
 		{
 			foreach (var file in inputFiles)

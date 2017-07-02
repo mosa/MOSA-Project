@@ -10,7 +10,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 {
 	internal class Program
 	{
-		private static void Main(string[] args)
+		private static void Main()
 		{
 			var tcpClient = new TcpClient("localhost", 2345);
 
@@ -40,8 +40,6 @@ namespace Mosa.Workspace.UnitTest.Debug
 			{
 				//loop
 			}
-
-			return;
 		}
 
 		private static void Response(GDBCommand command)

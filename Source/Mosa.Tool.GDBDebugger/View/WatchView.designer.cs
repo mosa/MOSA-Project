@@ -1,7 +1,7 @@
 namespace Mosa.Tool.GDBDebugger.View
 {
-	partial class WatchView : DebugDockContent
-	{
+    partial class WatchView : DebugDockContent
+    {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -21,12 +21,12 @@ namespace Mosa.Tool.GDBDebugger.View
         }
 
         #region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -100,13 +100,13 @@ namespace Mosa.Tool.GDBDebugger.View
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
-		}
-		#endregion
+        }
+        #endregion
 
-		private System.Windows.Forms.DataGridView dataGridView1;
-
-
+        private System.Windows.Forms.DataGridView dataGridView1;
 
 
-	}
+
+
+    }
 }

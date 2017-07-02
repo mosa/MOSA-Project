@@ -4,7 +4,7 @@ using System;
 
 namespace Mosa.UnitTest.Collection
 {
-	public class ArrayTest
+	public static class ArrayTest
 	{
 		public static bool BoundsCheck()
 		{

@@ -5,6 +5,7 @@ using Mosa.Tool.GDBDebugger.GDB;
 using Mosa.Tool.GDBDebugger.View;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -178,26 +179,50 @@ namespace Mosa.Tool.GDBDebugger
 			}
 		}
 
+		private void btnDebugQEMU_Click(object sender, EventArgs e)
+		{
+			using (DebugQemuWindow debug = new DebugQemuWindow(Options))
+			{
+				if (debug.ShowDialog(this) == DialogResult.OK)
+				{
+					Thread.Sleep(1000); //HACK: Wait for QEMU
+
+					Connect(debug.Debugger);
+				}
+			}
+		}
+
 		private void btnConnect_Click(object sender, EventArgs e)
 		{
-			Connect();
+			using (ConnectWindow connect = new ConnectWindow())
+			{
+				if (connect.ShowDialog(this) == DialogResult.OK)
+				{
+					Connect(connect.Debugger);
+				}
+			}
 		}
 
 		private void Connect()
 		{
+			Connect(new Connector(new X86Platform(), "localhost", Options.GDBPort));
+		}
+
+		private void Connect(Connector connector)
+		{
 			if (GDBConnector != null)
 				GDBConnector.Disconnect();
 
-			GDBConnector = new Connector(new X86Platform());
+			GDBConnector = connector;
 
-			GDBConnector.Connect(Options.GDBPort);
+			GDBConnector.Connect();
 
 			GDBConnector.OnPause = OnPause;
 			GDBConnector.OnRunning = OnRunning;
 
 			if (!GDBConnector.IsConnected)
 			{
-				MessageBox.Show($"Could not connect to 'localhost' on port {Options.GDBPort}.");
+				MessageBox.Show($"Could not connect to '{GDBConnector.ConnectionHost}' on port {GDBConnector.ConnectionPort}.");
 			}
 		}
 
