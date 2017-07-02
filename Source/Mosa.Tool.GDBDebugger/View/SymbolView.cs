@@ -11,11 +11,8 @@ namespace Mosa.Tool.GDBDebugger.View
 {
 	public partial class SymbolView : DebugDockContent
 	{
-<<<<<<< HEAD
 		private List<SymbolEntry> symbols;
 
-=======
->>>>>>> b9cbaa3d13afc4e3398a9d152a78f5b4da65829e
 		private class SymbolEntry
 		{
 			public string Name { get { return Symbol.Name; } }
