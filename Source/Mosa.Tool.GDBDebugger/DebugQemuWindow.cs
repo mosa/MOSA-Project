@@ -13,6 +13,7 @@ namespace Mosa.Tool.GDBDebugger
 	public partial class DebugQemuWindow : Form
 	{
 		private AppLocations _appLocations;
+
 		private ImageFormat _imageFormat;
 
 		public Connector Debugger
