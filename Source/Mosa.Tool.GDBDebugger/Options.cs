@@ -28,9 +28,9 @@ namespace Mosa.Tool.GDBDebugger
 
 		public PlatformType PlatformType { get; set; }
 
-        public string QEMUExe { get; set; }
+		public string QEMUExe { get; set; }
 
-        public string QEMUBiosDirectory { get; set; }
+		public string QEMUBiosDirectory { get; set; }
 
 		public Options()
 		{
@@ -42,9 +42,9 @@ namespace Mosa.Tool.GDBDebugger
 			ImageFormat = ImageFormat.IMG;
 			Emulator = EmulatorType.Qemu;
 
-            //TODO: Settings dialog?
-            QEMUExe = @"..\Tools\QEMU\qemu-system-i386.exe";
-            QEMUBiosDirectory = @"..\Tools\QEMU";
+			//TODO: Settings dialog?
+			QEMUExe = @"..\Tools\QEMU\qemu-system-i386.exe";
+			QEMUBiosDirectory = @"..\Tools\QEMU";
 		}
 
 		public void LoadArguments(string[] args)

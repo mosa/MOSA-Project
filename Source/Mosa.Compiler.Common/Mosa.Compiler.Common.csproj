@@ -24,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>Mosa.Compiler.Common.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -35,6 +36,7 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>Mosa.Compiler.Common.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="EndianAwareBinaryWriterExtensions.cs" />
@@ -62,7 +64,9 @@
     <Compile Include="UniqueQueue.cs" />
     <Compile Include="StringExtension.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Mosa.Compiler.Common.ruleset" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>

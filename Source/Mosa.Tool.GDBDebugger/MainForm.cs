@@ -11,263 +11,263 @@ using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.GDBDebugger
 {
-    public partial class MainForm : Form
-    {
-        private OutputView outputView;
+	public partial class MainForm : Form
+	{
+		private OutputView outputView;
 
-        private RegisterView registersView;
+		private RegisterView registersView;
 
-        //private DisplayView displayView;
-        private ControlView controlView;
+		//private DisplayView displayView;
+		private ControlView controlView;
 
-        //private CallStackView callStackView;
-        private StackFrameView stackFrameView;
+		//private CallStackView callStackView;
+		private StackFrameView stackFrameView;
 
-        //private StackView stackView;
-        //private FlagView flagView;
-        private StatusView statusView;
+		//private StackView stackView;
+		//private FlagView flagView;
+		private StatusView statusView;
 
-        private SymbolView symbolView;
-        private WatchView watchView;
-        private BreakPointView breakPointView;
+		private SymbolView symbolView;
+		private WatchView watchView;
+		private BreakPointView breakPointView;
 
-        //private ScriptView scriptView;
+		//private ScriptView scriptView;
 
-        public string Status { set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
+		public string Status { set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
 
-        public Connector GDBConnector { get; private set; }
+		public Connector GDBConnector { get; private set; }
 
-        public Options Options { get; private set; } = new Options();
+		public Options Options { get; private set; } = new Options();
 
-        public DebugSource DebugSource { get; private set; } = new DebugSource();
+		public DebugSource DebugSource { get; private set; } = new DebugSource();
 
-        public List<BreakPoint> BreakPoints { get; private set; } = new List<BreakPoint>();
+		public List<BreakPoint> BreakPoints { get; private set; } = new List<BreakPoint>();
 
-        public List<Watch> Watchs { get; private set; } = new List<Watch>();
+		public List<Watch> Watchs { get; private set; } = new List<Watch>();
 
-        public MainForm()
-        {
-            InitializeComponent();
+		public MainForm()
+		{
+			InitializeComponent();
 
-            outputView = new OutputView(this);
+			outputView = new OutputView(this);
 
-            registersView = new RegisterView(this);
+			registersView = new RegisterView(this);
 
-            //displayView = new DisplayView(this);
-            controlView = new ControlView(this);
+			//displayView = new DisplayView(this);
+			controlView = new ControlView(this);
 
-            //callStackView = new CallStackView(this);
-            stackFrameView = new StackFrameView(this);
+			//callStackView = new CallStackView(this);
+			stackFrameView = new StackFrameView(this);
 
-            //stackView = new StackView(this);
-            //flagView = new FlagView(this);
-            statusView = new StatusView(this);
-            symbolView = new SymbolView(this);
-            watchView = new WatchView(this);
-            breakPointView = new BreakPointView(this);
+			//stackView = new StackView(this);
+			//flagView = new FlagView(this);
+			statusView = new StatusView(this);
+			symbolView = new SymbolView(this);
+			watchView = new WatchView(this);
+			breakPointView = new BreakPointView(this);
 
-            //scriptView = new ScriptView(this);
-        }
+			//scriptView = new ScriptView(this);
+		}
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-            dockPanel.SuspendLayout(true);
-            dockPanel.DockTopPortion = 150;
+		private void MainForm_Load(object sender, EventArgs e)
+		{
+			dockPanel.SuspendLayout(true);
+			dockPanel.DockTopPortion = 150;
 
-            statusView.Show(dockPanel, DockState.DockTop);
-            controlView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
+			statusView.Show(dockPanel, DockState.DockTop);
+			controlView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
 
-            //callStackView.Show(controlView.PanelPane, DockAlignment.Bottom, 0.50);
-            breakPointView.Show(dockPanel, DockState.DockBottom);
-            watchView.Show(breakPointView.PanelPane, DockAlignment.Right, 0.50);
+			//callStackView.Show(controlView.PanelPane, DockAlignment.Bottom, 0.50);
+			breakPointView.Show(dockPanel, DockState.DockBottom);
+			watchView.Show(breakPointView.PanelPane, DockAlignment.Right, 0.50);
 
-            //displayView.Show(dockPanel, DockState.Document);
-            outputView.Show(dockPanel, DockState.Document);
+			//displayView.Show(dockPanel, DockState.Document);
+			outputView.Show(dockPanel, DockState.Document);
 
-            //scriptView.Show(dockPanel, DockState.Document);
-            symbolView.Show(dockPanel, DockState.Document);
-            registersView.Show(dockPanel, DockState.DockRight);
+			//scriptView.Show(dockPanel, DockState.Document);
+			symbolView.Show(dockPanel, DockState.Document);
+			registersView.Show(dockPanel, DockState.DockRight);
 
-            //flagView.Show(dockPanel, DockState.DockRight);
-            //stackView.Show(dockPanel, DockState.DockRight);
-            stackFrameView.Show(dockPanel, DockState.DockRight);
+			//flagView.Show(dockPanel, DockState.DockRight);
+			//stackView.Show(dockPanel, DockState.DockRight);
+			stackFrameView.Show(dockPanel, DockState.DockRight);
 
-            registersView.Show();
+			registersView.Show();
 
-            var memoryView = new MemoryView(this);
-            memoryView.Show(dockPanel, DockState.Document);
+			var memoryView = new MemoryView(this);
+			memoryView.Show(dockPanel, DockState.Document);
 
-            dockPanel.ResumeLayout(true, true);
+			dockPanel.ResumeLayout(true, true);
 
-            if (Options.AutoConnect)
-            {
-                Connect();
-            }
+			if (Options.AutoConnect)
+			{
+				Connect();
+			}
 
-            if (Options.DebugInfoFile != null)
-            {
-                LoadDebugData.LoadDebugInfo(Options.DebugInfoFile, DebugSource);
-            }
-        }
+			if (Options.DebugInfoFile != null)
+			{
+				LoadDebugData.LoadDebugInfo(Options.DebugInfoFile, DebugSource);
+			}
+		}
 
-        public void AddOutput(string line)
-        {
-            outputView.AddOutput(line);
-        }
+		public void AddOutput(string line)
+		{
+			outputView.AddOutput(line);
+		}
 
-        private void OnPause()
-        {
-            MethodInvoker method = delegate ()
-            {
-                NotifyPause();
-            };
+		private void OnPause()
+		{
+			MethodInvoker method = delegate ()
+			{
+				NotifyPause();
+			};
 
-            BeginInvoke(method);
-        }
+			BeginInvoke(method);
+		}
 
-        private void OnRunning()
-        {
-            MethodInvoker method = delegate ()
-            {
-                NotifyRunning();
-            };
+		private void OnRunning()
+		{
+			MethodInvoker method = delegate ()
+			{
+				NotifyRunning();
+			};
 
-            BeginInvoke(method);
-        }
+			BeginInvoke(method);
+		}
 
-        private void NotifyPause()
-        {
-            foreach (var dock in dockPanel.Contents)
-            {
-                if (dock.DockHandler.Content is DebugDockContent debugdock)
+		private void NotifyPause()
+		{
+			foreach (var dock in dockPanel.Contents)
+			{
+				if (dock.DockHandler.Content is DebugDockContent debugdock)
 				{
-                    debugdock.OnPause();
-                }
-            }
-        }
+					debugdock.OnPause();
+				}
+			}
+		}
 
-        private void NotifyRunning()
-        {
-            foreach (var dock in dockPanel.Contents)
-            {
-                if (dock.DockHandler.Content is DebugDockContent debugdock)
+		private void NotifyRunning()
+		{
+			foreach (var dock in dockPanel.Contents)
+			{
+				if (dock.DockHandler.Content is DebugDockContent debugdock)
 				{
-                    debugdock.OnRunning();
-                }
-            }
-        }
+					debugdock.OnRunning();
+				}
+			}
+		}
 
-        private void NotifyBreakPointChange()
-        {
-            foreach (var dock in dockPanel.Contents)
-            {
-                if (dock.DockHandler.Content is DebugDockContent debugdock)
+		private void NotifyBreakPointChange()
+		{
+			foreach (var dock in dockPanel.Contents)
+			{
+				if (dock.DockHandler.Content is DebugDockContent debugdock)
 				{
-                    debugdock.OnBreakpointChange();
-                }
-            }
-        }
+					debugdock.OnBreakpointChange();
+				}
+			}
+		}
 
-        private void NotifyWatchChange()
-        {
-            foreach (var dock in dockPanel.Contents)
-            {
-                if (dock.DockHandler.Content is DebugDockContent debugdock)
+		private void NotifyWatchChange()
+		{
+			foreach (var dock in dockPanel.Contents)
+			{
+				if (dock.DockHandler.Content is DebugDockContent debugdock)
 				{
-                    debugdock.OnWatchChange();
-                }
-            }
-        }
+					debugdock.OnWatchChange();
+				}
+			}
+		}
 
-        private void btnDebugQEMU_Click(object sender, EventArgs e)
-        {
-            using (DebugQemuWindow debug = new DebugQemuWindow(Options))
-            {
-                if (debug.ShowDialog(this) == DialogResult.OK)
-                {
-                    Thread.Sleep(1000); //HACK: Wait for QEMU
+		private void btnDebugQEMU_Click(object sender, EventArgs e)
+		{
+			using (DebugQemuWindow debug = new DebugQemuWindow(Options))
+			{
+				if (debug.ShowDialog(this) == DialogResult.OK)
+				{
+					Thread.Sleep(1000); //HACK: Wait for QEMU
 
-                    Connect(debug.Debugger);
-                }
-            }
-        }
+					Connect(debug.Debugger);
+				}
+			}
+		}
 
-        private void btnConnect_Click(object sender, EventArgs e)
-        {
-            using (ConnectWindow connect = new ConnectWindow())
-            {
-                if (connect.ShowDialog(this) == DialogResult.OK)
-                {
-                    Connect(connect.Debugger);
-                }
-            }
-        }
+		private void btnConnect_Click(object sender, EventArgs e)
+		{
+			using (ConnectWindow connect = new ConnectWindow())
+			{
+				if (connect.ShowDialog(this) == DialogResult.OK)
+				{
+					Connect(connect.Debugger);
+				}
+			}
+		}
 
-        private void Connect()
-        {
-            Connect(new Connector(new X86Platform(), "localhost", Options.GDBPort));
-        }
+		private void Connect()
+		{
+			Connect(new Connector(new X86Platform(), "localhost", Options.GDBPort));
+		}
 
-        private void Connect(Connector connector)
-        {
-            if (GDBConnector != null)
-                GDBConnector.Disconnect();
+		private void Connect(Connector connector)
+		{
+			if (GDBConnector != null)
+				GDBConnector.Disconnect();
 
-            GDBConnector = connector;
+			GDBConnector = connector;
 
-            GDBConnector.Connect();
+			GDBConnector.Connect();
 
-            GDBConnector.OnPause = OnPause;
-            GDBConnector.OnRunning = OnRunning;
+			GDBConnector.OnPause = OnPause;
+			GDBConnector.OnRunning = OnRunning;
 
-            if (!GDBConnector.IsConnected)
-            {
-                MessageBox.Show($"Could not connect to '{GDBConnector.ConnectionHost}' on port {GDBConnector.ConnectionPort}.");
-            }
-        }
+			if (!GDBConnector.IsConnected)
+			{
+				MessageBox.Show($"Could not connect to '{GDBConnector.ConnectionHost}' on port {GDBConnector.ConnectionPort}.");
+			}
+		}
 
-        private void btnViewMemory_Click(object sender, EventArgs e)
-        {
-            var memoryView = new MemoryView(this);
-            memoryView.Show(dockPanel, DockState.Document);
-        }
+		private void btnViewMemory_Click(object sender, EventArgs e)
+		{
+			var memoryView = new MemoryView(this);
+			memoryView.Show(dockPanel, DockState.Document);
+		}
 
-        public void AddBreakPoint(BreakPoint breakpoint)
-        {
-            BreakPoints.Add(breakpoint);
-            GDBConnector.AddBreakPoint(breakpoint.Address);
-            NotifyBreakPointChange();
-        }
+		public void AddBreakPoint(BreakPoint breakpoint)
+		{
+			BreakPoints.Add(breakpoint);
+			GDBConnector.AddBreakPoint(breakpoint.Address);
+			NotifyBreakPointChange();
+		}
 
-        public void AddBreakPoint(ulong address, string name = null)
-        {
-            var breakpoint = new BreakPoint(name, address);
-            AddBreakPoint(breakpoint);
-        }
+		public void AddBreakPoint(ulong address, string name = null)
+		{
+			var breakpoint = new BreakPoint(name, address);
+			AddBreakPoint(breakpoint);
+		}
 
-        public void RemoveBreakPoint(BreakPoint breakpoint)
-        {
-            BreakPoints.Remove(breakpoint);
-            GDBConnector.ClearBreakPoint(breakpoint.Address);
-            NotifyBreakPointChange();
-        }
+		public void RemoveBreakPoint(BreakPoint breakpoint)
+		{
+			BreakPoints.Remove(breakpoint);
+			GDBConnector.ClearBreakPoint(breakpoint.Address);
+			NotifyBreakPointChange();
+		}
 
-        public void AddWatch(Watch watch)
-        {
-            Watchs.Add(watch);
-            NotifyWatchChange();
-        }
+		public void AddWatch(Watch watch)
+		{
+			Watchs.Add(watch);
+			NotifyWatchChange();
+		}
 
-        public void AddWatch(string name, ulong address, int size, bool signed = false)
-        {
-            var watch = new Watch(name, address, size, signed);
-            AddWatch(watch);
-        }
+		public void AddWatch(string name, ulong address, int size, bool signed = false)
+		{
+			var watch = new Watch(name, address, size, signed);
+			AddWatch(watch);
+		}
 
-        public void RemoveWatch(Watch watch)
-        {
-            Watchs.Remove(watch);
-            NotifyWatchChange();
-        }
-    }
+		public void RemoveWatch(Watch watch)
+		{
+			Watchs.Remove(watch);
+			NotifyWatchChange();
+		}
+	}
 }

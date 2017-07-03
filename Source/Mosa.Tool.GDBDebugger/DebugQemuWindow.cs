@@ -1,4 +1,6 @@
-﻿using Mosa.Tool.GDBDebugger.GDB;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Tool.GDBDebugger.GDB;
 using Mosa.Utility.BootImage;
 using System;
 using System.Diagnostics;
@@ -7,134 +9,135 @@ using System.Windows.Forms;
 
 namespace Mosa.Tool.GDBDebugger
 {
-    public partial class DebugQemuWindow : Form
-    {
-        private Options _options;
-        private ImageFormat _imageFormat;
+	public partial class DebugQemuWindow : Form
+	{
+		private Options _options;
+		private ImageFormat _imageFormat;
 
-        public Connector Debugger
-        {
-            get;
-            private set;
-        }
+		public Connector Debugger
+		{
+			get;
+			private set;
+		}
 
-        public Process QEMUProcess
-        {
-            get;
-            private set;
-        }
+		public Process QEMUProcess
+		{
+			get;
+			private set;
+		}
 
-        public DebugQemuWindow(Options options)
-        {
-            InitializeComponent();
+		public DebugQemuWindow(Options options)
+		{
+			InitializeComponent();
 
-            _options = options;
-        }
+			_options = options;
+		}
 
-        private void DebugQemuWindow_Load(object sender, EventArgs e)
-        {
-            tbQEMU.Text = _options.QEMUExe;
-            tbBIOSDirectory.Text = _options.QEMUBiosDirectory;
-        }
+		private void DebugQemuWindow_Load(object sender, EventArgs e)
+		{
+			tbQEMU.Text = _options.QEMUExe;
+			tbBIOSDirectory.Text = _options.QEMUBiosDirectory;
+		}
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-        }
+		private void btnCancel_Click(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.Cancel;
+		}
 
-        private void btnDebug_Click(object sender, EventArgs e)
-        {
-            if (LaunchAndDebug())
-            {
-                DialogResult = DialogResult.OK;
-            }
-            else
-            {
-                DialogResult = DialogResult.Cancel;
-            }
-        }
+		private void btnDebug_Click(object sender, EventArgs e)
+		{
+			if (LaunchAndDebug())
+			{
+				DialogResult = DialogResult.OK;
+			}
+			else
+			{
+				DialogResult = DialogResult.Cancel;
+			}
+		}
 
-        private void btnImageBrowse_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog imageDialog = new OpenFileDialog())
-            {
-                imageDialog.Filter = "Supported files (*.iso,*.img)|*.iso;*.img|IMG files (*.img)|*.img|ISO files (*.iso)|*.iso";
+		private void btnImageBrowse_Click(object sender, EventArgs e)
+		{
+			using (OpenFileDialog imageDialog = new OpenFileDialog())
+			{
+				imageDialog.Filter = "Supported files (*.iso,*.img)|*.iso;*.img|IMG files (*.img)|*.img|ISO files (*.iso)|*.iso";
 
-                if(imageDialog.ShowDialog(this) == DialogResult.OK)
-                {
-                    tbImage.Text = imageDialog.FileName;
+				if (imageDialog.ShowDialog(this) == DialogResult.OK)
+				{
+					tbImage.Text = imageDialog.FileName;
 
-                    _imageFormat = GetFormat(tbImage.Text);
-                }
-            }
-        }
+					_imageFormat = GetFormat(tbImage.Text);
+				}
+			}
+		}
 
-        private ImageFormat GetFormat(string fileName)
-        {
-            string extension = Path.GetExtension(fileName);
-            
-            switch(extension.ToLower())
-            {
-                case ".img":
-                    return ImageFormat.IMG;
-                case ".iso":
-                    return ImageFormat.ISO;
-            }
+		private ImageFormat GetFormat(string fileName)
+		{
+			string extension = Path.GetExtension(fileName);
 
-            return ImageFormat.NotSpecified;
-        }
+			switch (extension.ToLower())
+			{
+				case ".img":
+					return ImageFormat.IMG;
 
-        private void CheckDebugButton(object sender, EventArgs e)
-        {
-            btnDebug.Enabled = (!string.IsNullOrEmpty(tbImage.Text) && File.Exists(tbImage.Text) &&
-                                !string.IsNullOrEmpty(tbQEMU.Text) && File.Exists(tbQEMU.Text) &&
-                                !string.IsNullOrEmpty(tbBIOSDirectory.Text) && Directory.Exists(tbBIOSDirectory.Text));
-        }
+				case ".iso":
+					return ImageFormat.ISO;
+			}
 
-        private string ResolvePath(string path)
-        {
-            if (Path.IsPathRooted(path))
-                return path;
+			return ImageFormat.NotSpecified;
+		}
 
-            return Path.Combine(Application.StartupPath, path);
-        }
+		private void CheckDebugButton(object sender, EventArgs e)
+		{
+			btnDebug.Enabled = (!string.IsNullOrEmpty(tbImage.Text) && File.Exists(tbImage.Text) &&
+								!string.IsNullOrEmpty(tbQEMU.Text) && File.Exists(tbQEMU.Text) &&
+								!string.IsNullOrEmpty(tbBIOSDirectory.Text) && Directory.Exists(tbBIOSDirectory.Text));
+		}
 
-        private bool LaunchAndDebug()
-        {
-            int debugPort = 1234;
+		private string ResolvePath(string path)
+		{
+			if (Path.IsPathRooted(path))
+				return path;
 
-            QEMUProcess = StartQEMU(debugPort);
+			return Path.Combine(Application.StartupPath, path);
+		}
 
-            Debugger = new GDB.Connector(new X86Platform(), "localhost", debugPort);
+		private bool LaunchAndDebug()
+		{
+			int debugPort = 1234;
 
-            return true;
-        }
+			QEMUProcess = StartQEMU(debugPort);
 
-        private Process StartQEMU(int debugPort)
-        {
-            ProcessStartInfo info = new ProcessStartInfo();
-            info.FileName = tbQEMU.Text;
+			Debugger = new GDB.Connector(new X86Platform(), "localhost", debugPort);
 
-            info.Arguments = " -L \"" + tbBIOSDirectory.Text + "\"";
+			return true;
+		}
 
-            //TODO: Check platform
-            info.Arguments = info.Arguments + " -cpu qemu32,+sse4.1";
+		private Process StartQEMU(int debugPort)
+		{
+			ProcessStartInfo info = new ProcessStartInfo();
+			info.FileName = tbQEMU.Text;
 
-            info.Arguments = info.Arguments + " -S -gdb tcp::" + debugPort.ToString();
+			info.Arguments = " -L \"" + tbBIOSDirectory.Text + "\"";
 
-            if (_imageFormat == ImageFormat.ISO)
-            {
-                info.Arguments = info.Arguments + " -cdrom \"" + tbImage.Text + "\"";
-            }
-            else
-            {
-                info.Arguments = info.Arguments + " -hda \"" + tbImage.Text + "\"";
-            }
+			//TODO: Check platform
+			info.Arguments = info.Arguments + " -cpu qemu32,+sse4.1";
 
-            info.UseShellExecute = false;
-            info.CreateNoWindow = true;
+			info.Arguments = info.Arguments + " -S -gdb tcp::" + debugPort.ToString();
 
-            return Process.Start(info);
-        }
-    }
+			if (_imageFormat == ImageFormat.ISO)
+			{
+				info.Arguments = info.Arguments + " -cdrom \"" + tbImage.Text + "\"";
+			}
+			else
+			{
+				info.Arguments = info.Arguments + " -hda \"" + tbImage.Text + "\"";
+			}
+
+			info.UseShellExecute = false;
+			info.CreateNoWindow = true;
+
+			return Process.Start(info);
+		}
+	}
 }
