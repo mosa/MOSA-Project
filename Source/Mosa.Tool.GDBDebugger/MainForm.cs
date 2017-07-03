@@ -3,6 +3,7 @@
 using Mosa.Tool.GDBDebugger.DebugData;
 using Mosa.Tool.GDBDebugger.GDB;
 using Mosa.Tool.GDBDebugger.View;
+using Mosa.Utility.Launcher;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -39,6 +40,8 @@ namespace Mosa.Tool.GDBDebugger
 
 		public Options Options { get; private set; } = new Options();
 
+		public AppLocations AppLocations { get; private set; } = new AppLocations();
+
 		public DebugSource DebugSource { get; private set; } = new DebugSource();
 
 		public List<BreakPoint> BreakPoints { get; private set; } = new List<BreakPoint>();
@@ -67,6 +70,8 @@ namespace Mosa.Tool.GDBDebugger
 			breakPointView = new BreakPointView(this);
 
 			//scriptView = new ScriptView(this);
+
+			AppLocations.FindApplications();
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
@@ -181,12 +186,10 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void btnDebugQEMU_Click(object sender, EventArgs e)
 		{
-			using (DebugQemuWindow debug = new DebugQemuWindow(Options))
+			using (DebugQemuWindow debug = new DebugQemuWindow(AppLocations))
 			{
 				if (debug.ShowDialog(this) == DialogResult.OK)
 				{
-					Thread.Sleep(1000); //HACK: Wait for QEMU
-
 					Connect(debug.Debugger);
 				}
 			}
