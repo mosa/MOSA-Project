@@ -55,7 +55,7 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 							{
 								Address = parts[0].ParseHex(),
 								Offset = (uint)parts[1].ParseHex(),
-								Size = (int)parts[2].ParseHex(),
+								Length = (int)parts[2].ParseHex(),
 								Kind = parts[3],
 								Name = parts[4],
 							};

@@ -96,9 +96,27 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			GDBClient = null;
 		}
 
+		public void ExtendedMode()
+		{
+			var command = new ExtendedMode();
+
+			GDBClient.SendCommandAsync(command);
+		}
+
 		public void Restart()
 		{
-			//todo
+			var command = new Reset();
+
+			GDBClient.SendCommandAsync(command);
+		}
+
+		public void Kill()
+		{
+			var command = new Kill();
+
+			GDBClient.SendCommandAsync(command);
+
+			Disconnect();
 		}
 
 		public void Step()

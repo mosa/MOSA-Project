@@ -15,8 +15,9 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		public override void OnRunning()
 		{
-			txtInstruction.Text = "Running...";
+			tbInstruction.Text = "Running...";
 			tbIP.Text = string.Empty;
+			tbMethod.Text = string.Empty;
 		}
 
 		public override void OnPause()
@@ -28,9 +29,13 @@ namespace Mosa.Tool.GDBDebugger.View
 				return;
 
 			tbIP.Text = Platform.InstructionPointer.ToHex();
-			txtInstruction.Text = string.Empty;
+			tbInstruction.Text = string.Empty;
 
 			GDBConnector.ReadMemory(Platform.InstructionPointer.Value, 16, OnMemoryRead);
+
+			var symbol = DebugSource.GetFirstSymbol(Platform.InstructionPointer.Value);
+
+			tbMethod.Text = symbol == null ? string.Empty : symbol.Name;
 		}
 
 		private void OnMemoryRead(ulong address, byte[] bytes)
@@ -48,33 +53,28 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (address != Platform.InstructionPointer.Value)
 				return;
 
-			// Determine the architecture mode
-			ArchitectureMode mode = ArchitectureMode.x86_64; // todo:
+			var mode = ArchitectureMode.x86_32; // todo:
 
 			try
 			{
-				// Create the disassembler
 				using (var disasm = new Disassembler(memory, mode, address, true))
 				{
-					// Need a new instance of translator every time as they aren't thread safe
 					var translator = new SharpDisasm.Translators.IntelTranslator();
 
-					// Configure the translator to output instruction addresses and instruction binary as hex
 					translator.IncludeAddress = false;
 					translator.IncludeBinary = false;
 
-					// Disassemble instruction
 					foreach (var instruction in disasm.Disassemble())
 					{
 						var asm = translator.Translate(instruction);
-						txtInstruction.Text = asm;
+						tbInstruction.Text = asm;
 						break;
 					}
 				}
 			}
 			catch
 			{
-				txtInstruction.Text = "Unable to decode!";
+				tbInstruction.Text = "Unable to decode!";
 			}
 		}
 	}

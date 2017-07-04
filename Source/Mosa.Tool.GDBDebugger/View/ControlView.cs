@@ -35,7 +35,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private void btnRestart_Click(object sender, EventArgs e)
 		{
-			//MainForm.Restart();
+			GDBConnector.Restart();
 		}
 
 		private void btnStart_Click(object sender, EventArgs e)

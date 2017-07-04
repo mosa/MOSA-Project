@@ -29,14 +29,14 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 			Sections.Add(section);
 		}
 
-		public List<Symbol> LookupSymbols(ulong address)
+		public List<Symbol> GetSymbolsStartingAt(ulong address)
 		{
 			var symbol = SymbolLookup[address];
 
 			return symbol;
 		}
 
-		public Instruction LookupInstruction(ulong address)
+		public Instruction GetInstruction(ulong address)
 		{
 			Instruction instruction = null;
 
@@ -45,13 +45,32 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 			return instruction;
 		}
 
-		//public Section LookupSection(ulong address)
-		//{
-		//	Section section = null;
+		public List<Symbol> GetSymbols(ulong address)
+		{
+			List<Symbol> symbols = new List<Symbol>();
 
-		//	SectionLookup.TryGetValue(address, out section);
+			foreach (var symbol in Symbols)
+			{
+				if (symbol.Address >= address && (symbol.Address + (ulong)symbol.Length) < address)
+				{
+					symbols.Add(symbol);
+				}
+			}
 
-		//	return section;
-		//}
+			return symbols;
+		}
+
+		public Symbol GetFirstSymbol(ulong address)
+		{
+			foreach (var symbol in Symbols)
+			{
+				if (address >= symbol.Address && address < (symbol.Address + (ulong)symbol.Length))
+				{
+					return symbol;
+				}
+			}
+
+			return null;
+		}
 	}
 }

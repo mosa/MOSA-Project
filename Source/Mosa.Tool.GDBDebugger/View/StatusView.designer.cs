@@ -27,34 +27,35 @@ namespace Mosa.Tool.GDBDebugger.View
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.txtInstruction = new System.Windows.Forms.TextBox();
+            this.tbInstruction = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.tbIP = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.tbMethod = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // txtInstruction
+            // tbInstruction
             // 
-            this.txtInstruction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.tbInstruction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtInstruction.Location = new System.Drawing.Point(96, 22);
-            this.txtInstruction.Name = "txtInstruction";
-            this.txtInstruction.ReadOnly = true;
-            this.txtInstruction.Size = new System.Drawing.Size(273, 20);
-            this.txtInstruction.TabIndex = 27;
+            this.tbInstruction.Location = new System.Drawing.Point(118, 8);
+            this.tbInstruction.Name = "tbInstruction";
+            this.tbInstruction.ReadOnly = true;
+            this.tbInstruction.Size = new System.Drawing.Size(280, 20);
+            this.tbInstruction.TabIndex = 27;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(93, 6);
+            this.label8.Location = new System.Drawing.Point(3, 35);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(84, 13);
+            this.label8.Size = new System.Drawing.Size(46, 13);
             this.label8.TabIndex = 26;
-            this.label8.Text = "Next Instruction:";
+            this.label8.Text = "Method:";
             // 
             // tbIP
             // 
-            this.tbIP.Location = new System.Drawing.Point(3, 22);
+            this.tbIP.Location = new System.Drawing.Point(25, 8);
             this.tbIP.Name = "tbIP";
             this.tbIP.ReadOnly = true;
             this.tbIP.Size = new System.Drawing.Size(87, 20);
@@ -63,20 +64,31 @@ namespace Mosa.Tool.GDBDebugger.View
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(1, 6);
+            this.label3.Location = new System.Drawing.Point(3, 11);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(20, 13);
             this.label3.TabIndex = 33;
             this.label3.Text = "IP:";
             // 
+            // tbMethod
+            // 
+            this.tbMethod.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbMethod.Location = new System.Drawing.Point(55, 32);
+            this.tbMethod.Name = "tbMethod";
+            this.tbMethod.ReadOnly = true;
+            this.tbMethod.Size = new System.Drawing.Size(343, 20);
+            this.tbMethod.TabIndex = 34;
+            // 
             // StatusView
             // 
-            this.ClientSize = new System.Drawing.Size(386, 51);
+            this.ClientSize = new System.Drawing.Size(408, 65);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
+            this.Controls.Add(this.tbMethod);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.tbIP);
-            this.Controls.Add(this.txtInstruction);
+            this.Controls.Add(this.tbInstruction);
             this.Controls.Add(this.label8);
             this.HideOnClose = true;
             this.MaximizeBox = false;
@@ -93,14 +105,10 @@ namespace Mosa.Tool.GDBDebugger.View
 		}
 		#endregion
 
-		private System.Windows.Forms.TextBox txtInstruction;
+		private System.Windows.Forms.TextBox tbInstruction;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.TextBox tbIP;
 		private System.Windows.Forms.Label label3;
-
-
-
-
-
+		private System.Windows.Forms.TextBox tbMethod;
 	}
 }

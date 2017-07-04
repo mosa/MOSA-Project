@@ -6,7 +6,7 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 	{
 		public ulong Address { get; set; }
 		public uint Offset { get; set; }
-		public int Size { get; set; }
+		public int Length { get; set; }
 		public string Kind { get; set; }
 		public string Name { get; set; }
 	}
