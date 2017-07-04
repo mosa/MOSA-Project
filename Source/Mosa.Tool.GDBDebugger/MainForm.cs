@@ -85,7 +85,6 @@ namespace Mosa.Tool.GDBDebugger
 			outputView.Show(dockPanel, DockState.Document);
 
 			//scriptView.Show(dockPanel, DockState.Document);
-			symbolView.Show(dockPanel, DockState.Document);
 			registersView.Show(dockPanel, DockState.DockRight);
 
 			//flagView.Show(dockPanel, DockState.DockRight);
@@ -96,6 +95,8 @@ namespace Mosa.Tool.GDBDebugger
 
 			var memoryView = new MemoryView(this);
 			memoryView.Show(dockPanel, DockState.Document);
+
+			symbolView.Show(dockPanel, DockState.Document);
 
 			dockPanel.ResumeLayout(true, true);
 
@@ -223,7 +224,10 @@ namespace Mosa.Tool.GDBDebugger
 			if (!GDBConnector.IsConnected)
 			{
 				MessageBox.Show($"Could not connect to '{GDBConnector.ConnectionHost}' on port {GDBConnector.ConnectionPort}.");
+				return;
 			}
+
+			GDBConnector.ExtendedMode();
 		}
 
 		private void btnViewMemory_Click(object sender, EventArgs e)

@@ -109,5 +109,20 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			watches.Add(watchEntry);
 		}
+
+		private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode != Keys.Delete)
+				return;
+
+			if (dataGridView1.CurrentCell == null)
+				return;
+
+			var row = dataGridView1.CurrentCell.OwningRow.DataBoundItem;
+
+			var watchEntry = row as WatchEntry;
+
+			MainForm.RemoveWatch(watchEntry.Watch);
+		}
 	}
 }

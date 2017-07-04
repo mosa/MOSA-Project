@@ -7,10 +7,10 @@ namespace Mosa.TestWorld.x86.Tests
 		public InterfaceTest()
 			: base("Interface")
 		{
-			testMethods.AddLast(InterfaceTest1);
-			testMethods.AddLast(InterfaceTest2);
-			testMethods.AddLast(InterfaceTest3);
-			testMethods.AddLast(InterfaceTest4);
+			testMethods.Add(InterfaceTest1);
+			testMethods.Add(InterfaceTest2);
+			testMethods.Add(InterfaceTest3);
+			testMethods.Add(InterfaceTest4);
 		}
 
 		public static bool InterfaceTest1()

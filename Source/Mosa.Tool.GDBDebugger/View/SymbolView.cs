@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Tool.GDBDebugger.DebugData;
-using Mosa.Tool.GDBDebugger.GDB;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,13 +14,11 @@ namespace Mosa.Tool.GDBDebugger.View
 		{
 			public string Name { get { return Symbol.Name; } }
 
-			[Browsable(false)]
-			public int Size { get { return Symbol.Size; } }
+			public int Length { get { return Symbol.Size; } }
 
-			public string Address { get { return BasePlatform.ToHex(Symbol.Address, Symbol.Size); } }
-
-			[Browsable(false)]
 			public string Kind { get { return Symbol.Kind; } }
+
+			public string Address { get { return "0x" + Symbol.Address.ToString((Symbol.Address <= uint.MaxValue) ? "X4" : "X8"); } }
 
 			[Browsable(false)]
 			public Symbol Symbol { get; }
@@ -79,7 +76,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			dataGridView1.DataSource = symbols;
 			dataGridView1.AutoResizeColumns();
-			dataGridView1.Columns[0].Width = 500;
+			dataGridView1.Columns[0].Width = 550;
 		}
 
 		private void textBox1_TextChanged(object sender, EventArgs e)
@@ -118,7 +115,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (clickedSymbolEntry == null)
 				return;
 
-			MainForm.AddWatch(clickedSymbolEntry.Name, clickedSymbolEntry.Symbol.Address, clickedSymbolEntry.Size);
+			MainForm.AddWatch(clickedSymbolEntry.Name, clickedSymbolEntry.Symbol.Address, clickedSymbolEntry.Length);
 		}
 
 		private void MenuItem2_Click(Object sender, EventArgs e)
