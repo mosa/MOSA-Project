@@ -62,7 +62,9 @@
     <Compile Include="UniqueQueue.cs" />
     <Compile Include="StringExtension.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Mosa.Compiler.Common.ruleset" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>

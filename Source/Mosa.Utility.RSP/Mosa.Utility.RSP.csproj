@@ -45,6 +45,9 @@
     <Compile Include="Checksum.cs" />
     <Compile Include="Command\ClearAccessWatchPoint.cs" />
     <Compile Include="Command\GetRegisters.cs" />
+    <Compile Include="Command\ExtendedMode.cs" />
+    <Compile Include="Command\Kill.cs" />
+    <Compile Include="Command\Reset.cs" />
     <Compile Include="Command\SetBreakPoint.cs" />
     <Compile Include="Command\ClearBreakPoint.cs" />
     <Compile Include="Command\ClearSoftwareBreakPoint.cs" />

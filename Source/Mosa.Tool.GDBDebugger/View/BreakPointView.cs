@@ -12,9 +12,9 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private class BreakPointEntry
 		{
-			public string Name { get { return BreakPoint.Name; } }
-
 			public string Address { get { return "0x" + BreakPoint.Address.ToString((BreakPoint.Address <= uint.MaxValue) ? "X4" : "X8"); } }
+
+			public string Name { get { return BreakPoint.Name; } }
 
 			[Browsable(false)]
 			public BreakPoint BreakPoint { get; }
@@ -31,7 +31,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			InitializeComponent();
 			dataGridView1.DataSource = breakpoints;
 			dataGridView1.AutoResizeColumns();
-			dataGridView1.Columns[0].Width = 400;
+			dataGridView1.Columns[1].Width = 400;
 		}
 
 		public override void OnBreakpointChange()
@@ -46,8 +46,6 @@ namespace Mosa.Tool.GDBDebugger.View
 		public void AddBreakPoint(string name, ulong address)
 		{
 			var breakpoint = new BreakPoint(name, address);
-
-			//breakpoints.Add(new BreakPointEntry(breakpoint));
 
 			MainForm.AddBreakPoint(breakpoint);
 		}
@@ -64,12 +62,10 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			var breakPointEntry = row as BreakPointEntry;
 
-			//breakpoints.Remove(breakPointEntry);
-
 			MainForm.RemoveBreakPoint(breakPointEntry.BreakPoint);
 		}
 
-		private BreakPointEntry breakPointEntry = null;
+		private BreakPointEntry clickedBreakPointEntry = null;
 
 		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
@@ -81,13 +77,13 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			var row = dataGridView1.Rows[e.RowIndex].DataBoundItem as BreakPointEntry;
 
-			breakPointEntry = row;
+			clickedBreakPointEntry = row;
 
 			var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
 
-			MenuItem menu = new MenuItem(row.Name);
+			var menu = new MenuItem(row.Name);
 			menu.Enabled = false;
-			ContextMenu m = new ContextMenu();
+			var m = new ContextMenu();
 			m.MenuItems.Add(menu);
 			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MenuItem3_Click)));
 			m.MenuItems.Add(new MenuItem("&Delete breakpoint", new EventHandler(MenuItem1_Click)));
@@ -96,20 +92,18 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private void MenuItem1_Click(Object sender, EventArgs e)
 		{
-			if (breakPointEntry == null)
+			if (clickedBreakPointEntry == null)
 				return;
 
-			//breakpoints.Remove(breakPointEntry);
-
-			MainForm.RemoveBreakPoint(breakPointEntry.BreakPoint);
+			MainForm.RemoveBreakPoint(clickedBreakPointEntry.BreakPoint);
 		}
 
 		private void MenuItem3_Click(Object sender, EventArgs e)
 		{
-			if (breakPointEntry == null)
+			if (clickedBreakPointEntry == null)
 				return;
 
-			Clipboard.SetText(breakPointEntry.Name);
+			Clipboard.SetText(clickedBreakPointEntry.Name);
 		}
 	}
 }

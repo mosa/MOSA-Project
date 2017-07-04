@@ -10,8 +10,8 @@ namespace Mosa.TestWorld.x86.Tests
 		public ArrayTest()
 			: base("Array")
 		{
-			testMethods.AddLast(GenericInterfaceTest);
-			testMethods.AddLast(ArrayBoundsCheck);
+			testMethods.Add(GenericInterfaceTest);
+			testMethods.Add(ArrayBoundsCheck);
 
 			// TODO: add more tests
 		}
@@ -24,7 +24,7 @@ namespace Mosa.TestWorld.x86.Tests
 			int result = 0;
 			foreach (var i in iList)
 				result += i;
-			return (result == 9);
+			return result == 9;
 		}
 
 		public static bool ArrayBoundsCheck()

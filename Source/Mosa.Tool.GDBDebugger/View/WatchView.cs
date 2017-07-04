@@ -40,6 +40,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			InitializeComponent();
 			dataGridView1.DataSource = watches;
 			dataGridView1.AutoResizeColumns();
+			dataGridView1.Columns[0].Width = 65;
 			dataGridView1.Columns[1].Width = 250;
 		}
 
@@ -108,6 +109,21 @@ namespace Mosa.Tool.GDBDebugger.View
 			var watchEntry = new WatchEntry(watch);
 
 			watches.Add(watchEntry);
+		}
+
+		private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode != Keys.Delete)
+				return;
+
+			if (dataGridView1.CurrentCell == null)
+				return;
+
+			var row = dataGridView1.CurrentCell.OwningRow.DataBoundItem;
+
+			var watchEntry = row as WatchEntry;
+
+			MainForm.RemoveWatch(watchEntry.Watch);
 		}
 	}
 }

@@ -16,6 +16,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 	public class Connector
 	{
+		public const string DefaultConnectionHost = "localhost";
 		public const int DefaultConnectionPort = 1234;
 
 		public TcpClient TcpClient { get; set; }
@@ -28,6 +29,8 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		public bool IsRunning { get { return !IsPaused; } }
 		public bool IsPaused { get; set; } = true;
 
+		public string ConnectionHost { get; set; }
+		public int ConnectionPort { get; set; }
 		public BasePlatform Platform { get; set; }
 
 		protected List<ulong> BreakPoints = new List<ulong>();
@@ -36,15 +39,37 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		public Connector(BasePlatform platform)
 		{
 			Platform = platform;
+
+			ConnectionHost = DefaultConnectionHost;
+			ConnectionPort = DefaultConnectionPort;
+		}
+
+		public Connector(BasePlatform platform, string host = DefaultConnectionHost, int port = DefaultConnectionPort)
+			: this(platform)
+		{
+			ConnectionHost = host;
+			ConnectionPort = port;
+		}
+
+		public bool Connect()
+		{
+			return Connect(ConnectionHost, ConnectionPort);
 		}
 
 		public bool Connect(int port)
+		{
+			return Connect(ConnectionHost, port);
+		}
+
+		public bool Connect(string host, int port)
 		{
 			try
 			{
 				Disconnect();
 
-				TcpClient = new TcpClient("localhost", port);
+				TcpClient = new TcpClient();
+				TcpClient.Connect(host, port);
+
 				var stream = new GDBNetworkStream(TcpClient.Client, true);
 				GDBClient = new GDBClient(stream);
 
@@ -53,13 +78,13 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 				Break();
 				GetRegisters();
-
-				return true;
 			}
-			catch
+			catch (SocketException)
 			{
 				return false;
 			}
+
+			return true;
 		}
 
 		public void Disconnect()
@@ -73,9 +98,27 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			GDBClient = null;
 		}
 
+		public void ExtendedMode()
+		{
+			var command = new ExtendedMode();
+
+			GDBClient.SendCommandAsync(command);
+		}
+
 		public void Restart()
 		{
-			//todo
+			var command = new Reset();
+
+			GDBClient.SendCommandAsync(command);
+		}
+
+		public void Kill()
+		{
+			var command = new Kill();
+
+			GDBClient.SendCommandAsync(command);
+
+			Disconnect();
 		}
 
 		public void Step()

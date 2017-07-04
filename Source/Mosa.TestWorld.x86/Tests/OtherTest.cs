@@ -11,27 +11,27 @@ namespace Mosa.TestWorld.x86.Tests
 		public OtherTest()
 			: base("Other")
 		{
-			testMethods.AddLast(OtherTest1);
-			testMethods.AddLast(OtherTest2);
-			testMethods.AddLast(OtherTest3);
-			testMethods.AddLast(OtherTest4);
-			testMethods.AddLast(OtherTest5);
-			testMethods.AddLast(ForeachNestedTest);
-			testMethods.AddLast(ForeachNested2Test);
-			testMethods.AddLast(StructNewObjTest);
-			testMethods.AddLast(StructNotBoxed);
-			testMethods.AddLast(ForeachBreak);
-			testMethods.AddLast(ConditionalBug);
-			testMethods.AddLast(PointerBug);
-			testMethods.AddLast(AddressOfThisBug);
-			testMethods.AddLast(RemR4);
-			testMethods.AddLast(RemR8);
-			testMethods.AddLast(NullableTest1);
-			testMethods.AddLast(NullableTest2);
-			testMethods.AddLast(NullableTest3);
-			testMethods.AddLast(NullableTest4);
-			testMethods.AddLast(NullableTest5);
-			testMethods.AddLast(ForeachU1Test);
+			testMethods.Add(OtherTest1);
+			testMethods.Add(OtherTest2);
+			testMethods.Add(OtherTest3);
+			testMethods.Add(OtherTest4);
+			testMethods.Add(OtherTest5);
+			testMethods.Add(ForeachNestedTest);
+			testMethods.Add(ForeachNested2Test);
+			testMethods.Add(StructNewObjTest);
+			testMethods.Add(StructNotBoxed);
+			testMethods.Add(ForeachBreak);
+			testMethods.Add(ConditionalBug);
+			testMethods.Add(PointerBug);
+			testMethods.Add(AddressOfThisBug);
+			testMethods.Add(RemR4);
+			testMethods.Add(RemR8);
+			testMethods.Add(NullableTest1);
+			testMethods.Add(NullableTest2);
+			testMethods.Add(NullableTest3);
+			testMethods.Add(NullableTest4);
+			testMethods.Add(NullableTest5);
+			testMethods.Add(ForeachU1Test);
 		}
 
 		private static uint StaticValue = 0x200000;

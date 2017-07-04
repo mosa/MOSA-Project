@@ -38,8 +38,10 @@ build.force
 
 # NuGet Packages
 *.nupkg
+
 # The packages folder can be ignored because of Package Restore
 **/packages/*
+
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
@@ -49,3 +51,6 @@ build.force
 /.vs/slnx.sqlite
 /.vs/VSWorkspaceState.json
 /.vs
+
+# exclude test directory
+.test/

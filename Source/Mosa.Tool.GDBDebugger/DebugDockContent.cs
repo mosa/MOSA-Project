@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Tool.GDBDebugger.DebugData;
 using Mosa.Tool.GDBDebugger.GDB;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -20,6 +21,9 @@ namespace Mosa.Tool.GDBDebugger
 		}
 
 		public string Status { set { MainForm.Status = value; } }
+
+		public DebugSource DebugSource { get { return MainForm.DebugSource; } }
+
 		public Connector GDBConnector { get { return MainForm.GDBConnector; } }
 		public BasePlatform Platform { get { return (GDBConnector == null ? null : GDBConnector.Platform); } }
 

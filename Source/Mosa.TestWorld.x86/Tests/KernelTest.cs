@@ -9,35 +9,17 @@ namespace Mosa.TestWorld.x86.Tests
 	{
 		private static ConsoleSession Console;
 
-		/// <summary>
-		///
-		/// </summary>
-		private string testName = string.Empty;
+		private readonly string testName = string.Empty;
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <returns></returns>
 		protected delegate bool TestMethod();
 
-		/// <summary>
-		///
-		/// </summary>
-		protected LinkedList<TestMethod> testMethods = new LinkedList<TestMethod>();
+		protected List<TestMethod> testMethods = new List<TestMethod>();
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="testName"></param>
 		protected KernelTest(string testName)
 		{
 			this.testName = testName;
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="flag"></param>
 		public void PrintResult(bool flag)
 		{
 			byte color = Console.Color;
@@ -57,7 +39,7 @@ namespace Mosa.TestWorld.x86.Tests
 		}
 
 		/// <summary>
-		///
+		/// Runs the tests.
 		/// </summary>
 		public static void RunTests()
 		{
@@ -121,16 +103,9 @@ namespace Mosa.TestWorld.x86.Tests
 
 			Console.Write(": ");
 
-			//foreach (TestMethod node in testMethods)
-			//{
-			//    PrintResult(node());
-			//}
-
-			var node = testMethods.First;
-			while (node != null)
+			foreach (var node in testMethods)
 			{
-				PrintResult(node.Value());
-				node = node.Next;
+				PrintResult(node());
 			}
 
 			Console.WriteLine();

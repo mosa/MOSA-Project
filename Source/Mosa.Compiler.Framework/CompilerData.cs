@@ -35,9 +35,7 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (types)
 			{
-				CompilerTypeData compilerType;
-
-				if (!types.TryGetValue(type, out compilerType))
+				if (!types.TryGetValue(type, out CompilerTypeData compilerType))
 				{
 					compilerType = new CompilerTypeData(type);
 					types.Add(type, compilerType);
@@ -51,9 +49,7 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (methods)
 			{
-				CompilerMethodData compilerMethod;
-
-				if (!methods.TryGetValue(method, out compilerMethod))
+				if (!methods.TryGetValue(method, out CompilerMethodData compilerMethod))
 				{
 					compilerMethod = new CompilerMethodData(method);
 					methods.Add(method, compilerMethod);

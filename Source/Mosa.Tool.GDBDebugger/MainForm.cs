@@ -5,6 +5,7 @@ using Mosa.Tool.GDBDebugger.GDB;
 using Mosa.Tool.GDBDebugger.View;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -26,6 +27,8 @@ namespace Mosa.Tool.GDBDebugger
 		//private StackView stackView;
 		//private FlagView flagView;
 		private StatusView statusView;
+
+		private InstructionView instructionView;
 
 		private SymbolView symbolView;
 		private WatchView watchView;
@@ -65,6 +68,7 @@ namespace Mosa.Tool.GDBDebugger
 			symbolView = new SymbolView(this);
 			watchView = new WatchView(this);
 			breakPointView = new BreakPointView(this);
+			instructionView = new InstructionView(this);
 
 			//scriptView = new ScriptView(this);
 		}
@@ -72,10 +76,10 @@ namespace Mosa.Tool.GDBDebugger
 		private void MainForm_Load(object sender, EventArgs e)
 		{
 			dockPanel.SuspendLayout(true);
-			dockPanel.DockTopPortion = 150;
+			dockPanel.DockTopPortion = 75;
 
-			statusView.Show(dockPanel, DockState.DockTop);
-			controlView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
+			controlView.Show(dockPanel, DockState.DockTop);
+			statusView.Show(controlView.PanelPane, DockAlignment.Right, 0.50);
 
 			//callStackView.Show(controlView.PanelPane, DockAlignment.Bottom, 0.50);
 			breakPointView.Show(dockPanel, DockState.DockBottom);
@@ -85,17 +89,19 @@ namespace Mosa.Tool.GDBDebugger
 			outputView.Show(dockPanel, DockState.Document);
 
 			//scriptView.Show(dockPanel, DockState.Document);
-			symbolView.Show(dockPanel, DockState.Document);
 			registersView.Show(dockPanel, DockState.DockRight);
 
 			//flagView.Show(dockPanel, DockState.DockRight);
 			//stackView.Show(dockPanel, DockState.DockRight);
 			stackFrameView.Show(dockPanel, DockState.DockRight);
 
-			registersView.Show();
-
 			var memoryView = new MemoryView(this);
 			memoryView.Show(dockPanel, DockState.Document);
+			symbolView.Show(dockPanel, DockState.Document);
+
+			instructionView.Show(symbolView.PanelPane, DockAlignment.Right, 0.35);
+
+			registersView.Show();
 
 			dockPanel.ResumeLayout(true, true);
 
@@ -179,27 +185,71 @@ namespace Mosa.Tool.GDBDebugger
 			}
 		}
 
+		public ulong ParseMemoryAddress(string input)
+		{
+			string nbr = input.ToUpper().Trim();
+			int digits = 10;
+			int where = nbr.IndexOf('X');
+
+			if (where >= 0)
+			{
+				digits = 16;
+				nbr = nbr.Substring(where + 1);
+			}
+
+			var value = Convert.ToUInt64(nbr, digits);
+
+			return value;
+		}
+
+		private void btnDebugQEMU_Click(object sender, EventArgs e)
+		{
+			using (DebugQemuWindow debug = new DebugQemuWindow(Options))
+			{
+				if (debug.ShowDialog(this) == DialogResult.OK)
+				{
+					Thread.Sleep(1000); //HACK: Wait for QEMU
+
+					Connect(debug.Debugger);
+				}
+			}
+		}
+
 		private void btnConnect_Click(object sender, EventArgs e)
 		{
-			Connect();
+			using (ConnectWindow connect = new ConnectWindow())
+			{
+				if (connect.ShowDialog(this) == DialogResult.OK)
+				{
+					Connect(connect.Debugger);
+				}
+			}
 		}
 
 		private void Connect()
 		{
+			Connect(new Connector(new X86Platform(), "localhost", Options.GDBPort));
+		}
+
+		private void Connect(Connector connector)
+		{
 			if (GDBConnector != null)
 				GDBConnector.Disconnect();
 
-			GDBConnector = new Connector(new X86Platform());
+			GDBConnector = connector;
 
-			GDBConnector.Connect(Options.GDBPort);
+			GDBConnector.Connect();
 
 			GDBConnector.OnPause = OnPause;
 			GDBConnector.OnRunning = OnRunning;
 
 			if (!GDBConnector.IsConnected)
 			{
-				MessageBox.Show($"Could not connect to 'localhost' on port {Options.GDBPort}.");
+				MessageBox.Show($"Could not connect to '{GDBConnector.ConnectionHost}' on port {GDBConnector.ConnectionPort}.");
+				return;
 			}
+
+			GDBConnector.ExtendedMode();
 		}
 
 		private void btnViewMemory_Click(object sender, EventArgs e)
