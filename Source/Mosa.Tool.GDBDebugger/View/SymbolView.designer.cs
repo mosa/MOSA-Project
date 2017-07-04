@@ -37,9 +37,9 @@ namespace Mosa.Tool.GDBDebugger.View
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripComboBox2 = new System.Windows.Forms.ToolStripComboBox();
+            this.cbLength = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripComboBox1 = new System.Windows.Forms.ToolStripComboBox();
+            this.cbKind = new System.Windows.Forms.ToolStripComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -98,10 +98,10 @@ namespace Mosa.Tool.GDBDebugger.View
             this.toolStripSeparator1,
             this.toolStripLabel2,
             this.toolStripTextBox1,
-            this.toolStripLabel4,
-            this.toolStripComboBox2,
             this.toolStripLabel3,
-            this.toolStripComboBox1});
+            this.cbKind,
+            this.toolStripLabel4,
+            this.cbLength});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(890, 28);
@@ -111,8 +111,8 @@ namespace Mosa.Tool.GDBDebugger.View
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(33, 25);
-            this.toolStripLabel1.Text = "Filter";
+            this.toolStripLabel1.Size = new System.Drawing.Size(36, 25);
+            this.toolStripLabel1.Text = "Filter:";
             // 
             // toolStripSeparator1
             // 
@@ -130,7 +130,7 @@ namespace Mosa.Tool.GDBDebugger.View
             this.toolStripTextBox1.BackColor = System.Drawing.SystemColors.Window;
             this.toolStripTextBox1.Margin = new System.Windows.Forms.Padding(1, 3, 1, 2);
             this.toolStripTextBox1.Name = "toolStripTextBox1";
-            this.toolStripTextBox1.Size = new System.Drawing.Size(100, 23);
+            this.toolStripTextBox1.Size = new System.Drawing.Size(200, 23);
             this.toolStripTextBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // toolStripLabel4
@@ -139,18 +139,18 @@ namespace Mosa.Tool.GDBDebugger.View
             this.toolStripLabel4.Size = new System.Drawing.Size(47, 25);
             this.toolStripLabel4.Text = "Length:";
             // 
-            // toolStripComboBox2
+            // cbLength
             // 
-            this.toolStripComboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.toolStripComboBox2.Items.AddRange(new object[] {
+            this.cbLength.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbLength.Items.AddRange(new object[] {
             "<Any>",
             "1-Byte",
             "2-Word",
             "4-Integer",
             "8-Long"});
-            this.toolStripComboBox2.Name = "toolStripComboBox2";
-            this.toolStripComboBox2.Size = new System.Drawing.Size(75, 28);
-            this.toolStripComboBox2.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox2_SelectedIndexChanged);
+            this.cbLength.Name = "cbLength";
+            this.cbLength.Size = new System.Drawing.Size(75, 28);
+            this.cbLength.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox2_SelectedIndexChanged);
             // 
             // toolStripLabel3
             // 
@@ -158,17 +158,17 @@ namespace Mosa.Tool.GDBDebugger.View
             this.toolStripLabel3.Size = new System.Drawing.Size(76, 25);
             this.toolStripLabel3.Text = "Section Kind:";
             // 
-            // toolStripComboBox1
+            // cbKind
             // 
-            this.toolStripComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.toolStripComboBox1.Items.AddRange(new object[] {
+            this.cbKind.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbKind.Items.AddRange(new object[] {
             "<Any>",
             "Text",
             "BSS",
             "ROData"});
-            this.toolStripComboBox1.Name = "toolStripComboBox1";
-            this.toolStripComboBox1.Size = new System.Drawing.Size(75, 28);
-            this.toolStripComboBox1.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
+            this.cbKind.Name = "cbKind";
+            this.cbKind.Size = new System.Drawing.Size(75, 28);
+            this.cbKind.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
             // 
             // SymbolView
             // 
@@ -196,10 +196,10 @@ namespace Mosa.Tool.GDBDebugger.View
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel2;
 		private System.Windows.Forms.ToolStripTextBox toolStripTextBox1;
-		private System.Windows.Forms.ToolStripComboBox toolStripComboBox1;
+		private System.Windows.Forms.ToolStripComboBox cbKind;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel3;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel4;
-		private System.Windows.Forms.ToolStripComboBox toolStripComboBox2;
+		private System.Windows.Forms.ToolStripComboBox cbLength;
 
 
 	}

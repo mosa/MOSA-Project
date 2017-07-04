@@ -27,6 +27,8 @@ namespace Mosa.Tool.GDBDebugger
 		//private FlagView flagView;
 		private StatusView statusView;
 
+		private InstructionView instructionView;
+
 		private SymbolView symbolView;
 		private WatchView watchView;
 		private BreakPointView breakPointView;
@@ -65,6 +67,7 @@ namespace Mosa.Tool.GDBDebugger
 			symbolView = new SymbolView(this);
 			watchView = new WatchView(this);
 			breakPointView = new BreakPointView(this);
+			instructionView = new InstructionView(this);
 
 			//scriptView = new ScriptView(this);
 		}
@@ -72,10 +75,10 @@ namespace Mosa.Tool.GDBDebugger
 		private void MainForm_Load(object sender, EventArgs e)
 		{
 			dockPanel.SuspendLayout(true);
-			dockPanel.DockTopPortion = 150;
+			dockPanel.DockTopPortion = 75;
 
-			statusView.Show(dockPanel, DockState.DockTop);
-			controlView.Show(statusView.PanelPane, DockAlignment.Right, 0.50);
+			controlView.Show(dockPanel, DockState.DockTop);
+			statusView.Show(controlView.PanelPane, DockAlignment.Right, 0.50);
 
 			//callStackView.Show(controlView.PanelPane, DockAlignment.Bottom, 0.50);
 			breakPointView.Show(dockPanel, DockState.DockBottom);
@@ -91,12 +94,13 @@ namespace Mosa.Tool.GDBDebugger
 			//stackView.Show(dockPanel, DockState.DockRight);
 			stackFrameView.Show(dockPanel, DockState.DockRight);
 
-			registersView.Show();
-
 			var memoryView = new MemoryView(this);
 			memoryView.Show(dockPanel, DockState.Document);
-
 			symbolView.Show(dockPanel, DockState.Document);
+
+			instructionView.Show(symbolView.PanelPane, DockAlignment.Right, 0.35);
+
+			registersView.Show();
 
 			dockPanel.ResumeLayout(true, true);
 
@@ -178,6 +182,23 @@ namespace Mosa.Tool.GDBDebugger
 					debugdock.OnWatchChange();
 				}
 			}
+		}
+
+		public ulong ParseMemoryAddress(string input)
+		{
+			string nbr = input.ToUpper().Trim();
+			int digits = 10;
+			int where = nbr.IndexOf('X');
+
+			if (where >= 0)
+			{
+				digits = 16;
+				nbr = nbr.Substring(where + 1);
+			}
+
+			var value = Convert.ToUInt64(nbr, digits);
+
+			return value;
 		}
 
 		private void btnDebugQEMU_Click(object sender, EventArgs e)

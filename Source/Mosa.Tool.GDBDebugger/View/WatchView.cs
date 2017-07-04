@@ -40,6 +40,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			InitializeComponent();
 			dataGridView1.DataSource = watches;
 			dataGridView1.AutoResizeColumns();
+			dataGridView1.Columns[0].Width = 65;
 			dataGridView1.Columns[1].Width = 250;
 		}
 

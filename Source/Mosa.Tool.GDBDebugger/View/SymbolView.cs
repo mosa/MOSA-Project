@@ -10,15 +10,17 @@ namespace Mosa.Tool.GDBDebugger.View
 {
 	public partial class SymbolView : DebugDockContent
 	{
+		private BindingList<SymbolEntry> symbols = new BindingList<SymbolEntry>();
+
 		private class SymbolEntry
 		{
-			public string Name { get { return Symbol.Name; } }
+			public string Address { get { return "0x" + Symbol.Address.ToString((Symbol.Address <= uint.MaxValue) ? "X4" : "X8"); } }
 
-			public int Length { get { return Symbol.Size; } }
+			public string Name { get { return Symbol.Name; } }
 
 			public string Kind { get { return Symbol.Kind; } }
 
-			public string Address { get { return "0x" + Symbol.Address.ToString((Symbol.Address <= uint.MaxValue) ? "X4" : "X8"); } }
+			public int Length { get { return Symbol.Length; } }
 
 			[Browsable(false)]
 			public Symbol Symbol { get; }
@@ -33,25 +35,33 @@ namespace Mosa.Tool.GDBDebugger.View
 			: base(mainForm)
 		{
 			InitializeComponent();
+			dataGridView1.DataSource = symbols;
+			dataGridView1.AutoResizeColumns();
+			dataGridView1.Columns[0].Width = 65;
+			dataGridView1.Columns[1].Width = 450;
 		}
 
 		private void SymbolView_Load(object sender, EventArgs e)
 		{
-			toolStripComboBox1.SelectedIndex = 0;
-			toolStripComboBox2.SelectedIndex = 0;
+			cbKind.SelectedIndex = 0;
+			cbLength.SelectedIndex = 0;
 		}
 
 		public void CreateEntries()
 		{
-			var symbols = new List<SymbolEntry>();
+			symbols.Clear();
 
 			string filter = toolStripTextBox1.Text.Trim();
-			string kind = toolStripComboBox1.SelectedIndex < 1 ? string.Empty : toolStripComboBox1.SelectedItem.ToString().Trim();
+
+			if (filter.Length < 3)
+				return;
+
+			string kind = cbKind.SelectedIndex < 1 ? string.Empty : cbKind.SelectedItem.ToString().Trim();
 
 			uint start = 0;
 			uint end = UInt32.MaxValue;
 
-			switch (toolStripComboBox2.SelectedIndex)
+			switch (cbLength.SelectedIndex)
 			{
 				case 1: start = 1; end = 1; break;
 				case 2: start = 2; end = 2; break;
@@ -65,18 +75,14 @@ namespace Mosa.Tool.GDBDebugger.View
 				if (!(filter.Length == 0 || symbol.Name.Contains(filter)))
 					continue;
 
-				if (kind != string.Empty && symbol.Kind.ToString() != kind)
+				if (kind != string.Empty && symbol.Kind != kind)
 					continue;
 
-				if (symbol.Size > end || symbol.Size < start)
+				if (symbol.Length > end || symbol.Length < start)
 					continue;
 
 				symbols.Add(new SymbolEntry(symbol));
 			}
-
-			dataGridView1.DataSource = symbols;
-			dataGridView1.AutoResizeColumns();
-			dataGridView1.Columns[0].Width = 550;
 		}
 
 		private void textBox1_TextChanged(object sender, EventArgs e)

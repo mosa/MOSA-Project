@@ -83,6 +83,12 @@
     <Compile Include="View\BreakPointView.designer.cs">
       <DependentUpon>BreakPointView.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\InstructionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\InstructionView.designer.cs">
+      <DependentUpon>InstructionView.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\StackFrameView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -224,6 +230,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\RegisterView.resx">
       <DependentUpon>RegisterView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\InstructionView.resx">
+      <DependentUpon>InstructionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\StackFrameView.resx">
       <DependentUpon>StackFrameView.cs</DependentUpon>

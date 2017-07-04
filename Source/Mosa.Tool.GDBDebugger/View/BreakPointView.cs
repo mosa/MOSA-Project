@@ -12,9 +12,9 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private class BreakPointEntry
 		{
-			public string Name { get { return BreakPoint.Name; } }
-
 			public string Address { get { return "0x" + BreakPoint.Address.ToString((BreakPoint.Address <= uint.MaxValue) ? "X4" : "X8"); } }
+
+			public string Name { get { return BreakPoint.Name; } }
 
 			[Browsable(false)]
 			public BreakPoint BreakPoint { get; }
@@ -31,7 +31,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			InitializeComponent();
 			dataGridView1.DataSource = breakpoints;
 			dataGridView1.AutoResizeColumns();
-			dataGridView1.Columns[0].Width = 400;
+			dataGridView1.Columns[1].Width = 400;
 		}
 
 		public override void OnBreakpointChange()
