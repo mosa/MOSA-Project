@@ -2,7 +2,6 @@
 
 using SharpDisasm;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -80,10 +79,11 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			using (var disasm = new Disassembler(memory, mode, address, true, Vendor.Any))
 			{
-				var translator = new SharpDisasm.Translators.IntelTranslator();
-
-				translator.IncludeAddress = false;
-				translator.IncludeBinary = false;
+				var translator = new SharpDisasm.Translators.IntelTranslator()
+				{
+					IncludeAddress = false,
+					IncludeBinary = false
+				};
 
 				foreach (var instruction in disasm.Disassemble())
 				{
@@ -104,8 +104,6 @@ namespace Mosa.Tool.GDBDebugger.View
 			Query();
 		}
 
-		private InstructionEntry clickedEntry;
-
 		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Right)
@@ -114,7 +112,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (e.RowIndex < 0 || e.ColumnIndex < 0)
 				return;
 
-			clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as InstructionEntry;
+			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as InstructionEntry;
 
 			var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
 
@@ -122,25 +120,10 @@ namespace Mosa.Tool.GDBDebugger.View
 			menu.Enabled = false;
 			var m = new ContextMenu();
 			m.MenuItems.Add(menu);
-			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MenuItem3_Click)));
-			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MenuItem2_Click)));
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.Address + " : " + clickedEntry.Instruction });
+			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MainForm.OnAddBreakPoint)) { Tag = new AddBreakPointArgs(clickedEntry.Instruction, clickedEntry.IP) });
+
 			m.Show(dataGridView1, relativeMousePosition);
-		}
-
-		private void MenuItem2_Click(Object sender, EventArgs e)
-		{
-			if (clickedEntry == null)
-				return;
-
-			MainForm.AddBreakPoint(clickedEntry.IP, clickedEntry.Instruction);
-		}
-
-		private void MenuItem3_Click(Object sender, EventArgs e)
-		{
-			if (clickedEntry == null)
-				return;
-
-			Clipboard.SetText(clickedEntry.Address + " : " + clickedEntry.Instruction);
 		}
 	}
 }

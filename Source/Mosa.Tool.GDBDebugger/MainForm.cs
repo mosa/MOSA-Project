@@ -6,7 +6,6 @@ using Mosa.Tool.GDBDebugger.View;
 using Mosa.Utility.Launcher;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -252,12 +251,21 @@ namespace Mosa.Tool.GDBDebugger
 			}
 
 			GDBConnector.ExtendedMode();
+			ResendBreakPoints();
 		}
 
 		private void btnViewMemory_Click(object sender, EventArgs e)
 		{
 			var memoryView = new MemoryView(this);
 			memoryView.Show(dockPanel, DockState.Document);
+		}
+
+		public void ResendBreakPoints()
+		{
+			foreach (var breakpoint in BreakPoints)
+			{
+				GDBConnector.AddBreakPoint(breakpoint.Address);
+			}
 		}
 
 		public void AddBreakPoint(BreakPoint breakpoint)
@@ -296,6 +304,34 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			Watchs.Remove(watch);
 			NotifyWatchChange();
+		}
+
+		public void OnAddBreakPoint(Object sender, EventArgs e)
+		{
+			var args = (sender as System.Windows.Forms.Menu).Tag as AddBreakPointArgs;
+
+			AddBreakPoint(args.Address, args.Name);
+		}
+
+		public void OnCopyToClipboard(Object sender, EventArgs e)
+		{
+			var text = (sender as System.Windows.Forms.Menu).Tag as string;
+
+			Clipboard.SetText(text);
+		}
+
+		public void OnRemoveBreakPoint(Object sender, EventArgs e)
+		{
+			var breakpoint = (sender as System.Windows.Forms.Menu).Tag as BreakPoint;
+
+			RemoveBreakPoint(breakpoint);
+		}
+
+		public void OnAddWatch(Object sender, EventArgs e)
+		{
+			var args = (sender as System.Windows.Forms.Menu).Tag as AddWatchArgs;
+
+			AddWatch(args.Name, args.Address, args.Length);
 		}
 	}
 }

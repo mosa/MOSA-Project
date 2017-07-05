@@ -64,6 +64,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddWatchArgs.cs" />
     <Compile Include="ConnectWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,6 +108,7 @@
     <Compile Include="View\WatchView.designer.cs">
       <DependentUpon>WatchView.cs</DependentUpon>
     </Compile>
+    <Compile Include="AddBreakPointArgs.cs" />
     <Compile Include="Watch.cs" />
     <Compile Include="BreakPoint.cs" />
     <Compile Include="View\ControlView.cs">
