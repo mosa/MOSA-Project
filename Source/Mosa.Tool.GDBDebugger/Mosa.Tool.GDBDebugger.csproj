@@ -110,7 +110,7 @@
     </Compile>
     <Compile Include="AddBreakPointArgs.cs" />
     <Compile Include="Watch.cs" />
-    <Compile Include="BreakPoint.cs" />
+    <Compile Include="Breakpoint.cs" />
     <Compile Include="View\ControlView.cs">
       <SubType>Form</SubType>
     </Compile>

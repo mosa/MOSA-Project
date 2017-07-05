@@ -42,6 +42,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			dataGridView1.AutoResizeColumns();
 			dataGridView1.Columns[0].Width = 65;
 			dataGridView1.Columns[1].Width = 250;
+			cbLength.SelectedIndex = 2;
 		}
 
 		public override void OnPause()
@@ -88,6 +89,8 @@ namespace Mosa.Tool.GDBDebugger.View
 				watch.Value = ToLong(bytes, bytes.Length);
 				watch.HexValue = BasePlatform.ToHex(watch.Value, watch.Size);
 			}
+
+			Refresh();
 		}
 
 		private static ulong ToLong(byte[] bytes, int size)
@@ -124,6 +127,24 @@ namespace Mosa.Tool.GDBDebugger.View
 			var watchEntry = row as WatchEntry;
 
 			MainForm.RemoveWatch(watchEntry.Watch);
+		}
+
+		private void toolStripButton1_Click(object sender, System.EventArgs e)
+		{
+			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
+
+			int size = 0;
+
+			switch (cbLength.SelectedIndex)
+			{
+				case 0: size = 1; break;
+				case 1: size = 2; break;
+				case 2: size = 4; break;
+				case 3: size = 8; break;
+				default: size = 4; break;
+			}
+
+			MainForm.AddWatch(null, address, size);
 		}
 	}
 }

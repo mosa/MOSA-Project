@@ -112,16 +112,18 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (e.RowIndex < 0 || e.ColumnIndex < 0)
 				return;
 
-			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as InstructionEntry;
-
+			dataGridView1.ClearSelection();
+			dataGridView1.Rows[e.RowIndex].Selected = true;
 			var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
 
-			var menu = new MenuItem(clickedEntry.Address + " : " + clickedEntry.Instruction);
+			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as InstructionEntry;
+
+			var menu = new MenuItem(clickedEntry.Address + " - " + clickedEntry.Instruction);
 			menu.Enabled = false;
 			var m = new ContextMenu();
 			m.MenuItems.Add(menu);
-			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.Address + " : " + clickedEntry.Instruction });
-			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MainForm.OnAddBreakPoint)) { Tag = new AddBreakPointArgs(clickedEntry.Instruction, clickedEntry.IP) });
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.Address });
+			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MainForm.OnAddBreakPoint)) { Tag = new AddBreakPointArgs(null, clickedEntry.IP, clickedEntry.Instruction) });
 
 			m.Show(dataGridView1, relativeMousePosition);
 		}

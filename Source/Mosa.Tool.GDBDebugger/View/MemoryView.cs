@@ -14,7 +14,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			: base(mainForm)
 		{
 			InitializeComponent();
-			tbMemory.Text = "0xB8000";
+			tbAddress.Text = "0xB8000";
 		}
 
 		public override void OnRunning()
@@ -35,7 +35,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			Columns = (lbMemory.Width - 100) / ((int)lbMemory.Font.Size * 3);
 			Rows = lbMemory.Height / (lbMemory.Font.Height + 2);
 
-			var address = MainForm.ParseMemoryAddress(tbMemory.Text);
+			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
 			var bytes = Rows * Columns;
 
 			if (bytes > 0x800)

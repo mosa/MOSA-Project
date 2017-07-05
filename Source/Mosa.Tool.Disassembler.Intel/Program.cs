@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Mosa.Tool.Disassembler.Intel
 {
-	internal class Program
+	internal static class Program
 	{
 		private static int Main(string[] args)
 		{
