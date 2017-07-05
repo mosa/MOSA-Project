@@ -90,7 +90,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			CreateEntries();
 		}
 
-		private SymbolEntry clickedSymbolEntry;
+		private SymbolEntry clickedEntry;
 
 		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
@@ -100,15 +100,13 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (e.RowIndex < 0 || e.ColumnIndex < 0)
 				return;
 
-			var row = dataGridView1.Rows[e.RowIndex].DataBoundItem as SymbolEntry;
-
-			clickedSymbolEntry = row;
+			clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as SymbolEntry;
 
 			var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
 
-			MenuItem menu = new MenuItem(row.Name);
+			var menu = new MenuItem(clickedEntry.Name);
 			menu.Enabled = false;
-			ContextMenu m = new ContextMenu();
+			var m = new ContextMenu();
 			m.MenuItems.Add(menu);
 			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MenuItem3_Click)));
 			m.MenuItems.Add(new MenuItem("Add to &Watch List", new EventHandler(MenuItem1_Click)));
@@ -118,26 +116,26 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private void MenuItem1_Click(Object sender, EventArgs e)
 		{
-			if (clickedSymbolEntry == null)
+			if (clickedEntry == null)
 				return;
 
-			MainForm.AddWatch(clickedSymbolEntry.Name, clickedSymbolEntry.Symbol.Address, clickedSymbolEntry.Length);
+			MainForm.AddWatch(clickedEntry.Name, clickedEntry.Symbol.Address, clickedEntry.Length);
 		}
 
 		private void MenuItem2_Click(Object sender, EventArgs e)
 		{
-			if (clickedSymbolEntry == null)
+			if (clickedEntry == null)
 				return;
 
-			MainForm.AddBreakPoint(clickedSymbolEntry.Symbol.Address, clickedSymbolEntry.Name);
+			MainForm.AddBreakPoint(clickedEntry.Symbol.Address, clickedEntry.Name);
 		}
 
 		private void MenuItem3_Click(Object sender, EventArgs e)
 		{
-			if (clickedSymbolEntry == null)
+			if (clickedEntry == null)
 				return;
 
-			Clipboard.SetText(clickedSymbolEntry.Name);
+			Clipboard.SetText(clickedEntry.Address + " : " + clickedEntry.Name);
 		}
 
 		private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)

@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using SharpDisasm;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -101,6 +102,45 @@ namespace Mosa.Tool.GDBDebugger.View
 		private void toolStripButton1_Click(object sender, System.EventArgs e)
 		{
 			Query();
+		}
+
+		private InstructionEntry clickedEntry;
+
+		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Right)
+				return;
+
+			if (e.RowIndex < 0 || e.ColumnIndex < 0)
+				return;
+
+			clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as InstructionEntry;
+
+			var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
+
+			var menu = new MenuItem(clickedEntry.Address + " : " + clickedEntry.Instruction);
+			menu.Enabled = false;
+			var m = new ContextMenu();
+			m.MenuItems.Add(menu);
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MenuItem3_Click)));
+			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MenuItem2_Click)));
+			m.Show(dataGridView1, relativeMousePosition);
+		}
+
+		private void MenuItem2_Click(Object sender, EventArgs e)
+		{
+			if (clickedEntry == null)
+				return;
+
+			MainForm.AddBreakPoint(clickedEntry.IP, clickedEntry.Instruction);
+		}
+
+		private void MenuItem3_Click(Object sender, EventArgs e)
+		{
+			if (clickedEntry == null)
+				return;
+
+			Clipboard.SetText(clickedEntry.Address + " : " + clickedEntry.Instruction);
 		}
 	}
 }
