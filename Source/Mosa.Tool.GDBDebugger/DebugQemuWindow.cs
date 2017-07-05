@@ -2,6 +2,7 @@
 
 using Mosa.Tool.GDBDebugger.GDB;
 using Mosa.Utility.BootImage;
+using Mosa.Utility.Launcher;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -11,7 +12,7 @@ namespace Mosa.Tool.GDBDebugger
 {
 	public partial class DebugQemuWindow : Form
 	{
-		private Options _options;
+		private AppLocations _appLocations;
 		private ImageFormat _imageFormat;
 
 		public Connector Debugger
@@ -26,17 +27,17 @@ namespace Mosa.Tool.GDBDebugger
 			private set;
 		}
 
-		public DebugQemuWindow(Options options)
+		public DebugQemuWindow(AppLocations apps)
 		{
 			InitializeComponent();
 
-			_options = options;
+			_appLocations = apps;
 		}
 
 		private void DebugQemuWindow_Load(object sender, EventArgs e)
 		{
-			tbQEMU.Text = _options.QEMUExe;
-			tbBIOSDirectory.Text = _options.QEMUBiosDirectory;
+			tbQEMU.Text = _appLocations.QEMU;
+			tbBIOSDirectory.Text = _appLocations.QEMUBIOSDirectory;
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)

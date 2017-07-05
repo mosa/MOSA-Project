@@ -77,7 +77,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			var mode = ArchitectureMode.x86_32; // todo:
 
-			using (var disasm = new Disassembler(memory, mode, address, true))
+			using (var disasm = new Disassembler(memory, mode, address, true, Vendor.Any))
 			{
 				var translator = new SharpDisasm.Translators.IntelTranslator();
 
@@ -88,7 +88,7 @@ namespace Mosa.Tool.GDBDebugger.View
 				{
 					var entry = new InstructionEntry()
 					{
-						IP = instruction.PC,
+						IP = instruction.Offset,
 						Length = instruction.Length,
 						Instruction = translator.Translate(instruction)
 					};
