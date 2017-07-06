@@ -6,6 +6,7 @@ using Mosa.Tool.GDBDebugger.View;
 using Mosa.Utility.Launcher;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -304,9 +305,12 @@ namespace Mosa.Tool.GDBDebugger
 
 		public void AddBreakPoint(BreakPoint breakpoint)
 		{
-			BreakPoints.Add(breakpoint);
-			GDBConnector.AddBreakPoint(breakpoint.Address);
-			NotifyBreakPointChange();
+			if(!BreakPoints.Any(b => b.Address == breakpoint.Address))
+			{
+				BreakPoints.Add(breakpoint);
+				GDBConnector.AddBreakPoint(breakpoint.Address);
+				NotifyBreakPointChange();
+			}
 		}
 
 		public void AddBreakPoint(ulong address, string name, string description = null)

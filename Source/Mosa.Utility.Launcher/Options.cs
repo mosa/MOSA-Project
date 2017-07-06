@@ -85,6 +85,8 @@ namespace Mosa.Utility.Launcher
 
 		public bool LaunchGDB { get; set; }
 
+		public bool LaunchMosaDebugger { get; set; }
+
 		public Options()
 		{
 			EnableSSA = true;
@@ -119,6 +121,7 @@ namespace Mosa.Utility.Launcher
 			GenerateASMFile = false;
 			EnableQemuGDB = false;
 			LaunchGDB = false;
+			LaunchMosaDebugger = false;
 			GenerateDebugFile = false;
 		}
 
