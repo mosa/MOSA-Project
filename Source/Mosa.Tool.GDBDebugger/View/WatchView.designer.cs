@@ -35,9 +35,9 @@ namespace Mosa.Tool.GDBDebugger.View
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.tbAddress = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
             this.cbLength = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -79,15 +79,6 @@ namespace Mosa.Tool.GDBDebugger.View
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Black;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(33, 22);
-            this.toolStripButton1.Text = "Add";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
-            // 
             // toolStripLabel4
             // 
             this.toolStripLabel4.Name = "toolStripLabel4";
@@ -104,6 +95,15 @@ namespace Mosa.Tool.GDBDebugger.View
             "8-Long"});
             this.cbLength.Name = "cbLength";
             this.cbLength.Size = new System.Drawing.Size(75, 25);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Black;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(33, 22);
+            this.toolStripButton1.Text = "Add";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // dataGridView1
             // 
@@ -151,6 +151,7 @@ namespace Mosa.Tool.GDBDebugger.View
             this.dataGridView1.RowTemplate.Height = 18;
             this.dataGridView1.Size = new System.Drawing.Size(624, 176);
             this.dataGridView1.TabIndex = 7;
+            this.dataGridView1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
             // 
             // WatchView
             // 

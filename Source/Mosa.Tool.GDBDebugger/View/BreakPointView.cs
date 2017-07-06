@@ -58,11 +58,9 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (dataGridView1.CurrentCell == null)
 				return;
 
-			var row = dataGridView1.CurrentCell.OwningRow.DataBoundItem;
+			var clickedEntry = dataGridView1.CurrentCell.OwningRow.DataBoundItem as BreakPointEntry;
 
-			var breakPointEntry = row as BreakPointEntry;
-
-			MainForm.RemoveBreakPoint(breakPointEntry.BreakPoint);
+			MainForm.RemoveBreakPoint(clickedEntry.BreakPoint);
 		}
 
 		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -79,7 +77,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as BreakPointEntry;
 
-			var menu = new MenuItem(clickedEntry.Name);
+			var menu = new MenuItem(clickedEntry.Address + " - " + clickedEntry.Name);
 			menu.Enabled = false;
 			var m = new ContextMenu();
 			m.MenuItems.Add(menu);

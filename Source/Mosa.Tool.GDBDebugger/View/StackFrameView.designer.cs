@@ -79,6 +79,7 @@ namespace Mosa.Tool.GDBDebugger.View
             this.dataGridView1.RowTemplate.Height = 18;
             this.dataGridView1.Size = new System.Drawing.Size(219, 157);
             this.dataGridView1.TabIndex = 3;
+            this.dataGridView1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
             // 
             // StackFrameView
             // 

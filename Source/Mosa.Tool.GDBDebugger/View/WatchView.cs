@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Tool.GDBDebugger.GDB;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -122,9 +123,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (dataGridView1.CurrentCell == null)
 				return;
 
-			var row = dataGridView1.CurrentCell.OwningRow.DataBoundItem;
-
-			var watchEntry = row as WatchEntry;
+			var watchEntry = dataGridView1.CurrentCell.OwningRow.DataBoundItem as WatchEntry;
 
 			MainForm.RemoveWatch(watchEntry.Watch);
 		}
@@ -145,6 +144,30 @@ namespace Mosa.Tool.GDBDebugger.View
 			}
 
 			MainForm.AddWatch(null, address, size);
+		}
+
+		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Right)
+				return;
+
+			if (e.RowIndex < 0 || e.ColumnIndex < 0)
+				return;
+
+			dataGridView1.ClearSelection();
+			dataGridView1.Rows[e.RowIndex].Selected = true;
+			var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
+
+			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as WatchEntry;
+
+			var menu = new MenuItem(clickedEntry.HexValue + " - " + clickedEntry.Name);
+			menu.Enabled = false;
+			var m = new ContextMenu();
+			m.MenuItems.Add(menu);
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.Address });
+			m.MenuItems.Add(new MenuItem("&Delete watch", new EventHandler(MainForm.OnRemoveWatch)) { Tag = clickedEntry.Watch });
+
+			m.Show(dataGridView1, relativeMousePosition);
 		}
 	}
 }

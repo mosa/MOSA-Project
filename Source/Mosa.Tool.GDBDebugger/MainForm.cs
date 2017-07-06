@@ -387,5 +387,12 @@ namespace Mosa.Tool.GDBDebugger
 
 			AddWatch(args.Name, args.Address, args.Length);
 		}
+
+		public void OnRemoveWatch(Object sender, EventArgs e)
+		{
+			var watch = (sender as System.Windows.Forms.Menu).Tag as Watch;
+
+			RemoveWatch(watch);
+		}
 	}
 }
