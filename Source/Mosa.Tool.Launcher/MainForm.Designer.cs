@@ -39,6 +39,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cbDebugInfo = new MetroFramework.Controls.MetroCheckBox();
             this.cbGenerateNASMFile = new MetroFramework.Controls.MetroCheckBox();
             this.cbGenerateASMFile = new MetroFramework.Controls.MetroCheckBox();
             this.cbGenerateMapFile = new MetroFramework.Controls.MetroCheckBox();
@@ -74,6 +75,10 @@
             this.cbEnableIROptimizations = new MetroFramework.Controls.MetroCheckBox();
             this.cbEnableSSA = new MetroFramework.Controls.MetroCheckBox();
             this.tabAdvanced = new MetroFramework.Controls.MetroTabPage();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.cbDebugConnectionOption = new MetroFramework.Controls.MetroComboBox();
+            this.label8 = new MetroFramework.Controls.MetroLabel();
+            this.cbMosaDebugger = new MetroFramework.Controls.MetroCheckBox();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.cbLaunchGDB = new MetroFramework.Controls.MetroCheckBox();
             this.cbEnableQemuGDB = new MetroFramework.Controls.MetroCheckBox();
@@ -109,11 +114,7 @@
             this.tabCounters = new MetroFramework.Controls.MetroTabPage();
             this.rtbCounters = new System.Windows.Forms.RichTextBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-            this.cbDebugInfo = new MetroFramework.Controls.MetroCheckBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.cbDebugConnectionOption = new MetroFramework.Controls.MetroComboBox();
-            this.label8 = new MetroFramework.Controls.MetroLabel();
-            this.cbMosaDebugger = new MetroFramework.Controls.MetroCheckBox();
+            this.cbLaunchMosaDebugger = new MetroFramework.Controls.MetroCheckBox();
             this.tbApplicationLocations.SuspendLayout();
             this.tabOptions.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -125,6 +126,7 @@
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabAdvanced.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.groupBox15.SuspendLayout();
             this.groupBox14.SuspendLayout();
             this.groupBox13.SuspendLayout();
@@ -136,7 +138,6 @@
             this.groupBox7.SuspendLayout();
             this.tabOutput.SuspendLayout();
             this.tabCounters.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -172,7 +173,7 @@
             this.tbApplicationLocations.Margin = new System.Windows.Forms.Padding(0);
             this.tbApplicationLocations.Multiline = true;
             this.tbApplicationLocations.Name = "tbApplicationLocations";
-            this.tbApplicationLocations.SelectedIndex = 3;
+            this.tbApplicationLocations.SelectedIndex = 1;
             this.tbApplicationLocations.Size = new System.Drawing.Size(661, 438);
             this.tbApplicationLocations.Style = MetroFramework.MetroColorStyle.Blue;
             this.tbApplicationLocations.TabIndex = 22;
@@ -258,6 +259,18 @@
             this.groupBox2.TabIndex = 29;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Diagnostic Output:";
+            // 
+            // cbDebugInfo
+            // 
+            this.cbDebugInfo.AutoSize = true;
+            this.cbDebugInfo.Location = new System.Drawing.Point(6, 85);
+            this.cbDebugInfo.Name = "cbDebugInfo";
+            this.cbDebugInfo.Size = new System.Drawing.Size(79, 15);
+            this.cbDebugInfo.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbDebugInfo.TabIndex = 48;
+            this.cbDebugInfo.Text = "Debug File";
+            this.cbDebugInfo.UseCustomBackColor = true;
+            this.cbDebugInfo.UseSelectable = true;
             // 
             // cbGenerateNASMFile
             // 
@@ -760,7 +773,7 @@
             this.tabAdvanced.Location = new System.Drawing.Point(4, 22);
             this.tabAdvanced.Name = "tabAdvanced";
             this.tabAdvanced.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAdvanced.Size = new System.Drawing.Size(653, 392);
+            this.tabAdvanced.Size = new System.Drawing.Size(653, 412);
             this.tabAdvanced.TabIndex = 4;
             this.tabAdvanced.Text = "Advanced Options";
             this.tabAdvanced.UseVisualStyleBackColor = true;
@@ -768,9 +781,67 @@
             this.tabAdvanced.VerticalScrollbarHighlightOnWheel = false;
             this.tabAdvanced.VerticalScrollbarSize = 10;
             // 
+            // groupBox5
+            // 
+            this.groupBox5.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox5.Controls.Add(this.cbDebugConnectionOption);
+            this.groupBox5.Controls.Add(this.label8);
+            this.groupBox5.Controls.Add(this.cbMosaDebugger);
+            this.groupBox5.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox5.Location = new System.Drawing.Point(8, 148);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(158, 112);
+            this.groupBox5.TabIndex = 48;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Debugger:";
+            // 
+            // cbDebugConnectionOption
+            // 
+            this.cbDebugConnectionOption.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.cbDebugConnectionOption.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbDebugConnectionOption.FormattingEnabled = true;
+            this.cbDebugConnectionOption.ItemHeight = 23;
+            this.cbDebugConnectionOption.Items.AddRange(new object[] {
+            "None",
+            "Pipe",
+            "TCP Server",
+            "TCP Client"});
+            this.cbDebugConnectionOption.Location = new System.Drawing.Point(7, 64);
+            this.cbDebugConnectionOption.Name = "cbDebugConnectionOption";
+            this.cbDebugConnectionOption.Size = new System.Drawing.Size(120, 29);
+            this.cbDebugConnectionOption.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbDebugConnectionOption.TabIndex = 36;
+            this.cbDebugConnectionOption.UseCustomBackColor = true;
+            this.cbDebugConnectionOption.UseSelectable = true;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+            this.label8.Location = new System.Drawing.Point(6, 42);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(127, 19);
+            this.label8.TabIndex = 35;
+            this.label8.Text = "Debug Connection:";
+            this.label8.UseCustomBackColor = true;
+            // 
+            // cbMosaDebugger
+            // 
+            this.cbMosaDebugger.AutoSize = true;
+            this.cbMosaDebugger.Enabled = false;
+            this.cbMosaDebugger.Location = new System.Drawing.Point(7, 23);
+            this.cbMosaDebugger.Name = "cbMosaDebugger";
+            this.cbMosaDebugger.Size = new System.Drawing.Size(112, 15);
+            this.cbMosaDebugger.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbMosaDebugger.TabIndex = 14;
+            this.cbMosaDebugger.Text = "MOSA Debugger";
+            this.cbMosaDebugger.UseCustomBackColor = true;
+            this.cbMosaDebugger.UseSelectable = true;
+            // 
             // groupBox15
             // 
             this.groupBox15.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox15.Controls.Add(this.cbLaunchMosaDebugger);
             this.groupBox15.Controls.Add(this.cbLaunchGDB);
             this.groupBox15.Controls.Add(this.cbEnableQemuGDB);
             this.groupBox15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -935,7 +1006,7 @@
             this.tabApplicationLocations.Location = new System.Drawing.Point(4, 22);
             this.tabApplicationLocations.Name = "tabApplicationLocations";
             this.tabApplicationLocations.Padding = new System.Windows.Forms.Padding(3);
-            this.tabApplicationLocations.Size = new System.Drawing.Size(653, 392);
+            this.tabApplicationLocations.Size = new System.Drawing.Size(653, 412);
             this.tabApplicationLocations.TabIndex = 3;
             this.tabApplicationLocations.Text = "Application Locations";
             this.tabApplicationLocations.UseVisualStyleBackColor = true;
@@ -1235,74 +1306,19 @@
             this.openFileDialog2.Filter = "Executable|*.exe";
             this.openFileDialog2.Title = "Select Assembly";
             // 
-            // cbDebugInfo
+            // cbLaunchMosaDebugger
             // 
-            this.cbDebugInfo.AutoSize = true;
-            this.cbDebugInfo.Location = new System.Drawing.Point(6, 85);
-            this.cbDebugInfo.Name = "cbDebugInfo";
-            this.cbDebugInfo.Size = new System.Drawing.Size(79, 15);
-            this.cbDebugInfo.Style = MetroFramework.MetroColorStyle.Blue;
-            this.cbDebugInfo.TabIndex = 48;
-            this.cbDebugInfo.Text = "Debug File";
-            this.cbDebugInfo.UseCustomBackColor = true;
-            this.cbDebugInfo.UseSelectable = true;
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.groupBox5.Controls.Add(this.cbDebugConnectionOption);
-            this.groupBox5.Controls.Add(this.label8);
-            this.groupBox5.Controls.Add(this.cbMosaDebugger);
-            this.groupBox5.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox5.Location = new System.Drawing.Point(8, 148);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(158, 112);
-            this.groupBox5.TabIndex = 48;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Debugger:";
-            // 
-            // cbDebugConnectionOption
-            // 
-            this.cbDebugConnectionOption.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.cbDebugConnectionOption.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cbDebugConnectionOption.FormattingEnabled = true;
-            this.cbDebugConnectionOption.ItemHeight = 23;
-            this.cbDebugConnectionOption.Items.AddRange(new object[] {
-            "None",
-            "Pipe",
-            "TCP Server",
-            "TCP Client"});
-            this.cbDebugConnectionOption.Location = new System.Drawing.Point(7, 64);
-            this.cbDebugConnectionOption.Name = "cbDebugConnectionOption";
-            this.cbDebugConnectionOption.Size = new System.Drawing.Size(120, 29);
-            this.cbDebugConnectionOption.Style = MetroFramework.MetroColorStyle.Blue;
-            this.cbDebugConnectionOption.TabIndex = 36;
-            this.cbDebugConnectionOption.UseCustomBackColor = true;
-            this.cbDebugConnectionOption.UseSelectable = true;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.label8.Location = new System.Drawing.Point(6, 42);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(127, 19);
-            this.label8.TabIndex = 35;
-            this.label8.Text = "Debug Connection:";
-            this.label8.UseCustomBackColor = true;
-            // 
-            // cbMosaDebugger
-            // 
-            this.cbMosaDebugger.AutoSize = true;
-            this.cbMosaDebugger.Enabled = false;
-            this.cbMosaDebugger.Location = new System.Drawing.Point(7, 23);
-            this.cbMosaDebugger.Name = "cbMosaDebugger";
-            this.cbMosaDebugger.Size = new System.Drawing.Size(112, 15);
-            this.cbMosaDebugger.Style = MetroFramework.MetroColorStyle.Blue;
-            this.cbMosaDebugger.TabIndex = 14;
-            this.cbMosaDebugger.Text = "MOSA Debugger";
-            this.cbMosaDebugger.UseCustomBackColor = true;
-            this.cbMosaDebugger.UseSelectable = true;
+            this.cbLaunchMosaDebugger.AutoSize = true;
+            this.cbLaunchMosaDebugger.Checked = true;
+            this.cbLaunchMosaDebugger.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbLaunchMosaDebugger.Location = new System.Drawing.Point(6, 72);
+            this.cbLaunchMosaDebugger.Name = "cbLaunchMosaDebugger";
+            this.cbLaunchMosaDebugger.Size = new System.Drawing.Size(154, 15);
+            this.cbLaunchMosaDebugger.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbLaunchMosaDebugger.TabIndex = 8;
+            this.cbLaunchMosaDebugger.Text = "Launch MOSA Debugger";
+            this.cbLaunchMosaDebugger.UseCustomBackColor = true;
+            this.cbLaunchMosaDebugger.UseSelectable = true;
             // 
             // MainForm
             // 
@@ -1339,6 +1355,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabAdvanced.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
             this.groupBox15.ResumeLayout(false);
             this.groupBox15.PerformLayout();
             this.groupBox14.ResumeLayout(false);
@@ -1358,8 +1376,6 @@
             this.groupBox7.PerformLayout();
             this.tabOutput.ResumeLayout(false);
             this.tabCounters.ResumeLayout(false);
-            this.groupBox5.ResumeLayout(false);
-            this.groupBox5.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -1451,5 +1467,6 @@
 		private MetroFramework.Controls.MetroComboBox cbDebugConnectionOption;
 		private MetroFramework.Controls.MetroLabel label8;
 		private MetroFramework.Controls.MetroCheckBox cbMosaDebugger;
+		private MetroFramework.Controls.MetroCheckBox cbLaunchMosaDebugger;
 	}
 }
