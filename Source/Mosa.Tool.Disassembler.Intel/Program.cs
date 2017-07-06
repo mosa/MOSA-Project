@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Mosa.Tool.Disassembler.Intel
 {
-	internal class Program
+	internal static class Program
 	{
 		private static int Main(string[] args)
 		{
@@ -30,11 +30,12 @@ namespace Mosa.Tool.Disassembler.Intel
 				options.LoadArguments(args);
 
 				// Need a new instance of translator every time as they aren't thread safe
-				var translator = new IntelTranslator();
-
-				// Configure the translator to output instruction addresses and instruction binary as hex
-				translator.IncludeAddress = true;
-				translator.IncludeBinary = true;
+				var translator = new IntelTranslator()
+				{
+					// Configure the translator to output instruction addresses and instruction binary as hex
+					IncludeAddress = true,
+					IncludeBinary = true
+				};
 
 				var code2 = File.ReadAllBytes(options.InputFile);
 

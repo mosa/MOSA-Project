@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Tool.GDBDebugger.GDB;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -9,13 +10,18 @@ namespace Mosa.Tool.GDBDebugger.View
 {
 	public partial class StackFrameView : DebugDockContent
 	{
+		private BindingList<StackEntry> stackentries = new BindingList<StackEntry>();
+
 		private class StackEntry
 		{
 			public string Offset { get; set; }
 
 			public string Address { get; set; }
 
-			public string Value { get; set; }
+			public string HexValue { get; set; }
+
+			[Browsable(false)]
+			public ulong Value { get; set; }
 
 			[Browsable(false)]
 			public int Index { get; set; }
@@ -25,15 +31,22 @@ namespace Mosa.Tool.GDBDebugger.View
 			: base(mainForm)
 		{
 			InitializeComponent();
+			dataGridView1.DataSource = stackentries;
+			dataGridView1.AutoResizeColumns();
+			dataGridView1.Columns[0].Width = 75;
+			dataGridView1.Columns[1].Width = 75;
+			dataGridView1.Columns[2].Width = 75;
 		}
 
 		public override void OnRunning()
 		{
-			dataGridView1.DataSource = null;
+			stackentries.Clear();
 		}
 
 		public override void OnPause()
 		{
+			stackentries.Clear();
+
 			if (Platform == null)
 				return;
 
@@ -65,8 +78,6 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private void UpdateDisplay(ulong address, byte[] memory)
 		{
-			var list = new List<StackEntry>();
-
 			int size = 4; // fixme
 
 			for (int i = memory.Length - 4; i > 0; i = i - size)
@@ -78,16 +89,39 @@ namespace Mosa.Tool.GDBDebugger.View
 				var entry = new StackEntry()
 				{
 					Address = BasePlatform.ToHex(at, size),
-					Value = BasePlatform.ToHex(value, size),
+					HexValue = BasePlatform.ToHex(value, size),
+					Value = value,
 					Offset = Platform.StackFrame.Name.ToUpper() + "-" + (Platform.StackFrame.Value - at).ToString().PadLeft(2, '0'),
-					Index = list.Count,
+					Index = stackentries.Count,
 				};
 
-				list.Add(entry);
+				stackentries.Add(entry);
 			}
+		}
 
-			dataGridView1.DataSource = list;
-			dataGridView1.AutoResizeColumns();
+		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Right)
+				return;
+
+			if (e.RowIndex < 0 || e.ColumnIndex < 0)
+				return;
+
+			dataGridView1.ClearSelection();
+			dataGridView1.Rows[e.RowIndex].Selected = true;
+			var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
+
+			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as StackEntry;
+
+			var menu = new MenuItem(clickedEntry.Offset + " - " + clickedEntry.HexValue);
+			menu.Enabled = false;
+			var m = new ContextMenu();
+			m.MenuItems.Add(menu);
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.HexValue });
+			m.MenuItems.Add(new MenuItem("Add to &Watch List", new EventHandler(MainForm.OnAddWatch)) { Tag = new AddWatchArgs(null, clickedEntry.Value, 4) });
+			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MainForm.OnAddBreakPoint)) { Tag = new AddBreakPointArgs(null, clickedEntry.Value) });
+
+			m.Show(dataGridView1, relativeMousePosition);
 		}
 	}
 }

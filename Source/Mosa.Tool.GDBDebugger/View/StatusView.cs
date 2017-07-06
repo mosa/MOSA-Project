@@ -59,10 +59,11 @@ namespace Mosa.Tool.GDBDebugger.View
 			{
 				using (var disasm = new Disassembler(memory, mode, address, true))
 				{
-					var translator = new SharpDisasm.Translators.IntelTranslator();
-
-					translator.IncludeAddress = false;
-					translator.IncludeBinary = false;
+					var translator = new SharpDisasm.Translators.IntelTranslator()
+					{
+						IncludeAddress = false,
+						IncludeBinary = false
+					};
 
 					foreach (var instruction in disasm.Disassemble())
 					{

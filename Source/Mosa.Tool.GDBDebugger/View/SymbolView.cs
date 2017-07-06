@@ -2,7 +2,6 @@
 
 using Mosa.Tool.GDBDebugger.DebugData;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -90,8 +89,6 @@ namespace Mosa.Tool.GDBDebugger.View
 			CreateEntries();
 		}
 
-		private SymbolEntry clickedSymbolEntry;
-
 		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Right)
@@ -100,44 +97,21 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (e.RowIndex < 0 || e.ColumnIndex < 0)
 				return;
 
-			var row = dataGridView1.Rows[e.RowIndex].DataBoundItem as SymbolEntry;
-
-			clickedSymbolEntry = row;
-
+			dataGridView1.ClearSelection();
+			dataGridView1.Rows[e.RowIndex].Selected = true;
 			var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
 
-			MenuItem menu = new MenuItem(row.Name);
+			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as SymbolEntry;
+
+			var menu = new MenuItem(clickedEntry.Name);
 			menu.Enabled = false;
-			ContextMenu m = new ContextMenu();
+			var m = new ContextMenu();
 			m.MenuItems.Add(menu);
-			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MenuItem3_Click)));
-			m.MenuItems.Add(new MenuItem("Add to &Watch List", new EventHandler(MenuItem1_Click)));
-			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MenuItem2_Click)));
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.Address });
+			m.MenuItems.Add(new MenuItem("Add to &Watch List", new EventHandler(MainForm.OnAddWatch)) { Tag = new AddWatchArgs(clickedEntry.Name, clickedEntry.Symbol.Address, clickedEntry.Length) });
+			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MainForm.OnAddBreakPoint)) { Tag = new AddBreakPointArgs(clickedEntry.Name, clickedEntry.Symbol.Address) });
+
 			m.Show(dataGridView1, relativeMousePosition);
-		}
-
-		private void MenuItem1_Click(Object sender, EventArgs e)
-		{
-			if (clickedSymbolEntry == null)
-				return;
-
-			MainForm.AddWatch(clickedSymbolEntry.Name, clickedSymbolEntry.Symbol.Address, clickedSymbolEntry.Length);
-		}
-
-		private void MenuItem2_Click(Object sender, EventArgs e)
-		{
-			if (clickedSymbolEntry == null)
-				return;
-
-			MainForm.AddBreakPoint(clickedSymbolEntry.Symbol.Address, clickedSymbolEntry.Name);
-		}
-
-		private void MenuItem3_Click(Object sender, EventArgs e)
-		{
-			if (clickedSymbolEntry == null)
-				return;
-
-			Clipboard.SetText(clickedSymbolEntry.Name);
 		}
 
 		private void toolStripComboBox1_SelectedIndexChanged(object sender, EventArgs e)

@@ -130,8 +130,8 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 		public void AddBreakPoint(ulong address)
 		{
-			var command1 = new SetBreakPoint(address, 4, 0);
-			GDBClient.SendCommandAsync(command1);
+			var command = new SetBreakPoint(address, 4, 0);
+			GDBClient.SendCommandAsync(command);
 		}
 
 		public void ClearBreakPoint(ulong address)

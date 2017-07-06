@@ -7,14 +7,8 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public class Keyboard : IKeyboard
 	{
-		/// <summary>
-		///
-		/// </summary>
 		protected IKeyboardDevice keyboardDevice;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected IScanCodeMap scanCodeMap;
 
 		/// <summary>
@@ -147,18 +141,15 @@ namespace Mosa.DeviceSystem
 
 			var keyEvent = scanCodeMap.ConvertScanCode(scanCode);
 
-			if (keyEvent.KeyType == KeyType.RegularKey)
+			if (keyEvent.KeyType == KeyType.RegularKey && keyEvent.KeyPress == KeyEvent.KeyPressType.Make)
 			{
-				if (keyEvent.KeyPress == KeyEvent.KeyPressType.Make)
-				{
-					var key = new Key();
-					key.KeyType = keyEvent.KeyType;
-					key.Character = keyEvent.Character;
-					key.Alt = Alt;
-					key.Control = Control;
-					key.Shift = Shift;
-					return key;
-				}
+				var key = new Key();
+				key.KeyType = keyEvent.KeyType;
+				key.Character = keyEvent.Character;
+				key.Alt = Alt;
+				key.Control = Control;
+				key.Shift = Shift;
+				return key;
 			}
 
 			if (keyEvent.KeyType == KeyType.CapsLock)
