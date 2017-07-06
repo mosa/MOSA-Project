@@ -42,9 +42,18 @@ namespace Mosa.Utility.Launcher
 		{
 			var process = LaunchVM();
 
+			if (Options.LaunchMosaDebugger)
+			{
+				LaunchMosaDebugger();
+			}
 			if (Options.LaunchGDB)
 			{
 				LaunchGDB();
+			}
+			if (!Options.ExitOnLaunch)
+			{
+				var output = GetOutput(process);
+				AddOutput(output);
 			}
 
 			return process;
@@ -54,9 +63,9 @@ namespace Mosa.Utility.Launcher
 		{
 			switch (Options.Emulator)
 			{
-				case EmulatorType.Qemu: return LaunchQemu(!Options.ExitOnLaunch);
-				case EmulatorType.Bochs: return LaunchBochs(!Options.ExitOnLaunch);
-				case EmulatorType.VMware: return LaunchVMwarePlayer(!Options.ExitOnLaunch);
+				case EmulatorType.Qemu: return LaunchQemu(false);
+				case EmulatorType.Bochs: return LaunchBochs(false);
+				case EmulatorType.VMware: return LaunchVMwarePlayer(false);
 				default: throw new InvalidOperationException();
 			}
 		}
@@ -189,6 +198,13 @@ namespace Mosa.Utility.Launcher
 			string arg = Quote(configfile);
 
 			return LaunchApplication(AppLocations.VMwarePlayer, arg, getOutput);
+		}
+
+		private void LaunchMosaDebugger()
+		{
+			string arg = " -debugfile " + Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".debug");
+			arg = arg + " -port 1234";
+			LaunchApplication("Mosa.Tool.GDBDebugger.exe", arg);
 		}
 
 		private void LaunchGDB()

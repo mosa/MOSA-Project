@@ -6,6 +6,7 @@ using Mosa.Tool.GDBDebugger.View;
 using Mosa.Utility.Launcher;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
@@ -32,6 +33,7 @@ namespace Mosa.Tool.GDBDebugger
 		private SymbolView symbolView;
 		private WatchView watchView;
 		private BreakPointView breakPointView;
+		private MethodView methodView;
 
 		//private ScriptView scriptView;
 
@@ -70,6 +72,7 @@ namespace Mosa.Tool.GDBDebugger
 			watchView = new WatchView(this);
 			breakPointView = new BreakPointView(this);
 			instructionView = new InstructionView(this);
+			methodView = new MethodView(this);
 
 			//scriptView = new ScriptView(this);
 
@@ -103,6 +106,8 @@ namespace Mosa.Tool.GDBDebugger
 			symbolView.Show(dockPanel, DockState.Document);
 
 			instructionView.Show(symbolView.PanelPane, DockAlignment.Right, 0.35);
+
+			methodView.Show(instructionView.PanelPane, instructionView);
 
 			registersView.Show();
 
@@ -304,9 +309,12 @@ namespace Mosa.Tool.GDBDebugger
 
 		public void AddBreakPoint(BreakPoint breakpoint)
 		{
-			BreakPoints.Add(breakpoint);
-			GDBConnector.AddBreakPoint(breakpoint.Address);
-			NotifyBreakPointChange();
+			if (!BreakPoints.Any(b => b.Address == breakpoint.Address))
+			{
+				BreakPoints.Add(breakpoint);
+				GDBConnector.AddBreakPoint(breakpoint.Address);
+				NotifyBreakPointChange();
+			}
 		}
 
 		public void AddBreakPoint(ulong address, string name, string description = null)

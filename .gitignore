@@ -35,6 +35,7 @@ Thumbs.db
 build.force
 /tmp
 /tags
+/.vs/
 
 # NuGet Packages
 *.nupkg
