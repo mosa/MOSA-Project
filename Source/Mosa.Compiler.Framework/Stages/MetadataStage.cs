@@ -6,6 +6,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -43,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)stream.Position, SectionKind.ROData, "System.String" + Metadata.TypeDefinition, 0);
 			stream.WriteZeroBytes(TypeLayout.NativePointerSize * 2);
 			stream.Write(value.Length, TypeLayout.NativePointerSize);
-			stream.Write(System.Text.UnicodeEncoding.Unicode.GetBytes(value));
+			stream.Write(UnicodeEncoding.Unicode.GetBytes(value));
 			return symbol;
 		}
 

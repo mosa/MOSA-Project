@@ -2,7 +2,7 @@
 
 namespace Mosa.Tool.GDBDebugger.DebugData
 {
-	public class Section
+	public class SectionInfo
 	{
 		public uint Offset { get; set; }
 		public ulong Address { get; set; }

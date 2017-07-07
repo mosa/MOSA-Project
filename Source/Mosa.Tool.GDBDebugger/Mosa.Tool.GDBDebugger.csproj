@@ -71,6 +71,9 @@
     <Compile Include="ConnectWindow.Designer.cs">
       <DependentUpon>ConnectWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="DebugData\ParameterInfo.cs" />
+    <Compile Include="DebugData\MethodInfo.cs" />
+    <Compile Include="DebugData\TypeInfo.cs" />
     <Compile Include="DebugQemuWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -125,9 +128,9 @@
     </Compile>
     <Compile Include="DebugData\LoadDebugData.cs" />
     <Compile Include="DebugData\DebugSource.cs" />
-    <Compile Include="DebugData\Section.cs" />
-    <Compile Include="DebugData\Instruction.cs" />
-    <Compile Include="DebugData\Symbol.cs" />
+    <Compile Include="DebugData\SectionInfo.cs" />
+    <Compile Include="DebugData\InstructionInfo.cs" />
+    <Compile Include="DebugData\SymbolInfo.cs" />
     <Compile Include="GDB\X86Platform.cs" />
     <Compile Include="GDB\BasePlatform.cs" />
     <Compile Include="GDB\Register.cs" />

@@ -7,47 +7,64 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 {
 	public class DebugSource
 	{
-		protected Dictionary<ulong, Instruction> InstructionLookup = new Dictionary<ulong, Instruction>();
-		protected KeyedList<ulong, Symbol> SymbolLookup = new KeyedList<ulong, Symbol>();
+		protected Dictionary<ulong, InstructionInfo> InstructionLookup = new Dictionary<ulong, InstructionInfo>();
+		protected KeyedList<ulong, SymbolInfo> SymbolLookup = new KeyedList<ulong, SymbolInfo>();
 
-		public List<Symbol> Symbols { get; private set; } = new List<Symbol>();
-		public List<Section> Sections { get; private set; } = new List<Section>();
+		public List<SymbolInfo> Symbols { get; } = new List<SymbolInfo>();
+		public List<SectionInfo> Sections { get; } = new List<SectionInfo>();
 
-		public void Add(Symbol symbol)
+		public List<TypeInfo> Types { get; } = new List<TypeInfo>();
+		public List<MethodInfo> Methods { get; } = new List<MethodInfo>();
+		public List<ParameterInfo> Parameters { get; } = new List<ParameterInfo>();
+
+		public void Add(SymbolInfo symbol)
 		{
 			Symbols.Add(symbol);
 			SymbolLookup.Add(symbol.Address, symbol);
 		}
 
-		public void Add(Instruction instruction)
+		public void Add(InstructionInfo instruction)
 		{
 			InstructionLookup.Add(instruction.Address, instruction);
 		}
 
-		public void Add(Section section)
+		public void Add(SectionInfo section)
 		{
 			Sections.Add(section);
 		}
 
-		public List<Symbol> GetSymbolsStartingAt(ulong address)
+		public void Add(TypeInfo section)
 		{
-			var symbol = SymbolLookup[address];
-
-			return symbol;
+			Types.Add(section);
 		}
 
-		public Instruction GetInstruction(ulong address)
+		public void Add(MethodInfo section)
 		{
-			Instruction instruction = null;
+			Methods.Add(section);
+		}
+
+		public void Add(ParameterInfo section)
+		{
+			Parameters.Add(section);
+		}
+
+		public List<SymbolInfo> GetSymbolsStartingAt(ulong address)
+		{
+			return SymbolLookup[address];
+		}
+
+		public InstructionInfo GetInstruction(ulong address)
+		{
+			InstructionInfo instruction = null;
 
 			InstructionLookup.TryGetValue(address, out instruction);
 
 			return instruction;
 		}
 
-		public List<Symbol> GetSymbols(ulong address)
+		public List<SymbolInfo> GetSymbols(ulong address)
 		{
-			List<Symbol> symbols = new List<Symbol>();
+			var symbols = new List<SymbolInfo>();
 
 			foreach (var symbol in Symbols)
 			{
@@ -60,7 +77,7 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 			return symbols;
 		}
 
-		public Symbol GetFirstSymbol(ulong address)
+		public SymbolInfo GetFirstSymbol(ulong address)
 		{
 			foreach (var symbol in Symbols)
 			{

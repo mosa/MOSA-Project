@@ -33,11 +33,11 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 							if (parts[0].StartsWith("Address"))
 								continue;
 
-							var section = new Section()
+							var section = new SectionInfo()
 							{
 								Address = parts[0].ParseHex(),
-								Offset = (uint)parts[1].ParseHex(),
-								Size = (int)parts[2].ParseHex(),
+								Offset = parts[1].ToUInt32(),
+								Size = parts[2].ToInt32(),
 								Kind = parts[3],
 								Name = parts[4],
 							};
@@ -51,11 +51,11 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 							if (parts[0].StartsWith("Address"))
 								continue;
 
-							var symbol = new Symbol()
+							var symbol = new SymbolInfo()
 							{
 								Address = parts[0].ParseHex(),
-								Offset = (uint)parts[1].ParseHex(),
-								Length = (int)parts[2].ParseHex(),
+								Offset = parts[1].ToUInt32(),
+								Length = parts[2].ToInt32(),
 								Kind = parts[3],
 								Name = parts[4],
 							};
@@ -63,6 +63,68 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 							debugSource.Add(symbol);
 							continue;
 						}
+
+					case "[Types]":
+						{
+							if (parts[0].StartsWith("TypeDef"))
+								continue;
+
+							var type = new TypeInfo()
+							{
+								DefAddress = parts[0].ParseHex(),
+								Size = parts[1].ToUInt32(),
+								FullName = parts[2],
+								BaseType = parts[3],
+								DeclaringType = parts[4],
+								ElementType = parts[5],
+							};
+
+							debugSource.Add(type);
+							continue;
+						}
+
+					case "[Methods]":
+						{
+							if (parts[0].StartsWith("Address"))
+								continue;
+
+							var method = new MethodInfo()
+							{
+								Address = parts[0].ParseHex(),
+								Size = parts[1].ToUInt32(),
+								DefAddress = parts[2].ParseHex(),
+								FullName = parts[3],
+								Type = parts[4],
+								ReturnType = parts[5],
+								StackSize = parts[6].ToUInt32(),
+								ParameterStackSize = parts[7].ToUInt32(),
+								Attributes = parts[8].ToUInt32(),
+							};
+
+							debugSource.Add(method);
+							continue;
+						}
+
+					case "[Parameters]":
+						{
+							if (parts[0].StartsWith("Index"))
+								continue;
+
+							var parameter = new ParameterInfo()
+							{
+								Index = parts[0].ToUInt32(),
+								Offset = parts[1].ToUInt32(),
+								FullName = parts[2],
+								Name = parts[3],
+								Type = parts[4],
+								Method = parts[5],
+								Attributes = parts[6].ToUInt32(),
+							};
+
+							debugSource.Add(parameter);
+							continue;
+						}
+
 					default: continue;
 				}
 			}

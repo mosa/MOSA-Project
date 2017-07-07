@@ -2,7 +2,7 @@
 
 namespace Mosa.Tool.GDBDebugger.DebugData
 {
-	public class Instruction
+	public class InstructionInfo
 	{
 		public ulong Address { get; set; }
 		public uint Size { get; set; }
