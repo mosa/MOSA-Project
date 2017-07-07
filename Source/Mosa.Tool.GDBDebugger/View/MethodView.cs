@@ -136,7 +136,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private void UpdateBuffer(ulong address, byte[] memory)
 		{
-			int offset = 0;
+			int offset = (int)(address - methodSymbol.Address);
 
 			for (int i = 0; i < memory.Length; i++)
 			{
