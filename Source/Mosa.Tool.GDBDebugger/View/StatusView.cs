@@ -35,7 +35,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			var symbol = DebugSource.GetFirstSymbol(Platform.InstructionPointer.Value);
 
-			tbMethod.Text = symbol == null ? string.Empty : symbol.Name;
+			tbMethod.Text = symbol == null ? string.Empty : symbol.CommonName;
 		}
 
 		private void OnMemoryRead(ulong address, byte[] bytes)

@@ -96,16 +96,21 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			GDBClient = null;
 		}
 
-		public void ExtendedMode()
+		public void ClearAllBreakPoints()
 		{
-			var command = new ExtendedMode();
+			GetReasonHalted();
+		}
+
+		public void GetReasonHalted()
+		{
+			var command = new GetReasonHalted();
 
 			GDBClient.SendCommandAsync(command);
 		}
 
-		public void Restart()
+		public void ExtendedMode()
 		{
-			var command = new Reset();
+			var command = new ExtendedMode();
 
 			GDBClient.SendCommandAsync(command);
 		}
