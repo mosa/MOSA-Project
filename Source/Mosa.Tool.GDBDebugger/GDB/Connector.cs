@@ -135,8 +135,18 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 		public void AddBreakPoint(ulong address)
 		{
-			var command = new SetBreakPoint(address, 4, 0);
-			GDBClient.SendCommandAsync(command);
+			
+			if (IsRunning)
+			{
+				Break();
+				var command = new SetBreakPoint(address, 4, 0, OnAddBreakpoint);
+				GDBClient.SendCommandAsync(command);
+			}
+			else
+			{
+				var command = new SetBreakPoint(address, 4, 0);
+				GDBClient.SendCommandAsync(command);
+			}
 		}
 
 		public void ClearBreakPoint(ulong address)
@@ -192,6 +202,11 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			GDBClient.SendCommandAsync(command);
 		}
 
+		private void OnAddBreakpoint(GDBCommand command)
+		{
+			Continue();
+		}
+
 		private void OnStop(GDBCommand command)
 		{
 			IsPaused = true;
@@ -201,8 +216,6 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 		private void OnStep(GDBCommand command)
 		{
-			IsPaused = true;
-
 			GetRegisters();
 
 			CallOnRunning();
