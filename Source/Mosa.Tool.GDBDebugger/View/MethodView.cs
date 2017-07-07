@@ -12,7 +12,7 @@ namespace Mosa.Tool.GDBDebugger.View
 	public partial class MethodView : DebugDockContent
 	{
 		private BindingList<MethodInstructionEntry> instructions = new BindingList<MethodInstructionEntry>();
-		private Symbol methodSymbol;
+		private SymbolInfo methodSymbol;
 		private byte[] buffer;
 		private List<ulong> addresses = new List<ulong>();
 
@@ -93,7 +93,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			}
 		}
 
-		private void Query(Symbol symbol)
+		private void Query(SymbolInfo symbol)
 		{
 			if (!IsConnected || !IsPaused)
 				return;

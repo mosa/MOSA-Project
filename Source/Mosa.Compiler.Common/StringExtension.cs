@@ -33,5 +33,25 @@ namespace Mosa.Compiler.Common
 
 			return Convert.ToUInt64(value, 16);
 		}
+
+		public static int ToInt32(this string value)
+		{
+			return Convert.ToInt32(value);
+		}
+
+		public static uint ToUInt32(this string value)
+		{
+			return Convert.ToUInt32(value);
+		}
+
+		public static long ToInt64(this string value)
+		{
+			return Convert.ToInt64(value);
+		}
+
+		public static ulong ToUInt64(this string value)
+		{
+			return Convert.ToUInt64(value);
+		}
 	}
 }

@@ -24,9 +24,9 @@ namespace Mosa.Tool.GDBDebugger.View
 			//public string FullName { get { return Symbol.Name; } }
 
 			[Browsable(false)]
-			public Symbol Symbol { get; }
+			public SymbolInfo Symbol { get; }
 
-			public SymbolEntry(Symbol symbol)
+			public SymbolEntry(SymbolInfo symbol)
 			{
 				Symbol = symbol;
 			}
