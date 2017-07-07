@@ -31,7 +31,7 @@ namespace Mosa.Tool.GDBDebugger.View
 		{
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.tbMemory = new System.Windows.Forms.ToolStripTextBox();
+            this.tbAddress = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.lbMemory = new System.Windows.Forms.TextBox();
@@ -43,7 +43,7 @@ namespace Mosa.Tool.GDBDebugger.View
             this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
-            this.tbMemory,
+            this.tbAddress,
             this.toolStripSeparator1,
             this.toolStripButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -55,18 +55,18 @@ namespace Mosa.Tool.GDBDebugger.View
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(55, 22);
-            this.toolStripLabel1.Text = "Memory:";
+            this.toolStripLabel1.Size = new System.Drawing.Size(52, 22);
+            this.toolStripLabel1.Text = "Address:";
             // 
-            // tbMemory
+            // tbAddress
             // 
-            this.tbMemory.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.tbMemory.MaxLength = 20;
-            this.tbMemory.Name = "tbMemory";
-            this.tbMemory.Size = new System.Drawing.Size(100, 25);
-            this.tbMemory.Text = "0x200000";
-            this.tbMemory.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.tbMemory.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbMemory_KeyDown);
+            this.tbAddress.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.tbAddress.MaxLength = 20;
+            this.tbAddress.Name = "tbAddress";
+            this.tbAddress.Size = new System.Drawing.Size(100, 25);
+            this.tbAddress.Text = "0x200000";
+            this.tbAddress.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbAddress.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbMemory_KeyDown);
             // 
             // toolStripSeparator1
             // 
@@ -115,7 +115,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private System.Windows.Forms.ToolStrip toolStrip1;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel1;
-		private System.Windows.Forms.ToolStripTextBox tbMemory;
+		private System.Windows.Forms.ToolStripTextBox tbAddress;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
 		private System.Windows.Forms.TextBox lbMemory;

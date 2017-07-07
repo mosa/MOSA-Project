@@ -15,7 +15,9 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private void btnStep_Click(object sender, EventArgs e)
 		{
+			GDBConnector.ClearAllBreakPoints();
 			GDBConnector.Step();
+			MainForm.ResendBreakPoints();
 		}
 
 		private void btnStepN_Click(object sender, EventArgs e)
@@ -30,16 +32,31 @@ namespace Mosa.Tool.GDBDebugger.View
 				MessageBox.Show($"Invalid input, '{tbSteps.Text}' is not a valid number.");
 				return;
 			}
-			GDBConnector.StepN(steps);
+
+			if (steps == 0)
+				return;
+
+			GDBConnector.ClearAllBreakPoints();
+			GDBConnector.Step();
+			MainForm.ResendBreakPoints();
+
+			if (steps <= 1)
+				return;
+
+			GDBConnector.StepN(steps - 1);
 		}
 
 		private void btnRestart_Click(object sender, EventArgs e)
 		{
-			GDBConnector.Restart();
+			// ???
 		}
 
 		private void btnStart_Click(object sender, EventArgs e)
 		{
+			GDBConnector.ClearAllBreakPoints();
+			GDBConnector.Step();
+			MainForm.ResendBreakPoints();
+
 			GDBConnector.Continue();
 		}
 

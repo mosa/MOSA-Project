@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using SharpDisasm;
-using System.Collections.Generic;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -79,10 +79,11 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			using (var disasm = new Disassembler(memory, mode, address, true, Vendor.Any))
 			{
-				var translator = new SharpDisasm.Translators.IntelTranslator();
-
-				translator.IncludeAddress = false;
-				translator.IncludeBinary = false;
+				var translator = new SharpDisasm.Translators.IntelTranslator()
+				{
+					IncludeAddress = false,
+					IncludeBinary = false
+				};
 
 				foreach (var instruction in disasm.Disassemble())
 				{
@@ -101,6 +102,30 @@ namespace Mosa.Tool.GDBDebugger.View
 		private void toolStripButton1_Click(object sender, System.EventArgs e)
 		{
 			Query();
+		}
+
+		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Right)
+				return;
+
+			if (e.RowIndex < 0 || e.ColumnIndex < 0)
+				return;
+
+			dataGridView1.ClearSelection();
+			dataGridView1.Rows[e.RowIndex].Selected = true;
+			var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
+
+			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as InstructionEntry;
+
+			var menu = new MenuItem(clickedEntry.Address + " - " + clickedEntry.Instruction);
+			menu.Enabled = false;
+			var m = new ContextMenu();
+			m.MenuItems.Add(menu);
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.Address });
+			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MainForm.OnAddBreakPoint)) { Tag = new AddBreakPointArgs(null, clickedEntry.IP, clickedEntry.Instruction) });
+
+			m.Show(dataGridView1, relativeMousePosition);
 		}
 	}
 }

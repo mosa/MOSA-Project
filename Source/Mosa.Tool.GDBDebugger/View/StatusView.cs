@@ -35,7 +35,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			var symbol = DebugSource.GetFirstSymbol(Platform.InstructionPointer.Value);
 
-			tbMethod.Text = symbol == null ? string.Empty : symbol.Name;
+			tbMethod.Text = symbol == null ? string.Empty : symbol.CommonName;
 		}
 
 		private void OnMemoryRead(ulong address, byte[] bytes)
@@ -59,10 +59,11 @@ namespace Mosa.Tool.GDBDebugger.View
 			{
 				using (var disasm = new Disassembler(memory, mode, address, true))
 				{
-					var translator = new SharpDisasm.Translators.IntelTranslator();
-
-					translator.IncludeAddress = false;
-					translator.IncludeBinary = false;
+					var translator = new SharpDisasm.Translators.IntelTranslator()
+					{
+						IncludeAddress = false,
+						IncludeBinary = false
+					};
 
 					foreach (var instruction in disasm.Disassemble())
 					{

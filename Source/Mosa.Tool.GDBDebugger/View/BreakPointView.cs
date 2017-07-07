@@ -58,14 +58,10 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (dataGridView1.CurrentCell == null)
 				return;
 
-			var row = dataGridView1.CurrentCell.OwningRow.DataBoundItem;
+			var clickedEntry = dataGridView1.CurrentCell.OwningRow.DataBoundItem as BreakPointEntry;
 
-			var breakPointEntry = row as BreakPointEntry;
-
-			MainForm.RemoveBreakPoint(breakPointEntry.BreakPoint);
+			MainForm.RemoveBreakPoint(clickedEntry.BreakPoint);
 		}
-
-		private BreakPointEntry clickedBreakPointEntry = null;
 
 		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
@@ -75,35 +71,26 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (e.RowIndex < 0 || e.ColumnIndex < 0)
 				return;
 
-			var row = dataGridView1.Rows[e.RowIndex].DataBoundItem as BreakPointEntry;
-
-			clickedBreakPointEntry = row;
-
+			dataGridView1.ClearSelection();
+			dataGridView1.Rows[e.RowIndex].Selected = true;
 			var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
 
-			var menu = new MenuItem(row.Name);
+			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as BreakPointEntry;
+
+			var menu = new MenuItem(clickedEntry.Address + " - " + clickedEntry.Name);
 			menu.Enabled = false;
 			var m = new ContextMenu();
 			m.MenuItems.Add(menu);
-			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MenuItem3_Click)));
-			m.MenuItems.Add(new MenuItem("&Delete breakpoint", new EventHandler(MenuItem1_Click)));
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.Name });
+			m.MenuItems.Add(new MenuItem("&Delete breakpoint", new EventHandler(MainForm.OnRemoveBreakPoint)) { Tag = clickedEntry.BreakPoint });
+
 			m.Show(dataGridView1, relativeMousePosition);
 		}
 
-		private void MenuItem1_Click(Object sender, EventArgs e)
+		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			if (clickedBreakPointEntry == null)
-				return;
-
-			MainForm.RemoveBreakPoint(clickedBreakPointEntry.BreakPoint);
-		}
-
-		private void MenuItem3_Click(Object sender, EventArgs e)
-		{
-			if (clickedBreakPointEntry == null)
-				return;
-
-			Clipboard.SetText(clickedBreakPointEntry.Name);
+			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
+			MainForm.AddBreakPoint(address);
 		}
 	}
 }

@@ -6,7 +6,6 @@ using Mosa.Tool.GDBDebugger.View;
 using Mosa.Utility.Launcher;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -34,6 +33,7 @@ namespace Mosa.Tool.GDBDebugger
 		private SymbolView symbolView;
 		private WatchView watchView;
 		private BreakPointView breakPointView;
+		private MethodView methodView;
 
 		//private ScriptView scriptView;
 
@@ -72,6 +72,7 @@ namespace Mosa.Tool.GDBDebugger
 			watchView = new WatchView(this);
 			breakPointView = new BreakPointView(this);
 			instructionView = new InstructionView(this);
+			methodView = new MethodView(this);
 
 			//scriptView = new ScriptView(this);
 
@@ -105,6 +106,8 @@ namespace Mosa.Tool.GDBDebugger
 			symbolView.Show(dockPanel, DockState.Document);
 
 			instructionView.Show(symbolView.PanelPane, DockAlignment.Right, 0.35);
+
+			methodView.Show(instructionView.PanelPane, instructionView);
 
 			registersView.Show();
 
@@ -253,6 +256,8 @@ namespace Mosa.Tool.GDBDebugger
 			}
 
 			GDBConnector.ExtendedMode();
+			GDBConnector.ClearAllBreakPoints();
+			ResendBreakPoints();
 		}
 
 		private void btnViewMemory_Click(object sender, EventArgs e)
@@ -261,9 +266,51 @@ namespace Mosa.Tool.GDBDebugger
 			memoryView.Show(dockPanel, DockState.Document);
 		}
 
+		public void ResendBreakPoints()
+		{
+			foreach (var breakpoint in BreakPoints)
+			{
+				GDBConnector.AddBreakPoint(breakpoint.Address);
+			}
+		}
+
+		public string CreateBreakPointName(ulong address)
+		{
+			var list = DebugSource.GetSymbolsStartingAt(address);
+
+			if (list != null && list.Count >= 1)
+			{
+				return list[0].CommonName;
+			}
+			else
+			{
+				var first = DebugSource.GetFirstSymbol(address);
+
+				if (first != null)
+				{
+					int delta = (int)(address - first.Address);
+					return "0x" + delta.ToString("X2") + "+" + first.CommonName;
+				}
+			}
+
+			return string.Empty;
+		}
+
+		public string CreateWatchName(ulong address)
+		{
+			var list = DebugSource.GetSymbolsStartingAt(address);
+
+			if (list != null && list.Count >= 1)
+			{
+				return list[0].CommonName;
+			}
+
+			return string.Empty;
+		}
+
 		public void AddBreakPoint(BreakPoint breakpoint)
 		{
-			if(!BreakPoints.Any(b => b.Address == breakpoint.Address))
+			if (!BreakPoints.Any(b => b.Address == breakpoint.Address))
 			{
 				BreakPoints.Add(breakpoint);
 				GDBConnector.AddBreakPoint(breakpoint.Address);
@@ -271,8 +318,18 @@ namespace Mosa.Tool.GDBDebugger
 			}
 		}
 
-		public void AddBreakPoint(ulong address, string name = null)
+		public void AddBreakPoint(ulong address, string name, string description = null)
 		{
+			if (string.IsNullOrWhiteSpace(name))
+				name = CreateBreakPointName(address);
+
+			var breakpoint = new BreakPoint(name, address, description);
+			AddBreakPoint(breakpoint);
+		}
+
+		public void AddBreakPoint(ulong address)
+		{
+			string name = CreateBreakPointName(address);
 			var breakpoint = new BreakPoint(name, address);
 			AddBreakPoint(breakpoint);
 		}
@@ -292,6 +349,9 @@ namespace Mosa.Tool.GDBDebugger
 
 		public void AddWatch(string name, ulong address, int size, bool signed = false)
 		{
+			if (string.IsNullOrWhiteSpace(name))
+				name = CreateWatchName(address);
+
 			var watch = new Watch(name, address, size, signed);
 			AddWatch(watch);
 		}
@@ -300,6 +360,48 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			Watchs.Remove(watch);
 			NotifyWatchChange();
+		}
+
+		public void OnAddBreakPoint(Object sender, EventArgs e)
+		{
+			var args = (sender as System.Windows.Forms.Menu).Tag as AddBreakPointArgs;
+
+			if (string.IsNullOrWhiteSpace(args.Name))
+			{
+				AddBreakPoint(args.Address);
+			}
+			else
+			{
+				AddBreakPoint(args.Address, args.Name);
+			}
+		}
+
+		public void OnCopyToClipboard(Object sender, EventArgs e)
+		{
+			var text = (sender as System.Windows.Forms.Menu).Tag as string;
+
+			Clipboard.SetText(text);
+		}
+
+		public void OnRemoveBreakPoint(Object sender, EventArgs e)
+		{
+			var breakpoint = (sender as System.Windows.Forms.Menu).Tag as BreakPoint;
+
+			RemoveBreakPoint(breakpoint);
+		}
+
+		public void OnAddWatch(Object sender, EventArgs e)
+		{
+			var args = (sender as System.Windows.Forms.Menu).Tag as AddWatchArgs;
+
+			AddWatch(args.Name, args.Address, args.Length);
+		}
+
+		public void OnRemoveWatch(Object sender, EventArgs e)
+		{
+			var watch = (sender as System.Windows.Forms.Menu).Tag as Watch;
+
+			RemoveWatch(watch);
 		}
 	}
 }

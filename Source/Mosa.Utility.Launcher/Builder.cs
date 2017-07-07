@@ -340,12 +340,11 @@ namespace Mosa.Utility.Launcher
 
 		private void GenerateASMFile()
 		{
-			// Need a new instance of translator every time as they aren't thread safe
-			var translator = new IntelTranslator();
-
-			// Configure the translator to output instruction addresses and instruction binary as hex
-			translator.IncludeAddress = true;
-			translator.IncludeBinary = true;
+			var translator = new IntelTranslator()
+			{
+				IncludeAddress = true,
+				IncludeBinary = true
+			};
 
 			var asmfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".asm");
 

@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Tool.GDBDebugger.GDB;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
@@ -42,6 +43,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			dataGridView1.AutoResizeColumns();
 			dataGridView1.Columns[0].Width = 65;
 			dataGridView1.Columns[1].Width = 250;
+			cbLength.SelectedIndex = 2;
 		}
 
 		public override void OnPause()
@@ -88,6 +90,8 @@ namespace Mosa.Tool.GDBDebugger.View
 				watch.Value = ToLong(bytes, bytes.Length);
 				watch.HexValue = BasePlatform.ToHex(watch.Value, watch.Size);
 			}
+
+			Refresh();
 		}
 
 		private static ulong ToLong(byte[] bytes, int size)
@@ -119,11 +123,51 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (dataGridView1.CurrentCell == null)
 				return;
 
-			var row = dataGridView1.CurrentCell.OwningRow.DataBoundItem;
-
-			var watchEntry = row as WatchEntry;
+			var watchEntry = dataGridView1.CurrentCell.OwningRow.DataBoundItem as WatchEntry;
 
 			MainForm.RemoveWatch(watchEntry.Watch);
+		}
+
+		private void toolStripButton1_Click(object sender, System.EventArgs e)
+		{
+			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
+
+			int size = 0;
+
+			switch (cbLength.SelectedIndex)
+			{
+				case 0: size = 1; break;
+				case 1: size = 2; break;
+				case 2: size = 4; break;
+				case 3: size = 8; break;
+				default: size = 4; break;
+			}
+
+			MainForm.AddWatch(null, address, size);
+		}
+
+		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if (e.Button != MouseButtons.Right)
+				return;
+
+			if (e.RowIndex < 0 || e.ColumnIndex < 0)
+				return;
+
+			dataGridView1.ClearSelection();
+			dataGridView1.Rows[e.RowIndex].Selected = true;
+			var relativeMousePosition = dataGridView1.PointToClient(Cursor.Position);
+
+			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as WatchEntry;
+
+			var menu = new MenuItem(clickedEntry.HexValue + " - " + clickedEntry.Name);
+			menu.Enabled = false;
+			var m = new ContextMenu();
+			m.MenuItems.Add(menu);
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.Address });
+			m.MenuItems.Add(new MenuItem("&Delete watch", new EventHandler(MainForm.OnRemoveWatch)) { Tag = clickedEntry.Watch });
+
+			m.Show(dataGridView1, relativeMousePosition);
 		}
 	}
 }

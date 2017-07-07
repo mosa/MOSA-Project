@@ -8,15 +8,18 @@ namespace Mosa.Tool.GDBDebugger
 
 		public ulong Address { get; }
 
+		public string Description { get; private set; }
+
 		public BreakPoint(ulong address)
 		{
 			Address = address;
 		}
 
-		public BreakPoint(string name, ulong address)
+		public BreakPoint(string name, ulong address, string description = null)
 			: this(address)
 		{
 			Name = name;
+			Description = description;
 		}
 	}
 }
