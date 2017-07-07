@@ -9,5 +9,18 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 		public int Length { get; set; }
 		public string Kind { get; set; }
 		public string Name { get; set; }
+
+		public string CommonName
+		{
+			get
+			{
+				int pos = Name.IndexOf(' ');
+
+				if (pos <= 0)
+					return Name;
+
+				return Name.Substring(pos + 1);
+			}
+		}
 	}
 }

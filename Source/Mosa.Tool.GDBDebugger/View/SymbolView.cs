@@ -15,11 +15,13 @@ namespace Mosa.Tool.GDBDebugger.View
 		{
 			public string Address { get { return "0x" + Symbol.Address.ToString((Symbol.Address <= uint.MaxValue) ? "X4" : "X8"); } }
 
-			public string Name { get { return Symbol.Name; } }
+			public string Name { get { return Symbol.CommonName; } }
 
 			public string Kind { get { return Symbol.Kind; } }
 
 			public int Length { get { return Symbol.Length; } }
+
+			//public string FullName { get { return Symbol.Name; } }
 
 			[Browsable(false)]
 			public Symbol Symbol { get; }
@@ -71,7 +73,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			foreach (var symbol in MainForm.DebugSource.Symbols)
 			{
-				if (!(filter.Length == 0 || symbol.Name.Contains(filter)))
+				if (!(filter.Length == 0 || symbol.CommonName.Contains(filter)))
 					continue;
 
 				if (kind != string.Empty && symbol.Kind != kind)

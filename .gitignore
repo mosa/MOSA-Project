@@ -36,6 +36,7 @@ build.force
 /tmp
 /tags
 /.vs/
+/Tests/BootImage/
 
 # NuGet Packages
 *.nupkg
@@ -48,3 +49,4 @@ build.force
 
 # exclude test directory
 .test/
+

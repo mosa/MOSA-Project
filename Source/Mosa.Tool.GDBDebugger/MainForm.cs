@@ -256,6 +256,7 @@ namespace Mosa.Tool.GDBDebugger
 			}
 
 			GDBConnector.ExtendedMode();
+			GDBConnector.ClearAllBreakPoints();
 			ResendBreakPoints();
 		}
 
@@ -279,7 +280,7 @@ namespace Mosa.Tool.GDBDebugger
 
 			if (list != null && list.Count >= 1)
 			{
-				return list[0].Name;
+				return list[0].CommonName;
 			}
 			else
 			{
@@ -288,7 +289,7 @@ namespace Mosa.Tool.GDBDebugger
 				if (first != null)
 				{
 					int delta = (int)(address - first.Address);
-					return "0x" + delta.ToString("X2") + "+" + first.Name;
+					return "0x" + delta.ToString("X2") + "+" + first.CommonName;
 				}
 			}
 
@@ -301,7 +302,7 @@ namespace Mosa.Tool.GDBDebugger
 
 			if (list != null && list.Count >= 1)
 			{
-				return list[0].Name;
+				return list[0].CommonName;
 			}
 
 			return string.Empty;

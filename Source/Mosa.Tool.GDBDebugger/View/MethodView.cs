@@ -51,7 +51,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			var symbol = DebugSource.GetFirstSymbol(Platform.InstructionPointer.Value);
 
-			tbMethod.Text = symbol == null ? string.Empty : symbol.Name;
+			tbMethod.Text = symbol == null ? string.Empty : symbol.CommonName;
 
 			if (symbol != null)
 			{
@@ -136,7 +136,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private void UpdateBuffer(ulong address, byte[] memory)
 		{
-			int offset = (int)(methodSymbol.Address - address);
+			int offset = (int)(address - methodSymbol.Address);
 
 			for (int i = 0; i < memory.Length; i++)
 			{
