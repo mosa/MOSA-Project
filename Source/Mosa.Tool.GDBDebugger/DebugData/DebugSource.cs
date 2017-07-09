@@ -16,6 +16,11 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 		public List<TypeInfo> Types { get; } = new List<TypeInfo>();
 		public List<MethodInfo> Methods { get; } = new List<MethodInfo>();
 		public List<ParameterInfo> Parameters { get; } = new List<ParameterInfo>();
+		public List<FieldInfo> Fields { get; } = new List<FieldInfo>();
+
+		public Dictionary<ulong, TypeInfo> TypeDefLookup = new Dictionary<ulong, TypeInfo>();
+		public Dictionary<string, TypeInfo> TypeFullNameLookup = new Dictionary<string, TypeInfo>();
+		public Dictionary<string, MethodInfo> MethodFullNameLookup = new Dictionary<string, MethodInfo>();
 
 		public void Add(SymbolInfo symbol)
 		{
@@ -33,19 +38,39 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 			Sections.Add(section);
 		}
 
-		public void Add(TypeInfo section)
+		public void Add(TypeInfo type)
 		{
-			Types.Add(section);
+			Types.Add(type);
+
+			if (type.DefAddress != 0 && !TypeDefLookup.ContainsKey(type.DefAddress))
+			{
+				TypeDefLookup.Add(type.DefAddress, type);
+			}
+
+			if (!TypeFullNameLookup.ContainsKey(type.FullName))
+			{
+				TypeFullNameLookup.Add(type.FullName, type);
+			}
 		}
 
-		public void Add(MethodInfo section)
+		public void Add(MethodInfo method)
 		{
-			Methods.Add(section);
+			Methods.Add(method);
+
+			if (!MethodFullNameLookup.ContainsKey(method.FullName))
+			{
+				MethodFullNameLookup.Add(method.FullName, method);
+			}
 		}
 
-		public void Add(ParameterInfo section)
+		public void Add(ParameterInfo parameter)
 		{
-			Parameters.Add(section);
+			Parameters.Add(parameter);
+		}
+
+		public void Add(FieldInfo field)
+		{
+			Fields.Add(field);
 		}
 
 		public List<SymbolInfo> GetSymbolsStartingAt(ulong address)

@@ -39,6 +39,7 @@ namespace Mosa.Compiler.Framework.Stages
 				EmitTypes();
 				EmitMethods();
 				EmitParameters();
+				EmitFields();
 			}
 		}
 
@@ -131,11 +132,11 @@ namespace Mosa.Compiler.Framework.Stages
 						symbol.Size,
 						Linker.GetSymbol(method.FullName + Metadata.MethodDefinition, SectionKind.ROData).VirtualAddress,
 						method.FullName,
-						type.FullName,
 						method.Signature.ReturnType.FullName,
 						TypeLayout.GetMethodStackSize(method),
 						TypeLayout.GetMethodParameterStackSize(method),
-						(int)method.MethodAttributes
+						(int)method.MethodAttributes,
+						type.FullName
 					);
 				}
 			}
@@ -164,10 +165,45 @@ namespace Mosa.Compiler.Framework.Stages
 							parameter.FullName,
 							parameter.Name,
 							parameter.ParameterType.FullName,
-							method.FullName,
-							(int)parameter.ParameterAttributes
+							(int)parameter.ParameterAttributes,
+							method.FullName
 						);
 					}
+				}
+			}
+		}
+
+		private void EmitFields()
+		{
+			writer.WriteLine("[Fields]");
+			writer.WriteLine("Index\tFullName\tName\tFieldType\tAddress\tAttributes\tOffset\tDataLength\tDataAddress\tType");
+
+			foreach (var type in TypeSystem.AllTypes)
+			{
+				if (type.IsModule)
+					continue;
+
+				int index = 0;
+
+				foreach (var field in type.Fields)
+				{
+					var symbol = Linker.GetSymbol(field.FullName + Metadata.FieldDefinition, SectionKind.ROData);
+
+					//var datasection = (field.Data != null) ? SectionKind.ROData : SectionKind.BSS; // not used yet
+
+					writer.WriteLine(
+						"{0}\t{1}\t{2}\t{3}\t{4:x8}\t{5}\t{6}\t{7}\t{8:x8}\t{9}",
+						index++,
+						field.FullName,
+						field.Name,
+						field.FieldType.FullName,
+						symbol != null ? symbol.VirtualAddress : 0,
+						(int)field.FieldAttributes,
+						field.IsStatic && !field.IsLiteral ? 0 : TypeLayout.GetFieldOffset(field),  // todo: missing first offset
+						field.Data != null ? field.Data.Length : 0,
+						0, // todo: DataAddress
+						type.FullName
+					);
 				}
 			}
 		}

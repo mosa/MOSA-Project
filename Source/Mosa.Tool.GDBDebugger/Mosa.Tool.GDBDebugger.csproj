@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="DebugData\ParameterInfo.cs" />
     <Compile Include="DebugData\MethodInfo.cs" />
+    <Compile Include="DebugData\FieldInfo.cs" />
     <Compile Include="DebugData\TypeInfo.cs" />
     <Compile Include="DebugQemuWindow.cs">
       <SubType>Form</SubType>

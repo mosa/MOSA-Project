@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.13
+VisualStudioVersion = 15.0.26430.15
 MinimumVisualStudioVersion = 12.0.31101.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{AB88960E-B233-475B-96E4-8C10EEF8622C}"
 EndProject
@@ -25,6 +25,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Screenshots", "Screenshots", "{D30D7194-59AD-4B6F-8DB9-F1CCE0483E99}"
 	ProjectSection(SolutionItems) = preProject
 		..\Documentation\Screenshots\MOSA Debugger.png = ..\Documentation\Screenshots\MOSA Debugger.png
+		..\Documentation\Screenshots\MOSA GDB Debugger.png = ..\Documentation\Screenshots\MOSA GDB Debugger.png
 		..\Documentation\Screenshots\MOSA Launcher Output.png = ..\Documentation\Screenshots\MOSA Launcher Output.png
 		..\Documentation\Screenshots\MOSA Launcher.png = ..\Documentation\Screenshots\MOSA Launcher.png
 		..\Documentation\Screenshots\MOSA QEMU CoolWorld.png = ..\Documentation\Screenshots\MOSA QEMU CoolWorld.png
