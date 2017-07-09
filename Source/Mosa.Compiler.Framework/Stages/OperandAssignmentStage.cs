@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Trace;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,19 +14,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class OperandAssignmentStage : BaseMethodCompilerStage
 	{
-		/// <summary>
-		///
-		/// </summary>
 		private sealed class WorkItem
 		{
-			/// <summary>
-			///
-			/// </summary>
 			public BasicBlock Block;
-
-			/// <summary>
-			///
-			/// </summary>
 			public Stack<Operand> IncomingStack;
 
 			/// <summary>
@@ -40,44 +31,24 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		///
-		/// </summary>
 		private Queue<WorkItem> workList;
-
-		/// <summary>
-		///
-		/// </summary>
 		private BitArray processed;
-
-		/// <summary>
-		///
-		/// </summary>
 		private BitArray enqueued;
-
-		/// <summary>
-		///
-		/// </summary>
 		private Stack<Operand>[] outgoingStack;
-
-		/// <summary>
-		///
-		/// </summary>
 		private Stack<Operand>[] scheduledMoves;
-
-		/// <summary>
-		/// The dup nodes
-		/// </summary>
 		private List<InstructionNode> dupNodes;
+		private TraceLog trace;
 
 		protected override void Run()
 		{
 			if (MethodCompiler.Method.Code.Count == 0)
 				return;
 
+			trace = CreateTraceLog();
+
 			workList = new Queue<WorkItem>();
 
-			foreach (BasicBlock headBlock in BasicBlocks.HeadBlocks)
+			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
 				Trace(headBlock);
 			}
@@ -93,6 +64,7 @@ namespace Mosa.Compiler.Framework.Stages
 			processed = null;
 			enqueued = null;
 			dupNodes = null;
+			trace = null;
 		}
 
 		/// <summary>
@@ -128,10 +100,26 @@ namespace Mosa.Compiler.Framework.Stages
 
 			operandStack = CreateMovesForIncomingStack(block, operandStack);
 
-			//System.Diagnostics.Debug.WriteLine("IN:    Block: " + block.Label + " Operand Stack Count: " + operandStack.Count);
+			if (trace.Active)
+			{
+				trace.Log("IN:    Block: " + block + " Operand Stack Count: " + operandStack.Count.ToString());
+				foreach (var op in operandStack)
+				{
+					trace.Log("       -> " + op);
+				}
+			}
+
 			AssignOperands(block, operandStack);
 
-			//System.Diagnostics.Debug.WriteLine("AFTER: Block: " + block.Label + " Operand Stack Count: " + operandStack.Count);
+			if (trace.Active)
+			{
+				trace.Log("AFTER: Block: " + block + " Operand Stack Count: " + operandStack.Count.ToString());
+				foreach (var op in operandStack)
+				{
+					trace.Log("       -> " + op);
+				}
+			}
+
 			operandStack = CreateScheduledMoves(block, operandStack);
 
 			outgoingStack[block.Sequence] = operandStack;
@@ -243,7 +231,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.GotoPrevious();
 
-			while ((context.Instruction.FlowControl == FlowControl.ConditionalBranch || context.Instruction.FlowControl == FlowControl.UnconditionalBranch || context.Instruction.FlowControl == FlowControl.Return) || context.Instruction == IRInstruction.Jmp)
+			while (context.Instruction.FlowControl == FlowControl.ConditionalBranch
+				|| context.Instruction.FlowControl == FlowControl.UnconditionalBranch
+				|| context.Instruction.FlowControl == FlowControl.Return
+				|| context.Instruction == IRInstruction.Jmp)
 			{
 				context.GotoPrevious();
 			}
@@ -288,16 +279,17 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="currentStack">The current stack.</param>
 		private void PushResultOperands(Context ctx, Stack<Operand> currentStack)
 		{
-			if (ctx.Instruction != IRInstruction.ExceptionStart && ctx.Instruction != IRInstruction.FilterStart)
-				if (!(ctx.Instruction as BaseCILInstruction).PushResult)
-					return;
+			if (ctx.Instruction != IRInstruction.ExceptionStart &&
+				ctx.Instruction != IRInstruction.FilterStart &&
+				!(ctx.Instruction as BaseCILInstruction).PushResult)
+				return;
 
 			if (ctx.ResultCount == 0)
 				return;
 
 			currentStack.Push(ctx.Result);
 
-			if (ctx.Instruction is CIL.DupInstruction)
+			if (ctx.Instruction is DupInstruction)
 			{
 				currentStack.Push(ctx.Result);
 				if (dupNodes == null)
@@ -319,7 +311,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var node in dupNodes)
 			{
-				Debug.Assert(node.Instruction is CIL.DupInstruction);
+				Debug.Assert(node.Instruction is DupInstruction);
 				Debug.Assert(node.Result == node.Operand1);
 
 				node.Empty();

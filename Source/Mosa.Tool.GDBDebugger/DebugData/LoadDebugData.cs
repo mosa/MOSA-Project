@@ -94,11 +94,11 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 								Size = parts[1].ToUInt32(),
 								DefAddress = parts[2].ParseHex(),
 								FullName = parts[3],
-								Type = parts[4],
-								ReturnType = parts[5],
-								StackSize = parts[6].ToUInt32(),
-								ParameterStackSize = parts[7].ToUInt32(),
-								Attributes = parts[8].ToUInt32(),
+								ReturnType = parts[4],
+								StackSize = parts[5].ToUInt32(),
+								ParameterStackSize = parts[6].ToUInt32(),
+								Attributes = parts[7].ToUInt32(),
+								Type = parts[8],
 							};
 
 							debugSource.Add(method);
@@ -117,11 +117,34 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 								FullName = parts[2],
 								Name = parts[3],
 								Type = parts[4],
-								Method = parts[5],
-								Attributes = parts[6].ToUInt32(),
+								Attributes = parts[5].ToUInt32(),
+								Method = parts[6],
 							};
 
 							debugSource.Add(parameter);
+							continue;
+						}
+
+					case "[Fields]":
+						{
+							if (parts[0].StartsWith("Index"))
+								continue;
+
+							var field = new FieldInfo()
+							{
+								Index = parts[0].ToUInt32(),
+								FullName = parts[1],
+								Name = parts[2],
+								FieldType = parts[3],
+								Address = parts[4].ParseHex(),
+								Attributes = parts[5].ToUInt32(),
+								Offset = parts[6].ToUInt32(),
+								DataLength = parts[7].ToUInt32(),
+								DataAddress = parts[8].ParseHex(),
+								Type = parts[9],
+							};
+
+							debugSource.Add(field);
 							continue;
 						}
 
@@ -131,3 +154,14 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 		}
 	}
 }
+
+//public uint Index { get; set; }
+//public string FullName { get; set; }
+//public string Name { get; set; }
+//public string FieldType { get; set; }
+//public string Address { get; set; }
+//public uint Attributes { get; set; }
+//public ulong Offset { get; set; }
+//public ulong DataLength { get; set; }
+//public uint DataAddress { get; set; }
+//public string Type { get; set; }
