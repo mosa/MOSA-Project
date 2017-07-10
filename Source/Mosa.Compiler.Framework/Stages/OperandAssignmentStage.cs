@@ -31,12 +31,12 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private Queue<WorkItem> workList;
+		private Queue<WorkItem> workList = new Queue<WorkItem>();
 		private BitArray processed;
 		private BitArray enqueued;
 		private Stack<Operand>[] outgoingStack;
 		private Stack<Operand>[] scheduledMoves;
-		private List<InstructionNode> dupNodes;
+		private List<InstructionNode> dupNodes = new List<InstructionNode>();
 		private TraceLog trace;
 
 		protected override void Run()
@@ -45,8 +45,6 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			trace = CreateTraceLog();
-
-			workList = new Queue<WorkItem>();
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
@@ -75,10 +73,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			outgoingStack = new Stack<Operand>[BasicBlocks.Count];
 			scheduledMoves = new Stack<Operand>[BasicBlocks.Count];
-			processed = new BitArray(BasicBlocks.Count);
-			processed.SetAll(false);
-			enqueued = new BitArray(BasicBlocks.Count);
-			enqueued.SetAll(false);
+			processed = new BitArray(BasicBlocks.Count, false);
+			enqueued = new BitArray(BasicBlocks.Count, false);
 
 			processed.Set(headBlock.Sequence, true);
 			workList.Enqueue(new WorkItem(headBlock, new Stack<Operand>()));
@@ -161,32 +157,29 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			for (var ctx = new Context(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 			{
-				if (ctx.IsEmpty)
+				if (ctx.IsEmpty ||
+					ctx.IsBlockEndInstruction ||
+					ctx.IsBlockStartInstruction ||
+					ctx.Instruction == IRInstruction.Jmp)
 					continue;
 
-				if (ctx.IsBlockEndInstruction || ctx.IsBlockStartInstruction)
+				if (ctx.Instruction.FlowControl != FlowControl.ConditionalBranch &&
+					ctx.Instruction.FlowControl != FlowControl.UnconditionalBranch &&
+					ctx.Instruction.FlowControl != FlowControl.Return &&
+					ctx.Instruction != IRInstruction.ExceptionStart &&
+					ctx.Instruction != IRInstruction.FilterStart &&
+					!(ctx.Instruction is BaseCILInstruction))
 					continue;
 
-				if (ctx.Instruction == IRInstruction.Jmp)
-					continue;
+				AssignOperandsFromCILStack(ctx, operandStack);
 
-				if (!(ctx.Instruction.FlowControl == FlowControl.ConditionalBranch || ctx.Instruction.FlowControl == FlowControl.UnconditionalBranch || ctx.Instruction.FlowControl == FlowControl.Return)
-					&& !(ctx.Instruction is BaseCILInstruction)
-					&& ctx.Instruction != IRInstruction.ExceptionStart
-					&& ctx.Instruction != IRInstruction.FilterStart)
-					continue;
-
-				if (ctx.Instruction == IRInstruction.ExceptionStart || ctx.Instruction == IRInstruction.FilterStart)
+				if (ctx.Instruction != IRInstruction.ExceptionStart && ctx.Instruction != IRInstruction.FilterStart)
 				{
-					AssignOperandsFromCILStack(ctx, operandStack);
-					PushResultOperands(ctx, operandStack);
+					var cilInstruction = ctx.Instruction as BaseCILInstruction;
+					cilInstruction.Resolve(ctx, MethodCompiler);
 				}
-				else
-				{
-					AssignOperandsFromCILStack(ctx, operandStack);
-					(ctx.Instruction as BaseCILInstruction).Resolve(ctx, MethodCompiler);
-					PushResultOperands(ctx, operandStack);
-				}
+
+				PushResultOperands(ctx, operandStack);
 			}
 		}
 
@@ -231,10 +224,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.GotoPrevious();
 
-			while (context.Instruction.FlowControl == FlowControl.ConditionalBranch
-				|| context.Instruction.FlowControl == FlowControl.UnconditionalBranch
-				|| context.Instruction.FlowControl == FlowControl.Return
-				|| context.Instruction == IRInstruction.Jmp)
+			while (context.Instruction.FlowControl == FlowControl.ConditionalBranch ||
+				context.Instruction.FlowControl == FlowControl.UnconditionalBranch ||
+				context.Instruction.FlowControl == FlowControl.Return ||
+				context.Instruction == IRInstruction.Jmp)
 			{
 				context.GotoPrevious();
 			}
@@ -279,12 +272,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="currentStack">The current stack.</param>
 		private void PushResultOperands(Context ctx, Stack<Operand> currentStack)
 		{
+			if (ctx.ResultCount == 0)
+				return;
+
 			if (ctx.Instruction != IRInstruction.ExceptionStart &&
 				ctx.Instruction != IRInstruction.FilterStart &&
 				!(ctx.Instruction as BaseCILInstruction).PushResult)
-				return;
-
-			if (ctx.ResultCount == 0)
 				return;
 
 			currentStack.Push(ctx.Result);
@@ -292,11 +285,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ctx.Instruction is DupInstruction)
 			{
 				currentStack.Push(ctx.Result);
-				if (dupNodes == null)
-				{
-					dupNodes = new List<InstructionNode>();
-				}
-
 				dupNodes.Add(ctx.Node);
 			}
 		}
@@ -306,9 +294,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void RemoveDuplicateInstructions()
 		{
-			if (dupNodes == null)
-				return;
-
 			foreach (var node in dupNodes)
 			{
 				Debug.Assert(node.Instruction is DupInstruction);
