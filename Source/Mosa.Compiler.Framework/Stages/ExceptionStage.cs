@@ -258,7 +258,10 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var context = new Context(block.Last);
 
-				while (context.IsEmpty || context.IsBlockEndInstruction || context.Instruction == IRInstruction.Flow || context.Instruction == IRInstruction.GotoLeaveTarget)
+				while (context.IsEmpty
+					|| context.IsBlockEndInstruction
+					|| context.Instruction == IRInstruction.Flow
+					|| context.Instruction == IRInstruction.GotoLeaveTarget)
 				{
 					context.GotoPrevious();
 				}
