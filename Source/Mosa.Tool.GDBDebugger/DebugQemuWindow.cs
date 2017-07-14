@@ -105,7 +105,7 @@ namespace Mosa.Tool.GDBDebugger
 
 		private bool LaunchAndDebug()
 		{
-			int debugPort = 1234;
+			int debugPort = 1234; //fixme
 
 			QEMUProcess = StartQEMU(debugPort);
 

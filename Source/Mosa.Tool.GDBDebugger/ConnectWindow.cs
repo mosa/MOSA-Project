@@ -8,11 +8,7 @@ namespace Mosa.Tool.GDBDebugger
 {
 	public partial class ConnectWindow : Form
 	{
-		public Connector Debugger
-		{
-			get;
-			private set;
-		}
+		public Options Options { get; set; }
 
 		public ConnectWindow()
 		{
@@ -26,7 +22,8 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void btnConnect_Click(object sender, EventArgs e)
 		{
-			Debugger = new Connector(new X86Platform(), tbHost.Text, (int)numPort.Value);
+			Options.GDBHost = tbHost.Text;
+			Options.GDBPort = (int)numPort.Value;
 
 			DialogResult = DialogResult.OK;
 		}

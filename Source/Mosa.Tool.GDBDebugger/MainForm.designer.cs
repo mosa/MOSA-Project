@@ -32,6 +32,7 @@
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnConnect = new System.Windows.Forms.ToolStripButton();
+            this.btnDebugQEMU = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.btnViewMemory = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -39,7 +40,6 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.btnDebugQEMU = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -84,6 +84,15 @@
             this.btnConnect.Size = new System.Drawing.Size(72, 22);
             this.btnConnect.Text = "Connect";
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
+            // btnDebugQEMU
+            // 
+            this.btnDebugQEMU.Image = ((System.Drawing.Image)(resources.GetObject("btnDebugQEMU.Image")));
+            this.btnDebugQEMU.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnDebugQEMU.Name = "btnDebugQEMU";
+            this.btnDebugQEMU.Size = new System.Drawing.Size(99, 22);
+            this.btnDebugQEMU.Text = "Debug QEMU";
+            this.btnDebugQEMU.Click += new System.EventHandler(this.btnDebugQEMU_Click);
             // 
             // toolStripSeparator1
             // 
@@ -131,15 +140,6 @@
             this.openFileDialog.DefaultExt = "exe";
             this.openFileDialog.Filter = "Executable|*.exe|Library|*.dll|All Files|*.*";
             // 
-            // btnDebugQEMU
-            // 
-            this.btnDebugQEMU.Image = ((System.Drawing.Image)(resources.GetObject("btnDebugQEMU.Image")));
-            this.btnDebugQEMU.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnDebugQEMU.Name = "btnDebugQEMU";
-            this.btnDebugQEMU.Size = new System.Drawing.Size(99, 22);
-            this.btnDebugQEMU.Text = "Debug QEMU";
-            this.btnDebugQEMU.Click += new System.EventHandler(this.btnDebugQEMU_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -150,7 +150,7 @@
             this.Controls.Add(this.dockPanel);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "Mosa GDB Debugger v1.0";
+            this.Text = "Mosa GDB Debugger v1.1";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.toolStrip1.ResumeLayout(false);

@@ -223,18 +223,20 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void btnConnect_Click(object sender, EventArgs e)
 		{
-			using (ConnectWindow connect = new ConnectWindow())
+			using (var connect = new ConnectWindow())
 			{
+				connect.Options = Options;
+
 				if (connect.ShowDialog(this) == DialogResult.OK)
 				{
-					Connect(connect.Debugger);
+					Connect();
 				}
 			}
 		}
 
 		private void Connect()
 		{
-			Connect(new Connector(new X86Platform(), "localhost", Options.GDBPort));
+			Connect(new Connector(new X86Platform(), Options.GDBHost, Options.GDBPort));
 		}
 
 		private void Connect(Connector connector)

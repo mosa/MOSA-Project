@@ -31,6 +31,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace = CreateTraceLog();
 
+			processed = new BitArray(BasicBlocks.Count, false);
+
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
 				Trace(headBlock);
@@ -55,8 +57,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="headBlock">The head block.</param>
 		private void Trace(BasicBlock headBlock)
 		{
-			processed = new BitArray(BasicBlocks.Count, false);
-
 			worklist.Enqueue(headBlock);
 			incomingMoves.Add(headBlock, empty); // no incoming moves
 
@@ -86,13 +86,6 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(incoming != null);
 
 			var operandStack = new Stack<Operand>(incoming);
-
-			//var operandStack = new Stack<Operand>(incoming.Count);
-
-			//foreach (var op in incoming)
-			//{
-			//	operandStack.Push(op);
-			//}
 
 			if (trace.Active)
 			{

@@ -42,19 +42,25 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 		{
 			Types.Add(type);
 
-			if (type.DefAddress != 0)
+			if (type.DefAddress != 0 && !TypeDefLookup.ContainsKey(type.DefAddress))
 			{
 				TypeDefLookup.Add(type.DefAddress, type);
 			}
 
-			TypeFullNameLookup.Add(type.FullName, type);
+			if (!TypeFullNameLookup.ContainsKey(type.FullName))
+			{
+				TypeFullNameLookup.Add(type.FullName, type);
+			}
 		}
 
 		public void Add(MethodInfo method)
 		{
 			Methods.Add(method);
 
-			MethodFullNameLookup.Add(method.FullName, method);
+			if (!MethodFullNameLookup.ContainsKey(method.FullName))
+			{
+				MethodFullNameLookup.Add(method.FullName, method);
+			}
 		}
 
 		public void Add(ParameterInfo parameter)

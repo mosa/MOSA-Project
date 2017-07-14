@@ -15,9 +15,6 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 	public class Connector
 	{
-		public const string DefaultConnectionHost = "localhost";
-		public const int DefaultConnectionPort = 1234;
-
 		public TcpClient TcpClient { get; set; }
 		public GDBClient GDBClient { get; set; }
 
@@ -37,12 +34,9 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		public Connector(BasePlatform platform)
 		{
 			Platform = platform;
-
-			ConnectionHost = DefaultConnectionHost;
-			ConnectionPort = DefaultConnectionPort;
 		}
 
-		public Connector(BasePlatform platform, string host = DefaultConnectionHost, int port = DefaultConnectionPort)
+		public Connector(BasePlatform platform, string host, int port)
 			: this(platform)
 		{
 			ConnectionHost = host;
@@ -135,7 +129,6 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 		public void AddBreakPoint(ulong address)
 		{
-			
 			if (IsRunning)
 			{
 				Break();

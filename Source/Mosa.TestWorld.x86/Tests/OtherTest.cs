@@ -11,6 +11,7 @@ namespace Mosa.TestWorld.x86.Tests
 		public OtherTest()
 			: base("Other")
 		{
+			testMethods.Add(BoxTestEqualsI4);
 			testMethods.Add(OtherTest1);
 			testMethods.Add(OtherTest2);
 			testMethods.Add(OtherTest3);
@@ -319,6 +320,11 @@ namespace Mosa.TestWorld.x86.Tests
 					}
 				}
 			}
+		}
+
+		public static bool BoxTestEqualsI4()
+		{
+			return Mosa.UnitTest.Collection.BoxingTests.EqualsI4(10);
 		}
 	}
 
