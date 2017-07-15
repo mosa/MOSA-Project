@@ -18,7 +18,7 @@ namespace Mosa.Tool.GDBDebugger
 
 		private RegisterView registersView;
 
-		//private DisplayView displayView;
+		private DisplayView displayView;
 		private ControlView controlView;
 
 		private CallStackView callStackView;
@@ -59,7 +59,7 @@ namespace Mosa.Tool.GDBDebugger
 
 			registersView = new RegisterView(this);
 
-			//displayView = new DisplayView(this);
+			displayView = new DisplayView(this);
 			controlView = new ControlView(this);
 
 			callStackView = new CallStackView(this);
@@ -90,7 +90,7 @@ namespace Mosa.Tool.GDBDebugger
 			breakPointView.Show(dockPanel, DockState.DockBottom);
 			watchView.Show(breakPointView.PanelPane, DockAlignment.Right, 0.50);
 
-			//displayView.Show(dockPanel, DockState.Document);
+			displayView.Show(dockPanel, DockState.Document);
 			outputView.Show(dockPanel, DockState.Document);
 
 			//scriptView.Show(dockPanel, DockState.Document);

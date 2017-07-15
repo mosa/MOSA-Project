@@ -94,6 +94,12 @@
     <Compile Include="View\CallStackView.designer.cs">
       <DependentUpon>CallStackView.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\DisplayView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\DisplayView.designer.cs">
+      <DependentUpon>DisplayView.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\MethodView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -238,6 +244,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DebugDockContent.resx">
       <DependentUpon>DebugDockContent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\DisplayView.resx">
+      <DependentUpon>DisplayView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\MethodView.resx">
       <DependentUpon>MethodView.cs</DependentUpon>
