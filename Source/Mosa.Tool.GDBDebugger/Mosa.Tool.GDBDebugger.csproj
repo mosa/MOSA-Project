@@ -88,6 +88,12 @@
     <Compile Include="View\BreakPointView.designer.cs">
       <DependentUpon>BreakPointView.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\CallStackView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\CallStackView.designer.cs">
+      <DependentUpon>CallStackView.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\MethodView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -220,6 +226,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\BreakPointView.resx">
       <DependentUpon>BreakPointView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\CallStackView.resx">
+      <DependentUpon>CallStackView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\ControlView.resx">
       <DependentUpon>ControlView.cs</DependentUpon>

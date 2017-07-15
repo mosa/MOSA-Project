@@ -21,7 +21,7 @@ namespace Mosa.Tool.GDBDebugger
 		//private DisplayView displayView;
 		private ControlView controlView;
 
-		//private CallStackView callStackView;
+		private CallStackView callStackView;
 		private StackFrameView stackFrameView;
 
 		//private StackView stackView;
@@ -62,7 +62,7 @@ namespace Mosa.Tool.GDBDebugger
 			//displayView = new DisplayView(this);
 			controlView = new ControlView(this);
 
-			//callStackView = new CallStackView(this);
+			callStackView = new CallStackView(this);
 			stackFrameView = new StackFrameView(this);
 
 			//stackView = new StackView(this);
@@ -87,7 +87,6 @@ namespace Mosa.Tool.GDBDebugger
 			controlView.Show(dockPanel, DockState.DockTop);
 			statusView.Show(controlView.PanelPane, DockAlignment.Right, 0.50);
 
-			//callStackView.Show(controlView.PanelPane, DockAlignment.Bottom, 0.50);
 			breakPointView.Show(dockPanel, DockState.DockBottom);
 			watchView.Show(breakPointView.PanelPane, DockAlignment.Right, 0.50);
 
@@ -106,8 +105,8 @@ namespace Mosa.Tool.GDBDebugger
 			symbolView.Show(dockPanel, DockState.Document);
 
 			instructionView.Show(symbolView.PanelPane, DockAlignment.Right, 0.35);
-
 			methodView.Show(instructionView.PanelPane, instructionView);
+			callStackView.Show(instructionView.PanelPane, DockAlignment.Bottom, 0.25);
 
 			registersView.Show();
 
@@ -205,14 +204,12 @@ namespace Mosa.Tool.GDBDebugger
 				nbr = nbr.Substring(where + 1);
 			}
 
-			var value = Convert.ToUInt64(nbr, digits);
-
-			return value;
+			return Convert.ToUInt64(nbr, digits);
 		}
 
 		private void btnDebugQEMU_Click(object sender, EventArgs e)
 		{
-			using (DebugQemuWindow debug = new DebugQemuWindow(AppLocations))
+			using (var debug = new DebugQemuWindow(AppLocations))
 			{
 				if (debug.ShowDialog(this) == DialogResult.OK)
 				{

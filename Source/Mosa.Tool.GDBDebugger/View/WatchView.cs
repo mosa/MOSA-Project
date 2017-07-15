@@ -87,21 +87,21 @@ namespace Mosa.Tool.GDBDebugger.View
 				if (watch.Watch.Address != address || watch.Size != bytes.Length)
 					continue;
 
-				watch.Value = ToLong(bytes, bytes.Length);
+				watch.Value = ToLong(bytes);
 				watch.HexValue = BasePlatform.ToHex(watch.Value, watch.Size);
 			}
 
 			Refresh();
 		}
 
-		private static ulong ToLong(byte[] bytes, int size)
+		private static ulong ToLong(byte[] bytes)
 		{
 			ulong value = 0;
 
 			for (int i = 0; i < bytes.Length; i++)
 			{
 				ulong shifted = (ulong)(bytes[i] << (i * 8));
-				value = value | shifted;
+				value |= shifted;
 			}
 
 			return value;
