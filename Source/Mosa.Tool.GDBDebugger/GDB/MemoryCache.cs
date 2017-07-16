@@ -58,6 +58,8 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			var start = Alignment.AlignDown(address, BlockSize);
 			var end = Alignment.AlignUp(address + (ulong)size, BlockSize);
 
+			var queries = new List<ulong>();
+
 			lock (sync)
 			{
 				requests.Add(request);
@@ -67,7 +69,9 @@ namespace Mosa.Tool.GDBDebugger.GDB
 					if (!requested.Contains(i))
 					{
 						requested.Add(i);
-						Connector.ReadMemory(i, BlockSize, OnMemoryRead);
+
+						//Connector.ReadMemory(i, BlockSize, OnMemoryRead);
+						queries.Add(i);
 					}
 
 					if (!received.Contains(i))
@@ -75,6 +79,11 @@ namespace Mosa.Tool.GDBDebugger.GDB
 						request.Blocks.Add(i);
 					}
 				}
+			}
+
+			foreach (var q in queries)
+			{
+				Connector.ReadMemory(q, BlockSize, OnMemoryRead);
 			}
 
 			Process();
