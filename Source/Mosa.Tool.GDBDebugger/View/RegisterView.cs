@@ -19,7 +19,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			public ulong Value { get; set; }
 
 			[Browsable(false)]
-			public int Size { get; set; }
+			public uint Size { get; set; }
 
 			//private Register Register { get; set; }
 
@@ -28,7 +28,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			//	Register = register;
 			//}
 
-			public RegisterEntry(string register, ulong value, string hexValue, int size)
+			public RegisterEntry(string register, ulong value, string hexValue, uint size)
 			{
 				Register = register;
 				Value = value;

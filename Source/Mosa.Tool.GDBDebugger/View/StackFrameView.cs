@@ -53,6 +53,9 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (Platform.Registers == null)
 				return;
 
+			if (Platform.StackFrame.Value == 0 || Platform.StackPointer.Value == 0)
+				return;
+
 			var span = Platform.StackFrame.Value - Platform.StackPointer.Value;
 
 			if (span <= 0)
@@ -63,7 +66,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (span % 4 != 0)
 				span = span + (span % 4);
 
-			GDBConnector.ReadMemory(Platform.StackFrame.Value - span, (int)span + 4, OnMemoryRead);
+			MemoryCache.ReadMemory(Platform.StackFrame.Value - span, (uint)span + 4, OnMemoryRead);
 		}
 
 		private void OnMemoryRead(ulong address, byte[] bytes)
@@ -78,9 +81,9 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private void UpdateDisplay(ulong address, byte[] memory)
 		{
-			int size = 4; // fixme
+			uint size = 4; // fixme
 
-			for (int i = memory.Length - 4; i > 0; i = i - size)
+			for (int i = memory.Length - 4; i > 0; i = i - (int)size)
 			{
 				ulong value = (ulong)(memory[i] | (memory[i + 1] << 8) | (memory[i + 2] << 16) | (memory[i + 3] << 24));
 

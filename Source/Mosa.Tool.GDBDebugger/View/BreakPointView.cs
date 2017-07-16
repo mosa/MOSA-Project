@@ -92,5 +92,10 @@ namespace Mosa.Tool.GDBDebugger.View
 			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
 			MainForm.AddBreakPoint(address);
 		}
+
+		private void btnDeleteAll_Click(object sender, EventArgs e)
+		{
+			MainForm.DeleteAllBreakPonts();
+		}
 	}
 }

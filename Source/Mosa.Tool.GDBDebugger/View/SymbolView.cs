@@ -19,7 +19,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			public string Kind { get { return Symbol.Kind; } }
 
-			public int Length { get { return Symbol.Length; } }
+			public uint Length { get { return Symbol.Length; } }
 
 			//public string FullName { get { return Symbol.Name; } }
 

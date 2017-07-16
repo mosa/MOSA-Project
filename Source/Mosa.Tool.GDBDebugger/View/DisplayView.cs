@@ -66,10 +66,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		public override void OnPause()
 		{
-			//int total = width * height * 2;
-			int size = width * height;
-			GDBConnector.ReadMemory(StandardAddressBase, size, OnMemoryRead);
-			GDBConnector.ReadMemory(StandardAddressBase + (ulong)size * 2, size, OnMemoryRead);
+			MemoryCache.ReadMemory(StandardAddressBase, (uint)(width * height * 2), OnMemoryRead);
 		}
 
 		private void OnMemoryRead(ulong address, byte[] bytes)

@@ -9,9 +9,9 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		public string Name { get; set; }
 		public int Index { set; get; }
 		public int Offset { set; get; }
-		public int Size { set; get; }
+		public uint Size { set; get; }
 
-		public RegisterDefinition(int index, string name, int size, int offset)
+		public RegisterDefinition(int index, string name, uint size, int offset)
 		{
 			Index = index;
 			Name = name;

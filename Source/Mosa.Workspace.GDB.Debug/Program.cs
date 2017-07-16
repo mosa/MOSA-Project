@@ -17,21 +17,21 @@ namespace Mosa.Workspace.UnitTest.Debug
 			var gdbClient = new GDBClient();
 			gdbClient.Stream = new GDBNetworkStream(tcpClient.Client, true);
 
-			gdbClient.SendCommandAsync(new ReadMemory(0x0, 2, ReadMemory));
+			gdbClient.SendCommand(new ReadMemory(0x0, 2, ReadMemory));
 
 			//gdbClient.SendCommandAsync(new SetSoftwareBreakPoint(0x400030, 1, Response));
-			gdbClient.SendCommandAsync(new SetSoftwareBreakPoint(0x4571B9, 1, Response));
-			gdbClient.SendCommandAsync(new GetRegisters(GetRegisters));
-			gdbClient.SendCommandAsync(new Continue(Response));
+			gdbClient.SendCommand(new SetSoftwareBreakPoint(0x4571B9, 1, Response));
+			gdbClient.SendCommand(new GetRegisters(GetRegisters));
+			gdbClient.SendCommand(new Continue(Response));
 
 			Thread.Sleep(2000);
 			gdbClient.SendBreak();
-			gdbClient.SendCommandAsync(new GetRegisters(GetRegisters));
-			gdbClient.SendCommandAsync(new Continue(Response));
+			gdbClient.SendCommand(new GetRegisters(GetRegisters));
+			gdbClient.SendCommand(new Continue(Response));
 
 			Thread.Sleep(2000);
 			gdbClient.SendBreak();
-			gdbClient.SendCommandAsync(new GetRegisters(GetRegisters));
+			gdbClient.SendCommand(new GetRegisters(GetRegisters));
 
 			//0x400030
 			//gdbClient.SendCommandAsync(new GeneralRegisterRead(Response));

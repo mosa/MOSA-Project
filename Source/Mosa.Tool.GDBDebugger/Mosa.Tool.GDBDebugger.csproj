@@ -81,6 +81,7 @@
     <Compile Include="DebugQemuWindow.Designer.cs">
       <DependentUpon>DebugQemuWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="GDB\MemoryCache.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="View\BreakPointView.cs">
       <SubType>Form</SubType>

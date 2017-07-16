@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Utility.RSP.Command;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -68,40 +69,44 @@ namespace Mosa.Utility.RSP
 
 		private void ReadAsyncCallback(IAsyncResult ar)
 		{
-			try
+			lock (sync)
 			{
-				stream.EndRead(ar);
-
-				var data = receivedByte[0];
-
-				lock (sync)
+				try
 				{
+					stream.EndRead(ar);
+
+					var data = receivedByte[0];
+
 					receivedData.Add(data);
 
-					Debug.Write((char)data);
+					//Debug.Write((char)data);
 
 					IncomingPatcket();
 				}
+				catch (Exception e)
+				{
+					// nothing for now
+					Debug.WriteLine(e.ToString());
+				}
+				finally
+				{
+					SetReadCallBack();
 
-				SetReadCallBack();
-			}
-			catch
-			{
-				// nothing for now
+					// try to send more packets
+				}
 			}
 
-			// try to send more packets
 			SendPackets();
 		}
 
-		public void SendCommandAsync(GDBCommand command)
+		public void SendCommand(GDBCommand command)
 		{
 			lock (sync)
 			{
 				commandQueue.Enqueue(command);
 			}
 
-			// try to send more packets
+			// try to send packets
 			SendPackets();
 		}
 
@@ -109,6 +114,11 @@ namespace Mosa.Utility.RSP
 		{
 			lock (sync)
 			{
+				commandQueue.Clear();
+
+				Debug.WriteLine("SENT: BREAK");
+
+				currentCommand = new GetReasonHalted();
 				stream.Write(breakData, 0, 1);
 			}
 		}
@@ -140,13 +150,6 @@ namespace Mosa.Utility.RSP
 			if (len == 0)
 				return;
 
-			if (currentCommand == null && len == 0)
-			{
-				// ignore if no current command
-				receivedData.Clear();
-				return;
-			}
-
 			if (len == 1 && receivedData[0] == '+')
 			{
 				receivedData.Clear();
@@ -162,7 +165,13 @@ namespace Mosa.Utility.RSP
 
 			if (len >= 4 && receivedData[0] == '$' && receivedData[len - 3] == '#')
 			{
-				Debug.WriteLine(string.Empty);
+				Debug.WriteLine("RECEIVED: " + Encoding.UTF8.GetString(receivedData.ToArray()));
+
+				if (currentCommand == null)
+				{
+					receivedData.Clear();
+					return;
+				}
 
 				var data = Rle.Decode(receivedData, 1, receivedData.Count - 3).ToArray();
 

@@ -40,6 +40,7 @@ namespace Mosa.Tool.GDBDebugger
 		public string Status { set { toolStripStatusLabel1.Text = value; toolStrip1.Refresh(); } }
 
 		public Connector GDBConnector { get; private set; }
+		public MemoryCache MemoryCache { get; private set; }
 
 		public Options Options { get; private set; } = new Options();
 
@@ -209,21 +210,19 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void btnDebugQEMU_Click(object sender, EventArgs e)
 		{
-			using (var debug = new DebugQemuWindow(AppLocations))
+			using (var debug = new DebugQemuWindow(AppLocations, Options))
 			{
 				if (debug.ShowDialog(this) == DialogResult.OK)
 				{
-					Connect(debug.Debugger);
+					Connect();
 				}
 			}
 		}
 
 		private void btnConnect_Click(object sender, EventArgs e)
 		{
-			using (var connect = new ConnectWindow())
+			using (var connect = new ConnectWindow(Options))
 			{
-				connect.Options = Options;
-
 				if (connect.ShowDialog(this) == DialogResult.OK)
 				{
 					Connect();
@@ -233,30 +232,28 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void Connect()
 		{
-			Connect(new Connector(new X86Platform(), Options.GDBHost, Options.GDBPort));
-		}
-
-		private void Connect(Connector connector)
-		{
 			if (GDBConnector != null)
+			{
 				GDBConnector.Disconnect();
+				MemoryCache = null;
+			}
 
-			GDBConnector = connector;
+			GDBConnector = new Connector(new X86Platform(), Options.GDBHost, Options.GDBPort);
 
 			GDBConnector.Connect();
-
 			GDBConnector.OnPause = OnPause;
 			GDBConnector.OnRunning = OnRunning;
 
 			if (!GDBConnector.IsConnected)
 			{
-				MessageBox.Show($"Could not connect to '{GDBConnector.ConnectionHost}' on port {GDBConnector.ConnectionPort}.");
+				MessageBox.Show($"Could not connect to '{GDBConnector.ConnectionHost}' on port {GDBConnector.ConnectionPort.ToString()}.");
 				return;
 			}
 
 			GDBConnector.ExtendedMode();
 			GDBConnector.ClearAllBreakPoints();
 			ResendBreakPoints();
+			MemoryCache = new MemoryCache(GDBConnector);
 		}
 
 		private void btnViewMemory_Click(object sender, EventArgs e)
@@ -340,13 +337,20 @@ namespace Mosa.Tool.GDBDebugger
 			NotifyBreakPointChange();
 		}
 
+		public void DeleteAllBreakPonts()
+		{
+			BreakPoints.Clear();
+			GDBConnector.ClearAllBreakPoints();
+			NotifyBreakPointChange();
+		}
+
 		public void AddWatch(Watch watch)
 		{
 			Watchs.Add(watch);
 			NotifyWatchChange();
 		}
 
-		public void AddWatch(string name, ulong address, int size, bool signed = false)
+		public void AddWatch(string name, ulong address, uint size, bool signed = false)
 		{
 			if (string.IsNullOrWhiteSpace(name))
 				name = CreateWatchName(address);
@@ -361,9 +365,15 @@ namespace Mosa.Tool.GDBDebugger
 			NotifyWatchChange();
 		}
 
+		public void RemoveAllWatches()
+		{
+			Watchs.Clear();
+			NotifyWatchChange();
+		}
+
 		public void OnAddBreakPoint(Object sender, EventArgs e)
 		{
-			var args = (sender as System.Windows.Forms.Menu).Tag as AddBreakPointArgs;
+			var args = (sender as Menu).Tag as AddBreakPointArgs;
 
 			if (string.IsNullOrWhiteSpace(args.Name))
 			{
@@ -377,28 +387,28 @@ namespace Mosa.Tool.GDBDebugger
 
 		public void OnCopyToClipboard(Object sender, EventArgs e)
 		{
-			var text = (sender as System.Windows.Forms.Menu).Tag as string;
+			var text = (sender as Menu).Tag as string;
 
 			Clipboard.SetText(text);
 		}
 
 		public void OnRemoveBreakPoint(Object sender, EventArgs e)
 		{
-			var breakpoint = (sender as System.Windows.Forms.Menu).Tag as BreakPoint;
+			var breakpoint = (sender as Menu).Tag as BreakPoint;
 
 			RemoveBreakPoint(breakpoint);
 		}
 
 		public void OnAddWatch(Object sender, EventArgs e)
 		{
-			var args = (sender as System.Windows.Forms.Menu).Tag as AddWatchArgs;
+			var args = (sender as Menu).Tag as AddWatchArgs;
 
 			AddWatch(args.Name, args.Address, args.Length);
 		}
 
 		public void OnRemoveWatch(Object sender, EventArgs e)
 		{
-			var watch = (sender as System.Windows.Forms.Menu).Tag as Watch;
+			var watch = (sender as Menu).Tag as Watch;
 
 			RemoveWatch(watch);
 		}

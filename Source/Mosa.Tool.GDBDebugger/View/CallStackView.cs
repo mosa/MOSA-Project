@@ -53,7 +53,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			if (ebp != 0)
 			{
-				GDBConnector.ReadMemory(ebp, 8, OnMemoryRead);
+				MemoryCache.ReadMemory(ebp, 8, OnMemoryRead);
 			}
 		}
 
@@ -108,7 +108,7 @@ namespace Mosa.Tool.GDBDebugger.View
 				if (treeView1.Nodes.Count > 20)
 					return;
 
-				GDBConnector.ReadMemory(ebp, 8, OnMemoryRead);
+				MemoryCache.ReadMemory(ebp, 8, OnMemoryRead);
 			}
 		}
 

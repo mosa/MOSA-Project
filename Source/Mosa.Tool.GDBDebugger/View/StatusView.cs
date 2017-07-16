@@ -31,7 +31,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			tbIP.Text = Platform.InstructionPointer.ToHex();
 			tbInstruction.Text = string.Empty;
 
-			GDBConnector.ReadMemory(Platform.InstructionPointer.Value, 16, OnMemoryRead);
+			MemoryCache.ReadMemory(Platform.InstructionPointer.Value, 16, OnMemoryRead);
 
 			var symbol = DebugSource.GetFirstSymbol(Platform.InstructionPointer.Value);
 

@@ -37,8 +37,10 @@ namespace Mosa.Tool.GDBDebugger.View
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
             this.cbLength = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.btnDeleteAll = new System.Windows.Forms.ToolStripButton();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -52,7 +54,9 @@ namespace Mosa.Tool.GDBDebugger.View
             this.toolStripSeparator1,
             this.toolStripLabel4,
             this.cbLength,
-            this.toolStripButton1});
+            this.toolStripButton2,
+            this.toolStripSeparator2,
+            this.btnDeleteAll});
             this.toolStrip1.Location = new System.Drawing.Point(0, 2);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(624, 25);
@@ -96,14 +100,14 @@ namespace Mosa.Tool.GDBDebugger.View
             this.cbLength.Name = "cbLength";
             this.cbLength.Size = new System.Drawing.Size(75, 25);
             // 
-            // toolStripButton1
+            // btnDeleteAll
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Black;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(33, 22);
-            this.toolStripButton1.Text = "Add";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.btnDeleteAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnDeleteAll.ImageTransparentColor = System.Drawing.Color.Black;
+            this.btnDeleteAll.Name = "btnDeleteAll";
+            this.btnDeleteAll.Size = new System.Drawing.Size(61, 22);
+            this.btnDeleteAll.Text = "Delete All";
+            this.btnDeleteAll.Click += new System.EventHandler(this.btnDeleteAll_Click);
             // 
             // dataGridView1
             // 
@@ -153,6 +157,19 @@ namespace Mosa.Tool.GDBDebugger.View
             this.dataGridView1.TabIndex = 7;
             this.dataGridView1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
             // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Black;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(33, 22);
+            this.toolStripButton2.Text = "Add";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
             // WatchView
             // 
             this.ClientSize = new System.Drawing.Size(624, 205);
@@ -181,9 +198,11 @@ namespace Mosa.Tool.GDBDebugger.View
 		private System.Windows.Forms.ToolStripLabel toolStripLabel1;
 		private System.Windows.Forms.ToolStripTextBox tbAddress;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ToolStripButton toolStripButton1;
+		private System.Windows.Forms.ToolStripButton btnDeleteAll;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel4;
 		private System.Windows.Forms.ToolStripComboBox cbLength;
 		private System.Windows.Forms.DataGridView dataGridView1;
+		private System.Windows.Forms.ToolStripButton toolStripButton2;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 	}
 }

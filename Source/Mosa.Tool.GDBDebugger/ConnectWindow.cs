@@ -8,11 +8,12 @@ namespace Mosa.Tool.GDBDebugger
 {
 	public partial class ConnectWindow : Form
 	{
-		public Options Options { get; set; }
+		private readonly Options Options;
 
-		public ConnectWindow()
+		public ConnectWindow(Options options)
 		{
 			InitializeComponent();
+			Options = options;
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
