@@ -128,10 +128,6 @@ namespace Mosa.Tool.GDBDebugger.View
 			MainForm.RemoveWatch(watchEntry.Watch);
 		}
 
-		private void toolStripButton1_Click(object sender, System.EventArgs e)
-		{
-		}
-
 		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Right)
@@ -159,6 +155,24 @@ namespace Mosa.Tool.GDBDebugger.View
 		private void btnDeleteAll_Click(object sender, EventArgs e)
 		{
 			MainForm.RemoveAllWatches();
+		}
+
+		private void btnAdd_Click(object sender, EventArgs e)
+		{
+			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
+
+			uint size = 0;
+
+			switch (cbLength.SelectedIndex)
+			{
+				case 0: size = 1; break;
+				case 1: size = 2; break;
+				case 2: size = 4; break;
+				case 3: size = 8; break;
+				default: size = 4; break;
+			}
+
+			MainForm.AddWatch(null, address, size);
 		}
 	}
 }

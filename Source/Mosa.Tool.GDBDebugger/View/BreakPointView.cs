@@ -87,7 +87,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			m.Show(dataGridView1, relativeMousePosition);
 		}
 
-		private void toolStripButton1_Click(object sender, EventArgs e)
+		private void btnAdd_Click(object sender, EventArgs e)
 		{
 			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
 			MainForm.AddBreakPoint(address);
