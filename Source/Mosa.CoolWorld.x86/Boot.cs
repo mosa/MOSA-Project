@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.AppSystem;
-using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.HardwareSystem;
 using Mosa.Kernel.x86;
@@ -44,7 +43,7 @@ namespace Mosa.CoolWorld.x86
 			// Setup hardware abstraction interface
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 
-			var hardware = new Mosa.CoolWorld.x86.HAL.Hardware();
+			var hardware = new HAL.Hardware();
 			HardwareSystem.Setup.Initialize(hardware);
 
 			Console.WriteLine("> Adding hardware devices...");
@@ -54,10 +53,21 @@ namespace Mosa.CoolWorld.x86
 			Console.WriteLine();
 
 			// Get StandardKeyboard
-			var standardKeyboard = (StandardKeyboard)HardwareSystem.Setup.DeviceManager.GetDevices(new WithName("StandardKeyboard")).First.Value;
+			var standardKeyboards = HardwareSystem.Setup.DeviceManager.GetDevices(new WithName("StandardKeyboard"));
 
-			if (standardKeyboard == null)
-				Console.WriteLine("No Keyboard");
+			if (standardKeyboards == null)
+			{
+				Console.WriteLine("No Keyboards");
+				ForeverLoop();
+			}
+
+			if (standardKeyboards.Count == 0)
+			{
+				Console.WriteLine("No Keyboards");
+				ForeverLoop();
+			}
+
+			var standardKeyboard = standardKeyboards[0] as DeviceSystem.IKeyboardDevice;
 
 			Debug = ConsoleManager.Controller.Debug;
 
