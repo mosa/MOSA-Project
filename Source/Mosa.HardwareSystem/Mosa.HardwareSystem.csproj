@@ -91,7 +91,6 @@
     <Compile Include="IOPortRegion.cs" />
     <Compile Include="IOPortResources.cs" />
     <Compile Include="IPCIController.cs" />
-    <Compile Include="IISADeviceDriver.cs" />
     <Compile Include="MemoryRegion.cs" />
     <Compile Include="MemoryResources.cs" />
     <Compile Include="PCIControllerManager.cs" />

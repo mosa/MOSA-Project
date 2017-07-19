@@ -46,6 +46,9 @@ namespace Mosa.CoolWorld.x86
 			var hardware = new HAL.Hardware();
 			HardwareSystem.Setup.Initialize(hardware);
 
+			Console.WriteLine("> Registering device drivers...");
+			Mosa.DeviceDriver.Setup.Register(Setup.DeviceDriverRegistry);
+
 			Console.WriteLine("> Adding hardware devices...");
 			HardwareSystem.Setup.Start();
 
@@ -54,12 +57,6 @@ namespace Mosa.CoolWorld.x86
 
 			// Get StandardKeyboard
 			var standardKeyboards = HardwareSystem.Setup.DeviceManager.GetDevices(new WithName("StandardKeyboard"));
-
-			if (standardKeyboards == null)
-			{
-				Console.WriteLine("No Keyboards");
-				ForeverLoop();
-			}
 
 			if (standardKeyboards.Count == 0)
 			{

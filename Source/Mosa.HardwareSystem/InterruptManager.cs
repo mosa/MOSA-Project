@@ -10,17 +10,17 @@ namespace Mosa.HardwareSystem
 	public class InterruptManager
 	{
 		/// <summary>
-		///
+		/// The maximum interrupts
 		/// </summary>
 		public const ushort MaxInterrupts = 16;
 
 		/// <summary>
-		///
+		/// The interrupt handlers
 		/// </summary>
-		protected LinkedList<IHardwareDevice>[] interruptHandlers;
+		protected List<IHardwareDevice>[] interruptHandlers;
 
 		/// <summary>
-		///
+		/// The spin lock
 		/// </summary>
 		protected SpinLock spinLock;
 
@@ -29,11 +29,11 @@ namespace Mosa.HardwareSystem
 		/// </summary>
 		public InterruptManager()
 		{
-			interruptHandlers = new LinkedList<IHardwareDevice>[MaxInterrupts];
+			interruptHandlers = new List<IHardwareDevice>[MaxInterrupts];
 
 			for (int i = 0; i < MaxInterrupts; i++)
 			{
-				interruptHandlers[i] = new LinkedList<IHardwareDevice>();
+				interruptHandlers[i] = new List<IHardwareDevice>();
 			}
 		}
 
@@ -71,7 +71,7 @@ namespace Mosa.HardwareSystem
 			try
 			{
 				spinLock.Enter();
-				interruptHandlers[irq].AddLast(hardwareDevice);
+				interruptHandlers[irq].Add(hardwareDevice);
 			}
 			finally
 			{
