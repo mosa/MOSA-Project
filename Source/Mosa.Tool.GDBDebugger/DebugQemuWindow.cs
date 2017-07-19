@@ -12,14 +12,9 @@ namespace Mosa.Tool.GDBDebugger
 {
 	public partial class DebugQemuWindow : Form
 	{
-		private AppLocations _appLocations;
-		private ImageFormat _imageFormat;
-
-		public Connector Debugger
-		{
-			get;
-			private set;
-		}
+		private readonly AppLocations AppLocations;
+		private readonly Options Options;
+		private ImageFormat ImageFormat;
 
 		public Process QEMUProcess
 		{
@@ -27,17 +22,18 @@ namespace Mosa.Tool.GDBDebugger
 			private set;
 		}
 
-		public DebugQemuWindow(AppLocations apps)
+		public DebugQemuWindow(AppLocations apps, Options options)
 		{
 			InitializeComponent();
 
-			_appLocations = apps;
+			Options = options;
+			AppLocations = apps;
 		}
 
 		private void DebugQemuWindow_Load(object sender, EventArgs e)
 		{
-			tbQEMU.Text = _appLocations.QEMU;
-			tbBIOSDirectory.Text = _appLocations.QEMUBIOSDirectory;
+			tbQEMU.Text = AppLocations.QEMU;
+			tbBIOSDirectory.Text = AppLocations.QEMUBIOSDirectory;
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
@@ -59,7 +55,7 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void btnImageBrowse_Click(object sender, EventArgs e)
 		{
-			using (OpenFileDialog imageDialog = new OpenFileDialog())
+			using (var imageDialog = new OpenFileDialog())
 			{
 				imageDialog.Filter = "Supported files (*.iso,*.img)|*.iso;*.img|IMG files (*.img)|*.img|ISO files (*.iso)|*.iso";
 
@@ -67,7 +63,7 @@ namespace Mosa.Tool.GDBDebugger
 				{
 					tbImage.Text = imageDialog.FileName;
 
-					_imageFormat = GetFormat(tbImage.Text);
+					ImageFormat = GetFormat(tbImage.Text);
 				}
 			}
 		}
@@ -105,28 +101,24 @@ namespace Mosa.Tool.GDBDebugger
 
 		private bool LaunchAndDebug()
 		{
-			int debugPort = 1234;
-
-			QEMUProcess = StartQEMU(debugPort);
-
-			Debugger = new GDB.Connector(new X86Platform(), "localhost", debugPort);
+			QEMUProcess = StartQEMU(Options.GDBPort);
 
 			return true;
 		}
 
 		private Process StartQEMU(int debugPort)
 		{
-			ProcessStartInfo info = new ProcessStartInfo();
+			var info = new ProcessStartInfo();
 			info.FileName = tbQEMU.Text;
 
 			info.Arguments = " -L \"" + tbBIOSDirectory.Text + "\"";
 
 			//TODO: Check platform
-			info.Arguments = info.Arguments + " -cpu qemu32,+sse4.1";
+			info.Arguments += " -cpu qemu32,+sse4.1";
 
 			info.Arguments = info.Arguments + " -S -gdb tcp::" + debugPort.ToString();
 
-			if (_imageFormat == ImageFormat.ISO)
+			if (ImageFormat == ImageFormat.ISO)
 			{
 				info.Arguments = info.Arguments + " -cdrom \"" + tbImage.Text + "\"";
 			}

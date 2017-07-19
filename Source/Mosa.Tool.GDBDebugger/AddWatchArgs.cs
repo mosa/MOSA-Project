@@ -8,9 +8,9 @@ namespace Mosa.Tool.GDBDebugger
 
 		public ulong Address { get; private set; }
 
-		public int Length { get; private set; }
+		public uint Length { get; private set; }
 
-		public AddWatchArgs(string name, ulong address, int length)
+		public AddWatchArgs(string name, ulong address, uint length)
 		{
 			Name = name;
 			Address = address;

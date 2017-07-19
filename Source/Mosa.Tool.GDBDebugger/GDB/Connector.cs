@@ -15,9 +15,6 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 	public class Connector
 	{
-		public const string DefaultConnectionHost = "localhost";
-		public const int DefaultConnectionPort = 1234;
-
 		public TcpClient TcpClient { get; set; }
 		public GDBClient GDBClient { get; set; }
 
@@ -37,12 +34,9 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		public Connector(BasePlatform platform)
 		{
 			Platform = platform;
-
-			ConnectionHost = DefaultConnectionHost;
-			ConnectionPort = DefaultConnectionPort;
 		}
 
-		public Connector(BasePlatform platform, string host = DefaultConnectionHost, int port = DefaultConnectionPort)
+		public Connector(BasePlatform platform, string host, int port)
 			: this(platform)
 		{
 			ConnectionHost = host;
@@ -105,65 +99,23 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		{
 			var command = new GetReasonHalted();
 
-			GDBClient.SendCommandAsync(command);
+			GDBClient.SendCommand(command);
 		}
 
 		public void ExtendedMode()
 		{
 			var command = new ExtendedMode();
 
-			GDBClient.SendCommandAsync(command);
+			GDBClient.SendCommand(command);
 		}
 
 		public void Kill()
 		{
 			var command = new Kill();
 
-			GDBClient.SendCommandAsync(command);
+			GDBClient.SendCommand(command);
 
 			Disconnect();
-		}
-
-		public void Step()
-		{
-			var command = new Step(OnStep);
-
-			GDBClient.SendCommandAsync(command);
-
-			CallOnRunning();
-		}
-
-		public void AddBreakPoint(ulong address)
-		{
-			
-			if (IsRunning)
-			{
-				Break();
-				var command = new SetBreakPoint(address, 4, 0, OnAddBreakpoint);
-				GDBClient.SendCommandAsync(command);
-			}
-			else
-			{
-				var command = new SetBreakPoint(address, 4, 0);
-				GDBClient.SendCommandAsync(command);
-			}
-		}
-
-		public void ClearBreakPoint(ulong address)
-		{
-			var command = new ClearBreakPoint(address, 4, 0);
-			GDBClient.SendCommandAsync(command);
-		}
-
-		public void StepN(uint stepCount)
-		{
-			var command = new Step();
-			for (uint currentStep = 0; currentStep < stepCount - 1; currentStep++)
-			{
-				GDBClient.SendCommandAsync(command);
-			}
-
-			Step();
 		}
 
 		public void Continue()
@@ -171,17 +123,57 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			if (IsRunning)
 				return;
 
-			var command = new Continue(OnStop);
+			IsPaused = false;
+			CallOnRunning();
 
-			GDBClient.SendCommandAsync(command);
+			var command = new Continue(OnStop);
+			GDBClient.SendCommand(command);
+		}
+
+		public void Step(bool skipOnStep = false)
+		{
+			if (IsRunning)
+				return;
 
 			IsPaused = false;
-
 			CallOnRunning();
+
+			var command = skipOnStep ? new Step(OnStepQuiet) : new Step(OnStep);
+
+			GDBClient.SendCommand(command);
+		}
+
+		public void StepN(uint stepCount)
+		{
+			if (IsRunning)
+				return;
+
+			var command = new Step();
+			for (uint currentStep = 0; currentStep < stepCount - 1; currentStep++)
+			{
+				GDBClient.SendCommand(command);
+			}
+
+			Step();
+		}
+
+		public void AddBreakPoint(ulong address)
+		{
+			var command = new SetBreakPoint(address, 4, 0);
+			GDBClient.SendCommand(command);
+		}
+
+		public void ClearBreakPoint(ulong address)
+		{
+			var command = new ClearBreakPoint(address, 4, 0);
+			GDBClient.SendCommand(command);
 		}
 
 		public void Break()
 		{
+			if (!IsRunning)
+				return;
+
 			GDBClient.SendBreak();
 			IsPaused = true;
 		}
@@ -190,38 +182,29 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		{
 			var command = new GetRegisters(OnGetRegisters);
 
-			GDBClient.SendCommandAsync(command);
+			GDBClient.SendCommand(command);
 		}
 
-		public void ReadMemory(ulong address, int size, OnMemoryRead onMemoryRead)
+		public void ReadMemory(ulong address, uint size, OnMemoryRead onMemoryRead)
 		{
 			var command = new ReadMemory(address, size, OnMemoryRead);
 
 			OnMemoryReadMap.Add(command, onMemoryRead);
 
-			GDBClient.SendCommandAsync(command);
-		}
-
-		private void OnAddBreakpoint(GDBCommand command)
-		{
-			Continue();
+			GDBClient.SendCommand(command);
 		}
 
 		private void OnStop(GDBCommand command)
 		{
-			IsPaused = true;
-
 			GetRegisters();
 		}
 
 		private void OnStep(GDBCommand command)
 		{
 			GetRegisters();
-
-			CallOnRunning();
 		}
 
-		private void OnCompetion(GDBCommand command)
+		private void OnStepQuiet(GDBCommand command)
 		{
 			IsPaused = true;
 		}

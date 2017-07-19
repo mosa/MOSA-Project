@@ -16,7 +16,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 		public abstract Register StackFrame { get; }
 		public abstract Register StatusFlag { get; }
 
-		public static string ToHex(ulong value, int size)
+		public static string ToHex(ulong value, uint size)
 		{
 			switch (size)
 			{

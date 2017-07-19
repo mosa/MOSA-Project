@@ -800,15 +800,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Expands the neg instruction for 64-bits.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ExpandNeg(Context context)
-		{
-			throw new NotSupportedException();
-		}
-
-		/// <summary>
 		/// Expands the not instruction for 64-bits.
 		/// </summary>
 		/// <param name="context">The context.</param>

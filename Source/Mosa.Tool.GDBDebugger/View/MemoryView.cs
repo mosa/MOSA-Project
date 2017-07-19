@@ -36,15 +36,15 @@ namespace Mosa.Tool.GDBDebugger.View
 			Rows = lbMemory.Height / (lbMemory.Font.Height + 2);
 
 			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
-			var bytes = Rows * Columns;
+			uint bytes = (uint)(Rows * Columns);
 
-			if (bytes > 0x800)
-			{
-				Rows = 0x800 / Columns;
-				bytes = Rows * Columns;
-			}
+			//if (bytes > 0x800)
+			//{
+			//	Rows = 0x800 / Columns;
+			//	bytes = (uint)(Rows * Columns);
+			//}
 
-			GDBConnector.ReadMemory(address, bytes, OnMemoryRead);
+			MemoryCache.ReadMemory(address, bytes, OnMemoryRead);
 		}
 
 		private void OnMemoryRead(ulong address, byte[] bytes)

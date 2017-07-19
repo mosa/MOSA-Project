@@ -96,6 +96,7 @@ namespace Mosa.TestWorld.x86
 		{
 			while (true)
 			{
+				var result = Mosa.UnitTest.Collection.BoxingTests.EqualsI4(10);
 				Native.Hlt();
 			}
 		}

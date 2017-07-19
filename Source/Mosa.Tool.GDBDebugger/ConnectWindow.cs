@@ -8,15 +8,12 @@ namespace Mosa.Tool.GDBDebugger
 {
 	public partial class ConnectWindow : Form
 	{
-		public Connector Debugger
-		{
-			get;
-			private set;
-		}
+		private readonly Options Options;
 
-		public ConnectWindow()
+		public ConnectWindow(Options options)
 		{
 			InitializeComponent();
+			Options = options;
 		}
 
 		private void btnCancel_Click(object sender, EventArgs e)
@@ -26,7 +23,8 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void btnConnect_Click(object sender, EventArgs e)
 		{
-			Debugger = new Connector(new X86Platform(), tbHost.Text, (int)numPort.Value);
+			Options.GDBHost = tbHost.Text;
+			Options.GDBPort = (int)numPort.Value;
 
 			DialogResult = DialogResult.OK;
 		}

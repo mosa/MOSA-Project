@@ -10,6 +10,8 @@ namespace Mosa.Tool.GDBDebugger
 	{
 		public int GDBPort { get; set; }
 
+		public string GDBHost { get; set; }
+
 		public bool AutoConnect { get; set; }
 
 		public string ImageFile { get; set; }
@@ -31,6 +33,7 @@ namespace Mosa.Tool.GDBDebugger
 		public Options()
 		{
 			GDBPort = 2345;
+			GDBHost = "localhost";
 			AutoConnect = false;
 			ImageFile = null;
 			EmulatorMemoryInMB = 256;

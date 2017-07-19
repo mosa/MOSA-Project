@@ -1,4 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 using System.Collections.Generic;
 
 namespace Mosa.HardwareSystem
@@ -43,12 +44,14 @@ namespace Mosa.HardwareSystem
 
 			foreach (var driver in drivers)
 			{
-				if ((driver as IISADeviceDriver).AutoLoad)
-					StartISADevice((driver as IISADeviceDriver));
+				if (driver is ISADeviceDriver)
+				{
+					StartISADevice(driver as ISADeviceDriver);
+				}
 			}
 		}
 
-		public static void StartISADevice(IISADeviceDriver driver)
+		public static void StartISADevice(ISADeviceDriver driver)
 		{
 			var hardwareDevice = driver.Factory() as IHardwareDevice;
 
@@ -67,18 +70,18 @@ namespace Mosa.HardwareSystem
 				memoryRegions.Add(new MemoryRegion(driver.BaseAddress, driver.AddressRange));
 			}
 
-			if (driver.PhysicalMemory != null)
-			{
-				foreach (var physicalMemory in driver.PhysicalMemory)
-				{
-					if (physicalMemory.MemorySize > 0)
-					{
-						var memory = HAL.AllocateMemory(physicalMemory.MemorySize, physicalMemory.MemoryAlignment);
+			//if (driver.PhysicalMemory != null)
+			//{
+			//	foreach (var physicalMemory in driver.PhysicalMemory)
+			//	{
+			//		if (physicalMemory.MemorySize > 0)
+			//		{
+			//			var memory = HAL.AllocateMemory(physicalMemory.MemorySize, physicalMemory.MemoryAlignment);
 
-						memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));
-					}
-				}
-			}
+			//			memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));
+			//		}
+			//	}
+			//}
 
 			var interruptHandler = new InterruptHandler(InterruptManager, driver.IRQ, hardwareDevice);
 

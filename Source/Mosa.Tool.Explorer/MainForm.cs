@@ -15,7 +15,7 @@ using System.Windows.Forms;
 
 namespace Mosa.Tool.Explorer
 {
-	public partial class Main : Form, ITraceListener
+	public partial class MainForm : Form, ITraceListener
 	{
 		private CodeForm form = new CodeForm();
 
@@ -34,7 +34,7 @@ namespace Mosa.Tool.Explorer
 
 		private MethodStore methodStore = new MethodStore();
 
-		public Main()
+		public MainForm()
 		{
 			InitializeComponent();
 

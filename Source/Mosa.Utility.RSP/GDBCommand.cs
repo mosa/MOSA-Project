@@ -43,12 +43,12 @@ namespace Mosa.Utility.RSP
 			return GDBClient.HexToDecimal(ResponseData[i * 2], ResponseData[(i * 2) + 1]);
 		}
 
-		public ulong GetInteger(int index, int size)
+		public ulong GetInteger(int index, uint size)
 		{
 			index = index * 2;
 			ulong value = 0;
 
-			for (int i = index + (size * 2) - 2; i >= index; i = i - 2)
+			for (int i = index + ((int)size * 2) - 2; i >= index; i = i - 2)
 			{
 				var b = GDBClient.HexToDecimal(ResponseData[i], ResponseData[i + 1]);
 				value = value << 8;

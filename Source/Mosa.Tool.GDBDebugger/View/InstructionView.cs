@@ -56,9 +56,9 @@ namespace Mosa.Tool.GDBDebugger.View
 				return;
 
 			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
-			var bytes = 512;
+			uint bytes = 512;
 
-			GDBConnector.ReadMemory(address, bytes, OnMemoryRead);
+			MemoryCache.ReadMemory(address, bytes, OnMemoryRead);
 		}
 
 		private void OnMemoryRead(ulong address, byte[] bytes)

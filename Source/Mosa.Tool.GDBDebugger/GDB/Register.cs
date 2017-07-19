@@ -8,7 +8,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 		public string Name { get { return Definition.Name; } }
 
-		public int Size { get { return Definition.Size; } }
+		public uint Size { get { return Definition.Size; } }
 
 		public ulong Value { get; private set; }
 		public ulong ValueExtended { get; private set; }

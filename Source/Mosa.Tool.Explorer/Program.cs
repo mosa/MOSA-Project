@@ -15,7 +15,7 @@ namespace Mosa.Tool.Explorer
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			var main = new Main();
+			var main = new MainForm();
 
 			main.LoadArguments(args);
 

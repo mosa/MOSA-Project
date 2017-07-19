@@ -8,11 +8,11 @@ namespace Mosa.Tool.GDBDebugger
 
 		public ulong Address { get; private set; }
 
-		public int Size { get; private set; }
+		public uint Size { get; private set; }
 
 		public bool Signed { get; private set; }
 
-		public Watch(string name, ulong address, int size, bool signed = false)
+		public Watch(string name, ulong address, uint size, bool signed = false)
 		{
 			Name = name;
 			Address = address;

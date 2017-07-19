@@ -80,6 +80,7 @@
             this.label8 = new MetroFramework.Controls.MetroLabel();
             this.cbMosaDebugger = new MetroFramework.Controls.MetroCheckBox();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
+            this.cbLaunchMosaDebugger = new MetroFramework.Controls.MetroCheckBox();
             this.cbLaunchGDB = new MetroFramework.Controls.MetroCheckBox();
             this.cbEnableQemuGDB = new MetroFramework.Controls.MetroCheckBox();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
@@ -114,7 +115,6 @@
             this.tabCounters = new MetroFramework.Controls.MetroTabPage();
             this.rtbCounters = new System.Windows.Forms.RichTextBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-            this.cbLaunchMosaDebugger = new MetroFramework.Controls.MetroCheckBox();
             this.tbApplicationLocations.SuspendLayout();
             this.tabOptions.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -852,6 +852,20 @@
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "Debugger:";
             // 
+            // cbLaunchMosaDebugger
+            // 
+            this.cbLaunchMosaDebugger.AutoSize = true;
+            this.cbLaunchMosaDebugger.Checked = true;
+            this.cbLaunchMosaDebugger.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbLaunchMosaDebugger.Location = new System.Drawing.Point(6, 72);
+            this.cbLaunchMosaDebugger.Name = "cbLaunchMosaDebugger";
+            this.cbLaunchMosaDebugger.Size = new System.Drawing.Size(154, 15);
+            this.cbLaunchMosaDebugger.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbLaunchMosaDebugger.TabIndex = 8;
+            this.cbLaunchMosaDebugger.Text = "Launch MOSA Debugger";
+            this.cbLaunchMosaDebugger.UseCustomBackColor = true;
+            this.cbLaunchMosaDebugger.UseSelectable = true;
+            // 
             // cbLaunchGDB
             // 
             this.cbLaunchGDB.AutoSize = true;
@@ -1306,20 +1320,6 @@
             this.openFileDialog2.Filter = "Executable|*.exe";
             this.openFileDialog2.Title = "Select Assembly";
             // 
-            // cbLaunchMosaDebugger
-            // 
-            this.cbLaunchMosaDebugger.AutoSize = true;
-            this.cbLaunchMosaDebugger.Checked = true;
-            this.cbLaunchMosaDebugger.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLaunchMosaDebugger.Location = new System.Drawing.Point(6, 72);
-            this.cbLaunchMosaDebugger.Name = "cbLaunchMosaDebugger";
-            this.cbLaunchMosaDebugger.Size = new System.Drawing.Size(154, 15);
-            this.cbLaunchMosaDebugger.Style = MetroFramework.MetroColorStyle.Blue;
-            this.cbLaunchMosaDebugger.TabIndex = 8;
-            this.cbLaunchMosaDebugger.Text = "Launch MOSA Debugger";
-            this.cbLaunchMosaDebugger.UseCustomBackColor = true;
-            this.cbLaunchMosaDebugger.UseSelectable = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1332,7 +1332,7 @@
             this.Resizable = false;
             this.ShadowType = MetroFramework.Forms.MetroFormShadowType.AeroShadow;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "MOSA Launcher v1.7";
+            this.Text = "MOSA Launcher v1.7.1";
             this.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);

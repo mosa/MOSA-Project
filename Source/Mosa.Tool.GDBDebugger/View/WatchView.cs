@@ -24,7 +24,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 			public ulong Value { get; set; }
 
-			public int Size { get { return Watch.Size; } }
+			public uint Size { get { return Watch.Size; } }
 
 			[Browsable(false)]
 			public Watch Watch;
@@ -53,7 +53,7 @@ namespace Mosa.Tool.GDBDebugger.View
 				watch.Value = 0;
 				watch.HexValue = string.Empty;
 
-				GDBConnector.ReadMemory(watch.Watch.Address, watch.Size, OnMemoryRead);
+				MemoryCache.ReadMemory(watch.Watch.Address, watch.Size, OnMemoryRead);
 			}
 
 			Refresh();
@@ -87,27 +87,27 @@ namespace Mosa.Tool.GDBDebugger.View
 				if (watch.Watch.Address != address || watch.Size != bytes.Length)
 					continue;
 
-				watch.Value = ToLong(bytes, bytes.Length);
+				watch.Value = ToLong(bytes);
 				watch.HexValue = BasePlatform.ToHex(watch.Value, watch.Size);
 			}
 
 			Refresh();
 		}
 
-		private static ulong ToLong(byte[] bytes, int size)
+		private static ulong ToLong(byte[] bytes)
 		{
 			ulong value = 0;
 
 			for (int i = 0; i < bytes.Length; i++)
 			{
 				ulong shifted = (ulong)(bytes[i] << (i * 8));
-				value = value | shifted;
+				value |= shifted;
 			}
 
 			return value;
 		}
 
-		public void AddWatch(string name, ulong address, int size, bool signed)
+		public void AddWatch(string name, ulong address, uint size, bool signed)
 		{
 			var watch = new Watch(name, address, size, signed);
 			var watchEntry = new WatchEntry(watch);
@@ -126,24 +126,6 @@ namespace Mosa.Tool.GDBDebugger.View
 			var watchEntry = dataGridView1.CurrentCell.OwningRow.DataBoundItem as WatchEntry;
 
 			MainForm.RemoveWatch(watchEntry.Watch);
-		}
-
-		private void toolStripButton1_Click(object sender, System.EventArgs e)
-		{
-			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
-
-			int size = 0;
-
-			switch (cbLength.SelectedIndex)
-			{
-				case 0: size = 1; break;
-				case 1: size = 2; break;
-				case 2: size = 4; break;
-				case 3: size = 8; break;
-				default: size = 4; break;
-			}
-
-			MainForm.AddWatch(null, address, size);
 		}
 
 		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -168,6 +150,29 @@ namespace Mosa.Tool.GDBDebugger.View
 			m.MenuItems.Add(new MenuItem("&Delete watch", new EventHandler(MainForm.OnRemoveWatch)) { Tag = clickedEntry.Watch });
 
 			m.Show(dataGridView1, relativeMousePosition);
+		}
+
+		private void btnDeleteAll_Click(object sender, EventArgs e)
+		{
+			MainForm.RemoveAllWatches();
+		}
+
+		private void btnAdd_Click(object sender, EventArgs e)
+		{
+			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
+
+			uint size = 0;
+
+			switch (cbLength.SelectedIndex)
+			{
+				case 0: size = 1; break;
+				case 1: size = 2; break;
+				case 2: size = 4; break;
+				case 3: size = 8; break;
+				default: size = 4; break;
+			}
+
+			MainForm.AddWatch(null, address, size);
 		}
 	}
 }

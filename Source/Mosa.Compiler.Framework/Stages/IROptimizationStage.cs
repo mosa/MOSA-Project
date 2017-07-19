@@ -43,7 +43,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private int simplifyPhiCount = 0;
 		private int deadCodeEliminationPhi = 0;
 		private int reduce64BitOperationsTo32BitCount = 0;
-		private int promoteLocalVariableCount = 0;
 		private int constantFoldingLogicalOrCount = 0;
 		private int constantFoldingLogicalAndCount = 0;
 		private int combineIntegerCompareBranchCount = 0;
@@ -192,6 +191,7 @@ namespace Mosa.Compiler.Framework.Stages
 				FoldLoadStoreOffsets,
 				ConstantFoldingPhi,
 				SimplifyPhi,
+				SimplifyPhi2,
 				DeadCodeEliminationPhi,
 				NormalizeConstantTo32Bit
 			};
@@ -527,7 +527,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ForwardPropagateCompoundMove(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.MoveCompound))
+			if (node.Instruction != IRInstruction.MoveCompound)
 				return;
 
 			if (node.Result.Definitions.Count != 1)
@@ -721,8 +721,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationAdditionAndSubstraction(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.AddSigned || node.Instruction == IRInstruction.AddUnsigned
-				|| node.Instruction == IRInstruction.SubSigned || node.Instruction == IRInstruction.SubUnsigned))
+			if (!(node.Instruction == IRInstruction.AddSigned
+				|| node.Instruction == IRInstruction.AddUnsigned
+				|| node.Instruction == IRInstruction.SubSigned
+				|| node.Instruction == IRInstruction.SubUnsigned))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -751,7 +753,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationMultiplication(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.MulSigned || node.Instruction == IRInstruction.MulUnsigned))
+			if (!(node.Instruction == IRInstruction.MulSigned
+				|| node.Instruction == IRInstruction.MulUnsigned))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -812,7 +815,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationDivision(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.DivSigned || node.Instruction == IRInstruction.DivUnsigned))
+			if (!(node.Instruction == IRInstruction.DivSigned
+				|| node.Instruction == IRInstruction.DivUnsigned))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -876,7 +880,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void SimplifyExtendedMoveWithConstant(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.MoveZeroExtended || node.Instruction == IRInstruction.MoveSignExtended))
+			if (!(node.Instruction == IRInstruction.MoveZeroExtended
+				|| node.Instruction == IRInstruction.MoveSignExtended))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -927,7 +932,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationSubtraction(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.SubSigned || node.Instruction == IRInstruction.SubUnsigned))
+			if (!(node.Instruction == IRInstruction.SubSigned
+				|| node.Instruction == IRInstruction.SubUnsigned))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -954,7 +960,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationLogicalOperators(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.LogicalAnd || node.Instruction == IRInstruction.LogicalOr))
+			if (!(node.Instruction == IRInstruction.LogicalAnd
+				|| node.Instruction == IRInstruction.LogicalOr))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -1018,7 +1025,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationShiftOperators(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.ShiftLeft || node.Instruction == IRInstruction.ShiftRight || node.Instruction == IRInstruction.ArithmeticShiftRight))
+			if (!(node.Instruction == IRInstruction.ShiftLeft
+				|| node.Instruction == IRInstruction.ShiftRight
+				|| node.Instruction == IRInstruction.ArithmeticShiftRight))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -1166,9 +1175,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantMoveToRight(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.AddSigned || node.Instruction == IRInstruction.AddUnsigned
-				|| node.Instruction == IRInstruction.MulSigned || node.Instruction == IRInstruction.MulUnsigned
-				|| node.Instruction == IRInstruction.LogicalAnd || node.Instruction == IRInstruction.LogicalOr
+			if (!(node.Instruction == IRInstruction.AddSigned
+				|| node.Instruction == IRInstruction.AddUnsigned
+				|| node.Instruction == IRInstruction.MulSigned
+				|| node.Instruction == IRInstruction.MulUnsigned
+				|| node.Instruction == IRInstruction.LogicalAnd
+				|| node.Instruction == IRInstruction.LogicalOr
 				|| node.Instruction == IRInstruction.LogicalXor))
 				return;
 
@@ -1191,8 +1203,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantFoldingAdditionAndSubstraction(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.AddSigned || node.Instruction == IRInstruction.AddUnsigned
-				|| node.Instruction == IRInstruction.SubSigned || node.Instruction == IRInstruction.SubUnsigned))
+			if (!(node.Instruction == IRInstruction.AddSigned
+				|| node.Instruction == IRInstruction.AddUnsigned
+				|| node.Instruction == IRInstruction.SubSigned
+				|| node.Instruction == IRInstruction.SubUnsigned))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -1344,7 +1358,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantFoldingMultiplication(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.MulSigned || node.Instruction == IRInstruction.MulUnsigned))
+			if (!(node.Instruction == IRInstruction.MulSigned
+				|| node.Instruction == IRInstruction.MulUnsigned))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -1388,7 +1403,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantFoldingDivision(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.DivSigned || node.Instruction == IRInstruction.DivUnsigned))
+			if (!(node.Instruction == IRInstruction.DivSigned
+				|| node.Instruction == IRInstruction.DivUnsigned))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -1587,7 +1603,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void SimplifyExtendedMove(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.MoveZeroExtended || node.Instruction == IRInstruction.MoveSignExtended))
+			if (!(node.Instruction == IRInstruction.MoveZeroExtended
+				|| node.Instruction == IRInstruction.MoveSignExtended))
 				return;
 
 			if (!node.Result.IsVirtualRegister || !node.Operand1.IsVirtualRegister)
@@ -1712,7 +1729,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Definitions.Count != 1)
 				return;
 
-			if (!node.Result.IsInteger)
+			if (!node.Result.IsInteger) // future: should work on other types as well
 				return;
 
 			if (trace.Active) trace.Log("*** SimplifyPhiInstruction");
@@ -1728,6 +1745,35 @@ namespace Mosa.Compiler.Framework.Stages
 				node.SetInstruction(IRInstruction.Nop);
 			}
 
+			if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
+			simplifyPhiCount++;
+			changeCount++;
+		}
+
+		private void SimplifyPhi2(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.Phi)
+				return;
+
+			if (node.Result.Definitions.Count != 1)
+				return;
+
+			if (!node.Result.IsInteger) // future: should work on other types as well
+				return;
+
+			var operand = node.Operand1;
+
+			foreach (var op in node.Operands)
+			{
+				if (op != operand)
+					return;
+			}
+
+			if (trace.Active) trace.Log("*** SimplifyPhiInstruction");
+			if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
+			AddOperandUsageToWorkList(node);
+
+			node.SetInstruction(IRInstruction.MoveInteger, node.Result, node.Operand1);
 			if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
 			simplifyPhiCount++;
 			changeCount++;
@@ -1763,7 +1809,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationRemUnsignedModulus(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.RemUnsigned))
+			if (node.Instruction != IRInstruction.RemUnsigned)
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -1816,7 +1862,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationRemSignedModulus(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.RemSigned))
+			if (node.Instruction != IRInstruction.RemSigned)
 				return;
 
 			if (!node.Result.IsVirtualRegister)

@@ -116,7 +116,7 @@ namespace Mosa.Tool.GDBDebugger.View
 				if (len > MaxMemoryQuery)
 					len = MaxMemoryQuery;
 
-				GDBConnector.ReadMemory(at, len, OnMemoryRead);
+				MemoryCache.ReadMemory(at, (uint)len, OnMemoryRead);
 
 				addresses.Add(at);
 

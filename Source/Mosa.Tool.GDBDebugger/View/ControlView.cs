@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.GDBDebugger.View
@@ -15,6 +16,7 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private void btnStep_Click(object sender, EventArgs e)
 		{
+			MemoryCache.Clear();
 			GDBConnector.ClearAllBreakPoints();
 			GDBConnector.Step();
 			MainForm.ResendBreakPoints();
@@ -22,6 +24,9 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private void btnStepN_Click(object sender, EventArgs e)
 		{
+			if (GDBConnector.IsRunning)
+				return;
+
 			uint steps = 0;
 			try
 			{
@@ -36,14 +41,27 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (steps == 0)
 				return;
 
-			GDBConnector.ClearAllBreakPoints();
-			GDBConnector.Step();
-			MainForm.ResendBreakPoints();
+			MemoryCache.Clear();
 
-			if (steps <= 1)
+			if (MainForm.BreakPoints.Count != 0)
+			{
+				GDBConnector.ClearAllBreakPoints();
+				GDBConnector.Step(true);
+
+				while (GDBConnector.IsRunning)
+				{
+					Thread.Sleep(1);
+				}
+
+				MainForm.ResendBreakPoints();
+
+				steps--;
+			}
+
+			if (steps == 0)
 				return;
 
-			GDBConnector.StepN(steps - 1);
+			GDBConnector.StepN(steps);
 		}
 
 		private void btnRestart_Click(object sender, EventArgs e)
@@ -53,9 +71,23 @@ namespace Mosa.Tool.GDBDebugger.View
 
 		private void btnStart_Click(object sender, EventArgs e)
 		{
-			GDBConnector.ClearAllBreakPoints();
-			GDBConnector.Step();
-			MainForm.ResendBreakPoints();
+			if (GDBConnector.IsRunning)
+				return;
+
+			MemoryCache.Clear();
+
+			if (MainForm.BreakPoints.Count != 0)
+			{
+				GDBConnector.ClearAllBreakPoints();
+				GDBConnector.Step(true);
+
+				while (GDBConnector.IsRunning)
+				{
+					Thread.Sleep(1);
+				}
+
+				MainForm.ResendBreakPoints();
+			}
 
 			GDBConnector.Continue();
 		}
@@ -63,6 +95,7 @@ namespace Mosa.Tool.GDBDebugger.View
 		private void btnStop_Click(object sender, EventArgs e)
 		{
 			GDBConnector.Break();
+			GDBConnector.GetRegisters();
 		}
 	}
 }
