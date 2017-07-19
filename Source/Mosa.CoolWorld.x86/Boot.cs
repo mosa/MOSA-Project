@@ -60,7 +60,7 @@ namespace Mosa.CoolWorld.x86
 
 			if (standardKeyboards.Count == 0)
 			{
-				Console.WriteLine("No Keyboards");
+				Console.WriteLine("No Keyboard!");
 				ForeverLoop();
 			}
 
