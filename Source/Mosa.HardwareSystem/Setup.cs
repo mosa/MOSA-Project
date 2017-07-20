@@ -51,6 +51,19 @@ namespace Mosa.HardwareSystem
 			}
 		}
 
+		static public void StartPCIDevices()
+		{
+			PCIControllerManager.CreatePCIDevices();
+
+			//var devices = deviceManager.GetDevices(new IsPCIDevice(), new IsAvailable());
+
+			//foreach (var device in devices)
+			//{
+			//	var pciDevice = device as IPCIDevice;
+			//	StartDevice(pciDevice);
+			//}
+		}
+
 		public static void StartISADevice(ISADeviceDriver driver)
 		{
 			var hardwareDevice = driver.Factory() as IHardwareDevice;

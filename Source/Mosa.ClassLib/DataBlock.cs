@@ -5,29 +5,29 @@ using System.Text;
 namespace Mosa.ClassLib
 {
 	/// <summary>
-	/// Binary Formatter (Little Endian)
+	/// Data Block (Little Endian)
 	/// </summary>
-	public struct BinaryFormat
+	public struct DataBlock
 	{
 		/// <summary>
-		///
+		/// The data
 		/// </summary>
 		private byte[] data;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BinaryFormat"/> struct.
+		/// Initializes a new instance of the <see cref="DataBlock"/> struct.
 		/// </summary>
 		/// <param name="data">The data.</param>
-		public BinaryFormat(byte[] data)
+		public DataBlock(byte[] data)
 		{
 			this.data = data;
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BinaryFormat"/> struct.
+		/// Initializes a new instance of the <see cref="DataBlock"/> struct.
 		/// </summary>
 		/// <param name="length">The length.</param>
-		public BinaryFormat(uint length)
+		public DataBlock(uint length)
 		{
 			data = new byte[length];
 		}

@@ -155,7 +155,7 @@ namespace Mosa.Utility.BootImage
 			ldlinuxWriter.Flush();
 
 			// Read boot sector
-			var fatBootSector = new BinaryFormat(partitionDevice.ReadBlock(0, 1));
+			var fatBootSector = new DataBlock(partitionDevice.ReadBlock(0, 1));
 
 			// Set the first sector location of the file
 			fatBootSector.SetUInt(sect1Ptr0, fat.GetSectorByCluster(location.FirstCluster));
@@ -176,7 +176,7 @@ namespace Mosa.Utility.BootImage
 			if (location.IsValid)
 			{
 				// Read boot sector
-				var bootSector = new BinaryFormat(partitionDevice.ReadBlock(0, 1));
+				var bootSector = new DataBlock(partitionDevice.ReadBlock(0, 1));
 
 				// Set the first sector location of the file
 				bootSector.SetUInt(0x1F8, fat.GetSectorByCluster(location.FirstCluster));
@@ -203,7 +203,7 @@ namespace Mosa.Utility.BootImage
 				}
 
 				// Read the first cluster of the file
-				var firstCluster = new BinaryFormat(fat.ReadCluster(location.FirstCluster));
+				var firstCluster = new DataBlock(fat.ReadCluster(location.FirstCluster));
 
 				uint patchArea = 0;
 

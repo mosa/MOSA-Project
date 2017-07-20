@@ -52,7 +52,9 @@ namespace Mosa.HardwareSystem
 			foreach (var device in devices)
 			{
 				if (match.IsMatch(device))
+				{
 					list.Add(device);
+				}
 			}
 
 			spinLock.Exit();
@@ -75,7 +77,9 @@ namespace Mosa.HardwareSystem
 			foreach (var device in devices)
 			{
 				if (match1.IsMatch(device) && (match2.IsMatch(device)))
+				{
 					list.Add(device);
+				}
 			}
 
 			spinLock.Exit();
@@ -123,14 +127,18 @@ namespace Mosa.HardwareSystem
 				bool matched = true;
 
 				foreach (IFindDevice find in matches)
+				{
 					if (!find.IsMatch(device))
 					{
 						matched = false;
 						break;
 					}
+				}
 
 				if (matched)
+				{
 					list.Add(device);
+				}
 			}
 
 			spinLock.Exit();
@@ -159,7 +167,9 @@ namespace Mosa.HardwareSystem
 			var list = new List<IDevice>();
 
 			foreach (var device in devices)
+			{
 				list.Add(device);
+			}
 
 			spinLock.Exit();
 
