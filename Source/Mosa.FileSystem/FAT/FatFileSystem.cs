@@ -327,7 +327,7 @@ namespace Mosa.FileSystem.FAT
 			if (BlockSize != 512)   // only going to work with 512 sector sizes (for now)
 				return false;
 
-			var bootSector = new BinaryFormat(partition.ReadBlock(0, 1));
+			var bootSector = new DataBlock(partition.ReadBlock(0, 1));
 
 			if (bootSector.GetUShort(BootSector.BootSectorSignature) != 0xAA55)
 				return false;
@@ -461,7 +461,7 @@ namespace Mosa.FileSystem.FAT
 
 			firstRootDirectorySector = reservedSectors + sectorsPerFat;
 
-			var bootSector = new BinaryFormat(512);
+			var bootSector = new DataBlock(512);
 
 			bootSector.SetUInt(BootSector.JumpInstruction, 0);
 			bootSector.SetString(BootSector.EOMName, "MOSA    ");
@@ -568,7 +568,7 @@ namespace Mosa.FileSystem.FAT
 					partition.WriteBlock(6, 1, bootSector.Data);
 
 				// Create FSInfo Structure
-				var infoSector = new BinaryFormat(512);
+				var infoSector = new DataBlock(512);
 
 				infoSector.SetUInt(FSInfo.FSI_LeadSignature, 0x41615252);
 
@@ -585,7 +585,7 @@ namespace Mosa.FileSystem.FAT
 				partition.WriteBlock(7, 1, infoSector.Data);
 
 				// Create 2nd sector
-				var secondSector = new BinaryFormat(512);
+				var secondSector = new DataBlock(512);
 
 				secondSector.SetUShort(FSInfo.FSI_TrailSignature2, 0xAA55);
 
@@ -596,7 +596,7 @@ namespace Mosa.FileSystem.FAT
 			// Create FAT table(s)
 
 			// Clear primary & secondary FATs
-			var emptyFat = new BinaryFormat(512);
+			var emptyFat = new DataBlock(512);
 
 			for (uint i = 1; i < sectorsPerFat; i++)
 				partition.WriteBlock(reservedSectors + i, 1, emptyFat.Data);
@@ -606,7 +606,7 @@ namespace Mosa.FileSystem.FAT
 					partition.WriteBlock(reservedSectors + sectorsPerFat + i, 1, emptyFat.Data);
 
 			// First FAT block is special
-			var firstFat = new BinaryFormat(512);
+			var firstFat = new DataBlock(512);
 
 			if (fatType == FatType.FAT12)
 			{
@@ -742,7 +742,7 @@ namespace Mosa.FileSystem.FAT
 			if ((fatType == FatType.FAT12) && (sectorOffset == bytesPerSector - 1))
 				nbrSectors = 2;
 
-			var fat = new BinaryFormat(partition.ReadBlock(sector, nbrSectors));
+			var fat = new DataBlock(partition.ReadBlock(sector, nbrSectors));
 
 			uint clusterValue;
 
@@ -786,7 +786,7 @@ namespace Mosa.FileSystem.FAT
 			if ((fatType == FatType.FAT12) && (sectorOffset == bytesPerSector - 1))
 				nbrSectors = 2;
 
-			var fat = new BinaryFormat(partition.ReadBlock(sector, nbrSectors));
+			var fat = new DataBlock(partition.ReadBlock(sector, nbrSectors));
 
 			if (fatType == FatType.FAT12)
 			{
@@ -863,7 +863,7 @@ namespace Mosa.FileSystem.FAT
 		internal static string ExtractFileName(byte[] directory, uint index)
 		{
 			// rewrite to use string
-			var entry = new BinaryFormat(directory);
+			var entry = new DataBlock(directory);
 
 			var name = new char[12];
 
@@ -946,7 +946,7 @@ namespace Mosa.FileSystem.FAT
 		/// <returns></returns>
 		static internal uint GetClusterEntry(byte[] data, uint index, FatType type)
 		{
-			var entry = new BinaryFormat(data);
+			var entry = new DataBlock(data);
 
 			uint cluster = entry.GetUShort(Entry.FirstCluster + (index * Entry.EntrySize));
 
@@ -978,7 +978,7 @@ namespace Mosa.FileSystem.FAT
 
 			for (;;)
 			{
-				var directory = new BinaryFormat(partition.ReadBlock(activeSector, 1));
+				var directory = new DataBlock(partition.ReadBlock(activeSector, 1));
 
 				for (uint index = 0; index < entriesPerSector; index++)
 				{
@@ -1041,7 +1041,7 @@ namespace Mosa.FileSystem.FAT
 		/// <returns></returns>
 		public uint GetFileSize(uint directoryBlock, uint index)
 		{
-			var directory = new BinaryFormat(partition.ReadBlock(directoryBlock, 1));
+			var directory = new DataBlock(partition.ReadBlock(directoryBlock, 1));
 			return directory.GetUInt((index * Entry.EntrySize) + Entry.FileSize);
 		}
 
@@ -1055,7 +1055,7 @@ namespace Mosa.FileSystem.FAT
 		public void UpdateLength(uint size, uint firstCluster, uint directorySector, uint directorySectorIndex)
 		{
 			// Truncate the file
-			var entry = new BinaryFormat(partition.ReadBlock(directorySector, 1));
+			var entry = new DataBlock(partition.ReadBlock(directorySector, 1));
 
 			// Truncate the file length and set
 			entry.SetUInt(Entry.FileSize + (directorySectorIndex * Entry.EntrySize), size);
@@ -1096,7 +1096,7 @@ namespace Mosa.FileSystem.FAT
 			if (location.IsValid)
 			{
 				// Truncate the file
-				var entry = new BinaryFormat(partition.ReadBlock(location.DirectorySector, 1));
+				var entry = new DataBlock(partition.ReadBlock(location.DirectorySector, 1));
 
 				// Truncate the file length and reset the start cluster
 				entry.SetUInt(Entry.FileSize + (location.DirectorySectorIndex * Entry.EntrySize), 0);
@@ -1123,7 +1123,7 @@ namespace Mosa.FileSystem.FAT
 				return location;
 			}
 
-			var directory = new BinaryFormat(partition.ReadBlock(location.DirectorySector, 1));
+			var directory = new DataBlock(partition.ReadBlock(location.DirectorySector, 1));
 
 			if (filename.Length > 11)
 				filename = filename.Substring(0, 11);
@@ -1155,7 +1155,7 @@ namespace Mosa.FileSystem.FAT
 		/// <param name="directorySectorIndex">Index of the directory sector.</param>
 		public void Delete(uint targetCluster, uint directorySector, uint directorySectorIndex)
 		{
-			var entry = new BinaryFormat(partition.ReadBlock(directorySector, 1));
+			var entry = new DataBlock(partition.ReadBlock(directorySector, 1));
 
 			entry.SetByte(Entry.DOSName + (directorySectorIndex * Entry.EntrySize), (byte)FileNameAttribute.Deleted);
 
@@ -1183,7 +1183,7 @@ namespace Mosa.FileSystem.FAT
 					return; // TODO: something went wrong
 			}
 
-			var directory = new BinaryFormat(partition.ReadBlock(location.DirectorySector, 1));
+			var directory = new DataBlock(partition.ReadBlock(location.DirectorySector, 1));
 
 			if (volumeName.Length > 8)
 				volumeName = volumeName.Substring(0, 8);
@@ -1328,7 +1328,7 @@ namespace Mosa.FileSystem.FAT
 				return 0;
 
 			// Truncate set first cluster
-			var entry = new BinaryFormat(partition.ReadBlock(directorySector, 1));
+			var entry = new DataBlock(partition.ReadBlock(directorySector, 1));
 			entry.SetUInt(Entry.FirstCluster + (directorySectorIndex * Entry.EntrySize), newCluster);
 			partition.WriteBlock(directorySector, 1, entry.Data);
 

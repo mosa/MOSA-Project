@@ -62,7 +62,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CRC.cs" />
-    <Compile Include="BinaryFormat.cs">
+    <Compile Include="DataBlock.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LZF.cs" />

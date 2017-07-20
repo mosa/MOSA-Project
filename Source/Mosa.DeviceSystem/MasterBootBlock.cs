@@ -137,7 +137,7 @@ namespace Mosa.DeviceSystem
 			if (diskDevice.BlockSize != 512) return false;  // only going to work with 512 sector sizes
 			if (diskDevice.TotalBlocks < 3) return false;
 
-			var masterboot = new BinaryFormat(diskDevice.ReadBlock(0, 1));
+			var masterboot = new DataBlock(diskDevice.ReadBlock(0, 1));
 
 			if (masterboot.GetUShort(MBR.MBRSignature) != MBRConstant.MBRSignature)
 				return false;
@@ -178,7 +178,7 @@ namespace Mosa.DeviceSystem
 			if (!diskDevice.CanWrite)
 				return false;
 
-			var masterboot = new BinaryFormat(new byte[512]);
+			var masterboot = new DataBlock(new byte[512]);
 
 			masterboot.SetUInt(MBR.DiskSignature, diskSignature);
 			masterboot.SetUShort(MBR.MBRSignature, MBRConstant.MBRSignature);

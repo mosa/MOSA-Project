@@ -316,7 +316,7 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 			if (!WaitForRegisterReady())
 				return false;
 
-			var sector = new BinaryFormat(data);
+			var sector = new DataBlock(data);
 
 			//TODO: Don't use PIO
 			if (operation == SectorOperation.Read)
@@ -372,7 +372,7 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 			if (!WaitForRegisterReady())
 				return false;
 
-			var sector = new BinaryFormat(data);
+			var sector = new DataBlock(data);
 
 			//TODO: Don't use PIO
 			if (operation == SectorOperation.Read)
@@ -415,7 +415,7 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 			if (!WaitForRegisterReady())
 				return false;
 
-			var info = new BinaryFormat(new byte[512]);
+			var info = new DataBlock(new byte[512]);
 
 			for (uint index = 0; index < 256; index++)
 				info.SetUShort(index * 2, DataPort.Read16());

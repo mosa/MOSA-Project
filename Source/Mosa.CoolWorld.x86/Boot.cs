@@ -2,7 +2,8 @@
 
 using Mosa.AppSystem;
 using Mosa.DeviceDriver.ScanCodeMap;
-using Mosa.HardwareSystem;
+
+//using Mosa.HardwareSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 
@@ -35,28 +36,84 @@ namespace Mosa.CoolWorld.x86
 			Console.Color = Color.White;
 			Console.BackgroundColor = Color.Green;
 
-			Console.Write(@"                   MOSA OS Version 1.4 - Compiler Version 1.4");
+			Console.Write("                   MOSA OS Version 1.5 - Compiler Version 1.5");
 			FillLine();
 			Console.Color = Color.White;
 			Console.BackgroundColor = Color.Black;
 
-			// Setup hardware abstraction interface
-			Console.WriteLine("> Initializing hardware abstraction layer...");
+			//Debug.Color = Color.White;
+			//Debug.BackgroundColor = Color.Blue;
+			//Debug.Clear();
+			//Debug.WriteLine("Debug Information:");
 
+			Console.WriteLine("> Initializing hardware abstraction layer...");
 			var hardware = new HAL.Hardware();
 			HardwareSystem.Setup.Initialize(hardware);
 
 			Console.WriteLine("> Registering device drivers...");
-			Mosa.DeviceDriver.Setup.Register(Setup.DeviceDriverRegistry);
+			DeviceDriver.Setup.Register(HardwareSystem.Setup.DeviceDriverRegistry);
 
-			Console.WriteLine("> Adding hardware devices...");
-			HardwareSystem.Setup.Start();
+			Console.Write("> Probing for ISA devices...");
+			HardwareSystem.Setup.StartISADevices();
+			var isaDevices = HardwareSystem.Setup.DeviceManager.GetAllDevices();
+			Console.WriteLine("[Completed: " + isaDevices.Count.ToString() + " found]");
 
-			Console.Color = Color.White;
-			Console.WriteLine();
+			foreach (var device in isaDevices)
+			{
+				Console.Write("  ");
+				Bullet(Color.Yellow);
+				Console.Write(" ");
+				InBrackets(device.Name, Color.White, Color.LightGreen);
+				Console.WriteLine();
+			}
+
+			Console.Write("> Probing for PCI devices...");
+			HardwareSystem.Setup.StartPCIDevices();
+			var pciDevices = HardwareSystem.Setup.DeviceManager.GetDevices(new HardwareSystem.IsPCIDevice(), new HardwareSystem.IsAvailable());
+			Console.WriteLine("[Completed: " + pciDevices.Count.ToString() + " found]");
+
+			foreach (var device in pciDevices)
+			{
+				var pciDevice = device as HardwareSystem.PCI.IPCIDevice;
+
+				Console.Write("  ");
+				Bullet(Color.Yellow);
+				Console.Write(" ");
+				InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubVendorID.ToString("x") + " (" + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", Color.White, Color.LightGreen);
+				Console.WriteLine();
+			}
+
+			Console.Write("> Probing for disk controllers...");
+			var diskcontrollers = HardwareSystem.Setup.DeviceManager.GetDevices(new DeviceSystem.IsDiskControllerDevice());
+			Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
+			foreach (var device in diskcontrollers)
+			{
+				Console.Write("  ");
+				Bullet(Color.Yellow);
+				Console.Write(" ");
+				InBrackets(device.Name, Color.White, Color.LightGreen);
+				Console.WriteLine();
+			}
+
+			var diskcontroller = new DeviceSystem.DiskControllerManager(HardwareSystem.Setup.DeviceManager);
+
+			//diskcontroller.CreateDiskDevices(); // fixme
+
+			Console.Write("> Probing for disks...");
+			var disks = HardwareSystem.Setup.DeviceManager.GetDevices(new DeviceSystem.IsDiskDevice());
+			Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
+			foreach (var disk in disks)
+			{
+				Console.Write("  ");
+				Bullet(Color.Yellow);
+				Console.Write(" ");
+				InBrackets(disk.Name, Color.White, Color.LightGreen);
+				Console.Write(" " + (disk as DeviceSystem.IDiskDevice).TotalBlocks.ToString() + " blocks");
+				Console.WriteLine();
+			}
 
 			// Get StandardKeyboard
-			var standardKeyboards = HardwareSystem.Setup.DeviceManager.GetDevices(new WithName("StandardKeyboard"));
+			var standardKeyboards = HardwareSystem.Setup.DeviceManager.GetDevices(new HardwareSystem.WithName("StandardKeyboard"));
 
 			if (standardKeyboards.Count == 0)
 			{
@@ -72,7 +129,7 @@ namespace Mosa.CoolWorld.x86
 			var keymap = new US();
 
 			// setup keyboard (state machine)
-			var keyboard = new Mosa.DeviceSystem.Keyboard(standardKeyboard, keymap);
+			var keyboard = new DeviceSystem.Keyboard(standardKeyboard, keymap);
 
 			// setup app manager
 			var manager = new AppManager(Console, keyboard);
@@ -100,12 +157,22 @@ namespace Mosa.CoolWorld.x86
 
 		public static void InBrackets(string message, byte outerColor, byte innerColor)
 		{
+			var restore = Console.Color;
 			Console.Color = outerColor;
 			Console.Write("[");
 			Console.Color = innerColor;
 			Console.Write(message);
 			Console.Color = outerColor;
 			Console.Write("]");
+			Console.Color = restore;
+		}
+
+		public static void Bullet(byte color)
+		{
+			var restore = Console.Color;
+			Console.Color = color;
+			Console.Write("*");
+			Console.Color = restore;
 		}
 
 		private static uint tick = 0;
