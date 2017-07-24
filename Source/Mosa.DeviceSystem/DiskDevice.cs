@@ -76,7 +76,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public byte[] ReadBlock(uint block, uint count)
 		{
-			byte[] data = new byte[count * BlockSize];
+			var data = new byte[count * BlockSize];
 			diskController.ReadBlock(driveNbr, block, count, data);
 			return data;
 		}

@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Utility.BootImage;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Mosa.Utility.Launcher
@@ -87,8 +88,11 @@ namespace Mosa.Utility.Launcher
 
 		public bool LaunchMosaDebugger { get; set; }
 
+		public List<IncludeFile> IncludeFiles { get; set; }
+
 		public Options()
 		{
+			IncludeFiles = new List<IncludeFile>();
 			EnableSSA = true;
 			EnableIROptimizations = true;
 			EnableSparseConditionalConstantPropagation = true;

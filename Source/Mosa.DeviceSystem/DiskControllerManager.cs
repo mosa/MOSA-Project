@@ -37,6 +37,9 @@ namespace Mosa.DeviceSystem
 			{
 				if (diskControllerDevice.Open(drive))
 				{
+					if (diskControllerDevice.GetTotalSectors(drive) == 0)
+						continue;
+
 					var diskDevice = new DiskDevice(diskControllerDevice, drive, false);
 					devices.Add(diskDevice as IDevice);
 				}

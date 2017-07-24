@@ -18,6 +18,12 @@ namespace Mosa.HardwareSystem
 		bool Setup(HardwareResources hardwareResources);
 
 		/// <summary>
+		/// Probes this instance.
+		/// </summary>
+		/// <returns></returns>
+		bool Probe();
+
+		/// <summary>
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>

@@ -89,7 +89,7 @@ namespace Mosa.ClassLib
 		/// <returns></returns>
 		public char[] GetChars(uint offset, uint length)
 		{
-			char[] value = new char[length];
+			var value = new char[length];
 
 			for (uint index = 0; index < length; index++) { value[index] = GetChar(offset + index); }
 
@@ -104,7 +104,7 @@ namespace Mosa.ClassLib
 		/// <returns></returns>
 		public byte[] GetBytes(uint offset, uint length)
 		{
-			byte[] value = new byte[length];
+			var value = new byte[length];
 
 			for (uint index = 0; index < length; index++) { value[index] = data[offset + index]; }
 
@@ -152,7 +152,7 @@ namespace Mosa.ClassLib
 			uint value = data[offset++];
 			value += (uint)(data[offset++] << 8);
 			value += (uint)(data[offset++] << 16);
-			value += (uint)(data[offset++] << 24);
+			value += (uint)(data[offset] << 24);
 
 			return value;
 		}
@@ -167,7 +167,7 @@ namespace Mosa.ClassLib
 			data[offset++] = (byte)(value & 0xFF);
 			data[offset++] = (byte)((value >> 8) & 0xFF);
 			data[offset++] = (byte)((value >> 16) & 0xFF);
-			data[offset++] = (byte)((value >> 24) & 0xFF);
+			data[offset] = (byte)((value >> 24) & 0xFF);
 		}
 
 		/// <summary>
@@ -180,7 +180,7 @@ namespace Mosa.ClassLib
 			data[offset++] = (byte)((value >> 24) & 0xFF);
 			data[offset++] = (byte)((value >> 16) & 0xFF);
 			data[offset++] = (byte)((value >> 8) & 0xFF);
-			data[offset++] = (byte)(value & 0xFF);
+			data[offset] = (byte)(value & 0xFF);
 		}
 
 		/// <summary>
@@ -197,7 +197,7 @@ namespace Mosa.ClassLib
 			data[offset++] = (byte)((value >> 32) & 0xFF);
 			data[offset++] = (byte)((value >> 40) & 0xFF);
 			data[offset++] = (byte)((value >> 48) & 0xFF);
-			data[offset++] = (byte)((value >> 56) & 0xFF);
+			data[offset] = (byte)((value >> 56) & 0xFF);
 		}
 
 		/// <summary>
@@ -214,7 +214,7 @@ namespace Mosa.ClassLib
 			data[offset++] = (byte)((value >> 24) & 0xFF);
 			data[offset++] = (byte)((value >> 16) & 0xFF);
 			data[offset++] = (byte)((value >> 8) & 0xFF);
-			data[offset++] = (byte)(value & 0xFF);
+			data[offset] = (byte)(value & 0xFF);
 		}
 
 		/// <summary>
@@ -224,7 +224,10 @@ namespace Mosa.ClassLib
 		/// <returns></returns>
 		public ushort GetUShort(uint offset)
 		{
-			return (ushort)(data[offset++] | (data[offset++] << 8));
+			ushort value = data[offset++];
+			value += (ushort)(data[offset] << 8);
+
+			return value;
 		}
 
 		/// <summary>
@@ -235,7 +238,7 @@ namespace Mosa.ClassLib
 		public void SetUShort(uint offset, ushort value)
 		{
 			data[offset++] = (byte)(value & 0xFF);
-			data[offset++] = (byte)((value >> 8) & 0xFF);
+			data[offset] = (byte)((value >> 8) & 0xFF);
 		}
 
 		/// <summary>
@@ -246,7 +249,7 @@ namespace Mosa.ClassLib
 		public void SetUShortReversed(uint offset, ushort value)
 		{
 			data[offset++] = (byte)((value >> 8) & 0xFF);
-			data[offset++] = (byte)(value & 0xFF);
+			data[offset] = (byte)(value & 0xFF);
 		}
 
 		/// <summary>
@@ -263,7 +266,7 @@ namespace Mosa.ClassLib
 			value += (uint)(data[offset++] << 32);
 			value += (uint)(data[offset++] << 40);
 			value += (uint)(data[offset++] << 48);
-			value += (uint)(data[offset++] << 56);
+			value += (uint)(data[offset] << 56);
 
 			return value;
 		}
@@ -282,7 +285,7 @@ namespace Mosa.ClassLib
 			data[offset++] = (byte)((value >> 32) & 0xFF);
 			data[offset++] = (byte)((value >> 40) & 0xFF);
 			data[offset++] = (byte)((value >> 48) & 0xFF);
-			data[offset++] = (byte)((value >> 56) & 0xFF);
+			data[offset] = (byte)((value >> 56) & 0xFF);
 		}
 
 		/// <summary>

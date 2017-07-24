@@ -203,8 +203,8 @@ namespace Mosa.Utility.Launcher
 		private void LaunchMosaDebugger()
 		{
 			string arg = " -debugfile " + Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".debug");
-			arg = arg + " -port 1234";
-			arg = arg + " -connect";
+			arg += " -port 1234";
+			arg += " -connect";
 			LaunchApplication("Mosa.Tool.GDBDebugger.exe", arg);
 		}
 
