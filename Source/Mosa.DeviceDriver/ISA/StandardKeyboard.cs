@@ -176,7 +176,9 @@ namespace Mosa.DeviceDriver.ISA
 		public byte GetScanCode()
 		{
 			if (!IsFIFODataAvailable())
+			{
 				return 0;
+			}
 
 			return GetFromFIFO();
 		}

@@ -1,1 +1,1 @@
-start ..\bin\Mosa.Tool.Launcher.exe -q -a --vmdk -map -debuginfo ..\bin\Mosa.CoolWorld.x86.exe
+start ..\bin\Mosa.Tool.Launcher.exe -q -a --vmdk -map -asm -debuginfo ..\bin\Mosa.CoolWorld.x86.exe

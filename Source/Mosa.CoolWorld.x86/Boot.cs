@@ -2,6 +2,7 @@
 
 using Mosa.AppSystem;
 using Mosa.DeviceDriver.ScanCodeMap;
+using Mosa.FileSystem.FAT;
 
 //using Mosa.HardwareSystem;
 using Mosa.Kernel.x86;
@@ -86,18 +87,18 @@ namespace Mosa.CoolWorld.x86
 			Console.Write("> Probing for disk controllers...");
 			var diskcontrollers = HardwareSystem.Setup.DeviceManager.GetDevices(new DeviceSystem.IsDiskControllerDevice());
 			Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
-			foreach (var device in diskcontrollers)
-			{
-				Console.Write("  ");
-				Bullet(Color.Yellow);
-				Console.Write(" ");
-				InBrackets(device.Name, Color.White, Color.LightGreen);
-				Console.WriteLine();
-			}
+
+			//foreach (var device in diskcontrollers)
+			//{
+			//	Console.Write("  ");
+			//	Bullet(Color.Yellow);
+			//	Console.Write(" ");
+			//	InBrackets(device.Name, Color.White, Color.LightGreen);
+			//	Console.WriteLine();
+			//}
 
 			var diskcontroller = new DeviceSystem.DiskControllerManager(HardwareSystem.Setup.DeviceManager);
-
-			//diskcontroller.CreateDiskDevices(); // fixme
+			diskcontroller.CreateDiskDevices();
 
 			Console.Write("> Probing for disks...");
 			var disks = HardwareSystem.Setup.DeviceManager.GetDevices(new DeviceSystem.IsDiskDevice());
@@ -111,6 +112,61 @@ namespace Mosa.CoolWorld.x86
 				Console.Write(" " + (disk as DeviceSystem.IDiskDevice).TotalBlocks.ToString() + " blocks");
 				Console.WriteLine();
 			}
+
+			var partitionManager = new Mosa.DeviceSystem.PartitionManager(HardwareSystem.Setup.DeviceManager);
+			partitionManager.CreatePartitionDevices();
+
+			Console.Write("> Finding partitions...");
+			var partitions = HardwareSystem.Setup.DeviceManager.GetDevices(new DeviceSystem.IsPartitionDevice());
+			Console.WriteLine("[Completed: " + partitions.Count.ToString() + " found]");
+			foreach (var partition in partitions)
+			{
+				Console.Write("  ");
+				Bullet(Color.Yellow);
+				Console.Write(" ");
+				InBrackets(partition.Name, Color.White, Color.LightGreen);
+				Console.Write(" " + (partition as DeviceSystem.IPartitionDevice).BlockCount.ToString() + " blocks");
+				Console.WriteLine();
+			}
+
+			//Boot.Console.Write("> Finding file systems...");
+
+			//foreach (var partition in partitions)
+			//{
+			//	var fat = new FatFileSystem(partition as DeviceSystem.IPartitionDevice);
+
+			//	if (fat.IsValid)
+			//	{
+			//		Console.WriteLine("Found a FAT file system!");
+
+			//		var filename = "TEST.TXT";
+
+			//		var location = fat.FindEntry(filename);
+
+			//		if (location.IsValid)
+			//		{
+			//			Console.WriteLine("Found: " + filename);
+
+			//			var fatFileStream = new FatFileStream(fat, location);
+
+			//			uint len = (uint)fatFileStream.Length;
+
+			//			Console.WriteLine("Length: " + len.ToString());
+
+			//			Console.WriteLine("Reading File:");
+
+			//			for (;;)
+			//			{
+			//				int i = fatFileStream.ReadByte();
+
+			//				if (i < 0)
+			//					break;
+
+			//				Console.Write((char)i);
+			//			}
+			//		}
+			//	}
+			//}
 
 			// Get StandardKeyboard
 			var standardKeyboards = HardwareSystem.Setup.DeviceManager.GetDevices(new HardwareSystem.WithName("StandardKeyboard"));
