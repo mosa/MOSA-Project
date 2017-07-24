@@ -30,7 +30,7 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 			internal const byte ReadSectorsWithRetry = 0x20;
 			internal const byte WriteSectorsWithRetry = 0x30;
 			internal const byte IdentifyDrive = 0xEC;
-		};
+		}
 
 		/// <summary>
 		///
@@ -61,77 +61,63 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		protected SpinLock spinLock;
 
 		/// <summary>
-		///
+		/// The drives per conroller
 		/// </summary>
 		public const uint DrivesPerConroller = 2; // the maximum supported
 
 		/// <summary>
-		///
+		/// The data port
 		/// </summary>
 		protected IReadWriteIOPort DataPort;
 
 		/// <summary>
-		///
+		/// The feature port
 		/// </summary>
 		protected IReadWriteIOPort FeaturePort;
 
 		/// <summary>
-		///
+		/// The error port
 		/// </summary>
 		protected IReadOnlyIOPort ErrorPort;
 
 		/// <summary>
-		///
+		/// The sector count port
 		/// </summary>
 		protected IReadWriteIOPort SectorCountPort;
 
 		/// <summary>
-		///
+		/// The lba low port
 		/// </summary>
 		protected IReadWriteIOPort LBALowPort;
 
 		/// <summary>
-		///
+		/// The lba mid port
 		/// </summary>
 		protected IReadWriteIOPort LBAMidPort;
 
 		/// <summary>
-		///
+		/// The lba high port
 		/// </summary>
 		protected IReadWriteIOPort LBAHighPort;
 
 		/// <summary>
-		///
+		/// The device head port
 		/// </summary>
 		protected IReadWriteIOPort DeviceHeadPort;
 
 		/// <summary>
-		///
+		/// The status port
 		/// </summary>
 		protected IReadOnlyIOPort StatusPort;
 
 		/// <summary>
-		///
+		/// The command port
 		/// </summary>
 		protected IWriteOnlyIOPort CommandPort;
 
 		//protected IRQHandler IdeIRQ;
 
-		/// <summary>
-		///
-		/// </summary>
-		public enum LBAType
-		{
-			/// <summary>
-			///
-			/// </summary>
-			LBA28,
-
-			/// <summary>
-			///
-			/// </summary>
-			LBA48
-		}
+		public enum LBAType { LBA28, LBA48 }
 
 		/// <summary>
 		///
@@ -139,23 +125,23 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		protected struct DriveInfo
 		{
 			/// <summary>
-			///
+			/// The present
 			/// </summary>
 			public bool Present;
 
 			/// <summary>
-			///
+			/// The maximum lba
 			/// </summary>
 			public uint MaxLBA;
 
 			/// <summary>
-			///
+			/// The lba type
 			/// </summary>
 			public LBAType LBAType;
 		}
 
 		/// <summary>
-		///
+		/// The drive information
 		/// </summary>
 		protected DriveInfo[] driveInfo;
 
@@ -208,7 +194,7 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		/// Probes this instance.
 		/// </summary>
 		/// <returns></returns>
-		public bool Probe()
+		public override bool Probe()
 		{
 			LBALowPort.Write8(0x88);
 
@@ -415,7 +401,7 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 			if (!WaitForRegisterReady())
 				return false;
 
-			var info = new DataBlock(new byte[512]);
+			var info = new DataBlock(512);
 
 			for (uint index = 0; index < 256; index++)
 				info.SetUShort(index * 2, DataPort.Read16());

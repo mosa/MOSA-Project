@@ -48,6 +48,8 @@ namespace Mosa.DeviceDriver
 				AutoLoad = true,
 				BasePort = 0x1F0,
 				PortRange = 8,
+				AltBasePort = 0x3F6,
+				AltPortRange = 8,
 				Factory = delegate { return new ISA.IDEController(); }
 			});
 
@@ -58,6 +60,8 @@ namespace Mosa.DeviceDriver
 				AutoLoad = true,
 				BasePort = 0x170,
 				PortRange = 8,
+				AltBasePort = 0x376,
+				AltPortRange = 8,
 				ForceOption = "ide2",
 				Factory = delegate { return new ISA.IDEController(); }
 			});

@@ -96,7 +96,7 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.BaseAddress = Options.BaseAddress;
 				compiler.CompilerOptions.EmitSymbols = Options.EmitSymbols;
 				compiler.CompilerOptions.EmitRelocations = Options.EmitRelocations;
-				
+
 				compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
 
 				if (Options.GenerateMapFile)
@@ -155,7 +155,7 @@ namespace Mosa.Utility.Launcher
 
 					if (Options.ImageFormat == ImageFormat.VMDK)
 					{
-						CreateVMDK(ImageFile);
+						CreateVMDK();
 					}
 				}
 
@@ -208,6 +208,11 @@ namespace Mosa.Utility.Launcher
 
 			bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
 
+			foreach (var include in Options.IncludeFiles)
+			{
+				bootImageOptions.IncludeFiles.Add(include);
+			}
+
 			bootImageOptions.VolumeLabel = "MOSABOOT";
 
 			var vmext = ".img";
@@ -254,6 +259,12 @@ namespace Mosa.Utility.Launcher
 			}
 
 			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetResource(@"syslinux", "syslinux.cfg"));
+
+			foreach (var include in Options.IncludeFiles)
+			{
+				File.WriteAllBytes(Path.Combine(isoDirectory, include.Filename), include.Content);
+			}
+
 			File.Copy(compiledFile, Path.Combine(isoDirectory, "main.exe"));
 
 			ImageFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.iso");
@@ -300,6 +311,11 @@ namespace Mosa.Utility.Launcher
 				archive.ExtractToDirectory(Path.Combine(isoDirectory, "boot", "grub"));
 			}
 
+			foreach (var include in Options.IncludeFiles)
+			{
+				File.WriteAllBytes(Path.Combine(isoDirectory, include.Filename), include.Content);
+			}
+
 			File.Copy(compiledFile, Path.Combine(isoDirectory, "boot", "main.exe"));
 
 			ImageFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.iso");
@@ -309,7 +325,7 @@ namespace Mosa.Utility.Launcher
 			LaunchApplication(AppLocations.mkisofs, arg, true);
 		}
 
-		private void CreateVMDK(string compiledFile)
+		private void CreateVMDK()
 		{
 			var vmdkFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.vmdk");
 

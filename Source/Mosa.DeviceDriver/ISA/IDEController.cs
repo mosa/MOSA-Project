@@ -2,8 +2,7 @@
 
 // References
 // http://www.t13.org/Documents/UploadedDocuments/docs2004/d1572r3-EDD3.pdf
-// http://www.osdever.net/tutorials/lba.php
-// http://www.nondot.org/sabre/os/files/Disk/IDE-tech.html
+// http://mirrors.josefsipek.net/www.nondot.org/sabre/os/files/Disk/IDE-tech.html
 
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
@@ -113,11 +112,13 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		protected IWriteOnlyIOPort CommandPort;
 
+		/// <summary>
+		/// The status port
+		/// </summary>
+		protected IReadOnlyIOPort AltStatusPort;
+
 		//protected IRQHandler IdeIRQ;
 
-		/// <summary>
-		///
-		/// </summary>
 		public enum LBAType { LBA28, LBA48 }
 
 		/// <summary>
@@ -174,6 +175,7 @@ namespace Mosa.DeviceDriver.ISA
 			DeviceHeadPort = base.HardwareResources.GetIOPort(0, 6);
 			CommandPort = base.HardwareResources.GetIOPort(0, 7);
 			StatusPort = base.HardwareResources.GetIOPort(0, 7);
+			AltStatusPort = base.HardwareResources.GetIOPort(1, 6);
 
 			for (int drive = 0; drive < DrivesPerConroller; drive++)
 			{
@@ -182,6 +184,7 @@ namespace Mosa.DeviceDriver.ISA
 			}
 
 			base.DeviceStatus = DeviceStatus.Online;
+
 			return true;
 		}
 
@@ -189,14 +192,11 @@ namespace Mosa.DeviceDriver.ISA
 		/// Probes this instance.
 		/// </summary>
 		/// <returns></returns>
-		public bool Probe()
+		public override bool Probe()
 		{
 			LBALowPort.Write8(0x88);
 
-			if (LBALowPort.Read8() != 0x88)
-				return false;
-
-			return true;
+			return LBALowPort.Read8() == 0x88;
 		}
 
 		/// <summary>
@@ -205,19 +205,17 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		public override DeviceDriverStartStatus Start()
 		{
-			DeviceHeadPort.Write8(0xA0);
+			SelectDrive(0);
 
 			HAL.Sleep(1000 / 250); // wait 1/250th of a second
 
-			if ((StatusPort.Read8() & 0x40) == 0x40)
-				driveInfo[0].Present = true;
+			driveInfo[0].Present = ((StatusPort.Read8() & 0x40) == 0x40);
 
-			DeviceHeadPort.Write8(0xB0);
+			SelectDrive(1);
 
 			HAL.Sleep(1000 / 250); // wait 1/250th of a second
 
-			if ((StatusPort.Read8() & 0x40) == 0x40)
-				driveInfo[1].Present = true;
+			driveInfo[1].Present = ((StatusPort.Read8() & 0x40) == 0x40);
 
 			return DeviceDriverStartStatus.Started;
 		}
@@ -239,15 +237,56 @@ namespace Mosa.DeviceDriver.ISA
 		{
 			while (true)
 			{
-				uint status = StatusPort.Read8();
+				byte status = AltStatusPort.Read8();
 
 				if ((status & 0x08) == 0x08)
+				{
 					return true;
+				}
 
 				//TODO: add timeout check
 			}
 
 			//return false;
+		}
+
+		/// <summary>
+		/// Selects the drive.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		protected void SelectDrive(byte drive)
+		{
+			// select drive; bit 4 is the drive selection, bits 7 and 5 are set high by spec
+			DeviceHeadPort.Write8((byte)((drive == 0) ? 0xA0 : 0xB0));
+		}
+
+		/// <summary>
+		/// Opens the specified drive NBR.
+		/// </summary>
+		/// <param name="drive">The drive NBR.</param>
+		/// <returns></returns>
+		public bool Open(uint drive)
+		{
+			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
+				return false;
+
+			SelectDrive((byte)drive);
+
+			CommandPort.Write8(IDECommands.IdentifyDrive);
+
+			if (!WaitForRegisterReady())
+				return false;
+
+			var info = new DataBlock(512);
+
+			for (uint index = 0; index < 256; index++)
+			{
+				info.SetUShort(index * 2, DataPort.Read16());
+			}
+
+			driveInfo[drive].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA28);
+
+			return true;
 		}
 
 		protected enum SectorOperation { Read, Write }
@@ -263,8 +302,10 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		protected bool PerformLBA28(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
 		{
-			if (drive > MaximunDriveCount)
+			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
 				return false;
+
+			DeviceHeadPort.Write8((byte)(0xE0 | (drive << 4) | ((lba >> 24) & 0x0F)));
 
 			FeaturePort.Write8(0);
 			SectorCountPort.Write8(1);
@@ -273,12 +314,7 @@ namespace Mosa.DeviceDriver.ISA
 			LBAMidPort.Write8((byte)((lba >> 8) & 0xFF));
 			LBAHighPort.Write8((byte)((lba >> 16) & 0xFF));
 
-			DeviceHeadPort.Write8((byte)(0xE0 | (drive << 4) | ((lba >> 24) & 0x0F)));
-
-			if (operation == SectorOperation.Write)
-				CommandPort.Write8(IDECommands.WriteSectorsWithRetry);
-			else
-				CommandPort.Write8(IDECommands.ReadSectorsWithRetry);
+			CommandPort.Write8((byte)((operation == SectorOperation.Write) ? IDECommands.WriteSectorsWithRetry : IDECommands.ReadSectorsWithRetry));
 
 			if (!WaitForRegisterReady())
 				return false;
@@ -289,12 +325,24 @@ namespace Mosa.DeviceDriver.ISA
 			if (operation == SectorOperation.Read)
 			{
 				for (uint index = 0; index < 256; index++)
-					sector.SetUShort(offset + (index * 2), DataPort.Read16());
+				{
+					var s = DataPort.Read16();
+
+					//HAL.DebugWrite(s.ToString("x"));
+					//HAL.DebugWrite(" ");
+					sector.SetUShort(offset + (index * 2), s);
+
+					//var s2 = sector.GetUShort(offset + index * 2);
+					//if (s2 != s)
+					//	HAL.DebugWrite("*");
+				}
 			}
 			else
 			{
 				for (uint index = 0; index < 256; index++)
+				{
 					DataPort.Write16(sector.GetUShort(offset + (index * 2)));
+				}
 			}
 
 			return true;
@@ -311,7 +359,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		protected bool ReadLBA48(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
 		{
-			if (drive > MaximunDriveCount)
+			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
 				return false;
 
 			FeaturePort.Write8(0);
@@ -331,10 +379,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			DeviceHeadPort.Write8((byte)(0x40 | (drive << 4)));
 
-			if (operation == SectorOperation.Write)
-				CommandPort.Write8(0x34);
-			else
-				CommandPort.Write8(0x24);
+			CommandPort.Write8((byte)((operation == SectorOperation.Write) ? 0x34 : 0x24));
 
 			if (!WaitForRegisterReady())
 				return false;
@@ -345,50 +390,17 @@ namespace Mosa.DeviceDriver.ISA
 			if (operation == SectorOperation.Read)
 			{
 				for (uint index = 0; index < 256; index++)
+				{
 					sector.SetUShort(offset + (index * 2), DataPort.Read16());
+				}
 			}
 			else
 			{
 				for (uint index = 0; index < 256; index++)
+				{
 					DataPort.Write16(sector.GetUShort(offset + (index * 2)));
+				}
 			}
-
-			return true;
-		}
-
-		/// <summary>
-		/// Opens the specified drive NBR.
-		/// </summary>
-		/// <param name="drive">The drive NBR.</param>
-		/// <returns></returns>
-		public bool Open(uint drive)
-		{
-			if (drive > MaximunDriveCount)
-				return false;
-
-			if (!driveInfo[drive].Present)
-				return false;
-
-			if (drive == 0)
-				DeviceHeadPort.Write8(0xA0);
-			else if (drive == 1)
-				DeviceHeadPort.Write8(0xB0);
-			else
-				return false;
-
-			CommandPort.Write8(IDECommands.IdentifyDrive);
-
-			if (!WaitForRegisterReady())
-				return false;
-
-			var info = new DataBlock(new byte[512]);
-
-			for (uint index = 0; index < 256; index++)
-			{
-				info.SetUShort(index * 2, DataPort.Read16());
-			}
-
-			driveInfo[drive].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA28);
 
 			return true;
 		}
@@ -426,7 +438,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		public uint GetTotalSectors(uint drive)
 		{
-			if (drive > MaximunDriveCount)
+			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
 				return 0;
 
 			return driveInfo[drive].MaxLBA;
@@ -441,6 +453,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// </returns>
 		public bool CanWrite(uint drive)
 		{
+			//todo
 			return true;
 		}
 
@@ -454,7 +467,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		public bool ReadBlock(uint drive, uint block, uint count, byte[] data)
 		{
-			if (drive > MaximunDriveCount)
+			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
 				return false;
 
 			if (data.Length < count * 512)
@@ -486,7 +499,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		public bool WriteBlock(uint drive, uint block, uint count, byte[] data)
 		{
-			if (drive > MaximunDriveCount)
+			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
 				return false;
 
 			if (data.Length < count * 512)
