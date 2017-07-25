@@ -165,7 +165,7 @@ namespace Mosa.DeviceDriver.ScanCodeMap
 				_shifted = (key.KeyPress == KeyEvent.KeyPressType.Make);
 			if (key.KeyType == KeyType.CapsLock)
 				_shifted = !_shifted;
-			if (key.KeyType == KeyType.LeftAlt && key.KeyPress == KeyEvent.KeyPressType.Make)
+			if (key.KeyType == KeyType.LeftAlt)
 				_alted = (key.KeyPress == KeyEvent.KeyPressType.Make);
 
 			return key;
