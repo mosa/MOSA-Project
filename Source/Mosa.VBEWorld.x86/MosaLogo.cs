@@ -19,11 +19,11 @@
 			{
 				uint data = logo[ty];
 
-				for (int tx = 0;tx<_width;tx++)
+				for (int tx = 0; tx < _width; tx++)
 				{
 					int mask = 1 << tx;
 
-					if((data & mask) == mask)
+					if ((data & mask) == mask)
 					{
 						frameBuffer.FillRectangle(colors[tx / 6], (uint)(positionX + tileSize * tx), (uint)(positionY + tileSize * ty), tileSize, tileSize); //Each pixel is aprox 5 tiles in width
 					}

@@ -46,6 +46,20 @@ namespace System
 			return IsUpper(s[index]);
 		}
 
+		public static bool IsLower(char c)
+		{
+			unsafe
+			{
+				var value = (ushort)c;
+				return value >= 97 && value <= 122;
+			}
+		}
+
+		public static bool IsLower(string s, int index)
+		{
+			return IsLower(s[index]);
+		}
+
 		public override string ToString()
 		{
 			return new String(_value, 1);
@@ -78,6 +92,45 @@ namespace System
 		public static bool IsWhiteSpace(char c)
 		{
 			return (IsWhiteSpaceLatin1(c));
+		}
+
+		public static bool IsLetter(char c)
+		{
+			unsafe
+			{
+				var value = (ushort)c;
+				return ((value >= 65 && value <= 90) || (value >= 97 && value <= 122));
+			}
+		}
+
+		public static bool IsDigit(char c)
+		{
+			unsafe
+			{
+				var value = (ushort)c;
+				return (value >= 48 && value <= 57);
+			}
+		}
+
+		public static bool IsLetterOrDigit(char c)
+		{
+			return (IsLetter(c) || IsDigit(c));
+		}
+
+		public static char ToUpper(char c)
+		{
+			if (IsUpper(c) || !IsLetter(c))
+				return c;
+
+			return (char)(c - 32);
+		}
+
+		public static char ToLower(char c)
+		{
+			if (IsLower(c) || !IsLetter(c))
+				return c;
+
+			return (char)(c + 32);
 		}
 	}
 }

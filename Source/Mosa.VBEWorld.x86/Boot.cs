@@ -29,7 +29,7 @@ namespace Mosa.VBEWorld.x86
 
 			Serial.SetupPort(Serial.COM1); //For debugging
 
-			if(SetupVBE())
+			if (SetupVBE())
 			{
 				Log("VBE setup OK!");
 
@@ -85,7 +85,7 @@ namespace Mosa.VBEWorld.x86
 				Native.Hlt();
 			}
 		}
-		
+
 		public static void ProcessInterrupt(uint interrupt, uint errorCode)
 		{
 		}
