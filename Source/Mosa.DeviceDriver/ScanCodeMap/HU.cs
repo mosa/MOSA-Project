@@ -18,6 +18,7 @@ namespace Mosa.DeviceDriver.ScanCodeMap
 		public HU()
 		{
 			_shifted = false;
+			_alted = false;
 		}
 
 		private char TransformCharacter(char c)

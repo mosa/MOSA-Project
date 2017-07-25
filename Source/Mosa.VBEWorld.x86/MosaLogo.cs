@@ -1,4 +1,6 @@
-﻿namespace Mosa.VBEWorld.x86
+﻿using Mosa.DeviceSystem;
+
+namespace Mosa.VBEWorld.x86
 {
 	static class MosaLogo
 	{
@@ -6,7 +8,7 @@
 		private static uint _width = 23;
 		private static uint _height = 7;
 
-		public static void Draw(VBEFrameBuffer32bpp frameBuffer, uint tileSize)
+		public static void Draw(IFrameBuffer frameBuffer, uint tileSize)
 		{
 			uint positionX = (frameBuffer.Width / 2) - ((_width * tileSize) / 2);
 			uint positionY = (frameBuffer.Height / 2) - ((_height * tileSize) / 2);
