@@ -10,7 +10,7 @@ namespace Mosa.HardwareSystem
 		/// <summary>
 		/// The hardware abstraction
 		/// </summary>
-		static private IHardwareAbstraction hardwareAbstraction;
+		static public IHardwareAbstraction hardwareAbstraction; //temp: set back to private
 
 		/// <summary>
 		/// </summary>

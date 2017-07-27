@@ -129,44 +129,46 @@ namespace Mosa.CoolWorld.x86
 				Console.WriteLine();
 			}
 
-			//Boot.Console.Write("> Finding file systems...");
+			Console.Write("> Finding file systems...");
 
-			//foreach (var partition in partitions)
-			//{
-			//	var fat = new FatFileSystem(partition as DeviceSystem.IPartitionDevice);
+			foreach (var partition in partitions)
+			{
+				var fat = new FatFileSystem(partition as DeviceSystem.IPartitionDevice);
 
-			//	if (fat.IsValid)
-			//	{
-			//		Console.WriteLine("Found a FAT file system!");
+				if (fat.IsValid)
+				{
+					Console.WriteLine("Found a FAT file system!");
 
-			//		var filename = "TEST.TXT";
+					var filename = "TEST.TXT";
 
-			//		var location = fat.FindEntry(filename);
+					var location = fat.FindEntry(filename);
 
-			//		if (location.IsValid)
-			//		{
-			//			Console.WriteLine("Found: " + filename);
+					if (location.IsValid)
+					{
+						Console.WriteLine("Found: " + filename);
 
-			//			var fatFileStream = new FatFileStream(fat, location);
+						var fatFileStream = new FatFileStream(fat, location);
 
-			//			uint len = (uint)fatFileStream.Length;
+						uint len = (uint)fatFileStream.Length;
 
-			//			Console.WriteLine("Length: " + len.ToString());
+						Console.WriteLine("Length: " + len.ToString());
 
-			//			Console.WriteLine("Reading File:");
+						Console.WriteLine("Reading File:");
 
-			//			for (;;)
-			//			{
-			//				int i = fatFileStream.ReadByte();
+						for (;;)
+						{
+							int i = fatFileStream.ReadByte();
 
-			//				if (i < 0)
-			//					break;
+							if (i < 0)
+								break;
 
-			//				Console.Write((char)i);
-			//			}
-			//		}
-			//	}
-			//}
+							Console.Write((char)i);
+						}
+					}
+				}
+			}
+
+			ForeverLoop();
 
 			// Get StandardKeyboard
 			var standardKeyboards = HardwareSystem.Setup.DeviceManager.GetDevices(new HardwareSystem.WithName("StandardKeyboard"));

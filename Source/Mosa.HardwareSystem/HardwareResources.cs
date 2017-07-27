@@ -11,17 +11,17 @@ namespace Mosa.HardwareSystem
 	public sealed class HardwareResources
 	{
 		/// <summary>
-		///
+		/// The io port regions
 		/// </summary>
 		private List<IOPortRegion> ioPortRegions;
 
 		/// <summary>
-		///
+		/// The memory regions
 		/// </summary>
 		private List<MemoryRegion> memoryRegions;
 
 		/// <summary>
-		///
+		/// The interrupt handler
 		/// </summary>
 		private InterruptHandler interruptHandler;
 
