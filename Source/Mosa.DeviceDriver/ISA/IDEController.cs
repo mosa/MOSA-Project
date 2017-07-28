@@ -22,12 +22,24 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		internal struct IDECommands
+		internal struct IDECommand
 		{
 			internal const byte ReadSectorsWithRetry = 0x20;
 			internal const byte WriteSectorsWithRetry = 0x30;
 			internal const byte IdentifyDrive = 0xEC;
-		};
+		}
+
+		internal struct StatusRegister
+		{
+			internal const byte Busy = (byte)(1 << 7);
+			internal const byte DriveReady = (byte)(1 << 6);
+			internal const byte DriveWriteFault = (byte)(1 << 5);
+			internal const byte DriveSeekComplete = (byte)(1 << 4);
+			internal const byte DataRequest = (byte)(1 << 3);
+			internal const byte CorrectedData = (byte)(1 << 2);
+			internal const byte Index = (byte)(1 << 1);
+			internal const byte Error = (byte)(1 << 0);
+		}
 
 		/// <summary>
 		///
@@ -177,7 +189,7 @@ namespace Mosa.DeviceDriver.ISA
 			StatusPort = base.HardwareResources.GetIOPort(0, 7);
 			AltStatusPort = base.HardwareResources.GetIOPort(1, 6);
 
-			for (int drive = 0; drive < DrivesPerConroller; drive++)
+			for (var drive = 0; drive < DrivesPerConroller; drive++)
 			{
 				driveInfo[drive].Present = false;
 				driveInfo[drive].MaxLBA = 0;
@@ -206,16 +218,10 @@ namespace Mosa.DeviceDriver.ISA
 		public override DeviceDriverStartStatus Start()
 		{
 			SelectDrive(0);
+			driveInfo[0].Present = ((AltStatusPort.Read8() & StatusRegister.DriveReady) == StatusRegister.DriveReady);
 
-			HAL.Sleep(1000 / 250); // wait 1/250th of a second
-
-			driveInfo[0].Present = ((StatusPort.Read8() & 0x40) == 0x40);
-
-			SelectDrive(1);
-
-			HAL.Sleep(1000 / 250); // wait 1/250th of a second
-
-			driveInfo[1].Present = ((StatusPort.Read8() & 0x40) == 0x40);
+			//SelectDrive(1);
+			//driveInfo[1].Present = ((AltStatusPort.Read8() & StatusRegister.DriveReady) == StatusRegister.DriveReady);
 
 			return DeviceDriverStartStatus.Started;
 		}
@@ -229,20 +235,33 @@ namespace Mosa.DeviceDriver.ISA
 			return true;
 		}
 
+		private byte previousStatus = 0;
+
 		/// <summary>
 		/// Waits for register ready.
 		/// </summary>
 		/// <returns></returns>
-		protected bool WaitForRegisterReady()
+		protected bool WaitUntilStatus(byte mask, byte value = 0)
 		{
+			// Wait 400ns
+			for (var i = 0; i < 4; i++)
+			{
+				var status = AltStatusPort.Read8(); // This wastes 100ns
+			}
+
 			while (true)
 			{
-				byte status = AltStatusPort.Read8();
+				var status = AltStatusPort.Read8();
 
-				if ((status & 0x08) == 0x08)
+				if (status != previousStatus)
 				{
-					return true;
+					HAL.DebugWriteLine("Status: 0x" + previousStatus.ToString("x") + " => 0x" + status.ToString("x"));
 				}
+
+				previousStatus = status;
+
+				if ((status & mask) != value)
+					return true;
 
 				//TODO: add timeout check
 			}
@@ -254,16 +273,31 @@ namespace Mosa.DeviceDriver.ISA
 		/// Selects the drive.
 		/// </summary>
 		/// <param name="drive">The drive.</param>
-		protected void SelectDrive(byte drive)
+		/// <returns></returns>
+		protected bool SelectDrive(byte drive)
 		{
+			if (!WaitUntilStatus(StatusRegister.Busy | StatusRegister.DataRequest))
+				return false;
+
 			// select drive; bit 4 is the drive selection, bits 7 and 5 are set high by spec
 			DeviceHeadPort.Write8((byte)((drive == 0) ? 0xA0 : 0xB0));
+
+			// Wait at least 400ns
+			for (var i = 0; i < 4; i++)
+			{
+				var status = AltStatusPort.Read8(); // wastes 100ns
+			}
+
+			if (!WaitUntilStatus(StatusRegister.Busy | StatusRegister.DataRequest))
+				return false;
+
+			return true;
 		}
 
 		/// <summary>
-		/// Opens the specified drive NBR.
+		/// Opens the specified drive.
 		/// </summary>
-		/// <param name="drive">The drive NBR.</param>
+		/// <param name="drive">The drive.</param>
 		/// <returns></returns>
 		public bool Open(uint drive)
 		{
@@ -272,16 +306,17 @@ namespace Mosa.DeviceDriver.ISA
 
 			SelectDrive((byte)drive);
 
-			CommandPort.Write8(IDECommands.IdentifyDrive);
+			CommandPort.Write8(IDECommand.IdentifyDrive);
 
-			if (!WaitForRegisterReady())
+			if (!WaitUntilStatus(StatusRegister.DataRequest))
 				return false;
 
 			var info = new DataBlock(512);
 
 			for (uint index = 0; index < 256; index++)
 			{
-				info.SetUShort(index * 2, DataPort.Read16());
+				var d = DataPort.Read16();
+				info.SetUShort(index * 2, d);
 			}
 
 			driveInfo[drive].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA28);
@@ -305,19 +340,34 @@ namespace Mosa.DeviceDriver.ISA
 			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
 				return false;
 
-			DeviceHeadPort.Write8((byte)(0xE0 | (drive << 4) | ((lba >> 24) & 0x0F)));
+			HAL.DebugWrite("Disk/Block: ");
+			HAL.DebugWrite(drive.ToString());
+			HAL.DebugWrite("/");
+			HAL.DebugWrite(lba.ToString());
+			HAL.DebugWrite(" [");
 
+			HAL.DebugWrite("A");
+			SelectDrive((byte)drive);
+
+			HAL.DebugWrite("B");
+			DeviceHeadPort.Write8((byte)(0xE0 | (drive << 4) | ((lba >> 24) & 0x0F)));
 			FeaturePort.Write8(0);
 			SectorCountPort.Write8(1);
-
 			LBALowPort.Write8((byte)(lba & 0xFF));
 			LBAMidPort.Write8((byte)((lba >> 8) & 0xFF));
 			LBAHighPort.Write8((byte)((lba >> 16) & 0xFF));
 
-			CommandPort.Write8((byte)((operation == SectorOperation.Write) ? IDECommands.WriteSectorsWithRetry : IDECommands.ReadSectorsWithRetry));
+			CommandPort.Write8((operation == SectorOperation.Write) ? IDECommand.WriteSectorsWithRetry : IDECommand.ReadSectorsWithRetry);
 
-			if (!WaitForRegisterReady())
+			HAL.DebugWrite("C");
+
+			if (!WaitUntilStatus(StatusRegister.Busy))
+			{
+				HAL.DebugWriteLine("error");
 				return false;
+			}
+
+			HAL.DebugWriteLine("]");
 
 			var sector = new DataBlock(data);
 
@@ -327,14 +377,15 @@ namespace Mosa.DeviceDriver.ISA
 				for (uint index = 0; index < 256; index++)
 				{
 					var s = DataPort.Read16();
-
-					//HAL.DebugWrite(s.ToString("x"));
-					//HAL.DebugWrite(" ");
 					sector.SetUShort(offset + (index * 2), s);
 
-					//var s2 = sector.GetUShort(offset + index * 2);
-					//if (s2 != s)
-					//	HAL.DebugWrite("*");
+					if (index < 8 || index > 256 - 8)
+					{
+						HAL.DebugWrite(index.ToString("x"));
+						HAL.DebugWrite(":");
+						HAL.DebugWrite(s.ToString("x"));
+						HAL.DebugWrite(" ");
+					}
 				}
 			}
 			else
@@ -381,7 +432,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			CommandPort.Write8((byte)((operation == SectorOperation.Write) ? 0x34 : 0x24));
 
-			if (!WaitForRegisterReady())
+			if (!WaitUntilStatus(StatusRegister.Busy))
 				return false;
 
 			var sector = new DataBlock(data);
@@ -406,9 +457,9 @@ namespace Mosa.DeviceDriver.ISA
 		}
 
 		/// <summary>
-		/// Releases the specified drive NBR.
+		/// Releases the specified drive.
 		/// </summary>
-		/// <param name="drive">The drive NBR.</param>
+		/// <param name="drive">The drive.</param>
 		/// <returns></returns>
 		public bool Release(uint drive)
 		{
