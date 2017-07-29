@@ -288,7 +288,7 @@ namespace Mosa.Compiler.Framework
 		{
 			int returnSize = 0;
 
-			if (StoreOnStack(Method.Signature.ReturnType))
+			if (MosaTypeLayout.IsStoredOnStack(Method.Signature.ReturnType))
 			{
 				returnSize = TypeLayout.GetTypeSize(Method.Signature.ReturnType);
 			}
@@ -382,7 +382,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand AllocateVirtualRegisterOrStackSlot(MosaType type)
 		{
-			if (StoreOnStack(type))
+			if (MosaTypeLayout.IsStoredOnStack(type))
 			{
 				return AddStackLocal(type);
 			}
@@ -405,7 +405,7 @@ namespace Mosa.Compiler.Framework
 			{
 				Operand operand = null;
 
-				if (!StoreOnStack(local.Type) && !local.IsPinned)
+				if (!MosaTypeLayout.IsStoredOnStack(local.Type) && !local.IsPinned)
 				{
 					var stacktype = local.Type.GetStackType();
 					operand = CreateVirtualRegister(stacktype);
@@ -490,26 +490,6 @@ namespace Mosa.Compiler.Framework
 		public override string ToString()
 		{
 			return Method.ToString();
-		}
-
-		public bool StoreOnStack(MosaType type)
-		{
-			if (type.IsReferenceType)
-				return false;
-
-			if (type.IsUserValueType)
-			{
-				if (type.Fields != null)
-				{
-					var nonStaticFields = type.Fields.Where(x => !x.IsStatic).ToList();
-					if (nonStaticFields.Count == 1)
-					{
-						return nonStaticFields[0].FieldType.IsUserValueType;
-					}
-				}
-			}
-
-			return type.IsUserValueType;
 		}
 
 		#endregion Methods

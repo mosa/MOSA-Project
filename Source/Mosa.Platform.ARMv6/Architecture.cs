@@ -185,10 +185,10 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Extends the method compiler pipeline with ARMv6 specific stages.
 		/// </summary>
-		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
+		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
+		public override void ExtendMethodCompilerPipeline(CompilerPipeline compilerPipeline)
 		{
-			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
+			compilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
 			        //new LongOperandTransformationStage(),
@@ -199,7 +199,7 @@ namespace Mosa.Platform.ARMv6
 			//    new ExceptionLayoutStage()
 			//);
 
-			methodCompilerPipeline.InsertBefore<GreedyRegisterAllocatorStage>(
+			compilerPipeline.InsertBefore<GreedyRegisterAllocatorStage>(
 				new StopStage()
 			);
 		}
@@ -309,8 +309,8 @@ namespace Mosa.Platform.ARMv6
 		/// Inserts the call instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		public override void InsertCallInstruction(Context context, Operand destination)
+		/// <param name="source">The source.</param>
+		public override void InsertCallInstruction(Context context, Operand source)
 		{
 			//context.AppendInstruction(ARMv6., destination);
 		}

@@ -35,7 +35,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return ParameterType.Equals(type);
 		}
 
-		public class Mutator : MosaUnit.MutatorBase
+		public class Mutator : MutatorBase
 		{
 			private MosaParameter parameter;
 

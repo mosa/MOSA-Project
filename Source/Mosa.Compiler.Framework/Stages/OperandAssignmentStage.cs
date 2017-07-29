@@ -171,7 +171,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var source = sourceOperands[i];
 				var destination = destinationOperands[i];
 
-				if (StoreOnStack(source.Type))
+				if (MosaTypeLayout.IsStoredOnStack(source.Type))
 				{
 					context.AppendInstruction(IRInstruction.MoveCompound, destination, source);
 				}

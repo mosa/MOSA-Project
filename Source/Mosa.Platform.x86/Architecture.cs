@@ -210,10 +210,10 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Extends the method compiler pipeline with x86 specific stages.
 		/// </summary>
-		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
+		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
+		public override void ExtendMethodCompilerPipeline(CompilerPipeline compilerPipeline)
 		{
-			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
+			compilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
 					new PlatformIntrinsicStage(),
@@ -226,15 +226,15 @@ namespace Mosa.Platform.x86
 					new FloatingPointStage(),
 				});
 
-			methodCompilerPipeline.InsertAfterLast<StackLayoutStage>(
+			compilerPipeline.InsertAfterLast<StackLayoutStage>(
 				new BuildStackStage()
 			);
 
-			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
+			compilerPipeline.InsertBefore<CodeGenerationStage>(
 				new FinalTweakTransformationStage()
 			);
 
-			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
+			compilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
 			);
 		}
@@ -248,9 +248,9 @@ namespace Mosa.Platform.x86
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
 		public override void GetTypeRequirements(MosaTypeLayout typeLayout, MosaType type, out int size, out int alignment)
 		{
-			alignment = 4;
+			alignment = NativeAlignment;
 
-			size = type.IsValueType ? typeLayout.GetTypeSize(type) : 4;
+			size = type.IsValueType ? typeLayout.GetTypeSize(type) : NativeAlignment;
 		}
 
 		/// <summary>

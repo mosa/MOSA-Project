@@ -20,8 +20,11 @@ namespace Mosa.Platform.x86.Intrinsic
 			var ctor = context.Operand1;
 			var thisObject = context.Operand2;
 			var result = context.Result;
+			var method = context.InvokeMethod;
 
 			context.SetInstruction(IRInstruction.Call, null, ctor, thisObject);
+
+			//context.InvokeMethod = method;
 			context.AppendInstruction(IRInstruction.MoveInteger, result, thisObject);
 		}
 

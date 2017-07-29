@@ -1,9 +1,11 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace Mosa.Compiler.Framework
 {
@@ -63,6 +65,21 @@ namespace Mosa.Compiler.Framework
 		/// The method parameter stack sizes
 		/// </summary>
 		private Dictionary<MosaMethod, int> methodParameterStackSizes = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
+
+		/// <summary>
+		/// The parameter offsets
+		/// </summary>
+		private Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>();
+
+		/// <summary>
+		/// The parameter stack size
+		/// </summary>
+		private Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>();
+
+		/// <summary>
+		/// The parameter stack size
+		/// </summary>
+		private Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>();
 
 		#endregion Data members
 
@@ -141,8 +158,7 @@ namespace Mosa.Compiler.Framework
 		{
 			ResolveType(type);
 
-			var size = 0;
-			typeSizes.TryGetValue(type, out size);
+			typeSizes.TryGetValue(type, out int size);
 
 			return size;
 		}
@@ -154,10 +170,8 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public int GetFieldSize(MosaField field)
 		{
-			var size = 0;
-
 			//FIXME: This is not thread safe!
-			if (fieldSizes.TryGetValue(field, out size))
+			if (fieldSizes.TryGetValue(field, out int size))
 			{
 				return size;
 			}
@@ -190,9 +204,7 @@ namespace Mosa.Compiler.Framework
 		{
 			ResolveType(field.DeclaringType);
 
-			var offset = 0;
-
-			fieldOffsets.TryGetValue(field, out offset);
+			fieldOffsets.TryGetValue(field, out int offset);
 
 			return offset;
 		}
@@ -249,6 +261,7 @@ namespace Mosa.Compiler.Framework
 		{
 			// i.e. whether copying of the type requires multiple move
 			int? primitiveSize = type.GetPrimitiveSize(NativePointerSize);
+
 			if (primitiveSize != null && primitiveSize > 8)
 				return true;
 
@@ -256,6 +269,7 @@ namespace Mosa.Compiler.Framework
 				return false;
 
 			int typeSize = GetTypeSize(type);
+
 			if (typeSize > NativePointerSize)
 				return true;
 
@@ -273,6 +287,7 @@ namespace Mosa.Compiler.Framework
 
 		public void SetMethodParameterStackSize(MosaMethod method, int size)
 		{
+			// TO BE RETIRED!
 			lock (methodParameterStackSizes)
 			{
 				methodParameterStackSizes.Remove(method);
@@ -282,7 +297,7 @@ namespace Mosa.Compiler.Framework
 
 		public int GetMethodStackSize(MosaMethod method)
 		{
-			var size = 0;
+			int size = 0;
 
 			lock (methodStackSizes)
 			{
@@ -291,9 +306,8 @@ namespace Mosa.Compiler.Framework
 					if ((method.MethodAttributes & MosaMethodAttributes.Abstract) == MosaMethodAttributes.Abstract)
 						return 0;
 
-					return 0;
-
 					//throw new InvalidCompilerException();
+					return 0;
 				}
 			}
 
@@ -311,9 +325,8 @@ namespace Mosa.Compiler.Framework
 					if ((method.MethodAttributes & MosaMethodAttributes.Abstract) == MosaMethodAttributes.Abstract)
 						return 0;
 
-					return 0;
-
 					//throw new InvalidCompilerException();
+					return 0;
 				}
 			}
 
@@ -322,6 +335,9 @@ namespace Mosa.Compiler.Framework
 
 		#region Internal - Layout
 
+		/// <summary>
+		/// Resolves the layouts.
+		/// </summary>
 		private void ResolveLayouts()
 		{
 			// Enumerate all types and do an appropriate type layout
@@ -329,8 +345,20 @@ namespace Mosa.Compiler.Framework
 			{
 				ResolveType(type);
 			}
+
+			foreach (var type in TypeSystem.AllTypes)
+			{
+				foreach (var method in type.Methods)
+				{
+					ResolveMethodParameters(method);
+				}
+			}
 		}
 
+		/// <summary>
+		/// Resolves the type.
+		/// </summary>
+		/// <param name="type">The type.</param>
 		private void ResolveType(MosaType type)
 		{
 			if (type.IsModule)
@@ -386,6 +414,49 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Resolves the method parameters.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		private void ResolveMethodParameters(MosaMethod method)
+		{
+			if (method.IsAbstract)
+				return;
+
+			var parameters = method.Signature.Parameters;
+			int stacksize = 0;
+
+			var offsets = new List<int>(parameters.Count + ((method.HasThis) ? 1 : 0));
+
+			if (method.HasThis)
+			{
+				offsets.Add(0);
+				stacksize = NativePointerSize;  // already aligned
+			}
+
+			for (int index = parameters.Count - 1; index >= 0; index--)
+			{
+				var size = GetTypeSize(parameters[index].ParameterType);
+
+				var sizeAligned = Alignment.AlignUp(size, NativePointerAlignment);
+
+				offsets.Add(stacksize);
+
+				stacksize += sizeAligned;
+			}
+
+			int returnSize = 0; //todo
+
+			if (IsStoredOnStack(method.Signature.ReturnType))
+			{
+				returnSize = GetTypeSize(method.Signature.ReturnType);
+			}
+
+			parameterOffsets.Add(method, offsets);
+			parameterStackSize.Add(method, stacksize);
+			methodReturnSize.Add(method, returnSize);
+		}
+
+		/// <summary>
 		/// Builds a list of interfaces and assigns interface a unique index number
 		/// </summary>
 		/// <param name="type">The type.</param>
@@ -424,7 +495,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			foreach (MosaField field in type.Fields)
+			foreach (var field in type.Fields)
 			{
 				if (!field.IsStatic)
 				{
@@ -457,7 +528,7 @@ namespace Mosa.Compiler.Framework
 			//Debug.Assert(type.BaseType.LayoutSize != 0, @"Type size not set for explicit layout.");
 
 			int size = 0;
-			foreach (MosaField field in type.Fields)
+			foreach (var field in type.Fields)
 			{
 				if (field.Offset == null)
 					continue;
@@ -593,8 +664,7 @@ namespace Mosa.Compiler.Framework
 
 		private List<MosaMethod> CreateMethodTable(MosaType type)
 		{
-			List<MosaMethod> methodTable;
-			if (typeMethodTables.TryGetValue(type, out methodTable))
+			if (typeMethodTables.TryGetValue(type, out List<MosaMethod> methodTable))
 			{
 				return methodTable;
 			}
@@ -655,9 +725,7 @@ namespace Mosa.Compiler.Framework
 
 			if (type.BaseType != null)
 			{
-				List<MosaMethod> baseMethodTable;
-
-				if (!typeMethodTables.TryGetValue(type.BaseType, out baseMethodTable))
+				if (!typeMethodTables.TryGetValue(type.BaseType, out List<MosaMethod> baseMethodTable))
 				{
 					// Method table for the base type has not been create yet, so create it now
 					baseMethodTable = CreateMethodTable(type.BaseType);
@@ -703,5 +771,26 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Internal
+
+		public static bool IsStoredOnStack(MosaType type)
+		{
+			if (type.IsReferenceType)
+				return false;
+
+			if (type.IsUserValueType)
+			{
+				if (type.Fields != null)
+				{
+					var nonStaticFields = type.Fields.Where(x => !x.IsStatic).ToList();
+
+					if (nonStaticFields.Count == 1)
+					{
+						return nonStaticFields[0].FieldType.IsUserValueType;
+					}
+				}
+			}
+
+			return type.IsUserValueType;
+		}
 	}
 }
