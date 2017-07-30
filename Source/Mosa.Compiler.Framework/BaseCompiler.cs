@@ -102,10 +102,7 @@ namespace Mosa.Compiler.Framework
 
 		public void Initialize(MosaCompiler compiler)
 		{
-			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
-
-			Compiler = compiler;
+			Compiler = compiler ?? throw new ArgumentNullException("compiler");
 
 			Architecture = Compiler.CompilerOptions.Architecture;
 
@@ -367,6 +364,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="compilerEvent">The compiler event.</param>
 		/// <param name="message">The message.</param>
+		/// <param name="threadID">The thread identifier.</param>
 		protected void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
 			CompilerTrace.NewCompilerTraceEvent(compilerEvent, message, threadID);

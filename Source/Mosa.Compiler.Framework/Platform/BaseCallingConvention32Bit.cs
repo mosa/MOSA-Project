@@ -66,13 +66,12 @@ namespace Mosa.Compiler.Framework.Platform
 
 			var operands = BuildOperands(context);
 
-
 			int stackSize = 0;
 			int returnSize = 0;
 
 			if (method != null)
 			{
-				stackSize = CalculateStackSizeForParameters(compiler.TypeLayout, architecture, operands, method);
+				stackSize = CalculateStackSizeForParameters(compiler.TypeLayout, architecture, operands, method, compiler);
 				returnSize = CalculateReturnSize(compiler, method);
 			}
 			else
@@ -83,17 +82,19 @@ namespace Mosa.Compiler.Framework.Platform
 
 			context.Empty();
 
-			if (stackSize != 0 || returnSize != 0)
+			int totalStack = returnSize + stackSize;
+
+			if (totalStack != 0)
 			{
-				ReserveStackSizeForCall(compiler, context, returnSize + stackSize, scratch);
+				ReserveStackSizeForCall(compiler, context, totalStack, scratch);
 
 				if (method != null)
 				{
-					PushOperands(compiler, context, method, operands, returnSize + stackSize, scratch);
+					PushOperands(compiler, context, method, operands, totalStack, scratch);
 				}
 				else
 				{
-					PushOperands(compiler, context, operands, returnSize + stackSize, scratch);
+					PushOperands(compiler, context, operands, totalStack, scratch);
 				}
 			}
 
@@ -102,7 +103,7 @@ namespace Mosa.Compiler.Framework.Platform
 			architecture.InsertCallInstruction(context, scratch);
 
 			CleanupReturnValue(compiler, context, result);
-			FreeStackAfterCall(compiler, context, returnSize + stackSize);
+			FreeStackAfterCall(compiler, context, totalStack);
 		}
 
 		private static int CalculateReturnSize(BaseMethodCompiler compiler, MosaMethod method)
@@ -213,27 +214,14 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <param name="scratch">The scratch.</param>
 		private void PushOperands(BaseMethodCompiler compiler, Context context, MosaMethod method, List<Operand> operands, int space, Operand scratch)
 		{
-			Debug.Assert((method.Signature.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
-						(method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count));
-
-			int offset = method.Signature.Parameters.Count - operands.Count;
+			Debug.Assert((method.Signature.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count)
+						|| (method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count));
 
 			for (int index = operands.Count - 1; index >= 0; index--)
 			{
 				var operand = operands[index];
 
-				var param = (index + offset >= 0) ? method.Signature.Parameters[index + offset].ParameterType : null;
-
-				int size, alignment;
-
-				if (param != null && operand.IsR8 && param.IsR4)
-				{
-					architecture.GetTypeRequirements(compiler.TypeLayout, param, out size, out alignment);
-				}
-				else
-				{
-					architecture.GetTypeRequirements(compiler.TypeLayout, operand.Type, out size, out alignment);
-				}
+				architecture.GetTypeRequirements(compiler.TypeLayout, operand.Type, out int size, out int alignment);
 
 				size = Alignment.AlignUp(size, alignment);
 

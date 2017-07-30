@@ -19,67 +19,67 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds a set of types
 		/// </summary>
-		private HashSet<MosaType> typeSet = new HashSet<MosaType>();
+		private readonly HashSet<MosaType> typeSet = new HashSet<MosaType>();
 
 		/// <summary>
 		/// Holds a list of interfaces
 		/// </summary>
-		private List<MosaType> interfaces = new List<MosaType>();
+		private readonly List<MosaType> interfaces = new List<MosaType>();
 
 		/// <summary>
 		/// Holds the method table offsets value for each method
 		/// </summary>
-		private Dictionary<MosaMethod, int> methodTableOffsets = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
+		private readonly Dictionary<MosaMethod, int> methodTableOffsets = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// Holds the slot value for each interface
 		/// </summary>
-		private Dictionary<MosaType, int> interfaceSlots = new Dictionary<MosaType, int>();
+		private readonly Dictionary<MosaType, int> interfaceSlots = new Dictionary<MosaType, int>();
 
 		/// <summary>
 		/// Holds the size of each type
 		/// </summary>
-		private Dictionary<MosaType, int> typeSizes = new Dictionary<MosaType, int>();
+		private readonly Dictionary<MosaType, int> typeSizes = new Dictionary<MosaType, int>();
 
 		/// <summary>
 		/// Holds the size of each field
 		/// </summary>
-		private Dictionary<MosaField, int> fieldSizes = new Dictionary<MosaField, int>();
+		private readonly Dictionary<MosaField, int> fieldSizes = new Dictionary<MosaField, int>();
 
 		/// <summary>
 		/// Holds the offset for each field
 		/// </summary>
-		private Dictionary<MosaField, int> fieldOffsets = new Dictionary<MosaField, int>();
+		public readonly Dictionary<MosaField, int> fieldOffsets = new Dictionary<MosaField, int>();
 
 		/// <summary>
 		/// Holds a list of methods for each type
 		/// </summary>
-		private Dictionary<MosaType, List<MosaMethod>> typeMethodTables = new Dictionary<MosaType, List<MosaMethod>>();
+		private readonly Dictionary<MosaType, List<MosaMethod>> typeMethodTables = new Dictionary<MosaType, List<MosaMethod>>();
 
 		/// <summary>
 		/// The method stack sizes
 		/// </summary>
-		private Dictionary<MosaMethod, int> methodStackSizes = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
+		private readonly Dictionary<MosaMethod, int> methodStackSizes = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// The method parameter stack sizes
 		/// </summary>
-		private Dictionary<MosaMethod, int> methodParameterStackSizes = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
+		private readonly Dictionary<MosaMethod, int> methodParameterStackSizes = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// The parameter offsets
 		/// </summary>
-		private Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>();
+		public Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>(); // fixme: change to private
 
 		/// <summary>
 		/// The parameter stack size
 		/// </summary>
-		private Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>();
+		public Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>(); // fixme: change to private
 
 		/// <summary>
 		/// The parameter stack size
 		/// </summary>
-		private Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>();
+		public Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>(); // fixme: change to private
 
 		#endregion Data members
 
@@ -89,19 +89,19 @@ namespace Mosa.Compiler.Framework
 		/// Gets the type system associated with this instance.
 		/// </summary>
 		/// <value>The type system.</value>
-		public TypeSystem TypeSystem { get; private set; }
+		public TypeSystem TypeSystem { get; }
 
 		/// <summary>
 		/// Gets the size of the native pointer.
 		/// </summary>
 		/// <value>The size of the native pointer.</value>
-		public int NativePointerSize { get; private set; }
+		public int NativePointerSize { get; }
 
 		/// <summary>
 		/// Gets the native pointer alignment.
 		/// </summary>
 		/// <value>The native pointer alignment.</value>
-		public int NativePointerAlignment { get; private set; }
+		public int NativePointerAlignment { get; }
 
 		/// <summary>
 		/// Get a list of interfaces
@@ -419,23 +419,21 @@ namespace Mosa.Compiler.Framework
 		/// <param name="method">The method.</param>
 		private void ResolveMethodParameters(MosaMethod method)
 		{
-			if (method.IsAbstract)
-				return;
-
 			var parameters = method.Signature.Parameters;
 			int stacksize = 0;
 
 			var offsets = new List<int>(parameters.Count + ((method.HasThis) ? 1 : 0));
 
+			// method.DeclaringType.IsDelegate
 			if (method.HasThis)
 			{
 				offsets.Add(0);
 				stacksize = NativePointerSize;  // already aligned
 			}
 
-			for (int index = parameters.Count - 1; index >= 0; index--)
+			foreach (var parameter in parameters)
 			{
-				var size = GetTypeSize(parameters[index].ParameterType);
+				var size = parameter.ParameterType.IsValueType ? GetTypeSize(parameter.ParameterType) : NativePointerAlignment;
 
 				var sizeAligned = Alignment.AlignUp(size, NativePointerAlignment);
 
@@ -476,7 +474,7 @@ namespace Mosa.Compiler.Framework
 
 		private void ComputeSequentialLayout(MosaType type)
 		{
-			Debug.Assert(type != null, @"No type given.");
+			Debug.Assert(type != null, "No type given.");
 
 			if (typeSizes.ContainsKey(type))
 				return;
@@ -523,7 +521,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="type">The type.</param>
 		private void ComputeExplicitLayout(MosaType type)
 		{
-			Debug.Assert(type != null, @"No type given.");
+			Debug.Assert(type != null, "No type given.");
 
 			//Debug.Assert(type.BaseType.LayoutSize != 0, @"Type size not set for explicit layout.");
 
@@ -539,7 +537,7 @@ namespace Mosa.Compiler.Framework
 
 				// Explicit layout assigns a physical offset from the start of the structure
 				// to the field. We just assign this offset.
-				Debug.Assert(fieldSizes[field] != 0, @"Non-static field doesn't have layout!");
+				Debug.Assert(fieldSizes[field] != 0, "Non-static field doesn't have layout!");
 			}
 
 			typeSizes.Add(type, (type.ClassSize == null || type.ClassSize == -1) ? size : (int)type.ClassSize);
@@ -610,7 +608,7 @@ namespace Mosa.Compiler.Framework
 			if (methodFound != null)
 				return methodFound;
 
-			throw new InvalidOperationException(@"Failed to find implicit interface implementation for type " + type + " and interface method " + interfaceMethod);
+			throw new InvalidOperationException("Failed to find implicit interface implementation for type " + type + " and interface method " + interfaceMethod);
 		}
 
 		private MosaMethod FindImplicitInterfaceMethod(MosaType type, MosaMethod interfaceMethod)

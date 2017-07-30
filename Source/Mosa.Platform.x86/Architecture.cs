@@ -76,7 +76,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Specifies the architecture features to use in generated code.
 		/// </summary>
-		private ArchitectureFeatureFlags architectureFeatures;
+		private readonly ArchitectureFeatureFlags architectureFeatures;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Architecture"/> class.
@@ -421,7 +421,7 @@ namespace Mosa.Platform.x86
 		/// Inserts the jump instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
+		/// <param name="destination">The destination.</param>
 		public override void InsertJumpInstruction(Context context, BasicBlock destination)
 		{
 			context.AppendInstruction(X86.Jmp, destination);
@@ -441,8 +441,9 @@ namespace Mosa.Platform.x86
 		/// Inserts the add instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source1">The source1.</param>
+		/// <param name="source2">The source2.</param>
 		public override void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
 			Debug.Assert(source1 == destination);
@@ -453,8 +454,9 @@ namespace Mosa.Platform.x86
 		/// Inserts the sub instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source1">The source1.</param>
+		/// <param name="source2">The source2.</param>
 		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
 			Debug.Assert(source1 == destination);
@@ -468,7 +470,7 @@ namespace Mosa.Platform.x86
 		/// <returns></returns>
 		public override bool IsInstructionMove(BaseInstruction instruction)
 		{
-			return (instruction == X86.Mov || instruction == X86.Movsd || instruction == X86.Movss);
+			return instruction == X86.Mov || instruction == X86.Movsd || instruction == X86.Movss;
 		}
 	}
 }

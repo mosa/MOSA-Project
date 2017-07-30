@@ -31,10 +31,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="architecture">The architecture of the calling convention.</param>
 		public BaseCallingConventionExtended(BaseArchitecture architecture)
 		{
-			if (architecture == null)
-				throw new ArgumentNullException(@"Architecture");
-
-			this.architecture = architecture;
+			this.architecture = architecture ?? throw new ArgumentNullException("Architecture");
 		}
 
 		#endregion Construction
@@ -69,11 +66,12 @@ namespace Mosa.Compiler.Framework
 		/// <param name="architecture">The architecture.</param>
 		/// <param name="operands">The operands.</param>
 		/// <param name="method">The method.</param>
+		/// <param name="compiler">The compiler.</param>
 		/// <returns></returns>
-		protected static int CalculateStackSizeForParameters(MosaTypeLayout typeLayout, BaseArchitecture architecture, List<Operand> operands, MosaMethod method)
+		protected static int CalculateStackSizeForParameters(MosaTypeLayout typeLayout, BaseArchitecture architecture, List<Operand> operands, MosaMethod method, BaseMethodCompiler compiler)
 		{
-			Debug.Assert((method.Signature.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
-			(method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count), method.FullName);
+			Debug.Assert((method.Signature.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count)
+			|| (method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count), method.FullName);
 
 			int result = 0;
 
@@ -87,6 +85,16 @@ namespace Mosa.Compiler.Framework
 			}
 
 			// todo --- validate with type layout
+			//if (typeLayout.parameterStackSize[method] != result || method.FullName.Contains("::Invoke")) // || method.DeclaringType.IsDelegate)
+			//{
+			//	lock (AppDomain.CurrentDomain)
+			//	{
+			//		Debug.WriteLine("");
+			//		Debug.WriteLine(compiler.Method.FullName);
+			//		Debug.WriteLine("=> calls method: " + method.FullName);
+			//		Debug.WriteLine(result.ToString() + ((typeLayout.parameterStackSize[method] != result) ? " != " : " == ") + typeLayout.parameterStackSize[method].ToString());
+			//	}
+			//}
 
 			return result;
 		}
