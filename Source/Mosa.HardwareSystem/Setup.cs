@@ -102,6 +102,9 @@ namespace Mosa.HardwareSystem
 
 			hardwareDevice.Setup(hardwareResources);
 
+			if (!hardwareDevice.Probe())
+				return;
+
 			DeviceManager.Add(hardwareDevice);
 
 			hardwareResources.EnableIRQ();

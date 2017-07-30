@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
 			Operand instanceOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, instanceOffset);
 
-			var context = new Context(CreateMethodStructure(methodCompiler, true));
+			var context = new Context(CreateMethodStructure(methodCompiler));
 
 			Operand v1 = methodCompiler.CreateVirtualRegister(thisOperand.Type);
 			Operand v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand.Type);
@@ -68,29 +68,29 @@ namespace Mosa.Compiler.Framework
 		{
 			// check if instance is null (if so, it's a static call to the methodPointer)
 
-			MosaField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
+			var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-			Operand methodPointerOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, methodPointerOffset);
+			var methodPointerOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, methodPointerOffset);
 
-			MosaField instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
+			var instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-			Operand instanceOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, instanceOffset);
+			var instanceOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, instanceOffset);
 
 			var size = methodCompiler.Architecture.NativeInstructionSize;
 			bool withReturn = (methodCompiler.Method.Signature.ReturnType == null) ? false : !methodCompiler.Method.Signature.ReturnType.IsVoid;
 
-			Context b0 = new Context(CreateMethodStructure(methodCompiler, false));
-			Context b1 = new Context(methodCompiler.BasicBlocks.CreateBlock());
-			Context b2 = new Context(methodCompiler.BasicBlocks.CreateBlock());
-			Context b3 = new Context(methodCompiler.BasicBlocks.CreateBlock());
+			var b0 = new Context(CreateMethodStructure(methodCompiler));
+			var b1 = new Context(methodCompiler.BasicBlocks.CreateBlock());
+			var b2 = new Context(methodCompiler.BasicBlocks.CreateBlock());
+			var b3 = new Context(methodCompiler.BasicBlocks.CreateBlock());
 
-			Operand[] vrs = new Operand[methodCompiler.Parameters.Length];
+			var vrs = new Operand[methodCompiler.Parameters.Length];
 
 			for (int i = 0; i < methodCompiler.Parameters.Length; i++)
 			{
 				var type = methodCompiler.Parameters[i].Type;
 
-				if (methodCompiler.StoreOnStack(type))
+				if (MosaTypeLayout.IsStoredOnStack(type))
 				{
 					b0.AppendInstruction(IRInstruction.LoadParameterCompound, vrs[i], methodCompiler.Parameters[i]);
 					b0.MosaType = type;
@@ -107,14 +107,14 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			Operand thisOperand = vrs[0];
+			var thisOperand = vrs[0];
 
-			Operand opMethod = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.U4);
-			Operand opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
-			Operand opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.I4);
+			var opMethod = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.U4);
+			var opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
+			var opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.I4);
 
-			Operand opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
-			Operand c0 = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
+			var opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
+			var c0 = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
 
 			b0.AppendInstruction(IRInstruction.LoadInteger, size, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(IRInstruction.LoadInteger, size, opInstance, thisOperand, instanceOffsetOperand);
@@ -125,21 +125,30 @@ namespace Mosa.Compiler.Framework
 
 			// no instance
 			b1.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
-			b1.InvokeMethod = methodCompiler.Method;
+			b1.InvokeMethod = methodCompiler.Method;    // fixme: what should we put here?
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
+			{
 				b1.AddOperand(vrs[i]);
+			}
 			if (withReturn)
+			{
 				b1.SetResult(0, opReturn);
+			}
 			b1.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 			// instance
 			b2.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
-			b2.InvokeMethod = methodCompiler.Method;
+			b2.InvokeMethod = methodCompiler.Method;    // fixme: what should we put here?
 			b2.AddOperand(opInstance);
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
+			{
 				b2.AddOperand(vrs[i]);
+			}
+
 			if (withReturn)
+			{
 				b2.SetResult(0, opReturn);
+			}
 			b2.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 			// return
@@ -152,19 +161,19 @@ namespace Mosa.Compiler.Framework
 		{
 			var nullOperand = Operand.GetNull(methodCompiler.TypeSystem);
 
-			var context = new Context(CreateMethodStructure(methodCompiler, true));
+			var context = new Context(CreateMethodStructure(methodCompiler));
 			context.AppendInstruction(IRInstruction.Return, null, nullOperand);
 			context.AddBranchTarget(methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private static void PatchEndInvoke(BaseMethodCompiler methodCompiler)
 		{
-			var start = CreateMethodStructure(methodCompiler, true);
+			var start = CreateMethodStructure(methodCompiler);
 
 			start.First.Insert(new InstructionNode(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock));
 		}
 
-		private static BasicBlock CreateMethodStructure(BaseMethodCompiler methodCompiler, bool linkEpilogueBlock)
+		private static BasicBlock CreateMethodStructure(BaseMethodCompiler methodCompiler)
 		{
 			var basicBlocks = methodCompiler.BasicBlocks;
 

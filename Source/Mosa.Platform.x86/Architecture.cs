@@ -76,7 +76,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Specifies the architecture features to use in generated code.
 		/// </summary>
-		private ArchitectureFeatureFlags architectureFeatures;
+		private readonly ArchitectureFeatureFlags architectureFeatures;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Architecture"/> class.
@@ -210,10 +210,10 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Extends the method compiler pipeline with x86 specific stages.
 		/// </summary>
-		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
+		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
+		public override void ExtendMethodCompilerPipeline(CompilerPipeline compilerPipeline)
 		{
-			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
+			compilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
 					new PlatformIntrinsicStage(),
@@ -226,15 +226,15 @@ namespace Mosa.Platform.x86
 					new FloatingPointStage(),
 				});
 
-			methodCompilerPipeline.InsertAfterLast<StackLayoutStage>(
+			compilerPipeline.InsertAfterLast<StackLayoutStage>(
 				new BuildStackStage()
 			);
 
-			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
+			compilerPipeline.InsertBefore<CodeGenerationStage>(
 				new FinalTweakTransformationStage()
 			);
 
-			methodCompilerPipeline.InsertBefore<CodeGenerationStage>(
+			compilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
 			);
 		}
@@ -248,9 +248,9 @@ namespace Mosa.Platform.x86
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
 		public override void GetTypeRequirements(MosaTypeLayout typeLayout, MosaType type, out int size, out int alignment)
 		{
-			alignment = 4;
+			alignment = NativeAlignment;
 
-			size = type.IsValueType ? typeLayout.GetTypeSize(type) : 4;
+			size = type.IsValueType ? typeLayout.GetTypeSize(type) : NativeAlignment;
 		}
 
 		/// <summary>
@@ -421,7 +421,7 @@ namespace Mosa.Platform.x86
 		/// Inserts the jump instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
+		/// <param name="destination">The destination.</param>
 		public override void InsertJumpInstruction(Context context, BasicBlock destination)
 		{
 			context.AppendInstruction(X86.Jmp, destination);
@@ -441,8 +441,9 @@ namespace Mosa.Platform.x86
 		/// Inserts the add instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source1">The source1.</param>
+		/// <param name="source2">The source2.</param>
 		public override void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
 			Debug.Assert(source1 == destination);
@@ -453,8 +454,9 @@ namespace Mosa.Platform.x86
 		/// Inserts the sub instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source1">The source1.</param>
+		/// <param name="source2">The source2.</param>
 		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
 			Debug.Assert(source1 == destination);
@@ -468,7 +470,7 @@ namespace Mosa.Platform.x86
 		/// <returns></returns>
 		public override bool IsInstructionMove(BaseInstruction instruction)
 		{
-			return (instruction == X86.Mov || instruction == X86.Movsd || instruction == X86.Movss);
+			return instruction == X86.Mov || instruction == X86.Movsd || instruction == X86.Movss;
 		}
 	}
 }

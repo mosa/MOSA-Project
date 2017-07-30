@@ -35,7 +35,7 @@ namespace Mosa.TestWorld.x86.Tests
 				myArray[1] = 20;
 				return false;
 			}
-			catch (IndexOutOfRangeException ex)
+			catch
 			{
 				return true;
 			}

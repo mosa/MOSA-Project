@@ -115,107 +115,107 @@ namespace Mosa.FileSystem.FAT
 		// Limitation: Long file names are not supported
 
 		/// <summary>
-		///
+		/// The fat type
 		/// </summary>
 		private FatType fatType;
 
 		/// <summary>
-		///
+		/// The end of cluster mark
 		/// </summary>
 		private uint endOfClusterMark;
 
 		/// <summary>
-		///
+		/// The bad cluster mark
 		/// </summary>
 		private uint badClusterMark;
 
 		/// <summary>
-		///
+		/// The reserved cluster mark
 		/// </summary>
 		private uint reservedClusterMark;
 
 		/// <summary>
-		///
+		/// The fat mask
 		/// </summary>
 		private uint fatMask;
 
 		/// <summary>
-		///
+		/// The bytes per sector
 		/// </summary>
 		private uint bytesPerSector;
 
 		/// <summary>
-		///
+		/// The sectors per cluster
 		/// </summary>
 		private byte sectorsPerCluster;
 
 		/// <summary>
-		///
+		/// The reserved sectors
 		/// </summary>
 		private byte reservedSectors;
 
 		/// <summary>
-		///
+		/// The NBR fats
 		/// </summary>
 		private byte nbrFats;
 
 		/// <summary>
-		///
+		/// The root entries
 		/// </summary>
 		private uint rootEntries;
 
 		/// <summary>
-		///
+		/// The total clusters
 		/// </summary>
 		private uint totalClusters;
 
 		/// <summary>
-		///
+		/// The root dir sectors
 		/// </summary>
 		private uint rootDirSectors;
 
 		/// <summary>
-		///
+		/// The first data sector
 		/// </summary>
 		private uint firstDataSector;
 
 		/// <summary>
-		///
+		/// The total sectors
 		/// </summary>
 		private uint totalSectors;
 
 		/// <summary>
-		///
+		/// The data sectors
 		/// </summary>
 		private uint dataSectors;
 
 		/// <summary>
-		///
+		/// The data area start
 		/// </summary>
 		private uint dataAreaStart;
 
 		/// <summary>
-		///
+		/// The entries per sector
 		/// </summary>
 		private uint entriesPerSector;
 
 		/// <summary>
-		///
+		/// The first root directory sector
 		/// </summary>
 		private uint firstRootDirectorySector;
 
 		/// <summary>
-		///
+		/// The root cluster32
 		/// </summary>
 		private uint rootCluster32;
 
 		/// <summary>
-		///
+		/// The fat entries
 		/// </summary>
 		private uint fatEntries;
 
 		/// <summary>
-		///
+		/// The cluster size in bytes
 		/// </summary>
 		private uint clusterSizeInBytes;
 
@@ -274,8 +274,11 @@ namespace Mosa.FileSystem.FAT
 		public bool IsReadOnly { get { return true; } }
 
 		/// <summary>
-		///
+		/// Gets the cluster size in bytes.
 		/// </summary>
+		/// <value>
+		/// The cluster size in bytes.
+		/// </value>
 		public uint ClusterSizeInBytes { get { return clusterSizeInBytes; } }
 
 		/// <summary>
@@ -326,18 +329,18 @@ namespace Mosa.FileSystem.FAT
 
 			if (BlockSize != 512)   // only going to work with 512 sector sizes (for now)
 				return false;
-
+			if (HardwareSystem.HAL.hardwareAbstraction != null) HardwareSystem.HAL.DebugWrite(".A.");
 			var bootSector = new DataBlock(partition.ReadBlock(0, 1));
 
 			if (bootSector.GetUShort(BootSector.BootSectorSignature) != 0xAA55)
 				return false;
-
+			if (HardwareSystem.HAL.hardwareAbstraction != null) HardwareSystem.HAL.DebugWrite(".B.");
 			byte extendedBootSignature = bootSector.GetByte(BootSector.ExtendedBootSignature);
 			byte extendedBootSignature32 = bootSector.GetByte(BootSector.FAT32_ExtendedBootSignature);
 
 			if ((extendedBootSignature != 0x29) && (extendedBootSignature != 0x28) && (extendedBootSignature32 != 0x29))
 				return false;
-
+			if (HardwareSystem.HAL.hardwareAbstraction != null) HardwareSystem.HAL.DebugWrite(".C.");
 			VolumeLabel = bootSector.GetString(BootSector.VolumeLabel, 8).ToString().TrimEnd();
 			bytesPerSector = bootSector.GetUShort(BootSector.BytesPerSector);
 			sectorsPerCluster = bootSector.GetByte(BootSector.SectorsPerCluster);
@@ -370,11 +373,12 @@ namespace Mosa.FileSystem.FAT
 			{
 				return false;
 			}
+			if (HardwareSystem.HAL.hardwareAbstraction != null) HardwareSystem.HAL.DebugWrite(".D.");
 
 			// Some basic checks
 			if ((nbrFats == 0) || (nbrFats > 2) || (totalSectors == 0) || (sectorsPerFat == 0))
 				return false;
-
+			if (HardwareSystem.HAL.hardwareAbstraction != null) HardwareSystem.HAL.DebugWrite(".E.");
 			if (totalClusters < 4085)
 				fatType = FatType.FAT12;
 			else if (totalClusters < 65525)
@@ -406,11 +410,12 @@ namespace Mosa.FileSystem.FAT
 				fatMask = 0x0FFFFFFF;
 				fatEntries = sectorsPerFat * BlockSize / 4;
 			}
+			if (HardwareSystem.HAL.hardwareAbstraction != null) HardwareSystem.HAL.DebugWrite(".F.");
 
 			// More basic checks
 			if ((fatType == FatType.FAT32) && (rootCluster32 == 0))
 				return false;
-
+			if (HardwareSystem.HAL.hardwareAbstraction != null) HardwareSystem.HAL.DebugWrite(".G.");
 			SerialNumber = bootSector.GetBytes(fatType != FatType.FAT32 ? BootSector.IDSerialNumber : BootSector.FAT32_IDSerialNumber, 4);
 
 			IsValid = true;

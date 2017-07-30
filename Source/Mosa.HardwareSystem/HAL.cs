@@ -8,13 +8,13 @@ namespace Mosa.HardwareSystem
 	public static class HAL
 	{
 		/// <summary>
-		///
+		/// The hardware abstraction
 		/// </summary>
-		static private IHardwareAbstraction hardwareAbstraction;
+		static public IHardwareAbstraction hardwareAbstraction; //temp: set back to private
 
 		/// <summary>
-		///
 		/// </summary>
+		/// <param name="irq">The irq.</param>
 		public delegate void HandleInterrupt(byte irq);
 
 		static private HandleInterrupt handleInterrupt;

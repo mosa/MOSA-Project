@@ -32,8 +32,16 @@ namespace Mosa.HardwareSystem
 		/// <summary>
 		/// Setups this hardware device driver
 		/// </summary>
+		/// <param name="hardwareResources"></param>
 		/// <returns></returns>
 		public abstract bool Setup(HardwareResources hardwareResources);
+
+		/// <summary>
+		/// Probes this instance.
+		/// </summary>
+		/// <remarks>Overide for ISA devices, if example</remarks>
+		/// <returns></returns>
+		public virtual bool Probe() { return true; }
 
 		/// <summary>
 		/// Starts this hardware device.

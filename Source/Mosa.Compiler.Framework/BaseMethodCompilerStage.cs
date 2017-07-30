@@ -197,16 +197,6 @@ namespace Mosa.Compiler.Framework
 			return MethodCompiler.AllocateVirtualRegisterOrStackSlot(type);
 		}
 
-		/// <summary>
-		/// Stores the on stack.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public bool StoreOnStack(MosaType type)
-		{
-			return MethodCompiler.StoreOnStack(type);
-		}
-
 		#endregion Methods
 
 		#region Block Operations

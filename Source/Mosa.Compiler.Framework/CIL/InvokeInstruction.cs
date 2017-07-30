@@ -140,7 +140,7 @@ namespace Mosa.Compiler.Framework.CIL
 			{
 				context.ResultCount = 1;
 
-				if (compiler.StoreOnStack(method.Signature.ReturnType))
+				if (MosaTypeLayout.IsStoredOnStack(method.Signature.ReturnType))
 				{
 					context.Result = AllocateVirtualRegisterOrStackSlot(compiler, method.Signature.ReturnType);
 				}

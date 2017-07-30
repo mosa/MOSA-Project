@@ -57,14 +57,11 @@ namespace Mosa.DeviceDriver.ISA
 		/// Probes for this device.
 		/// </summary>
 		/// <returns></returns>
-		public bool Probe()
+		public override bool Probe()
 		{
 			configAddress.Write32(BaseValue);
 
-			if (configAddress.Read32() != BaseValue)
-				return false;
-
-			return true;
+			return configAddress.Read32() == BaseValue;
 		}
 
 		/// <summary>
@@ -75,12 +72,12 @@ namespace Mosa.DeviceDriver.ISA
 		{
 			if (Probe())
 			{
-				base.DeviceStatus = DeviceStatus.Online;
+				DeviceStatus = DeviceStatus.Online;
 				return DeviceDriverStartStatus.Started;
 			}
 			else
 			{
-				base.DeviceStatus = DeviceStatus.NotFound;
+				DeviceStatus = DeviceStatus.NotFound;
 				return DeviceDriverStartStatus.NotFound;
 			}
 		}

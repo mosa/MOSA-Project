@@ -109,8 +109,8 @@ namespace Mosa.Compiler.Framework
 		/// Requests the architecture to add architecture specific compilation stages to the pipeline. These
 		/// may depend upon the current state of the pipeline.
 		/// </summary>
-		/// <param name="methodPipeline">The pipeline of the method compiler to add architecture specific compilation stages to.</param>
-		public abstract void ExtendMethodCompilerPipeline(CompilerPipeline methodPipeline);
+		/// <param name="compilerPipeline">The pipeline of the method compiler to add architecture specific compilation stages to.</param>
+		public abstract void ExtendMethodCompilerPipeline(CompilerPipeline compilerPipeline);
 
 		/// <summary>
 		/// Gets the type memory requirements.
@@ -191,8 +191,8 @@ namespace Mosa.Compiler.Framework
 		/// Inserts the call instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		public abstract void InsertCallInstruction(Context context, Operand destination);
+		/// <param name="source">The source.</param>
+		public abstract void InsertCallInstruction(Context context, Operand source);
 
 		/// <summary>
 		/// Inserts the add instruction.

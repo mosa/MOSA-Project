@@ -11,18 +11,24 @@ namespace Mosa.FileSystem
 	public abstract class GenericFileSystem
 	{
 		/// <summary>
-		///
+		/// The partition
 		/// </summary>
 		protected IPartitionDevice partition;
 
 		/// <summary>
-		///
+		/// Gets or sets the size of the block.
 		/// </summary>
+		/// <value>
+		/// The size of the block.
+		/// </value>
 		public uint BlockSize { get; protected set; }
 
 		/// <summary>
-		///
+		/// Returns true if ... is valid.
 		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is valid; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsValid { get; protected set; }
 
 		/// <summary>

@@ -894,7 +894,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Debug.Assert(context.Operand1.IsParameter);
 
-			if (StoreOnStack(context.Operand1.Type))
+			if (MosaTypeLayout.IsStoredOnStack(context.Operand1.Type))
 			{
 				context.SetInstruction(IRInstruction.LoadParameterCompound, context.Result, context.Operand1);
 				context.MosaType = context.Operand1.Type;
@@ -929,7 +929,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var destination = context.Result;
 			var size = GetInstructionSize(source.Type);
 
-			Debug.Assert(!StoreOnStack(destination.Type));
+			Debug.Assert(!MosaTypeLayout.IsStoredOnStack(destination.Type));
 			var moveInstruction = GetMoveInstruction(destination.Type);
 			context.SetInstruction(moveInstruction, size, destination, source);
 		}
@@ -953,7 +953,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(elementOffset != null);
 
-			if (StoreOnStack(arrayType.ElementType))
+			if (MosaTypeLayout.IsStoredOnStack(arrayType.ElementType))
 			{
 				context.SetInstruction(IRInstruction.LoadCompound, result, arrayAddress, elementOffset);
 				context.MosaType = arrayType.ElementType;
@@ -1008,7 +1008,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int offset = TypeLayout.GetFieldOffset(field);
 			bool isPointer = operand.IsPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
 
-			if (!result.IsOnStack && !StoreOnStack(operand.Type) && !operand.IsReferenceType && isPointer)
+			if (!result.IsOnStack && !MosaTypeLayout.IsStoredOnStack(operand.Type) && !operand.IsReferenceType && isPointer)
 			{
 				//EXAMPLE:
 				//  CIL.Ldfld V_3 [U4*] <= V_2 [Mosa.Runtime.MetadataMethodStruct*] {f:System.UInt32* Mosa.Runtime.MetadataMethodStruct::Name}
@@ -1024,7 +1024,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (!result.IsOnStack && !StoreOnStack(operand.Type) && !operand.IsReferenceType && !isPointer)
+			if (!result.IsOnStack && !MosaTypeLayout.IsStoredOnStack(operand.Type) && !operand.IsReferenceType && !isPointer)
 			{
 				//EXAMPLE:
 				//  CIL.Ldfld V_13 [System.IntPtr] <= V_12 [System.RuntimeMethodHandle] {f:System.IntPtr System.RuntimeMethodHandle::m_ptr}
@@ -1042,7 +1042,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (!StoreOnStack(result.Type) && operand.IsOnStack)
+			if (!MosaTypeLayout.IsStoredOnStack(result.Type) && operand.IsOnStack)
 			{
 				//EXAMPLE:
 				//  CIL.Ldfld V_5 [I4] <= T_2 const= unresolved[Mosa.TestWorld.x86.Tests.Pair] { f: System.Int32 Mosa.TestWorld.x86.Tests.Pair::A}
@@ -1058,7 +1058,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (!StoreOnStack(result.Type) && !operand.IsOnStack)
+			if (!MosaTypeLayout.IsStoredOnStack(result.Type) && !operand.IsOnStack)
 			{
 				//EXAMPLE:
 				//  CIL.Ldfld V_30 [O] <= V_29 [O] {f:Mosa.Kernel.x86.ConsoleSession Mosa.Kernel.x86.ConsoleManager::Boot}
@@ -1170,7 +1170,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
 
-			if (StoreOnStack(type))
+			if (MosaTypeLayout.IsStoredOnStack(type))
 			{
 				context.SetInstruction(IRInstruction.LoadCompound, destination, source, ConstantZero);
 			}
@@ -1197,7 +1197,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var size = GetInstructionSize(fieldType);
 			var fieldOperand = Operand.CreateField(context.MosaField);
 
-			if (StoreOnStack(fieldType))
+			if (MosaTypeLayout.IsStoredOnStack(fieldType))
 			{
 				context.SetInstruction(IRInstruction.LoadCompound, destination, fieldOperand, ConstantZero);
 				context.MosaType = fieldType;
@@ -1389,7 +1389,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Context before = context.InsertBefore();
 
 			// If the type is value type we don't need to call AllocateObject
-			if (StoreOnStack(thisReference.Type))
+			if (MosaTypeLayout.IsStoredOnStack(thisReference.Type))
 			{
 				Debug.Assert(thisReference.Uses.Count <= 1, "Usages too high");
 
@@ -1534,7 +1534,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Debug.Assert(context.Result.IsParameter);
 
-			if (StoreOnStack(context.Operand1.Type))
+			if (MosaTypeLayout.IsStoredOnStack(context.Operand1.Type))
 			{
 				context.SetInstruction(IRInstruction.StoreParameterCompound, context.Size, null, context.Result, context.Operand1);
 				context.MosaType = context.Result.Type; // may not be necessary
@@ -1563,7 +1563,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var arrayAddress = LoadArrayBaseAddress(context, arrayType, array);
 			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndex);
 
-			if (StoreOnStack(value.Type))
+			if (MosaTypeLayout.IsStoredOnStack(value.Type))
 			{
 				context.SetInstruction(IRInstruction.StoreCompound, null, arrayAddress, elementOffset, value);
 				context.MosaType = arrayType.ElementType;
@@ -1593,7 +1593,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var size = GetInstructionSize(fieldType);
 
-			if (StoreOnStack(fieldType))
+			if (MosaTypeLayout.IsStoredOnStack(fieldType))
 			{
 				context.SetInstruction(IRInstruction.StoreCompound, size, null, objectOperand, offsetOperand, valueOperand);
 				context.MosaType = fieldType;
@@ -1623,7 +1623,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (StoreOnStack(type))
+			if (MosaTypeLayout.IsStoredOnStack(type))
 			{
 				Debug.Assert(!context.Result.IsVirtualRegister);
 				context.SetInstruction(IRInstruction.MoveCompound, context.Result, context.Operand1);
@@ -1647,7 +1647,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// This is actually stind.* and stobj - the opcodes have the same meanings
 			var type = context.MosaType;  // pass thru
 
-			if (StoreOnStack(type))
+			if (MosaTypeLayout.IsStoredOnStack(type))
 			{
 				context.SetInstruction(IRInstruction.StoreCompound, null, context.Operand1, ConstantZero, context.Operand2);
 			}
@@ -1672,7 +1672,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var size = GetInstructionSize(field.FieldType);
 			var fieldOperand = Operand.CreateField(field);
 
-			if (StoreOnStack(field.FieldType))
+			if (MosaTypeLayout.IsStoredOnStack(field.FieldType))
 			{
 				context.SetInstruction(IRInstruction.StoreCompound, size, null, fieldOperand, ConstantZero, context.Operand1);
 				context.MosaType = field.FieldType;
@@ -1796,7 +1796,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Result = tmp;
 			context.ResultCount = 1;
 
-			if (StoreOnStack(type))
+			if (MosaTypeLayout.IsStoredOnStack(type))
 			{
 				context.AppendInstruction(IRInstruction.LoadCompound, result, tmp, ConstantZero);
 				context.MosaType = type;
@@ -1859,7 +1859,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var size = GetInstructionSize(type);
 
-			if (StoreOnStack(type))
+			if (MosaTypeLayout.IsStoredOnStack(type))
 			{
 				context.AppendInstruction(IRInstruction.LoadCompound, result, tmp, ConstantZero);
 				context.MosaType = type;
@@ -2404,7 +2404,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var source = context.Operand1;
 			var size = GetInstructionSize(source.Type);
 
-			if (StoreOnStack(source.Type))
+			if (MosaTypeLayout.IsStoredOnStack(source.Type))
 			{
 				context.SetInstruction(IRInstruction.MoveCompound, destination, source);
 			}

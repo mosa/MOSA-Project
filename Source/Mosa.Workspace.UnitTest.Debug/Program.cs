@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Mosa.Workspace.UnitTest.Debug
 {
-	internal class Program
+	internal static class Program
 	{
 		private static readonly UnitTestEngine unitTestEngine = new UnitTestEngine();
 
@@ -53,7 +53,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 		{
 			Console.WriteLine("Thread Start: " + Thread.CurrentThread.Name);
 
-			for (int i = 0; i < 2; i++)
+			for (int i = 0; i < 3; i++)
 			{
 				int value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 1, 2);
 
@@ -63,8 +63,8 @@ namespace Mosa.Workspace.UnitTest.Debug
 				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 7, 8);
 				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 9, 0);
 
-				double a1 = 7;
-				double b1 = 9;
+				const double a1 = 7;
+				const double b1 = 9;
 
 				var d1 = unitTestEngine.Run<double>("Mosa.UnitTest.Collection", "DoubleTests", "AddR8R8", a1, b1);
 

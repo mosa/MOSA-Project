@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var returnType = method.Method.Signature.ReturnType;
 
-			if (StoreOnStack(returnType) && !returnType.IsUI8 && !returnType.IsR8)
+			if (MosaTypeLayout.IsStoredOnStack(returnType) && !returnType.IsUI8 && !returnType.IsR8)
 				return false;
 
 			return true;
@@ -180,7 +180,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var newOperand = Operand.CreateVirtualRegister(operand.Type, -operand.Index);
 
-					var moveInstruction = StoreOnStack(newOperand.Type)
+					var moveInstruction = MosaTypeLayout.IsStoredOnStack(newOperand.Type)
 						? IRInstruction.MoveCompound
 						: GetMoveInstruction(newOperand.Type);
 

@@ -31,10 +31,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="architecture">The architecture of the calling convention.</param>
 		public BaseCallingConventionExtended(BaseArchitecture architecture)
 		{
-			if (architecture == null)
-				throw new ArgumentNullException(@"Architecture");
-
-			this.architecture = architecture;
+			this.architecture = architecture ?? throw new ArgumentNullException("Architecture");
 		}
 
 		#endregion Construction
@@ -51,7 +48,7 @@ namespace Mosa.Compiler.Framework
 			var operands = new List<Operand>(context.OperandCount - 1);
 			int index = 0;
 
-			foreach (Operand operand in context.Operands)
+			foreach (var operand in context.Operands)
 			{
 				if (index++ > 0)
 				{
@@ -66,34 +63,38 @@ namespace Mosa.Compiler.Framework
 		/// Calculates the stack size for parameters.
 		/// </summary>
 		/// <param name="typeLayout">The type layouts.</param>
+		/// <param name="architecture">The architecture.</param>
 		/// <param name="operands">The operands.</param>
 		/// <param name="method">The method.</param>
+		/// <param name="compiler">The compiler.</param>
 		/// <returns></returns>
-		protected static int CalculateStackSizeForParameters(MosaTypeLayout typeLayout, BaseArchitecture architecture, List<Operand> operands, MosaMethod method)
+		protected static int CalculateStackSizeForParameters(MosaTypeLayout typeLayout, BaseArchitecture architecture, List<Operand> operands, MosaMethod method, BaseMethodCompiler compiler)
 		{
-			Debug.Assert((method.Signature.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count) ||
-			(method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count), method.FullName);
+			Debug.Assert((method.Signature.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count)
+			|| (method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count), method.FullName);
 
-			int offset = method.Signature.Parameters.Count - operands.Count;
 			int result = 0;
 
 			for (int index = operands.Count - 1; index >= 0; index--)
 			{
-				Operand operand = operands[index];
+				var operand = operands[index];
 
-				int size, alignment;
-				architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
-
-				var param = (index + offset >= 0) ? method.Signature.Parameters[index + offset] : null;
-
-				if (param != null && operand.IsR8 && param.ParameterType.IsR4)
-				{
-					//  adjust for parameter size on stack when method parameter is R4 while the calling variable is R8
-					architecture.GetTypeRequirements(typeLayout, param.ParameterType, out size, out alignment);
-				}
+				architecture.GetTypeRequirements(typeLayout, operand.Type, out int size, out int alignment);
 
 				result = Alignment.AlignUp(result, alignment) + size;
 			}
+
+			// todo --- validate with type layout
+			//if (typeLayout.parameterStackSize[method] != result || method.FullName.Contains("::Invoke")) // || method.DeclaringType.IsDelegate)
+			//{
+			//	lock (AppDomain.CurrentDomain)
+			//	{
+			//		Debug.WriteLine("");
+			//		Debug.WriteLine(compiler.Method.FullName);
+			//		Debug.WriteLine("=> calls method: " + method.FullName);
+			//		Debug.WriteLine(result.ToString() + ((typeLayout.parameterStackSize[method] != result) ? " != " : " == ") + typeLayout.parameterStackSize[method].ToString());
+			//	}
+			//}
 
 			return result;
 		}
@@ -105,8 +106,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var operand in operands)
 			{
-				int size, alignment;
-				architecture.GetTypeRequirements(typeLayout, operand.Type, out size, out alignment);
+				architecture.GetTypeRequirements(typeLayout, operand.Type, out int size, out int alignment);
 
 				result = Alignment.AlignUp(result, alignment) + size;
 			}
