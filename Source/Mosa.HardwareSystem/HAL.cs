@@ -62,7 +62,7 @@ namespace Mosa.HardwareSystem
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		internal static IMemory RequestPhysicalMemory(uint address, uint size)
+		public static IMemory RequestPhysicalMemory(uint address, uint size)
 		{
 			return hardwareAbstraction.RequestPhysicalMemory(address, size);
 		}

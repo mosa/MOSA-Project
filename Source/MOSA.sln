@@ -1,5 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
+VisualStudioVersion = 15.0.26430.14
 VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 12.0.31101.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{AB88960E-B233-475B-96E4-8C10EEF8622C}"
@@ -156,6 +157,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{F0EFF742
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.GDBDebugger", "Mosa.Tool.GDBDebugger\Mosa.Tool.GDBDebugger.csproj", "{DFD831EA-79D8-49FC-8923-3AFFDA1283B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.VBEWorld.x86", "Mosa.VBEWorld.x86\Mosa.VBEWorld.x86.csproj", "{E039B97A-FEA6-4655-94D6-32381A9F9931}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -756,6 +759,18 @@ Global
 		{DFD831EA-79D8-49FC-8923-3AFFDA1283B9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DFD831EA-79D8-49FC-8923-3AFFDA1283B9}.Release|x86.ActiveCfg = Release|Any CPU
 		{DFD831EA-79D8-49FC-8923-3AFFDA1283B9}.Release|x86.Build.0 = Release|Any CPU
+		{E039B97A-FEA6-4655-94D6-32381A9F9931}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E039B97A-FEA6-4655-94D6-32381A9F9931}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E039B97A-FEA6-4655-94D6-32381A9F9931}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E039B97A-FEA6-4655-94D6-32381A9F9931}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E039B97A-FEA6-4655-94D6-32381A9F9931}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E039B97A-FEA6-4655-94D6-32381A9F9931}.Debug|x86.Build.0 = Debug|Any CPU
+		{E039B97A-FEA6-4655-94D6-32381A9F9931}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E039B97A-FEA6-4655-94D6-32381A9F9931}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E039B97A-FEA6-4655-94D6-32381A9F9931}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E039B97A-FEA6-4655-94D6-32381A9F9931}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E039B97A-FEA6-4655-94D6-32381A9F9931}.Release|x86.ActiveCfg = Release|Any CPU
+		{E039B97A-FEA6-4655-94D6-32381A9F9931}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -813,5 +828,6 @@ Global
 		{1717C7EB-06ED-434B-BA3C-E4FF9644EEDF} = {AC7C3CDA-E0E8-408C-BB32-DBCBB905E3E1}
 		{FD266261-809F-483C-99CF-F26A7C143E52} = {1F29608A-4C39-42C7-B981-154F92B9EDAC}
 		{DFD831EA-79D8-49FC-8923-3AFFDA1283B9} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
+		{E039B97A-FEA6-4655-94D6-32381A9F9931} = {1AB7FA6A-829C-4DCF-BCA6-A27156D8DA26}
 	EndGlobalSection
 EndGlobal

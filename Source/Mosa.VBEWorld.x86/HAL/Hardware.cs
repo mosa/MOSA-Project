@@ -3,8 +3,9 @@
 using Mosa.HardwareSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
+using System;
 
-namespace Mosa.CoolWorld.x86.HAL
+namespace Mosa.VBEWorld.x86.HAL
 {
 	/// <summary>
 	///
@@ -18,7 +19,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <returns></returns>
 		IReadWriteIOPort IHardwareAbstraction.RequestIOPort(ushort port)
 		{
-			return new IOPort(port);
+			throw new Exception("Unimplemented");
 		}
 
 		/// <summary>
@@ -27,12 +28,12 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		IMemory IHardwareAbstraction.RequestPhysicalMemory(uint address, uint size)
+		public IMemory RequestPhysicalMemory(uint address, uint size)
 		{
 			// Map physical memory space to virtual memory space
-			for (uint at = address; at < address + size; at = at + 4096)
+			for (uint at = address; at < address + size; at += 4096)
 			{
-				PageTable.MapVirtualAddressToPhysical(at, at);
+				PageTable.MapVirtualAddressToPhysical(at, at, true);
 			}
 
 			return new Memory(address, size);
@@ -100,7 +101,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="message">The message.</param>
 		void IHardwareAbstraction.DebugWrite(string message)
 		{
-			Boot.Debug.Write(message);
+			Boot.Log(message);
 		}
 
 		/// <summary>
@@ -109,7 +110,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="message">The message.</param>
 		void IHardwareAbstraction.DebugWriteLine(string message)
 		{
-			Boot.Debug.WriteLine(message);
+			Boot.Log(message);
 		}
 
 		/// <summary>

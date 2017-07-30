@@ -127,9 +127,9 @@ namespace Mosa.Kernel.x86
 		public static uint VBEControlInformation => multiBootInfo->VbeControlInfo;
 
 		/// <summary>
-		/// Gets the VBE mode info.
+		/// Gets the VBE mode info pointer.
 		/// </summary>
-		/// <value>The VBE mode info.</value>
+		/// <value>The VBE mode info pointer.</value>
 		public static uint VBEModeInfo => multiBootInfo->VbeModeInfo;
 
 		/// <summary>
@@ -155,6 +155,31 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <value>The VBE interface len.</value>
 		public static uint VBEInterfaceLen => multiBootInfo->VbeInterfaceLength;
+
+		/// <summary>
+		/// Gets the presence of VBE.
+		/// </summary>
+		/// <value>True if VBE is present.</value>
+		public static bool VBEPresent
+		{
+			get { return ((Flags & (1 << 11)) == (1 << 11)); }
+		}
+
+		/// <summary>
+		/// Gets the VBE mode info structure.
+		/// </summary>
+		/// <value>The VBE mode info structure.</value>
+		public static VBEMode VBEModeInfoStructure
+		{
+			get
+			{
+				if (_vbeModeInfoStructure == null && VBEPresent)
+					_vbeModeInfoStructure = new VBEMode((VBEModeInfo*)VBEModeInfo);
+
+				return _vbeModeInfoStructure;
+			}
+		}
+		private static VBEMode _vbeModeInfoStructure = null;
 
 		/// <summary>
 		/// Setups this multiboot.
@@ -256,6 +281,46 @@ namespace Mosa.Kernel.x86
 		}
 	}
 
+	public unsafe class VBEMode
+	{
+		private VBEModeInfo* _info;
+
+		public VBEMode(VBEModeInfo* info)
+		{
+			_info = info;
+		}
+
+		/// <summary>
+		/// Gets the width of the screen in pixels.
+		/// </summary>
+		/// <returns>Screen width in pixels.</returns>
+		public ushort ScreenWidth => _info->ScreenWidth;
+
+		/// <summary>
+		/// Gets the height of the screen in pixels.
+		/// </summary>
+		/// <returns>Screen height in pixels.</returns>
+		public ushort ScreenHeight => _info->ScreenHeight;
+
+		/// <summary>
+		/// Gets bits per pixel.
+		/// </summary>
+		/// <returns>Bits per pixel.</returns>
+		public ushort BitsPerPixel => _info->BitsPerPixel;
+
+		/// <summary>
+		/// Gets bytes per line.
+		/// </summary>
+		/// <returns>Bytes per line.</returns>
+		public ushort Pitch => _info->Pitch;
+
+		/// <summary>
+		/// Gets physical location of the framebuffer.
+		/// </summary>
+		/// <returns>The location of ht framebuffer.</returns>
+		public uint MemoryPhysicalLocation => _info->PhysBase;
+	}
+
 	[StructLayout(LayoutKind.Sequential)]
 	unsafe public struct MultiBootInfo
 	{
@@ -303,5 +368,108 @@ namespace Mosa.Kernel.x86
 				}
 			}
 		}
+	}
+
+	[StructLayout(LayoutKind.Explicit, Size = 256)]
+	unsafe public struct VBEModeInfo
+	{
+		[FieldOffset(0)]
+		public ushort Attributes;
+
+		[FieldOffset(2)]
+		public byte WindowA;
+
+		[FieldOffset(3)]
+		public byte WindowB;
+
+		[FieldOffset(4)]
+		public ushort Granularity;
+
+		[FieldOffset(6)]
+		public ushort WindowSize;
+
+		[FieldOffset(8)]
+		public ushort SegmentA;
+
+		[FieldOffset(10)]
+		public ushort SegmentB;
+
+		[FieldOffset(12)]
+		public uint WinFuncPtr;
+
+		[FieldOffset(16)]
+		public ushort Pitch;
+
+		[FieldOffset(18)]
+		public ushort ScreenWidth;
+
+		[FieldOffset(20)]
+		public ushort ScreenHeight;
+
+		[FieldOffset(22)]
+		public byte WChar;
+
+		[FieldOffset(23)]
+		public byte YChar;
+
+		[FieldOffset(24)]
+		public byte Planes;
+
+		[FieldOffset(25)]
+		public byte BitsPerPixel;
+
+		[FieldOffset(26)]
+		public byte Banks;
+
+		[FieldOffset(27)]
+		public byte MemoryModel;
+
+		[FieldOffset(28)]
+		public byte BankSize;
+
+		[FieldOffset(29)]
+		public byte ImagePages;
+
+		[FieldOffset(30)]
+		public byte Reserved0;
+
+		[FieldOffset(31)]
+		public byte RedMask;
+
+		[FieldOffset(32)]
+		public byte RedPosition;
+
+		[FieldOffset(33)]
+		public byte GreenMask;
+
+		[FieldOffset(34)]
+		public byte GreenPosition;
+
+		[FieldOffset(35)]
+		public byte BlueMask;
+
+		[FieldOffset(36)]
+		public byte BluePosition;
+
+		[FieldOffset(37)]
+		public byte ReservedMask;
+
+		[FieldOffset(38)]
+		public byte ReservedPosition;
+
+		[FieldOffset(39)]
+		public byte DirectColorAttributes;
+
+		[FieldOffset(40)]
+		public uint PhysBase;
+
+		[FieldOffset(44)]
+		public uint OffScreenMemoryOff;
+
+		[FieldOffset(48)]
+		public ushort OffScreenMemorSize;
+
+		[FieldOffset(50)]
+		public fixed byte Reserved1[206];
 	}
 }

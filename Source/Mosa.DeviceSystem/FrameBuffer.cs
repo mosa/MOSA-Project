@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceSystem
@@ -69,5 +70,15 @@ namespace Mosa.DeviceSystem
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
 		public abstract void SetPixel(uint color, uint x, uint y);
+
+		/// <summary>
+		/// Fills a rectangle with color.
+		/// </summary>
+		/// <param name="color">The color.</param>
+		/// <param name="x">X of the top left of the rectangle.</param>
+		/// <param name="y">Y of the top left of the rectangle.</param>
+		/// <param name="w">Width of the rectangle.</param>
+		/// <param name="h">Width of the rectangle.</param>
+		public abstract void FillRectangle(uint color, uint x, uint y, uint w, uint h);
 	}
 }

@@ -85,6 +85,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ScanCodeMap\HU.cs" />
     <Compile Include="Setup.cs" />
     <Compile Include="ISA\CMOS.cs">
       <SubType>Code</SubType>
