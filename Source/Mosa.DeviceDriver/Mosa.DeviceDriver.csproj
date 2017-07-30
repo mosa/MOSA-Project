@@ -65,7 +65,6 @@
     <NoWarn>1685,219,414</NoWarn>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
-    <CodeAnalysisRuleSet>Mosa.DeviceDriver.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Korlib\Korlib.csproj">

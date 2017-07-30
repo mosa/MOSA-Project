@@ -62,11 +62,6 @@ namespace Mosa.Compiler.Framework
 		private readonly Dictionary<MosaMethod, int> methodStackSizes = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
-		/// The method parameter stack sizes
-		/// </summary>
-		private readonly Dictionary<MosaMethod, int> methodParameterStackSizes = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
-
-		/// <summary>
 		/// The parameter offsets
 		/// </summary>
 		public Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>(); // fixme: change to private
@@ -285,16 +280,6 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void SetMethodParameterStackSize(MosaMethod method, int size)
-		{
-			// TO BE RETIRED!
-			lock (methodParameterStackSizes)
-			{
-				methodParameterStackSizes.Remove(method);
-				methodParameterStackSizes.Add(method, size);
-			}
-		}
-
 		public int GetMethodStackSize(MosaMethod method)
 		{
 			int size = 0;
@@ -316,21 +301,17 @@ namespace Mosa.Compiler.Framework
 
 		public int GetMethodParameterStackSize(MosaMethod method)
 		{
-			var size = 0;
-
-			lock (methodParameterStackSizes)
+			lock (parameterStackSize)
 			{
-				if (!methodParameterStackSizes.TryGetValue(method, out size))
+				if (parameterStackSize.TryGetValue(method, out int value))
 				{
-					if ((method.MethodAttributes & MosaMethodAttributes.Abstract) == MosaMethodAttributes.Abstract)
-						return 0;
-
-					//throw new InvalidCompilerException();
-					return 0;
+					return value;
 				}
-			}
 
-			return size;
+				ResolveMethodParameters(method);
+
+				return parameterStackSize[method];
+			}
 		}
 
 		#region Internal - Layout
@@ -424,7 +405,6 @@ namespace Mosa.Compiler.Framework
 
 			var offsets = new List<int>(parameters.Count + ((method.HasThis) ? 1 : 0));
 
-			// method.DeclaringType.IsDelegate
 			if (method.HasThis)
 			{
 				offsets.Add(0);

@@ -1,10 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -57,46 +55,6 @@ namespace Mosa.Compiler.Framework
 			}
 
 			return operands;
-		}
-
-		/// <summary>
-		/// Calculates the stack size for parameters.
-		/// </summary>
-		/// <param name="typeLayout">The type layouts.</param>
-		/// <param name="architecture">The architecture.</param>
-		/// <param name="operands">The operands.</param>
-		/// <param name="method">The method.</param>
-		/// <param name="compiler">The compiler.</param>
-		/// <returns></returns>
-		protected static int CalculateStackSizeForParameters(MosaTypeLayout typeLayout, BaseArchitecture architecture, List<Operand> operands, MosaMethod method, BaseMethodCompiler compiler)
-		{
-			Debug.Assert((method.Signature.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count)
-			|| (method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count), method.FullName);
-
-			int result = 0;
-
-			for (int index = operands.Count - 1; index >= 0; index--)
-			{
-				var operand = operands[index];
-
-				architecture.GetTypeRequirements(typeLayout, operand.Type, out int size, out int alignment);
-
-				result = Alignment.AlignUp(result, alignment) + size;
-			}
-
-			// todo --- validate with type layout
-			//if (typeLayout.parameterStackSize[method] != result || method.FullName.Contains("::Invoke")) // || method.DeclaringType.IsDelegate)
-			//{
-			//	lock (AppDomain.CurrentDomain)
-			//	{
-			//		Debug.WriteLine("");
-			//		Debug.WriteLine(compiler.Method.FullName);
-			//		Debug.WriteLine("=> calls method: " + method.FullName);
-			//		Debug.WriteLine(result.ToString() + ((typeLayout.parameterStackSize[method] != result) ? " != " : " == ") + typeLayout.parameterStackSize[method].ToString());
-			//	}
-			//}
-
-			return result;
 		}
 
 		protected static int CalculateStackSizeForParameters(MosaTypeLayout typeLayout, BaseArchitecture architecture, List<Operand> operands)

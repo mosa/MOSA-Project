@@ -21,17 +21,17 @@ namespace Mosa.Platform.x86.Stages
 	/// </remarks>
 	public sealed class Multiboot0695Stage : BaseCompilerStage
 	{
-        #region Constants
+		#region Constants
 
-        /// <summary>
-        /// This address is the top of the initial kernel stack.
-        /// </summary>
-        private const uint STACK_ADDRESS = 0x00A00000 - 8;
+		/// <summary>
+		/// This address is the top of the initial kernel stack.
+		/// </summary>
+		private const uint STACK_ADDRESS = 0x00A00000 - 8;
 
-        /// <summary>
-        /// Magic value in the multiboot header.
-        /// </summary>
-        private const uint HEADER_MB_MAGIC = 0x1BADB002U;
+		/// <summary>
+		/// Magic value in the multiboot header.
+		/// </summary>
+		private const uint HEADER_MB_MAGIC = 0x1BADB002U;
 
 		/// <summary>
 		/// Multiboot flag, which indicates that additional modules must be
@@ -96,9 +96,7 @@ namespace Mosa.Platform.x86.Stages
 
 			multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
 
-			var multibootSymbol = Linker.GetSymbol(multibootMethod.FullName, SectionKind.Text);
-
-			Linker.EntryPoint = multibootSymbol;
+			Linker.EntryPoint = Linker.GetSymbol(multibootMethod.FullName, SectionKind.Text);
 		}
 
 		protected override void RunPostCompile()

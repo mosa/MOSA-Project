@@ -343,9 +343,10 @@ namespace Mosa.UnitTest.Collection
 
 		public static int TestInstanceDelegate1(int a)
 		{
-			var w = new Worker();
-			w.Value = 25;
-
+			var w = new Worker()
+			{
+				Value = 25
+			};
 			SumValue executeSum = w.SumValue;
 
 			int sum = executeSum(a);
@@ -355,9 +356,10 @@ namespace Mosa.UnitTest.Collection
 
 		public static int TestInstanceDelegate2(int a, int b)
 		{
-			var w = new Worker();
-			w.Value = 25;
-
+			var w = new Worker()
+			{
+				Value = 25
+			};
 			SumPlusValue executeSum = w.SumPlusValue;
 
 			int sum = executeSum(a, b);
