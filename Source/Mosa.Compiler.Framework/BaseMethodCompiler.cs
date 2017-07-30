@@ -125,11 +125,17 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public List<Operand> LocalStack { get; private set; }
 
+		/// <summary>
+		/// Gets or sets the size of the stack parameter.
+		/// </summary>
 		/// <value>
 		/// The size of the stack parameter.
 		/// </value>
 		public int StackParameterSize { get; set; }
 
+		/// <summary>
+		/// Gets or sets the size of the stack.
+		/// </summary>
 		/// <value>
 		/// The size of the stack memory.
 		/// </value>

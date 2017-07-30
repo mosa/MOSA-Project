@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DelegatePatcher" /> class.
 		/// </summary>
-		/// <param name="complier">The complier.</param>
+		/// <param name="compiler">The compiler.</param>
 		public DelegatePatcher(BaseCompiler compiler)
 		{
 			Compiler = compiler;
