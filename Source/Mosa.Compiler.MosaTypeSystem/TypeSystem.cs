@@ -62,7 +62,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public static TypeSystem Load(IMetadata metadata)
 		{
-			TypeSystem result = new TypeSystem(metadata);
+			var result = new TypeSystem(metadata);
 			result.Load();
 			return result;
 		}
@@ -136,14 +136,19 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return metadata.LookupUserString(module, token);
 		}
 
-		public MosaMethod CreateLinkerMethod(string methodName, MosaType returnType, IList<MosaParameter> parameters)
+		public MosaMethod CreateLinkerMethod(string methodName, MosaType returnType, bool hasThis = false, IList<MosaParameter> parameters = null)
+		{
+			return CreateLinkerMethod(DefaultLinkerType, methodName, returnType, hasThis, parameters);
+		}
+
+		public MosaMethod CreateLinkerMethod(MosaType type, string methodName, MosaType returnType, bool hasThis = false, IList<MosaParameter> parameters = null)
 		{
 			if (parameters == null)
 				parameters = new List<MosaParameter>();
 
 			var result = Controller.CreateMethod();
 
-			using (var mosaType = Controller.MutateType(DefaultLinkerType))
+			using (var mosaType = Controller.MutateType(type))
 			{
 				mosaType.Methods.Add(result);
 			}
@@ -156,12 +161,31 @@ namespace Mosa.Compiler.MosaTypeSystem
 				mosaMethod.Signature = new MosaMethodSignature(returnType, parameters);
 
 				mosaMethod.IsStatic = true;
-				mosaMethod.HasThis = false;
+				mosaMethod.HasThis = hasThis;
 				mosaMethod.HasExplicitThis = false;
 				mosaMethod.IsLinkerGenerated = true;
 
 				return result;
 			}
+		}
+
+		/// <summary>
+		/// Creates the type of the linker.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public MosaType CreateLinkerType(string name)
+		{
+			var mosatype = Controller.CreateType();
+
+			using (var type = Controller.MutateType(mosatype))
+			{
+				type.Module = LinkerModule;
+				type.Name = name;
+				type.IsLinkerGenerated = true;
+				type.TypeCode = MosaTypeCode.ReferenceType;
+			}
+			return mosatype;
 		}
 
 		private class TypeSystemController : ITypeSystemController

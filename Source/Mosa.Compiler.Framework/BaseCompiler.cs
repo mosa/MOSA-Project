@@ -89,7 +89,21 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public MosaType PlatformInternalRuntimeType { get; private set; }
 
+		/// <summary>
+		/// Gets the type of the internal runtime.
+		/// </summary>
+		/// <value>
+		/// The type of the internal runtime.
+		/// </value>
 		public MosaType InternalRuntimeType { get; private set; }
+
+		/// <summary>
+		/// Gets the delegate patcher.
+		/// </summary>
+		/// <value>
+		/// The delegate patcher.
+		/// </value>
+		public DelegatePatcher DelegatePatcher { get; private set; }
 
 		/// <summary>
 		/// Gets the compiler data.
@@ -117,6 +131,7 @@ namespace Mosa.Compiler.Framework
 			GlobalCounters = new Counters();
 			PlugSystem = new PlugSystem();
 			CompilerData = new CompilerData();
+			DelegatePatcher = new DelegatePatcher(this);
 
 			// Create new dictionary
 			IntrinsicTypes = new Dictionary<string, Type>();
@@ -184,7 +199,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public MosaMethod CreateLinkerMethod(string methodName)
 		{
-			return TypeSystem.CreateLinkerMethod(methodName, TypeSystem.BuiltIn.Void, null);
+			return TypeSystem.CreateLinkerMethod(methodName, TypeSystem.BuiltIn.Void, false, null);
 		}
 
 		/// <summary>

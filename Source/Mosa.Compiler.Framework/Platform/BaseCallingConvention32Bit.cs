@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework.Platform
 
 			if (method != null)
 			{
-				stackSize = CalculateStackSizeForParameters(compiler.TypeLayout, architecture, operands, method, compiler);
+				stackSize = compiler.TypeLayout.GetMethodParameterStackSize(method);
 				returnSize = CalculateReturnSize(compiler, method);
 			}
 			else

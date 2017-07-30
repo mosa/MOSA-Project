@@ -8,7 +8,6 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Mosa.Compiler.Framework
 {
@@ -293,10 +292,7 @@ namespace Mosa.Compiler.Framework
 				returnSize = TypeLayout.GetTypeSize(Method.Signature.ReturnType);
 			}
 
-			int size = LayoutParameters(Architecture.CallingConvention.OffsetOfFirstParameter + returnSize);
-
-			StackParameterSize = size;
-			TypeLayout.SetMethodParameterStackSize(Method, size);
+			StackParameterSize = LayoutParameters(Architecture.CallingConvention.OffsetOfFirstParameter + returnSize);
 		}
 
 		private int LayoutParameters(int offsetOfFirst)
@@ -305,21 +301,13 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var operand in Parameters)
 			{
-				int size, alignment;
-				Architecture.GetTypeRequirements(TypeLayout, operand.Type, out size, out alignment);
+				Architecture.GetTypeRequirements(TypeLayout, operand.Type, out int size, out int alignment);
 
 				operand.Offset = offset;
 				operand.IsResolved = true;
 
-				//// adjust split children
-				//if (operand.Low != null)
-				//{
-				//	operand.Low.Offset = offset + (operand.Low.Offset - operand.Offset);
-				//	operand.High.Offset = offset + (operand.High.Offset - operand.Offset);
-				//}
-
 				size = Alignment.AlignUp(size, alignment);
-				offset = offset + size;
+				offset += size;
 			}
 
 			return offset;

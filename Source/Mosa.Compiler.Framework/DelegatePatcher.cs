@@ -2,20 +2,60 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Patches delegates
 	/// </summary>
-	public static class DelegatePatcher
+	public sealed class DelegatePatcher
 	{
+		private BaseCompiler Compiler;
+
+		private MosaType delegateProxyType;
+
+		/// <summary>
+		/// The deligate proxy methods
+		/// </summary>
+		private Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>> delegateProxyMethods = new Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>>();
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DelegatePatcher" /> class.
+		/// </summary>
+		/// <param name="complier">The complier.</param>
+		public DelegatePatcher(BaseCompiler compiler)
+		{
+			Compiler = compiler;
+		}
+
+		private MosaMethod GetDelegateProxyMethod(MosaMethod delegateMethod, bool instance)
+		{
+			if (delegateProxyType == null)
+			{
+				delegateProxyType = Compiler.TypeSystem.CreateLinkerType("DelegateProxy");
+			}
+
+			if (!delegateProxyMethods.TryGetValue(delegateMethod, out Tuple<MosaMethod, MosaMethod> tuple))
+			{
+				var staticProxy = Compiler.TypeSystem.CreateLinkerMethod(delegateProxyType, delegateMethod.FullName + "@Static@Proxy", delegateMethod.Signature.ReturnType, false, delegateMethod.Signature.Parameters);
+				var instanceProxy = Compiler.TypeSystem.CreateLinkerMethod(delegateProxyType, delegateMethod.FullName + "@Instance@Proxy", delegateMethod.Signature.ReturnType, true, delegateMethod.Signature.Parameters);
+
+				tuple = new Tuple<MosaMethod, MosaMethod>(instanceProxy, staticProxy);
+
+				delegateProxyMethods.Add(delegateMethod, tuple);
+			}
+
+			return instance ? tuple.Item1 : tuple.Item2;
+		}
+
 		/// <summary>
 		/// Patches the delegate.
 		/// </summary>
 		/// <param name="methodCompiler">The method compiler.</param>
 		/// <returns></returns>
-		public static bool PatchDelegate(BaseMethodCompiler methodCompiler)
+		public bool PatchDelegate(BaseMethodCompiler methodCompiler)
 		{
 			if (!methodCompiler.Method.DeclaringType.IsDelegate)
 				return false;
@@ -33,25 +73,25 @@ namespace Mosa.Compiler.Framework
 
 		private static void PatchConstructor(BaseMethodCompiler methodCompiler)
 		{
-			Operand thisOperand = methodCompiler.Parameters[0];
-			Operand instanceOperand = methodCompiler.Parameters[1];
-			Operand methodPointerOperand = methodCompiler.Parameters[2];
+			var thisOperand = methodCompiler.Parameters[0];
+			var instanceOperand = methodCompiler.Parameters[1];
+			var methodPointerOperand = methodCompiler.Parameters[2];
 
 			var size = methodCompiler.Architecture.NativeInstructionSize;
 
-			MosaField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
+			var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-			Operand methodPointerOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, methodPointerOffset);
+			var methodPointerOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, methodPointerOffset);
 
-			MosaField instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
+			var instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-			Operand instanceOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, instanceOffset);
+			var instanceOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, instanceOffset);
 
 			var context = new Context(CreateMethodStructure(methodCompiler));
 
-			Operand v1 = methodCompiler.CreateVirtualRegister(thisOperand.Type);
-			Operand v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand.Type);
-			Operand v3 = methodCompiler.CreateVirtualRegister(instanceOperand.Type);
+			var v1 = methodCompiler.CreateVirtualRegister(thisOperand.Type);
+			var v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand.Type);
+			var v3 = methodCompiler.CreateVirtualRegister(instanceOperand.Type);
 
 			context.AppendInstruction(IRInstruction.LoadParameterInteger, v1, thisOperand);
 			context.AppendInstruction(IRInstruction.LoadParameterInteger, v2, methodPointerOperand);
@@ -64,7 +104,7 @@ namespace Mosa.Compiler.Framework
 			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
-		private static void PatchInvoke(BaseMethodCompiler methodCompiler)
+		private void PatchInvoke(BaseMethodCompiler methodCompiler)
 		{
 			// check if instance is null (if so, it's a static call to the methodPointer)
 
@@ -125,7 +165,7 @@ namespace Mosa.Compiler.Framework
 
 			// no instance
 			b1.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
-			b1.InvokeMethod = methodCompiler.Method;    // fixme: what should we put here?
+			b1.InvokeMethod = GetDelegateProxyMethod(methodCompiler.Method, false);
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
 			{
 				b1.AddOperand(vrs[i]);
@@ -138,7 +178,7 @@ namespace Mosa.Compiler.Framework
 
 			// instance
 			b2.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
-			b2.InvokeMethod = methodCompiler.Method;    // fixme: what should we put here?
+			b2.InvokeMethod = GetDelegateProxyMethod(methodCompiler.Method, true);
 			b2.AddOperand(opInstance);
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
 			{
@@ -154,7 +194,9 @@ namespace Mosa.Compiler.Framework
 			// return
 			b3.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
 			if (withReturn)
+			{
 				b3.SetOperand(0, opReturn);
+			}
 		}
 
 		private static void PatchBeginInvoke(BaseMethodCompiler methodCompiler)
