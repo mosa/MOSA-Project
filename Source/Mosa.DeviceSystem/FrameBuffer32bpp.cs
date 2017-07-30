@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceSystem
@@ -57,6 +58,29 @@ namespace Mosa.DeviceSystem
 		public override void SetPixel(uint color, uint x, uint y)
 		{
 			memory.Write32(GetOffset(x, y), color);
+		}
+
+		/// <summary>
+		/// Fills a rectangle with color.
+		/// </summary>
+		/// <param name="color">The color.</param>
+		/// <param name="x">X of the top left of the rectangle.</param>
+		/// <param name="y">Y of the top left of the rectangle.</param>
+		/// <param name="w">Width of the rectangle.</param>
+		/// <param name="h">Width of the rectangle.</param>
+		public override void FillRectangle(uint color, uint x, uint y, uint w, uint h)
+		{
+			uint startAddress = GetOffset(x, y);
+
+			for (uint offsetY = 0; offsetY < h; offsetY++)
+			{
+				for (uint offsetX = 0; offsetX < w; offsetX++)
+				{
+					memory.Write32(startAddress + (offsetX << 2), color);
+				}
+
+				startAddress += depth;
+			}
 		}
 	}
 }

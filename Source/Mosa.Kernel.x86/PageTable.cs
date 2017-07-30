@@ -51,7 +51,9 @@ namespace Mosa.Kernel.x86
 		public static void MapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress, bool present = true)
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			Native.Set32(Address.PageTable + ((virtualAddress & 0xFFC00000u) >> 10), physicalAddress & 0xFFC00000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
+
+			//Native.Set32(Address.PageTable + ((virtualAddress & 0xFFC00000u) >> 10), physicalAddress & 0xFFC00000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
+			Native.Set32(Address.PageTable + ((virtualAddress & 0xFFFFF000u) >> 10), physicalAddress & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
 		}
 
 		/// <summary>
