@@ -57,21 +57,6 @@ namespace Mosa.Compiler.Framework
 			return operands;
 		}
 
-		protected static int CalculateStackSizeForParameters(MosaTypeLayout typeLayout, BaseArchitecture architecture, List<Operand> operands)
-		{
-			// first operand is the call location
-			int result = 0;
-
-			foreach (var operand in operands)
-			{
-				architecture.GetTypeRequirements(typeLayout, operand.Type, out int size, out int alignment);
-
-				result = Alignment.AlignUp(result, alignment) + size;
-			}
-
-			return result;
-		}
-
 		#endregion Helper Methods
 	}
 }
