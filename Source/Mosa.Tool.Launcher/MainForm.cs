@@ -339,6 +339,11 @@ namespace Mosa.Tool.Launcher
 		private void MainForm_Load(object sender, EventArgs e)
 		{
 			tbApplicationLocations.SelectedTab = tabOptions;
+
+			foreach(IncludeFile file in Options.IncludeFiles)
+			{
+				AddAdditionalFile(file);
+			}
 		}
 
 		private void btnDestination_Click(object sender, EventArgs e)
@@ -469,6 +474,51 @@ namespace Mosa.Tool.Launcher
 			else
 			{
 				tbMode.Enabled = false;
+			}
+		}
+
+		private void AddAdditionalFile(IncludeFile file)
+		{
+			ListViewItem item = new ListViewItem();
+			item.Tag = file;
+			item.Text = file.Filename;
+
+			item.SubItems.Add(file.Content.Length.ToString());
+
+			additionalFilesList.Items.Add(item);
+		}
+
+		private void btnAddFiles_Click(object sender, EventArgs e)
+		{
+			using(OpenFileDialog open = new OpenFileDialog())
+			{
+				open.Multiselect = true;
+				open.Filter = "All files (*.*)|*.*";
+
+				if(open.ShowDialog(this) == DialogResult.OK)
+				{
+					foreach (string file in open.FileNames)
+					{
+						IncludeFile includeFile = new IncludeFile(file, Path.GetFileName(file));
+
+						Options.IncludeFiles.Add(includeFile);
+
+						AddAdditionalFile(includeFile);
+					}
+				}
+			}
+		}
+
+		private void benRemoveFiles_Click(object sender, EventArgs e)
+		{
+			if (additionalFilesList.SelectedItems.Count == 0)
+				return;
+
+			foreach (ListViewItem item in additionalFilesList.SelectedItems)
+			{
+				Options.IncludeFiles.Remove((IncludeFile)item.Tag);
+
+				item.Remove();
 			}
 		}
 	}
