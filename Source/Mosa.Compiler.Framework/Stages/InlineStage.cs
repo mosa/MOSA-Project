@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///
+	/// Inline Stage
 	/// </summary>
 	public class InlineStage : BaseMethodCompilerStage
 	{
