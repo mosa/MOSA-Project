@@ -11,15 +11,15 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
 	internal class MetadataResolver
 	{
-		private CLRMetadata metadata;
+		private readonly CLRMetadata metadata;
 
 		public MetadataResolver(CLRMetadata metadata)
 		{
 			this.metadata = metadata;
 		}
 
-		private Queue<MosaUnit> resolveQueue = new Queue<MosaUnit>();
-		private Queue<MosaType> arrayResolveQueue = new Queue<MosaType>();
+		private readonly Queue<MosaUnit> resolveQueue = new Queue<MosaUnit>();
+		private readonly Queue<MosaType> arrayResolveQueue = new Queue<MosaType>();
 
 		public void EnqueueForResolve(MosaUnit unit)
 		{
@@ -35,9 +35,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		{
 			foreach (var unit in metadata.Loader.LoadedUnits)
 			{
-				if (unit is MosaType)
+				if (unit is MosaType type)
 				{
-					var type = (MosaType)unit;
 					using (var mosaType = metadata.Controller.MutateType(type))
 					{
 						var typeDef = type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Definition;
@@ -76,9 +75,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					ResolveMethod((MosaMethod)unit);
 				if (unit is MosaProperty)
 					ResolveProperty((MosaProperty)unit);
-				if (unit is MosaModule)
+				if (unit is MosaModule module)
 				{
-					var module = (MosaModule)unit;
 					using (var mosaModule = metadata.Controller.MutateModule(module))
 					{
 						ResolveCustomAttributes(mosaModule, module.GetUnderlyingObject<UnitDesc<ModuleDef, object>>().Definition);
@@ -132,9 +130,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			{
 				value = metadata.Loader.GetType((TypeSig)value);
 			}
-			else if (value is CAArgument[])
+			else if (value is CAArgument[] valueArray)
 			{
-				var valueArray = (CAArgument[])value;
 				var resultArray = new MosaCustomAttribute.Argument[valueArray.Length];
 				for (int i = 0; i < resultArray.Length; i++)
 				{
@@ -235,9 +232,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			{
 				mosaField.FieldType = metadata.Loader.GetType(resolver.Resolve(field.GetFieldSig().Type));
 
-				mosaField.HasOpenGenericParams =
-					field.DeclaringType.HasOpenGenericParams ||
-					field.FieldType.GetTypeSig().HasOpenGenericParameter();
+				mosaField.HasOpenGenericParams = field.DeclaringType.HasOpenGenericParams
+					|| field.FieldType.GetTypeSig().HasOpenGenericParameter();
 
 				ResolveCustomAttributes(mosaField, field.GetUnderlyingObject<UnitDesc<FieldDef, FieldSig>>().Definition);
 			}
@@ -341,7 +337,9 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				return (int)(instruction.Offset + instruction.GetSize());
 			}
 			else
+			{
 				return (int)instruction.Offset;
+			}
 		}
 
 		private void ResolveBody(MethodDef methodDef, MosaMethod.Mutator method, CilBody body, GenericArgumentResolver resolver)
@@ -399,9 +397,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			{
 				operand = ResolveTypeOperand((ITypeDefOrRef)instruction.Operand, resolver);
 			}
-			else if (instruction.Operand is MemberRef)
+			else if (instruction.Operand is MemberRef memberRef)
 			{
-				var memberRef = (MemberRef)instruction.Operand;
 				if (memberRef.IsFieldRef)
 					operand = ResolveFieldOperand(memberRef, resolver);
 				else
@@ -427,9 +424,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			{
 				operand = (int)((Instruction)instruction.Operand).Offset;
 			}
-			else if (instruction.Operand is Instruction[])
+			else if (instruction.Operand is Instruction[] targets)
 			{
-				var targets = (Instruction[])instruction.Operand;
 				var offsets = new int[targets.Length];
 				for (int i = 0; i < offsets.Length; i++)
 				{
@@ -463,7 +459,9 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				declType = memberRef.DeclaringType.ToTypeSig();
 			}
 			else
+			{
 				declType = fieldDef.DeclaringType.ToTypeSig();
+			}
 
 			var fieldToken = fieldDef.MDToken;
 

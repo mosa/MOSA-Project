@@ -58,57 +58,57 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the Architecture to compile for.
 		/// </summary>
-		public BaseArchitecture Architecture { get; private set; }
+		public BaseArchitecture Architecture { get; }
 
 		/// <summary>
 		/// Gets the linker used to resolve external symbols.
 		/// </summary>
-		public BaseLinker Linker { get; private set; }
+		public BaseLinker Linker { get; }
 
 		/// <summary>
 		/// Gets the method implementation being compiled.
 		/// </summary>
-		public MosaMethod Method { get; private set; }
+		public MosaMethod Method { get; }
 
 		/// <summary>
 		/// Gets the owner type of the method.
 		/// </summary>
-		public MosaType Type { get; private set; }
+		public MosaType Type { get; }
 
 		/// <summary>
 		/// Gets the basic blocks.
 		/// </summary>
 		/// <value>The basic blocks.</value>
-		public BasicBlocks BasicBlocks { get; private set; }
+		public BasicBlocks BasicBlocks { get; }
 
 		/// <summary>
 		/// Retrieves the compilation scheduler.
 		/// </summary>
 		/// <value>The compilation scheduler.</value>
-		public CompilationScheduler Scheduler { get; private set; }
+		public CompilationScheduler Scheduler { get; }
 
 		/// <summary>
 		/// Provides access to the pipeline of this compiler.
 		/// </summary>
-		public CompilerPipeline Pipeline { get; private set; }
+		public CompilerPipeline Pipeline { get; }
 
 		/// <summary>
 		/// Gets the type system.
 		/// </summary>
 		/// <value>The type system.</value>
-		public TypeSystem TypeSystem { get; private set; }
+		public TypeSystem TypeSystem { get; }
 
 		/// <summary>
 		/// Gets the type layout.
 		/// </summary>
 		/// <value>The type layout.</value>
-		public MosaTypeLayout TypeLayout { get; private set; }
+		public MosaTypeLayout TypeLayout { get; }
 
 		/// <summary>
 		/// Gets the compiler trace handle
 		/// </summary>
 		/// <value>The log.</value>
-		public CompilerTrace Trace { get; private set; }
+		public CompilerTrace Trace { get; }
 
 		/// <summary>
 		/// Gets the local variables.
@@ -118,12 +118,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the assembly compiler.
 		/// </summary>
-		public BaseCompiler Compiler { get; private set; }
+		public BaseCompiler Compiler { get; }
 
 		/// <summary>
 		/// Gets the stack.
 		/// </summary>
-		public List<Operand> LocalStack { get; private set; }
+		public List<Operand> LocalStack { get; }
 
 		/// <summary>
 		/// Gets or sets the size of the stack parameter.
@@ -144,17 +144,17 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the virtual register layout.
 		/// </summary>
-		public VirtualRegisters VirtualRegisters { get; private set; }
+		public VirtualRegisters VirtualRegisters { get; }
 
 		/// <summary>
 		/// Gets the dominance analysis.
 		/// </summary>
-		public Dominance DominanceAnalysis { get; private set; }
+		public Dominance DominanceAnalysis { get; }
 
 		/// <summary>
 		/// Gets the parameters.
 		/// </summary>
-		public Operand[] Parameters { get; private set; }
+		public Operand[] Parameters { get; }
 
 		/// <summary>
 		/// Gets the protected regions.
@@ -167,7 +167,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether [plugged method].
 		/// </summary>
-		public MosaMethod PluggedMethod { get; private set; }
+		public MosaMethod PluggedMethod { get; }
 
 		/// <summary>
 		/// Gets a value indicating whether this method is plugged.
@@ -180,7 +180,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The thread identifier.
 		/// </value>
-		public int ThreadID { get; private set; }
+		public int ThreadID { get; }
 
 		/// <summary>
 		/// Gets the method data.
@@ -188,7 +188,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The method data.
 		/// </value>
-		public CompilerMethodData MethodData { get; private set; }
+		public CompilerMethodData MethodData { get; }
 
 		#endregion Properties
 
@@ -251,6 +251,7 @@ namespace Mosa.Compiler.Framework
 		/// Adds the stack local.
 		/// </summary>
 		/// <param name="type">The type.</param>
+		/// <param name="pinned">if set to <c>true</c> [pinned].</param>
 		/// <returns></returns>
 		public Operand AddStackLocal(MosaType type, bool pinned)
 		{

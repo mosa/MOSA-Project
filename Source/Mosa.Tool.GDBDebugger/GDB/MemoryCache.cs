@@ -11,7 +11,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 	{
 		public const int BlockSize = 0x800;
 
-		public Connector Connector { get; private set; }
+		public Connector Connector { get; }
 
 		private readonly Dictionary<ulong, byte[]> buffer = new Dictionary<ulong, byte[]>();
 		private readonly HashSet<ulong> requested = new HashSet<ulong>();
@@ -21,9 +21,9 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 		private class Request
 		{
-			public ulong Address { get; private set; }
-			public uint Size { get; private set; }
-			public OnMemoryRead OnMemoryRead { get; private set; }
+			public ulong Address { get; }
+			public uint Size { get; }
+			public OnMemoryRead OnMemoryRead { get; }
 
 			public List<ulong> Blocks { get; } = new List<ulong>();
 
@@ -64,7 +64,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			{
 				requests.Add(request);
 
-				for (var i = start; i < end; i = i + BlockSize)
+				for (var i = start; i < end; i += BlockSize)
 				{
 					if (!requested.Contains(i))
 					{

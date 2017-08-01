@@ -24,9 +24,10 @@ namespace Mosa.Compiler.Framework
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseCallingConventionExtended"/>.
+		/// Initializes a new instance of the <see cref="BaseCallingConventionExtended" />.
 		/// </summary>
 		/// <param name="architecture">The architecture of the calling convention.</param>
+		/// <exception cref="ArgumentNullException">Architecture</exception>
 		public BaseCallingConventionExtended(BaseArchitecture architecture)
 		{
 			this.architecture = architecture ?? throw new ArgumentNullException("Architecture");

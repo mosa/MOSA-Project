@@ -23,18 +23,18 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 		}
 
-		private Dictionary<TypeSig, MosaType> typeCache = new Dictionary<TypeSig, MosaType>(new TypeSigComparer());
-		private MosaType[] mvar = new MosaType[0x100];
-		private MosaType[] var = new MosaType[0x100];
+		private readonly Dictionary<TypeSig, MosaType> typeCache = new Dictionary<TypeSig, MosaType>(new TypeSigComparer());
+		private readonly MosaType[] mvar = new MosaType[0x100];
+		private readonly MosaType[] var = new MosaType[0x100];
 		private ClassOrValueTypeSig szHelperEnumeratorSig = null;
 		private ClassOrValueTypeSig iListSig = null;
 		private UnitDesc<MethodDef, MethodSig>[] szHelperMethods = null;
 
-		public IList<MosaUnit> LoadedUnits { get; private set; }
+		public IList<MosaUnit> LoadedUnits { get; }
 
 		public MosaModule CorLib { get; private set; }
 
-		private CLRMetadata metadata;
+		private readonly CLRMetadata metadata;
 
 		public MetadataLoader(CLRMetadata metadata)
 		{
@@ -87,9 +87,9 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 				type.IsInterface = typeDef.IsInterface;
 				type.IsEnum = typeDef.IsEnum;
-				type.IsDelegate =
-					typeDef.BaseType != null && typeDef.BaseType.DefinitionAssembly.IsCorLib() &&
-					(typeDef.BaseType.FullName == "System.Delegate" || typeDef.BaseType.FullName == "System.MulticastDelegate");
+				type.IsDelegate = typeDef.BaseType != null
+					&& typeDef.BaseType.DefinitionAssembly.IsCorLib()
+					&& (typeDef.BaseType.FullName == "System.Delegate" || typeDef.BaseType.FullName == "System.MulticastDelegate");
 				type.IsModule = typeDef.IsGlobalModuleType;
 
 				type.IsExplicitLayout = typeDef.IsExplicitLayout;
@@ -149,10 +149,12 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			LoadedUnits.Add(mosaType);
 
 			if (typeDef.Name.Contains("SZArrayHelper"))
+			{
 				szHelperMethods = mosaType
 					.Methods
 					.Select(x => x.GetUnderlyingObject<UnitDesc<MethodDef, MethodSig>>())
 					.ToArray();
+			}
 		}
 
 		private void LoadField(MosaType declType, MosaField.Mutator field, FieldDef fieldDef)
@@ -490,7 +492,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				if (mDesc.Definition != desc.Definition || !comparer.Equals(mDesc.Signature, newSig))
 					continue;
 
-				if (!(newSig.ContainsGenericParameter == false && newSig.GenParamCount > 0))
+				if (!(!newSig.ContainsGenericParameter && newSig.GenParamCount > 0))
 					return m;
 			}
 
