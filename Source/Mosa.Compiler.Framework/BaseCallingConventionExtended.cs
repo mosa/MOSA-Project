@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="architecture">The architecture of the calling convention.</param>
 		/// <exception cref="ArgumentNullException">Architecture</exception>
-		public BaseCallingConventionExtended(BaseArchitecture architecture)
+		protected BaseCallingConventionExtended(BaseArchitecture architecture)
 		{
 			this.architecture = architecture ?? throw new ArgumentNullException("Architecture");
 		}

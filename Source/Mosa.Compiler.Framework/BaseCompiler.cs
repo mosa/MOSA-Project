@@ -116,7 +116,7 @@ namespace Mosa.Compiler.Framework
 
 		public void Initialize(MosaCompiler compiler)
 		{
-			Compiler = compiler ?? throw new ArgumentNullException("compiler");
+			Compiler = compiler;
 
 			Architecture = Compiler.CompilerOptions.Architecture;
 

@@ -7,19 +7,19 @@ using System.IO;
 namespace Mosa.Compiler.Linker
 {
 	/// <summary>
-	///
+	/// Linker Section
 	/// </summary>
 	public sealed class LinkerSection
 	{
-		public List<LinkerSymbol> Symbols { get; private set; }
+		public List<LinkerSymbol> Symbols { get; }
 
-		private Dictionary<string, LinkerSymbol> symbolLookup;
+		private readonly Dictionary<string, LinkerSymbol> symbolLookup;
 
 		public string Name { get { return SectionKind.ToString(); } }
 
-		public SectionKind SectionKind { get; private set; }
+		public SectionKind SectionKind { get; }
 
-		public uint SectionAlignment { get; private set; }
+		public uint SectionAlignment { get; }
 
 		public bool IsResolved { get; private set; }
 
@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Linker
 
 		public uint AlignedSize { get { return Alignment.AlignUp(Size, SectionAlignment); } }
 
-		private object mylock = new object();
+		private readonly object mylock = new object();
 
 		public LinkerSection(SectionKind sectionKind, uint alignment)
 		{
@@ -51,9 +51,7 @@ namespace Mosa.Compiler.Linker
 
 		internal LinkerSymbol GetSymbol(string name)
 		{
-			LinkerSymbol symbol = null;
-
-			symbolLookup.TryGetValue(name, out symbol);
+			symbolLookup.TryGetValue(name, out LinkerSymbol symbol);
 
 			return symbol;
 		}
@@ -82,7 +80,7 @@ namespace Mosa.Compiler.Linker
 				symbol.SectionOffset = Size;
 				symbol.VirtualAddress = VirtualAddress + Size;
 
-				Size = Size + symbol.Size;
+				Size += symbol.Size;
 			}
 
 			IsResolved = true;

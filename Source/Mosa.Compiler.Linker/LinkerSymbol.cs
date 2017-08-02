@@ -9,13 +9,15 @@ using System.Text;
 namespace Mosa.Compiler.Linker
 {
 	/// <summary>
-	///
+	/// Linker Symbol
 	/// </summary>
 	public sealed class LinkerSymbol
 	{
-		public string Name { get; private set; }
+		private readonly object _lock = new object();
 
-		public SectionKind SectionKind { get; private set; }
+		public string Name { get; }
+
+		public SectionKind SectionKind { get; }
 
 		public Stream Stream { get; internal set; }
 
@@ -31,7 +33,7 @@ namespace Mosa.Compiler.Linker
 
 		public ulong VirtualAddress { get; internal set; }
 
-		public List<LinkRequest> LinkRequests { get; private set; }
+		public List<LinkRequest> LinkRequests { get; }
 
 		public string PreHash { get; internal set; }
 
@@ -57,7 +59,7 @@ namespace Mosa.Compiler.Linker
 
 		public void AddPatch(LinkRequest linkRequest)
 		{
-			lock (this)
+			lock (_lock)
 			{
 				LinkRequests.Add(linkRequest);
 			}
@@ -65,7 +67,7 @@ namespace Mosa.Compiler.Linker
 
 		public void RemovePatches()
 		{
-			lock (this)
+			lock (_lock)
 			{
 				LinkRequests.Clear();
 			}
