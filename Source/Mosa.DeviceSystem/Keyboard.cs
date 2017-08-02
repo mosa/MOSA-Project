@@ -143,12 +143,14 @@ namespace Mosa.DeviceSystem
 
 			if (keyEvent.KeyType == KeyType.RegularKey && keyEvent.KeyPress == KeyEvent.KeyPressType.Make)
 			{
-				var key = new Key();
-				key.KeyType = keyEvent.KeyType;
-				key.Character = keyEvent.Character;
-				key.Alt = Alt;
-				key.Control = Control;
-				key.Shift = Shift;
+				var key = new Key()
+				{
+					KeyType = keyEvent.KeyType,
+					Character = keyEvent.Character,
+					Alt = Alt,
+					Control = Control,
+					Shift = Shift
+				};
 				return key;
 			}
 

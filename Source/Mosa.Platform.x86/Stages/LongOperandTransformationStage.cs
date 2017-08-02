@@ -106,18 +106,16 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void Call(Context context)
 		{
-			Operand op0L, op0H;
-
-			if (context.Result != null && context.Result.Is64BitInteger)
+			if (context.Result?.Is64BitInteger == true)
 			{
-				SplitLongOperand(context.Result, out op0L, out op0H);
+				SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 			}
 
 			foreach (var operand in context.Operands)
 			{
 				if (operand.Is64BitInteger)
 				{
-					SplitLongOperand(operand, out op0L, out op0H);
+					SplitLongOperand(operand, out Operand op0L, out Operand op0H);
 				}
 			}
 		}
@@ -361,7 +359,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand op0L, op0H;
 
-			if (context.Result != null && context.Result.Is64BitInteger)
+			if (context.Result?.Is64BitInteger == true)
 			{
 				SplitLongOperand(context.Result, out op0L, out op0H);
 			}
@@ -462,8 +460,12 @@ namespace Mosa.Platform.x86.Stages
 				return true;
 
 			foreach (var operand in context.Operands)
+			{
 				if (operand.Is64BitInteger)
+				{
 					return true;
+				}
+			}
 
 			return false;
 		}
@@ -491,10 +493,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandAdd(Context context)
 		{
-			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(context.Result, out op0L, out op0H);
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			SplitLongOperand(context.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
@@ -514,10 +515,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandAnd(Context context)
 		{
-			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(context.Result, out op0L, out op0H);
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			SplitLongOperand(context.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
 			if (!context.Result.Is64BitInteger)
 			{
@@ -541,9 +541,8 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand count = context.Operand2;
 
-			Operand op0H, op1H, op0L, op1L;
-			SplitLongOperand(context.Result, out op0L, out op0H);
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
 			Operand eax = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			Operand edx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
@@ -590,9 +589,8 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandBinaryBranch(Context context)
 		{
-			Operand op1L, op1H, op2L, op2H;
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			SplitLongOperand(context.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
 			BasicBlock target = context.BranchTargets[0];
 			ConditionCode conditionCode = context.ConditionCode;
@@ -631,12 +629,11 @@ namespace Mosa.Platform.x86.Stages
 			Operand op1 = context.Operand1;
 			Operand op2 = context.Operand2;
 
-			Debug.Assert(op1 != null && op2 != null, @"IntegerCompareInstruction operand not memory!");
-			Debug.Assert(op0.IsVirtualRegister, @"IntegerCompareInstruction result not memory and not register!");
+			Debug.Assert(op1 != null && op2 != null, "IntegerCompareInstruction operand not memory!");
+			Debug.Assert(op0.IsVirtualRegister, "IntegerCompareInstruction result not memory and not register!");
 
-			Operand op1L, op1H, op2L, op2H;
-			SplitLongOperand(op1, out op1L, out op1H);
-			SplitLongOperand(op2, out op2L, out op2H);
+			SplitLongOperand(op1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(op2, out Operand op2L, out Operand op2H);
 
 			ConditionCode conditionCode = context.ConditionCode;
 
@@ -672,14 +669,13 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandDiv(Context context)
 		{
-			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			var result = context.Result;
 			var op1 = context.Operand1;
 			var op2 = context.Operand2;
 
-			SplitLongOperand(result, out op0L, out op0H);
-			SplitLongOperand(op1, out op1L, out op1H);
-			SplitLongOperand(op2, out op2L, out op2H);
+			SplitLongOperand(result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(op1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(op2, out Operand op2L, out Operand op2H);
 
 			ReplaceWithDivisionCall(context, "sdiv64");
 			context.Result = result;
@@ -695,11 +691,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandLoadParameter(Context context)
 		{
-			Operand op0L, op0H;
-			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(MethodCompiler, context.Result, out Operand op0L, out Operand op0H);
 
-			Operand op1L, op1H;
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
 			context.SetInstruction(X86.MovLoad, InstructionSize.Size32, op0L, StackFrame, op1L);
 			context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, op0H, StackFrame, op1H);
@@ -714,8 +708,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand address = context.Operand1;
 			Operand offset = context.Operand2;
 
-			Operand op0L, op0H;
-			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 
 			context.SetInstruction(X86.MovLoad, InstructionSize.Size32, op0L, address, offset);
 
@@ -726,8 +719,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			}
 
-			Operand op2L, op2H;
-			SplitLongOperand(offset, out op2L, out op2H);
+			SplitLongOperand(offset, out Operand op2L, out Operand op2H);
 
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
@@ -741,13 +733,11 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandMoveInteger(Context context)
 		{
-			Operand op0L, op0H, op1L, op1H;
-
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
 			if (context.Result.Is64BitInteger)
 			{
-				SplitLongOperand(context.Result, out op0L, out op0H);
+				SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 
 				context.SetInstruction(X86.Mov, InstructionSize.Size32, op0L, op1L);
 				context.AppendInstruction(X86.Mov, InstructionSize.Size32, op0H, op1H);
@@ -764,10 +754,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandMul(Context context)
 		{
-			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(context.Result, out op0L, out op0H);
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			SplitLongOperand(context.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
 			Operand eax = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			Operand edx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
@@ -805,9 +794,8 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandNot(Context context)
 		{
-			Operand op0H, op1H, op0L, op1L;
-			SplitLongOperand(context.Result, out op0L, out op0H);
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
 			Operand eax = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
@@ -826,10 +814,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandOr(Context context)
 		{
-			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(context.Result, out op0L, out op0H);
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			SplitLongOperand(context.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
 			context.SetInstruction(X86.Mov, op0H, op1H);
 			context.AppendInstruction(X86.Mov, op0L, op1L);
@@ -843,14 +830,13 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandRem(Context context)
 		{
-			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			var result = context.Result;
 			var op1 = context.Operand1;
 			var op2 = context.Operand2;
 
-			SplitLongOperand(result, out op0L, out op0H);
-			SplitLongOperand(op1, out op1L, out op1H);
-			SplitLongOperand(op2, out op2L, out op2H);
+			SplitLongOperand(result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(op1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(op2, out Operand op2L, out Operand op2H);
 
 			ReplaceWithDivisionCall(context, "smod64");
 			context.Result = result;
@@ -868,9 +854,8 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand count = context.Operand2;
 
-			Operand op0H, op1H, op0L, op1L;
-			SplitLongOperand(context.Result, out op0L, out op0H);
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
 			Operand eax = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			Operand edx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
@@ -919,9 +904,8 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand count = context.Operand2;
 
-			Operand op0H, op1H, op0L, op1L;
-			SplitLongOperand(context.Result, out op0L, out op0H);
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
 			Operand ecx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
@@ -967,10 +951,9 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand op0 = context.Result;
 			Operand op1 = context.Operand1;
-			Debug.Assert(op0 != null, @"I8 not in a memory operand!");
+			Debug.Assert(op0 != null, "I8 not in a memory operand!");
 
-			Operand op0L, op0H;
-			SplitLongOperand(op0, out op0L, out op0H);
+			SplitLongOperand(op0, out Operand op0L, out Operand op0H);
 
 			if (op1.IsBoolean)
 			{
@@ -1033,8 +1016,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand address = context.Operand1;
 			Operand offset = context.Operand2;
 
-			Operand op3L, op3H;
-			SplitLongOperand(context.Operand3, out op3L, out op3H);
+			SplitLongOperand(context.Operand3, out Operand op3L, out Operand op3H);
 
 			context.SetInstruction(X86.MovStore, InstructionSize.Size32, null, address, offset, op3L);
 
@@ -1045,8 +1027,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			}
 
-			Operand op2L, op2H;
-			SplitLongOperand(offset, out op2L, out op2H);
+			SplitLongOperand(offset, out Operand op2L, out Operand op2H);
 
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
@@ -1060,11 +1041,8 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandStoreParameter(Context context)
 		{
-			Operand op0L, op0H;
-			SplitLongOperand(context.Operand1, out op0L, out op0H);
-
-			Operand op1L, op1H;
-			SplitLongOperand(context.Operand2, out op1L, out op1H);
+			SplitLongOperand(context.Operand1, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand2, out Operand op1L, out Operand op1H);
 
 			context.SetInstruction(X86.MovStore, InstructionSize.Size32, null, StackFrame, op0L, op1L);
 			context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, StackFrame, op0H, op1H);
@@ -1076,10 +1054,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandSub(Context context)
 		{
-			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(context.Result, out op0L, out op0H);
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			SplitLongOperand(context.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
@@ -1099,14 +1076,13 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandUDiv(Context context)
 		{
-			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			var result = context.Result;
 			var op1 = context.Operand1;
 			var op2 = context.Operand2;
 
-			SplitLongOperand(result, out op0L, out op0H);
-			SplitLongOperand(op1, out op1L, out op1H);
-			SplitLongOperand(op2, out op2L, out op2H);
+			SplitLongOperand(result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(op1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(op2, out Operand op2L, out Operand op2H);
 
 			ReplaceWithDivisionCall(context, "udiv64");
 			context.Result = result;
@@ -1125,9 +1101,8 @@ namespace Mosa.Platform.x86.Stages
 			Operand op0 = context.Result;
 			Operand op1 = context.Operand1;
 
-			Operand op0L, op0H, op1L, op1H;
-			SplitLongOperand(op0, out op0L, out op0H);
-			SplitLongOperand(op1, out op1L, out op1H);
+			SplitLongOperand(op0, out Operand op0L, out Operand op0H);
+			SplitLongOperand(op1, out Operand op1L, out Operand op1H);
 
 			if (op1.IsInt)
 			{
@@ -1158,14 +1133,13 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandURem(Context context)
 		{
-			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			var result = context.Result;
 			var op1 = context.Operand1;
 			var op2 = context.Operand2;
 
-			SplitLongOperand(result, out op0L, out op0H);
-			SplitLongOperand(op1, out op1L, out op1H);
-			SplitLongOperand(op2, out op2L, out op2H);
+			SplitLongOperand(result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(op1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(op2, out Operand op2L, out Operand op2H);
 
 			ReplaceWithDivisionCall(context, "umod64");
 			context.Result = result;
@@ -1181,10 +1155,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandXor(Context context)
 		{
-			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(context.Result, out op0L, out op0H);
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			SplitLongOperand(context.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
 			context.SetInstruction(X86.Mov, op0H, op1H);
 			context.AppendInstruction(X86.Mov, op0L, op1L);

@@ -10,23 +10,27 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Analysis
 {
 	/// <summary>
-	///
+	/// Sparse Conditional Constant Propagation (SCCP) Optimization
 	/// </summary>
 	public sealed class SparseConditionalConstantPropagation
 	{
-		private static int MAXCONSTANTS = 5;
+		private const int MAXCONSTANTS = 5;
 
 		private class VariableState
 		{
-			private enum VariableStatus { NeverDefined, OverDefined, SingleConstant, MultipleConstants };
+			private enum VariableStatusType { NeverDefined, OverDefined, SingleConstant, MultipleConstants }
 
-			private VariableStatus Status;
+			private enum NullStatusType { Invalid, NeverDefined, Defined, OverDefined }
+
+			private VariableStatusType Status;
+
+			private readonly NullStatusType NotNullStatus;
 
 			private List<ulong> constants;
 
 			public int ConstantCount { get { return constants == null ? 0 : constants.Count; } }
 
-			public IList<ulong> Constants { get { return constants; } }
+			public List<ulong> Constants { get { return constants; } }
 
 			private ulong SingleConstant { get { return constants[0]; } }
 
@@ -34,17 +38,17 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			public long ConstantSignedLongInteger { get { return (long)SingleConstant; } }
 
-			public Operand Operand { get; private set; }
+			public Operand Operand { get; }
 
-			public bool IsOverDefined { get { return Status == VariableStatus.OverDefined; } set { Status = VariableStatus.OverDefined; constants = null; Debug.Assert(value); } }
+			public bool IsOverDefined { get { return Status == VariableStatusType.OverDefined; } set { Status = VariableStatusType.OverDefined; constants = null; Debug.Assert(value); } }
 
-			public bool IsNeverDefined { get { return Status == VariableStatus.NeverDefined; } }
+			public bool IsNeverDefined { get { return Status == VariableStatusType.NeverDefined; } }
 
-			public bool IsSingleConstant { get { return Status == VariableStatus.SingleConstant; } set { Status = VariableStatus.SingleConstant; Debug.Assert(value); } }
+			public bool IsSingleConstant { get { return Status == VariableStatusType.SingleConstant; } set { Status = VariableStatusType.SingleConstant; Debug.Assert(value); } }
 
-			public bool HasMultipleConstants { get { return Status == VariableStatus.MultipleConstants; } }
+			public bool HasMultipleConstants { get { return Status == VariableStatusType.MultipleConstants; } }
 
-			public bool HasOnlyConstants { get { return Status == VariableStatus.SingleConstant || Status == VariableStatus.MultipleConstants; } }
+			public bool HasOnlyConstants { get { return Status == VariableStatusType.SingleConstant || Status == VariableStatusType.MultipleConstants; } }
 
 			public bool IsVirtualRegister { get { return Operand.IsVirtualRegister; } }
 
@@ -54,7 +58,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 				if (operand.IsVirtualRegister)
 				{
-					Status = VariableStatus.NeverDefined;
+					Status = VariableStatusType.NeverDefined;
 				}
 				else if (operand.IsUnresolvedConstant)
 				{
@@ -68,11 +72,20 @@ namespace Mosa.Compiler.Framework.Analysis
 				{
 					IsOverDefined = true;
 				}
+
+				if (!operand.Type.IsReferenceType || !operand.IsVirtualRegister)
+				{
+					NotNullStatus = NullStatusType.Invalid;
+				}
+				else
+				{
+					NotNullStatus = NullStatusType.NeverDefined;
+				}
 			}
 
 			public bool AddConstant(ulong value)
 			{
-				if (Status == VariableStatus.OverDefined)
+				if (Status == VariableStatusType.OverDefined)
 					return false;
 
 				if (constants != null)
@@ -82,21 +95,23 @@ namespace Mosa.Compiler.Framework.Analysis
 				}
 				else
 				{
-					constants = new List<ulong>(2);
-					constants.Add(value);
-					Status = VariableStatus.SingleConstant;
+					constants = new List<ulong>(2)
+					{
+						value
+					};
+					Status = VariableStatusType.SingleConstant;
 					return true;
 				}
 
 				if (constants.Count > MAXCONSTANTS)
 				{
-					Status = VariableStatus.OverDefined;
+					Status = VariableStatusType.OverDefined;
 					constants = null;
 					return true;
 				}
 
 				constants.Add(value);
-				Status = VariableStatus.MultipleConstants;
+				Status = VariableStatusType.MultipleConstants;
 				return true;
 			}
 
@@ -110,16 +125,16 @@ namespace Mosa.Compiler.Framework.Analysis
 				if (!other.IsSingleConstant || !IsSingleConstant)
 					return false;
 
-				return (other.ConstantUnsignedLongInteger == ConstantUnsignedLongInteger);
+				return other.ConstantUnsignedLongInteger == ConstantUnsignedLongInteger;
 			}
 
 			public override string ToString()
 			{
-				string s = Operand.ToString() + " : " + Status.ToString();
+				string s = Operand + " : " + Status.ToString();
 
 				if (IsSingleConstant)
 				{
-					s = s + " = " + ConstantUnsignedLongInteger.ToString();
+					return s + " = " + ConstantUnsignedLongInteger.ToString();
 				}
 				else if (HasMultipleConstants)
 				{
@@ -127,23 +142,23 @@ namespace Mosa.Compiler.Framework.Analysis
 					foreach (ulong i in constants)
 					{
 						s = s + " " + i.ToString();
-						s = s + ",";
+						s += ",";
 					}
-					s = s.TrimEnd(',');
+					return s.TrimEnd(',');
 				}
 
 				return s;
 			}
 		}
 
-		private bool[] blockStates;
+		private readonly bool[] blockStates;
 
-		private Dictionary<Operand, VariableState> variableStates = new Dictionary<Operand, VariableState>();
+		private readonly Dictionary<Operand, VariableState> variableStates = new Dictionary<Operand, VariableState>();
 
-		private Stack<InstructionNode> instructionWorkList = new Stack<InstructionNode>();
-		private Stack<BasicBlock> blockWorklist = new Stack<BasicBlock>();
+		private readonly Stack<InstructionNode> instructionWorkList = new Stack<InstructionNode>();
+		private readonly Stack<BasicBlock> blockWorklist = new Stack<BasicBlock>();
 
-		private HashSet<InstructionNode> executedStatements = new HashSet<InstructionNode>();
+		private readonly HashSet<InstructionNode> executedStatements = new HashSet<InstructionNode>();
 
 		private readonly BasicBlocks BasicBlocks;
 		private readonly ITraceFactory TraceFactory;
@@ -230,9 +245,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private VariableState GetVariableState(Operand operand)
 		{
-			VariableState variable;
-
-			if (!variableStates.TryGetValue(operand, out variable))
+			if (!variableStates.TryGetValue(operand, out VariableState variable))
 			{
 				variable = new VariableState(operand);
 				variableStates.Add(operand, variable);
@@ -260,7 +273,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			for (int i = 0; i < BasicBlocks.Count; i++)
 			{
-				blockTrace.Log(BasicBlocks[i].ToString() + " = " + (blockStates[i] ? "Executable" : "Dead"));
+				blockTrace.Log(BasicBlocks[i] + " = " + (blockStates[i] ? "Executable" : "Dead"));
 			}
 		}
 
@@ -300,7 +313,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private void ProcessBlock(BasicBlock block)
 		{
-			if (MainTrace.Active) MainTrace.Log("Process Block: " + block.ToString());
+			if (MainTrace.Active) MainTrace.Log("Process Block: " + block);
 
 			// if the block has only one successor block, add successor block to executed block list
 			if (block.NextBlocks.Count == 1)
@@ -367,38 +380,38 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Move(node);
 			}
-			else if (instruction == IRInstruction.Call ||
-				instruction == IRInstruction.IntrinsicMethodCall)
+			else if (instruction == IRInstruction.Call
+				|| instruction == IRInstruction.IntrinsicMethodCall)
 			{
 				Call(node);
 			}
-			else if (instruction == IRInstruction.LoadInteger ||
-				instruction == IRInstruction.LoadSignExtended ||
-				instruction == IRInstruction.LoadZeroExtended ||
-				instruction == IRInstruction.LoadFloatR4 ||
-				instruction == IRInstruction.LoadFloatR8 ||
-				instruction == IRInstruction.LoadParameterInteger ||
-				instruction == IRInstruction.LoadParameterSignExtended ||
-				instruction == IRInstruction.LoadParameterZeroExtended ||
-				instruction == IRInstruction.LoadParameterFloatR4 ||
-				instruction == IRInstruction.LoadParameterFloatR8)
+			else if (instruction == IRInstruction.LoadInteger
+				|| instruction == IRInstruction.LoadSignExtended
+				|| instruction == IRInstruction.LoadZeroExtended
+				|| instruction == IRInstruction.LoadFloatR4
+				|| instruction == IRInstruction.LoadFloatR8
+				|| instruction == IRInstruction.LoadParameterInteger
+				|| instruction == IRInstruction.LoadParameterSignExtended
+				|| instruction == IRInstruction.LoadParameterZeroExtended
+				|| instruction == IRInstruction.LoadParameterFloatR4
+				|| instruction == IRInstruction.LoadParameterFloatR8)
 			{
 				Load(node);
 			}
-			else if (instruction == IRInstruction.AddSigned ||
-				instruction == IRInstruction.AddUnsigned ||
-				instruction == IRInstruction.SubSigned ||
-				instruction == IRInstruction.SubUnsigned ||
-				instruction == IRInstruction.MulSigned ||
-				instruction == IRInstruction.MulUnsigned ||
-				instruction == IRInstruction.DivSigned ||
-				instruction == IRInstruction.DivUnsigned ||
-				instruction == IRInstruction.RemSigned ||
-				instruction == IRInstruction.RemUnsigned ||
-				instruction == IRInstruction.CompareInteger ||
-				instruction == IRInstruction.ShiftLeft ||
-				instruction == IRInstruction.ShiftRight ||
-				instruction == IRInstruction.ArithmeticShiftRight)
+			else if (instruction == IRInstruction.AddSigned
+				|| instruction == IRInstruction.AddUnsigned
+				|| instruction == IRInstruction.SubSigned
+				|| instruction == IRInstruction.SubUnsigned
+				|| instruction == IRInstruction.MulSigned
+				|| instruction == IRInstruction.MulUnsigned
+				|| instruction == IRInstruction.DivSigned
+				|| instruction == IRInstruction.DivUnsigned
+				|| instruction == IRInstruction.RemSigned
+				|| instruction == IRInstruction.RemUnsigned
+				|| instruction == IRInstruction.CompareInteger
+				|| instruction == IRInstruction.ShiftLeft
+				|| instruction == IRInstruction.ShiftRight
+				|| instruction == IRInstruction.ArithmeticShiftRight)
 			{
 				IntegerOperation(node);
 			}
@@ -418,8 +431,8 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				AddressOf(node);
 			}
-			else if (instruction == IRInstruction.MoveZeroExtended ||
-				instruction == IRInstruction.MoveSignExtended)
+			else if (instruction == IRInstruction.MoveZeroExtended
+				|| instruction == IRInstruction.MoveSignExtended)
 			{
 				Move(node);
 			}
@@ -544,9 +557,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 			else if (operand1.IsSingleConstant && operand2.IsSingleConstant)
 			{
-				ulong value;
-
-				if (IntegerOperation(node.Instruction, operand1.ConstantUnsignedLongInteger, operand2.ConstantUnsignedLongInteger, node.ConditionCode, out value))
+				if (IntegerOperation(node.Instruction, operand1.ConstantUnsignedLongInteger, operand2.ConstantUnsignedLongInteger, node.ConditionCode, out ulong value))
 				{
 					UpdateToConstant(result, value);
 					return;
@@ -563,9 +574,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				{
 					foreach (var c2 in operand2.Constants)
 					{
-						ulong value;
-
-						if (IntegerOperation(node.Instruction, c1, c2, node.ConditionCode, out value))
+						if (IntegerOperation(node.Instruction, c1, c2, node.ConditionCode, out ulong value))
 						{
 							UpdateToConstant(result, value);
 						}

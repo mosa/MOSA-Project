@@ -9,49 +9,24 @@ namespace System
 	public sealed unsafe class RuntimeTypeInfo : TypeInfo
 	{
 		private MDTypeDefinition* typeDefinition;
-		private Assembly assembly;
-
-		//private RuntimeTypeHandle handle;
-		private string assemblyQualifiedName;
-
-		private string name;
-		private string @namespace;
-		private string fullname;
-		private TypeCode typeCode;
-		private TypeAttributes attributes;
-		private Type baseType;
-		private Type declaringType;
-		private Type elementType;
-		private Type asType;
+		private readonly TypeCode typeCode;
+		private readonly Type baseType;
+		private readonly Type elementType;
+		private readonly Type asType;
 		private LinkedList<CustomAttributeData> customAttributesData = null;
 
 		internal readonly Type ValueType = typeof(ValueType);
 		internal readonly Type EnumType = typeof(Enum);
 
-		public override string AssemblyQualifiedName
-		{
-			get { return assemblyQualifiedName; }
-		}
+		public override string AssemblyQualifiedName { get; }
 
-		public override Assembly Assembly
-		{
-			get { return assembly; }
-		}
+		public override Assembly Assembly { get; }
 
-		public override TypeAttributes Attributes
-		{
-			get { return attributes; }
-		}
+		public override TypeAttributes Attributes { get; }
 
-		public override Type BaseType
-		{
-			get { return (IsInterface) ? null : baseType; }
-		}
+		public override Type BaseType { get { return (IsInterface) ? null : baseType; } }
 
-		public override bool ContainsGenericParameters
-		{
-			get { throw new NotImplementedException(); }
-		}
+		public override bool ContainsGenericParameters => throw new NotImplementedException();
 
 		public override IEnumerable<CustomAttributeData> CustomAttributes
 		{
@@ -77,20 +52,11 @@ namespace System
 			}
 		}
 
-		public override MethodBase DeclaringMethod
-		{
-			get { throw new NotImplementedException(); }
-		}
+		public override MethodBase DeclaringMethod => throw new NotImplementedException();
 
-		public override Type DeclaringType
-		{
-			get { return declaringType; }
-		}
+		public override Type DeclaringType { get; }
 
-		public override string FullName
-		{
-			get { return fullname; }
-		}
+		public override string FullName { get; }
 
 		public override int GenericParameterPosition
 		{
@@ -131,32 +97,26 @@ namespace System
 			get { return false; }
 		}
 
-		public override string Name
-		{
-			get { return name; }
-		}
+		public override string Name { get; }
 
-		public override string Namespace
-		{
-			get { return @namespace; }
-		}
+		public override string Namespace { get; }
 
 		public RuntimeTypeInfo(RuntimeType type, Assembly assembly)
 		{
 			var handle = type.TypeHandle;
 			asType = type;
-			this.assembly = assembly;
+			this.Assembly = assembly;
 
 			//this.handle = handle;
 			typeDefinition = (MDTypeDefinition*)((uint**)&handle)[0];
 
-			assemblyQualifiedName = typeDefinition->Name;   // TODO
-			name = typeDefinition->Name;                    // TODO
-			@namespace = typeDefinition->Name;              // TODO
-			fullname = typeDefinition->Name;
+			AssemblyQualifiedName = typeDefinition->Name;   // TODO
+			Name = typeDefinition->Name;                    // TODO
+			Namespace = typeDefinition->Name;              // TODO
+			FullName = typeDefinition->Name;
 
 			typeCode = typeDefinition->TypeCode;
-			attributes = typeDefinition->Attributes;
+			Attributes = typeDefinition->Attributes;
 
 			// Base Type
 			if (typeDefinition->ParentType != null)
@@ -171,7 +131,7 @@ namespace System
 			{
 				RuntimeTypeHandle declaringHandle = new RuntimeTypeHandle();
 				((uint**)&declaringHandle)[0] = (uint*)typeDefinition->DeclaringType;
-				declaringType = Type.GetTypeFromHandle(declaringHandle);
+				DeclaringType = Type.GetTypeFromHandle(declaringHandle);
 			}
 
 			// Element Type
@@ -191,7 +151,7 @@ namespace System
 		public override int GetArrayRank()
 		{
 			// We don't know so just return 1 if array, 0 otherwise
-			return (IsArrayImpl() == true) ? 1 : 0;
+			return IsArrayImpl() ? 1 : 0;
 		}
 
 		public override Type GetElementType()
@@ -213,7 +173,7 @@ namespace System
 
 		protected override bool HasElementTypeImpl()
 		{
-			return (elementType != null);
+			return elementType != null;
 		}
 
 		protected override bool IsArrayImpl()
@@ -229,7 +189,7 @@ namespace System
 
 		protected override bool IsNestedImpl()
 		{
-			return (attributes & TypeAttributes.VisibilityMask) > TypeAttributes.Public;
+			return (Attributes & TypeAttributes.VisibilityMask) > TypeAttributes.Public;
 		}
 
 		protected override bool IsPointerImpl()
@@ -239,12 +199,12 @@ namespace System
 
 		protected override bool IsPrimitiveImpl()
 		{
-			return (typeCode == TypeCode.Boolean
+			return typeCode == TypeCode.Boolean
 				|| typeCode == TypeCode.Char
 				|| (typeCode >= TypeCode.I && typeCode <= TypeCode.I8)
 				|| (typeCode >= TypeCode.U && typeCode <= TypeCode.U8)
 				|| typeCode == TypeCode.R4
-				|| typeCode == TypeCode.R8);
+				|| typeCode == TypeCode.R8;
 		}
 
 		protected override bool IsValueTypeImpl()

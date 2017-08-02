@@ -68,7 +68,7 @@ namespace Mosa.UnitTest.Collection
 
 		private static void DelegateParametersTarget(int a, int b)
 		{
-			status = a * 10000 + b;
+			status = (a * 10000) + b;
 		}
 
 		#endregion DelegateParameters
@@ -104,7 +104,7 @@ namespace Mosa.UnitTest.Collection
 
 		private static int DelegateParametersReturnTarget(int a, int b)
 		{
-			return a * 10000 + b;
+			return (a * 10000) + b;
 		}
 
 		#endregion DelegateParametersReturn
@@ -306,7 +306,7 @@ namespace Mosa.UnitTest.Collection
 			return o.Delegate();
 		}
 
-		private static MyDelegateObject myObject = new MyDelegateObject();
+		private static readonly MyDelegateObject myObject = new MyDelegateObject();
 
 		public static int InlineDelegate4()
 		{
@@ -343,9 +343,10 @@ namespace Mosa.UnitTest.Collection
 
 		public static int TestInstanceDelegate1(int a)
 		{
-			Worker w = new Worker();
-			w.Value = 25;
-
+			var w = new Worker()
+			{
+				Value = 25
+			};
 			SumValue executeSum = w.SumValue;
 
 			int sum = executeSum(a);
@@ -355,9 +356,10 @@ namespace Mosa.UnitTest.Collection
 
 		public static int TestInstanceDelegate2(int a, int b)
 		{
-			Worker w = new Worker();
-			w.Value = 25;
-
+			var w = new Worker()
+			{
+				Value = 25
+			};
 			SumPlusValue executeSum = w.SumPlusValue;
 
 			int sum = executeSum(a, b);

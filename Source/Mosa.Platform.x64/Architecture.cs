@@ -163,8 +163,8 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Extends the method compiler pipeline with x64 specific stages.
 		/// </summary>
-		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
+		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
+		public override void ExtendMethodCompilerPipeline(CompilerPipeline compilerPipeline)
 		{
 			// TODO
 		}
@@ -178,20 +178,19 @@ namespace Mosa.Platform.x64
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
 		public override void GetTypeRequirements(MosaTypeLayout typeLayout, MosaType type, out int size, out int alignment)
 		{
+			alignment = NativeAlignment;
+
 			if (type.IsUI8 || type.IsR8 || !type.IsValueType || type.IsPointer)
 			{
 				size = 8;
-				alignment = 8;
 			}
 			else if (typeLayout.IsCompoundType(type))
 			{
 				size = typeLayout.GetTypeSize(type);
-				alignment = 8;
 			}
 			else
 			{
 				size = 4;
-				alignment = 4;
 			}
 		}
 
@@ -249,13 +248,13 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="context">The context.</param>
+		/// <param name="destinationBase">The destination.</param>
 		/// <param name="destination">The destination.</param>
-		/// <param name="destinationOffset">The destination offset.</param>
+		/// <param name="sourceBase">The source.</param>
 		/// <param name="source">The source.</param>
-		/// <param name="sourceOffset">The source offset.</param>
 		/// <param name="size">The size.</param>
 		/// <exception cref="NotImplementCompilerException"></exception>
-		public override void InsertCompoundCopy(BaseMethodCompiler compiler, Context context, Operand destination, Operand destinationOffset, Operand source, Operand sourceOffset, int size)
+		public override void InsertCompoundCopy(BaseMethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
 		{
 			throw new NotImplementCompilerException();
 		}
@@ -287,7 +286,7 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="Destination">The destination.</param>
-		public override void InsertJumpInstruction(Context context, BasicBlock Destination)
+		public override void InsertJumpInstruction(Context context, BasicBlock destination)
 		{
 			throw new NotImplementCompilerException();
 		}
@@ -297,6 +296,7 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="source">The source.</param>
+		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void InsertCallInstruction(Context context, Operand source)
 		{
 			throw new NotImplementCompilerException();

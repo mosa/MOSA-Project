@@ -10,19 +10,19 @@ using System.IO;
 namespace Mosa.Compiler.Linker
 {
 	/// <summary>
-	///
+	/// Base Linker
 	/// </summary>
 	public class BaseLinker
 	{
-		public LinkerSection[] LinkerSections { get; private set; }
+		public LinkerSection[] LinkerSections { get; }
 
 		public LinkerSymbol EntryPoint { get; set; }
 
 		public Endianness Endianness { get; protected set; }
 
-		public MachineType MachineType { get; private set; }
+		public MachineType MachineType { get; }
 
-		public ulong BaseAddress { get; private set; }
+		public ulong BaseAddress { get; }
 
 		public uint SectionAlignment { get; set; }
 
@@ -30,13 +30,13 @@ namespace Mosa.Compiler.Linker
 
 		public bool EmitSymbols { get; set; }
 
-		public LinkerFormatType LinkerFormatType { get; private set; }
+		public LinkerFormatType LinkerFormatType { get; }
 
 		private readonly ElfLinker elfLinker;
 
-		private object mylock = new object();
+		private readonly object mylock = new object();
 
-		private static SectionKind[] SectionList = new[] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
+		private static readonly SectionKind[] SectionList = new[] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
 
 		public IEnumerable<LinkerSymbol> Symbols
 		{
@@ -63,6 +63,7 @@ namespace Mosa.Compiler.Linker
 			Endianness = endianness;
 			MachineType = machineType;
 			EmitSymbols = emitSymbols;
+			LinkerFormatType = linkerFormatType;
 
 			elfLinker = new ElfLinker(this, LinkerFormatType);
 
@@ -167,7 +168,7 @@ namespace Mosa.Compiler.Linker
 					section.AddLinkerObject(symbol);
 				}
 
-				symbol.Alignment = alignment != 0 ? alignment : 0;
+				symbol.Alignment = alignment != 0 ? alignment : 1;
 
 				return symbol;
 			}
@@ -215,7 +216,7 @@ namespace Mosa.Compiler.Linker
 				uint size = section.AlignedSize;
 
 				virtualAddress = section.VirtualAddress + size;
-				fileOffset = fileOffset + size;
+				fileOffset += size;
 			}
 		}
 
@@ -255,7 +256,7 @@ namespace Mosa.Compiler.Linker
 				else
 				{
 					// Change the absolute into a relative offset
-					value = value - (linkRequest.PatchSymbol.VirtualAddress + (ulong)linkRequest.PatchOffset);
+					value -= (linkRequest.PatchSymbol.VirtualAddress + (ulong)linkRequest.PatchOffset);
 				}
 			}
 
@@ -288,7 +289,7 @@ namespace Mosa.Compiler.Linker
 
 			foreach (byte b in data)
 			{
-				name = name + b.ToString("x");
+				name += b.ToString("x");
 			}
 
 			var symbol = GetSymbol(name, SectionKind.ROData);
@@ -309,7 +310,7 @@ namespace Mosa.Compiler.Linker
 
 			foreach (byte b in data)
 			{
-				name = name + b.ToString("x");
+				name += b.ToString("x");
 			}
 
 			var symbol = GetSymbol(name, SectionKind.ROData);

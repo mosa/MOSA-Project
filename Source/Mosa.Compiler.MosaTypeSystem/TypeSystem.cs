@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.MosaTypeSystem
 {
 	/// <summary>
-	///
+	/// Type System
 	/// </summary>
 	public class TypeSystem
 	{
@@ -42,7 +42,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		public IList<MosaModule> Modules { get; private set; }
+		public IList<MosaModule> Modules { get; }
 
 		public MosaModule LinkerModule { get; private set; }
 
@@ -52,7 +52,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		internal ITypeSystemController Controller { get; private set; }
 
-		private IMetadata metadata;
+		private readonly IMetadata metadata;
 
 		private TypeSystem(IMetadata metadata)
 		{
@@ -62,7 +62,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public static TypeSystem Load(IMetadata metadata)
 		{
-			TypeSystem result = new TypeSystem(metadata);
+			var result = new TypeSystem(metadata);
 			result.Load();
 			return result;
 		}
@@ -72,6 +72,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Controller = new TypeSystemController(this);
 
 			LinkerModule = Controller.CreateModule();
+
 			using (var module = Controller.MutateModule(LinkerModule))
 			{
 				module.Name = "@Linker";
@@ -81,6 +82,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Modules.Add(LinkerModule);
 
 			DefaultLinkerType = Controller.CreateType();
+
 			using (var type = Controller.MutateType(DefaultLinkerType))
 			{
 				type.Module = LinkerModule;
@@ -97,14 +99,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 				throw new AssemblyLoadException();
 		}
 
-		private Dictionary<Tuple<MosaModule, string, string>, MosaType> typeLookup = new Dictionary<Tuple<MosaModule, string, string>, MosaType>();
+		private readonly Dictionary<Tuple<MosaModule, string, string>, MosaType> typeLookup = new Dictionary<Tuple<MosaModule, string, string>, MosaType>();
 
 		public MosaType GetTypeByName(string @namespace, string name)
 		{
 			foreach (var module in Modules)
 			{
-				MosaType result;
-				if (typeLookup.TryGetValue(Tuple.Create(module, @namespace, name), out result))
+				if (typeLookup.TryGetValue(Tuple.Create(module, @namespace, name), out MosaType result))
 					return result;
 			}
 
@@ -113,8 +114,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public MosaType GetTypeByName(MosaModule module, string @namespace, string name)
 		{
-			MosaType result;
-			if (typeLookup.TryGetValue(Tuple.Create(module, @namespace, name), out result))
+			if (typeLookup.TryGetValue(Tuple.Create(module, @namespace, name), out MosaType result))
 				return result;
 
 			return null;
@@ -136,23 +136,31 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return metadata.LookupUserString(module, token);
 		}
 
-		public MosaMethod CreateLinkerMethod(string methodName, MosaType returnType, IList<MosaParameter> parameters)
+		public MosaMethod CreateLinkerMethod(string methodName, MosaType returnType, bool hasThis = false, IList<MosaParameter> parameters = null)
+		{
+			return CreateLinkerMethod(DefaultLinkerType, methodName, returnType, hasThis, parameters);
+		}
+
+		public MosaMethod CreateLinkerMethod(MosaType type, string methodName, MosaType returnType, bool hasThis = false, IList<MosaParameter> parameters = null)
 		{
 			if (parameters == null)
 				parameters = new List<MosaParameter>();
 
-			MosaMethod result = Controller.CreateMethod();
-			using (var mosaType = Controller.MutateType(DefaultLinkerType))
+			var result = Controller.CreateMethod();
+
+			using (var mosaType = Controller.MutateType(type))
+			{
 				mosaType.Methods.Add(result);
+			}
+
 			using (var mosaMethod = Controller.MutateMethod(result))
 			{
 				mosaMethod.Module = LinkerModule;
 				mosaMethod.DeclaringType = DefaultLinkerType;
 				mosaMethod.Name = methodName;
 				mosaMethod.Signature = new MosaMethodSignature(returnType, parameters);
-
 				mosaMethod.IsStatic = true;
-				mosaMethod.HasThis = false;
+				mosaMethod.HasThis = hasThis;
 				mosaMethod.HasExplicitThis = false;
 				mosaMethod.IsLinkerGenerated = true;
 
@@ -160,9 +168,43 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
+		/// <summary>
+		/// Creates the type of the linker.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public MosaType CreateLinkerType(string name)
+		{
+			var mosatype = Controller.CreateType();
+
+			using (var type = Controller.MutateType(mosatype))
+			{
+				type.Module = LinkerModule;
+				type.Name = name;
+				type.IsLinkerGenerated = true;
+				type.TypeCode = MosaTypeCode.ReferenceType;
+			}
+			return mosatype;
+		}
+
+		public MosaParameter CreateParameter(MosaMethod method, string name, MosaType parameterType)
+		{
+			var mosaparameter = Controller.CreateParameter();
+
+			using (var parameter = Controller.MutateParameter(mosaparameter))
+			{
+				parameter.Name = name;
+				parameter.ParameterAttributes = MosaParameterAttributes.In;
+				parameter.ParameterType = parameterType;
+				parameter.DeclaringMethod = method;
+
+				return mosaparameter;
+			}
+		}
+
 		private class TypeSystemController : ITypeSystemController
 		{
-			private TypeSystem typeSystem;
+			private readonly TypeSystem typeSystem;
 			private uint id = 1;
 
 			public TypeSystemController(TypeSystem typeSystem)
@@ -294,9 +336,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 				return new MosaProperty.Mutator(property);
 			}
 
-			public MosaParameter.Mutator MutateParameter(MosaParameter Parameter)
+			public MosaParameter.Mutator MutateParameter(MosaParameter parameter)
 			{
-				return new MosaParameter.Mutator(Parameter);
+				return new MosaParameter.Mutator(parameter);
 			}
 
 			public void AddModule(MosaModule module)
@@ -307,7 +349,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			public void AddType(MosaType type)
 			{
 				if (!type.Module.Types.ContainsKey(type.ID))
+				{
 					type.Module.Types.Add(type.ID, type);
+				}
 
 				typeSystem.typeLookup[Tuple.Create(type.Module, type.Namespace, type.ShortName)] = type;
 			}

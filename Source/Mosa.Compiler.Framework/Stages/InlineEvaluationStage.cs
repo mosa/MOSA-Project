@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///
+	///Inline Evaluation Stage
 	/// </summary>
 	public class InlineEvaluationStage : BaseMethodCompilerStage
 	{
@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var returnType = method.Method.Signature.ReturnType;
 
-			if (StoreOnStack(returnType) && !returnType.IsUI8 && !returnType.IsR8)
+			if (MosaTypeLayout.IsStoredOnStack(returnType) && !returnType.IsUI8 && !returnType.IsR8)
 				return false;
 
 			return true;
@@ -180,7 +180,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var newOperand = Operand.CreateVirtualRegister(operand.Type, -operand.Index);
 
-					var moveInstruction = StoreOnStack(newOperand.Type)
+					var moveInstruction = MosaTypeLayout.IsStoredOnStack(newOperand.Type)
 						? IRInstruction.MoveCompound
 						: GetMoveInstruction(newOperand.Type);
 
@@ -203,10 +203,11 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount);
-					newNode.Size = node.Size;
-					newNode.ConditionCode = node.ConditionCode;
-
+					var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount)
+					{
+						Size = node.Size,
+						ConditionCode = node.ConditionCode
+					};
 					if (node.BranchTargets != null)
 					{
 						// copy targets
@@ -252,7 +253,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				foreach (var entry in map)
 				{
-					trace.Log(entry.Value.ToString() + " from: " + entry.Key.ToString());
+					trace.Log(entry.Value + " from: " + entry.Key);
 				}
 			}
 
@@ -264,9 +265,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (operand == null)
 				return null;
 
-			Operand mappedOperand;
-
-			if (map.TryGetValue(operand, out mappedOperand))
+			if (map.TryGetValue(operand, out Operand mappedOperand))
 			{
 				return mappedOperand;
 			}
