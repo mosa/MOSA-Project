@@ -100,10 +100,6 @@ namespace Mosa.Tool.CreateBootImage
 			get { return _options.VolumeLabel; }
 		}
 
-		[OptionArray("file")]
-		public IEnumerable<string> AdditionalFiles
-		{ get; set; }
-
 		public BootImageOptions BootImageOptions
 		{
 			get { return _options; }
