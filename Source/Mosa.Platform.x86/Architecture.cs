@@ -271,7 +271,7 @@ namespace Mosa.Platform.x86
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
 			BaseInstruction instruction = X86.Mov;
-			InstructionSize size = InstructionSize.Size32;
+			var size = InstructionSize.Size32;
 
 			if (destination.IsR4)
 			{

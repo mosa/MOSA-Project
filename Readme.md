@@ -60,15 +60,13 @@ You will also need the following prerequisites:
 
 **Windows**
 
-Install any [Visual Studio](http://www.visualstudio.com) version 2015 or newer.
+Install any [Visual Studio](http://www.visualstudio.com) version 2017 or newer.
 
 All editions are supported including the fully-featured free [Community Edition](https://www.visualstudio.com/products/visual-studio-community-vs).
 
-The [EditorConfig](http://editorconfig.org/) plugin is recommended for MOSA contributors.
+The [CodeMaid](http://www.codemaid.net/) Visual Studio Extension is strongly recommended for MOSA contributors.
 
 **Linux**
-
-
 
 Install [Mono](http://www.mono-project.com) and [Qemu](http://wiki.qemu.org/Main_Page).
 

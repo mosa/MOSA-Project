@@ -124,11 +124,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			get
 			{
-				return TypeCode == MosaTypeCode.ReferenceType ||
-						TypeCode == MosaTypeCode.String ||
-						TypeCode == MosaTypeCode.Object ||
-						TypeCode == MosaTypeCode.Array ||
-						TypeCode == MosaTypeCode.SZArray;
+				return TypeCode == MosaTypeCode.ReferenceType
+					|| TypeCode == MosaTypeCode.String
+					|| TypeCode == MosaTypeCode.Object
+					|| TypeCode == MosaTypeCode.Array
+					|| TypeCode == MosaTypeCode.SZArray;
 			}
 		}
 
@@ -136,10 +136,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			get
 			{
-				return TypeCode == MosaTypeCode.ValueType ||
-						TypeCode == MosaTypeCode.Boolean ||
-						TypeCode == MosaTypeCode.Char ||
-						IsInteger || IsR;
+				return TypeCode == MosaTypeCode.ValueType
+					|| TypeCode == MosaTypeCode.Boolean
+					|| TypeCode == MosaTypeCode.Char
+					|| IsInteger
+					|| IsR;
 			}
 		}
 
@@ -227,9 +228,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return null;
 		}
 
-		public class Mutator : MosaUnit.MutatorBase
+		public class Mutator : MutatorBase
 		{
-			private MosaType type;
+			private readonly MosaType type;
 
 			internal Mutator(MosaType type)
 				: base(type)

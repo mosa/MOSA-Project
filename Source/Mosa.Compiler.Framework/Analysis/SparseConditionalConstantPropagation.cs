@@ -16,15 +16,15 @@ namespace Mosa.Compiler.Framework.Analysis
 	{
 		private const int MAXCONSTANTS = 5;
 
-		private class VariableState
+		private sealed class VariableState
 		{
-			private enum VariableStatusType { NeverDefined, OverDefined, SingleConstant, MultipleConstants }
+			private enum VariableStatusType { Unknown, OverDefined, SingleConstant, MultipleConstants }
 
-			private enum NullStatusType { Invalid, NeverDefined, Defined, OverDefined }
+			private enum ReferenceStatusType { Unknown, DefinedNotNull, OverDefined }
 
 			private VariableStatusType Status;
 
-			private readonly NullStatusType NotNullStatus;
+			private ReferenceStatusType ReferenceStatus;
 
 			private List<ulong> constants;
 
@@ -38,27 +38,72 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			public long ConstantSignedLongInteger { get { return (long)SingleConstant; } }
 
+			public bool ConstantsContainZero { get; set; }
+
 			public Operand Operand { get; }
 
-			public bool IsOverDefined { get { return Status == VariableStatusType.OverDefined; } set { Status = VariableStatusType.OverDefined; constants = null; Debug.Assert(value); } }
+			public bool IsOverDefined
+			{
+				get { return Status == VariableStatusType.OverDefined; }
+				set { Status = VariableStatusType.OverDefined; constants = null; Debug.Assert(value); }
+			}
 
-			public bool IsNeverDefined { get { return Status == VariableStatusType.NeverDefined; } }
+			public bool IsUnknown { get { return Status == VariableStatusType.Unknown; } }
 
-			public bool IsSingleConstant { get { return Status == VariableStatusType.SingleConstant; } set { Status = VariableStatusType.SingleConstant; Debug.Assert(value); } }
+			public bool IsSingleConstant
+			{
+				get { return Status == VariableStatusType.SingleConstant; }
+				set { Status = VariableStatusType.SingleConstant; Debug.Assert(value); }
+			}
 
 			public bool HasMultipleConstants { get { return Status == VariableStatusType.MultipleConstants; } }
 
 			public bool HasOnlyConstants { get { return Status == VariableStatusType.SingleConstant || Status == VariableStatusType.MultipleConstants; } }
 
-			public bool IsVirtualRegister { get { return Operand.IsVirtualRegister; } }
+			public bool IsVirtualRegister { get; set; }
+
+			public bool IsReferenceType { get; set; }
+
+			public bool IsReferenceDefinedUnknown { get { return ReferenceStatus == ReferenceStatusType.Unknown; } }
+
+			public bool IsReferenceDefinedNotNull
+			{
+				get
+				{
+					return ReferenceStatus == ReferenceStatusType.DefinedNotNull;
+				}
+				set
+				{
+					Debug.Assert(value);
+					ReferenceStatus = ReferenceStatusType.DefinedNotNull;
+				}
+			}
+
+			public bool IsReferenceOverDefined
+			{
+				get
+				{
+					return ReferenceStatus == ReferenceStatusType.OverDefined;
+				}
+				set
+				{
+					Debug.Assert(value);
+					ReferenceStatus = ReferenceStatusType.OverDefined;
+				}
+			}
 
 			public VariableState(Operand operand)
 			{
 				Operand = operand;
 
-				if (operand.IsVirtualRegister)
+				IsVirtualRegister = operand.IsVirtualRegister;
+				IsReferenceType = operand.IsReferenceType;
+				ConstantsContainZero = false;
+
+				if (IsVirtualRegister)
 				{
-					Status = VariableStatusType.NeverDefined;
+					Status = VariableStatusType.Unknown;
+					IsVirtualRegister = true;
 				}
 				else if (operand.IsUnresolvedConstant)
 				{
@@ -73,13 +118,23 @@ namespace Mosa.Compiler.Framework.Analysis
 					IsOverDefined = true;
 				}
 
-				if (!operand.Type.IsReferenceType || !operand.IsVirtualRegister)
+				if (!IsReferenceType || !IsVirtualRegister)
 				{
-					NotNullStatus = NullStatusType.Invalid;
+					ReferenceStatus = ReferenceStatusType.OverDefined;
 				}
 				else
 				{
-					NotNullStatus = NullStatusType.NeverDefined;
+					ReferenceStatus = ReferenceStatusType.Unknown;
+				}
+			}
+
+			private void AppendConstant(ulong value)
+			{
+				constants.Add(value);
+
+				if (value == 0)
+				{
+					ConstantsContainZero = true;
 				}
 			}
 
@@ -95,10 +150,8 @@ namespace Mosa.Compiler.Framework.Analysis
 				}
 				else
 				{
-					constants = new List<ulong>(2)
-					{
-						value
-					};
+					constants = new List<ulong>(2);
+					AppendConstant(value);
 					Status = VariableStatusType.SingleConstant;
 					return true;
 				}
@@ -110,7 +163,8 @@ namespace Mosa.Compiler.Framework.Analysis
 					return true;
 				}
 
-				constants.Add(value);
+				AppendConstant(value);
+
 				Status = VariableStatusType.MultipleConstants;
 				return true;
 			}
@@ -239,8 +293,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private TraceLog CreateTrace(string name)
 		{
-			var sectionTrace = TraceFactory.CreateTraceLog(name);
-			return sectionTrace;
+			return TraceFactory.CreateTraceLog(name);
 		}
 
 		private VariableState GetVariableState(Operand operand)
@@ -482,6 +535,40 @@ namespace Mosa.Compiler.Framework.Analysis
 			AddInstruction(variable);
 		}
 
+		private void AssignedNewObject(VariableState variable)
+		{
+			SetReferenceNotNull(variable);
+		}
+
+		private void SetReferenceOverdefined(VariableState variable)
+		{
+			SetReferenceNull(variable);
+		}
+
+		private void SetReferenceNull(VariableState variable)
+		{
+			if (variable.IsReferenceOverDefined)
+				return;
+
+			variable.IsReferenceOverDefined = true;
+
+			if (MainTrace.Active) MainTrace.Log(variable.ToString());
+
+			AddInstruction(variable);
+		}
+
+		private void SetReferenceNotNull(VariableState variable)
+		{
+			if (variable.IsReferenceOverDefined || variable.IsReferenceDefinedNotNull)
+				return;
+
+			variable.IsReferenceDefinedNotNull = true;
+
+			if (MainTrace.Active) MainTrace.Log(variable.ToString());
+
+			AddInstruction(variable);
+		}
+
 		private void Jmp(InstructionNode node)
 		{
 			if (node.BranchTargets == null || node.BranchTargetsCount == 0)
@@ -497,6 +584,38 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			var result = GetVariableState(node.Result);
 			var operand = GetVariableState(node.Operand1);
+
+			if (result.IsReferenceDefinedUnknown || result.IsReferenceDefinedNotNull)
+			{
+				if (operand.IsReferenceType)
+				{
+					if (operand.IsReferenceDefinedNotNull)
+					{
+						SetReferenceNotNull(result);
+					}
+					else if (operand.Operand.IsParameter && operand.Operand.IsThis)
+					{
+						// the this pointer can not be null
+						AssignedNewObject(result);
+					}
+					else
+					{
+						SetReferenceOverdefined(result);
+					}
+				}
+				else if (operand.IsSingleConstant && operand.ConstantUnsignedLongInteger != 0)
+				{
+					SetReferenceNotNull(result);
+				}
+				else if (operand.HasMultipleConstants && !operand.ConstantsContainZero)
+				{
+					SetReferenceNotNull(result);
+				}
+				else
+				{
+					SetReferenceOverdefined(result);
+				}
+			}
 
 			if (result.IsOverDefined)
 				return;
@@ -515,9 +634,9 @@ namespace Mosa.Compiler.Framework.Analysis
 						return;
 				}
 			}
-			else if (operand.IsNeverDefined)
+			else if (operand.IsUnknown)
 			{
-				Debug.Assert(result.IsNeverDefined);
+				Debug.Assert(result.IsUnknown);
 			}
 
 			return;
@@ -532,7 +651,10 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			var result = GetVariableState(node.Result);
 
+			//todo: go thru parameter operands, if any are out, then set overdefine on that parameter operand
+
 			UpdateToOverDefined(result);
+			SetReferenceOverdefined(result);
 		}
 
 		private void IntegerOperation(InstructionNode node)
@@ -550,9 +672,9 @@ namespace Mosa.Compiler.Framework.Analysis
 				UpdateToOverDefined(result);
 				return;
 			}
-			else if (operand1.IsNeverDefined || operand2.IsNeverDefined)
+			else if (operand1.IsUnknown || operand2.IsUnknown)
 			{
-				Debug.Assert(result.IsNeverDefined);
+				Debug.Assert(result.IsUnknown);
 				return;
 			}
 			else if (operand1.IsSingleConstant && operand2.IsSingleConstant)
@@ -662,6 +784,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			var result = GetVariableState(node.Result);
 			UpdateToOverDefined(result);
+			SetReferenceOverdefined(result);
 		}
 
 		private void AddressOf(InstructionNode node)
@@ -671,6 +794,8 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			UpdateToOverDefined(result);
 			UpdateToOverDefined(operand1);
+			SetReferenceOverdefined(result);
+			SetReferenceOverdefined(operand1);
 		}
 
 		private void FinallyStart(InstructionNode node)
@@ -678,6 +803,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			var result = GetVariableState(node.Result);
 
 			UpdateToOverDefined(result);
+			SetReferenceOverdefined(result);
 		}
 
 		private void Default(InstructionNode node)
@@ -690,6 +816,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			var result = GetVariableState(node.Result);
 
 			UpdateToOverDefined(result);
+			SetReferenceOverdefined(result);
 		}
 
 		private bool CompareIntegerBranch(InstructionNode node)
@@ -809,8 +936,6 @@ namespace Mosa.Compiler.Framework.Analysis
 			//if (Trace.Active) Trace.Log(node.ToString());
 
 			var result = GetVariableState(node.Result);
-
-			//UpdateToOverDefined(result); // test
 
 			if (result.IsOverDefined)
 				return;
