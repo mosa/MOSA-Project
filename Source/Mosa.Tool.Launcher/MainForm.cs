@@ -17,7 +17,7 @@ namespace Mosa.Tool.Launcher
 
 		public Starter Starter { get; private set; }
 
-		public Options Options { get; private set; }
+		public Options Options { get; set; }
 
 		public AppLocations AppLocations { get; set; }
 
