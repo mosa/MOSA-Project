@@ -199,5 +199,19 @@ namespace Mosa.UnitTest.Collection
 
 			return p >= 16 && q == 0;
 		}
+
+		public static bool NullTest1(int a, int b)
+		{
+			var o = new object();
+
+			if (o is null)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
 	}
 }

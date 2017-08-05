@@ -44,8 +44,9 @@ namespace Mosa.Platform.x86.Stages
 			visitationDictionary[IRInstruction.DivFloatR8] = DivFloatR8;
 			visitationDictionary[IRInstruction.DivSigned] = DivSigned;
 			visitationDictionary[IRInstruction.DivUnsigned] = DivUnsigned;
-			visitationDictionary[IRInstruction.InternalCall] = InternalCall;
-			visitationDictionary[IRInstruction.InternalReturn] = InternalReturn;
+
+			//visitationDictionary[IRInstruction.InternalCall] = InternalCall;
+			//visitationDictionary[IRInstruction.InternalReturn] = InternalReturn;
 			visitationDictionary[IRInstruction.Jmp] = Jmp;
 			visitationDictionary[IRInstruction.LoadFloatR4] = LoadFloatR4;
 			visitationDictionary[IRInstruction.LoadFloatR8] = LoadFloatR8;
@@ -419,6 +420,8 @@ namespace Mosa.Platform.x86.Stages
 		/// Floating point compare instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="size">The size.</param>
 		private void FloatCompare(Context context, X86Instruction instruction, InstructionSize size)
 		{
 			Operand result = context.Result;
@@ -491,7 +494,6 @@ namespace Mosa.Platform.x86.Stages
 						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
 						break;
 					}
-
 				case ConditionCode.LessThan:
 					{
 						//	a<b
@@ -547,22 +549,22 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for InternalCall.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void InternalCall(Context context)
-		{
-			context.ReplaceInstructionOnly(X86.Call);
-		}
+		//private void InternalCall(Context context)
+		//{
+		//	context.ReplaceInstructionOnly(X86.Call);
+		//}
 
 		/// <summary>
 		/// Visitation function for InternalReturn.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void InternalReturn(Context context)
-		{
-			Debug.Assert(context.BranchTargets == null);
+		//private void InternalReturn(Context context)
+		//{
+		//	Debug.Assert(context.BranchTargets == null);
 
-			// To return from an internal method call (usually from within a finally or exception clause)
-			context.SetInstruction(X86.Ret);
-		}
+		//	// To return from an internal method call (usually from within a finally or exception clause)
+		//	context.SetInstruction(X86.Ret);
+		//}
 
 		/// <summary>
 		/// Visitation function for JmpInstruction.
@@ -788,6 +790,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for RemFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
+		/// <param name="method">The method.</param>
 		private void RemFloat(Context context, string method)
 		{
 			var result = context.Result;

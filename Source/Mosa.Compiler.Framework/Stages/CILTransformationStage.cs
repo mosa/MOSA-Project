@@ -806,14 +806,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand GetRuntimeTypeHandle(MosaType runtimeType, Context context)
 		{
-			//var typeDef = Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
-			//var runtimeTypeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
-			//var before = context.InsertBefore();
-			//before.SetInstruction(IRInstruction.MoveInteger, runtimeTypeHandle, typeDef);
-			//return runtimeTypeHandle;
+			var typeDef = Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
+			var runtimeTypeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+			var before = context.InsertBefore();
+			before.SetInstruction(IRInstruction.MoveInteger, runtimeTypeHandle, typeDef);
+			return runtimeTypeHandle;
+		}
 
-			var typeDef = Operand.CreateSymbol(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), runtimeType.FullName + Metadata.TypeDefinition);
-			return typeDef;
+		private Operand GetRuntimeTypeHandle(MosaType runtimeType)
+		{
+			return Operand.CreateSymbol(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), runtimeType.FullName + Metadata.TypeDefinition);
 		}
 
 		/// <summary>
@@ -1401,14 +1403,13 @@ namespace Mosa.Compiler.Framework.Stages
 				Debug.Assert(thisReference.Uses.Count <= 1, "Usages too high");
 
 				var newThis = MethodCompiler.AddStackLocal(thisReference.Type);
-
 				var newThisReference = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
 				before.SetInstruction(IRInstruction.AddressOf, newThisReference, newThis);
 
-				var after = context.InsertAfter();
 				var size = GetInstructionSize(newThis.Type);
 				var loadInstruction = GetLoadInstruction(newThis.Type);
-				after.SetInstruction(loadInstruction, thisReference, StackFrame, newThis);
+
+				context.InsertAfter().SetInstruction(loadInstruction, thisReference, StackFrame, newThis);
 
 				operands.Insert(0, newThisReference);
 			}
@@ -1416,13 +1417,16 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Debug.Assert(thisReference.Type.IsReferenceType, $"VmCall.AllocateObject only needs to be called for reference types. Type: {thisReference.Type}");
 
-				ReplaceWithVmCall(before, VmCall.AllocateObject);
+				//ReplaceWithVmCall(before, VmCall.AllocateObject);
+				//before.SetOperand(1, GetRuntimeTypeHandle(classType, before));
+				//before.SetOperand(2, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(classType)));
+				//before.OperandCount = 3;
+				//before.Result = thisReference;
+				//before.ResultCount = 1;
 
-				before.SetOperand(1, GetRuntimeTypeHandle(classType, before));
-				before.SetOperand(2, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(classType)));
-				before.OperandCount = 3;
-				before.Result = thisReference;
-				before.ResultCount = 1;
+				var runtimeTypeHandle = GetRuntimeTypeHandle(classType);
+				var size = Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(classType));
+				before.SetInstruction(IRInstruction.NewObject, thisReference, runtimeTypeHandle, size);
 
 				operands.Insert(0, thisReference);
 			}
@@ -1584,11 +1588,10 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var objectOperand = context.Operand1;
 			var valueOperand = context.Operand2;
+			var fieldType = context.MosaField.FieldType;
 
 			int offset = TypeLayout.GetFieldOffset(context.MosaField);
 			var offsetOperand = Operand.CreateConstant(TypeSystem, offset);
-
-			var fieldType = context.MosaField.FieldType;
 
 			var size = GetInstructionSize(fieldType);
 
@@ -2081,7 +2084,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		/// <returns></returns>
-		/// <exception cref="NotImplementedException"></exception>
+		/// <exception cref="InvalidProgramException"></exception>
 		private static ConditionCode ConvertCondition(OpCode opcode)
 		{
 			switch (opcode)
@@ -2121,7 +2124,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Clt: return ConditionCode.LessThan;
 				case OpCode.Clt_un: return ConditionCode.UnsignedLessThan;
 
-				default: throw new NotImplementedException();
+				default: throw new InvalidProgramException();
 			}
 		}
 
