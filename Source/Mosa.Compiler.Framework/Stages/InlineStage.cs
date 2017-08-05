@@ -265,7 +265,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else if (operand.Name != null)
 				{
-					mappedOperand = Operand.CreateManagedSymbol(operand.Type, operand.Name);
+					mappedOperand = Operand.CreateSymbol(operand.Type, operand.Name);
 				}
 			}
 			else if (operand.IsParameter)

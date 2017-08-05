@@ -764,7 +764,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="type">The type.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public static Operand CreateManagedSymbol(MosaType type, string name)
+		public static Operand CreateSymbol(MosaType type, string name)
 		{
 			var operand = new Operand(type)
 			{

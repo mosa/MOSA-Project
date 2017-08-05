@@ -661,12 +661,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.IsUI1)
 			{
 				mask = 0xFF;
-				return type.IsSigned ? (BaseInstruction)IRInstruction.MoveSignExtended : (BaseInstruction)IRInstruction.MoveZeroExtended;
+				return type.IsSigned ? (BaseInstruction)IRInstruction.MoveSignExtended : IRInstruction.MoveZeroExtended;
 			}
 			else if (type.IsUI2)
 			{
 				mask = 0xFFFF;
-				return type.IsSigned ? (BaseInstruction)IRInstruction.MoveSignExtended : (BaseInstruction)IRInstruction.MoveZeroExtended;
+				return type.IsSigned ? (BaseInstruction)IRInstruction.MoveSignExtended : IRInstruction.MoveZeroExtended;
 			}
 			else if (type.IsUI4)
 			{
@@ -806,11 +806,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand GetRuntimeTypeHandle(MosaType runtimeType, Context context)
 		{
-			var typeDef = Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
-			var runtimeTypeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
-			var before = context.InsertBefore();
-			before.SetInstruction(IRInstruction.MoveInteger, runtimeTypeHandle, typeDef);
-			return runtimeTypeHandle;
+			//var typeDef = Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
+			//var runtimeTypeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+			//var before = context.InsertBefore();
+			//before.SetInstruction(IRInstruction.MoveInteger, runtimeTypeHandle, typeDef);
+			//return runtimeTypeHandle;
+
+			var typeDef = Operand.CreateSymbol(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), runtimeType.FullName + Metadata.TypeDefinition);
+			return typeDef;
 		}
 
 		/// <summary>
@@ -1402,12 +1405,12 @@ namespace Mosa.Compiler.Framework.Stages
 				var newThisReference = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
 				before.SetInstruction(IRInstruction.AddressOf, newThisReference, newThis);
 
-				operands.Insert(0, newThisReference);
-
 				var after = context.InsertAfter();
 				var size = GetInstructionSize(newThis.Type);
 				var loadInstruction = GetLoadInstruction(newThis.Type);
 				after.SetInstruction(loadInstruction, thisReference, StackFrame, newThis);
+
+				operands.Insert(0, newThisReference);
 			}
 			else
 			{
