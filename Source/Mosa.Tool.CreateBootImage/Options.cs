@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Mosa.Compiler.Common;
 using Mosa.Utility.BootImage;
 using System;
 using System.Collections;
@@ -98,6 +99,43 @@ namespace Mosa.Tool.CreateBootImage
 		{
 			set { _options.VolumeLabel = value; }
 			get { return _options.VolumeLabel; }
+		}
+
+		[Option("file", Separator = ',', HelpText = "A list of files which will be included in the output image file. Paths are separated by commas.")]
+		public IEnumerable<string> RawFileList
+		{
+			set
+			{
+				IList<string> list = (IList<string>)value;
+
+				for (int x = 0; x < list.Count; x++)
+				{
+					string path = list[x];
+					if(Path.IsPathRooted(path))
+					{
+						if (x + 1 < list.Count) //Is there a next entry?
+						{
+							if (Path.IsPathRooted(list[x + 1]))
+							{
+								_options.IncludeFiles.Add(new IncludeFile(path));
+							}
+							else //If the next is not rooted, it's the new name of the files
+							{
+								_options.IncludeFiles.Add(new IncludeFile(path, list[++x]));
+							}
+						}
+						else
+						{
+							_options.IncludeFiles.Add(new IncludeFile(path));
+						}
+					}
+					else
+					{
+						//TODO: Handle unexpected non rooted file paths.
+						Console.WriteLine("Unexpected file path \"" + path + "\"");
+					}
+				}
+			}
 		}
 
 		public BootImageOptions BootImageOptions

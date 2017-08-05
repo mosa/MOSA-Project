@@ -16,33 +16,10 @@ namespace Mosa.Tool.CreateBootImage
 	{
 		public static BootImageOptions Parse(string filename)
 		{
-			//TODO: The CommandLineParser library doesn't support multiple options with the same name, so multple "--file" doesn't work -> HACK
-			string[] lines = File.ReadAllLines(filename);
-
-			List<string> parse = new List<string>();
-			List<IncludeFile> files = new List<IncludeFile>();
-
-			foreach(string line in lines)
-			{
-				string[] parts = line.Split(new char[] { '\n', '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-				if(line.StartsWith("--file"))
-				{
-					if (parts.Length > 2)
-						files.Add(new IncludeFile(parts[1], parts[2]));
-					else
-						files.Add(new IncludeFile(parts[1]));
-				}
-				else
-				{
-					parse.AddRange(parts);
-				}
-			}
-
-			Options options = ParseOptions(parse.ToArray());
+			Options options = ParseOptions(File.ReadAllText(filename).Split(new char[] { '\n', '\r', ' ' }, StringSplitOptions.RemoveEmptyEntries));
 			if (options == null)
 				return null;
 
-			options.BootImageOptions.IncludeFiles = files;
 			return options.BootImageOptions;
 		}
 
