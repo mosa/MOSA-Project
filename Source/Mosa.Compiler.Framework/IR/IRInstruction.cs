@@ -38,8 +38,10 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly Flow Flow = new Flow();
 		public static readonly Gen Gen = new Gen();
 		public static readonly GotoLeaveTarget GotoLeaveTarget = new GotoLeaveTarget();
-		public static readonly InternalCall InternalCall = new InternalCall();
-		public static readonly InternalReturn InternalReturn = new InternalReturn();
+
+		//public static readonly InternalCall InternalCall = new InternalCall();
+		//public static readonly InternalReturn InternalReturn = new InternalReturn();
+
 		public static readonly IntrinsicMethodCall IntrinsicMethodCall = new IntrinsicMethodCall();
 		public static readonly Jmp Jmp = new Jmp();
 		public static readonly Kill Kill = new Kill();
@@ -71,6 +73,9 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly MulFloatR8 MulFloatR8 = new MulFloatR8();
 		public static readonly MulSigned MulSigned = new MulSigned();
 		public static readonly MulUnsigned MulUnsigned = new MulUnsigned();
+		public static readonly NewArray NewArray = new NewArray();
+		public static readonly NewObject NewObject = new NewObject();
+		public static readonly NewString NewString = new NewString();
 		public static readonly Nop Nop = new Nop();
 		public static readonly Phi Phi = new Phi();
 		public static readonly Prologue Prologue = new Prologue();

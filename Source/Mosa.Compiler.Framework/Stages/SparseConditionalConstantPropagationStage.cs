@@ -10,7 +10,7 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///
+	/// Sparse Conditional Constant Propagation Stage
 	/// </summary>
 	public class SparseConditionalConstantPropagationStage : BaseMethodCompilerStage
 	{
@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void ReplaceVirtualRegisterWithConstant(Operand target, ulong value)
 		{
-			if (trace.Active) trace.Log(target.ToString() + " = " + value.ToString() + " Uses: " + target.Uses.Count.ToString());
+			if (trace.Active) trace.Log(target + " = " + value.ToString() + " Uses: " + target.Uses.Count.ToString());
 
 			Debug.Assert(target.Definitions.Count == 1);
 
@@ -73,10 +73,10 @@ namespace Mosa.Compiler.Framework.Stages
 							continue;
 
 						if (trace.Active) trace.Log("*** ConditionalConstantPropagation");
-						if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
+						if (trace.Active) trace.Log("BEFORE:\t" + node);
 						node.SetOperand(i, constant);
 						conditionalConstantPropagation++;
-						if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
+						if (trace.Active) trace.Log("AFTER: \t" + node);
 
 						changed = true;
 					}
@@ -90,7 +90,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var defNode = target.Definitions[0];
 
-			if (trace.Active) trace.Log("REMOVED:\t" + defNode.ToString());
+			if (trace.Active) trace.Log("REMOVED:\t" + defNode);
 			defNode.SetInstruction(IRInstruction.Nop);
 			instructionsRemovedCount++;
 		}
@@ -113,7 +113,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//if (block.PreviousBlocks.Count != 0 || BasicBlocks.HeadBlocks.Contains(block))
 			//	return;
 
-			if (trace.Active) trace.Log("*** RemoveBlock: " + block.ToString());
+			if (trace.Active) trace.Log("*** RemoveBlock: " + block);
 
 			var nextBlocks = block.NextBlocks.ToArray();
 
@@ -148,16 +148,16 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.Instruction == IRInstruction.CompareIntegerBranch)
 					{
 						if (trace.Active) trace.Log("*** RemoveBranchesToDeadBlocks");
-						if (trace.Active) trace.Log("REMOVED:\t" + node.ToString());
+						if (trace.Active) trace.Log("REMOVED:\t" + node);
 						node.SetInstruction(IRInstruction.Nop);
 						instructionsRemovedCount++;
 					}
 					else if (node.Instruction == IRInstruction.Jmp)
 					{
 						if (trace.Active) trace.Log("*** RemoveBranchesToDeadBlocks");
-						if (trace.Active) trace.Log("BEFORE:\t" + node.ToString());
+						if (trace.Active) trace.Log("BEFORE:\t" + node);
 						node.UpdateBranchTarget(0, otherBlock);
-						if (trace.Active) trace.Log("AFTER: \t" + node.ToString());
+						if (trace.Active) trace.Log("AFTER: \t" + node);
 					}
 					else if (node.Instruction == IRInstruction.CompareIntegerBranch)
 					{

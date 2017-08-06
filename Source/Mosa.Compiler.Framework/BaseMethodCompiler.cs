@@ -260,9 +260,17 @@ namespace Mosa.Compiler.Framework
 			return local;
 		}
 
-		private Operand SetStackParameter(int index, MosaType type, string name)
+		/// <summary>
+		/// Sets the stack parameter.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="type">The type.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="isThis">if set to <c>true</c> [is this].</param>
+		/// <returns></returns>
+		private Operand SetStackParameter(int index, MosaType type, string name, bool isThis)
 		{
-			var param = Operand.CreateStackParameter(type, index, name);
+			var param = Operand.CreateStackParameter(type, index, name, isThis);
 			Parameters[index] = param;
 			return param;
 		}
@@ -277,14 +285,14 @@ namespace Mosa.Compiler.Framework
 			if (Method.HasThis || Method.HasExplicitThis)
 			{
 				if (Type.IsValueType)
-					SetStackParameter(index++, Type.ToManagedPointer(), "this");
+					SetStackParameter(index++, Type.ToManagedPointer(), "this", true);
 				else
-					SetStackParameter(index++, Type, "this");
+					SetStackParameter(index++, Type, "this", true);
 			}
 
 			foreach (var parameter in Method.Signature.Parameters)
 			{
-				SetStackParameter(index++, parameter.ParameterType, parameter.Name);
+				SetStackParameter(index++, parameter.ParameterType, parameter.Name, false);
 			}
 
 			LayoutParameters();

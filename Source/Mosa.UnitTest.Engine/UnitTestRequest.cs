@@ -18,7 +18,7 @@ namespace Mosa.UnitTest.Engine
 
 		public ulong Address { get; set; }
 		public MosaMethod RuntimeMethod { get; private set; }
-		public LinkerSymbol LinkerSymbol { get; private set; }
+		public LinkerSymbol LinkerSymbol { get; }
 
 		public object Result { get; private set; }
 
@@ -57,11 +57,12 @@ namespace Mosa.UnitTest.Engine
 		{
 			get
 			{
-				var cmd = new List<int>(4 + 4 + 4 + RuntimeMethod.Signature.Parameters.Count);
-
-				cmd.Add((int)Address);
-				cmd.Add(GetReturnResultType(RuntimeMethod.Signature.ReturnType));
-				cmd.Add(0);
+				var cmd = new List<int>(4 + 4 + 4 + RuntimeMethod.Signature.Parameters.Count)
+				{
+					(int)Address,
+					GetReturnResultType(RuntimeMethod.Signature.ReturnType),
+					0
+				};
 
 				foreach (var parm in Parameters)
 				{
@@ -177,11 +178,17 @@ namespace Mosa.UnitTest.Engine
 		public static object GetResult(MosaType type, List<byte> data)
 		{
 			if (type.IsI1)
+			{
 				return (sbyte)data[0];
+			}
 			else if (type.IsI2)
+			{
 				return (short)(data[0] | (data[1] << 8));
+			}
 			else if (type.IsI4)
+			{
 				return (int)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
+			}
 			else if (type.IsI8)
 			{
 				ulong low = (uint)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
@@ -190,11 +197,17 @@ namespace Mosa.UnitTest.Engine
 				return (long)(low | (high << 32));
 			}
 			else if (type.IsU1)
+			{
 				return (byte)data[0];
+			}
 			else if (type.IsU2)
+			{
 				return (ushort)(data[0] | (data[1] << 8));
+			}
 			else if (type.IsU4)
+			{
 				return (uint)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
+			}
 			else if (type.IsU8)
 			{
 				ulong low = (uint)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
@@ -203,9 +216,13 @@ namespace Mosa.UnitTest.Engine
 				return (ulong)(low | (high << 32));
 			}
 			else if (type.IsChar)
+			{
 				return (char)(data[0] | (data[1] << 8));
+			}
 			else if (type.IsBoolean)
+			{
 				return (bool)(data[0] != 0);
+			}
 			else if (type.IsR4)
 			{
 				var value = new byte[8];
@@ -229,7 +246,9 @@ namespace Mosa.UnitTest.Engine
 				return d;
 			}
 			else if (type.IsVoid)
+			{
 				return null;
+			}
 
 			return null;
 		}

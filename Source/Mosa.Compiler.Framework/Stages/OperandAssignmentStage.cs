@@ -10,7 +10,7 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///
+	/// Operand Assignment Stage
 	/// </summary>
 	public sealed class OperandAssignmentStage : BaseMethodCompilerStage
 	{

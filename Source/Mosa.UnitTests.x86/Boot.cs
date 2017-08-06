@@ -59,7 +59,7 @@ namespace Mosa.UnitTests.x86
 		private static void ForceTestCollection()
 		{
 			// required to force assembly to be referenced and loaded
-			Mosa.UnitTest.Collection.OptimizationTest.OptimizationTest1();
+			Mosa.UnitTest.Collection.OptimizationTests.OptimizationTest1();
 		}
 	}
 }

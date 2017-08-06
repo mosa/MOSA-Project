@@ -120,6 +120,7 @@
       <DependentUpon>EnumTests.tt</DependentUpon>
     </Compile>
     <Compile Include="GenericMixedTest.cs" />
+    <Compile Include="NullCheckOptimizationTests.cs" />
     <Compile Include="RemTests.cs" />
     <Compile Include="LargeSwitchTest.cs" />
     <Compile Include="LdargaTests.cs">
@@ -132,7 +133,7 @@
     <Compile Include="ListTests.cs" />
     <Compile Include="LinkedListTests.cs" />
     <Compile Include="NewObjectTests.cs" />
-    <Compile Include="OptimizationTest.cs" />
+    <Compile Include="OptimizationTests.cs" />
     <Compile Include="RegisterAllocatorTests.cs" />
     <Compile Include="SpecificTests.cs" />
     <Compile Include="ForeachTests.cs">

@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///
+	/// IR Cleanup Stage
 	/// </summary>
 	public class IRCleanupStage : EmptyBlockRemovalStage
 	{
