@@ -355,8 +355,11 @@ namespace Mosa.Platform.x86
 			return this;
 		}
 
-		public OpcodeEncoder AppendInteger(Operand operand, InstructionSize size)
+		public OpcodeEncoder AppendConditionalIntegerOfSize(bool include, Operand operand, InstructionSize size)
 		{
+			if (!include)
+				return this;
+
 			if (size == InstructionSize.Size32)
 				return AppendIntegerValue(operand.ConstantUnsignedInteger);
 			if (size == InstructionSize.Size8)
