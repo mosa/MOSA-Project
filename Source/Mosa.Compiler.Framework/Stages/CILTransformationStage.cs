@@ -960,13 +960,7 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				var loadInstruction = GetLoadInstruction(arrayType.ElementType);
-
 				var size = GetInstructionSize(arrayType.ElementType);
-
-				//if (size == InstructionSize.Native)
-				//{
-				//	size = Architecture.NativeInstructionSize;
-				//}
 
 				context.SetInstruction(loadInstruction, size, result, arrayAddress, elementOffset);
 			}
@@ -1009,11 +1003,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!result.IsOnStack && !MosaTypeLayout.IsStoredOnStack(operand.Type) && !operand.IsReferenceType && isPointer)
 			{
-				//EXAMPLE:
-				//  CIL.Ldfld V_3 [U4*] <= V_2 [Mosa.Runtime.MetadataMethodStruct*] {f:System.UInt32* Mosa.Runtime.MetadataMethodStruct::Name}
-				//EXAMPLE:
-				//  CIL.Ldfld V_26 [I4] <= V_61 [System.IntPtr] {f:System.UInt32 Mosa.Runtime.x86.ULong::_hi}
-
 				var loadInstruction = GetLoadInstruction(field.FieldType);
 				var size = GetInstructionSize(field.FieldType);
 				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
@@ -1025,11 +1014,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!result.IsOnStack && !MosaTypeLayout.IsStoredOnStack(operand.Type) && !operand.IsReferenceType && !isPointer)
 			{
-				//EXAMPLE:
-				//  CIL.Ldfld V_13 [System.IntPtr] <= V_12 [System.RuntimeMethodHandle] {f:System.IntPtr System.RuntimeMethodHandle::m_ptr}
-				//TRANSFORM:
-				//  IR.Move V_13[System.IntPtr] <= V_12[System.RuntimeMethodHandle]
-
 				// simple move
 				Debug.Assert(result.IsVirtualRegister);
 
@@ -1043,9 +1027,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!MosaTypeLayout.IsStoredOnStack(result.Type) && operand.IsOnStack)
 			{
-				//EXAMPLE:
-				//  CIL.Ldfld V_5 [I4] <= T_2 const= unresolved[Mosa.TestWorld.x86.Tests.Pair] { f: System.Int32 Mosa.TestWorld.x86.Tests.Pair::A}
-
 				var loadInstruction = GetLoadInstruction(field.FieldType);
 				var size = GetInstructionSize(field.FieldType);
 				var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
@@ -1059,9 +1040,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!MosaTypeLayout.IsStoredOnStack(result.Type) && !operand.IsOnStack)
 			{
-				//EXAMPLE:
-				//  CIL.Ldfld V_30 [O] <= V_29 [O] {f:Mosa.Kernel.x86.ConsoleSession Mosa.Kernel.x86.ConsoleManager::Boot}
-
 				var loadInstruction = GetLoadInstruction(field.FieldType);
 				var size = GetInstructionSize(field.FieldType);
 				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
@@ -1073,9 +1051,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (result.IsOnStack && !operand.IsOnStack)
 			{
-				//EXAMPLE:
-				//  CIL.Ldfld T_1 const=unresolved [System.Reflection.CustomAttributeTypedArgument] <= V_1 [System.Reflection.CustomAttributeNamedArgument&] {f:System.Reflection.CustomAttributeTypedArgument System.Reflection.CustomAttributeNamedArgument::typedArgument}
-
 				var size = GetInstructionSize(field.FieldType);
 				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
 
@@ -1087,9 +1062,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (result.IsOnStack && operand.IsOnStack)
 			{
-				//EXAMPLE:
-				//  CIL.Ldfld T_5 const=unresolved [Mosa.UnitTest.Collection.ValueTypeTests+valuetype] <= T_4 const=unresolved [Mosa.UnitTest.Collection.ValueTypeTests+valuewrapper] {f:Mosa.UnitTest.Collection.ValueTypeTests+valuetype Mosa.UnitTest.Collection.ValueTypeTests+valuewrapper::content}
-
 				var size = GetInstructionSize(field.FieldType);
 				var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
 				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
@@ -1355,12 +1327,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(elementSize != 0);
 
-			//ReplaceWithVmCall(context, VmCall.AllocateArray);
-			//context.SetOperand(1, GetRuntimeTypeHandle(arrayType, context));
-			//context.SetOperand(2, Operand.CreateConstant(TypeSystem, elementSize));
-			//context.SetOperand(3, lengthOperand);
-			//context.OperandCount = 4;
-
 			var runtimeTypeHandle = GetRuntimeTypeHandle(arrayType);
 			var size = Operand.CreateConstant(TypeSystem, elementSize);
 			context.SetInstruction(IRInstruction.NewArray, result, runtimeTypeHandle, size, elements);
@@ -1511,8 +1477,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Sizeof(Context context)
 		{
 			var type = context.MosaType;
-			context.MosaType = null;
-			var size = type.IsPointer ? TypeLayout.NativePointerSize : MethodCompiler.TypeLayout.GetTypeSize(type);
+			var size = type.IsPointer ? NativePointerSize : MethodCompiler.TypeLayout.GetTypeSize(type);
 			context.SetInstruction(IRInstruction.MoveInteger, context.Result, Operand.CreateConstant(TypeSystem, size));
 		}
 
@@ -1702,19 +1667,6 @@ namespace Mosa.Compiler.Framework.Stages
 			throw new InvalidCompilerException();
 		}
 
-		private bool TypeContainsMethodObjective(MosaType type, MosaMethod method)
-		{
-			foreach (var m in type.Methods)
-			{
-				if (((object)m).Equals(method))
-				{
-					return true;
-				}
-			}
-
-			return false;
-		}
-
 		/// <summary>
 		/// Visitation function for UnaryBranch instruction.
 		/// </summary>
@@ -1722,10 +1674,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private void UnaryBranch(Context context)
 		{
 			var target = context.BranchTargets[0];
-
 			var first = context.Operand1;
 			var second = ConstantZero;
-
 			var opcode = ((BaseCILInstruction)context.Instruction).OpCode;
 
 			if (opcode == OpCode.Brtrue || opcode == OpCode.Brtrue_s)
