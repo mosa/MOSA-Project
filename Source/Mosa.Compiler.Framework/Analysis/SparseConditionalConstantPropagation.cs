@@ -549,11 +549,23 @@ namespace Mosa.Compiler.Framework.Analysis
 					return false;
 				}
 			}
+			else if (condition == ConditionCode.NotEqual)
+			{
+				if (operand2.IsSingleConstant && operand2.ConstantSignedLongInteger == 0 && operand1.IsReferenceDefinedNotNull)
+				{
+					return true;
+				}
+
+				if (operand1.IsSingleConstant && operand1.ConstantSignedLongInteger == 0 && operand2.IsReferenceDefinedNotNull)
+				{
+					return true;
+				}
+			}
 			else if (condition == ConditionCode.UnsignedGreaterThan)
 			{
 				if (operand2.IsSingleConstant && operand2.ConstantSignedLongInteger == 0 && operand1.IsReferenceDefinedNotNull)
 				{
-					return false;
+					return true;
 				}
 			}
 
@@ -579,11 +591,6 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 
 			IntegerOperation(node);
-		}
-
-		private void UpdateToConstant(VariableState variable, long value)
-		{
-			UpdateToConstant(variable, (ulong)value);
 		}
 
 		private void UpdateToConstant(VariableState variable, ulong value)
