@@ -1356,20 +1356,23 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Newarr(Context context)
 		{
-			var arrayType = context.Result.Type;
+			var result = context.Result;
+			var arrayType = result.Type;
+			var elements = context.Operand1;
 
 			Architecture.GetTypeRequirements(TypeLayout, arrayType.ElementType, out int elementSize, out int alignment);
 
-			var lengthOperand = context.Operand1;
-
 			Debug.Assert(elementSize != 0);
 
-			ReplaceWithVmCall(context, VmCall.AllocateArray);
+			//ReplaceWithVmCall(context, VmCall.AllocateArray);
+			//context.SetOperand(1, GetRuntimeTypeHandle(arrayType, context));
+			//context.SetOperand(2, Operand.CreateConstant(TypeSystem, elementSize));
+			//context.SetOperand(3, lengthOperand);
+			//context.OperandCount = 4;
 
-			context.SetOperand(1, GetRuntimeTypeHandle(arrayType, context));
-			context.SetOperand(2, Operand.CreateConstant(TypeSystem, elementSize));
-			context.SetOperand(3, lengthOperand);
-			context.OperandCount = 4;
+			var runtimeTypeHandle = GetRuntimeTypeHandle(arrayType);
+			var size = Operand.CreateConstant(TypeSystem, elementSize);
+			context.SetInstruction(IRInstruction.NewArray, result, runtimeTypeHandle, size, elements);
 		}
 
 		/// <summary>
@@ -1416,13 +1419,6 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				Debug.Assert(thisReference.Type.IsReferenceType, $"VmCall.AllocateObject only needs to be called for reference types. Type: {thisReference.Type}");
-
-				//ReplaceWithVmCall(before, VmCall.AllocateObject);
-				//before.SetOperand(1, GetRuntimeTypeHandle(classType, before));
-				//before.SetOperand(2, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(classType)));
-				//before.OperandCount = 3;
-				//before.Result = thisReference;
-				//before.ResultCount = 1;
 
 				var runtimeTypeHandle = GetRuntimeTypeHandle(classType);
 				var size = Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(classType));
