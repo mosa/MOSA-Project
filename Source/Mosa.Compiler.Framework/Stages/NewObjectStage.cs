@@ -46,11 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var size = context.Operand2;
 			var result = context.Result;
 
-			// fixme: move is a hack because the x86 emitter can't handle it
-			var v1 = AllocateVirtualRegister(runtimeHandle.Type);
-			context.SetInstruction(IRInstruction.MoveInteger, v1, runtimeHandle);
-
-			context.AppendInstruction(IRInstruction.Call, result, symbol, v1, size);
+			context.SetInstruction(IRInstruction.Call, result, symbol, runtimeHandle, size);
 			context.InvokeMethod = method;
 		}
 
@@ -70,11 +66,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var elements = context.Operand3;
 			var result = context.Result;
 
-			// fixme: move is a hack because the x86 emitter can't handle it
-			var v1 = AllocateVirtualRegister(runtimeHandle.Type);
-			context.SetInstruction(IRInstruction.MoveInteger, v1, runtimeHandle);
-
-			context.AppendInstruction(IRInstruction.Call, result, symbol, v1, size, elements);
+			context.SetInstruction(IRInstruction.Call, result, symbol, runtimeHandle, size, elements);
 			context.InvokeMethod = method;
 		}
 	}
