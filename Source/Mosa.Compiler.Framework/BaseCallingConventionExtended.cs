@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
 
@@ -24,10 +23,11 @@ namespace Mosa.Compiler.Framework
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseCallingConventionExtended"/>.
+		/// Initializes a new instance of the <see cref="BaseCallingConventionExtended" />.
 		/// </summary>
 		/// <param name="architecture">The architecture of the calling convention.</param>
-		public BaseCallingConventionExtended(BaseArchitecture architecture)
+		/// <exception cref="ArgumentNullException">Architecture</exception>
+		protected BaseCallingConventionExtended(BaseArchitecture architecture)
 		{
 			this.architecture = architecture ?? throw new ArgumentNullException("Architecture");
 		}
@@ -55,21 +55,6 @@ namespace Mosa.Compiler.Framework
 			}
 
 			return operands;
-		}
-
-		protected static int CalculateStackSizeForParameters(MosaTypeLayout typeLayout, BaseArchitecture architecture, List<Operand> operands)
-		{
-			// first operand is the call location
-			int result = 0;
-
-			foreach (var operand in operands)
-			{
-				architecture.GetTypeRequirements(typeLayout, operand.Type, out int size, out int alignment);
-
-				result = Alignment.AlignUp(result, alignment) + size;
-			}
-
-			return result;
 		}
 
 		#endregion Helper Methods

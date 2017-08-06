@@ -159,7 +159,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 				mosaMethod.DeclaringType = DefaultLinkerType;
 				mosaMethod.Name = methodName;
 				mosaMethod.Signature = new MosaMethodSignature(returnType, parameters);
-
 				mosaMethod.IsStatic = true;
 				mosaMethod.HasThis = hasThis;
 				mosaMethod.HasExplicitThis = false;
@@ -186,6 +185,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 				type.TypeCode = MosaTypeCode.ReferenceType;
 			}
 			return mosatype;
+		}
+
+		public MosaParameter CreateParameter(MosaMethod method, string name, MosaType parameterType)
+		{
+			var mosaparameter = Controller.CreateParameter();
+
+			using (var parameter = Controller.MutateParameter(mosaparameter))
+			{
+				parameter.Name = name;
+				parameter.ParameterAttributes = MosaParameterAttributes.In;
+				parameter.ParameterType = parameterType;
+				parameter.DeclaringMethod = method;
+
+				return mosaparameter;
+			}
 		}
 
 		private class TypeSystemController : ITypeSystemController
@@ -335,7 +349,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			public void AddType(MosaType type)
 			{
 				if (!type.Module.Types.ContainsKey(type.ID))
+				{
 					type.Module.Types.Add(type.ID, type);
+				}
 
 				typeSystem.typeLookup[Tuple.Create(type.Module, type.Namespace, type.ShortName)] = type;
 			}

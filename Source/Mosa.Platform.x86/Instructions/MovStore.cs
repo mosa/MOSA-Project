@@ -105,7 +105,9 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendInteger(node.Operand3, node.Size);                       // 8/16/32:immediate
 
 			if (node.Operand1.IsLinkerResolved && !node.Operand3.IsLinkerResolved)
+			{
 				emitter.Emit(opcode, node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
+			}
 			else if (node.Operand1.IsLinkerResolved && node.Operand3.IsLinkerResolved)
 			{
 				// fixme: trouble!

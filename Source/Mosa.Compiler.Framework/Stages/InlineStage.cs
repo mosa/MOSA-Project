@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///
+	/// Inline Stage
 	/// </summary>
 	public class InlineStage : BaseMethodCompilerStage
 	{
@@ -133,10 +133,11 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 					}
 
-					var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount);
-					newNode.Size = node.Size;
-					newNode.ConditionCode = node.ConditionCode;
-
+					var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount)
+					{
+						Size = node.Size,
+						ConditionCode = node.ConditionCode
+					};
 					if (node.BranchTargets != null)
 					{
 						// copy targets
@@ -247,9 +248,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (operand == null)
 				return null;
 
-			Operand mappedOperand;
-
-			if (map.TryGetValue(operand, out mappedOperand))
+			if (map.TryGetValue(operand, out Operand mappedOperand))
 			{
 				return mappedOperand;
 			}
@@ -266,7 +265,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else if (operand.Name != null)
 				{
-					mappedOperand = Operand.CreateManagedSymbol(operand.Type, operand.Name);
+					mappedOperand = Operand.CreateSymbol(operand.Type, operand.Name);
 				}
 			}
 			else if (operand.IsParameter)

@@ -35,6 +35,18 @@ namespace Mosa.Compiler.Framework.Platform
 
 		#endregion Data members
 
+		#region Properties
+
+		//The first parameter is offset by 8 bytes from the start of the stack frame.
+		//- holds the return stack frame, which was pushed by the prologue instruction.
+		//- holds the return address, which was pushed by the call instruction.
+
+		public override int OffsetOfFirstLocal { get { return 0; } }
+
+		public override int OffsetOfFirstParameter { get { return 8; } }
+
+		#endregion Properties
+
 		#region Members
 
 		/// <summary>
@@ -69,16 +81,8 @@ namespace Mosa.Compiler.Framework.Platform
 			int stackSize = 0;
 			int returnSize = 0;
 
-			if (method != null)
-			{
-				stackSize = compiler.TypeLayout.GetMethodParameterStackSize(method);
-				returnSize = CalculateReturnSize(compiler, method);
-			}
-			else
-			{
-				stackSize = CalculateStackSizeForParameters(compiler.TypeLayout, architecture, operands);
-				returnSize = CalculateReturnSize(compiler, result);
-			}
+			stackSize = compiler.TypeLayout.GetMethodParameterStackSize(method);
+			returnSize = CalculateReturnSize(compiler, method);
 
 			context.Empty();
 
@@ -87,15 +91,7 @@ namespace Mosa.Compiler.Framework.Platform
 			if (totalStack != 0)
 			{
 				ReserveStackSizeForCall(compiler, context, totalStack, scratch);
-
-				if (method != null)
-				{
-					PushOperands(compiler, context, method, operands, totalStack, scratch);
-				}
-				else
-				{
-					PushOperands(compiler, context, operands, totalStack, scratch);
-				}
+				PushOperands(compiler, context, method, operands, totalStack, scratch);
 			}
 
 			// the mov/call two-instructions combo is to help facilitate the register allocator
@@ -111,19 +107,6 @@ namespace Mosa.Compiler.Framework.Platform
 			if (MosaTypeLayout.IsStoredOnStack(method.Signature.ReturnType))
 			{
 				return compiler.TypeLayout.GetTypeSize(method.Signature.ReturnType);
-			}
-
-			return 0;
-		}
-
-		private static int CalculateReturnSize(BaseMethodCompiler compiler, Operand result)
-		{
-			if (result == null)
-				return 0;
-
-			if (MosaTypeLayout.IsStoredOnStack(result.Type))
-			{
-				return compiler.TypeLayout.GetTypeSize(result.Type);
 			}
 
 			return 0;
@@ -232,28 +215,6 @@ namespace Mosa.Compiler.Framework.Platform
 		}
 
 		/// <summary>
-		/// Calculates the remaining space.
-		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		/// <param name="context">The context.</param>
-		/// <param name="operands">The operand stack.</param>
-		/// <param name="space">The space.</param>
-		/// <param name="scratch">The scratch.</param>
-		private void PushOperands(BaseMethodCompiler compiler, Context context, List<Operand> operands, int space, Operand scratch)
-		{
-			foreach (var operand in operands)
-			{
-				architecture.GetTypeRequirements(compiler.TypeLayout, operand.Type, out int size, out int alignment);
-
-				size = Alignment.AlignUp(size, alignment);
-
-				space -= size;
-
-				Push(compiler, context, operand, space, size, scratch);
-			}
-		}
-
-		/// <summary>
 		/// Pushes the specified instructions.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
@@ -335,13 +296,6 @@ namespace Mosa.Compiler.Framework.Platform
 				architecture.InsertMoveInstruction(context, Operand.CreateCPURegister(operand.Type, return32BitRegister), operand);
 			}
 		}
-
-		public override int OffsetOfFirstLocal { get { return 0; } }
-
-		//The first parameter is offset by 8 bytes from the start of the stack frame.
-		//- holds the return stack frame, which was pushed by the prologue instruction.
-		//- holds the return address, which was pushed by the call instruction.
-		public override int OffsetOfFirstParameter { get { return 8; } }
 
 		#endregion Members
 	}

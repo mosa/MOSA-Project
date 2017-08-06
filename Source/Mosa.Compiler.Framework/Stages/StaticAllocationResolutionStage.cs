@@ -81,8 +81,8 @@ namespace Mosa.Compiler.Framework.Stages
 				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, symbolName, 0, SectionKind.ROData, typeDefinitionSymbol, 0);
 			}
 
-			Operand staticAddress = Operand.CreateManagedSymbol(assignmentField.FieldType, symbolName.Name);
-			Operand result1 = AllocateVirtualRegister(assignmentField.FieldType);
+			var staticAddress = Operand.CreateSymbol(assignmentField.FieldType, symbolName.Name);
+			var result1 = AllocateVirtualRegister(assignmentField.FieldType);
 
 			//Operand result2 = AllocateVirtualRegister(assignmentField.FieldType);
 

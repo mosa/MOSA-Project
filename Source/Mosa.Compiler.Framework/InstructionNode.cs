@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Instruction Node
 	/// </summary>
 	public sealed class InstructionNode
 	{
@@ -94,7 +94,10 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public BasicBlock Block
 		{
-			get { return basicBlock; }
+			get
+			{
+				return basicBlock;
+			}
 			internal set
 			{
 				if (basicBlock != null)
@@ -117,7 +120,10 @@ namespace Mosa.Compiler.Framework
 		/// <value>The first operand.</value>
 		public Operand Operand1
 		{
-			get { return operand1; }
+			get
+			{
+				return operand1;
+			}
 			set
 			{
 				Operand current = operand1;
@@ -144,7 +150,10 @@ namespace Mosa.Compiler.Framework
 		/// <value>The second operand.</value>
 		public Operand Operand2
 		{
-			get { return operand2; }
+			get
+			{
+				return operand2;
+			}
 			set
 			{
 				Operand current = operand2;
@@ -170,7 +179,10 @@ namespace Mosa.Compiler.Framework
 		/// <value>The third operand.</value>
 		public Operand Operand3
 		{
-			get { return operand3; }
+			get
+			{
+				return operand3;
+			}
 			set
 			{
 				Operand current = operand3;
@@ -232,7 +244,10 @@ namespace Mosa.Compiler.Framework
 		/// <value>The result operand.</value>
 		public Operand Result
 		{
-			get { return result; }
+			get
+			{
+				return result;
+			}
 			set
 			{
 				Operand current = result;
@@ -257,7 +272,10 @@ namespace Mosa.Compiler.Framework
 		/// <value>The result operand.</value>
 		public Operand Result2
 		{
-			get { return result2; }
+			get
+			{
+				return result2;
+			}
 			set
 			{
 				Operand current = result2;

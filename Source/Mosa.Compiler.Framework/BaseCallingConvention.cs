@@ -8,6 +8,20 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCallingConvention
 	{
+		#region Properties
+
+		/// <summary>
+		/// Retrieves the offset of the first local variable from the stack frame start.
+		/// </summary>
+		public abstract int OffsetOfFirstLocal { get; }
+
+		/// <summary>
+		/// Retrieves the offset of the first parameter From the stack frame start.
+		/// </summary>
+		public abstract int OffsetOfFirstParameter { get; }
+
+		#endregion Properties
+
 		#region Methods
 
 		/// <summary>
@@ -25,16 +39,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
 		public abstract void SetReturnValue(BaseMethodCompiler compiler, Context context, Operand operand);
-
-		/// <summary>
-		/// Retrieves the offset of the first local variable from the stack frame start.
-		/// </summary>
-		public abstract int OffsetOfFirstLocal { get; }
-
-		/// <summary>
-		/// Retrieves the offset of the first parameter From the stack frame start.
-		/// </summary>
-		public abstract int OffsetOfFirstParameter { get; }
 
 		#endregion Methods
 	}

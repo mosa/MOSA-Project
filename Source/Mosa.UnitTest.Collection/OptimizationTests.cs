@@ -2,7 +2,7 @@
 
 namespace Mosa.UnitTest.Collection
 {
-	public static class OptimizationTest
+	public static class OptimizationTests
 	{
 		public static bool OptimizationTest1()
 		{

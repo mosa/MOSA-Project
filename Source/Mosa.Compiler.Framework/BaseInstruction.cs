@@ -6,7 +6,7 @@ using System.Text;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Base Instruction
 	/// </summary>
 	public abstract class BaseInstruction
 	{
@@ -235,7 +235,7 @@ namespace Mosa.Compiler.Framework
 			var size = GetSizeString(node.Size);
 
 			if (size != string.Empty)
-				sb.Append("/" + size);
+				sb.Append("/").Append(size);
 
 			if (node.ConditionCode != ConditionCode.Undefined)
 			{
@@ -262,7 +262,7 @@ namespace Mosa.Compiler.Framework
 
 			if (node.ResultCount > 0)
 			{
-				sb.Length = sb.Length - 1;
+				sb.Length--;
 			}
 
 			if (node.ResultCount > 0 && node.OperandCount > 0)
@@ -280,7 +280,7 @@ namespace Mosa.Compiler.Framework
 
 			if (node.OperandCount > 0)
 			{
-				sb.Length = sb.Length - 1;
+				sb.Length--;
 			}
 
 			if (node.BranchTargets != null)

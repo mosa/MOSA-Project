@@ -234,18 +234,14 @@ namespace Mosa.UnitTest.Engine
 				if (t.Name != type)
 					continue;
 
-				if (!string.IsNullOrEmpty(ns))
-					if (t.Namespace != ns)
-						continue;
+				if (!string.IsNullOrEmpty(ns) && t.Namespace != ns)
+					continue;
 
 				foreach (var m in t.Methods)
 				{
-					if (m.Name == method)
+					if (m.Name == method && m.Signature.Parameters.Count == parameters.Length)
 					{
-						if (m.Signature.Parameters.Count == parameters.Length)
-						{
-							return m;
-						}
+						return m;
 					}
 				}
 
@@ -316,7 +312,7 @@ namespace Mosa.UnitTest.Engine
 
 		private bool CheckCompiled()
 		{
-			lock (this)
+			lock (_lock)
 			{
 				if (compiled)
 					return true;
@@ -445,6 +441,7 @@ namespace Mosa.UnitTest.Engine
 		}
 
 		private volatile bool wait = false;
+		private readonly object _lock = new object();
 
 		public void SendMessageAndWait(DebugMessage message)
 		{
