@@ -101,6 +101,8 @@
     <Compile Include="Intrinsics\Load64.cs" />
     <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="IR\AddFloatR4.cs" />
+    <Compile Include="IR\NewString.cs" />
+    <Compile Include="IR\NewArray.cs" />
     <Compile Include="IR\NewObject.cs" />
     <Compile Include="IR\BaseStoreParameterInstruction.cs" />
     <Compile Include="IR\LoadParameterCompound.cs" />

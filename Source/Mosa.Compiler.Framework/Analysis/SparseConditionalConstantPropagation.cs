@@ -454,7 +454,8 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Move(node);
 			}
-			else if (instruction == IRInstruction.NewObject)
+			else if (instruction == IRInstruction.NewObject
+				|| instruction == IRInstruction.NewArray)
 			{
 				NewObject(node);
 			}
