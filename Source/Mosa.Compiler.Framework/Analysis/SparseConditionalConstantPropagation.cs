@@ -114,6 +114,10 @@ namespace Mosa.Compiler.Framework.Analysis
 				{
 					AddConstant(operand.ConstantUnsignedLongInteger);
 				}
+				else if (operand.IsNull)
+				{
+					AddConstant(0);
+				}
 				else
 				{
 					IsOverDefined = true;
@@ -482,12 +486,15 @@ namespace Mosa.Compiler.Framework.Analysis
 				|| instruction == IRInstruction.DivUnsigned
 				|| instruction == IRInstruction.RemSigned
 				|| instruction == IRInstruction.RemUnsigned
-				|| instruction == IRInstruction.CompareInteger
 				|| instruction == IRInstruction.ShiftLeft
 				|| instruction == IRInstruction.ShiftRight
 				|| instruction == IRInstruction.ArithmeticShiftRight)
 			{
 				IntegerOperation(node);
+			}
+			else if (instruction == IRInstruction.CompareInteger)
+			{
+				CompareIntegerOperation(node);
 			}
 			else if (instruction == IRInstruction.Phi)
 			{
@@ -525,6 +532,53 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 
 			return true;
+		}
+
+		private bool? NullComparisionCheck(ConditionCode condition, VariableState operand1, VariableState operand2)
+		{
+			// not null check
+			if (condition == ConditionCode.Equal)
+			{
+				if (operand2.IsSingleConstant && operand2.ConstantSignedLongInteger == 0 && operand1.IsReferenceDefinedNotNull)
+				{
+					return false;
+				}
+
+				if (operand1.IsSingleConstant && operand1.ConstantSignedLongInteger == 0 && operand2.IsReferenceDefinedNotNull)
+				{
+					return false;
+				}
+			}
+			else if (condition == ConditionCode.UnsignedGreaterThan)
+			{
+				if (operand2.IsSingleConstant && operand2.ConstantSignedLongInteger == 0 && operand1.IsReferenceDefinedNotNull)
+				{
+					return false;
+				}
+			}
+
+			return null;
+		}
+
+		private void CompareIntegerOperation(InstructionNode node)
+		{
+			var result = GetVariableState(node.Result);
+
+			if (result.IsOverDefined)
+				return;
+
+			var operand1 = GetVariableState(node.Operand1);
+			var operand2 = GetVariableState(node.Operand2);
+
+			bool? compare = NullComparisionCheck(node.ConditionCode, operand1, operand2);
+
+			if (compare.HasValue)
+			{
+				UpdateToConstant(result, compare.Value ? 1u : 0u);
+				return;
+			}
+
+			IntegerOperation(node);
 		}
 
 		private void UpdateToConstant(VariableState variable, long value)
@@ -860,6 +914,18 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			var operand1 = GetVariableState(node.Operand1);
 			var operand2 = GetVariableState(node.Operand2);
+
+			var compareNull = NullComparisionCheck(node.ConditionCode, operand1, operand2);
+
+			if (compareNull.HasValue)
+			{
+				if (compareNull.Value)
+				{
+					Branch(node);
+				}
+
+				return !compareNull.Value;
+			}
 
 			if (operand1.IsOverDefined || operand2.IsOverDefined)
 			{

@@ -2,7 +2,7 @@
 
 namespace Mosa.UnitTest.Collection
 {
-	public static class OptimizationTest
+	public static class OptimizationTests
 	{
 		public static bool OptimizationTest1()
 		{
@@ -198,20 +198,6 @@ namespace Mosa.UnitTest.Collection
 			int q = z & 0xF;
 
 			return p >= 16 && q == 0;
-		}
-
-		public static bool NullTest1(int a, int b)
-		{
-			var o = new object();
-
-			if (o is null)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
 		}
 	}
 }
