@@ -3,10 +3,8 @@
 using CommandLine;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Trace.BuiltIn;
 using Mosa.Utility.Aot;
-using NDesk.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -64,7 +62,7 @@ namespace Mosa.Tool.Compiler
 			// always print header with version information
 			Console.WriteLine("MOSA AOT Compiler, Version {0}.{1} '{2}'", majorVersion, minorVersion, codeName);
 			Console.WriteLine("Copyright 2015 by the MOSA Project. Licensed under the New BSD License.");
-			Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
+			//Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
 			Console.WriteLine();
 			Console.WriteLine("Parsing options...");
 
@@ -79,7 +77,7 @@ namespace Mosa.Tool.Compiler
 
 				if (options.InputFiles.Count == 0)
 				{
-					throw new OptionException("No input file(s) specified.", string.Empty);
+					throw new Exception("No input file(s) specified.");
 				}
 
 				options.ApplyCompilerOptions(compiler);
@@ -95,15 +93,15 @@ namespace Mosa.Tool.Compiler
 
 				if (string.IsNullOrEmpty(compiler.CompilerOptions.OutputFile))
 				{
-					throw new OptionException("No output file specified.", "o");
+					throw new Exception("No output file specified.");
 				}
 
 				if (compiler.CompilerOptions.Architecture == null)
 				{
-					throw new OptionException("No Architecture specified.", "Architecture");
+					throw new Exception("No Architecture specified.");
 				}
 			}
-			catch (OptionException e)
+			catch (Exception e)
 			{
 				ShowError(e.Message);
 				return;
