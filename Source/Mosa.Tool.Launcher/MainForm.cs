@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using CommandLine;
 using MetroFramework.Forms;
 using Mosa.Compiler.Common;
 using Mosa.Utility.BootImage;
@@ -520,6 +521,23 @@ namespace Mosa.Tool.Launcher
 
 				item.Remove();
 			}
+		}
+
+		public void LoadArguments(string[] args)
+		{
+			Options = ParseOptions(args);
+		}
+
+		private static Options ParseOptions(string[] args)
+		{
+			ParserResult<Options> result = new Parser(config => config.HelpWriter = Console.Out).ParseArguments<Options>(args);
+
+			if (result.Tag == ParserResultType.NotParsed)
+			{
+				return new Options();
+			}
+
+			return ((Parsed<Options>)result).Value;
 		}
 	}
 }

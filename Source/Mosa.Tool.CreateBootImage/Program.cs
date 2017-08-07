@@ -1,10 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using CommandLine;
-using Mosa.Compiler.Common;
 using Mosa.Utility.BootImage;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace Mosa.Tool.CreateBootImage
@@ -68,9 +66,7 @@ namespace Mosa.Tool.CreateBootImage
 
 				if (bootImageOptions == null)
 				{
-					Console.WriteLine("Usage: CreateBootImage <boot.config file> <image name>");
-					Console.Error.WriteLine("ERROR: Invalid options");
-					return -1;
+					return -1; //Errors will be printed by the commandline library
 				}
 
 				bootImageOptions.DiskImageFileName = args[1];

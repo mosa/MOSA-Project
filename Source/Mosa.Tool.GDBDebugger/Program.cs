@@ -19,21 +19,9 @@ namespace Mosa.Tool.GDBDebugger
 
 			var main = new MainForm();
 
-			main.Options = ParseOptions(args);
+			main.LoadArguments(args);
 
 			Application.Run(main);
-		}
-
-		private static Options ParseOptions(string[] args)
-		{
-			ParserResult<Options> result = new Parser(config => config.HelpWriter = Console.Out).ParseArguments<Options>(args);
-
-			if (result.Tag == ParserResultType.NotParsed)
-			{
-				return new Options();
-			}
-
-			return ((Parsed<Options>)result).Value;
 		}
 	}
 }

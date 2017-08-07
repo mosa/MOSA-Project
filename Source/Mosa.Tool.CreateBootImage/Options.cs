@@ -1,8 +1,9 @@
-﻿using CommandLine;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using CommandLine;
 using Mosa.Compiler.Common;
 using Mosa.Utility.BootImage;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 

@@ -23,7 +23,7 @@ namespace Mosa.Tool.Disassembler.Intel
 				var options = ParseOptions(args);
 				if(options == null)
 				{
-					return -1;
+					return -1; //Commandline errors will be printed by the commandline lib
 				}
 
 				// Need a new instance of translator every time as they aren't thread safe

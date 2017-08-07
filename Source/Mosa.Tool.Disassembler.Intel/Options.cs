@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using CommandLine;
-using System;
 using Mosa.Compiler.Common;
 
 namespace Mosa.Tool.Disassembler.Intel
@@ -23,7 +22,7 @@ namespace Mosa.Tool.Disassembler.Intel
 		[Option('a', "address", Default = "0", Required = true)]
 		public string StartingAddressString { get; set; }
 
-		//TODO: Better way of converting hexadecimal to ulong?
+		//TODO: Better way of parsing these?
 		public ulong FileOffset
 		{
 			get { return FileOffsetString.ParseHexOrDecimal(); }

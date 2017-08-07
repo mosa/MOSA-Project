@@ -26,7 +26,7 @@ namespace Mosa.Tool.Explorer
 		[Option("no-sparse")]
 		public bool NoSparse { get; set; }
 
-		[Value(0, Max = 1)]
+		[Value(0)]
 		public IEnumerable<string> Files { get; set; }
 	}
 }

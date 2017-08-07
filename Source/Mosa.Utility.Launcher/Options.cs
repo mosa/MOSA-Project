@@ -11,24 +11,6 @@ namespace Mosa.Utility.Launcher
 {
 	public class Options
 	{
-		private string _sourceFile;
-		[Value(0)]
-		public string SourceFile
-		{
-			get { return _sourceFile; }
-			set
-			{
-				if (value.IndexOf(Path.DirectorySeparatorChar) >= 0)
-				{
-					_sourceFile = value;
-				}
-				else
-				{
-					_sourceFile = Path.Combine(Directory.GetCurrentDirectory(), value);
-				}
-			}
-		}
-
 		[Option("destination-dir")]
 		public string DestinationDirectory { get; set; }
 
@@ -59,7 +41,7 @@ namespace Mosa.Utility.Launcher
 			set { ExitOnLaunch = value; }
 		}
 
-		[Option("emulator", Default = EmulatorType.Qemu)]
+		[Option("emulator")]
 		public EmulatorType Emulator { get; set; }
 
 		[Option("qemu")]
@@ -80,7 +62,7 @@ namespace Mosa.Utility.Launcher
 			set { Emulator = EmulatorType.Bochs; }
 		}
 
-		[Option("image-format", Default = ImageFormat.IMG)]
+		[Option("image-format")]
 		public ImageFormat ImageFormat { get; set; }
 
 		[Option("vhd")]
@@ -166,7 +148,7 @@ namespace Mosa.Utility.Launcher
 		[Option("debuginfo", Default = false)]
 		public bool GenerateDebugFile { get; set; }
 
-		[Option("linker-format", Default = LinkerFormatType.Elf32)]
+		[Option("linker-format")]
 		public LinkerFormatType LinkerFormatType { get; set; }
 
 		[Option("elf32")]
@@ -181,7 +163,7 @@ namespace Mosa.Utility.Launcher
 			set { LinkerFormatType = LinkerFormatType.Elf32; }
 		}
 
-		[Option("boot-format", Default = BootFormat.Multiboot_0_7)]
+		[Option("boot-format")]
 		public BootFormat BootFormat { get; set; }
 
 		[Option("mb0.7")]
@@ -190,13 +172,13 @@ namespace Mosa.Utility.Launcher
 			set { BootFormat = BootFormat.Multiboot_0_7; }
 		}
 
-		[Option("platform", Default = PlatformType.X86)]
+		[Option("platform")]
 		public PlatformType PlatformType { get; set; }
 
-		[Option("file-system", Default = FileSystem.FAT16)]
+		[Option("file-system")]
 		public FileSystem FileSystem { get; set; }
 
-		[Option("debug-connection", Default = DebugConnectionOption.None)]
+		[Option("debug-connection")]
 		public DebugConnectionOption DebugConnectionOption { get; set; }
 
 		[Option("pipe")]
@@ -235,7 +217,7 @@ namespace Mosa.Utility.Launcher
 			set { UseMultipleThreadCompiler = false; }
 		}
 
-		[Option("bootloader", Default = BootLoader.Syslinux_3_72)]
+		[Option("bootloader")]
 		public BootLoader BootLoader { get; set; }
 
 		[Option("grub")]
@@ -378,10 +360,36 @@ namespace Mosa.Utility.Launcher
 			}
 		}
 
+		private string _sourceFile;
+		[Value(0)]
+		public string SourceFile
+		{
+			get { return _sourceFile; }
+			set
+			{
+				if (value.IndexOf(Path.DirectorySeparatorChar) >= 0)
+				{
+					_sourceFile = value;
+				}
+				else
+				{
+					_sourceFile = Path.Combine(Directory.GetCurrentDirectory(), value);
+				}
+			}
+		}
+
 		public Options()
 		{
 			IncludeFiles = new List<IncludeFile>();
 			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
+			BootLoader = BootLoader.Syslinux_3_72; //Can't use the Default in the attribute because it would overwrite other bootloader options
+			BootFormat = BootFormat.Multiboot_0_7;
+			DebugConnectionOption = DebugConnectionOption.None;
+			Emulator = EmulatorType.Qemu;
+			ImageFormat = ImageFormat.IMG;
+			LinkerFormatType = LinkerFormatType.Elf32;
+			PlatformType = PlatformType.X86;
+			FileSystem = FileSystem.FAT16;
 		}
 	}
 }
