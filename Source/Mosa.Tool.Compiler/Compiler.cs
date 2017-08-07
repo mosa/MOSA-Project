@@ -80,7 +80,7 @@ namespace Mosa.Tool.Compiler
 					throw new Exception("No input file(s) specified.");
 				}
 
-				options.ApplyCompilerOptions(compiler);
+				compiler.CompilerOptions = options.CompilerOptions;
 
 				// Process boot format:
 				// Boot format only matters if it's an executable

@@ -42,26 +42,26 @@ namespace Mosa.Tool.Compiler
 			}
 		}
 
-		[Option('b', "boot", HelpText = "Specify the bootable format of the produced binary [{mb0.7}].")]
-		public string BootFormat { get; set; }
+		[Option('b', "boot", HelpText = "Specify the bootable format of the produced binary [mb0.7].")]
+		public string BootFormat { set { CompilerOptions.BootStageFactory = GetBootStageFactory(value); } }
 
-		[Option('a', "architecture", HelpText = "Select one of the MOSA architectures to compile for [{x86|x64|ARMv6}].", Required = true)]
-		public string Architecture { get; set; }
+		[Option('a', "architecture", HelpText = "Select one of the MOSA architectures to compile for [x86|x64|ARMv6].", Required = true)]
+		public string Architecture { set { CompilerOptions.Architecture = SelectArchitecture(value); } }
 
-		[Option('f', "format", HelpText = "Select the format of the binary file to create [{ELF32|ELF64}].")]
-		public string LinkerFormat { get; set; }
+		[Option('f', "format", HelpText = "Select the format of the binary file to create [ELF32|ELF64].")]
+		public string LinkerFormat { set { CompilerOptions.LinkerFormatType = GetLinkerFactory(value); } }
 
 		[Option('o', "out", HelpText = "The name of the output file.", Required = true)]
-		public string OutputFile { get; set; }
+		public string OutputFile { set { CompilerOptions.OutputFile = value; } }
 
 		[Option("map", HelpText = "Generate a map file of the produced binary.")]
-		public string MapFile { get; set; }
+		public string MapFile { set { CompilerOptions.MapFile = value; } }
 
-		[Option("debug-info=", HelpText = "Generate a debug info {file} of the produced binary.")]
-		public string DebugInfoFile { get; set; }
+		[Option("debug-info=", HelpText = "Generate a debug info file of the produced binary.")]
+		public string DebugInfoFile { set { CompilerOptions.DebugFile = value; } }
 
 		[Option("sa", HelpText = "Performs static allocations at compile time.")]
-		public bool EnableStaticAllocation { get; set; }
+		public bool EnableStaticAllocation { set { CompilerOptions.EnableStaticAllocations = value; } }
 
 		[Option("enable-static-alloc", HelpText = "Performs static allocations at compile time.")]
 		public bool EnableStaticAllocationExtraOption
@@ -70,7 +70,7 @@ namespace Mosa.Tool.Compiler
 		}
 
 		[Option("ssa", HelpText = "Performs single static assignments at compile time.")]
-		public bool EnableSSA { get; set; }
+		public bool EnableSSA { set { CompilerOptions.EnableSSA = value; } }
 
 		[Option("enable-single-static-assignment-form", HelpText = "Performs single static assignments at compile time.")]
 		public bool EnableSSAExtraOption
@@ -79,7 +79,7 @@ namespace Mosa.Tool.Compiler
 		}
 
 		[Option("optimize-ir", HelpText = "Performs single static assignments optimizations.")]
-		public bool EnableIROptimizaion { get; set; }
+		public bool EnableIROptimizaion { set { CompilerOptions.EnableIROptimizations = value; } }
 
 		[Option("enable-ir-optimizations", HelpText = "Performs single static assignments optimizations.")]
 		public bool EnableIROptimizaionExtraOption
@@ -88,40 +88,24 @@ namespace Mosa.Tool.Compiler
 		}
 
 		[Option("emit-symbols", HelpText = "Emits the Symbol Table.")]
-		public bool EmitSymbols { get; set; }
+		public bool EmitSymbols { set { CompilerOptions.EmitSymbols = value; } }
 
 		[Option("emit-relocations", HelpText = "Emits the Relocation Table.")]
-		public bool EmitRelocations { get; set; }
+		public bool EmitRelocations { set { CompilerOptions.EmitRelocations = value; } }
 
 		[Option("x86-irq-methods", HelpText = "Emits x86 interrupt methods.")]
-		public bool EmitX86IRQMethods { get; set; }
+		public bool EmitX86IRQMethods { set { CompilerOptions.SetCustomOption("x86.irq-methods", value ? "true" : "false"); } }
 
 		[Option("base-address", HelpText = "Specify the base address.")]
-		public string BaseAddress { get; set; }
+		public string BaseAddress { set { CompilerOptions.BaseAddress = value.ParseHexOrDecimal(); } }
+
+		public CompilerOptions CompilerOptions
+		{ get; set; }
 
 		public Options()
 		{
 			InputFiles = new List<FileInfo>();
-		}
-
-		public void ApplyCompilerOptions(MosaCompiler compiler)
-		{
-			CompilerOptions cOptions = compiler.CompilerOptions;
-
-			cOptions.OutputFile = OutputFile;
-			cOptions.MapFile = MapFile;
-			cOptions.DebugFile = DebugInfoFile;
-			cOptions.EnableStaticAllocations = EnableStaticAllocation;
-			cOptions.EnableSSA = EnableSSA;
-			cOptions.EnableIROptimizations = EnableIROptimizaion;
-			cOptions.EmitSymbols = EmitSymbols;
-			cOptions.EmitRelocations = EmitRelocations;
-			cOptions.SetCustomOption("x86.irq-methods", EmitX86IRQMethods ? "true" : "false");
-			cOptions.BaseAddress = BaseAddress.ParseHexOrDecimal();
-
-			cOptions.BootStageFactory = GetBootStageFactory(BootFormat);
-			cOptions.Architecture = SelectArchitecture(Architecture);
-			cOptions.LinkerFormatType = GetLinkerFactory(LinkerFormat);
+			CompilerOptions = new CompilerOptions();
 		}
 
 		#region Internal Methods

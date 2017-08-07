@@ -323,7 +323,7 @@ namespace Mosa.Utility.Launcher
 
 		public List<IncludeFile> IncludeFiles { get; set; }
 
-		[Option("file", Separator = ',', HelpText = "A list of files which will be included in the output image file. Paths are separated by commas.")]
+		/*[Option("file", Separator = ',', HelpText = "A list of files which will be included in the output image file. Paths are separated by commas.")]
 		public IEnumerable<string> RawFileList
 		{
 			set
@@ -358,7 +358,7 @@ namespace Mosa.Utility.Launcher
 					}
 				}
 			}
-		}
+		}*/
 
 		private string _sourceFile;
 		[Value(0)]
