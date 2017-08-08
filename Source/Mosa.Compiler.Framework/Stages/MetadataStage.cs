@@ -244,7 +244,17 @@ namespace Mosa.Compiler.Framework.Stages
 				// 14. Number of Methods
 				writer1.Write(methodList.Count, TypeLayout.NativePointerSize);
 
-				// 15. Pointer to Method Definitions
+				// 15. Pointer to Methods
+				foreach (var method in methodList)
+				{
+					if (!method.IsAbstract)
+					{
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, SectionKind.Text, method.FullName, 0);
+					}
+					writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
+				}
+
+				// 16. Pointer to Method Definitions
 				foreach (var method in methodList)
 				{
 					// Create definition and get the symbol
@@ -257,7 +267,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				// Fill 11, 12, 13, 14 with zeros, 15 can be left out.
+				// Fill 11, 12, 13, 14 with zeros, 15 & 16 can be left out.
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize * 4);
 			}
 

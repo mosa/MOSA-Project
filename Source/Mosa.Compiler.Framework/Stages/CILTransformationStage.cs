@@ -270,12 +270,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (first.IsR)
 			{
 				var result = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareFloatR4 : IRInstruction.CompareFloatR8;
 
-				if (first.IsR4)
-					context.SetInstruction(IRInstruction.CompareFloatR4, cc, result, first, second);
-				else
-					context.SetInstruction(IRInstruction.CompareFloatR8, cc, result, first, second);
-
+				context.SetInstruction(instruction, cc, result, first, second);
 				context.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, result, Operand.CreateConstant(TypeSystem, 1));
 			}
 			else
@@ -293,15 +290,17 @@ namespace Mosa.Compiler.Framework.Stages
 		private void BinaryComparison(Context context)
 		{
 			var code = ConvertCondition((context.Instruction as BaseCILInstruction).OpCode);
+			var first = context.Operand1;
+			var second = context.Operand2;
+			var result = context.Result;
 
 			BaseInstruction instruction = IRInstruction.CompareInteger;
-			if (context.Operand1.IsR4)
+			if (first.IsR4)
 				instruction = IRInstruction.CompareFloatR4;
-			else if (context.Operand1.IsR8)
+			else if (first.IsR8)
 				instruction = IRInstruction.CompareFloatR8;
 
-			context.SetInstruction(instruction, code, context.Result, context.Operand1, context.Operand2);
-			context.SetInstruction(instruction, code, context.Result, context.Operand1, context.Operand2);
+			context.SetInstruction(instruction, code, result, first, second);
 		}
 
 		/// <summary>
@@ -495,13 +494,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Calli(Context context)
 		{
-			//fixme: this is untested
-			Debug.Assert(false);
+			//todo: not yet implemented
+			throw new NotImplementCompilerException();
 
-			var destinationOperand = context.GetOperand(context.OperandCount - 1);
-			context.OperandCount--;
-
-			ProcessInvokeInstruction(context, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
+			//var destinationOperand = context.GetOperand(context.OperandCount - 1);
+			//context.OperandCount--;
+			//ProcessInvokeInstruction(context, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
 		}
 
 		/// <summary>
@@ -584,21 +582,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (!method.DeclaringType.IsInterface)
 				{
-					// methodDefinitionOffset is as follows (slot * NativePointerSize) + (NativePointerSize * 14)
-					// We use 14 as that is the number of NativePointerSized fields until the start of methodDefinition pointers
-					int methodDefinitionOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 14);
-
 					// Same as above except for methodPointer
-					int methodPointerOffset = (NativePointerSize * 4);
+					int methodPointerOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 14);
 
 					// Get the TypeDef pointer
 					context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
-					// Get the MethodDef pointer
-					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodDefinition, typeDefinition, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
-
 					// Get the address of the method
-					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodPtr, typeDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 				}
 				else
 				{
@@ -656,7 +647,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.ReplaceInstructionOnly(IRInstruction.MoveInteger); // HACK!
 		}
 
-		private BaseInstruction ComputeExtensionTypeAndMask(MosaType type, ref uint mask)
+		private static BaseInstruction ComputeExtensionTypeAndMask(MosaType type, ref uint mask)
 		{
 			if (type.IsUI1)
 			{
@@ -787,20 +778,22 @@ namespace Mosa.Compiler.Framework.Stages
 		private MosaMethod GetMethodOrOverride(MosaType type, MosaMethod method)
 		{
 			MosaMethod implMethod = null;
+
 			if (type.Methods.Contains(method)
 				&& (implMethod = type.FindMethodBySignature(method.Name, method.Signature)) != null)
 			{
 				return implMethod;
 			}
+
 			if (method.DeclaringType.Module == TypeSystem.CorLib
 				&& (method.DeclaringType.Name.Equals("ValueType")
 					|| method.DeclaringType.Name.Equals("Object")
 					|| method.DeclaringType.Name.Equals("Enum"))
-				&& (implMethod = type.FindMethodBySignature(method.Name, method.Signature)) != null
-			)
+				&& (implMethod = type.FindMethodBySignature(method.Name, method.Signature)) != null)
 			{
 				return implMethod;
 			}
+
 			return method;
 		}
 
@@ -2176,9 +2169,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var fixedOffset = Operand.CreateConstant(TypeSystem, NativePointerSize * 3);
 			var arrayElement = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			var before = context.InsertBefore();
-
-			before.AppendInstruction(IRInstruction.AddSigned, arrayElement, array, fixedOffset);
+			context.InsertBefore().AppendInstruction(IRInstruction.AddSigned, arrayElement, array, fixedOffset);
 
 			return arrayElement;
 		}
@@ -2189,15 +2180,10 @@ namespace Mosa.Compiler.Framework.Stages
 			var invokeTarget = context.InvokeMethod;
 
 			// Skip recursive System.Object ctor calls.
-			if (currentMethod.DeclaringType.FullName == "System.Object"
+			return (currentMethod.DeclaringType.FullName == "System.Object"
 				&& currentMethod.Name == ".ctor"
 				&& invokeTarget.DeclaringType.FullName == "System.Object"
-				&& invokeTarget.Name == ".ctor")
-			{
-				return true;
-			}
-
-			return false;
+				&& invokeTarget.Name == ".ctor");
 		}
 
 		/// <summary>

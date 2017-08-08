@@ -32,7 +32,7 @@ shape = "record"
 ];
 
 "TypeDefinition" [
-label = "<f0>Type Definition|<f1>Pointer to Type Name|<f2>~Pointer to Custom Attributes|<f3>Type Code & Attributes|<f4>Type Size|<f5>Pointer to Assembly|<f6>~Pointer to Parent Type|<f7>~Pointer to Declaring Type|<f8>~Pointer to Element Type|<f9>~Pointer to Default Constructor Method|<f10>~Pointer to Properties Table|<f11>~Pointer to Fields Table|<f12>~Pointer to Interface Slot Table|<f13>~Pointer to Interface Bitmap|<f14>~Number of Methods|<f15>~Pointer to Method Definition 1|...|Pointer to Method Definition N"
+label = "<f0>Type Definition|<f1>Pointer to Type Name|<f2>~Pointer to Custom Attributes|<f3>Type Code & Attributes|<f4>Type Size|<f5>Pointer to Assembly|<f6>~Pointer to Parent Type|<f7>~Pointer to Declaring Type|<f8>~Pointer to Element Type|<f9>~Pointer to Default Constructor Method|<f10>~Pointer to Properties Table|<f11>~Pointer to Fields Table|<f12>~Pointer to Interface Slot Table|<f13>~Pointer to Interface Bitmap|<f14>~Number of Methods|<f15>Pointer to Method 1|...|Pointer to Method N|<f16>~Pointer to Method Definition 1|...|Pointer to Method Definition N"
 shape = "record"
 color = "blue"
 ];
@@ -194,7 +194,7 @@ id = 0
 id = 0
 ];
 
-"TypeDefinition":f15 -> "MethodDefinition":f0 [
+"TypeDefinition":f16 -> "MethodDefinition":f0 [
 id = 0
 color = "green"
 ];
