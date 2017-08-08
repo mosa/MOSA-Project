@@ -71,7 +71,7 @@ namespace Mosa.Platform.x86.Instructions
 				.Append3Bits(Bits.b011)                                         // 3:opcode
 				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
 				.ModRegRMSIBDisplacement(true, node.Operand1, node.Operand3, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendInteger(node.Operand3, node.Size)                        // 8/16/32:immediate
+				.AppendConditionalIntegerOfSize(!node.Operand3.IsLinkerResolved, node.Operand3, node.Size) // 8/16/32:immediate
 				.AppendConditionalPatchPlaceholder(node.Operand3.IsLinkerResolved, out patchOffset); // 32:memory
 
 			if (node.Operand3.IsLinkerResolved)
@@ -84,7 +84,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Operand1.IsConstant);
 			Debug.Assert(node.Operand2.IsResolvedConstant);
-			Debug.Assert(node.Operand3.IsConstant);
+			Debug.Assert(node.Operand3.IsResolvedConstant);
 
 			int patchOffset;
 
@@ -102,7 +102,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendConditionalDisplacement(!node.Operand1.IsLinkerResolved, node.Operand1)   // 32:displacement value
 
 				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out patchOffset)  // 32:memory
-				.AppendInteger(node.Operand3, node.Size);                       // 8/16/32:immediate
+				.AppendConditionalIntegerOfSize(true, node.Operand3, node.Size);                     // 8/16/32:immediate
 
 			if (node.Operand1.IsLinkerResolved && !node.Operand3.IsLinkerResolved)
 			{

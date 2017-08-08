@@ -375,7 +375,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.Nop);
 			ReplaceWithVmCall(context, vmCall);
 
-			context.SetOperand(1, GetRuntimeTypeHandle(type, context));
+			context.SetOperand(1, GetRuntimeTypeHandle(type));
 
 			if (vmCall == VmCall.Box)
 			{
@@ -474,7 +474,7 @@ namespace Mosa.Compiler.Framework.Stages
 					ReplaceWithVmCall(before, VmCall.Box);
 
 					// Populate the operands for the VmCall and result
-					before.SetOperand(1, GetRuntimeTypeHandle(type, before));
+					before.SetOperand(1, GetRuntimeTypeHandle(type));
 					before.SetOperand(2, context.Operand1);
 					before.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
 					before.OperandCount = 4;
@@ -558,7 +558,7 @@ namespace Mosa.Compiler.Framework.Stages
 						ReplaceWithVmCall(before, VmCall.Box);
 
 						// Populate the operands for the VmCall and result
-						before.SetOperand(1, GetRuntimeTypeHandle(elementType, before));
+						before.SetOperand(1, GetRuntimeTypeHandle(elementType));
 						before.SetOperand(2, context.Operand1);
 						before.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
 						before.OperandCount = 4;
@@ -804,13 +804,9 @@ namespace Mosa.Compiler.Framework.Stages
 			return method;
 		}
 
-		private Operand GetRuntimeTypeHandle(MosaType runtimeType, Context context)
+		private Operand GetRuntimeTypeHandle(MosaType runtimeType)
 		{
-			var typeDef = Operand.CreateUnmanagedSymbolPointer(TypeSystem, runtimeType.FullName + Metadata.TypeDefinition);
-			var runtimeTypeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
-			var before = context.InsertBefore();
-			before.SetInstruction(IRInstruction.MoveInteger, runtimeTypeHandle, typeDef);
-			return runtimeTypeHandle;
+			return Operand.CreateSymbol(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), runtimeType.FullName + Metadata.TypeDefinition);
 		}
 
 		private Operand GetRuntimeTypeHandle(MosaType runtimeType)
@@ -876,7 +872,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				ReplaceWithVmCall(context, VmCall.IsInstanceOfType);
 
-				context.SetOperand(1, GetRuntimeTypeHandle(classType, context));
+				context.SetOperand(1, GetRuntimeTypeHandle(classType));
 				context.SetOperand(2, reference);
 				context.OperandCount = 3;
 				context.ResultCount = 1;
@@ -1363,12 +1359,6 @@ namespace Mosa.Compiler.Framework.Stages
 			Architecture.GetTypeRequirements(TypeLayout, arrayType.ElementType, out int elementSize, out int alignment);
 
 			Debug.Assert(elementSize != 0);
-
-			//ReplaceWithVmCall(context, VmCall.AllocateArray);
-			//context.SetOperand(1, GetRuntimeTypeHandle(arrayType, context));
-			//context.SetOperand(2, Operand.CreateConstant(TypeSystem, elementSize));
-			//context.SetOperand(3, lengthOperand);
-			//context.OperandCount = 4;
 
 			var runtimeTypeHandle = GetRuntimeTypeHandle(arrayType);
 			var size = Operand.CreateConstant(TypeSystem, elementSize);
