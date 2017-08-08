@@ -244,7 +244,17 @@ namespace Mosa.Compiler.Framework.Stages
 				// 14. Number of Methods
 				writer1.Write(methodList.Count, TypeLayout.NativePointerSize);
 
-				// 15. Pointer to Method Definitions
+				// 15. Pointer to Methods
+				foreach (var method in methodList)
+				{
+					if (!method.IsAbstract)
+					{
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, SectionKind.Text, method.FullName, 0);
+					}
+					writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
+				}
+
+				// 16. Pointer to Method Definitions
 				foreach (var method in methodList)
 				{
 					// Create definition and get the symbol
@@ -257,7 +267,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				// Fill 11, 12, 13, 14 with zeros, 15 can be left out.
+				// Fill 11, 12, 13, 14 with zeros, 15 & 16 can be left out.
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize * 4);
 			}
 
@@ -446,8 +456,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					// Assign a memory slot to the static & initialize it, if there's initial data set
 					// Determine the size of the type & alignment requirements
-					int size, alignment;
-					Architecture.GetTypeRequirements(TypeLayout, field.FieldType, out size, out alignment);
+					Architecture.GetTypeRequirements(TypeLayout, field.FieldType, out int size, out int alignment);
 
 					size = TypeLayout.GetFieldSize(field);
 
@@ -726,7 +735,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private LinkerSymbol CreateCustomAttributeArgument(string symbolName, int count, string name, MosaCustomAttribute.Argument arg, bool isField)
 		{
-			string nameForSymbol = (name == null) ? count.ToString() : name;
+			string nameForSymbol = name ?? count.ToString();
 			nameForSymbol = symbolName + ":" + nameForSymbol;
 			var symbol = Linker.CreateSymbol(nameForSymbol + Metadata.CustomAttributeArgument, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(symbol.Stream, Architecture.Endianness);
@@ -805,7 +814,9 @@ namespace Mosa.Compiler.Framework.Stages
 						return TypeLayout.NativePointerSize;
 					}
 					else
+					{
 						throw new NotSupportedException();
+					}
 			}
 		}
 
@@ -895,7 +906,10 @@ namespace Mosa.Compiler.Framework.Stages
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 					}
 					else
+					{
 						throw new NotSupportedException();
+					}
+
 					break;
 			}
 		}
