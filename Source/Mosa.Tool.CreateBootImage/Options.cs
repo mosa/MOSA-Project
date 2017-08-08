@@ -102,7 +102,7 @@ namespace Mosa.Tool.CreateBootImage
 			get { return _options.VolumeLabel; }
 		}
 
-		[Option("file", Separator = ',', HelpText = "A list of files which will be included in the output image file. Paths are separated by commas.")]
+		[Option("file", Separator = ',', HelpText = "A list of files which will be included in the output image file.")]
 		public IEnumerable<string> RawFileList
 		{
 			set

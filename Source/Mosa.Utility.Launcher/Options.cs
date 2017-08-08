@@ -4,6 +4,7 @@ using CommandLine;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Utility.BootImage;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -323,42 +324,20 @@ namespace Mosa.Utility.Launcher
 
 		public List<IncludeFile> IncludeFiles { get; set; }
 
-		/*[Option("file", Separator = ',', HelpText = "A list of files which will be included in the output image file. Paths are separated by commas.")]
-		public IEnumerable<string> RawFileList
+		[Option("file", HelpText = "Path to a file which contains files to be included in the generated image file.")]
+		public string IncludeFilePath
 		{
 			set
 			{
-				IList<string> list = (IList<string>)value;
-
-				for (int x = 0; x < list.Count; x++)
+				if(!File.Exists(value))
 				{
-					string path = list[x];
-					if (Path.IsPathRooted(path))
-					{
-						if (x + 1 < list.Count) //Is there a next entry?
-						{
-							if (Path.IsPathRooted(list[x + 1]))
-							{
-								IncludeFiles.Add(new IncludeFile(path));
-							}
-							else //If the next is not rooted, it's the new name of the files
-							{
-								IncludeFiles.Add(new IncludeFile(path, list[++x]));
-							}
-						}
-						else
-						{
-							IncludeFiles.Add(new IncludeFile(path));
-						}
-					}
-					else
-					{
-						//TODO: Handle unexpected non rooted file paths.
-						throw new System.Exception("Unexpected file path \"" + path + "\"");
-					}
+					Console.WriteLine("File doesn't exist \"" + value + "\"");
+					return;
 				}
+
+				AppendIncludeFiles(value);
 			}
-		}*/
+		}
 
 		private string _sourceFile;
 		[Value(0)]
@@ -390,6 +369,41 @@ namespace Mosa.Utility.Launcher
 			LinkerFormatType = LinkerFormatType.Elf32;
 			PlatformType = PlatformType.X86;
 			FileSystem = FileSystem.FAT16;
+		}
+
+		private void AppendIncludeFiles(string file)
+		{
+			string line;
+			using (StreamReader reader = new StreamReader(file))
+			{
+				while(!reader.EndOfStream)
+				{
+					line = reader.ReadLine();
+
+					if (string.IsNullOrEmpty(line))
+						continue;
+
+					string[] parts = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+					if (parts.Length == 0)
+						continue;
+
+					if (!File.Exists(parts[0]))
+					{
+						Console.WriteLine("File not found \"" + parts[0] + "\"");
+						continue;
+					}
+
+					if (parts.Length > 1)
+					{
+						IncludeFiles.Add(new IncludeFile(parts[0], parts[1]));
+					}
+					else
+					{
+						IncludeFiles.Add(new IncludeFile(parts[0]));
+					}
+				}
+			}
 		}
 	}
 }
