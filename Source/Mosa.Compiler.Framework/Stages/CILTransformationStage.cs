@@ -2180,10 +2180,10 @@ namespace Mosa.Compiler.Framework.Stages
 			var invokeTarget = context.InvokeMethod;
 
 			// Skip recursive System.Object ctor calls.
-			return (currentMethod.DeclaringType.FullName == "System.Object"
+			return currentMethod.DeclaringType.FullName == "System.Object"
 				&& currentMethod.Name == ".ctor"
 				&& invokeTarget.DeclaringType.FullName == "System.Object"
-				&& invokeTarget.Name == ".ctor");
+				&& invokeTarget.Name == ".ctor";
 		}
 
 		/// <summary>

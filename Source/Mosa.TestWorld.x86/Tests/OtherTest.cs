@@ -35,11 +35,11 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(ForeachU1Test);
 		}
 
-		private static uint StaticValue = 0x200000;
+		private const uint StaticValue = 0x200000;
 
 		public static bool OtherTest1()
 		{
-			uint x = StaticValue;
+			const uint x = StaticValue;
 
 			return x == 0x200000;
 		}
@@ -74,11 +74,11 @@ namespace Mosa.TestWorld.x86.Tests
 
 			foreach (var item in list)
 			{
-				sum = sum + item;
+				sum += item;
 				foreach (var nestedItem in nestedList)
 				{
-					nestedSum = nestedSum + nestedItem;
-					nestedSum = nestedSum / ++nestedCount;
+					nestedSum += nestedItem;
+					nestedSum /= ++nestedCount;
 				}
 			}
 
@@ -92,11 +92,11 @@ namespace Mosa.TestWorld.x86.Tests
 
 			foreach (var item in list)
 			{
-				sum = sum + item;
+				sum += item;
 
 				foreach (var nested in list)
 				{
-					sum = sum + nested;
+					sum += nested;
 				}
 			}
 
@@ -131,7 +131,7 @@ namespace Mosa.TestWorld.x86.Tests
 			try { t1 = new Pair(5, 10); }
 			catch { }
 
-			return (t1.A == 5 && t1.B == 10);
+			return t1.A == 5 && t1.B == 10;
 		}
 
 		public static bool StructNotBoxed()
@@ -161,7 +161,7 @@ namespace Mosa.TestWorld.x86.Tests
 			}
 
 			Pair found = FindPair(PairList);
-			return (found.A == 90 && found.B == 180);
+			return found.A == 90 && found.B == 180;
 		}
 
 		private static Pair FindPair(LinkedList<Pair> PairList)
@@ -176,7 +176,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public static bool ConditionalBug()
 		{
-			uint address = 0x3000;
+			const uint address = 0x3000;
 			Mosa.Runtime.x86.Native.Set8(address, 81);
 			var num = Mosa.Runtime.x86.Native.Get8(address);
 
@@ -196,16 +196,16 @@ namespace Mosa.TestWorld.x86.Tests
 			return PointerBugClass.Test2();
 		}
 
-		private static float f1 = 1.232145E+10f;
-		private static float f2 = 2f;
+		private const float f1 = 1.232145E+10f;
+		private const float f2 = 2f;
 
 		public static bool RemR4()
 		{
 			return (f1 % f2) == 0f;
 		}
 
-		private static double d1 = 1.232145E+10d;
-		private static double d2 = 15d;
+		private const double d1 = 1.232145E+10d;
+		private const double d2 = 15d;
 
 		public static bool RemR8()
 		{
@@ -216,14 +216,14 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			bool? v1 = true;
 
-			return (v1 == true);
+			return v1 == true;
 		}
 
 		public static bool NullableTest2()
 		{
 			bool? v1 = null;
 
-			return (v1 == null);
+			return v1 == null;
 		}
 
 		public static bool NullableTest3()
@@ -248,7 +248,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 			long? v3 = v1 ?? v2;
 
-			return (v3 == 32);
+			return v3 == 32;
 		}
 
 		public static bool NullableTest6()
@@ -280,7 +280,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 		unsafe public static class PointerBugClass
 		{
-			private static uint pageDirectoryAddress = 0x1000;
+			private const uint pageDirectoryAddress = 0x1000;
 			private static PageDirectoryEntry* pageDirectoryEntries;
 
 			public static bool Test()
@@ -309,7 +309,7 @@ namespace Mosa.TestWorld.x86.Tests
 			unsafe public struct PageDirectoryEntry
 			{
 				[FieldOffset(0)]
-				private uint data;
+				private readonly uint data;
 
 				public uint AddressOfThis
 				{

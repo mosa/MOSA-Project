@@ -456,8 +456,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					// Assign a memory slot to the static & initialize it, if there's initial data set
 					// Determine the size of the type & alignment requirements
-					int size, alignment;
-					Architecture.GetTypeRequirements(TypeLayout, field.FieldType, out size, out alignment);
+					Architecture.GetTypeRequirements(TypeLayout, field.FieldType, out int size, out int alignment);
 
 					size = TypeLayout.GetFieldSize(field);
 
@@ -736,7 +735,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private LinkerSymbol CreateCustomAttributeArgument(string symbolName, int count, string name, MosaCustomAttribute.Argument arg, bool isField)
 		{
-			string nameForSymbol = (name == null) ? count.ToString() : name;
+			string nameForSymbol = name ?? count.ToString();
 			nameForSymbol = symbolName + ":" + nameForSymbol;
 			var symbol = Linker.CreateSymbol(nameForSymbol + Metadata.CustomAttributeArgument, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(symbol.Stream, Architecture.Endianness);
@@ -815,7 +814,9 @@ namespace Mosa.Compiler.Framework.Stages
 						return TypeLayout.NativePointerSize;
 					}
 					else
+					{
 						throw new NotSupportedException();
+					}
 			}
 		}
 
@@ -905,7 +906,10 @@ namespace Mosa.Compiler.Framework.Stages
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 					}
 					else
+					{
 						throw new NotSupportedException();
+					}
+
 					break;
 			}
 		}
