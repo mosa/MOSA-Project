@@ -115,14 +115,14 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Setups the specified compiler.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		void IMethodCompilerStage.Initialize(BaseMethodCompiler compiler)
+		/// <param name="methodCompiler">The compiler.</param>
+		void IMethodCompilerStage.Initialize(BaseMethodCompiler methodCompiler)
 		{
-			MethodCompiler = compiler;
-			BasicBlocks = compiler.BasicBlocks;
-			Architecture = compiler.Architecture;
-			TypeSystem = compiler.TypeSystem;
-			TypeLayout = compiler.TypeLayout;
+			MethodCompiler = methodCompiler;
+			BasicBlocks = methodCompiler.BasicBlocks;
+			Architecture = methodCompiler.Architecture;
+			TypeSystem = methodCompiler.TypeSystem;
+			TypeLayout = methodCompiler.TypeLayout;
 			CallingConvention = Architecture.CallingConvention;
 			NativePointerSize = Architecture.NativePointerSize;
 			NativeAlignment = Architecture.NativeAlignment;
@@ -594,6 +594,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Dumps this instance.
 		/// </summary>
+		/// <param name="before">if set to <c>true</c> [before].</param>
 		protected void Dump(bool before)
 		{
 			Debug.WriteLine(string.Empty);
@@ -603,9 +604,15 @@ namespace Mosa.Compiler.Framework
 			Debug.WriteLine(string.Empty);
 
 			for (int index = 0; index < BasicBlocks.Count; index++)
-				for (Context ctx = new Context(BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+			{
+				for (var ctx = new Context(BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
+				{
 					if (!ctx.IsEmpty)
+					{
 						Debug.WriteLine(ctx.ToString());
+					}
+				}
+			}
 		}
 
 		#region Helpers
