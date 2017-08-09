@@ -577,7 +577,6 @@ namespace Mosa.Compiler.Framework.Stages
 				var thisPtr = context.Operand1;
 
 				var typeDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-				var methodDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 				var methodPtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 				if (!method.DeclaringType.IsInterface)
@@ -593,6 +592,8 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else
 				{
+					var methodDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+
 					// Offset for InterfaceSlotTable in TypeDef
 					int interfaceSlotTableOffset = (NativePointerSize * 11);
 
