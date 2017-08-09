@@ -28,6 +28,9 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.progressBar1 = new MetroFramework.Controls.MetroProgressBar();
@@ -116,12 +119,12 @@
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.tabFiles = new System.Windows.Forms.TabPage();
 			this.panelAdditionalFiles = new System.Windows.Forms.Panel();
-			this.additionalFilesList = new Mosa.Tool.Launcher.AdditionalFilesListControl();
-			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-			this.btnAddFiles = new MetroFramework.Controls.MetroButton();
 			this.benRemoveFiles = new MetroFramework.Controls.MetroButton();
-			this.colVPath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.colSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+			this.btnAddFiles = new MetroFramework.Controls.MetroButton();
+			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+			this.additionalFilesList = new MetroFramework.Controls.MetroGrid();
+			this.colPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.colSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.tbApplicationLocations.SuspendLayout();
 			this.tabOptions.SuspendLayout();
 			this.groupBox12.SuspendLayout();
@@ -147,6 +150,7 @@
 			this.tabCounters.SuspendLayout();
 			this.tabFiles.SuspendLayout();
 			this.panelAdditionalFiles.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.additionalFilesList)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// openFileDialog1
@@ -1336,50 +1340,14 @@
 			// 
 			// panelAdditionalFiles
 			// 
+			this.panelAdditionalFiles.Controls.Add(this.additionalFilesList);
 			this.panelAdditionalFiles.Controls.Add(this.benRemoveFiles);
 			this.panelAdditionalFiles.Controls.Add(this.btnAddFiles);
-			this.panelAdditionalFiles.Controls.Add(this.additionalFilesList);
 			this.panelAdditionalFiles.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panelAdditionalFiles.Location = new System.Drawing.Point(0, 0);
 			this.panelAdditionalFiles.Name = "panelAdditionalFiles";
 			this.panelAdditionalFiles.Size = new System.Drawing.Size(653, 412);
 			this.panelAdditionalFiles.TabIndex = 23;
-			// 
-			// additionalFilesList
-			// 
-			this.additionalFilesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.additionalFilesList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.colVPath,
-            this.colSize});
-			this.additionalFilesList.Font = new System.Drawing.Font("Segoe UI", 12F);
-			this.additionalFilesList.FullRowSelect = true;
-			this.additionalFilesList.Location = new System.Drawing.Point(3, 3);
-			this.additionalFilesList.Name = "additionalFilesList";
-			this.additionalFilesList.OwnerDraw = true;
-			this.additionalFilesList.Size = new System.Drawing.Size(616, 406);
-			this.additionalFilesList.TabIndex = 23;
-			this.additionalFilesList.UseCompatibleStateImageBehavior = false;
-			this.additionalFilesList.UseSelectable = true;
-			this.additionalFilesList.View = System.Windows.Forms.View.Details;
-			// 
-			// openFileDialog2
-			// 
-			this.openFileDialog2.DefaultExt = "*.exe";
-			this.openFileDialog2.Filter = "Executable|*.exe";
-			this.openFileDialog2.Title = "Select Assembly";
-			// 
-			// btnAddFiles
-			// 
-			this.btnAddFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnAddFiles.Location = new System.Drawing.Point(625, 353);
-			this.btnAddFiles.Name = "btnAddFiles";
-			this.btnAddFiles.Size = new System.Drawing.Size(25, 25);
-			this.btnAddFiles.TabIndex = 29;
-			this.btnAddFiles.Text = "+";
-			this.btnAddFiles.UseSelectable = true;
-			this.btnAddFiles.Click += new System.EventHandler(this.btnAddFiles_Click);
 			// 
 			// benRemoveFiles
 			// 
@@ -1392,15 +1360,86 @@
 			this.benRemoveFiles.UseSelectable = true;
 			this.benRemoveFiles.Click += new System.EventHandler(this.benRemoveFiles_Click);
 			// 
-			// colVPath
+			// btnAddFiles
 			// 
-			this.colVPath.Text = "Virtual path";
-			this.colVPath.Width = 400;
+			this.btnAddFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnAddFiles.Location = new System.Drawing.Point(625, 353);
+			this.btnAddFiles.Name = "btnAddFiles";
+			this.btnAddFiles.Size = new System.Drawing.Size(25, 25);
+			this.btnAddFiles.TabIndex = 29;
+			this.btnAddFiles.Text = "+";
+			this.btnAddFiles.UseSelectable = true;
+			this.btnAddFiles.Click += new System.EventHandler(this.btnAddFiles_Click);
+			// 
+			// openFileDialog2
+			// 
+			this.openFileDialog2.DefaultExt = "*.exe";
+			this.openFileDialog2.Filter = "Executable|*.exe";
+			this.openFileDialog2.Title = "Select Assembly";
+			// 
+			// additionalFilesList
+			// 
+			this.additionalFilesList.AllowUserToAddRows = false;
+			this.additionalFilesList.AllowUserToDeleteRows = false;
+			this.additionalFilesList.AllowUserToResizeRows = false;
+			this.additionalFilesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.additionalFilesList.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+			this.additionalFilesList.BorderStyle = System.Windows.Forms.BorderStyle.None;
+			this.additionalFilesList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+			this.additionalFilesList.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+			dataGridViewCellStyle1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+			dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
+			dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.additionalFilesList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+			this.additionalFilesList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.additionalFilesList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colPath,
+            this.colSize});
+			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+			dataGridViewCellStyle2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(136)))), ((int)(((byte)(136)))), ((int)(((byte)(136)))));
+			dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
+			dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+			this.additionalFilesList.DefaultCellStyle = dataGridViewCellStyle2;
+			this.additionalFilesList.EnableHeadersVisualStyles = false;
+			this.additionalFilesList.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+			this.additionalFilesList.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+			this.additionalFilesList.Location = new System.Drawing.Point(3, 3);
+			this.additionalFilesList.Name = "additionalFilesList";
+			this.additionalFilesList.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+			dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+			dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(174)))), ((int)(((byte)(219)))));
+			dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+			dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+			dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(198)))), ((int)(((byte)(247)))));
+			dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(17)))), ((int)(((byte)(17)))));
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.additionalFilesList.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
+			this.additionalFilesList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
+			this.additionalFilesList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+			this.additionalFilesList.Size = new System.Drawing.Size(616, 406);
+			this.additionalFilesList.TabIndex = 31;
+			// 
+			// colPath
+			// 
+			this.colPath.HeaderText = "Virtual path";
+			this.colPath.Name = "colPath";
+			this.colPath.Width = 400;
 			// 
 			// colSize
 			// 
-			this.colSize.Text = "Size";
-			this.colSize.Width = 120;
+			this.colSize.HeaderText = "Size";
+			this.colSize.Name = "colSize";
+			this.colSize.ReadOnly = true;
+			this.colSize.Width = 150;
 			// 
 			// MainForm
 			// 
@@ -1460,6 +1499,7 @@
 			this.tabCounters.ResumeLayout(false);
 			this.tabFiles.ResumeLayout(false);
 			this.panelAdditionalFiles.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.additionalFilesList)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -1553,11 +1593,11 @@
 		private MetroFramework.Controls.MetroCheckBox cbMosaDebugger;
 		private MetroFramework.Controls.MetroCheckBox cbLaunchMosaDebugger;
 		private System.Windows.Forms.TabPage tabFiles;
-		private AdditionalFilesListControl additionalFilesList;
 		private System.Windows.Forms.Panel panelAdditionalFiles;
 		private MetroFramework.Controls.MetroButton benRemoveFiles;
 		private MetroFramework.Controls.MetroButton btnAddFiles;
-		private System.Windows.Forms.ColumnHeader colVPath;
-		private System.Windows.Forms.ColumnHeader colSize;
+		private MetroFramework.Controls.MetroGrid additionalFilesList;
+		private System.Windows.Forms.DataGridViewTextBoxColumn colPath;
+		private System.Windows.Forms.DataGridViewTextBoxColumn colSize;
 	}
 }

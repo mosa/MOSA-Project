@@ -480,23 +480,19 @@ namespace Mosa.Tool.Launcher
 
 		private void AddAdditionalFile(IncludeFile file)
 		{
-			ListViewItem item = new ListViewItem();
-			item.Tag = file;
-			item.Text = file.Filename;
+			int idx = additionalFilesList.Rows.Add(file.Filename, file.Content.Length.ToString());
 
-			item.SubItems.Add(file.Content.Length.ToString());
-
-			additionalFilesList.Items.Add(item);
+			additionalFilesList.Rows[idx].Tag = file;
 		}
 
 		private void btnAddFiles_Click(object sender, EventArgs e)
 		{
-			using(OpenFileDialog open = new OpenFileDialog())
+			using (OpenFileDialog open = new OpenFileDialog())
 			{
 				open.Multiselect = true;
 				open.Filter = "All files (*.*)|*.*";
 
-				if(open.ShowDialog(this) == DialogResult.OK)
+				if (open.ShowDialog(this) == DialogResult.OK)
 				{
 					foreach (string file in open.FileNames)
 					{
@@ -512,14 +508,14 @@ namespace Mosa.Tool.Launcher
 
 		private void benRemoveFiles_Click(object sender, EventArgs e)
 		{
-			if (additionalFilesList.SelectedItems.Count == 0)
+			if (additionalFilesList.SelectedRows.Count == 0)
 				return;
 
-			foreach (ListViewItem item in additionalFilesList.SelectedItems)
+			foreach (DataGridViewRow item in additionalFilesList.SelectedRows)
 			{
 				Options.IncludeFiles.Remove((IncludeFile)item.Tag);
 
-				item.Remove();
+				additionalFilesList.Rows.RemoveAt(item.Index);
 			}
 		}
 
