@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			private List<ulong> constants;
 
-			public int ConstantCount { get { return constants == null ? 0 : constants.Count; } }
+			public int ConstantCount { get { return constants?.Count ?? 0; } }
 
 			public List<ulong> Constants { get { return constants; } }
 

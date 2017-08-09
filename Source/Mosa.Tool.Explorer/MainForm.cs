@@ -17,22 +17,22 @@ namespace Mosa.Tool.Explorer
 {
 	public partial class MainForm : Form, ITraceListener
 	{
-		private CodeForm form = new CodeForm();
+		private readonly CodeForm form = new CodeForm();
 
 		private DateTime compileStartTime;
 
-		private MosaCompiler Compiler = new MosaCompiler();
+		public readonly MosaCompiler Compiler = new MosaCompiler();
 
-		private enum CompileStage { Nothing, Loaded, PreCompiled, Compiled };
+		private enum CompileStage { Nothing, Loaded, PreCompiled, Compiled }
 
 		private CompileStage Stage = CompileStage.Nothing;
 
-		private StringBuilder compileLog = new StringBuilder();
-		private StringBuilder counterLog = new StringBuilder();
-		private StringBuilder errorLog = new StringBuilder();
-		private StringBuilder exceptionLog = new StringBuilder();
+		private readonly StringBuilder compileLog = new StringBuilder();
+		private readonly StringBuilder counterLog = new StringBuilder();
+		private readonly StringBuilder errorLog = new StringBuilder();
+		private readonly StringBuilder exceptionLog = new StringBuilder();
 
-		private MethodStore methodStore = new MethodStore();
+		private readonly MethodStore methodStore = new MethodStore();
 
 		public MainForm()
 		{
@@ -59,12 +59,12 @@ namespace Mosa.Tool.Explorer
 			SetStatus("Ready!");
 		}
 
-		private void openToolStripMenuItem_Click(object sender, EventArgs e)
+		private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			OpenFile();
 		}
 
-		private void toolStripButton1_Click(object sender, EventArgs e)
+		private void ToolStripButton1_Click(object sender, EventArgs e)
 		{
 			OpenFile();
 		}
@@ -124,22 +124,22 @@ namespace Mosa.Tool.Explorer
 			TypeSystemTree.UpdateTree(treeView, Compiler.TypeSystem, Compiler.TypeLayout, showSizes.Checked);
 		}
 
-		private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+		private void QuitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Application.Exit();
 		}
 
-		private void showTokenValues_Click(object sender, EventArgs e)
+		private void ShowTokenValues_Click(object sender, EventArgs e)
 		{
 			UpdateTree();
 		}
 
-		private void showSizes_Click(object sender, EventArgs e)
+		private void ShowSizes_Click(object sender, EventArgs e)
 		{
 			UpdateTree();
 		}
 
-		private void SubmitTraceEventGUI(CompilerEvent compilerStage, string info, int threadID)
+		private void SubmitTraceEventGUI(CompilerEvent compilerStage, string info)
 		{
 			if (compilerStage != CompilerEvent.DebugInfo)
 			{
@@ -148,7 +148,7 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private object compilerStageLock = new object();
+		private readonly object compilerStageLock = new object();
 
 		private void SubmitTraceEvent(CompilerEvent compilerStage, string message, int threadID)
 		{
@@ -156,21 +156,21 @@ namespace Mosa.Tool.Explorer
 			{
 				if (compilerStage == CompilerEvent.Error)
 				{
-					errorLog.AppendLine(compilerStage.ToText() + ": " + message);
-					compileLog.AppendLine(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " [" + threadID.ToString() + "] " + compilerStage.ToText() + ": " + message);
+					errorLog.Append(compilerStage.ToText()).Append(": ").AppendLine(message);
+					compileLog.AppendFormat("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds).Append(" [").Append(threadID.ToString()).Append("] ").Append(compilerStage.ToText()).Append(": ").AppendLine(message);
 				}
 				if (compilerStage == CompilerEvent.Exception)
 				{
-					exceptionLog.AppendLine(compilerStage.ToText() + ": " + message);
-					compileLog.AppendLine(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " [" + threadID.ToString() + "] " + compilerStage.ToText() + ": " + message);
+					var stringBuilder = exceptionLog.Append(compilerStage.ToText()).Append(": ").AppendLine(message);
+					var stringBuilder2 = compileLog.AppendFormat("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds).Append(" [").Append(threadID.ToString()).Append("] ").Append(compilerStage.ToText()).Append(": ").AppendLine(message);
 				}
 				else if (compilerStage == CompilerEvent.Counter)
 				{
-					counterLog.AppendLine(compilerStage.ToText() + ": " + message);
+					counterLog.Append(compilerStage.ToText()).Append(": ").AppendLine(message);
 				}
 				else
 				{
-					compileLog.AppendLine(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " [" + threadID.ToString() + "] " + compilerStage.ToText() + ": " + message);
+					compileLog.AppendFormat("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds).Append(" [").Append(threadID.ToString()).Append("] ").Append(compilerStage.ToText()).Append(": ").AppendLine(message);
 				}
 			}
 		}
@@ -234,10 +234,7 @@ namespace Mosa.Tool.Explorer
 
 		private void OnCompileCompleted()
 		{
-			MethodInvoker call = delegate ()
-			{
-				CompileCompleted();
-			};
+			MethodInvoker call = CompileCompleted;
 
 			Invoke(call);
 		}
@@ -270,7 +267,7 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private void nowToolStripMenuItem_Click(object sender, EventArgs e)
+		private void NowToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Compile();
 		}
@@ -482,7 +479,7 @@ namespace Mosa.Tool.Explorer
 			rbDebugResult.Text = CreateText(lines);
 		}
 
-		private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
+		private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
 			tbResult.Text = string.Empty;
 
@@ -504,7 +501,7 @@ namespace Mosa.Tool.Explorer
 			UpdateCounters();
 		}
 
-		private void cbStages_SelectedIndexChanged(object sender, EventArgs e)
+		private void CbStages_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			var previousItemLabel = cbLabels.SelectedItem;
 
@@ -515,20 +512,20 @@ namespace Mosa.Tool.Explorer
 			else
 				cbLabels.SelectedIndex = 0;
 
-			cbLabels_SelectedIndexChanged(null, null);
+			CbLabels_SelectedIndexChanged(null, null);
 		}
 
-		private void cbDebugStages_SelectedIndexChanged(object sender, EventArgs e)
+		private void CbDebugStages_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			UpdateDebugResults();
 		}
 
-		private void snippetToolStripMenuItem_Click(object sender, EventArgs e)
+		private void SnippetToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			ShowCodeForm();
 		}
 
-		private void toolStripButton2_Click(object sender, EventArgs e)
+		private void ToolStripButton2_Click(object sender, EventArgs e)
 		{
 			ShowCodeForm();
 		}
@@ -565,12 +562,12 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private void toolStripButton3_Click(object sender, EventArgs e)
+		private void ToolStripButton3_Click(object sender, EventArgs e)
 		{
 			Compile();
 		}
 
-		private void cbLabels_SelectedIndexChanged(object sender, EventArgs e)
+		private void CbLabels_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			UpdateResults();
 		}
@@ -590,7 +587,7 @@ namespace Mosa.Tool.Explorer
 			return result.ToString();
 		}
 
-		private void toolStripButton4_Click(object sender, EventArgs e)
+		private void ToolStripButton4_Click(object sender, EventArgs e)
 		{
 			Compile();
 		}
@@ -601,24 +598,18 @@ namespace Mosa.Tool.Explorer
 			toolStripProgressBar1.Value = completedMethods;
 		}
 
-		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string message, int threadID)
+		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
-			SubmitTraceEvent(compilerStage, message, threadID);
+			SubmitTraceEvent(compilerEvent, message, threadID);
 
-			MethodInvoker call = delegate ()
-			{
-				SubmitTraceEventGUI(compilerStage, message, threadID);
-			};
+			MethodInvoker call = () => SubmitTraceEventGUI(compilerEvent, message);
 
 			Invoke(call);
 		}
 
 		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
 		{
-			MethodInvoker call = delegate ()
-			{
-				SubmitMethodStatus(totalMethods, completedMethods);
-			};
+			MethodInvoker call = () => SubmitMethodStatus(totalMethods, completedMethods);
 
 			Invoke(call);
 		}
@@ -663,7 +654,7 @@ namespace Mosa.Tool.Explorer
 						tbResult.AppendText("======================\n");
 						foreach (CvSymbol symbol in reader.GlobalSymbols)
 						{
-							tbResult.AppendText(symbol.ToString() + "\n");
+							tbResult.AppendText(symbol + "\n");
 						}
 
 						tbResult.AppendText("Types:\n");
@@ -674,7 +665,7 @@ namespace Mosa.Tool.Explorer
 							tbResult.AppendText("Symbols:\n");
 							foreach (CvSymbol symbol in type.Symbols)
 							{
-								tbResult.AppendText("\t" + symbol.ToString() + "\n");
+								tbResult.AppendText("\t" + symbol + "\n");
 							}
 
 							tbResult.AppendText("Lines:\n");
@@ -703,7 +694,7 @@ namespace Mosa.Tool.Explorer
 
 				while (true)
 				{
-					cbStages_SelectedIndexChanged(null, null);
+					CbStages_SelectedIndexChanged(null, null);
 
 					string stage = GetCurrentStage();
 					var result = tbResult.Text.Replace("\n", "\r\n");
@@ -720,7 +711,7 @@ namespace Mosa.Tool.Explorer
 
 				while (true)
 				{
-					cbDebugStages_SelectedIndexChanged(null, null);
+					CbDebugStages_SelectedIndexChanged(null, null);
 
 					string stage = GetCurrentDebugStage();
 					var result = rbDebugResult.Text.Replace("\n", "\r\n");
@@ -735,7 +726,7 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private void cbPlatform_SelectedIndexChanged(object sender, EventArgs e)
+		private void CbPlatform_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			//
 		}
