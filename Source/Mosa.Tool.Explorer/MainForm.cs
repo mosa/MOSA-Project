@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using CommandLine;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
@@ -77,31 +78,46 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
+		private Options ParseOptions(string[] args)
+		{
+			ParserResult<Options> result = new Parser(config => config.HelpWriter = Console.Out).ParseArguments<Options>(args);
+
+			if (result.Tag == ParserResultType.NotParsed)
+			{
+				return null;
+			}
+
+			return ((Parsed<Options>)result).Value;
+		}
+
 		public void LoadArguments(string[] args)
 		{
-			for (int i = 0; i < args.Length; i++)
+			Options options = ParseOptions(args);
+			if (options == null)
+				return;
+
+			if (options.Inline)
+				cbEnableInlinedMethods.Checked = true;
+			if (options.InlineOff || options.ThreadingOff)
+				cbEnableInlinedMethods.Checked = false;
+
+			cbEnableBinaryCodeGeneration.Checked = !options.NoCode;
+			cbEnableSSA.Checked = !options.NoSSA;
+			cbEnableOptimizations.Checked = !options.NoIROptimizations;
+			cbEnableSparseConditionalConstantPropagation.Checked = !options.NoSparse;
+
+			IList<string> files = (IList<string>)options.Files;
+			if(files.Count == 1)
 			{
-				var arg = args[i];
+				string file = files[0];
 
-				switch (arg.ToLower())
+				if (file.IndexOf(Path.DirectorySeparatorChar) >= 0)
 				{
-					case "-inline": cbEnableInlinedMethods.Checked = true; continue;
-					case "-inline-off": cbEnableInlinedMethods.Checked = false; continue;
-					case "-threading-off": cbEnableInlinedMethods.Checked = false; continue;
-					case "-no-code": cbEnableBinaryCodeGeneration.Checked = false; continue;
-					case "-no-ssa": cbEnableSSA.Checked = false; continue;
-					case "-no-ir-optimizations": cbEnableOptimizations.Checked = false; continue;
-					case "-no-sparse": cbEnableSparseConditionalConstantPropagation.Checked = false; continue;
-					default: break;
-				}
-
-				if (arg.IndexOf(Path.DirectorySeparatorChar) >= 0)
-				{
-					LoadAssembly(arg);
+					LoadAssembly(file);
 				}
 				else
 				{
-					LoadAssembly(Path.Combine(Directory.GetCurrentDirectory(), arg));
+					LoadAssembly(Path.Combine(Directory.GetCurrentDirectory(), file));
 				}
 			}
 		}

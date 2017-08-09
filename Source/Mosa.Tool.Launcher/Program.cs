@@ -18,7 +18,7 @@ namespace Mosa.Tool.Launcher
 
 			var main = new MainForm();
 
-			main.Options.LoadArguments(args);
+			main.LoadArguments(args);
 
 			Application.Run(main);
 		}

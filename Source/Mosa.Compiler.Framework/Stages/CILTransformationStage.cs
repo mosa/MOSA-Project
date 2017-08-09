@@ -803,6 +803,11 @@ namespace Mosa.Compiler.Framework.Stages
 			return Operand.CreateSymbol(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), runtimeType.FullName + Metadata.TypeDefinition);
 		}
 
+		private Operand GetRuntimeTypeHandle(MosaType runtimeType)
+		{
+			return Operand.CreateSymbol(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), runtimeType.FullName + Metadata.TypeDefinition);
+		}
+
 		/// <summary>
 		/// Visitation function for Initblk instruction.
 		/// </summary>

@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
+using CommandLine;
 using Mosa.Utility.BootImage;
 using System;
 using System.IO;
@@ -14,45 +14,23 @@ namespace Mosa.Tool.CreateBootImage
 	{
 		public static BootImageOptions Parse(string filename)
 		{
-			var options = new BootImageOptions();
+			Options options = ParseOptions(File.ReadAllText(filename).Split(new char[] { '\n', '\r', ' ' }, StringSplitOptions.RemoveEmptyEntries));
+			if (options == null)
+				return null;
 
-			var reader = File.OpenText(filename);
+			return options.BootImageOptions;
+		}
 
-			while (true)
+		private static Options ParseOptions(string[] args)
+		{
+			ParserResult<Options> result = new Parser(config => config.HelpWriter = Console.Out).ParseArguments<Options>(args);
+
+			if (result.Tag == ParserResultType.NotParsed)
 			{
-				string line = reader.ReadLine();
-				if (line == null) break;
-
-				if (string.IsNullOrEmpty(line))
-					continue;
-
-				string[] parts = line.Split(new char[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-				switch (parts[0].Trim())
-				{
-					case "-mbr": options.MBROption = true; options.MBRCode = (parts.Length > 1) ? File.ReadAllBytes(parts[1]) : null; break;
-					case "-boot": options.FatBootCode = (parts.Length > 1) ? File.ReadAllBytes(parts[1]) : null; break;
-					case "-vhd": options.ImageFormat = ImageFormat.VHD; break;
-					case "-img": options.ImageFormat = ImageFormat.IMG; break;
-					case "-vdi": options.ImageFormat = ImageFormat.VDI; break;
-					case "-syslinux": options.PatchSyslinuxOption = true; break;
-					case "-guid": if (parts.Length > 1) options.MediaGuid = new Guid(parts[1]); break;
-					case "-snapguid": if (parts.Length > 1) options.MediaLastSnapGuid = new Guid(parts[1]); break;
-					case "-fat12": options.FileSystem = FileSystem.FAT12; break;
-					case "-fat16": options.FileSystem = FileSystem.FAT16; break;
-					case "-fat32": options.FileSystem = FileSystem.FAT32; break;
-					case "-file":
-						if (parts.Length > 2) options.IncludeFiles.Add(new IncludeFile(parts[1], parts[2]));
-						else options.IncludeFiles.Add(new IncludeFile(parts[1])); break;
-					case "-blocks": options.BlockCount = Convert.ToUInt32(parts[1]); break;
-					case "-volume": options.VolumeLabel = parts[1]; break;
-					default: break;
-				}
+				return null;
 			}
 
-			reader.Close();
-
-			return options;
+			return ((Parsed<Options>)result).Value;
 		}
 
 		/// <summary>
@@ -88,9 +66,7 @@ namespace Mosa.Tool.CreateBootImage
 
 				if (bootImageOptions == null)
 				{
-					Console.WriteLine("Usage: CreateBootImage <boot.config file> <image name>");
-					Console.Error.WriteLine("ERROR: Invalid options");
-					return -1;
+					return -1; //Errors will be printed by the commandline library
 				}
 
 				bootImageOptions.DiskImageFileName = args[1];
