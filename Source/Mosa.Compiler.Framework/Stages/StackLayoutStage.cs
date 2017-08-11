@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void LayoutStackVariables()
 		{
 			// assign increasing stack offsets to each variable
-			int size = LayoutVariables(MethodCompiler.LocalStack, CallingConvention, CallingConvention.OffsetOfFirstLocal);
+			int size = LayoutVariables(MethodCompiler.LocalStack, CallingConvention.OffsetOfFirstLocal);
 
 			MethodCompiler.StackSize = size;
 			MethodCompiler.TypeLayout.SetLocalMethodStackSize(MethodCompiler.Method, -size);
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var local in MethodCompiler.LocalStack)
 			{
-				trace.Log(local.ToString() + ": offset = " + local.Offset.ToString());
+				trace.Log(local + ": offset = " + local.Offset.ToString());
 			}
 		}
 
@@ -52,20 +52,19 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Performs a stack layout of all local variables in the list.
 		/// </summary>
 		/// <param name="locals">The enumerable holding all locals.</param>
-		/// <param name="callingConvention">The cc.</param>
 		/// <param name="offsetOfFirst">The offset of first.</param>
+		///
 		/// <returns></returns>
-		private int LayoutVariables(IList<Operand> locals, BaseCallingConvention callingConvention, int offsetOfFirst)
+		private int LayoutVariables(IList<Operand> locals, int offsetOfFirst)
 		{
 			int offset = offsetOfFirst;
 
 			foreach (var operand in locals)
 			{
-				int size, alignment;
-				Architecture.GetTypeRequirements(TypeLayout, operand.Type, out size, out alignment);
+				Architecture.GetTypeRequirements(TypeLayout, operand.Type, out int size, out int alignment);
 
 				size = Alignment.AlignUp(size, alignment);
-				offset = offset - size;
+				offset -= size;
 
 				operand.Offset = offset;
 				operand.IsResolved = true;

@@ -180,18 +180,7 @@ namespace Mosa.Platform.x64
 		{
 			alignment = NativeAlignment;
 
-			if (type.IsUI8 || type.IsR8 || !type.IsValueType || type.IsPointer)
-			{
-				size = 8;
-			}
-			else if (typeLayout.IsCompoundType(type))
-			{
-				size = typeLayout.GetTypeSize(type);
-			}
-			else
-			{
-				size = 4;
-			}
+			size = type.IsValueType ? typeLayout.GetTypeSize(type) : NativeAlignment;
 		}
 
 		/// <summary>

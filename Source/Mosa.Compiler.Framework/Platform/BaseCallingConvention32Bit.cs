@@ -268,6 +268,7 @@ namespace Mosa.Compiler.Framework.Platform
 		public override void SetReturnValue(BaseMethodCompiler compiler, Context context, Operand operand)
 		{
 			architecture.GetTypeRequirements(compiler.TypeLayout, operand.Type, out int size, out int alignment);
+
 			size = Alignment.AlignUp(size, alignment);
 
 			if (operand.IsR4)

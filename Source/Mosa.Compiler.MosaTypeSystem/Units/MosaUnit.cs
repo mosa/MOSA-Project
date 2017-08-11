@@ -21,9 +21,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsLinkerGenerated { get; private set; }
 
-		private MosaCustomAttributeList customAttributes;
+		private readonly MosaCustomAttributeList customAttributes;
 
-		public IList<MosaCustomAttribute> CustomAttributes { get; private set; }
+		public IList<MosaCustomAttribute> CustomAttributes { get; }
 
 		internal MosaUnit()
 		{
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public abstract class MutatorBase : IDisposable
 		{
-			private MosaUnit unit;
+			private readonly MosaUnit unit;
 
 			internal MutatorBase(MosaUnit unit)
 			{

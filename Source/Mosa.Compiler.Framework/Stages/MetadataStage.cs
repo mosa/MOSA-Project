@@ -443,7 +443,7 @@ namespace Mosa.Compiler.Framework.Stages
 					var section = (field.Data != null) ? SectionKind.ROData : SectionKind.BSS;
 					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldDefSymbol, (int)writer2.Position, section, field.FullName, 0);
 					writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
-					writer2.Write((field.Data != null) ? field.Data.Length : 0, TypeLayout.NativePointerSize);
+					writer2.Write(field.Data?.Length ?? 0, TypeLayout.NativePointerSize);
 				}
 				else
 				{
