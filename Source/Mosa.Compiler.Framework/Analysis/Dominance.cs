@@ -9,11 +9,11 @@ namespace Mosa.Compiler.Framework.Analysis
 	{
 		#region Data members
 
-		private Func<IDominanceAnalysis> dominanceAnalysisFactory;
+		private readonly Func<IDominanceAnalysis> dominanceAnalysisFactory;
 
-		private Dictionary<BasicBlock, IDominanceAnalysis> blockAnalysis = new Dictionary<BasicBlock, IDominanceAnalysis>();
+		private readonly Dictionary<BasicBlock, IDominanceAnalysis> blockAnalysis = new Dictionary<BasicBlock, IDominanceAnalysis>();
 
-		private BasicBlocks basicBlocks;
+		private readonly BasicBlocks basicBlocks;
 
 		#endregion Data members
 
@@ -31,9 +31,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		public IDominanceAnalysis GetDominanceAnalysis(BasicBlock headBlock)
 		{
-			IDominanceAnalysis analysis;
-
-			if (!blockAnalysis.TryGetValue(headBlock, out analysis))
+			if (!blockAnalysis.TryGetValue(headBlock, out IDominanceAnalysis analysis))
 			{
 				analysis = dominanceAnalysisFactory();
 				analysis.PerformAnalysis(basicBlocks, headBlock);

@@ -76,6 +76,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>(); // fixme: change to private
 
+		private readonly object _lock = new object();
+
 		#endregion Data members
 
 		#region Properties
@@ -129,8 +131,11 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public int GetMethodTableOffset(MosaMethod method)
 		{
-			ResolveType(method.DeclaringType);
-			return methodTableOffsets[method];
+			lock (_lock)
+			{
+				ResolveType(method.DeclaringType);
+				return methodTableOffsets[method];
+			}
 		}
 
 		/// <summary>
@@ -140,8 +145,11 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public int GetInterfaceSlotOffset(MosaType type)
 		{
-			ResolveType(type);
-			return interfaceSlots[type];
+			lock (_lock)
+			{
+				ResolveType(type);
+				return interfaceSlots[type];
+			}
 		}
 
 		/// <summary>
@@ -151,11 +159,14 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public int GetTypeSize(MosaType type)
 		{
-			ResolveType(type);
+			lock (_lock)
+			{
+				ResolveType(type);
 
-			typeSizes.TryGetValue(type, out int size);
+				typeSizes.TryGetValue(type, out int size);
 
-			return size;
+				return size;
+			}
 		}
 
 		/// <summary>
@@ -165,29 +176,10 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public int GetFieldSize(MosaField field)
 		{
-			//FIXME: This is not thread safe!
-			if (fieldSizes.TryGetValue(field, out int size))
+			lock (_lock)
 			{
-				return size;
+				return ComputeFieldSize(field);
 			}
-			else
-			{
-				ResolveType(field.DeclaringType);
-			}
-
-			// If the field is another struct, we have to dig down and compute its size too.
-			if (field.FieldType.IsValueType)
-			{
-				size = GetTypeSize(field.FieldType);
-			}
-			else
-			{
-				size = GetMemorySize(field.FieldType);
-			}
-
-			fieldSizes.Add(field, size);
-
-			return size;
 		}
 
 		/// <summary>
@@ -197,11 +189,14 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public int GetFieldOffset(MosaField field)
 		{
-			ResolveType(field.DeclaringType);
+			lock (_lock)
+			{
+				ResolveType(field.DeclaringType);
 
-			fieldOffsets.TryGetValue(field, out int offset);
+				fieldOffsets.TryGetValue(field, out int offset);
 
-			return offset;
+				return offset;
+			}
 		}
 
 		/// <summary>
@@ -220,9 +215,11 @@ namespace Mosa.Compiler.Framework
 			if (type.Modifier != null)   // For types having modifiers, use the method table of element type instead.
 				return GetMethodTable(type.ElementType);
 
-			ResolveType(type);
-
-			return typeMethodTables[type];
+			lock (_lock)
+			{
+				ResolveType(type);
+				return typeMethodTables[type];
+			}
 		}
 
 		/// <summary>
@@ -236,20 +233,23 @@ namespace Mosa.Compiler.Framework
 			if (type.Interfaces.Count == 0)
 				return null;
 
-			ResolveType(type);
-
-			var methodTable = new MosaMethod[interfaceType.Methods.Count];
-
-			// Implicit Interface Methods
-			for (int slot = 0; slot < interfaceType.Methods.Count; slot++)
+			lock (_lock)
 			{
-				methodTable[slot] = FindInterfaceMethod(type, interfaceType.Methods[slot]);
+				ResolveType(type);
+
+				var methodTable = new MosaMethod[interfaceType.Methods.Count];
+
+				// Implicit Interface Methods
+				for (int slot = 0; slot < interfaceType.Methods.Count; slot++)
+				{
+					methodTable[slot] = FindInterfaceMethod(type, interfaceType.Methods[slot]);
+				}
+
+				// Explicit Interface Methods
+				ScanExplicitInterfaceImplementations(type, interfaceType, methodTable);
+
+				return methodTable;
 			}
-
-			// Explicit Interface Methods
-			ScanExplicitInterfaceImplementations(type, interfaceType, methodTable);
-
-			return methodTable;
 		}
 
 		public bool IsCompoundType(MosaType type)
@@ -263,30 +263,27 @@ namespace Mosa.Compiler.Framework
 			if (!type.IsUserValueType)
 				return false;
 
-			int typeSize = GetTypeSize(type);
-
-			if (typeSize > NativePointerSize)
-				return true;
-
-			return false;
+			lock (_lock)
+			{
+				int typeSize = GetTypeSize(type);
+				return typeSize > NativePointerSize;
+			}
 		}
 
-		public void SetMethodStackSize(MosaMethod method, int size)
+		public void SetLocalMethodStackSize(MosaMethod method, int size)
 		{
-			lock (methodStackSizes)
+			lock (_lock)
 			{
 				methodStackSizes.Remove(method);
 				methodStackSizes.Add(method, size);
 			}
 		}
 
-		public int GetMethodStackSize(MosaMethod method)
+		public int GetLocalMethodStackSize(MosaMethod method)
 		{
-			int size = 0;
-
-			lock (methodStackSizes)
+			lock (_lock)
 			{
-				if (!methodStackSizes.TryGetValue(method, out size))
+				if (!methodStackSizes.TryGetValue(method, out int size))
 				{
 					if ((method.MethodAttributes & MosaMethodAttributes.Abstract) == MosaMethodAttributes.Abstract)
 						return 0;
@@ -294,14 +291,14 @@ namespace Mosa.Compiler.Framework
 					//throw new InvalidCompilerException();
 					return 0;
 				}
-			}
 
-			return size;
+				return size;
+			}
 		}
 
 		public int GetMethodParameterStackSize(MosaMethod method)
 		{
-			lock (parameterStackSize)
+			lock (_lock)
 			{
 				if (parameterStackSize.TryGetValue(method, out int value))
 				{
@@ -354,7 +351,6 @@ namespace Mosa.Compiler.Framework
 				return;
 			}
 
-			// FIXME: This is not threadsafe!!!!!
 			if (typeSet.Contains(type))
 				return;
 
@@ -377,10 +373,9 @@ namespace Mosa.Compiler.Framework
 				ResolveInterfaceType(interfaceType);
 			}
 
-			int? size = type.GetPrimitiveSize(NativePointerSize);
-			if (size != null)
+			if (type.GetPrimitiveSize(NativePointerSize) != null)
 			{
-				typeSizes[type] = size.Value;
+				typeSizes[type] = type.GetPrimitiveSize(NativePointerSize).Value;
 			}
 			else if (type.IsExplicitLayout)
 			{
@@ -513,7 +508,7 @@ namespace Mosa.Compiler.Framework
 
 				int offset = (int)field.Offset.Value;
 				fieldOffsets.Add(field, offset);
-				size = Math.Max(size, offset + GetFieldSize(field));
+				size = Math.Max(size, offset + ComputeFieldSize(field));
 
 				// Explicit layout assigns a physical offset from the start of the structure
 				// to the field. We just assign this offset.
@@ -521,6 +516,32 @@ namespace Mosa.Compiler.Framework
 			}
 
 			typeSizes.Add(type, (type.ClassSize == null || type.ClassSize == -1) ? size : (int)type.ClassSize);
+		}
+
+		private int ComputeFieldSize(MosaField field)
+		{
+			if (fieldSizes.TryGetValue(field, out int size))
+			{
+				return size;
+			}
+			else
+			{
+				ResolveType(field.DeclaringType);
+			}
+
+			// If the field is another struct, we have to dig down and compute its size too.
+			if (field.FieldType.IsValueType)
+			{
+				size = GetTypeSize(field.FieldType);
+			}
+			else
+			{
+				size = GetMemorySize(field.FieldType);
+			}
+
+			fieldSizes.Add(field, size);
+
+			return size;
 		}
 
 		#endregion Internal - Layout

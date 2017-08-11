@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		#region Priority class
 
 		/// <summary>
-		///
+		/// Priority
 		/// </summary>
 		private class Priority : IComparable<Priority>
 		{
@@ -153,6 +153,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// <summary>
 		/// Determines the loop depths.
 		/// </summary>
+		/// <param name="start">The start.</param>
 		private void Start(BasicBlock start)
 		{
 			StartCountEdges(start);
@@ -298,10 +299,11 @@ namespace Mosa.Compiler.Framework.Analysis
 		private void ComputeOrder(BasicBlock start)
 		{
 			// Create sorted worklist
-			var workList = new SortedList<Priority, BasicBlock>();
-
-			// Start worklist with first block
-			workList.Add(new Priority(0, 0), start);
+			var workList = new SortedList<Priority, BasicBlock>
+			{
+				// Start worklist with first block
+				[new Priority(0, 0)] = start
+			};
 
 			while (workList.Count != 0)
 			{

@@ -6,23 +6,23 @@ using System.Text;
 
 namespace Mosa.Compiler.Trace
 {
-	public enum TraceType { InstructionList, DebugTrace, Counters };
+	public enum TraceType { InstructionList, DebugTrace, Counters }
 
-	public class TraceLog
+	public sealed class TraceLog
 	{
-		public TraceType Type { get; private set; }
+		public TraceType Type { get; }
 
-		public MosaMethod Method { get; private set; }
+		public MosaMethod Method { get; }
 
-		public string Stage { get; private set; }
+		public string Stage { get; }
 
-		public string Section { get; private set; }
+		public string Section { get; }
 
-		public bool Active { get; internal set; }
+		public bool Active { get; }
 
-		public List<string> Lines { get; private set; }
+		public List<string> Lines { get; }
 
-		protected TraceLog(TraceType type)
+		private TraceLog(TraceType type)
 		{
 			Type = type;
 			Active = true;

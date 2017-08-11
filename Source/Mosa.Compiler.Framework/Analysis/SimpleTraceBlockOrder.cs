@@ -55,8 +55,12 @@ namespace Mosa.Compiler.Framework.Analysis
 						blockOrder[orderBlockCnt++] = block;
 
 						foreach (var successor in block.NextBlocks)
+						{
 							if (!referenced.ContainsKey(successor))
+							{
 								workList.Push(successor);
+							}
+						}
 					}
 				}
 			}
