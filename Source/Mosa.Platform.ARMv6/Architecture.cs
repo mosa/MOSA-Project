@@ -214,9 +214,9 @@ namespace Mosa.Platform.ARMv6
 		/// <exception cref="System.ArgumentNullException">signatureType</exception>
 		public override void GetTypeRequirements(MosaTypeLayout typeLayout, MosaType type, out int size, out int alignment)
 		{
-			alignment = type.IsR8 ? 8 : 4;
+			alignment = type.IsR8 ? 8 : NativeAlignment;
 
-			size = type.IsValueType ? typeLayout.GetTypeSize(type) : 4;
+			size = type.IsValueType ? typeLayout.GetTypeSize(type) : NativeAlignment;
 		}
 
 		/// <summary>

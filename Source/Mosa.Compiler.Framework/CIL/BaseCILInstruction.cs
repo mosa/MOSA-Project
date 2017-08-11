@@ -5,7 +5,7 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Base CIL Instruction
 	/// </summary>
 	public abstract class BaseCILInstruction : BaseInstruction
 	{
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
 		/// <param name="operandCount">The operand count.</param>
-		public BaseCILInstruction(OpCode opCode, byte operandCount)
+		protected BaseCILInstruction(OpCode opCode, byte operandCount)
 			: base(0, operandCount)
 		{
 			opcode = opCode;
@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <param name="opCode">The op code.</param>
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		public BaseCILInstruction(OpCode opCode, byte operandCount, byte resultCount)
+		protected BaseCILInstruction(OpCode opCode, byte operandCount, byte resultCount)
 			: base(resultCount, operandCount)
 		{
 			opcode = opCode;
