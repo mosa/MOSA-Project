@@ -1,19 +1,21 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Stloc Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.StoreInstruction" />
 	public sealed class StlocInstruction : StoreInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="StlocInstruction"/> class.
+		/// Initializes a new instance of the <see cref="StlocInstruction" /> class.
 		/// </summary>
+		/// <param name="opcode"></param>
 		public StlocInstruction(OpCode opcode)
 			: base(opcode)
 		{
@@ -35,12 +37,12 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			int index;
 
@@ -53,10 +55,10 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Stloc_1: index = 1; break;
 				case OpCode.Stloc_2: index = 2; break;
 				case OpCode.Stloc_3: index = 3; break;
-				default: throw new NotImplementedException();
+				default: throw new NotImplementCompilerException();
 			}
 
-			ctx.Result = decoder.Compiler.LocalVariables[index];
+			node.Result = decoder.Compiler.LocalVariables[index];
 		}
 
 		#endregion Methods

@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Intermediate representation of an instruction, which takes two stack arguments.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
 	public class BinaryInstruction : BaseCILInstruction
 	{
 		#region Construction

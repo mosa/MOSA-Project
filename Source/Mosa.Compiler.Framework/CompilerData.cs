@@ -6,15 +6,15 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Compiler Data
 	/// </summary>
 	public sealed class CompilerData
 	{
 		#region Data Members
 
-		private Dictionary<MosaType, CompilerTypeData> types = new Dictionary<MosaType, CompilerTypeData>();
+		private readonly Dictionary<MosaType, CompilerTypeData> types = new Dictionary<MosaType, CompilerTypeData>();
 
-		private Dictionary<MosaMethod, CompilerMethodData> methods = new Dictionary<MosaMethod, CompilerMethodData>();
+		private readonly Dictionary<MosaMethod, CompilerMethodData> methods = new Dictionary<MosaMethod, CompilerMethodData>();
 
 		#endregion Data Members
 

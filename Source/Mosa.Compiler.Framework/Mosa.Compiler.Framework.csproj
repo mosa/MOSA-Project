@@ -93,7 +93,6 @@
     <Compile Include="CompilerData.cs" />
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="InstructionNodeExtension.cs" />
     <Compile Include="InstructionNodeAddition.cs" />
     <Compile Include="Intrinsics\CreateInstanceSimple.cs" />
     <Compile Include="Intrinsics\GetAssemblyListTable.cs" />

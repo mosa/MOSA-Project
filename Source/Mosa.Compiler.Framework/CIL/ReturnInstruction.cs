@@ -5,8 +5,9 @@ using System;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Return Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public sealed class ReturnInstruction : UnaryInstruction
 	{
 		#region Construction
@@ -42,24 +43,25 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		/// <exception cref="ArgumentException">Invalid opcode. - codeReader</exception>
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			if (OpCode.Ret != opcode)
-				throw new ArgumentException(@"Invalid opcode.", @"codeReader");
+				throw new ArgumentException("Invalid opcode.", "codeReader");
 
 			if (decoder.Method.Signature.ReturnType.IsVoid)
-				ctx.OperandCount = 0;
+				node.OperandCount = 0;
 			else
-				ctx.OperandCount = 1;
+				node.OperandCount = 1;
 
 			var block = decoder.GetBlock(BasicBlock.EpilogueLabel);
 
-			ctx.AddBranchTarget(block);
+			node.AddBranchTarget(block);
 		}
 
 		#endregion Methods

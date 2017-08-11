@@ -5,7 +5,7 @@ using System;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Condition Code Extension
 	/// </summary>
 	public static class ConditionCodeExtension
 	{

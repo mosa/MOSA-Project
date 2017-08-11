@@ -6,13 +6,13 @@ using System;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Compiler Type Data
 	/// </summary>
 	public sealed class CompilerTypeData
 	{
 		#region Properties
 
-		public MosaType MosaType { get; private set; }
+		public MosaType MosaType { get; }
 
 		public bool IsTypeAllocated { get; set; }
 
@@ -22,10 +22,7 @@ namespace Mosa.Compiler.Framework
 
 		public CompilerTypeData(MosaType mosaType)
 		{
-			if (mosaType == null)
-				throw new ArgumentNullException("mosaType");
-
-			MosaType = mosaType;
+			MosaType = mosaType ?? throw new ArgumentNullException(nameof(mosaType));
 		}
 
 		#endregion Methods

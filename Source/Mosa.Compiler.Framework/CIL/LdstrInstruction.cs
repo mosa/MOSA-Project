@@ -3,8 +3,9 @@
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Ldstr Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
 	public sealed class LdstrInstruction : BaseCILInstruction
 	{
 		#region Construction
@@ -26,22 +27,22 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			var token = (uint)decoder.Instruction.Operand;
 
-			string symbolName = @"$ldstr$" + decoder.Method.Module.Name + "$" + token;
+			string symbolName = "$ldstr$" + decoder.Method.Module.Name + "$" + token;
 
 			string name = decoder.TypeSystem.LookupUserString(decoder.Method.Module, token);
 
-			ctx.Operand1 = Operand.CreateStringSymbol(decoder.TypeSystem, symbolName, name);
+			node.Operand1 = Operand.CreateStringSymbol(decoder.TypeSystem, symbolName, name);
 
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.String);
+			node.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.String);
 		}
 
 		#endregion Methods

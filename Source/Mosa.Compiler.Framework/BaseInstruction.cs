@@ -145,7 +145,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		private string cachedInstructionName { get; set; }
+		private string CachedInstructionName { get; set; }
 
 		/// <summary>
 		/// Gets the name of the instruction.
@@ -157,17 +157,17 @@ namespace Mosa.Compiler.Framework
 		{
 			get
 			{
-				if (cachedInstructionName == null)
+				if (CachedInstructionName == null)
 				{
-					cachedInstructionName = InstructionFamilyName + "." + BaseInstructionName;
+					CachedInstructionName = InstructionFamilyName + "." + BaseInstructionName;
 
 					if (!string.IsNullOrWhiteSpace(InstructionExtensionName))
 					{
-						cachedInstructionName = cachedInstructionName + "." + InstructionExtensionName;
+						CachedInstructionName = CachedInstructionName + "." + InstructionExtensionName;
 					}
 				}
 
-				return cachedInstructionName;
+				return CachedInstructionName;
 			}
 		}
 
@@ -176,11 +176,11 @@ namespace Mosa.Compiler.Framework
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
+		/// Initializes a new instance of the <see cref="BaseInstruction" /> class.
 		/// </summary>
 		/// <param name="resultCount">The result count.</param>
 		/// <param name="operandCount">The operand count.</param>
-		public BaseInstruction(byte resultCount, byte operandCount)
+		protected BaseInstruction(byte resultCount, byte operandCount)
 		{
 			DefaultResultCount = resultCount;
 			DefaultOperandCount = operandCount;
@@ -193,9 +193,9 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Validates the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public virtual void Resolve(Context ctx, BaseMethodCompiler compiler)
+		public virtual void Resolve(Context context, BaseMethodCompiler compiler)
 		{
 			/* Default implementation is to do nothing */
 		}

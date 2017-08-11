@@ -3,8 +3,9 @@
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Div Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.ArithmeticInstruction" />
 	public sealed class DivInstruction : ArithmeticInstruction
 	{
 		#region Construction

@@ -8,11 +8,11 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Compiler Options
 	/// </summary>
 	public class CompilerOptions
 	{
-		private Dictionary<string, string> options = new Dictionary<string, string>();
+		private readonly Dictionary<string, string> options = new Dictionary<string, string>();
 
 		#region Properties
 
@@ -206,7 +206,7 @@ namespace Mosa.Compiler.Framework
 
 			value = value.ToLower();
 
-			return (value.Contains("y") || value.Contains("t") || value.Contains("1"));
+			return value.Contains("y") || value.Contains("t") || value.Contains("1");
 		}
 
 		/// <summary>
@@ -222,9 +222,7 @@ namespace Mosa.Compiler.Framework
 			if (value == null)
 				return @default;
 
-			int val;
-
-			if (int.TryParse(value, out val))
+			if (int.TryParse(value, out int val))
 				return val;
 			else
 				return @default;
@@ -243,9 +241,7 @@ namespace Mosa.Compiler.Framework
 			if (value == null)
 				return @default;
 
-			int val;
-
-			if (int.TryParse(value, out val))
+			if (int.TryParse(value, out int val))
 				return val;
 			else
 				return @default;

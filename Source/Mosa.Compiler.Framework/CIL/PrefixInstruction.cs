@@ -5,8 +5,9 @@ using System;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Prefix Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
 	public class PrefixInstruction : BaseCILInstruction
 	{
 		#region Properties
@@ -28,7 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 					case OpCode.PreUnaligned: return Prefix.Unaligned;
 					case OpCode.PreVolatile: return Prefix.Volatile;
 					default:
-						throw new InvalidOperationException(@"Unknown prefix instruction codeReader.");
+						throw new InvalidOperationException("Unknown prefix instruction codeReader.");
 				}
 			}
 		}

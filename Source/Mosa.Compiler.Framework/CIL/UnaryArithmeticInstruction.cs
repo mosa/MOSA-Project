@@ -6,6 +6,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// Represents a unary instruction, which performs an operation on the operand and places
 	/// the result on the stack.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public class UnaryArithmeticInstruction : UnaryInstruction
 	{
 		#region Construction
@@ -26,14 +27,14 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, BaseMethodCompiler compiler)
 		{
-			base.Resolve(ctx, compiler);
+			base.Resolve(context, compiler);
 
 			// Simple result is the same type as the unary argument
-			ctx.Result = compiler.CreateVirtualRegister(ctx.Operand1.Type);
+			context.Result = compiler.CreateVirtualRegister(context.Operand1.Type);
 		}
 
 		#endregion Methods Overrides

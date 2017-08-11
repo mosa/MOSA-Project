@@ -8,15 +8,17 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Compiler Metho dData
 	/// </summary>
 	public sealed class CompilerMethodData
 	{
-		public Counters Counters { get; private set; }
+		private readonly object _lock = new object();
+
+		public Counters Counters { get; }
 
 		#region Properties
 
-		public MosaMethod Method { get; private set; }
+		public MosaMethod Method { get; }
 
 		public bool InvokesAnyMethod { get { return Calls.Count != 0; } }
 
@@ -56,10 +58,7 @@ namespace Mosa.Compiler.Framework
 
 		public CompilerMethodData(MosaMethod mosaMethod)
 		{
-			if (mosaMethod == null)
-				throw new ArgumentNullException("mosaMethod");
-
-			Method = mosaMethod;
+			Method = mosaMethod ?? throw new ArgumentNullException(nameof(mosaMethod));
 
 			Calls = new List<MosaMethod>();
 			CalledBy = new List<MosaMethod>();
@@ -71,7 +70,7 @@ namespace Mosa.Compiler.Framework
 
 		public void AddCalledBy(MosaMethod method)
 		{
-			lock (this)
+			lock (_lock)
 			{
 				CalledBy.AddIfNew(method);
 			}

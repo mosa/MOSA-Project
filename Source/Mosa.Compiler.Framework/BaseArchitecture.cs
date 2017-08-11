@@ -7,7 +7,7 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Base Architecture
 	/// </summary>
 	public abstract class BaseArchitecture
 	{

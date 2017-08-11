@@ -1,12 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Arglist Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
 	internal sealed class ArglistInstruction : BaseCILInstruction
 	{
 		#region Construction
@@ -27,14 +28,14 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
-			throw new NotImplementedException();
+			throw new NotImplementCompilerException("ArglistInstruction");
 		}
 
 		#endregion Methods

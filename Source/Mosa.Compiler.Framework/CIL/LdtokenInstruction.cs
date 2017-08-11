@@ -5,8 +5,9 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Ldtoken Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.LoadInstruction" />
 	public sealed class LdtokenInstruction : LoadInstruction
 	{
 		#region Construction
@@ -27,31 +28,31 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			// See Partition III, 4.17 (ldtoken)
 
 			if (decoder.Instruction.Operand is MosaType)
 			{
-				ctx.MosaType = (MosaType)decoder.Instruction.Operand;
-				ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+				node.MosaType = (MosaType)decoder.Instruction.Operand;
+				node.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			}
 			else if (decoder.Instruction.Operand is MosaMethod)
 			{
-				ctx.InvokeMethod = (MosaMethod)decoder.Instruction.Operand;
-				ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeMethodHandle"));
+				node.InvokeMethod = (MosaMethod)decoder.Instruction.Operand;
+				node.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeMethodHandle"));
 			}
 			else if (decoder.Instruction.Operand is MosaField)
 			{
-				ctx.MosaField = (MosaField)decoder.Instruction.Operand;
-				ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
+				node.MosaField = (MosaField)decoder.Instruction.Operand;
+				node.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
 			}
-			ctx.OperandCount = 0;
+			node.OperandCount = 0;
 		}
 
 		#endregion Methods

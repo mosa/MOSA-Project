@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Intermediate representation of the IL throw instruction.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public sealed class ThrowInstruction : UnaryInstruction
 	{
 		#region Construction
@@ -22,9 +23,9 @@ namespace Mosa.Compiler.Framework.CIL
 
 		#region Properties
 
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 		}
 
 		/// <summary>

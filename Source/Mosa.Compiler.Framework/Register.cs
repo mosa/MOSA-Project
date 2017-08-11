@@ -7,15 +7,6 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class Register
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the register index.
-		/// </summary>
-		private int index;
-
-		#endregion Data members
-
 		#region Construction
 
 		/// <summary>
@@ -24,7 +15,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="index">The numeric index of the register.</param>
 		protected Register(int index)
 		{
-			this.index = index;
+			this.Index = index;
 		}
 
 		#endregion Construction
@@ -34,10 +25,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Retrieves the numeric index of this register in its architecture.
 		/// </summary>
-		public int Index
-		{
-			get { return index; }
-		}
+		public int Index { get; }
 
 		/// <summary>
 		/// Determines if this is a floating point register.

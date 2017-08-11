@@ -8,6 +8,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Intermediate representation of a IL binary logic instruction.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BinaryInstruction" />
 	public sealed class BinaryLogicInstruction : BinaryInstruction
 	{
 		#region Operand Table
@@ -46,23 +47,23 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, BaseMethodCompiler compiler)
 		{
-			base.Resolve(ctx, compiler);
+			base.Resolve(context, compiler);
 
-			var stackTypeForOperand1 = ctx.Operand1.Type.GetStackTypeCode();
-			var stackTypeForOperand2 = ctx.Operand2.Type.GetStackTypeCode();
+			var stackTypeForOperand1 = context.Operand1.Type.GetStackTypeCode();
+			var stackTypeForOperand2 = context.Operand2.Type.GetStackTypeCode();
 
 			var result = opTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2];
 
 			if (result == StackTypeCode.Unknown)
 			{
-				throw new InvalidOperationException(@"Invalid virtualLocal result of instruction: " + result.ToString() + " (" + ctx.Operand1.ToString() + ")");
+				throw new InvalidOperationException("Invalid virtualLocal result of instruction: " + result.ToString() + " (" + context.Operand1 + ")");
 			}
 
-			ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.GetStackTypeFromCode(result));
+			context.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.GetStackTypeFromCode(result));
 		}
 
 		#endregion Methods

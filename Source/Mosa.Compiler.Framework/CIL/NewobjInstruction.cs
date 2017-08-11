@@ -7,15 +7,16 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Intermediate representation of the newobj IL instruction.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.InvokeInstruction" />
 	/// <remarks>
 	/// Actually this is a waste. Newobj is a compound of at least three instructions:
-	///   - pop ctor-args
-	///   - push type
-	///   - push type-size
-	///   - call allocator.new
-	///   - dup
-	///   - push ctor-args
-	///   - call ctor
+	/// - pop ctor-args
+	/// - push type
+	/// - push type-size
+	/// - call allocator.new
+	/// - dup
+	/// - push ctor-args
+	/// - call ctor
 	/// Note that processing this instruction does require extensive call stack rewriting in order
 	/// to insert the this reference in front of all other ctor arguments, even though it is pushed
 	/// *after* calling allocator new as seen above. Additionally note that after executing the ctor
@@ -24,16 +25,16 @@ namespace Mosa.Compiler.Framework.CIL
 	/// I don't want to have runtime helpers for newarr and newobj, so we unite both by using a common
 	/// allocator, which receives the type and memory size as parameters. This also fixes string
 	/// issues for us, which vary in size and thus can't be allocated by a plain newobj.
-	/// <para/>
+	/// <para />
 	/// These details are automatically processed by the Expand function, which expands this highlevel
 	/// opcode into its parts as described above. The exception is that Expand is not stack based anymore
 	/// and uses virtual registers to implement two calls:
 	/// - this-vreg = allocator-new(type-vreg, type-size-vreg)
 	/// - ctor(this-vreg[, args])
-	/// <para/>
+	/// <para />
 	/// Those calls are ultimately processed by further expansion and inlining, except that allocator-new
 	/// is a kernel call and can't be inlined - even by the jit.
-	/// <para/>
+	/// <para />
 	/// The expansion essentially adds a dependency to mosacor, which provides the allocator and gc.
 	/// </remarks>
 	public sealed class NewobjInstruction : InvokeInstruction
@@ -72,11 +73,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode context, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
-			var ctor = DecodeInvocationTarget(context, decoder, InvokeSupport);
+			var ctor = DecodeInvocationTarget(node, decoder);
 
 			/*
 			 * HACK: We need to remove the this parameter from the operand list, as it
@@ -87,27 +88,30 @@ namespace Mosa.Compiler.Framework.CIL
 			 */
 
 			// Remove the this argument from the invocation, it's not on the stack yet.
-			context.OperandCount--;
+			node.OperandCount--;
 
 			decoder.Compiler.Scheduler.TrackTypeAllocated(ctor.DeclaringType);
-			decoder.Compiler.Scheduler.TrackTypeAllocated(context.InvokeMethod.DeclaringType);
+			decoder.Compiler.Scheduler.TrackTypeAllocated(node.InvokeMethod.DeclaringType);
 
 			// Set a return value according to the type of the object allocated
-			context.Result = decoder.Compiler.AllocateVirtualRegisterOrStackSlot(ctor.DeclaringType);
-			context.ResultCount = 1;
+			node.Result = decoder.Compiler.AllocateVirtualRegisterOrStackSlot(ctor.DeclaringType);
+			node.ResultCount = 1;
 		}
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, BaseMethodCompiler compiler)
 		{
-			// Validate the operands...
-			int offset = (ctx.InvokeMethod.HasExplicitThis ? 1 : 0);
+			if (context == null)
+				throw new System.ArgumentNullException(nameof(context));
 
-			Debug.Assert(ctx.OperandCount == ctx.InvokeMethod.Signature.Parameters.Count - offset, @"Operand count doesn't match parameter count.");
+			// Validate the operands...
+			int offset = (context.InvokeMethod.HasExplicitThis ? 1 : 0);
+
+			Debug.Assert(context.OperandCount == context.InvokeMethod.Signature.Parameters.Count - offset, "Operand count doesn't match parameter count.");
 		}
 
 		#endregion Methods

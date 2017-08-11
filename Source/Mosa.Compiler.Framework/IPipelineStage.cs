@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Pipeline Stage Interface
 	/// </summary>
 	public interface IPipelineStage
 	{

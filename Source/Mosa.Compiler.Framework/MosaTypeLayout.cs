@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds a set of types
 		/// </summary>
-		private readonly HashSet<MosaType> typeSet = new HashSet<MosaType>();
+		private readonly HashSet<MosaType> resolvedTypes = new HashSet<MosaType>();
 
 		/// <summary>
 		/// Holds a list of interfaces
@@ -75,6 +75,11 @@ namespace Mosa.Compiler.Framework
 		/// The parameter stack size
 		/// </summary>
 		public Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>(); // fixme: change to private
+
+		/// <summary>
+		/// The overridden methods
+		/// </summary>
+		private readonly HashSet<MosaMethod> overriddenMethods = new HashSet<MosaMethod>();
 
 		private readonly object _lock = new object();
 
@@ -252,6 +257,13 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		/// <summary>
+		/// Determines whether [is compound type] [the specified type].
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns>
+		///   <c>true</c> if [is compound type] [the specified type]; otherwise, <c>false</c>.
+		/// </returns>
 		public bool IsCompoundType(MosaType type)
 		{
 			// i.e. whether copying of the type requires multiple move
@@ -263,13 +275,51 @@ namespace Mosa.Compiler.Framework
 			if (!type.IsUserValueType)
 				return false;
 
+			int typeSize = GetTypeSize(type);
+			return typeSize > NativePointerSize;
+		}
+
+		/// <summary>
+		/// Determines whether [is method overridden] [the specified method].
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <returns>
+		///   <c>true</c> if [is method overridden] [the specified method]; otherwise, <c>false</c>.
+		/// </returns>
+		public bool IsMethodOverridden(MosaMethod method)
+		{
 			lock (_lock)
 			{
-				int typeSize = GetTypeSize(type);
-				return typeSize > NativePointerSize;
+				if (overriddenMethods.Contains(method))
+					return true;
+
+				int slot = methodTableOffsets[method];
+				var type = method.DeclaringType.BaseType;
+
+				while (type != null)
+				{
+					var table = typeMethodTables[type];
+
+					if (table.Count >= slot)
+						return false;
+
+					method = table[slot];
+
+					if (overriddenMethods.Contains(method))
+						return true;
+
+					type = type.BaseType;
+				}
+
+				return false;
 			}
 		}
 
+		/// <summary>
+		/// Sets the size of the local method stack.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <param name="size">The size.</param>
 		public void SetLocalMethodStackSize(MosaMethod method, int size)
 		{
 			lock (_lock)
@@ -279,6 +329,11 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		/// <summary>
+		/// Gets the size of the local method stack.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <returns></returns>
 		public int GetLocalMethodStackSize(MosaMethod method)
 		{
 			lock (_lock)
@@ -351,10 +406,10 @@ namespace Mosa.Compiler.Framework
 				return;
 			}
 
-			if (typeSet.Contains(type))
+			if (resolvedTypes.Contains(type))
 				return;
 
-			typeSet.Add(type);
+			resolvedTypes.Add(type);
 
 			if (type.BaseType != null)
 			{
@@ -536,7 +591,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				size = GetMemorySize(field.FieldType);
+				size = NativePointerSize;
 			}
 
 			fieldSizes.Add(field, size);
@@ -687,6 +742,7 @@ namespace Mosa.Compiler.Framework
 						{
 							methodTable[slot] = method;
 							methodTableOffsets.Add(method, slot);
+							SetMethodOverridden(method, slot);
 						}
 						else
 						{
@@ -758,15 +814,32 @@ namespace Mosa.Compiler.Framework
 			return -1;
 		}
 
-		/// <summary>
-		/// Gets the type memory requirements.
-		/// </summary>
-		/// <param name="type">The signature type.</param>
-		/// <returns></returns>
-		private int GetMemorySize(MosaType type)
+		private void SetMethodOverridden(MosaMethod method, int slot)
 		{
-			Debug.Assert(!type.IsValueType);
-			return NativePointerSize;
+			// this method is overridden (obviousily)
+			overriddenMethods.Add(method);
+
+			// Note: this method does not update methods in other parts of the inheritance chain
+			// however, when trying to determine if a method was overridden a searched up to the root method will be performed at that time
+
+			// go up the inheritance chain
+			var type = method.DeclaringType.BaseType;
+			while (type != null)
+			{
+				var table = typeMethodTables[type];
+
+				if (table.Count >= slot)
+					return;
+
+				method = table[slot];
+
+				if (overriddenMethods.Contains(method))
+					return;
+
+				overriddenMethods.Add(method);
+
+				type = type.BaseType;
+			}
 		}
 
 		#endregion Internal
