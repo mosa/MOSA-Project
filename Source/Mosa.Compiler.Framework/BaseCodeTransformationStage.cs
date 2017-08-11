@@ -37,8 +37,7 @@ namespace Mosa.Compiler.Framework
 
 					var ctx = new Context(node);
 
-					VisitationDelegate visitationMethod;
-					if (!visitationDictionary.TryGetValue(ctx.Instruction, out visitationMethod))
+					if (!visitationDictionary.TryGetValue(ctx.Instruction, out VisitationDelegate visitationMethod))
 						continue;
 
 					visitationMethod(ctx);

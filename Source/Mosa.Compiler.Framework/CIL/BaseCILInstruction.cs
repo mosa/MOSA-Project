@@ -7,6 +7,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Base CIL Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseInstruction" />
 	public abstract class BaseCILInstruction : BaseInstruction
 	{
 		#region Data members
@@ -73,11 +74,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public virtual void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public virtual void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
-			ctx.SetInstruction(this, DefaultOperandCount, DefaultResultCount);
+			node.SetInstruction(this, DefaultOperandCount, DefaultResultCount);
 		}
 
 		/// <summary>

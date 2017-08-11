@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The stages in the compiler pipeline.
 		/// </summary>
-		private List<IPipelineStage> pipeline;
+		private readonly List<IPipelineStage> pipeline;
 
 		#endregion Data members
 
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework
 		public void Add(IPipelineStage stage)
 		{
 			if (stage == null)
-				throw new ArgumentNullException(@"stage");
+				throw new ArgumentNullException(nameof(stage));
 
 			pipeline.Add(stage);
 		}
@@ -73,22 +73,22 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <typeparam name="StageType">The type of stage.</typeparam>
 		/// <param name="stage">The stage.</param>
+		/// <exception cref="ArgumentNullException"></exception>
 		public void InsertAfterFirst<StageType>(IPipelineStage stage) where StageType : class, IPipelineStage
 		{
 			if (stage == null)
-				throw new ArgumentNullException(@"stage");
+				throw new ArgumentNullException(nameof(stage));
 
 			for (int i = 0; i < pipeline.Count; i++)
 			{
-				StageType result = pipeline[i] as StageType;
-				if (result != null)
+				if (pipeline[i] is StageType result)
 				{
 					pipeline.Insert(i + 1, stage);
 					return;
 				}
 			}
 
-			throw new ArgumentNullException(@"missing stage to insert at");
+			throw new ArgumentNullException("missing stage to insert at");
 		}
 
 		/// <summary>
@@ -99,19 +99,18 @@ namespace Mosa.Compiler.Framework
 		public void InsertAfterLast<StageType>(IPipelineStage stage) where StageType : class, IPipelineStage
 		{
 			if (stage == null)
-				throw new ArgumentNullException(@"stage");
+				throw new ArgumentNullException(nameof(stage));
 
 			for (int i = pipeline.Count - 1; i >= 0; i--)
 			{
-				StageType result = pipeline[i] as StageType;
-				if (result != null)
+				if (pipeline[i] is StageType result)
 				{
 					pipeline.Insert(i + 1, stage);
 					return;
 				}
 			}
 
-			throw new ArgumentNullException(@"missing stage to insert at");
+			throw new ArgumentNullException("missing stage to insert at");
 		}
 
 		/// <summary>
@@ -119,22 +118,22 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <typeparam name="StageType">The type of stage.</typeparam>
 		/// <param name="stages">The stages.</param>
+		/// <exception cref="ArgumentNullException"><paramref name="stages"/> is <c>null</c>.</exception>
 		public void InsertAfterLast<StageType>(IEnumerable<IPipelineStage> stages) where StageType : class, IPipelineStage
 		{
 			if (stages == null)
-				throw new ArgumentNullException(@"stage");
+				throw new ArgumentNullException(nameof(stages));
 
 			for (int i = pipeline.Count - 1; i >= 0; i--)
 			{
-				StageType result = pipeline[i] as StageType;
-				if (result != null)
+				if (pipeline[i] is StageType result)
 				{
 					pipeline.InsertRange(i + 1, stages);
 					return;
 				}
 			}
 
-			throw new ArgumentNullException(@"missing stage to insert at");
+			throw new ArgumentNullException("missing stage to insert at");
 		}
 
 		/// <summary>
@@ -145,19 +144,18 @@ namespace Mosa.Compiler.Framework
 		public void InsertBefore<StageType>(IPipelineStage stage) where StageType : class, IPipelineStage
 		{
 			if (stage == null)
-				throw new ArgumentNullException(@"stage");
+				throw new ArgumentNullException(nameof(stage));
 
 			for (int i = 0; i < pipeline.Count; i++)
 			{
-				StageType result = pipeline[i] as StageType;
-				if (result != null)
+				if (pipeline[i] is StageType result)
 				{
 					pipeline.Insert(i, stage);
 					return;
 				}
 			}
 
-			throw new ArgumentNullException(@"missing stage to insert before");
+			throw new ArgumentNullException("missing stage to insert before");
 		}
 
 		/// <summary>
@@ -168,11 +166,15 @@ namespace Mosa.Compiler.Framework
 		public void Add(IEnumerable<IPipelineStage> stages)
 		{
 			if (stages == null)
-				throw new ArgumentNullException(@"stages");
+				throw new ArgumentNullException(nameof(stages));
 
 			foreach (var stage in stages)
+			{
 				if (stage != null)
+				{
 					Add(stage);
+				}
+			}
 		}
 
 		/// <summary>
@@ -190,7 +192,7 @@ namespace Mosa.Compiler.Framework
 		public void Remove(IPipelineStage stage)
 		{
 			if (stage == null)
-				throw new ArgumentNullException(@"stage");
+				throw new ArgumentNullException(nameof(stage));
 
 			pipeline.Remove(stage);
 		}
@@ -204,7 +206,9 @@ namespace Mosa.Compiler.Framework
 		public int GetPosition(IPipelineStage stage)
 		{
 			if (stage == null)
-				throw new ArgumentNullException(@"stage");
+			{
+				throw new ArgumentNullException(nameof(stage));
+			}
 
 			for (int i = 0; i < pipeline.Count; i++)
 			{
@@ -212,7 +216,7 @@ namespace Mosa.Compiler.Framework
 					return i;
 			}
 
-			throw new ArgumentNullException(@"missing stage to insert before");
+			throw new ArgumentNullException("missing stage to insert before");
 		}
 
 		#endregion Methods

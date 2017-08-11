@@ -3,8 +3,9 @@
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Cpblk Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.NaryInstruction" />
 	public sealed class CpblkInstruction : NaryInstruction
 	{
 		#region Construction

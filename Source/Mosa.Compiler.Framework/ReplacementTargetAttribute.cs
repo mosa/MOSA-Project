@@ -10,11 +10,7 @@ namespace Mosa.Compiler.Framework
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
 	public class ReplacementTargetAttribute : Attribute
 	{
-		public string Target
-		{
-			get;
-			private set;
-		}
+		public string Target { get; }
 
 		public ReplacementTargetAttribute(string target)
 		{

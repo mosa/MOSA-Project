@@ -5,15 +5,17 @@ using Mosa.Compiler.Common;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Ldc Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.LoadInstruction" />
 	public sealed class LdcInstruction : LoadInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LdcInstruction"/> class.
+		/// Initializes a new instance of the <see cref="LdcInstruction" /> class.
 		/// </summary>
+		/// <param name="opCode">The op code.</param>
 		public LdcInstruction(OpCode opCode)
 			: base(opCode, 1)
 		{
@@ -26,12 +28,12 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			Operand constantValueOperand;
 
@@ -87,8 +89,8 @@ namespace Mosa.Compiler.Framework.CIL
 				default: throw new NotImplementCompilerException();
 			}
 
-			ctx.Operand1 = constantValueOperand;
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(constantValueOperand.Type);
+			node.Operand1 = constantValueOperand;
+			node.Result = decoder.Compiler.CreateVirtualRegister(constantValueOperand.Type);
 		}
 
 		#endregion Methods

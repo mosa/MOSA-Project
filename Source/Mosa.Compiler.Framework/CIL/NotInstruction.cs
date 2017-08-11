@@ -6,8 +6,9 @@ using System;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// NotI nstruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryArithmeticInstruction" />
 	public sealed class NotInstruction : UnaryArithmeticInstruction
 	{
 		#region Operand Table
@@ -46,18 +47,18 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx"></param>
+		/// <param name="context"></param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, BaseMethodCompiler compiler)
 		{
-			base.Resolve(ctx, compiler);
+			base.Resolve(context, compiler);
 
 			// Validate the operand
-			var result = opTable[(int)ctx.Operand1.Type.GetStackTypeCode()];
+			var result = opTable[(int)context.Operand1.Type.GetStackTypeCode()];
 			if (StackTypeCode.Unknown == result)
-				throw new InvalidOperationException(@"Invalid operand to Not instruction.");
+				throw new InvalidOperationException("Invalid operand to Not instruction.");
 
-			ctx.Result = compiler.CreateVirtualRegister(ctx.Operand1.Type);
+			context.Result = compiler.CreateVirtualRegister(context.Operand1.Type);
 		}
 
 		#endregion Methods

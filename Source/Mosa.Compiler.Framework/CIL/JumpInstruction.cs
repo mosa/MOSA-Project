@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Represents a basic jump instruction.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.InvokeInstruction" />
 	/// <remarks>
 	/// Other more complex method invocation instructions derive from this class, specifically the CallInstruction,
 	/// the CalliInstruction and CallvirtInstruction classes. They share the features provided by the JumpInstruction.
@@ -14,8 +15,9 @@ namespace Mosa.Compiler.Framework.CIL
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="JumpInstruction"/> class.
+		/// Initializes a new instance of the <see cref="JumpInstruction" /> class.
 		/// </summary>
+		/// <param name="opCode">The op code.</param>
 		public JumpInstruction(OpCode opCode)
 			: base(opCode)
 		{

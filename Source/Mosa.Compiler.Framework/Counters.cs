@@ -5,27 +5,27 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Counters
 	/// </summary>
 	public sealed class Counters
 	{
 		private Dictionary<string, int> counters;
+		private readonly object _lock = new object();
 
 		public void Clear()
 		{
-			if (counters != null)
-				counters.Clear();
+			counters?.Clear();
 		}
 
 		public void Update(string name, int count)
 		{
-			lock (this)
+			lock (_lock)
 			{
 				if (counters == null)
 					counters = new Dictionary<string, int>();
 
 				if (counters.ContainsKey(name))
-					counters[name] = counters[name] + count;
+					counters[name] += count;
 				else
 					counters.Add(name, count);
 			}

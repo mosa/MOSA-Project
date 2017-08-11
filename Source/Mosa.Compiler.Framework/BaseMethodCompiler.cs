@@ -220,7 +220,7 @@ namespace Mosa.Compiler.Framework
 			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 
 			Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
-			VirtualRegisters = new VirtualRegisters(Architecture);
+			VirtualRegisters = new VirtualRegisters();
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
 			DominanceAnalysis = new Dominance(Compiler.CompilerOptions.DominanceAnalysisFactory, BasicBlocks);

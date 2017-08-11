@@ -5,8 +5,9 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// IsInst Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public sealed class IsInstInstruction : UnaryInstruction
 	{
 		#region Construction
@@ -27,18 +28,18 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			var type = (MosaType)decoder.Instruction.Operand;
 
-			ctx.Result = decoder.Compiler.AllocateVirtualRegisterOrStackSlot(type);
-			ctx.MosaType = type;
-			ctx.ResultCount = 1;
+			node.Result = decoder.Compiler.AllocateVirtualRegisterOrStackSlot(type);
+			node.MosaType = type;
+			node.ResultCount = 1;
 		}
 
 		#endregion Methods

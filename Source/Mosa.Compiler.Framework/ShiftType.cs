@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Shift Type
 	/// </summary>
 	public enum ShiftType
 	{

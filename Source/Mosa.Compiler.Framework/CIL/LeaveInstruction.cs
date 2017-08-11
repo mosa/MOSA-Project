@@ -3,8 +3,9 @@
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Leave Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BranchInstruction" />
 	public sealed class LeaveInstruction : BranchInstruction
 	{
 		#region Construction

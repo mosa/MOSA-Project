@@ -1,13 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Intermediate representation for stobj and stind.* IL instructions.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BinaryInstruction" />
 	public sealed class StobjInstruction : BinaryInstruction
 	{
 		#region Data members
@@ -39,7 +40,7 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Stind_i: elementType = MosaTypeCode.I; break;
 				case OpCode.Stind_ref: elementType = MosaTypeCode.Object; break;
 				case OpCode.Stobj: elementType = null; break;
-				default: throw new NotImplementedException();
+				default: throw new NotImplementCompilerException();
 			}
 		}
 
@@ -50,18 +51,18 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			MosaType type = (elementType == null)
 				? type = (MosaType)decoder.Instruction.Operand
 				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
 
-			ctx.MosaType = type;
+			node.MosaType = type;
 
 			// FIXME: Check the value/destinations
 		}
@@ -69,11 +70,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, BaseMethodCompiler compiler)
 		{
-			base.Resolve(ctx, compiler);
+			base.Resolve(context, compiler);
 		}
 
 		#endregion Methods

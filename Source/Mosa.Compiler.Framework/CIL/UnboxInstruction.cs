@@ -5,8 +5,9 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Unbox Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public sealed class UnboxInstruction : UnaryInstruction
 	{
 		#region Construction
@@ -24,17 +25,17 @@ namespace Mosa.Compiler.Framework.CIL
 
 		#region Methods
 
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			var type = (MosaType)decoder.Instruction.Operand;
 
 			//Operand result = decoder.Compiler.CreateVirtualRegister(type);
 			//ctx.Result = result;
-			ctx.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, type);
-			ctx.MosaType = type;
+			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, type);
+			node.MosaType = type;
 		}
 
 		#endregion Methods

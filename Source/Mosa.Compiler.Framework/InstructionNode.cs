@@ -100,17 +100,11 @@ namespace Mosa.Compiler.Framework
 			}
 			internal set
 			{
-				if (basicBlock != null)
-				{
-					basicBlock.RemoveBranchInstruction(this);
-				}
+				basicBlock?.RemoveBranchInstruction(this);
 
 				basicBlock = value;
 
-				if (basicBlock != null)
-				{
-					basicBlock.AddBranchInstruction(this);
-				}
+				basicBlock?.AddBranchInstruction(this);
 			}
 		}
 
@@ -218,8 +212,12 @@ namespace Mosa.Compiler.Framework
 					yield return operand3;
 
 				if (OperandCount >= 3)
+				{
 					for (int i = 3; i < OperandCount; i++)
+					{
 						yield return GetAdditionalOperand(i);
+					}
+				}
 			}
 		}
 
@@ -315,7 +313,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The branch targets count.
 		/// </value>
-		public int BranchTargetsCount { get { return (branchTargets == null) ? 0 : branchTargets.Count; } }
+		public int BranchTargetsCount { get { return branchTargets?.Count ?? 0; } }
 
 		/// <summary>
 		/// Sets the branch target.
@@ -325,17 +323,9 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(block != null);
 
-			if (branchTargets == null)
-			{
-				branchTargets = new List<BasicBlock>(1);
-			}
+			(branchTargets ?? (branchTargets = new List<BasicBlock>(1))).Add(block);
 
-			branchTargets.Add(block);
-
-			if (Block != null)
-			{
-				Block.AddBranchInstruction(this);
-			}
+			Block?.AddBranchInstruction(this);
 		}
 
 		public void UpdateBranchTarget(int index, BasicBlock block)
@@ -360,7 +350,7 @@ namespace Mosa.Compiler.Framework
 		public bool HasPrefix
 		{
 			get { return (packed & 0x02) == 0x02; }
-			set { if (value) packed = packed | 0x02; else packed = (uint)(packed & ~0x2); }
+			set { if (value) { packed |= 0x02; } else { packed = (uint)(packed & ~0x2); } }
 		}
 
 		/// <summary>
@@ -369,7 +359,7 @@ namespace Mosa.Compiler.Framework
 		public bool BranchHint
 		{
 			get { return (packed & 0x04) == 0x04; }
-			set { if (value) packed = packed | 0x04; else packed = (uint)(packed & ~0x04); }
+			set { if (value) { packed |= 0x04; } else { packed = (uint)(packed & ~0x04); } }
 		}
 
 		/// <summary>
@@ -378,7 +368,7 @@ namespace Mosa.Compiler.Framework
 		public bool Marked
 		{
 			get { return (packed & 0x08) == 0x08; }
-			set { if (value) packed = packed | 0x08; else packed = (uint)(packed & ~0x08); }
+			set { if (value) { packed |= 0x08; } else { packed = (uint)(packed & ~0x08); } }
 		}
 
 		/// <summary>
@@ -390,7 +380,7 @@ namespace Mosa.Compiler.Framework
 		public bool UpdateStatus
 		{
 			get { return (packed & 0x16) == 0x16; }
-			set { if (value) packed = packed | 0x16; else packed = (uint)(packed & ~0x16); }
+			set { if (value) packed |= 0x16; else packed = (uint)(packed & ~0x16); }
 		}
 
 		/// <summary>
@@ -423,7 +413,7 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public MosaMethod InvokeMethod
 		{
-			get { return addition == null ? null : addition.InvokeMethod; }
+			get { return addition?.InvokeMethod; }
 			set { CheckAddition(); addition.InvokeMethod = value; }
 		}
 
@@ -433,7 +423,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>The runtime field.</value>
 		public MosaField MosaField
 		{
-			get { return addition == null ? null : addition.MosaField; }
+			get { return addition?.MosaField; }
 			set { CheckAddition(); addition.MosaField = value; }
 		}
 
@@ -443,7 +433,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>The runtime field.</value>
 		public MosaType MosaType
 		{
-			get { return addition == null ? null : addition.MosaType; }
+			get { return addition?.MosaType; }
 			set { CheckAddition(); addition.MosaType = value; }
 		}
 
@@ -455,7 +445,7 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public List<BasicBlock> PhiBlocks
 		{
-			get { return addition == null ? null : addition.PhiBlocks; }
+			get { return addition?.PhiBlocks; }
 			set { CheckAddition(); addition.PhiBlocks = value; }
 		}
 
@@ -749,7 +739,7 @@ namespace Mosa.Compiler.Framework
 
 			//if (addition.AdditionalOperands == null) addition.AdditionalOperands = new Operand[253];
 			//Debug.Assert(index < 255, @"No Index");
-			Debug.Assert(index >= 3, @"No Index");
+			Debug.Assert(index >= 3, "No Index");
 
 			SizeAdditionalOperands(index - 3);
 
@@ -787,7 +777,7 @@ namespace Mosa.Compiler.Framework
 			if (addition == null || addition.AdditionalOperands == null)
 				return null;
 
-			Debug.Assert(index >= 3, @"No Index");
+			Debug.Assert(index >= 3, "No Index");
 
 			//Debug.Assert(index < 255, @"No Index");
 
@@ -1157,6 +1147,7 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		public void SetInstruction(BaseInstruction instruction, bool updateStatus, Operand result, Operand operand1)
@@ -1271,6 +1262,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
 		/// <param name="operand3">The operand3.</param>
+		/// <param name="operand4">The operand4.</param>
 		public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
 		{
 			SetInstruction(instruction, 4, (byte)((result == null) ? 0 : 1));

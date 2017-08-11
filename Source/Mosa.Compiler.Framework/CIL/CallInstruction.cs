@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Intermediate representation for various IL call operations.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.InvokeInstruction" />
 	/// <remarks>
 	/// Instances of this class are used to represent call, calli and callvirt
 	/// instructions.
@@ -14,8 +15,9 @@ namespace Mosa.Compiler.Framework.CIL
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CallInstruction"/> class.
+		/// Initializes a new instance of the <see cref="CallInstruction" /> class.
 		/// </summary>
+		/// <param name="opCode">The op code.</param>
 		public CallInstruction(OpCode opCode)
 			: base(opCode)
 		{

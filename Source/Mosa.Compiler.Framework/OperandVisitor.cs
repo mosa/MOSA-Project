@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework
 {
 	public struct OperandVisitor
 	{
-		private InstructionNode node;
+		private readonly InstructionNode node;
 
 		public OperandVisitor(InstructionNode node)
 		{

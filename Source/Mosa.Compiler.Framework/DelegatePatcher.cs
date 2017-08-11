@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The compiler
 		/// </summary>
-		private BaseCompiler Compiler;
+		private readonly BaseCompiler Compiler;
 
 		/// <summary>
 		/// The delegate proxy type
@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The deligate proxy methods
 		/// </summary>
-		private Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>> delegateProxyMethods = new Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>>();
+		public readonly Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>> delegateProxyMethods = new Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DelegatePatcher"/> class.

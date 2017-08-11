@@ -1,17 +1,21 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
+
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Ldarg Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.LoadInstruction" />
 	public sealed class LdargInstruction : LoadInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LdargInstruction"/> class.
+		/// Initializes a new instance of the <see cref="LdargInstruction" /> class.
 		/// </summary>
+		/// <param name="opCode">The op code.</param>
 		public LdargInstruction(OpCode opCode)
 			: base(opCode, 1)
 		{
@@ -24,16 +28,16 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified CIL instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		/// <remarks>
 		/// This method is used by instructions to retrieve immediate operands
 		/// From the instruction stream.
 		/// </remarks>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			int index;
 
@@ -46,13 +50,13 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Ldarg_1: index = 1; break;
 				case OpCode.Ldarg_2: index = 2; break;
 				case OpCode.Ldarg_3: index = 3; break;
-				default: throw new System.NotImplementedException();
+				default: throw new InvalidCompilerException();
 			}
 
 			var parameterOperand = decoder.Compiler.Parameters[index];
 
-			ctx.Operand1 = parameterOperand;
-			ctx.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, parameterOperand.Type);
+			node.Operand1 = parameterOperand;
+			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, parameterOperand.Type);
 		}
 
 		#endregion Methods

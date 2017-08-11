@@ -5,12 +5,13 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Implements the internal representation for unary CIL instructions.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
 	public class UnaryInstruction : BaseCILInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="UnaryInstruction"/> class.
+		/// Initializes a new instance of the <see cref="UnaryInstruction" /> class.
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public UnaryInstruction(OpCode opcode)
@@ -19,7 +20,7 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="UnaryInstruction"/> class.
+		/// Initializes a new instance of the <see cref="UnaryInstruction" /> class.
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		/// <param name="resultCount">The result count.</param>

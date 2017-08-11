@@ -3,8 +3,9 @@
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Callvirt Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.InvokeInstruction" />
 	public sealed class CallvirtInstruction : InvokeInstruction
 	{
 		#region Construction
@@ -35,9 +36,9 @@ namespace Mosa.Compiler.Framework.CIL
 
 		#region Methods
 
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 		}
 
 		#endregion Methods

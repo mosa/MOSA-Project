@@ -5,15 +5,17 @@ using Mosa.Compiler.Common;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Ldloc Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.LoadInstruction" />
 	public sealed class LdlocInstruction : LoadInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LdlocInstruction"/> class.
+		/// Initializes a new instance of the <see cref="LdlocInstruction" /> class.
 		/// </summary>
+		/// <param name="opCode">The op code.</param>
 		public LdlocInstruction(OpCode opCode)
 			: base(opCode, 1)
 		{
@@ -26,12 +28,12 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			// Opcode specific handling
 			int index;
@@ -50,8 +52,8 @@ namespace Mosa.Compiler.Framework.CIL
 			var local = decoder.Compiler.LocalVariables[index];
 			var result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, local.Type);
 
-			ctx.Operand1 = local;
-			ctx.Result = result;
+			node.Operand1 = local;
+			node.Result = result;
 		}
 
 		#endregion Methods

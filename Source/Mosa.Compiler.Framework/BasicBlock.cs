@@ -13,17 +13,17 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class BasicBlock
 	{
-		public static readonly int PrologueLabel = -1;
-		public static readonly int StartLabel = 0;
-		public static readonly int EpilogueLabel = int.MaxValue;
-		public static readonly int CompilerBlockStartLabel = 0x10000000;
+		public const int PrologueLabel = -1;
+		public const int StartLabel = 0;
+		public const int EpilogueLabel = int.MaxValue;
+		public const int CompilerBlockStartLabel = 0x10000000;
 
 		#region Data Fields
 
 		/// <summary>
 		/// The branch instructions
 		/// </summary>
-		private List<InstructionNode> branchInstructions = new List<InstructionNode>(2);
+		private readonly List<InstructionNode> branchInstructions = new List<InstructionNode>(2);
 
 		#endregion Data Fields
 
@@ -32,12 +32,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the first instruction node.
 		/// </summary>
-		public InstructionNode First { get; private set; }
+		public InstructionNode First { get; }
 
 		/// <summary>
 		/// Gets the last instruction node.
 		/// </summary>
-		public InstructionNode Last { get; private set; }
+		public InstructionNode Last { get; }
 
 		/// <summary>
 		/// Gets the before last instruction node.
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the label, which uniquely identifies this block.
 		/// </summary>
 		/// <value>The label.</value>
-		public int Label { get; private set; }
+		public int Label { get; }
 
 		/// <summary>
 		/// Retrieves the label, which uniquely identifies this block.
@@ -116,13 +116,17 @@ namespace Mosa.Compiler.Framework
 			Label = label;
 			Sequence = sequence;
 
-			First = new InstructionNode(IRInstruction.BlockStart);
-			First.Label = label;
-			First.Block = this;
+			First = new InstructionNode(IRInstruction.BlockStart)
+			{
+				Label = label,
+				Block = this
+			};
 
-			Last = new InstructionNode(IRInstruction.BlockEnd);
-			Last.Label = label;
-			Last.Block = this;
+			Last = new InstructionNode(IRInstruction.BlockEnd)
+			{
+				Label = label,
+				Block = this
+			};
 
 			First.Next = Last;
 			Last.Previous = First;
@@ -134,7 +138,7 @@ namespace Mosa.Compiler.Framework
 
 		internal void AddBranchInstruction(InstructionNode node)
 		{
-			if (node.Instruction != null && node.Instruction.IgnoreInstructionBasicBlockTargets)
+			if (node.Instruction?.IgnoreInstructionBasicBlockTargets == true)
 				return;
 
 			if (node.BranchTargets == null || node.BranchTargetsCount == 0)

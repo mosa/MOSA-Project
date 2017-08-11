@@ -3,8 +3,9 @@
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Branch Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
 	public class BranchInstruction : BaseCILInstruction
 	{
 		#region Construction
@@ -46,16 +47,16 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode bases first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			var block = decoder.GetBlock((int)decoder.Instruction.Operand);
 
-			ctx.AddBranchTarget(block);
+			node.AddBranchTarget(block);
 		}
 
 		#endregion Methods

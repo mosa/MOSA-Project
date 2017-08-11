@@ -20,9 +20,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public MosaMethod GetPlugMethod(MosaMethod method)
 		{
-			MosaMethod plug = null;
-
-			plugMethods.TryGetValue(method, out plug);
+			plugMethods.TryGetValue(method, out MosaMethod plug);
 
 			return plug;
 		}
