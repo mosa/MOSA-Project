@@ -133,7 +133,7 @@ namespace Mosa.Compiler.Framework.Stages
 						Linker.GetSymbol(method.FullName + Metadata.MethodDefinition, SectionKind.ROData).VirtualAddress,
 						method.FullName,
 						method.Signature.ReturnType.FullName,
-						TypeLayout.GetMethodStackSize(method),
+						TypeLayout.GetLocalMethodStackSize(method),
 						TypeLayout.GetMethodParameterStackSize(method),
 						(int)method.MethodAttributes,
 						type.FullName

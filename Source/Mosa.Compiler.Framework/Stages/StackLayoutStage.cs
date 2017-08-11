@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int size = LayoutVariables(MethodCompiler.LocalStack, CallingConvention, CallingConvention.OffsetOfFirstLocal);
 
 			MethodCompiler.StackSize = size;
-			MethodCompiler.TypeLayout.SetMethodStackSize(MethodCompiler.Method, -size);
+			MethodCompiler.TypeLayout.SetLocalMethodStackSize(MethodCompiler.Method, -size);
 
 			TraceStackLocals();
 		}
