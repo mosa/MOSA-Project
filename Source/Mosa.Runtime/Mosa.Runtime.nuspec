@@ -19,7 +19,7 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\..\bin\Mosa.Runtime.dll" target="lib" />
+		<file src="..\..\bin\Mosa.Runtime.dll" target="lib\net45" />
 	</files>
 
 </package>
