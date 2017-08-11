@@ -5,7 +5,7 @@ using System.IO;
 namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
-	///
+	/// Program Header
 	/// </summary>
 	public class ProgramHeader
 	{
@@ -13,9 +13,9 @@ namespace Mosa.Compiler.Linker.Elf
 		/// This member holds the size in bytes of one entry in the file's program header table;
 		/// all entries are the same size.
 		/// </summary>
-		public static readonly ushort EntrySize32 = 0x20;
+		public const ushort EntrySize32 = 0x20;
 
-		public static readonly ushort EntrySize64 = 0x28;
+		internal const ushort EntrySize64 = 0x28;
 
 		/// This member tells what kind of segment this array element describes or how to
 		/// interpret the array element's information.
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Linker.Elf
 		public ProgramHeaderFlags Flags;
 
 		/// <summary>
-		///
+		/// The alignment
 		/// </summary>
 		public ulong Alignment;
 

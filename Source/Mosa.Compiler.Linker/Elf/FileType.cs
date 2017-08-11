@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
-	///
+	/// File Type
 	/// </summary>
 	public enum FileType : ushort
 	{
