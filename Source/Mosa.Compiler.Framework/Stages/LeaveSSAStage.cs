@@ -7,8 +7,9 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///
+	/// Leave SSA Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public class LeaveSSAStage : BaseMethodCompilerStage
 	{
 		private Dictionary<Operand, Operand> finalVirtualRegisters;
@@ -47,13 +48,13 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var op = context.GetOperand(i);
 
-						if (op != null && op.IsSSA)
+						if (op?.IsSSA == true)
 						{
 							context.SetOperand(i, GetFinalVirtualRegister(op));
 						}
 					}
 
-					if (context.Result != null && context.Result.IsSSA)
+					if (context.Result?.IsSSA == true)
 					{
 						context.Result = GetFinalVirtualRegister(context.Result);
 					}
@@ -70,9 +71,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand GetFinalVirtualRegister(Operand operand)
 		{
-			Operand final;
-
-			if (!finalVirtualRegisters.TryGetValue(operand, out final))
+			if (!finalVirtualRegisters.TryGetValue(operand, out Operand final))
 			{
 				if (operand.SSAVersion == 0)
 					final = operand.SSAParent;

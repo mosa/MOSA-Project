@@ -9,12 +9,13 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///	Places phi instructions for the SSA transformation
+	/// Places phi instructions for the SSA transformation
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public class PhiPlacementStage : BaseMethodCompilerStage
 	{
 		/// <summary>
-		///
+		/// Phi Placement Strategy
 		/// </summary>
 		public enum PhiPlacementStrategy
 		{
@@ -24,14 +25,9 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		///
+		/// The strategy
 		/// </summary>
-		private PhiPlacementStrategy strategy;
-
-		/// <summary>
-		///
-		/// </summary>
-		private Dictionary<Operand, List<BasicBlock>> assignments = new Dictionary<Operand, List<BasicBlock>>();
+		private readonly PhiPlacementStrategy strategy;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PhiPlacementStage"/> class.
@@ -53,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Gets the assignments.
 		/// </summary>
-		public Dictionary<Operand, List<BasicBlock>> Assignments { get { return assignments; } }
+		public Dictionary<Operand, List<BasicBlock>> Assignments { get; } = new Dictionary<Operand, List<BasicBlock>>();
 
 		protected override void Run()
 		{
@@ -111,12 +107,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="block">The block.</param>
 		private void AddToAssignments(Operand operand, BasicBlock block)
 		{
-			List<BasicBlock> blocks;
-
-			if (!assignments.TryGetValue(operand, out blocks))
+			if (!Assignments.TryGetValue(operand, out List<BasicBlock> blocks))
 			{
 				blocks = new List<BasicBlock>();
-				assignments.Add(operand, blocks);
+				Assignments.Add(operand, blocks);
 			}
 
 			blocks.AddIfNew(block);
@@ -161,11 +155,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Places the phi functions minimal.
 		/// </summary>
+		/// <param name="headBlock">The head block.</param>
 		private void PlacePhiFunctionsMinimal(BasicBlock headBlock)
 		{
 			var analysis = MethodCompiler.DominanceAnalysis.GetDominanceAnalysis(headBlock);
 
-			foreach (var t in assignments)
+			foreach (var t in Assignments)
 			{
 				var blocks = t.Value;
 

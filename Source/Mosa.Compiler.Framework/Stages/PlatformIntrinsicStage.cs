@@ -6,8 +6,9 @@ using System;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///
+	/// Platform Intrinsic Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public sealed class PlatformIntrinsicStage : BaseMethodCompilerStage
 	{
 		protected override void Run()

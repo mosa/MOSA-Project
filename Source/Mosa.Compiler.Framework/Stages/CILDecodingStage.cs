@@ -289,16 +289,16 @@ namespace Mosa.Compiler.Framework.Stages
 			return GetBlockByLabel(label);
 		}
 
-		Operand IInstructionDecoder.ConvertVirtualRegisterToStackLocal(Operand operand)
+		Operand IInstructionDecoder.ConvertVirtualRegisterToStackLocal(Operand virtualRegister)
 		{
-			if (operand.IsStackLocal)
-				return operand;
+			if (virtualRegister.IsStackLocal)
+				return virtualRegister;
 
 			int index = 0;
 
 			foreach (var op in MethodCompiler.LocalVariables)
 			{
-				if (op == operand)
+				if (op == virtualRegister)
 					break;
 
 				index++;
@@ -310,26 +310,26 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MethodCompiler.LocalVariables[index] = stackLocal;
 
-			foreach (var node in operand.Uses.ToArray())
+			foreach (var node in virtualRegister.Uses.ToArray())
 			{
 				for (int i = 0; i < node.OperandCount; i++)
 				{
 					var op = node.GetOperand(i);
 
-					if (operand == op)
+					if (virtualRegister == op)
 					{
 						node.SetOperand(i, stackLocal);
 					}
 				}
 			}
 
-			foreach (var node in operand.Definitions.ToArray())
+			foreach (var node in virtualRegister.Definitions.ToArray())
 			{
 				for (int i = 0; i < node.ResultCount; i++)
 				{
 					var op = node.GetResult(i);
 
-					if (operand == op)
+					if (virtualRegister == op)
 					{
 						node.SetResult(i, stackLocal);
 					}

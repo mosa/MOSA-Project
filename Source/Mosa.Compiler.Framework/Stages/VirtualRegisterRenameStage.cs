@@ -1,16 +1,14 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.IR;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///
+	/// Virtual Register Rename Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
 	public sealed class VirtualRegisterRenameStage : BaseCodeTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()

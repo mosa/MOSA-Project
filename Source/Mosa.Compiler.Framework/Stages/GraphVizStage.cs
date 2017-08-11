@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog();
 
-			char q = '"';
+			const char q = '"';
 
 			trace.Log("digraph blocks {");
 
@@ -31,11 +31,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 				//trace.Log("\t" + block.ToString() + " [label=" + q + sb.ToString() + q + "];");
 
-				trace.Log("\t" + block.ToString());
+				trace.Log("\t" + block);
 
 				foreach (var next in block.NextBlocks)
 				{
-					trace.Log("\t" + block.ToString() + " -> " + next.ToString());
+					trace.Log("\t" + block + " -> " + next);
 				}
 			}
 

@@ -5,8 +5,9 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///
+	/// Stack Setup Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public sealed class StackSetupStage : BaseMethodCompilerStage
 	{
 		protected override void Run()

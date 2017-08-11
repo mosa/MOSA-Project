@@ -8,8 +8,9 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///
+	/// Enter SSA Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public sealed class EnterSSAStage : BaseMethodCompilerStage
 	{
 		private PhiPlacementStage phiPlacementStage;
@@ -123,7 +124,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (op == null || !op.IsVirtualRegister)
 							continue;
 
-						Debug.Assert(variables.ContainsKey(op), op.ToString() + " is not in dictionary [block = " + block + "]");
+						Debug.Assert(variables.ContainsKey(op), op + " is not in dictionary [block = " + block + "]");
 
 						var version = variables[op].Peek();
 						node.SetOperand(i, GetSSAOperand(op, version));
@@ -186,8 +187,13 @@ namespace Mosa.Compiler.Framework.Stages
 		private int WhichPredecessor(BasicBlock y, BasicBlock x)
 		{
 			for (var i = 0; i < y.PreviousBlocks.Count; ++i)
+			{
 				if (y.PreviousBlocks[i] == x)
+				{
 					return i;
+				}
+			}
+
 			return -1;
 		}
 	}

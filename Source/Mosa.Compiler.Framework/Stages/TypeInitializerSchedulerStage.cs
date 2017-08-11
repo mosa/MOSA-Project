@@ -16,19 +16,19 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class TypeInitializerSchedulerStage : BaseCompilerStage
 	{
-		public readonly static string TypeInitializerName = "AssemblyInit";
+		public const string TypeInitializerName = "AssemblyInit";
 
 		#region Data Members
 
 		/// <summary>
 		/// Hold the current context
 		/// </summary>
-		private Context start;
+		private readonly Context start;
 
 		/// <summary>
 		/// The basic blocks
 		/// </summary>
-		private BasicBlocks basicBlocks;
+		private readonly BasicBlocks basicBlocks;
 
 		private MosaMethod typeInitializerMethod;
 

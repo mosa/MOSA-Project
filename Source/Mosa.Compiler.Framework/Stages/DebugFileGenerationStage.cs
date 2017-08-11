@@ -197,10 +197,10 @@ namespace Mosa.Compiler.Framework.Stages
 						field.FullName,
 						field.Name,
 						field.FieldType.FullName,
-						symbol != null ? symbol.VirtualAddress : 0,
+						symbol?.VirtualAddress ?? 0,
 						(int)field.FieldAttributes,
 						field.IsStatic && !field.IsLiteral ? 0 : TypeLayout.GetFieldOffset(field),  // todo: missing first offset
-						field.Data != null ? field.Data.Length : 0,
+						field.Data?.Length ?? 0,
 						0, // todo: DataAddress
 						type.FullName
 					);

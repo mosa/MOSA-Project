@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var block in blockOrderAnalysis.NewBlockOrder)
 			{
 				if (block != null)
-					trace.Log("# " + index.ToString() + " Block " + block.ToString() + " #" + block.Sequence.ToString());
+					trace.Log("# " + index.ToString() + " Block " + block + " #" + block.Sequence.ToString());
 				else
 					trace.Log("# " + index.ToString() + " NONE");
 
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 				int depth = blockOrderAnalysis.GetLoopDepth(block);
 				int depthindex = blockOrderAnalysis.GetLoopIndex(block);
 
-				trace.Log("Block " + block.ToString() + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " Index: " + depthindex.ToString());
+				trace.Log("Block " + block + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " Index: " + depthindex.ToString());
 			}
 		}
 	}
