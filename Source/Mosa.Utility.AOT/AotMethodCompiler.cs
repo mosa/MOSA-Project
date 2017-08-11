@@ -48,7 +48,7 @@ namespace Mosa.Utility.Aot
 				(compilerOptions.TwoPassOptimizationStages && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.TwoPassOptimizationStages && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
 
-				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
+				(compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
 				new IRCleanupStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 				new PlatformStubStage(),

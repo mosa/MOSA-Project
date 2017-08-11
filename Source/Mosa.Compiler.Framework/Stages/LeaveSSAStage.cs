@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///
 	/// </summary>
-	public class LeaveSSA : BaseMethodCompilerStage
+	public class LeaveSSAStage : BaseMethodCompilerStage
 	{
 		private Dictionary<Operand, Operand> finalVirtualRegisters;
 

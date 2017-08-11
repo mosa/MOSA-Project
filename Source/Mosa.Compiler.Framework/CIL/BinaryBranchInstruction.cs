@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <returns></returns>
 		protected override string GetModifier(InstructionNode node)
 		{
-			switch (((node.Instruction) as CIL.BaseCILInstruction).OpCode)
+			switch (((node.Instruction) as BaseCILInstruction).OpCode)
 			{
 				case OpCode.Beq_s: return "==";
 				case OpCode.Beq: return "==";

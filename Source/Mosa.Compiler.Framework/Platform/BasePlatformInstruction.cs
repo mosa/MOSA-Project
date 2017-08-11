@@ -3,8 +3,9 @@
 namespace Mosa.Compiler.Framework.Platform
 {
 	/// <summary>
-	///
+	/// Base Platform Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseInstruction" />
 	public abstract class BasePlatformInstruction : BaseInstruction
 	{
 		#region Construction
@@ -14,7 +15,7 @@ namespace Mosa.Compiler.Framework.Platform
 		/// </summary>
 		/// <param name="resultCount">The result count.</param>
 		/// <param name="operandCount">The operand count.</param>
-		public BasePlatformInstruction(byte resultCount, byte operandCount)
+		protected BasePlatformInstruction(byte resultCount, byte operandCount)
 			: base(resultCount, operandCount)
 		{
 		}
