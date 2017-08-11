@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <package >
 	<metadata>
 		<id>Mosa.Runtime.x86</id>
@@ -20,6 +20,6 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\..\bin\Mosa.Runtime.x86.dll" target="lib" />
+		<file src="..\..\bin\Mosa.Runtime.x86.dll" target="lib\net45" />
 	</files>
 </package>

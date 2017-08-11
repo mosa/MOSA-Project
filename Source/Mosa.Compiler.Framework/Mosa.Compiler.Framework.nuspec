@@ -16,11 +16,11 @@
 		<tags>MOSA Compiler</tags>
 	</metadata>
 	<files>
-		<file src="..\..\bin\Mosa.Compiler.Framework.dll" target="lib" />
-		<file src="..\..\bin\Mosa.Compiler.Common.dll" target="lib" />
-		<file src="..\..\bin\Mosa.Compiler.Linker.dll" target="lib" />
-		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.dll" target="lib" />
-		<file src="..\..\bin\Mosa.Compiler.Trace.dll" target="lib" />
-		<file src="..\..\bin\dnlib.dll" target="lib" />
+		<file src="..\..\bin\Mosa.Compiler.Framework.dll" target="lib\net45" />
+		<file src="..\..\bin\Mosa.Compiler.Common.dll" target="lib\net45" />
+		<file src="..\..\bin\Mosa.Compiler.Linker.dll" target="lib\net45" />
+		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.dll" target="lib\net45" />
+		<file src="..\..\bin\Mosa.Compiler.Trace.dll" target="lib\net45" />
+		<file src="..\..\bin\dnlib.dll" target="lib\net45" />
 	</files>
 </package>

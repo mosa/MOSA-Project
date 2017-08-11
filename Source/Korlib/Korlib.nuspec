@@ -16,6 +16,6 @@
 		<tags>MOSA Compiler corlib</tags>
 	</metadata>
 	<files>
-		<file src="..\..\bin\mscorlib.dll" target="lib" />
+		<file src="..\..\bin\mscorlib.dll" target="lib\net45" />
 	</files>
 </package>
