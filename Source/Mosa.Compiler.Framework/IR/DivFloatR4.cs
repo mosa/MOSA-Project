@@ -8,11 +8,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <remarks>
 	/// The instruction is a three-address instruction, where the result receives
 	/// the value of the first operand (index 0) divided by the second operand (index 1).
-	/// <para />
-	/// Both the first and second operand must be the same floating point type. If the second operand
-	/// is statically or dynamically equal to or larger than the number of bits in the first
-	/// operand, the result is undefined.
 	/// </remarks>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseThreeOperandInstruction" />
 	public sealed class DivFloatR4 : BaseThreeOperandInstruction
 	{
 		/// <summary>

@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	///
+	/// Move Integer
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseTwoOperandInstruction" />
 	public sealed class MoveInteger : BaseTwoOperandInstruction

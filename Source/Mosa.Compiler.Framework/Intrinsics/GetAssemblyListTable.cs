@@ -4,6 +4,10 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	/// <summary>
+	///
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetAssemblyListTable")]
 	internal class GetAssemblyListTable : IIntrinsicInternalMethod
 	{

@@ -13,9 +13,10 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="methodCompiler">The method compiler.</param>
+		/// <exception cref="InvalidCompilerException"></exception>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			var size = InstructionSize.Size64;
+			const InstructionSize size = InstructionSize.Size64;
 
 			if (context.OperandCount == 1)
 			{

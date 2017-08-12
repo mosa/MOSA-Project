@@ -2,6 +2,11 @@
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	/// <summary>
+	///
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.InternalsBase" />
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Type::GetTypeImpl")]
 	[ReplacementTarget("System.Type::GetTypeFromHandleImpl")]
 	public sealed class InternalsForType : InternalsBase, IIntrinsicInternalMethod

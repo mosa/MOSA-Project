@@ -8,15 +8,12 @@ namespace Mosa.Compiler.Framework.IR
 	/// <remarks>
 	/// The add instruction is a three-address instruction, where the result receives
 	/// the value of the first operand (index 0) added with the second operand (index 1).
-	/// <para />
-	/// Both the first and second operand must be the same integral type. If the second operand
-	/// is statically or dynamically equal to or larger than the number of bits in the first
-	/// operand, the result is undefined.
 	/// </remarks>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseThreeOperandInstruction" />
 	public sealed class AddFloatR4 : BaseThreeOperandInstruction
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="AddFloatR4"/>.
+		/// Initializes a new instance of the <see cref="AddFloatR4" />.
 		/// </summary>
 		public AddFloatR4()
 		{

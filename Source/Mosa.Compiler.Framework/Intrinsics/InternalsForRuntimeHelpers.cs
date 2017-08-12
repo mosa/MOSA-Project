@@ -2,6 +2,11 @@
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	/// <summary>
+	///
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.InternalsBase" />
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::InitializeArray")]
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::GetHashCode")]
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::Equals")]

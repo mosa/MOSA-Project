@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of a method return context.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseOneOperandInstruction" />
 	public sealed class InternalReturn : BaseOneOperandInstruction
 	{
 		#region Construction

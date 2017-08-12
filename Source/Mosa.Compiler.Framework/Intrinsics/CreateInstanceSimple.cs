@@ -7,6 +7,10 @@ using System.Collections.Generic;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
+	/// <summary>
+	///
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("Mosa.Runtime.Intrinsic::CreateInstanceSimple")]
 	internal class CreateInstanceSimple : IIntrinsicInternalMethod
 	{

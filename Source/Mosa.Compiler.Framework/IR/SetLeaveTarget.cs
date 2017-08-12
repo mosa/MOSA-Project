@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// An abstract intermediate representation to set the target of the eventually (even if nested) target for the leave instruction within a finally or catch handler, or a try protected block.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class SetLeaveTarget : BaseIRInstruction
 	{
 		#region Construction

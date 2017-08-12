@@ -21,12 +21,18 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var operand1 = context.Operand1;
 			if (operand1.IsValueType)
 			{
-				InstructionNode def = operand1.Definitions[0];
+				var def = operand1.Definitions[0];
 				var replacements = new List<Tuple<InstructionNode, int>>();
 				foreach (var use in operand1.Uses)
+				{
 					for (int i = 0; i < use.OperandCount; i++)
+					{
 						if (use.GetOperand(i) == operand1)
+						{
 							replacements.Add(new Tuple<InstructionNode, int>(use, i));
+						}
+					}
+				}
 
 				foreach (var replace in replacements)
 					replace.Item1.SetOperand(replace.Item2, def.Operand1);

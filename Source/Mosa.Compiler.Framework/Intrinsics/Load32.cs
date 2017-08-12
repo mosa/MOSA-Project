@@ -5,6 +5,10 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	/// <summary>
+	///
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("Mosa.Runtime.Intrinsic::Load32")]
 	public sealed class Load32 : IIntrinsicInternalMethod
 	{
@@ -13,9 +17,10 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="methodCompiler">The method compiler.</param>
+		/// <exception cref="InvalidCompilerException"></exception>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			var size = InstructionSize.Size32;
+			const InstructionSize size = InstructionSize.Size32;
 
 			if (context.OperandCount == 1)
 			{

@@ -7,6 +7,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// automatically select the appropriate value of a variable depending on the
 	/// incoming edge.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class Phi : BaseIRInstruction
 	{
 		#region Construction

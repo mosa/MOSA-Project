@@ -13,6 +13,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// is statically or dynamically equal to or larger than the number of bits in the first
 	/// operand, the result is undefined.
 	/// </remarks>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseThreeOperandInstruction" />
 	public sealed class MulSigned : BaseThreeOperandInstruction
 	{
 		/// <summary>
