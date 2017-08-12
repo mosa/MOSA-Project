@@ -64,22 +64,22 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The parameter offsets
 		/// </summary>
-		private readonly Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>();
+		private readonly Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// The parameter stack size
 		/// </summary>
-		private readonly Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>();
+		private readonly Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// The parameter stack size
 		/// </summary>
-		private readonly Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>();
+		private readonly Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// The overridden methods
 		/// </summary>
-		private readonly HashSet<MosaMethod> overriddenMethods = new HashSet<MosaMethod>();
+		private readonly HashSet<MosaMethod> overriddenMethods = new HashSet<MosaMethod>(new MosaMethodFullNameComparer());
 
 		private readonly object _lock = new object();
 
