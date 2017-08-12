@@ -27,6 +27,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.ArithmeticShiftRight, ArithmeticShiftRight);
 			AddVisitation(IRInstruction.Break, Break);
 			AddVisitation(IRInstruction.Call, Call);
+			AddVisitation(IRInstruction.CallDirect, CallDirect);
 			AddVisitation(IRInstruction.CompareFloatR4, CompareFloatR4);
 			AddVisitation(IRInstruction.CompareFloatR8, CompareFloatR8);
 			AddVisitation(IRInstruction.CompareInteger, CompareInteger);
@@ -105,7 +106,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsR4);
 
-			context.ReplaceInstructionOnly(X86.Addss);
+			context.ReplaceInstruction(X86.Addss);
 			context.Size = InstructionSize.Size32;
 		}
 
@@ -118,7 +119,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR8);
 			Debug.Assert(context.Operand1.IsR8);
 
-			context.ReplaceInstructionOnly(X86.Addsd);
+			context.ReplaceInstruction(X86.Addsd);
 			context.Size = InstructionSize.Size32;
 		}
 
@@ -154,7 +155,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddSigned(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Add);
+			context.ReplaceInstruction(X86.Add);
 		}
 
 		/// <summary>
@@ -163,7 +164,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddUnsigned(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Add);
+			context.ReplaceInstruction(X86.Add);
 		}
 
 		/// <summary>
@@ -172,7 +173,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ArithmeticShiftRight(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Sar);
+			context.ReplaceInstruction(X86.Sar);
 		}
 
 		/// <summary>
@@ -193,12 +194,21 @@ namespace Mosa.Platform.x86.Stages
 			if (context.OperandCount == 0 && context.BranchTargets != null)
 			{
 				// inter-method call; usually for exception processing
-				context.ReplaceInstructionOnly(X86.Call);
+				context.ReplaceInstruction(X86.Call);
 			}
 			else
 			{
 				CallingConvention.MakeCall(MethodCompiler, context);
 			}
+		}
+
+		/// <summary>
+		/// Visitation function for direct call instruction.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void CallDirect(InstructionNode node)
+		{
+			node.ReplaceInstruction(X86.Call);
 		}
 
 		/// <summary>
@@ -297,10 +307,10 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Visitation function for MoveInteger instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ConversionFloatR4ToFloatR8(Context context)
+		/// <param name="node">The node.</param>
+		private void ConversionFloatR4ToFloatR8(InstructionNode node)
 		{
-			context.ReplaceInstructionOnly(X86.Cvtss2sd);
+			node.ReplaceInstruction(X86.Cvtss2sd);
 		}
 
 		/// <summary>
@@ -311,7 +321,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Debug.Assert(context.Result.Type.IsI1 || context.Result.Type.IsI2 || context.Result.Type.IsI4);
 
-			context.ReplaceInstructionOnly(X86.Cvttss2si);
+			context.ReplaceInstruction(X86.Cvttss2si);
 		}
 
 		/// <summary>
@@ -320,7 +330,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ConversionFloatR8ToFloatR4(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Cvtsd2ss);
+			context.ReplaceInstruction(X86.Cvtsd2ss);
 		}
 
 		/// <summary>
@@ -331,7 +341,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Debug.Assert(context.Result.Type.IsI1 || context.Result.Type.IsI2 || context.Result.Type.IsI4);
 
-			context.ReplaceInstructionOnly(X86.Cvttsd2si);
+			context.ReplaceInstruction(X86.Cvttsd2si);
 		}
 
 		/// <summary>
@@ -341,7 +351,7 @@ namespace Mosa.Platform.x86.Stages
 		private void ConversionIntegerToFloatR4(Context context)
 		{
 			Debug.Assert(context.Result.IsR4);
-			context.ReplaceInstructionOnly(X86.Cvtsi2ss);
+			context.ReplaceInstruction(X86.Cvtsi2ss);
 		}
 
 		/// <summary>
@@ -351,7 +361,7 @@ namespace Mosa.Platform.x86.Stages
 		private void ConversionIntegerToFloatR8(Context context)
 		{
 			Debug.Assert(context.Result.IsR8);
-			context.ReplaceInstructionOnly(X86.Cvtsi2sd);
+			context.ReplaceInstruction(X86.Cvtsi2sd);
 		}
 
 		/// <summary>
@@ -363,7 +373,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsR4);
 
-			context.ReplaceInstructionOnly(X86.Divss);
+			context.ReplaceInstruction(X86.Divss);
 			context.Size = InstructionSize.Size32;
 		}
 
@@ -376,7 +386,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR8);
 			Debug.Assert(context.Operand1.IsR8);
 
-			context.ReplaceInstructionOnly(X86.Divsd);
+			context.ReplaceInstruction(X86.Divsd);
 			context.Size = InstructionSize.Size32;
 		}
 
@@ -572,7 +582,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void Jmp(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Jmp);
+			context.ReplaceInstruction(X86.Jmp);
 		}
 
 		private void LoadParameterFloatR4(Context context)
@@ -657,7 +667,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LogicalAnd(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.And);
+			context.ReplaceInstruction(X86.And);
 		}
 
 		/// <summary>
@@ -684,7 +694,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LogicalOr(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Or);
+			context.ReplaceInstruction(X86.Or);
 		}
 
 		/// <summary>
@@ -693,7 +703,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LogicalXor(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Xor);
+			context.ReplaceInstruction(X86.Xor);
 		}
 
 		/// <summary>
@@ -702,7 +712,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void MoveFloatR4(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Movss);
+			context.ReplaceInstruction(X86.Movss);
 		}
 
 		/// <summary>
@@ -711,7 +721,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void MoveFloatR8(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Movsd);
+			context.ReplaceInstruction(X86.Movsd);
 		}
 
 		/// <summary>
@@ -720,7 +730,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void MoveInteger(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Mov);
+			context.ReplaceInstruction(X86.Mov);
 		}
 
 		/// <summary>
@@ -732,7 +742,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsR4);
 
-			context.ReplaceInstructionOnly(X86.Mulss);
+			context.ReplaceInstruction(X86.Mulss);
 			context.Size = InstructionSize.Size32;
 		}
 
@@ -745,7 +755,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR8);
 			Debug.Assert(context.Operand1.IsR8);
 
-			context.ReplaceInstructionOnly(X86.Mulsd);
+			context.ReplaceInstruction(X86.Mulsd);
 			context.Size = InstructionSize.Size32;
 		}
 
@@ -805,7 +815,7 @@ namespace Mosa.Platform.x86.Stages
 
 			Debug.Assert(method != null, "Cannot find method: " + method);
 
-			context.ReplaceInstructionOnly(IRInstruction.Call);
+			context.ReplaceInstruction(IRInstruction.Call);
 			context.SetOperand(0, Operand.CreateSymbolFromMethod(TypeSystem, mosaMethod));
 			context.Result = result;
 			context.Operand2 = dividend;
@@ -908,7 +918,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ShiftLeft(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Shl);
+			context.ReplaceInstruction(X86.Shl);
 		}
 
 		/// <summary>
@@ -917,7 +927,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ShiftRight(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Shr);
+			context.ReplaceInstruction(X86.Shr);
 		}
 
 		/// <summary>
@@ -926,7 +936,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void SignExtendedMove(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Movsx);
+			context.ReplaceInstruction(X86.Movsx);
 		}
 
 		private void StoreFloatR4(Context context)
@@ -968,7 +978,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsR4);
 
-			context.ReplaceInstructionOnly(X86.Subss);
+			context.ReplaceInstruction(X86.Subss);
 			context.Size = InstructionSize.Size32;
 		}
 
@@ -981,7 +991,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR8);
 			Debug.Assert(context.Operand1.IsR8);
 
-			context.ReplaceInstructionOnly(X86.Subsd);
+			context.ReplaceInstruction(X86.Subsd);
 			context.Size = InstructionSize.Size64;
 		}
 
@@ -991,7 +1001,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void SubSigned(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Sub);
+			context.ReplaceInstruction(X86.Sub);
 		}
 
 		/// <summary>
@@ -1000,7 +1010,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void SubUnsigned(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.Sub);
+			context.ReplaceInstruction(X86.Sub);
 		}
 
 		/// <summary>
@@ -1029,7 +1039,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Debug.Assert(context.Size != InstructionSize.None);
 
-			context.ReplaceInstructionOnly(X86.Movzx);
+			context.ReplaceInstruction(X86.Movzx);
 		}
 
 		#endregion Visitation Methods
