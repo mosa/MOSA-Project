@@ -5,8 +5,9 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	///
+	/// Address Mode Conversion Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	public sealed class AddressModeConversionStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
@@ -17,10 +18,15 @@ namespace Mosa.Platform.x86.Stages
 		protected override void Run()
 		{
 			foreach (var block in BasicBlocks)
+			{
 				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
-					if (!node.IsEmpty)
-						if (node.OperandCount == 2 && node.ResultCount == 1)
-							ThreeTwoAddressConversion(node);
+				{
+					if (!node.IsEmpty && node.OperandCount == 2 && node.ResultCount == 1)
+					{
+						ThreeTwoAddressConversion(node);
+					}
+				}
+			}
 		}
 
 		/// <summary>
@@ -40,14 +46,14 @@ namespace Mosa.Platform.x86.Stages
 			if (!(node.OperandCount >= 1 && node.ResultCount >= 1 && node.Result != node.Operand1))
 				return;
 
-			Operand result = node.Result;
-			Operand operand1 = node.Operand1;
+			var result = node.Result;
+			var operand1 = node.Operand1;
 			int label = node.Label;
 
 			node.Operand1 = result;
 
 			X86Instruction move = null;
-			InstructionSize size = InstructionSize.None;
+			var size = InstructionSize.None;
 
 			if (result.Type.IsR4)
 			{
@@ -65,12 +71,12 @@ namespace Mosa.Platform.x86.Stages
 				size = InstructionSize.Size32;
 			}
 
-			var newNode = new InstructionNode(move, result, operand1);
-			newNode.Size = size;
-			newNode.Label = label;
+			var newNode = new InstructionNode(move, result, operand1)
+			{
+				Size = size,
+				Label = label
+			};
 			node.Previous.Insert(newNode);
-
-			return;
 		}
 	}
 }

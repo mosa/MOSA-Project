@@ -6,23 +6,23 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	///
+	/// Final Tweak Transformation Stage
 	/// </summary>
 	public sealed class FinalTweakTransformationStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			visitationDictionary[X86.Call] = Call;
-			visitationDictionary[X86.In] = In;
-			visitationDictionary[X86.Mov] = Mov;
-			visitationDictionary[X86.MovLoad] = MovLoad;
-			visitationDictionary[X86.MovStore] = MovStore;
-			visitationDictionary[X86.Movsd] = Movsd;
-			visitationDictionary[X86.Movss] = Movss;
-			visitationDictionary[X86.Movsx] = Movsx;
-			visitationDictionary[X86.Movzx] = Movzx;
-			visitationDictionary[X86.Nop] = Nop;
-			visitationDictionary[X86.Setcc] = Setcc;
+			AddVisitation(X86.Call, Call);
+			AddVisitation(X86.In, In);
+			AddVisitation(X86.Mov, Mov);
+			AddVisitation(X86.MovLoad, MovLoad);
+			AddVisitation(X86.MovStore, MovStore);
+			AddVisitation(X86.Movsd, Movsd);
+			AddVisitation(X86.Movss, Movss);
+			AddVisitation(X86.Movsx, Movsx);
+			AddVisitation(X86.Movzx, Movzx);
+			AddVisitation(X86.Nop, Nop);
+			AddVisitation(X86.Setcc, Setcc);
 		}
 
 		#region Visitation Methods

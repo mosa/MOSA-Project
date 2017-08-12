@@ -15,11 +15,11 @@ namespace Mosa.Platform.ARMv6.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			visitationDictionary[IRInstruction.AddSigned] = AddSigned;
-			visitationDictionary[IRInstruction.AddUnsigned] = AddUnsigned;
-			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
-			visitationDictionary[IRInstruction.SubSigned] = SubSigned;
-			visitationDictionary[IRInstruction.SubUnsigned] = SubUnsigned;
+			AddVisitation(IRInstruction.AddSigned, AddSigned);
+			AddVisitation(IRInstruction.AddUnsigned, AddUnsigned);
+			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
+			AddVisitation(IRInstruction.SubSigned, SubSigned);
+			AddVisitation(IRInstruction.SubUnsigned, SubUnsigned);
 		}
 
 		#region Visitation Methods

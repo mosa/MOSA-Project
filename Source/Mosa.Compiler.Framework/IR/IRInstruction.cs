@@ -17,6 +17,8 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly BlockStart BlockStart = new BlockStart();
 		public static readonly Break Break = new Break();
 		public static readonly Call Call = new Call();
+		public static readonly CallStatic CallStatic = new CallStatic();
+		public static readonly CallVirtual CallVirtual = new CallVirtual();
 		public static readonly CompareFloatR4 CompareFloatR4 = new CompareFloatR4();
 		public static readonly CompareFloatR8 CompareFloatR8 = new CompareFloatR8();
 		public static readonly CompareInteger CompareInteger = new CompareInteger();
