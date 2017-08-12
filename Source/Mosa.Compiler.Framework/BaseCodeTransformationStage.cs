@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework
 						var context = new Context(node);
 						contextVisitationMethod(context);
 					}
-					if (NodeVisit && nodeVisitationDictionary.TryGetValue(node.Instruction, out NodeVisitationDelegate nodeVisitationMethod))
+					else if (NodeVisit && nodeVisitationDictionary.TryGetValue(node.Instruction, out NodeVisitationDelegate nodeVisitationMethod))
 					{
 						nodeVisitationMethod(node);
 					}
