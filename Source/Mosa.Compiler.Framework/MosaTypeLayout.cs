@@ -385,25 +385,19 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private void ResolveLayouts()
 		{
-			lock (_lock)
+			// Enumerate all types and do an appropriate type layout
+			foreach (var type in TypeSystem.AllTypes)
 			{
-				// Enumerate all types and do an appropriate type layout
-				foreach (var type in TypeSystem.AllTypes)
-				{
-					ResolveType(type);
-				}
+				ResolveType(type);
+			}
 
-				int cnt = 0;
-				foreach (var type in TypeSystem.AllTypes)
+			foreach (var type in TypeSystem.AllTypes)
+			{
+				//Debug.WriteLine("TYPE: " + type.FullName);
+				foreach (var method in type.Methods)
 				{
-					cnt++;
-
-					//Debug.WriteLine("TYPE: " + type.FullName);
-					foreach (var method in type.Methods)
-					{
-						//Debug.WriteLine("METHOD: " + method.FullName);
-						ResolveMethodParameters(method);
-					}
+					//Debug.WriteLine("METHOD: " + method.FullName);
+					ResolveMethodParameters(method);
 				}
 			}
 		}

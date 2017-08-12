@@ -8,7 +8,6 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Basic Blocks
 	/// </summary>
-	/// <seealso cref="System.Collections.Generic.IEnumerable{Mosa.Compiler.Framework.BasicBlock}" />
 	public sealed class BasicBlocks : IEnumerable<BasicBlock>
 	{
 		#region Data members
