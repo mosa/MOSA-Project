@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -16,8 +17,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			AddVisitation(IRInstruction.NewObject, NewObject);
 			AddVisitation(IRInstruction.NewArray, NewArray);
-			AddVisitation(IRInstruction.CallVirtual, CallVirtual);
-			AddVisitation(IRInstruction.CallStatic, CallStatic);
 		}
 
 		private MosaMethod GetVMCallMethod(VmCall vmcall)
@@ -57,14 +56,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			node.SetInstruction(IRInstruction.Call, result, symbol, runtimeHandle, size, elements);
 			node.InvokeMethod = method;
-		}
-
-		private void CallVirtual(InstructionNode node)
-		{
-		}
-
-		private void CallStatic(InstructionNode node)
-		{
 		}
 	}
 }

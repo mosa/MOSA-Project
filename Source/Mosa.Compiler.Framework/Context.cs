@@ -402,7 +402,7 @@ namespace Mosa.Compiler.Framework
 		/// Replaces the instruction only.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		public void ReplaceInstructionOnly(BaseInstruction instruction)
+		public void ReplaceInstruction(BaseInstruction instruction)
 		{
 			Instruction = instruction;
 		}

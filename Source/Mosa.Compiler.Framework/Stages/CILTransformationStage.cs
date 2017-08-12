@@ -350,7 +350,7 @@ namespace Mosa.Compiler.Framework.Stages
 				Debug.Assert(value.IsVirtualRegister);
 
 				var moveInstruction = GetMoveInstruction(type);
-				context.ReplaceInstructionOnly(moveInstruction);
+				context.ReplaceInstruction(moveInstruction);
 				return;
 			}
 
@@ -400,7 +400,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Branch(InstructionNode node)
 		{
-			node.ReplaceInstructionOnly(IRInstruction.Jmp);
+			node.ReplaceInstruction(IRInstruction.Jmp);
 		}
 
 		/// <summary>
@@ -645,7 +645,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			// TODO!
 			//ReplaceWithVmCall(context, VmCall.Castclass);
-			node.ReplaceInstructionOnly(IRInstruction.MoveInteger); // HACK!
+			node.ReplaceInstruction(IRInstruction.MoveInteger); // HACK!
 		}
 
 		private static BaseInstruction ComputeExtensionTypeAndMask(MosaType type, ref uint mask)
@@ -907,7 +907,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldarga(InstructionNode node)
 		{
-			node.ReplaceInstructionOnly(IRInstruction.AddressOf);
+			node.ReplaceInstruction(IRInstruction.AddressOf);
 		}
 
 		/// <summary>
@@ -1119,7 +1119,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldloca(InstructionNode node)
 		{
-			node.ReplaceInstructionOnly(IRInstruction.AddressOf);
+			node.ReplaceInstruction(IRInstruction.AddressOf);
 		}
 
 		/// <summary>
@@ -1437,7 +1437,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ret(InstructionNode node)
 		{
-			node.ReplaceInstructionOnly(IRInstruction.Return);
+			node.ReplaceInstruction(IRInstruction.Return);
 		}
 
 		/// <summary>
@@ -1650,7 +1650,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Switch(InstructionNode node)
 		{
-			node.ReplaceInstructionOnly(IRInstruction.Switch);
+			node.ReplaceInstruction(IRInstruction.Switch);
 		}
 
 		/// <summary>
@@ -1703,7 +1703,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var moveInstruction = GetMoveInstruction(type);
 
-				context.ReplaceInstructionOnly(moveInstruction);
+				context.ReplaceInstruction(moveInstruction);
 				return;
 			}
 
@@ -1763,7 +1763,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var moveInstruction = GetMoveInstruction(type);
 
-				context.ReplaceInstructionOnly(moveInstruction);
+				context.ReplaceInstruction(moveInstruction);
 				return;
 			}
 
@@ -2088,19 +2088,19 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (node.Result.IsR4)
 			{
-				node.ReplaceInstructionOnly(floatingPointR4Instruction);
+				node.ReplaceInstruction(floatingPointR4Instruction);
 			}
 			else if (node.Result.IsR8)
 			{
-				node.ReplaceInstructionOnly(floatingPointR8Instruction);
+				node.ReplaceInstruction(floatingPointR8Instruction);
 			}
 			else if (node.Result.IsUnsigned)
 			{
-				node.ReplaceInstructionOnly(unsignedInstruction);
+				node.ReplaceInstruction(unsignedInstruction);
 			}
 			else
 			{
-				node.ReplaceInstructionOnly(signedInstruction);
+				node.ReplaceInstruction(signedInstruction);
 			}
 		}
 
@@ -2260,7 +2260,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (instance is IIntrinsicPlatformMethod)
 			{
-				context.ReplaceInstructionOnly(IRInstruction.IntrinsicMethodCall);
+				context.ReplaceInstruction(IRInstruction.IntrinsicMethodCall);
 				return true;
 			}
 
@@ -2368,7 +2368,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());
 
-			node.ReplaceInstructionOnly(IRInstruction.Call);
+			node.ReplaceInstruction(IRInstruction.Call);
 			node.SetOperand(0, Operand.CreateSymbolFromMethod(TypeSystem, method));
 			node.OperandCount = 1;
 			node.InvokeMethod = method;

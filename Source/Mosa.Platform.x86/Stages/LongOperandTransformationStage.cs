@@ -1175,7 +1175,7 @@ namespace Mosa.Platform.x86.Stages
 
 			Debug.Assert(method != null, "Cannot find method: " + methodName);
 
-			context.ReplaceInstructionOnly(IRInstruction.Call);
+			context.ReplaceInstruction(IRInstruction.Call);
 			context.SetOperand(0, Operand.CreateSymbolFromMethod(TypeSystem, method));
 			context.OperandCount = 1;
 			context.InvokeMethod = method;
