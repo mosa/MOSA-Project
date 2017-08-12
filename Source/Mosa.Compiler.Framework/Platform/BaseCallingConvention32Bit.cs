@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework.Platform
 
 			//Debug.Assert(method != null, context.ToString());
 
-			Operand scratch = Operand.CreateCPURegister(compiler.TypeLayout.TypeSystem.BuiltIn.Pointer, scratchRegister);
+			Operand scratch = Operand.CreateCPURegister(compiler.TypeSystem.BuiltIn.Pointer, scratchRegister);
 
 			var operands = BuildOperands(context);
 

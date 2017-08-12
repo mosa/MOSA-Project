@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the offset for each field
 		/// </summary>
-		public readonly Dictionary<MosaField, int> fieldOffsets = new Dictionary<MosaField, int>();
+		private readonly Dictionary<MosaField, int> fieldOffsets = new Dictionary<MosaField, int>();
 
 		/// <summary>
 		/// Holds a list of methods for each type
@@ -108,7 +108,19 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Get a list of interfaces
 		/// </summary>
-		public IList<MosaType> Interfaces { get { return interfaces; } }
+		/// <value>
+		/// The interfaces.
+		/// </value>
+		public IList<MosaType> Interfaces
+		{
+			get
+			{
+				lock (_lock)
+				{
+					return interfaces.ToArray();
+				}
+			}
+		}
 
 		#endregion Properties
 
@@ -381,8 +393,11 @@ namespace Mosa.Compiler.Framework
 					ResolveType(type);
 				}
 
+				int cnt = 0;
 				foreach (var type in TypeSystem.AllTypes)
 				{
+					cnt++;
+
 					//Debug.WriteLine("TYPE: " + type.FullName);
 					foreach (var method in type.Methods)
 					{
@@ -477,7 +492,7 @@ namespace Mosa.Compiler.Framework
 				stacksize += sizeAligned;
 			}
 
-			int returnSize = 0; //todo
+			int returnSize = 0;
 			var returnType = method.Signature.ReturnType;
 
 			if (IsStoredOnStack(returnType))
@@ -486,9 +501,6 @@ namespace Mosa.Compiler.Framework
 
 				typeSizes.TryGetValue(returnType, out returnSize);
 			}
-
-			//if (parameterOffsets.ContainsKey(method))
-			//	Debug.WriteLine(method);
 
 			parameterOffsets.Add(method, offsets);
 			parameterStackSize.Add(method, stacksize);
