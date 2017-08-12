@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.Platform
 	/// <summary>
 	/// Base Platform Transformation Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
 	public abstract class BasePlatformTransformationStage : BaseCodeTransformationStage
 	{
 		/// <summary>

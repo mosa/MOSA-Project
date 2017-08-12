@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// IR Instruction
+	/// IR Instructions
 	/// </summary>
 	public static class IRInstruction
 	{

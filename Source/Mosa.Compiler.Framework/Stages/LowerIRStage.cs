@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Lower IR Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
 	public sealed class LowerIRStage : BaseCodeTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
