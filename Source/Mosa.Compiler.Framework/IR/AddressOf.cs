@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Retrieves the address of the variable represented by its operand.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseTwoOperandInstruction" />
 	/// <remarks>
 	/// The address of instruction is used to retrieve the memory address
 	/// of its sole operand. The operand may not represent a register.

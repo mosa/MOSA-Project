@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of the not instruction.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseTwoOperandInstruction" />
 	public sealed class LogicalNot : BaseTwoOperandInstruction
 	{
 		#region Construction

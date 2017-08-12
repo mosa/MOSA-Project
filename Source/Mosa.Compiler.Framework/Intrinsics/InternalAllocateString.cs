@@ -7,7 +7,10 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	[ReplacementTarget("System.String::InternalAllocateString")]
 	public sealed class InternalAllocateString : IIntrinsicInternalMethod
 	{
-		private const string StringClassTypeDefinitionSymbolName = @"System.String" + Metadata.TypeDefinition;
+		/// <summary>
+		/// The string class type definition symbol name
+		/// </summary>
+		private const string StringClassTypeDefinitionSymbolName = "System.String" + Metadata.TypeDefinition;
 
 		/// <summary>
 		/// Replaces the intrinsic call site

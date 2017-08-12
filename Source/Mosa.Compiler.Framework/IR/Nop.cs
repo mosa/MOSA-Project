@@ -3,14 +3,14 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	///
+	/// Nop
 	/// </summary>
 	public sealed class Nop : BaseIRInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Nop"/>.
+		/// Initializes a new instance of the <see cref="Nop" />.
 		/// </summary>
 		public Nop() :
 			base(0, 0)

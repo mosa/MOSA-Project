@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// An abstract intermediate representation of the end of a finally block.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class FinallyEnd : BaseIRInstruction
 	{
 		#region Construction

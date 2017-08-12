@@ -3,7 +3,9 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
+	/// Block End
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class BlockEnd : BaseIRInstruction
 	{
 		#region Construction

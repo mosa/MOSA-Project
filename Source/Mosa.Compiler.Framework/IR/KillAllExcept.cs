@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of kill all except.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class KillAllExcept : BaseIRInstruction
 	{
 		#region Construction

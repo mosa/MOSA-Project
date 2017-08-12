@@ -6,6 +6,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// An abstract intermediate representation of a routine to leave a protected block, finally or catch handler to normal flow control, calling finally handlers as appropriate.
 	/// Not to be confused with CIL Leave instruction.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class GotoLeaveTarget : BaseIRInstruction
 	{
 		#region Construction

@@ -3,8 +3,9 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// Loads parameter.
+	/// Load Parameter Integer
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseLoadParameterInstruction" />
 	public sealed class LoadParameterInteger : BaseLoadParameterInstruction
 	{
 	}

@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of an integer comparison.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseThreeOperandInstruction" />
 	public sealed class CompareInteger : BaseThreeOperandInstruction
 	{
 		#region Construction

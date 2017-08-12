@@ -2,6 +2,10 @@
 
 namespace Mosa.Compiler.Framework.IR
 {
+	/// <summary>
+	/// Unstable Object Tracking
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class UnstableObjectTracking : BaseIRInstruction
 	{
 		#region Construction

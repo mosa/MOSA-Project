@@ -2,6 +2,9 @@
 
 namespace Mosa.Compiler.Framework.IR
 {
+	/// <summary>
+	/// IR Instruction
+	/// </summary>
 	public static class IRInstruction
 	{
 		public static readonly AddFloatR4 AddFloatR4 = new AddFloatR4();

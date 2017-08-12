@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	///
+	/// Conversion Float R4 To Float R8
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseTwoOperandInstruction" />
 	public sealed class ConversionFloatR4ToFloatR8 : BaseTwoOperandInstruction

@@ -3,7 +3,9 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
+	/// Block Start
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class BlockStart : BaseIRInstruction
 	{
 		#region Construction

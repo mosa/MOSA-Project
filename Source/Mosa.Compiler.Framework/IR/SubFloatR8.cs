@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of the floating point subtraction operation.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseThreeOperandInstruction" />
 	/// <remarks>
 	/// The add instruction is a three-address instruction, where the result receives
 	/// the value of the second operand (index 1) subtracted from the first operand (index 0).

@@ -3,11 +3,9 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// Loads a value from a memory pointer.
+	/// Load Integer
 	/// </summary>
-	/// <remarks>
-	/// The load instruction is used to load a value from a memory pointer and an offset. The types must be compatible.
-	/// </remarks>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseThreeOperandInstruction" />
 	public sealed class LoadInteger : BaseThreeOperandInstruction
 	{
 		#region Construction

@@ -2,6 +2,11 @@
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	/// <summary>
+	///
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.InternalsBase" />
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Array::Copy")]
 	[ReplacementTarget("System.Array::GetLength")]
 	[ReplacementTarget("System.Array::GetLowerBound")]

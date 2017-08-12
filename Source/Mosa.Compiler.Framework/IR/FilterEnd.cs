@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// An abstract intermediate representation of the end of a filter block.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class FilterEnd : BaseIRInstruction
 	{
 		#region Construction

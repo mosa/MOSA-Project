@@ -380,12 +380,18 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			var c = liveInterval.LiveRange.GetPreviousUsePosition(at);
 			if (c != null && c.HalfStepForward <= at)
+			{
 				c = c.HalfStepForward;
+			}
+
 			if (Trace.Active) Trace.Log("  Previous Use : " + (c != null ? c.ToString() : "null"));
 
 			var d = liveInterval.LiveRange.GetPreviousDefPosition(at);
 			if (d != null && d.HalfStepForward <= at)
+			{
 				d = d.HalfStepForward;
+			}
+
 			if (Trace.Active) Trace.Log("  Previous Def : " + (d != null ? d.ToString() : "null"));
 
 			var max = GetMaximum(a, b, c, d);

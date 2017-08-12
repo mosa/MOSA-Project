@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// An abstract intermediate representation of the method prologue.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	/// <remarks>
 	/// This instruction is usually derived by the architecture and expanded appropriately
 	/// for the calling convention of the method.

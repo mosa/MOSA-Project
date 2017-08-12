@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Abstract base class for all instructions in the intermediate representation.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseInstruction" />
 	public abstract class BaseIRInstruction : BaseInstruction
 	{
 		#region Construction
