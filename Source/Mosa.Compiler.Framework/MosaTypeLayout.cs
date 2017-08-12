@@ -64,17 +64,17 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The parameter offsets
 		/// </summary>
-		public Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>(); // fixme: change to private
+		private readonly Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>();
 
 		/// <summary>
 		/// The parameter stack size
 		/// </summary>
-		public Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>(); // fixme: change to private
+		private readonly Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>();
 
 		/// <summary>
 		/// The parameter stack size
 		/// </summary>
-		public Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>(); // fixme: change to private
+		private readonly Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>();
 
 		/// <summary>
 		/// The overridden methods
@@ -209,7 +209,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public IList<MosaMethod> GetMethodTable(MosaType type)
+		public List<MosaMethod> GetMethodTable(MosaType type)
 		{
 			if (type.IsModule)
 				return null;
@@ -373,17 +373,22 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private void ResolveLayouts()
 		{
-			// Enumerate all types and do an appropriate type layout
-			foreach (var type in TypeSystem.AllTypes)
+			lock (_lock)
 			{
-				ResolveType(type);
-			}
-
-			foreach (var type in TypeSystem.AllTypes)
-			{
-				foreach (var method in type.Methods)
+				// Enumerate all types and do an appropriate type layout
+				foreach (var type in TypeSystem.AllTypes)
 				{
-					ResolveMethodParameters(method);
+					ResolveType(type);
+				}
+
+				foreach (var type in TypeSystem.AllTypes)
+				{
+					//Debug.WriteLine("TYPE: " + type.FullName);
+					foreach (var method in type.Methods)
+					{
+						//Debug.WriteLine("METHOD: " + method.FullName);
+						ResolveMethodParameters(method);
+					}
 				}
 			}
 		}
@@ -473,11 +478,17 @@ namespace Mosa.Compiler.Framework
 			}
 
 			int returnSize = 0; //todo
+			var returnType = method.Signature.ReturnType;
 
-			if (IsStoredOnStack(method.Signature.ReturnType))
+			if (IsStoredOnStack(returnType))
 			{
-				returnSize = GetTypeSize(method.Signature.ReturnType);
+				ResolveType(returnType);
+
+				typeSizes.TryGetValue(returnType, out returnSize);
 			}
+
+			//if (parameterOffsets.ContainsKey(method))
+			//	Debug.WriteLine(method);
 
 			parameterOffsets.Add(method, offsets);
 			parameterStackSize.Add(method, stacksize);
