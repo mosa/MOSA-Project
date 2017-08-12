@@ -325,23 +325,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				else
 				{
-					if (type.ElementType != null)
+					if (!string.IsNullOrEmpty(type.Namespace))
 					{
-						fName.Append(type.ElementType.FullName);
-						sName.Append(type.ElementType.ShortName);
-					}
-					else
-					{
-						if (!string.IsNullOrEmpty(type.Namespace))
-						{
-							fName.Append(type.Namespace);
-							fName.Append(".");
-						}
-						fName.Append(type.Name);
-						sName.Append(type.Name);
+						fName.Append(type.Namespace);
+						fName.Append(".");
 					}
 
+					fName.Append(type.Name);
 					fName.Append(type.Signature);
+					sName.Append(type.Name);
 					sName.Append(type.Signature);
 
 					type.FullName = fName.ToString();
