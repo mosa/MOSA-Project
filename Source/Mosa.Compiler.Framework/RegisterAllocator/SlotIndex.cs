@@ -8,13 +8,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public sealed class SlotIndex : IComparable
 	{
-		private enum SlotType { Normal, HalfStepBack, HalfStepForward };
+		private enum SlotType { Normal, HalfStepBack, HalfStepForward }
 
 		public const int Increment = 2;
 
 		public readonly InstructionNode Index;
 
-		private SlotType slotType;
+		private readonly SlotType slotType;
 
 		public int SlotNumber
 		{
@@ -85,7 +85,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			if (ns1 && ns2)
 				return true;
-			else if ((ns1 && !ns2) || (!ns1 && ns2))
+			else if (ns1 ^ ns2)
 				return false;
 
 			return s1.SlotNumber == s2.SlotNumber;
@@ -98,18 +98,18 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			if (ns1 && ns2)
 				return false;
-			else if ((ns1 && !ns2) || (!ns1 && ns2))
+			else if (ns1 ^ ns2)
 				return true;
 
 			return s1.SlotNumber != s2.SlotNumber;
 		}
 
-		public override bool Equals(object s)
+		public override bool Equals(object obj)
 		{
-			if (!(s is SlotIndex))
+			if (!(obj is SlotIndex))
 				return false;
 
-			return ((s as SlotIndex).Index == Index);
+			return (obj as SlotIndex).Index == Index;
 		}
 
 		public override int GetHashCode()
@@ -117,11 +117,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return SlotNumber;
 		}
 
-		int IComparable.CompareTo(Object o)
+		int IComparable.CompareTo(Object obj)
 		{
-			SlotIndex slotIndex = o as SlotIndex;
+			var slotIndex = obj as SlotIndex;
 
-			return (SlotNumber - slotIndex.SlotNumber);
+			return SlotNumber - slotIndex.SlotNumber;
 		}
 
 		public override string ToString()
