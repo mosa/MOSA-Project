@@ -7,25 +7,43 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Base class for code transformation stages.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage
 	{
-		protected delegate void VisitationDelegate(Context context);
+		protected delegate void ContextVisitationDelegate(Context context);
 
-		protected Dictionary<BaseInstruction, VisitationDelegate> visitationDictionary;
+		protected delegate void NodeVisitationDelegate(InstructionNode node);
+
+		private Dictionary<BaseInstruction, ContextVisitationDelegate> contextVisitationDictionary;
+		private Dictionary<BaseInstruction, NodeVisitationDelegate> nodeVisitationDictionary;
 
 		protected override void Setup()
 		{
 			base.Setup();
 
-			visitationDictionary = new Dictionary<BaseInstruction, VisitationDelegate>();
+			contextVisitationDictionary = new Dictionary<BaseInstruction, ContextVisitationDelegate>();
+			nodeVisitationDictionary = new Dictionary<BaseInstruction, NodeVisitationDelegate>();
 
 			PopulateVisitationDictionary();
+		}
+
+		protected void AddVisitation(BaseInstruction instruction, ContextVisitationDelegate method)
+		{
+			contextVisitationDictionary.Add(instruction, method);
+		}
+
+		protected void AddVisitation(BaseInstruction instruction, NodeVisitationDelegate method)
+		{
+			nodeVisitationDictionary.Add(instruction, method);
 		}
 
 		protected abstract void PopulateVisitationDictionary();
 
 		protected override void Run()
 		{
+			bool contextVisit = contextVisitationDictionary.Count != 0;
+			bool NodeVisit = nodeVisitationDictionary.Count != 0;
+
 			for (int index = 0; index < BasicBlocks.Count; index++)
 			{
 				for (var node = BasicBlocks[index].First; !node.IsBlockEndInstruction; node = node.Next)
@@ -35,12 +53,15 @@ namespace Mosa.Compiler.Framework
 
 					instructionCount++;
 
-					var ctx = new Context(node);
-
-					if (!visitationDictionary.TryGetValue(ctx.Instruction, out VisitationDelegate visitationMethod))
-						continue;
-
-					visitationMethod(ctx);
+					if (contextVisit && contextVisitationDictionary.TryGetValue(node.Instruction, out ContextVisitationDelegate contextVisitationMethod))
+					{
+						var context = new Context(node);
+						contextVisitationMethod(context);
+					}
+					if (NodeVisit && nodeVisitationDictionary.TryGetValue(node.Instruction, out NodeVisitationDelegate nodeVisitationMethod))
+					{
+						nodeVisitationMethod(node);
+					}
 				}
 			}
 		}

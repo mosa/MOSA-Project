@@ -21,38 +21,38 @@ namespace Mosa.Platform.x86.Stages
 
 		protected override void PopulateVisitationDictionary()
 		{
-			visitationDictionary[IRInstruction.AddSigned] = AddSigned;
-			visitationDictionary[IRInstruction.AddUnsigned] = AddUnsigned;
-			visitationDictionary[IRInstruction.ArithmeticShiftRight] = ArithmeticShiftRight;
-			visitationDictionary[IRInstruction.Call] = Call;
-			visitationDictionary[IRInstruction.CompareInteger] = CompareInteger;
-			visitationDictionary[IRInstruction.CompareIntegerBranch] = CompareIntegerBranch;
-			visitationDictionary[IRInstruction.DivSigned] = DivSigned;
-			visitationDictionary[IRInstruction.DivUnsigned] = DivUnsigned;
-			visitationDictionary[IRInstruction.LoadInteger] = LoadInteger;
-			visitationDictionary[IRInstruction.LoadSignExtended] = LoadSignExtended;
-			visitationDictionary[IRInstruction.LoadZeroExtended] = LoadZeroExtended;
-			visitationDictionary[IRInstruction.LoadParameterInteger] = LoadParameterInteger;
-			visitationDictionary[IRInstruction.LoadParameterSignExtended] = LoadParameterSignExtended;
-			visitationDictionary[IRInstruction.LoadParameterZeroExtended] = LoadParameterZeroExtended;
-			visitationDictionary[IRInstruction.LogicalAnd] = LogicalAnd;
-			visitationDictionary[IRInstruction.LogicalNot] = LogicalNot;
-			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
-			visitationDictionary[IRInstruction.LogicalXor] = LogicalXor;
-			visitationDictionary[IRInstruction.MoveInteger] = MoveInteger;
-			visitationDictionary[IRInstruction.MoveSignExtended] = MoveSignExtended;
-			visitationDictionary[IRInstruction.MoveZeroExtended] = MoveZeroExtended;
-			visitationDictionary[IRInstruction.MulSigned] = MulSigned;
-			visitationDictionary[IRInstruction.MulUnsigned] = MulUnsigned;
-			visitationDictionary[IRInstruction.RemSigned] = RemSigned;
-			visitationDictionary[IRInstruction.RemUnsigned] = RemUnsigned;
-			visitationDictionary[IRInstruction.Return] = Return;
-			visitationDictionary[IRInstruction.ShiftLeft] = ShiftLeft;
-			visitationDictionary[IRInstruction.ShiftRight] = ShiftRight;
-			visitationDictionary[IRInstruction.StoreInteger] = StoreInteger;
-			visitationDictionary[IRInstruction.StoreParameterInteger] = StoreParameterInteger;
-			visitationDictionary[IRInstruction.SubSigned] = SubSigned;
-			visitationDictionary[IRInstruction.SubUnsigned] = SubUnsigned;
+			AddVisitation(IRInstruction.AddSigned, AddSigned);
+			AddVisitation(IRInstruction.AddUnsigned, AddUnsigned);
+			AddVisitation(IRInstruction.ArithmeticShiftRight, ArithmeticShiftRight);
+			AddVisitation(IRInstruction.Call, Call);
+			AddVisitation(IRInstruction.CompareInteger, CompareInteger);
+			AddVisitation(IRInstruction.CompareIntegerBranch, CompareIntegerBranch);
+			AddVisitation(IRInstruction.DivSigned, DivSigned);
+			AddVisitation(IRInstruction.DivUnsigned, DivUnsigned);
+			AddVisitation(IRInstruction.LoadInteger, LoadInteger);
+			AddVisitation(IRInstruction.LoadSignExtended, LoadSignExtended);
+			AddVisitation(IRInstruction.LoadZeroExtended, LoadZeroExtended);
+			AddVisitation(IRInstruction.LoadParameterInteger, LoadParameterInteger);
+			AddVisitation(IRInstruction.LoadParameterSignExtended, LoadParameterSignExtended);
+			AddVisitation(IRInstruction.LoadParameterZeroExtended, LoadParameterZeroExtended);
+			AddVisitation(IRInstruction.LogicalAnd, LogicalAnd);
+			AddVisitation(IRInstruction.LogicalNot, LogicalNot);
+			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
+			AddVisitation(IRInstruction.LogicalXor, LogicalXor);
+			AddVisitation(IRInstruction.MoveInteger, MoveInteger);
+			AddVisitation(IRInstruction.MoveSignExtended, MoveSignExtended);
+			AddVisitation(IRInstruction.MoveZeroExtended, MoveZeroExtended);
+			AddVisitation(IRInstruction.MulSigned, MulSigned);
+			AddVisitation(IRInstruction.MulUnsigned, MulUnsigned);
+			AddVisitation(IRInstruction.RemSigned, RemSigned);
+			AddVisitation(IRInstruction.RemUnsigned, RemUnsigned);
+			AddVisitation(IRInstruction.Return, Return);
+			AddVisitation(IRInstruction.ShiftLeft, ShiftLeft);
+			AddVisitation(IRInstruction.ShiftRight, ShiftRight);
+			AddVisitation(IRInstruction.StoreInteger, StoreInteger);
+			AddVisitation(IRInstruction.StoreParameterInteger, StoreParameterInteger);
+			AddVisitation(IRInstruction.SubSigned, SubSigned);
+			AddVisitation(IRInstruction.SubUnsigned, SubUnsigned);
 		}
 
 		protected override void Setup()

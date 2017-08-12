@@ -5,17 +5,17 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	///
+	/// Tweak Transformation Stage
 	/// </summary>
 	public sealed class TweakTransformationStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			visitationDictionary[X86.Call] = Call;
-			visitationDictionary[X86.Cmp] = Cmp;
-			visitationDictionary[X86.Sar] = Sar;
-			visitationDictionary[X86.Shl] = Shl;
-			visitationDictionary[X86.Shr] = Shr;
+			AddVisitation(X86.Call, Call);
+			AddVisitation(X86.Cmp, Cmp);
+			AddVisitation(X86.Sar, Sar);
+			AddVisitation(X86.Shl, Shl);
+			AddVisitation(X86.Shr, Shr);
 		}
 
 		#region Visitation Methods

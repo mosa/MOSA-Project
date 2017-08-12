@@ -100,6 +100,8 @@
     <Compile Include="Intrinsics\Load64.cs" />
     <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="IR\AddFloatR4.cs" />
+    <Compile Include="IR\CallVirtual.cs" />
+    <Compile Include="IR\CallStatic.cs" />
     <Compile Include="IR\NewString.cs" />
     <Compile Include="IR\NewArray.cs" />
     <Compile Include="IR\NewObject.cs" />
@@ -192,7 +194,7 @@
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
     <Compile Include="Stages\DebugFileGenerationStage.cs" />
-    <Compile Include="Stages\NewObjectStage.cs" />
+    <Compile Include="Stages\LowerIRStage.cs" />
     <Compile Include="Stages\PreciseGCStage.cs" />
     <Compile Include="Stages\GraphVizStage.cs" />
     <Compile Include="Stages\ExceptionPrologueStage.cs" />
