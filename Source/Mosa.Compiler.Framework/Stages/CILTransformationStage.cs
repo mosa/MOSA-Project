@@ -485,7 +485,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			ProcessInvokeInstruction(context, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
+			ProcessInvokeInstruction(context.Node, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
 		}
 
 		/// <summary>
@@ -567,7 +567,7 @@ namespace Mosa.Compiler.Framework.Stages
 						context.Operand1 = boxedValue;
 					}
 
-					ProcessInvokeInstruction(context, method, resultOperand, operands);
+					ProcessInvokeInstruction(context.Node, method, resultOperand, operands);
 					return;
 				}
 			}
@@ -627,13 +627,13 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				context.AppendInstruction(IRInstruction.Nop);
-				ProcessInvokeInstruction(context, method, methodPtr, resultOperand, operands);
+				ProcessInvokeInstruction(context.Node, method, methodPtr, resultOperand, operands);
 			}
 			else
 			{
 				// FIXME: Callvirt imposes a null-check. For virtual calls this is done implicitly, but for non-virtual calls
 				// we have to make this explicitly somehow.
-				ProcessInvokeInstruction(context, method, resultOperand, operands);
+				ProcessInvokeInstruction(context.Node, method, resultOperand, operands);
 			}
 		}
 
@@ -1106,11 +1106,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Visitation function for Ldloc instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Ldloc(Context context)
+		/// <param name="node">The context.</param>
+		private void Ldloc(InstructionNode node)
 		{
-			Debug.Assert(context.MosaType == null);
-			ProcessLoadInstruction(context);
+			Debug.Assert(node.MosaType == null);
+			ProcessLoadInstruction(node);
 		}
 
 		/// <summary>
@@ -1378,7 +1378,7 @@ namespace Mosa.Compiler.Framework.Stages
 				operands.Insert(0, thisReference);
 			}
 
-			ProcessInvokeInstruction(context, context.InvokeMethod, null, operands);
+			ProcessInvokeInstruction(context.Node, context.InvokeMethod, null, operands);
 		}
 
 		/// <summary>
@@ -2269,41 +2269,41 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Processes the invoke instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="method">The method.</param>
 		/// <param name="resultOperand">The result operand.</param>
 		/// <param name="operands">The operands.</param>
-		private void ProcessInvokeInstruction(Context context, MosaMethod method, Operand resultOperand, List<Operand> operands)
+		private void ProcessInvokeInstruction(InstructionNode node, MosaMethod method, Operand resultOperand, List<Operand> operands)
 		{
 			var symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
-			ProcessInvokeInstruction(context, method, symbolOperand, resultOperand, operands);
+			ProcessInvokeInstruction(node, method, symbolOperand, resultOperand, operands);
 		}
 
 		/// <summary>
 		/// Processes a method call instruction.
 		/// </summary>
-		/// <param name="context">The transformation context.</param>
+		/// <param name="node">The transformation context.</param>
 		/// <param name="method">The method.</param>
 		/// <param name="symbolOperand">The symbol operand.</param>
 		/// <param name="resultOperand">The result operand.</param>
 		/// <param name="operands">The operands.</param>
-		private void ProcessInvokeInstruction(Context context, MosaMethod method, Operand symbolOperand, Operand resultOperand, List<Operand> operands)
+		private void ProcessInvokeInstruction(InstructionNode node, MosaMethod method, Operand symbolOperand, Operand resultOperand, List<Operand> operands)
 		{
 			Debug.Assert(method != null);
 
-			context.SetInstruction(IRInstruction.Call, (byte)(operands.Count + 1), (byte)(resultOperand == null ? 0 : 1));
-			context.InvokeMethod = method;
+			node.SetInstruction(IRInstruction.Call, (byte)(operands.Count + 1), (byte)(resultOperand == null ? 0 : 1));
+			node.InvokeMethod = method;
 
 			if (resultOperand != null)
 			{
-				context.Result = resultOperand;
+				node.Result = resultOperand;
 			}
 
 			int index = 0;
-			context.SetOperand(index++, symbolOperand);
+			node.SetOperand(index++, symbolOperand);
 			foreach (var operand in operands)
 			{
-				context.SetOperand(index++, operand);
+				node.SetOperand(index++, operand);
 			}
 		}
 
@@ -2311,28 +2311,28 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Replaces the IL load instruction by an appropriate IR move instruction or removes it entirely, if
 		/// it is a native size.
 		/// </summary>
-		/// <param name="context">Provides the transformation context.</param>
-		private void ProcessLoadInstruction(Context context)
+		/// <param name="node">Provides the transformation context.</param>
+		private void ProcessLoadInstruction(InstructionNode node)
 		{
-			var destination = context.Result;
-			var source = context.Operand1;
+			var destination = node.Result;
+			var source = node.Operand1;
 			var size = GetInstructionSize(source.Type);
 
 			if (MosaTypeLayout.IsStoredOnStack(source.Type))
 			{
-				context.SetInstruction(IRInstruction.MoveCompound, destination, source);
+				node.SetInstruction(IRInstruction.MoveCompound, destination, source);
 			}
 			else if (!source.IsVirtualRegister)
 			{
 				var loadInstruction = GetLoadInstruction(source.Type);
 
-				context.SetInstruction(loadInstruction, size, destination, StackFrame, source);
+				node.SetInstruction(loadInstruction, size, destination, StackFrame, source);
 			}
 			else
 			{
 				var moveInstruction = GetMoveInstruction(source.Type);
 
-				context.SetInstruction(moveInstruction, size, destination, source);
+				node.SetInstruction(moveInstruction, size, destination, source);
 			}
 		}
 
@@ -2351,7 +2351,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var operands = new List<Operand>(context.Operands);
 
-			ProcessInvokeInstruction(context, method, result, operands);
+			ProcessInvokeInstruction(context.Node, method, result, operands);
 
 			return true;
 		}
