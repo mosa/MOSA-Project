@@ -6,37 +6,35 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public sealed class VirtualRegister // alternative name is LiveInterval
 	{
-		private List<LiveInterval> liveIntervals = new List<LiveInterval>(1);
+		private readonly SortedList<SlotIndex, SlotIndex> usePositions = new SortedList<SlotIndex, SlotIndex>();
 
-		private SortedList<SlotIndex, SlotIndex> usePositions = new SortedList<SlotIndex, SlotIndex>();
+		private readonly SortedList<SlotIndex, SlotIndex> defPositions = new SortedList<SlotIndex, SlotIndex>();
 
-		private SortedList<SlotIndex, SlotIndex> defPositions = new SortedList<SlotIndex, SlotIndex>();
+		public Operand VirtualRegisterOperand { get; }
 
-		public Operand VirtualRegisterOperand { get; private set; }
-
-		public Register PhysicalRegister { get; private set; }
+		public Register PhysicalRegister { get; }
 
 		public bool IsPhysicalRegister { get { return VirtualRegisterOperand == null; } }
 
 		public bool IsVirtualRegister { get { return VirtualRegisterOperand != null; } }
 
-		public List<LiveInterval> LiveIntervals { get { return liveIntervals; } }
+		public List<LiveInterval> LiveIntervals { get; } = new List<LiveInterval>(1);
 
-		public int Count { get { return liveIntervals.Count; } }
+		public int Count { get { return LiveIntervals.Count; } }
 
 		public IList<SlotIndex> UsePositions { get { return usePositions.Keys; } }
 
 		public IList<SlotIndex> DefPositions { get { return defPositions.Keys; } }
 
-		public LiveInterval LastRange { get { return liveIntervals.Count == 0 ? null : liveIntervals[liveIntervals.Count - 1]; } }
+		public LiveInterval LastRange { get { return LiveIntervals.Count == 0 ? null : LiveIntervals[LiveIntervals.Count - 1]; } }
 
-		public LiveInterval FirstRange { get { return liveIntervals.Count == 0 ? null : liveIntervals[0]; } set { liveIntervals[0] = value; } }
+		public LiveInterval FirstRange { get { return LiveIntervals.Count == 0 ? null : LiveIntervals[0]; } set { LiveIntervals[0] = value; } }
 
 		public Operand SpillSlotOperand { get; set; }
 
 		public bool IsFloatingPoint { get { return VirtualRegisterOperand.IsR; } }
 
-		public bool IsReserved { get; private set; }
+		public bool IsReserved { get; }
 
 		public bool IsSpilled { get; set; }
 
@@ -74,12 +72,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public void Add(LiveInterval liveInterval)
 		{
-			liveIntervals.Add(liveInterval);
+			LiveIntervals.Add(liveInterval);
 		}
 
 		public void Remove(LiveInterval liveInterval)
 		{
-			liveIntervals.Remove(liveInterval);
+			LiveIntervals.Remove(liveInterval);
 		}
 
 		public void AddLiveInterval(Interval interval)
@@ -89,15 +87,15 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public void AddLiveInterval(SlotIndex start, SlotIndex end)
 		{
-			if (liveIntervals.Count == 0)
+			if (LiveIntervals.Count == 0)
 			{
-				liveIntervals.Add(new LiveInterval(this, start, end));
+				LiveIntervals.Add(new LiveInterval(this, start, end));
 				return;
 			}
 
-			for (int i = 0; i < liveIntervals.Count; i++)
+			for (int i = 0; i < LiveIntervals.Count; i++)
 			{
-				var liveRange = liveIntervals[i];
+				var liveRange = LiveIntervals[i];
 
 				if (liveRange.Start == start && liveRange.End == end)
 					return;
@@ -105,16 +103,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (liveRange.IsAdjacent(start, end) || liveRange.Intersects(start, end))
 				{
 					liveRange = liveRange.CreateExpandedLiveRange(start, end);
-					liveIntervals[i] = liveRange;
+					LiveIntervals[i] = liveRange;
 
-					for (int z = i + 1; z < liveIntervals.Count; z++)
+					for (int z = i + 1; z < LiveIntervals.Count; z++)
 					{
-						var nextLiveRange = liveIntervals[z];
+						var nextLiveRange = LiveIntervals[z];
 						if (liveRange.IsAdjacent(nextLiveRange) || liveRange.Intersects(nextLiveRange))
 						{
 							liveRange = liveRange.CreateExpandedLiveInterval(nextLiveRange);
-							liveIntervals[i] = liveRange;
-							liveIntervals.RemoveAt(z);
+							LiveIntervals[i] = liveRange;
+							LiveIntervals.RemoveAt(z);
 
 							continue;
 						}
@@ -128,13 +126,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (liveRange.Start > end)
 				{
 					// new range is before the current range (so insert before)
-					liveIntervals.Insert(i, new LiveInterval(this, start, end));
+					LiveIntervals.Insert(i, new LiveInterval(this, start, end));
 					return;
 				}
 			}
 
 			// new range is after the last range
-			liveIntervals.Add(new LiveInterval(this, start, end));
+			LiveIntervals.Add(new LiveInterval(this, start, end));
 		}
 
 		/// <summary>
@@ -144,7 +142,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		/// <returns></returns>
 		public LiveInterval GetIntervalAt(SlotIndex at)
 		{
-			foreach (var liveInterval in liveIntervals)
+			foreach (var liveInterval in LiveIntervals)
 			{
 				if (liveInterval.Contains(at))
 					return liveInterval;
@@ -160,7 +158,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		/// <returns></returns>
 		public LiveInterval GetIntervalAtOrEndsAt(SlotIndex at)
 		{
-			foreach (var liveInterval in liveIntervals)
+			foreach (var liveInterval in LiveIntervals)
 			{
 				if (liveInterval.Contains(at) || at == liveInterval.End)
 					return liveInterval;

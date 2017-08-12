@@ -17,9 +17,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Max = 5,
 		}
 
-		public LiveRange LiveRange { get; private set; }
+		public LiveRange LiveRange { get; }
 
-		public VirtualRegister VirtualRegister { get; private set; }
+		public VirtualRegister VirtualRegister { get; }
 
 		public int SpillValue { get; set; }
 
@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsPhysicalRegister { get { return VirtualRegister.IsPhysicalRegister; } }
 
-		public Register AssignedPhysicalRegister { get { return LiveIntervalTrack == null ? null : LiveIntervalTrack.Register; } }
+		public Register AssignedPhysicalRegister { get { return LiveIntervalTrack?.Register; } }
 
 		public Operand AssignedPhysicalOperand { get; set; }
 
@@ -132,7 +132,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public override string ToString()
 		{
-			return VirtualRegister.ToString() + " between " + LiveRange.ToString();
+			return VirtualRegister + " between " + LiveRange;
 		}
 
 		public void Evict()
