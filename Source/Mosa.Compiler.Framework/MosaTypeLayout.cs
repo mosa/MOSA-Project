@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the offset for each field
 		/// </summary>
-		public readonly Dictionary<MosaField, int> fieldOffsets = new Dictionary<MosaField, int>();
+		private readonly Dictionary<MosaField, int> fieldOffsets = new Dictionary<MosaField, int>();
 
 		/// <summary>
 		/// Holds a list of methods for each type
@@ -64,22 +64,22 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The parameter offsets
 		/// </summary>
-		public Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>(); // fixme: change to private
+		private readonly Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// The parameter stack size
 		/// </summary>
-		public Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>(); // fixme: change to private
+		private readonly Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// The parameter stack size
 		/// </summary>
-		public Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>(); // fixme: change to private
+		private readonly Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// The overridden methods
 		/// </summary>
-		private readonly HashSet<MosaMethod> overriddenMethods = new HashSet<MosaMethod>();
+		private readonly HashSet<MosaMethod> overriddenMethods = new HashSet<MosaMethod>(new MosaMethodFullNameComparer());
 
 		private readonly object _lock = new object();
 
@@ -108,7 +108,19 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Get a list of interfaces
 		/// </summary>
-		public IList<MosaType> Interfaces { get { return interfaces; } }
+		/// <value>
+		/// The interfaces.
+		/// </value>
+		public IList<MosaType> Interfaces
+		{
+			get
+			{
+				lock (_lock)
+				{
+					return interfaces.ToArray();
+				}
+			}
+		}
 
 		#endregion Properties
 
@@ -209,7 +221,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public IList<MosaMethod> GetMethodTable(MosaType type)
+		public List<MosaMethod> GetMethodTable(MosaType type)
 		{
 			if (type.IsModule)
 				return null;
@@ -381,8 +393,10 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var type in TypeSystem.AllTypes)
 			{
+				//Debug.WriteLine("TYPE: " + type.FullName);
 				foreach (var method in type.Methods)
 				{
+					//Debug.WriteLine("METHOD: " + method.FullName);
 					ResolveMethodParameters(method);
 				}
 			}
@@ -472,11 +486,14 @@ namespace Mosa.Compiler.Framework
 				stacksize += sizeAligned;
 			}
 
-			int returnSize = 0; //todo
+			int returnSize = 0;
+			var returnType = method.Signature.ReturnType;
 
-			if (IsStoredOnStack(method.Signature.ReturnType))
+			if (IsStoredOnStack(returnType))
 			{
-				returnSize = GetTypeSize(method.Signature.ReturnType);
+				ResolveType(returnType);
+
+				typeSizes.TryGetValue(returnType, out returnSize);
 			}
 
 			parameterOffsets.Add(method, offsets);

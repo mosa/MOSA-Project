@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
-	///
+	/// Machine Type
 	/// </summary>
 	public enum MachineType : ushort
 	{

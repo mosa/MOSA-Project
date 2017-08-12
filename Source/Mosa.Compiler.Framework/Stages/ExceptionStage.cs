@@ -9,7 +9,9 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
+	/// Exception Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public class ExceptionStage : BaseMethodCompilerStage
 	{
 		private Dictionary<BasicBlock, Operand> exceptionVirtualRegisters = new Dictionary<BasicBlock, Operand>();
@@ -39,19 +41,19 @@ namespace Mosa.Compiler.Framework.Stages
 			// collect leave targets
 			leaveTargets = CollectLeaveTargets();
 
-			var dispatches = new Dictionary<BaseInstruction, Dispatch>();
-
-			dispatches.Add(IRInstruction.Throw, ThrowInstruction);
-			dispatches.Add(IRInstruction.FinallyStart, FinallyStartInstruction);
-			dispatches.Add(IRInstruction.FinallyEnd, FinallyEndInstruction);
-			dispatches.Add(IRInstruction.ExceptionStart, ExceptionStartInstruction);
-			dispatches.Add(IRInstruction.SetLeaveTarget, SetLeaveTargetInstruction);
-			dispatches.Add(IRInstruction.GotoLeaveTarget, GotoLeaveTargetInstruction);
-			dispatches.Add(IRInstruction.Flow, Empty);
-			dispatches.Add(IRInstruction.TryStart, Empty);
-			dispatches.Add(IRInstruction.TryEnd, Empty);
-			dispatches.Add(IRInstruction.ExceptionEnd, Empty);
-
+			var dispatches = new Dictionary<BaseInstruction, Dispatch>
+			{
+				[IRInstruction.Throw] = ThrowInstruction,
+				[IRInstruction.FinallyStart] = FinallyStartInstruction,
+				[IRInstruction.FinallyEnd] = FinallyEndInstruction,
+				[IRInstruction.ExceptionStart] = ExceptionStartInstruction,
+				[IRInstruction.SetLeaveTarget] = SetLeaveTargetInstruction,
+				[IRInstruction.GotoLeaveTarget] = GotoLeaveTargetInstruction,
+				[IRInstruction.Flow] = Empty,
+				[IRInstruction.TryStart] = Empty,
+				[IRInstruction.TryEnd] = Empty,
+				[IRInstruction.ExceptionEnd] = Empty
+			};
 			for (int i = 0; i < BasicBlocks.Count; i++)
 			{
 				for (var node = BasicBlocks[i].First; !node.IsBlockEndInstruction; node = node.Next)
@@ -59,9 +61,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					Dispatch dispatch;
-
-					if (dispatches.TryGetValue(node.Instruction, out dispatch))
+					if (dispatches.TryGetValue(node.Instruction, out Dispatch dispatch))
 					{
 						dispatch.Invoke(node);
 					}

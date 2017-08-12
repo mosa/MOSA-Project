@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework.Platform
 			}
 			else
 			{
-				index = index - 8;
+				index -= 8;
 				int shift = 56 - (8 * index);
 				return (byte)((data2 >> shift) & 0xFF);
 			}

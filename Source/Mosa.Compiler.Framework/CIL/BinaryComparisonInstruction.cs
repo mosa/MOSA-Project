@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <exception cref="InvalidOperationException">Invalid opcode.</exception>
 		protected override string GetModifier(InstructionNode node)
 		{
-			switch (((node.Instruction) as CIL.BaseCILInstruction).OpCode)
+			switch (((node.Instruction) as BaseCILInstruction).OpCode)
 			{
 				case OpCode.Ceq: return "==";
 				case OpCode.Cgt: return ">";

@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Linker.Elf
 
 		public bool IsEmitted { get; set; }
 
-		public List<Section> Dependencies { get; private set; }
+		public List<Section> Dependencies { get; }
 
 		public EmitSectionMethod EmitMethod { get; set; }
 
@@ -57,19 +57,19 @@ namespace Mosa.Compiler.Linker.Elf
 
 		public void WriteSectionHeader(LinkerFormatType elfType, BinaryWriter writer)
 		{
-			var header = new SectionHeaderEntry();
-
-			header.Name = NameIndex;
-			header.Address = Address;
-			header.Offset = Offset;
-			header.Size = Size;
-			header.EntrySize = EntrySize;
-			header.AddressAlignment = AddressAlignment;
-			header.Type = Type;
-			header.Flags = Flags;
-			header.Link = Link == null ? 0 : Link.Index;
-			header.Info = Info == null ? 0 : Info.Index;
-
+			var header = new SectionHeaderEntry()
+			{
+				Name = NameIndex,
+				Address = Address,
+				Offset = Offset,
+				Size = Size,
+				EntrySize = EntrySize,
+				AddressAlignment = AddressAlignment,
+				Type = Type,
+				Flags = Flags,
+				Link = Link?.Index ?? 0,
+				Info = Info?.Index ?? 0
+			};
 			header.Write(elfType, writer);
 		}
 	}

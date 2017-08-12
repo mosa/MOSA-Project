@@ -5,8 +5,9 @@ using Mosa.Compiler.Trace;
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	/// <summary>
-	///
+	/// Basic Register Allocator
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.RegisterAllocator.BaseRegisterAllocator" />
 	public class BasicRegisterAllocator : BaseRegisterAllocator
 	{
 		public BasicRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, Operand stackFrame, ITraceFactory traceFactory)
@@ -43,7 +44,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected override int CalculatePriorityValue(LiveInterval liveInterval)
 		{
-			return liveInterval.Length | ((int)(((int)LiveInterval.AllocationStage.Max - liveInterval.Stage)) << 28);
+			return liveInterval.Length | ((int)((int)LiveInterval.AllocationStage.Max - liveInterval.Stage) << 28);
 		}
 
 		protected void SplitIntervalsAtCallSites()

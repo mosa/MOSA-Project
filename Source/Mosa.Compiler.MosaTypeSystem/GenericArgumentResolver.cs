@@ -11,8 +11,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 	/// </summary>
 	public class GenericArgumentResolver
 	{
-		GenericArguments genericArguments;
-		RecursionCounter recursionCounter;
+		private GenericArguments genericArguments;
+		private RecursionCounter recursionCounter;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GenericArgumentResolver"/> class.
@@ -77,7 +77,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return ResolveGenericArgs(methodSig);
 		}
 
-		bool ReplaceGenericArg(ref TypeSig typeSig)
+		private bool ReplaceGenericArg(ref TypeSig typeSig)
 		{
 			if (genericArguments == null)
 				return false;
@@ -90,7 +90,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return false;
 		}
 
-		MethodSig ResolveGenericArgs(MethodSig sig)
+		private MethodSig ResolveGenericArgs(MethodSig sig)
 		{
 			if (sig == null)
 				return null;
@@ -103,12 +103,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return result;
 		}
 
-		MethodSig ResolveGenericArgs(MethodSig sig, MethodSig old)
+		private MethodSig ResolveGenericArgs(MethodSig sig, MethodSig old)
 		{
 			sig.RetType = ResolveGenericArgs(old.RetType);
 			foreach (var p in old.Params)
 				sig.Params.Add(ResolveGenericArgs(p));
-			sig.GenParamCount = old.GenParamCount;
+
 			if (sig.ParamsAfterSentinel != null)
 			{
 				foreach (var p in old.ParamsAfterSentinel)
@@ -117,7 +117,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return sig;
 		}
 
-		TypeSig ResolveGenericArgs(TypeSig typeSig)
+		private TypeSig ResolveGenericArgs(TypeSig typeSig)
 		{
 			if (!recursionCounter.Increment())
 				return null;

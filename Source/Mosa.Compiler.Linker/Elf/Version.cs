@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
-	///
+	/// Version
 	/// </summary>
 	public enum Version : uint
 	{

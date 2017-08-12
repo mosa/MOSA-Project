@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected Stream codeStream;
 
 		/// <summary>
-		///
+		/// The code emitter
 		/// </summary>
 		protected BaseCodeEmitter codeEmitter;
 
@@ -71,11 +71,11 @@ namespace Mosa.Compiler.Framework.Stages
 			// Retrieve a stream to place the code into
 
 			// HINT: We need seeking to resolve labels.
-			Debug.Assert(codeStream.CanSeek, @"Can't seek codeReader output stream2.");
-			Debug.Assert(codeStream.CanWrite, @"Can't write to codeReader output stream2.");
+			Debug.Assert(codeStream.CanSeek, "Can't seek codeReader output stream2.");
+			Debug.Assert(codeStream.CanWrite, "Can't write to codeReader output stream2.");
 
 			if (!codeStream.CanSeek || !codeStream.CanWrite)
-				throw new NotSupportedException(@"Code stream2 doesn't support seeking or writing.");
+				throw new NotSupportedException("Code stream2 doesn't support seeking or writing.");
 
 			// Emit method prologue
 			BeginGenerate();
@@ -122,9 +122,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.Instruction.IgnoreDuringCodeGeneration)
 						continue;
 
-					var baseInstruction = node.Instruction as BasePlatformInstruction;
-
-					if (baseInstruction != null)
+					if (node.Instruction is BasePlatformInstruction baseInstruction)
 					{
 						if (node.Size == InstructionSize.Native | node.Size == InstructionSize.None)
 						{
@@ -135,11 +133,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 						generatedInstructionCount++;
 
-						if (trace.Active) trace.Log(node.Offset.ToString() + " - /0x" + node.Offset.ToString("X") + " : " + node.ToString());
+						if (trace.Active) trace.Log(node.Offset.ToString() + " - /0x" + node.Offset.ToString("X") + " : " + node);
 					}
 					else
 					{
-						NewCompilerTraceEvent(CompilerEvent.Error, "Missing Code Transformation: " + node.ToString());
+						NewCompilerTraceEvent(CompilerEvent.Error, "Missing Code Transformation: " + node);
 					}
 				}
 

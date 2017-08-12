@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
-	///
+	/// SymbolType
 	/// </summary>
 	public enum SymbolType
 	{

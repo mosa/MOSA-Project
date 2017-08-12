@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Dictionary<BasicBlock, List<Operand>> outgoingMoves = new Dictionary<BasicBlock, List<Operand>>();
 		private Dictionary<BasicBlock, List<Operand>> incomingMoves = new Dictionary<BasicBlock, List<Operand>>();
 
-		private static List<Operand> empty = new List<Operand>();
+		private static readonly List<Operand> empty = new List<Operand>();
 
 		protected override void Run()
 		{
@@ -119,9 +119,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				worklist.Enqueue(next);
 
-				List<Operand> nextIncoming = null;
-
-				incomingMoves.TryGetValue(next, out nextIncoming);
+				incomingMoves.TryGetValue(next, out List<Operand> nextIncoming);
 
 				if (next.PreviousBlocks.Count == 0)
 				{
@@ -192,18 +190,18 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			for (var ctx = new Context(block); !ctx.IsBlockEndInstruction; ctx.GotoNext())
 			{
-				if (ctx.IsEmpty ||
-					ctx.IsBlockEndInstruction ||
-					ctx.IsBlockStartInstruction ||
-					ctx.Instruction == IRInstruction.Jmp)
+				if (ctx.IsEmpty
+					|| ctx.IsBlockEndInstruction
+					|| ctx.IsBlockStartInstruction
+					|| ctx.Instruction == IRInstruction.Jmp)
 					continue;
 
-				if (ctx.Instruction.FlowControl != FlowControl.ConditionalBranch &&
-					ctx.Instruction.FlowControl != FlowControl.UnconditionalBranch &&
-					ctx.Instruction.FlowControl != FlowControl.Return &&
-					ctx.Instruction != IRInstruction.ExceptionStart &&
-					ctx.Instruction != IRInstruction.FilterStart &&
-					!(ctx.Instruction is BaseCILInstruction))
+				if (ctx.Instruction.FlowControl != FlowControl.ConditionalBranch
+					&& ctx.Instruction.FlowControl != FlowControl.UnconditionalBranch
+					&& ctx.Instruction.FlowControl != FlowControl.Return
+					&& ctx.Instruction != IRInstruction.ExceptionStart
+					&& ctx.Instruction != IRInstruction.FilterStart
+					&& !(ctx.Instruction is BaseCILInstruction))
 					continue;
 
 				AssignOperandsFromCILStack(ctx, operandStack);
@@ -244,9 +242,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ctx.ResultCount == 0)
 				return;
 
-			if (ctx.Instruction != IRInstruction.ExceptionStart &&
-				ctx.Instruction != IRInstruction.FilterStart &&
-				!(ctx.Instruction as BaseCILInstruction).PushResult)
+			if (ctx.Instruction != IRInstruction.ExceptionStart
+				&& ctx.Instruction != IRInstruction.FilterStart
+				&& !(ctx.Instruction as BaseCILInstruction).PushResult)
 				return;
 
 			currentStack.Push(ctx.Result);

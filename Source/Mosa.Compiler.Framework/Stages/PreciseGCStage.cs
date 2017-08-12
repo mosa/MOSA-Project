@@ -45,15 +45,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 			for (int i = 0; i < registerRangeData.Length; i++)
 			{
-				var range = new RangeData();
-				range.Register = Architecture.RegisterSet[i];
+				var range = new RangeData()
+				{
+					Register = Architecture.RegisterSet[i]
+				};
 				registerRangeData[i] = range;
 			}
 
 			foreach (var local in stack)
 			{
-				var range = new RangeData();
-				range.StackLocal = local.Key;
+				var range = new RangeData()
+				{
+					StackLocal = local.Key
+				};
 				stackLocalRangeData[local.Value] = range;
 			}
 
