@@ -573,58 +573,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (method.IsVirtual)
 			{
-				var thisPtr = context.Operand1;
+				var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
 
-				var typeDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-				var methodPtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-
-				if (!method.DeclaringType.IsInterface)
+				if (method.DeclaringType.IsInterface)
 				{
-					var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-					context.SetInstruction(IRInstruction.CallVirtual, result, symbol);
-					SetCallParameters(context.Node, operands);
-
-					return;
+					context.SetInstruction(IRInstruction.CallInterface, result, symbol);
 				}
 				else
 				{
-					var methodDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-
-					// Offset for InterfaceSlotTable in TypeDef
-					int interfaceSlotTableOffset = (NativePointerSize * 11);
-
-					// Offset for InterfaceMethodTable in InterfaceSlotTable
-					int interfaceMethodTableOffset = (NativePointerSize * 1) + CalculateInterfaceSlotOffset(method);
-
-					// Offset for MethodDef in InterfaceMethodTable
-					int methodDefinitionOffset = (NativePointerSize * 2) + CalculateMethodTableOffset(method);
-
-					// Offset for Method pointer in MethodDef
-					int methodPointerOffset = (NativePointerSize * 4);
-
-					// Operands to hold pointers
-					var interfaceSlotPtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-					var interfaceMethodTablePtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-
-					// Get the TypeDef pointer
-					context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
-
-					// Get the Interface Slot Table pointer
-					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, interfaceSlotPtr, typeDefinition, Operand.CreateConstant(TypeSystem, interfaceSlotTableOffset));
-
-					// Get the Interface Method Table pointer
-					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant(TypeSystem, interfaceMethodTableOffset));
-
-					// Get the MethodDef pointer
-					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
-
-					// Get the address of the method
-					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+					context.SetInstruction(IRInstruction.CallVirtual, result, symbol);
 				}
 
-				context.AppendInstruction(IRInstruction.Nop);
-				ProcessInvokeInstruction(context.Node, method, methodPtr, result, operands);
+				SetCallParameters(context.Node, operands);
+				return;
 			}
 			else
 			{

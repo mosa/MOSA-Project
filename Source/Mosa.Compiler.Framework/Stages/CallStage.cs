@@ -35,7 +35,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var method = call.Method;
 			var operands = new List<Operand>(node.Operands);
 
-			Debug.Assert(method == call.Method || method == null);
+			Debug.Assert(method != null);
+			Debug.Assert(method == node.InvokeMethod || node.InvokeMethod == null);
 
 			operands.RemoveAt(0);
 
@@ -54,7 +55,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var thisPtr = node.Operand2;
 			var operands = new List<Operand>(node.Operands);
 
-			Debug.Assert(method == call.Method || method == null);
+			Debug.Assert(method != null);
+			Debug.Assert(method == node.InvokeMethod || node.InvokeMethod == null);
 
 			operands.RemoveAt(0);
 
@@ -89,10 +91,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CallInterface(InstructionNode node)
 		{
-			var method = node.InvokeMethod;
-			var thisPtr = node.Operand1;
+			var call = node.Operand1;
+			var method = call.Method;
 			var result = node.Result;
+			var thisPtr = node.Operand2;
 			var operands = new List<Operand>(node.Operands);
+
+			Debug.Assert(method != null);
+			Debug.Assert(method == node.InvokeMethod || node.InvokeMethod == null);
+
+			operands.RemoveAt(0);
 
 			var typeDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 			var callTarget = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
