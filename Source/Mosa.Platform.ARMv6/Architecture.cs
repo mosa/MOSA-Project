@@ -86,7 +86,7 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Specifies the architecture features to use in generated code.
 		/// </summary>
-		private ArchitectureFeatureFlags architectureFeatures;
+		private readonly ArchitectureFeatureFlags architectureFeatures;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Architecture"/> class.
@@ -147,6 +147,38 @@ namespace Mosa.Platform.ARMv6
 		public override Register StackPointerRegister
 		{
 			get { return GeneralPurposeRegister.SP; }
+		}
+
+		/// <summary>
+		/// Retrieves the scratch register of the ARMv6.
+		/// </summary>
+		public override Register ScratchRegister
+		{
+			get { return null; } // TODO
+		}
+
+		/// <summary>
+		/// Gets the return32 bit register.
+		/// </summary>
+		public override Register Return32BitRegister
+		{
+			get { return null; /* TODO */}
+		}
+
+		/// <summary>
+		/// Gets the return64 bit register.
+		/// </summary>
+		public override Register Return64BitRegister
+		{
+			get { return null; /* TODO */}
+		}
+
+		/// <summary>
+		/// Gets the return floating point register.
+		/// </summary>
+		public override Register ReturnFloatingPointRegister
+		{
+			get { return null; /* TODO */}
 		}
 
 		/// <summary>
@@ -232,8 +264,9 @@ namespace Mosa.Platform.ARMv6
 		/// Create platform move.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
 			throw new NotImplementCompilerException();
@@ -262,13 +295,13 @@ namespace Mosa.Platform.ARMv6
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="destinationOffset">The destination offset.</param>
-		/// <param name="source">The source.</param>
-		/// <param name="sourceOffset">The source offset.</param>
+		/// <param name="destinationBase">The destination.</param>
+		/// <param name="destination">The destination offset.</param>
+		/// <param name="sourceBase">The source.</param>
+		/// <param name="source">The source offset.</param>
 		/// <param name="size">The size.</param>
 		/// <exception cref="NotImplementCompilerException"></exception>
-		public override void InsertCompoundCopy(BaseMethodCompiler compiler, Context context, Operand destination, Operand destinationOffset, Operand source, Operand sourceOffset, int size)
+		public override void InsertCompoundCopy(BaseMethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
 		{
 			throw new NotImplementCompilerException();
 		}
@@ -277,8 +310,8 @@ namespace Mosa.Platform.ARMv6
 		/// Creates the swap.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
 		public override void InsertExchangeInstruction(Context context, Operand destination, Operand source)
 		{
 			// TODO
@@ -299,7 +332,7 @@ namespace Mosa.Platform.ARMv6
 		/// Inserts the jump instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
+		/// <param name="destination">The destination.</param>
 		public override void InsertJumpInstruction(Context context, BasicBlock destination)
 		{
 			// TODO
@@ -319,8 +352,9 @@ namespace Mosa.Platform.ARMv6
 		/// Inserts the add instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source1">The source1.</param>
+		/// <param name="source2">The source2.</param>
 		public override void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
 			context.AppendInstruction(ARMv6.Add, destination);
@@ -330,8 +364,9 @@ namespace Mosa.Platform.ARMv6
 		/// Inserts the sub instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source1">The source1.</param>
+		/// <param name="source2">The source2.</param>
 		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
 			context.AppendInstruction(ARMv6.Sub, destination);
@@ -344,7 +379,7 @@ namespace Mosa.Platform.ARMv6
 		/// <returns></returns>
 		public override bool IsInstructionMove(BaseInstruction instruction)
 		{
-			return (instruction == ARMv6.Mov);
+			return instruction == ARMv6.Mov;
 		}
 	}
 }

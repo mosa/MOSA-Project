@@ -53,6 +53,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.StoreParameterInteger, StoreParameterInteger);
 			AddVisitation(IRInstruction.SubSigned, SubSigned);
 			AddVisitation(IRInstruction.SubUnsigned, SubUnsigned);
+
+			AddVisitation(IRInstruction.To64, To64);
 		}
 
 		protected override void Setup()
@@ -443,6 +445,22 @@ namespace Mosa.Platform.x86.Stages
 			{
 				ExpandSub(context);
 			}
+		}
+
+		/// <summary>
+		/// Visitation function for To64 conversion.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void To64(Context context)
+		{
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand1;
+			var result = context.Result;
+
+			SplitLongOperand(result, out Operand op0L, out Operand op0H);
+
+			context.SetInstruction(X86.Mov, op0L, operand1);
+			context.AppendInstruction(X86.Mov, op0H, operand2);
 		}
 
 		#endregion Visitation Methods

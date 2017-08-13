@@ -109,6 +109,7 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly SubUnsigned SubUnsigned = new SubUnsigned();
 		public static readonly Switch Switch = new Switch();
 		public static readonly Throw Throw = new Throw();
+		public static readonly To64 To64 = new To64();
 		public static readonly TryEnd TryEnd = new TryEnd();
 		public static readonly TryStart TryStart = new TryStart();
 		public static readonly UnstableObjectTracking UnstableObjectTracking = new UnstableObjectTracking();

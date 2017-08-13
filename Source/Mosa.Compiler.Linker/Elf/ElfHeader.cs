@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Linker.Elf
 		/// <summary>
 		/// This member holds the ELF header's size in bytes.
 		/// </summary>
-		public const ushort ElfHeaderSize32 = 0x34;
+		internal const ushort ElfHeaderSize32 = 0x34;
 
 		internal const ushort ElfHeaderSize64 = 0x40;
 

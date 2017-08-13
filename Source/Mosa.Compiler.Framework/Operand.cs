@@ -898,13 +898,12 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateUnmanagedSymbolPointer(TypeSystem typeSystem, string name)
 		{
-			var operand = new Operand(typeSystem.BuiltIn.Pointer)
+			return new Operand(typeSystem.BuiltIn.Pointer)
 			{
 				IsSymbol = true,
 				Name = name,
 				IsConstant = true
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -915,12 +914,11 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateVirtualRegister(MosaType type, int index)
 		{
-			var operand = new Operand(type)
+			return new Operand(type)
 			{
 				IsVirtualRegister = true,
 				Index = index
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -930,13 +928,12 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand GetNull(TypeSystem typeSystem)
 		{
-			var operand = new Operand(typeSystem.BuiltIn.Object)
+			return new Operand(typeSystem.BuiltIn.Object)
 			{
 				IsNull = true,
 				IsConstant = true,
 				IsResolved = true
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -948,13 +945,12 @@ namespace Mosa.Compiler.Framework
 		private static Operand CreateManagedSymbolPointer(MosaType type, string name)
 		{
 			// NOTE: Not being used
-			var operand = new Operand(type.ToManagedPointer())
+			return new Operand(type.ToManagedPointer())
 			{
 				IsSymbol = true,
 				Name = name,
 				IsConstant = true
 			};
-			return operand;
 		}
 
 		#endregion Static Factory Constructors
