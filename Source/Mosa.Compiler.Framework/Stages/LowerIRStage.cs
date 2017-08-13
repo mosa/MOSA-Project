@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.Box32, Box32);
 			AddVisitation(IRInstruction.Box64, Box64);
 			AddVisitation(IRInstruction.BoxR4, BoxR4);
-			AddVisitation(IRInstruction.BoxR4, BoxR8);
+			AddVisitation(IRInstruction.BoxR8, BoxR8);
 			AddVisitation(IRInstruction.Unbox, Unbox);
 			AddVisitation(IRInstruction.Unbox32, Unbox32);
 			AddVisitation(IRInstruction.Unbox64, Unbox64);
