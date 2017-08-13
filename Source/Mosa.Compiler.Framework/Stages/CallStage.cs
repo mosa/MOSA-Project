@@ -30,17 +30,29 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CallStatic(InstructionNode node)
 		{
+			var method = node.InvokeMethod;
+			var callTarget = node.Operand1;
+			var result = node.Result;
+			var operands = new List<Operand>(node.Operands);
+
+			Debug.Assert(method == callTarget.Method);
+
+			operands.RemoveAt(0);
+
+			var context = new Context(node);
+
+			MakeCall(context, method, callTarget, result, operands);
 		}
 
 		private void CallVirtual(InstructionNode node)
 		{
 			var method = node.InvokeMethod;
 			var thisPtr = node.Operand1;
-			var resultOperand = node.Result;
+			var result = node.Result;
 			var operands = new List<Operand>(node.Operands);
 
 			var typeDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-			var methodPtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+			var callTarget = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 			Debug.Assert(!method.DeclaringType.IsInterface);
 
@@ -53,9 +65,9 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 			// Get the address of the method
-			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodPtr, typeDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, callTarget, typeDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 
-			MakeCall(context, method, methodPtr, resultOperand, operands);
+			MakeCall(context, method, callTarget, result, operands);
 		}
 
 		private int CalculateInterfaceSlot(MosaType interaceType)
@@ -72,11 +84,11 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var method = node.InvokeMethod;
 			var thisPtr = node.Operand1;
-			var resultOperand = node.Result;
+			var result = node.Result;
 			var operands = new List<Operand>(node.Operands);
 
 			var typeDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-			var methodPtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+			var callTarget = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 			Debug.Assert(method.DeclaringType.IsInterface);
 
@@ -112,9 +124,9 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
 
 			// Get the address of the method
-			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodPtr, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, callTarget, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 
-			MakeCall(context, method, methodPtr, resultOperand, operands);
+			MakeCall(context, method, callTarget, result, operands);
 		}
 
 		private int CalculateReturnSize(MosaMethod method)
@@ -143,7 +155,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// the mov/call two-instructions combo is to help facilitate the register allocator
 			context.AppendInstruction(IRInstruction.MoveInteger, scratch, target);
-			context.AppendInstruction(IRInstruction.CallDirect, null, target);
+			context.AppendInstruction(IRInstruction.CallDirect, null, scratch);
 			context.InvokeMethod = method;
 
 			GetReturnValue(context, result);
@@ -195,7 +207,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (operand.IsInteger)
 			{
-				// same as 32-bit
 				context.AppendInstruction(IRInstruction.StoreInteger, null, scratch, offsetOperand, operand);
 			}
 			else if (operand.IsR4)
@@ -213,7 +224,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				throw new InvalidCompilerException();
+				// note: same for integer logic (above)
+				context.AppendInstruction(IRInstruction.StoreInteger, null, scratch, offsetOperand, operand);
 			}
 		}
 
@@ -261,7 +273,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				throw new InvalidCompilerException();
+				// note: same for integer logic (above)
+				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.Return32BitRegister);
+				context.AppendInstruction(IRInstruction.Gen, returnLow);
+				context.AppendInstruction(IRInstruction.MoveInteger, result, returnLow);
 			}
 		}
 

@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -39,7 +38,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var size = node.Operand2;
 			var result = node.Result;
 
-			node.SetInstruction(IRInstruction.Call, result, symbol, runtimeHandle, size);
+			node.SetInstruction(IRInstruction.CallStatic, result, symbol, runtimeHandle, size);
 			node.InvokeMethod = method;
 		}
 
@@ -54,7 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var elements = node.Operand3;
 			var result = node.Result;
 
-			node.SetInstruction(IRInstruction.Call, result, symbol, runtimeHandle, size, elements);
+			node.SetInstruction(IRInstruction.CallStatic, result, symbol, runtimeHandle, size, elements);
 			node.InvokeMethod = method;
 		}
 	}

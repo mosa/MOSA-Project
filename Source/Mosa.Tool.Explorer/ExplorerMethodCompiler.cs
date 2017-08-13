@@ -42,6 +42,7 @@ namespace Mosa.Tool.Explorer
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
 
 				new LowerIRStage(),
+				new CallStage(),
 
 				(compilerOptions.TwoPassOptimizationStages && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.TwoPassOptimizationStages && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
