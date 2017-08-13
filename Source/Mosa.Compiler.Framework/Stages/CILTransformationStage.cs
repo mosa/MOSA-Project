@@ -543,9 +543,8 @@ namespace Mosa.Compiler.Framework.Stages
 						// Get the value type, size and native alignment
 						var elementType = context.Operand1.Type.ElementType;
 						int typeSize = TypeLayout.GetTypeSize(elementType);
-						int alignment = TypeLayout.NativePointerAlignment;
 
-						typeSize = Alignment.AlignUp(typeSize, alignment);
+						typeSize = Alignment.AlignUp(typeSize, TypeLayout.NativePointerAlignment);
 
 						// Create a virtual register to hold our boxed value
 						var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
@@ -581,20 +580,22 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (!method.DeclaringType.IsInterface)
 				{
-					// Same as above except for methodPointer
-					int methodPointerOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 14);
+					//// Same as above except for methodPointer
+					//int methodPointerOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 14);
 
-					// Get the TypeDef pointer
-					context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
+					//// Get the TypeDef pointer
+					//context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
-					// Get the address of the method
-					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodPtr, typeDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+					//// Get the address of the method
+					//context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodPtr, typeDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 
-					//context.SetInstruction(IRInstruction.CallVirtual, result);
+					var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
 
-					//SetCallParameters(context.Node, operands);
+					context.SetInstruction(IRInstruction.CallVirtual, result, symbol);
 
-					//return;
+					SetCallParameters(context.Node, operands);
+
+					return;
 				}
 				else
 				{
@@ -2318,7 +2319,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			for (int i = start; i < operands.Count; i++)
 			{
-				node.SetOperand(node.OperandCount, operands[i]);
+				node.SetOperand(node.OperandCount++, operands[i]);
 			}
 		}
 
