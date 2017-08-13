@@ -308,7 +308,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Definitions.Count != 1)
 				return;
 
-			if (node.Instruction == IRInstruction.Call || node.Instruction == IRInstruction.IntrinsicMethodCall)
+			if (node.Instruction == IRInstruction.Call
+				|| node.Instruction == IRInstruction.CallInterface
+				|| node.Instruction == IRInstruction.CallDirect
+				|| node.Instruction == IRInstruction.CallStatic
+				|| node.Instruction == IRInstruction.CallVirtual
+				|| node.Instruction == IRInstruction.IntrinsicMethodCall)
 				return;
 
 			if (node.Instruction == IRInstruction.MoveInteger && node.Operand1.IsVirtualRegister && node.Operand1 == node.Result)
@@ -1953,7 +1958,11 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Instruction == IRInstruction.AddressOf)
 					return false;
 
-				if (node.Instruction == IRInstruction.Call)
+				if (node.Instruction == IRInstruction.Call
+					|| node.Instruction == IRInstruction.CallInterface
+					|| node.Instruction == IRInstruction.CallDirect
+					|| node.Instruction == IRInstruction.CallStatic
+					|| node.Instruction == IRInstruction.CallVirtual)
 					return false;
 
 				if (node.Instruction == IRInstruction.Return)

@@ -270,10 +270,11 @@ namespace Mosa.Compiler.Framework.Stages
 				// TODO: This is probably wrong!
 				Debug.Assert(result.IsStackLocal);
 
-				int size = TypeLayout.GetTypeSize(result.Type);
-				var offsetOperand = Operand.CreateConstant(TypeSystem, size);
+				//int size = TypeLayout.GetTypeSize(result.Type);
+				//var offsetOperand = Operand.CreateConstant(TypeSystem, size);
+				var stackPointer = Operand.CreateCPURegister(result.Type, Architecture.StackPointerRegister);
 
-				context.AppendInstruction(IRInstruction.MoveCompound, result, offsetOperand);
+				context.AppendInstruction(IRInstruction.LoadCompound, result, stackPointer, ConstantZero);
 			}
 			else
 			{
