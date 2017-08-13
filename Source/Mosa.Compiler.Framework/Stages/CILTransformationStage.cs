@@ -512,7 +512,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			var method = context.InvokeMethod;
-			var resultOperand = context.Result;
+			var result = context.Result;
 
 			var operands = new List<Operand>(context.Operands);
 
@@ -567,7 +567,7 @@ namespace Mosa.Compiler.Framework.Stages
 						context.Operand1 = boxedValue;
 					}
 
-					ProcessInvokeInstruction(context.Node, method, resultOperand, operands);
+					ProcessInvokeInstruction(context.Node, method, result, operands);
 					return;
 				}
 			}
@@ -589,6 +589,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 					// Get the address of the method
 					context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodPtr, typeDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+
+					//context.SetInstruction(IRInstruction.CallVirtual, result);
+
+					//SetCallParameters(context.Node, operands);
+
+					//return;
 				}
 				else
 				{
@@ -627,13 +633,13 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				context.AppendInstruction(IRInstruction.Nop);
-				ProcessInvokeInstruction(context.Node, method, methodPtr, resultOperand, operands);
+				ProcessInvokeInstruction(context.Node, method, methodPtr, result, operands);
 			}
 			else
 			{
 				// FIXME: Callvirt imposes a null-check. For virtual calls this is done implicitly, but for non-virtual calls
 				// we have to make this explicitly somehow.
-				ProcessInvokeInstruction(context.Node, method, resultOperand, operands);
+				ProcessInvokeInstruction(context.Node, method, result, operands);
 			}
 		}
 
@@ -1318,7 +1324,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var arrayType = result.Type;
 			var elements = node.Operand1;
 
-			Architecture.GetTypeRequirements(TypeLayout, arrayType.ElementType, out int elementSize, out int alignment);
+			GetTypeRequirements(arrayType.ElementType, out int elementSize, out int alignment);
 
 			Debug.Assert(elementSize != 0);
 
@@ -2146,7 +2152,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <returns>Element offset operand.</returns>
 		private Operand CalculateArrayElementOffset(Context context, MosaType arrayType, Operand index)
 		{
-			Architecture.GetTypeRequirements(TypeLayout, arrayType.ElementType, out int size, out int alignment);
+			GetTypeRequirements(arrayType.ElementType, out int size, out int alignment);
 
 			var elementOffset = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var elementSize = Operand.CreateConstant(TypeSystem, size);
@@ -2305,6 +2311,14 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var operand in operands)
 			{
 				node.SetOperand(index++, operand);
+			}
+		}
+
+		private void SetCallParameters(InstructionNode node, List<Operand> operands, int start = 0)
+		{
+			for (int i = start; i < operands.Count; i++)
+			{
+				node.SetOperand(node.OperandCount, operands[i]);
 			}
 		}
 

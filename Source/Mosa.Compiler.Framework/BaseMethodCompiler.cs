@@ -316,7 +316,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var operand in Parameters)
 			{
-				Architecture.GetTypeRequirements(TypeLayout, operand.Type, out int size, out int alignment);
+				GetTypeRequirements(operand.Type, out int size, out int alignment);
 
 				operand.Offset = offset;
 				operand.IsResolved = true;
@@ -420,6 +420,19 @@ namespace Mosa.Compiler.Framework
 
 				LocalVariables[index++] = operand;
 			}
+		}
+
+		/// <summary>
+		/// Gets the type requirements.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="size">The size.</param>
+		/// <param name="alignment">The alignment.</param>
+		public void GetTypeRequirements(MosaType type, out int size, out int alignment)
+		{
+			alignment = Architecture.NativeAlignment;
+
+			size = type.IsValueType ? TypeLayout.GetTypeSize(type) : alignment;
 		}
 
 		/// <summary>

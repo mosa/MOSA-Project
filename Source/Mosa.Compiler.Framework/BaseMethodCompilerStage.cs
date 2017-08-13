@@ -617,6 +617,11 @@ namespace Mosa.Compiler.Framework
 
 		#region Helpers
 
+		public void GetTypeRequirements(MosaType type, out int size, out int alignment)
+		{
+			MethodCompiler.GetTypeRequirements(type, out size, out alignment);
+		}
+
 		/// <summary>
 		/// Gets the size of the instruction.
 		/// </summary>

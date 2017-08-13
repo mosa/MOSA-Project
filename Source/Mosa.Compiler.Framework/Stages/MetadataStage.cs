@@ -456,14 +456,14 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					// Assign a memory slot to the static & initialize it, if there's initial data set
 					// Determine the size of the type & alignment requirements
-					Architecture.GetTypeRequirements(TypeLayout, field.FieldType, out int size, out int alignment);
+					//Architecture.GetTypeRequirements(TypeLayout, field.FieldType, out int size, out int alignment);
 
-					size = TypeLayout.GetFieldSize(field);
+					int size = TypeLayout.GetFieldSize(field);
 
 					// The linker section to move this field into
 					SectionKind section = field.Data != null ? section = SectionKind.ROData : section = SectionKind.BSS;
 
-					var symbol = Compiler.Linker.CreateSymbol(field.FullName, section, alignment, size);
+					var symbol = Compiler.Linker.CreateSymbol(field.FullName, section, Architecture.NativeAlignment, size);
 
 					if (field.Data != null)
 					{

@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var operand in locals)
 			{
-				Architecture.GetTypeRequirements(TypeLayout, operand.Type, out int size, out int alignment);
+				GetTypeRequirements(operand.Type, out int size, out int alignment);
 
 				size = Alignment.AlignUp(size, alignment);
 				offset -= size;
