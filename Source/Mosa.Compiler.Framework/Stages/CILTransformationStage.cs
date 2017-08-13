@@ -450,9 +450,10 @@ namespace Mosa.Compiler.Framework.Stages
 				&& context.Operand1.Type.ElementType.IsValueType
 				&& context.InvokeMethod.DeclaringType == context.Operand1.Type.ElementType)
 			{
+				var before = context.InsertBefore();
+
 				if (OverridesMethod(context.InvokeMethod))
 				{
-					var before = context.InsertBefore();
 					before.SetInstruction(IRInstruction.SubSigned, context.Operand1, context.Operand1, Operand.CreateConstant(TypeSystem, NativePointerSize * 2));
 				}
 				else
@@ -460,15 +461,13 @@ namespace Mosa.Compiler.Framework.Stages
 					// Get the value type, size and native alignment
 					var type = context.Operand1.Type.ElementType;
 					int typeSize = TypeLayout.GetTypeSize(type);
-					int alignment = TypeLayout.NativePointerAlignment;
 
-					typeSize = Alignment.AlignUp(typeSize, alignment);
+					typeSize = Alignment.AlignUp(typeSize, TypeLayout.NativePointerAlignment);
 
 					// Create a virtual register to hold our boxed value
 					var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
 
 					// Create a new context before the call and set it as a VmCall
-					var before = context.InsertBefore();
 					before.SetInstruction(IRInstruction.Nop);
 					ReplaceWithVmCall(before.Node, VmCall.Box);
 
@@ -2311,10 +2310,12 @@ namespace Mosa.Compiler.Framework.Stages
 			method = method.DeclaringType.FindMethodByNameAndParameters(replacementMethod, method.Signature.Parameters);
 
 			var result = node.Result;
-
 			var operands = new List<Operand>(node.Operands);
 
-			ProcessInvokeInstruction(node, method, result, operands);
+			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+
+			node.SetInstruction(IRInstruction.CallStatic, result, symbol);
+			SetCallParameters(node, operands);
 
 			return true;
 		}
