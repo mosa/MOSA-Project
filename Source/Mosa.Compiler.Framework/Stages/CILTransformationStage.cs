@@ -720,9 +720,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Endfilter(InstructionNode node)
 		{
 			throw new InvalidCompilerException();
-
-			// Move this transformation to ProtectedRegionStage
-			//context.SetInstruction(IRInstruction.FilterEnd, context.Operand1);
 		}
 
 		/// <summary>
