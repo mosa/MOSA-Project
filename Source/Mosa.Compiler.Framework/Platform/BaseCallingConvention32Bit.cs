@@ -204,7 +204,7 @@ namespace Mosa.Compiler.Framework.Platform
 			{
 				var operand = operands[index];
 
-				architecture.GetTypeRequirements(compiler.TypeLayout, operand.Type, out int size, out int alignment);
+				compiler.GetTypeRequirements(operand.Type, out int size, out int alignment);
 
 				size = Alignment.AlignUp(size, alignment);
 
@@ -257,7 +257,7 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <param name="operand">The operand, that's holding the return value.</param>
 		public override void SetReturnValue(BaseMethodCompiler compiler, Context context, Operand operand)
 		{
-			architecture.GetTypeRequirements(compiler.TypeLayout, operand.Type, out int size, out int alignment);
+			compiler.GetTypeRequirements(operand.Type, out int size, out int alignment);
 
 			size = Alignment.AlignUp(size, alignment);
 

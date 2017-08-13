@@ -273,20 +273,6 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Gets the type memory requirements.
-		/// </summary>
-		/// <param name="typeLayout">The type layouts.</param>
-		/// <param name="type">The type.</param>
-		/// <param name="size">Receives the memory size of the type.</param>
-		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public override void GetTypeRequirements(MosaTypeLayout typeLayout, MosaType type, out int size, out int alignment)
-		{
-			alignment = NativeAlignment;
-
-			size = type.IsValueType ? typeLayout.GetTypeSize(type) : NativeAlignment;
-		}
-
-		/// <summary>
 		/// Gets the code emitter.
 		/// </summary>
 		/// <returns></returns>

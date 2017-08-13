@@ -30,12 +30,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CallStatic(InstructionNode node)
 		{
-			var method = node.InvokeMethod;
 			var callTarget = node.Operand1;
 			var result = node.Result;
+			var method = callTarget.Method;
 			var operands = new List<Operand>(node.Operands);
 
-			Debug.Assert(method == callTarget.Method);
+			Debug.Assert(method == callTarget.Method || method == null);
 
 			operands.RemoveAt(0);
 
@@ -191,7 +191,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var operand = operands[index];
 
-				Architecture.GetTypeRequirements(TypeLayout, operand.Type, out int size, out int alignment);
+				GetTypeRequirements(operand.Type, out int size, out int alignment);
 
 				size = Alignment.AlignUp(size, alignment);
 

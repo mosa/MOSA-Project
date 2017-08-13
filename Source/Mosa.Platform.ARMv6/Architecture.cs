@@ -237,21 +237,6 @@ namespace Mosa.Platform.ARMv6
 		}
 
 		/// <summary>
-		/// Gets the type memory requirements.
-		/// </summary>
-		/// <param name="typeLayout">The type layouts.</param>
-		/// <param name="type">The signature type.</param>
-		/// <param name="size">Receives the memory size of the type.</param>
-		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		/// <exception cref="System.ArgumentNullException">signatureType</exception>
-		public override void GetTypeRequirements(MosaTypeLayout typeLayout, MosaType type, out int size, out int alignment)
-		{
-			alignment = type.IsR8 ? 8 : NativeAlignment;
-
-			size = type.IsValueType ? typeLayout.GetTypeSize(type) : NativeAlignment;
-		}
-
-		/// <summary>
 		/// Gets the code emitter.
 		/// </summary>
 		/// <returns></returns>
