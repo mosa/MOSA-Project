@@ -30,26 +30,33 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CallStatic(InstructionNode node)
 		{
-			var callTarget = node.Operand1;
+			var call = node.Operand1;
 			var result = node.Result;
-			var method = callTarget.Method;
+			var method = call.Method;
 			var operands = new List<Operand>(node.Operands);
 
-			Debug.Assert(method == callTarget.Method || method == null);
+			Debug.Assert(method == call.Method || method == null);
 
 			operands.RemoveAt(0);
 
 			var context = new Context(node);
 
-			MakeCall(context, method, callTarget, result, operands);
+			context.Empty();
+
+			MakeCall(context, method, call, result, operands);
 		}
 
 		private void CallVirtual(InstructionNode node)
 		{
-			var method = node.InvokeMethod;
-			var thisPtr = node.Operand1;
+			var call = node.Operand1;
 			var result = node.Result;
+			var method = call.Method;
+			var thisPtr = node.Operand2;
 			var operands = new List<Operand>(node.Operands);
+
+			Debug.Assert(method == call.Method || method == null);
+
+			operands.RemoveAt(0);
 
 			var typeDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 			var callTarget = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
@@ -143,8 +150,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var scratch = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.ScratchRegister);
 
-			context.Empty();
-
 			int stackSize = TypeLayout.GetMethodParameterStackSize(method);
 			int returnSize = CalculateReturnSize(method);
 
@@ -219,8 +224,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (MosaTypeLayout.IsStoredOnStack(operand.Type))
 			{
-				// TODO: This is probably wrong!
-				context.AppendInstruction(IRInstruction.MoveCompound, operand, offsetOperand);
+				context.AppendInstruction(IRInstruction.StoreCompound, null, scratch, offsetOperand, operand);
 			}
 			else
 			{

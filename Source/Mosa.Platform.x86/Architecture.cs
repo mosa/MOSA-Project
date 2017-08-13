@@ -334,7 +334,7 @@ namespace Mosa.Platform.x86
 		public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
 		{
 			BaseInstruction instruction = X86.MovLoad;
-			InstructionSize size = InstructionSize.Size32;
+			var size = InstructionSize.Size32;
 
 			if (destination.IsR4)
 			{
