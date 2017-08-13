@@ -580,19 +580,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (!method.DeclaringType.IsInterface)
 				{
-					//// Same as above except for methodPointer
-					//int methodPointerOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 14);
-
-					//// Get the TypeDef pointer
-					//context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
-
-					//// Get the address of the method
-					//context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodPtr, typeDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
-
 					var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
 
 					context.SetInstruction(IRInstruction.CallVirtual, result, symbol);
-
 					SetCallParameters(context.Node, operands);
 
 					return;
