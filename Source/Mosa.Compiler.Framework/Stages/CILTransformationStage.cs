@@ -417,18 +417,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return TypeLayout.GetInterfaceSlotOffset(interaceType);
 		}
 
-		private int CalculateInterfaceSlotOffset(MosaMethod invokeTarget)
-		{
-			return CalculateInterfaceSlot(invokeTarget.DeclaringType) * NativePointerSize;
-		}
-
-		private int CalculateMethodTableOffset(MosaMethod invokeTarget)
-		{
-			int slot = TypeLayout.GetMethodTableOffset(invokeTarget);
-
-			return NativePointerSize * slot;
-		}
-
 		/// <summary>
 		/// Visitation function for Call instruction.
 		/// </summary>
@@ -519,6 +507,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var type = context.Previous.MosaType;
 
+				// remove constrained prefix
 				context.Previous.Empty();
 
 				if (type.IsValueType)
@@ -539,7 +528,6 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else
 					{
-						// Get the value type, size and native alignment
 						var elementType = context.Operand1.Type.ElementType;
 						int typeSize = TypeLayout.GetTypeSize(elementType);
 
@@ -565,7 +553,11 @@ namespace Mosa.Compiler.Framework.Stages
 						context.Operand1 = boxedValue;
 					}
 
-					ProcessInvokeInstruction(context.Node, method, result, operands);
+					//ProcessInvokeInstruction(context.Node, method, result, operands);
+
+					var symbol2 = Operand.CreateSymbolFromMethod(TypeSystem, method);
+					context.SetInstruction(IRInstruction.CallStatic, result, symbol2);
+					SetCallParameters(context.Node, operands);
 					return;
 				}
 			}
