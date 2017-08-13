@@ -246,7 +246,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (result == null)
 				return;
 
-			if (result.Is64BitInteger && Architecture.NativeIntegerSize == 4)
+			if (result.Is64BitInteger && Architecture.NativeIntegerSize == 32)
 			{
 				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.Return32BitRegister);
 				var returnHigh = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister);
