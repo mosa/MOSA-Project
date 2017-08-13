@@ -40,7 +40,7 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Specifies the architecture features to use in generated code.
 		/// </summary>
-		private ArchitectureFeatureFlags architectureFeatures;
+		private readonly ArchitectureFeatureFlags architectureFeatures;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Architecture"/> class.
@@ -99,7 +99,39 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		public override Register StackPointerRegister
 		{
-			get { return null; /* GeneralPurposeRegister.ESP;*/ }
+			get { return null; /* GeneralPurposeRegister.EDX;*/ }
+		}
+
+		/// <summary>
+		/// Retrieves the scratch register of the x86.
+		/// </summary>
+		public override Register ScratchRegister
+		{
+			get { return null; /* TODO */}
+		}
+
+		/// <summary>
+		/// Gets the return32 bit register.
+		/// </summary>
+		public override Register Return32BitRegister
+		{
+			get { return null; /* TODO */}
+		}
+
+		/// <summary>
+		/// Gets the return64 bit register.
+		/// </summary>
+		public override Register Return64BitRegister
+		{
+			get { return null; /* TODO */}
+		}
+
+		/// <summary>
+		/// Gets the return floating point register.
+		/// </summary>
+		public override Register ReturnFloatingPointRegister
+		{
+			get { return null; /* TODO */}
 		}
 
 		/// <summary>
@@ -274,7 +306,8 @@ namespace Mosa.Platform.x64
 		/// Inserts the jump instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
+		/// <param name="destination">The destination.</param>
+		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void InsertJumpInstruction(Context context, BasicBlock destination)
 		{
 			throw new NotImplementCompilerException();
@@ -295,8 +328,10 @@ namespace Mosa.Platform.x64
 		/// Inserts the add instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source1">The source1.</param>
+		/// <param name="source2">The source2.</param>
+		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
 			throw new NotImplementCompilerException();
@@ -306,8 +341,10 @@ namespace Mosa.Platform.x64
 		/// Inserts the sub instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="Destination">The destination.</param>
-		/// <param name="Source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source1">The source1.</param>
+		/// <param name="source2">The source2.</param>
+		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
 		{
 			throw new NotImplementCompilerException();

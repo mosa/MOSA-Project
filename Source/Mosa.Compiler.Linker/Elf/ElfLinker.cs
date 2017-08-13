@@ -58,7 +58,9 @@ namespace Mosa.Compiler.Linker.Elf
 
 		private void AddSection(Section section)
 		{
-			ushort index = (ushort)sections.Count;
+			Debug.Assert(section != null);
+
+			var index = (ushort)sections.Count;
 			section.Index = index;
 
 			sections.Add(section);
@@ -470,17 +472,26 @@ namespace Mosa.Compiler.Linker.Elf
 				}
 
 				if (reloc)
-					CreateRelocationSection(linkerSection.SectionKind);
+					CreateRelocationSection(linkerSection.SectionKind, false);
 
 				if (relocAddend)
-					CreateRelocationSection(linkerSection.SectionKind);
+					CreateRelocationSection(linkerSection.SectionKind, true);
 			}
 		}
 
-		protected void CreateRelocationSection(
-			SectionKind kind)
+		protected void CreateRelocationSection(SectionKind kind, bool addend)
 		{
-			Section relocationSection = null;
+			var relocationSection = new Section()
+			{
+				Name = (addend ? ".rela" : ".rel") + LinkerSectionNames[(int)kind],
+				Type = addend ? SectionType.RelocationA : SectionType.Relocation,
+				Link = symbolSection,
+				Info = GetSection(kind),
+				AddressAlignment = linker.SectionAlignment,
+				EntrySize = addend ? RelocationAddendEntry.GetEntrySize(linkerFormatType) : RelocationEntry.GetEntrySize(linkerFormatType),
+				EmitMethod = WriteRelocationSection
+			};
+
 			AddSection(relocationSection);
 
 			relocationSection.AddDependency(symbolSection);

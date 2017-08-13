@@ -8,6 +8,7 @@ using Mosa.Compiler.Linker.Elf;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.x86.Stages;
 using System.Diagnostics;
+using System;
 
 namespace Mosa.Platform.x86
 {
@@ -137,6 +138,38 @@ namespace Mosa.Platform.x86
 		public override Register StackPointerRegister
 		{
 			get { return GeneralPurposeRegister.ESP; }
+		}
+
+		/// <summary>
+		/// Retrieves the scratch register of the x86.
+		/// </summary>
+		public override Register ScratchRegister
+		{
+			get { return GeneralPurposeRegister.EDX; }
+		}
+
+		/// <summary>
+		/// Gets the return32 bit register.
+		/// </summary>
+		public override Register Return32BitRegister
+		{
+			get { return GeneralPurposeRegister.EAX; }
+		}
+
+		/// <summary>
+		/// Gets the return64 bit register.
+		/// </summary>
+		public override Register Return64BitRegister
+		{
+			get { return GeneralPurposeRegister.EDX; }
+		}
+
+		/// <summary>
+		/// Gets the return floating point register.
+		/// </summary>
+		public override Register ReturnFloatingPointRegister
+		{
+			get { return SSE2Register.XMM0; }
 		}
 
 		/// <summary>

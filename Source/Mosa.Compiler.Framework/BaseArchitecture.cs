@@ -50,6 +50,26 @@ namespace Mosa.Compiler.Framework
 		public abstract Register StackPointerRegister { get; }
 
 		/// <summary>
+		/// Gets the scratch register.
+		/// </summary>
+		public abstract Register ScratchRegister { get; }
+
+		/// <summary>
+		/// Gets the return32 bit register.
+		/// </summary>
+		public abstract Register Return32BitRegister { get; }
+
+		/// <summary>
+		/// Gets the return64 bit register.
+		/// </summary>
+		public abstract Register Return64BitRegister { get; }
+
+		/// <summary>
+		/// Gets the return floating point register.
+		/// </summary>
+		public abstract Register ReturnFloatingPointRegister { get; }
+
+		/// <summary>
 		/// Retrieves the program counter register of the architecture.
 		/// </summary>
 		public abstract Register ProgramCounter { get; }

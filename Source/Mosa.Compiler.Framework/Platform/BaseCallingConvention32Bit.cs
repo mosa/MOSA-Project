@@ -210,7 +210,7 @@ namespace Mosa.Compiler.Framework.Platform
 
 				space -= size;
 
-				Push(compiler, context, operand, space, size, scratch);
+				Push(compiler, context, operand, space, scratch);
 			}
 		}
 
@@ -221,9 +221,8 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <param name="context">The context.</param>
 		/// <param name="operand">The op.</param>
 		/// <param name="offset">Size of the stack.</param>
-		/// <param name="size">Size of the parameter.</param>
 		/// <param name="scratch">The scratch.</param>
-		private void Push(BaseMethodCompiler compiler, Context context, Operand operand, int offset, int size, Operand scratch)
+		private void Push(BaseMethodCompiler compiler, Context context, Operand operand, int offset, Operand scratch)
 		{
 			var offsetOperand = Operand.CreateConstant(compiler.TypeSystem, offset);
 
@@ -236,16 +235,7 @@ namespace Mosa.Compiler.Framework.Platform
 			}
 			else if (operand.IsR)
 			{
-				if (operand.IsR8 && size == 4)
-				{
-					var op2 = Operand.CreateCPURegister(compiler.TypeSystem.BuiltIn.R4, returnFloatingPointRegister);
-					architecture.InsertMoveInstruction(context, op2, operand);
-					architecture.InsertStoreInstruction(context, scratch, offsetOperand, op2);
-				}
-				else
-				{
-					architecture.InsertStoreInstruction(context, scratch, offsetOperand, operand);
-				}
+				architecture.InsertStoreInstruction(context, scratch, offsetOperand, operand);
 			}
 			else if (MosaTypeLayout.IsStoredOnStack(operand.Type))
 			{
