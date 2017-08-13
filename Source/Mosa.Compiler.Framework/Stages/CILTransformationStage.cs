@@ -571,10 +571,10 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
+			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+
 			if (method.IsVirtual)
 			{
-				var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
 				if (method.DeclaringType.IsInterface)
 				{
 					context.SetInstruction(IRInstruction.CallInterface, result, symbol);
@@ -583,16 +583,15 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					context.SetInstruction(IRInstruction.CallVirtual, result, symbol);
 				}
-
-				SetCallParameters(context.Node, operands);
-				return;
 			}
 			else
 			{
 				// FIXME: Callvirt imposes a null-check. For virtual calls this is done implicitly, but for non-virtual calls
 				// we have to make this explicitly somehow.
-				ProcessInvokeInstruction(context.Node, method, result, operands);
+				context.SetInstruction(IRInstruction.CallStatic, result, symbol);
 			}
+
+			SetCallParameters(context.Node, operands);
 		}
 
 		/// <summary>
