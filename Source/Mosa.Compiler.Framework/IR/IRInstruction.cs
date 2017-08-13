@@ -50,6 +50,8 @@ namespace Mosa.Compiler.Framework.IR
 		//public static readonly InternalReturn InternalReturn = new InternalReturn();
 
 		public static readonly IntrinsicMethodCall IntrinsicMethodCall = new IntrinsicMethodCall();
+		public static readonly IsInstanceOfType IsInstanceOfType = new IsInstanceOfType();
+		public static readonly IsInstanceOfInterfaceType IsInstanceOfInterfaceType = new IsInstanceOfInterfaceType();
 		public static readonly Jmp Jmp = new Jmp();
 		public static readonly Kill Kill = new Kill();
 		public static readonly KillAll KillAll = new KillAll();
@@ -70,6 +72,7 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly LogicalNot LogicalNot = new LogicalNot();
 		public static readonly LogicalOr LogicalOr = new LogicalOr();
 		public static readonly LogicalXor LogicalXor = new LogicalXor();
+		public static readonly MemorySet MemorySet = new MemorySet();
 		public static readonly MoveCompound MoveCompound = new MoveCompound();
 		public static readonly MoveFloatR4 MoveFloatR4 = new MoveFloatR4();
 		public static readonly MoveFloatR8 MoveFloatR8 = new MoveFloatR8();
@@ -113,5 +116,17 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly TryEnd TryEnd = new TryEnd();
 		public static readonly TryStart TryStart = new TryStart();
 		public static readonly UnstableObjectTracking UnstableObjectTracking = new UnstableObjectTracking();
+
+		public static readonly Rethrow Rethrow = new Rethrow();
+		public static readonly GetVirtualFunctionPtr GetVirtualFunctionPtr = new GetVirtualFunctionPtr();
+		public static readonly MemoryCopy MemoryCopy = new MemoryCopy();
+		public static readonly Box Box = new Box();
+		public static readonly Box32 Box32 = new Box32();
+		public static readonly Box64 Box64 = new Box64();
+		public static readonly BoxR4 BoxR4 = new BoxR4();
+		public static readonly BoxR8 BoxR8 = new BoxR8();
+		public static readonly Unbox Unbox = new Unbox();
+		public static readonly Unbox32 Unbox32 = new Unbox32();
+		public static readonly Unbox64 Unbox64 = new Unbox64();
 	}
 }
