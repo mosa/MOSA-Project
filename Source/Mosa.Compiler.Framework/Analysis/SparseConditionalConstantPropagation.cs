@@ -460,6 +460,10 @@ namespace Mosa.Compiler.Framework.Analysis
 				NewObject(node);
 			}
 			else if (instruction == IRInstruction.Call
+				|| instruction == IRInstruction.CallInterface
+				|| instruction == IRInstruction.CallDirect
+				|| instruction == IRInstruction.CallStatic
+				|| instruction == IRInstruction.CallVirtual
 				|| instruction == IRInstruction.IntrinsicMethodCall)
 			{
 				Call(node);
