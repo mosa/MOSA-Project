@@ -220,7 +220,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (operand.IsInteger)
 			{
-				context.AppendInstruction(IRInstruction.StoreInteger, null, scratch, offsetOperand, operand);
+				var size = GetInstructionSize(operand.Type);
+				context.AppendInstruction(IRInstruction.StoreInteger, size, null, scratch, offsetOperand, operand);
 			}
 			else if (operand.IsR4)
 			{
@@ -237,7 +238,8 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				// note: same for integer logic (above)
-				context.AppendInstruction(IRInstruction.StoreInteger, null, scratch, offsetOperand, operand);
+				var size = GetInstructionSize(operand.Type);
+				context.AppendInstruction(IRInstruction.StoreInteger, size, null, scratch, offsetOperand, operand);
 			}
 		}
 

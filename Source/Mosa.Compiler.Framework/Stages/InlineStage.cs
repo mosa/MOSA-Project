@@ -33,7 +33,11 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if (node.Instruction != IRInstruction.Call)
+					if (!(node.Instruction == IRInstruction.Call
+						|| node.Instruction == IRInstruction.CallDirect
+						|| node.Instruction == IRInstruction.CallInterface
+						|| node.Instruction == IRInstruction.CallVirtual
+						|| node.Instruction == IRInstruction.CallStatic))
 						continue;
 
 					nodes.Add(node);
