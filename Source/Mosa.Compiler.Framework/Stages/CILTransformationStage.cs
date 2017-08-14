@@ -1282,49 +1282,53 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			var classType = context.InvokeMethod.DeclaringType;
-			var thisReference = context.Result;
-
+			var result = context.Result;
+			var method = context.InvokeMethod;
 			var operands = new List<Operand>(context.Operands);
 
 			var before = context.InsertBefore();
 
 			// If the type is value type we don't need to call AllocateObject
-			if (MosaTypeLayout.IsStoredOnStack(thisReference.Type))
+			if (MosaTypeLayout.IsStoredOnStack(result.Type))
 			{
-				Debug.Assert(thisReference.Uses.Count <= 1, "Usages too high");
+				Debug.Assert(result.Uses.Count <= 1, "Usages too high");
 
-				var newThis = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
-				before.SetInstruction(IRInstruction.AddressOf, newThis, thisReference);
+				var newThis = MethodCompiler.CreateVirtualRegister(result.Type.ToManagedPointer());
+				before.SetInstruction(IRInstruction.AddressOf, newThis, result);
 
 				operands.Insert(0, newThis);
 			}
-			else if (thisReference.Type.IsValueType)
+			else if (result.Type.IsValueType)
 			{
-				Debug.Assert(thisReference.Uses.Count <= 1, "Usages too high");
+				Debug.Assert(result.Uses.Count <= 1, "Usages too high");
 
-				var newThis = MethodCompiler.AddStackLocal(thisReference.Type);
-				var newThisReference = MethodCompiler.CreateVirtualRegister(thisReference.Type.ToManagedPointer());
-				before.SetInstruction(IRInstruction.AddressOf, newThisReference, newThis);
+				var newThisLocal = MethodCompiler.AddStackLocal(result.Type);
+				var newThis = MethodCompiler.CreateVirtualRegister(result.Type.ToManagedPointer());
+				before.SetInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
 
-				var size = GetInstructionSize(newThis.Type);
-				var loadInstruction = GetLoadInstruction(newThis.Type);
+				var size = GetInstructionSize(newThisLocal.Type);
+				var loadInstruction = GetLoadInstruction(newThisLocal.Type);
 
-				context.InsertAfter().SetInstruction(loadInstruction, thisReference, StackFrame, newThis);
+				context.InsertAfter().SetInstruction(loadInstruction, result, StackFrame, newThisLocal);
 
-				operands.Insert(0, newThisReference);
+				operands.Insert(0, newThis);
 			}
 			else
 			{
-				Debug.Assert(thisReference.Type.IsReferenceType, $"VmCall.AllocateObject only needs to be called for reference types. Type: {thisReference.Type}");
+				Debug.Assert(result.Type.IsReferenceType, $"VmCall.AllocateObject only needs to be called for reference types. Type: {result.Type}");
 
 				var runtimeTypeHandle = GetRuntimeTypeHandle(classType);
 				var size = Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(classType));
-				before.SetInstruction(IRInstruction.NewObject, thisReference, runtimeTypeHandle, size);
+				before.SetInstruction(IRInstruction.NewObject, result, runtimeTypeHandle, size);
 
-				operands.Insert(0, thisReference);
+				operands.Insert(0, result);
 			}
 
-			ProcessInvokeInstruction(context.Node, context.InvokeMethod, null, operands);
+			//ProcessInvokeInstruction(context.Node, context.InvokeMethod, null, operands);
+
+			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			context.SetInstruction(IRInstruction.CallStatic, null, symbol);
+			SetCallParameters(context.Node, operands);
 		}
 
 		/// <summary>
