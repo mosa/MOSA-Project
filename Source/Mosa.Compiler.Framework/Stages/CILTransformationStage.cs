@@ -473,6 +473,14 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			ProcessInvokeInstruction(context.Node, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
+
+			//var method = context.InvokeMethod;
+			//var result = context.Result;
+			//var operands = new List<Operand>(context.Operands);
+
+			//var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			//context.SetInstruction(IRInstruction.CallStatic, result, symbol);
+			//SetCallParameters(context.Node, operands);
 		}
 
 		/// <summary>
@@ -483,10 +491,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			//todo: not yet implemented
 			throw new NotImplementCompilerException();
-
-			//var destinationOperand = context.GetOperand(context.OperandCount - 1);
-			//context.OperandCount--;
-			//ProcessInvokeInstruction(context, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
 		}
 
 		/// <summary>
@@ -552,8 +556,6 @@ namespace Mosa.Compiler.Framework.Stages
 						// Now replace the value type pointer with the boxed value virtual register
 						context.Operand1 = boxedValue;
 					}
-
-					//ProcessInvokeInstruction(context.Node, method, result, operands);
 
 					var symbol2 = Operand.CreateSymbolFromMethod(TypeSystem, method);
 					context.SetInstruction(IRInstruction.CallStatic, result, symbol2);
@@ -1323,8 +1325,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				operands.Insert(0, result);
 			}
-
-			//ProcessInvokeInstruction(context.Node, context.InvokeMethod, null, operands);
 
 			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
 			context.SetInstruction(IRInstruction.CallStatic, null, symbol);
