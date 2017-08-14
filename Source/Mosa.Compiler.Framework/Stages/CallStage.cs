@@ -289,25 +289,5 @@ namespace Mosa.Compiler.Framework.Stages
 				context.AppendInstruction(IRInstruction.MoveInteger, result, returnLow);
 			}
 		}
-
-		private void __OLD__ProcessInvokeInstruction(Context context, MosaMethod method, Operand symbolOperand, Operand resultOperand, List<Operand> operands)
-		{
-			Debug.Assert(method != null);
-
-			context.AppendInstruction(IRInstruction.Call, (byte)(operands.Count + 1), (byte)(resultOperand == null ? 0 : 1));
-			context.InvokeMethod = method;
-
-			if (resultOperand != null)
-			{
-				context.Result = resultOperand;
-			}
-
-			int index = 0;
-			context.SetOperand(index++, symbolOperand);
-			foreach (var operand in operands)
-			{
-				context.SetOperand(index++, operand);
-			}
-		}
 	}
 }
