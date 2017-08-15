@@ -90,9 +90,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="method">The method.</param>
 		public void Schedule(MosaMethod method)
 		{
-			var symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
-			start.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
-			start.InvokeMethod = method;
+			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			start.AppendInstruction(IRInstruction.CallStatic, null, symbol);
 		}
 
 		#endregion Methods

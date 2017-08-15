@@ -2257,7 +2257,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var result = node.Result;
 			var operands = node.GetOperands();
-
 			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol);
