@@ -55,7 +55,6 @@ namespace Mosa.Compiler.Framework.Stages
 			var result = node.Result;
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol, runtimeHandle, size);
-			node.InvokeMethod = method;
 		}
 
 		private void NewArray(InstructionNode node)
@@ -69,7 +68,6 @@ namespace Mosa.Compiler.Framework.Stages
 			var result = node.Result;
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol, runtimeHandle, size, elements);
-			node.InvokeMethod = method;
 		}
 
 		private void MemorySet(InstructionNode node)

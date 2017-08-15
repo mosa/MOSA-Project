@@ -20,24 +20,13 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			var method = methodCompiler.Compiler.InternalRuntimeType.FindMethodByName("AllocateString");
+			var symbol = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
 
-			Operand callTargetOperand = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
-
-			Operand typeDefinitionOperand = GetRuntimeTypeHandle(context, methodCompiler);
-			Operand lengthOperand = context.Operand1;
-			Operand result = context.Result;
-
-			context.SetInstruction(IRInstruction.Call, result, callTargetOperand, typeDefinitionOperand, lengthOperand);
-			context.InvokeMethod = method;
-		}
-
-		private Operand GetRuntimeTypeHandle(Context context, BaseMethodCompiler methodCompiler)
-		{
 			var typeDef = Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, StringClassTypeDefinitionSymbolName);
-			var runtimeTypeHandle = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
-			var before = context.InsertBefore();
-			before.SetInstruction(IRInstruction.MoveInteger, runtimeTypeHandle, typeDef);
-			return runtimeTypeHandle;
+			var length = context.Operand1;
+			var result = context.Result;
+
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol, typeDef, length);
 		}
 	}
 }

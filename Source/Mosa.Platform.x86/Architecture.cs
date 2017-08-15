@@ -5,10 +5,8 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker.Elf;
-using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.x86.Stages;
 using System.Diagnostics;
-using System;
 
 namespace Mosa.Platform.x86
 {
