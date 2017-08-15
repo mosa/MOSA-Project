@@ -729,11 +729,33 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Appends the operands.
+		/// </summary>
+		/// <param name="operands">The operands.</param>
+		/// <param name="offset">The offset.</param>
+		public void AppendOperands(IList<Operand> operands, int offset = 0)
+		{
+			for (int i = offset; i < operands.Count; i++)
+			{
+				SetOperand(OperandCount++, operands[i]);
+			}
+		}
+
+		/// <summary>
+		/// Gets the operands.
+		/// </summary>
+		/// <returns></returns>
+		public List<Operand> GetOperands()
+		{
+			return new List<Operand>(Operands);
+		}
+
+		/// <summary>
 		/// Sets the additional operand.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="operand">The operand.</param>
-		public void SetAdditionalOperand(int index, Operand operand)
+		private void SetAdditionalOperand(int index, Operand operand)
 		{
 			CheckAddition();
 
@@ -772,7 +794,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public Operand GetAdditionalOperand(int index)
+		private Operand GetAdditionalOperand(int index)
 		{
 			if (addition == null || addition.AdditionalOperands == null)
 				return null;

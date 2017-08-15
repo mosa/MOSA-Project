@@ -432,15 +432,17 @@ namespace Mosa.Compiler.Framework.Stages
 			if (ProcessExternalCall(context))
 				return;
 
+			var method = context.InvokeMethod;
+
 			// If the method being called is a virtual method then we need to box the value type
-			if (context.InvokeMethod.IsVirtual
+			if (method.IsVirtual
 				&& context.Operand1.Type.ElementType != null
 				&& context.Operand1.Type.ElementType.IsValueType
-				&& context.InvokeMethod.DeclaringType == context.Operand1.Type.ElementType)
+				&& method.DeclaringType == context.Operand1.Type.ElementType)
 			{
 				var before = context.InsertBefore();
 
-				if (OverridesMethod(context.InvokeMethod))
+				if (OverridesMethod(method))
 				{
 					before.SetInstruction(IRInstruction.SubSigned, context.Operand1, context.Operand1, Operand.CreateConstant(TypeSystem, NativePointerSize * 2));
 				}
@@ -472,15 +474,12 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			ProcessInvokeInstruction(context.Node, context.InvokeMethod, context.Result, new List<Operand>(context.Operands));
+			var result = context.Result;
+			var operands = new List<Operand>(context.Operands);
+			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
 
-			//var method = context.InvokeMethod;
-			//var result = context.Result;
-			//var operands = new List<Operand>(context.Operands);
-
-			//var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-			//context.SetInstruction(IRInstruction.CallStatic, result, symbol);
-			//SetCallParameters(context.Node, operands);
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol);
+			context.AppendOperands(operands);
 		}
 
 		/// <summary>
@@ -559,7 +558,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var symbol2 = Operand.CreateSymbolFromMethod(TypeSystem, method);
 					context.SetInstruction(IRInstruction.CallStatic, result, symbol2);
-					SetCallParameters(context.Node, operands);
+					context.AppendOperands(operands);
 					return;
 				}
 			}
@@ -584,7 +583,7 @@ namespace Mosa.Compiler.Framework.Stages
 				context.SetInstruction(IRInstruction.CallStatic, result, symbol);
 			}
 
-			SetCallParameters(context.Node, operands);
+			context.AppendOperands(operands);
 		}
 
 		/// <summary>
@@ -1328,7 +1327,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
 			context.SetInstruction(IRInstruction.CallStatic, null, symbol);
-			SetCallParameters(context.Node, operands);
+			context.AppendOperands(operands);
 		}
 
 		/// <summary>
@@ -2217,55 +2216,6 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Processes the invoke instruction.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		/// <param name="method">The method.</param>
-		/// <param name="resultOperand">The result operand.</param>
-		/// <param name="operands">The operands.</param>
-		private void ProcessInvokeInstruction(InstructionNode node, MosaMethod method, Operand resultOperand, List<Operand> operands)
-		{
-			var symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
-			ProcessInvokeInstruction(node, method, symbolOperand, resultOperand, operands);
-		}
-
-		/// <summary>
-		/// Processes a method call instruction.
-		/// </summary>
-		/// <param name="node">The transformation context.</param>
-		/// <param name="method">The method.</param>
-		/// <param name="symbolOperand">The symbol operand.</param>
-		/// <param name="resultOperand">The result operand.</param>
-		/// <param name="operands">The operands.</param>
-		private void ProcessInvokeInstruction(InstructionNode node, MosaMethod method, Operand symbolOperand, Operand resultOperand, List<Operand> operands)
-		{
-			Debug.Assert(method != null);
-
-			node.SetInstruction(IRInstruction.Call, (byte)(operands.Count + 1), (byte)(resultOperand == null ? 0 : 1));
-			node.InvokeMethod = method;
-
-			if (resultOperand != null)
-			{
-				node.Result = resultOperand;
-			}
-
-			int index = 0;
-			node.SetOperand(index++, symbolOperand);
-			foreach (var operand in operands)
-			{
-				node.SetOperand(index++, operand);
-			}
-		}
-
-		private void SetCallParameters(InstructionNode node, List<Operand> operands, int start = 0)
-		{
-			for (int i = start; i < operands.Count; i++)
-			{
-				node.SetOperand(node.OperandCount++, operands[i]);
-			}
-		}
-
-		/// <summary>
 		/// Replaces the IL load instruction by an appropriate IR move instruction or removes it entirely, if
 		/// it is a native size.
 		/// </summary>
@@ -2306,12 +2256,12 @@ namespace Mosa.Compiler.Framework.Stages
 			method = method.DeclaringType.FindMethodByNameAndParameters(replacementMethod, method.Signature.Parameters);
 
 			var result = node.Result;
-			var operands = new List<Operand>(node.Operands);
+			var operands = node.GetOperands();
 
 			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol);
-			SetCallParameters(node, operands);
+			node.AppendOperands(operands);
 
 			return true;
 		}
