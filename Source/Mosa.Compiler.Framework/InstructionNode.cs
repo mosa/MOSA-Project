@@ -1156,6 +1156,19 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operands">The operands.</param>
+		public void SetInstruction(BaseInstruction instruction, Operand result, IList<Operand> operands)
+		{
+			SetInstruction(instruction, operands.Count, (byte)((result == null) ? 0 : 1));
+			Result = result;
+			AppendOperands(operands);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
 		/// <param name="size">The size.</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
@@ -1163,6 +1176,19 @@ namespace Mosa.Compiler.Framework
 		{
 			SetInstruction(instruction, result, operand1);
 			Size = size;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operands">The operands.</param>
+		public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, IList<Operand> operands)
+		{
+			SetInstruction(instruction, result, operand1);
+			AppendOperands(operands);
 		}
 
 		/// <summary>

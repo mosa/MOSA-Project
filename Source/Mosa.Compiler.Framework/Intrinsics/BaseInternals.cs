@@ -35,8 +35,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var result = context.Result;
 			var operands = new List<Operand>(context.Operands);
 
-			context.SetInstruction(IRInstruction.CallStatic, result, symbol);
-			context.AppendOperands(operands);
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
 		}
 	}
 }
