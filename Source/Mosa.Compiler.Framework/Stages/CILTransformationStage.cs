@@ -871,56 +871,56 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Visitation function for Ldelem instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Ldelem(Context context)
+		/// <param name="node">The node.</param>
+		private void Ldelem(InstructionNode node)
 		{
-			var result = context.Result;
-			var array = context.Operand1;
-			var arrayIndex = context.Operand2;
+			var result = node.Result;
+			var array = node.Operand1;
+			var arrayIndex = node.Operand2;
 			var arrayType = array.Type;
 
 			// Array bounds check
-			AddArrayBoundsCheck(context, array, arrayIndex);
+			AddArrayBoundsCheck(node, array, arrayIndex);
 
-			var arrayAddress = LoadArrayBaseAddress(context, array);
-			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndex);
+			var arrayAddress = LoadArrayBaseAddress(node, array);
+			var elementOffset = CalculateArrayElementOffset(node, arrayType, arrayIndex);
 
 			Debug.Assert(elementOffset != null);
 
 			if (MosaTypeLayout.IsStoredOnStack(arrayType.ElementType))
 			{
-				context.SetInstruction(IRInstruction.LoadCompound, result, arrayAddress, elementOffset);
-				context.MosaType = arrayType.ElementType;
+				node.SetInstruction(IRInstruction.LoadCompound, result, arrayAddress, elementOffset);
+				node.MosaType = arrayType.ElementType;
 			}
 			else
 			{
 				var loadInstruction = GetLoadInstruction(arrayType.ElementType);
 				var size = GetInstructionSize(arrayType.ElementType);
 
-				context.SetInstruction(loadInstruction, size, result, arrayAddress, elementOffset);
+				node.SetInstruction(loadInstruction, size, result, arrayAddress, elementOffset);
 			}
 		}
 
 		/// <summary>
 		/// Visitation function for Ldelema instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Ldelema(Context context)
+		/// <param name="node">The node.</param>
+		private void Ldelema(InstructionNode node)
 		{
-			var result = context.Result;
-			var array = context.Operand1;
-			var arrayIndex = context.Operand2;
+			var result = node.Result;
+			var array = node.Operand1;
+			var arrayIndex = node.Operand2;
 			var arrayType = array.Type;
 
 			Debug.Assert(arrayType.ElementType == result.Type.ElementType);
 
 			// Array bounds check
-			AddArrayBoundsCheck(context, array, arrayIndex);
+			AddArrayBoundsCheck(node, array, arrayIndex);
 
-			var arrayAddress = LoadArrayBaseAddress(context, array);
-			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndex);
+			var arrayAddress = LoadArrayBaseAddress(node, array);
+			var elementOffset = CalculateArrayElementOffset(node, arrayType, arrayIndex);
 
-			context.SetInstruction(IRInstruction.AddSigned, result, arrayAddress, elementOffset);
+			node.SetInstruction(IRInstruction.AddSigned, result, arrayAddress, elementOffset);
 		}
 
 		/// <summary>
@@ -1441,31 +1441,31 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Visitation function for Stelem instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Stelem(Context context)
+		/// <param name="node">The node.</param>
+		private void Stelem(InstructionNode node)
 		{
-			var array = context.Operand1;
-			var arrayIndex = context.Operand2;
-			var value = context.Operand3;
+			var array = node.Operand1;
+			var arrayIndex = node.Operand2;
+			var value = node.Operand3;
 			var arrayType = array.Type;
 
 			// Array bounds check
-			AddArrayBoundsCheck(context, array, arrayIndex);
+			AddArrayBoundsCheck(node, array, arrayIndex);
 
-			var arrayAddress = LoadArrayBaseAddress(context, array);
-			var elementOffset = CalculateArrayElementOffset(context, arrayType, arrayIndex);
+			var arrayAddress = LoadArrayBaseAddress(node, array);
+			var elementOffset = CalculateArrayElementOffset(node, arrayType, arrayIndex);
 
 			if (MosaTypeLayout.IsStoredOnStack(value.Type))
 			{
-				context.SetInstruction(IRInstruction.StoreCompound, null, arrayAddress, elementOffset, value);
-				context.MosaType = arrayType.ElementType;
+				node.SetInstruction(IRInstruction.StoreCompound, null, arrayAddress, elementOffset, value);
+				node.MosaType = arrayType.ElementType;
 			}
 			else
 			{
 				var storeInstruction = GetStoreInstruction(value.Type);
 				var size = GetInstructionSize(arrayType.ElementType);
 
-				context.SetInstruction(storeInstruction, size, null, arrayAddress, elementOffset, value);
+				node.SetInstruction(storeInstruction, size, null, arrayAddress, elementOffset, value);
 			}
 		}
 
@@ -2049,12 +2049,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Adds bounds check to the array access.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="arrayOperand">The array operand.</param>
 		/// <param name="arrayIndexOperand">The index operand.</param>
-		private void AddArrayBoundsCheck(Context context, Operand arrayOperand, Operand arrayIndexOperand)
+		private void AddArrayBoundsCheck(InstructionNode node, Operand arrayOperand, Operand arrayIndexOperand)
 		{
-			var before = context.InsertBefore();
+			var before = new Context(node).InsertBefore();
 
 			// First create new block and split current block
 			var exceptionContext = CreateNewBlockContexts(1)[0];
@@ -2075,25 +2075,26 @@ namespace Mosa.Compiler.Framework.Stages
 			var method = InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
 			var symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
 
-			exceptionContext.AppendInstruction(IRInstruction.Call, null, symbolOperand);
-			exceptionContext.InvokeMethod = method;
+			exceptionContext.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
 		}
 
 		/// <summary>
 		/// Calculates the element offset for the specified index.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="arrayType">The array type.</param>
 		/// <param name="index">The index operand.</param>
-		/// <returns>Element offset operand.</returns>
-		private Operand CalculateArrayElementOffset(Context context, MosaType arrayType, Operand index)
+		/// <returns>
+		/// Element offset operand.
+		/// </returns>
+		private Operand CalculateArrayElementOffset(InstructionNode node, MosaType arrayType, Operand index)
 		{
 			GetTypeRequirements(arrayType.ElementType, out int size, out int alignment);
 
 			var elementOffset = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var elementSize = Operand.CreateConstant(TypeSystem, size);
 
-			var before = context.InsertBefore();
+			var before = new Context(node).InsertBefore();
 
 			before.AppendInstruction(IRInstruction.MulSigned, elementOffset, index, elementSize);
 
@@ -2103,17 +2104,18 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Calculates the base of the array elements.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="array">The array.</param>
 		/// <returns>
 		/// Base address for array elements.
 		/// </returns>
-		private Operand LoadArrayBaseAddress(Context context, Operand array)
+		private Operand LoadArrayBaseAddress(InstructionNode node, Operand array)
 		{
 			var fixedOffset = Operand.CreateConstant(TypeSystem, NativePointerSize * 3);
 			var arrayElement = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.InsertBefore().AppendInstruction(IRInstruction.AddSigned, arrayElement, array, fixedOffset);
+			var before = new Context(node).InsertBefore();
+			before.AppendInstruction(IRInstruction.AddSigned, arrayElement, array, fixedOffset);
 
 			return arrayElement;
 		}
