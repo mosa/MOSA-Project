@@ -539,12 +539,35 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operands">The operands.</param>
+		public void SetInstruction(BaseInstruction instruction, Operand result, IList<Operand> operands)
+		{
+			Node.SetInstruction(instruction, result, operands);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
 		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		public void SetInstruction(BaseInstruction instruction, bool updateStatus, Operand result, Operand operand1)
 		{
 			Node.SetInstruction(instruction, updateStatus, result, operand1);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operands">The operands.</param>
+		public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, IList<Operand> operands)
+		{
+			Node.SetInstruction(instruction, result, operand1, operands);
 		}
 
 		/// <summary>
@@ -977,6 +1000,18 @@ namespace Mosa.Compiler.Framework
 		{
 			AppendInstruction();
 			Node.SetInstruction(instruction, condition, result);
+		}
+
+		/// <summary>
+		/// Appends the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operands">The operands.</param>
+		public void AppendInstruction(BaseInstruction instruction, Operand result, List<Operand> operands)
+		{
+			AppendInstruction();
+			Node.SetInstruction(instruction, result, operands);
 		}
 
 		/// <summary>

@@ -478,8 +478,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var operands = new List<Operand>(context.Operands);
 			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
 
-			context.SetInstruction(IRInstruction.CallStatic, result, symbol);
-			context.AppendOperands(operands);
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
 		}
 
 		/// <summary>
@@ -503,8 +502,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var method = context.InvokeMethod;
 			var result = context.Result;
-
-			var operands = new List<Operand>(context.Operands);
+			var operands = context.GetOperands();
 
 			if (context.Previous.Instruction is ConstrainedPrefixInstruction)
 			{
@@ -557,8 +555,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 
 					var symbol2 = Operand.CreateSymbolFromMethod(TypeSystem, method);
-					context.SetInstruction(IRInstruction.CallStatic, result, symbol2);
-					context.AppendOperands(operands);
+					context.SetInstruction(IRInstruction.CallStatic, result, symbol2, operands);
 					return;
 				}
 			}
@@ -569,21 +566,19 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (method.DeclaringType.IsInterface)
 				{
-					context.SetInstruction(IRInstruction.CallInterface, result, symbol);
+					context.SetInstruction(IRInstruction.CallInterface, result, symbol, operands);
 				}
 				else
 				{
-					context.SetInstruction(IRInstruction.CallVirtual, result, symbol);
+					context.SetInstruction(IRInstruction.CallVirtual, result, symbol, operands);
 				}
 			}
 			else
 			{
 				// FIXME: Callvirt imposes a null-check. For virtual calls this is done implicitly, but for non-virtual calls
 				// we have to make this explicitly somehow.
-				context.SetInstruction(IRInstruction.CallStatic, result, symbol);
+				context.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
 			}
-
-			context.AppendOperands(operands);
 		}
 
 		/// <summary>
@@ -1326,8 +1321,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-			context.SetInstruction(IRInstruction.CallStatic, null, symbol);
-			context.AppendOperands(operands);
+			context.SetInstruction(IRInstruction.CallStatic, null, symbol, operands);
 		}
 
 		/// <summary>

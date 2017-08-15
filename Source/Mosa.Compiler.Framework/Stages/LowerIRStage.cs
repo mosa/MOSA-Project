@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -45,154 +46,105 @@ namespace Mosa.Compiler.Framework.Stages
 			return method;
 		}
 
+		private void SetVMCall(InstructionNode node, VmCall vmcall, Operand result, List<Operand> operands)
+		{
+			var method = GetVMCallMethod(vmcall);
+			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+
+			node.SetInstruction(IRInstruction.CallStatic, result, symbol);
+			node.AppendOperands(operands);
+		}
+
 		private void NewObject(InstructionNode node)
 		{
 			var method = GetVMCallMethod(VmCall.AllocateObject);
 			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			var runtimeHandle = node.Operand1;
-			var size = node.Operand2;
+			var operands = node.GetOperands();
 			var result = node.Result;
 
-			node.SetInstruction(IRInstruction.CallStatic, result, symbol, runtimeHandle, size);
+			node.SetInstruction(IRInstruction.CallStatic, result, symbol);
+			node.AppendOperands(operands);
 		}
 
 		private void NewArray(InstructionNode node)
 		{
 			var method = GetVMCallMethod(VmCall.AllocateArray);
 			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			var runtimeHandle = node.Operand1;
-			var size = node.Operand2;
-			var elements = node.Operand3;
+			var operands = node.GetOperands();
 			var result = node.Result;
 
-			node.SetInstruction(IRInstruction.CallStatic, result, symbol, runtimeHandle, size, elements);
+			node.SetInstruction(IRInstruction.CallStatic, result, symbol);
+			node.AppendOperands(operands);
 		}
 
 		private void MemorySet(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.MemorySet);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			//var runtimeHandle = node.Operand1;
-			//var size = node.Operand2;
-			//var elements = node.Operand3;
-			//var result = node.Result;
-
-			// todo
-
-			//node.SetOperand(1, ptr);
-			//node.SetOperand(2, ConstantZero);
-			//node.SetOperand(3, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(type)));
+			SetVMCall(node, VmCall.MemorySet, node.Result, node.GetOperands());
 		}
 
 		private void IsInstanceOfType(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.IsInstanceOfType);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			// todo
-			//node.SetOperand(1, GetRuntimeTypeHandle(classType));
-			//node.SetOperand(2, reference);
+			SetVMCall(node, VmCall.IsInstanceOfType, node.Result, node.GetOperands());
 		}
 
 		private void IsInstanceOfInterfaceType(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.IsInstanceOfInterfaceType);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			// todo
-			//node.SetOperand(1, Operand.CreateConstant(TypeSystem, slot));
-			//node.SetOperand(2, reference);
+			SetVMCall(node, VmCall.IsInstanceOfInterfaceType, node.Result, node.GetOperands());
 		}
 
 		private void GetVirtualFunctionPtr(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.GetVirtualFunctionPtr);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			// TODO
+			SetVMCall(node, VmCall.GetVirtualFunctionPtr, node.Result, node.GetOperands());
 		}
 
 		private void Rethrow(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.Rethrow);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			// TODO
+			SetVMCall(node, VmCall.Rethrow, node.Result, node.GetOperands());
 		}
 
 		private void MemoryCopy(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.MemoryCopy);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			// TODO
+			SetVMCall(node, VmCall.MemoryCopy, node.Result, node.GetOperands());
 		}
 
 		private void Box(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.Box);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			// TODO
+			SetVMCall(node, VmCall.Box, node.Result, node.GetOperands());
 		}
 
 		private void Box32(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.Box32);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			// TODO
+			SetVMCall(node, VmCall.Box32, node.Result, node.GetOperands());
 		}
 
 		private void Box64(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.Box64);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			// TODO
+			SetVMCall(node, VmCall.Box64, node.Result, node.GetOperands());
 		}
 
 		private void BoxR4(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.BoxR4);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			// TODO
+			SetVMCall(node, VmCall.BoxR4, node.Result, node.GetOperands());
 		}
 
 		private void BoxR8(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.BoxR8);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			// TODO
+			SetVMCall(node, VmCall.BoxR8, node.Result, node.GetOperands());
 		}
 
 		private void Unbox(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.Unbox);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			// TODO
+			SetVMCall(node, VmCall.Unbox, node.Result, node.GetOperands());
 		}
 
 		private void Unbox32(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.Unbox32);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			// TODO
+			SetVMCall(node, VmCall.Unbox32, node.Result, node.GetOperands());
 		}
 
 		private void Unbox64(InstructionNode node)
 		{
-			var method = GetVMCallMethod(VmCall.Unbox64);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
-
-			// TODO
+			SetVMCall(node, VmCall.Unbox64, node.Result, node.GetOperands());
 		}
 	}
 }
