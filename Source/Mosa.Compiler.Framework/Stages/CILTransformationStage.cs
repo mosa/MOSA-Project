@@ -219,7 +219,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(CILInstruction.Switch, Switch);
 			AddVisitation(CILInstruction.Throw, Throw);
 			AddVisitation(CILInstruction.Unbox, Unbox);
-			AddVisitation(CILInstruction.Unbox_any, UnboxAny);
+			AddVisitation(CILInstruction.Unbox_any, Unbox);
 			AddVisitation(CILInstruction.Xor, BinaryLogic);
 
 			//AddVisitation(CILInstruction.Add_ovf,Add_ovf);
@@ -354,44 +354,33 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			int typeSize = TypeLayout.GetTypeSize(type);
-			typeSize = Alignment.AlignUp(typeSize, TypeLayout.NativePointerAlignment);
+			var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
+			var runtimeType = GetRuntimeTypeHandle(type);
 
-			var vmCall = VmCall.Box32;
+			if (typeSize <= 8 || type.IsR)
+			{
+				BaseIRInstruction instruction;
 
-			if (type.IsR4)
-				vmCall = VmCall.BoxR4;
-			else if (type.IsR8)
-				vmCall = VmCall.BoxR8;
-			else if (typeSize <= 4)
-				vmCall = VmCall.Box32;
-			else if (typeSize == 8)
-				vmCall = VmCall.Box64;
+				if (type.IsR4)
+					instruction = IRInstruction.BoxR4;
+				else if (type.IsR8)
+					instruction = IRInstruction.BoxR8;
+				else if (typeSize <= 4)
+					instruction = IRInstruction.Box32;
+				else if (typeSize == 8)
+					instruction = IRInstruction.Box64;
+				else
+					throw new InvalidOperationException();
+
+				context.SetInstruction(instruction, result, runtimeType, value);
+			}
 			else
-				vmCall = VmCall.Box;
-
-			context.SetInstruction(IRInstruction.Nop);
-			ReplaceWithVmCall(context.Node, vmCall);
-
-			context.SetOperand(1, GetRuntimeTypeHandle(type));
-
-			if (vmCall == VmCall.Box)
 			{
 				var adr = AllocateVirtualRegister(type.ToManagedPointer());
 
-				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, value);
-
-				context.SetOperand(2, adr);
-				context.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
-				context.OperandCount = 4;
+				context.SetInstruction(IRInstruction.AddressOf, adr, value);
+				context.AppendInstruction(IRInstruction.Box, result, runtimeType, adr, Operand.CreateConstant(TypeSystem, typeSize));
 			}
-			else
-			{
-				context.SetOperand(2, value);
-				context.OperandCount = 3;
-			}
-			context.Result = result;
-			context.ResultCount = 1;
 		}
 
 		/// <summary>
@@ -1602,36 +1591,24 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!type.IsValueType)
 			{
 				var moveInstruction = GetMoveInstruction(type);
-
 				context.ReplaceInstruction(moveInstruction);
 				return;
 			}
 
 			var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
+			var tmp = AllocateVirtualRegister(type.ToManagedPointer());
 
-			var vmCall = ToVmUnboxCall(typeSize);
-
-			context.SetInstruction(IRInstruction.Nop);
-			ReplaceWithVmCall(context.Node, vmCall);
-
-			context.SetOperand(1, value);
-			if (vmCall == VmCall.Unbox)
+			if (typeSize <= 8)
 			{
-				var adr = AllocateVirtualRegister(type.ToManagedPointer());
-				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.AddStackLocal(type));
-
-				context.SetOperand(2, adr);
-				context.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
-				context.OperandCount = 4;
+				context.AppendInstruction(typeSize != 8 ? (BaseIRInstruction)IRInstruction.Unbox32 : IRInstruction.Unbox64, tmp, value);
 			}
 			else
 			{
-				context.OperandCount = 2;
-			}
+				var adr = AllocateVirtualRegister(type.ToManagedPointer());
 
-			var tmp = AllocateVirtualRegister(type.ToManagedPointer());
-			context.Result = tmp;
-			context.ResultCount = 1;
+				context.SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.AddStackLocal(type));
+				context.AppendInstruction(IRInstruction.Unbox, tmp, value, adr, Operand.CreateConstant(TypeSystem, typeSize));
+			}
 
 			if (MosaTypeLayout.IsStoredOnStack(type))
 			{
@@ -1643,66 +1620,6 @@ namespace Mosa.Compiler.Framework.Stages
 				var loadInstruction = GetLoadInstruction(type);
 				var size = GetInstructionSize(type);
 
-				context.AppendInstruction(loadInstruction, size, result, tmp, ConstantZero);
-				context.MosaType = type;
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for Unbox.Any instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void UnboxAny(Context context)
-		{
-			var value = context.Operand1;
-			var result = context.Result;
-			var type = context.MosaType;
-
-			if (!type.IsValueType)
-			{
-				var moveInstruction = GetMoveInstruction(type);
-
-				context.ReplaceInstruction(moveInstruction);
-				return;
-			}
-
-			int typeSize = TypeLayout.GetTypeSize(type);
-			typeSize = Alignment.AlignUp(typeSize, TypeLayout.NativePointerAlignment);
-
-			var vmCall = ToVmUnboxCall(typeSize);
-
-			context.SetInstruction(IRInstruction.Nop);
-			ReplaceWithVmCall(context.Node, vmCall);
-
-			context.SetOperand(1, value);
-			if (vmCall == VmCall.Unbox)
-			{
-				var adr = AllocateVirtualRegister(type.ToManagedPointer());
-				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.AddStackLocal(type));
-
-				context.SetOperand(2, adr);
-				context.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
-				context.OperandCount = 4;
-			}
-			else
-			{
-				context.OperandCount = 2;
-			}
-
-			var tmp = AllocateVirtualRegister(type.ToManagedPointer());
-			context.Result = tmp;
-			context.ResultCount = 1;
-
-			var size = GetInstructionSize(type);
-
-			if (MosaTypeLayout.IsStoredOnStack(type))
-			{
-				context.AppendInstruction(IRInstruction.LoadCompound, result, tmp, ConstantZero);
-				context.MosaType = type;
-			}
-			else
-			{
-				var loadInstruction = GetLoadInstruction(type);
 				context.AppendInstruction(loadInstruction, size, result, tmp, ConstantZero);
 				context.MosaType = type;
 			}
@@ -2216,33 +2133,6 @@ namespace Mosa.Compiler.Framework.Stages
 			node.AppendOperands(operands);
 
 			return true;
-		}
-
-		/// <summary>
-		/// Replaces the instruction with an internal call.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		/// <param name="internalCallTarget">The internal call target.</param>
-		private void ReplaceWithVmCall(InstructionNode node, VmCall internalCallTarget)
-		{
-			var method = InternalRuntimeType.FindMethodByName(internalCallTarget.ToString()) ?? PlatformInternalRuntimeType.FindMethodByName(internalCallTarget.ToString());
-
-			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());
-
-			node.ReplaceInstruction(IRInstruction.Call);
-			node.SetOperand(0, Operand.CreateSymbolFromMethod(TypeSystem, method));
-			node.OperandCount = 1;
-			node.InvokeMethod = method;
-		}
-
-		private static VmCall ToVmUnboxCall(int typeSize)
-		{
-			if (typeSize <= 4)
-				return VmCall.Unbox32;
-			else if (typeSize == 8)
-				return VmCall.Unbox64;
-			else
-				return VmCall.Unbox;
 		}
 
 		#endregion Internals
