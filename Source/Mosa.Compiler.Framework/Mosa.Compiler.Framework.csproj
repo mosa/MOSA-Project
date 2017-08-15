@@ -165,7 +165,7 @@
     <Compile Include="Intrinsics\InternalsForObject.cs" />
     <Compile Include="Intrinsics\InternalsForRuntimeHelpers.cs" />
     <Compile Include="Intrinsics\Load32.cs" />
-    <Compile Include="Intrinsics\InternalsBase.cs" />
+    <Compile Include="Intrinsics\BaseInternals.cs" />
     <Compile Include="Intrinsics\InternalsForType.cs" />
     <Compile Include="IR\InternalCall.cs" />
     <Compile Include="IR\ExceptionEnd.cs" />

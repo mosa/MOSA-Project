@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var call = node.Operand1;
 			var result = node.Result;
 			var method = call.Method;
-			var operands = new List<Operand>(node.Operands);
+			var operands = node.GetOperands();
 
 			Debug.Assert(method != null);
 			Debug.Assert(method == node.InvokeMethod || node.InvokeMethod == null);
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var result = node.Result;
 			var method = call.Method;
 			var thisPtr = node.Operand2;
-			var operands = new List<Operand>(node.Operands);
+			var operands = node.GetOperands();
 
 			Debug.Assert(method != null);
 			Debug.Assert(method == node.InvokeMethod || node.InvokeMethod == null);
@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var method = call.Method;
 			var result = node.Result;
 			var thisPtr = node.Operand2;
-			var operands = new List<Operand>(node.Operands);
+			var operands = node.GetOperands();
 
 			Debug.Assert(method != null);
 			Debug.Assert(method == node.InvokeMethod || node.InvokeMethod == null);

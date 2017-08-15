@@ -454,7 +454,7 @@ namespace Mosa.Platform.x86.Stages
 		private void To64(Context context)
 		{
 			var operand1 = context.Operand1;
-			var operand2 = context.Operand1;
+			var operand2 = context.Operand2;
 			var result = context.Result;
 
 			SplitLongOperand(result, out Operand op0L, out Operand op0H);

@@ -388,6 +388,25 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Appends the operands.
+		/// </summary>
+		/// <param name="operands">The operands.</param>
+		/// <param name="offset">The offset.</param>
+		public void AppendOperands(IList<Operand> operands, int offset = 0)
+		{
+			Node.AppendOperands(operands, offset);
+		}
+
+		/// <summary>
+		/// Gets the operands.
+		/// </summary>
+		/// <returns></returns>
+		public List<Operand> GetOperands()
+		{
+			return Node.GetOperands();
+		}
+
+		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
 		/// <returns>

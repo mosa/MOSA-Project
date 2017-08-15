@@ -2,14 +2,15 @@
 
 using Mosa.Compiler.Framework.IR;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	///
+	/// Internals Base
 	/// </summary>
-	public abstract class InternalsBase
+	public abstract class BaseInternals
 	{
 		/// <summary>
 		/// Allows quick internal call replacements
@@ -30,24 +31,12 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var method = type.FindMethodByName(internalMethod);
 			Debug.Assert(method != null, "Cannot find " + internalMethod + " in " + type.Name);
 
-			Operand callTargetOperand = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
+			var symbol = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
+			var result = context.Result;
+			var operands = new List<Operand>(context.Operands);
 
-			var operands = new Operand[context.OperandCount];
-
-			for (int i = 0; i < context.OperandCount; i++)
-				operands[i] = context.GetOperand(i);
-
-			Operand result = context.Result;
-
-			context.SetInstruction(IRInstruction.Call, result, callTargetOperand);
-
-			for (int i = 0; i < operands.Length; i++)
-			{
-				context.SetOperand(1 + i, operands[i]);
-			}
-
-			context.OperandCount = (byte)(1 + operands.Length);
-			context.InvokeMethod = method;
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol);
+			context.AppendOperands(operands);
 		}
 	}
 }
