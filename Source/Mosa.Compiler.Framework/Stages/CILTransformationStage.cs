@@ -355,7 +355,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			int typeSize = TypeLayout.GetTypeSize(type);
-
 			typeSize = Alignment.AlignUp(typeSize, TypeLayout.NativePointerAlignment);
 
 			var vmCall = VmCall.Box32;
@@ -379,6 +378,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (vmCall == VmCall.Box)
 			{
 				var adr = AllocateVirtualRegister(type.ToManagedPointer());
+
 				context.InsertBefore().SetInstruction(IRInstruction.AddressOf, adr, value);
 
 				context.SetOperand(2, adr);
@@ -423,13 +423,13 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Call(Context context)
 		{
-			if (CanSkipDueToRecursiveSystemObjectCtorCall(context))
+			if (CanSkipDueToRecursiveSystemObjectCtorCall(context.Node))
 			{
 				context.Empty();
 				return;
 			}
 
-			if (ProcessExternalCall(context))
+			if (ProcessExternalCall(context.Node))
 				return;
 
 			var method = context.InvokeMethod;
@@ -450,24 +450,12 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					// Get the value type, size and native alignment
 					var type = context.Operand1.Type.ElementType;
-					int typeSize = TypeLayout.GetTypeSize(type);
-
-					typeSize = Alignment.AlignUp(typeSize, TypeLayout.NativePointerAlignment);
+					var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
 
 					// Create a virtual register to hold our boxed value
 					var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
 
-					// Create a new context before the call and set it as a VmCall
-					before.SetInstruction(IRInstruction.Nop);
-					ReplaceWithVmCall(before.Node, VmCall.Box);
-
-					// Populate the operands for the VmCall and result
-					before.SetOperand(1, GetRuntimeTypeHandle(type));
-					before.SetOperand(2, context.Operand1);
-					before.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
-					before.OperandCount = 4;
-					before.Result = boxedValue;
-					before.ResultCount = 1;
+					before.SetInstruction(IRInstruction.Box, boxedValue, GetRuntimeTypeHandle(type), context.Operand1, Operand.CreateConstant(TypeSystem, typeSize));
 
 					// Now replace the value type pointer with the boxed value virtual register
 					context.Operand1 = boxedValue;
@@ -497,7 +485,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Callvirt(Context context)
 		{
-			if (ProcessExternalCall(context))
+			if (ProcessExternalCall(context.Node))
 				return;
 
 			var method = context.InvokeMethod;
@@ -530,25 +518,13 @@ namespace Mosa.Compiler.Framework.Stages
 					else
 					{
 						var elementType = context.Operand1.Type.ElementType;
-						int typeSize = TypeLayout.GetTypeSize(elementType);
-
-						typeSize = Alignment.AlignUp(typeSize, TypeLayout.NativePointerAlignment);
+						var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(elementType), TypeLayout.NativePointerAlignment);
 
 						// Create a virtual register to hold our boxed value
 						var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
 
-						// Create a new context before the call and set it as a VmCall
 						var before = context.InsertBefore();
-						before.SetInstruction(IRInstruction.Nop);
-						ReplaceWithVmCall(before.Node, VmCall.Box);
-
-						// Populate the operands for the VmCall and result
-						before.SetOperand(1, GetRuntimeTypeHandle(elementType));
-						before.SetOperand(2, context.Operand1);
-						before.SetOperand(3, Operand.CreateConstant(TypeSystem, typeSize));
-						before.OperandCount = 4;
-						before.Result = boxedValue;
-						before.ResultCount = 1;
+						before.SetInstruction(IRInstruction.Box, boxedValue, GetRuntimeTypeHandle(type), context.Operand1, Operand.CreateConstant(TypeSystem, typeSize));
 
 						// Now replace the value type pointer with the boxed value virtual register
 						context.Operand1 = boxedValue;
@@ -663,10 +639,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 				context.SetInstruction(IRInstruction.MoveInteger, size, temp, source);
 				context.AppendInstruction(instruction, size, result, temp, Operand.CreateConstant(TypeSystem, (int)mask));
-				return;
 			}
-
-			context.SetInstruction(instruction, size, result, source, Operand.CreateConstant(TypeSystem, (int)mask));
+			else
+			{
+				context.SetInstruction(instruction, size, result, source, Operand.CreateConstant(TypeSystem, (int)mask));
+			}
 		}
 
 		/// <summary>
@@ -675,7 +652,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Cpblk(InstructionNode node)
 		{
-			ReplaceWithVmCall(node, VmCall.MemoryCopy);
+			node.ReplaceInstruction(IRInstruction.MemoryCopy);
 		}
 
 		/// <summary>
@@ -750,7 +727,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Initblk(InstructionNode node)
 		{
-			ReplaceWithVmCall(node, VmCall.MemorySet);
+			node.ReplaceInstruction(IRInstruction.MemorySet);
 		}
 
 		/// <summary>
@@ -766,6 +743,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// this instruction is the equivalent of ldnull followed by stind.ref
 
 			var type = ptr.Type.ElementType;
+
 			if (type.IsReferenceType)
 			{
 				var size = GetInstructionSize(type);
@@ -774,16 +752,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				node.SetInstruction(IRInstruction.Nop);
-
-				// Setup context for VmCall
-				ReplaceWithVmCall(node, VmCall.MemorySet);
-
-				// Set the operands
-				node.SetOperand(1, ptr);
-				node.SetOperand(2, ConstantZero);
-				node.SetOperand(3, Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(type)));
-				node.OperandCount = 4;
+				var size = Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(type));
+				node.SetInstruction(IRInstruction.MemorySet, null, ptr, ConstantZero, size);
 			}
 		}
 
@@ -795,28 +765,16 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var reference = node.Operand1;
 			var result = node.Result;
-
 			var classType = node.MosaType;
 
 			if (!classType.IsInterface)
 			{
-				ReplaceWithVmCall(node, VmCall.IsInstanceOfType);
-
-				node.SetOperand(1, GetRuntimeTypeHandle(classType));
-				node.SetOperand(2, reference);
-				node.OperandCount = 3;
-				node.ResultCount = 1;
+				node.SetInstruction(IRInstruction.IsInstanceOfType, result, GetRuntimeTypeHandle(classType), reference);
 			}
 			else
 			{
 				int slot = CalculateInterfaceSlot(classType);
-
-				ReplaceWithVmCall(node, VmCall.IsInstanceOfInterfaceType);
-
-				node.SetOperand(1, Operand.CreateConstant(TypeSystem, slot));
-				node.SetOperand(2, reference);
-				node.OperandCount = 3;
-				node.ResultCount = 1;
+				node.SetInstruction(IRInstruction.IsInstanceOfInterfaceType, result, Operand.CreateConstant(TypeSystem, slot), reference);
 			}
 		}
 
@@ -1198,7 +1156,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldvirtftn(InstructionNode node)
 		{
-			ReplaceWithVmCall(node, VmCall.GetVirtualFunctionPtr);
+			node.ReplaceInstruction(IRInstruction.GetVirtualFunctionPtr);
 		}
 
 		/// <summary>
@@ -1388,7 +1346,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Rethrow(InstructionNode node)
 		{
-			ReplaceWithVmCall(node, VmCall.Rethrow);
+			node.ReplaceInstruction(IRInstruction.Rethrow);
 		}
 
 		/// <summary>
@@ -1649,8 +1607,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			int typeSize = TypeLayout.GetTypeSize(type);
-			typeSize = Alignment.AlignUp(typeSize, TypeLayout.NativePointerAlignment);
+			var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
 
 			var vmCall = ToVmUnboxCall(typeSize);
 
@@ -2120,10 +2077,10 @@ namespace Mosa.Compiler.Framework.Stages
 			return arrayElement;
 		}
 
-		private bool CanSkipDueToRecursiveSystemObjectCtorCall(Context context)
+		private bool CanSkipDueToRecursiveSystemObjectCtorCall(InstructionNode node)
 		{
 			var currentMethod = MethodCompiler.Method;
-			var invokeTarget = context.InvokeMethod;
+			var invokeTarget = node.InvokeMethod;
 
 			// Skip recursive System.Object ctor calls.
 			return currentMethod.DeclaringType.FullName == "System.Object"
@@ -2163,7 +2120,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Processes external method calls.
 		/// </summary>
-		/// <param name="context">The transformation context.</param>
+		/// <param name="node">The transformation context.</param>
 		/// <returns>
 		///   <c>true</c> if the method was replaced by an intrinsic; <c>false</c> otherwise.
 		/// </returns>
@@ -2172,24 +2129,24 @@ namespace Mosa.Compiler.Framework.Stages
 		/// the current architecture. If it has, the method call is replaced by the specified
 		/// native instruction.
 		/// </remarks>
-		private bool ProcessExternalCall(Context context)
+		private bool ProcessExternalCall(InstructionNode node)
 		{
 			Type intrinsicType = null;
 
-			if (context.InvokeMethod.ExternMethod != null)
+			if (node.InvokeMethod.ExternMethod != null)
 			{
-				intrinsicType = Type.GetType(context.InvokeMethod.ExternMethod);
+				intrinsicType = Type.GetType(node.InvokeMethod.ExternMethod);
 			}
-			else if (context.InvokeMethod.IsInternal)
+			else if (node.InvokeMethod.IsInternal)
 			{
-				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.InvokeMethod.FullName, out intrinsicType);
+				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(node.InvokeMethod.FullName, out intrinsicType);
 
 				if (intrinsicType == null)
 				{
-					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(context.InvokeMethod.DeclaringType.FullName + "::" + context.InvokeMethod.Name, out intrinsicType);
+					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(node.InvokeMethod.DeclaringType.FullName + "::" + node.InvokeMethod.Name, out intrinsicType);
 				}
 
-				Debug.Assert(intrinsicType != null, "Method is internal but no processor found: " + context.InvokeMethod.FullName);
+				Debug.Assert(intrinsicType != null, "Method is internal but no processor found: " + node.InvokeMethod.FullName);
 			}
 
 			if (intrinsicType == null)
@@ -2199,12 +2156,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (instance is IIntrinsicInternalMethod instanceMethod)
 			{
-				instanceMethod.ReplaceIntrinsicCall(context, MethodCompiler);
+				instanceMethod.ReplaceIntrinsicCall(new Context(node), MethodCompiler);
 				return true;
 			}
 			else if (instance is IIntrinsicPlatformMethod)
 			{
-				context.ReplaceInstruction(IRInstruction.IntrinsicMethodCall);
+				node.ReplaceInstruction(IRInstruction.IntrinsicMethodCall);
 				return true;
 			}
 
@@ -2278,7 +2235,7 @@ namespace Mosa.Compiler.Framework.Stages
 			node.InvokeMethod = method;
 		}
 
-		private VmCall ToVmUnboxCall(int typeSize)
+		private static VmCall ToVmUnboxCall(int typeSize)
 		{
 			if (typeSize <= 4)
 				return VmCall.Unbox32;
