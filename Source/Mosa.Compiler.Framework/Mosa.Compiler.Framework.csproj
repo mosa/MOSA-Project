@@ -100,6 +100,7 @@
     <Compile Include="Intrinsics\Load64.cs" />
     <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="IR\AddFloatR4.cs" />
+    <Compile Include="IR\CallDynamic.cs" />
     <Compile Include="IR\Unbox.cs" />
     <Compile Include="IR\Unbox32.cs" />
     <Compile Include="IR\Unbox64.cs" />

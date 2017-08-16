@@ -937,6 +937,21 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gets the null constant <see cref="Operand" />.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		public static Operand GetNull(MosaType type)
+		{
+			return new Operand(type)
+			{
+				IsNull = true,
+				IsConstant = true,
+				IsResolved = true
+			};
+		}
+
+		/// <summary>
 		/// Creates the symbol.
 		/// </summary>
 		/// <param name="type">The type.</param>

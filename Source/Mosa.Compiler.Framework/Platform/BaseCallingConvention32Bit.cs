@@ -6,6 +6,8 @@ using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+// NOTE: This class is being depreciated
+
 namespace Mosa.Compiler.Framework.Platform
 {
 	/// <summary>
