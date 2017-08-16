@@ -41,6 +41,10 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			context.SetInstruction(IRInstruction.Call, null, ctor, thisObject);
 			context.InvokeMethod = internalMethod;
+
+			//var symbol = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, internalMethod);
+			//context.SetInstruction(IRInstruction.CallStatic, null, ctor, thisObject);
+
 			context.AppendInstruction(IRInstruction.MoveInteger, result, thisObject);
 		}
 

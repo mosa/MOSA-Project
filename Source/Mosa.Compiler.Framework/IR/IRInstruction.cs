@@ -18,6 +18,7 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly Break Break = new Break();
 		public static readonly Call Call = new Call();
 		public static readonly CallDirect CallDirect = new CallDirect();
+		public static readonly CallDynamic CallDynamic = new CallDynamic();
 		public static readonly CallInterface CallInterface = new CallInterface();
 		public static readonly CallStatic CallStatic = new CallStatic();
 		public static readonly CallVirtual CallVirtual = new CallVirtual();

@@ -426,6 +426,16 @@ namespace Mosa.Compiler.Framework
 			Instruction = instruction;
 		}
 
+		/// <summary>
+		/// Replaces the instruction only.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		public void ReplaceInstruction(BaseInstruction instruction, InstructionSize size)
+		{
+			Instruction = instruction;
+			Size = size;
+		}
+
 		#endregion Methods
 
 		#region Set Instruction Methods

@@ -755,6 +755,18 @@ namespace Mosa.Compiler.Framework.Stages
 			var reference = node.Operand1;
 			var result = node.Result;
 			var classType = node.MosaType;
+			var type = result.Type;
+
+			if (type.IsValueType)
+			{
+				// FIXME:
+				var adr = AllocateVirtualRegister(type.ToManagedPointer());
+
+				//var context = new Context(node).InsertBefore();
+
+				//context.SetInstruction(IRInstruction.AddressOf, adr, value);
+				//context.AppendInstruction(IRInstruction.Box, result, runtimeType, adr, Operand.CreateConstant(TypeSystem, typeSize));
+			}
 
 			if (!classType.IsInterface)
 			{

@@ -181,7 +181,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		internal MosaType Clone()
 		{
-			MosaType result = (MosaType)base.MemberwiseClone();
+			var result = (MosaType)base.MemberwiseClone();
 
 			result.Methods = (result.methods = new List<MosaMethod>(methods)).AsReadOnly();
 			result.Fields = (result.fields = new List<MosaField>(fields)).AsReadOnly();

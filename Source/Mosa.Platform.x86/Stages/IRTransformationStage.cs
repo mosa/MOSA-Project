@@ -676,7 +676,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void LogicalNot(Context context)
 		{
-			Operand dest = context.Result;
+			var dest = context.Result;
 
 			context.SetInstruction(X86.Mov, dest, context.Operand1);
 
@@ -742,8 +742,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsR4);
 
-			context.ReplaceInstruction(X86.Mulss);
-			context.Size = InstructionSize.Size32;
+			context.ReplaceInstruction(X86.Mulss, InstructionSize.Size32);
 		}
 
 		/// <summary>
@@ -755,8 +754,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR8);
 			Debug.Assert(context.Operand1.IsR8);
 
-			context.ReplaceInstruction(X86.Mulsd);
-			context.Size = InstructionSize.Size32;
+			context.ReplaceInstruction(X86.Mulsd, InstructionSize.Size32);
 		}
 
 		/// <summary>

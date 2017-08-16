@@ -19,6 +19,8 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.CallInterface, CallInterface);
 			AddVisitation(IRInstruction.CallStatic, CallStatic);
 			AddVisitation(IRInstruction.CallVirtual, CallVirtual);
+
+			//AddVisitation(IRInstruction.CallDynamic, CallDynamic);
 		}
 
 		private int CalculateMethodTableOffset(MosaMethod invokeTarget)
@@ -144,32 +146,26 @@ namespace Mosa.Compiler.Framework.Stages
 			MakeCall(context, method, callTarget, result, operands);
 		}
 
-		private int CalculateReturnSize(MosaMethod method)
-		{
-			if (MosaTypeLayout.IsStoredOnStack(method.Signature.ReturnType))
-			{
-				return TypeLayout.GetTypeSize(method.Signature.ReturnType);
-			}
-
-			return 0;
-		}
-
 		private void MakeCall(Context context, MosaMethod method, Operand target, Operand result, List<Operand> operands)
 		{
-			var scratch = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.ScratchRegister);
+			int stackSize = CalculateParameterStackSize(operands);
+			int returnSize = CalculateReturnSize(result);
 
-			int stackSize = TypeLayout.GetMethodParameterStackSize(method);
-			int returnSize = CalculateReturnSize(method);
+			MakeCall(context, stackSize, returnSize, target, result, operands);
+		}
+
+		private void MakeCall(Context context, int stackSize, int returnSize, Operand target, Operand result, List<Operand> operands)
+		{
+			var scratch = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.ScratchRegister);
 
 			int totalStack = returnSize + stackSize;
 
 			ReserveStackSizeForCall(context, totalStack, scratch);
-			PushOperands(context, method, operands, totalStack, scratch);
+			PushOperands(context, operands, totalStack, scratch);
 
 			// the mov/call two-instructions combo is to help facilitate the register allocator
 			context.AppendInstruction(IRInstruction.MoveInteger, scratch, target);
 			context.AppendInstruction(IRInstruction.CallDirect, null, scratch);
-			context.InvokeMethod = method;
 
 			GetReturnValue(context, result);
 			FreeStackAfterCall(context, totalStack);
@@ -195,11 +191,39 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.AddSigned, stackPointer, stackPointer, Operand.CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
 		}
 
-		private void PushOperands(Context context, MosaMethod method, List<Operand> operands, int space, Operand scratch)
+		private int CalculateParameterStackSize(List<Operand> operands)
 		{
-			Debug.Assert((method.Signature.Parameters.Count + (method.HasThis ? 1 : 0) == operands.Count)
-						|| (method.DeclaringType.IsDelegate && method.Signature.Parameters.Count == operands.Count));
+			int stackSize = 0;
 
+			for (int index = operands.Count - 1; index >= 0; index--)
+			{
+				var operand = operands[index];
+
+				GetTypeRequirements(operand.Type, out int size, out int alignment);
+
+				stackSize += Alignment.AlignUp(size, alignment);
+			}
+
+			return stackSize;
+		}
+
+		private int CalculateReturnSize(Operand result)
+		{
+			if (result == null)
+				return 0;
+
+			var returnType = result.Type;
+
+			if (MosaTypeLayout.IsStoredOnStack(returnType))
+			{
+				return Alignment.AlignUp(TypeLayout.GetTypeSize(returnType), NativeAlignment);
+			}
+
+			return 0;
+		}
+
+		private void PushOperands(Context context, List<Operand> operands, int space, Operand scratch)
+		{
 			for (int index = operands.Count - 1; index >= 0; index--)
 			{
 				var operand = operands[index];
