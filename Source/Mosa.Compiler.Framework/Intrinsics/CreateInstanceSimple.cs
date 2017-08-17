@@ -30,17 +30,18 @@ namespace Mosa.Platform.x86.Intrinsic
 			var result = context.Result;
 			var method = context.InvokeMethod;
 
-			var internalMethod = methodCompiler.TypeSystem.DefaultLinkerType.FindMethodByName(InternalMethodName);
+			//var internalMethod = methodCompiler.TypeSystem.DefaultLinkerType.FindMethodByName(InternalMethodName);
 
-			if (internalMethod == null)
-			{
-				var param = methodCompiler.TypeSystem.CreateParameter(internalMethod, "this", methodCompiler.TypeSystem.BuiltIn.Object);
-				var parameters = new List<MosaParameter>(1) { param };
-				internalMethod = methodCompiler.TypeSystem.CreateLinkerMethod(InternalMethodName, methodCompiler.TypeSystem.BuiltIn.Void, false, parameters);
-			}
+			//if (internalMethod == null)
+			//{
+			//	var param = methodCompiler.TypeSystem.CreateParameter(internalMethod, "this", methodCompiler.TypeSystem.BuiltIn.Object);
+			//	var parameters = new List<MosaParameter>(1) { param };
+			//	internalMethod = methodCompiler.TypeSystem.CreateLinkerMethod(InternalMethodName, methodCompiler.TypeSystem.BuiltIn.Void, false, parameters);
+			//}
 
-			context.SetInstruction(IRInstruction.Call, null, ctor, thisObject);
-			context.InvokeMethod = internalMethod;
+			context.SetInstruction(IRInstruction.CallDynamic, null, ctor, thisObject);
+
+			//context.InvokeMethod = internalMethod;
 
 			//var symbol = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, internalMethod);
 			//context.SetInstruction(IRInstruction.CallStatic, null, ctor, thisObject);
