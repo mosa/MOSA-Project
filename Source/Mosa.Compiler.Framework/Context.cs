@@ -430,6 +430,7 @@ namespace Mosa.Compiler.Framework
 		/// Replaces the instruction only.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="size">The size.</param>
 		public void ReplaceInstruction(BaseInstruction instruction, InstructionSize size)
 		{
 			Instruction = instruction;

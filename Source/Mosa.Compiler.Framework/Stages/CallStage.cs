@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.Empty();
 
-			MakeCall(context, method, call, result, operands);
+			MakeCall(context, call, result, operands);
 		}
 
 		private void CallVirtual(InstructionNode node)
@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Get the address of the method
 			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, callTarget, typeDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 
-			MakeCall(context, method, callTarget, result, operands);
+			MakeCall(context, callTarget, result, operands);
 		}
 
 		private int CalculateInterfaceSlot(MosaType interaceType)
@@ -143,19 +143,14 @@ namespace Mosa.Compiler.Framework.Stages
 			// Get the address of the method
 			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, callTarget, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
 
-			MakeCall(context, method, callTarget, result, operands);
+			MakeCall(context, callTarget, result, operands);
 		}
 
-		private void MakeCall(Context context, MosaMethod method, Operand target, Operand result, List<Operand> operands)
+		private void MakeCall(Context context, Operand target, Operand result, List<Operand> operands)
 		{
 			int stackSize = CalculateParameterStackSize(operands);
 			int returnSize = CalculateReturnSize(result);
 
-			MakeCall(context, stackSize, returnSize, target, result, operands);
-		}
-
-		private void MakeCall(Context context, int stackSize, int returnSize, Operand target, Operand result, List<Operand> operands)
-		{
 			var scratch = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.ScratchRegister);
 
 			int totalStack = returnSize + stackSize;

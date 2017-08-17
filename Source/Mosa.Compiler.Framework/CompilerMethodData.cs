@@ -14,9 +14,9 @@ namespace Mosa.Compiler.Framework
 	{
 		private readonly object _lock = new object();
 
-		public Counters Counters { get; }
-
 		#region Properties
+
+		public Counters Counters { get; }
 
 		public MosaMethod Method { get; }
 
@@ -53,6 +53,10 @@ namespace Mosa.Compiler.Framework
 		public bool IsVirtual { get; set; }
 
 		public int CompileCount { get; set; }
+
+		public int ParameterStackSize { get; set; }
+
+		public int LocalMethodStackSize { get; set; }
 
 		#endregion Properties
 
