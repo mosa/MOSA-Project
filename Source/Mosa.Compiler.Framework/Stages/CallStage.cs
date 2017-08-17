@@ -19,8 +19,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.CallInterface, CallInterface);
 			AddVisitation(IRInstruction.CallStatic, CallStatic);
 			AddVisitation(IRInstruction.CallVirtual, CallVirtual);
-
-			//AddVisitation(IRInstruction.CallDynamic, CallDynamic);
+			AddVisitation(IRInstruction.CallDynamic, CallDynamic);
 		}
 
 		private int CalculateMethodTableOffset(MosaMethod invokeTarget)
@@ -39,6 +38,21 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(method != null);
 			Debug.Assert(method == node.InvokeMethod || node.InvokeMethod == null);
+
+			operands.RemoveAt(0);
+
+			var context = new Context(node);
+
+			context.Empty();
+
+			MakeCall(context, call, result, operands);
+		}
+
+		private void CallDynamic(InstructionNode node)
+		{
+			var call = node.Operand1;
+			var result = node.Result;
+			var operands = node.GetOperands();
 
 			operands.RemoveAt(0);
 

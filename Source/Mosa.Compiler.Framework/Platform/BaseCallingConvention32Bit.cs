@@ -83,8 +83,6 @@ namespace Mosa.Compiler.Framework.Platform
 			int stackSize = 0;
 			int returnSize = 0;
 
-			//var methoData = compiler.Compiler.CompilerData.GetCompilerMethodData(method);
-			//			stackSize = methoData.ParameterStackSize;
 			stackSize = CalculateParameterStackSize(operands, compiler);
 			returnSize = CalculateReturnSize(compiler, method);
 
