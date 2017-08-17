@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
@@ -93,6 +94,14 @@ namespace Mosa.Compiler.Framework
 		/// The method data.
 		/// </value>
 		protected CompilerMethodData MethodData { get; private set; }
+
+		/// <summary>
+		/// Gets the method.
+		/// </summary>
+		/// <value>
+		/// The method.
+		/// </value>
+		protected MosaMethod Method { get { return MethodCompiler.Method; } }
 
 		protected Operand ConstantZero { get { return MethodCompiler.ConstantZero; } }
 
@@ -589,30 +598,6 @@ namespace Mosa.Compiler.Framework
 		public void UpdateCounter(string name, int count)
 		{
 			MethodData.Counters.Update(name, count);
-		}
-
-		/// <summary>
-		/// Dumps this instance.
-		/// </summary>
-		/// <param name="before">if set to <c>true</c> [before].</param>
-		protected void Dump(bool before)
-		{
-			Debug.WriteLine(string.Empty);
-
-			Debug.WriteLine("METHOD: " + MethodCompiler.Method.FullName);
-			Debug.WriteLine("STAGE : " + (before ? "[BEFORE] " : "[AFTER] ") + GetType().Name);
-			Debug.WriteLine(string.Empty);
-
-			for (int index = 0; index < BasicBlocks.Count; index++)
-			{
-				for (var ctx = new Context(BasicBlocks[index]); !ctx.IsBlockEndInstruction; ctx.GotoNext())
-				{
-					if (!ctx.IsEmpty)
-					{
-						Debug.WriteLine(ctx.ToString());
-					}
-				}
-			}
 		}
 
 		#region Helpers

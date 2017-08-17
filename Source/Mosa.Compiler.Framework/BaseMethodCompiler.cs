@@ -231,11 +231,31 @@ namespace Mosa.Compiler.Framework
 			MethodData.Counters.Clear();
 
 			EvaluateParameterOperands();
+
+			CalculateMethodParameterSize();
 		}
 
 		#endregion Construction
 
 		#region Methods
+
+		private void CalculateMethodParameterSize()
+		{
+			int stacksize = 0;
+
+			if (Method.HasThis)
+			{
+				stacksize = TypeLayout.NativePointerSize;
+			}
+
+			foreach (var parameter in Method.Signature.Parameters)
+			{
+				var size = parameter.ParameterType.IsValueType ? TypeLayout.GetTypeSize(parameter.ParameterType) : TypeLayout.NativePointerAlignment;
+				stacksize += Alignment.AlignUp(size, TypeLayout.NativePointerAlignment);
+			}
+
+			MethodData.ParameterStackSize = stacksize;
+		}
 
 		/// <summary>
 		/// Adds the stack local.

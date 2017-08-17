@@ -72,11 +72,6 @@ namespace Mosa.Compiler.Framework
 		private readonly Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
-		/// The parameter stack size
-		/// </summary>
-		private readonly Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
-
-		/// <summary>
 		/// The overridden methods
 		/// </summary>
 		private readonly HashSet<MosaMethod> overriddenMethods = new HashSet<MosaMethod>(new MosaMethodFullNameComparer());
@@ -327,21 +322,6 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public int GetMethodParameterStackSize(MosaMethod method)
-		{
-			lock (_lock)
-			{
-				if (parameterStackSize.TryGetValue(method, out int value))
-				{
-					return value;
-				}
-
-				ResolveMethodParameters(method);
-
-				return parameterStackSize[method];
-			}
-		}
-
 		#region Internal - Layout
 
 		/// <summary>
@@ -353,16 +333,6 @@ namespace Mosa.Compiler.Framework
 			foreach (var type in TypeSystem.AllTypes)
 			{
 				ResolveType(type);
-			}
-
-			foreach (var type in TypeSystem.AllTypes)
-			{
-				//Debug.WriteLine("TYPE: " + type.FullName);
-				foreach (var method in type.Methods)
-				{
-					//Debug.WriteLine("METHOD: " + method.FullName);
-					ResolveMethodParameters(method);
-				}
 			}
 		}
 
@@ -420,49 +390,6 @@ namespace Mosa.Compiler.Framework
 			}
 
 			CreateMethodTable(type);
-		}
-
-		/// <summary>
-		/// Resolves the method parameters.
-		/// </summary>
-		/// <param name="method">The method.</param>
-		private void ResolveMethodParameters(MosaMethod method)
-		{
-			var parameters = method.Signature.Parameters;
-			int stacksize = 0;
-
-			var offsets = new List<int>(parameters.Count + ((method.HasThis) ? 1 : 0));
-
-			if (method.HasThis)
-			{
-				offsets.Add(0);
-				stacksize = NativePointerSize;  // already aligned
-			}
-
-			foreach (var parameter in parameters)
-			{
-				var size = parameter.ParameterType.IsValueType ? GetTypeSize(parameter.ParameterType) : NativePointerAlignment;
-
-				var sizeAligned = Alignment.AlignUp(size, NativePointerAlignment);
-
-				offsets.Add(stacksize);
-
-				stacksize += sizeAligned;
-			}
-
-			int returnSize = 0;
-			var returnType = method.Signature.ReturnType;
-
-			if (IsStoredOnStack(returnType))
-			{
-				ResolveType(returnType);
-
-				typeSizes.TryGetValue(returnType, out returnSize);
-			}
-
-			parameterOffsets.Add(method, offsets);
-			parameterStackSize.Add(method, stacksize);
-			methodReturnSize.Add(method, returnSize);
 		}
 
 		/// <summary>

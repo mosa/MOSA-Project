@@ -135,9 +135,7 @@ namespace Mosa.Compiler.Framework.Stages
 						method.FullName,
 						method.Signature.ReturnType.FullName,
 						methodData.LocalMethodStackSize,
-
-						//methodData.ParameterStackSize,
-						TypeLayout.GetMethodParameterStackSize(method),
+						methodData.ParameterStackSize,
 						(int)method.MethodAttributes,
 						type.FullName
 					);
