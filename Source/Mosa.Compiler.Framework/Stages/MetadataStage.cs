@@ -579,7 +579,9 @@ namespace Mosa.Compiler.Framework.Stages
 			writer1.Write((uint)method.MethodAttributes, TypeLayout.NativePointerSize);
 
 			// 4. Local Stack Size (16 Bits) && Parameter Stack Size (16 Bits)
-			int value = TypeLayout.GetLocalMethodStackSize(method) | (TypeLayout.GetMethodParameterStackSize(method) << 16);
+			//int value = TypeLayout.GetLocalMethodStackSize(method) | (TypeLayout.GetMethodParameterStackSize(method) << 16);
+			var methodData = Compiler.CompilerData.GetCompilerMethodData(method);
+			int value = methodData.LocalMethodStackSize | (TypeLayout.GetMethodParameterStackSize(method) << 16);
 			writer1.Write(value, TypeLayout.NativePointerSize);
 
 			// 5. Pointer to Method

@@ -327,42 +327,6 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		/// <summary>
-		/// Sets the size of the local method stack.
-		/// </summary>
-		/// <param name="method">The method.</param>
-		/// <param name="size">The size.</param>
-		public void SetLocalMethodStackSize(MosaMethod method, int size)
-		{
-			lock (_lock)
-			{
-				methodStackSizes.Remove(method);
-				methodStackSizes.Add(method, size);
-			}
-		}
-
-		/// <summary>
-		/// Gets the size of the local method stack.
-		/// </summary>
-		/// <param name="method">The method.</param>
-		/// <returns></returns>
-		public int GetLocalMethodStackSize(MosaMethod method)
-		{
-			lock (_lock)
-			{
-				if (!methodStackSizes.TryGetValue(method, out int size))
-				{
-					if ((method.MethodAttributes & MosaMethodAttributes.Abstract) == MosaMethodAttributes.Abstract)
-						return 0;
-
-					//throw new InvalidCompilerException();
-					return 0;
-				}
-
-				return size;
-			}
-		}
-
 		public int GetMethodParameterStackSize(MosaMethod method)
 		{
 			lock (_lock)

@@ -125,6 +125,7 @@ namespace Mosa.Compiler.Framework.Stages
 				foreach (var method in type.Methods)
 				{
 					var symbol = Linker.GetSymbol(method.FullName, SectionKind.Text);
+					var methodData = this.Compiler.CompilerData.GetCompilerMethodData(method);
 
 					writer.WriteLine(
 						"{0:x8}\t{1}\t{2:x8}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
@@ -133,7 +134,9 @@ namespace Mosa.Compiler.Framework.Stages
 						Linker.GetSymbol(method.FullName + Metadata.MethodDefinition, SectionKind.ROData).VirtualAddress,
 						method.FullName,
 						method.Signature.ReturnType.FullName,
-						TypeLayout.GetLocalMethodStackSize(method),
+						methodData.LocalMethodStackSize,
+
+						//methodData.ParameterStackSize,
 						TypeLayout.GetMethodParameterStackSize(method),
 						(int)method.MethodAttributes,
 						type.FullName
