@@ -83,7 +83,9 @@ namespace Mosa.Compiler.Framework.Platform
 			int stackSize = 0;
 			int returnSize = 0;
 
-			stackSize = compiler.TypeLayout.GetMethodParameterStackSize(method);
+			//var methoData = compiler.Compiler.CompilerData.GetCompilerMethodData(method);
+			//			stackSize = methoData.ParameterStackSize;
+			stackSize = CalculateParameterStackSize(operands, compiler);
 			returnSize = CalculateReturnSize(compiler, method);
 
 			context.Empty();
@@ -102,6 +104,22 @@ namespace Mosa.Compiler.Framework.Platform
 
 			CleanupReturnValue(compiler, context, result);
 			FreeStackAfterCall(compiler, context, totalStack);
+		}
+
+		private int CalculateParameterStackSize(List<Operand> operands, BaseMethodCompiler compiler)
+		{
+			int stackSize = 0;
+
+			for (int index = operands.Count - 1; index >= 0; index--)
+			{
+				var operand = operands[index];
+
+				compiler.GetTypeRequirements(operand.Type, out int size, out int alignment);
+
+				stackSize += Alignment.AlignUp(size, alignment);
+			}
+
+			return stackSize;
 		}
 
 		private static int CalculateReturnSize(BaseMethodCompiler compiler, MosaMethod method)
