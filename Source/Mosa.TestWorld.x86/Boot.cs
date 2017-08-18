@@ -8,7 +8,7 @@ using Mosa.TestWorld.x86.Tests;
 namespace Mosa.TestWorld.x86
 {
 	/// <summary>
-	///
+	/// Boot
 	/// </summary>
 	public static class Boot
 	{

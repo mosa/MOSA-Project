@@ -1060,21 +1060,22 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="target">The target.</param>
-		public void SetInstruction(BaseInstruction instruction, MosaMethod target)
+		/// <param name="block">The block.</param>
+		public void SetInstruction(BaseInstruction instruction, BasicBlock block)
 		{
 			SetInstruction(instruction);
-			InvokeMethod = target;
+			AddBranchTarget(block);
 		}
 
 		/// <summary>
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
 		/// <param name="block">The block.</param>
-		public void SetInstruction(BaseInstruction instruction, BasicBlock block)
+		public void SetInstruction(BaseInstruction instruction, Operand result, BasicBlock block)
 		{
-			SetInstruction(instruction);
+			SetInstruction(instruction, result);
 			AddBranchTarget(block);
 		}
 
@@ -1188,6 +1189,20 @@ namespace Mosa.Compiler.Framework
 		public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, IList<Operand> operands)
 		{
 			SetInstruction(instruction, result, operand1);
+			AppendOperands(operands);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operands">The operands.</param>
+		public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2, IList<Operand> operands)
+		{
+			SetInstruction(instruction, result, operand1, operand2);
 			AppendOperands(operands);
 		}
 
