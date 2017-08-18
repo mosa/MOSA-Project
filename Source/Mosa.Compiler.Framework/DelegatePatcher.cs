@@ -169,32 +169,20 @@ namespace Mosa.Compiler.Framework
 			b0.AddBranchTarget(b2.Block);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 
-			// no instance
-			b1.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
-			b1.InvokeMethod = GetDelegateProxyMethod(methodCompiler.Method, false);
+			var operands = new List<Operand>(methodCompiler.Parameters.Length + 1);
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
 			{
-				b1.AddOperand(vrs[i]);
+				operands.Add(vrs[i]);
 			}
-			if (withReturn)
-			{
-				b1.SetResult(0, opReturn);
-			}
+
+			var result = withReturn ? opReturn : null;
+
+			// no instance
+			b1.AppendInstruction(IRInstruction.CallDynamic, result, opMethod, operands);
 			b1.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 			// instance
-			b2.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
-			b2.InvokeMethod = GetDelegateProxyMethod(methodCompiler.Method, true);
-			b2.AddOperand(opInstance);
-			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
-			{
-				b2.AddOperand(vrs[i]);
-			}
-
-			if (withReturn)
-			{
-				b2.SetResult(0, opReturn);
-			}
+			b2.AppendInstruction(IRInstruction.CallDynamic, result, opMethod, opInstance, operands);
 			b2.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 			// return
