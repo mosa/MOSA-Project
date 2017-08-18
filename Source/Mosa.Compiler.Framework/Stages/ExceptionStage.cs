@@ -115,8 +115,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
 			newBlocks[0].AppendInstruction(IRInstruction.MoveInteger, exceptionRegister, exceptionVirtualRegister);
-			newBlocks[0].AppendInstruction(IRInstruction.Call, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
-			newBlocks[0].InvokeMethod = method;
+			newBlocks[0].AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
 		}
 
 		private void FinallyStartInstruction(InstructionNode node)
@@ -146,8 +145,7 @@ namespace Mosa.Compiler.Framework.Stages
 			ctx.SetInstruction(IRInstruction.MoveInteger, exceptionRegister, node.Operand1);
 
 			//ctx.AppendInstruction(IRInstruction.KillAllExcept, null, exceptionRegister);
-			ctx.AppendInstruction(IRInstruction.Call, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
-			ctx.InvokeMethod = method;
+			ctx.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
 		}
 
 		private void GotoLeaveTargetInstruction(InstructionNode node)
