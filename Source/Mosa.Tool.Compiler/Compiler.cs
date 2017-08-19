@@ -402,7 +402,7 @@ namespace Mosa.Tool.Compiler
 			switch (format.ToLower())
 			{
 				case "multibootHeader-0.7":
-				case "mb0.7": return delegate { return new Mosa.Platform.x86.Stages.Multiboot0695Stage(); };
+				case "mb0.7": return delegate { return new Mosa.Platform.x86.CompilerStages.Multiboot0695Stage(); };
 				default: throw new NotImplementCompilerException(string.Format("Unknown or unsupported boot format {0}.", format));
 			}
 		}

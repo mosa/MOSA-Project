@@ -4,11 +4,12 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x86.CompilerStages
 {
 	/// <summary>
-	///
+	/// Start Up Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public sealed class StartUpStage : BaseCompilerStage
 	{
 		protected override void RunPreCompile()

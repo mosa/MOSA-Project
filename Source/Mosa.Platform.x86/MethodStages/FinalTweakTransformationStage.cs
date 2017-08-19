@@ -3,11 +3,12 @@
 using Mosa.Compiler.Framework;
 using System.Diagnostics;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x86.MethodStages
 {
 	/// <summary>
 	/// Final Tweak Transformation Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	public sealed class FinalTweakTransformationStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()

@@ -2,13 +2,14 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Platform.x86.Stages;
+using Mosa.Platform.x86.MethodStages;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// Frame Call Ret R8
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicPlatformMethod" />
 	internal class FrameCallRetR8 : IIntrinsicPlatformMethod
 	{
 		#region Methods

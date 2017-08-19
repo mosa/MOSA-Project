@@ -1,11 +1,12 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x86.MethodStages
 {
 	/// <summary>
 	/// The simple dead code removal stage remove useless instructions
 	/// and NOP instructions prior to the register allocation stage.
 	/// </summary>
+	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	public sealed class SimpleDeadCodeRemovalStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
@@ -35,6 +36,9 @@ namespace Mosa.Platform.x86.Stages
 							node.Empty();
 							continue;
 						}
+
+						if (node.Instruction == X86.Call)
+							continue;
 
 						// Remove useless instructions
 						if (node.ResultCount == 1 && node.Result.Uses.Count == 0 && node.Result.IsVirtualRegister)

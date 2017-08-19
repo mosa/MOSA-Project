@@ -3,11 +3,12 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x86.CompilerStages
 {
 	/// <summary>
-	///
+	/// Interrupt Vector Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public sealed class InterruptVectorStage : BaseCompilerStage
 	{
 		protected override void RunPreCompile()

@@ -45,11 +45,8 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly FinallyStart FinallyStart = new FinallyStart();
 		public static readonly Flow Flow = new Flow();
 		public static readonly Gen Gen = new Gen();
+		public static readonly GotoEpilogue GotoEpilogue = new GotoEpilogue();
 		public static readonly GotoLeaveTarget GotoLeaveTarget = new GotoLeaveTarget();
-
-		//public static readonly InternalCall InternalCall = new InternalCall();
-		//public static readonly InternalReturn InternalReturn = new InternalReturn();
-
 		public static readonly IntrinsicMethodCall IntrinsicMethodCall = new IntrinsicMethodCall();
 		public static readonly IsInstanceOfType IsInstanceOfType = new IsInstanceOfType();
 		public static readonly IsInstanceOfInterfaceType IsInstanceOfInterfaceType = new IsInstanceOfInterfaceType();
@@ -94,7 +91,7 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly RemFloatR8 RemFloatR8 = new RemFloatR8();
 		public static readonly RemSigned RemSigned = new RemSigned();
 		public static readonly RemUnsigned RemUnsigned = new RemUnsigned();
-		public static readonly Return Return = new Return();
+		public static readonly SetReturn SetReturn = new SetReturn();
 		public static readonly SetLeaveTarget SetLeaveTarget = new SetLeaveTarget();
 		public static readonly ShiftLeft ShiftLeft = new ShiftLeft();
 		public static readonly ShiftRight ShiftRight = new ShiftRight();
@@ -129,5 +126,6 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly Unbox Unbox = new Unbox();
 		public static readonly Unbox32 Unbox32 = new Unbox32();
 		public static readonly Unbox64 Unbox64 = new Unbox64();
+		public static readonly Split64 Split64 = new Split64();
 	}
 }

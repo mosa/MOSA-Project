@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void LayoutStackVariables()
 		{
 			// assign increasing stack offsets to each variable
-			int size = LayoutVariables(MethodCompiler.LocalStack, CallingConvention.OffsetOfFirstLocal);
+			int size = LayoutVariables(MethodCompiler.LocalStack, Architecture.OffsetOfFirstLocal);
 
 			MethodCompiler.StackSize = size;
 			MethodCompiler.MethodData.LocalMethodStackSize = -size;

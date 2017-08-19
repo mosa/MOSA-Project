@@ -2,11 +2,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x86.MethodStages
 {
 	/// <summary>
 	/// Tweak Transformation Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	public sealed class TweakTransformationStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()

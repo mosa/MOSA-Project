@@ -87,7 +87,6 @@
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
     <Compile Include="Analysis\Dominance.cs" />
     <Compile Include="Analysis\IDominanceAnalysis.cs" />
-    <Compile Include="BaseCallingConventionExtended.cs" />
     <Compile Include="CompilerTypeData.cs" />
     <Compile Include="CompilerMethodData.cs" />
     <Compile Include="CompilerData.cs" />
@@ -101,6 +100,8 @@
     <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="IR\AddFloatR4.cs" />
     <Compile Include="IR\CallDynamic.cs" />
+    <Compile Include="IR\Return.cs" />
+    <Compile Include="IR\Split64.cs" />
     <Compile Include="IR\Unbox.cs" />
     <Compile Include="IR\Unbox32.cs" />
     <Compile Include="IR\Unbox64.cs" />
@@ -202,7 +203,6 @@
     <Compile Include="IR\BlockStart.cs" />
     <Compile Include="IR\BlockEnd.cs" />
     <Compile Include="IR\InternalReturn.cs" />
-    <Compile Include="Platform\BaseCallingConvention32Bit.cs" />
     <Compile Include="RegisterAllocator\MoveResolver.cs" />
     <Compile Include="RegisterAllocator\Interval.cs" />
     <Compile Include="RegisterAllocator\SlotIndex.cs" />
@@ -403,7 +403,7 @@
     <Compile Include="IR\BaseOneOperandInstruction.cs" />
     <Compile Include="IR\Phi.cs" />
     <Compile Include="IR\Prologue.cs" />
-    <Compile Include="IR\Return.cs" />
+    <Compile Include="IR\SetReturn.cs" />
     <Compile Include="IR\ShiftLeft.cs" />
     <Compile Include="IR\ShiftRight.cs" />
     <Compile Include="IR\MoveSignExtended.cs" />
@@ -435,9 +435,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ICompilerStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BaseCallingConvention.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CIL\IInstructionDecoder.cs">

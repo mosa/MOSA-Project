@@ -5,8 +5,9 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// Frame Call
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicPlatformMethod" />
 	internal class FrameCall : IIntrinsicPlatformMethod
 	{
 		#region Methods

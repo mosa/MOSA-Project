@@ -4,11 +4,12 @@ using Mosa.Compiler.Framework;
 
 // fixme: this stage may not be necessary with the specific load/store instructions
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x86.MethodStages
 {
 	/// <summary>
-	///
+	/// Floating Point Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	public class FloatingPointStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()

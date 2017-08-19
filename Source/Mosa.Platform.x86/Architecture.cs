@@ -5,7 +5,8 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker.Elf;
-using Mosa.Platform.x86.Stages;
+using Mosa.Platform.x86.CompilerStages;
+using Mosa.Platform.x86.MethodStages;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86
@@ -84,7 +85,6 @@ namespace Mosa.Platform.x86
 		private Architecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			this.architectureFeatures = architectureFeatures;
-			CallingConvention = new DefaultCallingConvention(this);
 		}
 
 		/// <summary>
@@ -195,6 +195,22 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
+		/// Gets the offset of first local.
+		/// </summary>
+		/// <value>
+		/// The offset of first local.
+		/// </value>
+		public override int OffsetOfFirstLocal { get { return 0; } }
+
+		/// <summary>
+		/// Gets the offset of first parameter.
+		/// </summary>
+		/// <value>
+		/// The offset of first parameter.
+		/// </value>
+		public override int OffsetOfFirstParameter { get { return 8; } }
+
+		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
 		/// <value>
@@ -244,10 +260,17 @@ namespace Mosa.Platform.x86
 		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
 		public override void ExtendMethodCompilerPipeline(CompilerPipeline compilerPipeline)
 		{
+			compilerPipeline.InsertBefore<LowerIRStage>(
+				new IRSubstitutionStage()
+			);
+
 			compilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
 					new PlatformIntrinsicStage(),
+
+					//new StopStage(),
+
 					new LongOperandTransformationStage(),
 					new IRTransformationStage(),
 					new TweakTransformationStage(),
@@ -442,42 +465,6 @@ namespace Mosa.Platform.x86
 		public override void InsertJumpInstruction(Context context, BasicBlock destination)
 		{
 			context.AppendInstruction(X86.Jmp, destination);
-		}
-
-		/// <summary>
-		/// Inserts the call instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="source">The source.</param>
-		public override void InsertCallInstruction(Context context, Operand source)
-		{
-			context.AppendInstruction(X86.Call, null, source);
-		}
-
-		/// <summary>
-		/// Inserts the add instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source1">The source1.</param>
-		/// <param name="source2">The source2.</param>
-		public override void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2)
-		{
-			Debug.Assert(source1 == destination);
-			context.AppendInstruction(X86.Add, destination, source1, source2);
-		}
-
-		/// <summary>
-		/// Inserts the sub instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source1">The source1.</param>
-		/// <param name="source2">The source2.</param>
-		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
-		{
-			Debug.Assert(source1 == destination);
-			context.AppendInstruction(X86.Sub, destination, source1, source2);
 		}
 
 		/// <summary>

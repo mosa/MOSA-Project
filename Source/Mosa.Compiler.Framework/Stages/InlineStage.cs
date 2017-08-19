@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if (!(node.Instruction == IRInstruction.Call
+					if (!(node.Instruction == IRInstruction.CallDynamic
 						|| node.Instruction == IRInstruction.CallDirect
 						|| node.Instruction == IRInstruction.CallInterface
 						|| node.Instruction == IRInstruction.CallVirtual
@@ -121,7 +121,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.Instruction == IRInstruction.Epilogue)
 						continue;
 
-					if (node.Instruction == IRInstruction.Return)
+					if (node.Instruction == IRInstruction.SetReturn)
 					{
 						if (callNode.Result != null)
 						{

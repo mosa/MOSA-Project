@@ -3,7 +3,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x86.CompilerStages
 {
 	/// <summary>
 	/// Sets up SSE before any code that relies on SSE runs.

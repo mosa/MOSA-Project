@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker.Elf;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
@@ -12,11 +11,6 @@ namespace Mosa.Compiler.Framework
 	public abstract class BaseArchitecture
 	{
 		#region Properties
-
-		/// <summary>
-		/// Retrieves an object, that is able to translate the CIL calling convention into appropriate native code.
-		/// </summary>
-		public BaseCallingConvention CallingConvention { get; protected set; }
 
 		/// <summary>
 		/// Gets the endianness of the target architecture.
@@ -115,6 +109,22 @@ namespace Mosa.Compiler.Framework
 			get { return NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64; }
 		}
 
+		/// <summary>
+		/// Gets the offset of first local.
+		/// </summary>
+		/// <value>
+		/// The offset of first local.
+		/// </value>
+		public virtual int OffsetOfFirstLocal { get { return 0; } }
+
+		/// <summary>
+		/// Gets the offset of first parameter.
+		/// </summary>
+		/// <value>
+		/// The offset of first parameter.
+		/// </value>
+		public virtual int OffsetOfFirstParameter { get { return NativePointerSize * 2; } }
+
 		#endregion Properties
 
 		#region Methods
@@ -197,31 +207,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
 		public abstract void InsertJumpInstruction(Context context, BasicBlock destination);
-
-		/// <summary>
-		/// Inserts the call instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="source">The source.</param>
-		public abstract void InsertCallInstruction(Context context, Operand source);
-
-		/// <summary>
-		/// Inserts the add instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source1">The source1.</param>
-		/// <param name="source2">The source2.</param>
-		public abstract void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2);
-
-		/// <summary>
-		/// Inserts the sub instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source1">The source1.</param>
-		/// <param name="source2">The source2.</param>
-		public abstract void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2);
 
 		/// <summary>
 		/// Determines whether [is instruction move] [the specified instruction].

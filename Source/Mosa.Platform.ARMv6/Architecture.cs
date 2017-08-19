@@ -4,7 +4,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker.Elf;
-using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.ARMv6.Stages;
 
 namespace Mosa.Platform.ARMv6
@@ -95,7 +94,6 @@ namespace Mosa.Platform.ARMv6
 		private Architecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			this.architectureFeatures = architectureFeatures;
-			CallingConvention = new DefaultCallingConvention(this);
 		}
 
 		/// <summary>
@@ -321,40 +319,6 @@ namespace Mosa.Platform.ARMv6
 		public override void InsertJumpInstruction(Context context, BasicBlock destination)
 		{
 			// TODO
-		}
-
-		/// <summary>
-		/// Inserts the call instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="source">The source.</param>
-		public override void InsertCallInstruction(Context context, Operand source)
-		{
-			//context.AppendInstruction(ARMv6., destination);
-		}
-
-		/// <summary>
-		/// Inserts the add instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source1">The source1.</param>
-		/// <param name="source2">The source2.</param>
-		public override void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2)
-		{
-			context.AppendInstruction(ARMv6.Add, destination);
-		}
-
-		/// <summary>
-		/// Inserts the sub instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source1">The source1.</param>
-		/// <param name="source2">The source2.</param>
-		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
-		{
-			context.AppendInstruction(ARMv6.Sub, destination);
 		}
 
 		/// <summary>

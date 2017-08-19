@@ -4,11 +4,12 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using System.Diagnostics;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x86.MethodStages
 {
 	/// <summary>
 	/// Completes the stack handling after register allocation
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public sealed class BuildStackStage : BaseMethodCompilerStage
 	{
 		protected override void Run()

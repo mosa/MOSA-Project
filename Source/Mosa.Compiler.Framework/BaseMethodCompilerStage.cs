@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
@@ -48,11 +47,6 @@ namespace Mosa.Compiler.Framework
 		/// Holds the type layout interface
 		/// </summary>
 		protected MosaTypeLayout TypeLayout { get; private set; }
-
-		/// <summary>
-		/// Holds the calling convention interface
-		/// </summary>
-		protected BaseCallingConvention CallingConvention { get; private set; }
 
 		/// <summary>
 		/// Holds the native pointer size
@@ -132,7 +126,6 @@ namespace Mosa.Compiler.Framework
 			Architecture = methodCompiler.Architecture;
 			TypeSystem = methodCompiler.TypeSystem;
 			TypeLayout = methodCompiler.TypeLayout;
-			CallingConvention = Architecture.CallingConvention;
 			NativePointerSize = Architecture.NativePointerSize;
 			NativeAlignment = Architecture.NativeAlignment;
 			NativeInstructionSize = Architecture.NativeInstructionSize;
