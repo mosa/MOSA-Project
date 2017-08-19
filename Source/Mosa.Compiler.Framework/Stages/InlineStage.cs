@@ -34,23 +34,22 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if (!(node.Instruction == IRInstruction.CallDynamic
-						|| node.Instruction == IRInstruction.CallDirect
-						|| node.Instruction == IRInstruction.CallInterface
-						|| node.Instruction == IRInstruction.CallVirtual
-						|| node.Instruction == IRInstruction.CallStatic))
+					if (node.Instruction != IRInstruction.CallStatic)
+						continue;
+
+					if (!node.Operand1.IsSymbol)
+						continue;
+
+					var invokedMethod = node.Operand1.Method;
+
+					if (invokedMethod == null)
 						continue;
 
 					nodes.Add(node);
 
-					if (node.InvokeMethod == null)
-						continue;
+					var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(invokedMethod);
 
-					Debug.Assert(node.InvokeMethod != null);
-
-					var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
-
-					MethodData.Calls.AddIfNew(node.InvokeMethod);
+					MethodData.Calls.AddIfNew(invokedMethod);
 
 					invoked.AddCalledBy(MethodCompiler.Method);
 				}
@@ -63,12 +62,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var node in nodes)
 			{
-				if (node.InvokeMethod == null)
-					continue;
+				var invokedMethod = node.Operand1.Method;
 
-				Debug.Assert(node.InvokeMethod != null);
-
-				var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
+				var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(invokedMethod);
 
 				if (!invoked.CanInline)
 					continue;
@@ -120,7 +116,10 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 
 					if (node.Instruction == IRInstruction.Epilogue)
+					{
+						newBlock.BeforeLast.Insert(new InstructionNode(IRInstruction.Jmp, nextBlock));
 						continue;
+					}
 
 					if (node.Instruction == IRInstruction.SetReturn)
 					{
@@ -133,8 +132,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 							newBlock.BeforeLast.Insert(moveNode);
 						}
-						newBlock.BeforeLast.Insert(new InstructionNode(IRInstruction.Jmp, nextBlock));
-
 						continue;
 					}
 

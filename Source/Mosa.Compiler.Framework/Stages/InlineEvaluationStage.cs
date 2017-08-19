@@ -152,6 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var returnType = method.Method.Signature.ReturnType;
 
+			// FIXME: Add rational
 			if (MosaTypeLayout.IsStoredOnStack(returnType) && !returnType.IsUI8 && !returnType.IsR8)
 				return false;
 
