@@ -21,13 +21,13 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			Operand result = context.Result;
-			Operand methodAddress = context.Operand1;
-			Operand newESP = context.Operand2;
+			var result = context.Result;
+			var methodAddress = context.Operand1;
+			var newESP = context.Operand2;
 
-			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			Operand edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-			Operand mmx1 = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, SSE2Register.XMM0);
+			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			var edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			var mmx1 = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, SSE2Register.XMM0);
 
 			LongOperandTransformationStage.SplitLongOperand(methodCompiler, result, out Operand op0L, out Operand op0H);
 
