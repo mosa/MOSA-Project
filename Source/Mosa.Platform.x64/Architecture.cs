@@ -282,17 +282,6 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
-		/// <param name="source">The source.</param>
-		public override void InsertJumpInstruction(Context context, Operand destination)
-		{
-			throw new NotImplementCompilerException();
-		}
-
-		/// <summary>
-		/// Inserts the jump instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
 		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void InsertJumpInstruction(Context context, BasicBlock destination)
 		{

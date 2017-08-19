@@ -72,9 +72,7 @@ namespace Mosa.Runtime.x86
 
 		public static ulong udiv64(ulong n, ulong d)
 		{
-			ulong quotient;
-			ulong remainder;
-			DivUmod(n, d, out quotient, out remainder);
+			DivUmod(n, d, out ulong quotient, out ulong remainder);
 			return quotient;
 		}
 
@@ -82,9 +80,7 @@ namespace Mosa.Runtime.x86
 
 		public static ulong umod64(ulong n, ulong d)
 		{
-			ulong quotient;
-			ulong remainder;
-			DivUmod(n, d, out quotient, out remainder);
+			DivUmod(n, d, out ulong quotient, out ulong remainder);
 			return remainder;
 		}
 
@@ -92,9 +88,7 @@ namespace Mosa.Runtime.x86
 
 		public static long sdiv64(long n, long d)
 		{
-			long quotient;
-			long remainder;
-			DivMod(n, d, out quotient, out remainder);
+			DivMod(n, d, out long quotient, out long remainder);
 			return quotient;
 		}
 
@@ -102,9 +96,7 @@ namespace Mosa.Runtime.x86
 
 		public static long smod64(long n, long d)
 		{
-			long quotient;
-			long remainder;
-			DivMod(n, d, out quotient, out remainder);
+			DivMod(n, d, out long quotient, out long remainder);
 			return remainder;
 		}
 
@@ -223,8 +215,8 @@ namespace Mosa.Runtime.x86
 			{
 				int oldSign = ((ulong)quotient & 0x8000000000000000) != 0 ? -1 : 1;
 
-				if ((oldSign == -1 && quotientSign == -1))
-					quotient += 1;
+				if (oldSign == -1 && quotientSign == -1)
+					quotient++;
 
 				quotient *= quotientSign;
 			}
@@ -232,8 +224,8 @@ namespace Mosa.Runtime.x86
 			if (remainder != 0)
 			{
 				int oldSign = ((ulong)remainder & 0x8000000000000000) != 0 ? -1 : 1;
-				if ((oldSign == -1 && remainderSign == -1))
-					remainder += 1;
+				if (oldSign == -1 && remainderSign == -1)
+					remainder++;
 
 				remainder *= remainderSign;
 			}

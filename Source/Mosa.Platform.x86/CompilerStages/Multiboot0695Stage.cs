@@ -143,9 +143,9 @@ namespace Mosa.Platform.x86.CompilerStages
 
 		#region Internals
 
-		private const string MultibootHeaderSymbolName = @"<$>mosa-multiboot-header";
-		public const string MultibootEAX = @"<$>mosa-multiboot-eax";
-		public const string MultibootEBX = @"<$>mosa-multiboot-ebx";
+		private const string MultibootHeaderSymbolName = "<$>mosa-multiboot-header";
+		public const string MultibootEAX = "<$>mosa-multiboot-eax";
+		public const string MultibootEBX = "<$>mosa-multiboot-ebx";
 
 		/// <summary>
 		/// Writes the multiboot header.
@@ -166,7 +166,7 @@ namespace Mosa.Platform.x86.CompilerStages
 			if (HasVideo)
 				flags |= HEADER_MB_FLAG_VIDEO_MODES_REQUIRED;
 
-			uint load_addr = 0;
+			const uint load_addr = 0;
 
 			// magic
 			writer.Write(HEADER_MB_MAGIC);

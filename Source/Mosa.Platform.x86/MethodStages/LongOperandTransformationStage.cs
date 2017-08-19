@@ -28,8 +28,6 @@ namespace Mosa.Platform.x86.MethodStages
 			AddVisitation(IRInstruction.Call, Call);
 			AddVisitation(IRInstruction.CompareInteger, CompareInteger);
 			AddVisitation(IRInstruction.CompareIntegerBranch, CompareIntegerBranch);
-			AddVisitation(IRInstruction.DivSigned, DivSigned);
-			AddVisitation(IRInstruction.DivUnsigned, DivUnsigned);
 			AddVisitation(IRInstruction.LoadInteger, LoadInteger);
 			AddVisitation(IRInstruction.LoadSignExtended, LoadSignExtended);
 			AddVisitation(IRInstruction.LoadZeroExtended, LoadZeroExtended);
@@ -45,8 +43,7 @@ namespace Mosa.Platform.x86.MethodStages
 			AddVisitation(IRInstruction.MoveZeroExtended, MoveZeroExtended);
 			AddVisitation(IRInstruction.MulSigned, MulSigned);
 			AddVisitation(IRInstruction.MulUnsigned, MulUnsigned);
-			AddVisitation(IRInstruction.RemSigned, RemSigned);
-			AddVisitation(IRInstruction.RemUnsigned, RemUnsigned);
+
 			AddVisitation(IRInstruction.ShiftLeft, ShiftLeft);
 			AddVisitation(IRInstruction.ShiftRight, ShiftRight);
 			AddVisitation(IRInstruction.StoreInteger, StoreInteger);
@@ -73,7 +70,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void AddSigned(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandAdd(context);
 			}
@@ -85,7 +82,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void AddUnsigned(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandAdd(context);
 			}
@@ -148,30 +145,6 @@ namespace Mosa.Platform.x86.MethodStages
 		}
 
 		/// <summary>
-		/// Visitation function for DivSInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void DivSigned(Context context)
-		{
-			if (Any64Bit(context))
-			{
-				ExpandDiv(context);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for DivUInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void DivUnsigned(Context context)
-		{
-			if (Any64Bit(context))
-			{
-				ExpandUDiv(context);
-			}
-		}
-
-		/// <summary>
 		/// Visitation function for Load.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -196,12 +169,12 @@ namespace Mosa.Platform.x86.MethodStages
 
 		private void LoadParameterSignExtended(Context context)
 		{
-			Debug.Assert(!Any64Bit(context));
+			Debug.Assert(!Any64Bit(context.Node));
 		}
 
 		private void LoadParameterZeroExtended(Context context)
 		{
-			Debug.Assert(!Any64Bit(context));
+			Debug.Assert(!Any64Bit(context.Node));
 		}
 
 		/// <summary>
@@ -210,7 +183,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void LoadSignExtended(Context context)
 		{
-			Debug.Assert(!Any64Bit(context));
+			Debug.Assert(!Any64Bit(context.Node));
 		}
 
 		/// <summary>
@@ -219,7 +192,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void LoadZeroExtended(Context context)
 		{
-			Debug.Assert(!Any64Bit(context));
+			Debug.Assert(!Any64Bit(context.Node));
 		}
 
 		/// <summary>
@@ -228,7 +201,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void LogicalAnd(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandAnd(context);
 			}
@@ -240,7 +213,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void LogicalNot(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandNot(context);
 			}
@@ -252,7 +225,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void LogicalOr(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandOr(context);
 			}
@@ -264,7 +237,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void LogicalXor(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandXor(context);
 			}
@@ -276,7 +249,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void MoveInteger(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandMoveInteger(context);
 			}
@@ -288,7 +261,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void MoveSignExtended(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandSignedMove(context);
 			}
@@ -300,7 +273,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void MoveZeroExtended(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandUnsignedMove(context);
 			}
@@ -312,7 +285,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void MulSigned(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandMul(context);
 			}
@@ -324,33 +297,9 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void MulUnsigned(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandMul(context);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for RemSigned.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void RemSigned(Context context)
-		{
-			if (Any64Bit(context))
-			{
-				ExpandRem(context);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for RemUInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void RemUnsigned(Context context)
-		{
-			if (Any64Bit(context))
-			{
-				ExpandURem(context);
 			}
 		}
 
@@ -360,7 +309,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void ShiftLeft(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandShiftLeft(context);
 			}
@@ -372,7 +321,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void ShiftRight(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandShiftRight(context);
 			}
@@ -408,7 +357,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void SubSigned(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandSub(context);
 			}
@@ -420,7 +369,7 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <param name="context">The context.</param>
 		private void SubUnsigned(Context context)
 		{
-			if (Any64Bit(context))
+			if (Any64Bit(context.Node))
 			{
 				ExpandSub(context);
 			}
@@ -461,14 +410,14 @@ namespace Mosa.Platform.x86.MethodStages
 		/// <summary>
 		/// Ares the any64 bit.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <returns></returns>
-		public static bool Any64Bit(Context context)
+		public static bool Any64Bit(InstructionNode node)
 		{
-			if (context.Result.Is64BitInteger)
+			if (node.Result.Is64BitInteger)
 				return true;
 
-			foreach (var operand in context.Operands)
+			foreach (var operand in node.Operands)
 			{
 				if (operand.Is64BitInteger)
 				{
@@ -673,28 +622,6 @@ namespace Mosa.Platform.x86.MethodStages
 		}
 
 		/// <summary>
-		/// Expands the div.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ExpandDiv(Context context)
-		{
-			var result = context.Result;
-			var op1 = context.Operand1;
-			var op2 = context.Operand2;
-
-			SplitLongOperand(result, out Operand op0L, out Operand op0H);
-			SplitLongOperand(op1, out Operand op1L, out Operand op1H);
-			SplitLongOperand(op2, out Operand op2L, out Operand op2H);
-
-			ReplaceWithDivisionCall(context, "sdiv64");
-			context.Result = result;
-			context.Operand2 = op1;
-			context.Operand3 = op2;
-			context.OperandCount = 3;
-			context.ResultCount = 1;
-		}
-
-		/// <summary>
 		/// Expands the load instruction for 64-bits.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -831,28 +758,6 @@ namespace Mosa.Platform.x86.MethodStages
 			context.AppendInstruction(X86.Mov, op0L, op1L);
 			context.AppendInstruction(X86.Or, op0H, op0H, op2H);
 			context.AppendInstruction(X86.Or, op0L, op0L, op2L);
-		}
-
-		/// <summary>
-		/// Expands the rem.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ExpandRem(Context context)
-		{
-			var result = context.Result;
-			var op1 = context.Operand1;
-			var op2 = context.Operand2;
-
-			SplitLongOperand(result, out Operand op0L, out Operand op0H);
-			SplitLongOperand(op1, out Operand op1L, out Operand op1H);
-			SplitLongOperand(op2, out Operand op2L, out Operand op2H);
-
-			ReplaceWithDivisionCall(context, "smod64");
-			context.Result = result;
-			context.Operand2 = op1;
-			context.Operand3 = op2;
-			context.OperandCount = 3;
-			context.ResultCount = 1;
 		}
 
 		/// <summary>
@@ -1080,28 +985,6 @@ namespace Mosa.Platform.x86.MethodStages
 		}
 
 		/// <summary>
-		/// Expands the udiv instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ExpandUDiv(Context context)
-		{
-			var result = context.Result;
-			var op1 = context.Operand1;
-			var op2 = context.Operand2;
-
-			SplitLongOperand(result, out Operand op0L, out Operand op0H);
-			SplitLongOperand(op1, out Operand op1L, out Operand op1H);
-			SplitLongOperand(op2, out Operand op2L, out Operand op2H);
-
-			ReplaceWithDivisionCall(context, "udiv64");
-			context.Result = result;
-			context.Operand2 = op1;
-			context.Operand3 = op2;
-			context.OperandCount = 3;
-			context.ResultCount = 1;
-		}
-
-		/// <summary>
 		/// Expands the unsigned move instruction for 64-bits.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -1137,28 +1020,6 @@ namespace Mosa.Platform.x86.MethodStages
 		}
 
 		/// <summary>
-		/// Expands the urem instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ExpandURem(Context context)
-		{
-			var result = context.Result;
-			var op1 = context.Operand1;
-			var op2 = context.Operand2;
-
-			SplitLongOperand(result, out Operand op0L, out Operand op0H);
-			SplitLongOperand(op1, out Operand op1L, out Operand op1H);
-			SplitLongOperand(op2, out Operand op2L, out Operand op2H);
-
-			ReplaceWithDivisionCall(context, "umod64");
-			context.Result = result;
-			context.Operand2 = op1;
-			context.Operand3 = op2;
-			context.OperandCount = 3;
-			context.ResultCount = 1;
-		}
-
-		/// <summary>
 		/// Expands the neg instruction for 64-bits.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -1172,22 +1033,6 @@ namespace Mosa.Platform.x86.MethodStages
 			context.AppendInstruction(X86.Mov, op0L, op1L);
 			context.AppendInstruction(X86.Xor, op0H, op0H, op2H);
 			context.AppendInstruction(X86.Xor, op0L, op0L, op2L);
-		}
-
-		private void ReplaceWithDivisionCall(Context context, string methodName)
-		{
-			var type = TypeSystem.GetTypeByName("Mosa.Runtime.x86", "Division");
-
-			Debug.Assert(type != null, "Cannot find type: Mosa.Runtime.x86.Division type");
-
-			var method = type.FindMethodByName(methodName);
-
-			Debug.Assert(method != null, "Cannot find method: " + methodName);
-
-			context.ReplaceInstruction(IRInstruction.Call);
-			context.SetOperand(0, Operand.CreateSymbolFromMethod(TypeSystem, method));
-			context.OperandCount = 1;
-			context.InvokeMethod = method;
 		}
 
 		private void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)

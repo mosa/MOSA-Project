@@ -47,7 +47,7 @@ namespace Mosa.Platform.x86.MethodStages
 							if (node.Result.IsSplitChild && node.Result.SplitParent.Uses.Count != 0)
 								continue;
 
-							if (trace.Active) trace.Log("REMOVED:\t" + node.ToString());
+							if (trace.Active) trace.Log("REMOVED:\t" + node);
 
 							node.Empty();
 							changed = true;

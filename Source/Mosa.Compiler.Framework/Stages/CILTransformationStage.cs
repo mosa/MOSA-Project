@@ -1336,7 +1336,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Visitation function for Ret instruction.
 		/// </summary>
-		/// <param name="node">The node.</param>
+		/// <param name="context">The context.</param>
 		private void Ret(Context context)
 		{
 			var operand1 = context.Operand1;
