@@ -19,8 +19,8 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			Operand methodAddress = context.Operand1;
-			Operand newESP = context.Operand2;
+			var methodAddress = context.Operand1;
+			var newESP = context.Operand2;
 
 			context.SetInstruction(X86.Call, null, methodAddress);
 		}
