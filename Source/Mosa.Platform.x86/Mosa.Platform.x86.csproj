@@ -152,6 +152,7 @@
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
+    <Compile Include="Stages\SimpleMovePropagationStage.cs" />
     <Compile Include="Stages\IRSubstitutionStage.cs" />
     <Compile Include="CompilerStages\StartUpStage.cs" />
     <Compile Include="CompilerStages\SSEInitStage.cs" />
