@@ -3,7 +3,7 @@
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework.CompilerStages
 {
 	/// <summary>
 	/// Schedules type initializers and creates a hidden mosacl_main method,
@@ -14,6 +14,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// by the high-level language compiler by placing cctors in some order in
 	/// metadata.
 	/// </remarks>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public sealed class TypeInitializerSchedulerStage : BaseCompilerStage
 	{
 		public const string TypeInitializerName = "AssemblyInit";

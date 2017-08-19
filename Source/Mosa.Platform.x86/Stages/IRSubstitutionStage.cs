@@ -3,10 +3,9 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Mosa.Platform.x86.MethodStages
+namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	/// Platform Stage

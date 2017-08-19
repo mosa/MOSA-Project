@@ -100,7 +100,6 @@
     <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="IR\AddFloatR4.cs" />
     <Compile Include="IR\CallDynamic.cs" />
-    <Compile Include="IR\Return.cs" />
     <Compile Include="IR\Split64.cs" />
     <Compile Include="IR\Unbox.cs" />
     <Compile Include="IR\Unbox32.cs" />
@@ -211,7 +210,7 @@
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
-    <Compile Include="Stages\DebugFileGenerationStage.cs" />
+    <Compile Include="CompilerStages\DebugFileGenerationStage.cs" />
     <Compile Include="Stages\CallStage.cs" />
     <Compile Include="Stages\LowerIRStage.cs" />
     <Compile Include="Stages\PreciseGCStage.cs" />
@@ -221,11 +220,11 @@
     <Compile Include="Stages\InlineEvaluationStage.cs" />
     <Compile Include="Stages\IRCleanupStage.cs" />
     <Compile Include="Stages\SparseConditionalConstantPropagationStage.cs" />
-    <Compile Include="Stages\MethodExceptionLookupTableStage.cs" />
-    <Compile Include="Stages\MethodLookupTableStage.cs" />
+    <Compile Include="CompilerStages\MethodExceptionLookupTableStage.cs" />
+    <Compile Include="CompilerStages\MethodLookupTableStage.cs" />
     <Compile Include="Stages\ProtectedRegionLayoutStage.cs" />
     <Compile Include="Stages\ExceptionStage.cs" />
-    <Compile Include="Stages\MapFileGenerationStage.cs" />
+    <Compile Include="CompilerStages\MapFileGenerationStage.cs" />
     <Compile Include="Stages\StackSlotStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />
@@ -234,7 +233,7 @@
     <Compile Include="Stages\PlatformEdgeSplitStage.cs" />
     <Compile Include="Stages\StackSetupStage.cs" />
     <Compile Include="Stages\GreedyRegisterAllocatorStage.cs" />
-    <Compile Include="Stages\LinkerFinalizationStage.cs" />
+    <Compile Include="CompilerStages\LinkerFinalizationStage.cs" />
     <Compile Include="IIntrinsicInternalMethod.cs" />
     <Compile Include="Counters.cs" />
     <Compile Include="IR\IntrinsicMethodCall.cs" />
@@ -248,7 +247,7 @@
     <Compile Include="Stages\BlockOrderingStage.cs" />
     <Compile Include="Stages\IROptimizationStage.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
-    <Compile Include="Stages\TypeInitializerSchedulerStage.cs" />
+    <Compile Include="CompilerStages\TypeInitializerSchedulerStage.cs" />
     <Compile Include="MosaTypeLayout.cs" />
     <Compile Include="Stages\UnboxValueTypeStage.cs" />
     <Compile Include="Stages\VirtualRegisterRenameStage.cs" />
@@ -277,10 +276,10 @@
     <Compile Include="BaseCompilerStage.cs" />
     <Compile Include="Platform\BasePlatformInstruction.cs" />
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
-    <Compile Include="Stages\PlugStage.cs" />
+    <Compile Include="CompilerStages\PlugStage.cs" />
     <Compile Include="Stages\CILProtectedRegionStage.cs" />
     <Compile Include="IR\ExceptionStart.cs" />
-    <Compile Include="Stages\MetadataStage.cs" />
+    <Compile Include="CompilerStages\MetadataStage.cs" />
     <Compile Include="Stages\EnterSSAStage.cs" />
     <Compile Include="InstructionLogger.cs" />
     <Compile Include="Stages\LeaveSSAStage.cs" />

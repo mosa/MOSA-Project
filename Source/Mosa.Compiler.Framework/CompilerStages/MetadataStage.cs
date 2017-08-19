@@ -8,11 +8,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework.CompilerStages
 {
 	/// <summary>
 	/// Emits metadata for assemblies and types
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public sealed class MetadataStage : BaseCompilerStage
 	{
 		#region Data members

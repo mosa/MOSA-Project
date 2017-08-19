@@ -4,7 +4,7 @@ using Mosa.Compiler.Framework;
 
 // fixme: this stage may not be necessary with the specific load/store instructions
 
-namespace Mosa.Platform.x86.MethodStages
+namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	/// Floating Point Stage

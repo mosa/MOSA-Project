@@ -151,20 +151,20 @@
     <Compile Include="Intrinsic\SetFS.cs" />
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MethodStages\BuildStackStage.cs" />
-    <Compile Include="MethodStages\IRSubstitutionStage.cs" />
+    <Compile Include="Stages\BuildStackStage.cs" />
+    <Compile Include="Stages\IRSubstitutionStage.cs" />
     <Compile Include="CompilerStages\StartUpStage.cs" />
     <Compile Include="CompilerStages\SSEInitStage.cs" />
-    <Compile Include="MethodStages\FloatingPointStage.cs" />
-    <Compile Include="MethodStages\FinalTweakTransformationStage.cs" />
-    <Compile Include="MethodStages\SimpleDeadCodeRemovalStage.cs" />
+    <Compile Include="Stages\FloatingPointStage.cs" />
+    <Compile Include="Stages\FinalTweakTransformationStage.cs" />
+    <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
     <Compile Include="Instructions\Mulsd.cs" />
     <Compile Include="Instructions\DivSD.cs" />
     <Compile Include="Instructions\RoundSD.cs" />
     <Compile Include="Instructions\SubSD.cs" />
-    <Compile Include="MethodStages\AddressModeConversionStage.cs" />
+    <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
-    <Compile Include="MethodStages\FixedRegisterAssignmentStage.cs" />
+    <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
     <Compile Include="Instructions\FarJmp.cs" />
     <Compile Include="Instructions\Leave.cs" />
     <Compile Include="Instructions\RoundSS.cs" />
@@ -213,7 +213,7 @@
     <Compile Include="Instructions\Movzx.cs" />
     <Compile Include="Instructions\Movsx.cs" />
     <Compile Include="X86CodeEmitter.cs" />
-    <Compile Include="MethodStages\TweakTransformationStage.cs" />
+    <Compile Include="Stages\TweakTransformationStage.cs" />
     <Compile Include="Instructions\Adc.cs" />
     <Compile Include="Instructions\Add.cs" />
     <Compile Include="Instructions\Cdq.cs" />
@@ -284,10 +284,10 @@
     <Compile Include="GeneralPurposeRegister.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MethodStages\IRTransformationStage.cs">
+    <Compile Include="Stages\IRTransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MethodStages\LongOperandTransformationStage.cs">
+    <Compile Include="Stages\LongOperandTransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SSE2Register.cs">

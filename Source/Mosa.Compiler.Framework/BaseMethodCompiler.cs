@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.Stages;
+using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;

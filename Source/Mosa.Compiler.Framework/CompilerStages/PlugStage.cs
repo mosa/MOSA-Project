@@ -4,11 +4,12 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
 using System;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework.CompilerStages
 {
 	/// <summary>
 	/// Searches for plug declarations
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public class PlugStage : BaseCompilerStage
 	{
 		#region Data members
