@@ -268,14 +268,10 @@ namespace Mosa.Platform.x86
 				new IMethodCompilerStage[]
 				{
 					new PlatformIntrinsicStage(),
-
-					//new StopStage(),
-
 					new LongOperandTransformationStage(),
 					new IRTransformationStage(),
 					new TweakTransformationStage(),
 					new FixedRegisterAssignmentStage(),
-					new SimpleMovePropagationStage(),
 					new SimpleDeadCodeRemovalStage(),
 					new AddressModeConversionStage(),
 					new FloatingPointStage(),
