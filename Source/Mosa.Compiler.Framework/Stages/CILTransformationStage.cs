@@ -641,6 +641,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Cpblk(InstructionNode node)
 		{
+			Debug.Assert(node.ResultCount == 0);
 			node.ReplaceInstruction(IRInstruction.MemoryCopy);
 		}
 

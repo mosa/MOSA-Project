@@ -101,6 +101,8 @@ namespace Mosa.Compiler.Framework
 
 		protected Operand StackFrame { get { return MethodCompiler.StackFrame; } }
 
+		protected Operand StackPointer { get { return MethodCompiler.StackPointer; } }
+
 		#endregion Properties
 
 		#region IPipelineStage Members

@@ -264,7 +264,7 @@ namespace Mosa.Compiler.Framework
 			DebugRestrictOptimizationByCount = 0;
 			EmitSymbols = true;
 			EmitRelocations = true;
-			TwoPassOptimizationStages = false;
+			TwoPassOptimizationStages = true;
 			EnableStatistics = true;
 		}
 	}

@@ -37,6 +37,7 @@ build.force
 /tmp
 /tags
 /.vs/
+.vs/
 /Tests/BootImage/
 
 # NuGet Packages

@@ -313,6 +313,11 @@ namespace Mosa.Compiler.Framework.Stages
 				|| node.Instruction == IRInstruction.CallDirect
 				|| node.Instruction == IRInstruction.CallStatic
 				|| node.Instruction == IRInstruction.CallVirtual
+				|| node.Instruction == IRInstruction.NewObject
+				|| node.Instruction == IRInstruction.SetReturn
+
+				//|| node.Instruction == IRInstruction.NewArray
+				//|| node.Instruction == IRInstruction.NewString
 				|| node.Instruction == IRInstruction.IntrinsicMethodCall)
 				return;
 
@@ -1919,6 +1924,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool Reduce64BitOperationsTo32Bit()
 		{
+			// FIXME - not in use
 			if (Architecture.NativeIntegerSize != 32)
 				return false;
 
