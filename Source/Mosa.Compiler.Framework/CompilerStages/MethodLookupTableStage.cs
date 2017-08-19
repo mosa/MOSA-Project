@@ -4,11 +4,12 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework.CompilerStages
 {
 	/// <summary>
 	/// Emits method lookup table
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public class MethodLookupTableStage : BaseCompilerStage
 	{
 		#region Data members

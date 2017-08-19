@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
 
-namespace Mosa.Platform.x86.MethodStages
+namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	/// Transforms IR instructions into their appropriate X86.
@@ -45,7 +45,6 @@ namespace Mosa.Platform.x86.MethodStages
 			AddVisitation(IRInstruction.DivFloatR8, DivFloatR8);
 			AddVisitation(IRInstruction.DivSigned, DivSigned);
 			AddVisitation(IRInstruction.DivUnsigned, DivUnsigned);
-			AddVisitation(IRInstruction.GotoEpilogue, GotoEpilogue);
 			AddVisitation(IRInstruction.Jmp, Jmp);
 			AddVisitation(IRInstruction.LoadFloatR4, LoadFloatR4);
 			AddVisitation(IRInstruction.LoadFloatR8, LoadFloatR8);
@@ -794,9 +793,6 @@ namespace Mosa.Platform.x86.MethodStages
 		private void GotoEpilogue(Context context)
 		{
 			Debug.Assert(context.Operand1 == null);
-
-			if (BasicBlocks.EpilogueBlock == null)
-				return;
 
 			context.SetInstruction(X86.Jmp, BasicBlocks.EpilogueBlock);
 		}

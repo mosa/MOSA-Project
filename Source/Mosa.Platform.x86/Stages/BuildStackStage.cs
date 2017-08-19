@@ -4,7 +4,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using System.Diagnostics;
 
-namespace Mosa.Platform.x86.MethodStages
+namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	/// Completes the stack handling after register allocation

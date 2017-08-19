@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker.Elf;
 using Mosa.Platform.x86.CompilerStages;
-using Mosa.Platform.x86.MethodStages;
+using Mosa.Platform.x86.Stages;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86

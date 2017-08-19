@@ -1344,11 +1344,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (operand1 != null)
 			{
 				context.SetInstruction(IRInstruction.SetReturn, null, operand1);
-				context.AppendInstruction(IRInstruction.GotoEpilogue, BasicBlocks.EpilogueBlock);
+				context.AppendInstruction(IRInstruction.Jmp, BasicBlocks.EpilogueBlock);
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.GotoEpilogue, BasicBlocks.EpilogueBlock);
+				context.SetInstruction(IRInstruction.Jmp, BasicBlocks.EpilogueBlock);
 			}
 		}
 

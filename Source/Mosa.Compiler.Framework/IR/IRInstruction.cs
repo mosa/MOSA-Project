@@ -45,7 +45,6 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly FinallyStart FinallyStart = new FinallyStart();
 		public static readonly Flow Flow = new Flow();
 		public static readonly Gen Gen = new Gen();
-		public static readonly GotoEpilogue GotoEpilogue = new GotoEpilogue();
 		public static readonly GotoLeaveTarget GotoLeaveTarget = new GotoLeaveTarget();
 		public static readonly IntrinsicMethodCall IntrinsicMethodCall = new IntrinsicMethodCall();
 		public static readonly IsInstanceOfType IsInstanceOfType = new IsInstanceOfType();

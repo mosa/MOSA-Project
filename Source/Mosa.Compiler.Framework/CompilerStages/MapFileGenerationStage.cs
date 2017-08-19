@@ -3,11 +3,12 @@
 using System;
 using System.IO;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework.CompilerStages
 {
 	/// <summary>
 	/// An compilation stage, which generates a map file of the built binary file.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public sealed class MapFileGenerationStage : BaseCompilerStage
 	{
 		#region Data members

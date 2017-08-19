@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework.IR;
 using System;
 using System.Diagnostics;
 
-namespace Mosa.Platform.x86.MethodStages
+namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	/// Transforms 64-bit arithmetic to 32-bit operations.

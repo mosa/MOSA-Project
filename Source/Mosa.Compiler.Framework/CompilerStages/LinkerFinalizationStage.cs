@@ -2,11 +2,12 @@
 
 using System.IO;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Compiler.Framework.CompilerStages
 {
 	/// <summary>
 	/// Finalizes the linking
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public sealed class LinkerFinalizationStage : BaseCompilerStage
 	{
 		protected override void RunPostCompile()

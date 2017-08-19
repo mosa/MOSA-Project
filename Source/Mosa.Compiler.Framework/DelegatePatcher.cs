@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework
 			context.MosaType = methodPointerOperand.Type;
 			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, instanceOffsetOperand, v3);
 			context.MosaType = instanceOperand.Type;
-			context.AppendInstruction(IRInstruction.GotoEpilogue, methodCompiler.BasicBlocks.EpilogueBlock);
+			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private void PatchInvoke(BaseMethodCompiler methodCompiler)
@@ -189,7 +189,7 @@ namespace Mosa.Compiler.Framework
 			if (opReturn != null)
 				b3.AppendInstruction(IRInstruction.SetReturn, null, opReturn);
 
-			b3.AppendInstruction(IRInstruction.GotoEpilogue, methodCompiler.BasicBlocks.EpilogueBlock);
+			b3.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private static void PatchBeginInvoke(BaseMethodCompiler methodCompiler)
@@ -198,7 +198,7 @@ namespace Mosa.Compiler.Framework
 			var context = new Context(CreateMethodStructure(methodCompiler));
 
 			context.AppendInstruction(IRInstruction.SetReturn, null, nullOperand);
-			context.AppendInstruction(IRInstruction.GotoEpilogue, methodCompiler.BasicBlocks.EpilogueBlock);
+			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private static void PatchEndInvoke(BaseMethodCompiler methodCompiler)

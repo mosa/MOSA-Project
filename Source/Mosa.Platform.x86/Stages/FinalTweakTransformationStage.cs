@@ -3,7 +3,7 @@
 using Mosa.Compiler.Framework;
 using System.Diagnostics;
 
-namespace Mosa.Platform.x86.MethodStages
+namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	/// Final Tweak Transformation Stage
