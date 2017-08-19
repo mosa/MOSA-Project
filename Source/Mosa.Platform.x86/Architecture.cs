@@ -275,6 +275,7 @@ namespace Mosa.Platform.x86
 					new IRTransformationStage(),
 					new TweakTransformationStage(),
 					new FixedRegisterAssignmentStage(),
+					new SimpleMovePropagationStage(),
 					new SimpleDeadCodeRemovalStage(),
 					new AddressModeConversionStage(),
 					new FloatingPointStage(),
