@@ -532,7 +532,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 			else if (instruction == IRInstruction.SetReturn)
 			{
-				SetReturn(node);
+				// nothing
 			}
 			else
 			{
@@ -903,10 +903,6 @@ namespace Mosa.Compiler.Framework.Analysis
 			UpdateToOverDefined(operand1);
 			SetReferenceOverdefined(result);
 			SetReferenceOverdefined(operand1);
-		}
-
-		private void SetReturn(InstructionNode node)
-		{
 		}
 
 		private void FinallyStart(InstructionNode node)

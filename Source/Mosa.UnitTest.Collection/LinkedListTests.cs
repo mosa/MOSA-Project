@@ -111,7 +111,7 @@ namespace Mosa.UnitTest.Collection
 
 			foreach (var item in list)
 			{
-				sum = sum + item;
+				sum += item;
 			}
 
 			return sum;
@@ -124,11 +124,11 @@ namespace Mosa.UnitTest.Collection
 
 			foreach (var item in list)
 			{
-				sum = sum + item;
+				sum += item;
 
 				foreach (var nested in list)
 				{
-					sum = sum + nested;
+					sum += nested;
 				}
 			}
 
@@ -145,11 +145,11 @@ namespace Mosa.UnitTest.Collection
 
 			foreach (var item in list)
 			{
-				sum = sum + item;
+				sum += item;
 				foreach (var nestedItem in nestedList)
 				{
-					nestedSum = nestedSum + nestedItem;
-					nestedSum = nestedSum / ++nestedCount;
+					nestedSum += nestedItem;
+					nestedSum /= ++nestedCount;
 				}
 			}
 
@@ -166,7 +166,7 @@ namespace Mosa.UnitTest.Collection
 			}
 
 			var found = FindHolder(holderList);
-			return (found.value1 + found.value2 + found.value3);
+			return found.value1 + found.value2 + found.value3;
 		}
 
 		private static Holder FindHolder(LinkedList<Holder> holderList)

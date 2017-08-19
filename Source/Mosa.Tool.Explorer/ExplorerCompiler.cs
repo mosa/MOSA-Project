@@ -28,7 +28,7 @@ namespace Mosa.Tool.Explorer
 		/// </summary>
 		/// <param name="method">The method to compile.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
-		/// <param name="instructionSet">The instruction set.</param>
+		/// <param name="threadID">The thread identifier.</param>
 		/// <returns>
 		/// An instance of a MethodCompilerBase for the given type/method pair.
 		/// </returns>

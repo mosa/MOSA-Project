@@ -195,13 +195,6 @@ namespace Mosa.Compiler.Framework
 		public abstract void InsertExchangeInstruction(Context context, Operand destination, Operand source);
 
 		/// <summary>
-		/// Create platform exchange registers.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		public abstract void InsertJumpInstruction(Context context, Operand destination);
-
-		/// <summary>
 		/// Inserts the jump instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>

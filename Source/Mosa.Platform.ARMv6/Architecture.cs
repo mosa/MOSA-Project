@@ -305,17 +305,6 @@ namespace Mosa.Platform.ARMv6
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
-		/// <param name="source">The source.</param>
-		public override void InsertJumpInstruction(Context context, Operand destination)
-		{
-			//context.AppendInstruction(ARMv6., destination);
-		}
-
-		/// <summary>
-		/// Inserts the jump instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
 		public override void InsertJumpInstruction(Context context, BasicBlock destination)
 		{
 			// TODO
