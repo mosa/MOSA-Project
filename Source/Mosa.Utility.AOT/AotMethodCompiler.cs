@@ -42,16 +42,13 @@ namespace Mosa.Utility.Aot
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
-
 				new LowerIRStage(),
-				new CallStage(),
-
 				(compilerOptions.TwoPassOptimizationStages && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.TwoPassOptimizationStages && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
-
 				(compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
 				new IRCleanupStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
+				new CallStage(),
 				new PlatformStubStage(),
 				new PlatformEdgeSplitStage(),
 				new VirtualRegisterRenameStage(),

@@ -16,18 +16,11 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
+			AddVisitation(IRInstruction.SetReturn, SetReturn);
 			AddVisitation(IRInstruction.CallInterface, CallInterface);
 			AddVisitation(IRInstruction.CallStatic, CallStatic);
 			AddVisitation(IRInstruction.CallVirtual, CallVirtual);
 			AddVisitation(IRInstruction.CallDynamic, CallDynamic);
-			AddVisitation(IRInstruction.SetReturn, SetReturn);
-		}
-
-		private int CalculateMethodTableOffset(MosaMethod invokeTarget)
-		{
-			int slot = TypeLayout.GetMethodTableOffset(invokeTarget);
-
-			return NativePointerSize * slot;
 		}
 
 		private void SetReturn(Context context)
@@ -62,6 +55,13 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				context.SetInstruction(IRInstruction.MoveInteger, InstructionSize.Size32, Operand.CreateCPURegister(operand.Type, Architecture.Return32BitRegister), operand);
 			}
+		}
+
+		private int CalculateMethodTableOffset(MosaMethod invokeTarget)
+		{
+			int slot = TypeLayout.GetMethodTableOffset(invokeTarget);
+
+			return NativePointerSize * slot;
 		}
 
 		private void CallStatic(InstructionNode node)
