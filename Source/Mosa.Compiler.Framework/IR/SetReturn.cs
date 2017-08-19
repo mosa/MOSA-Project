@@ -6,14 +6,14 @@ namespace Mosa.Compiler.Framework.IR
 	/// Intermediate representation of a method return context.
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseOneOperandInstruction" />
-	public sealed class GotoEpilogue : BaseOneOperandInstruction
+	public sealed class SetReturn : BaseOneOperandInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="GotoEpilogue" />.
+		/// Initializes a new instance of <see cref="SetReturn" />.
 		/// </summary>
-		public GotoEpilogue()
+		public SetReturn()
 		{
 		}
 

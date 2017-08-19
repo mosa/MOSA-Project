@@ -6,7 +6,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using System.IO;
 using System.Text;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x86.CompilerStages
 {
 	/// <summary>
 	/// Writes a multiboot v0.6.95 header into the generated binary.

@@ -6,11 +6,12 @@ using Mosa.Compiler.Framework.IR;
 using System;
 using System.Diagnostics;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x86.MethodStages
 {
 	/// <summary>
 	/// Transforms 64-bit arithmetic to 32-bit operations.
 	/// </summary>
+	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	/// <remarks>
 	/// This stage translates all 64-bit operations to appropriate 32-bit operations on
 	/// architectures without appropriate 64-bit integral operations.
@@ -46,7 +47,6 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.MulUnsigned, MulUnsigned);
 			AddVisitation(IRInstruction.RemSigned, RemSigned);
 			AddVisitation(IRInstruction.RemUnsigned, RemUnsigned);
-			AddVisitation(IRInstruction.Return, Return);
 			AddVisitation(IRInstruction.ShiftLeft, ShiftLeft);
 			AddVisitation(IRInstruction.ShiftRight, ShiftRight);
 			AddVisitation(IRInstruction.StoreInteger, StoreInteger);
@@ -55,6 +55,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.SubUnsigned, SubUnsigned);
 
 			AddVisitation(IRInstruction.To64, To64);
+			AddVisitation(IRInstruction.Split64, Split64);
 		}
 
 		protected override void Setup()
@@ -354,28 +355,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for ReturnInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Return(Context context)
-		{
-			Operand op0L, op0H;
-
-			if (context.Result?.Is64BitInteger == true)
-			{
-				SplitLongOperand(context.Result, out op0L, out op0H);
-			}
-
-			foreach (var operand in context.Operands)
-			{
-				if (operand.Is64BitInteger)
-				{
-					SplitLongOperand(operand, out op0L, out op0H);
-				}
-			}
-		}
-
-		/// <summary>
 		/// Visitation function for ShiftLeftInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -461,6 +440,18 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, op0L, operand1);
 			context.AppendInstruction(X86.Mov, op0H, operand2);
+		}
+
+		private void Split64(Context context)
+		{
+			var operand1 = context.Operand1;
+			var result = context.Result;
+			var result2 = context.Result2;
+
+			SplitLongOperand(operand1, out Operand op0L, out Operand op0H);
+
+			context.SetInstruction(X86.Mov, result, op0L);
+			context.AppendInstruction(X86.Mov, result2, op0H);
 		}
 
 		#endregion Visitation Methods

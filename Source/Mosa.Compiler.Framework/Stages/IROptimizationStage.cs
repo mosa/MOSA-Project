@@ -308,7 +308,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Definitions.Count != 1)
 				return;
 
-			if (node.Instruction == IRInstruction.Call
+			if (node.Instruction == IRInstruction.CallDynamic
 				|| node.Instruction == IRInstruction.CallInterface
 				|| node.Instruction == IRInstruction.CallDirect
 				|| node.Instruction == IRInstruction.CallStatic
@@ -1958,14 +1958,14 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Instruction == IRInstruction.AddressOf)
 					return false;
 
-				if (node.Instruction == IRInstruction.Call
+				if (node.Instruction == IRInstruction.CallDynamic
 					|| node.Instruction == IRInstruction.CallInterface
 					|| node.Instruction == IRInstruction.CallDirect
 					|| node.Instruction == IRInstruction.CallStatic
 					|| node.Instruction == IRInstruction.CallVirtual)
 					return false;
 
-				if (node.Instruction == IRInstruction.Return)
+				if (node.Instruction == IRInstruction.SetReturn)
 					return false;
 
 				if (node.Instruction == IRInstruction.SubSigned)

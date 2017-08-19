@@ -300,43 +300,6 @@ namespace Mosa.Platform.x64
 		}
 
 		/// <summary>
-		/// Inserts the call instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="source">The source.</param>
-		/// <exception cref="NotImplementCompilerException"></exception>
-		public override void InsertCallInstruction(Context context, Operand source)
-		{
-			throw new NotImplementCompilerException();
-		}
-
-		/// <summary>
-		/// Inserts the add instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source1">The source1.</param>
-		/// <param name="source2">The source2.</param>
-		/// <exception cref="NotImplementCompilerException"></exception>
-		public override void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2)
-		{
-			throw new NotImplementCompilerException();
-		}
-
-		/// <summary>
-		/// Inserts the sub instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source1">The source1.</param>
-		/// <param name="source2">The source2.</param>
-		/// <exception cref="NotImplementCompilerException"></exception>
-		public override void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2)
-		{
-			throw new NotImplementCompilerException();
-		}
-
-		/// <summary>
 		/// Determines whether [is instruction move] [the specified instruction].
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>

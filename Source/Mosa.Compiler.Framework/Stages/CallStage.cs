@@ -20,6 +20,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.CallStatic, CallStatic);
 			AddVisitation(IRInstruction.CallVirtual, CallVirtual);
 			AddVisitation(IRInstruction.CallDynamic, CallDynamic);
+			AddVisitation(IRInstruction.SetReturn, SetReturn);
 		}
 
 		private int CalculateMethodTableOffset(MosaMethod invokeTarget)
@@ -27,6 +28,40 @@ namespace Mosa.Compiler.Framework.Stages
 			int slot = TypeLayout.GetMethodTableOffset(invokeTarget);
 
 			return NativePointerSize * slot;
+		}
+
+		private void SetReturn(Context context)
+		{
+			var operand = context.Operand1;
+
+			Debug.Assert(operand != null);
+
+			if (operand.IsR4)
+			{
+				context.SetInstruction(IRInstruction.MoveFloatR4, Operand.CreateCPURegister(operand.Type, Architecture.ReturnFloatingPointRegister), operand);
+			}
+			else if (operand.IsR8)
+			{
+				context.SetInstruction(IRInstruction.MoveFloatR8, Operand.CreateCPURegister(operand.Type, Architecture.ReturnFloatingPointRegister), operand);
+			}
+			else if (operand.IsLong)
+			{
+				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+				var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+
+				context.SetInstruction2(IRInstruction.Split64, v1, v2, operand);
+				context.AppendInstruction(IRInstruction.MoveInteger, InstructionSize.Size32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return32BitRegister), v1);
+				context.AppendInstruction(IRInstruction.MoveInteger, InstructionSize.Size32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), v2);
+			}
+			else if (MosaTypeLayout.IsStoredOnStack(operand.Type))
+			{
+				var OffsetOfFirstParameterOperand = Operand.CreateConstant(TypeSystem, Architecture.OffsetOfFirstParameter);
+				context.SetInstruction(IRInstruction.StoreCompound, null, StackFrame, OffsetOfFirstParameterOperand, operand);
+			}
+			else
+			{
+				context.SetInstruction(IRInstruction.MoveInteger, InstructionSize.Size32, Operand.CreateCPURegister(operand.Type, Architecture.Return32BitRegister), operand);
+			}
 		}
 
 		private void CallStatic(InstructionNode node)

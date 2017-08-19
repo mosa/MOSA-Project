@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x86.MethodStages
 {
 	/// <summary>
 	/// Transforms IR instructions into their appropriate X86.
 	/// </summary>
+	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	/// <remarks>
 	/// This transformation stage transforms IR instructions into their equivalent X86 sequences.
 	/// </remarks>
@@ -26,7 +27,6 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.AddUnsigned, AddUnsigned);
 			AddVisitation(IRInstruction.ArithmeticShiftRight, ArithmeticShiftRight);
 			AddVisitation(IRInstruction.Break, Break);
-			AddVisitation(IRInstruction.Call, Call);
 			AddVisitation(IRInstruction.CallDirect, CallDirect);
 			AddVisitation(IRInstruction.CompareFloatR4, CompareFloatR4);
 			AddVisitation(IRInstruction.CompareFloatR8, CompareFloatR8);
@@ -45,9 +45,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.DivFloatR8, DivFloatR8);
 			AddVisitation(IRInstruction.DivSigned, DivSigned);
 			AddVisitation(IRInstruction.DivUnsigned, DivUnsigned);
-
-			//AddVisitation(IRInstruction.InternalCall,InternalCall);
-			//AddVisitation(IRInstruction.InternalReturn,InternalReturn);
+			AddVisitation(IRInstruction.GotoEpilogue, GotoEpilogue);
 			AddVisitation(IRInstruction.Jmp, Jmp);
 			AddVisitation(IRInstruction.LoadFloatR4, LoadFloatR4);
 			AddVisitation(IRInstruction.LoadFloatR8, LoadFloatR8);
@@ -74,11 +72,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.MulSigned, MulSigned);
 			AddVisitation(IRInstruction.MulUnsigned, MulUnsigned);
 			AddVisitation(IRInstruction.Nop, Nop);
-			AddVisitation(IRInstruction.RemFloatR4, RemFloatR4);
-			AddVisitation(IRInstruction.RemFloatR8, RemFloatR8);
 			AddVisitation(IRInstruction.RemSigned, RemSigned);
 			AddVisitation(IRInstruction.RemUnsigned, RemUnsigned);
-			AddVisitation(IRInstruction.Return, Return);
 			AddVisitation(IRInstruction.ShiftLeft, ShiftLeft);
 			AddVisitation(IRInstruction.ShiftRight, ShiftRight);
 			AddVisitation(IRInstruction.StoreFloatR4, StoreFloatR4);
@@ -183,23 +178,6 @@ namespace Mosa.Platform.x86.Stages
 		private void Break(Context context)
 		{
 			context.SetInstruction(X86.Break);
-		}
-
-		/// <summary>
-		/// Visitation function for Call.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Call(Context context)
-		{
-			if (context.OperandCount == 0 && context.BranchTargets != null)
-			{
-				// inter-method call; usually for exception processing
-				context.ReplaceInstruction(X86.Call);
-			}
-			else
-			{
-				CallingConvention.MakeCall(MethodCompiler, context);
-			}
 		}
 
 		/// <summary>
@@ -556,27 +534,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for InternalCall.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		//private void InternalCall(Context context)
-		//{
-		//	context.ReplaceInstructionOnly(X86.Call);
-		//}
-
-		/// <summary>
-		/// Visitation function for InternalReturn.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		//private void InternalReturn(Context context)
-		//{
-		//	Debug.Assert(context.BranchTargets == null);
-
-		//	// To return from an internal method call (usually from within a finally or exception clause)
-		//	context.SetInstruction(X86.Ret);
-		//}
-
-		/// <summary>
 		/// Visitation function for JmpInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -795,62 +752,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for RemFloat.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="method">The method.</param>
-		private void RemFloat(Context context, string method)
-		{
-			var result = context.Result;
-			var dividend = context.Operand1;
-			var divisor = context.Operand2;
-
-			var type = TypeSystem.GetTypeByName("Mosa.Runtime.x86", "Division");
-
-			Debug.Assert(type != null, "Cannot find type: Mosa.Runtime.x86.Division type");
-
-			var mosaMethod = type.FindMethodByName(method);
-
-			Debug.Assert(method != null, "Cannot find method: " + method);
-
-			context.ReplaceInstruction(IRInstruction.Call);
-			context.SetOperand(0, Operand.CreateSymbolFromMethod(TypeSystem, mosaMethod));
-			context.Result = result;
-			context.Operand2 = dividend;
-			context.Operand3 = divisor;
-			context.OperandCount = 3;
-			context.ResultCount = 1;
-			context.InvokeMethod = mosaMethod;
-
-			// Since we are already in IR Transformation Stage we gotta call this now
-			CallingConvention.MakeCall(MethodCompiler, context);
-		}
-
-		/// <summary>
-		/// Visitation function for RemFloat.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void RemFloatR4(Context context)
-		{
-			Debug.Assert(context.Result.IsR4);
-			Debug.Assert(context.Operand1.IsR4);
-
-			RemFloat(context, "RemR4");
-		}
-
-		/// <summary>
-		/// Visitation function for RemFloat.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void RemFloatR8(Context context)
-		{
-			Debug.Assert(context.Result.IsR8);
-			Debug.Assert(context.Operand1.IsR8);
-
-			RemFloat(context, "RemR8");
-		}
-
-		/// <summary>
 		/// Visitation function for RemSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -890,24 +791,14 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for Return.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Return(Context context)
+		private void GotoEpilogue(Context context)
 		{
-			//Debug.Assert(context.BranchTargets != null);
+			Debug.Assert(context.Operand1 == null);
 
-			if (context.Operand1 != null)
-			{
-				var returnOperand = context.Operand1;
+			if (BasicBlocks.EpilogueBlock == null)
+				return;
 
-				context.Empty();
-
-				CallingConvention.SetReturnValue(MethodCompiler, context, returnOperand);
-
-				context.AppendInstruction(X86.Jmp, BasicBlocks.EpilogueBlock);
-			}
-			else
-			{
-				context.SetInstruction(X86.Jmp, BasicBlocks.EpilogueBlock);
-			}
+			context.SetInstruction(X86.Jmp, BasicBlocks.EpilogueBlock);
 		}
 
 		/// <summary>

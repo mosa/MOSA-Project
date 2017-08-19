@@ -459,7 +459,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				NewObject(node);
 			}
-			else if (instruction == IRInstruction.Call
+			else if (instruction == IRInstruction.CallDynamic
 				|| instruction == IRInstruction.CallInterface
 				|| instruction == IRInstruction.CallDirect
 				|| instruction == IRInstruction.CallStatic
@@ -529,6 +529,10 @@ namespace Mosa.Compiler.Framework.Analysis
 			else if (instruction == IRInstruction.FinallyStart)
 			{
 				FinallyStart(node);
+			}
+			else if (instruction == IRInstruction.SetReturn)
+			{
+				SetReturn(node);
 			}
 			else
 			{
@@ -899,6 +903,10 @@ namespace Mosa.Compiler.Framework.Analysis
 			UpdateToOverDefined(operand1);
 			SetReferenceOverdefined(result);
 			SetReferenceOverdefined(operand1);
+		}
+
+		private void SetReturn(InstructionNode node)
+		{
 		}
 
 		private void FinallyStart(InstructionNode node)

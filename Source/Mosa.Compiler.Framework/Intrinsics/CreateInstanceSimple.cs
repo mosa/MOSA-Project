@@ -2,8 +2,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.MosaTypeSystem;
-using System.Collections.Generic;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -28,24 +26,8 @@ namespace Mosa.Platform.x86.Intrinsic
 			var ctor = context.Operand1;
 			var thisObject = context.Operand2;
 			var result = context.Result;
-			var method = context.InvokeMethod;
-
-			//var internalMethod = methodCompiler.TypeSystem.DefaultLinkerType.FindMethodByName(InternalMethodName);
-
-			//if (internalMethod == null)
-			//{
-			//	var param = methodCompiler.TypeSystem.CreateParameter(internalMethod, "this", methodCompiler.TypeSystem.BuiltIn.Object);
-			//	var parameters = new List<MosaParameter>(1) { param };
-			//	internalMethod = methodCompiler.TypeSystem.CreateLinkerMethod(InternalMethodName, methodCompiler.TypeSystem.BuiltIn.Void, false, parameters);
-			//}
 
 			context.SetInstruction(IRInstruction.CallDynamic, null, ctor, thisObject);
-
-			//context.InvokeMethod = internalMethod;
-
-			//var symbol = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, internalMethod);
-			//context.SetInstruction(IRInstruction.CallStatic, null, ctor, thisObject);
-
 			context.AppendInstruction(IRInstruction.MoveInteger, result, thisObject);
 		}
 

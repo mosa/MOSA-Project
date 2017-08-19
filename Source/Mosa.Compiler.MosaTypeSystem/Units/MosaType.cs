@@ -313,6 +313,16 @@ namespace Mosa.Compiler.MosaTypeSystem
 					type.FullName = fName.ToString();
 					type.ShortName = sName.ToString();
 				}
+				else if (type.DeclaringType != null)
+				{
+					fName.Append(type.ElementType.FullName);
+					fName.Append(type.Signature);
+					sName.Append(type.ElementType.ShortName);
+					sName.Append(type.Signature);
+
+					type.FullName = fName.ToString();
+					type.ShortName = sName.ToString();
+				}
 				else
 				{
 					if (!string.IsNullOrEmpty(type.Namespace))

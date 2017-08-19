@@ -6,7 +6,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x86.CompilerStages
 {
 	/// <summary>
 	/// Builds the method table used for exception handling. The table has the following format:

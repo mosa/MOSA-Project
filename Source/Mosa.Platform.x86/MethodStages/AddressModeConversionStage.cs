@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x86.MethodStages
 {
 	/// <summary>
 	/// Address Mode Conversion Stage

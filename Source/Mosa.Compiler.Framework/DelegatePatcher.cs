@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework
 			context.MosaType = methodPointerOperand.Type;
 			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, instanceOffsetOperand, v3);
 			context.MosaType = instanceOperand.Type;
-			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
+			context.AppendInstruction(IRInstruction.GotoEpilogue, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private void PatchInvoke(BaseMethodCompiler methodCompiler)
@@ -186,20 +186,19 @@ namespace Mosa.Compiler.Framework
 			b2.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 			// return
-			b3.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
-			if (withReturn)
-			{
-				b3.SetOperand(0, opReturn);
-			}
+			if (opReturn != null)
+				b3.AppendInstruction(IRInstruction.SetReturn, null, opReturn);
+
+			b3.AppendInstruction(IRInstruction.GotoEpilogue, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private static void PatchBeginInvoke(BaseMethodCompiler methodCompiler)
 		{
 			var nullOperand = Operand.GetNull(methodCompiler.TypeSystem);
-
 			var context = new Context(CreateMethodStructure(methodCompiler));
-			context.AppendInstruction(IRInstruction.Return, null, nullOperand);
-			context.AddBranchTarget(methodCompiler.BasicBlocks.EpilogueBlock);
+
+			context.AppendInstruction(IRInstruction.SetReturn, null, nullOperand);
+			context.AppendInstruction(IRInstruction.GotoEpilogue, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private static void PatchEndInvoke(BaseMethodCompiler methodCompiler)

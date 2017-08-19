@@ -126,14 +126,6 @@ namespace Mosa.Compiler.Framework
 		public List<Operand> LocalStack { get; }
 
 		/// <summary>
-		/// Gets or sets the size of the stack parameter.
-		/// </summary>
-		/// <value>
-		/// The size of the stack parameter.
-		/// </value>
-		public int StackParameterSize { get; set; }
-
-		/// <summary>
 		/// Gets or sets the size of the stack.
 		/// </summary>
 		/// <value>
@@ -327,7 +319,7 @@ namespace Mosa.Compiler.Framework
 				returnSize = TypeLayout.GetTypeSize(Method.Signature.ReturnType);
 			}
 
-			StackParameterSize = LayoutParameters(Architecture.CallingConvention.OffsetOfFirstParameter + returnSize);
+			LayoutParameters(Architecture.OffsetOfFirstParameter + returnSize);
 		}
 
 		private int LayoutParameters(int offsetOfFirst)

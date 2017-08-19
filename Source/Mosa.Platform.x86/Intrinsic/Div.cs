@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.x86.Stages;
+using Mosa.Platform.x86.MethodStages;
 
 namespace Mosa.Platform.x86.Intrinsic
 {

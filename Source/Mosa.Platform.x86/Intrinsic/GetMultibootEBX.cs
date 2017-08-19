@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Platform.x86.Stages;
+using Mosa.Platform.x86.CompilerStages;
 
 namespace Mosa.Platform.x86.Intrinsic
 {

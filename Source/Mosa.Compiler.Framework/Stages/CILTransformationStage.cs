@@ -1250,6 +1250,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				var newThis = MethodCompiler.CreateVirtualRegister(result.Type.ToManagedPointer());
 				before.SetInstruction(IRInstruction.AddressOf, newThis, result);
+				before.AppendInstruction(IRInstruction.Nop);
 
 				operands.Insert(0, newThis);
 			}
@@ -1336,9 +1337,19 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ret instruction.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void Ret(InstructionNode node)
+		private void Ret(Context context)
 		{
-			node.ReplaceInstruction(IRInstruction.Return);
+			var operand1 = context.Operand1;
+
+			if (operand1 != null)
+			{
+				context.SetInstruction(IRInstruction.SetReturn, null, operand1);
+				context.AppendInstruction(IRInstruction.GotoEpilogue, BasicBlocks.EpilogueBlock);
+			}
+			else
+			{
+				context.SetInstruction(IRInstruction.GotoEpilogue, BasicBlocks.EpilogueBlock);
+			}
 		}
 
 		/// <summary>
