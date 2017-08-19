@@ -455,7 +455,8 @@ namespace Mosa.Compiler.Framework.Analysis
 				Move(node);
 			}
 			else if (instruction == IRInstruction.NewObject
-				|| instruction == IRInstruction.NewArray)
+				|| instruction == IRInstruction.NewArray
+				|| instruction == IRInstruction.NewString)
 			{
 				NewObject(node);
 			}
@@ -918,12 +919,20 @@ namespace Mosa.Compiler.Framework.Analysis
 			if (node.ResultCount == 0)
 				return;
 
-			Debug.Assert(node.ResultCount == 1);
+			Debug.Assert(node.ResultCount > 0);
 
 			var result = GetVariableState(node.Result);
 
 			UpdateToOverDefined(result);
 			SetReferenceOverdefined(result);
+
+			if (node.ResultCount == 2)
+			{
+				var result2 = GetVariableState(node.Result);
+
+				UpdateToOverDefined(result2);
+				SetReferenceOverdefined(result2);
+			}
 		}
 
 		private bool CompareIntegerBranch(InstructionNode node)

@@ -200,30 +200,24 @@ namespace Mosa.Compiler.Framework.Stages
 			int stackSize = CalculateParameterStackSize(operands);
 			int returnSize = CalculateReturnSize(result);
 
-			var scratch = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.ScratchRegister);
-
 			int totalStack = returnSize + stackSize;
 
-			ReserveStackSizeForCall(context, totalStack, scratch);
-			PushOperands(context, operands, totalStack, scratch);
+			ReserveStackSizeForCall(context, totalStack);
+			PushOperands(context, operands, totalStack, StackPointer);
 
 			// the mov/call two-instructions combo is to help facilitate the register allocator
-			context.AppendInstruction(IRInstruction.MoveInteger, scratch, target);
-			context.AppendInstruction(IRInstruction.CallDirect, null, scratch);
+			context.AppendInstruction(IRInstruction.CallDirect, null, target);
 
 			GetReturnValue(context, result);
 			FreeStackAfterCall(context, totalStack);
 		}
 
-		private void ReserveStackSizeForCall(Context context, int stackSize, Operand scratch)
+		private void ReserveStackSizeForCall(Context context, int stackSize)
 		{
 			if (stackSize == 0)
 				return;
 
-			var stackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
-
-			context.AppendInstruction(IRInstruction.SubSigned, stackPointer, stackPointer, Operand.CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
-			context.AppendInstruction(IRInstruction.MoveInteger, scratch, stackPointer);
+			context.AppendInstruction(IRInstruction.SubSigned, StackPointer, StackPointer, Operand.CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
 		}
 
 		private void FreeStackAfterCall(Context context, int stackSize)
@@ -231,8 +225,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackSize == 0)
 				return;
 
-			var stackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
-			context.AppendInstruction(IRInstruction.AddSigned, stackPointer, stackPointer, Operand.CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
+			context.AppendInstruction(IRInstruction.AddSigned, StackPointer, StackPointer, Operand.CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
 		}
 
 		private int CalculateParameterStackSize(List<Operand> operands)
@@ -346,8 +339,7 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (MosaTypeLayout.IsStoredOnStack(result.Type))
 			{
 				Debug.Assert(result.IsStackLocal);
-				var stackPointer = Operand.CreateCPURegister(result.Type, Architecture.StackPointerRegister);
-				context.AppendInstruction(IRInstruction.LoadCompound, result, stackPointer, ConstantZero);
+				context.AppendInstruction(IRInstruction.LoadCompound, result, StackPointer, ConstantZero);
 			}
 			else
 			{
