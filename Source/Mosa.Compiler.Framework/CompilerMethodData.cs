@@ -52,6 +52,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsVirtual { get; set; }
 
+		public bool IsDevirtualized { get; set; }
+
 		public int CompileCount { get; set; }
 
 		public int ParameterStackSize { get; set; }

@@ -294,6 +294,8 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public bool IsMethodOverridden(MosaMethod method)
 		{
+			var originalMethod = method;
+
 			lock (_lock)
 			{
 				if (overriddenMethods.Contains(method))
@@ -306,13 +308,17 @@ namespace Mosa.Compiler.Framework
 				{
 					var table = typeMethodTables[type];
 
-					if (table.Count >= slot)
+					if (slot >= table.Count)
 						return false;
 
 					method = table[slot];
 
 					if (overriddenMethods.Contains(method))
+					{
+						// cache this for next time
+						overriddenMethods.Add(originalMethod);
 						return true;
+					}
 
 					type = type.BaseType;
 				}
@@ -726,8 +732,9 @@ namespace Mosa.Compiler.Framework
 			// this method is overridden (obviousily)
 			overriddenMethods.Add(method);
 
-			// Note: this method does not update methods in other parts of the inheritance chain
-			// however, when trying to determine if a method was overridden a searched up to the root method will be performed at that time
+			// Note: this method does not update other parts of the inheritance chain
+			// however, when trying to determine if a method was overridden a searched
+			// up to the root method will be performed at that time
 
 			// go up the inheritance chain
 			var type = method.DeclaringType.BaseType;
@@ -735,7 +742,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var table = typeMethodTables[type];
 
-				if (table.Count >= slot)
+				if (slot >= table.Count)
 					return;
 
 				method = table[slot];

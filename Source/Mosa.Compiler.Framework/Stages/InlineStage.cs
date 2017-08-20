@@ -81,11 +81,14 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active)
 					trace.Log(invoked.Method.FullName);
 
-				//System.Diagnostics.Debug.WriteLine(MethodCompiler.Method.FullName);
-				//System.Diagnostics.Debug.WriteLine(" * " + invoked.Method.FullName);
-
 				Inline(node, blocks);
 			}
+
+			UpdateCounter("InlineStage.InlinedMethodCount", 1);
+			UpdateCounter("InlineStage.InlinedCallSiteCount", nodes.Count);
+
+			//UpdateCounter("InlineStage.Compiled", MethodData.CompileCount == 0 ? 1 : 0);
+			//UpdateCounter("InlineStage.Recompiled", MethodData.CompileCount > 1 ? 1 : 0);
 		}
 
 		protected void Inline(InstructionNode callNode, BasicBlocks blocks)

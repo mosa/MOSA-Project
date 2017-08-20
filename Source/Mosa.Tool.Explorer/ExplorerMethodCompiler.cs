@@ -45,6 +45,7 @@ namespace Mosa.Tool.Explorer
 				(compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
 				new IRCleanupStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
+				new DevirtualizeCallStage(),
 				new CallStage(),
 				new PlatformStubStage(),
 				new PlatformEdgeSplitStage(),
