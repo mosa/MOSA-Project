@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			UpdateCounter("DevirtualizeCalls", devirtualizedCount);
+			UpdateCounter("Devirtualize.CallCount", devirtualizedCount);
 		}
 
 		private void CallVirtual(InstructionNode node)

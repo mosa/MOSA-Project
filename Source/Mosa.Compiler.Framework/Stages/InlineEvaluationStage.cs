@@ -30,9 +30,10 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.IsCILDecoded = (!method.IsLinkerGenerated && method.Code.Count > 0);
 			MethodData.HasLoops = false;
 			MethodData.IsPlugged = IsPlugged;
-			MethodData.IsVirtual = method.IsVirtual;
 			MethodData.HasDoNotInlineAttribute = false;
 			MethodData.HasAddressOfInstruction = false;
+			MethodData.IsVirtual = method.IsVirtual;
+			MethodData.IsDevirtualized = (method.IsVirtual && !TypeLayout.IsMethodOverridden(method));
 
 			int totalIRCount = 0;
 			int totalNonIRCount = 0;
@@ -110,6 +111,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace.Log("CanInline: " + MethodData.CanInline.ToString());
 			trace.Log("IsVirtual: " + MethodData.IsVirtual.ToString());
+			trace.Log("IsDevirtualized: " + MethodData.IsDevirtualized.ToString());
 			trace.Log("HasLoops: " + MethodData.HasLoops.ToString());
 			trace.Log("HasProtectedRegions: " + MethodData.HasProtectedRegions.ToString());
 			trace.Log("IRInstructionCount: " + MethodData.IRInstructionCount.ToString());
@@ -137,7 +139,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//if (method.HasLoops)
 			//	return false;
 
-			if (method.IsVirtual)
+			if (method.IsVirtual && !method.IsDevirtualized)
 				return false;
 
 			// current implementation limitation - can't include methods with addressOf instruction
