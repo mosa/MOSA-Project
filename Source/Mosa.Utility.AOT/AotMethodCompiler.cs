@@ -48,6 +48,7 @@ namespace Mosa.Utility.Aot
 				(compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
 				new IRCleanupStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
+				new DevirtualizeCallStage(),
 				new CallStage(),
 				new PlatformStubStage(),
 				new PlatformEdgeSplitStage(),
