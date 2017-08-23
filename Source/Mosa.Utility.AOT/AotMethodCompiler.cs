@@ -58,6 +58,7 @@ namespace Mosa.Utility.Aot
 				new EmptyBlockRemovalStage(),
 				new BlockOrderingStage(),
 				new CodeGenerationStage(),
+				new PreciseGCStage(),
 				new ProtectedRegionLayoutStage(),
 			});
 		}

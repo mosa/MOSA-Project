@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Trace;
 using System.Collections.Generic;
 
@@ -31,37 +32,50 @@ namespace Mosa.Compiler.Framework.Stages
 		private RangeData[] registerRangeData;
 		private RangeData[] stackLocalRangeData;
 
+		private int PhysicalRegisterCount;
+
 		protected override void Run()
 		{
 			if (IsPlugged)
 				return;
 
+			PhysicalRegisterCount = Architecture.RegisterSet.Length;
+
 			trace = CreateTraceLog();
 
-			CollectStackObjects();
+			CollectReferenceStackObjects();
 
 			stackLocalRangeData = new RangeData[stack.Count];
-			registerRangeData = new RangeData[Architecture.RegisterSet.Length];
+			registerRangeData = new RangeData[PhysicalRegisterCount];
 
 			for (int i = 0; i < registerRangeData.Length; i++)
 			{
-				var range = new RangeData()
+				registerRangeData[i] = new RangeData()
 				{
 					Register = Architecture.RegisterSet[i]
 				};
-				registerRangeData[i] = range;
 			}
 
 			foreach (var local in stack)
 			{
-				var range = new RangeData()
+				stackLocalRangeData[local.Value] = new RangeData()
 				{
 					StackLocal = local.Key
 				};
-				stackLocalRangeData[local.Value] = range;
 			}
 
 			CollectObjectAssignmentsAndUses();
+		}
+
+		protected void CollectReferenceStackObjects()
+		{
+			foreach (var local in MethodCompiler.LocalStack)
+			{
+				if (ContainsReference(local))
+				{
+					stack.Add(local, stack.Count);
+				}
+			}
 		}
 
 		private void CollectObjectAssignmentsAndUses()
@@ -80,7 +94,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					foreach (var input in visitor.Input)
 					{
-						if (input.Type.IsReferenceType || input.Type.IsManagedPointer)
+						if (ContainsReference(input))
 						{
 							if (input.IsCPURegister)
 								registerRangeData[input.Register.Index].UseList.Add(node.Offset);
@@ -96,9 +110,29 @@ namespace Mosa.Compiler.Framework.Stages
 						}
 					}
 
+					if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
+					{
+						for (int reg = 0; reg < PhysicalRegisterCount; reg++)
+						{
+							registerRangeData[reg].KillList.Add(node.Offset);
+						}
+					}
+					else if (node.Instruction == IRInstruction.KillAllExcept)
+					{
+						var except = node.Operand1.Register.Index;
+
+						for (int reg = 0; reg < PhysicalRegisterCount; reg++)
+						{
+							if (reg != except)
+							{
+								registerRangeData[reg].KillList.Add(node.Offset);
+							}
+						}
+					}
+
 					foreach (var output in visitor.Output)
 					{
-						if (output.Type.IsReferenceType || output.Type.IsManagedPointer)
+						if (ContainsReference(output))
 						{
 							if (output.IsCPURegister)
 								registerRangeData[output.Register.Index].GenList.Add(node.Offset);
@@ -110,22 +144,31 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		protected bool ContainsReference(Operand operand)
+		{
+			if (operand.Type.IsReferenceType || operand.Type.IsManagedPointer)
+				return true;
+
+			if (!operand.IsValueType)
+				return false;
+
+			foreach (var field in operand.Type.Fields)
+			{
+				if (field.IsStatic)
+					continue;
+
+				if (field.FieldType.IsReferenceType || field.FieldType.IsManagedPointer)
+					return true;
+			}
+
+			return false;
+		}
+
 		protected override void Finish()
 		{
 			stack = null;
 			stackLocalRangeData = null;
 			registerRangeData = null;
-		}
-
-		protected void CollectStackObjects()
-		{
-			foreach (var local in MethodCompiler.LocalStack)
-			{
-				if (local.Type.IsReferenceType || local.Type.IsManagedPointer)
-				{
-					stack.Add(local, stack.Count);
-				}
-			}
 		}
 	}
 }

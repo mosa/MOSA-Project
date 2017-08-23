@@ -803,14 +803,13 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(!ssa.IsSymbol);
 			Debug.Assert(!ssa.IsStaticField);
 
-			var operand = new Operand(ssa.Type)
+			return new Operand(ssa.Type)
 			{
 				IsVirtualRegister = true,
 				IsSSA = true,
 				SSAParent = ssa,
 				SSAVersion = version
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -822,14 +821,13 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateStackLocal(MosaType type, int index, bool pinned)
 		{
-			var operand = new Operand(type)
+			return new Operand(type)
 			{
 				Index = index,
 				IsStackLocal = true,
 				IsConstant = true,
 				IsPinned = pinned
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -844,7 +842,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(!isThis || (isThis && index == 0));
 
-			var operand = new Operand(type)
+			return new Operand(type)
 			{
 				IsParameter = true,
 				Index = index,
@@ -852,7 +850,6 @@ namespace Mosa.Compiler.Framework
 				Name = name,
 				IsThis = isThis
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -866,14 +863,13 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(data != null);
 
-			var operand = new Operand(typeSystem.BuiltIn.String)
+			return new Operand(typeSystem.BuiltIn.String)
 			{
 				IsSymbol = true,
 				Name = name,
 				StringData = data,
 				IsConstant = true
 			};
-			return operand;
 		}
 
 		/// <summary>

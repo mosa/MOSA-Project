@@ -638,9 +638,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 					if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 					{
-						for (int s = 0; s < PhysicalRegisterCount; s++)
+						for (int reg = 0; reg < PhysicalRegisterCount; reg++)
 						{
-							liveKill.Set(s, true);
+							liveKill.Set(reg, true);
 						}
 
 						if (liveSetTrace.Active)
@@ -650,11 +650,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					{
 						var except = node.Operand1.Register.Index;
 
-						for (int s = 0; s < PhysicalRegisterCount; s++)
+						for (int reg = 0; reg < PhysicalRegisterCount; reg++)
 						{
-							if (s != except)
+							if (reg != except)
 							{
-								liveKill.Set(s, true);
+								liveKill.Set(reg, true);
 							}
 						}
 
