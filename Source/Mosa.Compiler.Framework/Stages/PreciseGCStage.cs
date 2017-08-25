@@ -29,10 +29,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private TraceLog trace;
 
-		private RangeData[] registerRangeData;
-		private RangeData[] stackLocalRangeData;
+		private RangeData[] rangeData;
 
 		private int PhysicalRegisterCount;
+		private int RangeCount;
 
 		protected override void Run()
 		{
@@ -41,16 +41,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 			PhysicalRegisterCount = Architecture.RegisterSet.Length;
 
-			trace = CreateTraceLog();
-
 			CollectReferenceStackObjects();
 
-			stackLocalRangeData = new RangeData[stack.Count];
-			registerRangeData = new RangeData[PhysicalRegisterCount];
+			RangeCount = PhysicalRegisterCount + stack.Count;
 
-			for (int i = 0; i < registerRangeData.Length; i++)
+			trace = CreateTraceLog();
+
+			rangeData = new RangeData[RangeCount];
+
+			for (int i = 0; i < PhysicalRegisterCount; i++)
 			{
-				registerRangeData[i] = new RangeData()
+				rangeData[i] = new RangeData()
 				{
 					Register = Architecture.RegisterSet[i]
 				};
@@ -58,7 +59,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var local in stack)
 			{
-				stackLocalRangeData[local.Value] = new RangeData()
+				rangeData[local.Value] = new RangeData()
 				{
 					StackLocal = local.Key
 				};
@@ -73,7 +74,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (ContainsReference(local))
 				{
-					stack.Add(local, stack.Count);
+					stack.Add(local, PhysicalRegisterCount + stack.Count);
 				}
 			}
 		}
@@ -97,35 +98,35 @@ namespace Mosa.Compiler.Framework.Stages
 						if (ContainsReference(input))
 						{
 							if (input.IsCPURegister)
-								registerRangeData[input.Register.Index].UseList.Add(node.Offset);
+								rangeData[input.Register.Index].UseList.Add(node.Offset);
 							else if (input.IsStackLocal)
-								stackLocalRangeData[stack[input]].UseList.Add(node.Offset);
+								rangeData[stack[input]].UseList.Add(node.Offset);
 						}
 						else
 						{
 							if (input.IsCPURegister)
-								registerRangeData[input.Register.Index].KillList.Add(node.Offset);
+								rangeData[input.Register.Index].KillList.Add(node.Offset);
 							else if (input.IsStackLocal)
-								stackLocalRangeData[stack[input]].KillList.Add(node.Offset);
+								rangeData[stack[input]].KillList.Add(node.Offset);
 						}
 					}
 
 					if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 					{
-						for (int reg = 0; reg < PhysicalRegisterCount; reg++)
+						for (int reg = 0; reg < RangeCount; reg++)
 						{
-							registerRangeData[reg].KillList.Add(node.Offset);
+							rangeData[reg].KillList.Add(node.Offset);
 						}
 					}
 					else if (node.Instruction == IRInstruction.KillAllExcept)
 					{
 						var except = node.Operand1.Register.Index;
 
-						for (int reg = 0; reg < PhysicalRegisterCount; reg++)
+						for (int reg = 0; reg < RangeCount; reg++)
 						{
 							if (reg != except)
 							{
-								registerRangeData[reg].KillList.Add(node.Offset);
+								rangeData[reg].KillList.Add(node.Offset);
 							}
 						}
 					}
@@ -135,9 +136,9 @@ namespace Mosa.Compiler.Framework.Stages
 						if (ContainsReference(output))
 						{
 							if (output.IsCPURegister)
-								registerRangeData[output.Register.Index].GenList.Add(node.Offset);
+								rangeData[output.Register.Index].GenList.Add(node.Offset);
 							else if (output.IsStackLocal)
-								stackLocalRangeData[stack[output]].GenList.Add(node.Offset);
+								rangeData[stack[output]].GenList.Add(node.Offset);
 						}
 					}
 				}
@@ -167,8 +168,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Finish()
 		{
 			stack = null;
-			stackLocalRangeData = null;
-			registerRangeData = null;
+			rangeData = null;
 		}
 	}
 }

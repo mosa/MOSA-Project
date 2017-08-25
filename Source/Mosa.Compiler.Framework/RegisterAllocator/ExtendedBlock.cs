@@ -44,12 +44,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return Interval.Contains(slotIndex) || slotIndex == Interval.End;
 		}
 
-		//public bool Contains(Context context)
-		//{
-		//	// TODO: could be made faster by avoiding allocation of SlotIndex
-		//	return Contains(new SlotIndex(context));
-		//}
-
 		public override string ToString()
 		{
 			return BasicBlock.ToString();

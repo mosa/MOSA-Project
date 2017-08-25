@@ -100,8 +100,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected TraceLog CreateTrace(string name)
 		{
-			var sectionTrace = TraceFactory.CreateTraceLog(name);
-			return sectionTrace;
+			return TraceFactory.CreateTraceLog(name);
 		}
 
 		public virtual void Start()
@@ -833,7 +832,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						else
 						{
 							// This is necesary to handled a result that is never used!
-							// Common with instructions with more than one result
+							// This is common with instructions with more than one result.
 							if (intervalTrace.Active) intervalTrace.Log("Add (Unused) " + register + " : " + slotIndex + " destination " + slotIndex);
 							if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
 							register.AddLiveInterval(slotIndex, slotIndex.HalfStepForward);
@@ -1289,7 +1288,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected SlotIndex FindCallSiteInInterval(LiveInterval liveInterval)
 		{
-			foreach (SlotIndex slot in KillAll)
+			foreach (var slot in KillAll)
 			{
 				if (liveInterval.Contains(slot))
 					return slot;
@@ -1337,7 +1336,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					foreach (var def in liveInterval.DefPositions)
 					{
-						var context = new Context(def.Index);
+						var context = new Context(def.Node);
 
 						Architecture.InsertStoreInstruction(context, StackFrame, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
 
@@ -1358,12 +1357,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					foreach (var use in liveInterval.UsePositions)
 					{
-						AssignPhysicalRegistersToInstructions(use.Index, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
+						AssignPhysicalRegistersToInstructions(use.Node, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
 					}
 
 					foreach (var def in liveInterval.DefPositions)
 					{
-						AssignPhysicalRegistersToInstructions(def.Index, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
+						AssignPhysicalRegistersToInstructions(def.Node, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
 					}
 				}
 			}
@@ -1482,7 +1481,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var key in moves.Keys)
 			{
-				var moveResolver = new MoveResolver(key.Index, !key.IsOnHalfStepForward, moves[key]);
+				var moveResolver = new MoveResolver(key.Node, !key.IsOnHalfStepForward, moves[key]);
 
 				moveResolver.InsertResolvingMoves(Architecture, StackFrame);
 
@@ -1503,7 +1502,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected MoveKeyedList GetRegisterMoves()
 		{
-			MoveKeyedList keyedList = new MoveKeyedList();
+			var keyedList = new MoveKeyedList();
 
 			// collect edge slot indexes
 			var blockEdges = new Dictionary<SlotIndex, ExtendedBlock>();
