@@ -95,88 +95,84 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for AddFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void AddFloatR4(Context context)
+		private void AddFloatR4(InstructionNode node)
 		{
-			Debug.Assert(context.Result.IsR4);
-			Debug.Assert(context.Operand1.IsR4);
+			Debug.Assert(node.Result.IsR4);
+			Debug.Assert(node.Operand1.IsR4);
 
-			context.ReplaceInstruction(X86.Addss);
-			context.Size = InstructionSize.Size32;
+			node.ReplaceInstruction(X86.Addss, InstructionSize.Size32);
 		}
 
 		/// <summary>
 		/// Visitation function for AddFloat.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void AddFloatR8(Context context)
+		private void AddFloatR8(InstructionNode node)
 		{
-			Debug.Assert(context.Result.IsR8);
-			Debug.Assert(context.Operand1.IsR8);
+			Debug.Assert(node.Result.IsR8);
+			Debug.Assert(node.Operand1.IsR8);
 
-			context.ReplaceInstruction(X86.Addsd);
-			context.Size = InstructionSize.Size32;
+			node.ReplaceInstruction(X86.Addsd, InstructionSize.Size32);
 		}
 
 		/// <summary>
 		/// Addresses the of instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void AddressOf(Context context)
+		/// <param name="node">The node.</param>
+		private void AddressOf(InstructionNode node)
 		{
-			Debug.Assert(context.Operand1.IsOnStack | context.Operand1.IsStaticField);
+			Debug.Assert(node.Operand1.IsOnStack | node.Operand1.IsStaticField);
 
-			if (context.Operand1.IsStaticField)
+			if (node.Operand1.IsStaticField)
 			{
-				context.SetInstruction(X86.Mov, NativeInstructionSize, context.Result, context.Operand1);
-				return;
+				node.SetInstruction(X86.Mov, NativeInstructionSize, node.Result, node.Operand1);
 			}
-
-			if (context.Operand1.IsStackLocal)
+			else if (node.Operand1.IsStackLocal)
 			{
-				context.SetInstruction(X86.Lea, NativeInstructionSize, context.Result, StackFrame, context.Operand1);
+				node.SetInstruction(X86.Lea, NativeInstructionSize, node.Result, StackFrame, node.Operand1);
 			}
 			else
 			{
-				var offset = Operand.CreateConstant(TypeSystem, context.Operand1.Offset);
+				var offset = Operand.CreateConstant(TypeSystem, node.Operand1.Offset);
 
-				context.SetInstruction(X86.Lea, NativeInstructionSize, context.Result, StackFrame, offset);
+				node.SetInstruction(X86.Lea, NativeInstructionSize, node.Result, StackFrame, offset);
 			}
 		}
 
 		/// <summary>
 		/// Visitation function for AddSigned.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void AddSigned(Context context)
+		/// <param name="node">The node.</param>
+		private void AddSigned(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Add);
+			node.ReplaceInstruction(X86.Add);
 		}
 
 		/// <summary>
 		/// Visitation function for AddUnsigned.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void AddUnsigned(Context context)
+		/// <param name="node">The node.</param>
+		private void AddUnsigned(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Add);
+			node.ReplaceInstruction(X86.Add);
 		}
 
 		/// <summary>
 		/// Arithmetic the shift right instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ArithmeticShiftRight(Context context)
+		/// <param name="node">The node.</param>
+		private void ArithmeticShiftRight(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Sar);
+			node.ReplaceInstruction(X86.Sar);
 		}
 
 		/// <summary>
 		/// Visitation function for BreakInstruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Break(Context context)
+		/// <param name="node">The node.</param>
+		private void Break(InstructionNode node)
 		{
-			context.SetInstruction(X86.Break);
+			node.SetInstruction(X86.Break);
 		}
 
 		/// <summary>
@@ -220,7 +216,6 @@ namespace Mosa.Platform.x86.Stages
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction(X86.Mov, v1, ConstantZero);
-
 			context.AppendInstruction(X86.Cmp, null, operand1, operand2);
 
 			if (resultOperand.IsUnsigned || resultOperand.IsChar)
@@ -291,80 +286,76 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for FloatingPointToIntegerConversionInstruction.
+		/// Visitation function for ConversionFloatR4ToInteger.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ConversionFloatR4ToInteger(Context context)
+		/// <param name="node">The node.</param>
+		private void ConversionFloatR4ToInteger(InstructionNode node)
 		{
-			Debug.Assert(context.Result.Type.IsI1 || context.Result.Type.IsI2 || context.Result.Type.IsI4);
-
-			context.ReplaceInstruction(X86.Cvttss2si);
+			Debug.Assert(node.Result.Type.IsI1 || node.Result.Type.IsI2 || node.Result.Type.IsI4);
+			node.ReplaceInstruction(X86.Cvttss2si);
 		}
 
 		/// <summary>
-		/// Visitation function for MoveInteger instruction.
+		/// Visitation function for ConversionFloatR8ToFloatR4 instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ConversionFloatR8ToFloatR4(Context context)
+		/// <param name="node">The node.</param>
+		private void ConversionFloatR8ToFloatR4(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Cvtsd2ss);
+			node.ReplaceInstruction(X86.Cvtsd2ss);
 		}
 
 		/// <summary>
-		/// Visitation function for FloatingPointToIntegerConversionInstruction.
+		/// Visitation function for ConversionFloatR8ToInteger.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ConversionFloatR8ToInteger(Context context)
+		/// <param name="node">The node.</param>
+		private void ConversionFloatR8ToInteger(InstructionNode node)
 		{
-			Debug.Assert(context.Result.Type.IsI1 || context.Result.Type.IsI2 || context.Result.Type.IsI4);
-
-			context.ReplaceInstruction(X86.Cvttsd2si);
+			Debug.Assert(node.Result.Type.IsI1 || node.Result.Type.IsI2 || node.Result.Type.IsI4);
+			node.ReplaceInstruction(X86.Cvttsd2si);
 		}
 
 		/// <summary>
-		/// Visitation function for IntegerToFloatR4Conversion.
+		/// Visitation function for ConversionIntegerToFloatR4.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ConversionIntegerToFloatR4(Context context)
+		/// <param name="node">The node.</param>
+		private void ConversionIntegerToFloatR4(InstructionNode node)
 		{
-			Debug.Assert(context.Result.IsR4);
-			context.ReplaceInstruction(X86.Cvtsi2ss);
+			Debug.Assert(node.Result.IsR4);
+			node.ReplaceInstruction(X86.Cvtsi2ss);
 		}
 
 		/// <summary>
-		/// Visitation function for IntegerToFloatR8Conversion.
+		/// Visitation function for ConversionIntegerToFloatR8.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ConversionIntegerToFloatR8(Context context)
+		/// <param name="node">The node.</param>
+		private void ConversionIntegerToFloatR8(InstructionNode node)
 		{
-			Debug.Assert(context.Result.IsR8);
-			context.ReplaceInstruction(X86.Cvtsi2sd);
+			Debug.Assert(node.Result.IsR8);
+			node.ReplaceInstruction(X86.Cvtsi2sd);
 		}
 
 		/// <summary>
-		/// Visitation function for DivFloat.
+		/// Visitation function for DivFloatR4.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void DivFloatR4(Context context)
+		/// <param name="node">The node.</param>
+		private void DivFloatR4(InstructionNode node)
 		{
-			Debug.Assert(context.Result.IsR4);
-			Debug.Assert(context.Operand1.IsR4);
+			Debug.Assert(node.Result.IsR4);
+			Debug.Assert(node.Operand1.IsR4);
 
-			context.ReplaceInstruction(X86.Divss);
-			context.Size = InstructionSize.Size32;
+			node.ReplaceInstruction(X86.Divss, InstructionSize.Size32);
 		}
 
 		/// <summary>
-		/// Visitation function for DivFloat.
+		/// Visitation function for DivFloatR8.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void DivFloatR8(Context context)
+		/// <param name="node">The node.</param>
+		private void DivFloatR8(InstructionNode node)
 		{
-			Debug.Assert(context.Result.IsR8);
-			Debug.Assert(context.Operand1.IsR8);
+			Debug.Assert(node.Result.IsR8);
+			Debug.Assert(node.Operand1.IsR8);
 
-			context.ReplaceInstruction(X86.Divsd);
-			context.Size = InstructionSize.Size32;
+			node.ReplaceInstruction(X86.Divsd, InstructionSize.Size32);
 		}
 
 		/// <summary>
@@ -444,7 +435,7 @@ namespace Mosa.Platform.x86.Stages
 						//	mov	eax, 0
 
 						var newBlocks = CreateNewBlockContexts(2);
-						Context nextBlock = Split(context);
+						var nextBlock = Split(context);
 
 						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(TypeSystem, 1));
 						context.AppendInstruction(instruction, size, null, left, right);
@@ -469,7 +460,7 @@ namespace Mosa.Platform.x86.Stages
 						//L5:
 
 						var newBlocks = CreateNewBlockContexts(1);
-						Context nextBlock = Split(context);
+						var nextBlock = Split(context);
 
 						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(TypeSystem, 1));
 						context.AppendInstruction(instruction, size, null, left, right);
@@ -533,101 +524,103 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for JmpInstruction.
+		/// Visitation function for JmpInstruction instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void Jmp(Context context)
+		private void Jmp(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Jmp);
+			node.ReplaceInstruction(X86.Jmp);
 		}
 
-		private void LoadParameterFloatR4(Context context)
+		private void LoadParameterFloatR4(InstructionNode node)
 		{
-			Debug.Assert(context.Result.IsR4);
+			Debug.Assert(node.Result.IsR4);
 
-			context.SetInstruction(X86.MovssLoad, context.Size, context.Result, StackFrame, context.Operand1);
+			node.SetInstruction(X86.MovssLoad, node.Size, node.Result, StackFrame, node.Operand1);
 		}
 
-		private void LoadParameterFloatR8(Context context)
+		private void LoadParameterFloatR8(InstructionNode node)
 		{
-			Debug.Assert(context.Result.IsR8);
+			Debug.Assert(node.Result.IsR8);
 
-			context.SetInstruction(X86.MovsdLoad, context.Size, context.Result, StackFrame, context.Operand1);
+			node.SetInstruction(X86.MovsdLoad, node.Size, node.Result, StackFrame, node.Operand1);
 		}
 
-		private void LoadParameterInteger(Context context)
+		private void LoadParameterInteger(InstructionNode node)
 		{
-			Debug.Assert(!context.Result.IsR4);
-			Debug.Assert(!context.Result.IsR8);
+			Debug.Assert(!node.Result.IsR4);
+			Debug.Assert(!node.Result.IsR8);
 
-			context.SetInstruction(X86.MovLoad, context.Size, context.Result, StackFrame, context.Operand1);
+			node.SetInstruction(X86.MovLoad, node.Size, node.Result, StackFrame, node.Operand1);
 		}
 
-		private void LoadParameterSignExtended(Context context)
+		private void LoadParameterSignExtended(InstructionNode node)
 		{
-			Debug.Assert(context.Size == InstructionSize.Size8 || context.Size == InstructionSize.Size16);
-			context.SetInstruction(X86.MovsxLoad, context.Size, context.Result, StackFrame, context.Operand1);
+			Debug.Assert(node.Size == InstructionSize.Size8 || node.Size == InstructionSize.Size16);
+
+			node.SetInstruction(X86.MovsxLoad, node.Size, node.Result, StackFrame, node.Operand1);
 		}
 
-		private void LoadParameterZeroExtended(Context context)
+		private void LoadParameterZeroExtended(InstructionNode node)
 		{
-			Debug.Assert(context.Size == InstructionSize.Size8 || context.Size == InstructionSize.Size16);
-			context.SetInstruction(X86.MovzxLoad, context.Size, context.Result, StackFrame, context.Operand1);
+			Debug.Assert(node.Size == InstructionSize.Size8 || node.Size == InstructionSize.Size16);
+
+			node.SetInstruction(X86.MovzxLoad, node.Size, node.Result, StackFrame, node.Operand1);
 		}
 
-		private void LoadFloatR4(Context context)
+		private void LoadFloatR4(InstructionNode node)
 		{
-			Debug.Assert(context.Result.IsR4);
+			Debug.Assert(node.Result.IsR4);
 
-			context.SetInstruction(X86.MovssLoad, context.Size, context.Result, context.Operand1, context.Operand2);
+			node.SetInstruction(X86.MovssLoad, node.Size, node.Result, node.Operand1, node.Operand2);
 		}
 
-		private void LoadFloatR8(Context context)
+		private void LoadFloatR8(InstructionNode node)
 		{
-			Debug.Assert(context.Result.IsR8);
+			Debug.Assert(node.Result.IsR8);
 
-			context.SetInstruction(X86.MovsdLoad, context.Size, context.Result, context.Operand1, context.Operand2);
+			node.SetInstruction(X86.MovsdLoad, node.Size, node.Result, node.Operand1, node.Operand2);
 		}
 
-		private void LoadInteger(Context context)
+		private void LoadInteger(InstructionNode node)
 		{
-			Debug.Assert(!context.Result.IsR4);
-			Debug.Assert(!context.Result.IsR8);
+			Debug.Assert(!node.Result.IsR4);
+			Debug.Assert(!node.Result.IsR8);
 
-			context.SetInstruction(X86.MovLoad, context.Size, context.Result, context.Operand1, context.Operand2);
+			node.SetInstruction(X86.MovLoad, node.Size, node.Result, node.Operand1, node.Operand2);
 		}
 
 		/// <summary>
-		/// Visitation function for Load Sign Extended.
+		/// Visitation function for LoadSignExtended instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void LoadSignExtended(Context context)
+		/// <param name="node">The node.</param>
+		private void LoadSignExtended(InstructionNode node)
 		{
-			Debug.Assert(context.Size == InstructionSize.Size8 || context.Size == InstructionSize.Size16);
-			context.SetInstruction(X86.MovsxLoad, context.Size, context.Result, context.Operand1, context.Operand2);
+			Debug.Assert(node.Size == InstructionSize.Size8 || node.Size == InstructionSize.Size16);
+			node.SetInstruction(X86.MovsxLoad, node.Size, node.Result, node.Operand1, node.Operand2);
 		}
 
 		/// <summary>
-		/// Visitation function for Load Zero Extended.
+		/// Visitation function for LoadZeroExtended instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void LoadZeroExtended(Context context)
+		/// <param name="node">The node.</param>
+		private void LoadZeroExtended(InstructionNode node)
 		{
-			Debug.Assert(context.Size == InstructionSize.Size8 || context.Size == InstructionSize.Size16);
-			context.SetInstruction(X86.MovzxLoad, context.Size, context.Result, context.Operand1, context.Operand2);
+			Debug.Assert(node.Size == InstructionSize.Size8 || node.Size == InstructionSize.Size16);
+			node.SetInstruction(X86.MovzxLoad, node.Size, node.Result, node.Operand1, node.Operand2);
 		}
 
 		/// <summary>
-		/// Visitation function for LogicalAndInstruction.
+		/// Visitation function for LogicalAnd instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void LogicalAnd(Context context)
+		/// <param name="node">The node.</param>
+		private void LogicalAnd(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.And);
+			node.ReplaceInstruction(X86.And);
 		}
 
 		/// <summary>
-		/// Visitation function for LogicalNotInstruction.
+		/// Visitation function for LogicalNot instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		private void LogicalNot(Context context)
@@ -645,109 +638,109 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for LogicalOrInstruction.
+		/// Visitation function for LogicalOr instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void LogicalOr(Context context)
+		/// <param name="node">The node.</param>
+		private void LogicalOr(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Or);
+			node.ReplaceInstruction(X86.Or);
 		}
 
 		/// <summary>
-		/// Visitation function for LogicalXorInstruction.
+		/// Visitation function for LogicalXor instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void LogicalXor(Context context)
+		/// <param name="node">The node.</param>
+		private void LogicalXor(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Xor);
+			node.ReplaceInstruction(X86.Xor);
 		}
 
 		/// <summary>
 		/// Visitation function for MoveFloatR4 instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void MoveFloatR4(Context context)
+		/// <param name="node">The node.</param>
+		private void MoveFloatR4(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Movss);
+			node.ReplaceInstruction(X86.Movss);
 		}
 
 		/// <summary>
 		/// Visitation function for MoveFloatR8 instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void MoveFloatR8(Context context)
+		/// <param name="node">The node.</param>
+		private void MoveFloatR8(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Movsd);
+			node.ReplaceInstruction(X86.Movsd);
 		}
 
 		/// <summary>
 		/// Visitation function for MoveInteger instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void MoveInteger(Context context)
+		/// <param name="node">The node.</param>
+		private void MoveInteger(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Mov);
+			node.ReplaceInstruction(X86.Mov);
 		}
 
 		/// <summary>
 		/// Visitation function for MulFloat.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void MulFloatR4(Context context)
+		/// <param name="node">The node.</param>
+		private void MulFloatR4(InstructionNode node)
 		{
-			Debug.Assert(context.Result.IsR4);
-			Debug.Assert(context.Operand1.IsR4);
+			Debug.Assert(node.Result.IsR4);
+			Debug.Assert(node.Operand1.IsR4);
 
-			context.ReplaceInstruction(X86.Mulss, InstructionSize.Size32);
+			node.ReplaceInstruction(X86.Mulss, InstructionSize.Size32);
 		}
 
 		/// <summary>
 		/// Visitation function for MulFloat.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void MulFloatR8(Context context)
+		/// <param name="node">The node.</param>
+		private void MulFloatR8(InstructionNode node)
 		{
-			Debug.Assert(context.Result.IsR8);
-			Debug.Assert(context.Operand1.IsR8);
+			Debug.Assert(node.Result.IsR8);
+			Debug.Assert(node.Operand1.IsR8);
 
-			context.ReplaceInstruction(X86.Mulsd, InstructionSize.Size32);
+			node.ReplaceInstruction(X86.Mulsd, InstructionSize.Size32);
 		}
 
 		/// <summary>
 		/// Visitation function for MulSigned.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void MulSigned(Context context)
+		/// <param name="node">The node.</param>
+		private void MulSigned(InstructionNode node)
 		{
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
+			Operand result = node.Result;
+			Operand operand1 = node.Operand1;
+			Operand operand2 = node.Operand2;
 
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			context.SetInstruction2(X86.Mul, v1, result, operand1, operand2);
+			node.SetInstruction2(X86.Mul, v1, result, operand1, operand2);
 		}
 
 		/// <summary>
 		/// Visitation function for MulUnsigned.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void MulUnsigned(Context context)
+		/// <param name="node">The node.</param>
+		private void MulUnsigned(InstructionNode node)
 		{
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
+			Operand result = node.Result;
+			Operand operand1 = node.Operand1;
+			Operand operand2 = node.Operand2;
 
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			context.SetInstruction2(X86.Mul, v1, result, operand1, operand2);
+			node.SetInstruction2(X86.Mul, v1, result, operand1, operand2);
 		}
 
 		/// <summary>
 		/// Visitation function for NopInstruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void Nop(Context context)
+		/// <param name="node">The node.</param>
+		private void Nop(InstructionNode node)
 		{
-			context.SetInstruction(X86.Nop);
+			node.SetInstruction(X86.Nop);
 		}
 
 		/// <summary>
@@ -789,113 +782,111 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Visitation function for Return.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void GotoEpilogue(Context context)
+		/// <param name="node">The node.</param>
+		private void GotoEpilogue(InstructionNode node)
 		{
-			Debug.Assert(context.Operand1 == null);
+			Debug.Assert(node.Operand1 == null);
 
-			context.SetInstruction(X86.Jmp, BasicBlocks.EpilogueBlock);
+			node.SetInstruction(X86.Jmp, BasicBlocks.EpilogueBlock);
 		}
 
 		/// <summary>
 		/// Visitation function for ShiftLeftInstruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ShiftLeft(Context context)
+		/// <param name="node">The node.</param>
+		private void ShiftLeft(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Shl);
+			node.ReplaceInstruction(X86.Shl);
 		}
 
 		/// <summary>
 		/// Visitation function for ShiftRightInstruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ShiftRight(Context context)
+		/// <param name="node">The node.</param>
+		private void ShiftRight(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Shr);
+			node.ReplaceInstruction(X86.Shr);
 		}
 
 		/// <summary>
-		/// Visitation function for SignExtendedMoveInstruction instructions.
+		/// Visitation function for SignExtendedMove instructions.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void SignExtendedMove(Context context)
+		/// <param name="node">The node.</param>
+		private void SignExtendedMove(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Movsx);
+			node.ReplaceInstruction(X86.Movsx);
 		}
 
-		private void StoreFloatR4(Context context)
+		private void StoreFloatR4(InstructionNode node)
 		{
-			context.SetInstruction(X86.MovssStore, context.Size, null, context.Operand1, context.Operand2, context.Operand3);
+			node.SetInstruction(X86.MovssStore, node.Size, null, node.Operand1, node.Operand2, node.Operand3);
 		}
 
-		private void StoreFloatR8(Context context)
+		private void StoreFloatR8(InstructionNode node)
 		{
-			context.SetInstruction(X86.MovsdStore, context.Size, null, context.Operand1, context.Operand2, context.Operand3);
+			node.SetInstruction(X86.MovsdStore, node.Size, null, node.Operand1, node.Operand2, node.Operand3);
 		}
 
-		private void StoreInteger(Context context)
+		private void StoreInteger(InstructionNode node)
 		{
-			context.SetInstruction(X86.MovStore, context.Size, null, context.Operand1, context.Operand2, context.Operand3);
+			node.SetInstruction(X86.MovStore, node.Size, null, node.Operand1, node.Operand2, node.Operand3);
 		}
 
-		private void StoreParameterFloatR4(Context context)
+		private void StoreParameterFloatR4(InstructionNode node)
 		{
-			context.SetInstruction(X86.MovssStore, context.Size, null, StackFrame, context.Operand1, context.Operand2);
+			node.SetInstruction(X86.MovssStore, node.Size, null, StackFrame, node.Operand1, node.Operand2);
 		}
 
-		private void StoreParameterFloatR8(Context context)
+		private void StoreParameterFloatR8(InstructionNode node)
 		{
-			context.SetInstruction(X86.MovsdStore, context.Size, null, StackFrame, context.Operand1, context.Operand2);
+			node.SetInstruction(X86.MovsdStore, node.Size, null, StackFrame, node.Operand1, node.Operand2);
 		}
 
-		private void StoreParameterInteger(Context context)
+		private void StoreParameterInteger(InstructionNode node)
 		{
-			context.SetInstruction(X86.MovStore, context.Size, null, StackFrame, context.Operand1, context.Operand2);
-		}
-
-		/// <summary>
-		/// Visitation function for SubFloat.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void SubFloatR4(Context context)
-		{
-			Debug.Assert(context.Result.IsR4);
-			Debug.Assert(context.Operand1.IsR4);
-
-			context.ReplaceInstruction(X86.Subss);
-			context.Size = InstructionSize.Size32;
+			node.SetInstruction(X86.MovStore, node.Size, null, StackFrame, node.Operand1, node.Operand2);
 		}
 
 		/// <summary>
 		/// Visitation function for SubFloat.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void SubFloatR8(Context context)
+		/// <param name="node">The node.</param>
+		private void SubFloatR4(InstructionNode node)
 		{
-			Debug.Assert(context.Result.IsR8);
-			Debug.Assert(context.Operand1.IsR8);
+			Debug.Assert(node.Result.IsR4);
+			Debug.Assert(node.Operand1.IsR4);
 
-			context.ReplaceInstruction(X86.Subsd);
-			context.Size = InstructionSize.Size64;
+			node.ReplaceInstruction(X86.Subss, InstructionSize.Size32);
+		}
+
+		/// <summary>
+		/// Visitation function for SubFloat.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void SubFloatR8(InstructionNode node)
+		{
+			Debug.Assert(node.Result.IsR8);
+			Debug.Assert(node.Operand1.IsR8);
+
+			node.ReplaceInstruction(X86.Subsd, InstructionSize.Size64);
 		}
 
 		/// <summary>
 		/// Visitation function for SubSigned.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void SubSigned(Context context)
+		/// <param name="node">The node.</param>
+		private void SubSigned(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Sub);
+			node.ReplaceInstruction(X86.Sub);
 		}
 
 		/// <summary>
 		/// Visitation function for SubUnsigned.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void SubUnsigned(Context context)
+		/// <param name="node">The node.</param>
+		private void SubUnsigned(InstructionNode node)
 		{
-			context.ReplaceInstruction(X86.Sub);
+			node.ReplaceInstruction(X86.Sub);
 		}
 
 		/// <summary>
@@ -919,12 +910,12 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Visitation function for ZeroExtendedMoveInstruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ZeroExtendedMove(Context context)
+		/// <param name="node">The node.</param>
+		private void ZeroExtendedMove(InstructionNode node)
 		{
-			Debug.Assert(context.Size != InstructionSize.None);
+			Debug.Assert(node.Size != InstructionSize.None);
 
-			context.ReplaceInstruction(X86.Movzx);
+			node.ReplaceInstruction(X86.Movzx);
 		}
 
 		#endregion Visitation Methods

@@ -832,6 +832,12 @@ namespace Mosa.Compiler.Framework
 			Instruction = instruction;
 		}
 
+		public void ReplaceInstruction(BaseInstruction instruction, InstructionSize size)
+		{
+			Instruction = instruction;
+			Size = size;
+		}
+
 		private void ReplaceOperands(Operand target, Operand replacement)
 		{
 			for (int i = 0; i < OperandCount; i++)
