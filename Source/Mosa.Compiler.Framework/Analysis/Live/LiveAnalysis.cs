@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 
 		//private TraceLog trace;
 
-		private TraceLog CreateTrace(string name)
+		private TraceLog CreateTraceLog(string name)
 		{
 			return TraceFactory.CreateTraceLog(name);
 		}
@@ -53,21 +53,6 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			BuildLiveIntervals();
 		}
 
-		private void CreateExtendedBlocks()
-		{
-			ExtendedBlocks = new List<ExtendedBlock2>(BasicBlocks.Count);
-
-			foreach (var block in BasicBlocks)
-			{
-				var extendedBlock = new ExtendedBlock2(block, SlotCount, 0)
-				{
-					Range = new Range(block.First.Offset, block.Last.Offset)
-				};
-
-				ExtendedBlocks.Add(extendedBlock);
-			}
-		}
-
 		public void NumberInstructions()
 		{
 			const int increment = 2;
@@ -91,15 +76,27 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			}
 		}
 
+		private void CreateExtendedBlocks()
+		{
+			ExtendedBlocks = new List<ExtendedBlock2>(BasicBlocks.Count);
+
+			foreach (var block in BasicBlocks)
+			{
+				var extendedBlock = new ExtendedBlock2(block, SlotCount, 0)
+				{
+					Range = new Range(block.First.Offset, block.Last.Offset)
+				};
+
+				ExtendedBlocks.Add(extendedBlock);
+			}
+		}
+
 		private void ComputeLocalLiveSets()
 		{
-			var liveSetTrace = CreateTrace("ComputeLocalLiveSets");
+			var liveSetTrace = CreateTraceLog("ComputeLocalLiveSets");
 
 			foreach (var block in ExtendedBlocks)
 			{
-				if (liveSetTrace.Active)
-					liveSetTrace.Log("Block # " + block.BasicBlock.Sequence.ToString());
-
 				var liveGen = new BitArray(SlotCount, false);
 				var liveKill = new BitArray(SlotCount, false);
 
@@ -109,9 +106,6 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 					{
 						liveKill.Set(s, true);
 					}
-
-					if (liveSetTrace.Active)
-						liveSetTrace.Log("KILL ALL PHYSICAL");
 				}
 
 				for (var node = block.BasicBlock.First; !node.IsBlockEndInstruction; node = node.Next)
@@ -119,39 +113,22 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 					if (node.IsEmpty)
 						continue;
 
-					if (liveSetTrace.Active)
-						liveSetTrace.Log(node.ToString());
-
-					foreach (var index in Environment.GetInput(node))
+					foreach (var index in Environment.GetInputs(node))
 					{
-						//if (liveSetTrace.Active)
-						//	liveSetTrace.Log("INPUT:  " + op);
-
 						if (!liveKill.Get(index))
 						{
 							liveGen.Set(index, true);
-
-							if (liveSetTrace.Active)
-							{
-								liveSetTrace.Log("GEN:  " + index.ToString()/* + " " + op*/);
-							}
 						}
 					}
 
-					foreach (var index in Environment.GetKill(node))
+					foreach (var index in Environment.GetKills(node))
 					{
 						liveKill.Set(index, true);
 					}
 
-					foreach (var index in Environment.GetOutput(node))
+					foreach (var index in Environment.GetOutputs(node))
 					{
-						//if (liveSetTrace.Active)
-						//liveSetTrace.Log("OUTPUT: " + op);
-
 						liveKill.Set(index, true);
-
-						if (liveSetTrace.Active)
-							liveSetTrace.Log("KILL: " + index.ToString() /*+ " " + op*/);
 					}
 				}
 
@@ -161,6 +138,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 
 				if (liveSetTrace.Active)
 				{
+					liveSetTrace.Log("Block #  " + block.BasicBlock.Sequence.ToString());
 					liveSetTrace.Log("GEN:     " + block.LiveGen.ToString2());
 					liveSetTrace.Log("KILL:    " + block.LiveKill.ToString2());
 					liveSetTrace.Log("KILLNOT: " + block.LiveKillNot.ToString2());
@@ -233,12 +211,12 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 					if (node.IsEmpty)
 						continue;
 
-					foreach (var index in Environment.GetKill(node))
+					foreach (var index in Environment.GetKills(node))
 					{
 						LiveRanges[index].Add(index, index + 1);
 					}
 
-					foreach (var index in Environment.GetOutput(node))
+					foreach (var index in Environment.GetOutputs(node))
 					{
 						var liveRange = LiveRanges[index];
 						var first = liveRange.FirstRange;
@@ -255,7 +233,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 						}
 					}
 
-					foreach (var index in Environment.GetInput(node))
+					foreach (var index in Environment.GetInputs(node))
 					{
 						LiveRanges[index].Add(block.Start, index);
 					}

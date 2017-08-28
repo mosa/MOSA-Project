@@ -7,8 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using Mosa.Compiler.Common;
-
-// INCOMPLETE
+using Mosa.Compiler.Framework.Analysis.Live;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -18,6 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 	public class PreciseGCStage : BaseMethodCompilerStage
 	{
 		private TraceLog trace;
+		protected LiveAnalysis LiveAnalysis;
 
 		protected override void Run()
 		{
@@ -25,6 +25,10 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			trace = CreateTraceLog();
+
+			var liveAnalysisGCEnvironment = new LiveAnalysisGCEnvironment(BasicBlocks, Architecture, MethodCompiler.LocalStack);
+
+			LiveAnalysis = new LiveAnalysis(liveAnalysisGCEnvironment, this, true);
 		}
 
 		protected override void Finish()

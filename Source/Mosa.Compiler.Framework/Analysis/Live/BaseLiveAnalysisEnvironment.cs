@@ -11,11 +11,11 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 	{
 		public BasicBlocks BasicBlocks { get; protected set; }
 
-		public abstract IEnumerable<int> GetInput(InstructionNode node);
+		public abstract IEnumerable<int> GetInputs(InstructionNode node);
 
-		public abstract IEnumerable<int> GetOutput(InstructionNode node);
+		public abstract IEnumerable<int> GetOutputs(InstructionNode node);
 
-		public abstract IEnumerable<int> GetKill(InstructionNode node);
+		public abstract IEnumerable<int> GetKills(InstructionNode node);
 
 		public int SlotCount { get; protected set; }
 	}

@@ -8,24 +8,29 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 	/// <summary>
 	/// Register Allocator Environment
 	/// </summary>
-	public class LiveAnalysisGCEnvironment
+	/// <seealso cref="Mosa.Compiler.Framework.Analysis.Live.BaseLiveAnalysisEnvironment" />
+	public class LiveAnalysisGCEnvironment : BaseLiveAnalysisEnvironment
 	{
-		public int IndexCount { get; protected set; }
+		protected Dictionary<Operand, int> stackLookup = new Dictionary<Operand, int>();
+		protected int PhysicalRegisterCount { get; }
 
-		public BasicBlocks BasicBlocks { get; protected set; }
+		public LiveAnalysisGCEnvironment(BasicBlocks basicBlocks, BaseArchitecture architecture, List<Operand> localStack)
+		{
+			BasicBlocks = basicBlocks;
 
-		public int PhysicalRegisterCount { get; set; }
+			PhysicalRegisterCount = architecture.RegisterSet.Length;
 
-		private Dictionary<Operand, int> stackLookup = new Dictionary<Operand, int>();
+			CollectReferenceStackObjects(localStack);
 
-		//protected BaseArchitecture Architecture;
+			SlotCount = PhysicalRegisterCount + stackLookup.Count;
+		}
 
 		protected int GetIndex(Operand operand)
 		{
 			return operand.IsCPURegister ? operand.Register.Index : stackLookup[operand];
 		}
 
-		public IEnumerable<int> GetInputs(InstructionNode node)
+		public override IEnumerable<int> GetInputs(InstructionNode node)
 		{
 			foreach (var operand in node.Operands)
 			{
@@ -39,7 +44,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			}
 		}
 
-		public IEnumerable<int> GetOutput(InstructionNode node)
+		public override IEnumerable<int> GetOutputs(InstructionNode node)
 		{
 			foreach (var operand in node.Results)
 			{
@@ -53,7 +58,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			}
 		}
 
-		public IEnumerable<int> GetKill(InstructionNode node)
+		public override IEnumerable<int> GetKills(InstructionNode node)
 		{
 			foreach (var operand in node.Operands)
 			{
@@ -65,7 +70,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 
 			if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 			{
-				for (int reg = 0; reg < PhysicalRegisterCount; reg++)
+				for (int reg = 0; reg < SlotCount; reg++)
 				{
 					yield return reg;
 				}
@@ -74,7 +79,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			{
 				var except = node.Operand1.Register.Index;
 
-				for (int reg = 0; reg < PhysicalRegisterCount; reg++)
+				for (int reg = 0; reg < SlotCount; reg++)
 				{
 					if (reg != except)
 					{
@@ -102,18 +107,6 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			}
 
 			return false;
-		}
-
-		public LiveAnalysisGCEnvironment(BasicBlocks basicBlocks, BaseArchitecture architecture, List<Operand> localStack)
-		{
-			BasicBlocks = basicBlocks;
-
-			//Architecture = architecture;
-			PhysicalRegisterCount = architecture.RegisterSet.Length;
-
-			CollectReferenceStackObjects(localStack);
-
-			IndexCount = PhysicalRegisterCount + stackLookup.Count;
 		}
 
 		protected void CollectReferenceStackObjects(IList<Operand> localStack)

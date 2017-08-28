@@ -8,20 +8,22 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 	/// <summary>
 	/// Register Allocator Environment
 	/// </summary>
-	public class RegisterAllocatorEnvironment
+	public class RegisterAllocatorEnvironment : BaseLiveAnalysisEnvironment
 	{
-		public int IndexCount { get; protected set; }
+		protected int PhysicalRegisterCount { get; set; }
 
-		public BasicBlocks BasicBlocks { get; protected set; }
-
-		public int PhysicalRegisterCount { get; set; }
+		public RegisterAllocatorEnvironment(BasicBlocks basicBlocks, BaseArchitecture architecture)
+		{
+			BasicBlocks = basicBlocks;
+			PhysicalRegisterCount = architecture.RegisterSet.Length;
+		}
 
 		protected int GetIndex(Operand operand)
 		{
 			return (operand.IsCPURegister) ? (operand.Register.Index) : (operand.Index + PhysicalRegisterCount - 1);
 		}
 
-		public IEnumerable<int> GetInputs(InstructionNode node)
+		public override IEnumerable<int> GetInputs(InstructionNode node)
 		{
 			foreach (var operand in node.Operands)
 			{
@@ -35,7 +37,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			}
 		}
 
-		public IEnumerable<int> GetOutput(InstructionNode node)
+		public override IEnumerable<int> GetOutputs(InstructionNode node)
 		{
 			foreach (var operand in node.Results)
 			{
@@ -49,7 +51,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			}
 		}
 
-		public IEnumerable<int> GetKill(InstructionNode node)
+		public override IEnumerable<int> GetKills(InstructionNode node)
 		{
 			if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 			{
@@ -70,12 +72,6 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 					}
 				}
 			}
-		}
-
-		public RegisterAllocatorEnvironment(BasicBlocks basicBlocks, BaseArchitecture architecture)
-		{
-			BasicBlocks = basicBlocks;
-			PhysicalRegisterCount = architecture.RegisterSet.Length;
 		}
 	}
 }
