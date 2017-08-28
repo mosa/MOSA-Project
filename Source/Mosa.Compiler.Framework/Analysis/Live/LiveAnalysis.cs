@@ -16,16 +16,16 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 	/// </summary>
 	public class LiveAnalysis
 	{
-		private BaseLiveAnalysisEnvironment Environment;
-		private BasicBlocks BasicBlocks { get { return Environment.BasicBlocks; } }
-		private int SlotCount { get { return Environment.SlotCount; } }
+		protected BaseLiveAnalysisEnvironment Environment;
+		protected BasicBlocks BasicBlocks { get { return Environment.BasicBlocks; } }
+		protected int IndexCount { get { return Environment.IndexCount; } }
 
-		private readonly ITraceFactory TraceFactory;
+		protected readonly ITraceFactory TraceFactory;
 
-		private List<ExtendedBlock2> ExtendedBlocks;
-		private LiveRanges[] LiveRanges;
+		protected List<ExtendedBlock2> ExtendedBlocks;
+		public LiveRanges[] LiveRanges; // protected
 
-		private TraceLog CreateTraceLog(string name)
+		protected TraceLog CreateTraceLog(string name)
 		{
 			return TraceFactory.CreateTraceLog(name);
 		}
@@ -35,17 +35,19 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			Environment = environment;
 			TraceFactory = traceFactory;
 
-			LiveRanges = new LiveRanges[SlotCount];
+			LiveRanges = new LiveRanges[IndexCount];
 
-			for (int i = 0; i < SlotCount; i++)
+			for (int i = 0; i < IndexCount; i++)
 			{
-				LiveRanges[i] = new Live.LiveRanges();
+				LiveRanges[i] = new LiveRanges();
 			}
 
 			if (numberInstructions)
 			{
 				NumberInstructions();
 			}
+
+			TraceNumberInstructions();
 
 			CreateExtendedBlocks();
 
@@ -56,7 +58,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			BuildLiveIntervals();
 		}
 
-		public void NumberInstructions()
+		protected void NumberInstructions()
 		{
 			const int increment = 2;
 			int index = increment;
@@ -79,13 +81,42 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			}
 		}
 
-		private void CreateExtendedBlocks()
+		private void TraceNumberInstructions()
+		{
+			var numberTrace = CreateTraceLog("InstructionNumber");
+
+			if (!numberTrace.Active)
+				return;
+
+			foreach (var block in BasicBlocks)
+			{
+				for (var node = block.First; ; node = node.Next)
+				{
+					if (node.IsEmpty)
+						continue;
+
+					string log = node.Offset.ToString() + " = " + node;
+
+					if (node.IsBlockStartInstruction)
+					{
+						log = log + " # " + block;
+					}
+
+					numberTrace.Log(log);
+
+					if (node.IsBlockEndInstruction)
+						break;
+				}
+			}
+		}
+
+		protected void CreateExtendedBlocks()
 		{
 			ExtendedBlocks = new List<ExtendedBlock2>(BasicBlocks.Count);
 
 			foreach (var block in BasicBlocks)
 			{
-				var extendedBlock = new ExtendedBlock2(block, SlotCount, 0)
+				var extendedBlock = new ExtendedBlock2(block, IndexCount, 0)
 				{
 					Range = new Range(block.First.Offset, block.Last.Offset)
 				};
@@ -94,18 +125,18 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			}
 		}
 
-		private void ComputeLocalLiveSets()
+		protected void ComputeLocalLiveSets()
 		{
 			var liveSetTrace = CreateTraceLog("ComputeLocalLiveSets");
 
 			foreach (var block in ExtendedBlocks)
 			{
-				var liveGen = new BitArray(SlotCount, false);
-				var liveKill = new BitArray(SlotCount, false);
+				var liveGen = new BitArray(IndexCount, false);
+				var liveKill = new BitArray(IndexCount, false);
 
 				if (BasicBlocks.HeadBlocks.Contains(block.BasicBlock))
 				{
-					for (int s = 0; s < SlotCount; s++)
+					for (int s = 0; s < IndexCount; s++)
 					{
 						liveKill.Set(s, true);
 					}
@@ -150,7 +181,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			}
 		}
 
-		private void ComputeGlobalLiveSets()
+		protected void ComputeGlobalLiveSets()
 		{
 			bool changed = true;
 
@@ -162,7 +193,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 				{
 					var block = ExtendedBlocks[i];
 
-					var liveOut = new BitArray(SlotCount);
+					var liveOut = new BitArray(IndexCount);
 
 					foreach (var next in block.BasicBlock.NextBlocks)
 					{
@@ -188,13 +219,13 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			}
 		}
 
-		private void BuildLiveIntervals()
+		protected void BuildLiveIntervals()
 		{
 			for (int b = BasicBlocks.Count - 1; b >= 0; b--)
 			{
 				var block = ExtendedBlocks[b];
 
-				for (int r = 0; r < SlotCount; r++)
+				for (int r = 0; r < IndexCount; r++)
 				{
 					if (!block.LiveOut.Get(r))
 						continue;

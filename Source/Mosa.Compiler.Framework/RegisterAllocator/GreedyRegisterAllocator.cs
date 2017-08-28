@@ -464,7 +464,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void TraceMoveHints()
 		{
-			var moveHintTrace = CreateTrace("MoveHints");
+			var moveHintTrace = CreateTraceLog("MoveHints");
 
 			if (!moveHintTrace.Active)
 				return;

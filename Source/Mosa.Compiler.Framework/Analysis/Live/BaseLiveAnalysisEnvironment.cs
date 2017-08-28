@@ -17,6 +17,6 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 
 		public abstract IEnumerable<int> GetKills(InstructionNode node);
 
-		public int SlotCount { get; protected set; }
+		public int IndexCount { get; protected set; }
 	}
 }

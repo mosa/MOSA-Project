@@ -30,6 +30,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 			LiveAnalysis = new LiveAnalysis(liveAnalysisGCEnvironment, this, true);
 
+			if (trace.Active)
+			{
+				for (int i = 0; i < LiveAnalysis.LiveRanges.Length; i++)
+				{
+					var range = LiveAnalysis.LiveRanges[i];
+
+					trace.Log(i.ToString() + ": " + range);
+				}
+			}
+
 			return;
 		}
 

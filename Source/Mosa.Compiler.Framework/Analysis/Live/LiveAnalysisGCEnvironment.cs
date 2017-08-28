@@ -12,17 +12,20 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 	public class LiveAnalysisGCEnvironment : BaseLiveAnalysisEnvironment
 	{
 		protected Dictionary<Operand, int> stackLookup = new Dictionary<Operand, int>();
+		protected Dictionary<int, Operand> stackLookupReverse = new Dictionary<int, Operand>();
 		protected int PhysicalRegisterCount { get; }
+		protected bool[] StackLocalReference;
 
 		public LiveAnalysisGCEnvironment(BasicBlocks basicBlocks, BaseArchitecture architecture, List<Operand> localStack)
 		{
 			BasicBlocks = basicBlocks;
+			StackLocalReference = new bool[localStack.Count];
 
 			PhysicalRegisterCount = architecture.RegisterSet.Length;
 
 			CollectReferenceStackObjects(localStack);
 
-			SlotCount = PhysicalRegisterCount + stackLookup.Count;
+			IndexCount = PhysicalRegisterCount + stackLookup.Count;
 		}
 
 		protected int GetIndex(Operand operand)
@@ -30,14 +33,28 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			return operand.IsCPURegister ? operand.Register.Index : stackLookup[operand];
 		}
 
+		protected bool ContainsObjectReference(Operand operand)
+		{
+			if (operand.IsCPURegister && ContainsReference(operand))
+			{
+				return true;
+			}
+			else if (operand.IsStackLocal && StackLocalReference[operand.Index])
+			{
+				return true;
+			}
+
+			return false;
+		}
+
 		public override IEnumerable<int> GetInputs(InstructionNode node)
 		{
+			if (node.Instruction == IRInstruction.KillAll || node.Instruction == IRInstruction.KillAllExcept || node.Instruction == IRInstruction.Kill)
+				yield break;
+
 			foreach (var operand in node.Operands)
 			{
-				if (!(operand.IsCPURegister || operand.IsStackLocal))
-					continue;
-
-				if (ContainsReference(operand))
+				if (ContainsObjectReference(operand))
 				{
 					yield return GetIndex(operand);
 				}
@@ -46,12 +63,12 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 
 		public override IEnumerable<int> GetOutputs(InstructionNode node)
 		{
+			if (node.Instruction == IRInstruction.KillAll || node.Instruction == IRInstruction.KillAllExcept || node.Instruction == IRInstruction.Kill)
+				yield break;
+
 			foreach (var operand in node.Results)
 			{
-				if (!(operand.IsCPURegister || operand.IsStackLocal))
-					continue;
-
-				if (ContainsReference(operand))
+				if (ContainsObjectReference(operand))
 				{
 					yield return GetIndex(operand);
 				}
@@ -60,39 +77,48 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 
 		public override IEnumerable<int> GetKills(InstructionNode node)
 		{
-			foreach (var operand in node.Operands)
-			{
-				if (!(operand.IsCPURegister || operand.IsStackLocal))
-					continue;
-
-				if (ContainsReference(operand))
-				{
-					yield return GetIndex(operand);
-				}
-			}
-
 			if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 			{
-				for (int reg = 0; reg < SlotCount; reg++)
+				for (int reg = 0; reg < IndexCount; reg++)
 				{
 					yield return reg;
 				}
+				yield break;
 			}
 			else if (node.Instruction == IRInstruction.KillAllExcept)
 			{
 				var except = node.Operand1.Register.Index;
 
-				for (int reg = 0; reg < SlotCount; reg++)
+				for (int reg = 0; reg < IndexCount; reg++)
 				{
 					if (reg != except)
 					{
 						yield return reg;
 					}
 				}
+				yield break;
+			}
+			else if (node.Instruction == IRInstruction.Kill)
+			{
+				foreach (var op in node.Operands)
+				{
+					yield return op.Register.Index;
+				}
+				yield break;
+			}
+
+			foreach (var operand in node.Operands)
+			{
+				if (operand.IsCPURegister && !ContainsReference(operand))
+				{
+					yield return GetIndex(operand);
+				}
+
+				// IsStackLocal ???
 			}
 		}
 
-		protected bool ContainsReference(Operand operand)
+		public bool ContainsReference(Operand operand)
 		{
 			if (operand.Type.IsReferenceType || operand.Type.IsManagedPointer)
 				return true;
@@ -116,8 +142,13 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 		{
 			foreach (var local in localStack)
 			{
-				if (ContainsReference(local))
+				var containsRefernce = ContainsReference(local);
+
+				StackLocalReference[local.Index] = containsRefernce;
+
+				if (containsRefernce)
 				{
+					stackLookupReverse.Add(PhysicalRegisterCount + stackLookup.Count, local);
 					stackLookup.Add(local, PhysicalRegisterCount + stackLookup.Count);
 				}
 			}
