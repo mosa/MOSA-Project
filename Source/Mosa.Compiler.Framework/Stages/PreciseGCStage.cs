@@ -29,6 +29,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var liveAnalysisGCEnvironment = new LiveAnalysisGCEnvironment(BasicBlocks, Architecture, MethodCompiler.LocalStack);
 
 			LiveAnalysis = new LiveAnalysis(liveAnalysisGCEnvironment, this, true);
+
+			return;
 		}
 
 		protected override void Finish()

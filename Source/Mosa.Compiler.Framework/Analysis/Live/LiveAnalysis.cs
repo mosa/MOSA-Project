@@ -25,8 +25,6 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 		private List<ExtendedBlock2> ExtendedBlocks;
 		private LiveRanges[] LiveRanges;
 
-		//private TraceLog trace;
-
 		private TraceLog CreateTraceLog(string name)
 		{
 			return TraceFactory.CreateTraceLog(name);
@@ -38,6 +36,11 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			TraceFactory = traceFactory;
 
 			LiveRanges = new LiveRanges[SlotCount];
+
+			for (int i = 0; i < SlotCount; i++)
+			{
+				LiveRanges[i] = new Live.LiveRanges();
+			}
 
 			if (numberInstructions)
 			{
@@ -213,7 +216,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 
 					foreach (var index in Environment.GetKills(node))
 					{
-						LiveRanges[index].Add(index, index + 1);
+						LiveRanges[index].Add(node.Offset, node.Offset + 1);
 					}
 
 					foreach (var index in Environment.GetOutputs(node))
@@ -223,19 +226,19 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 
 						if (first != null)
 						{
-							liveRange.FirstRange = new Range(index, first.End);
+							liveRange.FirstRange = new Range(node.Offset, first.End);
 						}
 						else
 						{
 							// This is necesary to handled a result that is never used!
 							// This is common with instructions with more than one result.
-							liveRange.Add(index, index + 1);
+							liveRange.Add(node.Offset, node.Offset + 1);
 						}
 					}
 
 					foreach (var index in Environment.GetInputs(node))
 					{
-						LiveRanges[index].Add(block.Start, index);
+						LiveRanges[index].Add(block.Start, node.Offset);
 					}
 				}
 			}

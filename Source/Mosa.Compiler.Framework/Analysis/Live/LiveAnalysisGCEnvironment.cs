@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 		{
 			foreach (var operand in node.Operands)
 			{
-				if (operand.IsCPURegister && operand.Register.IsSpecial)
+				if (!(operand.IsCPURegister || operand.IsStackLocal))
 					continue;
 
 				if (ContainsReference(operand))
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 		{
 			foreach (var operand in node.Results)
 			{
-				if (operand.IsCPURegister && operand.Register.IsSpecial)
+				if (!(operand.IsCPURegister || operand.IsStackLocal))
 					continue;
 
 				if (ContainsReference(operand))
@@ -62,7 +62,10 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 		{
 			foreach (var operand in node.Operands)
 			{
-				if (operand.IsCPURegister && operand.Register.IsSpecial || !ContainsReference(operand))
+				if (!(operand.IsCPURegister || operand.IsStackLocal))
+					continue;
+
+				if (ContainsReference(operand))
 				{
 					yield return GetIndex(operand);
 				}
@@ -109,7 +112,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			return false;
 		}
 
-		protected void CollectReferenceStackObjects(IList<Operand> localStack)
+		protected void CollectReferenceStackObjects(List<Operand> localStack)
 		{
 			foreach (var local in localStack)
 			{
