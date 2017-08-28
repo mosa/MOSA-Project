@@ -1,14 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.RegisterAllocator;
-using Mosa.Compiler.Trace;
-using System.Collections;
 using System.Collections.Generic;
-using System;
-using Mosa.Compiler.Common;
 
-namespace Mosa.Compiler.Framework.Analysis
+namespace Mosa.Compiler.Framework.Analysis.Live
 {
 	/// <summary>
 	/// BaseLiveAnalysisEnvironment
@@ -23,6 +17,6 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		public abstract IEnumerable<int> GetKill(InstructionNode node);
 
-		public int IndexCount { get; protected set; }
+		public int SlotCount { get; protected set; }
 	}
 }
