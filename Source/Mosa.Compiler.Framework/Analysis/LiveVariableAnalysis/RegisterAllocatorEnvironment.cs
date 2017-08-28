@@ -3,12 +3,12 @@
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Analysis.Live
+namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 {
 	/// <summary>
 	/// Register Allocator Environment
 	/// </summary>
-	public class RegisterAllocatorEnvironment : BaseLiveAnalysisEnvironment
+	public class RegisterAllocatorEnvironment : BaseLivenessAnalysisEnvironment
 	{
 		protected int PhysicalRegisterCount { get; set; }
 

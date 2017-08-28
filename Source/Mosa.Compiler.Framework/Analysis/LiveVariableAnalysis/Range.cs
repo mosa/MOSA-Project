@@ -2,9 +2,9 @@
 
 using System.Diagnostics;
 
-namespace Mosa.Compiler.Framework.Analysis.Live
+namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 {
-	public class Range
+	public struct Range
 	{
 		public int Start { get; }
 

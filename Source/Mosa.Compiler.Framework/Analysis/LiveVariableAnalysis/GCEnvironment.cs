@@ -3,20 +3,20 @@
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Analysis.Live
+namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 {
 	/// <summary>
 	/// Register Allocator Environment
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.Analysis.Live.BaseLiveAnalysisEnvironment" />
-	public class LiveAnalysisGCEnvironment : BaseLiveAnalysisEnvironment
+	/// <seealso cref="Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis .BaseLivenessAnalysisEnvironment" />
+	public class GCEnvironment : BaseLivenessAnalysisEnvironment
 	{
 		protected Dictionary<Operand, int> stackLookup = new Dictionary<Operand, int>();
 		protected Dictionary<int, Operand> stackLookupReverse = new Dictionary<int, Operand>();
 		protected int PhysicalRegisterCount { get; }
 		protected bool[] StackLocalReference;
 
-		public LiveAnalysisGCEnvironment(BasicBlocks basicBlocks, BaseArchitecture architecture, List<Operand> localStack)
+		public GCEnvironment(BasicBlocks basicBlocks, BaseArchitecture architecture, List<Operand> localStack)
 		{
 			BasicBlocks = basicBlocks;
 			StackLocalReference = new bool[localStack.Count];

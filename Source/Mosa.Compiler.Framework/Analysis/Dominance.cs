@@ -56,11 +56,6 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
-		public void Clear()
-		{
-			blockAnalysis.Clear();
-		}
-
 		#endregion Members
 	}
 }

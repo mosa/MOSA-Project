@@ -10,9 +10,6 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// Performs dominance calculations on basic blocks.
 	/// </summary>
 	/// <remarks>
-	/// The stage exposes the IDominanceProvider interface for other compilation stages to allow
-	/// them to use the calculated dominance properties.
-	/// <para/>
 	/// The implementation is based on "A Simple, Fast Dominance Algorithm" by Keith D. Cooper,
 	/// Timothy J. Harvey, and Ken Kennedy, Rice University in Houston, Texas, USA.
 	/// </remarks>

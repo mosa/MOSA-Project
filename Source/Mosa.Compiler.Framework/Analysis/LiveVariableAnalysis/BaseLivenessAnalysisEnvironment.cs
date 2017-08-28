@@ -2,12 +2,12 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Analysis.Live
+namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 {
 	/// <summary>
 	/// BaseLiveAnalysisEnvironment
 	/// </summary>
-	public abstract class BaseLiveAnalysisEnvironment
+	public abstract class BaseLivenessAnalysisEnvironment
 	{
 		public BasicBlocks BasicBlocks { get; protected set; }
 

@@ -2,7 +2,7 @@
 
 using System.Collections;
 
-namespace Mosa.Compiler.Framework.Analysis.Live
+namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 {
 	public sealed class ExtendedBlock2
 	{

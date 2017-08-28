@@ -80,12 +80,12 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analysis\Live\ExtendedBlock2.cs" />
-    <Compile Include="Analysis\Live\Range.cs" />
-    <Compile Include="Analysis\Live\LiveAnalysisRegisterAllocatorEnvironment.cs" />
-    <Compile Include="Analysis\Live\LiveAnalysisGCEnvironment.cs" />
-    <Compile Include="Analysis\Live\BaseLiveAnalysisEnvironment.cs" />
-    <Compile Include="Analysis\Live\LiveRanges.cs" />
+    <Compile Include="Analysis\LiveVariableAnalysis\ExtendedBlock2.cs" />
+    <Compile Include="Analysis\LiveVariableAnalysis\Range.cs" />
+    <Compile Include="Analysis\LiveVariableAnalysis\RegisterAllocatorEnvironment.cs" />
+    <Compile Include="Analysis\LiveVariableAnalysis\GCEnvironment.cs" />
+    <Compile Include="Analysis\LiveVariableAnalysis\BaseLivenessAnalysisEnvironment.cs" />
+    <Compile Include="Analysis\LiveVariableAnalysis\LiveRanges.cs" />
     <Compile Include="Analysis\SparseConditionalConstantPropagation.cs" />
     <Compile Include="Analysis\NaturalBlockOrder.cs" />
     <Compile Include="Analysis\ProtectedRegion.cs" />
@@ -220,7 +220,7 @@
     <Compile Include="Stages\DevirtualizeCallStage.cs" />
     <Compile Include="Stages\CallStage.cs" />
     <Compile Include="Stages\LowerIRStage.cs" />
-    <Compile Include="Analysis\Live\LiveAnalysis.cs" />
+    <Compile Include="Analysis\LiveVariableAnalysis\LivenessAnalysis.cs" />
     <Compile Include="Stages\PreciseGCStage.cs" />
     <Compile Include="Stages\GraphVizStage.cs" />
     <Compile Include="Stages\ExceptionPrologueStage.cs" />

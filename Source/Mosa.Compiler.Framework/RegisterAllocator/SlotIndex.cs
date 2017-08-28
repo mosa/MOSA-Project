@@ -101,10 +101,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is SlotIndex))
+			var o = obj as SlotIndex;
+
+			if (o == null)
 				return false;
 
-			return (obj as SlotIndex).Node == Node;
+			return o.Node == Node;
 		}
 
 		public override int GetHashCode()

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Compiler.Framework.Analysis.Live
+namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 {
 	public sealed class LiveRanges
 	{
@@ -12,9 +12,9 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 
 		public int Count { get { return Ranges.Count; } }
 
-		public Range LastRange { get { return Count == 0 ? null : Ranges[Count - 1]; } }
+		public Range LastRange { get { return Ranges[Count - 1]; } }
 
-		public Range FirstRange { get { return Count == 0 ? null : Ranges[0]; } set { Ranges[0] = value; } }
+		public Range FirstRange { get { return Ranges[0]; } set { Ranges[0] = value; } }
 
 		public void Add(int start, int end)
 		{

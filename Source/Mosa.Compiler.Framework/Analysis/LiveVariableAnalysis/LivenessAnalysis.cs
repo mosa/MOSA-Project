@@ -9,14 +9,14 @@ using System.Diagnostics;
 
 // INCOMPLETE
 
-namespace Mosa.Compiler.Framework.Analysis.Live
+namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 {
 	/// <summary>
 	/// This stage determine were object references are located in code.
 	/// </summary>
-	public class LiveAnalysis
+	public class LivenessAnalysis
 	{
-		protected BaseLiveAnalysisEnvironment Environment;
+		protected BaseLivenessAnalysisEnvironment Environment;
 		protected BasicBlocks BasicBlocks { get { return Environment.BasicBlocks; } }
 		protected int IndexCount { get { return Environment.IndexCount; } }
 
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			return TraceFactory.CreateTraceLog(name);
 		}
 
-		public LiveAnalysis(BaseLiveAnalysisEnvironment environment, ITraceFactory traceFactory, bool numberInstructions)
+		public LivenessAnalysis(BaseLivenessAnalysisEnvironment environment, ITraceFactory traceFactory, bool numberInstructions)
 		{
 			Environment = environment;
 			TraceFactory = traceFactory;
@@ -253,11 +253,10 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 					foreach (var index in Environment.GetOutputs(node))
 					{
 						var liveRange = LiveRanges[index];
-						var first = liveRange.FirstRange;
 
-						if (first != null)
+						if (liveRange.Count != 0)
 						{
-							liveRange.FirstRange = new Range(node.Offset, first.End);
+							liveRange.FirstRange = new Range(node.Offset, liveRange.FirstRange.End);
 						}
 						else
 						{
