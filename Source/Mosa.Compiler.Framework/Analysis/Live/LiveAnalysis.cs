@@ -49,6 +49,8 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 			ComputeLocalLiveSets();
 
 			ComputeLocalLiveSets();
+
+			BuildLiveIntervals();
 		}
 
 		private void CreateExtendedBlocks()
@@ -207,35 +209,22 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 
 		private void BuildLiveIntervals()
 		{
-			var intervalTrace = CreateTrace("BuildLiveIntervals");
-
 			for (int b = BasicBlocks.Count - 1; b >= 0; b--)
 			{
 				var block = ExtendedBlocks[b];
-
-				if (intervalTrace.Active)
-					intervalTrace.Log("Block # " + block.BasicBlock.Sequence.ToString());
 
 				for (int r = 0; r < SlotCount; r++)
 				{
 					if (!block.LiveOut.Get(r))
 						continue;
 
-					var liveRange = LiveRanges[r];
-
 					if (b + 1 != BasicBlocks.Count && ExtendedBlocks[b + 1].LiveIn.Get(r))
 					{
-						if (intervalTrace.Active) intervalTrace.Log("Add (LiveOut) " + liveRange + " : " + block.Start + " destination " + ExtendedBlocks[b + 1].Start);
-						if (intervalTrace.Active) intervalTrace.Log("   Before: " + liveRange);
-						liveRange.Add(block.Start, ExtendedBlocks[b + 1].Start);
-						if (intervalTrace.Active) intervalTrace.Log("    After: " + liveRange);
+						LiveRanges[r].Add(block.Start, ExtendedBlocks[b + 1].Start);
 					}
 					else
 					{
-						if (intervalTrace.Active) intervalTrace.Log("Add (!LiveOut) " + liveRange + " : " + block.Range.Start + " destination " + block.Range.End);
-						if (intervalTrace.Active) intervalTrace.Log("   Before: " + liveRange);
-						liveRange.Add(block.Range);
-						if (intervalTrace.Active) intervalTrace.Log("    After: " + liveRange);
+						LiveRanges[r].Add(block.Range);
 					}
 				}
 
@@ -246,12 +235,7 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 
 					foreach (var index in Environment.GetKill(node))
 					{
-						var register = LiveRanges[index];
-
-						if (intervalTrace.Active) intervalTrace.Log("Add (Call) " + register + " : " + index + " destination " + (index + 1));
-						if (intervalTrace.Active) intervalTrace.Log("   Before: " + register);
-						register.Add(index, index + 1);
-						if (intervalTrace.Active) intervalTrace.Log("    After: " + register);
+						LiveRanges[index].Add(index, index + 1);
 					}
 
 					foreach (var index in Environment.GetOutput(node))
@@ -261,30 +245,19 @@ namespace Mosa.Compiler.Framework.Analysis.Live
 
 						if (first != null)
 						{
-							if (intervalTrace.Active) intervalTrace.Log("Replace First " + liveRange + " : " + index + " destination " + first.End);
-							if (intervalTrace.Active) intervalTrace.Log("   Before: " + liveRange);
 							liveRange.FirstRange = new Range(index, first.End);
-							if (intervalTrace.Active) intervalTrace.Log("    After: " + liveRange);
 						}
 						else
 						{
 							// This is necesary to handled a result that is never used!
 							// This is common with instructions with more than one result.
-							if (intervalTrace.Active) intervalTrace.Log("Add (Unused) " + liveRange + " : " + index + " destination " + index);
-							if (intervalTrace.Active) intervalTrace.Log("   Before: " + liveRange);
 							liveRange.Add(index, index + 1);
-							if (intervalTrace.Active) intervalTrace.Log("    After: " + liveRange);
 						}
 					}
 
 					foreach (var index in Environment.GetInput(node))
 					{
-						var liveRange = LiveRanges[index];
-
-						if (intervalTrace.Active) intervalTrace.Log("Add (normal) " + liveRange + " : " + block.Start + " destination " + index);
-						if (intervalTrace.Active) intervalTrace.Log("   Before: " + liveRange);
-						liveRange.Add(block.Start, index);
-						if (intervalTrace.Active) intervalTrace.Log("    After: " + liveRange);
+						LiveRanges[index].Add(block.Start, index);
 					}
 				}
 			}
