@@ -1,13 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.RegisterAllocator;
-using Mosa.Compiler.Trace;
-using System.Collections;
-using System.Collections.Generic;
-using System;
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis;
+using Mosa.Compiler.Trace;
 
 namespace Mosa.Compiler.Framework.Stages
 {

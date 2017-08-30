@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -14,38 +13,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public class PhiPlacementStage : BaseMethodCompilerStage
 	{
-		/// <summary>
-		/// Phi Placement Strategy
-		/// </summary>
-		public enum PhiPlacementStrategy
-		{
-			Minimal,
-			SemiPruned,
-			Pruned
-		}
-
-		/// <summary>
-		/// The strategy
-		/// </summary>
-		private readonly PhiPlacementStrategy strategy;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PhiPlacementStage"/> class.
-		/// </summary>
-		/// <param name="strategy">The strategy.</param>
-		public PhiPlacementStage(PhiPlacementStrategy strategy)
-		{
-			this.strategy = strategy;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PhiPlacementStage"/> class.
-		/// </summary>
-		public PhiPlacementStage()
-			: this(PhiPlacementStrategy.Minimal)
-		{
-		}
-
 		/// <summary>
 		/// Gets the assignments.
 		/// </summary>
@@ -62,12 +29,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			CollectAssignments();
 
-			switch (strategy)
-			{
-				case PhiPlacementStrategy.Minimal: PlacePhiFunctionsMinimal(); return;
-				case PhiPlacementStrategy.SemiPruned: PlacePhiFunctionsSemiPruned(); return;
-				case PhiPlacementStrategy.Pruned: PlacePhiFunctionsPruned(); return;
-			}
+			PlacePhiFunctionsMinimal();
 		}
 
 		protected override void Finish()
@@ -176,22 +138,6 @@ namespace Mosa.Compiler.Framework.Stages
 					InsertPhiInstruction(n, t.Key);
 				}
 			}
-		}
-
-		/// <summary>
-		/// Places the phi functions semi pruned.
-		/// </summary>
-		private void PlacePhiFunctionsSemiPruned()
-		{
-			throw new NotImplementedException("PhiPlacementStage.PlacePhiFunctionsSemiPruned");
-		}
-
-		/// <summary>
-		/// Places the phi functions pruned.
-		/// </summary>
-		private void PlacePhiFunctionsPruned()
-		{
-			throw new NotImplementedException("PhiPlacementStage.PlacePhiFunctionsSemiPruned");
 		}
 	}
 }

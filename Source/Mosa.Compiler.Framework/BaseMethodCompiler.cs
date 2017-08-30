@@ -220,7 +220,7 @@ namespace Mosa.Compiler.Framework
 			VirtualRegisters = new VirtualRegisters();
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
-			DominanceAnalysis = new Dominance(Compiler.CompilerOptions.DominanceAnalysisFactory, BasicBlocks);
+			DominanceAnalysis = new Dominance(BasicBlocks);
 			PluggedMethod = compiler.PlugSystem.GetPlugMethod(Method);
 			stop = false;
 

@@ -43,6 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Clean up
 			variables = null;
 			counts = null;
+			ssaOperands = null;
 		}
 
 		/// <summary>
@@ -111,7 +112,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="block">The block.</param>
 		/// <param name="dominance">The dominance provider.</param>
-		private void RenameVariables(BasicBlock block, IDominanceAnalysis dominance)
+		private void RenameVariables(BasicBlock block, BaseDominanceAnalysis dominance)
 		{
 			for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 			{

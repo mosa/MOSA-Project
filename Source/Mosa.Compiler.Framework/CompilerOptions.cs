@@ -103,14 +103,6 @@ namespace Mosa.Compiler.Framework
 		public bool EnableStaticAllocations { get; set; }
 
 		/// <summary>
-		/// Gets or sets the dominance analysis factory.
-		/// </summary>
-		/// <value>
-		/// The dominance analysis factory.
-		/// </value>
-		public Func<IDominanceAnalysis> DominanceAnalysisFactory { get; set; }
-
-		/// <summary>
 		/// Gets or sets the block order analysis.
 		/// </summary>
 		/// <value>
@@ -257,7 +249,6 @@ namespace Mosa.Compiler.Framework
 			EnableSparseConditionalConstantPropagation = true;
 			EnableInlinedMethods = true;
 			BaseAddress = 0x00400000;
-			DominanceAnalysisFactory = delegate { return new SimpleFastDominance(); };
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
 			EmitBinary = true;
 			InlinedIRMaximum = 20;
