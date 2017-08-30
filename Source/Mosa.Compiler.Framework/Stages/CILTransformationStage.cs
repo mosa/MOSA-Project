@@ -1219,7 +1219,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var arrayType = result.Type;
 			var elements = node.Operand1;
 
-			GetTypeRequirements(arrayType.ElementType, out int elementSize, out int alignment);
+			var elementSize = GetTypeSize(arrayType.ElementType, false);
 
 			Debug.Assert(elementSize != 0);
 
@@ -1987,7 +1987,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </returns>
 		private Operand CalculateArrayElementOffset(InstructionNode node, MosaType arrayType, Operand index)
 		{
-			GetTypeRequirements(arrayType.ElementType, out int size, out int alignment);
+			var size = GetTypeSize(arrayType.ElementType, false);
 
 			var elementOffset = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var elementSize = Operand.CreateConstant(TypeSystem, size);

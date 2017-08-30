@@ -289,8 +289,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			public override void Dispose()
 			{
 				SignatureName.UpdateType(type);
-				StringBuilder fName = new StringBuilder();
-				StringBuilder sName = new StringBuilder();
+				var fName = new StringBuilder();
+				var sName = new StringBuilder();
 
 				if (type.DeclaringType != null && type.DeclaringType != type.ElementType)
 				{

@@ -35,7 +35,6 @@ namespace Mosa.Tool.Explorer
 
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
-				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
@@ -55,6 +54,7 @@ namespace Mosa.Tool.Explorer
 				new EmptyBlockRemovalStage(),
 				new BlockOrderingStage(),
 				new CodeGenerationStage(compilerOptions.EmitBinary),
+				new PreciseGCStage(),
 				new GraphVizStage(),
 				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null,
 				(compilerOptions.EmitBinary) ? new DisassemblyStage() : null

@@ -529,13 +529,12 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public static Operand CreateConstant(TypeSystem typeSystem, int value)
 		{
-			var operand = new Operand(typeSystem.BuiltIn.I4)
+			return new Operand(typeSystem.BuiltIn.I4)
 			{
 				IsConstant = true,
 				ConstantSignedLongInteger = value,
 				IsResolved = true
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -548,13 +547,12 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public static Operand CreateConstant(TypeSystem typeSystem, long value)
 		{
-			var operand = new Operand(typeSystem.BuiltIn.I8)
+			return new Operand(typeSystem.BuiltIn.I8)
 			{
 				IsConstant = true,
 				ConstantSignedLongInteger = value,
 				IsResolved = true
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -567,13 +565,12 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public static Operand CreateConstant(TypeSystem typeSystem, float value)
 		{
-			var operand = new Operand(typeSystem.BuiltIn.R4)
+			return new Operand(typeSystem.BuiltIn.R4)
 			{
 				IsConstant = true,
 				ConstantSingleFloatingPoint = value,
 				IsResolved = true
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -586,13 +583,12 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public static Operand CreateConstant(TypeSystem typeSystem, double value)
 		{
-			var operand = new Operand(typeSystem.BuiltIn.R8)
+			return new Operand(typeSystem.BuiltIn.R8)
 			{
 				IsConstant = true,
 				ConstantDoubleFloatingPoint = value,
 				IsResolved = true
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -603,12 +599,11 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateCPURegister(MosaType type, Register register)
 		{
-			var operand = new Operand(type)
+			return new Operand(type)
 			{
 				IsCPURegister = true,
 				Register = register
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -620,16 +615,13 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(field.IsStatic);
 
-			var operand = new Operand(field.FieldType)
+			return new Operand(field.FieldType)
 			{
 				IsStaticField = true,
 				Offset = 0,
 				Field = field,
-
-				//operand.IsResolved = true;
 				IsConstant = true
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -678,7 +670,12 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(operand != null);
 
 			operand.SplitParent = longOperand;
-			operand.Index = index;
+
+			if (!longOperand.IsStackLocal)
+			{
+				operand.Index = index;
+			}
+
 			longOperand.Low = operand;
 
 			return operand;
@@ -727,14 +724,19 @@ namespace Mosa.Compiler.Framework
 				operand = new Operand(typeSystem.BuiltIn.U4)
 				{
 					IsConstant = true,
-					IsResolved = true
+					IsResolved = false
 				};
 			}
 
 			Debug.Assert(operand != null);
 
 			operand.SplitParent = longOperand;
-			operand.Index = index;
+
+			if (!longOperand.IsStackLocal)
+			{
+				operand.Index = index;
+			}
+
 			longOperand.High = operand;
 
 			return operand;
@@ -803,14 +805,13 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(!ssa.IsSymbol);
 			Debug.Assert(!ssa.IsStaticField);
 
-			var operand = new Operand(ssa.Type)
+			return new Operand(ssa.Type)
 			{
 				IsVirtualRegister = true,
 				IsSSA = true,
 				SSAParent = ssa,
 				SSAVersion = version
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -822,14 +823,13 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateStackLocal(MosaType type, int index, bool pinned)
 		{
-			var operand = new Operand(type)
+			return new Operand(type)
 			{
 				Index = index,
 				IsStackLocal = true,
 				IsConstant = true,
 				IsPinned = pinned
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -844,7 +844,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(!isThis || (isThis && index == 0));
 
-			var operand = new Operand(type)
+			return new Operand(type)
 			{
 				IsParameter = true,
 				Index = index,
@@ -852,7 +852,6 @@ namespace Mosa.Compiler.Framework
 				Name = name,
 				IsThis = isThis
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -866,14 +865,13 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(data != null);
 
-			var operand = new Operand(typeSystem.BuiltIn.String)
+			return new Operand(typeSystem.BuiltIn.String)
 			{
 				IsSymbol = true,
 				Name = name,
 				StringData = data,
 				IsConstant = true
 			};
-			return operand;
 		}
 
 		/// <summary>
@@ -1142,6 +1140,9 @@ namespace Mosa.Compiler.Framework
 
 		internal void RenameIndex(int index)
 		{
+			Debug.Assert(IsVirtualRegister);
+			Debug.Assert(!IsStackLocal);
+
 			Index = index;
 		}
 

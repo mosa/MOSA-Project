@@ -144,11 +144,6 @@ namespace Mosa.Compiler.Framework
 		public VirtualRegisters VirtualRegisters { get; }
 
 		/// <summary>
-		/// Gets the dominance analysis.
-		/// </summary>
-		public Dominance DominanceAnalysis { get; }
-
-		/// <summary>
 		/// Gets the parameters.
 		/// </summary>
 		public Operand[] Parameters { get; }
@@ -220,7 +215,6 @@ namespace Mosa.Compiler.Framework
 			VirtualRegisters = new VirtualRegisters();
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
-			DominanceAnalysis = new Dominance(Compiler.CompilerOptions.DominanceAnalysisFactory, BasicBlocks);
 			PluggedMethod = compiler.PlugSystem.GetPlugMethod(Method);
 			stop = false;
 
@@ -333,12 +327,10 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var operand in Parameters)
 			{
-				GetTypeRequirements(operand.Type, out int size, out int alignment);
-
 				operand.Offset = offset;
 				operand.IsResolved = true;
 
-				size = Alignment.AlignUp(size, alignment);
+				var size = GetReferenceOrTypeSize(operand.Type, true);
 				offset += size;
 			}
 
@@ -440,16 +432,24 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the type requirements.
+		/// Gets the size of the reference or type.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		/// <param name="size">The size.</param>
-		/// <param name="alignment">The alignment.</param>
-		public void GetTypeRequirements(MosaType type, out int size, out int alignment)
+		/// <param name="aligned">if set to <c>true</c> [aligned].</param>
+		/// <returns></returns>
+		public int GetReferenceOrTypeSize(MosaType type, bool aligned)
 		{
-			alignment = Architecture.NativeAlignment;
-
-			size = type.IsValueType ? TypeLayout.GetTypeSize(type) : alignment;
+			if (type.IsValueType)
+			{
+				if (aligned)
+					return Alignment.AlignUp(TypeLayout.GetTypeSize(type), Architecture.NativeAlignment);
+				else
+					return TypeLayout.GetTypeSize(type);
+			}
+			else
+			{
+				return Architecture.NativeAlignment;
+			}
 		}
 
 		/// <summary>

@@ -433,25 +433,25 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			foreach (var block in BasicBlocks)
 			{
-				for (var context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (context.IsEmpty || context.IsBlockStartInstruction || context.IsBlockEndInstruction)
+					if (node.IsEmpty || node.IsBlockStartInstruction || node.IsBlockEndInstruction)
 						continue;
 
-					if (!Architecture.IsInstructionMove(context.Instruction))
+					if (!Architecture.IsInstructionMove(node.Instruction))
 						continue;
 
-					if (!((context.Result.IsVirtualRegister && context.Operand1.IsVirtualRegister)
-						|| (context.Result.IsVirtualRegister && context.Operand1.IsCPURegister)
-						|| (context.Result.IsCPURegister && context.Operand1.IsVirtualRegister)))
+					if (!((node.Result.IsVirtualRegister && node.Operand1.IsVirtualRegister)
+						|| (node.Result.IsVirtualRegister && node.Operand1.IsCPURegister)
+						|| (node.Result.IsCPURegister && node.Operand1.IsVirtualRegister)))
 					{
 						continue;
 					}
 
-					var from = VirtualRegisters[GetIndex(context.Operand1)];
-					var to = VirtualRegisters[GetIndex(context.Result)];
+					var from = VirtualRegisters[GetIndex(node.Operand1)];
+					var to = VirtualRegisters[GetIndex(node.Result)];
 
-					var slot = new SlotIndex(context);
+					var slot = new SlotIndex(node);
 
 					int factor = (from.IsPhysicalRegister || to.IsPhysicalRegister) ? 150 : 125;
 
@@ -464,7 +464,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void TraceMoveHints()
 		{
-			var moveHintTrace = CreateTrace("MoveHints");
+			var moveHintTrace = CreateTraceLog("MoveHints");
 
 			if (!moveHintTrace.Active)
 				return;

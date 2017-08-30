@@ -2,9 +2,9 @@
 
 using System.Collections;
 
-namespace Mosa.Compiler.Framework.RegisterAllocator
+namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 {
-	public sealed class ExtendedBlock
+	public sealed class ExtendedBlock2
 	{
 		public BasicBlock BasicBlock { get; }
 
@@ -12,11 +12,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int LoopDepth { get; }
 
-		public Interval Interval { get; set; }
+		public Range Range { get; set; }
 
-		public SlotIndex Start { get { return Interval.Start; } }
+		public int Start { get { return Range.Start; } }
 
-		public SlotIndex End { get { return Interval.End; } }
+		public int End { get { return Range.End; } }
 
 		public BitArray LiveGen { get; set; }
 
@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public BitArray LiveKillNot { get; set; }
 
-		public ExtendedBlock(BasicBlock basicBlock, int registerCount, int loopDepth)
+		public ExtendedBlock2(BasicBlock basicBlock, int registerCount, int loopDepth)
 		{
 			BasicBlock = basicBlock;
 			LiveGen = new BitArray(registerCount);
@@ -39,9 +39,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			LoopDepth = loopDepth;
 		}
 
-		public bool Contains(SlotIndex slotIndex)
+		public bool Contains(int index)
 		{
-			return Interval.Contains(slotIndex) || slotIndex == Interval.End;
+			return Range.Contains(index) || index == Range.End;
 		}
 
 		public override string ToString()

@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			VirtualRegisters = new List<VirtualRegister>(RegisterCount);
 			ExtendedBlocks = new List<ExtendedBlock>(basicBlocks.Count);
 
-			Trace = CreateTrace("Main");
+			Trace = CreateTraceLog("Main");
 
 			StackFrameRegister = architecture.StackFrameRegister;
 			StackPointerRegister = architecture.StackPointerRegister;
@@ -98,10 +98,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			KillAll = new List<SlotIndex>();
 		}
 
-		protected TraceLog CreateTrace(string name)
+		protected TraceLog CreateTraceLog(string name)
 		{
-			var sectionTrace = TraceFactory.CreateTraceLog(name);
-			return sectionTrace;
+			return TraceFactory.CreateTraceLog(name);
 		}
 
 		public virtual void Start()
@@ -172,7 +171,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void TraceBlocks()
 		{
-			var extendedBlockTrace = CreateTrace("Extended Blocks");
+			var extendedBlockTrace = CreateTraceLog("Extended Blocks");
 
 			if (!extendedBlockTrace.Active)
 				return;
@@ -189,7 +188,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void TraceLiveIntervals(string stage, bool operand)
 		{
-			var registerTrace = CreateTrace(stage);
+			var registerTrace = CreateTraceLog(stage);
 
 			if (!registerTrace.Active)
 				return;
@@ -320,7 +319,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void TraceNumberInstructions()
 		{
-			var numberTrace = CreateTrace("InstructionNumber");
+			var numberTrace = CreateTraceLog("InstructionNumber");
 
 			if (!numberTrace.Active)
 				return;
@@ -349,7 +348,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void TraceDefAndUseLocations()
 		{
-			var locationTrace = CreateTrace("DefAndUseLocations");
+			var locationTrace = CreateTraceLog("DefAndUseLocations");
 
 			if (!locationTrace.Active)
 				return;
@@ -413,7 +412,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void TraceUsageMap(string stage)
 		{
-			var usageMap = CreateTrace("TraceUsageMap-" + stage);
+			var usageMap = CreateTraceLog("TraceUsageMap-" + stage);
 
 			if (!usageMap.Active)
 				return;
@@ -577,7 +576,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void ComputeLocalLiveSets()
 		{
-			var liveSetTrace = CreateTrace("ComputeLocalLiveSets");
+			var liveSetTrace = CreateTraceLog("ComputeLocalLiveSets");
 
 			foreach (var block in ExtendedBlocks)
 			{
@@ -638,9 +637,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 					if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 					{
-						for (int s = 0; s < PhysicalRegisterCount; s++)
+						for (int reg = 0; reg < PhysicalRegisterCount; reg++)
 						{
-							liveKill.Set(s, true);
+							liveKill.Set(reg, true);
 						}
 
 						if (liveSetTrace.Active)
@@ -650,11 +649,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					{
 						var except = node.Operand1.Register.Index;
 
-						for (int s = 0; s < PhysicalRegisterCount; s++)
+						for (int reg = 0; reg < PhysicalRegisterCount; reg++)
 						{
-							if (s != except)
+							if (reg != except)
 							{
-								liveKill.Set(s, true);
+								liveKill.Set(reg, true);
 							}
 						}
 
@@ -731,7 +730,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void BuildLiveIntervals()
 		{
-			var intervalTrace = CreateTrace("BuildLiveIntervals");
+			var intervalTrace = CreateTraceLog("BuildLiveIntervals");
 
 			for (int b = BasicBlocks.Count - 1; b >= 0; b--)
 			{
@@ -833,7 +832,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						else
 						{
 							// This is necesary to handled a result that is never used!
-							// Common with instructions with more than one result
+							// This is common with instructions with more than one result.
 							if (intervalTrace.Active) intervalTrace.Log("Add (Unused) " + register + " : " + slotIndex + " destination " + slotIndex);
 							if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
 							register.AddLiveInterval(slotIndex, slotIndex.HalfStepForward);
@@ -1289,7 +1288,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected SlotIndex FindCallSiteInInterval(LiveInterval liveInterval)
 		{
-			foreach (SlotIndex slot in KillAll)
+			foreach (var slot in KillAll)
 			{
 				if (liveInterval.Contains(slot))
 					return slot;
@@ -1337,7 +1336,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					foreach (var def in liveInterval.DefPositions)
 					{
-						var context = new Context(def.Index);
+						var context = new Context(def.Node);
 
 						Architecture.InsertStoreInstruction(context, StackFrame, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
 
@@ -1358,12 +1357,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					foreach (var use in liveInterval.UsePositions)
 					{
-						AssignPhysicalRegistersToInstructions(use.Index, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
+						AssignPhysicalRegistersToInstructions(use.Node, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
 					}
 
 					foreach (var def in liveInterval.DefPositions)
 					{
-						AssignPhysicalRegistersToInstructions(def.Index, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
+						AssignPhysicalRegistersToInstructions(def.Node, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
 					}
 				}
 			}
@@ -1394,7 +1393,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected void ResolveDataFlow()
 		{
-			var resolverTrace = CreateTrace("ResolveDataFlow");
+			var resolverTrace = CreateTraceLog("ResolveDataFlow");
 
 			var moveResolvers = new MoveResolver[2, BasicBlocks.Count];
 
@@ -1476,13 +1475,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected void InsertRegisterMoves()
 		{
-			var insertTrace = CreateTrace("InsertRegisterMoves");
+			var insertTrace = CreateTraceLog("InsertRegisterMoves");
 
 			var moves = GetRegisterMoves();
 
 			foreach (var key in moves.Keys)
 			{
-				var moveResolver = new MoveResolver(key.Index, !key.IsOnHalfStepForward, moves[key]);
+				var moveResolver = new MoveResolver(key.Node, !key.IsOnHalfStepForward, moves[key]);
 
 				moveResolver.InsertResolvingMoves(Architecture, StackFrame);
 
@@ -1503,7 +1502,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected MoveKeyedList GetRegisterMoves()
 		{
-			MoveKeyedList keyedList = new MoveKeyedList();
+			var keyedList = new MoveKeyedList();
 
 			// collect edge slot indexes
 			var blockEdges = new Dictionary<SlotIndex, ExtendedBlock>();

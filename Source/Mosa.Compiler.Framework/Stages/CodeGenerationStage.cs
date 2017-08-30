@@ -141,6 +141,8 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 
+				block.Last.Offset = codeEmitter.CurrentPosition;
+
 				BlockEnd(block);
 				generatedBlockCount++;
 			}

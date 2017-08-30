@@ -55,8 +55,14 @@ namespace Mosa.Compiler.Framework
 
 			if (longOperand.Low == null && longOperand.High == null)
 			{
-				virtualRegisters.Add(Operand.CreateLowSplitForLong(typeSystem, longOperand, virtualRegisters.Count + 1));
-				virtualRegisters.Add(Operand.CreateHighSplitForLong(typeSystem, longOperand, virtualRegisters.Count + 1));
+				var low = Operand.CreateLowSplitForLong(typeSystem, longOperand, virtualRegisters.Count + 1);
+				var high = Operand.CreateHighSplitForLong(typeSystem, longOperand, virtualRegisters.Count + 1);
+
+				if (longOperand.IsVirtualRegister)
+				{
+					virtualRegisters.Add(low);
+					virtualRegisters.Add(high);
+				}
 			}
 		}
 
