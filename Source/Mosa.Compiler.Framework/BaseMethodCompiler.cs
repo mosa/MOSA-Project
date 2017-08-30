@@ -144,11 +144,6 @@ namespace Mosa.Compiler.Framework
 		public VirtualRegisters VirtualRegisters { get; }
 
 		/// <summary>
-		/// Gets the dominance analysis.
-		/// </summary>
-		public Dominance DominanceAnalysis { get; }
-
-		/// <summary>
 		/// Gets the parameters.
 		/// </summary>
 		public Operand[] Parameters { get; }
@@ -220,7 +215,6 @@ namespace Mosa.Compiler.Framework
 			VirtualRegisters = new VirtualRegisters();
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
-			DominanceAnalysis = new Dominance(BasicBlocks);
 			PluggedMethod = compiler.PlugSystem.GetPlugMethod(Method);
 			stop = false;
 

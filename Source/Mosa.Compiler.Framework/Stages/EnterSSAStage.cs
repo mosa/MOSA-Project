@@ -19,7 +19,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Dictionary<Operand, Operand[]> ssaOperands = new Dictionary<Operand, Operand[]>();
 
-		private Dictionary<Operand, List<BasicBlock>> Assignments { get; } = new Dictionary<Operand, List<BasicBlock>>();
+		private Dictionary<BasicBlock, BaseDominanceAnalysis> blockAnalysis = new Dictionary<BasicBlock, BaseDominanceAnalysis>();
+
+		private Dictionary<Operand, List<BasicBlock>> assignments = new Dictionary<Operand, List<BasicBlock>>();
 
 		protected override void Run()
 		{
@@ -30,14 +32,17 @@ namespace Mosa.Compiler.Framework.Stages
 			if (HasProtectedRegions)
 				return;
 
+			foreach (var headBlock in BasicBlocks.HeadBlocks)
+			{
+				var analysis = new SimpleFastDominance(BasicBlocks, headBlock);
+				blockAnalysis.Add(headBlock, analysis);
+			}
+
 			CollectAssignments();
 
 			PlacePhiFunctionsMinimal();
 
-			foreach (var headBlock in BasicBlocks.HeadBlocks)
-			{
-				EnterSSA(headBlock);
-			}
+			EnterSSA();
 		}
 
 		protected override void Finish()
@@ -48,6 +53,16 @@ namespace Mosa.Compiler.Framework.Stages
 			variables = null;
 			counts = null;
 			ssaOperands = null;
+			assignments = null;
+			blockAnalysis = null;
+		}
+
+		private void EnterSSA()
+		{
+			foreach (var headBlock in BasicBlocks.HeadBlocks)
+			{
+				EnterSSA(headBlock);
+			}
 		}
 
 		/// <summary>
@@ -56,12 +71,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="headBlock">The head block.</param>
 		private void EnterSSA(BasicBlock headBlock)
 		{
-			var analysis = MethodCompiler.DominanceAnalysis.GetDominanceAnalysis(headBlock);
+			var analysis = blockAnalysis[headBlock];
 
 			variables = new Dictionary<Operand, Stack<int>>();
 			counts = new Dictionary<Operand, int>();
 
-			foreach (var op in Assignments.Keys)
+			foreach (var op in assignments.Keys)
 			{
 				AddToAssignments(op);
 			}
@@ -115,8 +130,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Renames the variables.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		/// <param name="dominance">The dominance provider.</param>
-		private void RenameVariables(BasicBlock block, BaseDominanceAnalysis dominance)
+		/// <param name="dominanceAnalysis">The dominance analysis.</param>
+		private void RenameVariables(BasicBlock block, BaseDominanceAnalysis dominanceAnalysis)
 		{
 			for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 			{
@@ -168,9 +183,9 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			foreach (var s in dominance.GetChildren(block))
+			foreach (var s in dominanceAnalysis.GetChildren(block))
 			{
-				RenameVariables(s, dominance);
+				RenameVariables(s, dominanceAnalysis);
 			}
 
 			for (var context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
@@ -234,10 +249,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="block">The block.</param>
 		private void AddToAssignments(Operand operand, BasicBlock block)
 		{
-			if (!Assignments.TryGetValue(operand, out List<BasicBlock> blocks))
+			if (!assignments.TryGetValue(operand, out List<BasicBlock> blocks))
 			{
 				blocks = new List<BasicBlock>();
-				Assignments.Add(operand, blocks);
+				assignments.Add(operand, blocks);
 			}
 
 			blocks.AddIfNew(block);
@@ -285,9 +300,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="headBlock">The head block.</param>
 		private void PlacePhiFunctionsMinimal(BasicBlock headBlock)
 		{
-			var analysis = MethodCompiler.DominanceAnalysis.GetDominanceAnalysis(headBlock);
+			var analysis = blockAnalysis[headBlock];
 
-			foreach (var t in Assignments)
+			foreach (var t in assignments)
 			{
 				var blocks = t.Value;
 
@@ -296,9 +311,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				blocks.AddIfNew(headBlock);
 
-				var idf = analysis.IteratedDominanceFrontier(blocks);
-
-				foreach (var n in idf)
+				foreach (var n in analysis.IteratedDominanceFrontier(blocks))
 				{
 					InsertPhiInstruction(n, t.Key);
 				}
