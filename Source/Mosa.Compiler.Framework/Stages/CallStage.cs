@@ -236,9 +236,8 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var operand = operands[index];
 
-				GetTypeRequirements(operand.Type, out int size, out int alignment);
-
-				stackSize += Alignment.AlignUp(size, alignment);
+				var size = GetTypeSize(operand.Type, true);
+				stackSize += size;
 			}
 
 			return stackSize;
@@ -265,10 +264,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var operand = operands[index];
 
-				GetTypeRequirements(operand.Type, out int size, out int alignment);
-
-				size = Alignment.AlignUp(size, alignment);
-
+				var size = GetTypeSize(operand.Type, true);
 				space -= size;
 
 				Push(context, operand, space, scratch);

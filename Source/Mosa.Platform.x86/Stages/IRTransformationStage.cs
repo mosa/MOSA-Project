@@ -94,7 +94,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Visitation function for AddFloat.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		private void AddFloatR4(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR4);
@@ -106,7 +106,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Visitation function for AddFloat.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		private void AddFloatR8(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR8);
@@ -526,7 +526,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Visitation function for JmpInstruction instruction.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="node">The node.</param>
 		private void Jmp(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Jmp);

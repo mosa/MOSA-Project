@@ -59,7 +59,7 @@ namespace Mosa.Utility.Aot
 				new BlockOrderingStage(),
 				new CodeGenerationStage(),
 
-				//new PreciseGCStage(),
+				new PreciseGCStage(),
 				new ProtectedRegionLayoutStage(),
 			});
 		}

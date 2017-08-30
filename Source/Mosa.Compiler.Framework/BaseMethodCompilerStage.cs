@@ -597,9 +597,15 @@ namespace Mosa.Compiler.Framework
 
 		#region Helpers
 
-		public void GetTypeRequirements(MosaType type, out int size, out int alignment)
+		/// <summary>
+		/// Gets the size of the type.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="align">if set to <c>true</c> [align].</param>
+		/// <returns></returns>
+		public int GetTypeSize(MosaType type, bool align)
 		{
-			MethodCompiler.GetTypeRequirements(type, out size, out alignment);
+			return MethodCompiler.GetReferenceOrTypeSize(type, align);
 		}
 
 		/// <summary>
