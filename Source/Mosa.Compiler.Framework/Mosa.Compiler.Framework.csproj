@@ -293,7 +293,6 @@
     <Compile Include="Stages\LeaveSSAStage.cs" />
     <Compile Include="Stages\OperandAssignmentStage.cs" />
     <Compile Include="CompilerOptions.cs" />
-    <Compile Include="Stages\PhiPlacementStage.cs" />
     <Compile Include="Stages\StaticAllocationResolutionStage.cs" />
     <Compile Include="IR\Throw.cs" />
     <Compile Include="Intrinsics\InternalAllocateString.cs" />
