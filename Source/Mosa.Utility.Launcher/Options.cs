@@ -34,6 +34,8 @@ namespace Mosa.Utility.Launcher
 
 		public bool EnableInlinedMethods { get; set; }
 
+		public bool EnableIRLongOperand { get; set; }
+
 		public int InlinedIRMaximum { get; set; }
 
 		public bool GenerateNASMFile { get; set; }
@@ -127,6 +129,7 @@ namespace Mosa.Utility.Launcher
 			LaunchGDB = false;
 			LaunchMosaDebugger = false;
 			GenerateDebugFile = false;
+			EnableIRLongOperand = false;
 		}
 
 		public void LoadArguments(string[] args)
@@ -173,6 +176,7 @@ namespace Mosa.Utility.Launcher
 					case "-optimization-ir-off": EnableIROptimizations = false; continue;
 					case "-optimization-sccp-off": EnableSparseConditionalConstantPropagation = false; continue;
 					case "-all-optimization-off": EnableIROptimizations = false; EnableSparseConditionalConstantPropagation = false; EnableInlinedMethods = false; EnableSSA = false; continue;
+					case "-ir-long-operand": EnableIRLongOperand = true; continue;
 					case "-inline-level": InlinedIRMaximum = (int)args[++i].ParseHexOrDecimal(); continue;
 					case "-threading-off": UseMultipleThreadCompiler = false; continue;
 					case "-video": VBEVideo = true; continue;

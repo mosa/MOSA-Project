@@ -95,6 +95,8 @@ namespace Mosa.UnitTest.Engine
 				GenerateMapFile = true,
 				GenerateDebugFile = false,
 
+				EnableIRLongOperand = true
+
 				//BootLoaderImage = @"..\Tests\BootImage\Mosa.BootLoader.x86.img"
 			};
 

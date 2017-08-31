@@ -17,17 +17,17 @@ namespace Mosa.Utility.RSP
 		private const char Prefix = '$';
 		private const char Suffix = '#';
 
-		private object sync = new object();
+		private readonly object sync = new object();
 		private GDBNetworkStream stream = null;
 
-		private byte[] receivedByte = new byte[1];
-		private List<byte> receivedData = new List<byte>();
+		private readonly byte[] receivedByte = new byte[1];
+		private readonly List<byte> receivedData = new List<byte>();
 
-		private Queue<GDBCommand> commandQueue = new Queue<GDBCommand>();
+		private readonly Queue<GDBCommand> commandQueue = new Queue<GDBCommand>();
 
 		private GDBCommand currentCommand = null;
 
-		private static byte[] breakData = new byte[1] { 3 };
+		private static readonly byte[] breakData = new byte[1] { 3 };
 
 		public GDBNetworkStream Stream
 		{
@@ -233,7 +233,7 @@ namespace Mosa.Utility.RSP
 			h = HexToDecimal(h);
 			l = HexToDecimal(l);
 
-			return (byte)(h * 16 + l);
+			return (byte)((h * 16) + l);
 		}
 	}
 }

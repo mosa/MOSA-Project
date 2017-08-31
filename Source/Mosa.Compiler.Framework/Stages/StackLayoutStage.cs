@@ -63,9 +63,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var size = GetTypeSize(operand.Type, true);
 
-				//GetTypeRequirements(operand.Type, out int size, out int alignment);
-				//size = Alignment.AlignUp(size, alignment);
-
 				offset -= size;
 
 				operand.Offset = offset;

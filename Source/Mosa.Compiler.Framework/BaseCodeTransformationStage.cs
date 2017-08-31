@@ -41,6 +41,9 @@ namespace Mosa.Compiler.Framework
 
 		protected override void Run()
 		{
+			if (contextVisitationDictionary.Count == 0 && nodeVisitationDictionary.Count == 0)
+				return;
+
 			bool contextVisit = contextVisitationDictionary.Count != 0;
 			bool NodeVisit = nodeVisitationDictionary.Count != 0;
 
