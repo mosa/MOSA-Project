@@ -103,6 +103,14 @@ namespace Mosa.Compiler.Framework
 		public bool EnableStaticAllocations { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [enable ir long operand conversion].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [enable ir long operand conversion]; otherwise, <c>false</c>.
+		/// </value>
+		public bool EnableIRLongOperand { get; set; }
+
+		/// <summary>
 		/// Gets or sets the block order analysis.
 		/// </summary>
 		/// <value>
@@ -150,7 +158,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if [aggressive optimizations]; otherwise, <c>false</c>.
 		/// </value>
-		public bool TwoPassOptimizationStages { get; set; }
+		public bool TwoPassOptimization { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable statistics].
@@ -255,8 +263,9 @@ namespace Mosa.Compiler.Framework
 			DebugRestrictOptimizationByCount = 0;
 			EmitSymbols = true;
 			EmitRelocations = true;
-			TwoPassOptimizationStages = false;
+			TwoPassOptimization = false;
 			EnableStatistics = true;
+			EnableIRLongOperand = false;
 		}
 	}
 }

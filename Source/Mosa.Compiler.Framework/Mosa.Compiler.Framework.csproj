@@ -218,6 +218,7 @@
     <Compile Include="CompilerStages\DebugFileGenerationStage.cs" />
     <Compile Include="Stages\DevirtualizeCallStage.cs" />
     <Compile Include="Stages\CallStage.cs" />
+    <Compile Include="Stages\LongOperandStage.cs" />
     <Compile Include="Stages\LowerIRStage.cs" />
     <Compile Include="Analysis\LiveVariableAnalysis\LivenessAnalysis.cs" />
     <Compile Include="Stages\PreciseGCStage.cs" />
@@ -232,7 +233,6 @@
     <Compile Include="Stages\ProtectedRegionLayoutStage.cs" />
     <Compile Include="Stages\ExceptionStage.cs" />
     <Compile Include="CompilerStages\MapFileGenerationStage.cs" />
-    <Compile Include="Stages\StackSlotStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />
     <Compile Include="Stages\EmptyBlockRemovalStage.cs" />

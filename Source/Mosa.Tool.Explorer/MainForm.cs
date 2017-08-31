@@ -92,6 +92,7 @@ namespace Mosa.Tool.Explorer
 					case "-no-ssa": cbEnableSSA.Checked = false; continue;
 					case "-no-ir-optimizations": cbEnableOptimizations.Checked = false; continue;
 					case "-no-sparse": cbEnableSparseConditionalConstantPropagation.Checked = false; continue;
+					case "-ir-long-operand": cbEnableLongOperand.Checked = true; continue;
 					default: break;
 				}
 
@@ -182,6 +183,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
 			Compiler.CompilerOptions.EnableInlinedMethods = cbEnableInlinedMethods.Checked;
+			Compiler.CompilerOptions.EnableIRLongOperand = cbEnableLongOperand.Checked;
 			Compiler.CompilerOptions.InlinedIRMaximum = 20;
 		}
 
@@ -288,15 +290,12 @@ namespace Mosa.Tool.Explorer
 			if (treeView.SelectedNode == null)
 				return null;
 
-			T node = treeView.SelectedNode as T;
-
-			return node;
+			return treeView.SelectedNode as T;
 		}
 
 		private ViewNode<MosaMethod> GetCurrentNode()
 		{
-			var node = GetCurrentNode<ViewNode<MosaMethod>>();
-			return node;
+			return GetCurrentNode<ViewNode<MosaMethod>>();
 		}
 
 		private MosaMethod GetCurrentType()
@@ -311,20 +310,17 @@ namespace Mosa.Tool.Explorer
 
 		private string GetCurrentStage()
 		{
-			string stage = cbStages.SelectedItem.ToString();
-			return stage;
+			return cbStages.SelectedItem.ToString();
 		}
 
 		private string GetCurrentDebugStage()
 		{
-			string stage = cbDebugStages.SelectedItem.ToString();
-			return stage;
+			return cbDebugStages.SelectedItem.ToString();
 		}
 
 		private string GetCurrentLabel()
 		{
-			string label = cbLabels.SelectedItem as string;
-			return label;
+			return cbLabels.SelectedItem as string;
 		}
 
 		private List<string> GetCurrentLines()
@@ -341,9 +337,7 @@ namespace Mosa.Tool.Explorer
 
 			string stage = GetCurrentStage();
 
-			var lines = methodData.InstructionLogs[stage];
-
-			return lines;
+			return methodData.InstructionLogs[stage];
 		}
 
 		private List<string> GetCurrentDebugLines()
@@ -360,9 +354,7 @@ namespace Mosa.Tool.Explorer
 
 			string stage = GetCurrentDebugStage();
 
-			var lines = methodData.DebugLogs[stage];
-
-			return lines;
+			return methodData.DebugLogs[stage];
 		}
 
 		private void UpdateStages()
