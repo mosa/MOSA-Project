@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -17,6 +18,8 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
 			AddVisitation(IRInstruction.LogicalXor, LogicalXor);
 			AddVisitation(IRInstruction.LogicalNot, LogicalNot);
+
+			//AddVisitation(IRInstruction.LoadParameterInteger, LoadParameterInteger);
 		}
 
 		private void LogicalAnd(InstructionNode node)
@@ -112,6 +115,31 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
 			context.AppendInstruction(IRInstruction.LogicalNot, InstructionSize.Size32, resultLow, op0Low);
 			context.AppendInstruction(IRInstruction.LogicalNot, InstructionSize.Size32, resultHigh, op0High);
+			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+		}
+
+		private void LoadParameterInteger(InstructionNode node)
+		{
+			Debug.Assert(!node.Result.IsR4);
+			Debug.Assert(!node.Result.IsR8);
+
+			if (!node.Result.Is64BitInteger)
+				return;
+
+			var result = node.Result;
+			var operand1 = node.Operand1;
+
+			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			var context = new Context(node);
+
+			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
+			context.AppendInstruction(IRInstruction.LoadParameterInteger, InstructionSize.Size32, resultLow, StackFrame, op0Low);
+			context.AppendInstruction(IRInstruction.LoadParameterInteger, InstructionSize.Size32, resultHigh, StackFrame, op0High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 	}

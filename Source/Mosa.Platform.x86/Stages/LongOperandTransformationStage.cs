@@ -428,26 +428,6 @@ namespace Mosa.Platform.x86.Stages
 			return false;
 		}
 
-		private void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
-		{
-			SplitLongOperand(MethodCompiler, operand, out operandLow, out operandHigh);
-		}
-
-		public static void SplitLongOperand(BaseMethodCompiler methodCompiler, Operand operand, out Operand operandLow, out Operand operandHigh)
-		{
-			if (operand.Is64BitInteger)
-			{
-				methodCompiler.VirtualRegisters.SplitLongOperand(methodCompiler.TypeSystem, operand);
-				operandLow = operand.Low;
-				operandHigh = operand.High;
-			}
-			else
-			{
-				operandLow = operand;
-				operandHigh = methodCompiler.ConstantZero;
-			}
-		}
-
 		/// <summary>
 		/// Expands the add instruction for 64-bit operands.
 		/// </summary>
@@ -633,7 +613,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandLoadParameter(Context context)
 		{
-			SplitLongOperand(MethodCompiler, context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
 			context.SetInstruction(X86.MovLoad, InstructionSize.Size32, op0L, StackFrame, op1L);
@@ -1041,6 +1021,17 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov, op0L, op1L);
 			context.AppendInstruction(X86.Xor, op0H, op0H, op2H);
 			context.AppendInstruction(X86.Xor, op0L, op0L, op2L);
+		}
+
+		/// <summary>
+		/// Splits the long operand.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		/// <param name="operandLow">The operand low.</param>
+		/// <param name="operandHigh">The operand high.</param>
+		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+		{
+			MethodCompiler.SplitLongOperand(operand, out operandLow, out operandHigh);
 		}
 
 		#endregion Utility Methods

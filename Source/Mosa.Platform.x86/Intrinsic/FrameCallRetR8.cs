@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var edx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 			var mmx1 = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, SSE2Register.XMM0);
 
-			LongOperandTransformationStage.SplitLongOperand(methodCompiler, result, out Operand op0L, out Operand op0H);
+			methodCompiler.SplitLongOperand(result, out Operand op0L, out Operand op0H);
 
 			context.SetInstruction(X86.Call, null, methodAddress);
 			context.AppendInstruction(IRInstruction.Gen, mmx1);

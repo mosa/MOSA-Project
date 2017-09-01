@@ -8,6 +8,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -385,6 +386,36 @@ namespace Mosa.Compiler.Framework
 		public Operand CreateVirtualRegister(MosaType type)
 		{
 			return VirtualRegisters.Allocate(type);
+		}
+
+		/// <summary>
+		/// Splits the long operand.
+		/// </summary>
+		/// <param name="longOperand">The long operand.</param>
+		public void SplitLongOperand(Operand longOperand)
+		{
+			VirtualRegisters.SplitLongOperand(TypeSystem, longOperand);
+		}
+
+		/// <summary>
+		/// Splits the long operand.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		/// <param name="operandLow">The operand low.</param>
+		/// <param name="operandHigh">The operand high.</param>
+		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+		{
+			if (operand.Is64BitInteger)
+			{
+				SplitLongOperand(operand);
+				operandLow = operand.Low;
+				operandHigh = operand.High;
+			}
+			else
+			{
+				operandLow = operand;
+				operandHigh = ConstantZero;
+			}
 		}
 
 		/// <summary>
