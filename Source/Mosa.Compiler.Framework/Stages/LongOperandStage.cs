@@ -129,17 +129,15 @@ namespace Mosa.Compiler.Framework.Stages
 			var result = node.Result;
 			var operand1 = node.Operand1;
 
-			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			MethodCompiler.SplitLongOperand(operand1, out Operand op0Low, out Operand op0High);
 
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			var context = new Context(node);
 
-			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
-			context.AppendInstruction(IRInstruction.LoadParameterInteger, InstructionSize.Size32, resultLow, StackFrame, op0Low);
-			context.AppendInstruction(IRInstruction.LoadParameterInteger, InstructionSize.Size32, resultHigh, StackFrame, op0High);
+			context.AppendInstruction(IRInstruction.LoadParameterInteger, InstructionSize.Size32, resultLow, op0Low);
+			context.AppendInstruction(IRInstruction.LoadParameterInteger, InstructionSize.Size32, resultHigh, op0High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 	}
