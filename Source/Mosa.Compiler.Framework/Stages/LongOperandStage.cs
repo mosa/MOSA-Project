@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AddVisitation(IRInstruction.LoadParameterInteger, LoadParameterInteger);
 
-			//AddVisitation(IRInstruction.LoadInteger, LoadInteger);
+			AddVisitation(IRInstruction.LoadInteger, LoadInteger);
 		}
 
 		private void LogicalAnd(InstructionNode node)
@@ -163,7 +163,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var context = new Context(node);
 
-			if (operand2.IsConstant && !operand2.IsLong)
+			if (operand2.IsConstant && !operand2.IsLong && !operand1.IsStaticField)
 			{
 				var target4 = CreateConstant((uint)(operand2.ConstantUnsignedLongInteger + 4));
 

@@ -263,7 +263,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return newBasicBlocks;
 		}
 
-		private static Operand Map(Operand operand, Dictionary<Operand, Operand> map)
+		private Operand Map(Operand operand, Dictionary<Operand, Operand> map)
 		{
 			if (operand == null)
 				return null;
@@ -305,7 +305,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsStaticField)
 			{
-				mappedOperand = Operand.CreateField(operand.Field);
+				mappedOperand = Operand.CreateStaticField(operand.Field, TypeSystem);
 			}
 			else if (operand.IsCPURegister)
 			{

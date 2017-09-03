@@ -628,7 +628,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="field">The field.</param>
 		/// <returns></returns>
-		public static Operand CreateField(MosaField field)
+		public static Operand CreateStaticField(MosaField field, TypeSystem typeSystem)
 		{
 			Debug.Assert(field.IsStatic);
 
@@ -686,8 +686,10 @@ namespace Mosa.Compiler.Framework
 			else if (longOperand.IsStackLocal)
 			{
 				operand = CreateStackLocal(typeSystem.BuiltIn.I4, 0, longOperand.IsPinned);
-
-				//operand = longOperand;
+			}
+			else if (longOperand.IsStaticField)
+			{
+				//future
 			}
 
 			Debug.Assert(operand != null);
@@ -748,6 +750,10 @@ namespace Mosa.Compiler.Framework
 					IsResolved = false,
 					IsStackLocal = true,
 				};
+			}
+			else if (longOperand.IsStaticField)
+			{
+				//future
 			}
 
 			Debug.Assert(operand != null);
@@ -900,7 +906,6 @@ namespace Mosa.Compiler.Framework
 		{
 			var operand = CreateUnmanagedSymbolPointer(typeSystem, method.FullName);
 			operand.Method = method;
-			operand.IsConstant = true;
 			return operand;
 		}
 

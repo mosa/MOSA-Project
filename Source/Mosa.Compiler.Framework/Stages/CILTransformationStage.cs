@@ -312,14 +312,14 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Operand1.Type.IsEnum)
 			{
 				var type = node.Operand1.Type;
-				var operand = Operand.CreateField(type.Fields[0]);
+				var operand = Operand.CreateStaticField(type.Fields[0], TypeSystem);
 				node.SetOperand(0, operand);
 			}
 
 			if (node.Operand2.Type.IsEnum)
 			{
 				var type = node.Operand2.Type;
-				var operand = Operand.CreateField(type.Fields[0]);
+				var operand = Operand.CreateStaticField(type.Fields[0], TypeSystem);
 				node.SetOperand(1, operand);
 			}
 
@@ -1061,7 +1061,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var destination = node.Result;
 
 			var size = GetInstructionSize(fieldType);
-			var fieldOperand = Operand.CreateField(node.MosaField);
+			var fieldOperand = Operand.CreateStaticField(node.MosaField, TypeSystem);
 
 			if (MosaTypeLayout.IsStoredOnStack(fieldType))
 			{
@@ -1082,7 +1082,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldsflda(InstructionNode node)
 		{
-			node.SetInstruction(IRInstruction.AddressOf, node.Result, Operand.CreateField(node.MosaField));
+			node.SetInstruction(IRInstruction.AddressOf, node.Result, Operand.CreateStaticField(node.MosaField, TypeSystem));
 		}
 
 		/// <summary>
@@ -1532,7 +1532,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var field = node.MosaField;
 			var size = GetInstructionSize(field.FieldType);
-			var fieldOperand = Operand.CreateField(field);
+			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 
 			if (MosaTypeLayout.IsStoredOnStack(field.FieldType))
 			{

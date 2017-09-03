@@ -133,7 +133,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				var offset = Operand.CreateConstant(TypeSystem, node.Operand1.Offset);
+				var offset = CreateConstant(node.Operand1.Offset);
 
 				node.SetInstruction(X86.Lea, NativeInstructionSize, node.Result, StackFrame, offset);
 			}

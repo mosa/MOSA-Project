@@ -82,6 +82,7 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.EnableInlinedMethods = Options.EnableInlinedMethods;
 				compiler.CompilerOptions.InlinedIRMaximum = Options.InlinedIRMaximum;
 				compiler.CompilerOptions.EnableIRLongOperand = Options.EnableIRLongOperand;
+				compiler.CompilerOptions.TwoPassOptimization = Options.TwoPassOptimization;
 				compiler.CompilerOptions.OutputFile = CompiledFile;
 
 				compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);

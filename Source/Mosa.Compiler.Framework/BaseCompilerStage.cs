@@ -153,7 +153,7 @@ namespace Mosa.Compiler.Framework
 
 		protected static Operand CreateConstant(MosaType type, long value)
 		{
-			return Operand.CreateConstant(type, (ulong)value);
+			return Operand.CreateConstant(type, value);
 		}
 
 		protected static Operand CreateConstant(MosaType type, ulong value)
@@ -163,7 +163,7 @@ namespace Mosa.Compiler.Framework
 
 		protected static Operand CreateConstant(MosaType type, int value)
 		{
-			return Operand.CreateConstant(type, (long)value);
+			return Operand.CreateConstant(type, value);
 		}
 
 		protected static Operand CreateConstant(MosaType type, uint value)
