@@ -15,21 +15,21 @@ namespace Mosa.Utility.Launcher
 			this.builder = builder;
 		}
 
-		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string message, int threadID)
+		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
 			lock (mylock)
 			{
-				if (compilerStage == CompilerEvent.PreCompileStageStart
-					|| compilerStage == CompilerEvent.PreCompileStageEnd
-					|| compilerStage == CompilerEvent.PostCompileStageStart
-					|| compilerStage == CompilerEvent.PostCompileStageEnd
-					|| compilerStage == CompilerEvent.Exception)
+				if (compilerEvent == CompilerEvent.PreCompileStageStart
+					|| compilerEvent == CompilerEvent.PreCompileStageEnd
+					|| compilerEvent == CompilerEvent.PostCompileStageStart
+					|| compilerEvent == CompilerEvent.PostCompileStageEnd
+					|| compilerEvent == CompilerEvent.Exception)
 				{
-					string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - builder.CompileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + message;
+					string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - builder.CompileStartTime).TotalSeconds) + " secs: " + compilerEvent.ToText() + ": " + message;
 
 					builder.AddOutput(status);
 				}
-				else if (compilerStage == CompilerEvent.Counter)
+				else if (compilerEvent == CompilerEvent.Counter)
 				{
 					builder.AddCounters(message);
 				}
