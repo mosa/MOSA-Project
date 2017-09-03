@@ -6,8 +6,8 @@ namespace Mosa.Utility.RSP.Command
 	{
 		protected byte Type;
 
-		public ulong Address { get; private set; }
-		public ulong Size { get; private set; }
+		public ulong Address { get; }
+		public ulong Size { get; }
 
 		protected override string PackArguments { get { return Type.ToString() + "," + Address.ToString("x") + "," + Size.ToString("x"); } }
 

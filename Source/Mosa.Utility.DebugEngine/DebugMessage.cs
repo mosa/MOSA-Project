@@ -10,9 +10,9 @@ namespace Mosa.Utility.DebugEngine
 	{
 		public int ID { get; internal set; }
 
-		public int Code { get; private set; }
+		public int Code { get; }
 
-		public IList<byte> CommandData { get; private set; }
+		public IList<byte> CommandData { get; }
 
 		public List<byte> ResponseData { get; internal set; }
 

@@ -7,8 +7,8 @@ namespace Mosa.Utility.Launcher
 {
 	internal class BuilderEventListener : ITraceListener
 	{
-		private Builder builder;
-		private object mylock = new object();
+		private readonly Builder builder;
+		private readonly object mylock = new object();
 
 		public BuilderEventListener(Builder builder)
 		{
@@ -19,9 +19,11 @@ namespace Mosa.Utility.Launcher
 		{
 			lock (mylock)
 			{
-				if (compilerStage == CompilerEvent.PreCompileStageStart || compilerStage == CompilerEvent.PreCompileStageEnd ||
-					compilerStage == CompilerEvent.PostCompileStageStart || compilerStage == CompilerEvent.PostCompileStageEnd ||
-					compilerStage == CompilerEvent.Exception)
+				if (compilerStage == CompilerEvent.PreCompileStageStart
+					|| compilerStage == CompilerEvent.PreCompileStageEnd
+					|| compilerStage == CompilerEvent.PostCompileStageStart
+					|| compilerStage == CompilerEvent.PostCompileStageEnd
+					|| compilerStage == CompilerEvent.Exception)
 				{
 					string status = "Compiling: " + String.Format("{0:0.00}", (DateTime.Now - builder.CompileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + message;
 
@@ -36,10 +38,7 @@ namespace Mosa.Utility.Launcher
 
 		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
 		{
-			if (builder.BuilderEvent != null)
-			{
-				builder.BuilderEvent.UpdateProgress(totalMethods, completedMethods);
-			}
+			builder.BuilderEvent?.UpdateProgress(totalMethods, completedMethods);
 		}
 
 		void ITraceListener.OnNewTraceLog(TraceLog traceLog)

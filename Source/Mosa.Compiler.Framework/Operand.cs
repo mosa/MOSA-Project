@@ -540,9 +540,8 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the constant.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
-		/// <param name="">The .</param>
 		/// <param name="value">The value.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <returns></returns>
 		public static Operand CreateConstant(uint value, TypeSystem typeSystem)
 		{

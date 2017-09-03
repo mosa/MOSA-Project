@@ -274,7 +274,7 @@ namespace Mosa.Utility.Launcher
 
 			string arg = $"-relaxed-filenames -J -R -o {Quote(ImageFile)} -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
 
-			LaunchApplication(AppLocations.mkisofs, arg, true);
+			LaunchApplication(AppLocations.Mkisofs, arg, true);
 		}
 
 		private void CreateISOImageWithGrub(string compiledFile)
@@ -325,7 +325,7 @@ namespace Mosa.Utility.Launcher
 
 			string arg = $"-relaxed-filenames -J -R -o {Quote(ImageFile)} -b {Quote(loader)} -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
 
-			LaunchApplication(AppLocations.mkisofs, arg, true);
+			LaunchApplication(AppLocations.Mkisofs, arg, true);
 		}
 
 		private void CreateVMDK()

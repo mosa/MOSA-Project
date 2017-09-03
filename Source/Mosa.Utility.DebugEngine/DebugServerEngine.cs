@@ -10,20 +10,20 @@ namespace Mosa.Utility.DebugEngine
 {
 	public sealed class DebugServerEngine
 	{
-		private object sync = new object();
+		private readonly object sync = new object();
 		private Stream stream;
 
-		private Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
+		private readonly Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
 		private int nextID = 0;
 
 		private List<byte> buffer = new List<byte>();
 
 		private CallBack globalDispatch;
-		private byte[] receivedData = new byte[1];
+		private readonly byte[] receivedData = new byte[1];
 
 		private int length = -1;
 
-		private const int MaxBufferSize = 64 * 1024 + 64;
+		private const int MaxBufferSize = (64 * 1024) + 64;
 
 		public Stream Stream
 		{
@@ -80,7 +80,7 @@ namespace Mosa.Utility.DebugEngine
 			return true;
 		}
 
-		private static Stopwatch stopwatch = new Stopwatch();
+		private static readonly Stopwatch stopwatch = new Stopwatch();
 		private static int packetCnt = 0;
 
 		public bool SendCommand2(List<DebugMessage> messages)
@@ -108,7 +108,7 @@ namespace Mosa.Utility.DebugEngine
 				}
 
 				SendPacket(packets);
-				packetCnt = packetCnt + messages.Count;
+				packetCnt += messages.Count;
 
 				//Console.Write(packetCnt);
 				//Console.Write(' ');
@@ -195,8 +195,10 @@ namespace Mosa.Utility.DebugEngine
 				if (id == 0 || !pending.TryGetValue(id, out message))
 				{
 					// message without command
-					message = new DebugMessage(code, data);
-					message.ID = id;
+					message = new DebugMessage(code, data)
+					{
+						ID = id
+					};
 
 					// need to set a default notifier for this
 				}

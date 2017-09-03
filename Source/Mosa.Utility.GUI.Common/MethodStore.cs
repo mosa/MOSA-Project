@@ -9,7 +9,7 @@ namespace Mosa.Utility.GUI.Common
 {
 	public class MethodStore
 	{
-		private Dictionary<MosaMethod, MethodData> methodDataStore = new Dictionary<MosaMethod, MethodData>();
+		private readonly Dictionary<MosaMethod, MethodData> methodDataStore = new Dictionary<MosaMethod, MethodData>();
 
 		public void Clear()
 		{
@@ -20,9 +20,7 @@ namespace Mosa.Utility.GUI.Common
 		{
 			lock (methodDataStore)
 			{
-				MethodData methodData = null;
-
-				if (!methodDataStore.TryGetValue(method, out methodData))
+				if (!methodDataStore.TryGetValue(method, out MethodData methodData))
 				{
 					if (create)
 					{

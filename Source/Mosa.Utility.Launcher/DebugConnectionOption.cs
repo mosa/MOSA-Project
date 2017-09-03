@@ -2,5 +2,5 @@
 
 namespace Mosa.Utility.Launcher
 {
-	public enum DebugConnectionOption { None, Pipe, TCPServer, TCPClient };
+	public enum DebugConnectionOption { None, Pipe, TCPServer, TCPClient }
 }

@@ -18,9 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
 			AddVisitation(IRInstruction.LogicalXor, LogicalXor);
 			AddVisitation(IRInstruction.LogicalNot, LogicalNot);
-
 			AddVisitation(IRInstruction.LoadParameterInteger, LoadParameterInteger);
-
 			AddVisitation(IRInstruction.LoadInteger, LoadInteger);
 		}
 

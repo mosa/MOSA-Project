@@ -18,9 +18,9 @@ namespace Mosa.Utility.RSP
 
 		public string ResponseAsString { get { return Encoding.UTF8.GetString(ResponseData); } }
 
-		public CallBack Callback { get; private set; }
+		public CallBack Callback { get; }
 
-		public GDBCommand(string commandName, CallBack callBack)
+		protected GDBCommand(string commandName, CallBack callBack)
 		{
 			CommandName = commandName;
 			Callback = callBack;
@@ -45,14 +45,14 @@ namespace Mosa.Utility.RSP
 
 		public ulong GetInteger(int index, uint size)
 		{
-			index = index * 2;
+			index *= 2;
 			ulong value = 0;
 
-			for (int i = index + ((int)size * 2) - 2; i >= index; i = i - 2)
+			for (int i = index + ((int)size * 2) - 2; i >= index; i -= 2)
 			{
 				var b = GDBClient.HexToDecimal(ResponseData[i], ResponseData[i + 1]);
-				value = value << 8;
-				value = value | b;
+				value <<= 8;
+				value |= b;
 			}
 
 			return value;
