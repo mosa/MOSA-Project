@@ -522,12 +522,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates a new constant <see cref="Operand" /> for the given integral value.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
 		/// <param name="value">The value to create the constant operand for.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <returns>
 		/// A new operand representing the value <paramref name="value" />.
 		/// </returns>
-		public static Operand CreateConstant(TypeSystem typeSystem, int value)
+		public static Operand CreateConstant(int value, TypeSystem typeSystem)
 		{
 			return new Operand(typeSystem.BuiltIn.I4)
 			{
@@ -544,7 +544,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="">The .</param>
 		/// <param name="value">The value.</param>
 		/// <returns></returns>
-		public static Operand CreateConstant(TypeSystem typeSystem, uint value)
+		public static Operand CreateConstant(uint value, TypeSystem typeSystem)
 		{
 			return new Operand(typeSystem.BuiltIn.U4)
 			{
@@ -557,12 +557,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates a new constant <see cref="Operand" /> for the given integral value.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
 		/// <param name="value">The value to create the constant operand for.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <returns>
 		/// A new operand representing the value <paramref name="value" />.
 		/// </returns>
-		public static Operand CreateConstant(TypeSystem typeSystem, long value)
+		public static Operand CreateConstant(long value, TypeSystem typeSystem)
 		{
 			return new Operand(typeSystem.BuiltIn.I8)
 			{
@@ -575,12 +575,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates a new constant <see cref="Operand"/> for the given integral value.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
 		/// <param name="value">The value to create the constant operand for.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <returns>
 		/// A new operand representing the value <paramref name="value"/>.
 		/// </returns>
-		public static Operand CreateConstant(TypeSystem typeSystem, float value)
+		public static Operand CreateConstant(float value, TypeSystem typeSystem)
 		{
 			return new Operand(typeSystem.BuiltIn.R4)
 			{
@@ -593,12 +593,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates a new constant <see cref="Operand"/> for the given integral value.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
 		/// <param name="value">The value to create the constant operand for.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <returns>
 		/// A new operand representing the value <paramref name="value"/>.
 		/// </returns>
-		public static Operand CreateConstant(TypeSystem typeSystem, double value)
+		public static Operand CreateConstant(double value, TypeSystem typeSystem)
 		{
 			return new Operand(typeSystem.BuiltIn.R8)
 			{
@@ -624,144 +624,24 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a new runtime member <see cref="Operand"/>.
+		/// Creates a new runtime member <see cref="Operand" />.
 		/// </summary>
 		/// <param name="field">The field.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <returns></returns>
 		public static Operand CreateStaticField(MosaField field, TypeSystem typeSystem)
 		{
 			Debug.Assert(field.IsStatic);
 
-			return new Operand(field.FieldType)
+			var type = field.FieldType.IsReferenceType ? typeSystem.BuiltIn.Object : field.FieldType.ToManagedPointer();
+
+			return new Operand(type)
 			{
 				IsStaticField = true,
 				Offset = 0,
 				Field = field,
 				IsConstant = true
 			};
-		}
-
-		/// <summary>
-		/// Creates the low 32 bit portion of a 64-bit <see cref="Operand" />.
-		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
-		/// <param name="longOperand">The long operand.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		public static Operand CreateLowSplitForLong(TypeSystem typeSystem, Operand longOperand, int index)
-		{
-			if (longOperand.Low != null)
-			{
-				return longOperand.Low;
-			}
-
-			Debug.Assert(longOperand.IsLong);
-			Debug.Assert(longOperand.SplitParent == null);
-			Debug.Assert(longOperand.Low == null);
-
-			Operand operand = null;
-
-			if (longOperand.IsParameter)
-			{
-				operand = CreateStackParameter(typeSystem.BuiltIn.U4, longOperand.Index, longOperand.Name + " (Low)", false, (int)longOperand.Offset);
-			}
-			else if (longOperand.IsResolvedConstant)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4)
-				{
-					IsConstant = true,
-					IsResolved = true,
-					Index = index,
-					ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger & uint.MaxValue,
-				};
-			}
-			else if (longOperand.IsVirtualRegister)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4)
-				{
-					IsVirtualRegister = true,
-					Index = index,
-				};
-			}
-			else if (longOperand.IsStackLocal)
-			{
-				operand = CreateStackLocal(typeSystem.BuiltIn.I4, 0, longOperand.IsPinned);
-			}
-			else if (longOperand.IsStaticField)
-			{
-				//future
-			}
-
-			Debug.Assert(operand != null);
-
-			operand.SplitParent = longOperand;
-			longOperand.Low = operand;
-
-			return operand;
-		}
-
-		/// <summary>
-		/// Creates the high 32 bit portion of a 64-bit <see cref="Operand" />.
-		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
-		/// <param name="longOperand">The long operand.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		public static Operand CreateHighSplitForLong(TypeSystem typeSystem, Operand longOperand, int index)
-		{
-			if (longOperand.High != null)
-			{
-				return longOperand.High;
-			}
-
-			Debug.Assert(longOperand.IsLong);
-			Debug.Assert(longOperand.SplitParent == null || longOperand.SplitParent == longOperand);
-			Debug.Assert(longOperand.High == null);
-
-			Operand operand = null;
-
-			if (longOperand.IsParameter)
-			{
-				operand = CreateStackParameter(typeSystem.BuiltIn.U4, longOperand.Index, longOperand.Name + " (High)", false, (int)longOperand.Offset + 4);
-			}
-			else if (longOperand.IsResolvedConstant)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4)
-				{
-					IsConstant = true,
-					IsResolved = true,
-					Index = index,
-					ConstantUnsignedLongInteger = ((uint)(longOperand.ConstantUnsignedLongInteger >> 32)) & uint.MaxValue
-				};
-			}
-			else if (longOperand.IsVirtualRegister)
-			{
-				operand = new Operand(typeSystem.BuiltIn.U4)
-				{
-					IsVirtualRegister = true,
-					Index = index,
-				};
-			}
-			else if (longOperand.IsStackLocal)
-			{
-				operand = new Operand(typeSystem.BuiltIn.I4)
-				{
-					IsConstant = true,
-					IsResolved = false,
-					IsStackLocal = true,
-				};
-			}
-			else if (longOperand.IsStaticField)
-			{
-				//future
-			}
-
-			Debug.Assert(operand != null);
-
-			operand.SplitParent = longOperand;
-			longOperand.High = operand;
-
-			return operand;
 		}
 
 		/// <summary>
@@ -879,11 +759,11 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the string symbol with data.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="data">The string data.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <returns></returns>
-		public static Operand CreateStringSymbol(TypeSystem typeSystem, string name, string data)
+		public static Operand CreateStringSymbol(string name, string data, TypeSystem typeSystem)
 		{
 			Debug.Assert(data != null);
 
@@ -899,12 +779,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates a new symbol <see cref="Operand" /> for the given symbol name.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
 		/// <param name="method">The method.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <returns></returns>
-		public static Operand CreateSymbolFromMethod(TypeSystem typeSystem, MosaMethod method)
+		public static Operand CreateSymbolFromMethod(MosaMethod method, TypeSystem typeSystem)
 		{
-			var operand = CreateUnmanagedSymbolPointer(typeSystem, method.FullName);
+			var operand = CreateUnmanagedSymbolPointer(method.FullName, typeSystem);
 			operand.Method = method;
 			return operand;
 		}
@@ -912,10 +792,10 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the symbol.
 		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
 		/// <param name="name">The name.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <returns></returns>
-		public static Operand CreateUnmanagedSymbolPointer(TypeSystem typeSystem, string name)
+		public static Operand CreateUnmanagedSymbolPointer(string name, TypeSystem typeSystem)
 		{
 			return new Operand(typeSystem.BuiltIn.Pointer)
 			{
@@ -941,11 +821,11 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the null constant <see cref="Operand" />.
+		/// Gets the null constant <see cref="Operand" /> of the object.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
 		/// <returns></returns>
-		public static Operand GetNull(TypeSystem typeSystem)
+		public static Operand GetNullObject(TypeSystem typeSystem)
 		{
 			return new Operand(typeSystem.BuiltIn.Object)
 			{
@@ -985,6 +865,129 @@ namespace Mosa.Compiler.Framework
 				Name = name,
 				IsConstant = true
 			};
+		}
+
+		/// <summary>
+		/// Creates the low 32 bit portion of a 64-bit <see cref="Operand" />.
+		/// </summary>
+		/// <param name="longOperand">The long operand.</param>
+		/// <param name="index">The index.</param>
+		/// <param name="typeSystem">The type system.</param>
+		/// <returns></returns>
+		public static Operand CreateLowSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
+		{
+			if (longOperand.Low != null)
+			{
+				return longOperand.Low;
+			}
+
+			Debug.Assert(longOperand.IsLong);
+			Debug.Assert(longOperand.SplitParent == null);
+			Debug.Assert(longOperand.Low == null);
+
+			Operand operand = null;
+
+			if (longOperand.IsParameter)
+			{
+				operand = CreateStackParameter(typeSystem.BuiltIn.U4, longOperand.Index, longOperand.Name + " (Low)", false, (int)longOperand.Offset);
+			}
+			else if (longOperand.IsResolvedConstant)
+			{
+				operand = new Operand(typeSystem.BuiltIn.U4)
+				{
+					IsConstant = true,
+					IsResolved = true,
+					Index = index,
+					ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger & uint.MaxValue,
+				};
+			}
+			else if (longOperand.IsVirtualRegister)
+			{
+				operand = new Operand(typeSystem.BuiltIn.U4)
+				{
+					IsVirtualRegister = true,
+					Index = index,
+				};
+			}
+			else if (longOperand.IsStackLocal)
+			{
+				operand = CreateStackLocal(typeSystem.BuiltIn.I4, 0, longOperand.IsPinned);
+			}
+			else if (longOperand.IsStaticField)
+			{
+				//future
+			}
+
+			Debug.Assert(operand != null);
+
+			operand.SplitParent = longOperand;
+			longOperand.Low = operand;
+
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the high 32 bit portion of a 64-bit <see cref="Operand" />.
+		/// </summary>
+		/// <param name="longOperand">The long operand.</param>
+		/// <param name="index">The index.</param>
+		/// <param name="typeSystem">The type system.</param>
+		/// <returns></returns>
+		public static Operand CreateHighSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
+		{
+			if (longOperand.High != null)
+			{
+				return longOperand.High;
+			}
+
+			Debug.Assert(longOperand.IsLong);
+			Debug.Assert(longOperand.SplitParent == null || longOperand.SplitParent == longOperand);
+			Debug.Assert(longOperand.High == null);
+
+			Operand operand = null;
+
+			if (longOperand.IsParameter)
+			{
+				operand = CreateStackParameter(typeSystem.BuiltIn.U4, longOperand.Index, longOperand.Name + " (High)", false, (int)longOperand.Offset + 4);
+			}
+			else if (longOperand.IsResolvedConstant)
+			{
+				operand = new Operand(typeSystem.BuiltIn.U4)
+				{
+					IsConstant = true,
+					IsResolved = true,
+					Index = index,
+					ConstantUnsignedLongInteger = ((uint)(longOperand.ConstantUnsignedLongInteger >> 32)) & uint.MaxValue
+				};
+			}
+			else if (longOperand.IsVirtualRegister)
+			{
+				operand = new Operand(typeSystem.BuiltIn.U4)
+				{
+					IsVirtualRegister = true,
+					Index = index,
+				};
+			}
+			else if (longOperand.IsStackLocal)
+			{
+				operand = new Operand(typeSystem.BuiltIn.I4)
+				{
+					IsConstant = true,
+					IsResolved = false,
+					IsStackLocal = true,
+				};
+			}
+			else if (longOperand.IsStaticField)
+			{
+				//future
+			}
+
+			Debug.Assert(operand != null);
+
+			operand.SplitParent = longOperand;
+			longOperand.High = operand;
+
+			return operand;
 		}
 
 		#endregion Static Factory Constructors

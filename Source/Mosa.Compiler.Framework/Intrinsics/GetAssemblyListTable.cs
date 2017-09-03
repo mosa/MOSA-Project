@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			context.SetInstruction(IRInstruction.MoveInteger, context.Result, Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, Metadata.AssembliesTable));
+			context.SetInstruction(IRInstruction.MoveInteger, context.Result, Operand.CreateUnmanagedSymbolPointer(Metadata.AssembliesTable, methodCompiler.TypeSystem));
 		}
 
 		#endregion Methods

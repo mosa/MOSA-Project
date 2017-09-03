@@ -21,8 +21,8 @@ namespace Mosa.Platform.x86.Intrinsic
 			var dest = context.Operand1;
 
 			var v0 = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.Void, SSE2Register.XMM0);
-			var zero = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
-			var offset16 = Operand.CreateConstant(methodCompiler.TypeSystem, 16);
+			var zero = Operand.CreateConstant(0, methodCompiler.TypeSystem);
+			var offset16 = Operand.CreateConstant(16, methodCompiler.TypeSystem);
 
 			context.SetInstruction(X86.PXor, InstructionSize.Size128, v0, v0, v0);
 			context.AppendInstruction(X86.MovupsStore, InstructionSize.Size128, dest, zero, v0);

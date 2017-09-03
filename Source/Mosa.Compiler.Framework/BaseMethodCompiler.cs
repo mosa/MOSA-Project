@@ -208,7 +208,7 @@ namespace Mosa.Compiler.Framework
 			Pipeline = new CompilerPipeline();
 			LocalStack = new List<Operand>();
 
-			ConstantZero = Operand.CreateConstant(TypeSystem, 0);
+			ConstantZero = Operand.CreateConstant(0, TypeSystem);
 			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
 			Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];

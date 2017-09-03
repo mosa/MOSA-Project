@@ -453,7 +453,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var result = context.Result;
 			var operands = new List<Operand>(context.Operands);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			context.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
 		}
@@ -519,13 +519,13 @@ namespace Mosa.Compiler.Framework.Stages
 						context.Operand1 = boxedValue;
 					}
 
-					var symbol2 = Operand.CreateSymbolFromMethod(TypeSystem, method);
+					var symbol2 = Operand.CreateSymbolFromMethod(method, TypeSystem);
 					context.SetInstruction(IRInstruction.CallStatic, result, symbol2, operands);
 					return;
 				}
 			}
 
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			if (method.IsVirtual)
 			{
@@ -737,7 +737,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.IsReferenceType)
 			{
 				var size = GetInstructionSize(type);
-				node.SetInstruction(IRInstruction.StoreInteger, size, null, ptr, ConstantZero, Operand.GetNull(TypeSystem));
+				node.SetInstruction(IRInstruction.StoreInteger, size, null, ptr, ConstantZero, Operand.GetNullObject(TypeSystem));
 				node.MosaType = type;
 			}
 			else
@@ -991,7 +991,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldftn(InstructionNode node)
 		{
-			node.SetInstruction(IRInstruction.MoveInteger, node.Result, Operand.CreateSymbolFromMethod(TypeSystem, node.InvokeMethod));
+			node.SetInstruction(IRInstruction.MoveInteger, node.Result, Operand.CreateSymbolFromMethod(node.InvokeMethod, TypeSystem));
 		}
 
 		/// <summary>
@@ -1134,12 +1134,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (context.MosaType != null)
 			{
-				source = Operand.CreateUnmanagedSymbolPointer(TypeSystem, context.MosaType.FullName + Metadata.TypeDefinition);
+				source = Operand.CreateUnmanagedSymbolPointer(context.MosaType.FullName + Metadata.TypeDefinition, TypeSystem);
 				runtimeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			}
 			else if (context.MosaField != null)
 			{
-				source = Operand.CreateUnmanagedSymbolPointer(TypeSystem, context.MosaField.FullName + Metadata.FieldDefinition);
+				source = Operand.CreateUnmanagedSymbolPointer(context.MosaField.FullName + Metadata.FieldDefinition, TypeSystem);
 				runtimeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
 			}
 			else
@@ -1281,7 +1281,7 @@ namespace Mosa.Compiler.Framework.Stages
 				operands.Insert(0, result);
 			}
 
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 			context.SetInstruction(IRInstruction.CallStatic, null, symbol, operands);
 		}
 
@@ -1971,7 +1971,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Build exception block which is just a call to throw exception
 			var method = InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
-			var symbolOperand = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var symbolOperand = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			exceptionContext.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
 		}
@@ -2151,7 +2151,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var result = node.Result;
 			var operands = node.GetOperands();
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol);
 			node.AppendOperands(operands);

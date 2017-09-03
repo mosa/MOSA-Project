@@ -67,7 +67,7 @@ namespace Mosa.Platform.x86.Stages
 
 			Debug.Assert(method != null, "Cannot find method: " + methodName);
 
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2);
 		}

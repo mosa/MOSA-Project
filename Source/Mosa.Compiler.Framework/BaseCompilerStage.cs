@@ -173,12 +173,12 @@ namespace Mosa.Compiler.Framework
 
 		protected Operand CreateConstant(float value)
 		{
-			return Operand.CreateConstant(TypeSystem, value);
+			return Operand.CreateConstant(value, TypeSystem);
 		}
 
 		protected Operand CreateConstant(double value)
 		{
-			return Operand.CreateConstant(TypeSystem, value);
+			return Operand.CreateConstant(value, TypeSystem);
 		}
 
 		#endregion Constant Helper Methods

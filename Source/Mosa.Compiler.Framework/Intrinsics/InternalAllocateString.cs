@@ -20,9 +20,9 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			var method = methodCompiler.Compiler.InternalRuntimeType.FindMethodByName("AllocateString");
-			var symbol = Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method);
+			var symbol = Operand.CreateSymbolFromMethod(method, methodCompiler.TypeSystem);
 
-			var typeDef = Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, StringClassTypeDefinitionSymbolName);
+			var typeDef = Operand.CreateUnmanagedSymbolPointer(StringClassTypeDefinitionSymbolName, methodCompiler.TypeSystem);
 			var length = context.Operand1;
 			var result = context.Result;
 

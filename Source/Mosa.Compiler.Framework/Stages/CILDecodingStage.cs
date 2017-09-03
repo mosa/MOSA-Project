@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				Debug.Assert(plugMethod != null);
 
-				var plugSymbol = Operand.CreateSymbolFromMethod(TypeSystem, plugMethod);
+				var plugSymbol = Operand.CreateSymbolFromMethod(plugMethod, TypeSystem);
 				var context = CreateNewBlockContext(-1);
 				context.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
 				BasicBlocks.AddHeadBlock(context.Block);

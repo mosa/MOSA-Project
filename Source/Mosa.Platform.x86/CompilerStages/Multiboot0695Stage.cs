@@ -106,8 +106,8 @@ namespace Mosa.Platform.x86.CompilerStages
 			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
 			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
-			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEAX);
-			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEBX);
+			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(Multiboot0695Stage.MultibootEAX, TypeSystem);
+			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(Multiboot0695Stage.MultibootEBX, TypeSystem);
 
 			var stackTop = CreateConstant(STACK_ADDRESS);
 			var zero = CreateConstant(0);
@@ -131,7 +131,7 @@ namespace Mosa.Platform.x86.CompilerStages
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
 			var startUpMethod = startUpType.FindMethodByName("Initialize");
 
-			var entryPoint = Operand.CreateSymbolFromMethod(TypeSystem, startUpMethod);
+			var entryPoint = Operand.CreateSymbolFromMethod(startUpMethod, TypeSystem);
 			ctx.AppendInstruction(X86.Call, null, entryPoint);
 
 			ctx.AppendInstruction(X86.Ret);

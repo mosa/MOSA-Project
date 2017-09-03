@@ -43,49 +43,49 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Ldc_i4:
 					{
 						int i = (int)decoder.Instruction.Operand;
-						constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, i);
+						constantValueOperand = Operand.CreateConstant(i, decoder.TypeSystem);
 					}
 					break;
 
 				case OpCode.Ldc_i4_s:
 					{
 						sbyte sb = (sbyte)decoder.Instruction.Operand;
-						constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, sb);
+						constantValueOperand = Operand.CreateConstant(sb, decoder.TypeSystem);
 					}
 					break;
 
 				case OpCode.Ldc_i8:
 					{
 						long l = (long)decoder.Instruction.Operand;
-						constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, l);
+						constantValueOperand = Operand.CreateConstant(l, decoder.TypeSystem);
 					}
 					break;
 
 				case OpCode.Ldc_r4:
 					{
 						float f = (float)decoder.Instruction.Operand;
-						constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, f);
+						constantValueOperand = Operand.CreateConstant(f, decoder.TypeSystem);
 					}
 					break;
 
 				case OpCode.Ldc_r8:
 					{
 						double d = (double)decoder.Instruction.Operand;
-						constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, d);
+						constantValueOperand = Operand.CreateConstant(d, decoder.TypeSystem);
 					}
 					break;
 
-				case OpCode.Ldnull: constantValueOperand = Operand.GetNull(decoder.TypeSystem); break;
-				case OpCode.Ldc_i4_0: constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, 0); break;
-				case OpCode.Ldc_i4_1: constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, 1); break;
-				case OpCode.Ldc_i4_2: constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, 2); break;
-				case OpCode.Ldc_i4_3: constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, 3); break;
-				case OpCode.Ldc_i4_4: constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, 4); break;
-				case OpCode.Ldc_i4_5: constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, 5); break;
-				case OpCode.Ldc_i4_6: constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, 6); break;
-				case OpCode.Ldc_i4_7: constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, 7); break;
-				case OpCode.Ldc_i4_8: constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, 8); break;
-				case OpCode.Ldc_i4_m1: constantValueOperand = Operand.CreateConstant(decoder.TypeSystem, -1); break;
+				case OpCode.Ldnull: constantValueOperand = Operand.GetNullObject(decoder.TypeSystem); break;
+				case OpCode.Ldc_i4_0: constantValueOperand = Operand.CreateConstant(0, decoder.TypeSystem); break;
+				case OpCode.Ldc_i4_1: constantValueOperand = Operand.CreateConstant(1, decoder.TypeSystem); break;
+				case OpCode.Ldc_i4_2: constantValueOperand = Operand.CreateConstant(2, decoder.TypeSystem); break;
+				case OpCode.Ldc_i4_3: constantValueOperand = Operand.CreateConstant(3, decoder.TypeSystem); break;
+				case OpCode.Ldc_i4_4: constantValueOperand = Operand.CreateConstant(4, decoder.TypeSystem); break;
+				case OpCode.Ldc_i4_5: constantValueOperand = Operand.CreateConstant(5, decoder.TypeSystem); break;
+				case OpCode.Ldc_i4_6: constantValueOperand = Operand.CreateConstant(6, decoder.TypeSystem); break;
+				case OpCode.Ldc_i4_7: constantValueOperand = Operand.CreateConstant(7, decoder.TypeSystem); break;
+				case OpCode.Ldc_i4_8: constantValueOperand = Operand.CreateConstant(8, decoder.TypeSystem); break;
+				case OpCode.Ldc_i4_m1: constantValueOperand = Operand.CreateConstant(-1, decoder.TypeSystem); break;
 				default: throw new NotImplementCompilerException();
 			}
 

@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.CompilerStages
 			if (method == null)
 				return;
 
-			var interrupt = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var interrupt = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 

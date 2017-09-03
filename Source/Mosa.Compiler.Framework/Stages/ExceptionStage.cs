@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			leaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, Architecture.LeaveTargetRegister);
 
-			nullOperand = Operand.GetNull(TypeSystem);
+			nullOperand = Operand.GetNullObject(TypeSystem);
 
 			// collect leave targets
 			leaveTargets = CollectLeaveTargets();
@@ -115,7 +115,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
 			newBlocks[0].AppendInstruction(IRInstruction.MoveInteger, exceptionRegister, exceptionVirtualRegister);
-			newBlocks[0].AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
+			newBlocks[0].AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, TypeSystem));
 		}
 
 		private void FinallyStartInstruction(InstructionNode node)
@@ -145,7 +145,7 @@ namespace Mosa.Compiler.Framework.Stages
 			ctx.SetInstruction(IRInstruction.MoveInteger, exceptionRegister, node.Operand1);
 
 			//ctx.AppendInstruction(IRInstruction.KillAllExcept, null, exceptionRegister);
-			ctx.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
+			ctx.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, TypeSystem));
 		}
 
 		private void GotoLeaveTargetInstruction(InstructionNode node)
