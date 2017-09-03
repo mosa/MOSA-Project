@@ -11,32 +11,7 @@ namespace Mosa.Utility.CodeDomCompiler
 		/// <summary>
 		/// An array of assembly references to include in the compilation.
 		/// </summary>
-		private List<string> references;
-
-		/// <summary>
-		/// The source text of the test code to compile.
-		/// </summary>
-		private string codeSource = string.Empty;
-
-		/// <summary>
-		/// The source text of the test code to compile.
-		/// </summary>
-		private string additionalSource = string.Empty;
-
-		/// <summary>
-		/// Holds the target language of this test runner.
-		/// </summary>
-		private string language = string.Empty;
-
-		/// <summary>
-		/// Determines if unsafe code is allowed in the test.
-		/// </summary>
-		private bool unsafeCode;
-
-		/// <summary>
-		/// Determines if mscorlib is referenced in the test.
-		/// </summary>
-		private bool doNotReferenceMscorlib;
+		private readonly List<string> references;
 
 		#endregion Data members
 
@@ -47,9 +22,9 @@ namespace Mosa.Utility.CodeDomCompiler
 		/// </summary>
 		public CompilerSettings()
 		{
-			language = "C#";
-			unsafeCode = true;
-			doNotReferenceMscorlib = true;
+			Language = "C#";
+			UnsafeCode = true;
+			DoNotReferenceMscorlib = true;
 			references = new List<string>();
 		}
 
@@ -59,11 +34,11 @@ namespace Mosa.Utility.CodeDomCompiler
 		/// <param name="settings">The settings.</param>
 		public CompilerSettings(CompilerSettings settings)
 		{
-			language = settings.language;
-			unsafeCode = settings.unsafeCode;
-			doNotReferenceMscorlib = settings.doNotReferenceMscorlib;
-			codeSource = settings.codeSource;
-			additionalSource = settings.additionalSource;
+			Language = settings.Language;
+			UnsafeCode = settings.UnsafeCode;
+			DoNotReferenceMscorlib = settings.DoNotReferenceMscorlib;
+			CodeSource = settings.CodeSource;
+			AdditionalSource = settings.AdditionalSource;
 			references = new List<string>(settings.references);
 		}
 
@@ -75,41 +50,25 @@ namespace Mosa.Utility.CodeDomCompiler
 		/// Gets or sets the language.
 		/// </summary>
 		/// <value>The language.</value>
-		public string Language
-		{
-			get { return language; }
-			set { language = value; }
-		}
+		public string Language { get; set; } = string.Empty;
 
 		/// <summary>
 		/// Gets or sets the code source.
 		/// </summary>
 		/// <value>The code source.</value>
-		public string CodeSource
-		{
-			get { return codeSource; }
-			set { codeSource = value; }
-		}
+		public string CodeSource { get; set; } = string.Empty;
 
 		/// <summary>
 		/// Gets or sets the code source.
 		/// </summary>
 		/// <value>The code source.</value>
-		public string AdditionalSource
-		{
-			get { return additionalSource; }
-			set { additionalSource = value; }
-		}
+		public string AdditionalSource { get; set; } = string.Empty;
 
 		/// <summary>
 		/// Gets or sets a value indicating whether unsafe code is used in the test.
 		/// </summary>
 		/// <value><c>true</c> if unsafe code is used in the test; otherwise, <c>false</c>.</value>
-		public bool UnsafeCode
-		{
-			get { return unsafeCode; }
-			set { unsafeCode = value; }
-		}
+		public bool UnsafeCode { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [do not reference mscorlib].
@@ -117,11 +76,7 @@ namespace Mosa.Utility.CodeDomCompiler
 		/// <value>
 		/// 	<c>true</c> if [do not reference mscorlib]; otherwise, <c>false</c>.
 		/// </value>
-		public bool DoNotReferenceMscorlib
-		{
-			get { return doNotReferenceMscorlib; }
-			set { doNotReferenceMscorlib = value; }
-		}
+		public bool DoNotReferenceMscorlib { get; set; }
 
 		/// <summary>
 		/// Gets or sets the references.
@@ -144,27 +99,31 @@ namespace Mosa.Utility.CodeDomCompiler
 			if (other == null)
 				return false;
 
-			if (codeSource != other.codeSource)
+			if (CodeSource != other.CodeSource)
 				return false;
 
-			if (additionalSource != other.additionalSource)
+			if (AdditionalSource != other.AdditionalSource)
 				return false;
 
-			if (unsafeCode != other.unsafeCode)
+			if (UnsafeCode != other.UnsafeCode)
 				return false;
 
-			if (language != other.language)
+			if (Language != other.Language)
 				return false;
 
-			if (doNotReferenceMscorlib != other.doNotReferenceMscorlib)
+			if (DoNotReferenceMscorlib != other.DoNotReferenceMscorlib)
 				return false;
 
 			if (references.Count != other.references.Count)
 				return false;
 
 			foreach (string file in references)
+			{
 				if (!other.references.Contains(file))
+				{
 					return false;
+				}
+			}
 
 			return true;
 		}
