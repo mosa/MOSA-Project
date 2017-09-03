@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (MosaTypeLayout.IsStoredOnStack(operand.Type))
 			{
-				var OffsetOfFirstParameterOperand = Operand.CreateConstant(TypeSystem, Architecture.OffsetOfFirstParameter);
+				var OffsetOfFirstParameterOperand = CreateConstant(Architecture.OffsetOfFirstParameter);
 				context.SetInstruction(IRInstruction.StoreCompound, null, StackFrame, OffsetOfFirstParameterOperand, operand);
 			}
 			else
@@ -125,7 +125,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 			// Get the address of the method
-			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, callTarget, typeDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, callTarget, typeDefinition, CreateConstant(methodPointerOffset));
 
 			MakeCall(context, callTarget, result, operands);
 		}
@@ -181,16 +181,16 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 			// Get the Interface Slot Table pointer
-			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, interfaceSlotPtr, typeDefinition, Operand.CreateConstant(TypeSystem, interfaceSlotTableOffset));
+			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, interfaceSlotPtr, typeDefinition, CreateConstant(interfaceSlotTableOffset));
 
 			// Get the Interface Method Table pointer
-			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant(TypeSystem, interfaceMethodTableOffset));
+			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, CreateConstant(interfaceMethodTableOffset));
 
 			// Get the MethodDef pointer
-			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, Operand.CreateConstant(TypeSystem, methodDefinitionOffset));
+			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, CreateConstant(methodDefinitionOffset));
 
 			// Get the address of the method
-			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, callTarget, methodDefinition, Operand.CreateConstant(TypeSystem, methodPointerOffset));
+			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, callTarget, methodDefinition, CreateConstant(methodPointerOffset));
 
 			MakeCall(context, callTarget, result, operands);
 		}
@@ -217,7 +217,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(IRInstruction.SubSigned, StackPointer, StackPointer, Operand.CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
+			context.AppendInstruction(IRInstruction.SubSigned, StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
 		}
 
 		private void FreeStackAfterCall(Context context, int stackSize)
@@ -225,7 +225,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(IRInstruction.AddSigned, StackPointer, StackPointer, Operand.CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
+			context.AppendInstruction(IRInstruction.AddSigned, StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
 		}
 
 		private int CalculateParameterStackSize(List<Operand> operands)
@@ -273,7 +273,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void Push(Context context, Operand operand, int offset, Operand scratch)
 		{
-			var offsetOperand = Operand.CreateConstant(TypeSystem, offset);
+			var offsetOperand = CreateConstant(offset);
 
 			if (operand.IsInteger)
 			{

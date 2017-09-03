@@ -55,8 +55,8 @@ namespace Mosa.Compiler.Framework
 
 			if (longOperand.Low == null && longOperand.High == null)
 			{
-				var low = Operand.CreateLowSplitForLong(typeSystem, longOperand, virtualRegisters.Count + 1);
-				var high = Operand.CreateHighSplitForLong(typeSystem, longOperand, virtualRegisters.Count + 1);
+				var low = Operand.CreateLowSplitForLong(longOperand, virtualRegisters.Count + 1, typeSystem);
+				var high = Operand.CreateHighSplitForLong(longOperand, virtualRegisters.Count + 1, typeSystem);
 
 				if (longOperand.IsVirtualRegister)
 				{

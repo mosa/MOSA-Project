@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (target.Uses.Count != 0)
 			{
-				var constant = Operand.CreateConstant(target.Type, value);
+				var constant = CreateConstant(target.Type, value);
 
 				// for each statement T that uses operand, substituted c in statement T
 				foreach (var node in target.Uses.ToArray())

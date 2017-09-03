@@ -49,7 +49,7 @@ namespace Mosa.Tool.Launcher
 			lbQEMUBIOSDirectory.Text = AppLocations.QEMUBIOSDirectory;
 			lbQEMUImgApplication.Text = AppLocations.QEMUImg;
 			lbVMwarePlayerExecutable.Text = AppLocations.VMwarePlayer;
-			lbmkisofsExecutable.Text = AppLocations.mkisofs;
+			lbmkisofsExecutable.Text = AppLocations.Mkisofs;
 		}
 
 		private void UpdateBuilderOptions()

@@ -91,7 +91,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		/// <param name="method">The method.</param>
 		public void Schedule(MosaMethod method)
 		{
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 			start.AppendInstruction(IRInstruction.CallStatic, null, symbol);
 		}
 

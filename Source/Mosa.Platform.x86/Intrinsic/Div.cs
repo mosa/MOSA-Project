@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand result = context.Result;
 			Operand result2 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
 
-			LongOperandTransformationStage.SplitLongOperand(methodCompiler, n, out Operand op0L, out Operand op0H);
+			methodCompiler.SplitLongOperand(n, out Operand op0L, out Operand op0H);
 
 			context.SetInstruction2(X86.Div, result2, result, op0H, op0L, d);
 		}

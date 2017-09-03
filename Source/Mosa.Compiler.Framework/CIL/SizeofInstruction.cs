@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			node.MosaType = type;
 
-			node.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4);
 		}
 
 		#endregion Methods

@@ -14,15 +14,15 @@ namespace Mosa.Utility.CodeDomCompiler
 		/// <summary>
 		/// A cache of CodeDom providers.
 		/// </summary>
-		private static Dictionary<string, CodeDomProvider> providerCache = new Dictionary<string, CodeDomProvider>();
+		private static readonly Dictionary<string, CodeDomProvider> providerCache = new Dictionary<string, CodeDomProvider>();
 
 		/// <summary>
 		/// Holds the temporary files collection.
 		/// </summary>
-		private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
+		private static readonly TempFileCollection temps = new TempFileCollection(TempDirectory, false);
 
 		/// <summary>
-		///
+		/// The temporary directory
 		/// </summary>
 		private static string tempDirectory;
 
@@ -51,12 +51,13 @@ namespace Mosa.Utility.CodeDomCompiler
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Compiler"/> class.
+		/// Initializes a new instance of the <see cref="Compiler" /> class.
 		/// </summary>
+		/// <param name="settings">The settings.</param>
+		/// <returns></returns>
 		public static CompilerResults ExecuteCompiler(CompilerSettings settings)
 		{
-			CodeDomProvider provider;
-			if (!providerCache.TryGetValue(settings.Language, out provider))
+			if (!providerCache.TryGetValue(settings.Language, out CodeDomProvider provider))
 			{
 				provider = CodeDomProvider.CreateProvider(settings.Language);
 				if (provider == null)
@@ -67,16 +68,18 @@ namespace Mosa.Utility.CodeDomCompiler
 			string filename = Path.Combine(TempDirectory, Path.ChangeExtension(Path.GetRandomFileName(), "dll"));
 			temps.AddFile(filename, false);
 
-			string[] references = new string[settings.References.Count];
+			var references = new string[settings.References.Count];
 			settings.References.CopyTo(references, 0);
 
-			CompilerParameters parameters = new CompilerParameters(references, filename, false);
-			parameters.CompilerOptions = "/optimize-";
+			var parameters = new CompilerParameters(references, filename, false)
+			{
+				CompilerOptions = "/optimize-"
+			};
 
 			if (settings.UnsafeCode)
 			{
 				if (settings.Language == "C#")
-					parameters.CompilerOptions = parameters.CompilerOptions + " /unsafe+";
+					parameters.CompilerOptions += " /unsafe+";
 				else
 					throw new NotSupportedException();
 			}
@@ -84,7 +87,7 @@ namespace Mosa.Utility.CodeDomCompiler
 			if (settings.DoNotReferenceMscorlib)
 			{
 				if (settings.Language == "C#")
-					parameters.CompilerOptions = parameters.CompilerOptions + " /nostdlib";
+					parameters.CompilerOptions += " /nostdlib";
 				else
 					throw new NotSupportedException();
 			}
@@ -93,12 +96,12 @@ namespace Mosa.Utility.CodeDomCompiler
 
 			if (settings.CodeSource != null)
 			{
-				CompilerResults compileResults = provider.CompileAssemblyFromSource(parameters, settings.CodeSource + settings.AdditionalSource);
-
-				return compileResults;
+				return provider.CompileAssemblyFromSource(parameters, settings.CodeSource + settings.AdditionalSource);
 			}
 			else
+			{
 				throw new NotSupportedException();
+			}
 		}
 
 		#endregion Construction

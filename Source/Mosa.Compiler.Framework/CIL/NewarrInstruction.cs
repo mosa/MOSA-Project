@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// checks in an optimization stage later on, if we find that a value never exceeds the array
 			// bounds.
 
-			node.Result = decoder.Compiler.CreateVirtualRegister(type);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(type);
 		}
 
 		#endregion Methods

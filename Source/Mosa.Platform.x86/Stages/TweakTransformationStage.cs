@@ -103,7 +103,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 
 			// fixme: may not be necessary
-			context.Operand2 = Operand.CreateConstant(TypeSystem.BuiltIn.U1, context.Operand2.ConstantUnsignedLongInteger);
+			context.Operand2 = CreateConstant(TypeSystem.BuiltIn.U1, context.Operand2.ConstantUnsignedLongInteger);
 		}
 	}
 }

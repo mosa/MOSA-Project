@@ -90,11 +90,11 @@ namespace Mosa.Compiler.Framework.CIL
 			// Remove the this argument from the invocation, it's not on the stack yet.
 			node.OperandCount--;
 
-			decoder.Compiler.Scheduler.TrackTypeAllocated(ctor.DeclaringType);
-			decoder.Compiler.Scheduler.TrackTypeAllocated(node.InvokeMethod.DeclaringType);
+			decoder.MethodCompiler.Scheduler.TrackTypeAllocated(ctor.DeclaringType);
+			decoder.MethodCompiler.Scheduler.TrackTypeAllocated(node.InvokeMethod.DeclaringType);
 
 			// Set a return value according to the type of the object allocated
-			node.Result = decoder.Compiler.AllocateVirtualRegisterOrStackSlot(ctor.DeclaringType);
+			node.Result = decoder.MethodCompiler.AllocateVirtualRegisterOrStackSlot(ctor.DeclaringType);
 			node.ResultCount = 1;
 		}
 

@@ -208,7 +208,7 @@ namespace Mosa.Compiler.Framework
 			Pipeline = new CompilerPipeline();
 			LocalStack = new List<Operand>();
 
-			ConstantZero = Operand.CreateConstant(TypeSystem, 0);
+			ConstantZero = Operand.CreateConstant(0, TypeSystem);
 			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
 			Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
@@ -278,10 +278,11 @@ namespace Mosa.Compiler.Framework
 		/// <param name="type">The type.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="isThis">if set to <c>true</c> [is this].</param>
+		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		private Operand SetStackParameter(int index, MosaType type, string name, bool isThis)
+		private Operand SetStackParameter(int index, MosaType type, string name, bool isThis, int offset)
 		{
-			var param = Operand.CreateStackParameter(type, index, name, isThis);
+			var param = Operand.CreateStackParameter(type, index, name, isThis, offset);
 			Parameters[index] = param;
 			return param;
 		}
@@ -291,50 +292,41 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected void EvaluateParameterOperands()
 		{
+			int offset = Architecture.OffsetOfFirstParameter;
+
+			if (MosaTypeLayout.IsStoredOnStack(Method.Signature.ReturnType))
+			{
+				offset += TypeLayout.GetTypeSize(Method.Signature.ReturnType);
+			}
+
 			int index = 0;
 
 			if (Method.HasThis || Method.HasExplicitThis)
 			{
 				if (Type.IsValueType)
-					SetStackParameter(index++, Type.ToManagedPointer(), "this", true);
+				{
+					var ptr = Type.ToManagedPointer();
+					SetStackParameter(index++, ptr, "this", true, offset);
+
+					var size = GetReferenceOrTypeSize(ptr, true);
+					offset += size;
+				}
 				else
-					SetStackParameter(index++, Type, "this", true);
+				{
+					SetStackParameter(index++, Type, "this", true, offset);
+
+					var size = GetReferenceOrTypeSize(Type, true);
+					offset += size;
+				}
 			}
 
 			foreach (var parameter in Method.Signature.Parameters)
 			{
-				SetStackParameter(index++, parameter.ParameterType, parameter.Name, false);
-			}
+				SetStackParameter(index++, parameter.ParameterType, parameter.Name, false, offset);
 
-			LayoutParameters();
-		}
-
-		private void LayoutParameters()
-		{
-			int returnSize = 0;
-
-			if (MosaTypeLayout.IsStoredOnStack(Method.Signature.ReturnType))
-			{
-				returnSize = TypeLayout.GetTypeSize(Method.Signature.ReturnType);
-			}
-
-			LayoutParameters(Architecture.OffsetOfFirstParameter + returnSize);
-		}
-
-		private int LayoutParameters(int offsetOfFirst)
-		{
-			int offset = offsetOfFirst;
-
-			foreach (var operand in Parameters)
-			{
-				operand.Offset = offset;
-				operand.IsResolved = true;
-
-				var size = GetReferenceOrTypeSize(operand.Type, true);
+				var size = GetReferenceOrTypeSize(parameter.ParameterType, true);
 				offset += size;
 			}
-
-			return offset;
 		}
 
 		/// <summary>
@@ -385,6 +377,36 @@ namespace Mosa.Compiler.Framework
 		public Operand CreateVirtualRegister(MosaType type)
 		{
 			return VirtualRegisters.Allocate(type);
+		}
+
+		/// <summary>
+		/// Splits the long operand.
+		/// </summary>
+		/// <param name="longOperand">The long operand.</param>
+		public void SplitLongOperand(Operand longOperand)
+		{
+			VirtualRegisters.SplitLongOperand(TypeSystem, longOperand);
+		}
+
+		/// <summary>
+		/// Splits the long operand.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		/// <param name="operandLow">The operand low.</param>
+		/// <param name="operandHigh">The operand high.</param>
+		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+		{
+			if (operand.Is64BitInteger)
+			{
+				SplitLongOperand(operand);
+				operandLow = operand.Low;
+				operandHigh = operand.High;
+			}
+			else
+			{
+				operandLow = operand;
+				operandHigh = ConstantZero;
+			}
 		}
 
 		/// <summary>

@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Gets the method compiler that is currently executing.
 		/// </summary>
-		BaseMethodCompiler Compiler { get; }
+		BaseMethodCompiler MethodCompiler { get; }
 
 		/// <summary>
 		/// Gets the MosaMethod being compiled.

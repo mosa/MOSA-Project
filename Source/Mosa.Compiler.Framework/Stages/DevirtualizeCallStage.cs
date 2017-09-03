@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (TypeLayout.IsMethodOverridden(method))
 				return;
 
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			var operands = node.GetOperands();
 			operands.RemoveAt(0);

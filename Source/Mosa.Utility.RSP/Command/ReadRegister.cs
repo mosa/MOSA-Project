@@ -4,7 +4,7 @@ namespace Mosa.Utility.RSP.Command
 {
 	public class ReadRegister : GDBCommand
 	{
-		public int Register { get; private set; }
+		public int Register { get; }
 
 		protected override string PackArguments { get { return Register.ToString("x"); } }
 

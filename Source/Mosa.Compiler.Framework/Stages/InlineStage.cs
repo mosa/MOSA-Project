@@ -262,11 +262,11 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (operand.StringData != null)
 				{
-					mappedOperand = Operand.CreateStringSymbol(operand.Type.TypeSystem, operand.Name, operand.StringData);
+					mappedOperand = Operand.CreateStringSymbol(operand.Name, operand.StringData, operand.Type.TypeSystem);
 				}
 				else if (operand.Method != null)
 				{
-					mappedOperand = Operand.CreateSymbolFromMethod(operand.Type.TypeSystem, operand.Method);
+					mappedOperand = Operand.CreateSymbolFromMethod(operand.Method, operand.Type.TypeSystem);
 				}
 				else if (operand.Name != null)
 				{
@@ -287,7 +287,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsStaticField)
 			{
-				mappedOperand = Operand.CreateField(operand.Field);
+				mappedOperand = Operand.CreateStaticField(operand.Field, TypeSystem);
 			}
 			else if (operand.IsCPURegister)
 			{

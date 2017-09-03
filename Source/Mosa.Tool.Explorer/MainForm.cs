@@ -93,6 +93,7 @@ namespace Mosa.Tool.Explorer
 					case "-no-ir-optimizations": cbEnableOptimizations.Checked = false; continue;
 					case "-no-sparse": cbEnableSparseConditionalConstantPropagation.Checked = false; continue;
 					case "-ir-long-operand": cbEnableLongOperand.Checked = true; continue;
+					case "-two-pass-optimization": cbEnableTwoPassOptimizationToolStripMenuItem.Checked = true; continue;
 					default: break;
 				}
 

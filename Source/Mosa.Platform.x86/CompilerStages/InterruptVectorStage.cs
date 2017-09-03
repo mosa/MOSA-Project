@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.CompilerStages
 			if (method == null)
 				return;
 
-			var interrupt = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var interrupt = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
@@ -47,15 +47,15 @@ namespace Mosa.Platform.x86.CompilerStages
 				ctx.AppendInstruction(X86.Cli);
 				if (i <= 7 || (i >= 16 | i == 9)) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
 				{
-					ctx.AppendInstruction(X86.Push, null, Operand.CreateConstant(TypeSystem, 0));
+					ctx.AppendInstruction(X86.Push, null, CreateConstant(0));
 				}
-				ctx.AppendInstruction(X86.Push, null, Operand.CreateConstant(TypeSystem, i));
+				ctx.AppendInstruction(X86.Push, null, CreateConstant(i));
 				ctx.AppendInstruction(X86.Pushad);
 				ctx.AppendInstruction(X86.Push, null, esp);
 				ctx.AppendInstruction(X86.Call, null, interrupt);
 				ctx.AppendInstruction(X86.Pop, esp);
 				ctx.AppendInstruction(X86.Popad);
-				ctx.AppendInstruction(X86.Add, esp, esp, Operand.CreateConstant(TypeSystem, 8));
+				ctx.AppendInstruction(X86.Add, esp, esp, CreateConstant(8));
 				ctx.AppendInstruction(X86.Sti);
 				ctx.AppendInstruction(X86.IRetd);
 

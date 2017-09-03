@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var result = context.Result;
 
 			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
-			var zero = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
+			var zero = Operand.CreateConstant(0, methodCompiler.TypeSystem);
 			var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
 
 			// Compare EAX with r/m32. If equal, ZF is set and r32 is loaded into r/m32.

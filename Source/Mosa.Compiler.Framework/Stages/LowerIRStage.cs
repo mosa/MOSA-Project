@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void SetVMCall(InstructionNode node, VmCall vmcall, Operand result, List<Operand> operands)
 		{
 			var method = GetVMCallMethod(vmcall);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
 		}
@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void NewObject(InstructionNode node)
 		{
 			var method = GetVMCallMethod(VmCall.AllocateObject);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			node.SetInstruction(IRInstruction.CallStatic, node.Result, symbol, node.GetOperands());
 		}
@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void NewArray(InstructionNode node)
 		{
 			var method = GetVMCallMethod(VmCall.AllocateArray);
-			var symbol = Operand.CreateSymbolFromMethod(TypeSystem, method);
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			node.SetInstruction(IRInstruction.CallStatic, node.Result, symbol, node.GetOperands());
 		}

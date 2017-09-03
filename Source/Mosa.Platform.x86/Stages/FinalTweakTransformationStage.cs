@@ -123,11 +123,11 @@ namespace Mosa.Platform.x86.Stages
 
 				if (size == InstructionSize.Size16)
 				{
-					context.AppendInstruction(X86.And, result, result, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x0000ffff));
+					context.AppendInstruction(X86.And, result, result, CreateConstant(0x0000ffff));
 				}
 				else if (size == InstructionSize.Size8)
 				{
-					context.AppendInstruction(X86.And, result, result, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x000000ff));
+					context.AppendInstruction(X86.And, result, result, CreateConstant(0x000000ff));
 				}
 			}
 		}
@@ -223,15 +223,15 @@ namespace Mosa.Platform.x86.Stages
 
 				if (size == InstructionSize.Size16)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x0000ffff));
-					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00010000));
-					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00010000));
+					context.AppendInstruction(X86.And, dest, dest, CreateConstant(0x0000ffff));
+					context.AppendInstruction(X86.Xor, dest, dest, CreateConstant(0x00010000));
+					context.AppendInstruction(X86.Sub, dest, dest, CreateConstant(0x00010000));
 				}
 				else if (size == InstructionSize.Size8)
 				{
-					context.AppendInstruction(X86.And, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x000000ff));
-					context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00000100));
-					context.AppendInstruction(X86.Sub, dest, dest, Operand.CreateConstant(MethodCompiler.TypeSystem, 0x00000100));
+					context.AppendInstruction(X86.And, dest, dest, CreateConstant(0x000000ff));
+					context.AppendInstruction(X86.Xor, dest, dest, CreateConstant(0x00000100));
+					context.AppendInstruction(X86.Sub, dest, dest, CreateConstant(0x00000100));
 				}
 			}
 		}
@@ -265,11 +265,11 @@ namespace Mosa.Platform.x86.Stages
 
 				if (size == InstructionSize.Size16)
 				{
-					context.AppendInstruction(X86.And, result, result, Operand.CreateConstant(TypeSystem, 0xffff));
+					context.AppendInstruction(X86.And, result, result, CreateConstant(0xffff));
 				}
 				else if (size == InstructionSize.Size8)
 				{
-					context.AppendInstruction(X86.And, result, result, Operand.CreateConstant(TypeSystem, 0xff));
+					context.AppendInstruction(X86.And, result, result, CreateConstant(0xff));
 				}
 			}
 		}

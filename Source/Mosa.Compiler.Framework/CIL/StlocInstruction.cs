@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.CIL
 				default: throw new NotImplementCompilerException();
 			}
 
-			node.Result = decoder.Compiler.LocalVariables[index];
+			node.Result = decoder.MethodCompiler.LocalVariables[index];
 		}
 
 		#endregion Methods

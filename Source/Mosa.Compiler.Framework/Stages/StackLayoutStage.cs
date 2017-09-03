@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -55,7 +54,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="offsetOfFirst">The offset of first.</param>
 		///
 		/// <returns></returns>
-		private int LayoutVariables(IList<Operand> locals, int offsetOfFirst)
+		private int LayoutVariables(List<Operand> locals, int offsetOfFirst)
 		{
 			int offset = offsetOfFirst;
 
@@ -67,6 +66,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 				operand.Offset = offset;
 				operand.IsResolved = true;
+
+				if (operand.Low != null)
+				{
+					operand.Low.Offset = offset;
+					operand.Low.IsResolved = true;
+				}
+				if (operand.High != null)
+				{
+					operand.High.Offset = offset + 4;
+					operand.High.IsResolved = true;
+				}
 			}
 
 			return offset;

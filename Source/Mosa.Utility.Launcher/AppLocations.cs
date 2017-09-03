@@ -20,7 +20,7 @@ namespace Mosa.Utility.Launcher
 
 		public string VMwarePlayer { get; set; }
 
-		public string mkisofs { get; set; }
+		public string Mkisofs { get; set; }
 
 		public string GDB { get; set; }
 
@@ -35,12 +35,12 @@ namespace Mosa.Utility.Launcher
 					new string[] { "qemu-system-i386.exe", "qemu-system-i386" },
 					new string[] {
 						CombineParameterAndDirectory("MOSA",@"Tools\QEMU"),
-						CombineParameterAndDirectory("MOSA",@"QEMU"),
+						CombineParameterAndDirectory("MOSA","QEMU"),
 						@"..\Tools\QEMU",
 						@"Tools\QEMU",
-						CombineParameterAndDirectory("ProgramFiles",@"qemu"),
-						CombineParameterAndDirectory("ProgramFiles(x86)",@"qemu"),
-						@"/bin"
+						CombineParameterAndDirectory("ProgramFiles","qemu"),
+						CombineParameterAndDirectory("ProgramFiles(x86)","qemu"),
+						"/bin"
 					}
 				);
 			}
@@ -54,12 +54,12 @@ namespace Mosa.Utility.Launcher
 						new string[]
 						{
 							CombineParameterAndDirectory("MOSA", @"Tools\QEMU"),
-							CombineParameterAndDirectory("MOSA", @"QEMU"),
+							CombineParameterAndDirectory("MOSA", "QEMU"),
 							@"..\Tools\QEMU",
 							@"Tools\QEMU",
-							CombineParameterAndDirectory("ProgramFiles", @"qemu"),
-							CombineParameterAndDirectory("ProgramFiles(x86)", @"qemu"),
-							@"/bin"
+							CombineParameterAndDirectory("ProgramFiles", "qemu"),
+							CombineParameterAndDirectory("ProgramFiles(x86)", "qemu"),
+							"/bin"
 						}
 					);
 				}
@@ -85,10 +85,10 @@ namespace Mosa.Utility.Launcher
 					new string[] { "ndisasm.exe", "ndisasm" },
 					new string[] {
 						CombineParameterAndDirectory("MOSA",@"Tools\ndisasm"),
-						CombineParameterAndDirectory("MOSA",@"ndisasm"),
+						CombineParameterAndDirectory("MOSA","ndisasm"),
 						@"..\Tools\ndisasm",
 						@"Tools\ndisasm",
-						@"/bin"
+						"/bin"
 					}
 				);
 			}
@@ -98,19 +98,19 @@ namespace Mosa.Utility.Launcher
 				BOCHS = TryFind(
 					new string[] { "bochs.exe", "bochs" },
 					new string[] {
-						CombineParameterAndDirectory("ProgramFiles",@"Bochs-2.6.9"),
-						CombineParameterAndDirectory("ProgramFiles(x86)",@"Bochs-2.6.9"),
-						CombineParameterAndDirectory("ProgramFiles",@"Bochs-2.6.8"),
-						CombineParameterAndDirectory("ProgramFiles(x86)",@"Bochs-2.6.8"),
-						CombineParameterAndDirectory("ProgramFiles",@"Bochs-2.6.5"),
-						CombineParameterAndDirectory("ProgramFiles(x86)",@"Bochs-2.6.5"),
-						CombineParameterAndDirectory("ProgramFiles",@"Bochs-2.6.2"),
-						CombineParameterAndDirectory("ProgramFiles(x86)",@"Bochs-2.6.2"),
+						CombineParameterAndDirectory("ProgramFiles","Bochs-2.6.9"),
+						CombineParameterAndDirectory("ProgramFiles(x86)","Bochs-2.6.9"),
+						CombineParameterAndDirectory("ProgramFiles","Bochs-2.6.8"),
+						CombineParameterAndDirectory("ProgramFiles(x86)","Bochs-2.6.8"),
+						CombineParameterAndDirectory("ProgramFiles","Bochs-2.6.5"),
+						CombineParameterAndDirectory("ProgramFiles(x86)","Bochs-2.6.5"),
+						CombineParameterAndDirectory("ProgramFiles","Bochs-2.6.2"),
+						CombineParameterAndDirectory("ProgramFiles(x86)","Bochs-2.6.2"),
 						CombineParameterAndDirectory("MOSA",@"Tools\Bochs"),
-						CombineParameterAndDirectory("MOSA",@"Bochs"),
+						CombineParameterAndDirectory("MOSA","Bochs"),
 						@"..\Tools\Bochs",
 						@"Tools\Bochs",
-						@"/bin"
+						"/bin"
 						}
 				);
 			}
@@ -125,26 +125,26 @@ namespace Mosa.Utility.Launcher
 						CombineParameterAndDirectory("ProgramFiles",@"VMware\VMware Workstation"),
 						CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Player"),
 						CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Workstation"),
-						@"/bin"
+						"/bin"
 					}
 				);
 			}
 
-			if (string.IsNullOrEmpty(mkisofs))
+			if (string.IsNullOrEmpty(Mkisofs))
 			{
 				// find mkisofs
-				mkisofs = TryFind(
+				Mkisofs = TryFind(
 					new string[] { "mkisofs.exe", "mkisofs" },
 					new string[] {
 						CombineParameterAndDirectory("ProgramFiles",@"VMware\VMware Player"),
 						CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Player"),
-						CombineParameterAndDirectory("ProgramFiles",@"cdrtools"),
-						CombineParameterAndDirectory("ProgramFiles(x86)",@"cdrtools"),
+						CombineParameterAndDirectory("ProgramFiles","cdrtools"),
+						CombineParameterAndDirectory("ProgramFiles(x86)","cdrtools"),
 						CombineParameterAndDirectory("MOSA",@"Tools\mkisofs"),
-						CombineParameterAndDirectory("MOSA",@"mkisofs"),
+						CombineParameterAndDirectory("MOSA","mkisofs"),
 						@"..\Tools\mkisofs",
 						@"Tools\mkisofs",
-						@"/bin"
+						"/bin"
 					}
 				);
 			}
@@ -156,7 +156,7 @@ namespace Mosa.Utility.Launcher
 					new string[] { "gdb.exe" },
 					new string[] {
 						CombineParameterAndDirectory("MOSA",@"Tools\gdb"),
-						CombineParameterAndDirectory("MOSA",@"gdb"),
+						CombineParameterAndDirectory("MOSA","gdb"),
 						@"..\Tools\gdb",
 						@"Tools\gdb",
 						@"C:\cygwin64\bin",
@@ -164,7 +164,7 @@ namespace Mosa.Utility.Launcher
 						@"C:\cygwin\bin",
 						@"C:\mingw32\bin",
 						@"C:\mingw\bin",
-						@"/bin"
+						"/bin"
 					}
 				);
 			}
@@ -182,12 +182,16 @@ namespace Mosa.Utility.Launcher
 
 		private string TryFind(IList<string> files, IList<string> directories)
 		{
-			string location;
-
 			foreach (var directory in directories)
+			{
 				foreach (var file in files)
-					if (TryFind(file, directory, out location))
+				{
+					if (TryFind(file, directory, out string location))
+					{
 						return location;
+					}
+				}
+			}
 
 			return string.Empty;
 		}

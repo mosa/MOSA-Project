@@ -53,10 +53,10 @@ namespace Mosa.Compiler.Framework.CIL
 				default: throw new InvalidCompilerException();
 			}
 
-			var parameterOperand = decoder.Compiler.Parameters[index];
+			var parameterOperand = decoder.MethodCompiler.Parameters[index];
 
 			node.Operand1 = parameterOperand;
-			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, parameterOperand.Type);
+			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, parameterOperand.Type);
 		}
 
 		#endregion Methods

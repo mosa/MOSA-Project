@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// result must be a reference
 			var resultType = (type.IsReferenceType) ? type : type.ToManagedPointer();
 
-			node.Result = decoder.Compiler.AllocateVirtualRegisterOrStackSlot(resultType);
+			node.Result = decoder.MethodCompiler.AllocateVirtualRegisterOrStackSlot(resultType);
 			node.MosaType = type;
 			node.ResultCount = 1;
 		}

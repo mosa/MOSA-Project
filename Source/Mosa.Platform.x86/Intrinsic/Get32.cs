@@ -20,7 +20,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			Debug.Assert(context.Result.IsI4 | context.Result.IsU4);
-			Operand zero = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
+			Operand zero = Operand.CreateConstant(0, methodCompiler.TypeSystem);
 
 			context.SetInstruction(X86.MovLoad, InstructionSize.Size32, context.Result, context.Operand1, zero);
 		}

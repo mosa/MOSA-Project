@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(node, decoder);
 
 			// Set the result
-			node.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4);
 		}
 
 		/// <summary>

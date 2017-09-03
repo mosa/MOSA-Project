@@ -47,7 +47,7 @@ namespace Mosa.Platform.x86.Intrinsic
 				throw new InvalidCompilerException();
 			}
 
-			context.SetInstruction(IRInstruction.MoveInteger, context.Result, Operand.CreateSymbolFromMethod(methodCompiler.TypeSystem, method));
+			context.SetInstruction(IRInstruction.MoveInteger, context.Result, Operand.CreateSymbolFromMethod(method, methodCompiler.TypeSystem));
 		}
 
 		#endregion Methods

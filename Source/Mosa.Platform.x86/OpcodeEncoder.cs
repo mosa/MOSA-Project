@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
-				index = index - 8;
+				index -= 8;
 				int shift = 56 - (8 * index);
 				return (byte)((data2 >> shift) & 0xFF);
 			}
@@ -291,7 +291,7 @@ namespace Mosa.Platform.x86
 
 		public bool Is8BitDisplacement(Operand displacement)
 		{
-			return (displacement.ConstantSignedInteger >= sbyte.MinValue && displacement.ConstantSignedInteger <= sbyte.MaxValue);
+			return displacement.ConstantSignedInteger >= sbyte.MinValue && displacement.ConstantSignedInteger <= sbyte.MaxValue;
 		}
 
 		public OpcodeEncoder AppendMod(bool memory, Operand displacement)

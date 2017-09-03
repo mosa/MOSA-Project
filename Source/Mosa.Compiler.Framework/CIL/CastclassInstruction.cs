@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var type = (MosaType)decoder.Instruction.Operand;
 
-			node.Result = decoder.Compiler.CreateVirtualRegister(type);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(type);
 		}
 
 		#endregion Methods

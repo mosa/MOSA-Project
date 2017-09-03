@@ -36,9 +36,9 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var method = (MosaMethod)decoder.Instruction.Operand;
 
-			decoder.Compiler.Scheduler.TrackMethodInvoked(method);
+			decoder.MethodCompiler.Scheduler.TrackMethodInvoked(method);
 
-			node.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.ToFnPtr(method.Signature));
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.ToFnPtr(method.Signature));
 			node.InvokeMethod = method;
 		}
 

@@ -19,11 +19,11 @@ namespace Mosa.Utility.Launcher
 {
 	public class Builder : BaseLauncher
 	{
-		public IList<string> Counters { get; private set; }
+		public IList<string> Counters { get; }
 
 		public DateTime CompileStartTime { get; private set; }
 
-		public IBuilderEvent BuilderEvent { get; private set; }
+		public IBuilderEvent BuilderEvent { get; }
 
 		public bool HasCompileError { get; private set; }
 
@@ -49,8 +49,7 @@ namespace Mosa.Utility.Launcher
 
 		protected override void OutputEvent(string status)
 		{
-			if (BuilderEvent != null)
-				BuilderEvent.NewStatus(status);
+			BuilderEvent?.NewStatus(status);
 		}
 
 		public void AddCounters(string data)
@@ -83,6 +82,7 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.EnableInlinedMethods = Options.EnableInlinedMethods;
 				compiler.CompilerOptions.InlinedIRMaximum = Options.InlinedIRMaximum;
 				compiler.CompilerOptions.EnableIRLongOperand = Options.EnableIRLongOperand;
+				compiler.CompilerOptions.TwoPassOptimization = Options.TwoPassOptimization;
 				compiler.CompilerOptions.OutputFile = CompiledFile;
 
 				compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);
@@ -128,8 +128,10 @@ namespace Mosa.Utility.Launcher
 					return;
 				}
 
-				var inputFiles = new List<FileInfo>();
-				inputFiles.Add(new FileInfo(Options.SourceFile));
+				var inputFiles = new List<FileInfo>
+				{
+					new FileInfo(Options.SourceFile)
+				};
 
 				compiler.Load(inputFiles);
 
@@ -204,7 +206,7 @@ namespace Mosa.Utility.Launcher
 				bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\3.72", "mboot.c32")));
 			}
 
-			bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetResource(@"syslinux", "syslinux.cfg")));
+			bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetResource("syslinux", "syslinux.cfg")));
 			bootImageOptions.IncludeFiles.Add(new IncludeFile(compiledFile, "main.exe"));
 
 			bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
@@ -259,7 +261,7 @@ namespace Mosa.Utility.Launcher
 				File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource(@"syslinux\3.72", "mboot.c32"));
 			}
 
-			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetResource(@"syslinux", "syslinux.cfg"));
+			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetResource("syslinux", "syslinux.cfg"));
 
 			foreach (var include in Options.IncludeFiles)
 			{
@@ -272,7 +274,7 @@ namespace Mosa.Utility.Launcher
 
 			string arg = $"-relaxed-filenames -J -R -o {Quote(ImageFile)} -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
 
-			LaunchApplication(AppLocations.mkisofs, arg, true);
+			LaunchApplication(AppLocations.Mkisofs, arg, true);
 		}
 
 		private void CreateISOImageWithGrub(string compiledFile)
@@ -293,13 +295,13 @@ namespace Mosa.Utility.Launcher
 
 			if (Options.BootLoader == BootLoader.Grub_0_97)
 			{
-				loader = @"boot/grub/stage2_eltorito";
+				loader = "boot/grub/stage2_eltorito";
 				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "stage2_eltorito"), GetResource(@"grub\0.97", "stage2_eltorito"));
 				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "menu.lst"), GetResource(@"grub\0.97", "menu.lst"));
 			}
 			else if (Options.BootLoader == BootLoader.Grub_2_00)
 			{
-				loader = @"boot/grub/i386-pc/eltorito.img";
+				loader = "boot/grub/i386-pc/eltorito.img";
 				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "grub.cfg"), GetResource(@"grub\2.00", "grub.cfg"));
 
 				Directory.CreateDirectory(Path.Combine(isoDirectory, "boot", "grub", "i386-pc"));
@@ -323,7 +325,7 @@ namespace Mosa.Utility.Launcher
 
 			string arg = $"-relaxed-filenames -J -R -o {Quote(ImageFile)} -b {Quote(loader)} -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
 
-			LaunchApplication(AppLocations.mkisofs, arg, true);
+			LaunchApplication(AppLocations.Mkisofs, arg, true);
 		}
 
 		private void CreateVMDK()
@@ -340,7 +342,7 @@ namespace Mosa.Utility.Launcher
 		{
 			var textSection = Linker.LinkerSections[(int)SectionKind.Text];
 
-			uint multibootHeaderLength = MultibootHeaderLength;
+			const uint multibootHeaderLength = MultibootHeaderLength;
 			ulong startingAddress = textSection.VirtualAddress + multibootHeaderLength;
 			uint fileOffset = textSection.FileOffset + multibootHeaderLength;
 
@@ -377,7 +379,7 @@ namespace Mosa.Utility.Launcher
 				map.Add(symbol.VirtualAddress, symbol.Name);
 			}
 
-			uint multibootHeaderLength = MultibootHeaderLength;
+			const uint multibootHeaderLength = MultibootHeaderLength;
 			ulong startingAddress = textSection.VirtualAddress + multibootHeaderLength;
 			uint fileOffset = textSection.FileOffset + multibootHeaderLength;
 			uint length = textSection.Size;
