@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// Replaces the intrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
+		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			var result = context.Result;
@@ -27,7 +27,7 @@ namespace Mosa.Platform.x86.Intrinsic
 				var xmm1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R8);
 				var xmm2 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R8);
 				var xmm3 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R8);
-				var size = InstructionSize.Size64;
+				const InstructionSize size = InstructionSize.Size64;
 
 				context.SetInstruction(X86.Divsd, size, xmm1, dividend, divisor);
 				context.AppendInstruction(X86.Roundsd, size, xmm2, xmm1, Operand.CreateConstant(methodCompiler.TypeSystem.BuiltIn.U1, 0x3));
@@ -39,7 +39,7 @@ namespace Mosa.Platform.x86.Intrinsic
 				var xmm1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R4);
 				var xmm2 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R4);
 				var xmm3 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R4);
-				var size = InstructionSize.Size32;
+				const InstructionSize size = InstructionSize.Size32;
 
 				context.SetInstruction(X86.Divss, size, xmm1, dividend, divisor);
 				context.AppendInstruction(X86.Roundss, size, xmm2, xmm1, Operand.CreateConstant(methodCompiler.TypeSystem.BuiltIn.U1, 0x3));

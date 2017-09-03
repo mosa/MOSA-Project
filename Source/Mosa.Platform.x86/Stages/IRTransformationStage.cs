@@ -437,7 +437,7 @@ namespace Mosa.Platform.x86.Stages
 						var newBlocks = CreateNewBlockContexts(2);
 						var nextBlock = Split(context);
 
-						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(TypeSystem, 1));
+						context.SetInstruction(X86.Mov, result, CreateConstant(1));
 						context.AppendInstruction(instruction, size, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
@@ -462,7 +462,7 @@ namespace Mosa.Platform.x86.Stages
 						var newBlocks = CreateNewBlockContexts(1);
 						var nextBlock = Split(context);
 
-						context.SetInstruction(X86.Mov, result, Operand.CreateConstant(TypeSystem, 1));
+						context.SetInstruction(X86.Mov, result, CreateConstant(1));
 						context.AppendInstruction(instruction, size, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
@@ -630,9 +630,9 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Mov, dest, context.Operand1);
 
 			if (dest.IsByte)
-				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(TypeSystem, 0xFF));
+				context.AppendInstruction(X86.Xor, dest, dest, CreateConstant(0xFF));
 			else if (dest.IsU2)
-				context.AppendInstruction(X86.Xor, dest, dest, Operand.CreateConstant(TypeSystem, 0xFFFF));
+				context.AppendInstruction(X86.Xor, dest, dest, CreateConstant(0xFFFF));
 			else
 				context.AppendInstruction(X86.Not, dest, dest);
 		}
@@ -902,7 +902,7 @@ namespace Mosa.Platform.x86.Stages
 
 			for (int i = 0; i < targets.Count - 1; ++i)
 			{
-				context.AppendInstruction(X86.Cmp, null, operand, Operand.CreateConstant(TypeSystem, i));
+				context.AppendInstruction(X86.Cmp, null, operand, CreateConstant(i));
 				context.AppendInstruction(X86.Branch, ConditionCode.Equal, targets[i]);
 			}
 		}

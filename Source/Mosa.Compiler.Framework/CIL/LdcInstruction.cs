@@ -90,7 +90,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 
 			node.Operand1 = constantValueOperand;
-			node.Result = decoder.Compiler.CreateVirtualRegister(constantValueOperand.Type);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(constantValueOperand.Type);
 		}
 
 		#endregion Methods

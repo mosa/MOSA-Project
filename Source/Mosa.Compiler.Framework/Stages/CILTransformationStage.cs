@@ -273,7 +273,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareFloatR4 : IRInstruction.CompareFloatR8;
 
 				context.SetInstruction(instruction, cc, result, first, second);
-				context.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, result, Operand.CreateConstant(TypeSystem, 1));
+				context.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, result, CreateConstant(1));
 			}
 			else
 			{
@@ -379,7 +379,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var adr = AllocateVirtualRegister(type.ToManagedPointer());
 
 				context.SetInstruction(IRInstruction.AddressOf, adr, value);
-				context.AppendInstruction(IRInstruction.Box, result, runtimeType, adr, Operand.CreateConstant(TypeSystem, typeSize));
+				context.AppendInstruction(IRInstruction.Box, result, runtimeType, adr, CreateConstant(typeSize));
 			}
 		}
 
@@ -433,7 +433,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (OverridesMethod(method))
 				{
-					before.SetInstruction(IRInstruction.SubSigned, context.Operand1, context.Operand1, Operand.CreateConstant(TypeSystem, NativePointerSize * 2));
+					before.SetInstruction(IRInstruction.SubSigned, context.Operand1, context.Operand1, CreateConstant(NativePointerSize * 2));
 				}
 				else
 				{
@@ -444,7 +444,7 @@ namespace Mosa.Compiler.Framework.Stages
 					// Create a virtual register to hold our boxed value
 					var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
 
-					before.SetInstruction(IRInstruction.Box, boxedValue, GetRuntimeTypeHandle(type), context.Operand1, Operand.CreateConstant(TypeSystem, typeSize));
+					before.SetInstruction(IRInstruction.Box, boxedValue, GetRuntimeTypeHandle(type), context.Operand1, CreateConstant(typeSize));
 
 					// Now replace the value type pointer with the boxed value virtual register
 					context.Operand1 = boxedValue;
@@ -501,7 +501,7 @@ namespace Mosa.Compiler.Framework.Stages
 							&& method.DeclaringType == context.Operand1.Type.ElementType)
 						{
 							var before = context.InsertBefore();
-							before.SetInstruction(IRInstruction.SubSigned, context.Operand1, context.Operand1, Operand.CreateConstant(TypeSystem, NativePointerSize * 2));
+							before.SetInstruction(IRInstruction.SubSigned, context.Operand1, context.Operand1, CreateConstant(NativePointerSize * 2));
 						}
 					}
 					else
@@ -513,7 +513,7 @@ namespace Mosa.Compiler.Framework.Stages
 						var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
 
 						var before = context.InsertBefore();
-						before.SetInstruction(IRInstruction.Box, boxedValue, GetRuntimeTypeHandle(type), context.Operand1, Operand.CreateConstant(TypeSystem, typeSize));
+						before.SetInstruction(IRInstruction.Box, boxedValue, GetRuntimeTypeHandle(type), context.Operand1, CreateConstant(typeSize));
 
 						// Now replace the value type pointer with the boxed value virtual register
 						context.Operand1 = boxedValue;
@@ -627,11 +627,11 @@ namespace Mosa.Compiler.Framework.Stages
 				var temp = AllocateVirtualRegister(result.Type);
 
 				context.SetInstruction(IRInstruction.MoveInteger, size, temp, source);
-				context.AppendInstruction(instruction, size, result, temp, Operand.CreateConstant(TypeSystem, (int)mask));
+				context.AppendInstruction(instruction, size, result, temp, CreateConstant((int)mask));
 			}
 			else
 			{
-				context.SetInstruction(instruction, size, result, source, Operand.CreateConstant(TypeSystem, (int)mask));
+				context.SetInstruction(instruction, size, result, source, CreateConstant((int)mask));
 			}
 		}
 
@@ -742,7 +742,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				var size = Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(type));
+				var size = CreateConstant(TypeLayout.GetTypeSize(type));
 				node.SetInstruction(IRInstruction.MemorySet, null, ptr, ConstantZero, size);
 			}
 		}
@@ -766,7 +766,7 @@ namespace Mosa.Compiler.Framework.Stages
 				//var context = new Context(node).InsertBefore();
 
 				//context.SetInstruction(IRInstruction.AddressOf, adr, value);
-				//context.AppendInstruction(IRInstruction.Box, result, runtimeType, adr, Operand.CreateConstant(TypeSystem, typeSize));
+				//context.AppendInstruction(IRInstruction.Box, result, runtimeType, adr, CreateConstant(typeSize));
 			}
 
 			if (!classType.IsInterface)
@@ -776,7 +776,7 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				int slot = CalculateInterfaceSlot(classType);
-				node.SetInstruction(IRInstruction.IsInstanceOfInterfaceType, result, Operand.CreateConstant(TypeSystem, slot), reference);
+				node.SetInstruction(IRInstruction.IsInstanceOfInterfaceType, result, CreateConstant(slot), reference);
 			}
 		}
 
@@ -900,7 +900,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var loadInstruction = GetLoadInstruction(field.FieldType);
 				var size = GetInstructionSize(field.FieldType);
-				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+				var fixedOffset = CreateConstant(offset);
 
 				context.SetInstruction(loadInstruction, size, result, operand, fixedOffset);
 
@@ -925,7 +925,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var loadInstruction = GetLoadInstruction(field.FieldType);
 				var size = GetInstructionSize(field.FieldType);
 				var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
-				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+				var fixedOffset = CreateConstant(offset);
 
 				context.SetInstruction(IRInstruction.AddressOf, address, operand);
 				context.AppendInstruction(loadInstruction, size, result, address, fixedOffset);
@@ -937,7 +937,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var loadInstruction = GetLoadInstruction(field.FieldType);
 				var size = GetInstructionSize(field.FieldType);
-				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+				var fixedOffset = CreateConstant(offset);
 
 				context.SetInstruction(loadInstruction, size, result, operand, fixedOffset);
 
@@ -947,7 +947,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (result.IsOnStack && !operand.IsOnStack)
 			{
 				var size = GetInstructionSize(field.FieldType);
-				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+				var fixedOffset = CreateConstant(offset);
 
 				context.SetInstruction(IRInstruction.LoadCompound, size, result, operand, fixedOffset);
 				context.MosaType = field.FieldType;
@@ -959,7 +959,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var size = GetInstructionSize(field.FieldType);
 				var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
-				var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+				var fixedOffset = CreateConstant(offset);
 
 				context.SetInstruction(IRInstruction.AddressOf, address, operand);
 				context.AppendInstruction(IRInstruction.LoadCompound, size, result, address, fixedOffset);
@@ -980,7 +980,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var objectOperand = node.Operand1;
 
 			int offset = TypeLayout.GetFieldOffset(node.MosaField);
-			var fixedOffset = Operand.CreateConstant(TypeSystem, offset);
+			var fixedOffset = CreateConstant(offset);
 
 			node.SetInstruction(IRInstruction.AddUnsigned, fieldAddress, objectOperand, fixedOffset);
 		}
@@ -1000,7 +1000,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldlen(InstructionNode node)
 		{
-			var offset = Operand.CreateConstant(TypeSystem, NativePointerSize * 2);
+			var offset = CreateConstant(NativePointerSize * 2);
 			node.SetInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, node.Result, node.Operand1, offset);
 		}
 
@@ -1189,22 +1189,22 @@ namespace Mosa.Compiler.Framework.Stages
 			//FUTURE: Add IRInstruction.Negate
 			if (node.Operand1.IsUnsigned)
 			{
-				var zero = Operand.CreateConstant(node.Operand1.Type, 0);
+				var zero = CreateConstant(node.Operand1.Type, 0);
 				node.SetInstruction(IRInstruction.SubUnsigned, node.Result, zero, node.Operand1);
 			}
 			else if (node.Operand1.IsR4)
 			{
-				var minusOne = Operand.CreateConstant(TypeSystem, -1.0f);
+				var minusOne = CreateConstant(-1.0f);
 				node.SetInstruction(IRInstruction.MulFloatR4, node.Result, minusOne, node.Operand1);
 			}
 			else if (node.Operand1.IsR8)
 			{
-				var minusOne = Operand.CreateConstant(TypeSystem, -1.0d);
+				var minusOne = CreateConstant(-1.0d);
 				node.SetInstruction(IRInstruction.MulFloatR8, node.Result, minusOne, node.Operand1);
 			}
 			else
 			{
-				var minusOne = Operand.CreateConstant(node.Operand1.Type, -1);
+				var minusOne = CreateConstant(node.Operand1.Type, -1);
 				node.SetInstruction(IRInstruction.MulSigned, node.Result, minusOne, node.Operand1);
 			}
 		}
@@ -1224,7 +1224,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(elementSize != 0);
 
 			var runtimeTypeHandle = GetRuntimeTypeHandle(arrayType);
-			var size = Operand.CreateConstant(TypeSystem, elementSize);
+			var size = CreateConstant(elementSize);
 			node.SetInstruction(IRInstruction.NewArray, result, runtimeTypeHandle, size, elements);
 		}
 
@@ -1275,7 +1275,7 @@ namespace Mosa.Compiler.Framework.Stages
 				Debug.Assert(result.Type.IsReferenceType, $"VmCall.AllocateObject only needs to be called for reference types. Type: {result.Type}");
 
 				var runtimeTypeHandle = GetRuntimeTypeHandle(classType);
-				var size = Operand.CreateConstant(TypeSystem, TypeLayout.GetTypeSize(classType));
+				var size = CreateConstant(TypeLayout.GetTypeSize(classType));
 				before.SetInstruction(IRInstruction.NewObject, result, runtimeTypeHandle, size);
 
 				operands.Insert(0, result);
@@ -1386,7 +1386,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var type = node.MosaType;
 			var size = type.IsPointer ? NativePointerSize : MethodCompiler.TypeLayout.GetTypeSize(type);
-			node.SetInstruction(IRInstruction.MoveInteger, node.Result, Operand.CreateConstant(TypeSystem, size));
+			node.SetInstruction(IRInstruction.MoveInteger, node.Result, CreateConstant(size));
 		}
 
 		/// <summary>
@@ -1451,7 +1451,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var fieldType = node.MosaField.FieldType;
 
 			int offset = TypeLayout.GetFieldOffset(node.MosaField);
-			var offsetOperand = Operand.CreateConstant(TypeSystem, offset);
+			var offsetOperand = CreateConstant(offset);
 
 			var size = GetInstructionSize(fieldType);
 
@@ -1631,7 +1631,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var adr = AllocateVirtualRegister(type.ToManagedPointer());
 
 				context.SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.AddStackLocal(type));
-				context.AppendInstruction(IRInstruction.Unbox, tmp, value, adr, Operand.CreateConstant(TypeSystem, typeSize));
+				context.AppendInstruction(IRInstruction.Unbox, tmp, value, adr, CreateConstant(typeSize));
 			}
 
 			if (MosaTypeLayout.IsStoredOnStack(type))
@@ -1960,7 +1960,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Get array length
 			var lengthOperand = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			var fixedOffset = Operand.CreateConstant(TypeSystem, NativePointerSize * 2);
+			var fixedOffset = CreateConstant(NativePointerSize * 2);
 
 			before.SetInstruction(IRInstruction.LoadInteger, lengthOperand, arrayOperand, fixedOffset);
 
@@ -1990,7 +1990,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var size = GetTypeSize(arrayType.ElementType, false);
 
 			var elementOffset = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var elementSize = Operand.CreateConstant(TypeSystem, size);
+			var elementSize = CreateConstant(size);
 
 			var before = new Context(node).InsertBefore();
 
@@ -2009,7 +2009,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </returns>
 		private Operand LoadArrayBaseAddress(InstructionNode node, Operand array)
 		{
-			var fixedOffset = Operand.CreateConstant(TypeSystem, NativePointerSize * 3);
+			var fixedOffset = CreateConstant(NativePointerSize * 3);
 			var arrayElement = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			var before = new Context(node).InsertBefore();

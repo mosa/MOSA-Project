@@ -19,7 +19,9 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.LogicalXor, LogicalXor);
 			AddVisitation(IRInstruction.LogicalNot, LogicalNot);
 
-			//AddVisitation(IRInstruction.LoadParameterInteger, LoadParameterInteger);
+			AddVisitation(IRInstruction.LoadParameterInteger, LoadParameterInteger);
+
+			//AddVisitation(IRInstruction.LoadInteger, LoadInteger);
 		}
 
 		private void LogicalAnd(InstructionNode node)
@@ -136,9 +138,52 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var context = new Context(node);
 
-			context.AppendInstruction(IRInstruction.LoadParameterInteger, InstructionSize.Size32, resultLow, op0Low);
+			context.SetInstruction(IRInstruction.LoadParameterInteger, InstructionSize.Size32, resultLow, op0Low);
 			context.AppendInstruction(IRInstruction.LoadParameterInteger, InstructionSize.Size32, resultHigh, op0High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+		}
+
+		private void LoadInteger(InstructionNode node)
+		{
+			Debug.Assert(!node.Result.IsR4);
+			Debug.Assert(!node.Result.IsR8);
+
+			if (!node.Result.Is64BitInteger)
+				return;
+
+			var result = node.Result;
+			var operand1 = node.Operand1;
+			var operand2 = node.Operand2;
+
+			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			var context = new Context(node);
+
+			if (operand2.IsConstant && !operand2.IsLong)
+			{
+				var target4 = CreateConstant((uint)(operand2.ConstantUnsignedLongInteger + 4));
+
+				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
+				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, op0Low, operand2);
+				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, op0Low, target4);
+				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+			}
+
+			//else
+			//{
+			//	Operand target4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			//	var contant4 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 4);
+
+			//	context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand2);
+			//	context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, operand1, op0Low);
+			//	context.AppendInstruction(IRInstruction.AddSigned, InstructionSize.Size32, target4, op0Low, contant4);
+			//	context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, operand1, target4);
+			//	context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+			//}
 		}
 	}
 }

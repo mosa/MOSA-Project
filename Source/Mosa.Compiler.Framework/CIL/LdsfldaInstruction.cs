@@ -31,10 +31,10 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var field = (MosaField)decoder.Instruction.Operand;
 
-			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
+			decoder.MethodCompiler.Scheduler.TrackFieldReferenced(field);
 
 			node.MosaField = field;
-			node.Result = decoder.Compiler.CreateVirtualRegister(field.FieldType.ToManagedPointer());
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(field.FieldType.ToManagedPointer());
 		}
 	}
 }

@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(node, decoder);
 
 			// FIXME: Validate operands & verify instruction
-			node.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4);
 		}
 
 		#endregion Methods

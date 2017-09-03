@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.CIL
 				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
 
 			// Push the loaded value
-			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, type);
+			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, type);
 			node.MosaType = type;
 
 			//System.Diagnostics.Debug.WriteLine(decoder.Method.FullName); //temp - remove me

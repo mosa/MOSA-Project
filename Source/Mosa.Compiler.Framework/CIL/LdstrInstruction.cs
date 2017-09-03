@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			node.Operand1 = Operand.CreateStringSymbol(decoder.TypeSystem, symbolName, name);
 
-			node.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.String);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.String);
 		}
 
 		#endregion Methods

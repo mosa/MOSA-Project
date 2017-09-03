@@ -538,6 +538,23 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Creates the constant.
+		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="">The .</param>
+		/// <param name="value">The value.</param>
+		/// <returns></returns>
+		public static Operand CreateConstant(TypeSystem typeSystem, uint value)
+		{
+			return new Operand(typeSystem.BuiltIn.U4)
+			{
+				IsConstant = true,
+				ConstantSignedLongInteger = value,
+				IsResolved = true
+			};
+		}
+
+		/// <summary>
 		/// Creates a new constant <see cref="Operand" /> for the given integral value.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>

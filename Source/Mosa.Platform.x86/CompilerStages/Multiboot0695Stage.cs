@@ -109,9 +109,9 @@ namespace Mosa.Platform.x86.CompilerStages
 			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEAX);
 			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(TypeSystem, Multiboot0695Stage.MultibootEBX);
 
-			var stackTop = Operand.CreateConstant(TypeSystem.BuiltIn.I4, STACK_ADDRESS);
-			var zero = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 0);
-			var four = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 4);
+			var stackTop = CreateConstant(STACK_ADDRESS);
+			var zero = CreateConstant(0);
+			var four = CreateConstant(4);
 
 			var basicBlocks = new BasicBlocks();
 			var block = basicBlocks.CreateBlock();

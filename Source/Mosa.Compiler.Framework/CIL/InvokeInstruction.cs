@@ -114,7 +114,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			var method = (MosaMethod)decoder.Instruction.Operand;
 
-			decoder.Compiler.Scheduler.TrackMethodInvoked(method);
+			decoder.MethodCompiler.Scheduler.TrackMethodInvoked(method);
 
 			node.InvokeMethod = method;
 
@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Framework.CIL
 			if (!method.Signature.ReturnType.IsVoid)
 			{
 				node.ResultCount = 1;
-				node.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, method.Signature.ReturnType);
+				node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, method.Signature.ReturnType);
 			}
 			else
 			{

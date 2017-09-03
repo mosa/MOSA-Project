@@ -38,9 +38,9 @@ namespace Mosa.Compiler.Framework.CIL
 			// Opcode specific handling
 			int index = (int)decoder.Instruction.Operand;
 
-			var parameterOperand = decoder.Compiler.Parameters[index];
+			var parameterOperand = decoder.MethodCompiler.Parameters[index];
 			node.Operand1 = parameterOperand;
-			node.Result = decoder.Compiler.CreateVirtualRegister(parameterOperand.Type.ToManagedPointer());
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(parameterOperand.Type.ToManagedPointer());
 		}
 
 		#endregion Methods

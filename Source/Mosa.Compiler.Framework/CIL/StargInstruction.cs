@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(node, decoder);
 
 			// The argument is the result
-			node.Result = decoder.Compiler.Parameters[(int)decoder.Instruction.Operand];
+			node.Result = decoder.MethodCompiler.Parameters[(int)decoder.Instruction.Operand];
 
 			// FIXME: Do some type compatibility checks
 			// See verification for this instruction and

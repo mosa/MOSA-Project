@@ -36,10 +36,10 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var field = (MosaField)decoder.Instruction.Operand;
 
-			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
+			decoder.MethodCompiler.Scheduler.TrackFieldReferenced(field);
 
 			node.MosaField = field;
-			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, field.FieldType.ToManagedPointer());
+			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, field.FieldType.ToManagedPointer());
 		}
 
 		#endregion Methods
