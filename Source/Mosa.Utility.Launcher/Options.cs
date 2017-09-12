@@ -333,12 +333,114 @@ namespace Mosa.Utility.Launcher
 		[Option("file", HelpText = "Path to a file which contains files to be included in the generated image file.")]
 		public string IncludeFilePath
 		{
+<<<<<<< HEAD
 			set
+=======
+			IncludeFiles = new List<IncludeFile>();
+			EnableSSA = true;
+			EnableIROptimizations = true;
+			EnableSparseConditionalConstantPropagation = true;
+			Emulator = EmulatorType.Qemu;
+			ImageFormat = ImageFormat.IMG;
+			BootFormat = BootFormat.Multiboot_0_7;
+			PlatformType = PlatformType.X86;
+			LinkerFormatType = LinkerFormatType.Elf32;
+			EmulatorMemoryInMB = 128;
+			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
+			FileSystem = FileSystem.FAT16;
+			DebugConnectionOption = DebugConnectionOption.None;
+			DebugConnectionPort = 9999;
+			DebugConnectionAddress = "127.0.0.1";
+			DebugPipeName = "MOSA";
+			UseMultipleThreadCompiler = true;
+			EnableInlinedMethods = true;
+			InlinedIRMaximum = 8;
+			BootLoader = BootLoader.Syslinux_3_72;
+			VBEVideo = false;
+			Width = 640;
+			Height = 480;
+			Depth = 32;
+			BaseAddress = 0x00400000;
+			EmitRelocations = false;
+			EmitSymbols = false;
+			Emitx86IRQMethods = true;
+			LaunchEmulator = true;
+			BootLoaderImage = null;
+			GenerateASMFile = false;
+			EnableQemuGDB = false;
+			LaunchGDB = false;
+			LaunchMosaDebugger = false;
+			GenerateDebugFile = false;
+			EnableIRLongOperand = false;
+		}
+
+		public void LoadArguments(string[] args)
+		{
+			for (int i = 0; i < args.Length; i++)
+>>>>>>> 6571c9c8bfb5cd7450d6bea665dcd5d305729f6d
 			{
 				if(!File.Exists(value))
 				{
+<<<<<<< HEAD
 					Console.WriteLine("File doesn't exist \"" + value + "\"");
 					return;
+=======
+					case "-e": ExitOnLaunch = true; continue;
+					case "-q": ExitOnLaunch = true; continue;
+					case "-a": AutoStart = true; continue;
+					case "-l": LaunchEmulator = true; continue;
+					case "-launch": LaunchEmulator = true; continue;
+					case "-launch-off": LaunchEmulator = false; continue;
+					case "-map": GenerateMapFile = true; continue;
+					case "-debuginfo": GenerateDebugFile = true; continue;
+					case "-asm": GenerateASMFile = true; continue;
+					case "-nasm": GenerateNASMFile = true; continue;
+					case "-qemu": Emulator = EmulatorType.Qemu; continue;
+					case "-vmware": Emulator = EmulatorType.VMware; continue;
+					case "-bochs": Emulator = EmulatorType.Bochs; continue;
+					case "-vhd": ImageFormat = ImageFormat.VHD; continue;
+					case "-img": ImageFormat = ImageFormat.IMG; continue;
+					case "-vdi": ImageFormat = ImageFormat.VDI; continue;
+					case "-iso": ImageFormat = ImageFormat.ISO; continue;
+					case "-vmdk": ImageFormat = ImageFormat.VMDK; continue;
+					case "-elf32": LinkerFormatType = LinkerFormatType.Elf32; continue;
+					case "-elf": LinkerFormatType = LinkerFormatType.Elf32; continue;
+					case "-mb0.7": BootFormat = BootFormat.Multiboot_0_7; continue;
+					case "-pipe": DebugConnectionOption = DebugConnectionOption.Pipe; continue;
+					case "-tcpclient": DebugConnectionOption = DebugConnectionOption.TCPClient; continue;
+					case "-tcpserver": DebugConnectionOption = DebugConnectionOption.TCPServer; continue;
+					case "-grub": BootLoader = BootLoader.Grub_0_97; continue;
+					case "-grub-0.97": BootLoader = BootLoader.Grub_0_97; continue;
+					case "-grub-2": BootLoader = BootLoader.Grub_2_00; continue;
+					case "-grub2": BootLoader = BootLoader.Grub_2_00; continue;
+					case "-syslinux": BootLoader = BootLoader.Syslinux_6_03; continue;
+					case "-syslinux-6.03": BootLoader = BootLoader.Syslinux_6_03; continue;
+					case "-syslinux-3.72": BootLoader = BootLoader.Syslinux_3_72; continue;
+					case "-inline": EnableInlinedMethods = true; continue;
+					case "-inline-off": EnableInlinedMethods = false; continue;
+					case "-optimization-ir-off": EnableIROptimizations = false; continue;
+					case "-optimization-sccp-off": EnableSparseConditionalConstantPropagation = false; continue;
+					case "-all-optimization-off": EnableIROptimizations = false; EnableSparseConditionalConstantPropagation = false; EnableInlinedMethods = false; EnableSSA = false; continue;
+					case "-ir-long-operand": EnableIRLongOperand = true; continue;
+					case "-two-pass-optimization": TwoPassOptimization = true; continue;
+					case "-inline-level": InlinedIRMaximum = (int)args[++i].ParseHexOrDecimal(); continue;
+					case "-threading-off": UseMultipleThreadCompiler = false; continue;
+					case "-video": VBEVideo = true; continue;
+					case "-base": BaseAddress = args[++i].ParseHexOrDecimal(); continue;
+					case "-destination-dir": DestinationDirectory = args[++i]; continue;
+					case "-dest": DestinationDirectory = args[++i]; continue;
+					case "-symbols": EmitSymbols = true; continue;
+					case "-symbols-false": EmitSymbols = false; continue;
+					case "-relocations": EmitRelocations = true; continue;
+					case "-relocations-false": EmitRelocations = false; continue;
+					case "-x86-irq-methods": Emitx86IRQMethods = true; continue;
+					case "-x86-irq-methods-false": Emitx86IRQMethods = false; continue;
+					case "-bootloader-image": BootLoaderImage = args[++i]; continue;
+					case "-qemu-gdb": EnableQemuGDB = true; continue;
+					case "-gdb": LaunchGDB = true; continue;
+
+					default: break;
+>>>>>>> 6571c9c8bfb5cd7450d6bea665dcd5d305729f6d
 				}
 
 				AppendIncludeFiles(value);
