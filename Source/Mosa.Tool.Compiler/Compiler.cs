@@ -3,6 +3,7 @@
 using CommandLine;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.Trace.BuiltIn;
 using Mosa.Utility.Aot;
 using System;
