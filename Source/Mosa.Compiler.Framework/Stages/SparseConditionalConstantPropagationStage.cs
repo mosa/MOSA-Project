@@ -33,8 +33,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var deadBlocks = analysis.GetDeadBlocked();
 			var constants = analysis.GetIntegerConstants();
 
-			ReplaceVirtualRegistersWithConstants(constants);
 			RemoveDeadBlocks(deadBlocks);
+			ReplaceVirtualRegistersWithConstants(constants);
 
 			UpdateCounter("ConditionalConstantPropagation.ConstantVariableCount", constants.Count);
 			UpdateCounter("ConditionalConstantPropagation.ConstantVariableUse", conditionalConstantPropagation);
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (target.Uses.Count != 0)
 			{
-				var constant = Operand.CreateConstant(target.Type, value);
+				var constant = CreateConstant(target.Type, value);
 
 				// for each statement T that uses operand, substituted c in statement T
 				foreach (var node in target.Uses.ToArray())
@@ -110,9 +110,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void RemoveDeadBlock(BasicBlock block)
 		{
-			//if (block.PreviousBlocks.Count != 0 || BasicBlocks.HeadBlocks.Contains(block))
-			//	return;
-
 			if (trace.Active) trace.Log("*** RemoveBlock: " + block);
 
 			var nextBlocks = block.NextBlocks.ToArray();
@@ -122,8 +119,6 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdatePhiList(block, nextBlocks);
 
 			Debug.Assert(block.NextBlocks.Count == 0);
-
-			//Debug.Assert(block.PreviousBlocks.Count == 0);
 		}
 
 		protected void RemoveBranchesToDeadBlocks(BasicBlock deadBlock)
@@ -158,10 +153,6 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log("BEFORE:\t" + node);
 						node.UpdateBranchTarget(0, otherBlock);
 						if (trace.Active) trace.Log("AFTER: \t" + node);
-					}
-					else if (node.Instruction == IRInstruction.CompareIntegerBranch)
-					{
-						return;
 					}
 				}
 			}

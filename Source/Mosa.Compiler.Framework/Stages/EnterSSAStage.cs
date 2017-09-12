@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
@@ -8,15 +9,19 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///
+	/// Enter SSA Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public sealed class EnterSSAStage : BaseMethodCompilerStage
 	{
-		private PhiPlacementStage phiPlacementStage;
 		private Dictionary<Operand, Stack<int>> variables;
 		private Dictionary<Operand, int> counts;
 
 		private Dictionary<Operand, Operand[]> ssaOperands = new Dictionary<Operand, Operand[]>();
+
+		private Dictionary<BasicBlock, BaseDominanceAnalysis> blockAnalysis = new Dictionary<BasicBlock, BaseDominanceAnalysis>();
+
+		private Dictionary<Operand, List<BasicBlock>> assignments = new Dictionary<Operand, List<BasicBlock>>();
 
 		protected override void Run()
 		{
@@ -27,21 +32,37 @@ namespace Mosa.Compiler.Framework.Stages
 			if (HasProtectedRegions)
 				return;
 
-			phiPlacementStage = MethodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
-
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
-				EnterSSA(headBlock);
+				var analysis = new SimpleFastDominance(BasicBlocks, headBlock);
+				blockAnalysis.Add(headBlock, analysis);
 			}
 
-			ssaOperands = null;
+			CollectAssignments();
+
+			PlacePhiFunctionsMinimal();
+
+			EnterSSA();
 		}
 
 		protected override void Finish()
 		{
+			UpdateCounter("EnterSSA.IRInstructions", instructionCount);
+
 			// Clean up
 			variables = null;
 			counts = null;
+			ssaOperands = null;
+			assignments = null;
+			blockAnalysis = null;
+		}
+
+		private void EnterSSA()
+		{
+			foreach (var headBlock in BasicBlocks.HeadBlocks)
+			{
+				EnterSSA(headBlock);
+			}
 		}
 
 		/// <summary>
@@ -50,12 +71,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="headBlock">The head block.</param>
 		private void EnterSSA(BasicBlock headBlock)
 		{
-			var analysis = MethodCompiler.DominanceAnalysis.GetDominanceAnalysis(headBlock);
+			var analysis = blockAnalysis[headBlock];
 
 			variables = new Dictionary<Operand, Stack<int>>();
 			counts = new Dictionary<Operand, int>();
 
-			foreach (var op in phiPlacementStage.Assignments.Keys)
+			foreach (var op in assignments.Keys)
 			{
 				AddToAssignments(op);
 			}
@@ -109,8 +130,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Renames the variables.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		/// <param name="dominance">The dominance provider.</param>
-		private void RenameVariables(BasicBlock block, IDominanceAnalysis dominance)
+		/// <param name="dominanceAnalysis">The dominance analysis.</param>
+		private void RenameVariables(BasicBlock block, BaseDominanceAnalysis dominanceAnalysis)
 		{
 			for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 			{
@@ -123,7 +144,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (op == null || !op.IsVirtualRegister)
 							continue;
 
-						Debug.Assert(variables.ContainsKey(op), op.ToString() + " is not in dictionary [block = " + block + "]");
+						Debug.Assert(variables.ContainsKey(op), op + " is not in dictionary [block = " + block + "]");
 
 						var version = variables[op].Peek();
 						node.SetOperand(i, GetSSAOperand(op, version));
@@ -162,9 +183,9 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			foreach (var s in dominance.GetChildren(block))
+			foreach (var s in dominanceAnalysis.GetChildren(block))
 			{
-				RenameVariables(s, dominance);
+				RenameVariables(s, dominanceAnalysis);
 			}
 
 			for (var context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
@@ -186,9 +207,115 @@ namespace Mosa.Compiler.Framework.Stages
 		private int WhichPredecessor(BasicBlock y, BasicBlock x)
 		{
 			for (var i = 0; i < y.PreviousBlocks.Count; ++i)
+			{
 				if (y.PreviousBlocks[i] == x)
+				{
 					return i;
+				}
+			}
+
 			return -1;
+		}
+
+		/// <summary>
+		/// Collects the assignments.
+		/// </summary>
+		private void CollectAssignments()
+		{
+			foreach (var block in BasicBlocks)
+			{
+				for (var context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
+				{
+					if (context.IsEmpty)
+						continue;
+
+					instructionCount++;
+
+					if (context.Result == null)
+						continue;
+
+					if (context.Result.IsVirtualRegister)
+					{
+						AddToAssignments(context.Result, block);
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Adds to assignments.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		/// <param name="block">The block.</param>
+		private void AddToAssignments(Operand operand, BasicBlock block)
+		{
+			if (!assignments.TryGetValue(operand, out List<BasicBlock> blocks))
+			{
+				blocks = new List<BasicBlock>();
+				assignments.Add(operand, blocks);
+			}
+
+			blocks.AddIfNew(block);
+		}
+
+		/// <summary>
+		/// Inserts the phi instruction.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="variable">The variable.</param>
+		private void InsertPhiInstruction(BasicBlock block, Operand variable)
+		{
+			var context = new Context(block);
+			context.AppendInstruction(IRInstruction.Phi, variable);
+
+			//var sourceBlocks = new BasicBlock[block.PreviousBlocks.Count];
+			var sourceBlocks = new List<BasicBlock>(block.PreviousBlocks.Count);
+			context.PhiBlocks = sourceBlocks;
+
+			for (var i = 0; i < block.PreviousBlocks.Count; i++)
+			{
+				context.SetOperand(i, variable);
+				sourceBlocks.Add(block.PreviousBlocks[i]);
+			}
+
+			context.OperandCount = block.PreviousBlocks.Count;
+
+			Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
+		}
+
+		/// <summary>
+		/// Places the phi functions minimal.
+		/// </summary>
+		private void PlacePhiFunctionsMinimal()
+		{
+			foreach (var headBlock in BasicBlocks.HeadBlocks)
+			{
+				PlacePhiFunctionsMinimal(headBlock);
+			}
+		}
+
+		/// <summary>
+		/// Places the phi functions minimal.
+		/// </summary>
+		/// <param name="headBlock">The head block.</param>
+		private void PlacePhiFunctionsMinimal(BasicBlock headBlock)
+		{
+			var analysis = blockAnalysis[headBlock];
+
+			foreach (var t in assignments)
+			{
+				var blocks = t.Value;
+
+				if (blocks.Count < 2)
+					continue;
+
+				blocks.AddIfNew(headBlock);
+
+				foreach (var n in analysis.IteratedDominanceFrontier(blocks))
+				{
+					InsertPhiInstruction(n, t.Key);
+				}
+			}
 		}
 	}
 }

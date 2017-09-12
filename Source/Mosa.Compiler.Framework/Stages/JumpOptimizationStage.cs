@@ -8,6 +8,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// This stages removes jumps to the next instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
 	public sealed class JumpOptimizationStage : BaseCodeTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()

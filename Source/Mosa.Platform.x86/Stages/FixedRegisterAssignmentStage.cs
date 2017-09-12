@@ -6,25 +6,26 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	///
+	/// Fixed Register Assignment Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	public sealed class FixedRegisterAssignmentStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			visitationDictionary[X86.Cdq] = Cdq;
-			visitationDictionary[X86.Div] = Div;
-			visitationDictionary[X86.IDiv] = IDiv;
-			visitationDictionary[X86.IMul] = IMul;
-			visitationDictionary[X86.In] = In;
-			visitationDictionary[X86.Mul] = Mul;
-			visitationDictionary[X86.Out] = Out;
-			visitationDictionary[X86.Rcr] = Rcr;
-			visitationDictionary[X86.Sar] = Sar;
-			visitationDictionary[X86.Shl] = Shl;
-			visitationDictionary[X86.Shld] = Shld;
-			visitationDictionary[X86.Shr] = Shr;
-			visitationDictionary[X86.Shrd] = Shrd;
+			AddVisitation(X86.Cdq, Cdq);
+			AddVisitation(X86.Div, Div);
+			AddVisitation(X86.IDiv, IDiv);
+			AddVisitation(X86.IMul, IMul);
+			AddVisitation(X86.In, In);
+			AddVisitation(X86.Mul, Mul);
+			AddVisitation(X86.Out, Out);
+			AddVisitation(X86.Rcr, Rcr);
+			AddVisitation(X86.Sar, Sar);
+			AddVisitation(X86.Shl, Shl);
+			AddVisitation(X86.Shld, Shld);
+			AddVisitation(X86.Shr, Shr);
+			AddVisitation(X86.Shrd, Shrd);
 		}
 
 		#region Visitation Methods
@@ -57,12 +58,14 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		public void Div(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Result2.IsCPURegister && context.Operand1.IsCPURegister)
-				if (context.Result.Register == GeneralPurposeRegister.EDX &&
-					context.Result2.Register == GeneralPurposeRegister.EAX &&
-					context.Operand1.Register == GeneralPurposeRegister.EDX &&
-					context.Operand2.Register == GeneralPurposeRegister.EAX)
-					return;
+			if (context.Result.IsCPURegister
+				&& context.Result2.IsCPURegister
+				&& context.Operand1.IsCPURegister
+				&& context.Result.Register == GeneralPurposeRegister.EDX
+				&& context.Result2.Register == GeneralPurposeRegister.EAX
+				&& context.Operand1.Register == GeneralPurposeRegister.EDX
+				&& context.Operand2.Register == GeneralPurposeRegister.EAX)
+				return;
 
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
@@ -97,13 +100,15 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		public void IDiv(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Result2.IsCPURegister &
-				context.Operand1.IsCPURegister && context.Operand2.IsCPURegister)
-				if (context.Result.Register == GeneralPurposeRegister.EDX &&
-					context.Result2.Register == GeneralPurposeRegister.EAX &&
-					context.Operand1.Register == GeneralPurposeRegister.EDX &&
-					context.Operand2.Register == GeneralPurposeRegister.EAX)
-					return;
+			if (context.Result.IsCPURegister
+				&& context.Result2.IsCPURegister
+				&& context.Operand1.IsCPURegister
+				&& context.Operand2.IsCPURegister
+				&& context.Result.Register == GeneralPurposeRegister.EDX
+				&& context.Result2.Register == GeneralPurposeRegister.EAX
+				&& context.Operand1.Register == GeneralPurposeRegister.EDX
+				&& context.Operand2.Register == GeneralPurposeRegister.EAX)
+				return;
 
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
@@ -154,9 +159,10 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		public void In(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Operand1.IsCPURegister &&
-				context.Result.Register == GeneralPurposeRegister.EAX &&
-				(context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
+			if (context.Result.IsCPURegister
+				&& context.Operand1.IsCPURegister
+				&& context.Result.Register == GeneralPurposeRegister.EAX
+				&& (context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
 				return;
 
 			Operand result = context.Result;
@@ -178,8 +184,13 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		public void Mul(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Result2.IsCPURegister && context.Operand1.IsCPURegister && !context.Operand2.IsConstant &&
-				context.Result.Register == GeneralPurposeRegister.EDX && context.Result2.Register == GeneralPurposeRegister.EAX && context.Operand1.Register == GeneralPurposeRegister.EAX)
+			if (context.Result.IsCPURegister
+				&& context.Result2.IsCPURegister
+				&& context.Operand1.IsCPURegister
+				&& !context.Operand2.IsConstant
+				&& context.Result.Register == GeneralPurposeRegister.EDX
+				&& context.Result2.Register == GeneralPurposeRegister.EAX
+				&& context.Operand1.Register == GeneralPurposeRegister.EAX)
 				return;
 
 			Operand operand1 = context.Operand1;
@@ -215,9 +226,10 @@ namespace Mosa.Platform.x86.Stages
 			// TRANSFORM: OUT <= EDX, EAX && OUT <= imm8, EAX
 			var size = context.Size;
 
-			if (context.Operand1.IsCPURegister && context.Operand2.IsCPURegister &&
-				(context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant) &&
-				context.Operand2.Register == GeneralPurposeRegister.EAX)
+			if (context.Operand1.IsCPURegister
+				&& context.Operand2.IsCPURegister
+				&& (context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant)
+				&& context.Operand2.Register == GeneralPurposeRegister.EAX)
 				return;
 
 			Operand operand1 = context.Operand1;

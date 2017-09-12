@@ -19,7 +19,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			context.SetInstruction(IRInstruction.MoveInteger, context.Result, Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, Metadata.MethodLookupTable));
+			context.SetInstruction(IRInstruction.MoveInteger, context.Result, Operand.CreateUnmanagedSymbolPointer(Metadata.MethodLookupTable, methodCompiler.TypeSystem));
 		}
 
 		#endregion Methods

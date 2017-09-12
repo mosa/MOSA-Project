@@ -5,8 +5,9 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Ldelem Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BinaryInstruction" />
 	public sealed class LdelemInstruction : BinaryInstruction
 	{
 		/// <summary>
@@ -41,18 +42,18 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			MosaType type = (elementType == null)
 				? type = (MosaType)decoder.Instruction.Operand
 				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
 
-			ctx.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, type);
+			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, type);
 		}
 	}
 }

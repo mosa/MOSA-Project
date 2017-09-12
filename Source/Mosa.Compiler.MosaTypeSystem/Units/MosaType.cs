@@ -181,7 +181,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		internal MosaType Clone()
 		{
-			MosaType result = (MosaType)base.MemberwiseClone();
+			var result = (MosaType)base.MemberwiseClone();
 
 			result.Methods = (result.methods = new List<MosaMethod>(methods)).AsReadOnly();
 			result.Fields = (result.fields = new List<MosaField>(fields)).AsReadOnly();
@@ -289,8 +289,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			public override void Dispose()
 			{
 				SignatureName.UpdateType(type);
-				StringBuilder fName = new StringBuilder();
-				StringBuilder sName = new StringBuilder();
+				var fName = new StringBuilder();
+				var sName = new StringBuilder();
 
 				if (type.DeclaringType != null && type.DeclaringType != type.ElementType)
 				{

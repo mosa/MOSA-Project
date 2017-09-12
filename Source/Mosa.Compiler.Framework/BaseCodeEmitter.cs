@@ -207,19 +207,9 @@ namespace Mosa.Compiler.Framework
 				var section = symbolOperand.Method != null ? SectionKind.Text : SectionKind.ROData;
 
 				// First try finding the symbol in the expected section
-				var symbol = linker.FindSymbol(symbolOperand.Name, section);
-
 				// If no symbol found, look in all sections
-				if (symbol == null)
-				{
-					symbol = linker.FindSymbol(symbolOperand.Name);
-				}
-
 				// Otherwise create the symbol in the expected section
-				if (symbol == null)
-				{
-					symbol = linker.GetSymbol(symbolOperand.Name, section);
-				}
+				var symbol = (linker.FindSymbol(symbolOperand.Name, section) ?? linker.FindSymbol(symbolOperand.Name)) ?? linker.GetSymbol(symbolOperand.Name, section);
 
 				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, pos, symbol, referenceOffset);
 			}

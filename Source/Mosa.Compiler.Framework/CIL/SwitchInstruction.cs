@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Intermediate representation for the IL switch instruction.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryBranchInstruction" />
 	public sealed class SwitchInstruction : UnaryBranchInstruction
 	{
 		#region Construction
@@ -51,21 +52,21 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			foreach (var target in (int[])decoder.Instruction.Operand)
 			{
 				var block = decoder.GetBlock(target);
 
-				ctx.AddBranchTarget(block);
+				node.AddBranchTarget(block);
 			}
 
-			ctx.AddBranchTarget(decoder.GetBlock(decoder.Instruction.Next.Value));
+			node.AddBranchTarget(decoder.GetBlock(decoder.Instruction.Next.Value));
 		}
 
 		#endregion Methods Overrides

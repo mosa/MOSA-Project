@@ -7,11 +7,11 @@ namespace Mosa.Compiler.Framework.Analysis
 {
 	public class ProtectedRegion
 	{
-		public MosaExceptionHandler Handler { get; private set; }
+		public MosaExceptionHandler Handler { get; }
 
-		private List<BasicBlock> included = new List<BasicBlock>();
-		private List<BasicBlock> excluded = new List<BasicBlock>();
-		private List<BasicBlock> final = new List<BasicBlock>();
+		private readonly List<BasicBlock> included = new List<BasicBlock>();
+		private readonly List<BasicBlock> excluded = new List<BasicBlock>();
+		private readonly List<BasicBlock> final = new List<BasicBlock>();
 
 		public IList<BasicBlock> IncludedBlocks { get { return final.AsReadOnly(); } }
 

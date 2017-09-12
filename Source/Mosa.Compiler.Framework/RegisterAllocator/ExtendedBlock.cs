@@ -6,11 +6,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public sealed class ExtendedBlock
 	{
-		public BasicBlock BasicBlock { get; private set; }
+		public BasicBlock BasicBlock { get; }
 
 		public int Sequence { get { return BasicBlock.Sequence; } }
 
-		public int LoopDepth { get; private set; }
+		public int LoopDepth { get; }
 
 		public Interval Interval { get; set; }
 
@@ -43,12 +43,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			return Interval.Contains(slotIndex) || slotIndex == Interval.End;
 		}
-
-		//public bool Contains(Context context)
-		//{
-		//	// TODO: could be made faster by avoiding allocation of SlotIndex
-		//	return Contains(new SlotIndex(context));
-		//}
 
 		public override string ToString()
 		{

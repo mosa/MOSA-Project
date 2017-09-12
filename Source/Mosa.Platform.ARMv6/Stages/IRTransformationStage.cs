@@ -15,11 +15,11 @@ namespace Mosa.Platform.ARMv6.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			visitationDictionary[IRInstruction.AddSigned] = AddSigned;
-			visitationDictionary[IRInstruction.AddUnsigned] = AddUnsigned;
-			visitationDictionary[IRInstruction.LogicalOr] = LogicalOr;
-			visitationDictionary[IRInstruction.SubSigned] = SubSigned;
-			visitationDictionary[IRInstruction.SubUnsigned] = SubUnsigned;
+			AddVisitation(IRInstruction.AddSigned, AddSigned);
+			AddVisitation(IRInstruction.AddUnsigned, AddUnsigned);
+			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
+			AddVisitation(IRInstruction.SubSigned, SubSigned);
+			AddVisitation(IRInstruction.SubUnsigned, SubUnsigned);
 		}
 
 		#region Visitation Methods
@@ -30,7 +30,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		private void AddSigned(Context context)
 		{
-			context.ReplaceInstructionOnly(ARMv6.Add);
+			context.ReplaceInstruction(ARMv6.Add);
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		private void AddUnsigned(Context context)
 		{
-			context.ReplaceInstructionOnly(ARMv6.Add);
+			context.ReplaceInstruction(ARMv6.Add);
 		}
 
 		/// <summary>
@@ -48,7 +48,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		private void LogicalOr(Context context)
 		{
-			context.ReplaceInstructionOnly(ARMv6.Orr);
+			context.ReplaceInstruction(ARMv6.Orr);
 		}
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		private void SubSigned(Context context)
 		{
-			context.ReplaceInstructionOnly(ARMv6.Sub);
+			context.ReplaceInstruction(ARMv6.Sub);
 		}
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		private void SubUnsigned(Context context)
 		{
-			context.ReplaceInstructionOnly(ARMv6.Sub);
+			context.ReplaceInstruction(ARMv6.Sub);
 		}
 
 		#endregion Visitation Methods

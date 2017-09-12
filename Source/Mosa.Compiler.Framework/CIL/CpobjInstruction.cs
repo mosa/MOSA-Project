@@ -3,8 +3,9 @@
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Cpobj Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BinaryInstruction" />
 	public sealed class CpobjInstruction : BinaryInstruction
 	{
 		#region Construction

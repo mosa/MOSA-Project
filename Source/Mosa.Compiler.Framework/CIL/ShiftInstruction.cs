@@ -9,6 +9,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Intermediate representation for IL shift instructions.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BinaryInstruction" />
 	public sealed class ShiftInstruction : BinaryInstruction
 	{
 		#region Operand Table
@@ -16,7 +17,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// This operand table conforms to ISO/IEC 23271:2006 (E), Partition III, §1.5, Table 6.
 		/// </summary>
-		private static StackTypeCode[][] operandTable = new StackTypeCode[][] {
+		private static readonly StackTypeCode[][] operandTable = new StackTypeCode[][] {
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Int32,   StackTypeCode.Unknown, StackTypeCode.Int32,   StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Int64,   StackTypeCode.Int64,   StackTypeCode.Int64,   StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
@@ -47,18 +48,24 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
+		/// <exception cref="ArgumentNullException">context</exception>
+		/// <exception cref="InvalidOperationException">Invalid virtualLocal state for pairing (" + context.Operand1.Type.GetStackType() + ", " + context.Operand2.Type.GetStackType() + ")</exception>
+		public override void Resolve(Context context, BaseMethodCompiler compiler)
 		{
-			base.Resolve(ctx, compiler);
+			if (context == null)
+				throw new ArgumentNullException(nameof(context));
 
-			var result = operandTable[(int)ctx.Operand1.Type.GetStackTypeCode()][(int)ctx.Operand2.Type.GetStackTypeCode()];
-			Debug.Assert(StackTypeCode.Unknown != result, @"Can't shift with the given virtualLocal operands.");
+			base.Resolve(context, compiler);
+
+			var result = operandTable[(int)context.Operand1.Type.GetStackTypeCode()][(int)context.Operand2.Type.GetStackTypeCode()];
+			Debug.Assert(StackTypeCode.Unknown != result, "Can't shift with the given virtualLocal operands.");
+
 			if (StackTypeCode.Unknown == result)
-				throw new InvalidOperationException(@"Invalid virtualLocal state for pairing (" + ctx.Operand1.Type.GetStackType() + ", " + ctx.Operand2.Type.GetStackType() + ")");
+				throw new InvalidOperationException("Invalid virtualLocal state for pairing (" + context.Operand1.Type.GetStackType() + ", " + context.Operand2.Type.GetStackType() + ")");
 
-			ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.GetStackTypeFromCode(result));
+			context.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.GetStackTypeFromCode(result));
 		}
 
 		#endregion Methods

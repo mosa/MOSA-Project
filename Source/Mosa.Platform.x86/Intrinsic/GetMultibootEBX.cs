@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Platform.x86.Stages;
+using Mosa.Platform.x86.CompilerStages;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -20,7 +20,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			var MultibootEBX = Operand.CreateUnmanagedSymbolPointer(methodCompiler.TypeSystem, Multiboot0695Stage.MultibootEBX);
+			var MultibootEBX = Operand.CreateUnmanagedSymbolPointer(Multiboot0695Stage.MultibootEBX, methodCompiler.TypeSystem);
 
 			context.SetInstruction(IRInstruction.LoadInteger, context.Result, MultibootEBX, methodCompiler.ConstantZero);
 		}

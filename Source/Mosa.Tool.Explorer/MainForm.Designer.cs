@@ -51,6 +51,7 @@
             this.cbEnableSparseConditionalConstantPropagation = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableBinaryCodeGeneration = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableInlinedMethods = new System.Windows.Forms.ToolStripMenuItem();
+            this.cbEnableLongOperand = new System.Windows.Forms.ToolStripMenuItem();
             this.advanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dumpAllMethodStagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -82,6 +83,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.cbPlatform = new System.Windows.Forms.ComboBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.cbEnableTwoPassOptimizationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             label1 = new System.Windows.Forms.Label();
             stageLabel = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -187,7 +189,7 @@
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.openToolStripMenuItem.Text = "&Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -199,7 +201,7 @@
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
             this.quitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
             this.quitToolStripMenuItem.Text = "&Quit";
-            this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
+            this.quitToolStripMenuItem.Click += new System.EventHandler(this.QuitToolStripMenuItem_Click);
             // 
             // compileToolStripMenuItem
             // 
@@ -215,14 +217,14 @@
             this.nowToolStripMenuItem.Name = "nowToolStripMenuItem";
             this.nowToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.nowToolStripMenuItem.Text = "Now";
-            this.nowToolStripMenuItem.Click += new System.EventHandler(this.nowToolStripMenuItem_Click);
+            this.nowToolStripMenuItem.Click += new System.EventHandler(this.NowToolStripMenuItem_Click);
             // 
             // snippetToolStripMenuItem
             // 
             this.snippetToolStripMenuItem.Name = "snippetToolStripMenuItem";
             this.snippetToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.snippetToolStripMenuItem.Text = "Snippet";
-            this.snippetToolStripMenuItem.Click += new System.EventHandler(this.snippetToolStripMenuItem_Click);
+            this.snippetToolStripMenuItem.Click += new System.EventHandler(this.SnippetToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
@@ -232,7 +234,9 @@
             this.cbEnableOptimizations,
             this.cbEnableSparseConditionalConstantPropagation,
             this.cbEnableBinaryCodeGeneration,
-            this.cbEnableInlinedMethods});
+            this.cbEnableInlinedMethods,
+            this.cbEnableTwoPassOptimizationToolStripMenuItem,
+            this.cbEnableLongOperand});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -245,7 +249,7 @@
             this.showSizes.Name = "showSizes";
             this.showSizes.Size = new System.Drawing.Size(293, 22);
             this.showSizes.Text = "Show Sizes";
-            this.showSizes.Click += new System.EventHandler(this.showSizes_Click);
+            this.showSizes.Click += new System.EventHandler(this.ShowSizes_Click);
             // 
             // cbEnableSSA
             // 
@@ -292,6 +296,13 @@
             this.cbEnableInlinedMethods.Size = new System.Drawing.Size(293, 22);
             this.cbEnableInlinedMethods.Text = "Enable Inlined Methods";
             // 
+            // cbEnableLongOperand
+            // 
+            this.cbEnableLongOperand.CheckOnClick = true;
+            this.cbEnableLongOperand.Name = "cbEnableLongOperand";
+            this.cbEnableLongOperand.Size = new System.Drawing.Size(293, 22);
+            this.cbEnableLongOperand.Text = "Enable Long Operand Conversion";
+            // 
             // advanceToolStripMenuItem
             // 
             this.advanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -321,7 +332,7 @@
             this.treeView.Name = "treeView";
             this.treeView.Size = new System.Drawing.Size(262, 425);
             this.treeView.TabIndex = 3;
-            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
+            this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView_AfterSelect);
             // 
             // splitContainer1
             // 
@@ -365,7 +376,7 @@
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.Padding = new System.Drawing.Point(0, 0);
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(671, 425);
+            this.tabControl1.Size = new System.Drawing.Size(700, 425);
             this.tabControl1.TabIndex = 38;
             // 
             // tbStages
@@ -379,7 +390,7 @@
             this.tbStages.Location = new System.Drawing.Point(4, 25);
             this.tbStages.Margin = new System.Windows.Forms.Padding(0);
             this.tbStages.Name = "tbStages";
-            this.tbStages.Size = new System.Drawing.Size(663, 396);
+            this.tbStages.Size = new System.Drawing.Size(692, 396);
             this.tbStages.TabIndex = 0;
             this.tbStages.Text = "Instructions";
             // 
@@ -394,7 +405,7 @@
             this.cbLabels.Name = "cbLabels";
             this.cbLabels.Size = new System.Drawing.Size(105, 21);
             this.cbLabels.TabIndex = 40;
-            this.cbLabels.SelectedIndexChanged += new System.EventHandler(this.cbLabels_SelectedIndexChanged);
+            this.cbLabels.SelectedIndexChanged += new System.EventHandler(this.CbLabels_SelectedIndexChanged);
             // 
             // cbStages
             // 
@@ -408,7 +419,7 @@
             this.cbStages.Name = "cbStages";
             this.cbStages.Size = new System.Drawing.Size(242, 21);
             this.cbStages.TabIndex = 38;
-            this.cbStages.SelectedIndexChanged += new System.EventHandler(this.cbStages_SelectedIndexChanged);
+            this.cbStages.SelectedIndexChanged += new System.EventHandler(this.CbStages_SelectedIndexChanged);
             // 
             // tbResult
             // 
@@ -418,7 +429,7 @@
             this.tbResult.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbResult.Location = new System.Drawing.Point(0, 32);
             this.tbResult.Name = "tbResult";
-            this.tbResult.Size = new System.Drawing.Size(677, 368);
+            this.tbResult.Size = new System.Drawing.Size(714, 368);
             this.tbResult.TabIndex = 31;
             this.tbResult.Text = "";
             this.tbResult.WordWrap = false;
@@ -432,7 +443,7 @@
             this.tbDebug.Location = new System.Drawing.Point(4, 25);
             this.tbDebug.Margin = new System.Windows.Forms.Padding(0);
             this.tbDebug.Name = "tbDebug";
-            this.tbDebug.Size = new System.Drawing.Size(663, 396);
+            this.tbDebug.Size = new System.Drawing.Size(692, 396);
             this.tbDebug.TabIndex = 1;
             this.tbDebug.Text = "Debug";
             // 
@@ -447,7 +458,7 @@
             this.cbDebugStages.Name = "cbDebugStages";
             this.cbDebugStages.Size = new System.Drawing.Size(387, 21);
             this.cbDebugStages.TabIndex = 40;
-            this.cbDebugStages.SelectedIndexChanged += new System.EventHandler(this.cbDebugStages_SelectedIndexChanged);
+            this.cbDebugStages.SelectedIndexChanged += new System.EventHandler(this.CbDebugStages_SelectedIndexChanged);
             // 
             // rbDebugResult
             // 
@@ -467,7 +478,7 @@
             this.tbMethodCounters.Controls.Add(this.rbMethodCounters);
             this.tbMethodCounters.Location = new System.Drawing.Point(4, 25);
             this.tbMethodCounters.Name = "tbMethodCounters";
-            this.tbMethodCounters.Size = new System.Drawing.Size(663, 396);
+            this.tbMethodCounters.Size = new System.Drawing.Size(692, 396);
             this.tbMethodCounters.TabIndex = 6;
             this.tbMethodCounters.Text = "Counters";
             this.tbMethodCounters.UseVisualStyleBackColor = true;
@@ -492,7 +503,7 @@
             this.tbGlobalCounters.Location = new System.Drawing.Point(4, 25);
             this.tbGlobalCounters.Name = "tbGlobalCounters";
             this.tbGlobalCounters.Padding = new System.Windows.Forms.Padding(3);
-            this.tbGlobalCounters.Size = new System.Drawing.Size(663, 396);
+            this.tbGlobalCounters.Size = new System.Drawing.Size(692, 396);
             this.tbGlobalCounters.TabIndex = 4;
             this.tbGlobalCounters.Text = "Global Counters";
             // 
@@ -516,7 +527,7 @@
             this.tbLogs.Location = new System.Drawing.Point(4, 25);
             this.tbLogs.Name = "tbLogs";
             this.tbLogs.Padding = new System.Windows.Forms.Padding(3);
-            this.tbLogs.Size = new System.Drawing.Size(663, 396);
+            this.tbLogs.Size = new System.Drawing.Size(692, 396);
             this.tbLogs.TabIndex = 3;
             this.tbLogs.Text = "Log";
             // 
@@ -540,7 +551,7 @@
             this.tbErrors.Location = new System.Drawing.Point(4, 25);
             this.tbErrors.Name = "tbErrors";
             this.tbErrors.Padding = new System.Windows.Forms.Padding(3);
-            this.tbErrors.Size = new System.Drawing.Size(663, 396);
+            this.tbErrors.Size = new System.Drawing.Size(692, 396);
             this.tbErrors.TabIndex = 2;
             this.tbErrors.Text = "Errors";
             // 
@@ -563,7 +574,7 @@
             this.tbExceptions.Location = new System.Drawing.Point(4, 25);
             this.tbExceptions.Name = "tbExceptions";
             this.tbExceptions.Padding = new System.Windows.Forms.Padding(3);
-            this.tbExceptions.Size = new System.Drawing.Size(663, 396);
+            this.tbExceptions.Size = new System.Drawing.Size(692, 396);
             this.tbExceptions.TabIndex = 5;
             this.tbExceptions.Text = "Exceptions";
             this.tbExceptions.UseVisualStyleBackColor = true;
@@ -602,7 +613,7 @@
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(56, 22);
             this.toolStripButton1.Text = "Open";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.toolStripButton1.Click += new System.EventHandler(this.ToolStripButton1_Click);
             // 
             // toolStripButton2
             // 
@@ -611,7 +622,7 @@
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(67, 22);
             this.toolStripButton2.Text = "Snippet";
-            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+            this.toolStripButton2.Click += new System.EventHandler(this.ToolStripButton2_Click);
             // 
             // toolStripSeparator1
             // 
@@ -625,7 +636,7 @@
             this.toolStripButton4.Name = "toolStripButton4";
             this.toolStripButton4.Size = new System.Drawing.Size(72, 22);
             this.toolStripButton4.Text = "Compile";
-            this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
+            this.toolStripButton4.Click += new System.EventHandler(this.ToolStripButton4_Click);
             // 
             // toolStripSeparator2
             // 
@@ -643,11 +654,20 @@
             this.cbPlatform.Name = "cbPlatform";
             this.cbPlatform.Size = new System.Drawing.Size(78, 21);
             this.cbPlatform.TabIndex = 28;
-            this.cbPlatform.SelectedIndexChanged += new System.EventHandler(this.cbPlatform_SelectedIndexChanged);
+            this.cbPlatform.SelectedIndexChanged += new System.EventHandler(this.CbPlatform_SelectedIndexChanged);
             // 
             // folderBrowserDialog1
             // 
             this.folderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer;
+            // 
+            // enableTwoPassOptimizationToolStripMenuItem
+            // 
+            this.cbEnableTwoPassOptimizationToolStripMenuItem.Checked = true;
+            this.cbEnableTwoPassOptimizationToolStripMenuItem.CheckOnClick = true;
+            this.cbEnableTwoPassOptimizationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbEnableTwoPassOptimizationToolStripMenuItem.Name = "enableTwoPassOptimizationToolStripMenuItem";
+            this.cbEnableTwoPassOptimizationToolStripMenuItem.Size = new System.Drawing.Size(293, 22);
+            this.cbEnableTwoPassOptimizationToolStripMenuItem.Text = "Enable Two Pass Optimization";
             // 
             // MainForm
             // 
@@ -662,7 +682,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "MOSA Explorer v1.7.2";
+            this.Text = "MOSA Explorer v1.7.3";
             this.Load += new System.EventHandler(this.Main_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -739,5 +759,7 @@
 		private System.Windows.Forms.ToolStripMenuItem dumpAllMethodStagesToolStripMenuItem;
 		private System.Windows.Forms.TabPage tbMethodCounters;
 		private System.Windows.Forms.RichTextBox rbMethodCounters;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableLongOperand;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableTwoPassOptimizationToolStripMenuItem;
 	}
 }

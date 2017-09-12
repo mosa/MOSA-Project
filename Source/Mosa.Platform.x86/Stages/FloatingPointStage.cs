@@ -7,8 +7,9 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	///
+	/// Floating Point Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	public class FloatingPointStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
+	/// Instruction Node Addition
 	/// </summary>
 	public sealed class InstructionNodeAddition
 	{

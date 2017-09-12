@@ -4,8 +4,8 @@ namespace Mosa.Utility.RSP.Command
 {
 	public class ReadMemory : GDBCommand
 	{
-		public ulong Address { get; private set; }
-		public uint SentBytes { get; private set; }
+		public ulong Address { get; }
+		public uint SentBytes { get; }
 
 		protected override string PackArguments { get { return Address.ToString("x") + "," + SentBytes.ToString("x"); } }
 

@@ -3,8 +3,9 @@
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Ldlen Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public sealed class LdlenInstruction : UnaryInstruction
 	{
 		#region Construction
@@ -25,13 +26,16 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, BaseMethodCompiler compiler)
 		{
-			base.Resolve(ctx, compiler);
+			if (context == null)
+				throw new System.ArgumentNullException(nameof(context));
 
-			ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.BuiltIn.U);
+			base.Resolve(context, compiler);
+
+			context.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.BuiltIn.U);
 		}
 
 		#endregion Methods

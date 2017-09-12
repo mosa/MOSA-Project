@@ -3,10 +3,17 @@
 namespace Mosa.Compiler.Framework.Platform
 {
 	/// <summary>
-	///
+	/// Base Platform Transformation Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
 	public abstract class BasePlatformTransformationStage : BaseCodeTransformationStage
 	{
+		/// <summary>
+		/// Gets the platform.
+		/// </summary>
+		/// <value>
+		/// The platform.
+		/// </value>
 		protected virtual string Platform { get { return "Generic"; } }
 
 		#region IPipelineStage Members

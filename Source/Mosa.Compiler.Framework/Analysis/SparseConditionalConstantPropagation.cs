@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			private List<ulong> constants;
 
-			public int ConstantCount { get { return constants == null ? 0 : constants.Count; } }
+			public int ConstantCount { get { return constants?.Count ?? 0; } }
 
 			public List<ulong> Constants { get { return constants; } }
 
@@ -455,11 +455,16 @@ namespace Mosa.Compiler.Framework.Analysis
 				Move(node);
 			}
 			else if (instruction == IRInstruction.NewObject
-				|| instruction == IRInstruction.NewArray)
+				|| instruction == IRInstruction.NewArray
+				|| instruction == IRInstruction.NewString)
 			{
 				NewObject(node);
 			}
-			else if (instruction == IRInstruction.Call
+			else if (instruction == IRInstruction.CallDynamic
+				|| instruction == IRInstruction.CallInterface
+				|| instruction == IRInstruction.CallDirect
+				|| instruction == IRInstruction.CallStatic
+				|| instruction == IRInstruction.CallVirtual
 				|| instruction == IRInstruction.IntrinsicMethodCall)
 			{
 				Call(node);
@@ -525,6 +530,10 @@ namespace Mosa.Compiler.Framework.Analysis
 			else if (instruction == IRInstruction.FinallyStart)
 			{
 				FinallyStart(node);
+			}
+			else if (instruction == IRInstruction.SetReturn)
+			{
+				// nothing
 			}
 			else
 			{
@@ -910,12 +919,20 @@ namespace Mosa.Compiler.Framework.Analysis
 			if (node.ResultCount == 0)
 				return;
 
-			Debug.Assert(node.ResultCount == 1);
+			Debug.Assert(node.ResultCount > 0);
 
 			var result = GetVariableState(node.Result);
 
 			UpdateToOverDefined(result);
 			SetReferenceOverdefined(result);
+
+			if (node.ResultCount == 2)
+			{
+				var result2 = GetVariableState(node.Result);
+
+				UpdateToOverDefined(result2);
+				SetReferenceOverdefined(result2);
+			}
 		}
 
 		private bool CompareIntegerBranch(InstructionNode node)

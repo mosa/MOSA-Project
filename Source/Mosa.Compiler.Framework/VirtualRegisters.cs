@@ -8,13 +8,13 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Virtual Registers
 	/// </summary>
 	public sealed class VirtualRegisters : IEnumerable<Operand>
 	{
 		#region Data members
 
-		private List<Operand> virtualRegisters = new List<Operand>();
+		private readonly List<Operand> virtualRegisters = new List<Operand>();
 
 		#endregion Data members
 
@@ -27,9 +27,9 @@ namespace Mosa.Compiler.Framework
 		#endregion Properties
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VirtualRegisters"/> class.
+		/// Initializes a new instance of the <see cref="VirtualRegisters" /> class.
 		/// </summary>
-		public VirtualRegisters(BaseArchitecture architecture)
+		public VirtualRegisters()
 		{
 		}
 
@@ -55,8 +55,14 @@ namespace Mosa.Compiler.Framework
 
 			if (longOperand.Low == null && longOperand.High == null)
 			{
-				virtualRegisters.Add(Operand.CreateLowSplitForLong(typeSystem, longOperand, virtualRegisters.Count + 1));
-				virtualRegisters.Add(Operand.CreateHighSplitForLong(typeSystem, longOperand, virtualRegisters.Count + 1));
+				var low = Operand.CreateLowSplitForLong(longOperand, virtualRegisters.Count + 1, typeSystem);
+				var high = Operand.CreateHighSplitForLong(longOperand, virtualRegisters.Count + 1, typeSystem);
+
+				if (longOperand.IsVirtualRegister)
+				{
+					virtualRegisters.Add(low);
+					virtualRegisters.Add(high);
+				}
 			}
 		}
 

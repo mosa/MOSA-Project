@@ -8,6 +8,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Base class for instructions, which invoke other functions.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
 	public abstract class InvokeInstruction : BaseCILInstruction
 	{
 		#region Types
@@ -18,6 +19,8 @@ namespace Mosa.Compiler.Framework.CIL
 		[Flags]
 		protected enum InvokeSupportFlags
 		{
+			None = 0,
+
 			/// <summary>
 			/// Specifies that the invoke instruction supports member references.
 			/// </summary>
@@ -49,10 +52,10 @@ namespace Mosa.Compiler.Framework.CIL
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="InvokeInstruction"/> class.
+		/// Initializes a new instance of the <see cref="InvokeInstruction" /> class.
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
-		public InvokeInstruction(OpCode opcode)
+		protected InvokeInstruction(OpCode opcode)
 			: base(opcode, 0)
 		{
 		}
@@ -84,50 +87,36 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
-			DecodeInvocationTarget(ctx, decoder, InvokeSupport);
+			DecodeInvocationTarget(node, decoder);
 		}
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, BaseMethodCompiler compiler)
 		{
-			base.Resolve(ctx, compiler);
+			base.Resolve(context, compiler);
 		}
 
 		/// <summary>
 		/// Decodes the invocation target.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The node.</param>
 		/// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
-		/// <param name="flags">Flags, which control the</param>
 		/// <returns></returns>
-		protected static MosaMethod DecodeInvocationTarget(InstructionNode ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
+		protected static MosaMethod DecodeInvocationTarget(InstructionNode node, IInstructionDecoder decoder)
 		{
 			var method = (MosaMethod)decoder.Instruction.Operand;
 
-			decoder.Compiler.Scheduler.TrackMethodInvoked(method);
+			decoder.MethodCompiler.Scheduler.TrackMethodInvoked(method);
 
-			SetInvokeTarget(ctx, decoder.Compiler, method);
-
-			return method;
-		}
-
-		/// <summary>
-		/// Sets the invoke target.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="compiler">The compiler.</param>
-		/// <param name="method">The method.</param>
-		private static void SetInvokeTarget(InstructionNode context, BaseMethodCompiler compiler, MosaMethod method)
-		{
-			context.InvokeMethod = method;
+			node.InvokeMethod = method;
 
 			// Fix the parameter list
 			int paramCount = method.Signature.Parameters.Count;
@@ -138,23 +127,17 @@ namespace Mosa.Compiler.Framework.CIL
 			// Setup operands for parameters and the return value
 			if (!method.Signature.ReturnType.IsVoid)
 			{
-				context.ResultCount = 1;
-
-				if (MosaTypeLayout.IsStoredOnStack(method.Signature.ReturnType))
-				{
-					context.Result = AllocateVirtualRegisterOrStackSlot(compiler, method.Signature.ReturnType);
-				}
-				else
-				{
-					context.Result = compiler.CreateVirtualRegister(method.Signature.ReturnType.GetStackType());
-				}
+				node.ResultCount = 1;
+				node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, method.Signature.ReturnType);
 			}
 			else
 			{
-				context.ResultCount = 0;
+				node.ResultCount = 0;
 			}
 
-			context.OperandCount = (byte)paramCount;
+			node.OperandCount = (byte)paramCount;
+
+			return method;
 		}
 
 		#endregion Methods

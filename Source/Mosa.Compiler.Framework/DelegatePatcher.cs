@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The compiler
 		/// </summary>
-		private BaseCompiler Compiler;
+		private readonly BaseCompiler Compiler;
 
 		/// <summary>
 		/// The delegate proxy type
@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The deligate proxy methods
 		/// </summary>
-		private Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>> delegateProxyMethods = new Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>>();
+		public readonly Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>> delegateProxyMethods = new Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DelegatePatcher"/> class.
@@ -87,11 +87,11 @@ namespace Mosa.Compiler.Framework
 
 			var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-			var methodPointerOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, methodPointerOffset);
+			var methodPointerOffsetOperand = Operand.CreateConstant(methodPointerOffset, methodCompiler.TypeSystem);
 
 			var instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-			var instanceOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, instanceOffset);
+			var instanceOffsetOperand = Operand.CreateConstant(instanceOffset, methodCompiler.TypeSystem);
 
 			var context = new Context(CreateMethodStructure(methodCompiler));
 
@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework
 			context.MosaType = methodPointerOperand.Type;
 			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, instanceOffsetOperand, v3);
 			context.MosaType = instanceOperand.Type;
-			context.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
+			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private void PatchInvoke(BaseMethodCompiler methodCompiler)
@@ -116,11 +116,11 @@ namespace Mosa.Compiler.Framework
 
 			var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-			var methodPointerOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, methodPointerOffset);
+			var methodPointerOffsetOperand = Operand.CreateConstant(methodPointerOffset, methodCompiler.TypeSystem);
 
 			var instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-			var instanceOffsetOperand = Operand.CreateConstant(methodCompiler.TypeSystem, instanceOffset);
+			var instanceOffsetOperand = Operand.CreateConstant(instanceOffset, methodCompiler.TypeSystem);
 
 			var size = methodCompiler.Architecture.NativeInstructionSize;
 			bool withReturn = (methodCompiler.Method.Signature.ReturnType == null) ? false : !methodCompiler.Method.Signature.ReturnType.IsVoid;
@@ -160,7 +160,7 @@ namespace Mosa.Compiler.Framework
 			var opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.I4);
 
 			var opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
-			var c0 = Operand.CreateConstant(methodCompiler.TypeSystem, 0);
+			var c0 = Operand.CreateConstant(0, methodCompiler.TypeSystem);
 
 			b0.AppendInstruction(IRInstruction.LoadInteger, size, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(IRInstruction.LoadInteger, size, opInstance, thisOperand, instanceOffsetOperand);
@@ -169,49 +169,36 @@ namespace Mosa.Compiler.Framework
 			b0.AddBranchTarget(b2.Block);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 
-			// no instance
-			b1.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
-			b1.InvokeMethod = GetDelegateProxyMethod(methodCompiler.Method, false);
+			var operands = new List<Operand>(methodCompiler.Parameters.Length + 1);
 			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
 			{
-				b1.AddOperand(vrs[i]);
+				operands.Add(vrs[i]);
 			}
-			if (withReturn)
-			{
-				b1.SetResult(0, opReturn);
-			}
+
+			var result = withReturn ? opReturn : null;
+
+			// no instance
+			b1.AppendInstruction(IRInstruction.CallDynamic, result, opMethod, operands);
 			b1.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 			// instance
-			b2.AppendInstruction(IRInstruction.Call, opReturn, opMethod);
-			b2.InvokeMethod = GetDelegateProxyMethod(methodCompiler.Method, true);
-			b2.AddOperand(opInstance);
-			for (int i = 1; i < methodCompiler.Parameters.Length; i++)
-			{
-				b2.AddOperand(vrs[i]);
-			}
-
-			if (withReturn)
-			{
-				b2.SetResult(0, opReturn);
-			}
+			b2.AppendInstruction(IRInstruction.CallDynamic, result, opMethod, opInstance, operands);
 			b2.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 			// return
-			b3.AppendInstruction(IRInstruction.Return, methodCompiler.BasicBlocks.EpilogueBlock);
-			if (withReturn)
-			{
-				b3.SetOperand(0, opReturn);
-			}
+			if (opReturn != null)
+				b3.AppendInstruction(IRInstruction.SetReturn, null, opReturn);
+
+			b3.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private static void PatchBeginInvoke(BaseMethodCompiler methodCompiler)
 		{
-			var nullOperand = Operand.GetNull(methodCompiler.TypeSystem);
-
+			var nullOperand = Operand.GetNullObject(methodCompiler.TypeSystem);
 			var context = new Context(CreateMethodStructure(methodCompiler));
-			context.AppendInstruction(IRInstruction.Return, null, nullOperand);
-			context.AddBranchTarget(methodCompiler.BasicBlocks.EpilogueBlock);
+
+			context.AppendInstruction(IRInstruction.SetReturn, null, nullOperand);
+			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
 		private static void PatchEndInvoke(BaseMethodCompiler methodCompiler)

@@ -3,8 +3,9 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// Stores a value to a memory pointer.
+	/// Store Parameter Float R4
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseStoreParameterInstruction" />
 	public sealed class StoreParameterFloatR4 : BaseStoreParameterInstruction
 	{
 	}

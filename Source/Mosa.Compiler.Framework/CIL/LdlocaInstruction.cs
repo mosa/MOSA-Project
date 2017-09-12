@@ -5,15 +5,17 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Ldloca Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.LoadInstruction" />
 	public sealed class LdlocaInstruction : LoadInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LdlocaInstruction"/> class.
+		/// Initializes a new instance of the <see cref="LdlocaInstruction" /> class.
 		/// </summary>
+		/// <param name="opCode">The op code.</param>
 		public LdlocaInstruction(OpCode opCode)
 			: base(opCode)
 		{
@@ -26,21 +28,21 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			// Opcode specific handling
 
-			Operand local = decoder.Compiler.LocalVariables[(int)decoder.Instruction.Operand];
+			Operand local = decoder.MethodCompiler.LocalVariables[(int)decoder.Instruction.Operand];
 
 			local = decoder.ConvertVirtualRegisterToStackLocal(local);
 
-			ctx.Operand1 = local;
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(local.Type.ToManagedPointer());
+			node.Operand1 = local;
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(local.Type.ToManagedPointer());
 		}
 
 		#endregion Methods

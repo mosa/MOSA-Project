@@ -30,15 +30,15 @@ namespace Mosa.Compiler.Linker.Elf
 		protected List<byte> sectionHeaderStringTable = new List<byte>();
 		protected List<byte> stringTable = new List<byte>();
 
-		private Dictionary<LinkerSymbol, uint> symbolTableOffset = new Dictionary<LinkerSymbol, uint>();
+		private readonly Dictionary<LinkerSymbol, uint> symbolTableOffset = new Dictionary<LinkerSymbol, uint>();
 
 		protected EndianAwareBinaryWriter writer;
 
 		protected static string[] LinkerSectionNames = { ".text", ".data", ".rodata", ".bss" };
 
-		public uint BaseFileOffset { get; private set; }
+		public uint BaseFileOffset { get; }
 
-		public uint SectionAlignment { get; private set; }
+		public uint SectionAlignment { get; }
 
 		#endregion Data members
 
@@ -58,7 +58,9 @@ namespace Mosa.Compiler.Linker.Elf
 
 		private void AddSection(Section section)
 		{
-			ushort index = (ushort)sections.Count;
+			Debug.Assert(section != null);
+
+			var index = (ushort)sections.Count;
 			section.Index = index;
 
 			sections.Add(section);
@@ -178,10 +180,7 @@ namespace Mosa.Compiler.Linker.Elf
 			ResolveSectionOffset(section);
 			writer.Position = section.Offset;
 
-			if (section.EmitMethod != null)
-			{
-				section.EmitMethod(section);
-			}
+			section.EmitMethod?.Invoke(section);
 		}
 
 		private void WriteElfHeader()
@@ -191,7 +190,7 @@ namespace Mosa.Compiler.Linker.Elf
 			elfheader.Type = FileType.Executable;
 			elfheader.Machine = linker.MachineType;
 			elfheader.EntryAddress = (uint)linker.EntryPoint.VirtualAddress;
-			elfheader.CreateIdent((linkerFormatType == LinkerFormatType.Elf32) ? IdentClass.Class32 : IdentClass.Class64, linker.Endianness == Endianness.Little ? IdentData.Data2LSB : IdentData.Data2MSB, null);
+			elfheader.CreateIdent((linkerFormatType == LinkerFormatType.Elf32) ? IdentClass.Class32 : IdentClass.Class64, linker.Endianness == Endianness.Little ? IdentData.Data2LSB : IdentData.Data2MSB);
 			elfheader.SectionHeaderNumber = (ushort)sections.Count;
 			elfheader.SectionHeaderStringIndex = sectionHeaderStringSection.Index;
 
@@ -242,16 +241,16 @@ namespace Mosa.Compiler.Linker.Elf
 				if (linkerSection.Size == 0 && linkerSection.SectionKind != SectionKind.BSS)
 					continue;
 
-				var section = new Section();
-
-				section.Name = LinkerSectionNames[(int)linkerSection.SectionKind];
-				section.Address = linkerSection.VirtualAddress;
-				section.Offset = linkerSection.FileOffset;
-				section.Size = linkerSection.AlignedSize;
-				section.AddressAlignment = linkerSection.SectionAlignment;
-				section.EmitMethod = WriteLinkerSection;
-				section.SectionKind = linkerSection.SectionKind;
-
+				var section = new Section()
+				{
+					Name = LinkerSectionNames[(int)linkerSection.SectionKind],
+					Address = linkerSection.VirtualAddress,
+					Offset = linkerSection.FileOffset,
+					Size = linkerSection.AlignedSize,
+					AddressAlignment = linkerSection.SectionAlignment,
+					EmitMethod = WriteLinkerSection,
+					SectionKind = linkerSection.SectionKind
+				};
 				switch (linkerSection.SectionKind)
 				{
 					case SectionKind.Text:
@@ -295,7 +294,7 @@ namespace Mosa.Compiler.Linker.Elf
 
 		private void WriteSectionHeaders()
 		{
-			elfheader.SectionHeaderOffset = elfheader.ProgramHeaderOffset + ProgramHeader.GetEntrySize(linkerFormatType) * elfheader.ProgramHeaderNumber;
+			elfheader.SectionHeaderOffset = elfheader.ProgramHeaderOffset + (ProgramHeader.GetEntrySize(linkerFormatType) * elfheader.ProgramHeaderNumber);
 
 			writer.Position = elfheader.SectionHeaderOffset;
 
@@ -316,10 +315,11 @@ namespace Mosa.Compiler.Linker.Elf
 
 		private void CreateNullSection()
 		{
-			nullSection = new Section();
-			nullSection.Name = null;
-			nullSection.Type = SectionType.Null;
-
+			nullSection = new Section()
+			{
+				Name = null,
+				Type = SectionType.Null
+			};
 			AddSection(nullSection);
 		}
 
@@ -481,15 +481,16 @@ namespace Mosa.Compiler.Linker.Elf
 
 		protected void CreateRelocationSection(SectionKind kind, bool addend)
 		{
-			var relocationSection = new Section();
-
-			relocationSection.Name = (addend ? ".rela" : ".rel") + LinkerSectionNames[(int)kind];
-			relocationSection.Type = addend ? SectionType.RelocationA : SectionType.Relocation;
-			relocationSection.Link = symbolSection;
-			relocationSection.Info = GetSection(kind);
-			relocationSection.AddressAlignment = linker.SectionAlignment;
-			relocationSection.EntrySize = (uint)(addend ? RelocationAddendEntry.GetEntrySize(linkerFormatType) : RelocationEntry.GetEntrySize(linkerFormatType));
-			relocationSection.EmitMethod = WriteRelocationSection;
+			var relocationSection = new Section()
+			{
+				Name = (addend ? ".rela" : ".rel") + LinkerSectionNames[(int)kind],
+				Type = addend ? SectionType.RelocationA : SectionType.Relocation,
+				Link = symbolSection,
+				Info = GetSection(kind),
+				AddressAlignment = linker.SectionAlignment,
+				EntrySize = addend ? RelocationAddendEntry.GetEntrySize(linkerFormatType) : RelocationEntry.GetEntrySize(linkerFormatType),
+				EmitMethod = WriteRelocationSection
+			};
 
 			AddSection(relocationSection);
 
@@ -529,7 +530,7 @@ namespace Mosa.Compiler.Linker.Elf
 
 					var relocationEntry = new RelocationEntry()
 					{
-						RelocationType = ConvertType(patch.PatchType, patch.LinkType, linker.MachineType),
+						RelocationType = ConvertType(patch.LinkType, linker.MachineType),
 						Symbol = symbolTableOffset[symbol],
 						Offset = (ulong)patch.PatchOffset,
 					};
@@ -558,7 +559,7 @@ namespace Mosa.Compiler.Linker.Elf
 
 					var relocationAddendEntry = new RelocationAddendEntry()
 					{
-						RelocationType = ConvertType(patch.PatchType, patch.LinkType, linker.MachineType),
+						RelocationType = ConvertType(patch.LinkType, linker.MachineType),
 						Symbol = symbolTableOffset[symbol],
 						Offset = (ulong)patch.PatchOffset,
 						Addend = (ulong)patch.ReferenceOffset,
@@ -573,7 +574,7 @@ namespace Mosa.Compiler.Linker.Elf
 			section.Size = (uint)(count * RelocationAddendEntry.GetEntrySize(linkerFormatType));
 		}
 
-		private static RelocationType ConvertType(PatchType patchType, LinkType linkType, MachineType machineType)
+		private static RelocationType ConvertType(LinkType linkType, MachineType machineType)
 		{
 			if (machineType == MachineType.Intel386)
 			{

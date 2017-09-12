@@ -1,0 +1,551 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3774.47 1118.5" width="3774pt" height="1119pt" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g class="graph" id="graph0" transform="scale(1) rotate(0) translate(4 1114.5)">
+<title>g</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-1114.5 3770.47,-1114.5 3770.47,4 -4,4" />
+<!-- Key -->
+<g class="node" id="node1"><title>Key</title>
+<polygon fill="none" stroke="black" points="1.27898e-013,-873.2 1.27898e-013,-954.8 234.35,-954.8 234.35,-873.2 1.27898e-013,-873.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="117.175" y="-936.4">Key</text>
+<polyline fill="none" stroke="black" points="1.27898e-013,-927.6 234.35,-927.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="117.175" y="-909.2">~ Denotes field may be zero filled</text>
+<polyline fill="none" stroke="black" points="1.27898e-013,-900.4 234.35,-900.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="117.175" y="-882">due to no value being available.</text>
+</g>
+<!-- NameString -->
+<g class="node" id="node2"><title>NameString</title>
+<polygon fill="none" stroke="red" points="3530.96,-584 3530.96,-720 3766.47,-720 3766.47,-584 3530.96,-584" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3648.72" y="-701.6">Name String Object</text>
+<polyline fill="none" stroke="red" points="3530.96,-692.8 3766.47,-692.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3648.72" y="-674.4">Address of String Type Definition</text>
+<polyline fill="none" stroke="red" points="3530.96,-665.6 3766.47,-665.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3648.72" y="-647.2">Sync block</text>
+<polyline fill="none" stroke="red" points="3530.96,-638.4 3766.47,-638.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3648.72" y="-620">String Length</text>
+<polyline fill="none" stroke="red" points="3530.96,-611.2 3766.47,-611.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3648.72" y="-592.8">Unicode String</text>
+</g>
+<!-- AssemblyListTable -->
+<g class="node" id="node3"><title>AssemblyListTable</title>
+<polygon fill="none" stroke="black" points="35.4184,-974 35.4184,-1110 198.932,-1110 198.932,-974 35.4184,-974" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="117.175" y="-1091.6">Assembly Table</text>
+<polyline fill="none" stroke="black" points="35.4184,-1082.8 198.932,-1082.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="117.175" y="-1064.4">Number of Assemblies</text>
+<polyline fill="none" stroke="black" points="35.4184,-1055.6 198.932,-1055.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="117.175" y="-1037.2">Pointer to Assembly 1</text>
+<polyline fill="none" stroke="black" points="35.4184,-1028.4 198.932,-1028.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="117.175" y="-1010">..</text>
+<polyline fill="none" stroke="black" points="35.4184,-1001.2 198.932,-1001.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="117.175" y="-982.8">Pointer to Assembly N</text>
+</g>
+<!-- AssemblyDefinition -->
+<g class="node" id="node4"><title>AssemblyDefinition</title>
+<polygon fill="none" stroke="black" points="381.35,-838.2 381.35,-1055.8 590.44,-1055.8 590.44,-838.2 381.35,-838.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="485.895" y="-1037.4">Assembly</text>
+<polyline fill="none" stroke="black" points="381.35,-1028.6 590.44,-1028.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="485.895" y="-1010.2">Pointer to Assembly Name</text>
+<polyline fill="none" stroke="black" points="381.35,-1001.4 590.44,-1001.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="485.895" y="-983">~Pointer to Custom Attributes</text>
+<polyline fill="none" stroke="black" points="381.35,-974.2 590.44,-974.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="485.895" y="-955.8">Flags: IsReflectionOnly</text>
+<polyline fill="none" stroke="black" points="381.35,-947 590.44,-947" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="485.895" y="-928.6">Number of Types</text>
+<polyline fill="none" stroke="black" points="381.35,-919.8 590.44,-919.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="485.895" y="-901.4">Pointer to Type Definition 1</text>
+<polyline fill="none" stroke="black" points="381.35,-892.6 590.44,-892.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="485.895" y="-874.2">...</text>
+<polyline fill="none" stroke="black" points="381.35,-865.4 590.44,-865.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="485.895" y="-847">Pointer to Type Definition N</text>
+</g>
+<!-- AssemblyListTable&#45;&gt;AssemblyDefinition -->
+<g class="edge" id="0"><title>AssemblyListTable:f2-&gt;AssemblyDefinition:f0</title>
+<path fill="none" stroke="black" d="M 200.175 -1042 C 277.238 -1042 298.987 -1042 371.295 -1042" />
+<polygon fill="black" stroke="black" points="371.35,-1045.5 381.35,-1042 371.35,-1038.5 371.35,-1045.5" />
+</g>
+<!-- AssemblyDefinition&#45;&gt;NameString -->
+<g class="edge" id="0"><title>AssemblyDefinition:f1-&gt;NameString:f0</title>
+<path fill="none" stroke="red" d="M 590.44 -1015 C 642.932 -1015 647.948 -1058 700.44 -1058 C 700.44 -1058 700.44 -1058 3457.96 -1058 C 3476.1 -1058 3505.03 -767.659 3525.15 -714.354" />
+<polygon fill="red" stroke="red" points="3528.13,-716.208 3530.96,-706 3522.38,-712.211 3528.13,-716.208" />
+</g>
+<!-- TypeDefinition -->
+<g class="node" id="node5"><title>TypeDefinition</title>
+<polygon fill="none" stroke="blue" points="737.44,-40.4 737.44,-611.6 1010.04,-611.6 1010.04,-40.4 737.44,-40.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-593.2">Type Definition</text>
+<polyline fill="none" stroke="blue" points="737.44,-584.4 1010.04,-584.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-566">Pointer to Type Name</text>
+<polyline fill="none" stroke="blue" points="737.44,-557.2 1010.04,-557.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-538.8">~Pointer to Custom Attributes</text>
+<polyline fill="none" stroke="blue" points="737.44,-530 1010.04,-530" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-511.6">Type Code &amp; Attributes</text>
+<polyline fill="none" stroke="blue" points="737.44,-502.8 1010.04,-502.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-484.4">Type Size</text>
+<polyline fill="none" stroke="blue" points="737.44,-475.6 1010.04,-475.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-457.2">Pointer to Assembly</text>
+<polyline fill="none" stroke="blue" points="737.44,-448.4 1010.04,-448.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-430">~Pointer to Parent Type</text>
+<polyline fill="none" stroke="blue" points="737.44,-421.2 1010.04,-421.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-402.8">~Pointer to Declaring Type</text>
+<polyline fill="none" stroke="blue" points="737.44,-394 1010.04,-394" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-375.6">~Pointer to Element Type</text>
+<polyline fill="none" stroke="blue" points="737.44,-366.8 1010.04,-366.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-348.4">~Pointer to Default Constructor Method</text>
+<polyline fill="none" stroke="blue" points="737.44,-339.6 1010.04,-339.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-321.2">~Pointer to Properties Table</text>
+<polyline fill="none" stroke="blue" points="737.44,-312.4 1010.04,-312.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-294">~Pointer to Fields Table</text>
+<polyline fill="none" stroke="blue" points="737.44,-285.2 1010.04,-285.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-266.8">~Pointer to Interface Slot Table</text>
+<polyline fill="none" stroke="blue" points="737.44,-258 1010.04,-258" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-239.6">~Pointer to Interface Bitmap</text>
+<polyline fill="none" stroke="blue" points="737.44,-230.8 1010.04,-230.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-212.4">~Number of Methods</text>
+<polyline fill="none" stroke="blue" points="737.44,-203.6 1010.04,-203.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-185.2">Pointer to Method 1</text>
+<polyline fill="none" stroke="blue" points="737.44,-176.4 1010.04,-176.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-158">...</text>
+<polyline fill="none" stroke="blue" points="737.44,-149.2 1010.04,-149.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-130.8">Pointer to Method N</text>
+<polyline fill="none" stroke="blue" points="737.44,-122 1010.04,-122" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-103.6">~Pointer to Method Definition 1</text>
+<polyline fill="none" stroke="blue" points="737.44,-94.8 1010.04,-94.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-76.4">...</text>
+<polyline fill="none" stroke="blue" points="737.44,-67.6 1010.04,-67.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="873.742" y="-49.2">Pointer to Method Definition N</text>
+</g>
+<!-- AssemblyDefinition&#45;&gt;TypeDefinition -->
+<g class="edge" id="0"><title>AssemblyDefinition:f5-&gt;TypeDefinition:f0</title>
+<path fill="none" stroke="blue" d="M 590.44 -906 C 738.566 -906 592.92 -612.268 727.275 -598.5" />
+<polygon fill="blue" stroke="blue" points="727.624,-601.987 737.44,-598 727.28,-594.995 727.624,-601.987" />
+</g>
+<!-- CustomAttributesTable -->
+<g class="node" id="node18"><title>CustomAttributesTable</title>
+<polygon fill="none" stroke="black" points="1956.91,-535 1956.91,-671 2166.67,-671 2166.67,-535 1956.91,-535" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2061.79" y="-652.6">Custom Attributes Table</text>
+<polyline fill="none" stroke="black" points="1956.91,-643.8 2166.67,-643.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2061.79" y="-625.4">Number of Attributes</text>
+<polyline fill="none" stroke="black" points="1956.91,-616.6 2166.67,-616.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2061.79" y="-598.2">Pointer to Custom Attribute 1</text>
+<polyline fill="none" stroke="black" points="1956.91,-589.4 2166.67,-589.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2061.79" y="-571">...</text>
+<polyline fill="none" stroke="black" points="1956.91,-562.2 2166.67,-562.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2061.79" y="-543.8">Pointer to Custom Attribute N</text>
+</g>
+<!-- AssemblyDefinition&#45;&gt;CustomAttributesTable -->
+<g class="edge" id="0"><title>AssemblyDefinition:f2-&gt;CustomAttributesTable:f0</title>
+<path fill="none" stroke="black" d="M 590.44 -988 C 622.994 -988 630.886 -982 663.44 -982 C 663.44 -982 663.44 -982 1846.91 -982 C 1919.58 -982 1884.38 -686.755 1946.94 -659.075" />
+<polygon fill="black" stroke="black" points="1947.83,-662.466 1956.91,-657 1946.4,-655.613 1947.83,-662.466" />
+</g>
+<!-- TypeDefinition&#45;&gt;NameString -->
+<g class="edge" id="0"><title>TypeDefinition:f1-&gt;NameString:f0</title>
+<path fill="none" stroke="red" d="M 1010.04 -571 C 1067.61 -571 1025.47 -464 1083.04 -464 C 1083.04 -464 1083.04 -464 1121.04 -464 C 1264.6 -464 1309.67 -494.474 1443.29 -442 C 1501.82 -419.012 1494.71 -375.89 1553.29 -353 C 1674.67 -305.562 1715.58 -334 1845.91 -334 C 1845.91 -334 1845.91 -334 1920.91 -334 C 2047.65 -334 2094.68 -306.309 2203.67 -371 C 2275.07 -413.38 2241.14 -481.579 2313.67 -522 C 2426.64 -584.963 2474.51 -544 2603.84 -544 C 2603.84 -544 2603.84 -544 3457.96 -544 C 3480.3 -544 3483.27 -558.971 3494.96 -578 C 3523.9 -625.108 3478.48 -696.104 3520.89 -705.06" />
+<polygon fill="red" stroke="red" points="3520.68,-708.556 3530.96,-706 3521.33,-701.586 3520.68,-708.556" />
+</g>
+<!-- TypeDefinition&#45;&gt;AssemblyDefinition -->
+<g class="edge" id="0"><title>TypeDefinition:f5-&gt;AssemblyDefinition:f0</title>
+<path fill="none" stroke="black" d="M 737.44 -462 C 729.868 -462 630.667 -989.15 627.44 -996 C 617.918 -1016.21 616.808 -1035.36 600.487 -1040.6" />
+<polygon fill="black" stroke="black" points="599.859,-1037.15 590.44,-1042 600.828,-1044.08 599.859,-1037.15" />
+</g>
+<!-- TypeDefinition&#45;&gt;TypeDefinition -->
+<g class="edge" id="0"><title>TypeDefinition:f6-&gt;TypeDefinition:f0</title>
+<path fill="none" stroke="blue" d="M 737.254 -437.912 C 689.804 -447.837 651.44 -470.455 651.44 -516.5 C 651.44 -559.308 684.599 -581.867 727.39 -592.803" />
+<polygon fill="blue" stroke="blue" points="726.722,-596.241 737.254,-595.088 728.302,-589.421 726.722,-596.241" />
+</g>
+<!-- FieldsTable -->
+<g class="node" id="node6"><title>FieldsTable</title>
+<polygon fill="none" stroke="black" points="1181.23,-627 1181.23,-763 1382.1,-763 1382.1,-627 1181.23,-627" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-744.6">Fields Table</text>
+<polyline fill="none" stroke="black" points="1181.23,-735.8 1382.1,-735.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-717.4">Number of Fields</text>
+<polyline fill="none" stroke="black" points="1181.23,-708.6 1382.1,-708.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-690.2">Pointer to Field Definition 1</text>
+<polyline fill="none" stroke="black" points="1181.23,-681.4 1382.1,-681.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-663">...</text>
+<polyline fill="none" stroke="black" points="1181.23,-654.2 1382.1,-654.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-635.8">Pointer to Field Definition N</text>
+</g>
+<!-- TypeDefinition&#45;&gt;FieldsTable -->
+<g class="edge" id="0"><title>TypeDefinition:f11-&gt;FieldsTable:f0</title>
+<path fill="none" stroke="black" d="M 1010.04 -299 C 1080.06 -299 1015.87 -548.822 1046.04 -612 C 1081.33 -685.871 1094.24 -744.052 1170.52 -748.7" />
+<polygon fill="black" stroke="black" points="1170.57,-752.203 1180.67,-749 1170.77,-745.206 1170.57,-752.203" />
+</g>
+<!-- PropertiesTable -->
+<g class="node" id="node8"><title>PropertiesTable</title>
+<polygon fill="none" stroke="black" points="1170.13,-299 1170.13,-435 1393.2,-435 1393.2,-299 1170.13,-299" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-416.6">Properties Table</text>
+<polyline fill="none" stroke="black" points="1170.13,-407.8 1393.2,-407.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-389.4">Number of Properties</text>
+<polyline fill="none" stroke="black" points="1170.13,-380.6 1393.2,-380.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-362.2">Pointer to Property Definition 1</text>
+<polyline fill="none" stroke="black" points="1170.13,-353.4 1393.2,-353.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-335">...</text>
+<polyline fill="none" stroke="black" points="1170.13,-326.2 1393.2,-326.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-307.8">Pointer to Property Definition N</text>
+</g>
+<!-- TypeDefinition&#45;&gt;PropertiesTable -->
+<g class="edge" id="0"><title>TypeDefinition:f10-&gt;PropertiesTable:f0</title>
+<path fill="none" stroke="black" d="M 1010.04 -326 C 1088.69 -326 1086.82 -413.011 1158.55 -420.489" />
+<polygon fill="black" stroke="black" points="1158.5,-423.991 1168.67,-421 1158.85,-417 1158.5,-423.991" />
+</g>
+<!-- InterfaceSlotTable -->
+<g class="node" id="node13"><title>InterfaceSlotTable</title>
+<polygon fill="none" stroke="black" points="1157.04,-29 1157.04,-165 1406.29,-165 1406.29,-29 1157.04,-29" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-146.6">Interface Slot Table</text>
+<polyline fill="none" stroke="black" points="1157.04,-137.8 1406.29,-137.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-119.4">Number of Interface Method Tables</text>
+<polyline fill="none" stroke="black" points="1157.04,-110.6 1406.29,-110.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-92.2">Pointer to Interface Method Table 1</text>
+<polyline fill="none" stroke="black" points="1157.04,-83.4 1406.29,-83.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-65">...</text>
+<polyline fill="none" stroke="black" points="1157.04,-56.2 1406.29,-56.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1281.67" y="-37.8">Pointer to Interface Method Table N</text>
+</g>
+<!-- TypeDefinition&#45;&gt;InterfaceSlotTable -->
+<g class="edge" id="0"><title>TypeDefinition:f12-&gt;InterfaceSlotTable:f0</title>
+<path fill="none" stroke="black" d="M 1010.04 -272 C 1053.95 -272 1013.23 -209.172 1046.04 -180 C 1081.55 -148.439 1102.98 -150.514 1146.98 -150.946" />
+<polygon fill="black" stroke="black" points="1147.02,-154.446 1157.04,-151 1147.06,-147.446 1147.02,-154.446" />
+</g>
+<!-- MethodDefinition -->
+<g class="node" id="node15"><title>MethodDefinition</title>
+<polygon fill="none" stroke="green" points="2714.84,-66.2 2714.84,-419.8 2961.9,-419.8 2961.9,-66.2 2714.84,-66.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-401.4">Method Definition</text>
+<polyline fill="none" stroke="green" points="2714.84,-392.6 2961.9,-392.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-374.2">Pointer to Method Name</text>
+<polyline fill="none" stroke="green" points="2714.84,-365.4 2961.9,-365.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-347">~Pointer to Custom Attributes</text>
+<polyline fill="none" stroke="green" points="2714.84,-338.2 2961.9,-338.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-319.8">Method Attributes</text>
+<polyline fill="none" stroke="green" points="2714.84,-311 2961.9,-311" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-292.6">Local &amp; Parameter Stack Size</text>
+<polyline fill="none" stroke="green" points="2714.84,-283.8 2961.9,-283.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-265.4">Pointer to Method</text>
+<polyline fill="none" stroke="green" points="2714.84,-256.6 2961.9,-256.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-238.2">Pointer to Return Type Definition</text>
+<polyline fill="none" stroke="green" points="2714.84,-229.4 2961.9,-229.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-211">~Pointer to Protected Region Table</text>
+<polyline fill="none" stroke="green" points="2714.84,-202.2 2961.9,-202.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-183.8">Pointer to GC Tracking Information</text>
+<polyline fill="none" stroke="green" points="2714.84,-175 2961.9,-175" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-156.6">Number of Parameters</text>
+<polyline fill="none" stroke="green" points="2714.84,-147.8 2961.9,-147.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-129.4">Pointer to Parameter Definition 1</text>
+<polyline fill="none" stroke="green" points="2714.84,-120.6 2961.9,-120.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-102.2">...</text>
+<polyline fill="none" stroke="green" points="2714.84,-93.4 2961.9,-93.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-75">Pointer to Parameter Definition N</text>
+</g>
+<!-- TypeDefinition&#45;&gt;MethodDefinition -->
+<g class="edge" id="0"><title>TypeDefinition:f9-&gt;MethodDefinition:f0</title>
+<path fill="none" stroke="green" d="M 1010.04 -353 C 1056.03 -353 1017.29 -291.89 1046.04 -256 C 1058.3 -240.702 1063.44 -232 1083.04 -232 C 1083.04 -232 1083.04 -232 1480.29 -232 C 1518.4 -232 1516.98 -265.423 1553.29 -277 C 1677.46 -316.587 1715.58 -296 1845.91 -296 C 1845.91 -296 1845.91 -296 1920.91 -296 C 2080.46 -296 2159.76 -228.508 2277.67 -336 C 2328.33 -382.189 2261.32 -441.726 2313.67 -486 C 2412.37 -569.48 2474.57 -506 2603.84 -506 C 2603.84 -506 2603.84 -506 2641.84 -506 C 2693.11 -506 2664.45 -419.205 2704.79 -407.338" />
+<polygon fill="green" stroke="green" points="2705.39,-410.789 2714.84,-406 2704.47,-403.85 2705.39,-410.789" />
+</g>
+<!-- TypeDefinition&#45;&gt;MethodDefinition -->
+<g class="edge" id="0"><title>TypeDefinition:f16-&gt;MethodDefinition:f0</title>
+<path fill="none" stroke="green" d="M 1010.04 -108 C 1067.98 -108 1025.11 0 1083.04 0 C 1083.04 0 1083.04 0 2641.84 0 C 2673.93 0 2668.71 -31.5513 2678.84 -62 C 2689.98 -95.4746 2678.62 -357.369 2706.41 -400.111" />
+<polygon fill="green" stroke="green" points="2704.64,-403.144 2714.84,-406 2708.65,-397.405 2704.64,-403.144" />
+</g>
+<!-- TypeDefinition&#45;&gt;CustomAttributesTable -->
+<g class="edge" id="0"><title>TypeDefinition:f2-&gt;CustomAttributesTable:f0</title>
+<path fill="none" stroke="black" d="M 1010.04 -544 C 1043.93 -544 1049.16 -522 1083.04 -522 C 1083.04 -522 1083.04 -522 1480.29 -522 C 1517.5 -522 1517.61 -552.42 1553.29 -563 C 1678.24 -600.053 1715.58 -582 1845.91 -582 C 1845.91 -582 1845.91 -582 1883.91 -582 C 1926.61 -582 1913.23 -645.2 1946.73 -655.569" />
+<polygon fill="black" stroke="black" points="1946.52,-659.073 1956.91,-657 1947.49,-652.141 1946.52,-659.073" />
+</g>
+<!-- FieldDefinition -->
+<g class="node" id="node7"><title>FieldDefinition</title>
+<polygon fill="none" stroke="black" points="1577.05,-610.8 1577.05,-801.2 1786.14,-801.2 1786.14,-610.8 1577.05,-610.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-782.8">Field Definition</text>
+<polyline fill="none" stroke="black" points="1577.05,-774 1786.14,-774" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-755.6">Pointer to Field Name</text>
+<polyline fill="none" stroke="black" points="1577.05,-746.8 1786.14,-746.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-728.4">~Pointer to Custom Attributes</text>
+<polyline fill="none" stroke="black" points="1577.05,-719.6 1786.14,-719.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-701.2">Field Attributes</text>
+<polyline fill="none" stroke="black" points="1577.05,-692.4 1786.14,-692.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-674">Pointer to Field Type</text>
+<polyline fill="none" stroke="black" points="1577.05,-665.2 1786.14,-665.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-646.8">~Address</text>
+<polyline fill="none" stroke="black" points="1577.05,-638 1786.14,-638" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-619.6">Offset / Size</text>
+</g>
+<!-- FieldsTable&#45;&gt;FieldDefinition -->
+<g class="edge" id="0"><title>FieldsTable:f1-&gt;FieldDefinition:f0</title>
+<path fill="none" stroke="black" d="M 1382.67 -722 C 1469.75 -722 1483.94 -782.944 1565.33 -787.706" />
+<polygon fill="black" stroke="black" points="1565.5,-791.212 1575.6,-788 1565.7,-784.215 1565.5,-791.212" />
+</g>
+<!-- FieldDefinition&#45;&gt;NameString -->
+<g class="edge" id="0"><title>FieldDefinition:f1-&gt;NameString:f0</title>
+<path fill="none" stroke="red" d="M 1787.6 -760 C 1867.58 -760 1845.87 -851.723 1919.91 -882 C 2141.74 -972.723 2758.22 -916 2997.9 -916 C 2997.9 -916 2997.9 -916 3457.96 -916 C 3503.7 -916 3484.98 -736.015 3521.15 -709.299" />
+<polygon fill="red" stroke="red" points="3522.6,-712.502 3530.96,-706 3520.37,-705.867 3522.6,-712.502" />
+</g>
+<!-- FieldDefinition&#45;&gt;TypeDefinition -->
+<g class="edge" id="0"><title>FieldDefinition:f4-&gt;TypeDefinition:f0</title>
+<path fill="none" stroke="blue" d="M 1575.6 -679 C 1524.53 -679 1556.34 -745.098 1517.29 -778 C 1503.84 -789.328 1497.87 -792 1480.29 -792 C 1083.04 -792 1083.04 -792 1083.04 -792 C 1040.58 -792 1053.52 -627.128 1019.71 -601.367" />
+<polygon fill="blue" stroke="blue" points="1020.64,-597.985 1010.04,-598 1018.33,-604.595 1020.64,-597.985" />
+</g>
+<!-- FieldDefinition&#45;&gt;CustomAttributesTable -->
+<g class="edge" id="0"><title>FieldDefinition:f2-&gt;CustomAttributesTable:f0</title>
+<path fill="none" stroke="black" d="M 1787.6 -733 C 1866.53 -733 1873.91 -663.391 1946.69 -657.409" />
+<polygon fill="black" stroke="black" points="1947.05,-660.897 1956.91,-657 1946.77,-653.903 1947.05,-660.897" />
+</g>
+<!-- PropertyDefinition -->
+<g class="node" id="node9"><title>PropertyDefinition</title>
+<polygon fill="none" stroke="black" points="1553.29,-362.8 1553.29,-553.2 1809.91,-553.2 1809.91,-362.8 1553.29,-362.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-534.8">Property Definition</text>
+<polyline fill="none" stroke="black" points="1553.29,-526 1809.91,-526" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-507.6">Pointer to Property Name</text>
+<polyline fill="none" stroke="black" points="1553.29,-498.8 1809.91,-498.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-480.4">~Pointer to Custom Attributes</text>
+<polyline fill="none" stroke="black" points="1553.29,-471.6 1809.91,-471.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-453.2">Property Attributes</text>
+<polyline fill="none" stroke="black" points="1553.29,-444.4 1809.91,-444.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-426">Pointer to Property Type</text>
+<polyline fill="none" stroke="black" points="1553.29,-417.2 1809.91,-417.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-398.8">~Pointer to Getter Method Definition</text>
+<polyline fill="none" stroke="black" points="1553.29,-390 1809.91,-390" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-371.6">~Pointer to Setter Method Defiinition</text>
+</g>
+<!-- PropertiesTable&#45;&gt;PropertyDefinition -->
+<g class="edge" id="0"><title>PropertiesTable:f1-&gt;PropertyDefinition:f0</title>
+<path fill="none" stroke="black" d="M 1394.67 -394 C 1397.27 -394 1513.43 -504.785 1545.31 -533.347" />
+<polygon fill="black" stroke="black" points="1543.37,-536.283 1553.29,-540 1547.85,-530.907 1543.37,-536.283" />
+</g>
+<!-- PropertyDefinition&#45;&gt;NameString -->
+<g class="edge" id="0"><title>PropertyDefinition:f1-&gt;NameString:f0</title>
+<path fill="none" stroke="red" d="M 1809.91 -512 C 1921.44 -512 1949.25 -506 2060.79 -506 C 2060.79 -506 2060.79 -506 2203.67 -506 C 2257.75 -506 2261.44 -543.991 2313.67 -558 C 2438.66 -591.525 2474.44 -582 2603.84 -582 C 2603.84 -582 2603.84 -582 3457.96 -582 C 3518.17 -582 3473.04 -691.894 3520.9 -704.773" />
+<polygon fill="red" stroke="red" points="3520.61,-708.264 3530.96,-706 3521.46,-701.315 3520.61,-708.264" />
+</g>
+<!-- PropertyDefinition&#45;&gt;TypeDefinition -->
+<g class="edge" id="0"><title>PropertyDefinition:f4-&gt;TypeDefinition:f0</title>
+<path fill="none" stroke="blue" d="M 1553.29 -431 C 1487.75 -431 1555.42 -520.698 1517.29 -574 C 1505.88 -589.941 1499.89 -598 1480.29 -598 C 1083.04 -598 1083.04 -598 1083.04 -598 C 1054.27 -598 1044.64 -598 1020.2 -598" />
+<polygon fill="blue" stroke="blue" points="1020.04,-594.5 1010.04,-598 1020.04,-601.5 1020.04,-594.5" />
+</g>
+<!-- PropertyDefinition&#45;&gt;MethodDefinition -->
+<g class="edge" id="0"><title>PropertyDefinition:f5-&gt;MethodDefinition:f0</title>
+<path fill="none" stroke="green" d="M 1809.91 -404 C 1842.46 -404 1850.35 -410 1882.91 -410 C 1882.91 -410 1882.91 -410 1920.91 -410 C 2030.65 -410 2059.75 -410.773 2166.67 -386 C 2234.63 -370.254 2245.03 -343.421 2313.67 -331 C 2424.83 -310.886 2456.6 -311.34 2567.84 -331 C 2620.6 -340.324 2633.98 -348.717 2678.84 -378 C 2692.37 -386.829 2694.33 -399.367 2704.82 -404.096" />
+<polygon fill="green" stroke="green" points="2704.36,-407.572 2714.84,-406 2705.67,-400.695 2704.36,-407.572" />
+</g>
+<!-- PropertyDefinition&#45;&gt;MethodDefinition -->
+<g class="edge" id="0"><title>PropertyDefinition:f6-&gt;MethodDefinition:f0</title>
+<path fill="none" stroke="green" d="M 1809.91 -376 C 1842.4 -376 1850.41 -372 1882.91 -372 C 1882.91 -372 1882.91 -372 1920.91 -372 C 2082.78 -372 2115.74 -311.435 2276.67 -294 C 2439.09 -276.404 2488 -281.018 2641.84 -336 C 2658.55 -341.972 2665.14 -339.73 2678.84 -351 C 2698.23 -366.946 2689.31 -396.104 2704.95 -403.989" />
+<polygon fill="green" stroke="green" points="2704.34,-407.437 2714.84,-406 2705.74,-400.577 2704.34,-407.437" />
+</g>
+<!-- PropertyDefinition&#45;&gt;CustomAttributesTable -->
+<g class="edge" id="0"><title>PropertyDefinition:f2-&gt;CustomAttributesTable:f0</title>
+<path fill="none" stroke="black" d="M 1809.91 -485 C 1871.51 -485 1883.31 -519.207 1920.91 -568 C 1944.51 -598.629 1919.85 -646.838 1946.78 -655.608" />
+<polygon fill="black" stroke="black" points="1946.52,-659.105 1956.91,-657 1947.48,-652.17 1946.52,-659.105" />
+</g>
+<!-- MethodLookupTable -->
+<g class="node" id="node10"><title>MethodLookupTable</title>
+<polygon fill="none" stroke="black" points="2313.67,-341 2313.67,-477 2567.84,-477 2567.84,-341 2313.67,-341" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2440.76" y="-458.6">Method Lookup Table</text>
+<polyline fill="none" stroke="black" points="2313.67,-449.8 2567.84,-449.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2440.76" y="-431.4">Number of Methods</text>
+<polyline fill="none" stroke="black" points="2313.67,-422.6 2567.84,-422.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2440.76" y="-404.2">Pointer to Method (Starting Address)</text>
+<polyline fill="none" stroke="black" points="2313.67,-395.4 2567.84,-395.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2440.76" y="-377">Method Size</text>
+<polyline fill="none" stroke="black" points="2313.67,-368.2 2567.84,-368.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2440.76" y="-349.8">Pointer to Method Definition</text>
+</g>
+<!-- MethodLookupTable&#45;&gt;MethodDefinition -->
+<g class="edge" id="0"><title>MethodLookupTable:f3-&gt;MethodDefinition:f0</title>
+<path fill="none" stroke="green" d="M 2567.84 -355 C 2633.48 -355 2644.65 -400.952 2704.76 -405.619" />
+<polygon fill="green" stroke="green" points="2704.72,-409.12 2714.84,-406 2704.98,-402.125 2704.72,-409.12" />
+</g>
+<!-- ProtectedRegionTable -->
+<g class="node" id="node11"><title>ProtectedRegionTable</title>
+<polygon fill="none" stroke="black" points="3108.9,-140 3108.9,-276 3383.96,-276 3383.96,-140 3108.9,-140" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3246.43" y="-257.6">Protected Region Table</text>
+<polyline fill="none" stroke="black" points="3108.9,-248.8 3383.96,-248.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3246.43" y="-230.4">Number of Regions</text>
+<polyline fill="none" stroke="black" points="3108.9,-221.6 3383.96,-221.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3246.43" y="-203.2">Pointer to Protected Region Definition 1</text>
+<polyline fill="none" stroke="black" points="3108.9,-194.4 3383.96,-194.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3246.43" y="-176">...</text>
+<polyline fill="none" stroke="black" points="3108.9,-167.2 3383.96,-167.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3246.43" y="-148.8">Protected Region Definition N</text>
+</g>
+<!-- ProtectedRegionDefinition -->
+<g class="node" id="node12"><title>ProtectedRegionDefinition</title>
+<polygon fill="none" stroke="black" points="3550.52,-33.4 3550.52,-196.6 3746.92,-196.6 3746.92,-33.4 3550.52,-33.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3648.72" y="-178.2">Protected Region Definition</text>
+<polyline fill="none" stroke="black" points="3550.52,-169.4 3746.92,-169.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3648.72" y="-151">Region Start</text>
+<polyline fill="none" stroke="black" points="3550.52,-142.2 3746.92,-142.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3648.72" y="-123.8">Region End</text>
+<polyline fill="none" stroke="black" points="3550.52,-115 3746.92,-115" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3648.72" y="-96.6">Region Handler</text>
+<polyline fill="none" stroke="black" points="3550.52,-87.8 3746.92,-87.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3648.72" y="-69.4">Exception Handler Type</text>
+<polyline fill="none" stroke="black" points="3550.52,-60.6 3746.92,-60.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3648.72" y="-42.2">Pointer to Exception Type</text>
+</g>
+<!-- ProtectedRegionTable&#45;&gt;ProtectedRegionDefinition -->
+<g class="edge" id="0"><title>ProtectedRegionTable:f2-&gt;ProtectedRegionDefinition:f0</title>
+<path fill="none" stroke="black" d="M 3383.96 -208 C 3454.97 -208 3473.52 -185.289 3539.61 -183.16" />
+<polygon fill="black" stroke="black" points="3539.77,-186.658 3549.72,-183 3539.66,-179.658 3539.77,-186.658" />
+</g>
+<!-- ProtectedRegionDefinition&#45;&gt;TypeDefinition -->
+<g class="edge" id="0"><title>ProtectedRegionDefinition:f5-&gt;TypeDefinition:f0</title>
+<path fill="none" stroke="blue" d="M 3549.72 -47 C 3508.74 -47 3498.94 -38 3457.96 -38 C 1845.91 -38 1845.91 -38 1845.91 -38 C 1715.7 -38 1668.79 8.09605 1553.29 -52 C 1482.47 -88.8475 1523.12 -194 1443.29 -194 C 1083.04 -194 1083.04 -194 1083.04 -194 C 1052.47 -194 1056.12 -223.131 1046.04 -252 C 1034.33 -285.571 1046.41 -550.181 1018.33 -592.345" />
+<polygon fill="blue" stroke="blue" points="1016.33,-589.473 1010.04,-598 1020.28,-595.255 1016.33,-589.473" />
+</g>
+<!-- InterfaceMethodTable -->
+<g class="node" id="node14"><title>InterfaceMethodTable</title>
+<polygon fill="none" stroke="black" points="1572.72,-104.4 1572.72,-267.6 1790.47,-267.6 1790.47,-104.4 1572.72,-104.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-249.2">Interface Method Table</text>
+<polyline fill="none" stroke="black" points="1572.72,-240.4 1790.47,-240.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-222">Pointer to Interface Type</text>
+<polyline fill="none" stroke="black" points="1572.72,-213.2 1790.47,-213.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-194.8">Number of Methods</text>
+<polyline fill="none" stroke="black" points="1572.72,-186 1790.47,-186" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-167.6">Pointer to Method Definition 1</text>
+<polyline fill="none" stroke="black" points="1572.72,-158.8 1790.47,-158.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-140.4">..</text>
+<polyline fill="none" stroke="black" points="1572.72,-131.6 1790.47,-131.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="1681.6" y="-113.2">Pointer to Method Definition N</text>
+</g>
+<!-- InterfaceSlotTable&#45;&gt;InterfaceMethodTable -->
+<g class="edge" id="0"><title>InterfaceSlotTable:f2-&gt;InterfaceMethodTable:f0</title>
+<path fill="none" stroke="black" d="M 1406.29 -97 C 1453.69 -97 1512.74 -234.414 1561.64 -252.127" />
+<polygon fill="black" stroke="black" points="1561.12,-255.591 1571.6,-254 1562.42,-248.712 1561.12,-255.591" />
+</g>
+<!-- InterfaceMethodTable&#45;&gt;TypeDefinition -->
+<g class="edge" id="0"><title>InterfaceMethodTable:f1-&gt;TypeDefinition:f0</title>
+<path fill="none" stroke="blue" d="M 1571.6 -227 C 1494.87 -227 1557.02 -560 1480.29 -560 C 1083.04 -560 1083.04 -560 1083.04 -560 C 1050.18 -560 1046.97 -590.673 1020.13 -596.904" />
+<polygon fill="blue" stroke="blue" points="1019.61,-593.44 1010.04,-598 1020.36,-600.399 1019.61,-593.44" />
+</g>
+<!-- InterfaceMethodTable&#45;&gt;MethodDefinition -->
+<g class="edge" id="0"><title>InterfaceMethodTable:f3-&gt;MethodDefinition:f0</title>
+<path fill="none" stroke="green" d="M 1791.6 -172 C 1832.59 -172 1841.91 -185 1882.91 -185 C 1882.91 -185 1882.91 -185 2641.84 -185 C 2689.93 -185 2667 -376.014 2705.09 -402.876" />
+<polygon fill="green" stroke="green" points="2704.25,-406.281 2714.84,-406 2706.39,-399.615 2704.25,-406.281" />
+</g>
+<!-- MethodDefinition&#45;&gt;NameString -->
+<g class="edge" id="0"><title>MethodDefinition:f1-&gt;NameString:f0</title>
+<path fill="none" stroke="red" d="M 2961.9 -379 C 3004.75 -379 2992.04 -442 3034.9 -442 C 3034.9 -442 3034.9 -442 3457.96 -442 C 3500.39 -442 3482.43 -489.466 3494.96 -530 C 3505.65 -564.564 3493.75 -681.028 3521.14 -702.561" />
+<polygon fill="red" stroke="red" points="3520.37,-706.001 3530.96,-706 3522.68,-699.394 3520.37,-706.001" />
+</g>
+<!-- MethodDefinition&#45;&gt;TypeDefinition -->
+<g class="edge" id="0"><title>MethodDefinition:f6-&gt;TypeDefinition:f0</title>
+<path fill="none" stroke="blue" d="M 2714.84 -243 C 2674.34 -243 2682.34 -76 2641.84 -76 C 1845.91 -76 1845.91 -76 1845.91 -76 C 1715.58 -76 1657.55 -16.8115 1553.29 -95 C 1515.83 -123.089 1535.56 -150.894 1517.29 -194 C 1502.63 -228.589 1517.86 -270 1480.29 -270 C 1083.04 -270 1083.04 -270 1083.04 -270 C 1051.71 -270 1056.58 -300.496 1046.04 -330 C 1027.05 -383.163 1065.01 -572.967 1019.85 -595.756" />
+<polygon fill="blue" stroke="blue" points="1019.01,-592.357 1010.04,-598 1020.57,-599.181 1019.01,-592.357" />
+</g>
+<!-- MethodDefinition&#45;&gt;ProtectedRegionTable -->
+<g class="edge" id="0"><title>MethodDefinition:f7-&gt;ProtectedRegionTable:f0</title>
+<path fill="none" stroke="black" d="M 2961.9 -216 C 3026.74 -216 3039.21 -257.276 3098.54 -261.63" />
+<polygon fill="black" stroke="black" points="3098.78,-265.141 3108.9,-262 3099.03,-258.145 3098.78,-265.141" />
+</g>
+<!-- ParameterDefinition -->
+<g class="node" id="node16"><title>ParameterDefinition</title>
+<polygon fill="none" stroke="black" points="3141.89,-611 3141.89,-747 3350.98,-747 3350.98,-611 3141.89,-611" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3246.43" y="-728.6">Parameter Definition</text>
+<polyline fill="none" stroke="black" points="3141.89,-719.8 3350.98,-719.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3246.43" y="-701.4">Pointer to Parameter Name</text>
+<polyline fill="none" stroke="black" points="3141.89,-692.6 3350.98,-692.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3246.43" y="-674.2">~Pointer to Custom Attributes</text>
+<polyline fill="none" stroke="black" points="3141.89,-665.4 3350.98,-665.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3246.43" y="-647">Parameter Attributes</text>
+<polyline fill="none" stroke="black" points="3141.89,-638.2 3350.98,-638.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3246.43" y="-619.8">Pointer to Parameter Type</text>
+</g>
+<!-- MethodDefinition&#45;&gt;ParameterDefinition -->
+<g class="edge" id="0"><title>MethodDefinition:f10-&gt;ParameterDefinition:f0</title>
+<path fill="none" stroke="black" d="M 2961.9 -134 C 2997.9 -134 2987.49 -421.537 2997.9 -456 C 3016.93 -519.035 3066.08 -712.765 3130.41 -731.534" />
+<polygon fill="black" stroke="black" points="3130.03,-735.016 3140.43,-733 3131.04,-728.09 3130.03,-735.016" />
+</g>
+<!-- GCTrackingInformation -->
+<g class="node" id="node17"><title>GCTrackingInformation</title>
+<polygon fill="none" stroke="black" points="3156.23,-66.8 3156.23,-121.2 3336.63,-121.2 3336.63,-66.8 3156.23,-66.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3246.43" y="-102.8">GC Tracking Information</text>
+<polyline fill="none" stroke="black" points="3156.23,-94 3336.63,-94" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="3246.43" y="-75.6">TODO</text>
+</g>
+<!-- MethodDefinition&#45;&gt;GCTrackingInformation -->
+<g class="edge" id="0"><title>MethodDefinition:f8-&gt;GCTrackingInformation:f0</title>
+<path fill="none" stroke="black" d="M 2961.9 -189 C 3051.68 -189 3061.55 -113.9 3145.4 -108.326" />
+<polygon fill="black" stroke="black" points="3145.55,-111.823 3155.43,-108 3145.32,-104.827 3145.55,-111.823" />
+</g>
+<!-- MethodDefinition&#45;&gt;CustomAttributesTable -->
+<g class="edge" id="0"><title>MethodDefinition:f2-&gt;CustomAttributesTable:f0</title>
+<path fill="none" stroke="black" d="M 2714.84 -352 C 2536.3 -352 2463.64 -234.114 2313.67 -331 C 2298.48 -340.812 2205.62 -602.816 2174.08 -649.816" />
+<polygon fill="black" stroke="black" points="2171.42,-647.528 2166.67,-657 2176.29,-652.555 2171.42,-647.528" />
+</g>
+<!-- ParameterDefinition&#45;&gt;NameString -->
+<g class="edge" id="0"><title>ParameterDefinition:f1-&gt;NameString:f0</title>
+<path fill="none" stroke="red" d="M 3352.43 -706 C 3428.21 -706 3449.71 -706 3520.62 -706" />
+<polygon fill="red" stroke="red" points="3520.96,-709.5 3530.96,-706 3520.96,-702.5 3520.96,-709.5" />
+</g>
+<!-- ParameterDefinition&#45;&gt;TypeDefinition -->
+<g class="edge" id="0"><title>ParameterDefinition:f4-&gt;TypeDefinition:f0</title>
+<path fill="none" stroke="blue" d="M 3140.43 -625 C 2947.1 -625 2886.88 -626.79 2714.84 -715 C 2636.18 -755.335 2649.19 -814.389 2567.84 -849 C 2448.92 -899.6 2406.91 -868 2277.67 -868 C 1083.04 -868 1083.04 -868 1083.04 -868 C 1054.76 -868 1043.23 -644.336 1017.96 -604.147" />
+<polygon fill="blue" stroke="blue" points="1020.09,-601.369 1010.04,-598 1015.79,-606.898 1020.09,-601.369" />
+</g>
+<!-- ParameterDefinition&#45;&gt;CustomAttributesTable -->
+<g class="edge" id="0"><title>ParameterDefinition:f2-&gt;CustomAttributesTable:f0</title>
+<path fill="none" stroke="black" d="M 3140.43 -679 C 2900.95 -679 2844.32 -620 2604.84 -620 C 2239.67 -620 2239.67 -620 2239.67 -620 C 2206.99 -620 2203.47 -649.866 2176.71 -655.933" />
+<polygon fill="black" stroke="black" points="2176.24,-652.462 2166.67,-657 2176.98,-659.423 2176.24,-652.462" />
+</g>
+<!-- CustomAttribute -->
+<g class="node" id="node19"><title>CustomAttribute</title>
+<polygon fill="none" stroke="black" points="2334.77,-648.8 2334.77,-839.2 2546.74,-839.2 2546.74,-648.8 2334.77,-648.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2440.76" y="-820.8">Custom Attribute</text>
+<polyline fill="none" stroke="black" points="2334.77,-812 2546.74,-812" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2440.76" y="-793.6">Pointer to Attribute Type</text>
+<polyline fill="none" stroke="black" points="2334.77,-784.8 2546.74,-784.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2440.76" y="-766.4">Pointer to Constructor Method</text>
+<polyline fill="none" stroke="black" points="2334.77,-757.6 2546.74,-757.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2440.76" y="-739.2">Number of Arguments</text>
+<polyline fill="none" stroke="black" points="2334.77,-730.4 2546.74,-730.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2440.76" y="-712">Pointer to Argument 1</text>
+<polyline fill="none" stroke="black" points="2334.77,-703.2 2546.74,-703.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2440.76" y="-684.8">...</text>
+<polyline fill="none" stroke="black" points="2334.77,-676 2546.74,-676" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2440.76" y="-657.6">Pointer to Argument N</text>
+</g>
+<!-- CustomAttributesTable&#45;&gt;CustomAttribute -->
+<g class="edge" id="0"><title>CustomAttributesTable:f2-&gt;CustomAttribute:f0</title>
+<path fill="none" stroke="black" d="M 2166.67 -603 C 2287.01 -603 2214.31 -813.548 2323.72 -825.474" />
+<polygon fill="black" stroke="black" points="2323.59,-828.971 2333.76,-826 2323.95,-821.981 2323.59,-828.971" />
+</g>
+<!-- CustomAttribute&#45;&gt;TypeDefinition -->
+<g class="edge" id="0"><title>CustomAttribute:f1-&gt;TypeDefinition:f0</title>
+<path fill="none" stroke="blue" d="M 2333.76 -798 C 2044 -798 1972.35 -830 1682.6 -830 C 1083.04 -830 1083.04 -830 1083.04 -830 C 1071.06 -830 1033.55 -647.585 1015.79 -606.257" />
+<polygon fill="blue" stroke="blue" points="1018.63,-604.208 1010.04,-598 1012.88,-608.207 1018.63,-604.208" />
+</g>
+<!-- CustomAttribute&#45;&gt;MethodDefinition -->
+<g class="edge" id="0"><title>CustomAttribute:f2-&gt;MethodDefinition:f0</title>
+<path fill="none" stroke="green" d="M 2547.76 -771 C 2579.22 -771 2666.78 -549.058 2678.84 -520 C 2697.71 -474.572 2666.96 -415.551 2704.45 -407.04" />
+<polygon fill="green" stroke="green" points="2705.24,-410.478 2714.84,-406 2704.54,-403.513 2705.24,-410.478" />
+</g>
+<!-- CustomAttributeArgument -->
+<g class="node" id="node20"><title>CustomAttributeArgument</title>
+<polygon fill="none" stroke="black" points="2739.17,-724.4 2739.17,-887.6 2937.56,-887.6 2937.56,-724.4 2739.17,-724.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-869.2">Custom Attribute Argument</text>
+<polyline fill="none" stroke="black" points="2739.17,-860.4 2937.56,-860.4" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-842">~Pointer to Argument Name</text>
+<polyline fill="none" stroke="black" points="2739.17,-833.2 2937.56,-833.2" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-814.8">Is Argument a Field</text>
+<polyline fill="none" stroke="black" points="2739.17,-806 2937.56,-806" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-787.6">Pointer to Argument Type</text>
+<polyline fill="none" stroke="black" points="2739.17,-778.8 2937.56,-778.8" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-760.4">Argument Size</text>
+<polyline fill="none" stroke="black" points="2739.17,-751.6 2937.56,-751.6" />
+<text font-family="Times,serif" font-size="16px" text-anchor="middle" x="2838.3702" y="-733.2">Argument</text>
+</g>
+<!-- CustomAttribute&#45;&gt;CustomAttributeArgument -->
+<g class="edge" id="0"><title>CustomAttribute:f4-&gt;CustomAttributeArgument:f0</title>
+<path fill="none" stroke="black" d="M 2547.76 -717 C 2653.97 -717 2630.33 -864.044 2728.18 -873.521" />
+<polygon fill="black" stroke="black" points="2728.22,-877.027 2738.37,-874 2728.54,-870.034 2728.22,-877.027" />
+</g>
+<!-- CustomAttributeArgument&#45;&gt;NameString -->
+<g class="edge" id="0"><title>CustomAttributeArgument:f1-&gt;NameString:f0</title>
+<path fill="none" stroke="red" d="M 2938.37 -847 C 2984.16 -847 2989.11 -811 3034.9 -811 C 3034.9 -811 3034.9 -811 3457.96 -811 C 3511.03 -811 3479.1 -719.482 3520.87 -707.328" />
+<polygon fill="red" stroke="red" points="3521.51,-710.775 3530.96,-706 3520.59,-703.834 3521.51,-710.775" />
+</g>
+<!-- CustomAttributeArgument&#45;&gt;TypeDefinition -->
+<g class="edge" id="0"><title>CustomAttributeArgument:f3-&gt;TypeDefinition:f0</title>
+<path fill="none" stroke="blue" d="M 2738.37 -792 C 2643.65 -792 2736.56 -982 2641.84 -982 C 2060.79 -982 2060.79 -982 2060.79 -982 C 1964.24 -982 1943.45 -944 1846.91 -944 C 1083.04 -944 1083.04 -944 1083.04 -944 C 1050.95 -944 1056.5 -912.336 1046.04 -882 C 1026.52 -825.383 1068.23 -623.671 1020.11 -600.228" />
+<polygon fill="blue" stroke="blue" points="1020.56,-596.744 1010.04,-598 1019.05,-603.578 1020.56,-596.744" />
+</g>
+</g>
+</svg>8 1020.56,-596.744" />
+</g>
+</g>
+</svg>

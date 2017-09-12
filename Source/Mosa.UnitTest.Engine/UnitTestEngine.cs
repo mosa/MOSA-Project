@@ -19,7 +19,7 @@ namespace Mosa.UnitTest.Engine
 {
 	public class UnitTestEngine : IBuilderEvent, IStarterEvent, IDisposable
 	{
-		public Options Options { get; private set; }
+		public Options Options { get; }
 		public string TestAssemblyPath { get; set; }
 		public string Platform { get; set; }
 		public string TestSuiteFile { get; set; }
@@ -41,21 +41,21 @@ namespace Mosa.UnitTest.Engine
 		private bool kernelInit = false;
 		private volatile bool ready = false;
 
-		private Stopwatch stopwatch = new Stopwatch();
+		private readonly Stopwatch stopwatch = new Stopwatch();
 
 		private const uint MaxRetries = 10;
 		private const uint RetryDelay = 1; // 1- seconds
 
 		private const int DefaultMaxSentQueue = 64; // 100
 
-		private Queue<DebugMessage> queue = new Queue<DebugMessage>();
-		private HashSet<DebugMessage> sent = new HashSet<DebugMessage>();
+		private readonly Queue<DebugMessage> queue = new Queue<DebugMessage>();
+		private readonly HashSet<DebugMessage> sent = new HashSet<DebugMessage>();
 
-		private int MaxSentQueue = DefaultMaxSentQueue;
+		private readonly int MaxSentQueue = DefaultMaxSentQueue;
 
 		//private int SentQueueCountDown = 0;
 
-		private Thread processThread;
+		private readonly Thread processThread;
 		private volatile bool processThreadAbort = false;
 
 		public UnitTestEngine()
@@ -95,6 +95,8 @@ namespace Mosa.UnitTest.Engine
 				GenerateMapFile = true,
 				GenerateDebugFile = false,
 
+				EnableIRLongOperand = true
+
 				//BootLoaderImage = @"..\Tests\BootImage\Mosa.BootLoader.x86.img"
 			};
 
@@ -106,9 +108,10 @@ namespace Mosa.UnitTest.Engine
 
 			stopwatch.Start();
 
-			processThread = new Thread(ProcessQueue);
-			processThread.Name = "ProcesQueue";
-
+			processThread = new Thread(ProcessQueue)
+			{
+				Name = "ProcesQueue"
+			};
 			processThread.Start();
 		}
 
@@ -118,10 +121,12 @@ namespace Mosa.UnitTest.Engine
 				Platform = "x86";
 
 			if (TestAssemblyPath == null)
+			{
 #if __MonoCS__
 				TestAssemblyPath = AppDomain.CurrentDomain.BaseDirectory;
 #else
 				TestAssemblyPath = AppContext.BaseDirectory;
+			}
 #endif
 
 			if (TestSuiteFile == null)
@@ -200,9 +205,7 @@ namespace Mosa.UnitTest.Engine
 				sent.Remove(response);
 			}
 
-			var message = response.Other as UnitTestRequest;
-
-			if (message != null)
+			if (response.Other is UnitTestRequest message)
 			{
 				message.ParseResultData(response.ResponseData);
 			}
@@ -281,9 +284,10 @@ namespace Mosa.UnitTest.Engine
 
 			request.Resolve(typeSystem, linker);
 
-			var message = new DebugMessage(DebugCode.ExecuteUnitTest, request.Message);
-			message.Other = request;
-
+			var message = new DebugMessage(DebugCode.ExecuteUnitTest, request.Message)
+			{
+				Other = request
+			};
 			QueueMessage(message);
 
 			while (!request.HasResult)
@@ -305,8 +309,8 @@ namespace Mosa.UnitTest.Engine
 			}
 			catch (InvalidCastException e)
 			{
-				Debug.Assert(false, String.Format("Failed to convert result {0} of destination {1} destination type {2}.", result, result.GetType(), typeof(T).ToString()));
-				throw e;
+				Debug.Fail(String.Format("Failed to convert result {0} of destination {1} destination type {2}.", result, result.GetType(), typeof(T).ToString()));
+				throw;
 			}
 		}
 
@@ -336,7 +340,7 @@ namespace Mosa.UnitTest.Engine
 
 			linker = builder.Linker;
 			typeSystem = builder.TypeSystem;
-			imagefile = Options.BootLoaderImage != null ? Options.BootLoaderImage : builder.ImageFile;
+			imagefile = Options.BootLoaderImage ?? builder.ImageFile;
 
 			fatalError = builder.HasCompileError;
 			compiled = !fatalError;
@@ -442,6 +446,7 @@ namespace Mosa.UnitTest.Engine
 
 		private volatile bool wait = false;
 		private readonly object _lock = new object();
+		private readonly object _lockObject = new object();
 
 		public void SendMessageAndWait(DebugMessage message)
 		{
@@ -464,7 +469,7 @@ namespace Mosa.UnitTest.Engine
 
 		public void SendImage()
 		{
-			uint maxsize = 1024 * 16;
+			const uint maxsize = 1024 * 16;
 
 			uint originalSize = 0;
 
@@ -509,7 +514,7 @@ namespace Mosa.UnitTest.Engine
 					var raw = new byte[size];
 					Array.Copy(array, at, raw, 0, size);
 
-					originalSize = originalSize + size;
+					originalSize += size;
 
 					var data = new byte[size + 8];
 					uint address = (uint)(section.VirtualAddress + at);
@@ -532,7 +537,7 @@ namespace Mosa.UnitTest.Engine
 
 					SendMessageAndWait(message);
 
-					at = at + size;
+					at += size;
 				}
 			}
 
@@ -544,9 +549,9 @@ namespace Mosa.UnitTest.Engine
 
 		public void SendImageCompressed()
 		{
-			uint maxsize = 1024 * 64;
+			const uint maxsize = 1024 * 64;
 
-			LZF lzf = new LZF();
+			var lzf = new LZF();
 
 			uint compressSize = 0;
 			uint originalSize = 0;
@@ -602,8 +607,8 @@ namespace Mosa.UnitTest.Engine
 
 					var len = lzf.Compress(raw, raw.Length, compressed, compressed.Length);
 
-					compressSize = compressSize + (uint)len;
-					originalSize = originalSize + size;
+					compressSize += (uint)len;
+					originalSize += size;
 
 					// data
 					var data = new byte[len + 16];
@@ -637,7 +642,7 @@ namespace Mosa.UnitTest.Engine
 
 					SendMessageAndWait(message);
 
-					at = at + size;
+					at += size;
 				}
 			}
 
@@ -662,7 +667,7 @@ namespace Mosa.UnitTest.Engine
 
 		public bool PrepareUnitTest()
 		{
-			lock (this)
+			lock (_lockObject)
 			{
 				if (fatalError)
 					return false;

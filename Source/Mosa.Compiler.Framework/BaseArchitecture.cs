@@ -2,21 +2,15 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker.Elf;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Base Architecture
 	/// </summary>
 	public abstract class BaseArchitecture
 	{
 		#region Properties
-
-		/// <summary>
-		/// Retrieves an object, that is able to translate the CIL calling convention into appropriate native code.
-		/// </summary>
-		public BaseCallingConvention CallingConvention { get; protected set; }
 
 		/// <summary>
 		/// Gets the endianness of the target architecture.
@@ -48,6 +42,26 @@ namespace Mosa.Compiler.Framework
 		/// Returns the stack pointer register of the architecture.
 		/// </summary>
 		public abstract Register StackPointerRegister { get; }
+
+		/// <summary>
+		/// Gets the scratch register.
+		/// </summary>
+		public abstract Register ScratchRegister { get; }
+
+		/// <summary>
+		/// Gets the return32 bit register.
+		/// </summary>
+		public abstract Register Return32BitRegister { get; }
+
+		/// <summary>
+		/// Gets the return64 bit register.
+		/// </summary>
+		public abstract Register Return64BitRegister { get; }
+
+		/// <summary>
+		/// Gets the return floating point register.
+		/// </summary>
+		public abstract Register ReturnFloatingPointRegister { get; }
 
 		/// <summary>
 		/// Retrieves the program counter register of the architecture.
@@ -95,6 +109,22 @@ namespace Mosa.Compiler.Framework
 			get { return NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64; }
 		}
 
+		/// <summary>
+		/// Gets the offset of first local.
+		/// </summary>
+		/// <value>
+		/// The offset of first local.
+		/// </value>
+		public virtual int OffsetOfFirstLocal { get { return 0; } }
+
+		/// <summary>
+		/// Gets the offset of first parameter.
+		/// </summary>
+		/// <value>
+		/// The offset of first parameter.
+		/// </value>
+		public virtual int OffsetOfFirstParameter { get { return NativePointerSize * 2; } }
+
 		#endregion Properties
 
 		#region Methods
@@ -111,15 +141,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline of the method compiler to add architecture specific compilation stages to.</param>
 		public abstract void ExtendMethodCompilerPipeline(CompilerPipeline compilerPipeline);
-
-		/// <summary>
-		/// Gets the type memory requirements.
-		/// </summary>
-		/// <param name="typeLayout">The type layouts.</param>
-		/// <param name="type">The type.</param>
-		/// <param name="size">Receives the memory size of the type.</param>
-		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public abstract void GetTypeRequirements(MosaTypeLayout typeLayout, MosaType type, out int size, out int alignment);
 
 		/// <summary>
 		/// Gets the code emitter.
@@ -174,43 +195,11 @@ namespace Mosa.Compiler.Framework
 		public abstract void InsertExchangeInstruction(Context context, Operand destination, Operand source);
 
 		/// <summary>
-		/// Create platform exchange registers.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		public abstract void InsertJumpInstruction(Context context, Operand destination);
-
-		/// <summary>
 		/// Inserts the jump instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
 		public abstract void InsertJumpInstruction(Context context, BasicBlock destination);
-
-		/// <summary>
-		/// Inserts the call instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="source">The source.</param>
-		public abstract void InsertCallInstruction(Context context, Operand source);
-
-		/// <summary>
-		/// Inserts the add instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source1">The source1.</param>
-		/// <param name="source2">The source2.</param>
-		public abstract void InsertAddInstruction(Context context, Operand destination, Operand source1, Operand source2);
-
-		/// <summary>
-		/// Inserts the sub instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source1">The source1.</param>
-		/// <param name="source2">The source2.</param>
-		public abstract void InsertSubInstruction(Context context, Operand destination, Operand source1, Operand source2);
 
 		/// <summary>
 		/// Determines whether [is instruction move] [the specified instruction].

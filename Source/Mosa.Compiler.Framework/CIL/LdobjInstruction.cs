@@ -1,13 +1,14 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Ldobj Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public sealed class LdobjInstruction : UnaryInstruction
 	{
 		/// <summary>
@@ -36,27 +37,27 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Ldind_r8: elementType = MosaTypeCode.R8; break;
 				case OpCode.Ldind_ref: elementType = MosaTypeCode.Object; break;
 				case OpCode.Ldobj: elementType = null; break;
-				default: throw new NotImplementedException();
+				default: throw new NotImplementCompilerException();
 			}
 		}
 
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			MosaType type = (elementType == null)
 				? type = (MosaType)decoder.Instruction.Operand
 				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
 
 			// Push the loaded value
-			ctx.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, type);
-			ctx.MosaType = type;
+			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, type);
+			node.MosaType = type;
 
 			//System.Diagnostics.Debug.WriteLine(decoder.Method.FullName); //temp - remove me
 		}
@@ -64,18 +65,18 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, BaseMethodCompiler compiler)
 		{
-			base.Resolve(ctx, compiler);
+			base.Resolve(context, compiler);
 
 			// If we're ldind.i8, fix an IL deficiency that the result may be U8
 			if (opcode == OpCode.Ldind_i8 && elementType.Value == MosaTypeCode.I8)
 			{
-				if (ctx.Operand1.Type.ElementType != null && ctx.Operand1.Type.ElementType.IsU8)
+				if (context.Operand1.Type.ElementType?.IsU8 == true)
 				{
-					ctx.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.BuiltIn.U8);
+					context.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.BuiltIn.U8);
 				}
 			}
 		}

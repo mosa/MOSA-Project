@@ -8,19 +8,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public sealed class SlotIndex : IComparable
 	{
-		private enum SlotType { Normal, HalfStepBack, HalfStepForward };
-
 		public const int Increment = 2;
 
-		public readonly InstructionNode Index;
+		private enum SlotType { Normal, HalfStepBack, HalfStepForward }
 
-		private SlotType slotType;
+		public readonly InstructionNode Node;
+
+		private readonly SlotType slotType;
 
 		public int SlotNumber
 		{
 			get
 			{
-				int slot = Index.Offset;
+				int slot = Node.Offset;
 
 				if (slotType == SlotType.HalfStepForward)
 					slot++;
@@ -37,19 +37,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsOnHalfStepBack { get { return slotType == SlotType.HalfStepBack; } }
 
-		private SlotIndex(InstructionNode index, SlotType slotType)
+		private SlotIndex(InstructionNode node, SlotType slotType)
 		{
-			Index = index;
+			Node = node;
 			this.slotType = slotType;
 		}
 
-		public SlotIndex(InstructionNode index)
-			: this(index, SlotType.Normal)
-		{
-		}
-
-		public SlotIndex(Context context)
-			: this(context.Node, SlotType.Normal)
+		public SlotIndex(InstructionNode node)
+			: this(node, SlotType.Normal)
 		{
 		}
 
@@ -85,7 +80,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			if (ns1 && ns2)
 				return true;
-			else if ((ns1 && !ns2) || (!ns1 && ns2))
+			else if (ns1 ^ ns2)
 				return false;
 
 			return s1.SlotNumber == s2.SlotNumber;
@@ -98,18 +93,20 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			if (ns1 && ns2)
 				return false;
-			else if ((ns1 && !ns2) || (!ns1 && ns2))
+			else if (ns1 ^ ns2)
 				return true;
 
 			return s1.SlotNumber != s2.SlotNumber;
 		}
 
-		public override bool Equals(object s)
+		public override bool Equals(object obj)
 		{
-			if (!(s is SlotIndex))
+			var o = obj as SlotIndex;
+
+			if (o == null)
 				return false;
 
-			return ((s as SlotIndex).Index == Index);
+			return o.Node == Node;
 		}
 
 		public override int GetHashCode()
@@ -117,11 +114,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return SlotNumber;
 		}
 
-		int IComparable.CompareTo(Object o)
+		int IComparable.CompareTo(Object obj)
 		{
-			SlotIndex slotIndex = o as SlotIndex;
+			var slotIndex = obj as SlotIndex;
 
-			return (SlotNumber - slotIndex.SlotNumber);
+			return SlotNumber - slotIndex.SlotNumber;
 		}
 
 		public override string ToString()
@@ -134,7 +131,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			get
 			{
 				Debug.Assert(slotType == SlotType.Normal);
-				return new SlotIndex(Index, SlotType.HalfStepForward);
+				return new SlotIndex(Node, SlotType.HalfStepForward);
 			}
 		}
 
@@ -143,7 +140,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			get
 			{
 				Debug.Assert(slotType == SlotType.Normal);
-				return new SlotIndex(Index, SlotType.HalfStepBack);
+				return new SlotIndex(Node, SlotType.HalfStepBack);
 			}
 		}
 
@@ -154,7 +151,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (slotType != SlotType.Normal)
 					return false;
 
-				return Index.Instruction == IRInstruction.BlockStart;
+				return Node.Instruction == IRInstruction.BlockStart;
 			}
 		}
 
@@ -165,7 +162,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (slotType != SlotType.Normal)
 					return false;
 
-				return Index.Instruction == IRInstruction.BlockEnd;
+				return Node.Instruction == IRInstruction.BlockEnd;
 			}
 		}
 	}

@@ -8,6 +8,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Implements the internal representation for the IL conversion instructions.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryArithmeticInstruction" />
 	public sealed class ConversionInstruction : UnaryArithmeticInstruction
 	{
 		#region Construction
@@ -28,11 +29,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx"></param>
+		/// <param name="context"></param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, BaseMethodCompiler compiler)
 		{
-			base.Resolve(ctx, compiler);
+			base.Resolve(context, compiler);
 
 			// Validate the typecode & determine the resulting stack type
 			MosaType resultType;
@@ -56,10 +57,10 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Conv_ovf_i_un: goto case OpCode.Conv_i;
 				case OpCode.Conv_ovf_u_un: goto case OpCode.Conv_u;
 				case OpCode.Conv_r_un: resultType = compiler.TypeSystem.BuiltIn.R8; break;
-				default: throw new NotSupportedException(@"Overflow checking conversions not supported.");
+				default: throw new NotSupportedException("Overflow checking conversions not supported.");
 			}
 
-			ctx.Result = compiler.CreateVirtualRegister(resultType.GetStackType());
+			context.Result = compiler.CreateVirtualRegister(resultType.GetStackType());
 		}
 
 		#endregion Methods

@@ -4,6 +4,10 @@ using System;
 
 namespace Mosa.Compiler.Common
 {
+	/// <summary>
+	/// Invalid Compiler Exception
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Common.CompilerException" />
 	[Serializable]
 	public class InvalidCompilerException : CompilerException
 	{

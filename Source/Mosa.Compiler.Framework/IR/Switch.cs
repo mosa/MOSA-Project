@@ -2,6 +2,10 @@
 
 namespace Mosa.Compiler.Framework.IR
 {
+	/// <summary>
+	/// Switch
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public class Switch : BaseIRInstruction
 	{
 		#region Properties

@@ -52,8 +52,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 
-			int patchOffset;
-
 			// memory to reg 1000 101w: mod reg r/m
 			var opcode = new OpcodeEncoder()
 				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
@@ -61,7 +59,7 @@ namespace Mosa.Platform.x86.Instructions
 				.Append3Bits(Bits.b101)                                         // 3:opcode
 				.AppendWidthBit(node.Size != InstructionSize.Size8)                  // 1:width
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out patchOffset); // 32:memory
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
 				emitter.Emit(opcode, node.Operand1, patchOffset);
@@ -74,8 +72,6 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(node.Result.IsCPURegister);
 			Debug.Assert(node.Operand1.IsLinkerResolved);
 
-			int patchOffset;
-
 			// memory to reg 1000 101w: mod reg r/m
 			var opcode = new OpcodeEncoder()
 				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66) // 8:prefix: 16bit
@@ -85,7 +81,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendMod(Bits.b00)                                                // 2:mod
 				.AppendRegister(node.Result.Register)                               // 3:register (destination)
 				.AppendRM(Bits.b101)                                                // 3:r/m (source)
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out patchOffset) // 32:memory
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
 				.AppendConditionalIntegerValue(!node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)

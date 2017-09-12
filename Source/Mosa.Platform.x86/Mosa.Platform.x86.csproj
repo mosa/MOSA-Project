@@ -152,8 +152,9 @@
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
-    <Compile Include="Stages\StartUpStage.cs" />
-    <Compile Include="Stages\SSEInitStage.cs" />
+    <Compile Include="Stages\IRSubstitutionStage.cs" />
+    <Compile Include="CompilerStages\StartUpStage.cs" />
+    <Compile Include="CompilerStages\SSEInitStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
     <Compile Include="Stages\FinalTweakTransformationStage.cs" />
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
@@ -167,7 +168,7 @@
     <Compile Include="Instructions\FarJmp.cs" />
     <Compile Include="Instructions\Leave.cs" />
     <Compile Include="Instructions\RoundSS.cs" />
-    <Compile Include="Stages\InterruptVectorStage.cs" />
+    <Compile Include="CompilerStages\InterruptVectorStage.cs" />
     <Compile Include="Intrinsic\GetEBP.cs" />
     <Compile Include="Intrinsic\GetMethodLookupTable.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
@@ -197,14 +198,14 @@
     <Compile Include="Intrinsic\Nop.cs" />
     <Compile Include="Intrinsic\Out8.cs" />
     <Compile Include="Intrinsic\Sti.cs" />
-    <Compile Include="Stages\MethodTableBuilderStage.cs" />
+    <Compile Include="CompilerStages\MethodTableBuilderStage.cs" />
     <Compile Include="SegmentRegister.cs" />
     <Compile Include="Instructions\Branch.cs" />
     <Compile Include="Instructions\Cvttsd2si.cs" />
     <Compile Include="Instructions\Cvttss2si.cs" />
     <Compile Include="Instructions\Div.cs" />
     <Compile Include="Instructions\Jmp.cs" />
-    <Compile Include="Stages\Multiboot0695Stage.cs" />
+    <Compile Include="CompilerStages\Multiboot0695Stage.cs" />
     <Compile Include="Instructions\Call.cs" />
     <Compile Include="Instructions\Movsd.cs" />
     <Compile Include="Instructions\Movss.cs" />
@@ -280,9 +281,6 @@
     <Compile Include="LegacyOpCode.cs" />
     <Compile Include="X86Instruction.cs" />
     <Compile Include="Instructions\Nop.cs" />
-    <Compile Include="DefaultCallingConvention.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GeneralPurposeRegister.cs">
       <SubType>Code</SubType>
     </Compile>

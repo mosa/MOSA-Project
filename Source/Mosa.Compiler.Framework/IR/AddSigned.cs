@@ -5,13 +5,10 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of the signed add operation.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseThreeOperandInstruction" />
 	/// <remarks>
 	/// The add instruction is a three-address instruction, where the result receives
 	/// the value of the first operand (index 0) added with the second operand (index 1).
-	/// <para />
-	/// Both the first and second operand must be the same integral type. If the second operand
-	/// is statically or dynamically equal to or larger than the number of bits in the first
-	/// operand, the result is undefined.
 	/// </remarks>
 	public sealed class AddSigned : BaseThreeOperandInstruction
 	{

@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
-	///
+	/// SymbolBinding
 	/// </summary>
 	public enum SymbolBinding
 	{

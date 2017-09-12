@@ -9,9 +9,9 @@ namespace Mosa.Compiler.Linker.Elf
 	/// </summary>
 	public class RelocationEntry
 	{
-		public static readonly ushort EntrySize32 = 0x08;
+		public const ushort EntrySize32 = 0x08;
 
-		public static readonly ushort EntrySize64 = 0x10;
+		public const ushort EntrySize64 = 0x10;
 
 		/// <summary>
 		/// This member holds an index into the object file's symbol string table, which holds

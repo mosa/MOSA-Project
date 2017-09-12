@@ -86,10 +86,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				if (interval.Intersects(liveInterval))
 				{
-					if (intersections == null)
-						intersections = new List<LiveInterval>();
-
-					intersections.Add(interval);
+					(intersections ?? (intersections = new List<LiveInterval>())).Add(interval);
 				}
 			}
 
@@ -142,7 +139,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				sb.Append(", ");
 			}
 
-			sb.Length = sb.Length - 2;
+			sb.Length -= 2;
 
 			return sb.ToString();
 		}

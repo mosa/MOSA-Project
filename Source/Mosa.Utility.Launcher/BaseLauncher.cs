@@ -9,7 +9,7 @@ namespace Mosa.Utility.Launcher
 {
 	public class BaseLauncher
 	{
-		public IList<string> Log { get; private set; }
+		public IList<string> Log { get; }
 		public Options Options { get; set; }
 
 		public AppLocations AppLocations { get; set; }
@@ -37,7 +37,7 @@ namespace Mosa.Utility.Launcher
 
 		static protected byte[] GetResource(string path, string name)
 		{
-			var newname = path.Replace(".", "._").Replace(@"\", "._").Replace(@"/", "._").Replace(@"-", "_") + "." + name;
+			var newname = path.Replace(".", "._").Replace(@"\", "._").Replace("/", "._").Replace("-", "_") + "." + name;
 			return GetResource(newname);
 		}
 
@@ -59,13 +59,15 @@ namespace Mosa.Utility.Launcher
 			AddOutput("Launching Application: " + app);
 			AddOutput("Arguments: " + args);
 
-			var start = new ProcessStartInfo();
-			start.FileName = app;
-			start.Arguments = args;
-			start.UseShellExecute = false;
-			start.CreateNoWindow = true;
-			start.RedirectStandardOutput = true;
-			start.RedirectStandardError = true;
+			var start = new ProcessStartInfo
+			{
+				FileName = app,
+				Arguments = args,
+				UseShellExecute = false,
+				CreateNoWindow = true,
+				RedirectStandardOutput = true,
+				RedirectStandardError = true
+			};
 
 			return Process.Start(start);
 		}
@@ -75,13 +77,15 @@ namespace Mosa.Utility.Launcher
 			AddOutput("Launching Application: " + app);
 			AddOutput("Arguments: " + args);
 
-			var start = new ProcessStartInfo();
-			start.FileName = app;
-			start.Arguments = args;
-			start.UseShellExecute = false;
-			start.CreateNoWindow = false;
-			start.RedirectStandardOutput = false;
-			start.RedirectStandardError = false;
+			var start = new ProcessStartInfo
+			{
+				FileName = app,
+				Arguments = args,
+				UseShellExecute = false,
+				CreateNoWindow = false,
+				RedirectStandardOutput = false,
+				RedirectStandardError = false
+			};
 
 			return Process.Start(start);
 		}

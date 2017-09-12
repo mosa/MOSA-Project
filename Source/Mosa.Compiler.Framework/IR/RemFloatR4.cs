@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of the floating point remainder operation.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseThreeOperandInstruction" />
 	/// <remarks>
 	/// The instruction is a three-address instruction, where the result receives
 	/// the remainder of the division of the first operand (index 0) by the second operand (index 1).

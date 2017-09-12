@@ -2,10 +2,15 @@
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	/// <summary>
+	///
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.BaseInternals" />
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Array::Copy")]
 	[ReplacementTarget("System.Array::GetLength")]
 	[ReplacementTarget("System.Array::GetLowerBound")]
-	public sealed class InternalsForArray : InternalsBase, IIntrinsicInternalMethod
+	public sealed class InternalsForArray : BaseInternals, IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site

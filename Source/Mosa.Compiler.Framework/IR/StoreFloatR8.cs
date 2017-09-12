@@ -3,14 +3,9 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// Stores a value to a memory pointer.
+	/// Store Float R8
 	/// </summary>
-	/// <remarks>
-	/// The store instruction stores the value in the given memory pointer with offset.
-	/// The first operand is the memory base.
-	/// The second operand is the memory base offset.
-	/// The third is the value to store.
-	/// </remarks>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class StoreFloatR8 : BaseIRInstruction
 	{
 		#region Construction

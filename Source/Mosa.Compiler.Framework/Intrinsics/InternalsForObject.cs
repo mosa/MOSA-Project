@@ -2,9 +2,14 @@
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	/// <summary>
+	///
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.BaseInternals" />
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Object::GetType")]
 	[ReplacementTarget("System.Object::MemberwiseClone")]
-	public sealed class InternalsForObject : InternalsBase, IIntrinsicInternalMethod
+	public sealed class InternalsForObject : BaseInternals, IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -33,19 +34,22 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if (node.Instruction != IRInstruction.Call)
+					if (node.Instruction != IRInstruction.CallStatic)
+						continue;
+
+					if (!node.Operand1.IsSymbol)
+						continue;
+
+					var invokedMethod = node.Operand1.Method;
+
+					if (invokedMethod == null)
 						continue;
 
 					nodes.Add(node);
 
-					if (node.InvokeMethod == null)
-						continue;
+					var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(invokedMethod);
 
-					Debug.Assert(node.InvokeMethod != null);
-
-					var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
-
-					MethodData.Calls.AddIfNew(node.InvokeMethod);
+					MethodData.Calls.AddIfNew(invokedMethod);
 
 					invoked.AddCalledBy(MethodCompiler.Method);
 				}
@@ -58,12 +62,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var node in nodes)
 			{
-				if (node.InvokeMethod == null)
-					continue;
+				var invokedMethod = node.Operand1.Method;
 
-				Debug.Assert(node.InvokeMethod != null);
-
-				var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(node.InvokeMethod);
+				var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(invokedMethod);
 
 				if (!invoked.CanInline)
 					continue;
@@ -80,11 +81,14 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active)
 					trace.Log(invoked.Method.FullName);
 
-				//System.Diagnostics.Debug.WriteLine(MethodCompiler.Method.FullName);
-				//System.Diagnostics.Debug.WriteLine(" * " + invoked.Method.FullName);
-
 				Inline(node, blocks);
 			}
+
+			UpdateCounter("InlineStage.InlinedMethodCount", 1);
+			UpdateCounter("InlineStage.InlinedCallSiteCount", nodes.Count);
+
+			//UpdateCounter("InlineStage.Compiled", MethodData.CompileCount == 0 ? 1 : 0);
+			//UpdateCounter("InlineStage.Recompiled", MethodData.CompileCount > 1 ? 1 : 0);
 		}
 
 		protected void Inline(InstructionNode callNode, BasicBlocks blocks)
@@ -115,9 +119,12 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 
 					if (node.Instruction == IRInstruction.Epilogue)
+					{
+						newBlock.BeforeLast.Insert(new InstructionNode(IRInstruction.Jmp, nextBlock));
 						continue;
+					}
 
-					if (node.Instruction == IRInstruction.Return)
+					if (node.Instruction == IRInstruction.SetReturn)
 					{
 						if (callNode.Result != null)
 						{
@@ -128,8 +135,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 							newBlock.BeforeLast.Insert(moveNode);
 						}
-						newBlock.BeforeLast.Insert(new InstructionNode(IRInstruction.Jmp, nextBlock));
-
 						continue;
 					}
 
@@ -257,11 +262,11 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (operand.StringData != null)
 				{
-					mappedOperand = Operand.CreateStringSymbol(operand.Type.TypeSystem, operand.Name, operand.StringData);
+					mappedOperand = Operand.CreateStringSymbol(operand.Name, operand.StringData, operand.Type.TypeSystem);
 				}
 				else if (operand.Method != null)
 				{
-					mappedOperand = Operand.CreateSymbolFromMethod(operand.Type.TypeSystem, operand.Method);
+					mappedOperand = Operand.CreateSymbolFromMethod(operand.Method, operand.Type.TypeSystem);
 				}
 				else if (operand.Name != null)
 				{
@@ -282,7 +287,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsStaticField)
 			{
-				mappedOperand = Operand.CreateField(operand.Field);
+				mappedOperand = Operand.CreateStaticField(operand.Field, TypeSystem);
 			}
 			else if (operand.IsCPURegister)
 			{

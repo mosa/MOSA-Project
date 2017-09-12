@@ -5,8 +5,9 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Ldsflda Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
 	public sealed class LdsfldaInstruction : BaseCILInstruction
 	{
 		/// <summary>
@@ -21,19 +22,19 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			var field = (MosaField)decoder.Instruction.Operand;
 
-			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
+			decoder.MethodCompiler.Scheduler.TrackFieldReferenced(field);
 
-			ctx.MosaField = field;
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(field.FieldType.ToManagedPointer());
+			node.MosaField = field;
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(field.FieldType.ToManagedPointer());
 		}
 	}
 }

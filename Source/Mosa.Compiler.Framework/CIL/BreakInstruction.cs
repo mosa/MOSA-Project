@@ -3,8 +3,9 @@
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Break Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
 	public sealed class BreakInstruction : BaseCILInstruction
 	{
 		#region Construction

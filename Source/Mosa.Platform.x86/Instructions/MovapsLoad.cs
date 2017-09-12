@@ -45,8 +45,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 
-			int patchOffset;
-
 			// mem to xmmreg 1111 0011:0000 1111:0101 1101: mod xmmreg r/m
 			var opcode = new OpcodeEncoder()
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
@@ -56,7 +54,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b0101)                                       // 4:opcode
 				.AppendNibble(Bits.b1101)                                       // 4:opcode
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out patchOffset); // 32:memory
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
 				emitter.Emit(opcode, node.Operand1, patchOffset);

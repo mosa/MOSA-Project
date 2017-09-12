@@ -2,6 +2,9 @@
 
 namespace Mosa.Compiler.Framework.IR
 {
+	/// <summary>
+	/// IR Instructions
+	/// </summary>
 	public static class IRInstruction
 	{
 		public static readonly AddFloatR4 AddFloatR4 = new AddFloatR4();
@@ -14,6 +17,11 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly BlockStart BlockStart = new BlockStart();
 		public static readonly Break Break = new Break();
 		public static readonly Call Call = new Call();
+		public static readonly CallDirect CallDirect = new CallDirect();
+		public static readonly CallDynamic CallDynamic = new CallDynamic();
+		public static readonly CallInterface CallInterface = new CallInterface();
+		public static readonly CallStatic CallStatic = new CallStatic();
+		public static readonly CallVirtual CallVirtual = new CallVirtual();
 		public static readonly CompareFloatR4 CompareFloatR4 = new CompareFloatR4();
 		public static readonly CompareFloatR8 CompareFloatR8 = new CompareFloatR8();
 		public static readonly CompareInteger CompareInteger = new CompareInteger();
@@ -38,11 +46,9 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly Flow Flow = new Flow();
 		public static readonly Gen Gen = new Gen();
 		public static readonly GotoLeaveTarget GotoLeaveTarget = new GotoLeaveTarget();
-
-		//public static readonly InternalCall InternalCall = new InternalCall();
-		//public static readonly InternalReturn InternalReturn = new InternalReturn();
-
 		public static readonly IntrinsicMethodCall IntrinsicMethodCall = new IntrinsicMethodCall();
+		public static readonly IsInstanceOfType IsInstanceOfType = new IsInstanceOfType();
+		public static readonly IsInstanceOfInterfaceType IsInstanceOfInterfaceType = new IsInstanceOfInterfaceType();
 		public static readonly Jmp Jmp = new Jmp();
 		public static readonly Kill Kill = new Kill();
 		public static readonly KillAll KillAll = new KillAll();
@@ -63,6 +69,7 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly LogicalNot LogicalNot = new LogicalNot();
 		public static readonly LogicalOr LogicalOr = new LogicalOr();
 		public static readonly LogicalXor LogicalXor = new LogicalXor();
+		public static readonly MemorySet MemorySet = new MemorySet();
 		public static readonly MoveCompound MoveCompound = new MoveCompound();
 		public static readonly MoveFloatR4 MoveFloatR4 = new MoveFloatR4();
 		public static readonly MoveFloatR8 MoveFloatR8 = new MoveFloatR8();
@@ -83,7 +90,7 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly RemFloatR8 RemFloatR8 = new RemFloatR8();
 		public static readonly RemSigned RemSigned = new RemSigned();
 		public static readonly RemUnsigned RemUnsigned = new RemUnsigned();
-		public static readonly Return Return = new Return();
+		public static readonly SetReturn SetReturn = new SetReturn();
 		public static readonly SetLeaveTarget SetLeaveTarget = new SetLeaveTarget();
 		public static readonly ShiftLeft ShiftLeft = new ShiftLeft();
 		public static readonly ShiftRight ShiftRight = new ShiftRight();
@@ -102,8 +109,22 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly SubUnsigned SubUnsigned = new SubUnsigned();
 		public static readonly Switch Switch = new Switch();
 		public static readonly Throw Throw = new Throw();
+		public static readonly To64 To64 = new To64();
 		public static readonly TryEnd TryEnd = new TryEnd();
 		public static readonly TryStart TryStart = new TryStart();
 		public static readonly UnstableObjectTracking UnstableObjectTracking = new UnstableObjectTracking();
+
+		public static readonly Rethrow Rethrow = new Rethrow();
+		public static readonly GetVirtualFunctionPtr GetVirtualFunctionPtr = new GetVirtualFunctionPtr();
+		public static readonly MemoryCopy MemoryCopy = new MemoryCopy();
+		public static readonly Box Box = new Box();
+		public static readonly Box32 Box32 = new Box32();
+		public static readonly Box64 Box64 = new Box64();
+		public static readonly BoxR4 BoxR4 = new BoxR4();
+		public static readonly BoxR8 BoxR8 = new BoxR8();
+		public static readonly Unbox Unbox = new Unbox();
+		public static readonly Unbox32 Unbox32 = new Unbox32();
+		public static readonly Unbox64 Unbox64 = new Unbox64();
+		public static readonly Split64 Split64 = new Split64();
 	}
 }

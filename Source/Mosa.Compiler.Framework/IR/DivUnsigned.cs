@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of the unsigned division operation.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseThreeOperandInstruction" />
 	public sealed class DivUnsigned : BaseThreeOperandInstruction
 	{
 		/// <summary>

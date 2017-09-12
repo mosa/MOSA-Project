@@ -20,7 +20,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Helper.FoldOperand1ToConstant(context);
 
-			var constantx10 = Operand.CreateConstant(methodCompiler.TypeSystem, 0x10);
+			var constantx10 = Operand.CreateConstant(0x10, methodCompiler.TypeSystem);
 
 			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			Operand ds = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.DS);

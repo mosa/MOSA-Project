@@ -28,9 +28,9 @@ namespace Mosa.Compiler.Linker.Elf
 		ExecuteInstructions = 0x00000004,
 
 		/// <summary>
-		///
+		/// The alloc execute
 		/// </summary>
-		AllocExecute = 0x00000006,
+		AllocExecute = Alloc | ExecuteInstructions,
 
 		/// <summary>
 		/// All bits included in this mask are reserved for processor-specific semantics.

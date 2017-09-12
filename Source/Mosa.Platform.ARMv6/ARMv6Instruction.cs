@@ -7,8 +7,9 @@ using System;
 namespace Mosa.Platform.ARMv6
 {
 	/// <summary>
-	///
+	/// ARMv6 Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseInstruction" />
 	public abstract class ARMv6Instruction : BaseInstruction
 	{
 		#region Construction

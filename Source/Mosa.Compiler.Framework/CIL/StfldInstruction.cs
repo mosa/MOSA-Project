@@ -7,6 +7,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Intermediate representation for the CIL stfld opcode.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BinaryInstruction" />
 	public sealed class StfldInstruction : BinaryInstruction
 	{
 		#region Construction
@@ -27,18 +28,18 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			var field = (MosaField)decoder.Instruction.Operand;
 
-			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
+			decoder.MethodCompiler.Scheduler.TrackFieldReferenced(field);
 
-			ctx.MosaField = field;
+			node.MosaField = field;
 		}
 
 		#endregion Methods Overrides

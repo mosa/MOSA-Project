@@ -8,7 +8,7 @@ using System;
 namespace Mosa.HelloWorld.x86
 {
 	/// <summary>
-	///
+	/// Boot
 	/// </summary>
 	public static class Boot
 	{

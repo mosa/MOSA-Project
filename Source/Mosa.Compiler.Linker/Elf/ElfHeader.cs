@@ -7,7 +7,7 @@ using System.IO;
 namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
-	///
+	/// Elf Header
 	/// </summary>
 	public class ElfHeader
 	{
@@ -60,9 +60,9 @@ namespace Mosa.Compiler.Linker.Elf
 		/// <summary>
 		/// This member holds the ELF header's size in bytes.
 		/// </summary>
-		public static readonly ushort ElfHeaderSize32 = 0x34;
+		internal const ushort ElfHeaderSize32 = 0x34;
 
-		public static readonly ushort ElfHeaderSize64 = 0x40;
+		internal const ushort ElfHeaderSize64 = 0x40;
 
 		/// <summary>
 		/// This member holds the number of entries in the program header table. Thus the
@@ -87,7 +87,7 @@ namespace Mosa.Compiler.Linker.Elf
 		public int SectionHeaderStringIndex;
 
 		/// <summary>
-		///
+		/// The magic number
 		/// </summary>
 		public static readonly byte[] MagicNumber = new byte[] { 0x7F, (byte)'E', (byte)'L', (byte)'F' };
 
@@ -195,8 +195,8 @@ namespace Mosa.Compiler.Linker.Elf
 		/// </summary>
 		/// <param name="identClass">The ident class.</param>
 		/// <param name="data">The data.</param>
-		/// <param name="padding">The padding.</param>
-		public void CreateIdent(IdentClass identClass, IdentData data, byte[] padding)
+		///
+		public void CreateIdent(IdentClass identClass, IdentData data)
 		{
 			// Store magic number
 			Ident[0] = MagicNumber[0];
@@ -230,8 +230,8 @@ namespace Mosa.Compiler.Linker.Elf
 			Console.WriteLine("--------------");
 			Console.WriteLine();
 			Console.WriteLine("Magic number equals 0x7F454C46: Yes");
-			Console.WriteLine("Ident class:                    {0} ({1})", ((IdentClass)Ident[4]), ((IdentClass)Ident[4]).ToString("x"));
-			Console.WriteLine("Ident data:                     {0} ({1})", ((IdentData)Ident[4]), ((IdentData)Ident[4]).ToString("x"));
+			Console.WriteLine("Ident class:                    {0} ({1})", (IdentClass)Ident[4], ((IdentClass)Ident[4]).ToString("x"));
+			Console.WriteLine("Ident data:                     {0} ({1})", (IdentData)Ident[4], ((IdentData)Ident[4]).ToString("x"));
 			Console.WriteLine("FileType:                       {0}", Type);
 			Console.WriteLine("Machine:                        {0}", Machine);
 			Console.WriteLine("Version:                        {0}", Version);

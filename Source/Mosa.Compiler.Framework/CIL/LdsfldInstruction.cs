@@ -6,8 +6,9 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Ldsfld Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
 	public sealed class LdsfldInstruction : BaseCILInstruction
 	{
 		#region Construction
@@ -28,21 +29,21 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			var field = (MosaField)decoder.Instruction.Operand;
 
-			decoder.Compiler.Scheduler.TrackFieldReferenced(field);
+			decoder.MethodCompiler.Scheduler.TrackFieldReferenced(field);
 
 			Debug.Assert(field.IsStatic, "Static field access on non-static field.");
 
-			ctx.MosaField = field;
-			ctx.Result = AllocateVirtualRegisterOrStackSlot(decoder.Compiler, field.FieldType);
+			node.MosaField = field;
+			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, field.FieldType);
 		}
 
 		#endregion Methods

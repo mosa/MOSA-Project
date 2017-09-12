@@ -30,9 +30,10 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.IsCILDecoded = (!method.IsLinkerGenerated && method.Code.Count > 0);
 			MethodData.HasLoops = false;
 			MethodData.IsPlugged = IsPlugged;
-			MethodData.IsVirtual = method.IsVirtual;
 			MethodData.HasDoNotInlineAttribute = false;
 			MethodData.HasAddressOfInstruction = false;
+			MethodData.IsVirtual = method.IsVirtual;
+			MethodData.IsDevirtualized = (method.IsVirtual && !TypeLayout.IsMethodOverridden(method));
 
 			int totalIRCount = 0;
 			int totalNonIRCount = 0;
@@ -110,6 +111,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace.Log("CanInline: " + MethodData.CanInline.ToString());
 			trace.Log("IsVirtual: " + MethodData.IsVirtual.ToString());
+			trace.Log("IsDevirtualized: " + MethodData.IsDevirtualized.ToString());
 			trace.Log("HasLoops: " + MethodData.HasLoops.ToString());
 			trace.Log("HasProtectedRegions: " + MethodData.HasProtectedRegions.ToString());
 			trace.Log("IRInstructionCount: " + MethodData.IRInstructionCount.ToString());
@@ -137,7 +139,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//if (method.HasLoops)
 			//	return false;
 
-			if (method.IsVirtual)
+			if (method.IsVirtual && !method.IsDevirtualized)
 				return false;
 
 			// current implementation limitation - can't include methods with addressOf instruction
@@ -152,6 +154,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var returnType = method.Method.Signature.ReturnType;
 
+			// FIXME: Add rational
 			if (MosaTypeLayout.IsStoredOnStack(returnType) && !returnType.IsUI8 && !returnType.IsR8)
 				return false;
 
@@ -260,7 +263,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return newBasicBlocks;
 		}
 
-		private static Operand Map(Operand operand, Dictionary<Operand, Operand> map)
+		private Operand Map(Operand operand, Dictionary<Operand, Operand> map)
 		{
 			if (operand == null)
 				return null;
@@ -274,11 +277,11 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (operand.StringData != null)
 				{
-					mappedOperand = Operand.CreateStringSymbol(operand.Type.TypeSystem, operand.Name, operand.StringData);
+					mappedOperand = Operand.CreateStringSymbol(operand.Name, operand.StringData, operand.Type.TypeSystem);
 				}
 				else if (operand.Method != null)
 				{
-					mappedOperand = Operand.CreateSymbolFromMethod(operand.Type.TypeSystem, operand.Method);
+					mappedOperand = Operand.CreateSymbolFromMethod(operand.Method, operand.Type.TypeSystem);
 				}
 				else if (operand.Name != null)
 				{
@@ -302,7 +305,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsStaticField)
 			{
-				mappedOperand = Operand.CreateField(operand.Field);
+				mappedOperand = Operand.CreateStaticField(operand.Field, TypeSystem);
 			}
 			else if (operand.IsCPURegister)
 			{

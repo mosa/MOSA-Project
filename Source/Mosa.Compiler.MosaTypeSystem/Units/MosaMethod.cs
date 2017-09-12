@@ -75,7 +75,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		internal MosaMethod Clone()
 		{
-			MosaMethod result = (MosaMethod)base.MemberwiseClone();
+			var result = (MosaMethod)base.MemberwiseClone();
 
 			result.GenericArguments = (result.genericArguments = new List<MosaType>(genericArguments)).AsReadOnly();
 
@@ -102,7 +102,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public class Mutator : MosaUnit.MutatorBase
 		{
-			private MosaMethod method;
+			private readonly MosaMethod method;
 
 			internal Mutator(MosaMethod method)
 				: base(method)

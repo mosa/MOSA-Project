@@ -3,15 +3,17 @@
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Dup Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public sealed class DupInstruction : UnaryInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="NopInstruction"/> class.
+		/// Initializes a new instance of the <see cref="NopInstruction" /> class.
 		/// </summary>
+		/// <param name="opcode">The opcode.</param>
 		public DupInstruction(OpCode opcode)
 			: base(opcode, 2)
 		{
@@ -24,14 +26,14 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Validates the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, BaseMethodCompiler compiler)
 		{
-			base.Resolve(ctx, compiler);
+			base.Resolve(context, compiler);
 
-			ctx.Result = ctx.Operand1;
-			ctx.ResultCount = 2;
+			context.Result = context.Operand1;
+			context.ResultCount = 2;
 		}
 
 		#endregion Methods

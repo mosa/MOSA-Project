@@ -5,7 +5,7 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Ldftn Instruction
 	/// </summary>
 	public sealed class LdftnInstruction : LoadInstruction
 	{
@@ -27,19 +27,19 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			var method = (MosaMethod)decoder.Instruction.Operand;
 
-			decoder.Compiler.Scheduler.TrackMethodInvoked(method);
+			decoder.MethodCompiler.Scheduler.TrackMethodInvoked(method);
 
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.ToFnPtr(method.Signature));
-			ctx.InvokeMethod = method;
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.ToFnPtr(method.Signature));
+			node.InvokeMethod = method;
 		}
 
 		#endregion Methods

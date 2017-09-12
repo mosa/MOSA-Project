@@ -3,15 +3,17 @@
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Calli Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.InvokeInstruction" />
 	public sealed class CalliInstruction : InvokeInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CalliInstruction"/> class.
+		/// Initializes a new instance of the <see cref="CalliInstruction" /> class.
 		/// </summary>
+		/// <param name="opcode">The opcode.</param>
 		public CalliInstruction(OpCode opcode)
 			: base(opcode)
 		{

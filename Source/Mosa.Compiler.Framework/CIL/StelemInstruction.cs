@@ -1,13 +1,14 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Intermediate representation of the CIL stelem opcode family.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.NaryInstruction" />
 	public sealed class StelemInstruction : NaryInstruction
 	{
 		private readonly MosaTypeCode? elementType;
@@ -32,7 +33,7 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Stelem_r8: elementType = MosaTypeCode.R8; break;
 				case OpCode.Stelem_ref: elementType = MosaTypeCode.Object; break;
 				case OpCode.Stelem: elementType = null; break;
-				default: throw new NotImplementedException("Not implemented: " + opcode);
+				default: throw new NotImplementCompilerException("Not implemented: " + opcode);
 			}
 		}
 
@@ -43,18 +44,18 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			MosaType type = (elementType == null)
 				? type = (MosaType)decoder.Instruction.Operand
 				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
 
-			ctx.MosaType = type;
+			node.MosaType = type;
 		}
 
 		#endregion Methods

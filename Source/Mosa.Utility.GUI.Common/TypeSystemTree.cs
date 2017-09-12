@@ -91,7 +91,7 @@ namespace Mosa.Utility.GUI.Common
 							fieldsNode.Nodes.Add(fieldNode);
 
 							if (field.IsStatic)
-								fieldNode.Text = fieldNode.Text + " [Static]";
+								fieldNode.Text += " [Static]";
 
 							if (showSizes)
 							{
@@ -100,7 +100,7 @@ namespace Mosa.Utility.GUI.Common
 								if (!field.IsStatic)
 									fieldNode.Text = fieldNode.Text + " - Offset: " + typeLayout.GetFieldOffset(field).ToString();
 
-								fieldNode.Text = fieldNode.Text + ")";
+								fieldNode.Text += ")";
 							}
 						}
 					}
@@ -124,25 +124,29 @@ namespace Mosa.Utility.GUI.Common
 								propertyNode.Nodes.Add(getterNode);
 
 								if (property.GetterMethod.IsStatic)
-									getterNode.Text = getterNode.Text + " [Static]";
+									getterNode.Text += " [Static]";
 
 								if (property.GetterMethod.IsAbstract)
-									getterNode.Text = getterNode.Text + " [Abstract]";
+									getterNode.Text += " [Abstract]";
 
 								if (property.GetterMethod.IsNewSlot)
-									getterNode.Text = getterNode.Text + " [NewSlot]";
+								{
+									getterNode.Text += " [NewSlot]";
+								}
 
 								if (property.GetterMethod.IsVirtual)
-									getterNode.Text = getterNode.Text + " [Virtual]";
+									getterNode.Text += " [Virtual]";
 
 								if (property.GetterMethod.IsFinal)
-									getterNode.Text = getterNode.Text + " [Final]";
+								{
+									getterNode.Text += " [Final]";
+								}
 
 								if (property.GetterMethod.IsSpecialName)
-									getterNode.Text = getterNode.Text + " [SpecialName]";
+									getterNode.Text += " [SpecialName]";
 
 								if (property.GetterMethod.IsRTSpecialName)
-									getterNode.Text = getterNode.Text + " [RTSpecialName]";
+									getterNode.Text += " [RTSpecialName]";
 
 								if (property.GetterMethod.GenericArguments.Count != 0)
 								{
@@ -163,25 +167,25 @@ namespace Mosa.Utility.GUI.Common
 								propertyNode.Nodes.Add(setterNode);
 
 								if (property.SetterMethod.IsStatic)
-									setterNode.Text = setterNode.Text + " [Static]";
+									setterNode.Text += " [Static]";
 
 								if (property.SetterMethod.IsAbstract)
-									setterNode.Text = setterNode.Text + " [Abstract]";
+									setterNode.Text += " [Abstract]";
 
 								if (property.SetterMethod.IsNewSlot)
-									setterNode.Text = setterNode.Text + " [NewSlot]";
+									setterNode.Text += " [NewSlot]";
 
 								if (property.SetterMethod.IsVirtual)
-									setterNode.Text = setterNode.Text + " [Virtual]";
+									setterNode.Text += " [Virtual]";
 
 								if (property.SetterMethod.IsFinal)
-									setterNode.Text = setterNode.Text + " [Final]";
+									setterNode.Text += " [Final]";
 
 								if (property.SetterMethod.IsSpecialName)
-									setterNode.Text = setterNode.Text + " [SpecialName]";
+									setterNode.Text += " [SpecialName]";
 
 								if (property.SetterMethod.IsRTSpecialName)
-									setterNode.Text = setterNode.Text + " [RTSpecialName]";
+									setterNode.Text += " [RTSpecialName]";
 
 								if (property.SetterMethod.GenericArguments.Count != 0)
 								{
@@ -211,25 +215,25 @@ namespace Mosa.Utility.GUI.Common
 							methodsNode.Nodes.Add(methodNode);
 
 							if (method.IsStatic)
-								methodNode.Text = methodNode.Text + " [Static]";
+								methodNode.Text += " [Static]";
 
 							if (method.IsAbstract)
-								methodNode.Text = methodNode.Text + " [Abstract]";
+								methodNode.Text += " [Abstract]";
 
 							if (method.IsNewSlot)
-								methodNode.Text = methodNode.Text + " [NewSlot]";
+								methodNode.Text += " [NewSlot]";
 
 							if (method.IsVirtual)
-								methodNode.Text = methodNode.Text + " [Virtual]";
+								methodNode.Text += " [Virtual]";
 
 							if (method.IsFinal)
-								methodNode.Text = methodNode.Text + " [Final]";
+								methodNode.Text += " [Final]";
 
 							if (method.IsSpecialName)
-								methodNode.Text = methodNode.Text + " [SpecialName]";
+								methodNode.Text += " [SpecialName]";
 
 							if (method.IsRTSpecialName)
-								methodNode.Text = methodNode.Text + " [RTSpecialName]";
+								methodNode.Text += " [RTSpecialName]";
 
 							if (method.GenericArguments.Count != 0)
 							{

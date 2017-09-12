@@ -2,9 +2,14 @@
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	/// <summary>
+	///
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.BaseInternals" />
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Type::GetTypeImpl")]
 	[ReplacementTarget("System.Type::GetTypeFromHandleImpl")]
-	public sealed class InternalsForType : InternalsBase, IIntrinsicInternalMethod
+	public sealed class InternalsForType : BaseInternals, IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site

@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// CIL Instruction
 	/// </summary>
 	public static class CILInstruction
 	{
@@ -231,17 +231,10 @@ namespace Mosa.Compiler.Framework.CIL
 		public static BaseCILInstruction Unbox_any = new UnboxAnyInstruction(OpCode.Unbox_any);
 		public static BaseCILInstruction Xor = new BinaryLogicInstruction(OpCode.Xor);
 
-		// This must be below the above static fields
-		// otherwise a null exception is thrown
-		private static BaseCILInstruction[] opcodeMap = Initialize();
-
 		/// <summary>
 		/// Gets the instructions.
 		/// </summary>
-		public static BaseCILInstruction[] Instructions
-		{
-			get { return opcodeMap; }
-		}
+		public static BaseCILInstruction[] Instructions { get; } = Initialize();
 
 		#endregion Static Data
 
@@ -251,7 +244,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <param name="opcode">The opcode.</param>
 		public static BaseCILInstruction Get(OpCode opcode)
 		{
-			return opcodeMap[(int)opcode];
+			return CILInstruction.Instructions[(int)opcode];
 		}
 
 		/// <summary>

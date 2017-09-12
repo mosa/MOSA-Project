@@ -31,13 +31,12 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 			else
 			{
-
 				if (includeReturnType)
 				{
 					result.Append(sig.ReturnType.FullName);
 					result.Append(" ");
 				}
-				
+
 				result.Append(name);
 				result.Append("(");
 				for (int i = 0; i < sig.Parameters.Count; i++)
@@ -70,15 +69,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 			switch (type.TypeCode)
 			{
 				case MosaTypeCode.UnmanagedPointer:
+					result.Append(type.ElementType.Signature);
 					result.Append("*");
 					break;
 
 				case MosaTypeCode.ManagedPointer:
+					result.Append(type.ElementType.Signature);
 					result.Append("&");
 					break;
 
 				case MosaTypeCode.SZArray:
 				case MosaTypeCode.Array:
+					result.Append(type.ElementType.Signature);
 					result.Append(type.ArrayInfo.ToString());
 					break;
 

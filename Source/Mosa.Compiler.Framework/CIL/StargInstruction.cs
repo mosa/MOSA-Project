@@ -3,8 +3,9 @@
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Starg Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.StoreInstruction" />
 	public sealed class StargInstruction : StoreInstruction
 	{
 		#region Construction
@@ -34,15 +35,15 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode the base first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			// The argument is the result
-			ctx.Result = decoder.Compiler.Parameters[(int)decoder.Instruction.Operand];
+			node.Result = decoder.MethodCompiler.Parameters[(int)decoder.Instruction.Operand];
 
 			// FIXME: Do some type compatibility checks
 			// See verification for this instruction and

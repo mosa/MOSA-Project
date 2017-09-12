@@ -14,17 +14,17 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// The type of link required
 		/// </summary>
-		public LinkType LinkType { get; private set; }
+		public LinkType LinkType { get; }
 
 		/// <summary>
 		/// Gets the patches.
 		/// </summary>
-		public PatchType PatchType { get; private set; }
+		public PatchType PatchType { get; }
 
 		/// <summary>
 		/// The object that is being patched.
 		/// </summary>
-		public LinkerSymbol PatchSymbol { get; private set; }
+		public LinkerSymbol PatchSymbol { get; }
 
 		/// <summary>
 		/// Gets the patch offset.
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Linker
 		/// <value>
 		/// The symbol offset.
 		/// </value>
-		public int PatchOffset { get; private set; }
+		public int PatchOffset { get; }
 
 		/// <summary>
 		/// Gets the reference symbol.
@@ -40,13 +40,13 @@ namespace Mosa.Compiler.Linker
 		/// <value>
 		/// The reference symbol.
 		/// </value>
-		public LinkerSymbol ReferenceSymbol { get; private set; }
+		public LinkerSymbol ReferenceSymbol { get; }
 
 		/// <summary>
 		/// Gets the offset to apply to the reference target.
 		/// </summary>
 		/// <value>The offset.</value>
-		public int ReferenceOffset { get; private set; }
+		public int ReferenceOffset { get; }
 
 		#endregion Properties
 

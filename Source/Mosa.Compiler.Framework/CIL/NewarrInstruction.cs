@@ -5,8 +5,9 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Newarr Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public sealed class NewarrInstruction : UnaryInstruction
 	{
 		#region Construction
@@ -27,12 +28,12 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			var type = (MosaType)decoder.Instruction.Operand;
 
@@ -41,7 +42,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// checks in an optimization stage later on, if we find that a value never exceeds the array
 			// bounds.
 
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(type);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(type);
 		}
 
 		#endregion Methods

@@ -9,7 +9,9 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
+	/// Exception Stage
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public class ExceptionStage : BaseMethodCompilerStage
 	{
 		private Dictionary<BasicBlock, Operand> exceptionVirtualRegisters = new Dictionary<BasicBlock, Operand>();
@@ -34,24 +36,24 @@ namespace Mosa.Compiler.Framework.Stages
 
 			leaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, Architecture.LeaveTargetRegister);
 
-			nullOperand = Operand.GetNull(TypeSystem);
+			nullOperand = Operand.GetNullObject(TypeSystem);
 
 			// collect leave targets
 			leaveTargets = CollectLeaveTargets();
 
-			var dispatches = new Dictionary<BaseInstruction, Dispatch>();
-
-			dispatches.Add(IRInstruction.Throw, ThrowInstruction);
-			dispatches.Add(IRInstruction.FinallyStart, FinallyStartInstruction);
-			dispatches.Add(IRInstruction.FinallyEnd, FinallyEndInstruction);
-			dispatches.Add(IRInstruction.ExceptionStart, ExceptionStartInstruction);
-			dispatches.Add(IRInstruction.SetLeaveTarget, SetLeaveTargetInstruction);
-			dispatches.Add(IRInstruction.GotoLeaveTarget, GotoLeaveTargetInstruction);
-			dispatches.Add(IRInstruction.Flow, Empty);
-			dispatches.Add(IRInstruction.TryStart, Empty);
-			dispatches.Add(IRInstruction.TryEnd, Empty);
-			dispatches.Add(IRInstruction.ExceptionEnd, Empty);
-
+			var dispatches = new Dictionary<BaseInstruction, Dispatch>
+			{
+				[IRInstruction.Throw] = ThrowInstruction,
+				[IRInstruction.FinallyStart] = FinallyStartInstruction,
+				[IRInstruction.FinallyEnd] = FinallyEndInstruction,
+				[IRInstruction.ExceptionStart] = ExceptionStartInstruction,
+				[IRInstruction.SetLeaveTarget] = SetLeaveTargetInstruction,
+				[IRInstruction.GotoLeaveTarget] = GotoLeaveTargetInstruction,
+				[IRInstruction.Flow] = Empty,
+				[IRInstruction.TryStart] = Empty,
+				[IRInstruction.TryEnd] = Empty,
+				[IRInstruction.ExceptionEnd] = Empty
+			};
 			for (int i = 0; i < BasicBlocks.Count; i++)
 			{
 				for (var node = BasicBlocks[i].First; !node.IsBlockEndInstruction; node = node.Next)
@@ -59,9 +61,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					Dispatch dispatch;
-
-					if (dispatches.TryGetValue(node.Instruction, out dispatch))
+					if (dispatches.TryGetValue(node.Instruction, out Dispatch dispatch))
 					{
 						dispatch.Invoke(node);
 					}
@@ -85,7 +85,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var ctx = new Context(node);
 
-			ctx.SetInstruction(IRInstruction.MoveInteger, leaveTargetRegister, Operand.CreateConstant(TypeSystem, target.Label));
+			ctx.SetInstruction(IRInstruction.MoveInteger, leaveTargetRegister, CreateConstant(target.Label));
 		}
 
 		private void ExceptionStartInstruction(InstructionNode node)
@@ -115,8 +115,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
 			newBlocks[0].AppendInstruction(IRInstruction.MoveInteger, exceptionRegister, exceptionVirtualRegister);
-			newBlocks[0].AppendInstruction(IRInstruction.Call, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
-			newBlocks[0].InvokeMethod = method;
+			newBlocks[0].AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, TypeSystem));
 		}
 
 		private void FinallyStartInstruction(InstructionNode node)
@@ -146,8 +145,7 @@ namespace Mosa.Compiler.Framework.Stages
 			ctx.SetInstruction(IRInstruction.MoveInteger, exceptionRegister, node.Operand1);
 
 			//ctx.AppendInstruction(IRInstruction.KillAllExcept, null, exceptionRegister);
-			ctx.AppendInstruction(IRInstruction.Call, null, Operand.CreateSymbolFromMethod(TypeSystem, method));
-			ctx.InvokeMethod = method;
+			ctx.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, TypeSystem));
 		}
 
 		private void GotoLeaveTargetInstruction(InstructionNode node)
@@ -181,7 +179,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var nextBlock = Split(ctx);
 
 				// compare leaveTargetRegister > handlerBlock.End, then goto finally handler
-				ctx.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.GreaterThan, null, Operand.CreateConstant(TypeSystem, handlerBlock.Label), leaveTargetRegister, nextBlock.Block);
+				ctx.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.GreaterThan, null, CreateConstant(handlerBlock.Label), leaveTargetRegister, nextBlock.Block);
 				ctx.AppendInstruction(IRInstruction.Jmp, handlerBlock);
 
 				ctx = nextBlock;
@@ -237,12 +235,12 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var newBlocks = CreateNewBlockContexts(targets.Count - 1);
 
-				ctx.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, leaveTargetRegister, Operand.CreateConstant(TypeSystem, targets[0].Label), targets[0]);
+				ctx.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, leaveTargetRegister, CreateConstant(targets[0].Label), targets[0]);
 				ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 				for (int b = 1; b < targets.Count - 2; b++)
 				{
-					newBlocks[b - 1].AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, leaveTargetRegister, Operand.CreateConstant(TypeSystem, targets[b].Label), targets[b]);
+					newBlocks[b - 1].AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, leaveTargetRegister, CreateConstant(targets[b].Label), targets[b]);
 					newBlocks[b - 1].AppendInstruction(IRInstruction.Jmp, newBlocks[b + 1].Block);
 				}
 

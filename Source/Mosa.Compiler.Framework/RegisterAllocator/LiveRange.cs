@@ -7,9 +7,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public class LiveRange : Interval
 	{
-		private SortedList<SlotIndex, SlotIndex> usePositions = new SortedList<SlotIndex, SlotIndex>();
+		private readonly SortedList<SlotIndex, SlotIndex> usePositions = new SortedList<SlotIndex, SlotIndex>();
 
-		private SortedList<SlotIndex, SlotIndex> defPositions = new SortedList<SlotIndex, SlotIndex>();
+		private readonly SortedList<SlotIndex, SlotIndex> defPositions = new SortedList<SlotIndex, SlotIndex>();
 
 		public IList<SlotIndex> UsePositions { get { return usePositions.Keys; } }
 
@@ -17,9 +17,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsEmpty { get { return usePositions.Count == 0 && defPositions.Count == 0; } }
 
-		public SlotIndex Minimum { get; private set; }
+		public SlotIndex Minimum { get; }
 
-		public SlotIndex Maximum { get; private set; }
+		public SlotIndex Maximum { get; }
 
 		public SlotIndex FirstUse { get { return usePositions.Count == 0 ? null : usePositions.Values[0]; } }
 
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public SlotIndex LastDef { get { return defPositions.Count == 0 ? null : defPositions.Values[defPositions.Count - 1]; } }
 
-		public bool IsDefFirst { get; private set; }
+		public bool IsDefFirst { get; }
 
 		public LiveRange(SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)
 			: base(start, end)
@@ -144,11 +144,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			Debug.Assert(CanSplitAt(at));
 
-			var ranges = new List<LiveRange>(2);
-
-			ranges.Add(new LiveRange(Start, at, UsePositions, DefPositions));
-			ranges.Add(new LiveRange(at, End, UsePositions, DefPositions));
-
+			var ranges = new List<LiveRange>(2)
+			{
+				new LiveRange(Start, at, UsePositions, DefPositions),
+				new LiveRange(at, End, UsePositions, DefPositions)
+			};
 			return ranges;
 		}
 
@@ -181,12 +181,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			Debug.Assert(CanSplitAt(low, high));
 
-			var ranges = new List<LiveRange>(3);
-
-			ranges.Add(new LiveRange(Start, low, UsePositions, DefPositions));
-			ranges.Add(new LiveRange(low, high, UsePositions, DefPositions));
-			ranges.Add(new LiveRange(high, End, UsePositions, DefPositions));
-
+			var ranges = new List<LiveRange>(3)
+			{
+				new LiveRange(Start, low, UsePositions, DefPositions),
+				new LiveRange(low, high, UsePositions, DefPositions),
+				new LiveRange(high, End, UsePositions, DefPositions)
+			};
 			return ranges;
 		}
 	}

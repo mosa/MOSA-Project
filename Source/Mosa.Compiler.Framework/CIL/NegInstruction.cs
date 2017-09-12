@@ -6,8 +6,9 @@ using System;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Neg Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryArithmeticInstruction" />
 	public sealed class NegInstruction : UnaryArithmeticInstruction
 	{
 		#region Data members
@@ -16,7 +17,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// Holds the typecode validation table from ISO/IEC 23271:2006 (E),
 		/// Partition III, §1.5, Table 3.
 		/// </summary>
-		private static StackTypeCode[] typeCodes = new StackTypeCode[] {
+		private static readonly StackTypeCode[] typeCodes = new StackTypeCode[] {
 			StackTypeCode.Unknown,
 			StackTypeCode.Int32,
 			StackTypeCode.Int64,
@@ -47,18 +48,18 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx"></param>
+		/// <param name="context"></param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context ctx, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, BaseMethodCompiler compiler)
 		{
-			base.Resolve(ctx, compiler);
+			base.Resolve(context, compiler);
 
 			// Validate the operand
-			var result = typeCodes[(int)ctx.Operand1.Type.GetStackTypeCode()];
+			var result = typeCodes[(int)context.Operand1.Type.GetStackTypeCode()];
 			if (StackTypeCode.Unknown == result)
-				throw new InvalidOperationException(@"Invalid operand to Neg instruction [" + result + "]");
+				throw new InvalidOperationException("Invalid operand to Neg instruction [" + result + "]");
 
-			ctx.Result = compiler.CreateVirtualRegister(ctx.Operand1.Type);
+			context.Result = compiler.CreateVirtualRegister(context.Operand1.Type);
 		}
 
 		#endregion Methods

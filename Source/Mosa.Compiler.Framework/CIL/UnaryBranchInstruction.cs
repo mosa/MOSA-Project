@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using System;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -7,6 +8,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Represents a unary branch instruction in internal representation.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	/// <remarks>
 	/// This instruction is used to represent brfalse[.s] and brtrue[.s].
 	/// </remarks>
@@ -44,8 +46,8 @@ namespace Mosa.Compiler.Framework.CIL
 
 		public override bool DecodeTargets(IInstructionDecoder decoder)
 		{
-			if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s ||
-				opcode == OpCode.Brfalse || opcode == OpCode.Brtrue)
+			if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s
+				|| opcode == OpCode.Brfalse || opcode == OpCode.Brtrue)
 			{
 				decoder.GetBlock((int)decoder.Instruction.Operand);
 				return true;
@@ -61,21 +63,21 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			// Read the branch target
 			// Is this a short branch target?
-			if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s ||
-				opcode == OpCode.Brfalse || opcode == OpCode.Brtrue)
+			if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s
+				|| opcode == OpCode.Brfalse || opcode == OpCode.Brtrue)
 			{
 				var block = decoder.GetBlock((int)decoder.Instruction.Operand);
 
-				ctx.AddBranchTarget(block);
+				node.AddBranchTarget(block);
 			}
 			else if (opcode == OpCode.Switch)
 			{
@@ -83,7 +85,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 			else
 			{
-				throw new NotSupportedException(@"Invalid opcode " + opcode.ToString() + " specified for UnaryBranchInstruction.");
+				throw new NotSupportedException("Invalid opcode " + opcode.ToString() + " specified for UnaryBranchInstruction.");
 			}
 		}
 
@@ -94,15 +96,14 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <returns></returns>
 		protected override string GetModifier(InstructionNode node)
 		{
-			OpCode opCode = ((node.Instruction) as CIL.BaseCILInstruction).OpCode;
-			switch (opCode)
+			switch (((node.Instruction) as CIL.BaseCILInstruction).OpCode)
 			{
-				case OpCode.Brtrue: return @"true";
-				case OpCode.Brtrue_s: return @"true";
-				case OpCode.Brfalse: return @"false";
-				case OpCode.Brfalse_s: return @"false";
-				case OpCode.Switch: return @"switch";
-				default: throw new InvalidOperationException(@"Opcode not set.");
+				case OpCode.Brtrue: return "true";
+				case OpCode.Brtrue_s: return "true";
+				case OpCode.Brfalse: return "false";
+				case OpCode.Brfalse_s: return "false";
+				case OpCode.Switch: return "switch";
+				default: throw new InvalidCompilerException("Opcode not set.");
 			}
 		}
 

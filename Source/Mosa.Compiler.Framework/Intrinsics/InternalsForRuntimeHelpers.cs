@@ -2,13 +2,18 @@
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	/// <summary>
+	///
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.BaseInternals" />
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::InitializeArray")]
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::GetHashCode")]
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::Equals")]
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::UnsafeCast")]
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::GetAssemblies")]
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::CreateInstance")]
-	public sealed class InternalsForRuntimeHelpers : InternalsBase, IIntrinsicInternalMethod
+	public sealed class InternalsForRuntimeHelpers : BaseInternals, IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site

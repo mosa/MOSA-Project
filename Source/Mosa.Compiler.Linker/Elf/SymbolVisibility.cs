@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
-	///
+	/// SymbolVisibility
 	/// </summary>
 	public enum SymbolVisibility
 	{

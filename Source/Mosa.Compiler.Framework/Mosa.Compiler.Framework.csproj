@@ -80,20 +80,23 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis\LiveVariableAnalysis\ExtendedBlock2.cs" />
+    <Compile Include="Analysis\LiveVariableAnalysis\Range.cs" />
+    <Compile Include="Analysis\LiveVariableAnalysis\RegisterAllocatorEnvironment.cs" />
+    <Compile Include="Analysis\LiveVariableAnalysis\GCEnvironment.cs" />
+    <Compile Include="Analysis\LiveVariableAnalysis\BaseLivenessAnalysisEnvironment.cs" />
+    <Compile Include="Analysis\LiveVariableAnalysis\LiveRanges.cs" />
     <Compile Include="Analysis\SparseConditionalConstantPropagation.cs" />
     <Compile Include="Analysis\NaturalBlockOrder.cs" />
     <Compile Include="Analysis\ProtectedRegion.cs" />
     <Compile Include="Analysis\ReverseBlockOrder.cs" />
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
-    <Compile Include="Analysis\Dominance.cs" />
-    <Compile Include="Analysis\IDominanceAnalysis.cs" />
-    <Compile Include="BaseCallingConventionExtended.cs" />
+    <Compile Include="Analysis\BaseDominanceAnalysis.cs" />
     <Compile Include="CompilerTypeData.cs" />
     <Compile Include="CompilerMethodData.cs" />
     <Compile Include="CompilerData.cs" />
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="InstructionNodeExtension.cs" />
     <Compile Include="InstructionNodeAddition.cs" />
     <Compile Include="Intrinsics\CreateInstanceSimple.cs" />
     <Compile Include="Intrinsics\GetAssemblyListTable.cs" />
@@ -101,6 +104,27 @@
     <Compile Include="Intrinsics\Load64.cs" />
     <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="IR\AddFloatR4.cs" />
+    <Compile Include="IR\CallDynamic.cs" />
+    <Compile Include="IR\Split64.cs" />
+    <Compile Include="IR\Unbox.cs" />
+    <Compile Include="IR\Unbox32.cs" />
+    <Compile Include="IR\Unbox64.cs" />
+    <Compile Include="IR\BoxR8.cs" />
+    <Compile Include="IR\MemoryCopy.cs" />
+    <Compile Include="IR\Rethrow.cs" />
+    <Compile Include="IR\GetVirtualFunctionPtr.cs" />
+    <Compile Include="IR\IsInstanceOfType.cs" />
+    <Compile Include="IR\MemorySet.cs" />
+    <Compile Include="IR\IsInstanceOfInterfaceType.cs" />
+    <Compile Include="IR\Box32.cs" />
+    <Compile Include="IR\BoxR4.cs" />
+    <Compile Include="IR\Box64.cs" />
+    <Compile Include="IR\Box.cs" />
+    <Compile Include="IR\To64.cs" />
+    <Compile Include="IR\CallDirect.cs" />
+    <Compile Include="IR\CallInterface.cs" />
+    <Compile Include="IR\CallVirtual.cs" />
+    <Compile Include="IR\CallStatic.cs" />
     <Compile Include="IR\NewString.cs" />
     <Compile Include="IR\NewArray.cs" />
     <Compile Include="IR\NewObject.cs" />
@@ -147,7 +171,7 @@
     <Compile Include="Intrinsics\InternalsForObject.cs" />
     <Compile Include="Intrinsics\InternalsForRuntimeHelpers.cs" />
     <Compile Include="Intrinsics\Load32.cs" />
-    <Compile Include="Intrinsics\InternalsBase.cs" />
+    <Compile Include="Intrinsics\BaseInternals.cs" />
     <Compile Include="Intrinsics\InternalsForType.cs" />
     <Compile Include="IR\InternalCall.cs" />
     <Compile Include="IR\ExceptionEnd.cs" />
@@ -183,7 +207,6 @@
     <Compile Include="IR\BlockStart.cs" />
     <Compile Include="IR\BlockEnd.cs" />
     <Compile Include="IR\InternalReturn.cs" />
-    <Compile Include="Platform\BaseCallingConvention32Bit.cs" />
     <Compile Include="RegisterAllocator\MoveResolver.cs" />
     <Compile Include="RegisterAllocator\Interval.cs" />
     <Compile Include="RegisterAllocator\SlotIndex.cs" />
@@ -192,8 +215,12 @@
     <Compile Include="RegisterAllocator\LiveInterval.cs" />
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
-    <Compile Include="Stages\DebugFileGenerationStage.cs" />
-    <Compile Include="Stages\NewObjectStage.cs" />
+    <Compile Include="CompilerStages\DebugFileGenerationStage.cs" />
+    <Compile Include="Stages\DevirtualizeCallStage.cs" />
+    <Compile Include="Stages\CallStage.cs" />
+    <Compile Include="Stages\LongOperandStage.cs" />
+    <Compile Include="Stages\LowerIRStage.cs" />
+    <Compile Include="Analysis\LiveVariableAnalysis\LivenessAnalysis.cs" />
     <Compile Include="Stages\PreciseGCStage.cs" />
     <Compile Include="Stages\GraphVizStage.cs" />
     <Compile Include="Stages\ExceptionPrologueStage.cs" />
@@ -201,12 +228,11 @@
     <Compile Include="Stages\InlineEvaluationStage.cs" />
     <Compile Include="Stages\IRCleanupStage.cs" />
     <Compile Include="Stages\SparseConditionalConstantPropagationStage.cs" />
-    <Compile Include="Stages\MethodExceptionLookupTableStage.cs" />
-    <Compile Include="Stages\MethodLookupTableStage.cs" />
+    <Compile Include="CompilerStages\MethodExceptionLookupTableStage.cs" />
+    <Compile Include="CompilerStages\MethodLookupTableStage.cs" />
     <Compile Include="Stages\ProtectedRegionLayoutStage.cs" />
     <Compile Include="Stages\ExceptionStage.cs" />
-    <Compile Include="Stages\MapFileGenerationStage.cs" />
-    <Compile Include="Stages\StackSlotStage.cs" />
+    <Compile Include="CompilerStages\MapFileGenerationStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />
     <Compile Include="Stages\EmptyBlockRemovalStage.cs" />
@@ -214,7 +240,7 @@
     <Compile Include="Stages\PlatformEdgeSplitStage.cs" />
     <Compile Include="Stages\StackSetupStage.cs" />
     <Compile Include="Stages\GreedyRegisterAllocatorStage.cs" />
-    <Compile Include="Stages\LinkerFinalizationStage.cs" />
+    <Compile Include="CompilerStages\LinkerFinalizationStage.cs" />
     <Compile Include="IIntrinsicInternalMethod.cs" />
     <Compile Include="Counters.cs" />
     <Compile Include="IR\IntrinsicMethodCall.cs" />
@@ -228,7 +254,7 @@
     <Compile Include="Stages\BlockOrderingStage.cs" />
     <Compile Include="Stages\IROptimizationStage.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
-    <Compile Include="Stages\TypeInitializerSchedulerStage.cs" />
+    <Compile Include="CompilerStages\TypeInitializerSchedulerStage.cs" />
     <Compile Include="MosaTypeLayout.cs" />
     <Compile Include="Stages\UnboxValueTypeStage.cs" />
     <Compile Include="Stages\VirtualRegisterRenameStage.cs" />
@@ -257,16 +283,15 @@
     <Compile Include="BaseCompilerStage.cs" />
     <Compile Include="Platform\BasePlatformInstruction.cs" />
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
-    <Compile Include="Stages\PlugStage.cs" />
+    <Compile Include="CompilerStages\PlugStage.cs" />
     <Compile Include="Stages\CILProtectedRegionStage.cs" />
     <Compile Include="IR\ExceptionStart.cs" />
-    <Compile Include="Stages\MetadataStage.cs" />
+    <Compile Include="CompilerStages\MetadataStage.cs" />
     <Compile Include="Stages\EnterSSAStage.cs" />
     <Compile Include="InstructionLogger.cs" />
     <Compile Include="Stages\LeaveSSAStage.cs" />
     <Compile Include="Stages\OperandAssignmentStage.cs" />
     <Compile Include="CompilerOptions.cs" />
-    <Compile Include="Stages\PhiPlacementStage.cs" />
     <Compile Include="Stages\StaticAllocationResolutionStage.cs" />
     <Compile Include="IR\Throw.cs" />
     <Compile Include="Intrinsics\InternalAllocateString.cs" />
@@ -383,7 +408,7 @@
     <Compile Include="IR\BaseOneOperandInstruction.cs" />
     <Compile Include="IR\Phi.cs" />
     <Compile Include="IR\Prologue.cs" />
-    <Compile Include="IR\Return.cs" />
+    <Compile Include="IR\SetReturn.cs" />
     <Compile Include="IR\ShiftLeft.cs" />
     <Compile Include="IR\ShiftRight.cs" />
     <Compile Include="IR\MoveSignExtended.cs" />
@@ -415,9 +440,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ICompilerStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BaseCallingConvention.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CIL\IInstructionDecoder.cs">

@@ -6,14 +6,14 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	///
+	/// Basic Blocks
 	/// </summary>
 	public sealed class BasicBlocks : IEnumerable<BasicBlock>
 	{
 		#region Data members
 
 		/// <summary>
-		///
+		/// The basic blocks
 		/// </summary>
 		private readonly List<BasicBlock> basicBlocks = new List<BasicBlock>();
 
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework
 		private readonly Dictionary<int, BasicBlock> basicBlocksByLabel = new Dictionary<int, BasicBlock>();
 
 		/// <summary>
-		///
+		/// The head blocks
 		/// </summary>
 		private readonly List<BasicBlock> headBlocks = new List<BasicBlock>();
 
@@ -38,12 +38,12 @@ namespace Mosa.Compiler.Framework
 		private readonly List<BasicBlock> tryHeadBlocks = new List<BasicBlock>();
 
 		/// <summary>
-		///
+		/// The prologue block
 		/// </summary>
 		private BasicBlock prologueBlock = null;
 
 		/// <summary>
-		///
+		/// The epilogue block
 		/// </summary>
 		private BasicBlock epilogueBlock = null;
 
@@ -89,8 +89,13 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the <see cref="Mosa.Compiler.Framework.BasicBlock"/> at the specified index.
+		/// Gets the <see cref="Mosa.Compiler.Framework.BasicBlock" /> at the specified index.
 		/// </summary>
+		/// <value>
+		/// The <see cref="BasicBlock"/>.
+		/// </value>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
 		public BasicBlock this[int index]
 		{
 			get { return basicBlocks[index]; }
@@ -119,9 +124,7 @@ namespace Mosa.Compiler.Framework
 		{
 			get
 			{
-				if (prologueBlock == null)
-					prologueBlock = GetByLabel(BasicBlock.PrologueLabel);
-				return prologueBlock;
+				return prologueBlock ?? (prologueBlock = GetByLabel(BasicBlock.PrologueLabel));
 			}
 		}
 
@@ -132,9 +135,7 @@ namespace Mosa.Compiler.Framework
 		{
 			get
 			{
-				if (epilogueBlock == null)
-					epilogueBlock = GetByLabel(BasicBlock.EpilogueLabel);
-				return epilogueBlock;
+				return epilogueBlock ?? (epilogueBlock = GetByLabel(BasicBlock.EpilogueLabel));
 			}
 		}
 
@@ -177,11 +178,7 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public BasicBlock GetByLabel(int label)
 		{
-			BasicBlock basicBlock = null;
-			basicBlocksByLabel.TryGetValue(label, out basicBlock);
-
-			//Debug.Assert(label == BasicBlock.PrologueLabel || label == BasicBlock.EpilogueLabel || basicBlock != null);
-
+			basicBlocksByLabel.TryGetValue(label, out BasicBlock basicBlock);
 			return basicBlock;
 		}
 
@@ -285,10 +282,10 @@ namespace Mosa.Compiler.Framework
 
 		public List<BasicBlock> GetConnectedBlocksStartingAtHead(BasicBlock start)
 		{
-			List<BasicBlock> connected = new List<BasicBlock>();
-			BitArray visited = new BitArray(Count, false);
+			var connected = new List<BasicBlock>();
+			var visited = new BitArray(Count, false);
 
-			Stack<BasicBlock> stack = new Stack<BasicBlock>();
+			var stack = new Stack<BasicBlock>();
 			stack.Push(start);
 
 			while (stack.Count != 0)
@@ -300,8 +297,12 @@ namespace Mosa.Compiler.Framework
 					connected.Add(at);
 
 					foreach (BasicBlock next in at.NextBlocks)
+					{
 						if (!visited.Get(next.Sequence))
+						{
 							stack.Push(next);
+						}
+					}
 				}
 			}
 
@@ -310,9 +311,9 @@ namespace Mosa.Compiler.Framework
 
 		public BasicBlock GetExitBlock(BasicBlock start)
 		{
-			BitArray visited = new BitArray(Count, false);
+			var visited = new BitArray(Count, false);
 
-			Stack<BasicBlock> stack = new Stack<BasicBlock>();
+			var stack = new Stack<BasicBlock>();
 			stack.Push(start);
 
 			while (stack.Count != 0)
@@ -325,9 +326,13 @@ namespace Mosa.Compiler.Framework
 					if (at.NextBlocks.Count == 0)
 						return at;
 
-					foreach (BasicBlock next in at.NextBlocks)
+					foreach (var next in at.NextBlocks)
+					{
 						if (!visited.Get(next.Sequence))
+						{
 							stack.Push(next);
+						}
+					}
 				}
 			}
 
@@ -336,8 +341,8 @@ namespace Mosa.Compiler.Framework
 
 		public static List<BasicBlock> ReversePostorder(BasicBlock head)
 		{
-			List<BasicBlock> result = new List<BasicBlock>();
-			Queue<BasicBlock> workList = new Queue<BasicBlock>();
+			var result = new List<BasicBlock>();
+			var workList = new Queue<BasicBlock>();
 
 			// Add next block
 			workList.Enqueue(head);

@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				Debug.Assert(plugMethod != null);
 
-				var plugSymbol = Operand.CreateSymbolFromMethod(TypeSystem, plugMethod);
+				var plugSymbol = Operand.CreateSymbolFromMethod(plugMethod, TypeSystem);
 				var context = CreateNewBlockContext(-1);
 				context.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
 				BasicBlocks.AddHeadBlock(context.Block);
@@ -77,9 +77,11 @@ namespace Mosa.Compiler.Framework.Stages
 			var prologue = CreateNewBlock(BasicBlock.PrologueLabel);
 			BasicBlocks.AddHeadBlock(prologue);
 
-			var jmpNode = new InstructionNode();
-			jmpNode.Label = BasicBlock.PrologueLabel;
-			jmpNode.Block = prologue;
+			var jmpNode = new InstructionNode()
+			{
+				Label = BasicBlock.PrologueLabel,
+				Block = prologue
+			};
 			prologue.First.Insert(jmpNode);
 
 			// Create starting block
@@ -125,7 +127,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				UpdateCounter("CILDecodingStage.OpCode." + cil.InstructionName, count);
 
-				total = total + count;
+				total += count;
 			}
 
 			UpdateCounter("CILDecodingStage.CILInstructions", total);
@@ -205,17 +207,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 				var cil = CILInstruction.Get(op);
 
-				if (cil == null)
-				{
-					throw new InvalidMetadataException();
-				}
-
 				// Create and initialize the corresponding instruction
-				var node = new InstructionNode();
-				node.Label = instruction.Offset;
-				node.HasPrefix = prefix;
-				node.Instruction = cil;
-
+				var node = new InstructionNode()
+				{
+					Label = instruction.Offset,
+					HasPrefix = prefix,
+					Instruction = cil ?? throw new InvalidMetadataException()
+				};
 				block.BeforeLast.Insert(node);
 
 				cil.Decode(node, this);
@@ -223,7 +221,7 @@ namespace Mosa.Compiler.Framework.Stages
 				prefix = (cil is PrefixInstruction);
 				instructionCount++;
 
-				bool addjmp = false;
+				const bool addjmp = false;
 
 				var flow = node.Instruction.FlowControl;
 
@@ -235,8 +233,10 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var target = GetBlockByLabel(nextInstruction.Offset);
 
-						var jmpNode = new InstructionNode(IRInstruction.Jmp, target);
-						jmpNode.Label = instruction.Offset;
+						var jmpNode = new InstructionNode(IRInstruction.Jmp, target)
+						{
+							Label = instruction.Offset
+						};
 						block.BeforeLast.Insert(jmpNode);
 					}
 				}
@@ -245,12 +245,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private BasicBlock GetBlockByLabel(int label)
 		{
-			var block = BasicBlocks.GetByLabel(label);
-
-			if (block == null)
-			{
-				block = CreateNewBlock(label);
-			}
+			var block = BasicBlocks.GetByLabel(label) ?? CreateNewBlock(label);
 
 			return block;
 		}
@@ -263,7 +258,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Gets the compiler, that is currently executing.
 		/// </summary>
 		/// <value></value>
-		BaseMethodCompiler IInstructionDecoder.Compiler { get { return MethodCompiler; } }
+		BaseMethodCompiler IInstructionDecoder.MethodCompiler { get { return MethodCompiler; } }
 
 		/// <summary>
 		/// Gets the MosaMethod being compiled.
@@ -294,16 +289,16 @@ namespace Mosa.Compiler.Framework.Stages
 			return GetBlockByLabel(label);
 		}
 
-		Operand IInstructionDecoder.ConvertVirtualRegisterToStackLocal(Operand operand)
+		Operand IInstructionDecoder.ConvertVirtualRegisterToStackLocal(Operand virtualRegister)
 		{
-			if (operand.IsStackLocal)
-				return operand;
+			if (virtualRegister.IsStackLocal)
+				return virtualRegister;
 
 			int index = 0;
 
 			foreach (var op in MethodCompiler.LocalVariables)
 			{
-				if (op == operand)
+				if (op == virtualRegister)
 					break;
 
 				index++;
@@ -315,26 +310,26 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MethodCompiler.LocalVariables[index] = stackLocal;
 
-			foreach (var node in operand.Uses.ToArray())
+			foreach (var node in virtualRegister.Uses.ToArray())
 			{
 				for (int i = 0; i < node.OperandCount; i++)
 				{
 					var op = node.GetOperand(i);
 
-					if (operand == op)
+					if (virtualRegister == op)
 					{
 						node.SetOperand(i, stackLocal);
 					}
 				}
 			}
 
-			foreach (var node in operand.Definitions.ToArray())
+			foreach (var node in virtualRegister.Definitions.ToArray())
 			{
 				for (int i = 0; i < node.ResultCount; i++)
 				{
 					var op = node.GetResult(i);
 
-					if (operand == op)
+					if (virtualRegister == op)
 					{
 						node.SetResult(i, stackLocal);
 					}

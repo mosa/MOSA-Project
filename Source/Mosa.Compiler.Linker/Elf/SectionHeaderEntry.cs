@@ -5,7 +5,7 @@ using System.IO;
 namespace Mosa.Compiler.Linker.Elf
 {
 	/// <summary>
-	///
+	/// Section Header Entry
 	/// </summary>
 	public class SectionHeaderEntry
 	{
@@ -13,9 +13,9 @@ namespace Mosa.Compiler.Linker.Elf
 		/// This member holds a section header's size in bytes. A section header is one entry
 		/// in the section header table; all entries are the same size.
 		/// </summary>
-		public static readonly ushort EntrySize32 = 0x28;
+		public const ushort EntrySize32 = 0x28;
 
-		public static readonly ushort EntrySize64 = 0x40;
+		public const ushort EntrySize64 = 0x40;
 
 		/// <summary>
 		/// This member specifies the name of the section. Its value is an index into

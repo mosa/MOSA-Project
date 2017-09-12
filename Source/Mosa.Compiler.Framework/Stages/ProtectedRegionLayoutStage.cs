@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Framework.Stages
 					int end = codeEmitter.GetPosition(block.Label + 0x0F000000);
 
 					if (trace.Active)
-						trace.Log("   Block: " + block.ToString() + " [" + start.ToString() + "-" + end.ToString() + "]");
+						trace.Log("   Block: " + block + " [" + start.ToString() + "-" + end.ToString() + "]");
 
 					AddSection(sections, start, end);
 				}

@@ -5,8 +5,9 @@ using System;
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	///
+	/// Binary Comparison Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BinaryInstruction" />
 	public sealed class BinaryComparisonInstruction : BinaryInstruction
 	{
 		#region Construction
@@ -27,15 +28,15 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(InstructionNode ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			// Set the result
-			ctx.Result = decoder.Compiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4);
 		}
 
 		/// <summary>
@@ -43,16 +44,17 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="node">The context.</param>
 		/// <returns></returns>
+		/// <exception cref="InvalidOperationException">Invalid opcode.</exception>
 		protected override string GetModifier(InstructionNode node)
 		{
-			switch (((node.Instruction) as CIL.BaseCILInstruction).OpCode)
+			switch (((node.Instruction) as BaseCILInstruction).OpCode)
 			{
-				case OpCode.Ceq: return @"==";
-				case OpCode.Cgt: return @">";
-				case OpCode.Cgt_un: return @"> unordered";
-				case OpCode.Clt: return @"<";
-				case OpCode.Clt_un: return @"< unordered";
-				default: throw new InvalidOperationException(@"Invalid opcode.");
+				case OpCode.Ceq: return "==";
+				case OpCode.Cgt: return ">";
+				case OpCode.Cgt_un: return "> unordered";
+				case OpCode.Clt: return "<";
+				case OpCode.Clt_un: return "< unordered";
+				default: throw new InvalidOperationException("Invalid opcode.");
 			}
 		}
 
