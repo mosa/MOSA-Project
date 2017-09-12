@@ -203,5 +203,44 @@ namespace Mosa.Tool.Compiler
 		}
 
 		#endregion Private Methods
+
+		#region Internal Methods
+
+		/// <summary>
+		/// Selects the architecture.
+		/// </summary>
+		/// <param name="architecture">The architecture.</param>
+		/// <returns></returns>
+		private static BaseArchitecture SelectArchitecture(string architecture)
+		{
+			switch (architecture.ToLower())
+			{
+				case "x86": return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
+				default: throw new NotImplementCompilerException(string.Format("Unknown or unsupported Architecture {0}.", architecture));
+			}
+		}
+
+		private static Func<ICompilerStage> GetBootStageFactory(string format)
+		{
+			switch (format.ToLower())
+			{
+				case "multibootHeader-0.7":
+				case "mb0.7": return delegate { return new Mosa.Platform.x86.CompilerStages.Multiboot0695Stage(); };
+				default: throw new NotImplementCompilerException(string.Format("Unknown or unsupported boot format {0}.", format));
+			}
+		}
+
+		private static LinkerFormatType GetLinkerFactory(string format)
+		{
+			switch (format.ToLower())
+			{
+				case "elf": return LinkerFormatType.Elf32;
+				case "elf32": return LinkerFormatType.Elf32;
+				case "elf64": return LinkerFormatType.Elf64;
+				default: return LinkerFormatType.Elf32;
+			}
+		}
+
+		#endregion Internal Methods
 	}
 }

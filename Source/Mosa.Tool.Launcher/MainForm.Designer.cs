@@ -1319,6 +1319,7 @@
 			this.rtbCounters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+<<<<<<< HEAD
 			this.rtbCounters.Font = new System.Drawing.Font("Consolas", 8F);
 			this.rtbCounters.Location = new System.Drawing.Point(0, 0);
 			this.rtbCounters.Name = "rtbCounters";
@@ -1501,6 +1502,80 @@
 			this.panelAdditionalFiles.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.additionalFilesList)).EndInit();
 			this.ResumeLayout(false);
+=======
+            this.rtbCounters.Font = new System.Drawing.Font("Consolas", 8F);
+            this.rtbCounters.Location = new System.Drawing.Point(0, 0);
+            this.rtbCounters.Name = "rtbCounters";
+            this.rtbCounters.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
+            this.rtbCounters.Size = new System.Drawing.Size(653, 411);
+            this.rtbCounters.TabIndex = 1;
+            this.rtbCounters.Text = "";
+            this.rtbCounters.WordWrap = false;
+            // 
+            // openFileDialog2
+            // 
+            this.openFileDialog2.DefaultExt = "*.exe";
+            this.openFileDialog2.Filter = "Executable|*.exe";
+            this.openFileDialog2.Title = "Select Assembly";
+            // 
+            // MainForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(659, 524);
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.tbApplicationLocations);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "MainForm";
+            this.Resizable = false;
+            this.ShadowType = MetroFramework.Forms.MetroFormShadowType.AeroShadow;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.Text = "MOSA Launcher v1.7.2";
+            this.Theme = MetroFramework.MetroThemeStyle.Dark;
+            this.Load += new System.EventHandler(this.MainForm_Load);
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
+            this.tbApplicationLocations.ResumeLayout(false);
+            this.tabOptions.ResumeLayout(false);
+            this.tabOptions.PerformLayout();
+            this.groupBox12.ResumeLayout(false);
+            this.groupBox12.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nmMemory)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.tabAdvanced.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox5.PerformLayout();
+            this.groupBox15.ResumeLayout(false);
+            this.groupBox15.PerformLayout();
+            this.groupBox14.ResumeLayout(false);
+            this.groupBox14.PerformLayout();
+            this.groupBox13.ResumeLayout(false);
+            this.groupBox13.PerformLayout();
+            this.tabApplicationLocations.ResumeLayout(false);
+            this.groupBox11.ResumeLayout(false);
+            this.groupBox11.PerformLayout();
+            this.groupBox10.ResumeLayout(false);
+            this.groupBox10.PerformLayout();
+            this.groupBox9.ResumeLayout(false);
+            this.groupBox9.PerformLayout();
+            this.groupBox8.ResumeLayout(false);
+            this.groupBox8.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            this.tabOutput.ResumeLayout(false);
+            this.tabCounters.ResumeLayout(false);
+            this.ResumeLayout(false);
+>>>>>>> 6571c9c8bfb5cd7450d6bea665dcd5d305729f6d
 
 		}
 

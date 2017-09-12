@@ -129,6 +129,12 @@ namespace Mosa.Utility.Launcher
 			set { EnableInlinedMethods = false; }
 		}
 
+		[Option("ir-long-operand", Default = false)]
+		public bool EnableIRLongOperand { get; set; }
+
+		[Option("two-pass-optimizationf", Default = false)]
+		public bool TwoPassOptimization { get; set; }
+
 		public int InlinedIRMaximum { get; set; }
 
 		[Option("inline-level", Default = "8")]
