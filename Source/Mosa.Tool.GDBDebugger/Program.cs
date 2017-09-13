@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using CommandLine;
 using System;
 using System.Windows.Forms;
 
@@ -18,7 +19,7 @@ namespace Mosa.Tool.GDBDebugger
 
 			var main = new MainForm();
 
-			main.Options.LoadArguments(args);
+			main.LoadArguments(args);
 
 			Application.Run(main);
 		}

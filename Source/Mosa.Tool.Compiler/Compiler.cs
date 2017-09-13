@@ -1,11 +1,11 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using CommandLine;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Trace.BuiltIn;
 using Mosa.Utility.Aot;
-using NDesk.Options;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -23,19 +23,9 @@ namespace Mosa.Tool.Compiler
 		protected MosaCompiler compiler = new MosaCompiler();
 
 		/// <summary>
-		/// Holds a list of input files.
+		/// Holds a reference to the Options parsed from the arguments.
 		/// </summary>
-		private List<FileInfo> inputFiles;
-
-		/// <summary>
-		/// Determines if the file is executable.
-		/// </summary>
-		private bool isExecutable;
-
-		/// <summary>
-		/// Holds a reference to the OptionSet used for option parsing.
-		/// </summary>
-		private OptionSet optionSet;
+		private Options options;
 
 		private readonly int majorVersion = 1;
 		private readonly int minorVersion = 4;
@@ -58,173 +48,6 @@ namespace Mosa.Tool.Compiler
 			compiler.CompilerFactory = delegate { return new AotCompiler(); };
 
 			usageString = "Usage: mosacl -o outputfile --Architecture=[x86|x64|ARMv6] --format=[ELF32|ELF64] {--boot=[mb0.7]} {additional options} inputfiles";
-			optionSet = new OptionSet();
-			inputFiles = new List<FileInfo>();
-
-			#region Setup general options
-
-			optionSet.Add(
-				"local|version",
-				"Display version information.",
-				delegate (string v)
-				{
-					if (v != null)
-					{
-						// only show header and exit
-						Environment.Exit(0);
-					}
-				});
-
-			optionSet.Add(
-				"h|?|help",
-				"Display the full set of available options.",
-				delegate (string v)
-				{
-					if (v != null)
-					{
-						ShowHelp();
-						Environment.Exit(0);
-					}
-				});
-
-			// default option handler for input files
-			optionSet.Add(
-				"<>",
-				"Input files.",
-				delegate (string v)
-				{
-					if (!File.Exists(v))
-					{
-						throw new OptionException(string.Format("Input file or option '{0}' doesn't exist.", v), string.Empty);
-					}
-
-					FileInfo file = new FileInfo(v);
-					if (file.Extension.ToLower() == ".exe")
-					{
-						if (isExecutable)
-						{
-							// there are more than one exe files in the list
-							throw new OptionException("Multiple executables aren't allowed.", string.Empty);
-						}
-
-						isExecutable = true;
-					}
-
-					inputFiles.Add(file);
-				});
-
-			#endregion Setup general options
-
-			#region Setup options
-
-			optionSet.Add(
-				"b|boot=",
-				"Specify the bootable format of the produced binary [{mb0.7}].",
-				delegate (string format)
-				{
-					compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(format);
-				}
-			);
-
-			optionSet.Add(
-				"a|Architecture=",
-				"Select one of the MOSA architectures to compile for [{x86|x64|ARMv6}].",
-				delegate (string arch)
-				{
-					compiler.CompilerOptions.Architecture = SelectArchitecture(arch);
-				}
-			);
-
-			optionSet.Add(
-				"f|format=",
-				"Select the format of the binary file to create [{ELF32|ELF64}].",
-				delegate (string format)
-				{
-					compiler.CompilerOptions.LinkerFormatType = GetLinkerFactory(format);
-				}
-			);
-
-			optionSet.Add(
-				"o|out=",
-				"The name of the output {file}.",
-				delegate (string file)
-				{
-					compiler.CompilerOptions.OutputFile = file;
-				}
-			);
-
-			optionSet.Add(
-				"map=",
-				"Generate a map {file} of the produced binary.",
-				delegate (string file)
-				{
-					compiler.CompilerOptions.MapFile = file;
-				}
-			);
-
-			optionSet.Add(
-				"debug-info=",
-				"Generate a debug info {file} of the produced binary.",
-				delegate (string file)
-				{
-					compiler.CompilerOptions.DebugFile = file;
-				}
-			);
-
-			optionSet.Add(
-				@"sa|enable-static-alloc",
-				@"Performs static allocations at compile time.",
-				enable => compiler.CompilerOptions.EnableStaticAllocations = enable != null
-			);
-
-			optionSet.Add(
-				@"ssa|enable-single-static-assignment-form",
-				@"Performs single static assignments at compile time.",
-				enable => compiler.CompilerOptions.EnableSSA = enable != null
-			);
-
-			optionSet.Add(
-				@"optimize-ir|enable-ir-optimizations",
-				@"Performs single static assignments optimizations.",
-				enable => compiler.CompilerOptions.EnableIROptimizations = enable != null
-			);
-
-			optionSet.Add(
-				@"emit-symbols",
-				@"Emits the Symbol Table.",
-				enable => compiler.CompilerOptions.EmitSymbols = enable != null
-			);
-
-			optionSet.Add(
-				@"emit-relocations",
-				@"Emits the Relocation Table.",
-				enable => compiler.CompilerOptions.EmitRelocations = enable != null
-			);
-
-			optionSet.Add(
-				@"x86-irq-methods",
-				@"Emits x86 interrupt methods.",
-				enable => compiler.CompilerOptions.SetCustomOption("x86.irq-methods", enable != null ? "true" : "false")
-			);
-
-			optionSet.Add(
-				"base-address=",
-				"Specify the {base address}.",
-				delegate (string v)
-				{
-					uint val;
-					if (uint.TryParse(v, out val))
-					{
-						compiler.CompilerOptions.BaseAddress = val;
-					}
-					else
-					{
-						throw new OptionException("Invalid value for base address: " + v, "base-address");
-					}
-				}
-			);
-
-			#endregion Setup options
 		}
 
 		#endregion Constructors
@@ -240,30 +63,30 @@ namespace Mosa.Tool.Compiler
 			// always print header with version information
 			Console.WriteLine("MOSA AOT Compiler, Version {0}.{1} '{2}'", majorVersion, minorVersion, codeName);
 			Console.WriteLine("Copyright 2015 by the MOSA Project. Licensed under the New BSD License.");
-			Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
+			//Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
 			Console.WriteLine();
 			Console.WriteLine("Parsing options...");
 
 			try
 			{
-				if (args == null || args.Length == 0)
+				options = ParseOptions(args);
+				if(options == null)
 				{
-					// no arguments are specified
 					ShowShortHelp();
 					return;
 				}
 
-				optionSet.Parse(args);
-
-				if (inputFiles.Count == 0)
+				if (options.InputFiles.Count == 0)
 				{
-					throw new OptionException("No input file(s) specified.", string.Empty);
+					throw new Exception("No input file(s) specified.");
 				}
+
+				compiler.CompilerOptions = options.CompilerOptions;
 
 				// Process boot format:
 				// Boot format only matters if it's an executable
 				// Process this only now, because input files must be known
-				if (!isExecutable && compiler.CompilerOptions.BootStageFactory != null)
+				if (!options.IsInputExecutable && compiler.CompilerOptions.BootStageFactory != null)
 				{
 					Console.WriteLine("Warning: Ignoring boot format, because target is not an executable.");
 					Console.WriteLine();
@@ -271,15 +94,15 @@ namespace Mosa.Tool.Compiler
 
 				if (string.IsNullOrEmpty(compiler.CompilerOptions.OutputFile))
 				{
-					throw new OptionException("No output file specified.", "o");
+					throw new Exception("No output file specified.");
 				}
 
 				if (compiler.CompilerOptions.Architecture == null)
 				{
-					throw new OptionException("No Architecture specified.", "Architecture");
+					throw new Exception("No Architecture specified.");
 				}
 			}
-			catch (OptionException e)
+			catch (Exception e)
 			{
 				ShowError(e.Message);
 				return;
@@ -307,6 +130,18 @@ namespace Mosa.Tool.Compiler
 			Console.WriteLine("Compilation time: " + time);
 		}
 
+		private static Options ParseOptions(string[] args)
+		{
+			ParserResult<Options> result = new Parser(config => config.HelpWriter = Console.Out).ParseArguments<Options>(args);
+
+			if (result.Tag == ParserResultType.NotParsed)
+			{
+				return null;
+			}
+
+			return ((Parsed<Options>)result).Value;
+		}
+
 		/// <summary>
 		/// Returns a string representation of the current options.
 		/// </summary>
@@ -319,7 +154,7 @@ namespace Mosa.Tool.Compiler
 			sb.Append(" > Architecture: ").AppendLine(compiler.CompilerOptions.Architecture.GetType().FullName);
 			sb.Append(" > Binary format: ").AppendLine(compiler.CompilerOptions.LinkerFormatType.ToString());
 			sb.Append(" > Boot format: ").AppendLine((compiler.CompilerOptions.BootStageFactory == null) ? "None" : compiler.CompilerOptions.BootStageFactory().Name);
-			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
+			sb.Append(" > Is executable: ").AppendLine(options.IsInputExecutable.ToString());
 			return sb.ToString();
 		}
 
@@ -330,7 +165,7 @@ namespace Mosa.Tool.Compiler
 		private void Compile()
 		{
 			compiler.CompilerTrace.TraceListener = new ConsoleEventListener();
-			compiler.Load(inputFiles);
+			compiler.Load(options.InputFiles);
 			compiler.Execute(Environment.ProcessorCount);
 		}
 
@@ -339,7 +174,7 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		private IEnumerable<string> GetInputFileNames()
 		{
-			foreach (FileInfo file in inputFiles)
+			foreach (FileInfo file in options.InputFiles)
 				yield return file.FullName;
 		}
 
@@ -366,17 +201,6 @@ namespace Mosa.Tool.Compiler
 			Console.WriteLine(usageString);
 			Console.WriteLine();
 			Console.WriteLine("Execute 'mosacl --help' for more information.");
-		}
-
-		/// <summary>
-		/// Shows the full help containing descriptions for all possible options.
-		/// </summary>
-		private void ShowHelp()
-		{
-			Console.WriteLine(usageString);
-			Console.WriteLine();
-			Console.WriteLine("Options:");
-			optionSet.WriteOptionDescriptions(Console.Out);
 		}
 
 		#endregion Private Methods

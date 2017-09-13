@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using CommandLine;
 using MetroFramework.Forms;
 using Mosa.Compiler.Common;
 using Mosa.Utility.BootImage;
@@ -17,7 +18,7 @@ namespace Mosa.Tool.Launcher
 
 		public Starter Starter { get; private set; }
 
-		public Options Options { get; private set; }
+		public Options Options { get; set; }
 
 		public AppLocations AppLocations { get; set; }
 
@@ -339,6 +340,11 @@ namespace Mosa.Tool.Launcher
 		private void MainForm_Load(object sender, EventArgs e)
 		{
 			tbApplicationLocations.SelectedTab = tabOptions;
+
+			foreach(IncludeFile file in Options.IncludeFiles)
+			{
+				AddAdditionalFile(file);
+			}
 		}
 
 		private void btnDestination_Click(object sender, EventArgs e)
@@ -470,6 +476,64 @@ namespace Mosa.Tool.Launcher
 			{
 				tbMode.Enabled = false;
 			}
+		}
+
+		private void AddAdditionalFile(IncludeFile file)
+		{
+			int idx = additionalFilesList.Rows.Add(file.Filename, file.Content.Length.ToString());
+
+			additionalFilesList.Rows[idx].Tag = file;
+		}
+
+		private void btnAddFiles_Click(object sender, EventArgs e)
+		{
+			using (OpenFileDialog open = new OpenFileDialog())
+			{
+				open.Multiselect = true;
+				open.Filter = "All files (*.*)|*.*";
+
+				if (open.ShowDialog(this) == DialogResult.OK)
+				{
+					foreach (string file in open.FileNames)
+					{
+						IncludeFile includeFile = new IncludeFile(file, Path.GetFileName(file));
+
+						Options.IncludeFiles.Add(includeFile);
+
+						AddAdditionalFile(includeFile);
+					}
+				}
+			}
+		}
+
+		private void benRemoveFiles_Click(object sender, EventArgs e)
+		{
+			if (additionalFilesList.SelectedRows.Count == 0)
+				return;
+
+			foreach (DataGridViewRow item in additionalFilesList.SelectedRows)
+			{
+				Options.IncludeFiles.Remove((IncludeFile)item.Tag);
+
+				additionalFilesList.Rows.RemoveAt(item.Index);
+			}
+		}
+
+		public void LoadArguments(string[] args)
+		{
+			Options = ParseOptions(args);
+		}
+
+		private static Options ParseOptions(string[] args)
+		{
+			ParserResult<Options> result = new Parser(config => config.HelpWriter = Console.Out).ParseArguments<Options>(args);
+
+			if (result.Tag == ParserResultType.NotParsed)
+			{
+				return new Options();
+			}
+
+			return ((Parsed<Options>)result).Value;
 		}
 	}
 }

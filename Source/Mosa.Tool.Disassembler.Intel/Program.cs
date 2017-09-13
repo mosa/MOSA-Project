@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using CommandLine;
 using SharpDisasm;
 using SharpDisasm.Translators;
 using System;
@@ -17,17 +18,13 @@ namespace Mosa.Tool.Disassembler.Intel
 			Console.WriteLine("Written by Phil Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
 
-			if (args.Length < 2)
-			{
-				Console.WriteLine("Usage: Disassembler -offset <offset> -address <address> -o <output file> <source file>");
-				Console.Error.WriteLine("ERROR: Missing arguments");
-				return -1;
-			}
-
 			try
 			{
-				var options = new Options();
-				options.LoadArguments(args);
+				var options = ParseOptions(args);
+				if(options == null)
+				{
+					return -1; //Commandline errors will be printed by the commandline lib
+				}
 
 				// Need a new instance of translator every time as they aren't thread safe
 				var translator = new IntelTranslator()
@@ -69,6 +66,18 @@ namespace Mosa.Tool.Disassembler.Intel
 				Console.Error.WriteLine("Exception: {0}", e.ToString());
 				return -1;
 			}
+		}
+
+		private static Options ParseOptions(string[] args)
+		{
+			ParserResult<Options> result = new Parser(config => config.HelpWriter = Console.Out).ParseArguments<Options>(args);
+
+			if (result.Tag == ParserResultType.NotParsed)
+			{
+				return null;
+			}
+
+			return ((Parsed<Options>)result).Value;
 		}
 	}
 }
