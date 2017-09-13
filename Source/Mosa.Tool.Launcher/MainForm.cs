@@ -521,19 +521,12 @@ namespace Mosa.Tool.Launcher
 
 		public void LoadArguments(string[] args)
 		{
-			Options = ParseOptions(args);
-		}
+			Parser cliParser = new Parser(config => config.HelpWriter = Console.Out);
 
-		private static Options ParseOptions(string[] args)
-		{
-			ParserResult<Options> result = new Parser(config => config.HelpWriter = Console.Out).ParseArguments<Options>(args);
-
-			if (result.Tag == ParserResultType.NotParsed)
+			cliParser.ParseArguments<Options>(() => 
 			{
-				return new Options();
-			}
-
-			return ((Parsed<Options>)result).Value;
+				return Options;
+			}, args);
 		}
 	}
 }
