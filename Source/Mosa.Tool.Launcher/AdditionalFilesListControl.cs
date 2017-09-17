@@ -1,4 +1,6 @@
-﻿using MetroFramework.Controls;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using MetroFramework.Controls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,7 +10,7 @@ using System.Windows.Forms;
 namespace Mosa.Tool.Launcher
 {
 	//Some code is from: https://www.codeproject.com/Articles/6646/In-place-editing-of-ListView-subitems
-	class AdditionalFilesListControl : MetroListView
+	internal class AdditionalFilesListControl : MetroListView
 	{
 		private struct NMHDR
 		{
@@ -21,7 +23,7 @@ namespace Mosa.Tool.Launcher
 		private ListViewItem.ListViewSubItem _selectedSubItem;
 		private int _selectedColumn;
 
-		private TextBox _editingControl;
+		private readonly TextBox _editingControl;
 
 		private const int WM_HSCROLL = 0x114;
 		private const int WM_VSCROLL = 0x115;
@@ -78,12 +80,16 @@ namespace Mosa.Tool.Launcher
 				case WM_SIZE:
 					HideItemEditor(false);
 					break;
+
 				case WM_NOTIFY:
 					NMHDR h = (NMHDR)Marshal.PtrToStructure(msg.LParam, typeof(NMHDR));
-					if (h.code == HDN_BEGINDRAG ||
-						h.code == HDN_ITEMCHANGINGA ||
-						h.code == HDN_ITEMCHANGINGW)
+					if (h.code == HDN_BEGINDRAG
+						|| h.code == HDN_ITEMCHANGINGA
+						|| h.code == HDN_ITEMCHANGINGW)
+					{
 						HideItemEditor(false);
+					}
+
 					break;
 			}
 

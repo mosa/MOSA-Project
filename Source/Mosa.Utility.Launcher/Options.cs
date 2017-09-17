@@ -335,7 +335,7 @@ namespace Mosa.Utility.Launcher
 		{
 			set
 			{
-				if(!File.Exists(value))
+				if (!File.Exists(value))
 				{
 					Console.WriteLine("File doesn't exist \"" + value + "\"");
 					return;
@@ -346,10 +346,14 @@ namespace Mosa.Utility.Launcher
 		}
 
 		private string _sourceFile;
+
 		[Value(0)]
 		public string SourceFile
 		{
-			get { return _sourceFile; }
+			get
+			{
+				return _sourceFile;
+			}
 			set
 			{
 				if (value.IndexOf(Path.DirectorySeparatorChar) >= 0)
@@ -380,9 +384,9 @@ namespace Mosa.Utility.Launcher
 		private void AppendIncludeFiles(string file)
 		{
 			string line;
-			using (StreamReader reader = new StreamReader(file))
+			using (var reader = new StreamReader(file))
 			{
-				while(!reader.EndOfStream)
+				while (!reader.EndOfStream)
 				{
 					line = reader.ReadLine();
 
