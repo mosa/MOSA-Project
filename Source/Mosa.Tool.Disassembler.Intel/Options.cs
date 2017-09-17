@@ -1,43 +1,41 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using CommandLine;
 using Mosa.Compiler.Common;
-using System.IO;
 
 namespace Mosa.Tool.Disassembler.Intel
 {
 	public class Options
 	{
+		[Value(0, Required = true, Hidden = true)]
 		public string InputFile { get; set; }
-		public string OutputFile { get; set; }
-		public ulong FileOffset { get; set; }
-		public ulong Length { get; set; }
-		public ulong StartingAddress { get; set; }
 
-		public Options()
+		[Option('o', "output", Required = true)]
+		public string OutputFile { get; set; }
+
+		[Option('f', "offset", Default = "0", Required = true)]
+		public string FileOffsetString { get; set; }
+
+		[Option('l', "len", Required = true)]
+		public string LengthString { get; set; }
+
+		[Option('a', "address", Default = "0", Required = true)]
+		public string StartingAddressString { get; set; }
+
+		//TODO: Better way of parsing these?
+		public ulong FileOffset
 		{
-			FileOffset = 0;
-			StartingAddress = 0;
+			get { return FileOffsetString.ParseHexOrDecimal(); }
 		}
 
-		public void LoadArguments(string[] args)
+		public ulong Length
 		{
-			for (int i = 0; i < args.Length; i++)
-			{
-				var arg = args[i];
+			get { return LengthString.ParseHexOrDecimal(); }
+		}
 
-				switch (arg.ToLower())
-				{
-					case "-offset": FileOffset = args[++i].ParseHexOrDecimal(); continue;
-					case "-address": StartingAddress = args[++i].ParseHexOrDecimal(); continue;
-					case "-len": Length = args[++i].ParseHexOrDecimal(); continue;
-					case "-o": OutputFile = args[++i].Trim(); continue;
-					case "-output": OutputFile = args[++i].Trim(); continue;
-
-					default: break;
-				}
-
-				InputFile = Path.Combine(Directory.GetCurrentDirectory(), arg);
-			}
+		public ulong StartingAddress
+		{
+			get { return StartingAddressString.ParseHexOrDecimal(); }
 		}
 	}
 }

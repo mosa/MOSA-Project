@@ -90,11 +90,10 @@ namespace Mosa.UnitTest.Engine
 				DebugConnectionPort = 9999,
 				DebugPipeName = "MOSA",
 				ExitOnLaunch = true,
-				GenerateNASMFile = true,
-				GenerateASMFile = true,
-				GenerateMapFile = true,
+				GenerateNASMFile = false,
+				GenerateASMFile = false,
+				GenerateMapFile = false,
 				GenerateDebugFile = false,
-
 				EnableIRLongOperand = true
 
 				//BootLoaderImage = @"..\Tests\BootImage\Mosa.BootLoader.x86.img"

@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using CommandLine;
 using Mosa.Tool.GDBDebugger.DebugData;
 using Mosa.Tool.GDBDebugger.GDB;
 using Mosa.Tool.GDBDebugger.View;
@@ -411,6 +412,16 @@ namespace Mosa.Tool.GDBDebugger
 			var watch = (sender as Menu).Tag as Watch;
 
 			RemoveWatch(watch);
+		}
+
+		public void LoadArguments(string[] args)
+		{
+			Parser cliParser = new Parser(config => config.HelpWriter = Console.Out);
+
+			cliParser.ParseArguments<Options>(() =>
+			{
+				return Options;
+			}, args);
 		}
 	}
 }
