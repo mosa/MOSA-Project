@@ -14,7 +14,7 @@ namespace Mosa.Tool.Launcher
 {
 	public partial class MainForm : MetroForm, IBuilderEvent, IStarterEvent
 	{
-		public Builder Builder { get; private set; }
+		public Builder Builder { get; }
 
 		public Starter Starter { get; private set; }
 
@@ -70,7 +70,7 @@ namespace Mosa.Tool.Launcher
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
 
-			if(Options.LaunchMosaDebugger)
+			if (Options.LaunchMosaDebugger)
 			{
 				Options.GenerateDebugFile = true;
 			}
@@ -103,7 +103,7 @@ namespace Mosa.Tool.Launcher
 				}
 				else
 				{
-					throw new Exception("An error occured while parsing VBE Mode: " + "There wasn't 3 arguments");
+					throw new Exception("An error occured while parsing VBE Mode: There wasn't 3 arguments");
 				}
 			}
 
@@ -264,20 +264,14 @@ namespace Mosa.Tool.Launcher
 
 		void IBuilderEvent.NewStatus(string status)
 		{
-			MethodInvoker method = delegate ()
-			{
-				NewStatus(status);
-			};
+			MethodInvoker method = () => NewStatus(status);
 
 			Invoke(method);
 		}
 
 		void IStarterEvent.NewStatus(string status)
 		{
-			MethodInvoker method = delegate ()
-			{
-				NewStatus(status);
-			};
+			MethodInvoker method = () => NewStatus(status);
 
 			Invoke(method);
 		}
@@ -290,10 +284,7 @@ namespace Mosa.Tool.Launcher
 
 		void IBuilderEvent.UpdateProgress(int total, int at)
 		{
-			MethodInvoker method = delegate ()
-			{
-				UpdateProgress(total, at);
-			};
+			MethodInvoker method = () => UpdateProgress(total, at);
 
 			Invoke(method);
 		}
@@ -326,7 +317,7 @@ namespace Mosa.Tool.Launcher
 			rtbCounters.Update();
 		}
 
-		private void btnSource_Click(object sender, EventArgs e)
+		private void BtnSource_Click(object sender, EventArgs e)
 		{
 			if (openFileDialog1.ShowDialog() == DialogResult.OK)
 			{
@@ -341,13 +332,13 @@ namespace Mosa.Tool.Launcher
 		{
 			tbApplicationLocations.SelectedTab = tabOptions;
 
-			foreach(IncludeFile file in Options.IncludeFiles)
+			foreach (IncludeFile file in Options.IncludeFiles)
 			{
 				AddAdditionalFile(file);
 			}
 		}
 
-		private void btnDestination_Click(object sender, EventArgs e)
+		private void BtnDestination_Click(object sender, EventArgs e)
 		{
 			if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
 			{
@@ -409,20 +400,14 @@ namespace Mosa.Tool.Launcher
 
 		private void OnException(string data)
 		{
-			MethodInvoker method = delegate ()
-			{
-				AddOutput(data);
-			};
+			MethodInvoker method = () => AddOutput(data);
 
 			Invoke(method);
 		}
 
 		private void OnCompileCompleted()
 		{
-			MethodInvoker method = delegate ()
-			{
-				CompileCompleted();
-			};
+			MethodInvoker method = CompileCompleted;
 
 			Invoke(method);
 		}
@@ -437,7 +422,7 @@ namespace Mosa.Tool.Launcher
 			if (CheckKeyPressed())
 				return;
 
-			string imageFile = Options.BootLoaderImage != null ? Options.BootLoaderImage : Builder.ImageFile;
+			string imageFile = Options.BootLoaderImage ?? Builder.ImageFile;
 
 			Starter = new Starter(Options, AppLocations, imageFile, this, Builder.Linker);
 
@@ -449,7 +434,7 @@ namespace Mosa.Tool.Launcher
 			return ((ModifierKeys & Keys.Shift) != 0) || ((ModifierKeys & Keys.Control) != 0);
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		private void Btn1_Click(object sender, EventArgs e)
 		{
 			UpdateBuilderOptions();
 
@@ -466,16 +451,9 @@ namespace Mosa.Tool.Launcher
 			}
 		}
 
-		private void cbVBEVideo_CheckedChanged(object sender, EventArgs e)
+		private void CbVBEVideo_CheckedChanged(object sender, EventArgs e)
 		{
-			if (cbVBEVideo.Checked)
-			{
-				tbMode.Enabled = true;
-			}
-			else
-			{
-				tbMode.Enabled = false;
-			}
+			tbMode.Enabled = cbVBEVideo.Checked;
 		}
 
 		private void AddAdditionalFile(IncludeFile file)
@@ -485,18 +463,18 @@ namespace Mosa.Tool.Launcher
 			additionalFilesList.Rows[idx].Tag = file;
 		}
 
-		private void btnAddFiles_Click(object sender, EventArgs e)
+		private void BtnAddFiles_Click(object sender, EventArgs e)
 		{
-			using (OpenFileDialog open = new OpenFileDialog())
+			using (var open = new OpenFileDialog())
 			{
 				open.Multiselect = true;
 				open.Filter = "All files (*.*)|*.*";
 
 				if (open.ShowDialog(this) == DialogResult.OK)
 				{
-					foreach (string file in open.FileNames)
+					foreach (var file in open.FileNames)
 					{
-						IncludeFile includeFile = new IncludeFile(file, Path.GetFileName(file));
+						var includeFile = new IncludeFile(file, Path.GetFileName(file));
 
 						Options.IncludeFiles.Add(includeFile);
 
@@ -506,7 +484,7 @@ namespace Mosa.Tool.Launcher
 			}
 		}
 
-		private void benRemoveFiles_Click(object sender, EventArgs e)
+		private void BtnRemoveFiles_Click(object sender, EventArgs e)
 		{
 			if (additionalFilesList.SelectedRows.Count == 0)
 				return;
@@ -521,12 +499,9 @@ namespace Mosa.Tool.Launcher
 
 		public void LoadArguments(string[] args)
 		{
-			Parser cliParser = new Parser(config => config.HelpWriter = Console.Out);
+			var cliParser = new Parser(config => config.HelpWriter = Console.Out);
 
-			cliParser.ParseArguments<Options>(() => 
-			{
-				return Options;
-			}, args);
+			cliParser.ParseArguments(() => Options, args);
 		}
 	}
 }
