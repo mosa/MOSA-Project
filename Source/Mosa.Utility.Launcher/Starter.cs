@@ -11,11 +11,11 @@ namespace Mosa.Utility.Launcher
 {
 	public class Starter : BaseLauncher
 	{
-		public IStarterEvent LauncherEvent { get; private set; }
+		public IStarterEvent LauncherEvent { get; }
 
-		public string ImageFile { get; private set; }
+		public string ImageFile { get; }
 
-		public BaseLinker Linker { get; private set; }
+		public BaseLinker Linker { get; }
 
 		public Starter(Options options, AppLocations appLocations, string imagefile, IStarterEvent launcherEvent)
 			: base(options, appLocations)
@@ -34,8 +34,7 @@ namespace Mosa.Utility.Launcher
 
 		protected override void OutputEvent(string status)
 		{
-			if (LauncherEvent != null)
-				LauncherEvent.NewStatus(status);
+			LauncherEvent?.NewStatus(status);
 		}
 
 		public Process Launch()
@@ -76,7 +75,7 @@ namespace Mosa.Utility.Launcher
 
 			if (Options.PlatformType == PlatformType.X86)
 			{
-				arg = arg + " -cpu qemu32,+sse4.1";
+				arg += " -cpu qemu32,+sse4.1";
 			}
 
 			//arg = arg + " -vga vmware";
@@ -96,7 +95,7 @@ namespace Mosa.Utility.Launcher
 
 			if (Options.EnableQemuGDB)
 			{
-				arg = arg + " -S -gdb tcp::1234";
+				arg += " -S -gdb tcp::1234";
 			}
 
 			if (Options.ImageFormat == ImageFormat.ISO)
@@ -149,7 +148,7 @@ namespace Mosa.Utility.Launcher
 				sb.AppendLine(@"com1: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA");
 			}
 
-			string arg = "-q " + "-f " + Quote(configfile);
+			string arg = "-q -f " + Quote(configfile);
 
 			File.WriteAllText(configfile, sb.ToString());
 
@@ -218,7 +217,7 @@ namespace Mosa.Utility.Launcher
 
 			var textSection = Linker.LinkerSections[(int)SectionKind.Text];
 
-			uint multibootHeaderLength = Builder.MultibootHeaderLength;
+			const uint multibootHeaderLength = Builder.MultibootHeaderLength;
 			ulong startingAddress = textSection.VirtualAddress + multibootHeaderLength;
 
 			var sb = new StringBuilder();

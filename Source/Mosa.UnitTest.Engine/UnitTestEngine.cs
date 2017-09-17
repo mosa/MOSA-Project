@@ -88,6 +88,7 @@ namespace Mosa.UnitTest.Engine
 				Emitx86IRQMethods = true,
 				DebugConnectionOption = DebugConnectionOption.TCPServer,
 				DebugConnectionPort = 9999,
+				DebugConnectionAddress = "127.0.0.1",
 				DebugPipeName = "MOSA",
 				ExitOnLaunch = true,
 				GenerateNASMFile = false,
