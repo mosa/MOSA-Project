@@ -14,7 +14,7 @@ namespace Mosa.Tool.Launcher
 {
 	public partial class MainForm : MetroForm, IBuilderEvent, IStarterEvent
 	{
-		public Builder Builder { get; }
+		public Builder Builder { get; private set; }
 
 		public Starter Starter { get; private set; }
 
@@ -70,7 +70,7 @@ namespace Mosa.Tool.Launcher
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
 
-			if (Options.LaunchMosaDebugger)
+			if(Options.LaunchMosaDebugger)
 			{
 				Options.GenerateDebugFile = true;
 			}
@@ -103,7 +103,7 @@ namespace Mosa.Tool.Launcher
 				}
 				else
 				{
-					throw new Exception("An error occured while parsing VBE Mode: There wasn't 3 arguments");
+					throw new Exception("An error occured while parsing VBE Mode: " + "There wasn't 3 arguments");
 				}
 			}
 
@@ -264,14 +264,20 @@ namespace Mosa.Tool.Launcher
 
 		void IBuilderEvent.NewStatus(string status)
 		{
-			MethodInvoker method = () => NewStatus(status);
+			MethodInvoker method = delegate ()
+			{
+				NewStatus(status);
+			};
 
 			Invoke(method);
 		}
 
 		void IStarterEvent.NewStatus(string status)
 		{
-			MethodInvoker method = () => NewStatus(status);
+			MethodInvoker method = delegate ()
+			{
+				NewStatus(status);
+			};
 
 			Invoke(method);
 		}
@@ -284,7 +290,10 @@ namespace Mosa.Tool.Launcher
 
 		void IBuilderEvent.UpdateProgress(int total, int at)
 		{
-			MethodInvoker method = () => UpdateProgress(total, at);
+			MethodInvoker method = delegate ()
+			{
+				UpdateProgress(total, at);
+			};
 
 			Invoke(method);
 		}
@@ -332,7 +341,7 @@ namespace Mosa.Tool.Launcher
 		{
 			tbApplicationLocations.SelectedTab = tabOptions;
 
-			foreach (IncludeFile file in Options.IncludeFiles)
+			foreach(IncludeFile file in Options.IncludeFiles)
 			{
 				AddAdditionalFile(file);
 			}
@@ -400,14 +409,20 @@ namespace Mosa.Tool.Launcher
 
 		private void OnException(string data)
 		{
-			MethodInvoker method = () => AddOutput(data);
+			MethodInvoker method = delegate ()
+			{
+				AddOutput(data);
+			};
 
 			Invoke(method);
 		}
 
 		private void OnCompileCompleted()
 		{
-			MethodInvoker method = CompileCompleted;
+			MethodInvoker method = delegate ()
+			{
+				CompileCompleted();
+			};
 
 			Invoke(method);
 		}
@@ -422,7 +437,7 @@ namespace Mosa.Tool.Launcher
 			if (CheckKeyPressed())
 				return;
 
-			string imageFile = Options.BootLoaderImage ?? Builder.ImageFile;
+			string imageFile = Options.BootLoaderImage != null ? Options.BootLoaderImage : Builder.ImageFile;
 
 			Starter = new Starter(Options, AppLocations, imageFile, this, Builder.Linker);
 
@@ -453,7 +468,14 @@ namespace Mosa.Tool.Launcher
 
 		private void cbVBEVideo_CheckedChanged(object sender, EventArgs e)
 		{
-			tbMode.Enabled = cbVBEVideo.Checked;
+			if (cbVBEVideo.Checked)
+			{
+				tbMode.Enabled = true;
+			}
+			else
+			{
+				tbMode.Enabled = false;
+			}
 		}
 
 		private void AddAdditionalFile(IncludeFile file)
@@ -499,19 +521,12 @@ namespace Mosa.Tool.Launcher
 
 		public void LoadArguments(string[] args)
 		{
-			Options = ParseOptions(args);
-		}
+			Parser cliParser = new Parser(config => config.HelpWriter = Console.Out);
 
-		private static Options ParseOptions(string[] args)
-		{
-			var result = new Parser(config => config.HelpWriter = Console.Out).ParseArguments<Options>(args);
-
-			if (result.Tag == ParserResultType.NotParsed)
+			cliParser.ParseArguments<Options>(() => 
 			{
-				return new Options();
-			}
-
-			return ((Parsed<Options>)result).Value;
+				return Options;
+			}, args);
 		}
 	}
 }
