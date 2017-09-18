@@ -18,6 +18,37 @@ namespace Mosa.CoolWorld.x86
 		public static ConsoleSession Console;
 		public static ConsoleSession Debug;
 
+		class StatusByteHelper
+		{
+			public byte Status;
+
+			private bool Check(byte b)
+			{
+				return (Status & b) == b;
+			}
+
+			public bool ERR { get { return Check(0x01); } }
+			public bool DRQ { get { return Check(0x08); } }
+			public bool SRV { get { return Check(0x10); } }
+			public bool DF { get { return Check(0x20); } }
+			public bool RDY { get { return Check(0x40); } }
+			public bool BSY { get { return Check(0x80); } }
+
+			public override string ToString()
+			{
+				string str = string.Empty;
+
+				if (ERR) str += "ERR ";
+				if (DRQ) str += "DRQ ";
+				if (SRV) str += "SRV ";
+				if (DF) str += "DF ";
+				if (RDY) str += "RDY ";
+				if (BSY) str += "BSY ";
+
+				return str;
+			}
+		}
+
 		/// <summary>
 		/// Main
 		/// </summary>
@@ -99,6 +130,28 @@ namespace Mosa.CoolWorld.x86
 
 			var diskcontroller = new DeviceSystem.DiskControllerManager(HardwareSystem.Setup.DeviceManager);
 			diskcontroller.CreateDiskDevices();
+
+			//TEST
+			{
+				HardwareSystem.IDevice ctrl = diskcontrollers[0];
+
+				DeviceDriver.ISA.IDEController ide = (DeviceDriver.ISA.IDEController)ctrl;
+
+				{
+					byte[] sectorb = new byte[512];
+
+					bool readok = ide.ReadBlock(0, 0, 1, sectorb);
+					Console.WriteLine("OK? " + readok.ToString());
+
+					for(int x = 0; x < 32; x++)
+					{
+						Console.Write(sectorb[x].ToString("X2") + " ");
+					}
+				}
+
+				Console.WriteLine("Test done");
+				ForeverLoop();
+			}
 
 			Console.Write("> Probing for disks...");
 			var disks = HardwareSystem.Setup.DeviceManager.GetDevices(new DeviceSystem.IsDiskDevice());
