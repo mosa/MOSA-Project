@@ -137,7 +137,7 @@ namespace Mosa.Utility.Launcher
 
 		public int InlinedIRMaximum { get; set; }
 
-		[Option("inline-level", Default = "8")]
+		[Option("inline-level")]
 		public string InlinedIRMaximumHelper
 		{
 			set { InlinedIRMaximum = (int)value.ParseHexOrDecimal(); }
@@ -209,14 +209,14 @@ namespace Mosa.Utility.Launcher
 		[Option("debug-connection-port", Default = 9999)]
 		public int DebugConnectionPort { get; set; }
 
-		[Option("debug-connection-address", Default = "127.0.0.1")]
+		[Option("debug-connection-address")]
 		public string DebugConnectionAddress { get; set; }
 
-		[Option("debug-pipe-name", Default = "MOSA")]
-		public string DebugPipeName { get; set; }
+		[Option("debug-pipe-name")]
+		public string DebugPipeName { get; set; } = "MOSA";
 
-		[Option("threading", Default = true)]
-		public bool UseMultipleThreadCompiler { get; set; }
+		[Option("threading")]
+		public bool UseMultipleThreadCompiler { get; set; } = true;
 
 		[Option("threading-off")]
 		public bool UseMultipleThreadCompilerExtraOption
@@ -269,27 +269,27 @@ namespace Mosa.Utility.Launcher
 			set { BootLoader = BootLoader.Syslinux_3_72; }
 		}
 
-		[Option("video", Default = false)]
+		[Option("video")]
 		public bool VBEVideo { get; set; }
 
-		[Option("video-width", Default = 640)]
-		public int Width { get; set; }
+		[Option("video-width")]
+		public int Width { get; set; } = 640;
 
-		[Option("video-height", Default = 480)]
-		public int Height { get; set; }
+		[Option("video-height")]
+		public int Height { get; set; } = 480;
 
-		[Option("video-depth", Default = 32)]
-		public int Depth { get; set; }
+		[Option("video-depth")]
+		public int Depth { get; set; } = 32;
 
 		public ulong BaseAddress { get; set; }
 
-		[Option("base", Default = "0x00400000")]
+		[Option("base")]
 		public string BaseAddressHelper
 		{
 			set { BaseAddress = value.ParseHexOrDecimal(); }
 		}
 
-		[Option("symbols", Default = false)]
+		[Option("symbols")]
 		public bool EmitSymbols { get; set; }
 
 		[Option("symbols-false")]
@@ -298,7 +298,7 @@ namespace Mosa.Utility.Launcher
 			set { EmitSymbols = false; }
 		}
 
-		[Option("relocations", Default = false)]
+		[Option("relocations")]
 		public bool EmitRelocations { get; set; }
 
 		[Option("relocations-false")]
@@ -307,8 +307,8 @@ namespace Mosa.Utility.Launcher
 			set { EmitRelocations = false; }
 		}
 
-		[Option("x86-irq-methods", Default = true)]
-		public bool Emitx86IRQMethods { get; set; }
+		[Option("x86-irq-methods")]
+		public bool Emitx86IRQMethods { get; set; } = true;
 
 		[Option("x86-irq-methods-false")]
 		public bool Emitx86IRQMethodsExtraOption
@@ -316,16 +316,16 @@ namespace Mosa.Utility.Launcher
 			set { Emitx86IRQMethods = false; }
 		}
 
-		[Option("bootloader-image", Default = null)]
+		[Option("bootloader-image")]
 		public string BootLoaderImage { get; set; }
 
-		[Option("qemu-gdb", Default = false)]
+		[Option("qemu-gdb")]
 		public bool EnableQemuGDB { get; set; }
 
 		[Option("gdb", Default = false)]
 		public bool LaunchGDB { get; set; }
 
-		[Option("launch-mosa-debugger", Default = false)]
+		[Option("launch-mosa-debugger")]
 		public bool LaunchMosaDebugger { get; set; }
 
 		public List<IncludeFile> IncludeFiles { get; set; }
@@ -335,7 +335,7 @@ namespace Mosa.Utility.Launcher
 		{
 			set
 			{
-				if(!File.Exists(value))
+				if (!File.Exists(value))
 				{
 					Console.WriteLine("File doesn't exist \"" + value + "\"");
 					return;
@@ -346,10 +346,14 @@ namespace Mosa.Utility.Launcher
 		}
 
 		private string _sourceFile;
+
 		[Value(0)]
 		public string SourceFile
 		{
-			get { return _sourceFile; }
+			get
+			{
+				return _sourceFile;
+			}
 			set
 			{
 				if (value.IndexOf(Path.DirectorySeparatorChar) >= 0)
@@ -375,14 +379,17 @@ namespace Mosa.Utility.Launcher
 			LinkerFormatType = LinkerFormatType.Elf32;
 			PlatformType = PlatformType.X86;
 			FileSystem = FileSystem.FAT16;
+			BaseAddress = 0x00400000;
+			DebugConnectionAddress = "127.0.0.1";
+			InlinedIRMaximum = 8;
 		}
 
 		private void AppendIncludeFiles(string file)
 		{
 			string line;
-			using (StreamReader reader = new StreamReader(file))
+			using (var reader = new StreamReader(file))
 			{
-				while(!reader.EndOfStream)
+				while (!reader.EndOfStream)
 				{
 					line = reader.ReadLine();
 

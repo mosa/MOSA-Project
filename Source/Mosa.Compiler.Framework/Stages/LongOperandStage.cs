@@ -161,7 +161,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var context = new Context(node);
 
-			if (operand2.IsConstant && !operand2.IsLong && !operand1.IsStaticField)
+			if (operand2.IsConstant && !operand2.IsLong)
 			{
 				var target4 = CreateConstant((uint)(operand2.ConstantUnsignedLongInteger + 4));
 

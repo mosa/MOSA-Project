@@ -348,7 +348,7 @@
 			this.button1.TabIndex = 28;
 			this.button1.Text = "Compile and Run (F5)";
 			this.button1.UseSelectable = true;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
+			this.button1.Click += new System.EventHandler(this.Btn1_Click);
 			// 
 			// label6
 			// 
@@ -461,7 +461,7 @@
 			this.btnSource.TabIndex = 18;
 			this.btnSource.Text = "Source:";
 			this.btnSource.UseSelectable = true;
-			this.btnSource.Click += new System.EventHandler(this.btnSource_Click);
+			this.btnSource.Click += new System.EventHandler(this.BtnSource_Click);
 			// 
 			// lbSource
 			// 
@@ -543,7 +543,7 @@
 			this.cbVBEVideo.Text = "Enable VBE Video:";
 			this.cbVBEVideo.UseCustomBackColor = true;
 			this.cbVBEVideo.UseSelectable = true;
-			this.cbVBEVideo.CheckedChanged += new System.EventHandler(this.cbVBEVideo_CheckedChanged);
+			this.cbVBEVideo.CheckedChanged += new System.EventHandler(this.CbVBEVideo_CheckedChanged);
 			// 
 			// label1
 			// 
@@ -662,7 +662,7 @@
 			this.btnDestination.TabIndex = 17;
 			this.btnDestination.Text = "Destination:";
 			this.btnDestination.UseSelectable = true;
-			this.btnDestination.Click += new System.EventHandler(this.btnDestination_Click);
+			this.btnDestination.Click += new System.EventHandler(this.BtnDestination_Click);
 			// 
 			// cbImageFormat
 			// 
@@ -1358,7 +1358,7 @@
 			this.benRemoveFiles.TabIndex = 30;
 			this.benRemoveFiles.Text = "-";
 			this.benRemoveFiles.UseSelectable = true;
-			this.benRemoveFiles.Click += new System.EventHandler(this.benRemoveFiles_Click);
+			this.benRemoveFiles.Click += new System.EventHandler(this.BtnRemoveFiles_Click);
 			// 
 			// btnAddFiles
 			// 
@@ -1369,7 +1369,7 @@
 			this.btnAddFiles.TabIndex = 29;
 			this.btnAddFiles.Text = "+";
 			this.btnAddFiles.UseSelectable = true;
-			this.btnAddFiles.Click += new System.EventHandler(this.btnAddFiles_Click);
+			this.btnAddFiles.Click += new System.EventHandler(this.BtnAddFiles_Click);
 			// 
 			// openFileDialog2
 			// 
