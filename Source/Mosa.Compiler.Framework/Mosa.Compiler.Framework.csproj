@@ -193,6 +193,7 @@
     </Compile>
     <Compile Include="Platform\BaseOpcodeEncoder.cs" />
     <Compile Include="Platform\XOpcodeEncoder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterAllocator\BasicRegisterAllocator.cs" />
     <Compile Include="RegisterAllocator\MoveExtended.cs" />
     <Compile Include="RegisterAllocator\Move.cs" />
