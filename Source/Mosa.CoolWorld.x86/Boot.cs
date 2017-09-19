@@ -11,7 +11,7 @@ using Mosa.Runtime.x86;
 namespace Mosa.CoolWorld.x86
 {
 	/// <summary>
-	///
+	/// Boot
 	/// </summary>
 	public static class Boot
 	{
@@ -139,7 +139,7 @@ namespace Mosa.CoolWorld.x86
 				{
 					Console.WriteLine("Found a FAT file system!");
 
-					var filename = "TEST.TXT";
+					const string filename = "TEST.TXT";
 
 					var location = fat.FindEntry(filename);
 
@@ -155,7 +155,7 @@ namespace Mosa.CoolWorld.x86
 
 						Console.WriteLine("Reading File:");
 
-						for (;;)
+						for (; ; )
 						{
 							int i = fatFileStream.ReadByte();
 

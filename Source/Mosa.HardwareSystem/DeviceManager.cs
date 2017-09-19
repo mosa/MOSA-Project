@@ -5,14 +5,14 @@ using System.Collections.Generic;
 namespace Mosa.HardwareSystem
 {
 	/// <summary>
-	///
+	/// Device Manager
 	/// </summary>
 	public class DeviceManager
 	{
 		/// <summary>
 		/// The devices
 		/// </summary>
-		private List<IDevice> devices;
+		private readonly List<IDevice> devices;
 
 		/// <summary>
 		/// The spin lock

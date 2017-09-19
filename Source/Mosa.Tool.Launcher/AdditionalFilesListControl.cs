@@ -12,12 +12,16 @@ namespace Mosa.Tool.Launcher
 	//Some code is from: https://www.codeproject.com/Articles/6646/In-place-editing-of-ListView-subitems
 	internal class AdditionalFilesListControl : MetroListView
 	{
+#pragma warning disable 0649
+
 		private struct NMHDR
 		{
 			public IntPtr hwndFrom;
 			public Int32 idFrom;
 			public Int32 code;
 		}
+
+#pragma warning restore 0649
 
 		private ListViewItem _selectedItem;
 		private ListViewItem.ListViewSubItem _selectedSubItem;
@@ -82,7 +86,7 @@ namespace Mosa.Tool.Launcher
 					break;
 
 				case WM_NOTIFY:
-					NMHDR h = (NMHDR)Marshal.PtrToStructure(msg.LParam, typeof(NMHDR));
+					var h = (NMHDR)Marshal.PtrToStructure(msg.LParam, typeof(NMHDR));
 					if (h.code == HDN_BEGINDRAG
 						|| h.code == HDN_ITEMCHANGINGA
 						|| h.code == HDN_ITEMCHANGINGW)
@@ -98,7 +102,7 @@ namespace Mosa.Tool.Launcher
 
 		public Rectangle GetSubItemBounds(ListViewItem Item, int SubItem)
 		{
-			Rectangle itemBounds = Item.GetBounds(ItemBoundsPortion.Entire);
+			var itemBounds = Item.GetBounds(ItemBoundsPortion.Entire);
 
 			int testX = itemBounds.Left;
 			for (int i = 0; i < Columns.Count; i++)
@@ -123,7 +127,7 @@ namespace Mosa.Tool.Launcher
 				return;
 			}
 
-			ListViewHitTestInfo hitTest = HitTest(PointToClient(Cursor.Position));
+			var hitTest = HitTest(PointToClient(Cursor.Position));
 
 			if (hitTest.Location == ListViewHitTestLocations.None)
 			{
@@ -158,7 +162,7 @@ namespace Mosa.Tool.Launcher
 
 		private void ShowItemEditor()
 		{
-			Rectangle rect = GetSubItemBounds(_selectedItem, _selectedColumn);
+			var rect = GetSubItemBounds(_selectedItem, _selectedColumn);
 
 			_editingControl.Text = _selectedSubItem.Text;
 			_editingControl.Bounds = rect;
