@@ -56,5 +56,15 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// <param name="blocks">The blocks.</param>
 		/// <returns></returns>
 		public abstract List<BasicBlock> IteratedDominanceFrontier(List<BasicBlock> blocks);
+
+		/// <summary>
+		/// Determines whether the specified block is dominated by another specific block
+		/// </summary>
+		/// <param name="dom">The DOM.</param>
+		/// <param name="block">The block.</param>
+		/// <returns>
+		///   <c>true</c> if the specified DOM is dominator; otherwise, <c>false</c>.
+		/// </returns>
+		public abstract bool IsDominator(BasicBlock dom, BasicBlock block);
 	}
 }

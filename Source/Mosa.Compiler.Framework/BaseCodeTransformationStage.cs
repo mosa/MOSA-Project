@@ -47,6 +47,8 @@ namespace Mosa.Compiler.Framework
 			bool contextVisit = contextVisitationDictionary.Count != 0;
 			bool NodeVisit = nodeVisitationDictionary.Count != 0;
 
+			var context = new Context(null as InstructionNode);
+
 			for (int index = 0; index < BasicBlocks.Count; index++)
 			{
 				for (var node = BasicBlocks[index].First; !node.IsBlockEndInstruction; node = node.Next)
@@ -58,7 +60,7 @@ namespace Mosa.Compiler.Framework
 
 					if (contextVisit && contextVisitationDictionary.TryGetValue(node.Instruction, out ContextVisitationDelegate contextVisitationMethod))
 					{
-						var context = new Context(node);
+						context.Node = node;
 						contextVisitationMethod(context);
 					}
 					else if (NodeVisit && nodeVisitationDictionary.TryGetValue(node.Instruction, out NodeVisitationDelegate nodeVisitationMethod))

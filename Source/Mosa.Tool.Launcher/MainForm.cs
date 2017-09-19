@@ -183,12 +183,10 @@ namespace Mosa.Tool.Launcher
 			cbCompilerUsesMultipleThreads.Checked = Options.UseMultipleThreadCompiler;
 			nmMemory.Value = Options.EmulatorMemoryInMB;
 			cbVBEVideo.Checked = Options.VBEVideo;
-
 			tbBaseAddress.Text = "0x" + Options.BaseAddress.ToString("x8");
 			cbRelocationTable.Checked = Options.EmitRelocations;
 			cbEmitSymbolTable.Checked = Options.EmitSymbols;
 			cbEmitx86IRQMethods.Checked = Options.Emitx86IRQMethods;
-
 			tbMode.Text = Options.Width + "x" + Options.Height + "x" + Options.Depth;
 
 			switch (Options.ImageFormat)

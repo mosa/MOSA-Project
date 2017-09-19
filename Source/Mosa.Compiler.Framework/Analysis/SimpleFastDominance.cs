@@ -208,7 +208,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			return result;
 		}
 
-		#region IDominanceAnalysis Members
+		#region BaseDominanceAnalysis Members
 
 		public override BasicBlock GetImmediateDominator(BasicBlock block)
 		{
@@ -225,10 +225,8 @@ namespace Mosa.Compiler.Framework.Analysis
 			if (block == null)
 				throw new ArgumentNullException(nameof(block));
 
-			// Return value
 			var result = new List<BasicBlock>();
-
-			BasicBlock b = block;
+			var b = block;
 
 			while (b != null)
 			{
@@ -267,7 +265,46 @@ namespace Mosa.Compiler.Framework.Analysis
 				return new List<BasicBlock>(); // Empty List
 		}
 
-		#endregion IDominanceAnalysis Members
+		/// <summary>
+		/// Determines whether the specified block is dominated by another specific block
+		/// </summary>
+		/// <param name="dom">The DOM.</param>
+		/// <param name="block">The block.</param>
+		/// <returns>
+		///   <c>true</c> if the specified DOM is dominator; otherwise, <c>false</c>.
+		/// </returns>
+		/// <exception cref="ArgumentNullException">
+		/// dom
+		/// or
+		/// block
+		/// </exception>
+		public override bool IsDominator(BasicBlock dom, BasicBlock block)
+		{
+			if (dom == null)
+				throw new ArgumentNullException(nameof(dom));
+
+			if (block == null)
+				throw new ArgumentNullException(nameof(block));
+
+			var b = block;
+
+			while (b != null)
+			{
+				if (!doms.TryGetValue(b, out b))
+				{
+					return false;
+				}
+
+				if (dom == b)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		#endregion BaseDominanceAnalysis Members
 
 		#region Internals
 

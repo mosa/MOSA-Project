@@ -119,6 +119,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EnumTests.tt</DependentUpon>
     </Compile>
+    <Compile Include="GenericMethodTests.cs" />
     <Compile Include="GenericMixedTest.cs" />
     <Compile Include="NullCheckOptimizationTests.cs" />
     <Compile Include="RemTests.cs" />

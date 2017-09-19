@@ -144,6 +144,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is constant zero]; otherwise, <c>false</c>.
 		/// </value>
+		/// <exception cref="InvalidCompilerException"></exception>
 		public bool IsConstantZero
 		{
 			get
