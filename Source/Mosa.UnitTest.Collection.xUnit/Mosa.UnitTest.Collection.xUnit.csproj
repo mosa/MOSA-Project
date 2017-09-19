@@ -107,6 +107,8 @@
     <Compile Include="ExceptionHandlingFixture.cs" />
     <Compile Include="FibonacciFixture.cs" />
     <Compile Include="ForeachFixture.cs" />
+    <Compile Include="GenericMethodFixture.cs" />
+    <Compile Include="GenericInterfaceFixture.cs" />
     <Compile Include="GenericCallFixture.cs" />
     <Compile Include="Int16Fixture.cs" />
     <Compile Include="Int32Fixture.cs" />

@@ -25,25 +25,23 @@ namespace Mosa.UnitTest.Collection
 		}
 	}
 
-	public class GenericInterfaceTests
+	public static class GenericInterfaceTests
 	{
 		public static int InterfaceTest1(int value)
 		{
-			GenericInterfaceTestClass<int> gic = new GenericInterfaceTestClass<int>();
-			return gic.GetValue(value);
+			var genericInterfaceTestClass = new GenericInterfaceTestClass<int>();
+			return genericInterfaceTestClass.GetValue(value);
 		}
 
 		public static int InterfaceTest2(int value)
 		{
-			GenericInterfaceTestClass<int> gic = new GenericInterfaceTestClass<int>();
-			IInterfaceAA<int> aa = gic;
+			IInterfaceAA<int> aa = new GenericInterfaceTestClass<int>();
 			return aa.GetValue(value);
 		}
 
 		public static int InterfaceTest3(int value)
 		{
-			GenericInterfaceTestClass<int> gic = new GenericInterfaceTestClass<int>();
-			IInterfaceBB<int> bb = gic;
+			IInterfaceBB<int> bb = new GenericInterfaceTestClass<int>();
 			return bb.Get(value);
 		}
 	}
