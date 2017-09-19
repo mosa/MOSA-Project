@@ -217,13 +217,10 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		public override DeviceDriverStartStatus Start()
 		{
-			DoIdentifyDrive(0);
-
-			//SelectDrive(0);
-			//driveInfo[0].Present = ((AltStatusPort.Read8() & StatusRegister.DriveReady) == StatusRegister.DriveReady);
-
-			//SelectDrive(1);
-			//driveInfo[1].Present = ((AltStatusPort.Read8() & StatusRegister.DriveReady) == StatusRegister.DriveReady);
+			for (byte drive = 0; drive < MaximunDriveCount; drive++)
+			{
+				DoIdentifyDrive(drive);
+			}
 
 			return DeviceDriverStartStatus.Started;
 		}
@@ -380,19 +377,19 @@ namespace Mosa.DeviceDriver.ISA
 			}
 			else
 			{
-				for (uint index = 0; index < 256; index++)
+				//NOTE: Transfering 16bits at a time seems to fail(?) to write each second 16bits - transfering 32bits seems to fix this (???)
+				for (uint index = 0; index < 128; index++)
 				{
-					DataPort.Write16(sector.GetUShort(offset + (index * 2)));
+					DataPort.Write32(sector.GetUInt(offset + (index * 4)));
 				}
 
 				//Cache flush
 				CommandPort.Write8(0xE7);
 
-				byte tempStatus;
 				do
 				{
-					tempStatus = StatusPort.Read8();
-				} while ((tempStatus & StatusRegister.Busy) == StatusRegister.Busy);
+					status = StatusPort.Read8();
+				} while ((status & StatusRegister.Busy) == StatusRegister.Busy);
 			}
 
 			return true;

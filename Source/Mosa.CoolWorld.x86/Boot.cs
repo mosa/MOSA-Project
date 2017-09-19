@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.AppSystem;
+using Mosa.ClassLib;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.FileSystem.FAT;
 
@@ -119,39 +120,85 @@ namespace Mosa.CoolWorld.x86
 			var diskcontrollers = HardwareSystem.Setup.DeviceManager.GetDevices(new DeviceSystem.IsDiskControllerDevice());
 			Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
 
-			//foreach (var device in diskcontrollers)
-			//{
-			//	Console.Write("  ");
-			//	Bullet(Color.Yellow);
-			//	Console.Write(" ");
-			//	InBrackets(device.Name, Color.White, Color.LightGreen);
-			//	Console.WriteLine();
-			//}
+			foreach (var device in diskcontrollers)
+			{
+				Console.Write("  ");
+				Bullet(Color.Yellow);
+				Console.Write(" ");
+				InBrackets(device.Name, Color.White, Color.LightGreen);
+				Console.WriteLine();
+			}
 
 			var diskcontroller = new DeviceSystem.DiskControllerManager(HardwareSystem.Setup.DeviceManager);
 			diskcontroller.CreateDiskDevices();
 
-			//TEST
-			{
-				HardwareSystem.IDevice ctrl = diskcontrollers[0];
+#region TEST
+			//{
+			//	HardwareSystem.IDevice ctrl = diskcontrollers[0];
 
-				DeviceDriver.ISA.IDEController ide = (DeviceDriver.ISA.IDEController)ctrl;
+			//	DeviceDriver.ISA.IDEController ide = (DeviceDriver.ISA.IDEController)ctrl;
 
-				{
-					byte[] sectorb = new byte[512];
+			//	{
+			//		byte[] sectorb = new byte[512];
 
-					bool readok = ide.ReadBlock(0, 0, 1, sectorb);
-					Console.WriteLine("OK? " + readok.ToString());
+			//		int fail = 0;
 
-					for(int x = 0; x < 32; x++)
-					{
-						Console.Write(sectorb[x].ToString("X2") + " ");
-					}
-				}
+			//		Console.WriteLine("Reading the first sector 100 times...");
+			//		for (int x = 0; x < 100; x++)
+			//		{
+			//			if (!ide.ReadBlock(0, 0, 1, sectorb))
+			//			{
+			//				fail++;
+			//			}
+			//			else
+			//			{
+			//				if (sectorb[0] != 0xFA && sectorb[1] != 0x31) //Hardcoded bytes from the image file
+			//				{
+			//					fail++;
+			//				}
+			//			}
+			//		}
 
-				Console.WriteLine("Test done");
-				ForeverLoop();
-			}
+			//		Console.WriteLine("Fail: x" + fail.ToString() + (fail == 0 ? " (SUCCESS)" : ""));
+
+			//		fail = 0;
+
+			//		Console.WriteLine("Writing the first sector...");
+			//		byte[] newSector = new byte[512];
+			//		for(int x = 0; x < 512; x++)
+			//		{
+			//			newSector[x] = (byte)x;
+			//		}
+
+			//		if (!ide.WriteBlock(0, 0, 1, newSector))
+			//			Console.WriteLine("Writing failed...");
+
+			//		Console.WriteLine("Reading the first sector 100 times again...");
+			//		for (int x = 0; x < 100; x++)
+			//		{
+			//			if (!ide.ReadBlock(0, 0, 1, sectorb))
+			//			{
+			//				fail++;
+			//			}
+			//			else
+			//			{
+			//				for(int y = 0; y < 512; y++)
+			//				{
+			//					if(sectorb[y] != newSector[y])
+			//					{
+			//						fail++;
+			//						break;
+			//					}
+			//				}
+			//			}
+			//		}
+
+			//		Console.WriteLine("Fail: x" + fail.ToString() + (fail == 0 ? " (SUCCESS)" : ""));
+			//	}
+
+			//	Console.WriteLine("Test done");
+			//}
+#endregion
 
 			Console.Write("> Probing for disks...");
 			var disks = HardwareSystem.Setup.DeviceManager.GetDevices(new DeviceSystem.IsDiskDevice());
