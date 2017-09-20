@@ -417,7 +417,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="data">The data.</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		protected bool ReadLBA48(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
+		protected bool PerformLBA48(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
 		{
 			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
 				return false;
@@ -555,7 +555,7 @@ namespace Mosa.DeviceDriver.ISA
 								return false;
 							break;
 						case AddressingMode.LBA48:
-							if (!ReadLBA48(SectorOperation.Read, drive, block + index, data, index * 512))
+							if (!PerformLBA48(SectorOperation.Read, drive, block + index, data, index * 512))
 								return false;
 							break;
 					}
@@ -596,7 +596,7 @@ namespace Mosa.DeviceDriver.ISA
 								return false;
 							break;
 						case AddressingMode.LBA48:
-							if (!ReadLBA48(SectorOperation.Write, drive, block + index, data, index * 512))
+							if (!PerformLBA48(SectorOperation.Write, drive, block + index, data, index * 512))
 								return false;
 							break;
 					}
