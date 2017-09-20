@@ -1,5 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
-
+﻿
 // References
 // http://www.t13.org/Documents/UploadedDocuments/docs2004/d1572r3-EDD3.pdf
 // http://mirrors.josefsipek.net/www.nondot.org/sabre/os/files/Disk/IDE-tech.html
@@ -131,7 +130,7 @@ namespace Mosa.DeviceDriver.ISA
 
 		//protected IRQHandler IdeIRQ;
 
-		public enum LBAType { LBA28, LBA48 }
+		public enum AddressingMode { NotSupported, LBA28, LBA48 }
 
 		/// <summary>
 		///
@@ -151,7 +150,7 @@ namespace Mosa.DeviceDriver.ISA
 			/// <summary>
 			/// The lba type
 			/// </summary>
-			public LBAType LBAType;
+			public AddressingMode AddressingMode;
 		}
 
 		/// <summary>
@@ -269,9 +268,24 @@ namespace Mosa.DeviceDriver.ISA
 				info.SetUShort(ix * 2, d);
 			}
 
-			driveInfo[index].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA28);
+			//Find the addressing mode
+			uint lba28SectorCount = info.GetUInt(IdentifyDrive.MaxLBA28);
 
-			HAL.DebugWriteLine("Device " + index.ToString() + " present - MaxLBA28=" + driveInfo[index].MaxLBA.ToString());
+			AddressingMode aMode = AddressingMode.NotSupported;
+			if((info.GetUShort(IdentifyDrive.CommandSetSupported83) & 0x200) == 0x200) //Check the LBA48 support bit
+			{
+				aMode = AddressingMode.LBA48;
+				driveInfo[index].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA48);
+			}
+			else if(lba28SectorCount > 0)
+			{
+				aMode = AddressingMode.LBA28;
+				driveInfo[index].MaxLBA = lba28SectorCount;
+			}
+
+			driveInfo[index].AddressingMode = aMode;
+
+			HAL.DebugWriteLine("Device " + index.ToString() + " present - MaxLBA=" + driveInfo[index].MaxLBA.ToString());
 		}
 
 		/// <summary>
@@ -352,9 +366,9 @@ namespace Mosa.DeviceDriver.ISA
 			DeviceHeadPort.Write8((byte)(0xE0 | (drive << 4) | ((lba >> 24) & 0x0F)));
 			FeaturePort.Write8(0);
 			SectorCountPort.Write8(1);
-			LBALowPort.Write8((byte)(lba & 0xFF));
-			LBAMidPort.Write8((byte)((lba >> 8) & 0xFF));
 			LBAHighPort.Write8((byte)((lba >> 16) & 0xFF));
+			LBAMidPort.Write8((byte)((lba >> 8) & 0xFF));
+			LBALowPort.Write8((byte)(lba & 0xFF));
 
 			CommandPort.Write8((operation == SectorOperation.Write) ? IDECommand.WriteSectorsWithRetry : IDECommand.ReadSectorsWithRetry);
 
@@ -371,8 +385,7 @@ namespace Mosa.DeviceDriver.ISA
 			{
 				for (uint index = 0; index < 256; index++)
 				{
-					var s = DataPort.Read16();
-					sector.SetUShort(offset + (index * 2), s);
+					sector.SetUShort(offset + (index * 2), DataPort.Read16());
 				}
 			}
 			else
@@ -409,27 +422,29 @@ namespace Mosa.DeviceDriver.ISA
 			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
 				return false;
 
-			FeaturePort.Write8(0);
-			FeaturePort.Write8(0);
-
+			DeviceHeadPort.Write8((byte)(0x40 | (drive << 4)));
 			SectorCountPort.Write8(0);
-			SectorCountPort.Write8(1);
 
 			LBALowPort.Write8((byte)((lba >> 24) & 0xFF));
-			LBALowPort.Write8((byte)(lba & 0xFF));
-
 			LBAMidPort.Write8((byte)((lba >> 32) & 0xFF));
-			LBAMidPort.Write8((byte)((lba >> 8) & 0xFF));
-
 			LBAHighPort.Write8((byte)((lba >> 40) & 0xFF));
+
+			SectorCountPort.Write8(1);
+
+			LBALowPort.Write8((byte)(lba & 0xFF));
+			LBAMidPort.Write8((byte)((lba >> 8) & 0xFF));
 			LBAHighPort.Write8((byte)((lba >> 16) & 0xFF));
 
-			DeviceHeadPort.Write8((byte)(0x40 | (drive << 4)));
+			FeaturePort.Write8(0);
+			FeaturePort.Write8(0);
 
 			CommandPort.Write8((byte)((operation == SectorOperation.Write) ? 0x34 : 0x24));
 
-			if (!WaitUntilStatus(StatusRegister.Busy))
-				return false;
+			byte status;
+			do
+			{
+				status = StatusPort.Read8();
+			} while ((status & StatusRegister.Busy) == StatusRegister.Busy);
 
 			var sector = new DataBlock(data);
 
@@ -443,10 +458,18 @@ namespace Mosa.DeviceDriver.ISA
 			}
 			else
 			{
-				for (uint index = 0; index < 256; index++)
+				for (uint index = 0; index < 128; index++)
 				{
-					DataPort.Write16(sector.GetUShort(offset + (index * 2)));
+					DataPort.Write32(sector.GetUInt(offset + (index * 4)));
 				}
+
+				//Cache flush
+				CommandPort.Write8(0xE7);
+
+				do
+				{
+					status = StatusPort.Read8();
+				} while ((status & StatusRegister.Busy) == StatusRegister.Busy);
 			}
 
 			return true;
@@ -525,8 +548,17 @@ namespace Mosa.DeviceDriver.ISA
 				spinLock.Enter();
 				for (uint index = 0; index < count; index++)
 				{
-					if (!PerformLBA28(SectorOperation.Read, drive, block + index, data, index * 512))
-						return false;
+					switch (driveInfo[drive].AddressingMode)
+					{
+						case AddressingMode.LBA28:
+							if (!PerformLBA28(SectorOperation.Read, drive, block + index, data, index * 512))
+								return false;
+							break;
+						case AddressingMode.LBA48:
+							if (!ReadLBA48(SectorOperation.Read, drive, block + index, data, index * 512))
+								return false;
+							break;
+					}
 				}
 				return true;
 			}
@@ -557,8 +589,17 @@ namespace Mosa.DeviceDriver.ISA
 				spinLock.Enter();
 				for (uint index = 0; index < count; index++)
 				{
-					if (!PerformLBA28(SectorOperation.Write, drive, block + index, data, index * 512))
-						return false;
+					switch (driveInfo[drive].AddressingMode)
+					{
+						case AddressingMode.LBA28:
+							if (!PerformLBA28(SectorOperation.Write, drive, block + index, data, index * 512))
+								return false;
+							break;
+						case AddressingMode.LBA48:
+							if (!ReadLBA48(SectorOperation.Write, drive, block + index, data, index * 512))
+								return false;
+							break;
+					}
 				}
 				return true;
 			}
