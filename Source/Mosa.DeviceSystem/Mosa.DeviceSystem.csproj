@@ -85,7 +85,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CHS.cs" />
-    <Compile Include="FindDevice.cs" />
     <Compile Include="NetworkDevicePacketBuffer.cs" />
     <Compile Include="INetworkDevice.cs" />
     <Compile Include="MACAddress.cs" />

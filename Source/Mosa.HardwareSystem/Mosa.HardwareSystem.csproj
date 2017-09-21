@@ -72,7 +72,6 @@
     <Compile Include="DeviceDriverStartStatus.cs" />
     <Compile Include="DeviceManager.cs" />
     <Compile Include="DeviceStatus.cs" />
-    <Compile Include="FindDevices.cs" />
     <Compile Include="HAL.cs" />
     <Compile Include="HardwareDevice.cs" />
     <Compile Include="HardwareResources.cs" />

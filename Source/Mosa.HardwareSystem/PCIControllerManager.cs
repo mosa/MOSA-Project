@@ -3,12 +3,12 @@
 namespace Mosa.HardwareSystem
 {
 	/// <summary>
-	///
+	/// PCI Controller Manager
 	/// </summary>
 	public class PCIControllerManager
 	{
 		/// <summary>
-		///
+		/// The device manager
 		/// </summary>
 		protected DeviceManager deviceManager;
 
@@ -42,7 +42,7 @@ namespace Mosa.HardwareSystem
 		public void CreatePCIDevices()
 		{
 			// Find PCI controller devices
-			var devices = deviceManager.GetDevices(new IsPCIController(), new IsOnline());
+			var devices = deviceManager.GetDevices<IPCIController>(DeviceStatus.Online);
 
 			if (devices.Count == 0)
 				return;
