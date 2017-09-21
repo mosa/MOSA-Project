@@ -5,14 +5,14 @@ using System.Collections.Generic;
 namespace Mosa.HardwareSystem
 {
 	/// <summary>
-	///
+	/// Device Manager
 	/// </summary>
 	public class DeviceManager
 	{
 		/// <summary>
 		/// The devices
 		/// </summary>
-		private List<IDevice> devices;
+		private readonly List<IDevice> devices;
 
 		/// <summary>
 		/// The spin lock
@@ -41,9 +41,9 @@ namespace Mosa.HardwareSystem
 		/// <summary>
 		/// Gets the devices.
 		/// </summary>
-		/// <param name="match">The match.</param>
+		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public List<IDevice> GetDevices(IFindDevice match)
+		public List<IDevice> GetDevices<T>()
 		{
 			spinLock.Enter();
 
@@ -51,7 +51,26 @@ namespace Mosa.HardwareSystem
 
 			foreach (var device in devices)
 			{
-				if (match.IsMatch(device))
+				if (device is T)
+				{
+					list.Add(device);
+				}
+			}
+
+			spinLock.Exit();
+
+			return list;
+		}
+
+		public List<IDevice> GetDevices<T>(DeviceStatus status)
+		{
+			spinLock.Enter();
+
+			var list = new List<IDevice>();
+
+			foreach (var device in devices)
+			{
+				if (device.DeviceStatus == status && device is T)
 				{
 					list.Add(device);
 				}
@@ -65,10 +84,9 @@ namespace Mosa.HardwareSystem
 		/// <summary>
 		/// Gets the devices.
 		/// </summary>
-		/// <param name="match1">The match1.</param>
-		/// <param name="match2">The match2.</param>
+		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public List<IDevice> GetDevices(IFindDevice match1, IFindDevice match2)
+		public List<IDevice> GetDevices(string name)
 		{
 			spinLock.Enter();
 
@@ -76,66 +94,7 @@ namespace Mosa.HardwareSystem
 
 			foreach (var device in devices)
 			{
-				if (match1.IsMatch(device) && (match2.IsMatch(device)))
-				{
-					list.Add(device);
-				}
-			}
-
-			spinLock.Exit();
-
-			return list;
-		}
-
-		/// <summary>
-		/// Gets the devices.
-		/// </summary>
-		/// <param name="match1">The match1.</param>
-		/// <param name="match2">The match2.</param>
-		/// <param name="match3">The match3.</param>
-		/// <returns></returns>
-		public List<IDevice> GetDevices(IFindDevice match1, IFindDevice match2, IFindDevice match3)
-		{
-			spinLock.Enter();
-
-			var list = new List<IDevice>();
-
-			foreach (var device in devices)
-			{
-				if (match1.IsMatch(device) && (match2.IsMatch(device)) && (match3.IsMatch(device)))
-					list.Add(device);
-			}
-
-			spinLock.Exit();
-
-			return list;
-		}
-
-		/// <summary>
-		/// Gets the devices.
-		/// </summary>
-		/// <param name="matches">The matches.</param>
-		/// <returns></returns>
-		public List<IDevice> GetDevices(IFindDevice[] matches)
-		{
-			spinLock.Enter();
-
-			var list = new List<IDevice>();
-
-			foreach (var device in devices)
-			{
-				bool matched = true;
-
-				foreach (IFindDevice find in matches)
-				{
-					if (!find.IsMatch(device))
-					{
-						matched = false;
-						break;
-					}
-				}
-
-				if (matched)
+				if (device.Name == name)
 				{
 					list.Add(device);
 				}
@@ -153,7 +112,21 @@ namespace Mosa.HardwareSystem
 		/// <returns></returns>
 		public List<IDevice> GetChildrenOf(IDevice parent)
 		{
-			return GetDevices(new WithParent(parent));
+			spinLock.Enter();
+
+			var list = new List<IDevice>();
+
+			foreach (var device in devices)
+			{
+				if (device.Parent == parent)
+				{
+					list.Add(device);
+				}
+			}
+
+			spinLock.Exit();
+
+			return list;
 		}
 
 		/// <summary>

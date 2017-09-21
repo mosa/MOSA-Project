@@ -5,12 +5,12 @@ using Mosa.HardwareSystem;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	///
+	/// Partition Manager
 	/// </summary>
 	public class PartitionManager
 	{
 		/// <summary>
-		///
+		/// The device manager
 		/// </summary>
 		protected DeviceManager deviceManager;
 
@@ -30,8 +30,10 @@ namespace Mosa.DeviceSystem
 		{
 			// FIXME: Do not create multiple partition devices if this method executed more than once
 
+			var disks = deviceManager.GetDevices<IDiskDevice>(DeviceStatus.Online);
+
 			// Find all online disk devices
-			foreach (var device in deviceManager.GetDevices(new IsDiskDevice(), new IsOnline()))
+			foreach (var device in disks)
 			{
 				var diskDevice = device as IDiskDevice;
 

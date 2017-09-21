@@ -492,7 +492,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				if (mDesc.Definition != desc.Definition || !comparer.Equals(mDesc.Signature, newSig))
 					continue;
 
-				if (!(!newSig.ContainsGenericParameter && newSig.GenParamCount > 0))
+				if (!newSig.ContainsGenericParameter && newSig.GenParamCount > 0)
 					return m;
 			}
 

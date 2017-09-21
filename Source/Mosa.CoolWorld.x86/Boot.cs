@@ -11,7 +11,7 @@ using Mosa.Runtime.x86;
 namespace Mosa.CoolWorld.x86
 {
 	/// <summary>
-	///
+	/// Boot
 	/// </summary>
 	public static class Boot
 	{
@@ -70,7 +70,7 @@ namespace Mosa.CoolWorld.x86
 
 			Console.Write("> Probing for PCI devices...");
 			HardwareSystem.Setup.StartPCIDevices();
-			var pciDevices = HardwareSystem.Setup.DeviceManager.GetDevices(new HardwareSystem.IsPCIDevice(), new HardwareSystem.IsAvailable());
+			var pciDevices = HardwareSystem.Setup.DeviceManager.GetDevices<HardwareSystem.PCI.IPCIDevice>(HardwareSystem.DeviceStatus.Available);
 			Console.WriteLine("[Completed: " + pciDevices.Count.ToString() + " found]");
 
 			foreach (var device in pciDevices)
@@ -85,7 +85,7 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			Console.Write("> Probing for disk controllers...");
-			var diskcontrollers = HardwareSystem.Setup.DeviceManager.GetDevices(new DeviceSystem.IsDiskControllerDevice());
+			var diskcontrollers = HardwareSystem.Setup.DeviceManager.GetDevices<DeviceSystem.IDiskControllerDevice>();
 			Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
 
 			//foreach (var device in diskcontrollers)
@@ -101,7 +101,7 @@ namespace Mosa.CoolWorld.x86
 			diskcontroller.CreateDiskDevices();
 
 			Console.Write("> Probing for disks...");
-			var disks = HardwareSystem.Setup.DeviceManager.GetDevices(new DeviceSystem.IsDiskDevice());
+			var disks = HardwareSystem.Setup.DeviceManager.GetDevices<DeviceSystem.IDiskDevice>();
 			Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
 			foreach (var disk in disks)
 			{
@@ -117,7 +117,7 @@ namespace Mosa.CoolWorld.x86
 			partitionManager.CreatePartitionDevices();
 
 			Console.Write("> Finding partitions...");
-			var partitions = HardwareSystem.Setup.DeviceManager.GetDevices(new DeviceSystem.IsPartitionDevice());
+			var partitions = HardwareSystem.Setup.DeviceManager.GetDevices<DeviceSystem.IPartitionDevice>();
 			Console.WriteLine("[Completed: " + partitions.Count.ToString() + " found]");
 			foreach (var partition in partitions)
 			{
@@ -139,7 +139,7 @@ namespace Mosa.CoolWorld.x86
 				{
 					Console.WriteLine("Found a FAT file system!");
 
-					var filename = "TEST.TXT";
+					const string filename = "TEST.TXT";
 
 					var location = fat.FindEntry(filename);
 
@@ -155,7 +155,7 @@ namespace Mosa.CoolWorld.x86
 
 						Console.WriteLine("Reading File:");
 
-						for (;;)
+						for (; ; )
 						{
 							int i = fatFileStream.ReadByte();
 
@@ -171,7 +171,7 @@ namespace Mosa.CoolWorld.x86
 			ForeverLoop();
 
 			// Get StandardKeyboard
-			var standardKeyboards = HardwareSystem.Setup.DeviceManager.GetDevices(new HardwareSystem.WithName("StandardKeyboard"));
+			var standardKeyboards = HardwareSystem.Setup.DeviceManager.GetDevices("StandardKeyboard");
 
 			if (standardKeyboards.Count == 0)
 			{
