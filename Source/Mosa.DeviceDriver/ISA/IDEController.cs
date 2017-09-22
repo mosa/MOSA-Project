@@ -236,7 +236,7 @@ namespace Mosa.DeviceDriver.ISA
 			LBALowPort.Write8(0);
 			LBAMidPort.Write8(0);
 			LBAHighPort.Write8(0);
-			CommandPort.Write8(0xEC);
+			CommandPort.Write8(IDECommand.IdentifyDrive);
 
 			//Wait until a ready status is present
 			if (!WaitForReadyStatus())
