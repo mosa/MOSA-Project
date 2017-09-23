@@ -7,7 +7,7 @@ using Mosa.VBEWorld.x86.HAL;
 namespace Mosa.VBEWorld.x86
 {
 	/// <summary>
-	/// 
+	/// Boot
 	/// </summary>
 	public static class Boot
 	{
