@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.AppSystem;
+using Mosa.ClassLib;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.FileSystem.FAT;
 
@@ -88,14 +89,14 @@ namespace Mosa.CoolWorld.x86
 			var diskcontrollers = HardwareSystem.Setup.DeviceManager.GetDevices<DeviceSystem.IDiskControllerDevice>();
 			Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
 
-			//foreach (var device in diskcontrollers)
-			//{
-			//	Console.Write("  ");
-			//	Bullet(Color.Yellow);
-			//	Console.Write(" ");
-			//	InBrackets(device.Name, Color.White, Color.LightGreen);
-			//	Console.WriteLine();
-			//}
+			foreach (var device in diskcontrollers)
+			{
+				Console.Write("  ");
+				Bullet(Color.Yellow);
+				Console.Write(" ");
+				InBrackets(device.Name, Color.White, Color.LightGreen);
+				Console.WriteLine();
+			}
 
 			var diskcontroller = new DeviceSystem.DiskControllerManager(HardwareSystem.Setup.DeviceManager);
 			diskcontroller.CreateDiskDevices();
