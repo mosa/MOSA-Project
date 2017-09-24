@@ -125,7 +125,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory;
+		protected BaseMemory memory;
 
 		/// <summary>
 		///

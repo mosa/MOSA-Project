@@ -27,10 +27,10 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		IMemory IHardwareAbstraction.RequestPhysicalMemory(uint address, uint size)
+		BaseMemory IHardwareAbstraction.RequestPhysicalMemory(uint address, uint size)
 		{
 			// Map physical memory space to virtual memory space
-			for (uint at = address; at < address + size; at = at + 4096)
+			for (uint at = address; at < address + size; at += 4096)
 			{
 				PageTable.MapVirtualAddressToPhysical(at, at);
 			}
@@ -77,7 +77,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="size">The size.</param>
 		/// <param name="alignment">The alignment.</param>
 		/// <returns></returns>
-		IMemory IHardwareAbstraction.AllocateMemory(uint size, uint alignment)
+		BaseMemory IHardwareAbstraction.AllocateMemory(uint size, uint alignment)
 		{
 			uint address = KernelMemory.AllocateMemory(size);
 
@@ -89,7 +89,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="memory">The memory.</param>
 		/// <returns></returns>
-		uint IHardwareAbstraction.GetPhysicalAddress(IMemory memory)
+		uint IHardwareAbstraction.GetPhysicalAddress(BaseMemory memory)
 		{
 			return PageTable.GetPhysicalAddressFromVirtual(memory.Address);
 		}

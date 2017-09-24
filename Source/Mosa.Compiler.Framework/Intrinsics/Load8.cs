@@ -5,8 +5,12 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
-	[ReplacementTarget("Mosa.Runtime.Intrinsic::Load64")]
-	public sealed class Load64 : IIntrinsicInternalMethod
+	/// <summary>
+	///
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
+	[ReplacementTarget("Mosa.Runtime.Intrinsic::Load8")]
+	public sealed class Load8 : IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site
@@ -16,7 +20,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <exception cref="InvalidCompilerException"></exception>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			const InstructionSize size = InstructionSize.Size64;
+			const InstructionSize size = InstructionSize.Size8;
 
 			if (context.OperandCount == 1)
 			{

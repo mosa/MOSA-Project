@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.HardwareSystem;
 using Mosa.Runtime.x86;
 
 namespace Mosa.CoolWorld.x86.HAL
@@ -9,9 +8,9 @@ namespace Mosa.CoolWorld.x86.HAL
 	/// <summary>
 	/// Implementation of IReadWriteIOPort
 	/// </summary>
-	public sealed class IOPort : IReadWriteIOPort, IWriteOnlyIOPort, IReadOnlyIOPort, IBaseIOPort
+	public sealed class IOPort : IReadWriteIOPort
 	{
-		public ushort Address { get; private set; }
+		public ushort Address { get; }
 
 		public IOPort(ushort address)
 		{

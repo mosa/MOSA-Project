@@ -13,23 +13,23 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// The io port regions
 		/// </summary>
-		private List<IOPortRegion> ioPortRegions;
+		private readonly List<IOPortRegion> ioPortRegions;
 
 		/// <summary>
 		/// The memory regions
 		/// </summary>
-		private List<MemoryRegion> memoryRegions;
+		private readonly List<MemoryRegion> memoryRegions;
 
 		/// <summary>
 		/// The interrupt handler
 		/// </summary>
-		private InterruptHandler interruptHandler;
+		private readonly InterruptHandler interruptHandler;
 
 		/// <summary>
 		/// Gets the PCI device resource.
 		/// </summary>
 		/// <value>The PCI device resource.</value>
-		public IPCIDeviceResource DeviceResource { get; private set; }
+		public IPCIDeviceResource DeviceResource { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="HardwareResources" /> class.
@@ -42,21 +42,6 @@ namespace Mosa.DeviceSystem
 			this.ioPortRegions = ioPortRegions;
 			this.memoryRegions = memoryRegions;
 			this.interruptHandler = interruptHandler;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="HardwareResources" /> class.
-		/// </summary>
-		/// <param name="ioPortRegions">The io port regions.</param>
-		/// <param name="memoryRegions">The memory regions.</param>
-		/// <param name="interruptHandler">The interrupt handler.</param>
-		/// <param name="deviceResource">The device resource.</param>
-		public HardwareResources(List<IOPortRegion> ioPortRegions, List<MemoryRegion> memoryRegions, InterruptHandler interruptHandler, IPCIDeviceResource deviceResource)
-		{
-			this.ioPortRegions = ioPortRegions;
-			this.memoryRegions = memoryRegions;
-			this.interruptHandler = interruptHandler;
-			this.DeviceResource = DeviceResource;
 		}
 
 		/// <summary>
@@ -107,7 +92,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="region">The region.</param>
 		/// <returns></returns>
-		public IMemory GetMemory(byte region)
+		public BaseMemory GetMemory(byte region)
 		{
 			return HAL.RequestPhysicalMemory(memoryRegions[region].BaseAddress, memoryRegions[region].Size);
 		}

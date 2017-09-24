@@ -107,7 +107,7 @@ namespace Mosa.DeviceDriver.PCI.S3
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory;
+		protected BaseMemory memory;
 
 		/// <summary>
 		///

@@ -5,17 +5,17 @@ using System.Collections.Generic;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	///
+	/// Memory Resources
 	/// </summary>
 	public class MemoryResources
 	{
 		/// <summary>
-		///
+		/// The memory regions
 		/// </summary>
 		protected LinkedList<MemoryRegion> memoryRegions;
 
 		/// <summary>
-		///
+		/// The spin lock
 		/// </summary>
 		protected SpinLock spinLock;
 
@@ -33,7 +33,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public IMemory GetMemory(uint address, uint size)
+		public BaseMemory GetMemory(uint address, uint size)
 		{
 			return HAL.RequestPhysicalMemory(address, size);
 		}
@@ -53,7 +53,7 @@ namespace Mosa.DeviceSystem
 
 				foreach (var memoryRegion in memoryRegions)
 				{
-					if ((memoryRegion.Contains(region.BaseAddress) || memoryRegion.Contains(region.BaseAddress + region.Size)))
+					if (memoryRegion.Contains(region.BaseAddress) || memoryRegion.Contains(region.BaseAddress + region.Size))
 						return false;
 				}
 			}

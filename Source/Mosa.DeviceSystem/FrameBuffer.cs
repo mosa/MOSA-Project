@@ -1,12 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	///
+	/// Frame Buffer
 	/// </summary>
+	/// <seealso cref="Mosa.DeviceSystem.IFrameBuffer" />
 	public abstract class FrameBuffer : IFrameBuffer
 	{
 		/// <summary>
@@ -22,7 +21,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// The memory
 		/// </summary>
-		protected IMemory memory;
+		protected BaseMemory memory;
 
 		/// <summary>
 		/// The offset

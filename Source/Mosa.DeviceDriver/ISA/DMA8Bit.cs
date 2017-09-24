@@ -11,7 +11,7 @@ namespace Mosa.DeviceDriver.ISA
 	//[DeviceDriverPhysicalMemory(MemorySize = 64 * 1024, MemoryAlignment = 64 * 1024, RestrictUnder16M = true)]
 	//[DeviceDriverPhysicalMemory(MemorySize = 64 * 1024, MemoryAlignment = 64 * 1024, RestrictUnder16M = true)]
 	//[DeviceDriverPhysicalMemory(MemorySize = 64 * 1024, MemoryAlignment = 64 * 1024, RestrictUnder16M = true)]
-	public class DMA8Bit : HardwareDevice, IDevice, IHardwareDevice
+	public class DMA8Bit : HardwareDevice
 	{
 		#region Definitions
 
@@ -140,22 +140,22 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory0;
+		protected BaseMemory memory0;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory1;
+		protected BaseMemory memory1;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory2;
+		protected BaseMemory memory2;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory3;
+		protected BaseMemory memory3;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DMA8Bit"/> class.
@@ -167,6 +167,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		/// Setups this hardware device driver
 		/// </summary>
+		/// <param name="hardwareResources"></param>
 		/// <returns></returns>
 		public override bool Setup(HardwareResources hardwareResources)
 		{
@@ -210,19 +211,13 @@ namespace Mosa.DeviceDriver.ISA
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
-		{
-			return DeviceDriverStartStatus.Started;
-		}
+		public override DeviceDriverStartStatus Start() => DeviceDriverStartStatus.Started;
 
 		/// <summary>
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt()
-		{
-			return false;
-		}
+		public override bool OnInterrupt() => false;
 
 		/// <summary>
 		/// Setups the channel.
@@ -238,7 +233,7 @@ namespace Mosa.DeviceDriver.ISA
 			IWriteOnlyIOPort dmaAddress;
 			IWriteOnlyIOPort dmaCount;
 			IWriteOnlyIOPort dmaPage;
-			IMemory memory;
+			BaseMemory memory;
 
 			switch (channel)
 			{
@@ -249,7 +244,7 @@ namespace Mosa.DeviceDriver.ISA
 				default: return false;
 			}
 
-			uint address = memory.Address;
+			var address = memory.Address;
 
 			// Disable DMA Controller
 			channelMaskRegister.Write8((byte)(channel | 4));
@@ -269,7 +264,7 @@ namespace Mosa.DeviceDriver.ISA
 			dmaCount.Write8((byte)((count - 1) & 0xFF)); // low
 			dmaCount.Write8((byte)(((count - 1) >> 8) & 0xFF)); // high
 
-			byte value = channel;
+			var value = channel;
 
 			if (auto)
 				value = (byte)(value | DMAAutoValue.Auto);
@@ -304,7 +299,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		/// <param name="channel">The channel.</param>
 		/// <returns></returns>
-		protected IMemory GetTranserAddress(byte channel)
+		protected BaseMemory GetTranserAddress(byte channel)
 		{
 			switch (channel)
 			{
@@ -312,7 +307,8 @@ namespace Mosa.DeviceDriver.ISA
 				case 1: return memory1;
 				case 2: return memory2;
 				case 3: return memory3;
-				default: return null;
+				default:
+					return null;
 			}
 		}
 
@@ -332,7 +328,7 @@ namespace Mosa.DeviceDriver.ISA
 			if (destination.Length + offset > count)
 				return false;
 
-			IMemory address = GetTranserAddress(channel);
+			var address = GetTranserAddress(channel);
 
 			if (address.Address == 0x00)
 				return false;
@@ -359,7 +355,7 @@ namespace Mosa.DeviceDriver.ISA
 			if (source.Length + offset > count)
 				return false;
 
-			IMemory address = GetTranserAddress(channel);
+			var address = GetTranserAddress(channel);
 
 			if (address.Address == 0x00)
 				return false;

@@ -97,7 +97,7 @@
     <Compile Include="IHardwareAbstraction.cs" />
     <Compile Include="IHardwareDevice.cs" />
     <Compile Include="IIOPorts.cs" />
-    <Compile Include="IMemory.cs" />
+    <Compile Include="BaseMemory.cs" />
     <Compile Include="InterruptHandler.cs" />
     <Compile Include="InterruptManager.cs" />
     <Compile Include="IOPortRegion.cs" />

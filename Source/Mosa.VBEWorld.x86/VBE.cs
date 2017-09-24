@@ -6,7 +6,7 @@ namespace Mosa.VBEWorld.x86
 {
 	public static class VBE
 	{
-		private static IMemory _lfb;
+		private static BaseMemory _lfb;
 
 		public static IFrameBuffer Framebuffer { get; set;  }
 

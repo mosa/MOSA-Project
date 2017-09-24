@@ -5,80 +5,95 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Interface to a region of memory
 	/// </summary>
-	public interface IMemory
+	public abstract class BaseMemory
 	{
 		/// <summary>
 		/// Gets the address.
 		/// </summary>
 		/// <value>The address.</value>
-		uint Address { get; }
+		public uint Address { get; }
 
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
 		/// <value>The size.</value>
-		uint Size { get; }
+		public uint Size { get; }
 
 		/// <summary>
-		/// Gets or sets the <see cref="System.Byte"/> at the specified index.
+		/// Initializes a new instance of the <see cref="BaseMemory" /> class.
 		/// </summary>
-		/// <value></value>
-		byte this[uint index] { get; set; }
+		/// <param name="address">The address.</param>
+		/// <param name="size">The size.</param>
+		protected BaseMemory(uint address, uint size)
+		{
+			this.Address = address;
+			this.Size = size;
+		}
+
+		/// <summary>
+		/// Gets or sets the <see cref="System.Byte" /> at the specified index.
+		/// </summary>
+		/// <value>
+		/// The <see cref="System.Byte"/>.
+		/// </value>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public abstract byte this[uint index] { get; set; }
 
 		/// <summary>
 		/// Reads the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		byte Read8(uint index);
+		public abstract byte Read8(uint index);
 
 		/// <summary>
 		/// Writes the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		void Write8(uint index, byte value);
+		public abstract void Write8(uint index, byte value);
 
 		/// <summary>
 		/// Reads the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		ushort Read16(uint index);
+		public abstract ushort Read16(uint index);
 
 		/// <summary>
 		/// Writes the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		void Write24(uint index, uint value);
+		public abstract void Write24(uint index, uint value);
 
 		/// <summary>
 		/// Reads the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		uint Read24(uint index);
+		public abstract uint Read24(uint index);
 
 		/// <summary>
 		/// Writes the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		void Write16(uint index, ushort value);
+		public abstract void Write16(uint index, ushort value);
 
 		/// <summary>
 		/// Reads the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		uint Read32(uint index);
+		public abstract uint Read32(uint index);
 
 		/// <summary>
 		/// Writes the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		void Write32(uint index, uint value);
+		public abstract void Write32(uint index, uint value);
 	}
 }

@@ -119,12 +119,12 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory;
+		protected BaseMemory memory;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory fifo;
+		protected BaseMemory fifo;
 
 		/// <summary>
 		///

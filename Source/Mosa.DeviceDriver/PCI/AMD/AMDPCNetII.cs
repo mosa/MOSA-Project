@@ -50,12 +50,12 @@ namespace Mosa.DeviceDriver.PCI.AMD
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory initBlock;
+		protected BaseMemory initBlock;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory buffers;
+		protected BaseMemory buffers;
 
 		/// <summary>
 		///
@@ -65,12 +65,12 @@ namespace Mosa.DeviceDriver.PCI.AMD
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory txDescriptor;
+		protected BaseMemory txDescriptor;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory rxDescriptor;
+		protected BaseMemory rxDescriptor;
 
 		/// <summary>
 		///

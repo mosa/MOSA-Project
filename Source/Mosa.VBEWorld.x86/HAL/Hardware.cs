@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.HardwareSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 using System;
@@ -29,7 +28,7 @@ namespace Mosa.VBEWorld.x86.HAL
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public IMemory RequestPhysicalMemory(uint address, uint size)
+		public BaseMemory RequestPhysicalMemory(uint address, uint size)
 		{
 			// Map physical memory space to virtual memory space
 			for (uint at = address; at < address + size; at += 4096)
@@ -79,7 +78,7 @@ namespace Mosa.VBEWorld.x86.HAL
 		/// <param name="size">The size.</param>
 		/// <param name="alignment">The alignment.</param>
 		/// <returns></returns>
-		IMemory IHardwareAbstraction.AllocateMemory(uint size, uint alignment)
+		BaseMemory IHardwareAbstraction.AllocateMemory(uint size, uint alignment)
 		{
 			uint address = KernelMemory.AllocateMemory(size);
 
@@ -91,7 +90,7 @@ namespace Mosa.VBEWorld.x86.HAL
 		/// </summary>
 		/// <param name="memory">The memory.</param>
 		/// <returns></returns>
-		uint IHardwareAbstraction.GetPhysicalAddress(IMemory memory)
+		uint IHardwareAbstraction.GetPhysicalAddress(BaseMemory memory)
 		{
 			return PageTable.GetPhysicalAddressFromVirtual(memory.Address);
 		}

@@ -1,42 +1,33 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.HardwareSystem;
-using Mosa.Runtime.x86;
+using Mosa.Runtime;
 
 namespace Mosa.CoolWorld.x86.HAL
 {
-	public sealed class Memory : IMemory
+	public sealed class Memory : BaseMemory
 	{
-		private uint address;
-		private uint size;
-
-		public Memory(uint address, uint size)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Memory"/> class.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <param name="size">The size.</param>
+		public Memory(uint address, uint size) : base(address, size)
 		{
-			this.address = address;
-			this.size = size;
 		}
 
 		/// <summary>
-		/// Gets the address.
+		/// Gets or sets the <see cref="System.Byte" /> at the specified index.
 		/// </summary>
-		/// <value>The address.</value>
-		uint IMemory.Address { get { return address; } }
-
-		/// <summary>
-		/// Gets the size.
-		/// </summary>
-		/// <value>The size.</value>
-		uint IMemory.Size { get { return size; } }
-
-		/// <summary>
-		/// Gets or sets the <see cref="System.Byte"/> at the specified index.
-		/// </summary>
-		/// <value></value>
-		byte IMemory.this[uint index]
+		/// <value>
+		/// The <see cref="System.Byte"/>.
+		/// </value>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public override byte this[uint index]
 		{
-			get { return Native.Get8(address + index); }
-			set { Native.Set8(address + index, value); }
+			get { return Intrinsic.Load8(Address, index); }
+			set { Intrinsic.Store8(Address, index, value); }
 		}
 
 		/// <summary>
@@ -44,9 +35,9 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		byte IMemory.Read8(uint index)
+		public override byte Read8(uint index)
 		{
-			return Native.Get8(address + index);
+			return Intrinsic.Load8(Address, index);
 		}
 
 		/// <summary>
@@ -54,9 +45,9 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		void IMemory.Write8(uint index, byte value)
+		public override void Write8(uint index, byte value)
 		{
-			Native.Set8(address + index, value);
+			Intrinsic.Store8(Address, index, value);
 		}
 
 		/// <summary>
@@ -64,9 +55,9 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		ushort IMemory.Read16(uint index)
+		public override ushort Read16(uint index)
 		{
-			return Native.Get16(address + index);
+			return Intrinsic.Load16(Address, index);
 		}
 
 		/// <summary>
@@ -74,9 +65,9 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		void IMemory.Write16(uint index, ushort value)
+		public override void Write16(uint index, ushort value)
 		{
-			Native.Set16(address + index, value);
+			Intrinsic.Store16(Address, index, value);
 		}
 
 		/// <summary>
@@ -84,9 +75,9 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		uint IMemory.Read24(uint index)
+		public override uint Read24(uint index)
 		{
-			return Native.Get16(address + index) | (uint)(Native.Get8(address + index + 2) << 16);
+			return Intrinsic.Load16(Address, index) | (uint)(Intrinsic.Load8(Address, index + 2) << 16);
 		}
 
 		/// <summary>
@@ -94,10 +85,10 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		void IMemory.Write24(uint index, uint value)
+		public override void Write24(uint index, uint value)
 		{
-			Native.Set16(address + index, (ushort)(value & 0xFFFF));
-			Native.Set8(address + index + 2, (byte)((value >> 16) & 0xFF));
+			Intrinsic.Store16(Address, index, (ushort)(value & 0xFFFF));
+			Intrinsic.Store8(Address, index + 2, (byte)((value >> 16) & 0xFF));
 		}
 
 		/// <summary>
@@ -105,9 +96,9 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		uint IMemory.Read32(uint index)
+		public override uint Read32(uint index)
 		{
-			return Native.Get32(address + index);
+			return Intrinsic.Load32(Address, index);
 		}
 
 		/// <summary>
@@ -115,9 +106,9 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		void IMemory.Write32(uint index, uint value)
+		public override void Write32(uint index, uint value)
 		{
-			Native.Set32(address + index, value);
+			Intrinsic.Store32(Address, index, value);
 		}
 	}
 }

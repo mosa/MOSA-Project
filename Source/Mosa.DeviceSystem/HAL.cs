@@ -63,7 +63,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public static IMemory RequestPhysicalMemory(uint address, uint size)
+		public static BaseMemory RequestPhysicalMemory(uint address, uint size)
 		{
 			return hardwareAbstraction.RequestPhysicalMemory(address, size);
 		}
@@ -99,7 +99,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="size">The size.</param>
 		/// <param name="alignment">The alignment.</param>
 		/// <returns></returns>
-		public static IMemory AllocateMemory(uint size, uint alignment)
+		public static BaseMemory AllocateMemory(uint size, uint alignment)
 		{
 			return hardwareAbstraction.AllocateMemory(size, alignment);
 		}
@@ -109,7 +109,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="memory">The memory.</param>
 		/// <returns></returns>
-		public static uint GetPhysicalAddress(IMemory memory)
+		public static uint GetPhysicalAddress(BaseMemory memory)
 		{
 			return hardwareAbstraction.GetPhysicalAddress(memory);
 		}

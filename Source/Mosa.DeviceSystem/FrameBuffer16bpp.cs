@@ -15,7 +15,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="height">The height.</param>
 		/// <param name="offset">The offset.</param>
 		/// <param name="depth">The depth.</param>
-		public FrameBuffer16bpp(IMemory memory, uint width, uint height, uint offset, uint depth)
+		public FrameBuffer16bpp(BaseMemory memory, uint width, uint height, uint offset, uint depth)
 		{
 			this.memory = memory;
 			this.width = width;

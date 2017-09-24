@@ -20,7 +20,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		IMemory RequestPhysicalMemory(uint address, uint size);
+		BaseMemory RequestPhysicalMemory(uint address, uint size);
 
 		/// <summary>
 		/// Disables all interrupts.
@@ -50,14 +50,14 @@ namespace Mosa.DeviceSystem
 		/// <param name="size">The size.</param>
 		/// <param name="alignment">The alignment.</param>
 		/// <returns></returns>
-		IMemory AllocateMemory(uint size, uint alignment);
+		BaseMemory AllocateMemory(uint size, uint alignment);
 
 		/// <summary>
 		/// Gets the physical address.
 		/// </summary>
 		/// <param name="memory">The memory.</param>
 		/// <returns></returns>
-		uint GetPhysicalAddress(IMemory memory);
+		uint GetPhysicalAddress(BaseMemory memory);
 
 		/// <summary>
 		/// Debugs the write.
