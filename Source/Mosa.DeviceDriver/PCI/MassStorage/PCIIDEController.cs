@@ -5,10 +5,8 @@
 // http://www.osdever.net/tutorials/lba.php
 // http://www.nondot.org/sabre/os/files/Disk/IDE-tech.html
 
-using Mosa.ClassLib;
 using Mosa.DeviceSystem;
-using Mosa.HardwareSystem;
-using Mosa.HardwareSystem.PCI;
+using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceDriver.PCI.MassStorage
 {

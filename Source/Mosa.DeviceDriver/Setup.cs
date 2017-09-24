@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.HardwareSystem;
+using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDriver
 {

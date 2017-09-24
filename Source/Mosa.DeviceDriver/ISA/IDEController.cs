@@ -1,11 +1,11 @@
-﻿
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 // References
 // http://www.t13.org/Documents/UploadedDocuments/docs2004/d1572r3-EDD3.pdf
 // http://mirrors.josefsipek.net/www.nondot.org/sabre/os/files/Disk/IDE-tech.html
 
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
-using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceDriver.ISA
 {
@@ -272,12 +272,12 @@ namespace Mosa.DeviceDriver.ISA
 			uint lba28SectorCount = info.GetUInt(IdentifyDrive.MaxLBA28);
 
 			AddressingMode aMode = AddressingMode.NotSupported;
-			if((info.GetUShort(IdentifyDrive.CommandSetSupported83) & 0x200) == 0x200) //Check the LBA48 support bit
+			if ((info.GetUShort(IdentifyDrive.CommandSetSupported83) & 0x200) == 0x200) //Check the LBA48 support bit
 			{
 				aMode = AddressingMode.LBA48;
 				driveInfo[index].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA48);
 			}
-			else if(lba28SectorCount > 0) //LBA48 not supported, check LBA28
+			else if (lba28SectorCount > 0) //LBA48 not supported, check LBA28
 			{
 				aMode = AddressingMode.LBA28;
 				driveInfo[index].MaxLBA = lba28SectorCount;
@@ -547,6 +547,7 @@ namespace Mosa.DeviceDriver.ISA
 							if (!PerformLBA28(SectorOperation.Read, drive, block + index, data, index * 512))
 								return false;
 							break;
+
 						case AddressingMode.LBA48:
 							if (!PerformLBA48(SectorOperation.Read, drive, block + index, data, index * 512))
 								return false;
@@ -588,6 +589,7 @@ namespace Mosa.DeviceDriver.ISA
 							if (!PerformLBA28(SectorOperation.Write, drive, block + index, data, index * 512))
 								return false;
 							break;
+
 						case AddressingMode.LBA48:
 							if (!PerformLBA48(SectorOperation.Write, drive, block + index, data, index * 512))
 								return false;

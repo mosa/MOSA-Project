@@ -46,7 +46,7 @@ namespace Mosa.Utility.BootImage
 		/// <returns></returns>
 		static public byte[] CreateFooter(ulong blocks, uint timeStamp, byte[] guid, DiskGeometry diskGeometry)
 		{
-			var binaryFooter = new Mosa.ClassLib.DataBlock(512);
+			var binaryFooter = new DataBlock(512);
 
 			binaryFooter.SetString(VHDFooterOffset.Cookie, "conectix", 8);
 			binaryFooter.SetUIntReversed(VHDFooterOffset.Features, 0x00000002);

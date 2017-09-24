@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.HardwareSystem;
+using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 
 namespace Mosa.CoolWorld.x86.HAL
 {
 	/// <summary>
-	///
+	/// Hardware
 	/// </summary>
 	public sealed class Hardware : IHardwareAbstraction
 	{
@@ -60,7 +60,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="irq">The irq.</param>
 		void IHardwareAbstraction.ProcessInterrupt(byte irq)
 		{
-			Mosa.HardwareSystem.HAL.ProcessInterrupt(irq);
+			DeviceSystem.HAL.ProcessInterrupt(irq);
 		}
 
 		/// <summary>

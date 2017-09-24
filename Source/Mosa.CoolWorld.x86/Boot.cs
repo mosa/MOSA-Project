@@ -8,6 +8,7 @@ using Mosa.FileSystem.FAT;
 //using Mosa.HardwareSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
+using Mosa.CoolWorld.x86.HAL;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -71,12 +72,12 @@ namespace Mosa.CoolWorld.x86
 
 			Console.Write("> Probing for PCI devices...");
 			HardwareSystem.Setup.StartPCIDevices();
-			var pciDevices = HardwareSystem.Setup.DeviceManager.GetDevices<HardwareSystem.PCI.IPCIDevice>(HardwareSystem.DeviceStatus.Available);
+			var pciDevices = HardwareSystem.Setup.DeviceManager.GetDevices<DeviceSystem.PCI.IPCIDevice>(DeviceSystem.DeviceStatus.Available);
 			Console.WriteLine("[Completed: " + pciDevices.Count.ToString() + " found]");
 
 			foreach (var device in pciDevices)
 			{
-				var pciDevice = device as HardwareSystem.PCI.IPCIDevice;
+				var pciDevice = device as DeviceSystem.PCI.IPCIDevice;
 
 				Console.Write("  ");
 				Bullet(Color.Yellow);
@@ -260,7 +261,7 @@ namespace Mosa.CoolWorld.x86
 
 			if (interrupt >= 0x20 && interrupt < 0x30)
 			{
-				Mosa.HardwareSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
+				DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 			}
 
 			Console.Column = c;

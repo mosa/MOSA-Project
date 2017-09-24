@@ -145,7 +145,7 @@ namespace Mosa.AppSystem
 
 			if (interrupt >= 0x20 && interrupt < 0x30)
 			{
-				Mosa.HardwareSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
+				DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 			}
 
 			debug.Column = c;

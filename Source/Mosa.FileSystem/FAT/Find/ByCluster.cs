@@ -1,16 +1,16 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.ClassLib;
+using Mosa.DeviceSystem;
 
 namespace Mosa.FileSystem.FAT.Find
 {
 	/// <summary>
-	///
+	/// ByCluster
 	/// </summary>
 	internal class ByCluster : FatFileSystem.ICompare
 	{
 		/// <summary>
-		///
+		/// The cluster
 		/// </summary>
 		protected uint cluster;
 

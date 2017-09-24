@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.HardwareSystem;
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>

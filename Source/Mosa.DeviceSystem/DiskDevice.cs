@@ -1,31 +1,29 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.HardwareSystem;
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	///
+	/// Disk Device
 	/// </summary>
 	public class DiskDevice : Device, IDiskDevice
 	{
 		/// <summary>
-		///
+		/// The disk controller
 		/// </summary>
 		private IDiskControllerDevice diskController;
 
 		/// <summary>
-		///
+		/// The drive NBR
 		/// </summary>
 		private uint driveNbr;
 
 		/// <summary>
-		///
+		/// The total sectors
 		/// </summary>
 		private uint totalSectors;
 
 		/// <summary>
-		///
+		/// The read only
 		/// </summary>
 		private bool readOnly;
 
