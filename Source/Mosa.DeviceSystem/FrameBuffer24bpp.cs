@@ -8,7 +8,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Implementation of FrameBuffer with 24 Bits Per Pixel
 	/// </summary>
-	public sealed class FrameBuffer24bpp : FrameBuffer, IFrameBuffer
+	public sealed class FrameBuffer24bpp : FrameBuffer
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FrameBuffer24bpp"/> class.

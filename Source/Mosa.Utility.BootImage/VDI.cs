@@ -1,9 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem
+using Mosa.DeviceSystem;
+
+namespace Mosa.Utility.BootImage
 {
 	/// <summary>
-	///
+	/// VDI
 	/// </summary>
 	public static class VDI
 	{

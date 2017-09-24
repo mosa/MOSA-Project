@@ -91,7 +91,6 @@
     <Compile Include="DiskControllerManager.cs" />
     <Compile Include="GUIDPartitionTable.cs" />
     <Compile Include="PartitionType.cs" />
-    <Compile Include="VDI.cs" />
     <Compile Include="DiskGeometry.cs" />
     <Compile Include="PartitionManager.cs" />
     <Compile Include="DiskDevice.cs">
@@ -175,7 +174,6 @@
     <Compile Include="TextScreen.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="VHD.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

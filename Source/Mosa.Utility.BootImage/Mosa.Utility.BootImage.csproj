@@ -56,6 +56,8 @@
     <Compile Include="ImageFormat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Syslinux.cs" />
+    <Compile Include="VDI.cs" />
+    <Compile Include="VHD.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">

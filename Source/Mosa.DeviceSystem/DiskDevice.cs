@@ -7,7 +7,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	///
 	/// </summary>
-	public class DiskDevice : Device, IDiskDevice, IDevice
+	public class DiskDevice : Device, IDiskDevice
 	{
 		/// <summary>
 		///

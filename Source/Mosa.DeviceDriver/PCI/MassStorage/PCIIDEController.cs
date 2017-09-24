@@ -148,10 +148,7 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PCIIDEController"/> class.
 		/// </summary>
-		public PCIIDEController()
-		{
-			driveInfo = new DriveInfo[DrivesPerConroller];
-		}
+		public PCIIDEController() => driveInfo = new DriveInfo[DrivesPerConroller];
 
 		public override bool PreSetup(IPCIDeviceResource pciDeviceResource)
 		{
@@ -180,7 +177,7 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 			CommandPort = base.HardwareResources.GetIOPort(0, 7);
 			StatusPort = base.HardwareResources.GetIOPort(0, 7);
 
-			for (int drive = 0; drive < DrivesPerConroller; drive++)
+			for (var drive = 0; drive < DrivesPerConroller; drive++)
 			{
 				driveInfo[drive].Present = false;
 				driveInfo[drive].MaxLBA = 0;
@@ -198,10 +195,7 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		{
 			LBALowPort.Write8(0x88);
 
-			if (LBALowPort.Read8() != 0x88)
-				return false;
-
-			return true;
+			return !(LBALowPort.Read8() != 0x88);
 		}
 
 		/// <summary>
@@ -215,14 +209,18 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 			HAL.Sleep(1000 / 250); // wait 1/250th of a second
 
 			if ((StatusPort.Read8() & 0x40) == 0x40)
+			{
 				driveInfo[0].Present = true;
+			}
 
 			DeviceHeadPort.Write8(0xB0);
 
 			HAL.Sleep(1000 / 250); // wait 1/250th of a second
 
 			if ((StatusPort.Read8() & 0x40) == 0x40)
+			{
 				driveInfo[1].Present = true;
+			}
 
 			return DeviceDriverStartStatus.Started;
 		}
@@ -231,10 +229,7 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt()
-		{
-			return true;
-		}
+		public override bool OnInterrupt() => true;
 
 		/// <summary>
 		/// Waits for register ready.
@@ -247,7 +242,9 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 				uint status = StatusPort.Read8();
 
 				if ((status & 0x08) == 0x08)
+				{
 					return true;
+				}
 
 				//TODO: add timeout check
 			}
@@ -283,7 +280,9 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		protected bool PerformLBA28(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
 		{
 			if (drive > MaximunDriveCount)
+			{
 				return false;
+			}
 
 			FeaturePort.Write8(0);
 			SectorCountPort.Write8(1);
@@ -300,20 +299,26 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 				CommandPort.Write8(IDECommands.ReadSectorsWithRetry);
 
 			if (!WaitForRegisterReady())
+			{
 				return false;
+			}
 
-			var sector = new DataBlock(data);
+			DataBlock sector = new DataBlock(data);
 
 			//TODO: Don't use PIO
 			if (operation == SectorOperation.Read)
 			{
 				for (uint index = 0; index < 256; index++)
+				{
 					sector.SetUShort(offset + (index * 2), DataPort.Read16());
+				}
 			}
 			else
 			{
 				for (uint index = 0; index < 256; index++)
+				{
 					DataPort.Write16(sector.GetUShort(offset + (index * 2)));
+				}
 			}
 
 			return true;
@@ -331,7 +336,9 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		protected bool ReadLBA48(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
 		{
 			if (drive > MaximunDriveCount)
+			{
 				return false;
+			}
 
 			FeaturePort.Write8(0);
 			FeaturePort.Write8(0);
@@ -351,25 +358,35 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 			DeviceHeadPort.Write8((byte)(0x40 | (drive << 4)));
 
 			if (operation == SectorOperation.Write)
+			{
 				CommandPort.Write8(0x34);
+			}
 			else
+			{
 				CommandPort.Write8(0x24);
+			}
 
 			if (!WaitForRegisterReady())
+			{
 				return false;
+			}
 
-			var sector = new DataBlock(data);
+			DataBlock sector = new DataBlock(data);
 
 			//TODO: Don't use PIO
 			if (operation == SectorOperation.Read)
 			{
 				for (uint index = 0; index < 256; index++)
+				{
 					sector.SetUShort(offset + (index * 2), DataPort.Read16());
+				}
 			}
 			else
 			{
 				for (uint index = 0; index < 256; index++)
+				{
 					DataPort.Write16(sector.GetUShort(offset + (index * 2)));
+				}
 			}
 
 			return true;
@@ -383,28 +400,41 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		public bool Open(uint drive)
 		{
 			if (drive > MaximunDriveCount)
+			{
 				return false;
+			}
 
 			if (!driveInfo[drive].Present)
+			{
 				return false;
+			}
 
 			if (drive == 0)
+			{
 				DeviceHeadPort.Write8(0xA0);
-			else
-				if (drive == 1)
+			}
+			else if (drive == 1)
+			{
 				DeviceHeadPort.Write8(0xB0);
+			}
 			else
+			{
 				return false;
+			}
 
 			CommandPort.Write8(IDECommands.IdentifyDrive);
 
 			if (!WaitForRegisterReady())
+			{
 				return false;
+			}
 
 			var info = new DataBlock(512);
 
 			for (uint index = 0; index < 256; index++)
+			{
 				info.SetUShort(index * 2, DataPort.Read16());
+			}
 
 			driveInfo[drive].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA28);
 
@@ -416,26 +446,20 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		/// </summary>
 		/// <param name="drive">The drive NBR.</param>
 		/// <returns></returns>
-		public bool Release(uint drive)
-		{
-			return true;
-		}
+		public bool Release(uint drive) => true;
 
 		/// <summary>
 		/// Gets the maximum drive count.
 		/// </summary>
 		/// <value>The drive count.</value>
-		public uint MaximunDriveCount { get { return 2; } }
+		public uint MaximunDriveCount => 2;
 
 		/// <summary>
 		/// Gets the size of the sector.
 		/// </summary>
 		/// <param name="drive">The drive NBR.</param>
 		/// <returns></returns>
-		public uint GetSectorSize(uint drive)
-		{
-			return 512;
-		}
+		public uint GetSectorSize(uint drive) => 512;
 
 		/// <summary>
 		/// Gets the total sectors.
@@ -445,7 +469,9 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		public uint GetTotalSectors(uint drive)
 		{
 			if (drive > MaximunDriveCount)
+			{
 				return 0;
+			}
 
 			return driveInfo[drive].MaxLBA;
 		}
@@ -457,10 +483,7 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		/// <returns>
 		/// 	<c>true</c> if this instance can write to the specified drive; otherwise, <c>false</c>.
 		/// </returns>
-		public bool CanWrite(uint drive)
-		{
-			return true;
-		}
+		public bool CanWrite(uint drive) => true;
 
 		/// <summary>
 		/// Reads the block.
@@ -473,10 +496,14 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		public bool ReadBlock(uint drive, uint block, uint count, byte[] data)
 		{
 			if (drive > MaximunDriveCount)
+			{
 				return false;
+			}
 
 			if (data.Length < count * 512)
+			{
 				return false;
+			}
 
 			try
 			{
@@ -484,7 +511,9 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 				for (uint index = 0; index < count; index++)
 				{
 					if (!PerformLBA28(SectorOperation.Read, drive, block + index, data, index * 512))
+					{
 						return false;
+					}
 				}
 				return true;
 			}
@@ -505,10 +534,14 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		public bool WriteBlock(uint drive, uint block, uint count, byte[] data)
 		{
 			if (drive > MaximunDriveCount)
+			{
 				return false;
+			}
 
 			if (data.Length < count * 512)
+			{
 				return false;
+			}
 
 			try
 			{
@@ -516,7 +549,9 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 				for (uint index = 0; index < count; index++)
 				{
 					if (!PerformLBA28(SectorOperation.Write, drive, block + index, data, index * 512))
+					{
 						return false;
+					}
 				}
 				return true;
 			}

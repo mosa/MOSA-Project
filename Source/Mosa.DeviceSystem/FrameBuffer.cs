@@ -11,27 +11,27 @@ namespace Mosa.DeviceSystem
 	public abstract class FrameBuffer : IFrameBuffer
 	{
 		/// <summary>
-		///
+		/// The width
 		/// </summary>
 		protected uint width;
 
 		/// <summary>
-		///
+		/// The height
 		/// </summary>
 		protected uint height;
 
 		/// <summary>
-		///
+		/// The memory
 		/// </summary>
 		protected IMemory memory;
 
 		/// <summary>
-		///
+		/// The offset
 		/// </summary>
 		protected uint offset;
 
 		/// <summary>
-		///
+		/// The depth
 		/// </summary>
 		protected uint depth;
 

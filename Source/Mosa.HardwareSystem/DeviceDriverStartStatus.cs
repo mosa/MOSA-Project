@@ -3,7 +3,7 @@
 namespace Mosa.HardwareSystem
 {
 	/// <summary>
-	///
+	/// DeviceDriverStartStatus
 	/// </summary>
 	public enum DeviceDriverStartStatus
 	{

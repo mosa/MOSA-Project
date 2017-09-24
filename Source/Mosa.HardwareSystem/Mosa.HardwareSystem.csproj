@@ -67,6 +67,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Device.cs" />
+    <Compile Include="DeviceManagerX.cs" />
+    <Compile Include="DeviceX.cs" />
     <Compile Include="DeviceDriverPhysicalMemory.cs" />
     <Compile Include="DeviceDriverRegistry.cs" />
     <Compile Include="DeviceDriverStartStatus.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="HAL.cs" />
     <Compile Include="HardwareDevice.cs" />
     <Compile Include="HardwareResources.cs" />
+    <Compile Include="IService.cs" />
     <Compile Include="IDevice.cs" />
     <Compile Include="DeviceBusType.cs" />
     <Compile Include="IDeviceDriver.cs" />
