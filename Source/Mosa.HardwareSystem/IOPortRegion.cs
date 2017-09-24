@@ -3,7 +3,7 @@
 namespace Mosa.HardwareSystem
 {
 	/// <summary>
-	///
+	/// IO Port Region
 	/// </summary>
 	public sealed class IOPortRegion
 	{
@@ -11,13 +11,13 @@ namespace Mosa.HardwareSystem
 		/// Gets the base IO port.
 		/// </summary>
 		/// <value>The base IO port.</value>
-		public ushort BaseIOPort { get; private set; }
+		public ushort BaseIOPort { get; }
 
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
 		/// <value>The size.</value>
-		public ushort Size { get; private set; }
+		public ushort Size { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IOPortRegion"/> class.
@@ -26,8 +26,8 @@ namespace Mosa.HardwareSystem
 		/// <param name="size">The size.</param>
 		public IOPortRegion(ushort baseIOPort, ushort size)
 		{
-			this.BaseIOPort = baseIOPort;
-			this.Size = size;
+			BaseIOPort = baseIOPort;
+			Size = size;
 		}
 	}
 }

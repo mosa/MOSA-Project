@@ -3,7 +3,7 @@
 namespace Mosa.HardwareSystem
 {
 	/// <summary>
-	///
+	/// HAL
 	/// </summary>
 	public static class HAL
 	{
@@ -13,6 +13,7 @@ namespace Mosa.HardwareSystem
 		static public IHardwareAbstraction hardwareAbstraction; //temp: set back to private
 
 		/// <summary>
+		/// Interrupt Delegate
 		/// </summary>
 		/// <param name="irq">The irq.</param>
 		public delegate void HandleInterrupt(byte irq);

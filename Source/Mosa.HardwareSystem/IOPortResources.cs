@@ -3,7 +3,7 @@
 namespace Mosa.HardwareSystem
 {
 	/// <summary>
-	///
+	/// IO Port Resources
 	/// </summary>
 	public sealed class IOPortResources
 	{

@@ -3,7 +3,7 @@
 namespace Mosa.HardwareSystem
 {
 	/// <summary>
-	///
+	/// IDMAChannel
 	/// </summary>
 	public interface IDMAChannel
 	{
@@ -40,14 +40,7 @@ namespace Mosa.HardwareSystem
 	/// </summary>
 	public enum DMAMode : byte
 	{
-		/// <summary>
-		///
-		/// </summary>
 		ReadFromMemory,
-
-		/// <summary>
-		///
-		/// </summary>
 		WriteToMemory
 	}
 
@@ -56,24 +49,9 @@ namespace Mosa.HardwareSystem
 	/// </summary>
 	public enum DMATransferType : byte
 	{
-		/// <summary>
-		///
-		/// </summary>
 		OnDemand,
-
-		/// <summary>
-		///
-		/// </summary>
 		Single,
-
-		/// <summary>
-		///
-		/// </summary>
 		Block,
-
-		/// <summary>
-		///
-		/// </summary>
 		CascadeMode
 	}
 }
