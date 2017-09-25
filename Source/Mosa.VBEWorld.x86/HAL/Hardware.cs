@@ -14,27 +14,17 @@ namespace Mosa.VBEWorld.x86.HAL
 	public sealed class Hardware : IHardwareAbstraction
 	{
 		/// <summary>
-		/// Requests an IO read/write port interface from the kernel
-		/// </summary>
-		/// <param name="port">The port number.</param>
-		/// <returns></returns>
-		IReadWriteIOPort IHardwareAbstraction.RequestIOPort(ushort port)
-		{
-			throw new Exception("Unimplemented");
-		}
-
-		/// <summary>
 		/// Requests a block of memory from the kernel
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public BaseMemory RequestPhysicalMemory(uint address, uint size)
+		BaseMemory IHardwareAbstraction.RequestPhysicalMemory(uint address, uint size)
 		{
 			// Map physical memory space to virtual memory space
 			for (uint at = address; at < address + size; at += 4096)
 			{
-				PageTable.MapVirtualAddressToPhysical(at, at, true);
+				PageTable.MapVirtualAddressToPhysical(at, at);
 			}
 
 			return new Memory(address, size);
@@ -97,12 +87,41 @@ namespace Mosa.VBEWorld.x86.HAL
 		}
 
 		/// <summary>
+		/// Requests an IO read/write port interface from the kernel
+		/// </summary>
+		/// <param name="port">The port number.</param>
+		/// <returns></returns>
+		IOPortReadWrite IHardwareAbstraction.RequestReadWriteIOPort(ushort port)
+		{
+			throw new Exception("Unimplemented");
+		}
+
+		/// <summary>
+		/// Requests an IO read/write port interface from the kernel
+		/// </summary>
+		/// <param name="port">The port number.</param>
+		/// <returns></returns>
+		IOPortRead IHardwareAbstraction.RequestReadIOPort(ushort port)
+		{
+			throw new Exception("Unimplemented");
+		}
+
+		/// <summary>
+		/// Requests an IO write port interface from the kernel
+		/// </summary>
+		/// <param name="port">The port number.</param>
+		/// <returns></returns>
+		IOPortWrite IHardwareAbstraction.RequestWriteIOPort(ushort port)
+		{
+			throw new Exception("Unimplemented");
+		}
+
+		/// <summary>
 		/// Debugs the write.
 		/// </summary>
 		/// <param name="message">The message.</param>
 		void IHardwareAbstraction.DebugWrite(string message)
 		{
-			Boot.Log(message);
 		}
 
 		/// <summary>
@@ -111,7 +130,6 @@ namespace Mosa.VBEWorld.x86.HAL
 		/// <param name="message">The message.</param>
 		void IHardwareAbstraction.DebugWriteLine(string message)
 		{
-			Boot.Log(message);
 		}
 
 		/// <summary>

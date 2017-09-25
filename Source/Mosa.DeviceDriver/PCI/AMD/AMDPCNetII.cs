@@ -7,7 +7,6 @@
 
 using Mosa.DeviceSystem;
 
-
 namespace Mosa.DeviceDriver.PCI.AMD
 {
 	/// <summary>
@@ -25,27 +24,27 @@ namespace Mosa.DeviceDriver.PCI.AMD
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort ioProm1;
+		protected IOPortReadWrite ioProm1;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort ioProm4;
+		protected IOPortReadWrite ioProm4;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort rdp;
+		protected IOPortReadWrite rdp;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort rap;
+		protected IOPortReadWrite rap;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort bdp;
+		protected IOPortReadWrite bdp;
 
 		/// <summary>
 		///
@@ -104,17 +103,18 @@ namespace Mosa.DeviceDriver.PCI.AMD
 		/// <summary>
 		/// Setups this hardware device driver
 		/// </summary>
+		/// <param name="hardwareResources"></param>
 		/// <returns></returns>
 		public override bool Setup(HardwareResources hardwareResources)
 		{
 			this.HardwareResources = hardwareResources;
 			base.Name = "AMDPCNet_0x" + hardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-			ioProm1 = hardwareResources.GetIOPort(0, 0x0);
-			ioProm4 = hardwareResources.GetIOPort(0, 0x4);
-			rdp = hardwareResources.GetIOPort(0, 0x10);
-			rap = hardwareResources.GetIOPort(0, 0x14);
-			bdp = hardwareResources.GetIOPort(0, 0x1C);
+			ioProm1 = hardwareResources.GetIOPortReadWrite(0, 0x0);
+			ioProm4 = hardwareResources.GetIOPortReadWrite(0, 0x4);
+			rdp = hardwareResources.GetIOPortReadWrite(0, 0x10);
+			rap = hardwareResources.GetIOPortReadWrite(0, 0x14);
+			bdp = hardwareResources.GetIOPortReadWrite(0, 0x1C);
 
 			initBlock = hardwareResources.GetMemory(0);
 			txDescriptor = hardwareResources.GetMemory(1);
@@ -123,7 +123,7 @@ namespace Mosa.DeviceDriver.PCI.AMD
 
 			bufferSize = 2048;
 			uint len = (ushort)(~bufferSize);
-			len = (len + 1) & 0x0FFF | 0x8000F000;
+			len = ((len + 1) & 0x0FFF) | 0x8000F000;
 
 			physicalBufferAddress = HAL.GetPhysicalAddress(buffers);
 
@@ -153,8 +153,8 @@ namespace Mosa.DeviceDriver.PCI.AMD
 			rdp.Write32(0);
 
 			// Get the EEPROM MAC Address
-			byte[] eepromMac = new byte[6];
-			uint data = ioProm1.Read32();
+			var eepromMac = new byte[6];
+			var data = ioProm1.Read32();
 			eepromMac[0] = (byte)(data & 0xFF);
 			eepromMac[1] = (byte)((data >> 8) & 0xFF);
 			eepromMac[2] = (byte)((data >> 16) & 0xFF);
@@ -194,11 +194,14 @@ namespace Mosa.DeviceDriver.PCI.AMD
 			uint status = StatusRegister;
 
 			if ((status & 0x200) != 0)
-				if (packetBuffer != null)
-					packetBuffer.Pulse();
+			{
+				packetBuffer?.Pulse();
+			}
 
 			if ((status & 0x400) != 0)
+			{
 				RetrievePackets();
+			}
 
 			return true;
 		}
@@ -207,10 +210,7 @@ namespace Mosa.DeviceDriver.PCI.AMD
 		/// Assigns the packet buffer to the device
 		/// </summary>
 		/// <param name="packetBuffer">The packet buffer.</param>
-		public void AssignPacketBuffer(NetworkDevicePacketBuffer packetBuffer)
-		{
-			this.packetBuffer = packetBuffer;
-		}
+		public void AssignPacketBuffer(NetworkDevicePacketBuffer packetBuffer) => this.packetBuffer = packetBuffer;
 
 		/// <summary>
 		/// Sends the packet.
@@ -222,7 +222,9 @@ namespace Mosa.DeviceDriver.PCI.AMD
 			uint txd = nextTXDesc++;
 
 			if (nextTXDesc >= 16)
+			{
 				nextTXDesc = 0;
+			}
 
 			uint offset = txd * 4;
 
@@ -230,13 +232,15 @@ namespace Mosa.DeviceDriver.PCI.AMD
 			if ((txDescriptor.Read32(offset + 1) & 0x80000000) == 0)
 			{
 				for (uint i = 0; i < data.Length; i++)
+				{
 					buffers.Write8((txd * bufferSize) + i, data[i]);
+				}
 
 				ushort length = (ushort)(~data.Length);
 				length++;
 
 				// Set bits 31/OWN, 25/STP (start of packet), 24/ENP (end of packet) and two's compliment of the buffer length
-				txDescriptor.Write32(offset + 1, length & (uint)(0x0FFF) | (uint)(0x8300F000));
+				txDescriptor.Write32(offset + 1, (length & (uint)(0x0FFF)) | (uint)(0x8300F000));
 
 				return true;
 			}
@@ -260,10 +264,12 @@ namespace Mosa.DeviceDriver.PCI.AMD
 				if ((status & 0x80000000) == 0)
 				{
 					ushort length = (ushort)(rxDescriptor.Read16(offset + 0) & 0xFFF);
-					byte[] data = new byte[length];
+					var data = new byte[length];
 
 					for (uint i = 0; i < data.Length; i++)
+					{
 						data[i] = buffers.Read8((rxd * bufferSize) + i);
+					}
 
 					// if queue fails because it is already full, the packet is discarded
 					packetBuffer.QueuePacketForStack(data);
@@ -278,7 +284,7 @@ namespace Mosa.DeviceDriver.PCI.AMD
 		/// Gets the MAC address.
 		/// </summary>
 		/// <value>The MAC address.</value>
-		public MACAddress MACAddress { get { return macAddress; } }
+		public MACAddress MACAddress => macAddress;
 
 		/// <summary>
 		/// Gets or sets the status register.

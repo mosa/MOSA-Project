@@ -35,12 +35,12 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort modeControlPort;
+		protected IOPortReadWrite modeControlPort;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort counter0Divisor;
+		protected IOPortReadWrite counter0Divisor;
 
 		/// <summary>
 		///
@@ -61,10 +61,10 @@ namespace Mosa.DeviceDriver.ISA
 		public override bool Setup(HardwareResources hardwareResources)
 		{
 			this.HardwareResources = hardwareResources;
-			base.Name = "PIT_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			base.Name = "PIT_0x" + base.HardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-			modeControlPort = base.HardwareResources.GetIOPort(0, 3);
-			counter0Divisor = base.HardwareResources.GetIOPort(0, 0);
+			modeControlPort = base.HardwareResources.GetIOPortReadWrite(0, 3);
+			counter0Divisor = base.HardwareResources.GetIOPortReadWrite(0, 0);
 
 			return true;
 		}

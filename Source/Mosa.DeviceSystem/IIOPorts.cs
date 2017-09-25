@@ -2,70 +2,86 @@
 
 namespace Mosa.DeviceSystem
 {
-	/// <summary>
-	/// Interface to IOPort without any read/write permissions
-	/// </summary>
-	public interface IBaseIOPort
+	public abstract class IOPort
 	{
 		/// <summary>
 		/// Gets the address.
 		/// </summary>
-		/// <value>The address.</value>
-		ushort Address { get; }
+		/// <value>
+		/// The address.
+		/// </value>
+		public ushort Address { get; protected set; }
 	}
 
 	/// <summary>
 	/// Interface to IOPort with read only permission
 	/// </summary>
-	public interface IReadOnlyIOPort : IBaseIOPort
+	public abstract class IOPortRead : IOPort
 	{
 		/// <summary>
 		/// Read8s this instance.
 		/// </summary>
 		/// <returns></returns>
-		byte Read8();
+		public abstract byte Read8();
 
 		/// <summary>
 		/// Read16s this instance.
 		/// </summary>
 		/// <returns></returns>
-		ushort Read16();
+		public abstract ushort Read16();
 
 		/// <summary>
 		/// Read32s this instance.
 		/// </summary>
 		/// <returns></returns>
-		uint Read32();
+		public abstract uint Read32();
 	}
 
 	/// <summary>
 	/// Interface to IOPort with write only permission
 	/// </summary>
-	public interface IWriteOnlyIOPort : IBaseIOPort
+	public abstract class IOPortWrite : IOPort
 	{
 		/// <summary>
 		/// Write8s the specified data.
 		/// </summary>
 		/// <param name="data">The data.</param>
-		void Write8(byte data);
+		public abstract void Write8(byte data);
 
 		/// <summary>
 		/// Write16s the specified data.
 		/// </summary>
 		/// <param name="data">The data.</param>
-		void Write16(ushort data);
+		public abstract void Write16(ushort data);
 
 		/// <summary>
 		/// Write32s the specified data.
 		/// </summary>
 		/// <param name="data">The data.</param>
-		void Write32(uint data);
+		public abstract void Write32(uint data);
 	}
 
 	/// <summary>
-	/// Interface to IOPort with full read/write permissions
+	/// class to IOPort with full read/write permissions
 	/// </summary>
-	public interface IReadWriteIOPort : IBaseIOPort, IReadOnlyIOPort, IWriteOnlyIOPort
+	public abstract class IOPortReadWrite : IOPortRead
 	{
+		/// <summary>
+		/// Write8s the specified data.
+		/// </summary>
+		/// <param name="data">The data.</param>
+		public abstract void Write8(byte data);
+
+		/// <summary>
+		/// Write16s the specified data.
+		/// </summary>
+		/// <param name="data">The data.</param>
+		public abstract void Write16(ushort data);
+
+		/// <summary>
+		/// Write32s the specified data.
+		/// </summary>
+		/// <param name="data">The data.</param>
+		public abstract void Write32(uint data);
 	}
 }

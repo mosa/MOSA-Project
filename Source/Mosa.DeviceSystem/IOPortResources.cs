@@ -59,17 +59,6 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Gets the IO port.
-		/// </summary>
-		/// <param name="port">The port.</param>
-		/// <param name="offset">The offset.</param>
-		/// <returns></returns>
-		public IReadWriteIOPort GetIOPort(ushort port, ushort offset)
-		{
-			return HAL.RequestIOPort((ushort)(port + offset));
-		}
-
-		/// <summary>
 		/// Claims the resources.
 		/// </summary>
 		/// <param name="hardwareResources">The hardware resources.</param>

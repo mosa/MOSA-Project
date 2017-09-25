@@ -48,13 +48,33 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Requests an IO read/write port interface from the kernel
+		/// Requests an IO read/write port object from the kernel
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		internal static IReadWriteIOPort RequestIOPort(ushort port)
+		internal static IOPortReadWrite RequestReadWriteIOPort(ushort port)
 		{
-			return hardwareAbstraction.RequestIOPort(port);
+			return hardwareAbstraction.RequestReadWriteIOPort(port);
+		}
+
+		/// <summary>
+		/// Requests an IO read port object from the kernel
+		/// </summary>
+		/// <param name="port">The port number.</param>
+		/// <returns></returns>
+		internal static IOPortRead RequestReadIOPort(ushort port)
+		{
+			return hardwareAbstraction.RequestReadIOPort(port);
+		}
+
+		/// <summary>
+		/// Requests an IO read/write port object from the kernel
+		/// </summary>
+		/// <param name="port">The port number.</param>
+		/// <returns></returns>
+		internal static IOPortWrite RequestWriteIOPort(ushort port)
+		{
+			return hardwareAbstraction.RequestWriteIOPort(port);
 		}
 
 		/// <summary>

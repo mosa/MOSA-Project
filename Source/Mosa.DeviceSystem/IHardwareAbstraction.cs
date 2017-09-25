@@ -8,11 +8,25 @@ namespace Mosa.DeviceSystem
 	public interface IHardwareAbstraction
 	{
 		/// <summary>
-		/// Requests an IO read/write port interface from the kernel
+		/// Requests an IO read/write port object from the kernel
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		IReadWriteIOPort RequestIOPort(ushort port);
+		IOPortReadWrite RequestReadWriteIOPort(ushort port);
+
+		/// <summary>
+		/// Requests an IO read port object from the kernel
+		/// </summary>
+		/// <param name="port">The port number.</param>
+		/// <returns></returns>
+		IOPortRead RequestReadIOPort(ushort port);
+
+		/// <summary>
+		/// Requests an IO write port object from the kernel
+		/// </summary>
+		/// <param name="port">The port number.</param>
+		/// <returns></returns>
+		IOPortWrite RequestWriteIOPort(ushort port);
 
 		/// <summary>
 		/// Requests a block of memory from the kernel

@@ -2,7 +2,6 @@
 
 using Mosa.DeviceSystem;
 
-
 namespace Mosa.DeviceDriver.ISA
 {
 	/// <summary>
@@ -14,12 +13,12 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort commandPort;
+		protected IOPortReadWrite commandPort;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort dataPort;
+		protected IOPortReadWrite dataPort;
 
 		/// <summary>
 		///
@@ -62,8 +61,8 @@ namespace Mosa.DeviceDriver.ISA
 			this.HardwareResources = hardwareResources;
 			base.Name = "StandardKeyboard";
 
-			commandPort = base.HardwareResources.GetIOPort(0, 0);
-			dataPort = base.HardwareResources.GetIOPort(1, 0);
+			commandPort = base.HardwareResources.GetIOPortReadWrite(0, 0);
+			dataPort = base.HardwareResources.GetIOPortReadWrite(1, 0);
 
 			fifoBuffer = new byte[fifoSize];
 			fifoStart = 0;

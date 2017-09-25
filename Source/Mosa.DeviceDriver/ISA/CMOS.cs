@@ -13,12 +13,12 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort commandPort;
+		protected IOPortReadWrite commandPort;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort dataPort;
+		protected IOPortReadWrite dataPort;
 
 		/// <summary>
 		///
@@ -42,8 +42,8 @@ namespace Mosa.DeviceDriver.ISA
 			this.HardwareResources = hardwareResources;
 			base.Name = "CMOS";
 
-			commandPort = base.HardwareResources.GetIOPort(0, 0);
-			dataPort = base.HardwareResources.GetIOPort(0, 4);
+			commandPort = base.HardwareResources.GetIOPortReadWrite(0, 0);
+			dataPort = base.HardwareResources.GetIOPortReadWrite(0, 4);
 
 			return true;
 		}

@@ -66,52 +66,52 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		/// <summary>
 		/// The data port
 		/// </summary>
-		protected IReadWriteIOPort DataPort;
+		protected IOPortReadWrite DataPort;
 
 		/// <summary>
 		/// The feature port
 		/// </summary>
-		protected IReadWriteIOPort FeaturePort;
+		protected IOPortReadWrite FeaturePort;
 
 		/// <summary>
 		/// The error port
 		/// </summary>
-		protected IReadOnlyIOPort ErrorPort;
+		protected IOPortRead ErrorPort;
 
 		/// <summary>
 		/// The sector count port
 		/// </summary>
-		protected IReadWriteIOPort SectorCountPort;
+		protected IOPortReadWrite SectorCountPort;
 
 		/// <summary>
 		/// The lba low port
 		/// </summary>
-		protected IReadWriteIOPort LBALowPort;
+		protected IOPortReadWrite LBALowPort;
 
 		/// <summary>
 		/// The lba mid port
 		/// </summary>
-		protected IReadWriteIOPort LBAMidPort;
+		protected IOPortReadWrite LBAMidPort;
 
 		/// <summary>
 		/// The lba high port
 		/// </summary>
-		protected IReadWriteIOPort LBAHighPort;
+		protected IOPortReadWrite LBAHighPort;
 
 		/// <summary>
 		/// The device head port
 		/// </summary>
-		protected IReadWriteIOPort DeviceHeadPort;
+		protected IOPortReadWrite DeviceHeadPort;
 
 		/// <summary>
 		/// The status port
 		/// </summary>
-		protected IReadOnlyIOPort StatusPort;
+		protected IOPortRead StatusPort;
 
 		/// <summary>
 		/// The command port
 		/// </summary>
-		protected IWriteOnlyIOPort CommandPort;
+		protected IOPortWrite CommandPort;
 
 		//protected IRQHandler IdeIRQ;
 
@@ -162,18 +162,18 @@ namespace Mosa.DeviceDriver.PCI.MassStorage
 		public override bool Setup(HardwareResources hardwareResources)
 		{
 			this.HardwareResources = hardwareResources;
-			base.Name = "PCI_IDE_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			base.Name = "PCI_IDE_0x" + base.HardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-			DataPort = base.HardwareResources.GetIOPort(0, 0);
-			ErrorPort = base.HardwareResources.GetIOPort(0, 1);
-			FeaturePort = base.HardwareResources.GetIOPort(0, 1);
-			SectorCountPort = base.HardwareResources.GetIOPort(0, 2);
-			LBALowPort = base.HardwareResources.GetIOPort(0, 3);
-			LBAMidPort = base.HardwareResources.GetIOPort(0, 4);
-			LBAHighPort = base.HardwareResources.GetIOPort(0, 5);
-			DeviceHeadPort = base.HardwareResources.GetIOPort(0, 6);
-			CommandPort = base.HardwareResources.GetIOPort(0, 7);
-			StatusPort = base.HardwareResources.GetIOPort(0, 7);
+			DataPort = base.HardwareResources.GetIOPortReadWrite(0, 0);
+			ErrorPort = base.HardwareResources.GetIOPortReadWrite(0, 1);
+			FeaturePort = base.HardwareResources.GetIOPortReadWrite(0, 1);
+			SectorCountPort = base.HardwareResources.GetIOPortReadWrite(0, 2);
+			LBALowPort = base.HardwareResources.GetIOPortReadWrite(0, 3);
+			LBAMidPort = base.HardwareResources.GetIOPortReadWrite(0, 4);
+			LBAHighPort = base.HardwareResources.GetIOPortReadWrite(0, 5);
+			DeviceHeadPort = base.HardwareResources.GetIOPortReadWrite(0, 6);
+			CommandPort = base.HardwareResources.GetIOPortWrite(0, 7);
+			StatusPort = base.HardwareResources.GetIOPortReadWrite(0, 7);
 
 			for (var drive = 0; drive < DrivesPerConroller; drive++)
 			{

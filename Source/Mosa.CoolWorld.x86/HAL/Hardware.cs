@@ -13,16 +13,6 @@ namespace Mosa.CoolWorld.x86.HAL
 	public sealed class Hardware : IHardwareAbstraction
 	{
 		/// <summary>
-		/// Requests an IO read/write port interface from the kernel
-		/// </summary>
-		/// <param name="port">The port number.</param>
-		/// <returns></returns>
-		IReadWriteIOPort IHardwareAbstraction.RequestIOPort(ushort port)
-		{
-			return new IOPort(port);
-		}
-
-		/// <summary>
 		/// Requests a block of memory from the kernel
 		/// </summary>
 		/// <param name="address">The address.</param>
@@ -93,6 +83,36 @@ namespace Mosa.CoolWorld.x86.HAL
 		uint IHardwareAbstraction.GetPhysicalAddress(BaseMemory memory)
 		{
 			return PageTable.GetPhysicalAddressFromVirtual(memory.Address);
+		}
+
+		/// <summary>
+		/// Requests an IO read/write port interface from the kernel
+		/// </summary>
+		/// <param name="port">The port number.</param>
+		/// <returns></returns>
+		IOPortReadWrite IHardwareAbstraction.RequestReadWriteIOPort(ushort port)
+		{
+			return new X86IOPortReadWrite(port);
+		}
+
+		/// <summary>
+		/// Requests an IO read/write port interface from the kernel
+		/// </summary>
+		/// <param name="port">The port number.</param>
+		/// <returns></returns>
+		IOPortRead IHardwareAbstraction.RequestReadIOPort(ushort port)
+		{
+			return new X86IOPortReadWrite(port);
+		}
+
+		/// <summary>
+		/// Requests an IO write port interface from the kernel
+		/// </summary>
+		/// <param name="port">The port number.</param>
+		/// <returns></returns>
+		IOPortWrite IHardwareAbstraction.RequestWriteIOPort(ushort port)
+		{
+			return new X86IOPortWrite(port);
 		}
 
 		/// <summary>

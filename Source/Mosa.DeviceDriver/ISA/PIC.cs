@@ -43,22 +43,22 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort masterCommandPort;
+		protected IOPortReadWrite masterCommandPort;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort masterDataPort;
+		protected IOPortReadWrite masterDataPort;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort slaveCommandPort;
+		protected IOPortReadWrite slaveCommandPort;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort slaveDataPort;
+		protected IOPortReadWrite slaveDataPort;
 
 		// Interrupt masks must be tracked via the driver
 		/// <summary>
@@ -86,13 +86,13 @@ namespace Mosa.DeviceDriver.ISA
 		public override bool Setup(HardwareResources hardwareResources)
 		{
 			this.HardwareResources = hardwareResources;
-			base.Name = "PIC_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			base.Name = "PIC_0x" + base.HardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-			masterCommandPort = base.HardwareResources.GetIOPort(0, 0);
-			masterDataPort = base.HardwareResources.GetIOPort(0, 1);
+			masterCommandPort = base.HardwareResources.GetIOPortReadWrite(0, 0);
+			masterDataPort = base.HardwareResources.GetIOPortReadWrite(0, 1);
 
-			slaveCommandPort = base.HardwareResources.GetIOPort(1, 0);
-			slaveDataPort = base.HardwareResources.GetIOPort(1, 1);
+			slaveCommandPort = base.HardwareResources.GetIOPortReadWrite(1, 0);
+			slaveDataPort = base.HardwareResources.GetIOPortReadWrite(1, 1);
 
 			return true;
 		}

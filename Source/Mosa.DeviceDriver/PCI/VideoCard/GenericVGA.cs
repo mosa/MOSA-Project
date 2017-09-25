@@ -2,7 +2,6 @@
 
 using Mosa.DeviceSystem;
 
-
 /*
  * Portions of this device driver was adapted from:
  *
@@ -50,77 +49,77 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <summary>
 		///
 		/// </summary>
-		protected IWriteOnlyIOPort miscellaneousOutputWrite;
+		protected IOPortWrite miscellaneousOutputWrite;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort crtControllerIndex;
+		protected IOPortReadWrite crtControllerIndex;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort crtControllerData;
+		protected IOPortReadWrite crtControllerData;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort crtControllerIndexColor;
+		protected IOPortReadWrite crtControllerIndexColor;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort crtControllerDataColor;
+		protected IOPortReadWrite crtControllerDataColor;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort dacPaletteMask;
+		protected IOPortReadWrite dacPaletteMask;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort dacIndexWrite;
+		protected IOPortReadWrite dacIndexWrite;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort dacIndexRead;
+		protected IOPortReadWrite dacIndexRead;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort dacData;
+		protected IOPortReadWrite dacData;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadOnlyIOPort inputStatus1;
+		protected IOPortRead inputStatus1;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadOnlyIOPort miscellaneousOutputRead;
+		protected IOPortRead miscellaneousOutputRead;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort sequencerAddress;
+		protected IOPortReadWrite sequencerAddress;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort sequencerData;
+		protected IOPortReadWrite sequencerData;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort graphicsControllerAddress;
+		protected IOPortReadWrite graphicsControllerAddress;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort graphicsControllerData;
+		protected IOPortReadWrite graphicsControllerData;
 
 		/// <summary>
 		///
@@ -130,27 +129,27 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort activeControllerIndex;
+		protected IOPortReadWrite activeControllerIndex;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort activeControllerData;
+		protected IOPortReadWrite activeControllerData;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort inputStatus1ReadB;
+		protected IOPortReadWrite inputStatus1ReadB;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort attributeAddress;
+		protected IOPortReadWrite attributeAddress;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort attributeData;
+		protected IOPortReadWrite attributeData;
 
 		/// <summary>
 		///
@@ -192,6 +191,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <summary>
 		/// Setups this hardware device driver
 		/// </summary>
+		/// <param name="hardwareResources"></param>
 		/// <returns></returns>
 		public override bool Setup(HardwareResources hardwareResources)
 		{
@@ -200,24 +200,24 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 
 			byte portBar = (byte)(base.HardwareResources.IOPointRegionCount - 1);
 
-			miscellaneousOutputRead = base.HardwareResources.GetIOPort(portBar, 0x1C);
-			crtControllerIndex = base.HardwareResources.GetIOPort(portBar, 0x04);
-			crtControllerData = base.HardwareResources.GetIOPort(portBar, 0x05);
-			crtControllerIndexColor = base.HardwareResources.GetIOPort(portBar, 0x24);
-			crtControllerDataColor = base.HardwareResources.GetIOPort(portBar, 0x25);
-			dacPaletteMask = base.HardwareResources.GetIOPort(portBar, 0x16);
-			dacIndexRead = base.HardwareResources.GetIOPort(portBar, 0x17);
-			dacIndexWrite = base.HardwareResources.GetIOPort(portBar, 0x18);
-			dacData = base.HardwareResources.GetIOPort(portBar, 0x19);
-			inputStatus1 = base.HardwareResources.GetIOPort(portBar, 0x12);
-			miscellaneousOutputWrite = base.HardwareResources.GetIOPort(portBar, 0x12);
-			sequencerAddress = base.HardwareResources.GetIOPort(portBar, 0x14);
-			sequencerData = base.HardwareResources.GetIOPort(portBar, 0x15);
-			graphicsControllerAddress = base.HardwareResources.GetIOPort(portBar, 0x1E);
-			graphicsControllerData = base.HardwareResources.GetIOPort(portBar, 0x1F);
-			inputStatus1ReadB = base.HardwareResources.GetIOPort(portBar, 0x2A);
-			attributeAddress = base.HardwareResources.GetIOPort(portBar, 0x10);
-			attributeData = base.HardwareResources.GetIOPort(portBar, 0x11);
+			miscellaneousOutputRead = base.HardwareResources.GetIOPortReadWrite(portBar, 0x1C);
+			crtControllerIndex = base.HardwareResources.GetIOPortReadWrite(portBar, 0x04);
+			crtControllerData = base.HardwareResources.GetIOPortReadWrite(portBar, 0x05);
+			crtControllerIndexColor = base.HardwareResources.GetIOPortReadWrite(portBar, 0x24);
+			crtControllerDataColor = base.HardwareResources.GetIOPortReadWrite(portBar, 0x25);
+			dacPaletteMask = base.HardwareResources.GetIOPortReadWrite(portBar, 0x16);
+			dacIndexRead = base.HardwareResources.GetIOPortReadWrite(portBar, 0x17);
+			dacIndexWrite = base.HardwareResources.GetIOPortReadWrite(portBar, 0x18);
+			dacData = base.HardwareResources.GetIOPortReadWrite(portBar, 0x19);
+			inputStatus1 = base.HardwareResources.GetIOPortReadWrite(portBar, 0x12);
+			miscellaneousOutputWrite = base.HardwareResources.GetIOPortWrite(portBar, 0x12);
+			sequencerAddress = base.HardwareResources.GetIOPortReadWrite(portBar, 0x14);
+			sequencerData = base.HardwareResources.GetIOPortReadWrite(portBar, 0x15);
+			graphicsControllerAddress = base.HardwareResources.GetIOPortReadWrite(portBar, 0x1E);
+			graphicsControllerData = base.HardwareResources.GetIOPortReadWrite(portBar, 0x1F);
+			inputStatus1ReadB = base.HardwareResources.GetIOPortReadWrite(portBar, 0x2A);
+			attributeAddress = base.HardwareResources.GetIOPortReadWrite(portBar, 0x10);
+			attributeData = base.HardwareResources.GetIOPortReadWrite(portBar, 0x11);
 
 			memory = base.HardwareResources.GetMemory((byte)(base.HardwareResources.MemoryRegionCount - 1));
 

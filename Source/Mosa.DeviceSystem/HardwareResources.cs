@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// HardwareResources
+	/// Hardware Resources
 	/// </summary>
 	public sealed class HardwareResources
 	{
@@ -82,9 +82,31 @@ namespace Mosa.DeviceSystem
 		/// <param name="region">The region.</param>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public IReadWriteIOPort GetIOPort(byte region, ushort index)
+		public IOPortReadWrite GetIOPortReadWrite(byte region, ushort index)
 		{
-			return HAL.RequestIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
+			return HAL.RequestReadWriteIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
+		}
+
+		/// <summary>
+		/// Gets the IO port.
+		/// </summary>
+		/// <param name="region">The region.</param>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public IOPortRead GetIOPortRead(byte region, ushort index)
+		{
+			return HAL.RequestReadIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
+		}
+
+		/// <summary>
+		/// Gets the IO port.
+		/// </summary>
+		/// <param name="region">The region.</param>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public IOPortWrite GetIOPortWrite(byte region, ushort index)
+		{
+			return HAL.RequestWriteIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
 		}
 
 		/// <summary>
