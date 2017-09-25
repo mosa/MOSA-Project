@@ -1,20 +1,24 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.HardwareSystem;
 using System.IO;
 
 namespace Mosa.Utility.BootImage
 {
+	/// <summary>
+	///  Block File Stream
+	/// </summary>
+	/// <seealso cref="Mosa.DeviceSystem.Device" />
+	/// <seealso cref="Mosa.DeviceSystem.IDiskDevice" />
 	public class BlockFileStream : Device, IDiskDevice
 	{
 		/// <summary>
-		///
+		/// The disk file
 		/// </summary>
 		protected FileStream diskFile;
 
 		/// <summary>
-		///
+		/// The block offset
 		/// </summary>
 		public uint BlockOffset = 0;
 

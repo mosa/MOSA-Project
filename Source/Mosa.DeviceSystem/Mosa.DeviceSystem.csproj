@@ -203,6 +203,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PlatformArchitecture.cs" />
+    <Compile Include="Setup.cs" />
     <Compile Include="SpinLock.cs" />
     <Compile Include="TextScreen.cs">
       <SubType>Code</SubType>

@@ -85,7 +85,7 @@
     <Compile Include="IDT.cs" />
     <Compile Include="Kernel.cs" />
     <Compile Include="Keyboard.cs" />
-    <Compile Include="Memory.cs" />
+    <Compile Include="MemoryBlock.cs" />
     <Compile Include="Multiboot.cs" />
     <Compile Include="PageFrameAllocator.cs" />
     <Compile Include="PageTable.cs" />

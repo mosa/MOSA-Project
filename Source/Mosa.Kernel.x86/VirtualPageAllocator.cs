@@ -24,7 +24,7 @@ namespace Mosa.Kernel.x86
 			pages = (PageFrameAllocator.TotalPages - Address.ReserveMemory) / PageFrameAllocator.PageSize;
 
 			// Bits: 0 = Available, 1 = Not Available
-			Memory.Clear(Address.VirtualPageAllocator, pages / 8);
+			MemoryBlock.Clear(Address.VirtualPageAllocator, pages / 8);
 			initialized = true;
 		}
 

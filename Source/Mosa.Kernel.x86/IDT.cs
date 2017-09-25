@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	///
+	/// IDT
 	/// </summary>
 	public static class IDT
 	{
@@ -31,7 +31,7 @@ namespace Mosa.Kernel.x86
 		public static void Setup()
 		{
 			// Setup IDT table
-			Memory.Clear(Address.IDTTable, 6);
+			MemoryBlock.Clear(Address.IDTTable, 6);
 			Native.Set16(Address.IDTTable, (Offset.TotalSize * 256) - 1);
 			Native.Set32(Address.IDTTable + 2, Address.IDTTable + 6);
 
@@ -79,7 +79,7 @@ namespace Mosa.Kernel.x86
 		private static void SetTableEntries()
 		{
 			// Clear out idt table
-			Memory.Clear(Address.IDTTable + 6, Offset.TotalSize * 256);
+			MemoryBlock.Clear(Address.IDTTable + 6, Offset.TotalSize * 256);
 
 			// Note: GetIDTJumpLocation parameter must be a constant and not a variable
 			Set(0, Native.GetIDTJumpLocation(0), 0x08, 0x8E);

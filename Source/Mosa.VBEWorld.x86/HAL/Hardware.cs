@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 using System;
@@ -8,7 +9,7 @@ using System;
 namespace Mosa.VBEWorld.x86.HAL
 {
 	/// <summary>
-	///
+	/// Hardware
 	/// </summary>
 	public sealed class Hardware : IHardwareAbstraction
 	{

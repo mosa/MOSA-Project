@@ -11,7 +11,7 @@ using Mosa.DeviceSystem.PCI;
 namespace Mosa.DeviceDriver.PCI.MassStorage
 {
 	/// <summary>
-	///
+	/// PCI IDE Controller
 	/// </summary>
 	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x7010, Platforms = PlatformArchitecture.X86AndX64)]
 	//, ProgIF = 0x80

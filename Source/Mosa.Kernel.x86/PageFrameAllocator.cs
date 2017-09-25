@@ -104,7 +104,7 @@ namespace Mosa.Kernel.x86
 			at = at - 4;
 
 			// Clear out memory
-			Memory.Clear(avail, PageSize);
+			MemoryBlock.Clear(avail, PageSize);
 
 			return avail;
 		}

@@ -1,5 +1,6 @@
-﻿using Mosa.DeviceSystem;
-using Mosa.HardwareSystem;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
 
 namespace Mosa.VBEWorld.x86
@@ -8,7 +9,7 @@ namespace Mosa.VBEWorld.x86
 	{
 		private static BaseMemory _lfb;
 
-		public static IFrameBuffer Framebuffer { get; set;  }
+		public static IFrameBuffer Framebuffer { get; set; }
 
 		public static bool InitVBE(IHardwareAbstraction hal)
 		{
@@ -23,7 +24,7 @@ namespace Mosa.VBEWorld.x86
 			uint memorySize = (uint)(vbeInfo.ScreenWidth * vbeInfo.ScreenHeight * (vbeInfo.BitsPerPixel / 8));
 			_lfb = hal.RequestPhysicalMemory(vbeInfo.MemoryPhysicalLocation, memorySize);
 
-			switch(vbeInfo.BitsPerPixel)
+			switch (vbeInfo.BitsPerPixel)
 			{
 				case 8: Framebuffer = new FrameBuffer8bpp(_lfb, vbeInfo.ScreenWidth, vbeInfo.ScreenHeight, 0, vbeInfo.Pitch); break;
 				case 16: Framebuffer = new FrameBuffer16bpp(_lfb, vbeInfo.ScreenWidth, vbeInfo.ScreenHeight, 0, vbeInfo.Pitch); break;

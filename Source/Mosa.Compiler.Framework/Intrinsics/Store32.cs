@@ -22,11 +22,11 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		{
 			const InstructionSize size = InstructionSize.Size32;
 
-			if (context.OperandCount == 1)
+			if (context.OperandCount == 2)
 			{
 				context.SetInstruction(IRInstruction.StoreInteger, size, null, context.Operand1, methodCompiler.ConstantZero, context.Operand2);
 			}
-			else if (context.OperandCount == 2)
+			else if (context.OperandCount == 3)
 			{
 				context.SetInstruction(IRInstruction.StoreInteger, size, null, context.Operand1, context.Operand2, context.Operand3);
 			}

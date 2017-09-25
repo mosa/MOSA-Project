@@ -1,12 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.HardwareSystem;
 
 namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
-	///
+	/// Fat File System Device
 	/// </summary>
 	public class FatFileSystemDevice : Device, IDevice, IFileSystemDevice
 	{

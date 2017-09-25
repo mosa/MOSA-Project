@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 

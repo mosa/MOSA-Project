@@ -3,7 +3,7 @@
 using Mosa.DeviceSystem;
 using Mosa.Runtime;
 
-namespace Mosa.CoolWorld.x86.HAL
+namespace Mosa.Kernel
 {
 	public sealed class Memory : BaseMemory
 	{

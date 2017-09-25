@@ -8,7 +8,7 @@ using System.IO;
 namespace Mosa.AppSystem
 {
 	/// <summary>
-	///
+	/// App Manager
 	/// </summary>
 	public class AppManager
 	{
@@ -77,10 +77,7 @@ namespace Mosa.AppSystem
 				{
 					var output = currentApp.Console.Output as AppOutputStream;
 
-					if (output != null)
-					{
-						output.WriteByte((byte)key.Character);
-					}
+					output?.WriteByte((byte)key.Character);
 				}
 			}
 		}

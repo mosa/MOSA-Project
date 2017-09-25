@@ -5,7 +5,7 @@ using Mosa.Runtime.x86;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	///
+	/// GDT
 	/// </summary>
 	public static class GDT
 	{
@@ -26,7 +26,7 @@ namespace Mosa.Kernel.x86
 
 		public static void Setup()
 		{
-			Memory.Clear(Address.GDTTable, 6);
+			MemoryBlock.Clear(Address.GDTTable, 6);
 			Native.Set16(Address.GDTTable, (Offset.TotalSize * 3) - 1);
 			Native.Set32(Address.GDTTable + 2, Address.GDTTable + 6);
 

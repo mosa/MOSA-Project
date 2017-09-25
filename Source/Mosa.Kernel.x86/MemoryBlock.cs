@@ -7,7 +7,7 @@ namespace Mosa.Kernel.x86
 	/// <summary>
 	/// Static class of helpful memory functions
 	/// </summary>
-	public static class Memory
+	public static class MemoryBlock
 	{
 		/// <summary>
 		/// Clears the specified memory area.

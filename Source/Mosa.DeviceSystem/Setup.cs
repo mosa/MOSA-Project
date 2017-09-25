@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using Mosa.DeviceSystem;
 
-namespace Mosa.HardwareSystem
+namespace Mosa.DeviceSystem
 {
 	public static class Setup
 	{
