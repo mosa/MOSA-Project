@@ -11,7 +11,7 @@ namespace Mosa.VBEWorld.x86
 
 		public static IFrameBuffer Framebuffer { get; set; }
 
-		public static bool InitVBE(IHardwareAbstraction hal)
+		public static bool InitVBE(BaseHardwareAbstraction hal)
 		{
 			if (!Multiboot.IsMultibootEnabled)
 				return false;

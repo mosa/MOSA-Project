@@ -13,7 +13,7 @@ namespace Mosa.DeviceSystem
 		public static InterruptManager InterruptManager { get; private set; }
 		public static PCIControllerManager PCIControllerManager { get; private set; }
 
-		public static void Initialize(IHardwareAbstraction hardware)
+		public static void Initialize(BaseHardwareAbstraction hardware)
 		{
 			// Create Device Manager
 			DeviceManager = new DeviceManager();

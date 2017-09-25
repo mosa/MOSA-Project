@@ -94,7 +94,7 @@
     <Compile Include="IDevice.cs" />
     <Compile Include="IDeviceDriver.cs" />
     <Compile Include="IDMAChannel.cs" />
-    <Compile Include="IHardwareAbstraction.cs" />
+    <Compile Include="BaseHardwareAbstraction.cs" />
     <Compile Include="IHardwareDevice.cs" />
     <Compile Include="IIOPorts.cs" />
     <Compile Include="BaseMemory.cs" />

@@ -10,7 +10,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// The hardware abstraction
 		/// </summary>
-		static private IHardwareAbstraction hardwareAbstraction;
+		static private BaseHardwareAbstraction hardwareAbstraction;
 
 		/// <summary>
 		/// Interrupt Delegate
@@ -24,7 +24,7 @@ namespace Mosa.DeviceSystem
 		/// Sets the hardware abstraction.
 		/// </summary>
 		/// <param name="hardwareAbstraction">The hardware abstraction.</param>
-		public static void SetHardwareAbstraction(IHardwareAbstraction hardwareAbstraction)
+		public static void SetHardwareAbstraction(BaseHardwareAbstraction hardwareAbstraction)
 		{
 			HAL.hardwareAbstraction = hardwareAbstraction;
 		}
