@@ -124,6 +124,11 @@ namespace Mosa.DeviceDriver.ISA
 		protected IWriteOnlyIOPort CommandPort;
 
 		/// <summary>
+		/// The bus control register port
+		/// </summary>
+		protected IReadWriteIOPort ControlPort;
+
+		/// <summary>
 		/// The status port
 		/// </summary>
 		protected IReadOnlyIOPort AltStatusPort;
@@ -186,6 +191,8 @@ namespace Mosa.DeviceDriver.ISA
 			DeviceHeadPort = base.HardwareResources.GetIOPort(0, 6);
 			CommandPort = base.HardwareResources.GetIOPort(0, 7);
 			StatusPort = base.HardwareResources.GetIOPort(0, 7);
+
+			ControlPort = base.HardwareResources.GetIOPort(1, 0);
 			AltStatusPort = base.HardwareResources.GetIOPort(1, 6);
 
 			for (var drive = 0; drive < DrivesPerConroller; drive++)
@@ -216,6 +223,8 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		public override DeviceDriverStartStatus Start()
 		{
+			ControlPort.Write8(0);
+
 			for (byte drive = 0; drive < MaximunDriveCount; drive++)
 			{
 				DoIdentifyDrive(drive);
@@ -226,17 +235,25 @@ namespace Mosa.DeviceDriver.ISA
 
 		private void DoIdentifyDrive(byte index)
 		{
-			HAL.DebugWriteLine("Device " + index.ToString() + " ID...");
+			//HAL.DebugWriteLine("Device " + index.ToString() + " ID...");
 
 			driveInfo[index].Present = false;
 
 			//Send the identify command to the selected drive
-			DeviceHeadPort.Write8((byte)(index == 0 ? 0x0A : 0x0B));
+			DeviceHeadPort.Write8((byte)(index == 0 ? 0xA0 : 0xB0));
 			SectorCountPort.Write8(0);
 			LBALowPort.Write8(0);
 			LBAMidPort.Write8(0);
 			LBAHighPort.Write8(0);
 			CommandPort.Write8(IDECommand.IdentifyDrive);
+
+			if (StatusPort.Read8() == 0)
+			{
+				HAL.DebugWriteLine("Device " + index.ToString() + " doesnt exist...");
+
+				//Drive doesn't exist
+				return;
+			}
 
 			//Wait until a ready status is present
 			if (!WaitForReadyStatus())
