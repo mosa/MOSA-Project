@@ -159,7 +159,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// <returns></returns>
 		private static byte GetType(uint address)
 		{
-			return Native.Get8(address);
+			return Intrinsic.Load8(address);
 		}
 
 		/// <summary>

@@ -180,12 +180,12 @@ namespace Mosa.Kernel.x86
 
 		private static byte GetByte(uint offset)
 		{
-			return Native.Get8(Address.DebuggerBuffer + offset);
+			return Intrinsic.Load8(Address.DebuggerBuffer + offset);
 		}
 
 		private static int GetInt32(uint offset)
 		{
-			return (Native.Get8(Address.DebuggerBuffer + offset + 3) << 24) | (Native.Get8(Address.DebuggerBuffer + offset + 2) << 16) | (Native.Get8(Address.DebuggerBuffer + offset + 1) << 8) | Native.Get8(Address.DebuggerBuffer + offset + 0);
+			return (Intrinsic.Load8(Address.DebuggerBuffer + offset + 3) << 24) | (Intrinsic.Load8(Address.DebuggerBuffer + offset + 2) << 16) | (Intrinsic.Load8(Address.DebuggerBuffer + offset + 1) << 8) | Intrinsic.Load8(Address.DebuggerBuffer + offset + 0);
 		}
 
 		private static uint GetUInt32(uint offset)
@@ -394,7 +394,7 @@ namespace Mosa.Kernel.x86
 
 			for (uint i = 0; i < bytes; i++)
 			{
-				SendByte((Native.Get8(start + i)));
+				SendByte((Intrinsic.Load8(start + i)));
 			}
 
 			SendCRC();
@@ -538,7 +538,7 @@ namespace Mosa.Kernel.x86
 
 			for (uint i = start; i < start + length; i++)
 			{
-				byte b = Native.Get8(i);
+				byte b = Intrinsic.Load8(i);
 				crc = CRC.Update(crc, b);
 			}
 

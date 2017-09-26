@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86.Smbios
@@ -35,10 +36,10 @@ namespace Mosa.Kernel.x86.Smbios
 		public CpuStructure()
 			: base(SmbiosManager.GetStructureOfType(0x04))
 		{
-			version = GetStringFromIndex(Native.Get8(address + 0x10u));
-			socket = GetStringFromIndex(Native.Get8(address + 0x04u));
+			version = GetStringFromIndex(Intrinsic.Load8(address + 0x10u));
+			socket = GetStringFromIndex(Intrinsic.Load8(address + 0x04u));
 			maxSpeed = Native.Get16(address + 0x16u);
-			vendor = GetStringFromIndex(Native.Get8(address + 0x07u));
+			vendor = GetStringFromIndex(Intrinsic.Load8(address + 0x07u));
 		}
 
 		/// <summary>

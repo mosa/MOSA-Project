@@ -71,7 +71,7 @@ namespace Mosa.Kernel.x86
 			byte bit = (byte)(page % 8);
 			byte mask = (byte)(1 << bit);
 
-			byte value = Native.Get8(at);
+			byte value = Intrinsic.Load8(at);
 
 			return (value & mask) == 0;
 		}
