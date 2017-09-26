@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// Memclr256
 	/// </summary>
 	internal sealed class Memclr256 : IIntrinsicPlatformMethod
 	{

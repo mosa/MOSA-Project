@@ -8,7 +8,7 @@ namespace Mosa.CoolWorld.x86.HAL
 	/// X86IOPortReadWrite
 	/// </summary>
 	/// <seealso cref="Mosa.DeviceSystem.IOPortReadWrite" />
-	public sealed class X86IOPortReadWrite : Mosa.DeviceSystem.IOPortReadWrite
+	public sealed class X86IOPortReadWrite : DeviceSystem.IOPortReadWrite
 	{
 		public X86IOPortReadWrite(ushort address)
 		{
@@ -74,8 +74,7 @@ namespace Mosa.CoolWorld.x86.HAL
 	/// X86IOPortRead
 	/// </summary>
 	/// <seealso cref="Mosa.DeviceSystem.IOPortRead" />
-	/// <seealso cref="Mosa.DeviceSystem.IOPortReadWrite" />
-	public sealed class X86IOPortRead : Mosa.DeviceSystem.IOPortRead
+	public sealed class X86IOPortRead : DeviceSystem.IOPortRead
 	{
 		public X86IOPortRead(ushort address)
 		{
@@ -114,7 +113,7 @@ namespace Mosa.CoolWorld.x86.HAL
 	/// X86IOPortWrite
 	/// </summary>
 	/// <seealso cref="Mosa.DeviceSystem.IOPortWrite" />
-	public sealed class X86IOPortWrite : Mosa.DeviceSystem.IOPortWrite
+	public sealed class X86IOPortWrite : DeviceSystem.IOPortWrite
 	{
 		public X86IOPortWrite(ushort address)
 		{

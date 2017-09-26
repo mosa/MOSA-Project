@@ -34,6 +34,8 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			{
 				throw new InvalidCompilerException();
 			}
+
+			LoadStore.OrderStoreOperands(context.Node, methodCompiler);
 		}
 	}
 }
