@@ -47,6 +47,7 @@
  * of this file under either the BSD or the GPL.
  */
 
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
@@ -88,7 +89,7 @@ namespace Mosa.Kernel.x86
 					do
 					{
 						//output[oidx++] = input[iidx++];
-						Native.Set8(output + oidx, Native.Get8(input + iidx));
+						Intrinsic.Store8(output + oidx, Native.Get8(input + iidx));
 						oidx++;
 						iidx++;
 					}
@@ -124,19 +125,19 @@ namespace Mosa.Kernel.x86
 					}
 
 					//output[oidx++] = output[reference++];
-					Native.Set8(output + oidx, Native.Get8(output + reference));
+					Intrinsic.Store8(output + oidx, Native.Get8(output + reference));
 					oidx++;
 					reference++;
 
 					//output[oidx++] = output[reference++];
-					Native.Set8(output + oidx, Native.Get8(output + reference));
+					Intrinsic.Store8(output + oidx, Native.Get8(output + reference));
 					oidx++;
 					reference++;
 
 					do
 					{
 						//output[oidx++] = output[reference++];
-						Native.Set8(output + oidx, Native.Get8(output + reference));
+						Intrinsic.Store8(output + oidx, Native.Get8(output + reference));
 						oidx++;
 						reference++;
 					}

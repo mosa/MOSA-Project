@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
@@ -22,7 +23,7 @@ namespace Mosa.Kernel.x86
 			queueCurrent = Address.UnitTestQueue;
 			count = 0;
 
-			Native.Set32(queueNext, 0);
+			Intrinsic.Store32(queueNext, 0);
 		}
 
 		public static bool QueueUnitTest(uint id, uint start, uint end)
@@ -33,26 +34,26 @@ namespace Mosa.Kernel.x86
 				if (Address.UnitTestQueue + len + 32 >= queueCurrent)
 					return false; // no space
 
-				Native.Set32(queueNext, uint.MaxValue); // mark jump to front
+				Intrinsic.Store32(queueNext, uint.MaxValue); // mark jump to front
 
 				// cycle to front
 				queueNext = Address.UnitTestQueue;
 			}
 
-			Native.Set32(queueNext, len + 4);
+			Intrinsic.Store32(queueNext, len + 4);
 			queueNext = queueNext + 4;
 
-			Native.Set32(queueNext, (uint)id);
+			Intrinsic.Store32(queueNext, (uint)id);
 			queueNext = queueNext + 4;
 
 			for (uint i = start; i < end; i = i + 4)
 			{
 				uint value = Native.Get32(i);
-				Native.Set32(queueNext, value);
+				Intrinsic.Store32(queueNext, value);
 				queueNext = queueNext + 4;
 			}
 
-			Native.Set32(queueNext, 0); // mark end
+			Intrinsic.Store32(queueNext, 0); // mark end
 			++count;
 
 			return true;

@@ -99,7 +99,7 @@ namespace Mosa.Runtime.x86
 			// write 1 byte increments until 32-bit alignment
 			for (; (dst & 0x3) != 0; dst++)
 			{
-				Native.Set8(dst, val);
+				Intrinsic.Store8(dst, val);
 			}
 
 			uint e2 = e3 & 0xFFFFFFFC;
@@ -108,13 +108,13 @@ namespace Mosa.Runtime.x86
 			// write in 32-bit increments
 			for (; dst < e2; dst += 4)
 			{
-				Native.Set32(dst, value4);
+				Intrinsic.Store32(dst, value4);
 			}
 
 			// write remaining in 1 byte increments
 			for (; dst < e3; dst++)
 			{
-				Native.Set8(dst, val);
+				Intrinsic.Store8(dst, val);
 			}
 		}
 
@@ -131,7 +131,7 @@ namespace Mosa.Runtime.x86
 			// write 1 byte increments until 32-bit alignment
 			for (; (dst & 0x3) != 0; dst++)
 			{
-				Native.Set8(dst, 0);
+				Intrinsic.Store8(dst, 0);
 			}
 
 			uint e2 = e3 & 0xFFFFFFFC;
@@ -139,13 +139,13 @@ namespace Mosa.Runtime.x86
 			// write in 32-bit increments
 			for (; dst < e2; dst += 4)
 			{
-				Native.Set32(dst, 0);
+				Intrinsic.Store32(dst, 0);
 			}
 
 			// write remaining in 1 byte increments
 			for (; dst < e3; dst++)
 			{
-				Native.Set8(dst, 0);
+				Intrinsic.Store8(dst, 0);
 			}
 		}
 
@@ -333,7 +333,7 @@ namespace Mosa.Runtime.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void SetReturnAddressForStackFrame(uint stackframe, uint value)
 		{
-			Native.Set32(stackframe + NativeIntSize, value);
+			Intrinsic.Store32(stackframe + NativeIntSize, value);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]

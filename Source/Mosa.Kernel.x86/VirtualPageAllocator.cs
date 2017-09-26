@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.x86.Helpers;
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
@@ -56,7 +57,7 @@ namespace Mosa.Kernel.x86
 			else
 				value = value | mask;
 
-			Native.Set32(at, value);
+			Intrinsic.Store32(at, value);
 		}
 
 		/// <summary>

@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -177,7 +178,7 @@ namespace Mosa.TestWorld.x86.Tests
 		public static bool ConditionalBug()
 		{
 			const uint address = 0x3000;
-			Mosa.Runtime.x86.Native.Set8(address, 81);
+			Intrinsic.Store8(address, 81);
 			var num = Mosa.Runtime.x86.Native.Get8(address);
 
 			if (num >= 32 && num < 128)
