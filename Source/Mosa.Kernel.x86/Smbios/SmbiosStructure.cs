@@ -18,7 +18,7 @@ namespace Mosa.Kernel.x86.Smbios
 		{
 			this.address = address;
 			length = Intrinsic.Load8(address + 0x01u);
-			handle = Native.Get16(address + 0x02u);
+			handle = Intrinsic.Load16(address + 0x02u);
 		}
 
 		protected string GetStringFromIndex(byte index)
