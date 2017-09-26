@@ -106,7 +106,7 @@ namespace Mosa.Runtime.x86
 			uint value4 = (uint)((val << 24) | (val << 16) | (val << 8) | val);
 
 			// write in 32-bit increments
-			for (; dst < e2; dst = dst + 4)
+			for (; dst < e2; dst += 4)
 			{
 				Native.Set32(dst, value4);
 			}
@@ -137,7 +137,7 @@ namespace Mosa.Runtime.x86
 			uint e2 = e3 & 0xFFFFFFFC;
 
 			// write in 32-bit increments
-			for (; dst < e2; dst = dst + 4)
+			for (; dst < e2; dst += 4)
 			{
 				Native.Set32(dst, 0);
 			}
@@ -393,7 +393,7 @@ namespace Mosa.Runtime.x86
 
 			uint stackFrame = GetStackFrame(1);
 
-			for (uint i = 0;; i++)
+			for (uint i = 0; ; i++)
 			{
 				uint returnAddress = GetReturnAddressFromStackFrame(stackFrame);
 

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
-using System.Runtime.InteropServices;
 
 namespace Mosa.Kernel.x86
 {
@@ -32,8 +32,8 @@ namespace Mosa.Kernel.x86
 		{
 			// Setup IDT table
 			MemoryBlock.Clear(Address.IDTTable, 6);
-			Native.Set16(Address.IDTTable, (Offset.TotalSize * 256) - 1);
-			Native.Set32(Address.IDTTable + 2, Address.IDTTable + 6);
+			Intrinsic.Store16(Address.IDTTable, (Offset.TotalSize * 256) - 1);
+			Intrinsic.Store32(Address.IDTTable + 2, Address.IDTTable + 6);
 
 			SetTableEntries();
 
@@ -56,11 +56,11 @@ namespace Mosa.Kernel.x86
 		private static void Set(uint index, uint address, ushort select, byte flags)
 		{
 			uint entry = GetEntryLocation(index);
-			Native.Set16(entry + Offset.BaseLow, (ushort)(address & 0xFFFF));
-			Native.Set16(entry + Offset.BaseHigh, (ushort)((address >> 16) & 0xFFFF));
-			Native.Set16(entry + Offset.Select, select);
-			Native.Set8(entry + Offset.Always0, 0);
-			Native.Set8(entry + Offset.Flags, flags);
+			Intrinsic.Store16(entry + Offset.BaseLow, (ushort)(address & 0xFFFF));
+			Intrinsic.Store16(entry + Offset.BaseHigh, (ushort)((address >> 16) & 0xFFFF));
+			Intrinsic.Store16(entry + Offset.Select, select);
+			Intrinsic.Store8(entry + Offset.Always0, 0);
+			Intrinsic.Store8(entry + Offset.Flags, flags);
 		}
 
 		/// <summary>
