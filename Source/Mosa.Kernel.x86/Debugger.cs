@@ -411,7 +411,7 @@ namespace Mosa.Kernel.x86
 			{
 				uint address = GetUInt32((i * 4) + 16);
 				SendInteger(address);
-				SendInteger(Native.Get32(address));
+				SendInteger(Intrinsic.Load32(address));
 			}
 
 			SendCRC();

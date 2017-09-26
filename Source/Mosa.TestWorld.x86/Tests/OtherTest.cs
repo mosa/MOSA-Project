@@ -179,7 +179,7 @@ namespace Mosa.TestWorld.x86.Tests
 		{
 			const uint address = 0x3000;
 			Intrinsic.Store8(address, 81);
-			var num = Intrinsic.Load8(address);
+			var num = Mosa.Runtime.x86.Native.Get8(address);
 
 			if (num >= 32 && num < 128)
 				return true;

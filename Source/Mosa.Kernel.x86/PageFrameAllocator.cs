@@ -101,8 +101,8 @@ namespace Mosa.Kernel.x86
 				return 0; // out of memory
 
 			totalUsedPages++;
-			uint avail = Native.Get32(at);
-			at = at - 4;
+			uint avail = Intrinsic.Load32(at);
+			at -= 4;
 
 			// Clear out memory
 			MemoryBlock.Clear(avail, PageSize);

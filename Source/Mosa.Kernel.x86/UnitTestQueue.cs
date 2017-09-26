@@ -48,7 +48,7 @@ namespace Mosa.Kernel.x86
 
 			for (uint i = start; i < end; i = i + 4)
 			{
-				uint value = Native.Get32(i);
+				uint value = Intrinsic.Load32(i);
 				Intrinsic.Store32(queueNext, value);
 				queueNext = queueNext + 4;
 			}
@@ -69,18 +69,18 @@ namespace Mosa.Kernel.x86
 				return;
 			}
 
-			uint marker = Native.Get32(queueCurrent);
+			uint marker = Intrinsic.Load32(queueCurrent);
 
 			if (marker == uint.MaxValue)
 			{
 				queueCurrent = Address.UnitTestQueue;
 			}
 
-			uint len = Native.Get32(queueCurrent);
-			uint id = Native.Get32(queueCurrent + 4);
-			uint address = Native.Get32(queueCurrent + 8);
-			uint type = Native.Get32(queueCurrent + 12);
-			uint paramcnt = Native.Get32(queueCurrent + 16);
+			uint len = Intrinsic.Load32(queueCurrent);
+			uint id = Intrinsic.Load32(queueCurrent + 4);
+			uint address = Intrinsic.Load32(queueCurrent + 8);
+			uint type = Intrinsic.Load32(queueCurrent + 12);
+			uint paramcnt = Intrinsic.Load32(queueCurrent + 16);
 
 			UnitTestRunner.SetUnitTestMethodAddress(address);
 			UnitTestRunner.SetUnitTestResultType(type);
@@ -88,7 +88,7 @@ namespace Mosa.Kernel.x86
 
 			for (uint index = 0; index < paramcnt; index++)
 			{
-				uint value = Native.Get32(queueCurrent + 20 + (index * 4));
+				uint value = Intrinsic.Load32(queueCurrent + 20 + (index * 4));
 				UnitTestRunner.SetUnitTestMethodParameter(index, value);
 			}
 

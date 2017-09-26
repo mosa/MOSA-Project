@@ -38,7 +38,7 @@ namespace Mosa.Kernel.x86.Smbios
 		{
 			version = GetStringFromIndex(Intrinsic.Load8(address + 0x10u));
 			socket = GetStringFromIndex(Intrinsic.Load8(address + 0x04u));
-			maxSpeed = Native.Get16(address + 0x16u);
+			maxSpeed = Intrinsic.Load16(address + 0x16u);
 			vendor = GetStringFromIndex(Intrinsic.Load8(address + 0x07u));
 		}
 

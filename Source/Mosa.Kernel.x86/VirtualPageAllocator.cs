@@ -50,12 +50,12 @@ namespace Mosa.Kernel.x86
 			byte bit = (byte)(page % 32);
 			uint mask = (byte)(1 << bit);
 
-			uint value = Native.Get32(at);
+			uint value = Intrinsic.Load32(at);
 
 			if (free)
-				value = value & ~mask;
+				value &= ~mask;
 			else
-				value = value | mask;
+				value |= mask;
 
 			Intrinsic.Store32(at, value);
 		}
