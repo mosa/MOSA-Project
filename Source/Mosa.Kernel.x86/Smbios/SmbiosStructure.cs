@@ -5,7 +5,7 @@ using Mosa.Runtime.x86;
 namespace Mosa.Kernel.x86.Smbios
 {
 	/// <summary>
-	///
+	/// Smbios Structure
 	/// </summary>
 	public abstract class SmbiosStructure
 	{

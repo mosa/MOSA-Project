@@ -1,4 +1,6 @@
-﻿/*
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -7,12 +9,13 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	///
+	/// Page Table
 	/// </summary>
 	public static class PageTable
 	{
@@ -24,13 +27,13 @@ namespace Mosa.Kernel.x86
 			// Setup Page Directory
 			for (int index = 0; index < 1024; index++)
 			{
-				Native.Set32((uint)(Address.PageDirectory + (index << 2)), (uint)(Address.PageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
+				Intrinsic.Store32((uint)(Address.PageDirectory + (index << 2)), (uint)(Address.PageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
 			}
 
 			// Map the first 128MB of memory (32786 4K pages) (why 128MB?)
 			for (int index = 0; index < 1024 * 32; index++)
 			{
-				Native.Set32((uint)(Address.PageTable + (index << 2)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
+				Intrinsic.Store32((uint)(Address.PageTable + (index << 2)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 			}
 
 			// Unmap the first page for null pointer exceptions
@@ -53,7 +56,7 @@ namespace Mosa.Kernel.x86
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
 
 			//Native.Set32(Address.PageTable + ((virtualAddress & 0xFFC00000u) >> 10), physicalAddress & 0xFFC00000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
-			Native.Set32(Address.PageTable + ((virtualAddress & 0xFFFFF000u) >> 10), physicalAddress & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
+			Intrinsic.Store32(Address.PageTable + ((virtualAddress & 0xFFFFF000u) >> 10), physicalAddress & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
 		}
 
 		/// <summary>
@@ -64,7 +67,7 @@ namespace Mosa.Kernel.x86
 		public static uint GetPhysicalAddressFromVirtual(uint virtualAddress)
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			return Native.Get32(Address.PageTable + ((virtualAddress & 0xFFFFF000u) >> 10)) + (virtualAddress & 0xFFFu);
+			return Intrinsic.Load32(Address.PageTable + ((virtualAddress & 0xFFFFF000u) >> 10)) + (virtualAddress & 0xFFFu);
 		}
 	}
 }
