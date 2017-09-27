@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.x86.Helpers;
-using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using System.Runtime.InteropServices;
 
@@ -179,6 +177,7 @@ namespace Mosa.Kernel.x86
 				return _vbeModeInfoStructure;
 			}
 		}
+
 		private static VBEMode _vbeModeInfoStructure = null;
 
 		/// <summary>

@@ -41,12 +41,12 @@ namespace Mosa.Kernel.x86
 		private static void Set(uint index, uint address, uint limit, byte access, byte granularity)
 		{
 			uint entry = GetEntryLocation(index);
-			Intrinsic.Store16(entry + Offset.BaseLow, (ushort)(address & 0xFFFF));
-			Intrinsic.Store8(entry + Offset.BaseMiddle, (byte)((address >> 16) & 0xFF));
-			Intrinsic.Store8(entry + Offset.BaseHigh, (byte)((address >> 24) & 0xFF));
-			Intrinsic.Store16(entry + Offset.LimitLow, (ushort)(limit & 0xFFFF));
-			Intrinsic.Store8(entry + Offset.Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0xF0)));
-			Intrinsic.Store8(entry + Offset.Access, access);
+			Intrinsic.Store16(entry, Offset.BaseLow, (ushort)(address & 0xFFFF));
+			Intrinsic.Store8(entry, Offset.BaseMiddle, (byte)((address >> 16) & 0xFF));
+			Intrinsic.Store8(entry, Offset.BaseHigh, (byte)((address >> 24) & 0xFF));
+			Intrinsic.Store16(entry, Offset.LimitLow, (ushort)(limit & 0xFFFF));
+			Intrinsic.Store8(entry, Offset.Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0xF0)));
+			Intrinsic.Store8(entry, Offset.Access, access);
 		}
 
 		/// <summary>

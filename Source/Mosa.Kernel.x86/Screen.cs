@@ -93,7 +93,7 @@ namespace Mosa.Kernel.x86
 			uint address = (0x0B8000 + ((row * Columns + column) * 2));
 
 			Intrinsic.Store8(address, (byte)chr);
-			Intrinsic.Store8(address + 1, color);
+			Intrinsic.Store8(address, 1, color);
 		}
 
 		/// <summary>
@@ -105,7 +105,7 @@ namespace Mosa.Kernel.x86
 			uint address = (0x0B8000 + ((Row * Columns + Column) * 2));
 
 			Intrinsic.Store8(address, (byte)chr);
-			Intrinsic.Store8(address + 1, color);
+			Intrinsic.Store8(address, 1, color);
 
 			Next();
 			UpdateCursor();

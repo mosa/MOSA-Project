@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86.Smbios
 {
@@ -17,8 +16,8 @@ namespace Mosa.Kernel.x86.Smbios
 		protected SmbiosStructure(uint address)
 		{
 			this.address = address;
-			length = Intrinsic.Load8(address + 0x01u);
-			handle = Intrinsic.Load16(address + 0x02u);
+			length = Intrinsic.Load8(address, 0x01u);
+			handle = Intrinsic.Load16(address, 0x02u);
 		}
 
 		protected string GetStringFromIndex(byte index)
@@ -41,7 +40,7 @@ namespace Mosa.Kernel.x86.Smbios
 			string result = string.Empty;
 
 			for (uint i = 0; i < stringLength; ++i)
-				result = string.Concat(result, new string((char)Intrinsic.Load8(stringStart + i), 1));
+				result = string.Concat(result, new string((char)Intrinsic.Load8(stringStart, i), 1));
 
 			return result;
 		}

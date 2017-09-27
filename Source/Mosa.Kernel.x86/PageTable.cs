@@ -27,13 +27,13 @@ namespace Mosa.Kernel.x86
 			// Setup Page Directory
 			for (int index = 0; index < 1024; index++)
 			{
-				Intrinsic.Store32((uint)(Address.PageDirectory + (index << 2)), (uint)(Address.PageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
+				Intrinsic.Store32(Address.PageDirectory, (index << 2), (uint)(Address.PageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
 			}
 
 			// Map the first 128MB of memory (32786 4K pages) (why 128MB?)
 			for (int index = 0; index < 1024 * 32; index++)
 			{
-				Intrinsic.Store32((uint)(Address.PageTable + (index << 2)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
+				Intrinsic.Store32(Address.PageTable, (index << 2), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 			}
 
 			// Unmap the first page for null pointer exceptions
@@ -56,7 +56,7 @@ namespace Mosa.Kernel.x86
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
 
 			//Native.Set32(Address.PageTable + ((virtualAddress & 0xFFC00000u) >> 10), physicalAddress & 0xFFC00000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
-			Intrinsic.Store32(Address.PageTable + ((virtualAddress & 0xFFFFF000u) >> 10), physicalAddress & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
+			Intrinsic.Store32(Address.PageTable, ((virtualAddress & 0xFFFFF000u) >> 10), physicalAddress & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
 		}
 
 		/// <summary>
@@ -67,7 +67,7 @@ namespace Mosa.Kernel.x86
 		public static uint GetPhysicalAddressFromVirtual(uint virtualAddress)
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			return Intrinsic.Load32(Address.PageTable + ((virtualAddress & 0xFFFFF000u) >> 10)) + (virtualAddress & 0xFFFu);
+			return Intrinsic.Load32(Address.PageTable, ((virtualAddress & 0xFFFFF000u) >> 10)) + (virtualAddress & 0xFFFu);
 		}
 	}
 }

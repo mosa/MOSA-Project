@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86.Smbios
 {
@@ -31,9 +30,9 @@ namespace Mosa.Kernel.x86.Smbios
 		public BiosInformationStructure()
 			: base(SmbiosManager.GetStructureOfType(0x00))
 		{
-			biosVendor = GetStringFromIndex(Intrinsic.Load8(address + 0x04u));
-			biosVersion = GetStringFromIndex(Intrinsic.Load8(address + 0x05u));
-			biosDate = GetStringFromIndex(Intrinsic.Load8(address + 0x08u));
+			biosVendor = GetStringFromIndex(Intrinsic.Load8(address, 0x04u));
+			biosVersion = GetStringFromIndex(Intrinsic.Load8(address, 0x05u));
+			biosDate = GetStringFromIndex(Intrinsic.Load8(address, 0x08u));
 		}
 
 		/// <summary>
