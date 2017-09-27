@@ -333,7 +333,7 @@ namespace Mosa.Runtime.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void SetReturnAddressForStackFrame(uint stackframe, uint value)
 		{
-			Intrinsic.Store32(stackframe + NativeIntSize, value);
+			Intrinsic.Store32(stackframe, NativeIntSize, value);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
