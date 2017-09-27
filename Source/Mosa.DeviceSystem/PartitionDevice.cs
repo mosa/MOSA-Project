@@ -1,31 +1,29 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.HardwareSystem;
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	///
+	/// Partition Device
 	/// </summary>
 	public class PartitionDevice : Device, IDevice, IPartitionDevice
 	{
 		/// <summary>
-		///
+		/// The disk device
 		/// </summary>
 		private IDiskDevice diskDevice;
 
 		/// <summary>
-		///
+		/// The start block
 		/// </summary>
 		private uint startBlock;
 
 		/// <summary>
-		///
+		/// The block count
 		/// </summary>
 		private uint blockCount;
 
 		/// <summary>
-		///
+		/// The read only
 		/// </summary>
 		private bool readOnly;
 

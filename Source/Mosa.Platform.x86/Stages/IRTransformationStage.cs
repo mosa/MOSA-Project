@@ -587,6 +587,8 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(!node.Result.IsR4);
 			Debug.Assert(!node.Result.IsR8);
 
+			LoadStore.OrderLoadOperands(node, MethodCompiler);
+
 			node.SetInstruction(X86.MovLoad, node.Size, node.Result, node.Operand1, node.Operand2);
 		}
 
@@ -597,6 +599,9 @@ namespace Mosa.Platform.x86.Stages
 		private void LoadSignExtended(InstructionNode node)
 		{
 			Debug.Assert(node.Size == InstructionSize.Size8 || node.Size == InstructionSize.Size16);
+
+			LoadStore.OrderLoadOperands(node, MethodCompiler);
+
 			node.SetInstruction(X86.MovsxLoad, node.Size, node.Result, node.Operand1, node.Operand2);
 		}
 
@@ -607,6 +612,9 @@ namespace Mosa.Platform.x86.Stages
 		private void LoadZeroExtended(InstructionNode node)
 		{
 			Debug.Assert(node.Size == InstructionSize.Size8 || node.Size == InstructionSize.Size16);
+
+			LoadStore.OrderLoadOperands(node, MethodCompiler);
+
 			node.SetInstruction(X86.MovzxLoad, node.Size, node.Result, node.Operand1, node.Operand2);
 		}
 
@@ -829,6 +837,8 @@ namespace Mosa.Platform.x86.Stages
 
 		private void StoreInteger(InstructionNode node)
 		{
+			LoadStore.OrderStoreOperands(node, MethodCompiler);
+
 			node.SetInstruction(X86.MovStore, node.Size, null, node.Operand1, node.Operand2, node.Operand3);
 		}
 

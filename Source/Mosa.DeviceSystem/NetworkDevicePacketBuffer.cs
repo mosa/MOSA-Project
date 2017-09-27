@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.HardwareSystem;
 using System.Collections.Generic;
 
 namespace Mosa.DeviceSystem
@@ -20,52 +19,52 @@ namespace Mosa.DeviceSystem
 		protected INetworkDevice networkDevice;
 
 		/// <summary>
-		///
+		/// The transmit queue
 		/// </summary>
 		protected LinkedList<byte[]> transmitQueue;
 
 		/// <summary>
-		///
+		/// The receive queue
 		/// </summary>
 		protected LinkedList<byte[]> receiveQueue;
 
 		/// <summary>
-		///
+		/// The maximum transmit queue
 		/// </summary>
 		protected uint maxTransmitQueue;
 
 		/// <summary>
-		///
+		/// The maximum receive queue
 		/// </summary>
 		protected uint maxReceiveQueue;
 
 		/// <summary>
-		///
+		/// The count transmit packets
 		/// </summary>
 		protected uint countTransmitPackets;
 
 		/// <summary>
-		///
+		/// The count receive packets
 		/// </summary>
 		protected uint countReceivePackets;
 
 		/// <summary>
-		///
+		/// The discarded transmit packets
 		/// </summary>
 		protected uint discardedTransmitPackets;
 
 		/// <summary>
-		///
+		/// The discarded receive packets
 		/// </summary>
 		protected uint discardedReceivePackets;
 
 		/// <summary>
-		///
+		/// The transmit lock
 		/// </summary>
 		protected SpinLock transmitLock;
 
 		/// <summary>
-		///
+		/// The receive lock
 		/// </summary>
 		protected SpinLock receiveLock;
 

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceDriver.PCI.S3
 {
@@ -107,7 +106,7 @@ namespace Mosa.DeviceDriver.PCI.S3
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory;
+		protected BaseMemory memory;
 
 		/// <summary>
 		///
@@ -117,52 +116,52 @@ namespace Mosa.DeviceDriver.PCI.S3
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort lfbControllerIndex;
+		protected IOPortReadWrite lfbControllerIndex;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort enhMapControllerIndex;
+		protected IOPortReadWrite enhMapControllerIndex;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort vgaEnableController;
+		protected IOPortReadWrite vgaEnableController;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort miscOutputReader;
+		protected IOPortReadWrite miscOutputReader;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort miscOutputWriter;
+		protected IOPortReadWrite miscOutputWriter;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort crtcControllerIndex;
+		protected IOPortReadWrite crtcControllerIndex;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort crtcControllerData;
+		protected IOPortReadWrite crtcControllerData;
 
 		/// <summary>
 		/// IOPort to index sequence registers
 		/// </summary>
-		protected IReadWriteIOPort seqControllerIndex;
+		protected IOPortReadWrite seqControllerIndex;
 
 		/// <summary>
 		/// IOPort to write data to the sequence registers
 		/// </summary>
-		protected IReadWriteIOPort seqControllerData;
+		protected IOPortReadWrite seqControllerData;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IWriteOnlyIOPort outportWrite;
+		protected IOPortWrite outportWrite;
 
 		#endregion Members
 
@@ -222,6 +221,7 @@ namespace Mosa.DeviceDriver.PCI.S3
 		/// <summary>
 		/// Setups this hardware device driver
 		/// </summary>
+		/// <param name="hardwareResources"></param>
 		/// <returns></returns>
 		public override bool Setup(HardwareResources hardwareResources)
 		{
@@ -234,13 +234,13 @@ namespace Mosa.DeviceDriver.PCI.S3
 			// Store portmanager
 			byte portBar = (byte)(base.HardwareResources.IOPointRegionCount - 1);
 
-			vgaEnableController = base.HardwareResources.GetIOPort(portBar, Register.VgaEnable);
-			miscOutputReader = base.HardwareResources.GetIOPort(portBar, Register.MiscOutRead);
-			miscOutputWriter = base.HardwareResources.GetIOPort(portBar, Register.MiscOutWrite);
-			crtcControllerIndex = base.HardwareResources.GetIOPort(portBar, Register.CrtcIndex);
-			crtcControllerData = base.HardwareResources.GetIOPort(portBar, Register.CrtcData);
-			seqControllerIndex = base.HardwareResources.GetIOPort(portBar, Register.SequenceIndex);
-			seqControllerData = base.HardwareResources.GetIOPort(portBar, Register.SequenceData);
+			vgaEnableController = base.HardwareResources.GetIOPortReadWrite(portBar, Register.VgaEnable);
+			miscOutputReader = base.HardwareResources.GetIOPortReadWrite(portBar, Register.MiscOutRead);
+			miscOutputWriter = base.HardwareResources.GetIOPortReadWrite(portBar, Register.MiscOutWrite);
+			crtcControllerIndex = base.HardwareResources.GetIOPortReadWrite(portBar, Register.CrtcIndex);
+			crtcControllerData = base.HardwareResources.GetIOPortReadWrite(portBar, Register.CrtcData);
+			seqControllerIndex = base.HardwareResources.GetIOPortReadWrite(portBar, Register.SequenceIndex);
+			seqControllerData = base.HardwareResources.GetIOPortReadWrite(portBar, Register.SequenceData);
 
 			// Everything went fine
 			return true;

@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime.x86;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.x86
 {
@@ -83,7 +83,7 @@ namespace Mosa.Kernel.x86
 			// Populate free table
 			for (uint mem = normstart; mem < normstart + normsize; mem = mem + PageSize, at = at + 4)
 			{
-				Native.Set32(at, mem);
+				Intrinsic.Store32(at, mem);
 			}
 
 			at = at - 4;
@@ -100,11 +100,11 @@ namespace Mosa.Kernel.x86
 				return 0; // out of memory
 
 			totalUsedPages++;
-			uint avail = Native.Get32(at);
-			at = at - 4;
+			uint avail = Intrinsic.Load32(at);
+			at -= 4;
 
 			// Clear out memory
-			Memory.Clear(avail, PageSize);
+			MemoryBlock.Clear(avail, PageSize);
 
 			return avail;
 		}
@@ -117,7 +117,7 @@ namespace Mosa.Kernel.x86
 		{
 			totalUsedPages--;
 			at = at + 4;
-			Native.Set32(at, address);
+			Intrinsic.Store32(at, address);
 		}
 
 		/// <summary>

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.HardwareSystem;
 
 /*
  * Portions of this code is:
@@ -109,22 +108,22 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort indexPort;
+		protected IOPortReadWrite indexPort;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort valuePort;
+		protected IOPortReadWrite valuePort;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory;
+		protected BaseMemory memory;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory fifo;
+		protected BaseMemory fifo;
 
 		/// <summary>
 		///
@@ -257,8 +256,8 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			this.HardwareResources = hardwareResources;
 			base.Name = "VMWARE_SVGA_0x" + hardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-			indexPort = hardwareResources.GetIOPort(0, 0);
-			valuePort = hardwareResources.GetIOPort(0, 1);
+			indexPort = hardwareResources.GetIOPortReadWrite(0, 0);
+			valuePort = hardwareResources.GetIOPortReadWrite(0, 1);
 			HAL.DebugWrite("**G**");
 			memory = base.HardwareResources.GetMemory(0);
 			HAL.DebugWrite("**I**");

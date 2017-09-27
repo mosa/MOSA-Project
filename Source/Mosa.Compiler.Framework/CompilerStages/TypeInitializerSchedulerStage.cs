@@ -32,6 +32,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private readonly BasicBlocks basicBlocks;
 
 		private MosaMethod typeInitializerMethod;
+		private readonly object _lockObject = new object();
 
 		#endregion Data Members
 
@@ -92,7 +93,11 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		public void Schedule(MosaMethod method)
 		{
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-			start.AppendInstruction(IRInstruction.CallStatic, null, symbol);
+
+			lock (_lockObject)
+			{
+				start.AppendInstruction(IRInstruction.CallStatic, null, symbol);
+			}
 		}
 
 		#endregion Methods

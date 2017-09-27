@@ -1,12 +1,15 @@
-﻿using Mosa.DeviceSystem;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.DeviceSystem;
 
 namespace Mosa.VBEWorld.x86
 {
-	static class MosaLogo
+	internal static class MosaLogo
 	{
 		//Size in tiles
-		private static uint _width = 23;
-		private static uint _height = 7;
+		private const uint _width = 23;
+
+		private const uint _height = 7;
 
 		public static void Draw(IFrameBuffer frameBuffer, uint tileSize)
 		{
@@ -27,7 +30,7 @@ namespace Mosa.VBEWorld.x86
 
 					if ((data & mask) == mask)
 					{
-						frameBuffer.FillRectangle(colors[tx / 6], (uint)(positionX + tileSize * tx), (uint)(positionY + tileSize * ty), tileSize, tileSize); //Each pixel is aprox 5 tiles in width
+						frameBuffer.FillRectangle(colors[tx / 6], (uint)(positionX + (tileSize * tx)), (uint)(positionY + (tileSize * ty)), tileSize, tileSize); //Each pixel is aprox 5 tiles in width
 					}
 				}
 			}

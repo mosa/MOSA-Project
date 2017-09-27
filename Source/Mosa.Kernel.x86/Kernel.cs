@@ -6,7 +6,7 @@ using Mosa.Runtime;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	///
+	/// X86 Kernel
 	/// </summary>
 	public static class Kernel
 	{

@@ -1,11 +1,11 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime.x86;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.x86.Smbios
 {
 	/// <summary>
-	///
+	/// Smbios Structure
 	/// </summary>
 	public abstract class SmbiosStructure
 	{
@@ -16,8 +16,8 @@ namespace Mosa.Kernel.x86.Smbios
 		protected SmbiosStructure(uint address)
 		{
 			this.address = address;
-			length = Native.Get8(address + 0x01u);
-			handle = Native.Get16(address + 0x02u);
+			length = Intrinsic.Load8(address, 0x01u);
+			handle = Intrinsic.Load16(address, 0x02u);
 		}
 
 		protected string GetStringFromIndex(byte index)
@@ -29,18 +29,18 @@ namespace Mosa.Kernel.x86.Smbios
 			int count = 1;
 
 			while (count++ != index)
-				while (Native.Get8(stringStart++) != 0x00u)
+				while (Intrinsic.Load8(stringStart++) != 0x00u)
 					;
 
 			uint stringEnd = stringStart;
-			while (Native.Get8(++stringEnd) != 0x00u)
+			while (Intrinsic.Load8(++stringEnd) != 0x00u)
 				;
 
 			int stringLength = (int)(stringEnd - stringStart);
 			string result = string.Empty;
 
 			for (uint i = 0; i < stringLength; ++i)
-				result = string.Concat(result, new string((char)Native.Get8(stringStart + i), 1));
+				result = string.Concat(result, new string((char)Intrinsic.Load8(stringStart, i), 1));
 
 			return result;
 		}

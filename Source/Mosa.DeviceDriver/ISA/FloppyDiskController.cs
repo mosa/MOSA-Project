@@ -9,7 +9,6 @@
 // http://www.osdev.org/phpBB2/viewtopic.php?t=13538
 
 using Mosa.DeviceSystem;
-using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceDriver.ISA
 {
@@ -225,22 +224,22 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort commandPort;
+		protected IOPortReadWrite commandPort;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort dataPort;
+		protected IOPortReadWrite dataPort;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort configPort;
+		protected IOPortReadWrite configPort;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort statusPort;
+		protected IOPortReadWrite statusPort;
 
 		/// <summary>
 		///
@@ -286,13 +285,13 @@ namespace Mosa.DeviceDriver.ISA
 		public override bool Setup(HardwareResources hardwareResources)
 		{
 			this.HardwareResources = hardwareResources;
-			base.Name = "FDC_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			base.Name = "FDC_0x" + base.HardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 			base.Parent = null; // no parent
 
-			commandPort = base.HardwareResources.GetIOPort(0, 2);
-			statusPort = base.HardwareResources.GetIOPort(0, 4);
-			dataPort = base.HardwareResources.GetIOPort(0, 5);
-			configPort = base.HardwareResources.GetIOPort(0, 7);
+			commandPort = base.HardwareResources.GetIOPortReadWrite(0, 2);
+			statusPort = base.HardwareResources.GetIOPortReadWrite(0, 4);
+			dataPort = base.HardwareResources.GetIOPortReadWrite(0, 5);
+			configPort = base.HardwareResources.GetIOPortReadWrite(0, 7);
 
 			//			floppyDMA = base.CreateDMAChannel(2);
 			//			floppyIRQ = base.CreateIRQHandler(6);

@@ -8,7 +8,7 @@ using System.IO;
 namespace Mosa.Utility.BootImage
 {
 	/// <summary>
-	///
+	/// Generator
 	/// </summary>
 	public static class Generator
 	{
@@ -70,10 +70,12 @@ namespace Mosa.Utility.BootImage
 			if (options.MBROption)
 			{
 				// Create master boot block record
-				var mbr = new MasterBootBlock(diskDevice);
+				var mbr = new MasterBootBlock(diskDevice)
+				{
+					// Setup partition entry
+					DiskSignature = 0x12345678
+				};
 
-				// Setup partition entry
-				mbr.DiskSignature = 0x12345678;
 				mbr.Partitions[0].Bootable = true;
 				mbr.Partitions[0].StartLBA = diskGeometry.SectorsPerTrack;
 				mbr.Partitions[0].TotalBlocks = blockCount - mbr.Partitions[0].StartLBA;

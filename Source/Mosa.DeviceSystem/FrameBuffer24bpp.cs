@@ -1,14 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using Mosa.HardwareSystem;
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
 	/// Implementation of FrameBuffer with 24 Bits Per Pixel
 	/// </summary>
-	public sealed class FrameBuffer24bpp : FrameBuffer, IFrameBuffer
+	public sealed class FrameBuffer24bpp : FrameBuffer
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FrameBuffer24bpp"/> class.
@@ -18,7 +15,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="height">The height.</param>
 		/// <param name="offset">The offset.</param>
 		/// <param name="depth">The depth.</param>
-		public FrameBuffer24bpp(IMemory memory, uint width, uint height, uint offset, uint depth)
+		public FrameBuffer24bpp(BaseMemory memory, uint width, uint height, uint offset, uint depth)
 		{
 			this.memory = memory;
 			this.width = width;

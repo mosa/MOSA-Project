@@ -101,6 +101,13 @@
     <Compile Include="Intrinsics\CreateInstanceSimple.cs" />
     <Compile Include="Intrinsics\GetAssemblyListTable.cs" />
     <Compile Include="Intrinsics\GetObjectFromAddress.cs" />
+    <Compile Include="LoadStore.cs" />
+    <Compile Include="Intrinsics\Load16.cs" />
+    <Compile Include="Intrinsics\Store64.cs" />
+    <Compile Include="Intrinsics\Store8.cs" />
+    <Compile Include="Intrinsics\Store16.cs" />
+    <Compile Include="Intrinsics\Store32.cs" />
+    <Compile Include="Intrinsics\Load8.cs" />
     <Compile Include="Intrinsics\Load64.cs" />
     <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="IR\AddFloatR4.cs" />

@@ -1,3 +1,5 @@
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 /*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
@@ -8,7 +10,6 @@
  */
 
 using Mosa.DeviceSystem;
-using Mosa.HardwareSystem;
 using System.IO;
 
 namespace Mosa.Workspace.FileSystem.Debug.Synthetic
@@ -19,12 +20,12 @@ namespace Mosa.Workspace.FileSystem.Debug.Synthetic
 	public class DiskDevice : Device, IDiskDevice
 	{
 		/// <summary>
-		///
+		/// The disk file
 		/// </summary>
 		protected FileStream diskFile;
 
 		/// <summary>
-		///
+		/// The block offset
 		/// </summary>
 		public uint BlockOffset = 0;
 

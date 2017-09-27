@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.HardwareSystem;
 using System.Collections.Generic;
 
 namespace Mosa.DeviceSystem
@@ -56,7 +55,7 @@ namespace Mosa.DeviceSystem
 			// FIXME: Do not create disk devices if this method executed more than once
 
 			// Find disk controller devices
-			var controllers = deviceManager.GetDevices<IDiskControllerDevice>(HardwareSystem.DeviceStatus.Online);
+			var controllers = deviceManager.GetDevices<IDiskControllerDevice>(DeviceStatus.Online);
 
 			// For each controller
 			foreach (var device in controllers)

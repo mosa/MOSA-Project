@@ -1,11 +1,12 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.ClassLib;
+using Mosa.DeviceSystem;
 
 namespace Mosa.FileSystem.FAT.Find
 {
 	/// <summary>
-	///
+	/// Empty
 	/// </summary>
 	internal class Empty : FatFileSystem.ICompare
 	{

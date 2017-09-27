@@ -47,7 +47,7 @@
  * of this file under either the BSD or the GPL.
  */
 
-using Mosa.Runtime.x86;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.x86
 {
@@ -72,7 +72,7 @@ namespace Mosa.Kernel.x86
 			do
 			{
 				//uint ctrl = input[iidx++];
-				uint ctrl = Native.Get8(input + iidx);
+				uint ctrl = Intrinsic.Load8(input, iidx);
 				iidx++;
 
 				if (ctrl < (1 << 5)) /* literal run */
@@ -88,7 +88,7 @@ namespace Mosa.Kernel.x86
 					do
 					{
 						//output[oidx++] = input[iidx++];
-						Native.Set8(output + oidx, Native.Get8(input + iidx));
+						Intrinsic.Store8(output, oidx, Intrinsic.Load8(input, iidx));
 						oidx++;
 						iidx++;
 					}
@@ -103,12 +103,12 @@ namespace Mosa.Kernel.x86
 					if (len == 7)
 					{
 						//len += input[iidx++];
-						len += Native.Get8(input + iidx);
+						len += Intrinsic.Load8(input, iidx);
 						iidx++;
 					}
 
 					//reference -= input[iidx++];
-					reference -= Native.Get8(input + iidx);
+					reference -= Intrinsic.Load8(input, iidx);
 					iidx++;
 
 					if (oidx + len + 2 > outputLength)
@@ -124,19 +124,19 @@ namespace Mosa.Kernel.x86
 					}
 
 					//output[oidx++] = output[reference++];
-					Native.Set8(output + oidx, Native.Get8(output + reference));
+					Intrinsic.Store8(output, oidx, Intrinsic.Load8(output, reference));
 					oidx++;
 					reference++;
 
 					//output[oidx++] = output[reference++];
-					Native.Set8(output + oidx, Native.Get8(output + reference));
+					Intrinsic.Store8(output, oidx, Intrinsic.Load8(output, reference));
 					oidx++;
 					reference++;
 
 					do
 					{
 						//output[oidx++] = output[reference++];
-						Native.Set8(output + oidx, Native.Get8(output + reference));
+						Intrinsic.Store8(output, oidx, Intrinsic.Load8(output, reference));
 						oidx++;
 						reference++;
 					}

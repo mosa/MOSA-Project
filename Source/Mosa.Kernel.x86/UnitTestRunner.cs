@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
@@ -77,9 +78,9 @@ namespace Mosa.Kernel.x86
 					// copy parameters into stack
 					for (uint index = 0; index < testParameters; index++)
 					{
-						uint value = Native.Get32(Address.UnitTestStack + (index * 4));
+						uint value = Intrinsic.Load32(Address.UnitTestStack, (index * 4));
 
-						Native.Set32(esp + (index * 4), value);
+						Intrinsic.Store32(esp, (index * 4), value);
 					}
 
 					switch (testResultType)
@@ -104,7 +105,7 @@ namespace Mosa.Kernel.x86
 
 		public static void SetUnitTestMethodParameter(uint index, uint value)
 		{
-			Native.Set32(Address.UnitTestStack + (index * 4), value);
+			Intrinsic.Store32(Address.UnitTestStack, (index * 4), value);
 		}
 
 		public static void SetUnitTestMethodParameterCount(uint number)

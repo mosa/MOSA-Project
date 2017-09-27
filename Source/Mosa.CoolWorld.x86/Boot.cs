@@ -1,13 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.AppSystem;
-using Mosa.ClassLib;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.FileSystem.FAT;
 
-//using Mosa.HardwareSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
+using Mosa.DeviceSystem;
+using Mosa.CoolWorld.x86.HAL;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -35,13 +35,13 @@ namespace Mosa.CoolWorld.x86
 
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
-			Console.Color = Color.White;
-			Console.BackgroundColor = Color.Green;
+			Console.Color = Kernel.x86.Color.White;
+			Console.BackgroundColor = Kernel.x86.Color.Green;
 
 			Console.Write("                   MOSA OS Version 1.5 - Compiler Version 1.5");
 			FillLine();
-			Console.Color = Color.White;
-			Console.BackgroundColor = Color.Black;
+			Console.Color = Kernel.x86.Color.White;
+			Console.BackgroundColor = Kernel.x86.Color.Black;
 
 			//Debug.Color = Color.White;
 			//Debug.BackgroundColor = Color.Blue;
@@ -50,83 +50,83 @@ namespace Mosa.CoolWorld.x86
 
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 			var hardware = new HAL.Hardware();
-			HardwareSystem.Setup.Initialize(hardware);
+			Setup.Initialize(hardware);
 
 			Console.WriteLine("> Registering device drivers...");
-			DeviceDriver.Setup.Register(HardwareSystem.Setup.DeviceDriverRegistry);
+			DeviceDriver.Setup.Register(Setup.DeviceDriverRegistry);
 
 			Console.Write("> Probing for ISA devices...");
-			HardwareSystem.Setup.StartISADevices();
-			var isaDevices = HardwareSystem.Setup.DeviceManager.GetAllDevices();
+			Setup.StartISADevices();
+			var isaDevices = Setup.DeviceManager.GetAllDevices();
 			Console.WriteLine("[Completed: " + isaDevices.Count.ToString() + " found]");
 
 			foreach (var device in isaDevices)
 			{
 				Console.Write("  ");
-				Bullet(Color.Yellow);
+				Bullet(Kernel.x86.Color.Yellow);
 				Console.Write(" ");
-				InBrackets(device.Name, Color.White, Color.LightGreen);
+				InBrackets(device.Name, Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
 				Console.WriteLine();
 			}
 
 			Console.Write("> Probing for PCI devices...");
-			HardwareSystem.Setup.StartPCIDevices();
-			var pciDevices = HardwareSystem.Setup.DeviceManager.GetDevices<HardwareSystem.PCI.IPCIDevice>(HardwareSystem.DeviceStatus.Available);
+			Setup.StartPCIDevices();
+			var pciDevices = Setup.DeviceManager.GetDevices<DeviceSystem.PCI.IPCIDevice>(DeviceStatus.Available);
 			Console.WriteLine("[Completed: " + pciDevices.Count.ToString() + " found]");
 
 			foreach (var device in pciDevices)
 			{
-				var pciDevice = device as HardwareSystem.PCI.IPCIDevice;
+				var pciDevice = device as DeviceSystem.PCI.IPCIDevice;
 
 				Console.Write("  ");
-				Bullet(Color.Yellow);
+				Bullet(Kernel.x86.Color.Yellow);
 				Console.Write(" ");
-				InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubVendorID.ToString("x") + " (" + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", Color.White, Color.LightGreen);
+				InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubVendorID.ToString("x") + " (" + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
 				Console.WriteLine();
 			}
 
 			Console.Write("> Probing for disk controllers...");
-			var diskcontrollers = HardwareSystem.Setup.DeviceManager.GetDevices<DeviceSystem.IDiskControllerDevice>();
+			var diskcontrollers = Setup.DeviceManager.GetDevices<IDiskControllerDevice>();
 			Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
 
 			foreach (var device in diskcontrollers)
 			{
 				Console.Write("  ");
-				Bullet(Color.Yellow);
+				Bullet(Kernel.x86.Color.Yellow);
 				Console.Write(" ");
-				InBrackets(device.Name, Color.White, Color.LightGreen);
+				InBrackets(device.Name, Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
 				Console.WriteLine();
 			}
 
-			var diskcontroller = new DeviceSystem.DiskControllerManager(HardwareSystem.Setup.DeviceManager);
+			var diskcontroller = new DiskControllerManager(Setup.DeviceManager);
 			diskcontroller.CreateDiskDevices();
 
 			Console.Write("> Probing for disks...");
-			var disks = HardwareSystem.Setup.DeviceManager.GetDevices<DeviceSystem.IDiskDevice>();
+			var disks = Setup.DeviceManager.GetDevices<IDiskDevice>();
 			Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
 			foreach (var disk in disks)
 			{
 				Console.Write("  ");
-				Bullet(Color.Yellow);
+				Bullet(Kernel.x86.Color.Yellow);
 				Console.Write(" ");
-				InBrackets(disk.Name, Color.White, Color.LightGreen);
-				Console.Write(" " + (disk as DeviceSystem.IDiskDevice).TotalBlocks.ToString() + " blocks");
+				InBrackets(disk.Name, Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
+				Console.Write(" " + (disk as IDiskDevice).TotalBlocks.ToString() + " blocks");
 				Console.WriteLine();
 			}
 
-			var partitionManager = new Mosa.DeviceSystem.PartitionManager(HardwareSystem.Setup.DeviceManager);
+			var partitionManager = new PartitionManager(Setup.DeviceManager);
 			partitionManager.CreatePartitionDevices();
 
 			Console.Write("> Finding partitions...");
-			var partitions = HardwareSystem.Setup.DeviceManager.GetDevices<DeviceSystem.IPartitionDevice>();
+			var partitions = Setup.DeviceManager.GetDevices<IPartitionDevice>();
 			Console.WriteLine("[Completed: " + partitions.Count.ToString() + " found]");
 			foreach (var partition in partitions)
 			{
 				Console.Write("  ");
-				Bullet(Color.Yellow);
+				Bullet(Kernel.x86.Color.Yellow);
 				Console.Write(" ");
-				InBrackets(partition.Name, Color.White, Color.LightGreen);
-				Console.Write(" " + (partition as DeviceSystem.IPartitionDevice).BlockCount.ToString() + " blocks");
+				InBrackets(partition.Name, Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
+				Console.Write(" " + (partition as IPartitionDevice).BlockCount.ToString() + " blocks");
 				Console.WriteLine();
 			}
 
@@ -134,7 +134,7 @@ namespace Mosa.CoolWorld.x86
 
 			foreach (var partition in partitions)
 			{
-				var fat = new FatFileSystem(partition as DeviceSystem.IPartitionDevice);
+				var fat = new FatFileSystem(partition as IPartitionDevice);
 
 				if (fat.IsValid)
 				{
@@ -172,7 +172,7 @@ namespace Mosa.CoolWorld.x86
 			ForeverLoop();
 
 			// Get StandardKeyboard
-			var standardKeyboards = HardwareSystem.Setup.DeviceManager.GetDevices("StandardKeyboard");
+			var standardKeyboards = Setup.DeviceManager.GetDevices("StandardKeyboard");
 
 			if (standardKeyboards.Count == 0)
 			{
@@ -244,8 +244,8 @@ namespace Mosa.CoolWorld.x86
 			byte back = Console.BackgroundColor;
 			uint sr = Console.ScrollRow;
 
-			Console.Color = Color.Cyan;
-			Console.BackgroundColor = Color.Black;
+			Console.Color = Kernel.x86.Color.Cyan;
+			Console.BackgroundColor = Kernel.x86.Color.Black;
 			Console.Row = 24;
 			Console.Column = 0;
 			Console.ScrollRow = Console.Rows;
@@ -260,7 +260,7 @@ namespace Mosa.CoolWorld.x86
 
 			if (interrupt >= 0x20 && interrupt < 0x30)
 			{
-				Mosa.HardwareSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
+				DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 			}
 
 			Console.Column = c;

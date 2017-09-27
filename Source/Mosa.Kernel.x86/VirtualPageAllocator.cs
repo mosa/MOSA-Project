@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.x86.Helpers;
-using Mosa.Runtime.x86;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.x86
 {
@@ -24,7 +24,7 @@ namespace Mosa.Kernel.x86
 			pages = (PageFrameAllocator.TotalPages - Address.ReserveMemory) / PageFrameAllocator.PageSize;
 
 			// Bits: 0 = Available, 1 = Not Available
-			Memory.Clear(Address.VirtualPageAllocator, pages / 8);
+			MemoryBlock.Clear(Address.VirtualPageAllocator, pages / 8);
 			initialized = true;
 		}
 
@@ -49,14 +49,14 @@ namespace Mosa.Kernel.x86
 			byte bit = (byte)(page % 32);
 			uint mask = (byte)(1 << bit);
 
-			uint value = Native.Get32(at);
+			uint value = Intrinsic.Load32(at);
 
 			if (free)
-				value = value & ~mask;
+				value &= ~mask;
 			else
-				value = value | mask;
+				value |= mask;
 
-			Native.Set32(at, value);
+			Intrinsic.Store32(at, value);
 		}
 
 		/// <summary>
@@ -70,7 +70,7 @@ namespace Mosa.Kernel.x86
 			byte bit = (byte)(page % 8);
 			byte mask = (byte)(1 << bit);
 
-			byte value = Native.Get8(at);
+			byte value = Intrinsic.Load8(at);
 
 			return (value & mask) == 0;
 		}

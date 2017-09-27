@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.HardwareSystem;
+using Mosa.DeviceSystem;
 
 // http://download.intel.com/support/processors/quark/sb/quarkdatasheetrev02.pdf
 
@@ -34,7 +34,7 @@ namespace Mosa.DeviceDriver.PCI.Intel.QuarkSoC
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
+		public override DeviceSystem.DeviceDriverStartStatus Start()
 		{
 			return DeviceDriverStartStatus.Started;
 		}
