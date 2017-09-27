@@ -87,6 +87,7 @@
     <Compile Include="DeviceStatus.cs" />
     <Compile Include="DeviceX.cs" />
     <Compile Include="HAL.cs" />
+    <Compile Include="HardwareDeviceX.cs" />
     <Compile Include="HardwareDevice.cs" />
     <Compile Include="HardwareResources.cs" />
     <Compile Include="IDevice.cs" />

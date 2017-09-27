@@ -9,11 +9,11 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public class DeviceX
 	{
-		public string Name { get; internal set; }
-		public IDeviceDriver Driver { get; internal set; }
-		public DeviceStatus Status { get; internal set; }
-		public IService Service { get; internal set; }
-		public DeviceX Parent { get; internal set; }
+		public string Name { get; set; }
+		public IDeviceDriver Driver { get; set; }
+		public DeviceStatus Status { get; set; }
+		public IService Service { get; set; }
+		public DeviceX Parent { get; set; }
 		public List<DeviceX> Children { get; } = new List<DeviceX>();
 		public HardwareResources Resources;
 	}

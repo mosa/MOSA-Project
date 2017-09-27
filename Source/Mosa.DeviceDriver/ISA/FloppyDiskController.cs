@@ -17,7 +17,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x03F0, PortRange = 8, IRQ = 6, Platforms = PlatformArchitecture.X86AndX64)]
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x0370, PortRange = 8, IRQ = 5, ForceOption = "fdc2", Platforms = PlatformArchitecture.X86AndX64)]
-	public class FloppyDiskController : HardwareDevice, IDevice, IHardwareDevice, IDiskControllerDevice
+	public class FloppyDiskController : HardwareDevice, IDiskControllerDevice
 	{
 		#region Definitions
 

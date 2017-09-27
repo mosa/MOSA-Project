@@ -35,6 +35,12 @@ namespace Mosa.DeviceSystem
 		{
 			spinLock.Enter();
 			devices.Add(device);
+
+			if (device.Parent != null)
+			{
+				device.Parent.Children.Add(device);
+			}
+
 			spinLock.Exit();
 		}
 

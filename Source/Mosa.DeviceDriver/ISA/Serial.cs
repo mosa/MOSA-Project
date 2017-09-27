@@ -11,7 +11,7 @@ namespace Mosa.DeviceDriver.ISA
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x02F8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.X86AndX64)]
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x03E8, PortRange = 8, IRQ = 4, Platforms = PlatformArchitecture.X86AndX64)]
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x02E8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.X86AndX64)]
-	public class Serial : HardwareDevice, IDevice, IHardwareDevice, ISerialDevice
+	public class Serial : HardwareDevice, ISerialDevice
 	{
 		/// <summary>
 		/// Receive Buffer Register (read only)
@@ -133,31 +133,31 @@ namespace Mosa.DeviceDriver.ISA
 		[System.Flags]
 		private enum FCR : byte
 		{
-			/// <summary>
-			///
-			/// </summary>
-			Enabled = 0x01, // FIFO enable.
-
-			/// <summary>
-			///
-			/// </summary>
-			CLR_RCVR = 0x02, // Clear receiver FIFO. This bit is self-clearing.
-
-			/// <summary>
-			///
-			/// </summary>
-			CLR_XMIT = 0x04, // Clear transmitter FIFO. This bit is self-clearing.
-
-			/// <summary>
-			///
-			/// </summary>
-			DMA = 0x08, // DMA mode
-
 			// Receiver FIFO trigger level
 			/// <summary>
 			///
 			/// </summary>
 			TL1 = 0x00,
+
+			/// <summary>
+			///
+			/// </summary>
+			Enabled = 0x01,
+
+			/// <summary>
+			///
+			/// </summary>
+			CLR_RCVR = 0x02,
+
+			/// <summary>
+			///
+			/// </summary>
+			CLR_XMIT = 0x04,
+
+			/// <summary>
+			///
+			/// </summary>
+			DMA = 0x08,
 
 			/// <summary>
 			///
@@ -172,7 +172,7 @@ namespace Mosa.DeviceDriver.ISA
 			/// <summary>
 			///
 			/// </summary>
-			TL14 = 0xC0,
+			TL14 = 0xC0
 		}
 
 		/// <summary>
@@ -185,59 +185,59 @@ namespace Mosa.DeviceDriver.ISA
 			/// <summary>
 			///
 			/// </summary>
-			CS5 = 0x00, // 5bits
-
-			/// <summary>
-			///
-			/// </summary>
-			CS6 = 0x01, // 6bits
-
-			/// <summary>
-			///
-			/// </summary>
-			CS7 = 0x02, // 7bits
-
-			/// <summary>
-			///
-			/// </summary>
-			CS8 = 0x03, // 8bits
+			CS5 = 0x00,
 
 			// Stop bit
 			/// <summary>
 			///
 			/// </summary>
-			ST1 = 0x00, // 1
-
-			/// <summary>
-			///
-			/// </summary>
-			ST2 = 0x04, // 2
+			ST1 = 0x00,
 
 			// Parity
 			/// <summary>
 			///
 			/// </summary>
-			PNO = 0x00, // None
+			PNO = 0x00,
 
 			/// <summary>
 			///
 			/// </summary>
-			POD = 0x08, // Odd
+			CS6 = 0x01,
 
 			/// <summary>
 			///
 			/// </summary>
-			PEV = 0x18, // Even
+			CS7 = 0x02,
 
 			/// <summary>
 			///
 			/// </summary>
-			PMK = 0x28, // Mark
+			CS8 = 0x03,
 
 			/// <summary>
 			///
 			/// </summary>
-			PSP = 0x38, // Space
+			ST2 = 0x04,
+
+			/// <summary>
+			///
+			/// </summary>
+			POD = 0x08,
+
+			/// <summary>
+			///
+			/// </summary>
+			PEV = 0x18,
+
+			/// <summary>
+			///
+			/// </summary>
+			PMK = 0x28,
+
+			/// <summary>
+			///
+			/// </summary>
+			PSP = 0x38,
 
 			/// <summary>
 			///
@@ -247,7 +247,7 @@ namespace Mosa.DeviceDriver.ISA
 			/// <summary>
 			///
 			/// </summary>
-			DLAB = 0x80,
+			DLAB = 0x80
 		}
 
 		/// <summary>
@@ -383,6 +383,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		/// Setups this hardware device driver
 		/// </summary>
+		/// <param name="hardwareResources"></param>
 		/// <returns></returns>
 		public override bool Setup(HardwareResources hardwareResources)
 		{
@@ -426,8 +427,8 @@ namespace Mosa.DeviceDriver.ISA
 			lcrBase.Write8((byte)LCR.DLAB);
 
 			// Set Baud rate
-			int baudRate = 115200;
-			int divisor = 115200 / baudRate;
+			const int baudRate = 115200;
+			const int divisor = 115200 / baudRate;
 			dllBase.Write8((byte)(divisor & 0xFF));
 			dlmBase.Write8((byte)(divisor >> 8 & 0xFF));
 
@@ -501,7 +502,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// </returns>
 		protected bool IsFIFODataAvailable()
 		{
-			return (fifoEnd != fifoStart);
+			return fifoEnd != fifoStart;
 		}
 
 		/// <summary>
@@ -526,7 +527,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// </returns>
 		protected bool CanTransmit()
 		{
-			return ((lsrBase.Read8() & (byte)LSR.THRE) != 0);
+			return (lsrBase.Read8() & (byte)LSR.THRE) != 0;
 		}
 
 		/// <summary>
