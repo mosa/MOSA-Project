@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
 {
@@ -77,10 +76,10 @@ namespace Mosa.Kernel.x86
 			}
 
 			uint len = Intrinsic.Load32(queueCurrent);
-			uint id = Intrinsic.Load32(queueCurrent + 4);
-			uint address = Intrinsic.Load32(queueCurrent + 8);
-			uint type = Intrinsic.Load32(queueCurrent + 12);
-			uint paramcnt = Intrinsic.Load32(queueCurrent + 16);
+			uint id = Intrinsic.Load32(queueCurrent, 4);
+			uint address = Intrinsic.Load32(queueCurrent, 8);
+			uint type = Intrinsic.Load32(queueCurrent, 12);
+			uint paramcnt = Intrinsic.Load32(queueCurrent, 16);
 
 			UnitTestRunner.SetUnitTestMethodAddress(address);
 			UnitTestRunner.SetUnitTestResultType(type);
@@ -88,7 +87,7 @@ namespace Mosa.Kernel.x86
 
 			for (uint index = 0; index < paramcnt; index++)
 			{
-				uint value = Intrinsic.Load32(queueCurrent + 20 + (index * 4));
+				uint value = Intrinsic.Load32(queueCurrent, 20 + (index * 4));
 				UnitTestRunner.SetUnitTestMethodParameter(index, value);
 			}
 

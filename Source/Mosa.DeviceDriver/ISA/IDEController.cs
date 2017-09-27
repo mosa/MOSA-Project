@@ -4,7 +4,6 @@
 // http://www.t13.org/Documents/UploadedDocuments/docs2004/d1572r3-EDD3.pdf
 // http://mirrors.josefsipek.net/www.nondot.org/sabre/os/files/Disk/IDE-tech.html
 
-using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDriver.ISA
@@ -166,10 +165,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IDEController"/> class.
 		/// </summary>
-		public IDEController()
-		{
-			driveInfo = new DriveInfo[DrivesPerConroller];
-		}
+		public IDEController() => driveInfo = new DriveInfo[DrivesPerConroller];
 
 		/// <summary>
 		/// Setups this hardware device driver
@@ -239,7 +235,7 @@ namespace Mosa.DeviceDriver.ISA
 			driveInfo[index].Present = false;
 
 			//Send the identify command to the selected drive
-			DeviceHeadPort.Write8((byte)(index == 0 ? 0xA0 : 0xB0));
+			DeviceHeadPort.Write8((byte)((index == 0) ? 0xA0 : 0xB0));
 			SectorCountPort.Write8(0);
 			LBALowPort.Write8(0);
 			LBAMidPort.Write8(0);
@@ -285,7 +281,7 @@ namespace Mosa.DeviceDriver.ISA
 			}
 
 			//Find the addressing mode
-			uint lba28SectorCount = info.GetUInt(IdentifyDrive.MaxLBA28);
+			var lba28SectorCount = info.GetUInt(IdentifyDrive.MaxLBA28);
 
 			AddressingMode aMode = AddressingMode.NotSupported;
 			if ((info.GetUShort(IdentifyDrive.CommandSetSupported83) & 0x200) == 0x200) //Check the LBA48 support bit
@@ -308,10 +304,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt()
-		{
-			return true;
-		}
+		public override bool OnInterrupt() => true;
 
 		/// <summary>
 		/// Waits for register ready.
@@ -323,7 +316,8 @@ namespace Mosa.DeviceDriver.ISA
 			do
 			{
 				status = StatusPort.Read8();
-			} while ((status & StatusRegister.Busy) == StatusRegister.Busy);
+			}
+			while ((status & StatusRegister.Busy) == StatusRegister.Busy);
 
 			return true;
 
@@ -340,7 +334,8 @@ namespace Mosa.DeviceDriver.ISA
 			do
 			{
 				status = StatusPort.Read8();
-			} while ((status & StatusRegister.DataRequest) != StatusRegister.DataRequest && (status & StatusRegister.Error) != StatusRegister.Error);
+			}
+			while ((status & StatusRegister.DataRequest) != StatusRegister.DataRequest && (status & StatusRegister.Error) != StatusRegister.Error);
 
 			return ((status & StatusRegister.Error) != StatusRegister.Error);
 		}
@@ -489,26 +484,20 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		/// <param name="drive">The drive.</param>
 		/// <returns></returns>
-		public bool Release(uint drive)
-		{
-			return true;
-		}
+		public bool Release(uint drive) => true;
 
 		/// <summary>
 		/// Gets the maximum drive count.
 		/// </summary>
 		/// <value>The drive count.</value>
-		public uint MaximunDriveCount { get { return 2; } }
+		public uint MaximunDriveCount => 2;
 
 		/// <summary>
 		/// Gets the size of the sector.
 		/// </summary>
 		/// <param name="drive">The drive NBR.</param>
 		/// <returns></returns>
-		public uint GetSectorSize(uint drive)
-		{
-			return 512;
-		}
+		public uint GetSectorSize(uint drive) => 512;
 
 		/// <summary>
 		/// Gets the total sectors.
