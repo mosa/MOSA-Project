@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -37,7 +39,7 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Creates the partition devices.
+		/// Creates PCI devices.
 		/// </summary>
 		public void CreatePCIDevices()
 		{
@@ -46,6 +48,9 @@ namespace Mosa.DeviceSystem
 
 			if (devices.Count == 0)
 				return;
+
+			var drivers = Setup.DeviceDriverRegistry.GetDeviceDrivers(DeviceBusType.PCI);
+			HAL.DebugWriteLine("PCI DRIVERS: " + drivers.Count.ToString());
 
 			var pciController = devices[0] as IPCIController;
 
@@ -59,7 +64,29 @@ namespace Mosa.DeviceSystem
 						if (ProbeDevice(pciController, (byte)bus, (byte)slot, (byte)fun))
 						{
 							var pciDevice = new PCI.PCIDevice(pciController, (byte)bus, (byte)slot, (byte)fun);
-							deviceManager.Add(pciDevice);
+
+							PCIDeviceDriver driverFound = null;
+							foreach (PCIDeviceDriver driver in drivers)
+							{
+								if(pciDevice.ClassCode == driver.ClassCode && pciDevice.SubClassCode == driver.SubClassCode && pciDevice.ProgIF == driver.ProgIF)
+								{
+									driverFound = driver;
+									break;
+								}
+							}
+
+							if(driverFound == null)
+							{
+								pciDevice.SetNoDriverFound();
+
+								deviceManager.Add(pciDevice);
+							}
+							else
+							{
+								pciDevice.SetDeviceOnline();
+
+								//Create device based on the driver here.
+							}
 						}
 					}
 				}
