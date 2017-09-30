@@ -6,7 +6,7 @@ using Mosa.Runtime.x86;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	///
+	/// Screen
 	/// </summary>
 	public static class Screen
 	{
@@ -15,18 +15,21 @@ namespace Mosa.Kernel.x86
 		private static byte color = 23;
 
 		/// <summary>
-		///
+		/// The columns
 		/// </summary>
 		public const uint Columns = 80;
 
 		/// <summary>
-		///
+		/// The rows
 		/// </summary>
 		public const uint Rows = 40;
 
 		/// <summary>
-		///
+		/// Gets or sets the column.
 		/// </summary>
+		/// <value>
+		/// The column.
+		/// </value>
 		public static uint Column
 		{
 			get { return column; }
@@ -34,8 +37,11 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		///
+		/// Gets or sets the row.
 		/// </summary>
+		/// <value>
+		/// The row.
+		/// </value>
 		public static uint Row
 		{
 			get { return row; }
@@ -86,8 +92,8 @@ namespace Mosa.Kernel.x86
 		{
 			uint address = (0x0B8000 + ((row * Columns + column) * 2));
 
-			Native.Set8(address, (byte)chr);
-			Native.Set8(address + 1, color);
+			Intrinsic.Store8(address, (byte)chr);
+			Intrinsic.Store8(address, 1, color);
 		}
 
 		/// <summary>
@@ -98,8 +104,8 @@ namespace Mosa.Kernel.x86
 		{
 			uint address = (0x0B8000 + ((Row * Columns + Column) * 2));
 
-			Native.Set8(address, (byte)chr);
-			Native.Set8(address + 1, color);
+			Intrinsic.Store8(address, (byte)chr);
+			Intrinsic.Store8(address, 1, color);
 
 			Next();
 			UpdateCursor();

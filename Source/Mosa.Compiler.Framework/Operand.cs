@@ -144,6 +144,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is constant zero]; otherwise, <c>false</c>.
 		/// </value>
+		/// <exception cref="InvalidCompilerException"></exception>
 		public bool IsConstantZero
 		{
 			get
@@ -549,6 +550,24 @@ namespace Mosa.Compiler.Framework
 			{
 				IsConstant = true,
 				ConstantSignedLongInteger = value,
+				IsResolved = true
+			};
+		}
+
+		/// <summary>
+		/// Creates a new constant <see cref="Operand" /> for the given integral value.
+		/// </summary>
+		/// <param name="value">The value to create the constant operand for.</param>
+		/// <param name="typeSystem">The type system.</param>
+		/// <returns>
+		/// A new operand representing the value <paramref name="value" />.
+		/// </returns>
+		public static Operand CreateConstant(ulong value, TypeSystem typeSystem)
+		{
+			return new Operand(typeSystem.BuiltIn.I8)
+			{
+				IsConstant = true,
+				ConstantUnsignedLongInteger = value,
 				IsResolved = true
 			};
 		}

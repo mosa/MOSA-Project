@@ -1,36 +1,27 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.HardwareSystem;
+using Mosa.DeviceSystem;
+using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 
 namespace Mosa.CoolWorld.x86.HAL
 {
 	/// <summary>
-	///
+	/// Hardware
 	/// </summary>
-	public sealed class Hardware : IHardwareAbstraction
+	public sealed class Hardware : BaseHardwareAbstraction
 	{
-		/// <summary>
-		/// Requests an IO read/write port interface from the kernel
-		/// </summary>
-		/// <param name="port">The port number.</param>
-		/// <returns></returns>
-		IReadWriteIOPort IHardwareAbstraction.RequestIOPort(ushort port)
-		{
-			return new IOPort(port);
-		}
-
 		/// <summary>
 		/// Requests a block of memory from the kernel
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		IMemory IHardwareAbstraction.RequestPhysicalMemory(uint address, uint size)
+		public override BaseMemory RequestPhysicalMemory(uint address, uint size)
 		{
 			// Map physical memory space to virtual memory space
-			for (uint at = address; at < address + size; at = at + 4096)
+			for (uint at = address; at < address + size; at += 4096)
 			{
 				PageTable.MapVirtualAddressToPhysical(at, at);
 			}
@@ -41,7 +32,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <summary>
 		/// Disables all interrupts.
 		/// </summary>
-		void IHardwareAbstraction.DisableAllInterrupts()
+		public override void DisableAllInterrupts()
 		{
 			Native.Cli();
 		}
@@ -49,7 +40,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <summary>
 		/// Enables all interrupts.
 		/// </summary>
-		void IHardwareAbstraction.EnableAllInterrupts()
+		public override void EnableAllInterrupts()
 		{
 			Native.Sti();
 		}
@@ -58,16 +49,16 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// Processes the interrupt.
 		/// </summary>
 		/// <param name="irq">The irq.</param>
-		void IHardwareAbstraction.ProcessInterrupt(byte irq)
+		public override void ProcessInterrupt(byte irq)
 		{
-			Mosa.HardwareSystem.HAL.ProcessInterrupt(irq);
+			DeviceSystem.HAL.ProcessInterrupt(irq);
 		}
 
 		/// <summary>
 		/// Sleeps the specified milliseconds.
 		/// </summary>
 		/// <param name="milliseconds">The milliseconds.</param>
-		void IHardwareAbstraction.Sleep(uint milliseconds)
+		public override void Sleep(uint milliseconds)
 		{
 		}
 
@@ -77,7 +68,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="size">The size.</param>
 		/// <param name="alignment">The alignment.</param>
 		/// <returns></returns>
-		IMemory IHardwareAbstraction.AllocateMemory(uint size, uint alignment)
+		public override BaseMemory AllocateMemory(uint size, uint alignment)
 		{
 			uint address = KernelMemory.AllocateMemory(size);
 
@@ -89,16 +80,46 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="memory">The memory.</param>
 		/// <returns></returns>
-		uint IHardwareAbstraction.GetPhysicalAddress(IMemory memory)
+		public override uint GetPhysicalAddress(BaseMemory memory)
 		{
 			return PageTable.GetPhysicalAddressFromVirtual(memory.Address);
+		}
+
+		/// <summary>
+		/// Requests an IO read/write port interface from the kernel
+		/// </summary>
+		/// <param name="port">The port number.</param>
+		/// <returns></returns>
+		public override IOPortReadWrite RequestReadWriteIOPort(ushort port)
+		{
+			return new X86IOPortReadWrite(port);
+		}
+
+		/// <summary>
+		/// Requests an IO read/write port interface from the kernel
+		/// </summary>
+		/// <param name="port">The port number.</param>
+		/// <returns></returns>
+		public override IOPortRead RequestReadIOPort(ushort port)
+		{
+			return new X86IOPortReadWrite(port);
+		}
+
+		/// <summary>
+		/// Requests an IO write port interface from the kernel
+		/// </summary>
+		/// <param name="port">The port number.</param>
+		/// <returns></returns>
+		public override IOPortWrite RequestWriteIOPort(ushort port)
+		{
+			return new X86IOPortWrite(port);
 		}
 
 		/// <summary>
 		/// Debugs the write.
 		/// </summary>
 		/// <param name="message">The message.</param>
-		void IHardwareAbstraction.DebugWrite(string message)
+		public override void DebugWrite(string message)
 		{
 			Boot.Debug.Write(message);
 		}
@@ -107,7 +128,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// Debugs the write line.
 		/// </summary>
 		/// <param name="message">The message.</param>
-		void IHardwareAbstraction.DebugWriteLine(string message)
+		public override void DebugWriteLine(string message)
 		{
 			Boot.Debug.WriteLine(message);
 		}
@@ -116,7 +137,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// Aborts with the specified message.
 		/// </summary>
 		/// <param name="message">The message.</param>
-		void IHardwareAbstraction.Abort(string message)
+		public override void Abort(string message)
 		{
 			Panic.Error(message);
 		}

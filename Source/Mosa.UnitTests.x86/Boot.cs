@@ -6,7 +6,7 @@ using Mosa.Runtime.Plug;
 namespace Mosa.UnitTests.x86
 {
 	/// <summary>
-	///
+	/// Boot
 	/// </summary>
 	public static class Boot
 	{

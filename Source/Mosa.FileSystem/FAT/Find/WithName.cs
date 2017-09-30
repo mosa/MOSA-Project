@@ -1,16 +1,17 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.ClassLib;
+using Mosa.DeviceSystem;
 
 namespace Mosa.FileSystem.FAT.Find
 {
 	/// <summary>
-	///
+	/// WithName
 	/// </summary>
 	internal class WithName : FatFileSystem.ICompare
 	{
 		/// <summary>
-		///
+		/// The name
 		/// </summary>
 		protected string name;
 

@@ -1,37 +1,35 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using Mosa.HardwareSystem;
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	///
+	/// Frame Buffer
 	/// </summary>
+	/// <seealso cref="Mosa.DeviceSystem.IFrameBuffer" />
 	public abstract class FrameBuffer : IFrameBuffer
 	{
 		/// <summary>
-		///
+		/// The width
 		/// </summary>
 		protected uint width;
 
 		/// <summary>
-		///
+		/// The height
 		/// </summary>
 		protected uint height;
 
 		/// <summary>
-		///
+		/// The memory
 		/// </summary>
-		protected IMemory memory;
+		protected BaseMemory memory;
 
 		/// <summary>
-		///
+		/// The offset
 		/// </summary>
 		protected uint offset;
 
 		/// <summary>
-		///
+		/// The depth
 		/// </summary>
 		protected uint depth;
 

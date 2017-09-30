@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.HardwareSystem;
 
 namespace Mosa.DeviceDriver.ISA
 {
@@ -29,82 +28,82 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort miscellaneousOutput;
+		protected IOPortReadWrite miscellaneousOutput;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort crtControllerIndex;
+		protected IOPortReadWrite crtControllerIndex;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort crtControllerData;
+		protected IOPortReadWrite crtControllerData;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort crtControllerIndexColor;
+		protected IOPortReadWrite crtControllerIndexColor;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort crtControllerDataColor;
+		protected IOPortReadWrite crtControllerDataColor;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IWriteOnlyIOPort miscellaneousOutputWrite;
+		protected IOPortWrite miscellaneousOutputWrite;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort sequencerAddress;
+		protected IOPortReadWrite sequencerAddress;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort sequencerData;
+		protected IOPortReadWrite sequencerData;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort graphicsControllerAddress;
+		protected IOPortReadWrite graphicsControllerAddress;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort graphicsControllerData;
+		protected IOPortReadWrite graphicsControllerData;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort inputStatus1ReadB;
+		protected IOPortReadWrite inputStatus1ReadB;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort attributeAddress;
+		protected IOPortReadWrite attributeAddress;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort attributeData;
+		protected IOPortReadWrite attributeData;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory;
+		protected BaseMemory memory;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort activeControllerIndex;
+		protected IOPortReadWrite activeControllerIndex;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort activeControllerData;
+		protected IOPortReadWrite activeControllerData;
 
 		/// <summary>
 		///
@@ -152,20 +151,20 @@ namespace Mosa.DeviceDriver.ISA
 			this.HardwareResources = hardwareResources;
 			base.Name = "VGAText";
 
-			miscellaneousOutput = base.HardwareResources.GetIOPort(0, 0x1C);
-			crtControllerIndex = base.HardwareResources.GetIOPort(0, 0x04);
-			crtControllerData = base.HardwareResources.GetIOPort(0, 0x05);
-			crtControllerIndexColor = base.HardwareResources.GetIOPort(0, 0x24);
-			crtControllerDataColor = base.HardwareResources.GetIOPort(0, 0x25);
+			miscellaneousOutput = base.HardwareResources.GetIOPortReadWrite(0, 0x1C);
+			crtControllerIndex = base.HardwareResources.GetIOPortReadWrite(0, 0x04);
+			crtControllerData = base.HardwareResources.GetIOPortReadWrite(0, 0x05);
+			crtControllerIndexColor = base.HardwareResources.GetIOPortReadWrite(0, 0x24);
+			crtControllerDataColor = base.HardwareResources.GetIOPortReadWrite(0, 0x25);
 
-			miscellaneousOutputWrite = base.HardwareResources.GetIOPort(0, 0x12);
-			sequencerAddress = base.HardwareResources.GetIOPort(0, 0x14);
-			sequencerData = base.HardwareResources.GetIOPort(0, 0x15);
-			graphicsControllerAddress = base.HardwareResources.GetIOPort(0, 0x1E);
-			graphicsControllerData = base.HardwareResources.GetIOPort(0, 0x1F);
-			inputStatus1ReadB = base.HardwareResources.GetIOPort(0, 0x2A);
-			attributeAddress = base.HardwareResources.GetIOPort(0, 0x10);
-			attributeData = base.HardwareResources.GetIOPort(0, 0x11);
+			miscellaneousOutputWrite = base.HardwareResources.GetIOPortWrite(0, 0x12);
+			sequencerAddress = base.HardwareResources.GetIOPortReadWrite(0, 0x14);
+			sequencerData = base.HardwareResources.GetIOPortReadWrite(0, 0x15);
+			graphicsControllerAddress = base.HardwareResources.GetIOPortReadWrite(0, 0x1E);
+			graphicsControllerData = base.HardwareResources.GetIOPortReadWrite(0, 0x1F);
+			inputStatus1ReadB = base.HardwareResources.GetIOPortReadWrite(0, 0x2A);
+			attributeAddress = base.HardwareResources.GetIOPortReadWrite(0, 0x10);
+			attributeData = base.HardwareResources.GetIOPortReadWrite(0, 0x11);
 
 			memory = base.HardwareResources.GetMemory(0);
 

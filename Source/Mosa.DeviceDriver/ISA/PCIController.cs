@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.HardwareSystem;
+using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDriver.ISA
 {
@@ -24,12 +24,12 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort configAddress;
+		protected IOPortReadWrite configAddress;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort configData;
+		protected IOPortReadWrite configData;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PCIController"/> class.
@@ -45,10 +45,10 @@ namespace Mosa.DeviceDriver.ISA
 		public override bool Setup(HardwareResources hardwareResources)
 		{
 			this.HardwareResources = hardwareResources;
-			base.Name = "PCI_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			base.Name = "PCI_0x" + base.HardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-			configAddress = base.HardwareResources.GetIOPort(0, 0);
-			configData = base.HardwareResources.GetIOPort(0, 4);
+			configAddress = base.HardwareResources.GetIOPortReadWrite(0, 0);
+			configData = base.HardwareResources.GetIOPortReadWrite(0, 4);
 
 			return true;
 		}

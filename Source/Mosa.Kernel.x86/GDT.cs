@@ -1,11 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	///
+	/// GDT
 	/// </summary>
 	public static class GDT
 	{
@@ -26,9 +27,9 @@ namespace Mosa.Kernel.x86
 
 		public static void Setup()
 		{
-			Memory.Clear(Address.GDTTable, 6);
-			Native.Set16(Address.GDTTable, (Offset.TotalSize * 3) - 1);
-			Native.Set32(Address.GDTTable + 2, Address.GDTTable + 6);
+			MemoryBlock.Clear(Address.GDTTable, 6);
+			Intrinsic.Store16(Address.GDTTable, (Offset.TotalSize * 3) - 1);
+			Intrinsic.Store32(Address.GDTTable, 2, Address.GDTTable + 6);
 
 			Set(0, 0, 0, 0, 0);                // Null segment
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
@@ -40,12 +41,12 @@ namespace Mosa.Kernel.x86
 		private static void Set(uint index, uint address, uint limit, byte access, byte granularity)
 		{
 			uint entry = GetEntryLocation(index);
-			Native.Set16(entry + Offset.BaseLow, (ushort)(address & 0xFFFF));
-			Native.Set8(entry + Offset.BaseMiddle, (byte)((address >> 16) & 0xFF));
-			Native.Set8(entry + Offset.BaseHigh, (byte)((address >> 24) & 0xFF));
-			Native.Set16(entry + Offset.LimitLow, (ushort)(limit & 0xFFFF));
-			Native.Set8(entry + Offset.Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0xF0)));
-			Native.Set8(entry + Offset.Access, access);
+			Intrinsic.Store16(entry, Offset.BaseLow, (ushort)(address & 0xFFFF));
+			Intrinsic.Store8(entry, Offset.BaseMiddle, (byte)((address >> 16) & 0xFF));
+			Intrinsic.Store8(entry, Offset.BaseHigh, (byte)((address >> 24) & 0xFF));
+			Intrinsic.Store16(entry, Offset.LimitLow, (ushort)(limit & 0xFFFF));
+			Intrinsic.Store8(entry, Offset.Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0xF0)));
+			Intrinsic.Store8(entry, Offset.Access, access);
 		}
 
 		/// <summary>

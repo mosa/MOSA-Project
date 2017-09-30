@@ -24,7 +24,7 @@ namespace Mosa.Utility.Launcher
 		[Option('a')]
 		public bool AutoStart { get; set; }
 
-		[Option('l', "launch", Default = true)]
+		[Option('l', "launch")]
 		public bool LaunchEmulator { get; set; }
 
 		[Option("launch-off")]
@@ -382,6 +382,7 @@ namespace Mosa.Utility.Launcher
 			BaseAddress = 0x00400000;
 			DebugConnectionAddress = "127.0.0.1";
 			InlinedIRMaximum = 8;
+			LaunchEmulator = true;
 		}
 
 		private void AppendIncludeFiles(string file)

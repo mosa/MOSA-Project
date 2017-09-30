@@ -101,6 +101,13 @@
     <Compile Include="Intrinsics\CreateInstanceSimple.cs" />
     <Compile Include="Intrinsics\GetAssemblyListTable.cs" />
     <Compile Include="Intrinsics\GetObjectFromAddress.cs" />
+    <Compile Include="LoadStore.cs" />
+    <Compile Include="Intrinsics\Load16.cs" />
+    <Compile Include="Intrinsics\Store64.cs" />
+    <Compile Include="Intrinsics\Store8.cs" />
+    <Compile Include="Intrinsics\Store16.cs" />
+    <Compile Include="Intrinsics\Store32.cs" />
+    <Compile Include="Intrinsics\Load8.cs" />
     <Compile Include="Intrinsics\Load64.cs" />
     <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="IR\AddFloatR4.cs" />
@@ -193,6 +200,7 @@
     </Compile>
     <Compile Include="Platform\BaseOpcodeEncoder.cs" />
     <Compile Include="Platform\XOpcodeEncoder.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterAllocator\BasicRegisterAllocator.cs" />
     <Compile Include="RegisterAllocator\MoveExtended.cs" />
     <Compile Include="RegisterAllocator\Move.cs" />

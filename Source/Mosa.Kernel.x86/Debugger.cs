@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.ClassLib;
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
@@ -179,12 +180,12 @@ namespace Mosa.Kernel.x86
 
 		private static byte GetByte(uint offset)
 		{
-			return Native.Get8(Address.DebuggerBuffer + offset);
+			return Intrinsic.Load8(Address.DebuggerBuffer, offset);
 		}
 
 		private static int GetInt32(uint offset)
 		{
-			return (Native.Get8(Address.DebuggerBuffer + offset + 3) << 24) | (Native.Get8(Address.DebuggerBuffer + offset + 2) << 16) | (Native.Get8(Address.DebuggerBuffer + offset + 1) << 8) | Native.Get8(Address.DebuggerBuffer + offset + 0);
+			return (Intrinsic.Load8(Address.DebuggerBuffer, offset + 3) << 24) | (Intrinsic.Load8(Address.DebuggerBuffer, offset + 2) << 16) | (Intrinsic.Load8(Address.DebuggerBuffer, offset + 1) << 8) | Intrinsic.Load8(Address.DebuggerBuffer, offset + 0);
 		}
 
 		private static uint GetUInt32(uint offset)
@@ -295,7 +296,7 @@ namespace Mosa.Kernel.x86
 				return true;
 			}
 
-			Native.Set8(Address.DebuggerBuffer + index, b);
+			Intrinsic.Store8(Address.DebuggerBuffer, index, b);
 			index++;
 
 			uint length = 0;
@@ -393,7 +394,7 @@ namespace Mosa.Kernel.x86
 
 			for (uint i = 0; i < bytes; i++)
 			{
-				SendByte((Native.Get8(start + i)));
+				SendByte((Intrinsic.Load8(start, i)));
 			}
 
 			SendCRC();
@@ -410,7 +411,7 @@ namespace Mosa.Kernel.x86
 			{
 				uint address = GetUInt32((i * 4) + 16);
 				SendInteger(address);
-				SendInteger(Native.Get32(address));
+				SendInteger(Intrinsic.Load32(address));
 			}
 
 			SendCRC();
@@ -430,18 +431,18 @@ namespace Mosa.Kernel.x86
 			{
 				uint value = GetUInt32(24 + at);
 
-				Native.Set32(address + at, value);
+				Intrinsic.Store32(address, at, value);
 
-				at = at + 4;
+				at += 4;
 			}
 
 			while (at < length)
 			{
 				byte value = GetByte(24 + at);
 
-				Native.Set8(address + at, value);
+				Intrinsic.Store8(address, at, value);
 
-				at = at + 1;
+				at++;
 			}
 
 			Screen.Goto(15, 0);
@@ -503,14 +504,14 @@ namespace Mosa.Kernel.x86
 
 			while (at + 4 < bytes)
 			{
-				Native.Set32(start + at, 0);
+				Intrinsic.Store32(start, at, 0);
 
 				at = at + 4;
 			}
 
 			while (at < bytes)
 			{
-				Native.Set8(start + at, 0);
+				Intrinsic.Store8(start, at, 0);
 
 				at = at + 1;
 			}
@@ -537,7 +538,7 @@ namespace Mosa.Kernel.x86
 
 			for (uint i = start; i < start + length; i++)
 			{
-				byte b = Native.Get8(i);
+				byte b = Intrinsic.Load8(i);
 				crc = CRC.Update(crc, b);
 			}
 

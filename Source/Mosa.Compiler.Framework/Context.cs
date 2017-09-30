@@ -14,11 +14,17 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
+		/// Gets or sets the node.
+		/// </summary>
+		/// <value>
+		/// The node.
+		/// </value>
+		public InstructionNode Node { get; set; }
+
+		/// <summary>
 		/// Gets or sets the basic block currently processed.
 		/// </summary>
 		public BasicBlock Block { get { return Node.Block; } internal set { Node.Block = value; } }
-
-		public InstructionNode Node { get; set; }
 
 		/// <summary>
 		/// Gets the instruction.

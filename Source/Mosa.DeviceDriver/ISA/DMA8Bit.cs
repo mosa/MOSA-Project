@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.HardwareSystem;
+using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDriver.ISA
 {
@@ -11,7 +11,7 @@ namespace Mosa.DeviceDriver.ISA
 	//[DeviceDriverPhysicalMemory(MemorySize = 64 * 1024, MemoryAlignment = 64 * 1024, RestrictUnder16M = true)]
 	//[DeviceDriverPhysicalMemory(MemorySize = 64 * 1024, MemoryAlignment = 64 * 1024, RestrictUnder16M = true)]
 	//[DeviceDriverPhysicalMemory(MemorySize = 64 * 1024, MemoryAlignment = 64 * 1024, RestrictUnder16M = true)]
-	public class DMA8Bit : HardwareDevice, IDevice, IHardwareDevice
+	public class DMA8Bit : HardwareDevice
 	{
 		#region Definitions
 
@@ -40,122 +40,122 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadOnlyIOPort statusRegister;
+		protected IOPortRead statusRegister;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IWriteOnlyIOPort commandRegister;
+		protected IOPortWrite commandRegister;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IWriteOnlyIOPort requestRegister;
+		protected IOPortWrite requestRegister;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IWriteOnlyIOPort channelMaskRegister;
+		protected IOPortWrite channelMaskRegister;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IWriteOnlyIOPort modeRegister;
+		protected IOPortWrite modeRegister;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IWriteOnlyIOPort byteWordRegister;
+		protected IOPortWrite byteWordRegister;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadOnlyIOPort intermediateRegister;
+		protected IOPortRead intermediateRegister;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IWriteOnlyIOPort maskRegister;
+		protected IOPortWrite maskRegister;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort channel0Address;
+		protected IOPortReadWrite channel0Address;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort channel0Count;
+		protected IOPortReadWrite channel0Count;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort channel0Page;
+		protected IOPortReadWrite channel0Page;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort channel1Address;
+		protected IOPortReadWrite channel1Address;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort channel1Count;
+		protected IOPortReadWrite channel1Count;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort channel1Page;
+		protected IOPortReadWrite channel1Page;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort channel2Address;
+		protected IOPortReadWrite channel2Address;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort channel2Count;
+		protected IOPortReadWrite channel2Count;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort channel2Page;
+		protected IOPortReadWrite channel2Page;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort channel3Address;
+		protected IOPortReadWrite channel3Address;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort channel3Count;
+		protected IOPortReadWrite channel3Count;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IReadWriteIOPort channel3Page;
+		protected IOPortReadWrite channel3Page;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory0;
+		protected BaseMemory memory0;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory1;
+		protected BaseMemory memory1;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory2;
+		protected BaseMemory memory2;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IMemory memory3;
+		protected BaseMemory memory3;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DMA8Bit"/> class.
@@ -167,36 +167,37 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		/// Setups this hardware device driver
 		/// </summary>
+		/// <param name="hardwareResources"></param>
 		/// <returns></returns>
 		public override bool Setup(HardwareResources hardwareResources)
 		{
 			this.HardwareResources = hardwareResources;
-			base.Name = "DMA_0x" + base.HardwareResources.GetIOPort(0, 0).Address.ToString("X");
+			base.Name = "DMA_0x" + base.HardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-			statusRegister = base.HardwareResources.GetIOPort(0, 0x08);
-			commandRegister = base.HardwareResources.GetIOPort(0, 0x08);
-			requestRegister = base.HardwareResources.GetIOPort(0, 0x09);
-			channelMaskRegister = base.HardwareResources.GetIOPort(0, 0x0A);
-			modeRegister = base.HardwareResources.GetIOPort(0, 0x0B);
-			byteWordRegister = base.HardwareResources.GetIOPort(0, 0x0C);
-			intermediateRegister = base.HardwareResources.GetIOPort(0, 0x0D);
-			maskRegister = base.HardwareResources.GetIOPort(0, 0x0F);
+			statusRegister = base.HardwareResources.GetIOPortRead(0, 0x08);
+			commandRegister = base.HardwareResources.GetIOPortWrite(0, 0x08);
+			requestRegister = base.HardwareResources.GetIOPortWrite(0, 0x09);
+			channelMaskRegister = base.HardwareResources.GetIOPortWrite(0, 0x0A);
+			modeRegister = base.HardwareResources.GetIOPortWrite(0, 0x0B);
+			byteWordRegister = base.HardwareResources.GetIOPortWrite(0, 0x0C);
+			intermediateRegister = base.HardwareResources.GetIOPortReadWrite(0, 0x0D);
+			maskRegister = base.HardwareResources.GetIOPortWrite(0, 0x0F);
 
-			channel0Address = base.HardwareResources.GetIOPort(0, 0x00);
-			channel0Count = base.HardwareResources.GetIOPort(0, 0x01);
-			channel0Page = base.HardwareResources.GetIOPort(0, 0x87);
+			channel0Address = base.HardwareResources.GetIOPortReadWrite(0, 0x00);
+			channel0Count = base.HardwareResources.GetIOPortReadWrite(0, 0x01);
+			channel0Page = base.HardwareResources.GetIOPortReadWrite(0, 0x87);
 
-			channel1Address = base.HardwareResources.GetIOPort(0, 0x02);
-			channel1Count = base.HardwareResources.GetIOPort(0, 0x03);
-			channel1Page = base.HardwareResources.GetIOPort(0, 0x83);
+			channel1Address = base.HardwareResources.GetIOPortReadWrite(0, 0x02);
+			channel1Count = base.HardwareResources.GetIOPortReadWrite(0, 0x03);
+			channel1Page = base.HardwareResources.GetIOPortReadWrite(0, 0x83);
 
-			channel2Address = base.HardwareResources.GetIOPort(0, 0x04);
-			channel2Count = base.HardwareResources.GetIOPort(0, 0x05);
-			channel2Page = base.HardwareResources.GetIOPort(0, 0x81);
+			channel2Address = base.HardwareResources.GetIOPortReadWrite(0, 0x04);
+			channel2Count = base.HardwareResources.GetIOPortReadWrite(0, 0x05);
+			channel2Page = base.HardwareResources.GetIOPortReadWrite(0, 0x81);
 
-			channel3Address = base.HardwareResources.GetIOPort(0, 0x06);
-			channel3Count = base.HardwareResources.GetIOPort(0, 0x07);
-			channel3Page = base.HardwareResources.GetIOPort(0, 0x82);
+			channel3Address = base.HardwareResources.GetIOPortReadWrite(0, 0x06);
+			channel3Count = base.HardwareResources.GetIOPortReadWrite(0, 0x07);
+			channel3Page = base.HardwareResources.GetIOPortReadWrite(0, 0x82);
 
 			memory0 = base.HardwareResources.GetMemory(0);
 			memory1 = base.HardwareResources.GetMemory(1);
@@ -210,19 +211,13 @@ namespace Mosa.DeviceDriver.ISA
 		/// Starts this hardware device.
 		/// </summary>
 		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
-		{
-			return DeviceDriverStartStatus.Started;
-		}
+		public override DeviceDriverStartStatus Start() => DeviceDriverStartStatus.Started;
 
 		/// <summary>
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt()
-		{
-			return false;
-		}
+		public override bool OnInterrupt() => false;
 
 		/// <summary>
 		/// Setups the channel.
@@ -235,10 +230,10 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		public bool SetupChannel(byte channel, uint count, DMAMode mode, DMATransferType type, bool auto)
 		{
-			IWriteOnlyIOPort dmaAddress;
-			IWriteOnlyIOPort dmaCount;
-			IWriteOnlyIOPort dmaPage;
-			IMemory memory;
+			IOPortReadWrite dmaAddress;
+			IOPortReadWrite dmaCount;
+			IOPortReadWrite dmaPage;
+			BaseMemory memory;
 
 			switch (channel)
 			{
@@ -249,7 +244,7 @@ namespace Mosa.DeviceDriver.ISA
 				default: return false;
 			}
 
-			uint address = memory.Address;
+			var address = memory.Address;
 
 			// Disable DMA Controller
 			channelMaskRegister.Write8((byte)(channel | 4));
@@ -269,7 +264,7 @@ namespace Mosa.DeviceDriver.ISA
 			dmaCount.Write8((byte)((count - 1) & 0xFF)); // low
 			dmaCount.Write8((byte)(((count - 1) >> 8) & 0xFF)); // high
 
-			byte value = channel;
+			var value = channel;
 
 			if (auto)
 				value = (byte)(value | DMAAutoValue.Auto);
@@ -304,7 +299,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		/// <param name="channel">The channel.</param>
 		/// <returns></returns>
-		protected IMemory GetTranserAddress(byte channel)
+		protected BaseMemory GetTranserAddress(byte channel)
 		{
 			switch (channel)
 			{
@@ -312,7 +307,8 @@ namespace Mosa.DeviceDriver.ISA
 				case 1: return memory1;
 				case 2: return memory2;
 				case 3: return memory3;
-				default: return null;
+				default:
+					return null;
 			}
 		}
 
@@ -332,7 +328,7 @@ namespace Mosa.DeviceDriver.ISA
 			if (destination.Length + offset > count)
 				return false;
 
-			IMemory address = GetTranserAddress(channel);
+			var address = GetTranserAddress(channel);
 
 			if (address.Address == 0x00)
 				return false;
@@ -359,7 +355,7 @@ namespace Mosa.DeviceDriver.ISA
 			if (source.Length + offset > count)
 				return false;
 
-			IMemory address = GetTranserAddress(channel);
+			var address = GetTranserAddress(channel);
 
 			if (address.Address == 0x00)
 				return false;

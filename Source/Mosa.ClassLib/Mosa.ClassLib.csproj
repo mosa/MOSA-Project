@@ -62,9 +62,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CRC.cs" />
-    <Compile Include="DataBlock.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="LZF.cs" />
     <Compile Include="Math.cs">
       <SubType>Code</SubType>

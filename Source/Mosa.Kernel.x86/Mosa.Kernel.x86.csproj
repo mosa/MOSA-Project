@@ -68,6 +68,7 @@
   <ItemGroup>
     <Compile Include="Address.cs" />
     <Compile Include="IDTStack.cs" />
+    <Compile Include="IOPort.cs" />
     <Compile Include="LZF.cs" />
     <Compile Include="UnitTestQueue.cs" />
     <Compile Include="UnitTestRunner.cs" />
@@ -85,7 +86,7 @@
     <Compile Include="IDT.cs" />
     <Compile Include="Kernel.cs" />
     <Compile Include="Keyboard.cs" />
-    <Compile Include="Memory.cs" />
+    <Compile Include="MemoryBlock.cs" />
     <Compile Include="Multiboot.cs" />
     <Compile Include="PageFrameAllocator.cs" />
     <Compile Include="PageTable.cs" />
