@@ -55,19 +55,6 @@ namespace Mosa.CoolWorld.x86
 			Console.WriteLine("> Registering device drivers...");
 			DeviceDriver.Setup.Register(Setup.DeviceDriverRegistry);
 
-			//TEST
-			{
-				Setup.DeviceDriverRegistry.AddDeviceDriver(new PCIDeviceDriver()
-				{
-					Name = "AHCI",
-					Platforms = PlatformArchitecture.X86AndX64,
-					ClassCode = 1,
-					SubClassCode = 6,
-					ProgIF = 1,
-					Factory = delegate { return new Mosa.DeviceDriver.PCI.MassStorage.AHCI(); }
-				});
-			}
-
 			Console.Write("> Probing for ISA devices...");
 			Setup.StartISADevices();
 			var isaDevices = Setup.DeviceManager.GetAllDevices();
