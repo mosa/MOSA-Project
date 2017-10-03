@@ -3,6 +3,7 @@
 // References
 // http://www.t13.org/Documents/UploadedDocuments/docs2004/d1572r3-EDD3.pdf
 // http://mirrors.josefsipek.net/www.nondot.org/sabre/os/files/Disk/IDE-tech.html
+// http://www.t13.org/documents/uploadeddocuments/docs2006/d1699r3f-ata8-acs.pdf
 
 using Mosa.DeviceSystem;
 
@@ -256,9 +257,8 @@ namespace Mosa.DeviceDriver.ISA
 
 			if (LBAMidPort.Read8() != 0 && LBAHighPort.Read8() != 0) //Check if the drive is ATA
 			{
-				//In this case the drive is ATAPI
-
-				HAL.DebugWriteLine("Device " + index.ToString() + " not ATA");
+				//In this case the drive is ATAPI, which is not supported
+				//HAL.DebugWriteLine("Device " + index.ToString() + " not ATA");
 
 				return;
 			}
@@ -266,12 +266,9 @@ namespace Mosa.DeviceDriver.ISA
 			//Wait until the identify data is present (256x16 bits)
 			if (!WaitForIdentifyData())
 			{
-				HAL.DebugWriteLine("Device " + index.ToString() + " ID error");
+				//HAL.DebugWriteLine("Device " + index.ToString() + " ID error");
 				return;
 			}
-
-			//An ATA drive is present
-			driveInfo[index].Present = true;
 
 			//Read the identification info
 			var info = new DataBlock(512);
@@ -281,23 +278,36 @@ namespace Mosa.DeviceDriver.ISA
 			}
 
 			//Find the addressing mode
-			var lba28SectorCount = info.GetUInt(IdentifyDrive.MaxLBA28);
+			bool lba48Supported = ((info.GetUShort(IdentifyDrive.CommandSetSupported83) & 0x200) == 0x200);
+			driveInfo[index].AddressingMode = (lba48Supported ? AddressingMode.LBA48 : AddressingMode.LBA28);
 
-			AddressingMode aMode = AddressingMode.NotSupported;
-			if ((info.GetUShort(IdentifyDrive.CommandSetSupported83) & 0x200) == 0x200) //Check the LBA48 support bit
+			//Find the max LBA count
+			uint lba28SectorCount = info.GetUInt(IdentifyDrive.MaxLBA28);
+			ulong lba48SectorCount = info.GetULong(IdentifyDrive.MaxLBA48);
+			
+			//HAL.DebugWriteLine("LBA48BIT=" + lba48Supported.ToString());
+			//HAL.DebugWriteLine("LBA28   =" + lba28SectorCount.ToString("X2"));
+
+			if(!lba48Supported) //No LBA48
 			{
-				aMode = AddressingMode.LBA48;
-				driveInfo[index].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA48);
-			}
-			else if (lba28SectorCount > 0) //LBA48 not supported, check LBA28
-			{
-				aMode = AddressingMode.LBA28;
 				driveInfo[index].MaxLBA = lba28SectorCount;
 			}
+			else //LBA48 supported
+			{
+				if(lba28SectorCount == 0x0FFFFFFF) //Check the limit according to the d1699r3f-ata8-acs.pdf (4.10.4 IDENTIFY DEVICE data)
+				{
+					driveInfo[index].MaxLBA = (uint)lba48SectorCount;
+				}
+				else
+				{
+					driveInfo[index].MaxLBA = lba28SectorCount;
+				}
+			}
 
-			driveInfo[index].AddressingMode = aMode;
+			//An ATA drive is present and ready to use
+			driveInfo[index].Present = true;
 
-			HAL.DebugWriteLine("Device " + index.ToString() + " present - MaxLBA=" + driveInfo[index].MaxLBA.ToString());
+			//HAL.DebugWriteLine("Device " + index.ToString() + " present - MaxLBA=" + driveInfo[index].MaxLBA.ToString());
 		}
 
 		/// <summary>
@@ -359,9 +369,6 @@ namespace Mosa.DeviceDriver.ISA
 		public bool Open(uint drive)
 		{
 			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
-				return false;
-
-			if (!driveInfo[drive].Present)
 				return false;
 
 			return true;
@@ -447,9 +454,6 @@ namespace Mosa.DeviceDriver.ISA
 			LBAMidPort.Write8((byte)((lba >> 8) & 0xFF));
 			LBAHighPort.Write8((byte)((lba >> 16) & 0xFF));
 
-			FeaturePort.Write8(0);
-			FeaturePort.Write8(0);
-
 			CommandPort.Write8((byte)((operation == SectorOperation.Write) ? 0x34 : 0x24));
 
 			if (!WaitForReadyStatus())
@@ -490,7 +494,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// Gets the maximum drive count.
 		/// </summary>
 		/// <value>The drive count.</value>
-		public uint MaximunDriveCount => 2;
+		public uint MaximunDriveCount => MaximunDriveCount;
 
 		/// <summary>
 		/// Gets the size of the sector.
