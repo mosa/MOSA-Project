@@ -244,6 +244,9 @@ namespace Mosa.DeviceSystem.PCI
 				if (baseAddress == null)
 					continue;
 
+				if ((object)baseAddress.Region == null)
+					continue;
+
 				switch (baseAddress.Region)
 				{
 					case AddressType.IO: ioPortRegionCount++; break;
