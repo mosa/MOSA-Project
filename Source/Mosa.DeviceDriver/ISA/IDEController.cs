@@ -445,8 +445,11 @@ namespace Mosa.DeviceDriver.ISA
 			SectorCountPort.Write8(0);
 
 			LBALowPort.Write8((byte)((lba >> 24) & 0xFF));
-			LBAMidPort.Write8((byte)((lba >> 32) & 0xFF));
-			LBAHighPort.Write8((byte)((lba >> 40) & 0xFF));
+
+			//LBAMidPort.Write8((byte)((lba >> 32) & 0xFF));
+			LBAMidPort.Write8(0x0);
+			//LBAHighPort.Write8((byte)((lba >> 40) & 0xFF));
+			LBAHighPort.Write8(0x0);
 
 			SectorCountPort.Write8(1);
 
