@@ -446,6 +446,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			LBALowPort.Write8((byte)((lba >> 24) & 0xFF));
 
+			//NOTE: There's no point in finding the upper 5-6 bytes in a 32bit number (which also fixes a bug: (lba >> 32) = lba -> addressing wrong blocks)
 			//LBAMidPort.Write8((byte)((lba >> 32) & 0xFF));
 			LBAMidPort.Write8(0x0);
 			//LBAHighPort.Write8((byte)((lba >> 40) & 0xFF));
