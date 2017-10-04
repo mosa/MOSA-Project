@@ -470,6 +470,8 @@ namespace Mosa.DeviceDriver.ISA
 			return true;
 		}
 
+		#region IDiskControllerDevice
+
 		/// <summary>
 		/// Releases the specified drive.
 		/// </summary>
@@ -599,5 +601,7 @@ namespace Mosa.DeviceDriver.ISA
 				spinLock.Exit();
 			}
 		}
+
+		#endregion IDiskControllerDevice
 	}
 }
