@@ -25,6 +25,8 @@ namespace Mosa.HelloWorld.x86
 
 			Console.Clear();
 
+			Console.ScrollRow = 23;
+
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
 			Console.Color = Color.White;

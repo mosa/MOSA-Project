@@ -483,7 +483,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// Gets the maximum drive count.
 		/// </summary>
 		/// <value>The drive count.</value>
-		uint IDiskControllerDevice.MaximunDriveCount { get { return maximunDriveCount; } }
+		uint IDiskControllerDevice.MaximunDriveCount => maximunDriveCount;
 
 		/// <summary>
 		/// Gets the size of the sector.
@@ -585,12 +585,16 @@ namespace Mosa.DeviceDriver.ISA
 					{
 						case AddressingMode.LBA28:
 							if (!PerformLBA28(SectorOperation.Write, drive, block + index, data, index * 512))
+							{
 								return false;
+							}
 							break;
 
 						case AddressingMode.LBA48:
 							if (!PerformLBA48(SectorOperation.Write, drive, block + index, data, index * 512))
+							{
 								return false;
+							}
 							break;
 					}
 				}
