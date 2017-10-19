@@ -8,7 +8,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// CMOS Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x0070, PortRange = 2, Platforms = PlatformArchitecture.X86)]
-	public class CMOSX : HardwareDeviceX
+	public class CMOSX : DeviceDriverX
 	{
 		/// <summary>
 		/// The command port
@@ -25,6 +25,9 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		protected SpinLock spinLock;
 
+		/// <summary>
+		/// Initializes this device.
+		/// </summary>
 		protected override void Initialize()
 		{
 			Device.Name = "CMOS";
@@ -37,10 +40,10 @@ namespace Mosa.DeviceDriver.ISA
 
 		public override void Start()
 		{
-			if (Device.Status == DeviceStatus.Available)
-			{
-				Device.Status = DeviceStatus.Online;
-			}
+			if (Device.Status != DeviceStatus.Available)
+				return;
+
+			Device.Status = DeviceStatus.Online;
 		}
 
 		/// <summary>

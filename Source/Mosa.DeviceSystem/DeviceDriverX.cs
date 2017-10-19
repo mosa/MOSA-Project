@@ -7,7 +7,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Abstract class for hardware devices
 	/// </summary>
-	public abstract class HardwareDeviceX
+	public abstract class DeviceDriverX
 	{
 		protected DeviceX Device;
 

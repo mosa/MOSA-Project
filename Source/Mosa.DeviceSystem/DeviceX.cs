@@ -10,7 +10,7 @@ namespace Mosa.DeviceSystem
 	public class DeviceX
 	{
 		public string Name { get; set; }
-		public IDeviceDriver Driver { get; set; }
+		public DeviceDriverRegistryEntry Driver { get; set; }
 		public DeviceStatus Status { get; set; }
 		public IService Service { get; set; }
 		public DeviceX Parent { get; set; }

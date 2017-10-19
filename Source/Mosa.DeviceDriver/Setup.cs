@@ -8,7 +8,7 @@ namespace Mosa.DeviceDriver
 	{
 		public static void Register(DeviceDriverRegistry registery)
 		{
-			registery.AddDeviceDriver(new ISADeviceDriver()
+			registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
 			{
 				Name = "CMOS",
 				Platforms = PlatformArchitecture.X86,
@@ -18,7 +18,7 @@ namespace Mosa.DeviceDriver
 				Factory = delegate { return new ISA.CMOS(); }
 			});
 
-			registery.AddDeviceDriver(new ISADeviceDriver()
+			registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
 			{
 				Name = "StandardKeyboard",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -31,7 +31,7 @@ namespace Mosa.DeviceDriver
 				Factory = delegate { return new ISA.StandardKeyboard(); }
 			});
 
-			registery.AddDeviceDriver(new ISADeviceDriver()
+			registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
 			{
 				Name = "PCIController",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -41,7 +41,7 @@ namespace Mosa.DeviceDriver
 				Factory = delegate { return new ISA.PCIController(); }
 			});
 
-			registery.AddDeviceDriver(new ISADeviceDriver()
+			registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
 			{
 				Name = "IDEController",
 				Platforms = PlatformArchitecture.X86AndX64,

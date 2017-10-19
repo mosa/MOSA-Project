@@ -7,22 +7,21 @@ namespace Mosa.DeviceSystem
 	public class DeviceDriverRegistry
 	{
 		protected PlatformArchitecture PlatformArchitecture;
-		protected List<IDeviceDriver> DeviceDrivers;
+		protected readonly List<DeviceDriverRegistryEntry> DeviceDrivers = new List<DeviceDriverRegistryEntry>();
 
 		public DeviceDriverRegistry(PlatformArchitecture platformArchitecture)
 		{
-			this.PlatformArchitecture = platformArchitecture;
-			DeviceDrivers = new List<IDeviceDriver>();
+			PlatformArchitecture = platformArchitecture;
 		}
 
-		public void AddDeviceDriver(IDeviceDriver deviceDriver)
+		public void AddDeviceDriver(DeviceDriverRegistryEntry deviceDriver)
 		{
 			DeviceDrivers.Add(deviceDriver);
 		}
 
-		public List<IDeviceDriver> GetDeviceDrivers(DeviceBusType busType)
+		public List<DeviceDriverRegistryEntry> GetDeviceDrivers(DeviceBusType busType)
 		{
-			var drivers = new List<IDeviceDriver>();
+			var drivers = new List<DeviceDriverRegistryEntry>();
 
 			foreach (var deviceDriver in DeviceDrivers)
 			{

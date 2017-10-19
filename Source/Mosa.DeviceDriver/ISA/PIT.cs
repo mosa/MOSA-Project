@@ -11,7 +11,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// Programmable Interval Timer (PIT) Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x40, PortRange = 4, IRQ = 0, Platforms = PlatformArchitecture.X86AndX64)]
-	public class PIT : HardwareDevice, IDevice, IHardwareDevice
+	public class PIT : DeviceDriverX
 	{
 		#region Definitions
 
@@ -48,33 +48,32 @@ namespace Mosa.DeviceDriver.ISA
 		protected uint tickCount;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="PIT"/> class.
+		/// Initializes this device.
 		/// </summary>
-		public PIT()
+		protected override void Initialize()
 		{
+			Device.Name = "PIT_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+
+			modeControlPort = Device.Resources.GetIOPortReadWrite(0, 3);
+			counter0Divisor = Device.Resources.GetIOPortReadWrite(0, 0);
 		}
 
 		/// <summary>
-		/// Setups this hardware device driver
+		/// Probes this instance.
 		/// </summary>
-		/// <returns></returns>
-		public override bool Setup(HardwareResources hardwareResources)
-		{
-			this.HardwareResources = hardwareResources;
-			base.Name = "PIT_0x" + base.HardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
-
-			modeControlPort = base.HardwareResources.GetIOPortReadWrite(0, 3);
-			counter0Divisor = base.HardwareResources.GetIOPortReadWrite(0, 0);
-
-			return true;
-		}
+		/// <remarks>
+		/// Overide for ISA devices, if example
+		/// </remarks>
+		public override void Probe() => Device.Status = DeviceStatus.Available;
 
 		/// <summary>
 		/// Starts this hardware device.
 		/// </summary>
-		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
+		public override void Start()
 		{
+			if (Device.Status != DeviceStatus.Available)
+				return;
+
 			ushort timerCount = (ushort)(Frequency / Hz);
 
 			// Set to Mode 3 - Square Wave Generator
@@ -84,8 +83,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			tickCount = 0;
 
-			base.DeviceStatus = DeviceStatus.Online;
-			return DeviceDriverStartStatus.Started;
+			Device.Status = DeviceStatus.Online;
 		}
 
 		/// <summary>

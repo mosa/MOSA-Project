@@ -14,7 +14,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// Programmable Interrupt Controller (PIC) Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x20, PortRange = 2, AltBasePort = 0xA0, AltPortRange = 2, Platforms = PlatformArchitecture.X86AndX64)]
-	public class PIC : HardwareDevice
+	public class PIC : DeviceDriverX
 	{
 		#region Definitions
 
@@ -71,38 +71,26 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		protected byte slaveInterruptMask;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PIC"/> class.
-		/// </summary>
-		public PIC()
+		protected override void Initialize()
 		{
+			Device.Name = "PIC_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+
+			masterCommandPort = Device.Resources.GetIOPortReadWrite(0, 0);
+			masterDataPort = Device.Resources.GetIOPortReadWrite(0, 1);
+
+			slaveCommandPort = Device.Resources.GetIOPortReadWrite(1, 0);
+			slaveDataPort = Device.Resources.GetIOPortReadWrite(1, 1);
 		}
 
-		/// <summary>
-		/// Setups this hardware device driver
-		/// </summary>
-		/// <param name="hardwareResources"></param>
-		/// <returns></returns>
-		public override bool Setup(HardwareResources hardwareResources)
+		public override void Probe() => Device.Status = DeviceStatus.Available;
+
+		public override void Start()
 		{
-			this.HardwareResources = hardwareResources;
-			base.Name = "PIC_0x" + base.HardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+			if (Device.Status != DeviceStatus.Available)
+				return;
 
-			masterCommandPort = base.HardwareResources.GetIOPortReadWrite(0, 0);
-			masterDataPort = base.HardwareResources.GetIOPortReadWrite(0, 1);
+			Device.Status = DeviceStatus.Online;
 
-			slaveCommandPort = base.HardwareResources.GetIOPortReadWrite(1, 0);
-			slaveDataPort = base.HardwareResources.GetIOPortReadWrite(1, 1);
-
-			return true;
-		}
-
-		/// <summary>
-		/// Starts this hardware device.
-		/// </summary>
-		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
-		{
 			byte masterMask;
 			byte slaveMask;
 
@@ -139,9 +127,6 @@ namespace Mosa.DeviceDriver.ISA
 			slaveDataPort.Write8(slaveMask);
 
 			DisableIRQs();
-
-			base.DeviceStatus = DeviceStatus.Online;
-			return DeviceDriverStartStatus.Started;
 		}
 
 		/// <summary>
@@ -160,7 +145,9 @@ namespace Mosa.DeviceDriver.ISA
 		public void SendEndOfInterrupt(byte irq)
 		{
 			if (irq >= 8)
+			{
 				slaveCommandPort.Write8(EOI);
+			}
 
 			masterCommandPort.Write8(EOI);
 		}
