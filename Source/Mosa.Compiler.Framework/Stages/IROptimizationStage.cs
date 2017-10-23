@@ -287,13 +287,19 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void DeadCodeElimination(InstructionNode node)
 		{
-			if (node.ResultCount != 1)
+			if (node.ResultCount == 0 || node.ResultCount > 2)
 				return;
 
 			if (!node.Result.IsVirtualRegister)
 				return;
 
 			if (node.Result.Definitions.Count != 1)
+				return;
+
+			if (node.ResultCount == 2 && node.Result2.IsVirtualRegister)
+				return;
+
+			if (node.ResultCount == 2 && node.Result2.Definitions.Count != 1)
 				return;
 
 			if (node.Instruction == IRInstruction.CallDynamic
@@ -303,9 +309,6 @@ namespace Mosa.Compiler.Framework.Stages
 				|| node.Instruction == IRInstruction.CallVirtual
 				|| node.Instruction == IRInstruction.NewObject
 				|| node.Instruction == IRInstruction.SetReturn
-
-				//|| node.Instruction == IRInstruction.NewArray
-				//|| node.Instruction == IRInstruction.NewString
 				|| node.Instruction == IRInstruction.IntrinsicMethodCall)
 				return;
 
@@ -321,6 +324,9 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			if (node.Result.Uses.Count != 0)
+				return;
+
+			if (node.ResultCount == 2 && node.Result2.Uses.Count != 0)
 				return;
 
 			if (trace.Active) trace.Log("*** DeadCodeElimination");

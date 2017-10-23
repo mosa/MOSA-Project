@@ -265,7 +265,7 @@ namespace Mosa.Compiler.Framework
 			EmitRelocations = true;
 			TwoPassOptimization = false;
 			EnableStatistics = true;
-			EnableIRLongOperand = false;
+			EnableIRLongOperand = true;
 		}
 	}
 }

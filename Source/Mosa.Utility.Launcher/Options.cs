@@ -129,7 +129,7 @@ namespace Mosa.Utility.Launcher
 			set { EnableInlinedMethods = false; }
 		}
 
-		[Option("ir-long-operand", Default = false)]
+		[Option("ir-long-operand", Default = true)]
 		public bool EnableIRLongOperand { get; set; }
 
 		[Option("two-pass-optimizationf", Default = false)]
@@ -383,6 +383,7 @@ namespace Mosa.Utility.Launcher
 			DebugConnectionAddress = "127.0.0.1";
 			InlinedIRMaximum = 8;
 			LaunchEmulator = true;
+			EnableIRLongOperand = true;
 		}
 
 		private void AppendIncludeFiles(string file)
