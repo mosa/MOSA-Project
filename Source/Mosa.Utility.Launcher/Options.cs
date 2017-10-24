@@ -132,7 +132,7 @@ namespace Mosa.Utility.Launcher
 		[Option("ir-long-operand", Default = true)]
 		public bool EnableIRLongOperand { get; set; }
 
-		[Option("two-pass-optimizationf", Default = false)]
+		[Option("two-pass-optimizationf", Default = true)]
 		public bool TwoPassOptimization { get; set; }
 
 		public int InlinedIRMaximum { get; set; }
@@ -384,6 +384,7 @@ namespace Mosa.Utility.Launcher
 			InlinedIRMaximum = 8;
 			LaunchEmulator = true;
 			EnableIRLongOperand = true;
+			TwoPassOptimization = true;
 		}
 
 		private void AppendIncludeFiles(string file)
