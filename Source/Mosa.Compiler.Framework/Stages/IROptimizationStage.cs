@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int simplifyTo64 = 0;
 		private int simplifySplit64 = 0;
 		private int reduceSplit64 = 0;
-		
+
 		private Stack<InstructionNode> worklist = new Stack<InstructionNode>();
 
 		private HashSet<Operand> virtualRegisters = new HashSet<Operand>();
@@ -114,7 +114,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.Split64Constant", split64Constant);
 			UpdateCounter("IROptimizations.SimplifyTo64", simplifyTo64);
 			UpdateCounter("IROptimizations.SimplifySplit64", simplifySplit64);
-			UpdateCounter("IROptimizations.ReduceSplit64", reduceSplit64);			
+			UpdateCounter("IROptimizations.ReduceSplit64", reduceSplit64);
 
 			worklist = null;
 		}
@@ -196,7 +196,7 @@ namespace Mosa.Compiler.Framework.Stages
 				SimplifyTo64,
 				SimplifySplit64,
 				Split64Constant,
-				//ReduceSplit64
+				ReduceSplit64
 			};
 		}
 
@@ -2028,7 +2028,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (node.Result.Definitions.Count != 1)
-				return;			
+				return;
 
 			// to keep things simple, we only check the first def are from the same split instruction
 			if (node.Operand1.Definitions[0] != node.Operand2.Definitions[0])
@@ -2068,7 +2068,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (node.Result.Definitions.Count != 1)
-				return;						
+				return;
 
 			AddOperandUsageToWorkList(node);
 
@@ -2110,25 +2110,50 @@ namespace Mosa.Compiler.Framework.Stages
 				|| instruction == IRInstruction.ShiftLeft
 				|| instruction == IRInstruction.AddUnsigned
 				|| instruction == IRInstruction.MoveInteger
-				|| instruction == IRInstruction.AddressOf))
+				|| instruction == IRInstruction.MulUnsigned
+				|| instruction == IRInstruction.DivUnsigned
+				|| instruction == IRInstruction.RemUnsigned))
 				return;
 
-			return;
+			if (defNode.Operand1.Definitions.Count != 1)
+				return;
 
-			//if (trace.Active) trace.Log("*** SimplifySplit64");
-			//if (trace.Active) trace.Log("BEFORE:\t" + node);
+			if (defNode.OperandCount == 2 && defNode.Operand2.Definitions.Count != 1)
+				return;
 
-			//var result1 = node.Result;
-			//var result2 = node.Result2;
+			if (trace.Active) trace.Log("*** ReduceSplit64");
+			if (trace.Active) trace.Log("BEFORE:\t" + defNode);
+			if (trace.Active) trace.Log("REMOVED:\t" + node);
 
-			//var context = new Context(node);
+			var result1 = node.Result;
+			var operand1 = defNode.Operand1;
+			var operand2 = defNode.OperandCount == 2 ? defNode.Operand2 : null;
 
-			//context.SetInstruction(IRInstruction.MoveInteger, result1, defNode.Operand1);
-			//context.AppendInstruction(IRInstruction.MoveInteger, result2, defNode.Operand2);
+			node.SetInstruction(IRInstruction.Nop);
 
-			//if (trace.Active) trace.Log("AFTER: \t" + context.Previous);
-			//if (trace.Active) trace.Log("AFTER: \t" + context);
-			//reduceSplit64++;
+			var context = new Context(defNode);
+
+			var op1Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op1High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			context.SetInstruction2(IRInstruction.Split64, op1Low, op1High, operand1);
+
+			if (operand2 != null)
+			{
+				var op2Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var op2High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				context.AppendInstruction2(IRInstruction.Split64, op2Low, op2High, operand2);
+
+				context.AppendInstruction(instruction, result1, op1Low, op2Low);
+			}
+			else
+			{
+				context.AppendInstruction(instruction, result1, op1Low);
+			}
+
+			if (trace.Active && operand2 != null) trace.Log("AFTER: \t" + context.Previous.Previous);
+			if (trace.Active) trace.Log("AFTER: \t" + context.Previous);
+			if (trace.Active) trace.Log("AFTER: \t" + context);
+			reduceSplit64++;
 		}
 	}
 }

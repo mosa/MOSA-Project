@@ -440,7 +440,7 @@
             this.tbResult.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbResult.Location = new System.Drawing.Point(0, 32);
             this.tbResult.Name = "tbResult";
-            this.tbResult.Size = new System.Drawing.Size(714, 368);
+            this.tbResult.Size = new System.Drawing.Size(687, 368);
             this.tbResult.TabIndex = 31;
             this.tbResult.Text = "";
             this.tbResult.WordWrap = false;

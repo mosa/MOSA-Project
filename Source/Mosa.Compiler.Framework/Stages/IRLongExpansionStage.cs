@@ -158,21 +158,33 @@ namespace Mosa.Compiler.Framework.Stages
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
 			var context = new Context(node);
 
-			if (operand2.IsConstant && !operand2.IsLong)
+			if (operand2.IsConstant && !operand2.IsLong && !operand1.IsLong)
 			{
 				var target4 = CreateConstant((uint)(operand2.ConstantUnsignedLongInteger + 4));
+
+				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, operand1, operand2);
+				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, operand1, target4);
+				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+				return;
+			}
+
+			if (operand2.IsConstant && !operand2.IsLong && operand1.IsLong)
+			{
+				var target4 = CreateConstant((uint)(operand2.ConstantUnsignedLongInteger + 4));
+
+				var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
 				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, op0Low, operand2);
 				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, op0Low, target4);
 				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+				return;
 			}
 
+			return;
 			//else
 			//{
 			//	Operand target4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
