@@ -50,7 +50,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private int split64Constant = 0;
 		private int simplifyTo64 = 0;
 		private int simplifySplit64 = 0;
-
+		private int reduceSplit64 = 0;
+		
 		private Stack<InstructionNode> worklist = new Stack<InstructionNode>();
 
 		private HashSet<Operand> virtualRegisters = new HashSet<Operand>();
@@ -113,6 +114,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.Split64Constant", split64Constant);
 			UpdateCounter("IROptimizations.SimplifyTo64", simplifyTo64);
 			UpdateCounter("IROptimizations.SimplifySplit64", simplifySplit64);
+			UpdateCounter("IROptimizations.ReduceSplit64", reduceSplit64);			
 
 			worklist = null;
 		}
@@ -193,7 +195,8 @@ namespace Mosa.Compiler.Framework.Stages
 				NormalizeConstantTo32Bit,
 				SimplifyTo64,
 				SimplifySplit64,
-				Split64Constant
+				Split64Constant,
+				//ReduceSplit64
 			};
 		}
 
@@ -2085,6 +2088,47 @@ namespace Mosa.Compiler.Framework.Stages
 			simplifySplit64++;
 		}
 
+		private void ReduceSplit64(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.Split64)
+				return;
 
+			if (node.Operand1.Definitions.Count != 1)
+				return;
+
+			if (node.Result2.Uses.Count != 0)
+				return;
+
+			var defNode = node.Operand1.Definitions[0];
+
+			var instruction = defNode.Instruction;
+
+			if (!(instruction == IRInstruction.LogicalAnd
+				|| instruction == IRInstruction.LogicalOr
+				|| instruction == IRInstruction.LogicalXor
+				|| instruction == IRInstruction.LogicalNot
+				|| instruction == IRInstruction.ShiftLeft
+				|| instruction == IRInstruction.AddUnsigned
+				|| instruction == IRInstruction.MoveInteger
+				|| instruction == IRInstruction.AddressOf))
+				return;
+
+			return;
+
+			//if (trace.Active) trace.Log("*** SimplifySplit64");
+			//if (trace.Active) trace.Log("BEFORE:\t" + node);
+
+			//var result1 = node.Result;
+			//var result2 = node.Result2;
+
+			//var context = new Context(node);
+
+			//context.SetInstruction(IRInstruction.MoveInteger, result1, defNode.Operand1);
+			//context.AppendInstruction(IRInstruction.MoveInteger, result2, defNode.Operand2);
+
+			//if (trace.Active) trace.Log("AFTER: \t" + context.Previous);
+			//if (trace.Active) trace.Log("AFTER: \t" + context);
+			//reduceSplit64++;
+		}
 	}
 }

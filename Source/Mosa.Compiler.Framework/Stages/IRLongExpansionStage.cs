@@ -7,10 +7,10 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// Long Operand Stage
+	/// IR Long Expansion Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
-	public sealed class LongOperandStage : BaseCodeTransformationStage
+	public sealed class IRLongExpansionStage : BaseCodeTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
 		{
@@ -122,6 +122,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Debug.Assert(!node.Result.IsR4);
 			Debug.Assert(!node.Result.IsR8);
+
+			// TODO: Managed 64bit pointers
 
 			if (!node.Result.Is64BitInteger)
 				return;
