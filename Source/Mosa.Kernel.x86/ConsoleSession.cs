@@ -5,7 +5,7 @@ using Mosa.Kernel.x86.Helpers;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	///
+	/// Console Session
 	/// </summary>
 	public class ConsoleSession
 	{
@@ -19,18 +19,21 @@ namespace Mosa.Kernel.x86
 		protected uint scrollRow = 0;
 
 		/// <summary>
-		///
+		/// The columns
 		/// </summary>
 		public readonly uint Columns;
 
 		/// <summary>
-		///
+		/// The rows
 		/// </summary>
 		public readonly uint Rows;
 
 		/// <summary>
-		///
+		/// Gets or sets the column.
 		/// </summary>
+		/// <value>
+		/// The column.
+		/// </value>
 		public uint Column
 		{
 			get { return column; }
@@ -38,8 +41,11 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		///
+		/// Gets or sets the row.
 		/// </summary>
+		/// <value>
+		/// The row.
+		/// </value>
 		public uint Row
 		{
 			get { return row; }

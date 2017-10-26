@@ -109,7 +109,6 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly SubUnsigned SubUnsigned = new SubUnsigned();
 		public static readonly Switch Switch = new Switch();
 		public static readonly Throw Throw = new Throw();
-		public static readonly To64 To64 = new To64();
 		public static readonly TryEnd TryEnd = new TryEnd();
 		public static readonly TryStart TryStart = new TryStart();
 		public static readonly UnstableObjectTracking UnstableObjectTracking = new UnstableObjectTracking();
@@ -125,6 +124,8 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly Unbox Unbox = new Unbox();
 		public static readonly Unbox32 Unbox32 = new Unbox32();
 		public static readonly Unbox64 Unbox64 = new Unbox64();
+
+		public static readonly To64 To64 = new To64();
 		public static readonly Split64 Split64 = new Split64();
 	}
 }

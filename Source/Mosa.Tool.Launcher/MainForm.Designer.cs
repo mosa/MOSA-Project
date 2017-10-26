@@ -119,12 +119,14 @@
 			this.rtbCounters = new System.Windows.Forms.RichTextBox();
 			this.tabFiles = new System.Windows.Forms.TabPage();
 			this.panelAdditionalFiles = new System.Windows.Forms.Panel();
-			this.benRemoveFiles = new MetroFramework.Controls.MetroButton();
-			this.btnAddFiles = new MetroFramework.Controls.MetroButton();
-			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
 			this.additionalFilesList = new MetroFramework.Controls.MetroGrid();
 			this.colPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.colSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.benRemoveFiles = new MetroFramework.Controls.MetroButton();
+			this.btnAddFiles = new MetroFramework.Controls.MetroButton();
+			this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+			this.cbIRLongExpansion = new MetroFramework.Controls.MetroCheckBox();
+			this.cbTwoPassOptimizations = new MetroFramework.Controls.MetroCheckBox();
 			this.tbApplicationLocations.SuspendLayout();
 			this.tabOptions.SuspendLayout();
 			this.groupBox12.SuspendLayout();
@@ -161,8 +163,8 @@
 			// 
 			// progressBar1
 			// 
-			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.progressBar1.Location = new System.Drawing.Point(0, 63);
 			this.progressBar1.Name = "progressBar1";
 			this.progressBar1.Size = new System.Drawing.Size(661, 20);
@@ -172,9 +174,9 @@
 			// 
 			// tbApplicationLocations
 			// 
-			this.tbApplicationLocations.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.tbApplicationLocations.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.tbApplicationLocations.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
 			this.tbApplicationLocations.Controls.Add(this.tabOptions);
 			this.tbApplicationLocations.Controls.Add(this.tabAdvanced);
@@ -187,7 +189,7 @@
 			this.tbApplicationLocations.Margin = new System.Windows.Forms.Padding(0);
 			this.tbApplicationLocations.Multiline = true;
 			this.tbApplicationLocations.Name = "tbApplicationLocations";
-			this.tbApplicationLocations.SelectedIndex = 5;
+			this.tbApplicationLocations.SelectedIndex = 0;
 			this.tbApplicationLocations.Size = new System.Drawing.Size(661, 438);
 			this.tbApplicationLocations.Style = MetroFramework.MetroColorStyle.Blue;
 			this.tbApplicationLocations.TabIndex = 22;
@@ -247,7 +249,7 @@
 			// 
 			this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsStatusLabel});
+			this.tsStatusLabel});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 390);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(653, 22);
@@ -324,8 +326,8 @@
 			// 
 			// groupBox6
 			// 
-			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox6.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.groupBox6.Controls.Add(this.button1);
 			this.groupBox6.Controls.Add(this.label6);
@@ -366,23 +368,23 @@
 			this.nmMemory.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.nmMemory.Location = new System.Drawing.Point(76, 51);
 			this.nmMemory.Maximum = new decimal(new int[] {
-            2048,
-            0,
-            0,
-            0});
+			2048,
+			0,
+			0,
+			0});
 			this.nmMemory.Minimum = new decimal(new int[] {
-            64,
-            0,
-            0,
-            0});
+			64,
+			0,
+			0,
+			0});
 			this.nmMemory.Name = "nmMemory";
 			this.nmMemory.Size = new System.Drawing.Size(56, 20);
 			this.nmMemory.TabIndex = 23;
 			this.nmMemory.Value = new decimal(new int[] {
-            128,
-            0,
-            0,
-            0});
+			128,
+			0,
+			0,
+			0});
 			// 
 			// cbExitOnLaunch
 			// 
@@ -403,9 +405,9 @@
 			this.cbEmulator.FormattingEnabled = true;
 			this.cbEmulator.ItemHeight = 23;
 			this.cbEmulator.Items.AddRange(new object[] {
-            "QEMU",
-            "Bochs",
-            "VMware"});
+			"QEMU",
+			"Bochs",
+			"VMware"});
 			this.cbEmulator.Location = new System.Drawing.Point(10, 19);
 			this.cbEmulator.Name = "cbEmulator";
 			this.cbEmulator.Size = new System.Drawing.Size(171, 29);
@@ -416,8 +418,8 @@
 			// 
 			// groupBox4
 			// 
-			this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox4.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.groupBox4.Controls.Add(this.lbSourceDirectory);
 			this.groupBox4.Controls.Add(this.label7);
@@ -475,8 +477,8 @@
 			// 
 			// groupBox3
 			// 
-			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox3.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.groupBox3.Controls.Add(this.tbMode);
 			this.groupBox3.Controls.Add(this.cbVBEVideo);
@@ -516,7 +518,7 @@
 			this.tbMode.CustomButton.Visible = false;
 			this.tbMode.Enabled = false;
 			this.tbMode.Lines = new string[] {
-        "{Mode}"};
+		"{Mode}"};
 			this.tbMode.Location = new System.Drawing.Point(535, 83);
 			this.tbMode.MaxLength = 32767;
 			this.tbMode.Name = "tbMode";
@@ -562,10 +564,10 @@
 			this.cbBootLoader.FormattingEnabled = true;
 			this.cbBootLoader.ItemHeight = 23;
 			this.cbBootLoader.Items.AddRange(new object[] {
-            "Syslinux 3.72",
-            "Syslinux 6.03",
-            "Grub 0.97",
-            "Grub 2.00"});
+			"Syslinux 3.72",
+			"Syslinux 6.03",
+			"Grub 0.97",
+			"Grub 2.00"});
 			this.cbBootLoader.Location = new System.Drawing.Point(273, 78);
 			this.cbBootLoader.Name = "cbBootLoader";
 			this.cbBootLoader.Size = new System.Drawing.Size(127, 29);
@@ -591,8 +593,8 @@
 			this.cbBootFileSystem.FormattingEnabled = true;
 			this.cbBootFileSystem.ItemHeight = 23;
 			this.cbBootFileSystem.Items.AddRange(new object[] {
-            "FAT12",
-            "FAT16"});
+			"FAT12",
+			"FAT16"});
 			this.cbBootFileSystem.Location = new System.Drawing.Point(88, 78);
 			this.cbBootFileSystem.Name = "cbBootFileSystem";
 			this.cbBootFileSystem.Size = new System.Drawing.Size(88, 29);
@@ -618,7 +620,7 @@
 			this.cbBootFormat.FormattingEnabled = true;
 			this.cbBootFormat.ItemHeight = 23;
 			this.cbBootFormat.Items.AddRange(new object[] {
-            "Multiboot v0.7"});
+			"Multiboot v0.7"});
 			this.cbBootFormat.Location = new System.Drawing.Point(273, 47);
 			this.cbBootFormat.Name = "cbBootFormat";
 			this.cbBootFormat.Size = new System.Drawing.Size(127, 29);
@@ -644,8 +646,8 @@
 			this.cbPlatform.FormattingEnabled = true;
 			this.cbPlatform.ItemHeight = 23;
 			this.cbPlatform.Items.AddRange(new object[] {
-            "x86",
-            "ARMv6"});
+			"x86",
+			"ARMv6"});
 			this.cbPlatform.Location = new System.Drawing.Point(88, 47);
 			this.cbPlatform.Name = "cbPlatform";
 			this.cbPlatform.Size = new System.Drawing.Size(88, 29);
@@ -670,11 +672,11 @@
 			this.cbImageFormat.FormattingEnabled = true;
 			this.cbImageFormat.ItemHeight = 23;
 			this.cbImageFormat.Items.AddRange(new object[] {
-            "IMG (.img)",
-            "ISO Image (.iso)",
-            "Microsoft (.vhd)",
-            "Virtual Box (.vdi)",
-            "VMware (.vmdk)"});
+			"IMG (.img)",
+			"ISO Image (.iso)",
+			"Microsoft (.vhd)",
+			"Virtual Box (.vdi)",
+			"VMware (.vmdk)"});
 			this.cbImageFormat.Location = new System.Drawing.Point(510, 47);
 			this.cbImageFormat.Name = "cbImageFormat";
 			this.cbImageFormat.Size = new System.Drawing.Size(114, 29);
@@ -707,6 +709,8 @@
 			// groupBox1
 			// 
 			this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.groupBox1.Controls.Add(this.cbTwoPassOptimizations);
+			this.groupBox1.Controls.Add(this.cbIRLongExpansion);
 			this.groupBox1.Controls.Add(this.cbInlinedMethods);
 			this.groupBox1.Controls.Add(this.cbEnableSparseConditionalConstantPropagation);
 			this.groupBox1.Controls.Add(this.cbEnableIROptimizations);
@@ -816,10 +820,10 @@
 			this.cbDebugConnectionOption.FormattingEnabled = true;
 			this.cbDebugConnectionOption.ItemHeight = 23;
 			this.cbDebugConnectionOption.Items.AddRange(new object[] {
-            "None",
-            "Pipe",
-            "TCP Server",
-            "TCP Client"});
+			"None",
+			"Pipe",
+			"TCP Server",
+			"TCP Client"});
 			this.cbDebugConnectionOption.Location = new System.Drawing.Point(7, 64);
 			this.cbDebugConnectionOption.Name = "cbDebugConnectionOption";
 			this.cbDebugConnectionOption.Size = new System.Drawing.Size(120, 29);
@@ -975,7 +979,7 @@
 			this.tbBaseAddress.CustomButton.UseSelectable = true;
 			this.tbBaseAddress.CustomButton.Visible = false;
 			this.tbBaseAddress.Lines = new string[] {
-        "0x00400000"};
+		"0x00400000"};
 			this.tbBaseAddress.Location = new System.Drawing.Point(102, 90);
 			this.tbBaseAddress.MaxLength = 32767;
 			this.tbBaseAddress.Name = "tbBaseAddress";
@@ -1044,8 +1048,8 @@
 			// 
 			// groupBox11
 			// 
-			this.groupBox11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox11.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox11.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.groupBox11.Controls.Add(this.button7);
 			this.groupBox11.Controls.Add(this.lbmkisofsExecutable);
@@ -1080,8 +1084,8 @@
 			// 
 			// groupBox10
 			// 
-			this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox10.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.groupBox10.Controls.Add(this.button4);
 			this.groupBox10.Controls.Add(this.lbVMwarePlayerExecutable);
@@ -1116,8 +1120,8 @@
 			// 
 			// groupBox9
 			// 
-			this.groupBox9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox9.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.groupBox9.Controls.Add(this.button6);
 			this.groupBox9.Controls.Add(this.lbBOCHSExecutable);
@@ -1152,8 +1156,8 @@
 			// 
 			// groupBox8
 			// 
-			this.groupBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox8.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox8.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.groupBox8.Controls.Add(this.button5);
 			this.groupBox8.Controls.Add(this.lbNDISASMExecutable);
@@ -1188,8 +1192,8 @@
 			// 
 			// groupBox7
 			// 
-			this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.groupBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.groupBox7.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.groupBox7.Controls.Add(this.lbQEMUImgApplication);
 			this.groupBox7.Controls.Add(this.button8);
@@ -1285,9 +1289,9 @@
 			// 
 			// rtbOutput
 			// 
-			this.rtbOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.rtbOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbOutput.Font = new System.Drawing.Font("Consolas", 8F);
 			this.rtbOutput.Location = new System.Drawing.Point(3, 0);
 			this.rtbOutput.Name = "rtbOutput";
@@ -1316,9 +1320,9 @@
 			// 
 			// rtbCounters
 			// 
-			this.rtbCounters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.rtbCounters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.rtbCounters.Font = new System.Drawing.Font("Consolas", 8F);
 			this.rtbCounters.Location = new System.Drawing.Point(0, 0);
 			this.rtbCounters.Name = "rtbCounters";
@@ -1349,42 +1353,14 @@
 			this.panelAdditionalFiles.Size = new System.Drawing.Size(653, 412);
 			this.panelAdditionalFiles.TabIndex = 23;
 			// 
-			// benRemoveFiles
-			// 
-			this.benRemoveFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.benRemoveFiles.Location = new System.Drawing.Point(625, 384);
-			this.benRemoveFiles.Name = "benRemoveFiles";
-			this.benRemoveFiles.Size = new System.Drawing.Size(25, 25);
-			this.benRemoveFiles.TabIndex = 30;
-			this.benRemoveFiles.Text = "-";
-			this.benRemoveFiles.UseSelectable = true;
-			this.benRemoveFiles.Click += new System.EventHandler(this.BtnRemoveFiles_Click);
-			// 
-			// btnAddFiles
-			// 
-			this.btnAddFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnAddFiles.Location = new System.Drawing.Point(625, 353);
-			this.btnAddFiles.Name = "btnAddFiles";
-			this.btnAddFiles.Size = new System.Drawing.Size(25, 25);
-			this.btnAddFiles.TabIndex = 29;
-			this.btnAddFiles.Text = "+";
-			this.btnAddFiles.UseSelectable = true;
-			this.btnAddFiles.Click += new System.EventHandler(this.BtnAddFiles_Click);
-			// 
-			// openFileDialog2
-			// 
-			this.openFileDialog2.DefaultExt = "*.exe";
-			this.openFileDialog2.Filter = "Executable|*.exe";
-			this.openFileDialog2.Title = "Select Assembly";
-			// 
 			// additionalFilesList
 			// 
 			this.additionalFilesList.AllowUserToAddRows = false;
 			this.additionalFilesList.AllowUserToDeleteRows = false;
 			this.additionalFilesList.AllowUserToResizeRows = false;
-			this.additionalFilesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			this.additionalFilesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Left)
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.additionalFilesList.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			this.additionalFilesList.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.additionalFilesList.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
@@ -1399,8 +1375,8 @@
 			this.additionalFilesList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
 			this.additionalFilesList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.additionalFilesList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colPath,
-            this.colSize});
+			this.colPath,
+			this.colSize});
 			dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
 			dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
 			dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
@@ -1440,6 +1416,62 @@
 			this.colSize.Name = "colSize";
 			this.colSize.ReadOnly = true;
 			this.colSize.Width = 150;
+			// 
+			// benRemoveFiles
+			// 
+			this.benRemoveFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.benRemoveFiles.Location = new System.Drawing.Point(625, 384);
+			this.benRemoveFiles.Name = "benRemoveFiles";
+			this.benRemoveFiles.Size = new System.Drawing.Size(25, 25);
+			this.benRemoveFiles.TabIndex = 30;
+			this.benRemoveFiles.Text = "-";
+			this.benRemoveFiles.UseSelectable = true;
+			this.benRemoveFiles.Click += new System.EventHandler(this.BtnRemoveFiles_Click);
+			// 
+			// btnAddFiles
+			// 
+			this.btnAddFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnAddFiles.Location = new System.Drawing.Point(625, 353);
+			this.btnAddFiles.Name = "btnAddFiles";
+			this.btnAddFiles.Size = new System.Drawing.Size(25, 25);
+			this.btnAddFiles.TabIndex = 29;
+			this.btnAddFiles.Text = "+";
+			this.btnAddFiles.UseSelectable = true;
+			this.btnAddFiles.Click += new System.EventHandler(this.BtnAddFiles_Click);
+			// 
+			// openFileDialog2
+			// 
+			this.openFileDialog2.DefaultExt = "*.exe";
+			this.openFileDialog2.Filter = "Executable|*.exe";
+			this.openFileDialog2.Title = "Select Assembly";
+			// 
+			// cbIRLongExpansion
+			// 
+			this.cbIRLongExpansion.AutoSize = true;
+			this.cbIRLongExpansion.Checked = true;
+			this.cbIRLongExpansion.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbIRLongExpansion.Location = new System.Drawing.Point(6, 106);
+			this.cbIRLongExpansion.Name = "cbIRLongExpansion";
+			this.cbIRLongExpansion.Size = new System.Drawing.Size(119, 15);
+			this.cbIRLongExpansion.Style = MetroFramework.MetroColorStyle.Blue;
+			this.cbIRLongExpansion.TabIndex = 10;
+			this.cbIRLongExpansion.Text = "IR Long Expansion";
+			this.cbIRLongExpansion.UseCustomBackColor = true;
+			this.cbIRLongExpansion.UseSelectable = true;
+			// 
+			// cbTwoPassOptimizations
+			// 
+			this.cbTwoPassOptimizations.AutoSize = true;
+			this.cbTwoPassOptimizations.Checked = true;
+			this.cbTwoPassOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbTwoPassOptimizations.Location = new System.Drawing.Point(6, 127);
+			this.cbTwoPassOptimizations.Name = "cbTwoPassOptimizations";
+			this.cbTwoPassOptimizations.Size = new System.Drawing.Size(148, 15);
+			this.cbTwoPassOptimizations.Style = MetroFramework.MetroColorStyle.Blue;
+			this.cbTwoPassOptimizations.TabIndex = 11;
+			this.cbTwoPassOptimizations.Text = "Two Pass Optimizations";
+			this.cbTwoPassOptimizations.UseCustomBackColor = true;
+			this.cbTwoPassOptimizations.UseSelectable = true;
 			// 
 			// MainForm
 			// 
@@ -1501,6 +1533,7 @@
 			this.panelAdditionalFiles.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.additionalFilesList)).EndInit();
 			this.ResumeLayout(false);
+
 		}
 
 		#endregion
@@ -1579,7 +1612,7 @@
 		private MetroFramework.Controls.MetroLabel label9;
 		private System.Windows.Forms.GroupBox groupBox14;
 		private MetroFramework.Controls.MetroCheckBox cbEmitx86IRQMethods;
-        private MetroFramework.Controls.MetroLabel lbDestinationDirectory;
+		private MetroFramework.Controls.MetroLabel lbDestinationDirectory;
 		private MetroFramework.Controls.MetroCheckBox cbGenerateASMFile;
 		private System.Windows.Forms.GroupBox groupBox15;
 		private MetroFramework.Controls.MetroCheckBox cbEnableQemuGDB;
@@ -1598,5 +1631,7 @@
 		private MetroFramework.Controls.MetroGrid additionalFilesList;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colPath;
 		private System.Windows.Forms.DataGridViewTextBoxColumn colSize;
+		private MetroFramework.Controls.MetroCheckBox cbTwoPassOptimizations;
+		private MetroFramework.Controls.MetroCheckBox cbIRLongExpansion;
 	}
 }

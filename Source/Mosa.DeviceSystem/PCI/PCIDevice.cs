@@ -93,19 +93,19 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the bus.
 		/// </summary>
 		/// <value>The bus.</value>
-		public byte Bus { get; private set; }
+		public byte Bus { get; }
 
 		/// <summary>
 		/// Gets the slot.
 		/// </summary>
 		/// <value>The slot.</value>
-		public byte Slot { get; private set; }
+		public byte Slot { get; }
 
 		/// <summary>
 		/// Gets the function.
 		/// </summary>
 		/// <value>The function.</value>
-		public byte Function { get; private set; }
+		public byte Function { get; }
 
 		/// <summary>
 		/// Gets the vendor ID.
@@ -232,7 +232,7 @@ namespace Mosa.DeviceSystem.PCI
 					BaseAddresses[i] = new BaseAddress(AddressType.Memory, address & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((address & 0x08) == 1));
 			}
 
-			if ((ClassCode == 0x03) && (SubClassCode == 0x00) && (ProgIF == 0x00))
+			if (ClassCode == 0x03 && SubClassCode == 0x00 && ProgIF == 0x00)
 			{
 				// Special case for generic VGA
 				BaseAddresses[6] = new BaseAddress(AddressType.Memory, 0xA0000, 0x1FFFF, false);
@@ -242,6 +242,9 @@ namespace Mosa.DeviceSystem.PCI
 			foreach (var baseAddress in BaseAddresses)
 			{
 				if (baseAddress == null)
+					continue;
+
+				if ((object)baseAddress.Region == null)
 					continue;
 
 				switch (baseAddress.Region)

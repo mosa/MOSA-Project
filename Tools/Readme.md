@@ -48,6 +48,11 @@ nuget
 - http://docs.nuget.org/consume/Command-Line-Reference
 
 gdb
-- GPL License v1.3
+- GPL License v3
 - https://www.gnu.org/software/gdb/
 - Version: 7.6.1
+
+rufus
+- GNU License v3
+- https://github.com/pbatard/rufus
+- Version: 2.17

@@ -46,9 +46,9 @@ namespace Mosa.DeviceSystem
 
 			foreach (var driver in drivers)
 			{
-				if (driver is ISADeviceDriver)
+				if (driver is ISADeviceDriverRegistryEntry)
 				{
-					StartISADevice(driver as ISADeviceDriver);
+					StartISADevice(driver as ISADeviceDriverRegistryEntry);
 				}
 			}
 		}
@@ -66,7 +66,7 @@ namespace Mosa.DeviceSystem
 			//}
 		}
 
-		public static void StartISADevice(ISADeviceDriver driver)
+		public static void StartISADevice(ISADeviceDriverRegistryEntry driver)
 		{
 			var hardwareDevice = driver.Factory() as IHardwareDevice;
 

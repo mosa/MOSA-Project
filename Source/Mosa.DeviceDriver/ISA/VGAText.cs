@@ -8,7 +8,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// VGA Text Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.X86AndX64)]
-	public class VGAText : HardwareDevice, IDevice, ITextDevice
+	public class VGAText : DeviceDriverX, ITextDevice
 	{
 		#region Definitions
 
@@ -135,48 +135,35 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		protected TextColor defaultBackground = TextColor.White;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="VGAText"/> class.
-		/// </summary>
-		public VGAText()
+		protected override void Initialize()
 		{
+			Device.Name = "VGAText";
+
+			miscellaneousOutput = Device.Resources.GetIOPortReadWrite(0, 0x1C);
+			crtControllerIndex = Device.Resources.GetIOPortReadWrite(0, 0x04);
+			crtControllerData = Device.Resources.GetIOPortReadWrite(0, 0x05);
+			crtControllerIndexColor = Device.Resources.GetIOPortReadWrite(0, 0x24);
+			crtControllerDataColor = Device.Resources.GetIOPortReadWrite(0, 0x25);
+
+			miscellaneousOutputWrite = Device.Resources.GetIOPortWrite(0, 0x12);
+			sequencerAddress = Device.Resources.GetIOPortReadWrite(0, 0x14);
+			sequencerData = Device.Resources.GetIOPortReadWrite(0, 0x15);
+			graphicsControllerAddress = Device.Resources.GetIOPortReadWrite(0, 0x1E);
+			graphicsControllerData = Device.Resources.GetIOPortReadWrite(0, 0x1F);
+			inputStatus1ReadB = Device.Resources.GetIOPortReadWrite(0, 0x2A);
+			attributeAddress = Device.Resources.GetIOPortReadWrite(0, 0x10);
+			attributeData = Device.Resources.GetIOPortReadWrite(0, 0x11);
+
+			memory = Device.Resources.GetMemory(0);
 		}
 
-		/// <summary>
-		/// Setups this hardware device driver
-		/// </summary>
-		/// <returns></returns>
-		public override bool Setup(HardwareResources hardwareResources)
+		public override void Probe() => Device.Status = DeviceStatus.Available;
+
+		public override void Start()
 		{
-			this.HardwareResources = hardwareResources;
-			base.Name = "VGAText";
+			if (Device.Status != DeviceStatus.Available)
+				return;
 
-			miscellaneousOutput = base.HardwareResources.GetIOPortReadWrite(0, 0x1C);
-			crtControllerIndex = base.HardwareResources.GetIOPortReadWrite(0, 0x04);
-			crtControllerData = base.HardwareResources.GetIOPortReadWrite(0, 0x05);
-			crtControllerIndexColor = base.HardwareResources.GetIOPortReadWrite(0, 0x24);
-			crtControllerDataColor = base.HardwareResources.GetIOPortReadWrite(0, 0x25);
-
-			miscellaneousOutputWrite = base.HardwareResources.GetIOPortWrite(0, 0x12);
-			sequencerAddress = base.HardwareResources.GetIOPortReadWrite(0, 0x14);
-			sequencerData = base.HardwareResources.GetIOPortReadWrite(0, 0x15);
-			graphicsControllerAddress = base.HardwareResources.GetIOPortReadWrite(0, 0x1E);
-			graphicsControllerData = base.HardwareResources.GetIOPortReadWrite(0, 0x1F);
-			inputStatus1ReadB = base.HardwareResources.GetIOPortReadWrite(0, 0x2A);
-			attributeAddress = base.HardwareResources.GetIOPortReadWrite(0, 0x10);
-			attributeData = base.HardwareResources.GetIOPortReadWrite(0, 0x11);
-
-			memory = base.HardwareResources.GetMemory(0);
-
-			return true;
-		}
-
-		/// <summary>
-		/// Starts this hardware device.
-		/// </summary>
-		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
-		{
 			WriteSettings(VGAText80x25);
 
 			colorMode = ((miscellaneousOutput.Read8() & 1) == 1);
@@ -202,18 +189,14 @@ namespace Mosa.DeviceDriver.ISA
 			width++;
 			height = 25;
 
-			base.DeviceStatus = DeviceStatus.Online;
-			return DeviceDriverStartStatus.Started;
+			Device.Status = DeviceStatus.Online;
 		}
 
 		/// <summary>
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public override bool OnInterrupt()
-		{
-			return true;
-		}
+		public override bool OnInterrupt() => true;
 
 		/// <summary>
 		/// Sends the command.
@@ -253,14 +236,14 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		/// <value></value>
 		/// <returns></returns>
-		public byte Width { get { return width; } }
+		public byte Width => width;
 
 		/// <summary>
 		/// Gets the height.
 		/// </summary>
 		/// <value></value>
 		/// <returns></returns>
-		public byte Height { get { return height; } }
+		public byte Height => height;
 
 		/// <summary>
 		/// Writes the char at the position indicated.
@@ -307,16 +290,20 @@ namespace Mosa.DeviceDriver.ISA
 			uint size = (uint)(height * width);
 
 			if (bytePerChar == 2)
+			{
 				for (int i = 0; i < size; i++)
 				{
 					memory[(uint)(index + (i * 2))] = 0;
 					memory[(uint)(index + (i * 2) + 1)] = (byte)((byte)defaultBackground << 4);
 				}
+			}
 			else
+			{
 				for (int i = 0; i < size; i = i + bytePerChar)
 				{
 					memory[(uint)(index + i)] = 0;
 				}
+			}
 		}
 
 		/// <summary>
@@ -328,12 +315,16 @@ namespace Mosa.DeviceDriver.ISA
 			uint size = (uint)(((height * width) - width) * bytePerChar);
 
 			for (uint i = index; i < (index + size); i++)
+			{
 				memory[i] = memory[(uint)(i + (width * bytePerChar))];
+			}
 
 			index = (uint)(index + ((height - 1) * width * bytePerChar));
 
 			for (int i = 0; i < width * 2; i++)
+			{
 				memory[(uint)(index + i)] = 0;
+			}
 		}
 
 		/// <summary>

@@ -25,6 +25,8 @@ namespace Mosa.HelloWorld.x86
 
 			Console.Clear();
 
+			Console.ScrollRow = 25;
+
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
 			Console.Color = Color.White;
@@ -38,7 +40,7 @@ namespace Mosa.HelloWorld.x86
 			Console.Color = Color.Red;
 			Console.Write("Neptune");
 			Console.Color = Color.Yellow;
-			Console.Write("'                                Copyright 2008-2015");
+			Console.Write("'                                Copyright 2008-2017");
 
 			Console.Color = 0x0F;
 			Console.Write(new String((char)205, 60));
@@ -58,7 +60,6 @@ namespace Mosa.HelloWorld.x86
 			Console.Color = Color.Gray;
 			Console.Write(Multiboot.Flags, 2, 32);
 			Console.WriteLine();
-			Console.WriteLine();
 
 			Console.Color = Color.Green;
 			Console.Write("Size of Memory:   ");
@@ -68,14 +69,12 @@ namespace Mosa.HelloWorld.x86
 			Console.Write(Multiboot.MemoryLower + Multiboot.MemoryUpper, 10, -1);
 			Console.Write(" KB)");
 			Console.WriteLine();
-
-			Console.Color = Color.White;
-			for (uint index = 0; index < 60; index++)
-				Console.Write((char)205);
+			Console.WriteLine();
 
 			Console.WriteLine();
 			Console.Color = Color.Green;
 			Console.Write("Smbios Info: ");
+
 			if (SmbiosManager.IsAvailable)
 			{
 				Console.Color = Color.White;
@@ -94,7 +93,7 @@ namespace Mosa.HelloWorld.x86
 				Console.Color = Color.White;
 				Console.WriteLine();
 
-				BiosInformationStructure biosInformation = new BiosInformationStructure();
+				var biosInformation = new BiosInformationStructure();
 				Console.Color = Color.White;
 				Console.Write("Vendor: ");
 				Console.Color = Color.Gray;
@@ -118,7 +117,7 @@ namespace Mosa.HelloWorld.x86
 				Console.WriteLine();
 				Console.Column = 35;
 
-				CpuStructure cpuStructure = new CpuStructure();
+				var cpuStructure = new CpuStructure();
 				Console.Color = Color.White;
 				Console.Write("Vendor: ");
 				Console.Color = Color.Gray;
@@ -152,12 +151,7 @@ namespace Mosa.HelloWorld.x86
 				Console.Write("No SMBIOS available on this system!");
 			}
 
-			Console.Goto(14, 0);
-
-			Console.Color = 0x0F;
-			for (uint index = 0; index < 60; index++)
-				Console.Write((char)205);
-
+			Console.WriteLine();
 			Console.WriteLine();
 
 			Console.Color = Color.Green;
@@ -180,111 +174,51 @@ namespace Mosa.HelloWorld.x86
 				Console.Write(Multiboot.GetMemoryMapType(index), 16, 1);
 				Console.WriteLine();
 			}
-			Console.WriteLine();
-			Console.WriteLine();
 
-			//CpuInfo cpuInfo = new CpuInfo();
+			Console.Color = Color.Yellow;
+			Console.Goto(24, 29);
+			Console.Write("www.mosa-project.org");
 
-			//#region Vendor
+			// Borders
 
-			//Console.Color = Colors.Green;
-			//Console.Write("Vendor:   ");
-			//Console.Color = Colors.White;
+			Console.Color = Color.White;
 
-			//cpuInfo.PrintVendorString(Console);
-
-			//Console.WriteLine();
-
-			//#endregion Vendor
-
-			//#region Brand
-
-			//Console.Color = Colors.Green;
-			//Console.Write("Brand:    ");
-			//Console.Color = Colors.White;
-			//cpuInfo.PrintBrandString(Console);
-			//Console.WriteLine();
-
-			//#endregion Brand
-
-			//#region Stepping
-
-			//Console.Color = Colors.Green;
-			//Console.Write("Stepping: ");
-			//Console.Color = Colors.White;
-			//Console.Write(cpuInfo.Stepping, 16, 2);
-
-			//#endregion Stepping
-
-			//#region Model
-
-			//Console.Color = Colors.Green;
-			//Console.Write(" Model: ");
-			//Console.Color = Colors.White;
-			//Console.Write(cpuInfo.Model, 16, 2);
-
-			//#endregion Model
-
-			//#region Family
-
-			//Console.Color = Colors.Green;
-			//Console.Write(" Family: ");
-			//Console.Color = Colors.White;
-			//Console.Write(cpuInfo.Family, 16, 2);
-
-			//#endregion Family
-
-			//#region Type
-
-			//Console.Color = Colors.Green;
-			//Console.Write(" Type: ");
-			//Console.Color = Colors.White;
-
-			//Console.Write(cpuInfo.Type, 16, 2);
-			//Console.WriteLine();
-			//Console.Color = Colors.Green;
-			//Console.Write("Cores:    ");
-			//Console.Color = Colors.White;
-			//Console.Write(cpuInfo.NumberOfCores, 16, 2);
-
-			//#endregion Type
-
-			Console.Row = 19;
-			for (uint index = 60; index < 80; index++)
+			for (uint index = 0; index < 60; index++)
 			{
-				Console.Color = Color.White;
-				Console.Column = index;
+				Console.Goto(14, index);
 				Console.Write((char)205);
 			}
 
-			Console.Row = 23;
+			for (uint index = 0; index < 60; index++)
+			{
+				Console.Goto(6, index);
+				Console.Write((char)205);
+			}
+
+			for (uint index = 60; index < 80; index++)
+			{
+				Console.Goto(19, index);
+				Console.Write((char)205);
+			}
+
 			for (uint index = 0; index < 80; index++)
 			{
-				Console.Color = Color.White;
-				Console.Column = index;
+				Console.Goto(23, index);
 				Console.Write((char)205);
 			}
 
 			for (uint index = 2; index < 20; index++)
 			{
-				Console.Column = 60;
-				Console.Row = index;
-
-				Console.Color = Color.White;
+				Console.Goto(index, 60);
 				if (index == 6)
 					Console.Write((char)185);
 				else if (index == 14)
 					Console.Write((char)185);
 				else if (index == 19)
-					Console.Write((char)202);
+					Console.Write((char)200);
 				else
 					Console.Write((char)186);
 			}
-
-			Console.Goto(24, 29);
-			Console.Color = Color.Yellow;
-
-			Console.Write("www.mosa-project.org");
 
 			Console.Goto(12, 0);
 
@@ -328,7 +262,7 @@ namespace Mosa.HelloWorld.x86
 		/// </summary>
 		private static void DisplayTime()
 		{
-			Console.Goto(24, 52);
+			Console.Goto(24, 50);
 			Console.Color = Color.Green;
 			Console.Write("Time: ");
 

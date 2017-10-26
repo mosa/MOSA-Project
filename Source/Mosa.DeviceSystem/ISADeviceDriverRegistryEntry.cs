@@ -2,15 +2,9 @@
 
 namespace Mosa.DeviceSystem
 {
-	public class ISADeviceDriver : IDeviceDriver
+	public class ISADeviceDriverRegistryEntry : DeviceDriverRegistryEntry
 	{
-		public PlatformArchitecture Platforms { get; set; }
-
-		public DeviceBusType BusType { get { return DeviceBusType.ISA; } }
-
-		public string Name { get; set; }
-
-		public InstantiateDevice Factory { get; set; }
+		public override DeviceBusType BusType { get { return DeviceBusType.ISA; } }
 
 		public ushort BasePort { get; set; }
 

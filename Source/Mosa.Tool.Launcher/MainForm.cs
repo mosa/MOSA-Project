@@ -69,6 +69,8 @@ namespace Mosa.Tool.Launcher
 			Options.EmulatorMemoryInMB = (uint)nmMemory.Value;
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
+			Options.IRLongExpansion = cbIRLongExpansion.Checked;
+			Options.TwoPassOptimizations = cbTwoPassOptimizations.Checked;
 
 			if (Options.LaunchMosaDebugger)
 			{
@@ -188,6 +190,8 @@ namespace Mosa.Tool.Launcher
 			cbEmitSymbolTable.Checked = Options.EmitSymbols;
 			cbEmitx86IRQMethods.Checked = Options.Emitx86IRQMethods;
 			tbMode.Text = Options.Width + "x" + Options.Height + "x" + Options.Depth;
+			cbIRLongExpansion.Checked = Options.IRLongExpansion;
+			cbTwoPassOptimizations.Checked = Options.TwoPassOptimizations;
 
 			switch (Options.ImageFormat)
 			{

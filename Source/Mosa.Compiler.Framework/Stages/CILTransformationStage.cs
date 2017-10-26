@@ -842,14 +842,14 @@ namespace Mosa.Compiler.Framework.Stages
 			// Array bounds check
 			AddArrayBoundsCheck(node, array, arrayIndex);
 
-			var arrayAddress = LoadArrayBaseAddress(node, array);
 			var elementOffset = CalculateArrayElementOffset(node, arrayType, arrayIndex);
+			var totalElementOffset = CalculateTotalArrayOffset(node, elementOffset);
 
 			Debug.Assert(elementOffset != null);
 
 			if (MosaTypeLayout.IsStoredOnStack(arrayType.ElementType))
 			{
-				node.SetInstruction(IRInstruction.LoadCompound, result, arrayAddress, elementOffset);
+				node.SetInstruction(IRInstruction.LoadCompound, result, array, totalElementOffset);
 				node.MosaType = arrayType.ElementType;
 			}
 			else
@@ -857,7 +857,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var loadInstruction = GetLoadInstruction(arrayType.ElementType);
 				var size = GetInstructionSize(arrayType.ElementType);
 
-				node.SetInstruction(loadInstruction, size, result, arrayAddress, elementOffset);
+				node.SetInstruction(loadInstruction, size, result, array, totalElementOffset);
 			}
 		}
 
@@ -877,10 +877,10 @@ namespace Mosa.Compiler.Framework.Stages
 			// Array bounds check
 			AddArrayBoundsCheck(node, array, arrayIndex);
 
-			var arrayAddress = LoadArrayBaseAddress(node, array);
 			var elementOffset = CalculateArrayElementOffset(node, arrayType, arrayIndex);
+			var totalElementOffset = CalculateTotalArrayOffset(node, elementOffset);
 
-			node.SetInstruction(IRInstruction.AddSigned, result, arrayAddress, elementOffset);
+			node.SetInstruction(IRInstruction.AddUnsigned, result, array, totalElementOffset);
 		}
 
 		/// <summary>
@@ -1423,12 +1423,12 @@ namespace Mosa.Compiler.Framework.Stages
 			// Array bounds check
 			AddArrayBoundsCheck(node, array, arrayIndex);
 
-			var arrayAddress = LoadArrayBaseAddress(node, array);
 			var elementOffset = CalculateArrayElementOffset(node, arrayType, arrayIndex);
+			var totalElementOffset = CalculateTotalArrayOffset(node, elementOffset);
 
 			if (MosaTypeLayout.IsStoredOnStack(value.Type))
 			{
-				node.SetInstruction(IRInstruction.StoreCompound, null, arrayAddress, elementOffset, value);
+				node.SetInstruction(IRInstruction.StoreCompound, null, array, totalElementOffset, value);
 				node.MosaType = arrayType.ElementType;
 			}
 			else
@@ -1436,7 +1436,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var storeInstruction = GetStoreInstruction(value.Type);
 				var size = GetInstructionSize(arrayType.ElementType);
 
-				node.SetInstruction(storeInstruction, size, null, arrayAddress, elementOffset, value);
+				node.SetInstruction(storeInstruction, size, null, array, totalElementOffset, value);
 			}
 		}
 
@@ -1992,9 +1992,9 @@ namespace Mosa.Compiler.Framework.Stages
 			var elementOffset = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var elementSize = CreateConstant(size);
 
-			var before = new Context(node).InsertBefore();
+			var context = new Context(node).InsertBefore();
 
-			before.AppendInstruction(IRInstruction.MulSigned, elementOffset, index, elementSize);
+			context.AppendInstruction(IRInstruction.MulUnsigned, elementOffset, index, elementSize);
 
 			return elementOffset;
 		}
@@ -2003,17 +2003,17 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Calculates the base of the array elements.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		/// <param name="array">The array.</param>
+		/// <param name="elementOffset">The array.</param>
 		/// <returns>
 		/// Base address for array elements.
 		/// </returns>
-		private Operand LoadArrayBaseAddress(InstructionNode node, Operand array)
+		private Operand CalculateTotalArrayOffset(InstructionNode node, Operand elementOffset)
 		{
 			var fixedOffset = CreateConstant(NativePointerSize * 3);
 			var arrayElement = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			var before = new Context(node).InsertBefore();
-			before.AppendInstruction(IRInstruction.AddSigned, arrayElement, array, fixedOffset);
+			var context = new Context(node).InsertBefore();
+			context.AppendInstruction(IRInstruction.AddUnsigned, arrayElement, elementOffset, fixedOffset);
 
 			return arrayElement;
 		}

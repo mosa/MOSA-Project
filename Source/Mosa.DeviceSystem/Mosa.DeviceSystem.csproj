@@ -87,10 +87,11 @@
     <Compile Include="DeviceStatus.cs" />
     <Compile Include="DeviceX.cs" />
     <Compile Include="HAL.cs" />
+    <Compile Include="DeviceDriverX.cs" />
     <Compile Include="HardwareDevice.cs" />
     <Compile Include="HardwareResources.cs" />
     <Compile Include="IDevice.cs" />
-    <Compile Include="IDeviceDriver.cs" />
+    <Compile Include="DeviceDriverRegistryEntry.cs" />
     <Compile Include="IDMAChannel.cs" />
     <Compile Include="BaseHardwareAbstraction.cs" />
     <Compile Include="IHardwareDevice.cs" />
@@ -101,8 +102,8 @@
     <Compile Include="IOPortRegion.cs" />
     <Compile Include="IOPortResources.cs" />
     <Compile Include="IPCIController.cs" />
-    <Compile Include="IPCIDeviceDriver.cs" />
-    <Compile Include="ISADeviceDriver.cs" />
+    <Compile Include="PCIDeviceDriverRegistryEntry.cs" />
+    <Compile Include="ISADeviceDriverRegistryEntry.cs" />
     <Compile Include="IService.cs" />
     <Compile Include="MemoryRegion.cs" />
     <Compile Include="MemoryResources.cs" />

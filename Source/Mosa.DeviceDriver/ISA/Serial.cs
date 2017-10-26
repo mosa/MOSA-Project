@@ -11,7 +11,7 @@ namespace Mosa.DeviceDriver.ISA
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x02F8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.X86AndX64)]
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x03E8, PortRange = 8, IRQ = 4, Platforms = PlatformArchitecture.X86AndX64)]
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x02E8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.X86AndX64)]
-	public class Serial : HardwareDevice, IDevice, IHardwareDevice, ISerialDevice
+	public class Serial : DeviceDriverX, ISerialDevice
 	{
 		/// <summary>
 		/// Receive Buffer Register (read only)
@@ -133,31 +133,31 @@ namespace Mosa.DeviceDriver.ISA
 		[System.Flags]
 		private enum FCR : byte
 		{
-			/// <summary>
-			///
-			/// </summary>
-			Enabled = 0x01, // FIFO enable.
-
-			/// <summary>
-			///
-			/// </summary>
-			CLR_RCVR = 0x02, // Clear receiver FIFO. This bit is self-clearing.
-
-			/// <summary>
-			///
-			/// </summary>
-			CLR_XMIT = 0x04, // Clear transmitter FIFO. This bit is self-clearing.
-
-			/// <summary>
-			///
-			/// </summary>
-			DMA = 0x08, // DMA mode
-
 			// Receiver FIFO trigger level
 			/// <summary>
 			///
 			/// </summary>
 			TL1 = 0x00,
+
+			/// <summary>
+			///
+			/// </summary>
+			Enabled = 0x01,
+
+			/// <summary>
+			///
+			/// </summary>
+			CLR_RCVR = 0x02,
+
+			/// <summary>
+			///
+			/// </summary>
+			CLR_XMIT = 0x04,
+
+			/// <summary>
+			///
+			/// </summary>
+			DMA = 0x08,
 
 			/// <summary>
 			///
@@ -172,7 +172,7 @@ namespace Mosa.DeviceDriver.ISA
 			/// <summary>
 			///
 			/// </summary>
-			TL14 = 0xC0,
+			TL14 = 0xC0
 		}
 
 		/// <summary>
@@ -185,59 +185,59 @@ namespace Mosa.DeviceDriver.ISA
 			/// <summary>
 			///
 			/// </summary>
-			CS5 = 0x00, // 5bits
-
-			/// <summary>
-			///
-			/// </summary>
-			CS6 = 0x01, // 6bits
-
-			/// <summary>
-			///
-			/// </summary>
-			CS7 = 0x02, // 7bits
-
-			/// <summary>
-			///
-			/// </summary>
-			CS8 = 0x03, // 8bits
+			CS5 = 0x00,
 
 			// Stop bit
 			/// <summary>
 			///
 			/// </summary>
-			ST1 = 0x00, // 1
-
-			/// <summary>
-			///
-			/// </summary>
-			ST2 = 0x04, // 2
+			ST1 = 0x00,
 
 			// Parity
 			/// <summary>
 			///
 			/// </summary>
-			PNO = 0x00, // None
+			PNO = 0x00,
 
 			/// <summary>
 			///
 			/// </summary>
-			POD = 0x08, // Odd
+			CS6 = 0x01,
 
 			/// <summary>
 			///
 			/// </summary>
-			PEV = 0x18, // Even
+			CS7 = 0x02,
 
 			/// <summary>
 			///
 			/// </summary>
-			PMK = 0x28, // Mark
+			CS8 = 0x03,
 
 			/// <summary>
 			///
 			/// </summary>
-			PSP = 0x38, // Space
+			ST2 = 0x04,
+
+			/// <summary>
+			///
+			/// </summary>
+			POD = 0x08,
+
+			/// <summary>
+			///
+			/// </summary>
+			PEV = 0x18,
+
+			/// <summary>
+			///
+			/// </summary>
+			PMK = 0x28,
+
+			/// <summary>
+			///
+			/// </summary>
+			PSP = 0x38,
 
 			/// <summary>
 			///
@@ -247,7 +247,7 @@ namespace Mosa.DeviceDriver.ISA
 			/// <summary>
 			///
 			/// </summary>
-			DLAB = 0x80,
+			DLAB = 0x80
 		}
 
 		/// <summary>
@@ -374,50 +374,51 @@ namespace Mosa.DeviceDriver.ISA
 		#endregion Flags
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Serial"/> class.
+		/// Initializes this device.
 		/// </summary>
-		public Serial()
+		protected override void Initialize()
 		{
-		}
+			Device.Name = "COM_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-		/// <summary>
-		/// Setups this hardware device driver
-		/// </summary>
-		/// <returns></returns>
-		public override bool Setup(HardwareResources hardwareResources)
-		{
-			this.HardwareResources = hardwareResources;
-			base.Name = "COM_0x" + base.HardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
-
-			rbrBase = base.HardwareResources.GetIOPortReadWrite(0, 0); // Receive Buffer Register (read only)
-			thrBase = base.HardwareResources.GetIOPortWrite(0, 0); // Transmitter Holding Register (write only)
-			ierBase = base.HardwareResources.GetIOPortReadWrite(0, 1); // Interrupt Enable Register
-			dllBase = base.HardwareResources.GetIOPortReadWrite(0, 0); // Divisor Latch (LSB and MSB)
-			dlmBase = base.HardwareResources.GetIOPortReadWrite(0, 1);
-			iirBase = base.HardwareResources.GetIOPortReadWrite(0, 2); // Interrupt Identification Register (read only)
-			fcrBase = base.HardwareResources.GetIOPortWrite(0, 2); // FIFO Control Register (write only, 16550+ only)
-			lcrBase = base.HardwareResources.GetIOPortReadWrite(0, 3); // Line Control Register
-			mcrBase = base.HardwareResources.GetIOPortReadWrite(0, 4); // Modem Control Register
-			lsrBase = base.HardwareResources.GetIOPortReadWrite(0, 5); // Line Status Register
-			msrBase = base.HardwareResources.GetIOPortReadWrite(0, 6); // Modem Status Register
-			scrBase = base.HardwareResources.GetIOPortReadWrite(0, 7); // Scratch Register (16450+ and some 8250s, special use with some boards)
+			rbrBase = Device.Resources.GetIOPortReadWrite(0, 0); // Receive Buffer Register (read only)
+			thrBase = Device.Resources.GetIOPortWrite(0, 0); // Transmitter Holding Register (write only)
+			ierBase = Device.Resources.GetIOPortReadWrite(0, 1); // Interrupt Enable Register
+			dllBase = Device.Resources.GetIOPortReadWrite(0, 0); // Divisor Latch (LSB and MSB)
+			dlmBase = Device.Resources.GetIOPortReadWrite(0, 1);
+			iirBase = Device.Resources.GetIOPortReadWrite(0, 2); // Interrupt Identification Register (read only)
+			fcrBase = Device.Resources.GetIOPortWrite(0, 2); // FIFO Control Register (write only, 16550+ only)
+			lcrBase = Device.Resources.GetIOPortReadWrite(0, 3); // Line Control Register
+			mcrBase = Device.Resources.GetIOPortReadWrite(0, 4); // Modem Control Register
+			lsrBase = Device.Resources.GetIOPortReadWrite(0, 5); // Line Status Register
+			msrBase = Device.Resources.GetIOPortReadWrite(0, 6); // Modem Status Register
+			scrBase = Device.Resources.GetIOPortReadWrite(0, 7); // Scratch Register (16450+ and some 8250s, special use with some boards)
 
 			fifoBuffer = new byte[fifoSize];
 			fifoStart = 0;
 			fifoEnd = 0;
+		}
 
-			base.DeviceStatus = DeviceStatus.Online;
-			return true;
+		/// <summary>
+		/// Probes this instance.
+		/// </summary>
+		/// <remarks>
+		/// Overide for ISA devices, if example
+		/// </remarks>
+		public override void Probe()
+		{
+			//TODO: auto detect - otherwise just assume one is there
+			//TODO: could use BIOS to help w/ detection; 0x0400-x0403 supply base address for COM1-4
+
+			Device.Status = DeviceStatus.Available;
 		}
 
 		/// <summary>
 		/// Starts this hardware device.
 		/// </summary>
-		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
+		public override void Start()
 		{
-			//TODO: auto detect - otherwise just assume one is there
-			//TODO: could use BIOS to help w/ detection; 0x0400-x0403 supply base address for COM1-4
+			if (Device.Status != DeviceStatus.Available)
+				return;
 
 			// Disable all UART interrupts
 			ierBase.Write8(0x00);
@@ -426,8 +427,8 @@ namespace Mosa.DeviceDriver.ISA
 			lcrBase.Write8((byte)LCR.DLAB);
 
 			// Set Baud rate
-			int baudRate = 115200;
-			int divisor = 115200 / baudRate;
+			const int baudRate = 115200;
+			const int divisor = 115200 / baudRate;
 			dllBase.Write8((byte)(divisor & 0xFF));
 			dlmBase.Write8((byte)(divisor >> 8 & 0xFF));
 
@@ -443,7 +444,7 @@ namespace Mosa.DeviceDriver.ISA
 			// Interrupt when data received
 			ierBase.Write8((byte)IER.DR);
 
-			return DeviceDriverStartStatus.Started;
+			Device.Status = DeviceStatus.Online;
 		}
 
 		/// <summary>
@@ -501,7 +502,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// </returns>
 		protected bool IsFIFODataAvailable()
 		{
-			return (fifoEnd != fifoStart);
+			return fifoEnd != fifoStart;
 		}
 
 		/// <summary>
@@ -526,7 +527,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// </returns>
 		protected bool CanTransmit()
 		{
-			return ((lsrBase.Read8() & (byte)LSR.THRE) != 0);
+			return (lsrBase.Read8() & (byte)LSR.THRE) != 0;
 		}
 
 		/// <summary>
@@ -571,8 +572,12 @@ namespace Mosa.DeviceDriver.ISA
 				spinLock.Enter();
 
 				if (!IsFIFOFull())
+				{
 					while (CanRead())
+					{
 						AddToFIFO(rbrBase.Read8());
+					}
+				}
 			}
 			finally
 			{
