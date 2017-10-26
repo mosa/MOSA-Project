@@ -2003,7 +2003,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Calculates the base of the array elements.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		/// <param name="array">The array.</param>
+		/// <param name="elementOffset">The array.</param>
 		/// <returns>
 		/// Base address for array elements.
 		/// </returns>
