@@ -152,50 +152,80 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			var result = node.Result;
-			var operand1 = node.Operand1;
-			var operand2 = node.Operand2;
+			var location = node.Operand1;
+			var offset = node.Operand2;
 
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			var context = new Context(node);
 
-			if (operand2.IsConstant && !operand2.IsLong && !operand1.IsLong)
+			if (offset.IsConstant && !offset.IsLong && !location.IsLong)
 			{
-				var target4 = CreateConstant((uint)(operand2.ConstantUnsignedLongInteger + 4));
+				var offset4 = CreateConstant(offset.ConstantUnsignedLongInteger + 4u);
 
-				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, operand1, operand2);
-				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, operand1, target4);
+				context.SetInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, location, offset);
+				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, location, offset4);
 				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 				return;
 			}
 
-			if (operand2.IsConstant && !operand2.IsLong && operand1.IsLong)
+			if (offset.IsConstant && !offset.IsLong && location.IsLong)
 			{
-				var target4 = CreateConstant((uint)(operand2.ConstantUnsignedLongInteger + 4));
+				var offset4 = CreateConstant(offset.ConstantUnsignedLongInteger + 4u);
 
 				var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
-				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, op0Low, operand2);
-				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, op0Low, target4);
+				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, location);
+				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, op0Low, offset);
+				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, op0Low, offset4);
+				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+				return;
+			}
+
+			if (offset.IsVirtualRegister && !offset.IsLong && !location.IsLong)
+			{
+				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+				context.SetInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, location, offset);
+				context.AppendInstruction(IRInstruction.AddUnsigned, offset4, offset, CreateConstant(4u));
+				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, location, offset4);
+				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+				return;
+			}
+
+			if (offset.IsVirtualRegister && !offset.IsLong && location.IsLong)
+			{
+				var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, location);
+				context.AppendInstruction(IRInstruction.AddUnsigned, offset4, offset, CreateConstant(4u));
+				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, op0Low, offset);
+				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, op0Low, offset4);
+				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+				return;
+			}
+
+			if (offset.IsConstant && offset.IsLong && !location.IsLong)
+			{
+				var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, offset);
+				context.AppendInstruction(IRInstruction.AddUnsigned, offset4, op0Low, CreateConstant(4u));
+				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, location, op0Low);
+				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, location, offset4);
 				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 				return;
 			}
 
 			return;
-			//else
-			//{
-			//	Operand target4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			//	var contant4 = Operand.CreateConstant(TypeSystem.BuiltIn.I4, 4);
-
-			//	context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand2);
-			//	context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, operand1, op0Low);
-			//	context.AppendInstruction(IRInstruction.AddSigned, InstructionSize.Size32, target4, op0Low, contant4);
-			//	context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, operand1, target4);
-			//	context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
-			//}
 		}
 	}
 }
