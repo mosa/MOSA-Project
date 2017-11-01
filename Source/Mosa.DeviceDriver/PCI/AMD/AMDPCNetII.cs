@@ -17,7 +17,7 @@ namespace Mosa.DeviceDriver.PCI.AMD
 	//[DeviceDriverPhysicalMemory(MemorySize = 80 * 4, MemoryAlignment = 16, RestrictUnder4G = true)]
 	//[DeviceDriverPhysicalMemory(MemorySize = 80 * 4, MemoryAlignment = 16, RestrictUnder4G = true)]
 	//[DeviceDriverPhysicalMemory(MemorySize = 2048 * 32, MemoryAlignment = 1, RestrictUnder4G = true)]
-	public class AMDPCNet : HardwareDevice, INetworkDevice
+	public class AMDPCNet : DeviceSystem.DeviceDriver, INetworkDevice
 	{
 		#region Memory and Ports
 
@@ -93,33 +93,20 @@ namespace Mosa.DeviceDriver.PCI.AMD
 
 		#endregion Memory and Ports
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AMDPCNet"/> class.
-		/// </summary>
-		public AMDPCNet()
+		protected override void Initialize()
 		{
-		}
+			Device.Name = "AMDPCNet_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-		/// <summary>
-		/// Setups this hardware device driver
-		/// </summary>
-		/// <param name="hardwareResources"></param>
-		/// <returns></returns>
-		public override bool Setup(HardwareResources hardwareResources)
-		{
-			this.HardwareResources = hardwareResources;
-			base.Name = "AMDPCNet_0x" + hardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+			ioProm1 = Device.Resources.GetIOPortReadWrite(0, 0x0);
+			ioProm4 = Device.Resources.GetIOPortReadWrite(0, 0x4);
+			rdp = Device.Resources.GetIOPortReadWrite(0, 0x10);
+			rap = Device.Resources.GetIOPortReadWrite(0, 0x14);
+			bdp = Device.Resources.GetIOPortReadWrite(0, 0x1C);
 
-			ioProm1 = hardwareResources.GetIOPortReadWrite(0, 0x0);
-			ioProm4 = hardwareResources.GetIOPortReadWrite(0, 0x4);
-			rdp = hardwareResources.GetIOPortReadWrite(0, 0x10);
-			rap = hardwareResources.GetIOPortReadWrite(0, 0x14);
-			bdp = hardwareResources.GetIOPortReadWrite(0, 0x1C);
-
-			initBlock = hardwareResources.GetMemory(0);
-			txDescriptor = hardwareResources.GetMemory(1);
-			rxDescriptor = hardwareResources.GetMemory(2);
-			buffers = hardwareResources.GetMemory(3);
+			initBlock = Device.Resources.GetMemory(0);
+			txDescriptor = Device.Resources.GetMemory(1);
+			rxDescriptor = Device.Resources.GetMemory(2);
+			buffers = Device.Resources.GetMemory(3);
 
 			bufferSize = 2048;
 			uint len = (ushort)(~bufferSize);
@@ -136,18 +123,15 @@ namespace Mosa.DeviceDriver.PCI.AMD
 			}
 
 			nextTXDesc = 0;
-
-			return true;
 		}
 
-		/// <summary>
-		/// Starts this hardware device.
-		/// </summary>
-		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
+		public override void Start()
 		{
+			if (Device.Status != DeviceStatus.Available)
+				return;
+
 			// Enable the card
-			HardwareResources.DeviceResource.EnableDevice();
+			//HardwareResources.DeviceResource.EnableDevice(); // TODO
 
 			// Do a 32-bit write to set 32-bit mode
 			rdp.Write32(0);
@@ -182,7 +166,7 @@ namespace Mosa.DeviceDriver.PCI.AMD
 
 			nextTXDesc = 0;
 
-			return DeviceDriverStartStatus.Started;
+			Device.Status = DeviceStatus.Online;
 		}
 
 		/// <summary>

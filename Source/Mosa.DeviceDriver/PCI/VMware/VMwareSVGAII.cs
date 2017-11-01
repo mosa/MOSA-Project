@@ -16,7 +16,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 	/// VMware SVGA II Device Driver
 	/// </summary>
 	//[PCIDeviceDriver(VendorID = 0x15AD, DeviceID = 0x0405, Platforms = PlatformArchitecture.X86AndX64)]
-	public class VMwareSVGAII : HardwareDevice, IPixelGraphicsDevice
+	public class VMwareSVGAII : DeviceSystem.DeviceDriver, IPixelGraphicsDevice
 	{
 		#region Definitions
 
@@ -240,38 +240,21 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		/// </summary>
 		protected const uint FifoNumRegs = 32 + 255 + 1 + 1 + 1;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="VMwareSVGAII"/> class.
-		/// </summary>
-		public VMwareSVGAII()
+		protected override void Initialize()
 		{
+			Device.Name = "VMWARE_SVGA_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+
+			indexPort = Device.Resources.GetIOPortReadWrite(0, 0);
+			valuePort = Device.Resources.GetIOPortReadWrite(0, 1);
+			memory = Device.Resources.GetMemory(0);
+			fifo = Device.Resources.GetMemory(1);
 		}
 
-		/// <summary>
-		/// Setups this hardware device driver
-		/// </summary>
-		/// <returns></returns>
-		public override bool Setup(HardwareResources hardwareResources)
+		public override void Start()
 		{
-			this.HardwareResources = hardwareResources;
-			base.Name = "VMWARE_SVGA_0x" + hardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+			if (Device.Status != DeviceStatus.Available)
+				return;
 
-			indexPort = hardwareResources.GetIOPortReadWrite(0, 0);
-			valuePort = hardwareResources.GetIOPortReadWrite(0, 1);
-			HAL.DebugWrite("**G**");
-			memory = base.HardwareResources.GetMemory(0);
-			HAL.DebugWrite("**I**");
-			fifo = base.HardwareResources.GetMemory(1);
-			HAL.DebugWrite("**J**");
-			return true;
-		}
-
-		/// <summary>
-		/// Starts this hardware device.
-		/// </summary>
-		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
-		{
 			videoRamSize = ReadRegister(Register.VRamSize);
 			maxWidth = ReadRegister(Register.MaxWidth);
 			maxHeight = ReadRegister(Register.MaxHeight);
@@ -305,15 +288,9 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 			SetMode(640, 480);
 
-			base.DeviceStatus = DeviceStatus.Online;
-
-			return DeviceDriverStartStatus.Started;
+			Device.Status = DeviceStatus.Online;
 		}
 
-		/// <summary>
-		/// Called when an interrupt is received.
-		/// </summary>
-		/// <returns></returns>
 		public override bool OnInterrupt()
 		{
 			return false;

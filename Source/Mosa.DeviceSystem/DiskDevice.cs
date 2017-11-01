@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Disk Device
 	/// </summary>
-	public class DiskDevice : Device, IDiskDevice
+	public class DiskDevice : DeviceSystem.DeviceDriver, IDiskDevice
 	{
 		/// <summary>
 		/// The disk controller
@@ -45,25 +45,49 @@ namespace Mosa.DeviceSystem
 		/// <value>The size of the block.</value>
 		public uint BlockSize { get { return diskController.GetSectorSize(driveNbr); } }
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DiskDevice"/> class.
-		/// </summary>
-		/// <param name="diskController">The disk controller.</param>
-		/// <param name="driveNbr">The drive number.</param>
-		/// <param name="readOnly">if set to <c>true</c> [read only].</param>
-		public DiskDevice(IDiskControllerDevice diskController, uint driveNbr, bool readOnly)
+		public DiskDevice(uint driveNbr, bool readOnly)
 		{
-			base.Parent = diskController as Device;
-			base.Name = base.Parent.Name + "/Disk" + driveNbr.ToString();
-			base.DeviceStatus = DeviceStatus.Online;
-			totalSectors = diskController.GetTotalSectors(driveNbr);
-			this.diskController = diskController;
 			this.driveNbr = driveNbr;
+			this.readOnly = readOnly;
+		}
 
-			if (readOnly)
-				this.readOnly = true;
-			else
-				this.readOnly = this.diskController.CanWrite(driveNbr);
+		public override void Setup(Device device)
+		{
+			Device = device;
+			Device.Name = Device.Parent.Name + "/Disk" + driveNbr.ToString();
+
+			Device.Status = DeviceStatus.Initializing;
+
+			Initialize();
+		}
+
+		protected override void Initialize()
+		{
+			if (Device.Status == DeviceStatus.Online)
+				return;
+
+			diskController = Device.Parent as IDiskControllerDevice;
+
+			if (diskController == null)
+			{
+				Device.Status = DeviceStatus.Error;
+				return;
+			}
+
+			Device.Status = DeviceStatus.Available;
+		}
+
+		public override void Start()
+		{
+			if (Device.Status != DeviceStatus.Available)
+				return;
+
+			totalSectors = diskController.GetTotalSectors(driveNbr);
+
+			if (!readOnly)
+				readOnly = diskController.CanWrite(driveNbr);
+
+			Device.Status = DeviceStatus.Online;
 		}
 
 		/// <summary>

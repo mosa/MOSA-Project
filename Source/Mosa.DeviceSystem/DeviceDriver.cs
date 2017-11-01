@@ -1,21 +1,19 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem.PCI;
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
 	/// Abstract class for hardware devices
 	/// </summary>
-	public abstract class DeviceDriverX
+	public abstract class DeviceDriver
 	{
-		protected DeviceX Device;
+		protected Device Device;
 
 		/// <summary>
 		/// Sets up the this device.
 		/// </summary>
 		/// <param name="device">The device.</param>
-		public virtual void Setup(DeviceX device)
+		public virtual void Setup(Device device)
 		{
 			this.Device = device;
 			Device.Status = DeviceStatus.Initializing;
@@ -59,6 +57,9 @@ namespace Mosa.DeviceSystem
 		/// Called when an interrupt is received.
 		/// </summary>
 		/// <returns></returns>
-		public abstract bool OnInterrupt();
+		public virtual bool OnInterrupt()
+		{
+			return false;
+		}
 	}
 }

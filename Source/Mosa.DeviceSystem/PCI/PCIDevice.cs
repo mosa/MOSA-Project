@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem.PCI
 	/// <summary>
 	/// PCI Device
 	/// </summary>
-	public class PCIDevice : Device, IDevice, IPCIDevice, IPCIDeviceResource
+	public class PCIDevice : Device, IPCIDevice, IPCIDeviceResource
 	{
 		#region PCICommand
 

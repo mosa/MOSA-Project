@@ -8,7 +8,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// VGA Text Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.X86AndX64)]
-	public class VGAText : DeviceDriverX, ITextDevice
+	public class VGAText : DeviceSystem.DeviceDriver, ITextDevice
 	{
 		#region Definitions
 

@@ -12,7 +12,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// The devices
 		/// </summary>
-		private readonly List<IDevice> devices;
+		private readonly List<Device> devices;
 
 		/// <summary>
 		/// The spin lock
@@ -24,17 +24,23 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public DeviceManager()
 		{
-			devices = new List<IDevice>();
+			devices = new List<Device>();
 		}
 
 		/// <summary>
 		/// Adds the specified device.
 		/// </summary>
 		/// <param name="device">The device.</param>
-		public void Add(IDevice device)
+		public void Add(Device device)
 		{
 			spinLock.Enter();
 			devices.Add(device);
+
+			if (device.Parent != null)
+			{
+				device.Parent.Children.Add(device);
+			}
+
 			spinLock.Exit();
 		}
 
@@ -43,17 +49,17 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public List<IDevice> GetDevices<T>()
+		public List<T> GetDeviceServices<T>() /*where T : IService*/
 		{
 			spinLock.Enter();
 
-			var list = new List<IDevice>();
+			var list = new List<T>();
 
 			foreach (var device in devices)
 			{
-				if (device is T)
+				if (device.Service is T)
 				{
-					list.Add(device);
+					list.Add((T)device.Service);
 				}
 			}
 
@@ -62,17 +68,17 @@ namespace Mosa.DeviceSystem
 			return list;
 		}
 
-		public List<IDevice> GetDevices<T>(DeviceStatus status)
+		public List<T> GetDeviceServices<T>(DeviceStatus status) /*where T : IService*/
 		{
 			spinLock.Enter();
 
-			var list = new List<IDevice>();
+			var list = new List<T>();
 
 			foreach (var device in devices)
 			{
-				if (device.DeviceStatus == status && device is T)
+				if (device.Status == status && device.Service is T)
 				{
-					list.Add(device);
+					list.Add((T)device.Service);
 				}
 			}
 
@@ -86,11 +92,11 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public List<IDevice> GetDevices(string name)
+		public List<Device> GetDevices(string name)
 		{
 			spinLock.Enter();
 
-			var list = new List<IDevice>();
+			var list = new List<Device>();
 
 			foreach (var device in devices)
 			{
@@ -110,18 +116,15 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="parent">The parent.</param>
 		/// <returns></returns>
-		public List<IDevice> GetChildrenOf(IDevice parent)
+		public List<Device> GetChildrenOf(Device parent)
 		{
 			spinLock.Enter();
 
-			var list = new List<IDevice>();
+			var list = new List<Device>();
 
-			foreach (var device in devices)
+			foreach (var device in parent.Children)
 			{
-				if (device.Parent == parent)
-				{
-					list.Add(device);
-				}
+				list.Add(device);
 			}
 
 			spinLock.Exit();
@@ -133,11 +136,11 @@ namespace Mosa.DeviceSystem
 		/// Gets all devices.
 		/// </summary>
 		/// <returns></returns>
-		public List<IDevice> GetAllDevices()
+		public List<Device> GetAllDevices()
 		{
 			spinLock.Enter();
 
-			var list = new List<IDevice>();
+			var list = new List<Device>();
 
 			foreach (var device in devices)
 			{

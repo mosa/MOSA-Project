@@ -77,20 +77,16 @@
     </Compile>
     <Compile Include="CHS.cs" />
     <Compile Include="DataBlock.cs" />
-    <Compile Include="Device.cs" />
     <Compile Include="DeviceBusType.cs" />
     <Compile Include="DeviceDriverPhysicalMemory.cs" />
     <Compile Include="DeviceDriverRegistry.cs" />
     <Compile Include="DeviceDriverStartStatus.cs" />
     <Compile Include="DeviceManager.cs" />
-    <Compile Include="DeviceManagerX.cs" />
     <Compile Include="DeviceStatus.cs" />
-    <Compile Include="DeviceX.cs" />
+    <Compile Include="Device.cs" />
     <Compile Include="HAL.cs" />
-    <Compile Include="DeviceDriverX.cs" />
-    <Compile Include="HardwareDevice.cs" />
+    <Compile Include="DeviceDriver.cs" />
     <Compile Include="HardwareResources.cs" />
-    <Compile Include="IDevice.cs" />
     <Compile Include="DeviceDriverRegistryEntry.cs" />
     <Compile Include="IDMAChannel.cs" />
     <Compile Include="BaseHardwareAbstraction.cs" />
