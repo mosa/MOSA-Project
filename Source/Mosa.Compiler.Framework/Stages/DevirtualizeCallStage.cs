@@ -44,10 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var operands = node.GetOperands();
 			operands.RemoveAt(0);
 
-			if (trace.Active)
-			{
-				trace.Log("De-virtualize: " + method);
-			}
+			if (trace.Active) trace.Log("De-virtualize: " + method);
 
 			devirtualizedCount++;
 

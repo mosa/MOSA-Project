@@ -66,6 +66,8 @@ namespace Mosa.UnitTest.Engine
 				EnableIROptimizations = true,
 				EnableSparseConditionalConstantPropagation = true,
 				EnableInlinedMethods = true,
+				IRLongExpansion = true,
+				TwoPassOptimizations = true,
 
 				Emulator = EmulatorType.Qemu,
 				ImageFormat = ImageFormat.IMG,
@@ -95,7 +97,6 @@ namespace Mosa.UnitTest.Engine
 				GenerateASMFile = false,
 				GenerateMapFile = false,
 				GenerateDebugFile = false,
-				IRLongExpansion = true
 
 				//BootLoaderImage = @"..\Tests\BootImage\Mosa.BootLoader.x86.img"
 			};
