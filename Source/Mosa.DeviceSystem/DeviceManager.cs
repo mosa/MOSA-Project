@@ -27,11 +27,28 @@ namespace Mosa.DeviceSystem
 			devices = new List<Device>();
 		}
 
+		public void Add(DeviceDriverRegistryEntry driver, Device parent, IDeviceConfiguration configuration, HardwareResources resources)
+		{
+			var device = new Device()
+			{
+				Driver = driver,
+				Status = DeviceStatus.Initializing,
+				Parent = parent,
+				Configuration = configuration,
+				Resources = resources
+			};
+
+			//public string Name { get; set; }
+			//public DeviceDriverRegistryEntry Driver { get; set; }
+			//public IService Service { get; set; }
+			//public List<Device> Children { get; } = new List<Device>();
+		}
+
 		/// <summary>
 		/// Adds the specified device.
 		/// </summary>
 		/// <param name="device">The device.</param>
-		public void Add(Device device)
+		public void AddX(Device device)
 		{
 			spinLock.Enter();
 			devices.Add(device);

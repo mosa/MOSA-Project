@@ -16,5 +16,6 @@ namespace Mosa.DeviceSystem
 		public Device Parent { get; set; }
 		public List<Device> Children { get; } = new List<Device>();
 		public HardwareResources Resources;
+		public IDeviceConfiguration Configuration;
 	}
 }
