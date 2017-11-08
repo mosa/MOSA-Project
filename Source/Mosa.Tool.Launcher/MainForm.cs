@@ -6,6 +6,7 @@ using Mosa.Compiler.Common;
 using Mosa.Utility.BootImage;
 using Mosa.Utility.Launcher;
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
@@ -30,6 +31,23 @@ namespace Mosa.Tool.Launcher
 			}
 		}
 
+		private BindingList<IncludedEntry> includedEntries = new BindingList<IncludedEntry>();
+
+		private class IncludedEntry
+		{
+			[Browsable(false)]
+			public IncludeFile IncludeFile { get; }
+
+			public int Size { get { return IncludeFile.Length; } }
+			public string Destination { get { return IncludeFile.Filename; } }
+			public string Source { get { return IncludeFile.SourceFileName; } }
+
+			public IncludedEntry(IncludeFile file)
+			{
+				IncludeFile = file;
+			}
+		}
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -40,6 +58,11 @@ namespace Mosa.Tool.Launcher
 			AppLocations.FindApplications();
 
 			Builder = new Builder(Options, AppLocations, this);
+
+			dataGridView1.DataSource = includedEntries;
+			dataGridView1.AutoResizeColumns();
+			dataGridView1.Columns[1].Width = 175;
+			dataGridView1.Columns[2].Width = 500;
 		}
 
 		private void UpdateInterfaceAppLocations()
@@ -166,6 +189,13 @@ namespace Mosa.Tool.Launcher
 				case 2: Options.BootLoader = BootLoader.Grub_0_97; break;
 				case 3: Options.BootLoader = BootLoader.Grub_2_00; break;
 				default: break;
+			}
+
+			Options.IncludeFiles.Clear();
+
+			foreach (var entry in includedEntries)
+			{
+				Options.IncludeFiles.Add(entry.IncludeFile);
 			}
 		}
 
@@ -334,9 +364,9 @@ namespace Mosa.Tool.Launcher
 		{
 			tbApplicationLocations.SelectedTab = tabOptions;
 
-			foreach (IncludeFile file in Options.IncludeFiles)
+			foreach (var includeFile in Options.IncludeFiles)
 			{
-				AddAdditionalFile(file);
+				includedEntries.Add(new IncludedEntry(includeFile));
 			}
 		}
 
@@ -458,13 +488,6 @@ namespace Mosa.Tool.Launcher
 			tbMode.Enabled = cbVBEVideo.Checked;
 		}
 
-		private void AddAdditionalFile(IncludeFile file)
-		{
-			int idx = additionalFilesList.Rows.Add(file.Filename, file.Content.Length.ToString());
-
-			additionalFilesList.Rows[idx].Tag = file;
-		}
-
 		private void BtnAddFiles_Click(object sender, EventArgs e)
 		{
 			using (var open = new OpenFileDialog())
@@ -478,9 +501,7 @@ namespace Mosa.Tool.Launcher
 					{
 						var includeFile = new IncludeFile(file, Path.GetFileName(file));
 
-						Options.IncludeFiles.Add(includeFile);
-
-						AddAdditionalFile(includeFile);
+						includedEntries.Add(new IncludedEntry(includeFile));
 					}
 				}
 			}
@@ -488,14 +509,9 @@ namespace Mosa.Tool.Launcher
 
 		private void BtnRemoveFiles_Click(object sender, EventArgs e)
 		{
-			if (additionalFilesList.SelectedRows.Count == 0)
-				return;
-
-			foreach (DataGridViewRow item in additionalFilesList.SelectedRows)
+			while (dataGridView1.SelectedRows.Count > 0)
 			{
-				Options.IncludeFiles.Remove((IncludeFile)item.Tag);
-
-				additionalFilesList.Rows.RemoveAt(item.Index);
+				dataGridView1.Rows.RemoveAt(dataGridView1.SelectedRows[0].Index);
 			}
 		}
 
