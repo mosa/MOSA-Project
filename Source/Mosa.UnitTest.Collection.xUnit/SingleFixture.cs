@@ -50,7 +50,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 
 		//[Theory]
 		//[ExpectedException(typeof(DivideByZeroException))]
-		public void DivR4R4DivideByZeroException(float a)
+		private void DivR4R4DivideByZeroException(float a)
 		{
 			Run<float>("Mosa.UnitTest.Collection.SingleTests.DivR4R4", (float)0, a, (float)0);
 		}
@@ -58,7 +58,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		// TinySimulator can't simulate this.
 		//[Theory]
 		//[MemberData(nameof(R4R4), DisableDiscoveryEnumeration = true)]
-		public void RemR4R4(float a, float b)
+		private void RemR4R4(float a, float b)
 		{
 			if (a == int.MinValue && b == -1)
 			{
@@ -76,7 +76,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 
 		//[Theory]
 		//[ExpectedException(typeof(DivideByZeroException))]
-		public void RemI4I4DivideByZeroException(int a)
+		private void RemI4I4DivideByZeroException(int a)
 		{
 			Run<float>("Mosa.UnitTest.Collection.SingleTests.RemR4R4", (float)0, a, (float)0);
 		}
@@ -159,7 +159,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 
 		//[Theory]
 		//[MemberData(nameof(R4), DisableDiscoveryEnumeration = true)]
-		public void IsNaN(float value)
+		private void IsNaN(float value)
 		{
 			Assert.Equal(SingleTests.IsNaN(value), Run<bool>("Mosa.UnitTest.Collection.SingleTests.IsNaN", value));
 		}

@@ -41,7 +41,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 
 		//[Theory]
 		//[ExpectedException(typeof(DivideByZeroException))]
-		public void DivI1I1DivideByZeroException(sbyte a)
+		private void DivI1I1DivideByZeroException(sbyte a)
 		{
 			Assert.Equal(Int8Tests.DivI1I1(a, 0), Run<int>("Mosa.UnitTest.Collection.Int8Tests.DivI1I1", a, (sbyte)0));
 		}

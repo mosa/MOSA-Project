@@ -41,7 +41,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 
 		//[Theory]
 		//[ExpectedException(typeof(DivideByZeroException))]
-		public void DivU8U8DivideByZeroException(ulong a)
+		private void DivU8U8DivideByZeroException(ulong a)
 		{
 			Assert.Equal(UInt64Tests.DivU8U8(a, 0), Run<ulong>("Mosa.UnitTest.Collection.UInt64Tests.DivU8U8", a, (ulong)0));
 		}
@@ -60,7 +60,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 
 		//[Theory]
 		//[ExpectedException(typeof(DivideByZeroException))]
-		public void RemU8U8DivideByZeroException(ulong a)
+		private void RemU8U8DivideByZeroException(ulong a)
 		{
 			Assert.Equal(UInt64Tests.RemU8U8(a, 0), Run<ulong>("Mosa.UnitTest.Collection.UInt64Tests.RemU8U8", a, (ulong)0));
 		}

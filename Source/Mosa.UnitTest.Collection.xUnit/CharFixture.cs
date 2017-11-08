@@ -40,7 +40,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		//[Theory]
-		public void DivCCDivideByZeroException(char a)
+		private void DivCCDivideByZeroException(char a)
 		{
 			Assert.Equal(CharTests.DivCC(a, (char)0), Run<int>("Mosa.UnitTest.Collection.CharTests.DivCC", a, (char)0));
 		}
@@ -58,7 +58,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		//[Theory]
-		public void RemCCDivideByZeroException(char a, char b)
+		private void RemCCDivideByZeroException(char a, char b)
 		{
 			Assert.Equal(CharTests.RemCC(a, (char)0), Run<int>("Mosa.UnitTest.Collection.CharTests.RemCC", a, (char)0));
 		}

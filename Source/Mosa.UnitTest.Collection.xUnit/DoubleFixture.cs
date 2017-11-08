@@ -50,7 +50,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 
 		//[Theory]
 		//[ExpectedException(typeof(DivideByZeroException))]
-		public void DivR8R8DivideByZeroException(double a)
+		private void DivR8R8DivideByZeroException(double a)
 		{
 			Run<double>("Mosa.UnitTest.Collection.DoubleTests.DivR8R8", (double)0, a, (double)0);
 		}
@@ -75,7 +75,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 
 		//[Theory]
 		//[ExpectedException(typeof(DivideByZeroException))]
-		public void RemI4I4DivideByZeroException(int a)
+		private void RemI4I4DivideByZeroException(int a)
 		{
 			Run<double>("Mosa.UnitTest.Collection.DoubleTests.RemR8R8", (double)0, a, (double)0);
 		}
