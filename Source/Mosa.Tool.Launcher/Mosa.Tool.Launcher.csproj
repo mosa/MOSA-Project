@@ -15,6 +15,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectGuid>{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659}</ProjectGuid>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseMSBuildEngine>false</UseMSBuildEngine>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -29,7 +30,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <UseMSBuildEngine>false</UseMSBuildEngine>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -99,9 +99,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdditionalFilesListControl.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

@@ -60,6 +60,7 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="CharTests.cs" />
+    <Compile Include="CompilerTests.cs" />
     <Compile Include="ConvI2Tests.cs" />
     <Compile Include="ConvI1Tests.cs" />
     <Compile Include="ConvI4Tests.cs" />
