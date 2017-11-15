@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if ((node.Instruction is NewobjInstruction && !MosaTypeLayout.IsStoredOnStack(node.Result.Type)) || node.Instruction is NewarrInstruction)
+					if ((node.Instruction is CIL.NewobjInstruction && !MosaTypeLayout.IsStoredOnStack(node.Result.Type)) || node.Instruction is CIL.NewarrInstruction)
 					{
 						list.Add(node);
 					}
@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// If instruction is newarr then get the size of the element, multiply it by array size, and add array header size
 			// Also need to align to a 4-byte boundary
-			if (allocation.Instruction is NewarrInstruction)
+			if (allocation.Instruction is CIL.NewarrInstruction)
 			{
 				int elements = GetConstant(allocation.Operand1);
 				typeSize = (TypeLayout.GetTypeSize(allocatedType.ElementType) * elements) + (TypeLayout.NativePointerSize * 3);
@@ -91,7 +91,7 @@ namespace Mosa.Compiler.Framework.Stages
 			assignment.Operand1 = result1;
 
 			// If the instruction is a newarr
-			if (allocation.Instruction is NewarrInstruction)
+			if (allocation.Instruction is CIL.NewarrInstruction)
 			{
 				allocation.SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), allocation.Result, result1);
 				return;
@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var node in allocation.Result.Uses)
 			{
-				if (node.Instruction is StsfldInstruction)
+				if (node.Instruction is CIL.StsfldInstruction)
 				{
 					return node;
 				}
@@ -143,7 +143,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var op = operand.Definitions[0];
 
-				if (op.Instruction is LdcInstruction)
+				if (op.Instruction is CIL.LdcInstruction)
 				{
 					if (op.Operand1.IsResolvedConstant)
 					{

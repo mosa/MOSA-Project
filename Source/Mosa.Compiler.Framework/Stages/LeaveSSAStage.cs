@@ -116,8 +116,8 @@ namespace Mosa.Compiler.Framework.Stages
 			context.GotoPrevious();
 
 			while (context.IsEmpty
-				|| context.Instruction is CompareIntegerBranch
-				|| context.Instruction is Jmp)
+				|| context.Instruction == IRInstruction.CompareIntegerBranch
+				|| context.Instruction == IRInstruction.Jmp)
 			{
 				context.GotoPrevious();
 			}
