@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="BaseThreeOperandInstruction" />.
+		/// Initializes a new instance of the <see cref="BaseOneOperandInstruction"/> class.
 		/// </summary>
 		protected BaseOneOperandInstruction() :
 			base(1, 0)

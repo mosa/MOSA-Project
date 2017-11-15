@@ -58,7 +58,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		//[Theory]
-		private void RemCCDivideByZeroException(char a, char b)
+		private void RemCCDivideByZeroException(char a)
 		{
 			Assert.Equal(CharTests.RemCC(a, (char)0), Run<int>("Mosa.UnitTest.Collection.CharTests.RemCC", a, (char)0));
 		}

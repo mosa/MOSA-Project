@@ -108,6 +108,7 @@
     <Compile Include="GenericMethodFixture.cs" />
     <Compile Include="GenericInterfaceFixture.cs" />
     <Compile Include="GenericCallFixture.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Int16Fixture.cs" />
     <Compile Include="Int32Fixture.cs" />
     <Compile Include="Int64Fixture.cs" />

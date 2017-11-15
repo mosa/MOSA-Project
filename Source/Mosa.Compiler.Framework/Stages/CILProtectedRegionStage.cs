@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if (node.Instruction is LeaveInstruction) // CIL.LeaveInstruction
+					if (node.Instruction is CIL.LeaveInstruction) // CIL.LeaveInstruction
 					{
 						var leaveBlock = node.BranchTargets[0];
 
@@ -85,14 +85,14 @@ namespace Mosa.Compiler.Framework.Stages
 						ctx.AppendInstruction(IRInstruction.SetLeaveTarget, leaveBlock);
 						ctx.AppendInstruction(IRInstruction.GotoLeaveTarget);
 					}
-					else if (node.Instruction is EndFinallyInstruction) // CIL.Endfinally
+					else if (node.Instruction is CIL.EndFinallyInstruction) // CIL.Endfinally
 					{
 						var ctx = new Context(node);
 
 						ctx.SetInstruction(IRInstruction.FinallyEnd);
 						ctx.AppendInstruction(IRInstruction.GotoLeaveTarget);
 					}
-					else if (node.Instruction is ThrowInstruction) // CIL.Throw
+					else if (node.Instruction is CIL.ThrowInstruction) // CIL.Throw
 					{
 						node.SetInstruction(IRInstruction.Throw, node.Result, node.Operand1);
 					}

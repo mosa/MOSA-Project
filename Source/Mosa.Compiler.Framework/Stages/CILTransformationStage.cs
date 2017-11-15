@@ -481,7 +481,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var result = context.Result;
 			var operands = context.GetOperands();
 
-			if (context.Previous.Instruction is ConstrainedPrefixInstruction)
+			if (context.Previous.Instruction is CIL.ConstrainedPrefixInstruction)
 			{
 				var type = context.Previous.MosaType;
 
