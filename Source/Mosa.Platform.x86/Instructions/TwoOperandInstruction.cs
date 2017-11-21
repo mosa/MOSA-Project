@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	///
+	/// TwoOperandInstruction
 	/// </summary>
 	public abstract class TwoOperandInstruction : X86Instruction
 	{
