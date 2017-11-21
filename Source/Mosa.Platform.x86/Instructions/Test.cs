@@ -66,7 +66,7 @@ namespace Mosa.Platform.x86.Instructions
 				return R_C;
 			}
 
-			throw new ArgumentException(String.Format(@"x86.Test: No opcode for operand types {0} and {1}.", source, third));
+			throw new ArgumentException(String.Format("x86.Test: No opcode for operand types {0} and {1}.", source, third));
 		}
 
 		/// <summary>

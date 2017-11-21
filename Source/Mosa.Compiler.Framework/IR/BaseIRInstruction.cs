@@ -32,6 +32,10 @@ namespace Mosa.Compiler.Framework.IR
 		/// </value>
 		public override string InstructionFamilyName { get { return "IR"; } }
 
+		public virtual bool EnforcedOperandResultCount { get { return true; } }
+
+		public virtual bool Commutative { get { return false; } }
+
 		#endregion Properties
 	}
 }

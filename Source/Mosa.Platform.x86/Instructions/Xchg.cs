@@ -45,7 +45,7 @@ namespace Mosa.Platform.x86.Instructions
 			if (destination.IsShort && source.IsShort && destination.IsCPURegister && source.IsCPURegister) return R_R_16;
 			if (destination.IsCPURegister && source.IsCPURegister) return R_R;
 
-			throw new ArgumentException(@"No opcode for operand type.");
+			throw new ArgumentException("No opcode for operand type.");
 		}
 
 		#endregion Methods
