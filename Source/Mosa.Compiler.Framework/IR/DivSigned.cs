@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class DivSigned : BaseIRInstruction
 	{
 		public DivSigned()
-			: base(1, 2)
+			: base(2, 1)
 		{
 		}
 	}

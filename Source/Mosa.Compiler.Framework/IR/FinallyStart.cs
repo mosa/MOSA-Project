@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class FinallyStart : BaseIRInstruction
 	{
 		public FinallyStart()
-			: base(2, 0)
+			: base(0, 2)
 		{
 		}
 

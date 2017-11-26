@@ -109,9 +109,7 @@ namespace Mosa.Compiler.Framework
 					index2 = name.LastIndexOf('.', index - 1);
 				}
 
-				name = name.Substring(index2 + 1, index - index2 - 1);
-
-				return name;
+				return name.Substring(index2 + 1, index - index2 - 1);
 			}
 		}
 

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class RemFloatR8 : BaseIRInstruction
 	{
 		public RemFloatR8()
-			: base(1, 2)
+			: base(2, 1)
 		{
 		}
 	}

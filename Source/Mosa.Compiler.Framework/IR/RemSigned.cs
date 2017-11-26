@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class RemSigned : BaseIRInstruction
 	{
 		public RemSigned()
-			: base(1, 2)
+			: base(2, 1)
 		{
 		}
 	}

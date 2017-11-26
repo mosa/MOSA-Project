@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class Kill : BaseIRInstruction
 	{
 		public Kill()
-			: base(0, 1)
+			: base(1, 0)
 		{
 		}
 

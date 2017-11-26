@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class BoxR4 : BaseIRInstruction
 	{
 		public BoxR4()
-			: base(1, 2)
+			: base(2, 1)
 		{
 		}
 	}

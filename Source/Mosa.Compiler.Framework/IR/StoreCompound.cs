@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class StoreCompound : BaseIRInstruction
 	{
 		public StoreCompound()
-			: base(0, 3)
+			: base(3, 0)
 		{
 		}
 

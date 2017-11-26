@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class StoreFloatR4 : BaseIRInstruction
 	{
 		public StoreFloatR4()
-			: base(0, 3)
+			: base(3, 0)
 		{
 		}
 

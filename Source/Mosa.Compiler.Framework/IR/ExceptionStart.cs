@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class ExceptionStart : BaseIRInstruction
 	{
 		public ExceptionStart()
-			: base(1, 0)
+			: base(0, 1)
 		{
 		}
 

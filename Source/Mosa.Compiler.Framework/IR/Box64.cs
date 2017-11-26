@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class Box64 : BaseIRInstruction
 	{
 		public Box64()
-			: base(1, 2)
+			: base(2, 1)
 		{
 		}
 	}

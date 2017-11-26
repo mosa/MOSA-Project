@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class NewObject : BaseIRInstruction
 	{
 		public NewObject()
-			: base(1, 2)
+			: base(2, 1)
 		{
 		}
 	}
