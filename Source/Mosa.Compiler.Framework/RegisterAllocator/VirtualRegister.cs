@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public Operand VirtualRegisterOperand { get; }
 
-		public Register PhysicalRegister { get; }
+		public PhysicalRegister PhysicalRegister { get; }
 
 		public bool IsPhysicalRegister { get { return VirtualRegisterOperand == null; } }
 
@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			IsSpilled = false;
 		}
 
-		public VirtualRegister(Register physicalRegister, bool reserved)
+		public VirtualRegister(PhysicalRegister physicalRegister, bool reserved)
 		{
 			PhysicalRegister = physicalRegister;
 			IsReserved = reserved;

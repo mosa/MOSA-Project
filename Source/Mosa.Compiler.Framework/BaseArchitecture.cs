@@ -31,52 +31,52 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the register set of the architecture.
 		/// </summary>
-		public abstract Register[] RegisterSet { get; }
+		public abstract PhysicalRegister[] RegisterSet { get; }
 
 		/// <summary>
 		/// Gets the stack frame register of the architecture.
 		/// </summary>
-		public abstract Register StackFrameRegister { get; }
+		public abstract PhysicalRegister StackFrameRegister { get; }
 
 		/// <summary>
 		/// Returns the stack pointer register of the architecture.
 		/// </summary>
-		public abstract Register StackPointerRegister { get; }
+		public abstract PhysicalRegister StackPointerRegister { get; }
 
 		/// <summary>
 		/// Gets the scratch register.
 		/// </summary>
-		public abstract Register ScratchRegister { get; }
+		public abstract PhysicalRegister ScratchRegister { get; }
 
 		/// <summary>
 		/// Gets the return32 bit register.
 		/// </summary>
-		public abstract Register Return32BitRegister { get; }
+		public abstract PhysicalRegister Return32BitRegister { get; }
 
 		/// <summary>
 		/// Gets the return64 bit register.
 		/// </summary>
-		public abstract Register Return64BitRegister { get; }
+		public abstract PhysicalRegister Return64BitRegister { get; }
 
 		/// <summary>
 		/// Gets the return floating point register.
 		/// </summary>
-		public abstract Register ReturnFloatingPointRegister { get; }
+		public abstract PhysicalRegister ReturnFloatingPointRegister { get; }
 
 		/// <summary>
 		/// Retrieves the program counter register of the architecture.
 		/// </summary>
-		public abstract Register ProgramCounter { get; }
+		public abstract PhysicalRegister ProgramCounter { get; }
 
 		/// <summary>
 		/// Retrieves the exception register of the architecture.
 		/// </summary>
-		public abstract Register ExceptionRegister { get; }
+		public abstract PhysicalRegister ExceptionRegister { get; }
 
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public abstract Register LeaveTargetRegister { get; }
+		public abstract PhysicalRegister LeaveTargetRegister { get; }
 
 		/// <summary>
 		/// Gets the name of the platform.

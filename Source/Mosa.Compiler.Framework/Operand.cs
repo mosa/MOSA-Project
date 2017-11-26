@@ -366,7 +366,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Retrieves the register, where the operand is located.
 		/// </summary>
-		public Register Register { get; private set; }
+		public PhysicalRegister Register { get; private set; }
 
 		/// <summary>
 		/// Gets the type of the shift.
@@ -632,7 +632,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="type">The type.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		public static Operand CreateCPURegister(MosaType type, Register register)
+		public static Operand CreateCPURegister(MosaType type, PhysicalRegister register)
 		{
 			return new Operand(type)
 			{

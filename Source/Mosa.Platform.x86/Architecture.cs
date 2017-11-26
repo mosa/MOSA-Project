@@ -36,7 +36,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Defines the register set of the target architecture.
 		/// </summary>
-		private static readonly Register[] registers = new Register[]
+		private static readonly PhysicalRegister[] registers = new PhysicalRegister[]
 		{
 			////////////////////////////////////////////////////////
 			// 32-bit general purpose registers
@@ -117,7 +117,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Retrieves the register set of the x86 platform.
 		/// </summary>
-		public override Register[] RegisterSet
+		public override PhysicalRegister[] RegisterSet
 		{
 			get { return registers; }
 		}
@@ -125,7 +125,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Retrieves the stack frame register of the x86.
 		/// </summary>
-		public override Register StackFrameRegister
+		public override PhysicalRegister StackFrameRegister
 		{
 			get { return GeneralPurposeRegister.EBP; }
 		}
@@ -133,7 +133,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Retrieves the stack pointer register of the x86.
 		/// </summary>
-		public override Register StackPointerRegister
+		public override PhysicalRegister StackPointerRegister
 		{
 			get { return GeneralPurposeRegister.ESP; }
 		}
@@ -141,7 +141,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Retrieves the scratch register of the x86.
 		/// </summary>
-		public override Register ScratchRegister
+		public override PhysicalRegister ScratchRegister
 		{
 			get { return GeneralPurposeRegister.EDX; }
 		}
@@ -149,7 +149,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Gets the return32 bit register.
 		/// </summary>
-		public override Register Return32BitRegister
+		public override PhysicalRegister Return32BitRegister
 		{
 			get { return GeneralPurposeRegister.EAX; }
 		}
@@ -157,7 +157,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Gets the return64 bit register.
 		/// </summary>
-		public override Register Return64BitRegister
+		public override PhysicalRegister Return64BitRegister
 		{
 			get { return GeneralPurposeRegister.EDX; }
 		}
@@ -165,7 +165,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Gets the return floating point register.
 		/// </summary>
-		public override Register ReturnFloatingPointRegister
+		public override PhysicalRegister ReturnFloatingPointRegister
 		{
 			get { return SSE2Register.XMM0; }
 		}
@@ -173,7 +173,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Retrieves the exception register of the architecture.
 		/// </summary>
-		public override Register ExceptionRegister
+		public override PhysicalRegister ExceptionRegister
 		{
 			get { return GeneralPurposeRegister.EDI; }
 		}
@@ -181,7 +181,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public override Register LeaveTargetRegister
+		public override PhysicalRegister LeaveTargetRegister
 		{
 			get { return GeneralPurposeRegister.ESI; }
 		}
@@ -189,7 +189,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Retrieves the program counter register of the x86.
 		/// </summary>
-		public override Register ProgramCounter
+		public override PhysicalRegister ProgramCounter
 		{
 			get { return null; }
 		}

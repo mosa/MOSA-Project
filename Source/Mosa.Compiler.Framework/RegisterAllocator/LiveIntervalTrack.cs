@@ -13,13 +13,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public readonly bool IsReserved;
 
-		public readonly Register Register;
+		public readonly PhysicalRegister Register;
 
 		public bool IsFloatingPoint { get { return Register.IsFloatingPoint; } }
 
 		public bool IsInteger { get { return Register.IsInteger; } }
 
-		public LiveIntervalTrack(Register register, bool reserved)
+		public LiveIntervalTrack(PhysicalRegister register, bool reserved)
 		{
 			Register = register;
 			IsReserved = reserved;

@@ -5,15 +5,15 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Represents a machine specific abstract register.
 	/// </summary>
-	public abstract class Register
+	public abstract class PhysicalRegister
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Register"/>.
+		/// Initializes a new instance of <see cref="PhysicalRegister"/>.
 		/// </summary>
 		/// <param name="index">The numeric index of the register.</param>
-		protected Register(int index)
+		protected PhysicalRegister(int index)
 		{
 			this.Index = index;
 		}

@@ -7,7 +7,7 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// Base class for x86 control registers.
 	/// </summary>
-	public sealed class ControlRegister : Register
+	public sealed class ControlRegister : PhysicalRegister
 	{
 		#region Types
 
