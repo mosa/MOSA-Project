@@ -5,8 +5,9 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	///
+	/// Nop
 	/// </summary>
+	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public class Nop : X86Instruction
 	{
 		#region Construction

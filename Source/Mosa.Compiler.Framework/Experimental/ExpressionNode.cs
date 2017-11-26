@@ -94,8 +94,16 @@ namespace Mosa.Compiler.Framework.Experimental
 			return true;
 		}
 
+		public bool Validate(InstructionNode node, int operandIndex)
+		{
+			return Validate(node.GetOperand(operandIndex));
+		}
+
 		public bool Validate(Operand operand)
 		{
+			if (operand == null)
+				return false;
+
 			if (NodeType == NodeType.Instruction)
 				return false;
 

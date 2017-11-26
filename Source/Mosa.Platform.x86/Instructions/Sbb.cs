@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Instructions
 			if (destination.IsCPURegister && third.IsConstant) return RM_C;
 			if (destination.IsCPURegister && third.IsCPURegister) return R_RM;
 
-			throw new ArgumentException(@"No opcode for operand type.");
+			throw new ArgumentException("No opcode for operand type.");
 		}
 
 		#endregion Methods

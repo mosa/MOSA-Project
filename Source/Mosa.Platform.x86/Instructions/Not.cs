@@ -58,7 +58,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
-			LegacyOpCode opCode = ComputeOpCode(node.Result, null, null);
+			var opCode = ComputeOpCode(node.Result, null, null);
 			emitter.Emit(opCode, node.Result);
 		}
 

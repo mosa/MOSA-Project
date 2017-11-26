@@ -43,7 +43,7 @@ namespace Mosa.Platform.x86.Instructions
 			if (destination.Register is ControlRegister) return CR_R;
 			if (source.Register is ControlRegister) return R_CR;
 
-			throw new ArgumentException(@"No opcode for operand type. [" + destination + ", " + source + ")");
+			throw new ArgumentException("No opcode for operand type. [" + destination + ", " + source + ")");
 		}
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
-			LegacyOpCode opCode = ComputeOpCode(node.Result, node.Operand1, null);
+			var opCode = ComputeOpCode(node.Result, node.Operand1, null);
 
 			if (node.Result.Register is ControlRegister)
 			{

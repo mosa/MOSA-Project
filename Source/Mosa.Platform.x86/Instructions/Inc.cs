@@ -45,18 +45,7 @@ namespace Mosa.Platform.x86.Instructions
 			if (destination.IsShort || destination.IsChar) return INC16;
 			if (destination.IsInt) return INC32;
 
-			throw new ArgumentException(@"No opcode for operand type.");
-		}
-
-		/// <summary>
-		/// Emits the specified platform instruction.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		/// <param name="emitter">The emitter.</param>
-		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
-		{
-			LegacyOpCode opCode = ComputeOpCode(node.Result, null, null);
-			emitter.Emit(opCode, node.Result);
+			throw new ArgumentException("No opcode for operand type.");
 		}
 
 		#endregion Methods
