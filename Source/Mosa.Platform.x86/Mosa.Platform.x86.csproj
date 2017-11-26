@@ -101,6 +101,8 @@
     <Compile Include="Instructions\CmpXchgLoad.cs" />
     <Compile Include="Instructions\Lea.cs" />
     <Compile Include="Instructions\Movaps.cs" />
+    <Compile Include="Instructions\MovCRStore.cs" />
+    <Compile Include="Instructions\MovCRLoad.cs" />
     <Compile Include="Instructions\MovupsStore.cs" />
     <Compile Include="Instructions\MovupsLoad.cs" />
     <Compile Include="Instructions\Movd.cs" />
@@ -115,7 +117,6 @@
     <Compile Include="Instructions\Movups.cs" />
     <Compile Include="Instructions\MovStore.cs" />
     <Compile Include="Instructions\MovLoad.cs" />
-    <Compile Include="Instructions\MovCR.cs" />
     <Compile Include="Instructions\IMul.cs" />
     <Compile Include="Instructions\Bts.cs" />
     <Compile Include="Instructions\PXor.cs" />
