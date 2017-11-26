@@ -152,6 +152,11 @@
     <Compile Include="Intrinsic\Remainder.cs" />
     <Compile Include="Intrinsic\SetFS.cs" />
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
+    <Compile Include="X86.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>X86.tt</DependentUpon>
+    </Compile>
     <Compile Include="X86InstructionMap.cs">
       <DependentUpon>X86InstructionMap.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -235,7 +240,6 @@
     <Compile Include="Instructions\Dec.cs" />
     <Compile Include="Instructions\IDiv.cs" />
     <Compile Include="Instructions\Inc.cs" />
-    <Compile Include="X86.cs" />
     <Compile Include="Instructions\Int.cs" />
     <Compile Include="Intrinsic\BochsDebug.cs" />
     <Compile Include="Instructions\Cld.cs" />
@@ -298,6 +302,10 @@
     <Compile Include="OpcodeEncoder.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="X86.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>X86.cs</LastGenOutput>
+    </Content>
     <Content Include="X86InstructionMap.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>X86InstructionMap.cs</LastGenOutput>
