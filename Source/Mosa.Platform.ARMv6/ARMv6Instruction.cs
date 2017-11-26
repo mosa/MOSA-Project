@@ -26,6 +26,14 @@ namespace Mosa.Platform.ARMv6
 
 		#endregion Construction
 
+		/// <summary>
+		/// Gets the name of the instruction family.
+		/// </summary>
+		/// <value>
+		/// The name of the instruction family.
+		/// </value>
+		public override string InstructionFamilyName { get { return "ARMv6"; } }
+
 		#region Methods
 
 		/// <summary>
