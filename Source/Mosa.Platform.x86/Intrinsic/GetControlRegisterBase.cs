@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// GetControlRegisterBase
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicPlatformMethod" />
 	internal class GetControlRegisterBase : IIntrinsicPlatformMethod
 	{
-		private ControlRegister control;
+		private readonly ControlRegister control;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GetControlRegisterBase"/> class.
@@ -26,14 +27,12 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// Replaces the intrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
+		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			Operand result = context.Result;
-			Operand imm = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
 
-			context.SetInstruction(X86.MovCR, imm, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, control));
-			context.AppendInstruction(X86.Mov, result, imm);
+			context.SetInstruction(X86.MovCRLoad, result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, control));
 		}
 
 		#endregion Methods
