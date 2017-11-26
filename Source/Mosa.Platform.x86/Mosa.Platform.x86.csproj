@@ -244,15 +244,10 @@
     <Compile Include="Instructions\Out.cs" />
     <Compile Include="Instructions\Pause.cs" />
     <Compile Include="Instructions\Popad.cs" />
-    <Compile Include="Instructions\Popfd.cs" />
     <Compile Include="Instructions\Pop.cs" />
     <Compile Include="Instructions\Pushad.cs" />
-    <Compile Include="Instructions\Pushfd.cs" />
     <Compile Include="Instructions\Push.cs" />
     <Compile Include="Instructions\Rcr.cs" />
-    <Compile Include="Instructions\Rdmsr.cs" />
-    <Compile Include="Instructions\Rdpmc.cs" />
-    <Compile Include="Instructions\Rdtsc.cs" />
     <Compile Include="Instructions\Rep.cs" />
     <Compile Include="Instructions\Sti.cs" />
     <Compile Include="Instructions\Stos.cs" />

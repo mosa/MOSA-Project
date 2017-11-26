@@ -42,7 +42,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (destination.IsCPURegister) return R_RM;
 
-			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
+			throw new ArgumentException("No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
 		}
 
 		#endregion Methods

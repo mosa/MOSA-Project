@@ -46,6 +46,7 @@ namespace Mosa.Platform.x86.Instructions
 			if (node.Result.IsCPURegister)
 			{
 				if (node.Result.Register is SegmentRegister)
+				{
 					switch ((node.Result.Register as SegmentRegister).Segment)
 					{
 						case SegmentRegister.SegmentType.DS: emitter.Emit(POP_DS); return;
@@ -53,13 +54,18 @@ namespace Mosa.Platform.x86.Instructions
 						case SegmentRegister.SegmentType.FS: emitter.Emit(POP_FS); return;
 						case SegmentRegister.SegmentType.GS: emitter.Emit(POP_GS); return;
 						case SegmentRegister.SegmentType.SS: emitter.Emit(POP_SS); return;
-						default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
+						default: throw new InvalidOperationException("unable to emit opcode for segment register");
 					}
+				}
 				else
+				{
 					emitter.WriteByte((byte)(0x58 + node.Result.Register.RegisterCode));
+				}
 			}
 			else
+			{
 				emitter.Emit(POP, node.Result);
+			}
 		}
 
 		#endregion Methods

@@ -32,18 +32,6 @@ namespace Mosa.Platform.x86.Instructions
 		#region Methods
 
 		/// <summary>
-		/// Computes the opcode.
-		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		internal override LegacyOpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-		{
-			throw new NotSupportedException();
-		}
-
-		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="node">The node.</param>

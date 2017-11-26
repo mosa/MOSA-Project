@@ -82,15 +82,10 @@ namespace Mosa.Platform.x86
 		public static readonly Pextrd Pextrd = new Pextrd();
 		public static readonly Pop Pop = new Pop();
 		public static readonly Popad Popad = new Popad();
-		public static readonly Popfd Popfd = new Popfd();
 		public static readonly Push Push = new Push();
 		public static readonly Pushad Pushad = new Pushad();
-		public static readonly Pushfd Pushfd = new Pushfd();
 		public static readonly PXor PXor = new PXor();
 		public static readonly Rcr Rcr = new Rcr();
-		public static readonly Rdmsr Rdmsr = new Rdmsr();
-		public static readonly Rdpmc Rdpmc = new Rdpmc();
-		public static readonly Rdtsc Rdtsc = new Rdtsc();
 		public static readonly Rep Rep = new Rep();
 		public static readonly Ret Ret = new Ret();
 		public static readonly Roundsd Roundsd = new Roundsd();

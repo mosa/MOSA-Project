@@ -53,7 +53,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Result == null);
 
-			LegacyOpCode opCode = ComputeOpCode(null, node.Operand1, node.Operand2);
+			var opCode = ComputeOpCode(null, node.Operand1, node.Operand2);
 			emitter.Emit(opCode, node.Operand1, node.Operand2);
 		}
 
