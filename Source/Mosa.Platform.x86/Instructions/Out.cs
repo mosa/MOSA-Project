@@ -44,8 +44,7 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(destination.IsConstant || destination.IsCPURegister);
 			Debug.Assert(size != InstructionSize.None);
 			Debug.Assert(size != InstructionSize.Native);
-
-			//size = BaseMethodCompilerStage.GetInstructionSize(size, destination);
+			Debug.Assert(source != null);
 
 			if (destination.IsCPURegister)
 			{

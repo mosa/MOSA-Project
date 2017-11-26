@@ -45,8 +45,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 
-			int patchOffset;
-
 			// WARNING: DO NOT USE 0x66 PREFIX WITH THIS INSTRUCTION
 			// We currently don't have the ability to load into 16bit registers
 
@@ -58,7 +56,7 @@ namespace Mosa.Platform.x86.Instructions
 				.Append3Bits(Bits.b011)                                             // 3:opcode
 				.AppendWidthBit(node.Size != InstructionSize.Size8)                 // 1:width
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out patchOffset) // 32:memory
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
 				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
