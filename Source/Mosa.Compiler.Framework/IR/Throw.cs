@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class Throw : BaseIRInstruction
 	{
 		public Throw()
-			: base(0, 1)
+			: base(1, 0)
 		{
 		}
 	}

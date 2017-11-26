@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class To64 : BaseIRInstruction
 	{
 		public To64()
-			: base(1, 2)
+			: base(2, 1)
 		{
 		}
 	}

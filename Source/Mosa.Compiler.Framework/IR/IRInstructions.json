@@ -776,7 +776,7 @@
 			"ignoreDuringCodeGeneration": "false",
 			"ignoreInstructionBasicBlockTargets": "false",
 			"variableOperandCount": "false",
-			"commutative": "true",
+			"commutative": "false",
 			"hasSideEffect": "false",
 			"description": ""
 		},

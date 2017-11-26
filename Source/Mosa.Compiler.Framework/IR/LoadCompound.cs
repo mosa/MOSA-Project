@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class LoadCompound : BaseIRInstruction
 	{
 		public LoadCompound()
-			: base(1, 2)
+			: base(2, 1)
 		{
 		}
 	}

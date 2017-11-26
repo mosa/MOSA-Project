@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class MemoryCopy : BaseIRInstruction
 	{
 		public MemoryCopy()
-			: base(1, 3)
+			: base(3, 1)
 		{
 		}
 

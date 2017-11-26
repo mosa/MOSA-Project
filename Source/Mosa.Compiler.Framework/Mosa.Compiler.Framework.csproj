@@ -752,9 +752,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="IR\DynamicJsonConverter.ttinclude" />
-    <None Include="IR\IRInstruction.json" />
-    <None Include="IR\MultipleOutputHelper.ttinclude" />
+    <None Include="IR\IRInstructions.json" />
     <None Include="Mosa.Compiler.Framework.nuspec" />
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class Unbox64 : BaseIRInstruction
 	{
 		public Unbox64()
-			: base(1, 2)
+			: base(2, 1)
 		{
 		}
 	}

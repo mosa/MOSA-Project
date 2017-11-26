@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class MulSigned : BaseIRInstruction
 	{
 		public MulSigned()
-			: base(1, 2)
+			: base(2, 1)
 		{
 		}
 

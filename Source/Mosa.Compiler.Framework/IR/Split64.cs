@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class Split64 : BaseIRInstruction
 	{
 		public Split64()
-			: base(2, 1)
+			: base(1, 2)
 		{
 		}
 	}

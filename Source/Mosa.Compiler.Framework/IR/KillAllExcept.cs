@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class KillAllExcept : BaseIRInstruction
 	{
 		public KillAllExcept()
-			: base(0, 1)
+			: base(1, 0)
 		{
 		}
 
