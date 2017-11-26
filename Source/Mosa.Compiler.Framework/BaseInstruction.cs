@@ -90,28 +90,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The name of the instruction family.
 		/// </value>
-		public virtual string InstructionFamilyName
-		{
-			get
-			{
-				string name = GetType().ToString();
-
-				int index = name.LastIndexOf(".Instructions.");
-				int index2 = 0;
-
-				if (index < 0)
-				{
-					index = name.LastIndexOf('.');
-					index2 = name.LastIndexOf('.', index - 1);
-				}
-				else
-				{
-					index2 = name.LastIndexOf('.', index - 1);
-				}
-
-				return name.Substring(index2 + 1, index - index2 - 1);
-			}
-		}
+		public abstract string InstructionFamilyName { get; }
 
 		/// <summary>
 		/// Gets the name of the instruction extension.
@@ -157,12 +136,14 @@ namespace Mosa.Compiler.Framework
 			{
 				if (CachedInstructionName == null)
 				{
-					CachedInstructionName = InstructionFamilyName + "." + BaseInstructionName;
+					string name = InstructionFamilyName + "." + BaseInstructionName;
 
 					if (!string.IsNullOrWhiteSpace(InstructionExtensionName))
 					{
-						CachedInstructionName = CachedInstructionName + "." + InstructionExtensionName;
+						name = CachedInstructionName + "." + InstructionExtensionName;
 					}
+
+					CachedInstructionName = name;
 				}
 
 				return CachedInstructionName;
