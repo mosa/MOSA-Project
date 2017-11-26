@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public LiveInterval FromInterval;
 		public LiveInterval ToInterval;
 
-		public Register FromRegister
+		public PhysicalRegister FromRegister
 		{
 			get
 			{
@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		public Register ToRegister
+		public PhysicalRegister ToRegister
 		{
 			get
 			{

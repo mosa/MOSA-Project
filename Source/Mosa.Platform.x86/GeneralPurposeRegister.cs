@@ -7,7 +7,7 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// Represents integral general purpose x86 registers.
 	/// </summary>
-	public sealed class GeneralPurposeRegister : Register
+	public sealed class GeneralPurposeRegister : PhysicalRegister
 	{
 		#region Types
 

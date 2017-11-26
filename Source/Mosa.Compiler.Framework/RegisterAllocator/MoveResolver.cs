@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Moves.Add(new Move(source, destination));
 		}
 
-		private int FindIndex(Register register, bool source)
+		private int FindIndex(PhysicalRegister register, bool source)
 		{
 			for (int i = 0; i < Moves.Count; i++)
 			{

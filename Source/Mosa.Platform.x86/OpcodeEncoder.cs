@@ -200,7 +200,7 @@ namespace Mosa.Platform.x86
 			return Append3Bits(value);
 		}
 
-		public OpcodeEncoder AppendRegister(Register register)
+		public OpcodeEncoder AppendRegister(PhysicalRegister register)
 		{
 			return Append3Bits(register.RegisterCode);
 		}
@@ -220,7 +220,7 @@ namespace Mosa.Platform.x86
 			return Append3Bits(value);
 		}
 
-		public OpcodeEncoder AppendRM(Register register)
+		public OpcodeEncoder AppendRM(PhysicalRegister register)
 		{
 			return Append3Bits(register.RegisterCode);
 		}
@@ -256,7 +256,7 @@ namespace Mosa.Platform.x86
 			return AppendBit(width ? 1 : 0);
 		}
 
-		public OpcodeEncoder AppendSIB(int scale, Register index, Register @base)
+		public OpcodeEncoder AppendSIB(int scale, PhysicalRegister index, PhysicalRegister @base)
 		{
 			Debug.Assert(scale == 1 || scale == 2 || scale == 4 || scale == 8);
 

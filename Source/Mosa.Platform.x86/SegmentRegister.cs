@@ -7,7 +7,7 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// Base class for x86 segment registers.
 	/// </summary>
-	public sealed class SegmentRegister : Register
+	public sealed class SegmentRegister : PhysicalRegister
 	{
 		#region Types
 
