@@ -60,6 +60,7 @@ namespace Mosa.Platform.x86.Instructions
 			if (node.Operand1.IsCPURegister)
 			{
 				if (node.Operand1.Register is SegmentRegister)
+				{
 					switch ((node.Operand1.Register as SegmentRegister).Segment)
 					{
 						case SegmentRegister.SegmentType.CS: emitter.Emit(PUSH_CS); return;
@@ -68,8 +69,9 @@ namespace Mosa.Platform.x86.Instructions
 						case SegmentRegister.SegmentType.ES: emitter.Emit(PUSH_ES); return;
 						case SegmentRegister.SegmentType.FS: emitter.Emit(PUSH_FS); return;
 						case SegmentRegister.SegmentType.GS: emitter.Emit(PUSH_GS); return;
-						default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
+						default: throw new InvalidOperationException("unable to emit opcode for segment register");
 					}
+				}
 			}
 			emitter.Emit(PUSH, node.Operand1);
 		}

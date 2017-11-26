@@ -48,7 +48,7 @@ namespace Mosa.Platform.x86.Instructions
 				return MR;
 			}
 
-			throw new ArgumentException(@"No opcode for operand type.");
+			throw new ArgumentException("No opcode for operand type.");
 		}
 
 		/// <summary>

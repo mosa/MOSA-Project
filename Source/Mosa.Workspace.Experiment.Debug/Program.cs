@@ -1,11 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
-using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework;
 using System.Text;
 
 namespace Mosa.Workspace.Experiment.Debug

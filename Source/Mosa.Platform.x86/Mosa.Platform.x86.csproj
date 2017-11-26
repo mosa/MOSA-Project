@@ -95,6 +95,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Instructions\Btr.cs" />
     <Compile Include="Instructions\Cmovcc.cs" />
     <Compile Include="Instructions\CmpXchgLoad.cs" />

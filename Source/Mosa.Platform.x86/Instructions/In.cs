@@ -37,6 +37,7 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(destination.IsConstant || destination.IsCPURegister);
 			Debug.Assert(size != InstructionSize.None);
 			Debug.Assert(size != InstructionSize.Native);
+			Debug.Assert(source == null);
 
 			//size = BaseMethodCompilerStage.GetInstructionSize(size, destination);
 
@@ -72,7 +73,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
-			var opCode = ComputeOpCode(node.Size, node.Operand1, node.Operand2);
+			var opCode = ComputeOpCode(node.Size, node.Operand1, null);
 
 			if (node.Operand1.IsConstant)
 			{
