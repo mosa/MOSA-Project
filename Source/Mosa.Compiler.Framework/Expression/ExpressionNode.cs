@@ -3,9 +3,19 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Mosa.Compiler.Framework.Experimental
+namespace Mosa.Compiler.Framework.Expression
 {
-	public enum NodeType { Instruction, VariableConstant, FixedConstant, VirtualRegister, PhyiscalRegister }
+	public enum NodeType
+	{
+		Instruction,
+		VariableConstant,
+		FixedIntegerConstant,
+		FixedDoubleConstant,
+		VirtualRegister,
+		PhyiscalRegister,
+		Variable, // can be virtual/physical register or constant
+		Any
+	}
 
 	public class ExpressionNode
 	{
@@ -19,6 +29,7 @@ namespace Mosa.Compiler.Framework.Experimental
 		public string Alias { get; }
 
 		public ulong ConstantUnsignedLongInteger { get; }
+		public double ConstantDouble { get; }
 
 		public PhysicalRegister PhysicalRegister { get; }
 
@@ -52,8 +63,14 @@ namespace Mosa.Compiler.Framework.Experimental
 
 		public ExpressionNode(ulong constant)
 		{
-			NodeType = NodeType.FixedConstant;
+			NodeType = NodeType.FixedIntegerConstant;
 			ConstantUnsignedLongInteger = constant;
+		}
+
+		public ExpressionNode(double constant)
+		{
+			NodeType = NodeType.FixedDoubleConstant;
+			ConstantDouble = constant;
 		}
 
 		public ExpressionNode(PhysicalRegister physicalRegister)
@@ -64,7 +81,7 @@ namespace Mosa.Compiler.Framework.Experimental
 
 		public ExpressionNode(NodeType type, string alias = null)
 		{
-			Debug.Assert(type != NodeType.FixedConstant);
+			Debug.Assert(type != NodeType.FixedIntegerConstant);
 			Debug.Assert(type != NodeType.PhyiscalRegister);
 			Debug.Assert(type != NodeType.Instruction);
 
@@ -77,8 +94,14 @@ namespace Mosa.Compiler.Framework.Experimental
 			ParentNodes.Add(node);
 		}
 
-		public bool Validate(InstructionNode node)
+		protected bool ValidateInstruction(InstructionNode node)
 		{
+			if (node == null)
+				return false;
+
+			if (node.IsEmpty)
+				return false;
+
 			if (NodeType != NodeType.Instruction)
 				return false;
 
@@ -94,12 +117,15 @@ namespace Mosa.Compiler.Framework.Experimental
 			return true;
 		}
 
-		public bool Validate(InstructionNode node, int operandIndex)
+		protected bool ValidateOperand(InstructionNode node, int operandIndex)
 		{
-			return Validate(node.GetOperand(operandIndex));
+			if (operandIndex > node.OperandCount)
+				return false;
+
+			return ValidateOperand(node.GetOperand(operandIndex));
 		}
 
-		public bool Validate(Operand operand)
+		protected bool ValidateOperand(Operand operand)
 		{
 			if (operand == null)
 				return false;
@@ -113,7 +139,7 @@ namespace Mosa.Compiler.Framework.Experimental
 			if (NodeType == NodeType.VirtualRegister && operand.IsVirtualRegister)
 				return true;
 
-			if (NodeType == NodeType.FixedConstant && operand.IsResolvedConstant && operand.ConstantUnsignedLongInteger == ConstantUnsignedLongInteger)
+			if (NodeType == NodeType.FixedIntegerConstant && operand.IsResolvedConstant && operand.ConstantUnsignedLongInteger == ConstantUnsignedLongInteger)
 				return true;
 
 			if (NodeType == NodeType.VariableConstant && operand.IsConstant)
@@ -122,6 +148,48 @@ namespace Mosa.Compiler.Framework.Experimental
 			//todo
 
 			return false;
+		}
+
+		public bool Validate(InstructionNode node)
+		{
+			if (NodeType == NodeType.Instruction)
+			{
+				if (!ValidateInstruction(node))
+					return false;
+
+				for (int i = 0; i < ParentNodes.Count; i++)
+				{
+					var parentNode = ParentNodes[i];
+
+					if (NodeType == NodeType.Any)
+						continue;
+
+					if (parentNode.NodeType == NodeType.Instruction)
+					{
+						var operand = node.GetOperand(i);
+
+						if (operand.Definitions.Count != 1)
+							return false;
+
+						var parent = operand.Definitions[0];
+
+						if (!parentNode.Validate(parent))
+							return false;
+					}
+					else
+					{
+						if (!parentNode.ValidateOperand(node, i))
+							return false;
+					}
+				}
+			}
+
+			return true;
+		}
+
+		public override string ToString()
+		{
+			return NodeType.ToString() + ":" + (Instruction != null ? Instruction.BaseInstructionName : string.Empty) + Alias;
 		}
 	}
 }

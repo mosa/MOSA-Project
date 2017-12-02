@@ -443,7 +443,7 @@ namespace Mosa.Compiler.Framework
 		private Operand(MosaType type)
 				: this()
 		{
-			Debug.Assert(type != null);
+			//Debug.Assert(type != null);
 			Type = type;
 		}
 

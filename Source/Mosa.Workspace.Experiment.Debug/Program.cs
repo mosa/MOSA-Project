@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework.Expression;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Platform.x86;
 using System.Collections.Generic;
@@ -10,6 +11,8 @@ namespace Mosa.Workspace.Experiment.Debug
 {
 	internal static class Program
 	{
+		#region Data
+
 		private static readonly List<BaseIRInstruction> IRInstructions = new List<BaseIRInstruction>()
 		{
 			IRInstruction.AddFloatR4,
@@ -329,8 +332,17 @@ namespace Mosa.Workspace.Experiment.Debug
 			X86.Rep,
 		};
 
+		#endregion Data
+
 		private static void Main()
 		{
+			var tree = ExpressionTest.GetTestExpression1();
+			var basicBlocks = ExpressionTest.CreateBasicBlockInstructionSet();
+
+			var match = tree.Validate(basicBlocks[0].Last.Previous);
+
+			ExpressionTest.GetTestExpression2();
+
 			DumpIRInstruction();
 			DumpX86Instruction();
 

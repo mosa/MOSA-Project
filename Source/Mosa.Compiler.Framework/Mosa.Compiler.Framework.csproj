@@ -96,9 +96,13 @@
     <Compile Include="CompilerMethodData.cs" />
     <Compile Include="CompilerData.cs" />
     <Compile Include="DelegatePatcher.cs" />
-    <Compile Include="Experimental\ExpressionNode.cs" />
-    <Compile Include="Experimental\ExpressionText.cs" />
-    <Compile Include="Experimental\ExpressionTree.cs" />
+    <Compile Include="Expression\ExpressionBuilder.cs" />
+    <Compile Include="Expression\Tokenizer.cs" />
+    <Compile Include="Expression\TokenType.cs" />
+    <Compile Include="Expression\Token.cs" />
+    <Compile Include="Expression\ExpressionNode.cs" />
+    <Compile Include="Expression\ExpressionTest.cs" />
+    <Compile Include="Expression\ExpressionTree.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InstructionNodeAddition.cs" />
     <Compile Include="Intrinsics\CreateInstanceSimple.cs" />

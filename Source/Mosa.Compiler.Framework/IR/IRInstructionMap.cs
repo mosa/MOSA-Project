@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// </summary>
 	public static class IRInstructionMap
 	{
-		public static readonly Dictionary<string,BaseIRInstruction> Map = new Dictionary<string, BaseIRInstruction>() {
+		public static readonly Dictionary<string,BaseInstruction> Map = new Dictionary<string, BaseInstruction>() {
 			{ "AddFloatR4", IRInstruction.AddFloatR4 },
 			{ "AddFloatR8", IRInstruction.AddFloatR8 },
 			{ "AddressOf", IRInstruction.AddressOf },
