@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// </summary>
 	public static class IRInstructionMap
 	{
-		public static readonly Dictionary<string,BaseIRInstruction> Map = new Dictionary<string, BaseIRInstruction>() {
+		public static readonly Dictionary<string,BaseInstruction> Map = new Dictionary<string, BaseInstruction>() {
 <#
 var path = System.IO.Path.GetFullPath(Host.TemplateFile+"\\..\\");
 var json = File.ReadAllText(path+"\\"+"IRInstructions.json");

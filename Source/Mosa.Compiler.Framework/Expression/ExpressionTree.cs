@@ -2,12 +2,13 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Experimental
+namespace Mosa.Compiler.Framework.Expression
 {
 	public class ExpressionTree
 	{
 		public ExpressionNode Root { get; }
-		public Dictionary<string, int> AliasIndex { get; } = new Dictionary<string, int>();
+
+		protected Dictionary<string, int> AliasIndex { get; } = new Dictionary<string, int>();
 
 		public ExpressionTree(ExpressionNode root)
 		{
@@ -42,6 +43,11 @@ namespace Mosa.Compiler.Framework.Experimental
 				return value;
 
 			return -1;
+		}
+
+		public bool Validate(InstructionNode node)
+		{
+			return Root.Validate(node);
 		}
 	}
 }
