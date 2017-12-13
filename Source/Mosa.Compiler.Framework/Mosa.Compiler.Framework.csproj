@@ -96,13 +96,15 @@
     <Compile Include="CompilerMethodData.cs" />
     <Compile Include="CompilerData.cs" />
     <Compile Include="DelegatePatcher.cs" />
+    <Compile Include="Expression\EvaluationNode.cs" />
     <Compile Include="Expression\ExpressionBuilder.cs" />
+    <Compile Include="Expression\Parser.cs" />
     <Compile Include="Expression\Tokenizer.cs" />
     <Compile Include="Expression\TokenType.cs" />
     <Compile Include="Expression\Token.cs" />
     <Compile Include="Expression\ExpressionNode.cs" />
     <Compile Include="Expression\ExpressionTest.cs" />
-    <Compile Include="Expression\ExpressionTree.cs" />
+    <Compile Include="Expression\Transform.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InstructionNodeAddition.cs" />
     <Compile Include="Intrinsics\CreateInstanceSimple.cs" />
@@ -486,6 +488,7 @@
     <Compile Include="Intrinsics\Load8.cs" />
     <Compile Include="Intrinsics\Load64.cs" />
     <Compile Include="Intrinsics\InternalsForArray.cs" />
+    <Compile Include="MethodTransform.cs" />
     <Compile Include="MosaCompiler.cs" />
     <Compile Include="InstructionSize.cs" />
     <Compile Include="Intrinsics\GetObjectAddress.cs" />

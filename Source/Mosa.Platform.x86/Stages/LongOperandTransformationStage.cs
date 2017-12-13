@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using System;
@@ -902,7 +902,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				throw new InvalidCompilerException();
+				throw new CompilerException();
 			}
 		}
 

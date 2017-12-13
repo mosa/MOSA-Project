@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Expression
 {
 	public static class ExpressionTest
 	{
-		public static ExpressionTree GetTestExpression1()
+		public static Transform GetTestExpression1()
 		{
 			// (Add64 <t> (Mul64 x y) (Mul64 x z))
 			// (Add(Mul x y)(Mul x z))
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Expression
 			instruction3.AddNode(nodeX);
 			instruction3.AddNode(nodeZ);
 
-			var tree = new ExpressionTree(instruction1);
+			var tree = new Transform(instruction1, null);
 
 			return tree;
 		}
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.Expression
 			return basicBlocks;
 		}
 
-		public static ExpressionTree GetTestExpression2()
+		public static Transform GetTestExpression2()
 		{
 			const string text = "(AddUnsigned(MulUnsigned x y)(MulUnsigned x z))"; // "(Mul8  (Const8  [1]) x) -> x";
 

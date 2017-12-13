@@ -7,8 +7,10 @@ namespace Mosa.Compiler.Framework.Expression
 {
 	public class Token
 	{
-		public TokenType TokenType { get; protected set; } = TokenType.Unknown;
-		public string Value { get; protected set; } = null;
+		public static Token Unknown = new Token(TokenType.Unknown);
+
+		public TokenType TokenType { get; protected set; }
+		public string Value { get; protected set; }
 		public int Index { get; protected set; } = -1;
 
 		public Token(TokenType tokenType, string value = null, int index = -1)

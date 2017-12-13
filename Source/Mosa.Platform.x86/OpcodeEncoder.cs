@@ -1,10 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-using System.IO;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
+using System.Diagnostics;
+using System.IO;
 
 namespace Mosa.Platform.x86
 {
@@ -367,7 +368,7 @@ namespace Mosa.Platform.x86
 			if (size == InstructionSize.Size16)
 				return AppendShortValue((ushort)operand.ConstantUnsignedInteger);
 
-			throw new InvalidCompilerException("Instruction size invalid");
+			throw new CompilerException("Instruction size invalid");
 		}
 
 		public OpcodeEncoder ModRegRMSIBDisplacement(bool offsetDestination, Operand destination, Operand source, Operand offset)

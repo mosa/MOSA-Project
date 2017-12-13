@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Expression
 {
@@ -31,28 +31,22 @@ namespace Mosa.Compiler.Framework.Expression
 			}
 		}
 
-		public ExpressionTree CreateExpressionTree(string expression)
+		public Transform CreateExpressionTree(string expression)
 		{
 			var tokenized = new Tokenizer(expression);
-
-			if (tokenized.HasError)
-				return null;
 
 			var tokens = tokenized.Tokens;
 			int at = 1; // skip
 
-			var root = ParseInstruction(tokens, ref at);
+			var root = ParseInstruction(tokens, ref at, tokens.Count);
 
-			var tree = new ExpressionTree(root);
+			var tree = new Transform(root, null);
 
 			return tree;
 		}
 
-		protected ExpressionNode ParseInstruction(List<Token> tokens, ref int at)
+		protected ExpressionNode ParseInstruction(List<Token> tokens, ref int at, int end)
 		{
-			// order: instruction <t> operands/instructions [...]
-			// or constant <t> [x]
-
 			var word = tokens[at++];
 
 			if (word.TokenType != TokenType.Identifier)
@@ -62,41 +56,33 @@ namespace Mosa.Compiler.Framework.Expression
 			{
 				ExpressionNode node = null;
 
-				while (at < tokens.Count)
+				while (at < end)
 				{
-					Token token = tokens[at++];
+					var token = tokens[at++];
 
 					if (token.TokenType == TokenType.CloseParens)
 					{
 						at++;
 						return node;
 					}
-					else if (token.TokenType == TokenType.OpenBracket)
-					{
-						at++;
-					}
-					else if (token.TokenType == TokenType.CloseBracket)
-					{
-						at++;
-					}
 					else if (token.TokenType == TokenType.IntegerConstant && token.Value[0] != '-')
 					{
 						if (!UInt64.TryParse(token.Value, out ulong value))
-							return null;
+							throw new CompilerException("Invalid ulong constant: " + token.Value);
 
 						node = new ExpressionNode(value);
 					}
 					else if (token.TokenType == TokenType.IntegerConstant && token.Value[0] == '-')
 					{
 						if (!Int64.TryParse(token.Value, out long value))
-							return null;
+							throw new CompilerException("Invalid long constant: " + token.Value);
 
 						node = new ExpressionNode((ulong)value);
 					}
 					else if (token.TokenType == TokenType.FloatConstant)
 					{
 						if (!Double.TryParse(token.Value, out double value))
-							return null;
+							throw new CompilerException("Invalid floating constant: " + token.Value);
 
 						node = new ExpressionNode(value);
 					}
@@ -121,9 +107,9 @@ namespace Mosa.Compiler.Framework.Expression
 
 				var node = new ExpressionNode(instruction);
 
-				while (at < tokens.Count)
+				while (at < end)
 				{
-					Token token = tokens[at++];
+					var token = tokens[at++];
 
 					if (token.TokenType == TokenType.CloseParens)
 					{
@@ -134,7 +120,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 					if (token.TokenType == TokenType.OpenParens)
 					{
-						parentNode = ParseInstruction(tokens, ref at);
+						parentNode = ParseInstruction(tokens, ref at, end);
 
 						if (parentNode == null)
 							return null;
@@ -168,13 +154,9 @@ namespace Mosa.Compiler.Framework.Expression
 						}
 						else
 						{
-							if (token.Value[0] == 'v')
+							if (token.Value[0] == 'v' && token.Value.Length > 1)
 							{
 								parentNode = new ExpressionNode(NodeType.VirtualRegister, token.Value);
-							}
-							else if (token.Value[0] == 'c')
-							{
-								parentNode = new ExpressionNode(NodeType.VariableConstant, token.Value);
 							}
 							else
 							{

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
@@ -13,7 +14,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <returns>
 		/// The equivalent stack type code.
 		/// </returns>
-		/// <exception cref="InvalidCompilerException"></exception>
+		/// <exception cref="CompilerException"></exception>
 		public static StackTypeCode GetStackTypeCode(this MosaType type)
 		{
 			switch (type.IsEnum ? type.GetEnumUnderlyingType().TypeCode : type.TypeCode)
@@ -60,7 +61,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				case MosaTypeCode.Void:
 					return StackTypeCode.Unknown;
 			}
-			throw new InvalidCompilerException(string.Format("Can't transform Type {0} to StackTypeCode.", type));
+			throw new CompilerException(string.Format("Can't transform Type {0} to StackTypeCode.", type));
 		}
 
 		public static MosaType GetStackType(this MosaType type)

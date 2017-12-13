@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Ldarg_1: index = 1; break;
 				case OpCode.Ldarg_2: index = 2; break;
 				case OpCode.Ldarg_3: index = 3; break;
-				default: throw new InvalidCompilerException();
+				default: throw new CompilerException();
 			}
 
 			var parameterOperand = decoder.MethodCompiler.Parameters[index];
