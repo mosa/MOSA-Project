@@ -19,6 +19,7 @@ namespace Mosa.Compiler.Framework.Expression
 		Comma,
 		Transform,
 		Underscore,
+		Period,
 
 		And,    // boolean logic:
 		Or,
@@ -45,12 +46,19 @@ namespace Mosa.Compiler.Framework.Expression
 		CompareLessThan,
 		CompareGreaterThan,
 
+		ShiftRight,
+		ShiftLeft,
+
 		Identifier,  // temporary
 
-		Variable,
-		VirtualRegister,
-		ReservedWord,
-		TypeName,
-		PhysicalRegister,
+		If,
+		Method,     // ???
+		Variable,   // ???
+
+		InstructionFamily,
+		InstructionName,
+		ClassName,
+		MethodName,
+		TypeVariable,
 	}
 }

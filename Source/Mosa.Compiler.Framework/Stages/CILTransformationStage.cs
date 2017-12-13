@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Linker;
@@ -330,7 +331,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Xor: node.SetInstruction(IRInstruction.LogicalXor, node.Result, node.Operand1, node.Operand2); break;
 				case OpCode.Div_un: node.SetInstruction(IRInstruction.DivUnsigned, node.Result, node.Operand1, node.Operand2); break;
 				case OpCode.Rem_un: node.SetInstruction(IRInstruction.RemUnsigned, node.Result, node.Operand1, node.Operand2); break;
-				default: throw new InvalidCompilerException();
+				default: throw new CompilerException();
 			}
 		}
 
@@ -672,7 +673,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Endfilter(InstructionNode node)
 		{
-			throw new InvalidCompilerException();
+			throw new CompilerException();
 		}
 
 		/// <summary>
@@ -681,7 +682,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Endfinally(InstructionNode node)
 		{
-			throw new InvalidCompilerException();
+			throw new CompilerException();
 		}
 
 		private MosaMethod GetMethodOrOverride(MosaType type, MosaMethod method)
@@ -1165,10 +1166,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Leave instruction.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		/// <exception cref="InvalidCompilerException"></exception>
+		/// <exception cref="CompilerException"></exception>
 		private void Leave(InstructionNode node)
 		{
-			throw new InvalidCompilerException();
+			throw new CompilerException();
 		}
 
 		/// <summary>
@@ -1366,7 +1367,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Shift instruction.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		/// <exception cref="InvalidCompilerException"></exception>
+		/// <exception cref="CompilerException"></exception>
 		private void Shift(InstructionNode node)
 		{
 			switch ((node.Instruction as BaseCILInstruction).OpCode)
@@ -1374,7 +1375,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Shl: node.SetInstruction(IRInstruction.ShiftLeft, node.Result, node.Operand1, node.Operand2); break;
 				case OpCode.Shr: node.SetInstruction(IRInstruction.ArithmeticShiftRight, node.Result, node.Operand1, node.Operand2); break;
 				case OpCode.Shr_un: node.SetInstruction(IRInstruction.ShiftRight, node.Result, node.Operand1, node.Operand2); break;
-				default: throw new InvalidCompilerException();
+				default: throw new CompilerException();
 			}
 		}
 
@@ -1572,7 +1573,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Throw(InstructionNode node)
 		{
-			throw new InvalidCompilerException();
+			throw new CompilerException();
 		}
 
 		/// <summary>
@@ -2036,7 +2037,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="type">The type.</param>
 		/// <param name="Platform32Bit">if set to <c>true</c> [platform32 bit].</param>
 		/// <returns></returns>
-		/// <exception cref="InvalidCompilerException"></exception>
+		/// <exception cref="CompilerException"></exception>
 		private int GetIndex(MosaType type, bool Platform32Bit)
 		{
 			if (type.IsChar) return 5;
@@ -2055,7 +2056,7 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (type.IsPointer) return 12;
 			else if (!type.IsValueType) return 12;
 
-			throw new InvalidCompilerException();
+			throw new CompilerException();
 		}
 
 		/// <summary>

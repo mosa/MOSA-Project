@@ -27,6 +27,7 @@ namespace Mosa.Compiler.Framework.Expression
 		public ConditionCode ConditionCode { get; set; } = ConditionCode.Undefined;
 
 		public string Alias { get; }
+		public string TypeAlias { get; }
 
 		public ulong ConstantUnsignedLongInteger { get; }
 		public double ConstantDouble { get; }
@@ -189,7 +190,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 		public override string ToString()
 		{
-			return NodeType.ToString() + ":" + (Instruction != null ? Instruction.BaseInstructionName : string.Empty) + Alias;
+			return NodeType.ToString() + ": " + (Instruction != null ? Instruction.BaseInstructionName : string.Empty) + Alias;
 		}
 	}
 }

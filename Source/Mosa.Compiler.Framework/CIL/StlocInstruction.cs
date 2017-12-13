@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -39,6 +39,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first

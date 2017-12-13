@@ -182,6 +182,8 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public CompilerMethodData MethodData { get; }
 
+		public MethodTransform MethodTransform { get; }
+
 		#endregion Properties
 
 		#region Construction
@@ -224,6 +226,8 @@ namespace Mosa.Compiler.Framework
 			EvaluateParameterOperands();
 
 			CalculateMethodParameterSize();
+
+			MethodTransform = new MethodTransform(this);
 		}
 
 		#endregion Construction

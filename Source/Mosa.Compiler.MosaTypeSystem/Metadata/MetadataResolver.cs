@@ -2,7 +2,7 @@
 
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
-using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -540,7 +540,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private void ResolveSZArray(MosaType arrayType)
 		{
 			if (arrayType.ArrayInfo != MosaArrayInfo.Vector)
-				throw new InvalidCompilerException("Type must be a SZ Array.");
+				throw new CompilerException("Type must be a SZ Array.");
 
 			var typeSystem = arrayType.TypeSystem;
 			var szHelper = typeSystem.GetTypeByName(typeSystem.CorLib, "System", "Array+SZArrayHelper");

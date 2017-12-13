@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using dnlib.DotNet;
-using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using System;
 using System.Collections.Generic;
 
@@ -9,16 +9,16 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
 	public class MetadataCache
 	{
-		public IDictionary<string, MosaModule> Modules { get; private set; }
+		public IDictionary<string, MosaModule> Modules { get; }
 
-		public MosaModule LinkerModule { get; private set; }
+		public MosaModule LinkerModule { get; }
 
-		public MosaType DefaultLinkerType { get; private set; }
+		public MosaType DefaultLinkerType { get; }
 
-		private Dictionary<ScopedToken, MosaType> typeLookup = new Dictionary<ScopedToken, MosaType>();
-		private Dictionary<ScopedToken, MosaMethod> methodLookup = new Dictionary<ScopedToken, MosaMethod>();
-		private Dictionary<ScopedToken, MosaField> fieldLookup = new Dictionary<ScopedToken, MosaField>();
-		private Dictionary<ScopedToken, MosaProperty> propertyLookup = new Dictionary<ScopedToken, MosaProperty>();
+		private readonly Dictionary<ScopedToken, MosaType> typeLookup = new Dictionary<ScopedToken, MosaType>();
+		private readonly Dictionary<ScopedToken, MosaMethod> methodLookup = new Dictionary<ScopedToken, MosaMethod>();
+		private readonly Dictionary<ScopedToken, MosaField> fieldLookup = new Dictionary<ScopedToken, MosaField>();
+		private readonly Dictionary<ScopedToken, MosaProperty> propertyLookup = new Dictionary<ScopedToken, MosaProperty>();
 
 		private uint stringIdCounter;
 		internal Dictionary<string, uint> stringHeapLookup = new Dictionary<string, uint>(StringComparer.Ordinal);
@@ -38,11 +38,10 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 		public MosaModule GetModuleByName(string name)
 		{
-			MosaModule result;
-			if (Modules.TryGetValue(name, out result))
+			if (Modules.TryGetValue(name, out MosaModule result))
 				return result;
 
-			throw new InvalidCompilerException();
+			throw new CompilerException();
 		}
 
 		public void AddType(MosaType type)
@@ -87,8 +86,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 		public uint GetStringId(string value)
 		{
-			uint id;
-			if (!stringHeapLookup.TryGetValue(value, out id))
+			if (!stringHeapLookup.TryGetValue(value, out uint id))
 			{
 				id = stringIdCounter++;
 				stringHeapLookup[value] = id;

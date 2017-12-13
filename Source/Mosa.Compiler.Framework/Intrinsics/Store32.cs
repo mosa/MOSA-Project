@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="methodCompiler">The method compiler.</param>
-		/// <exception cref="InvalidCompilerException"></exception>
+		/// <exception cref="CompilerException"></exception>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			const InstructionSize size = InstructionSize.Size32;
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			}
 			else
 			{
-				throw new InvalidCompilerException();
+				throw new CompilerException();
 			}
 
 			LoadStore.OrderStoreOperands(context.Node, methodCompiler);

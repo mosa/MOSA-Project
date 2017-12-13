@@ -2,131 +2,113 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
+
+// Note: Most code from BaseMethodCompilerStage
 
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// Basic base class for method compiler pipeline stages
+	/// Method Transform Helper
 	/// </summary>
-	public abstract class BaseMethodCompilerStage : IMethodCompilerStage, ITraceFactory
+	public class MethodTransform
 	{
-		#region Data members
-
-		protected int instructionCount = 0;
-
-		private List<TraceLog> traceLogs;
-
-		#endregion Data members
-
 		#region Properties
+
+		public string CurrenStageName { get; set; }
 
 		/// <summary>
 		/// Hold the method compiler
 		/// </summary>
-		protected BaseMethodCompiler MethodCompiler { get; private set; }
+		public BaseMethodCompiler MethodCompiler { get; }
 
 		/// <summary>
 		/// The architecture of the compilation process
 		/// </summary>
-		protected BaseArchitecture Architecture { get; private set; }
-
-		/// <summary>
-		/// List of basic blocks found during decoding
-		/// </summary>
-		protected BasicBlocks BasicBlocks { get; private set; }
+		public BaseArchitecture Architecture { get; }
 
 		/// <summary>
 		/// Holds the type system
 		/// </summary>
-		protected TypeSystem TypeSystem { get; private set; }
+		public TypeSystem TypeSystem { get; }
 
 		/// <summary>
 		/// Holds the type layout interface
 		/// </summary>
-		protected MosaTypeLayout TypeLayout { get; private set; }
-
-		/// <summary>
-		/// Holds the native pointer size
-		/// </summary>
-		protected int NativePointerSize { get; private set; }
+		public MosaTypeLayout TypeLayout { get; }
 
 		/// <summary>
 		/// Holds the native alignment
 		/// </summary>
-		protected int NativeAlignment { get; private set; }
+		public int NativeAlignment { get; }
 
 		/// <summary>
-		/// Gets the type of the platform internal runtime.
+		/// Holds the size of the native pointer.
+		/// </summary>
+		public int NativePointerSize { get; }
+
+		/// <summary>
+		/// The size of the native instruction.
+		/// </summary>
+		public InstructionSize NativeInstructionSize { get; }
+
+		public BasicBlocks BasicBlocks { get; }
+
+		/// <summary>
+		/// The method data.
+		/// </summary>
+		public CompilerMethodData MethodData { get; }
+
+		public MosaMethod Method { get { return MethodCompiler.Method; } }
+
+		public Operand ConstantZero { get { return MethodCompiler.ConstantZero; } }
+
+		public Operand StackFrame { get { return MethodCompiler.StackFrame; } }
+
+		public Operand StackPointer { get { return MethodCompiler.StackPointer; } }
+
+		/// <summary>
+		/// The type of the platform internal runtime.
 		/// </summary>
 		public MosaType PlatformInternalRuntimeType { get { return MethodCompiler.Compiler.PlatformInternalRuntimeType; } }
 
 		/// <summary>
-		/// Gets the type of the internal runtime.
+		/// The type of the internal runtime.
 		/// </summary>
 		public MosaType InternalRuntimeType { get { return MethodCompiler.Compiler.InternalRuntimeType; } }
 
 		/// <summary>
-		/// Gets a value indicating whether this instance is plugged.
+		/// Gets a value indicating whether this instance has code.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance has code; otherwise, <c>false</c>.
+		/// </value>
+		public bool HasCode { get { return BasicBlocks.HeadBlocks.Count != 0; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance has protected regions.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance has protected regions; otherwise, <c>false</c>.
+		/// </value>
+		public bool HasProtectedRegions { get { return MethodCompiler.Method.ExceptionHandlers.Count != 0; } }
+
+		/// <summary>
+		/// The Value indicating whether this instance is plugged.
 		/// </summary>
 		public bool IsPlugged { get { return MethodCompiler.IsPlugged; } }
 
-		/// <summary>
-		/// Gets the size of the native instruction.
-		/// </summary>
-		/// <value>
-		/// The size of the native instruction.
-		/// </value>
-		protected InstructionSize NativeInstructionSize { get; private set; }
-
-		/// <summary>
-		/// Gets the method data.
-		/// </summary>
-		/// <value>
-		/// The method data.
-		/// </value>
-		protected CompilerMethodData MethodData { get; private set; }
-
-		/// <summary>
-		/// Gets the method.
-		/// </summary>
-		/// <value>
-		/// The method.
-		/// </value>
-		protected MosaMethod Method { get { return MethodCompiler.Method; } }
-
-		protected Operand ConstantZero { get { return MethodCompiler.ConstantZero; } }
-
-		protected Operand StackFrame { get { return MethodCompiler.StackFrame; } }
-
-		protected Operand StackPointer { get { return MethodCompiler.StackPointer; } }
-
-		protected MethodTransform MethodTransform { get; private set; }
-
 		#endregion Properties
 
-		#region IPipelineStage Members
-
 		/// <summary>
-		/// Retrieves the name of the compilation stage.
+		/// Method Transform Helper
 		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public virtual string Name { get { return GetType().Name; } }
-
-		#endregion IPipelineStage Members
-
-		#region IMethodCompilerStage members
-
-		/// <summary>
-		/// Setups the specified compiler.
-		/// </summary>
-		/// <param name="methodCompiler">The compiler.</param>
-		void IMethodCompilerStage.Initialize(BaseMethodCompiler methodCompiler)
+		/// <param name="methodCompiler">The method compiler.</param>
+		/// <returns></returns>
+		public MethodTransform(BaseMethodCompiler methodCompiler)
 		{
 			MethodCompiler = methodCompiler;
-			MethodTransform = methodCompiler.MethodTransform;
 			BasicBlocks = methodCompiler.BasicBlocks;
 			Architecture = methodCompiler.Architecture;
 			TypeSystem = methodCompiler.TypeSystem;
@@ -136,60 +118,16 @@ namespace Mosa.Compiler.Framework
 			NativeInstructionSize = Architecture.NativeInstructionSize;
 
 			MethodData = MethodCompiler.MethodData;
-
-			traceLogs = new List<TraceLog>();
-
-			Setup();
 		}
-
-		void IMethodCompilerStage.Execute()
-		{
-			Run();
-
-			SubmitTraceLogs(traceLogs);
-
-			Finish();
-		}
-
-		#endregion IMethodCompilerStage members
-
-		#region Overrides
-
-		protected virtual void Setup()
-		{ }
-
-		protected virtual void Run()
-		{ }
-
-		protected virtual void Finish()
-		{ }
-
-		#endregion Overrides
 
 		#region Methods
-
-		/// <summary>
-		/// Gets a value indicating whether this instance has code.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if this instance has code; otherwise, <c>false</c>.
-		/// </value>
-		protected bool HasCode { get { return BasicBlocks.HeadBlocks.Count != 0; } }
-
-		/// <summary>
-		/// Gets a value indicating whether this instance has protected regions.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance has protected regions; otherwise, <c>false</c>.
-		/// </value>
-		protected bool HasProtectedRegions { get { return MethodCompiler.Method.ExceptionHandlers.Count != 0; } }
 
 		/// <summary>
 		/// Allocates the virtual register.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		protected Operand AllocateVirtualRegister(MosaType type)
+		public Operand AllocateVirtualRegister(MosaType type)
 		{
 			return MethodCompiler.VirtualRegisters.Allocate(type);
 		}
@@ -299,11 +237,11 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Splits the block.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <returns></returns>
-		protected Context Split(Context ctx)
+		protected Context Split(Context context)
 		{
-			return new Context(Split(ctx.Node));
+			return new Context(Split(context.Node));
 		}
 
 		/// <summary>
@@ -313,7 +251,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		///   <c>true</c> if [is empty block with single jump] [the specified block]; otherwise, <c>false</c>.
 		/// </returns>
-		protected bool IsEmptyBlockWithSingleJump(BasicBlock block)
+		public bool IsEmptyBlockWithSingleJump(BasicBlock block)
 		{
 			if (block.NextBlocks.Count != 1)
 				return false;
@@ -337,7 +275,7 @@ namespace Mosa.Compiler.Framework
 		/// Empties the block of all instructions.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		protected void EmptyBlockOfAllInstructions(BasicBlock block)
+		public void EmptyBlockOfAllInstructions(BasicBlock block)
 		{
 			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
@@ -351,7 +289,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="block">The current from block.</param>
 		/// <param name="oldTarget">The current destination block.</param>
 		/// <param name="newTarget">The new target block.</param>
-		protected void ReplaceBranchTargets(BasicBlock block, BasicBlock oldTarget, BasicBlock newTarget)
+		public void ReplaceBranchTargets(BasicBlock block, BasicBlock oldTarget, BasicBlock newTarget)
 		{
 			for (var node = block.Last; !node.IsBlockStartInstruction; node = node.Previous)
 			{
@@ -373,7 +311,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		protected void RemoveEmptyBlockWithSingleJump(BasicBlock block)
+		public void RemoveEmptyBlockWithSingleJump(BasicBlock block)
 		{
 			Debug.Assert(block.NextBlocks.Count == 1);
 
@@ -390,7 +328,7 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(block.PreviousBlocks.Count == 0);
 		}
 
-		protected static void UpdatePhiList(BasicBlock removedBlock, BasicBlock[] nextBlocks)
+		public static void UpdatePhiList(BasicBlock removedBlock, BasicBlock[] nextBlocks)
 		{
 			foreach (var next in nextBlocks)
 			{
@@ -426,7 +364,7 @@ namespace Mosa.Compiler.Framework
 
 		#region Protected Region Methods
 
-		protected MosaExceptionHandler FindImmediateExceptionContext(int label)
+		public MosaExceptionHandler FindImmediateExceptionContext(int label)
 		{
 			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
 			{
@@ -439,7 +377,7 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		protected MosaExceptionHandler FindNextEnclosingFinallyContext(MosaExceptionHandler exceptionContext)
+		public MosaExceptionHandler FindNextEnclosingFinallyContext(MosaExceptionHandler exceptionContext)
 		{
 			int index = MethodCompiler.Method.ExceptionHandlers.IndexOf(exceptionContext);
 
@@ -459,10 +397,8 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		protected MosaExceptionHandler FindFinallyExceptionContext(InstructionNode node)
+		public MosaExceptionHandler FindFinallyExceptionContext(InstructionNode node)
 		{
-			MosaExceptionHandler innerClause = null;
-
 			int label = node.Label;
 
 			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
@@ -476,7 +412,7 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		protected bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
+		public bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
 		{
 			int leaveLabel = node.Label;
 			int targetLabel = node.BranchTargets[0].First.Label;
@@ -513,80 +449,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Protected Region Methods
-
-		#region ITraceSectionFactory
-
-		TraceLog ITraceFactory.CreateTraceLog(string section)
-		{
-			return CreateTraceLog(section);
-		}
-
-		#endregion ITraceSectionFactory
-
-		#region Trace Helper Methods
-
-		public string GetFormattedStageName()
-		{
-			return MethodCompiler.FormatStageName(this as IPipelineStage);
-		}
-
-		public bool IsTraceable()
-		{
-			return MethodCompiler.Trace.TraceFilter.IsMatch(MethodCompiler.Method, GetFormattedStageName());
-		}
-
-		protected TraceLog CreateTraceLog()
-		{
-			bool active = IsTraceable();
-
-			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, GetFormattedStageName(), active);
-
-			if (active)
-				traceLogs.Add(traceLog);
-
-			return traceLog;
-		}
-
-		public TraceLog CreateTraceLog(string section)
-		{
-			bool active = IsTraceable();
-
-			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, GetFormattedStageName(), section, active);
-
-			if (active)
-				traceLogs.Add(traceLog);
-
-			return traceLog;
-		}
-
-		private void SubmitTraceLog(TraceLog traceLog)
-		{
-			if (!traceLog.Active)
-				return;
-
-			MethodCompiler.Trace.NewTraceLog(traceLog);
-		}
-
-		private void SubmitTraceLogs(IList<TraceLog> traceLogs)
-		{
-			if (traceLogs == null)
-				return;
-
-			foreach (var traceLog in traceLogs)
-			{
-				if (traceLog != null)
-				{
-					SubmitTraceLog(traceLog);
-				}
-			}
-		}
-
-		protected void NewCompilerTraceEvent(CompilerEvent compileEvent, string message)
-		{
-			MethodCompiler.Trace.NewCompilerTraceEvent(compileEvent, message, MethodCompiler.ThreadID);
-		}
-
-		#endregion Trace Helper Methods
 
 		/// <summary>
 		/// Updates the counter.
@@ -804,52 +666,52 @@ namespace Mosa.Compiler.Framework
 
 		#region Constant Helper Methods
 
-		protected Operand CreateConstant(int value)
+		public Operand CreateConstant(int value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
 		}
 
-		protected Operand CreateConstant(uint value)
+		public Operand CreateConstant(uint value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.U4, value);
 		}
 
-		protected Operand CreateConstant(long value)
+		public Operand CreateConstant(long value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
 		}
 
-		protected Operand CreateConstant(ulong value)
+		public Operand CreateConstant(ulong value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.U8, value);
 		}
 
-		protected static Operand CreateConstant(MosaType type, long value)
+		public static Operand CreateConstant(MosaType type, long value)
 		{
 			return Operand.CreateConstant(type, (ulong)value);
 		}
 
-		protected static Operand CreateConstant(MosaType type, ulong value)
+		public static Operand CreateConstant(MosaType type, ulong value)
 		{
 			return Operand.CreateConstant(type, value);
 		}
 
-		protected static Operand CreateConstant(MosaType type, int value)
+		public static Operand CreateConstant(MosaType type, int value)
 		{
 			return Operand.CreateConstant(type, (long)value);
 		}
 
-		protected static Operand CreateConstant(MosaType type, uint value)
+		public static Operand CreateConstant(MosaType type, uint value)
 		{
 			return Operand.CreateConstant(type, value);
 		}
 
-		protected Operand CreateConstant(float value)
+		public Operand CreateConstant(float value)
 		{
 			return Operand.CreateConstant(value, TypeSystem);
 		}
 
-		protected Operand CreateConstant(double value)
+		public Operand CreateConstant(double value)
 		{
 			return Operand.CreateConstant(value, TypeSystem);
 		}
