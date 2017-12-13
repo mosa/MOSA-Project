@@ -6,7 +6,7 @@ using Mosa.FileSystem.VFS;
 namespace Mosa.FileSystem
 {
 	/// <summary>
-	///
+	/// GenericFileSystem
 	/// </summary>
 	public abstract class GenericFileSystem
 	{

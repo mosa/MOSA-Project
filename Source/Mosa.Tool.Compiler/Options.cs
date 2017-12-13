@@ -1,4 +1,6 @@
-﻿using CommandLine;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using CommandLine;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Common;
 using System;
@@ -8,7 +10,7 @@ using Mosa.Compiler.Linker;
 
 namespace Mosa.Tool.Compiler
 {
-	class Options
+	internal class Options
 	{
 		public List<FileInfo> InputFiles { get; private set; }
 		public bool IsInputExecutable { get; private set; }
@@ -26,7 +28,7 @@ namespace Mosa.Tool.Compiler
 					}
 
 					FileInfo file = new FileInfo(v);
-					if (file.Extension.ToLower() == ".exe")
+					if (string.Equals(file.Extension, ".exe", StringComparison.OrdinalIgnoreCase))
 					{
 						if (IsInputExecutable)
 						{

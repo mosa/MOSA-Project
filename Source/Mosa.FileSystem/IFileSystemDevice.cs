@@ -3,7 +3,7 @@
 namespace Mosa.FileSystem
 {
 	/// <summary>
-	///
+	/// IFileSystemDevice
 	/// </summary>
 	public interface IFileSystemDevice
 	{

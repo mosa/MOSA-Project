@@ -88,6 +88,7 @@
     <Compile Include="DeviceDriver.cs" />
     <Compile Include="HardwareResources.cs" />
     <Compile Include="DeviceDriverRegistryEntry.cs" />
+    <Compile Include="IDeviceConfiguration.cs" />
     <Compile Include="IDMAChannel.cs" />
     <Compile Include="BaseHardwareAbstraction.cs" />
     <Compile Include="IHardwareDevice.cs" />
