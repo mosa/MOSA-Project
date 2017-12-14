@@ -2,6 +2,7 @@
 
 using CommandLine;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Trace.BuiltIn;
@@ -63,6 +64,7 @@ namespace Mosa.Tool.Compiler
 			// always print header with version information
 			Console.WriteLine("MOSA AOT Compiler, Version {0}.{1} '{2}'", majorVersion, minorVersion, codeName);
 			Console.WriteLine("Copyright 2015 by the MOSA Project. Licensed under the New BSD License.");
+
 			//Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
 			Console.WriteLine();
 			Console.WriteLine("Parsing options...");
@@ -70,7 +72,7 @@ namespace Mosa.Tool.Compiler
 			try
 			{
 				options = ParseOptions(args);
-				if(options == null)
+				if (options == null)
 				{
 					ShowShortHelp();
 					return;

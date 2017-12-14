@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
-
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -114,7 +113,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is constant one]; otherwise, <c>false</c>.
 		/// </value>
-		/// <exception cref="InvalidCompilerException"></exception>
+		/// <exception cref="CompilerException"></exception>
 		public bool IsConstantOne
 		{
 			get
@@ -134,7 +133,7 @@ namespace Mosa.Compiler.Framework
 				else if (IsNull)
 					return false;
 
-				throw new InvalidCompilerException();
+				throw new CompilerException();
 			}
 		}
 
@@ -144,7 +143,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if [is constant zero]; otherwise, <c>false</c>.
 		/// </value>
-		/// <exception cref="InvalidCompilerException"></exception>
+		/// <exception cref="CompilerException"></exception>
 		public bool IsConstantZero
 		{
 			get
@@ -164,7 +163,7 @@ namespace Mosa.Compiler.Framework
 				else if (IsNull)
 					return true;
 
-				throw new InvalidCompilerException();
+				throw new CompilerException();
 			}
 		}
 
@@ -366,7 +365,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Retrieves the register, where the operand is located.
 		/// </summary>
-		public Register Register { get; private set; }
+		public PhysicalRegister Register { get; private set; }
 
 		/// <summary>
 		/// Gets the type of the shift.
@@ -443,7 +442,7 @@ namespace Mosa.Compiler.Framework
 		private Operand(MosaType type)
 				: this()
 		{
-			Debug.Assert(type != null);
+			//Debug.Assert(type != null);
 			Type = type;
 		}
 
@@ -471,7 +470,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		/// A new operand representing the value <paramref name="value" />.
 		/// </returns>
-		/// <exception cref="InvalidCompilerException"></exception>
+		/// <exception cref="CompilerException"></exception>
 		public static Operand CreateConstant(MosaType type, ulong value)
 		{
 			var operand = new Operand(type)
@@ -483,12 +482,12 @@ namespace Mosa.Compiler.Framework
 			};
 			if (type.IsReferenceType && value != 0)
 			{
-				throw new InvalidCompilerException();
+				throw new CompilerException();
 			}
 
 			if (!(operand.IsInteger || operand.IsBoolean || operand.IsChar || operand.IsPointer || operand.IsReferenceType))
 			{
-				throw new InvalidCompilerException();
+				throw new CompilerException();
 			}
 
 			return operand;
@@ -632,7 +631,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="type">The type.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		public static Operand CreateCPURegister(MosaType type, Register register)
+		public static Operand CreateCPURegister(MosaType type, PhysicalRegister register)
 		{
 			return new Operand(type)
 			{

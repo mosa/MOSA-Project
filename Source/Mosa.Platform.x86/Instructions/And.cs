@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86.Instructions
 				if (third.IsConstant) return R_C;
 			}
 
-			throw new ArgumentException(@"No opcode for operand type.");
+			throw new ArgumentException("No opcode for operand type.");
 		}
 
 		#endregion Methods

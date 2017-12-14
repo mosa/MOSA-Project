@@ -1,18 +1,19 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using CommandLine;
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Linker;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Mosa.Compiler.Linker;
 
 namespace Mosa.Tool.Compiler
 {
 	internal class Options
 	{
-		public List<FileInfo> InputFiles { get; private set; }
+		public List<FileInfo> InputFiles { get; }
 		public bool IsInputExecutable { get; private set; }
 
 		[Value(0, MetaName = "Input files", HelpText = "Input files.", Min = 1, Required = true)]

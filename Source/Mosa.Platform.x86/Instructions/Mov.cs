@@ -54,14 +54,14 @@ namespace Mosa.Platform.x86.Instructions
 			{
 				if (source.IsCPURegister) return SEG_RM;
 
-				throw new ArgumentException(@"TODO: No opcode for move destination segment register");
+				throw new ArgumentException("TODO: No opcode for move destination segment register");
 			}
 
 			if (source.Register is SegmentRegister)
 			{
 				if (destination.IsCPURegister) return RM_SEG;
 
-				throw new ArgumentException(@"TODO: No opcode for move source segment register");
+				throw new ArgumentException("TODO: No opcode for move source segment register");
 			}
 
 			if (destination.IsCPURegister && source.IsConstant) return RM_C;
@@ -85,7 +85,7 @@ namespace Mosa.Platform.x86.Instructions
 				return RM_C;
 			}
 
-			throw new ArgumentException(@"No opcode for operand type. [" + destination + ", " + source + ")");
+			throw new ArgumentException("No opcode for operand type. [" + destination + ", " + source + ")");
 		}
 
 		/// <summary>
@@ -95,7 +95,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
-			LegacyOpCode opCode = ComputeOpCode(node.Result, node.Operand1, null);
+			var opCode = ComputeOpCode(node.Result, node.Operand1, null);
 			emitter.Emit(opCode, node.Result, node.Operand1);
 		}
 

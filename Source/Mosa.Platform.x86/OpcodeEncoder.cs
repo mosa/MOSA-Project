@@ -1,10 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-using System.IO;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
+using System.Diagnostics;
+using System.IO;
 
 namespace Mosa.Platform.x86
 {
@@ -200,7 +201,7 @@ namespace Mosa.Platform.x86
 			return Append3Bits(value);
 		}
 
-		public OpcodeEncoder AppendRegister(Register register)
+		public OpcodeEncoder AppendRegister(PhysicalRegister register)
 		{
 			return Append3Bits(register.RegisterCode);
 		}
@@ -220,7 +221,7 @@ namespace Mosa.Platform.x86
 			return Append3Bits(value);
 		}
 
-		public OpcodeEncoder AppendRM(Register register)
+		public OpcodeEncoder AppendRM(PhysicalRegister register)
 		{
 			return Append3Bits(register.RegisterCode);
 		}
@@ -256,7 +257,7 @@ namespace Mosa.Platform.x86
 			return AppendBit(width ? 1 : 0);
 		}
 
-		public OpcodeEncoder AppendSIB(int scale, Register index, Register @base)
+		public OpcodeEncoder AppendSIB(int scale, PhysicalRegister index, PhysicalRegister @base)
 		{
 			Debug.Assert(scale == 1 || scale == 2 || scale == 4 || scale == 8);
 
@@ -367,7 +368,7 @@ namespace Mosa.Platform.x86
 			if (size == InstructionSize.Size16)
 				return AppendShortValue((ushort)operand.ConstantUnsignedInteger);
 
-			throw new InvalidCompilerException("Instruction size invalid");
+			throw new CompilerException("Instruction size invalid");
 		}
 
 		public OpcodeEncoder ModRegRMSIBDisplacement(bool offsetDestination, Operand destination, Operand source, Operand offset)

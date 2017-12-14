@@ -11,12 +11,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Lidt : X86Instruction
 	{
-		#region Data Members
-
-		private static readonly LegacyOpCode opcode = new LegacyOpCode(new byte[] { 0x0F, 0x01 }, 3);
-
-		#endregion Data Members
-
 		#region Construction
 
 		/// <summary>

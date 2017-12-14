@@ -63,7 +63,7 @@ namespace Mosa.Platform.x86.Instructions
 				return R_C;
 			}
 
-			throw new ArgumentException(String.Format(@"x86.Cmp: No opcode for operand types {0} and {1}.", source, third));
+			throw new ArgumentException(String.Format("x86.Cmp: No opcode for operand types {0} and {1}.", source, third));
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Result == null);
 
-			LegacyOpCode opCode = ComputeOpCode(null, node.Operand1, node.Operand2);
+			var opCode = ComputeOpCode(null, node.Operand1, node.Operand2);
 			emitter.Emit(opCode, node.Operand1, node.Operand2);
 		}
 

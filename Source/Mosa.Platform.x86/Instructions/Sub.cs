@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.Instructions
 					return R_O;
 			}
 
-			throw new ArgumentException(@"No opcode for operand type.");
+			throw new ArgumentException("No opcode for operand type.");
 		}
 
 		#endregion Methods

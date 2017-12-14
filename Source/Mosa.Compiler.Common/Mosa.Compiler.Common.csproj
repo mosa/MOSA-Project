@@ -38,18 +38,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="EndianAwareBinaryWriterExtensions.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IncludeFile.cs" />
     <Compile Include="KeyedList.cs" />
     <Compile Include="Alignment.cs" />
-    <Compile Include="InvalidMetadataException.cs" />
+    <Compile Include="Exceptions\InvalidMetadataException.cs" />
     <Compile Include="Bits.cs" />
     <Compile Include="BitArrayExtension.cs" />
-    <Compile Include="AssemblyLoadException.cs" />
-    <Compile Include="InvalidCompilerException.cs" />
+    <Compile Include="Exceptions\AssemblyLoadException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SortedSetExtension.cs" />
-    <Compile Include="NotImplementCompilerException.cs" />
-    <Compile Include="CompilerException.cs" />
+    <Compile Include="Exceptions\NotImplementCompilerException.cs" />
+    <Compile Include="Exceptions\CompilerException.cs" />
     <Compile Include="SimplePriorityQueue.cs" />
     <Compile Include="Endianness .cs" />
     <Compile Include="ListExtension.cs" />

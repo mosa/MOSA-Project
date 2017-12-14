@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -30,18 +29,6 @@ namespace Mosa.Platform.x86.Instructions
 		#endregion Construction
 
 		#region Methods
-
-		/// <summary>
-		/// Computes the opcode.
-		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		internal override LegacyOpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-		{
-			throw new NotSupportedException();
-		}
 
 		/// <summary>
 		/// Emits the specified platform instruction.

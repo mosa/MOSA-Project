@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using System;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -103,7 +103,7 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Brfalse: return "false";
 				case OpCode.Brfalse_s: return "false";
 				case OpCode.Switch: return "switch";
-				default: throw new InvalidCompilerException("Opcode not set.");
+				default: throw new CompilerException("Opcode not set.");
 			}
 		}
 

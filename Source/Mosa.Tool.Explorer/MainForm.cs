@@ -107,7 +107,7 @@ namespace Mosa.Tool.Explorer
 			cbEnableSparseConditionalConstantPropagation.Checked = !options.NoSparse;
 
 			IList<string> files = (IList<string>)options.Files;
-			if(files.Count == 1)
+			if (files.Count == 1)
 			{
 				string file = files[0];
 
@@ -544,7 +544,9 @@ namespace Mosa.Tool.Explorer
 			var moduleLoader = new MosaModuleLoader();
 
 			if (includeDirectory != null)
+			{
 				moduleLoader.AddPrivatePath(includeDirectory);
+			}
 
 			moduleLoader.AddPrivatePath(Path.GetDirectoryName(filename));
 			moduleLoader.LoadModuleFromFile(filename);
@@ -560,12 +562,9 @@ namespace Mosa.Tool.Explorer
 		{
 			form.ShowDialog();
 
-			if (form.DialogResult == DialogResult.OK)
+			if (form.DialogResult == DialogResult.OK && !string.IsNullOrEmpty(form.Assembly))
 			{
-				if (!string.IsNullOrEmpty(form.Assembly))
-				{
-					LoadAssembly(form.Assembly, AppDomain.CurrentDomain.BaseDirectory);
-				}
+				LoadAssembly(form.Assembly, AppDomain.CurrentDomain.BaseDirectory);
 			}
 		}
 

@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if (!(node.Instruction is IntrinsicMethodCall))
+					if (node.Instruction != IRInstruction.IntrinsicMethodCall)
 						continue;
 
 					string external = node.InvokeMethod.ExternMethod;

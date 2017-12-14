@@ -66,7 +66,7 @@ namespace Mosa.Platform.x86.Instructions
 				return R_C;
 			}
 
-			throw new ArgumentException(String.Format(@"x86.Test: No opcode for operand types {0} and {1}.", source, third));
+			throw new ArgumentException(String.Format("x86.Test: No opcode for operand types {0} and {1}.", source, third));
 		}
 
 		/// <summary>
@@ -76,7 +76,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
-			LegacyOpCode opCode = ComputeOpCode(null, node.Operand1, node.Operand2);
+			var opCode = ComputeOpCode(null, node.Operand1, node.Operand2);
 			emitter.Emit(opCode, node.Operand1, node.Operand2);
 		}
 

@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using System;
 
@@ -25,6 +25,14 @@ namespace Mosa.Platform.ARMv6
 		}
 
 		#endregion Construction
+
+		/// <summary>
+		/// Gets the name of the instruction family.
+		/// </summary>
+		/// <value>
+		/// The name of the instruction family.
+		/// </value>
+		public override string InstructionFamilyName { get { return "ARMv6"; } }
 
 		#region Methods
 
@@ -66,7 +74,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
 		/// <param name="opcode">The opcode.</param>
-		/// <exception cref="InvalidCompilerException"></exception>
+		/// <exception cref="CompilerException"></exception>
 		protected void EmitDataProcessingInstruction(InstructionNode node, ARMv6CodeEmitter emitter, byte opcode)
 		{
 			if (node.Operand2.IsCPURegister && node.Operand3.IsShift)
@@ -79,7 +87,7 @@ namespace Mosa.Platform.ARMv6
 			}
 			else
 			{
-				throw new InvalidCompilerException();
+				throw new CompilerException();
 			}
 		}
 

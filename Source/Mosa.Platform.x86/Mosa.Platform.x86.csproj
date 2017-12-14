@@ -95,11 +95,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Instructions\Btr.cs" />
     <Compile Include="Instructions\Cmovcc.cs" />
     <Compile Include="Instructions\CmpXchgLoad.cs" />
     <Compile Include="Instructions\Lea.cs" />
     <Compile Include="Instructions\Movaps.cs" />
+    <Compile Include="Instructions\MovCRStore.cs" />
+    <Compile Include="Instructions\MovCRLoad.cs" />
     <Compile Include="Instructions\MovupsStore.cs" />
     <Compile Include="Instructions\MovupsLoad.cs" />
     <Compile Include="Instructions\Movd.cs" />
@@ -114,7 +117,6 @@
     <Compile Include="Instructions\Movups.cs" />
     <Compile Include="Instructions\MovStore.cs" />
     <Compile Include="Instructions\MovLoad.cs" />
-    <Compile Include="Instructions\MovCR.cs" />
     <Compile Include="Instructions\IMul.cs" />
     <Compile Include="Instructions\Bts.cs" />
     <Compile Include="Instructions\PXor.cs" />
@@ -150,6 +152,16 @@
     <Compile Include="Intrinsic\Remainder.cs" />
     <Compile Include="Intrinsic\SetFS.cs" />
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
+    <Compile Include="X86.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>X86.tt</DependentUpon>
+    </Compile>
+    <Compile Include="X86InstructionMap.cs">
+      <DependentUpon>X86InstructionMap.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
     <Compile Include="Stages\IRSubstitutionStage.cs" />
@@ -228,7 +240,6 @@
     <Compile Include="Instructions\Dec.cs" />
     <Compile Include="Instructions\IDiv.cs" />
     <Compile Include="Instructions\Inc.cs" />
-    <Compile Include="X86.cs" />
     <Compile Include="Instructions\Int.cs" />
     <Compile Include="Intrinsic\BochsDebug.cs" />
     <Compile Include="Instructions\Cld.cs" />
@@ -244,15 +255,10 @@
     <Compile Include="Instructions\Out.cs" />
     <Compile Include="Instructions\Pause.cs" />
     <Compile Include="Instructions\Popad.cs" />
-    <Compile Include="Instructions\Popfd.cs" />
     <Compile Include="Instructions\Pop.cs" />
     <Compile Include="Instructions\Pushad.cs" />
-    <Compile Include="Instructions\Pushfd.cs" />
     <Compile Include="Instructions\Push.cs" />
     <Compile Include="Instructions\Rcr.cs" />
-    <Compile Include="Instructions\Rdmsr.cs" />
-    <Compile Include="Instructions\Rdpmc.cs" />
-    <Compile Include="Instructions\Rdtsc.cs" />
     <Compile Include="Instructions\Rep.cs" />
     <Compile Include="Instructions\Sti.cs" />
     <Compile Include="Instructions\Stos.cs" />
@@ -295,7 +301,22 @@
     </Compile>
     <Compile Include="OpcodeEncoder.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="X86.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>X86.cs</LastGenOutput>
+    </Content>
+    <Content Include="X86InstructionMap.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>X86InstructionMap.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="X86Instructions.json" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>

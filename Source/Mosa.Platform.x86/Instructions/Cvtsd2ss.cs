@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (destination.IsCPURegister && source.IsCPURegister) return opcode;
 
-			throw new ArgumentException(@"No opcode for operand type.");
+			throw new ArgumentException("No opcode for operand type.");
 		}
 
 		#endregion Methods

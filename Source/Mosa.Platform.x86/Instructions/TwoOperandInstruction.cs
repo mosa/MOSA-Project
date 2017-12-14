@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	///
+	/// TwoOperandInstruction
 	/// </summary>
 	public abstract class TwoOperandInstruction : X86Instruction
 	{
@@ -30,7 +30,8 @@ namespace Mosa.Platform.x86.Instructions
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			Debug.Assert(node.Result == node.Operand1);
-			LegacyOpCode opCode = ComputeOpCode(node.Result, node.Operand1, node.Operand2);
+
+			var opCode = ComputeOpCode(node.Result, node.Operand1, node.Operand2);
 			emitter.Emit(opCode, node.Result, node.Operand2);
 		}
 	}

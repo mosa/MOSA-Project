@@ -249,7 +249,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			currentStack.Push(ctx.Result);
 
-			if (ctx.Instruction is DupInstruction)
+			if (ctx.Instruction is CIL.DupInstruction)
 			{
 				currentStack.Push(ctx.Result);
 				dupNodes.Add(ctx.Node);
@@ -263,7 +263,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var node in dupNodes)
 			{
-				Debug.Assert(node.Instruction is DupInstruction);
+				Debug.Assert(node.Instruction is CIL.DupInstruction);
 				Debug.Assert(node.Result == node.Operand1);
 
 				node.Empty();

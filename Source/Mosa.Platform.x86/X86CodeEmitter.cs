@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using System;
@@ -54,10 +55,9 @@ namespace Mosa.Platform.x86
 			int relOffset = 0;
 
 			// The position in the code stream of the label
-			int position;
 
 			// Did we see the label?
-			if (TryGetLabel(label, out position))
+			if (TryGetLabel(label, out int position))
 			{
 				// Yes, calculate the relative offset
 				relOffset = position - ((int)codeStream.Position + 4);
@@ -79,8 +79,7 @@ namespace Mosa.Platform.x86
 
 			foreach (var p in patches)
 			{
-				int labelPosition;
-				if (!TryGetLabel(p.Label, out labelPosition))
+				if (!TryGetLabel(p.Label, out int labelPosition))
 				{
 					throw new ArgumentException("Missing label while resolving patches.", "label=" + labelPosition.ToString());
 				}
@@ -135,10 +134,8 @@ namespace Mosa.Platform.x86
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
-			byte? modRM = null;
-
 			// Write the mod R/M byte
-			modRM = CalculateModRM(opCode.RegField, dest, null);
+			byte? modRM = CalculateModRM(opCode.RegField, dest, null);
 			if (modRM != null)
 			{
 				codeStream.WriteByte(modRM.Value);
@@ -164,10 +161,8 @@ namespace Mosa.Platform.x86
 
 			Debug.Assert(!(dest == null && src == null));
 
-			byte? modRM = null;
-
 			// Write the mod R/M byte
-			modRM = CalculateModRM(opCode.RegField, dest, src);
+			byte? modRM = CalculateModRM(opCode.RegField, dest, src);
 			if (modRM != null)
 			{
 				codeStream.WriteByte(modRM.Value);
@@ -178,7 +173,7 @@ namespace Mosa.Platform.x86
 				WriteImmediate(dest);
 			else if (dest.IsSymbol)
 				WriteDisplacement(dest);
-			else if (src != null && src.IsResolvedConstant)
+			else if (src?.IsResolvedConstant == true)
 				WriteImmediate(src);
 			else if (src != null && (src.IsSymbol || src.IsStaticField))
 				WriteDisplacement(src);
@@ -198,17 +193,15 @@ namespace Mosa.Platform.x86
 
 			Debug.Assert(!(dest == null && src == null));
 
-			byte? modRM = null;
-
 			// Write the mod R/M byte
-			modRM = CalculateModRM(opCode.RegField, dest, src);
+			byte? modRM = CalculateModRM(opCode.RegField, dest, src);
 			if (modRM != null)
 			{
 				codeStream.WriteByte(modRM.Value);
 			}
 
 			// Add immediate bytes
-			if (third != null && third.IsConstant)
+			if (third?.IsConstant == true)
 				WriteImmediate(third);
 		}
 
@@ -294,7 +287,7 @@ namespace Mosa.Platform.x86
 			else if (op.IsU4 || op.IsPointer || op.IsU || !op.IsValueType)
 				codeStream.Write(Convert.ToUInt32(op.ConstantUnsignedInteger), Endianness.Little);
 			else
-				throw new InvalidCompilerException();
+				throw new CompilerException();
 		}
 
 		/// <summary>
@@ -308,8 +301,8 @@ namespace Mosa.Platform.x86
 		{
 			byte? modRM = null;
 
-			bool op1IsRegister = (op1 != null) && op1.IsCPURegister;
-			bool op2IsRegister = (op2 != null) && op2.IsCPURegister;
+			bool op1IsRegister = op1?.IsCPURegister == true;
+			bool op2IsRegister = op2?.IsCPURegister == true;
 
 			Debug.Assert(!(!op1IsRegister && op2IsRegister));
 
@@ -319,11 +312,11 @@ namespace Mosa.Platform.x86
 			if (op1IsRegister && op2IsRegister)
 			{
 				// mod = 11b, reg = rop1, r/m = rop2
-				modRM = (byte)((3 << 6) | (op1.Register.RegisterCode << 3) | op2.Register.RegisterCode);
+				return (byte)((3 << 6) | (op1.Register.RegisterCode << 3) | op2.Register.RegisterCode);
 			}
 			else if (op1IsRegister)
 			{
-				modRM = (byte)(modRM.GetValueOrDefault() | (3 << 6) | op1.Register.RegisterCode);
+				return (byte)(modRM.GetValueOrDefault() | (3 << 6) | op1.Register.RegisterCode);
 			}
 
 			return modRM;

@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86
 	/// SSE2 register allows storage of double precision floating point values (64 bit)
 	/// as required by the CIL standard.
 	/// </remarks>
-	public sealed class SSE2Register : Register
+	public sealed class SSE2Register : PhysicalRegister
 	{
 		#region Static data members
 

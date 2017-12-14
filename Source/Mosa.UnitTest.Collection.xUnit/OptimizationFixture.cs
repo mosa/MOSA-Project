@@ -91,7 +91,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		[Theory]
-		[MemberData("I4", DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(I4), DisableDiscoveryEnumeration = true)]
 		public void OptimizationTest13(int a)
 		{
 			Assert.Equal(Mosa.UnitTest.Collection.OptimizationTests.OptimizationTest13(a), Run<int>("Mosa.UnitTest.Collection.OptimizationTests.OptimizationTest13", a));

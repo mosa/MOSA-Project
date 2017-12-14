@@ -32,6 +32,30 @@ namespace Mosa.Compiler.Framework.IR
 		/// </value>
 		public override string InstructionFamilyName { get { return "IR"; } }
 
+		/// <summary>
+		/// Gets a value indicating whether [variable operand count].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [variable operand count]; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool VariableOperandCount { get { return false; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="BaseIRInstruction"/> is commutative.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if commutative; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool Commutative { get { return false; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance has side effect.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool HasSideEffect { get { return true; } }
+
 		#endregion Properties
 	}
 }

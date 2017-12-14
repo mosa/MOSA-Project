@@ -103,6 +103,8 @@ namespace Mosa.Compiler.Framework
 
 		protected Operand StackPointer { get { return MethodCompiler.StackPointer; } }
 
+		protected MethodTransform MethodTransform { get; private set; }
+
 		#endregion Properties
 
 		#region IPipelineStage Members
@@ -124,6 +126,7 @@ namespace Mosa.Compiler.Framework
 		void IMethodCompilerStage.Initialize(BaseMethodCompiler methodCompiler)
 		{
 			MethodCompiler = methodCompiler;
+			MethodTransform = methodCompiler.MethodTransform;
 			BasicBlocks = methodCompiler.BasicBlocks;
 			Architecture = methodCompiler.Architecture;
 			TypeSystem = methodCompiler.TypeSystem;

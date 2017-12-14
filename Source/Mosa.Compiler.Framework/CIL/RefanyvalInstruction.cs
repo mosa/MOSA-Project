@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// FIXME: Limit the token types
 			var token = (MosaType)decoder.Instruction.Operand;
 
-			throw new InvalidCompilerException();
+			throw new CompilerException();
 		}
 
 		/// <summary>

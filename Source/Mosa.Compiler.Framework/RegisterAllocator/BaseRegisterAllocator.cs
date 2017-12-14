@@ -35,9 +35,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private readonly SimpleKeyPriorityQueue<LiveInterval> PriorityQueue;
 		protected readonly List<LiveIntervalTrack> LiveIntervalTracks;
 
-		private readonly Register StackFrameRegister;
-		private readonly Register StackPointerRegister;
-		private readonly Register ProgramCounter;
+		private readonly PhysicalRegister StackFrameRegister;
+		private readonly PhysicalRegister StackPointerRegister;
+		private readonly PhysicalRegister ProgramCounter;
 
 		private readonly List<LiveInterval> SpilledIntervals;
 

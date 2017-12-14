@@ -7,7 +7,7 @@ using System;
 namespace Mosa.Platform.x86
 {
 	/// <summary>
-	///
+	/// X86Instruction
 	/// </summary>
 	public abstract class X86Instruction : BasePlatformInstruction
 	{

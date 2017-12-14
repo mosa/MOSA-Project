@@ -35,14 +35,14 @@ namespace Mosa.Platform.x86.CompilerStages
 				ret
 			*/
 
-			ctx.AppendInstruction(X86.MovCR, eax, cr0);
+			ctx.AppendInstruction(X86.MovCRLoad, eax, cr0);
 			ctx.AppendInstruction(X86.And, eax, eax, CreateConstant(0xFFFB));
 			ctx.AppendInstruction(X86.Or, eax, eax, CreateConstant(0x2));
-			ctx.AppendInstruction(X86.MovCR, cr0, eax);
+			ctx.AppendInstruction(X86.MovCRStore, null, cr0, eax);
 
-			ctx.AppendInstruction(X86.MovCR, eax, cr4);
+			ctx.AppendInstruction(X86.MovCRLoad, eax, cr4);
 			ctx.AppendInstruction(X86.Or, eax, eax, CreateConstant(0x600));
-			ctx.AppendInstruction(X86.MovCR, cr4, eax);
+			ctx.AppendInstruction(X86.MovCRStore, null, cr4, eax);
 
 			ctx.AppendInstruction(X86.Ret);
 

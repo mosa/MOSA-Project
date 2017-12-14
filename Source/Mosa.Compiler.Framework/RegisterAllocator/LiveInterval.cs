@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsPhysicalRegister { get { return VirtualRegister.IsPhysicalRegister; } }
 
-		public Register AssignedPhysicalRegister { get { return LiveIntervalTrack?.Register; } }
+		public PhysicalRegister AssignedPhysicalRegister { get { return LiveIntervalTrack?.Register; } }
 
 		public Operand AssignedPhysicalOperand { get; set; }
 

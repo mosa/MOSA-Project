@@ -5,8 +5,9 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	///
+	/// Roundsd
 	/// </summary>
+	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public class Roundsd : X86Instruction
 	{
 		private static readonly LegacyOpCode opcode = new LegacyOpCode(new byte[] { 0x66, 0x0F, 0x3A, 0x0B });

@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	///
+	/// Lea
 	/// </summary>
 	public sealed class Lea : TwoOperandInstruction
 	{
