@@ -104,7 +104,7 @@
     <Compile Include="Expression\Token.cs" />
     <Compile Include="Expression\ExpressionNode.cs" />
     <Compile Include="Expression\ExpressionTest.cs" />
-    <Compile Include="Expression\Transform.cs" />
+    <Compile Include="Expression\TransformRule.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InstructionNodeAddition.cs" />
     <Compile Include="Intrinsics\CreateInstanceSimple.cs" />

@@ -14,6 +14,7 @@ namespace Mosa.Compiler.Framework.Expression
 		VirtualRegister,
 		PhyiscalRegister,
 		Variable, // can be virtual/physical register or constant
+		Expression,
 		Any
 	}
 
