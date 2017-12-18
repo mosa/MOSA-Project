@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework.Expression
 					return node;
 				}
 
-				if (CurrentTokenType == TokenType.Variable)
+				if (CurrentTokenType == TokenType.OperandVariable)
 				{
 					var variableToken = new Token(CurrentTokenType, CurrentToken.Value, Index);
 					Index++;
@@ -217,7 +217,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return node;
 			}
 
-			if (CurrentTokenType == TokenType.Variable)
+			if (CurrentTokenType == TokenType.OperandVariable)
 			{
 				var node = new EvaluationNode(CurrentToken);
 				Index++;

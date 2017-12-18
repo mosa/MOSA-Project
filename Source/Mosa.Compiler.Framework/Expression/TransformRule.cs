@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Expression
 {
-	public class Transform
+	public class TransformRule
 	{
 		public ExpressionNode MatchExpression { get; }
 		public ExpressionNode TransformationExpression { get; }
@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Expression
 		protected Dictionary<string, int> AliasIndex { get; } = new Dictionary<string, int>();
 		protected Dictionary<string, int> TypeAliasIndex { get; } = new Dictionary<string, int>();
 
-		public Transform(ExpressionNode match, ExpressionNode transform)
+		public TransformRule(ExpressionNode match, ExpressionNode transform)
 		{
 			MatchExpression = match;
 			TransformationExpression = transform;

@@ -35,6 +35,7 @@ namespace Mosa.Compiler.Framework.Expression
 		Negate,
 
 		IntegerConstant, // literals:
+		HexIntegerConstant,
 		FloatConstant,
 		BooleanTrueConstant,
 		BooleanFalseConstant,
@@ -46,19 +47,21 @@ namespace Mosa.Compiler.Framework.Expression
 		CompareLessThan,
 		CompareGreaterThan,
 
+		If,
+
 		ShiftRight,
 		ShiftLeft,
 
 		Identifier,  // temporary
-
-		If,
-		Method,     // ???
-		Variable,   // ???
 
 		InstructionFamily,
 		InstructionName,
 		ClassName,
 		MethodName,
 		TypeVariable,
+		OperandVariable,
+		ConstLiteral,
+
+		Method,     // ???
 	}
 }

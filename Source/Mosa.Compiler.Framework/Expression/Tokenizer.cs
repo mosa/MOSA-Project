@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common.Exceptions;
 using System.Collections.Generic;
+using System;
 
 namespace Mosa.Compiler.Framework.Expression
 {
@@ -88,7 +89,7 @@ namespace Mosa.Compiler.Framework.Expression
 		{
 			int i = index + offset;
 
-			if (Tokens.Count >= i)
+			if (i >= Tokens.Count)
 				return Token.Unknown;
 
 			return Tokens[i];
@@ -98,7 +99,10 @@ namespace Mosa.Compiler.Framework.Expression
 		{
 			for (int i = 0; i < tokens.Length; i++)
 			{
-				if (Peek(index, i).TokenType != tokens[index + i])
+				if (index + i > Tokens.Count)
+					return false;
+
+				if (Peek(index, i).TokenType != tokens[i])
 					return false;
 			}
 
@@ -129,8 +133,34 @@ namespace Mosa.Compiler.Framework.Expression
 			TokenType.Identifier , TokenType.OpenParens
 		};
 
+		private static readonly TokenType[] InstructionNameList = new TokenType[]
+		{
+			// ({Identifier}  ->  ({InstructionName}
+			TokenType.OpenParens , TokenType.Identifier
+		};
+
+		private static readonly TokenType[] InstructionFamilyNameList = new TokenType[]
+		{
+			// ({Identifier}.{Identifier}  ->  ({InstructionFamily}.{InstructionName}
+			TokenType.OpenParens , TokenType.Identifier , TokenType.Period, TokenType.Identifier, TokenType.OpenParens
+		};
+
+		/// <summary>
+		/// Rewrites the tokens by:
+		///    1. resolving identifiers into specific tokens
+		///    2. adding tokens to
+		/// </summary>
 		private void Rewrite()
 		{
+			for (int i = 0; i < Tokens.Count; i++)
+			{
+				if (Tokens[i].TokenType == TokenType.Identifier && string.Equals(Tokens[i].Value, "const", StringComparison.OrdinalIgnoreCase))
+				{
+					Tokens[i] = new Token(TokenType.ConstLiteral, Tokens[i].Value);
+				}
+			}
+
+			bool instructionMatch = true;
 			bool criteria = false;
 			bool transform = false;
 
@@ -140,10 +170,12 @@ namespace Mosa.Compiler.Framework.Expression
 
 				if (token.TokenType == TokenType.And)
 				{
+					instructionMatch = false;
 					criteria = true;
 				}
 				else if (token.TokenType == TokenType.Transform)
 				{
+					instructionMatch = true;
 					transform = true;
 					criteria = false;
 				}
@@ -165,10 +197,29 @@ namespace Mosa.Compiler.Framework.Expression
 					Tokens[i] = new Token(TokenType.ClassName, Tokens[i].Value);
 					Tokens[i + 2] = new Token(TokenType.MethodName, Tokens[i + 2].Value);
 				}
-				if (Match(i, MethodNameList))
+				if (criteria && Match(i, MethodNameList))
 				{
 					// {Identifier}(  ->  {MethodName}(
 					Tokens[i] = new Token(TokenType.MethodName, Tokens[i].Value);
+				}
+				if (!criteria && Match(i, InstructionFamilyNameList))
+				{
+					// ({Identifier}.{Identifier}(  ->  ({InstructionFamily}.{InstructionName}
+					Tokens[i + 1] = new Token(TokenType.InstructionFamily, Tokens[i + 1].Value);
+					Tokens[i + 3] = new Token(TokenType.InstructionName, Tokens[i + 3].Value);
+				}
+				if (!criteria && Match(i, InstructionNameList))
+				{
+					// ({Identifier}  ->  ({InstructionName}
+					Tokens[i + 1] = new Token(TokenType.InstructionName, Tokens[i + 1].Value);
+				}
+			}
+
+			for (int i = 0; i < Tokens.Count; i++)
+			{
+				if (Tokens[i].TokenType == TokenType.Identifier)
+				{
+					Tokens[i] = new Token(TokenType.OperandVariable, Tokens[i].Value);
 				}
 			}
 		}
@@ -204,6 +255,7 @@ namespace Mosa.Compiler.Framework.Expression
 		private void ExtractNumber()
 		{
 			bool decimalsymbol = false;
+			bool hex = false;
 			int start = Index;
 
 			while (Index < Expression.Length)
@@ -213,6 +265,13 @@ namespace Mosa.Compiler.Framework.Expression
 				if (c == '-')
 				{
 					Index++;
+					continue;
+				}
+
+				if (c == 'x')
+				{
+					Index++;
+					hex = true;
 					continue;
 				}
 
@@ -239,7 +298,9 @@ namespace Mosa.Compiler.Framework.Expression
 
 			var value = Expression.Substring(start, Index - start);
 
-			if (decimalsymbol)
+			if (hex)
+				Tokens.Add(new Token(TokenType.HexIntegerConstant, value, Index));
+			else if (decimalsymbol)
 				Tokens.Add(new Token(TokenType.FloatConstant, value, Index));
 			else
 				Tokens.Add(new Token(TokenType.IntegerConstant, value, Index));
@@ -280,6 +341,29 @@ namespace Mosa.Compiler.Framework.Expression
 		public override string ToString()
 		{
 			return Expression;
+		}
+
+		public int FindFirst(TokenType token)
+		{
+			for (int i = 0; i < Tokens.Count; i++)
+			{
+				if (Tokens[i].TokenType == token)
+					return i;
+			}
+
+			return -1;
+		}
+
+		public List<Token> GetPart(int start, int end)
+		{
+			var tokens = new List<Token>(end - start);
+
+			for (int i = start; i < end; i++)
+			{
+				tokens.Add(Tokens[i]);
+			}
+
+			return tokens;
 		}
 	}
 }
