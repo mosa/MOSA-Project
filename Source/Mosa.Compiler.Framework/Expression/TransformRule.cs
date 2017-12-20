@@ -6,28 +6,31 @@ namespace Mosa.Compiler.Framework.Expression
 {
 	public class TransformRule
 	{
-		public ExpressionNode MatchExpression { get; }
-		public ExpressionNode TransformationExpression { get; }
+		public Node InstructionMatchExpression { get; }
+		public Node CriteriaExpression { get; }
+		public Node TransformationExpression { get; }
 
 		protected Dictionary<string, int> AliasIndex { get; } = new Dictionary<string, int>();
 		protected Dictionary<string, int> TypeAliasIndex { get; } = new Dictionary<string, int>();
 
-		public TransformRule(ExpressionNode match, ExpressionNode transform)
+		public TransformRule(Node instructionMatch, Node transform)
 		{
-			MatchExpression = match;
+			InstructionMatchExpression = instructionMatch;
 			TransformationExpression = transform;
 
-			FindAliases();
+			FindNames();
 		}
 
-		protected void FindAliases()
+		protected void FindNames()
 		{
-			AddAlias(MatchExpression.Alias);
+			AddAlias(InstructionMatchExpression.Name);
 
-			foreach (var node in MatchExpression.ParentNodes)
+			foreach (var node in InstructionMatchExpression.ParentNodes)
 			{
-				AddAlias(node.Alias);
-				AddTypeAlias(node.TypeAlias);
+				if (node.NodeType == NodeType.ConstantVariable || node.NodeType == NodeType.OperandVariable)
+					AddAlias(node.Name);
+				else if (node.NodeType == NodeType.TypeVariable)
+					AddTypeAlias(node.Name);
 			}
 		}
 
@@ -71,7 +74,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 		public bool Validate(InstructionNode node)
 		{
-			return MatchExpression.Validate(node);
+			return InstructionMatchExpression.Validate(node);
 		}
 	}
 }

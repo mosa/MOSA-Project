@@ -96,13 +96,14 @@
     <Compile Include="CompilerMethodData.cs" />
     <Compile Include="CompilerData.cs" />
     <Compile Include="DelegatePatcher.cs" />
-    <Compile Include="Expression\EvaluationNode.cs" />
-    <Compile Include="Expression\ExpressionBuilder.cs" />
+    <Compile Include="Expression\ExpressionNode.cs" />
+    <Compile Include="Expression\Builder.cs" />
+    <Compile Include="Expression\NodeType.cs" />
     <Compile Include="Expression\Parser.cs" />
     <Compile Include="Expression\Tokenizer.cs" />
     <Compile Include="Expression\TokenType.cs" />
     <Compile Include="Expression\Token.cs" />
-    <Compile Include="Expression\ExpressionNode.cs" />
+    <Compile Include="Expression\Node.cs" />
     <Compile Include="Expression\ExpressionTest.cs" />
     <Compile Include="Expression\TransformRule.cs" />
     <Compile Include="GlobalSuppressions.cs" />
