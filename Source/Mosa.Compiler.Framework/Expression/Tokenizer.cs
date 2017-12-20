@@ -287,7 +287,7 @@ namespace Mosa.Compiler.Framework.Expression
 					continue;
 				}
 
-				if (c >= '0' && c <= '9')
+				if ((c >= '0' && c <= '9') || (c == 'd' || c == 'u'))
 				{
 					Index++;
 					continue;
@@ -298,12 +298,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 			var value = Expression.Substring(start, Index - start);
 
-			if (hex)
-				Tokens.Add(new Token(TokenType.HexIntegerConstant, value, Index));
-			else if (decimalsymbol)
-				Tokens.Add(new Token(TokenType.FloatConstant, value, Index));
-			else
-				Tokens.Add(new Token(TokenType.IntegerConstant, value, Index));
+			Tokens.Add(new Token(value, Index));
 		}
 
 		private void ExtractIdentifier()
@@ -325,14 +320,18 @@ namespace Mosa.Compiler.Framework.Expression
 
 			var value = Expression.Substring(start, Index - start);
 
-			// special case for true/false
-			if (value == "true")
+			// special case for true/false/null
+			var special = value.ToLower();
+
+			if (special == "true")
 			{
-				Tokens.Add(new Token(TokenType.BooleanTrueConstant));
+				Tokens.Add(new Token(1u, Index));
+				return;
 			}
-			else if (value == "false")
+			else if (special == "false" || special == "null")
 			{
-				Tokens.Add(new Token(TokenType.BooleanFalseConstant));
+				Tokens.Add(new Token((ulong)0, Index));
+				return;
 			}
 
 			Tokens.Add(new Token(TokenType.Identifier, value, Index));

@@ -34,11 +34,9 @@ namespace Mosa.Compiler.Framework.Expression
 		Modulus,
 		Negate,
 
-		IntegerConstant, // literals:
-		HexIntegerConstant,
-		FloatConstant,
-		BooleanTrueConstant,
-		BooleanFalseConstant,
+		SignedIntegerConstant, // constants:
+		UnsignedIntegerConstant,
+		DoubleConstant,
 
 		CompareEqual,   // comparisons:
 		CompareNotEqual,

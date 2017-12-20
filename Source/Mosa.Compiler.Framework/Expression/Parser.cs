@@ -7,22 +7,17 @@ namespace Mosa.Compiler.Framework.Expression
 {
 	public class Parser
 	{
-		protected Tokenizer Tokenizer { get; }
-
-		protected List<Token> Tokens { get { return Tokenizer.Tokens; } }
+		protected List<Token> Tokens { get; }
 		protected Token CurrentToken { get { return Tokens[Index]; } }
 		protected TokenType CurrentTokenType { get { return CurrentToken.TokenType; } }
 		protected bool IsOutOfTokens { get { return Index >= Tokens.Count; } }
 		protected int Index = 0;
 
-		public EvaluationNode Root;
+		public ExpressionNode Root { get; private set; }
 
-		public Parser(Tokenizer tokenizer)
+		public Parser(List<Token> tokens)
 		{
-			Tokenizer = tokenizer;
-
-			if (tokenizer == null)
-				throw new CompilerException("tokenizer parameter is null");
+			Tokens = tokens ?? throw new CompilerException("tokens parameter is null");
 
 			Parse();
 		}
@@ -32,7 +27,7 @@ namespace Mosa.Compiler.Framework.Expression
 			Root = ParseAddSub();
 		}
 
-		private EvaluationNode ParseAddSub()
+		private ExpressionNode ParseAddSub()
 		{
 			var lhs = ParseMulDiv();
 
@@ -61,11 +56,11 @@ namespace Mosa.Compiler.Framework.Expression
 
 				var rhs = ParseMulDiv();
 
-				lhs = new EvaluationNode(op, lhs, rhs);
+				lhs = new ExpressionNode(op.TokenType, lhs, rhs);
 			}
 		}
 
-		private EvaluationNode ParseMulDiv()
+		private ExpressionNode ParseMulDiv()
 		{
 			var lhs = ParseUnary();
 
@@ -100,11 +95,11 @@ namespace Mosa.Compiler.Framework.Expression
 
 				var rhs = ParseUnary();
 
-				lhs = new EvaluationNode(op, lhs, rhs);
+				lhs = new ExpressionNode(op.TokenType, lhs, rhs);
 			}
 		}
 
-		private EvaluationNode ParseUnary()
+		private ExpressionNode ParseUnary()
 		{
 			while (true)
 			{
@@ -122,7 +117,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 					var rhs = ParseUnary();
 
-					var node = new EvaluationNode(token, rhs);
+					var node = new ExpressionNode(token.TokenType, rhs);
 					return node;
 				}
 
@@ -131,7 +126,7 @@ namespace Mosa.Compiler.Framework.Expression
 					var variableToken = new Token(CurrentTokenType, CurrentToken.Value, Index);
 					Index++;
 
-					var node = new EvaluationNode(variableToken);
+					var node = new ExpressionNode(variableToken.TokenType);
 					return node;
 				}
 				else if (CurrentTokenType == TokenType.Method || CurrentTokenType == TokenType.If)
@@ -141,7 +136,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 					Index++; // skip opening paraens
 
-					var parameters = new List<EvaluationNode>();
+					var parameters = new List<ExpressionNode>();
 
 					while (CurrentTokenType != TokenType.CloseParens)
 					{
@@ -158,7 +153,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 					Index++; // skip closing parens
 
-					var node = new EvaluationNode(token, parameters);
+					var node = new ExpressionNode(token.TokenType, parameters);
 					return node;
 				}
 
@@ -179,14 +174,14 @@ namespace Mosa.Compiler.Framework.Expression
 
 				//	var falseExpression = ParseAddSub();
 
-				//	var parameters = new List<EvaluationNode>
+				//	var parameters = new List<ExpressionNode>
 				//	{
 				//		null, // todo
 				//		trueExpression,
 				//		falseExpression
 				//	};
 
-				//	var node = new EvaluationNode(questionToken, parameters);
+				//	var node = new ExpressionNode(questionToken, parameters);
 				//	return node;
 				//}
 
@@ -194,11 +189,11 @@ namespace Mosa.Compiler.Framework.Expression
 			}
 		}
 
-		private EvaluationNode ParseLeaf()
+		private ExpressionNode ParseLeaf()
 		{
 			if (IsLiteral(CurrentToken.TokenType))
 			{
-				var node = new EvaluationNode(CurrentToken);
+				var node = new ExpressionNode(CurrentToken.TokenType);
 				Index++;
 				return node;
 			}
@@ -219,7 +214,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 			if (CurrentTokenType == TokenType.OperandVariable)
 			{
-				var node = new EvaluationNode(CurrentToken);
+				var node = new ExpressionNode(CurrentToken.TokenType);
 				Index++;
 				return node;
 			}
@@ -229,10 +224,9 @@ namespace Mosa.Compiler.Framework.Expression
 
 		protected static bool IsLiteral(TokenType tokenType)
 		{
-			return tokenType == TokenType.IntegerConstant
-					|| tokenType == TokenType.FloatConstant
-					|| tokenType == TokenType.BooleanTrueConstant
-					|| tokenType == TokenType.BooleanFalseConstant;
+			return tokenType == TokenType.SignedIntegerConstant
+					|| tokenType == TokenType.UnsignedIntegerConstant
+					|| tokenType == TokenType.DoubleConstant;
 		}
 
 		protected static bool IsAddSubOperand(TokenType tokenType)
@@ -258,11 +252,6 @@ namespace Mosa.Compiler.Framework.Expression
 					|| tokenType == TokenType.CompareLessThanOrEqual
 					|| tokenType == TokenType.CompareLessThan
 					|| tokenType == TokenType.CompareGreaterThan;
-		}
-
-		public override string ToString()
-		{
-			return Tokenizer.Expression;
 		}
 	}
 }
