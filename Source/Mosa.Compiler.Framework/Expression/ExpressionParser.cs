@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Expression
 {
-	public class Parser
+	public class ExpressionParser
 	{
 		protected List<Token> Tokens { get; }
 		protected Token CurrentToken { get { return Tokens[Index]; } }
@@ -13,9 +13,16 @@ namespace Mosa.Compiler.Framework.Expression
 		protected bool IsOutOfTokens { get { return Index >= Tokens.Count; } }
 		protected int Index = 0;
 
-		public ExpressionNode Root { get; private set; }
+		protected ExpressionNode Root { get; private set; }
 
-		public Parser(List<Token> tokens)
+		public static ExpressionNode Parse(List<Token> tokens)
+		{
+			var parse = new ExpressionParser(tokens);
+
+			return parse.Root;
+		}
+
+		protected ExpressionParser(List<Token> tokens)
 		{
 			Tokens = tokens ?? throw new CompilerException("tokens parameter is null");
 

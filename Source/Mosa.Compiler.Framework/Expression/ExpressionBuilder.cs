@@ -7,12 +7,12 @@ using System.Globalization;
 
 namespace Mosa.Compiler.Framework.Expression
 {
-	public class Builder
+	public class ExpressionBuilder
 	{
 		protected Dictionary<string, BaseInstruction> instructionMap = new Dictionary<string, BaseInstruction>();
 		protected Dictionary<string, PhysicalRegister> physicalRegisterMap = new Dictionary<string, PhysicalRegister>();
 
-		public Builder()
+		public ExpressionBuilder()
 		{
 		}
 
@@ -44,25 +44,33 @@ namespace Mosa.Compiler.Framework.Expression
 		{
 			var tokenized = new Tokenizer(expression);
 
-			int end = tokenized.Tokens.Count - 1;
+			int transformEnd = tokenized.Tokens.Count - 1;
+			int matchEnd = tokenized.Tokens.Count - 1;
 
 			int transformPosition = tokenized.FindFirst(TokenType.Transform);
-			if (transformPosition != -1)
-				end = transformPosition - 1;
-
 			int andPosition = tokenized.FindFirst(TokenType.And);
-			if (andPosition != -1 && andPosition < end)
-				end = andPosition;
 
-			var tokens = tokenized.GetPart(1, end);
-			int at = 0;
+			if (transformPosition != -1)
+				matchEnd = transformPosition - 1;
 
-			var match = StartParse(tokens, ref at);
-			var transform = null as Node;
+			if (andPosition != -1 && andPosition < matchEnd)
+				matchEnd = andPosition;
+
+			var matchTokens = tokenized.GetPart(1, matchEnd);
+			var transformTokens = tokenized.GetPart(transformPosition + 1, transformEnd);
+
+			var match = StartParse(matchTokens);
+			var transform = StartParse(transformTokens);
 
 			var tree = new TransformRule(match, transform);
 
 			return tree;
+		}
+
+		protected Node StartParse(List<Token> tokens)
+		{
+			int at = 0;
+			return StartParse(tokens, ref at);
 		}
 
 		protected Node StartParse(List<Token> tokens, ref int at)
@@ -148,7 +156,26 @@ namespace Mosa.Compiler.Framework.Expression
 				}
 				else if (token.TokenType == TokenType.OpenBracket)
 				{
-					//
+					var bracketedTokens = new List<Token>();
+
+					for (; at < tokens.Count; at++)
+					{
+						if (tokens[at].TokenType == TokenType.CloseBracket)
+						{
+							break;
+						}
+
+						bracketedTokens.Add(tokens[at]);
+					}
+
+					if (tokens.Count <= at)
+					{
+						throw new CompilerException("Invalid expression: missing closing bracket");
+					}
+
+					var expressionNode = ExpressionParser.Parse(bracketedTokens);
+
+					parentNode = new Node(expressionNode);
 				}
 				else if (token.TokenType == TokenType.OperandVariable)
 				{

@@ -20,6 +20,7 @@ namespace Mosa.Compiler.Framework.Expression
 		Transform,
 		Underscore,
 		Period,
+		Hash,
 
 		And,    // boolean logic:
 		Or,
@@ -59,6 +60,7 @@ namespace Mosa.Compiler.Framework.Expression
 		TypeVariable,
 		OperandVariable,
 		ConstLiteral,
+		PhysicalRegister,
 
 		Method,     // ???
 	}
