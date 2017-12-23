@@ -41,6 +41,7 @@ namespace Mosa.Compiler.Framework.Expression
 			new KeyValuePair<string, TokenType>(":", TokenType.Colon),
 			new KeyValuePair<string, TokenType>("_", TokenType.Underscore),
 			new KeyValuePair<string, TokenType>(".", TokenType.Period),
+			new KeyValuePair<string, TokenType>("#", TokenType.Hash),
 			new KeyValuePair<string, TokenType>("[", TokenType.OpenBracket),
 			new KeyValuePair<string, TokenType>("]", TokenType.CloseBracket),
 		};
@@ -139,6 +140,12 @@ namespace Mosa.Compiler.Framework.Expression
 			TokenType.OpenParens , TokenType.Identifier
 		};
 
+		private static readonly TokenType[] HashList = new TokenType[]
+		{
+			// #{Identifier}  ->  #{PhysicalRegister}
+			TokenType.Hash , TokenType.Identifier
+		};
+
 		private static readonly TokenType[] InstructionFamilyNameList = new TokenType[]
 		{
 			// ({Identifier}.{Identifier}  ->  ({InstructionFamily}.{InstructionName}
@@ -212,6 +219,11 @@ namespace Mosa.Compiler.Framework.Expression
 				{
 					// ({Identifier}  ->  ({InstructionName}
 					Tokens[i + 1] = new Token(TokenType.InstructionName, Tokens[i + 1].Value);
+				}
+				if (!criteria && Match(i, HashList))
+				{
+					// #{Identifier}  ->  #{PhysicalRegister}
+					Tokens[i + 1] = new Token(TokenType.PhysicalRegister, Tokens[i + 1].Value);
 				}
 			}
 

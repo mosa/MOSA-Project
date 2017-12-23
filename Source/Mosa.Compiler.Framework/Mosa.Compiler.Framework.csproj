@@ -97,9 +97,9 @@
     <Compile Include="CompilerData.cs" />
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="Expression\ExpressionNode.cs" />
-    <Compile Include="Expression\Builder.cs" />
+    <Compile Include="Expression\ExpressionBuilder.cs" />
     <Compile Include="Expression\NodeType.cs" />
-    <Compile Include="Expression\Parser.cs" />
+    <Compile Include="Expression\ExpressionParser.cs" />
     <Compile Include="Expression\Tokenizer.cs" />
     <Compile Include="Expression\TokenType.cs" />
     <Compile Include="Expression\Token.cs" />

@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 		private static TransformRule GetTestExpression(string text)
 		{
-			var builder = new Builder();
+			var builder = new ExpressionBuilder();
 
 			builder.AddInstructions(IRInstructionMap.Map);
 
@@ -88,6 +88,13 @@ namespace Mosa.Compiler.Framework.Expression
 		public static TransformRule GetTestExpression4()
 		{
 			var expression = GetTestExpression("(MulUnsigned (Const c1) (Const c2)) -> [c1 * c2]");
+
+			return expression;
+		}
+
+		public static TransformRule GetTestExpression5()
+		{
+			var expression = GetTestExpression("(MulUnsigned 1 2) -> [1 * 2]");
 
 			return expression;
 		}

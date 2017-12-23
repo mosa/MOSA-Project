@@ -341,6 +341,7 @@ namespace Mosa.Workspace.Experiment.Debug
 
 			var match = tree.Validate(basicBlocks[0].Last.Previous);
 
+			ExpressionTest.GetTestExpression5();
 			ExpressionTest.GetTestExpression4();
 			ExpressionTest.GetTestExpression3();
 			ExpressionTest.GetTestExpression2();

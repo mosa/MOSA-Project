@@ -71,11 +71,18 @@ namespace Mosa.Compiler.Framework.Expression
 			PhysicalRegister = physicalRegister;
 		}
 
+		public Node(ExpressionNode expressionNode)
+		{
+			NodeType = NodeType.Expression;
+			ExpressionNode = expressionNode;
+		}
+
 		public Node(NodeType type, string name)
 		{
 			Debug.Assert(type != NodeType.FixedIntegerConstant);
 			Debug.Assert(type != NodeType.PhyiscalRegister);
 			Debug.Assert(type != NodeType.Instruction);
+			Debug.Assert(type != NodeType.Expression);
 
 			NodeType = type;
 			Name = name;
@@ -182,12 +189,6 @@ namespace Mosa.Compiler.Framework.Expression
 		public override string ToString()
 		{
 			var sb = new StringBuilder();
-
-			//if (NodeType != NodeType.Instruction && NodeType != NodeType.OperandVariable)
-			//{
-			//	sb.Append(NodeType.ToString());
-			//	sb.Append(": ");
-			//}
 
 			switch (NodeType)
 			{
