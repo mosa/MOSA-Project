@@ -200,7 +200,7 @@ namespace Mosa.Compiler.Framework.Expression
 				case NodeType.OperandVariable: sb.Append(Name); break;
 				case NodeType.ConstantVariable: sb.Append("(Const "); sb.Append(Name); sb.Append(")"); break;
 				case NodeType.TypeVariable: sb.Append('<'); sb.Append(Name); sb.Append('>'); break;
-				case NodeType.Expression: sb.Append("EXPRESSION"); break;
+				case NodeType.Expression: sb.Append("["); sb.Append(ExpressionNode.ToString()); sb.Append("]"); break;
 				case NodeType.Any: sb.Append("_"); break;
 				default: break;
 			}

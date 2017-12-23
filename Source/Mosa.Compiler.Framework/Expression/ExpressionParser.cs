@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 				var rhs = ParseMulDiv();
 
-				lhs = new ExpressionNode(op.TokenType, lhs, rhs);
+				lhs = new ExpressionNode(op, lhs, rhs);
 			}
 		}
 
@@ -102,7 +102,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 				var rhs = ParseUnary();
 
-				lhs = new ExpressionNode(op.TokenType, lhs, rhs);
+				lhs = new ExpressionNode(op, lhs, rhs);
 			}
 		}
 
@@ -124,7 +124,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 					var rhs = ParseUnary();
 
-					var node = new ExpressionNode(token.TokenType, rhs);
+					var node = new ExpressionNode(token, rhs);
 					return node;
 				}
 
@@ -133,7 +133,7 @@ namespace Mosa.Compiler.Framework.Expression
 					var variableToken = new Token(CurrentTokenType, CurrentToken.Value, Index);
 					Index++;
 
-					var node = new ExpressionNode(variableToken.TokenType);
+					var node = new ExpressionNode(variableToken);
 					return node;
 				}
 				else if (CurrentTokenType == TokenType.Method || CurrentTokenType == TokenType.If)
@@ -160,7 +160,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 					Index++; // skip closing parens
 
-					var node = new ExpressionNode(token.TokenType, parameters);
+					var node = new ExpressionNode(token, parameters);
 					return node;
 				}
 
@@ -200,7 +200,7 @@ namespace Mosa.Compiler.Framework.Expression
 		{
 			if (IsLiteral(CurrentToken.TokenType))
 			{
-				var node = new ExpressionNode(CurrentToken.TokenType);
+				var node = new ExpressionNode(CurrentToken);
 				Index++;
 				return node;
 			}
@@ -221,7 +221,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 			if (CurrentTokenType == TokenType.OperandVariable)
 			{
-				var node = new ExpressionNode(CurrentToken.TokenType);
+				var node = new ExpressionNode(CurrentToken);
 				Index++;
 				return node;
 			}

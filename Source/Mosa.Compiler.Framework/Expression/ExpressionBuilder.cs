@@ -81,6 +81,10 @@ namespace Mosa.Compiler.Framework.Expression
 			{
 				return ParseInstructionNode(tokens, ref at);
 			}
+			else if (word.TokenType == TokenType.OpenBracket)
+			{
+				return ParseBrackExpression(tokens, ref at);
+			}
 
 			return null; // error
 		}
@@ -156,26 +160,7 @@ namespace Mosa.Compiler.Framework.Expression
 				}
 				else if (token.TokenType == TokenType.OpenBracket)
 				{
-					var bracketedTokens = new List<Token>();
-
-					for (; at < tokens.Count; at++)
-					{
-						if (tokens[at].TokenType == TokenType.CloseBracket)
-						{
-							break;
-						}
-
-						bracketedTokens.Add(tokens[at]);
-					}
-
-					if (tokens.Count <= at)
-					{
-						throw new CompilerException("Invalid expression: missing closing bracket");
-					}
-
-					var expressionNode = ExpressionParser.Parse(bracketedTokens);
-
-					parentNode = new Node(expressionNode);
+					parentNode = ParseBrackExpression(tokens, ref at);
 				}
 				else if (token.TokenType == TokenType.OperandVariable)
 				{
@@ -201,6 +186,27 @@ namespace Mosa.Compiler.Framework.Expression
 			}
 
 			return node;
+		}
+
+		private static Node ParseBrackExpression(List<Token> tokens, ref int at)
+		{
+			var bracketedTokens = new List<Token>();
+
+			for (at++; at < tokens.Count; at++)
+			{
+				if (tokens[at].TokenType == TokenType.CloseBracket)
+				{
+					break;
+				}
+
+				bracketedTokens.Add(tokens[at]);
+			}
+
+			var expressionNode = ExpressionParser.Parse(bracketedTokens);
+
+			var parentNode = new Node(expressionNode);
+
+			return parentNode;
 		}
 	}
 }
