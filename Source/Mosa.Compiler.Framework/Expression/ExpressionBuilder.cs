@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return ParseBrackExpression(tokens, ref at);
 			}
 
-			return null; // error
+			throw new CompilerException("Invalid parse: error at " + word.Index.ToString() + " unexpected token: " + word);
 		}
 
 		protected Node Parse(List<Token> tokens, ref int at)
@@ -117,7 +117,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return node;
 			}
 
-			return null; // error
+			throw new CompilerException("Invalid parse: error at " + word.Index.ToString() + " unexpected token: " + word);
 		}
 
 		protected Node ParseInstructionNode(List<Token> tokens, ref int at)
@@ -179,7 +179,7 @@ namespace Mosa.Compiler.Framework.Expression
 				}
 				else
 				{
-					return null;
+					throw new CompilerException("Invalid parse: error at " + word.Index.ToString() + " unexpected token: " + word);
 				}
 
 				node.AddNode(parentNode);

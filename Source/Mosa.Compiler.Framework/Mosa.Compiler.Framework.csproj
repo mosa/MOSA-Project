@@ -96,6 +96,7 @@
     <Compile Include="CompilerMethodData.cs" />
     <Compile Include="CompilerData.cs" />
     <Compile Include="DelegatePatcher.cs" />
+    <Compile Include="Expression\ExpressionEvaluator.cs" />
     <Compile Include="Expression\ExpressionNode.cs" />
     <Compile Include="Expression\ExpressionBuilder.cs" />
     <Compile Include="Expression\NodeType.cs" />
@@ -106,6 +107,8 @@
     <Compile Include="Expression\Node.cs" />
     <Compile Include="Expression\ExpressionTest.cs" />
     <Compile Include="Expression\TransformRule.cs" />
+    <Compile Include="Expression\Value.cs" />
+    <Compile Include="Expression\ValueType.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="InstructionNodeAddition.cs" />
     <Compile Include="Intrinsics\CreateInstanceSimple.cs" />
