@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -17,6 +18,7 @@ namespace Mosa.Compiler.Framework.Expression
 		public ConditionCode ConditionCode { get; set; } = ConditionCode.Undefined;
 
 		public string Name { get; }
+		public int Index { get; }
 
 		public ulong ConstantInteger { get; }
 		public double ConstantDouble { get; }
@@ -77,7 +79,7 @@ namespace Mosa.Compiler.Framework.Expression
 			ExpressionNode = expressionNode;
 		}
 
-		public Node(NodeType type, string name)
+		public Node(NodeType type, string name, int index)
 		{
 			Debug.Assert(type != NodeType.FixedIntegerConstant);
 			Debug.Assert(type != NodeType.PhyiscalRegister);
@@ -85,6 +87,7 @@ namespace Mosa.Compiler.Framework.Expression
 			Debug.Assert(type != NodeType.Expression);
 
 			NodeType = type;
+			Index = index;
 			Name = name;
 		}
 
@@ -116,15 +119,15 @@ namespace Mosa.Compiler.Framework.Expression
 			return true;
 		}
 
-		protected bool ValidateOperand(InstructionNode node, int operandIndex)
+		protected bool ValidateOperand(InstructionNode node, int operandIndex, Operand[] operands, MosaType[] types)
 		{
 			if (operandIndex > node.OperandCount)
 				return false;
 
-			return ValidateOperand(node.GetOperand(operandIndex));
+			return ValidateOperand(node.GetOperand(operandIndex), operands, types);
 		}
 
-		protected bool ValidateOperand(Operand operand)
+		protected bool ValidateOperand(Operand operand, Operand[] operands, MosaType[] types)
 		{
 			if (operand == null)
 				return false;
@@ -142,14 +145,48 @@ namespace Mosa.Compiler.Framework.Expression
 				return true;
 
 			if (NodeType == NodeType.ConstantVariable && operand.IsConstant)
-				return true;
+			{
+				if (operands[Index] == null)
+				{
+					operands[Index] = operand;
+					return true;
+				}
+				else
+				{
+					return operands[Index].ConstantUnsignedInteger == operand.ConstantUnsignedInteger;
+				}
+			}
 
-			//todo
+			if (NodeType == NodeType.OperandVariable)
+			{
+				if (operands[Index] == null)
+				{
+					operands[Index] = operand;
+					return true;
+				}
+				else
+				{
+					return operands[Index] == operand;
+				}
+			}
+
+			if (NodeType == NodeType.TypeVariable)
+			{
+				if (types[Index] == null)
+				{
+					types[Index] = operand.Type;
+					return true;
+				}
+				else
+				{
+					return types[Index] == operand.Type;
+				}
+			}
 
 			return false;
 		}
 
-		public bool Validate(InstructionNode node)
+		public bool Match(InstructionNode node, Operand[] operands, MosaType[] types)
 		{
 			if (NodeType == NodeType.Instruction)
 			{
@@ -172,12 +209,12 @@ namespace Mosa.Compiler.Framework.Expression
 
 						var parent = operand.Definitions[0];
 
-						if (!parentNode.Validate(parent))
+						if (!parentNode.Match(parent, operands, types))
 							return false;
 					}
 					else
 					{
-						if (!parentNode.ValidateOperand(node, i))
+						if (!parentNode.ValidateOperand(node, i, operands, types))
 							return false;
 					}
 				}

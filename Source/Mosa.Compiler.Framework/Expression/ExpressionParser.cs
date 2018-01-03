@@ -17,6 +17,9 @@ namespace Mosa.Compiler.Framework.Expression
 
 		public static ExpressionNode Parse(List<Token> tokens)
 		{
+			if (tokens.Count == 0)
+				return null;
+
 			var parse = new ExpressionParser(tokens);
 
 			return parse.Root;
@@ -24,7 +27,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 		protected ExpressionParser(List<Token> tokens)
 		{
-			Tokens = tokens ?? throw new CompilerException("tokens parameter is null");
+			Tokens = tokens ?? throw new CompilerException("ExpressionEvaluation: tokens parameter is null");
 
 			Parse();
 		}
@@ -109,7 +112,7 @@ namespace Mosa.Compiler.Framework.Expression
 			{
 				if (IsOutOfTokens)
 				{
-					throw new CompilerException("Invalid parse: parser unexpected end");
+					throw new CompilerException("ExpressionEvaluation: Invalid parse: parser unexpected end");
 				}
 
 				if (CurrentTokenType == TokenType.Not)
@@ -161,7 +164,7 @@ namespace Mosa.Compiler.Framework.Expression
 				//	var trueExpression = ParseAddSub();
 
 				//	if (CurrentToken.TokenType != TokenType.Colon)
-				//		throw new CompilerException("Invalid parse: error at " + CurrentToken.Index.ToString() + " missing colon");
+				//		throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + CurrentToken.Index.ToString() + " missing colon");
 
 				//	Index++; // skip closing colon
 
@@ -199,7 +202,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 				if (CurrentToken.TokenType != TokenType.CloseParens)
 				{
-					throw new CompilerException("Invalid parse: error at " + CurrentToken.Index.ToString() + " missing closing parenthesis");
+					throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + CurrentToken.Position.ToString() + " missing closing parenthesis");
 				}
 
 				Index++;
@@ -214,7 +217,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return node;
 			}
 
-			throw new CompilerException("Invalid parse: error at " + CurrentToken.Index.ToString() + " unexpected token: " + CurrentToken);
+			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + CurrentToken.Position.ToString() + " unexpected token: " + CurrentToken);
 		}
 
 		protected static bool IsConstant(TokenType tokenType)

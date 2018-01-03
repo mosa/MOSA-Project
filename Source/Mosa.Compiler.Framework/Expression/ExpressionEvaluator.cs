@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,32 +12,13 @@ namespace Mosa.Compiler.Framework.Expression
 
 	public class ExpressionEvaluator
 	{
-		protected ExpressionNode Root { get; }
-
-		//protected static IMethodSource BuiltInMethods = new BuiltInMethods();
-
-		public ExpressionEvaluator(ExpressionNode root)
-		{
-			Root = root;
-		}
-
-		public Value Evaluate()
-		{
-			if (Root == null)
-				throw new CompilerException("invalid parameter to parser");
-
-			var result = Evaluate(Root);
-
-			return result;
-		}
-
-		protected static Value Evaluate(ExpressionNode root)
+		public static Value Evaluate(ExpressionNode root, Operand[] operands, MosaType[] types)
 		{
 			Debug.Assert(root != null);
 
 			if (root.Left != null && root.Right != null)
 			{
-				var left = Evaluate(root.Left);
+				var left = Evaluate(root.Left, operands, types);
 
 				// shortcut evaluation
 				if (root.Token.TokenType == TokenType.And && left.IsFalse)
@@ -48,13 +30,13 @@ namespace Mosa.Compiler.Framework.Expression
 					return left;
 				}
 
-				var right = Evaluate(root.Right);
+				var right = Evaluate(root.Right, operands, types);
 
 				return Eval(root.Token.TokenType, left, right);
 			}
 			else if (root.Left != null && root.Right == null)
 			{
-				var left = Evaluate(root.Left);
+				var left = Evaluate(root.Left, operands, types);
 
 				return Eval(root.Token.TokenType, left);
 			}
@@ -62,7 +44,7 @@ namespace Mosa.Compiler.Framework.Expression
 			{
 				if (root.Token.TokenType == TokenType.If)
 				{
-					return IfStatement(root);
+					return IfStatement(root, operands, types);
 				}
 				else if (root.Token.TokenType == TokenType.OperandVariable)
 				{
@@ -70,7 +52,7 @@ namespace Mosa.Compiler.Framework.Expression
 				}
 				else if (root.Token.TokenType == TokenType.Method)
 				{
-					return Method(root);
+					return Method(root, operands, types);
 				}
 				else
 				{
@@ -79,7 +61,7 @@ namespace Mosa.Compiler.Framework.Expression
 				}
 			}
 
-			throw new CompilerException("unexpected token type: " + root.Token);
+			throw new CompilerException("ExpressionEvaluation: unexpected token type: " + root.Token);
 		}
 
 		protected static Value OperandVariable(ExpressionNode node)
@@ -101,7 +83,7 @@ namespace Mosa.Compiler.Framework.Expression
 				default: break;
 			}
 
-			throw new CompilerException("invalid token type: " + token);
+			throw new CompilerException("ExpressionEvaluation: invalid token type: " + token);
 		}
 
 		protected static Value Eval(TokenType tokenType, Value left, Value right)
@@ -123,7 +105,7 @@ namespace Mosa.Compiler.Framework.Expression
 				default: break;
 			}
 
-			throw new CompilerException("invalid token type: " + tokenType.ToString());
+			throw new CompilerException("ExpressionEvaluation: invalid token type: " + tokenType.ToString());
 		}
 
 		protected static Value Eval(TokenType tokenType, Value left)
@@ -135,7 +117,7 @@ namespace Mosa.Compiler.Framework.Expression
 				default: break;
 			}
 
-			throw new CompilerException("invalid token type: " + tokenType.ToString());
+			throw new CompilerException("ExpressionEvaluation: invalid token type: " + tokenType.ToString());
 		}
 
 		protected static Value Not(Value left)
@@ -149,7 +131,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value(~left.SignedInteger);
 			}
 
-			throw new CompilerException("incompatible type for not operator: " + left);
+			throw new CompilerException("ExpressionEvaluation: incompatible type for not operator: " + left);
 		}
 
 		protected static Value Negate(Value left)
@@ -163,7 +145,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value(-left.Double);
 			}
 
-			throw new CompilerException("incompatible type for negate operator: " + left);
+			throw new CompilerException("ExpressionEvaluation: incompatible type for negate operator: " + left);
 		}
 
 		protected static Value Addition(Value left, Value right)
@@ -197,7 +179,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value((ulong)left.UnsignedInteger + right.UnsignedInteger);
 			}
 
-			throw new CompilerException("incompatible types for addition operator: " + left + " and " + right);
+			throw new CompilerException("ExpressionEvaluation: incompatible types for addition operator: " + left + " and " + right);
 		}
 
 		protected static Value Subtract(Value left, Value right)
@@ -231,7 +213,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value((ulong)left.UnsignedInteger - right.UnsignedInteger);
 			}
 
-			throw new CompilerException("incompatible types for substraction operator: " + left + " and " + right);
+			throw new CompilerException("ExpressionEvaluation: incompatible types for substraction operator: " + left + " and " + right);
 		}
 
 		protected static Value Multiplication(Value left, Value right)
@@ -265,7 +247,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value((ulong)left.UnsignedInteger * right.UnsignedInteger);
 			}
 
-			throw new CompilerException("incompatible types for multiplication operator: " + left + " and " + right);
+			throw new CompilerException("ExpressionEvaluation: incompatible types for multiplication operator: " + left + " and " + right);
 		}
 
 		protected static Value Division(Value left, Value right)
@@ -299,7 +281,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value((ulong)left.UnsignedInteger / right.UnsignedInteger);
 			}
 
-			throw new CompilerException("incompatible types for division operator: " + left + " and " + right);
+			throw new CompilerException("ExpressionEvaluation: incompatible types for division operator: " + left + " and " + right);
 		}
 
 		protected static Value And(Value left, Value right)
@@ -309,7 +291,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value(left.IsTrue && right.IsTrue);
 			}
 
-			throw new CompilerException("incompatible types for and operator: " + left + " and " + right);
+			throw new CompilerException("ExpressionEvaluation: incompatible types for and operator: " + left + " and " + right);
 		}
 
 		protected static Value Or(Value left, Value right)
@@ -319,7 +301,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value(left.IsTrue || right.IsTrue);
 			}
 
-			throw new CompilerException("incompatible types for or operator operator: " + left + " and " + right);
+			throw new CompilerException("ExpressionEvaluation: incompatible types for or operator operator: " + left + " and " + right);
 		}
 
 		protected static Value CompareEqual(Value left, Value right)
@@ -333,7 +315,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value(left.SignedInteger == right.SignedInteger);
 			}
 
-			throw new CompilerException("incompatible types for comparison operator: " + left + " and " + right);
+			throw new CompilerException("ExpressionEvaluation: incompatible types for comparison operator: " + left + " and " + right);
 		}
 
 		protected static Value CompareNotEqual(Value left, Value right)
@@ -347,7 +329,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value(left.SignedInteger != right.SignedInteger);
 			}
 
-			throw new CompilerException("incompatible types for comparison operator: " + left + " and " + right);
+			throw new CompilerException("ExpressionEvaluation: incompatible types for comparison operator: " + left + " and " + right);
 		}
 
 		protected static Value CompareGreaterThanOrEqual(Value left, Value right)
@@ -361,7 +343,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value(left.SignedInteger >= right.SignedInteger);
 			}
 
-			throw new CompilerException("incompatible types for comparison operator: " + left + " and " + right);
+			throw new CompilerException("ExpressionEvaluation: incompatible types for comparison operator: " + left + " and " + right);
 		}
 
 		protected static Value CompareLessThanOrEqual(Value left, Value right)
@@ -375,7 +357,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value(left.SignedInteger <= right.SignedInteger);
 			}
 
-			throw new CompilerException("incompatible types for comparison operator: " + left + " and " + right);
+			throw new CompilerException("ExpressionEvaluation: incompatible types for comparison operator: " + left + " and " + right);
 		}
 
 		protected static Value CompareLessThan(Value left, Value right)
@@ -389,7 +371,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value(left.SignedInteger < right.SignedInteger);
 			}
 
-			throw new CompilerException("incompatible types for comparison operator: " + left + " and " + right);
+			throw new CompilerException("ExpressionEvaluation: incompatible types for comparison operator: " + left + " and " + right);
 		}
 
 		protected static Value CompareGreaterThan(Value left, Value right)
@@ -403,20 +385,20 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value(left.SignedInteger > right.SignedInteger);
 			}
 
-			throw new CompilerException("incompatible types for comparison operator: " + left + " and " + right);
+			throw new CompilerException("ExpressionEvaluation: incompatible types for comparison operator: " + left + " and " + right);
 		}
 
-		protected static Value IfStatement(ExpressionNode node)
+		protected static Value IfStatement(ExpressionNode node, Operand[] operands, MosaType[] types)
 		{
 			if (node.Parameters.Count < 2 || node.Parameters.Count > 3)
-				throw new CompilerException("Incomplete if statement");
+				throw new CompilerException("ExpressionEvaluation: Incomplete if statement");
 
-			var condition = Evaluate(node.Parameters[0]);
+			var condition = Evaluate(node.Parameters[0], operands, types);
 
-			return Evaluate(node.Parameters[condition.IsTrue ? 1 : 2]);
+			return Evaluate(node.Parameters[condition.IsTrue ? 1 : 2], operands, types);
 		}
 
-		protected static Value Method(ExpressionNode node)
+		protected static Value Method(ExpressionNode node, Operand[] operands, MosaType[] types)
 		{
 			string name = node.Token.Value;
 
@@ -425,15 +407,10 @@ namespace Mosa.Compiler.Framework.Expression
 			//if (result != null)
 			//	return result;
 
-			throw new CompilerException("unknown method: " + name);
+			throw new CompilerException("ExpressionEvaluation: unknown method: " + name);
 		}
 
-		public override string ToString()
-		{
-			return Root.ToString();
-		}
-
-		public static Value ValidateHelper(string method, IList<Value> parameters, int minParameters, IList<ValueType> types)
+		protected static Value ValidateHelper(string method, IList<Value> parameters, int minParameters, IList<ValueType> types)
 		{
 			if (parameters.Count < minParameters)
 			{

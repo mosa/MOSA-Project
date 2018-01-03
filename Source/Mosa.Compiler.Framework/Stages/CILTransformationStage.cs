@@ -968,7 +968,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			throw new CompilerException("Error transforming CIL.Ldfld");
+			throw new CompilerException("ExpressionEvaluation: Error transforming CIL.Ldfld");
 		}
 
 		/// <summary>
@@ -1600,7 +1600,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			throw new NotImplementCompilerException("CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
+			throw new NotImplementCompilerException("ExpressionEvaluation: CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
 		}
 
 		/// <summary>
@@ -1899,30 +1899,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				default: throw new InvalidProgramException();
 			}
-		}
-
-		/// <summary>
-		/// Determines if a store is silently truncating the value.
-		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <returns>True if the store is truncating, otherwise false.</returns>
-		private static bool IsTruncating(Operand destination, Operand source)
-		{
-			if (destination.IsInt)
-			{
-				return source.IsLong;
-			}
-			else if (destination.IsShort || destination.IsChar)
-			{
-				return source.IsLong || source.IsInteger;
-			}
-			else if (destination.IsByte) // UNKNOWN: Add destination.IsBoolean
-			{
-				return source.IsLong || source.IsInteger || source.IsShort;
-			}
-
-			return false;
 		}
 
 		private static void Replace(InstructionNode node, BaseInstruction floatingPointR4Instruction, BaseInstruction floatingPointR8Instruction, BaseInstruction signedInstruction, BaseInstruction unsignedInstruction)
