@@ -3,7 +3,6 @@
 using Mosa.Compiler.Common.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace Mosa.Compiler.Framework.Expression
 {
@@ -54,15 +53,33 @@ namespace Mosa.Compiler.Framework.Expression
 				matchEnd = transformPosition - 1;
 
 			if (andPosition != -1 && andPosition < matchEnd)
-				matchEnd = andPosition;
+				matchEnd = andPosition - 1;
 
 			var matchTokens = tokenized.GetPart(1, matchEnd);
 			var transformTokens = tokenized.GetPart(transformPosition + 1, transformEnd);
+			var criteriaTokens = tokenized.GetPart(matchEnd + 1, transformPosition - 1);
 
 			var match = StartParse(matchTokens);
 			var transform = StartParse(transformTokens);
 
-			var tree = new TransformRule(match, transform);
+			var criteria = ExpressionParser.Parse(criteriaTokens);
+
+			int operandVariableCount = 0;
+			int typeVariableCount = 0;
+
+			foreach (var token in tokenized.Tokens)
+			{
+				if (token.TokenType == TokenType.OperandVariable)
+				{
+					operandVariableCount = Math.Max(operandVariableCount, token.Index);
+				}
+				else if (token.TokenType == TokenType.TypeVariable)
+				{
+					typeVariableCount = Math.Max(typeVariableCount, token.Index);
+				}
+			}
+
+			var tree = new TransformRule(match, criteria, transform, operandVariableCount, typeVariableCount);
 
 			return tree;
 		}
@@ -83,10 +100,10 @@ namespace Mosa.Compiler.Framework.Expression
 			}
 			else if (word.TokenType == TokenType.OpenBracket)
 			{
-				return ParseBrackExpression(tokens, ref at);
+				return ParseBracketExpression(tokens, ref at);
 			}
 
-			throw new CompilerException("Invalid parse: error at " + word.Index.ToString() + " unexpected token: " + word);
+			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + word.Position.ToString() + " unexpected token: " + word);
 		}
 
 		protected Node Parse(List<Token> tokens, ref int at)
@@ -105,7 +122,7 @@ namespace Mosa.Compiler.Framework.Expression
 				if (next.TokenType != TokenType.OperandVariable)
 					return null; // error
 
-				var node = new Node(NodeType.ConstantVariable, next.Value);
+				var node = new Node(NodeType.ConstantVariable, next.Value, next.Index);
 
 				// next token should be a close paran
 				var next2 = tokens[++at];
@@ -117,7 +134,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return node;
 			}
 
-			throw new CompilerException("Invalid parse: error at " + word.Index.ToString() + " unexpected token: " + word);
+			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + word.Position.ToString() + " unexpected token: " + word);
 		}
 
 		protected Node ParseInstructionNode(List<Token> tokens, ref int at)
@@ -160,7 +177,7 @@ namespace Mosa.Compiler.Framework.Expression
 				}
 				else if (token.TokenType == TokenType.OpenBracket)
 				{
-					parentNode = ParseBrackExpression(tokens, ref at);
+					parentNode = ParseBracketExpression(tokens, ref at);
 				}
 				else if (token.TokenType == TokenType.OperandVariable)
 				{
@@ -170,16 +187,16 @@ namespace Mosa.Compiler.Framework.Expression
 					}
 					else if (token.Value[0] == 'v' && token.Value.Length > 1)
 					{
-						parentNode = new Node(NodeType.VirtualRegister, token.Value);
+						parentNode = new Node(NodeType.VirtualRegister, token.Value, token.Index);
 					}
 					else
 					{
-						parentNode = new Node(NodeType.OperandVariable, token.Value);
+						parentNode = new Node(NodeType.OperandVariable, token.Value, token.Index);
 					}
 				}
 				else
 				{
-					throw new CompilerException("Invalid parse: error at " + word.Index.ToString() + " unexpected token: " + word);
+					throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + word.Position.ToString() + " unexpected token: " + word);
 				}
 
 				node.AddNode(parentNode);
@@ -188,7 +205,7 @@ namespace Mosa.Compiler.Framework.Expression
 			return node;
 		}
 
-		private static Node ParseBrackExpression(List<Token> tokens, ref int at)
+		private static Node ParseBracketExpression(List<Token> tokens, ref int at)
 		{
 			var bracketedTokens = new List<Token>();
 
@@ -204,9 +221,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 			var expressionNode = ExpressionParser.Parse(bracketedTokens);
 
-			var parentNode = new Node(expressionNode);
-
-			return parentNode;
+			return new Node(expressionNode);
 		}
 	}
 }

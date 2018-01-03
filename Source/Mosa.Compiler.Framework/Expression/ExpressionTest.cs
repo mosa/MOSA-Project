@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.MosaTypeSystem;
-using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Expression
 {
@@ -10,12 +8,13 @@ namespace Mosa.Compiler.Framework.Expression
 	{
 		public static TransformRule GetTestExpression1()
 		{
-			// (Add64 <t> (Mul64 x y) (Mul64 x z))
 			// (Add(Mul x y)(Mul x z))
 
-			var nodeX = new Node(NodeType.VirtualRegister, "x");
-			var nodeY = new Node(NodeType.VirtualRegister, "y");
-			var nodeZ = new Node(NodeType.VirtualRegister, "z");
+			var nodeX = new Node(NodeType.OperandVariable, "x", 0);
+			var nodeY = new Node(NodeType.OperandVariable, "y", 1);
+			var nodeZ = new Node(NodeType.OperandVariable, "z", 2);
+
+			//var nodeW = new Node(NodeType.OperandVariable, "w", 3);
 
 			var instruction1 = new Node(IRInstruction.AddUnsigned);
 			var instruction2 = new Node(IRInstruction.MulSigned);
@@ -30,7 +29,7 @@ namespace Mosa.Compiler.Framework.Expression
 			instruction3.AddNode(nodeX);
 			instruction3.AddNode(nodeZ);
 
-			var tree = new TransformRule(instruction1, null);
+			var tree = new TransformRule(instruction1, null, null, 4, 0);
 
 			return tree;
 		}
@@ -50,6 +49,7 @@ namespace Mosa.Compiler.Framework.Expression
 			var r = Operand.CreateVirtualRegister(null, 4);
 			var t1 = Operand.CreateVirtualRegister(null, 5);
 			var t2 = Operand.CreateVirtualRegister(null, 6);
+			var w = Operand.CreateVirtualRegister(null, 7);
 
 			context.AppendInstruction(IRInstruction.MulSigned, t1, x, y);
 			context.AppendInstruction(IRInstruction.MulSigned, t2, x, z);

@@ -15,17 +15,20 @@ namespace Mosa.Compiler.Framework.Expression
 
 		public Value(long i)
 		{
-			ValueType = ValueType.SignedInteger; SignedInteger = i;
+			ValueType = ValueType.SignedInteger;
+			SignedInteger = i;
 		}
 
 		public Value(ulong i)
 		{
-			ValueType = ValueType.UnsignedInteger; UnsignedInteger = i;
+			ValueType = ValueType.UnsignedInteger;
+			UnsignedInteger = i;
 		}
 
 		public Value(bool b)
 		{
-			ValueType = ValueType.SignedInteger; SignedInteger = b ? 1 : 0;
+			ValueType = ValueType.SignedInteger;
+			SignedInteger = b ? 1 : 0;
 		}
 
 		public Value(double d)

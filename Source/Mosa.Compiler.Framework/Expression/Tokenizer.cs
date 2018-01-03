@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common.Exceptions;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Expression
 {
@@ -50,6 +50,8 @@ namespace Mosa.Compiler.Framework.Expression
 		{
 			Expression = expression;
 			Parse();
+			Rewrite();
+			AssignNameLabels();
 		}
 
 		private void Parse()
@@ -80,10 +82,8 @@ namespace Mosa.Compiler.Framework.Expression
 					continue;
 				}
 
-				throw new CompilerException("tokenizer: error at " + Index.ToString() + ": syntax error");
+				throw new CompilerException("ExpressionEvaluation: tokenizer: error at " + Index.ToString() + ": syntax error");
 			}
-
-			Rewrite();
 		}
 
 		private Token Peek(int index, int offset = 0)
@@ -153,9 +153,7 @@ namespace Mosa.Compiler.Framework.Expression
 		};
 
 		/// <summary>
-		/// Rewrites the tokens by:
-		///    1. resolving identifiers into specific tokens
-		///    2. adding tokens to
+		/// Rewrites the tokens by more specific tokens
 		/// </summary>
 		private void Rewrite()
 		{
@@ -236,6 +234,42 @@ namespace Mosa.Compiler.Framework.Expression
 			}
 		}
 
+		private void AssignNameLabels()
+		{
+			var aliases = new Dictionary<string, int>();
+			var typeAlias = new Dictionary<string, int>();
+
+			for (int i = 0; i < Tokens.Count; i++)
+			{
+				var token = Tokens[i];
+
+				if (token.TokenType == TokenType.OperandVariable)
+				{
+					var name = token.Value;
+
+					if (!aliases.TryGetValue(name, out int value))
+					{
+						value = aliases.Count;
+						aliases.Add(name, value);
+					}
+
+					token.SetNameIndex(value);
+				}
+				else if (token.TokenType == TokenType.TypeVariable)
+				{
+					var name = token.Value;
+
+					if (!typeAlias.TryGetValue(name, out int value))
+					{
+						value = typeAlias.Count;
+						typeAlias.Add(name, value);
+					}
+
+					token.SetNameIndex(value);
+				}
+			}
+		}
+
 		private bool ExtractOperand()
 		{
 			foreach (var op in operands)
@@ -291,7 +325,7 @@ namespace Mosa.Compiler.Framework.Expression
 				{
 					if (decimalsymbol)
 					{
-						throw new CompilerException("tokenizer: error at " + Index.ToString() + ": too many decimal characters");
+						throw new CompilerException("ExpressionEvaluation: tokenizer: error at " + Index.ToString() + ": too many decimal characters");
 					}
 
 					decimalsymbol = true;
@@ -367,7 +401,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 		public List<Token> GetPart(int start, int end)
 		{
-			var tokens = new List<Token>(end - start);
+			var tokens = new List<Token>(end > start ? end - start : 0);
 
 			for (int i = start; i < end; i++)
 			{

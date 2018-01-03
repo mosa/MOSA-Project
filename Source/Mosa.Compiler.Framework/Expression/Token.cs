@@ -2,8 +2,6 @@
 
 using Mosa.Compiler.Common.Exceptions;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 
 namespace Mosa.Compiler.Framework.Expression
@@ -14,7 +12,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 		public TokenType TokenType { get; protected set; }
 		public string Value { get; protected set; }
-		public int Index { get; protected set; } = -1;
+		public int Position { get; protected set; } = -1;
 
 		public bool IsInteger { get { return TokenType == TokenType.SignedIntegerConstant || TokenType == TokenType.UnsignedIntegerConstant; } }
 		public bool IsSigned { get { return TokenType == TokenType.SignedIntegerConstant; } }
@@ -23,39 +21,41 @@ namespace Mosa.Compiler.Framework.Expression
 		public ulong Integer { get; }
 		public double Double { get; }
 
+		public int Index { get; protected set; }
+
 		public Token(TokenType tokenType, string value = null, int index = -1)
 		{
 			TokenType = tokenType;
 			Value = value;
-			Index = index;
+			Position = index;
 		}
 
 		public Token(long i, int index = -1)
 		{
 			TokenType = TokenType.SignedIntegerConstant;
 			Integer = (ulong)i;
-			Index = index;
+			Position = index;
 		}
 
 		public Token(ulong u, int index = -1)
 		{
 			TokenType = TokenType.UnsignedIntegerConstant;
 			Integer = u;
-			Index = index;
+			Position = index;
 		}
 
 		public Token(double d, int index = -1)
 		{
 			TokenType = TokenType.DoubleConstant;
 			Double = d;
-			Index = index;
+			Position = index;
 		}
 
 		public Token(bool b, int index = -1)
 		{
 			TokenType = TokenType.UnsignedIntegerConstant;
 			Integer = b ? 0u : 1u;
-			Index = index;
+			Position = index;
 		}
 
 		public Token(TokenType tokenType) : this(tokenType, null)
@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 		public Token(string text, int index = -1)
 		{
-			Index = index;
+			Position = index;
 			Value = text;
 
 			// start of unused - kept for possible future use
@@ -103,7 +103,7 @@ namespace Mosa.Compiler.Framework.Expression
 			if (hex)
 			{
 				if (!UInt64.TryParse(value.Substring(2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out ulong v))
-					throw new CompilerException("Invalid long hex constant: " + text);
+					throw new CompilerException("ExpressionEvaluation: Invalid long hex constant: " + text);
 
 				TokenType = TokenType.UnsignedIntegerConstant;
 				Integer = v;
@@ -116,7 +116,7 @@ namespace Mosa.Compiler.Framework.Expression
 				value = dec2 ? value.Substring(0, value.Length - 1) : value;
 
 				if (!Double.TryParse(value, out double d))
-					throw new CompilerException("Invalid double constant: " + text);
+					throw new CompilerException("ExpressionEvaluation: Invalid double constant: " + text);
 
 				TokenType = TokenType.DoubleConstant;
 				Double = d;
@@ -127,7 +127,7 @@ namespace Mosa.Compiler.Framework.Expression
 			if (signed)
 			{
 				if (!Int64.TryParse(value, out long i))
-					throw new CompilerException("Invalid integer constant: " + text);
+					throw new CompilerException("ExpressionEvaluation: Invalid integer constant: " + text);
 
 				TokenType = TokenType.SignedIntegerConstant;
 				Integer = (ulong)i;
@@ -138,10 +138,15 @@ namespace Mosa.Compiler.Framework.Expression
 			value = dec2 ? value.Substring(0, value.Length - 1) : value;
 
 			if (!UInt64.TryParse(value, out ulong u))
-				throw new CompilerException("Invalid integer constant: " + text);
+				throw new CompilerException("ExpressionEvaluation: Invalid integer constant: " + text);
 
 			TokenType = TokenType.UnsignedIntegerConstant;
 			Integer = u;
+		}
+
+		public void SetNameIndex(int index)
+		{
+			Index = index;
 		}
 
 		public override string ToString()

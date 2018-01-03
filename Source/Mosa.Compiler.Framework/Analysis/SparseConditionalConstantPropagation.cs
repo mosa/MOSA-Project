@@ -33,11 +33,9 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			public List<ulong> Constants { get { return constants; } }
 
-			private ulong SingleConstant { get { return constants[0]; } }
+			public ulong ConstantUnsignedLongInteger { get { return constants[0]; } }
 
-			public ulong ConstantUnsignedLongInteger { get { return SingleConstant; } }
-
-			public long ConstantSignedLongInteger { get { return (long)SingleConstant; } }
+			public long ConstantSignedLongInteger { get { return (long)constants[0]; } }
 
 			public bool ConstantsContainZero { get; set; }
 
