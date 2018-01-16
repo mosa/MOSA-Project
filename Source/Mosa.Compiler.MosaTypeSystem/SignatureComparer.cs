@@ -29,8 +29,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 					return Equals(x.ElementType, y.ElementType);
 
 				case MosaTypeCode.Array:
-					return Equals(x.ElementType, y.ElementType) &&
-						   Equals(x.ArrayInfo, y.ArrayInfo);
+					return Equals(x.ElementType, y.ElementType)
+						   && Equals(x.ArrayInfo, y.ArrayInfo);
 
 				case MosaTypeCode.FunctionPointer:
 					return Equals(x.FunctionPtrSig, y.FunctionPtrSig);
@@ -51,7 +51,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			foreach (var genericArg in type.GenericArguments)
 			{
-				result += result * 7 + GetHashCode(genericArg);
+				result += (result * 7) + GetHashCode(genericArg);
 			}
 
 			switch (type.TypeCode)
@@ -62,7 +62,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				// Hash code DOES not need to be unique, so to save time ArrayInfo is not hashed
 				case MosaTypeCode.Array:
-					result += result * 7 + GetHashCode(type.ElementType);
+					result += (result * 7) + GetHashCode(type.ElementType);
 					break;
 
 				case MosaTypeCode.FunctionPointer:
@@ -70,21 +70,21 @@ namespace Mosa.Compiler.MosaTypeSystem
 					break;
 
 				default:
-					result += result * 7 + type.Name.GetHashCode() + type.Namespace.GetHashCode();
+					result += (result * 7) + type.Name.GetHashCode() + type.Namespace.GetHashCode();
 					break;
 			}
 			return result;
 		}
 
-		int IEqualityComparer<MosaType>.GetHashCode(MosaType type)
+		int IEqualityComparer<MosaType>.GetHashCode(MosaType obj)
 		{
-			return GetHashCode(type);
+			return GetHashCode(obj);
 		}
 
 		public static bool Equals(MosaMethodSignature x, MosaMethodSignature y)
 		{
-			return Equals(x.ReturnType, y.ReturnType) &&
-				   x.Parameters.SequenceEquals(y.Parameters);
+			return Equals(x.ReturnType, y.ReturnType)
+				   && x.Parameters.SequenceEquals(y.Parameters);
 		}
 
 		bool IEqualityComparer<MosaMethodSignature>.Equals(MosaMethodSignature x, MosaMethodSignature y)
@@ -98,14 +98,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			foreach (var param in method.Parameters)
 			{
-				result += result * 7 + GetHashCode(param.ParameterType);
+				result += (result * 7) + GetHashCode(param.ParameterType);
 			}
 			return result;
 		}
 
-		int IEqualityComparer<MosaMethodSignature>.GetHashCode(MosaMethodSignature method)
+		int IEqualityComparer<MosaMethodSignature>.GetHashCode(MosaMethodSignature obj)
 		{
-			return GetHashCode(method);
+			return GetHashCode(obj);
 		}
 	}
 }

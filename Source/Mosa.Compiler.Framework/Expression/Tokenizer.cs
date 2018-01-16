@@ -401,9 +401,9 @@ namespace Mosa.Compiler.Framework.Expression
 
 		public List<Token> GetPart(int start, int end)
 		{
-			var tokens = new List<Token>(end > start ? end - start : 0);
+			var tokens = new List<Token>(end > start ? (end - start) + 1 : 0);
 
-			for (int i = start; i < end; i++)
+			for (int i = start; i <= end; i++)
 			{
 				tokens.Add(Tokens[i]);
 			}
