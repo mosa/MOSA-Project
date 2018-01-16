@@ -58,6 +58,7 @@ namespace Mosa.Compiler.Framework.Expression
 		OperandVariable,
 		ConstLiteral,
 		PhysicalRegister,
+		VirtualRegister,
 
 		Method,     // ???
 	}

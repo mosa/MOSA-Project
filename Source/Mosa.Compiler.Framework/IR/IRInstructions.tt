@@ -24,6 +24,10 @@ foreach (var entry in entries.instructions) {
 #>
 
 <# manager.StartNewFile(entry.name+".cs"); #>
+<# if (entry.resultType!="" || entry.resultType2!="") { #>
+using Mosa.Compiler.MosaTypeSystem;
+
+<# } #>
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
@@ -42,6 +46,14 @@ namespace Mosa.Compiler.Framework.IR
 <# if (entry.flowControl!="Next") { #>
 		
 		public override FlowControl FlowControl { get { return FlowControl.<#= entry.flowControl #>; } }
+<# } #>
+<# if (entry.resultType!="") { #>
+
+		public override BuiltInType ResultType { get { return BuiltInType.<#= entry.resultType #>; } }
+<# } #>
+<# if (entry.resultType2!="") { #>
+
+		public override BuiltInType ResultType2 { get { return BuiltInType.<#= entry.resultType2 #>; } }
 <# } #>
 <# if (entry.ignoreDuringCodeGeneration=="true") { #>
 

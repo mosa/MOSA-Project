@@ -1,7 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Expression;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.x86;
 using System.Collections.Generic;
 using System.IO;
@@ -332,19 +334,33 @@ namespace Mosa.Workspace.Experiment.Debug
 			X86.Rep,
 		};
 
+		private static readonly Dictionary<BaseInstruction, string> ResultType = new Dictionary<BaseInstruction, string>()
+		{
+			{ IRInstruction.CompareInteger, "Boolean" },
+			{ IRInstruction.CompareFloatR4, "Boolean" },
+			{ IRInstruction.CompareFloatR8, "Boolean" },
+			{ IRInstruction.Split64, "UInt32" },
+			{ IRInstruction.To64, "UInt64" },
+		};
+
+		private static readonly Dictionary<BaseInstruction, string> ResultType2 = new Dictionary<BaseInstruction, string>()
+		{
+			{ IRInstruction.Split64, "UInt32" },
+		};
+
 		#endregion Data
 
 		private static void Main()
 		{
-			var tree = ExpressionTest.GetTestExpression1();
+			var tree = ExpressionTest.GetTestExpression2();
 			var basicBlocks = ExpressionTest.CreateBasicBlockInstructionSet();
 
-			var match = tree.Validate(basicBlocks[0].Last.Previous);
+			//var match = tree.Transform(basicBlocks[0].Last.Previous, null);
 
-			ExpressionTest.GetTestExpression5();
-			ExpressionTest.GetTestExpression4();
-			ExpressionTest.GetTestExpression3();
-			ExpressionTest.GetTestExpression2();
+			//ExpressionTest.GetTestExpression5();
+			//ExpressionTest.GetTestExpression4();
+			//ExpressionTest.GetTestExpression3();
+			//ExpressionTest.GetTestExpression2();
 
 			DumpIRInstruction();
 			DumpX86Instruction();
@@ -352,11 +368,29 @@ namespace Mosa.Workspace.Experiment.Debug
 			return;
 		}
 
+		private static string GetResultType(BaseInstruction instruction)
+		{
+			string value = string.Empty;
+
+			ResultType.TryGetValue(instruction, out value);
+
+			return value;
+		}
+
+		private static string GetResultType2(BaseInstruction instruction)
+		{
+			string value = string.Empty;
+
+			ResultType2.TryGetValue(instruction, out value);
+
+			return value;
+		}
+
 		private static void DumpIRInstruction()
 		{
 			var sb = new StringBuilder();
 
-			const string template = "\"name\": \"{0}\",\n\"familyName\": \"{1}\",\n\"resultCount\": {2},\n\"operandCount\": {3},\n\"flowControl\": \"{4}\",\n\"ignoreDuringCodeGeneration\": \"{5}\",\n\"ignoreInstructionBasicBlockTargets\": \"{6}\",\n\"variableOperandCount\": \"{7}\",\n\"commutative\": \"{8}\",\n\"hasSideEffect\": \"{9}\",\n\"description\": \"{10}\"\n";
+			const string template = "\"name\": \"{0}\",\n\"familyName\": \"{1}\",\n\"resultCount\": {2},\n\"operandCount\": {3},\n\"resultType\": \"{4}\",\n\"resultType2\": \"{5}\",\n\"flowControl\": \"{6}\",\n\"ignoreDuringCodeGeneration\": \"{7}\",\n\"ignoreInstructionBasicBlockTargets\": \"{8}\",\n\"variableOperandCount\": \"{9}\",\n\"commutative\": \"{10}\",\n\"hasSideEffect\": \"{11}\",\n\"description\": \"{12}\"\n";
 
 			sb.AppendLine("{ \"instructions\": [");
 
@@ -368,13 +402,15 @@ namespace Mosa.Workspace.Experiment.Debug
 					instruction.InstructionFamilyName, // 1
 					instruction.DefaultResultCount.ToString(), // 2
 					instruction.DefaultOperandCount.ToString(), // 3
-					instruction.FlowControl.ToString(), // 4
-					instruction.IgnoreDuringCodeGeneration ? "true" : "false", // 5
-					instruction.IgnoreInstructionBasicBlockTargets ? "true" : "false", // 6
-					IRVariableOperand.Contains(instruction) ? "true" : "false", // 8
-					IRCommutative.Contains(instruction) ? "true" : "false", // 8
-					IRSideEffects.Contains(instruction) ? "true" : "false", // 9
-					string.Empty); //10
+					GetResultType(instruction), // 4
+					GetResultType2(instruction), // 5
+					instruction.FlowControl.ToString(), // 6
+					instruction.IgnoreDuringCodeGeneration ? "true" : "false", // 7
+					instruction.IgnoreInstructionBasicBlockTargets ? "true" : "false", // 8
+					IRVariableOperand.Contains(instruction) ? "true" : "false", // 9
+					IRCommutative.Contains(instruction) ? "true" : "false", // 10
+					IRSideEffects.Contains(instruction) ? "true" : "false", // 11
+					string.Empty); //12
 
 				sb.AppendLine("} ,");
 			}
@@ -390,7 +426,7 @@ namespace Mosa.Workspace.Experiment.Debug
 		{
 			var sb = new StringBuilder();
 
-			const string template = "\"name\": \"{0}\",\n\"familyName\": \"{1}\",\n\"resultCount\": {2},\n\"operandCount\": {3},\n\"flowControl\": \"{4}\",\n\"ignoreDuringCodeGeneration\": \"{5}\",\n\"ignoreInstructionBasicBlockTargets\": \"{6}\",\n\"variableOperandCount\": \"{7}\",\n\"commutative\": \"{8}\",\n\"hasSideEffect\": \"{9}\",\n\"description\": \"{10}\"\n";
+			const string template = "\"name\": \"{0}\",\n\"familyName\": \"{1}\",\n\"resultCount\": {2},\n\"operandCount\": {3},\n\"resultType\": \"{4}\",\n\"resultType2\": \"{5}\",\n\"flowControl\": \"{6}\",\n\"ignoreDuringCodeGeneration\": \"{7}\",\n\"ignoreInstructionBasicBlockTargets\": \"{8}\",\n\"variableOperandCount\": \"{9}\",\n\"commutative\": \"{10}\",\n\"hasSideEffect\": \"{11}\",\n\"description\": \"{12}\"\n";
 
 			sb.AppendLine("{ \"instructions\": [");
 
@@ -402,13 +438,15 @@ namespace Mosa.Workspace.Experiment.Debug
 					instruction.InstructionFamilyName, // 1
 					instruction.DefaultResultCount.ToString(), // 2
 					instruction.DefaultOperandCount.ToString(), // 3
-					instruction.FlowControl.ToString(), // 4
-					instruction.IgnoreDuringCodeGeneration ? "true" : "false", // 5
-					instruction.IgnoreInstructionBasicBlockTargets ? "true" : "false", // 6
-					"false", // 8
-					X86Commutative.Contains(instruction) ? "true" : "false", // 8
-					X86SideEffects.Contains(instruction) ? "true" : "false", // 9
-					string.Empty); //10
+					GetResultType(instruction), // 4
+					GetResultType2(instruction), // 5
+					instruction.FlowControl.ToString(), // 6
+					instruction.IgnoreDuringCodeGeneration ? "true" : "false", // 7
+					instruction.IgnoreInstructionBasicBlockTargets ? "true" : "false", // 8
+					"false", // 9
+					X86Commutative.Contains(instruction) ? "true" : "false", // 10
+					X86SideEffects.Contains(instruction) ? "true" : "false", // 11
+					string.Empty); //12
 
 				sb.AppendLine("} ,");
 			}

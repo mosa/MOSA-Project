@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Text;
 
@@ -23,6 +24,16 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <value>The operand result count.</value>
 		public byte DefaultResultCount { get; protected set; }
+
+		/// <summary>
+		/// The type of the result type
+		/// </summary>
+		public virtual BuiltInType ResultType { get; protected set; } = BuiltInType.None;
+
+		/// <summary>
+		/// The type of the secondary result type
+		/// </summary>
+		public virtual BuiltInType ResultType2 { get; protected set; } = BuiltInType.None;
 
 		/// <summary>
 		/// Determines flow behavior of this instruction.

@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.Expression
 			if (andPosition != -1 && andPosition < matchEnd)
 				matchEnd = andPosition - 1;
 
-			var matchTokens = tokenized.GetPart(1, matchEnd);
+			var matchTokens = tokenized.GetPart(0, matchEnd);
 			var transformTokens = tokenized.GetPart(transformPosition + 1, transformEnd);
 			var criteriaTokens = tokenized.GetPart(matchEnd + 1, transformPosition - 1);
 
@@ -79,42 +79,80 @@ namespace Mosa.Compiler.Framework.Expression
 				}
 			}
 
-			var tree = new TransformRule(match, criteria, transform, operandVariableCount, typeVariableCount);
+			var tree = new TransformRule(match, criteria, transform, operandVariableCount + 1, typeVariableCount + 1);
 
 			return tree;
 		}
 
 		protected Node StartParse(List<Token> tokens)
 		{
+			if (tokens.Count == 0)
+				return null;
+
 			int at = 0;
-			return StartParse(tokens, ref at);
+			return ParseOperand(tokens, ref at);
 		}
 
-		protected Node StartParse(List<Token> tokens, ref int at)
+		protected Node ParseOperand(List<Token> tokens, ref int at)
 		{
-			var word = tokens[at];
+			var token = tokens[at++];
 
-			if (word.TokenType == TokenType.InstructionName)
+			if (token.TokenType == TokenType.CloseParens)
 			{
-				return ParseInstructionNode(tokens, ref at);
+				return null;
 			}
-			else if (word.TokenType == TokenType.OpenBracket)
+
+			if (token.TokenType == TokenType.OpenParens)
+			{
+				return ParseNewExpression(tokens, ref at);
+			}
+			else if (token.TokenType == TokenType.SignedIntegerConstant)
+			{
+				return new Node((long)token.Integer);
+			}
+			else if (token.TokenType == TokenType.UnsignedIntegerConstant)
+			{
+				return new Node((ulong)token.Integer);
+			}
+			else if (token.TokenType == TokenType.DoubleConstant)
+			{
+				return new Node((long)token.Double);
+			}
+			else if (token.TokenType == TokenType.OpenBracket)
 			{
 				return ParseBracketExpression(tokens, ref at);
 			}
+			else if (token.TokenType == TokenType.PhysicalRegister)
+			{
+				if (physicalRegisterMap.TryGetValue(token.Value, out PhysicalRegister physicalRegister))
+				{
+					return new Node(physicalRegister);
+				}
 
-			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + word.Position.ToString() + " unexpected token: " + word);
+				throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + token.Position.ToString() + " unknown register name: " + token.Value);
+			}
+			else if (token.TokenType == TokenType.VirtualRegister)
+			{
+				// not available with syntax yet
+				return new Node(NodeType.VirtualRegister, token.Value, token.Index);
+			}
+			else if (token.TokenType == TokenType.OperandVariable)
+			{
+				return new Node(NodeType.OperandVariable, token.Value, token.Index);
+			}
+
+			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + token.Position.ToString() + " unexpected token: " + token);
 		}
 
-		protected Node Parse(List<Token> tokens, ref int at)
+		protected Node ParseNewExpression(List<Token> tokens, ref int at)
 		{
-			var word = tokens[at];
+			var token = tokens[at];
 
-			if (word.TokenType == TokenType.InstructionName)
+			if (token.TokenType == TokenType.InstructionName)
 			{
 				return ParseInstructionNode(tokens, ref at);
 			}
-			else if (word.TokenType == TokenType.ConstLiteral)
+			else if (token.TokenType == TokenType.ConstLiteral)
 			{
 				// the next token should be a variable
 				var next = tokens[++at];
@@ -134,82 +172,35 @@ namespace Mosa.Compiler.Framework.Expression
 				return node;
 			}
 
-			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + word.Position.ToString() + " unexpected token: " + word);
+			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + token.Position.ToString() + " unexpected token: " + token);
 		}
 
 		protected Node ParseInstructionNode(List<Token> tokens, ref int at)
 		{
-			var word = tokens[at++];
+			var token = tokens[at++];
 
-			var instruction = instructionMap[word.Value];
+			var instruction = instructionMap[token.Value];
 
 			var node = new Node(instruction);
 
 			while (at < tokens.Count)
 			{
-				var token = tokens[at++];
+				var operand = ParseOperand(tokens, ref at);
 
-				if (token.TokenType == TokenType.CloseParens)
-				{
+				if (operand == null)
 					return node;
-				}
 
-				Node parentNode = null;
-
-				if (token.TokenType == TokenType.OpenParens)
-				{
-					parentNode = Parse(tokens, ref at);
-
-					if (parentNode == null)
-						return null;
-				}
-				else if (token.TokenType == TokenType.SignedIntegerConstant)
-				{
-					parentNode = new Node((long)token.Integer);
-				}
-				else if (token.TokenType == TokenType.UnsignedIntegerConstant)
-				{
-					parentNode = new Node((ulong)token.Integer);
-				}
-				else if (token.TokenType == TokenType.DoubleConstant)
-				{
-					parentNode = new Node((long)token.Double);
-				}
-				else if (token.TokenType == TokenType.OpenBracket)
-				{
-					parentNode = ParseBracketExpression(tokens, ref at);
-				}
-				else if (token.TokenType == TokenType.OperandVariable)
-				{
-					if (physicalRegisterMap.TryGetValue(token.Value, out PhysicalRegister physicalRegister))
-					{
-						parentNode = new Node(physicalRegister);
-					}
-					else if (token.Value[0] == 'v' && token.Value.Length > 1)
-					{
-						parentNode = new Node(NodeType.VirtualRegister, token.Value, token.Index);
-					}
-					else
-					{
-						parentNode = new Node(NodeType.OperandVariable, token.Value, token.Index);
-					}
-				}
-				else
-				{
-					throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + word.Position.ToString() + " unexpected token: " + word);
-				}
-
-				node.AddNode(parentNode);
+				node.AddNode(operand);
 			}
 
-			return node;
+			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + token.Position.ToString() + " unexpected token: " + token);
 		}
 
 		private static Node ParseBracketExpression(List<Token> tokens, ref int at)
 		{
 			var bracketedTokens = new List<Token>();
 
-			for (at++; at < tokens.Count; at++)
+			for (; at < tokens.Count; at++)
 			{
 				if (tokens[at].TokenType == TokenType.CloseBracket)
 				{
