@@ -182,6 +182,18 @@ namespace Mosa.Workspace.Experiment.Debug
 
 		private static readonly List<BaseIRInstruction> IRReadOperation = new List<BaseIRInstruction>()
 		{
+			IRInstruction.LoadCompound,
+			IRInstruction.LoadFloatR4,
+			IRInstruction.LoadFloatR8,
+			IRInstruction.LoadInteger,
+			IRInstruction.LoadSignExtended,
+			IRInstruction.LoadZeroExtended,
+			IRInstruction.LoadParameterCompound,
+			IRInstruction.LoadParameterFloatR4,
+			IRInstruction.LoadParameterFloatR8,
+			IRInstruction.LoadParameterInteger,
+			IRInstruction.LoadParameterSignExtended,
+			IRInstruction.LoadParameterZeroExtended,
 		};
 
 		private static readonly List<BaseIRInstruction> IRIOOperation = new List<BaseIRInstruction>()
@@ -334,17 +346,29 @@ namespace Mosa.Workspace.Experiment.Debug
 
 		private static readonly List<X86Instruction> X86WriteOperation = new List<X86Instruction>()
 		{
-			// TODO
+			X86.MovCRStore,
+			X86.MovsdStore,
+			X86.MovssStore,
+			X86.MovStore,
+			X86.MovupsStore,
 		};
 
 		private static readonly List<X86Instruction> X86ReadOperation = new List<X86Instruction>()
 		{
-			// TODO
+			X86.MovapsLoad,
+			X86.MovCRLoad,
+			X86.MovLoad,
+			X86.MovsdLoad,
+			X86.MovssLoad,
+			X86.MovsxLoad,
+			X86.MovupsLoad,
+			X86.MovzxLoad,
 		};
 
 		private static readonly List<X86Instruction> X86IOOperation = new List<X86Instruction>()
 		{
-			// TODO
+			X86.In,
+			X86.Out,
 		};
 
 		private static readonly List<X86Instruction> X86UnspecifiedSideEffect = new List<X86Instruction>()
