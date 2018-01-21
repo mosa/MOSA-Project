@@ -20,58 +20,58 @@ jss.RegisterConverters(new JavaScriptConverter[] { new DynamicJsonConverter() })
 
 dynamic entries = jss.Deserialize(json, typeof(object)) as dynamic;
 
-foreach (var entry in entries.instructions) {
+foreach (var entry in entries.Instructions) {
 #>
 
-<# manager.StartNewFile(entry.name+".cs"); #>
-<# if (entry.resultType!="" || entry.resultType2!="") { #>
+<# manager.StartNewFile(entry.Name+".cs"); #>
+<# if (entry.ResultType!="" || entry.ResultType2!="") { #>
 using Mosa.Compiler.MosaTypeSystem;
 
 <# } #>
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// <#= entry.name #>
-<# if (!string.IsNullOrWhiteSpace(entry.description)) { #>
-	/// <#= entry.description #>
+	/// <#= entry.Name #>
+<# if (!string.IsNullOrWhiteSpace(entry.Description)) { #>
+	/// <#= entry.Description #>
 <# } #>
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class <#= entry.name #> : BaseIRInstruction
+	public sealed class <#= entry.Name #> : BaseIRInstruction
 	{
-		public <#= entry.name #>()
-			: base(<#= entry.operandCount #>, <#= entry.resultCount #>)
+		public <#= entry.Name #>()
+			: base(<#= entry.OperandCount #>, <#= entry.ResultCount #>)
 		{
 		}
-<# if (entry.flowControl!="Next") { #>
-		
-		public override FlowControl FlowControl { get { return FlowControl.<#= entry.flowControl #>; } }
-<# } #>
-<# if (entry.resultType!="") { #>
+<# if (entry.FlowControl!="Next") { #>
 
-		public override BuiltInType ResultType { get { return BuiltInType.<#= entry.resultType #>; } }
+		public override FlowControl FlowControl { get { return FlowControl.<#= entry.FlowControl #>; } }
 <# } #>
-<# if (entry.resultType2!="") { #>
+<# if (entry.ResultType!="") { #>
 
-		public override BuiltInType ResultType2 { get { return BuiltInType.<#= entry.resultType2 #>; } }
+		public override BuiltInType ResultType { get { return BuiltInType.<#= entry.ResultType #>; } }
 <# } #>
-<# if (entry.ignoreDuringCodeGeneration=="true") { #>
+<# if (entry.ResultType2!="") { #>
+
+		public override BuiltInType ResultType2 { get { return BuiltInType.<#= entry.ResultType2 #>; } }
+<# } #>
+<# if (entry.IgnoreDuringCodeGeneration=="true") { #>
 
 		public override bool IgnoreDuringCodeGeneration { get { return true; } }
 <# } #>
-<# if (entry.ignoreInstructionBasicBlockTargets=="true") { #>
+<# if (entry.IgnoreInstructionBasicBlockTargets=="true") { #>
 
 		public override bool IgnoreInstructionBasicBlockTargets { get { return true; } }
 <# } #>
-<# if (entry.variableOperandCount=="true") { #>
+<# if (entry.VariableOperandCount=="true") { #>
 
 		public override bool VariableOperandCount { get { return true; } }
 <# } #>
-<# if (entry.commutative=="true") { #>
+<# if (entry.Commutative=="true") { #>
 
 		public override bool Commutative { get { return true; } }
 <# } #>
-<# if (entry.hasSideEffect=="true") { #>
+<# if (entry.HasSideEffect=="true") { #>
 
 		public override bool HasSideEffect { get { return true; } }
 <# } #>

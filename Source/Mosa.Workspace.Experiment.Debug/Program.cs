@@ -390,9 +390,9 @@ namespace Mosa.Workspace.Experiment.Debug
 		{
 			var sb = new StringBuilder();
 
-			const string template = "\"name\": \"{0}\",\n\"familyName\": \"{1}\",\n\"resultCount\": {2},\n\"operandCount\": {3},\n\"resultType\": \"{4}\",\n\"resultType2\": \"{5}\",\n\"flowControl\": \"{6}\",\n\"ignoreDuringCodeGeneration\": \"{7}\",\n\"ignoreInstructionBasicBlockTargets\": \"{8}\",\n\"variableOperandCount\": \"{9}\",\n\"commutative\": \"{10}\",\n\"hasSideEffect\": \"{11}\",\n\"description\": \"{12}\"\n";
+			const string template = "\"Name\": \"{0}\",\n\"FamilyName\": \"{1}\",\n\"ResultCount\": {2},\n\"OperandCount\": {3},\n\"ResultType\": \"{4}\",\n\"ResultType2\": \"{5}\",\n\"FlowControl\": \"{6}\",\n\"IgnoreDuringCodeGeneration\": \"{7}\",\n\"IgnoreInstructionBasicBlockTargets\": \"{8}\",\n\"VariableOperandCount\": \"{9}\",\n\"Commutative\": \"{10}\",\n\"HasSideEffect\": \"{11}\",\n\"Description\": \"{12}\"\n";
 
-			sb.AppendLine("{ \"instructions\": [");
+			sb.AppendLine("{ \"Instructions\": [");
 
 			foreach (var instruction in IRInstructions)
 			{
@@ -426,9 +426,9 @@ namespace Mosa.Workspace.Experiment.Debug
 		{
 			var sb = new StringBuilder();
 
-			const string template = "\"name\": \"{0}\",\n\"familyName\": \"{1}\",\n\"resultCount\": {2},\n\"operandCount\": {3},\n\"resultType\": \"{4}\",\n\"resultType2\": \"{5}\",\n\"flowControl\": \"{6}\",\n\"ignoreDuringCodeGeneration\": \"{7}\",\n\"ignoreInstructionBasicBlockTargets\": \"{8}\",\n\"variableOperandCount\": \"{9}\",\n\"commutative\": \"{10}\",\n\"hasSideEffect\": \"{11}\",\n\"description\": \"{12}\"\n";
+			const string template = "\"Name\": \"{0}\",\n\"FamilyName\": \"{1}\",\n\"ResultCount\": {2},\n\"OperandCount\": {3},\n\"ResultType\": \"{4}\",\n\"ResultType2\": \"{5}\",\n\"FlowControl\": \"{6}\",\n\"IgnoreDuringCodeGeneration\": \"{7}\",\n\"IgnoreInstructionBasicBlockTargets\": \"{8}\",\n\"VariableOperandCount\": \"{9}\",\n\"Commutative\": \"{10}\",\n\"HasSideEffect\": \"{11}\",\n\"Description\": \"{12}\"\n";
 
-			sb.AppendLine("{ \"instructions\": [");
+			sb.AppendLine("{ \"Instructions\": [");
 
 			foreach (var instruction in X86Instructions)
 			{
