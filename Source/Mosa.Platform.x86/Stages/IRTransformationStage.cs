@@ -16,8 +16,6 @@ namespace Mosa.Platform.x86.Stages
 	/// </remarks>
 	public sealed class IRTransformationStage : BaseTransformationStage
 	{
-		private const int LargeAlignment = 16;
-
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(IRInstruction.AddFloatR4, AddFloatR4);
@@ -785,17 +783,6 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Mov, v1, ConstantZero);
 			context.AppendInstruction2(X86.Div, v1, v2, v1, operand1, operand2);
 			context.AppendInstruction(X86.Mov, result, v1);
-		}
-
-		/// <summary>
-		/// Visitation function for Return.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		private void GotoEpilogue(InstructionNode node)
-		{
-			Debug.Assert(node.Operand1 == null);
-
-			node.SetInstruction(X86.Jmp, BasicBlocks.EpilogueBlock);
 		}
 
 		/// <summary>

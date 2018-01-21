@@ -48,14 +48,6 @@ namespace Mosa.Compiler.Framework.IR
 		/// </value>
 		public virtual bool Commutative { get { return false; } }
 
-		/// <summary>
-		/// Gets a value indicating whether this instance has side effect.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
-		/// </value>
-		public virtual bool HasSideEffect { get { return true; } }
-
 		#endregion Properties
 	}
 }

@@ -5,6 +5,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 
 namespace Mosa.Compiler.Framework
 {
@@ -809,18 +810,120 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// Returns a <see cref="System.String" /> that represents this instance.
 		/// </summary>
 		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
+		/// A <see cref="System.String" /> that represents this instance.
 		/// </returns>
 		public override string ToString()
 		{
 			if (Instruction == null)
 				return "<none>";
 
-			// TODO: Copy next method into this class
-			return Instruction.ToString(this);
+			// TODO: Copy this method into calling class
+			var sb = new StringBuilder();
+
+			sb.AppendFormat("L_{0:X4}", Label);
+
+			if (Marked)
+				sb.Append('*');
+			else
+				sb.Append(' ');
+
+			sb.Append(Instruction.InstructionName);
+
+			var size = GetSizeString(Size);
+
+			if (size != string.Empty)
+				sb.Append("/").Append(size);
+
+			if (ConditionCode != ConditionCode.Undefined)
+			{
+				sb.Append(" [");
+				sb.Append(GetConditionString(ConditionCode));
+				sb.Append("]");
+			}
+
+			if (Instruction.Modifier != null)
+			{
+				sb.Append(" [");
+				sb.Append(Instruction.Modifier);
+				sb.Append("]");
+			}
+
+			for (int i = 0; i < ResultCount; i++)
+			{
+				var op = GetResult(i);
+				sb.Append(" ");
+				sb.Append(op == null ? "[NULL]" : op.ToString(false));
+				sb.Append(",");
+			}
+
+			if (ResultCount > 0)
+			{
+				sb.Length--;
+			}
+
+			if (ResultCount > 0 && OperandCount > 0)
+			{
+				sb.Append(" <=");
+			}
+
+			for (int i = 0; i < OperandCount; i++)
+			{
+				var op = GetOperand(i);
+				sb.Append(" ");
+				sb.Append(op == null ? "[NULL]" : op.ToString(false));
+				sb.Append(",");
+			}
+
+			if (OperandCount > 0)
+			{
+				sb.Length--;
+			}
+
+			if (BranchTargets != null)
+			{
+				sb.Append(' ');
+
+				for (int i = 0; (i < 2) && (i < BranchTargetsCount); i++)
+				{
+					if (i != 0)
+					{
+						sb.Append(", ");
+					}
+
+					sb.Append(BranchTargets[i].ToString());
+				}
+
+				if (BranchTargetsCount > 2)
+				{
+					sb.Append(", [more]");
+				}
+			}
+
+			if (InvokeMethod != null)
+			{
+				sb.Append(" {m:");
+				sb.Append(InvokeMethod.FullName);
+				sb.Append("}");
+			}
+
+			if (MosaType != null)
+			{
+				sb.Append(" {t:");
+				sb.Append(MosaType.FullName);
+				sb.Append("}");
+			}
+
+			if (MosaField != null)
+			{
+				sb.Append(" {f:");
+				sb.Append(MosaField.FullName);
+				sb.Append("}");
+			}
+
+			return sb.ToString();
 		}
 
 		/// <summary>
@@ -838,7 +941,7 @@ namespace Mosa.Compiler.Framework
 			Size = size;
 		}
 
-		private void ReplaceOperands(Operand target, Operand replacement)
+		private void ReplaceOperand(Operand target, Operand replacement)
 		{
 			for (int i = 0; i < OperandCount; i++)
 			{
@@ -891,6 +994,53 @@ namespace Mosa.Compiler.Framework
 			}
 
 			return node;
+		}
+
+		/// <summary>
+		/// Gets the condition string.
+		/// </summary>
+		/// <param name="conditioncode">The condition code.</param>
+		/// <returns></returns>
+		public static string GetConditionString(ConditionCode conditioncode)
+		{
+			switch (conditioncode)
+			{
+				case ConditionCode.Equal: return "==";
+				case ConditionCode.GreaterOrEqual: return ">=";
+				case ConditionCode.GreaterThan: return ">";
+				case ConditionCode.LessOrEqual: return "<=";
+				case ConditionCode.LessThan: return "<";
+				case ConditionCode.NotEqual: return "!=";
+				case ConditionCode.UnsignedGreaterOrEqual: return ">= (U)";
+				case ConditionCode.UnsignedGreaterThan: return "> (U)";
+				case ConditionCode.UnsignedLessOrEqual: return "<= (U)";
+				case ConditionCode.UnsignedLessThan: return "< (U)";
+				case ConditionCode.NotSigned: return "not signed";
+				case ConditionCode.Signed: return "signed";
+				case ConditionCode.Zero: return "zero";
+				case ConditionCode.NotZero: return "not zero";
+				case ConditionCode.Parity: return "parity";
+				case ConditionCode.NoParity: return "no parity";
+				case ConditionCode.Carry: return "carry";
+				case ConditionCode.NoCarry: return "no carry";
+				case ConditionCode.Always: return "always";
+
+				default: throw new NotSupportedException();
+			}
+		}
+
+		public static string GetSizeString(InstructionSize size)
+		{
+			switch (size)
+			{
+				case InstructionSize.Size32: return "32";
+				case InstructionSize.Size8: return "8";
+				case InstructionSize.Size16: return "16";
+				case InstructionSize.Size64: return "64";
+				case InstructionSize.Size128: return "128";
+				case InstructionSize.Native: return string.Empty;// "Native";
+				default: return string.Empty;
+			}
 		}
 
 		#endregion Methods
