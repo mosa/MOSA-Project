@@ -47,7 +47,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "Btr",
@@ -66,8 +66,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"FlowControl": "Call",
-			"HasSideEffect": "true"
+			"FlowControl": "Call"
 		},
 		{
 			"Name": "Cdq",
@@ -188,14 +187,14 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 1,
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "Hlt",
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "IDiv",
@@ -214,7 +213,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "Inc",
@@ -227,14 +226,14 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 1,
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "Invlpg",
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 1,
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "IRetd",
@@ -242,7 +241,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"FlowControl": "Return",
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "Jmp",
@@ -262,28 +261,28 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "Lgdt",
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 1,
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "Lidt",
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 1,
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "Lock",
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "Mov",
@@ -462,7 +461,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 2,
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "Pause",
@@ -517,7 +516,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "Ret",

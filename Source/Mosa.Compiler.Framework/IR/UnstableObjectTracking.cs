@@ -16,8 +16,6 @@ namespace Mosa.Compiler.Framework.IR
 		}
 
 		public override bool IgnoreDuringCodeGeneration { get { return true; } }
-
-		public override bool HasSideEffect { get { return true; } }
 	}
 }
 
