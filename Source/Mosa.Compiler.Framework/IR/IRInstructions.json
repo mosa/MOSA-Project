@@ -312,73 +312,85 @@
 			"Name": "LoadCompound",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "LoadFloatR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "LoadFloatR8",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "LoadInteger",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "LoadSignExtended",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "LoadZeroExtended",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "LoadParameterCompound",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "LoadParameterFloatR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "LoadParameterFloatR8",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "LoadParameterInteger",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "LoadParameterSignExtended",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "LoadParameterZeroExtended",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "LogicalAnd",

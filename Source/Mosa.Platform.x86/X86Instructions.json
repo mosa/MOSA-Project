@@ -213,6 +213,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
+			"IOOperation": "true",
 			"UnspecifiedSideEffect": "true"
 		},
 		{
@@ -300,19 +301,22 @@
 			"Name": "MovapsLoad",
 			"FamilyName": "X86",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "MovCRLoad",
 			"FamilyName": "X86",
 			"ResultCount": 1,
-			"OperandCount": 1
+			"OperandCount": 1,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "MovCRStore",
 			"FamilyName": "X86",
 			"ResultCount": 0,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "Movd",
@@ -324,7 +328,8 @@
 			"Name": "MovLoad",
 			"FamilyName": "X86",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "Movsd",
@@ -336,13 +341,15 @@
 			"Name": "MovsdLoad",
 			"FamilyName": "X86",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "MovsdStore",
 			"FamilyName": "X86",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "Movss",
@@ -354,19 +361,22 @@
 			"Name": "MovssLoad",
 			"FamilyName": "X86",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "MovssStore",
 			"FamilyName": "X86",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "MovStore",
 			"FamilyName": "X86",
 			"ResultCount": 0,
-			"OperandCount": 3
+			"OperandCount": 3,
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "Movsx",
@@ -378,7 +388,8 @@
 			"Name": "MovsxLoad",
 			"FamilyName": "X86",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "Movups",
@@ -390,13 +401,15 @@
 			"Name": "MovupsLoad",
 			"FamilyName": "X86",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "MovupsStore",
 			"FamilyName": "X86",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "Movzx",
@@ -408,7 +421,8 @@
 			"Name": "MovzxLoad",
 			"FamilyName": "X86",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "Mul",
@@ -461,6 +475,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 2,
+			"IOOperation": "true",
 			"UnspecifiedSideEffect": "true"
 		},
 		{
