@@ -24,9 +24,9 @@ jss.RegisterConverters(new JavaScriptConverter[] { new DynamicJsonConverter() })
 
 dynamic entries = jss.Deserialize(json, typeof(object)) as dynamic;
 
-foreach (var entry in entries.instructions) {
+foreach (var entry in entries.Instructions) {
 #>
-		public static readonly <#= entry.name #> <#= entry.name #> = new <#= entry.name #>();
+		public static readonly <#= entry.Name #> <#= entry.Name #> = new <#= entry.Name #>();
 <# } #>
 	}
 }

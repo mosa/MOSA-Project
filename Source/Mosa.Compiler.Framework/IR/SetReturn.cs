@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework.IR
 			: base(1, 0)
 		{
 		}
-		
+
 		public override FlowControl FlowControl { get { return FlowControl.Return; } }
 
 		public override bool VariableOperandCount { get { return true; } }

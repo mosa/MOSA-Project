@@ -25,9 +25,9 @@ jss.RegisterConverters(new JavaScriptConverter[] { new DynamicJsonConverter() })
 
 dynamic entries = jss.Deserialize(json, typeof(object)) as dynamic;
 
-foreach (var entry in entries.instructions) {
+foreach (var entry in entries.Instructions) {
 #>
-			{ "<#= entry.name #>", IRInstruction.<#= entry.name #> },
+			{ "<#= entry.Name #>", IRInstruction.<#= entry.Name #> },
 <# } #>
 		};
 	}
