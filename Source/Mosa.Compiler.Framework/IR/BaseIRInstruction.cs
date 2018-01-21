@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <value>
 		///   <c>true</c> if [variable operand count]; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool VariableOperandCount { get { return false; } }
+		public virtual bool VariableOperands { get { return false; } }
 
 		/// <summary>
 		/// Gets a value indicating whether this <see cref="BaseIRInstruction"/> is commutative.

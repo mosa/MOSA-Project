@@ -24,7 +24,7 @@ foreach (var entry in entries.Instructions) {
 #>
 
 <# manager.StartNewFile(entry.Name+".cs"); #>
-<# if (entry.ResultType!="" || entry.ResultType2!="") { #>
+<# if (entry.ResultType != null || entry.ResultType2 != null) { #>
 using Mosa.Compiler.MosaTypeSystem;
 
 <# } #>
@@ -43,35 +43,35 @@ namespace Mosa.Compiler.Framework.IR
 			: base(<#= entry.OperandCount #>, <#= entry.ResultCount #>)
 		{
 		}
-<# if (entry.FlowControl!="Next") { #>
+<# if (entry.FlowControl != null && entry.FlowControl != "Next") { #>
 
 		public override FlowControl FlowControl { get { return FlowControl.<#= entry.FlowControl #>; } }
 <# } #>
-<# if (entry.ResultType!="") { #>
+<# if (entry.ResultType != null && entry.ResultType != "") { #>
 
 		public override BuiltInType ResultType { get { return BuiltInType.<#= entry.ResultType #>; } }
 <# } #>
-<# if (entry.ResultType2!="") { #>
+<# if (entry.ResultType2 != null && entry.ResultType2 != "") { #>
 
 		public override BuiltInType ResultType2 { get { return BuiltInType.<#= entry.ResultType2 #>; } }
 <# } #>
-<# if (entry.IgnoreDuringCodeGeneration=="true") { #>
+<# if (entry.IgnoreDuringCodeGeneration  != null && entry.IgnoreDuringCodeGeneration == "true") { #>
 
 		public override bool IgnoreDuringCodeGeneration { get { return true; } }
 <# } #>
-<# if (entry.IgnoreInstructionBasicBlockTargets=="true") { #>
+<# if (entry.IgnoreInstructionBasicBlockTargets  != null && entry.IgnoreInstructionBasicBlockTargets == "true") { #>
 
 		public override bool IgnoreInstructionBasicBlockTargets { get { return true; } }
 <# } #>
-<# if (entry.VariableOperandCount=="true") { #>
+<# if (entry.VariableOperands != null && entry.VariableOperands == "true") { #>
 
-		public override bool VariableOperandCount { get { return true; } }
+		public override bool VariableOperands { get { return true; } }
 <# } #>
-<# if (entry.Commutative=="true") { #>
+<# if (entry.Commutative  != null && entry.Commutative=="true") { #>
 
 		public override bool Commutative { get { return true; } }
 <# } #>
-<# if (entry.HasSideEffect=="true") { #>
+<# if (entry.HasSideEffect  != null && entry.HasSideEffect=="true") { #>
 
 		public override bool HasSideEffect { get { return true; } }
 <# } #>
