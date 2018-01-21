@@ -21,7 +21,12 @@ namespace Mosa.Workspace.Experiment.Debug
 		public bool IgnoreInstructionBasicBlockTargets;
 		public bool VariableOperands;
 		public bool Commutative;
-		public bool HasSideEffect;
+
+		public bool MemoryWrite;
+		public bool MemoryRead;
+		public bool IOOperation;
+		public bool UnspecifiedSideEffect;
+
 		public string Description = null;
 
 		public override string ToString()
@@ -56,8 +61,17 @@ namespace Mosa.Workspace.Experiment.Debug
 			if (Commutative)
 				sb.AppendFormat("\"Commutative\": \"{0}\", ", Commutative ? "true" : "false");
 
-			if (HasSideEffect)
-				sb.AppendFormat("\"HasSideEffect\": \"{0}\", ", HasSideEffect ? "true" : "false");
+			if (MemoryWrite)
+				sb.AppendFormat("\"MemoryWrite\": \"{0}\", ", MemoryWrite ? "true" : "false");
+
+			if (MemoryRead)
+				sb.AppendFormat("\"MemoryRead\": \"{0}\", ", MemoryRead ? "true" : "false");
+
+			if (IOOperation)
+				sb.AppendFormat("\"IOOperation\": \"{0}\", ", IOOperation ? "true" : "false");
+
+			if (UnspecifiedSideEffect)
+				sb.AppendFormat("\"UnspecifiedSideEffect\": \"{0}\", ", UnspecifiedSideEffect ? "true" : "false");
 
 			if (Description != null)
 				sb.AppendFormat("\"Description\": \"{0}\", ", Description);

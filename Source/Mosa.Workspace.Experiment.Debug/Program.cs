@@ -152,7 +152,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			IRInstruction.MulUnsigned,
 		};
 
-		private static readonly List<BaseIRInstruction> IRSideEffects = new List<BaseIRInstruction>()
+		private static readonly List<BaseIRInstruction> IRCalls = new List<BaseIRInstruction>()
 		{
 			IRInstruction.Call,
 			IRInstruction.CallDirect,
@@ -160,21 +160,6 @@ namespace Mosa.Workspace.Experiment.Debug
 			IRInstruction.CallInterface,
 			IRInstruction.CallStatic,
 			IRInstruction.CallVirtual,
-			IRInstruction.MemoryCopy,
-			IRInstruction.StableObjectTracking,
-			IRInstruction.UnstableObjectTracking,
-			IRInstruction.StoreCompound,
-			IRInstruction.StoreFloatR4,
-			IRInstruction.StoreFloatR8,
-			IRInstruction.StoreInteger,
-			IRInstruction.StoreParameterCompound,
-			IRInstruction.StoreParameterFloatR4,
-			IRInstruction.StoreParameterFloatR8,
-			IRInstruction.StoreParameterInteger,
-			IRInstruction.StoreCompound,
-			IRInstruction.StoreFloatR4,
-			IRInstruction.StoreFloatR8,
-			IRInstruction.StoreInteger,
 			IRInstruction.IntrinsicMethodCall
 		};
 
@@ -193,6 +178,20 @@ namespace Mosa.Workspace.Experiment.Debug
 			IRInstruction.StoreFloatR4,
 			IRInstruction.StoreFloatR8,
 			IRInstruction.StoreInteger,
+		};
+
+		private static readonly List<BaseIRInstruction> IRReadOperation = new List<BaseIRInstruction>()
+		{
+		};
+
+		private static readonly List<BaseIRInstruction> IRIOOperation = new List<BaseIRInstruction>()
+		{
+		};
+
+		private static readonly List<BaseIRInstruction> IRUnspecifiedSideEffect = new List<BaseIRInstruction>()
+		{
+			IRInstruction.StableObjectTracking,
+			IRInstruction.UnstableObjectTracking,
 		};
 
 		private static readonly List<BaseIRInstruction> IRVariableOperand = new List<BaseIRInstruction>()
@@ -333,9 +332,24 @@ namespace Mosa.Workspace.Experiment.Debug
 			X86.Xchg,
 		};
 
-		private static readonly List<X86Instruction> X86SideEffects = new List<X86Instruction>()
+		private static readonly List<X86Instruction> X86WriteOperation = new List<X86Instruction>()
 		{
-			X86.Call,
+			// TODO
+		};
+
+		private static readonly List<X86Instruction> X86ReadOperation = new List<X86Instruction>()
+		{
+			// TODO
+		};
+
+		private static readonly List<X86Instruction> X86IOOperation = new List<X86Instruction>()
+		{
+			// TODO
+		};
+
+		private static readonly List<X86Instruction> X86UnspecifiedSideEffect = new List<X86Instruction>()
+		{
+			//X86.Call,
 			X86.FarJmp,
 			X86.Invlpg,
 			X86.Int,
@@ -424,7 +438,11 @@ namespace Mosa.Workspace.Experiment.Debug
 					IgnoreInstructionBasicBlockTargets = instruction.IgnoreInstructionBasicBlockTargets,
 					VariableOperands = IRVariableOperand.Contains(instruction),
 					Commutative = IRCommutative.Contains(instruction),
-					HasSideEffect = IRSideEffects.Contains(instruction)
+
+					MemoryWrite = IRWriteOperation.Contains(instruction),
+					MemoryRead = IRReadOperation.Contains(instruction),
+					IOOperation = IRIOOperation.Contains(instruction),
+					UnspecifiedSideEffect = IRUnspecifiedSideEffect.Contains(instruction),
 				};
 
 				sb.Append(inst.ToString());
@@ -461,7 +479,10 @@ namespace Mosa.Workspace.Experiment.Debug
 					IgnoreInstructionBasicBlockTargets = instruction.IgnoreInstructionBasicBlockTargets,
 					VariableOperands = false,
 					Commutative = X86Commutative.Contains(instruction),
-					HasSideEffect = X86SideEffects.Contains(instruction)
+					MemoryWrite = X86WriteOperation.Contains(instruction),
+					MemoryRead = X86ReadOperation.Contains(instruction),
+					IOOperation = X86IOOperation.Contains(instruction),
+					UnspecifiedSideEffect = X86UnspecifiedSideEffect.Contains(instruction)
 				};
 
 				sb.Append(inst.ToString());

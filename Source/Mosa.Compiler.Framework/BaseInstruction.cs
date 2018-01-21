@@ -62,12 +62,12 @@ namespace Mosa.Compiler.Framework
 		public virtual bool IgnoreInstructionBasicBlockTargets { get { return false; } }
 
 		/// <summary>
-		/// Gets a value indicating whether this instance has side effect.
+		/// Gets a value indicating whether this instance has an unspecified side effect.
 		/// </summary>
 		/// <value>
 		///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool HasSideEffect { get { return true; } }
+		public virtual bool HasIRUnspecifiedSideEffect { get { return true; } }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has memory write side effect.

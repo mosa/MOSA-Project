@@ -65,48 +65,42 @@
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true",
-			"HasSideEffect": "true"
+			"VariableOperands": "true"
 		},
 		{
 			"Name": "CallDirect",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true",
-			"HasSideEffect": "true"
+			"VariableOperands": "true"
 		},
 		{
 			"Name": "CallDynamic",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true",
-			"HasSideEffect": "true"
+			"VariableOperands": "true"
 		},
 		{
 			"Name": "CallInterface",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true",
-			"HasSideEffect": "true"
+			"VariableOperands": "true"
 		},
 		{
 			"Name": "CallStatic",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true",
-			"HasSideEffect": "true"
+			"VariableOperands": "true"
 		},
 		{
 			"Name": "CallVirtual",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true",
-			"HasSideEffect": "true"
+			"VariableOperands": "true"
 		},
 		{
 			"Name": "CompareFloatR4",
@@ -269,8 +263,7 @@
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true",
-			"HasSideEffect": "true"
+			"VariableOperands": "true"
 		},
 		{
 			"Name": "IsInstanceOfType",
@@ -578,63 +571,63 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"IgnoreDuringCodeGeneration": "true",
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "StoreCompound",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 3,
-			"HasSideEffect": "true"
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "StoreFloatR4",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 3,
-			"HasSideEffect": "true"
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "StoreFloatR8",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 3,
-			"HasSideEffect": "true"
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "StoreInteger",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 3,
-			"HasSideEffect": "true"
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "StoreParameterCompound",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
-			"HasSideEffect": "true"
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "StoreParameterFloatR4",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
-			"HasSideEffect": "true"
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "StoreParameterFloatR8",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
-			"HasSideEffect": "true"
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "StoreParameterInteger",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
-			"HasSideEffect": "true"
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "SubFloatR4",
@@ -695,7 +688,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"IgnoreDuringCodeGeneration": "true",
-			"HasSideEffect": "true"
+			"UnspecifiedSideEffect": "true"
 		},
 		{
 			"Name": "Rethrow",
@@ -714,7 +707,7 @@
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 3,
-			"HasSideEffect": "true"
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "Box",

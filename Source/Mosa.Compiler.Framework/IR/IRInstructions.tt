@@ -67,13 +67,25 @@ namespace Mosa.Compiler.Framework.IR
 
 		public override bool VariableOperands { get { return true; } }
 <# } #>
-<# if (entry.Commutative  != null && entry.Commutative=="true") { #>
+<# if (entry.Commutative  != null && entry.Commutative == "true") { #>
 
 		public override bool Commutative { get { return true; } }
 <# } #>
-<# if (entry.HasSideEffect  != null && entry.HasSideEffect=="true") { #>
+<# if (entry.MemoryWrite != null && entry.MemoryWrite == "true") { #>
 
-		public override bool HasSideEffect { get { return true; } }
+		public override bool IsMemoryWrite { get { return true; } }
+<# } #>
+<# if (entry.MemoryRead != null && entry.MemoryRead == "true") { #>
+
+		public override bool IsMemoryRead { get { return true; } }
+<# } #>
+<# if (entry.IOOperation != null && entry.IOOperation == "true") { #>
+
+		public override bool IsIOOperation { get { return true; } }
+<# } #>
+<# if (entry.IRUnspecifiedSideEffect != null && entry.IRUnspecifiedSideEffect == "true") { #>
+
+		public override bool HasIRUnspecifiedSideEffect { get { return true; } }
 <# } #>
 	}
 }
