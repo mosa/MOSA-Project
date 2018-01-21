@@ -178,6 +178,23 @@ namespace Mosa.Workspace.Experiment.Debug
 			IRInstruction.IntrinsicMethodCall
 		};
 
+		private static readonly List<BaseIRInstruction> IRWriteOperation = new List<BaseIRInstruction>()
+		{
+			IRInstruction.MemoryCopy,
+			IRInstruction.StoreCompound,
+			IRInstruction.StoreFloatR4,
+			IRInstruction.StoreFloatR8,
+			IRInstruction.StoreInteger,
+			IRInstruction.StoreParameterCompound,
+			IRInstruction.StoreParameterFloatR4,
+			IRInstruction.StoreParameterFloatR8,
+			IRInstruction.StoreParameterInteger,
+			IRInstruction.StoreCompound,
+			IRInstruction.StoreFloatR4,
+			IRInstruction.StoreFloatR8,
+			IRInstruction.StoreInteger,
+		};
+
 		private static readonly List<BaseIRInstruction> IRVariableOperand = new List<BaseIRInstruction>()
 		{
 			IRInstruction.Call,
@@ -390,33 +407,34 @@ namespace Mosa.Workspace.Experiment.Debug
 		{
 			var sb = new StringBuilder();
 
-			const string template = "\"Name\": \"{0}\",\n\"FamilyName\": \"{1}\",\n\"ResultCount\": {2},\n\"OperandCount\": {3},\n\"ResultType\": \"{4}\",\n\"ResultType2\": \"{5}\",\n\"FlowControl\": \"{6}\",\n\"IgnoreDuringCodeGeneration\": \"{7}\",\n\"IgnoreInstructionBasicBlockTargets\": \"{8}\",\n\"VariableOperandCount\": \"{9}\",\n\"Commutative\": \"{10}\",\n\"HasSideEffect\": \"{11}\",\n\"Description\": \"{12}\"\n";
-
 			sb.AppendLine("{ \"Instructions\": [");
 
 			foreach (var instruction in IRInstructions)
 			{
-				sb.Append("{ ");
-				sb.AppendFormat(template,
-					instruction.GetType().Name, // 0
-					instruction.InstructionFamilyName, // 1
-					instruction.DefaultResultCount.ToString(), // 2
-					instruction.DefaultOperandCount.ToString(), // 3
-					GetResultType(instruction), // 4
-					GetResultType2(instruction), // 5
-					instruction.FlowControl.ToString(), // 6
-					instruction.IgnoreDuringCodeGeneration ? "true" : "false", // 7
-					instruction.IgnoreInstructionBasicBlockTargets ? "true" : "false", // 8
-					IRVariableOperand.Contains(instruction) ? "true" : "false", // 9
-					IRCommutative.Contains(instruction) ? "true" : "false", // 10
-					IRSideEffects.Contains(instruction) ? "true" : "false", // 11
-					string.Empty); //12
+				var inst = new Instruction()
+				{
+					Name = instruction.GetType().Name,
+					FamilyName = instruction.InstructionFamilyName,
+					ResultCount = instruction.DefaultResultCount,
+					OperandCount = instruction.DefaultOperandCount,
+					ResultType = GetResultType(instruction),
+					ResultType2 = GetResultType2(instruction),
+					FlowControl = instruction.FlowControl.ToString(),
+					IgnoreDuringCodeGeneration = instruction.IgnoreDuringCodeGeneration,
+					IgnoreInstructionBasicBlockTargets = instruction.IgnoreInstructionBasicBlockTargets,
+					VariableOperands = IRVariableOperand.Contains(instruction),
+					Commutative = IRCommutative.Contains(instruction),
+					HasSideEffect = IRSideEffects.Contains(instruction)
+				};
 
-				sb.AppendLine("} ,");
+				sb.Append(inst.ToString());
+				sb.AppendLine(",");
 			}
+
 			sb.Length--;
 			sb.Length--;
 			sb.Length--;
+			sb.AppendLine();
 			sb.AppendLine("] }");
 
 			File.WriteAllText("IRInstructions.json", sb.ToString());
@@ -426,33 +444,34 @@ namespace Mosa.Workspace.Experiment.Debug
 		{
 			var sb = new StringBuilder();
 
-			const string template = "\"Name\": \"{0}\",\n\"FamilyName\": \"{1}\",\n\"ResultCount\": {2},\n\"OperandCount\": {3},\n\"ResultType\": \"{4}\",\n\"ResultType2\": \"{5}\",\n\"FlowControl\": \"{6}\",\n\"IgnoreDuringCodeGeneration\": \"{7}\",\n\"IgnoreInstructionBasicBlockTargets\": \"{8}\",\n\"VariableOperandCount\": \"{9}\",\n\"Commutative\": \"{10}\",\n\"HasSideEffect\": \"{11}\",\n\"Description\": \"{12}\"\n";
-
 			sb.AppendLine("{ \"Instructions\": [");
 
 			foreach (var instruction in X86Instructions)
 			{
-				sb.Append("{ ");
-				sb.AppendFormat(template,
-					instruction.GetType().Name, // 0
-					instruction.InstructionFamilyName, // 1
-					instruction.DefaultResultCount.ToString(), // 2
-					instruction.DefaultOperandCount.ToString(), // 3
-					GetResultType(instruction), // 4
-					GetResultType2(instruction), // 5
-					instruction.FlowControl.ToString(), // 6
-					instruction.IgnoreDuringCodeGeneration ? "true" : "false", // 7
-					instruction.IgnoreInstructionBasicBlockTargets ? "true" : "false", // 8
-					"false", // 9
-					X86Commutative.Contains(instruction) ? "true" : "false", // 10
-					X86SideEffects.Contains(instruction) ? "true" : "false", // 11
-					string.Empty); //12
+				var inst = new Instruction()
+				{
+					Name = instruction.GetType().Name,
+					FamilyName = instruction.InstructionFamilyName,
+					ResultCount = instruction.DefaultResultCount,
+					OperandCount = instruction.DefaultOperandCount,
+					ResultType = GetResultType(instruction),
+					ResultType2 = GetResultType2(instruction),
+					FlowControl = instruction.FlowControl.ToString(),
+					IgnoreDuringCodeGeneration = instruction.IgnoreDuringCodeGeneration,
+					IgnoreInstructionBasicBlockTargets = instruction.IgnoreInstructionBasicBlockTargets,
+					VariableOperands = false,
+					Commutative = X86Commutative.Contains(instruction),
+					HasSideEffect = X86SideEffects.Contains(instruction)
+				};
 
-				sb.AppendLine("} ,");
+				sb.Append(inst.ToString());
+				sb.AppendLine(",");
 			}
+
 			sb.Length--;
 			sb.Length--;
 			sb.Length--;
+			sb.AppendLine();
 			sb.AppendLine("] }");
 
 			File.WriteAllText("X86Instructions.json", sb.ToString());
