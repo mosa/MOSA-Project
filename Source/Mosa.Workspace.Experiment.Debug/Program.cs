@@ -387,6 +387,8 @@ namespace Mosa.Workspace.Experiment.Debug
 			X86.Lidt,
 			X86.Lock,
 			X86.Rep,
+			X86.Cli,
+			X86.Sti,
 		};
 
 		private static readonly Dictionary<BaseInstruction, string> ResultType = new Dictionary<BaseInstruction, string>()
@@ -401,6 +403,25 @@ namespace Mosa.Workspace.Experiment.Debug
 		private static readonly Dictionary<BaseInstruction, string> ResultType2 = new Dictionary<BaseInstruction, string>()
 		{
 			{ IRInstruction.Split64, "UInt32" },
+		};
+
+		private static readonly Dictionary<BaseInstruction, byte[]> X86Bytes = new Dictionary<BaseInstruction, byte[]>()
+		{
+			{ X86.Break, new byte[] { 0xCC } },
+			{ X86.Pushad, new byte[] { 0x60 } },
+			{ X86.Popad, new byte[] { 0x61 } },
+			{ X86.Nop, new byte[] { 0x90 } },
+			{ X86.Pause, new byte[] { 0xF3, 0x90 } },
+			{ X86.Cdq, new byte[] { 0x99 } },
+			{ X86.Stos, new byte[] { 0xAB } },
+			{ X86.Ret, new byte[] { 0xC3 } },
+			{ X86.Leave, new byte[] { 0xC9 } },
+			{ X86.IRetd, new byte[] { 0xCF } },
+			{ X86.Lock, new byte[] { 0xF0 } },
+			{ X86.Rep, new byte[] { 0xF3 } },
+			{ X86.Hlt, new byte[] { 0xF4 } },
+			{ X86.Cli, new byte[] { 0xFA } },
+			{ X86.Sti, new byte[] { 0xFB } },
 		};
 
 		#endregion Data
@@ -437,6 +458,13 @@ namespace Mosa.Workspace.Experiment.Debug
 			string value = string.Empty;
 
 			ResultType2.TryGetValue(instruction, out value);
+
+			return value;
+		}
+
+		private static byte[] GetX86Bytes(BaseInstruction instruction)
+		{
+			X86Bytes.TryGetValue(instruction, out byte[] value);
 
 			return value;
 		}
@@ -506,7 +534,10 @@ namespace Mosa.Workspace.Experiment.Debug
 					MemoryWrite = X86WriteOperation.Contains(instruction),
 					MemoryRead = X86ReadOperation.Contains(instruction),
 					IOOperation = X86IOOperation.Contains(instruction),
-					UnspecifiedSideEffect = X86UnspecifiedSideEffect.Contains(instruction)
+					UnspecifiedSideEffect = X86UnspecifiedSideEffect.Contains(instruction),
+					X86ThreeTwoAddressConversion = instruction.ThreeTwoAddressConversion,
+					X86EmitBytes = GetX86Bytes(instruction),
+					X86EmitMethodType = GetX86Bytes(instruction) != null ? "Bytes" : null,
 				};
 
 				sb.Append(inst.ToString());

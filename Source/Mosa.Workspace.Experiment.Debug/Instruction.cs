@@ -29,6 +29,32 @@ namespace Mosa.Workspace.Experiment.Debug
 
 		public string Description = null;
 
+		public string X86EmitMethodType;
+		public new byte[] X86EmitBytes;
+
+		//Effect:
+		//	X - Changed
+		//	1 - Always set to 1
+		//	0 - Always set to 0
+		//	U - Undefined(assume change)
+
+		public string CarryFlagEffect;
+		public string OverflowFlagEffect;
+		public string ZeroFlagEffect;
+		public string NegativeFlagEffect;
+
+		//Dependency:
+		//	Y - Yes
+		//	N - No
+		//	C - Conditional(based on instruction condition)
+
+		public string CarryFlagDependency;
+		public string OverflowFlagDependency;
+		public string ZeroFlagDependency;
+		public string NegativeFlagDependency;
+
+		public bool X86ThreeTwoAddressConversion;
+
 		public override string ToString()
 		{
 			var sb = new StringBuilder();
@@ -72,6 +98,51 @@ namespace Mosa.Workspace.Experiment.Debug
 
 			if (UnspecifiedSideEffect)
 				sb.AppendFormat("\"UnspecifiedSideEffect\": \"{0}\", ", UnspecifiedSideEffect ? "true" : "false");
+
+			if (CarryFlagEffect != null)
+				sb.AppendFormat("\"CarryFlagEffect\": \"{0}\", ", CarryFlagEffect);
+
+			if (OverflowFlagEffect != null)
+				sb.AppendFormat("\"OverflowFlagEffect\": \"{0}\", ", OverflowFlagEffect);
+
+			if (ZeroFlagEffect != null)
+				sb.AppendFormat("\"ZeroFlagEffect\": \"{0}\", ", ZeroFlagEffect);
+
+			if (NegativeFlagEffect != null)
+				sb.AppendFormat("\"NegativeFlagEffect\": \"{0}\", ", NegativeFlagEffect);
+
+			if (CarryFlagDependency != null)
+				sb.AppendFormat("\"CarryFlagDependency\": \"{0}\", ", CarryFlagDependency);
+
+			if (OverflowFlagDependency != null)
+				sb.AppendFormat("\"OverflowFlagDependency\": \"{0}\", ", OverflowFlagDependency);
+
+			if (ZeroFlagDependency != null)
+				sb.AppendFormat("\"ZeroFlagDependency\": \"{0}\", ", ZeroFlagDependency);
+
+			if (NegativeFlagDependency != null)
+				sb.AppendFormat("\"NegativeFlagDependency\": \"{0}\", ", NegativeFlagDependency);
+
+			if (X86EmitMethodType != null)
+				sb.AppendFormat("\"X86EmitMethodType\": \"{0}\", ", X86EmitMethodType);
+
+			if (X86EmitBytes != null)
+			{
+				sb.AppendFormat("\"X86EmitBytes\": \"");
+
+				foreach (var b in X86EmitBytes)
+				{
+					sb.AppendFormat("{0:X2} ", b);
+				}
+
+				sb.Length--;
+				sb.Length--;
+
+				sb.AppendFormat("\", ");
+			}
+
+			if (X86ThreeTwoAddressConversion)
+				sb.AppendFormat("\"X86ThreeTwoAddressConversion\": \"{0}\", ", X86ThreeTwoAddressConversion ? "true" : "false");
 
 			if (Description != null)
 				sb.AppendFormat("\"Description\": \"{0}\", ", Description);
