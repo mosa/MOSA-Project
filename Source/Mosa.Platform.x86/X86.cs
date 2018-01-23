@@ -113,5 +113,25 @@ namespace Mosa.Platform.x86
 		public static readonly Ucomiss Ucomiss = new Ucomiss();
 		public static readonly Xchg Xchg = new Xchg();
 		public static readonly Xor Xor = new Xor();
+		public static readonly BranchOverflow BranchOverflow = new BranchOverflow();
+		public static readonly BranchNoOverflow BranchNoOverflow = new BranchNoOverflow();
+		public static readonly BranchCarry BranchCarry = new BranchCarry();
+		public static readonly BranchUnsignedLessThan BranchUnsignedLessThan = new BranchUnsignedLessThan();
+		public static readonly BranchUnsignedGreaterOrEqual BranchUnsignedGreaterOrEqual = new BranchUnsignedGreaterOrEqual();
+		public static readonly BranchNoCarry BranchNoCarry = new BranchNoCarry();
+		public static readonly BranchEqual BranchEqual = new BranchEqual();
+		public static readonly BranchZero BranchZero = new BranchZero();
+		public static readonly BranchNotEqual BranchNotEqual = new BranchNotEqual();
+		public static readonly BranchNotZero BranchNotZero = new BranchNotZero();
+		public static readonly BranchUnsignedLessOrEqual BranchUnsignedLessOrEqual = new BranchUnsignedLessOrEqual();
+		public static readonly BranchUnsignedGreaterThan BranchUnsignedGreaterThan = new BranchUnsignedGreaterThan();
+		public static readonly BranchSigned BranchSigned = new BranchSigned();
+		public static readonly BranchNotSigned BranchNotSigned = new BranchNotSigned();
+		public static readonly BranchParity BranchParity = new BranchParity();
+		public static readonly BranchNoParity BranchNoParity = new BranchNoParity();
+		public static readonly BranchLessThan BranchLessThan = new BranchLessThan();
+		public static readonly BranchGreaterOrEqual BranchGreaterOrEqual = new BranchGreaterOrEqual();
+		public static readonly BranchLessOrEqual BranchLessOrEqual = new BranchLessOrEqual();
+		public static readonly BranchGreaterThan BranchGreaterThan = new BranchGreaterThan();
 	}
 }

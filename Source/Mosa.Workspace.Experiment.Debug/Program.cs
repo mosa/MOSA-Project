@@ -446,7 +446,7 @@ namespace Mosa.Workspace.Experiment.Debug
 
 		private static string GetResultType(BaseInstruction instruction)
 		{
-			string value = string.Empty;
+			string value = null;
 
 			ResultType.TryGetValue(instruction, out value);
 
@@ -455,7 +455,7 @@ namespace Mosa.Workspace.Experiment.Debug
 
 		private static string GetResultType2(BaseInstruction instruction)
 		{
-			string value = string.Empty;
+			string value = null;
 
 			ResultType2.TryGetValue(instruction, out value);
 
@@ -483,13 +483,13 @@ namespace Mosa.Workspace.Experiment.Debug
 					FamilyName = instruction.InstructionFamilyName,
 					ResultCount = instruction.DefaultResultCount,
 					OperandCount = instruction.DefaultOperandCount,
-					ResultType = GetResultType(instruction),
-					ResultType2 = GetResultType2(instruction),
+					ResultType = GetResultType(instruction) ?? instruction.ResultType.ToString(),
+					ResultType2 = GetResultType2(instruction) ?? instruction.ResultType2.ToString(),
 					FlowControl = instruction.FlowControl.ToString(),
 					IgnoreDuringCodeGeneration = instruction.IgnoreDuringCodeGeneration,
 					IgnoreInstructionBasicBlockTargets = instruction.IgnoreInstructionBasicBlockTargets,
-					VariableOperands = IRVariableOperand.Contains(instruction),
-					Commutative = IRCommutative.Contains(instruction),
+					VariableOperands = instruction.VariableOperands, //IRVariableOperand.Contains(instruction),
+					Commutative = instruction.Commutative,// IRCommutative.Contains(instruction),
 
 					MemoryWrite = IRWriteOperation.Contains(instruction),
 					MemoryRead = IRReadOperation.Contains(instruction),
@@ -516,7 +516,7 @@ namespace Mosa.Workspace.Experiment.Debug
 
 			sb.AppendLine("{ \"Instructions\": [");
 
-			foreach (var instruction in X86Instructions)
+			foreach (var instruction in X86InstructionMap.Map.Values) // replaces X86Instructions
 			{
 				var inst = new Instruction()
 				{
@@ -524,20 +524,20 @@ namespace Mosa.Workspace.Experiment.Debug
 					FamilyName = instruction.InstructionFamilyName,
 					ResultCount = instruction.DefaultResultCount,
 					OperandCount = instruction.DefaultOperandCount,
-					ResultType = GetResultType(instruction),
-					ResultType2 = GetResultType2(instruction),
+					ResultType = GetResultType(instruction) ?? instruction.ResultType.ToString(),
+					ResultType2 = GetResultType2(instruction) ?? instruction.ResultType2.ToString(),
 					FlowControl = instruction.FlowControl.ToString(),
 					IgnoreDuringCodeGeneration = instruction.IgnoreDuringCodeGeneration,
 					IgnoreInstructionBasicBlockTargets = instruction.IgnoreInstructionBasicBlockTargets,
 					VariableOperands = false,
 					Commutative = X86Commutative.Contains(instruction),
-					MemoryWrite = X86WriteOperation.Contains(instruction),
-					MemoryRead = X86ReadOperation.Contains(instruction),
-					IOOperation = X86IOOperation.Contains(instruction),
-					UnspecifiedSideEffect = X86UnspecifiedSideEffect.Contains(instruction),
+					MemoryWrite = X86WriteOperation.Contains(instruction), // instruction.IsMemoryWrite,
+					MemoryRead = X86ReadOperation.Contains(instruction), // instruction.IsMemoryRead,
+					IOOperation = X86IOOperation.Contains(instruction), // instruction.IsIOOperation,
+					UnspecifiedSideEffect = X86UnspecifiedSideEffect.Contains(instruction), //instruction.HasIRUnspecifiedSideEffect,
 					X86ThreeTwoAddressConversion = instruction.ThreeTwoAddressConversion,
-					X86EmitBytes = GetX86Bytes(instruction),
-					X86EmitMethodType = GetX86Bytes(instruction) != null ? "Bytes" : null,
+					X86EmitBytes = GetX86Bytes(instruction) ?? instruction.__opcode,
+					X86EmitMethodType = ((GetX86Bytes(instruction) ?? instruction.__opcode) != null) ? "SimpleByteCode" : null,
 				};
 
 				sb.Append(inst.ToString());
