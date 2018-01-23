@@ -7,17 +7,17 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Nop
+	/// BranchCarry
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class Nop : X86Instruction
+	public sealed class BranchCarry : X86Instruction
 	{
-		private static readonly byte[] opcode = new byte[] { 0x90 };
+		private static readonly byte[] opcode = new byte[] { 0x0F, 0x08 };
 
 		// for internal code generator use
 		public override byte[] __opcode { get { return opcode; } }
 
-		public Nop()
+		public BranchCarry()
 			: base(0, 0)
 		{
 		}

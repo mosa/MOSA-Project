@@ -86,5 +86,7 @@ namespace Mosa.Platform.x86
 		}
 
 		#endregion Legacy Opcode Methods
+
+		public virtual byte[] __opcode { get; }
 	}
 }

@@ -54,7 +54,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "CC",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -85,7 +85,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 2,
 			"OperandCount": 1,
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "99",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -102,7 +102,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "FA",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -232,7 +232,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "F4",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -289,7 +289,7 @@
 			"OperandCount": 0,
 			"FlowControl": "Return",
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "CF",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -313,7 +313,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "C9",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -339,7 +339,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "F0",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -528,7 +528,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "90",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -561,7 +561,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "F3 90",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -583,7 +583,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "61",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -599,7 +599,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "60",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -623,7 +623,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "F3",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -633,7 +633,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"FlowControl": "Return",
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "C3",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -706,7 +706,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "FB",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -715,7 +715,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 1,
-			"X86EmitMethodType": "Bytes",
+			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "AB",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -775,6 +775,186 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchOverflow",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchNoOverflow",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchCarry",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchUnsignedLessThan",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchUnsignedGreaterOrEqual",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchNoCarry",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchEqual",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchZero",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchNotEqual",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchNotZero",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchUnsignedLessOrEqual",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchUnsignedGreaterThan",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchSigned",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchNotSigned",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchParity",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchNoParity",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchLessThan",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchGreaterOrEqual",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchLessOrEqual",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BranchGreaterThan",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"X86EmitMethodType": "SimpleByteCode",
+			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		}
 	]

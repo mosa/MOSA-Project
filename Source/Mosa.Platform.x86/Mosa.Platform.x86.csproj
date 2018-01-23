@@ -96,6 +96,66 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Instructions\BranchCarry.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchEqual.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchGreaterOrEqual.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchGreaterThan.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchLessOrEqual.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchLessThan.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNoCarry.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNoOverflow.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNoParity.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNotEqual.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNotSigned.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNotZero.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchOverflow.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchParity.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchSigned.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchUnsignedGreaterOrEqual.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchUnsignedGreaterThan.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchUnsignedLessOrEqual.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchUnsignedLessThan.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchZero.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Btr.cs" />
     <Compile Include="Instructions\Cmovcc.cs" />
     <Compile Include="Instructions\CmpXchgLoad.cs" />

@@ -14,8 +14,11 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		private static readonly byte[] opcode = new byte[] { 0x99 };
 
+		// for internal code generator use
+		public override byte[] __opcode { get { return opcode; } }
+
 		public Cdq()
-			: base(1, 2)
+			: base(2, 1)
 		{
 		}
 

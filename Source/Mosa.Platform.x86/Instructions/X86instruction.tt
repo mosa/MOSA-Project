@@ -43,7 +43,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class <#= entry.Name #> : X86Instruction
 	{
-<# if (entry.X86EmitMethodType != null && entry.X86EmitMethodType == "Bytes") {
+<# if (entry.X86EmitMethodType != null && entry.X86EmitMethodType == "SimpleByteCode") {
 
 		bool first = true;
 		string data = string.Empty;
@@ -60,9 +60,12 @@ namespace Mosa.Platform.x86.Instructions
 #>
 		private static readonly byte[] opcode = new byte[] { <#= data #> };
 
+		// for internal code generator use
+		public override byte[] __opcode { get { return opcode; } }
+
 <# } #>
 		public <#= entry.Name #>()
-			: base(<#= entry.OperandCount #>, <#= entry.ResultCount #>)
+			: base(<#= entry.ResultCount #>, <#= entry.OperandCount #>)
 		{
 		}
 <# if (entry.FlowControl != null && entry.FlowControl != "Next") { #>
@@ -113,7 +116,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool ThreeTwoAddressConversion { get { return false; } }
 <# } #>
-<# if (entry.X86EmitMethodType != null && entry.X86EmitMethodType == "Bytes"){ #>
+<# if (entry.X86EmitMethodType != null && entry.X86EmitMethodType == "SimpleByteCode"){ #>
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{

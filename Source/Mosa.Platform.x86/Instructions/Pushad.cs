@@ -14,6 +14,9 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		private static readonly byte[] opcode = new byte[] { 0x60 };
 
+		// for internal code generator use
+		public override byte[] __opcode { get { return opcode; } }
+
 		public Pushad()
 			: base(0, 0)
 		{

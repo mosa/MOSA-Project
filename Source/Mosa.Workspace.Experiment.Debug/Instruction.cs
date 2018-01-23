@@ -67,9 +67,10 @@ namespace Mosa.Workspace.Experiment.Debug
 			sb.AppendFormat("\"ResultCount\": {0}, ", ResultCount);
 			sb.AppendFormat("\"OperandCount\": {0}, ", OperandCount);
 
-			if (ResultType != null)
+			if (!String.IsNullOrWhiteSpace(ResultType) && ResultType != "None")
 				sb.AppendFormat("\"ResultType\": \"{0}\", ", ResultType);
-			if (ResultType2 != null)
+
+			if (!String.IsNullOrWhiteSpace(ResultType2) && ResultType2 != "None")
 				sb.AppendFormat("\"ResultType2\": \"{0}\", ", ResultType2);
 
 			if (FlowControl != null && FlowControl != "Next")
@@ -135,7 +136,6 @@ namespace Mosa.Workspace.Experiment.Debug
 					sb.AppendFormat("{0:X2} ", b);
 				}
 
-				sb.Length--;
 				sb.Length--;
 
 				sb.AppendFormat("\", ");
