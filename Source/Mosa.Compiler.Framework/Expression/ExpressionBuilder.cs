@@ -31,149 +31,188 @@ namespace Mosa.Compiler.Framework.Expression
 			}
 		}
 
-		public Transform CreateExpressionTree(string expression)
+		public void AddPhysicalRegisters(PhysicalRegister[] registers)
+		{
+			foreach (var entry in registers)
+			{
+				physicalRegisterMap.Add(entry.ToString(), entry);
+			}
+		}
+
+		public TransformRule CreateExpressionTree(string expression)
 		{
 			var tokenized = new Tokenizer(expression);
 
-			var tokens = tokenized.Tokens;
-			int at = 1; // skip
+			int transformEnd = tokenized.Tokens.Count - 1;
+			int matchEnd = tokenized.Tokens.Count - 1;
 
-			var root = ParseInstruction(tokens, ref at, tokens.Count);
+			int transformPosition = tokenized.FindFirst(TokenType.Transform);
+			int andPosition = tokenized.FindFirst(TokenType.And);
 
-			var tree = new Transform(root, null);
+			if (transformPosition != -1)
+				matchEnd = transformPosition - 1;
+
+			if (andPosition != -1 && andPosition < matchEnd)
+				matchEnd = andPosition - 1;
+
+			var matchTokens = tokenized.GetPart(0, matchEnd);
+			var transformTokens = tokenized.GetPart(transformPosition + 1, transformEnd);
+			var criteriaTokens = tokenized.GetPart(matchEnd + 1, transformPosition - 1);
+
+			var match = StartParse(matchTokens);
+			var transform = StartParse(transformTokens);
+
+			var criteria = ExpressionParser.Parse(criteriaTokens);
+
+			int operandVariableCount = 0;
+			int typeVariableCount = 0;
+
+			foreach (var token in tokenized.Tokens)
+			{
+				if (token.TokenType == TokenType.OperandVariable)
+				{
+					operandVariableCount = Math.Max(operandVariableCount, token.Index);
+				}
+				else if (token.TokenType == TokenType.TypeVariable)
+				{
+					typeVariableCount = Math.Max(typeVariableCount, token.Index);
+				}
+			}
+
+			var tree = new TransformRule(match, criteria, transform, operandVariableCount + 1, typeVariableCount + 1);
 
 			return tree;
 		}
 
-		protected ExpressionNode ParseInstruction(List<Token> tokens, ref int at, int end)
+		protected Node StartParse(List<Token> tokens)
 		{
-			var word = tokens[at++];
-
-			if (word.TokenType != TokenType.Identifier)
+			if (tokens.Count == 0)
 				return null;
 
-			if (string.Equals(word.Value, "const", StringComparison.OrdinalIgnoreCase))
+			int at = 0;
+			return ParseOperand(tokens, ref at);
+		}
+
+		protected Node ParseOperand(List<Token> tokens, ref int at)
+		{
+			var token = tokens[at++];
+
+			if (token.TokenType == TokenType.CloseParens)
 			{
-				ExpressionNode node = null;
-
-				while (at < end)
-				{
-					var token = tokens[at++];
-
-					if (token.TokenType == TokenType.CloseParens)
-					{
-						at++;
-						return node;
-					}
-					else if (token.TokenType == TokenType.IntegerConstant && token.Value[0] != '-')
-					{
-						if (!UInt64.TryParse(token.Value, out ulong value))
-							throw new CompilerException("Invalid ulong constant: " + token.Value);
-
-						node = new ExpressionNode(value);
-					}
-					else if (token.TokenType == TokenType.IntegerConstant && token.Value[0] == '-')
-					{
-						if (!Int64.TryParse(token.Value, out long value))
-							throw new CompilerException("Invalid long constant: " + token.Value);
-
-						node = new ExpressionNode((ulong)value);
-					}
-					else if (token.TokenType == TokenType.FloatConstant)
-					{
-						if (!Double.TryParse(token.Value, out double value))
-							throw new CompilerException("Invalid floating constant: " + token.Value);
-
-						node = new ExpressionNode(value);
-					}
-					else if (token.TokenType == TokenType.Identifier)
-					{
-						node = new ExpressionNode(NodeType.VariableConstant, token.Value);
-					}
-					else
-					{
-						return null;
-					}
-				}
-
 				return null;
 			}
-			else
+
+			if (token.TokenType == TokenType.OpenParens)
 			{
-				var instruction = instructionMap[word.Value];
-
-				if (instruction == null)
-					return null;
-
-				var node = new ExpressionNode(instruction);
-
-				while (at < end)
+				return ParseNewExpression(tokens, ref at);
+			}
+			else if (token.TokenType == TokenType.SignedIntegerConstant)
+			{
+				return new Node((long)token.Integer);
+			}
+			else if (token.TokenType == TokenType.UnsignedIntegerConstant)
+			{
+				return new Node((ulong)token.Integer);
+			}
+			else if (token.TokenType == TokenType.DoubleConstant)
+			{
+				return new Node((long)token.Double);
+			}
+			else if (token.TokenType == TokenType.OpenBracket)
+			{
+				return ParseBracketExpression(tokens, ref at);
+			}
+			else if (token.TokenType == TokenType.PhysicalRegister)
+			{
+				if (physicalRegisterMap.TryGetValue(token.Value, out PhysicalRegister physicalRegister))
 				{
-					var token = tokens[at++];
-
-					if (token.TokenType == TokenType.CloseParens)
-					{
-						return node;
-					}
-
-					ExpressionNode parentNode = null;
-
-					if (token.TokenType == TokenType.OpenParens)
-					{
-						parentNode = ParseInstruction(tokens, ref at, end);
-
-						if (parentNode == null)
-							return null;
-					}
-					else if (token.TokenType == TokenType.IntegerConstant && token.Value[0] != '-')
-					{
-						if (!UInt64.TryParse(token.Value, out ulong value))
-							return null;
-
-						parentNode = new ExpressionNode(value);
-					}
-					else if (token.TokenType == TokenType.IntegerConstant && token.Value[0] == '-')
-					{
-						if (!Int64.TryParse(token.Value, out long value))
-							return null;
-
-						parentNode = new ExpressionNode((ulong)value);
-					}
-					else if (token.TokenType == TokenType.FloatConstant)
-					{
-						if (!Double.TryParse(token.Value, out double value))
-							return null;
-
-						parentNode = new ExpressionNode(value);
-					}
-					else if (token.TokenType == TokenType.Identifier)
-					{
-						if (physicalRegisterMap.TryGetValue(token.Value, out PhysicalRegister physicalRegister))
-						{
-							parentNode = new ExpressionNode(physicalRegister);
-						}
-						else
-						{
-							if (token.Value[0] == 'v' && token.Value.Length > 1)
-							{
-								parentNode = new ExpressionNode(NodeType.VirtualRegister, token.Value);
-							}
-							else
-							{
-								parentNode = new ExpressionNode(NodeType.Variable, token.Value);
-							}
-						}
-					}
-					else
-					{
-						return null;
-					}
-
-					node.AddNode(parentNode);
+					return new Node(physicalRegister);
 				}
 
+				throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + token.Position.ToString() + " unknown register name: " + token.Value);
+			}
+			else if (token.TokenType == TokenType.VirtualRegister)
+			{
+				// not available with syntax yet
+				return new Node(NodeType.VirtualRegister, token.Value, token.Index);
+			}
+			else if (token.TokenType == TokenType.OperandVariable)
+			{
+				return new Node(NodeType.OperandVariable, token.Value, token.Index);
+			}
+
+			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + token.Position.ToString() + " unexpected token: " + token);
+		}
+
+		protected Node ParseNewExpression(List<Token> tokens, ref int at)
+		{
+			var token = tokens[at];
+
+			if (token.TokenType == TokenType.InstructionName)
+			{
+				return ParseInstructionNode(tokens, ref at);
+			}
+			else if (token.TokenType == TokenType.ConstLiteral)
+			{
+				// the next token should be a variable
+				var next = tokens[++at];
+
+				if (next.TokenType != TokenType.OperandVariable)
+					return null; // error
+
+				var node = new Node(NodeType.ConstantVariable, next.Value, next.Index);
+
+				// next token should be a close paran
+				var next2 = tokens[++at];
+
+				if (next2.TokenType != TokenType.CloseParens)
+					return null; // error
+
+				at++;
 				return node;
 			}
+
+			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + token.Position.ToString() + " unexpected token: " + token);
+		}
+
+		protected Node ParseInstructionNode(List<Token> tokens, ref int at)
+		{
+			var token = tokens[at++];
+
+			var instruction = instructionMap[token.Value];
+
+			var node = new Node(instruction);
+
+			while (at < tokens.Count)
+			{
+				var operand = ParseOperand(tokens, ref at);
+
+				if (operand == null)
+					return node;
+
+				node.AddNode(operand);
+			}
+
+			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + token.Position.ToString() + " unexpected token: " + token);
+		}
+
+		private static Node ParseBracketExpression(List<Token> tokens, ref int at)
+		{
+			var bracketedTokens = new List<Token>();
+
+			for (; at < tokens.Count; at++)
+			{
+				if (tokens[at].TokenType == TokenType.CloseBracket)
+				{
+					break;
+				}
+
+				bracketedTokens.Add(tokens[at]);
+			}
+
+			var expressionNode = ExpressionParser.Parse(bracketedTokens);
+
+			return new Node(expressionNode);
 		}
 	}
 }

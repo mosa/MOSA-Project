@@ -90,20 +90,25 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		/// <summary>
-		/// Gets the instruction modifier.
+		/// Gets the modifier.
 		/// </summary>
-		/// <param name="node">The context.</param>
-		/// <returns></returns>
-		protected override string GetModifier(InstructionNode node)
+		/// <value>
+		/// The modifier.
+		/// </value>
+		/// <exception cref="CompilerException">Opcode not set.</exception>
+		public override string Modifier
 		{
-			switch (((node.Instruction) as CIL.BaseCILInstruction).OpCode)
+			get
 			{
-				case OpCode.Brtrue: return "true";
-				case OpCode.Brtrue_s: return "true";
-				case OpCode.Brfalse: return "false";
-				case OpCode.Brfalse_s: return "false";
-				case OpCode.Switch: return "switch";
-				default: throw new CompilerException("Opcode not set.");
+				switch (OpCode)
+				{
+					case OpCode.Brtrue: return "true";
+					case OpCode.Brtrue_s: return "true";
+					case OpCode.Brfalse: return "false";
+					case OpCode.Brfalse_s: return "false";
+					case OpCode.Switch: return "switch";
+					default: throw new CompilerException("Opcode not set.");
+				}
 			}
 		}
 

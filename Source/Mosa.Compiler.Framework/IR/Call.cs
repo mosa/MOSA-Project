@@ -15,9 +15,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		public override bool VariableOperandCount { get { return true; } }
-
-		public override bool HasSideEffect { get { return true; } }
+		public override bool VariableOperands { get { return true; } }
 	}
 }
 

@@ -79,6 +79,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuiltInType.cs" />
     <Compile Include="GenericArgumentResolver.cs" />
     <Compile Include="IMetadata.cs" />
     <Compile Include="IModuleLoader.cs" />

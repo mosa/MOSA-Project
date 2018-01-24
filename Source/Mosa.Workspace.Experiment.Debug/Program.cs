@@ -1,7 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Expression;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.x86;
 using System.Collections.Generic;
 using System.IO;
@@ -150,7 +152,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			IRInstruction.MulUnsigned,
 		};
 
-		private static readonly List<BaseIRInstruction> IRSideEffects = new List<BaseIRInstruction>()
+		private static readonly List<BaseIRInstruction> IRCalls = new List<BaseIRInstruction>()
 		{
 			IRInstruction.Call,
 			IRInstruction.CallDirect,
@@ -158,9 +160,12 @@ namespace Mosa.Workspace.Experiment.Debug
 			IRInstruction.CallInterface,
 			IRInstruction.CallStatic,
 			IRInstruction.CallVirtual,
+			IRInstruction.IntrinsicMethodCall
+		};
+
+		private static readonly List<BaseIRInstruction> IRWriteOperation = new List<BaseIRInstruction>()
+		{
 			IRInstruction.MemoryCopy,
-			IRInstruction.StableObjectTracking,
-			IRInstruction.UnstableObjectTracking,
 			IRInstruction.StoreCompound,
 			IRInstruction.StoreFloatR4,
 			IRInstruction.StoreFloatR8,
@@ -173,7 +178,32 @@ namespace Mosa.Workspace.Experiment.Debug
 			IRInstruction.StoreFloatR4,
 			IRInstruction.StoreFloatR8,
 			IRInstruction.StoreInteger,
-			IRInstruction.IntrinsicMethodCall
+		};
+
+		private static readonly List<BaseIRInstruction> IRReadOperation = new List<BaseIRInstruction>()
+		{
+			IRInstruction.LoadCompound,
+			IRInstruction.LoadFloatR4,
+			IRInstruction.LoadFloatR8,
+			IRInstruction.LoadInteger,
+			IRInstruction.LoadSignExtended,
+			IRInstruction.LoadZeroExtended,
+			IRInstruction.LoadParameterCompound,
+			IRInstruction.LoadParameterFloatR4,
+			IRInstruction.LoadParameterFloatR8,
+			IRInstruction.LoadParameterInteger,
+			IRInstruction.LoadParameterSignExtended,
+			IRInstruction.LoadParameterZeroExtended,
+		};
+
+		private static readonly List<BaseIRInstruction> IRIOOperation = new List<BaseIRInstruction>()
+		{
+		};
+
+		private static readonly List<BaseIRInstruction> IRUnspecifiedSideEffect = new List<BaseIRInstruction>()
+		{
+			IRInstruction.StableObjectTracking,
+			IRInstruction.UnstableObjectTracking,
 		};
 
 		private static readonly List<BaseIRInstruction> IRVariableOperand = new List<BaseIRInstruction>()
@@ -314,9 +344,36 @@ namespace Mosa.Workspace.Experiment.Debug
 			X86.Xchg,
 		};
 
-		private static readonly List<X86Instruction> X86SideEffects = new List<X86Instruction>()
+		private static readonly List<X86Instruction> X86WriteOperation = new List<X86Instruction>()
 		{
-			X86.Call,
+			X86.MovCRStore,
+			X86.MovsdStore,
+			X86.MovssStore,
+			X86.MovStore,
+			X86.MovupsStore,
+		};
+
+		private static readonly List<X86Instruction> X86ReadOperation = new List<X86Instruction>()
+		{
+			X86.MovapsLoad,
+			X86.MovCRLoad,
+			X86.MovLoad,
+			X86.MovsdLoad,
+			X86.MovssLoad,
+			X86.MovsxLoad,
+			X86.MovupsLoad,
+			X86.MovzxLoad,
+		};
+
+		private static readonly List<X86Instruction> X86IOOperation = new List<X86Instruction>()
+		{
+			X86.In,
+			X86.Out,
+		};
+
+		private static readonly List<X86Instruction> X86UnspecifiedSideEffect = new List<X86Instruction>()
+		{
+			//X86.Call,
 			X86.FarJmp,
 			X86.Invlpg,
 			X86.Int,
@@ -330,18 +387,56 @@ namespace Mosa.Workspace.Experiment.Debug
 			X86.Lidt,
 			X86.Lock,
 			X86.Rep,
+			X86.Cli,
+			X86.Sti,
+		};
+
+		private static readonly Dictionary<BaseInstruction, string> ResultType = new Dictionary<BaseInstruction, string>()
+		{
+			{ IRInstruction.CompareInteger, "Boolean" },
+			{ IRInstruction.CompareFloatR4, "Boolean" },
+			{ IRInstruction.CompareFloatR8, "Boolean" },
+			{ IRInstruction.Split64, "UInt32" },
+			{ IRInstruction.To64, "UInt64" },
+		};
+
+		private static readonly Dictionary<BaseInstruction, string> ResultType2 = new Dictionary<BaseInstruction, string>()
+		{
+			{ IRInstruction.Split64, "UInt32" },
+		};
+
+		private static readonly Dictionary<BaseInstruction, byte[]> X86Bytes = new Dictionary<BaseInstruction, byte[]>()
+		{
+			{ X86.Break, new byte[] { 0xCC } },
+			{ X86.Pushad, new byte[] { 0x60 } },
+			{ X86.Popad, new byte[] { 0x61 } },
+			{ X86.Nop, new byte[] { 0x90 } },
+			{ X86.Pause, new byte[] { 0xF3, 0x90 } },
+			{ X86.Cdq, new byte[] { 0x99 } },
+			{ X86.Stos, new byte[] { 0xAB } },
+			{ X86.Ret, new byte[] { 0xC3 } },
+			{ X86.Leave, new byte[] { 0xC9 } },
+			{ X86.IRetd, new byte[] { 0xCF } },
+			{ X86.Lock, new byte[] { 0xF0 } },
+			{ X86.Rep, new byte[] { 0xF3 } },
+			{ X86.Hlt, new byte[] { 0xF4 } },
+			{ X86.Cli, new byte[] { 0xFA } },
+			{ X86.Sti, new byte[] { 0xFB } },
 		};
 
 		#endregion Data
 
 		private static void Main()
 		{
-			var tree = ExpressionTest.GetTestExpression1();
+			var tree = ExpressionTest.GetTestExpression2();
 			var basicBlocks = ExpressionTest.CreateBasicBlockInstructionSet();
 
-			var match = tree.Validate(basicBlocks[0].Last.Previous);
+			//var match = tree.Transform(basicBlocks[0].Last.Previous, null);
 
-			ExpressionTest.GetTestExpression2();
+			//ExpressionTest.GetTestExpression5();
+			//ExpressionTest.GetTestExpression4();
+			//ExpressionTest.GetTestExpression3();
+			//ExpressionTest.GetTestExpression2();
 
 			DumpIRInstruction();
 			DumpX86Instruction();
@@ -349,35 +444,67 @@ namespace Mosa.Workspace.Experiment.Debug
 			return;
 		}
 
+		private static string GetResultType(BaseInstruction instruction)
+		{
+			string value = null;
+
+			ResultType.TryGetValue(instruction, out value);
+
+			return value;
+		}
+
+		private static string GetResultType2(BaseInstruction instruction)
+		{
+			string value = null;
+
+			ResultType2.TryGetValue(instruction, out value);
+
+			return value;
+		}
+
+		private static byte[] GetX86Bytes(BaseInstruction instruction)
+		{
+			X86Bytes.TryGetValue(instruction, out byte[] value);
+
+			return value;
+		}
+
 		private static void DumpIRInstruction()
 		{
 			var sb = new StringBuilder();
 
-			const string template = "\"name\": \"{0}\",\n\"familyName\": \"{1}\",\n\"resultCount\": {2},\n\"operandCount\": {3},\n\"flowControl\": \"{4}\",\n\"ignoreDuringCodeGeneration\": \"{5}\",\n\"ignoreInstructionBasicBlockTargets\": \"{6}\",\n\"variableOperandCount\": \"{7}\",\n\"commutative\": \"{8}\",\n\"hasSideEffect\": \"{9}\",\n\"description\": \"{10}\"\n";
-
-			sb.AppendLine("{ \"instructions\": [");
+			sb.AppendLine("{ \"Instructions\": [");
 
 			foreach (var instruction in IRInstructions)
 			{
-				sb.Append("{ ");
-				sb.AppendFormat(template,
-					instruction.GetType().Name, // 0
-					instruction.InstructionFamilyName, // 1
-					instruction.DefaultResultCount.ToString(), // 2
-					instruction.DefaultOperandCount.ToString(), // 3
-					instruction.FlowControl.ToString(), // 4
-					instruction.IgnoreDuringCodeGeneration ? "true" : "false", // 5
-					instruction.IgnoreInstructionBasicBlockTargets ? "true" : "false", // 6
-					IRVariableOperand.Contains(instruction) ? "true" : "false", // 8
-					IRCommutative.Contains(instruction) ? "true" : "false", // 8
-					IRSideEffects.Contains(instruction) ? "true" : "false", // 9
-					string.Empty); //10
+				var inst = new Instruction()
+				{
+					Name = instruction.GetType().Name,
+					FamilyName = instruction.InstructionFamilyName,
+					ResultCount = instruction.DefaultResultCount,
+					OperandCount = instruction.DefaultOperandCount,
+					ResultType = GetResultType(instruction) ?? instruction.ResultType.ToString(),
+					ResultType2 = GetResultType2(instruction) ?? instruction.ResultType2.ToString(),
+					FlowControl = instruction.FlowControl.ToString(),
+					IgnoreDuringCodeGeneration = instruction.IgnoreDuringCodeGeneration,
+					IgnoreInstructionBasicBlockTargets = instruction.IgnoreInstructionBasicBlockTargets,
+					VariableOperands = instruction.VariableOperands, //IRVariableOperand.Contains(instruction),
+					Commutative = instruction.Commutative,// IRCommutative.Contains(instruction),
 
-				sb.AppendLine("} ,");
+					MemoryWrite = IRWriteOperation.Contains(instruction),
+					MemoryRead = IRReadOperation.Contains(instruction),
+					IOOperation = IRIOOperation.Contains(instruction),
+					UnspecifiedSideEffect = IRUnspecifiedSideEffect.Contains(instruction),
+				};
+
+				sb.Append(inst.ToString());
+				sb.AppendLine(",");
 			}
+
 			sb.Length--;
 			sb.Length--;
 			sb.Length--;
+			sb.AppendLine();
 			sb.AppendLine("] }");
 
 			File.WriteAllText("IRInstructions.json", sb.ToString());
@@ -387,31 +514,40 @@ namespace Mosa.Workspace.Experiment.Debug
 		{
 			var sb = new StringBuilder();
 
-			const string template = "\"name\": \"{0}\",\n\"familyName\": \"{1}\",\n\"resultCount\": {2},\n\"operandCount\": {3},\n\"flowControl\": \"{4}\",\n\"ignoreDuringCodeGeneration\": \"{5}\",\n\"ignoreInstructionBasicBlockTargets\": \"{6}\",\n\"variableOperandCount\": \"{7}\",\n\"commutative\": \"{8}\",\n\"hasSideEffect\": \"{9}\",\n\"description\": \"{10}\"\n";
+			sb.AppendLine("{ \"Instructions\": [");
 
-			sb.AppendLine("{ \"instructions\": [");
-
-			foreach (var instruction in X86Instructions)
+			foreach (var instruction in X86InstructionMap.Map.Values) // replaces X86Instructions
 			{
-				sb.Append("{ ");
-				sb.AppendFormat(template,
-					instruction.GetType().Name, // 0
-					instruction.InstructionFamilyName, // 1
-					instruction.DefaultResultCount.ToString(), // 2
-					instruction.DefaultOperandCount.ToString(), // 3
-					instruction.FlowControl.ToString(), // 4
-					instruction.IgnoreDuringCodeGeneration ? "true" : "false", // 5
-					instruction.IgnoreInstructionBasicBlockTargets ? "true" : "false", // 6
-					"false", // 8
-					X86Commutative.Contains(instruction) ? "true" : "false", // 8
-					X86SideEffects.Contains(instruction) ? "true" : "false", // 9
-					string.Empty); //10
+				var inst = new Instruction()
+				{
+					Name = instruction.GetType().Name,
+					FamilyName = instruction.InstructionFamilyName,
+					ResultCount = instruction.DefaultResultCount,
+					OperandCount = instruction.DefaultOperandCount,
+					ResultType = GetResultType(instruction) ?? instruction.ResultType.ToString(),
+					ResultType2 = GetResultType2(instruction) ?? instruction.ResultType2.ToString(),
+					FlowControl = instruction.FlowControl.ToString(),
+					IgnoreDuringCodeGeneration = instruction.IgnoreDuringCodeGeneration,
+					IgnoreInstructionBasicBlockTargets = instruction.IgnoreInstructionBasicBlockTargets,
+					VariableOperands = false,
+					Commutative = X86Commutative.Contains(instruction),
+					MemoryWrite = X86WriteOperation.Contains(instruction), // instruction.IsMemoryWrite,
+					MemoryRead = X86ReadOperation.Contains(instruction), // instruction.IsMemoryRead,
+					IOOperation = X86IOOperation.Contains(instruction), // instruction.IsIOOperation,
+					UnspecifiedSideEffect = X86UnspecifiedSideEffect.Contains(instruction), //instruction.HasIRUnspecifiedSideEffect,
+					X86ThreeTwoAddressConversion = instruction.ThreeTwoAddressConversion,
+					X86EmitBytes = GetX86Bytes(instruction) ?? instruction.__opcode,
+					X86EmitMethodType = ((GetX86Bytes(instruction) ?? instruction.__opcode) != null) ? "SimpleByteCode" : null,
+				};
 
-				sb.AppendLine("} ,");
+				sb.Append(inst.ToString());
+				sb.AppendLine(",");
 			}
+
 			sb.Length--;
 			sb.Length--;
 			sb.Length--;
+			sb.AppendLine();
 			sb.AppendLine("] }");
 
 			File.WriteAllText("X86Instructions.json", sb.ToString());

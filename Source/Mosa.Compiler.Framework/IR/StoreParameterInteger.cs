@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 		}
 
-		public override bool HasSideEffect { get { return true; } }
+		public override bool IsMemoryWrite { get { return true; } }
 	}
 }
 

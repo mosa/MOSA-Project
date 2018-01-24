@@ -95,6 +95,16 @@ namespace Mosa.Compiler.Framework.CIL
 			return compiler.AllocateVirtualRegisterOrStackSlot(type);
 		}
 
+		/// <summary>
+		/// Validates the specified instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="compiler">The compiler.</param>
+		public virtual void Resolve(Context context, BaseMethodCompiler compiler)
+		{
+			/* Default implementation is to do nothing */
+		}
+
 		#endregion Methods
 	}
 }

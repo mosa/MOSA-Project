@@ -17,14 +17,16 @@ namespace Mosa.Platform.x86.Instructions
 		//private static readonly OpCode R_M = new OpCode(new byte[] { 0x3B });
 		private static readonly LegacyOpCode R_R = new LegacyOpCode(new byte[] { 0x85 });
 
-		private static readonly LegacyOpCode M_C = new LegacyOpCode(new byte[] { 0xF7 }, 0);
+		//private static readonly LegacyOpCode M_C = new LegacyOpCode(new byte[] { 0xF7 }, 0);
 		private static readonly LegacyOpCode R_C = new LegacyOpCode(new byte[] { 0xF7 }, 0);
+
 		private static readonly LegacyOpCode R_C_8 = new LegacyOpCode(new byte[] { 0xF6 }, 0);
 		private static readonly LegacyOpCode R_C_16 = new LegacyOpCode(new byte[] { 0x66, 0xF7 }, 0);
-		private static readonly LegacyOpCode M_R_8 = new LegacyOpCode(new byte[] { 0x84 });
+
+		//private static readonly LegacyOpCode M_R_8 = new LegacyOpCode(new byte[] { 0x84 });
 
 		//private static readonly OpCode R_M_8 = new OpCode(new byte[] { 0x3A });
-		private static readonly LegacyOpCode M_R_16 = new LegacyOpCode(new byte[] { 0x66, 0x85 });
+		//private static readonly LegacyOpCode M_R_16 = new LegacyOpCode(new byte[] { 0x66, 0x85 });
 
 		//private static readonly OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x3B });
 

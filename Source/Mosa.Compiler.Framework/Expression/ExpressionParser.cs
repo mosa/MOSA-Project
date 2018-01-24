@@ -5,24 +5,29 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Expression
 {
-	public class Parser
+	public class ExpressionParser
 	{
-		protected Tokenizer Tokenizer { get; }
-
-		protected List<Token> Tokens { get { return Tokenizer.Tokens; } }
+		protected List<Token> Tokens { get; }
 		protected Token CurrentToken { get { return Tokens[Index]; } }
 		protected TokenType CurrentTokenType { get { return CurrentToken.TokenType; } }
 		protected bool IsOutOfTokens { get { return Index >= Tokens.Count; } }
 		protected int Index = 0;
 
-		public EvaluationNode Root;
+		protected ExpressionNode Root { get; private set; }
 
-		public Parser(Tokenizer tokenizer)
+		public static ExpressionNode Parse(List<Token> tokens)
 		{
-			Tokenizer = tokenizer;
+			if (tokens.Count == 0)
+				return null;
 
-			if (tokenizer == null)
-				throw new CompilerException("tokenizer parameter is null");
+			var parse = new ExpressionParser(tokens);
+
+			return parse.Root;
+		}
+
+		protected ExpressionParser(List<Token> tokens)
+		{
+			Tokens = tokens ?? throw new CompilerException("ExpressionEvaluation: tokens parameter is null");
 
 			Parse();
 		}
@@ -32,14 +37,12 @@ namespace Mosa.Compiler.Framework.Expression
 			Root = ParseAddSub();
 		}
 
-		private EvaluationNode ParseAddSub()
+		private ExpressionNode ParseAddSub()
 		{
 			var lhs = ParseMulDiv();
 
 			while (true)
 			{
-				//if (HasError) return null;
-
 				if (IsOutOfTokens) return lhs;
 
 				Token op = null;
@@ -61,19 +64,18 @@ namespace Mosa.Compiler.Framework.Expression
 
 				var rhs = ParseMulDiv();
 
-				lhs = new EvaluationNode(op, lhs, rhs);
+				lhs = new ExpressionNode(op, lhs, rhs);
 			}
 		}
 
-		private EvaluationNode ParseMulDiv()
+		private ExpressionNode ParseMulDiv()
 		{
 			var lhs = ParseUnary();
 
 			while (true)
 			{
-				//if (HasError) return null;
-
-				if (IsOutOfTokens) return lhs;
+				if (IsOutOfTokens)
+					return lhs;
 
 				Token op = null;
 
@@ -100,19 +102,17 @@ namespace Mosa.Compiler.Framework.Expression
 
 				var rhs = ParseUnary();
 
-				lhs = new EvaluationNode(op, lhs, rhs);
+				lhs = new ExpressionNode(op, lhs, rhs);
 			}
 		}
 
-		private EvaluationNode ParseUnary()
+		private ExpressionNode ParseUnary()
 		{
 			while (true)
 			{
-				//if (HasError) return null;
-
 				if (IsOutOfTokens)
 				{
-					throw new CompilerException("Invalid parse: parser unexpected end");
+					throw new CompilerException("ExpressionEvaluation: Invalid parse: parser unexpected end");
 				}
 
 				if (CurrentTokenType == TokenType.Not)
@@ -122,26 +122,22 @@ namespace Mosa.Compiler.Framework.Expression
 
 					var rhs = ParseUnary();
 
-					var node = new EvaluationNode(token, rhs);
-					return node;
+					return new ExpressionNode(token, rhs);
 				}
 
-				if (CurrentTokenType == TokenType.Variable)
+				if (CurrentTokenType == TokenType.OperandVariable)
 				{
-					var variableToken = new Token(CurrentTokenType, CurrentToken.Value, Index);
-					Index++;
+					var variableToken = new Token(CurrentTokenType, CurrentToken.Value, Index++);
 
-					var node = new EvaluationNode(variableToken);
-					return node;
+					return new ExpressionNode(variableToken);
 				}
 				else if (CurrentTokenType == TokenType.Method || CurrentTokenType == TokenType.If)
 				{
-					var token = new Token(CurrentTokenType, CurrentToken.Value, Index);
-					Index++;
+					var token = new Token(CurrentTokenType, CurrentToken.Value, Index++);
 
 					Index++; // skip opening paraens
 
-					var parameters = new List<EvaluationNode>();
+					var parameters = new List<ExpressionNode>();
 
 					while (CurrentTokenType != TokenType.CloseParens)
 					{
@@ -158,35 +154,30 @@ namespace Mosa.Compiler.Framework.Expression
 
 					Index++; // skip closing parens
 
-					var node = new EvaluationNode(token, parameters);
-					return node;
+					return new ExpressionNode(token, parameters);
 				}
 
 				//else if (CurrentTokenType == TokenType.Questionmark)
 				//{
-				//	var questionToken = new Token(TokenType.If, null, Index);
-				//	Index++;
+				//	var questionToken = new Token(TokenType.If, null, Index++);
 
 				//	var trueExpression = ParseAddSub();
 
 				//	if (CurrentToken.TokenType != TokenType.Colon)
-				//	{
-				//		ErrorMessage = "error at " + CurrentToken.Index.ToString() + " missing colon";
-				//		return null;
-				//	}
+				//		throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + CurrentToken.Index.ToString() + " missing colon");
 
 				//	Index++; // skip closing colon
 
 				//	var falseExpression = ParseAddSub();
 
-				//	var parameters = new List<EvaluationNode>
+				//	var parameters = new List<ExpressionNode>
 				//	{
 				//		null, // todo
 				//		trueExpression,
 				//		falseExpression
 				//	};
 
-				//	var node = new EvaluationNode(questionToken, parameters);
+				//	var node = new ExpressionNode(questionToken, parameters);
 				//	return node;
 				//}
 
@@ -194,11 +185,11 @@ namespace Mosa.Compiler.Framework.Expression
 			}
 		}
 
-		private EvaluationNode ParseLeaf()
+		private ExpressionNode ParseLeaf()
 		{
-			if (IsLiteral(CurrentToken.TokenType))
+			if (IsConstant(CurrentToken.TokenType))
 			{
-				var node = new EvaluationNode(CurrentToken);
+				var node = new ExpressionNode(CurrentToken);
 				Index++;
 				return node;
 			}
@@ -210,29 +201,30 @@ namespace Mosa.Compiler.Framework.Expression
 				var node = ParseAddSub();
 
 				if (CurrentToken.TokenType != TokenType.CloseParens)
-					throw new CompilerException("Invalid parse: error at " + CurrentToken.Index.ToString() + " missing closing parenthesis");
+				{
+					throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + CurrentToken.Position.ToString() + " missing closing parenthesis");
+				}
 
 				Index++;
 
 				return node;
 			}
 
-			if (CurrentTokenType == TokenType.Variable)
+			if (CurrentTokenType == TokenType.OperandVariable)
 			{
-				var node = new EvaluationNode(CurrentToken);
+				var node = new ExpressionNode(CurrentToken);
 				Index++;
 				return node;
 			}
 
-			throw new CompilerException("Invalid parse: error at " + CurrentToken.Index.ToString() + " unexpected token: " + CurrentToken);
+			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + CurrentToken.Position.ToString() + " unexpected token: " + CurrentToken);
 		}
 
-		protected static bool IsLiteral(TokenType tokenType)
+		protected static bool IsConstant(TokenType tokenType)
 		{
-			return tokenType == TokenType.IntegerConstant
-					|| tokenType == TokenType.FloatConstant
-					|| tokenType == TokenType.BooleanTrueConstant
-					|| tokenType == TokenType.BooleanFalseConstant;
+			return tokenType == TokenType.SignedIntegerConstant
+					|| tokenType == TokenType.UnsignedIntegerConstant
+					|| tokenType == TokenType.DoubleConstant;
 		}
 
 		protected static bool IsAddSubOperand(TokenType tokenType)
@@ -258,11 +250,6 @@ namespace Mosa.Compiler.Framework.Expression
 					|| tokenType == TokenType.CompareLessThanOrEqual
 					|| tokenType == TokenType.CompareLessThan
 					|| tokenType == TokenType.CompareGreaterThan;
-		}
-
-		public override string ToString()
-		{
-			return Tokenizer.Expression;
 		}
 	}
 }

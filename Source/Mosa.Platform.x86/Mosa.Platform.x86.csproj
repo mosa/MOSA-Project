@@ -96,6 +96,66 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Instructions\BranchCarry.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchEqual.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchGreaterOrEqual.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchGreaterThan.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchLessOrEqual.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchLessThan.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNoCarry.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNoOverflow.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNoParity.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNotEqual.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNotSigned.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNotZero.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchOverflow.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchParity.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchSigned.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchUnsignedGreaterOrEqual.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchUnsignedGreaterThan.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchUnsignedLessOrEqual.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchUnsignedLessThan.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchZero.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Btr.cs" />
     <Compile Include="Instructions\Cmovcc.cs" />
     <Compile Include="Instructions\CmpXchgLoad.cs" />
@@ -123,6 +183,11 @@
     <Compile Include="Instructions\Test.cs" />
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\AddSD.cs" />
+    <Compile Include="Instructions\X86instruction.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Intrinsic\Div.cs" />
     <Compile Include="Intrinsic\AllocateStackSpace.cs" />
     <Compile Include="Intrinsic\FrameCallRetR8.cs" />
@@ -178,7 +243,9 @@
     <Compile Include="ControlRegister.cs" />
     <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
     <Compile Include="Instructions\FarJmp.cs" />
-    <Compile Include="Instructions\Leave.cs" />
+    <Compile Include="Instructions\Leave.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\RoundSS.cs" />
     <Compile Include="CompilerStages\InterruptVectorStage.cs" />
     <Compile Include="Intrinsic\GetEBP.cs" />
@@ -221,18 +288,24 @@
     <Compile Include="Instructions\Call.cs" />
     <Compile Include="Instructions\Movsd.cs" />
     <Compile Include="Instructions\Movss.cs" />
-    <Compile Include="Instructions\Ret.cs" />
+    <Compile Include="Instructions\Ret.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Movzx.cs" />
     <Compile Include="Instructions\Movsx.cs" />
     <Compile Include="X86CodeEmitter.cs" />
     <Compile Include="Stages\TweakTransformationStage.cs" />
     <Compile Include="Instructions\Adc.cs" />
     <Compile Include="Instructions\Add.cs" />
-    <Compile Include="Instructions\Cdq.cs" />
+    <Compile Include="Instructions\Cdq.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Cmp.cs" />
     <Compile Include="Instructions\Comisd.cs" />
     <Compile Include="Instructions\Comiss.cs" />
-    <Compile Include="Instructions\Break.cs" />
+    <Compile Include="Instructions\Break.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Cvtsd2ss.cs" />
     <Compile Include="Instructions\Cvtsi2sd.cs" />
     <Compile Include="Instructions\Cvtsi2ss.cs" />
@@ -243,25 +316,45 @@
     <Compile Include="Instructions\Int.cs" />
     <Compile Include="Intrinsic\BochsDebug.cs" />
     <Compile Include="Instructions\Cld.cs" />
-    <Compile Include="Instructions\Cli.cs" />
+    <Compile Include="Instructions\Cli.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\CpuId.cs" />
-    <Compile Include="Instructions\Hlt.cs" />
+    <Compile Include="Instructions\Hlt.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\In.cs" />
     <Compile Include="Instructions\Invlpg.cs" />
-    <Compile Include="Instructions\IRetd.cs" />
+    <Compile Include="Instructions\IRetd.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Lgdt.cs" />
     <Compile Include="Instructions\Lidt.cs" />
-    <Compile Include="Instructions\Lock.cs" />
+    <Compile Include="Instructions\Lock.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Out.cs" />
-    <Compile Include="Instructions\Pause.cs" />
-    <Compile Include="Instructions\Popad.cs" />
+    <Compile Include="Instructions\Pause.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Popad.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Pop.cs" />
-    <Compile Include="Instructions\Pushad.cs" />
+    <Compile Include="Instructions\Pushad.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Push.cs" />
     <Compile Include="Instructions\Rcr.cs" />
-    <Compile Include="Instructions\Rep.cs" />
-    <Compile Include="Instructions\Sti.cs" />
-    <Compile Include="Instructions\Stos.cs" />
+    <Compile Include="Instructions\Rep.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Sti.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Stos.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Xchg.cs" />
     <Compile Include="Instructions\And.cs" />
     <Compile Include="Instructions\Not.cs" />
@@ -286,7 +379,9 @@
     <Compile Include="Instructions\Ucomiss.cs" />
     <Compile Include="LegacyOpCode.cs" />
     <Compile Include="X86Instruction.cs" />
-    <Compile Include="Instructions\Nop.cs" />
+    <Compile Include="Instructions\Nop.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="GeneralPurposeRegister.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -302,6 +397,10 @@
     <Compile Include="OpcodeEncoder.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Instructions\X86instruction.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>X86instruction.cs</LastGenOutput>
+    </Content>
     <Content Include="X86.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>X86.cs</LastGenOutput>

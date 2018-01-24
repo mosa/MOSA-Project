@@ -163,6 +163,15 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Writes the specified data.
+		/// </summary>
+		/// <param name="data">The data.</param>
+		public void Write(byte[] data)
+		{
+			codeStream.Write(data, 0, data.Length);
+		}
+
+		/// <summary>
 		/// Writes the byte.
 		/// </summary>
 		/// <param name="buffer">The buffer.</param>

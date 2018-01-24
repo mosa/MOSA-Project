@@ -40,21 +40,22 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		/// <summary>
-		/// Gets the instruction modifier.
+		/// Gets the modifier.
 		/// </summary>
-		/// <param name="node">The context.</param>
-		/// <returns></returns>
 		/// <exception cref="InvalidOperationException">Invalid opcode.</exception>
-		protected override string GetModifier(InstructionNode node)
+		public override string Modifier
 		{
-			switch (((node.Instruction) as BaseCILInstruction).OpCode)
+			get
 			{
-				case OpCode.Ceq: return "==";
-				case OpCode.Cgt: return ">";
-				case OpCode.Cgt_un: return "> unordered";
-				case OpCode.Clt: return "<";
-				case OpCode.Clt_un: return "< unordered";
-				default: throw new InvalidOperationException("Invalid opcode.");
+				switch (OpCode)
+				{
+					case OpCode.Ceq: return "==";
+					case OpCode.Cgt: return ">";
+					case OpCode.Cgt_un: return "> unordered";
+					case OpCode.Clt: return "<";
+					case OpCode.Clt_un: return "< unordered";
+					default: throw new InvalidOperationException("Invalid opcode.");
+				}
 			}
 		}
 

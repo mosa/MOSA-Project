@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Text;
 
@@ -23,6 +24,16 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <value>The operand result count.</value>
 		public byte DefaultResultCount { get; protected set; }
+
+		/// <summary>
+		/// The type of the result type
+		/// </summary>
+		public virtual BuiltInType ResultType { get; protected set; } = BuiltInType.None;
+
+		/// <summary>
+		/// The type of the secondary result type
+		/// </summary>
+		public virtual BuiltInType ResultType2 { get; protected set; } = BuiltInType.None;
 
 		/// <summary>
 		/// Determines flow behavior of this instruction.
@@ -49,6 +60,38 @@ namespace Mosa.Compiler.Framework
 		/// <c>true</c> if [ignore instruction basic block]; otherwise, <c>false</c>.
 		/// </value>
 		public virtual bool IgnoreInstructionBasicBlockTargets { get { return false; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance has an unspecified side effect.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool HasIRUnspecifiedSideEffect { get { return false; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance has memory write side effect.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool IsMemoryWrite { get { return false; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance has memory write side effect.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool IsMemoryRead { get { return false; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance has IO operation side effect.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool IsIOOperation { get { return false; } }
 
 		/// <summary>
 		/// Gets the name of the base instruction.
@@ -150,6 +193,8 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		public virtual string Modifier { get { return null; } }
+
 		#endregion Properties
 
 		#region Construction
@@ -170,16 +215,6 @@ namespace Mosa.Compiler.Framework
 		#region Methods
 
 		/// <summary>
-		/// Validates the specified instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="compiler">The compiler.</param>
-		public virtual void Resolve(Context context, BaseMethodCompiler compiler)
-		{
-			/* Default implementation is to do nothing */
-		}
-
-		/// <summary>
 		/// Returns a string representation of the context.
 		/// </summary>
 		/// <returns>
@@ -188,179 +223,6 @@ namespace Mosa.Compiler.Framework
 		public override string ToString()
 		{
 			return InstructionName;
-		}
-
-		/// <summary>
-		/// Returns a <see cref="System.String" /> that represents this instance.
-		/// </summary>
-		/// <param name="node">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String" /> that represents this instance.
-		/// </returns>
-		public string ToString(InstructionNode node)
-		{
-			// TODO: Copy this method into calling class
-			var sb = new StringBuilder();
-
-			sb.AppendFormat("L_{0:X4}", node.Label);
-
-			if (node.Marked)
-				sb.Append('*');
-			else
-				sb.Append(' ');
-
-			sb.Append(InstructionName);
-
-			var size = GetSizeString(node.Size);
-
-			if (size != string.Empty)
-				sb.Append("/").Append(size);
-
-			if (node.ConditionCode != ConditionCode.Undefined)
-			{
-				sb.Append(" [");
-				sb.Append(GetConditionString(node.ConditionCode));
-				sb.Append("]");
-			}
-
-			string mod = GetModifier(node);
-			if (mod != null)
-			{
-				sb.Append(" [");
-				sb.Append(mod);
-				sb.Append("]");
-			}
-
-			for (int i = 0; i < node.ResultCount; i++)
-			{
-				var op = node.GetResult(i);
-				sb.Append(" ");
-				sb.Append(op == null ? "[NULL]" : op.ToString(false));
-				sb.Append(",");
-			}
-
-			if (node.ResultCount > 0)
-			{
-				sb.Length--;
-			}
-
-			if (node.ResultCount > 0 && node.OperandCount > 0)
-			{
-				sb.Append(" <=");
-			}
-
-			for (int i = 0; i < node.OperandCount; i++)
-			{
-				var op = node.GetOperand(i);
-				sb.Append(" ");
-				sb.Append(op == null ? "[NULL]" : op.ToString(false));
-				sb.Append(",");
-			}
-
-			if (node.OperandCount > 0)
-			{
-				sb.Length--;
-			}
-
-			if (node.BranchTargets != null)
-			{
-				sb.Append(' ');
-
-				for (int i = 0; (i < 2) && (i < node.BranchTargetsCount); i++)
-				{
-					if (i != 0)
-					{
-						sb.Append(", ");
-					}
-
-					sb.Append(node.BranchTargets[i].ToString());
-				}
-
-				if (node.BranchTargetsCount > 2)
-				{
-					sb.Append(", [more]");
-				}
-			}
-
-			if (node.InvokeMethod != null)
-			{
-				sb.Append(" {m:");
-				sb.Append(node.InvokeMethod.FullName);
-				sb.Append("}");
-			}
-
-			if (node.MosaType != null)
-			{
-				sb.Append(" {t:");
-				sb.Append(node.MosaType.FullName);
-				sb.Append("}");
-			}
-
-			if (node.MosaField != null)
-			{
-				sb.Append(" {f:");
-				sb.Append(node.MosaField.FullName);
-				sb.Append("}");
-			}
-
-			return sb.ToString();
-		}
-
-		/// <summary>
-		/// Gets the instruction modifier.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		/// <returns></returns>
-		protected virtual string GetModifier(InstructionNode node)
-		{
-			return null;
-		}
-
-		/// <summary>
-		/// Gets the condition string.
-		/// </summary>
-		/// <param name="conditioncode">The condition code.</param>
-		/// <returns></returns>
-		protected string GetConditionString(ConditionCode conditioncode)
-		{
-			switch (conditioncode)
-			{
-				case ConditionCode.Equal: return "==";
-				case ConditionCode.GreaterOrEqual: return ">=";
-				case ConditionCode.GreaterThan: return ">";
-				case ConditionCode.LessOrEqual: return "<=";
-				case ConditionCode.LessThan: return "<";
-				case ConditionCode.NotEqual: return "!=";
-				case ConditionCode.UnsignedGreaterOrEqual: return ">= (U)";
-				case ConditionCode.UnsignedGreaterThan: return "> (U)";
-				case ConditionCode.UnsignedLessOrEqual: return "<= (U)";
-				case ConditionCode.UnsignedLessThan: return "< (U)";
-				case ConditionCode.NotSigned: return "not signed";
-				case ConditionCode.Signed: return "signed";
-				case ConditionCode.Zero: return "zero";
-				case ConditionCode.NotZero: return "not zero";
-				case ConditionCode.Parity: return "parity";
-				case ConditionCode.NoParity: return "no parity";
-				case ConditionCode.Carry: return "carry";
-				case ConditionCode.NoCarry: return "no carry";
-				case ConditionCode.Always: return "always";
-
-				default: throw new NotSupportedException();
-			}
-		}
-
-		public static string GetSizeString(InstructionSize size)
-		{
-			switch (size)
-			{
-				case InstructionSize.Size32: return "32";
-				case InstructionSize.Size8: return "8";
-				case InstructionSize.Size16: return "16";
-				case InstructionSize.Size64: return "64";
-				case InstructionSize.Size128: return "128";
-				case InstructionSize.Native: return string.Empty;// "Native";
-				default: return string.Empty;
-			}
 		}
 
 		#endregion Methods

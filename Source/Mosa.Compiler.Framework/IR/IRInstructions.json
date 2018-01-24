@@ -1,1538 +1,788 @@
 ﻿{
-	"instructions": [
-		{
-			"name": "AddFloatR4",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "true",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "AddFloatR8",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "true",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "AddressOf",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "AddSigned",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "true",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "AddUnsigned",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "true",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "ArithmeticShiftRight",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "BlockEnd",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "BlockStart",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Break",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Call",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "true",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "CallDirect",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "true",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "CallDynamic",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "true",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "CallInterface",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "true",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "CallStatic",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "true",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "CallVirtual",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "true",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "CompareFloatR4",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "CompareFloatR8",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "CompareInteger",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "CompareIntegerBranch",
-			"familyName": "IR",
-			"resultCount": 2,
-			"operandCount": 0,
-			"flowControl": "ConditionalBranch",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "ConversionFloatR4ToFloatR8",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "ConversionFloatR4ToInteger",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "ConversionFloatR8ToFloatR4",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "ConversionFloatR8ToInteger",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "ConversionIntegerToFloatR4",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "ConversionIntegerToFloatR8",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "DivFloatR4",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "DivFloatR8",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "DivSigned",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "DivUnsigned",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Epilogue",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "ExceptionEnd",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "ExceptionStart",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "FilterEnd",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "FilterStart",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "FinallyEnd",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "FinallyStart",
-			"familyName": "IR",
-			"resultCount": 2,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Flow",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Gen",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "true",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "GotoLeaveTarget",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "IntrinsicMethodCall",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "true",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "IsInstanceOfType",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "IsInstanceOfInterfaceType",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Jmp",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "UnconditionalBranch",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Kill",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "true",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "KillAll",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "true",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "KillAllExcept",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "true",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LoadCompound",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LoadFloatR4",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LoadFloatR8",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LoadInteger",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LoadSignExtended",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LoadZeroExtended",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LoadParameterCompound",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LoadParameterFloatR4",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LoadParameterFloatR8",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LoadParameterInteger",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LoadParameterSignExtended",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LoadParameterZeroExtended",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LogicalAnd",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "true",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LogicalNot",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LogicalOr",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "true",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "LogicalXor",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "true",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "MemorySet",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 3,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "MoveCompound",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "MoveFloatR4",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "MoveFloatR8",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "MoveInteger",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "MoveSignExtended",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "MoveZeroExtended",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "MulFloatR4",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "true",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "MulFloatR8",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "true",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "MulSigned",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "true",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "MulUnsigned",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "true",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "NewArray",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "NewObject",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "NewString",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Nop",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Phi",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "true",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Prologue",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "RemFloatR4",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "RemFloatR8",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "RemSigned",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "RemUnsigned",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "SetReturn",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 1,
-			"flowControl": "Return",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "true",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "SetLeaveTarget",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "ShiftLeft",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "ShiftRight",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "StableObjectTracking",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "StoreCompound",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 3,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "StoreFloatR4",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 3,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "StoreFloatR8",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 3,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "StoreInteger",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 3,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "StoreParameterCompound",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "StoreParameterFloatR4",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "StoreParameterFloatR8",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "StoreParameterInteger",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "SubFloatR4",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "SubFloatR8",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "SubSigned",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "SubUnsigned",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Switch",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Switch",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Throw",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "TryEnd",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "true",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "TryStart",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "true",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "UnstableObjectTracking",
-			"familyName": "IR",
-			"resultCount": 0,
-			"operandCount": 0,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "true",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "Rethrow",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "GetVirtualFunctionPtr",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "MemoryCopy",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 3,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "true",
-			"description": ""
-		},
-		{
-			"name": "Box",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Box32",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Box64",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "BoxR4",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "BoxR8",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Unbox",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Unbox32",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Unbox64",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "To64",
-			"familyName": "IR",
-			"resultCount": 1,
-			"operandCount": 2,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
-		},
-		{
-			"name": "Split64",
-			"familyName": "IR",
-			"resultCount": 2,
-			"operandCount": 1,
-			"flowControl": "Next",
-			"ignoreDuringCodeGeneration": "false",
-			"ignoreInstructionBasicBlockTargets": "false",
-			"variableOperandCount": "false",
-			"commutative": "false",
-			"hasSideEffect": "false",
-			"description": ""
+	"Instructions": [
+		{
+			"Name": "AddFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "AddFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "AddressOf",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "AddSigned",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "AddUnsigned",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "ArithmeticShiftRight",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "BlockEnd",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "BlockStart",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "Break",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
+			"Name": "Call",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "CallDirect",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "CallDynamic",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "CallInterface",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "CallStatic",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "CallVirtual",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "CompareFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
+			"Name": "CompareFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
+			"Name": "CompareInteger",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
+			"Name": "CompareIntegerBranch",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 0,
+			"FlowControl": "ConditionalBranch"
+		},
+		{
+			"Name": "ConversionFloatR4ToFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConversionFloatR4ToInteger",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConversionFloatR8ToFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConversionFloatR8ToInteger",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConversionIntegerToFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConversionIntegerToFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "DivFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "DivFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "DivSigned",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "DivUnsigned",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "Epilogue",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
+			"Name": "ExceptionEnd",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "ExceptionStart",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "FilterEnd",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
+			"Name": "FilterStart",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "FinallyEnd",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "FinallyStart",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "Flow",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "Gen",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "GotoLeaveTarget",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
+			"Name": "IntrinsicMethodCall",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "IsInstanceOfType",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "IsInstanceOfInterfaceType",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "Jmp",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"FlowControl": "UnconditionalBranch"
+		},
+		{
+			"Name": "Kill",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"IgnoreDuringCodeGeneration": "true",
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "KillAll",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "KillAllExcept",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"IgnoreDuringCodeGeneration": "true",
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "LoadCompound",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadInteger",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtended",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtended",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterCompound",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterInteger",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterSignExtended",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterZeroExtended",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LogicalAnd",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "LogicalNot",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "LogicalOr",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "LogicalXor",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MemorySet",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3
+		},
+		{
+			"Name": "MoveCompound",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "MoveFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "MoveFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "MoveInteger",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "MoveSignExtended",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "MoveZeroExtended",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "MulFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulSigned",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulUnsigned",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "NewArray",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "NewObject",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "NewString",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "Nop",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
+			"Name": "Phi",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "Prologue",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
+			"Name": "RemFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "RemFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "RemSigned",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "RemUnsigned",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "SetReturn",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return",
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "SetLeaveTarget",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "ShiftLeft",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "ShiftRight",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "StableObjectTracking",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"UnspecifiedSideEffect": "true"
+		},
+		{
+			"Name": "StoreCompound",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreInteger",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreParameterCompound",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreParameterFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreParameterFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreParameterInteger",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "SubFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "SubFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "SubSigned",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "SubUnsigned",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "Switch",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"FlowControl": "Switch"
+		},
+		{
+			"Name": "Throw",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1
+		},
+		{
+			"Name": "TryEnd",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"IgnoreInstructionBasicBlockTargets": "true"
+		},
+		{
+			"Name": "TryStart",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"IgnoreInstructionBasicBlockTargets": "true"
+		},
+		{
+			"Name": "UnstableObjectTracking",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"UnspecifiedSideEffect": "true"
+		},
+		{
+			"Name": "Rethrow",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "GetVirtualFunctionPtr",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "MemoryCopy",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "Box",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "Box32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "Box64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "BoxR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "BoxR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "Unbox",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "Unbox32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "Unbox64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "To64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "UInt64"
+		},
+		{
+			"Name": "Split64",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 1,
+			"ResultType": "UInt32",
+			"ResultType2": "UInt32"
 		}
 	]
 }

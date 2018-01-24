@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common.Exceptions;
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Expression
@@ -40,6 +41,7 @@ namespace Mosa.Compiler.Framework.Expression
 			new KeyValuePair<string, TokenType>(":", TokenType.Colon),
 			new KeyValuePair<string, TokenType>("_", TokenType.Underscore),
 			new KeyValuePair<string, TokenType>(".", TokenType.Period),
+			new KeyValuePair<string, TokenType>("#", TokenType.Hash),
 			new KeyValuePair<string, TokenType>("[", TokenType.OpenBracket),
 			new KeyValuePair<string, TokenType>("]", TokenType.CloseBracket),
 		};
@@ -48,6 +50,8 @@ namespace Mosa.Compiler.Framework.Expression
 		{
 			Expression = expression;
 			Parse();
+			Rewrite();
+			AssignNameLabels();
 		}
 
 		private void Parse()
@@ -78,17 +82,15 @@ namespace Mosa.Compiler.Framework.Expression
 					continue;
 				}
 
-				throw new CompilerException("tokenizer: error at " + Index.ToString() + ": syntax error");
+				throw new CompilerException("ExpressionEvaluation: tokenizer: error at " + Index.ToString() + ": syntax error");
 			}
-
-			Rewrite();
 		}
 
 		private Token Peek(int index, int offset = 0)
 		{
 			int i = index + offset;
 
-			if (Tokens.Count >= i)
+			if (i >= Tokens.Count)
 				return Token.Unknown;
 
 			return Tokens[i];
@@ -98,7 +100,10 @@ namespace Mosa.Compiler.Framework.Expression
 		{
 			for (int i = 0; i < tokens.Length; i++)
 			{
-				if (Peek(index, i).TokenType != tokens[index + i])
+				if (index + i > Tokens.Count)
+					return false;
+
+				if (Peek(index, i).TokenType != tokens[i])
 					return false;
 			}
 
@@ -129,8 +134,38 @@ namespace Mosa.Compiler.Framework.Expression
 			TokenType.Identifier , TokenType.OpenParens
 		};
 
+		private static readonly TokenType[] InstructionNameList = new TokenType[]
+		{
+			// ({Identifier}  ->  ({InstructionName}
+			TokenType.OpenParens , TokenType.Identifier
+		};
+
+		private static readonly TokenType[] HashList = new TokenType[]
+		{
+			// #{Identifier}  ->  #{PhysicalRegister}
+			TokenType.Hash , TokenType.Identifier
+		};
+
+		private static readonly TokenType[] InstructionFamilyNameList = new TokenType[]
+		{
+			// ({Identifier}.{Identifier}  ->  ({InstructionFamily}.{InstructionName}
+			TokenType.OpenParens , TokenType.Identifier , TokenType.Period, TokenType.Identifier, TokenType.OpenParens
+		};
+
+		/// <summary>
+		/// Rewrites the tokens by more specific tokens
+		/// </summary>
 		private void Rewrite()
 		{
+			for (int i = 0; i < Tokens.Count; i++)
+			{
+				if (Tokens[i].TokenType == TokenType.Identifier && string.Equals(Tokens[i].Value, "const", StringComparison.OrdinalIgnoreCase))
+				{
+					Tokens[i] = new Token(TokenType.ConstLiteral, Tokens[i].Value);
+				}
+			}
+
+			bool instructionMatch = true;
 			bool criteria = false;
 			bool transform = false;
 
@@ -140,10 +175,12 @@ namespace Mosa.Compiler.Framework.Expression
 
 				if (token.TokenType == TokenType.And)
 				{
+					instructionMatch = false;
 					criteria = true;
 				}
 				else if (token.TokenType == TokenType.Transform)
 				{
+					instructionMatch = true;
 					transform = true;
 					criteria = false;
 				}
@@ -165,10 +202,70 @@ namespace Mosa.Compiler.Framework.Expression
 					Tokens[i] = new Token(TokenType.ClassName, Tokens[i].Value);
 					Tokens[i + 2] = new Token(TokenType.MethodName, Tokens[i + 2].Value);
 				}
-				if (Match(i, MethodNameList))
+				if (criteria && Match(i, MethodNameList))
 				{
 					// {Identifier}(  ->  {MethodName}(
 					Tokens[i] = new Token(TokenType.MethodName, Tokens[i].Value);
+				}
+				if (!criteria && Match(i, InstructionFamilyNameList))
+				{
+					// ({Identifier}.{Identifier}(  ->  ({InstructionFamily}.{InstructionName}
+					Tokens[i + 1] = new Token(TokenType.InstructionFamily, Tokens[i + 1].Value);
+					Tokens[i + 3] = new Token(TokenType.InstructionName, Tokens[i + 3].Value);
+				}
+				if (!criteria && Match(i, InstructionNameList))
+				{
+					// ({Identifier}  ->  ({InstructionName}
+					Tokens[i + 1] = new Token(TokenType.InstructionName, Tokens[i + 1].Value);
+				}
+				if (!criteria && Match(i, HashList))
+				{
+					// #{Identifier}  ->  #{PhysicalRegister}
+					Tokens[i + 1] = new Token(TokenType.PhysicalRegister, Tokens[i + 1].Value);
+				}
+			}
+
+			for (int i = 0; i < Tokens.Count; i++)
+			{
+				if (Tokens[i].TokenType == TokenType.Identifier)
+				{
+					Tokens[i] = new Token(TokenType.OperandVariable, Tokens[i].Value);
+				}
+			}
+		}
+
+		private void AssignNameLabels()
+		{
+			var aliases = new Dictionary<string, int>();
+			var typeAlias = new Dictionary<string, int>();
+
+			for (int i = 0; i < Tokens.Count; i++)
+			{
+				var token = Tokens[i];
+
+				if (token.TokenType == TokenType.OperandVariable)
+				{
+					var name = token.Value;
+
+					if (!aliases.TryGetValue(name, out int value))
+					{
+						value = aliases.Count;
+						aliases.Add(name, value);
+					}
+
+					token.SetNameIndex(value);
+				}
+				else if (token.TokenType == TokenType.TypeVariable)
+				{
+					var name = token.Value;
+
+					if (!typeAlias.TryGetValue(name, out int value))
+					{
+						value = typeAlias.Count;
+						typeAlias.Add(name, value);
+					}
+
+					token.SetNameIndex(value);
 				}
 			}
 		}
@@ -204,6 +301,7 @@ namespace Mosa.Compiler.Framework.Expression
 		private void ExtractNumber()
 		{
 			bool decimalsymbol = false;
+			bool hex = false;
 			int start = Index;
 
 			while (Index < Expression.Length)
@@ -216,11 +314,18 @@ namespace Mosa.Compiler.Framework.Expression
 					continue;
 				}
 
+				if (c == 'x')
+				{
+					Index++;
+					hex = true;
+					continue;
+				}
+
 				if (c == '.')
 				{
 					if (decimalsymbol)
 					{
-						throw new CompilerException("tokenizer: error at " + Index.ToString() + ": too many decimal characters");
+						throw new CompilerException("ExpressionEvaluation: tokenizer: error at " + Index.ToString() + ": too many decimal characters");
 					}
 
 					decimalsymbol = true;
@@ -228,7 +333,7 @@ namespace Mosa.Compiler.Framework.Expression
 					continue;
 				}
 
-				if (c >= '0' && c <= '9')
+				if ((c >= '0' && c <= '9') || (c == 'd' || c == 'u'))
 				{
 					Index++;
 					continue;
@@ -239,10 +344,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 			var value = Expression.Substring(start, Index - start);
 
-			if (decimalsymbol)
-				Tokens.Add(new Token(TokenType.FloatConstant, value, Index));
-			else
-				Tokens.Add(new Token(TokenType.IntegerConstant, value, Index));
+			Tokens.Add(new Token(value, Index));
 		}
 
 		private void ExtractIdentifier()
@@ -264,14 +366,18 @@ namespace Mosa.Compiler.Framework.Expression
 
 			var value = Expression.Substring(start, Index - start);
 
-			// special case for true/false
-			if (value == "true")
+			// special case for true/false/null
+			var special = value.ToLower();
+
+			if (special == "true")
 			{
-				Tokens.Add(new Token(TokenType.BooleanTrueConstant));
+				Tokens.Add(new Token(1u, Index));
+				return;
 			}
-			else if (value == "false")
+			else if (special == "false" || special == "null")
 			{
-				Tokens.Add(new Token(TokenType.BooleanFalseConstant));
+				Tokens.Add(new Token((ulong)0, Index));
+				return;
 			}
 
 			Tokens.Add(new Token(TokenType.Identifier, value, Index));
@@ -280,6 +386,29 @@ namespace Mosa.Compiler.Framework.Expression
 		public override string ToString()
 		{
 			return Expression;
+		}
+
+		public int FindFirst(TokenType token)
+		{
+			for (int i = 0; i < Tokens.Count; i++)
+			{
+				if (Tokens[i].TokenType == token)
+					return i;
+			}
+
+			return -1;
+		}
+
+		public List<Token> GetPart(int start, int end)
+		{
+			var tokens = new List<Token>(end > start ? (end - start) + 1 : 0);
+
+			for (int i = start; i <= end; i++)
+			{
+				tokens.Add(Tokens[i]);
+			}
+
+			return tokens;
 		}
 	}
 }

@@ -1,196 +1,71 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Text;
 
 namespace Mosa.Compiler.Framework.Expression
 {
-	public enum NodeType
-	{
-		Instruction,
-		VariableConstant,
-		FixedIntegerConstant,
-		FixedDoubleConstant,
-		VirtualRegister,
-		PhyiscalRegister,
-		Variable, // can be virtual/physical register or constant
-		Any
-	}
-
 	public class ExpressionNode
 	{
-		public NodeType NodeType { get; }
-		public List<ExpressionNode> ParentNodes { get; } = new List<ExpressionNode>();
+		public Token Token { get; protected set; }
 
-		public BaseInstruction Instruction { get; }
-		public InstructionSize Size { get; } = InstructionSize.None;
-		public ConditionCode ConditionCode { get; set; } = ConditionCode.Undefined;
+		public TokenType TokenType { get { return Token.TokenType; } }
 
-		public string Alias { get; }
-		public string TypeAlias { get; }
+		public ExpressionNode Left { get; protected set; }
+		public ExpressionNode Right { get; protected set; }
 
-		public ulong ConstantUnsignedLongInteger { get; }
-		public double ConstantDouble { get; }
+		public List<ExpressionNode> Parameters { get; protected set; }
 
-		public PhysicalRegister PhysicalRegister { get; }
-
-		public ExpressionNode(BaseInstruction instruction)
+		public ExpressionNode(Token token)
 		{
-			NodeType = NodeType.Instruction;
-			Instruction = instruction;
+			Token = token;
 		}
 
-		public ExpressionNode(BaseInstruction instruction, InstructionSize size)
+		public ExpressionNode(Token token, ExpressionNode left)
 		{
-			NodeType = NodeType.Instruction;
-			Instruction = instruction;
-			Size = size;
+			Token = token;
+			Left = left;
 		}
 
-		public ExpressionNode(BaseInstruction instruction, ConditionCode condition)
+		public ExpressionNode(Token token, ExpressionNode left, ExpressionNode right)
 		{
-			NodeType = NodeType.Instruction;
-			Instruction = instruction;
-			ConditionCode = condition;
+			Token = token;
+			Left = left;
+			Right = right;
 		}
 
-		public ExpressionNode(BaseInstruction instruction, ConditionCode condition, InstructionSize size)
+		public ExpressionNode(Token token, List<ExpressionNode> parameters)
 		{
-			NodeType = NodeType.Instruction;
-			Instruction = instruction;
-			ConditionCode = condition;
-			Size = size;
-		}
-
-		public ExpressionNode(ulong constant)
-		{
-			NodeType = NodeType.FixedIntegerConstant;
-			ConstantUnsignedLongInteger = constant;
-		}
-
-		public ExpressionNode(double constant)
-		{
-			NodeType = NodeType.FixedDoubleConstant;
-			ConstantDouble = constant;
-		}
-
-		public ExpressionNode(PhysicalRegister physicalRegister)
-		{
-			NodeType = NodeType.PhyiscalRegister;
-			PhysicalRegister = physicalRegister;
-		}
-
-		public ExpressionNode(NodeType type, string alias = null)
-		{
-			Debug.Assert(type != NodeType.FixedIntegerConstant);
-			Debug.Assert(type != NodeType.PhyiscalRegister);
-			Debug.Assert(type != NodeType.Instruction);
-
-			NodeType = type;
-			Alias = alias;
-		}
-
-		public void AddNode(ExpressionNode node)
-		{
-			ParentNodes.Add(node);
-		}
-
-		protected bool ValidateInstruction(InstructionNode node)
-		{
-			if (node == null)
-				return false;
-
-			if (node.IsEmpty)
-				return false;
-
-			if (NodeType != NodeType.Instruction)
-				return false;
-
-			if (node.Instruction != Instruction)
-				return false;
-
-			if (Size != InstructionSize.Native && node.Size != Size)
-				return false;
-
-			if (ConditionCode != ConditionCode.Undefined && node.ConditionCode != ConditionCode)
-				return false;
-
-			return true;
-		}
-
-		protected bool ValidateOperand(InstructionNode node, int operandIndex)
-		{
-			if (operandIndex > node.OperandCount)
-				return false;
-
-			return ValidateOperand(node.GetOperand(operandIndex));
-		}
-
-		protected bool ValidateOperand(Operand operand)
-		{
-			if (operand == null)
-				return false;
-
-			if (NodeType == NodeType.Instruction)
-				return false;
-
-			if (NodeType == NodeType.PhyiscalRegister && operand.IsCPURegister && operand.Register == PhysicalRegister)
-				return true;
-
-			if (NodeType == NodeType.VirtualRegister && operand.IsVirtualRegister)
-				return true;
-
-			if (NodeType == NodeType.FixedIntegerConstant && operand.IsResolvedConstant && operand.ConstantUnsignedLongInteger == ConstantUnsignedLongInteger)
-				return true;
-
-			if (NodeType == NodeType.VariableConstant && operand.IsConstant)
-				return true;
-
-			//todo
-
-			return false;
-		}
-
-		public bool Validate(InstructionNode node)
-		{
-			if (NodeType == NodeType.Instruction)
-			{
-				if (!ValidateInstruction(node))
-					return false;
-
-				for (int i = 0; i < ParentNodes.Count; i++)
-				{
-					var parentNode = ParentNodes[i];
-
-					if (NodeType == NodeType.Any)
-						continue;
-
-					if (parentNode.NodeType == NodeType.Instruction)
-					{
-						var operand = node.GetOperand(i);
-
-						if (operand.Definitions.Count != 1)
-							return false;
-
-						var parent = operand.Definitions[0];
-
-						if (!parentNode.Validate(parent))
-							return false;
-					}
-					else
-					{
-						if (!parentNode.ValidateOperand(node, i))
-							return false;
-					}
-				}
-			}
-
-			return true;
+			Token = token;
+			Parameters = parameters;
 		}
 
 		public override string ToString()
 		{
-			return NodeType.ToString() + ": " + (Instruction != null ? Instruction.BaseInstructionName : string.Empty) + Alias;
+			var sb = new StringBuilder();
+
+			sb.Append(Token.ToString());
+
+			if (Left != null && Right != null)
+			{
+				sb.Append("(");
+
+				if (Left != null)
+				{
+					sb.Append(" ");
+					sb.Append(Left.ToString());
+				}
+
+				if (Right != null)
+				{
+					sb.Append(" ");
+					sb.Append(Right.ToString());
+				}
+
+				sb.Append(")");
+			}
+
+			return sb.ToString();
 		}
 	}
 }

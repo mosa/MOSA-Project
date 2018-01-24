@@ -1,8 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
-using System.Diagnostics;
-
 namespace Mosa.Compiler.Framework.Expression
 {
 	/// <summary>
@@ -20,6 +17,7 @@ namespace Mosa.Compiler.Framework.Expression
 		Transform,
 		Underscore,
 		Period,
+		Hash,
 
 		And,    // boolean logic:
 		Or,
@@ -34,10 +32,9 @@ namespace Mosa.Compiler.Framework.Expression
 		Modulus,
 		Negate,
 
-		IntegerConstant, // literals:
-		FloatConstant,
-		BooleanTrueConstant,
-		BooleanFalseConstant,
+		SignedIntegerConstant, // constants:
+		UnsignedIntegerConstant,
+		DoubleConstant,
 
 		CompareEqual,   // comparisons:
 		CompareNotEqual,
@@ -46,19 +43,23 @@ namespace Mosa.Compiler.Framework.Expression
 		CompareLessThan,
 		CompareGreaterThan,
 
+		If,
+
 		ShiftRight,
 		ShiftLeft,
 
 		Identifier,  // temporary
-
-		If,
-		Method,     // ???
-		Variable,   // ???
 
 		InstructionFamily,
 		InstructionName,
 		ClassName,
 		MethodName,
 		TypeVariable,
+		OperandVariable,
+		ConstLiteral,
+		PhysicalRegister,
+		VirtualRegister,
+
+		Method,     // ???
 	}
 }

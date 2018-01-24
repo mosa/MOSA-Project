@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework.IR
 			: base(0, 2)
 		{
 		}
-		
+
 		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 	}
 }

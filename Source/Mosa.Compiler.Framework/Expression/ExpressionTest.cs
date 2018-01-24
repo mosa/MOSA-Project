@@ -1,25 +1,24 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.MosaTypeSystem;
-using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Expression
 {
 	public static class ExpressionTest
 	{
-		public static Transform GetTestExpression1()
+		public static TransformRule GetTestExpression1()
 		{
-			// (Add64 <t> (Mul64 x y) (Mul64 x z))
 			// (Add(Mul x y)(Mul x z))
 
-			var nodeX = new ExpressionNode(NodeType.VirtualRegister, "x");
-			var nodeY = new ExpressionNode(NodeType.VirtualRegister, "y");
-			var nodeZ = new ExpressionNode(NodeType.VirtualRegister, "z");
+			var nodeX = new Node(NodeType.OperandVariable, "x", 0);
+			var nodeY = new Node(NodeType.OperandVariable, "y", 1);
+			var nodeZ = new Node(NodeType.OperandVariable, "z", 2);
 
-			var instruction1 = new ExpressionNode(IRInstruction.AddUnsigned);
-			var instruction2 = new ExpressionNode(IRInstruction.MulSigned);
-			var instruction3 = new ExpressionNode(IRInstruction.MulSigned);
+			//var nodeW = new Node(NodeType.OperandVariable, "w", 3);
+
+			var instruction1 = new Node(IRInstruction.AddUnsigned);
+			var instruction2 = new Node(IRInstruction.MulUnsigned);
+			var instruction3 = new Node(IRInstruction.MulUnsigned);
 
 			instruction1.AddNode(instruction2);
 			instruction1.AddNode(instruction3);
@@ -30,7 +29,7 @@ namespace Mosa.Compiler.Framework.Expression
 			instruction3.AddNode(nodeX);
 			instruction3.AddNode(nodeZ);
 
-			var tree = new Transform(instruction1, null);
+			var tree = new TransformRule(instruction1, null, null, 4, 0);
 
 			return tree;
 		}
@@ -50,23 +49,52 @@ namespace Mosa.Compiler.Framework.Expression
 			var r = Operand.CreateVirtualRegister(null, 4);
 			var t1 = Operand.CreateVirtualRegister(null, 5);
 			var t2 = Operand.CreateVirtualRegister(null, 6);
+			var w = Operand.CreateVirtualRegister(null, 7);
 
-			context.AppendInstruction(IRInstruction.MulSigned, t1, x, y);
-			context.AppendInstruction(IRInstruction.MulSigned, t2, x, z);
+			context.AppendInstruction(IRInstruction.MulUnsigned, t1, x, y);
+			context.AppendInstruction(IRInstruction.MulUnsigned, t2, x, z);
 			context.AppendInstruction(IRInstruction.AddUnsigned, r, t1, t2);
 
 			return basicBlocks;
 		}
 
-		public static Transform GetTestExpression2()
+		private static TransformRule GetTestExpression(string text)
 		{
-			const string text = "(AddUnsigned(MulUnsigned x y)(MulUnsigned x z))"; // "(Mul8  (Const8  [1]) x) -> x";
-
 			var builder = new ExpressionBuilder();
 
 			builder.AddInstructions(IRInstructionMap.Map);
 
+			//builder.AddPhysicalRegisters();
+
 			var expression = builder.CreateExpressionTree(text);
+
+			return expression;
+		}
+
+		public static TransformRule GetTestExpression2()
+		{
+			var expression = GetTestExpression("(AddUnsigned(MulUnsigned x y)(MulUnsigned x z)) -> (MulUnsigned x (AddUnsigned y z))");
+
+			return expression;
+		}
+
+		public static TransformRule GetTestExpression3()
+		{
+			var expression = GetTestExpression("(MulUnsigned 1 x) -> x");
+
+			return expression;
+		}
+
+		public static TransformRule GetTestExpression4()
+		{
+			var expression = GetTestExpression("(MulUnsigned (Const c1) (Const c2)) -> [c1 * c2]");
+
+			return expression;
+		}
+
+		public static TransformRule GetTestExpression5()
+		{
+			var expression = GetTestExpression("(MulUnsigned 1 2) -> [1 * 2]");
 
 			return expression;
 		}
