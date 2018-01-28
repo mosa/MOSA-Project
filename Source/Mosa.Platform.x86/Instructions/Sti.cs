@@ -9,13 +9,11 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Sti
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class Sti : X86Instruction
+	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
+	public sealed partial class Sti : X86Instruction
 	{
-		private static readonly byte[] opcode = new byte[] { 0xFB };
 
-		// for internal code generator use
-		public override byte[] __opcode { get { return opcode; } }
+		private static readonly byte[] opcode = new byte[] { 0xFB };
 
 		public Sti()
 			: base(0, 0)
@@ -26,6 +24,8 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			emitter.Write(opcode);
 		}
+
+		public override byte[] __opcode { get { return opcode; } }
 	}
 }
 

@@ -536,8 +536,17 @@ namespace Mosa.Workspace.Experiment.Debug
 					IOOperation = X86IOOperation.Contains(instruction), // instruction.IsIOOperation,
 					UnspecifiedSideEffect = X86UnspecifiedSideEffect.Contains(instruction), //instruction.HasIRUnspecifiedSideEffect,
 					X86ThreeTwoAddressConversion = instruction.ThreeTwoAddressConversion,
-					X86EmitBytes = GetX86Bytes(instruction) ?? instruction.__opcode,
-					X86EmitMethodType = ((GetX86Bytes(instruction) ?? instruction.__opcode) != null) ? "SimpleByteCode" : null,
+					X86EmitBytes = instruction.__opcode,
+					X86LegacyOpcode = (instruction.__legacyopcode != null) ? instruction.__legacyopcode.Code : null,
+					X86LegacyOpcodeRegField = (instruction.__legacyopcode != null) ? instruction.__legacyopcode.RegField : null,
+					EmitOpcodeMethod = instruction.__staticMethodName,
+
+					//X86EmitMethodType =
+					//	instruction.__staticMethodName != null ? "CallInternalMethod" :
+					//	GetX86Bytes(instruction) != null ? "SimpleByteCode" :
+					//	instruction.__legacyopcode != null ? "LegacyOpcode" :
+					//	instruction.__opcode != null ? "SimpleByteCode" :
+					//	null,
 				};
 
 				sb.Append(inst.ToString());

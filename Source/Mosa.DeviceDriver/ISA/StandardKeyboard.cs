@@ -163,8 +163,6 @@ namespace Mosa.DeviceDriver.ISA
 
 			AddToFIFO(v);
 
-			HAL.DebugWrite(" scancode: " + v.ToString() + "   ");
-
 			spinLock.Exit();
 		}
 

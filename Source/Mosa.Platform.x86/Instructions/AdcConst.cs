@@ -7,25 +7,25 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// BranchSigned
+	/// AdcConst
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed partial class BranchSigned : X86Instruction
+	public sealed partial class AdcConst : X86Instruction
 	{
 
-		private static readonly byte[] opcode = new byte[] { 0x0F, 0x08 };
+		private static readonly LegacyOpCode legacyOpcode = new LegacyOpCode(new byte[] { 0x81, 0x02 });
 
-		public BranchSigned()
-			: base(0, 0)
+		public AdcConst()
+			: base(1, 2)
 		{
 		}
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			emitter.Write(opcode);
+			EmitOpcode(node, emitter);
 		}
 
-		public override byte[] __opcode { get { return opcode; } }
+		public override LegacyOpCode __legacyopcode { get { return legacyOpcode; } }
 	}
 }
 

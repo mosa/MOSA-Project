@@ -96,6 +96,11 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Instructions\Adc.Partial.cs" />
+    <Compile Include="Instructions\AdcConst.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\AdcConst.Partial.cs" />
     <Compile Include="Instructions\BranchCarry.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
@@ -177,7 +182,9 @@
     <Compile Include="Instructions\Movups.cs" />
     <Compile Include="Instructions\MovStore.cs" />
     <Compile Include="Instructions\MovLoad.cs" />
-    <Compile Include="Instructions\IMul.cs" />
+    <Compile Include="Instructions\IMul.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Bts.cs" />
     <Compile Include="Instructions\PXor.cs" />
     <Compile Include="Instructions\Test.cs" />
@@ -217,6 +224,7 @@
     <Compile Include="Intrinsic\Remainder.cs" />
     <Compile Include="Intrinsic\SetFS.cs" />
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
+    <Compile Include="Stages\LoweringTransformationStage.cs" />
     <Compile Include="X86.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -295,7 +303,9 @@
     <Compile Include="Instructions\Movsx.cs" />
     <Compile Include="X86CodeEmitter.cs" />
     <Compile Include="Stages\TweakTransformationStage.cs" />
-    <Compile Include="Instructions\Adc.cs" />
+    <Compile Include="Instructions\Adc.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Add.cs" />
     <Compile Include="Instructions\Cdq.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
@@ -362,7 +372,9 @@
     <Compile Include="Instructions\Xor.cs" />
     <Compile Include="Instructions\Mov.cs" />
     <Compile Include="Instructions\Mul.cs" />
-    <Compile Include="Instructions\Neg.cs" />
+    <Compile Include="Instructions\Neg.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Sar.cs" />
     <Compile Include="Instructions\Sbb.cs" />
     <Compile Include="Instructions\Setcc.cs" />

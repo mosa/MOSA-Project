@@ -87,6 +87,10 @@ namespace Mosa.Platform.x86
 
 		#endregion Legacy Opcode Methods
 
+		// used by the code automation tool
+
 		public virtual byte[] __opcode { get; }
+		public virtual LegacyOpCode __legacyopcode { get; }
+		public virtual string __staticMethodName { get; }
 	}
 }

@@ -22,7 +22,7 @@ dynamic entries = jss.Deserialize(json, typeof(object)) as dynamic;
 
 foreach (var entry in entries.Instructions) {
 
-if (entry.X86EmitMethodType == null)
+if (entry.X86EmitBytes == null && entry.X86LegacyOpcode == null && entry.EmitOpcodeMethod == null)
 	continue;
 #>
 
@@ -40,30 +40,51 @@ namespace Mosa.Platform.x86.Instructions
 	/// <#= entry.Description #>
 <# } #>
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class <#= entry.Name #> : X86Instruction
+	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
+	public sealed partial class <#= entry.Name #> : X86Instruction
 	{
-<# if (entry.X86EmitMethodType != null && entry.X86EmitMethodType == "SimpleByteCode") {
-
+<#
 		bool first = true;
-		string data = string.Empty;
 
-		foreach (string b in entry.X86EmitBytes.Split(' '))
-		{
-			if (!first)
-				data = data + ", ";
+		string bytes = string.Empty;
+		if (entry.X86EmitBytes != null) {
+			foreach (string b in entry.X86EmitBytes.Split(' '))
+			{
+				if (!first)
+					bytes = bytes + ", ";
 
-			data = data + "0x" + b;
+				bytes = bytes + "0x" + b;
 
-			first = false;
+				first = false;
+			}
 		}
+		string legacy = string.Empty;
+		if (entry.X86LegacyOpcode != null) {
+			first = true;
+			foreach (string b in entry.X86LegacyOpcode.Split(' '))
+			{
+				if (!first)
+					legacy = legacy + ", ";
+
+				legacy = legacy + "0x" + b;
+
+				first = false;
+			}
+		}
+
+		string reg = string.Empty;
+		if (entry.X86LegacyOpcodeRegField != null)
+			reg = reg+ ", 0x" + entry.X86LegacyOpcodeRegField;
 #>
-		private static readonly byte[] opcode = new byte[] { <#= data #> };
+<# if (entry.X86EmitBytes != null) { #>
 
-		// for internal code generator use
-		public override byte[] __opcode { get { return opcode; } }
-
+		private static readonly byte[] opcode = new byte[] { <#= bytes #> };
 <# } #>
+<# if (entry.X86LegacyOpcode != null) { #>
+
+		private static readonly LegacyOpCode legacyOpcode = new LegacyOpCode(new byte[] { <#= legacy #><#= reg #> });
+<# } #>
+
 		public <#= entry.Name #>()
 			: base(<#= entry.ResultCount #>, <#= entry.OperandCount #>)
 		{
@@ -116,12 +137,34 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool ThreeTwoAddressConversion { get { return false; } }
 <# } #>
-<# if (entry.X86EmitMethodType != null && entry.X86EmitMethodType == "SimpleByteCode"){ #>
+<# if (entry.X86EmitBytes != null){ #>
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			emitter.Write(opcode);
 		}
+<# } #>
+<# if (entry.legacyOpcode != null && entry.EmitOpcodeMethod == null){ #>
+
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		{
+			System.Diagnostics.Debug.Assert(node.Result == node.Operand1);
+			emitter.Emit(legacyOpcode, node.Result, node.Operand2);
+		}
+<# } #>
+<# if (entry.EmitOpcodeMethod != null && entry.legacyOpcode == null){ #>
+
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			<#= entry.EmitOpcodeMethod #>(node, emitter);
+		}
+<# } #>
+
+<# if (entry.X86EmitBytes != null) { #>
+		public override byte[] __opcode { get { return opcode; } }
+<# } #>
+<# if (entry.X86LegacyOpcode != null) { #>
+		public override LegacyOpCode __legacyopcode { get { return legacyOpcode; } }
 <# } #>
 	}
 }

@@ -94,6 +94,22 @@ namespace Mosa.Compiler.Framework
 		public virtual bool IsIOOperation { get { return false; } }
 
 		/// <summary>
+		/// Gets a value indicating whether [variable operand count].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [variable operand count]; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool VariableOperands { get { return false; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="BaseInstruction"/> is commutative.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if commutative; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool Commutative { get { return false; } }
+
+		/// <summary>
 		/// Gets the name of the base instruction.
 		/// </summary>
 		/// <value>

@@ -12,6 +12,7 @@ namespace Mosa.Platform.x86
 	public static class X86
 	{
 		public static readonly Adc Adc = new Adc();
+		public static readonly AdcConst AdcConst = new AdcConst();
 		public static readonly Add Add = new Add();
 		public static readonly Addsd Addsd = new Addsd();
 		public static readonly Addss Addss = new Addss();
