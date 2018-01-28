@@ -9,13 +9,11 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Pause
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class Pause : X86Instruction
+	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
+	public sealed partial class Pause : X86Instruction
 	{
-		private static readonly byte[] opcode = new byte[] { 0xF3, 0x90 };
 
-		// for internal code generator use
-		public override byte[] __opcode { get { return opcode; } }
+		private static readonly byte[] opcode = new byte[] { 0xF3, 0x90 };
 
 		public Pause()
 			: base(0, 0)
@@ -26,6 +24,8 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			emitter.Write(opcode);
 		}
+
+		public override byte[] __opcode { get { return opcode; } }
 	}
 }
 

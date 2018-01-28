@@ -6,6 +6,16 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true",
+			"EmitOpcodeMethod": "EmitOpcode",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "AdcConst",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"X86LegacyOpcode": "81 02",
+			"EmitOpcodeMethod": "EmitOpcode",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -54,7 +64,6 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "CC",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -85,7 +94,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 2,
 			"OperandCount": 1,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "99",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -102,7 +110,6 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "FA",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -232,7 +239,6 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "F4",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -248,6 +254,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
+			"X86LegacyOpcode": "0F AF",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -289,7 +296,6 @@
 			"OperandCount": 0,
 			"FlowControl": "Return",
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "CF",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -313,7 +319,6 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "C9",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -339,7 +344,6 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "F0",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -521,6 +525,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
+			"X86EmitBytes": "F7 03",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -528,7 +533,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "90",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -561,7 +565,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "F3 90",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -583,7 +586,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "61",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -599,7 +601,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "60",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -623,7 +624,6 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "F3",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -633,7 +633,6 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"FlowControl": "Return",
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "C3",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -706,7 +705,6 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "FB",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -715,7 +713,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 1,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "AB",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -782,7 +779,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -791,7 +787,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -800,7 +795,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -809,7 +803,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -818,7 +811,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -827,7 +819,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -836,7 +827,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -845,7 +835,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -854,7 +843,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -863,7 +851,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -872,7 +859,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -881,7 +867,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -890,7 +875,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -899,7 +883,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -908,7 +891,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -917,7 +899,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -926,7 +907,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -935,7 +915,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -944,7 +923,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		},
@@ -953,7 +931,6 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"X86EmitMethodType": "SimpleByteCode",
 			"X86EmitBytes": "0F 08",
 			"X86ThreeTwoAddressConversion": "true"
 		}

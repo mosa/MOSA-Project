@@ -29,8 +29,13 @@ namespace Mosa.Workspace.Experiment.Debug
 
 		public string Description = null;
 
+		public string EmitOpcodeMethod; // __staticMethodName
+
 		public string X86EmitMethodType;
-		public new byte[] X86EmitBytes;
+		public byte[] X86EmitBytes;
+
+		public byte[] X86LegacyOpcode;
+		public byte? X86LegacyOpcodeRegField;
 
 		//Effect:
 		//	X - Changed
@@ -140,6 +145,26 @@ namespace Mosa.Workspace.Experiment.Debug
 
 				sb.AppendFormat("\", ");
 			}
+
+			if (X86LegacyOpcode != null)
+			{
+				sb.AppendFormat("\"X86LegacyOpcode\": \"");
+
+				foreach (var b in X86LegacyOpcode)
+				{
+					sb.AppendFormat("{0:X2} ", b);
+				}
+
+				sb.Length--;
+
+				sb.AppendFormat("\", ");
+			}
+
+			if (X86LegacyOpcodeRegField.HasValue)
+				sb.AppendFormat("\"X86LegacyOpcodeRegField\": \"{0}\", ", X86LegacyOpcodeRegField.Value);
+
+			if (EmitOpcodeMethod != null)
+				sb.AppendFormat("\"EmitOpcodeMethod\": \"{0}\", ", EmitOpcodeMethod);
 
 			if (X86ThreeTwoAddressConversion)
 				sb.AppendFormat("\"X86ThreeTwoAddressConversion\": \"{0}\", ", X86ThreeTwoAddressConversion ? "true" : "false");
