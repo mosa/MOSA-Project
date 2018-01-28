@@ -539,7 +539,7 @@ namespace Mosa.Workspace.Experiment.Debug
 					X86EmitBytes = instruction.__opcode,
 					X86LegacyOpcode = (instruction.__legacyopcode != null) ? instruction.__legacyopcode.Code : null,
 					X86LegacyOpcodeRegField = (instruction.__legacyopcode != null) ? instruction.__legacyopcode.RegField : null,
-					EmitOpcodeMethod = instruction.__staticMethodName,
+					StaticEmitMethod = instruction.__staticEmitMethod,
 
 					//X86EmitMethodType =
 					//	instruction.__staticMethodName != null ? "CallInternalMethod" :

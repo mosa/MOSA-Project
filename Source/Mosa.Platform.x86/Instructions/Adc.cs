@@ -12,7 +12,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed partial class Adc : X86Instruction
 	{
-
 		public Adc()
 			: base(1, 2)
 		{
@@ -25,6 +24,7 @@ namespace Mosa.Platform.x86.Instructions
 			EmitOpcode(node, emitter);
 		}
 
+		public override string __staticEmitMethod { get { return "EmitOpcode"; } }
 	}
 }
 
