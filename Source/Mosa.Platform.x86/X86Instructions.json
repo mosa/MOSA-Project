@@ -14,7 +14,8 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"X86LegacyOpcode": "81 02",
+			"X86LegacyOpcode": "81",
+			"X86LegacyOpcodeRegField": "02",
 			"StaticEmitMethod": "EmitOpcode",
 			"X86ThreeTwoAddressConversion": "true"
 		},
