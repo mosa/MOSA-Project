@@ -24,6 +24,8 @@ namespace Mosa.Platform.x86.Instructions
 			EmitOpcode(node, emitter);
 		}
 
+		// The following is used by the code automation generator.
+
 		public override string __staticEmitMethod { get { return "EmitOpcode"; } }
 	}
 }

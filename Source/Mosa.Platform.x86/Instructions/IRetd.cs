@@ -26,6 +26,8 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Write(opcode);
 		}
 
+		// The following is used by the code automation generator.
+
 		public override byte[] __opcode { get { return opcode; } }
 	}
 }
