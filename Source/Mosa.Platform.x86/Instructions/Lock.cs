@@ -12,7 +12,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed partial class Lock : X86Instruction
 	{
-
 		private static readonly byte[] opcode = new byte[] { 0xF0 };
 
 		public Lock()

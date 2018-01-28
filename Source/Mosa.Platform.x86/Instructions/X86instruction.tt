@@ -22,7 +22,7 @@ dynamic entries = jss.Deserialize(json, typeof(object)) as dynamic;
 
 foreach (var entry in entries.Instructions) {
 
-if (entry.X86EmitBytes == null && entry.X86LegacyOpcode == null && entry.EmitOpcodeMethod == null)
+if (entry.X86EmitBytes == null && entry.X86LegacyOpcode == null && entry.StaticEmitMethod == null)
 	continue;
 #>
 
@@ -77,14 +77,13 @@ namespace Mosa.Platform.x86.Instructions
 			reg = reg+ ", 0x" + entry.X86LegacyOpcodeRegField;
 #>
 <# if (entry.X86EmitBytes != null) { #>
-
 		private static readonly byte[] opcode = new byte[] { <#= bytes #> };
+
 <# } #>
 <# if (entry.X86LegacyOpcode != null) { #>
-
 		private static readonly LegacyOpCode legacyOpcode = new LegacyOpCode(new byte[] { <#= legacy #><#= reg #> });
-<# } #>
 
+<# } #>
 		public <#= entry.Name #>()
 			: base(<#= entry.ResultCount #>, <#= entry.OperandCount #>)
 		{
@@ -144,7 +143,7 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Write(opcode);
 		}
 <# } #>
-<# if (entry.legacyOpcode != null && entry.EmitOpcodeMethod == null){ #>
+<# if (entry.legacyOpcode != null && entry.StaticEmitMethod == null){ #>
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
@@ -152,11 +151,11 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Emit(legacyOpcode, node.Result, node.Operand2);
 		}
 <# } #>
-<# if (entry.EmitOpcodeMethod != null && entry.legacyOpcode == null){ #>
+<# if (entry.StaticEmitMethod != null && entry.legacyOpcode == null){ #>
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			<#= entry.EmitOpcodeMethod #>(node, emitter);
+			<#= entry.StaticEmitMethod #>(node, emitter);
 		}
 <# } #>
 
@@ -165,6 +164,9 @@ namespace Mosa.Platform.x86.Instructions
 <# } #>
 <# if (entry.X86LegacyOpcode != null) { #>
 		public override LegacyOpCode __legacyopcode { get { return legacyOpcode; } }
+<# } #>
+<# if (entry.StaticEmitMethod != null) { #>
+		public override string __staticEmitMethod { get { return "<#= entry.StaticEmitMethod #>"; } }
 <# } #>
 	}
 }

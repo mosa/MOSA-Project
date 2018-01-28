@@ -6,7 +6,7 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true",
-			"EmitOpcodeMethod": "EmitOpcode",
+			"StaticEmitMethod": "EmitOpcode",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -15,7 +15,7 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"X86LegacyOpcode": "81 02",
-			"EmitOpcodeMethod": "EmitOpcode",
+			"StaticEmitMethod": "EmitOpcode",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{

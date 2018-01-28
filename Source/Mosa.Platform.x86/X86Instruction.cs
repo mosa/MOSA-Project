@@ -91,6 +91,6 @@ namespace Mosa.Platform.x86
 
 		public virtual byte[] __opcode { get; }
 		public virtual LegacyOpCode __legacyopcode { get; }
-		public virtual string __staticMethodName { get; }
+		public virtual string __staticEmitMethod { get; }
 	}
 }

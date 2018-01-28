@@ -12,7 +12,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed partial class AdcConst : X86Instruction
 	{
-
 		private static readonly LegacyOpCode legacyOpcode = new LegacyOpCode(new byte[] { 0x81, 0x02 });
 
 		public AdcConst()
@@ -26,6 +25,7 @@ namespace Mosa.Platform.x86.Instructions
 		}
 
 		public override LegacyOpCode __legacyopcode { get { return legacyOpcode; } }
+		public override string __staticEmitMethod { get { return "EmitOpcode"; } }
 	}
 }
 

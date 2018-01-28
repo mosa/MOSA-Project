@@ -12,7 +12,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed partial class BranchGreaterOrEqual : X86Instruction
 	{
-
 		private static readonly byte[] opcode = new byte[] { 0x0F, 0x08 };
 
 		public BranchGreaterOrEqual()
