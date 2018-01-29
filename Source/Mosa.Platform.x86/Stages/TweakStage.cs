@@ -8,7 +8,7 @@ namespace Mosa.Platform.x86.Stages
 	/// Tweak Transformation Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
-	public sealed class TweakTransformationStage : BaseTransformationStage
+	public sealed class TweakStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
 		{

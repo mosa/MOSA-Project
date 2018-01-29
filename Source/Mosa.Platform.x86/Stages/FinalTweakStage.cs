@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Stages
 	/// Final Tweak Transformation Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
-	public sealed class FinalTweakTransformationStage : BaseTransformationStage
+	public sealed class FinalTweakStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
 		{
@@ -123,11 +123,11 @@ namespace Mosa.Platform.x86.Stages
 
 				if (size == InstructionSize.Size16)
 				{
-					context.AppendInstruction(X86.And, result, result, CreateConstant(0x0000ffff));
+					context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0x0000ffff));
 				}
 				else if (size == InstructionSize.Size8)
 				{
-					context.AppendInstruction(X86.And, result, result, CreateConstant(0x000000ff));
+					context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0x000000ff));
 				}
 			}
 		}
@@ -223,13 +223,13 @@ namespace Mosa.Platform.x86.Stages
 
 				if (size == InstructionSize.Size16)
 				{
-					context.AppendInstruction(X86.And, dest, dest, CreateConstant(0x0000ffff));
+					context.AppendInstruction(X86.AndConst32, dest, dest, CreateConstant(0x0000ffff));
 					context.AppendInstruction(X86.Xor, dest, dest, CreateConstant(0x00010000));
 					context.AppendInstruction(X86.Sub, dest, dest, CreateConstant(0x00010000));
 				}
 				else if (size == InstructionSize.Size8)
 				{
-					context.AppendInstruction(X86.And, dest, dest, CreateConstant(0x000000ff));
+					context.AppendInstruction(X86.AndConst32, dest, dest, CreateConstant(0x000000ff));
 					context.AppendInstruction(X86.Xor, dest, dest, CreateConstant(0x00000100));
 					context.AppendInstruction(X86.Sub, dest, dest, CreateConstant(0x00000100));
 				}
@@ -265,11 +265,11 @@ namespace Mosa.Platform.x86.Stages
 
 				if (size == InstructionSize.Size16)
 				{
-					context.AppendInstruction(X86.And, result, result, CreateConstant(0xffff));
+					context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0xffff));
 				}
 				else if (size == InstructionSize.Size8)
 				{
-					context.AppendInstruction(X86.And, result, result, CreateConstant(0xff));
+					context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0xff));
 				}
 			}
 		}

@@ -94,7 +94,7 @@ namespace Mosa.UnitTest.Engine
 				DebugPipeName = "MOSA",
 				ExitOnLaunch = true,
 				GenerateNASMFile = false,
-				GenerateASMFile = false,
+				GenerateASMFile = true,
 				GenerateMapFile = false,
 				GenerateDebugFile = false,
 

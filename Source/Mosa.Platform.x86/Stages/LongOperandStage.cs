@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Stages
 	/// This stage translates all 64-bit operations to appropriate 32-bit operations on
 	/// architectures without appropriate 64-bit integral operations.
 	/// </remarks>
-	public sealed class LongOperandTransformationStage : BaseTransformationStage
+	public sealed class LongOperandStage : BaseTransformationStage
 	{
 		private Operand ConstantFour;
 
@@ -466,14 +466,14 @@ namespace Mosa.Platform.x86.Stages
 			if (!context.Result.Is64BitInteger)
 			{
 				context.SetInstruction(X86.Mov, op0L, op1L);
-				context.AppendInstruction(X86.And, op0L, op0L, op2L);
+				context.AppendInstruction(X86.And32, op0L, op0L, op2L);
 			}
 			else
 			{
 				context.SetInstruction(X86.Mov, op0H, op1H);
 				context.AppendInstruction(X86.Mov, op0L, op1L);
-				context.AppendInstruction(X86.And, op0H, op0H, op2H);
-				context.AppendInstruction(X86.And, op0L, op0L, op2L);
+				context.AppendInstruction(X86.And32, op0H, op0H, op2H);
+				context.AppendInstruction(X86.And32, op0L, op0L, op2L);
 			}
 		}
 
@@ -514,7 +514,7 @@ namespace Mosa.Platform.x86.Stages
 
 			newBlocks[3].AppendInstruction(X86.Mov, eax, edx);
 			newBlocks[3].AppendInstruction(X86.Sar, edx, edx, CreateConstant(0x1F));
-			newBlocks[3].AppendInstruction(X86.And, ecx, ecx, CreateConstant(0x1F));
+			newBlocks[3].AppendInstruction(X86.AndConst32, ecx, ecx, CreateConstant(0x1F));
 			newBlocks[3].AppendInstruction(X86.Sar, eax, eax, ecx);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].Block);
 
@@ -782,7 +782,7 @@ namespace Mosa.Platform.x86.Stages
 
 			newBlocks[3].AppendInstruction(X86.Mov, edx, eax);
 			newBlocks[3].AppendInstruction(X86.Mov, eax, ConstantZero);
-			newBlocks[3].AppendInstruction(X86.And, ecx, ecx, CreateConstant(0x1F));
+			newBlocks[3].AppendInstruction(X86.AndConst32, ecx, ecx, CreateConstant(0x1F));
 			newBlocks[3].AppendInstruction(X86.Shl, edx, edx, ecx);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].Block);
 
@@ -832,7 +832,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[2].AppendInstruction(X86.Mov, op0L, op1H);
 			if (!op0H.IsConstantZero)
 				newBlocks[2].AppendInstruction(X86.Mov, op0H, ConstantZero);
-			newBlocks[2].AppendInstruction(X86.And, ecx, ecx, CreateConstant(0x1F));
+			newBlocks[2].AppendInstruction(X86.AndConst32, ecx, ecx, CreateConstant(0x1F));
 			newBlocks[2].AppendInstruction(X86.Sar, op0L, op0L, ecx);
 			newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.Block);
 

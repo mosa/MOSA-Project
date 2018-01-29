@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Instructions
 	/// IMul
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed partial class IMul : X86Instruction
+	public sealed class IMul : X86Instruction
 	{
-		private static readonly LegacyOpCode legacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xAF } );
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xAF } );
 
 		public IMul()
 			: base(1, 2)
@@ -22,12 +22,12 @@ namespace Mosa.Platform.x86.Instructions
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.Result == node.Operand1);
-			emitter.Emit(legacyOpcode, node.Result, node.Operand2);
+			emitter.Emit(LegacyOpcode, node.Result, node.Operand2);
 		}
 
-		// The following is used by the code automation generator.
+		// The following is used by the automated code generator.
 
-		public override LegacyOpCode __legacyopcode { get { return legacyOpcode; } }
+		public override LegacyOpCode __legacyopcode { get { return LegacyOpcode; } }
 	}
 }
 

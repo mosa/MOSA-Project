@@ -36,7 +36,7 @@ namespace Mosa.Platform.x86.CompilerStages
 			*/
 
 			ctx.AppendInstruction(X86.MovCRLoad, eax, cr0);
-			ctx.AppendInstruction(X86.And, eax, eax, CreateConstant(0xFFFB));
+			ctx.AppendInstruction(X86.AndConst32, eax, eax, CreateConstant(0xFFFB));
 			ctx.AppendInstruction(X86.Or, eax, eax, CreateConstant(0x2));
 			ctx.AppendInstruction(X86.MovCRStore, null, cr0, eax);
 

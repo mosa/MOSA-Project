@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// SubSS
+	/// And32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class SubSS : X86Instruction
+	public sealed class And32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF3, 0x0F, 0x5C } );
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x23 } );
 
-		public SubSS()
+		public And32()
 			: base(1, 2)
 		{
 		}
@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			StaticEmitters.EmitSubSS(node, emitter);
+			StaticEmitters.EmitAnd32(node, emitter);
 		}
 
 		// The following is used by the automated code generator.

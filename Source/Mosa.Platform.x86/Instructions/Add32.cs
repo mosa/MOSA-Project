@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Instructions
 	/// Add32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed partial class Add32 : X86Instruction
+	public sealed class Add32 : X86Instruction
 	{
-		private static readonly LegacyOpCode legacyOpcode = new LegacyOpCode(new byte[] { 0x03 } );
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x03 } );
 
 		public Add32()
 			: base(1, 2)
@@ -23,14 +23,14 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			EmitOpcode(node, emitter);
+			StaticEmitters.EmitAdd32(node, emitter);
 		}
 
-		// The following is used by the code automation generator.
+		// The following is used by the automated code generator.
 
-		public override LegacyOpCode __legacyopcode { get { return legacyOpcode; } }
+		public override LegacyOpCode __legacyopcode { get { return LegacyOpcode; } }
 
-		public override string __staticEmitMethod { get { return "EmitOpcode"; } }
+		public override string __staticEmitMethod { get { return "StaticEmitters.Emit%"; } }
 	}
 }
 
