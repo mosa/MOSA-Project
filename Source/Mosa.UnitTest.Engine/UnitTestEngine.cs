@@ -77,7 +77,7 @@ namespace Mosa.UnitTest.Engine
 				EmulatorMemoryInMB = 128,
 				DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"),
 				FileSystem = FileSystem.FAT16,
-				UseMultipleThreadCompiler = true,
+				UseMultipleThreadCompiler = false,
 				InlinedIRMaximum = 8,
 				BootLoader = BootLoader.Syslinux_3_72,
 				VBEVideo = false,
