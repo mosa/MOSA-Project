@@ -38,10 +38,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			MovapsMemoryToReg(node, emitter);
+			EmitMovapsLoad(node, emitter);
 		}
 
-		private static void MovapsMemoryToReg(InstructionNode node, BaseCodeEmitter emitter)
+		private static void EmitMovapsLoad(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 

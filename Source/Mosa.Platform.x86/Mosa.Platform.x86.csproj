@@ -203,12 +203,22 @@
     <Compile Include="Instructions\MovCRLoad.cs" />
     <Compile Include="Instructions\MovupsStore.cs" />
     <Compile Include="Instructions\MovupsLoad.cs" />
-    <Compile Include="Instructions\Movd.cs" />
+    <Compile Include="Instructions\Movd.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\MovapsLoad.cs" />
-    <Compile Include="Instructions\MovssLoad.cs" />
-    <Compile Include="Instructions\MovssStore.cs" />
-    <Compile Include="Instructions\MovsdStore.cs" />
-    <Compile Include="Instructions\MovsdLoad.cs" />
+    <Compile Include="Instructions\MovssLoad.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovssStore.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovsdStore.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovsdLoad.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\MovzxLoad.cs" />
     <Compile Include="Instructions\MovsxLoad.cs" />
     <Compile Include="Instructions\Pextrd.cs" />
