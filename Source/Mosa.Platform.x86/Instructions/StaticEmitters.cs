@@ -395,5 +395,101 @@ namespace Mosa.Platform.x86.Instructions
 			else
 				emitter.Emit(opcode);
 		}
+
+		internal static void EmitPextrd(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsConstant);
+
+			// reg from xmmreg, imm8
+			// 0110 0110:0000 1111:0011 1010: 0001 0110:11 xmmreg reg: imm8
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0110)                                       // 4:opcode
+				.AppendNibble(Bits.b0110)                                       // 4:opcode
+
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+
+				.AppendNibble(Bits.b0011)                                       // 4:opcode
+				.AppendNibble(Bits.b1010)                                       // 4:opcode
+
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.AppendNibble(Bits.b0110)                                       // 4:opcode
+
+				.Append2Bits(Bits.b11)                                          // 2:opcode
+				.AppendRM(node.Operand1)                                        // 3:r/m (source)
+				.AppendRegister(node.Result.Register)                           // 3:register (destination)
+
+				.AppendByteValue((byte)node.Operand2.ConstantUnsignedInteger);  // 8:memory
+
+			emitter.Emit(opcode);
+		}
+
+		internal static void EmitLgdt(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsConstant);
+
+			// LGDT – Load Global Descriptor Table Register 0000 1111 : 0000 0001 : modA 010 r / m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
+				.Append3Bits(Bits.b010)                                         // 3:reg
+				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
+				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
+				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			else
+				emitter.Emit(opcode);
+		}
+
+		internal static void EmitInvlpg(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsConstant);
+
+			// INVLPG – Invalidate TLB Entry 0000 1111 : 0000 0001 : mod 111 r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
+				.Append3Bits(Bits.b010)                                         // 3:reg
+				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
+				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
+				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			else
+				emitter.Emit(opcode);
+		}
+
+		internal static void EmitLidt(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsConstant);
+
+			// LIDT – Load Interrupt Descriptor Table Register 0000 1111 : 0000 0001 : modA 011 r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
+				.Append3Bits(Bits.b011)                                         // 3:reg
+				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
+				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
+				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			else
+				emitter.Emit(opcode);
+		}
 	}
 }
