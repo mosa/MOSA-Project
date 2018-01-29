@@ -76,6 +76,42 @@ namespace Mosa.Platform.x86.Instructions
 			(emitter as X86CodeEmitter).Emit(AndConst32.LegacyOpcode, node.Result, node.Operand2);
 		}
 
+		internal static void EmitBtr32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result == node.Operand1);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+
+			(emitter as X86CodeEmitter).Emit(Btr32.LegacyOpcode, node.Result, node.Operand2);
+		}
+
+		internal static void EmitBtrConst32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result == node.Operand1);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand2.IsConstant);
+
+			(emitter as X86CodeEmitter).Emit(BtrConst32.LegacyOpcode, node.Result, node.Operand2);
+		}
+
+		internal static void EmitBts32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result == node.Operand1);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+
+			(emitter as X86CodeEmitter).Emit(Bts32.LegacyOpcode, node.Result, node.Operand2);
+		}
+
+		internal static void EmitBtsConst32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result == node.Operand1);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand2.IsConstant);
+
+			(emitter as X86CodeEmitter).Emit(BtsConst32.LegacyOpcode, node.Result, node.Operand2);
+		}
+
 		internal static void EmitSubSS(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result == node.Operand1);

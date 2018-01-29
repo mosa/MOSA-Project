@@ -100,17 +100,41 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Btr",
+			"Name": "Btr32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
+			"X86LegacyOpcode": "0F BA",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Bts",
+			"Name": "BtrConst32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
+			"X86LegacyOpcode": "0F B3",
+			"X86LegacyOpcodeRegField": "06",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "Bts32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"X86LegacyOpcode": "0F BA",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BtsConst32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"X86LegacyOpcode": "0F AB",
+			"X86LegacyOpcodeRegField": "05",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
