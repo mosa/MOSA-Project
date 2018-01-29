@@ -7,17 +7,17 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Adc
+	/// AdcConst32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed partial class Adc : X86Instruction
+	public sealed partial class AdcConst32 : X86Instruction
 	{
-		public Adc()
+		private static readonly LegacyOpCode legacyOpcode = new LegacyOpCode(new byte[] { 0x81 } , 0x02);
+
+		public AdcConst32()
 			: base(1, 2)
 		{
 		}
-
-		public override bool Commutative { get { return true; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
@@ -25,6 +25,8 @@ namespace Mosa.Platform.x86.Instructions
 		}
 
 		// The following is used by the code automation generator.
+
+		public override LegacyOpCode __legacyopcode { get { return legacyOpcode; } }
 
 		public override string __staticEmitMethod { get { return "EmitOpcode"; } }
 	}

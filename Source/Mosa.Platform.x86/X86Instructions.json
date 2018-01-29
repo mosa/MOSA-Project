@@ -1,16 +1,17 @@
 {
 	"Instructions": [
 		{
-			"Name": "Adc",
+			"Name": "Adc32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true",
+			"X86LegacyOpcode": "13",
 			"StaticEmitMethod": "EmitOpcode",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "AdcConst",
+			"Name": "AdcConst32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,

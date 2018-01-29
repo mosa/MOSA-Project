@@ -7,17 +7,19 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// AdcConst
+	/// Adc32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed partial class AdcConst : X86Instruction
+	public sealed partial class Adc32 : X86Instruction
 	{
-		private static readonly LegacyOpCode legacyOpcode = new LegacyOpCode(new byte[] { 0x81 } , 0x02);
+		private static readonly LegacyOpCode legacyOpcode = new LegacyOpCode(new byte[] { 0x13 } );
 
-		public AdcConst()
+		public Adc32()
 			: base(1, 2)
 		{
 		}
+
+		public override bool Commutative { get { return true; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{

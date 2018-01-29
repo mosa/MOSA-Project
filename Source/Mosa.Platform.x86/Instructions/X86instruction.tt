@@ -71,7 +71,7 @@ namespace Mosa.Platform.x86.Instructions
 				first = false;
 			}
 		}
-
+		
 		string reg = string.Empty;
 		if (entry.X86LegacyOpcodeRegField != null)
 			reg = reg+ ", 0x" + entry.X86LegacyOpcodeRegField;
