@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Instructions
 	public sealed class CmpXchgLoad32 : X86Instruction
 	{
 		public CmpXchgLoad32()
-			: base(0, 3)
+			: base(1, 4)
 		{
 		}
 
@@ -21,6 +21,9 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount || VariableOperands);
+			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount || VariableOperands);
+
 			StaticEmitters.EmitCmpXchgLoad32(node, emitter);
 		}
 

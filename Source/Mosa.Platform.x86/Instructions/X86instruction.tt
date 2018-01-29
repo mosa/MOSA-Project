@@ -144,6 +144,9 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount || VariableOperands);
+			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount || VariableOperands);
+
 			emitter.Write(opcode);
 		}
 <# } #>
@@ -151,6 +154,9 @@ namespace Mosa.Platform.x86.Instructions
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount || VariableOperands);
+			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount || VariableOperands);
+
 			System.Diagnostics.Debug.Assert(node.Result == node.Operand1);
 			emitter.Emit(LegacyOpcode, node.Result, node.Operand2);
 		}
@@ -159,6 +165,9 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount || VariableOperands);
+			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount || VariableOperands);
+
 			<#= entry.StaticEmitMethod.Replace("%", entry.Name) #>(node, emitter);
 		}
 <# } #>

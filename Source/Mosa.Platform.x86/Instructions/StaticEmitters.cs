@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
@@ -161,48 +160,54 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2 == null);
 
-			(emitter as X86CodeEmitter).Emit(Cvtsd2ss.LegacyOpcode, node.Result, node.Operand1, node.Operand2);
+			(emitter as X86CodeEmitter).Emit(Cvtsd2ss.LegacyOpcode, node.Result, node.Operand1, null);
 		}
 
 		internal static void EmitCvtsi2sd(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2 == null);
 
-			(emitter as X86CodeEmitter).Emit(Cvtsi2sd.LegacyOpcode, node.Result, node.Operand1, node.Operand2);
+			(emitter as X86CodeEmitter).Emit(Cvtsi2sd.LegacyOpcode, node.Result, node.Operand1, null);
 		}
 
 		internal static void EmitCvtsi2ss(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2 == null);
 
-			(emitter as X86CodeEmitter).Emit(Cvtsi2ss.LegacyOpcode, node.Result, node.Operand1, node.Operand2);
+			(emitter as X86CodeEmitter).Emit(Cvtsi2ss.LegacyOpcode, node.Result, node.Operand1, null);
 		}
 
 		internal static void EmitCvtss2sd(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2 == null);
 
-			(emitter as X86CodeEmitter).Emit(Cvtss2sd.LegacyOpcode, node.Result, node.Operand1, node.Operand2);
+			(emitter as X86CodeEmitter).Emit(Cvtss2sd.LegacyOpcode, node.Result, node.Operand1, null);
 		}
 
 		internal static void EmitCvttsd2si(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2 == null);
 
-			(emitter as X86CodeEmitter).Emit(Cvttsd2si.LegacyOpcode, node.Result, node.Operand1, node.Operand2);
+			(emitter as X86CodeEmitter).Emit(Cvttsd2si.LegacyOpcode, node.Result, node.Operand1, null);
 		}
 
 		internal static void EmitCvttss2si(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2 == null);
 
-			(emitter as X86CodeEmitter).Emit(Cvttss2si.LegacyOpcode, node.Result, node.Operand1, node.Operand2);
+			(emitter as X86CodeEmitter).Emit(Cvttss2si.LegacyOpcode, node.Result, node.Operand1, null);
 		}
 	}
 }
