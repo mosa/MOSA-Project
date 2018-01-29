@@ -17,6 +17,8 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
+		public override bool IsMemoryRead { get { return true; } }
+
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			StaticEmitters.EmitCmpXchgLoad32(node, emitter);

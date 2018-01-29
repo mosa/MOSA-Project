@@ -321,8 +321,12 @@
     <Compile Include="CompilerStages\MethodTableBuilderStage.cs" />
     <Compile Include="SegmentRegister.cs" />
     <Compile Include="Instructions\Branch.cs" />
-    <Compile Include="Instructions\Cvttsd2si.cs" />
-    <Compile Include="Instructions\Cvttss2si.cs" />
+    <Compile Include="Instructions\Cvttsd2si.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Cvttss2si.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Div.cs" />
     <Compile Include="Instructions\Jmp.cs" />
     <Compile Include="CompilerStages\Multiboot0695Stage.cs" />
@@ -345,10 +349,18 @@
     <Compile Include="Instructions\Break.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Cvtsd2ss.cs" />
-    <Compile Include="Instructions\Cvtsi2sd.cs" />
-    <Compile Include="Instructions\Cvtsi2ss.cs" />
-    <Compile Include="Instructions\Cvtss2sd.cs" />
+    <Compile Include="Instructions\Cvtsd2ss.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Cvtsi2sd.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Cvtsi2ss.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Cvtss2sd.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Dec.cs" />
     <Compile Include="Instructions\IDiv.cs" />
     <Compile Include="Instructions\Inc.cs" />
