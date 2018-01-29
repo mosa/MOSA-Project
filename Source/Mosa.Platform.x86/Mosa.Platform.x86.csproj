@@ -221,7 +221,9 @@
     </Compile>
     <Compile Include="Instructions\MovzxLoad.cs" />
     <Compile Include="Instructions\MovsxLoad.cs" />
-    <Compile Include="Instructions\Pextrd.cs" />
+    <Compile Include="Instructions\Pextrd.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Movups.cs" />
     <Compile Include="Instructions\MovStore.cs" />
     <Compile Include="Instructions\MovLoad.cs" />
@@ -399,12 +401,18 @@
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\In.cs" />
-    <Compile Include="Instructions\Invlpg.cs" />
+    <Compile Include="Instructions\Invlpg.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\IRetd.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Lgdt.cs" />
-    <Compile Include="Instructions\Lidt.cs" />
+    <Compile Include="Instructions\Lgdt.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Lidt.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Lock.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>

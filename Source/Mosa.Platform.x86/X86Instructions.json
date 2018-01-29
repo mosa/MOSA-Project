@@ -354,6 +354,7 @@
 			"ResultCount": 0,
 			"OperandCount": 1,
 			"UnspecifiedSideEffect": "true",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -395,7 +396,8 @@
 			"ResultCount": 0,
 			"OperandCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "true",
+			"StaticEmitMethod": "StaticEmitters.Emit%"
 		},
 		{
 			"Name": "Lidt",
@@ -403,7 +405,8 @@
 			"ResultCount": 0,
 			"OperandCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "true",
+			"StaticEmitMethod": "StaticEmitters.Emit%"
 		},
 		{
 			"Name": "Lock",
@@ -644,7 +647,8 @@
 			"Name": "Pextrd",
 			"FamilyName": "X86",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"StaticEmitMethod": "StaticEmitters.Emit%"
 		},
 		{
 			"Name": "Pop",

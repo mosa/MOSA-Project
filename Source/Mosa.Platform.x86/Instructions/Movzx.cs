@@ -46,7 +46,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b1111)                           // 4:opcode
 				.AppendNibble(Bits.b1011)                           // 4:opcode
 				.Append3Bits(Bits.b011)                             // 4:opcode
-				.AppendWidthBit(node.Size != InstructionSize.Size8)      // 1:width
+				.AppendWidthBit(node.Size != InstructionSize.Size8) // 1:width
 				.AppendMod(Bits.b11)                                // 2:mod
 				.AppendRegister(node.Result)                        // 3:register (destination)
 				.AppendRM(node.Operand1);                           // 3:r/m (source)
