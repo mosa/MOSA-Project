@@ -12,8 +12,6 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly LegacyOpCode MR_8 = new LegacyOpCode(new byte[] { 0xF6 }, 2);
-		private static readonly LegacyOpCode MR_16 = new LegacyOpCode(new byte[] { 0x66, 0xF7 }, 2);
 		private static readonly LegacyOpCode MR = new LegacyOpCode(new byte[] { 0xF7 }, 2);
 
 		#endregion Data Members
@@ -43,8 +41,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (destination.IsCPURegister)
 			{
-				if (destination.IsByte) return MR_8;
-				if (destination.IsChar) return MR_16;
 				return MR;
 			}
 

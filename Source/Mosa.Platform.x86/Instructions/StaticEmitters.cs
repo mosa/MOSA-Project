@@ -279,5 +279,121 @@ namespace Mosa.Platform.x86.Instructions
 
 			(emitter as X86CodeEmitter).Emit(TestConst32.LegacyOpcode, node.Result, node.Operand2);
 		}
+
+		internal static void EmitMovd(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsCPURegister);
+
+			// reg from mmxreg
+			// 0000 1111:0111 1110: 11 mmxreg reg
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0110)                                       // 4:opcode
+				.AppendNibble(Bits.b0110)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.Append3Bits(Bits.b011)                                         // 3:opcode
+				.AppendBit(node.Result.Register.Width != 128)                   // 1:direction
+				.AppendNibble(Bits.b1110)                                       // 4:opcode
+				.Append2Bits(Bits.b11)                                          // 2:opcode
+				.AppendRM(node.Operand1)                                        // 3:r/m (source)
+				.AppendRegister(node.Result.Register);                          // 3:register (destination)
+
+			emitter.Emit(opcode);
+		}
+
+		internal static void EmitMovsdLoad(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+
+			// mem to xmmreg1 1111 0010:0000 1111:0001 0000: mod xmmreg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0010)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
+			else
+				emitter.Emit(opcode);
+		}
+
+		internal static void EmitMovsdStore(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand3.IsCPURegister);
+			Debug.Assert(node.ResultCount == 0);
+			Debug.Assert(!node.Operand3.IsConstant);
+
+			// xmmreg1 to mem 1111 0010:0000 1111:0001 0001: mod xmmreg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0010)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+
+				// This opcode has a directionality bit, and it is set to 0
+				// This means we must swap around operand1 and operand3, and set offsetDestination to false
+				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
+			else
+				emitter.Emit(opcode);
+		}
+
+		internal static void EmitMovssLoad(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+
+			// mem to xmmreg1 1111 0011:0000 1111:0001 0000: mod xmmreg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0011)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
+			else
+				emitter.Emit(opcode);
+		}
+
+		internal static void EmitMovssStore(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand3.IsCPURegister);
+			Debug.Assert(node.ResultCount == 0);
+			Debug.Assert(!node.Operand3.IsConstant);
+
+			// xmmreg1 to mem 1111 0011:0000 1111:0001 0001: mod xmmreg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0011)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+
+				// This opcode has a directionality bit, and it is set to 0
+				// This means we must swap around operand1 and operand3, and set offsetDestination to false
+				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
+			else
+				emitter.Emit(opcode);
+		}
 	}
 }

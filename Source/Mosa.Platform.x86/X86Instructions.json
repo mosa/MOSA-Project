@@ -456,6 +456,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -477,13 +478,15 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"MemoryRead": "true"
 		},
 		{
 			"Name": "MovsdStore",
 			"FamilyName": "X86",
-			"ResultCount": 1,
-			"OperandCount": 2,
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"MemoryWrite": "true"
 		},
 		{
@@ -498,13 +501,15 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"MemoryRead": "true"
 		},
 		{
 			"Name": "MovssStore",
 			"FamilyName": "X86",
-			"ResultCount": 1,
-			"OperandCount": 2,
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"MemoryWrite": "true"
 		},
 		{

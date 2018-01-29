@@ -131,13 +131,13 @@ namespace Mosa.Compiler.Framework
 				if (index > 0)
 					name = name.Substring(0, index);
 
-				index = name.IndexOf("Store");
+				//index = name.IndexOf("Store");
 
-				if (index < 0)
-					index = name.IndexOf("Load");
+				//if (index < 0)
+				//	index = name.IndexOf("Load");
 
-				if (index > 0)
-					name = name.Substring(0, index);
+				//if (index > 0)
+				//	name = name.Substring(0, index);
 
 				return name;
 			}
@@ -168,14 +168,14 @@ namespace Mosa.Compiler.Framework
 
 				name = name.Substring(index + 1);
 
-				if (name.StartsWith("Store"))
-					return string.Empty;
-				else if (name.StartsWith("Load"))
-					return string.Empty;
-				else if (name.EndsWith("Store"))
-					ext = "Store";
-				else if (name.EndsWith("Load"))
-					ext = "Load";
+				//if (name.StartsWith("Store"))
+				//	return string.Empty;
+				//else if (name.StartsWith("Load"))
+				//	return string.Empty;
+				//else if (name.EndsWith("Store"))
+				//	ext = "Store";
+				//else if (name.EndsWith("Load"))
+				//	ext = "Load";
 
 				return ext;
 			}

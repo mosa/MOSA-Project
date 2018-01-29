@@ -32,10 +32,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			MovsxRegToReg(node, emitter);
+			EmitMovsx(node, emitter);
 		}
 
-		private static void MovsxRegToReg(InstructionNode node, BaseCodeEmitter emitter)
+		private static void EmitMovsx(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 			Debug.Assert(node.Operand1.IsCPURegister);
@@ -46,7 +46,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b1111)                           // 4:opcode
 				.AppendNibble(Bits.b1011)                           // 4:opcode
 				.Append3Bits(Bits.b111)                             // 4:opcode
-				.AppendWidthBit(node.Size != InstructionSize.Size8)      // 1:width
+				.AppendWidthBit(node.Size != InstructionSize.Size8) // 1:width
 				.AppendMod(Bits.b11)                                // 2:mod
 				.AppendRegister(node.Result)                        // 3:register (destination)
 				.AppendRM(node.Operand1);                           // 3:r/m (source)
