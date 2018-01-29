@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(X86.Mov, eax, oldval);
 			context.AppendInstruction(X86.Mov, v1, newval);
 			context.AppendInstruction(X86.Lock);
-			context.AppendInstruction(X86.CmpXchgLoad, InstructionSize.Size32, eax, eax, pointer, zero, v1);
+			context.AppendInstruction(X86.CmpXchgLoad32, eax, eax, pointer, zero, v1);
 			context.AppendInstruction(X86.Setcc, ConditionCode.Equal, result);
 		}
 

@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86
 			{ "Cli", X86.Cli },
 			{ "Cmovcc", X86.Cmovcc },
 			{ "Cmp", X86.Cmp },
-			{ "CmpXchgLoad", X86.CmpXchgLoad },
+			{ "CmpXchgLoad32", X86.CmpXchgLoad32 },
 			{ "Comisd", X86.Comisd },
 			{ "Comiss", X86.Comiss },
 			{ "CpuId", X86.CpuId },

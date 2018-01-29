@@ -7,28 +7,24 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Sti
+	/// CmpXchgLoad32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Sti : X86Instruction
+	public sealed class CmpXchgLoad32 : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0xFB };
-
-		public Sti()
-			: base(0, 0)
+		public CmpXchgLoad32()
+			: base(0, 3)
 		{
 		}
 
-		public override bool HasIRUnspecifiedSideEffect { get { return true; } }
-
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			emitter.Write(opcode);
+			StaticEmitters.EmitCmpXchgLoad32(node, emitter);
 		}
 
 		// The following is used by the automated code generator.
 
-		public override byte[] __opcode { get { return opcode; } }
+		public override string __staticEmitMethod { get { return "StaticEmitters.Emit%"; } }
 	}
 }
 

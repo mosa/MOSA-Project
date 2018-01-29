@@ -80,9 +80,7 @@
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="OpCodes\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Architecture.cs" />
     <Compile Include="ArchitectureFeatureFlags.cs" />

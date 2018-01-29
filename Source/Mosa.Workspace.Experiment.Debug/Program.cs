@@ -329,67 +329,67 @@ namespace Mosa.Workspace.Experiment.Debug
 		//	X86.Xor,
 		//};
 
-		//private static readonly List<X86Instruction> X86Commutative = new List<X86Instruction>()
-		//{
-		//	X86.Add,
-		//	X86.Addsd,
-		//	X86.Addss,
-		//	X86.Adc32,
-		//	X86.And,
-		//	X86.Or,
-		//	X86.Xor,
-		//	X86.Mul,
-		//	X86.Mulsd,
-		//	X86.Mulss,
-		//	X86.Xchg,
-		//};
+		private static readonly List<X86Instruction> X86Commutative = new List<X86Instruction>()
+		{
+			//X86.Add,
+			//X86.Addsd,
+			//X86.Addss,
+			//X86.Adc32,
+			//X86.And,
+			X86.Or,
+			X86.Xor,
+			X86.Mul,
+			X86.Mulsd,
+			X86.Mulss,
+			X86.Xchg,
+		};
 
-		//private static readonly List<X86Instruction> X86WriteOperation = new List<X86Instruction>()
-		//{
-		//	X86.MovCRStore,
-		//	X86.MovsdStore,
-		//	X86.MovssStore,
-		//	X86.MovStore,
-		//	X86.MovupsStore,
-		//};
+		private static readonly List<X86Instruction> X86WriteOperation = new List<X86Instruction>()
+		{
+			X86.MovCRStore,
+			X86.MovsdStore,
+			X86.MovssStore,
+			X86.MovStore,
+			X86.MovupsStore,
+		};
 
-		//private static readonly List<X86Instruction> X86ReadOperation = new List<X86Instruction>()
-		//{
-		//	X86.MovapsLoad,
-		//	X86.MovCRLoad,
-		//	X86.MovLoad,
-		//	X86.MovsdLoad,
-		//	X86.MovssLoad,
-		//	X86.MovsxLoad,
-		//	X86.MovupsLoad,
-		//	X86.MovzxLoad,
-		//};
+		private static readonly List<X86Instruction> X86ReadOperation = new List<X86Instruction>()
+		{
+			X86.MovapsLoad,
+			X86.MovCRLoad,
+			X86.MovLoad,
+			X86.MovsdLoad,
+			X86.MovssLoad,
+			X86.MovsxLoad,
+			X86.MovupsLoad,
+			X86.MovzxLoad,
+		};
 
-		//private static readonly List<X86Instruction> X86IOOperation = new List<X86Instruction>()
-		//{
-		//	X86.In,
-		//	X86.Out,
-		//};
+		private static readonly List<X86Instruction> X86IOOperation = new List<X86Instruction>()
+		{
+			X86.In,
+			X86.Out,
+		};
 
-		//private static readonly List<X86Instruction> X86UnspecifiedSideEffect = new List<X86Instruction>()
-		//{
-		//	//X86.Call,
-		//	X86.FarJmp,
-		//	X86.Invlpg,
-		//	X86.Int,
-		//	X86.Hlt,
-		//	X86.Out,
-		//	X86.In,
-		//	X86.IRetd,
-		//	X86.Lgdt,
-		//	X86.Leave,
-		//	X86.Break,
-		//	X86.Lidt,
-		//	X86.Lock,
-		//	X86.Rep,
-		//	X86.Cli,
-		//	X86.Sti,
-		//};
+		private static readonly List<X86Instruction> X86UnspecifiedSideEffect = new List<X86Instruction>()
+		{
+			//X86.Call,
+			X86.FarJmp,
+			X86.Invlpg,
+			X86.Int,
+			X86.Hlt,
+			X86.Out,
+			X86.In,
+			X86.IRetd,
+			X86.Lgdt,
+			X86.Leave,
+			X86.Break,
+			X86.Lidt,
+			X86.Lock,
+			X86.Rep,
+			X86.Cli,
+			X86.Sti,
+		};
 
 		private static readonly Dictionary<BaseInstruction, string> ResultType = new Dictionary<BaseInstruction, string>()
 		{
@@ -530,11 +530,19 @@ namespace Mosa.Workspace.Experiment.Debug
 					IgnoreDuringCodeGeneration = instruction.IgnoreDuringCodeGeneration,
 					IgnoreInstructionBasicBlockTargets = instruction.IgnoreInstructionBasicBlockTargets,
 					VariableOperands = false,
-					Commutative = instruction.IsCommutative, // X86Commutative.Contains(instruction),
-					MemoryWrite = instruction.IsMemoryWrite, //X86WriteOperation.Contains(instruction),
-					MemoryRead = instruction.IsMemoryRead,  // X86ReadOperation.Contains(instruction),
-					IOOperation = instruction.IsIOOperation, // X86IOOperation.Contains(instruction),
-					UnspecifiedSideEffect = instruction.HasIRUnspecifiedSideEffect, // X86UnspecifiedSideEffect.Contains(instruction),
+
+					//Commutative = instruction.IsCommutative,
+					//MemoryWrite = instruction.IsMemoryWrite,
+					//MemoryRead = instruction.IsMemoryRead,
+					//IOOperation = instruction.IsIOOperation,
+					//UnspecifiedSideEffect = instruction.HasIRUnspecifiedSideEffect,
+
+					Commutative = instruction.IsCommutative || X86Commutative.Contains(instruction),
+					MemoryWrite = instruction.IsMemoryWrite || X86WriteOperation.Contains(instruction),
+					MemoryRead = instruction.IsMemoryRead || X86ReadOperation.Contains(instruction),
+					IOOperation = instruction.IsIOOperation || X86IOOperation.Contains(instruction),
+					UnspecifiedSideEffect = instruction.HasIRUnspecifiedSideEffect || X86UnspecifiedSideEffect.Contains(instruction),
+
 					X86ThreeTwoAddressConversion = instruction.ThreeTwoAddressConversion,
 					X86EmitBytes = instruction.__opcode,
 					X86LegacyOpcode = (instruction.__legacyopcode != null) ? instruction.__legacyopcode.Code : null,
