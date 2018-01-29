@@ -225,7 +225,7 @@ namespace Mosa.Workspace.Experiment.Debug
 
 		private static readonly List<X86Instruction> X86Instructions = new List<X86Instruction>()
 		{
-			X86.Adc,
+			X86.Adc32,
 			X86.Add,
 			X86.Addsd,
 			X86.Addss,
@@ -334,7 +334,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			X86.Add,
 			X86.Addsd,
 			X86.Addss,
-			X86.Adc,
+			X86.Adc32,
 			X86.And,
 			X86.Or,
 			X86.Xor,

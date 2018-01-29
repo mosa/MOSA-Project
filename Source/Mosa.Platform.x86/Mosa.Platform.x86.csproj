@@ -96,14 +96,14 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Instructions\Adc.cs">
+    <Compile Include="Instructions\Adc32.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Adc.Partial.cs" />
-    <Compile Include="Instructions\AdcConst.cs">
+    <Compile Include="Instructions\Adc32.Partial.cs" />
+    <Compile Include="Instructions\AdcConst32.Partial.cs" />
+    <Compile Include="Instructions\AdcConst32.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\AdcConst.Partial.cs" />
     <Compile Include="Instructions\BranchCarry.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>

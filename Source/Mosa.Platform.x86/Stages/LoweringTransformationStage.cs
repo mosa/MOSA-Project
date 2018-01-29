@@ -13,16 +13,16 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			//AddVisitation(X86.Adc, Adc);
+			AddVisitation(X86.Adc32, Adc32);
 		}
 
 		#region Visitation Methods
 
-		public void Adc(Context context)
+		public void Adc32(Context context)
 		{
 			if (context.Operand2.IsConstant)
 			{
-				context.SetInstruction(X86.AdcConst, context.Result, context.Operand1, context.Operand2);
+				context.SetInstruction(X86.AdcConst32, context.Result, context.Operand1, context.Operand2);
 			}
 		}
 
