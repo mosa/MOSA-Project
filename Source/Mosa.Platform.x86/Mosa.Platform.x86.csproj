@@ -99,16 +99,25 @@
     <Compile Include="Instructions\Adc32.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\AddSD.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\AddSS.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\And32.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\AndConst32.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\StaticEmitters.cs" />
     <Compile Include="Instructions\Add32.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Add32.Partial.cs" />
-    <Compile Include="Instructions\Adc32.Partial.cs" />
     <Compile Include="Instructions\AddConst32.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\AddConst32.Partial .cs" />
-    <Compile Include="Instructions\AdcConst32.Partial.cs" />
     <Compile Include="Instructions\AdcConst32.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
@@ -200,7 +209,6 @@
     <Compile Include="Instructions\PXor.cs" />
     <Compile Include="Instructions\Test.cs" />
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
-    <Compile Include="Instructions\AddSD.cs" />
     <Compile Include="Instructions\X86instruction.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -252,12 +260,14 @@
     <Compile Include="CompilerStages\StartUpStage.cs" />
     <Compile Include="CompilerStages\SSEInitStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
-    <Compile Include="Stages\FinalTweakTransformationStage.cs" />
+    <Compile Include="Stages\FinalTweakStage.cs" />
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
     <Compile Include="Instructions\Mulsd.cs" />
     <Compile Include="Instructions\DivSD.cs" />
     <Compile Include="Instructions\RoundSD.cs" />
-    <Compile Include="Instructions\SubSD.cs" />
+    <Compile Include="Instructions\SubSD.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
     <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
@@ -313,7 +323,7 @@
     <Compile Include="Instructions\Movzx.cs" />
     <Compile Include="Instructions\Movsx.cs" />
     <Compile Include="X86CodeEmitter.cs" />
-    <Compile Include="Stages\TweakTransformationStage.cs" />
+    <Compile Include="Stages\TweakStage.cs" />
     <Compile Include="Instructions\Cdq.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
@@ -332,7 +342,6 @@
     <Compile Include="Instructions\Inc.cs" />
     <Compile Include="Instructions\Int.cs" />
     <Compile Include="Intrinsic\BochsDebug.cs" />
-    <Compile Include="Instructions\Cld.cs" />
     <Compile Include="Instructions\Cli.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
@@ -373,7 +382,6 @@
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Xchg.cs" />
-    <Compile Include="Instructions\And.cs" />
     <Compile Include="Instructions\Not.cs" />
     <Compile Include="Instructions\Or.cs" />
     <Compile Include="Instructions\Xor.cs" />
@@ -389,10 +397,11 @@
     <Compile Include="Instructions\Shl.cs" />
     <Compile Include="Instructions\Shrd.cs" />
     <Compile Include="Instructions\Shr.cs" />
-    <Compile Include="Instructions\AddSS.cs" />
     <Compile Include="Instructions\DivSS.cs" />
     <Compile Include="Instructions\Mulss.cs" />
-    <Compile Include="Instructions\SubSS.cs" />
+    <Compile Include="Instructions\SubSS.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Sub.cs" />
     <Compile Include="Instructions\Ucomisd.cs" />
     <Compile Include="Instructions\Ucomiss.cs" />
@@ -407,7 +416,7 @@
     <Compile Include="Stages\IRTransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Stages\LongOperandTransformationStage.cs">
+    <Compile Include="Stages\LongOperandStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SSE2Register.cs">

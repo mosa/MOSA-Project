@@ -67,9 +67,9 @@ namespace Mosa.Compiler.Framework.IR
 
 		public override bool VariableOperands { get { return true; } }
 <# } #>
-<# if (entry.Commutative  != null && entry.Commutative == "true") { #>
+<# if (entry.Commutative != null && entry.Commutative == "true") { #>
 
-		public override bool Commutative { get { return true; } }
+		public override bool IsCommutative { get { return true; } }
 <# } #>
 <# if (entry.MemoryWrite != null && entry.MemoryWrite == "true") { #>
 

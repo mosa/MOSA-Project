@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Instructions
 	/// AdcConst32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed partial class AdcConst32 : X86Instruction
+	public sealed class AdcConst32 : X86Instruction
 	{
-		private static readonly LegacyOpCode legacyOpcode = new LegacyOpCode(new byte[] { 0x81 } , 0x02);
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x81 } , 0x02);
 
 		public AdcConst32()
 			: base(1, 2)
@@ -21,14 +21,14 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			EmitOpcode(node, emitter);
+			StaticEmitters.EmitAdcConst32(node, emitter);
 		}
 
-		// The following is used by the code automation generator.
+		// The following is used by the automated code generator.
 
-		public override LegacyOpCode __legacyopcode { get { return legacyOpcode; } }
+		public override LegacyOpCode __legacyopcode { get { return LegacyOpcode; } }
 
-		public override string __staticEmitMethod { get { return "EmitOpcode"; } }
+		public override string __staticEmitMethod { get { return "StaticEmitters.Emit%"; } }
 	}
 }
 

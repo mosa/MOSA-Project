@@ -269,9 +269,9 @@ namespace Mosa.Platform.x86
 				new IMethodCompilerStage[]
 				{
 					new PlatformIntrinsicStage(),
-					new LongOperandTransformationStage(),
+					new LongOperandStage(),
 					new IRTransformationStage(),
-					new TweakTransformationStage(),
+					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
 					new SimpleDeadCodeRemovalStage(),
 					new AddressModeConversionStage(),
@@ -284,7 +284,7 @@ namespace Mosa.Platform.x86
 			);
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(
-				new FinalTweakTransformationStage()
+				new FinalTweakStage()
 			);
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(

@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Instructions
 	/// Lock
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed partial class Lock : X86Instruction
+	public sealed class Lock : X86Instruction
 	{
-		private static readonly byte[] opcode = new byte[] { 0xF0 };
+		public static readonly byte[] opcode = new byte[] { 0xF0 };
 
 		public Lock()
 			: base(0, 0)
@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Write(opcode);
 		}
 
-		// The following is used by the code automation generator.
+		// The following is used by the automated code generator.
 
 		public override byte[] __opcode { get { return opcode; } }
 	}

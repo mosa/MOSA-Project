@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Instructions
 	/// Popad
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed partial class Popad : X86Instruction
+	public sealed class Popad : X86Instruction
 	{
-		private static readonly byte[] opcode = new byte[] { 0x61 };
+		public static readonly byte[] opcode = new byte[] { 0x61 };
 
 		public Popad()
 			: base(0, 0)
@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Write(opcode);
 		}
 
-		// The following is used by the code automation generator.
+		// The following is used by the automated code generator.
 
 		public override byte[] __opcode { get { return opcode; } }
 	}

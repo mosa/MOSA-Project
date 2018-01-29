@@ -10,9 +10,9 @@ namespace Mosa.Platform.x86.Instructions
 	/// Rep
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed partial class Rep : X86Instruction
+	public sealed class Rep : X86Instruction
 	{
-		private static readonly byte[] opcode = new byte[] { 0xF3 };
+		public static readonly byte[] opcode = new byte[] { 0xF3 };
 
 		public Rep()
 			: base(0, 0)
@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Write(opcode);
 		}
 
-		// The following is used by the code automation generator.
+		// The following is used by the automated code generator.
 
 		public override byte[] __opcode { get { return opcode; } }
 	}

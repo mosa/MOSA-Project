@@ -12,9 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly LegacyOpCode R_M = new LegacyOpCode(new byte[] { 0x87 });
 		private static readonly LegacyOpCode R_R = new LegacyOpCode(new byte[] { 0x87 });
-		private static readonly LegacyOpCode M_R = new LegacyOpCode(new byte[] { 0x87 });
 		private static readonly LegacyOpCode R_R_16 = new LegacyOpCode(new byte[] { 0x66, 0x87 });
 
 		#endregion Data Members
