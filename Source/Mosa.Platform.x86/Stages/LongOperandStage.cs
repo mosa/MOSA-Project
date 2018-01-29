@@ -961,7 +961,7 @@ namespace Mosa.Platform.x86.Stages
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X86.Mov, v2, op1L);
-			context.AppendInstruction(X86.Sub, v2, v2, op2L);
+			context.AppendInstruction(X86.Sub32, v2, v2, op2L);
 			context.AppendInstruction(X86.Mov, op0L, v2);
 			context.AppendInstruction(X86.Mov, v1, op1H);
 			context.AppendInstruction(X86.Sbb, v1, v1, op2H);

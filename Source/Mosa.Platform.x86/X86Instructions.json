@@ -784,10 +784,22 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Sub",
+			"Name": "Sub32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
+			"X86LegacyOpcode": "0x2B",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "SubConst32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"X86LegacyOpcode": "0x81",
+			"X86LegacyOpcodeRegField": "05",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -811,10 +823,22 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Test",
+			"Name": "Test32",
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 2,
+			"X86LegacyOpcode": "0x85",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "TestConst32",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"X86LegacyOpcode": "0xF7",
+			"X86LegacyOpcodeRegField": "00",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
