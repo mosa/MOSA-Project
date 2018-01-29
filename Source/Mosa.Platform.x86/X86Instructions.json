@@ -177,10 +177,12 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "CmpXchgLoad",
+			"Name": "CmpXchgLoad32",
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 3,
+			"MemoryRead": "true",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{

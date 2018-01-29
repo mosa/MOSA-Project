@@ -50,10 +50,12 @@ namespace Mosa.Platform.x86.Instructions
 		if (entry.X86EmitBytes != null) {
 			foreach (string b in entry.X86EmitBytes.Split(' '))
 			{
+				string b2 = b.Replace("0x",string.Empty).Replace(",",string.Empty);
+
 				if (!first)
 					bytes = bytes + ", ";
 
-				bytes = bytes + "0x" + b;
+				bytes = bytes + "0x" + b2;
 
 				first = false;
 			}
@@ -128,7 +130,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool IsIOOperation { get { return true; } }
 <# } #>
-<# if (entry.IRUnspecifiedSideEffect != null && entry.IRUnspecifiedSideEffect == "true") { #>
+<# if (entry.UnspecifiedSideEffect != null && entry.UnspecifiedSideEffect == "true") { #>
 
 		public override bool HasIRUnspecifiedSideEffect { get { return true; } }
 <# } #>

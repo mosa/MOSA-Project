@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using System;
 using System.Diagnostics;
@@ -124,6 +125,36 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(node.Result == node.Operand1);
 
 			(emitter as X86CodeEmitter).Emit(SubSD.LegacyOpcode, node.Result, node.Operand2);
+		}
+
+		internal static void EmitCmpXchgLoad32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+			Debug.Assert(node.GetOperand(3).IsCPURegister);
+			Debug.Assert(node.Result.Register == GeneralPurposeRegister.EAX);
+			Debug.Assert(node.Operand1.Register == GeneralPurposeRegister.EAX);
+			Debug.Assert(node.ResultCount == 1);
+
+			// Compare EAX with r/m32. If equal, ZF is set and r32 is loaded into r/m32.
+			// Else, clear ZF and load r/m32 into EAX.
+
+			// memory, register 0000 1111 : 1011 000w : mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b1011)                                       // 4:opcode
+				.Append3Bits(Bits.b000)                                         // 3:opcode
+				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
+				.ModRegRMSIBDisplacement(true, node.GetOperand(3), node.Operand2, node.Operand3) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalIntegerValue(node.Operand2.IsLinkerResolved, 0);               // 32:memory
+
+			if (node.Operand2.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand2, (opcode.Size - 32) / 8);
+			else
+				emitter.Emit(opcode);
 		}
 	}
 }

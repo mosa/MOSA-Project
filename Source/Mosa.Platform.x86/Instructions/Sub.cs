@@ -14,8 +14,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		private static readonly LegacyOpCode O_C = new LegacyOpCode(new byte[] { 0x81 }, 5);
 		private static readonly LegacyOpCode R_O = new LegacyOpCode(new byte[] { 0x2B });
-		private static readonly LegacyOpCode R_O_16 = new LegacyOpCode(new byte[] { 0x66, 0x2B });
-		private static readonly LegacyOpCode M_R = new LegacyOpCode(new byte[] { 0x29 });
 
 		#endregion Data Members
 
@@ -35,10 +33,7 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (destination.IsCPURegister)
 			{
-				if (third.IsChar)
-					return R_O_16;
-				else
-					return R_O;
+				return R_O;
 			}
 
 			throw new ArgumentException("No opcode for operand type.");

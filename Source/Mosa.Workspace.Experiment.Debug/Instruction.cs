@@ -161,7 +161,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			}
 
 			if (X86LegacyOpcodeRegField.HasValue)
-				sb.AppendFormat("\"X86LegacyOpcodeRegField\": \"{0}\", ", X86LegacyOpcodeRegField.Value);
+				sb.AppendFormat("\"X86LegacyOpcodeRegField\": \"{0:X2}\", ", X86LegacyOpcodeRegField.Value);
 
 			if (StaticEmitMethod != null)
 				sb.AppendFormat("\"StaticEmitMethod\": \"{0}\", ", StaticEmitMethod);

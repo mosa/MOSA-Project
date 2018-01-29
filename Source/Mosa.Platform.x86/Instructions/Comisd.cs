@@ -40,6 +40,7 @@ namespace Mosa.Platform.x86.Instructions
 		internal override LegacyOpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			Debug.Assert(source.IsCPURegister);
+			Debug.Assert(third.IsCPURegister);
 
 			return opcode;
 		}

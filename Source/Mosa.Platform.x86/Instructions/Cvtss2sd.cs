@@ -40,7 +40,6 @@ namespace Mosa.Platform.x86.Instructions
 		internal override LegacyOpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			if (destination.IsCPURegister && source.IsCPURegister) return opcode;
-
 			throw new ArgumentException("No opcode for operand type.");
 		}
 

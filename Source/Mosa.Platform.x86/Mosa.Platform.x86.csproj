@@ -123,6 +123,9 @@
     <Compile Include="Instructions\BtsConst32.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\CmpXchgLoad32.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\StaticEmitters.cs" />
     <Compile Include="Instructions\Add32.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
@@ -194,7 +197,6 @@
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Cmovcc.cs" />
-    <Compile Include="Instructions\CmpXchgLoad.cs" />
     <Compile Include="Instructions\Lea.cs" />
     <Compile Include="Instructions\Movaps.cs" />
     <Compile Include="Instructions\MovCRStore.cs" />

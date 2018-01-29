@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -38,7 +39,8 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		internal override LegacyOpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			return opcode;
+			if (destination.IsCPURegister && source.IsCPURegister) return opcode;
+			throw new ArgumentException("No opcode for operand type.");
 		}
 
 		#endregion Methods
