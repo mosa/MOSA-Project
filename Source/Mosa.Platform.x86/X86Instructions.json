@@ -190,6 +190,8 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 2,
+			"X86LegacyOpcode": "0x66, 0x0F, 0x2F",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -197,6 +199,8 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 2,
+			"X86LegacyOpcode": "0x66, 0x0F, 0x2F",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -818,6 +822,9 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 2,
+			"X86LegacyOpcode": "0x66, 0x0F, 0x2E",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -825,6 +832,8 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 2,
+			"X86LegacyOpcode": "0x0F, 0x2E",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{

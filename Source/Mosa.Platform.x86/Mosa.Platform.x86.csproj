@@ -344,8 +344,12 @@
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Cmp.cs" />
-    <Compile Include="Instructions\Comisd.cs" />
-    <Compile Include="Instructions\Comiss.cs" />
+    <Compile Include="Instructions\Comisd.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Comiss.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Break.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
@@ -427,8 +431,12 @@
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Sub.cs" />
-    <Compile Include="Instructions\Ucomisd.cs" />
-    <Compile Include="Instructions\Ucomiss.cs" />
+    <Compile Include="Instructions\Ucomisd.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Ucomiss.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="LegacyOpCode.cs" />
     <Compile Include="X86Instruction.cs" />
     <Compile Include="Instructions\Nop.cs">

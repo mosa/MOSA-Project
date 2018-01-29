@@ -209,5 +209,41 @@ namespace Mosa.Platform.x86.Instructions
 
 			(emitter as X86CodeEmitter).Emit(Cvttss2si.LegacyOpcode, node.Result, node.Operand1, null);
 		}
+
+		internal static void EmitComisd(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+			Debug.Assert(node.Result == null);
+
+			(emitter as X86CodeEmitter).Emit(Comisd.LegacyOpcode, node.Operand1, node.Operand2);
+		}
+
+		internal static void EmitComiss(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+			Debug.Assert(node.Result == null);
+
+			(emitter as X86CodeEmitter).Emit(Comiss.LegacyOpcode, node.Operand1, node.Operand2);
+		}
+
+		internal static void EmitUcomisd(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+			Debug.Assert(node.Result == null);
+
+			(emitter as X86CodeEmitter).Emit(Ucomisd.LegacyOpcode, node.Operand1, node.Operand2);
+		}
+
+		internal static void EmitUcomiss(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+			Debug.Assert(node.Result == null);
+
+			(emitter as X86CodeEmitter).Emit(Ucomiss.LegacyOpcode, node.Operand1, node.Operand2);
+		}
 	}
 }
