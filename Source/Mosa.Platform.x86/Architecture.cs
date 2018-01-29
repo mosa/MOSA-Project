@@ -276,7 +276,7 @@ namespace Mosa.Platform.x86
 					new SimpleDeadCodeRemovalStage(),
 					new AddressModeConversionStage(),
 					new FloatingPointStage(),
-					new LoweringTransformationStage(),
+					new FinalLoweringStage(),
 				});
 
 			compilerPipeline.InsertAfterLast<StackLayoutStage>(

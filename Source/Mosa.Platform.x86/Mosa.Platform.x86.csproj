@@ -99,7 +99,15 @@
     <Compile Include="Instructions\Adc32.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Add32.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Add32.Partial.cs" />
     <Compile Include="Instructions\Adc32.Partial.cs" />
+    <Compile Include="Instructions\AddConst32.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\AddConst32.Partial .cs" />
     <Compile Include="Instructions\AdcConst32.Partial.cs" />
     <Compile Include="Instructions\AdcConst32.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
@@ -227,7 +235,7 @@
     <Compile Include="Intrinsic\Remainder.cs" />
     <Compile Include="Intrinsic\SetFS.cs" />
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
-    <Compile Include="Stages\LoweringTransformationStage.cs" />
+    <Compile Include="Stages\FinalLoweringStage.cs" />
     <Compile Include="X86.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -306,7 +314,6 @@
     <Compile Include="Instructions\Movsx.cs" />
     <Compile Include="X86CodeEmitter.cs" />
     <Compile Include="Stages\TweakTransformationStage.cs" />
-    <Compile Include="Instructions\Add.cs" />
     <Compile Include="Instructions\Cdq.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>

@@ -14,7 +14,8 @@ namespace Mosa.Platform.x86
 		public static readonly Dictionary<string, X86Instruction> Map = new Dictionary<string, X86Instruction>() {
 			{ "Adc32", X86.Adc32 },
 			{ "AdcConst32", X86.AdcConst32 },
-			{ "Add", X86.Add },
+			{ "Add32", X86.Add32 },
+			{ "AddConst32", X86.AddConst32 },
 			{ "Addsd", X86.Addsd },
 			{ "Addss", X86.Addss },
 			{ "And", X86.And },

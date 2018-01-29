@@ -6,9 +6,6 @@ using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
-	/// <summary>
-	/// Representations the x86 adc instruction.
-	/// </summary>
 	public sealed partial class AdcConst32
 	{
 		internal static void EmitOpcode(InstructionNode node, BaseCodeEmitter emitter)

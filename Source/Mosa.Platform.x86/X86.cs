@@ -13,7 +13,8 @@ namespace Mosa.Platform.x86
 	{
 		public static readonly Adc32 Adc32 = new Adc32();
 		public static readonly AdcConst32 AdcConst32 = new AdcConst32();
-		public static readonly Add Add = new Add();
+		public static readonly Add32 Add32 = new Add32();
+		public static readonly AddConst32 AddConst32 = new AddConst32();
 		public static readonly Addsd Addsd = new Addsd();
 		public static readonly Addss Addss = new Addss();
 		public static readonly And And = new And();

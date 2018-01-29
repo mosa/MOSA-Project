@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Instructions
 {
-	public sealed partial class Adc32
+	public sealed partial class Add32
 	{
 		internal static void EmitOpcode(InstructionNode node, BaseCodeEmitter emitter)
 		{
