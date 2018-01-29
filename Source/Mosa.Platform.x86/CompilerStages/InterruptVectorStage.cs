@@ -55,7 +55,7 @@ namespace Mosa.Platform.x86.CompilerStages
 				ctx.AppendInstruction(X86.Call, null, interrupt);
 				ctx.AppendInstruction(X86.Pop, esp);
 				ctx.AppendInstruction(X86.Popad);
-				ctx.AppendInstruction(X86.Add, esp, esp, CreateConstant(8));
+				ctx.AppendInstruction(X86.AddConst32, esp, esp, CreateConstant(8));
 				ctx.AppendInstruction(X86.Sti);
 				ctx.AppendInstruction(X86.IRetd);
 

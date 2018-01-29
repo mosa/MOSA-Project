@@ -21,11 +21,24 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Add",
+			"Name": "Add32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true",
+			"X86LegacyOpcode": "03",
+			"StaticEmitMethod": "EmitOpcode",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "AddConst32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true",
+			"X86LegacyOpcode": "81",
+			"X86LegacyOpcodeRegField": "00",
+			"StaticEmitMethod": "EmitOpcode",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{

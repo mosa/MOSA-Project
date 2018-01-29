@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if commutative; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool Commutative { get { return false; } }
+		public virtual bool IsCommutative { get { return false; } }
 
 		/// <summary>
 		/// Gets the name of the base instruction.

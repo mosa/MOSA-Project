@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Adc32
+	/// Add32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed partial class Adc32 : X86Instruction
+	public sealed partial class Add32 : X86Instruction
 	{
-		private static readonly LegacyOpCode legacyOpcode = new LegacyOpCode(new byte[] { 0x13 } );
+		private static readonly LegacyOpCode legacyOpcode = new LegacyOpCode(new byte[] { 0x03 } );
 
-		public Adc32()
+		public Add32()
 			: base(1, 2)
 		{
 		}

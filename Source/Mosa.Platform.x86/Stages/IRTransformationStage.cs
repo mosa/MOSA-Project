@@ -143,7 +143,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void AddSigned(InstructionNode node)
 		{
-			node.ReplaceInstruction(X86.Add);
+			node.ReplaceInstruction(X86.Add32);
 		}
 
 		/// <summary>
@@ -152,7 +152,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void AddUnsigned(InstructionNode node)
 		{
-			node.ReplaceInstruction(X86.Add);
+			node.ReplaceInstruction(X86.Add32);
 		}
 
 		/// <summary>
