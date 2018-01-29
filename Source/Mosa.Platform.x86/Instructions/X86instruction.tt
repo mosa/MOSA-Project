@@ -65,18 +65,20 @@ namespace Mosa.Platform.x86.Instructions
 			first = true;
 			foreach (string b in entry.X86LegacyOpcode.Split(' '))
 			{
+				string b2 = b.Replace("0x",string.Empty).Replace(",",string.Empty);
+
 				if (!first)
 					legacy = legacy + ", ";
 
-				legacy = legacy + "0x" + b;
+				legacy = legacy + "0x" + b2;
 
 				first = false;
 			}
 		}
-	 
+
 		string reg = string.Empty;
 		if (entry.X86LegacyOpcodeRegField != null)
-			reg = reg+ ", 0x" + entry.X86LegacyOpcodeRegField;
+			reg = ", 0x" + entry.X86LegacyOpcodeRegField.Replace("0x",string.Empty);
 #>
 <# if (entry.X86EmitBytes != null) { #>
 		public static readonly byte[] opcode = new byte[] { <#= bytes #> };
