@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// AllocateStackSpace
 	/// </summary>
 	internal class AllocateStackSpace : IIntrinsicPlatformMethod
 	{
@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
-			context.SetInstruction(X86.Sub, esp, esp, size);
+			context.SetInstruction(X86.Sub32, esp, esp, size);
 			context.AppendInstruction(X86.Mov, result, esp);
 		}
 

@@ -219,7 +219,18 @@
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\PXor.cs" />
-    <Compile Include="Instructions\Test.cs" />
+    <Compile Include="Instructions\Sub32.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SubConst32.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Test32.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\TestConst32.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\X86instruction.cs">
       <AutoGen>True</AutoGen>
@@ -430,7 +441,6 @@
     <Compile Include="Instructions\SubSS.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Sub.cs" />
     <Compile Include="Instructions\Ucomisd.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>

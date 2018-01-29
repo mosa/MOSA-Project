@@ -73,7 +73,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Sub, esp, esp, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(X86.SubConst32, esp, esp, CreateConstant(-MethodCompiler.StackSize));
 			}
 		}
 

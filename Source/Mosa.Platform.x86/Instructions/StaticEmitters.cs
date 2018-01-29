@@ -245,5 +245,39 @@ namespace Mosa.Platform.x86.Instructions
 
 			(emitter as X86CodeEmitter).Emit(Ucomiss.LegacyOpcode, node.Operand1, node.Operand2);
 		}
+
+		internal static void EmitSub32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result == node.Operand1);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+
+			(emitter as X86CodeEmitter).Emit(Sub32.LegacyOpcode, node.Result, node.Operand2);
+		}
+
+		internal static void EmitSubConst32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result == node.Operand1);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand2.IsConstant);
+
+			(emitter as X86CodeEmitter).Emit(SubConst32.LegacyOpcode, node.Result, node.Operand2);
+		}
+
+		internal static void EmitTest32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+
+			(emitter as X86CodeEmitter).Emit(Test32.LegacyOpcode, node.Result, node.Operand2);
+		}
+
+		internal static void EmitTestConst32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsConstant);
+
+			(emitter as X86CodeEmitter).Emit(TestConst32.LegacyOpcode, node.Result, node.Operand2);
+		}
 	}
 }
