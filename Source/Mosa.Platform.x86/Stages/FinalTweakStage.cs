@@ -96,9 +96,9 @@ namespace Mosa.Platform.x86.Stages
 			{
 				Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
-				context.SetInstruction2(X86.Xchg, eax, source, source, eax);
+				context.SetInstruction2(X86.Xchg32, eax, source, source, eax);
 				context.AppendInstruction(X86.Mov, result, eax);
-				context.AppendInstruction2(X86.Xchg, source, eax, eax, source);
+				context.AppendInstruction2(X86.Xchg32, source, eax, eax, source);
 			}
 		}
 
@@ -166,9 +166,9 @@ namespace Mosa.Platform.x86.Stages
 					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 				}
 
-				context.SetInstruction2(X86.Xchg, temporaryRegister, value, value, temporaryRegister);
+				context.SetInstruction2(X86.Xchg32, temporaryRegister, value, value, temporaryRegister);
 				context.AppendInstruction(X86.MovStore, size, null, dest, offset, temporaryRegister);
-				context.AppendInstruction2(X86.Xchg, value, temporaryRegister, temporaryRegister, value);
+				context.AppendInstruction2(X86.Xchg32, value, temporaryRegister, temporaryRegister, value);
 			}
 		}
 
@@ -294,9 +294,9 @@ namespace Mosa.Platform.x86.Stages
 
 				Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
-				context.SetInstruction2(X86.Xchg, eax, result, result, eax);
+				context.SetInstruction2(X86.Xchg32, eax, result, result, eax);
 				context.AppendInstruction(X86.Setcc, condition, eax);
-				context.AppendInstruction2(X86.Xchg, result, eax, eax, result);
+				context.AppendInstruction2(X86.Xchg32, result, eax, eax, result);
 			}
 		}
 

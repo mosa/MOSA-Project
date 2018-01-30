@@ -441,7 +441,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
-				context.AppendInstruction2(X86.Xchg, destination, source, source, destination);
+				context.AppendInstruction2(X86.Xchg32, destination, source, source, destination);
 			}
 		}
 

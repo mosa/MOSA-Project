@@ -44,18 +44,18 @@ namespace Mosa.Platform.x86.Instructions
 			(emitter as X86CodeEmitter).Emit(AddConst32.LegacyOpcode, node.Result, node.Operand2);
 		}
 
-		internal static void EmitAddSS(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result == node.Operand1);
-
-			(emitter as X86CodeEmitter).Emit(AddSS.LegacyOpcode, node.Result, node.Operand2);
-		}
-
 		internal static void EmitAddSD(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result == node.Operand1);
 
 			(emitter as X86CodeEmitter).Emit(AddSD.LegacyOpcode, node.Result, node.Operand2);
+		}
+
+		internal static void EmitAddSS(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result == node.Operand1);
+
+			(emitter as X86CodeEmitter).Emit(AddSS.LegacyOpcode, node.Result, node.Operand2);
 		}
 
 		internal static void EmitAnd32(InstructionNode node, BaseCodeEmitter emitter)
@@ -112,20 +112,6 @@ namespace Mosa.Platform.x86.Instructions
 			(emitter as X86CodeEmitter).Emit(BtsConst32.LegacyOpcode, node.Result, node.Operand2);
 		}
 
-		internal static void EmitSubSS(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result == node.Operand1);
-
-			(emitter as X86CodeEmitter).Emit(SubSS.LegacyOpcode, node.Result, node.Operand2);
-		}
-
-		internal static void EmitSubSD(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result == node.Operand1);
-
-			(emitter as X86CodeEmitter).Emit(SubSD.LegacyOpcode, node.Result, node.Operand2);
-		}
-
 		internal static void EmitCmpXchgLoad32(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
@@ -154,6 +140,24 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.Emit(opcode, node.Operand2, (opcode.Size - 32) / 8);
 			else
 				emitter.Emit(opcode);
+		}
+
+		internal static void EmitComisd(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+			Debug.Assert(node.Result == null);
+
+			(emitter as X86CodeEmitter).Emit(Comisd.LegacyOpcode, node.Operand1, node.Operand2);
+		}
+
+		internal static void EmitComiss(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+			Debug.Assert(node.Result == null);
+
+			(emitter as X86CodeEmitter).Emit(Comiss.LegacyOpcode, node.Operand1, node.Operand2);
 		}
 
 		internal static void EmitCvtsd2ss(InstructionNode node, BaseCodeEmitter emitter)
@@ -210,74 +214,70 @@ namespace Mosa.Platform.x86.Instructions
 			(emitter as X86CodeEmitter).Emit(Cvttss2si.LegacyOpcode, node.Result, node.Operand1, null);
 		}
 
-		internal static void EmitComisd(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitInvlpg(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsCPURegister);
-			Debug.Assert(node.Operand2.IsCPURegister);
-			Debug.Assert(node.Result == null);
+			Debug.Assert(node.Operand1.IsConstant);
 
-			(emitter as X86CodeEmitter).Emit(Comisd.LegacyOpcode, node.Operand1, node.Operand2);
+			// INVLPG – Invalidate TLB Entry 0000 1111 : 0000 0001 : mod 111 r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
+				.Append3Bits(Bits.b010)                                         // 3:reg
+				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
+				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
+				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			else
+				emitter.Emit(opcode);
 		}
 
-		internal static void EmitComiss(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitLgdt(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsCPURegister);
-			Debug.Assert(node.Operand2.IsCPURegister);
-			Debug.Assert(node.Result == null);
+			Debug.Assert(node.Operand1.IsConstant);
 
-			(emitter as X86CodeEmitter).Emit(Comiss.LegacyOpcode, node.Operand1, node.Operand2);
+			// LGDT – Load Global Descriptor Table Register 0000 1111 : 0000 0001 : modA 010 r / m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
+				.Append3Bits(Bits.b010)                                         // 3:reg
+				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
+				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
+				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			else
+				emitter.Emit(opcode);
 		}
 
-		internal static void EmitUcomisd(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitLidt(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsCPURegister);
-			Debug.Assert(node.Operand2.IsCPURegister);
-			Debug.Assert(node.Result == null);
+			Debug.Assert(node.Operand1.IsConstant);
 
-			(emitter as X86CodeEmitter).Emit(Ucomisd.LegacyOpcode, node.Operand1, node.Operand2);
-		}
+			// LIDT – Load Interrupt Descriptor Table Register 0000 1111 : 0000 0001 : modA 011 r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b0001)                                       // 4:opcode
+				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
+				.Append3Bits(Bits.b011)                                         // 3:reg
+				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
+				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
+				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
 
-		internal static void EmitUcomiss(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Operand1.IsCPURegister);
-			Debug.Assert(node.Operand2.IsCPURegister);
-			Debug.Assert(node.Result == null);
-
-			(emitter as X86CodeEmitter).Emit(Ucomiss.LegacyOpcode, node.Operand1, node.Operand2);
-		}
-
-		internal static void EmitSub32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result == node.Operand1);
-			Debug.Assert(node.Result.IsCPURegister);
-			Debug.Assert(node.Operand2.IsCPURegister);
-
-			(emitter as X86CodeEmitter).Emit(Sub32.LegacyOpcode, node.Result, node.Operand2);
-		}
-
-		internal static void EmitSubConst32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result == node.Operand1);
-			Debug.Assert(node.Result.IsCPURegister);
-			Debug.Assert(node.Operand2.IsConstant);
-
-			(emitter as X86CodeEmitter).Emit(SubConst32.LegacyOpcode, node.Result, node.Operand2);
-		}
-
-		internal static void EmitTest32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Operand1.IsCPURegister);
-			Debug.Assert(node.Operand2.IsCPURegister);
-
-			(emitter as X86CodeEmitter).Emit(Test32.LegacyOpcode, node.Result, node.Operand2);
-		}
-
-		internal static void EmitTestConst32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Operand1.IsCPURegister);
-			Debug.Assert(node.Operand2.IsConstant);
-
-			(emitter as X86CodeEmitter).Emit(TestConst32.LegacyOpcode, node.Result, node.Operand2);
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+			else
+				emitter.Emit(opcode);
 		}
 
 		internal static void EmitMovd(InstructionNode node, BaseCodeEmitter emitter)
@@ -426,70 +426,82 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Emit(opcode);
 		}
 
-		internal static void EmitLgdt(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitSub32(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsConstant);
+			Debug.Assert(node.Result == node.Operand1);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
 
-			// LGDT – Load Global Descriptor Table Register 0000 1111 : 0000 0001 : modA 010 r / m
-			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b0001)                                       // 4:opcode
-				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
-				.Append3Bits(Bits.b010)                                         // 3:reg
-				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
-				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
-				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
-
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
-			else
-				emitter.Emit(opcode);
+			(emitter as X86CodeEmitter).Emit(Sub32.LegacyOpcode, node.Result, node.Operand2);
 		}
 
-		internal static void EmitInvlpg(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitSubConst32(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsConstant);
+			Debug.Assert(node.Result == node.Operand1);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand2.IsConstant);
 
-			// INVLPG – Invalidate TLB Entry 0000 1111 : 0000 0001 : mod 111 r/m
-			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b0001)                                       // 4:opcode
-				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
-				.Append3Bits(Bits.b010)                                         // 3:reg
-				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
-				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
-				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
-
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
-			else
-				emitter.Emit(opcode);
+			(emitter as X86CodeEmitter).Emit(SubConst32.LegacyOpcode, node.Result, node.Operand2);
 		}
 
-		internal static void EmitLidt(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitSubSD(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsConstant);
+			Debug.Assert(node.Result == node.Operand1);
 
-			// LIDT – Load Interrupt Descriptor Table Register 0000 1111 : 0000 0001 : modA 011 r/m
-			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b0001)                                       // 4:opcode
-				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
-				.Append3Bits(Bits.b011)                                         // 3:reg
-				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
-				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
-				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
+			(emitter as X86CodeEmitter).Emit(SubSD.LegacyOpcode, node.Result, node.Operand2);
+		}
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
-			else
-				emitter.Emit(opcode);
+		internal static void EmitSubSS(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result == node.Operand1);
+
+			(emitter as X86CodeEmitter).Emit(SubSS.LegacyOpcode, node.Result, node.Operand2);
+		}
+
+		internal static void EmitTest32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+
+			(emitter as X86CodeEmitter).Emit(Test32.LegacyOpcode, node.Result, node.Operand2);
+		}
+
+		internal static void EmitTestConst32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsConstant);
+
+			(emitter as X86CodeEmitter).Emit(TestConst32.LegacyOpcode, node.Result, node.Operand2);
+		}
+
+		internal static void EmitUcomisd(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+			Debug.Assert(node.Result == null);
+
+			(emitter as X86CodeEmitter).Emit(Ucomisd.LegacyOpcode, node.Operand1, node.Operand2);
+		}
+
+		internal static void EmitUcomiss(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+			Debug.Assert(node.Result == null);
+
+			(emitter as X86CodeEmitter).Emit(Ucomiss.LegacyOpcode, node.Operand1, node.Operand2);
+		}
+
+		internal static void EmitXchg32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Result2.IsCPURegister);
+			Debug.Assert(node.Operand1 == node.Result2);
+			Debug.Assert(node.Operand2 == node.Result);
+
+			(emitter as X86CodeEmitter).Emit(Xchg32.LegacyOpcode, node.Result, node.Operand1, node.Operand2);
 		}
 	}
 }

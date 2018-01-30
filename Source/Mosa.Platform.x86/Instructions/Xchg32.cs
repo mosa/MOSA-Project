@@ -7,24 +7,26 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Cvttsd2si
+	/// Xchg32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Cvttsd2si : X86Instruction
+	public sealed class Xchg32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF2, 0x0F, 0x2C } );
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x87 } );
 
-		public Cvttsd2si()
-			: base(1, 1)
+		public Xchg32()
+			: base(2, 2)
 		{
 		}
+
+		public override bool IsCommutative { get { return true; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
 			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
 
-			StaticEmitters.EmitCvttsd2si(node, emitter);
+			StaticEmitters.EmitXchg32(node, emitter);
 		}
 
 		// The following is used by the automated code generator.

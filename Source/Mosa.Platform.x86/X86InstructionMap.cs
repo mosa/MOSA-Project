@@ -118,7 +118,7 @@ namespace Mosa.Platform.x86
 			{ "TestConst32", X86.TestConst32 },
 			{ "Ucomisd", X86.Ucomisd },
 			{ "Ucomiss", X86.Ucomiss },
-			{ "Xchg", X86.Xchg },
+			{ "Xchg32", X86.Xchg32 },
 			{ "Xor", X86.Xor },
 			{ "BranchOverflow", X86.BranchOverflow },
 			{ "BranchNoOverflow", X86.BranchNoOverflow },
