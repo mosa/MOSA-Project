@@ -19,19 +19,21 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override bool ThreeTwoAddressConversion { get { return false; } }
+
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
 			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
 
-			StaticEmitters.EmitCvtss2sd(node, emitter);
+			emitter.Emit(LegacyOpcode, node.Result, node.Operand1);
 		}
 
 		// The following is used by the automated code generator.
 
 		public override LegacyOpCode __legacyopcode { get { return LegacyOpcode; } }
 
-		public override string __staticEmitMethod { get { return "StaticEmitters.Emit%"; } }
+		public override string __legacyOpcodeOperandOrder { get { return "r1"; } }
 	}
 }
 
