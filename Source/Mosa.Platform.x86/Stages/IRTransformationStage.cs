@@ -98,7 +98,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(node.Result.IsR4);
 			Debug.Assert(node.Operand1.IsR4);
 
-			node.ReplaceInstruction(X86.AddSS, InstructionSize.Size32);
+			node.ReplaceInstruction(X86.Addss, InstructionSize.Size32);
 		}
 
 		/// <summary>
@@ -110,7 +110,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(node.Result.IsR8);
 			Debug.Assert(node.Operand1.IsR8);
 
-			node.ReplaceInstruction(X86.AddSD, InstructionSize.Size32);
+			node.ReplaceInstruction(X86.Addsd, InstructionSize.Size32);
 		}
 
 		/// <summary>

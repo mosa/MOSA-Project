@@ -79,6 +79,42 @@ namespace Mosa.Platform.x86.Instructions
 		string reg = string.Empty;
 		if (entry.X86LegacyOpcodeRegField != null)
 			reg = ", 0x" + entry.X86LegacyOpcodeRegField.Replace("0x",string.Empty);
+
+		string operands = string.Empty;
+		if (entry.X86LegacyOpcodeOperandOrder != null)
+		{
+			var sb = new StringBuilder();
+
+			foreach(var c in entry.X86LegacyOpcodeOperandOrder)
+			{
+				if (c == 'R' || c == 'r')
+				{
+					sb.Append("node.Result");
+				}
+				else if (c == '1')
+				{
+					sb.Append("node.Operand1");
+				}
+				else if (c == '2')
+				{
+					sb.Append("node.Operand2");
+				} 
+				else if (c == '3')
+				{
+					sb.Append("node.Operand3");
+				}
+				else if (c == 'N' || c == 'n')
+				{
+					sb.Append("node.Result");
+				}
+				sb.Append(", ");
+			}
+
+			sb.Length--;
+			sb.Length--;
+
+			operands = sb.ToString();
+		}
 #>
 <# if (entry.X86EmitBytes != null) { #>
 		public static readonly byte[] opcode = new byte[] { <#= bytes #> };
@@ -152,19 +188,6 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Write(opcode);
 		}
 <# } #>
-<# if (entry.StaticEmitMethod == null && entry.X86LegacyOpcode != null){ #>
-
-		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
-		{
-<# if (entry.VariableOperands == null || entry.VariableOperands == "false") { #>
-			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
-			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
-
-<# } #>
-			System.Diagnostics.Debug.Assert(node.Result == node.Operand1);
-			emitter.Emit(LegacyOpcode, node.Result, node.Operand2);
-		}
-<# } #>
 <# if (entry.StaticEmitMethod != null){ #>
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
@@ -175,6 +198,23 @@ namespace Mosa.Platform.x86.Instructions
 
 <# } #>
 			<#= entry.StaticEmitMethod.Replace("%", entry.Name) #>(node, emitter);
+		}
+<# } #>
+<# if (entry.X86LegacyOpcodeOperandOrder != null && entry.X86LegacyOpcode != null && entry.StaticEmitMethod == null){ #>
+
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		{
+<# if (entry.VariableOperands == null || entry.VariableOperands == "false") { #>
+			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
+			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
+<# if (entry.X86ThreeTwoAddressConversion == null || entry.X86ThreeTwoAddressConversion == "true") { #>
+			System.Diagnostics.Debug.Assert(node.Result == node.Operand1);
+			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
+			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
+<# } #>
+
+<# } #>
+			emitter.Emit(LegacyOpcode, <#= operands #>);
 		}
 <# } #>
 <# if (entry.X86EmitBytes != null || entry.X86LegacyOpcode != null || entry.StaticEmitMethod != null) { #>
@@ -193,7 +233,10 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override string __staticEmitMethod { get { return "<#= entry.StaticEmitMethod #>"; } }
 <# } #>
-	}
+<# if (entry.X86LegacyOpcodeOperandOrder != null) { #>
+
+		public override string __legacyOpcodeOperandOrder { get { return "<#= entry.X86LegacyOpcodeOperandOrder #>"; } }
+<# } #>	}
 }
 <# } #>
 <# manager.EndBlock(); #>
