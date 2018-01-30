@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// SubSD
+	/// Subsd
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class SubSD : X86Instruction
+	public sealed class Subsd : X86Instruction
 	{
 		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF2, 0x0F, 0x5C } );
 
-		public SubSD()
+		public Subsd()
 			: base(1, 2)
 		{
 		}
@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
 			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
 
-			StaticEmitters.EmitSubSD(node, emitter);
+			StaticEmitters.EmitSubsd(node, emitter);
 		}
 
 		// The following is used by the automated code generator.

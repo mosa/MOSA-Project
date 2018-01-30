@@ -826,7 +826,7 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "SubSD",
+			"Name": "Subsd",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
@@ -836,7 +836,7 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "SubSS",
+			"Name": "Subss",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,

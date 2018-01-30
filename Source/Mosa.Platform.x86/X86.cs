@@ -112,8 +112,8 @@ namespace Mosa.Platform.x86
 		public static readonly Stos Stos = new Stos();
 		public static readonly Sub32 Sub32 = new Sub32();
 		public static readonly SubConst32 SubConst32 = new SubConst32();
-		public static readonly SubSD SubSD = new SubSD();
-		public static readonly SubSS SubSS = new SubSS();
+		public static readonly Subsd Subsd = new Subsd();
+		public static readonly Subss Subss = new Subss();
 		public static readonly Test32 Test32 = new Test32();
 		public static readonly TestConst32 TestConst32 = new TestConst32();
 		public static readonly Ucomisd Ucomisd = new Ucomisd();

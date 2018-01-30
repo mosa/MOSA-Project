@@ -324,14 +324,14 @@ namespace Mosa.Platform.x86.Instructions
 			(emitter as X86CodeEmitter).Emit(SubConst32.LegacyOpcode, node.Result, node.Operand2);
 		}
 
-		internal static void EmitSubSD(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitSubsd(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			(emitter as X86CodeEmitter).Emit(SubSD.LegacyOpcode, node.Result, node.Operand2);
+			(emitter as X86CodeEmitter).Emit(Subsd.LegacyOpcode, node.Result, node.Operand2);
 		}
 
-		internal static void EmitSubSS(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitSubss(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			(emitter as X86CodeEmitter).Emit(SubSS.LegacyOpcode, node.Result, node.Operand2);
+			(emitter as X86CodeEmitter).Emit(Subss.LegacyOpcode, node.Result, node.Operand2);
 		}
 
 		internal static void EmitTest32(InstructionNode node, BaseCodeEmitter emitter)

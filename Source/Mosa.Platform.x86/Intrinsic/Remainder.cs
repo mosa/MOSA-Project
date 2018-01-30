@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Intrinsic
 				context.SetInstruction(X86.Divsd, size, xmm1, dividend, divisor);
 				context.AppendInstruction(X86.Roundsd, size, xmm2, xmm1, Operand.CreateConstant(methodCompiler.TypeSystem.BuiltIn.U1, 0x3));
 				context.AppendInstruction(X86.Mulsd, size, xmm3, divisor, xmm2);
-				context.AppendInstruction(X86.SubSD, size, result, dividend, xmm3);
+				context.AppendInstruction(X86.Subsd, size, result, dividend, xmm3);
 			}
 			else
 			{
@@ -44,7 +44,7 @@ namespace Mosa.Platform.x86.Intrinsic
 				context.SetInstruction(X86.Divss, size, xmm1, dividend, divisor);
 				context.AppendInstruction(X86.Roundss, size, xmm2, xmm1, Operand.CreateConstant(methodCompiler.TypeSystem.BuiltIn.U1, 0x3));
 				context.AppendInstruction(X86.Mulss, size, xmm3, divisor, xmm2);
-				context.AppendInstruction(X86.SubSS, size, result, dividend, xmm3);
+				context.AppendInstruction(X86.Subss, size, result, dividend, xmm3);
 			}
 		}
 
