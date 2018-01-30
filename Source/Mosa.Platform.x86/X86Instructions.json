@@ -857,7 +857,6 @@
 			"OperandCount": 2,
 			"X86LegacyOpcode": "0x66, 0x0F, 0x2E",
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -870,11 +869,13 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Xchg",
+			"Name": "Xchg32",
 			"FamilyName": "X86",
-			"ResultCount": 1,
-			"OperandCount": 1,
+			"ResultCount": 2,
+			"OperandCount": 2,
 			"Commutative": "true",
+			"X86LegacyOpcode": "0x87",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{

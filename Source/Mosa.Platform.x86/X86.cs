@@ -118,7 +118,7 @@ namespace Mosa.Platform.x86
 		public static readonly TestConst32 TestConst32 = new TestConst32();
 		public static readonly Ucomisd Ucomisd = new Ucomisd();
 		public static readonly Ucomiss Ucomiss = new Ucomiss();
-		public static readonly Xchg Xchg = new Xchg();
+		public static readonly Xchg32 Xchg32 = new Xchg32();
 		public static readonly Xor Xor = new Xor();
 		public static readonly BranchOverflow BranchOverflow = new BranchOverflow();
 		public static readonly BranchNoOverflow BranchNoOverflow = new BranchNoOverflow();

@@ -341,7 +341,8 @@ namespace Mosa.Workspace.Experiment.Debug
 			X86.Mul,
 			X86.Mulsd,
 			X86.Mulss,
-			X86.Xchg,
+
+			//X86.Xchg,
 		};
 
 		private static readonly List<X86Instruction> X86WriteOperation = new List<X86Instruction>()

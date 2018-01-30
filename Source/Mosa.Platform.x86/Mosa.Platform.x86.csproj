@@ -249,6 +249,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Xchg32.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Intrinsic\Div.cs" />
     <Compile Include="Intrinsic\AllocateStackSpace.cs" />
     <Compile Include="Intrinsic\FrameCallRetR8.cs" />
@@ -438,7 +441,6 @@
     <Compile Include="Instructions\Stos.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Xchg.cs" />
     <Compile Include="Instructions\Not.cs" />
     <Compile Include="Instructions\Or.cs" />
     <Compile Include="Instructions\Xor.cs" />

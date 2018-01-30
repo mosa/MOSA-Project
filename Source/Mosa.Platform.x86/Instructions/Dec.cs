@@ -12,8 +12,6 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly LegacyOpCode DEC8 = new LegacyOpCode(new byte[] { 0xFE }, 1);
-		private static readonly LegacyOpCode DEC16 = new LegacyOpCode(new byte[] { 0x66, 0xFF }, 1);
 		private static readonly LegacyOpCode DEC32 = new LegacyOpCode(new byte[] { 0xFF }, 1);
 
 		#endregion Data Members
@@ -41,9 +39,8 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		internal override LegacyOpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (destination.IsByte) return DEC8;
-			if (destination.IsShort || destination.IsChar) return DEC16;
-			if (destination.IsInt) return DEC32;
+			if (destination.IsInt)
+				return DEC32;
 
 			throw new ArgumentException("No opcode for operand type.");
 		}

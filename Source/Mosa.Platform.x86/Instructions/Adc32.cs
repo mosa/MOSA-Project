@@ -23,8 +23,8 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount || VariableOperands);
-			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount || VariableOperands);
+			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
+			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
 
 			StaticEmitters.EmitAdc32(node, emitter);
 		}
