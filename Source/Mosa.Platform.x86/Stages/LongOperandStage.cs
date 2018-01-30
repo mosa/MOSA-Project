@@ -1019,8 +1019,8 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, op0H, op1H);
 			context.AppendInstruction(X86.Mov, op0L, op1L);
-			context.AppendInstruction(X86.Xor, op0H, op0H, op2H);
-			context.AppendInstruction(X86.Xor, op0L, op0L, op2L);
+			context.AppendInstruction(X86.Xor32, op0H, op0H, op2H);
+			context.AppendInstruction(X86.Xor32, op0L, op0L, op2L);
 		}
 
 		/// <summary>

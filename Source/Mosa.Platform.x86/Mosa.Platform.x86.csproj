@@ -252,6 +252,12 @@
     <Compile Include="Instructions\Xchg32.cs">
       <DependentUpon>X86instruction.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Xor32.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\XorConst32.cs">
+      <DependentUpon>X86instruction.tt</DependentUpon>
+    </Compile>
     <Compile Include="Intrinsic\Div.cs" />
     <Compile Include="Intrinsic\AllocateStackSpace.cs" />
     <Compile Include="Intrinsic\FrameCallRetR8.cs" />
@@ -443,7 +449,6 @@
     </Compile>
     <Compile Include="Instructions\Not.cs" />
     <Compile Include="Instructions\Or.cs" />
-    <Compile Include="Instructions\Xor.cs" />
     <Compile Include="Instructions\Mov.cs" />
     <Compile Include="Instructions\Mul.cs" />
     <Compile Include="Instructions\Neg.cs">
