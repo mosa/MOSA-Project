@@ -246,79 +246,16 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Emit(opcode);
 		}
 
-		internal static void EmitSub32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Operand2.IsCPURegister);
+		//internal static void EmitXchg32(InstructionNode node, BaseCodeEmitter emitter)
+		//{
+		//	Debug.Assert(node.Operand1.IsCPURegister);
+		//	Debug.Assert(node.Operand2.IsCPURegister);
+		//	Debug.Assert(node.Result.IsCPURegister);
+		//	Debug.Assert(node.Result2.IsCPURegister);
+		//	Debug.Assert(node.Operand1 == node.Result2);
+		//	Debug.Assert(node.Operand2 == node.Result);
 
-			(emitter as X86CodeEmitter).Emit(Sub32.LegacyOpcode, node.Result, node.Operand2);
-		}
-
-		internal static void EmitSubConst32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Operand2.IsConstant);
-
-			(emitter as X86CodeEmitter).Emit(SubConst32.LegacyOpcode, node.Result, node.Operand2);
-		}
-
-		internal static void EmitSubsd(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			(emitter as X86CodeEmitter).Emit(Subsd.LegacyOpcode, node.Result, node.Operand2);
-		}
-
-		internal static void EmitSubss(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			(emitter as X86CodeEmitter).Emit(Subss.LegacyOpcode, node.Result, node.Operand2);
-		}
-
-		internal static void EmitTest32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Operand1.IsCPURegister);
-			Debug.Assert(node.Operand2.IsCPURegister);
-
-			(emitter as X86CodeEmitter).Emit(Test32.LegacyOpcode, node.Result, node.Operand2);
-		}
-
-		internal static void EmitTestConst32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			(emitter as X86CodeEmitter).Emit(TestConst32.LegacyOpcode, node.Result, node.Operand2);
-		}
-
-		internal static void EmitUcomisd(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Operand1.IsCPURegister);
-			Debug.Assert(node.Operand2.IsCPURegister);
-
-			(emitter as X86CodeEmitter).Emit(Ucomisd.LegacyOpcode, node.Operand1, node.Operand2);
-		}
-
-		internal static void EmitUcomiss(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Operand1.IsCPURegister);
-			Debug.Assert(node.Operand2.IsCPURegister);
-
-			(emitter as X86CodeEmitter).Emit(Ucomiss.LegacyOpcode, node.Operand1, node.Operand2);
-		}
-
-		internal static void EmitXchg32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Operand1.IsCPURegister);
-			Debug.Assert(node.Operand2.IsCPURegister);
-			Debug.Assert(node.Result.IsCPURegister);
-			Debug.Assert(node.Result2.IsCPURegister);
-			Debug.Assert(node.Operand1 == node.Result2);
-			Debug.Assert(node.Operand2 == node.Result);
-
-			(emitter as X86CodeEmitter).Emit(Xchg32.LegacyOpcode, node.Result, node.Operand1, node.Operand2);
-		}
-
-		internal static void EmitXor32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			(emitter as X86CodeEmitter).Emit(Xor32.LegacyOpcode, node.Result, node.Operand2);
-		}
-
-		internal static void EmitXorConst32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			(emitter as X86CodeEmitter).Emit(XorConst32.LegacyOpcode, node.Result, node.Operand2);
-		}
+		//	(emitter as X86CodeEmitter).Emit(Xchg32.LegacyOpcode, node.Result, node.Operand1, node.Operand2);
+		//}
 	}
 }
