@@ -636,9 +636,9 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Mov, dest, context.Operand1);
 
 			if (dest.IsByte)
-				context.AppendInstruction(X86.Xor, dest, dest, CreateConstant(0xFF));
+				context.AppendInstruction(X86.XorConst32, dest, dest, CreateConstant(0xFF));
 			else if (dest.IsU2)
-				context.AppendInstruction(X86.Xor, dest, dest, CreateConstant(0xFFFF));
+				context.AppendInstruction(X86.XorConst32, dest, dest, CreateConstant(0xFFFF));
 			else
 				context.AppendInstruction(X86.Not, dest, dest);
 		}
@@ -658,7 +658,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void LogicalXor(InstructionNode node)
 		{
-			node.ReplaceInstruction(X86.Xor);
+			node.ReplaceInstruction(X86.Xor32);
 		}
 
 		/// <summary>

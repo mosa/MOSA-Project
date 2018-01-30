@@ -224,13 +224,13 @@ namespace Mosa.Platform.x86.Stages
 				if (size == InstructionSize.Size16)
 				{
 					context.AppendInstruction(X86.AndConst32, dest, dest, CreateConstant(0x0000ffff));
-					context.AppendInstruction(X86.Xor, dest, dest, CreateConstant(0x00010000));
+					context.AppendInstruction(X86.XorConst32, dest, dest, CreateConstant(0x00010000));
 					context.AppendInstruction(X86.SubConst32, dest, dest, CreateConstant(0x00010000));
 				}
 				else if (size == InstructionSize.Size8)
 				{
 					context.AppendInstruction(X86.AndConst32, dest, dest, CreateConstant(0x000000ff));
-					context.AppendInstruction(X86.Xor, dest, dest, CreateConstant(0x00000100));
+					context.AppendInstruction(X86.XorConst32, dest, dest, CreateConstant(0x00000100));
 					context.AppendInstruction(X86.SubConst32, dest, dest, CreateConstant(0x00000100));
 				}
 			}

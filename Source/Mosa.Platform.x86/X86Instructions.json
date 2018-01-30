@@ -879,11 +879,24 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Xor",
+			"Name": "Xor32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true",
+			"X86LegacyOpcode": "0x33",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "XorConst32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true",
+			"X86LegacyOpcode": "0x81",
+			"X86LegacyOpcodeRegField": "06",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{

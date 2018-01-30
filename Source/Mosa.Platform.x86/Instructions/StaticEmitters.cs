@@ -503,5 +503,23 @@ namespace Mosa.Platform.x86.Instructions
 
 			(emitter as X86CodeEmitter).Emit(Xchg32.LegacyOpcode, node.Result, node.Operand1, node.Operand2);
 		}
+
+		internal static void EmitXor32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result == node.Operand1);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+
+			(emitter as X86CodeEmitter).Emit(Xor32.LegacyOpcode, node.Result, node.Operand2);
+		}
+
+		internal static void EmitXorConst32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result == node.Operand1);
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand2.IsCPURegister);
+
+			(emitter as X86CodeEmitter).Emit(XorConst32.LegacyOpcode, node.Result, node.Operand2);
+		}
 	}
 }
