@@ -255,6 +255,12 @@
     <Compile Include="Instructions\SubConst32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Subsd.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Subss.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Test32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -324,9 +330,6 @@
     <Compile Include="Stages\FloatingPointStage.cs" />
     <Compile Include="Stages\FinalTweakStage.cs" />
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
-    <Compile Include="Instructions\SubSD.cs">
-      <DependentUpon>X86Instructions.tt</DependentUpon>
-    </Compile>
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
     <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
@@ -475,9 +478,6 @@
     <Compile Include="Instructions\Shl.cs" />
     <Compile Include="Instructions\Shrd.cs" />
     <Compile Include="Instructions\Shr.cs" />
-    <Compile Include="Instructions\SubSS.cs">
-      <DependentUpon>X86Instructions.tt</DependentUpon>
-    </Compile>
     <Compile Include="Instructions\Ucomisd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
