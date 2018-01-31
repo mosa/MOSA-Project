@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class MovssLoad : X86Instruction
 	{
-		public MovssLoad()
+		internal MovssLoad()
 			: base(1, 2)
 		{
 		}

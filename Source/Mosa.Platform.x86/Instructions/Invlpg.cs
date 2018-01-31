@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Invlpg : X86Instruction
 	{
-		public Invlpg()
+		internal Invlpg()
 			: base(0, 1)
 		{
 		}

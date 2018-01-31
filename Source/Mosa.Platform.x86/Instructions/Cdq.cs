@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		public static readonly byte[] opcode = new byte[] { 0x99 };
 
-		public Cdq()
+		internal Cdq()
 			: base(2, 1)
 		{
 		}

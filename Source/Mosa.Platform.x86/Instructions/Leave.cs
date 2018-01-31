@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		public static readonly byte[] opcode = new byte[] { 0xC9 };
 
-		public Leave()
+		internal Leave()
 			: base(0, 0)
 		{
 		}

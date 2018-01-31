@@ -245,17 +245,5 @@ namespace Mosa.Platform.x86.Instructions
 
 			emitter.Emit(opcode);
 		}
-
-		//internal static void EmitXchg32(InstructionNode node, BaseCodeEmitter emitter)
-		//{
-		//	Debug.Assert(node.Operand1.IsCPURegister);
-		//	Debug.Assert(node.Operand2.IsCPURegister);
-		//	Debug.Assert(node.Result.IsCPURegister);
-		//	Debug.Assert(node.Result2.IsCPURegister);
-		//	Debug.Assert(node.Operand1 == node.Result2);
-		//	Debug.Assert(node.Operand2 == node.Result);
-
-		//	(emitter as X86CodeEmitter).Emit(Xchg32.LegacyOpcode, node.Result, node.Operand1, node.Operand2);
-		//}
 	}
 }

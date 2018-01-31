@@ -124,7 +124,7 @@ namespace Mosa.Platform.x86.Instructions
 		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { <#= legacy #> } <#= reg #>);
 
 <# } #>
-		public <#= entry.Name #>()
+		internal <#= entry.Name #>()
 			: base(<#= entry.ResultCount #>, <#= entry.OperandCount #>)
 		{
 		}

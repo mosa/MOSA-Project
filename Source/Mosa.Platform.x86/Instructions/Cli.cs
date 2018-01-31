@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		public static readonly byte[] opcode = new byte[] { 0xFA };
 
-		public Cli()
+		internal Cli()
 			: base(0, 0)
 		{
 		}

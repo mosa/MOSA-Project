@@ -769,10 +769,21 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Shld",
+			"Name": "Shld32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 3,
+			"X86LegacyOpcode": "0x0F, 0xA5",
+			"X86LegacyOpcodeOperandOrder": "2r",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "ShldConst32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"X86LegacyOpcode": "0x0F, 0xA4",
+			"X86LegacyOpcodeOperandOrder": "2r3",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -783,10 +794,23 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Shrd",
+			"Name": "Shrd32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 3,
+			"X86LegacyOpcode": "0x0F, 0xAD",
+			"X86LegacyOpcodeRegField": "04",
+			"X86LegacyOpcodeOperandOrder": "2r",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "ShrdConst32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"X86LegacyOpcode": "0x0F, 0xAC",
+			"X86LegacyOpcodeRegField": "04",
+			"X86LegacyOpcodeOperandOrder": "2r3",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
