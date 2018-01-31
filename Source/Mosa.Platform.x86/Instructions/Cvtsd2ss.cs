@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF2, 0x0F, 0x5A } );
 
-		public Cvtsd2ss()
+		internal Cvtsd2ss()
 			: base(1, 1)
 		{
 		}

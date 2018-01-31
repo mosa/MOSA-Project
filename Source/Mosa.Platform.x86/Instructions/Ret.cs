@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		public static readonly byte[] opcode = new byte[] { 0xC3 };
 
-		public Ret()
+		internal Ret()
 			: base(0, 0)
 		{
 		}

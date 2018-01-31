@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class CmpXchgLoad32 : X86Instruction
 	{
-		public CmpXchgLoad32()
+		internal CmpXchgLoad32()
 			: base(1, 4)
 		{
 		}

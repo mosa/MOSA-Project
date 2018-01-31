@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		public static readonly byte[] opcode = new byte[] { 0x0F, 0x08 };
 
-		public BranchNotZero()
+		internal BranchNotZero()
 			: base(0, 0)
 		{
 		}

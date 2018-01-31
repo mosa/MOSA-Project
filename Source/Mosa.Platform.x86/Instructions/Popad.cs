@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		public static readonly byte[] opcode = new byte[] { 0x61 };
 
-		public Popad()
+		internal Popad()
 			: base(0, 0)
 		{
 		}

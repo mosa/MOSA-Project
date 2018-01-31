@@ -144,6 +144,18 @@
     <Compile Include="Instructions\Roundss.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Shld32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\ShldConst32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Shrd32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\ShrdConst32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\StaticEmitters.cs" />
     <Compile Include="Instructions\Add32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
@@ -474,9 +486,7 @@
     <Compile Include="Instructions\Sar.cs" />
     <Compile Include="Instructions\Sbb.cs" />
     <Compile Include="Instructions\Setcc.cs" />
-    <Compile Include="Instructions\Shld.cs" />
     <Compile Include="Instructions\Shl.cs" />
-    <Compile Include="Instructions\Shrd.cs" />
     <Compile Include="Instructions\Shr.cs" />
     <Compile Include="Instructions\Ucomisd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>

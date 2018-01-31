@@ -23,9 +23,9 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Rcr, Rcr);
 			AddVisitation(X86.Sar, Sar);
 			AddVisitation(X86.Shl, Shl);
-			AddVisitation(X86.Shld, Shld);
+			AddVisitation(X86.Shld32, Shld32);
 			AddVisitation(X86.Shr, Shr);
-			AddVisitation(X86.Shrd, Shrd);
+			AddVisitation(X86.Shrd32, Shrd32);
 		}
 
 		#region Visitation Methods
@@ -274,9 +274,9 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Shld"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Shld(Context context)
+		public void Shld32(Context context)
 		{
-			if (context.Operand3.IsConstant || context.Operand3.IsCPURegister)
+			if (context.Operand3.IsConstant)
 				return;
 
 			if (context.Operand3.Register == GeneralPurposeRegister.ECX)
@@ -292,7 +292,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 
 			context.SetInstruction(X86.Mov, ECX, operand3);
-			context.AppendInstruction(X86.Shld, result, operand1, operand2, ECX);
+			context.AppendInstruction(X86.Shld32, result, operand1, operand2, ECX);
 		}
 
 		/// <summary>
@@ -308,9 +308,9 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Shrd"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Shrd(Context context)
+		public void Shrd32(Context context)
 		{
-			if (context.Operand3.IsConstant || context.Operand3.IsCPURegister)
+			if (context.Operand3.IsConstant)
 				return;
 
 			if (context.Operand3.Register == GeneralPurposeRegister.ECX)
@@ -326,7 +326,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 
 			context.SetInstruction(X86.Mov, ECX, operand3);
-			context.AppendInstruction(X86.Shrd, result, operand1, operand2, ECX);
+			context.AppendInstruction(X86.Shrd32, result, operand1, operand2, ECX);
 		}
 
 		#endregion Visitation Methods

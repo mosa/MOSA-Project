@@ -7,15 +7,15 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// BtrConst32
+	/// Shrd32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class BtrConst32 : X86Instruction
+	public sealed class Shrd32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xB3 } , 0x06);
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xAD } , 0x04);
 
-		internal BtrConst32()
-			: base(1, 2)
+		internal Shrd32()
+			: base(1, 3)
 		{
 		}
 
@@ -27,14 +27,14 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 
-			emitter.Emit(LegacyOpcode, node.Result, node.Operand2);
+			emitter.Emit(LegacyOpcode, node.Operand2, node.Result);
 		}
 
 		// The following is used by the automated code generator.
 
 		public override LegacyOpCode __legacyopcode { get { return LegacyOpcode; } }
 
-		public override string __legacyOpcodeOperandOrder { get { return "r2"; } }
+		public override string __legacyOpcodeOperandOrder { get { return "2r"; } }
 	}
 }
 

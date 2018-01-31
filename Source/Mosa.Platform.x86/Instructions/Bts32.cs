@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xBA } );
 
-		public Bts32()
+		internal Bts32()
 			: base(1, 2)
 		{
 		}

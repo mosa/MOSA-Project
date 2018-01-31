@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		public static readonly byte[] opcode = new byte[] { 0x60 };
 
-		public Pushad()
+		internal Pushad()
 			: base(0, 0)
 		{
 		}
