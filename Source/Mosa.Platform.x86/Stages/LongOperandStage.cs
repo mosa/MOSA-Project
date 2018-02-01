@@ -721,11 +721,11 @@ namespace Mosa.Platform.x86.Stages
 			var eax = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X86.Mov, eax, op1H);
-			context.AppendInstruction(X86.Not, eax, eax);
+			context.AppendInstruction(X86.Not32, eax, eax);
 			context.AppendInstruction(X86.Mov, op0H, eax);
 
 			context.AppendInstruction(X86.Mov, eax, op1L);
-			context.AppendInstruction(X86.Not, eax, eax);
+			context.AppendInstruction(X86.Not32, eax, eax);
 			context.AppendInstruction(X86.Mov, op0L, eax);
 		}
 
@@ -741,8 +741,8 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, op0H, op1H);
 			context.AppendInstruction(X86.Mov, op0L, op1L);
-			context.AppendInstruction(X86.Or, op0H, op0H, op2H);
-			context.AppendInstruction(X86.Or, op0L, op0L, op2L);
+			context.AppendInstruction(X86.Or32, op0H, op0H, op2H);
+			context.AppendInstruction(X86.Or32, op0L, op0L, op2L);
 		}
 
 		/// <summary>

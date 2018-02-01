@@ -265,10 +265,13 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "Dec",
+			"Name": "Dec32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
+			"X86LegacyOpcode": "0xFF",
+			"X86LegacyOpcodeRegField": "01",
+			"X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -340,10 +343,13 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Inc",
+			"Name": "Inc32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
+			"X86LegacyOpcode": "0xFF",
+			"X86LegacyOpcodeRegField": "00",
+			"X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -622,18 +628,34 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Not",
+			"Name": "Not32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
+			"X86LegacyOpcode": "0xF7",
+			"X86LegacyOpcodeRegField": "02",
+			"X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Or",
+			"Name": "Or32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true",
+			"X86LegacyOpcode": "0x0B",
+			"X86LegacyOpcodeOperandOrder": "r2",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "OrConst32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true",
+			"X86LegacyOpcode": "0x81",
+			"X86LegacyOpcodeRegField": "01",
+			"X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
