@@ -509,16 +509,16 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].Block);
 
 			newBlocks[2].AppendInstruction(X86.Shrd32, eax, eax, edx, ecx);
-			newBlocks[2].AppendInstruction(X86.Sar, edx, edx, ecx);
+			newBlocks[2].AppendInstruction(X86.Sar32, edx, edx, ecx);
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[5].Block);
 
 			newBlocks[3].AppendInstruction(X86.Mov, eax, edx);
-			newBlocks[3].AppendInstruction(X86.Sar, edx, edx, CreateConstant(0x1F));
+			newBlocks[3].AppendInstruction(X86.SarConst32, edx, edx, CreateConstant(0x1F));
 			newBlocks[3].AppendInstruction(X86.AndConst32, ecx, ecx, CreateConstant(0x1F));
-			newBlocks[3].AppendInstruction(X86.Sar, eax, eax, ecx);
+			newBlocks[3].AppendInstruction(X86.Sar32, eax, eax, ecx);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].Block);
 
-			newBlocks[4].AppendInstruction(X86.Sar, edx, edx, CreateConstant(0x1F));
+			newBlocks[4].AppendInstruction(X86.SarConst32, edx, edx, CreateConstant(0x1F));
 			newBlocks[4].AppendInstruction(X86.Mov, eax, edx);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].Block);
 
@@ -833,7 +833,7 @@ namespace Mosa.Platform.x86.Stages
 			if (!op0H.IsConstantZero)
 				newBlocks[2].AppendInstruction(X86.Mov, op0H, ConstantZero);
 			newBlocks[2].AppendInstruction(X86.AndConst32, ecx, ecx, CreateConstant(0x1F));
-			newBlocks[2].AppendInstruction(X86.Sar, op0L, op0L, ecx);
+			newBlocks[2].AppendInstruction(X86.Sar32, op0L, op0L, ecx);
 			newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 			newBlocks[3].AppendInstruction(X86.Mov, op0L, op0H);

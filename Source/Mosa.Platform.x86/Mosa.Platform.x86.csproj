@@ -162,10 +162,28 @@
     <Compile Include="Instructions\OrConst32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Rcr32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\RcrConst32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\RcrConstOne32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Roundsd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Roundss.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Sar32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SarConst32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SarConstOne32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Sbb32.cs">
@@ -371,7 +389,7 @@
     <Compile Include="Intrinsic\Remainder.cs" />
     <Compile Include="Intrinsic\SetFS.cs" />
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
-    <Compile Include="Stages\FinalLoweringStage.cs" />
+    <Compile Include="Stages\ConstantLoweringStage.cs" />
     <Compile Include="X86.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -510,7 +528,6 @@
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Push.cs" />
-    <Compile Include="Instructions\Rcr.cs" />
     <Compile Include="Instructions\Rep.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -524,7 +541,6 @@
     <Compile Include="Instructions\Neg.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Sar.cs" />
     <Compile Include="Instructions\Setcc.cs" />
     <Compile Include="Instructions\Ucomisd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>

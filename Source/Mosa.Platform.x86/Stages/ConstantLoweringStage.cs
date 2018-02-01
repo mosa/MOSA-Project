@@ -25,6 +25,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Sbb32, Sbb32);
 			AddVisitation(X86.Shr32, Shr32);
 			AddVisitation(X86.Shl32, Shl32);
+			AddVisitation(X86.Sar32, Sar32);
+			AddVisitation(X86.Rcr32, Rcr32);
 		}
 
 		#region Visitation Methods
@@ -135,6 +137,36 @@ namespace Mosa.Platform.x86.Stages
 				else
 				{
 					context.SetInstruction(X86.ShlConst32, context.Result, context.Operand1, context.Operand2);
+				}
+			}
+		}
+
+		public void Sar32(Context context)
+		{
+			if (context.Operand2.IsConstant)
+			{
+				if (context.Operand2.IsConstantOne)
+				{
+					context.SetInstruction(X86.SarConstOne32, context.Result, context.Operand1, context.Operand2);
+				}
+				else
+				{
+					context.SetInstruction(X86.SarConst32, context.Result, context.Operand1, context.Operand2);
+				}
+			}
+		}
+
+		public void Rcr32(Context context)
+		{
+			if (context.Operand2.IsConstant)
+			{
+				if (context.Operand2.IsConstantOne)
+				{
+					context.SetInstruction(X86.RcrConstOne32, context.Result, context.Operand1, context.Operand2);
+				}
+				else
+				{
+					context.SetInstruction(X86.RcrConst32, context.Result, context.Operand1, context.Operand2);
 				}
 			}
 		}

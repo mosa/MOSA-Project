@@ -20,8 +20,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.In, In);
 			AddVisitation(X86.Mul32, Mul32);
 			AddVisitation(X86.Out, Out);
-			AddVisitation(X86.Rcr, Rcr);
-			AddVisitation(X86.Sar, Sar);
+			AddVisitation(X86.Rcr32, Rcr32);
+			AddVisitation(X86.Sar32, Sar32);
 			AddVisitation(X86.Shl32, Shl32);
 			AddVisitation(X86.Shld32, Shld32);
 			AddVisitation(X86.Shr32, Shr32);
@@ -248,18 +248,18 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Rcr"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Rcr(Context context)
+		public void Rcr32(Context context)
 		{
-			HandleShiftOperation(context, X86.Rcr);
+			HandleShiftOperation(context, X86.Rcr32);
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IX86Visitor.Sar"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Sar(Context context)
+		public void Sar32(Context context)
 		{
-			HandleShiftOperation(context, X86.Sar);
+			HandleShiftOperation(context, X86.Sar32);
 		}
 
 		/// <summary>
