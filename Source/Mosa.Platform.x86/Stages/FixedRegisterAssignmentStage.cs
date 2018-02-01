@@ -22,7 +22,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Out, Out);
 			AddVisitation(X86.Rcr, Rcr);
 			AddVisitation(X86.Sar, Sar);
-			AddVisitation(X86.Shl, Shl);
+			AddVisitation(X86.Shl32, Shl32);
 			AddVisitation(X86.Shld32, Shld32);
 			AddVisitation(X86.Shr32, Shr32);
 			AddVisitation(X86.ShrConst32, Shr32);
@@ -266,9 +266,9 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Shl"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Shl(Context context)
+		public void Shl32(Context context)
 		{
-			HandleShiftOperation(context, X86.Shl);
+			HandleShiftOperation(context, X86.Shl32);
 		}
 
 		/// <summary>

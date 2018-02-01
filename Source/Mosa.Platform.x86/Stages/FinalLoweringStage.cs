@@ -6,10 +6,10 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// Lowering Transformation Stage
+	/// ConstantLoweringStage
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
-	public sealed class FinalLoweringStage : BaseTransformationStage
+	public sealed class ConstantLoweringStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
 		{
@@ -24,6 +24,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Or32, Or32);
 			AddVisitation(X86.Sbb32, Sbb32);
 			AddVisitation(X86.Shr32, Shr32);
+			AddVisitation(X86.Shl32, Shl32);
 		}
 
 		#region Visitation Methods
@@ -119,6 +120,21 @@ namespace Mosa.Platform.x86.Stages
 				else
 				{
 					context.SetInstruction(X86.ShrConst32, context.Result, context.Operand1, context.Operand2);
+				}
+			}
+		}
+
+		public void Shl32(Context context)
+		{
+			if (context.Operand2.IsConstant)
+			{
+				if (context.Operand2.IsConstantOne)
+				{
+					context.SetInstruction(X86.ShlConstOne32, context.Result, context.Operand1, context.Operand2);
+				}
+				else
+				{
+					context.SetInstruction(X86.ShlConst32, context.Result, context.Operand1, context.Operand2);
 				}
 			}
 		}

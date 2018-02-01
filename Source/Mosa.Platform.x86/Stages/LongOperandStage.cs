@@ -777,13 +777,13 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].Block);
 
 			newBlocks[2].AppendInstruction(X86.Shld32, edx, edx, eax, ecx);
-			newBlocks[2].AppendInstruction(X86.Shl, eax, eax, ecx);
+			newBlocks[2].AppendInstruction(X86.Shl32, eax, eax, ecx);
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[5].Block);
 
 			newBlocks[3].AppendInstruction(X86.Mov, edx, eax);
 			newBlocks[3].AppendInstruction(X86.Mov, eax, ConstantZero);
 			newBlocks[3].AppendInstruction(X86.AndConst32, ecx, ecx, CreateConstant(0x1F));
-			newBlocks[3].AppendInstruction(X86.Shl, edx, edx, ecx);
+			newBlocks[3].AppendInstruction(X86.Shl32, edx, edx, ecx);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].Block);
 
 			newBlocks[4].AppendInstruction(X86.Mov, eax, ConstantZero);
