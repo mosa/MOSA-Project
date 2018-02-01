@@ -779,10 +779,24 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Sbb",
+			"Name": "Sbb32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
+			"Commutative": "true",
+			"X86LegacyOpcode": "0x1B",
+			"X86LegacyOpcodeOperandOrder": "r2",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "SbbConst32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true",
+			"X86LegacyOpcode": "0x81",
+			"X86LegacyOpcodeRegField": "03",
+			"X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{

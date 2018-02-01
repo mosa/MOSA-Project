@@ -103,7 +103,8 @@ namespace Mosa.Platform.x86
 		public static readonly Roundsd Roundsd = new Roundsd();
 		public static readonly Roundss Roundss = new Roundss();
 		public static readonly Sar Sar = new Sar();
-		public static readonly Sbb Sbb = new Sbb();
+		public static readonly Sbb32 Sbb32 = new Sbb32();
+		public static readonly SbbConst32 SbbConst32 = new SbbConst32();
 		public static readonly Setcc Setcc = new Setcc();
 		public static readonly Shl Shl = new Shl();
 		public static readonly Shld32 Shld32 = new Shld32();
