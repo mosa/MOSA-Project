@@ -109,7 +109,9 @@ namespace Mosa.Platform.x86
 		public static readonly Shl Shl = new Shl();
 		public static readonly Shld32 Shld32 = new Shld32();
 		public static readonly ShldConst32 ShldConst32 = new ShldConst32();
-		public static readonly Shr Shr = new Shr();
+		public static readonly Shr32 Shr32 = new Shr32();
+		public static readonly ShrConst32 ShrConst32 = new ShrConst32();
+		public static readonly ShrConstOne32 ShrConstOne32 = new ShrConstOne32();
 		public static readonly Shrd32 Shrd32 = new Shrd32();
 		public static readonly ShrdConst32 ShrdConst32 = new ShrdConst32();
 		public static readonly Sti Sti = new Sti();

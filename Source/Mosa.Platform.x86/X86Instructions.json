@@ -832,10 +832,33 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Shr",
+			"Name": "Shr32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
+			"X86LegacyOpcode": "0xD3",
+			"X86LegacyOpcodeRegField": "05",
+			"X86LegacyOpcodeOperandOrder": "r",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "ShrConst32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"X86LegacyOpcode": "0xC1",
+			"X86LegacyOpcodeRegField": "05",
+			"X86LegacyOpcodeOperandOrder": "r2",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "ShrConstOne32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"X86LegacyOpcode": "0xD1",
+			"X86LegacyOpcodeRegField": "05",
+			"X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
