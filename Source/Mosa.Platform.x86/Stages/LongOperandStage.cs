@@ -824,7 +824,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Mov, v1, op1H);
 			newBlocks[1].AppendInstruction(X86.Mov, op0L, op1L);
 			newBlocks[1].AppendInstruction(X86.Shrd32, op0L, op0L, v1, ecx);
-			newBlocks[1].AppendInstruction(X86.Shr, v1, v1, ecx);
+			newBlocks[1].AppendInstruction(X86.Shr32, v1, v1, ecx);
 			if (!op0H.IsConstantZero)
 				newBlocks[1].AppendInstruction(X86.Mov, op0H, v1);
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);

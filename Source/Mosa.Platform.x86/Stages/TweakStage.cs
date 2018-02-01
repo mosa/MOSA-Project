@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Cmp, Cmp);
 			AddVisitation(X86.Sar, Sar);
 			AddVisitation(X86.Shl, Shl);
-			AddVisitation(X86.Shr, Shr);
+			AddVisitation(X86.Shr32, Shr32);
 		}
 
 		#region Visitation Methods
@@ -83,7 +83,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Shr"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Shr(Context context)
+		public void Shr32(Context context)
 		{
 			ConvertShiftConstantToByte(context);
 		}

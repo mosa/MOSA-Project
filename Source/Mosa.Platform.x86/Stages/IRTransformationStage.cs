@@ -800,7 +800,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void ShiftRight(InstructionNode node)
 		{
-			node.ReplaceInstruction(X86.Shr);
+			node.ReplaceInstruction(X86.Shr32);
 		}
 
 		/// <summary>
