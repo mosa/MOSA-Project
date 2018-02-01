@@ -144,6 +144,9 @@
     <Compile Include="Instructions\Inc32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Mul32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Mulsd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -494,7 +497,6 @@
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Mov.cs" />
-    <Compile Include="Instructions\Mul.cs" />
     <Compile Include="Instructions\Neg.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>

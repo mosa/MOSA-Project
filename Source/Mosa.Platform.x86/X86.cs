@@ -81,7 +81,7 @@ namespace Mosa.Platform.x86
 		public static readonly MovupsStore MovupsStore = new MovupsStore();
 		public static readonly Movzx Movzx = new Movzx();
 		public static readonly MovzxLoad MovzxLoad = new MovzxLoad();
-		public static readonly Mul Mul = new Mul();
+		public static readonly Mul32 Mul32 = new Mul32();
 		public static readonly Mulsd Mulsd = new Mulsd();
 		public static readonly Mulss Mulss = new Mulss();
 		public static readonly Neg Neg = new Neg();

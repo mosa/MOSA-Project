@@ -81,7 +81,7 @@ namespace Mosa.Platform.x86
 			{ "MovupsStore", X86.MovupsStore },
 			{ "Movzx", X86.Movzx },
 			{ "MovzxLoad", X86.MovzxLoad },
-			{ "Mul", X86.Mul },
+			{ "Mul32", X86.Mul32 },
 			{ "Mulsd", X86.Mulsd },
 			{ "Mulss", X86.Mulss },
 			{ "Neg", X86.Neg },

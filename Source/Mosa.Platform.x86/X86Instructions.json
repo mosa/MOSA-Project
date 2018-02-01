@@ -590,12 +590,15 @@
 			"MemoryRead": "true"
 		},
 		{
-			"Name": "Mul",
+			"Name": "Mul32",
 			"FamilyName": "X86",
 			"ResultCount": 2,
 			"OperandCount": 2,
 			"Commutative": "true",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86LegacyOpcode": "0xF7",
+			"X86LegacyOpcodeRegField": "04",
+			"X86LegacyOpcodeOperandOrder": "2",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Mulsd",
