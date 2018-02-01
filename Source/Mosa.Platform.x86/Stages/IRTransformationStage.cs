@@ -791,7 +791,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void ShiftLeft(InstructionNode node)
 		{
-			node.ReplaceInstruction(X86.Shl);
+			node.ReplaceInstruction(X86.Shl32);
 		}
 
 		/// <summary>
