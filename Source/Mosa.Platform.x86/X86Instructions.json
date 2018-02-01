@@ -454,7 +454,8 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"StaticEmitMethod": "StaticEmitters.Emit%"
 		},
 		{
 			"Name": "MovCRLoad",
@@ -492,7 +493,9 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"X86ThreeTwoAddressConversion": "true"
+			"X86LegacyOpcode": "0xF2, 0x0F, 0x10",
+			"X86LegacyOpcodeOperandOrder": "r1",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovsdLoad",
@@ -515,7 +518,9 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"X86ThreeTwoAddressConversion": "true"
+			"X86LegacyOpcode": "0xF3, 0x0F, 0x10",
+			"X86LegacyOpcodeOperandOrder": "r1",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovssLoad",
@@ -566,14 +571,16 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"StaticEmitMethod": "StaticEmitters.Emit%"
 		},
 		{
 			"Name": "MovupsStore",
 			"FamilyName": "X86",
-			"ResultCount": 1,
-			"OperandCount": 2,
-			"MemoryWrite": "true"
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true",
+			"StaticEmitMethod": "StaticEmitters.Emit%"
 		},
 		{
 			"Name": "Movzx",

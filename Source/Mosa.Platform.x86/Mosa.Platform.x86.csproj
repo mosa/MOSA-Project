@@ -297,12 +297,18 @@
     <Compile Include="Instructions\Movaps.cs" />
     <Compile Include="Instructions\MovCRStore.cs" />
     <Compile Include="Instructions\MovCRLoad.cs" />
-    <Compile Include="Instructions\MovupsStore.cs" />
-    <Compile Include="Instructions\MovupsLoad.cs" />
+    <Compile Include="Instructions\MovupsStore.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovupsLoad.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Movd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\MovapsLoad.cs" />
+    <Compile Include="Instructions\MovapsLoad.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\MovssLoad.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -457,8 +463,12 @@
     <Compile Include="Instructions\Jmp.cs" />
     <Compile Include="CompilerStages\Multiboot0695Stage.cs" />
     <Compile Include="Instructions\Call.cs" />
-    <Compile Include="Instructions\Movsd.cs" />
-    <Compile Include="Instructions\Movss.cs" />
+    <Compile Include="Instructions\Movsd.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movss.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Ret.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
