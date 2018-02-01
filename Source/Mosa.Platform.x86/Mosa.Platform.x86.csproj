@@ -129,10 +129,16 @@
     <Compile Include="Instructions\Dec32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Div32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Divsd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Divss.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\IDiv32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Inc32.cs">
@@ -403,7 +409,6 @@
     <Compile Include="Instructions\Cvttss2si.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Div.cs" />
     <Compile Include="Instructions\Jmp.cs" />
     <Compile Include="CompilerStages\Multiboot0695Stage.cs" />
     <Compile Include="Instructions\Call.cs" />
@@ -441,7 +446,6 @@
     <Compile Include="Instructions\Cvtss2sd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\IDiv.cs" />
     <Compile Include="Instructions\Int.cs" />
     <Compile Include="Intrinsic\BochsDebug.cs" />
     <Compile Include="Instructions\Cli.cs">

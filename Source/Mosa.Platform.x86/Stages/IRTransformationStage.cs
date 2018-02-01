@@ -371,7 +371,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
-			context.AppendInstruction2(X86.IDiv, v3, result, v1, v2, operand2);
+			context.AppendInstruction2(X86.IDiv32, v3, result, v1, v2, operand2);
 		}
 
 		/// <summary>
@@ -388,7 +388,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X86.Mov, v1, ConstantZero);
-			context.AppendInstruction2(X86.Div, v1, v2, v1, operand1, operand2);
+			context.AppendInstruction2(X86.Div32, v1, v2, v1, operand1, operand2);
 			context.AppendInstruction(X86.Mov, result, v2);
 		}
 
@@ -764,7 +764,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
-			context.AppendInstruction2(X86.IDiv, result, v3, v1, v2, operand2);
+			context.AppendInstruction2(X86.IDiv32, result, v3, v1, v2, operand2);
 		}
 
 		/// <summary>
@@ -781,7 +781,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X86.Mov, v1, ConstantZero);
-			context.AppendInstruction2(X86.Div, v1, v2, v1, operand1, operand2);
+			context.AppendInstruction2(X86.Div32, v1, v2, v1, operand1, operand2);
 			context.AppendInstruction(X86.Mov, result, v1);
 		}
 

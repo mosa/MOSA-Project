@@ -42,12 +42,12 @@ namespace Mosa.Platform.x86
 		public static readonly Cvttsd2si Cvttsd2si = new Cvttsd2si();
 		public static readonly Cvttss2si Cvttss2si = new Cvttss2si();
 		public static readonly Dec32 Dec32 = new Dec32();
-		public static readonly Div Div = new Div();
+		public static readonly Div32 Div32 = new Div32();
 		public static readonly Divsd Divsd = new Divsd();
 		public static readonly Divss Divss = new Divss();
 		public static readonly FarJmp FarJmp = new FarJmp();
 		public static readonly Hlt Hlt = new Hlt();
-		public static readonly IDiv IDiv = new IDiv();
+		public static readonly IDiv32 IDiv32 = new IDiv32();
 		public static readonly IMul IMul = new IMul();
 		public static readonly In In = new In();
 		public static readonly Inc32 Inc32 = new Inc32();
