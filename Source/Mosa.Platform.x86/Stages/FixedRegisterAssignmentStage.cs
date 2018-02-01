@@ -14,8 +14,8 @@ namespace Mosa.Platform.x86.Stages
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(X86.Cdq, Cdq);
-			AddVisitation(X86.Div, Div);
-			AddVisitation(X86.IDiv, IDiv);
+			AddVisitation(X86.Div32, Div32);
+			AddVisitation(X86.IDiv32, IDiv32);
 			AddVisitation(X86.IMul, IMul);
 			AddVisitation(X86.In, In);
 			AddVisitation(X86.Mul, Mul);
@@ -56,7 +56,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Div"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Div(Context context)
+		public void Div32(Context context)
 		{
 			if (context.Result.IsCPURegister
 				&& context.Result2.IsCPURegister
@@ -81,13 +81,13 @@ namespace Mosa.Platform.x86.Stages
 
 			if (operand3.IsCPURegister)
 			{
-				context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, operand3);
+				context.AppendInstruction2(X86.Div32, EDX, EAX, EDX, EAX, operand3);
 			}
 			else
 			{
 				Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				context.AppendInstruction(X86.Mov, v3, operand3);
-				context.AppendInstruction2(X86.Div, EDX, EAX, EDX, EAX, v3);
+				context.AppendInstruction2(X86.Div32, EDX, EAX, EDX, EAX, v3);
 			}
 
 			context.AppendInstruction(X86.Mov, result2, EAX);
@@ -98,7 +98,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.IDiv"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void IDiv(Context context)
+		public void IDiv32(Context context)
 		{
 			if (context.Result.IsCPURegister
 				&& context.Result2.IsCPURegister
@@ -124,13 +124,13 @@ namespace Mosa.Platform.x86.Stages
 
 			if (operand3.IsCPURegister)
 			{
-				context.AppendInstruction2(X86.IDiv, EDX, EAX, EDX, EAX, operand3);
+				context.AppendInstruction2(X86.IDiv32, EDX, EAX, EDX, EAX, operand3);
 			}
 			else
 			{
 				Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				context.AppendInstruction(X86.Mov, v3, operand3);
-				context.AppendInstruction2(X86.IDiv, EDX, EAX, EDX, EAX, v3);
+				context.AppendInstruction2(X86.IDiv32, EDX, EAX, EDX, EAX, v3);
 			}
 
 			context.AppendInstruction(X86.Mov, result2, EAX);

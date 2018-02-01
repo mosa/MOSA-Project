@@ -275,10 +275,13 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Div",
+			"Name": "Div32",
 			"FamilyName": "X86",
 			"ResultCount": 2,
 			"OperandCount": 3,
+			"X86LegacyOpcode": "0xF7",
+			"X86LegacyOpcodeRegField": "06",
+			"X86LegacyOpcodeOperandOrder": "3",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
@@ -317,10 +320,13 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "IDiv",
+			"Name": "IDiv32",
 			"FamilyName": "X86",
 			"ResultCount": 2,
 			"OperandCount": 3,
+			"X86LegacyOpcode": "0xF7",
+			"X86LegacyOpcodeRegField": "07",
+			"X86LegacyOpcodeOperandOrder": "3",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
