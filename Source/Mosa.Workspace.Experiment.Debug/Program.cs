@@ -336,7 +336,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			//X86.Addss,
 			//X86.Adc32,
 			//X86.And,
-			X86.Or,
+			//X86.Or,
 
 			//X86.Xor,
 			X86.Mul,

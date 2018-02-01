@@ -640,7 +640,7 @@ namespace Mosa.Platform.x86.Stages
 			else if (dest.IsU2)
 				context.AppendInstruction(X86.XorConst32, dest, dest, CreateConstant(0xFFFF));
 			else
-				context.AppendInstruction(X86.Not, dest, dest);
+				context.AppendInstruction(X86.Not32, dest, dest);
 		}
 
 		/// <summary>
@@ -649,7 +649,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void LogicalOr(InstructionNode node)
 		{
-			node.ReplaceInstruction(X86.Or);
+			node.ReplaceInstruction(X86.Or32);
 		}
 
 		/// <summary>

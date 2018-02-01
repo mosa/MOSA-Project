@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86
 		public static readonly Cvtss2sd Cvtss2sd = new Cvtss2sd();
 		public static readonly Cvttsd2si Cvttsd2si = new Cvttsd2si();
 		public static readonly Cvttss2si Cvttss2si = new Cvttss2si();
-		public static readonly Dec Dec = new Dec();
+		public static readonly Dec32 Dec32 = new Dec32();
 		public static readonly Div Div = new Div();
 		public static readonly Divsd Divsd = new Divsd();
 		public static readonly Divss Divss = new Divss();
@@ -50,7 +50,7 @@ namespace Mosa.Platform.x86
 		public static readonly IDiv IDiv = new IDiv();
 		public static readonly IMul IMul = new IMul();
 		public static readonly In In = new In();
-		public static readonly Inc Inc = new Inc();
+		public static readonly Inc32 Inc32 = new Inc32();
 		public static readonly Int Int = new Int();
 		public static readonly Invlpg Invlpg = new Invlpg();
 		public static readonly IRetd IRetd = new IRetd();
@@ -86,8 +86,9 @@ namespace Mosa.Platform.x86
 		public static readonly Mulss Mulss = new Mulss();
 		public static readonly Neg Neg = new Neg();
 		public static readonly Nop Nop = new Nop();
-		public static readonly Not Not = new Not();
-		public static readonly Or Or = new Or();
+		public static readonly Not32 Not32 = new Not32();
+		public static readonly Or32 Or32 = new Or32();
+		public static readonly OrConst32 OrConst32 = new OrConst32();
 		public static readonly Out Out = new Out();
 		public static readonly Pause Pause = new Pause();
 		public static readonly Pextrd Pextrd = new Pextrd();
