@@ -14,9 +14,12 @@ namespace Mosa.Platform.x86.Stages
 		{
 			AddVisitation(X86.Call, Call);
 			AddVisitation(X86.Cmp, Cmp);
-			AddVisitation(X86.Sar, Sar);
-			AddVisitation(X86.Shl32, Shl32);
-			AddVisitation(X86.Shr32, Shr32);
+			AddVisitation(X86.Sar32, ConvertShiftConstantToByte);
+			AddVisitation(X86.Shl32, ConvertShiftConstantToByte);
+			AddVisitation(X86.Shr32, ConvertShiftConstantToByte);
+			AddVisitation(X86.SarConst32, ConvertShiftConstantToByte);
+			AddVisitation(X86.ShlConst32, ConvertShiftConstantToByte);
+			AddVisitation(X86.ShrConst32, ConvertShiftConstantToByte);
 		}
 
 		#region Visitation Methods
@@ -61,33 +64,6 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Sar"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Sar(Context context)
-		{
-			ConvertShiftConstantToByte(context);
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Shl"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Shl32(Context context)
-		{
-			ConvertShiftConstantToByte(context);
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Shr"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Shr32(Context context)
-		{
-			ConvertShiftConstantToByte(context);
-		}
-
 		#endregion Visitation Methods
 
 		/// <summary>
@@ -96,13 +72,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ConvertShiftConstantToByte(Context context)
 		{
-			if (!context.Operand2.IsConstant)
+			if (!context.Operand2.IsConstant || context.Operand2.IsByte)
 				return;
 
-			if (context.Operand2.IsByte)
-				return;
-
-			// fixme: may not be necessary
 			context.Operand2 = CreateConstant(TypeSystem.BuiltIn.U1, context.Operand2.ConstantUnsignedLongInteger);
 		}
 	}
