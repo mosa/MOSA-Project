@@ -339,7 +339,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			//X86.Or,
 
 			//X86.Xor,
-			X86.Mul,
+			//X86.Mul,
 			X86.Mulsd,
 			X86.Mulss,
 

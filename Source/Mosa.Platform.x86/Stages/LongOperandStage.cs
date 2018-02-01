@@ -690,7 +690,7 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Mov, eax, op2L);
 			context.AppendInstruction(X86.Mov, v20, eax);
 			context.AppendInstruction(X86.Mov, eax, v20);
-			context.AppendInstruction2(X86.Mul, edx, eax, eax, op1L);
+			context.AppendInstruction2(X86.Mul32, edx, eax, eax, op1L);
 			context.AppendInstruction(X86.Mov, op0L, eax);
 
 			if (!op0H.IsConstantZero)

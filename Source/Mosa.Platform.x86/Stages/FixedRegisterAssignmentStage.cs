@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.IDiv32, IDiv32);
 			AddVisitation(X86.IMul, IMul);
 			AddVisitation(X86.In, In);
-			AddVisitation(X86.Mul, Mul);
+			AddVisitation(X86.Mul32, Mul32);
 			AddVisitation(X86.Out, Out);
 			AddVisitation(X86.Rcr, Rcr);
 			AddVisitation(X86.Sar, Sar);
@@ -182,7 +182,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Mul"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Mul(Context context)
+		public void Mul32(Context context)
 		{
 			if (context.Result.IsCPURegister
 				&& context.Result2.IsCPURegister
@@ -212,7 +212,7 @@ namespace Mosa.Platform.x86.Stages
 
 			Debug.Assert(operand2.IsCPURegister || operand2.IsVirtualRegister);
 
-			context.AppendInstruction2(X86.Mul, EDX, EAX, EAX, operand2);
+			context.AppendInstruction2(X86.Mul32, EDX, EAX, EAX, operand2);
 			context.AppendInstruction(X86.Mov, result, EDX);
 			context.AppendInstruction(X86.Mov, result2, EAX);
 		}

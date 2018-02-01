@@ -723,7 +723,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand2 = node.Operand2;
 
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			node.SetInstruction2(X86.Mul, v1, result, operand1, operand2);
+			node.SetInstruction2(X86.Mul32, v1, result, operand1, operand2);
 		}
 
 		/// <summary>
@@ -737,7 +737,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand2 = node.Operand2;
 
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			node.SetInstruction2(X86.Mul, v1, result, operand1, operand2);
+			node.SetInstruction2(X86.Mul32, v1, result, operand1, operand2);
 		}
 
 		/// <summary>
