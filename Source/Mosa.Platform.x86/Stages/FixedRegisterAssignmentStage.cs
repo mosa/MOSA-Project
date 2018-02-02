@@ -19,7 +19,9 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.IMul, IMul);
 			AddVisitation(X86.In, In);
 			AddVisitation(X86.Mul32, Mul32);
-			AddVisitation(X86.Out, Out);
+			AddVisitation(X86.Out8, Out);
+			AddVisitation(X86.Out16, Out);
+			AddVisitation(X86.Out32, Out);
 			AddVisitation(X86.Rcr32, Rcr32);
 			AddVisitation(X86.Sar32, Sar32);
 			AddVisitation(X86.Shl32, Shl32);
@@ -239,9 +241,11 @@ namespace Mosa.Platform.x86.Stages
 			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
 			Operand EAX = Operand.CreateCPURegister(operand2.Type, GeneralPurposeRegister.EAX);
 
+			BaseInstruction instruction = context.Instruction;
+
 			context.SetInstruction(X86.Mov, EDX, operand1);
 			context.AppendInstruction(X86.Mov, EAX, operand2);
-			context.AppendInstruction(X86.Out, size, null, EDX, EAX);
+			context.AppendInstruction(instruction, size, null, EDX, EAX);
 		}
 
 		/// <summary>

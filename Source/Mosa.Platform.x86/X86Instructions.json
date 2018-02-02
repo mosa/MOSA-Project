@@ -683,13 +683,71 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Out",
+			"Name": "Out8",
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 2,
+			"X86LegacyOpcode": "0xEE",
+			"X86LegacyOpcodeOperandOrder": "",
 			"IOOperation": "true",
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "Out16",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"X86LegacyOpcode": "0xEF",
+			"X86LegacyOpcodeOperandOrder": "",
+			"IOOperation": "true",
+			"UnspecifiedSideEffect": "true",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "Out32",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"X86LegacyOpcode": "0xEF",
+			"X86LegacyOpcodeOperandOrder": "",
+			"IOOperation": "true",
+			"UnspecifiedSideEffect": "true",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+
+		{
+			"Name": "OutConst8",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"X86LegacyOpcode": "0xE6",
+			"X86LegacyOpcodeOperandOrder": "1",
+			"IOOperation": "true",
+			"UnspecifiedSideEffect": "true",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "OutConst16",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"X86LegacyOpcode": "0xE7",
+			"X86LegacyOpcodeOperandOrder": "1",
+			"IOOperation": "true",
+			"UnspecifiedSideEffect": "true",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "OutConst32",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"X86LegacyOpcode": "0xE7",
+			"X86LegacyOpcodeOperandOrder": "1",
+			"IOOperation": "true",
+			"UnspecifiedSideEffect": "true",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Pause",
