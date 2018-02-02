@@ -856,7 +856,9 @@ namespace Mosa.Platform.x86.Stages
 
 			if (op1.IsBoolean)
 			{
-				context.SetInstruction(X86.Movzx, InstructionSize.Size8, op0L, op1);
+				X86Instruction Movzx = op1.IsI1 ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
+
+				context.SetInstruction(Movzx, InstructionSize.Size8, op0L, op1);
 				context.AppendInstruction(X86.Mov, op0H, ConstantZero);
 			}
 			else if (op1.IsI1 || op1.IsI2)
@@ -866,8 +868,9 @@ namespace Mosa.Platform.x86.Stages
 				var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 				var size = op1.IsI1 ? InstructionSize.Size8 : InstructionSize.Size16;
+				X86Instruction Movsx = op1.IsI1 ? X86.Movsx8To32 : (X86Instruction)X86.Movsx16To32;
 
-				context.SetInstruction(X86.Movsx, size, v1, op1);
+				context.SetInstruction(Movsx, size, v1, op1);
 				context.AppendInstruction2(X86.Cdq, v3, v2, v1);
 				context.AppendInstruction(X86.Mov, op0L, v2);
 				context.AppendInstruction(X86.Mov, op0H, v3);
@@ -894,8 +897,9 @@ namespace Mosa.Platform.x86.Stages
 				var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 				var size = op1.IsI1 ? InstructionSize.Size8 : InstructionSize.Size16;
+				X86Instruction Movzx = op1.IsI1 ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
 
-				context.SetInstruction(X86.Movzx, size, v1, op1);
+				context.SetInstruction(Movzx, size, v1, op1);
 				context.AppendInstruction2(X86.Cdq, v3, v2, v1);
 				context.AppendInstruction(X86.Mov, op0L, v2);
 				context.AppendInstruction(X86.Mov, op0H, ConstantZero);
@@ -992,8 +996,9 @@ namespace Mosa.Platform.x86.Stages
 			else if (op1.IsBoolean || op1.IsChar || op1.IsU1 || op1.IsU2)
 			{
 				var size = (op1.IsU1 || op1.IsBoolean) ? InstructionSize.Size8 : InstructionSize.Size16;
+				X86Instruction Movzx = (op1.IsU1 || op1.IsBoolean) ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
 
-				context.SetInstruction(X86.Movzx, size, op0L, op1L);
+				context.SetInstruction(Movzx, size, op0L, op1L);
 				context.AppendInstruction(X86.Mov, op0H, ConstantZero);
 			}
 			else if (op1.IsU8)

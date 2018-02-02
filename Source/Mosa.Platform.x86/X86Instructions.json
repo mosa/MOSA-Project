@@ -552,11 +552,20 @@
 			"MemoryWrite": "true"
 		},
 		{
-			"Name": "Movsx",
+			"Name": "Movsx8To32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"X86ThreeTwoAddressConversion": "true"
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "Movsx16To32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovsxLoad",
@@ -591,11 +600,20 @@
 			"StaticEmitMethod": "StaticEmitters.Emit%"
 		},
 		{
-			"Name": "Movzx",
+			"Name": "Movzx8To32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"X86ThreeTwoAddressConversion": "true"
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "Movzx16To32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovzxLoad",

@@ -809,7 +809,11 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void SignExtendedMove(InstructionNode node)
 		{
-			node.ReplaceInstruction(X86.Movsx);
+			Debug.Assert(node.Size != InstructionSize.Size32);
+
+			X86Instruction Movsx = (node.Size == InstructionSize.Size8) ? X86.Movsx8To32 : (X86Instruction)X86.Movsx16To32;
+
+			node.ReplaceInstruction(Movsx);
 		}
 
 		private void StoreFloatR4(InstructionNode node)
@@ -911,8 +915,11 @@ namespace Mosa.Platform.x86.Stages
 		private void ZeroExtendedMove(InstructionNode node)
 		{
 			Debug.Assert(node.Size != InstructionSize.None);
+			Debug.Assert(node.Size != InstructionSize.Size32);
 
-			node.ReplaceInstruction(X86.Movzx);
+			X86Instruction Movzx = (node.Size == InstructionSize.Size8) ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
+
+			node.ReplaceInstruction(Movzx);
 		}
 
 		#endregion Visitation Methods

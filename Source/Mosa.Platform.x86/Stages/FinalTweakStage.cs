@@ -20,8 +20,6 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.MovStore, MovStore);
 			AddVisitation(X86.Movsd, Movsd);
 			AddVisitation(X86.Movss, Movss);
-			AddVisitation(X86.Movsx, Movsx);
-			AddVisitation(X86.Movzx, Movzx);
 			AddVisitation(X86.Nop, Nop);
 			AddVisitation(X86.Setcc, Setcc);
 		}
@@ -193,84 +191,6 @@ namespace Mosa.Platform.x86.Stages
 			{
 				context.Empty();
 				return;
-			}
-		}
-
-		public void Movsx(Context context)
-		{
-			var size = context.Size;
-
-			// Mov can not use ESI or EDI registers for 8/16bit values
-			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
-				return;
-
-			Operand result = context.Operand1;
-
-			Debug.Assert(result.IsCPURegister);
-
-			if (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI)
-			{
-				Operand dest = context.Result;
-
-				if (result.Register != dest.Register)
-				{
-					context.SetInstruction(X86.Mov, dest, result);
-				}
-				else
-				{
-					context.Empty();
-				}
-
-				if (size == InstructionSize.Size16)
-				{
-					context.AppendInstruction(X86.AndConst32, dest, dest, CreateConstant(0x0000ffff));
-					context.AppendInstruction(X86.XorConst32, dest, dest, CreateConstant(0x00010000));
-					context.AppendInstruction(X86.SubConst32, dest, dest, CreateConstant(0x00010000));
-				}
-				else if (size == InstructionSize.Size8)
-				{
-					context.AppendInstruction(X86.AndConst32, dest, dest, CreateConstant(0x000000ff));
-					context.AppendInstruction(X86.XorConst32, dest, dest, CreateConstant(0x00000100));
-					context.AppendInstruction(X86.SubConst32, dest, dest, CreateConstant(0x00000100));
-				}
-			}
-		}
-
-		public void Movzx(Context context)
-		{
-			var size = context.Size;
-
-			// Mov can not use ESI or EDI registers for 8/16bit values
-			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
-				return;
-
-			Operand result = context.Result;
-
-			Debug.Assert(result.IsCPURegister);
-
-			if (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI)
-			{
-				Debug.Assert(context.Result.IsCPURegister);
-
-				Operand source = context.Operand1;
-
-				if (source.Register != result.Register)
-				{
-					context.SetInstruction(X86.Mov, result, source);
-				}
-				else
-				{
-					context.Empty();
-				}
-
-				if (size == InstructionSize.Size16)
-				{
-					context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0xffff));
-				}
-				else if (size == InstructionSize.Size8)
-				{
-					context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0xff));
-				}
 			}
 		}
 

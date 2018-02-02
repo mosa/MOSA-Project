@@ -337,5 +337,81 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.WriteByte(0xCD);
 			emitter.WriteByte((byte)node.Operand1.ConstantUnsignedInteger);
 		}
+
+		internal static void EmitMovsx8To32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsCPURegister);
+
+			// register2 to register1 0000 1111 : 1011 111w : 11 reg1 reg2
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                           // 4:opcode
+				.AppendNibble(Bits.b1111)                           // 4:opcode
+				.AppendNibble(Bits.b1011)                           // 4:opcode
+				.Append3Bits(Bits.b111)                             // 4:opcode
+				.AppendWidthBit(false)                              // 1:width (node.Size != InstructionSize.Size8)
+				.AppendMod(Bits.b11)                                // 2:mod
+				.AppendRegister(node.Result)                        // 3:register (destination)
+				.AppendRM(node.Operand1);                           // 3:r/m (source)
+
+			emitter.Emit(opcode);
+		}
+
+		internal static void EmitMovsx16To32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsCPURegister);
+
+			// register2 to register1 0000 1111 : 1011 111w : 11 reg1 reg2
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                           // 4:opcode
+				.AppendNibble(Bits.b1111)                           // 4:opcode
+				.AppendNibble(Bits.b1011)                           // 4:opcode
+				.Append3Bits(Bits.b111)                             // 4:opcode
+				.AppendWidthBit(true)                               // 1:width (node.Size != InstructionSize.Size8)
+				.AppendMod(Bits.b11)                                // 2:mod
+				.AppendRegister(node.Result)                        // 3:register (destination)
+				.AppendRM(node.Operand1);                           // 3:r/m (source)
+
+			emitter.Emit(opcode);
+		}
+
+		internal static void EmitMovzx8To32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsCPURegister);
+
+			// register2 to register1 0000 1111 : 1011 011w : 11 reg1 reg2
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                           // 4:opcode
+				.AppendNibble(Bits.b1111)                           // 4:opcode
+				.AppendNibble(Bits.b1011)                           // 4:opcode
+				.Append3Bits(Bits.b011)                             // 4:opcode
+				.AppendWidthBit(false)                              // 1:width node.Size != InstructionSize.Size8
+				.AppendMod(Bits.b11)                                // 2:mod
+				.AppendRegister(node.Result)                        // 3:register (destination)
+				.AppendRM(node.Operand1);                           // 3:r/m (source)
+
+			emitter.Emit(opcode);
+		}
+
+		internal static void EmitMovzx16To32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsCPURegister);
+
+			// register2 to register1 0000 1111 : 1011 011w : 11 reg1 reg2
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                           // 4:opcode
+				.AppendNibble(Bits.b1111)                           // 4:opcode
+				.AppendNibble(Bits.b1011)                           // 4:opcode
+				.Append3Bits(Bits.b011)                             // 4:opcode
+				.AppendWidthBit(true)                              // 1:width node.Size != InstructionSize.Size8
+				.AppendMod(Bits.b11)                                // 2:mod
+				.AppendRegister(node.Result)                        // 3:register (destination)
+				.AppendRM(node.Operand1);                           // 3:r/m (source)
+
+			emitter.Emit(opcode);
+		}
 	}
 }
