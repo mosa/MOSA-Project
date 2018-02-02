@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// GetFS
 	/// </summary>
 	public class GetFS : IIntrinsicPlatformMethod
 	{

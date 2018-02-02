@@ -30,7 +30,8 @@ namespace Mosa.Platform.x86
 		public static readonly Cdq Cdq = new Cdq();
 		public static readonly Cli Cli = new Cli();
 		public static readonly Cmovcc Cmovcc = new Cmovcc();
-		public static readonly Cmp Cmp = new Cmp();
+		public static readonly Cmp32 Cmp32 = new Cmp32();
+		public static readonly CmpConst32 CmpConst32 = new CmpConst32();
 		public static readonly CmpXchgLoad32 CmpXchgLoad32 = new CmpXchgLoad32();
 		public static readonly Comisd Comisd = new Comisd();
 		public static readonly Comiss Comiss = new Comiss();

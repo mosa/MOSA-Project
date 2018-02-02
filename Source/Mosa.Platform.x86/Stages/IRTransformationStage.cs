@@ -214,7 +214,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction(X86.Mov, v1, ConstantZero);
-			context.AppendInstruction(X86.Cmp, null, operand1, operand2);
+			context.AppendInstruction(X86.Cmp32, null, operand1, operand2);
 
 			if (resultOperand.IsUnsigned || resultOperand.IsChar)
 			{
@@ -239,7 +239,7 @@ namespace Mosa.Platform.x86.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			context.SetInstruction(X86.Cmp, null, operand1, operand2);
+			context.SetInstruction(X86.Cmp32, null, operand1, operand2);
 			context.AppendInstruction(X86.Branch, condition, target);
 		}
 
@@ -903,7 +903,7 @@ namespace Mosa.Platform.x86.Stages
 
 			for (int i = 0; i < targets.Count - 1; ++i)
 			{
-				context.AppendInstruction(X86.Cmp, null, operand, CreateConstant(i));
+				context.AppendInstruction(X86.CmpConst32, null, operand, CreateConstant(i));
 				context.AppendInstruction(X86.Branch, ConditionCode.Equal, targets[i]);
 			}
 		}

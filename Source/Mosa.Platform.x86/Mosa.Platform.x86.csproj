@@ -123,6 +123,12 @@
     <Compile Include="Instructions\BtsConst32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Cmp32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CmpConst32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\CmpXchgLoad32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -524,7 +530,6 @@
     <Compile Include="Instructions\Cdq.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Cmp.cs" />
     <Compile Include="Instructions\Comisd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>

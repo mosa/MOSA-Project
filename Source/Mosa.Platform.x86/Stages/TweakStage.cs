@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Stages
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(X86.Call, Call);
-			AddVisitation(X86.Cmp, Cmp);
+			AddVisitation(X86.Cmp32, Cmp32);
 			AddVisitation(X86.Sar32, ConvertShiftConstantToByte);
 			AddVisitation(X86.Shl32, ConvertShiftConstantToByte);
 			AddVisitation(X86.Shr32, ConvertShiftConstantToByte);
@@ -51,7 +51,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Cmp"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Cmp(Context context)
+		public void Cmp32(Context context)
 		{
 			Operand left = context.Operand1;
 

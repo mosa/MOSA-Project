@@ -500,11 +500,11 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, count);
 			newBlocks[0].AppendInstruction(X86.Mov, edx, op1H);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op1L);
-			newBlocks[0].AppendInstruction(X86.Cmp, null, ecx, CreateConstant(64));
+			newBlocks[0].AppendInstruction(X86.CmpConst32, null, ecx, CreateConstant(64));
 			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].Block);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].Block);
 
-			newBlocks[1].AppendInstruction(X86.Cmp, null, ecx, CreateConstant(32));
+			newBlocks[1].AppendInstruction(X86.CmpConst32, null, ecx, CreateConstant(32));
 			newBlocks[1].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].Block);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].Block);
 
@@ -549,7 +549,7 @@ namespace Mosa.Platform.x86.Stages
 			nextBlock.Block.NextBlocks.Remove(target);
 
 			// Compare high dwords
-			context.SetInstruction(X86.Cmp, null, op1H, op2H);
+			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
 			context.AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[1].Block);
 			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
@@ -558,7 +558,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 			// Compare low dwords
-			newBlocks[1].AppendInstruction(X86.Cmp, null, op1L, op2L);
+			newBlocks[1].AppendInstruction(X86.Cmp32, null, op1L, op2L);
 			newBlocks[1].AppendInstruction(X86.Branch, conditionCode.GetUnsigned(), target);
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
@@ -585,7 +585,7 @@ namespace Mosa.Platform.x86.Stages
 			var newBlocks = CreateNewBlockContexts(4);
 
 			// Compare high dwords
-			context.SetInstruction(X86.Cmp, null, op1H, op2H);
+			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
 			context.AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[1].Block);
 			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
@@ -594,7 +594,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[3].Block);
 
 			// Compare low dwords
-			newBlocks[1].AppendInstruction(X86.Cmp, null, op1L, op2L);
+			newBlocks[1].AppendInstruction(X86.Cmp32, null, op1L, op2L);
 			newBlocks[1].AppendInstruction(X86.Branch, conditionCode.GetUnsigned(), newBlocks[2].Block);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[3].Block);
 
@@ -768,11 +768,11 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, count);
 			newBlocks[0].AppendInstruction(X86.Mov, edx, op1H);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op1L);
-			newBlocks[0].AppendInstruction(X86.Cmp, null, ecx, CreateConstant(64));
+			newBlocks[0].AppendInstruction(X86.CmpConst32, null, ecx, CreateConstant(64));
 			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].Block);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].Block);
 
-			newBlocks[1].AppendInstruction(X86.Cmp, null, ecx, CreateConstant(32));
+			newBlocks[1].AppendInstruction(X86.CmpConst32, null, ecx, CreateConstant(32));
 			newBlocks[1].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].Block);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].Block);
 
@@ -813,11 +813,11 @@ namespace Mosa.Platform.x86.Stages
 			var newBlocks = CreateNewBlockContexts(4);
 
 			context.SetInstruction(X86.Mov, ecx, count);
-			context.AppendInstruction(X86.Cmp, null, ecx, CreateConstant(64));
+			context.AppendInstruction(X86.CmpConst32, null, ecx, CreateConstant(64));
 			context.AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].Block);
 			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
-			newBlocks[0].AppendInstruction(X86.Cmp, null, ecx, CreateConstant(32));
+			newBlocks[0].AppendInstruction(X86.CmpConst32, null, ecx, CreateConstant(32));
 			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[2].Block);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].Block);
 

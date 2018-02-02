@@ -170,11 +170,23 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Cmp",
+			"Name": "Cmp32",
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 2,
-			"X86ThreeTwoAddressConversion": "true"
+			"X86LegacyOpcode": "0x3B",
+			"X86LegacyOpcodeOperandOrder": "12",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "CmpConst32",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"X86LegacyOpcode": "0x81",
+			"X86LegacyOpcodeRegField": "07",
+			"X86LegacyOpcodeOperandOrder": "12",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CmpXchgLoad32",
