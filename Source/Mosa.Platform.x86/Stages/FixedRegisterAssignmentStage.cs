@@ -17,7 +17,9 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Div32, Div32);
 			AddVisitation(X86.IDiv32, IDiv32);
 			AddVisitation(X86.IMul, IMul);
-			AddVisitation(X86.In, In);
+			AddVisitation(X86.In8, In8);
+			AddVisitation(X86.In16, In16);
+			AddVisitation(X86.In32, In32);
 			AddVisitation(X86.Mul32, Mul32);
 			AddVisitation(X86.Out8, Out);
 			AddVisitation(X86.Out16, Out);
@@ -157,10 +159,10 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.In"/> instructions.
+		/// In8s the specified context.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void In(Context context)
+		public void In8(Context context)
 		{
 			if (context.Result.IsCPURegister
 				&& context.Operand1.IsCPURegister
@@ -177,7 +179,57 @@ namespace Mosa.Platform.x86.Stages
 			var size = context.Size;
 
 			context.SetInstruction(X86.Mov, EDX, operand1);
-			context.AppendInstruction(X86.In, size, EAX, EDX);
+			context.AppendInstruction(X86.In8, size, EAX, EDX);
+			context.AppendInstruction(X86.Mov, result, EAX);
+		}
+
+		/// <summary>
+		/// In16s the specified context.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void In16(Context context)
+		{
+			if (context.Result.IsCPURegister
+				&& context.Operand1.IsCPURegister
+				&& context.Result.Register == GeneralPurposeRegister.EAX
+				&& (context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
+				return;
+
+			Operand result = context.Result;
+			Operand operand1 = context.Operand1;
+
+			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
+			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
+
+			var size = context.Size;
+
+			context.SetInstruction(X86.Mov, EDX, operand1);
+			context.AppendInstruction(X86.In16, size, EAX, EDX);
+			context.AppendInstruction(X86.Mov, result, EAX);
+		}
+
+		/// <summary>
+		/// Visitation function for <see cref="IX86Visitor.In"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void In32(Context context)
+		{
+			if (context.Result.IsCPURegister
+				&& context.Operand1.IsCPURegister
+				&& context.Result.Register == GeneralPurposeRegister.EAX
+				&& (context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
+				return;
+
+			Operand result = context.Result;
+			Operand operand1 = context.Operand1;
+
+			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
+			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
+
+			var size = context.Size;
+
+			context.SetInstruction(X86.Mov, EDX, operand1);
+			context.AppendInstruction(X86.In32, size, EAX, EDX);
 			context.AppendInstruction(X86.Mov, result, EAX);
 		}
 

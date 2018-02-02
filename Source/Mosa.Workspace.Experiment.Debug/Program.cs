@@ -368,8 +368,7 @@ namespace Mosa.Workspace.Experiment.Debug
 
 		private static readonly List<X86Instruction> X86IOOperation = new List<X86Instruction>()
 		{
-			X86.In,
-
+			//X86.In,
 			//X86.Out,
 		};
 
@@ -382,7 +381,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			X86.Hlt,
 
 			//X86.Out,
-			X86.In,
+			//X86.In,
 			X86.IRetd,
 			X86.Lgdt,
 			X86.Leave,

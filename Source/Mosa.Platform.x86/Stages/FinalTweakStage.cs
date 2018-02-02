@@ -14,7 +14,8 @@ namespace Mosa.Platform.x86.Stages
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(X86.Call, Call);
-			AddVisitation(X86.In, In);
+			AddVisitation(X86.In8, In8);
+			AddVisitation(X86.In16, In16);
 			AddVisitation(X86.Mov, Mov);
 			AddVisitation(X86.MovLoad, MovLoad);
 			AddVisitation(X86.MovStore, MovStore);
@@ -57,14 +58,16 @@ namespace Mosa.Platform.x86.Stages
 			context.Empty();
 		}
 
-		public void In(Context context)
+		public void In8(Context context)
 		{
-			var size = context.Size;
+			Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
 
-			// Mov can not use ESI or EDI registers for 8/16bit values
-			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
-				return;
+			// NOTE: Other option is to use Movzx after IN instruction
+			context.InsertBefore().SetInstruction(X86.Mov, context.Result, ConstantZero);
+		}
 
+		public void In16(Context context)
+		{
 			Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
 
 			// NOTE: Other option is to use Movzx after IN instruction
