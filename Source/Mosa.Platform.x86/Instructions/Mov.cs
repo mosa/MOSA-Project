@@ -16,10 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly LegacyOpCode RM_C = new LegacyOpCode(new byte[] { 0xC7 }, 0); // Move imm32 to r/m32
 		private static readonly LegacyOpCode RM_C_U8 = new LegacyOpCode(new byte[] { 0xC6 }, 0); // Move imm8 to r/m8
 		private static readonly LegacyOpCode R_RM_16 = new LegacyOpCode(new byte[] { 0x66, 0x8B });
-		private static readonly LegacyOpCode RM_R_U8 = new LegacyOpCode(new byte[] { 0x88 });
 		private static readonly LegacyOpCode R_RM = new LegacyOpCode(new byte[] { 0x8B });
-		private static readonly LegacyOpCode M_R = new LegacyOpCode(new byte[] { 0x89 });
-		private static readonly LegacyOpCode M_R_16 = new LegacyOpCode(new byte[] { 0x66, 0x89 });
 		private static readonly LegacyOpCode RM_U8 = new LegacyOpCode(new byte[] { 0x8A }); // Move r/m8 to R8
 		private static readonly LegacyOpCode M_C_16 = new LegacyOpCode(new byte[] { 0x66, 0xC7 });
 		private static readonly LegacyOpCode SEG_RM = new LegacyOpCode(new byte[] { 0x8E }); // Move r/m to seg
@@ -52,19 +49,22 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (destination.Register is SegmentRegister)
 			{
-				if (source.IsCPURegister) return SEG_RM;
+				if (source.IsCPURegister)
+					return SEG_RM;
 
 				throw new ArgumentException("TODO: No opcode for move destination segment register");
 			}
 
 			if (source.Register is SegmentRegister)
 			{
-				if (destination.IsCPURegister) return RM_SEG;
+				if (destination.IsCPURegister)
+					return RM_SEG;
 
 				throw new ArgumentException("TODO: No opcode for move source segment register");
 			}
 
-			if (destination.IsCPURegister && source.IsConstant) return RM_C;
+			if (destination.IsCPURegister && source.IsConstant)
+				return RM_C;
 
 			if (destination.IsCPURegister && source.IsSymbol)
 				return RM_C;
@@ -73,15 +73,11 @@ namespace Mosa.Platform.x86.Instructions
 			{
 				Debug.Assert(!((source.IsByte || destination.IsByte) && (source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI)), source.ToString());
 
-				if (source.IsByte || destination.IsByte) return RM_U8;
-				if (source.IsChar || destination.IsChar || source.IsShort || destination.IsShort) return R_RM_16;
 				return R_RM;
 			}
 
 			if (destination.IsSymbol && source.IsCPURegister)
 			{
-				if (destination.IsByte || destination.IsBoolean) return RM_C_U8;
-				if (destination.IsChar || destination.IsShort) return M_C_16;
 				return RM_C;
 			}
 

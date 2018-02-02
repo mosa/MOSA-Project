@@ -293,8 +293,12 @@
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Cmovcc.cs" />
-    <Compile Include="Instructions\Lea.cs" />
-    <Compile Include="Instructions\Movaps.cs" />
+    <Compile Include="Instructions\Lea.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movaps.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\MovCRStore.cs" />
     <Compile Include="Instructions\MovCRLoad.cs" />
     <Compile Include="Instructions\MovupsStore.cs">
@@ -326,13 +330,17 @@
     <Compile Include="Instructions\Pextrd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Movups.cs" />
+    <Compile Include="Instructions\Movups.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\MovStore.cs" />
     <Compile Include="Instructions\MovLoad.cs" />
     <Compile Include="Instructions\IMul.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\PXor.cs" />
+    <Compile Include="Instructions\PXor.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Sub32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -501,12 +509,16 @@
     <Compile Include="Instructions\Cvtss2sd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Int.cs" />
+    <Compile Include="Instructions\Int.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Intrinsic\BochsDebug.cs" />
     <Compile Include="Instructions\Cli.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CpuId.cs" />
+    <Compile Include="Instructions\CpuId.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Hlt.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
