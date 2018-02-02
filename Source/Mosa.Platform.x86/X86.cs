@@ -89,7 +89,12 @@ namespace Mosa.Platform.x86
 		public static readonly Not32 Not32 = new Not32();
 		public static readonly Or32 Or32 = new Or32();
 		public static readonly OrConst32 OrConst32 = new OrConst32();
-		public static readonly Out Out = new Out();
+		public static readonly Out8 Out8 = new Out8();
+		public static readonly Out16 Out16 = new Out16();
+		public static readonly Out32 Out32 = new Out32();
+		public static readonly OutConst8 OutConst8 = new OutConst8();
+		public static readonly OutConst16 OutConst16 = new OutConst16();
+		public static readonly OutConst32 OutConst32 = new OutConst32();
 		public static readonly Pause Pause = new Pause();
 		public static readonly Pextrd Pextrd = new Pextrd();
 		public static readonly Pop Pop = new Pop();

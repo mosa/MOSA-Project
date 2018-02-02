@@ -370,7 +370,8 @@ namespace Mosa.Workspace.Experiment.Debug
 		private static readonly List<X86Instruction> X86IOOperation = new List<X86Instruction>()
 		{
 			X86.In,
-			X86.Out,
+
+			//X86.Out,
 		};
 
 		private static readonly List<X86Instruction> X86UnspecifiedSideEffect = new List<X86Instruction>()
@@ -380,7 +381,8 @@ namespace Mosa.Workspace.Experiment.Debug
 			X86.Invlpg,
 			X86.Int,
 			X86.Hlt,
-			X86.Out,
+
+			//X86.Out,
 			X86.In,
 			X86.IRetd,
 			X86.Lgdt,
