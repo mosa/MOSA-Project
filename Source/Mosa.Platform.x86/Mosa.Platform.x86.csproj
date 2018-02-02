@@ -192,6 +192,15 @@
     <Compile Include="Instructions\OutConst8.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Pop32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Push32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\PushConst32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Rcr32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -572,11 +581,9 @@
     <Compile Include="Instructions\Popad.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Pop.cs" />
     <Compile Include="Instructions\Pushad.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Push.cs" />
     <Compile Include="Instructions\Rep.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>

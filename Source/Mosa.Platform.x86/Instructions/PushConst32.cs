@@ -7,31 +7,33 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Pushad
+	/// PushConst32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Pushad : X86Instruction
+	public sealed class PushConst32 : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0x60 };
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x68 } );
 
-		internal Pushad()
-			: base(0, 0)
+		internal PushConst32()
+			: base(0, 1)
 		{
 		}
 
 		public override bool ThreeTwoAddressConversion { get { return false; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
 			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
 
-			emitter.Write(opcode);
+			emitter.Emit(LegacyOpcode, node.Operand1);
 		}
 
 		// The following is used by the automated code generator.
 
-		public override byte[] __opcode { get { return opcode; } }
+		public override LegacyOpCode __legacyopcode { get { return LegacyOpcode; } }
+
+		public override string __legacyOpcodeOperandOrder { get { return "1"; } }
 	}
 }
 

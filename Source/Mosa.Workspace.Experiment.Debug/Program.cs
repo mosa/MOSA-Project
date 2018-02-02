@@ -3,7 +3,6 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Expression;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.x86;
 using System.Collections.Generic;
 using System.IO;
