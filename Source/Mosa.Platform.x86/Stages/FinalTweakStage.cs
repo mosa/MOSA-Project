@@ -63,7 +63,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
 
 			// NOTE: Other option is to use Movzx after IN instruction
-			context.InsertBefore().SetInstruction(X86.Mov, context.Result, ConstantZero);
+			//context.InsertBefore().SetInstruction(X86.Mov, context.Result, ConstantZero);
 		}
 
 		public void In16(Context context)
@@ -71,7 +71,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
 
 			// NOTE: Other option is to use Movzx after IN instruction
-			context.InsertBefore().SetInstruction(X86.Mov, context.Result, ConstantZero);
+			//context.InsertBefore().SetInstruction(X86.Mov, context.Result, ConstantZero);
 		}
 
 		public void Mov(Context context)
