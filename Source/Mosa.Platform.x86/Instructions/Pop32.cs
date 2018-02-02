@@ -7,15 +7,13 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Pushad
+	/// Pop32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Pushad : X86Instruction
+	public sealed class Pop32 : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0x60 };
-
-		internal Pushad()
-			: base(0, 0)
+		internal Pop32()
+			: base(1, 0)
 		{
 		}
 
@@ -26,12 +24,12 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
 			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
 
-			emitter.Write(opcode);
+			StaticEmitters.EmitPop32(node, emitter);
 		}
 
 		// The following is used by the automated code generator.
 
-		public override byte[] __opcode { get { return opcode; } }
+		public override string __staticEmitMethod { get { return "StaticEmitters.Emit%"; } }
 	}
 }
 

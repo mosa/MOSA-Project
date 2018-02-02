@@ -99,9 +99,10 @@ namespace Mosa.Platform.x86
 		public static readonly OutConst32 OutConst32 = new OutConst32();
 		public static readonly Pause Pause = new Pause();
 		public static readonly Pextrd Pextrd = new Pextrd();
-		public static readonly Pop Pop = new Pop();
+		public static readonly Pop32 Pop32 = new Pop32();
 		public static readonly Popad Popad = new Popad();
-		public static readonly Push Push = new Push();
+		public static readonly Push32 Push32 = new Push32();
+		public static readonly PushConst32 PushConst32 = new PushConst32();
 		public static readonly Pushad Pushad = new Pushad();
 		public static readonly PXor PXor = new PXor();
 		public static readonly Rcr32 Rcr32 = new Rcr32();

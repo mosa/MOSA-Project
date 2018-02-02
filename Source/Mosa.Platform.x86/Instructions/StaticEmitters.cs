@@ -413,5 +413,10 @@ namespace Mosa.Platform.x86.Instructions
 
 			emitter.Emit(opcode);
 		}
+
+		internal static void EmitPop32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			emitter.WriteByte((byte)(0x58 + node.Result.Register.RegisterCode));
+		}
 	}
 }
