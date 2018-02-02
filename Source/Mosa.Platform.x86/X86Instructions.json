@@ -208,7 +208,9 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"X86ThreeTwoAddressConversion": "true"
+			"X86LegacyOpcode": "0x0F, 0xA2",
+			"X86LegacyOpcodeOperandOrder": " ",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Cvtsd2ss",
@@ -364,7 +366,8 @@
 			"ResultCount": 0,
 			"OperandCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "true"
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Invlpg",
@@ -397,7 +400,9 @@
 			"Name": "Lea",
 			"FamilyName": "X86",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Leave",
@@ -447,7 +452,8 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"X86ThreeTwoAddressConversion": "true"
+			"X86LegacyOpcode": "0x0F, 0x28",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovapsLoad",
@@ -564,7 +570,9 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"X86ThreeTwoAddressConversion": "true"
+			"X86LegacyOpcode": "0x0F, 0x10",
+
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovupsLoad",
@@ -733,6 +741,7 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
+			"X86LegacyOpcode": "0x66, 0x0F, 0xEF",
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
