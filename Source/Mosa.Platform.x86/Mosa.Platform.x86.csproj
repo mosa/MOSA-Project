@@ -144,6 +144,18 @@
     <Compile Include="Instructions\Inc32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Movsx16To32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movsx8To32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movzx16To32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movzx8To32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Mul32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -498,8 +510,6 @@
     <Compile Include="Instructions\Ret.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Movzx.cs" />
-    <Compile Include="Instructions\Movsx.cs" />
     <Compile Include="X86CodeEmitter.cs" />
     <Compile Include="Stages\TweakStage.cs" />
     <Compile Include="Instructions\Cdq.cs">
