@@ -488,7 +488,9 @@
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
     <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
-    <Compile Include="Instructions\FarJmp.cs" />
+    <Compile Include="Instructions\FarJmp.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Leave.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>

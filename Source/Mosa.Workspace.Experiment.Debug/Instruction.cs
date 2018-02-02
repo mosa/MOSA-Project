@@ -31,9 +31,7 @@ namespace Mosa.Workspace.Experiment.Debug
 
 		public string StaticEmitMethod; // __staticMethodName
 
-		public string X86EmitMethodType;
 		public byte[] X86EmitBytes;
-
 		public byte[] X86LegacyOpcode;
 		public byte? X86LegacyOpcodeRegField;
 
@@ -128,9 +126,6 @@ namespace Mosa.Workspace.Experiment.Debug
 
 			if (NegativeFlagDependency != null)
 				sb.AppendFormat("\"NegativeFlagDependency\": \"{0}\", ", NegativeFlagDependency);
-
-			if (X86EmitMethodType != null)
-				sb.AppendFormat("\"X86EmitMethodType\": \"{0}\", ", X86EmitMethodType);
 
 			if (X86EmitBytes != null)
 			{
