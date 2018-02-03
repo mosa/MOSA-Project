@@ -538,16 +538,20 @@
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
+			"X86LegacyOpcode": "0x0F, 0x20",
+			"X86LegacyOpcodeOperandOrder": "1r",
 			"MemoryRead": "true",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovCRStore",
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 2,
+			"X86LegacyOpcode": "0x0F, 0x22",
+			"X86LegacyOpcodeOperandOrder": "12",
 			"MemoryWrite": "true",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Movd",
