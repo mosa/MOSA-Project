@@ -374,8 +374,12 @@
     <Compile Include="Instructions\Movaps.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\MovCRStore.cs" />
-    <Compile Include="Instructions\MovCRLoad.cs" />
+    <Compile Include="Instructions\MovCRStore.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovCRLoad.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\MovupsStore.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
