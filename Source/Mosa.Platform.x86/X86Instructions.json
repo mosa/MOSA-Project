@@ -638,10 +638,19 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "MovsxLoad",
+			"Name": "MovsxLoad8",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "MovsxLoad16",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"MemoryRead": "true"
 		},
 		{
@@ -650,7 +659,6 @@
 			"ResultCount": 1,
 			"OperandCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x10",
-
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
@@ -686,10 +694,19 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "MovzxLoad",
+			"Name": "MovzxLoad8",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "MovzxLoad16",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"MemoryRead": "true"
 		},
 		{

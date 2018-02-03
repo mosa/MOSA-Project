@@ -361,9 +361,11 @@ namespace Mosa.Workspace.Experiment.Debug
 			X86.MovLoad,
 			X86.MovsdLoad,
 			X86.MovssLoad,
-			X86.MovsxLoad,
+
+			//X86.MovsxLoad,
 			X86.MovupsLoad,
-			X86.MovzxLoad,
+
+			//X86.MovzxLoad,
 		};
 
 		private static readonly List<X86Instruction> X86IOOperation = new List<X86Instruction>()

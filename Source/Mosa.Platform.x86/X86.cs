@@ -82,13 +82,15 @@ namespace Mosa.Platform.x86
 		public static readonly MovStore MovStore = new MovStore();
 		public static readonly Movsx8To32 Movsx8To32 = new Movsx8To32();
 		public static readonly Movsx16To32 Movsx16To32 = new Movsx16To32();
-		public static readonly MovsxLoad MovsxLoad = new MovsxLoad();
+		public static readonly MovsxLoad8 MovsxLoad8 = new MovsxLoad8();
+		public static readonly MovsxLoad16 MovsxLoad16 = new MovsxLoad16();
 		public static readonly Movups Movups = new Movups();
 		public static readonly MovupsLoad MovupsLoad = new MovupsLoad();
 		public static readonly MovupsStore MovupsStore = new MovupsStore();
 		public static readonly Movzx8To32 Movzx8To32 = new Movzx8To32();
 		public static readonly Movzx16To32 Movzx16To32 = new Movzx16To32();
-		public static readonly MovzxLoad MovzxLoad = new MovzxLoad();
+		public static readonly MovzxLoad8 MovzxLoad8 = new MovzxLoad8();
+		public static readonly MovzxLoad16 MovzxLoad16 = new MovzxLoad16();
 		public static readonly Mul32 Mul32 = new Mul32();
 		public static readonly Mulsd Mulsd = new Mulsd();
 		public static readonly Mulss Mulss = new Mulss();
