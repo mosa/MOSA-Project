@@ -556,14 +556,28 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Debug.Assert(node.Size == InstructionSize.Size8 || node.Size == InstructionSize.Size16);
 
-			node.SetInstruction(X86.MovsxLoad, node.Size, node.Result, StackFrame, node.Operand1);
+			if (node.Size == InstructionSize.Size8)
+			{
+				node.SetInstruction(X86.MovsxLoad8, node.Size, node.Result, StackFrame, node.Operand1);
+			}
+			else if (node.Size == InstructionSize.Size16)
+			{
+				node.SetInstruction(X86.MovsxLoad16, node.Size, node.Result, StackFrame, node.Operand1);
+			}
 		}
 
 		private void LoadParameterZeroExtended(InstructionNode node)
 		{
 			Debug.Assert(node.Size == InstructionSize.Size8 || node.Size == InstructionSize.Size16);
 
-			node.SetInstruction(X86.MovzxLoad, node.Size, node.Result, StackFrame, node.Operand1);
+			if (node.Size == InstructionSize.Size8)
+			{
+				node.SetInstruction(X86.MovzxLoad8, node.Size, node.Result, StackFrame, node.Operand1);
+			}
+			else if (node.Size == InstructionSize.Size16)
+			{
+				node.SetInstruction(X86.MovzxLoad16, node.Size, node.Result, StackFrame, node.Operand1);
+			}
 		}
 
 		private void LoadFloatR4(InstructionNode node)
@@ -600,7 +614,14 @@ namespace Mosa.Platform.x86.Stages
 
 			LoadStore.OrderLoadOperands(node, MethodCompiler);
 
-			node.SetInstruction(X86.MovsxLoad, node.Size, node.Result, node.Operand1, node.Operand2);
+			if (node.Size == InstructionSize.Size8)
+			{
+				node.SetInstruction(X86.MovsxLoad8, node.Size, node.Result, node.Operand1, node.Operand2);
+			}
+			else if (node.Size == InstructionSize.Size16)
+			{
+				node.SetInstruction(X86.MovsxLoad16, node.Size, node.Result, node.Operand1, node.Operand2);
+			}
 		}
 
 		/// <summary>
@@ -613,7 +634,14 @@ namespace Mosa.Platform.x86.Stages
 
 			LoadStore.OrderLoadOperands(node, MethodCompiler);
 
-			node.SetInstruction(X86.MovzxLoad, node.Size, node.Result, node.Operand1, node.Operand2);
+			if (node.Size == InstructionSize.Size8)
+			{
+				node.SetInstruction(X86.MovzxLoad8, node.Size, node.Result, node.Operand1, node.Operand2);
+			}
+			else if (node.Size == InstructionSize.Size16)
+			{
+				node.SetInstruction(X86.MovzxLoad16, node.Size, node.Result, node.Operand1, node.Operand2);
+			}
 		}
 
 		/// <summary>

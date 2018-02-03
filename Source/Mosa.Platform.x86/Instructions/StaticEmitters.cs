@@ -423,5 +423,101 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			(emitter as X86CodeEmitter).EmitFarJumpToNextInstruction();
 		}
+
+		internal static void EmitMovsxLoad8(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+
+			// WARNING: DO NOT USE 0x66 PREFIX WITH THIS INSTRUCTION
+			// We currently don't have the ability to load into 16bit registers
+
+			// memory to reg 0000 1111 : 1011 111w : mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                           // 4:opcode
+				.AppendNibble(Bits.b1111)                                           // 4:opcode
+				.AppendNibble(Bits.b1011)                                           // 4:opcode
+				.Append3Bits(Bits.b111)                                             // 3:opcode
+				.AppendWidthBit(false)                                              // 1:width (node.Size != InstructionSize.Size8)
+				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
+				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
+			else
+				emitter.Emit(opcode);
+		}
+
+		internal static void EmitMovsxLoad16(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+
+			// WARNING: DO NOT USE 0x66 PREFIX WITH THIS INSTRUCTION
+			// We currently don't have the ability to load into 16bit registers
+
+			// memory to reg 0000 1111 : 1011 111w : mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                           // 4:opcode
+				.AppendNibble(Bits.b1111)                                           // 4:opcode
+				.AppendNibble(Bits.b1011)                                           // 4:opcode
+				.Append3Bits(Bits.b111)                                             // 3:opcode
+				.AppendWidthBit(true)                                               // 1:width (node.Size != InstructionSize.Size8)
+				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
+				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
+			else
+				emitter.Emit(opcode);
+		}
+
+		internal static void EmitMovzxLoad8(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+
+			// WARNING: DO NOT USE 0x66 PREFIX WITH THIS INSTRUCTION
+			// We currently don't have the ability to load into 16bit registers
+
+			// memory to register 0000 1111 : 1011 011w: mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                           // 4:opcode
+				.AppendNibble(Bits.b1111)                                           // 4:opcode
+				.AppendNibble(Bits.b1011)                                           // 4:opcode
+				.Append3Bits(Bits.b011)                                             // 3:opcode
+				.AppendWidthBit(false)                                              // 1:width (node.Size != InstructionSize.Size8)
+				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
+				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
+			else
+				emitter.Emit(opcode);
+		}
+
+		internal static void EmitMovzxLoad16(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+
+			// WARNING: DO NOT USE 0x66 PREFIX WITH THIS INSTRUCTION
+			// We currently don't have the ability to load into 16bit registers
+
+			// memory to register 0000 1111 : 1011 011w: mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                           // 4:opcode
+				.AppendNibble(Bits.b1111)                                           // 4:opcode
+				.AppendNibble(Bits.b1011)                                           // 4:opcode
+				.Append3Bits(Bits.b011)                                             // 3:opcode
+				.AppendWidthBit(true)                                               // 1:width (node.Size != InstructionSize.Size8)
+				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
+				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
+			else
+				emitter.Emit(opcode);
+		}
 	}
 }

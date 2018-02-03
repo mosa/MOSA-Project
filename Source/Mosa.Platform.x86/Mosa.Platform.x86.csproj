@@ -174,10 +174,22 @@
     <Compile Include="Instructions\Movsx8To32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\MovsxLoad16.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovsxLoad8.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Movzx16To32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Movzx8To32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovzxLoad16.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovzxLoad8.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Mul32.cs">
@@ -388,8 +400,6 @@
     <Compile Include="Instructions\MovsdLoad.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\MovzxLoad.cs" />
-    <Compile Include="Instructions\MovsxLoad.cs" />
     <Compile Include="Instructions\Pextrd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
