@@ -522,7 +522,10 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void Jmp(InstructionNode node)
 		{
-			node.ReplaceInstruction(X86.Jmp);
+			if (node.Operand1 == null)
+				node.ReplaceInstruction(X86.Jmp);
+			else
+				node.ReplaceInstruction(X86.JmpStatic); // FUTURE: Add IR.JumpStatic
 		}
 
 		private void LoadParameterFloatR4(InstructionNode node)

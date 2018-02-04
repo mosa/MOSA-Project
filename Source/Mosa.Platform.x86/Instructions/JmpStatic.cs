@@ -7,29 +7,37 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// MovapsLoad
+	/// JmpStatic
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class MovapsLoad : X86Instruction
+	public sealed class JmpStatic : X86Instruction
 	{
-		internal MovapsLoad()
-			: base(1, 2)
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xE9 } );
+
+		internal JmpStatic()
+			: base(0, 1)
 		{
 		}
 
-		public override bool IsMemoryRead { get { return true; } }
+		public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
+
+		public override bool ThreeTwoAddressConversion { get { return false; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
 			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
 
-			StaticEmitters.EmitMovapsLoad(node, emitter);
+			StaticEmitters.EmitJmpStatic(node, emitter);
 		}
 
 		// The following is used by the automated code generator.
 
+		public override LegacyOpCode __legacyopcode { get { return LegacyOpcode; } }
+
 		public override string __staticEmitMethod { get { return "StaticEmitters.Emit%"; } }
+
+		public override string __legacyOpcodeOperandOrder { get { return "1"; } }
 	}
 }
 

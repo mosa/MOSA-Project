@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// FrameJump
 	/// </summary>
 	internal class FrameJump : IIntrinsicPlatformMethod
 	{
@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			// Update the frame and stack registers
 			context.AppendInstruction(X86.Mov, ebp, ecx);
 			context.AppendInstruction(X86.Mov, esp, ebx);
-			context.AppendInstruction(X86.Jmp, null, eax);
+			context.AppendInstruction(X86.JmpReg, null, eax);
 
 			// future - common code (refactor opportunity)
 			context.GotoNext();

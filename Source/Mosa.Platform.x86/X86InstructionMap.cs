@@ -59,6 +59,8 @@ namespace Mosa.Platform.x86
 			{ "Invlpg", X86.Invlpg },
 			{ "IRetd", X86.IRetd },
 			{ "Jmp", X86.Jmp },
+			{ "JmpStatic", X86.JmpStatic },
+			{ "JmpReg", X86.JmpReg },
 			{ "Lea", X86.Lea },
 			{ "Leave", X86.Leave },
 			{ "Lgdt", X86.Lgdt },

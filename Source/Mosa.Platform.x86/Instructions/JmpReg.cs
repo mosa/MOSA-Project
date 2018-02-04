@@ -7,15 +7,15 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Jmp
+	/// JmpReg
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Jmp : X86Instruction
+	public sealed class JmpReg : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0xE9 };
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xFF } , 0x04);
 
-		internal Jmp()
-			: base(0, 0)
+		internal JmpReg()
+			: base(0, 1)
 		{
 		}
 
@@ -23,20 +23,19 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool ThreeTwoAddressConversion { get { return false; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
-			System.Diagnostics.Debug.Assert(node.BranchTargets.Count >= 1);
-			System.Diagnostics.Debug.Assert(node.BranchTargets[0] != null);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.Write(opcode);
-			(emitter as X86CodeEmitter).EmitRelativeBranchTarget(node.BranchTargets[0].Label);
+			emitter.Emit(LegacyOpcode, node.Operand1);
 		}
 
 		// The following is used by the automated code generator.
 
-		public override byte[] __opcode { get { return opcode; } }
+		public override LegacyOpCode __legacyopcode { get { return LegacyOpcode; } }
+
+		public override string __legacyOpcodeOperandOrder { get { return "1"; } }
 	}
 }
 
