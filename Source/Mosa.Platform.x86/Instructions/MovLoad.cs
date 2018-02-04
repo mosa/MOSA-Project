@@ -38,7 +38,9 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			if (node.Operand1.IsConstant && node.Result.IsCPURegister)
+			Debug.Assert(node.Result.IsCPURegister);
+
+			if (node.Operand1.IsConstant)
 			{
 				MovFixedMemoryToReg(node, emitter);
 			}

@@ -7,12 +7,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Lea
+	/// Lea32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Lea : X86Instruction
+	public sealed class Lea32 : X86Instruction
 	{
-		internal Lea()
+		internal Lea32()
 			: base(1, 2)
 		{
 		}
@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
 			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
 
-			StaticEmitters.EmitLea(node, emitter);
+			StaticEmitters.EmitLea32(node, emitter);
 		}
 
 		// The following is used by the automated code generator.

@@ -246,6 +246,9 @@
     <Compile Include="Instructions\JmpStatic.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Lea32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Movsx16To32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -503,9 +506,6 @@
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\BranchZero.cs">
-      <DependentUpon>X86Instructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Instructions\Lea.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Movaps.cs">

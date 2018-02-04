@@ -63,7 +63,7 @@ namespace Mosa.Platform.x86
 			{ "Jmp", X86.Jmp },
 			{ "JmpStatic", X86.JmpStatic },
 			{ "JmpReg", X86.JmpReg },
-			{ "Lea", X86.Lea },
+			{ "Lea32", X86.Lea32 },
 			{ "Leave", X86.Leave },
 			{ "Lgdt", X86.Lgdt },
 			{ "Lidt", X86.Lidt },

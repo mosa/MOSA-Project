@@ -62,20 +62,8 @@ namespace Mosa.Platform.x86.Instructions
 			if (destination.IsCPURegister && source.IsConstant)
 				return RM_C;
 
-			if (destination.IsCPURegister && source.IsSymbol)
-				return RM_C;
-
 			if (destination.IsCPURegister && source.IsCPURegister)
-			{
-				Debug.Assert(!((source.IsByte || destination.IsByte) && (source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI)), source.ToString());
-
 				return R_RM;
-			}
-
-			if (destination.IsSymbol && source.IsCPURegister)
-			{
-				return RM_C;
-			}
 
 			throw new ArgumentException("No opcode for operand type. [" + destination + ", " + source + ")");
 		}
