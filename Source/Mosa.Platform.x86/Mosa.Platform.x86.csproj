@@ -249,6 +249,18 @@
     <Compile Include="Instructions\Lea32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Mov32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovConst32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovLoadSeg32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovStoreSeg32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Movsx16To32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -765,7 +777,6 @@
     <Compile Include="Instructions\Stos.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Mov.cs" />
     <Compile Include="Instructions\Neg.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>

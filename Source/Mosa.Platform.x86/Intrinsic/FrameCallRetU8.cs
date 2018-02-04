@@ -33,8 +33,8 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(X86.CallReg, null, methodAddress);
 			context.AppendInstruction(IRInstruction.Gen, eax);
 			context.AppendInstruction(IRInstruction.Gen, edx);
-			context.AppendInstruction(X86.Mov, op0L, eax);
-			context.AppendInstruction(X86.Mov, op0H, edx);
+			context.AppendInstruction(X86.Mov32, op0L, eax);
+			context.AppendInstruction(X86.Mov32, op0H, edx);
 		}
 
 		#endregion Methods

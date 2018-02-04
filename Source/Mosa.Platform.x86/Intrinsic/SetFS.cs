@@ -23,8 +23,8 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			Operand v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
 
-			context.SetInstruction(X86.Mov, v1, operand1);
-			context.AppendInstruction(X86.Mov, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, SegmentRegister.FS), v1);
+			context.SetInstruction(X86.Mov32, v1, operand1);
+			context.AppendInstruction(X86.Mov32, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, SegmentRegister.FS), v1);
 		}
 
 		#endregion Methods

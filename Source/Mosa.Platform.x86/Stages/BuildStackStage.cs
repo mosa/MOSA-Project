@@ -69,7 +69,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
 			context.SetInstruction(X86.Push32, null, ebp);
-			context.AppendInstruction(X86.Mov, ebp, esp);
+			context.AppendInstruction(X86.Mov32, ebp, esp);
 
 			if (MethodCompiler.StackSize != 0)
 			{

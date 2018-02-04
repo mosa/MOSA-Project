@@ -309,7 +309,7 @@ namespace Mosa.Platform.x86
 		/// <param name="source">The source.</param>
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
-			BaseInstruction instruction = X86.Mov;
+			BaseInstruction instruction = X86.Mov32;
 			var size = InstructionSize.Size32;
 
 			if (destination.IsR4)
@@ -462,7 +462,7 @@ namespace Mosa.Platform.x86
 		/// <returns></returns>
 		public override bool IsInstructionMove(BaseInstruction instruction)
 		{
-			return instruction == X86.Mov || instruction == X86.Movsd || instruction == X86.Movss;
+			return instruction == X86.Mov32 || instruction == X86.Movsd || instruction == X86.Movss;
 		}
 	}
 }
