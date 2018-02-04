@@ -123,6 +123,15 @@
     <Compile Include="Instructions\BtsConst32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Call.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CallReg.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CallStatic.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\CmovCarry32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -675,7 +684,6 @@
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="CompilerStages\Multiboot0695Stage.cs" />
-    <Compile Include="Instructions\Call.cs" />
     <Compile Include="Instructions\Movsd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>

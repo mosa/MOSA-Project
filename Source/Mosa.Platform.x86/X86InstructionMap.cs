@@ -26,6 +26,8 @@ namespace Mosa.Platform.x86
 			{ "Bts32", X86.Bts32 },
 			{ "BtsConst32", X86.BtsConst32 },
 			{ "Call", X86.Call },
+			{ "CallStatic", X86.CallStatic },
+			{ "CallReg", X86.CallReg },
 			{ "Cdq", X86.Cdq },
 			{ "Cli", X86.Cli },
 			{ "Cmp32", X86.Cmp32 },

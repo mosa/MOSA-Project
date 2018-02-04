@@ -180,7 +180,13 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void CallDirect(InstructionNode node)
 		{
-			node.ReplaceInstruction(X86.Call);
+			Debug.Assert(node.Operand1 != null);
+
+			if (node.Operand1.IsConstant)
+				node.ReplaceInstruction(X86.CallStatic);
+			else if (node.Operand1.IsVirtualRegister)
+				node.ReplaceInstruction(X86.CallReg);
+			else throw new NotSupportedException();
 		}
 
 		/// <summary>

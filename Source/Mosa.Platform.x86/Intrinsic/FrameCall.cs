@@ -22,7 +22,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var methodAddress = context.Operand1;
 			var newESP = context.Operand2;
 
-			context.SetInstruction(X86.Call, null, methodAddress);
+			context.SetInstruction(X86.CallReg, null, methodAddress);
 		}
 
 		#endregion Methods

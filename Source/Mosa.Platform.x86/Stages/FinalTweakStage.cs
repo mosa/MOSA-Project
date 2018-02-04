@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(X86.Call, Call);
+			AddVisitation(X86.CallReg, CallReg);
 			AddVisitation(X86.In8, In8);
 			AddVisitation(X86.In16, In16);
 			AddVisitation(X86.Mov, Mov);
@@ -47,13 +47,10 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Visitation Methods
 
-		public void Call(Context context)
+		public void CallReg(Context context)
 		{
-			if (context.Operand1 == null)
-				return;
-
-			if (!context.Operand1.IsCPURegister)
-				return;
+			Debug.Assert(context.Operand1 != null);
+			Debug.Assert(context.Operand1.IsCPURegister);
 
 			var before = context.Previous;
 
@@ -74,7 +71,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand1.Register != before.Result.Register)
 				return;
 
-			before.SetInstruction(X86.Call, null, before.Operand1);
+			before.SetInstruction(X86.CallReg, null, before.Operand1);
 			context.Empty();
 		}
 

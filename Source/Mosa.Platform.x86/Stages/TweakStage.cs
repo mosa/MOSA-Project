@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -13,6 +14,8 @@ namespace Mosa.Platform.x86.Stages
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(X86.Call, Call);
+			AddVisitation(X86.CallReg, Call);
+			AddVisitation(X86.CallStatic, Call);
 			AddVisitation(X86.Cmp32, Cmp32);
 			AddVisitation(X86.Sar32, ConvertShiftConstantToByte);
 			AddVisitation(X86.Shl32, ConvertShiftConstantToByte);
