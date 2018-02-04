@@ -32,7 +32,7 @@ namespace Mosa.Platform.ARMv6
 		/// <value>
 		/// The name of the instruction family.
 		/// </value>
-		public override string InstructionFamilyName { get { return "ARMv6"; } }
+		public override string FamilyName { get { return "ARMv6"; } }
 
 		#region Methods
 

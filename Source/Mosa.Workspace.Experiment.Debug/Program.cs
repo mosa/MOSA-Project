@@ -484,7 +484,7 @@ namespace Mosa.Workspace.Experiment.Debug
 				var inst = new Instruction()
 				{
 					Name = instruction.GetType().Name,
-					FamilyName = instruction.InstructionFamilyName,
+					FamilyName = instruction.FamilyName,
 					ResultCount = instruction.DefaultResultCount,
 					OperandCount = instruction.DefaultOperandCount,
 					ResultType = GetResultType(instruction) ?? instruction.ResultType.ToString(),
@@ -525,7 +525,7 @@ namespace Mosa.Workspace.Experiment.Debug
 				var inst = new Instruction()
 				{
 					Name = instruction.GetType().Name,
-					FamilyName = instruction.InstructionFamilyName,
+					FamilyName = instruction.FamilyName,
 					ResultCount = instruction.DefaultResultCount,
 					OperandCount = instruction.DefaultOperandCount,
 					ResultType = GetResultType(instruction) ?? instruction.ResultType.ToString(),

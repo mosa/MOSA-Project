@@ -116,6 +116,10 @@ namespace Mosa.Platform.x86.Instructions
 			operands = sb.ToString();
 		}
 #>
+<# if (entry.AlternativeName != null) { #>
+		public override string AlternativeName { get { return "<#= entry.AlternativeName #>"; } }
+
+<# } #>
 <# if (entry.X86EmitBytes != null) { #>
 		public static readonly byte[] opcode = new byte[] { <#= bytes #> };
 
@@ -183,9 +187,16 @@ namespace Mosa.Platform.x86.Instructions
 <# if (entry.VariableOperands == null || entry.VariableOperands == "false") { #>
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
 			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
+<# if (entry.EmitRelativeBranchTarget != null || entry.EmitRelativeBranchTarget == "true") { #>
+			System.Diagnostics.Debug.Assert(node.BranchTargets.Count >= 1);
+			System.Diagnostics.Debug.Assert(node.BranchTargets[0] != null);
+<# } #>
 
 <# } #>
 			emitter.Write(opcode);
+<# if (entry.EmitRelativeBranchTarget != null || entry.EmitRelativeBranchTarget == "true") { #>
+			(emitter as X86CodeEmitter).EmitRelativeBranchTarget(node.BranchTargets[0].Label);
+<# } #>
 		}
 <# } #>
 <# if (entry.StaticEmitMethod != null){ #>

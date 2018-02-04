@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <value>
 		/// The name of the instruction family.
 		/// </value>
-		public override string InstructionFamilyName { get { return "IR"; } }
+		public override string FamilyName { get { return "IR"; } }
 
 		#endregion Properties
 	}
