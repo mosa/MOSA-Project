@@ -228,6 +228,15 @@
     <Compile Include="Instructions\InConst8.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Jmp.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\JmpReg.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\JmpStatic.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Movsx16To32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -665,7 +674,6 @@
     <Compile Include="Instructions\Cvttss2si.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Jmp.cs" />
     <Compile Include="CompilerStages\Multiboot0695Stage.cs" />
     <Compile Include="Instructions\Call.cs" />
     <Compile Include="Instructions\Movsd.cs">

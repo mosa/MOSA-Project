@@ -19,13 +19,12 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
+		public override bool ThreeTwoAddressConversion { get { return false; } }
+
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
-			System.Diagnostics.Debug.Assert(node.Result == node.Operand1);
-			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
-			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 
 			emitter.Emit(LegacyOpcode, node.Result);
 		}

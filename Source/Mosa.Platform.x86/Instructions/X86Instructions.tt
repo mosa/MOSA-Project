@@ -194,14 +194,14 @@ namespace Mosa.Platform.x86.Instructions
 <# if (entry.VariableOperands == null || entry.VariableOperands == "false") { #>
 			System.Diagnostics.Debug.Assert(node.ResultCount == <#= entry.ResultCount #>);
 			System.Diagnostics.Debug.Assert(node.OperandCount == <#= entry.OperandCount #>);
-<# if (entry.EmitRelativeBranchTarget != null || entry.EmitRelativeBranchTarget == "true") { #>
+<# if (entry.X86EmitRelativeBranchTarget != null || entry.X86EmitRelativeBranchTarget == "true") { #>
 			System.Diagnostics.Debug.Assert(node.BranchTargets.Count >= 1);
 			System.Diagnostics.Debug.Assert(node.BranchTargets[0] != null);
 <# } #>
 
 <# } #>
 			emitter.Write(opcode);
-<# if (entry.EmitRelativeBranchTarget != null || entry.EmitRelativeBranchTarget == "true") { #>
+<# if (entry.X86EmitRelativeBranchTarget != null || entry.X86EmitRelativeBranchTarget == "true") { #>
 			(emitter as X86CodeEmitter).EmitRelativeBranchTarget(node.BranchTargets[0].Label);
 <# } #>
 		}

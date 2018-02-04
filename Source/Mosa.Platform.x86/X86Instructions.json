@@ -412,7 +412,7 @@
 			"X86LegacyOpcode": "0xFF",
 			"X86LegacyOpcodeRegField": "00",
 			"X86LegacyOpcodeOperandOrder": "r",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Int",
@@ -430,7 +430,7 @@
 			"OperandCount": 1,
 			"UnspecifiedSideEffect": "true",
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "IRetd",
@@ -440,15 +440,39 @@
 			"FlowControl": "Return",
 			"UnspecifiedSideEffect": "true",
 			"X86EmitBytes": "CF",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Jmp",
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
+			"X86EmitBytes": "0xE9",
+			"X86EmitRelativeBranchTarget": "true",
+			"X86ThreeTwoAddressConversion": "false",
+			"FlowControl": "UnconditionalBranch"
+		},
+		{
+			"Name": "JmpStatic",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"X86LegacyOpcode": "0xE9",
+			"X86LegacyOpcodeOperandOrder": "1",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "false",
+			"FlowControl": "UnconditionalBranch"
+		},
+		{
+			"Name": "JmpReg",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"X86LegacyOpcode": "0xFF",
+			"X86LegacyOpcodeRegField": "04",
+			"X86LegacyOpcodeOperandOrder": "1",
 			"FlowControl": "UnconditionalBranch",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Lea",
@@ -465,7 +489,7 @@
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
 			"X86EmitBytes": "C9",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Lgdt",
@@ -473,7 +497,7 @@
 			"ResultCount": 0,
 			"OperandCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "true",
+			"X86ThreeTwoAddressConversion": "false",
 			"StaticEmitMethod": "StaticEmitters.Emit%"
 		},
 		{
@@ -482,7 +506,7 @@
 			"ResultCount": 0,
 			"OperandCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "true",
+			"X86ThreeTwoAddressConversion": "false",
 			"StaticEmitMethod": "StaticEmitters.Emit%"
 		},
 		{
@@ -492,14 +516,14 @@
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
 			"X86EmitBytes": "F0",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Mov",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Movaps",
@@ -515,7 +539,8 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"MemoryRead": "true",
-			"StaticEmitMethod": "StaticEmitters.Emit%"
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "MovCRLoad",
@@ -567,7 +592,8 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovsdStore",
@@ -575,7 +601,8 @@
 			"ResultCount": 0,
 			"OperandCount": 3,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"MemoryWrite": "true"
+			"MemoryWrite": "true",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Movss",
@@ -592,7 +619,8 @@
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovssStore",
@@ -600,14 +628,16 @@
 			"ResultCount": 0,
 			"OperandCount": 3,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"MemoryWrite": "true"
+			"MemoryWrite": "true",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovStore",
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 3,
-			"MemoryWrite": "true"
+			"MemoryWrite": "true",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Movsx8To32",
@@ -1254,7 +1284,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x80",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchNoOverflow",
 			"FlowControl": "ConditionalBranch"
@@ -1266,7 +1296,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x81",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchOverflow",
 			"FlowControl": "ConditionalBranch"
@@ -1278,7 +1308,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x82",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchNoCarry",
 			"FlowControl": "ConditionalBranch"
@@ -1290,7 +1320,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x82",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchUnsignedGreaterOrEqual",
 			"FlowControl": "ConditionalBranch"
@@ -1302,7 +1332,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x83",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchUnsignedLessThan",
 			"FlowControl": "ConditionalBranch"
@@ -1314,7 +1344,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x83",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchCarry",
 			"FlowControl": "ConditionalBranch"
@@ -1326,7 +1356,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x84",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchNotEqual",
 			"FlowControl": "ConditionalBranch"
@@ -1338,7 +1368,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x84",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchNotZero",
 			"FlowControl": "ConditionalBranch"
@@ -1350,7 +1380,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x85",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchEqual",
 			"FlowControl": "ConditionalBranch"
@@ -1362,7 +1392,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x85",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchZero",
 			"FlowControl": "ConditionalBranch"
@@ -1374,7 +1404,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x86",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchUnsignedGreaterThan",
 			"FlowControl": "ConditionalBranch"
@@ -1387,7 +1417,7 @@
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x87",
 			"X86ThreeTwoAddressConversion": "false",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"LogicalOpposite": "BranchUnsignedLessOrEqual",
 			"FlowControl": "ConditionalBranch"
 		},
@@ -1398,7 +1428,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x88",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchNotSigned",
 			"FlowControl": "ConditionalBranch"
@@ -1410,7 +1440,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x89",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchSigned",
 			"FlowControl": "ConditionalBranch"
@@ -1422,7 +1452,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x8A",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchNoParity",
 			"FlowControl": "ConditionalBranch"
@@ -1434,7 +1464,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x8B",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchParity",
 			"FlowControl": "ConditionalBranch"
@@ -1446,7 +1476,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x8C",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchGreaterOrEqual",
 			"FlowControl": "ConditionalBranch"
@@ -1458,7 +1488,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x8D",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchLessThan",
 			"FlowControl": "ConditionalBranch"
@@ -1470,7 +1500,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x8E",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchGreaterThan",
 			"FlowControl": "ConditionalBranch"
@@ -1482,7 +1512,7 @@
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"X86EmitBytes": "0x0F, 0x8F",
-			"EmitRelativeBranchTarget": "true",
+			"X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"LogicalOpposite": "BranchLessOrEqual",
 			"FlowControl": "ConditionalBranch"

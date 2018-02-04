@@ -519,5 +519,11 @@ namespace Mosa.Platform.x86.Instructions
 			else
 				emitter.Emit(opcode);
 		}
+
+		internal static void EmitJmpStatic(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			emitter.WriteByte(0xE9);
+			(emitter as X86CodeEmitter).EmitCallSite(node.Operand1);
+		}
 	}
 }
