@@ -128,13 +128,13 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else if (node.Operand1.IsStackLocal)
 			{
-				node.SetInstruction(X86.Lea, NativeInstructionSize, node.Result, StackFrame, node.Operand1);
+				node.SetInstruction(X86.Lea32, NativeInstructionSize, node.Result, StackFrame, node.Operand1);
 			}
 			else
 			{
 				var offset = CreateConstant(node.Operand1.Offset);
 
-				node.SetInstruction(X86.Lea, NativeInstructionSize, node.Result, StackFrame, offset);
+				node.SetInstruction(X86.Lea32, NativeInstructionSize, node.Result, StackFrame, offset);
 			}
 		}
 

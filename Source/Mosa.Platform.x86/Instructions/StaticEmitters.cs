@@ -23,17 +23,18 @@ namespace Mosa.Platform.x86.Instructions
 
 			// memory, register 0000 1111 : 1011 000w : mod reg r/m
 			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
+
+				//.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
 				.AppendNibble(Bits.b1011)                                       // 4:opcode
 				.Append3Bits(Bits.b000)                                         // 3:opcode
-				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
+				.AppendWidthBit(true)                                           // 1:width (node.Size != InstructionSize.Size8)
 				.ModRegRMSIBDisplacement(true, node.GetOperand(3), node.Operand2, node.Operand3) // Mod-Reg-RM-?SIB-?Displacement
 				.AppendConditionalIntegerValue(node.Operand2.IsLinkerResolved, 0);               // 32:memory
 
 			if (node.Operand2.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand2, (opcode.Size - 32) / 8);
+				emitter.Emit(opcode, node.Operand2, 0);
 			else
 				emitter.Emit(opcode);
 		}
@@ -55,7 +56,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+				emitter.Emit(opcode, node.Operand1, 0);
 			else
 				emitter.Emit(opcode);
 		}
@@ -77,7 +78,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+				emitter.Emit(opcode, node.Operand1, 0);
 			else
 				emitter.Emit(opcode);
 		}
@@ -99,7 +100,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+				emitter.Emit(opcode, node.Operand1, 0);
 			else
 				emitter.Emit(opcode);
 		}
@@ -314,20 +315,21 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.Emit(opcode);
 		}
 
-		internal static void EmitLea(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitLea32(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 
 			// LEA – Load Effective Address 1000 1101 : modA reg r/m
 			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
+
+				//.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
 				.AppendNibble(Bits.b1000)                                       // 4:opcode
 				.AppendNibble(Bits.b1101)                                       // 3:opcode
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
 
 			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
+				emitter.Emit(opcode, node.Operand1, 0);
 			else
 				emitter.Emit(opcode);
 		}

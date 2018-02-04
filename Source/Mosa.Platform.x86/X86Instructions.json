@@ -499,7 +499,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "Lea",
+			"Name": "Lea32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,

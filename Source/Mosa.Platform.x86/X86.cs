@@ -63,7 +63,7 @@ namespace Mosa.Platform.x86
 		public static readonly Jmp Jmp = new Jmp();
 		public static readonly JmpStatic JmpStatic = new JmpStatic();
 		public static readonly JmpReg JmpReg = new JmpReg();
-		public static readonly Lea Lea = new Lea();
+		public static readonly Lea32 Lea32 = new Lea32();
 		public static readonly Leave Leave = new Leave();
 		public static readonly Lgdt Lgdt = new Lgdt();
 		public static readonly Lidt Lidt = new Lidt();
