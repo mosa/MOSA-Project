@@ -255,7 +255,25 @@
     <Compile Include="Instructions\MovConst32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\MovLoad16.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovLoad32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovLoad8.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\MovLoadSeg32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovStore16.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovStore32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovStore8.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\MovStoreSeg32.cs">
@@ -560,7 +578,6 @@
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\MovStore.cs" />
-    <Compile Include="Instructions\MovLoad.cs" />
     <Compile Include="Instructions\IMul.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>

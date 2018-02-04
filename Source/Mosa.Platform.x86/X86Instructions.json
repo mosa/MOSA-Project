@@ -625,11 +625,31 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "MovLoad",
+			"Name": "MovLoad8",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 2,
-			"MemoryRead": "true"
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"MemoryRead": "true",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "MovLoad16",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"MemoryRead": "true",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "MovLoad32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"MemoryRead": "true",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Movsd",
@@ -690,6 +710,33 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 3,
+			"MemoryWrite": "true",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "MovStore8",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"MemoryWrite": "true",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "MovStore16",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"MemoryWrite": "true",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "MovStore32",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"MemoryWrite": "true",
 			"X86ThreeTwoAddressConversion": "false"
 		},

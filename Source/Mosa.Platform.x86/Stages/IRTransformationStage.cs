@@ -548,12 +548,39 @@ namespace Mosa.Platform.x86.Stages
 			node.SetInstruction(X86.MovsdLoad, node.Size, node.Result, StackFrame, node.Operand1);
 		}
 
+		public static BaseInstruction GetMovLoad(InstructionSize size)
+		{
+			switch (size)
+			{
+				case InstructionSize.Size32: return X86.MovLoad32;
+				case InstructionSize.None: return X86.MovLoad32;
+				case InstructionSize.Native: return X86.MovLoad32;
+				case InstructionSize.Size16: return X86.MovLoad16;
+				case InstructionSize.Size8: return X86.MovLoad8;
+				default: throw new NotSupportedException();
+			}
+		}
+
+		public static BaseInstruction GetStoreLoad(InstructionSize size)
+		{
+			switch (size)
+			{
+				case InstructionSize.Size32: return X86.MovStore32;
+				case InstructionSize.Native: return X86.MovStore32;
+				case InstructionSize.Size16: return X86.MovStore16;
+				case InstructionSize.Size8: return X86.MovStore8;
+				default: throw new NotSupportedException();
+			}
+		}
+
 		private void LoadParameterInteger(InstructionNode node)
 		{
 			Debug.Assert(!node.Result.IsR4);
 			Debug.Assert(!node.Result.IsR8);
 
-			node.SetInstruction(X86.MovLoad, node.Size, node.Result, StackFrame, node.Operand1);
+			var movLoad = GetMovLoad(node.Size);
+
+			node.SetInstruction(movLoad, node.Size, node.Result, StackFrame, node.Operand1);
 		}
 
 		private void LoadParameterSignExtended(InstructionNode node)
@@ -605,7 +632,9 @@ namespace Mosa.Platform.x86.Stages
 
 			LoadStore.OrderLoadOperands(node, MethodCompiler);
 
-			node.SetInstruction(X86.MovLoad, node.Size, node.Result, node.Operand1, node.Operand2);
+			var movLoad = GetMovLoad(node.Size);
+
+			node.SetInstruction(movLoad, node.Size, node.Result, node.Operand1, node.Operand2);
 		}
 
 		/// <summary>

@@ -619,8 +619,8 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
-			context.SetInstruction(X86.MovLoad, InstructionSize.Size32, op0L, StackFrame, op1L);
-			context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, op0H, StackFrame, op1H);
+			context.SetInstruction(X86.MovLoad32, InstructionSize.Size32, op0L, StackFrame, op1L);
+			context.AppendInstruction(X86.MovLoad32, InstructionSize.Size32, op0H, StackFrame, op1H);
 		}
 
 		/// <summary>
@@ -634,12 +634,12 @@ namespace Mosa.Platform.x86.Stages
 
 			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 
-			context.SetInstruction(X86.MovLoad, InstructionSize.Size32, op0L, address, offset);
+			context.SetInstruction(X86.MovLoad32, InstructionSize.Size32, op0L, address, offset);
 
 			if (offset.IsResolvedConstant)
 			{
 				var offset2 = offset.IsConstantZero ? ConstantFour : CreateConstant(offset.Offset + NativePointerSize);
-				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, op0H, address, offset2);
+				context.AppendInstruction(X86.MovLoad32, InstructionSize.Size32, op0H, address, offset2);
 				return;
 			}
 
@@ -648,7 +648,7 @@ namespace Mosa.Platform.x86.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.AppendInstruction(X86.AddConst32, InstructionSize.Size32, v1, op2L, ConstantFour);
-			context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, op0H, address, v1);
+			context.AppendInstruction(X86.MovLoad32, InstructionSize.Size32, op0H, address, v1);
 		}
 
 		/// <summary>

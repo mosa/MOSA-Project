@@ -358,7 +358,8 @@ namespace Mosa.Workspace.Experiment.Debug
 		{
 			X86.MovapsLoad,
 			X86.MovCRLoad,
-			X86.MovLoad,
+
+			//X86.MovLoad,
 			X86.MovsdLoad,
 			X86.MovssLoad,
 

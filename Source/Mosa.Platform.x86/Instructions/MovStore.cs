@@ -43,23 +43,23 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (node.Operand1.IsConstant && node.Operand3.IsConstant)
 			{
-				MovImmediateToFixedMemory(node, emitter);
+				EmitMoveStoreConstantBaseImmediate(node, emitter);
 			}
 			else if (node.Operand3.IsConstant)
 			{
-				MovImmediateToMemory(node, emitter);
+				EmitMovStoreImmediate(node, emitter);
 			}
 			else if (node.Operand1.IsConstant && node.Operand3.IsCPURegister)
 			{
-				MovRegToFixedMemory(node, emitter);
+				EmitMovStoreConstantBase(node, emitter);
 			}
 			else
 			{
-				MovRegToMemory(node, emitter);
+				EmitMovStore(node, emitter);
 			}
 		}
 
-		private static void MovImmediateToMemory(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitMovStoreImmediate(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Operand3.IsConstant);
 
@@ -79,7 +79,7 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.Emit(opcode);
 		}
 
-		private static void MovImmediateToFixedMemory(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitMoveStoreConstantBaseImmediate(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Operand1.IsConstant);
 			Debug.Assert(node.Operand2.IsResolvedConstant);
@@ -116,7 +116,7 @@ namespace Mosa.Platform.x86.Instructions
 			}
 		}
 
-		private static void MovRegToFixedMemory(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitMovStoreConstantBase(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Operand3.IsCPURegister);
 			Debug.Assert(!node.Operand3.IsConstant);
@@ -142,7 +142,7 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.Emit(opcode);
 		}
 
-		private static void MovRegToMemory(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitMovStore(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Operand3.IsCPURegister);
 			Debug.Assert(!node.Operand3.IsConstant);

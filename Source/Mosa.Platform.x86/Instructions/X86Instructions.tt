@@ -3,7 +3,6 @@
 <#@include file="..\..\Templates\DynamicJsonConverter.ttinclude" #>
 <#@include file="..\..\Templates\MultipleOutputHelper.ttinclude" #>
 <#@ assembly name="Microsoft.CSharp" #>
-
 <# var manager = Manager.Create(Host, GenerationEnvironment); #> 
 <# manager.StartHeader(); #>
 // Copyright (c) MOSA Project. Licensed under the New BSD License.

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using System.Diagnostics;
 
@@ -530,6 +531,220 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			emitter.WriteByte(0xE8);
 			(emitter as X86CodeEmitter).EmitCallSite(node.Operand1);
+		}
+
+		internal static void EmitMovLoadReg(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+
+			// memory to reg 1000 101w: mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
+				.AppendNibble(Bits.b1000)                                       // 4:opcode
+				.Append3Bits(Bits.b101)                                         // 3:opcode
+				.AppendWidthBit(node.Size != InstructionSize.Size8)                  // 1:width
+				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
+			else
+				emitter.Emit(opcode);
+		}
+
+		internal static void EmitMovLoadConstantBase(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand1.IsLinkerResolved);
+
+			// memory to reg 1000 101w: mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66) // 8:prefix: 16bit
+				.AppendNibble(Bits.b1000)                                           // 4:opcode
+				.Append3Bits(Bits.b101)                                             // 3:opcode
+				.AppendWidthBit(node.Size != InstructionSize.Size8)                 // 1:width
+				.AppendMod(Bits.b00)                                                // 2:mod
+				.AppendRegister(node.Result.Register)                               // 3:register (destination)
+				.AppendRM(Bits.b101)                                                // 3:r/m (source)
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
+				.AppendConditionalIntegerValue(!node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
+			else
+				emitter.Emit(opcode);
+		}
+
+		private static void EmitMovLoad(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			if (node.Operand1.IsConstant)
+			{
+				EmitMovLoadConstantBase(node, emitter);
+			}
+			else
+			{
+				EmitMovLoadReg(node, emitter);
+			}
+		}
+
+		internal static void EmitMovLoad8(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			EmitMovLoad(node, emitter);
+		}
+
+		internal static void EmitMovLoad16(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			EmitMovLoad(node, emitter);
+		}
+
+		internal static void EmitMovLoad32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			EmitMovLoad(node, emitter);
+		}
+
+		private static void EmitMovStoreImmediate(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand3.IsConstant);
+
+			// immediate to memory	1100 011w: mod 000 r/m : immediate data
+			var opcode = new OpcodeEncoder()
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
+				.AppendNibble(Bits.b1100)                                       // 4:opcode
+				.Append3Bits(Bits.b011)                                         // 3:opcode
+				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
+				.ModRegRMSIBDisplacement(true, node.Operand1, node.Operand3, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalIntegerOfSize(!node.Operand3.IsLinkerResolved, node.Operand3, node.Size) // 8/16/32:immediate
+				.AppendConditionalPatchPlaceholder(node.Operand3.IsLinkerResolved, out int patchOffset); // 32:memory
+
+			if (node.Operand3.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand3, patchOffset, node.Operand2.ConstantSignedInteger);
+			else
+				emitter.Emit(opcode);
+		}
+
+		private static void EmitMoveStoreConstantBaseImmediate(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand1.IsConstant);
+			Debug.Assert(node.Operand2.IsResolvedConstant);
+			Debug.Assert(node.Operand3.IsResolvedConstant);
+
+			// immediate to memory	1100 011w: mod 000 r/m : immediate data
+			var opcode = new OpcodeEncoder()
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
+				.AppendNibble(Bits.b1100)                                       // 4:opcode
+				.Append3Bits(Bits.b011)                                         // 3:opcode
+				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
+
+				.AppendMod(Bits.b00)                                            // 2:mod (00)
+				.Append3Bits(Bits.b000)                                         // 3:source (000)
+				.AppendRM(node.Operand1)                                        // 3:r/m (destination)
+
+				.AppendConditionalDisplacement(!node.Operand1.IsLinkerResolved, node.Operand1)   // 32:displacement value
+
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset)  // 32:memory
+				.AppendConditionalIntegerOfSize(true, node.Operand3, node.Size);                     // 8/16/32:immediate
+
+			if (node.Operand1.IsLinkerResolved && !node.Operand3.IsLinkerResolved)
+			{
+				emitter.Emit(opcode, node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
+			}
+			else if (node.Operand1.IsLinkerResolved && node.Operand3.IsLinkerResolved)
+			{
+				// fixme: trouble!
+				throw new NotImplementCompilerException("not here");
+			}
+			else
+			{
+				emitter.Emit(opcode);
+			}
+		}
+
+		private static void EmitMovStoreConstantBase(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand3.IsCPURegister);
+			Debug.Assert(!node.Operand3.IsConstant);
+			Debug.Assert(node.Operand1.IsConstant);
+
+			// reg to memory	1000 100w: mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
+				.AppendNibble(Bits.b1000)                                       // 4:opcode
+				.Append3Bits(Bits.b100)                                         // 3:opcode
+				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
+
+				.AppendMod(Bits.b00)                                            // 2:mod (00)
+				.AppendRegister(node.Operand3)                                  // 3:source
+				.AppendRegister(Bits.b101)                                      // 3:r/m (101=Fixed Displacement)
+
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
+				.AppendConditionalIntegerValue(!node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
+			else
+				emitter.Emit(opcode);
+		}
+
+		private static void EmitMovStoreReg(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Operand3.IsCPURegister);
+			Debug.Assert(!node.Operand3.IsConstant);
+
+			// reg to memory	1000 100w: mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendConditionalPrefix(node.Size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
+
+				.AppendNibble(Bits.b1000)                                       // 4:opcode
+				.Append3Bits(Bits.b100)                                         // 3:opcode
+				.AppendWidthBit(node.Size != InstructionSize.Size8)             // 1:width
+
+				// This opcode has a directionality bit, and it is set to 0
+				// This means we must swap around operand1 and operand3, and set offsetDestination to false
+				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:displacement
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
+			else
+				emitter.Emit(opcode);
+		}
+
+		private static void EmitMovStore(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.ResultCount == 0);
+
+			if (node.Operand1.IsConstant && node.Operand3.IsConstant)
+			{
+				EmitMoveStoreConstantBaseImmediate(node, emitter);
+			}
+			else if (node.Operand3.IsConstant)
+			{
+				EmitMovStoreImmediate(node, emitter);
+			}
+			else if (node.Operand1.IsConstant && node.Operand3.IsCPURegister)
+			{
+				EmitMovStoreConstantBase(node, emitter);
+			}
+			else
+			{
+				EmitMovStoreReg(node, emitter);
+			}
+		}
+
+		internal static void EmitMovStore8(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			EmitMovStore(node, emitter);
+		}
+
+		internal static void EmitMovStore16(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			EmitMovStore(node, emitter);
+		}
+
+		internal static void EmitMovStore32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			EmitMovStore(node, emitter);
 		}
 	}
 }

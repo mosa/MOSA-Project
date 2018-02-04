@@ -17,7 +17,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.In8, In8);
 			AddVisitation(X86.In16, In16);
 			AddVisitation(X86.Mov32, Mov32);
-			AddVisitation(X86.MovLoad, MovLoad);
+			AddVisitation(X86.MovLoad8, MovLoad8);
+			AddVisitation(X86.MovLoad16, MovLoad16);
 			AddVisitation(X86.MovStore, MovStore);
 			AddVisitation(X86.Movsd, Movsd);
 			AddVisitation(X86.Movss, Movss);
@@ -104,14 +105,8 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		public void MovLoad(Context context)
+		public void MovLoad8(Context context)
 		{
-			var size = context.Size;
-
-			// Mov can not use ESI or EDI registers for 8/16bit values
-			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
-				return;
-
 			Operand result = context.Result;
 
 			Debug.Assert(result.IsCPURegister);
@@ -121,16 +116,24 @@ namespace Mosa.Platform.x86.Stages
 				Operand source = context.Operand1;
 				Operand offset = context.Operand2;
 
-				context.SetInstruction(X86.MovLoad, InstructionSize.Size32, result, source, offset);
+				context.SetInstruction(X86.MovLoad32, InstructionSize.Size32, result, source, offset);
+				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0x000000ff));
+			}
+		}
 
-				if (size == InstructionSize.Size16)
-				{
-					context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0x0000ffff));
-				}
-				else if (size == InstructionSize.Size8)
-				{
-					context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0x000000ff));
-				}
+		public void MovLoad16(Context context)
+		{
+			Operand result = context.Result;
+
+			Debug.Assert(result.IsCPURegister);
+
+			if (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI)
+			{
+				Operand source = context.Operand1;
+				Operand offset = context.Operand2;
+
+				context.SetInstruction(X86.MovLoad32, InstructionSize.Size32, result, source, offset);
+				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0x0000ffff));
 			}
 		}
 
