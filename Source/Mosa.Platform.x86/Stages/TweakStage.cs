@@ -13,9 +13,7 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(X86.Call, Call);
-			AddVisitation(X86.CallReg, Call);
-			AddVisitation(X86.CallStatic, Call);
+			AddVisitation(X86.CallReg, CallReg);
 			AddVisitation(X86.Cmp32, Cmp32);
 			AddVisitation(X86.Sar32, ConvertShiftConstantToByte);
 			AddVisitation(X86.Shl32, ConvertShiftConstantToByte);
@@ -31,21 +29,16 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.Call"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Call(Context context)
+		public void CallReg(Context context)
 		{
 			// FIXME: Result operand should be used instead of Operand1 for the result
 			// FIXME: Move to FixedRegisterAssignmentStage
-			Operand destinationOperand = context.Operand1;
-
-			if (destinationOperand == null || destinationOperand.IsSymbol)
-				return;
-
-			if (!destinationOperand.IsCPURegister)
+			if (!context.Operand1.IsCPURegister)
 			{
 				Context before = context.InsertBefore();
-				Operand v1 = AllocateVirtualRegister(destinationOperand.Type);
+				Operand v1 = AllocateVirtualRegister(context.Operand1.Type);
 
-				before.SetInstruction(X86.Mov, v1, destinationOperand);
+				before.SetInstruction(X86.Mov, v1, context.Operand1);
 				context.Operand1 = v1;
 			}
 		}

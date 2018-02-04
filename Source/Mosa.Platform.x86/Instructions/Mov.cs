@@ -14,11 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 		#region Data Members
 
 		private static readonly LegacyOpCode RM_C = new LegacyOpCode(new byte[] { 0xC7 }, 0); // Move imm32 to r/m32
-		private static readonly LegacyOpCode RM_C_U8 = new LegacyOpCode(new byte[] { 0xC6 }, 0); // Move imm8 to r/m8
-		private static readonly LegacyOpCode R_RM_16 = new LegacyOpCode(new byte[] { 0x66, 0x8B });
 		private static readonly LegacyOpCode R_RM = new LegacyOpCode(new byte[] { 0x8B });
-		private static readonly LegacyOpCode RM_U8 = new LegacyOpCode(new byte[] { 0x8A }); // Move r/m8 to R8
-		private static readonly LegacyOpCode M_C_16 = new LegacyOpCode(new byte[] { 0x66, 0xC7 });
 		private static readonly LegacyOpCode SEG_RM = new LegacyOpCode(new byte[] { 0x8E }); // Move r/m to seg
 		private static readonly LegacyOpCode RM_SEG = new LegacyOpCode(new byte[] { 0x8C }); // Move seg to r/m
 

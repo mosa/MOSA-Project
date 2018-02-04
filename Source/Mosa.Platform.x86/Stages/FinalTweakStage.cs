@@ -22,7 +22,6 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Movsd, Movsd);
 			AddVisitation(X86.Movss, Movss);
 			AddVisitation(X86.Nop, Nop);
-
 			AddVisitation(X86.SetOverflow, Setcc);
 			AddVisitation(X86.SetNoOverflow, Setcc);
 			AddVisitation(X86.SetCarry, Setcc);
