@@ -229,7 +229,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 			switch (NodeType)
 			{
-				case NodeType.Instruction: sb.Append(Instruction.BaseInstructionName); break;
+				case NodeType.Instruction: sb.Append(Instruction.Name); break;
 				case NodeType.FixedIntegerConstant: sb.Append(ConstantInteger.ToString()); break;
 				case NodeType.FixedDoubleConstant: sb.Append(ConstantDouble.ToString()); break;
 				case NodeType.PhyiscalRegister: sb.Append(PhysicalRegister.ToString()); break;

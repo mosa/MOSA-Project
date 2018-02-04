@@ -12,19 +12,28 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class BranchCarry : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0x0F, 0x08 };
+		public override string AlternativeName { get { return "JC"; } }
+
+		public static readonly byte[] opcode = new byte[] { 0x0F, 0x82 };
 
 		internal BranchCarry()
 			: base(0, 0)
 		{
 		}
 
+		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
+
+		public override bool ThreeTwoAddressConversion { get { return false; } }
+
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
 			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
+			System.Diagnostics.Debug.Assert(node.BranchTargets.Count >= 1);
+			System.Diagnostics.Debug.Assert(node.BranchTargets[0] != null);
 
 			emitter.Write(opcode);
+			(emitter as X86CodeEmitter).EmitRelativeBranchTarget(node.BranchTargets[0].Label);
 		}
 
 		// The following is used by the automated code generator.

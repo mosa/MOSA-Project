@@ -830,7 +830,7 @@ namespace Mosa.Compiler.Framework
 			else
 				sb.Append(' ');
 
-			sb.Append(Instruction.InstructionName);
+			sb.Append(Instruction.FullName);
 
 			var size = GetSizeString(Size);
 

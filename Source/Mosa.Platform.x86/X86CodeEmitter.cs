@@ -49,7 +49,7 @@ namespace Mosa.Platform.x86
 		/// Emits the relative branch target.
 		/// </summary>
 		/// <param name="label">The label.</param>
-		private void EmitRelativeBranchTarget(int label)
+		public void EmitRelativeBranchTarget(int label)
 		{
 			// The relative offset of the label
 			int relOffset = 0;
