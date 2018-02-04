@@ -144,7 +144,7 @@
     <Compile Include="Instructions\CmovNoCarry32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovNoOverflow3232.cs">
+    <Compile Include="Instructions\CmovNoOverflow32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\CmovNoParity32.cs">
@@ -659,7 +659,6 @@
     <Compile Include="Intrinsic\Sti.cs" />
     <Compile Include="CompilerStages\MethodTableBuilderStage.cs" />
     <Compile Include="SegmentRegister.cs" />
-    <Compile Include="Instructions\Branch.cs" />
     <Compile Include="Instructions\Cvttsd2si.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>

@@ -212,42 +212,13 @@ namespace Mosa.Platform.x86.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			BaseInstruction setcc = GetSetcc(condition);
 
-			context.SetInstruction(X86.Mov, v1, ConstantZero);
-			context.AppendInstruction(X86.Cmp32, null, operand1, operand2);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			BaseInstruction instruction = null;
-
-			switch (condition)
-			{
-				case ConditionCode.Overflow: instruction = X86.SetOverflow; break;
-				case ConditionCode.NoOverflow: instruction = X86.SetNoOverflow; break;
-				case ConditionCode.Carry: instruction = X86.SetCarry; break;
-				case ConditionCode.UnsignedLessThan: instruction = X86.SetUnsignedLessThan; break;
-				case ConditionCode.UnsignedGreaterOrEqual: instruction = X86.SetUnsignedGreaterOrEqual; break;
-				case ConditionCode.NoCarry: instruction = X86.SetNoCarry; break;
-				case ConditionCode.Equal: instruction = X86.SetEqual; break;
-				case ConditionCode.Zero: instruction = X86.SetZero; break;
-				case ConditionCode.NotEqual: instruction = X86.SetNotEqual; break;
-				case ConditionCode.NotZero: instruction = X86.SetNotZero; break;
-				case ConditionCode.UnsignedLessOrEqual: instruction = X86.SetUnsignedLessOrEqual; break;
-				case ConditionCode.UnsignedGreaterThan: instruction = X86.SetUnsignedGreaterThan; break;
-				case ConditionCode.Signed: instruction = X86.SetSigned; break;
-				case ConditionCode.NotSigned: instruction = X86.SetNotSigned; break;
-				case ConditionCode.Parity: instruction = X86.SetParity; break;
-				case ConditionCode.NoParity: instruction = X86.SetNoParity; break;
-				case ConditionCode.LessThan: instruction = X86.SetLessThan; break;
-				case ConditionCode.GreaterOrEqual: instruction = X86.SetGreaterOrEqual; break;
-				case ConditionCode.LessOrEqual: instruction = X86.SetLessOrEqual; break;
-				case ConditionCode.GreaterThan: instruction = X86.SetGreaterThan; break;
-
-				default: throw new NotSupportedException();
-			}
-
-			context.AppendInstruction(instruction, condition, v1);
-
-			context.AppendInstruction(X86.Mov, resultOperand, v1);
+			context.SetInstruction(X86.Cmp32, null, operand1, operand2);
+			context.AppendInstruction(setcc, v1);
+			context.AppendInstruction(X86.Movzx8To32, resultOperand, v1);
 		}
 
 		/// <summary>
@@ -261,8 +232,10 @@ namespace Mosa.Platform.x86.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
+			var branch = GetBranch(condition);
+
 			context.SetInstruction(X86.Cmp32, null, operand1, operand2);
-			context.AppendInstruction(X86.Branch, condition, target);
+			context.AppendInstruction(branch, target);
 		}
 
 		private void LoadCompound(Context context)
@@ -459,10 +432,10 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov, result, CreateConstant(1));
 						context.AppendInstruction(instruction, size, null, left, right);
-						context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].Block);
+						context.AppendInstruction(X86.BranchParity, newBlocks[1].Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
-						newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[1].Block);
+						newBlocks[0].AppendInstruction(X86.BranchNotEqual, newBlocks[1].Block);
 						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 						newBlocks[1].AppendInstruction(X86.Mov, result, ConstantZero);
@@ -484,7 +457,7 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov, result, CreateConstant(1));
 						context.AppendInstruction(instruction, size, null, left, right);
-						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.Block);
+						context.AppendInstruction(X86.BranchParity, nextBlock.Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 						newBlocks[0].AppendInstruction(X86.SetNotEqual, result);
 
@@ -954,7 +927,7 @@ namespace Mosa.Platform.x86.Stages
 			for (int i = 0; i < targets.Count - 1; ++i)
 			{
 				context.AppendInstruction(X86.CmpConst32, null, operand, CreateConstant(i));
-				context.AppendInstruction(X86.Branch, ConditionCode.Equal, targets[i]);
+				context.AppendInstruction(X86.BranchEqual, targets[i]);
 			}
 		}
 
@@ -973,5 +946,63 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		#endregion Visitation Methods
+
+		public static BaseInstruction GetSetcc(ConditionCode condition)
+		{
+			switch (condition)
+			{
+				case ConditionCode.Overflow: return X86.SetOverflow;
+				case ConditionCode.NoOverflow: return X86.SetNoOverflow;
+				case ConditionCode.Carry: return X86.SetCarry;
+				case ConditionCode.UnsignedLessThan: return X86.SetUnsignedLessThan;
+				case ConditionCode.UnsignedGreaterOrEqual: return X86.SetUnsignedGreaterOrEqual;
+				case ConditionCode.NoCarry: return X86.SetNoCarry;
+				case ConditionCode.Equal: return X86.SetEqual;
+				case ConditionCode.Zero: return X86.SetZero;
+				case ConditionCode.NotEqual: return X86.SetNotEqual;
+				case ConditionCode.NotZero: return X86.SetNotZero;
+				case ConditionCode.UnsignedLessOrEqual: return X86.SetUnsignedLessOrEqual;
+				case ConditionCode.UnsignedGreaterThan: return X86.SetUnsignedGreaterThan;
+				case ConditionCode.Signed: return X86.SetSigned;
+				case ConditionCode.NotSigned: return X86.SetNotSigned;
+				case ConditionCode.Parity: return X86.SetParity;
+				case ConditionCode.NoParity: return X86.SetNoParity;
+				case ConditionCode.LessThan: return X86.SetLessThan;
+				case ConditionCode.GreaterOrEqual: return X86.SetGreaterOrEqual;
+				case ConditionCode.LessOrEqual: return X86.SetLessOrEqual;
+				case ConditionCode.GreaterThan: return X86.SetGreaterThan;
+
+				default: throw new NotSupportedException();
+			}
+		}
+
+		public static BaseInstruction GetBranch(ConditionCode condition)
+		{
+			switch (condition)
+			{
+				case ConditionCode.Overflow: return X86.BranchOverflow;
+				case ConditionCode.NoOverflow: return X86.BranchNoOverflow;
+				case ConditionCode.Carry: return X86.BranchCarry;
+				case ConditionCode.UnsignedLessThan: return X86.BranchUnsignedLessThan;
+				case ConditionCode.UnsignedGreaterOrEqual: return X86.BranchUnsignedGreaterOrEqual;
+				case ConditionCode.NoCarry: return X86.BranchNoCarry;
+				case ConditionCode.Equal: return X86.BranchEqual;
+				case ConditionCode.Zero: return X86.BranchZero;
+				case ConditionCode.NotEqual: return X86.BranchNotEqual;
+				case ConditionCode.NotZero: return X86.BranchNotZero;
+				case ConditionCode.UnsignedLessOrEqual: return X86.BranchUnsignedLessOrEqual;
+				case ConditionCode.UnsignedGreaterThan: return X86.BranchUnsignedGreaterThan;
+				case ConditionCode.Signed: return X86.BranchSigned;
+				case ConditionCode.NotSigned: return X86.BranchNotSigned;
+				case ConditionCode.Parity: return X86.BranchParity;
+				case ConditionCode.NoParity: return X86.BranchNoParity;
+				case ConditionCode.LessThan: return X86.BranchLessThan;
+				case ConditionCode.GreaterOrEqual: return X86.BranchGreaterOrEqual;
+				case ConditionCode.LessOrEqual: return X86.BranchLessOrEqual;
+				case ConditionCode.GreaterThan: return X86.BranchGreaterThan;
+
+				default: throw new NotSupportedException();
+			}
+		}
 	}
 }
