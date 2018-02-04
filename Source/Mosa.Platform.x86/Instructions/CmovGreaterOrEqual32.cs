@@ -23,6 +23,11 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool ThreeTwoAddressConversion { get { return false; } }
 
+		public override BaseInstruction GetOpposite()
+		{
+			return X86.CmovLessThan32;
+		}
+
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);

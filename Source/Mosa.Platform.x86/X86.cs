@@ -20,7 +20,6 @@ namespace Mosa.Platform.x86
 		public static readonly Addss Addss = new Addss();
 		public static readonly And32 And32 = new And32();
 		public static readonly AndConst32 AndConst32 = new AndConst32();
-		public static readonly Branch Branch = new Branch();
 		public static readonly Break Break = new Break();
 		public static readonly Btr32 Btr32 = new Btr32();
 		public static readonly BtrConst32 BtrConst32 = new BtrConst32();
@@ -188,7 +187,7 @@ namespace Mosa.Platform.x86
 		public static readonly SetLessOrEqual SetLessOrEqual = new SetLessOrEqual();
 		public static readonly SetGreaterThan SetGreaterThan = new SetGreaterThan();
 		public static readonly CmovOverflow32 CmovOverflow32 = new CmovOverflow32();
-		public static readonly CmovNoOverflow3232 CmovNoOverflow3232 = new CmovNoOverflow3232();
+		public static readonly CmovNoOverflow32 CmovNoOverflow32 = new CmovNoOverflow32();
 		public static readonly CmovCarry32 CmovCarry32 = new CmovCarry32();
 		public static readonly CmovUnsignedLessThan32 CmovUnsignedLessThan32 = new CmovUnsignedLessThan32();
 		public static readonly CmovUnsignedGreaterOrEqual32 CmovUnsignedGreaterOrEqual32 = new CmovUnsignedGreaterOrEqual32();

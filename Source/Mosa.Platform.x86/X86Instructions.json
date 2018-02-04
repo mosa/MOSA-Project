@@ -83,21 +83,13 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Branch",
-			"FamilyName": "X86",
-			"ResultCount": 0,
-			"OperandCount": 0,
-			"FlowControl": "ConditionalBranch",
-			"X86ThreeTwoAddressConversion": "true"
-		},
-		{
 			"Name": "Break",
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
 			"X86EmitBytes": "CC",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Btr32",
@@ -151,7 +143,7 @@
 			"ResultCount": 2,
 			"OperandCount": 1,
 			"X86EmitBytes": "99",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Cli",
@@ -1724,18 +1716,18 @@
 			"X86LegacyOpcode": "0x0F, 0x40",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovNoOverflow"
+			"LogicalOpposite": "CmovNoOverflow32"
 		},
 		{
-			"Name": "CmovNoOverflow3232",
-			"AlternativeName": "CmovNO3232",
+			"Name": "CmovNoOverflow32",
+			"AlternativeName": "CmovNO32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x41",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovOverflow"
+			"LogicalOpposite": "CmovOverflow32"
 		},
 		{
 			"Name": "CmovCarry32",
@@ -1746,7 +1738,7 @@
 			"X86LegacyOpcode": "0x0F, 0x42",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovNoCarry"
+			"LogicalOpposite": "CmovNoCarry32"
 		},
 		{
 			"Name": "CmovUnsignedLessThan32",
@@ -1757,7 +1749,7 @@
 			"X86LegacyOpcode": "0x0F, 0x42",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovUnsignedGreaterOrEqual"
+			"LogicalOpposite": "CmovUnsignedGreaterOrEqual32"
 		},
 		{
 			"Name": "CmovUnsignedGreaterOrEqual32",
@@ -1768,7 +1760,7 @@
 			"X86LegacyOpcode": "0x0F, 0x43",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovUnsignedLessThan"
+			"LogicalOpposite": "CmovUnsignedLessThan32"
 		},
 		{
 			"Name": "CmovNoCarry32",
@@ -1779,7 +1771,7 @@
 			"X86LegacyOpcode": "0x0F, 0x43",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovCarry"
+			"LogicalOpposite": "CmovCarry32"
 		},
 		{
 			"Name": "CmovEqual32",
@@ -1790,7 +1782,7 @@
 			"X86LegacyOpcode": "0x0F, 0x44",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovNotEqual"
+			"LogicalOpposite": "CmovNotEqual32"
 		},
 		{
 			"Name": "CmovZero32",
@@ -1801,7 +1793,7 @@
 			"X86LegacyOpcode": "0x0F, 0x44",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovNotZero"
+			"LogicalOpposite": "CmovNotZero32"
 		},
 		{
 			"Name": "CmovNotEqual32",
@@ -1812,7 +1804,7 @@
 			"X86LegacyOpcode": "0x0F, 0x45",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovEqual"
+			"LogicalOpposite": "CmovEqual32"
 		},
 		{
 			"Name": "CmovNotZero32",
@@ -1823,7 +1815,7 @@
 			"X86LegacyOpcode": "0x0F, 0x45",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovZero"
+			"LogicalOpposite": "CmovZero32"
 		},
 		{
 			"Name": "CmovUnsignedLessOrEqual32",
@@ -1834,7 +1826,7 @@
 			"X86LegacyOpcode": "0x0F, 0x46",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovUnsignedGreaterThan"
+			"LogicalOpposite": "CmovUnsignedGreaterThan32"
 		},
 		{
 			"Name": "CmovUnsignedGreaterThan32",
@@ -1845,7 +1837,7 @@
 			"X86LegacyOpcode": "0x0F, 0x47",
 			"X86ThreeTwoAddressConversion": "false",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"LogicalOpposite": "CmovUnsignedLessOrEqual"
+			"LogicalOpposite": "CmovUnsignedLessOrEqual32"
 		},
 		{
 			"Name": "CmovSigned32",
@@ -1856,7 +1848,7 @@
 			"X86LegacyOpcode": "0x0F, 0x48",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovNotSigned"
+			"LogicalOpposite": "CmovNotSigned32"
 		},
 		{
 			"Name": "CmovNotSigned32",
@@ -1867,7 +1859,7 @@
 			"X86LegacyOpcode": "0x0F, 0x49",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovSigned"
+			"LogicalOpposite": "CmovSigned32"
 		},
 		{
 			"Name": "CmovParity32",
@@ -1878,7 +1870,7 @@
 			"X86LegacyOpcode": "0x0F, 0x4A",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovNoParity"
+			"LogicalOpposite": "CmovNoParity32"
 		},
 		{
 			"Name": "CmovNoParity32",
@@ -1889,7 +1881,7 @@
 			"X86LegacyOpcode": "0x0F, 0x4B",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovParity"
+			"LogicalOpposite": "CmovParity32"
 		},
 		{
 			"Name": "CmovLessThan32",
@@ -1900,7 +1892,7 @@
 			"X86LegacyOpcode": "0x0F, 0x4C",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovGreaterOrEqual"
+			"LogicalOpposite": "CmovGreaterOrEqual32"
 		},
 		{
 			"Name": "CmovGreaterOrEqual32",
@@ -1911,7 +1903,7 @@
 			"X86LegacyOpcode": "0x0F, 0x4D",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovLessThan"
+			"LogicalOpposite": "CmovLessThan32"
 		},
 		{
 			"Name": "CmovLessOrEqual32",
@@ -1922,7 +1914,7 @@
 			"X86LegacyOpcode": "0x0F, 0x4E",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovGreaterThan"
+			"LogicalOpposite": "CmovGreaterThan32"
 		},
 		{
 			"Name": "CmovGreaterThan32",
@@ -1933,7 +1925,7 @@
 			"X86LegacyOpcode": "0x0F, 0x4F",
 			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
-			"LogicalOpposite": "CmovLessOrEqual"
+			"LogicalOpposite": "CmovLessOrEqual32"
 		}
 	]
 }

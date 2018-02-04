@@ -180,6 +180,13 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool ThreeTwoAddressConversion { get { return false; } }
 <# } #>
+<# if (entry.LogicalOpposite != null) { #>
+
+		public override BaseInstruction GetOpposite()
+		{
+			return <#= entry.FamilyName #>.<#=entry.LogicalOpposite#>;
+		}
+<# } #>
 <# if (entry.X86EmitBytes != null){ #>
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
