@@ -22,7 +22,27 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Movsd, Movsd);
 			AddVisitation(X86.Movss, Movss);
 			AddVisitation(X86.Nop, Nop);
-			AddVisitation(X86.Setcc, Setcc);
+
+			AddVisitation(X86.SetOverflow, Setcc);
+			AddVisitation(X86.SetNoOverflow, Setcc);
+			AddVisitation(X86.SetCarry, Setcc);
+			AddVisitation(X86.SetUnsignedLessThan, Setcc);
+			AddVisitation(X86.SetUnsignedGreaterOrEqual, Setcc);
+			AddVisitation(X86.SetNoCarry, Setcc);
+			AddVisitation(X86.SetEqual, Setcc);
+			AddVisitation(X86.SetZero, Setcc);
+			AddVisitation(X86.SetNotEqual, Setcc);
+			AddVisitation(X86.SetNotZero, Setcc);
+			AddVisitation(X86.SetUnsignedLessOrEqual, Setcc);
+			AddVisitation(X86.SetUnsignedGreaterThan, Setcc);
+			AddVisitation(X86.SetSigned, Setcc);
+			AddVisitation(X86.SetNotSigned, Setcc);
+			AddVisitation(X86.SetParity, Setcc);
+			AddVisitation(X86.SetNoParity, Setcc);
+			AddVisitation(X86.SetLessThan, Setcc);
+			AddVisitation(X86.SetGreaterOrEqual, Setcc);
+			AddVisitation(X86.SetLessOrEqual, Setcc);
+			AddVisitation(X86.SetGreaterThan, Setcc);
 		}
 
 		#region Visitation Methods
@@ -207,6 +227,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsCPURegister);
 
 			Operand result = context.Result;
+			var instruction = context.Instruction;
 
 			Debug.Assert(result.IsCPURegister);
 
@@ -218,7 +239,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
 				context.SetInstruction2(X86.Xchg32, eax, result, result, eax);
-				context.AppendInstruction(X86.Setcc, condition, eax);
+				context.AppendInstruction(instruction, condition, eax);
 				context.AppendInstruction2(X86.Xchg32, result, eax, eax, result);
 			}
 		}

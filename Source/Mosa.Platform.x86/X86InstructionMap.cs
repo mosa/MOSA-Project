@@ -124,7 +124,6 @@ namespace Mosa.Platform.x86
 			{ "SarConstOne32", X86.SarConstOne32 },
 			{ "Sbb32", X86.Sbb32 },
 			{ "SbbConst32", X86.SbbConst32 },
-			{ "Setcc", X86.Setcc },
 			{ "Shl32", X86.Shl32 },
 			{ "ShlConst32", X86.ShlConst32 },
 			{ "ShlConstOne32", X86.ShlConstOne32 },

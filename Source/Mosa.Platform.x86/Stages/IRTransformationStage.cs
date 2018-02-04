@@ -3,6 +3,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -216,14 +217,35 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Mov, v1, ConstantZero);
 			context.AppendInstruction(X86.Cmp32, null, operand1, operand2);
 
-			if (resultOperand.IsUnsigned || resultOperand.IsChar)
+			BaseInstruction instruction = null;
+
+			switch (condition)
 			{
-				context.AppendInstruction(X86.Setcc, condition.GetUnsigned(), v1);
+				case ConditionCode.Overflow: instruction = X86.SetOverflow; break;
+				case ConditionCode.NoOverflow: instruction = X86.SetNoOverflow; break;
+				case ConditionCode.Carry: instruction = X86.SetCarry; break;
+				case ConditionCode.UnsignedLessThan: instruction = X86.SetUnsignedLessThan; break;
+				case ConditionCode.UnsignedGreaterOrEqual: instruction = X86.SetUnsignedGreaterOrEqual; break;
+				case ConditionCode.NoCarry: instruction = X86.SetNoCarry; break;
+				case ConditionCode.Equal: instruction = X86.SetEqual; break;
+				case ConditionCode.Zero: instruction = X86.SetZero; break;
+				case ConditionCode.NotEqual: instruction = X86.SetNotEqual; break;
+				case ConditionCode.NotZero: instruction = X86.SetNotZero; break;
+				case ConditionCode.UnsignedLessOrEqual: instruction = X86.SetUnsignedLessOrEqual; break;
+				case ConditionCode.UnsignedGreaterThan: instruction = X86.SetUnsignedGreaterThan; break;
+				case ConditionCode.Signed: instruction = X86.SetSigned; break;
+				case ConditionCode.NotSigned: instruction = X86.SetNotSigned; break;
+				case ConditionCode.Parity: instruction = X86.SetParity; break;
+				case ConditionCode.NoParity: instruction = X86.SetNoParity; break;
+				case ConditionCode.LessThan: instruction = X86.SetLessThan; break;
+				case ConditionCode.GreaterOrEqual: instruction = X86.SetGreaterOrEqual; break;
+				case ConditionCode.LessOrEqual: instruction = X86.SetLessOrEqual; break;
+				case ConditionCode.GreaterThan: instruction = X86.SetGreaterThan; break;
+
+				default: throw new NotSupportedException();
 			}
-			else
-			{
-				context.AppendInstruction(X86.Setcc, condition, v1);
-			}
+
+			context.AppendInstruction(instruction, condition, v1);
 
 			context.AppendInstruction(X86.Mov, resultOperand, v1);
 		}
@@ -464,7 +486,7 @@ namespace Mosa.Platform.x86.Stages
 						context.AppendInstruction(instruction, size, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
-						newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.NotEqual, result);
+						newBlocks[0].AppendInstruction(X86.SetNotEqual, result);
 
 						//newBlocks[0].AppendInstruction(X86.Movzx, InstructionSize.Size8, result, result);
 						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
@@ -479,7 +501,7 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov, result, ConstantZero);
 						context.AppendInstruction(instruction, size, null, right, left);
-						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterThan, result);
+						context.AppendInstruction(X86.SetUnsignedGreaterThan, result);
 						break;
 					}
 				case ConditionCode.GreaterThan:
@@ -491,7 +513,7 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov, result, ConstantZero);
 						context.AppendInstruction(instruction, size, null, left, right);
-						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterThan, result);
+						context.AppendInstruction(X86.SetUnsignedGreaterThan, result);
 						break;
 					}
 				case ConditionCode.LessOrEqual:
@@ -503,7 +525,7 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov, result, ConstantZero);
 						context.AppendInstruction(instruction, size, null, right, left);
-						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
+						context.AppendInstruction(X86.SetUnsignedGreaterOrEqual, result);
 						break;
 					}
 				case ConditionCode.GreaterOrEqual:
@@ -515,7 +537,7 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov, result, ConstantZero);
 						context.AppendInstruction(instruction, size, null, left, right);
-						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
+						context.AppendInstruction(X86.SetUnsignedGreaterOrEqual, result);
 						break;
 					}
 			}
