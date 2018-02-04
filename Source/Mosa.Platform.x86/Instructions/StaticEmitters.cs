@@ -525,5 +525,11 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.WriteByte(0xE9);
 			(emitter as X86CodeEmitter).EmitCallSite(node.Operand1);
 		}
+
+		internal static void EmitCallStatic(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			emitter.WriteByte(0xE8);
+			(emitter as X86CodeEmitter).EmitCallSite(node.Operand1);
+		}
 	}
 }

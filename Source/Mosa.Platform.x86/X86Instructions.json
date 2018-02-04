@@ -134,6 +134,30 @@
 			"FamilyName": "X86",
 			"ResultCount": 0,
 			"OperandCount": 0,
+			"X86EmitBytes": "0xE8",
+			"X86EmitRelativeBranchTarget": "true",
+			"X86ThreeTwoAddressConversion": "false",
+			"FlowControl": "Call"
+		},
+		{
+			"Name": "CallStatic",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"X86LegacyOpcode": "0xE8",
+			"X86LegacyOpcodeOperandOrder": "1",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "false",
+			"FlowControl": "Call"
+		},
+		{
+			"Name": "CallReg",
+			"FamilyName": "X86",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"X86LegacyOpcode": "0xFF",
+			"X86LegacyOpcodeRegField": "02",
+			"X86LegacyOpcodeOperandOrder": "1",
 			"FlowControl": "Call",
 			"X86ThreeTwoAddressConversion": "false"
 		},

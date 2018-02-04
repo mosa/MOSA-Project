@@ -30,7 +30,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			methodCompiler.SplitLongOperand(result, out Operand op0L, out Operand op0H);
 
-			context.SetInstruction(X86.Call, null, methodAddress);
+			context.SetInstruction(X86.CallReg, null, methodAddress);
 			context.AppendInstruction(IRInstruction.Gen, eax);
 			context.AppendInstruction(IRInstruction.Gen, edx);
 			context.AppendInstruction(X86.Mov, op0L, eax);

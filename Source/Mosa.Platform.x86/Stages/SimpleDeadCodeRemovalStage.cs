@@ -46,7 +46,15 @@ namespace Mosa.Platform.x86.Stages
 							continue;
 						}
 
+						// FUTURE: Only useless if not result is not used and no side effect
+
 						if (node.Instruction == X86.Call)
+							continue;
+
+						if (node.Instruction == X86.CallStatic)
+							continue;
+
+						if (node.Instruction == X86.CallReg)
 							continue;
 
 						if (node.Instruction == X86.Mov)
