@@ -379,7 +379,6 @@
 			"UnspecifiedSideEffect": "true",
 			"X86ThreeTwoAddressConversion": "false"
 		},
-
 		{
 			"Name": "InConst8",
 			"FamilyName": "X86",
@@ -1032,13 +1031,6 @@
 			"X86LegacyOpcode": "0x81",
 			"X86LegacyOpcodeRegField": "03",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
-		},
-		{
-			"Name": "Setcc",
-			"FamilyName": "X86",
-			"ResultCount": 1,
-			"OperandCount": 0,
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{

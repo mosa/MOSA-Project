@@ -25,8 +25,8 @@ namespace Mosa.Platform.x86.Instructions
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
-			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 2);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
 			emitter.Emit(LegacyOpcode, node.Result, node.Operand1, node.Operand2);
 		}

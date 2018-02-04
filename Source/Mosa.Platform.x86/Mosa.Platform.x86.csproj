@@ -754,7 +754,6 @@
     <Compile Include="Instructions\Neg.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Setcc.cs" />
     <Compile Include="Instructions\Ucomisd.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>

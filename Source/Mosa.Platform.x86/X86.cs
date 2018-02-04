@@ -124,7 +124,6 @@ namespace Mosa.Platform.x86
 		public static readonly SarConstOne32 SarConstOne32 = new SarConstOne32();
 		public static readonly Sbb32 Sbb32 = new Sbb32();
 		public static readonly SbbConst32 SbbConst32 = new SbbConst32();
-		public static readonly Setcc Setcc = new Setcc();
 		public static readonly Shl32 Shl32 = new Shl32();
 		public static readonly ShlConst32 ShlConst32 = new ShlConst32();
 		public static readonly ShlConstOne32 ShlConstOne32 = new ShlConstOne32();

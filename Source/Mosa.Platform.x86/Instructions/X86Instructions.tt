@@ -185,8 +185,8 @@ namespace Mosa.Platform.x86.Instructions
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 <# if (entry.VariableOperands == null || entry.VariableOperands == "false") { #>
-			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
-			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
+			System.Diagnostics.Debug.Assert(node.ResultCount == <#= entry.ResultCount #>);
+			System.Diagnostics.Debug.Assert(node.OperandCount == <#= entry.OperandCount #>);
 <# if (entry.EmitRelativeBranchTarget != null || entry.EmitRelativeBranchTarget == "true") { #>
 			System.Diagnostics.Debug.Assert(node.BranchTargets.Count >= 1);
 			System.Diagnostics.Debug.Assert(node.BranchTargets[0] != null);
@@ -216,8 +216,8 @@ namespace Mosa.Platform.x86.Instructions
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 <# if (entry.VariableOperands == null || entry.VariableOperands == "false") { #>
-			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
-			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
+			System.Diagnostics.Debug.Assert(node.ResultCount == <#= entry.ResultCount #>);
+			System.Diagnostics.Debug.Assert(node.OperandCount == <#= entry.OperandCount #>);
 <# if (entry.X86ThreeTwoAddressConversion == null || entry.X86ThreeTwoAddressConversion == "true") { #>
 			System.Diagnostics.Debug.Assert(node.Result == node.Operand1);
 			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
