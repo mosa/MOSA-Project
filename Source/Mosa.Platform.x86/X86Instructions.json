@@ -543,10 +543,40 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "Mov",
+			"Name": "MovLoadSeg32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 1,
+			"X86LegacyOpcode": "0x8C",
+			"X86LegacyOpcodeOperandOrder": "r1",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "MovStoreSeg32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"X86LegacyOpcode": "0x8E",
+			"X86LegacyOpcodeOperandOrder": "r1",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "Mov32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"X86LegacyOpcode": "0x8B",
+			"X86LegacyOpcodeOperandOrder": "r1",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "MovConst32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"X86LegacyOpcode": "0xC7",
+			"X86LegacyOpcodeRegField": "00",
+			"X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{

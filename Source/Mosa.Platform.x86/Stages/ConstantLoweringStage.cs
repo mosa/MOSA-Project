@@ -30,6 +30,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Out16, Out16);
 			AddVisitation(X86.Out32, Out32);
 			AddVisitation(X86.Cmp32, Cmp32);
+			AddVisitation(X86.Mov32, Mov32);
 		}
 
 		#region Visitation Methods
@@ -203,6 +204,14 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand2.IsConstant)
 			{
 				context.SetInstruction(X86.CmpConst32, null, context.Operand1, context.Operand2);
+			}
+		}
+
+		public void Mov32(Context context)
+		{
+			if (context.Operand1.IsConstant)
+			{
+				context.SetInstruction(X86.MovConst32, context.Result, context.Operand1);
 			}
 		}
 

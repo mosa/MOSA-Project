@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.CallReg, CallReg);
 			AddVisitation(X86.In8, In8);
 			AddVisitation(X86.In16, In16);
-			AddVisitation(X86.Mov, Mov);
+			AddVisitation(X86.Mov32, Mov32);
 			AddVisitation(X86.MovLoad, MovLoad);
 			AddVisitation(X86.MovStore, MovStore);
 			AddVisitation(X86.Movsd, Movsd);
@@ -61,7 +61,7 @@ namespace Mosa.Platform.x86.Stages
 			if (before == null || before.IsBlockStartInstruction)
 				return;
 
-			if (before.Instruction != X86.Mov)
+			if (before.Instruction != X86.Mov32)
 				return;
 
 			if (!before.Result.IsCPURegister)
@@ -90,7 +90,7 @@ namespace Mosa.Platform.x86.Stages
 			//context.InsertBefore().SetInstruction(X86.Mov, context.Result, ConstantZero);
 		}
 
-		public void Mov(Context context)
+		public void Mov32(Context context)
 		{
 			Operand source = context.Operand1;
 			Operand result = context.Result;
@@ -101,21 +101,6 @@ namespace Mosa.Platform.x86.Stages
 			{
 				context.Empty();
 				return;
-			}
-
-			var size = context.Size;
-
-			// Mov can not use ESI or EDI registers for 8/16bit values
-			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
-				return;
-
-			if (source.IsCPURegister && (source.Register == GeneralPurposeRegister.ESI || source.Register == GeneralPurposeRegister.EDI))
-			{
-				Operand eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-
-				context.SetInstruction2(X86.Xchg32, eax, source, source, eax);
-				context.AppendInstruction(X86.Mov, result, eax);
-				context.AppendInstruction2(X86.Xchg32, source, eax, eax, source);
 			}
 		}
 

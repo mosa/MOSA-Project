@@ -67,7 +67,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				move = X86.Mov;
+				move = X86.Mov32;
 				size = InstructionSize.Size32;
 			}
 

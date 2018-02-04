@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
 			context.SetInstruction(X86.Sub32, esp, esp, size);
-			context.AppendInstruction(X86.Mov, result, esp);
+			context.AppendInstruction(X86.Mov32, result, esp);
 		}
 
 		#endregion Methods

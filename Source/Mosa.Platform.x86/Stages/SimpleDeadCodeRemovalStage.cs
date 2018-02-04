@@ -57,7 +57,7 @@ namespace Mosa.Platform.x86.Stages
 						if (node.Instruction == X86.CallReg)
 							continue;
 
-						if (node.Instruction == X86.Mov)
+						if (node.Instruction == X86.Mov32)
 						{
 							Move(node);
 						}
@@ -96,7 +96,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void Move(InstructionNode node)
 		{
-			if (node.Instruction != X86.Mov)
+			if (node.Instruction != X86.Mov32)
 				return;
 
 			var source = node.Operand1;
