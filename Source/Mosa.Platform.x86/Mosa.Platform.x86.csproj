@@ -601,7 +601,6 @@
     <Compile Include="Instructions\TestConst32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\X86Instructions.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
