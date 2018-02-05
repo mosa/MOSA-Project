@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.CallDirect, CallDirect);
 			AddVisitation(IRInstruction.CompareFloatR4, CompareFloatR4);
 			AddVisitation(IRInstruction.CompareFloatR8, CompareFloatR8);
-			AddVisitation(IRInstruction.CompareInteger, CompareInteger);
+			AddVisitation(IRInstruction.CompareInteger32x32, CompareInteger32x32);
 			AddVisitation(IRInstruction.CompareIntegerBranch, CompareIntegerBranch);
 			AddVisitation(IRInstruction.LoadCompound, LoadCompound);
 			AddVisitation(IRInstruction.MoveCompound, MoveCompound);
@@ -203,7 +203,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for IntegerCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void CompareInteger(Context context)
+		private void CompareInteger32x32(Context context)
 		{
 			var condition = context.ConditionCode;
 			var resultOperand = context.Result;

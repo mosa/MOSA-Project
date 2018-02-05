@@ -189,7 +189,13 @@
     <Compile Include="IR\CompareFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\CompareInteger.cs">
+    <Compile Include="IR\CompareInteger32x32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\CompareInteger64x32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\CompareInteger64x64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\CompareIntegerBranch.cs">

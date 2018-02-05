@@ -702,7 +702,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ConstantFoldingIntegerCompare(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.CompareInteger)
+			if (!(node.Instruction == IRInstruction.CompareInteger32x32
+				|| node.Instruction == IRInstruction.CompareInteger64x32
+				|| node.Instruction == IRInstruction.CompareInteger64x64))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -1569,7 +1571,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var node2 = operand.Definitions[0];
 
-			if (node2.Instruction != IRInstruction.CompareInteger)
+			if (!(node2.Instruction == IRInstruction.CompareInteger32x32
+				|| node2.Instruction == IRInstruction.CompareInteger64x32
+				|| node2.Instruction == IRInstruction.CompareInteger64x64))
 				return;
 
 			AddOperandUsageToWorkList(node2);
@@ -1588,7 +1592,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void FoldIntegerCompare(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.CompareInteger)
+			if (!(node.Instruction == IRInstruction.CompareInteger32x32
+				|| node.Instruction == IRInstruction.CompareInteger64x32
+				|| node.Instruction == IRInstruction.CompareInteger64x64))
 				return;
 
 			if (!(node.ConditionCode == ConditionCode.NotEqual || node.ConditionCode == ConditionCode.Equal))
@@ -1610,16 +1616,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var node2 = operand.Definitions[0];
 
-			if (node2.Instruction != IRInstruction.CompareInteger)
+			if (!(node2.Instruction == IRInstruction.CompareInteger32x32
+				|| node2.Instruction == IRInstruction.CompareInteger64x32
+				|| node2.Instruction == IRInstruction.CompareInteger64x64))
 				return;
+
+			BaseInstruction compareInteger = node2.Instruction;
+			var conditionCode = node.ConditionCode == ConditionCode.NotEqual ? node2.ConditionCode : node2.ConditionCode.GetOpposite();
 
 			AddOperandUsageToWorkList(node2);
 			AddOperandUsageToWorkList(node);
 			if (trace.Active) trace.Log("*** FoldIntegerCompare");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
-			node.ConditionCode = node.ConditionCode == ConditionCode.NotEqual ? node2.ConditionCode : node2.ConditionCode.GetOpposite();
-			node.Operand1 = node2.Operand1;
-			node.Operand2 = node2.Operand2;
+			node.SetInstruction(compareInteger, conditionCode, node.Result, node2.Operand1, node2.Operand2);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
 			if (trace.Active) trace.Log("REMOVED:\t" + node2);
 			node2.SetInstruction(IRInstruction.Nop);
@@ -1815,7 +1824,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void SimplifyIntegerCompare(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.CompareInteger)
+			if (!(node.Instruction == IRInstruction.CompareInteger32x32
+				|| node.Instruction == IRInstruction.CompareInteger64x32
+				|| node.Instruction == IRInstruction.CompareInteger64x64))
 				return;
 
 			if (node.ConditionCode != ConditionCode.NotEqual)
@@ -1853,7 +1864,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void SimplifyIntegerCompare2(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.CompareInteger)
+			if (!(node.Instruction == IRInstruction.CompareInteger32x32
+				|| node.Instruction == IRInstruction.CompareInteger64x32
+				|| node.Instruction == IRInstruction.CompareInteger64x64))
 				return;
 
 			if (node.ConditionCode != ConditionCode.UnsignedGreaterThan)
@@ -1875,7 +1888,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			AddOperandUsageToWorkList(node);
 
-			node.SetInstruction(IRInstruction.CompareInteger, ConditionCode.NotEqual, node.Result, node.Operand1, node.Operand2);
+			node.SetInstruction(Select(node.Result, !node.Operand1.Is64BitInteger ? (BaseInstruction)IRInstruction.CompareInteger32x32 : IRInstruction.CompareInteger64x32, IRInstruction.CompareInteger64x64), ConditionCode.NotEqual, node.Result, node.Operand1, node.Operand2);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
 			simplifyIntegerCompare++;
 		}

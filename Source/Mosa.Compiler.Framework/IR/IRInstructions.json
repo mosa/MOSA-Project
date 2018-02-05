@@ -137,7 +137,21 @@
 			"ResultType": "Boolean"
 		},
 		{
-			"Name": "CompareInteger",
+			"Name": "CompareInteger32x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
+			"Name": "CompareInteger64x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
+			"Name": "CompareInteger64x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,

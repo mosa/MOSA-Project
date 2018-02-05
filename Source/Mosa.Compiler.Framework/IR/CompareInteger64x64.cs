@@ -7,12 +7,12 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// CompareInteger
+	/// CompareInteger64x64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class CompareInteger : BaseIRInstruction
+	public sealed class CompareInteger64x64 : BaseIRInstruction
 	{
-		public CompareInteger()
+		public CompareInteger64x64()
 			: base(2, 1)
 		{
 		}

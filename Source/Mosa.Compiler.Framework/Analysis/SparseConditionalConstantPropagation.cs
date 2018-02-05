@@ -501,7 +501,9 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				IntegerOperation(node);
 			}
-			else if (instruction == IRInstruction.CompareInteger)
+			else if (instruction == IRInstruction.CompareInteger32x32
+				|| instruction == IRInstruction.CompareInteger64x32
+				|| instruction == IRInstruction.CompareInteger64x64)
 			{
 				CompareIntegerOperation(node);
 			}
@@ -882,7 +884,9 @@ namespace Mosa.Compiler.Framework.Analysis
 				result = operand1 << (int)operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.CompareInteger)
+			else if (instruction == IRInstruction.CompareInteger32x32
+				|| instruction == IRInstruction.CompareInteger64x32
+				|| instruction == IRInstruction.CompareInteger64x64)
 			{
 				bool? compare = Compare(operand1, operand2, conditionCode);
 

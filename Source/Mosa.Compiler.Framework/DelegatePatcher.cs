@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
@@ -17,15 +16,15 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private readonly BaseCompiler Compiler;
 
-		/// <summary>
-		/// The delegate proxy type
-		/// </summary>
-		private MosaType delegateProxyType;
+		///// <summary>
+		///// The delegate proxy type
+		///// </summary>
+		//private MosaType delegateProxyType;
 
-		/// <summary>
-		/// The deligate proxy methods
-		/// </summary>
-		public readonly Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>> delegateProxyMethods = new Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>>();
+		///// <summary>
+		///// The deligate proxy methods
+		///// </summary>
+		//public readonly Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>> delegateProxyMethods = new Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DelegatePatcher"/> class.
@@ -36,25 +35,25 @@ namespace Mosa.Compiler.Framework
 			Compiler = compiler;
 		}
 
-		private MosaMethod GetDelegateProxyMethod(MosaMethod delegateMethod, bool instance)
-		{
-			if (delegateProxyType == null)
-			{
-				delegateProxyType = Compiler.TypeSystem.CreateLinkerType("DelegateProxy");
-			}
+		//private MosaMethod GetDelegateProxyMethod(MosaMethod delegateMethod, bool instance)
+		//{
+		//	if (delegateProxyType == null)
+		//	{
+		//		delegateProxyType = Compiler.TypeSystem.CreateLinkerType("DelegateProxy");
+		//	}
 
-			if (!delegateProxyMethods.TryGetValue(delegateMethod, out Tuple<MosaMethod, MosaMethod> tuple))
-			{
-				var staticProxy = Compiler.TypeSystem.CreateLinkerMethod(delegateProxyType, delegateMethod.FullName + "@Static@Proxy", delegateMethod.Signature.ReturnType, false, delegateMethod.Signature.Parameters);
-				var instanceProxy = Compiler.TypeSystem.CreateLinkerMethod(delegateProxyType, delegateMethod.FullName + "@Instance@Proxy", delegateMethod.Signature.ReturnType, true, delegateMethod.Signature.Parameters);
+		//	if (!delegateProxyMethods.TryGetValue(delegateMethod, out Tuple<MosaMethod, MosaMethod> tuple))
+		//	{
+		//		var staticProxy = Compiler.TypeSystem.CreateLinkerMethod(delegateProxyType, delegateMethod.FullName + "@Static@Proxy", delegateMethod.Signature.ReturnType, false, delegateMethod.Signature.Parameters);
+		//		var instanceProxy = Compiler.TypeSystem.CreateLinkerMethod(delegateProxyType, delegateMethod.FullName + "@Instance@Proxy", delegateMethod.Signature.ReturnType, true, delegateMethod.Signature.Parameters);
 
-				tuple = new Tuple<MosaMethod, MosaMethod>(instanceProxy, staticProxy);
+		//		tuple = new Tuple<MosaMethod, MosaMethod>(instanceProxy, staticProxy);
 
-				delegateProxyMethods.Add(delegateMethod, tuple);
-			}
+		//		delegateProxyMethods.Add(delegateMethod, tuple);
+		//	}
 
-			return instance ? tuple.Item1 : tuple.Item2;
-		}
+		//	return instance ? tuple.Item1 : tuple.Item2;
+		//}
 
 		/// <summary>
 		/// Patches the delegate.
@@ -155,16 +154,16 @@ namespace Mosa.Compiler.Framework
 
 			var thisOperand = vrs[0];
 
-			var opMethod = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.U4);
+			var opMethod = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.U4); // FIXME -- not 64 compatible
 			var opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
-			var opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.I4);
+			var opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.I4); // FIXME -- not 64 compatible
 
 			var opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
 			var c0 = Operand.CreateConstant(0, methodCompiler.TypeSystem);
 
 			b0.AppendInstruction(IRInstruction.LoadInteger, size, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(IRInstruction.LoadInteger, size, opInstance, thisOperand, instanceOffsetOperand);
-			b0.AppendInstruction(IRInstruction.CompareInteger, ConditionCode.Equal, opCompare, opInstance, c0);
+			b0.AppendInstruction(IRInstruction.CompareInteger32x32, ConditionCode.Equal, opCompare, opInstance, c0); // FIXME -- not 64 compatible
 			b0.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, opCompare, c0);
 			b0.AddBranchTarget(b2.Block);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.Block);

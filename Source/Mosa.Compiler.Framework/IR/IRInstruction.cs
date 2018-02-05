@@ -29,7 +29,9 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly CallVirtual CallVirtual = new CallVirtual();
 		public static readonly CompareFloatR4 CompareFloatR4 = new CompareFloatR4();
 		public static readonly CompareFloatR8 CompareFloatR8 = new CompareFloatR8();
-		public static readonly CompareInteger CompareInteger = new CompareInteger();
+		public static readonly CompareInteger32x32 CompareInteger32x32 = new CompareInteger32x32();
+		public static readonly CompareInteger64x32 CompareInteger64x32 = new CompareInteger64x32();
+		public static readonly CompareInteger64x64 CompareInteger64x64 = new CompareInteger64x64();
 		public static readonly CompareIntegerBranch CompareIntegerBranch = new CompareIntegerBranch();
 		public static readonly ConversionFloatR4ToFloatR8 ConversionFloatR4ToFloatR8 = new ConversionFloatR4ToFloatR8();
 		public static readonly ConversionFloatR4ToInteger ConversionFloatR4ToInteger = new ConversionFloatR4ToInteger();

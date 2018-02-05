@@ -26,7 +26,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.AddUnsigned64, AddUnsigned64);
 			AddVisitation(IRInstruction.ArithmeticShiftRight64, ArithmeticShiftRight64);
 			AddVisitation(IRInstruction.Call, Call);
-			AddVisitation(IRInstruction.CompareInteger, CompareInteger);
+			AddVisitation(IRInstruction.CompareInteger64x64, CompareInteger64x64);
+			AddVisitation(IRInstruction.CompareInteger64x32, CompareInteger64x32);
 			AddVisitation(IRInstruction.CompareIntegerBranch, CompareIntegerBranch);
 			AddVisitation(IRInstruction.LoadInteger, LoadInteger);
 			AddVisitation(IRInstruction.LoadSignExtended, LoadSignExtended);
@@ -81,18 +82,6 @@ namespace Mosa.Platform.x86.Stages
 				{
 					SplitLongOperand(operand, out Operand op0L, out Operand op0H);
 				}
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for IntegerCompare.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void CompareInteger(Context context)
-		{
-			if (context.Operand1.Is64BitInteger)
-			{
-				ExpandComparison(context);
 			}
 		}
 
@@ -493,11 +482,16 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 
+		private void CompareInteger64x32(Context context)
+		{
+			CompareInteger64x64(context);
+		}
+
 		/// <summary>
 		/// Expands the binary comparison instruction for 64-bits.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void ExpandComparison(Context context)
+		private void CompareInteger64x64(Context context)
 		{
 			var op0 = context.Result;
 			var op1 = context.Operand1;
