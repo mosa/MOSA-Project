@@ -16,7 +16,8 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly AddSigned64 AddSigned64 = new AddSigned64();
 		public static readonly AddUnsigned32 AddUnsigned32 = new AddUnsigned32();
 		public static readonly AddUnsigned64 AddUnsigned64 = new AddUnsigned64();
-		public static readonly ArithmeticShiftRight ArithmeticShiftRight = new ArithmeticShiftRight();
+		public static readonly ArithmeticShiftRight32 ArithmeticShiftRight32 = new ArithmeticShiftRight32();
+		public static readonly ArithmeticShiftRight64 ArithmeticShiftRight64 = new ArithmeticShiftRight64();
 		public static readonly BlockEnd BlockEnd = new BlockEnd();
 		public static readonly BlockStart BlockStart = new BlockStart();
 		public static readonly Break Break = new Break();

@@ -496,7 +496,8 @@ namespace Mosa.Compiler.Framework.Analysis
 				|| instruction == IRInstruction.RemUnsigned
 				|| instruction == IRInstruction.ShiftLeft
 				|| instruction == IRInstruction.ShiftRight
-				|| instruction == IRInstruction.ArithmeticShiftRight)
+				|| instruction == IRInstruction.ArithmeticShiftRight32
+				|| instruction == IRInstruction.ArithmeticShiftRight64)
 			{
 				IntegerOperation(node);
 			}
@@ -866,7 +867,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				result = (ulong)((long)operand1 % (long)operand2);
 				return true;
 			}
-			else if (instruction == IRInstruction.ArithmeticShiftRight)
+			else if (instruction == IRInstruction.ArithmeticShiftRight32 || instruction == IRInstruction.ArithmeticShiftRight64)
 			{
 				result = (ulong)(((long)operand1) >> (int)operand2);
 				return true;

@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			AddVisitation(IRInstruction.AddSigned64, AddUnsigned64);
 			AddVisitation(IRInstruction.AddUnsigned64, AddUnsigned64);
-			AddVisitation(IRInstruction.ArithmeticShiftRight, ArithmeticShiftRight);
+			AddVisitation(IRInstruction.ArithmeticShiftRight64, ArithmeticShiftRight64);
 			AddVisitation(IRInstruction.Call, Call);
 			AddVisitation(IRInstruction.CompareInteger, CompareInteger);
 			AddVisitation(IRInstruction.CompareIntegerBranch, CompareIntegerBranch);
@@ -63,18 +63,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		#region Visitation Methods
-
-		/// <summary>
-		/// Visitation function for ArithmeticShiftRightInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ArithmeticShiftRight(Context context)
-		{
-			if (context.Operand1.Is64BitInteger)
-			{
-				ExpandArithmeticShiftRight(context);
-			}
-		}
 
 		/// <summary>
 		/// Visitation function for CallInstruction.
@@ -421,7 +409,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Expands the arithmetic shift right instruction for 64-bits.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void ExpandArithmeticShiftRight(Context context)
+		private void ArithmeticShiftRight64(Context context)
 		{
 			var count = context.Operand2;
 

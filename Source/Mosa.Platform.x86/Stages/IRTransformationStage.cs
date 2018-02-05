@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.AddressOf, AddressOf);
 			AddVisitation(IRInstruction.AddSigned32, AddSigned32);
 			AddVisitation(IRInstruction.AddUnsigned32, AddUnsigned32);
-			AddVisitation(IRInstruction.ArithmeticShiftRight, ArithmeticShiftRight);
+			AddVisitation(IRInstruction.ArithmeticShiftRight32, ArithmeticShiftRight32);
 			AddVisitation(IRInstruction.Break, Break);
 			AddVisitation(IRInstruction.CallDirect, CallDirect);
 			AddVisitation(IRInstruction.CompareFloatR4, CompareFloatR4);
@@ -152,7 +152,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Arithmetic the shift right instruction.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void ArithmeticShiftRight(InstructionNode node)
+		private void ArithmeticShiftRight32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Sar32);
 		}

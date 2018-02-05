@@ -135,7 +135,10 @@
     <Compile Include="IR\AddUnsigned64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\ArithmeticShiftRight.cs">
+    <Compile Include="IR\ArithmeticShiftRight32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\ArithmeticShiftRight64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\BlockEnd.cs">

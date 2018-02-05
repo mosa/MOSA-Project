@@ -608,7 +608,8 @@ namespace Mosa.Compiler.Framework.Stages
 				|| node.Instruction == IRInstruction.DivUnsigned
 				|| node.Instruction == IRInstruction.RemSigned
 				|| node.Instruction == IRInstruction.RemUnsigned
-				|| node.Instruction == IRInstruction.ArithmeticShiftRight
+				|| node.Instruction == IRInstruction.ArithmeticShiftRight32
+				|| node.Instruction == IRInstruction.ArithmeticShiftRight64
 				|| node.Instruction == IRInstruction.ShiftLeft
 				|| node.Instruction == IRInstruction.ShiftRight))
 				return;
@@ -663,7 +664,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				constant = CreateConstant(result.Type, op1.ConstantSignedLongInteger / op2.ConstantSignedLongInteger);
 			}
-			else if (node.Instruction == IRInstruction.ArithmeticShiftRight)
+			else if (node.Instruction == IRInstruction.ArithmeticShiftRight32 || node.Instruction == IRInstruction.ArithmeticShiftRight64)
 			{
 				constant = CreateConstant(result.Type, ((long)op1.ConstantUnsignedLongInteger) >> (int)op2.ConstantUnsignedLongInteger);
 			}
@@ -1048,7 +1049,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (!(node.Instruction == IRInstruction.ShiftLeft
 				|| node.Instruction == IRInstruction.ShiftRight
-				|| node.Instruction == IRInstruction.ArithmeticShiftRight))
+				|| node.Instruction == IRInstruction.ArithmeticShiftRight32
+				|| node.Instruction == IRInstruction.ArithmeticShiftRight64))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
