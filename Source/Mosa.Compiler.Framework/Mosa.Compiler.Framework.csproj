@@ -459,10 +459,16 @@
     <Compile Include="IR\SubFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\SubSigned.cs">
+    <Compile Include="IR\SubSigned32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\SubUnsigned.cs">
+    <Compile Include="IR\SubSigned64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\SubUnsigned32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\SubUnsigned64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\Switch.cs">

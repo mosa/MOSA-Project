@@ -13,8 +13,8 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly AddFloatR8 AddFloatR8 = new AddFloatR8();
 		public static readonly AddressOf AddressOf = new AddressOf();
 		public static readonly AddSigned32 AddSigned32 = new AddSigned32();
-		public static readonly AddUnsigned32 AddUnsigned32 = new AddUnsigned32();
 		public static readonly AddSigned64 AddSigned64 = new AddSigned64();
+		public static readonly AddUnsigned32 AddUnsigned32 = new AddUnsigned32();
 		public static readonly AddUnsigned64 AddUnsigned64 = new AddUnsigned64();
 		public static readonly ArithmeticShiftRight ArithmeticShiftRight = new ArithmeticShiftRight();
 		public static readonly BlockEnd BlockEnd = new BlockEnd();
@@ -110,8 +110,10 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly StoreParameterInteger StoreParameterInteger = new StoreParameterInteger();
 		public static readonly SubFloatR4 SubFloatR4 = new SubFloatR4();
 		public static readonly SubFloatR8 SubFloatR8 = new SubFloatR8();
-		public static readonly SubSigned SubSigned = new SubSigned();
-		public static readonly SubUnsigned SubUnsigned = new SubUnsigned();
+		public static readonly SubSigned32 SubSigned32 = new SubSigned32();
+		public static readonly SubSigned64 SubSigned64 = new SubSigned64();
+		public static readonly SubUnsigned32 SubUnsigned32 = new SubUnsigned32();
+		public static readonly SubUnsigned64 SubUnsigned64 = new SubUnsigned64();
 		public static readonly Switch Switch = new Switch();
 		public static readonly Throw Throw = new Throw();
 		public static readonly TryEnd TryEnd = new TryEnd();

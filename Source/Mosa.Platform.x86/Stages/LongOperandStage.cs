@@ -43,8 +43,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.ShiftRight, ShiftRight);
 			AddVisitation(IRInstruction.StoreInteger, StoreInteger);
 			AddVisitation(IRInstruction.StoreParameterInteger, StoreParameterInteger);
-			AddVisitation(IRInstruction.SubSigned, SubSigned);
-			AddVisitation(IRInstruction.SubUnsigned, SubUnsigned);
+			AddVisitation(IRInstruction.SubSigned64, SubUnsigned64);
+			AddVisitation(IRInstruction.SubUnsigned64, SubUnsigned64);
 
 			AddVisitation(IRInstruction.To64, To64);
 			AddVisitation(IRInstruction.Split64, Split64);
@@ -324,30 +324,6 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Size == InstructionSize.Size64)
 			{
 				ExpandStoreParameter(context);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for SubSInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void SubSigned(Context context)
-		{
-			if (Any64Bit(context.Node))
-			{
-				ExpandSub(context);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for SubUInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void SubUnsigned(Context context)
-		{
-			if (Any64Bit(context.Node))
-			{
-				ExpandSub(context);
 			}
 		}
 
@@ -932,7 +908,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Expands the sub instruction for 64-bit operands.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void ExpandSub(Context context)
+		private void SubUnsigned64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);

@@ -18,8 +18,8 @@ namespace Mosa.Platform.ARMv6.Stages
 			AddVisitation(IRInstruction.AddSigned32, AddSigned32);
 			AddVisitation(IRInstruction.AddUnsigned32, AddUnsigned32);
 			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
-			AddVisitation(IRInstruction.SubSigned, SubSigned);
-			AddVisitation(IRInstruction.SubUnsigned, SubUnsigned);
+			AddVisitation(IRInstruction.SubSigned32, SubSigned32);
+			AddVisitation(IRInstruction.SubUnsigned32, SubUnsigned32);
 		}
 
 		#region Visitation Methods
@@ -55,7 +55,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// Visitation function for SubSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void SubSigned(Context context)
+		private void SubSigned32(Context context)
 		{
 			context.ReplaceInstruction(ARMv6.Sub);
 		}
@@ -64,7 +64,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// Visitation function for SubUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void SubUnsigned(Context context)
+		private void SubUnsigned32(Context context)
 		{
 			context.ReplaceInstruction(ARMv6.Sub);
 		}

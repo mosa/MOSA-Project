@@ -217,7 +217,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(IRInstruction.SubSigned, StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
+			context.AppendInstruction(Select(IRInstruction.SubSigned32, IRInstruction.SubSigned64), StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
 		}
 
 		private void FreeStackAfterCall(Context context, int stackSize)

@@ -83,8 +83,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.StoreParameterCompound, StoreParameterCompound);
 			AddVisitation(IRInstruction.SubFloatR4, SubFloatR4);
 			AddVisitation(IRInstruction.SubFloatR8, SubFloatR8);
-			AddVisitation(IRInstruction.SubSigned, SubSigned);
-			AddVisitation(IRInstruction.SubUnsigned, SubUnsigned);
+			AddVisitation(IRInstruction.SubSigned32, SubSigned32);
+			AddVisitation(IRInstruction.SubUnsigned32, SubUnsigned32);
 			AddVisitation(IRInstruction.Switch, Switch);
 		}
 
@@ -928,7 +928,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SubSigned.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void SubSigned(InstructionNode node)
+		private void SubSigned32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Sub32);
 		}
@@ -937,7 +937,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SubUnsigned.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void SubUnsigned(InstructionNode node)
+		private void SubUnsigned32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Sub32);
 		}

@@ -434,7 +434,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (OverridesMethod(method))
 				{
-					before.SetInstruction(IRInstruction.SubSigned, context.Operand1, context.Operand1, CreateConstant(NativePointerSize * 2));
+					before.SetInstruction(Select(IRInstruction.SubSigned32, IRInstruction.SubSigned64), context.Operand1, context.Operand1, CreateConstant(NativePointerSize * 2));
 				}
 				else
 				{
@@ -502,7 +502,7 @@ namespace Mosa.Compiler.Framework.Stages
 							&& method.DeclaringType == context.Operand1.Type.ElementType)
 						{
 							var before = context.InsertBefore();
-							before.SetInstruction(IRInstruction.SubSigned, context.Operand1, context.Operand1, CreateConstant(NativePointerSize * 2));
+							before.SetInstruction(Select(IRInstruction.SubSigned32, IRInstruction.SubSigned64), context.Operand1, context.Operand1, CreateConstant(NativePointerSize * 2));
 						}
 					}
 					else
@@ -1191,7 +1191,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Operand1.IsUnsigned)
 			{
 				var zero = CreateConstant(node.Operand1.Type, 0);
-				node.SetInstruction(IRInstruction.SubUnsigned, node.Result, zero, node.Operand1);
+				node.SetInstruction(Select(node.Result, IRInstruction.SubUnsigned32, IRInstruction.SubUnsigned64), node.Result, zero, node.Operand1);
 			}
 			else if (node.Operand1.IsR4)
 			{
@@ -1567,7 +1567,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Sub(InstructionNode node)
 		{
-			Replace(node, IRInstruction.SubFloatR4, IRInstruction.SubFloatR8, IRInstruction.SubSigned, IRInstruction.SubUnsigned);
+			Replace(node, IRInstruction.SubFloatR4, IRInstruction.SubFloatR8, IRInstruction.SubSigned32, IRInstruction.SubSigned64, IRInstruction.SubUnsigned32, IRInstruction.SubUnsigned64);
 		}
 
 		/// <summary>

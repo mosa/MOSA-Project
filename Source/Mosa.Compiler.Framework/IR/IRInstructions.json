@@ -28,14 +28,14 @@
 			"Commutative": "true"
 		},
 		{
-			"Name": "AddUnsigned32",
+			"Name": "AddSigned64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "AddSigned64",
+			"Name": "AddUnsigned32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
@@ -674,13 +674,25 @@
 			"OperandCount": 2
 		},
 		{
-			"Name": "SubSigned",
+			"Name": "SubSigned32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
 		},
 		{
-			"Name": "SubUnsigned",
+			"Name": "SubSigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "SubUnsigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "SubUnsigned64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
