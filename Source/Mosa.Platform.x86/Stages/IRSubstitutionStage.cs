@@ -17,10 +17,10 @@ namespace Mosa.Platform.x86.Stages
 		{
 			AddVisitation(IRInstruction.RemFloatR4, RemFloatR4);
 			AddVisitation(IRInstruction.RemFloatR8, RemFloatR8);
-			AddVisitation(IRInstruction.RemSigned, RemSigned); // smod64
-			AddVisitation(IRInstruction.DivSigned, DivSigned); // sdiv64
-			AddVisitation(IRInstruction.RemUnsigned, RemUnsigned); // umod64
-			AddVisitation(IRInstruction.DivUnsigned, DivUnsigned); // udiv64
+			AddVisitation(IRInstruction.RemSigned64, RemSigned64); // smod64
+			AddVisitation(IRInstruction.DivSigned64, DivSigned64); // sdiv64
+			AddVisitation(IRInstruction.RemUnsigned64, RemUnsigned64); // umod64
+			AddVisitation(IRInstruction.DivUnsigned64, DivUnsigned64); // udiv64
 		}
 
 		#region Visitation Methods
@@ -76,48 +76,36 @@ namespace Mosa.Platform.x86.Stages
 		/// Rems the signed.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void RemSigned(InstructionNode node)
+		private void RemSigned64(InstructionNode node)
 		{
-			if (LongOperandStage.Any64Bit(node))
-			{
-				ReplaceWithDivisionCall(node, "smod64", node.Result, node.Operand1, node.Operand2);
-			}
+			ReplaceWithDivisionCall(node, "smod64", node.Result, node.Operand1, node.Operand2);
 		}
 
 		/// <summary>
 		/// Divs the signed.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void DivSigned(InstructionNode node)
+		private void DivSigned64(InstructionNode node)
 		{
-			if (LongOperandStage.Any64Bit(node))
-			{
-				ReplaceWithDivisionCall(node, "sdiv64", node.Result, node.Operand1, node.Operand2);
-			}
+			ReplaceWithDivisionCall(node, "sdiv64", node.Result, node.Operand1, node.Operand2);
 		}
 
 		/// <summary>
 		/// Rems the unsigned.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void RemUnsigned(InstructionNode node)
+		private void RemUnsigned64(InstructionNode node)
 		{
-			if (LongOperandStage.Any64Bit(node))
-			{
-				ReplaceWithDivisionCall(node, "umod64", node.Result, node.Operand1, node.Operand2);
-			}
+			ReplaceWithDivisionCall(node, "umod64", node.Result, node.Operand1, node.Operand2);
 		}
 
 		/// <summary>
 		/// Divs the unsigned.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void DivUnsigned(InstructionNode node)
+		private void DivUnsigned64(InstructionNode node)
 		{
-			if (LongOperandStage.Any64Bit(node))
-			{
-				ReplaceWithDivisionCall(node, "udiv64", node.Result, node.Operand1, node.Operand2);
-			}
+			ReplaceWithDivisionCall(node, "udiv64", node.Result, node.Operand1, node.Operand2);
 		}
 
 		#endregion Visitation Methods

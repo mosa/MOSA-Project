@@ -606,10 +606,14 @@ namespace Mosa.Compiler.Framework.Stages
 				|| node.Instruction == IRInstruction.MulUnsigned32
 				|| node.Instruction == IRInstruction.MulSigned64
 				|| node.Instruction == IRInstruction.MulUnsigned64
-				|| node.Instruction == IRInstruction.DivSigned
-				|| node.Instruction == IRInstruction.DivUnsigned
-				|| node.Instruction == IRInstruction.RemSigned
-				|| node.Instruction == IRInstruction.RemUnsigned
+				|| node.Instruction == IRInstruction.DivSigned32
+				|| node.Instruction == IRInstruction.DivUnsigned32
+				|| node.Instruction == IRInstruction.RemSigned32
+				|| node.Instruction == IRInstruction.RemUnsigned32
+				|| node.Instruction == IRInstruction.DivSigned64
+				|| node.Instruction == IRInstruction.DivUnsigned64
+				|| node.Instruction == IRInstruction.RemSigned64
+				|| node.Instruction == IRInstruction.RemUnsigned64
 				|| node.Instruction == IRInstruction.ArithmeticShiftRight32
 				|| node.Instruction == IRInstruction.ArithmeticShiftRight64
 				|| node.Instruction == IRInstruction.ShiftLeft
@@ -627,7 +631,15 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// Divide by zero!
-			if ((node.Instruction == IRInstruction.DivSigned || node.Instruction == IRInstruction.DivUnsigned || node.Instruction == IRInstruction.RemSigned || node.Instruction == IRInstruction.RemUnsigned) && op2.IsConstantZero)
+			if ((node.Instruction == IRInstruction.DivSigned32
+				|| node.Instruction == IRInstruction.DivUnsigned32
+				|| node.Instruction == IRInstruction.RemSigned32
+				|| node.Instruction == IRInstruction.RemUnsigned32
+				|| node.Instruction == IRInstruction.DivSigned64
+				|| node.Instruction == IRInstruction.DivUnsigned64
+				|| node.Instruction == IRInstruction.RemSigned64
+				|| node.Instruction == IRInstruction.RemUnsigned64)
+				&& op2.IsConstantZero)
 				return;
 
 			Operand constant = null;
@@ -659,11 +671,11 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				constant = CreateConstant(result.Type, op1.ConstantUnsignedLongInteger * op2.ConstantUnsignedLongInteger);
 			}
-			else if (node.Instruction == IRInstruction.DivUnsigned)
+			else if (node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivUnsigned64)
 			{
 				constant = CreateConstant(result.Type, op1.ConstantUnsignedLongInteger / op2.ConstantUnsignedLongInteger);
 			}
-			else if (node.Instruction == IRInstruction.DivSigned)
+			else if (node.Instruction == IRInstruction.DivSigned32 || node.Instruction == IRInstruction.DivSigned64)
 			{
 				constant = CreateConstant(result.Type, op1.ConstantSignedLongInteger / op2.ConstantSignedLongInteger);
 			}
@@ -679,11 +691,11 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				constant = CreateConstant(result.Type, op1.ConstantUnsignedLongInteger << (int)op2.ConstantUnsignedLongInteger);
 			}
-			else if (node.Instruction == IRInstruction.RemSigned)
+			else if (node.Instruction == IRInstruction.RemSigned32 || node.Instruction == IRInstruction.RemSigned64)
 			{
 				constant = CreateConstant(result.Type, op1.ConstantSignedLongInteger % op2.ConstantSignedLongInteger);
 			}
-			else if (node.Instruction == IRInstruction.RemUnsigned)
+			else if (node.Instruction == IRInstruction.RemUnsigned32 || node.Instruction == IRInstruction.RemUnsigned64)
 			{
 				constant = CreateConstant(result.Type, op1.ConstantUnsignedLongInteger % op2.ConstantUnsignedLongInteger);
 			}
@@ -848,8 +860,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationDivision(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.DivSigned
-				|| node.Instruction == IRInstruction.DivUnsigned))
+			if (!(node.Instruction == IRInstruction.DivSigned32
+				|| node.Instruction == IRInstruction.DivUnsigned32
+				|| node.Instruction == IRInstruction.DivSigned64
+				|| node.Instruction == IRInstruction.DivUnsigned64))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -887,7 +901,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (node.Instruction == IRInstruction.DivUnsigned && IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
+			if ((node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivUnsigned64) && IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
 			{
 				int shift = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
 
@@ -1452,8 +1466,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantFoldingDivision(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.DivSigned
-				|| node.Instruction == IRInstruction.DivUnsigned))
+			if (!(node.Instruction == IRInstruction.DivSigned32
+				|| node.Instruction == IRInstruction.DivUnsigned32
+				|| node.Instruction == IRInstruction.DivSigned64
+				|| node.Instruction == IRInstruction.DivUnsigned64))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -1470,7 +1486,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var node2 = node.Result.Uses[0];
 
-			if (!(node2.Instruction == IRInstruction.DivSigned || node2.Instruction == IRInstruction.DivUnsigned))
+			if (!(node2.Instruction == IRInstruction.DivSigned32
+				|| node2.Instruction == IRInstruction.DivUnsigned32
+				|| node2.Instruction == IRInstruction.DivSigned64
+				|| node2.Instruction == IRInstruction.DivUnsigned64))
 				return;
 
 			if (!node2.Result.IsVirtualRegister)
@@ -1481,7 +1500,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(node2.Result.Definitions.Count == 1);
 
-			ulong r = (node2.Instruction == IRInstruction.DivSigned) ?
+			ulong r = (node2.Instruction == IRInstruction.DivSigned32 || node2.Instruction == IRInstruction.DivSigned64) ?
 				(ulong)(node.Operand2.ConstantSignedLongInteger / node2.Operand2.ConstantSignedLongInteger) :
 				node.Operand2.ConstantUnsignedLongInteger / node2.Operand2.ConstantUnsignedLongInteger;
 
@@ -1934,7 +1953,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationRemUnsignedModulus(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.RemUnsigned)
+			if (!(node.Instruction == IRInstruction.RemUnsigned32 || node.Instruction == IRInstruction.RemUnsigned64))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -1985,7 +2004,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationRemSignedModulus(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.RemSigned)
+			if (!(node.Instruction == IRInstruction.RemSigned32 || node.Instruction == IRInstruction.RemSigned64))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -2208,8 +2227,10 @@ namespace Mosa.Compiler.Framework.Stages
 				|| instruction == IRInstruction.MoveInteger
 				|| instruction == IRInstruction.MulUnsigned32
 				|| instruction == IRInstruction.MulUnsigned64
-				|| instruction == IRInstruction.DivUnsigned
-				|| instruction == IRInstruction.RemUnsigned))
+				|| instruction == IRInstruction.DivUnsigned32
+				|| instruction == IRInstruction.RemUnsigned32
+				|| instruction == IRInstruction.DivUnsigned64
+				|| instruction == IRInstruction.RemUnsigned64))
 				return;
 
 			if (defNode.Operand1.Definitions.Count != 1)

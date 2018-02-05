@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// RemSigned
+	/// DivSigned64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class RemSigned : BaseIRInstruction
+	public sealed class DivSigned64 : BaseIRInstruction
 	{
-		public RemSigned()
+		public DivSigned64()
 			: base(2, 1)
 		{
 		}

@@ -41,8 +41,10 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly ConversionIntegerToFloatR8 ConversionIntegerToFloatR8 = new ConversionIntegerToFloatR8();
 		public static readonly DivFloatR4 DivFloatR4 = new DivFloatR4();
 		public static readonly DivFloatR8 DivFloatR8 = new DivFloatR8();
-		public static readonly DivSigned DivSigned = new DivSigned();
-		public static readonly DivUnsigned DivUnsigned = new DivUnsigned();
+		public static readonly DivSigned32 DivSigned32 = new DivSigned32();
+		public static readonly DivSigned64 DivSigned64 = new DivSigned64();
+		public static readonly DivUnsigned32 DivUnsigned32 = new DivUnsigned32();
+		public static readonly DivUnsigned64 DivUnsigned64 = new DivUnsigned64();
 		public static readonly Epilogue Epilogue = new Epilogue();
 		public static readonly ExceptionEnd ExceptionEnd = new ExceptionEnd();
 		public static readonly ExceptionStart ExceptionStart = new ExceptionStart();
@@ -91,8 +93,8 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly MulFloatR8 MulFloatR8 = new MulFloatR8();
 		public static readonly MulSigned32 MulSigned32 = new MulSigned32();
 		public static readonly MulSigned64 MulSigned64 = new MulSigned64();
-		public static readonly MulUnsigned32 MulUnsigned32 = new MulUnsigned32();
 		public static readonly MulUnsigned64 MulUnsigned64 = new MulUnsigned64();
+		public static readonly MulUnsigned32 MulUnsigned32 = new MulUnsigned32();
 		public static readonly NewArray NewArray = new NewArray();
 		public static readonly NewObject NewObject = new NewObject();
 		public static readonly NewString NewString = new NewString();
@@ -101,8 +103,10 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly Prologue Prologue = new Prologue();
 		public static readonly RemFloatR4 RemFloatR4 = new RemFloatR4();
 		public static readonly RemFloatR8 RemFloatR8 = new RemFloatR8();
-		public static readonly RemSigned RemSigned = new RemSigned();
-		public static readonly RemUnsigned RemUnsigned = new RemUnsigned();
+		public static readonly RemSigned32 RemSigned32 = new RemSigned32();
+		public static readonly RemSigned64 RemSigned64 = new RemSigned64();
+		public static readonly RemUnsigned32 RemUnsigned32 = new RemUnsigned32();
+		public static readonly RemUnsigned64 RemUnsigned64 = new RemUnsigned64();
 		public static readonly SetReturn SetReturn = new SetReturn();
 		public static readonly SetLeaveTarget SetLeaveTarget = new SetLeaveTarget();
 		public static readonly ShiftLeft ShiftLeft = new ShiftLeft();

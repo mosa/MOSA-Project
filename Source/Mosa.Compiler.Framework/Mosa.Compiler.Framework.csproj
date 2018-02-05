@@ -225,10 +225,16 @@
     <Compile Include="IR\DivFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\DivSigned.cs">
+    <Compile Include="IR\DivSigned32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\DivUnsigned.cs">
+    <Compile Include="IR\DivSigned64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\DivUnsigned32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\DivUnsigned64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\Epilogue.cs">
@@ -426,10 +432,16 @@
     <Compile Include="IR\RemFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\RemSigned.cs">
+    <Compile Include="IR\RemSigned32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\RemUnsigned.cs">
+    <Compile Include="IR\RemSigned64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\RemUnsigned32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\RemUnsigned64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\Rethrow.cs">

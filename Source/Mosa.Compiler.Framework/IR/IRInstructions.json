@@ -213,13 +213,25 @@
 			"OperandCount": 2
 		},
 		{
-			"Name": "DivSigned",
+			"Name": "DivSigned32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
 		},
 		{
-			"Name": "DivUnsigned",
+			"Name": "DivSigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "DivUnsigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "DivUnsigned64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
@@ -551,14 +563,14 @@
 			"Commutative": "true"
 		},
 		{
-			"Name": "MulUnsigned32",
+			"Name": "MulUnsigned64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "MulUnsigned64",
+			"Name": "MulUnsigned32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
@@ -614,13 +626,25 @@
 			"OperandCount": 2
 		},
 		{
-			"Name": "RemSigned",
+			"Name": "RemSigned32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
 		},
 		{
-			"Name": "RemUnsigned",
+			"Name": "RemSigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "RemUnsigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "RemUnsigned64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2

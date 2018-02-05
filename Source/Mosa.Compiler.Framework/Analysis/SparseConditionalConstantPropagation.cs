@@ -492,10 +492,14 @@ namespace Mosa.Compiler.Framework.Analysis
 				|| instruction == IRInstruction.MulUnsigned32
 				|| instruction == IRInstruction.MulSigned64
 				|| instruction == IRInstruction.MulUnsigned64
-				|| instruction == IRInstruction.DivSigned
-				|| instruction == IRInstruction.DivUnsigned
-				|| instruction == IRInstruction.RemSigned
-				|| instruction == IRInstruction.RemUnsigned
+				|| instruction == IRInstruction.DivSigned32
+				|| instruction == IRInstruction.DivUnsigned32
+				|| instruction == IRInstruction.RemSigned32
+				|| instruction == IRInstruction.RemUnsigned32
+				|| instruction == IRInstruction.DivSigned64
+				|| instruction == IRInstruction.DivUnsigned64
+				|| instruction == IRInstruction.RemSigned64
+				|| instruction == IRInstruction.RemUnsigned64
 				|| instruction == IRInstruction.ShiftLeft
 				|| instruction == IRInstruction.ShiftRight
 				|| instruction == IRInstruction.ArithmeticShiftRight32
@@ -854,22 +858,22 @@ namespace Mosa.Compiler.Framework.Analysis
 				result = operand1 * operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.DivUnsigned && operand2 != 0)
+			else if ((instruction == IRInstruction.DivUnsigned32 || instruction == IRInstruction.DivUnsigned64) && operand2 != 0)
 			{
 				result = operand1 / operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.DivSigned && operand2 != 0)
+			else if ((instruction == IRInstruction.DivSigned32 || instruction == IRInstruction.DivSigned64) && operand2 != 0)
 			{
 				result = (ulong)((long)operand1 / (long)operand2);
 				return true;
 			}
-			else if (instruction == IRInstruction.RemUnsigned && operand2 != 0)
+			else if ((instruction == IRInstruction.RemUnsigned32 || instruction == IRInstruction.RemUnsigned64) && operand2 != 0)
 			{
 				result = operand1 % operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.RemSigned && operand2 != 0)
+			else if ((instruction == IRInstruction.RemSigned32 || instruction == IRInstruction.RemSigned64) && operand2 != 0)
 			{
 				result = (ulong)((long)operand1 % (long)operand2);
 				return true;

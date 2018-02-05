@@ -336,8 +336,8 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.And: node.SetInstruction(Select(node.Result, IRInstruction.LogicalAnd32, IRInstruction.LogicalAnd64), node.Result, node.Operand1, node.Operand2); break;
 				case OpCode.Or: node.SetInstruction(Select(node.Result, IRInstruction.LogicalOr32, IRInstruction.LogicalOr64), node.Result, node.Operand1, node.Operand2); break;
 				case OpCode.Xor: node.SetInstruction(Select(node.Result, IRInstruction.LogicalXor32, IRInstruction.LogicalXor64), node.Result, node.Operand1, node.Operand2); break;
-				case OpCode.Div_un: node.SetInstruction(IRInstruction.DivUnsigned, node.Result, node.Operand1, node.Operand2); break;
-				case OpCode.Rem_un: node.SetInstruction(IRInstruction.RemUnsigned, node.Result, node.Operand1, node.Operand2); break;
+				case OpCode.Div_un: node.SetInstruction(Select(node.Result, IRInstruction.DivUnsigned32, IRInstruction.DivUnsigned64), node.Result, node.Operand1, node.Operand2); break;
+				case OpCode.Rem_un: node.SetInstruction(Select(node.Result, IRInstruction.RemUnsigned32, IRInstruction.RemUnsigned64), node.Result, node.Operand1, node.Operand2); break;
 				default: throw new CompilerException();
 			}
 		}
@@ -660,7 +660,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Div(InstructionNode node)
 		{
-			Replace(node, IRInstruction.DivFloatR4, IRInstruction.DivFloatR8, IRInstruction.DivSigned, IRInstruction.DivUnsigned);
+			Replace(node, IRInstruction.DivFloatR4, IRInstruction.DivFloatR8, IRInstruction.DivSigned32, IRInstruction.DivSigned64, IRInstruction.DivUnsigned32, IRInstruction.DivUnsigned64);
 		}
 
 		/// <summary>
@@ -1352,7 +1352,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Rem(InstructionNode node)
 		{
-			Replace(node, IRInstruction.RemFloatR4, IRInstruction.RemFloatR8, IRInstruction.RemSigned, IRInstruction.RemUnsigned);
+			Replace(node, IRInstruction.RemFloatR4, IRInstruction.RemFloatR8, IRInstruction.RemSigned32, IRInstruction.RemSigned64, IRInstruction.RemUnsigned32, IRInstruction.RemUnsigned64);
 		}
 
 		/// <summary>

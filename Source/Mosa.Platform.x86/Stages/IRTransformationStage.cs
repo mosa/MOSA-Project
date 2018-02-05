@@ -42,8 +42,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.ConversionIntegerToFloatR8, ConversionIntegerToFloatR8);
 			AddVisitation(IRInstruction.DivFloatR4, DivFloatR4);
 			AddVisitation(IRInstruction.DivFloatR8, DivFloatR8);
-			AddVisitation(IRInstruction.DivSigned, DivSigned);
-			AddVisitation(IRInstruction.DivUnsigned, DivUnsigned);
+			AddVisitation(IRInstruction.DivSigned32, DivSigned32);
+			AddVisitation(IRInstruction.DivUnsigned32, DivUnsigned32);
 			AddVisitation(IRInstruction.Jmp, Jmp);
 			AddVisitation(IRInstruction.LoadFloatR4, LoadFloatR4);
 			AddVisitation(IRInstruction.LoadFloatR8, LoadFloatR8);
@@ -70,8 +70,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.MulSigned32, MulSigned32);
 			AddVisitation(IRInstruction.MulUnsigned32, MulUnsigned32);
 			AddVisitation(IRInstruction.Nop, Nop);
-			AddVisitation(IRInstruction.RemSigned, RemSigned);
-			AddVisitation(IRInstruction.RemUnsigned, RemUnsigned);
+			AddVisitation(IRInstruction.RemSigned32, RemSigned32);
+			AddVisitation(IRInstruction.RemUnsigned32, RemUnsigned32);
 			AddVisitation(IRInstruction.ShiftLeft, ShiftLeft);
 			AddVisitation(IRInstruction.ShiftRight, ShiftRight);
 			AddVisitation(IRInstruction.StoreFloatR4, StoreFloatR4);
@@ -353,7 +353,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for DivSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void DivSigned(Context context)
+		private void DivSigned32(Context context)
 		{
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
@@ -371,7 +371,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for DivUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void DivUnsigned(Context context)
+		private void DivUnsigned32(Context context)
 		{
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
@@ -801,7 +801,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for RemSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void RemSigned(Context context)
+		private void RemSigned32(Context context)
 		{
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
@@ -819,7 +819,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for RemUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void RemUnsigned(Context context)
+		private void RemUnsigned32(Context context)
 		{
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
