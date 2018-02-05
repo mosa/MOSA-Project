@@ -500,8 +500,10 @@ namespace Mosa.Compiler.Framework.Analysis
 				|| instruction == IRInstruction.DivUnsigned64
 				|| instruction == IRInstruction.RemSigned64
 				|| instruction == IRInstruction.RemUnsigned64
-				|| instruction == IRInstruction.ShiftLeft
-				|| instruction == IRInstruction.ShiftRight
+				|| instruction == IRInstruction.ShiftLeft32
+				|| instruction == IRInstruction.ShiftRight32
+				|| instruction == IRInstruction.ShiftLeft64
+				|| instruction == IRInstruction.ShiftRight64
 				|| instruction == IRInstruction.ArithmeticShiftRight32
 				|| instruction == IRInstruction.ArithmeticShiftRight64)
 			{
@@ -883,12 +885,12 @@ namespace Mosa.Compiler.Framework.Analysis
 				result = (ulong)(((long)operand1) >> (int)operand2);
 				return true;
 			}
-			else if (instruction == IRInstruction.ShiftRight)
+			else if (instruction == IRInstruction.ShiftRight32 || instruction == IRInstruction.ShiftRight64)
 			{
 				result = operand1 >> (int)operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.ShiftLeft)
+			else if (instruction == IRInstruction.ShiftLeft32 || instruction == IRInstruction.ShiftLeft64)
 			{
 				result = operand1 << (int)operand2;
 				return true;

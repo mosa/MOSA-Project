@@ -453,10 +453,16 @@
     <Compile Include="IR\SetReturn.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\ShiftLeft.cs">
+    <Compile Include="IR\ShiftLeft32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\ShiftRight.cs">
+    <Compile Include="IR\ShiftLeft64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\ShiftRight32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\ShiftRight64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\Split64.cs">

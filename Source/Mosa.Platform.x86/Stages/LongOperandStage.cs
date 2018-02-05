@@ -40,8 +40,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.MoveZeroExtended, MoveZeroExtended);
 			AddVisitation(IRInstruction.MulSigned64, MulSigned64);
 			AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
-			AddVisitation(IRInstruction.ShiftLeft, ShiftLeft);
-			AddVisitation(IRInstruction.ShiftRight, ShiftRight);
+			AddVisitation(IRInstruction.ShiftLeft64, ShiftLeft64);
+			AddVisitation(IRInstruction.ShiftRight64, ShiftRight64);
 			AddVisitation(IRInstruction.StoreInteger, StoreInteger);
 			AddVisitation(IRInstruction.StoreParameterInteger, StoreParameterInteger);
 			AddVisitation(IRInstruction.SubSigned64, SubUnsigned64);
@@ -236,30 +236,6 @@ namespace Mosa.Platform.x86.Stages
 		private void MulUnsigned64(Context context)
 		{
 			ExpandMul(context);
-		}
-
-		/// <summary>
-		/// Visitation function for ShiftLeftInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ShiftLeft(Context context)
-		{
-			if (Any64Bit(context.Node))
-			{
-				ExpandShiftLeft(context);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for ShiftRightInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ShiftRight(Context context)
-		{
-			if (Any64Bit(context.Node))
-			{
-				ExpandShiftRight(context);
-			}
 		}
 
 		/// <summary>
@@ -668,7 +644,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Expands the shift left instruction for 64-bits.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void ExpandShiftLeft(Context context)
+		private void ShiftLeft64(Context context)
 		{
 			var count = context.Operand2;
 
@@ -718,7 +694,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Expands the shift right instruction for 64-bits.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void ExpandShiftRight(Context context)
+		private void ShiftRight64(Context context)
 		{
 			var count = context.Operand2;
 

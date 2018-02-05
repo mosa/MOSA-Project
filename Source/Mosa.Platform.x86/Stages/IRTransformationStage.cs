@@ -72,8 +72,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Nop, Nop);
 			AddVisitation(IRInstruction.RemSigned32, RemSigned32);
 			AddVisitation(IRInstruction.RemUnsigned32, RemUnsigned32);
-			AddVisitation(IRInstruction.ShiftLeft, ShiftLeft);
-			AddVisitation(IRInstruction.ShiftRight, ShiftRight);
+			AddVisitation(IRInstruction.ShiftLeft32, ShiftLeft32);
+			AddVisitation(IRInstruction.ShiftRight32, ShiftRight32);
 			AddVisitation(IRInstruction.StoreFloatR4, StoreFloatR4);
 			AddVisitation(IRInstruction.StoreFloatR8, StoreFloatR8);
 			AddVisitation(IRInstruction.StoreInteger, StoreInteger);
@@ -837,7 +837,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for ShiftLeftInstruction.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void ShiftLeft(InstructionNode node)
+		private void ShiftLeft32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Shl32);
 		}
@@ -846,7 +846,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for ShiftRightInstruction.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void ShiftRight(InstructionNode node)
+		private void ShiftRight32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Shr32);
 		}

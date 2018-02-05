@@ -109,8 +109,10 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly RemUnsigned64 RemUnsigned64 = new RemUnsigned64();
 		public static readonly SetReturn SetReturn = new SetReturn();
 		public static readonly SetLeaveTarget SetLeaveTarget = new SetLeaveTarget();
-		public static readonly ShiftLeft ShiftLeft = new ShiftLeft();
-		public static readonly ShiftRight ShiftRight = new ShiftRight();
+		public static readonly ShiftLeft32 ShiftLeft32 = new ShiftLeft32();
+		public static readonly ShiftLeft64 ShiftLeft64 = new ShiftLeft64();
+		public static readonly ShiftRight32 ShiftRight32 = new ShiftRight32();
+		public static readonly ShiftRight64 ShiftRight64 = new ShiftRight64();
 		public static readonly StableObjectTracking StableObjectTracking = new StableObjectTracking();
 		public static readonly StoreCompound StoreCompound = new StoreCompound();
 		public static readonly StoreFloatR4 StoreFloatR4 = new StoreFloatR4();

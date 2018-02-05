@@ -665,13 +665,25 @@
 			"IgnoreDuringCodeGeneration": "true"
 		},
 		{
-			"Name": "ShiftLeft",
+			"Name": "ShiftLeft32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
 		},
 		{
-			"Name": "ShiftRight",
+			"Name": "ShiftLeft64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "ShiftRight32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "ShiftRight64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2

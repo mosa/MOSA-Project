@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// ShiftRight
+	/// ShiftRight64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class ShiftRight : BaseIRInstruction
+	public sealed class ShiftRight64 : BaseIRInstruction
 	{
-		public ShiftRight()
+		public ShiftRight64()
 			: base(2, 1)
 		{
 		}

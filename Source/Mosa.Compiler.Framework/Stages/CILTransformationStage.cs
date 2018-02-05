@@ -1392,9 +1392,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			switch ((node.Instruction as BaseCILInstruction).OpCode)
 			{
-				case OpCode.Shl: node.SetInstruction(IRInstruction.ShiftLeft, node.Result, node.Operand1, node.Operand2); break;
+				case OpCode.Shl: node.SetInstruction(Select(node.Result, IRInstruction.ShiftLeft32, IRInstruction.ShiftLeft64), node.Result, node.Operand1, node.Operand2); break;
 				case OpCode.Shr: node.SetInstruction(Select(node.Result, IRInstruction.ArithmeticShiftRight32, IRInstruction.ArithmeticShiftRight64), node.Result, node.Operand1, node.Operand2); break;
-				case OpCode.Shr_un: node.SetInstruction(IRInstruction.ShiftRight, node.Result, node.Operand1, node.Operand2); break;
+				case OpCode.Shr_un: node.SetInstruction(Select(node.Result, IRInstruction.ShiftRight32, IRInstruction.ShiftRight64), node.Result, node.Operand1, node.Operand2); break;
 				default: throw new CompilerException();
 			}
 		}
