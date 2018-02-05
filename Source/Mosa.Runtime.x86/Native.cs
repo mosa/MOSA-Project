@@ -85,7 +85,7 @@ namespace Mosa.Runtime.x86
 		public extern static void Hlt();
 
 		/// <summary>
-		///
+		/// Wraps the x86 Invlpg instruction.
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Invlpg, Mosa.Platform.x86")]
 		public extern static void Invlpg(uint address);
@@ -188,13 +188,13 @@ namespace Mosa.Runtime.x86
 		//[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get64, Mosa.Platform.x86")]
 		//public extern static ulong Get64(uint address);
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set8, Mosa.Platform.x86")]
 		public extern static void Set8(uint address, byte value);
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set16, Mosa.Platform.x86")]
 		public extern static void Set16(uint address, ushort value);
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set32, Mosa.Platform.x86")]
 		public extern static void Set32(uint address, uint value);
 
 		//[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]

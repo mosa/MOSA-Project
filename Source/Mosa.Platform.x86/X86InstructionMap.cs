@@ -86,7 +86,6 @@ namespace Mosa.Platform.x86
 			{ "Movss", X86.Movss },
 			{ "MovssLoad", X86.MovssLoad },
 			{ "MovssStore", X86.MovssStore },
-			{ "MovStore", X86.MovStore },
 			{ "MovStore8", X86.MovStore8 },
 			{ "MovStore16", X86.MovStore16 },
 			{ "MovStore32", X86.MovStore32 },

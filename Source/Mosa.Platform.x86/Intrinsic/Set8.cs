@@ -6,9 +6,9 @@ using Mosa.Platform.x86.Stages;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// LockSet
+	/// Set
 	/// </summary>
-	internal sealed class LockSet : IIntrinsicPlatformMethod
+	internal sealed class Set8 : IIntrinsicPlatformMethod
 	{
 		#region Methods
 
@@ -20,11 +20,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			var zero = Operand.CreateConstant(0, methodCompiler.TypeSystem);
-			var size = BaseMethodCompilerStage.GetInstructionSize(context.Size, context.InvokeMethod.Signature.Parameters[1].ParameterType);
-
-			var movStore = IRTransformationStage.GetMovStore(size);
-
-			context.SetInstruction(movStore, null, context.Operand1, zero, context.Operand2);
+			context.SetInstruction(X86.MovStore8, null, context.Operand1, zero, context.Operand2);
 		}
 
 		#endregion Methods

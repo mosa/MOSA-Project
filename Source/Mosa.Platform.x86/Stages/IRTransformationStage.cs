@@ -561,11 +561,12 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		public static BaseInstruction GetStoreLoad(InstructionSize size)
+		public static BaseInstruction GetMovStore(InstructionSize size)
 		{
 			switch (size)
 			{
 				case InstructionSize.Size32: return X86.MovStore32;
+				case InstructionSize.None: return X86.MovStore32;
 				case InstructionSize.Native: return X86.MovStore32;
 				case InstructionSize.Size16: return X86.MovStore16;
 				case InstructionSize.Size8: return X86.MovStore8;
@@ -891,7 +892,9 @@ namespace Mosa.Platform.x86.Stages
 		{
 			LoadStore.OrderStoreOperands(node, MethodCompiler);
 
-			node.SetInstruction(X86.MovStore, node.Size, null, node.Operand1, node.Operand2, node.Operand3);
+			var movStore = IRTransformationStage.GetMovStore(node.Size);
+
+			node.SetInstruction(movStore, null, node.Operand1, node.Operand2, node.Operand3);
 		}
 
 		private void StoreParameterFloatR4(InstructionNode node)
@@ -906,7 +909,9 @@ namespace Mosa.Platform.x86.Stages
 
 		private void StoreParameterInteger(InstructionNode node)
 		{
-			node.SetInstruction(X86.MovStore, node.Size, null, StackFrame, node.Operand1, node.Operand2);
+			var movStore = IRTransformationStage.GetMovStore(node.Size);
+
+			node.SetInstruction(movStore, null, StackFrame, node.Operand1, node.Operand2);
 		}
 
 		/// <summary>

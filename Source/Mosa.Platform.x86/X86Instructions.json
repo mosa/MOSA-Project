@@ -706,14 +706,6 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "MovStore",
-			"FamilyName": "X86",
-			"ResultCount": 0,
-			"OperandCount": 3,
-			"MemoryWrite": "true",
-			"X86ThreeTwoAddressConversion": "false"
-		},
-		{
 			"Name": "MovStore8",
 			"FamilyName": "X86",
 			"ResultCount": 0,

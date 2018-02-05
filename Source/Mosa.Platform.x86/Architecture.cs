@@ -328,7 +328,7 @@ namespace Mosa.Platform.x86
 
 		public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
 		{
-			BaseInstruction instruction = X86.MovStore;
+			BaseInstruction instruction = X86.MovStore32;
 			InstructionSize size = InstructionSize.Size32;
 
 			if (value.IsR4)
@@ -409,13 +409,13 @@ namespace Mosa.Platform.x86
 			{
 				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovLoad32, InstructionSize.Size32, tmp, srcReg, index);
-				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, index, tmp);
+				context.AppendInstruction(X86.MovStore32, InstructionSize.Size32, null, dstReg, index, tmp);
 			}
 			for (int i = alignedSize; i < size; i++)
 			{
 				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
 				context.AppendInstruction(X86.MovLoad8, InstructionSize.Size8, tmp, srcReg, index);
-				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
+				context.AppendInstruction(X86.MovStore8, InstructionSize.Size8, null, dstReg, index, tmp);
 			}
 
 			context.AppendInstruction(IRInstruction.StableObjectTracking);

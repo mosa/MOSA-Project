@@ -19,7 +19,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Mov32, Mov32);
 			AddVisitation(X86.MovLoad8, MovLoad8);
 			AddVisitation(X86.MovLoad16, MovLoad16);
-			AddVisitation(X86.MovStore, MovStore);
+			AddVisitation(X86.MovStore8, MovStore8);
+			AddVisitation(X86.MovStore16, MovStore16);
 			AddVisitation(X86.Movsd, Movsd);
 			AddVisitation(X86.Movss, Movss);
 			AddVisitation(X86.Nop, Nop);
@@ -137,14 +138,8 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		public void MovStore(Context context)
+		public void MovStore8(Context context)
 		{
-			var size = context.Size;
-
-			// Mov can not use ESI or EDI registers for 8/16bit values
-			if (!(size == InstructionSize.Size16 || size == InstructionSize.Size8))
-				return;
-
 			Operand value = context.Operand3;
 
 			if (value.IsCPURegister && (value.Register == GeneralPurposeRegister.ESI || value.Register == GeneralPurposeRegister.EDI))
@@ -172,7 +167,41 @@ namespace Mosa.Platform.x86.Stages
 				}
 
 				context.SetInstruction2(X86.Xchg32, temporaryRegister, value, value, temporaryRegister);
-				context.AppendInstruction(X86.MovStore, size, null, dest, offset, temporaryRegister);
+				context.AppendInstruction(X86.MovStore8, null, dest, offset, temporaryRegister);
+				context.AppendInstruction2(X86.Xchg32, value, temporaryRegister, temporaryRegister, value);
+			}
+		}
+
+		public void MovStore16(Context context)
+		{
+			Operand value = context.Operand3;
+
+			if (value.IsCPURegister && (value.Register == GeneralPurposeRegister.ESI || value.Register == GeneralPurposeRegister.EDI))
+			{
+				Operand dest = context.Operand1;
+				Operand offset = context.Operand2;
+
+				Operand temporaryRegister = null;
+
+				if (dest.Register != GeneralPurposeRegister.EAX && offset.Register != GeneralPurposeRegister.EAX)
+				{
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+				}
+				else if (dest.Register != GeneralPurposeRegister.EBX && offset.Register != GeneralPurposeRegister.EBX)
+				{
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
+				}
+				else if (dest.Register != GeneralPurposeRegister.ECX && offset.Register != GeneralPurposeRegister.ECX)
+				{
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+				}
+				else
+				{
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+				}
+
+				context.SetInstruction2(X86.Xchg32, temporaryRegister, value, value, temporaryRegister);
+				context.AppendInstruction(X86.MovStore16, null, dest, offset, temporaryRegister);
 				context.AppendInstruction2(X86.Xchg32, value, temporaryRegister, temporaryRegister, value);
 			}
 		}

@@ -350,7 +350,8 @@ namespace Mosa.Workspace.Experiment.Debug
 			X86.MovCRStore,
 			X86.MovsdStore,
 			X86.MovssStore,
-			X86.MovStore,
+
+			//X86.MovStore,
 			X86.MovupsStore,
 		};
 

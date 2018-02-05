@@ -1,13 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using Mosa.Platform.x86.Stages;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
 	/// Set
 	/// </summary>
-	internal sealed class Set : IIntrinsicPlatformMethod
+	internal sealed class Set16 : IIntrinsicPlatformMethod
 	{
 		#region Methods
 
@@ -19,8 +20,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
 			var zero = Operand.CreateConstant(0, methodCompiler.TypeSystem);
-			var size = BaseMethodCompilerStage.GetInstructionSize(context.Size, context.InvokeMethod.Signature.Parameters[1].ParameterType);
-			context.SetInstruction(X86.MovStore, size, null, context.Operand1, zero, context.Operand2);
+			context.SetInstruction(X86.MovStore16, null, context.Operand1, zero, context.Operand2);
 		}
 
 		#endregion Methods
