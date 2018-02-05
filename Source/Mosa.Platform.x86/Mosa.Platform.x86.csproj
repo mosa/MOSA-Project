@@ -255,7 +255,25 @@
     <Compile Include="Instructions\MovConst32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\MovLoad16.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovLoad32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovLoad8.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\MovLoadSeg32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovStore16.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovStore32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovStore8.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\MovStoreSeg32.cs">
@@ -559,8 +577,6 @@
     <Compile Include="Instructions\Movups.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\MovStore.cs" />
-    <Compile Include="Instructions\MovLoad.cs" />
     <Compile Include="Instructions\IMul.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -585,7 +601,6 @@
     <Compile Include="Instructions\TestConst32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\TwoOperandInstruction.cs" />
     <Compile Include="Instructions\X86Instructions.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -627,6 +642,9 @@
     <Compile Include="Intrinsic\Pause.cs" />
     <Compile Include="Intrinsic\LockSet.cs" />
     <Compile Include="Intrinsic\Remainder.cs" />
+    <Compile Include="Intrinsic\Set32.cs" />
+    <Compile Include="Intrinsic\Set16.cs" />
+    <Compile Include="Intrinsic\Set8.cs" />
     <Compile Include="Intrinsic\SetFS.cs" />
     <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
     <Compile Include="Stages\ConstantLoweringStage.cs" />
@@ -674,7 +692,6 @@
     <Compile Include="Intrinsic\SetCR4.cs" />
     <Compile Include="Intrinsic\Get8.cs" />
     <Compile Include="Intrinsic\Hlt.cs" />
-    <Compile Include="Intrinsic\Set.cs" />
     <Compile Include="Intrinsic\CpuIdEax.cs" />
     <Compile Include="Intrinsic\CpuIdEbx.cs" />
     <Compile Include="Intrinsic\CpuIdEcx.cs" />

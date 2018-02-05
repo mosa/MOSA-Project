@@ -1,14 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Get32
+	/// Set
 	/// </summary>
-	internal sealed class Get32 : IIntrinsicPlatformMethod
+	internal sealed class Set8 : IIntrinsicPlatformMethod
 	{
 		#region Methods
 
@@ -19,10 +18,8 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			Debug.Assert(context.Result.IsI4 | context.Result.IsU4);
 			var zero = Operand.CreateConstant(0, methodCompiler.TypeSystem);
-
-			context.SetInstruction(X86.MovLoad32, context.Result, context.Operand1, zero);
+			context.SetInstruction(X86.MovStore8, null, context.Operand1, zero, context.Operand2);
 		}
 
 		#endregion Methods

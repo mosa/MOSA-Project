@@ -619,8 +619,8 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
-			context.SetInstruction(X86.MovLoad, InstructionSize.Size32, op0L, StackFrame, op1L);
-			context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, op0H, StackFrame, op1H);
+			context.SetInstruction(X86.MovLoad32, op0L, StackFrame, op1L);
+			context.AppendInstruction(X86.MovLoad32, op0H, StackFrame, op1H);
 		}
 
 		/// <summary>
@@ -634,12 +634,12 @@ namespace Mosa.Platform.x86.Stages
 
 			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 
-			context.SetInstruction(X86.MovLoad, InstructionSize.Size32, op0L, address, offset);
+			context.SetInstruction(X86.MovLoad32, op0L, address, offset);
 
 			if (offset.IsResolvedConstant)
 			{
 				var offset2 = offset.IsConstantZero ? ConstantFour : CreateConstant(offset.Offset + NativePointerSize);
-				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, op0H, address, offset2);
+				context.AppendInstruction(X86.MovLoad32, op0H, address, offset2);
 				return;
 			}
 
@@ -647,8 +647,8 @@ namespace Mosa.Platform.x86.Stages
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.AppendInstruction(X86.AddConst32, InstructionSize.Size32, v1, op2L, ConstantFour);
-			context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, op0H, address, v1);
+			context.AppendInstruction(X86.AddConst32, v1, op2L, ConstantFour);
+			context.AppendInstruction(X86.MovLoad32, op0H, address, v1);
 		}
 
 		/// <summary>
@@ -663,12 +663,12 @@ namespace Mosa.Platform.x86.Stages
 			{
 				SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 
-				context.SetInstruction(X86.Mov32, InstructionSize.Size32, op0L, op1L);
-				context.AppendInstruction(X86.Mov32, InstructionSize.Size32, op0H, op1H);
+				context.SetInstruction(X86.Mov32, op0L, op1L);
+				context.AppendInstruction(X86.Mov32, op0H, op1H);
 			}
 			else
 			{
-				context.SetInstruction(X86.Mov32, InstructionSize.Size32, context.Result, op1L);
+				context.SetInstruction(X86.Mov32, context.Result, op1L);
 			}
 		}
 
@@ -861,7 +861,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				X86Instruction Movzx = op1.IsI1 ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
 
-				context.SetInstruction(Movzx, InstructionSize.Size8, op0L, op1);
+				context.SetInstruction(Movzx, op0L, op1);
 				context.AppendInstruction(X86.MovConst32, op0H, ConstantZero);
 			}
 			else if (op1.IsI1 || op1.IsI2)
@@ -870,10 +870,9 @@ namespace Mosa.Platform.x86.Stages
 				var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 				var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-				var size = op1.IsI1 ? InstructionSize.Size8 : InstructionSize.Size16;
 				X86Instruction Movsx = op1.IsI1 ? X86.Movsx8To32 : (X86Instruction)X86.Movsx16To32;
 
-				context.SetInstruction(Movsx, size, v1, op1);
+				context.SetInstruction(Movsx, v1, op1);
 				context.AppendInstruction2(X86.Cdq, v3, v2, v1);
 				context.AppendInstruction(X86.Mov32, op0L, v2);
 				context.AppendInstruction(X86.Mov32, op0H, v3);
@@ -899,10 +898,9 @@ namespace Mosa.Platform.x86.Stages
 				var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 				var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-				var size = op1.IsI1 ? InstructionSize.Size8 : InstructionSize.Size16;
 				X86Instruction Movzx = op1.IsI1 ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
 
-				context.SetInstruction(Movzx, size, v1, op1);
+				context.SetInstruction(Movzx, v1, op1);
 				context.AppendInstruction2(X86.Cdq, v3, v2, v1);
 				context.AppendInstruction(X86.Mov32, op0L, v2);
 				context.AppendInstruction(X86.MovConst32, op0H, ConstantZero);
@@ -924,12 +922,12 @@ namespace Mosa.Platform.x86.Stages
 
 			SplitLongOperand(context.Operand3, out Operand op3L, out Operand op3H);
 
-			context.SetInstruction(X86.MovStore, InstructionSize.Size32, null, address, offset, op3L);
+			context.SetInstruction(X86.MovStore32, null, address, offset, op3L);
 
 			if (offset.IsResolvedConstant)
 			{
 				var offset2 = offset.IsConstantZero ? ConstantFour : CreateConstant(offset.Offset + NativePointerSize);
-				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, address, offset2, op3H);
+				context.AppendInstruction(X86.MovStore32, null, address, offset2, op3H);
 				return;
 			}
 
@@ -937,8 +935,8 @@ namespace Mosa.Platform.x86.Stages
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.AppendInstruction(X86.AddConst32, InstructionSize.Size32, v1, op2L, ConstantFour);
-			context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, address, v1, op3H);
+			context.AppendInstruction(X86.AddConst32, v1, op2L, ConstantFour);
+			context.AppendInstruction(X86.MovStore32, null, address, v1, op3H);
 		}
 
 		/// <summary>
@@ -950,8 +948,8 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand op0L, out Operand op0H);
 			SplitLongOperand(context.Operand2, out Operand op1L, out Operand op1H);
 
-			context.SetInstruction(X86.MovStore, InstructionSize.Size32, null, StackFrame, op0L, op1L);
-			context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, StackFrame, op0H, op1H);
+			context.SetInstruction(X86.MovStore32, null, StackFrame, op0L, op1L);
+			context.AppendInstruction(X86.MovStore32, null, StackFrame, op0H, op1H);
 		}
 
 		/// <summary>
@@ -998,10 +996,9 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else if (op1.IsBoolean || op1.IsChar || op1.IsU1 || op1.IsU2)
 			{
-				var size = (op1.IsU1 || op1.IsBoolean) ? InstructionSize.Size8 : InstructionSize.Size16;
-				X86Instruction Movzx = (op1.IsU1 || op1.IsBoolean) ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
+				var Movzx = (op1.IsU1 || op1.IsBoolean) ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
 
-				context.SetInstruction(Movzx, size, op0L, op1L);
+				context.SetInstruction(Movzx, op0L, op1L);
 				context.AppendInstruction(X86.MovConst32, op0H, ConstantZero);
 			}
 			else if (op1.IsU8)

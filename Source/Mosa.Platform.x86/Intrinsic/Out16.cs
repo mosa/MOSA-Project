@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X86.Out16, InstructionSize.Size16, null, context.Operand1, context.Operand2);
+			context.SetInstruction(X86.Out16, null, context.Operand1, context.Operand2);
 		}
 
 		#endregion Methods

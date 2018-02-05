@@ -20,7 +20,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Helper.FoldOperand1ToConstant(context);
 
-			context.SetInstruction(X86.Int, InstructionSize.Size8, context.Result, context.Operand1);
+			context.SetInstruction(X86.Int, context.Result, context.Operand1);
 		}
 
 		#endregion Methods

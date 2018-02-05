@@ -66,11 +66,11 @@ namespace Mosa.Platform.x86.Stages
 
 				if (operand.IsR4)
 				{
-					before.SetInstruction(X86.MovssLoad, InstructionSize.Size32, v1, s1, ConstantZero);
+					before.SetInstruction(X86.MovssLoad, v1, s1, ConstantZero);
 				}
 				else
 				{
-					before.SetInstruction(X86.MovsdLoad, InstructionSize.Size64, v1, s1, ConstantZero);
+					before.SetInstruction(X86.MovsdLoad, v1, s1, ConstantZero);
 				}
 
 				node.SetOperand(i, v1);

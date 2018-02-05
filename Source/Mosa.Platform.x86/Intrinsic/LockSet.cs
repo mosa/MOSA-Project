@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using Mosa.Platform.x86.Stages;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -20,7 +21,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			var zero = Operand.CreateConstant(0, methodCompiler.TypeSystem);
 			var size = BaseMethodCompilerStage.GetInstructionSize(context.Size, context.InvokeMethod.Signature.Parameters[1].ParameterType);
-			context.SetInstruction(X86.MovStore, size, null, context.Operand1, zero, context.Operand2);
+
+			var movStore = IRTransformationStage.GetMovStore(size);
+
+			context.SetInstruction(movStore, null, context.Operand1, zero, context.Operand2);
 		}
 
 		#endregion Methods
