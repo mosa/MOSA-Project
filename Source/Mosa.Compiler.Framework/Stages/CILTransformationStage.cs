@@ -746,7 +746,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.IsReferenceType)
 			{
 				var size = GetInstructionSize(type);
-				node.SetInstruction(IRInstruction.StoreInteger, size, null, ptr, ConstantZero, Operand.GetNullObject(TypeSystem));
+				node.SetInstruction(Select(IRInstruction.StoreInteger32, IRInstruction.StoreInteger64), size, null, ptr, ConstantZero, Operand.GetNullObject(TypeSystem));
 				node.MosaType = type;
 			}
 			else
@@ -1454,7 +1454,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				var storeInstruction = GetStoreInstruction(value.Type);
+				var storeInstruction = GetStoreInstruction(arrayType.ElementType);
 				var size = GetInstructionSize(arrayType.ElementType);
 
 				node.SetInstruction(storeInstruction, size, null, array, totalElementOffset, value);
@@ -1562,7 +1562,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				var storeInstruction = GetStoreInstruction(node.Operand1.Type);
+				var storeInstruction = GetStoreInstruction(field.FieldType);
 
 				node.SetInstruction(storeInstruction, size, null, fieldOperand, ConstantZero, node.Operand1);
 				node.MosaType = field.FieldType;
@@ -2379,13 +2379,13 @@ namespace Mosa.Compiler.Framework.Stages
 				return IRInstruction.StoreParameterFloatR4;
 			else if (type.IsR8)
 				return IRInstruction.StoreParameterFloatR8;
-			else if (type.IsI1)
+			else if (type.IsUI1 || type.IsBoolean)
 				return IRInstruction.StoreParameterInteger8;
-			else if (type.IsI2)
+			else if (type.IsUI2 || type.IsChar)
 				return IRInstruction.StoreParameterInteger16;
-			else if (type.IsI4)
+			else if (type.IsUI4)
 				return IRInstruction.StoreParameterInteger32;
-			else if (type.IsI4)
+			else if (type.IsUI8)
 				return IRInstruction.StoreParameterInteger64;
 			else if (NativeInstructionSize == InstructionSize.Size32)
 				return IRInstruction.StoreParameterInteger32;

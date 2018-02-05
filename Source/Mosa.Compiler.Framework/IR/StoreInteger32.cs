@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// StoreInteger
+	/// StoreInteger32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class StoreInteger : BaseIRInstruction
+	public sealed class StoreInteger32 : BaseIRInstruction
 	{
-		public StoreInteger()
+		public StoreInteger32()
 			: base(3, 0)
 		{
 		}

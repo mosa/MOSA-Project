@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -633,38 +632,6 @@ namespace Mosa.Compiler.Framework
 			}
 
 			return IRInstruction.MoveInteger;
-		}
-
-		public static BaseIRInstruction GetStoreInstruction(MosaType type)
-		{
-			if (type.IsR4)
-			{
-				return IRInstruction.StoreFloatR4;
-			}
-			else if (type.IsR8)
-			{
-				return IRInstruction.StoreFloatR8;
-			}
-
-			return IRInstruction.StoreInteger;
-		}
-
-		public static BaseIRInstruction GetStoreParameterInstruction(MosaType type)
-		{
-			if (type.IsR4)
-				return IRInstruction.StoreParameterFloatR4;
-			else if (type.IsR8)
-				return IRInstruction.StoreParameterFloatR8;
-			else if (type.IsI1)
-				return IRInstruction.StoreParameterInteger8;
-			else if (type.IsI2)
-				return IRInstruction.StoreParameterInteger16;
-			else if (type.IsI4)
-				return IRInstruction.StoreParameterInteger32;
-			else if (type.IsI4)
-				return IRInstruction.StoreParameterInteger64;
-
-			throw new NotSupportedException();
 		}
 
 		#endregion Helpers

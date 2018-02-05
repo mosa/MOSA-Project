@@ -117,7 +117,10 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly StoreCompound StoreCompound = new StoreCompound();
 		public static readonly StoreFloatR4 StoreFloatR4 = new StoreFloatR4();
 		public static readonly StoreFloatR8 StoreFloatR8 = new StoreFloatR8();
-		public static readonly StoreInteger StoreInteger = new StoreInteger();
+		public static readonly StoreInteger8 StoreInteger8 = new StoreInteger8();
+		public static readonly StoreInteger16 StoreInteger16 = new StoreInteger16();
+		public static readonly StoreInteger32 StoreInteger32 = new StoreInteger32();
+		public static readonly StoreInteger64 StoreInteger64 = new StoreInteger64();
 		public static readonly StoreParameterCompound StoreParameterCompound = new StoreParameterCompound();
 		public static readonly StoreParameterFloatR4 StoreParameterFloatR4 = new StoreParameterFloatR4();
 		public static readonly StoreParameterFloatR8 StoreParameterFloatR8 = new StoreParameterFloatR8();

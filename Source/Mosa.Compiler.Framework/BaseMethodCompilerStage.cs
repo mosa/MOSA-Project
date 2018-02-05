@@ -3,6 +3,7 @@
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -772,18 +773,26 @@ namespace Mosa.Compiler.Framework
 			return IRInstruction.MoveInteger;
 		}
 
-		public static BaseIRInstruction GetStoreInstruction(MosaType type)
+		public BaseIRInstruction GetStoreInstruction(MosaType type)
 		{
 			if (type.IsR4)
-			{
 				return IRInstruction.StoreFloatR4;
-			}
 			else if (type.IsR8)
-			{
 				return IRInstruction.StoreFloatR8;
-			}
+			else if (type.IsUI1 || type.IsBoolean)
+				return IRInstruction.StoreInteger8;
+			else if (type.IsUI2 || type.IsChar)
+				return IRInstruction.StoreInteger16;
+			else if (type.IsUI4)
+				return IRInstruction.StoreInteger32;
+			else if (type.IsUI8)
+				return IRInstruction.StoreInteger64;
+			else if (NativeInstructionSize == InstructionSize.Size32)
+				return IRInstruction.StoreInteger32;
+			else if (NativeInstructionSize == InstructionSize.Size64)
+				return IRInstruction.StoreInteger64;
 
-			return IRInstruction.StoreInteger;
+			throw new NotSupportedException();
 		}
 
 		public BaseInstruction Select(Operand operand, BaseInstruction instruction32, BaseInstruction instruction64)

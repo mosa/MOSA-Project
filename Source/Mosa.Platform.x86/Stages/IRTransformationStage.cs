@@ -76,7 +76,9 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.ShiftRight32, ShiftRight32);
 			AddVisitation(IRInstruction.StoreFloatR4, StoreFloatR4);
 			AddVisitation(IRInstruction.StoreFloatR8, StoreFloatR8);
-			AddVisitation(IRInstruction.StoreInteger, StoreInteger);
+			AddVisitation(IRInstruction.StoreInteger8, StoreInteger8);
+			AddVisitation(IRInstruction.StoreInteger16, StoreInteger16);
+			AddVisitation(IRInstruction.StoreInteger32, StoreInteger32);
 			AddVisitation(IRInstruction.StoreParameterFloatR4, StoreParameterFloatR4);
 			AddVisitation(IRInstruction.StoreParameterFloatR8, StoreParameterFloatR8);
 			AddVisitation(IRInstruction.StoreParameterInteger8, StoreParameterInteger8);
@@ -876,13 +878,25 @@ namespace Mosa.Platform.x86.Stages
 			node.SetInstruction(X86.MovsdStore, null, node.Operand1, node.Operand2, node.Operand3);
 		}
 
-		private void StoreInteger(InstructionNode node)
+		private void StoreInteger8(InstructionNode node)
 		{
 			LoadStore.OrderStoreOperands(node, MethodCompiler);
 
-			var movStore = IRTransformationStage.GetMovStore(node.Size);
+			node.SetInstruction(X86.MovStore8, null, node.Operand1, node.Operand2, node.Operand3);
+		}
 
-			node.SetInstruction(movStore, null, node.Operand1, node.Operand2, node.Operand3);
+		private void StoreInteger16(InstructionNode node)
+		{
+			LoadStore.OrderStoreOperands(node, MethodCompiler);
+
+			node.SetInstruction(X86.MovStore16, null, node.Operand1, node.Operand2, node.Operand3);
+		}
+
+		private void StoreInteger32(InstructionNode node)
+		{
+			LoadStore.OrderStoreOperands(node, MethodCompiler);
+
+			node.SetInstruction(X86.MovStore32, null, node.Operand1, node.Operand2, node.Operand3);
 		}
 
 		private void StoreParameterFloatR4(InstructionNode node)

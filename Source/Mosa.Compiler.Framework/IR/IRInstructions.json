@@ -718,7 +718,28 @@
 			"MemoryWrite": "true"
 		},
 		{
-			"Name": "StoreInteger",
+			"Name": "StoreInteger8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreInteger16",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreInteger32",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreInteger64",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 3,

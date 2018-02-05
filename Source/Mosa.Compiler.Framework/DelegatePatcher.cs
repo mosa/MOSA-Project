@@ -102,9 +102,9 @@ namespace Mosa.Compiler.Framework
 			context.AppendInstruction(IRInstruction.LoadParameterInteger, v2, methodPointerOperand);
 			context.AppendInstruction(IRInstruction.LoadParameterInteger, v3, instanceOperand);
 
-			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, methodPointerOffsetOperand, v2);
+			context.AppendInstruction(IRInstruction.StoreInteger32, size, null, v1, methodPointerOffsetOperand, v2); // FIXME -- not 64 compatible
 			context.MosaType = methodPointerOperand.Type;
-			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, instanceOffsetOperand, v3);
+			context.AppendInstruction(IRInstruction.StoreInteger32, size, null, v1, instanceOffsetOperand, v3); // FIXME -- not 64 compatible
 			context.MosaType = instanceOperand.Type;
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}

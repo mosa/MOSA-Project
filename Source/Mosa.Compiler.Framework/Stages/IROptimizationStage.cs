@@ -1701,7 +1701,10 @@ namespace Mosa.Compiler.Framework.Stages
 		private void FoldLoadStoreOffsets(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.LoadInteger
-				|| node.Instruction == IRInstruction.StoreInteger
+				|| node.Instruction == IRInstruction.StoreInteger8
+				|| node.Instruction == IRInstruction.StoreInteger16
+				|| node.Instruction == IRInstruction.StoreInteger32
+				|| node.Instruction == IRInstruction.StoreInteger64
 				|| node.Instruction == IRInstruction.StoreFloatR4
 				|| node.Instruction == IRInstruction.StoreFloatR8
 				|| node.Instruction == IRInstruction.LoadSignExtended
