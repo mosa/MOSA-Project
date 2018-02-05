@@ -17,8 +17,8 @@ namespace Mosa.Compiler.Framework.Expression
 			//var nodeW = new Node(NodeType.OperandVariable, "w", 3);
 
 			var instruction1 = new Node(IRInstruction.AddUnsigned32);
-			var instruction2 = new Node(IRInstruction.MulUnsigned);
-			var instruction3 = new Node(IRInstruction.MulUnsigned);
+			var instruction2 = new Node(IRInstruction.MulUnsigned32);
+			var instruction3 = new Node(IRInstruction.MulUnsigned32);
 
 			instruction1.AddNode(instruction2);
 			instruction1.AddNode(instruction3);
@@ -51,8 +51,8 @@ namespace Mosa.Compiler.Framework.Expression
 			var t2 = Operand.CreateVirtualRegister(null, 6);
 			var w = Operand.CreateVirtualRegister(null, 7);
 
-			context.AppendInstruction(IRInstruction.MulUnsigned, t1, x, y);
-			context.AppendInstruction(IRInstruction.MulUnsigned, t2, x, z);
+			context.AppendInstruction(IRInstruction.MulUnsigned32, t1, x, y);
+			context.AppendInstruction(IRInstruction.MulUnsigned32, t2, x, z);
 			context.AppendInstruction(IRInstruction.AddUnsigned32, r, t1, t2);
 
 			return basicBlocks;

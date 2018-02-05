@@ -488,8 +488,10 @@ namespace Mosa.Compiler.Framework.Analysis
 				|| instruction == IRInstruction.SubUnsigned32
 				|| instruction == IRInstruction.SubSigned64
 				|| instruction == IRInstruction.SubUnsigned64
-				|| instruction == IRInstruction.MulSigned
-				|| instruction == IRInstruction.MulUnsigned
+				|| instruction == IRInstruction.MulSigned32
+				|| instruction == IRInstruction.MulUnsigned32
+				|| instruction == IRInstruction.MulSigned64
+				|| instruction == IRInstruction.MulUnsigned64
 				|| instruction == IRInstruction.DivSigned
 				|| instruction == IRInstruction.DivUnsigned
 				|| instruction == IRInstruction.RemSigned
@@ -844,7 +846,10 @@ namespace Mosa.Compiler.Framework.Analysis
 				result = operand1 - operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.MulUnsigned || instruction == IRInstruction.MulSigned)
+			else if (instruction == IRInstruction.MulUnsigned32
+				|| instruction == IRInstruction.MulSigned32
+				|| instruction == IRInstruction.MulUnsigned64
+				|| instruction == IRInstruction.MulSigned64)
 			{
 				result = operand1 * operand2;
 				return true;

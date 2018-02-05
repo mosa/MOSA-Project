@@ -537,14 +537,28 @@
 			"Commutative": "true"
 		},
 		{
-			"Name": "MulSigned",
+			"Name": "MulSigned32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "MulUnsigned",
+			"Name": "MulSigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulUnsigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulUnsigned64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,

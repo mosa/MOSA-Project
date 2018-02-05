@@ -67,8 +67,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.MoveZeroExtended, ZeroExtendedMove);
 			AddVisitation(IRInstruction.MulFloatR4, MulFloatR4);
 			AddVisitation(IRInstruction.MulFloatR8, MulFloatR8);
-			AddVisitation(IRInstruction.MulSigned, MulSigned);
-			AddVisitation(IRInstruction.MulUnsigned, MulUnsigned);
+			AddVisitation(IRInstruction.MulSigned32, MulSigned32);
+			AddVisitation(IRInstruction.MulUnsigned32, MulUnsigned32);
 			AddVisitation(IRInstruction.Nop, Nop);
 			AddVisitation(IRInstruction.RemSigned, RemSigned);
 			AddVisitation(IRInstruction.RemUnsigned, RemUnsigned);
@@ -764,7 +764,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MulSigned.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void MulSigned(InstructionNode node)
+		private void MulSigned32(InstructionNode node)
 		{
 			Operand result = node.Result;
 			Operand operand1 = node.Operand1;
@@ -778,7 +778,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MulUnsigned.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void MulUnsigned(InstructionNode node)
+		private void MulUnsigned32(InstructionNode node)
 		{
 			Operand result = node.Result;
 			Operand operand1 = node.Operand1;

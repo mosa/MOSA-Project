@@ -38,8 +38,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.MoveInteger, MoveInteger);
 			AddVisitation(IRInstruction.MoveSignExtended, MoveSignExtended);
 			AddVisitation(IRInstruction.MoveZeroExtended, MoveZeroExtended);
-			AddVisitation(IRInstruction.MulSigned, MulSigned);
-			AddVisitation(IRInstruction.MulUnsigned, MulUnsigned);
+			AddVisitation(IRInstruction.MulSigned64, MulSigned64);
+			AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
 			AddVisitation(IRInstruction.ShiftLeft, ShiftLeft);
 			AddVisitation(IRInstruction.ShiftRight, ShiftRight);
 			AddVisitation(IRInstruction.StoreInteger, StoreInteger);
@@ -224,24 +224,18 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MulSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void MulSigned(Context context)
+		private void MulSigned64(Context context)
 		{
-			if (Any64Bit(context.Node))
-			{
-				ExpandMul(context);
-			}
+			ExpandMul(context);
 		}
 
 		/// <summary>
 		/// Visitation function for MulUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void MulUnsigned(Context context)
+		private void MulUnsigned64(Context context)
 		{
-			if (Any64Bit(context.Node))
-			{
-				ExpandMul(context);
-			}
+			ExpandMul(context);
 		}
 
 		/// <summary>

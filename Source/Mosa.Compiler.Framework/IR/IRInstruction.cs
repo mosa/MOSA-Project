@@ -89,8 +89,10 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly MoveZeroExtended MoveZeroExtended = new MoveZeroExtended();
 		public static readonly MulFloatR4 MulFloatR4 = new MulFloatR4();
 		public static readonly MulFloatR8 MulFloatR8 = new MulFloatR8();
-		public static readonly MulSigned MulSigned = new MulSigned();
-		public static readonly MulUnsigned MulUnsigned = new MulUnsigned();
+		public static readonly MulSigned32 MulSigned32 = new MulSigned32();
+		public static readonly MulSigned64 MulSigned64 = new MulSigned64();
+		public static readonly MulUnsigned32 MulUnsigned32 = new MulUnsigned32();
+		public static readonly MulUnsigned64 MulUnsigned64 = new MulUnsigned64();
 		public static readonly NewArray NewArray = new NewArray();
 		public static readonly NewObject NewObject = new NewObject();
 		public static readonly NewString NewString = new NewString();

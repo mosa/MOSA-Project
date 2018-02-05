@@ -602,8 +602,10 @@ namespace Mosa.Compiler.Framework.Stages
 				|| node.Instruction == IRInstruction.LogicalAnd64
 				|| node.Instruction == IRInstruction.LogicalOr64
 				|| node.Instruction == IRInstruction.LogicalXor64
-				|| node.Instruction == IRInstruction.MulSigned
-				|| node.Instruction == IRInstruction.MulUnsigned
+				|| node.Instruction == IRInstruction.MulSigned32
+				|| node.Instruction == IRInstruction.MulUnsigned32
+				|| node.Instruction == IRInstruction.MulSigned64
+				|| node.Instruction == IRInstruction.MulUnsigned64
 				|| node.Instruction == IRInstruction.DivSigned
 				|| node.Instruction == IRInstruction.DivUnsigned
 				|| node.Instruction == IRInstruction.RemSigned
@@ -652,7 +654,8 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				constant = CreateConstant(result.Type, op1.ConstantUnsignedLongInteger ^ op2.ConstantUnsignedLongInteger);
 			}
-			else if (node.Instruction == IRInstruction.MulSigned || node.Instruction == IRInstruction.MulUnsigned)
+			else if (node.Instruction == IRInstruction.MulSigned32 || node.Instruction == IRInstruction.MulUnsigned32
+				|| node.Instruction == IRInstruction.MulSigned64 || node.Instruction == IRInstruction.MulUnsigned64)
 			{
 				constant = CreateConstant(result.Type, op1.ConstantUnsignedLongInteger * op2.ConstantUnsignedLongInteger);
 			}
@@ -784,8 +787,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationMultiplication(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.MulSigned
-				|| node.Instruction == IRInstruction.MulUnsigned))
+			if (!(node.Instruction == IRInstruction.MulSigned32
+				|| node.Instruction == IRInstruction.MulUnsigned32
+				|| node.Instruction == IRInstruction.MulSigned64
+				|| node.Instruction == IRInstruction.MulUnsigned64))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -1200,8 +1205,10 @@ namespace Mosa.Compiler.Framework.Stages
 				|| node.Instruction == IRInstruction.AddUnsigned32
 				|| node.Instruction == IRInstruction.AddSigned64
 				|| node.Instruction == IRInstruction.AddUnsigned64
-				|| node.Instruction == IRInstruction.MulSigned
-				|| node.Instruction == IRInstruction.MulUnsigned
+				|| node.Instruction == IRInstruction.MulSigned32
+				|| node.Instruction == IRInstruction.MulUnsigned32
+				|| node.Instruction == IRInstruction.MulSigned64
+				|| node.Instruction == IRInstruction.MulUnsigned64
 				|| node.Instruction == IRInstruction.LogicalAnd32
 				|| node.Instruction == IRInstruction.LogicalOr32
 				|| node.Instruction == IRInstruction.LogicalXor32
@@ -1396,8 +1403,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantFoldingMultiplication(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.MulSigned
-				|| node.Instruction == IRInstruction.MulUnsigned))
+			if (!(node.Instruction == IRInstruction.MulSigned32
+				|| node.Instruction == IRInstruction.MulUnsigned32
+				|| node.Instruction == IRInstruction.MulSigned64
+				|| node.Instruction == IRInstruction.MulUnsigned64))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -1414,7 +1423,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var node2 = node.Result.Uses[0];
 
-			if (!(node2.Instruction == IRInstruction.MulSigned || node2.Instruction == IRInstruction.MulUnsigned))
+			if (!(node2.Instruction == IRInstruction.MulSigned32
+				|| node2.Instruction == IRInstruction.MulUnsigned32
+				|| node2.Instruction == IRInstruction.MulSigned64
+				|| node2.Instruction == IRInstruction.MulUnsigned64))
 				return;
 
 			if (!node2.Result.IsVirtualRegister)
@@ -2194,7 +2206,8 @@ namespace Mosa.Compiler.Framework.Stages
 				|| instruction == IRInstruction.AddUnsigned32
 				|| instruction == IRInstruction.AddUnsigned64
 				|| instruction == IRInstruction.MoveInteger
-				|| instruction == IRInstruction.MulUnsigned
+				|| instruction == IRInstruction.MulUnsigned32
+				|| instruction == IRInstruction.MulUnsigned64
 				|| instruction == IRInstruction.DivUnsigned
 				|| instruction == IRInstruction.RemUnsigned))
 				return;

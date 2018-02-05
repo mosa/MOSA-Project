@@ -1186,7 +1186,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Mul(InstructionNode node)
 		{
-			Replace(node, IRInstruction.MulFloatR4, IRInstruction.MulFloatR8, IRInstruction.MulSigned, IRInstruction.MulUnsigned);
+			Replace(node, IRInstruction.MulFloatR4, IRInstruction.MulFloatR8, IRInstruction.MulSigned32, IRInstruction.MulSigned64, IRInstruction.MulUnsigned32, IRInstruction.MulUnsigned64);
 		}
 
 		/// <summary>
@@ -1214,7 +1214,7 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				var minusOne = CreateConstant(node.Operand1.Type, -1);
-				node.SetInstruction(IRInstruction.MulSigned, node.Result, minusOne, node.Operand1);
+				node.SetInstruction(Select(node.Result, IRInstruction.MulSigned32, IRInstruction.MulSigned64), node.Result, minusOne, node.Operand1);
 			}
 		}
 
@@ -2204,12 +2204,12 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var size = GetTypeSize(arrayType.ElementType, false);
 
-			var elementOffset = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var elementOffset = AllocateVirtualRegister(TypeSystem.BuiltIn.I4); // FIXME - not compatible with 64bit
 			var elementSize = CreateConstant(size);
 
 			var context = new Context(node).InsertBefore();
 
-			context.AppendInstruction(IRInstruction.MulUnsigned, elementOffset, index, elementSize);
+			context.AppendInstruction(Select(IRInstruction.MulUnsigned32, IRInstruction.MulSigned64), elementOffset, index, elementSize);
 
 			return elementOffset;
 		}

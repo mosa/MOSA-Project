@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// MulUnsigned
+	/// MulSigned64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class MulUnsigned : BaseIRInstruction
+	public sealed class MulSigned64 : BaseIRInstruction
 	{
-		public MulUnsigned()
+		public MulSigned64()
 			: base(2, 1)
 		{
 		}
