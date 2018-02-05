@@ -269,13 +269,14 @@ namespace Mosa.Platform.x86
 				new IMethodCompilerStage[]
 				{
 					new PlatformIntrinsicStage(),
-					new LongOperandTransformationStage(),
+					new LongOperandStage(),
 					new IRTransformationStage(),
-					new TweakTransformationStage(),
+					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
 					new SimpleDeadCodeRemovalStage(),
 					new AddressModeConversionStage(),
 					new FloatingPointStage(),
+					new ConstantLoweringStage(),
 				});
 
 			compilerPipeline.InsertAfterLast<StackLayoutStage>(
@@ -283,7 +284,7 @@ namespace Mosa.Platform.x86
 			);
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(
-				new FinalTweakTransformationStage()
+				new FinalTweakStage()
 			);
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(
@@ -308,27 +309,23 @@ namespace Mosa.Platform.x86
 		/// <param name="source">The source.</param>
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
-			BaseInstruction instruction = X86.Mov;
-			var size = InstructionSize.Size32;
+			BaseInstruction instruction = X86.Mov32;
 
 			if (destination.IsR4)
 			{
 				instruction = X86.Movss;
-				size = InstructionSize.Size32;
 			}
 			else if (destination.IsR8)
 			{
 				instruction = X86.Movsd;
-				size = InstructionSize.Size64;
 			}
 
-			context.AppendInstruction(instruction, size, destination, source);
+			context.AppendInstruction(instruction, destination, source);
 		}
 
 		public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
 		{
-			BaseInstruction instruction = X86.MovStore;
-			InstructionSize size = InstructionSize.Size32;
+			BaseInstruction instruction = X86.MovStore32;
 
 			if (value.IsR4)
 			{
@@ -337,10 +334,9 @@ namespace Mosa.Platform.x86
 			else if (value.IsR8)
 			{
 				instruction = X86.MovsdStore;
-				size = InstructionSize.Size64;
 			}
 
-			context.AppendInstruction(instruction, size, null, destination, offset, value);
+			context.AppendInstruction(instruction, null, destination, offset, value);
 		}
 
 		/// <summary>
@@ -352,8 +348,7 @@ namespace Mosa.Platform.x86
 		/// <param name="offset">The offset.</param>
 		public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
 		{
-			BaseInstruction instruction = X86.MovLoad;
-			var size = InstructionSize.Size32;
+			BaseInstruction instruction = X86.MovLoad32;
 
 			if (destination.IsR4)
 			{
@@ -362,10 +357,9 @@ namespace Mosa.Platform.x86
 			else if (destination.IsR8)
 			{
 				instruction = X86.MovsdLoad;
-				size = InstructionSize.Size64;
 			}
 
-			context.AppendInstruction(instruction, size, destination, source, offset);
+			context.AppendInstruction(instruction, destination, source, offset);
 		}
 
 		/// <summary>
@@ -391,8 +385,8 @@ namespace Mosa.Platform.x86
 
 			context.AppendInstruction(IRInstruction.UnstableObjectTracking);
 
-			context.AppendInstruction(X86.Lea, srcReg, sourceBase, source);
-			context.AppendInstruction(X86.Lea, dstReg, destinationBase, destination);
+			context.AppendInstruction(X86.Lea32, srcReg, sourceBase, source);
+			context.AppendInstruction(X86.Lea32, dstReg, destinationBase, destination);
 
 			var tmp = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
 			var tmpLarge = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.R8);
@@ -407,14 +401,14 @@ namespace Mosa.Platform.x86
 			for (int i = largeAlignedTypeSize; i < alignedSize; i += NativeAlignment)
 			{
 				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
-				context.AppendInstruction(X86.MovLoad, InstructionSize.Size32, tmp, srcReg, index);
-				context.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, dstReg, index, tmp);
+				context.AppendInstruction(X86.MovLoad32, tmp, srcReg, index);
+				context.AppendInstruction(X86.MovStore32, null, dstReg, index, tmp);
 			}
 			for (int i = alignedSize; i < size; i++)
 			{
 				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
-				context.AppendInstruction(X86.MovLoad, InstructionSize.Size8, tmp, srcReg, index);
-				context.AppendInstruction(X86.MovStore, InstructionSize.Size8, null, dstReg, index, tmp);
+				context.AppendInstruction(X86.MovLoad8, tmp, srcReg, index);
+				context.AppendInstruction(X86.MovStore8, null, dstReg, index, tmp);
 			}
 
 			context.AppendInstruction(IRInstruction.StableObjectTracking);
@@ -440,7 +434,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
-				context.AppendInstruction2(X86.Xchg, destination, source, source, destination);
+				context.AppendInstruction2(X86.Xchg32, destination, source, source, destination);
 			}
 		}
 
@@ -461,7 +455,7 @@ namespace Mosa.Platform.x86
 		/// <returns></returns>
 		public override bool IsInstructionMove(BaseInstruction instruction)
 		{
-			return instruction == X86.Mov || instruction == X86.Movsd || instruction == X86.Movss;
+			return instruction == X86.Mov32 || instruction == X86.Movsd || instruction == X86.Movss;
 		}
 	}
 }

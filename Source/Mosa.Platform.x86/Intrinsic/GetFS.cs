@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// GetFS
 	/// </summary>
 	public class GetFS : IIntrinsicPlatformMethod
 	{
@@ -22,8 +22,8 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			Operand v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
 
-			context.SetInstruction(X86.Mov, v1, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, SegmentRegister.FS));
-			context.AppendInstruction(X86.Mov, result, v1);
+			context.SetInstruction(X86.MovLoadSeg32, v1, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, SegmentRegister.FS));
+			context.AppendInstruction(X86.Mov32, result, v1);
 		}
 
 		#endregion Methods

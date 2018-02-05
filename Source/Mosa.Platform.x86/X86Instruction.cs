@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86
 		/// <value>
 		/// The name of the instruction family.
 		/// </value>
-		public override string InstructionFamilyName { get { return "X86"; } }
+		public override string FamilyName { get { return "X86"; } }
 
 		#endregion Properties
 
@@ -87,6 +87,11 @@ namespace Mosa.Platform.x86
 
 		#endregion Legacy Opcode Methods
 
+		// used by the code automation tool
+
 		public virtual byte[] __opcode { get; }
+		public virtual LegacyOpCode __legacyopcode { get; }
+		public virtual string __legacyOpcodeOperandOrder { get; }
+		public virtual string __staticEmitMethod { get; }
 	}
 }

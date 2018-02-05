@@ -94,12 +94,28 @@ namespace Mosa.Compiler.Framework
 		public virtual bool IsIOOperation { get { return false; } }
 
 		/// <summary>
+		/// Gets a value indicating whether [variable operand count].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [variable operand count]; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool VariableOperands { get { return false; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="BaseInstruction"/> is commutative.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if commutative; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool IsCommutative { get { return false; } }
+
+		/// <summary>
 		/// Gets the name of the base instruction.
 		/// </summary>
 		/// <value>
 		/// The name of the base instruction.
 		/// </value>
-		public virtual string BaseInstructionName
+		public virtual string Name
 		{
 			get
 			{
@@ -110,90 +126,46 @@ namespace Mosa.Compiler.Framework
 				if (index > 0)
 					name = name.Substring(index + 1);
 
-				index = name.IndexOf("Instruction");
-
-				if (index > 0)
-					name = name.Substring(0, index);
-
-				index = name.IndexOf("Store");
-
-				if (index < 0)
-					index = name.IndexOf("Load");
-
-				if (index > 0)
-					name = name.Substring(0, index);
-
 				return name;
 			}
 		}
 
-		/// <summary>
-		/// Gets the name of the instruction family.
-		/// </summary>
-		/// <value>
-		/// The name of the instruction family.
-		/// </value>
-		public abstract string InstructionFamilyName { get; }
+		public virtual string AlternativeName { get { return null; } }
+		public virtual string FamilyName { get { return null; } }
+		public virtual string Modifier { get { return null; } }
 
-		/// <summary>
-		/// Gets the name of the instruction extension.
-		/// </summary>
-		/// <value>
-		/// The name of the instruction extension.
-		/// </value>
-		public virtual string InstructionExtensionName
+		private string CachedFullName { get; set; }
+
+		public virtual string FullName
 		{
 			get
 			{
-				string name = GetType().ToString();
-				string ext = string.Empty;
-
-				int index = name.LastIndexOf('.');
-
-				name = name.Substring(index + 1);
-
-				if (name.StartsWith("Store"))
-					return string.Empty;
-				else if (name.StartsWith("Load"))
-					return string.Empty;
-				else if (name.EndsWith("Store"))
-					ext = "Store";
-				else if (name.EndsWith("Load"))
-					ext = "Load";
-
-				return ext;
-			}
-		}
-
-		private string CachedInstructionName { get; set; }
-
-		/// <summary>
-		/// Gets the name of the instruction.
-		/// </summary>
-		/// <value>
-		/// The name of the instruction.
-		/// </value>
-		public virtual string InstructionName
-		{
-			get
-			{
-				if (CachedInstructionName == null)
+				if (CachedFullName == null)
 				{
-					string name = InstructionFamilyName + "." + BaseInstructionName;
-
-					if (!string.IsNullOrWhiteSpace(InstructionExtensionName))
-					{
-						name = CachedInstructionName + "." + InstructionExtensionName;
-					}
-
-					CachedInstructionName = name;
+					CachedFullName = FamilyName + "." + Name;
 				}
 
-				return CachedInstructionName;
+				return CachedFullName;
 			}
 		}
 
-		public virtual string Modifier { get { return null; } }
+		private string CachedFullAlternativeName { get; set; }
+
+		public virtual string FullAlternativeName
+		{
+			get
+			{
+				if (AlternativeName == null)
+					return null;
+
+				if (CachedFullAlternativeName == null)
+				{
+					CachedFullAlternativeName = FamilyName + "." + AlternativeName;
+				}
+
+				return CachedFullAlternativeName;
+			}
+		}
 
 		#endregion Properties
 
@@ -214,6 +186,11 @@ namespace Mosa.Compiler.Framework
 
 		#region Methods
 
+		public virtual BaseInstruction GetOpposite()
+		{
+			return null;
+		}
+
 		/// <summary>
 		/// Returns a string representation of the context.
 		/// </summary>
@@ -222,7 +199,7 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public override string ToString()
 		{
-			return InstructionName;
+			return FullName;
 		}
 
 		#endregion Methods

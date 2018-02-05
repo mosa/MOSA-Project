@@ -30,11 +30,11 @@ namespace Mosa.Platform.x86.Intrinsic
 			// Compare EAX with r/m32. If equal, ZF is set and r32 is loaded into r/m32.
 			// Else, clear ZF and load r/m32 into EAX.
 
-			context.SetInstruction(X86.Mov, eax, oldval);
-			context.AppendInstruction(X86.Mov, v1, newval);
+			context.SetInstruction(X86.Mov32, eax, oldval);
+			context.AppendInstruction(X86.Mov32, v1, newval);
 			context.AppendInstruction(X86.Lock);
-			context.AppendInstruction(X86.CmpXchgLoad, InstructionSize.Size32, eax, eax, pointer, zero, v1);
-			context.AppendInstruction(X86.Setcc, ConditionCode.Equal, result);
+			context.AppendInstruction(X86.CmpXchgLoad32, eax, eax, pointer, zero, v1);
+			context.AppendInstruction(X86.SetEqual, result);
 		}
 
 		#endregion Methods

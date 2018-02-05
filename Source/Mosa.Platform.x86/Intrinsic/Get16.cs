@@ -22,7 +22,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Debug.Assert(context.Result.IsI4 | context.Result.IsU4);
 			Operand zero = Operand.CreateConstant(0, methodCompiler.TypeSystem);
 
-			context.SetInstruction(X86.MovzxLoad, InstructionSize.Size16, context.Result, context.Operand1, zero);
+			context.SetInstruction(X86.MovzxLoad16, context.Result, context.Operand1, zero);
 		}
 
 		#endregion Methods

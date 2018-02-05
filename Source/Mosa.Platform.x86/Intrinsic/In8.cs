@@ -15,10 +15,17 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// Replaces the intrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
+		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X86.In, InstructionSize.Size8, context.Result, context.Operand1);
+			Operand v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
+
+			var result = context.Result;
+
+			context.SetInstruction(X86.In8, v1, context.Operand1);
+			context.AppendInstruction(X86.Movzx8To32, result, v1);
+
+			//context.SetInstruction(X86.In8, InstructionSize.Size8, context.Result, context.Operand1);
 		}
 
 		#endregion Methods

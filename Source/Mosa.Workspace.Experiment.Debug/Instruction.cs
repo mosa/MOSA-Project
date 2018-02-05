@@ -29,8 +29,11 @@ namespace Mosa.Workspace.Experiment.Debug
 
 		public string Description = null;
 
-		public string X86EmitMethodType;
-		public new byte[] X86EmitBytes;
+		public string StaticEmitMethod; // __staticMethodName
+
+		public byte[] X86EmitBytes;
+		public byte[] X86LegacyOpcode;
+		public byte? X86LegacyOpcodeRegField;
 
 		//Effect:
 		//	X - Changed
@@ -124,9 +127,6 @@ namespace Mosa.Workspace.Experiment.Debug
 			if (NegativeFlagDependency != null)
 				sb.AppendFormat("\"NegativeFlagDependency\": \"{0}\", ", NegativeFlagDependency);
 
-			if (X86EmitMethodType != null)
-				sb.AppendFormat("\"X86EmitMethodType\": \"{0}\", ", X86EmitMethodType);
-
 			if (X86EmitBytes != null)
 			{
 				sb.AppendFormat("\"X86EmitBytes\": \"");
@@ -140,6 +140,26 @@ namespace Mosa.Workspace.Experiment.Debug
 
 				sb.AppendFormat("\", ");
 			}
+
+			if (X86LegacyOpcode != null)
+			{
+				sb.AppendFormat("\"X86LegacyOpcode\": \"");
+
+				foreach (var b in X86LegacyOpcode)
+				{
+					sb.AppendFormat("{0:X2} ", b);
+				}
+
+				sb.Length--;
+
+				sb.AppendFormat("\", ");
+			}
+
+			if (X86LegacyOpcodeRegField.HasValue)
+				sb.AppendFormat("\"X86LegacyOpcodeRegField\": \"{0:X2}\", ", X86LegacyOpcodeRegField.Value);
+
+			if (StaticEmitMethod != null)
+				sb.AppendFormat("\"StaticEmitMethod\": \"{0}\", ", StaticEmitMethod);
 
 			if (X86ThreeTwoAddressConversion)
 				sb.AppendFormat("\"X86ThreeTwoAddressConversion\": \"{0}\", ", X86ThreeTwoAddressConversion ? "true" : "false");

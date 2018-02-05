@@ -119,20 +119,20 @@ namespace Mosa.Platform.x86.CompilerStages
 			var ctx = new Context(block);
 
 			// Setup the stack and place the sentinel on the stack to indicate the start of the stack
-			ctx.AppendInstruction(X86.Mov, InstructionSize.Size32, esp, stackTop);
-			ctx.AppendInstruction(X86.Mov, InstructionSize.Size32, ebp, stackTop);
-			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, esp, zero, zero);
-			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, esp, four, zero);
+			ctx.AppendInstruction(X86.Mov32, esp, stackTop);
+			ctx.AppendInstruction(X86.Mov32, ebp, stackTop);
+			ctx.AppendInstruction(X86.MovStore32, null, esp, zero, zero);
+			ctx.AppendInstruction(X86.MovStore32, null, esp, four, zero);
 
 			// Place the multiboot address into a static field
-			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEAX, zero, eax);
-			ctx.AppendInstruction(X86.MovStore, InstructionSize.Size32, null, multibootEBX, zero, ebx);
+			ctx.AppendInstruction(X86.MovStore32, null, multibootEAX, zero, eax);
+			ctx.AppendInstruction(X86.MovStore32, null, multibootEBX, zero, ebx);
 
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
 			var startUpMethod = startUpType.FindMethodByName("Initialize");
 
 			var entryPoint = Operand.CreateSymbolFromMethod(startUpMethod, TypeSystem);
-			ctx.AppendInstruction(X86.Call, null, entryPoint);
+			ctx.AppendInstruction(X86.CallStatic, null, entryPoint);
 
 			ctx.AppendInstruction(X86.Ret);
 

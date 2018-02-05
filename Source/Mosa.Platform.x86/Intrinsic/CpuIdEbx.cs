@@ -23,10 +23,10 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			Operand ecx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 			Operand reg = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
-			context.SetInstruction(X86.Mov, eax, operand);
-			context.AppendInstruction(X86.Mov, ecx, methodCompiler.ConstantZero);
+			context.SetInstruction(X86.Mov32, eax, operand);
+			context.AppendInstruction(X86.MovConst32, ecx, methodCompiler.ConstantZero);
 			context.AppendInstruction(X86.CpuId, eax, eax);
-			context.AppendInstruction(X86.Mov, result, reg);
+			context.AppendInstruction(X86.Mov32, result, reg);
 		}
 
 		#endregion Methods

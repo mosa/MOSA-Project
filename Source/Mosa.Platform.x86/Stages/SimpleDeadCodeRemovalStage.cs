@@ -46,10 +46,18 @@ namespace Mosa.Platform.x86.Stages
 							continue;
 						}
 
+						// FUTURE: Only useless if not result is not used and no side effect
+
 						if (node.Instruction == X86.Call)
 							continue;
 
-						if (node.Instruction == X86.Mov)
+						if (node.Instruction == X86.CallStatic)
+							continue;
+
+						if (node.Instruction == X86.CallReg)
+							continue;
+
+						if (node.Instruction == X86.Mov32)
 						{
 							Move(node);
 						}
@@ -88,7 +96,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void Move(InstructionNode node)
 		{
-			if (node.Instruction != X86.Mov)
+			if (node.Instruction != X86.Mov32)
 				return;
 
 			var source = node.Operand1;

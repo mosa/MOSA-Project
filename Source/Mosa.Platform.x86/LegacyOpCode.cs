@@ -5,17 +5,17 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// x86 OpCode
 	/// </summary>
-	internal sealed class LegacyOpCode
+	public sealed class LegacyOpCode
 	{
 		/// <summary>
 		/// Byte code
 		/// </summary>
-		internal byte[] Code;
+		public byte[] Code;
 
 		/// <summary>
 		/// Register field to extend the operation
 		/// </summary>
-		internal byte? RegField;
+		public byte? RegField;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LegacyOpCode"/> class.

@@ -78,7 +78,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void RemSigned(InstructionNode node)
 		{
-			if (LongOperandTransformationStage.Any64Bit(node))
+			if (LongOperandStage.Any64Bit(node))
 			{
 				ReplaceWithDivisionCall(node, "smod64", node.Result, node.Operand1, node.Operand2);
 			}
@@ -90,7 +90,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void DivSigned(InstructionNode node)
 		{
-			if (LongOperandTransformationStage.Any64Bit(node))
+			if (LongOperandStage.Any64Bit(node))
 			{
 				ReplaceWithDivisionCall(node, "sdiv64", node.Result, node.Operand1, node.Operand2);
 			}
@@ -102,7 +102,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void RemUnsigned(InstructionNode node)
 		{
-			if (LongOperandTransformationStage.Any64Bit(node))
+			if (LongOperandStage.Any64Bit(node))
 			{
 				ReplaceWithDivisionCall(node, "umod64", node.Result, node.Operand1, node.Operand2);
 			}
@@ -114,7 +114,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void DivUnsigned(InstructionNode node)
 		{
-			if (LongOperandTransformationStage.Any64Bit(node))
+			if (LongOperandStage.Any64Bit(node))
 			{
 				ReplaceWithDivisionCall(node, "udiv64", node.Result, node.Operand1, node.Operand2);
 			}

@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			methodCompiler.SplitLongOperand(n, out Operand op0L, out Operand op0H);
 
-			context.SetInstruction2(X86.Div, result2, result, op0H, op0L, d);
+			context.SetInstruction2(X86.Div32, result2, result, op0H, op0L, d);
 		}
 
 		#endregion Methods

@@ -68,12 +68,12 @@ namespace Mosa.Platform.x86.Stages
 			Operand ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
 			Operand esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
-			context.SetInstruction(X86.Push, null, ebp);
-			context.AppendInstruction(X86.Mov, ebp, esp);
+			context.SetInstruction(X86.Push32, null, ebp);
+			context.AppendInstruction(X86.Mov32, ebp, esp);
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Sub, esp, esp, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(X86.SubConst32, esp, esp, CreateConstant(-MethodCompiler.StackSize));
 			}
 		}
 
@@ -90,10 +90,10 @@ namespace Mosa.Platform.x86.Stages
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Add, esp, esp, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(X86.AddConst32, esp, esp, CreateConstant(-MethodCompiler.StackSize));
 			}
 
-			context.AppendInstruction(X86.Pop, ebp);
+			context.AppendInstruction(X86.Pop32, ebp);
 			context.AppendInstruction(X86.Ret);
 		}
 	}

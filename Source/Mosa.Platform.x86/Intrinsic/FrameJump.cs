@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// FrameJump
 	/// </summary>
 	internal class FrameJump : IIntrinsicPlatformMethod
 	{
@@ -33,15 +33,15 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand exceptionRegister = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.Object, methodCompiler.Architecture.ExceptionRegister);
 
 			// Move all virtual registers into physical registers - necessary since stack frame pointer will change
-			context.SetInstruction(X86.Mov, eax, v0);
-			context.AppendInstruction(X86.Mov, ebx, v1);
-			context.AppendInstruction(X86.Mov, ecx, v2);
-			context.AppendInstruction(X86.Mov, exceptionRegister, v3);
+			context.SetInstruction(X86.Mov32, eax, v0);
+			context.AppendInstruction(X86.Mov32, ebx, v1);
+			context.AppendInstruction(X86.Mov32, ecx, v2);
+			context.AppendInstruction(X86.Mov32, exceptionRegister, v3);
 
 			// Update the frame and stack registers
-			context.AppendInstruction(X86.Mov, ebp, ecx);
-			context.AppendInstruction(X86.Mov, esp, ebx);
-			context.AppendInstruction(X86.Jmp, null, eax);
+			context.AppendInstruction(X86.Mov32, ebp, ecx);
+			context.AppendInstruction(X86.Mov32, esp, ebx);
+			context.AppendInstruction(X86.JmpReg, null, eax);
 
 			// future - common code (refactor opportunity)
 			context.GotoNext();

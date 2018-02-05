@@ -28,12 +28,12 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand ebx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 
 			// Move all virtual registers into physical registers - necessary since stack frame pointer will change
-			context.SetInstruction(X86.Mov, eax, v0);
-			context.AppendInstruction(X86.Mov, ebx, v1);
+			context.SetInstruction(X86.Mov32, eax, v0);
+			context.AppendInstruction(X86.Mov32, ebx, v1);
 
 			// Update the frame and stack registers
-			context.AppendInstruction(X86.Mov, ebp, ebx);
-			context.AppendInstruction(X86.Mov, esp, eax);
+			context.AppendInstruction(X86.Mov32, ebp, ebx);
+			context.AppendInstruction(X86.Mov32, esp, eax);
 			context.AppendInstruction(X86.IRetd);
 
 			// future - common code (refactor opportunity)

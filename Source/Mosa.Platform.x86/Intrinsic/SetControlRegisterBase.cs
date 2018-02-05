@@ -35,7 +35,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
 			Operand cr = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, control);
 
-			context.SetInstruction(X86.Mov, eax, operand1);
+			context.SetInstruction(X86.Mov32, eax, operand1);
 			context.AppendInstruction(X86.MovCRStore, null, cr, eax);
 		}
 

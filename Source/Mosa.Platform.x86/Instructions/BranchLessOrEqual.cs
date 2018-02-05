@@ -9,23 +9,41 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// BranchLessOrEqual
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
+	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class BranchLessOrEqual : X86Instruction
 	{
-		private static readonly byte[] opcode = new byte[] { 0x0F, 0x08 };
+		public override string AlternativeName { get { return "JLE"; } }
 
-		// for internal code generator use
-		public override byte[] __opcode { get { return opcode; } }
+		public static readonly byte[] opcode = new byte[] { 0x0F, 0x8E };
 
-		public BranchLessOrEqual()
+		internal BranchLessOrEqual()
 			: base(0, 0)
 		{
 		}
 
+		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
+
+		public override bool ThreeTwoAddressConversion { get { return false; } }
+
+		public override BaseInstruction GetOpposite()
+		{
+			return X86.BranchGreaterThan;
+		}
+
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
+			System.Diagnostics.Debug.Assert(node.BranchTargets.Count >= 1);
+			System.Diagnostics.Debug.Assert(node.BranchTargets[0] != null);
+
 			emitter.Write(opcode);
+			(emitter as X86CodeEmitter).EmitRelativeBranchTarget(node.BranchTargets[0].Label);
 		}
+
+		// The following is used by the automated code generator.
+
+		public override byte[] __opcode { get { return opcode; } }
 	}
 }
 

@@ -9,23 +9,31 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Lock
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
+	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Lock : X86Instruction
 	{
-		private static readonly byte[] opcode = new byte[] { 0xF0 };
+		public static readonly byte[] opcode = new byte[] { 0xF0 };
 
-		// for internal code generator use
-		public override byte[] __opcode { get { return opcode; } }
-
-		public Lock()
+		internal Lock()
 			: base(0, 0)
 		{
 		}
 
+		public override bool HasIRUnspecifiedSideEffect { get { return true; } }
+
+		public override bool ThreeTwoAddressConversion { get { return false; } }
+
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
+
 			emitter.Write(opcode);
 		}
+
+		// The following is used by the automated code generator.
+
+		public override byte[] __opcode { get { return opcode; } }
 	}
 }
 
