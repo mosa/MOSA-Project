@@ -492,7 +492,16 @@
     <Compile Include="IR\StoreParameterFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\StoreParameterInteger.cs">
+    <Compile Include="IR\StoreParameterInteger16.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\StoreParameterInteger32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\StoreParameterInteger64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\StoreParameterInteger8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\SubFloatR4.cs">

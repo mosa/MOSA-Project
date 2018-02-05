@@ -211,7 +211,10 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				newNode.Instruction = IRInstruction.MoveZeroExtended;
 			}
-			else if (newNode.Instruction == IRInstruction.StoreParameterInteger)
+			else if (newNode.Instruction == IRInstruction.StoreParameterInteger8
+				|| newNode.Instruction == IRInstruction.StoreParameterInteger16
+				|| newNode.Instruction == IRInstruction.StoreParameterInteger32
+				|| newNode.Instruction == IRInstruction.StoreParameterInteger64)
 			{
 				newNode.Instruction = IRInstruction.MoveInteger;
 				newNode.Result = newNode.Operand1;

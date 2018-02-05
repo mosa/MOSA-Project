@@ -43,7 +43,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.ShiftLeft64, ShiftLeft64);
 			AddVisitation(IRInstruction.ShiftRight64, ShiftRight64);
 			AddVisitation(IRInstruction.StoreInteger, StoreInteger);
-			AddVisitation(IRInstruction.StoreParameterInteger, StoreParameterInteger);
+			AddVisitation(IRInstruction.StoreParameterInteger64, StoreParameterInteger64);
 			AddVisitation(IRInstruction.SubSigned64, SubUnsigned64);
 			AddVisitation(IRInstruction.SubUnsigned64, SubUnsigned64);
 
@@ -247,18 +247,6 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Size == InstructionSize.Size64)
 			{
 				ExpandStore(context);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for StoreInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void StoreParameterInteger(Context context)
-		{
-			if (context.Size == InstructionSize.Size64)
-			{
-				ExpandStoreParameter(context);
 			}
 		}
 
@@ -835,7 +823,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Expands the store instruction for 64-bits.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void ExpandStoreParameter(Context context)
+		private void StoreParameterInteger64(Context context)
 		{
 			SplitLongOperand(context.Operand1, out Operand op0L, out Operand op0H);
 			SplitLongOperand(context.Operand2, out Operand op1L, out Operand op1H);

@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// StoreParameterInteger
+	/// StoreParameterInteger32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class StoreParameterInteger : BaseIRInstruction
+	public sealed class StoreParameterInteger32 : BaseIRInstruction
 	{
-		public StoreParameterInteger()
+		public StoreParameterInteger32()
 			: base(2, 0)
 		{
 		}

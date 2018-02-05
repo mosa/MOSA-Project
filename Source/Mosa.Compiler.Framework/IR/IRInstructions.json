@@ -746,7 +746,28 @@
 			"MemoryWrite": "true"
 		},
 		{
-			"Name": "StoreParameterInteger",
+			"Name": "StoreParameterInteger8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreParameterInteger16",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreParameterInteger32",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreParameterInteger64",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
