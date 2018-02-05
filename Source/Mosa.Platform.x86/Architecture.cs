@@ -310,26 +310,22 @@ namespace Mosa.Platform.x86
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
 			BaseInstruction instruction = X86.Mov32;
-			var size = InstructionSize.Size32;
 
 			if (destination.IsR4)
 			{
 				instruction = X86.Movss;
-				size = InstructionSize.Size32;
 			}
 			else if (destination.IsR8)
 			{
 				instruction = X86.Movsd;
-				size = InstructionSize.Size64;
 			}
 
-			context.AppendInstruction(instruction, size, destination, source);
+			context.AppendInstruction(instruction, destination, source);
 		}
 
 		public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
 		{
 			BaseInstruction instruction = X86.MovStore32;
-			InstructionSize size = InstructionSize.Size32;
 
 			if (value.IsR4)
 			{
@@ -338,10 +334,9 @@ namespace Mosa.Platform.x86
 			else if (value.IsR8)
 			{
 				instruction = X86.MovsdStore;
-				size = InstructionSize.Size64;
 			}
 
-			context.AppendInstruction(instruction, size, null, destination, offset, value);
+			context.AppendInstruction(instruction, null, destination, offset, value);
 		}
 
 		/// <summary>
@@ -354,7 +349,6 @@ namespace Mosa.Platform.x86
 		public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
 		{
 			BaseInstruction instruction = X86.MovLoad32;
-			var size = InstructionSize.Size32;
 
 			if (destination.IsR4)
 			{
@@ -363,10 +357,9 @@ namespace Mosa.Platform.x86
 			else if (destination.IsR8)
 			{
 				instruction = X86.MovsdLoad;
-				size = InstructionSize.Size64;
 			}
 
-			context.AppendInstruction(instruction, size, destination, source, offset);
+			context.AppendInstruction(instruction, destination, source, offset);
 		}
 
 		/// <summary>
@@ -408,14 +401,14 @@ namespace Mosa.Platform.x86
 			for (int i = largeAlignedTypeSize; i < alignedSize; i += NativeAlignment)
 			{
 				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
-				context.AppendInstruction(X86.MovLoad32, InstructionSize.Size32, tmp, srcReg, index);
-				context.AppendInstruction(X86.MovStore32, InstructionSize.Size32, null, dstReg, index, tmp);
+				context.AppendInstruction(X86.MovLoad32, tmp, srcReg, index);
+				context.AppendInstruction(X86.MovStore32, null, dstReg, index, tmp);
 			}
 			for (int i = alignedSize; i < size; i++)
 			{
 				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
-				context.AppendInstruction(X86.MovLoad8, InstructionSize.Size8, tmp, srcReg, index);
-				context.AppendInstruction(X86.MovStore8, InstructionSize.Size8, null, dstReg, index, tmp);
+				context.AppendInstruction(X86.MovLoad8, tmp, srcReg, index);
+				context.AppendInstruction(X86.MovStore8, null, dstReg, index, tmp);
 			}
 
 			context.AppendInstruction(IRInstruction.StableObjectTracking);

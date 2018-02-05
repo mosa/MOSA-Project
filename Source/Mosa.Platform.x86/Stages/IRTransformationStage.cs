@@ -99,7 +99,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(node.Result.IsR4);
 			Debug.Assert(node.Operand1.IsR4);
 
-			node.ReplaceInstruction(X86.Addss, InstructionSize.Size32);
+			node.ReplaceInstruction(X86.Addss);
 		}
 
 		/// <summary>
@@ -111,7 +111,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(node.Result.IsR8);
 			Debug.Assert(node.Operand1.IsR8);
 
-			node.ReplaceInstruction(X86.Addsd, InstructionSize.Size32);
+			node.ReplaceInstruction(X86.Addsd);
 		}
 
 		/// <summary>
@@ -124,17 +124,17 @@ namespace Mosa.Platform.x86.Stages
 
 			if (node.Operand1.IsStaticField)
 			{
-				node.SetInstruction(X86.Mov32, NativeInstructionSize, node.Result, node.Operand1);
+				node.SetInstruction(X86.Mov32, node.Result, node.Operand1);
 			}
 			else if (node.Operand1.IsStackLocal)
 			{
-				node.SetInstruction(X86.Lea32, NativeInstructionSize, node.Result, StackFrame, node.Operand1);
+				node.SetInstruction(X86.Lea32, node.Result, StackFrame, node.Operand1);
 			}
 			else
 			{
 				var offset = CreateConstant(node.Operand1.Offset);
 
-				node.SetInstruction(X86.Lea32, NativeInstructionSize, node.Result, StackFrame, offset);
+				node.SetInstruction(X86.Lea32, node.Result, StackFrame, offset);
 			}
 		}
 
@@ -195,7 +195,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void CompareFloatR4(Context context)
 		{
-			FloatCompare(context, X86.Ucomiss, InstructionSize.Size32);
+			FloatCompare(context, X86.Ucomiss);
 		}
 
 		/// <summary>
@@ -204,7 +204,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void CompareFloatR8(Context context)
 		{
-			FloatCompare(context, X86.Ucomisd, InstructionSize.Size64);
+			FloatCompare(context, X86.Ucomisd);
 		}
 
 		/// <summary>
@@ -342,7 +342,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(node.Result.IsR4);
 			Debug.Assert(node.Operand1.IsR4);
 
-			node.ReplaceInstruction(X86.Divss, InstructionSize.Size32);
+			node.ReplaceInstruction(X86.Divss);
 		}
 
 		/// <summary>
@@ -354,7 +354,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(node.Result.IsR8);
 			Debug.Assert(node.Operand1.IsR8);
 
-			node.ReplaceInstruction(X86.Divsd, InstructionSize.Size32);
+			node.ReplaceInstruction(X86.Divsd);
 		}
 
 		/// <summary>
@@ -399,7 +399,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="size">The size.</param>
-		private void FloatCompare(Context context, X86Instruction instruction, InstructionSize size)
+		private void FloatCompare(Context context, X86Instruction instruction)
 		{
 			Operand result = context.Result;
 			Operand left = context.Operand1;
@@ -437,7 +437,7 @@ namespace Mosa.Platform.x86.Stages
 						var nextBlock = Split(context);
 
 						context.SetInstruction(X86.MovConst32, result, CreateConstant(1));
-						context.AppendInstruction(instruction, size, null, left, right);
+						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.BranchParity, newBlocks[1].Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
@@ -462,7 +462,7 @@ namespace Mosa.Platform.x86.Stages
 						var nextBlock = Split(context);
 
 						context.SetInstruction(X86.Mov32, result, CreateConstant(1));
-						context.AppendInstruction(instruction, size, null, left, right);
+						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.BranchParity, nextBlock.Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 						newBlocks[0].AppendInstruction(X86.SetNotEqual, result);
@@ -479,7 +479,7 @@ namespace Mosa.Platform.x86.Stages
 						//	seta	al
 
 						context.SetInstruction(X86.Mov32, result, ConstantZero);
-						context.AppendInstruction(instruction, size, null, right, left);
+						context.AppendInstruction(instruction, null, right, left);
 						context.AppendInstruction(X86.SetUnsignedGreaterThan, result);
 						break;
 					}
@@ -491,7 +491,7 @@ namespace Mosa.Platform.x86.Stages
 						//	seta	al
 
 						context.SetInstruction(X86.MovConst32, result, ConstantZero);
-						context.AppendInstruction(instruction, size, null, left, right);
+						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.SetUnsignedGreaterThan, result);
 						break;
 					}
@@ -503,7 +503,7 @@ namespace Mosa.Platform.x86.Stages
 						//	setae	al
 
 						context.SetInstruction(X86.Mov32, result, ConstantZero);
-						context.AppendInstruction(instruction, size, null, right, left);
+						context.AppendInstruction(instruction, null, right, left);
 						context.AppendInstruction(X86.SetUnsignedGreaterOrEqual, result);
 						break;
 					}
@@ -515,7 +515,7 @@ namespace Mosa.Platform.x86.Stages
 						//	setae	al
 
 						context.SetInstruction(X86.Mov32, result, ConstantZero);
-						context.AppendInstruction(instruction, size, null, left, right);
+						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.SetUnsignedGreaterOrEqual, result);
 						break;
 					}
@@ -538,14 +538,14 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Debug.Assert(node.Result.IsR4);
 
-			node.SetInstruction(X86.MovssLoad, node.Size, node.Result, StackFrame, node.Operand1);
+			node.SetInstruction(X86.MovssLoad, node.Result, StackFrame, node.Operand1);
 		}
 
 		private void LoadParameterFloatR8(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR8);
 
-			node.SetInstruction(X86.MovsdLoad, node.Size, node.Result, StackFrame, node.Operand1);
+			node.SetInstruction(X86.MovsdLoad, node.Result, StackFrame, node.Operand1);
 		}
 
 		public static BaseInstruction GetMovLoad(InstructionSize size)
@@ -581,7 +581,7 @@ namespace Mosa.Platform.x86.Stages
 
 			var movLoad = GetMovLoad(node.Size);
 
-			node.SetInstruction(movLoad, node.Size, node.Result, StackFrame, node.Operand1);
+			node.SetInstruction(movLoad, node.Result, StackFrame, node.Operand1);
 		}
 
 		private void LoadParameterSignExtended(InstructionNode node)
@@ -590,11 +590,11 @@ namespace Mosa.Platform.x86.Stages
 
 			if (node.Size == InstructionSize.Size8)
 			{
-				node.SetInstruction(X86.MovsxLoad8, node.Size, node.Result, StackFrame, node.Operand1);
+				node.SetInstruction(X86.MovsxLoad8, node.Result, StackFrame, node.Operand1);
 			}
 			else if (node.Size == InstructionSize.Size16)
 			{
-				node.SetInstruction(X86.MovsxLoad16, node.Size, node.Result, StackFrame, node.Operand1);
+				node.SetInstruction(X86.MovsxLoad16, node.Result, StackFrame, node.Operand1);
 			}
 		}
 
@@ -604,11 +604,11 @@ namespace Mosa.Platform.x86.Stages
 
 			if (node.Size == InstructionSize.Size8)
 			{
-				node.SetInstruction(X86.MovzxLoad8, node.Size, node.Result, StackFrame, node.Operand1);
+				node.SetInstruction(X86.MovzxLoad8, node.Result, StackFrame, node.Operand1);
 			}
 			else if (node.Size == InstructionSize.Size16)
 			{
-				node.SetInstruction(X86.MovzxLoad16, node.Size, node.Result, StackFrame, node.Operand1);
+				node.SetInstruction(X86.MovzxLoad16, node.Result, StackFrame, node.Operand1);
 			}
 		}
 
@@ -616,14 +616,14 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Debug.Assert(node.Result.IsR4);
 
-			node.SetInstruction(X86.MovssLoad, node.Size, node.Result, node.Operand1, node.Operand2);
+			node.SetInstruction(X86.MovssLoad, node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void LoadFloatR8(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR8);
 
-			node.SetInstruction(X86.MovsdLoad, node.Size, node.Result, node.Operand1, node.Operand2);
+			node.SetInstruction(X86.MovsdLoad, node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void LoadInteger(InstructionNode node)
@@ -635,7 +635,7 @@ namespace Mosa.Platform.x86.Stages
 
 			var movLoad = GetMovLoad(node.Size);
 
-			node.SetInstruction(movLoad, node.Size, node.Result, node.Operand1, node.Operand2);
+			node.SetInstruction(movLoad, node.Result, node.Operand1, node.Operand2);
 		}
 
 		/// <summary>
@@ -650,11 +650,11 @@ namespace Mosa.Platform.x86.Stages
 
 			if (node.Size == InstructionSize.Size8)
 			{
-				node.SetInstruction(X86.MovsxLoad8, node.Size, node.Result, node.Operand1, node.Operand2);
+				node.SetInstruction(X86.MovsxLoad8, node.Result, node.Operand1, node.Operand2);
 			}
 			else if (node.Size == InstructionSize.Size16)
 			{
-				node.SetInstruction(X86.MovsxLoad16, node.Size, node.Result, node.Operand1, node.Operand2);
+				node.SetInstruction(X86.MovsxLoad16, node.Result, node.Operand1, node.Operand2);
 			}
 		}
 
@@ -670,11 +670,11 @@ namespace Mosa.Platform.x86.Stages
 
 			if (node.Size == InstructionSize.Size8)
 			{
-				node.SetInstruction(X86.MovzxLoad8, node.Size, node.Result, node.Operand1, node.Operand2);
+				node.SetInstruction(X86.MovzxLoad8, node.Result, node.Operand1, node.Operand2);
 			}
 			else if (node.Size == InstructionSize.Size16)
 			{
-				node.SetInstruction(X86.MovzxLoad16, node.Size, node.Result, node.Operand1, node.Operand2);
+				node.SetInstruction(X86.MovzxLoad16, node.Result, node.Operand1, node.Operand2);
 			}
 		}
 
@@ -759,7 +759,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(node.Result.IsR4);
 			Debug.Assert(node.Operand1.IsR4);
 
-			node.ReplaceInstruction(X86.Mulss, InstructionSize.Size32);
+			node.ReplaceInstruction(X86.Mulss);
 		}
 
 		/// <summary>
@@ -771,7 +771,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(node.Result.IsR8);
 			Debug.Assert(node.Operand1.IsR8);
 
-			node.ReplaceInstruction(X86.Mulsd, InstructionSize.Size32);
+			node.ReplaceInstruction(X86.Mulsd);
 		}
 
 		/// <summary>
@@ -880,12 +880,12 @@ namespace Mosa.Platform.x86.Stages
 
 		private void StoreFloatR4(InstructionNode node)
 		{
-			node.SetInstruction(X86.MovssStore, node.Size, null, node.Operand1, node.Operand2, node.Operand3);
+			node.SetInstruction(X86.MovssStore, null, node.Operand1, node.Operand2, node.Operand3);
 		}
 
 		private void StoreFloatR8(InstructionNode node)
 		{
-			node.SetInstruction(X86.MovsdStore, node.Size, null, node.Operand1, node.Operand2, node.Operand3);
+			node.SetInstruction(X86.MovsdStore, null, node.Operand1, node.Operand2, node.Operand3);
 		}
 
 		private void StoreInteger(InstructionNode node)
@@ -899,12 +899,12 @@ namespace Mosa.Platform.x86.Stages
 
 		private void StoreParameterFloatR4(InstructionNode node)
 		{
-			node.SetInstruction(X86.MovssStore, node.Size, null, StackFrame, node.Operand1, node.Operand2);
+			node.SetInstruction(X86.MovssStore, null, StackFrame, node.Operand1, node.Operand2);
 		}
 
 		private void StoreParameterFloatR8(InstructionNode node)
 		{
-			node.SetInstruction(X86.MovsdStore, node.Size, null, StackFrame, node.Operand1, node.Operand2);
+			node.SetInstruction(X86.MovsdStore, null, StackFrame, node.Operand1, node.Operand2);
 		}
 
 		private void StoreParameterInteger(InstructionNode node)
@@ -923,7 +923,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(node.Result.IsR4);
 			Debug.Assert(node.Operand1.IsR4);
 
-			node.ReplaceInstruction(X86.Subss, InstructionSize.Size32);
+			node.ReplaceInstruction(X86.Subss);
 		}
 
 		/// <summary>
@@ -935,7 +935,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(node.Result.IsR8);
 			Debug.Assert(node.Operand1.IsR8);
 
-			node.ReplaceInstruction(X86.Subsd, InstructionSize.Size64);
+			node.ReplaceInstruction(X86.Subsd);
 		}
 
 		/// <summary>

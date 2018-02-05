@@ -53,29 +53,25 @@ namespace Mosa.Platform.x86.Stages
 			node.Operand1 = result;
 
 			X86Instruction move = null;
-			var size = InstructionSize.None;
 
 			if (result.Type.IsR4)
 			{
 				move = X86.Movss;
-				size = InstructionSize.Size32;
 			}
 			else if (result.Type.IsR8)
 			{
 				move = X86.Movsd;
-				size = InstructionSize.Size64;
 			}
 			else
 			{
 				move = X86.Mov32;
-				size = InstructionSize.Size32;
 			}
 
 			var newNode = new InstructionNode(move, result, operand1)
 			{
-				Size = size,
 				Label = label
 			};
+
 			node.Previous.Insert(newNode);
 		}
 	}

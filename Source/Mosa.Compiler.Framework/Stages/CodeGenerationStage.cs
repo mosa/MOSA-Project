@@ -124,10 +124,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (node.Instruction is BasePlatformInstruction baseInstruction)
 					{
-						if (node.Size == InstructionSize.Native | node.Size == InstructionSize.None)
-						{
-							node.Size = NativeInstructionSize;
-						}
+						//if (node.Size == InstructionSize.Native | node.Size == InstructionSize.None)
+						//{
+						//	node.Size = NativeInstructionSize;
+						//}
 
 						baseInstruction.Emit(node, codeEmitter);
 

@@ -117,7 +117,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand source = context.Operand1;
 				Operand offset = context.Operand2;
 
-				context.SetInstruction(X86.MovLoad32, InstructionSize.Size32, result, source, offset);
+				context.SetInstruction(X86.MovLoad32, result, source, offset);
 				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0x000000ff));
 			}
 		}
@@ -133,7 +133,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand source = context.Operand1;
 				Operand offset = context.Operand2;
 
-				context.SetInstruction(X86.MovLoad32, InstructionSize.Size32, result, source, offset);
+				context.SetInstruction(X86.MovLoad32, result, source, offset);
 				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0x0000ffff));
 			}
 		}
