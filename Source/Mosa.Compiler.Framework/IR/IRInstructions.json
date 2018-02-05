@@ -21,14 +21,28 @@
 			"OperandCount": 1
 		},
 		{
-			"Name": "AddSigned",
+			"Name": "AddSigned32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "AddUnsigned",
+			"Name": "AddUnsigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "AddSigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "AddUnsigned64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
@@ -400,7 +414,13 @@
 			"Commutative": "true"
 		},
 		{
-			"Name": "LogicalNot",
+			"Name": "LogicalNot32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "LogicalNot64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1

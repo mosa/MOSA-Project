@@ -800,6 +800,16 @@ namespace Mosa.Compiler.Framework
 			return IRInstruction.StoreParameterInteger;
 		}
 
+		public BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
+		{
+			return NativeInstructionSize == InstructionSize.Size32 ? instruction32 : instruction64;
+		}
+
+		public BaseInstruction Select(bool is64bit, BaseInstruction instruction32, BaseInstruction instruction64)
+		{
+			return !is64bit ? instruction32 : instruction64;
+		}
+
 		#endregion Helpers
 
 		#region Constant Helper Methods

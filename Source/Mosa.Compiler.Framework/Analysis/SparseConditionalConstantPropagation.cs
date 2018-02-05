@@ -480,8 +480,10 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Load(node);
 			}
-			else if (instruction == IRInstruction.AddSigned
-				|| instruction == IRInstruction.AddUnsigned
+			else if (instruction == IRInstruction.AddSigned32
+				|| instruction == IRInstruction.AddUnsigned32
+				|| instruction == IRInstruction.AddSigned64
+				|| instruction == IRInstruction.AddUnsigned64
 				|| instruction == IRInstruction.SubSigned
 				|| instruction == IRInstruction.SubUnsigned
 				|| instruction == IRInstruction.MulSigned
@@ -821,7 +823,8 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private bool IntegerOperation(BaseInstruction instruction, ulong operand1, ulong operand2, ConditionCode conditionCode, out ulong result)
 		{
-			if (instruction == IRInstruction.AddSigned || instruction == IRInstruction.AddUnsigned)
+			if (instruction == IRInstruction.AddSigned32 || instruction == IRInstruction.AddUnsigned32 ||
+				instruction == IRInstruction.AddSigned64 || instruction == IRInstruction.AddUnsigned64)
 			{
 				result = operand1 + operand2;
 				return true;

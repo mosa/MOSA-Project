@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 			//var nodeW = new Node(NodeType.OperandVariable, "w", 3);
 
-			var instruction1 = new Node(IRInstruction.AddUnsigned);
+			var instruction1 = new Node(IRInstruction.AddUnsigned32);
 			var instruction2 = new Node(IRInstruction.MulUnsigned);
 			var instruction3 = new Node(IRInstruction.MulUnsigned);
 
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 			context.AppendInstruction(IRInstruction.MulUnsigned, t1, x, y);
 			context.AppendInstruction(IRInstruction.MulUnsigned, t2, x, z);
-			context.AppendInstruction(IRInstruction.AddUnsigned, r, t1, t2);
+			context.AppendInstruction(IRInstruction.AddUnsigned32, r, t1, t2);
 
 			return basicBlocks;
 		}
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 		public static TransformRule GetTestExpression2()
 		{
-			var expression = GetTestExpression("(AddUnsigned(MulUnsigned x y)(MulUnsigned x z)) -> (MulUnsigned x (AddUnsigned y z))");
+			var expression = GetTestExpression("(AddUnsigned32(MulUnsigned x y)(MulUnsigned x z)) -> (MulUnsigned x (AddUnsigned32 y z))");
 
 			return expression;
 		}

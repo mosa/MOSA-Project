@@ -225,7 +225,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(IRInstruction.AddSigned, StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
+			context.AppendInstruction(Select(IRInstruction.AddSigned32, IRInstruction.AddSigned64), StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
 		}
 
 		private int CalculateParameterStackSize(List<Operand> operands)

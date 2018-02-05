@@ -22,8 +22,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.AddFloatR4, AddFloatR4);
 			AddVisitation(IRInstruction.AddFloatR8, AddFloatR8);
 			AddVisitation(IRInstruction.AddressOf, AddressOf);
-			AddVisitation(IRInstruction.AddSigned, AddSigned);
-			AddVisitation(IRInstruction.AddUnsigned, AddUnsigned);
+			AddVisitation(IRInstruction.AddSigned32, AddSigned32);
+			AddVisitation(IRInstruction.AddUnsigned32, AddUnsigned32);
 			AddVisitation(IRInstruction.ArithmeticShiftRight, ArithmeticShiftRight);
 			AddVisitation(IRInstruction.Break, Break);
 			AddVisitation(IRInstruction.CallDirect, CallDirect);
@@ -57,7 +57,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.LoadParameterZeroExtended, LoadParameterZeroExtended);
 			AddVisitation(IRInstruction.LoadParameterCompound, LoadParameterCompound);
 			AddVisitation(IRInstruction.LogicalAnd, LogicalAnd);
-			AddVisitation(IRInstruction.LogicalNot, LogicalNot);
+			AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
 			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
 			AddVisitation(IRInstruction.LogicalXor, LogicalXor);
 			AddVisitation(IRInstruction.MoveFloatR4, MoveFloatR4);
@@ -138,20 +138,12 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		/// <summary>
-		/// Visitation function for AddSigned.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		private void AddSigned(InstructionNode node)
+		private void AddSigned32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Add32);
 		}
 
-		/// <summary>
-		/// Visitation function for AddUnsigned.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		private void AddUnsigned(InstructionNode node)
+		private void AddUnsigned32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Add32);
 		}
@@ -691,18 +683,12 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalNot instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void LogicalNot(Context context)
+		private void LogicalNot32(Context context)
 		{
 			var dest = context.Result;
 
 			context.SetInstruction(X86.Mov32, dest, context.Operand1);
-
-			if (dest.IsByte)
-				context.AppendInstruction(X86.XorConst32, dest, dest, CreateConstant(0xFF));
-			else if (dest.IsU2)
-				context.AppendInstruction(X86.XorConst32, dest, dest, CreateConstant(0xFFFF));
-			else
-				context.AppendInstruction(X86.Not32, dest, dest);
+			context.AppendInstruction(X86.Not32, dest, dest);
 		}
 
 		/// <summary>

@@ -22,8 +22,8 @@ namespace Mosa.Platform.x86.Stages
 
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(IRInstruction.AddSigned, AddSigned);
-			AddVisitation(IRInstruction.AddUnsigned, AddUnsigned);
+			AddVisitation(IRInstruction.AddSigned64, AddUnsigned64);
+			AddVisitation(IRInstruction.AddUnsigned64, AddUnsigned64);
 			AddVisitation(IRInstruction.ArithmeticShiftRight, ArithmeticShiftRight);
 			AddVisitation(IRInstruction.Call, Call);
 			AddVisitation(IRInstruction.CompareInteger, CompareInteger);
@@ -50,7 +50,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Split64, Split64);
 
 			AddVisitation(IRInstruction.LogicalAnd, LogicalAnd);
-			AddVisitation(IRInstruction.LogicalNot, LogicalNot);
+			AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
 			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
 			AddVisitation(IRInstruction.LogicalXor, LogicalXor);
 		}
@@ -63,30 +63,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		#region Visitation Methods
-
-		/// <summary>
-		/// Visitation function for AddSigned.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void AddSigned(Context context)
-		{
-			if (Any64Bit(context.Node))
-			{
-				ExpandAdd(context);
-			}
-		}
-
-		/// <summary>
-		/// Visitation function for AddUnsigned.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void AddUnsigned(Context context)
-		{
-			if (Any64Bit(context.Node))
-			{
-				ExpandAdd(context);
-			}
-		}
 
 		/// <summary>
 		/// Visitation function for ArithmeticShiftRightInstruction.
@@ -211,7 +187,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalNotInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void LogicalNot(Context context)
+		private void LogicalNot32(Context context)
 		{
 			if (Any64Bit(context.Node))
 			{
@@ -432,7 +408,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Expands the add instruction for 64-bit operands.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void ExpandAdd(Context context)
+		private void AddUnsigned64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);

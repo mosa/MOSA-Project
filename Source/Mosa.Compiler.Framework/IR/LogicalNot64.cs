@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// LogicalNot
+	/// LogicalNot64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class LogicalNot : BaseIRInstruction
+	public sealed class LogicalNot64 : BaseIRInstruction
 	{
-		public LogicalNot()
+		public LogicalNot64()
 			: base(1, 1)
 		{
 		}

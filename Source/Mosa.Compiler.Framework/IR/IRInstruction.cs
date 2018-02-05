@@ -12,8 +12,10 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly AddFloatR4 AddFloatR4 = new AddFloatR4();
 		public static readonly AddFloatR8 AddFloatR8 = new AddFloatR8();
 		public static readonly AddressOf AddressOf = new AddressOf();
-		public static readonly AddSigned AddSigned = new AddSigned();
-		public static readonly AddUnsigned AddUnsigned = new AddUnsigned();
+		public static readonly AddSigned32 AddSigned32 = new AddSigned32();
+		public static readonly AddUnsigned32 AddUnsigned32 = new AddUnsigned32();
+		public static readonly AddSigned64 AddSigned64 = new AddSigned64();
+		public static readonly AddUnsigned64 AddUnsigned64 = new AddUnsigned64();
 		public static readonly ArithmeticShiftRight ArithmeticShiftRight = new ArithmeticShiftRight();
 		public static readonly BlockEnd BlockEnd = new BlockEnd();
 		public static readonly BlockStart BlockStart = new BlockStart();
@@ -68,7 +70,8 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly LoadParameterSignExtended LoadParameterSignExtended = new LoadParameterSignExtended();
 		public static readonly LoadParameterZeroExtended LoadParameterZeroExtended = new LoadParameterZeroExtended();
 		public static readonly LogicalAnd LogicalAnd = new LogicalAnd();
-		public static readonly LogicalNot LogicalNot = new LogicalNot();
+		public static readonly LogicalNot32 LogicalNot32 = new LogicalNot32();
+		public static readonly LogicalNot64 LogicalNot64 = new LogicalNot64();
 		public static readonly LogicalOr LogicalOr = new LogicalOr();
 		public static readonly LogicalXor LogicalXor = new LogicalXor();
 		public static readonly MemorySet MemorySet = new MemorySet();

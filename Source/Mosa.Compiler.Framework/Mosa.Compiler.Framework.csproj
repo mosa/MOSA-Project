@@ -123,10 +123,16 @@
     <Compile Include="IR\AddressOf.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\AddSigned.cs">
+    <Compile Include="IR\AddSigned32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\AddUnsigned.cs">
+    <Compile Include="IR\AddSigned64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\AddUnsigned32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\AddUnsigned64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\ArithmeticShiftRight.cs">
@@ -324,7 +330,10 @@
     <Compile Include="IR\LogicalAnd.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LogicalNot.cs">
+    <Compile Include="IR\LogicalNot32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LogicalNot64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\LogicalOr.cs">

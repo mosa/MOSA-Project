@@ -5,17 +5,15 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// AddSigned
+	/// LogicalNot32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class AddSigned : BaseIRInstruction
+	public sealed class LogicalNot32 : BaseIRInstruction
 	{
-		public AddSigned()
-			: base(2, 1)
+		public LogicalNot32()
+			: base(1, 1)
 		{
 		}
-
-		public override bool IsCommutative { get { return true; } }
 	}
 }
 

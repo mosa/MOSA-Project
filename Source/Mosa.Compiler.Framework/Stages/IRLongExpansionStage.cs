@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.LogicalAnd, LogicalAnd);
 			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
 			AddVisitation(IRInstruction.LogicalXor, LogicalXor);
-			AddVisitation(IRInstruction.LogicalNot, LogicalNot);
+			AddVisitation(IRInstruction.LogicalNot64, LogicalNot64);
 			AddVisitation(IRInstruction.LoadParameterInteger, LoadParameterInteger);
 			AddVisitation(IRInstruction.LoadInteger, LoadInteger);
 		}
@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalNot(InstructionNode node)
+		private void LogicalNot64(InstructionNode node)
 		{
 			if (!node.Result.Is64BitInteger)
 				return;
@@ -113,8 +113,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var context = new Context(node);
 
 			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
-			context.AppendInstruction(IRInstruction.LogicalNot, InstructionSize.Size32, resultLow, op0Low);
-			context.AppendInstruction(IRInstruction.LogicalNot, InstructionSize.Size32, resultHigh, op0High);
+			context.AppendInstruction(IRInstruction.LogicalNot32, resultLow, op0Low);
+			context.AppendInstruction(IRInstruction.LogicalNot32, resultHigh, op0High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
@@ -189,7 +189,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 				context.SetInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, location, offset);
-				context.AppendInstruction(IRInstruction.AddUnsigned, offset4, offset, CreateConstant(4u));
+				context.AppendInstruction(IRInstruction.AddUnsigned32, offset4, offset, CreateConstant(4u));
 				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, location, offset4);
 				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 				return;
@@ -203,7 +203,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, location);
-				context.AppendInstruction(IRInstruction.AddUnsigned, offset4, offset, CreateConstant(4u));
+				context.AppendInstruction(IRInstruction.AddUnsigned32, offset4, offset, CreateConstant(4u));
 				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, op0Low, offset);
 				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, op0Low, offset4);
 				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
@@ -218,7 +218,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, offset);
-				context.AppendInstruction(IRInstruction.AddUnsigned, offset4, op0Low, CreateConstant(4u));
+				context.AppendInstruction(IRInstruction.AddUnsigned32, offset4, op0Low, CreateConstant(4u));
 				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, location, op0Low);
 				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, location, offset4);
 				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);

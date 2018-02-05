@@ -253,7 +253,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Add(InstructionNode node)
 		{
-			Replace(node, IRInstruction.AddFloatR4, IRInstruction.AddFloatR8, IRInstruction.AddSigned, IRInstruction.AddUnsigned);
+			Replace(node, IRInstruction.AddFloatR4, IRInstruction.AddFloatR8, IRInstruction.AddSigned32, IRInstruction.AddSigned64, IRInstruction.AddUnsigned32, IRInstruction.AddUnsigned64);
 		}
 
 		/// <summary>
@@ -881,7 +881,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var elementOffset = CalculateArrayElementOffset(node, arrayType, arrayIndex);
 			var totalElementOffset = CalculateTotalArrayOffset(node, elementOffset);
 
-			node.SetInstruction(IRInstruction.AddUnsigned, result, array, totalElementOffset);
+			node.SetInstruction(Select(IRInstruction.AddUnsigned32, IRInstruction.AddUnsigned64), result, array, totalElementOffset);
 		}
 
 		/// <summary>
@@ -983,7 +983,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int offset = TypeLayout.GetFieldOffset(node.MosaField);
 			var fixedOffset = CreateConstant(offset);
 
-			node.SetInstruction(IRInstruction.AddUnsigned, fieldAddress, objectOperand, fixedOffset);
+			node.SetInstruction(Select(IRInstruction.AddUnsigned32, IRInstruction.AddUnsigned64), fieldAddress, objectOperand, fixedOffset);
 		}
 
 		/// <summary>
@@ -1295,13 +1295,25 @@ namespace Mosa.Compiler.Framework.Stages
 			node.SetInstruction(IRInstruction.Nop);
 		}
 
+		private static BaseIRInstruction Select(Operand operand, BaseIRInstruction instruction32, BaseIRInstruction instruction64)
+		{
+			return Select(operand.Is64BitInteger, instruction32, instruction64);
+		}
+
+		private static BaseIRInstruction Select(bool is64Bit, BaseIRInstruction instruction32, BaseIRInstruction instruction64)
+		{
+			return !is64Bit ? instruction32 : instruction64;
+		}
+
 		/// <summary>
 		/// Visitation function for Not instruction.
 		/// </summary>
 		/// <param name="node">The context.</param>
 		private void Not(InstructionNode node)
 		{
-			node.SetInstruction(IRInstruction.LogicalNot, node.Result, node.Operand1);
+			var logicalNot = Select(node.Result, IRInstruction.LogicalNot32, IRInstruction.LogicalNot64);
+
+			node.SetInstruction(logicalNot, node.Result, node.Operand1);
 		}
 
 		private bool OverridesMethod(MosaMethod method)
@@ -1901,6 +1913,26 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		private static void Replace(InstructionNode node, BaseIRInstruction floatingPointR4Instruction, BaseIRInstruction floatingPointR8Instruction, BaseIRInstruction signedInstruction32, BaseIRInstruction signedInstruction64, BaseIRInstruction unsignedInstruction32, BaseIRInstruction unsignedInstruction64)
+		{
+			if (node.Result.IsR4)
+			{
+				node.ReplaceInstruction(floatingPointR4Instruction);
+			}
+			else if (node.Result.IsR8)
+			{
+				node.ReplaceInstruction(floatingPointR8Instruction);
+			}
+			else if (node.Result.IsUnsigned)
+			{
+				node.ReplaceInstruction(Select(node.Result, unsignedInstruction32, unsignedInstruction64));
+			}
+			else
+			{
+				node.ReplaceInstruction(Select(node.Result, signedInstruction32, signedInstruction64));
+			}
+		}
+
 		private static void Replace(InstructionNode node, BaseInstruction floatingPointR4Instruction, BaseInstruction floatingPointR8Instruction, BaseInstruction signedInstruction, BaseInstruction unsignedInstruction)
 		{
 			if (node.Result.IsR4)
@@ -1990,7 +2022,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var arrayElement = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			var context = new Context(node).InsertBefore();
-			context.AppendInstruction(IRInstruction.AddUnsigned, arrayElement, elementOffset, fixedOffset);
+			context.AppendInstruction(Select(IRInstruction.AddUnsigned32, IRInstruction.AddUnsigned64), arrayElement, elementOffset, fixedOffset);
 
 			return arrayElement;
 		}
