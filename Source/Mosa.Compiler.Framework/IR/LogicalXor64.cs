@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// LogicalAnd
+	/// LogicalXor64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class LogicalAnd : BaseIRInstruction
+	public sealed class LogicalXor64 : BaseIRInstruction
 	{
-		public LogicalAnd()
+		public LogicalXor64()
 			: base(2, 1)
 		{
 		}

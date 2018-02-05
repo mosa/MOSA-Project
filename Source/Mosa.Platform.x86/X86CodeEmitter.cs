@@ -286,6 +286,8 @@ namespace Mosa.Platform.x86
 				codeStream.Write(Convert.ToInt32(op.ConstantSignedInteger), Endianness.Little);
 			else if (op.IsU4 || op.IsPointer || op.IsU || !op.IsValueType)
 				codeStream.Write(Convert.ToUInt32(op.ConstantUnsignedInteger), Endianness.Little);
+			else if (op.IsI8 || op.IsU8)
+				codeStream.Write(Convert.ToUInt32(op.ConstantUnsignedInteger), Endianness.Little);  // FUTURE: Remove me
 			else
 				throw new CompilerException();
 		}

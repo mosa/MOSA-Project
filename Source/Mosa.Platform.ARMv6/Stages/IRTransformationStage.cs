@@ -17,7 +17,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		{
 			AddVisitation(IRInstruction.AddSigned32, AddSigned32);
 			AddVisitation(IRInstruction.AddUnsigned32, AddUnsigned32);
-			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
+			AddVisitation(IRInstruction.LogicalOr32, LogicalOr32);
 			AddVisitation(IRInstruction.SubSigned32, SubSigned32);
 			AddVisitation(IRInstruction.SubUnsigned32, SubUnsigned32);
 		}
@@ -46,7 +46,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// Visitation function for LogicalOrInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void LogicalOr(Context context)
+		private void LogicalOr32(Context context)
 		{
 			context.ReplaceInstruction(ARMv6.Orr);
 		}

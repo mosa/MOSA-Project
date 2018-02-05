@@ -117,10 +117,10 @@
             this.button3 = new MetroFramework.Controls.MetroButton();
             this.button2 = new MetroFramework.Controls.MetroButton();
             this.lbQEMUExecutable = new MetroFramework.Controls.MetroLabel();
-            this.tabOutput = new MetroFramework.Controls.MetroTabPage();
-            this.rtbOutput = new System.Windows.Forms.RichTextBox();
             this.tabCounters = new MetroFramework.Controls.MetroTabPage();
             this.rtbCounters = new System.Windows.Forms.RichTextBox();
+            this.tabOutput = new MetroFramework.Controls.MetroTabPage();
+            this.rtbOutput = new System.Windows.Forms.RichTextBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.tbApplicationLocations.SuspendLayout();
             this.tabOptions.SuspendLayout();
@@ -146,8 +146,8 @@
             this.groupBox9.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox7.SuspendLayout();
-            this.tabOutput.SuspendLayout();
             this.tabCounters.SuspendLayout();
+            this.tabOutput.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -1346,37 +1346,6 @@
             this.lbQEMUExecutable.Text = "{QEMU Executable}";
             this.lbQEMUExecutable.UseCustomBackColor = true;
             // 
-            // tabOutput
-            // 
-            this.tabOutput.Controls.Add(this.rtbOutput);
-            this.tabOutput.HorizontalScrollbarBarColor = true;
-            this.tabOutput.HorizontalScrollbarHighlightOnWheel = false;
-            this.tabOutput.HorizontalScrollbarSize = 10;
-            this.tabOutput.Location = new System.Drawing.Point(4, 22);
-            this.tabOutput.Name = "tabOutput";
-            this.tabOutput.Padding = new System.Windows.Forms.Padding(3);
-            this.tabOutput.Size = new System.Drawing.Size(653, 412);
-            this.tabOutput.TabIndex = 1;
-            this.tabOutput.Text = "Output";
-            this.tabOutput.UseVisualStyleBackColor = true;
-            this.tabOutput.VerticalScrollbarBarColor = true;
-            this.tabOutput.VerticalScrollbarHighlightOnWheel = false;
-            this.tabOutput.VerticalScrollbarSize = 10;
-            // 
-            // rtbOutput
-            // 
-            this.rtbOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.rtbOutput.Font = new System.Drawing.Font("Consolas", 8F);
-            this.rtbOutput.Location = new System.Drawing.Point(3, 0);
-            this.rtbOutput.Name = "rtbOutput";
-            this.rtbOutput.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.rtbOutput.Size = new System.Drawing.Size(650, 416);
-            this.rtbOutput.TabIndex = 0;
-            this.rtbOutput.Text = "";
-            this.rtbOutput.WordWrap = false;
-            // 
             // tabCounters
             // 
             this.tabCounters.Controls.Add(this.rtbCounters);
@@ -1408,6 +1377,37 @@
             this.rtbCounters.Text = "";
             this.rtbCounters.WordWrap = false;
             // 
+            // tabOutput
+            // 
+            this.tabOutput.Controls.Add(this.rtbOutput);
+            this.tabOutput.HorizontalScrollbarBarColor = true;
+            this.tabOutput.HorizontalScrollbarHighlightOnWheel = false;
+            this.tabOutput.HorizontalScrollbarSize = 10;
+            this.tabOutput.Location = new System.Drawing.Point(4, 22);
+            this.tabOutput.Name = "tabOutput";
+            this.tabOutput.Padding = new System.Windows.Forms.Padding(3);
+            this.tabOutput.Size = new System.Drawing.Size(653, 412);
+            this.tabOutput.TabIndex = 1;
+            this.tabOutput.Text = "Output";
+            this.tabOutput.UseVisualStyleBackColor = true;
+            this.tabOutput.VerticalScrollbarBarColor = true;
+            this.tabOutput.VerticalScrollbarHighlightOnWheel = false;
+            this.tabOutput.VerticalScrollbarSize = 10;
+            // 
+            // rtbOutput
+            // 
+            this.rtbOutput.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rtbOutput.Font = new System.Drawing.Font("Consolas", 8F);
+            this.rtbOutput.Location = new System.Drawing.Point(3, 0);
+            this.rtbOutput.Name = "rtbOutput";
+            this.rtbOutput.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
+            this.rtbOutput.Size = new System.Drawing.Size(650, 416);
+            this.rtbOutput.TabIndex = 0;
+            this.rtbOutput.Text = "";
+            this.rtbOutput.WordWrap = false;
+            // 
             // openFileDialog2
             // 
             this.openFileDialog2.DefaultExt = "*.exe";
@@ -1426,7 +1426,7 @@
             this.Resizable = false;
             this.ShadowType = MetroFramework.Forms.MetroFormShadowType.AeroShadow;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "MOSA Launcher v1.7.1";
+            this.Text = "MOSA Launcher v1.7.2";
             this.Theme = MetroFramework.MetroThemeStyle.Dark;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
@@ -1471,8 +1471,8 @@
             this.groupBox8.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
-            this.tabOutput.ResumeLayout(false);
             this.tabCounters.ResumeLayout(false);
+            this.tabOutput.ResumeLayout(false);
             this.ResumeLayout(false);
 
 		}

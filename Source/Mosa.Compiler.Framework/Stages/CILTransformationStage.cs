@@ -326,9 +326,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			switch ((node.Instruction as BaseCILInstruction).OpCode)
 			{
-				case OpCode.And: node.SetInstruction(IRInstruction.LogicalAnd, node.Result, node.Operand1, node.Operand2); break;
-				case OpCode.Or: node.SetInstruction(IRInstruction.LogicalOr, node.Result, node.Operand1, node.Operand2); break;
-				case OpCode.Xor: node.SetInstruction(IRInstruction.LogicalXor, node.Result, node.Operand1, node.Operand2); break;
+				case OpCode.And: node.SetInstruction(Select(node.Result, IRInstruction.LogicalAnd32, IRInstruction.LogicalAnd64), node.Result, node.Operand1, node.Operand2); break;
+				case OpCode.Or: node.SetInstruction(Select(node.Result, IRInstruction.LogicalOr32, IRInstruction.LogicalOr64), node.Result, node.Operand1, node.Operand2); break;
+				case OpCode.Xor: node.SetInstruction(Select(node.Result, IRInstruction.LogicalXor32, IRInstruction.LogicalXor64), node.Result, node.Operand1, node.Operand2); break;
 				case OpCode.Div_un: node.SetInstruction(IRInstruction.DivUnsigned, node.Result, node.Operand1, node.Operand2); break;
 				case OpCode.Rem_un: node.SetInstruction(IRInstruction.RemUnsigned, node.Result, node.Operand1, node.Operand2); break;
 				default: throw new CompilerException();
@@ -591,13 +591,14 @@ namespace Mosa.Compiler.Framework.Stages
 			var result = context.Result;
 			var source = context.Operand1;
 
-			int destIndex = GetIndex(result.Type, NativeInstructionSize == InstructionSize.Size32);
-			int srcIndex = GetIndex(source.Type, NativeInstructionSize == InstructionSize.Size32);
+			int destIndex = GetIndex(result.Type);
+			int srcIndex = GetIndex(source.Type);
 
-			var instruction = convTable[destIndex][srcIndex];
-			var size = GetInstructionSize(result.Type);
+			var instruction = NativeInstructionSize == InstructionSize.Size32 ? convTable32[destIndex][srcIndex] : convTable64[destIndex][srcIndex];
 
 			Debug.Assert(instruction != null);
+
+			var size = GetInstructionSize(result.Type);
 
 			uint mask = 0xFFFFFFFF;
 			ComputeExtensionTypeAndMask(result.Type, ref mask);
@@ -608,7 +609,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (instruction != IRInstruction.LogicalAnd)
+			if (!(instruction == IRInstruction.LogicalAnd32 || instruction == IRInstruction.LogicalAnd64))
 			{
 				context.SetInstruction(instruction, size, result, source);
 				return;
@@ -1666,51 +1667,51 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Internals
 
-		private static readonly BaseIRInstruction[][] convTable = new BaseIRInstruction[13][] {
+		private static readonly BaseIRInstruction[][] convTable32 = new BaseIRInstruction[13][] {
 			/* I1 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.MoveInteger,
-				/* I2 */ IRInstruction.LogicalAnd,
-				/* I4 */ IRInstruction.LogicalAnd,
-				/* I8 */ IRInstruction.LogicalAnd,
+				/* I2 */ IRInstruction.LogicalAnd32,
+				/* I4 */ IRInstruction.LogicalAnd32,
+				/* I8 */ IRInstruction.LogicalAnd64,
 				/* U1 */ IRInstruction.MoveInteger,
-				/* U2 */ IRInstruction.LogicalAnd,
-				/* U4 */ IRInstruction.LogicalAnd,
-				/* U8 */ IRInstruction.LogicalAnd,
+				/* U2 */ IRInstruction.LogicalAnd32,
+				/* U4 */ IRInstruction.LogicalAnd32,
+				/* U8 */ IRInstruction.LogicalAnd64,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
 				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
+				/* I  */ IRInstruction.LogicalAnd32,
+				/* U  */ IRInstruction.LogicalAnd32,
+				/* Ptr*/ IRInstruction.LogicalAnd32,
 			},
 			/* I2 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.MoveSignExtended,
 				/* I2 */ IRInstruction.MoveInteger,
-				/* I4 */ IRInstruction.LogicalAnd,
-				/* I8 */ IRInstruction.LogicalAnd,
+				/* I4 */ IRInstruction.LogicalAnd32,
+				/* I8 */ IRInstruction.LogicalAnd64,
 				/* U1 */ IRInstruction.MoveZeroExtended,
 				/* U2 */ IRInstruction.MoveInteger,
-				/* U4 */ IRInstruction.LogicalAnd,
-				/* U8 */ IRInstruction.LogicalAnd,
+				/* U4 */ IRInstruction.LogicalAnd32,
+				/* U8 */ IRInstruction.LogicalAnd64,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
 				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
+				/* I  */ IRInstruction.LogicalAnd32,
+				/* U  */ IRInstruction.LogicalAnd32,
+				/* Ptr*/ IRInstruction.LogicalAnd32,
 			},
 			/* I4 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.MoveSignExtended,
 				/* I2 */ IRInstruction.MoveSignExtended,
 				/* I4 */ IRInstruction.MoveInteger,
-				/* I8 */ IRInstruction.LogicalAnd,
+				/* I8 */ IRInstruction.LogicalAnd64,
 				/* U1 */ IRInstruction.MoveZeroExtended,
 				/* U2 */ IRInstruction.MoveZeroExtended,
 				/* U4 */ IRInstruction.MoveInteger,
-				/* U8 */ IRInstruction.LogicalAnd,
+				/* U8 */ IRInstruction.LogicalAnd64,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
 				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
+				/* I  */ IRInstruction.MoveInteger,
+				/* U  */ IRInstruction.MoveInteger,
+				/* Ptr*/ IRInstruction.MoveInteger,
 			},
 			/* I8 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.MoveSignExtended,
@@ -1723,54 +1724,54 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U8 */ IRInstruction.MoveInteger,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
 				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
+				/* I  */ IRInstruction.MoveZeroExtended,
+				/* U  */ IRInstruction.MoveZeroExtended,
+				/* Ptr*/ IRInstruction.MoveZeroExtended,
 			},
 			/* U1 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.MoveInteger,
-				/* I2 */ IRInstruction.LogicalAnd,
-				/* I4 */ IRInstruction.LogicalAnd,
-				/* I8 */ IRInstruction.LogicalAnd,
+				/* I2 */ IRInstruction.LogicalAnd32,
+				/* I4 */ IRInstruction.LogicalAnd32,
+				/* I8 */ IRInstruction.LogicalAnd64,
 				/* U1 */ IRInstruction.MoveInteger,
-				/* U2 */ IRInstruction.LogicalAnd,
-				/* U4 */ IRInstruction.LogicalAnd,
-				/* U8 */ IRInstruction.LogicalAnd,
+				/* U2 */ IRInstruction.LogicalAnd32,
+				/* U4 */ IRInstruction.LogicalAnd32,
+				/* U8 */ IRInstruction.LogicalAnd64,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
 				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
+				/* I  */ IRInstruction.LogicalAnd32,
+				/* U  */ IRInstruction.LogicalAnd32,
+				/* Ptr*/ IRInstruction.LogicalAnd32,
 			},
 			/* U2 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.MoveZeroExtended,
 				/* I2 */ IRInstruction.MoveInteger,
-				/* I4 */ IRInstruction.LogicalAnd,
-				/* I8 */ IRInstruction.LogicalAnd,
+				/* I4 */ IRInstruction.LogicalAnd32,
+				/* I8 */ IRInstruction.LogicalAnd64,
 				/* U1 */ IRInstruction.MoveZeroExtended,
 				/* U2 */ IRInstruction.MoveInteger,
-				/* U4 */ IRInstruction.LogicalAnd,
-				/* U8 */ IRInstruction.LogicalAnd,
+				/* U4 */ IRInstruction.LogicalAnd32,
+				/* U8 */ IRInstruction.LogicalAnd64,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
 				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
+				/* I  */ IRInstruction.LogicalAnd32,
+				/* U  */ IRInstruction.LogicalAnd32,
+				/* Ptr*/ IRInstruction.LogicalAnd32,
 			},
 			/* U4 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.MoveZeroExtended,
 				/* I2 */ IRInstruction.MoveZeroExtended,
 				/* I4 */ IRInstruction.MoveInteger,
-				/* I8 */ IRInstruction.LogicalAnd,
+				/* I8 */ IRInstruction.LogicalAnd32,
 				/* U1 */ IRInstruction.MoveZeroExtended,
 				/* U2 */ IRInstruction.MoveZeroExtended,
 				/* U4 */ IRInstruction.MoveInteger,
-				/* U8 */ IRInstruction.LogicalAnd,
+				/* U8 */ IRInstruction.LogicalAnd64,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
 				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
+				/* I  */ IRInstruction.MoveInteger,
+				/* U  */ IRInstruction.MoveInteger,
+				/* Ptr*/ IRInstruction.MoveInteger,
 			},
 			/* U8 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.MoveZeroExtended,
@@ -1783,9 +1784,207 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U8 */ IRInstruction.MoveInteger,
 				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
 				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
-				/* I  */ IRInstruction.LogicalAnd,
-				/* U  */ IRInstruction.LogicalAnd,
-				/* Ptr*/ IRInstruction.LogicalAnd,
+				/* I  */ IRInstruction.MoveZeroExtended,
+				/* U  */ IRInstruction.MoveZeroExtended,
+				/* Ptr*/ IRInstruction.MoveZeroExtended,
+			},
+			/* R4 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I2 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I4 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I8 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U1 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U2 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U4 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U8 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* R4 */ IRInstruction.MoveFloatR4,
+				/* R8 */ IRInstruction.ConversionFloatR4ToFloatR8,
+				/* I  */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U  */ IRInstruction.ConversionIntegerToFloatR8,
+				/* Ptr*/ null,
+			},
+			/* R8 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I2 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I4 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* I8 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U1 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U2 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U4 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U8 */ IRInstruction.ConversionIntegerToFloatR8,
+				/* R4 */ IRInstruction.ConversionFloatR8ToFloatR4,
+				/* R8 */ IRInstruction.MoveFloatR8,
+				/* I  */ IRInstruction.ConversionIntegerToFloatR8,
+				/* U  */ IRInstruction.ConversionIntegerToFloatR8,
+				/* Ptr*/ null,
+			},
+			/* I  */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveSignExtended,
+				/* I2 */ IRInstruction.MoveSignExtended,
+				/* I4 */ IRInstruction.MoveSignExtended,
+				/* I8 */ IRInstruction.MoveInteger,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
+				/* U8 */ IRInstruction.MoveZeroExtended,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.MoveInteger,
+				/* U  */ IRInstruction.MoveInteger,
+				/* Ptr*/ IRInstruction.MoveInteger,
+			},
+			/* U  */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveZeroExtended,
+				/* I4 */ IRInstruction.MoveZeroExtended,
+				/* I8 */ IRInstruction.MoveZeroExtended,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
+				/* U8 */ IRInstruction.MoveInteger,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.MoveInteger,
+				/* U  */ IRInstruction.MoveInteger,
+				/* Ptr*/ IRInstruction.MoveInteger,
+			},
+			/* Ptr*/ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveZeroExtended,
+				/* I4 */ IRInstruction.MoveZeroExtended,
+				/* I8 */ IRInstruction.MoveZeroExtended,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
+				/* U8 */ IRInstruction.MoveZeroExtended,
+				/* R4 */ null,
+				/* R8 */ null,
+				/* I  */ IRInstruction.MoveInteger,
+				/* U  */ IRInstruction.MoveInteger,
+				/* Ptr*/ IRInstruction.MoveInteger,
+			},
+		};
+
+		private static readonly BaseIRInstruction[][] convTable64 = new BaseIRInstruction[13][] {
+		/* I1 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveInteger,
+				/* I2 */ IRInstruction.LogicalAnd32,
+				/* I4 */ IRInstruction.LogicalAnd32,
+				/* I8 */ IRInstruction.LogicalAnd64,
+				/* U1 */ IRInstruction.MoveInteger,
+				/* U2 */ IRInstruction.LogicalAnd32,
+				/* U4 */ IRInstruction.LogicalAnd32,
+				/* U8 */ IRInstruction.LogicalAnd64,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.LogicalAnd32,
+				/* U  */ IRInstruction.LogicalAnd32,
+				/* Ptr*/ IRInstruction.LogicalAnd32,
+			},
+			/* I2 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveSignExtended,
+				/* I2 */ IRInstruction.MoveInteger,
+				/* I4 */ IRInstruction.LogicalAnd32,
+				/* I8 */ IRInstruction.LogicalAnd64,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveInteger,
+				/* U4 */ IRInstruction.LogicalAnd32,
+				/* U8 */ IRInstruction.LogicalAnd64,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.LogicalAnd32,
+				/* U  */ IRInstruction.LogicalAnd32,
+				/* Ptr*/ IRInstruction.LogicalAnd32,
+			},
+			/* I4 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveSignExtended,
+				/* I2 */ IRInstruction.MoveSignExtended,
+				/* I4 */ IRInstruction.MoveInteger,
+				/* I8 */ IRInstruction.LogicalAnd64,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveInteger,
+				/* U8 */ IRInstruction.LogicalAnd64,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.MoveInteger,
+				/* U  */ IRInstruction.MoveInteger,
+				/* Ptr*/ IRInstruction.MoveInteger,
+			},
+			/* I8 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveSignExtended,
+				/* I2 */ IRInstruction.MoveSignExtended,
+				/* I4 */ IRInstruction.MoveSignExtended,
+				/* I8 */ IRInstruction.MoveInteger,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
+				/* U8 */ IRInstruction.MoveInteger,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.MoveInteger,
+				/* U  */ IRInstruction.MoveInteger,
+				/* Ptr*/ IRInstruction.MoveInteger,
+			},
+			/* U1 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveInteger,
+				/* I2 */ IRInstruction.LogicalAnd32,
+				/* I4 */ IRInstruction.LogicalAnd32,
+				/* I8 */ IRInstruction.LogicalAnd64,
+				/* U1 */ IRInstruction.MoveInteger,
+				/* U2 */ IRInstruction.LogicalAnd32,
+				/* U4 */ IRInstruction.LogicalAnd32,
+				/* U8 */ IRInstruction.LogicalAnd64,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.LogicalAnd32,
+				/* U  */ IRInstruction.LogicalAnd32,
+				/* Ptr*/ IRInstruction.LogicalAnd32,
+			},
+			/* U2 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveInteger,
+				/* I4 */ IRInstruction.LogicalAnd32,
+				/* I8 */ IRInstruction.LogicalAnd64,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveInteger,
+				/* U4 */ IRInstruction.LogicalAnd32,
+				/* U8 */ IRInstruction.LogicalAnd64,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.LogicalAnd32,
+				/* U  */ IRInstruction.LogicalAnd32,
+				/* Ptr*/ IRInstruction.LogicalAnd32,
+			},
+			/* U4 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveZeroExtended,
+				/* I4 */ IRInstruction.MoveInteger,
+				/* I8 */ IRInstruction.LogicalAnd32,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveInteger,
+				/* U8 */ IRInstruction.LogicalAnd64,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.MoveInteger,
+				/* U  */ IRInstruction.MoveInteger,
+				/* Ptr*/ IRInstruction.MoveInteger,
+			},
+			/* U8 */ new BaseIRInstruction[13] {
+				/* I1 */ IRInstruction.MoveZeroExtended,
+				/* I2 */ IRInstruction.MoveZeroExtended,
+				/* I4 */ IRInstruction.MoveZeroExtended,
+				/* I8 */ IRInstruction.MoveInteger,
+				/* U1 */ IRInstruction.MoveZeroExtended,
+				/* U2 */ IRInstruction.MoveZeroExtended,
+				/* U4 */ IRInstruction.MoveZeroExtended,
+				/* U8 */ IRInstruction.MoveInteger,
+				/* R4 */ IRInstruction.ConversionFloatR4ToInteger,
+				/* R8 */ IRInstruction.ConversionFloatR8ToInteger,
+				/* I  */ IRInstruction.MoveInteger,
+				/* U  */ IRInstruction.MoveInteger,
+				/* Ptr*/ IRInstruction.MoveInteger,
 			},
 			/* R4 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.ConversionIntegerToFloatR8,
@@ -2043,10 +2242,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Gets the index.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		/// <param name="Platform32Bit">if set to <c>true</c> [platform32 bit].</param>
 		/// <returns></returns>
 		/// <exception cref="CompilerException"></exception>
-		private int GetIndex(MosaType type, bool Platform32Bit)
+		private int GetIndex(MosaType type)
 		{
 			if (type.IsChar) return 5;
 			else if (type.IsI1) return 0;
@@ -2059,8 +2257,8 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (type.IsU8) return 7;
 			else if (type.IsR4) return 8;
 			else if (type.IsR8) return 9;
-			else if (type.IsI) return Platform32Bit ? 2 : 10;
-			else if (type.IsU) return Platform32Bit ? 6 : 11;
+			else if (type.IsI) return 10;
+			else if (type.IsU) return 11;
 			else if (type.IsPointer) return 12;
 			else if (!type.IsValueType) return 12;
 

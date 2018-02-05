@@ -49,10 +49,10 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.To64, To64);
 			AddVisitation(IRInstruction.Split64, Split64);
 
-			AddVisitation(IRInstruction.LogicalAnd, LogicalAnd);
+			AddVisitation(IRInstruction.LogicalAnd64, LogicalAnd64);
 			AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
-			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
-			AddVisitation(IRInstruction.LogicalXor, LogicalXor);
+			AddVisitation(IRInstruction.LogicalOr64, LogicalOr64);
+			AddVisitation(IRInstruction.LogicalXor64, LogicalXor64);
 		}
 
 		protected override void Setup()
@@ -172,18 +172,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for LogicalAndInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void LogicalAnd(Context context)
-		{
-			if (Any64Bit(context.Node))
-			{
-				ExpandAnd(context);
-			}
-		}
-
-		/// <summary>
 		/// Visitation function for LogicalNotInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -199,7 +187,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalOrInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void LogicalOr(Context context)
+		private void LogicalOr64(Context context)
 		{
 			if (Any64Bit(context.Node))
 			{
@@ -211,7 +199,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalXorInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void LogicalXor(Context context)
+		private void LogicalXor64(Context context)
 		{
 			if (Any64Bit(context.Node))
 			{
@@ -409,7 +397,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Expands the and instruction for 64-bits.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void ExpandAnd(Context context)
+		private void LogicalAnd64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);

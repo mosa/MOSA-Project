@@ -1,10 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Expression;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Platform.x86;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 

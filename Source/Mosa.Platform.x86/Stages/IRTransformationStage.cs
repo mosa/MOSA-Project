@@ -56,10 +56,10 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.LoadParameterSignExtended, LoadParameterSignExtended);
 			AddVisitation(IRInstruction.LoadParameterZeroExtended, LoadParameterZeroExtended);
 			AddVisitation(IRInstruction.LoadParameterCompound, LoadParameterCompound);
-			AddVisitation(IRInstruction.LogicalAnd, LogicalAnd);
+			AddVisitation(IRInstruction.LogicalAnd32, LogicalAnd32);
 			AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
-			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
-			AddVisitation(IRInstruction.LogicalXor, LogicalXor);
+			AddVisitation(IRInstruction.LogicalOr32, LogicalOr32);
+			AddVisitation(IRInstruction.LogicalXor32, LogicalXor32);
 			AddVisitation(IRInstruction.MoveFloatR4, MoveFloatR4);
 			AddVisitation(IRInstruction.MoveFloatR8, MoveFloatR8);
 			AddVisitation(IRInstruction.MoveInteger, MoveInteger);
@@ -674,7 +674,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalAnd instruction.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void LogicalAnd(InstructionNode node)
+		private void LogicalAnd32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.And32);
 		}
@@ -695,7 +695,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalOr instruction.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void LogicalOr(InstructionNode node)
+		private void LogicalOr32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Or32);
 		}
@@ -704,7 +704,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalXor instruction.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void LogicalXor(InstructionNode node)
+		private void LogicalXor32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Xor32);
 		}

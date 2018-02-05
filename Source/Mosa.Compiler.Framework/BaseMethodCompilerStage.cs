@@ -800,6 +800,11 @@ namespace Mosa.Compiler.Framework
 			return IRInstruction.StoreParameterInteger;
 		}
 
+		public BaseInstruction Select(Operand operand, BaseInstruction instruction32, BaseInstruction instruction64)
+		{
+			return !operand.Is64BitInteger ? instruction32 : instruction64;
+		}
+
 		public BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
 		{
 			return NativeInstructionSize == InstructionSize.Size32 ? instruction32 : instruction64;

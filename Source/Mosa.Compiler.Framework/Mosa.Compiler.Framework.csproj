@@ -327,7 +327,10 @@
     <Compile Include="IR\LoadZeroExtended.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LogicalAnd.cs">
+    <Compile Include="IR\LogicalAnd32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LogicalAnd64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\LogicalNot32.cs">
@@ -336,10 +339,16 @@
     <Compile Include="IR\LogicalNot64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LogicalOr.cs">
+    <Compile Include="IR\LogicalOr32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LogicalXor.cs">
+    <Compile Include="IR\LogicalOr64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LogicalXor32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LogicalXor64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\MemoryCopy.cs">

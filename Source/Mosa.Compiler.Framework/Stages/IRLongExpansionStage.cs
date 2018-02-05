@@ -14,18 +14,19 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(IRInstruction.LogicalAnd, LogicalAnd);
-			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
-			AddVisitation(IRInstruction.LogicalXor, LogicalXor);
+			AddVisitation(IRInstruction.LogicalAnd64, LogicalAnd64);
+			AddVisitation(IRInstruction.LogicalOr64, LogicalOr64);
+			AddVisitation(IRInstruction.LogicalXor64, LogicalXor64);
 			AddVisitation(IRInstruction.LogicalNot64, LogicalNot64);
 			AddVisitation(IRInstruction.LoadParameterInteger, LoadParameterInteger);
 			AddVisitation(IRInstruction.LoadInteger, LoadInteger);
+
+			AddVisitation(IRInstruction.MoveZeroExtended, MoveZeroExtended);
 		}
 
-		private void LogicalAnd(InstructionNode node)
+		private void LogicalAnd64(InstructionNode node)
 		{
-			if (!node.Result.Is64BitInteger)
-				return;
+			Debug.Assert(node.Result.Is64BitInteger);
 
 			var result = node.Result;
 			var operand1 = node.Operand1;
@@ -42,15 +43,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
 			context.AppendInstruction2(IRInstruction.Split64, op1Low, op1High, operand2);
-			context.AppendInstruction(IRInstruction.LogicalAnd, InstructionSize.Size32, resultLow, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.LogicalAnd, InstructionSize.Size32, resultHigh, op0High, op1High);
+			context.AppendInstruction(IRInstruction.LogicalAnd32, InstructionSize.Size32, resultLow, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.LogicalAnd32, InstructionSize.Size32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalOr(InstructionNode node)
+		private void LogicalOr64(InstructionNode node)
 		{
-			if (!node.Result.Is64BitInteger)
-				return;
+			Debug.Assert(node.Result.Is64BitInteger);
 
 			var result = node.Result;
 			var operand1 = node.Operand1;
@@ -67,15 +67,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
 			context.AppendInstruction2(IRInstruction.Split64, op1Low, op1High, operand2);
-			context.AppendInstruction(IRInstruction.LogicalOr, InstructionSize.Size32, resultLow, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.LogicalOr, InstructionSize.Size32, resultHigh, op0High, op1High);
+			context.AppendInstruction(IRInstruction.LogicalOr32, InstructionSize.Size32, resultLow, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.LogicalOr32, InstructionSize.Size32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalXor(InstructionNode node)
+		private void LogicalXor64(InstructionNode node)
 		{
-			if (!node.Result.Is64BitInteger)
-				return;
+			Debug.Assert(node.Result.Is64BitInteger);
 
 			var result = node.Result;
 			var operand1 = node.Operand1;
@@ -92,8 +91,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
 			context.AppendInstruction2(IRInstruction.Split64, op1Low, op1High, operand2);
-			context.AppendInstruction(IRInstruction.LogicalXor, InstructionSize.Size32, resultLow, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.LogicalXor, InstructionSize.Size32, resultHigh, op0High, op1High);
+			context.AppendInstruction(IRInstruction.LogicalXor32, InstructionSize.Size32, resultLow, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.LogicalXor32, InstructionSize.Size32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
@@ -226,6 +225,19 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return;
+		}
+
+		private void MoveZeroExtended(InstructionNode node)
+		{
+			if (!node.Result.Is64BitInteger)
+				return;
+
+			if (node.Result.Is64BitInteger)
+				return;
+
+			var context = new Context(node);
+
+			context.SetInstruction(IRInstruction.To64, node.Result, node.Operand1, ConstantZero);
 		}
 	}
 }

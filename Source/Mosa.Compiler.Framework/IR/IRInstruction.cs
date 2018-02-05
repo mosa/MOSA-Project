@@ -69,11 +69,14 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly LoadParameterInteger LoadParameterInteger = new LoadParameterInteger();
 		public static readonly LoadParameterSignExtended LoadParameterSignExtended = new LoadParameterSignExtended();
 		public static readonly LoadParameterZeroExtended LoadParameterZeroExtended = new LoadParameterZeroExtended();
-		public static readonly LogicalAnd LogicalAnd = new LogicalAnd();
+		public static readonly LogicalAnd32 LogicalAnd32 = new LogicalAnd32();
+		public static readonly LogicalAnd64 LogicalAnd64 = new LogicalAnd64();
 		public static readonly LogicalNot32 LogicalNot32 = new LogicalNot32();
 		public static readonly LogicalNot64 LogicalNot64 = new LogicalNot64();
-		public static readonly LogicalOr LogicalOr = new LogicalOr();
-		public static readonly LogicalXor LogicalXor = new LogicalXor();
+		public static readonly LogicalOr32 LogicalOr32 = new LogicalOr32();
+		public static readonly LogicalOr64 LogicalOr64 = new LogicalOr64();
+		public static readonly LogicalXor32 LogicalXor32 = new LogicalXor32();
+		public static readonly LogicalXor64 LogicalXor64 = new LogicalXor64();
 		public static readonly MemorySet MemorySet = new MemorySet();
 		public static readonly MoveCompound MoveCompound = new MoveCompound();
 		public static readonly MoveFloatR4 MoveFloatR4 = new MoveFloatR4();

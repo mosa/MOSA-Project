@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// LogicalOr
+	/// LogicalOr32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class LogicalOr : BaseIRInstruction
+	public sealed class LogicalOr32 : BaseIRInstruction
 	{
-		public LogicalOr()
+		public LogicalOr32()
 			: base(2, 1)
 		{
 		}

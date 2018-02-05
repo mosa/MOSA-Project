@@ -407,7 +407,14 @@
 			"MemoryRead": "true"
 		},
 		{
-			"Name": "LogicalAnd",
+			"Name": "LogicalAnd32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "LogicalAnd64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
@@ -426,14 +433,28 @@
 			"OperandCount": 1
 		},
 		{
-			"Name": "LogicalOr",
+			"Name": "LogicalOr32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "LogicalXor",
+			"Name": "LogicalOr64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "LogicalXor32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "LogicalXor64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
