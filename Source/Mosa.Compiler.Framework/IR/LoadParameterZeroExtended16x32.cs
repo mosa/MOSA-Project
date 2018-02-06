@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// LoadParameterSignExtended
+	/// LoadParameterZeroExtended16x32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class LoadParameterSignExtended : BaseIRInstruction
+	public sealed class LoadParameterZeroExtended16x32 : BaseIRInstruction
 	{
-		public LoadParameterSignExtended()
+		public LoadParameterZeroExtended16x32()
 			: base(1, 1)
 		{
 		}

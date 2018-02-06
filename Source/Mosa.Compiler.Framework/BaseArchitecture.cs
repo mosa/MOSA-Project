@@ -104,10 +104,23 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The size of the native instruction.
 		/// </value>
-		public virtual InstructionSize NativeInstructionSize
-		{
-			get { return NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64; }
-		}
+		public virtual InstructionSize NativeInstructionSize { get { return NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64; } }
+
+		/// <summary>
+		/// Is the platform is 32 bit
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [is32 bit]; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool Is32BitPlatform { get { return NativePointerSize == 4; } }
+
+		/// <summary>
+		/// Is the platform is 64 bit
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [is64 bit]; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool Is64BitPlatform { get { return NativePointerSize == 8; } }
 
 		/// <summary>
 		/// Gets the offset of first local.

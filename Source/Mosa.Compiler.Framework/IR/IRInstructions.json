@@ -418,21 +418,84 @@
 			"MemoryRead": "true"
 		},
 		{
-			"Name": "LoadParameterInteger",
+			"Name": "LoadParameterInteger32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
 			"MemoryRead": "true"
 		},
 		{
-			"Name": "LoadParameterSignExtended",
+			"Name": "LoadParameterInteger64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
 			"MemoryRead": "true"
 		},
 		{
-			"Name": "LoadParameterZeroExtended",
+			"Name": "LoadParameterSignExtended8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterSignExtended16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterSignExtended8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterSignExtended16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterSignExtended32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterZeroExtended8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterZeroExtended16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterZeroExtended8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterZeroExtended16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterZeroExtended32x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,

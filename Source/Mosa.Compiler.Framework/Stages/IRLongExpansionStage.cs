@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.LogicalOr64, LogicalOr64);
 			AddVisitation(IRInstruction.LogicalXor64, LogicalXor64);
 			AddVisitation(IRInstruction.LogicalNot64, LogicalNot64);
-			AddVisitation(IRInstruction.LoadParameterInteger, LoadParameterInteger);
+			AddVisitation(IRInstruction.LoadParameterInteger64, LoadParameterInteger64);
 			AddVisitation(IRInstruction.LoadInteger, LoadInteger);
 
 			AddVisitation(IRInstruction.MoveZeroExtended, MoveZeroExtended);
@@ -117,15 +117,13 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LoadParameterInteger(InstructionNode node)
+		private void LoadParameterInteger64(InstructionNode node)
 		{
 			Debug.Assert(!node.Result.IsR4);
 			Debug.Assert(!node.Result.IsR8);
+			Debug.Assert(node.Result.Is64BitInteger);
 
 			// TODO: Managed 64bit pointers
-
-			if (!node.Result.Is64BitInteger)
-				return;
 
 			var result = node.Result;
 			var operand1 = node.Operand1;
@@ -137,8 +135,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var context = new Context(node);
 
-			context.SetInstruction(IRInstruction.LoadParameterInteger, InstructionSize.Size32, resultLow, op0Low);
-			context.AppendInstruction(IRInstruction.LoadParameterInteger, InstructionSize.Size32, resultHigh, op0High);
+			context.SetInstruction(IRInstruction.LoadParameterInteger32, InstructionSize.Size32, resultLow, op0Low);
+			context.AppendInstruction(IRInstruction.LoadParameterInteger32, InstructionSize.Size32, resultHigh, op0High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 

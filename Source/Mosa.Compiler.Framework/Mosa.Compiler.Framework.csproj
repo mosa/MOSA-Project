@@ -327,13 +327,40 @@
     <Compile Include="IR\LoadParameterFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LoadParameterInteger.cs">
+    <Compile Include="IR\LoadParameterInteger32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LoadParameterSignExtended.cs">
+    <Compile Include="IR\LoadParameterInteger64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LoadParameterZeroExtended.cs">
+    <Compile Include="IR\LoadParameterSignExtended16x32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterSignExtended16x64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterSignExtended32x64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterSignExtended8x32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterSignExtended8x64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterZeroExtended16x32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterZeroExtended16x64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterZeroExtended32x64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterZeroExtended8x32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterZeroExtended8x64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\LoadSignExtended.cs">

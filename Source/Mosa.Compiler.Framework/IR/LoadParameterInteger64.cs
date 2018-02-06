@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// LoadParameterInteger
+	/// LoadParameterInteger64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class LoadParameterInteger : BaseIRInstruction
+	public sealed class LoadParameterInteger64 : BaseIRInstruction
 	{
-		public LoadParameterInteger()
+		public LoadParameterInteger64()
 			: base(1, 1)
 		{
 		}

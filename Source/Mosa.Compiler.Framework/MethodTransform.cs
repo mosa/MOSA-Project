@@ -590,28 +590,6 @@ namespace Mosa.Compiler.Framework
 			return IRInstruction.LoadInteger;
 		}
 
-		public static BaseIRInstruction GetLoadParameterInstruction(MosaType type)
-		{
-			if (MustSignExtendOnLoad(type))
-			{
-				return IRInstruction.LoadParameterSignExtended;
-			}
-			else if (MustZeroExtendOnLoad(type))
-			{
-				return IRInstruction.LoadParameterZeroExtended;
-			}
-			else if (type.IsR4)
-			{
-				return IRInstruction.LoadParameterFloatR4;
-			}
-			else if (type.IsR8)
-			{
-				return IRInstruction.LoadParameterFloatR8;
-			}
-
-			return IRInstruction.LoadParameterInteger;
-		}
-
 		public static BaseIRInstruction GetMoveInstruction(MosaType type)
 		{
 			if (MustSignExtendOnLoad(type))

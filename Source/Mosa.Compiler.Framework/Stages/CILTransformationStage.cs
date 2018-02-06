@@ -601,7 +601,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int destIndex = GetIndex(result.Type);
 			int srcIndex = GetIndex(source.Type);
 
-			var instruction = NativeInstructionSize == InstructionSize.Size32 ? convTable32[destIndex][srcIndex] : convTable64[destIndex][srcIndex];
+			var instruction = Is32BitPlatform ? convTable32[destIndex][srcIndex] : convTable64[destIndex][srcIndex];
 
 			Debug.Assert(instruction != null);
 
@@ -2371,28 +2371,6 @@ namespace Mosa.Compiler.Framework.Stages
 			node.AppendOperands(operands);
 
 			return true;
-		}
-
-		private BaseIRInstruction GetStoreParameterInstruction(MosaType type)
-		{
-			if (type.IsR4)
-				return IRInstruction.StoreParameterFloatR4;
-			else if (type.IsR8)
-				return IRInstruction.StoreParameterFloatR8;
-			else if (type.IsUI1 || type.IsBoolean)
-				return IRInstruction.StoreParameterInteger8;
-			else if (type.IsUI2 || type.IsChar)
-				return IRInstruction.StoreParameterInteger16;
-			else if (type.IsUI4)
-				return IRInstruction.StoreParameterInteger32;
-			else if (type.IsUI8)
-				return IRInstruction.StoreParameterInteger64;
-			else if (NativeInstructionSize == InstructionSize.Size32)
-				return IRInstruction.StoreParameterInteger32;
-			else if (NativeInstructionSize == InstructionSize.Size64)
-				return IRInstruction.StoreParameterInteger64;
-
-			throw new NotSupportedException();
 		}
 
 		#endregion Internals

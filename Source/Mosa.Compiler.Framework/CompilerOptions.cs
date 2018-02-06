@@ -259,7 +259,7 @@ namespace Mosa.Compiler.Framework
 			BaseAddress = 0x00400000;
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
 			EmitBinary = true;
-			InlinedIRMaximum = 20;
+			InlinedIRMaximum = 8;
 			DebugRestrictOptimizationByCount = 0;
 			EmitSymbols = true;
 			EmitRelocations = true;
