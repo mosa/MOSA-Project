@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Partition Device
 	/// </summary>
-	public class PartitionDevice : Device, IDevice, IPartitionDevice
+	public class PartitionDevice : Device, IPartitionDevice
 	{
 		/// <summary>
 		/// The disk device
@@ -65,7 +65,7 @@ namespace Mosa.DeviceSystem
 
 			base.Parent = diskDevice as Device;
 			base.Name = base.Parent.Name + "/Raw";  // need to give it a unique name
-			base.DeviceStatus = DeviceStatus.Online;
+			base.Status = DeviceStatus.Online;
 		}
 
 		/// <summary>
@@ -83,7 +83,7 @@ namespace Mosa.DeviceSystem
 
 			base.Parent = diskDevice as Device;
 			base.Name = base.Parent.Name + "/Partition" + (partition.Index + 1).ToString(); // need to give it a unique name
-			base.DeviceStatus = DeviceStatus.Online;
+			base.Status = DeviceStatus.Online;
 		}
 
 		/// <summary>

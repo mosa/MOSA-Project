@@ -3,7 +3,7 @@
 namespace Mosa.DeviceSystem.PCI
 {
 	/// <summary>
-	///
+	/// Class Code Table
 	/// </summary>
 	public static class ClassCodeTable
 	{

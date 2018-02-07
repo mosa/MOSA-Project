@@ -5,80 +5,58 @@ using Mosa.DeviceSystem;
 namespace Mosa.DeviceDriver.ISA
 {
 	/// <summary>
-	///
+	/// PCI Controller
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
-	public class PCIController : HardwareDevice, IDevice, IHardwareDevice, IPCIController
+	public class PCIController : DeviceSystem.DeviceDriver, IPCIController
 	{
 		#region Definitions
 
-		private static readonly uint BaseValue = 0x80000000;
+		protected static readonly uint BaseValue = 0x80000000;
 
 		#endregion Definitions
 
 		/// <summary>
-		///
+		/// The spin lock
 		/// </summary>
 		protected SpinLock spinLock;
 
 		/// <summary>
-		///
+		/// The configuration address
 		/// </summary>
 		protected IOPortReadWrite configAddress;
 
 		/// <summary>
-		///
+		/// The configuration data
 		/// </summary>
 		protected IOPortReadWrite configData;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PCIController"/> class.
-		/// </summary>
-		public PCIController()
+		protected override void Initialize()
 		{
-		}
+			Device.Name = "PCI_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-		/// <summary>
-		/// Setups this hardware device driver
-		/// </summary>
-		/// <returns></returns>
-		public override bool Setup(HardwareResources hardwareResources)
-		{
-			this.HardwareResources = hardwareResources;
-			base.Name = "PCI_0x" + base.HardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
-
-			configAddress = base.HardwareResources.GetIOPortReadWrite(0, 0);
-			configData = base.HardwareResources.GetIOPortReadWrite(0, 4);
-
-			return true;
+			configAddress = Device.Resources.GetIOPortReadWrite(0, 0);
+			configData = Device.Resources.GetIOPortReadWrite(0, 4);
 		}
 
 		/// <summary>
 		/// Probes for this device.
 		/// </summary>
 		/// <returns></returns>
-		public override bool Probe()
+		public override void Probe()
 		{
 			configAddress.Write32(BaseValue);
 
-			return configAddress.Read32() == BaseValue;
+			var found = configAddress.Read32() == BaseValue;
+
+			Device.Status = (found) ? DeviceStatus.Available : Device.Status = DeviceStatus.NotFound;
 		}
 
-		/// <summary>
-		/// Starts this hardware device.
-		/// </summary>
-		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
+		public override void Start()
 		{
-			if (Probe())
+			if (Device.Status == DeviceStatus.Available)
 			{
-				DeviceStatus = DeviceStatus.Online;
-				return DeviceDriverStartStatus.Started;
-			}
-			else
-			{
-				DeviceStatus = DeviceStatus.NotFound;
-				return DeviceDriverStartStatus.NotFound;
+				Device.Status = DeviceStatus.Online;
 			}
 		}
 
@@ -88,6 +66,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		public override bool OnInterrupt()
 		{
+			// TODO
 			return false;
 		}
 
@@ -108,6 +87,8 @@ namespace Mosa.DeviceDriver.ISA
 				| (uint)(register & 0xFC);
 		}
 
+		#region IPCIController
+
 		/// <summary>
 		/// Reads from configuration space
 		/// </summary>
@@ -116,7 +97,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		public uint ReadConfig32(byte bus, byte slot, byte function, byte register)
+		uint IPCIController.ReadConfig32(byte bus, byte slot, byte function, byte register)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
 			return configData.Read32();
@@ -130,7 +111,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		public ushort ReadConfig16(byte bus, byte slot, byte function, byte register)
+		ushort IPCIController.ReadConfig16(byte bus, byte slot, byte function, byte register)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
 			return (ushort)((configData.Read32() >> ((register % 4) * 8)) & 0xFFFF);
@@ -144,7 +125,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		public byte ReadConfig8(byte bus, byte slot, byte function, byte register)
+		byte IPCIController.ReadConfig8(byte bus, byte slot, byte function, byte register)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
 			return (byte)((configData.Read32() >> ((register % 4) * 8)) & 0xFF);
@@ -158,7 +139,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="value">The value.</param>
-		public void WriteConfig32(byte bus, byte slot, byte function, byte register, uint value)
+		void IPCIController.WriteConfig32(byte bus, byte slot, byte function, byte register, uint value)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
 			configData.Write32(value);
@@ -172,7 +153,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="value">The value.</param>
-		public void WriteConfig16(byte bus, byte slot, byte function, byte register, ushort value)
+		void IPCIController.WriteConfig16(byte bus, byte slot, byte function, byte register, ushort value)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
 			configData.Write16(value);
@@ -186,10 +167,12 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="value">The value.</param>
-		public void WriteConfig8(byte bus, byte slot, byte function, byte register, byte value)
+		void IPCIController.WriteConfig8(byte bus, byte slot, byte function, byte register, byte value)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
 			configData.Write8(value);
 		}
+
+		#endregion IPCIController
 	}
 }

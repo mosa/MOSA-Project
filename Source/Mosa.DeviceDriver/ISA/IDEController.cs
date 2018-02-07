@@ -3,18 +3,17 @@
 // References
 // http://www.t13.org/Documents/UploadedDocuments/docs2004/d1572r3-EDD3.pdf
 // http://mirrors.josefsipek.net/www.nondot.org/sabre/os/files/Disk/IDE-tech.html
-// http://www.t13.org/documents/uploadeddocuments/docs2006/d1699r3f-ata8-acs.pdf
 
 using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDriver.ISA
 {
 	/// <summary>
-	///
+	/// IDE Controller
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x1F0, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x170, PortRange = 8, ForceOption = "ide2", Platforms = PlatformArchitecture.X86AndX64)]
-	public class IDEController : HardwareDevice, IDiskControllerDevice
+	public class IDEController : DeviceSystem.DeviceDriver, IDiskControllerDevice
 	{
 		#region Definitions
 
@@ -133,6 +132,11 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		protected IOPortRead AltStatusPort;
 
+		/// <summary>
+		/// The maximun number of drives
+		/// </summary>
+		protected uint maximunDriveCount;
+
 		//protected IRQHandler IdeIRQ;
 
 		public enum AddressingMode { NotSupported, LBA28, LBA48 }
@@ -161,35 +165,26 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		/// The drive information
 		/// </summary>
-		protected DriveInfo[] driveInfo;
+		protected DriveInfo[] driveInfo = new DriveInfo[DrivesPerConroller];
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IDEController"/> class.
-		/// </summary>
-		public IDEController() => driveInfo = new DriveInfo[DrivesPerConroller];
-
-		/// <summary>
-		/// Setups this hardware device driver
-		/// </summary>
-		/// <param name="hardwareResources"></param>
-		/// <returns></returns>
-		public override bool Setup(HardwareResources hardwareResources)
+		protected override void Initialize()
 		{
-			this.HardwareResources = hardwareResources;
-			base.Name = "IDE_0x" + base.HardwareResources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+			Device.Name = "IDE_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-			DataPort = base.HardwareResources.GetIOPortReadWrite(0, 0);
-			ErrorPort = base.HardwareResources.GetIOPortReadWrite(0, 1);
-			FeaturePort = base.HardwareResources.GetIOPortReadWrite(0, 1);
-			SectorCountPort = base.HardwareResources.GetIOPortReadWrite(0, 2);
-			LBALowPort = base.HardwareResources.GetIOPortReadWrite(0, 3);
-			LBAMidPort = base.HardwareResources.GetIOPortReadWrite(0, 4);
-			LBAHighPort = base.HardwareResources.GetIOPortReadWrite(0, 5);
-			DeviceHeadPort = base.HardwareResources.GetIOPortReadWrite(0, 6);
-			CommandPort = base.HardwareResources.GetIOPortWrite(0, 7);
-			StatusPort = base.HardwareResources.GetIOPortReadWrite(0, 7);
-			ControlPort = base.HardwareResources.GetIOPortWrite(1, 0);
-			AltStatusPort = base.HardwareResources.GetIOPortReadWrite(1, 6);
+			DataPort = Device.Resources.GetIOPortReadWrite(0, 0);
+			ErrorPort = Device.Resources.GetIOPortReadWrite(0, 1);
+			FeaturePort = Device.Resources.GetIOPortReadWrite(0, 1);
+			SectorCountPort = Device.Resources.GetIOPortReadWrite(0, 2);
+			LBALowPort = Device.Resources.GetIOPortReadWrite(0, 3);
+			LBAMidPort = Device.Resources.GetIOPortReadWrite(0, 4);
+			LBAHighPort = Device.Resources.GetIOPortReadWrite(0, 5);
+			DeviceHeadPort = Device.Resources.GetIOPortReadWrite(0, 6);
+			CommandPort = Device.Resources.GetIOPortWrite(0, 7);
+			StatusPort = Device.Resources.GetIOPortReadWrite(0, 7);
+			ControlPort = Device.Resources.GetIOPortWrite(1, 0);
+			AltStatusPort = Device.Resources.GetIOPortReadWrite(1, 6);
+
+			maximunDriveCount = 2;
 
 			for (var drive = 0; drive < DrivesPerConroller; drive++)
 			{
@@ -197,36 +192,31 @@ namespace Mosa.DeviceDriver.ISA
 				driveInfo[drive].MaxLBA = 0;
 			}
 
-			base.DeviceStatus = DeviceStatus.Online;
-
-			return true;
+			Device.Status = DeviceStatus.Online;
 		}
 
-		/// <summary>
-		/// Probes this instance.
-		/// </summary>
-		/// <returns></returns>
-		public override bool Probe()
+		public override void Probe()
 		{
 			LBALowPort.Write8(0x88);
 
-			return LBALowPort.Read8() == 0x88;
+			var found = LBALowPort.Read8() == 0x88;
+
+			Device.Status = (found) ? DeviceStatus.Available : Device.Status = DeviceStatus.NotFound;
 		}
 
-		/// <summary>
-		/// Starts this hardware device.
-		/// </summary>
-		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
+		public override void Start()
 		{
+			if (Device.Status != DeviceStatus.Available)
+			{
+				return;
+			}
+
 			ControlPort.Write8(0);
 
-			for (byte drive = 0; drive < MaximunDriveCount; drive++)
+			for (byte drive = 0; drive < maximunDriveCount; drive++)
 			{
 				DoIdentifyDrive(drive);
 			}
-
-			return DeviceDriverStartStatus.Started;
 		}
 
 		private void DoIdentifyDrive(byte index)
@@ -257,8 +247,9 @@ namespace Mosa.DeviceDriver.ISA
 
 			if (LBAMidPort.Read8() != 0 && LBAHighPort.Read8() != 0) //Check if the drive is ATA
 			{
-				//In this case the drive is ATAPI, which is not supported
-				//HAL.DebugWriteLine("Device " + index.ToString() + " not ATA");
+				//In this case the drive is ATAPI
+
+				HAL.DebugWriteLine("Device " + index.ToString() + " not ATA");
 
 				return;
 			}
@@ -266,9 +257,12 @@ namespace Mosa.DeviceDriver.ISA
 			//Wait until the identify data is present (256x16 bits)
 			if (!WaitForIdentifyData())
 			{
-				//HAL.DebugWriteLine("Device " + index.ToString() + " ID error");
+				HAL.DebugWriteLine("Device " + index.ToString() + " ID error");
 				return;
 			}
+
+			//An ATA drive is present
+			driveInfo[index].Present = true;
 
 			//Read the identification info
 			var info = new DataBlock(512);
@@ -278,36 +272,23 @@ namespace Mosa.DeviceDriver.ISA
 			}
 
 			//Find the addressing mode
-			bool lba48Supported = ((info.GetUShort(IdentifyDrive.CommandSetSupported83) & 0x200) == 0x200);
-			driveInfo[index].AddressingMode = (lba48Supported ? AddressingMode.LBA48 : AddressingMode.LBA28);
+			var lba28SectorCount = info.GetUInt(IdentifyDrive.MaxLBA28);
 
-			//Find the max LBA count
-			uint lba28SectorCount = info.GetUInt(IdentifyDrive.MaxLBA28);
-			ulong lba48SectorCount = info.GetULong(IdentifyDrive.MaxLBA48);
-			
-			//HAL.DebugWriteLine("LBA48BIT=" + lba48Supported.ToString());
-			//HAL.DebugWriteLine("LBA28   =" + lba28SectorCount.ToString("X2"));
-
-			if(!lba48Supported) //No LBA48
+			AddressingMode aMode = AddressingMode.NotSupported;
+			if ((info.GetUShort(IdentifyDrive.CommandSetSupported83) & 0x200) == 0x200) //Check the LBA48 support bit
 			{
+				aMode = AddressingMode.LBA48;
+				driveInfo[index].MaxLBA = info.GetUInt(IdentifyDrive.MaxLBA48);
+			}
+			else if (lba28SectorCount > 0) //LBA48 not supported, check LBA28
+			{
+				aMode = AddressingMode.LBA28;
 				driveInfo[index].MaxLBA = lba28SectorCount;
 			}
-			else //LBA48 supported
-			{
-				if(lba28SectorCount == 0x0FFFFFFF) //Check the limit according to the d1699r3f-ata8-acs.pdf (4.10.4 IDENTIFY DEVICE data)
-				{
-					driveInfo[index].MaxLBA = (uint)lba48SectorCount;
-				}
-				else
-				{
-					driveInfo[index].MaxLBA = lba28SectorCount;
-				}
-			}
 
-			//An ATA drive is present and ready to use
-			driveInfo[index].Present = true;
+			driveInfo[index].AddressingMode = aMode;
 
-			//HAL.DebugWriteLine("Device " + index.ToString() + " present - MaxLBA=" + driveInfo[index].MaxLBA.ToString());
+			HAL.DebugWriteLine("Device " + index.ToString() + " present - MaxLBA=" + driveInfo[index].MaxLBA.ToString());
 		}
 
 		/// <summary>
@@ -366,9 +347,12 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		/// <param name="drive">The drive.</param>
 		/// <returns></returns>
-		public bool Open(uint drive)
+		bool IDiskControllerDevice.Open(uint drive)
 		{
-			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
+			if (drive >= maximunDriveCount || !driveInfo[drive].Present)
+				return false;
+
+			if (!driveInfo[drive].Present)
 				return false;
 
 			return true;
@@ -387,7 +371,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		protected bool PerformLBA28(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
 		{
-			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
+			if (drive >= maximunDriveCount || !driveInfo[drive].Present)
 				return false;
 
 			DeviceHeadPort.Write8((byte)(0xE0 | (drive << 4) | ((lba >> 24) & 0x0F)));
@@ -438,25 +422,24 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		protected bool PerformLBA48(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
 		{
-			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
+			if (drive >= maximunDriveCount || !driveInfo[drive].Present)
 				return false;
 
 			DeviceHeadPort.Write8((byte)(0x40 | (drive << 4)));
 			SectorCountPort.Write8(0);
 
 			LBALowPort.Write8((byte)((lba >> 24) & 0xFF));
-
-			//NOTE: There's no point in finding the upper 5-6 bytes in a 32bit number (which also fixes a bug: (lba >> 32) = lba -> addressing wrong blocks)
-			//LBAMidPort.Write8((byte)((lba >> 32) & 0xFF));
-			LBAMidPort.Write8(0x0);
-			//LBAHighPort.Write8((byte)((lba >> 40) & 0xFF));
-			LBAHighPort.Write8(0x0);
+			LBAMidPort.Write8((byte)((lba >> 32) & 0xFF));
+			LBAHighPort.Write8((byte)((lba >> 40) & 0xFF));
 
 			SectorCountPort.Write8(1);
 
 			LBALowPort.Write8((byte)(lba & 0xFF));
 			LBAMidPort.Write8((byte)((lba >> 8) & 0xFF));
 			LBAHighPort.Write8((byte)((lba >> 16) & 0xFF));
+
+			FeaturePort.Write8(0);
+			FeaturePort.Write8(0);
 
 			CommandPort.Write8((byte)((operation == SectorOperation.Write) ? 0x34 : 0x24));
 
@@ -487,34 +470,36 @@ namespace Mosa.DeviceDriver.ISA
 			return true;
 		}
 
+		#region IDiskControllerDevice
+
 		/// <summary>
 		/// Releases the specified drive.
 		/// </summary>
 		/// <param name="drive">The drive.</param>
 		/// <returns></returns>
-		public bool Release(uint drive) => true;
+		bool IDiskControllerDevice.Release(uint drive) => true;
 
 		/// <summary>
 		/// Gets the maximum drive count.
 		/// </summary>
 		/// <value>The drive count.</value>
-		public uint MaximunDriveCount => 2;
+		uint IDiskControllerDevice.MaximunDriveCount => maximunDriveCount;
 
 		/// <summary>
 		/// Gets the size of the sector.
 		/// </summary>
 		/// <param name="drive">The drive NBR.</param>
 		/// <returns></returns>
-		public uint GetSectorSize(uint drive) => 512;
+		uint IDiskControllerDevice.GetSectorSize(uint drive) => 512;
 
 		/// <summary>
 		/// Gets the total sectors.
 		/// </summary>
 		/// <param name="drive">The drive NBR.</param>
 		/// <returns></returns>
-		public uint GetTotalSectors(uint drive)
+		uint IDiskControllerDevice.GetTotalSectors(uint drive)
 		{
-			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
+			if (drive >= maximunDriveCount || !driveInfo[drive].Present)
 				return 0;
 
 			return driveInfo[drive].MaxLBA;
@@ -527,7 +512,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns>
 		/// 	<c>true</c> if this instance can write to the specified drive; otherwise, <c>false</c>.
 		/// </returns>
-		public bool CanWrite(uint drive)
+		bool IDiskControllerDevice.CanWrite(uint drive)
 		{
 			//todo
 			return true;
@@ -541,9 +526,9 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="count">The count.</param>
 		/// <param name="data">The data.</param>
 		/// <returns></returns>
-		public bool ReadBlock(uint drive, uint block, uint count, byte[] data)
+		bool IDiskControllerDevice.ReadBlock(uint drive, uint block, uint count, byte[] data)
 		{
-			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
+			if (drive >= maximunDriveCount || !driveInfo[drive].Present)
 				return false;
 
 			if (data.Length < count * 512)
@@ -583,9 +568,9 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="count">The count.</param>
 		/// <param name="data">The data.</param>
 		/// <returns></returns>
-		public bool WriteBlock(uint drive, uint block, uint count, byte[] data)
+		bool IDiskControllerDevice.WriteBlock(uint drive, uint block, uint count, byte[] data)
 		{
-			if (drive >= MaximunDriveCount || !driveInfo[drive].Present)
+			if (drive >= maximunDriveCount || !driveInfo[drive].Present)
 				return false;
 
 			if (data.Length < count * 512)
@@ -600,12 +585,16 @@ namespace Mosa.DeviceDriver.ISA
 					{
 						case AddressingMode.LBA28:
 							if (!PerformLBA28(SectorOperation.Write, drive, block + index, data, index * 512))
+							{
 								return false;
+							}
 							break;
 
 						case AddressingMode.LBA48:
 							if (!PerformLBA48(SectorOperation.Write, drive, block + index, data, index * 512))
+							{
 								return false;
+							}
 							break;
 					}
 				}
@@ -616,5 +605,7 @@ namespace Mosa.DeviceDriver.ISA
 				spinLock.Exit();
 			}
 		}
+
+		#endregion IDiskControllerDevice
 	}
 }

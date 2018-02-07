@@ -8,54 +8,42 @@ namespace Mosa.DeviceDriver.ISA
 	/// CMOS Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x0070, PortRange = 2, Platforms = PlatformArchitecture.X86)]
-	public class CMOS : HardwareDevice
+	public class CMOS : DeviceSystem.DeviceDriver
 	{
 		/// <summary>
-		///
+		/// The command port
 		/// </summary>
 		protected IOPortReadWrite commandPort;
 
 		/// <summary>
-		///
+		/// The data port
 		/// </summary>
 		protected IOPortReadWrite dataPort;
 
 		/// <summary>
-		///
+		/// The spin lock
 		/// </summary>
 		protected SpinLock spinLock;
 
 		/// <summary>
-		///
+		/// Initializes this device.
 		/// </summary>
-		public CMOS()
+		protected override void Initialize()
 		{
+			Device.Name = "CMOS";
+
+			commandPort = Device.Resources.GetIOPortReadWrite(0, 0);
+			dataPort = Device.Resources.GetIOPortReadWrite(0, 4);
 		}
 
-		/// <summary>
-		/// Setups this hardware device driver
-		/// </summary>
-		/// <param name="hardwareResources"></param>
-		/// <returns></returns>
-		public override bool Setup(HardwareResources hardwareResources)
+		public override void Probe() => Device.Status = DeviceStatus.Available;
+
+		public override void Start()
 		{
-			this.HardwareResources = hardwareResources;
-			base.Name = "CMOS";
+			if (Device.Status != DeviceStatus.Available)
+				return;
 
-			commandPort = base.HardwareResources.GetIOPortReadWrite(0, 0);
-			dataPort = base.HardwareResources.GetIOPortReadWrite(0, 4);
-
-			return true;
-		}
-
-		/// <summary>
-		/// Starts this hardware device.
-		/// </summary>
-		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
-		{
-			DeviceStatus = DeviceStatus.Online;
-			return DeviceDriverStartStatus.Started;
+			Device.Status = DeviceStatus.Online;
 		}
 
 		/// <summary>

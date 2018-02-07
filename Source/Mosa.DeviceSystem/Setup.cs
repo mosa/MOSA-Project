@@ -66,23 +66,23 @@ namespace Mosa.DeviceSystem
 			//}
 		}
 
-		public static void StartISADevice(ISADeviceDriverRegistryEntry driver)
+		public static void StartISADevice(ISADeviceDriverRegistryEntry driverEntry)
 		{
-			var hardwareDevice = driver.Factory() as IHardwareDevice;
+			var driver = driverEntry.Factory();
 
 			var ioPortRegions = new List<IOPortRegion>();
 			var memoryRegions = new List<MemoryRegion>();
 
-			ioPortRegions.Add(new IOPortRegion(driver.BasePort, driver.PortRange));
+			ioPortRegions.Add(new IOPortRegion(driverEntry.BasePort, driverEntry.PortRange));
 
-			if (driver.AltBasePort != 0x00)
+			if (driverEntry.AltBasePort != 0x00)
 			{
-				ioPortRegions.Add(new IOPortRegion(driver.AltBasePort, driver.AltPortRange));
+				ioPortRegions.Add(new IOPortRegion(driverEntry.AltBasePort, driverEntry.AltPortRange));
 			}
 
-			if (driver.BaseAddress != 0x00)
+			if (driverEntry.BaseAddress != 0x00)
 			{
-				memoryRegions.Add(new MemoryRegion(driver.BaseAddress, driver.AddressRange));
+				memoryRegions.Add(new MemoryRegion(driverEntry.BaseAddress, driverEntry.AddressRange));
 			}
 
 			//if (driver.PhysicalMemory != null)
@@ -98,20 +98,25 @@ namespace Mosa.DeviceSystem
 			//	}
 			//}
 
-			var interruptHandler = new InterruptHandler(InterruptManager, driver.IRQ, hardwareDevice);
+			var interruptHandler = new InterruptHandler(InterruptManager, driverEntry.IRQ, driver);
 
 			var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, interruptHandler);
 
-			hardwareDevice.Setup(hardwareResources);
+			var device = new Device()
+			{
+				//Parent = null;
+			};
 
-			if (!hardwareDevice.Probe())
+			driver.Setup(device);
+
+			if (!driver.Probe())
 				return;
 
-			DeviceManager.Add(hardwareDevice);
+			DeviceManager.Add(device);
 
 			hardwareResources.EnableIRQ();
 
-			hardwareDevice.Start();
+			driver.Start();
 		}
 	}
 }

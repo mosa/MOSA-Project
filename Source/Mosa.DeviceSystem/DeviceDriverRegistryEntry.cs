@@ -2,9 +2,7 @@
 
 namespace Mosa.DeviceSystem
 {
-	public delegate IDevice InstantiateDevice(); // legacy
-
-	public delegate DeviceDriverX InstantiateDeviceDriver();
+	public delegate DeviceDriver InstantiateDeviceDriver();
 
 	public abstract class DeviceDriverRegistryEntry
 	{
@@ -14,8 +12,6 @@ namespace Mosa.DeviceSystem
 
 		public string Name { get; set; }
 
-		public InstantiateDevice Factory { get; set; } // legacy
-
-		public InstantiateDeviceDriver FactoryX { get; set; }
+		public InstantiateDeviceDriver Factory { get; set; }
 	}
 }

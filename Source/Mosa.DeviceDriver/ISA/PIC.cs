@@ -14,7 +14,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// Programmable Interrupt Controller (PIC) Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x20, PortRange = 2, AltBasePort = 0xA0, AltPortRange = 2, Platforms = PlatformArchitecture.X86AndX64)]
-	public class PIC : DeviceDriverX
+	public class PIC : DeviceSystem.DeviceDriver
 	{
 		#region Definitions
 

@@ -9,40 +9,21 @@ namespace Mosa.DeviceDriver.PCI.Intel.QuarkSoC
 	/// <summary>
 	/// </summary>
 	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x0934, ClassCode = 0X0C, SubClassCode = 0x80, ProgIF = 0x00, RevisionID = 0x10, Platforms = PlatformArchitecture.X86AndX64)]
-	public class IntelGPIOController : HardwareDevice
+	public class IntelGPIOController : DeviceSystem.DeviceDriver
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IntelGPIOController"/> class.
-		/// </summary>
-		public IntelGPIOController()
+		protected override void Initialize()
 		{
+			Device.Name = "IntelGPIOController";
 		}
 
-		/// <summary>
-		/// Setups this hardware device driver
-		/// </summary>
-		/// <returns></returns>
-		public override bool Setup(HardwareResources hardwareResources)
+		public override void Start()
 		{
-			this.HardwareResources = hardwareResources;
-			base.Name = "IntelGPIOController";
+			if (Device.Status != DeviceStatus.Available)
+				return;
 
-			return true;
+			Device.Status = DeviceStatus.Online;
 		}
 
-		/// <summary>
-		/// Starts this hardware device.
-		/// </summary>
-		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
-		{
-			return DeviceDriverStartStatus.Started;
-		}
-
-		/// <summary>
-		/// Called when an interrupt is received.
-		/// </summary>
-		/// <returns></returns>
 		public override bool OnInterrupt()
 		{
 			return true;

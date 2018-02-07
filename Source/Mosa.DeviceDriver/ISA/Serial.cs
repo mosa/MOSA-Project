@@ -11,7 +11,7 @@ namespace Mosa.DeviceDriver.ISA
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x02F8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.X86AndX64)]
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x03E8, PortRange = 8, IRQ = 4, Platforms = PlatformArchitecture.X86AndX64)]
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x02E8, PortRange = 8, IRQ = 3, Platforms = PlatformArchitecture.X86AndX64)]
-	public class Serial : DeviceDriverX, ISerialDevice
+	public class Serial : DeviceSystem.DeviceDriver, ISerialDevice
 	{
 		/// <summary>
 		/// Receive Buffer Register (read only)

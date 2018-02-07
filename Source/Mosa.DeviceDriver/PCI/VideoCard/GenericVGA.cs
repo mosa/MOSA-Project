@@ -17,7 +17,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 	/// Generic VGA Device Driver
 	/// </summary>
 	//[PCIDeviceDriver(ClassCode = 0X03, SubClassCode = 0x00, ProgIF = 0x00, Platforms = PlatformArchitecture.X86AndX64)]
-	public class GenericVGA : HardwareDevice, IPixelPaletteGraphicsDevice
+	public class GenericVGA : DeviceSystem.DeviceDriver, IPixelPaletteGraphicsDevice
 	{
 		#region Definitions
 
@@ -181,65 +181,47 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// </summary>
 		private WriteMethod writeMethod;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="GenericVGA"/> class.
-		/// </summary>
-		public GenericVGA()
+		protected override void Initialize()
 		{
+			Device.Name = "GenericVGA";
+
+			byte portBar = (byte)(Device.Resources.IOPointRegionCount - 1);
+
+			miscellaneousOutputRead = Device.Resources.GetIOPortReadWrite(portBar, 0x1C);
+			crtControllerIndex = Device.Resources.GetIOPortReadWrite(portBar, 0x04);
+			crtControllerData = Device.Resources.GetIOPortReadWrite(portBar, 0x05);
+			crtControllerIndexColor = Device.Resources.GetIOPortReadWrite(portBar, 0x24);
+			crtControllerDataColor = Device.Resources.GetIOPortReadWrite(portBar, 0x25);
+			dacPaletteMask = Device.Resources.GetIOPortReadWrite(portBar, 0x16);
+			dacIndexRead = Device.Resources.GetIOPortReadWrite(portBar, 0x17);
+			dacIndexWrite = Device.Resources.GetIOPortReadWrite(portBar, 0x18);
+			dacData = Device.Resources.GetIOPortReadWrite(portBar, 0x19);
+			inputStatus1 = Device.Resources.GetIOPortReadWrite(portBar, 0x12);
+			miscellaneousOutputWrite = Device.Resources.GetIOPortWrite(portBar, 0x12);
+			sequencerAddress = Device.Resources.GetIOPortReadWrite(portBar, 0x14);
+			sequencerData = Device.Resources.GetIOPortReadWrite(portBar, 0x15);
+			graphicsControllerAddress = Device.Resources.GetIOPortReadWrite(portBar, 0x1E);
+			graphicsControllerData = Device.Resources.GetIOPortReadWrite(portBar, 0x1F);
+			inputStatus1ReadB = Device.Resources.GetIOPortReadWrite(portBar, 0x2A);
+			attributeAddress = Device.Resources.GetIOPortReadWrite(portBar, 0x10);
+			attributeData = Device.Resources.GetIOPortReadWrite(portBar, 0x11);
+
+			memory = Device.Resources.GetMemory((byte)(Device.Resources.MemoryRegionCount - 1));
 		}
 
-		/// <summary>
-		/// Setups this hardware device driver
-		/// </summary>
-		/// <param name="hardwareResources"></param>
-		/// <returns></returns>
-		public override bool Setup(HardwareResources hardwareResources)
+		public override void Start()
 		{
-			this.HardwareResources = hardwareResources;
-			base.Name = "GenericVGA";
+			if (Device.Status != DeviceStatus.Available)
+				return;
 
-			byte portBar = (byte)(base.HardwareResources.IOPointRegionCount - 1);
-
-			miscellaneousOutputRead = base.HardwareResources.GetIOPortReadWrite(portBar, 0x1C);
-			crtControllerIndex = base.HardwareResources.GetIOPortReadWrite(portBar, 0x04);
-			crtControllerData = base.HardwareResources.GetIOPortReadWrite(portBar, 0x05);
-			crtControllerIndexColor = base.HardwareResources.GetIOPortReadWrite(portBar, 0x24);
-			crtControllerDataColor = base.HardwareResources.GetIOPortReadWrite(portBar, 0x25);
-			dacPaletteMask = base.HardwareResources.GetIOPortReadWrite(portBar, 0x16);
-			dacIndexRead = base.HardwareResources.GetIOPortReadWrite(portBar, 0x17);
-			dacIndexWrite = base.HardwareResources.GetIOPortReadWrite(portBar, 0x18);
-			dacData = base.HardwareResources.GetIOPortReadWrite(portBar, 0x19);
-			inputStatus1 = base.HardwareResources.GetIOPortReadWrite(portBar, 0x12);
-			miscellaneousOutputWrite = base.HardwareResources.GetIOPortWrite(portBar, 0x12);
-			sequencerAddress = base.HardwareResources.GetIOPortReadWrite(portBar, 0x14);
-			sequencerData = base.HardwareResources.GetIOPortReadWrite(portBar, 0x15);
-			graphicsControllerAddress = base.HardwareResources.GetIOPortReadWrite(portBar, 0x1E);
-			graphicsControllerData = base.HardwareResources.GetIOPortReadWrite(portBar, 0x1F);
-			inputStatus1ReadB = base.HardwareResources.GetIOPortReadWrite(portBar, 0x2A);
-			attributeAddress = base.HardwareResources.GetIOPortReadWrite(portBar, 0x10);
-			attributeData = base.HardwareResources.GetIOPortReadWrite(portBar, 0x11);
-
-			memory = base.HardwareResources.GetMemory((byte)(base.HardwareResources.MemoryRegionCount - 1));
-
-			return true;
-		}
-
-		/// <summary>
-		/// Starts this hardware device.
-		/// </summary>
-		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
-		{
 			if (!SetMode(13))
-				return DeviceDriverStartStatus.Failed;
+			{
+				Device.Status = DeviceStatus.Error;
+			}
 
-			return DeviceDriverStartStatus.Started;
+			Device.Status = DeviceStatus.Online;
 		}
 
-		/// <summary>
-		/// Called when an interrupt is received.
-		/// </summary>
-		/// <returns></returns>
 		public override bool OnInterrupt()
 		{
 			return true;

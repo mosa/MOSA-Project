@@ -10,40 +10,21 @@ namespace Mosa.DeviceDriver.PCI.Intel
 	/// <summary>
 	/// </summary>
 	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x7113, Platforms = PlatformArchitecture.X86AndX64)]
-	public class IntelPIIX4 : HardwareDevice
+	public class IntelPIIX4 : DeviceSystem.DeviceDriver
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IntelPIIX4"/> class.
-		/// </summary>
-		public IntelPIIX4()
+		protected override void Initialize()
 		{
+			Device.Name = "IntelPCI_ISA_IDE_Xcelerator_PIIX4";
 		}
 
-		/// <summary>
-		/// Setups this hardware device driver
-		/// </summary>
-		/// <returns></returns>
-		public override bool Setup(HardwareResources hardwareResources)
+		public override void Start()
 		{
-			this.HardwareResources = hardwareResources;
-			base.Name = "IntelPCI_ISA_IDE_Xcelerator_PIIX4";
+			if (Device.Status != DeviceStatus.Available)
+				return;
 
-			return true;
+			Device.Status = DeviceStatus.Online;
 		}
 
-		/// <summary>
-		/// Starts this hardware device.
-		/// </summary>
-		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
-		{
-			return DeviceDriverStartStatus.Started;
-		}
-
-		/// <summary>
-		/// Called when an interrupt is received.
-		/// </summary>
-		/// <returns></returns>
 		public override bool OnInterrupt()
 		{
 			return true;

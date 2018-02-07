@@ -28,19 +28,22 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="diskControllerDevice">The disk controller device.</param>
 		/// <returns></returns>
-		private List<IDevice> CreateDevices(IDiskControllerDevice diskControllerDevice)
+		private List<Device> CreateDisk(Device diskControllerDevice)
 		{
-			var devices = new List<IDevice>();
+			var controller = diskControllerDevice as IDiskControllerDevice;
+			var devices = new List<Device>();
 
-			for (uint drive = 0; drive < diskControllerDevice.MaximunDriveCount; drive++)
+			for (uint drive = 0; drive < controller.MaximunDriveCount; drive++)
 			{
-				if (diskControllerDevice.Open(drive))
+				if (controller.Open(drive))
 				{
-					if (diskControllerDevice.GetTotalSectors(drive) == 0)
+					if (controller.GetTotalSectors(drive) == 0)
 						continue;
 
-					var diskDevice = new DiskDevice(diskControllerDevice, drive, false);
-					devices.Add(diskDevice as IDevice);
+					var diskDevice = new DiskDevice(drive, false);
+					diskDevice.Setup(diskControllerDevice);
+
+					devices.Add(diskDevice);
 				}
 			}
 
@@ -55,15 +58,13 @@ namespace Mosa.DeviceSystem
 			// FIXME: Do not create disk devices if this method executed more than once
 
 			// Find disk controller devices
-			var controllers = deviceManager.GetDevices<IDiskControllerDevice>(DeviceStatus.Online);
+			var controllers = deviceManager.GetDeviceServices<IDiskControllerDevice>(DeviceStatus.Online);
 
 			// For each controller
 			foreach (var device in controllers)
 			{
-				var controller = device as IDiskControllerDevice;
-
 				// Create disk devices
-				var disks = CreateDevices(controller);
+				var disks = CreateDisk(device);
 
 				// Add them to the device manager
 				foreach (var disk in disks)

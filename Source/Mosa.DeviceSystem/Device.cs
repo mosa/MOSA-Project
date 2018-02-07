@@ -1,25 +1,21 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// Abstract base class for a device
+	/// Device
 	/// </summary>
-	public abstract class Device : IDevice
+	public class Device
 	{
-		/// <summary>
-		/// Gets the name of the device.
-		/// </summary>
-		public string Name { get; protected set; }
-
-		/// <summary>
-		/// Gets the parent device, if any, of the device.
-		/// </summary>
-		public IDevice Parent { get; protected set; }
-
-		/// <summary>
-		/// Gets the status of the device.
-		/// </summary>
-		public DeviceStatus DeviceStatus { get; protected set; }
+		public string Name { get; set; }
+		public DeviceDriverRegistryEntry Driver { get; set; }
+		public DeviceStatus Status { get; set; }
+		public IService Service { get; set; }
+		public Device Parent { get; set; }
+		public List<Device> Children { get; } = new List<Device>();
+		public HardwareResources Resources;
+		public IDeviceConfiguration Configuration;
 	}
 }
