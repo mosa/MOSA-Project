@@ -14,8 +14,9 @@ namespace Mosa.Platform.x86.Stages
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(X86.CallReg, CallReg);
-			AddVisitation(X86.In8, In8);
-			AddVisitation(X86.In16, In16);
+
+			//AddVisitation(X86.In8, In8);
+			//AddVisitation(X86.In16, In16);
 			AddVisitation(X86.Mov32, Mov32);
 			AddVisitation(X86.MovLoad8, MovLoad8);
 			AddVisitation(X86.MovLoad16, MovLoad16);
@@ -76,21 +77,21 @@ namespace Mosa.Platform.x86.Stages
 			context.Empty();
 		}
 
-		public void In8(Context context)
-		{
-			Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
+		//public void In8(Context context)
+		//{
+		//	Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
 
-			// NOTE: Other option is to use Movzx after IN instruction
-			context.InsertBefore().SetInstruction(X86.MovConst32, context.Result, ConstantZero);
-		}
+		//	// NOTE: Other option is to use Movzx after IN instruction
+		//	context.InsertBefore().SetInstruction(X86.MovConst32, context.Result, ConstantZero);
+		//}
 
-		public void In16(Context context)
-		{
-			Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
+		//public void In16(Context context)
+		//{
+		//	Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
 
-			// NOTE: Other option is to use Movzx after IN instruction
-			context.InsertBefore().SetInstruction(X86.MovConst32, context.Result, ConstantZero);
-		}
+		//	// NOTE: Other option is to use Movzx after IN instruction
+		//	context.InsertBefore().SetInstruction(X86.MovConst32, context.Result, ConstantZero);
+		//}
 
 		public void Mov32(Context context)
 		{
