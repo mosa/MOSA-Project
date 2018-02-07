@@ -472,31 +472,55 @@ namespace Mosa.Compiler.Framework.Analysis
 				|| instruction == IRInstruction.LoadZeroExtended
 				|| instruction == IRInstruction.LoadFloatR4
 				|| instruction == IRInstruction.LoadFloatR8
-				|| instruction == IRInstruction.LoadParameterInteger
-				|| instruction == IRInstruction.LoadParameterSignExtended
-				|| instruction == IRInstruction.LoadParameterZeroExtended
+				|| instruction == IRInstruction.LoadParameterSignExtended8x32
+				|| instruction == IRInstruction.LoadParameterSignExtended16x32
+				|| instruction == IRInstruction.LoadParameterInteger32
+				|| instruction == IRInstruction.LoadParameterInteger64
+				|| instruction == IRInstruction.LoadParameterSignExtended8x64
+				|| instruction == IRInstruction.LoadParameterSignExtended16x64
+				|| instruction == IRInstruction.LoadParameterSignExtended32x64
+				|| instruction == IRInstruction.LoadParameterZeroExtended8x32
+				|| instruction == IRInstruction.LoadParameterZeroExtended16x32
+				|| instruction == IRInstruction.LoadParameterZeroExtended8x64
+				|| instruction == IRInstruction.LoadParameterZeroExtended16x64
+				|| instruction == IRInstruction.LoadParameterZeroExtended32x64
 				|| instruction == IRInstruction.LoadParameterFloatR4
 				|| instruction == IRInstruction.LoadParameterFloatR8)
 			{
 				Load(node);
 			}
-			else if (instruction == IRInstruction.AddSigned
-				|| instruction == IRInstruction.AddUnsigned
-				|| instruction == IRInstruction.SubSigned
-				|| instruction == IRInstruction.SubUnsigned
-				|| instruction == IRInstruction.MulSigned
-				|| instruction == IRInstruction.MulUnsigned
-				|| instruction == IRInstruction.DivSigned
-				|| instruction == IRInstruction.DivUnsigned
-				|| instruction == IRInstruction.RemSigned
-				|| instruction == IRInstruction.RemUnsigned
-				|| instruction == IRInstruction.ShiftLeft
-				|| instruction == IRInstruction.ShiftRight
-				|| instruction == IRInstruction.ArithmeticShiftRight)
+			else if (instruction == IRInstruction.AddSigned32
+				|| instruction == IRInstruction.AddUnsigned32
+				|| instruction == IRInstruction.AddSigned64
+				|| instruction == IRInstruction.AddUnsigned64
+				|| instruction == IRInstruction.SubSigned32
+				|| instruction == IRInstruction.SubUnsigned32
+				|| instruction == IRInstruction.SubSigned64
+				|| instruction == IRInstruction.SubUnsigned64
+				|| instruction == IRInstruction.MulSigned32
+				|| instruction == IRInstruction.MulUnsigned32
+				|| instruction == IRInstruction.MulSigned64
+				|| instruction == IRInstruction.MulUnsigned64
+				|| instruction == IRInstruction.DivSigned32
+				|| instruction == IRInstruction.DivUnsigned32
+				|| instruction == IRInstruction.RemSigned32
+				|| instruction == IRInstruction.RemUnsigned32
+				|| instruction == IRInstruction.DivSigned64
+				|| instruction == IRInstruction.DivUnsigned64
+				|| instruction == IRInstruction.RemSigned64
+				|| instruction == IRInstruction.RemUnsigned64
+				|| instruction == IRInstruction.ShiftLeft32
+				|| instruction == IRInstruction.ShiftRight32
+				|| instruction == IRInstruction.ShiftLeft64
+				|| instruction == IRInstruction.ShiftRight64
+				|| instruction == IRInstruction.ArithmeticShiftRight32
+				|| instruction == IRInstruction.ArithmeticShiftRight64)
 			{
 				IntegerOperation(node);
 			}
-			else if (instruction == IRInstruction.CompareInteger)
+			else if (instruction == IRInstruction.CompareInteger32x32
+				|| instruction == IRInstruction.CompareInteger64x32
+				|| instruction == IRInstruction.CompareInteger64x64)
 			{
 				CompareIntegerOperation(node);
 			}
@@ -821,57 +845,68 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private bool IntegerOperation(BaseInstruction instruction, ulong operand1, ulong operand2, ConditionCode conditionCode, out ulong result)
 		{
-			if (instruction == IRInstruction.AddSigned || instruction == IRInstruction.AddUnsigned)
+			if (instruction == IRInstruction.AddSigned32
+				|| instruction == IRInstruction.AddUnsigned32
+				|| instruction == IRInstruction.AddSigned64
+				|| instruction == IRInstruction.AddUnsigned64)
 			{
 				result = operand1 + operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.SubSigned || instruction == IRInstruction.SubUnsigned)
+			else if (instruction == IRInstruction.SubSigned32
+				|| instruction == IRInstruction.SubUnsigned32
+				|| instruction == IRInstruction.SubSigned64
+				|| instruction == IRInstruction.SubUnsigned64)
 			{
 				result = operand1 - operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.MulUnsigned || instruction == IRInstruction.MulSigned)
+			else if (instruction == IRInstruction.MulUnsigned32
+				|| instruction == IRInstruction.MulSigned32
+				|| instruction == IRInstruction.MulUnsigned64
+				|| instruction == IRInstruction.MulSigned64)
 			{
 				result = operand1 * operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.DivUnsigned && operand2 != 0)
+			else if ((instruction == IRInstruction.DivUnsigned32 || instruction == IRInstruction.DivUnsigned64) && operand2 != 0)
 			{
 				result = operand1 / operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.DivSigned && operand2 != 0)
+			else if ((instruction == IRInstruction.DivSigned32 || instruction == IRInstruction.DivSigned64) && operand2 != 0)
 			{
 				result = (ulong)((long)operand1 / (long)operand2);
 				return true;
 			}
-			else if (instruction == IRInstruction.RemUnsigned && operand2 != 0)
+			else if ((instruction == IRInstruction.RemUnsigned32 || instruction == IRInstruction.RemUnsigned64) && operand2 != 0)
 			{
 				result = operand1 % operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.RemSigned && operand2 != 0)
+			else if ((instruction == IRInstruction.RemSigned32 || instruction == IRInstruction.RemSigned64) && operand2 != 0)
 			{
 				result = (ulong)((long)operand1 % (long)operand2);
 				return true;
 			}
-			else if (instruction == IRInstruction.ArithmeticShiftRight)
+			else if (instruction == IRInstruction.ArithmeticShiftRight32 || instruction == IRInstruction.ArithmeticShiftRight64)
 			{
 				result = (ulong)(((long)operand1) >> (int)operand2);
 				return true;
 			}
-			else if (instruction == IRInstruction.ShiftRight)
+			else if (instruction == IRInstruction.ShiftRight32 || instruction == IRInstruction.ShiftRight64)
 			{
 				result = operand1 >> (int)operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.ShiftLeft)
+			else if (instruction == IRInstruction.ShiftLeft32 || instruction == IRInstruction.ShiftLeft64)
 			{
 				result = operand1 << (int)operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.CompareInteger)
+			else if (instruction == IRInstruction.CompareInteger32x32
+				|| instruction == IRInstruction.CompareInteger64x32
+				|| instruction == IRInstruction.CompareInteger64x64)
 			{
 				bool? compare = Compare(operand1, operand2, conditionCode);
 

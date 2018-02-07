@@ -3,6 +3,7 @@
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -105,6 +106,26 @@ namespace Mosa.Compiler.Framework
 
 		protected MethodTransform MethodTransform { get; private set; }
 
+		protected bool Is32BitPlatform { get; private set; }
+
+		protected bool Is64BitPlatform { get; private set; }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance has code.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance has code; otherwise, <c>false</c>.
+		/// </value>
+		protected bool HasCode { get { return BasicBlocks.HeadBlocks.Count != 0; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance has protected regions.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance has protected regions; otherwise, <c>false</c>.
+		/// </value>
+		protected bool HasProtectedRegions { get { return MethodCompiler.Method.ExceptionHandlers.Count != 0; } }
+
 		#endregion Properties
 
 		#region IPipelineStage Members
@@ -134,6 +155,8 @@ namespace Mosa.Compiler.Framework
 			NativePointerSize = Architecture.NativePointerSize;
 			NativeAlignment = Architecture.NativeAlignment;
 			NativeInstructionSize = Architecture.NativeInstructionSize;
+			Is32BitPlatform = Architecture.Is32BitPlatform;
+			Is64BitPlatform = Architecture.Is64BitPlatform;
 
 			MethodData = MethodCompiler.MethodData;
 
@@ -167,22 +190,6 @@ namespace Mosa.Compiler.Framework
 		#endregion Overrides
 
 		#region Methods
-
-		/// <summary>
-		/// Gets a value indicating whether this instance has code.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if this instance has code; otherwise, <c>false</c>.
-		/// </value>
-		protected bool HasCode { get { return BasicBlocks.HeadBlocks.Count != 0; } }
-
-		/// <summary>
-		/// Gets a value indicating whether this instance has protected regions.
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance has protected regions; otherwise, <c>false</c>.
-		/// </value>
-		protected bool HasProtectedRegions { get { return MethodCompiler.Method.ExceptionHandlers.Count != 0; } }
 
 		/// <summary>
 		/// Allocates the virtual register.
@@ -728,26 +735,87 @@ namespace Mosa.Compiler.Framework
 			return IRInstruction.LoadInteger;
 		}
 
-		public static BaseIRInstruction GetLoadParameterInstruction(MosaType type)
+		protected BaseIRInstruction GetStoreParameterInstruction(MosaType type)
 		{
-			if (MustSignExtendOnLoad(type))
-			{
-				return IRInstruction.LoadParameterSignExtended;
-			}
-			else if (MustZeroExtendOnLoad(type))
-			{
-				return IRInstruction.LoadParameterZeroExtended;
-			}
-			else if (type.IsR4)
-			{
-				return IRInstruction.LoadParameterFloatR4;
-			}
-			else if (type.IsR8)
-			{
-				return IRInstruction.LoadParameterFloatR8;
-			}
+			return GetStoreParameterInstruction(type, Is32BitPlatform);
+		}
 
-			return IRInstruction.LoadParameterInteger;
+		public BaseIRInstruction GetLoadParameterInstruction(MosaType type)
+		{
+			return GetLoadParameterInstruction(type, Is32BitPlatform);
+		}
+
+		public static BaseIRInstruction GetStoreParameterInstruction(MosaType type, bool is32bitPlatform)
+		{
+			if (type.IsR4)
+				return IRInstruction.StoreParameterFloatR4;
+			else if (type.IsR8)
+				return IRInstruction.StoreParameterFloatR8;
+			else if (type.IsUI1 || type.IsBoolean)
+				return IRInstruction.StoreParameterInteger8;
+			else if (type.IsUI2 || type.IsChar)
+				return IRInstruction.StoreParameterInteger16;
+			else if (type.IsUI4)
+				return IRInstruction.StoreParameterInteger32;
+			else if (type.IsUI8)
+				return IRInstruction.StoreParameterInteger64;
+			else if (is32bitPlatform)
+				return IRInstruction.StoreParameterInteger32;
+			else if (is32bitPlatform)
+				return IRInstruction.StoreParameterInteger64;
+
+			throw new NotSupportedException();
+		}
+
+		public static BaseIRInstruction GetLoadParameterInstruction(MosaType type, bool is32bitPlatform)
+		{
+			if (type.IsR4)
+				return IRInstruction.LoadParameterFloatR4;
+			else if (type.IsR8)
+				return IRInstruction.LoadParameterFloatR8;
+
+			if (is32bitPlatform)
+			{
+				if (type.IsU1 || type.IsBoolean)
+					return IRInstruction.LoadParameterZeroExtended8x32;
+				if (type.IsI1)
+					return IRInstruction.LoadParameterSignExtended8x32;
+				else if (type.IsU2 || type.IsChar)
+					return IRInstruction.LoadParameterZeroExtended16x32;
+				else if (type.IsI2)
+					return IRInstruction.LoadParameterSignExtended16x32;
+				else if (type.IsUI4)
+					return IRInstruction.LoadParameterInteger32;
+				else if (type.IsUI8)
+					return IRInstruction.LoadParameterInteger64;
+				else if (type.IsEnum && type.ElementType.IsUI8)
+					return IRInstruction.LoadParameterInteger64;
+
+				return IRInstruction.LoadParameterInteger32;
+			}
+			else
+			{
+				if (type.IsU1 || type.IsBoolean)
+					return IRInstruction.LoadParameterZeroExtended8x64;
+				if (type.IsI1)
+					return IRInstruction.LoadParameterSignExtended8x64;
+				else if (type.IsU2 || type.IsChar)
+					return IRInstruction.LoadParameterZeroExtended16x64;
+				else if (type.IsI2)
+					return IRInstruction.LoadParameterSignExtended16x64;
+				else if (type.IsU4)
+					return IRInstruction.LoadParameterZeroExtended32x64;
+				else if (type.IsI4)
+					return IRInstruction.LoadParameterSignExtended32x64;
+				else if (type.IsUI8)
+					return IRInstruction.LoadParameterInteger64;
+				else if (type.IsEnum && type.ElementType.IsI4)
+					return IRInstruction.LoadParameterSignExtended32x64;
+				else if (type.IsEnum && type.ElementType.IsU4)
+					return IRInstruction.LoadParameterZeroExtended32x64;
+
+				return IRInstruction.LoadParameterInteger64;
+			}
 		}
 
 		public static BaseIRInstruction GetMoveInstruction(MosaType type)
@@ -772,32 +840,41 @@ namespace Mosa.Compiler.Framework
 			return IRInstruction.MoveInteger;
 		}
 
-		public static BaseIRInstruction GetStoreInstruction(MosaType type)
+		public BaseIRInstruction GetStoreInstruction(MosaType type)
 		{
 			if (type.IsR4)
-			{
 				return IRInstruction.StoreFloatR4;
-			}
 			else if (type.IsR8)
-			{
 				return IRInstruction.StoreFloatR8;
-			}
+			else if (type.IsUI1 || type.IsBoolean)
+				return IRInstruction.StoreInteger8;
+			else if (type.IsUI2 || type.IsChar)
+				return IRInstruction.StoreInteger16;
+			else if (type.IsUI4)
+				return IRInstruction.StoreInteger32;
+			else if (type.IsUI8)
+				return IRInstruction.StoreInteger64;
+			else if (Is32BitPlatform)
+				return IRInstruction.StoreInteger32;
+			else if (Is64BitPlatform)
+				return IRInstruction.StoreInteger64;
 
-			return IRInstruction.StoreInteger;
+			throw new NotSupportedException();
 		}
 
-		public static BaseIRInstruction GetStoreParameterInstruction(MosaType type)
+		public BaseInstruction Select(Operand operand, BaseInstruction instruction32, BaseInstruction instruction64)
 		{
-			if (type.IsR4)
-			{
-				return IRInstruction.StoreParameterFloatR4;
-			}
-			else if (type.IsR8)
-			{
-				return IRInstruction.StoreParameterFloatR8;
-			}
+			return !operand.Is64BitInteger ? instruction32 : instruction64;
+		}
 
-			return IRInstruction.StoreParameterInteger;
+		public BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
+		{
+			return Is32BitPlatform ? instruction32 : instruction64;
+		}
+
+		public BaseInstruction Select(bool is64bit, BaseInstruction instruction32, BaseInstruction instruction64)
+		{
+			return !is64bit ? instruction32 : instruction64;
 		}
 
 		#endregion Helpers

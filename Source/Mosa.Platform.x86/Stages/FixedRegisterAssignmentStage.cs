@@ -41,7 +41,12 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		public void Cdq(Context context)
 		{
-			if (context.Result.IsCPURegister && context.Result2.IsCPURegister && context.Operand1.IsCPURegister)
+			if (context.Result.IsCPURegister
+				&& context.Result2.IsCPURegister
+				&& context.Operand1.IsCPURegister
+				&& context.Result.Register == GeneralPurposeRegister.EDX
+				&& context.Result2.Register == GeneralPurposeRegister.EAX
+				&& context.Operand1.Register == GeneralPurposeRegister.EAX)
 				return;
 
 			Operand operand1 = context.Operand1;

@@ -21,21 +21,41 @@
 			"OperandCount": 1
 		},
 		{
-			"Name": "AddSigned",
+			"Name": "AddSigned32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "AddUnsigned",
+			"Name": "AddSigned64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "ArithmeticShiftRight",
+			"Name": "AddUnsigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "AddUnsigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "ArithmeticShiftRight32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "ArithmeticShiftRight64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
@@ -117,7 +137,21 @@
 			"ResultType": "Boolean"
 		},
 		{
-			"Name": "CompareInteger",
+			"Name": "CompareInteger32x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
+			"Name": "CompareInteger64x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
+			"Name": "CompareInteger64x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
@@ -179,13 +213,25 @@
 			"OperandCount": 2
 		},
 		{
-			"Name": "DivSigned",
+			"Name": "DivSigned32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
 		},
 		{
-			"Name": "DivUnsigned",
+			"Name": "DivSigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "DivUnsigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "DivUnsigned64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
@@ -372,48 +418,138 @@
 			"MemoryRead": "true"
 		},
 		{
-			"Name": "LoadParameterInteger",
+			"Name": "LoadParameterInteger32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
 			"MemoryRead": "true"
 		},
 		{
-			"Name": "LoadParameterSignExtended",
+			"Name": "LoadParameterInteger64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
 			"MemoryRead": "true"
 		},
 		{
-			"Name": "LoadParameterZeroExtended",
+			"Name": "LoadParameterSignExtended8x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
 			"MemoryRead": "true"
 		},
 		{
-			"Name": "LogicalAnd",
+			"Name": "LoadParameterSignExtended16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterSignExtended8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterSignExtended16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterSignExtended32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterZeroExtended8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterZeroExtended16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterZeroExtended8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterZeroExtended16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParameterZeroExtended32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LogicalAnd32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "LogicalNot",
+			"Name": "LogicalAnd64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "LogicalNot32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "LogicalOr",
+			"Name": "LogicalNot64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "LogicalOr32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "LogicalXor",
+			"Name": "LogicalOr64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "LogicalXor32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "LogicalXor64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
@@ -476,14 +612,28 @@
 			"Commutative": "true"
 		},
 		{
-			"Name": "MulSigned",
+			"Name": "MulSigned32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "MulUnsigned",
+			"Name": "MulSigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulUnsigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulUnsigned32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
@@ -539,13 +689,25 @@
 			"OperandCount": 2
 		},
 		{
-			"Name": "RemSigned",
+			"Name": "RemSigned32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
 		},
 		{
-			"Name": "RemUnsigned",
+			"Name": "RemSigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "RemUnsigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "RemUnsigned64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
@@ -566,13 +728,25 @@
 			"IgnoreDuringCodeGeneration": "true"
 		},
 		{
-			"Name": "ShiftLeft",
+			"Name": "ShiftLeft32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
 		},
 		{
-			"Name": "ShiftRight",
+			"Name": "ShiftLeft64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "ShiftRight32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "ShiftRight64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
@@ -607,7 +781,28 @@
 			"MemoryWrite": "true"
 		},
 		{
-			"Name": "StoreInteger",
+			"Name": "StoreInteger8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreInteger16",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreInteger32",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreInteger64",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 3,
@@ -635,7 +830,28 @@
 			"MemoryWrite": "true"
 		},
 		{
-			"Name": "StoreParameterInteger",
+			"Name": "StoreParameterInteger8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreParameterInteger16",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreParameterInteger32",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreParameterInteger64",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
@@ -654,13 +870,25 @@
 			"OperandCount": 2
 		},
 		{
-			"Name": "SubSigned",
+			"Name": "SubSigned32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
 		},
 		{
-			"Name": "SubUnsigned",
+			"Name": "SubSigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "SubUnsigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "SubUnsigned64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2

@@ -217,7 +217,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(IRInstruction.SubSigned, StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
+			context.AppendInstruction(Select(IRInstruction.SubSigned32, IRInstruction.SubSigned64), StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
 		}
 
 		private void FreeStackAfterCall(Context context, int stackSize)
@@ -225,7 +225,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(IRInstruction.AddSigned, StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
+			context.AppendInstruction(Select(IRInstruction.AddSigned32, IRInstruction.AddSigned64), StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
 		}
 
 		private int CalculateParameterStackSize(List<Operand> operands)
@@ -278,7 +278,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (operand.IsInteger)
 			{
 				var size = GetInstructionSize(operand.Type);
-				context.AppendInstruction(IRInstruction.StoreInteger, size, null, scratch, offsetOperand, operand);
+				context.AppendInstruction(Select(operand, IRInstruction.StoreInteger32, IRInstruction.StoreInteger64), size, null, scratch, offsetOperand, operand);
 			}
 			else if (operand.IsR4)
 			{
@@ -296,7 +296,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				// note: same for integer logic (above)
 				var size = GetInstructionSize(operand.Type);
-				context.AppendInstruction(IRInstruction.StoreInteger, size, null, scratch, offsetOperand, operand);
+				context.AppendInstruction(Select(operand, IRInstruction.StoreInteger32, IRInstruction.StoreInteger64), size, null, scratch, offsetOperand, operand);
 			}
 		}
 

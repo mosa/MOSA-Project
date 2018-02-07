@@ -123,13 +123,22 @@
     <Compile Include="IR\AddressOf.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\AddSigned.cs">
+    <Compile Include="IR\AddSigned32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\AddUnsigned.cs">
+    <Compile Include="IR\AddSigned64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\ArithmeticShiftRight.cs">
+    <Compile Include="IR\AddUnsigned32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\AddUnsigned64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\ArithmeticShiftRight32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\ArithmeticShiftRight64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\BlockEnd.cs">
@@ -180,7 +189,13 @@
     <Compile Include="IR\CompareFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\CompareInteger.cs">
+    <Compile Include="IR\CompareInteger32x32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\CompareInteger64x32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\CompareInteger64x64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\CompareIntegerBranch.cs">
@@ -210,10 +225,16 @@
     <Compile Include="IR\DivFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\DivSigned.cs">
+    <Compile Include="IR\DivSigned32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\DivUnsigned.cs">
+    <Compile Include="IR\DivSigned64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\DivUnsigned32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\DivUnsigned64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\Epilogue.cs">
@@ -306,13 +327,40 @@
     <Compile Include="IR\LoadParameterFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LoadParameterInteger.cs">
+    <Compile Include="IR\LoadParameterInteger32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LoadParameterSignExtended.cs">
+    <Compile Include="IR\LoadParameterInteger64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LoadParameterZeroExtended.cs">
+    <Compile Include="IR\LoadParameterSignExtended16x32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterSignExtended16x64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterSignExtended32x64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterSignExtended8x32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterSignExtended8x64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterZeroExtended16x32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterZeroExtended16x64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterZeroExtended32x64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterZeroExtended8x32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LoadParameterZeroExtended8x64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\LoadSignExtended.cs">
@@ -321,16 +369,28 @@
     <Compile Include="IR\LoadZeroExtended.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LogicalAnd.cs">
+    <Compile Include="IR\LogicalAnd32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LogicalNot.cs">
+    <Compile Include="IR\LogicalAnd64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LogicalOr.cs">
+    <Compile Include="IR\LogicalNot32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\LogicalXor.cs">
+    <Compile Include="IR\LogicalNot64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LogicalOr32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LogicalOr64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LogicalXor32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\LogicalXor64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\MemoryCopy.cs">
@@ -363,10 +423,16 @@
     <Compile Include="IR\MulFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\MulSigned.cs">
+    <Compile Include="IR\MulSigned32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\MulUnsigned.cs">
+    <Compile Include="IR\MulSigned64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\MulUnsigned32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\MulUnsigned64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\NewArray.cs">
@@ -393,10 +459,16 @@
     <Compile Include="IR\RemFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\RemSigned.cs">
+    <Compile Include="IR\RemSigned32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\RemUnsigned.cs">
+    <Compile Include="IR\RemSigned64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\RemUnsigned32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\RemUnsigned64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\Rethrow.cs">
@@ -408,10 +480,16 @@
     <Compile Include="IR\SetReturn.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\ShiftLeft.cs">
+    <Compile Include="IR\ShiftLeft32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\ShiftRight.cs">
+    <Compile Include="IR\ShiftLeft64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\ShiftRight32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\ShiftRight64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\Split64.cs">
@@ -429,7 +507,16 @@
     <Compile Include="IR\StoreFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\StoreInteger.cs">
+    <Compile Include="IR\StoreInteger16.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\StoreInteger32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\StoreInteger64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\StoreInteger8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\StoreParameterCompound.cs">
@@ -441,7 +528,16 @@
     <Compile Include="IR\StoreParameterFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\StoreParameterInteger.cs">
+    <Compile Include="IR\StoreParameterInteger16.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\StoreParameterInteger32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\StoreParameterInteger64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\StoreParameterInteger8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\SubFloatR4.cs">
@@ -450,10 +546,16 @@
     <Compile Include="IR\SubFloatR8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\SubSigned.cs">
+    <Compile Include="IR\SubSigned32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\SubUnsigned.cs">
+    <Compile Include="IR\SubSigned64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\SubUnsigned32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\SubUnsigned64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\Switch.cs">

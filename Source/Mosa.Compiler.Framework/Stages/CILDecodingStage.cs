@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (MethodCompiler.Method.Code.Count == 0)
 			{
-				if (MethodCompiler.Compiler.DelegatePatcher.PatchDelegate(MethodCompiler))
+				if (DelegatePatcher.PatchDelegate(MethodCompiler))
 					return;
 
 				MethodCompiler.Stop();

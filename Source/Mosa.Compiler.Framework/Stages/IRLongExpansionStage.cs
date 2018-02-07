@@ -14,18 +14,19 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(IRInstruction.LogicalAnd, LogicalAnd);
-			AddVisitation(IRInstruction.LogicalOr, LogicalOr);
-			AddVisitation(IRInstruction.LogicalXor, LogicalXor);
-			AddVisitation(IRInstruction.LogicalNot, LogicalNot);
-			AddVisitation(IRInstruction.LoadParameterInteger, LoadParameterInteger);
+			AddVisitation(IRInstruction.LogicalAnd64, LogicalAnd64);
+			AddVisitation(IRInstruction.LogicalOr64, LogicalOr64);
+			AddVisitation(IRInstruction.LogicalXor64, LogicalXor64);
+			AddVisitation(IRInstruction.LogicalNot64, LogicalNot64);
+			AddVisitation(IRInstruction.LoadParameterInteger64, LoadParameterInteger64);
 			AddVisitation(IRInstruction.LoadInteger, LoadInteger);
+
+			AddVisitation(IRInstruction.MoveZeroExtended, MoveZeroExtended);
 		}
 
-		private void LogicalAnd(InstructionNode node)
+		private void LogicalAnd64(InstructionNode node)
 		{
-			if (!node.Result.Is64BitInteger)
-				return;
+			Debug.Assert(node.Result.Is64BitInteger);
 
 			var result = node.Result;
 			var operand1 = node.Operand1;
@@ -42,15 +43,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
 			context.AppendInstruction2(IRInstruction.Split64, op1Low, op1High, operand2);
-			context.AppendInstruction(IRInstruction.LogicalAnd, InstructionSize.Size32, resultLow, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.LogicalAnd, InstructionSize.Size32, resultHigh, op0High, op1High);
+			context.AppendInstruction(IRInstruction.LogicalAnd32, InstructionSize.Size32, resultLow, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.LogicalAnd32, InstructionSize.Size32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalOr(InstructionNode node)
+		private void LogicalOr64(InstructionNode node)
 		{
-			if (!node.Result.Is64BitInteger)
-				return;
+			Debug.Assert(node.Result.Is64BitInteger);
 
 			var result = node.Result;
 			var operand1 = node.Operand1;
@@ -67,15 +67,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
 			context.AppendInstruction2(IRInstruction.Split64, op1Low, op1High, operand2);
-			context.AppendInstruction(IRInstruction.LogicalOr, InstructionSize.Size32, resultLow, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.LogicalOr, InstructionSize.Size32, resultHigh, op0High, op1High);
+			context.AppendInstruction(IRInstruction.LogicalOr32, InstructionSize.Size32, resultLow, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.LogicalOr32, InstructionSize.Size32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalXor(InstructionNode node)
+		private void LogicalXor64(InstructionNode node)
 		{
-			if (!node.Result.Is64BitInteger)
-				return;
+			Debug.Assert(node.Result.Is64BitInteger);
 
 			var result = node.Result;
 			var operand1 = node.Operand1;
@@ -92,12 +91,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
 			context.AppendInstruction2(IRInstruction.Split64, op1Low, op1High, operand2);
-			context.AppendInstruction(IRInstruction.LogicalXor, InstructionSize.Size32, resultLow, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.LogicalXor, InstructionSize.Size32, resultHigh, op0High, op1High);
+			context.AppendInstruction(IRInstruction.LogicalXor32, InstructionSize.Size32, resultLow, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.LogicalXor32, InstructionSize.Size32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalNot(InstructionNode node)
+		private void LogicalNot64(InstructionNode node)
 		{
 			if (!node.Result.Is64BitInteger)
 				return;
@@ -113,20 +112,18 @@ namespace Mosa.Compiler.Framework.Stages
 			var context = new Context(node);
 
 			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
-			context.AppendInstruction(IRInstruction.LogicalNot, InstructionSize.Size32, resultLow, op0Low);
-			context.AppendInstruction(IRInstruction.LogicalNot, InstructionSize.Size32, resultHigh, op0High);
+			context.AppendInstruction(IRInstruction.LogicalNot32, resultLow, op0Low);
+			context.AppendInstruction(IRInstruction.LogicalNot32, resultHigh, op0High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LoadParameterInteger(InstructionNode node)
+		private void LoadParameterInteger64(InstructionNode node)
 		{
 			Debug.Assert(!node.Result.IsR4);
 			Debug.Assert(!node.Result.IsR8);
+			Debug.Assert(node.Result.Is64BitInteger);
 
 			// TODO: Managed 64bit pointers
-
-			if (!node.Result.Is64BitInteger)
-				return;
 
 			var result = node.Result;
 			var operand1 = node.Operand1;
@@ -138,8 +135,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var context = new Context(node);
 
-			context.SetInstruction(IRInstruction.LoadParameterInteger, InstructionSize.Size32, resultLow, op0Low);
-			context.AppendInstruction(IRInstruction.LoadParameterInteger, InstructionSize.Size32, resultHigh, op0High);
+			context.SetInstruction(IRInstruction.LoadParameterInteger32, InstructionSize.Size32, resultLow, op0Low);
+			context.AppendInstruction(IRInstruction.LoadParameterInteger32, InstructionSize.Size32, resultHigh, op0High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
@@ -189,7 +186,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 				context.SetInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, location, offset);
-				context.AppendInstruction(IRInstruction.AddUnsigned, offset4, offset, CreateConstant(4u));
+				context.AppendInstruction(IRInstruction.AddUnsigned32, offset4, offset, CreateConstant(4u));
 				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, location, offset4);
 				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 				return;
@@ -203,7 +200,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, location);
-				context.AppendInstruction(IRInstruction.AddUnsigned, offset4, offset, CreateConstant(4u));
+				context.AppendInstruction(IRInstruction.AddUnsigned32, offset4, offset, CreateConstant(4u));
 				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, op0Low, offset);
 				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, op0Low, offset4);
 				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
@@ -218,7 +215,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, offset);
-				context.AppendInstruction(IRInstruction.AddUnsigned, offset4, op0Low, CreateConstant(4u));
+				context.AppendInstruction(IRInstruction.AddUnsigned32, offset4, op0Low, CreateConstant(4u));
 				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultLow, location, op0Low);
 				context.AppendInstruction(IRInstruction.LoadInteger, InstructionSize.Size32, resultHigh, location, offset4);
 				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
@@ -226,6 +223,19 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return;
+		}
+
+		private void MoveZeroExtended(InstructionNode node)
+		{
+			if (!node.Result.Is64BitInteger)
+				return;
+
+			if (node.Result.Is64BitInteger)
+				return;
+
+			var context = new Context(node);
+
+			context.SetInstruction(IRInstruction.To64, node.Result, node.Operand1, ConstantZero);
 		}
 	}
 }

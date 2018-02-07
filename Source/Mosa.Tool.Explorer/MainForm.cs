@@ -199,7 +199,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
 			Compiler.CompilerOptions.EnableInlinedMethods = cbEnableInlinedMethods.Checked;
 			Compiler.CompilerOptions.IRLongExpansion = cbEnableIRLongExpansion.Checked;
-			Compiler.CompilerOptions.InlinedIRMaximum = 20;
+			Compiler.CompilerOptions.InlinedIRMaximum = 8;
 		}
 
 		private void CleanGUI()

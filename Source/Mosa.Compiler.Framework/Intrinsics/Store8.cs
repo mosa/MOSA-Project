@@ -24,11 +24,11 @@ namespace Mosa.Compiler.Framework.Intrinsics
 
 			if (context.OperandCount == 2)
 			{
-				context.SetInstruction(IRInstruction.StoreInteger, size, null, context.Operand1, methodCompiler.ConstantZero, context.Operand2);
+				context.SetInstruction(IRInstruction.StoreInteger8, size, null, context.Operand1, methodCompiler.ConstantZero, context.Operand2);
 			}
 			else if (context.OperandCount == 3)
 			{
-				context.SetInstruction(IRInstruction.StoreInteger, size, null, context.Operand1, context.Operand2, context.Operand3);
+				context.SetInstruction(IRInstruction.StoreInteger8, size, null, context.Operand1, context.Operand2, context.Operand3);
 			}
 			else
 			{

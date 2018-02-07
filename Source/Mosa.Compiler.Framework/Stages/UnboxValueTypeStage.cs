@@ -43,8 +43,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.TypedRef);
 
 			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, v1, StackFrame, thisPtr);
-			context.AppendInstruction(IRInstruction.AddSigned, NativeInstructionSize, v1, v1, CreateConstant(NativePointerSize * 2));
-			context.AppendInstruction(IRInstruction.StoreInteger, NativeInstructionSize, null, StackFrame, thisPtr, v1);
+			context.AppendInstruction(Select(IRInstruction.AddSigned32, IRInstruction.AddSigned64), NativeInstructionSize, v1, v1, CreateConstant(NativePointerSize * 2));
+			context.AppendInstruction(Select(IRInstruction.StoreInteger32, IRInstruction.StoreInteger64), NativeInstructionSize, null, StackFrame, thisPtr, v1);
 		}
 
 		protected override void Finish()

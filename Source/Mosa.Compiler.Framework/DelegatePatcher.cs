@@ -2,66 +2,18 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Collections.Generic;
+
+// FIXME -- not 64bit compatible
 
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Patches delegates
 	/// </summary>
-	public sealed class DelegatePatcher
+	public static class DelegatePatcher
 	{
-		/// <summary>
-		/// The compiler
-		/// </summary>
-		private readonly BaseCompiler Compiler;
-
-		/// <summary>
-		/// The delegate proxy type
-		/// </summary>
-		private MosaType delegateProxyType;
-
-		/// <summary>
-		/// The deligate proxy methods
-		/// </summary>
-		public readonly Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>> delegateProxyMethods = new Dictionary<MosaMethod, Tuple<MosaMethod, MosaMethod>>();
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DelegatePatcher"/> class.
-		/// </summary>
-		/// <param name="compiler">The compiler.</param>
-		public DelegatePatcher(BaseCompiler compiler)
-		{
-			Compiler = compiler;
-		}
-
-		private MosaMethod GetDelegateProxyMethod(MosaMethod delegateMethod, bool instance)
-		{
-			if (delegateProxyType == null)
-			{
-				delegateProxyType = Compiler.TypeSystem.CreateLinkerType("DelegateProxy");
-			}
-
-			if (!delegateProxyMethods.TryGetValue(delegateMethod, out Tuple<MosaMethod, MosaMethod> tuple))
-			{
-				var staticProxy = Compiler.TypeSystem.CreateLinkerMethod(delegateProxyType, delegateMethod.FullName + "@Static@Proxy", delegateMethod.Signature.ReturnType, false, delegateMethod.Signature.Parameters);
-				var instanceProxy = Compiler.TypeSystem.CreateLinkerMethod(delegateProxyType, delegateMethod.FullName + "@Instance@Proxy", delegateMethod.Signature.ReturnType, true, delegateMethod.Signature.Parameters);
-
-				tuple = new Tuple<MosaMethod, MosaMethod>(instanceProxy, staticProxy);
-
-				delegateProxyMethods.Add(delegateMethod, tuple);
-			}
-
-			return instance ? tuple.Item1 : tuple.Item2;
-		}
-
-		/// <summary>
-		/// Patches the delegate.
-		/// </summary>
-		/// <param name="methodCompiler">The method compiler.</param>
-		/// <returns></returns>
-		public bool PatchDelegate(BaseMethodCompiler methodCompiler)
+		public static bool PatchDelegate(BaseMethodCompiler methodCompiler)
 		{
 			if (!methodCompiler.Method.DeclaringType.IsDelegate)
 				return false;
@@ -99,18 +51,18 @@ namespace Mosa.Compiler.Framework
 			var v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand.Type);
 			var v3 = methodCompiler.CreateVirtualRegister(instanceOperand.Type);
 
-			context.AppendInstruction(IRInstruction.LoadParameterInteger, v1, thisOperand);
-			context.AppendInstruction(IRInstruction.LoadParameterInteger, v2, methodPointerOperand);
-			context.AppendInstruction(IRInstruction.LoadParameterInteger, v3, instanceOperand);
+			context.AppendInstruction(IRInstruction.LoadParameterInteger32, v1, thisOperand); // FIXME -- not 64 compatible
+			context.AppendInstruction(IRInstruction.LoadParameterInteger32, v2, methodPointerOperand); // FIXME -- not 64 compatible
+			context.AppendInstruction(IRInstruction.LoadParameterInteger32, v3, instanceOperand); // FIXME -- not 64 compatible
 
-			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, methodPointerOffsetOperand, v2);
+			context.AppendInstruction(IRInstruction.StoreInteger32, size, null, v1, methodPointerOffsetOperand, v2); // FIXME -- not 64 compatible
 			context.MosaType = methodPointerOperand.Type;
-			context.AppendInstruction(IRInstruction.StoreInteger, size, null, v1, instanceOffsetOperand, v3);
+			context.AppendInstruction(IRInstruction.StoreInteger32, size, null, v1, instanceOffsetOperand, v3); // FIXME -- not 64 compatible
 			context.MosaType = instanceOperand.Type;
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
-		private void PatchInvoke(BaseMethodCompiler methodCompiler)
+		private static void PatchInvoke(BaseMethodCompiler methodCompiler)
 		{
 			// check if instance is null (if so, it's a static call to the methodPointer)
 
@@ -145,7 +97,7 @@ namespace Mosa.Compiler.Framework
 				{
 					vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
 
-					var loadInstruction = BaseMethodCompilerStage.GetLoadParameterInstruction(vrs[i].Type);
+					var loadInstruction = BaseMethodCompilerStage.GetLoadParameterInstruction(vrs[i].Type, methodCompiler.Architecture.Is32BitPlatform);
 					var loadsize = BaseMethodCompilerStage.GetInstructionSize(vrs[i].Type);
 
 					b0.AppendInstruction(loadInstruction, loadsize, vrs[i], methodCompiler.Parameters[i]);
@@ -155,16 +107,16 @@ namespace Mosa.Compiler.Framework
 
 			var thisOperand = vrs[0];
 
-			var opMethod = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.U4);
+			var opMethod = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.U4); // FIXME -- not 64 compatible
 			var opInstance = methodCompiler.VirtualRegisters.Allocate(thisOperand.Type);
-			var opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.I4);
+			var opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.I4); // FIXME -- not 64 compatible
 
 			var opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
 			var c0 = Operand.CreateConstant(0, methodCompiler.TypeSystem);
 
 			b0.AppendInstruction(IRInstruction.LoadInteger, size, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(IRInstruction.LoadInteger, size, opInstance, thisOperand, instanceOffsetOperand);
-			b0.AppendInstruction(IRInstruction.CompareInteger, ConditionCode.Equal, opCompare, opInstance, c0);
+			b0.AppendInstruction(IRInstruction.CompareInteger32x32, ConditionCode.Equal, opCompare, opInstance, c0); // FIXME -- not 64 compatible
 			b0.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, opCompare, c0);
 			b0.AddBranchTarget(b2.Block);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.Block);

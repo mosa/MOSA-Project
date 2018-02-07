@@ -98,14 +98,6 @@ namespace Mosa.Compiler.Framework
 		public MosaType InternalRuntimeType { get; private set; }
 
 		/// <summary>
-		/// Gets the delegate patcher.
-		/// </summary>
-		/// <value>
-		/// The delegate patcher.
-		/// </value>
-		public DelegatePatcher DelegatePatcher { get; private set; }
-
-		/// <summary>
 		/// Gets the compiler data.
 		/// </summary>
 		public CompilerData CompilerData { get; private set; }
@@ -131,7 +123,6 @@ namespace Mosa.Compiler.Framework
 			GlobalCounters = new Counters();
 			PlugSystem = new PlugSystem();
 			CompilerData = new CompilerData();
-			DelegatePatcher = new DelegatePatcher(this);
 
 			// Create new dictionary
 			IntrinsicTypes = new Dictionary<string, Type>();

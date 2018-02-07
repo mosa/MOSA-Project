@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(X86.In16, v1, context.Operand1);
 			context.AppendInstruction(X86.Movzx16To32, result, v1);
 
-			//context.SetInstruction(X86.In16, InstructionSize.Size16, context.Result, context.Operand1);
+			//context.SetInstruction(X86.In16, result, context.Operand1);
 		}
 
 		#endregion Methods
