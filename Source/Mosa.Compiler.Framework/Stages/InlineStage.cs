@@ -193,13 +193,14 @@ namespace Mosa.Compiler.Framework.Stages
 		private static void UpdateParameterInstructions(InstructionNode newNode)
 		{
 			var instruction = newNode.Instruction;
+
 			if (instruction == IRInstruction.LoadParameterFloatR4)
 			{
-				instruction = IRInstruction.MoveFloatR4;
+				newNode.Instruction = IRInstruction.MoveFloatR4;
 			}
 			else if (instruction == IRInstruction.LoadParameterFloatR8)
 			{
-				instruction = IRInstruction.MoveFloatR8;
+				newNode.Instruction = IRInstruction.MoveFloatR8;
 			}
 			else if (instruction == IRInstruction.LoadParameterInteger32
 				|| instruction == IRInstruction.LoadParameterInteger64
@@ -214,7 +215,7 @@ namespace Mosa.Compiler.Framework.Stages
 				|| instruction == IRInstruction.LoadParameterZeroExtended16x64
 				|| instruction == IRInstruction.LoadParameterZeroExtended32x64)
 			{
-				instruction = IRInstruction.MoveInteger;
+				newNode.Instruction = IRInstruction.MoveInteger;
 			}
 			else if (instruction == IRInstruction.StoreParameterInteger8
 				|| instruction == IRInstruction.StoreParameterInteger16
@@ -233,11 +234,11 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (instruction == IRInstruction.StoreParameterCompound)
 			{
-				instruction = IRInstruction.MoveCompound;
+				newNode.Instruction = IRInstruction.MoveCompound;
 			}
 			else if (instruction == IRInstruction.LoadParameterCompound)
 			{
-				instruction = IRInstruction.MoveCompound;
+				newNode.Instruction = IRInstruction.MoveCompound;
 			}
 		}
 
