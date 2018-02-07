@@ -255,7 +255,7 @@ namespace Mosa.Compiler.Framework
 			EnableSSA = true;
 			EnableIROptimizations = true;
 			EnableSparseConditionalConstantPropagation = true;
-			EnableInlinedMethods = true;
+			EnableInlinedMethods = false;
 			BaseAddress = 0x00400000;
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
 			EmitBinary = true;

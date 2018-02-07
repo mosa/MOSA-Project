@@ -778,15 +778,17 @@ namespace Mosa.Compiler.Framework
 			{
 				if (type.IsU1 || type.IsBoolean)
 					return IRInstruction.LoadParameterZeroExtended8x32;
-				if (type.IsU1)
+				if (type.IsI1)
 					return IRInstruction.LoadParameterSignExtended8x32;
 				else if (type.IsU2 || type.IsChar)
 					return IRInstruction.LoadParameterZeroExtended16x32;
-				else if (type.IsI2 || type.IsChar)
+				else if (type.IsI2)
 					return IRInstruction.LoadParameterSignExtended16x32;
 				else if (type.IsUI4)
 					return IRInstruction.LoadParameterInteger32;
 				else if (type.IsUI8)
+					return IRInstruction.LoadParameterInteger64;
+				else if (type.IsEnum && type.ElementType.IsUI8)
 					return IRInstruction.LoadParameterInteger64;
 
 				return IRInstruction.LoadParameterInteger32;
@@ -795,11 +797,11 @@ namespace Mosa.Compiler.Framework
 			{
 				if (type.IsU1 || type.IsBoolean)
 					return IRInstruction.LoadParameterZeroExtended8x64;
-				if (type.IsU1)
+				if (type.IsI1)
 					return IRInstruction.LoadParameterSignExtended8x64;
 				else if (type.IsU2 || type.IsChar)
 					return IRInstruction.LoadParameterZeroExtended16x64;
-				else if (type.IsI2 || type.IsChar)
+				else if (type.IsI2)
 					return IRInstruction.LoadParameterSignExtended16x64;
 				else if (type.IsU4)
 					return IRInstruction.LoadParameterZeroExtended32x64;
@@ -807,6 +809,10 @@ namespace Mosa.Compiler.Framework
 					return IRInstruction.LoadParameterSignExtended32x64;
 				else if (type.IsUI8)
 					return IRInstruction.LoadParameterInteger64;
+				else if (type.IsEnum && type.ElementType.IsI4)
+					return IRInstruction.LoadParameterSignExtended32x64;
+				else if (type.IsEnum && type.ElementType.IsU4)
+					return IRInstruction.LoadParameterZeroExtended32x64;
 
 				return IRInstruction.LoadParameterInteger64;
 			}
