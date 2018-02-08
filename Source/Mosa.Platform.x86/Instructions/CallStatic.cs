@@ -30,14 +30,6 @@ namespace Mosa.Platform.x86.Instructions
 
 			StaticEmitters.EmitCallStatic(node, emitter);
 		}
-
-		// The following is used by the automated code generator.
-
-		public override LegacyOpCode __legacyopcode { get { return LegacyOpcode; } }
-
-		public override string __staticEmitMethod { get { return "StaticEmitters.Emit%"; } }
-
-		public override string __legacyOpcodeOperandOrder { get { return "1"; } }
 	}
 }
 

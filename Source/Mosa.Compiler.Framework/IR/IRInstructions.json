@@ -355,6 +355,18 @@
 			"VariableOperands": "true"
 		},
 		{
+			"Name": "LoadConstant32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "LoadConstant64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
 			"Name": "LoadCompound",
 			"FamilyName": "IR",
 			"ResultCount": 1,
@@ -391,6 +403,84 @@
 		},
 		{
 			"Name": "LoadZeroExtended",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+
+		{
+			"Name": "LoadInteger32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadInteger64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtended8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtended8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtended16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtended32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtended8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtended16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtended8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtended16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtended32x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
@@ -598,6 +688,18 @@
 			"OperandCount": 1
 		},
 		{
+			"Name": "MoveInteger32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "MoveInteger64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
 			"Name": "MulFloatR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,
@@ -719,6 +821,41 @@
 			"OperandCount": 1,
 			"FlowControl": "Return",
 			"VariableOperands": "true"
+		},
+		{
+			"Name": "SetReturnR4",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetReturnR8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetReturn32",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetReturn64",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetReturnCompound",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
 		},
 		{
 			"Name": "SetLeaveTarget",

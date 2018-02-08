@@ -20,10 +20,6 @@ namespace Mosa.Platform.x86.Instructions
 		}
 
 		public override bool ThreeTwoAddressConversion { get { return false; } }
-
-		// The following is used by the automated code generator.
-
-		public override LegacyOpCode __legacyopcode { get { return LegacyOpcode; } }
 	}
 }
 

@@ -21,8 +21,6 @@ dynamic entries = jss.Deserialize(json, typeof(object)) as dynamic;
 
 foreach (var entry in entries.Instructions) {
 
-if (entry.X86EmitBytes == null && entry.X86LegacyOpcode == null && entry.StaticEmitMethod == null)
-	continue;
 #>
 
 <# manager.StartNewFile(entry.Name+".cs"); #>
@@ -238,26 +236,7 @@ namespace Mosa.Platform.x86.Instructions
 <# } #>
 		}
 <# } #>
-<# if (entry.X86EmitBytes != null || entry.X86LegacyOpcode != null || entry.StaticEmitMethod != null) { #>
-
-		// The following is used by the automated code generator.
-<# } #>
-<# if (entry.X86EmitBytes != null) { #>
-
-		public override byte[] __opcode { get { return opcode; } }
-<# } #>
-<# if (entry.X86LegacyOpcode != null) { #>
-
-		public override LegacyOpCode __legacyopcode { get { return LegacyOpcode; } }
-<# } #>
-<# if (entry.StaticEmitMethod != null) { #>
-
-		public override string __staticEmitMethod { get { return "<#= entry.StaticEmitMethod #>"; } }
-<# } #>
-<# if (entry.X86LegacyOpcodeOperandOrder != null) { #>
-
-		public override string __legacyOpcodeOperandOrder { get { return "<#= entry.X86LegacyOpcodeOperandOrder #>"; } }
-<# } #>	}
+	}
 }
 <# } #>
 <# manager.EndBlock(); #>

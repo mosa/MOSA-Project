@@ -28,12 +28,6 @@ namespace Mosa.Platform.x86.Instructions
 
 			emitter.Emit(LegacyOpcode, node.Result, node.Operand1);
 		}
-
-		// The following is used by the automated code generator.
-
-		public override LegacyOpCode __legacyopcode { get { return LegacyOpcode; } }
-
-		public override string __legacyOpcodeOperandOrder { get { return "r1"; } }
 	}
 }
 
