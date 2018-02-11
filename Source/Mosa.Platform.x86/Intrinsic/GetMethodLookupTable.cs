@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// GetMethodLookupTable
 	/// </summary>
 	internal class GetMethodLookupTable : IIntrinsicPlatformMethod
 	{
@@ -19,7 +19,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
 		{
-			context.SetInstruction(IRInstruction.MoveInteger, context.Result, Operand.CreateUnmanagedSymbolPointer(Metadata.MethodLookupTable, methodCompiler.TypeSystem));
+			context.SetInstruction(IRInstruction.MoveInteger32, context.Result, Operand.CreateUnmanagedSymbolPointer(Metadata.MethodLookupTable, methodCompiler.TypeSystem));
 		}
 
 		#endregion Methods

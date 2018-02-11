@@ -139,7 +139,10 @@ namespace Mosa.Compiler.Framework
 
 			// return
 			if (opReturn != null)
-				b3.AppendInstruction(IRInstruction.SetReturn, null, opReturn);
+			{
+				var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Architecture.Is32BitPlatform);
+				b3.AppendInstruction(setReturn, null, opReturn);
+			}
 
 			b3.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
@@ -149,7 +152,9 @@ namespace Mosa.Compiler.Framework
 			var nullOperand = Operand.GetNullObject(methodCompiler.TypeSystem);
 			var context = new Context(CreateMethodStructure(methodCompiler));
 
-			context.AppendInstruction(IRInstruction.SetReturn, null, nullOperand);
+			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(nullOperand.Type, methodCompiler.Architecture.Is32BitPlatform);
+
+			context.AppendInstruction(setReturn, null, nullOperand);
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 

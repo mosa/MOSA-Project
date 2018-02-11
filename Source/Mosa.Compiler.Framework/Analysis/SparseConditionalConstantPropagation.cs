@@ -553,7 +553,11 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				FinallyStart(node);
 			}
-			else if (instruction == IRInstruction.SetReturn)
+			else if (instruction == IRInstruction.SetReturn32
+				|| instruction == IRInstruction.SetReturn64
+				|| instruction == IRInstruction.SetReturnR4
+				|| instruction == IRInstruction.SetReturnR8
+				|| instruction == IRInstruction.SetReturnCompound)
 			{
 				// nothing
 			}

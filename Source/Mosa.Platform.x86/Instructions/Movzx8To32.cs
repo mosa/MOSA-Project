@@ -26,10 +26,6 @@ namespace Mosa.Platform.x86.Instructions
 
 			StaticEmitters.EmitMovzx8To32(node, emitter);
 		}
-
-		// The following is used by the automated code generator.
-
-		public override string __staticEmitMethod { get { return "StaticEmitters.Emit%"; } }
 	}
 }
 

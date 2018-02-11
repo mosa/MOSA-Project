@@ -124,17 +124,36 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 					}
 
-					if (node.Instruction == IRInstruction.SetReturn)
+					if (node.Instruction == IRInstruction.SetReturn32
+						|| node.Instruction == IRInstruction.SetReturn64
+						|| node.Instruction == IRInstruction.SetReturnR4
+						|| node.Instruction == IRInstruction.SetReturnR8
+						|| node.Instruction == IRInstruction.SetReturnCompound)
 					{
 						if (callSiteNode.Result != null)
 						{
-							var newOp = Map(node.Operand1, map, callSiteNode);
-							var moveInsturction = GetMoveInstruction(callSiteNode.Result.Type);
+							var newOperand = Map(node.Operand1, map, callSiteNode);
 
-							var moveNode = new InstructionNode(moveInsturction, callSiteNode.Result, newOp);
+							BaseInstruction moveInstruction = null;
+
+							if (node.Instruction == IRInstruction.SetReturn32)
+								moveInstruction = IRInstruction.MoveInteger32;
+							else if (node.Instruction == IRInstruction.SetReturn64)
+								moveInstruction = IRInstruction.MoveInteger64;
+							else if (node.Instruction == IRInstruction.SetReturnR4)
+								moveInstruction = IRInstruction.MoveFloatR4;
+							else if (node.Instruction == IRInstruction.SetReturnR8)
+								moveInstruction = IRInstruction.MoveFloatR8;
+							else if (node.Instruction == IRInstruction.SetReturnCompound)
+								moveInstruction = IRInstruction.MoveCompound;
+
+							Debug.Assert(moveInstruction != null);
+
+							var moveNode = new InstructionNode(moveInstruction, callSiteNode.Result, newOperand);
 
 							newBlock.BeforeLast.Insert(moveNode);
 						}
+
 						continue;
 					}
 
@@ -203,26 +222,32 @@ namespace Mosa.Compiler.Framework.Stages
 				newNode.Instruction = IRInstruction.MoveFloatR8;
 			}
 			else if (instruction == IRInstruction.LoadParameterInteger32
-				|| instruction == IRInstruction.LoadParameterInteger64
 				|| instruction == IRInstruction.LoadParameterSignExtended8x32
 				|| instruction == IRInstruction.LoadParameterSignExtended16x32
+				|| instruction == IRInstruction.LoadParameterZeroExtended8x32
+				|| instruction == IRInstruction.LoadParameterZeroExtended16x32)
+			{
+				newNode.Instruction = IRInstruction.MoveInteger32;
+			}
+			else if (instruction == IRInstruction.LoadParameterInteger64
 				|| instruction == IRInstruction.LoadParameterSignExtended8x64
 				|| instruction == IRInstruction.LoadParameterSignExtended16x64
 				|| instruction == IRInstruction.LoadParameterSignExtended32x64
-				|| instruction == IRInstruction.LoadParameterZeroExtended8x32
-				|| instruction == IRInstruction.LoadParameterZeroExtended16x32
 				|| instruction == IRInstruction.LoadParameterZeroExtended8x64
 				|| instruction == IRInstruction.LoadParameterZeroExtended16x64
 				|| instruction == IRInstruction.LoadParameterZeroExtended32x64)
 			{
-				newNode.Instruction = IRInstruction.MoveInteger;
+				newNode.Instruction = IRInstruction.MoveInteger64;
 			}
 			else if (instruction == IRInstruction.StoreParameterInteger8
 				|| instruction == IRInstruction.StoreParameterInteger16
-				|| instruction == IRInstruction.StoreParameterInteger32
-				|| instruction == IRInstruction.StoreParameterInteger64)
+				|| instruction == IRInstruction.StoreParameterInteger32)
 			{
-				newNode.SetInstruction(IRInstruction.MoveInteger, newNode.Operand1, newNode.Operand2);
+				newNode.SetInstruction(IRInstruction.MoveInteger32, newNode.Operand1, newNode.Operand2);
+			}
+			else if (instruction == IRInstruction.StoreParameterInteger64)
+			{
+				newNode.SetInstruction(IRInstruction.MoveInteger64, newNode.Operand1, newNode.Operand2);
 			}
 			else if (instruction == IRInstruction.StoreParameterFloatR4)
 			{

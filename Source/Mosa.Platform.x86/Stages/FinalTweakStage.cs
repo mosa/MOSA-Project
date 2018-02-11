@@ -14,9 +14,6 @@ namespace Mosa.Platform.x86.Stages
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(X86.CallReg, CallReg);
-
-			//AddVisitation(X86.In8, In8);
-			//AddVisitation(X86.In16, In16);
 			AddVisitation(X86.Mov32, Mov32);
 			AddVisitation(X86.MovLoad8, MovLoad8);
 			AddVisitation(X86.MovLoad16, MovLoad16);
@@ -45,6 +42,9 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.SetGreaterOrEqual, Setcc);
 			AddVisitation(X86.SetLessOrEqual, Setcc);
 			AddVisitation(X86.SetGreaterThan, Setcc);
+
+			AddVisitation(X86.Movzx8To32, Movzx8To32);
+			AddVisitation(X86.Movzx16To32, Movzx16To32);
 		}
 
 		#region Visitation Methods
@@ -255,6 +255,50 @@ namespace Mosa.Platform.x86.Stages
 				context.SetInstruction2(X86.Xchg32, eax, result, result, eax);
 				context.AppendInstruction(instruction, condition, eax);
 				context.AppendInstruction2(X86.Xchg32, result, eax, eax, result);
+			}
+		}
+
+		public void Movzx8To32(Context context)
+		{
+			Debug.Assert(context.Result.IsCPURegister);
+
+			// Movzx8To32 can not use with ESI or EDI registers
+			if (context.Operand1.Register != GeneralPurposeRegister.ESI && context.Operand1.Register != GeneralPurposeRegister.EDI)
+				return;
+
+			Operand result = context.Result;
+			Operand source = context.Operand1;
+
+			if (source.Register != result.Register)
+			{
+				context.SetInstruction(X86.Mov32, result, source);
+				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0xff));
+			}
+			else
+			{
+				context.SetInstruction(X86.AndConst32, result, result, CreateConstant(0xff));
+			}
+		}
+
+		public void Movzx16To32(Context context)
+		{
+			Debug.Assert(context.Result.IsCPURegister);
+
+			// Movzx8To32 can not use with ESI or EDI registers
+			if (context.Operand1.Register != GeneralPurposeRegister.ESI && context.Operand1.Register != GeneralPurposeRegister.EDI)
+				return;
+
+			Operand result = context.Result;
+			Operand source = context.Operand1;
+
+			if (source.Register != result.Register)
+			{
+				context.SetInstruction(X86.Mov32, result, source);
+				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0xffff));
+			}
+			else
+			{
+				context.SetInstruction(X86.AndConst32, result, result, CreateConstant(0xffff));
 			}
 		}
 

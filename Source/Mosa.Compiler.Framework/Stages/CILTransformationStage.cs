@@ -1365,7 +1365,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (operand1 != null)
 			{
-				context.SetInstruction(IRInstruction.SetReturn, null, operand1);
+				var setret = GetSetReturnInstruction(operand1.Type, Is32BitPlatform);
+
+				context.SetInstruction(setret, null, operand1);
+
 				context.AppendInstruction(IRInstruction.Jmp, BasicBlocks.EpilogueBlock);
 			}
 			else

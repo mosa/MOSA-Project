@@ -14,12 +14,20 @@ namespace Mosa.Platform.x86.Stages
 		{
 			AddVisitation(X86.CallReg, CallReg);
 			AddVisitation(X86.Cmp32, Cmp32);
-			AddVisitation(X86.Sar32, ConvertShiftConstantToByte);
-			AddVisitation(X86.Shl32, ConvertShiftConstantToByte);
-			AddVisitation(X86.Shr32, ConvertShiftConstantToByte);
-			AddVisitation(X86.SarConst32, ConvertShiftConstantToByte);
-			AddVisitation(X86.ShlConst32, ConvertShiftConstantToByte);
-			AddVisitation(X86.ShrConst32, ConvertShiftConstantToByte);
+			AddVisitation(X86.Sar32, ConvertOperand2ToByte);
+			AddVisitation(X86.Shl32, ConvertOperand2ToByte);
+			AddVisitation(X86.Shr32, ConvertOperand2ToByte);
+			AddVisitation(X86.SarConst32, ConvertOperand2ToByte);
+			AddVisitation(X86.ShlConst32, ConvertOperand2ToByte);
+			AddVisitation(X86.ShrConst32, ConvertOperand2ToByte);
+
+			//AddVisitation(X86.In8, ConvertOperand1ToByte);
+			//AddVisitation(X86.In16, ConvertOperand1ToByte);
+			//AddVisitation(X86.In32, ConvertOperand1ToByte);
+
+			//AddVisitation(X86.Out8, ConvertOperand1ToByte);
+			//AddVisitation(X86.Out16, ConvertOperand1ToByte);
+			//AddVisitation(X86.Out32, ConvertOperand1ToByte);
 		}
 
 		#region Visitation Methods
@@ -65,12 +73,20 @@ namespace Mosa.Platform.x86.Stages
 		/// Adjusts the shift constant.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void ConvertShiftConstantToByte(Context context)
+		private void ConvertOperand2ToByte(Context context)
 		{
 			if (!context.Operand2.IsConstant || context.Operand2.IsByte)
 				return;
 
 			context.Operand2 = CreateConstant(TypeSystem.BuiltIn.U1, context.Operand2.ConstantUnsignedLongInteger);
+		}
+
+		private void ConvertOperand1ToByte(Context context)
+		{
+			if (!context.Operand1.IsConstant || context.Operand1.IsByte)
+				return;
+
+			context.Operand1 = CreateConstant(TypeSystem.BuiltIn.U1, context.Operand1.ConstantUnsignedLongInteger);
 		}
 	}
 }

@@ -42,6 +42,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.LoadParameterZeroExtended32x64, LoadParameterZeroExtended32x64);
 
 			AddVisitation(IRInstruction.MoveInteger, MoveInteger);
+			AddVisitation(IRInstruction.MoveInteger64, MoveInteger64);
 			AddVisitation(IRInstruction.MoveSignExtended, MoveSignExtended);
 			AddVisitation(IRInstruction.MoveZeroExtended, MoveZeroExtended);
 			AddVisitation(IRInstruction.MulSigned64, MulSigned64);
@@ -71,72 +72,6 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Visitation Methods
 
-		private void Call(Context context)
-		{
-			if (context.Result?.Is64BitInteger == true)
-			{
-				SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
-			}
-
-			foreach (var operand in context.Operands)
-			{
-				if (operand.Is64BitInteger)
-				{
-					SplitLongOperand(operand, out Operand op0L, out Operand op0H);
-				}
-			}
-		}
-
-		private void CompareIntegerBranch(Context context)
-		{
-			if (context.Operand1.Is64BitInteger || context.Operand2.Is64BitInteger)
-			{
-				ExpandBinaryBranch(context);
-			}
-		}
-
-		private void LoadInteger(Context context)
-		{
-			if (context.Operand1.Is64BitInteger || context.Result.Is64BitInteger)
-			{
-				ExpandLoad(context);
-			}
-		}
-
-		private void MoveInteger(Context context)
-		{
-			if (Any64Bit(context.Node))
-			{
-				ExpandMoveInteger(context);
-			}
-		}
-
-		private void MoveSignExtended(Context context)
-		{
-			if (Any64Bit(context.Node))
-			{
-				ExpandSignedMove(context);
-			}
-		}
-
-		private void MoveZeroExtended(Context context)
-		{
-			if (Any64Bit(context.Node))
-			{
-				ExpandUnsignedMove(context);
-			}
-		}
-
-		private void MulSigned64(Context context)
-		{
-			ExpandMul(context);
-		}
-
-		private void MulUnsigned64(Context context)
-		{
-			ExpandMul(context);
-		}
-
 		private void AddUnsigned64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
@@ -155,26 +90,6 @@ namespace Mosa.Platform.x86.Stages
 			if (!op0H.IsConstantZero)
 			{
 				context.AppendInstruction(X86.Mov32, op0H, v1);
-			}
-		}
-
-		private void LogicalAnd64(Context context)
-		{
-			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
-			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
-			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
-
-			if (!context.Result.Is64BitInteger)
-			{
-				context.SetInstruction(X86.Mov32, op0L, op1L);
-				context.AppendInstruction(X86.And32, op0L, op0L, op2L);
-			}
-			else
-			{
-				context.SetInstruction(X86.Mov32, op0H, op1H);
-				context.AppendInstruction(X86.Mov32, op0L, op1L);
-				context.AppendInstruction(X86.And32, op0H, op0H, op2H);
-				context.AppendInstruction(X86.And32, op0L, op0L, op2L);
 			}
 		}
 
@@ -224,62 +139,20 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[5].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 
-		private void To64(Context context)
+		private void Call(Context context)
 		{
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-			var result = context.Result;
+			if (context.Result?.Is64BitInteger == true)
+			{
+				SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			}
 
-			SplitLongOperand(result, out Operand op0L, out Operand op0H);
-
-			context.SetInstruction(X86.Mov32, op0L, operand1);
-			context.AppendInstruction(X86.Mov32, op0H, operand2);
-		}
-
-		private void Split64(Context context)
-		{
-			var operand1 = context.Operand1;
-			var result = context.Result;
-			var result2 = context.Result2;
-
-			SplitLongOperand(operand1, out Operand op0L, out Operand op0H);
-
-			context.SetInstruction(X86.Mov32, result, op0L);
-			context.AppendInstruction(X86.Mov32, result2, op0H);
-		}
-
-		private void ExpandBinaryBranch(Context context)
-		{
-			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
-			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
-
-			var target = context.BranchTargets[0];
-
-			var branch = IRTransformationStage.GetBranch(context.ConditionCode);
-			var branchUnsigned = IRTransformationStage.GetBranch(context.ConditionCode.GetUnsigned());
-
-			var nextBlock = Split(context);
-			var newBlocks = CreateNewBlockContexts(2);
-
-			// FIXME: If the conditional branch and unconditional branch are the same, this could cause a problem
-			target.PreviousBlocks.Remove(context.Block);
-
-			// The block is being split on the condition, so the new next block has one too many next blocks!
-			nextBlock.Block.NextBlocks.Remove(target);
-
-			// Compare high dwords
-			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
-			context.AppendInstruction(X86.BranchEqual, newBlocks[1].Block);
-			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
-
-			// Branch if check already gave results
-			newBlocks[0].AppendInstruction(branch, target);
-			newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
-
-			// Compare low dwords
-			newBlocks[1].AppendInstruction(X86.Cmp32, null, op1L, op2L);
-			newBlocks[1].AppendInstruction(branchUnsigned, target);
-			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
+			foreach (var operand in context.Operands)
+			{
+				if (operand.Is64BitInteger)
+				{
+					SplitLongOperand(operand, out Operand op0L, out Operand op0H);
+				}
+			}
 		}
 
 		private void CompareInteger64x32(Context context)
@@ -328,6 +201,48 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 
+		private void CompareIntegerBranch(Context context)
+		{
+			if (context.Operand1.Is64BitInteger || context.Operand2.Is64BitInteger)
+			{
+				ExpandBinaryBranch(context);
+			}
+		}
+
+		private void ExpandBinaryBranch(Context context)
+		{
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
+
+			var target = context.BranchTargets[0];
+
+			var branch = IRTransformationStage.GetBranch(context.ConditionCode);
+			var branchUnsigned = IRTransformationStage.GetBranch(context.ConditionCode.GetUnsigned());
+
+			var nextBlock = Split(context);
+			var newBlocks = CreateNewBlockContexts(2);
+
+			// FIXME: If the conditional branch and unconditional branch are the same, this could cause a problem
+			target.PreviousBlocks.Remove(context.Block);
+
+			// The block is being split on the condition, so the new next block has one too many next blocks!
+			nextBlock.Block.NextBlocks.Remove(target);
+
+			// Compare high dwords
+			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
+			context.AppendInstruction(X86.BranchEqual, newBlocks[1].Block);
+			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
+
+			// Branch if check already gave results
+			newBlocks[0].AppendInstruction(branch, target);
+			newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
+
+			// Compare low dwords
+			newBlocks[1].AppendInstruction(X86.Cmp32, null, op1L, op2L);
+			newBlocks[1].AppendInstruction(branchUnsigned, target);
+			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
+		}
+
 		private void ExpandLoad(Context context)
 		{
 			var address = context.Operand1;
@@ -369,6 +284,15 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		private void MoveInteger64(Context context)
+		{
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+
+			context.SetInstruction(X86.Mov32, op0L, op1L);
+			context.AppendInstruction(X86.Mov32, op0H, op1H);
+		}
+
 		private void ExpandMul(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
@@ -405,6 +329,190 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		private void ExpandSignedMove(Context context)
+		{
+			Operand op0 = context.Result;
+			Operand op1 = context.Operand1;
+			Debug.Assert(op0 != null, "I8 not in a memory operand!");
+
+			SplitLongOperand(op0, out Operand op0L, out Operand op0H);
+
+			if (op1.IsBoolean)
+			{
+				X86Instruction Movzx = op1.IsI1 ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
+
+				context.SetInstruction(Movzx, op0L, op1);
+				context.AppendInstruction(X86.MovConst32, op0H, ConstantZero);
+			}
+			else if (op1.IsI1 || op1.IsI2)
+			{
+				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+				var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+
+				X86Instruction Movsx = op1.IsI1 ? X86.Movsx8To32 : (X86Instruction)X86.Movsx16To32;
+
+				context.SetInstruction(Movsx, v1, op1);
+				context.AppendInstruction2(X86.Cdq, v3, v2, v1);
+				context.AppendInstruction(X86.Mov32, op0L, v2);
+				context.AppendInstruction(X86.Mov32, op0H, v3);
+			}
+			else if (op1.IsI4 || op1.IsU4 || op1.IsPointer || op1.IsI || op1.IsU)
+			{
+				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+				var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+
+				context.SetInstruction(X86.Mov32, v1, op1);
+				context.AppendInstruction2(X86.Cdq, v3, v2, v1);
+				context.AppendInstruction(X86.Mov32, op0L, v2);
+				context.AppendInstruction(X86.Mov32, op0H, v3);
+			}
+			else if (op1.IsI8)
+			{
+				context.SetInstruction(X86.Mov32, op0, op1); // doesn't seem right
+			}
+			else if (op1.IsU1 || op1.IsU2)
+			{
+				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+				var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+				var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+
+				X86Instruction Movzx = op1.IsI1 ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
+
+				context.SetInstruction(Movzx, v1, op1);
+				context.AppendInstruction2(X86.Cdq, v3, v2, v1);
+				context.AppendInstruction(X86.Mov32, op0L, v2);
+				context.AppendInstruction(X86.MovConst32, op0H, ConstantZero);
+			}
+			else
+			{
+				throw new CompilerException();
+			}
+		}
+
+		private void ExpandUnsignedMove(Context context)
+		{
+			var op0 = context.Result;
+			var op1 = context.Operand1;
+
+			SplitLongOperand(op0, out Operand op0L, out Operand op0H);
+			SplitLongOperand(op1, out Operand op1L, out Operand op1H);
+
+			if (op1.IsInt || op1.IsPointer)
+			{
+				context.SetInstruction(X86.Mov32, op0L, op1L);
+				context.AppendInstruction(X86.MovConst32, op0H, ConstantZero);
+			}
+			else if (op1.IsBoolean || op1.IsChar || op1.IsU1 || op1.IsU2)
+			{
+				var Movzx = (op1.IsU1 || op1.IsBoolean) ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
+
+				context.SetInstruction(Movzx, op0L, op1L);
+				context.AppendInstruction(X86.MovConst32, op0H, ConstantZero);
+			}
+			else if (op1.IsU8)
+			{
+				context.SetInstruction(X86.Mov32, op0L, op1L);
+				context.AppendInstruction(X86.Mov32, op0H, op1H);
+			}
+			else
+			{
+				throw new NotSupportedException();
+			}
+		}
+
+		private void LoadInteger(Context context)
+		{
+			if (context.Operand1.Is64BitInteger || context.Result.Is64BitInteger)
+			{
+				ExpandLoad(context);
+			}
+		}
+
+		private void LoadParameterInteger64(Context context)
+		{
+			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
+			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
+
+			context.SetInstruction(X86.MovLoad32, lowResult, StackFrame, lowOffset);
+			context.AppendInstruction(X86.MovLoad32, hiResult, StackFrame, highOffset);
+		}
+
+		private void LoadParameterSignExtended16x64(Context context)
+		{
+			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
+			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
+
+			context.SetInstruction(X86.MovsxLoad16, lowResult, StackFrame, lowOffset);
+			context.AppendInstruction2(X86.Cdq, hiResult, lowResult, lowResult);
+		}
+
+		private void LoadParameterSignExtended32x64(Context context)
+		{
+			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
+			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
+
+			context.SetInstruction(X86.MovLoad32, lowResult, StackFrame, lowOffset);
+			context.AppendInstruction2(X86.Cdq, hiResult, lowResult, lowResult);
+		}
+
+		private void LoadParameterSignExtended8x64(Context context)
+		{
+			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
+			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
+
+			context.SetInstruction(X86.MovsxLoad8, lowResult, StackFrame, lowOffset);
+			context.AppendInstruction2(X86.Cdq, hiResult, lowResult, lowResult);
+		}
+
+		private void LoadParameterZeroExtended16x64(Context context)
+		{
+			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
+			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
+
+			context.SetInstruction(X86.MovLoad16, lowResult, StackFrame, lowOffset);
+			context.AppendInstruction(X86.MovConst32, hiResult, ConstantZero);
+		}
+
+		private void LoadParameterZeroExtended32x64(Context context)
+		{
+			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
+			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
+
+			context.SetInstruction(X86.MovLoad32, lowResult, StackFrame, lowOffset);
+			context.AppendInstruction(X86.MovConst32, hiResult, ConstantZero);
+		}
+
+		private void LoadParameterZeroExtended8x64(Context context)
+		{
+			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
+			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
+
+			context.SetInstruction(X86.MovLoad8, lowResult, StackFrame, lowOffset);
+			context.AppendInstruction(X86.MovConst32, hiResult, ConstantZero);
+		}
+
+		private void LogicalAnd64(Context context)
+		{
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
+
+			if (!context.Result.Is64BitInteger)
+			{
+				context.SetInstruction(X86.Mov32, op0L, op1L);
+				context.AppendInstruction(X86.And32, op0L, op0L, op2L);
+			}
+			else
+			{
+				context.SetInstruction(X86.Mov32, op0H, op1H);
+				context.AppendInstruction(X86.Mov32, op0L, op1L);
+				context.AppendInstruction(X86.And32, op0H, op0H, op2H);
+				context.AppendInstruction(X86.And32, op0L, op0L, op2L);
+			}
+		}
+
 		private void LogicalNot64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
@@ -431,6 +539,52 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov32, op0L, op1L);
 			context.AppendInstruction(X86.Or32, op0H, op0H, op2H);
 			context.AppendInstruction(X86.Or32, op0L, op0L, op2L);
+		}
+
+		private void LogicalXor64(Context context)
+		{
+			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
+
+			context.SetInstruction(X86.Mov32, op0H, op1H);
+			context.AppendInstruction(X86.Mov32, op0L, op1L);
+			context.AppendInstruction(X86.Xor32, op0H, op0H, op2H);
+			context.AppendInstruction(X86.Xor32, op0L, op0L, op2L);
+		}
+
+		private void MoveInteger(Context context)
+		{
+			if (Any64Bit(context.Node))
+			{
+				ExpandMoveInteger(context);
+			}
+		}
+
+		private void MoveSignExtended(Context context)
+		{
+			if (Any64Bit(context.Node))
+			{
+				ExpandSignedMove(context);
+			}
+		}
+
+		private void MoveZeroExtended(Context context)
+		{
+			if (Any64Bit(context.Node))
+			{
+				ExpandUnsignedMove(context);
+			}
+		}
+
+		private void MulSigned64(Context context)
+		{
+			ExpandMul(context);
+		}
+
+		private void MulUnsigned64(Context context)
+		{
+			ExpandMul(context);
 		}
 
 		private void ShiftLeft64(Context context)
@@ -522,66 +676,16 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 
-		private void ExpandSignedMove(Context context)
+		private void Split64(Context context)
 		{
-			Operand op0 = context.Result;
-			Operand op1 = context.Operand1;
-			Debug.Assert(op0 != null, "I8 not in a memory operand!");
+			var operand1 = context.Operand1;
+			var result = context.Result;
+			var result2 = context.Result2;
 
-			SplitLongOperand(op0, out Operand op0L, out Operand op0H);
+			SplitLongOperand(operand1, out Operand op0L, out Operand op0H);
 
-			if (op1.IsBoolean)
-			{
-				X86Instruction Movzx = op1.IsI1 ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
-
-				context.SetInstruction(Movzx, op0L, op1);
-				context.AppendInstruction(X86.MovConst32, op0H, ConstantZero);
-			}
-			else if (op1.IsI1 || op1.IsI2)
-			{
-				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-				var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-				var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-
-				X86Instruction Movsx = op1.IsI1 ? X86.Movsx8To32 : (X86Instruction)X86.Movsx16To32;
-
-				context.SetInstruction(Movsx, v1, op1);
-				context.AppendInstruction2(X86.Cdq, v3, v2, v1);
-				context.AppendInstruction(X86.Mov32, op0L, v2);
-				context.AppendInstruction(X86.Mov32, op0H, v3);
-			}
-			else if (op1.IsI4 || op1.IsU4 || op1.IsPointer || op1.IsI || op1.IsU)
-			{
-				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-				var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-				var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-
-				context.SetInstruction(X86.Mov32, v1, op1);
-				context.AppendInstruction2(X86.Cdq, v3, v2, v1);
-				context.AppendInstruction(X86.Mov32, op0L, v2);
-				context.AppendInstruction(X86.Mov32, op0H, v3);
-			}
-			else if (op1.IsI8)
-			{
-				context.SetInstruction(X86.Mov32, op0, op1); // doesn't seem right
-			}
-			else if (op1.IsU1 || op1.IsU2)
-			{
-				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-				var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-				var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-
-				X86Instruction Movzx = op1.IsI1 ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
-
-				context.SetInstruction(Movzx, v1, op1);
-				context.AppendInstruction2(X86.Cdq, v3, v2, v1);
-				context.AppendInstruction(X86.Mov32, op0L, v2);
-				context.AppendInstruction(X86.MovConst32, op0H, ConstantZero);
-			}
-			else
-			{
-				throw new CompilerException();
-			}
+			context.SetInstruction(X86.Mov32, result, op0L);
+			context.AppendInstruction(X86.Mov32, result2, op0H);
 		}
 
 		private void StoreInteger64(Context context)
@@ -638,47 +742,16 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		private void LogicalXor64(Context context)
+		private void To64(Context context)
 		{
-			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
-			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
-			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var result = context.Result;
 
-			context.SetInstruction(X86.Mov32, op0H, op1H);
-			context.AppendInstruction(X86.Mov32, op0L, op1L);
-			context.AppendInstruction(X86.Xor32, op0H, op0H, op2H);
-			context.AppendInstruction(X86.Xor32, op0L, op0L, op2L);
-		}
+			SplitLongOperand(result, out Operand op0L, out Operand op0H);
 
-		private void ExpandUnsignedMove(Context context)
-		{
-			var op0 = context.Result;
-			var op1 = context.Operand1;
-
-			SplitLongOperand(op0, out Operand op0L, out Operand op0H);
-			SplitLongOperand(op1, out Operand op1L, out Operand op1H);
-
-			if (op1.IsInt)
-			{
-				context.SetInstruction(X86.Mov32, op0L, op1L);
-				context.AppendInstruction(X86.MovConst32, op0H, ConstantZero);
-			}
-			else if (op1.IsBoolean || op1.IsChar || op1.IsU1 || op1.IsU2)
-			{
-				var Movzx = (op1.IsU1 || op1.IsBoolean) ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
-
-				context.SetInstruction(Movzx, op0L, op1L);
-				context.AppendInstruction(X86.MovConst32, op0H, ConstantZero);
-			}
-			else if (op1.IsU8)
-			{
-				context.SetInstruction(X86.Mov32, op0L, op1L);
-				context.AppendInstruction(X86.Mov32, op0H, op1H);
-			}
-			else
-			{
-				throw new NotSupportedException();
-			}
+			context.SetInstruction(X86.Mov32, op0L, operand1);
+			context.AppendInstruction(X86.Mov32, op0H, operand2);
 		}
 
 		#endregion Visitation Methods
@@ -707,68 +780,5 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		#endregion Utility Methods
-
-		private void LoadParameterSignExtended8x64(Context context)
-		{
-			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
-			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
-
-			context.SetInstruction(X86.MovsxLoad8, lowResult, StackFrame, lowOffset);
-			context.AppendInstruction2(X86.Cdq, hiResult, lowResult, lowResult);
-		}
-
-		private void LoadParameterSignExtended16x64(Context context)
-		{
-			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
-			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
-
-			context.SetInstruction(X86.MovsxLoad16, lowResult, StackFrame, lowOffset);
-			context.AppendInstruction2(X86.Cdq, hiResult, lowResult, lowResult);
-		}
-
-		private void LoadParameterSignExtended32x64(Context context)
-		{
-			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
-			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
-
-			context.SetInstruction(X86.MovLoad32, lowResult, StackFrame, lowOffset);
-			context.AppendInstruction2(X86.Cdq, hiResult, lowResult, lowResult);
-		}
-
-		private void LoadParameterInteger64(Context context)
-		{
-			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
-			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
-
-			context.SetInstruction(X86.MovLoad32, lowResult, StackFrame, lowOffset);
-			context.AppendInstruction(X86.MovLoad32, hiResult, StackFrame, highOffset);
-		}
-
-		private void LoadParameterZeroExtended8x64(Context context)
-		{
-			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
-			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
-
-			context.SetInstruction(X86.MovLoad8, lowResult, StackFrame, lowOffset);
-			context.AppendInstruction(X86.MovConst32, hiResult, ConstantZero);
-		}
-
-		private void LoadParameterZeroExtended16x64(Context context)
-		{
-			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
-			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
-
-			context.SetInstruction(X86.MovLoad16, lowResult, StackFrame, lowOffset);
-			context.AppendInstruction(X86.MovConst32, hiResult, ConstantZero);
-		}
-
-		private void LoadParameterZeroExtended32x64(Context context)
-		{
-			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
-			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
-
-			context.SetInstruction(X86.MovLoad32, lowResult, StackFrame, lowOffset);
-			context.AppendInstruction(X86.MovConst32, hiResult, ConstantZero);
-		}
 	}
 }

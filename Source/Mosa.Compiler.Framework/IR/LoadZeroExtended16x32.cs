@@ -5,19 +5,17 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// SetReturn
+	/// LoadZeroExtended16x32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class SetReturn : BaseIRInstruction
+	public sealed class LoadZeroExtended16x32 : BaseIRInstruction
 	{
-		public SetReturn()
-			: base(1, 0)
+		public LoadZeroExtended16x32()
+			: base(2, 1)
 		{
 		}
 
-		public override FlowControl FlowControl { get { return FlowControl.Return; } }
-
-		public override bool VariableOperands { get { return true; } }
+		public override bool IsMemoryRead { get { return true; } }
 	}
 }
 

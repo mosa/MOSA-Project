@@ -323,7 +323,11 @@ namespace Mosa.Compiler.Framework.Stages
 				|| node.Instruction == IRInstruction.CallStatic
 				|| node.Instruction == IRInstruction.CallVirtual
 				|| node.Instruction == IRInstruction.NewObject
-				|| node.Instruction == IRInstruction.SetReturn
+				|| node.Instruction == IRInstruction.SetReturn32
+				|| node.Instruction == IRInstruction.SetReturn64
+				|| node.Instruction == IRInstruction.SetReturnR4
+				|| node.Instruction == IRInstruction.SetReturnR8
+				|| node.Instruction == IRInstruction.SetReturnCompound
 				|| node.Instruction == IRInstruction.IntrinsicMethodCall)
 				return;
 
