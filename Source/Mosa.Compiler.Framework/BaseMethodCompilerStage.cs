@@ -818,6 +818,28 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		public static BaseIRInstruction GetSetReturnInstruction(MosaType type, bool is32bitPlatform)
+		{
+			if (type == null)
+				return null;
+
+			if (type.IsR4)
+				return IRInstruction.SetReturnR4;
+			else if (type.IsR8)
+				return IRInstruction.SetReturnR8;
+
+			if (!is32bitPlatform)
+				return IRInstruction.SetReturn64;
+
+			if (type.IsUI8 || (type.IsEnum && type.ElementType.IsUI8))
+				return IRInstruction.SetReturn64;
+
+			if (MosaTypeLayout.IsStoredOnStack(type))
+				return IRInstruction.SetReturnCompound;
+
+			return IRInstruction.SetReturn32;
+		}
+
 		public static BaseIRInstruction GetMoveInstruction(MosaType type)
 		{
 			if (MustSignExtendOnLoad(type))

@@ -65,6 +65,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.MoveFloatR4, MoveFloatR4);
 			AddVisitation(IRInstruction.MoveFloatR8, MoveFloatR8);
 			AddVisitation(IRInstruction.MoveInteger, MoveInteger);
+			AddVisitation(IRInstruction.MoveInteger32, MoveInteger32);
 			AddVisitation(IRInstruction.MoveSignExtended, SignExtendedMove);
 			AddVisitation(IRInstruction.MoveZeroExtended, ZeroExtendedMove);
 			AddVisitation(IRInstruction.MulFloatR4, MulFloatR4);
@@ -568,6 +569,11 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		private void MoveInteger(InstructionNode node)
+		{
+			node.ReplaceInstruction(X86.Mov32);
+		}
+
+		private void MoveInteger32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Mov32);
 		}

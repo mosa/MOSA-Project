@@ -56,6 +56,7 @@ namespace Mosa.Tool.Explorer
 
 		private void Main_Load(object sender, EventArgs e)
 		{
+			Text = "MOSA Explorer v" + CompilerVersion.Version;
 			cbPlatform.SelectedIndex = 0;
 			SetStatus("Ready!");
 		}

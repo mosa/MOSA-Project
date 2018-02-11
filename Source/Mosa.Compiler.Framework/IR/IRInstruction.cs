@@ -131,7 +131,6 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly RemSigned64 RemSigned64 = new RemSigned64();
 		public static readonly RemUnsigned32 RemUnsigned32 = new RemUnsigned32();
 		public static readonly RemUnsigned64 RemUnsigned64 = new RemUnsigned64();
-		public static readonly SetReturn SetReturn = new SetReturn();
 		public static readonly SetReturnR4 SetReturnR4 = new SetReturnR4();
 		public static readonly SetReturnR8 SetReturnR8 = new SetReturnR8();
 		public static readonly SetReturn32 SetReturn32 = new SetReturn32();

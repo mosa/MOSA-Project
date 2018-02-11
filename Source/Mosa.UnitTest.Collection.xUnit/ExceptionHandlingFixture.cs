@@ -114,11 +114,11 @@ namespace Mosa.UnitTest.Collection.xUnit
 			Assert.Equal(_ExceptionHandlingTests.ExceptionTest11(), Run<int>("Mosa.UnitTest.Collection._ExceptionHandlingTests.ExceptionTest11"));
 		}
 
-		[Fact]
-		public void ExceptionTest12()
-		{
-			Assert.Equal(_ExceptionHandlingTests.ExceptionTest12(), Run<int>("Mosa.UnitTest.Collection._ExceptionHandlingTests.ExceptionTest12"));
-		}
+		//[Fact]
+		//public void ExceptionTest12()
+		//{
+		//	Assert.Equal(_ExceptionHandlingTests.ExceptionTest12(), Run<int>("Mosa.UnitTest.Collection._ExceptionHandlingTests.ExceptionTest12"));
+		//}
 
 		[Fact]
 		public void ExceptionTest13()

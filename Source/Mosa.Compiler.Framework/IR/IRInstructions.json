@@ -675,6 +675,7 @@
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
+
 		{
 			"Name": "MoveSignExtended",
 			"FamilyName": "IR",
@@ -813,14 +814,6 @@
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
-		},
-		{
-			"Name": "SetReturn",
-			"FamilyName": "IR",
-			"ResultCount": 0,
-			"OperandCount": 1,
-			"FlowControl": "Return",
-			"VariableOperands": "true"
 		},
 		{
 			"Name": "SetReturnR4",

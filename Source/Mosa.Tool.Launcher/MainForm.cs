@@ -3,6 +3,7 @@
 using CommandLine;
 using MetroFramework.Forms;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework;
 using Mosa.Utility.BootImage;
 using Mosa.Utility.Launcher;
 using System;
@@ -362,6 +363,7 @@ namespace Mosa.Tool.Launcher
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
+			Text = "MOSA Explorer v" + CompilerVersion.Version;
 			tbApplicationLocations.SelectedTab = tabOptions;
 
 			foreach (var includeFile in Options.IncludeFiles)

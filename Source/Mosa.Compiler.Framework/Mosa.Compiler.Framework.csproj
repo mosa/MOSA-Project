@@ -522,9 +522,6 @@
     <Compile Include="IR\SetLeaveTarget.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="IR\SetReturn.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
     <Compile Include="IR\SetReturn32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
@@ -679,6 +676,7 @@
     <Compile Include="RegisterAllocator\LiveRange.cs" />
     <Compile Include="RegisterAllocator\MoveHint.cs" />
     <Compile Include="ReplacementTargetAttribute.cs" />
+    <Compile Include="CompilerVersion.cs" />
     <Compile Include="ShiftType.cs" />
     <Compile Include="ConditionCodeExtension.cs" />
     <Compile Include="BasicBlocks.cs" />

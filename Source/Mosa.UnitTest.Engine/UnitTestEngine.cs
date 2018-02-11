@@ -65,7 +65,7 @@ namespace Mosa.UnitTest.Engine
 				EnableSSA = true,
 				EnableIROptimizations = true,
 				EnableSparseConditionalConstantPropagation = true,
-				EnableInlinedMethods = true,
+				EnableInlinedMethods = false,
 				IRLongExpansion = true,
 				TwoPassOptimizations = true,
 
@@ -140,8 +140,7 @@ namespace Mosa.UnitTest.Engine
 
 		private void ProcessQueue()
 		{
-			List<DebugMessage> messages = new List<DebugMessage>(64);
-			DateTime last = DateTime.Now;
+			var last = DateTime.Now;
 
 			try
 			{
@@ -152,40 +151,23 @@ namespace Mosa.UnitTest.Engine
 					lock (queue)
 					{
 						// check if queue has requests or too many have already been sent
-						if (queue.Count <= 0 || sent.Count > MaxSentQueue)
-						{
-							Thread.Sleep(10);
-						}
-						else
+						if (queue.Count > 0 && sent.Count < MaxSentQueue)
 						{
 							message = queue.Dequeue();
+
+							PrepareUnitTest();
+
+							message.CallBack = MessageCallBack;
+
+							sent.Add(message);
+
+							//Console.WriteLine("SENT: " + (message.Other as UnitTestRequest).MethodTypeName + "." + (message.Other as UnitTestRequest).MethodName);
+
+							debugServerEngine.SendCommand(message);
 						}
 					}
 
-					if (message != null)
-					{
-						PrepareUnitTest();
-
-						message.CallBack = MessageCallBack;
-
-						messages.Add(message);
-					}
-
-					DateTime now = DateTime.Now;
-
-					if (messages.Count != 0)
-					{
-						if (messages.Count > 64 || now.Ticks - last.Ticks > 250000)
-						{
-							debugServerEngine.SendCommand2(messages);
-
-							messages.Clear();
-
-							last = now;
-						}
-					}
-
-					//Console.WriteLine((message.Other as UnitTestRequest).MethodTypeName + "." + (message.Other as UnitTestRequest).MethodName);
+					Thread.Sleep(10);
 				}
 			}
 			catch (Exception e)
@@ -209,6 +191,8 @@ namespace Mosa.UnitTest.Engine
 			if (response.Other is UnitTestRequest message)
 			{
 				message.ParseResultData(response.ResponseData);
+
+				//Console.WriteLine("RECD: " + message.MethodTypeName + "." + message.MethodName);
 			}
 		}
 

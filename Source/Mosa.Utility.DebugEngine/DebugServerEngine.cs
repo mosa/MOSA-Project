@@ -110,19 +110,6 @@ namespace Mosa.Utility.DebugEngine
 				SendPacket(packets);
 				packetCnt += messages.Count;
 
-				//Console.Write(packetCnt);
-				//Console.Write(' ');
-				//Console.Write(stopwatch.Elapsed.TotalSeconds);
-				//Console.Write(' ');
-
-				//if (stopwatch.Elapsed.TotalSeconds > 0)
-				//	Console.Write(packetCnt / stopwatch.Elapsed.TotalSeconds);
-				//else
-				//	Console.Write('0');
-
-				//Console.Write(' ');
-				//Console.WriteLine(messages.Count);
-
 				return true;
 			}
 		}

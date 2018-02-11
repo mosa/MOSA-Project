@@ -426,7 +426,6 @@ namespace Mosa.Utility.Launcher
 		/// <param name="platformType">Type of the platform.</param>
 		/// <returns></returns>
 		/// <exception cref="NotImplementCompilerException">Unknown or unsupported Architecture</exception>
-		/// <exception cref="Mosa.Compiler.Common.NotImplementCompilerException">Unknown or unsupported Architecture</exception>
 		private static BaseArchitecture SelectArchitecture(PlatformType platformType)
 		{
 			switch (platformType)
@@ -441,7 +440,6 @@ namespace Mosa.Utility.Launcher
 		/// </summary>
 		/// <param name="bootFormat">The boot format.</param>
 		/// <returns></returns>
-		/// <exception cref="Mosa.Compiler.Common.NotImplementCompilerException"></exception>
 		/// <exception cref="NotImplementCompilerException"></exception>
 		private static Func<ICompilerStage> GetBootStageFactory(BootFormat bootFormat)
 		{

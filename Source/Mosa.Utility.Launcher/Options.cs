@@ -143,6 +143,19 @@ namespace Mosa.Utility.Launcher
 			set { InlinedIRMaximum = (int)value.ParseHexOrDecimal(); }
 		}
 
+		[Option("all-optimization-off")]
+		public bool AllOptimizationsOffHelper
+		{
+			set
+			{
+				EnableIROptimizations = false;
+				EnableInlinedMethods = false;
+				TwoPassOptimizations = false;
+				IRLongExpansion = false;
+				EnableSparseConditionalConstantPropagation = false;
+			}
+		}
+
 		[Option("nasm")]
 		public bool GenerateNASMFile { get; set; }
 

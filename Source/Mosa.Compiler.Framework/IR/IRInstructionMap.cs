@@ -134,7 +134,6 @@ namespace Mosa.Compiler.Framework.IR
 			{ "RemSigned64", IRInstruction.RemSigned64 },
 			{ "RemUnsigned32", IRInstruction.RemUnsigned32 },
 			{ "RemUnsigned64", IRInstruction.RemUnsigned64 },
-			{ "SetReturn", IRInstruction.SetReturn },
 			{ "SetReturnR4", IRInstruction.SetReturnR4 },
 			{ "SetReturnR8", IRInstruction.SetReturnR8 },
 			{ "SetReturn32", IRInstruction.SetReturn32 },
