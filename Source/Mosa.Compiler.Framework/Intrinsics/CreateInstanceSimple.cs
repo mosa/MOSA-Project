@@ -28,7 +28,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var result = context.Result;
 
 			context.SetInstruction(IRInstruction.CallDynamic, null, ctor, thisObject);
-			context.AppendInstruction(IRInstruction.MoveInteger, result, thisObject);
+			context.AppendInstruction(IRInstruction.MoveInteger32, result, thisObject);
 		}
 
 		#endregion Methods

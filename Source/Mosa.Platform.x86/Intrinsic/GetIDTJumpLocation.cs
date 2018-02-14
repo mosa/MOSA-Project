@@ -27,9 +27,9 @@ namespace Mosa.Platform.x86.Intrinsic
 			if (!operand.IsResolvedConstant)
 			{
 				// try to find the constant - a bit of a hack
-				Context ctx = new Context(operand.Definitions[0]);
+				var ctx = new Context(operand.Definitions[0]);
 
-				if ((ctx.Instruction == IRInstruction.MoveInteger || ctx.Instruction == IRInstruction.MoveInteger32) && ctx.Operand1.IsConstant)
+				if ((ctx.Instruction == IRInstruction.MoveInteger64 || ctx.Instruction == IRInstruction.MoveInteger32) && ctx.Operand1.IsConstant)
 				{
 					operand = ctx.Operand1;
 				}

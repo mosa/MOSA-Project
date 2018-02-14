@@ -20,7 +20,10 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		{
 			var result = context.Result;
 			var operand1 = context.Operand1;
-			context.SetInstruction(IRInstruction.MoveInteger, result, operand1);
+
+			var move = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.MoveInteger32 : IRInstruction.MoveInteger64;
+
+			context.SetInstruction(move, result, operand1);
 		}
 	}
 }

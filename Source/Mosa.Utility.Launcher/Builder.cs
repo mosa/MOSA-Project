@@ -394,7 +394,7 @@ namespace Mosa.Utility.Launcher
 				code[i - fileOffset] = code2[i];
 			}
 
-			using (var disasm = new SharpDisasm.Disassembler(code, ArchitectureMode.x86_32, startingAddress, true, Vendor.Any))
+			using (var disasm = new Disassembler(code, ArchitectureMode.x86_32, startingAddress, true, Vendor.Any))
 			{
 				using (var dest = File.CreateText(asmfile))
 				{

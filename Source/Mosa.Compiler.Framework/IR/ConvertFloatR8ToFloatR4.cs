@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// MoveInteger
+	/// ConvertFloatR8ToFloatR4
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class MoveInteger : BaseIRInstruction
+	public sealed class ConvertFloatR8ToFloatR4 : BaseIRInstruction
 	{
-		public MoveInteger()
+		public ConvertFloatR8ToFloatR4()
 			: base(1, 1)
 		{
 		}
