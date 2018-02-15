@@ -7,28 +7,28 @@ namespace Mosa.UnitTest.Collection.xUnit
 	public class CharFixture : TestFixture
 	{
 		[Theory]
-		[MemberData(nameof(CC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(CC))]
 		public void AddCC(char a, char b)
 		{
 			Assert.Equal(CharTests.AddCC(a, b), Run<int>("Mosa.UnitTest.Collection.CharTests.AddCC", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(CC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(CC))]
 		public void SubCC(char a, char b)
 		{
 			Assert.Equal(CharTests.SubCC(a, b), Run<int>("Mosa.UnitTest.Collection.CharTests.SubCC", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(CC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(CC))]
 		public void MulCC(char a, char b)
 		{
 			Assert.Equal(CharTests.MulCC(a, b), Run<int>("Mosa.UnitTest.Collection.CharTests.MulCC", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(CC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(CC))]
 		public void DivCC(char a, char b)
 		{
 			if (b == 0)
@@ -46,7 +46,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		[Theory]
-		[MemberData(nameof(CC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(CC))]
 		public void RemCC(char a, char b)
 		{
 			if (b == 0)
@@ -64,63 +64,63 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		[Theory]
-		[MemberData(nameof(C), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(C))]
 		public void RetC(char a)
 		{
 			Assert.Equal(CharTests.RetC(a), Run<char>("Mosa.UnitTest.Collection.CharTests.RetC", a));
 		}
 
 		[Theory]
-		[MemberData(nameof(CC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(CC))]
 		public void AndCC(char a, char b)
 		{
 			Assert.Equal(CharTests.AndCC(a, b), Run<int>("Mosa.UnitTest.Collection.CharTests.AndCC", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(CC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(CC))]
 		public void OrCC(char a, char b)
 		{
 			Assert.Equal(CharTests.OrCC(a, b), Run<int>("Mosa.UnitTest.Collection.CharTests.OrCC", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(CC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(CC))]
 		public void XorCC(char a, char b)
 		{
 			Assert.Equal(CharTests.XorCC(a, b), Run<int>("Mosa.UnitTest.Collection.CharTests.XorCC", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(CC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(CC))]
 		public void CeqCC(char a, char b)
 		{
 			Assert.Equal(CharTests.CeqCC(a, b), Run<bool>("Mosa.UnitTest.Collection.CharTests.CeqCC", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(CC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(CC))]
 		public void CltCC(char a, char b)
 		{
 			Assert.Equal(CharTests.CltCC(a, b), Run<bool>("Mosa.UnitTest.Collection.CharTests.CltCC", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(CC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(CC))]
 		public void CgtCC(char a, char b)
 		{
 			Assert.Equal(CharTests.CgtCC(a, b), Run<bool>("Mosa.UnitTest.Collection.CharTests.CgtCC", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(CC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(CC))]
 		public void CleCC(char a, char b)
 		{
 			Assert.Equal(CharTests.CleCC(a, b), Run<bool>("Mosa.UnitTest.Collection.CharTests.CleCC", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(CC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(CC))]
 		public void CgeCC(char a, char b)
 		{
 			Assert.Equal(CharTests.CgeCC(a, b), Run<bool>("Mosa.UnitTest.Collection.CharTests.CgeCC", a, b));
@@ -133,28 +133,28 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		[Theory]
-		[MemberData(nameof(I4Small), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(I4Small))]
 		public void Ldlen(int length)
 		{
 			Assert.True(Run<bool>("Mosa.UnitTest.Collection.CharTests.Ldlen", length));
 		}
 
 		[Theory]
-		[MemberData(nameof(I4SmallC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(I4SmallC))]
 		public void StelemC(int index, char value)
 		{
 			Assert.True(Run<bool>("Mosa.UnitTest.Collection.CharTests.Stelem", index, value));
 		}
 
 		[Theory]
-		[MemberData(nameof(I4SmallC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(I4SmallC))]
 		public void LdelemC(int index, char value)
 		{
 			Assert.True(Run<bool>("Mosa.UnitTest.Collection.CharTests.Ldelem", index, value));
 		}
 
 		[Theory]
-		[MemberData(nameof(I4SmallC), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(I4SmallC))]
 		public void LdelemaC(int index, char value)
 		{
 			Assert.True(Run<bool>("Mosa.UnitTest.Collection.CharTests.Ldelema", index, value));

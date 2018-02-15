@@ -9,7 +9,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 	public class Fixture_Call<#= number.Value #> : TestFixture
 	{
 		[Theory]
-		[MemberData(nameof(<#= number.Value #>), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(<#= number.Value #>))]
 		public void Call<#= number.Value #>(<#= number.Key #> a)
 		{
 			Assert.True(Run<bool>("Mosa.UnitTest.Collection.CallTests.Call<#= number.Value #>", a));

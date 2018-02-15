@@ -13,14 +13,14 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		[Theory]
-		[MemberData(nameof(I4MiniI4MiniI4MiniI4Mini), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(I4MiniI4MiniI4MiniI4Mini))]
 		public void Pressure7(int a, int b, int c, int d)
 		{
 			Assert.Equal(Mosa.UnitTest.Collection.RegisterAllocatorTests.Pressure7(a, b, 7, c, 9, d, 10), Run<int>("Mosa.UnitTest.Collection.RegisterAllocatorTests.Pressure7", a, b, 7, c, 9, d, 10));
 		}
 
 		[Theory]
-		[MemberData(nameof(I4MiniI4MiniI4MiniI4Mini), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(I4MiniI4MiniI4MiniI4Mini))]
 		public void Pressure9(int a, int b, int c, int d)
 		{
 			Assert.Equal(Mosa.UnitTest.Collection.RegisterAllocatorTests.Pressure9(a, b, c, 7, d, 3, 9), Run<int>("Mosa.UnitTest.Collection.RegisterAllocatorTests.Pressure9", a, b, c, 7, d, 3, 9));

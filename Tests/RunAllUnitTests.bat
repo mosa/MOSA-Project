@@ -1,7 +1,7 @@
 
 cd ..\bin
 
-SET XUNIT="..\Source\packages\xunit.runner.console.2.3.1\tools\net452\xunit.console.x86.exe"
+SET XUNIT="..\Source\packages\xunit.runner.console.2.4.0-beta.1.build3958\tools\net452\xunit.console.x86.exe"
 
 echo %DATE% %TIME%
 

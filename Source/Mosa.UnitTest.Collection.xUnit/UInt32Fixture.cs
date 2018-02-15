@@ -7,28 +7,28 @@ namespace Mosa.UnitTest.Collection.xUnit
 	public class UInt32Fixture : TestFixture
 	{
 		[Theory]
-		[MemberData(nameof(U4U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U4))]
 		public void AddU4U4(uint a, uint b)
 		{
 			Assert.Equal(UInt32Tests.AddU4U4(a, b), Run<uint>("Mosa.UnitTest.Collection.UInt32Tests.AddU4U4", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U4))]
 		public void SubU4U4(uint a, uint b)
 		{
 			Assert.Equal(UInt32Tests.SubU4U4(a, b), Run<uint>("Mosa.UnitTest.Collection.UInt32Tests.SubU4U4", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U4))]
 		public void MulU4U4(uint a, uint b)
 		{
 			Assert.Equal(UInt32Tests.MulU4U4(a, b), Run<uint>("Mosa.UnitTest.Collection.UInt32Tests.MulU4U4", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U4))]
 		public void DivU4U4(uint a, uint b)
 		{
 			if (b == 0)
@@ -47,7 +47,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U4))]
 		public void RemU4U4(uint a, uint b)
 		{
 			if (b == 0)
@@ -66,84 +66,84 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		[Theory]
-		[MemberData(nameof(U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4))]
 		public void RetU4(uint a)
 		{
 			Assert.Equal(UInt32Tests.RetU4(a), Run<uint>("Mosa.UnitTest.Collection.UInt32Tests.RetU4", a));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U4))]
 		public void AndU4U4(uint a, uint b)
 		{
 			Assert.Equal(UInt32Tests.AndU4U4(a, b), Run<uint>("Mosa.UnitTest.Collection.UInt32Tests.AndU4U4", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U4))]
 		public void OrU4U4(uint a, uint b)
 		{
 			Assert.Equal(UInt32Tests.OrU4U4(a, b), Run<uint>("Mosa.UnitTest.Collection.UInt32Tests.OrU4U4", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U4))]
 		public void XorU4U4(uint a, uint b)
 		{
 			Assert.Equal(UInt32Tests.XorU4U4(a, b), Run<uint>("Mosa.UnitTest.Collection.UInt32Tests.XorU4U4", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4))]
 		public void CompU4(uint a)
 		{
 			Assert.Equal(UInt32Tests.CompU4(a), Run<uint>("Mosa.UnitTest.Collection.UInt32Tests.CompU4", a));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U1UpTo32), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U1UpTo32))]
 		public void ShiftLeftU4U1(uint a, byte b)
 		{
 			Assert.Equal(UInt32Tests.ShiftLeftU4U1(a, b), Run<uint>("Mosa.UnitTest.Collection.UInt32Tests.ShiftLeftU4U1", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U1UpTo32), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U1UpTo32))]
 		public void ShiftRightU4U1(uint a, byte b)
 		{
 			Assert.Equal(UInt32Tests.ShiftRightU4U1(a, b), Run<uint>("Mosa.UnitTest.Collection.UInt32Tests.ShiftRightU4U1", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U4))]
 		public void CeqU4U4(uint a, uint b)
 		{
 			Assert.Equal(UInt32Tests.CeqU4U4(a, b), Run<bool>("Mosa.UnitTest.Collection.UInt32Tests.CeqU4U4", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U4))]
 		public void CltU4U4(uint a, uint b)
 		{
 			Assert.Equal(UInt32Tests.CltU4U4(a, b), Run<bool>("Mosa.UnitTest.Collection.UInt32Tests.CltU4U4", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U4))]
 		public void CgtU4U4(uint a, uint b)
 		{
 			Assert.Equal(UInt32Tests.CgtU4U4(a, b), Run<bool>("Mosa.UnitTest.Collection.UInt32Tests.CgtU4U4", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U4))]
 		public void CleU4U4(uint a, uint b)
 		{
 			Assert.Equal(UInt32Tests.CleU4U4(a, b), Run<bool>("Mosa.UnitTest.Collection.UInt32Tests.CleU4U4", a, b));
 		}
 
 		[Theory]
-		[MemberData(nameof(U4U4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(U4U4))]
 		public void CgeU4U4(uint a, uint b)
 		{
 			Assert.Equal(UInt32Tests.CgeU4U4(a, b), Run<bool>("Mosa.UnitTest.Collection.UInt32Tests.CgeU4U4", a, b));
@@ -156,28 +156,28 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		[Theory]
-		[MemberData(nameof(I4Small), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(I4Small))]
 		public void Ldlen(int length)
 		{
 			Assert.True(Run<bool>("Mosa.UnitTest.Collection.UInt32Tests.Ldlen", length));
 		}
 
 		[Theory]
-		[MemberData(nameof(I4SmallU4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(I4SmallU4))]
 		public void StelemU4(int index, uint value)
 		{
 			Assert.True(Run<bool>("Mosa.UnitTest.Collection.UInt32Tests.Stelem", index, value));
 		}
 
 		[Theory]
-		[MemberData(nameof(I4SmallU4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(I4SmallU4))]
 		public void LdelemU4(int index, uint value)
 		{
 			Assert.Equal(UInt32Tests.Ldelem(index, value), Run<uint>("Mosa.UnitTest.Collection.UInt32Tests.Ldelem", index, value));
 		}
 
 		[Theory]
-		[MemberData(nameof(I4SmallU4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(I4SmallU4))]
 		public void LdelemaU4(int index, uint value)
 		{
 			Assert.Equal(UInt32Tests.Ldelema(index, value), Run<uint>("Mosa.UnitTest.Collection.UInt32Tests.Ldelema", index, value));

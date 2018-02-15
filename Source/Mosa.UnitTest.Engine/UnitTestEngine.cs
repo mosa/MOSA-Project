@@ -175,7 +175,7 @@ namespace Mosa.UnitTest.Engine
 
 						if (messages.Count > 0)
 						{
-							//Console.WriteLine("Bulk Sent: " + messages.Count.ToString());
+							Console.Write(messages.Count.ToString() + ":");
 							debugServerEngine.SendCommand2(messages);
 							messages.Clear();
 						}
@@ -202,7 +202,7 @@ namespace Mosa.UnitTest.Engine
 
 				//Console.WriteLine(response.ToString());
 
-				if (processCount % 100 == 0 && stopwatch.Elapsed.Seconds != 0)
+				if (processCount % 1000 == 0 && stopwatch.Elapsed.Seconds != 0)
 				{
 					Console.WriteLine("Unit Tests: " + processCount.ToString() + " (" + (processCount / stopwatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
 				}
@@ -287,7 +287,7 @@ namespace Mosa.UnitTest.Engine
 
 			while (!request.HasResult)
 			{
-				Thread.Sleep(5);
+				Thread.Sleep(25);
 			}
 
 			var result = request.Result;
