@@ -73,7 +73,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		[Theory]
-		[MemberData(nameof(I4), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(I4))]
 		public void IsInstI4ToI4(int i)
 		{
 			Assert.Equal(IsInstTests.IsInstI4ToI4(i), Run<bool>("Mosa.UnitTest.Collection.IsInstTests.IsInstI4ToI4", i));
@@ -140,7 +140,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		[Theory]
-		[MemberData(nameof(B), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(B))]
 		public void IsInstBToB(bool b)
 		{
 			Assert.Equal(IsInstTests.IsInstBToB(b), Run<bool>("Mosa.UnitTest.Collection.IsInstTests.IsInstBToB", b));

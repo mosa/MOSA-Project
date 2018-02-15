@@ -14,47 +14,68 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
 	public sealed class CallStage : BaseCodeTransformationStage
 	{
+		protected BaseInstruction loadInstruction;
+		protected BaseInstruction moveInstruction;
+
+		protected override void Setup()
+		{
+			base.Setup();
+
+			loadInstruction = Select(IRInstruction.LoadInteger32, IRInstruction.LoadInteger64);
+			moveInstruction = Select(IRInstruction.MoveInteger32, IRInstruction.MoveInteger64);
+		}
+
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(IRInstruction.SetReturn, SetReturn);
+			AddVisitation(IRInstruction.SetReturnR4, SetReturnR4);
+			AddVisitation(IRInstruction.SetReturnR8, SetReturnR8);
+			AddVisitation(IRInstruction.SetReturn32, SetReturn32);
+			AddVisitation(IRInstruction.SetReturn64, SetReturn64);
+			AddVisitation(IRInstruction.SetReturnCompound, SetReturnCompound);
 			AddVisitation(IRInstruction.CallInterface, CallInterface);
 			AddVisitation(IRInstruction.CallStatic, CallStatic);
 			AddVisitation(IRInstruction.CallVirtual, CallVirtual);
 			AddVisitation(IRInstruction.CallDynamic, CallDynamic);
 		}
 
-		private void SetReturn(Context context)
+		private void SetReturnR4(Context context)
+		{
+			context.SetInstruction(IRInstruction.MoveFloatR4, Operand.CreateCPURegister(context.Operand1.Type, Architecture.ReturnFloatingPointRegister), context.Operand1);
+		}
+
+		private void SetReturnR8(Context context)
+		{
+			context.SetInstruction(IRInstruction.MoveFloatR8, Operand.CreateCPURegister(context.Operand1.Type, Architecture.ReturnFloatingPointRegister), context.Operand1);
+		}
+
+		private void SetReturn32(Context context)
+		{
+			context.SetInstruction(IRInstruction.MoveInteger32, Operand.CreateCPURegister(context.Operand1.Type, Architecture.Return32BitRegister), context.Operand1);
+		}
+
+		private void SetReturn64(Context context)
 		{
 			var operand = context.Operand1;
 
-			Debug.Assert(operand != null);
-
-			if (operand.IsR4)
-			{
-				context.SetInstruction(IRInstruction.MoveFloatR4, Operand.CreateCPURegister(operand.Type, Architecture.ReturnFloatingPointRegister), operand);
-			}
-			else if (operand.IsR8)
-			{
-				context.SetInstruction(IRInstruction.MoveFloatR8, Operand.CreateCPURegister(operand.Type, Architecture.ReturnFloatingPointRegister), operand);
-			}
-			else if (operand.IsLong)
+			if (Is32BitPlatform)
 			{
 				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 				var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 				context.SetInstruction2(IRInstruction.Split64, v1, v2, operand);
-				context.AppendInstruction(IRInstruction.MoveInteger, InstructionSize.Size32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return32BitRegister), v1);
-				context.AppendInstruction(IRInstruction.MoveInteger, InstructionSize.Size32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), v2);
-			}
-			else if (MosaTypeLayout.IsStoredOnStack(operand.Type))
-			{
-				var OffsetOfFirstParameterOperand = CreateConstant(Architecture.OffsetOfFirstParameter);
-				context.SetInstruction(IRInstruction.StoreCompound, null, StackFrame, OffsetOfFirstParameterOperand, operand);
+				context.AppendInstruction(IRInstruction.MoveInteger32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return32BitRegister), v1);
+				context.AppendInstruction(IRInstruction.MoveInteger32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), v2);
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.MoveInteger, InstructionSize.Size32, Operand.CreateCPURegister(operand.Type, Architecture.Return32BitRegister), operand);
+				context.AppendInstruction(IRInstruction.MoveInteger64, InstructionSize.Size32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), context.Operand1);
 			}
+		}
+
+		private void SetReturnCompound(Context context)
+		{
+			var OffsetOfFirstParameterOperand = CreateConstant(Architecture.OffsetOfFirstParameter);
+			context.SetInstruction(IRInstruction.StoreCompound, null, StackFrame, OffsetOfFirstParameterOperand, context.Operand1);
 		}
 
 		private int CalculateMethodTableOffset(MosaMethod invokeTarget)
@@ -122,10 +143,10 @@ namespace Mosa.Compiler.Framework.Stages
 			int methodPointerOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 14);
 
 			// Get the TypeDef pointer
-			context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
+			context.SetInstruction(loadInstruction, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 			// Get the address of the method
-			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, callTarget, typeDefinition, CreateConstant(methodPointerOffset));
+			context.AppendInstruction(loadInstruction, NativeInstructionSize, callTarget, typeDefinition, CreateConstant(methodPointerOffset));
 
 			MakeCall(context, callTarget, result, operands);
 		}
@@ -178,19 +199,19 @@ namespace Mosa.Compiler.Framework.Stages
 			var context = new Context(node);
 
 			// Get the TypeDef pointer
-			context.SetInstruction(IRInstruction.LoadInteger, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
+			context.SetInstruction(loadInstruction, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
 
 			// Get the Interface Slot Table pointer
-			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, interfaceSlotPtr, typeDefinition, CreateConstant(interfaceSlotTableOffset));
+			context.AppendInstruction(loadInstruction, NativeInstructionSize, interfaceSlotPtr, typeDefinition, CreateConstant(interfaceSlotTableOffset));
 
 			// Get the Interface Method Table pointer
-			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, CreateConstant(interfaceMethodTableOffset));
+			context.AppendInstruction(loadInstruction, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, CreateConstant(interfaceMethodTableOffset));
 
 			// Get the MethodDef pointer
-			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, CreateConstant(methodDefinitionOffset));
+			context.AppendInstruction(loadInstruction, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, CreateConstant(methodDefinitionOffset));
 
 			// Get the address of the method
-			context.AppendInstruction(IRInstruction.LoadInteger, NativeInstructionSize, callTarget, methodDefinition, CreateConstant(methodPointerOffset));
+			context.AppendInstruction(loadInstruction, NativeInstructionSize, callTarget, methodDefinition, CreateConstant(methodPointerOffset));
 
 			MakeCall(context, callTarget, result, operands);
 		}
@@ -305,7 +326,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (result == null)
 				return;
 
-			if (result.Is64BitInteger && Architecture.NativeIntegerSize == 32)
+			if (result.Is64BitInteger && Is32BitPlatform)
 			{
 				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.Return32BitRegister);
 				var returnHigh = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister);
@@ -318,7 +339,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.Return32BitRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
-				context.AppendInstruction(IRInstruction.MoveInteger, result, returnLow);
+				context.AppendInstruction(moveInstruction, result, returnLow);
 			}
 			else if (result.IsR4)
 			{
@@ -342,7 +363,7 @@ namespace Mosa.Compiler.Framework.Stages
 				// note: same for integer logic (above)
 				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.Return32BitRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
-				context.AppendInstruction(IRInstruction.MoveInteger, result, returnLow);
+				context.AppendInstruction(moveInstruction, result, returnLow);
 			}
 		}
 	}

@@ -448,7 +448,8 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			var instruction = node.Instruction;
 
-			if (instruction == IRInstruction.MoveInteger)
+			if (instruction == IRInstruction.MoveInteger32
+				|| instruction == IRInstruction.MoveInteger64)
 			{
 				Move(node);
 			}
@@ -467,9 +468,21 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Call(node);
 			}
-			else if (instruction == IRInstruction.LoadInteger
-				|| instruction == IRInstruction.LoadSignExtended
-				|| instruction == IRInstruction.LoadZeroExtended
+			else if (instruction == IRInstruction.LoadInteger32
+				|| instruction == IRInstruction.LoadInteger64
+
+				|| instruction == IRInstruction.LoadSignExtended8x32
+				|| instruction == IRInstruction.LoadSignExtended16x32
+				|| instruction == IRInstruction.LoadSignExtended8x64
+				|| instruction == IRInstruction.LoadSignExtended16x64
+				|| instruction == IRInstruction.LoadSignExtended32x64
+
+				|| instruction == IRInstruction.LoadZeroExtended8x32
+				|| instruction == IRInstruction.LoadZeroExtended16x32
+				|| instruction == IRInstruction.LoadZeroExtended8x64
+				|| instruction == IRInstruction.LoadZeroExtended16x64
+				|| instruction == IRInstruction.LoadZeroExtended32x64
+
 				|| instruction == IRInstruction.LoadFloatR4
 				|| instruction == IRInstruction.LoadFloatR8
 				|| instruction == IRInstruction.LoadParameterSignExtended8x32
@@ -540,8 +553,16 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				AddressOf(node);
 			}
-			else if (instruction == IRInstruction.MoveZeroExtended
-				|| instruction == IRInstruction.MoveSignExtended)
+			else if (instruction == IRInstruction.SignExtended8x32
+				|| instruction == IRInstruction.SignExtended16x32
+				|| instruction == IRInstruction.SignExtended8x64
+				|| instruction == IRInstruction.SignExtended16x64
+				|| instruction == IRInstruction.SignExtended32x64
+				|| instruction == IRInstruction.ZeroExtended8x32
+				|| instruction == IRInstruction.ZeroExtended16x32
+				|| instruction == IRInstruction.ZeroExtended8x64
+				|| instruction == IRInstruction.ZeroExtended16x64
+				|| instruction == IRInstruction.ZeroExtended32x64)
 			{
 				Move(node);
 			}
@@ -553,7 +574,11 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				FinallyStart(node);
 			}
-			else if (instruction == IRInstruction.SetReturn)
+			else if (instruction == IRInstruction.SetReturn32
+				|| instruction == IRInstruction.SetReturn64
+				|| instruction == IRInstruction.SetReturnR4
+				|| instruction == IRInstruction.SetReturnR8
+				|| instruction == IRInstruction.SetReturnCompound)
 			{
 				// nothing
 			}

@@ -46,7 +46,7 @@ namespace Mosa.UnitTest.Engine
 		private const uint MaxRetries = 10;
 		private const uint RetryDelay = 1; // 1- seconds
 
-		private const int DefaultMaxSentQueue = 64; // 100
+		private const int DefaultMaxSentQueue = 100;
 
 		private readonly Queue<DebugMessage> queue = new Queue<DebugMessage>();
 		private readonly HashSet<DebugMessage> sent = new HashSet<DebugMessage>();
@@ -58,6 +58,9 @@ namespace Mosa.UnitTest.Engine
 		private readonly Thread processThread;
 		private volatile bool processThreadAbort = false;
 
+		private int processCount = 0;
+		private Stopwatch stopWatch;
+
 		public UnitTestEngine()
 		{
 			Options = new Options()
@@ -65,7 +68,7 @@ namespace Mosa.UnitTest.Engine
 				EnableSSA = true,
 				EnableIROptimizations = true,
 				EnableSparseConditionalConstantPropagation = true,
-				EnableInlinedMethods = true,
+				EnableInlinedMethods = false,
 				IRLongExpansion = true,
 				TwoPassOptimizations = true,
 
@@ -140,52 +143,45 @@ namespace Mosa.UnitTest.Engine
 
 		private void ProcessQueue()
 		{
-			List<DebugMessage> messages = new List<DebugMessage>(64);
-			DateTime last = DateTime.Now;
+			var last = DateTime.Now;
 
 			try
 			{
 				while (!processThreadAbort)
 				{
+					var messages = new List<DebugMessage>();
+
 					DebugMessage message = null;
 
 					lock (queue)
 					{
 						// check if queue has requests or too many have already been sent
-						if (queue.Count <= 0 || sent.Count > MaxSentQueue)
-						{
-							Thread.Sleep(10);
-						}
-						else
+						while (queue.Count > 0 && sent.Count < MaxSentQueue)
 						{
 							message = queue.Dequeue();
+
+							PrepareUnitTest();
+
+							message.CallBack = MessageCallBack;
+
+							sent.Add(message);
+
+							//Console.WriteLine("[" + queue.Count.ToString() + "/" + messages.Count.ToString() + "] SENT: " + (message.Other as UnitTestRequest).MethodTypeName + "." + (message.Other as UnitTestRequest).MethodName);
+
+							messages.Add(message);
+
+							//debugServerEngine.SendCommand(message);
 						}
-					}
 
-					if (message != null)
-					{
-						PrepareUnitTest();
-
-						message.CallBack = MessageCallBack;
-
-						messages.Add(message);
-					}
-
-					DateTime now = DateTime.Now;
-
-					if (messages.Count != 0)
-					{
-						if (messages.Count > 64 || now.Ticks - last.Ticks > 250000)
+						if (messages.Count > 0)
 						{
+							Console.Write(messages.Count.ToString() + ":");
 							debugServerEngine.SendCommand2(messages);
-
 							messages.Clear();
-
-							last = now;
 						}
 					}
 
-					//Console.WriteLine((message.Other as UnitTestRequest).MethodTypeName + "." + (message.Other as UnitTestRequest).MethodName);
+					//					Thread.Sleep(10);
 				}
 			}
 			catch (Exception e)
@@ -201,14 +197,22 @@ namespace Mosa.UnitTest.Engine
 
 			lock (queue)
 			{
+				processCount++;
+				sent.Remove(response);
+
 				//Console.WriteLine(response.ToString());
 
-				sent.Remove(response);
+				if (processCount % 1000 == 0 && stopwatch.Elapsed.Seconds != 0)
+				{
+					Console.WriteLine("Unit Tests: " + processCount.ToString() + " (" + (processCount / stopwatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
+				}
 			}
 
 			if (response.Other is UnitTestRequest message)
 			{
 				message.ParseResultData(response.ResponseData);
+
+				//Console.WriteLine("RECD: " + message.MethodTypeName + "." + message.MethodName);
 			}
 		}
 
@@ -217,17 +221,6 @@ namespace Mosa.UnitTest.Engine
 			lock (queue)
 			{
 				queue.Enqueue(request);
-			}
-		}
-
-		private bool IsQueueEmpty
-		{
-			get
-			{
-				lock (queue)
-				{
-					return queue.Count == 0 && sent.Count == 0;
-				}
 			}
 		}
 
@@ -289,11 +282,12 @@ namespace Mosa.UnitTest.Engine
 			{
 				Other = request
 			};
+
 			QueueMessage(message);
 
 			while (!request.HasResult)
 			{
-				Thread.Sleep(5);
+				Thread.Sleep(25);
 			}
 
 			var result = request.Result;
@@ -720,6 +714,12 @@ namespace Mosa.UnitTest.Engine
 
 				if (fatalError)
 					return false;
+
+				if (stopWatch == null)
+				{
+					stopWatch = new Stopwatch();
+					stopWatch.Start();
+				}
 
 				return true;
 			}

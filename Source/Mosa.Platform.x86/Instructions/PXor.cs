@@ -18,10 +18,6 @@ namespace Mosa.Platform.x86.Instructions
 			: base(1, 2)
 		{
 		}
-
-		// The following is used by the automated code generator.
-
-		public override LegacyOpCode __legacyopcode { get { return LegacyOpcode; } }
 	}
 }
 

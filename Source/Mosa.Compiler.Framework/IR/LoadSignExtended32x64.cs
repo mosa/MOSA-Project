@@ -5,15 +5,17 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// ConversionFloatR4ToInteger
+	/// LoadSignExtended32x64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class ConversionFloatR4ToInteger : BaseIRInstruction
+	public sealed class LoadSignExtended32x64 : BaseIRInstruction
 	{
-		public ConversionFloatR4ToInteger()
-			: base(1, 1)
+		public LoadSignExtended32x64()
+			: base(2, 1)
 		{
 		}
+
+		public override bool IsMemoryRead { get { return true; } }
 	}
 }
 

@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// LoadInteger
+	/// LoadSignExtended16x32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class LoadInteger : BaseIRInstruction
+	public sealed class LoadSignExtended16x32 : BaseIRInstruction
 	{
-		public LoadInteger()
+		public LoadSignExtended16x32()
 			: base(2, 1)
 		{
 		}

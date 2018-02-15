@@ -5,17 +5,15 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// LoadSignExtended
+	/// Truncation64x32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class LoadSignExtended : BaseIRInstruction
+	public sealed class Truncation64x32 : BaseIRInstruction
 	{
-		public LoadSignExtended()
-			: base(2, 1)
+		public Truncation64x32()
+			: base(1, 1)
 		{
 		}
-
-		public override bool IsMemoryRead { get { return true; } }
 	}
 }
 

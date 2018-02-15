@@ -5,19 +5,15 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// SetReturn
+	/// MoveInteger32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class SetReturn : BaseIRInstruction
+	public sealed class MoveInteger32 : BaseIRInstruction
 	{
-		public SetReturn()
-			: base(1, 0)
+		public MoveInteger32()
+			: base(1, 1)
 		{
 		}
-
-		public override FlowControl FlowControl { get { return FlowControl.Return; } }
-
-		public override bool VariableOperands { get { return true; } }
 	}
 }
 

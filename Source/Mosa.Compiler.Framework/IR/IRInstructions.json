@@ -165,37 +165,61 @@
 			"FlowControl": "ConditionalBranch"
 		},
 		{
-			"Name": "ConversionFloatR4ToFloatR8",
+			"Name": "ConvertFloatR4ToFloatR8",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConversionFloatR4ToInteger",
+			"Name": "ConvertFloatR4ToInteger32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConversionFloatR8ToFloatR4",
+			"Name": "ConvertFloatR4ToInteger64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConversionFloatR8ToInteger",
+			"Name": "ConvertFloatR8ToFloatR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConversionIntegerToFloatR4",
+			"Name": "ConvertFloatR8ToInteger32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConversionIntegerToFloatR8",
+			"Name": "ConvertFloatR8ToInteger64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertInteger32ToFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertInteger64ToFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertInteger32ToFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertInteger64ToFloatR8",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
@@ -355,6 +379,18 @@
 			"VariableOperands": "true"
 		},
 		{
+			"Name": "LoadConstant32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "LoadConstant64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
 			"Name": "LoadCompound",
 			"FamilyName": "IR",
 			"ResultCount": 1,
@@ -376,21 +412,84 @@
 			"MemoryRead": "true"
 		},
 		{
-			"Name": "LoadInteger",
+			"Name": "LoadInteger32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"MemoryRead": "true"
 		},
 		{
-			"Name": "LoadSignExtended",
+			"Name": "LoadInteger64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"MemoryRead": "true"
 		},
 		{
-			"Name": "LoadZeroExtended",
+			"Name": "LoadSignExtended8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtended16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtended8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtended16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtended32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtended8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtended16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtended8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtended16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtended32x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
@@ -580,19 +679,73 @@
 			"OperandCount": 1
 		},
 		{
-			"Name": "MoveInteger",
+			"Name": "SignExtended8x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "MoveSignExtended",
+			"Name": "SignExtended16x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "MoveZeroExtended",
+			"Name": "SignExtended8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "SignExtended16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "SignExtended32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtended8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtended16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtended8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtended16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtended32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "MoveInteger32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "MoveInteger64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
@@ -713,12 +866,39 @@
 			"OperandCount": 2
 		},
 		{
-			"Name": "SetReturn",
+			"Name": "SetReturnR4",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 1,
-			"FlowControl": "Return",
-			"VariableOperands": "true"
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetReturnR8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetReturn32",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetReturn64",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetReturnCompound",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
 		},
 		{
 			"Name": "SetLeaveTarget",
@@ -904,6 +1084,12 @@
 			"Name": "Throw",
 			"FamilyName": "IR",
 			"ResultCount": 0,
+			"OperandCount": 1
+		},
+		{
+			"Name": "Truncation64x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{

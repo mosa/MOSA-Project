@@ -97,10 +97,10 @@ namespace Mosa.Compiler.Framework
 				{
 					vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
 
-					var loadInstruction = BaseMethodCompilerStage.GetLoadParameterInstruction(vrs[i].Type, methodCompiler.Architecture.Is32BitPlatform);
+					var paramLoadInstruction = BaseMethodCompilerStage.GetLoadParameterInstruction(vrs[i].Type, methodCompiler.Architecture.Is32BitPlatform);
 					var loadsize = BaseMethodCompilerStage.GetInstructionSize(vrs[i].Type);
 
-					b0.AppendInstruction(loadInstruction, loadsize, vrs[i], methodCompiler.Parameters[i]);
+					b0.AppendInstruction(paramLoadInstruction, loadsize, vrs[i], methodCompiler.Parameters[i]);
 					b0.MosaType = type;
 				}
 			}
@@ -114,8 +114,10 @@ namespace Mosa.Compiler.Framework
 			var opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
 			var c0 = Operand.CreateConstant(0, methodCompiler.TypeSystem);
 
-			b0.AppendInstruction(IRInstruction.LoadInteger, size, opMethod, thisOperand, methodPointerOffsetOperand);
-			b0.AppendInstruction(IRInstruction.LoadInteger, size, opInstance, thisOperand, instanceOffsetOperand);
+			var loadInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInteger32 : IRInstruction.LoadInteger64;
+
+			b0.AppendInstruction(loadInstruction, size, opMethod, thisOperand, methodPointerOffsetOperand);
+			b0.AppendInstruction(loadInstruction, size, opInstance, thisOperand, instanceOffsetOperand);
 			b0.AppendInstruction(IRInstruction.CompareInteger32x32, ConditionCode.Equal, opCompare, opInstance, c0); // FIXME -- not 64 compatible
 			b0.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, opCompare, c0);
 			b0.AddBranchTarget(b2.Block);
@@ -139,7 +141,10 @@ namespace Mosa.Compiler.Framework
 
 			// return
 			if (opReturn != null)
-				b3.AppendInstruction(IRInstruction.SetReturn, null, opReturn);
+			{
+				var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Architecture.Is32BitPlatform);
+				b3.AppendInstruction(setReturn, null, opReturn);
+			}
 
 			b3.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
@@ -149,7 +154,9 @@ namespace Mosa.Compiler.Framework
 			var nullOperand = Operand.GetNullObject(methodCompiler.TypeSystem);
 			var context = new Context(CreateMethodStructure(methodCompiler));
 
-			context.AppendInstruction(IRInstruction.SetReturn, null, nullOperand);
+			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(nullOperand.Type, methodCompiler.Architecture.Is32BitPlatform);
+
+			context.AppendInstruction(setReturn, null, nullOperand);
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 

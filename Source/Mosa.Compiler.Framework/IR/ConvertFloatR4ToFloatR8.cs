@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// ConversionFloatR4ToFloatR8
+	/// ConvertFloatR4ToFloatR8
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class ConversionFloatR4ToFloatR8 : BaseIRInstruction
+	public sealed class ConvertFloatR4ToFloatR8 : BaseIRInstruction
 	{
-		public ConversionFloatR4ToFloatR8()
+		public ConvertFloatR4ToFloatR8()
 			: base(1, 1)
 		{
 		}

@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// Helper
 	/// </summary>
 	internal static class Helper
 	{
@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 				var node = operand1.Definitions[0];
 
-				if ((node.Instruction == X86.Mov32 || node.Instruction == IRInstruction.MoveInteger) && node.Operand1.IsConstant)
+				if ((node.Instruction == X86.Mov32 || node.Instruction == IRInstruction.MoveInteger32) && node.Operand1.IsConstant)
 				{
 					operand1 = node.Operand1;
 					continue;

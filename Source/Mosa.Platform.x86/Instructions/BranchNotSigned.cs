@@ -40,10 +40,6 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Write(opcode);
 			(emitter as X86CodeEmitter).EmitRelativeBranchTarget(node.BranchTargets[0].Label);
 		}
-
-		// The following is used by the automated code generator.
-
-		public override byte[] __opcode { get { return opcode; } }
 	}
 }
 

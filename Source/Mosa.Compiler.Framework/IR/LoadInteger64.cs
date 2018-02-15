@@ -5,15 +5,17 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// ConversionFloatR8ToFloatR4
+	/// LoadInteger64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class ConversionFloatR8ToFloatR4 : BaseIRInstruction
+	public sealed class LoadInteger64 : BaseIRInstruction
 	{
-		public ConversionFloatR8ToFloatR4()
-			: base(1, 1)
+		public LoadInteger64()
+			: base(2, 1)
 		{
 		}
+
+		public override bool IsMemoryRead { get { return true; } }
 	}
 }
 
