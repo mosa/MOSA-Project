@@ -4,26 +4,28 @@ using Xunit.Extensions;
 
 namespace Mosa.UnitTest.Collection.xUnit
 {
+<# foreach (KeyValuePair<string, string> number in NegativeIntegers) { #>
 
-	public class SwitchFixture : TestFixture
+	public class Fixture_Switch<#= number.Value #> : TestFixture
 	{
-	<# foreach (KeyValuePair<string, string> number in NegativeIntegers) { #>
-
 		[Theory]
 		[MemberData(nameof(<#= number.Value #>), DisableDiscoveryEnumeration = true)]
 		public void Switch<#= number.Value #>(<#= number.Key #> a)
 		{
 			Assert.Equal(Mosa.UnitTest.Collection.SwitchTests.Switch<#= number.Value #>(a), Run<<#= number.Key #>>("Mosa.UnitTest.Collection.SwitchTests.Switch<#= number.Value #>", a));
 		}
-	<# } #>
-	<# foreach (KeyValuePair<string, string> number in PositiveIntegers) { #>
-
-		[Theory]
-		[MemberData(nameof(<#= number.Value #>), DisableDiscoveryEnumeration = true)]
-		public void Switch<#= number.Value #>(<#= number.Key #> a)
-		{
-			Assert.Equal(Mosa.UnitTest.Collection.SwitchTests.Switch<#= number.Value #>(a), Run<<#= number.Key #>>("Mosa.UnitTest.Collection.SwitchTests.Switch<#= number.Value #>", a));
-		}
-	<# } #>
 	}
+<# } #>
+<# foreach (KeyValuePair<string, string> number in PositiveIntegers) { #>
+
+public class Fixture_Switch<#= number.Value #> : TestFixture
+	{
+		[Theory]
+		[MemberData(nameof(<#= number.Value #>), DisableDiscoveryEnumeration = true)]
+		public void Switch<#= number.Value #>(<#= number.Key #> a)
+		{
+			Assert.Equal(Mosa.UnitTest.Collection.SwitchTests.Switch<#= number.Value #>(a), Run<<#= number.Key #>>("Mosa.UnitTest.Collection.SwitchTests.Switch<#= number.Value #>", a));
+		}
+	}
+<# } #>
 }

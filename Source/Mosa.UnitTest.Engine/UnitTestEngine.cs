@@ -46,7 +46,7 @@ namespace Mosa.UnitTest.Engine
 		private const uint MaxRetries = 10;
 		private const uint RetryDelay = 1; // 1- seconds
 
-		private const int DefaultMaxSentQueue = 64; // 100
+		private const int DefaultMaxSentQueue = 100;
 
 		private readonly Queue<DebugMessage> queue = new Queue<DebugMessage>();
 		private readonly HashSet<DebugMessage> sent = new HashSet<DebugMessage>();
@@ -57,6 +57,9 @@ namespace Mosa.UnitTest.Engine
 
 		private readonly Thread processThread;
 		private volatile bool processThreadAbort = false;
+
+		private int processCount = 0;
+		private Stopwatch stopWatch;
 
 		public UnitTestEngine()
 		{
@@ -146,12 +149,14 @@ namespace Mosa.UnitTest.Engine
 			{
 				while (!processThreadAbort)
 				{
+					var messages = new List<DebugMessage>();
+
 					DebugMessage message = null;
 
 					lock (queue)
 					{
 						// check if queue has requests or too many have already been sent
-						if (queue.Count > 0 && sent.Count < MaxSentQueue)
+						while (queue.Count > 0 && sent.Count < MaxSentQueue)
 						{
 							message = queue.Dequeue();
 
@@ -161,13 +166,22 @@ namespace Mosa.UnitTest.Engine
 
 							sent.Add(message);
 
-							//Console.WriteLine("SENT: " + (message.Other as UnitTestRequest).MethodTypeName + "." + (message.Other as UnitTestRequest).MethodName);
+							//Console.WriteLine("[" + queue.Count.ToString() + "/" + messages.Count.ToString() + "] SENT: " + (message.Other as UnitTestRequest).MethodTypeName + "." + (message.Other as UnitTestRequest).MethodName);
 
-							debugServerEngine.SendCommand(message);
+							messages.Add(message);
+
+							//debugServerEngine.SendCommand(message);
+						}
+
+						if (messages.Count > 0)
+						{
+							//Console.WriteLine("Bulk Sent: " + messages.Count.ToString());
+							debugServerEngine.SendCommand2(messages);
+							messages.Clear();
 						}
 					}
 
-					Thread.Sleep(10);
+					//					Thread.Sleep(10);
 				}
 			}
 			catch (Exception e)
@@ -183,9 +197,15 @@ namespace Mosa.UnitTest.Engine
 
 			lock (queue)
 			{
+				processCount++;
+				sent.Remove(response);
+
 				//Console.WriteLine(response.ToString());
 
-				sent.Remove(response);
+				if (processCount % 100 == 0 && stopwatch.Elapsed.Seconds != 0)
+				{
+					Console.WriteLine("Unit Tests: " + processCount.ToString() + " (" + (processCount / stopwatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
+				}
 			}
 
 			if (response.Other is UnitTestRequest message)
@@ -201,17 +221,6 @@ namespace Mosa.UnitTest.Engine
 			lock (queue)
 			{
 				queue.Enqueue(request);
-			}
-		}
-
-		private bool IsQueueEmpty
-		{
-			get
-			{
-				lock (queue)
-				{
-					return queue.Count == 0 && sent.Count == 0;
-				}
 			}
 		}
 
@@ -273,6 +282,7 @@ namespace Mosa.UnitTest.Engine
 			{
 				Other = request
 			};
+
 			QueueMessage(message);
 
 			while (!request.HasResult)
@@ -704,6 +714,12 @@ namespace Mosa.UnitTest.Engine
 
 				if (fatalError)
 					return false;
+
+				if (stopWatch == null)
+				{
+					stopWatch = new Stopwatch();
+					stopWatch.Start();
+				}
 
 				return true;
 			}
