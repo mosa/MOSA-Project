@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				context.AppendInstruction(IRInstruction.MoveInteger64, InstructionSize.Size32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), context.Operand1);
+				context.AppendInstruction(IRInstruction.MoveInteger64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), context.Operand1);
 			}
 		}
 
@@ -143,10 +143,10 @@ namespace Mosa.Compiler.Framework.Stages
 			int methodPointerOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 14);
 
 			// Get the TypeDef pointer
-			context.SetInstruction(loadInstruction, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
+			context.SetInstruction(loadInstruction, typeDefinition, thisPtr, ConstantZero);
 
 			// Get the address of the method
-			context.AppendInstruction(loadInstruction, NativeInstructionSize, callTarget, typeDefinition, CreateConstant(methodPointerOffset));
+			context.AppendInstruction(loadInstruction, callTarget, typeDefinition, CreateConstant(methodPointerOffset));
 
 			MakeCall(context, callTarget, result, operands);
 		}
@@ -199,19 +199,19 @@ namespace Mosa.Compiler.Framework.Stages
 			var context = new Context(node);
 
 			// Get the TypeDef pointer
-			context.SetInstruction(loadInstruction, NativeInstructionSize, typeDefinition, thisPtr, ConstantZero);
+			context.SetInstruction(loadInstruction, typeDefinition, thisPtr, ConstantZero);
 
 			// Get the Interface Slot Table pointer
-			context.AppendInstruction(loadInstruction, NativeInstructionSize, interfaceSlotPtr, typeDefinition, CreateConstant(interfaceSlotTableOffset));
+			context.AppendInstruction(loadInstruction, interfaceSlotPtr, typeDefinition, CreateConstant(interfaceSlotTableOffset));
 
 			// Get the Interface Method Table pointer
-			context.AppendInstruction(loadInstruction, NativeInstructionSize, interfaceMethodTablePtr, interfaceSlotPtr, CreateConstant(interfaceMethodTableOffset));
+			context.AppendInstruction(loadInstruction, interfaceMethodTablePtr, interfaceSlotPtr, CreateConstant(interfaceMethodTableOffset));
 
 			// Get the MethodDef pointer
-			context.AppendInstruction(loadInstruction, NativeInstructionSize, methodDefinition, interfaceMethodTablePtr, CreateConstant(methodDefinitionOffset));
+			context.AppendInstruction(loadInstruction, methodDefinition, interfaceMethodTablePtr, CreateConstant(methodDefinitionOffset));
 
 			// Get the address of the method
-			context.AppendInstruction(loadInstruction, NativeInstructionSize, callTarget, methodDefinition, CreateConstant(methodPointerOffset));
+			context.AppendInstruction(loadInstruction, callTarget, methodDefinition, CreateConstant(methodPointerOffset));
 
 			MakeCall(context, callTarget, result, operands);
 		}
@@ -298,8 +298,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (operand.IsInteger)
 			{
-				var size = GetInstructionSize(operand.Type);
-				context.AppendInstruction(Select(operand, IRInstruction.StoreInteger32, IRInstruction.StoreInteger64), size, null, scratch, offsetOperand, operand);
+				context.AppendInstruction(Select(operand, IRInstruction.StoreInteger32, IRInstruction.StoreInteger64), null, scratch, offsetOperand, operand);
 			}
 			else if (operand.IsR4)
 			{
@@ -316,8 +315,7 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				// note: same for integer logic (above)
-				var size = GetInstructionSize(operand.Type);
-				context.AppendInstruction(Select(operand, IRInstruction.StoreInteger32, IRInstruction.StoreInteger64), size, null, scratch, offsetOperand, operand);
+				context.AppendInstruction(Select(operand, IRInstruction.StoreInteger32, IRInstruction.StoreInteger64), null, scratch, offsetOperand, operand);
 			}
 		}
 

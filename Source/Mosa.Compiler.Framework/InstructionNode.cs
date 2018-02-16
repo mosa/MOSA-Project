@@ -299,11 +299,6 @@ namespace Mosa.Compiler.Framework
 		public ConditionCode ConditionCode { get; set; }
 
 		/// <summary>
-		/// The instruction size
-		/// </summary>
-		public InstructionSize Size { get; set; }
-
-		/// <summary>
 		/// Holds branch targets
 		/// </summary>
 		public List<BasicBlock> BranchTargets { get { return branchTargets; } }
@@ -832,11 +827,6 @@ namespace Mosa.Compiler.Framework
 
 			sb.Append(Instruction.FullName);
 
-			var size = GetSizeString(Size);
-
-			if (size != string.Empty)
-				sb.Append("/").Append(size);
-
 			if (ConditionCode != ConditionCode.Undefined)
 			{
 				sb.Append(" [");
@@ -933,12 +923,6 @@ namespace Mosa.Compiler.Framework
 		public void ReplaceInstruction(BaseInstruction instruction)
 		{
 			Instruction = instruction;
-		}
-
-		public void ReplaceInstruction(BaseInstruction instruction, InstructionSize size)
-		{
-			Instruction = instruction;
-			Size = size;
 		}
 
 		private void ReplaceOperand(Operand target, Operand replacement)
@@ -1062,7 +1046,6 @@ namespace Mosa.Compiler.Framework
 			Instruction = instruction;
 			OperandCount = operandCount;
 			ResultCount = resultCount;
-			Size = InstructionSize.None;
 		}
 
 		/// <summary>
@@ -1192,7 +1175,6 @@ namespace Mosa.Compiler.Framework
 			OperandCount = operandCount;
 			ResultCount = resultCount;
 			Label = label;
-			Size = InstructionSize.None;
 			Block = block;
 
 			//Block.DebugCheck();
@@ -1320,19 +1302,6 @@ namespace Mosa.Compiler.Framework
 			SetInstruction(instruction, operands.Count, (byte)((result == null) ? 0 : 1));
 			Result = result;
 			AppendOperands(operands);
-		}
-
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="size">The size.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		public void SetInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1)
-		{
-			SetInstruction(instruction, result, operand1);
-			Size = size;
 		}
 
 		/// <summary>
@@ -1607,51 +1576,6 @@ namespace Mosa.Compiler.Framework
 			Operand2 = operand2;
 			ConditionCode = condition;
 			UpdateStatus = updateStatus;
-		}
-
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="size">The size.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		public void SetInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2)
-		{
-			SetInstruction(instruction, result, operand1, operand2);
-			Size = size;
-		}
-
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="size">The size.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		/// <param name="operand3">The operand3.</param>
-		public void SetInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2, Operand operand3)
-		{
-			SetInstruction(instruction, result, operand1, operand2, operand3);
-			Size = size;
-		}
-
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="size">The size.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		/// <param name="operand3">The operand3.</param>
-		/// <param name="operand4">The operand4.</param>
-		public void SetInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
-		{
-			SetInstruction(instruction, result, operand1, operand2, operand3, operand4);
-			Size = size;
 		}
 
 		#endregion SetInstructions

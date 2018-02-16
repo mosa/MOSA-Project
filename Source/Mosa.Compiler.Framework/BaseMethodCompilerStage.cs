@@ -615,51 +615,6 @@ namespace Mosa.Compiler.Framework
 			return MethodCompiler.GetReferenceOrTypeSize(type, align);
 		}
 
-		/// <summary>
-		/// Gets the size of the instruction.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public static InstructionSize GetInstructionSize(MosaType type)
-		{
-			if (type.IsPointer)
-				return InstructionSize.Native;
-
-			if (type.IsI4 || type.IsU4 || type.IsR4)
-				return InstructionSize.Size32;
-
-			if (type.IsR8 || type.IsUI8)
-				return InstructionSize.Size64;
-
-			if (type.IsUI1 || type.IsBoolean)
-				return InstructionSize.Size8;
-
-			if (type.IsUI2 || type.IsChar)
-				return InstructionSize.Size16;
-
-			if (type.IsReferenceType)
-				return InstructionSize.Native;
-
-			if (type.IsValueType)
-				return InstructionSize.Native;
-
-			return InstructionSize.Size32;
-		}
-
-		/// <summary>
-		/// Gets the size of the instruction.
-		/// </summary>
-		/// <param name="size">The size.</param>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public static InstructionSize GetInstructionSize(InstructionSize size, MosaType type)
-		{
-			if (size != InstructionSize.None)
-				return size;
-
-			return GetInstructionSize(type);
-		}
-
 		public IList<BasicBlock> AddMissingBlocks(IList<BasicBlock> blocks, bool cleanUp)
 		{
 			var list = new List<BasicBlock>(blocks.Count);
