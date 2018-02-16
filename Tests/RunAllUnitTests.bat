@@ -8,5 +8,5 @@ echo %DATE% %TIME%
 %XUNIT% Mosa.Compiler.Framework.xUnit.dll
 echo %DATE% %TIME%
 
-%XUNIT% Mosa.UnitTest.Collection.xUnit.dll -parallel all -maxthreads 128
+%XUNIT% Mosa.UnitTest.Collection.xUnit.dll -parallel all
 echo %DATE% %TIME%

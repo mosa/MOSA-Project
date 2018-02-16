@@ -264,11 +264,18 @@ namespace Mosa.Kernel.x86
 				SendReady();
 			}
 
-			while (ProcessSerial()) ;
-
-			if (ready)
+			for (int x = 0; x < 25; x++)
 			{
-				ProcessTestUnitQueue();
+				for (int i = 0; i < 255; i++)
+				{
+					while (ProcessSerial()) ;
+				}
+
+				if (ready)
+				{
+					SendTestUnitResponse();
+					ProcessTestUnitQueue();
+				}
 			}
 		}
 
@@ -317,18 +324,6 @@ namespace Mosa.Kernel.x86
 					ResetBuffer();
 				}
 			}
-
-			//Screen.Goto(24, 0);
-			//Screen.Write("INDEX: ");
-			//Screen.Write(index, 10, 5);
-			//Screen.Write(" LENGTH: ");
-			//Screen.Write((uint)length, 10, 5);
-
-			//unsafe
-			//{
-			//	Screen.Write(" EIP: ");
-			//	Screen.Write((uint)idt_stack->EIP, 16, 8);
-			//}
 
 			return true;
 		}
@@ -550,7 +545,7 @@ namespace Mosa.Kernel.x86
 			uint id = GetID();
 
 			var start = Address.DebuggerBuffer + 16;
-			uint end = start + GetLength();
+			uint end = start + GetLength() + 16;
 
 			UnitTestQueue.QueueUnitTest(id, start, end);
 		}

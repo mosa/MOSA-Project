@@ -80,18 +80,12 @@ namespace Mosa.Utility.DebugEngine
 			return true;
 		}
 
-		private static readonly Stopwatch stopwatch = new Stopwatch();
 		private static int packetCnt = 0;
 
 		public bool SendCommand2(List<DebugMessage> messages)
 		{
 			lock (sync)
 			{
-				if (!stopwatch.IsRunning)
-				{
-					stopwatch.Start();
-				}
-
 				if (!IsConnected)
 					return false;
 
