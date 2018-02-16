@@ -43,7 +43,7 @@ namespace Mosa.UnitTest.Engine
 
 		private readonly Stopwatch stopwatch = new Stopwatch();
 
-		private const uint MaxRetries = 10;
+		private const uint MaxRetries = 32;
 		private const uint RetryDelay = 1; // 1- seconds
 
 		private const int DefaultMaxSentQueue = 100;
@@ -80,7 +80,7 @@ namespace Mosa.UnitTest.Engine
 				EmulatorMemoryInMB = 128,
 				DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"),
 				FileSystem = FileSystem.FAT16,
-				UseMultipleThreadCompiler = false,
+				UseMultipleThreadCompiler = true,
 				InlinedIRMaximum = 8,
 				BootLoader = BootLoader.Syslinux_3_72,
 				VBEVideo = false,
@@ -175,13 +175,13 @@ namespace Mosa.UnitTest.Engine
 
 						if (messages.Count > 0)
 						{
-							Console.Write(messages.Count.ToString() + ":");
+							//Console.Write(messages.Count.ToString() + ":");
 							debugServerEngine.SendCommand2(messages);
 							messages.Clear();
 						}
 					}
 
-					//					Thread.Sleep(10);
+					// Thread.Sleep(10);
 				}
 			}
 			catch (Exception e)
@@ -204,7 +204,7 @@ namespace Mosa.UnitTest.Engine
 
 				if (processCount % 1000 == 0 && stopwatch.Elapsed.Seconds != 0)
 				{
-					Console.WriteLine("Unit Tests: " + processCount.ToString() + " (" + (processCount / stopwatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
+					Console.WriteLine("Unit Tests - Count: " + processCount.ToString() + " Elapsed: " + ((int)stopwatch.Elapsed.TotalSeconds).ToString() + " (" + (processCount / stopwatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
 				}
 			}
 
@@ -278,12 +278,18 @@ namespace Mosa.UnitTest.Engine
 
 			request.Resolve(typeSystem, linker);
 
-			var message = new DebugMessage(DebugCode.ExecuteUnitTest, request.Message)
-			{
-				Other = request
-			};
+			var message = new DebugMessage(DebugCode.ExecuteUnitTest, request.Message, request);
 
 			QueueMessage(message);
+
+			//// for performance test --- create 1000 more to send
+			//var testMessage = new DebugMessage(message.Code, message.CommandData);
+			//testMessage.CallBack = MessageCallBack;
+
+			//for (int i = 0; i < 1000; i++)
+			//{
+			//	QueueMessage(testMessage);
+			//}
 
 			while (!request.HasResult)
 			{

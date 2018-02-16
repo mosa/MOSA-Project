@@ -1,12 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-/// <summary>
-///
-/// </summary>
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// Version
+	/// Compiler Version
 	/// </summary>
 	public static class CompilerVersion
 	{

@@ -35,4 +35,4 @@ using Xunit;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 //[assembly: CollectionBehavior(MaxParallelThreads = 64)]
-[assembly: CollectionBehavior(CollectionBehavior.CollectionPerClass, MaxParallelThreads = 64, DisableTestParallelization = false)]
+[assembly: CollectionBehavior(CollectionBehavior.CollectionPerClass, DisableTestParallelization = false)]

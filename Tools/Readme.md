@@ -4,7 +4,7 @@ qemu
 - GPL License
 - http://www.qemu.org
 - binary form: http://qemu.weilnetz.de/
-- Version: 2.7.0
+- Version: 2.11.0
 
 bochs
 - LGPL License
