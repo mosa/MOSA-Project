@@ -35,8 +35,6 @@ namespace Mosa.Compiler.Framework
 			var instanceOperand = methodCompiler.Parameters[1];
 			var methodPointerOperand = methodCompiler.Parameters[2];
 
-			var size = methodCompiler.Architecture.NativeInstructionSize;
-
 			var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
 			var methodPointerOffsetOperand = Operand.CreateConstant(methodPointerOffset, methodCompiler.TypeSystem);
@@ -55,9 +53,9 @@ namespace Mosa.Compiler.Framework
 			context.AppendInstruction(IRInstruction.LoadParameterInteger32, v2, methodPointerOperand); // FIXME -- not 64 compatible
 			context.AppendInstruction(IRInstruction.LoadParameterInteger32, v3, instanceOperand); // FIXME -- not 64 compatible
 
-			context.AppendInstruction(IRInstruction.StoreInteger32, size, null, v1, methodPointerOffsetOperand, v2); // FIXME -- not 64 compatible
+			context.AppendInstruction(IRInstruction.StoreInteger32, null, v1, methodPointerOffsetOperand, v2); // FIXME -- not 64 compatible
 			context.MosaType = methodPointerOperand.Type;
-			context.AppendInstruction(IRInstruction.StoreInteger32, size, null, v1, instanceOffsetOperand, v3); // FIXME -- not 64 compatible
+			context.AppendInstruction(IRInstruction.StoreInteger32, null, v1, instanceOffsetOperand, v3); // FIXME -- not 64 compatible
 			context.MosaType = instanceOperand.Type;
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
@@ -98,9 +96,8 @@ namespace Mosa.Compiler.Framework
 					vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
 
 					var paramLoadInstruction = BaseMethodCompilerStage.GetLoadParameterInstruction(vrs[i].Type, methodCompiler.Architecture.Is32BitPlatform);
-					var loadsize = BaseMethodCompilerStage.GetInstructionSize(vrs[i].Type);
 
-					b0.AppendInstruction(paramLoadInstruction, loadsize, vrs[i], methodCompiler.Parameters[i]);
+					b0.AppendInstruction(paramLoadInstruction, vrs[i], methodCompiler.Parameters[i]);
 					b0.MosaType = type;
 				}
 			}
@@ -116,8 +113,8 @@ namespace Mosa.Compiler.Framework
 
 			var loadInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInteger32 : IRInstruction.LoadInteger64;
 
-			b0.AppendInstruction(loadInstruction, size, opMethod, thisOperand, methodPointerOffsetOperand);
-			b0.AppendInstruction(loadInstruction, size, opInstance, thisOperand, instanceOffsetOperand);
+			b0.AppendInstruction(loadInstruction, opMethod, thisOperand, methodPointerOffsetOperand);
+			b0.AppendInstruction(loadInstruction, opInstance, thisOperand, instanceOffsetOperand);
 			b0.AppendInstruction(IRInstruction.CompareInteger32x32, ConditionCode.Equal, opCompare, opInstance, c0); // FIXME -- not 64 compatible
 			b0.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, opCompare, c0);
 			b0.AddBranchTarget(b2.Block);

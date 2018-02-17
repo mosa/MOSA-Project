@@ -14,7 +14,6 @@ namespace Mosa.Compiler.Framework.Expression
 		public List<Node> ParentNodes { get; } = new List<Node>();
 
 		public BaseInstruction Instruction { get; }
-		public InstructionSize Size { get; } = InstructionSize.None;
 		public ConditionCode ConditionCode { get; set; } = ConditionCode.Undefined;
 
 		public string Name { get; }
@@ -33,26 +32,11 @@ namespace Mosa.Compiler.Framework.Expression
 			Instruction = instruction;
 		}
 
-		public Node(BaseInstruction instruction, InstructionSize size)
-		{
-			NodeType = NodeType.Instruction;
-			Instruction = instruction;
-			Size = size;
-		}
-
 		public Node(BaseInstruction instruction, ConditionCode condition)
 		{
 			NodeType = NodeType.Instruction;
 			Instruction = instruction;
 			ConditionCode = condition;
-		}
-
-		public Node(BaseInstruction instruction, ConditionCode condition, InstructionSize size)
-		{
-			NodeType = NodeType.Instruction;
-			Instruction = instruction;
-			ConditionCode = condition;
-			Size = size;
 		}
 
 		public Node(ulong constant)
@@ -108,9 +92,6 @@ namespace Mosa.Compiler.Framework.Expression
 				return false;
 
 			if (node.Instruction != Instruction)
-				return false;
-
-			if (Size != InstructionSize.Native && node.Size != Size)
 				return false;
 
 			if (ConditionCode != ConditionCode.Undefined && node.ConditionCode != ConditionCode)

@@ -813,32 +813,6 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		public static BaseInstruction GetMovLoad(InstructionSize size)
-		{
-			switch (size)
-			{
-				case InstructionSize.Size32: return X86.MovLoad32;
-				case InstructionSize.None: return X86.MovLoad32;
-				case InstructionSize.Native: return X86.MovLoad32;
-				case InstructionSize.Size16: return X86.MovLoad16;
-				case InstructionSize.Size8: return X86.MovLoad8;
-				default: throw new NotSupportedException();
-			}
-		}
-
-		public static BaseInstruction GetMovStore(InstructionSize size)
-		{
-			switch (size)
-			{
-				case InstructionSize.Size32: return X86.MovStore32;
-				case InstructionSize.None: return X86.MovStore32;
-				case InstructionSize.Native: return X86.MovStore32;
-				case InstructionSize.Size16: return X86.MovStore16;
-				case InstructionSize.Size8: return X86.MovStore8;
-				default: throw new NotSupportedException();
-			}
-		}
-
 		public static BaseInstruction GetSetcc(ConditionCode condition)
 		{
 			switch (condition)
