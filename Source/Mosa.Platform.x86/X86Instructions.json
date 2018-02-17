@@ -622,7 +622,7 @@
 			"ResultCount": 1,
 			"OperandCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovLoad8",
