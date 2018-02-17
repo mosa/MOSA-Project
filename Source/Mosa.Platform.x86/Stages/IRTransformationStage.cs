@@ -802,8 +802,6 @@ namespace Mosa.Platform.x86.Stages
 				case ConditionCode.UnsignedGreaterThan: return X86.BranchUnsignedGreaterThan;
 				case ConditionCode.Signed: return X86.BranchSigned;
 				case ConditionCode.NotSigned: return X86.BranchNotSigned;
-				case ConditionCode.Parity: return X86.BranchParity;
-				case ConditionCode.NoParity: return X86.BranchNoParity;
 				case ConditionCode.LessThan: return X86.BranchLessThan;
 				case ConditionCode.GreaterOrEqual: return X86.BranchGreaterOrEqual;
 				case ConditionCode.LessOrEqual: return X86.BranchLessOrEqual;
@@ -831,8 +829,6 @@ namespace Mosa.Platform.x86.Stages
 				case ConditionCode.UnsignedGreaterThan: return X86.SetUnsignedGreaterThan;
 				case ConditionCode.Signed: return X86.SetSigned;
 				case ConditionCode.NotSigned: return X86.SetNotSigned;
-				case ConditionCode.Parity: return X86.SetParity;
-				case ConditionCode.NoParity: return X86.SetNoParity;
 				case ConditionCode.LessThan: return X86.SetLessThan;
 				case ConditionCode.GreaterOrEqual: return X86.SetGreaterOrEqual;
 				case ConditionCode.LessOrEqual: return X86.SetLessOrEqual;

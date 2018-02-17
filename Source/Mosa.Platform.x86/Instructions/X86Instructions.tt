@@ -173,9 +173,9 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool HasIRUnspecifiedSideEffect { get { return true; } }
 <# } #>
-<# if (entry.X86ThreeTwoAddressConversion == null || (entry.X86ThreeTwoAddressConversion != null && entry.X86ThreeTwoAddressConversion != "true")) { #>
+<# if (entry.X86ThreeTwoAddressConversion == null || entry.X86ThreeTwoAddressConversion == "true") { #>
 
-		public override bool ThreeTwoAddressConversion { get { return false; } }
+		public override bool ThreeTwoAddressConversion { get { return true; } }
 <# } #>
 <# if (entry.LogicalOpposite != null) { #>
 
@@ -223,9 +223,9 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == <#= entry.ResultCount #>);
 			System.Diagnostics.Debug.Assert(node.OperandCount == <#= entry.OperandCount #>);
 <# if (entry.X86ThreeTwoAddressConversion == null || entry.X86ThreeTwoAddressConversion == "true") { #>
-			System.Diagnostics.Debug.Assert(node.Result == node.Operand1);
 			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
+			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 <# } #>
 
 <# } #>

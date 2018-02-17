@@ -786,7 +786,8 @@
 			"ResultCount": 0,
 			"OperandCount": 3,
 			"MemoryWrite": "true",
-			"StaticEmitMethod": "StaticEmitters.Emit%"
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Movzx8To32",
@@ -1077,7 +1078,7 @@
 			"OperandCount": 0,
 			"FlowControl": "Return",
 			"X86EmitBytes": "C3",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Roundsd",
@@ -1253,7 +1254,7 @@
 			"OperandCount": 0,
 			"UnspecifiedSideEffect": "true",
 			"X86EmitBytes": "FB",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Stos",
@@ -1261,7 +1262,7 @@
 			"ResultCount": 0,
 			"OperandCount": 1,
 			"X86EmitBytes": "AB",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Sub32",

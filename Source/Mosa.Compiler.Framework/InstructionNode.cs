@@ -1003,8 +1003,6 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.Signed: return "signed";
 				case ConditionCode.Zero: return "zero";
 				case ConditionCode.NotZero: return "not zero";
-				case ConditionCode.Parity: return "parity";
-				case ConditionCode.NoParity: return "no parity";
 				case ConditionCode.Carry: return "carry";
 				case ConditionCode.NoCarry: return "no carry";
 				case ConditionCode.Always: return "always";
