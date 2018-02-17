@@ -21,8 +21,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool HasIRUnspecifiedSideEffect { get { return true; } }
 
-		public override bool ThreeTwoAddressConversion { get { return false; } }
-
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);

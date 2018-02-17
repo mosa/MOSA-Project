@@ -21,8 +21,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		public override bool ThreeTwoAddressConversion { get { return false; } }
-
 		public override BaseInstruction GetOpposite()
 		{
 			return X86.CmovLessThan32;

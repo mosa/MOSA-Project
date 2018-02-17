@@ -21,8 +21,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
 
-		public override bool ThreeTwoAddressConversion { get { return false; } }
-
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);

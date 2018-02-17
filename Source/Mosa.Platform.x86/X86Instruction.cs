@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86
 		/// <value>
 		/// <c>true</c> if [three two address conversion]; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool ThreeTwoAddressConversion { get { return true; } }
+		public virtual bool ThreeTwoAddressConversion { get { return false; } }
 
 		/// <summary>
 		/// Gets the name of the instruction family.
@@ -86,12 +86,5 @@ namespace Mosa.Platform.x86
 		}
 
 		#endregion Legacy Opcode Methods
-
-		// used by the code automation tool
-
-		public virtual byte[] __opcode { get; }
-		public virtual LegacyOpCode __legacyopcode { get; }
-		public virtual string __legacyOpcodeOperandOrder { get; }
-		public virtual string __staticEmitMethod { get; }
 	}
 }

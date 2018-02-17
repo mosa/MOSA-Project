@@ -58,8 +58,6 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.UnsignedLessThan: return ConditionCode.UnsignedGreaterOrEqual;
 				case ConditionCode.Signed: return ConditionCode.NotSigned;
 				case ConditionCode.NotSigned: return ConditionCode.Signed;
-				case ConditionCode.Parity: return ConditionCode.NoParity;
-				case ConditionCode.NoParity: return ConditionCode.Parity;
 				case ConditionCode.Carry: return ConditionCode.NoCarry;
 				case ConditionCode.NoCarry: return ConditionCode.Carry;
 				case ConditionCode.Overflow: return ConditionCode.NoOverflow;

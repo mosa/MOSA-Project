@@ -73,16 +73,6 @@ namespace Mosa.Compiler.Framework
 		Signed,
 
 		/// <summary>
-		/// No parity
-		/// </summary>
-		NoParity,
-
-		/// <summary>
-		/// Parity
-		/// </summary>
-		Parity,
-
-		/// <summary>
 		/// Carry flag
 		/// </summary>
 		Carry,

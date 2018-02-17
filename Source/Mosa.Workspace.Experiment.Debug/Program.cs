@@ -96,10 +96,11 @@ namespace Mosa.Workspace.Experiment.Debug
 					UnspecifiedSideEffect = instruction.HasIRUnspecifiedSideEffect,
 
 					X86ThreeTwoAddressConversion = instruction.ThreeTwoAddressConversion,
-					X86EmitBytes = instruction.__opcode,
-					X86LegacyOpcode = (instruction.__legacyopcode != null) ? instruction.__legacyopcode.Code : null,
-					X86LegacyOpcodeRegField = (instruction.__legacyopcode != null) ? instruction.__legacyopcode.RegField : null,
-					StaticEmitMethod = instruction.__staticEmitMethod,
+
+					//X86EmitBytes = instruction.__opcode,
+					//X86LegacyOpcode = (instruction.__legacyopcode != null) ? instruction.__legacyopcode.Code : null,
+					//X86LegacyOpcodeRegField = (instruction.__legacyopcode != null) ? instruction.__legacyopcode.RegField : null,
+					//StaticEmitMethod = instruction.__staticEmitMethod,
 
 					//X86EmitMethodType =
 					//	instruction.__staticMethodName != null ? "CallInternalMethod" :
