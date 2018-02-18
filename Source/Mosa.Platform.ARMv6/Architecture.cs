@@ -285,7 +285,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="source">The source offset.</param>
 		/// <param name="size">The size.</param>
 		/// <exception cref="NotImplementCompilerException"></exception>
-		public override void InsertCompoundCopy(BaseMethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
+		public override void InsertCompoundCopy(MethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
 		{
 			throw new NotImplementCompilerException();
 		}

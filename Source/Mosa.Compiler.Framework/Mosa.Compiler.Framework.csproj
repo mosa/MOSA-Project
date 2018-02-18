@@ -902,7 +902,7 @@
     <Compile Include="IMethodCompilerStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseMethodCompiler.cs">
+    <Compile Include="MethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Operand.cs">

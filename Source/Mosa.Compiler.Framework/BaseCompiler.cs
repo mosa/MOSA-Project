@@ -181,7 +181,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="threadID">The thread identifier.</param>
 		/// <returns></returns>
-		protected abstract BaseMethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0);
+		protected abstract MethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0);
 
 		/// <summary>
 		/// Compiles the linker method.

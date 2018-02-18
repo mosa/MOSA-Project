@@ -372,7 +372,7 @@ namespace Mosa.Platform.x86
 		/// <param name="sourceBase">The source base.</param>
 		/// <param name="source">The source.</param>
 		/// <param name="size">The size.</param>
-		public override void InsertCompoundCopy(BaseMethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
+		public override void InsertCompoundCopy(MethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
 		{
 			const int LargeAlignment = 16;
 			int alignedSize = size - (size % NativeAlignment);

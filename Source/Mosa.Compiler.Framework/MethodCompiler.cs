@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework
 	/// created by invoking CreateMethodCompiler on a specific compiler
 	/// instance.
 	/// </remarks>
-	public class BaseMethodCompiler
+	public sealed class MethodCompiler
 	{
 		#region Data Members
 
@@ -187,13 +187,13 @@ namespace Mosa.Compiler.Framework
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseMethodCompiler" /> class.
+		/// Initializes a new instance of the <see cref="MethodCompiler" /> class.
 		/// </summary>
 		/// <param name="compiler">The assembly compiler.</param>
 		/// <param name="method">The method to compile by this instance.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="threadID">The thread identifier.</param>
-		protected BaseMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
+		public MethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
 		{
 			Compiler = compiler;
 			Method = method;
@@ -290,7 +290,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Evaluates the parameter operands.
 		/// </summary>
-		protected void EvaluateParameterOperands()
+		private void EvaluateParameterOperands()
 		{
 			int offset = Architecture.OffsetOfFirstParameter;
 
@@ -334,8 +334,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
-			BeginCompile();
-
 			foreach (IMethodCompilerStage stage in Pipeline)
 			{
 				{
@@ -354,8 +352,6 @@ namespace Mosa.Compiler.Framework
 			var log = new TraceLog(TraceType.Counters, this.Method, string.Empty, Trace.TraceFilter.Active);
 			log.Log(MethodData.Counters.Export());
 			Trace.TraceListener.OnNewTraceLog(log);
-
-			EndCompile();
 		}
 
 		/// <summary>
@@ -486,7 +482,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Initializes the type.
 		/// </summary>
-		protected virtual void InitializeType()
+		private void InitializeType()
 		{
 			if (Method.IsSpecialName && Method.IsRTSpecialName && Method.IsStatic && Method.Name == ".cctor")
 			{
@@ -497,20 +493,6 @@ namespace Mosa.Compiler.Framework
 
 				typeInitializer.Schedule(Method);
 			}
-		}
-
-		/// <summary>
-		/// Called before the method compiler begins compiling the method.
-		/// </summary>
-		protected virtual void BeginCompile()
-		{
-		}
-
-		/// <summary>
-		/// Called after the method compiler has finished compiling the method.
-		/// </summary>
-		protected virtual void EndCompile()
-		{
 		}
 
 		/// <summary>

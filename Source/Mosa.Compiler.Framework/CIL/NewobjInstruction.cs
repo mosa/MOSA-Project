@@ -103,7 +103,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context context, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, MethodCompiler compiler)
 		{
 			if (context == null)
 				throw new System.ArgumentNullException(nameof(context));

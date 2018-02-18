@@ -88,7 +88,6 @@
     </Compile>
     <Compile Include="DisassemblyStage.cs" />
     <Compile Include="ExplorerCompiler.cs" />
-    <Compile Include="ExplorerMethodCompiler.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

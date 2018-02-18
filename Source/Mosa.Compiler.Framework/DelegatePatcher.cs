@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public static class DelegatePatcher
 	{
-		public static bool PatchDelegate(BaseMethodCompiler methodCompiler)
+		public static bool PatchDelegate(MethodCompiler methodCompiler)
 		{
 			if (!methodCompiler.Method.DeclaringType.IsDelegate)
 				return false;
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		private static void PatchConstructor(BaseMethodCompiler methodCompiler)
+		private static void PatchConstructor(MethodCompiler methodCompiler)
 		{
 			var thisOperand = methodCompiler.Parameters[0];
 			var instanceOperand = methodCompiler.Parameters[1];
@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Framework
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
-		private static void PatchInvoke(BaseMethodCompiler methodCompiler)
+		private static void PatchInvoke(MethodCompiler methodCompiler)
 		{
 			// check if instance is null (if so, it's a static call to the methodPointer)
 
@@ -146,7 +146,7 @@ namespace Mosa.Compiler.Framework
 			b3.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
-		private static void PatchBeginInvoke(BaseMethodCompiler methodCompiler)
+		private static void PatchBeginInvoke(MethodCompiler methodCompiler)
 		{
 			var nullOperand = Operand.GetNullObject(methodCompiler.TypeSystem);
 			var context = new Context(CreateMethodStructure(methodCompiler));
@@ -157,14 +157,14 @@ namespace Mosa.Compiler.Framework
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
-		private static void PatchEndInvoke(BaseMethodCompiler methodCompiler)
+		private static void PatchEndInvoke(MethodCompiler methodCompiler)
 		{
 			var start = CreateMethodStructure(methodCompiler);
 
 			start.First.Insert(new InstructionNode(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock));
 		}
 
-		private static BasicBlock CreateMethodStructure(BaseMethodCompiler methodCompiler)
+		private static BasicBlock CreateMethodStructure(MethodCompiler methodCompiler)
 		{
 			var basicBlocks = methodCompiler.BasicBlocks;
 

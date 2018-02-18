@@ -197,7 +197,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="sourceBase">The source.</param>
 		/// <param name="source">The source offset.</param>
 		/// <param name="size">The size.</param>
-		public abstract void InsertCompoundCopy(BaseMethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size);
+		public abstract void InsertCompoundCopy(MethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size);
 
 		/// <summary>
 		/// Create platform exchange registers.

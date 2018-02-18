@@ -15,8 +15,8 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// Replaces the intrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
+		/// <param name="methodCompiler">The method compiler.</param>
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var pointer = context.Operand1;
 			var oldval = context.Operand2;

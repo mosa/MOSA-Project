@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="methodCompiler">The method compiler.</param>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
+		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var move = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.MoveInteger32 : IRInstruction.MoveInteger64;
 

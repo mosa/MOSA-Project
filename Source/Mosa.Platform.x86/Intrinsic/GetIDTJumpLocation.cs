@@ -20,7 +20,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="context">The context.</param>
 		/// <param name="methodCompiler">The method compiler.</param>
 		/// <exception cref="CompilerException"></exception>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var operand = context.Operand1;
 

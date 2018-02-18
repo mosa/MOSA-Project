@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Trace
 	/// </summary>
 	public static class InstructionLogger
 	{
-		public static void Run(BaseMethodCompiler methodCompiler, IPipelineStage stage)
+		public static void Run(MethodCompiler methodCompiler, IPipelineStage stage)
 		{
 			Run(
 				methodCompiler.Trace,

@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Hold the method compiler
 		/// </summary>
-		protected BaseMethodCompiler MethodCompiler { get; private set; }
+		protected MethodCompiler MethodCompiler { get; private set; }
 
 		/// <summary>
 		/// The architecture of the compilation process
@@ -142,7 +142,7 @@ namespace Mosa.Compiler.Framework
 		/// Setups the specified compiler.
 		/// </summary>
 		/// <param name="methodCompiler">The compiler.</param>
-		void IMethodCompilerStage.Initialize(BaseMethodCompiler methodCompiler)
+		void IMethodCompilerStage.Initialize(MethodCompiler methodCompiler)
 		{
 			MethodCompiler = methodCompiler;
 			BasicBlocks = methodCompiler.BasicBlocks;

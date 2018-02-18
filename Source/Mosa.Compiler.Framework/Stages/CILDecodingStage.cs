@@ -258,7 +258,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Gets the compiler, that is currently executing.
 		/// </summary>
 		/// <value></value>
-		BaseMethodCompiler IInstructionDecoder.MethodCompiler { get { return MethodCompiler; } }
+		MethodCompiler IInstructionDecoder.MethodCompiler { get { return MethodCompiler; } }
 
 		/// <summary>
 		/// Gets the MosaMethod being compiled.
