@@ -26,22 +26,18 @@ namespace Mosa.Tool.Explorer
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),
 				new StackSetupStage(),
-
 				new CILProtectedRegionStage(),
 				new ExceptionStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				new UnboxValueTypeStage(),
-
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
 				new LowerIRStage(),
-
 				(compilerOptions.IRLongExpansion && compiler.Architecture.NativePointerSize == 4) ? new IRLongExpansionStage() : null,
-
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
