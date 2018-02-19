@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public class MethodExceptionLookupTableStage : BaseCompilerStage
 	{
-		#region Data members
+		#region Data Members
 
 		private PatchType NativePatchType;
 

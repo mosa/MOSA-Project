@@ -14,7 +14,7 @@ namespace Mosa.Kernel.x86
 
 		private static InterruptHandler interruptHandler;
 
-		#region Data members
+		#region Data Members
 
 		internal struct Offset
 		{

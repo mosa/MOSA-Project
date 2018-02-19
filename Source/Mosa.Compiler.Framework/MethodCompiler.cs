@@ -167,18 +167,19 @@ namespace Mosa.Compiler.Framework
 		public bool IsPlugged { get { return PluggedMethod != null; } }
 
 		/// <summary>
+		/// The labels
+		/// </summary>
+		public Dictionary<int, int> Labels { get; set; }
+
+		/// <summary>
 		/// Gets the thread identifier.
 		/// </summary>
-		/// <value>
-		/// The thread identifier.
 		/// </value>
 		public int ThreadID { get; }
 
 		/// <summary>
 		/// Gets the method data.
 		/// </summary>
-		/// <value>
-		/// The method data.
 		/// </value>
 		public CompilerMethodData MethodData { get; }
 
@@ -337,7 +338,7 @@ namespace Mosa.Compiler.Framework
 			foreach (IMethodCompilerStage stage in Pipeline)
 			{
 				{
-					stage.Initialize(this);
+					stage.Setup(this);
 					stage.Execute();
 
 					InstructionLogger.Run(this, stage);
@@ -493,6 +494,16 @@ namespace Mosa.Compiler.Framework
 
 				typeInitializer.Schedule(Method);
 			}
+		}
+
+		/// <summary>
+		/// Gets the position.
+		/// </summary>
+		/// <param name="label">The label.</param>
+		/// <returns></returns>
+		public int GetPosition(int label)
+		{
+			return Labels[label];
 		}
 
 		/// <summary>

@@ -11,7 +11,7 @@ namespace Mosa.FileSystem.VFS
 	/// </summary>
 	public abstract class NodeBase : IVfsNode
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Holds the file system of the node.

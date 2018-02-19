@@ -16,7 +16,6 @@ namespace Mosa.Tool.Explorer
 		{
 			CompilePipeline.Add(new ICompilerStage[] {
 				new PlugStage(),
-
 				new TypeInitializerSchedulerStage(),
 				new MethodLookupTableStage(),
 				new MethodExceptionLookupTableStage(),

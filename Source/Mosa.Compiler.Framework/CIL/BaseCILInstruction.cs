@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <seealso cref="Mosa.Compiler.Framework.BaseInstruction" />
 	public abstract class BaseCILInstruction : BaseInstruction
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Holds the CIL opcode

@@ -641,7 +641,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Dup(InstructionNode node)
 		{
-			Debug.Assert(false); // should never get here
+			Debug.Fail("CIL.DUP instruction encountered"); // should never get here
 
 			// We don't need the dup anymore.
 			node.Empty();
@@ -1647,7 +1647,7 @@ namespace Mosa.Compiler.Framework.Stages
 				PostInstruction = postInstruction;
 				BitsToMask = bitsToMask;
 			}
-		};
+		}
 
 		// [destination]<-[source]
 		private static readonly ConversionEntry[][] ConversionTable32 = new ConversionEntry[][] {

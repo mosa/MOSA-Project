@@ -9,7 +9,7 @@ namespace Mosa.Utility.CodeDomCompiler
 {
 	public static class Compiler
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// A cache of CodeDom providers.

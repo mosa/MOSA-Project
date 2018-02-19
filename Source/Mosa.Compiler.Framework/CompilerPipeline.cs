@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class CompilerPipeline : IEnumerable
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// The stages in the compiler pipeline.

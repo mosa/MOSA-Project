@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public class MosaTypeLayout
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Holds a set of types

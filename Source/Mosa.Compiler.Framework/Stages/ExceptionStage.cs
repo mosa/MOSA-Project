@@ -14,8 +14,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public class ExceptionStage : BaseMethodCompilerStage
 	{
-		private Dictionary<BasicBlock, Operand> exceptionVirtualRegisters = new Dictionary<BasicBlock, Operand>();
-
 		private Operand exceptionRegister;
 
 		private Operand nullOperand;
@@ -24,20 +22,33 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private MosaType exceptionType;
 
+		private Dictionary<BasicBlock, Operand> exceptionVirtualRegisters;
 		private List<Tuple<BasicBlock, BasicBlock>> leaveTargets;
 
 		private delegate void Dispatch(InstructionNode node);
 
-		protected override void Run()
+		protected override void Initialize()
 		{
 			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
-
 			exceptionRegister = Operand.CreateCPURegister(exceptionType, Architecture.ExceptionRegister);
-
 			leaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, Architecture.LeaveTargetRegister);
 
 			nullOperand = Operand.GetNullObject(TypeSystem);
 
+			exceptionVirtualRegisters = new Dictionary<BasicBlock, Operand>();
+			leaveTargets = new List<Tuple<BasicBlock, BasicBlock>>();
+		}
+
+		protected override void Setup()
+		{
+			base.Setup();
+
+			exceptionVirtualRegisters.Clear();
+			leaveTargets.Clear();
+		}
+
+		protected override void Run()
+		{
 			// collect leave targets
 			leaveTargets = CollectLeaveTargets();
 
@@ -54,6 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 				[IRInstruction.TryEnd] = Empty,
 				[IRInstruction.ExceptionEnd] = Empty
 			};
+
 			for (int i = 0; i < BasicBlocks.Count; i++)
 			{
 				for (var node = BasicBlocks[i].First; !node.IsBlockEndInstruction; node = node.Next)
@@ -69,14 +81,15 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		protected override void Finish()
+		{
+			exceptionVirtualRegisters.Clear();
+			leaveTargets.Clear();
+		}
+
 		private static void Empty(InstructionNode node)
 		{
 			node.Empty();
-		}
-
-		protected override void Finish()
-		{
-			exceptionVirtualRegisters = null;
 		}
 
 		private void SetLeaveTargetInstruction(InstructionNode node)

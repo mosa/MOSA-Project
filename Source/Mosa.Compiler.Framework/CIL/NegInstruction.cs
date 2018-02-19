@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryArithmeticInstruction" />
 	public sealed class NegInstruction : UnaryArithmeticInstruction
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Holds the typecode validation table from ISO/IEC 23271:2006 (E),

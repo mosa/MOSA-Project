@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class CILDecodingStage : BaseMethodCompilerStage, IInstructionDecoder
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// The instruction being decoded.
@@ -36,7 +36,16 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private int[] counts;
 
-		#endregion Data members
+		#endregion Data Members
+
+		protected override void Setup()
+		{
+			base.Setup();
+
+			instruction = null;
+			block = null;
+			counts = null;
+		}
 
 		protected override void Run()
 		{
@@ -131,6 +140,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			UpdateCounter("CILDecodingStage.CILInstructions", total);
+
+			instruction = null;
+			block = null;
+			counts = null;
 		}
 
 		#region Internals

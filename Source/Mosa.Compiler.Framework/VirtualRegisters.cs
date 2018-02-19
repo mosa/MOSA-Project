@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class VirtualRegisters : IEnumerable<Operand>
 	{
-		#region Data members
+		#region Data Members
 
 		private readonly List<Operand> virtualRegisters = new List<Operand>();
 

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <seealso cref="Mosa.Compiler.Framework.CIL.BinaryInstruction" />
 	public sealed class StobjInstruction : BinaryInstruction
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Specifies the type of the value.

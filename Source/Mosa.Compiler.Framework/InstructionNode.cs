@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class InstructionNode
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Holds a packed value (to save space)

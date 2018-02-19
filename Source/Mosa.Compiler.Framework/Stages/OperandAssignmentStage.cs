@@ -14,15 +14,26 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class OperandAssignmentStage : BaseMethodCompilerStage
 	{
-		private Queue<BasicBlock> worklist = new Queue<BasicBlock>();
+		private Queue<BasicBlock> worklist;
+		private List<InstructionNode> dupNodes;
 		private BitArray processed;
-		private List<InstructionNode> dupNodes = new List<InstructionNode>();
 		private TraceLog trace;
 
-		private Dictionary<BasicBlock, List<Operand>> outgoingMoves = new Dictionary<BasicBlock, List<Operand>>();
-		private Dictionary<BasicBlock, List<Operand>> incomingMoves = new Dictionary<BasicBlock, List<Operand>>();
+		private Dictionary<BasicBlock, List<Operand>> outgoingMoves;
+		private Dictionary<BasicBlock, List<Operand>> incomingMoves;
 
 		private static readonly List<Operand> empty = new List<Operand>();
+
+		protected override void Initialize()
+		{
+			base.Initialize();
+
+			outgoingMoves = new Dictionary<BasicBlock, List<Operand>>();
+			incomingMoves = new Dictionary<BasicBlock, List<Operand>>();
+
+			dupNodes = new List<InstructionNode>();
+			worklist = new Queue<BasicBlock>();
+		}
 
 		protected override void Run()
 		{
@@ -43,11 +54,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			worklist = null;
+			outgoingMoves.Clear();
+			incomingMoves.Clear();
+			worklist.Clear();
+			dupNodes.Clear();
 			processed = null;
-			outgoingMoves = null;
-			incomingMoves = null;
-			dupNodes = null;
 			trace = null;
 		}
 

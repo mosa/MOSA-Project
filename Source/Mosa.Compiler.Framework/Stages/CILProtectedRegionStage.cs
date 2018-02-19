@@ -14,10 +14,15 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		private MosaType exceptionType;
 
+		protected override void Initialize()
+		{
+			base.Initialize();
+
+			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
+		}
+
 		protected override void Run()
 		{
-			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
-
 			InsertBlockProtectInstructions();
 			UpdateBlockProtectInstructions();
 

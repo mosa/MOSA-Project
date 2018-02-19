@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public class PlugStage : BaseCompilerStage
 	{
-		#region Data members
+		#region Data Members
 
 		protected MosaType plugTypeAttribute;
 		protected MosaType plugMethodAttribute;
