@@ -4,7 +4,7 @@ using System;
 
 namespace Mosa.UnitTest.Collection
 {
-	enum EnumU1Type : byte
+	internal enum EnumU1Type : byte
 	{
 		Positive49 = 49,
 		Positive50,

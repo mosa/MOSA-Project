@@ -3,7 +3,6 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Tool.Explorer
 {
@@ -23,21 +22,9 @@ namespace Mosa.Tool.Explorer
 			});
 		}
 
-		/// <summary>
-		/// Creates a method compiler
-		/// </summary>
-		/// <param name="method">The method to compile.</param>
-		/// <param name="basicBlocks">The basic blocks.</param>
-		/// <param name="threadID">The thread identifier.</param>
-		/// <returns>
-		/// An instance of a MethodCompilerBase for the given type/method pair.
-		/// </returns>
-		protected override MethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID)
+		protected override BaseMethodCompilerStage[] CreateMethodPipeline()
 		{
-			var methodcompiler = new MethodCompiler(this, method, basicBlocks, threadID);
-
-			// Populate the pipeline
-			methodcompiler.Pipeline.Add(new BaseMethodCompilerStage[] {
+			return new BaseMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),
@@ -73,9 +60,7 @@ namespace Mosa.Tool.Explorer
 				new GraphVizStage(),
 				(CompilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null,
 				(CompilerOptions.EmitBinary) ? new DisassemblyStage() : null
-			});
-
-			return methodcompiler;
+			};
 		}
 	}
 }

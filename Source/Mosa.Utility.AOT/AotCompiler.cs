@@ -3,7 +3,6 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Utility.Aot
 {
@@ -29,20 +28,9 @@ namespace Mosa.Utility.Aot
 			});
 		}
 
-		/// <summary>
-		/// Creates the method compiler.
-		/// </summary>
-		/// <param name="method">The method.</param>
-		/// <param name="basicBlocks">The basic blocks.</param>
-		/// <param name="threadID"></param>
-		/// <returns>
-		/// An instance of a MethodCompilerBase for the given type/method pair.
-		/// </returns>
-		protected override MethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID)
+		protected override BaseMethodCompilerStage[] CreateMethodPipeline()
 		{
-			var methodCompiler = new MethodCompiler(this, method, basicBlocks, threadID);
-
-			methodCompiler.Pipeline.Add(new BaseMethodCompilerStage[] {
+			return new BaseMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),
@@ -76,9 +64,7 @@ namespace Mosa.Utility.Aot
 				new CodeGenerationStage(),
 				new PreciseGCStage(),
 				new ProtectedRegionLayoutStage(),
-			});
-
-			return methodCompiler;
+			};
 		}
 	}
 }

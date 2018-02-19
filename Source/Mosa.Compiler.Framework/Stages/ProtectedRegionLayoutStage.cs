@@ -34,12 +34,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ProtectedRegion.FinalizeAll(BasicBlocks, MethodCompiler.ProtectedRegions);
 
-			var codeEmitter = MethodCompiler.Pipeline.FindFirst<CodeGenerationStage>().CodeEmitter;
-
-			EmitProtectedRegionTable(codeEmitter);
+			EmitProtectedRegionTable();
 		}
 
-		private void EmitProtectedRegionTable(BaseCodeEmitter codeEmitter)
+		private void EmitProtectedRegionTable()
 		{
 			var trace = CreateTraceLog("Regions");
 

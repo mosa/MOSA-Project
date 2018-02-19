@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Provides access to the pipeline of this compiler.
 		/// </summary>
-		public CompilerPipeline Pipeline { get; }
+		public CompilerPipeline Pipeline { get; set; }
 
 		/// <summary>
 		/// Gets the type system.
@@ -206,7 +206,6 @@ namespace Mosa.Compiler.Framework
 			Trace = compiler.CompilerTrace;
 			Linker = compiler.Linker;
 			BasicBlocks = basicBlocks ?? new BasicBlocks();
-			Pipeline = new CompilerPipeline();
 			LocalStack = new List<Operand>();
 
 			ConstantZero = Operand.CreateConstant(0, TypeSystem);

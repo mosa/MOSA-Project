@@ -168,10 +168,27 @@ namespace Mosa.Compiler.Framework
 		{
 			NewCompilerTraceEvent(CompilerEvent.CompilingMethod, method.FullName, threadID);
 
-			var methodCompiler = CreateMethodCompiler(method, basicBlocks, threadID);
-			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
+			var methodCompiler = GetMethodCompiler(method, basicBlocks, threadID);
 
 			methodCompiler.Compile();
+		}
+
+		protected MethodCompiler GetMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0)
+		{
+			var methodCompiler = new MethodCompiler(this, method, basicBlocks, threadID);
+
+			// todo- look up via threadID
+
+			var stages = CreateMethodPipeline();
+
+			methodCompiler.Pipeline = new CompilerPipeline
+			{
+				stages
+			};
+
+			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
+
+			return methodCompiler;
 		}
 
 		/// <summary>
@@ -181,7 +198,12 @@ namespace Mosa.Compiler.Framework
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="threadID">The thread identifier.</param>
 		/// <returns></returns>
-		protected abstract MethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0);
+		protected MethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0)
+		{
+			return new MethodCompiler(this, method, basicBlocks, threadID);
+		}
+
+		protected abstract BaseMethodCompilerStage[] CreateMethodPipeline();
 
 		/// <summary>
 		/// Compiles the linker method.
