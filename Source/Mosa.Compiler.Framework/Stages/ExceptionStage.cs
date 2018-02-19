@@ -29,6 +29,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
+			base.Initialize();
+
 			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
 			exceptionRegister = Operand.CreateCPURegister(exceptionType, Architecture.ExceptionRegister);
 			leaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, Architecture.LeaveTargetRegister);
@@ -83,6 +85,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
+			base.Finish();
+
 			exceptionVirtualRegisters.Clear();
 			leaveTargets.Clear();
 		}

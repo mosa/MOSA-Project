@@ -29,11 +29,15 @@ namespace Mosa.Compiler.Framework
 
 		public BaseLinker Linker { get; private set; }
 
-		public MosaCompiler()
+		public int MaxThreads { get; }
+
+		public MosaCompiler(int maxThreads = 0)
 		{
 			CompilerOptions = new CompilerOptions();
 			CompilerTrace = new CompilerTrace();
 			ModuleLoader = new MosaModuleLoader();
+
+			MaxThreads = (maxThreads == 0) ? Environment.ProcessorCount : maxThreads;
 		}
 
 		/// <summary>
@@ -79,12 +83,12 @@ namespace Mosa.Compiler.Framework
 			PostCompile();
 		}
 
-		public void Execute(int threads)
+		public void ExecuteThreaded()
 		{
 			Initialize();
 			PreCompile();
 			ScheduleAll();
-			BaseCompiler.ExecuteThreadedCompile(threads);
+			BaseCompiler.ExecuteThreadedCompile(MaxThreads);
 			PostCompile();
 		}
 

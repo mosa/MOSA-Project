@@ -55,6 +55,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			UpdateCounter("EnterSSA.IRInstructions", instructionCount);
 
+			base.Finish();
+
 			// Clean up
 			variables = null;
 			counts = null;

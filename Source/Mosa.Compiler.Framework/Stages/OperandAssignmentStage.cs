@@ -54,6 +54,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
+			base.Finish();
+
 			outgoingMoves.Clear();
 			incomingMoves.Clear();
 			worklist.Clear();

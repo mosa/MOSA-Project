@@ -29,6 +29,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
+			base.Finish();
+
 			UpdateCounter("Devirtualize.CallCount", devirtualizedCount);
 			trace = null;
 		}

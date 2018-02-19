@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Framework.Stages
 			worklist = new Stack<InstructionNode>();
 			virtualRegisters = new HashSet<Operand>();
 
-			debugRestrictOptimizationByCount = MethodCompiler.Compiler.CompilerOptions.DebugRestrictOptimizationByCount;
+			debugRestrictOptimizationByCount = CompilerOptions.DebugRestrictOptimizationByCount;
 
 			transformations = CreateTransformationList();
 		}
@@ -173,6 +173,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
+			base.Finish();
+
 			virtualRegisters.Clear();
 			worklist.Clear();
 			trace = null;

@@ -236,17 +236,16 @@ namespace Mosa.Tool.Explorer
 				toolStrip1.Enabled = false;
 
 				ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+				{
+					try
 					{
-						try
-						{
-							Compiler.Execute(Environment.ProcessorCount);
-						}
-						finally
-						{
-							OnCompileCompleted();
-						}
+						Compiler.ExecuteThreaded();
 					}
-				));
+					finally
+					{
+						OnCompileCompleted();
+					}
+				}));
 			}
 		}
 

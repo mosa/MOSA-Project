@@ -46,6 +46,11 @@ namespace Mosa.Compiler.Framework
 		protected MosaTypeLayout TypeLayout { get; private set; }
 
 		/// <summary>
+		/// Gets the compiler options.
+		/// </summary>
+		protected CompilerOptions CompilerOptions { get; private set; }
+
+		/// <summary>
 		/// Holds the native pointer size
 		/// </summary>
 		protected int NativePointerSize { get; private set; }
@@ -163,24 +168,35 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Setups the specified compiler.
 		/// </summary>
-		/// <param name="methodCompiler">The compiler.</param>
-		public void Setup(MethodCompiler methodCompiler)
+		/// <param name="baseCompiler">The base compiler.</param>
+		public void Initialize(BaseCompiler baseCompiler)
 		{
-			Architecture = methodCompiler.Architecture;
+			Architecture = baseCompiler.Architecture;
+			TypeSystem = baseCompiler.TypeSystem;
+			TypeLayout = baseCompiler.TypeLayout;
+
 			NativePointerSize = Architecture.NativePointerSize;
 			NativeAlignment = Architecture.NativeAlignment;
 			NativeInstructionSize = Architecture.NativeInstructionSize;
 			Is32BitPlatform = Architecture.Is32BitPlatform;
 			Is64BitPlatform = Architecture.Is64BitPlatform;
 
+			CompilerOptions = baseCompiler.CompilerOptions;
+
+			Initialize();
+		}
+
+		/// <summary>
+		/// Setups the specified compiler.
+		/// </summary>
+		/// <param name="methodCompiler">The compiler.</param>
+		public void Setup(MethodCompiler methodCompiler)
+		{
 			MethodCompiler = methodCompiler;
 			BasicBlocks = methodCompiler.BasicBlocks;
-			TypeSystem = methodCompiler.TypeSystem;
-			TypeLayout = methodCompiler.TypeLayout;
 
 			traceLogs = new List<TraceLog>();
 
-			Initialize();
 			Setup();
 		}
 

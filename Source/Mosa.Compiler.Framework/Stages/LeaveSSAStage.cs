@@ -71,6 +71,9 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Finish()
 		{
 			UpdateCounter("LeaveSSA.IRInstructions", instructionCount);
+
+			base.Finish();
+
 			finalVirtualRegisters.Clear();
 		}
 

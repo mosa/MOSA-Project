@@ -149,7 +149,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (method.NonIRInstructionCount > 0)
 				return false;
 
-			if (method.IRInstructionCount > MethodCompiler.Compiler.CompilerOptions.InlinedIRMaximum)
+			if (method.IRInstructionCount > CompilerOptions.InlinedIRMaximum)
 				return false;
 
 			var returnType = method.Method.Signature.ReturnType;

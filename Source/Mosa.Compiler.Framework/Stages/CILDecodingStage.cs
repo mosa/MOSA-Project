@@ -75,7 +75,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (MethodCompiler.Compiler.CompilerOptions.EnableStatistics)
+			if (CompilerOptions.EnableStatistics)
 			{
 				counts = new int[CILInstruction.MaxOpCodeValue];
 			}
@@ -140,6 +140,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			UpdateCounter("CILDecodingStage.CILInstructions", total);
+
+			base.Finish();
 
 			instruction = null;
 			block = null;

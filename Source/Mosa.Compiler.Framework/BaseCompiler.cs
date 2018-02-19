@@ -16,9 +16,9 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCompiler
 	{
-		#region Properties
+		private CompilerPipeline[] methodStagePipelines;
 
-		public MosaCompiler Compiler { get; private set; }
+		#region Properties
 
 		/// <summary>
 		/// Returns the architecture used by the compiler.
@@ -108,16 +108,16 @@ namespace Mosa.Compiler.Framework
 
 		public void Initialize(MosaCompiler compiler)
 		{
-			Compiler = compiler;
+			Architecture = compiler.CompilerOptions.Architecture;
 
-			Architecture = Compiler.CompilerOptions.Architecture;
-
-			TypeSystem = Compiler.TypeSystem;
-			TypeLayout = Compiler.TypeLayout;
-			CompilerTrace = Compiler.CompilerTrace;
-			CompilerOptions = Compiler.CompilerOptions;
-			CompilationScheduler = Compiler.CompilationScheduler;
+			TypeSystem = compiler.TypeSystem;
+			TypeLayout = compiler.TypeLayout;
+			CompilerTrace = compiler.CompilerTrace;
+			CompilerOptions = compiler.CompilerOptions;
+			CompilationScheduler = compiler.CompilationScheduler;
 			Linker = compiler.Linker;
+
+			methodStagePipelines = new CompilerPipeline[compiler.MaxThreads];
 
 			CompilePipeline = new CompilerPipeline();
 			GlobalCounters = new Counters();
@@ -177,16 +177,28 @@ namespace Mosa.Compiler.Framework
 		{
 			var methodCompiler = new MethodCompiler(this, method, basicBlocks, threadID);
 
-			// todo- look up via threadID
+			var pipeline = methodStagePipelines[threadID];
 
-			var stages = CreateMethodPipeline();
-
-			methodCompiler.Pipeline = new CompilerPipeline
+			if (pipeline == null)
 			{
-				stages
-			};
+				var stages = CreateMethodPipeline();
 
-			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
+				pipeline = new CompilerPipeline
+				{
+					stages
+				};
+
+				Architecture.ExtendMethodCompilerPipeline(pipeline);
+
+				methodStagePipelines[threadID] = pipeline;
+
+				foreach (BaseMethodCompilerStage stage in pipeline)
+				{
+					stage.Initialize(this);
+				}
+			}
+
+			methodCompiler.Pipeline = pipeline;
 
 			return methodCompiler;
 		}
@@ -274,7 +286,7 @@ namespace Mosa.Compiler.Framework
 				{
 					finished.AddCount();
 
-					int tid = threadID + 1;
+					int tid = threadID;
 
 					ThreadPool.QueueUserWorkItem(
 						new WaitCallback(delegate
@@ -309,9 +321,7 @@ namespace Mosa.Compiler.Framework
 				var method = CompilationScheduler.GetMethodToCompile();
 
 				if (method == null)
-				{
 					return;
-				}
 
 				// only one method can be compiled at a time
 				lock (method)
@@ -319,9 +329,7 @@ namespace Mosa.Compiler.Framework
 					CompileMethod(method, null, threadID);
 				}
 
-				CompilerTrace.UpdatedCompilerProgress(
-					CompilationScheduler.TotalMethods,
-					CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
+				CompilerTrace.UpdatedCompilerProgress(CompilationScheduler.TotalMethods, CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
 			}
 		}
 

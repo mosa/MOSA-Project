@@ -115,9 +115,9 @@ namespace Mosa.Compiler.Trace.BuiltIn
 			}
 		}
 
-		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string info, int threadID)
+		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
-			TraceEvent(compilerStage, info);
+			TraceEvent(compilerEvent, message);
 		}
 
 		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
