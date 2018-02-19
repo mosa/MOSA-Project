@@ -174,13 +174,11 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the thread identifier.
 		/// </summary>
-		/// </value>
 		public int ThreadID { get; }
 
 		/// <summary>
-		/// Gets the method data.
+		/// Gets the compiler method data.
 		/// </summary>
-		/// </value>
 		public CompilerMethodData MethodData { get; }
 
 		#endregion Properties

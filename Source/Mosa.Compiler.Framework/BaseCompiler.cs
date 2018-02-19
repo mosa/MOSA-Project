@@ -191,18 +191,6 @@ namespace Mosa.Compiler.Framework
 			return methodCompiler;
 		}
 
-		/// <summary>
-		/// Creates a method compiler
-		/// </summary>
-		/// <param name="method">The method to compile.</param>
-		/// <param name="basicBlocks">The basic blocks.</param>
-		/// <param name="threadID">The thread identifier.</param>
-		/// <returns></returns>
-		protected MethodCompiler CreateMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0)
-		{
-			return new MethodCompiler(this, method, basicBlocks, threadID);
-		}
-
 		protected abstract BaseMethodCompilerStage[] CreateMethodPipeline();
 
 		/// <summary>
