@@ -14,7 +14,7 @@ namespace Mosa.Tool.Explorer
 		/// </summary>
 		public override void ExtendCompilerSetup()
 		{
-			CompilePipeline.Add(new ICompilerStage[] {
+			CompilePipeline.Add(new BaseCompilerStage[] {
 				new PlugStage(),
 				new TypeInitializerSchedulerStage(),
 				new MethodLookupTableStage(),
@@ -37,7 +37,7 @@ namespace Mosa.Tool.Explorer
 			var methodcompiler = new MethodCompiler(this, method, basicBlocks, threadID);
 
 			// Populate the pipeline
-			methodcompiler.Pipeline.Add(new IMethodCompilerStage[] {
+			methodcompiler.Pipeline.Add(new BaseMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),

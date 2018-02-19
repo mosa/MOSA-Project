@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private List<BasicBlock> branchTargets;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Properties
 

@@ -127,7 +127,7 @@ namespace Mosa.Tool.Compiler
 			}
 		}
 
-		private static Func<ICompilerStage> GetBootStageFactory(string format)
+		private static Func<BaseCompilerStage> GetBootStageFactory(string format)
 		{
 			switch (format.ToLower())
 			{

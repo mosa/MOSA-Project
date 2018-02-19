@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Basic base class for compiler stages
 	/// </summary>
-	public abstract class BaseCompilerStage : ICompilerStage
+	public abstract class BaseCompilerStage : IPipelineStage
 	{
 		#region Properties
 
@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework
 
 		#region ICompilerStage members
 
-		void ICompilerStage.Initialize(BaseCompiler compiler)
+		public void Initialize(BaseCompiler compiler)
 		{
 			Debug.Assert(compiler != null);
 
@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Executes the pre compile phase.
 		/// </summary>
-		void ICompilerStage.ExecutePreCompile()
+		public void ExecutePreCompile()
 		{
 			RunPreCompile();
 		}
@@ -88,7 +88,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Executes the post compile phase.
 		/// </summary>
-		void ICompilerStage.ExecutePostCompile()
+		public void ExecutePostCompile()
 		{
 			RunPostCompile();
 		}

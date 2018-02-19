@@ -893,13 +893,7 @@
     <Compile Include="FlowControl.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ICompilerStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CIL\IInstructionDecoder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IMethodCompilerStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MethodCompiler.cs">

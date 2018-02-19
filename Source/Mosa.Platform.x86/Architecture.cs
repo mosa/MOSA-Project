@@ -266,7 +266,7 @@ namespace Mosa.Platform.x86
 			);
 
 			compilerPipeline.InsertAfterLast<PlatformStubStage>(
-				new IMethodCompilerStage[]
+				new BaseMethodCompilerStage[]
 				{
 					new PlatformIntrinsicStage(),
 					new LongOperandStage(),

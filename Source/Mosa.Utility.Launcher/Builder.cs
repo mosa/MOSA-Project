@@ -441,7 +441,7 @@ namespace Mosa.Utility.Launcher
 		/// <param name="bootFormat">The boot format.</param>
 		/// <returns></returns>
 		/// <exception cref="NotImplementCompilerException"></exception>
-		private static Func<ICompilerStage> GetBootStageFactory(BootFormat bootFormat)
+		private static Func<BaseCompilerStage> GetBootStageFactory(BootFormat bootFormat)
 		{
 			switch (bootFormat)
 			{

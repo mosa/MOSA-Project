@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets the compiler stage responsible for booting.
 		/// </summary>
-		public Func<ICompilerStage> BootStageFactory { get; set; }
+		public Func<BaseCompilerStage> BootStageFactory { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [emit binary].

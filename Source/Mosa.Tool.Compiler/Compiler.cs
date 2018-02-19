@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using CommandLine;
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
@@ -223,7 +222,7 @@ namespace Mosa.Tool.Compiler
 			}
 		}
 
-		private static Func<ICompilerStage> GetBootStageFactory(string format)
+		private static Func<BaseCompilerStage> GetBootStageFactory(string format)
 		{
 			switch (format.ToLower())
 			{

@@ -220,7 +220,7 @@ namespace Mosa.Platform.ARMv6
 		public override void ExtendMethodCompilerPipeline(CompilerPipeline compilerPipeline)
 		{
 			compilerPipeline.InsertAfterLast<PlatformStubStage>(
-				new IMethodCompilerStage[]
+				new BaseMethodCompilerStage[]
 				{
 			        //new LongOperandTransformationStage(),
 			        new IRTransformationStage(),

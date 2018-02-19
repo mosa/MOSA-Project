@@ -154,7 +154,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The protected regions.
 		/// </value>
-		public IList<ProtectedRegion> ProtectedRegions { get; private set; }
+		public IList<ProtectedRegion> ProtectedRegions { get; set; }
 
 		/// <summary>
 		/// Gets a value indicating whether [plugged method].
@@ -335,7 +335,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
-			foreach (IMethodCompilerStage stage in Pipeline)
+			foreach (BaseMethodCompilerStage stage in Pipeline)
 			{
 				{
 					stage.Setup(this);
@@ -469,15 +469,6 @@ namespace Mosa.Compiler.Framework
 			{
 				return Architecture.NativeAlignment;
 			}
-		}
-
-		/// <summary>
-		/// Sets the protected regions.
-		/// </summary>
-		/// <param name="protectedRegions">The protected regions.</param>
-		public void SetProtectedRegions(IList<ProtectedRegion> protectedRegions)
-		{
-			ProtectedRegions = protectedRegions;
 		}
 
 		/// <summary>

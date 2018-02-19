@@ -16,7 +16,7 @@ namespace Mosa.Utility.Aot
 		{
 			var bootStage = CompilerOptions.BootStageFactory != null ? CompilerOptions.BootStageFactory() : null;
 
-			CompilePipeline.Add(new ICompilerStage[] {
+			CompilePipeline.Add(new BaseCompilerStage[] {
 				bootStage,
 				new PlugStage(),
 				new TypeInitializerSchedulerStage(),
@@ -42,7 +42,7 @@ namespace Mosa.Utility.Aot
 		{
 			var methodCompiler = new MethodCompiler(this, method, basicBlocks, threadID);
 
-			methodCompiler.Pipeline.Add(new IMethodCompilerStage[] {
+			methodCompiler.Pipeline.Add(new BaseMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),

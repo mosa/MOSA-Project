@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Basic base class for method compiler pipeline stages
 	/// </summary>
-	public abstract class BaseMethodCompilerStage : IMethodCompilerStage, ITraceFactory
+	public abstract class BaseMethodCompilerStage : ITraceFactory, IPipelineStage
 	{
 		#region Data Members
 
@@ -164,7 +164,7 @@ namespace Mosa.Compiler.Framework
 		/// Setups the specified compiler.
 		/// </summary>
 		/// <param name="methodCompiler">The compiler.</param>
-		void IMethodCompilerStage.Setup(MethodCompiler methodCompiler)
+		public void Setup(MethodCompiler methodCompiler)
 		{
 			Architecture = methodCompiler.Architecture;
 			NativePointerSize = Architecture.NativePointerSize;
@@ -184,7 +184,7 @@ namespace Mosa.Compiler.Framework
 			Setup();
 		}
 
-		void IMethodCompilerStage.Execute()
+		public void Execute()
 		{
 			Run();
 
