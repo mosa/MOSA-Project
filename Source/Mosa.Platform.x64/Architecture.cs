@@ -187,7 +187,7 @@ namespace Mosa.Platform.x64
 		/// Extends the pre compiler pipeline with x64 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(CompilerPipeline compilerPipeline)
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline)
 		{
 			// TODO
 		}
@@ -196,7 +196,7 @@ namespace Mosa.Platform.x64
 		/// Extends the method compiler pipeline with x64 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(CompilerPipeline compilerPipeline)
+		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline)
 		{
 			// TODO
 		}

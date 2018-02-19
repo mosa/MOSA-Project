@@ -6,19 +6,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// Platform Stub Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
-	/// <seealso cref="Mosa.Compiler.Framework.IPipelineStage" />
-	public sealed class PlatformStubStage : BaseMethodCompilerStage, IPipelineStage
+	public sealed class PlatformStubStage : BaseMethodCompilerStage
 	{
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>
-		/// The name of the compilation stage.
-		/// </value>
-		string IPipelineStage.Name { get { return "PlatformStubStage"; } }
-
-		#endregion IPipelineStage Members
 	}
 }

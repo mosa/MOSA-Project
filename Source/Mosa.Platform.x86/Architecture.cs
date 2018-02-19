@@ -240,7 +240,7 @@ namespace Mosa.Platform.x86
 		/// Extends the pre-compiler pipeline with x86 compiler stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(CompilerPipeline compilerPipeline)
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline)
 		{
 			compilerPipeline.Add(
 				new StartUpStage()
@@ -259,7 +259,7 @@ namespace Mosa.Platform.x86
 		/// Extends the method compiler pipeline with x86 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(CompilerPipeline compilerPipeline)
+		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline)
 		{
 			compilerPipeline.InsertBefore<LowerIRStage>(
 				new IRSubstitutionStage()

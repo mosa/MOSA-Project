@@ -92,6 +92,7 @@
     <Compile Include="Analysis\ReverseBlockOrder.cs" />
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
     <Compile Include="Analysis\BaseDominanceAnalysis.cs" />
+    <Compile Include="Pipeline.cs" />
     <Compile Include="CompilerTypeData.cs" />
     <Compile Include="CompilerMethodData.cs" />
     <Compile Include="CompilerData.cs" />
@@ -794,7 +795,6 @@
     <Compile Include="Intrinsics\InternalAllocateString.cs" />
     <Compile Include="Stages\PlatformStubStage.cs" />
     <Compile Include="IIntrinsicPlatformMethod.cs" />
-    <Compile Include="IPipelineStage.cs" />
     <Compile Include="Stages\CILTransformationStage.cs" />
     <Compile Include="CIL\ConstrainedPrefixInstruction.cs" />
     <Compile Include="CIL\ConversionInstruction.cs" />
@@ -872,7 +872,7 @@
     <Compile Include="CIL\NopInstruction.cs" />
     <Compile Include="InstructionNode.cs" />
     <Compile Include="CIL\BaseCILInstruction.cs" />
-    <Compile Include="BaseCompiler.cs">
+    <Compile Include="Compiler.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseArchitecture.cs">
@@ -885,9 +885,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseCodeTransformationStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilerPipeline.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FlowControl.cs">

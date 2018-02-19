@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework
 {
 	public class MosaCompiler : IDisposable
 	{
-		protected BaseCompiler BaseCompiler { get; private set; }
+		protected Compiler Compiler { get; private set; }
 
 		public CompilerOptions CompilerOptions { get; set; }
 
@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Framework
 			Initialize();
 			PreCompile();
 			ScheduleAll();
-			BaseCompiler.ExecuteThreadedCompile(MaxThreads);
+			Compiler.ExecuteThreadedCompile(MaxThreads);
 			PostCompile();
 		}
 
@@ -94,14 +94,14 @@ namespace Mosa.Compiler.Framework
 		{
 			Linker = new BaseLinker(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.MachineType, CompilerOptions.EmitSymbols, CompilerOptions.LinkerFormatType);
 
-			BaseCompiler = new BaseCompiler();
+			Compiler = new Compiler();
 
-			BaseCompiler.Initialize(this);
+			Compiler.Initialize(this);
 		}
 
 		public void PreCompile()
 		{
-			BaseCompiler.PreCompile();
+			Compiler.PreCompile();
 		}
 
 		public void ScheduleAll()
@@ -121,12 +121,12 @@ namespace Mosa.Compiler.Framework
 
 		public void Compile()
 		{
-			BaseCompiler.ExecuteCompile();
+			Compiler.ExecuteCompile();
 		}
 
 		public void PostCompile()
 		{
-			BaseCompiler.PostCompile();
+			Compiler.PostCompile();
 		}
 
 		public void Dispose()

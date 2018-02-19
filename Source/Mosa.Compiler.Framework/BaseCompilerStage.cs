@@ -10,14 +10,14 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Basic base class for compiler stages
 	/// </summary>
-	public abstract class BaseCompilerStage : IPipelineStage
+	public abstract class BaseCompilerStage
 	{
 		#region Properties
 
 		/// <summary>
 		/// Holds the compiler.
 		/// </summary>
-		protected BaseCompiler Compiler { get; private set; }
+		protected Compiler Compiler { get; private set; }
 
 		/// <summary>
 		/// Holds the Architecture during compilation.
@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework
 
 		#region ICompilerStage members
 
-		public void Initialize(BaseCompiler compiler)
+		public void Initialize(Compiler compiler)
 		{
 			Debug.Assert(compiler != null);
 

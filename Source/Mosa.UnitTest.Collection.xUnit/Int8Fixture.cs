@@ -60,10 +60,10 @@ namespace Mosa.UnitTest.Collection.xUnit
 
 		//[Theory]
 		//[ExpectedException(typeof(DivideByZeroException))]
-		public void RemI1I1DivideByZeroException(sbyte a)
-		{
-			Assert.Equal(Int8Tests.RemI1I1(a, 0), Run<int>("Mosa.UnitTest.Collection.Int8Tests.RemI1I1", a, (sbyte)0));
-		}
+		//public void RemI1I1DivideByZeroException(sbyte a)
+		//{
+		//Assert.Equal(Int8Tests.RemI1I1(a, 0), Run<int>("Mosa.UnitTest.Collection.Int8Tests.RemI1I1", a, (sbyte)0));
+		//}
 
 		[Theory]
 		[MemberData(nameof(I1))]

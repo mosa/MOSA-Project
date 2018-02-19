@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Provides access to the pipeline of this compiler.
 		/// </summary>
-		public CompilerPipeline Pipeline { get; set; }
+		public Pipeline<BaseMethodCompilerStage> Pipeline { get; set; }
 
 		/// <summary>
 		/// Gets the type system.
@@ -123,7 +123,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the assembly compiler.
 		/// </summary>
-		public BaseCompiler Compiler { get; }
+		public Compiler Compiler { get; }
 
 		/// <summary>
 		/// Gets the stack.
@@ -192,7 +192,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="method">The method to compile by this instance.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="threadID">The thread identifier.</param>
-		public MethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
+		public MethodCompiler(Compiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
 		{
 			Compiler = compiler;
 			Method = method;
@@ -494,25 +494,7 @@ namespace Mosa.Compiler.Framework
 			return Labels[label];
 		}
 
-		/// <summary>
-		/// Gets the stage.
-		/// </summary>
-		/// <param name="stageType">Type of the stage.</param>
-		/// <returns></returns>
-		public IPipelineStage GetStage(Type stageType)
-		{
-			foreach (IPipelineStage stage in Pipeline)
-			{
-				if (stageType.IsInstanceOfType(stage))
-				{
-					return stage;
-				}
-			}
-
-			return null;
-		}
-
-		public string FormatStageName(IPipelineStage stage)
+		public string FormatStageName(BaseMethodCompilerStage stage)
 		{
 			return "[" + Pipeline.GetPosition(stage).ToString("00") + "] " + stage.Name;
 		}

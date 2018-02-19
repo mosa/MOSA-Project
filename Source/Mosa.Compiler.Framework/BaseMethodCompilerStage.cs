@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Basic base class for method compiler pipeline stages
 	/// </summary>
-	public abstract class BaseMethodCompilerStage : ITraceFactory, IPipelineStage
+	public abstract class BaseMethodCompilerStage : ITraceFactory
 	{
 		#region Data Members
 
@@ -169,7 +169,7 @@ namespace Mosa.Compiler.Framework
 		/// Setups the specified compiler.
 		/// </summary>
 		/// <param name="baseCompiler">The base compiler.</param>
-		public void Initialize(BaseCompiler baseCompiler)
+		public void Initialize(Compiler baseCompiler)
 		{
 			Architecture = baseCompiler.Architecture;
 			TypeSystem = baseCompiler.TypeSystem;
@@ -575,7 +575,7 @@ namespace Mosa.Compiler.Framework
 
 		public string GetFormattedStageName()
 		{
-			return MethodCompiler.FormatStageName(this as IPipelineStage);
+			return MethodCompiler.FormatStageName(this);
 		}
 
 		public bool IsTraceable()

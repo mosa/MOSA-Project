@@ -16,9 +16,9 @@ namespace Mosa.Compiler.Framework
 	/// Base class for just-in-time and ahead-of-time compilers, which use
 	/// the Mosa.Compiler.Framework framework.
 	/// </summary>
-	public sealed class BaseCompiler
+	public sealed class Compiler
 	{
-		private CompilerPipeline[] methodStagePipelines;
+		private Pipeline<BaseMethodCompilerStage>[] methodStagePipelines;
 
 		#region Properties
 
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the pre compile pipeline.
 		/// </summary>
-		public CompilerPipeline CompilerPipeline { get; private set; }
+		public Pipeline<BaseCompilerStage> CompilerPipeline { get; private set; }
 
 		/// <summary>
 		/// Gets the type system.
@@ -171,23 +171,23 @@ namespace Mosa.Compiler.Framework
 
 		#region Methods
 
-		public void Initialize(MosaCompiler compiler)
+		public void Initialize(MosaCompiler mosaCompiler)
 		{
-			Architecture = compiler.CompilerOptions.Architecture;
+			Architecture = mosaCompiler.CompilerOptions.Architecture;
 
-			TypeSystem = compiler.TypeSystem;
-			TypeLayout = compiler.TypeLayout;
-			CompilerTrace = compiler.CompilerTrace;
-			CompilerOptions = compiler.CompilerOptions;
-			CompilationScheduler = compiler.CompilationScheduler;
-			Linker = compiler.Linker;
+			TypeSystem = mosaCompiler.TypeSystem;
+			TypeLayout = mosaCompiler.TypeLayout;
+			CompilerTrace = mosaCompiler.CompilerTrace;
+			CompilerOptions = mosaCompiler.CompilerOptions;
+			CompilationScheduler = mosaCompiler.CompilationScheduler;
+			Linker = mosaCompiler.Linker;
 
-			CompilerPipeline = new CompilerPipeline();
+			CompilerPipeline = new Pipeline<BaseCompilerStage>();
 			GlobalCounters = new Counters();
 			PlugSystem = new PlugSystem();
 			CompilerData = new CompilerData();
 
-			methodStagePipelines = new CompilerPipeline[compiler.MaxThreads];
+			methodStagePipelines = new Pipeline<BaseMethodCompilerStage>[mosaCompiler.MaxThreads];
 
 			// Create new dictionary
 			IntrinsicTypes = new Dictionary<string, Type>();
@@ -209,9 +209,9 @@ namespace Mosa.Compiler.Framework
 			PlatformInternalRuntimeType = GetPlatformInternalRuntimeType();
 			InternalRuntimeType = GeInternalRuntimeType();
 
+			// Build the default compiler pipeline
 			CompilerPipeline.Add(GetCompilerPipeline(CompilerOptions));
 
-			// Build the default pre-compiler pipeline
 			Architecture.ExtendCompilerPipeline(CompilerPipeline);
 		}
 
@@ -240,10 +240,9 @@ namespace Mosa.Compiler.Framework
 			{
 				var stages = GetMethodPipeline(CompilerOptions);
 
-				pipeline = new CompilerPipeline
-				{
-					stages
-				};
+				pipeline = new Pipeline<BaseMethodCompilerStage>();
+
+				pipeline.Add(stages);
 
 				Architecture.ExtendMethodCompilerPipeline(pipeline);
 
@@ -418,7 +417,7 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Methods
 
-		protected void ExportCounters()
+		private void ExportCounters()
 		{
 			foreach (var counter in GlobalCounters.Export())
 			{
@@ -433,7 +432,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="compilerEvent">The compiler event.</param>
 		/// <param name="message">The message.</param>
-		protected void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message)
+		private void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message)
 		{
 			CompilerTrace.NewCompilerTraceEvent(compilerEvent, message, 0);
 		}
@@ -444,7 +443,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="compilerEvent">The compiler event.</param>
 		/// <param name="message">The message.</param>
 		/// <param name="threadID">The thread identifier.</param>
-		protected void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
+		private void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
 			CompilerTrace.NewCompilerTraceEvent(compilerEvent, message, threadID);
 		}
@@ -454,17 +453,17 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <param name="count">The count.</param>
-		protected void UpdateCounter(string name, int count)
+		private void UpdateCounter(string name, int count)
 		{
 			GlobalCounters.Update(name, count);
 		}
 
-		protected MosaType GetPlatformInternalRuntimeType()
+		private MosaType GetPlatformInternalRuntimeType()
 		{
 			return TypeSystem.GetTypeByName("Mosa.Runtime." + Architecture.PlatformName, "Internal");
 		}
 
-		protected MosaType GeInternalRuntimeType()
+		private MosaType GeInternalRuntimeType()
 		{
 			return TypeSystem.GetTypeByName("Mosa.Runtime", "Internal");
 		}
