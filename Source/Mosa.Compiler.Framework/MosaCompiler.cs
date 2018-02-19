@@ -11,8 +11,6 @@ namespace Mosa.Compiler.Framework
 {
 	public class MosaCompiler : IDisposable
 	{
-		public Func<BaseCompiler> CompilerFactory { get; set; }
-
 		protected BaseCompiler BaseCompiler { get; private set; }
 
 		public CompilerOptions CompilerOptions { get; set; }
@@ -96,7 +94,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Linker = new BaseLinker(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.MachineType, CompilerOptions.EmitSymbols, CompilerOptions.LinkerFormatType);
 
-			BaseCompiler = CompilerFactory();
+			BaseCompiler = new BaseCompiler();
 
 			BaseCompiler.Initialize(this);
 		}

@@ -5,7 +5,6 @@ using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Trace.BuiltIn;
-using Mosa.Utility.Aot;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -45,8 +44,6 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		public Compiler()
 		{
-			compiler.CompilerFactory = delegate { return new AotCompiler(); };
-
 			usageString = "Usage: mosacl -o outputfile --Architecture=[x86|x64|ARMv6] --format=[ELF32|ELF64] {--boot=[mb0.7]} {additional options} inputfiles";
 		}
 

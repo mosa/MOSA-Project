@@ -475,7 +475,7 @@ namespace Mosa.Compiler.Framework
 		{
 			if (Method.IsSpecialName && Method.IsRTSpecialName && Method.IsStatic && Method.Name == ".cctor")
 			{
-				typeInitializer = Compiler.CompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
+				typeInitializer = Compiler.CompilerPipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 				if (typeInitializer == null)
 					return;

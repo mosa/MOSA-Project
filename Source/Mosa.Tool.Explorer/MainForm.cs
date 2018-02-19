@@ -45,7 +45,6 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerTrace.TraceFilter.MethodMatch = MatchType.Any;
 			Compiler.CompilerTrace.TraceFilter.StageMatch = MatchType.Any;
 
-			Compiler.CompilerFactory = delegate { return new ExplorerCompiler(); };
 			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
 		}
 

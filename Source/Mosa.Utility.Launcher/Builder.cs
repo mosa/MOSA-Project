@@ -6,7 +6,6 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
-using Mosa.Utility.Aot;
 using Mosa.Utility.BootImage;
 using SharpDisasm;
 using SharpDisasm.Translators;
@@ -74,8 +73,6 @@ namespace Mosa.Utility.Launcher
 				CompileStartTime = DateTime.Now;
 
 				CompiledFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.bin");
-
-				compiler.CompilerFactory = delegate { return new AotCompiler(); };
 
 				compiler.CompilerOptions.EnableSSA = Options.EnableSSA;
 				compiler.CompilerOptions.EnableIROptimizations = Options.EnableIROptimizations;

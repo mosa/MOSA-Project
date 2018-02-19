@@ -87,7 +87,6 @@
       <DependentUpon>CodeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DisassemblyStage.cs" />
-    <Compile Include="ExplorerCompiler.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
