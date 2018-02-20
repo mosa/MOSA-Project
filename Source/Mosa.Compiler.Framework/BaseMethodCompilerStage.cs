@@ -19,9 +19,26 @@ namespace Mosa.Compiler.Framework
 
 		protected int instructionCount = 0;
 
+		protected string formattedStageName;
+
 		private List<TraceLog> traceLogs;
 
 		#endregion Data Members
+
+		#region Properties
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		public virtual string Name { get { return GetType().Name; } }
+
+		/// <summary>
+		/// Gets or sets the name of the formatted stage.
+		/// </summary>
+		public string FormattedStageName { get; private set; }
+
+		#endregion Properties
 
 		#region Compiler Properties
 
@@ -153,17 +170,7 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Method Properties
 
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public virtual string Name { get { return GetType().Name; } }
-
-		#endregion IPipelineStage Members
-
-		#region IMethodCompilerStage members
+		#region Methods
 
 		/// <summary>
 		/// Setups the specified compiler.
@@ -190,12 +197,14 @@ namespace Mosa.Compiler.Framework
 		/// Setups the specified compiler.
 		/// </summary>
 		/// <param name="methodCompiler">The compiler.</param>
-		public void Setup(MethodCompiler methodCompiler)
+		public void Setup(MethodCompiler methodCompiler, int position)
 		{
 			MethodCompiler = methodCompiler;
 			BasicBlocks = methodCompiler.BasicBlocks;
 
 			traceLogs = new List<TraceLog>();
+
+			FormattedStageName = "[" + position.ToString("00") + "] " + Name;
 
 			Setup();
 		}
@@ -211,26 +220,6 @@ namespace Mosa.Compiler.Framework
 			MethodCompiler = null;
 			traceLogs = null;
 		}
-
-		#endregion IMethodCompilerStage members
-
-		#region Overrides
-
-		protected virtual void Initialize()
-		{ }
-
-		protected virtual void Setup()
-		{ }
-
-		protected virtual void Run()
-		{ }
-
-		protected virtual void Finish()
-		{ }
-
-		#endregion Overrides
-
-		#region Methods
 
 		/// <summary>
 		/// Allocates the virtual register.
@@ -253,6 +242,22 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Methods
+
+		#region Overrides
+
+		protected virtual void Initialize()
+		{ }
+
+		protected virtual void Setup()
+		{ }
+
+		protected virtual void Run()
+		{ }
+
+		protected virtual void Finish()
+		{ }
+
+		#endregion Overrides
 
 		#region Block Operations
 
@@ -573,21 +578,16 @@ namespace Mosa.Compiler.Framework
 
 		#region Trace Helper Methods
 
-		public string GetFormattedStageName()
-		{
-			return MethodCompiler.FormatStageName(this);
-		}
-
 		public bool IsTraceable()
 		{
-			return MethodCompiler.Trace.TraceFilter.IsMatch(MethodCompiler.Method, GetFormattedStageName());
+			return MethodCompiler.Trace.TraceFilter.IsMatch(MethodCompiler.Method, FormattedStageName);
 		}
 
 		protected TraceLog CreateTraceLog()
 		{
 			bool active = IsTraceable();
 
-			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, GetFormattedStageName(), active);
+			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, FormattedStageName, active);
 
 			if (active)
 				traceLogs.Add(traceLog);
@@ -599,7 +599,7 @@ namespace Mosa.Compiler.Framework
 		{
 			bool active = IsTraceable();
 
-			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, GetFormattedStageName(), section, active);
+			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, FormattedStageName, section, active);
 
 			if (active)
 				traceLogs.Add(traceLog);

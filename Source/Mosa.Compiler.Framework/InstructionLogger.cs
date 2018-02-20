@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Trace
 		{
 			Run(
 				methodCompiler.Trace,
-				methodCompiler.FormatStageName(stage),
+				stage.FormattedStageName,
 				methodCompiler.Method,
 				methodCompiler.BasicBlocks
 			);

@@ -22,7 +22,7 @@ namespace Mosa.Tool.Explorer
 
 		private DateTime compileStartTime;
 
-		public readonly MosaCompiler Compiler = new MosaCompiler();
+		public readonly MosaCompiler Compiler = new MosaCompiler(new List<BaseCompilerExtension>() { new ExplorerCompilerExtension() });
 
 		private enum CompileStage { Nothing, Loaded, PreCompiled, Compiled }
 

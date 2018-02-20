@@ -10,8 +10,7 @@ namespace Mosa.Compiler.Framework
 	/// Container class used to define the pipeline of a compiler.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	/// <seealso cref="System.Collections.IEnumerable" />
-	public sealed class Pipeline<T> : IEnumerable where T : class
+	public sealed class Pipeline<T> : IEnumerable<T> where T : class
 	{
 		#region Data Members
 
@@ -25,7 +24,7 @@ namespace Mosa.Compiler.Framework
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CompilerPipeline"/> class.
+		/// Initializes a new instance of the <see cref="Pipeline{T}"/> class.
 		/// </summary>
 		public Pipeline()
 		{
@@ -225,15 +224,17 @@ namespace Mosa.Compiler.Framework
 
 		#region IEnumerable members
 
-		/// <summary>
-		/// Returns an enumerator that iterates through a collection.
-		/// </summary>
-		/// <returns>
-		/// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
-		/// </returns>
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		public IEnumerator<T> GetEnumerator()
 		{
-			return pipeline.GetEnumerator();
+			foreach (var item in pipeline)
+			{
+				yield return item;
+			}
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
 		}
 
 		#endregion IEnumerable members

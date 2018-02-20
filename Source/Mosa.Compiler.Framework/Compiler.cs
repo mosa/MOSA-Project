@@ -18,7 +18,11 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class Compiler
 	{
+		#region Data Members
+
 		private Pipeline<BaseMethodCompilerStage>[] methodStagePipelines;
+
+		#endregion Data Members
 
 		#region Properties
 
@@ -30,7 +34,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the pre compile pipeline.
 		/// </summary>
-		public Pipeline<BaseCompilerStage> CompilerPipeline { get; private set; }
+		public Pipeline<BaseCompilerStage> CompilerPipeline { get; } = new Pipeline<BaseCompilerStage>();
 
 		/// <summary>
 		/// Gets the type system.
@@ -61,7 +65,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the counters.
 		/// </summary>
-		public Counters GlobalCounters { get; private set; }
+		public Counters GlobalCounters { get; } = new Counters();
 
 		/// <summary>
 		/// Gets the scheduler.
@@ -76,7 +80,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the plug system.
 		/// </summary>
-		public PlugSystem PlugSystem { get; private set; }
+		public PlugSystem PlugSystem { get; } = new PlugSystem();
 
 		/// <summary>
 		/// Gets the list of Intrinsic Types for internal call replacements.
@@ -102,32 +106,37 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the compiler data.
 		/// </summary>
-		public CompilerData CompilerData { get; private set; }
+		public CompilerData CompilerData { get; } = new CompilerData();
+
+		/// <summary>
+		/// Gets the compiler extensions.
+		/// </summary>
+		private List<BaseCompilerExtension> CompilerExtensions { get; } = new List<BaseCompilerExtension>();
 
 		#endregion Properties
 
 		#region Static Methods
 
-		private static BaseCompilerStage[] GetCompilerPipeline(CompilerOptions compilerOptions)
+		private static List<BaseCompilerStage> GetDefaultCompilerPipeline(CompilerOptions compilerOptions)
 		{
 			var bootStage = compilerOptions.BootStageFactory != null ? compilerOptions.BootStageFactory() : null;
 
-			return new BaseCompilerStage[] {
+			return new List<BaseCompilerStage> {
 				bootStage,
 				new PlugStage(),
 				new TypeInitializerSchedulerStage(),
 				new MethodLookupTableStage(),
 				new MethodExceptionLookupTableStage(),
 				new MetadataStage(),
-				( compilerOptions.OutputFile!= null && compilerOptions.EmitBinary) ? new LinkerFinalizationStage() : null,
+				(compilerOptions.OutputFile!= null && compilerOptions.EmitBinary) ? new LinkerFinalizationStage() : null,
 				(compilerOptions.MapFile != null) ? new MapFileGenerationStage() : null,
 				(compilerOptions.DebugFile != null) ? new DebugFileGenerationStage() : null
 			};
 		}
 
-		private static BaseMethodCompilerStage[] GetMethodPipeline(CompilerOptions compilerOptions)
+		private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(CompilerOptions compilerOptions)
 		{
-			return new BaseMethodCompilerStage[] {
+			return new List<BaseMethodCompilerStage>() {
 				new CILDecodingStage(),
 				new ExceptionPrologueStage(),
 				new OperandAssignmentStage(),
@@ -151,7 +160,7 @@ namespace Mosa.Compiler.Framework
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 				new DevirtualizeCallStage(),
 				new CallStage(),
-				new PlatformStubStage(),
+				new PlatformIntrinsicStage(),
 				new PlatformEdgeSplitStage(),
 				new VirtualRegisterRenameStage(),
 				new GreedyRegisterAllocatorStage(),
@@ -159,11 +168,9 @@ namespace Mosa.Compiler.Framework
 				new EmptyBlockRemovalStage(),
 				new BlockOrderingStage(),
 				new CodeGenerationStage(compilerOptions.EmitBinary),
-				new PreciseGCStage(),
-				new ProtectedRegionLayoutStage(),
-				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null,
 
-				//(compilerOptions.EmitBinary) ? new DisassemblyStage() : null
+				//new PreciseGCStage(),
+				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null,
 			};
 		}
 
@@ -171,7 +178,7 @@ namespace Mosa.Compiler.Framework
 
 		#region Methods
 
-		public void Initialize(MosaCompiler mosaCompiler)
+		public Compiler(MosaCompiler mosaCompiler)
 		{
 			Architecture = mosaCompiler.CompilerOptions.Architecture;
 
@@ -182,10 +189,7 @@ namespace Mosa.Compiler.Framework
 			CompilationScheduler = mosaCompiler.CompilationScheduler;
 			Linker = mosaCompiler.Linker;
 
-			CompilerPipeline = new Pipeline<BaseCompilerStage>();
-			GlobalCounters = new Counters();
-			PlugSystem = new PlugSystem();
-			CompilerData = new CompilerData();
+			CompilerExtensions.AddRange(mosaCompiler.CompilerExtensions);
 
 			methodStagePipelines = new Pipeline<BaseMethodCompilerStage>[mosaCompiler.MaxThreads];
 
@@ -210,7 +214,12 @@ namespace Mosa.Compiler.Framework
 			InternalRuntimeType = GeInternalRuntimeType();
 
 			// Build the default compiler pipeline
-			CompilerPipeline.Add(GetCompilerPipeline(CompilerOptions));
+			CompilerPipeline.Add(GetDefaultCompilerPipeline(CompilerOptions));
+
+			foreach (var extension in CompilerExtensions)
+			{
+				extension.ExtendCompilerPipeline(CompilerPipeline);
+			}
 
 			Architecture.ExtendCompilerPipeline(CompilerPipeline);
 		}
@@ -238,20 +247,23 @@ namespace Mosa.Compiler.Framework
 
 			if (pipeline == null)
 			{
-				var stages = GetMethodPipeline(CompilerOptions);
-
 				pipeline = new Pipeline<BaseMethodCompilerStage>();
 
-				pipeline.Add(stages);
+				methodStagePipelines[threadID] = pipeline;
+
+				pipeline.Add(GetDefaultMethodPipeline(CompilerOptions));
+
+				foreach (var extension in CompilerExtensions)
+				{
+					extension.ExtendMethodCompilerPipeline(pipeline);
+				}
 
 				Architecture.ExtendMethodCompilerPipeline(pipeline);
 
-				foreach (BaseMethodCompilerStage stage in pipeline)
+				foreach (var stage in pipeline)
 				{
 					stage.Initialize(this);
 				}
-
-				methodStagePipelines[threadID] = pipeline;
 			}
 
 			methodCompiler.Pipeline = pipeline;
@@ -278,12 +290,12 @@ namespace Mosa.Compiler.Framework
 		/// </remarks>
 		internal void PreCompile()
 		{
-			foreach (BaseCompilerStage stage in CompilerPipeline)
+			foreach (var stage in CompilerPipeline)
 			{
 				stage.Initialize(this);
 			}
 
-			foreach (BaseCompilerStage stage in CompilerPipeline)
+			foreach (var stage in CompilerPipeline)
 			{
 				NewCompilerTraceEvent(CompilerEvent.PreCompileStageStart, stage.Name);
 

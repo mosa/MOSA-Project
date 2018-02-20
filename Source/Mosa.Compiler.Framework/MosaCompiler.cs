@@ -13,11 +13,11 @@ namespace Mosa.Compiler.Framework
 	{
 		protected Compiler Compiler { get; private set; }
 
-		public CompilerOptions CompilerOptions { get; set; }
+		public CompilerOptions CompilerOptions { get; set; } = new CompilerOptions();
 
-		public CompilerTrace CompilerTrace { get; }
+		public CompilerTrace CompilerTrace { get; } = new CompilerTrace();
 
-		protected MosaModuleLoader ModuleLoader { get; }
+		protected MosaModuleLoader ModuleLoader { get; } = new MosaModuleLoader();
 
 		public TypeSystem TypeSystem { get; private set; }
 
@@ -27,15 +27,18 @@ namespace Mosa.Compiler.Framework
 
 		public BaseLinker Linker { get; private set; }
 
+		public List<BaseCompilerExtension> CompilerExtensions { get; } = new List<BaseCompilerExtension>();
+
 		public int MaxThreads { get; }
 
-		public MosaCompiler(int maxThreads = 0)
+		public MosaCompiler(List<BaseCompilerExtension> compilerExtensions = null, int maxThreads = 0)
 		{
-			CompilerOptions = new CompilerOptions();
-			CompilerTrace = new CompilerTrace();
-			ModuleLoader = new MosaModuleLoader();
-
 			MaxThreads = (maxThreads == 0) ? Environment.ProcessorCount : maxThreads;
+
+			if (compilerExtensions != null)
+			{
+				CompilerExtensions.AddRange(compilerExtensions);
+			}
 		}
 
 		/// <summary>
@@ -94,9 +97,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Linker = new BaseLinker(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.MachineType, CompilerOptions.EmitSymbols, CompilerOptions.LinkerFormatType);
 
-			Compiler = new Compiler();
-
-			Compiler.Initialize(this);
+			Compiler = new Compiler(this);
 		}
 
 		public void PreCompile()

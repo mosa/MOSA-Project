@@ -219,7 +219,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline)
 		{
-			compilerPipeline.InsertAfterLast<PlatformStubStage>(
+			compilerPipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{
 			        //new LongOperandTransformationStage(),

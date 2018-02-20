@@ -265,10 +265,9 @@ namespace Mosa.Platform.x86
 				new IRSubstitutionStage()
 			);
 
-			compilerPipeline.InsertAfterLast<PlatformStubStage>(
+			compilerPipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{
-					new PlatformIntrinsicStage(),
 					new LongOperandStage(),
 					new IRTransformationStage(),
 					new TweakStage(),

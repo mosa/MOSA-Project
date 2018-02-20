@@ -332,17 +332,17 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
-			foreach (BaseMethodCompilerStage stage in Pipeline)
+			int position = 0;
+
+			foreach (var stage in Pipeline)
 			{
-				{
-					stage.Setup(this);
-					stage.Execute();
+				stage.Setup(this, ++position);
+				stage.Execute();
 
-					InstructionLogger.Run(this, stage);
+				InstructionLogger.Run(this, stage);
 
-					if (stop)
-						break;
-				}
+				if (stop)
+					break;
 			}
 
 			InitializeType();
@@ -492,11 +492,6 @@ namespace Mosa.Compiler.Framework
 		public int GetPosition(int label)
 		{
 			return Labels[label];
-		}
-
-		public string FormatStageName(BaseMethodCompilerStage stage)
-		{
-			return "[" + Pipeline.GetPosition(stage).ToString("00") + "] " + stage.Name;
 		}
 
 		/// <summary>
