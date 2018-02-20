@@ -22,7 +22,7 @@ namespace Mosa.FileSystem.VFS
 
 		#endregion Constants
 
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Reference to the root directory of the system.

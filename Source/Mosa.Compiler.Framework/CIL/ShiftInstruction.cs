@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <param name="compiler">The compiler.</param>
 		/// <exception cref="ArgumentNullException">context</exception>
 		/// <exception cref="InvalidOperationException">Invalid virtualLocal state for pairing (" + context.Operand1.Type.GetStackType() + ", " + context.Operand2.Type.GetStackType() + ")</exception>
-		public override void Resolve(Context context, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, MethodCompiler compiler)
 		{
 			if (context == null)
 				throw new ArgumentNullException(nameof(context));

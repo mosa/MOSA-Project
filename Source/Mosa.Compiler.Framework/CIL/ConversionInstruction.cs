@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="context"></param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context context, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, MethodCompiler compiler)
 		{
 			base.Resolve(context, compiler);
 

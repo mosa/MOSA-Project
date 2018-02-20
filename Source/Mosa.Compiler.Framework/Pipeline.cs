@@ -9,25 +9,26 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Container class used to define the pipeline of a compiler.
 	/// </summary>
-	public sealed class CompilerPipeline : IEnumerable
+	/// <typeparam name="T"></typeparam>
+	public sealed class Pipeline<T> : IEnumerable<T> where T : class
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// The stages in the compiler pipeline.
 		/// </summary>
-		private readonly List<IPipelineStage> pipeline;
+		private readonly List<T> pipeline;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CompilerPipeline"/> class.
+		/// Initializes a new instance of the <see cref="Pipeline{T}"/> class.
 		/// </summary>
-		public CompilerPipeline()
+		public Pipeline()
 		{
-			pipeline = new List<IPipelineStage>();
+			pipeline = new List<T>();
 		}
 
 		#endregion Construction
@@ -47,7 +48,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="index">The index of the compilation stage to return.</param>
 		/// <returns>The compilation stage at the requested index.</returns>
-		public IPipelineStage this[int index]
+		public T this[int index]
 		{
 			get { return pipeline[index]; }
 		}
@@ -60,7 +61,7 @@ namespace Mosa.Compiler.Framework
 		/// Adds the specified stage.
 		/// </summary>
 		/// <param name="stage">The stage.</param>
-		public void Add(IPipelineStage stage)
+		public void Add(T stage)
 		{
 			if (stage == null)
 				throw new ArgumentNullException(nameof(stage));
@@ -74,7 +75,7 @@ namespace Mosa.Compiler.Framework
 		/// <typeparam name="StageType">The type of stage.</typeparam>
 		/// <param name="stage">The stage.</param>
 		/// <exception cref="ArgumentNullException"></exception>
-		public void InsertAfterFirst<StageType>(IPipelineStage stage) where StageType : class, IPipelineStage
+		public void InsertAfterFirst<StageType>(T stage) where StageType : class, T
 		{
 			if (stage == null)
 				throw new ArgumentNullException(nameof(stage));
@@ -96,7 +97,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <typeparam name="StageType">The type of stage.</typeparam>
 		/// <param name="stage">The stage.</param>
-		public void InsertAfterLast<StageType>(IPipelineStage stage) where StageType : class, IPipelineStage
+		public void InsertAfterLast<StageType>(T stage) where StageType : class, T
 		{
 			if (stage == null)
 				throw new ArgumentNullException(nameof(stage));
@@ -119,7 +120,7 @@ namespace Mosa.Compiler.Framework
 		/// <typeparam name="StageType">The type of stage.</typeparam>
 		/// <param name="stages">The stages.</param>
 		/// <exception cref="ArgumentNullException"><paramref name="stages"/> is <c>null</c>.</exception>
-		public void InsertAfterLast<StageType>(IEnumerable<IPipelineStage> stages) where StageType : class, IPipelineStage
+		public void InsertAfterLast<StageType>(IEnumerable<T> stages) where StageType : class, T
 		{
 			if (stages == null)
 				throw new ArgumentNullException(nameof(stages));
@@ -141,7 +142,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <typeparam name="StageType">The type of stage.</typeparam>
 		/// <param name="stage">The stage.</param>
-		public void InsertBefore<StageType>(IPipelineStage stage) where StageType : class, IPipelineStage
+		public void InsertBefore<StageType>(T stage) where StageType : class, T
 		{
 			if (stage == null)
 				throw new ArgumentNullException(nameof(stage));
@@ -163,7 +164,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="stages">The stages.</param>
 		/// <exception cref="System.ArgumentNullException">@stages</exception>
-		public void Add(IEnumerable<IPipelineStage> stages)
+		public void Add(IEnumerable<T> stages)
 		{
 			if (stages == null)
 				throw new ArgumentNullException(nameof(stages));
@@ -189,7 +190,7 @@ namespace Mosa.Compiler.Framework
 		/// Removes the specified stage.
 		/// </summary>
 		/// <param name="stage">The stage.</param>
-		public void Remove(IPipelineStage stage)
+		public void Remove(T stage)
 		{
 			if (stage == null)
 				throw new ArgumentNullException(nameof(stage));
@@ -203,7 +204,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="stage">The stage.</param>
 		/// <returns></returns>
 		/// <exception cref="System.ArgumentNullException">@stage</exception>
-		public int GetPosition(IPipelineStage stage)
+		public int GetPosition(T stage)
 		{
 			if (stage == null)
 			{
@@ -223,15 +224,17 @@ namespace Mosa.Compiler.Framework
 
 		#region IEnumerable members
 
-		/// <summary>
-		/// Returns an enumerator that iterates through a collection.
-		/// </summary>
-		/// <returns>
-		/// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
-		/// </returns>
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		public IEnumerator<T> GetEnumerator()
 		{
-			return pipeline.GetEnumerator();
+			foreach (var item in pipeline)
+			{
+				yield return item;
+			}
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
 		}
 
 		#endregion IEnumerable members

@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// Platform Stage
+	/// IR Substitution Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	public sealed class IRSubstitutionStage : BaseTransformationStage
@@ -25,10 +25,6 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Visitation Methods
 
-		/// <summary>
-		/// Visitation function for RemFloat.
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void RemFloatR4(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR4);
@@ -37,10 +33,6 @@ namespace Mosa.Platform.x86.Stages
 			ReplaceWithDivisionCall(node, "RemR4", node.Result, node.Operand1, node.Operand2);
 		}
 
-		/// <summary>
-		/// Visitation function for RemFloat.
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void RemFloatR8(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR8);
@@ -48,6 +40,28 @@ namespace Mosa.Platform.x86.Stages
 
 			ReplaceWithDivisionCall(node, "RemR8", node.Result, node.Operand1, node.Operand2);
 		}
+
+		private void RemSigned64(InstructionNode node)
+		{
+			ReplaceWithDivisionCall(node, "smod64", node.Result, node.Operand1, node.Operand2);
+		}
+
+		private void DivSigned64(InstructionNode node)
+		{
+			ReplaceWithDivisionCall(node, "sdiv64", node.Result, node.Operand1, node.Operand2);
+		}
+
+		private void RemUnsigned64(InstructionNode node)
+		{
+			ReplaceWithDivisionCall(node, "umod64", node.Result, node.Operand1, node.Operand2);
+		}
+
+		private void DivUnsigned64(InstructionNode node)
+		{
+			ReplaceWithDivisionCall(node, "udiv64", node.Result, node.Operand1, node.Operand2);
+		}
+
+		#endregion Visitation Methods
 
 		/// <summary>
 		/// Replaces the with division call.
@@ -71,43 +85,5 @@ namespace Mosa.Platform.x86.Stages
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2);
 		}
-
-		/// <summary>
-		/// Rems the signed.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		private void RemSigned64(InstructionNode node)
-		{
-			ReplaceWithDivisionCall(node, "smod64", node.Result, node.Operand1, node.Operand2);
-		}
-
-		/// <summary>
-		/// Divs the signed.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		private void DivSigned64(InstructionNode node)
-		{
-			ReplaceWithDivisionCall(node, "sdiv64", node.Result, node.Operand1, node.Operand2);
-		}
-
-		/// <summary>
-		/// Rems the unsigned.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		private void RemUnsigned64(InstructionNode node)
-		{
-			ReplaceWithDivisionCall(node, "umod64", node.Result, node.Operand1, node.Operand2);
-		}
-
-		/// <summary>
-		/// Divs the unsigned.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		private void DivUnsigned64(InstructionNode node)
-		{
-			ReplaceWithDivisionCall(node, "udiv64", node.Result, node.Operand1, node.Operand2);
-		}
-
-		#endregion Visitation Methods
 	}
 }

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Linker.Elf
 {
 	public class ElfLinker
 	{
-		#region Data members
+		#region Data Members
 
 		protected BaseLinker linker;
 

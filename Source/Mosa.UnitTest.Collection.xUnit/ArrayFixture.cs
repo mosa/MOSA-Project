@@ -11,5 +11,11 @@ namespace Mosa.UnitTest.Collection.xUnit
 		{
 			Assert.Equal(Mosa.UnitTest.Collection.ArrayTest.BoundsCheck(), Run<bool>("Mosa.UnitTest.Collection.ArrayTest.BoundsCheck"));
 		}
+
+		//[Fact]
+		//public void MultiDimensionalArray()
+		//{
+		//	Assert.Equal(Mosa.UnitTest.Collection.ArrayTest.MultiDimensionalArray2D(), Run<bool>("Mosa.UnitTest.Collection.ArrayTest.MultiDimensionalArray2D"));
+		//}
 	}
 }

@@ -1,12 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using CommandLine;
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Trace.BuiltIn;
-using Mosa.Utility.Aot;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -46,8 +44,6 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		public Compiler()
 		{
-			compiler.CompilerFactory = delegate { return new AotCompiler(); };
-
 			usageString = "Usage: mosacl -o outputfile --Architecture=[x86|x64|ARMv6] --format=[ELF32|ELF64] {--boot=[mb0.7]} {additional options} inputfiles";
 		}
 
@@ -168,7 +164,7 @@ namespace Mosa.Tool.Compiler
 		{
 			compiler.CompilerTrace.TraceListener = new ConsoleEventListener();
 			compiler.Load(options.InputFiles);
-			compiler.Execute(Environment.ProcessorCount);
+			compiler.ExecuteThreaded();
 		}
 
 		/// <summary>
@@ -176,7 +172,7 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		private IEnumerable<string> GetInputFileNames()
 		{
-			foreach (FileInfo file in options.InputFiles)
+			foreach (var file in options.InputFiles)
 				yield return file.FullName;
 		}
 
@@ -223,7 +219,7 @@ namespace Mosa.Tool.Compiler
 			}
 		}
 
-		private static Func<ICompilerStage> GetBootStageFactory(string format)
+		private static Func<BaseCompilerStage> GetBootStageFactory(string format)
 		{
 			switch (format.ToLower())
 			{

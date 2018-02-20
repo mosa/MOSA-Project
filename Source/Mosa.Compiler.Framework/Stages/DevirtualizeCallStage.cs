@@ -24,11 +24,15 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			base.Setup();
 			trace = CreateTraceLog();
+			devirtualizedCount = 0;
 		}
 
 		protected override void Finish()
 		{
+			base.Finish();
+
 			UpdateCounter("Devirtualize.CallCount", devirtualizedCount);
+			trace = null;
 		}
 
 		private void CallVirtual(InstructionNode node)

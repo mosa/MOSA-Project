@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="context">The context.</param>
 		/// <param name="methodCompiler">The method compiler.</param>
 		/// <exception cref="CompilerException"></exception>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
+		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var instruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadZeroExtended16x32 : IRInstruction.LoadZeroExtended16x64;
 

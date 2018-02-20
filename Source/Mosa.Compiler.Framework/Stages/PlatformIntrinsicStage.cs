@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					//TODO: Verify!
 
-					Type intrinsicType = Type.GetType(external);
+					var intrinsicType = Type.GetType(external);
 
 					if (intrinsicType == null)
 						return;

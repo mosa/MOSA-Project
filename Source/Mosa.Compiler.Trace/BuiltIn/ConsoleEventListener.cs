@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Trace.BuiltIn
 				return;
 
 			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.Write(@"[Compiling]  ");
+			Console.Write("[Compiling]  ");
 			Console.ForegroundColor = ConsoleColor.White;
 			Console.WriteLine(info);
 		}
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Trace.BuiltIn
 					{
 						if (Quiet) break;
 						Console.ForegroundColor = ConsoleColor.Yellow;
-						Console.Write(@"[Compiling]  ");
+						Console.Write("[Compiling]  ");
 						Console.ForegroundColor = ConsoleColor.White;
 						Console.WriteLine(info);
 						break;
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Trace.BuiltIn
 					{
 						if (Quiet) break;
 						Console.ForegroundColor = ConsoleColor.Blue;
-						Console.Write(@"[Scheduling]  ");
+						Console.Write("[Scheduling]  ");
 						Console.ForegroundColor = ConsoleColor.White;
 						Console.WriteLine(info);
 						break;
@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Trace.BuiltIn
 					{
 						if (Quiet) break;
 						Console.ForegroundColor = ConsoleColor.Blue;
-						Console.Write(@"[Scheduling]  ");
+						Console.Write("[Scheduling]  ");
 						Console.ForegroundColor = ConsoleColor.White;
 						Console.WriteLine(info);
 						break;
@@ -75,7 +75,7 @@ namespace Mosa.Compiler.Trace.BuiltIn
 						}
 
 						Console.ForegroundColor = ConsoleColor.Red;
-						Console.Write(@"[Exception]  ");
+						Console.Write("[Exception]  ");
 						Console.ForegroundColor = ConsoleColor.White;
 						Console.WriteLine(info);
 						break;
@@ -90,7 +90,7 @@ namespace Mosa.Compiler.Trace.BuiltIn
 						}
 
 						Console.ForegroundColor = ConsoleColor.Red;
-						Console.Write(@"[Error]  ");
+						Console.Write("[Error]  ");
 						Console.ForegroundColor = ConsoleColor.White;
 						Console.WriteLine(info);
 						break;
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Trace.BuiltIn
 						}
 
 						Console.ForegroundColor = ConsoleColor.Yellow;
-						Console.Write(@"[Warning]  ");
+						Console.Write("[Warning]  ");
 						Console.ForegroundColor = ConsoleColor.White;
 						Console.WriteLine(info);
 						break;
@@ -115,9 +115,9 @@ namespace Mosa.Compiler.Trace.BuiltIn
 			}
 		}
 
-		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string info, int threadID)
+		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
-			TraceEvent(compilerStage, info);
+			TraceEvent(compilerEvent, message);
 		}
 
 		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class BasicBlocks : IEnumerable<BasicBlock>
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// The basic blocks

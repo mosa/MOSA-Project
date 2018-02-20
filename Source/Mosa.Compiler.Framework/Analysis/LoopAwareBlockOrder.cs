@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// </summary>
 	public sealed class LoopAwareBlockOrder : IBlockOrderAnalysis
 	{
-		#region Data members
+		#region Data Members
 
 		private BasicBlocks basicBlocks;
 		private BitArray active;

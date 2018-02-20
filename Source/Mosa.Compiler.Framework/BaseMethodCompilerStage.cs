@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
 using System;
@@ -12,22 +13,34 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Basic base class for method compiler pipeline stages
 	/// </summary>
-	public abstract class BaseMethodCompilerStage : IMethodCompilerStage, ITraceFactory
+	public abstract class BaseMethodCompilerStage : ITraceFactory
 	{
-		#region Data members
+		#region Data Members
 
 		protected int instructionCount = 0;
 
+		protected string formattedStageName;
+
 		private List<TraceLog> traceLogs;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Properties
 
 		/// <summary>
-		/// Hold the method compiler
+		/// Retrieves the name of the compilation stage.
 		/// </summary>
-		protected BaseMethodCompiler MethodCompiler { get; private set; }
+		/// <value>The name of the compilation stage.</value>
+		public virtual string Name { get { return GetType().Name; } }
+
+		/// <summary>
+		/// Gets or sets the name of the formatted stage.
+		/// </summary>
+		public string FormattedStageName { get; private set; }
+
+		#endregion Properties
+
+		#region Compiler Properties
 
 		/// <summary>
 		/// The architecture of the compilation process
@@ -50,6 +63,11 @@ namespace Mosa.Compiler.Framework
 		protected MosaTypeLayout TypeLayout { get; private set; }
 
 		/// <summary>
+		/// Gets the compiler options.
+		/// </summary>
+		protected CompilerOptions CompilerOptions { get; private set; }
+
+		/// <summary>
 		/// Holds the native pointer size
 		/// </summary>
 		protected int NativePointerSize { get; private set; }
@@ -58,6 +76,49 @@ namespace Mosa.Compiler.Framework
 		/// Holds the native alignment
 		/// </summary>
 		protected int NativeAlignment { get; private set; }
+
+		/// <summary>
+		/// Gets the size of the native instruction.
+		/// </summary>
+		/// <value>
+		/// The size of the native instruction.
+		/// </value>
+		protected InstructionSize NativeInstructionSize { get; private set; }
+
+		/// <summary>
+		/// Gets a value indicating whether [is32 bit platform].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [is32 bit platform]; otherwise, <c>false</c>.
+		/// </value>
+		protected bool Is32BitPlatform { get; private set; }
+
+		/// <summary>
+		/// Gets a value indicating whether [is64 bit platform].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [is64 bit platform]; otherwise, <c>false</c>.
+		/// </value>
+		protected bool Is64BitPlatform { get; private set; }
+
+		#endregion Compiler Properties
+
+		#region Method Properties
+
+		/// <summary>
+		/// Hold the method compiler
+		/// </summary>
+		protected MethodCompiler MethodCompiler { get; private set; }
+
+		/// <summary>
+		/// Gets the method data.
+		/// </summary>
+		protected CompilerMethodData MethodData { get { return MethodCompiler.MethodData; } }
+
+		/// <summary>
+		/// Gets the linker.
+		/// </summary>
+		protected BaseLinker Linker { get { return MethodCompiler.Linker; } }
 
 		/// <summary>
 		/// Gets the type of the platform internal runtime.
@@ -75,46 +136,24 @@ namespace Mosa.Compiler.Framework
 		public bool IsPlugged { get { return MethodCompiler.IsPlugged; } }
 
 		/// <summary>
-		/// Gets the size of the native instruction.
-		/// </summary>
-		/// <value>
-		/// The size of the native instruction.
-		/// </value>
-		protected InstructionSize NativeInstructionSize { get; private set; }
-
-		/// <summary>
-		/// Gets the method data.
-		/// </summary>
-		/// <value>
-		/// The method data.
-		/// </value>
-		protected CompilerMethodData MethodData { get; private set; }
-
-		/// <summary>
 		/// Gets the method.
 		/// </summary>
-		/// <value>
-		/// The method.
-		/// </value>
 		protected MosaMethod Method { get { return MethodCompiler.Method; } }
 
+		/// <summary>
+		/// Gets the constant zero.
+		/// </summary>
 		protected Operand ConstantZero { get { return MethodCompiler.ConstantZero; } }
 
+		/// <summary>
+		/// Gets the stack frame.
+		/// </summary>
 		protected Operand StackFrame { get { return MethodCompiler.StackFrame; } }
 
-		protected Operand StackPointer { get { return MethodCompiler.StackPointer; } }
-
-		protected bool Is32BitPlatform { get; private set; }
-
-		protected bool Is64BitPlatform { get; private set; }
-
 		/// <summary>
-		/// Gets a value indicating whether this instance has code.
+		/// Gets the stack pointer.
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if this instance has code; otherwise, <c>false</c>.
-		/// </value>
-		protected bool HasCode { get { return BasicBlocks.HeadBlocks.Count != 0; } }
+		protected Operand StackPointer { get { return MethodCompiler.StackPointer; } }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has protected regions.
@@ -124,69 +163,63 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		protected bool HasProtectedRegions { get { return MethodCompiler.Method.ExceptionHandlers.Count != 0; } }
 
-		#endregion Properties
-
-		#region IPipelineStage Members
-
 		/// <summary>
-		/// Retrieves the name of the compilation stage.
+		/// Gets a value indicating whether this instance has code.
 		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public virtual string Name { get { return GetType().Name; } }
+		protected bool HasCode { get { return BasicBlocks.HeadBlocks.Count != 0; } }
 
-		#endregion IPipelineStage Members
+		#endregion Method Properties
 
-		#region IMethodCompilerStage members
+		#region Methods
 
 		/// <summary>
 		/// Setups the specified compiler.
 		/// </summary>
-		/// <param name="methodCompiler">The compiler.</param>
-		void IMethodCompilerStage.Initialize(BaseMethodCompiler methodCompiler)
+		/// <param name="baseCompiler">The base compiler.</param>
+		public void Initialize(Compiler baseCompiler)
 		{
-			MethodCompiler = methodCompiler;
-			BasicBlocks = methodCompiler.BasicBlocks;
-			Architecture = methodCompiler.Architecture;
-			TypeSystem = methodCompiler.TypeSystem;
-			TypeLayout = methodCompiler.TypeLayout;
+			Architecture = baseCompiler.Architecture;
+			TypeSystem = baseCompiler.TypeSystem;
+			TypeLayout = baseCompiler.TypeLayout;
+
 			NativePointerSize = Architecture.NativePointerSize;
 			NativeAlignment = Architecture.NativeAlignment;
 			NativeInstructionSize = Architecture.NativeInstructionSize;
 			Is32BitPlatform = Architecture.Is32BitPlatform;
 			Is64BitPlatform = Architecture.Is64BitPlatform;
 
-			MethodData = MethodCompiler.MethodData;
+			CompilerOptions = baseCompiler.CompilerOptions;
+
+			Initialize();
+		}
+
+		/// <summary>
+		/// Setups the specified compiler.
+		/// </summary>
+		/// <param name="methodCompiler">The compiler.</param>
+		public void Setup(MethodCompiler methodCompiler, int position)
+		{
+			MethodCompiler = methodCompiler;
+			BasicBlocks = methodCompiler.BasicBlocks;
 
 			traceLogs = new List<TraceLog>();
+
+			FormattedStageName = "[" + position.ToString("00") + "] " + Name;
 
 			Setup();
 		}
 
-		void IMethodCompilerStage.Execute()
+		public void Execute()
 		{
 			Run();
 
 			SubmitTraceLogs(traceLogs);
 
 			Finish();
+
+			MethodCompiler = null;
+			traceLogs = null;
 		}
-
-		#endregion IMethodCompilerStage members
-
-		#region Overrides
-
-		protected virtual void Setup()
-		{ }
-
-		protected virtual void Run()
-		{ }
-
-		protected virtual void Finish()
-		{ }
-
-		#endregion Overrides
-
-		#region Methods
 
 		/// <summary>
 		/// Allocates the virtual register.
@@ -209,6 +242,22 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Methods
+
+		#region Overrides
+
+		protected virtual void Initialize()
+		{ }
+
+		protected virtual void Setup()
+		{ }
+
+		protected virtual void Run()
+		{ }
+
+		protected virtual void Finish()
+		{ }
+
+		#endregion Overrides
 
 		#region Block Operations
 
@@ -529,21 +578,16 @@ namespace Mosa.Compiler.Framework
 
 		#region Trace Helper Methods
 
-		public string GetFormattedStageName()
-		{
-			return MethodCompiler.FormatStageName(this as IPipelineStage);
-		}
-
 		public bool IsTraceable()
 		{
-			return MethodCompiler.Trace.TraceFilter.IsMatch(MethodCompiler.Method, GetFormattedStageName());
+			return MethodCompiler.Trace.TraceFilter.IsMatch(MethodCompiler.Method, FormattedStageName);
 		}
 
 		protected TraceLog CreateTraceLog()
 		{
 			bool active = IsTraceable();
 
-			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, GetFormattedStageName(), active);
+			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, FormattedStageName, active);
 
 			if (active)
 				traceLogs.Add(traceLog);
@@ -555,7 +599,7 @@ namespace Mosa.Compiler.Framework
 		{
 			bool active = IsTraceable();
 
-			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, GetFormattedStageName(), section, active);
+			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, FormattedStageName, section, active);
 
 			if (active)
 				traceLogs.Add(traceLog);

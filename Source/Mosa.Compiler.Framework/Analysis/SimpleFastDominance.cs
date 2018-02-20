@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// </remarks>
 	public sealed class SimpleFastDominance : BaseDominanceAnalysis
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Holds the dominance information of a block.

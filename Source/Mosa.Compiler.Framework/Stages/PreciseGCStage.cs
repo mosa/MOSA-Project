@@ -33,12 +33,14 @@ namespace Mosa.Compiler.Framework.Stages
 					trace.Log(i.ToString() + ": " + range);
 				}
 			}
-
-			return;
 		}
 
 		protected override void Finish()
 		{
+			base.Finish();
+
+			trace = null;
+			LiveAnalysis = null;
 		}
 	}
 }

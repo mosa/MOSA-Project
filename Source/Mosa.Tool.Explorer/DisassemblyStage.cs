@@ -10,17 +10,6 @@ namespace Mosa.Tool.Explorer
 {
 	public class DisassemblyStage : BaseMethodCompilerStage
 	{
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DisassemblyStage"/> class.
-		/// </summary>
-		public DisassemblyStage()
-		{
-		}
-
-		#endregion Construction
-
 		protected override void Run()
 		{
 			TraceDisassembly();
@@ -69,11 +58,12 @@ namespace Mosa.Tool.Explorer
 				using (var disasm = new Disassembler(byteArray, mode, 0, true))
 				{
 					// Need a new instance of translator every time as they aren't thread safe
-					var translator = new SharpDisasm.Translators.IntelTranslator();
-
-					// Configure the translator to output instruction addresses and instruction binary as hex
-					translator.IncludeAddress = true;
-					translator.IncludeBinary = true;
+					var translator = new SharpDisasm.Translators.IntelTranslator()
+					{
+						// Configure the translator to output instruction addresses and instruction binary as hex
+						IncludeAddress = true,
+						IncludeBinary = true
+					};
 
 					// Disassemble each instruction and output to trace
 					foreach (var instruction in disasm.Disassemble())
@@ -85,7 +75,7 @@ namespace Mosa.Tool.Explorer
 			}
 			catch (Exception e)
 			{
-				trace.Log($"Unable to continue disassembly, error encountered\r\n{e.ToString()}");
+				trace.Log($"Unable to continue disassembly, error encountered\r\n{e}");
 				NewCompilerTraceEvent(CompilerEvent.Error, $"Failed disassembly for method {this.MethodCompiler.Method}");
 			}
 		}

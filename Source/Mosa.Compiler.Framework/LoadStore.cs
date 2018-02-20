@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public static class LoadStore
 	{
-		public static void OrderLoadOperands(InstructionNode node, BaseMethodCompiler methodCompiler)
+		public static void OrderLoadOperands(InstructionNode node, MethodCompiler methodCompiler)
 		{
 			if (node.Operand1.IsResolvedConstant && node.Operand2.IsResolvedConstant)
 			{
@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public static void OrderStoreOperands(InstructionNode node, BaseMethodCompiler methodCompiler)
+		public static void OrderStoreOperands(InstructionNode node, MethodCompiler methodCompiler)
 		{
 			if (node.Operand1.IsResolvedConstant && node.Operand2.IsResolvedConstant)
 			{

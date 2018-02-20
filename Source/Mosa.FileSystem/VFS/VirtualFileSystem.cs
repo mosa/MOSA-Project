@@ -11,7 +11,7 @@ namespace Mosa.FileSystem.VFS
 	/// </remarks>
 	public sealed class VirtualFileSystem : IFileSystem, IFileSystemService
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// The virtual root directory.

@@ -240,7 +240,7 @@ namespace Mosa.Platform.x86
 		/// Extends the pre-compiler pipeline with x86 compiler stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(CompilerPipeline compilerPipeline)
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline)
 		{
 			compilerPipeline.Add(
 				new StartUpStage()
@@ -259,16 +259,15 @@ namespace Mosa.Platform.x86
 		/// Extends the method compiler pipeline with x86 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(CompilerPipeline compilerPipeline)
+		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline)
 		{
 			compilerPipeline.InsertBefore<LowerIRStage>(
 				new IRSubstitutionStage()
 			);
 
-			compilerPipeline.InsertAfterLast<PlatformStubStage>(
-				new IMethodCompilerStage[]
+			compilerPipeline.InsertAfterLast<PlatformIntrinsicStage>(
+				new BaseMethodCompilerStage[]
 				{
-					new PlatformIntrinsicStage(),
 					new LongOperandStage(),
 					new IRTransformationStage(),
 					new TweakStage(),
@@ -372,7 +371,7 @@ namespace Mosa.Platform.x86
 		/// <param name="sourceBase">The source base.</param>
 		/// <param name="source">The source.</param>
 		/// <param name="size">The size.</param>
-		public override void InsertCompoundCopy(BaseMethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
+		public override void InsertCompoundCopy(MethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
 		{
 			const int LargeAlignment = 16;
 			int alignedSize = size - (size % NativeAlignment);

@@ -10,7 +10,7 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class GDT
 	{
-		#region Data members
+		#region Data Members
 
 		internal struct Offset
 		{

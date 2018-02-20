@@ -16,7 +16,7 @@ namespace Mosa.FileSystem.VFS
 
 		#endregion Static data members
 
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// References the inode that belongs to this name.

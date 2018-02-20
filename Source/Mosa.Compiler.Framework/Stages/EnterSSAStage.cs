@@ -16,12 +16,18 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		private Dictionary<Operand, Stack<int>> variables;
 		private Dictionary<Operand, int> counts;
+		private Dictionary<Operand, Operand[]> ssaOperands;
+		private Dictionary<BasicBlock, BaseDominanceAnalysis> blockAnalysis;
+		private Dictionary<Operand, List<BasicBlock>> assignments;
 
-		private Dictionary<Operand, Operand[]> ssaOperands = new Dictionary<Operand, Operand[]>();
+		protected override void Initialize()
+		{
+			base.Initialize();
 
-		private Dictionary<BasicBlock, BaseDominanceAnalysis> blockAnalysis = new Dictionary<BasicBlock, BaseDominanceAnalysis>();
-
-		private Dictionary<Operand, List<BasicBlock>> assignments = new Dictionary<Operand, List<BasicBlock>>();
+			ssaOperands = new Dictionary<Operand, Operand[]>();
+			blockAnalysis = new Dictionary<BasicBlock, BaseDominanceAnalysis>();
+			assignments = new Dictionary<Operand, List<BasicBlock>>();
+		}
 
 		protected override void Run()
 		{
@@ -49,12 +55,14 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			UpdateCounter("EnterSSA.IRInstructions", instructionCount);
 
+			base.Finish();
+
 			// Clean up
 			variables = null;
 			counts = null;
-			ssaOperands = null;
-			assignments = null;
-			blockAnalysis = null;
+			ssaOperands.Clear();
+			assignments.Clear();
+			blockAnalysis.Clear();
 		}
 
 		private void EnterSSA()

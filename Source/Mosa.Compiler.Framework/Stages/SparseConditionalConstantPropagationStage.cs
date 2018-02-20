@@ -23,7 +23,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
+			base.Setup();
+
 			trace = CreateTraceLog();
+			conditionalConstantPropagation = 0;
+			instructionsRemovedCount = 0;
+			changed = false;
 		}
 
 		protected override void Run()
@@ -40,6 +45,13 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("ConditionalConstantPropagation.ConstantVariableUse", conditionalConstantPropagation);
 			UpdateCounter("ConditionalConstantPropagation.DeadBlocks", deadBlocks.Count);
 			UpdateCounter("ConditionalConstantPropagation.IRInstructionRemoved", instructionsRemovedCount);
+		}
+
+		protected override void Finish()
+		{
+			base.Finish();
+
+			trace = null;
 		}
 
 		protected void ReplaceVirtualRegistersWithConstants(List<Tuple<Operand, ulong>> constantVirtualRegisters)

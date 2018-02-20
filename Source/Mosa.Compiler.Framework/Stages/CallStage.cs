@@ -14,8 +14,8 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
 	public sealed class CallStage : BaseCodeTransformationStage
 	{
-		protected BaseInstruction loadInstruction;
-		protected BaseInstruction moveInstruction;
+		private BaseInstruction loadInstruction;
+		private BaseInstruction moveInstruction;
 
 		protected override void Setup()
 		{

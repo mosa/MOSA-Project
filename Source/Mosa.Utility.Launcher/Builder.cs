@@ -6,7 +6,6 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
-using Mosa.Utility.Aot;
 using Mosa.Utility.BootImage;
 using SharpDisasm;
 using SharpDisasm.Translators;
@@ -75,8 +74,6 @@ namespace Mosa.Utility.Launcher
 
 				CompiledFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.bin");
 
-				compiler.CompilerFactory = delegate { return new AotCompiler(); };
-
 				compiler.CompilerOptions.EnableSSA = Options.EnableSSA;
 				compiler.CompilerOptions.EnableIROptimizations = Options.EnableIROptimizations;
 				compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = Options.EnableSparseConditionalConstantPropagation;
@@ -137,7 +134,7 @@ namespace Mosa.Utility.Launcher
 				compiler.Load(inputFiles);
 
 				var threads = Options.UseMultipleThreadCompiler ? Environment.ProcessorCount : 1;
-				compiler.Execute(threads);
+				compiler.ExecuteThreaded();
 
 				Linker = compiler.Linker;
 				TypeSystem = compiler.TypeSystem;
@@ -441,7 +438,7 @@ namespace Mosa.Utility.Launcher
 		/// <param name="bootFormat">The boot format.</param>
 		/// <returns></returns>
 		/// <exception cref="NotImplementCompilerException"></exception>
-		private static Func<ICompilerStage> GetBootStageFactory(BootFormat bootFormat)
+		private static Func<BaseCompilerStage> GetBootStageFactory(BootFormat bootFormat)
 		{
 			switch (bootFormat)
 			{

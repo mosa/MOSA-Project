@@ -53,9 +53,9 @@ namespace Mosa.Compiler.Framework.Stages
 		private int reduceSplit64 = 0;
 		private int simplifyIntegerCompare = 0;
 
-		private Stack<InstructionNode> worklist = new Stack<InstructionNode>();
+		private Stack<InstructionNode> worklist;
 
-		private HashSet<Operand> virtualRegisters = new HashSet<Operand>();
+		private HashSet<Operand> virtualRegisters;
 
 		private TraceLog trace;
 
@@ -65,6 +65,62 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private int debugRestrictOptimizationByCount = 0;
 
+		protected override void Initialize()
+		{
+			base.Initialize();
+
+			worklist = new Stack<InstructionNode>();
+			virtualRegisters = new HashSet<Operand>();
+
+			debugRestrictOptimizationByCount = CompilerOptions.DebugRestrictOptimizationByCount;
+
+			transformations = CreateTransformationList();
+		}
+
+		protected override void Setup()
+		{
+			base.Setup();
+
+			instructionsRemovedCount = 0;
+			simplifyExtendedMoveWithConstantCount = 0;
+			arithmeticSimplificationSubtractionCount = 0;
+			arithmeticSimplificationMultiplicationCount = 0;
+			arithmeticSimplificationDivisionCount = 0;
+			arithmeticSimplificationAdditionAndSubstractionCount = 0;
+			arithmeticSimplificationLogicalOperatorsCount = 0;
+			arithmeticSimplificationShiftOperators = 0;
+			simpleConstantPropagationCount = 0;
+			forwardPropagateMove = 0;
+			forwardPropagateCompoundMove = 0;
+			deadCodeEliminationCount = 0;
+			reduceTruncationAndExpansionCount = 0;
+			constantFoldingIntegerOperationsCount = 0;
+			constantFoldingIntegerCompareCount = 0;
+			constantFoldingAdditionAndSubstractionCount = 0;
+			constantFoldingMultiplicationCount = 0;
+			constantFoldingDivisionCount = 0;
+			constantFoldingPhiCount = 0;
+			blockRemovedCount = 0;
+			foldIntegerCompareBranchCount = 0;
+			reduceZeroExtendedMoveCount = 0;
+			foldIntegerCompareCount = 0;
+			simplifyExtendedMoveCount = 0;
+			foldLoadStoreOffsetsCount = 0;
+			constantMoveToRightCount = 0;
+			simplifyPhiCount = 0;
+			deadCodeEliminationPhi = 0;
+			constantFoldingLogicalOrCount = 0;
+			constantFoldingLogicalAndCount = 0;
+			combineIntegerCompareBranchCount = 0;
+			removeUselessIntegerCompareBranch = 0;
+			arithmeticSimplificationModulus = 0;
+			split64Constant = 0;
+			simplifyTo64 = 0;
+			simplifySplit64 = 0;
+			reduceSplit64 = 0;
+			simplifyIntegerCompare = 0;
+		}
+
 		protected override void Run()
 		{
 			// Method is empty - must be a plugged method
@@ -72,10 +128,6 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			trace = CreateTraceLog();
-
-			debugRestrictOptimizationByCount = MethodCompiler.Compiler.CompilerOptions.DebugRestrictOptimizationByCount;
-
-			transformations = CreateTransformationList();
 
 			Optimize();
 
@@ -117,8 +169,15 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.SimplifySplit64", simplifySplit64);
 			UpdateCounter("IROptimizations.ReduceSplit64", reduceSplit64);
 			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompare);
+		}
 
-			worklist = null;
+		protected override void Finish()
+		{
+			base.Finish();
+
+			virtualRegisters.Clear();
+			worklist.Clear();
+			trace = null;
 		}
 
 		private void Optimize()
@@ -205,15 +264,6 @@ namespace Mosa.Compiler.Framework.Stages
 				Split64Constant,
 				ReduceSplit64
 			};
-		}
-
-		/// <summary>
-		/// Finishes this instance.
-		/// </summary>
-		protected override void Finish()
-		{
-			virtualRegisters = null;
-			worklist = null;
 		}
 
 		private void ProcessWorkList()

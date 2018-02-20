@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <seealso cref="Mosa.Compiler.Framework.CIL.BinaryInstruction" />
 	public sealed class StobjInstruction : BinaryInstruction
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Specifies the type of the value.
@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context context, BaseMethodCompiler compiler)
+		public override void Resolve(Context context, MethodCompiler compiler)
 		{
 			base.Resolve(context, compiler);
 		}

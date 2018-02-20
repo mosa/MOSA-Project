@@ -9,13 +9,8 @@ namespace Mosa.Compiler.Framework.Stages
 	/// This stages removes jumps to the next instruction
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
-	public sealed class JumpOptimizationStage : BaseCodeTransformationStage
+	public sealed class JumpOptimizationStage : BaseMethodCompilerStage
 	{
-		protected override void PopulateVisitationDictionary()
-		{
-			// Nothing to do
-		}
-
 		protected override void Run()
 		{
 			var trace = CreateTraceLog();

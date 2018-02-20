@@ -22,7 +22,7 @@ namespace Mosa.Tool.Explorer
 
 		private DateTime compileStartTime;
 
-		public readonly MosaCompiler Compiler = new MosaCompiler();
+		public readonly MosaCompiler Compiler = new MosaCompiler(new List<BaseCompilerExtension>() { new ExplorerCompilerExtension() });
 
 		private enum CompileStage { Nothing, Loaded, PreCompiled, Compiled }
 
@@ -45,7 +45,6 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerTrace.TraceFilter.MethodMatch = MatchType.Any;
 			Compiler.CompilerTrace.TraceFilter.StageMatch = MatchType.Any;
 
-			Compiler.CompilerFactory = delegate { return new ExplorerCompiler(); };
 			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
 		}
 
@@ -236,17 +235,16 @@ namespace Mosa.Tool.Explorer
 				toolStrip1.Enabled = false;
 
 				ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+				{
+					try
 					{
-						try
-						{
-							Compiler.Execute(Environment.ProcessorCount);
-						}
-						finally
-						{
-							OnCompileCompleted();
-						}
+						Compiler.ExecuteThreaded();
 					}
-				));
+					finally
+					{
+						OnCompileCompleted();
+					}
+				}));
 			}
 		}
 

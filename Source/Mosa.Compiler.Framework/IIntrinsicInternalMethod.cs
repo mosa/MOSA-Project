@@ -12,6 +12,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="methodCompiler">The method compiler.</param>
-		void ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler);
+		void ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler);
 	}
 }

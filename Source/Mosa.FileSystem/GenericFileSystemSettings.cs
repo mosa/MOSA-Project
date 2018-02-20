@@ -11,7 +11,7 @@ namespace Mosa.FileSystem
 	/// </remarks>
 	public class GenericFileSystemSettings
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// The volume label.

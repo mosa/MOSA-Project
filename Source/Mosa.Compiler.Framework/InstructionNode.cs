@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class InstructionNode
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Holds a packed value (to save space)
@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private List<BasicBlock> branchTargets;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Properties
 

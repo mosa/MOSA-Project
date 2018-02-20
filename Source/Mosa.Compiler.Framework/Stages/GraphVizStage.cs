@@ -14,23 +14,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var block in BasicBlocks)
 			{
-				//var sb = new StringBuilder();
-
-				//for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
-				//{
-				//	if (node.IsEmpty)
-				//		continue;
-
-				//	sb.Append(node.ToString());
-				//	sb.Append(@"\n");
-				//}
-				//sb.Length = sb.Length - 1;
-				//sb.Replace('"', ' ');
-				//sb.Replace('[', ' ');
-				//sb.Replace(']', ' ');
-
-				//trace.Log("\t" + block.ToString() + " [label=" + q + sb.ToString() + q + "];");
-
 				trace.Log("\t" + block);
 
 				foreach (var next in block.NextBlocks)

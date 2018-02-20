@@ -68,7 +68,7 @@ namespace Mosa.UnitTest.Engine
 				EnableSSA = true,
 				EnableIROptimizations = true,
 				EnableSparseConditionalConstantPropagation = true,
-				EnableInlinedMethods = false,
+				EnableInlinedMethods = true,
 				IRLongExpansion = true,
 				TwoPassOptimizations = true,
 

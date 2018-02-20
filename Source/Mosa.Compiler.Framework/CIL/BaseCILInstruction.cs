@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <seealso cref="Mosa.Compiler.Framework.BaseInstruction" />
 	public abstract class BaseCILInstruction : BaseInstruction
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Holds the CIL opcode
@@ -110,7 +110,7 @@ namespace Mosa.Compiler.Framework.CIL
 			get { return true; }
 		}
 
-		public static Operand AllocateVirtualRegisterOrStackSlot(BaseMethodCompiler compiler, MosaType type)
+		public static Operand AllocateVirtualRegisterOrStackSlot(MethodCompiler compiler, MosaType type)
 		{
 			return compiler.AllocateVirtualRegisterOrStackSlot(type);
 		}
@@ -120,7 +120,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public virtual void Resolve(Context context, BaseMethodCompiler compiler)
+		public virtual void Resolve(Context context, MethodCompiler compiler)
 		{
 			/* Default implementation is to do nothing */
 		}
