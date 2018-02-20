@@ -8,16 +8,16 @@ using System.Text;
 
 namespace Mosa.UnitTest.Collection.xUnit
 {
-	public class Ldloca : TestFixture
+<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
+	public class Fixture_Ldloca<#= number.Value #> : TestFixture
 	{
-		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
-
 		[Theory]
-		[MemberData(nameof(<#= number.Value #>), DisableDiscoveryEnumeration = true)]
+		[MemberData(nameof(<#= number.Value #>))]
 		public void LdlocaCheckValue<#= number.Value #>(<#= number.Key #> a)
 		{
 			Assert.Equal(Mosa.UnitTest.Collection.LdlocaTests.LdlocaCheckValue<#= number.Value #>(a), Run<bool>("Mosa.UnitTest.Collection.LdlocaTests.LdlocaCheckValue<#= number.Value #>", a));
 		}
-		<# } #>
 	}
+
+<# } #>
 }

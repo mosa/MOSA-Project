@@ -159,7 +159,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount)
 					{
-						Size = node.Size,
 						ConditionCode = node.ConditionCode
 					};
 

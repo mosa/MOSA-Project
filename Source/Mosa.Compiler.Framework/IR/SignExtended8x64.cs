@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// ConversionFloatR4ToFloatR8
+	/// SignExtended8x64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class ConversionFloatR4ToFloatR8 : BaseIRInstruction
+	public sealed class SignExtended8x64 : BaseIRInstruction
 	{
-		public ConversionFloatR4ToFloatR8()
+		public SignExtended8x64()
 			: base(1, 1)
 		{
 		}

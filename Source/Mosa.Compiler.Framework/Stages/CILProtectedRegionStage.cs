@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 
@@ -14,14 +13,19 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		private MosaType exceptionType;
 
+		protected override void Initialize()
+		{
+			base.Initialize();
+
+			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
+		}
+
 		protected override void Run()
 		{
-			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
-
 			InsertBlockProtectInstructions();
 			UpdateBlockProtectInstructions();
 
-			MethodCompiler.SetProtectedRegions(ProtectedRegion.CreateProtectedRegions(BasicBlocks, MethodCompiler.Method.ExceptionHandlers));
+			MethodCompiler.ProtectedRegions = ProtectedRegion.CreateProtectedRegions(BasicBlocks, MethodCompiler.Method.ExceptionHandlers);
 		}
 
 		private void InsertBlockProtectInstructions()

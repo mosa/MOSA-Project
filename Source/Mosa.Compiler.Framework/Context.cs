@@ -129,14 +129,6 @@ namespace Mosa.Compiler.Framework
 		public byte ResultCount { get { return Node.ResultCount; } set { Node.ResultCount = value; } }
 
 		/// <summary>
-		/// Gets or sets the instruction size.
-		/// </summary>
-		/// <value>
-		/// The instruction size.
-		/// </value>
-		public InstructionSize Size { get { return Node.Size; } set { Node.Size = value; } }
-
-		/// <summary>
 		/// Gets a value indicating whether this instance is empty.
 		/// </summary>
 		/// <value>
@@ -440,7 +432,6 @@ namespace Mosa.Compiler.Framework
 		public void ReplaceInstruction(BaseInstruction instruction, InstructionSize size)
 		{
 			Instruction = instruction;
-			Size = size;
 		}
 
 		#endregion Methods
@@ -528,18 +519,6 @@ namespace Mosa.Compiler.Framework
 		public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1)
 		{
 			Node.SetInstruction(instruction, result, operand1);
-		}
-
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="size">The size.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		public void SetInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1)
-		{
-			Node.SetInstruction(instruction, size, result, operand1);
 		}
 
 		/// <summary>
@@ -745,33 +724,6 @@ namespace Mosa.Compiler.Framework
 			Node.SetInstruction(instruction, result, operand1, operand2, operand3, operand4);
 		}
 
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="size">The size.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		public void SetInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2)
-		{
-			Node.SetInstruction(instruction, size, result, operand1, operand2);
-		}
-
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="size">The size.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		/// <param name="operand3">The operand3.</param>
-		public void SetInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2, Operand operand3)
-		{
-			Node.SetInstruction(instruction, size, result, operand1, operand2, operand3);
-		}
-
 		#endregion Set Instruction Methods
 
 		#region Append Instruction Methods
@@ -901,7 +853,7 @@ namespace Mosa.Compiler.Framework
 		public void AppendInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1)
 		{
 			AppendInstruction();
-			Node.SetInstruction(instruction, size, result, operand1);
+			Node.SetInstruction(instruction, result, operand1);
 		}
 
 		/// <summary>
@@ -1147,52 +1099,6 @@ namespace Mosa.Compiler.Framework
 		{
 			AppendInstruction();
 			Node.SetInstruction(instruction, result, operand1, operand2, operand3, operand4);
-		}
-
-		/// <summary>
-		/// Appends the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="size">The size.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		public void AppendInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2)
-		{
-			AppendInstruction();
-			Node.SetInstruction(instruction, size, result, operand1, operand2);
-		}
-
-		/// <summary>
-		/// Appends the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="size">The size.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		/// <param name="operand3">The operand3.</param>
-		public void AppendInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2, Operand operand3)
-		{
-			AppendInstruction();
-			Node.SetInstruction(instruction, size, result, operand1, operand2, operand3);
-		}
-
-		/// <summary>
-		/// Appends the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="size">The size.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		/// <param name="operand3">The operand3.</param>
-		/// <param name="operand4">The operand4.</param>
-		public void AppendInstruction(BaseInstruction instruction, InstructionSize size, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
-		{
-			AppendInstruction();
-
-			Node.SetInstruction(instruction, size, result, operand1, operand2, operand3, operand4);
 		}
 
 		#endregion Append Instruction Methods

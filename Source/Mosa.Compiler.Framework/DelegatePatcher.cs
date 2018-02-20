@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public static class DelegatePatcher
 	{
-		public static bool PatchDelegate(BaseMethodCompiler methodCompiler)
+		public static bool PatchDelegate(MethodCompiler methodCompiler)
 		{
 			if (!methodCompiler.Method.DeclaringType.IsDelegate)
 				return false;
@@ -29,13 +29,11 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		private static void PatchConstructor(BaseMethodCompiler methodCompiler)
+		private static void PatchConstructor(MethodCompiler methodCompiler)
 		{
 			var thisOperand = methodCompiler.Parameters[0];
 			var instanceOperand = methodCompiler.Parameters[1];
 			var methodPointerOperand = methodCompiler.Parameters[2];
-
-			var size = methodCompiler.Architecture.NativeInstructionSize;
 
 			var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
@@ -55,14 +53,14 @@ namespace Mosa.Compiler.Framework
 			context.AppendInstruction(IRInstruction.LoadParameterInteger32, v2, methodPointerOperand); // FIXME -- not 64 compatible
 			context.AppendInstruction(IRInstruction.LoadParameterInteger32, v3, instanceOperand); // FIXME -- not 64 compatible
 
-			context.AppendInstruction(IRInstruction.StoreInteger32, size, null, v1, methodPointerOffsetOperand, v2); // FIXME -- not 64 compatible
+			context.AppendInstruction(IRInstruction.StoreInteger32, null, v1, methodPointerOffsetOperand, v2); // FIXME -- not 64 compatible
 			context.MosaType = methodPointerOperand.Type;
-			context.AppendInstruction(IRInstruction.StoreInteger32, size, null, v1, instanceOffsetOperand, v3); // FIXME -- not 64 compatible
+			context.AppendInstruction(IRInstruction.StoreInteger32, null, v1, instanceOffsetOperand, v3); // FIXME -- not 64 compatible
 			context.MosaType = instanceOperand.Type;
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
-		private static void PatchInvoke(BaseMethodCompiler methodCompiler)
+		private static void PatchInvoke(MethodCompiler methodCompiler)
 		{
 			// check if instance is null (if so, it's a static call to the methodPointer)
 
@@ -97,10 +95,9 @@ namespace Mosa.Compiler.Framework
 				{
 					vrs[i] = methodCompiler.VirtualRegisters.Allocate(methodCompiler.Parameters[i].Type);
 
-					var loadInstruction = BaseMethodCompilerStage.GetLoadParameterInstruction(vrs[i].Type, methodCompiler.Architecture.Is32BitPlatform);
-					var loadsize = BaseMethodCompilerStage.GetInstructionSize(vrs[i].Type);
+					var paramLoadInstruction = BaseMethodCompilerStage.GetLoadParameterInstruction(vrs[i].Type, methodCompiler.Architecture.Is32BitPlatform);
 
-					b0.AppendInstruction(loadInstruction, loadsize, vrs[i], methodCompiler.Parameters[i]);
+					b0.AppendInstruction(paramLoadInstruction, vrs[i], methodCompiler.Parameters[i]);
 					b0.MosaType = type;
 				}
 			}
@@ -114,8 +111,10 @@ namespace Mosa.Compiler.Framework
 			var opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
 			var c0 = Operand.CreateConstant(0, methodCompiler.TypeSystem);
 
-			b0.AppendInstruction(IRInstruction.LoadInteger, size, opMethod, thisOperand, methodPointerOffsetOperand);
-			b0.AppendInstruction(IRInstruction.LoadInteger, size, opInstance, thisOperand, instanceOffsetOperand);
+			var loadInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInteger32 : IRInstruction.LoadInteger64;
+
+			b0.AppendInstruction(loadInstruction, opMethod, thisOperand, methodPointerOffsetOperand);
+			b0.AppendInstruction(loadInstruction, opInstance, thisOperand, instanceOffsetOperand);
 			b0.AppendInstruction(IRInstruction.CompareInteger32x32, ConditionCode.Equal, opCompare, opInstance, c0); // FIXME -- not 64 compatible
 			b0.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, opCompare, c0);
 			b0.AddBranchTarget(b2.Block);
@@ -147,7 +146,7 @@ namespace Mosa.Compiler.Framework
 			b3.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
-		private static void PatchBeginInvoke(BaseMethodCompiler methodCompiler)
+		private static void PatchBeginInvoke(MethodCompiler methodCompiler)
 		{
 			var nullOperand = Operand.GetNullObject(methodCompiler.TypeSystem);
 			var context = new Context(CreateMethodStructure(methodCompiler));
@@ -158,14 +157,14 @@ namespace Mosa.Compiler.Framework
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
-		private static void PatchEndInvoke(BaseMethodCompiler methodCompiler)
+		private static void PatchEndInvoke(MethodCompiler methodCompiler)
 		{
 			var start = CreateMethodStructure(methodCompiler);
 
 			start.First.Insert(new InstructionNode(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock));
 		}
 
-		private static BasicBlock CreateMethodStructure(BaseMethodCompiler methodCompiler)
+		private static BasicBlock CreateMethodStructure(MethodCompiler methodCompiler)
 		{
 			var basicBlocks = methodCompiler.BasicBlocks;
 

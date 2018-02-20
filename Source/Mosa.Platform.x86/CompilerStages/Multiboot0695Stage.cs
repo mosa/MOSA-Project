@@ -60,7 +60,7 @@ namespace Mosa.Platform.x86.CompilerStages
 
 		#endregion Constants
 
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// The multiboot method

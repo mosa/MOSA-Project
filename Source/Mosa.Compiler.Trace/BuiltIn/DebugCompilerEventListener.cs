@@ -6,9 +6,9 @@ namespace Mosa.Compiler.Trace.BuiltIn
 {
 	public sealed class DebugCompilerEventListener : ITraceListener
 	{
-		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerStage, string info, int threadID)
+		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
-			Debug.WriteLine(compilerStage.ToString() + ": " + info);
+			Debug.WriteLine(compilerEvent.ToString() + ": " + message);
 		}
 
 		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)

@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="methodCompiler">The method compiler.</param>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
+		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			Internal(context, methodCompiler, context.InvokeMethod.Name, "InternalsForArray");
 		}

@@ -18,8 +18,6 @@ namespace Mosa.Platform.x86.Instructions
 			: base(1, 1)
 		{
 		}
-
-		public override bool ThreeTwoAddressConversion { get { return false; } }
 	}
 }
 

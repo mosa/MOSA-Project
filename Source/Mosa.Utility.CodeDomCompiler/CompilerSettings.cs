@@ -6,7 +6,7 @@ namespace Mosa.Utility.CodeDomCompiler
 {
 	public class CompilerSettings
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// An array of assembly references to include in the compilation.

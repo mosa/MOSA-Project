@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="internalMethod">The internal method to replace with.</param>
 		/// <param name="internalClass">The internal class that has the internal method.</param>
 		/// <exception cref="ArgumentNullException"></exception>
-		protected void Internal(Context context, BaseMethodCompiler methodCompiler, string internalMethod, string internalClass = "Internal")
+		protected void Internal(Context context, MethodCompiler methodCompiler, string internalMethod, string internalClass = "Internal")
 		{
 			if (context == null || methodCompiler == null || internalMethod == null || internalClass == null)
 				throw new ArgumentNullException();

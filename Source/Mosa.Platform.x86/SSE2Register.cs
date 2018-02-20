@@ -59,7 +59,7 @@ namespace Mosa.Platform.x86
 
 		#endregion Static data members
 
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Stores the register index of this instance.

@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	///
+	/// Store64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("Mosa.Runtime.Intrinsic::Store64")]
@@ -18,17 +18,15 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="context">The context.</param>
 		/// <param name="methodCompiler">The method compiler.</param>
 		/// <exception cref="CompilerException"></exception>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
+		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			const InstructionSize size = InstructionSize.Size64;
-
 			if (context.OperandCount == 2)
 			{
-				context.SetInstruction(IRInstruction.StoreInteger64, size, null, context.Operand1, methodCompiler.ConstantZero, context.Operand2);
+				context.SetInstruction(IRInstruction.StoreInteger64, null, context.Operand1, methodCompiler.ConstantZero, context.Operand2);
 			}
 			else if (context.OperandCount == 3)
 			{
-				context.SetInstruction(IRInstruction.StoreInteger64, size, null, context.Operand1, context.Operand2, context.Operand3);
+				context.SetInstruction(IRInstruction.StoreInteger64, null, context.Operand1, context.Operand2, context.Operand3);
 			}
 			else
 			{

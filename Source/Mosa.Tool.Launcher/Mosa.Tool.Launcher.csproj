@@ -62,8 +62,8 @@
     <ApplicationIcon>..\..\3rdParty\app-icons\rocket.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommandLine, Version=2.0.275.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommandLineParser.2.1.1-beta\lib\net45\CommandLine.dll</HintPath>
+    <Reference Include="CommandLine, Version=2.2.1.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommandLineParser.2.2.1\lib\net45\CommandLine.dll</HintPath>
     </Reference>
     <Reference Include="dnlib, Version=1.0.1.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -142,10 +142,6 @@
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
       <Project>{de30cbe9-50f3-4a3e-bcc9-a8a36348530e}</Project>
       <Name>Mosa.Platform.x86</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Utility.AOT\Mosa.Utility.Aot.csproj">
-      <Project>{3bf17c10-a1fb-4517-923e-b609c2fd8282}</Project>
-      <Name>Mosa.Utility.Aot</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj">
       <Project>{65f7691a-b355-4d98-bb97-0b19f13e2190}</Project>

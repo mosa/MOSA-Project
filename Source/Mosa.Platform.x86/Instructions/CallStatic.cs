@@ -21,8 +21,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override FlowControl FlowControl { get { return FlowControl.Call; } }
 
-		public override bool ThreeTwoAddressConversion { get { return false; } }
-
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);

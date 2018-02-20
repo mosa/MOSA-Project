@@ -13,7 +13,7 @@ namespace Mosa.Tool.Compiler
 		/// <param name="args">The command line arguments.</param>
 		internal static void Main(string[] args)
 		{
-			Compiler compiler = new Compiler();
+			var compiler = new Compiler();
 			compiler.Run(args);
 		}
 	}

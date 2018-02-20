@@ -14,26 +14,21 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class CodeGenerationStage : BaseMethodCompilerStage
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Holds the stream, where code is emitted to.
 		/// </summary>
 		protected Stream codeStream;
 
-		/// <summary>
-		/// The code emitter
-		/// </summary>
-		protected BaseCodeEmitter codeEmitter;
-
 		private int generatedInstructionCount = 0;
 		private int generatedBlockCount = 0;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Properties
 
-		public BaseCodeEmitter CodeEmitter { get { return codeEmitter; } }
+		public BaseCodeEmitter CodeEmitter { get; protected set; }
 
 		public bool EmitBinary { get; set; }
 
@@ -60,6 +55,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Construction
 
+		protected override void Setup()
+		{
+			base.Setup();
+
+			generatedInstructionCount = 0;
+			generatedBlockCount = 0;
+		}
+
 		protected override void Run()
 		{
 			if (!EmitBinary)
@@ -70,7 +73,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Retrieve a stream to place the code into
 
-			// HINT: We need seeking to resolve labels.
+			// HINT: We need seeking to resolve Labels.
 			Debug.Assert(codeStream.CanSeek, "Can't seek codeReader output stream2.");
 			Debug.Assert(codeStream.CanWrite, "Can't write to codeReader output stream2.");
 
@@ -88,6 +91,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			UpdateCounter("CodeGeneration.GeneratedInstructions", generatedInstructionCount);
 			UpdateCounter("CodeGeneration.GeneratedBlocks", generatedBlockCount);
+		}
+
+		protected override void Finish()
+		{
+			base.Finish();
+
+			CodeEmitter = null;
+			codeStream = null;
 		}
 
 		#region Methods
@@ -108,7 +119,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					node.Offset = codeEmitter.CurrentPosition;
+					node.Offset = CodeEmitter.CurrentPosition;
 
 					if (node.IsBlockStartInstruction)
 					{
@@ -129,7 +140,7 @@ namespace Mosa.Compiler.Framework.Stages
 						//	node.Size = NativeInstructionSize;
 						//}
 
-						baseInstruction.Emit(node, codeEmitter);
+						baseInstruction.Emit(node, CodeEmitter);
 
 						generatedInstructionCount++;
 
@@ -141,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 
-				block.Last.Offset = codeEmitter.CurrentPosition;
+				block.Last.Offset = CodeEmitter.CurrentPosition;
 
 				BlockEnd(block);
 				generatedBlockCount++;
@@ -153,8 +164,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		protected virtual void BeginGenerate()
 		{
-			codeEmitter = Architecture.GetCodeEmitter();
-			codeEmitter.Initialize(MethodCompiler.Method.FullName, MethodCompiler.Linker, codeStream);
+			CodeEmitter = Architecture.GetCodeEmitter();
+			CodeEmitter.Initialize(MethodCompiler.Method.FullName, MethodCompiler.Linker, codeStream);
+
+			MethodCompiler.Labels = CodeEmitter.Labels;
 		}
 
 		/// <summary>
@@ -163,7 +176,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="block">The started block.</param>
 		protected virtual void BlockStart(BasicBlock block)
 		{
-			codeEmitter.Label(block.Label);
+			CodeEmitter.Label(block.Label);
 		}
 
 		/// <summary>
@@ -173,7 +186,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected virtual void BlockEnd(BasicBlock block)
 		{
 			// TODO: Adjust BaseCodeEmitter interface to mark the end of label sections, rather than create this special label:
-			codeEmitter.Label(block.Label + 0x0F000000);
+			CodeEmitter.Label(block.Label + 0x0F000000);
 		}
 
 		/// <summary>
@@ -181,7 +194,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		protected virtual void EndGenerate()
 		{
-			codeEmitter.ResolvePatches();
+			CodeEmitter.ResolvePatches();
 		}
 
 		#endregion Methods

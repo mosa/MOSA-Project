@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -21,7 +22,12 @@ namespace Mosa.Platform.x86.Stages
 			{
 				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (!node.IsEmpty && node.OperandCount == 2 && node.ResultCount == 1)
+					if (node.IsEmpty)
+						continue;
+
+					var instruction = node.Instruction as X86Instruction;
+
+					if (instruction?.ThreeTwoAddressConversion == true)
 					{
 						ThreeTwoAddressConversion(node);
 					}
@@ -35,15 +41,10 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The conversion context.</param>
 		private void ThreeTwoAddressConversion(InstructionNode node)
 		{
-			var instruction = node.Instruction as X86Instruction;
-
-			if (instruction == null)
+			if (node.Result.IsCPURegister && node.Operand1.IsCPURegister && node.Result.Register == node.Operand1.Register)
 				return;
 
-			if (!instruction.ThreeTwoAddressConversion)
-				return;
-
-			if (!(node.OperandCount >= 1 && node.ResultCount >= 1 && node.Result != node.Operand1))
+			if (node.Result == node.Operand1)
 				return;
 
 			var result = node.Result;

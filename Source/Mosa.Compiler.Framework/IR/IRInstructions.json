@@ -165,37 +165,61 @@
 			"FlowControl": "ConditionalBranch"
 		},
 		{
-			"Name": "ConversionFloatR4ToFloatR8",
+			"Name": "ConvertFloatR4ToFloatR8",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConversionFloatR4ToInteger",
+			"Name": "ConvertFloatR4ToInteger32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConversionFloatR8ToFloatR4",
+			"Name": "ConvertFloatR4ToInteger64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConversionFloatR8ToInteger",
+			"Name": "ConvertFloatR8ToFloatR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConversionIntegerToFloatR4",
+			"Name": "ConvertFloatR8ToInteger32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConversionIntegerToFloatR8",
+			"Name": "ConvertFloatR8ToInteger64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertInteger32ToFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertInteger64ToFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertInteger32ToFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertInteger64ToFloatR8",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
@@ -388,28 +412,6 @@
 			"MemoryRead": "true"
 		},
 		{
-			"Name": "LoadInteger",
-			"FamilyName": "IR",
-			"ResultCount": 1,
-			"OperandCount": 2,
-			"MemoryRead": "true"
-		},
-		{
-			"Name": "LoadSignExtended",
-			"FamilyName": "IR",
-			"ResultCount": 1,
-			"OperandCount": 2,
-			"MemoryRead": "true"
-		},
-		{
-			"Name": "LoadZeroExtended",
-			"FamilyName": "IR",
-			"ResultCount": 1,
-			"OperandCount": 2,
-			"MemoryRead": "true"
-		},
-
-		{
 			"Name": "LoadInteger32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
@@ -425,6 +427,13 @@
 		},
 		{
 			"Name": "LoadSignExtended8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtended16x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
@@ -670,20 +679,61 @@
 			"OperandCount": 1
 		},
 		{
-			"Name": "MoveInteger",
-			"FamilyName": "IR",
-			"ResultCount": 1,
-			"OperandCount": 1
-		},
-
-		{
-			"Name": "MoveSignExtended",
+			"Name": "SignExtended8x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "MoveZeroExtended",
+			"Name": "SignExtended16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "SignExtended8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "SignExtended16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "SignExtended32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtended8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtended16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtended8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtended16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtended32x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
@@ -1034,6 +1084,12 @@
 			"Name": "Throw",
 			"FamilyName": "IR",
 			"ResultCount": 0,
+			"OperandCount": 1
+		},
+		{
+			"Name": "Truncation64x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{

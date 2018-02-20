@@ -18,17 +18,17 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="context">The context.</param>
 		/// <param name="methodCompiler">The method compiler.</param>
 		/// <exception cref="CompilerException"></exception>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
+		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			const InstructionSize size = InstructionSize.Size8;
+			var instruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadZeroExtended8x32 : IRInstruction.LoadZeroExtended8x64;
 
 			if (context.OperandCount == 1)
 			{
-				context.SetInstruction(IRInstruction.LoadZeroExtended, size, context.Result, context.Operand1, methodCompiler.ConstantZero);
+				context.SetInstruction(instruction, context.Result, context.Operand1, methodCompiler.ConstantZero);
 			}
 			else if (context.OperandCount == 2)
 			{
-				context.SetInstruction(IRInstruction.LoadZeroExtended, size, context.Result, context.Operand1, context.Operand2);
+				context.SetInstruction(instruction, context.Result, context.Operand1, context.Operand2);
 			}
 			else
 			{

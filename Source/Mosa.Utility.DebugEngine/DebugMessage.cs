@@ -62,8 +62,14 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
+		public DebugMessage(int code, IList<int> data, object other)
+			: this(code, data)
+		{
+			Other = other;
+		}
+
 		public DebugMessage(int code, IList<int> data, CallBack callback)
-		: this(code, data)
+			: this(code, data)
 		{
 			CallBack = callback;
 		}

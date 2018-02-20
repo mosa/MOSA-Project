@@ -12,6 +12,15 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class ExceptionPrologueStage : BaseMethodCompilerStage
 	{
+		protected MosaType objectType;
+
+		protected override void Initialize()
+		{
+			base.Initialize();
+
+			objectType = TypeSystem.GetTypeByName("System", "Object");
+		}
+
 		protected override void Run()
 		{
 			InsertExceptionStartInstructions();
@@ -20,8 +29,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void InsertExceptionStartInstructions()
 		{
-			var objectType = TypeSystem.GetTypeByName("System", "Object");
-
 			foreach (var clause in MethodCompiler.Method.ExceptionHandlers)
 			{
 				if (clause.ExceptionHandlerType == ExceptionHandlerType.Exception)

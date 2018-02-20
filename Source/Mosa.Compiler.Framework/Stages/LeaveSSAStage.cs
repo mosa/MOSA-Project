@@ -15,6 +15,13 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		private Dictionary<Operand, Operand> finalVirtualRegisters;
 
+		protected override void Initialize()
+		{
+			base.Initialize();
+
+			finalVirtualRegisters = new Dictionary<Operand, Operand>();
+		}
+
 		protected override void Run()
 		{
 			if (!HasCode)
@@ -22,8 +29,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (HasProtectedRegions)
 				return;
-
-			finalVirtualRegisters = new Dictionary<Operand, Operand>();
 
 			foreach (var block in BasicBlocks)
 			{
@@ -61,13 +66,15 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 			}
-
-			finalVirtualRegisters = null;
 		}
 
 		protected override void Finish()
 		{
 			UpdateCounter("LeaveSSA.IRInstructions", instructionCount);
+
+			base.Finish();
+
+			finalVirtualRegisters.Clear();
 		}
 
 		private Operand GetFinalVirtualRegister(Operand operand)

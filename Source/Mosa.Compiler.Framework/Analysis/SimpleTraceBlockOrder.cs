@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// </summary>
 	public class SimpleTraceBlockOrder : IBlockOrderAnalysis
 	{
-		#region Data members
+		#region Data Members
 
 		private BasicBlock[] blockOrder;
 

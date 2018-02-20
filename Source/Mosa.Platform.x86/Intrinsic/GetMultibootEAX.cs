@@ -7,7 +7,7 @@ using Mosa.Platform.x86.CompilerStages;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// GetMultibootEAX
 	/// </summary>
 	internal class GetMultibootEAX : IIntrinsicPlatformMethod
 	{
@@ -18,11 +18,11 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, BaseMethodCompiler methodCompiler)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var MultibootEAX = Operand.CreateUnmanagedSymbolPointer(Multiboot0695Stage.MultibootEAX, methodCompiler.TypeSystem);
 
-			context.SetInstruction(IRInstruction.LoadInteger, context.Result, MultibootEAX, methodCompiler.ConstantZero);
+			context.SetInstruction(IRInstruction.LoadInteger32, context.Result, MultibootEAX, methodCompiler.ConstantZero);
 		}
 
 		#endregion Methods

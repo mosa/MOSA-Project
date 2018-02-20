@@ -19,5 +19,19 @@ namespace Mosa.UnitTest.Collection
 				return true;
 			}
 		}
+
+		//public static bool MultiDimensionalArray2D()
+		//{
+		//	var d = new int[5, 5];
+
+		//	return true;
+		//}
+
+		//public static bool MultiDimensionalArray3D()
+		//{
+		//	var d = new int[5, 5, 5];
+
+		//	return true;
+		//}
 	}
 }

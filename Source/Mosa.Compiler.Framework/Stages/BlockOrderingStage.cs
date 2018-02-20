@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			var blockOrderAnalysis = MethodCompiler.Compiler.CompilerOptions.BlockOrderAnalysisFactory();
+			var blockOrderAnalysis = CompilerOptions.BlockOrderAnalysisFactory();
 
 			blockOrderAnalysis.PerformAnalysis(BasicBlocks);
 

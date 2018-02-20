@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// ConversionIntegerToFloatR4
+	/// Truncation64x32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class ConversionIntegerToFloatR4 : BaseIRInstruction
+	public sealed class Truncation64x32 : BaseIRInstruction
 	{
-		public ConversionIntegerToFloatR4()
+		public Truncation64x32()
 			: base(1, 1)
 		{
 		}

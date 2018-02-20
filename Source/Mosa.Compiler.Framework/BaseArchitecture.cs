@@ -146,14 +146,14 @@ namespace Mosa.Compiler.Framework
 		/// Extends the pre-compiler pipeline with architecture specific compiler stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public abstract void ExtendCompilerPipeline(CompilerPipeline compilerPipeline);
+		public abstract void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline);
 
 		/// <summary>
 		/// Requests the architecture to add architecture specific compilation stages to the pipeline. These
 		/// may depend upon the current state of the pipeline.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline of the method compiler to add architecture specific compilation stages to.</param>
-		public abstract void ExtendMethodCompilerPipeline(CompilerPipeline compilerPipeline);
+		public abstract void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline);
 
 		/// <summary>
 		/// Gets the code emitter.
@@ -197,7 +197,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="sourceBase">The source.</param>
 		/// <param name="source">The source offset.</param>
 		/// <param name="size">The size.</param>
-		public abstract void InsertCompoundCopy(BaseMethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size);
+		public abstract void InsertCompoundCopy(MethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size);
 
 		/// <summary>
 		/// Create platform exchange registers.

@@ -11,15 +11,13 @@ namespace Mosa.Compiler.Framework
 {
 	public class MosaCompiler : IDisposable
 	{
-		public Func<BaseCompiler> CompilerFactory { get; set; }
+		protected Compiler Compiler { get; private set; }
 
-		protected BaseCompiler BaseCompiler { get; private set; }
+		public CompilerOptions CompilerOptions { get; set; } = new CompilerOptions();
 
-		public CompilerOptions CompilerOptions { get; set; }
+		public CompilerTrace CompilerTrace { get; } = new CompilerTrace();
 
-		public CompilerTrace CompilerTrace { get; }
-
-		protected MosaModuleLoader ModuleLoader { get; }
+		protected MosaModuleLoader ModuleLoader { get; } = new MosaModuleLoader();
 
 		public TypeSystem TypeSystem { get; private set; }
 
@@ -29,11 +27,18 @@ namespace Mosa.Compiler.Framework
 
 		public BaseLinker Linker { get; private set; }
 
-		public MosaCompiler()
+		public List<BaseCompilerExtension> CompilerExtensions { get; } = new List<BaseCompilerExtension>();
+
+		public int MaxThreads { get; }
+
+		public MosaCompiler(List<BaseCompilerExtension> compilerExtensions = null, int maxThreads = 0)
 		{
-			CompilerOptions = new CompilerOptions();
-			CompilerTrace = new CompilerTrace();
-			ModuleLoader = new MosaModuleLoader();
+			MaxThreads = (maxThreads == 0) ? Environment.ProcessorCount : maxThreads;
+
+			if (compilerExtensions != null)
+			{
+				CompilerExtensions.AddRange(compilerExtensions);
+			}
 		}
 
 		/// <summary>
@@ -79,12 +84,12 @@ namespace Mosa.Compiler.Framework
 			PostCompile();
 		}
 
-		public void Execute(int threads)
+		public void ExecuteThreaded()
 		{
 			Initialize();
 			PreCompile();
 			ScheduleAll();
-			BaseCompiler.ExecuteThreadedCompile(threads);
+			Compiler.ExecuteThreadedCompile(MaxThreads);
 			PostCompile();
 		}
 
@@ -92,14 +97,12 @@ namespace Mosa.Compiler.Framework
 		{
 			Linker = new BaseLinker(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.MachineType, CompilerOptions.EmitSymbols, CompilerOptions.LinkerFormatType);
 
-			BaseCompiler = CompilerFactory();
-
-			BaseCompiler.Initialize(this);
+			Compiler = new Compiler(this);
 		}
 
 		public void PreCompile()
 		{
-			BaseCompiler.PreCompile();
+			Compiler.PreCompile();
 		}
 
 		public void ScheduleAll()
@@ -119,12 +122,12 @@ namespace Mosa.Compiler.Framework
 
 		public void Compile()
 		{
-			BaseCompiler.ExecuteCompile();
+			Compiler.ExecuteCompile();
 		}
 
 		public void PostCompile()
 		{
-			BaseCompiler.PostCompile();
+			Compiler.PostCompile();
 		}
 
 		public void Dispose()

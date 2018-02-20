@@ -34,12 +34,12 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.LoadCompound, LoadCompound);
 			AddVisitation(IRInstruction.MoveCompound, MoveCompound);
 			AddVisitation(IRInstruction.StoreCompound, StoreCompound);
-			AddVisitation(IRInstruction.ConversionFloatR4ToFloatR8, ConversionFloatR4ToFloatR8);
-			AddVisitation(IRInstruction.ConversionFloatR4ToInteger, ConversionFloatR4ToInteger);
-			AddVisitation(IRInstruction.ConversionFloatR8ToFloatR4, ConversionFloatR8ToFloatR4);
-			AddVisitation(IRInstruction.ConversionFloatR8ToInteger, ConversionFloatR8ToInteger);
-			AddVisitation(IRInstruction.ConversionIntegerToFloatR4, ConversionIntegerToFloatR4);
-			AddVisitation(IRInstruction.ConversionIntegerToFloatR8, ConversionIntegerToFloatR8);
+			AddVisitation(IRInstruction.ConvertFloatR4ToFloatR8, ConvertFloatR4ToFloatR8);
+			AddVisitation(IRInstruction.ConvertFloatR8ToFloatR4, ConvertFloatR8ToFloatR4);
+			AddVisitation(IRInstruction.ConvertFloatR4ToInteger32, ConvertFloatR4ToInteger32);
+			AddVisitation(IRInstruction.ConvertFloatR8ToInteger32, ConvertFloatR8ToInteger32);
+			AddVisitation(IRInstruction.ConvertInteger32ToFloatR4, ConvertInteger32ToFloatR4);
+			AddVisitation(IRInstruction.ConvertInteger32ToFloatR8, ConvertInteger32ToFloatR8);
 			AddVisitation(IRInstruction.DivFloatR4, DivFloatR4);
 			AddVisitation(IRInstruction.DivFloatR8, DivFloatR8);
 			AddVisitation(IRInstruction.DivSigned32, DivSigned32);
@@ -47,9 +47,11 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Jmp, Jmp);
 			AddVisitation(IRInstruction.LoadFloatR4, LoadFloatR4);
 			AddVisitation(IRInstruction.LoadFloatR8, LoadFloatR8);
-			AddVisitation(IRInstruction.LoadInteger, LoadInteger);
-			AddVisitation(IRInstruction.LoadSignExtended, LoadSignExtended);
-			AddVisitation(IRInstruction.LoadZeroExtended, LoadZeroExtended);
+			AddVisitation(IRInstruction.LoadInteger32, LoadInteger32);
+			AddVisitation(IRInstruction.LoadSignExtended8x32, LoadSignExtended8x32);
+			AddVisitation(IRInstruction.LoadSignExtended16x32, LoadSignExtended16x32);
+			AddVisitation(IRInstruction.LoadZeroExtended8x32, LoadZeroExtended8x32);
+			AddVisitation(IRInstruction.LoadZeroExtended16x32, LoadZeroExtended16x32);
 			AddVisitation(IRInstruction.LoadParameterFloatR4, LoadParameterFloatR4);
 			AddVisitation(IRInstruction.LoadParameterFloatR8, LoadParameterFloatR8);
 			AddVisitation(IRInstruction.LoadParameterInteger32, LoadParameterInteger32);
@@ -64,10 +66,11 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.LogicalXor32, LogicalXor32);
 			AddVisitation(IRInstruction.MoveFloatR4, MoveFloatR4);
 			AddVisitation(IRInstruction.MoveFloatR8, MoveFloatR8);
-			AddVisitation(IRInstruction.MoveInteger, MoveInteger);
 			AddVisitation(IRInstruction.MoveInteger32, MoveInteger32);
-			AddVisitation(IRInstruction.MoveSignExtended, SignExtendedMove);
-			AddVisitation(IRInstruction.MoveZeroExtended, ZeroExtendedMove);
+			AddVisitation(IRInstruction.SignExtended8x32, SignExtended8x32);
+			AddVisitation(IRInstruction.SignExtended16x32, SignExtended16x32);
+			AddVisitation(IRInstruction.ZeroExtended8x32, ZeroExtended8x32);
+			AddVisitation(IRInstruction.ZeroExtended16x32, ZeroExtended16x32);
 			AddVisitation(IRInstruction.MulFloatR4, MulFloatR4);
 			AddVisitation(IRInstruction.MulFloatR8, MulFloatR8);
 			AddVisitation(IRInstruction.MulSigned32, MulSigned32);
@@ -208,35 +211,35 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(branch, target);
 		}
 
-		private void ConversionFloatR4ToFloatR8(InstructionNode node)
+		private void ConvertFloatR4ToFloatR8(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Cvtss2sd);
 		}
 
-		private void ConversionFloatR4ToInteger(InstructionNode node)
+		private void ConvertFloatR4ToInteger32(InstructionNode node)
 		{
 			Debug.Assert(node.Result.Type.IsI1 || node.Result.Type.IsI2 || node.Result.Type.IsI4);
 			node.ReplaceInstruction(X86.Cvttss2si);
 		}
 
-		private void ConversionFloatR8ToFloatR4(InstructionNode node)
+		private void ConvertFloatR8ToFloatR4(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Cvtsd2ss);
 		}
 
-		private void ConversionFloatR8ToInteger(InstructionNode node)
+		private void ConvertFloatR8ToInteger32(InstructionNode node)
 		{
 			Debug.Assert(node.Result.Type.IsI1 || node.Result.Type.IsI2 || node.Result.Type.IsI4);
 			node.ReplaceInstruction(X86.Cvttsd2si);
 		}
 
-		private void ConversionIntegerToFloatR4(InstructionNode node)
+		private void ConvertInteger32ToFloatR4(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR4);
 			node.ReplaceInstruction(X86.Cvtsi2ss);
 		}
 
-		private void ConversionIntegerToFloatR8(InstructionNode node)
+		private void ConvertInteger32ToFloatR8(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR8);
 			node.ReplaceInstruction(X86.Cvtsi2sd);
@@ -442,16 +445,14 @@ namespace Mosa.Platform.x86.Stages
 			node.SetInstruction(X86.MovsdLoad, node.Result, node.Operand1, node.Operand2);
 		}
 
-		private void LoadInteger(InstructionNode node)
+		private void LoadInteger32(InstructionNode node)
 		{
 			Debug.Assert(!node.Result.IsR4);
 			Debug.Assert(!node.Result.IsR8);
 
 			LoadStore.OrderLoadOperands(node, MethodCompiler);
 
-			var movLoad = GetMovLoad(node.Size);
-
-			node.SetInstruction(movLoad, node.Result, node.Operand1, node.Operand2);
+			node.SetInstruction(X86.MovLoad32, node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void LoadParameterCompound(Context context)
@@ -498,36 +499,32 @@ namespace Mosa.Platform.x86.Stages
 			node.SetInstruction(X86.MovzxLoad8, node.Result, StackFrame, node.Operand1);
 		}
 
-		private void LoadSignExtended(InstructionNode node)
+		private void LoadSignExtended8x32(InstructionNode node)
 		{
-			Debug.Assert(node.Size == InstructionSize.Size8 || node.Size == InstructionSize.Size16);
-
 			LoadStore.OrderLoadOperands(node, MethodCompiler);
 
-			if (node.Size == InstructionSize.Size8)
-			{
-				node.SetInstruction(X86.MovsxLoad8, node.Result, node.Operand1, node.Operand2);
-			}
-			else if (node.Size == InstructionSize.Size16)
-			{
-				node.SetInstruction(X86.MovsxLoad16, node.Result, node.Operand1, node.Operand2);
-			}
+			node.SetInstruction(X86.MovsxLoad8, node.Result, node.Operand1, node.Operand2);
 		}
 
-		private void LoadZeroExtended(InstructionNode node)
+		private void LoadSignExtended16x32(InstructionNode node)
 		{
-			Debug.Assert(node.Size == InstructionSize.Size8 || node.Size == InstructionSize.Size16);
-
 			LoadStore.OrderLoadOperands(node, MethodCompiler);
 
-			if (node.Size == InstructionSize.Size8)
-			{
-				node.SetInstruction(X86.MovzxLoad8, node.Result, node.Operand1, node.Operand2);
-			}
-			else if (node.Size == InstructionSize.Size16)
-			{
-				node.SetInstruction(X86.MovzxLoad16, node.Result, node.Operand1, node.Operand2);
-			}
+			node.SetInstruction(X86.MovsxLoad16, node.Result, node.Operand1, node.Operand2);
+		}
+
+		private void LoadZeroExtended8x32(InstructionNode node)
+		{
+			LoadStore.OrderLoadOperands(node, MethodCompiler);
+
+			node.SetInstruction(X86.MovzxLoad8, node.Result, node.Operand1, node.Operand2);
+		}
+
+		private void LoadZeroExtended16x32(InstructionNode node)
+		{
+			LoadStore.OrderLoadOperands(node, MethodCompiler);
+
+			node.SetInstruction(X86.MovzxLoad16, node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void LogicalAnd32(InstructionNode node)
@@ -657,13 +654,14 @@ namespace Mosa.Platform.x86.Stages
 			node.ReplaceInstruction(X86.Shr32);
 		}
 
-		private void SignExtendedMove(InstructionNode node)
+		private void SignExtended8x32(InstructionNode node)
 		{
-			Debug.Assert(node.Size != InstructionSize.Size32);
+			node.ReplaceInstruction(X86.Movsx8To32);
+		}
 
-			X86Instruction Movsx = (node.Size == InstructionSize.Size8) ? X86.Movsx8To32 : (X86Instruction)X86.Movsx16To32;
-
-			node.ReplaceInstruction(Movsx);
+		private void SignExtended16x32(InstructionNode node)
+		{
+			node.ReplaceInstruction(X86.Movsx16To32);
 		}
 
 		private void StoreCompound(Context context)
@@ -772,14 +770,14 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		private void ZeroExtendedMove(InstructionNode node)
+		private void ZeroExtended8x32(InstructionNode node)
 		{
-			Debug.Assert(node.Size != InstructionSize.None);
-			Debug.Assert(node.Size != InstructionSize.Size32);
+			node.ReplaceInstruction(X86.Movzx8To32);
+		}
 
-			X86Instruction Movzx = (node.Size == InstructionSize.Size8) ? X86.Movzx8To32 : (X86Instruction)X86.Movzx16To32;
-
-			node.ReplaceInstruction(Movzx);
+		private void ZeroExtended16x32(InstructionNode node)
+		{
+			node.ReplaceInstruction(X86.Movzx16To32);
 		}
 
 		#endregion Visitation Methods
@@ -804,39 +802,11 @@ namespace Mosa.Platform.x86.Stages
 				case ConditionCode.UnsignedGreaterThan: return X86.BranchUnsignedGreaterThan;
 				case ConditionCode.Signed: return X86.BranchSigned;
 				case ConditionCode.NotSigned: return X86.BranchNotSigned;
-				case ConditionCode.Parity: return X86.BranchParity;
-				case ConditionCode.NoParity: return X86.BranchNoParity;
 				case ConditionCode.LessThan: return X86.BranchLessThan;
 				case ConditionCode.GreaterOrEqual: return X86.BranchGreaterOrEqual;
 				case ConditionCode.LessOrEqual: return X86.BranchLessOrEqual;
 				case ConditionCode.GreaterThan: return X86.BranchGreaterThan;
 
-				default: throw new NotSupportedException();
-			}
-		}
-
-		public static BaseInstruction GetMovLoad(InstructionSize size)
-		{
-			switch (size)
-			{
-				case InstructionSize.Size32: return X86.MovLoad32;
-				case InstructionSize.None: return X86.MovLoad32;
-				case InstructionSize.Native: return X86.MovLoad32;
-				case InstructionSize.Size16: return X86.MovLoad16;
-				case InstructionSize.Size8: return X86.MovLoad8;
-				default: throw new NotSupportedException();
-			}
-		}
-
-		public static BaseInstruction GetMovStore(InstructionSize size)
-		{
-			switch (size)
-			{
-				case InstructionSize.Size32: return X86.MovStore32;
-				case InstructionSize.None: return X86.MovStore32;
-				case InstructionSize.Native: return X86.MovStore32;
-				case InstructionSize.Size16: return X86.MovStore16;
-				case InstructionSize.Size8: return X86.MovStore8;
 				default: throw new NotSupportedException();
 			}
 		}
@@ -859,8 +829,6 @@ namespace Mosa.Platform.x86.Stages
 				case ConditionCode.UnsignedGreaterThan: return X86.SetUnsignedGreaterThan;
 				case ConditionCode.Signed: return X86.SetSigned;
 				case ConditionCode.NotSigned: return X86.SetNotSigned;
-				case ConditionCode.Parity: return X86.SetParity;
-				case ConditionCode.NoParity: return X86.SetNoParity;
 				case ConditionCode.LessThan: return X86.SetLessThan;
 				case ConditionCode.GreaterOrEqual: return X86.SetGreaterOrEqual;
 				case ConditionCode.LessOrEqual: return X86.SetLessOrEqual;

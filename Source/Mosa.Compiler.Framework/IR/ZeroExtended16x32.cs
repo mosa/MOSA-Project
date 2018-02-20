@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// ConversionIntegerToFloatR8
+	/// ZeroExtended16x32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class ConversionIntegerToFloatR8 : BaseIRInstruction
+	public sealed class ZeroExtended16x32 : BaseIRInstruction
 	{
-		public ConversionIntegerToFloatR8()
+		public ZeroExtended16x32()
 			: base(1, 1)
 		{
 		}

@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Types
 
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// The stream used to write machine code bytes to.
@@ -68,16 +68,11 @@ namespace Mosa.Compiler.Framework
 		protected BaseLinker linker;
 
 		/// <summary>
-		/// List of labels that were emitted.
-		/// </summary>
-		private readonly Dictionary<int, int> labels = new Dictionary<int, int>();
-
-		/// <summary>
 		/// Patches we need to perform.
 		/// </summary>
 		protected readonly List<Patch> patches = new List<Patch>();
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Properties
 
@@ -85,6 +80,11 @@ namespace Mosa.Compiler.Framework
 		/// Gets the name of the method.
 		/// </summary>
 		protected string MethodName { get; private set; }
+
+		/// <summary>
+		/// List of labels that were emitted.
+		/// </summary>
+		public Dictionary<int, int> Labels { get; set; }
 
 		#endregion Properties
 
@@ -108,6 +108,8 @@ namespace Mosa.Compiler.Framework
 			// only necessary if method is being recompiled (due to inline optimization, for example)
 			var symbol = linker.GetSymbol(MethodName, SectionKind.Text);
 			symbol.RemovePatches();
+
+			Labels = new Dictionary<int, int>();
 		}
 
 		/// <summary>
@@ -125,22 +127,12 @@ namespace Mosa.Compiler.Framework
 			 *
 			 */
 
-			Debug.Assert(!labels.ContainsKey(label));
+			Debug.Assert(!Labels.ContainsKey(label));
 
 			// Add this label to the label list, so we can resolve the jump later on
-			labels.Add(label, (int)codeStream.Position);
+			Labels.Add(label, (int)codeStream.Position);
 
 			//Debug.WriteLine("LABEL: " + label.ToString() + " @" + codeStream.Position.ToString());
-		}
-
-		/// <summary>
-		/// Gets the position.
-		/// </summary>
-		/// <param name="label">The label.</param>
-		/// <returns></returns>
-		public int GetPosition(int label)
-		{
-			return labels[label];
 		}
 
 		/// <summary>
@@ -228,7 +220,7 @@ namespace Mosa.Compiler.Framework
 
 		protected bool TryGetLabel(int label, out int position)
 		{
-			return labels.TryGetValue(label, out position);
+			return Labels.TryGetValue(label, out position);
 		}
 
 		protected void AddPatch(int label, int position)

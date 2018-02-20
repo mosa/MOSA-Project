@@ -208,7 +208,7 @@ namespace Mosa.Platform.ARMv6
 		/// Extends the assembly compiler pipeline with ARMv6 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(CompilerPipeline compilerPipeline)
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline)
 		{
 			// TODO
 		}
@@ -217,10 +217,10 @@ namespace Mosa.Platform.ARMv6
 		/// Extends the method compiler pipeline with ARMv6 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(CompilerPipeline compilerPipeline)
+		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline)
 		{
-			compilerPipeline.InsertAfterLast<PlatformStubStage>(
-				new IMethodCompilerStage[]
+			compilerPipeline.InsertAfterLast<PlatformIntrinsicStage>(
+				new BaseMethodCompilerStage[]
 				{
 			        //new LongOperandTransformationStage(),
 			        new IRTransformationStage(),
@@ -285,7 +285,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="source">The source offset.</param>
 		/// <param name="size">The size.</param>
 		/// <exception cref="NotImplementCompilerException"></exception>
-		public override void InsertCompoundCopy(BaseMethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
+		public override void InsertCompoundCopy(MethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
 		{
 			throw new NotImplementCompilerException();
 		}

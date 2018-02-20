@@ -11,12 +11,21 @@ namespace Mosa.Compiler.Framework.Stages
 {
 	public sealed class ProtectedRegionLayoutStage : BaseMethodCompilerStage
 	{
-		#region Data members
+		#region Data Members
 
-		private BaseCodeEmitter codeEmitter;
 		private PatchType NativePatchType;
 
-		#endregion Data members
+		#endregion Data Members
+
+		protected override void Initialize()
+		{
+			base.Initialize();
+
+			if (TypeLayout.NativePointerSize == 4)
+				NativePatchType = PatchType.I4;
+			else
+				NativePatchType = PatchType.I8;
+		}
 
 		protected override void Run()
 		{
@@ -24,13 +33,6 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			ProtectedRegion.FinalizeAll(BasicBlocks, MethodCompiler.ProtectedRegions);
-
-			codeEmitter = MethodCompiler.Pipeline.FindFirst<CodeGenerationStage>().CodeEmitter;
-
-			if (TypeLayout.NativePointerSize == 4)
-				NativePatchType = PatchType.I4;
-			else
-				NativePatchType = PatchType.I8;
 
 			EmitProtectedRegionTable();
 		}
@@ -49,7 +51,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var region in MethodCompiler.ProtectedRegions)
 			{
-				var handler = (uint)codeEmitter.GetPosition(region.Handler.HandlerStart);
+				var handler = (uint)MethodCompiler.GetPosition(region.Handler.HandlerStart);
 
 				if (trace.Active)
 					trace.Log("Handler: " + region.Handler.TryStart.ToString("X4") + " to " + region.Handler.TryEnd.ToString("X4") + " Handler: " + region.Handler.HandlerStart.ToString("X4") + " Offset: [" + handler.ToString("X4") + "]");
@@ -62,8 +64,8 @@ namespace Mosa.Compiler.Framework.Stages
 					if (!BasicBlocks.Contains(block))
 						continue;
 
-					int start = codeEmitter.GetPosition(block.Label);
-					int end = codeEmitter.GetPosition(block.Label + 0x0F000000);
+					int start = MethodCompiler.GetPosition(block.Label);
+					int end = MethodCompiler.GetPosition(block.Label + 0x0F000000);
 
 					if (trace.Active)
 						trace.Log("   Block: " + block + " [" + start.ToString() + "-" + end.ToString() + "]");
@@ -116,7 +118,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				// Store method table pointer of the exception object type
 				// The VES exception runtime will uses this to compare exception object types
-				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionDefinitionSymbol, (int)writer1.Position, SectionKind.ROData, exceptionType.FullName + Metadata.TypeDefinition, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionDefinitionSymbol, (int)writer1.Position, SectionKind.ROData, exceptionType.FullName + Metadata.TypeDefinition, 0);
 			}
 			else if (handlerType == ExceptionHandlerType.Filter)
 			{

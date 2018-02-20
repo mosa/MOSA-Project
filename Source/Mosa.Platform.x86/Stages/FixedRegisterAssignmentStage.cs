@@ -177,13 +177,12 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
-			var size = context.Size;
 
 			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
 			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EDX, operand1);
-			context.AppendInstruction(X86.In8, size, EAX, EDX);
+			context.AppendInstruction(X86.In8, EAX, EDX);
 			context.AppendInstruction(X86.Mov32, result, EAX);
 		}
 
@@ -201,7 +200,6 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
-			var size = context.Size;
 
 			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
 			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
@@ -225,7 +223,6 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;
-			var size = context.Size;
 
 			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
 			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
@@ -281,8 +278,6 @@ namespace Mosa.Platform.x86.Stages
 		public void Out(Context context)
 		{
 			// TRANSFORM: OUT <= EDX, EAX && OUT <= imm8, EAX
-			var size = context.Size;
-
 			if (context.Operand1.IsCPURegister
 				&& context.Operand2.IsCPURegister
 				&& (context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant)
@@ -298,7 +293,7 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov32, EDX, operand1);
 			context.AppendInstruction(X86.Mov32, EAX, operand2);
-			context.AppendInstruction(instruction, size, null, EDX, EAX);
+			context.AppendInstruction(instruction, null, EDX, EAX);
 		}
 
 		/// <summary>

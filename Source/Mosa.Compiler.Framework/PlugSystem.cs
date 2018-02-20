@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework
 {
 	public class PlugSystem
 	{
-		#region Data members
+		#region Data Members
 
 		protected Dictionary<MosaMethod, MosaMethod> plugMethods = new Dictionary<MosaMethod, MosaMethod>();
 

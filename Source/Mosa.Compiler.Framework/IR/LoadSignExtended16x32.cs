@@ -5,15 +5,17 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// MoveZeroExtended
+	/// LoadSignExtended16x32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class MoveZeroExtended : BaseIRInstruction
+	public sealed class LoadSignExtended16x32 : BaseIRInstruction
 	{
-		public MoveZeroExtended()
-			: base(1, 1)
+		public LoadSignExtended16x32()
+			: base(2, 1)
 		{
 		}
+
+		public override bool IsMemoryRead { get { return true; } }
 	}
 }
 

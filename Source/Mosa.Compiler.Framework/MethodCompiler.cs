@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework
 	/// created by invoking CreateMethodCompiler on a specific compiler
 	/// instance.
 	/// </remarks>
-	public class BaseMethodCompiler
+	public sealed class MethodCompiler
 	{
 		#region Data Members
 
@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Provides access to the pipeline of this compiler.
 		/// </summary>
-		public CompilerPipeline Pipeline { get; }
+		public Pipeline<BaseMethodCompilerStage> Pipeline { get; set; }
 
 		/// <summary>
 		/// Gets the type system.
@@ -123,7 +123,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the assembly compiler.
 		/// </summary>
-		public BaseCompiler Compiler { get; }
+		public Compiler Compiler { get; }
 
 		/// <summary>
 		/// Gets the stack.
@@ -154,7 +154,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The protected regions.
 		/// </value>
-		public IList<ProtectedRegion> ProtectedRegions { get; private set; }
+		public IList<ProtectedRegion> ProtectedRegions { get; set; }
 
 		/// <summary>
 		/// Gets a value indicating whether [plugged method].
@@ -167,35 +167,32 @@ namespace Mosa.Compiler.Framework
 		public bool IsPlugged { get { return PluggedMethod != null; } }
 
 		/// <summary>
+		/// The labels
+		/// </summary>
+		public Dictionary<int, int> Labels { get; set; }
+
+		/// <summary>
 		/// Gets the thread identifier.
 		/// </summary>
-		/// <value>
-		/// The thread identifier.
-		/// </value>
 		public int ThreadID { get; }
 
 		/// <summary>
-		/// Gets the method data.
+		/// Gets the compiler method data.
 		/// </summary>
-		/// <value>
-		/// The method data.
-		/// </value>
 		public CompilerMethodData MethodData { get; }
-
-		public MethodTransform MethodTransform { get; }
 
 		#endregion Properties
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseMethodCompiler" /> class.
+		/// Initializes a new instance of the <see cref="MethodCompiler" /> class.
 		/// </summary>
 		/// <param name="compiler">The assembly compiler.</param>
 		/// <param name="method">The method to compile by this instance.</param>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="threadID">The thread identifier.</param>
-		protected BaseMethodCompiler(BaseCompiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
+		public MethodCompiler(Compiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
 		{
 			Compiler = compiler;
 			Method = method;
@@ -207,7 +204,6 @@ namespace Mosa.Compiler.Framework
 			Trace = compiler.CompilerTrace;
 			Linker = compiler.Linker;
 			BasicBlocks = basicBlocks ?? new BasicBlocks();
-			Pipeline = new CompilerPipeline();
 			LocalStack = new List<Operand>();
 
 			ConstantZero = Operand.CreateConstant(0, TypeSystem);
@@ -226,8 +222,6 @@ namespace Mosa.Compiler.Framework
 			EvaluateParameterOperands();
 
 			CalculateMethodParameterSize();
-
-			MethodTransform = new MethodTransform(this);
 		}
 
 		#endregion Construction
@@ -294,7 +288,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Evaluates the parameter operands.
 		/// </summary>
-		protected void EvaluateParameterOperands()
+		private void EvaluateParameterOperands()
 		{
 			int offset = Architecture.OffsetOfFirstParameter;
 
@@ -338,19 +332,17 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
-			BeginCompile();
+			int position = 0;
 
-			foreach (IMethodCompilerStage stage in Pipeline)
+			foreach (var stage in Pipeline)
 			{
-				{
-					stage.Initialize(this);
-					stage.Execute();
+				stage.Setup(this, ++position);
+				stage.Execute();
 
-					InstructionLogger.Run(this, stage);
+				InstructionLogger.Run(this, stage);
 
-					if (stop)
-						break;
-				}
+				if (stop)
+					break;
 			}
 
 			InitializeType();
@@ -358,8 +350,6 @@ namespace Mosa.Compiler.Framework
 			var log = new TraceLog(TraceType.Counters, this.Method, string.Empty, Trace.TraceFilter.Active);
 			log.Log(MethodData.Counters.Export());
 			Trace.TraceListener.OnNewTraceLog(log);
-
-			EndCompile();
 		}
 
 		/// <summary>
@@ -479,22 +469,13 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Sets the protected regions.
-		/// </summary>
-		/// <param name="protectedRegions">The protected regions.</param>
-		public void SetProtectedRegions(IList<ProtectedRegion> protectedRegions)
-		{
-			ProtectedRegions = protectedRegions;
-		}
-
-		/// <summary>
 		/// Initializes the type.
 		/// </summary>
-		protected virtual void InitializeType()
+		private void InitializeType()
 		{
 			if (Method.IsSpecialName && Method.IsRTSpecialName && Method.IsStatic && Method.Name == ".cctor")
 			{
-				typeInitializer = Compiler.CompilePipeline.FindFirst<TypeInitializerSchedulerStage>();
+				typeInitializer = Compiler.CompilerPipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 				if (typeInitializer == null)
 					return;
@@ -504,40 +485,13 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Called before the method compiler begins compiling the method.
+		/// Gets the position.
 		/// </summary>
-		protected virtual void BeginCompile()
-		{
-		}
-
-		/// <summary>
-		/// Called after the method compiler has finished compiling the method.
-		/// </summary>
-		protected virtual void EndCompile()
-		{
-		}
-
-		/// <summary>
-		/// Gets the stage.
-		/// </summary>
-		/// <param name="stageType">Type of the stage.</param>
+		/// <param name="label">The label.</param>
 		/// <returns></returns>
-		public IPipelineStage GetStage(Type stageType)
+		public int GetPosition(int label)
 		{
-			foreach (IPipelineStage stage in Pipeline)
-			{
-				if (stageType.IsInstanceOfType(stage))
-				{
-					return stage;
-				}
-			}
-
-			return null;
-		}
-
-		public string FormatStageName(IPipelineStage stage)
-		{
-			return "[" + Pipeline.GetPosition(stage).ToString("00") + "] " + stage.Name;
+			return Labels[label];
 		}
 
 		/// <summary>
