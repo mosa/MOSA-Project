@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceSystem.PCI;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -46,7 +48,7 @@ namespace Mosa.DeviceSystem
 
 			if (devices.Count == 0)
 				return;
-			
+
 			var pciController = devices[0] as IPCIController;
 
 			// For each controller
@@ -58,8 +60,14 @@ namespace Mosa.DeviceSystem
 					{
 						if (ProbeDevice(pciController, (byte)bus, (byte)slot, (byte)fun))
 						{
-							var pciDevice = new PCI.PCIDevice(pciController, (byte)bus, (byte)slot, (byte)fun);
-							deviceManager.Add(pciDevice);
+							var configuration = new PCIDeviceConfiguration()
+							{
+								Bus = (byte)bus,
+								Slot = (byte)slot,
+								Function = (byte)fun
+							};
+
+							deviceManager.Initialize(new PCIDevice(), devices[0], configuration, null, null);
 						}
 					}
 				}

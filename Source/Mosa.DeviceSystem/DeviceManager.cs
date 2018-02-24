@@ -27,28 +27,37 @@ namespace Mosa.DeviceSystem
 			devices = new List<Device>();
 		}
 
-		public void Add(DeviceDriverRegistryEntry driver, Device parent, IDeviceConfiguration configuration, HardwareResources resources)
+		public BaseDeviceDriver Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, BaseDeviceConfiguration configuration, HardwareResources resources)
+		{
+			var deviceDriver = deviceDriverRegistryEntry.Factory();
+
+			Initialize(deviceDriver, parent, configuration, resources, deviceDriverRegistryEntry);
+
+			return deviceDriver;
+		}
+
+		public void Initialize(BaseDeviceDriver deviceDriver, Device parent, BaseDeviceConfiguration configuration, HardwareResources resources, DeviceDriverRegistryEntry deviceDriverRegistryEntry)
 		{
 			var device = new Device()
 			{
-				Driver = driver,
+				DeviceDriver = deviceDriver,
+				DeviceDriverRegistryEntry = deviceDriverRegistryEntry,
 				Status = DeviceStatus.Initializing,
 				Parent = parent,
 				Configuration = configuration,
-				Resources = resources
+				Resources = resources,
+
+				//Service = deviceDriver as IService
 			};
 
-			//public string Name { get; set; }
-			//public DeviceDriverRegistryEntry Driver { get; set; }
-			//public IService Service { get; set; }
-			//public List<Device> Children { get; } = new List<Device>();
+			Initialize(device);
 		}
 
 		/// <summary>
 		/// Adds the specified device.
 		/// </summary>
 		/// <param name="device">The device.</param>
-		public void AddX(Device device)
+		private void Initialize(Device device)
 		{
 			spinLock.Enter();
 			devices.Add(device);
@@ -59,6 +68,8 @@ namespace Mosa.DeviceSystem
 			}
 
 			spinLock.Exit();
+
+			device.DeviceDriver.Setup(device);
 		}
 
 		/// <summary>
@@ -66,17 +77,17 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public List<T> GetDeviceServices<T>() /*where T : IService*/
+		public List<Device> GetDevices<T>()
 		{
 			spinLock.Enter();
 
-			var list = new List<T>();
+			var list = new List<Device>();
 
 			foreach (var device in devices)
 			{
-				if (device.Service is T)
+				if (device is T)
 				{
-					list.Add((T)device.Service);
+					list.Add(device);
 				}
 			}
 
@@ -85,17 +96,17 @@ namespace Mosa.DeviceSystem
 			return list;
 		}
 
-		public List<T> GetDeviceServices<T>(DeviceStatus status) /*where T : IService*/
+		public List<Device> GetDevices<T>(DeviceStatus status)
 		{
 			spinLock.Enter();
 
-			var list = new List<T>();
+			var list = new List<Device>();
 
 			foreach (var device in devices)
 			{
-				if (device.Status == status && device.Service is T)
+				if (device.Status == status && device is T)
 				{
-					list.Add((T)device.Service);
+					list.Add(device);
 				}
 			}
 

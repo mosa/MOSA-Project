@@ -13,12 +13,12 @@ namespace Mosa.DeviceDriver.ISA
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x1F0, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
 	//[ISADeviceDriver(AutoLoad = false, BasePort = 0x170, PortRange = 8, ForceOption = "ide2", Platforms = PlatformArchitecture.X86AndX64)]
-	public class IDEController : DeviceSystem.DeviceDriver, IDiskControllerDevice
+	public class IDEController : BaseDeviceDriver, IDiskControllerDevice
 	{
 		#region Definitions
 
 		/// <summary>
-		///
+		/// IDE Command
 		/// </summary>
 		internal struct IDECommand
 		{
@@ -40,7 +40,7 @@ namespace Mosa.DeviceDriver.ISA
 		}
 
 		/// <summary>
-		///
+		/// Identify Drive
 		/// </summary>
 		internal struct IdentifyDrive
 		{
@@ -142,7 +142,7 @@ namespace Mosa.DeviceDriver.ISA
 		public enum AddressingMode { NotSupported, LBA28, LBA48 }
 
 		/// <summary>
-		///
+		/// Drive Info
 		/// </summary>
 		protected struct DriveInfo
 		{
@@ -192,7 +192,7 @@ namespace Mosa.DeviceDriver.ISA
 				driveInfo[drive].MaxLBA = 0;
 			}
 
-			Device.Status = DeviceStatus.Online;
+			Device.Status = DeviceStatus.Available;
 		}
 
 		public override void Probe()

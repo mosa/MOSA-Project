@@ -2,7 +2,7 @@
 
 namespace Mosa.DeviceSystem
 {
-	public delegate DeviceDriver InstantiateDeviceDriver();
+	public delegate BaseDeviceDriver InstantiateDeviceDriver();
 
 	public abstract class DeviceDriverRegistryEntry
 	{

@@ -16,7 +16,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 	/// VMware SVGA II Device Driver
 	/// </summary>
 	//[PCIDeviceDriver(VendorID = 0x15AD, DeviceID = 0x0405, Platforms = PlatformArchitecture.X86AndX64)]
-	public class VMwareSVGAII : DeviceSystem.DeviceDriver, IPixelGraphicsDevice
+	public class VMwareSVGAII : BaseDeviceDriver, IPixelGraphicsDevice
 	{
 		#region Definitions
 
@@ -105,34 +105,16 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		#endregion Definitions
 
-		/// <summary>
-		///
-		/// </summary>
 		protected IOPortReadWrite indexPort;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected IOPortReadWrite valuePort;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseMemory memory;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected BaseMemory fifo;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected IFrameBuffer frameBuffer;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected SpinLock spinLock;
 
 		/// <summary>
@@ -248,6 +230,8 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			valuePort = Device.Resources.GetIOPortReadWrite(0, 1);
 			memory = Device.Resources.GetMemory(0);
 			fifo = Device.Resources.GetMemory(1);
+
+			Device.Status = DeviceStatus.Available;
 		}
 
 		public override void Start()

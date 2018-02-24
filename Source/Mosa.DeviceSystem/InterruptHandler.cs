@@ -3,45 +3,31 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	///
+	/// Interrupt Handler
 	/// </summary>
-	public class InterruptHandler
+	public sealed class InterruptHandler
 	{
-		/// <summary>
-		///
-		/// </summary>
-		protected InterruptManager interruptManager;
+		public InterruptManager InterruptManager { get; private set; }
 
-		/// <summary>
-		///
-		/// </summary>
-		protected byte irq;
-
-		/// <summary>
-		///
-		/// </summary>
-		protected IHardwareDevice hardwareDevice;
+		public Device HardwareDevice { get; private set; }
 
 		/// <summary>
 		/// Gets the IRQ.
 		/// </summary>
 		/// <value>The IRQ.</value>
-		public byte IRQ { get { return irq; } }
+		public byte IRQ { get; private set; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="InterruptHandler"/> class.
+		/// Initializes a new instance of the <see cref="InterruptHandler" /> class.
 		/// </summary>
 		/// <param name="interruptManager">The interrupt manager.</param>
 		/// <param name="irq">The irq.</param>
 		/// <param name="hardwareDevice">The hardware device.</param>
-		public InterruptHandler(InterruptManager interruptManager, byte irq, IHardwareDevice hardwareDevice)
+		public InterruptHandler(InterruptManager interruptManager, byte irq, Device hardwareDevice)
 		{
-			if (hardwareDevice == null)
-				HAL.Abort("hardwareDevice == null");
-
-			this.interruptManager = interruptManager;
-			this.irq = irq;
-			this.hardwareDevice = hardwareDevice;
+			InterruptManager = interruptManager;
+			HardwareDevice = hardwareDevice;
+			IRQ = irq;
 		}
 
 		/// <summary>
@@ -49,9 +35,9 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public void Enable()
 		{
-			if (irq != 0xFF)
+			if (IRQ != 0xFF)
 			{
-				interruptManager.AddInterruptHandler(irq, hardwareDevice);
+				InterruptManager.AddInterruptHandler(IRQ, HardwareDevice.DeviceDriver as IHardwareDevice);
 			}
 		}
 
@@ -60,9 +46,9 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public void Disable()
 		{
-			if (irq != 0xFF)
+			if (IRQ != 0xFF)
 			{
-				interruptManager.ReleaseInterruptHandler(irq, hardwareDevice);
+				InterruptManager.ReleaseInterruptHandler(IRQ, HardwareDevice.DeviceDriver as IHardwareDevice);
 			}
 		}
 	}

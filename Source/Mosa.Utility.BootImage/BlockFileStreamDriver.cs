@@ -1,24 +1,19 @@
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
-
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
 using System.IO;
 
-namespace Mosa.Workspace.FileSystem.Debug.Synthetic
+namespace Mosa.Utility.BootImage
 {
 	/// <summary>
-	/// Emulates a disk device
+	/// Block File Stream Driver
 	/// </summary>
-	public class DiskDevice : Device, IDiskDevice
+	/// <seealso cref="Mosa.DeviceSystem.BaseDeviceDriver" />
+	/// <seealso cref="Mosa.DeviceSystem.IDiskDevice" />
+	public class BlockFileStreamDriver : BaseDeviceDriver, IDiskDevice
 	{
+		public string Filename { get; }
+
 		/// <summary>
 		/// The disk file
 		/// </summary>
@@ -30,17 +25,32 @@ namespace Mosa.Workspace.FileSystem.Debug.Synthetic
 		public uint BlockOffset = 0;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DiskDevice"/> class.
+		/// Initializes a new instance of the <see cref="BlockFileStreamDriver" /> class.
 		/// </summary>
 		/// <param name="filename">The filename.</param>
-		public DiskDevice(string filename)
+		public BlockFileStreamDriver(string filename)
 		{
-			base.Name = "DiskDevice_" + Path.GetFileName(filename);
-			base.Parent = null;
-			base.DeviceStatus = DeviceStatus.Online;
-
-			diskFile = new FileStream(filename, FileMode.OpenOrCreate);
+			Filename = filename;
+			diskFile = new FileStream(Filename, FileMode.OpenOrCreate);
 		}
+
+		protected override void Initialize()
+		{
+			Device.Name = "DiskDevice_" + Path.GetFileName(Filename);
+			Device.Status = DeviceStatus.Available;
+		}
+
+		public override void Probe() => Device.Status = DeviceStatus.Available;
+
+		public override void Start()
+		{
+			if (Device.Status != DeviceStatus.Available)
+				return;
+
+			Device.Status = DeviceStatus.Online;
+		}
+
+		public override bool OnInterrupt() => true;
 
 		/// <summary>
 		/// Releases unmanaged and - optionally - managed resources
@@ -76,7 +86,7 @@ namespace Mosa.Workspace.FileSystem.Debug.Synthetic
 		/// <returns></returns>
 		public byte[] ReadBlock(uint block, uint count)
 		{
-			byte[] data = new byte[count * 512];
+			var data = new byte[count * 512];
 			ReadBlock(block, count, data);
 			return data;
 		}

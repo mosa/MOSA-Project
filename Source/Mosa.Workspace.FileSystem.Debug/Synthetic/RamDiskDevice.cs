@@ -16,12 +16,14 @@ namespace Mosa.Workspace.FileSystem.Debug.Synthetic
 	/// <summary>
 	/// Emulates a ram disk device
 	/// </summary>
-	public class RamDiskDevice : Device, IDiskDevice
+	/// <seealso cref="Mosa.DeviceSystem.BaseDeviceDriver" />
+	/// <seealso cref="Mosa.DeviceSystem.IDiskDevice" />
+	public class RamDiskDevice : BaseDeviceDriver, IDiskDevice
 	{
 		/// <summary>
 		/// The total blocks
 		/// </summary>
-		protected uint totalBlocks;
+		public uint TotalBlocks { get; }
 
 		/// <summary>
 		/// The memory
@@ -29,29 +31,38 @@ namespace Mosa.Workspace.FileSystem.Debug.Synthetic
 		protected byte[] mem;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RamDiskDevice"/> class.
+		/// Initializes a new instance of the <see cref="RamDiskDevice" /> class.
 		/// </summary>
 		/// <param name="blocks">The blocks.</param>
 		public RamDiskDevice(uint blocks)
 		{
-			base.Name = "RamDiskDevice_" + ((blocks * 512) / (1024 * 1024)).ToString() + "Mb";
-			base.Parent = null;
-			base.DeviceStatus = DeviceStatus.Online;
-			this.totalBlocks = blocks;
-			this.mem = new byte[blocks * 512];
+			TotalBlocks = blocks;
+			mem = new byte[blocks * 512];
 		}
+
+		protected override void Initialize()
+		{
+			Device.Name = "RamDiskDevice_" + ((TotalBlocks * 512) / (1024 * 1024)).ToString() + "Mb";
+			Device.Status = DeviceStatus.Available;
+		}
+
+		public override void Probe() => Device.Status = DeviceStatus.Available;
+
+		public override void Start()
+		{
+			if (Device.Status != DeviceStatus.Available)
+				return;
+
+			Device.Status = DeviceStatus.Online;
+		}
+
+		public override bool OnInterrupt() => true;
 
 		/// <summary>
 		/// Gets a value indicating whether this instance can write.
 		/// </summary>
 		/// <value><c>true</c> if this instance can write; otherwise, <c>false</c>.</value>
 		public bool CanWrite { get { return true; } }
-
-		/// <summary>
-		/// Gets the total blocks.
-		/// </summary>
-		/// <value>The total blocks.</value>
-		public uint TotalBlocks { get { return totalBlocks; } }
 
 		/// <summary>
 		/// Gets the size of the block.
@@ -67,7 +78,7 @@ namespace Mosa.Workspace.FileSystem.Debug.Synthetic
 		/// <returns></returns>
 		public byte[] ReadBlock(uint block, uint count)
 		{
-			byte[] data = new byte[512];
+			var data = new byte[512];
 			ReadBlock(block, count, data);
 			return data;
 		}
@@ -83,6 +94,7 @@ namespace Mosa.Workspace.FileSystem.Debug.Synthetic
 		{
 			for (int i = 0; i < 512; i++)
 				data[i] = mem[(block * 512) + i];
+
 			return true;
 		}
 

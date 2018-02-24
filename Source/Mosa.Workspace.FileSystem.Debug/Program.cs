@@ -28,17 +28,42 @@ namespace Mosa.Workspace.FileSystem.Debug
 			// Create synthetic ram disk device
 			var ramDiskDevice = new RamDiskDevice(1024 * 1024 * 10 / 512);
 
+			// Setup device -- required as part of framework in operating system
+			ramDiskDevice.Setup(new Device() { DeviceDriver = ramDiskDevice });
+
 			// Create master boot block record
-			var mbr = new MasterBootBlock(ramDiskDevice);
-			mbr.DiskSignature = 0x12345678;
+			var mbr = new MasterBootBlock(ramDiskDevice)
+			{
+				DiskSignature = 0x12345678
+			};
+
 			mbr.Partitions[0].Bootable = true;
 			mbr.Partitions[0].StartLBA = 17;
 			mbr.Partitions[0].TotalBlocks = ramDiskDevice.TotalBlocks - 17;
 			mbr.Partitions[0].PartitionType = PartitionType.FAT12;
 			mbr.Write();
 
-			// Create partition device
-			var partitionDevice = new PartitionDevice(ramDiskDevice, mbr.Partitions[0], false);
+			// Create partition device driver
+			var partitionDevice = new PartitionDeviceDriver();
+
+			// Setup partition configuration
+			var configuraiton = new DiskPartitionConfiguration()
+			{
+				StartLBA = mbr.Partitions[0].StartLBA,
+				TotalBlocks = mbr.Partitions[0].TotalBlocks,
+				Index = 0,
+				ReadOnly = false,
+			};
+
+			// Setup device -- required as part of framework in operating system
+			var device = new Device()
+			{
+				Configuration = configuraiton,
+				DeviceDriver = partitionDevice,
+			};
+
+			// Setup and initialize
+			partitionDevice.Setup(device);
 
 			// Set FAT settings
 			var fatSettings = new FatSettings();
@@ -110,7 +135,7 @@ namespace Mosa.Workspace.FileSystem.Debug
 					var fatFileStream = new FatFileStream(fat, location);
 					Console.WriteLine("  Length: " + fatFileStream.Length.ToString());
 
-					for (;;)
+					for (; ; )
 					{
 						int i = fatFileStream.ReadByte();
 

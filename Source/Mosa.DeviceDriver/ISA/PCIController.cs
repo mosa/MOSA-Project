@@ -8,7 +8,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// PCI Controller
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
-	public class PCIController : DeviceSystem.DeviceDriver, IPCIController
+	public class PCIController : BaseDeviceDriver, IPCIController
 	{
 		#region Definitions
 
@@ -37,6 +37,8 @@ namespace Mosa.DeviceDriver.ISA
 
 			configAddress = Device.Resources.GetIOPortReadWrite(0, 0);
 			configData = Device.Resources.GetIOPortReadWrite(0, 4);
+
+			Device.Status = DeviceStatus.Available;
 		}
 
 		/// <summary>

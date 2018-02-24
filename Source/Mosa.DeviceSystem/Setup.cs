@@ -36,6 +36,7 @@ namespace Mosa.DeviceSystem
 
 		public static void Start()
 		{
+			// todo: this needs to move into ISAManagerDeviceDriver
 			StartISADevices();
 		}
 
@@ -68,8 +69,6 @@ namespace Mosa.DeviceSystem
 
 		public static void StartISADevice(ISADeviceDriverRegistryEntry driverEntry)
 		{
-			var driver = driverEntry.Factory();
-
 			var ioPortRegions = new List<IOPortRegion>();
 			var memoryRegions = new List<MemoryRegion>();
 
@@ -98,25 +97,20 @@ namespace Mosa.DeviceSystem
 			//	}
 			//}
 
-			var interruptHandler = new InterruptHandler(InterruptManager, driverEntry.IRQ, driver);
+			//var interruptHandler = (driverEntry.IRQ != 0) ? new InterruptHandler(InterruptManager, driverEntry.IRQ, deviceDriver as IHardwareDevice) : null;
 
-			var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, interruptHandler);
+			var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, null);
 
-			var device = new Device()
-			{
-				//Parent = null;
-			};
+			DeviceManager.Initialize(driverEntry, null, null, hardwareResources);
 
-			driver.Setup(device);
+			//driver.Setup(device);
 
-			if (!driver.Probe())
-				return;
+			//if (!driver.Probe())
+			//	return;
 
-			DeviceManager.Add(device);
+			//hardwareResources.EnableIRQ();
 
-			hardwareResources.EnableIRQ();
-
-			driver.Start();
+			//driver.Start();
 		}
 	}
 }

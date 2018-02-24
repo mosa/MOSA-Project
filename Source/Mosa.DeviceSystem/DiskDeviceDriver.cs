@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Disk Device
 	/// </summary>
-	public class DiskDevice : DeviceSystem.DeviceDriver, IDiskDevice
+	public class DiskDeviceDriver : BaseDeviceDriver, IDiskDevice
 	{
 		/// <summary>
 		/// The disk controller
@@ -45,26 +45,15 @@ namespace Mosa.DeviceSystem
 		/// <value>The size of the block.</value>
 		public uint BlockSize { get { return diskController.GetSectorSize(driveNbr); } }
 
-		public DiskDevice(uint driveNbr, bool readOnly)
-		{
-			this.driveNbr = driveNbr;
-			this.readOnly = readOnly;
-		}
-
-		public override void Setup(Device device)
-		{
-			Device = device;
-			Device.Name = Device.Parent.Name + "/Disk" + driveNbr.ToString();
-
-			Device.Status = DeviceStatus.Initializing;
-
-			Initialize();
-		}
-
 		protected override void Initialize()
 		{
-			if (Device.Status == DeviceStatus.Online)
-				return;
+			Device.Name = Device.Parent.Name + "/Disk" + driveNbr.ToString();
+			Device.Status = DeviceStatus.Initializing;
+
+			var configuration = Device.Configuration as DiskDeviceConfiguration;
+
+			driveNbr = configuration.DriveNbr;
+			readOnly = configuration.ReadOnly;
 
 			diskController = Device.Parent as IDiskControllerDevice;
 
@@ -76,6 +65,8 @@ namespace Mosa.DeviceSystem
 
 			Device.Status = DeviceStatus.Available;
 		}
+
+		public override void Probe() => Device.Status = DeviceStatus.Available;
 
 		public override void Start()
 		{
@@ -89,6 +80,8 @@ namespace Mosa.DeviceSystem
 
 			Device.Status = DeviceStatus.Online;
 		}
+
+		public override bool OnInterrupt() => true;
 
 		/// <summary>
 		/// Reads the block.

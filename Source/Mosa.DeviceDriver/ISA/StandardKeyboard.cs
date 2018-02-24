@@ -8,46 +8,22 @@ namespace Mosa.DeviceDriver.ISA
 	/// Standard Keyboard Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x60, PortRange = 1, AltBasePort = 0x64, AltPortRange = 1, IRQ = 1, Platforms = PlatformArchitecture.X86AndX64)]
-	public class StandardKeyboard : DeviceSystem.DeviceDriver, IKeyboardDevice
+	public class StandardKeyboard : BaseDeviceDriver, IKeyboardDevice
 	{
-		/// <summary>
-		///
-		/// </summary>
 		protected IOPortReadWrite commandPort;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected IOPortReadWrite dataPort;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected const ushort fifoSize = 256;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected byte[] fifoBuffer;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected uint fifoStart;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected uint fifoEnd;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected SpinLock spinLock;
 
-		/// <summary>
-		/// Initializes this device.
-		/// </summary>
 		protected override void Initialize()
 		{
 			Device.Name = "StandardKeyboard";
@@ -58,6 +34,8 @@ namespace Mosa.DeviceDriver.ISA
 			fifoBuffer = new byte[fifoSize];
 			fifoStart = 0;
 			fifoEnd = 0;
+
+			Device.Status = DeviceStatus.Available;
 		}
 
 		/// <summary>

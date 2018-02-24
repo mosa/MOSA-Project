@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Abstract class for hardware devices
 	/// </summary>
-	public abstract class DeviceDriver
+	public abstract class BaseDeviceDriver
 	{
 		protected Device Device;
 
@@ -29,8 +29,6 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Probes this instance.
 		/// </summary>
-		/// <remarks>Overide for ISA devices, if example</remarks>
-		/// <returns></returns>
 		public virtual void Probe()
 		{
 			Device.Status = DeviceStatus.NotFound;
@@ -39,7 +37,6 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Starts this hardware device.
 		/// </summary>
-		/// <returns></returns>
 		public virtual void Start()
 		{
 			Device.Status = DeviceStatus.Error;
@@ -48,7 +45,6 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Stops this hardware device.
 		/// </summary>
-		/// <returns></returns>
 		public virtual void Stop()
 		{
 		}

@@ -84,11 +84,14 @@
     <Compile Include="DeviceManager.cs" />
     <Compile Include="DeviceStatus.cs" />
     <Compile Include="Device.cs" />
+    <Compile Include="DiskPartitionConfiguration.cs" />
+    <Compile Include="PCIDeviceConfiguration.cs" />
     <Compile Include="HAL.cs" />
-    <Compile Include="DeviceDriver.cs" />
+    <Compile Include="BaseDeviceDriver.cs" />
     <Compile Include="HardwareResources.cs" />
     <Compile Include="DeviceDriverRegistryEntry.cs" />
-    <Compile Include="IDeviceConfiguration.cs" />
+    <Compile Include="BaseDeviceConfiguration.cs" />
+    <Compile Include="DiskDeviceConfiguration.cs" />
     <Compile Include="IDMAChannel.cs" />
     <Compile Include="BaseHardwareAbstraction.cs" />
     <Compile Include="IHardwareDevice.cs" />
@@ -112,7 +115,7 @@
     <Compile Include="PartitionType.cs" />
     <Compile Include="DiskGeometry.cs" />
     <Compile Include="PartitionManager.cs" />
-    <Compile Include="DiskDevice.cs">
+    <Compile Include="DiskDeviceDriver.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FrameBuffer.cs">
@@ -184,7 +187,7 @@
     <Compile Include="MasterBootBlock.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PartitionDevice.cs">
+    <Compile Include="PartitionDeviceDriver.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PCIControllerManager.cs" />

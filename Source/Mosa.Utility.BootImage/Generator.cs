@@ -40,7 +40,10 @@ namespace Mosa.Utility.BootImage
 			diskGeometry.GuessGeometry(blockCount);
 
 			// Create disk image file
-			var diskDevice = new BlockFileStream(options.DiskImageFileName);
+			var diskDevice = new BlockFileStreamDriver(options.DiskImageFileName);
+
+			// Setup device -- required as part of framework in operating system
+			diskDevice.Setup(new Device() { DeviceDriver = diskDevice });
 
 			if (options.ImageFormat == ImageFormat.VDI)
 			{
@@ -64,8 +67,15 @@ namespace Mosa.Utility.BootImage
 			// Expand disk image
 			diskDevice.WriteBlock(blockCount - 1, 1, new byte[SectorSize]);
 
-			// Create partition device
-			PartitionDevice partitionDevice;
+			// Create partition device driver
+			var partitionDevice = new PartitionDeviceDriver();
+
+			// Setup partition configuration
+			var configuraiton = new DiskPartitionConfiguration()
+			{
+				Index = 0,
+				ReadOnly = false,
+			};
 
 			if (options.MBROption)
 			{
@@ -92,12 +102,24 @@ namespace Mosa.Utility.BootImage
 
 				mbr.Write();
 
-				partitionDevice = new PartitionDevice(diskDevice, mbr.Partitions[0], false);
+				configuraiton.StartLBA = mbr.Partitions[0].StartLBA;
+				configuraiton.TotalBlocks = mbr.Partitions[0].TotalBlocks;
 			}
 			else
 			{
-				partitionDevice = new PartitionDevice(diskDevice, false);
+				configuraiton.StartLBA = 0;
+				configuraiton.TotalBlocks = diskDevice.TotalBlocks;
 			}
+
+			// Setup device -- required as part of framework in operating system
+			var device = new Device()
+			{
+				Configuration = configuraiton,
+				DeviceDriver = partitionDevice,
+			};
+
+			// Setup and initialize
+			partitionDevice.Setup(device);
 
 			// Set FAT settings
 			var fatSettings = new FatSettings();

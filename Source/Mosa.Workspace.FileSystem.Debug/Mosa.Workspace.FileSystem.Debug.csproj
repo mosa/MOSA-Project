@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Synthetic\DiskDevice.cs" />
     <Compile Include="Synthetic\RamDiskDevice.cs" />
   </ItemGroup>
   <ItemGroup>

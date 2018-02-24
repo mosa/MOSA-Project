@@ -14,61 +14,30 @@ namespace Mosa.DeviceDriver.ISA
 	/// Programmable Interrupt Controller (PIC) Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x20, PortRange = 2, AltBasePort = 0xA0, AltPortRange = 2, Platforms = PlatformArchitecture.X86AndX64)]
-	public class PIC : DeviceSystem.DeviceDriver
+	public class PIC : BaseDeviceDriver
 	{
 		#region Definitions
 
-		/// <summary>
-		///
-		/// </summary>
 		protected const byte IRQBaseSize = 0x08;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected const byte MasterIRQBase = 0x20;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected const byte SlaveIRQBase = MasterIRQBase + IRQBaseSize;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected const byte EOI = 0x20;
 
 		#endregion Definitions
 
-		/// <summary>
-		///
-		/// </summary>
 		protected IOPortReadWrite masterCommandPort;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected IOPortReadWrite masterDataPort;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected IOPortReadWrite slaveCommandPort;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected IOPortReadWrite slaveDataPort;
 
-		// Interrupt masks must be tracked via the driver
-		/// <summary>
-		///
-		/// </summary>
 		protected byte masterInterruptMask;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected byte slaveInterruptMask;
 
 		protected override void Initialize()
@@ -80,6 +49,8 @@ namespace Mosa.DeviceDriver.ISA
 
 			slaveCommandPort = Device.Resources.GetIOPortReadWrite(1, 0);
 			slaveDataPort = Device.Resources.GetIOPortReadWrite(1, 1);
+
+			Device.Status = DeviceStatus.Available;
 		}
 
 		public override void Probe() => Device.Status = DeviceStatus.Available;
