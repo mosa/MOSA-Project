@@ -33,7 +33,7 @@ namespace Mosa.DeviceSystem
 			// Find all online disk devices
 			foreach (var device in disks)
 			{
-				var diskDevice = device as IDiskDevice;
+				var diskDevice = device.DeviceDriver as IDiskDevice;
 
 				var mbr = new MasterBootBlock(diskDevice);
 

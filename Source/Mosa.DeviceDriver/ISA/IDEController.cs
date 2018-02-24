@@ -191,8 +191,6 @@ namespace Mosa.DeviceDriver.ISA
 				driveInfo[drive].Present = false;
 				driveInfo[drive].MaxLBA = 0;
 			}
-
-			Device.Status = DeviceStatus.Available;
 		}
 
 		public override void Probe()
@@ -235,7 +233,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			if (StatusPort.Read8() == 0)
 			{
-				//HAL.DebugWriteLine("Device " + index.ToString() + " doesnt exist...");
+				//HAL.DebugWriteLine("Device " + index.ToString() + " doesn't exist...");
 
 				//Drive doesn't exist
 				return;

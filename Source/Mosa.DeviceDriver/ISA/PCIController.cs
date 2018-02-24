@@ -37,8 +37,6 @@ namespace Mosa.DeviceDriver.ISA
 
 			configAddress = Device.Resources.GetIOPortReadWrite(0, 0);
 			configData = Device.Resources.GetIOPortReadWrite(0, 4);
-
-			Device.Status = DeviceStatus.Available;
 		}
 
 		/// <summary>
@@ -51,7 +49,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			var found = configAddress.Read32() == BaseValue;
 
-			Device.Status = (found) ? DeviceStatus.Available : Device.Status = DeviceStatus.NotFound;
+			Device.Status = found ? DeviceStatus.Available : Device.Status = DeviceStatus.NotFound;
 		}
 
 		public override void Start()

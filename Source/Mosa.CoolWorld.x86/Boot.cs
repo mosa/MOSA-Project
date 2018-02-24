@@ -76,7 +76,7 @@ namespace Mosa.CoolWorld.x86
 
 			foreach (var device in pciDevices)
 			{
-				var pciDevice = device as DeviceSystem.PCI.IPCIDevice;
+				var pciDevice = device.DeviceDriver as DeviceSystem.PCI.IPCIDevice;
 
 				Console.Write("  ");
 				Bullet(Kernel.x86.Color.Yellow);

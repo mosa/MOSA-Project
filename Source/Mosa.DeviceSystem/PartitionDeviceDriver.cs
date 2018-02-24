@@ -57,8 +57,6 @@ namespace Mosa.DeviceSystem
 				Device.Name = Device.Parent.Name + "/Raw";
 			else
 				Device.Name = Device.Parent.Name + "/Partition" + (configuration.Index + 1).ToString();
-
-			Device.Status = DeviceStatus.Available;
 		}
 
 		public override void Probe() => Device.Status = DeviceStatus.Available;

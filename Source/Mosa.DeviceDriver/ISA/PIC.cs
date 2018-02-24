@@ -49,8 +49,6 @@ namespace Mosa.DeviceDriver.ISA
 
 			slaveCommandPort = Device.Resources.GetIOPortReadWrite(1, 0);
 			slaveDataPort = Device.Resources.GetIOPortReadWrite(1, 1);
-
-			Device.Status = DeviceStatus.Available;
 		}
 
 		public override void Probe() => Device.Status = DeviceStatus.Available;

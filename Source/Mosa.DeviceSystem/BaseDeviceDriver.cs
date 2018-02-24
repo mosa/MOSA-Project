@@ -19,6 +19,7 @@ namespace Mosa.DeviceSystem
 			Device.Status = DeviceStatus.Initializing;
 
 			Initialize();
+			Probe();
 		}
 
 		/// <summary>

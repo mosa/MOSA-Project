@@ -30,7 +30,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		private void CreateDiskDevices(Device diskControllerDevice)
 		{
-			var controller = diskControllerDevice as IDiskControllerDevice;
+			var controller = diskControllerDevice.DeviceDriver as IDiskControllerDevice;
 
 			for (uint drive = 0; drive < controller.MaximunDriveCount; drive++)
 			{

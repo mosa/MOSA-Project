@@ -85,7 +85,7 @@ namespace Mosa.DeviceSystem
 
 			foreach (var device in devices)
 			{
-				if (device is T)
+				if (device.DeviceDriver is T)
 				{
 					list.Add(device);
 				}
@@ -104,7 +104,7 @@ namespace Mosa.DeviceSystem
 
 			foreach (var device in devices)
 			{
-				if (device.Status == status && device is T)
+				if (device.Status == status && device.DeviceDriver is T)
 				{
 					list.Add(device);
 				}

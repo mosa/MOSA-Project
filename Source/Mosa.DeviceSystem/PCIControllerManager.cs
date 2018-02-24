@@ -49,7 +49,7 @@ namespace Mosa.DeviceSystem
 			if (devices.Count == 0)
 				return;
 
-			var pciController = devices[0] as IPCIController;
+			var pciController = devices[0].DeviceDriver as IPCIController;
 
 			// For each controller
 			for (int bus = 0; bus < 255; bus++)
