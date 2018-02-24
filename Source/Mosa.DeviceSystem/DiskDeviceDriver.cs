@@ -55,7 +55,7 @@ namespace Mosa.DeviceSystem
 			driveNbr = configuration.DriveNbr;
 			readOnly = configuration.ReadOnly;
 
-			diskController = Device.Parent as IDiskControllerDevice;
+			diskController = Device.Parent.DeviceDriver as IDiskControllerDevice;
 
 			if (diskController == null)
 			{

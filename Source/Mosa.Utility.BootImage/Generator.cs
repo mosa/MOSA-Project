@@ -40,10 +40,12 @@ namespace Mosa.Utility.BootImage
 			diskGeometry.GuessGeometry(blockCount);
 
 			// Create disk image file
-			var diskDevice = new BlockFileStreamDriver(options.DiskImageFileName);
+			var diskDeviceDriver = new BlockFileStreamDriver(options.DiskImageFileName);
+
+			var diskDevice = new Device() { DeviceDriver = diskDeviceDriver };
 
 			// Setup device -- required as part of framework in operating system
-			diskDevice.Setup(new Device() { DeviceDriver = diskDevice });
+			diskDeviceDriver.Setup(diskDevice);
 
 			if (options.ImageFormat == ImageFormat.VDI)
 			{
@@ -55,17 +57,17 @@ namespace Mosa.Utility.BootImage
 					diskGeometry
 				);
 
-				diskDevice.WriteBlock(0, 1, header);
+				diskDeviceDriver.WriteBlock(0, 1, header);
 
 				var map = VDI.CreateImageMap(blockCount);
 
-				diskDevice.WriteBlock(1, (uint)(map.Length / SectorSize), map);
+				diskDeviceDriver.WriteBlock(1, (uint)(map.Length / SectorSize), map);
 
-				diskDevice.BlockOffset = 1 + (uint)(map.Length / 512);
+				diskDeviceDriver.BlockOffset = 1 + (uint)(map.Length / 512);
 			}
 
 			// Expand disk image
-			diskDevice.WriteBlock(blockCount - 1, 1, new byte[SectorSize]);
+			diskDeviceDriver.WriteBlock(blockCount - 1, 1, new byte[SectorSize]);
 
 			// Create partition device driver
 			var partitionDevice = new PartitionDeviceDriver();
@@ -80,7 +82,7 @@ namespace Mosa.Utility.BootImage
 			if (options.MBROption)
 			{
 				// Create master boot block record
-				var mbr = new MasterBootBlock(diskDevice)
+				var mbr = new MasterBootBlock(diskDeviceDriver)
 				{
 					// Setup partition entry
 					DiskSignature = 0x12345678
@@ -108,7 +110,7 @@ namespace Mosa.Utility.BootImage
 			else
 			{
 				configuraiton.StartLBA = 0;
-				configuraiton.TotalBlocks = diskDevice.TotalBlocks;
+				configuraiton.TotalBlocks = diskDeviceDriver.TotalBlocks;
 			}
 
 			// Setup device -- required as part of framework in operating system
@@ -116,6 +118,7 @@ namespace Mosa.Utility.BootImage
 			{
 				Configuration = configuraiton,
 				DeviceDriver = partitionDevice,
+				Parent = diskDevice,
 			};
 
 			// Setup and initialize
@@ -191,10 +194,10 @@ namespace Mosa.Utility.BootImage
 					diskGeometry
 				);
 
-				diskDevice.WriteBlock(blockCount, 1, footer);
+				diskDeviceDriver.WriteBlock(blockCount, 1, footer);
 			}
 
-			diskDevice.Dispose();
+			diskDeviceDriver.Dispose();
 		}
 	}
 }

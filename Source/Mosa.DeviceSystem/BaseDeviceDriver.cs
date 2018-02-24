@@ -15,7 +15,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="device">The device.</param>
 		public virtual void Setup(Device device)
 		{
-			this.Device = device;
+			Device = device;
 			Device.Status = DeviceStatus.Initializing;
 
 			Initialize();
