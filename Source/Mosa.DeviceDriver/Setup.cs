@@ -31,15 +31,15 @@ namespace Mosa.DeviceDriver
 				Factory = delegate { return new ISA.StandardKeyboard(); }
 			});
 
-			registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
-			{
-				Name = "PCIController",
-				Platforms = PlatformArchitecture.X86AndX64,
-				AutoLoad = true,
-				BasePort = 0x0CF8,
-				PortRange = 8,
-				Factory = delegate { return new ISA.PCIController(); }
-			});
+			//registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
+			//{
+			//	Name = "PCIController",
+			//	Platforms = PlatformArchitecture.X86AndX64,
+			//	AutoLoad = true,
+			//	BasePort = 0x0CF8,
+			//	PortRange = 8,
+			//	Factory = delegate { return new ISA.PCIController(); }
+			//});
 
 			registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
 			{
@@ -65,6 +65,15 @@ namespace Mosa.DeviceDriver
 			//	ForceOption = "ide2",
 			//	Factory = delegate { return new ISA.IDEController(); }
 			//});
+		}
+
+		public static void Start()
+		{
+			var deviceDriver = new X86System();
+
+			DeviceSystem.Setup.DeviceManager.Initialize(deviceDriver, null);
+
+			deviceDriver.Start();
 		}
 	}
 }

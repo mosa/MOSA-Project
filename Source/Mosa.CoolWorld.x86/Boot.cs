@@ -55,8 +55,10 @@ namespace Mosa.CoolWorld.x86
 			Console.WriteLine("> Registering device drivers...");
 			DeviceDriver.Setup.Register(Setup.DeviceDriverRegistry);
 
+			Console.Write("> Starting devices...");
+			DeviceDriver.Setup.Start();
+
 			Console.Write("> Probing for ISA devices...");
-			Setup.StartISADevices();
 			var isaDevices = Setup.DeviceManager.GetAllDevices();
 			Console.WriteLine("[Completed: " + isaDevices.Count.ToString() + " found]");
 
@@ -70,7 +72,8 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			Console.Write("> Probing for PCI devices...");
-			Setup.StartPCIDevices();
+
+			//Setup.StartPCIDevices();
 			var pciDevices = Setup.DeviceManager.GetDevices<DeviceSystem.PCI.IPCIDevice>(DeviceStatus.Available);
 			Console.WriteLine("[Completed: " + pciDevices.Count.ToString() + " found]");
 

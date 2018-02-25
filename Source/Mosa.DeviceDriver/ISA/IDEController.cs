@@ -68,7 +68,7 @@ namespace Mosa.DeviceDriver.ISA
 		protected SpinLock spinLock;
 
 		/// <summary>
-		/// The drives per conroller
+		/// The drives per controller
 		/// </summary>
 		public const uint DrivesPerConroller = 2; // the maximum supported
 
@@ -133,11 +133,9 @@ namespace Mosa.DeviceDriver.ISA
 		protected IOPortRead AltStatusPort;
 
 		/// <summary>
-		/// The maximun number of drives
+		/// The maximum number of drives
 		/// </summary>
-		protected uint maximunDriveCount;
-
-		//protected IRQHandler IdeIRQ;
+		public uint MaximumDriveCount { get; private set; }
 
 		public enum AddressingMode { NotSupported, LBA28, LBA48 }
 
@@ -184,7 +182,7 @@ namespace Mosa.DeviceDriver.ISA
 			ControlPort = Device.Resources.GetIOPortWrite(1, 0);
 			AltStatusPort = Device.Resources.GetIOPortReadWrite(1, 6);
 
-			maximunDriveCount = 2;
+			MaximumDriveCount = 2;
 
 			for (var drive = 0; drive < DrivesPerConroller; drive++)
 			{
@@ -199,22 +197,29 @@ namespace Mosa.DeviceDriver.ISA
 
 			var found = LBALowPort.Read8() == 0x88;
 
-			Device.Status = (found) ? DeviceStatus.Available : Device.Status = DeviceStatus.NotFound;
+			Device.Status = found ? DeviceStatus.Available : DeviceStatus.NotFound;
+
+			//Start();    //temp
 		}
 
 		public override void Start()
 		{
+			HAL.DebugWriteLine("B2");
 			if (Device.Status != DeviceStatus.Available)
 			{
 				return;
 			}
 
+			HAL.DebugWriteLine("B3");
+
 			ControlPort.Write8(0);
 
-			for (byte drive = 0; drive < maximunDriveCount; drive++)
+			for (byte drive = 0; drive < MaximumDriveCount; drive++)
 			{
 				DoIdentifyDrive(drive);
 			}
+
+			Device.Status = DeviceStatus.Online;
 		}
 
 		private void DoIdentifyDrive(byte index)
@@ -347,7 +352,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		bool IDiskControllerDevice.Open(uint drive)
 		{
-			if (drive >= maximunDriveCount || !driveInfo[drive].Present)
+			if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
 				return false;
 
 			if (!driveInfo[drive].Present)
@@ -369,7 +374,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		protected bool PerformLBA28(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
 		{
-			if (drive >= maximunDriveCount || !driveInfo[drive].Present)
+			if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
 				return false;
 
 			DeviceHeadPort.Write8((byte)(0xE0 | (drive << 4) | ((lba >> 24) & 0x0F)));
@@ -396,7 +401,7 @@ namespace Mosa.DeviceDriver.ISA
 			}
 			else
 			{
-				//NOTE: Transfering 16bits at a time seems to fail(?) to write each second 16bits - transfering 32bits seems to fix this (???)
+				//NOTE: Transferring 16bits at a time seems to fail(?) to write each second 16bits - transferring 32bits seems to fix this (???)
 				for (uint index = 0; index < 128; index++)
 				{
 					DataPort.Write32(sector.GetUInt(offset + (index * 4)));
@@ -420,7 +425,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		protected bool PerformLBA48(SectorOperation operation, uint drive, uint lba, byte[] data, uint offset)
 		{
-			if (drive >= maximunDriveCount || !driveInfo[drive].Present)
+			if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
 				return false;
 
 			DeviceHeadPort.Write8((byte)(0x40 | (drive << 4)));
@@ -481,7 +486,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// Gets the maximum drive count.
 		/// </summary>
 		/// <value>The drive count.</value>
-		uint IDiskControllerDevice.MaximunDriveCount => maximunDriveCount;
+		uint IDiskControllerDevice.MaximunDriveCount => MaximumDriveCount;
 
 		/// <summary>
 		/// Gets the size of the sector.
@@ -497,7 +502,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		uint IDiskControllerDevice.GetTotalSectors(uint drive)
 		{
-			if (drive >= maximunDriveCount || !driveInfo[drive].Present)
+			if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
 				return 0;
 
 			return driveInfo[drive].MaxLBA;
@@ -526,7 +531,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		bool IDiskControllerDevice.ReadBlock(uint drive, uint block, uint count, byte[] data)
 		{
-			if (drive >= maximunDriveCount || !driveInfo[drive].Present)
+			if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
 				return false;
 
 			if (data.Length < count * 512)
@@ -568,7 +573,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		bool IDiskControllerDevice.WriteBlock(uint drive, uint block, uint count, byte[] data)
 		{
-			if (drive >= maximunDriveCount || !driveInfo[drive].Present)
+			if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
 				return false;
 
 			if (data.Length < count * 512)

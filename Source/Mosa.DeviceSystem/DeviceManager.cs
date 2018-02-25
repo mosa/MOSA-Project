@@ -27,7 +27,7 @@ namespace Mosa.DeviceSystem
 			devices = new List<Device>();
 		}
 
-		public BaseDeviceDriver Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, BaseDeviceConfiguration configuration, HardwareResources resources)
+		public BaseDeviceDriver Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, BaseDeviceConfiguration configuration = null, HardwareResources resources = null)
 		{
 			var deviceDriver = deviceDriverRegistryEntry.Factory();
 
@@ -36,7 +36,7 @@ namespace Mosa.DeviceSystem
 			return deviceDriver;
 		}
 
-		public void Initialize(BaseDeviceDriver deviceDriver, Device parent, BaseDeviceConfiguration configuration, HardwareResources resources, DeviceDriverRegistryEntry deviceDriverRegistryEntry)
+		public void Initialize(BaseDeviceDriver deviceDriver, Device parent, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null)
 		{
 			var device = new Device()
 			{

@@ -31,11 +31,16 @@ namespace Mosa.DeviceSystem
 		private void CreateDiskDevices(Device diskControllerDevice)
 		{
 			var controller = diskControllerDevice.DeviceDriver as IDiskControllerDevice;
+			HAL.DebugWriteLine("A");
 
 			for (uint drive = 0; drive < controller.MaximunDriveCount; drive++)
 			{
+				HAL.DebugWriteLine("B");
+
 				if (controller.Open(drive))
 				{
+					HAL.DebugWriteLine("C");
+
 					if (controller.GetTotalSectors(drive) == 0)
 						continue;
 
@@ -57,12 +62,16 @@ namespace Mosa.DeviceSystem
 		{
 			// FIXME: Do not create disk devices if this method executed more than once
 
+			HAL.DebugWriteLine("A1");
+
 			// Find disk controller devices
 			var controllers = deviceManager.GetDevices<IDiskControllerDevice>(DeviceStatus.Online);
 
 			// For each controller
 			foreach (var controller in controllers)
 			{
+				HAL.DebugWriteLine("A2");
+
 				// Create disk devices
 				CreateDiskDevices(controller);
 			}
