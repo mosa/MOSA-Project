@@ -33,10 +33,10 @@ namespace Mosa.DeviceDriver.ISA
 
 		public override bool OnInterrupt() => true;
 
-		protected static void StartISADevices()
+		protected void StartISADevices()
 		{
 			// Start ISA Drivers
-			var drivers = Mosa.DeviceSystem.Setup.DeviceDriverRegistry.GetDeviceDrivers(DeviceBusType.ISA);
+			var drivers = DeviceManager.GetDeviceDrivers(DeviceBusType.ISA);
 
 			foreach (var driver in drivers)
 			{
@@ -47,7 +47,7 @@ namespace Mosa.DeviceDriver.ISA
 			}
 		}
 
-		protected static void StartISADevice(ISADeviceDriverRegistryEntry driverEntry)
+		protected void StartISADevice(ISADeviceDriverRegistryEntry driverEntry)
 		{
 			var ioPortRegions = new List<IOPortRegion>();
 			var memoryRegions = new List<MemoryRegion>();
@@ -64,7 +64,7 @@ namespace Mosa.DeviceDriver.ISA
 				memoryRegions.Add(new MemoryRegion(driverEntry.BaseAddress, driverEntry.AddressRange));
 			}
 
-			//if (driver.PhysicalMemory != null)
+			//if (driverEntry.PhysicalMemory != null)
 			//{
 			//	foreach (var physicalMemory in driver.PhysicalMemory)
 			//	{
@@ -79,9 +79,9 @@ namespace Mosa.DeviceDriver.ISA
 
 			//var interruptHandler = (driverEntry.IRQ != 0) ? new InterruptHandler(InterruptManager, driverEntry.IRQ, deviceDriver as IHardwareDevice) : null;
 
-			var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, null);
+			var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions);
 
-			var deviceDriver = Mosa.DeviceSystem.Setup.DeviceManager.Initialize(driverEntry, null, null, hardwareResources);
+			var deviceDriver = DeviceManager.Initialize(driverEntry, null, null, hardwareResources);
 		}
 	}
 }

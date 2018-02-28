@@ -43,15 +43,16 @@ namespace Mosa.DeviceSystem
 
 		protected override void Initialize()
 		{
-			diskDevice = Device.Parent.DeviceDriver as IDiskDevice;
-
 			var configuration = Device.Configuration as DiskPartitionConfiguration;
 
 			StartBlock = configuration.StartLBA;
 			BlockCount = configuration.TotalBlocks;
 			ReadOnly = configuration.ReadOnly;
 
+			diskDevice = Device.Parent.DeviceDriver as IDiskDevice;
 			BlockSize = diskDevice.BlockSize;
+
+			Device.SubComponentID = StartBlock;
 
 			if (StartBlock == 0)
 				Device.Name = Device.Parent.Name + "/Raw";

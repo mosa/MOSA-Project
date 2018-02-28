@@ -15,7 +15,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// The drive NBR
 		/// </summary>
-		private uint driveNbr;
+		private uint DriveNbr;
 
 		/// <summary>
 		/// The total sectors
@@ -43,17 +43,18 @@ namespace Mosa.DeviceSystem
 		/// Gets the size of the block.
 		/// </summary>
 		/// <value>The size of the block.</value>
-		public uint BlockSize { get { return diskController.GetSectorSize(driveNbr); } }
+		public uint BlockSize { get { return diskController.GetSectorSize(DriveNbr); } }
 
 		protected override void Initialize()
 		{
-			Device.Name = Device.Parent.Name + "/Disk" + driveNbr.ToString();
-			Device.Status = DeviceStatus.Initializing;
-
 			var configuration = Device.Configuration as DiskDeviceConfiguration;
 
-			driveNbr = configuration.DriveNbr;
+			DriveNbr = configuration.DriveNbr;
 			readOnly = configuration.ReadOnly;
+
+			Device.Status = DeviceStatus.Initializing;
+			Device.SubComponentID = DriveNbr;
+			Device.Name = Device.Parent.Name + "/Disk" + DriveNbr.ToString();
 
 			diskController = Device.Parent.DeviceDriver as IDiskControllerDevice;
 
@@ -73,10 +74,10 @@ namespace Mosa.DeviceSystem
 			if (Device.Status != DeviceStatus.Available)
 				return;
 
-			totalSectors = diskController.GetTotalSectors(driveNbr);
+			totalSectors = diskController.GetTotalSectors(DriveNbr);
 
 			if (!readOnly)
-				readOnly = diskController.CanWrite(driveNbr);
+				readOnly = diskController.CanWrite(DriveNbr);
 
 			Device.Status = DeviceStatus.Online;
 		}
@@ -92,7 +93,7 @@ namespace Mosa.DeviceSystem
 		public byte[] ReadBlock(uint block, uint count)
 		{
 			var data = new byte[count * BlockSize];
-			diskController.ReadBlock(driveNbr, block, count, data);
+			diskController.ReadBlock(DriveNbr, block, count, data);
 			return data;
 		}
 
@@ -105,7 +106,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool ReadBlock(uint block, uint count, byte[] data)
 		{
-			return diskController.ReadBlock(driveNbr, block, count, data);
+			return diskController.ReadBlock(DriveNbr, block, count, data);
 		}
 
 		/// <summary>
@@ -117,7 +118,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool WriteBlock(uint block, uint count, byte[] data)
 		{
-			return diskController.WriteBlock(driveNbr, block, count, data);
+			return diskController.WriteBlock(DriveNbr, block, count, data);
 		}
 	}
 }

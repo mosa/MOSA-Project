@@ -9,6 +9,8 @@ namespace Mosa.DeviceSystem
 	{
 		protected Device Device;
 
+		protected DeviceManager DeviceManager { get { return Device.DeviceManager; } }
+
 		/// <summary>
 		/// Sets up the this device.
 		/// </summary>

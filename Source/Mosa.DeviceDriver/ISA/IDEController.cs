@@ -168,6 +168,7 @@ namespace Mosa.DeviceDriver.ISA
 		protected override void Initialize()
 		{
 			Device.Name = "IDE_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
+			Device.SubComponentID = Device.Resources.GetIOPortRegion(0).BaseIOPort;
 
 			DataPort = Device.Resources.GetIOPortReadWrite(0, 0);
 			ErrorPort = Device.Resources.GetIOPortReadWrite(0, 1);
@@ -205,10 +206,9 @@ namespace Mosa.DeviceDriver.ISA
 		public override void Start()
 		{
 			HAL.DebugWriteLine("B2");
+
 			if (Device.Status != DeviceStatus.Available)
-			{
 				return;
-			}
 
 			HAL.DebugWriteLine("B3");
 
@@ -545,14 +545,18 @@ namespace Mosa.DeviceDriver.ISA
 					switch (driveInfo[drive].AddressingMode)
 					{
 						case AddressingMode.LBA28:
-							if (!PerformLBA28(SectorOperation.Read, drive, block + index, data, index * 512))
-								return false;
-							break;
+							{
+								if (!PerformLBA28(SectorOperation.Read, drive, block + index, data, index * 512))
+									return false;
+								break;
+							}
 
 						case AddressingMode.LBA48:
-							if (!PerformLBA48(SectorOperation.Read, drive, block + index, data, index * 512))
-								return false;
-							break;
+							{
+								if (!PerformLBA48(SectorOperation.Read, drive, block + index, data, index * 512))
+									return false;
+								break;
+							}
 					}
 				}
 				return true;

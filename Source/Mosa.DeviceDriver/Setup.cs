@@ -6,9 +6,9 @@ namespace Mosa.DeviceDriver
 {
 	public static class Setup
 	{
-		public static void Register(DeviceDriverRegistry registery)
+		public static void Register(DeviceManager deviceManager)
 		{
-			registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
+			deviceManager.RegisterDeviceDriver(new ISADeviceDriverRegistryEntry()
 			{
 				Name = "CMOS",
 				Platforms = PlatformArchitecture.X86,
@@ -18,7 +18,7 @@ namespace Mosa.DeviceDriver
 				Factory = delegate { return new ISA.CMOS(); }
 			});
 
-			registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
+			deviceManager.RegisterDeviceDriver(new ISADeviceDriverRegistryEntry()
 			{
 				Name = "StandardKeyboard",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -31,7 +31,7 @@ namespace Mosa.DeviceDriver
 				Factory = delegate { return new ISA.StandardKeyboard(); }
 			});
 
-			//registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
+			//deviceManager.RegisterDeviceDriver(new ISADeviceDriverRegistryEntry()
 			//{
 			//	Name = "PCIController",
 			//	Platforms = PlatformArchitecture.X86AndX64,
@@ -41,7 +41,7 @@ namespace Mosa.DeviceDriver
 			//	Factory = delegate { return new ISA.PCIController(); }
 			//});
 
-			registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
+			deviceManager.RegisterDeviceDriver(new ISADeviceDriverRegistryEntry()
 			{
 				Name = "IDEController",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -53,7 +53,7 @@ namespace Mosa.DeviceDriver
 				Factory = delegate { return new ISA.IDEController(); }
 			});
 
-			//registery.AddDeviceDriver(new ISADeviceDriver()
+			//deviceManager.RegisterDeviceDriver(new ISADeviceDriver()
 			//{
 			//	Name = "IDEController (Secondary)",
 			//	Platforms = PlatformArchitecture.X86AndX64,
@@ -67,11 +67,11 @@ namespace Mosa.DeviceDriver
 			//});
 		}
 
-		public static void Start()
+		public static void Start(DeviceManager deviceManager)
 		{
 			var deviceDriver = new X86System();
 
-			DeviceSystem.Setup.DeviceManager.Initialize(deviceDriver, null);
+			deviceManager.Initialize(deviceDriver, null);
 
 			deviceDriver.Start();
 		}

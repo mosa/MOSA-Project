@@ -36,5 +36,5 @@ namespace Mosa.DeviceSystem
 		ProgIF = 32,
 		ClassCode = 64,
 		SubClassCode = 128
-	};
+	}
 }
