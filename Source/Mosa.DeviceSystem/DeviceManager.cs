@@ -35,9 +35,19 @@ namespace Mosa.DeviceSystem
 		private SpinLock spinLock;
 
 		/// <summary>
+		/// The spin lock
+		/// </summary>
+		private SpinLock onChangeSpinLock;
+
+		/// <summary>
 		/// The interrupt handlers
 		/// </summary>
 		private readonly List<Device>[] irqDispatch;
+
+		/// <summary>
+		/// The mount daemons
+		/// </summary>
+		private readonly List<BaseMountDaemon> daemons;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeviceManager" /> class.
@@ -47,6 +57,7 @@ namespace Mosa.DeviceSystem
 		{
 			registry = new List<DeviceDriverRegistryEntry>();
 			devices = new List<Device>();
+			daemons = new List<BaseMountDaemon>();
 
 			irqDispatch = new List<Device>[MaxInterrupts];
 			PlatformArchitecture = platform;
@@ -97,20 +108,40 @@ namespace Mosa.DeviceSystem
 			return drivers;
 		}
 
+		public bool CheckExists(Device parent, ulong componentID)
+		{
+			try
+			{
+				spinLock.Enter();
+
+				foreach (var device in devices)
+				{
+					if (device.Parent == parent && device.ComponentID == componentID)
+					{
+						return true;
+					}
+				}
+			}
+			finally
+			{
+				spinLock.Exit();
+			}
+
+			return false;
+		}
+
 		#endregion Device Driver Registry
 
 		#region Initialize Devices Drivers
 
-		public BaseDeviceDriver Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, BaseDeviceConfiguration configuration = null, HardwareResources resources = null)
+		public Device Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, BaseDeviceConfiguration configuration = null, HardwareResources resources = null)
 		{
 			var deviceDriver = deviceDriverRegistryEntry.Factory();
 
-			Initialize(deviceDriver, parent, configuration, resources, deviceDriverRegistryEntry);
-
-			return deviceDriver;
+			return Initialize(deviceDriver, parent, configuration, resources, deviceDriverRegistryEntry);
 		}
 
-		public void Initialize(BaseDeviceDriver deviceDriver, Device parent, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null)
+		public Device Initialize(BaseDeviceDriver deviceDriver, Device parent, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null)
 		{
 			var device = new Device()
 			{
@@ -120,13 +151,14 @@ namespace Mosa.DeviceSystem
 				Parent = parent,
 				Configuration = configuration,
 				Resources = resources,
-
-				//Service = deviceDriver as IService
-
 				DeviceManager = this,
 			};
 
 			Initialize(device);
+
+			OnChange(device);
+
+			return device;
 		}
 
 		/// <summary>
@@ -145,7 +177,26 @@ namespace Mosa.DeviceSystem
 
 			spinLock.Exit();
 
+			Start(device);
+		}
+
+		private void Start(Device device)
+		{
+			device.Status = DeviceStatus.Initializing;
+
 			device.DeviceDriver.Setup(device);
+
+			device.DeviceDriver.Initialize();
+
+			if (device.Status == DeviceStatus.Initializing)
+			{
+				device.DeviceDriver.Probe();
+
+				if (device.Status == DeviceStatus.Available)
+				{
+					device.DeviceDriver.Start();
+				}
+			}
 		}
 
 		#endregion Initialize Devices Drivers
@@ -154,89 +205,114 @@ namespace Mosa.DeviceSystem
 
 		public List<Device> GetDevices<T>()
 		{
-			spinLock.Enter();
-
 			var list = new List<Device>();
 
-			foreach (var device in devices)
+			try
 			{
-				if (device.DeviceDriver is T)
+				spinLock.Enter();
+
+				foreach (var device in devices)
 				{
-					list.Add(device);
+					if (device.DeviceDriver is T)
+					{
+						list.Add(device);
+					}
 				}
 			}
-
-			spinLock.Exit();
+			finally
+			{
+				spinLock.Exit();
+			}
 
 			return list;
 		}
 
 		public List<Device> GetDevices<T>(DeviceStatus status)
 		{
-			spinLock.Enter();
-
 			var list = new List<Device>();
 
-			foreach (var device in devices)
+			try
 			{
-				if (device.Status == status && device.DeviceDriver is T)
+				spinLock.Enter();
+
+				foreach (var device in devices)
 				{
-					list.Add(device);
+					if (device.Status == status && device.DeviceDriver is T)
+					{
+						list.Add(device);
+					}
 				}
 			}
-
-			spinLock.Exit();
+			finally
+			{
+				spinLock.Exit();
+			}
 
 			return list;
 		}
 
 		public List<Device> GetDevices(string name)
 		{
-			spinLock.Enter();
-
 			var list = new List<Device>();
 
-			foreach (var device in devices)
+			try
 			{
-				if (device.Name == name)
+				spinLock.Enter();
+
+				foreach (var device in devices)
 				{
-					list.Add(device);
+					if (device.Name == name)
+					{
+						list.Add(device);
+					}
 				}
 			}
-
-			spinLock.Exit();
+			finally
+			{
+				spinLock.Exit();
+			}
 
 			return list;
 		}
 
 		public List<Device> GetChildrenOf(Device parent)
 		{
-			spinLock.Enter();
-
 			var list = new List<Device>();
 
-			foreach (var device in parent.Children)
+			try
 			{
-				list.Add(device);
-			}
+				spinLock.Enter();
 
-			spinLock.Exit();
+				foreach (var device in parent.Children)
+				{
+					list.Add(device);
+				}
+			}
+			finally
+			{
+				spinLock.Exit();
+			}
 
 			return list;
 		}
 
 		public List<Device> GetAllDevices()
 		{
-			spinLock.Enter();
-
 			var list = new List<Device>();
 
-			foreach (var device in devices)
+			try
 			{
-				list.Add(device);
-			}
+				spinLock.Enter();
 
-			spinLock.Exit();
+				foreach (var device in devices)
+				{
+					list.Add(device);
+				}
+			}
+			finally
+			{
+				spinLock.Exit();
+			}
 
 			return list;
 		}
@@ -296,5 +372,40 @@ namespace Mosa.DeviceSystem
 		}
 
 		#endregion Interrupts
+
+		#region Daemons
+
+		public void RegisterDaemon(BaseMountDaemon daemon)
+		{
+			try
+			{
+				onChangeSpinLock.Enter();
+
+				daemons.Add(daemon);
+			}
+			finally
+			{
+				onChangeSpinLock.Exit();
+			}
+		}
+
+		public void OnChange(Device device)
+		{
+			try
+			{
+				onChangeSpinLock.Enter();
+
+				foreach (var daemon in daemons)
+				{
+					daemon.OnChange(device);
+				}
+			}
+			finally
+			{
+				onChangeSpinLock.Exit();
+			}
+		}
+
+		#endregion Daemons
 	}
 }

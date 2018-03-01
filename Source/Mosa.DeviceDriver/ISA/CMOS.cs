@@ -25,23 +25,18 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		protected SpinLock spinLock;
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "CMOS";
 
 			commandPort = Device.Resources.GetIOPortReadWrite(0, 0);
 			dataPort = Device.Resources.GetIOPortReadWrite(0, 4);
-
-			Device.Status = DeviceStatus.Available;
 		}
 
 		public override void Probe() => Device.Status = DeviceStatus.Available;
 
 		public override void Start()
 		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
 			Device.Status = DeviceStatus.Online;
 		}
 

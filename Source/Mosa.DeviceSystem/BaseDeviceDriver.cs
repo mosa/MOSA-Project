@@ -19,15 +19,12 @@ namespace Mosa.DeviceSystem
 		{
 			Device = device;
 			Device.Status = DeviceStatus.Initializing;
-
-			Initialize();
-			Probe();
 		}
 
 		/// <summary>
 		/// Initializes this device.
 		/// </summary>
-		protected abstract void Initialize();
+		public abstract void Initialize();
 
 		/// <summary>
 		/// Probes this instance.

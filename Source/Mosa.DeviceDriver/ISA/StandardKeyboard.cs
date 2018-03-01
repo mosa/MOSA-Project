@@ -24,7 +24,7 @@ namespace Mosa.DeviceDriver.ISA
 
 		protected SpinLock spinLock;
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "StandardKeyboard";
 
@@ -34,15 +34,13 @@ namespace Mosa.DeviceDriver.ISA
 			fifoBuffer = new byte[fifoSize];
 			fifoStart = 0;
 			fifoEnd = 0;
-
-			Device.Status = DeviceStatus.Available;
 		}
 
 		/// <summary>
 		/// Probes this instance.
 		/// </summary>
 		/// <remarks>
-		/// Overide for ISA devices, if example
+		/// Override for ISA devices, if example
 		/// </remarks>
 		public override void Probe() => Device.Status = DeviceStatus.Available;
 
@@ -51,9 +49,6 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		public override void Start()
 		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
 			Device.Status = DeviceStatus.Online;
 		}
 

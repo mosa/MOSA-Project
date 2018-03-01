@@ -33,5 +33,7 @@ namespace Mosa.DeviceSystem
 		Error,
 
 		Offline,
+
+		Disabled,
 	}
 }

@@ -222,7 +222,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		/// </summary>
 		protected const uint FifoNumRegs = 32 + 255 + 1 + 1 + 1;
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "VMWARE_SVGA_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
@@ -230,15 +230,10 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			valuePort = Device.Resources.GetIOPortReadWrite(0, 1);
 			memory = Device.Resources.GetMemory(0);
 			fifo = Device.Resources.GetMemory(1);
-
-			Device.Status = DeviceStatus.Available;
 		}
 
 		public override void Start()
 		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
 			videoRamSize = ReadRegister(Register.VRamSize);
 			maxWidth = ReadRegister(Register.MaxWidth);
 			maxHeight = ReadRegister(Register.MaxHeight);

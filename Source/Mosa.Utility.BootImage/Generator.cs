@@ -46,6 +46,8 @@ namespace Mosa.Utility.BootImage
 
 			// Setup device -- required as part of framework in operating system
 			diskDeviceDriver.Setup(diskDevice);
+			diskDeviceDriver.Initialize();
+			diskDeviceDriver.Start();
 
 			if (options.ImageFormat == ImageFormat.VDI)
 			{
@@ -123,6 +125,8 @@ namespace Mosa.Utility.BootImage
 
 			// Setup and initialize
 			partitionDevice.Setup(device);
+			partitionDevice.Initialize();
+			partitionDevice.Start();
 
 			// Set FAT settings
 			var fatSettings = new FatSettings();

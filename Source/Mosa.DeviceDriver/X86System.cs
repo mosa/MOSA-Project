@@ -12,19 +12,15 @@ namespace Mosa.DeviceDriver
 	{
 		protected SpinLock spinLock;
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "X86System";
-			Device.Status = DeviceStatus.Available;
 		}
 
 		public override void Probe() => Device.Status = DeviceStatus.Available;
 
 		public override void Start()
 		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
 			Device.Status = DeviceStatus.Online;
 
 			CreateISABusDevices();
@@ -34,9 +30,7 @@ namespace Mosa.DeviceDriver
 
 		protected void CreateISABusDevices()
 		{
-			var deviceDriver = new ISABus();
-			DeviceManager.Initialize(deviceDriver, Device, null, null, null);
-			deviceDriver.Start();
+			DeviceManager.Initialize(new ISABus(), Device, null, null, null);
 		}
 	}
 }

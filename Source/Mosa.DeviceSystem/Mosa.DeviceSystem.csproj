@@ -109,7 +109,6 @@
     <Compile Include="NetworkDevicePacketBuffer.cs" />
     <Compile Include="INetworkDevice.cs" />
     <Compile Include="MACAddress.cs" />
-    <Compile Include="DiskControllerManager.cs" />
     <Compile Include="GUIDPartitionTable.cs" />
     <Compile Include="PartitionType.cs" />
     <Compile Include="DiskGeometry.cs" />

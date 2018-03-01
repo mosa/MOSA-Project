@@ -45,15 +45,14 @@ namespace Mosa.DeviceSystem
 		/// <value>The size of the block.</value>
 		public uint BlockSize { get { return diskController.GetSectorSize(DriveNbr); } }
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			var configuration = Device.Configuration as DiskDeviceConfiguration;
 
 			DriveNbr = configuration.DriveNbr;
 			readOnly = configuration.ReadOnly;
 
-			Device.Status = DeviceStatus.Initializing;
-			Device.SubComponentID = DriveNbr;
+			Device.ComponentID = DriveNbr;
 			Device.Name = Device.Parent.Name + "/Disk" + DriveNbr.ToString();
 
 			diskController = Device.Parent.DeviceDriver as IDiskControllerDevice;
@@ -63,17 +62,12 @@ namespace Mosa.DeviceSystem
 				Device.Status = DeviceStatus.Error;
 				return;
 			}
-
-			Device.Status = DeviceStatus.Available;
 		}
 
 		public override void Probe() => Device.Status = DeviceStatus.Available;
 
 		public override void Start()
 		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
 			totalSectors = diskController.GetTotalSectors(DriveNbr);
 
 			if (!readOnly)

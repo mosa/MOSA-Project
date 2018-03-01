@@ -40,7 +40,7 @@ namespace Mosa.DeviceDriver.ISA
 
 		protected byte slaveInterruptMask;
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "PIC_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
@@ -55,9 +55,6 @@ namespace Mosa.DeviceDriver.ISA
 
 		public override void Start()
 		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
 			Device.Status = DeviceStatus.Online;
 
 			byte masterMask;

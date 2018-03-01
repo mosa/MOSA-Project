@@ -7,18 +7,17 @@ namespace Mosa.DeviceSystem
 		public static DeviceManager Initialize(PlatformArchitecture platform, BaseHardwareAbstraction hardware)
 		{
 			// Create Device Manager
-			var DeviceManager = new DeviceManager(platform);
+			var deviceManager = new DeviceManager(platform);
 
-			// Create the PCI Controller Manager
-			//PCIControllerManager = new PCIControllerManager(DeviceManager);
+			deviceManager.RegisterDaemon(new DiskDeviceMountDeamon());
 
 			// Set device driver system to the hardware HAL
 			HAL.SetHardwareAbstraction(hardware);
 
 			// Set the interrupt handler
-			HAL.SetInterruptHandler(DeviceManager.ProcessInterrupt);
+			HAL.SetInterruptHandler(deviceManager.ProcessInterrupt);
 
-			return DeviceManager;
+			return deviceManager;
 		}
 	}
 }

@@ -100,9 +100,6 @@ namespace Mosa.CoolWorld.x86
 				Console.WriteLine();
 			}
 
-			var diskcontroller = new DiskControllerManager(DeviceManager);
-			diskcontroller.CreateDiskDevices();
-
 			Console.Write("> Probing for disks...");
 			var disks = DeviceManager.GetDevices<IDiskDevice>();
 			Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");

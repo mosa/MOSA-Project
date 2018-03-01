@@ -69,11 +69,7 @@ namespace Mosa.DeviceDriver
 
 		public static void Start(DeviceManager deviceManager)
 		{
-			var deviceDriver = new X86System();
-
-			deviceManager.Initialize(deviceDriver, null);
-
-			deviceDriver.Start();
+			deviceManager.Initialize(new X86System(), null);
 		}
 	}
 }

@@ -28,8 +28,12 @@ namespace Mosa.Workspace.FileSystem.Debug
 			// Create synthetic ram disk device
 			var ramDiskDevice = new RamDiskDevice(1024 * 1024 * 10 / 512);
 
+			var ramDevice = new Device() { DeviceDriver = ramDiskDevice };
+
 			// Setup device -- required as part of framework in operating system
-			ramDiskDevice.Setup(new Device() { DeviceDriver = ramDiskDevice });
+			ramDiskDevice.Setup(ramDevice);
+			ramDiskDevice.Initialize();
+			ramDiskDevice.Start();
 
 			// Create master boot block record
 			var mbr = new MasterBootBlock(ramDiskDevice)
@@ -64,6 +68,8 @@ namespace Mosa.Workspace.FileSystem.Debug
 
 			// Setup and initialize
 			partitionDevice.Setup(device);
+			partitionDevice.Initialize();
+			partitionDevice.Start();
 
 			// Set FAT settings
 			var fatSettings = new FatSettings();

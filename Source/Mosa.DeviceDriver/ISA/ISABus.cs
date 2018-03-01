@@ -12,20 +12,15 @@ namespace Mosa.DeviceDriver.ISA
 	{
 		protected SpinLock spinLock;
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "ISA-BUS";
-
-			Device.Status = DeviceStatus.Available;
 		}
 
 		public override void Probe() => Device.Status = DeviceStatus.Available;
 
 		public override void Start()
 		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
 			Device.Status = DeviceStatus.Online;
 
 			StartISADevices();
@@ -81,7 +76,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions);
 
-			var deviceDriver = DeviceManager.Initialize(driverEntry, null, null, hardwareResources);
+			DeviceManager.Initialize(driverEntry, null, null, hardwareResources);
 		}
 	}
 }

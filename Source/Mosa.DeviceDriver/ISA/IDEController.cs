@@ -165,10 +165,10 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		protected DriveInfo[] driveInfo = new DriveInfo[DrivesPerConroller];
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "IDE_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
-			Device.SubComponentID = Device.Resources.GetIOPortRegion(0).BaseIOPort;
+			Device.ComponentID = Device.Resources.GetIOPortRegion(0).BaseIOPort;
 
 			DataPort = Device.Resources.GetIOPortReadWrite(0, 0);
 			ErrorPort = Device.Resources.GetIOPortReadWrite(0, 1);
@@ -198,20 +198,14 @@ namespace Mosa.DeviceDriver.ISA
 
 			var found = LBALowPort.Read8() == 0x88;
 
-			Device.Status = found ? DeviceStatus.Available : DeviceStatus.NotFound;
-
-			//Start();    //temp
+			if (!found)
+			{
+				Device.Status = DeviceStatus.NotFound;
+			}
 		}
 
 		public override void Start()
 		{
-			HAL.DebugWriteLine("B2");
-
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
-			HAL.DebugWriteLine("B3");
-
 			ControlPort.Write8(0);
 
 			for (byte drive = 0; drive < MaximumDriveCount; drive++)
@@ -352,10 +346,9 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		bool IDiskControllerDevice.Open(uint drive)
 		{
-			if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
-				return false;
+			HAL.DebugWriteLine("Open()" + drive.ToString() + " : " + MaximumDriveCount.ToString() + " : " + (driveInfo[drive].Present ? "Y" : "N"));
 
-			if (!driveInfo[drive].Present)
+			if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
 				return false;
 
 			return true;

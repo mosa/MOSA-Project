@@ -40,19 +40,15 @@ namespace Mosa.Workspace.FileSystem.Debug.Synthetic
 			mem = new byte[blocks * 512];
 		}
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "RamDiskDevice_" + ((TotalBlocks * 512) / (1024 * 1024)).ToString() + "Mb";
-			Device.Status = DeviceStatus.Available;
 		}
 
 		public override void Probe() => Device.Status = DeviceStatus.Available;
 
 		public override void Start()
 		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
 			Device.Status = DeviceStatus.Online;
 		}
 

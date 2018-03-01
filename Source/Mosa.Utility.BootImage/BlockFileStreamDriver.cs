@@ -34,19 +34,15 @@ namespace Mosa.Utility.BootImage
 			diskFile = new FileStream(Filename, FileMode.OpenOrCreate);
 		}
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "DiskDevice_" + Path.GetFileName(Filename);
-			Device.Status = DeviceStatus.Available;
 		}
 
 		public override void Probe() => Device.Status = DeviceStatus.Available;
 
 		public override void Start()
 		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
 			Device.Status = DeviceStatus.Online;
 		}
 

@@ -189,7 +189,7 @@ namespace Mosa.DeviceSystem.PCI
 
 		#endregion Properties
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			pciController = base.Device.Parent as IPCIController;
 
@@ -200,7 +200,6 @@ namespace Mosa.DeviceSystem.PCI
 			Function = configuration.Function;
 
 			Device.Name = Device.Parent.Name + "/" + Bus.ToString() + "." + Slot.ToString() + "." + Function.ToString();
-			Device.Status = DeviceStatus.Available;
 
 			ioPortRegionCount = memoryRegionCount = 0;
 			BaseAddresses = new BaseAddress[8];
@@ -254,11 +253,6 @@ namespace Mosa.DeviceSystem.PCI
 
 		public override void Start()
 		{
-			// TODO
-
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
 			Device.Status = DeviceStatus.Online;
 		}
 

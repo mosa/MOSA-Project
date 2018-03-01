@@ -31,7 +31,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		protected IOPortReadWrite configData;
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "PCI_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
@@ -49,7 +49,10 @@ namespace Mosa.DeviceDriver.ISA
 
 			var found = configAddress.Read32() == BaseValue;
 
-			Device.Status = found ? DeviceStatus.Available : Device.Status = DeviceStatus.NotFound;
+			if (!found)
+			{
+				Device.Status = DeviceStatus.NotFound;
+			}
 		}
 
 		public override void Start()

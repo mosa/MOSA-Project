@@ -21,7 +21,7 @@ namespace Mosa.DeviceSystem
 		public HardwareResources Resources { get; set; }
 		public BaseDeviceConfiguration Configuration { get; set; }
 
-		public ulong SubComponentID { get; set; }
+		public ulong ComponentID { get; set; }
 
 		public DeviceDriverRegistryEntry DeviceDriverRegistryEntry { get; set; }
 		public DeviceManager DeviceManager { get; internal set; }

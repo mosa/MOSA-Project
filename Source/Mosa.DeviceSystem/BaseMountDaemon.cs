@@ -4,6 +4,6 @@ namespace Mosa.DeviceSystem
 {
 	public abstract class BaseMountDaemon
 	{
-		public abstract void OnChange();
+		public abstract void OnChange(Device device);
 	}
 }

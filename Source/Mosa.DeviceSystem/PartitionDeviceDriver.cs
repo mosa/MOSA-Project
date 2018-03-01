@@ -41,7 +41,7 @@ namespace Mosa.DeviceSystem
 		/// <value><c>true</c> if this instance can write; otherwise, <c>false</c>.</value>
 		public bool CanWrite { get { return !ReadOnly; } }
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			var configuration = Device.Configuration as DiskPartitionConfiguration;
 
@@ -52,7 +52,7 @@ namespace Mosa.DeviceSystem
 			diskDevice = Device.Parent.DeviceDriver as IDiskDevice;
 			BlockSize = diskDevice.BlockSize;
 
-			Device.SubComponentID = StartBlock;
+			Device.ComponentID = StartBlock;
 
 			if (StartBlock == 0)
 				Device.Name = Device.Parent.Name + "/Raw";
@@ -64,9 +64,6 @@ namespace Mosa.DeviceSystem
 
 		public override void Start()
 		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
 			Device.Status = DeviceStatus.Online;
 		}
 
