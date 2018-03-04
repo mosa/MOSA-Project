@@ -60,7 +60,6 @@ namespace Mosa.DeviceSystem
 			if (diskController == null)
 			{
 				Device.Status = DeviceStatus.Error;
-				return;
 			}
 		}
 
@@ -71,7 +70,7 @@ namespace Mosa.DeviceSystem
 			totalSectors = diskController.GetTotalSectors(DriveNbr);
 
 			if (!readOnly)
-				readOnly = diskController.CanWrite(DriveNbr);
+				readOnly = !diskController.CanWrite(DriveNbr);
 
 			Device.Status = DeviceStatus.Online;
 		}

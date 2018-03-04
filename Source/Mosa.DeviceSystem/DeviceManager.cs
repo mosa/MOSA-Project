@@ -50,6 +50,11 @@ namespace Mosa.DeviceSystem
 		private readonly List<BaseMountDaemon> daemons;
 
 		/// <summary>
+		/// The pending on change
+		/// </summary>
+		private readonly List<Device> pendingOnChange;
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="DeviceManager" /> class.
 		/// </summary>
 		/// <param name="platform">The platform.</param>
@@ -58,6 +63,7 @@ namespace Mosa.DeviceSystem
 			registry = new List<DeviceDriverRegistryEntry>();
 			devices = new List<Device>();
 			daemons = new List<BaseMountDaemon>();
+			pendingOnChange = new List<Device>();
 
 			irqDispatch = new List<Device>[MaxInterrupts];
 			PlatformArchitecture = platform;
@@ -108,28 +114,6 @@ namespace Mosa.DeviceSystem
 			return drivers;
 		}
 
-		public bool CheckExists(Device parent, ulong componentID)
-		{
-			try
-			{
-				spinLock.Enter();
-
-				foreach (var device in devices)
-				{
-					if (device.Parent == parent && device.ComponentID == componentID)
-					{
-						return true;
-					}
-				}
-			}
-			finally
-			{
-				spinLock.Exit();
-			}
-
-			return false;
-		}
-
 		#endregion Device Driver Registry
 
 		#region Initialize Devices Drivers
@@ -152,11 +136,15 @@ namespace Mosa.DeviceSystem
 				Configuration = configuration,
 				Resources = resources,
 				DeviceManager = this,
+
+				//Name = string.Empty,
 			};
 
-			Initialize(device);
+			StartDevice(device);
 
-			OnChange(device);
+			OnChangeNotification(device);
+
+			ProcessOnChangeNotifications();
 
 			return device;
 		}
@@ -165,38 +153,45 @@ namespace Mosa.DeviceSystem
 		/// Adds the specified device.
 		/// </summary>
 		/// <param name="device">The device.</param>
-		private void Initialize(Device device)
+		private void StartDevice(Device device)
 		{
-			spinLock.Enter();
-			devices.Add(device);
+			//HAL.DebugWriteLine("DeviceManger:StartDevice():Enter");
 
-			if (device.Parent != null)
+			try
 			{
-				device.Parent.Children.Add(device);
+				spinLock.Enter();
+				devices.Add(device);
+
+				if (device.Parent != null)
+				{
+					device.Parent.Children.Add(device);
+				}
+			}
+			finally
+			{
+				spinLock.Exit();
 			}
 
-			spinLock.Exit();
-
-			Start(device);
-		}
-
-		private void Start(Device device)
-		{
 			device.Status = DeviceStatus.Initializing;
 
 			device.DeviceDriver.Setup(device);
 
-			device.DeviceDriver.Initialize();
-
 			if (device.Status == DeviceStatus.Initializing)
 			{
-				device.DeviceDriver.Probe();
+				device.DeviceDriver.Initialize();
 
-				if (device.Status == DeviceStatus.Available)
+				if (device.Status == DeviceStatus.Initializing)
 				{
-					device.DeviceDriver.Start();
+					device.DeviceDriver.Probe();
+
+					if (device.Status == DeviceStatus.Available)
+					{
+						device.DeviceDriver.Start();
+					}
 				}
 			}
+
+			//HAL.DebugWriteLine("DeviceManger:StartDevice():Exit");
 		}
 
 		#endregion Initialize Devices Drivers
@@ -317,6 +312,28 @@ namespace Mosa.DeviceSystem
 			return list;
 		}
 
+		public bool CheckExists(Device parent, ulong componentID)
+		{
+			try
+			{
+				spinLock.Enter();
+
+				foreach (var device in devices)
+				{
+					if (device.Parent == parent && device.ComponentID == componentID)
+					{
+						return true;
+					}
+				}
+			}
+			finally
+			{
+				spinLock.Exit();
+			}
+
+			return false;
+		}
+
 		#endregion Get Devices
 
 		#region Interrupts
@@ -379,31 +396,77 @@ namespace Mosa.DeviceSystem
 		{
 			try
 			{
-				onChangeSpinLock.Enter();
+				spinLock.Enter();
 
 				daemons.Add(daemon);
 			}
 			finally
 			{
-				onChangeSpinLock.Exit();
+				spinLock.Exit();
 			}
 		}
 
-		public void OnChange(Device device)
+		public void OnChangeNotification(Device device)
+		{
+			//HAL.DebugWriteLine("OnChangeNotification:OnChange():Enter");
+
+			if (device == null)
+				return;
+
+			try
+			{
+				spinLock.Enter();
+
+				//if (pendingOnChange.Contains(device))
+				//	return;
+
+				pendingOnChange.Add(device);
+			}
+			finally
+			{
+				spinLock.Exit();
+			}
+
+			//HAL.DebugWriteLine("OnChangeNotification:OnChange():Exit");
+
+			ProcessOnChangeNotifications();
+		}
+
+		private Device GetPendingOnChangeNotification()
 		{
 			try
 			{
-				onChangeSpinLock.Enter();
+				spinLock.Enter();
 
+				if (pendingOnChange.Count == 0)
+					return null;
+
+				var device = pendingOnChange[0];
+				pendingOnChange.RemoveAt(0);
+
+				return device;
+			}
+			finally
+			{
+				spinLock.Exit();
+			}
+		}
+
+		private void ProcessOnChangeNotifications()
+		{
+			//HAL.DebugWriteLine("DeviceManger:ProcessOnChangeNotifications():Enter");
+
+			var device = GetPendingOnChangeNotification();
+
+			if (device != null)
+			{
 				foreach (var daemon in daemons)
 				{
 					daemon.OnChange(device);
 				}
 			}
-			finally
-			{
-				onChangeSpinLock.Exit();
-			}
+
+			//HAL.DebugWriteLine("DeviceManger:ProcessOnChangeNotifications():Exit");
 		}
 
 		#endregion Daemons

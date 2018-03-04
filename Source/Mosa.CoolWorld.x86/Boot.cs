@@ -109,9 +109,11 @@ namespace Mosa.CoolWorld.x86
 				Bullet(Kernel.x86.Color.Yellow);
 				Console.Write(" ");
 				InBrackets(disk.Name, Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
-				Console.Write(" " + (disk as IDiskDevice).TotalBlocks.ToString() + " blocks");
+				Console.Write(" " + (disk.DeviceDriver as IDiskDevice).TotalBlocks.ToString() + " blocks");
 				Console.WriteLine();
 			}
+
+			//ForeverLoop();
 
 			var partitionManager = new PartitionManager(DeviceManager);
 			partitionManager.CreatePartitionDevices();
@@ -125,9 +127,11 @@ namespace Mosa.CoolWorld.x86
 				Bullet(Kernel.x86.Color.Yellow);
 				Console.Write(" ");
 				InBrackets(partition.Name, Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
-				Console.Write(" " + (partition as IPartitionDevice).BlockCount.ToString() + " blocks");
+				Console.Write(" " + (partition.DeviceDriver as IPartitionDevice).BlockCount.ToString() + " blocks");
 				Console.WriteLine();
 			}
+
+			ForeverLoop();
 
 			Console.Write("> Finding file systems...");
 

@@ -30,9 +30,9 @@ namespace Mosa.DeviceSystem
 					ReadOnly = false
 				};
 
-				HAL.DebugWriteLine("DiskDeviceMountDeamon::OnChange()-5");
-
 				devicemanager.Initialize(new DiskDeviceDriver(), device, configuration);
+
+				//HAL.DebugWriteLine("DiskDeviceMountDeamon::OnChange():Exit");
 			}
 		}
 	}

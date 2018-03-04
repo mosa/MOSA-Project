@@ -124,12 +124,12 @@ namespace Mosa.Tool.Launcher
 					}
 					catch (Exception e)
 					{
-						throw new Exception("An error occured while parsing VBE Mode: " + e.Message);
+						throw new Exception("An error occurred while parsing VBE Mode: " + e.Message);
 					}
 				}
 				else
 				{
-					throw new Exception("An error occured while parsing VBE Mode: There wasn't 3 arguments");
+					throw new Exception("An error occurred while parsing VBE Mode: There wasn't 3 arguments");
 				}
 			}
 

@@ -198,10 +198,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			var found = LBALowPort.Read8() == 0x88;
 
-			if (!found)
-			{
-				Device.Status = DeviceStatus.NotFound;
-			}
+			Device.Status = (found) ? DeviceStatus.Available : DeviceStatus.NotFound;
 		}
 
 		public override void Start()
@@ -218,8 +215,6 @@ namespace Mosa.DeviceDriver.ISA
 
 		private void DoIdentifyDrive(byte index)
 		{
-			//HAL.DebugWriteLine("Device " + index.ToString() + " ID...");
-
 			driveInfo[index].Present = false;
 
 			//Send the identify command to the selected drive
@@ -232,29 +227,27 @@ namespace Mosa.DeviceDriver.ISA
 
 			if (StatusPort.Read8() == 0)
 			{
-				//HAL.DebugWriteLine("Device " + index.ToString() + " doesn't exist...");
-
 				//Drive doesn't exist
 				return;
 			}
 
 			//Wait until a ready status is present
 			if (!WaitForReadyStatus())
+			{
 				return; //There's no ready status, this drive doesn't exist
+			}
 
 			if (LBAMidPort.Read8() != 0 && LBAHighPort.Read8() != 0) //Check if the drive is ATA
 			{
 				//In this case the drive is ATAPI
-
-				HAL.DebugWriteLine("Device " + index.ToString() + " not ATA");
-
+				//HAL.DebugWriteLine("Device " + index.ToString() + " not ATA");
 				return;
 			}
 
 			//Wait until the identify data is present (256x16 bits)
 			if (!WaitForIdentifyData())
 			{
-				HAL.DebugWriteLine("Device " + index.ToString() + " ID error");
+				//HAL.DebugWriteLine("Device " + index.ToString() + " ID error");
 				return;
 			}
 
@@ -285,7 +278,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			driveInfo[index].AddressingMode = aMode;
 
-			HAL.DebugWriteLine("Device " + index.ToString() + " present - MaxLBA=" + driveInfo[index].MaxLBA.ToString());
+			//HAL.DebugWriteLine("Device " + index.ToString() + " present - MaxLBA=" + driveInfo[index].MaxLBA.ToString());
 		}
 
 		/// <summary>
@@ -346,7 +339,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		bool IDiskControllerDevice.Open(uint drive)
 		{
-			HAL.DebugWriteLine("Open()" + drive.ToString() + " : " + MaximumDriveCount.ToString() + " : " + (driveInfo[drive].Present ? "Y" : "N"));
+			//HAL.DebugWriteLine("Open()" + drive.ToString() + " : " + MaximumDriveCount.ToString() + " : " + (driveInfo[drive].Present ? "Y" : "N"));
 
 			if (drive >= MaximumDriveCount || !driveInfo[drive].Present)
 				return false;
@@ -510,7 +503,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// </returns>
 		bool IDiskControllerDevice.CanWrite(uint drive)
 		{
-			//todo
+			// TODO
 			return true;
 		}
 
