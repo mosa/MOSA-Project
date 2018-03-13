@@ -9,13 +9,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal sealed class Remainder : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var result = context.Result;
@@ -45,7 +38,5 @@ namespace Mosa.Platform.x86.Intrinsic
 				context.AppendInstruction(X86.Subss, result, dividend, xmm3);
 			}
 		}
-
-		#endregion Methods
 	}
 }

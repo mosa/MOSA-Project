@@ -10,18 +10,9 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal class GetMethodLookupTable : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(IRInstruction.MoveInteger32, context.Result, Operand.CreateUnmanagedSymbolPointer(Metadata.MethodLookupTable, methodCompiler.TypeSystem));
 		}
-
-		#endregion Methods
 	}
 }

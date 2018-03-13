@@ -115,7 +115,7 @@ namespace Mosa.Runtime.x86
 		public extern static uint CpuIdEdx(uint function);
 
 		/// <summary>
-		///
+		/// BochsDebug
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.BochsDebug, Mosa.Platform.x86")]
 		public extern static void BochsDebug();
@@ -218,7 +218,7 @@ namespace Mosa.Runtime.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SyncCompareAndSwap, Mosa.Platform.x86")]
 		public extern static bool SyncCompareAndSwap(ref bool spinlock, int oldval, int newval);
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.LockSet, Mosa.Platform.x86")]
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SyncSet, Mosa.Platform.x86")]
 		public extern static void SyncSet(ref bool spinlock, uint value);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Pause, Mosa.Platform.x86")]
@@ -260,8 +260,8 @@ namespace Mosa.Runtime.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.FrameCallRetR8, Mosa.Platform.x86")]
 		public extern static ulong FrameCallRetR8(uint eip);
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.FrameIRet, Mosa.Platform.x86")]
-		public extern static void FrameIRet(uint esp, uint ebp);
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InterruptReturn, Mosa.Platform.x86")]
+		public extern static void InterruptReturn(uint esp);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.AllocateStackSpace, Mosa.Platform.x86")]
 		public extern static uint AllocateStackSpace(uint size);

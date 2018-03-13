@@ -9,13 +9,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal sealed class Memcpy256 : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var dest = context.Operand1;
@@ -31,7 +24,5 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.MovupsStore, null, dest, zero, v0);
 			context.AppendInstruction(X86.MovupsStore, null, dest, offset16, v1);
 		}
-
-		#endregion Methods
 	}
 }

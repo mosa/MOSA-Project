@@ -119,8 +119,11 @@ namespace Mosa.Kernel.x86
 		public static void Release(uint address, uint count)
 		{
 			uint start = GetPageIndex(address);
+
 			for (uint index = 0; index < count; index++)
+			{
 				SetPageStatus(start + index, true);
+			}
 		}
 	}
 }

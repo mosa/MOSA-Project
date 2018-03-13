@@ -1,19 +1,18 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using Mosa.Platform.x86.Stages;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 Lidt instruction.
+	/// LockSet
 	/// </summary>
-	internal sealed class Lidt : IIntrinsicPlatformMethod
+	internal sealed class SyncSet : IIntrinsicPlatformMethod
 	{
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			Helper.FoldOperand1ToConstant(context);
-
-			context.SetInstruction(X86.Lidt, null, context.Operand1);
+			context.SetInstruction(X86.MovStore32, null, context.Operand1, methodCompiler.ConstantZero, context.Operand2);
 		}
 	}
 }

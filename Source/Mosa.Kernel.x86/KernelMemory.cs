@@ -30,7 +30,7 @@ namespace Mosa.Kernel.x86
 			}
 
 			uint at = heapStart + heapUsed;
-			heapUsed = heapUsed + size;
+			heapUsed += size;
 			return at;
 		}
 

@@ -21,20 +21,9 @@ namespace Mosa.Platform.x86.Intrinsic
 			this.control = control;
 		}
 
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			Operand result = context.Result;
-
-			context.SetInstruction(X86.MovCRLoad, result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, control));
+			context.SetInstruction(X86.MovCRLoad, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, control));
 		}
-
-		#endregion Methods
 	}
 }

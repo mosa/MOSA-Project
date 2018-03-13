@@ -5,22 +5,13 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// Nop
 	/// </summary>
 	internal class Nop : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.Nop);
 		}
-
-		#endregion Methods
 	}
 }

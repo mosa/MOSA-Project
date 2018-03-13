@@ -10,13 +10,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal sealed class Div : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			Operand n = context.Operand1;
@@ -28,7 +21,5 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			context.SetInstruction2(X86.Div32, result2, result, op0H, op0L, d);
 		}
-
-		#endregion Methods
 	}
 }

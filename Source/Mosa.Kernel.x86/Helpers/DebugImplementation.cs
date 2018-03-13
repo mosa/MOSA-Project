@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace Mosa.Kernel.x86.Helpers
 {
 	[Type("System.Diagnostics.Debug")]
-	internal class DebugImplementation
+	internal static class DebugImplementation
 	{
 		[Conditional("DEBUG")]
 		public static void Assert(bool condition, string message, string detailMessage)

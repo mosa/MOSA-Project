@@ -86,8 +86,8 @@ namespace Mosa.Kernel.x86
 				Intrinsic.Store32(at, mem);
 			}
 
-			at = at - 4;
-			totalPages = totalPages + (normsize / PageSize);
+			at -= 4;
+			totalPages += (normsize / PageSize);
 		}
 
 		/// <summary>

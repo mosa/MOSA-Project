@@ -3,7 +3,7 @@
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// SetCR2
 	/// </summary>
 	internal sealed class SetCR2 : SetControlRegisterBase
 	{

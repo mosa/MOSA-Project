@@ -621,7 +621,7 @@
     <Compile Include="Intrinsic\FrameCallRetU8.cs" />
     <Compile Include="Intrinsic\FrameCallRetU4.cs" />
     <Compile Include="Intrinsic\FrameCall.cs" />
-    <Compile Include="Intrinsic\FrameIRet.cs" />
+    <Compile Include="Intrinsic\InterruptReturn.cs" />
     <Compile Include="Intrinsic\Get32.cs" />
     <Compile Include="Intrinsic\Get16.cs" />
     <Compile Include="Intrinsic\FrameJump.cs" />
@@ -640,7 +640,7 @@
     <Compile Include="Intrinsic\Out16.cs" />
     <Compile Include="Intrinsic\Out32.cs" />
     <Compile Include="Intrinsic\Pause.cs" />
-    <Compile Include="Intrinsic\LockSet.cs" />
+    <Compile Include="Intrinsic\SyncSet.cs" />
     <Compile Include="Intrinsic\Remainder.cs" />
     <Compile Include="Intrinsic\Set32.cs" />
     <Compile Include="Intrinsic\Set16.cs" />

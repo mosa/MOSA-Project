@@ -9,13 +9,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal sealed class SyncCompareAndSwap : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var pointer = context.Operand1;
@@ -36,7 +29,5 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.CmpXchgLoad32, eax, eax, pointer, zero, v1);
 			context.AppendInstruction(X86.SetEqual, result);
 		}
-
-		#endregion Methods
 	}
 }

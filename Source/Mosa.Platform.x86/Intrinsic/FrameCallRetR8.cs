@@ -6,18 +6,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Frame Call Ret R8
+	/// FrameCallRetR8
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicPlatformMethod" />
 	internal class FrameCallRetR8 : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var result = context.Result;
@@ -39,7 +32,5 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.Mov32, op0L, eax);
 			context.AppendInstruction(X86.Mov32, op0H, edx);
 		}
-
-		#endregion Methods
 	}
 }
