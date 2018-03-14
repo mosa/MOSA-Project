@@ -31,6 +31,7 @@ namespace Mosa.BootLoader.x86
 			PIC.Setup();
 			IDT.Setup();
 			GDT.Setup();
+			// ThreadScheduler.Setup();
 
 			Runtime.Internal.Setup();
 

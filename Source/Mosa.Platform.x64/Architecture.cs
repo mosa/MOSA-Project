@@ -52,31 +52,10 @@ namespace Mosa.Platform.x64
 		}
 
 		/// <summary>
-		/// Retrieves the native integer size of the x64 platform.
-		/// </summary>
-		/// <value>This property always returns 64.</value>
-		public override int NativeIntegerSize
-		{
-			get { return 64; }
-		}
-
-		/// <summary>
-		/// Gets the native alignment of the architecture in bytes.
-		/// </summary>
-		/// <value>This property always returns 8.</value>
-		public override int NativeAlignment
-		{
-			get { return 8; }
-		}
-
-		/// <summary>
 		/// Gets the native size of architecture in bytes.
 		/// </summary>
 		/// <value>This property always returns 8.</value>
-		public override int NativePointerSize
-		{
-			get { return 8; }
-		}
+		public override int NativePointerSize { get { return 8; } }
 
 		/// <summary>
 		/// Retrieves the register set of the x64 platform.
@@ -253,7 +232,7 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Create platform compound move.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
+		/// <param name="methodCompiler">The compiler.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="destinationBase">The destination.</param>
 		/// <param name="destination">The destination.</param>
@@ -261,7 +240,7 @@ namespace Mosa.Platform.x64
 		/// <param name="source">The source.</param>
 		/// <param name="size">The size.</param>
 		/// <exception cref="NotImplementCompilerException"></exception>
-		public override void InsertCompoundCopy(MethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
+		public override void InsertCompoundCopy(MethodCompiler methodCompiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
 		{
 			throw new NotImplementCompilerException();
 		}

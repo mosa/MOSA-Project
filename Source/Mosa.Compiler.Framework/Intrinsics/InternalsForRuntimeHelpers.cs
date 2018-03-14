@@ -3,7 +3,7 @@
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	///
+	/// InternalsForRuntimeHelpers
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.BaseInternals" />
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::UnsafeCast")]
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::GetAssemblies")]
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::CreateInstance")]
-	public sealed class InternalsForRuntimeHelpers : BaseInternals, IIntrinsicInternalMethod
+	public sealed class InternalsForRuntimeHelpers : IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site
@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			Internal(context, methodCompiler, context.InvokeMethod.Name, "InternalsForRuntimeHelpers");
+			IntrinsicsHelper.MapToRunTime(context, methodCompiler, context.InvokeMethod.Name, "InternalsForRuntimeHelpers");
 		}
 	}
 }

@@ -28,6 +28,7 @@ namespace Mosa.Kernel.x86
 			PageTable.Setup();
 			VirtualPageAllocator.Setup();
 			GC.Setup();
+			ThreadScheduler.Setup();
 
 			// At this point we can use objects, that allocates memory
 			SmbiosManager.Setup();

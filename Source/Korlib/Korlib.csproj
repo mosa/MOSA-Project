@@ -99,6 +99,7 @@
     <Compile Include="System.Runtime.InteropServices\UnmanagedType.cs" />
     <Compile Include="System.Runtime.Versioning\NonVersionableAttribute.cs" />
     <Compile Include="System.Runtime.Versioning\TargetFrameworkAttribute.cs" />
+    <Compile Include="System.Threading\Thread.cs" />
     <Compile Include="System.Threading\SpinLock.cs" />
     <Compile Include="System\Action.cs" />
     <Compile Include="System\Activator.cs" />

@@ -107,8 +107,6 @@ namespace Mosa.Runtime
 		{
 			byte* memory = (byte*)AllocateObject(handle, size);
 
-			//MemoryCopy(memory + (uint)(sizeof(void*)) * 2, value, size);
-
 			byte* dest = memory + (uint)(sizeof(void*) * 2);
 			byte* src = (byte*)value;
 
@@ -196,7 +194,7 @@ namespace Mosa.Runtime
 			for (uint i = 0; i < assemblyCount; i++)
 			{
 				// Get the pointer to the Assembly Metadata
-				MDAssemblyDefinition* ptr = (MDAssemblyDefinition*)(assemblyListTable.Dereference(i));
+				var ptr = (MDAssemblyDefinition*)(assemblyListTable.Dereference(i));
 				Assemblies.AddLast(new RuntimeAssembly(ptr));
 			}
 		}

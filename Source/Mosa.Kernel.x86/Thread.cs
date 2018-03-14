@@ -8,5 +8,6 @@
 		public uint StackTop;
 		public uint StackBottom;
 		public uint StackStatePointer;
+		public uint Ticks;
 	}
 }

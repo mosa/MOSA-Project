@@ -16,12 +16,11 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			var v0 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.Void);
 			var v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.Void);
-			var zero = Operand.CreateConstant(0, methodCompiler.TypeSystem);
-			var offset16 = Operand.CreateConstant(16, methodCompiler.TypeSystem);
+			var offset16 = methodCompiler.CreateConstant(16);
 
-			context.SetInstruction(X86.MovupsLoad, v0, dest, zero);
+			context.SetInstruction(X86.MovupsLoad, v0, dest, methodCompiler.ConstantZero);
 			context.AppendInstruction(X86.MovupsLoad, v1, dest, offset16);
-			context.AppendInstruction(X86.MovupsStore, null, dest, zero, v0);
+			context.AppendInstruction(X86.MovupsStore, null, dest, methodCompiler.ConstantZero, v0);
 			context.AppendInstruction(X86.MovupsStore, null, dest, offset16, v1);
 		}
 	}

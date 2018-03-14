@@ -1,15 +1,17 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
+using System;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	/// GetObjectFromAddress
+	/// GetObjectAddress
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
-	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetObjectFromAddress")]
-	public sealed class GetObjectFromAddress : IIntrinsicInternalMethod
+	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetDelegateMethodAddress")]
+	public sealed class GetDelegateMethodAddress : IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site
@@ -18,9 +20,10 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			var move = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.MoveInteger32 : IRInstruction.MoveInteger64;
+			var load = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInteger32 : IRInstruction.LoadInteger64;
 
-			context.SetInstruction(move, context.Result, context.Operand1);
+			context.SetInstruction(load, context.Result, context.Operand1, methodCompiler.CreateConstant(2 * methodCompiler.Architecture.NativePointerSize));
+
 		}
 	}
 }

@@ -93,6 +93,8 @@
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
     <Compile Include="Analysis\BaseDominanceAnalysis.cs" />
     <Compile Include="BaseCompilerExtension.cs" />
+    <Compile Include="Intrinsics\GetDelegateTargetAddress.cs" />
+    <Compile Include="Intrinsics\GetDelegateMethodAddress.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="CompilerTypeData.cs" />
     <Compile Include="CompilerMethodData.cs" />
@@ -689,7 +691,7 @@
     <Compile Include="Intrinsics\InternalsForObject.cs" />
     <Compile Include="Intrinsics\InternalsForRuntimeHelpers.cs" />
     <Compile Include="Intrinsics\Load32.cs" />
-    <Compile Include="Intrinsics\BaseInternals.cs" />
+    <Compile Include="Intrinsics\IntrinsicsHelper.cs" />
     <Compile Include="Intrinsics\InternalsForType.cs" />
     <Compile Include="Analysis\IBlockOrderAnalysis.cs" />
     <Compile Include="Metadata.cs">
@@ -697,7 +699,7 @@
       </SubType>
     </Compile>
     <Compile Include="Platform\BaseOpcodeEncoder.cs" />
-    <Compile Include="Platform\XOpcodeEncoder.cs" />
+    <Compile Include="Platform\OpcodeEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterAllocator\BasicRegisterAllocator.cs" />
     <Compile Include="RegisterAllocator\MoveExtended.cs" />

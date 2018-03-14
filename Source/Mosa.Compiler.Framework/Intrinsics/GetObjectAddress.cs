@@ -6,6 +6,10 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	/// <summary>
+	/// GetObjectAddress
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetObjectAddress")]
 	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetValueTypeAddress")]
 	public sealed class GetObjectAddress : IIntrinsicInternalMethod
@@ -19,10 +23,12 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		{
 			var result = context.Result;
 			var operand1 = context.Operand1;
+
 			if (operand1.IsValueType)
 			{
 				var def = operand1.Definitions[0];
 				var replacements = new List<Tuple<InstructionNode, int>>();
+
 				foreach (var use in operand1.Uses)
 				{
 					for (int i = 0; i < use.OperandCount; i++)
@@ -35,7 +41,9 @@ namespace Mosa.Compiler.Framework.Intrinsics
 				}
 
 				foreach (var replace in replacements)
+				{
 					replace.Item1.SetOperand(replace.Item2, def.Operand1);
+				}
 
 				operand1 = def.Operand1;
 				def.Empty();

@@ -581,7 +581,7 @@ namespace Mosa.Kernel.x86
 			Screen.NextLine();
 			Screen.ClearRow();
 			Screen.Write("ID: ");
-			Screen.Write((uint)id, 10, 5);
+			Screen.Write(id, 10, 5);
 			Screen.Write(" Address: ");
 			Screen.Write(address, 16, 8);
 		}

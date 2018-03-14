@@ -8,9 +8,9 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	/// Internals Base
+	/// IntrinsicsHelper
 	/// </summary>
-	public abstract class BaseInternals
+	public static class IntrinsicsHelper
 	{
 		/// <summary>
 		/// Allows quick internal call replacements
@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="internalMethod">The internal method to replace with.</param>
 		/// <param name="internalClass">The internal class that has the internal method.</param>
 		/// <exception cref="ArgumentNullException"></exception>
-		protected void Internal(Context context, MethodCompiler methodCompiler, string internalMethod, string internalClass = "Internal")
+		public static void MapToRunTime(Context context, MethodCompiler methodCompiler, string internalMethod, string internalClass = "Internal")
 		{
 			if (context == null || methodCompiler == null || internalMethod == null || internalClass == null)
 				throw new ArgumentNullException();

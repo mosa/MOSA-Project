@@ -56,15 +56,16 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('8');
 			GC.Setup();
 			Screen.Write('9');
-
 			Runtime.Internal.Setup();
 			Screen.Write('A');
-			IDT.SetInterruptHandler(ProcessInterrupt);
+			ThreadScheduler.Setup();
 			Screen.Write('B');
-			ConsoleManager.Setup();
+			IDT.SetInterruptHandler(ProcessInterrupt);
 			Screen.Write('C');
-			Console = ConsoleManager.Controller.Boot;
+			ConsoleManager.Setup();
 			Screen.Write('D');
+			Console = ConsoleManager.Controller.Boot;
+			Screen.Write('E');
 
 			Console.Color = 0x0E;
 			Console.BackgroundColor = 1;
@@ -75,25 +76,20 @@ namespace Mosa.TestWorld.x86
 
 			DumpStackTrace();
 
-			//System.Threading.SpinLock splk = new System.Threading.SpinLock();
-
-			//bool lockTaken = false;
-			//splk.Enter(ref lockTaken);
-			//if (splk.IsHeld)
-			//	Console.Write("Entered...");
-
-			//lockTaken = false;
-			//splk.Enter(ref lockTaken);
-
-			//Console.Write("Should have looped!!!");
-
 			Console.Goto(22, 0);
 
-			Process();
+			ThreadScheduler.CreateThread(Process, PageFrameAllocator.PageSize);
+
+			ThreadScheduler.Start();
+
+			// should never get here
+			Screen.Write("!BAD!");
 		}
 
 		public static void Process()
 		{
+			Screen.Write("!Go!");
+
 			while (true)
 			{
 				var result = Mosa.UnitTest.Collection.BoxingTests.EqualsI4(10);

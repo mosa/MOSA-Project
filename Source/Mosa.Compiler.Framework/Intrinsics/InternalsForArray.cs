@@ -3,14 +3,14 @@
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	///
+	/// InternalsForArray
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.BaseInternals" />
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Array::Copy")]
 	[ReplacementTarget("System.Array::GetLength")]
 	[ReplacementTarget("System.Array::GetLowerBound")]
-	public sealed class InternalsForArray : BaseInternals, IIntrinsicInternalMethod
+	public sealed class InternalsForArray : IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site
@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			Internal(context, methodCompiler, context.InvokeMethod.Name, "InternalsForArray");
+			IntrinsicsHelper.MapToRunTime(context, methodCompiler, context.InvokeMethod.Name, "InternalsForArray");
 		}
 	}
 }

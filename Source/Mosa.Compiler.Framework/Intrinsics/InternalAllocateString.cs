@@ -4,6 +4,10 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
+	/// <summary>
+	/// InternalAllocateString
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.String::InternalAllocateString")]
 	public sealed class InternalAllocateString : IIntrinsicInternalMethod
 	{

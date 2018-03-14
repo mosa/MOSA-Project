@@ -333,9 +333,11 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Interrupts the handler.
 		/// </summary>
-		/// <param name="stack">The stack.</param>
-		private unsafe static void ProcessInterrupt(IDTStack* stack)
+		/// <param name="stackStatePointer">The stack state pointer.</param>
+		private unsafe static void ProcessInterrupt(uint stackStatePointer)
 		{
+			var stack = (IDTStack*)stackStatePointer;
+
 			Debugger.Process(stack);
 
 			switch (stack->Interrupt)
@@ -424,6 +426,14 @@ namespace Mosa.Kernel.x86
 					Error(stack, "SIMD Floating-Point Exception");
 					break;
 
+				case ThreadScheduler.ClockIRQ:
+					ThreadScheduler.SchedulerInterrupt(stackStatePointer);
+					break;
+
+				case ThreadScheduler.ThreadTerminationSignalIRQ:
+					ThreadScheduler.TerminateCurrentThread();
+					break;
+
 				default:
 					interruptHandler?.Invoke(stack->Interrupt, stack->ErrorCode);
 					break;
@@ -448,6 +458,7 @@ namespace Mosa.Kernel.x86
 			Panic.EFLAGS = stack->EFLAGS;
 			Panic.Interrupt = stack->Interrupt;
 			Panic.CR2 = Native.GetCR2();
+			Panic.FS = Native.GetFS();
 			Panic.Error(message);
 		}
 	}

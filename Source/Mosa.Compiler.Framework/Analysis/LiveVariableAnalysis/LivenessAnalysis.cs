@@ -259,7 +259,7 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 						}
 						else
 						{
-							// This is necesary to handled a result that is never used!
+							// This is necessary to handled a result that is never used!
 							// This is common with instructions with more than one result.
 							liveRange.Add(node.Offset, node.Offset + 1);
 						}
