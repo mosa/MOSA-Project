@@ -897,6 +897,11 @@ namespace Mosa.Compiler.Framework
 
 		#region Constant Helper Methods
 
+		public Operand CreateConstant(byte value)
+		{
+			return Operand.CreateConstant(TypeSystem.BuiltIn.U1, value);
+		}
+
 		protected Operand CreateConstant(int value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);

@@ -289,9 +289,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Gets the type system.
 		/// </summary>
-		/// <value>
-		/// The type system.
-		/// </value>
 		TypeSystem IInstructionDecoder.TypeSystem { get { return TypeSystem; } }
 
 		/// <summary>
@@ -304,6 +301,11 @@ namespace Mosa.Compiler.Framework.Stages
 			return GetBlockByLabel(label);
 		}
 
+		/// <summary>
+		/// Converts the virtual register to stack local.
+		/// </summary>
+		/// <param name="virtualRegister">The virtual register.</param>
+		/// <returns></returns>
 		Operand IInstructionDecoder.ConvertVirtualRegisterToStackLocal(Operand virtualRegister)
 		{
 			if (virtualRegister.IsStackLocal)

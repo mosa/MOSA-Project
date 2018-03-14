@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework
 		{
 			if (node.Operand1.IsResolvedConstant && node.Operand2.IsResolvedConstant)
 			{
-				node.Operand1 = Operand.CreateConstant(node.Operand1.ConstantUnsignedLongInteger + node.Operand2.ConstantUnsignedLongInteger, methodCompiler.TypeSystem);
+				node.Operand1 = methodCompiler.CreateConstant(node.Operand1.ConstantUnsignedLongInteger + node.Operand2.ConstantUnsignedLongInteger);
 				node.Operand2 = methodCompiler.ConstantZero;
 			}
 
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework
 		{
 			if (node.Operand1.IsResolvedConstant && node.Operand2.IsResolvedConstant)
 			{
-				node.Operand1 = Operand.CreateConstant(node.Operand1.ConstantUnsignedLongInteger + node.Operand2.ConstantUnsignedLongInteger, methodCompiler.TypeSystem);
+				node.Operand1 = methodCompiler.CreateConstant(node.Operand1.ConstantUnsignedLongInteger + node.Operand2.ConstantUnsignedLongInteger);
 				node.Operand2 = methodCompiler.ConstantZero;
 			}
 

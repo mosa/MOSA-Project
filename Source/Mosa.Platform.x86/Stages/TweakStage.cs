@@ -78,7 +78,7 @@ namespace Mosa.Platform.x86.Stages
 			if (!context.Operand2.IsConstant || context.Operand2.IsByte)
 				return;
 
-			context.Operand2 = CreateConstant(TypeSystem.BuiltIn.U1, context.Operand2.ConstantUnsignedLongInteger);
+			context.Operand2 = CreateConstant((byte)context.Operand2.ConstantUnsignedLongInteger);
 		}
 
 		private void ConvertOperand1ToByte(Context context)
@@ -86,7 +86,7 @@ namespace Mosa.Platform.x86.Stages
 			if (!context.Operand1.IsConstant || context.Operand1.IsByte)
 				return;
 
-			context.Operand1 = CreateConstant(TypeSystem.BuiltIn.U1, context.Operand1.ConstantUnsignedLongInteger);
+			context.Operand1 = CreateConstant((byte)context.Operand1.ConstantUnsignedLongInteger);
 		}
 	}
 }

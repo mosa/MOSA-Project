@@ -3,13 +3,13 @@
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	///
+	/// InternalsForType
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.BaseInternals" />
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Type::GetTypeImpl")]
 	[ReplacementTarget("System.Type::GetTypeFromHandleImpl")]
-	public sealed class InternalsForType : BaseInternals, IIntrinsicInternalMethod
+	public sealed class InternalsForType : IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site
@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			Internal(context, methodCompiler, context.InvokeMethod.Name, "InternalsForType");
+			IntrinsicsHelper.MapToRunTime(context, methodCompiler, context.InvokeMethod.Name, "InternalsForType");
 		}
 	}
 }

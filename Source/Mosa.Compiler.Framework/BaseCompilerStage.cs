@@ -131,6 +131,11 @@ namespace Mosa.Compiler.Framework
 
 		#region Constant Helper Methods
 
+		public Operand CreateConstant(byte value)
+		{
+			return Operand.CreateConstant(TypeSystem.BuiltIn.U1, value);
+		}
+
 		protected Operand CreateConstant(int value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
@@ -149,26 +154,6 @@ namespace Mosa.Compiler.Framework
 		protected Operand CreateConstant(ulong value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.U8, value);
-		}
-
-		protected static Operand CreateConstant(MosaType type, long value)
-		{
-			return Operand.CreateConstant(type, value);
-		}
-
-		protected static Operand CreateConstant(MosaType type, ulong value)
-		{
-			return Operand.CreateConstant(type, value);
-		}
-
-		protected static Operand CreateConstant(MosaType type, int value)
-		{
-			return Operand.CreateConstant(type, value);
-		}
-
-		protected static Operand CreateConstant(MosaType type, uint value)
-		{
-			return Operand.CreateConstant(type, value);
 		}
 
 		protected Operand CreateConstant(float value)

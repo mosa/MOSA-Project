@@ -16,9 +16,9 @@ namespace Mosa.Tool.Explorer
 				new DisassemblyStage()
 			);
 
-			pipeline.InsertAfterFirst<CodeGenerationStage>(
-				new PreciseGCStage()
-			);
+			//pipeline.InsertAfterFirst<CodeGenerationStage>(
+			//	new PreciseGCStage()
+			//);
 		}
 	}
 }

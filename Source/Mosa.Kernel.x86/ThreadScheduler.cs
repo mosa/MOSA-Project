@@ -1,5 +1,8 @@
 ﻿using Mosa.Kernel.x86.Helpers;
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
+using System;
+using System.Threading;
 
 namespace Mosa.Kernel.x86
 {
@@ -7,16 +10,28 @@ namespace Mosa.Kernel.x86
 	{
 		public const int MaxThreads = 256;
 
-		private static Thread[] threads = new Thread[MaxThreads];
+		private static Thread[] threads;
 
 		public static void Setup()
 		{
+			threads = new Thread[MaxThreads];
+
 			for (int i = 0; i < MaxThreads; i++)
 			{
 				threads[i] = new Thread();
 			}
 
-			threads[0].Status = ThreadStatus.Waiting; // special case since thread = 0 is the interrupt
+			uint address = GetAddress(IdleThread);
+
+			CreateThread(address, PageFrameAllocator.PageSize, 0);
+		}
+
+		private static void IdleThread()
+		{
+			while (true)
+			{
+				Native.Hlt();
+			}
 		}
 
 		public static void SchedulerInterrupt(uint stackSate)
@@ -25,10 +40,38 @@ namespace Mosa.Kernel.x86
 			var threadID = GetCurrentThreadID();
 			SaveThreadState(threadID, stackSate);
 
-			// TODO:
-			// 1. find next thread to execute
+			threadID = GetNextThread(threadID);
 
 			SwitchToThread(threadID);
+		}
+
+		private static uint GetNextThread(uint currentThreadID)
+		{
+			uint threadID = currentThreadID;
+
+			if (currentThreadID == 0)
+				currentThreadID = 1;
+
+			while (true)
+			{
+				threadID++;
+
+				if (threadID == MaxThreads)
+					threadID = 1;
+
+				var thread = threads[threadID];
+
+				if (thread.Status == ThreadStatus.Running)
+					return threadID;
+
+				if (currentThreadID == threadID)
+					return 0; // idle thread
+			}
+		}
+
+		private static uint GetAddress(ThreadStart d)
+		{
+			return Intrinsic.GetDelegateMethodAddress(d);
 		}
 
 		public static uint CreateThread(uint ip, uint stackSize)
@@ -47,6 +90,13 @@ namespace Mosa.Kernel.x86
 
 			Assert.True(stackSize != 0, "CreateThread(): invalid thread id = 0");
 
+			CreateThread(ip, stackSize, threadID);
+
+			return threadID;
+		}
+
+		private static void CreateThread(uint ip, uint stackSize, uint threadID)
+		{
 			Thread thread = threads[threadID];
 
 			var stack = VirtualPageAllocator.Reserve(stackSize);
@@ -57,9 +107,9 @@ namespace Mosa.Kernel.x86
 			Native.Set32(stackTop - 4, 0);          // Zero Sentinel
 			Native.Set32(stackTop - 8, 0);          // Zero Sentinel
 			Native.Set32(stackTop - 4 - 8, 0);      // EFLAG
-			Native.Set32(stackTop - 12 - 8, ip);	// EIP
-			Native.Set32(stackTop - 16 - 8, 0);		// ErrorCode - not used
-			Native.Set32(stackTop - 20 - 8, 0);		// Interrupt Number - not used
+			Native.Set32(stackTop - 12 - 8, ip);    // EIP
+			Native.Set32(stackTop - 16 - 8, 0);     // ErrorCode - not used
+			Native.Set32(stackTop - 20 - 8, 0);     // Interrupt Number - not used
 			Native.Set32(stackTop - 24 - 8, 0);     // EAX
 			Native.Set32(stackTop - 28 - 8, 0);     // ECX
 			Native.Set32(stackTop - 32 - 8, 0);     // EDX
@@ -73,8 +123,6 @@ namespace Mosa.Kernel.x86
 			thread.StackBottom = stack;
 			thread.StackTop = stackTop;
 			thread.StackStatePointer = stackTop - stackStateSize;
-
-			return threadID;
 		}
 
 		private static void SaveThreadState(uint threadID, uint stackSate)

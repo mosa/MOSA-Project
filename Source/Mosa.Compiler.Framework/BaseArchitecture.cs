@@ -84,14 +84,9 @@ namespace Mosa.Compiler.Framework
 		public abstract string PlatformName { get; }
 
 		/// <summary>
-		/// Gets the width of a native integer in bits.
-		/// </summary>
-		public abstract int NativeIntegerSize { get; }
-
-		/// <summary>
 		/// Gets the native alignment of the architecture in bytes.
 		/// </summary>
-		public abstract int NativeAlignment { get; }
+		public int NativeAlignment { get { return NativePointerSize; } }
 
 		/// <summary>
 		/// Gets the native size of architecture in bytes.
@@ -190,14 +185,14 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Create platform compound move.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
+		/// <param name="methodCompiler">The compiler.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="destinationBase">The destination.</param>
 		/// <param name="destination">The destination offset.</param>
 		/// <param name="sourceBase">The source.</param>
 		/// <param name="source">The source offset.</param>
 		/// <param name="size">The size.</param>
-		public abstract void InsertCompoundCopy(MethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size);
+		public abstract void InsertCompoundCopy(MethodCompiler methodCompiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size);
 
 		/// <summary>
 		/// Create platform exchange registers.

@@ -5,14 +5,12 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	///
+	/// GetAssemblyListTable
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetAssemblyListTable")]
 	internal class GetAssemblyListTable : IIntrinsicInternalMethod
 	{
-		#region Methods
-
 		/// <summary>
 		/// Replaces the intrinsic call site
 		/// </summary>
@@ -24,7 +22,5 @@ namespace Mosa.Compiler.Framework.Intrinsics
 
 			context.SetInstruction(move, context.Result, Operand.CreateUnmanagedSymbolPointer(Metadata.AssembliesTable, methodCompiler.TypeSystem));
 		}
-
-		#endregion Methods
 	}
 }

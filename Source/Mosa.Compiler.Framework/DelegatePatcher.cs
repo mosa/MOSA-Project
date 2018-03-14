@@ -37,11 +37,11 @@ namespace Mosa.Compiler.Framework
 
 			var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-			var methodPointerOffsetOperand = Operand.CreateConstant(methodPointerOffset, methodCompiler.TypeSystem);
+			var methodPointerOffsetOperand = methodCompiler.CreateConstant(methodPointerOffset);
 
 			var instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-			var instanceOffsetOperand = Operand.CreateConstant(instanceOffset, methodCompiler.TypeSystem);
+			var instanceOffsetOperand = methodCompiler.CreateConstant(instanceOffset);
 
 			var context = new Context(CreateMethodStructure(methodCompiler));
 
@@ -66,11 +66,11 @@ namespace Mosa.Compiler.Framework
 
 			var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
 			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
-			var methodPointerOffsetOperand = Operand.CreateConstant(methodPointerOffset, methodCompiler.TypeSystem);
+			var methodPointerOffsetOperand = methodCompiler.CreateConstant(methodPointerOffset);
 
 			var instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
 			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
-			var instanceOffsetOperand = Operand.CreateConstant(instanceOffset, methodCompiler.TypeSystem);
+			var instanceOffsetOperand = methodCompiler.CreateConstant(instanceOffset);
 
 			var size = methodCompiler.Architecture.NativeInstructionSize;
 			bool withReturn = (methodCompiler.Method.Signature.ReturnType == null) ? false : !methodCompiler.Method.Signature.ReturnType.IsVoid;
@@ -109,7 +109,7 @@ namespace Mosa.Compiler.Framework
 			var opCompare = methodCompiler.VirtualRegisters.Allocate(methodCompiler.TypeSystem.BuiltIn.I4); // FIXME -- not 64 compatible
 
 			var opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
-			var c0 = Operand.CreateConstant(0, methodCompiler.TypeSystem);
+			var c0 = methodCompiler.ConstantZero;
 
 			var loadInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInteger32 : IRInstruction.LoadInteger64;
 
