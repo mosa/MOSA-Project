@@ -76,14 +76,22 @@ namespace Mosa.TestWorld.x86
 
 			DumpStackTrace();
 
-			Console.Goto(22, 0);
+			Screen.Write("!");
 
 			ThreadScheduler.CreateThread(Process, PageFrameAllocator.PageSize);
+			Screen.Write("!");
+
+			Console.Goto(22, 0);
 
 			ThreadScheduler.Start();
 
 			// should never get here
 			Screen.Write("!BAD!");
+
+			while (true)
+			{
+				Native.Hlt();
+			}
 		}
 
 		public static void Process()
@@ -92,7 +100,7 @@ namespace Mosa.TestWorld.x86
 
 			while (true)
 			{
-				var result = Mosa.UnitTest.Collection.BoxingTests.EqualsI4(10);
+				Screen.Write("+");
 				Native.Hlt();
 			}
 		}

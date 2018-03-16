@@ -1,4 +1,6 @@
-﻿using Mosa.Kernel.x86.Helpers;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Kernel.x86.Helpers;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using System;
@@ -159,7 +161,7 @@ namespace Mosa.Kernel.x86
 
 		private static void CreateThread(uint methoAddress, uint stackSize, uint threadID)
 		{
-			Thread thread = Threads[threadID];
+			var thread = Threads[threadID];
 
 			var stack = VirtualPageAllocator.Reserve(stackSize);
 			uint stackStateSize = 52;
