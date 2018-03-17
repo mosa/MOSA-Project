@@ -9,7 +9,7 @@ namespace Mosa.Tool.GDBDebugger
 {
 	public class Options
 	{
-		[Option("port", Default = 2345)]
+		[Option("port", Default = "2345")]
 		public string GDBPortString
 		{
 			get { return GDBPort.ToString(); }
@@ -38,21 +38,21 @@ namespace Mosa.Tool.GDBDebugger
 		[Option("qemu")]
 		public bool EmulatorQEMU
 		{
-			get { return (Emulator == EmulatorType.Qemu); }
+			get { return Emulator == EmulatorType.Qemu; }
 			set { Emulator = EmulatorType.Qemu; }
 		}
 
 		[Option("vmware")]
 		public bool EmulatorVMWare
 		{
-			get { return (Emulator == EmulatorType.VMware); }
+			get { return Emulator == EmulatorType.VMware; }
 			set { Emulator = EmulatorType.VMware; }
 		}
 
 		[Option("bochs")]
 		public bool EmulatorBochs
 		{
-			get { return (Emulator == EmulatorType.Bochs); }
+			get { return Emulator == EmulatorType.Bochs; }
 			set { Emulator = EmulatorType.Bochs; }
 		}
 
@@ -61,35 +61,35 @@ namespace Mosa.Tool.GDBDebugger
 		[Option("vhd")]
 		public bool ImageVHD
 		{
-			get { return (ImageFormat == ImageFormat.VHD); }
+			get { return ImageFormat == ImageFormat.VHD; }
 			set { ImageFormat = ImageFormat.VHD; }
 		}
 
 		[Option("img")]
 		public bool ImageIMG
 		{
-			get { return (ImageFormat == ImageFormat.IMG); }
+			get { return ImageFormat == ImageFormat.IMG; }
 			set { ImageFormat = ImageFormat.IMG; }
 		}
 
 		[Option("vdi")]
 		public bool ImageVDI
 		{
-			get { return (ImageFormat == ImageFormat.VDI); }
+			get { return ImageFormat == ImageFormat.VDI; }
 			set { ImageFormat = ImageFormat.VDI; }
 		}
 
 		[Option("iso")]
 		public bool ImageISO
 		{
-			get { return (ImageFormat == ImageFormat.ISO); }
+			get { return ImageFormat == ImageFormat.ISO; }
 			set { ImageFormat = ImageFormat.ISO; }
 		}
 
 		[Option("vmdk")]
 		public bool ImageVMDK
 		{
-			get { return (ImageFormat == ImageFormat.VMDK); }
+			get { return ImageFormat == ImageFormat.VMDK; }
 			set { ImageFormat = ImageFormat.VMDK; }
 		}
 

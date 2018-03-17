@@ -45,13 +45,13 @@ namespace Mosa.Tool.GDBDebugger
 
 		public Options Options { get; private set; } = new Options();
 
-		public AppLocations AppLocations { get; private set; } = new AppLocations();
+		public AppLocations AppLocations { get; } = new AppLocations();
 
-		public DebugSource DebugSource { get; private set; } = new DebugSource();
+		public DebugSource DebugSource { get; } = new DebugSource();
 
-		public List<BreakPoint> BreakPoints { get; private set; } = new List<BreakPoint>();
+		public List<BreakPoint> BreakPoints { get; } = new List<BreakPoint>();
 
-		public List<Watch> Watchs { get; private set; } = new List<Watch>();
+		public List<Watch> Watchs { get; } = new List<Watch>();
 
 		public MainForm()
 		{
@@ -416,7 +416,7 @@ namespace Mosa.Tool.GDBDebugger
 
 		public void LoadArguments(string[] args)
 		{
-			Parser cliParser = new Parser(config => config.HelpWriter = Console.Out);
+			var cliParser = new Parser(config => config.HelpWriter = Console.Out);
 
 			cliParser.ParseArguments<Options>(() =>
 			{

@@ -93,6 +93,7 @@ namespace Mosa.Tool.Explorer
 		public void LoadArguments(string[] args)
 		{
 			Options options = ParseOptions(args);
+
 			if (options == null)
 				return;
 
@@ -106,7 +107,7 @@ namespace Mosa.Tool.Explorer
 			cbEnableOptimizations.Checked = !options.NoIROptimizations;
 			cbEnableSparseConditionalConstantPropagation.Checked = !options.NoSparse;
 
-			IList<string> files = (IList<string>)options.Files;
+			var files = (IList<string>)options.Files;
 			if (files.Count == 1)
 			{
 				string file = files[0];

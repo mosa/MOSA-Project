@@ -59,7 +59,7 @@ namespace Mosa.TestWorld.x86
 			Runtime.Internal.Setup();
 			Screen.Write('A');
 
-			ThreadScheduler.Setup();
+			Scheduler.Setup();
 			Screen.Write('B');
 			IDT.SetInterruptHandler(ProcessInterrupt);
 			Screen.Write('C');
@@ -79,13 +79,13 @@ namespace Mosa.TestWorld.x86
 
 			Screen.Write("!");
 
-			ThreadScheduler.CreateThread(Process, PageFrameAllocator.PageSize);
+			Scheduler.CreateThread(Process, PageFrameAllocator.PageSize);
 
 			//Screen.Write("!");
 
 			//Console.Goto(22, 0);
 
-			ThreadScheduler.Start();
+			Scheduler.Start();
 
 			// should never get here
 			Screen.Write("!BAD!");

@@ -1,14 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.x86.Helpers;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
-using System;
 using System.Threading;
 
 namespace Mosa.Kernel.x86
 {
-	public static class ThreadScheduler
+	public static class Scheduler
 	{
 		public const int MaxThreads = 256;
 		public const int ClockIRQ = 40;
