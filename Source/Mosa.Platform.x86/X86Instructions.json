@@ -548,7 +548,7 @@
 			"ResultCount": 1,
 			"OperandCount": 1,
 			"X86LegacyOpcode": "0x8C",
-			"X86LegacyOpcodeOperandOrder": "r1",
+			"X86LegacyOpcodeOperandOrder": "1r",
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{

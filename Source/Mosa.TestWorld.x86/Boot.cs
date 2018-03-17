@@ -58,6 +58,7 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('9');
 			Runtime.Internal.Setup();
 			Screen.Write('A');
+
 			ThreadScheduler.Setup();
 			Screen.Write('B');
 			IDT.SetInterruptHandler(ProcessInterrupt);
@@ -79,9 +80,10 @@ namespace Mosa.TestWorld.x86
 			Screen.Write("!");
 
 			ThreadScheduler.CreateThread(Process, PageFrameAllocator.PageSize);
-			Screen.Write("!");
 
-			Console.Goto(22, 0);
+			//Screen.Write("!");
+
+			//Console.Goto(22, 0);
 
 			ThreadScheduler.Start();
 

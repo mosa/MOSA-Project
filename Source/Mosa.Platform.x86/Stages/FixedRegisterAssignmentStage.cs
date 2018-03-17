@@ -20,6 +20,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.In8, In8);
 			AddVisitation(X86.In16, In16);
 			AddVisitation(X86.In32, In32);
+			AddVisitation(X86.MovStoreSeg32, MovStoreSeg32);
 			AddVisitation(X86.Mul32, Mul32);
 			AddVisitation(X86.Out8, Out);
 			AddVisitation(X86.Out16, Out);
@@ -380,6 +381,24 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov32, ECX, operand3);
 			context.AppendInstruction(X86.Shrd32, result, operand1, operand2, ECX);
+		}
+
+		/// <summary>
+		/// MovStoreSeg32
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void MovStoreSeg32(Context context)
+		{
+			if (!context.Operand1.IsConstant)
+				return;
+
+			Operand result = context.Result;
+			Operand operand1 = context.Operand1;
+
+			Operand v1 = AllocateVirtualRegister(operand1.Type);
+
+			context.SetInstruction(X86.Mov32, v1, operand1);
+			context.AppendInstruction(X86.MovStoreSeg32, result, v1);
 		}
 
 		#endregion Visitation Methods

@@ -19,10 +19,13 @@ namespace Mosa.Kernel.x86
 
 		private static Thread[] Threads;
 
+		private static uint CurrentThreadID;
+
 		public static void Setup()
 		{
 			Enabled = false;
 			Threads = new Thread[MaxThreads];
+			CurrentThreadID = 0;
 
 			for (int i = 0; i < MaxThreads; i++)
 			{
@@ -204,12 +207,16 @@ namespace Mosa.Kernel.x86
 
 		private static uint GetCurrentThreadID()
 		{
-			return Native.GetFS();
+			return CurrentThreadID;
+
+			//return Native.GetFS();
 		}
 
 		private static void SetThreadID(uint threadID)
 		{
-			Native.SetFS(threadID);
+			CurrentThreadID = threadID;
+
+			//Native.SetFS(threadID);
 		}
 
 		private static void SwitchToThread(uint threadID)
