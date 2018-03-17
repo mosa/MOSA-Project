@@ -34,7 +34,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="MOSA Project\" />
   </ItemGroup>
   <Target Name="Build">
     <Copy SourceFiles="@(Content)" DestinationFiles="@(Content->'$(OutputPath)%(RelativeDir)%(Filename)%(Extension)')" />
@@ -44,14 +43,29 @@
   <Target Name="Rebuild" DependsOnTargets="Clean;Build">
   </Target>
   <ItemGroup>
-    <Compile Include="MOSA Project\Boot.cs" />
-    <Compile Include="MOSA Project\Program.cs" />
+    <Content Include="MOSA Project\Boot.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MOSA Project\Program.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="MOSA Project\Mosa.Starter.x86.csproj" />
-    <None Include="MOSA Project\MyTemplate.vstemplate" />
-    <None Include="MOSA Project\__TemplateIcon.ico" />
-    <None Include="MOSA Project\app.config" />
-    <None Include="MOSA Project\packages.config" />
+    <Content Include="MOSA Project\Mosa.Starter.x86.csproj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MOSA Project\MyTemplate.vstemplate" />
+    <Content Include="MOSA Project\__TemplateIcon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MOSA Project\app.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MOSA Project\packages.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="MOSA Project\Mosa.Starter.x86.csproj.user">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
