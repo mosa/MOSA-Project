@@ -32,14 +32,17 @@
             this.dockPanel = new WeifenLuo.WinFormsUI.Docking.DockPanel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnConnect = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.btnDebugQEMU = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnViewMemory = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.btnViewMemory = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.ofdDebug = new System.Windows.Forms.OpenFileDialog();
+            this.odfVMImage = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -65,11 +68,13 @@
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton1,
             this.btnConnect,
             this.btnDebugQEMU,
             this.toolStripSeparator1,
-            this.btnViewMemory,
-            this.toolStripSeparator});
+            this.toolStripSeparator,
+            this.toolStripButton2,
+            this.btnViewMemory});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(799, 25);
@@ -85,19 +90,41 @@
             this.btnConnect.Text = "Connect";
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(87, 22);
+            this.toolStripButton1.Text = "Launch VM";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
             // btnDebugQEMU
             // 
             this.btnDebugQEMU.Image = ((System.Drawing.Image)(resources.GetObject("btnDebugQEMU.Image")));
             this.btnDebugQEMU.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnDebugQEMU.Name = "btnDebugQEMU";
-            this.btnDebugQEMU.Size = new System.Drawing.Size(99, 22);
-            this.btnDebugQEMU.Text = "Debug QEMU";
-            this.btnDebugQEMU.Click += new System.EventHandler(this.btnDebugQEMU_Click);
+            this.btnDebugQEMU.Size = new System.Drawing.Size(86, 22);
+            this.btnDebugQEMU.Text = "Debug Info";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator
+            // 
+            this.toolStripSeparator.Name = "toolStripSeparator";
+            this.toolStripSeparator.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton2
+            // 
+            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton2.Name = "toolStripButton2";
+            this.toolStripButton2.Size = new System.Drawing.Size(103, 22);
+            this.toolStripButton2.Text = "App Locations";
+            this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // btnViewMemory
             // 
@@ -107,11 +134,6 @@
             this.btnViewMemory.Size = new System.Drawing.Size(100, 22);
             this.btnViewMemory.Text = "View Memory";
             this.btnViewMemory.Click += new System.EventHandler(this.btnViewMemory_Click);
-            // 
-            // toolStripSeparator
-            // 
-            this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(6, 25);
             // 
             // statusStrip1
             // 
@@ -135,10 +157,15 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 23);
             // 
-            // openFileDialog
+            // ofdDebug
             // 
-            this.openFileDialog.DefaultExt = "exe";
-            this.openFileDialog.Filter = "Executable|*.exe|Library|*.dll|All Files|*.*";
+            this.ofdDebug.DefaultExt = "debug";
+            this.ofdDebug.Filter = "Debug Info|*.debug|All Files|*.*";
+            // 
+            // odfVMImage
+            // 
+            this.odfVMImage.DefaultExt = "img";
+            this.odfVMImage.Filter = "Image File|*.img|All Files|*.*";
             // 
             // MainForm
             // 
@@ -152,6 +179,7 @@
             this.Name = "MainForm";
             this.Text = "Mosa GDB Debugger v1.1";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -171,9 +199,12 @@
         private System.Windows.Forms.ToolStripButton btnViewMemory;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.OpenFileDialog ofdDebug;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btnDebugQEMU;
-    }
+		private System.Windows.Forms.ToolStripButton toolStripButton2;
+		private System.Windows.Forms.ToolStripButton toolStripButton1;
+		private System.Windows.Forms.OpenFileDialog odfVMImage;
+	}
 }

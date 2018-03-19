@@ -3,7 +3,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace Mosa.Tool.GDBDebugger.View
+namespace Mosa.Tool.GDBDebugger.Views
 {
 	public partial class MemoryView : DebugDockContent
 	{
@@ -32,7 +32,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			if (!IsConnected || !IsPaused)
 				return;
 
-			Columns = (lbMemory.Width - 100) / ((int)lbMemory.Font.Size * 3);
+			Columns = 6 * 4; // (lbMemory.Width - 100) / ((int)lbMemory.Font.Size * 3);
 			Rows = lbMemory.Height / (lbMemory.Font.Height + 2);
 
 			var address = MainForm.ParseMemoryAddress(tbAddress.Text);

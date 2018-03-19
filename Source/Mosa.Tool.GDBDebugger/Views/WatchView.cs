@@ -5,7 +5,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace Mosa.Tool.GDBDebugger.View
+namespace Mosa.Tool.GDBDebugger.Views
 {
 	public partial class WatchView : DebugDockContent
 	{

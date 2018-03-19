@@ -41,11 +41,11 @@
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(40, 16);
+            this.label1.Location = new System.Drawing.Point(33, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(70, 13);
+            this.label1.Size = new System.Drawing.Size(72, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Remote host:";
+            this.label1.Text = "Remote Host:";
             // 
             // tbHost
             // 
@@ -61,11 +61,11 @@
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(42, 43);
+            this.label2.Location = new System.Drawing.Point(33, 41);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 13);
+            this.label2.Size = new System.Drawing.Size(69, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Remote port:";
+            this.label2.Text = "Remote Port:";
             // 
             // numPort
             // 

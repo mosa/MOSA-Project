@@ -1,4 +1,4 @@
-namespace Mosa.Tool.GDBDebugger.View
+namespace Mosa.Tool.GDBDebugger.Views
 {
 	partial class StatusView : DebugDockContent
 	{

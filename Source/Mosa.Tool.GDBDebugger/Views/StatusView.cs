@@ -3,7 +3,7 @@
 using SharpDisasm;
 using System.Windows.Forms;
 
-namespace Mosa.Tool.GDBDebugger.View
+namespace Mosa.Tool.GDBDebugger.Views
 {
 	public partial class StatusView : DebugDockContent
 	{

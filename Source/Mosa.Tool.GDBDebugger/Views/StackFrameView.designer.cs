@@ -1,6 +1,6 @@
-namespace Mosa.Tool.GDBDebugger.View
+namespace Mosa.Tool.GDBDebugger.Views
 {
-	partial class RegisterView : DebugDockContent
+	partial class StackFrameView : DebugDockContent
     {
         /// <summary>
         /// Required designer variable.
@@ -38,11 +38,10 @@ namespace Mosa.Tool.GDBDebugger.View
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToOrderColumns = true;
             this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Consolas", 8F);
@@ -60,7 +59,8 @@ namespace Mosa.Tool.GDBDebugger.View
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
             dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 2);
             this.dataGridView1.Margin = new System.Windows.Forms.Padding(0);
             this.dataGridView1.MultiSelect = false;
             this.dataGridView1.Name = "dataGridView1";
@@ -77,11 +77,11 @@ namespace Mosa.Tool.GDBDebugger.View
             this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 8F);
             this.dataGridView1.RowTemplate.Height = 18;
-            this.dataGridView1.Size = new System.Drawing.Size(219, 159);
-            this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.Size = new System.Drawing.Size(219, 157);
+            this.dataGridView1.TabIndex = 3;
             this.dataGridView1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
             // 
-            // RegisterView
+            // StackFrameView
             // 
             this.ClientSize = new System.Drawing.Size(219, 161);
             this.CloseButton = false;
@@ -91,19 +91,20 @@ namespace Mosa.Tool.GDBDebugger.View
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(235, 200);
-            this.Name = "RegisterView";
+            this.Name = "StackFrameView";
             this.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
             this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;
-            this.TabText = "Registers";
-            this.Text = "Registers";
+            this.TabText = "Stack Frame";
+            this.Text = "Stack Frame";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
 
 		}
+
+
+
 		#endregion
 
 		private System.Windows.Forms.DataGridView dataGridView1;
-
-
 	}
 }

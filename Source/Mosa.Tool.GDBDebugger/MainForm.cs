@@ -3,10 +3,13 @@
 using CommandLine;
 using Mosa.Tool.GDBDebugger.DebugData;
 using Mosa.Tool.GDBDebugger.GDB;
-using Mosa.Tool.GDBDebugger.View;
+using Mosa.Tool.GDBDebugger.Views;
+using Mosa.Utility.BootImage;
 using Mosa.Utility.Launcher;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
@@ -43,7 +46,7 @@ namespace Mosa.Tool.GDBDebugger
 		public Connector GDBConnector { get; private set; }
 		public MemoryCache MemoryCache { get; private set; }
 
-		public Options Options { get; private set; } = new Options();
+		public Options Options { get; } = new Options();
 
 		public AppLocations AppLocations { get; } = new AppLocations();
 
@@ -52,6 +55,8 @@ namespace Mosa.Tool.GDBDebugger
 		public List<BreakPoint> BreakPoints { get; } = new List<BreakPoint>();
 
 		public List<Watch> Watchs { get; } = new List<Watch>();
+
+		private Process VMProcess = null;
 
 		public MainForm()
 		{
@@ -119,6 +124,11 @@ namespace Mosa.Tool.GDBDebugger
 				Connect();
 			}
 
+			LoadDebugInfo();
+		}
+
+		private void LoadDebugInfo()
+		{
 			if (Options.DebugInfoFile != null)
 			{
 				LoadDebugData.LoadDebugInfo(Options.DebugInfoFile, DebugSource);
@@ -207,17 +217,6 @@ namespace Mosa.Tool.GDBDebugger
 			}
 
 			return Convert.ToUInt64(nbr, digits);
-		}
-
-		private void btnDebugQEMU_Click(object sender, EventArgs e)
-		{
-			using (var debug = new DebugQemuWindow(AppLocations, Options))
-			{
-				if (debug.ShowDialog(this) == DialogResult.OK)
-				{
-					Connect();
-				}
-			}
 		}
 
 		private void btnConnect_Click(object sender, EventArgs e)
@@ -418,10 +417,94 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			var cliParser = new Parser(config => config.HelpWriter = Console.Out);
 
-			cliParser.ParseArguments<Options>(() =>
+			cliParser.ParseArguments(() => Options, args);
+		}
+
+		private void toolStripButton2_Click(object sender, EventArgs e)
+		{
+			using (var debug = new DebugAppLocationsWindow(AppLocations))
 			{
-				return Options;
-			}, args);
+				if (debug.ShowDialog(this) == DialogResult.OK)
+				{
+				}
+			}
+		}
+
+		private static ImageFormat GetFormat(string fileName)
+		{
+			switch (Path.GetExtension(fileName).ToLower())
+			{
+				case ".img": return ImageFormat.IMG;
+				case ".iso": return ImageFormat.ISO;
+			}
+
+			return ImageFormat.NotSpecified;
+		}
+
+		private void toolStripButton1_Click(object sender, EventArgs e)
+		{
+			if (odfVMImage.ShowDialog() == DialogResult.OK)
+			{
+				Options.ImageFile = odfVMImage.FileName;
+				Options.ImageFormat = GetFormat(Options.ImageFile);
+
+				var debugFile = Path.Combine(
+					Path.GetDirectoryName(Options.ImageFile),
+					Path.GetFileNameWithoutExtension(Options.ImageFile)) + ".debug";
+
+				if (File.Exists(debugFile))
+				{
+					Options.DebugInfoFile = debugFile;
+				}
+
+				Options.GDBPort++;
+
+				VMProcess = StartQEMU();
+				LoadDebugInfo();
+
+				Connect();
+			}
+		}
+
+		private Process StartQEMU()
+		{
+			var info = new ProcessStartInfo();
+			info.FileName = AppLocations.QEMU;
+
+			info.Arguments = " -L \"" + AppLocations.QEMUBIOSDirectory + "\"";
+
+			//TODO: Check platform
+			info.Arguments += " -cpu qemu32,+sse4.1";
+
+			info.Arguments = info.Arguments + " -S -gdb tcp::" + Options.GDBPort.ToString();
+
+			if (Options.ImageFormat == ImageFormat.ISO)
+			{
+				info.Arguments = info.Arguments + " -cdrom \"" + Options.ImageFile + "\"";
+			}
+			else
+			{
+				info.Arguments = info.Arguments + " -hda \"" + Options.ImageFile + "\"";
+			}
+
+			info.UseShellExecute = false;
+			info.CreateNoWindow = true;
+
+			return Process.Start(info);
+		}
+
+		private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			if (GDBConnector != null)
+			{
+				GDBConnector.Disconnect();
+				GDBConnector = null;
+			}
+
+			if (VMProcess != null)
+			{
+				VMProcess.Kill();
+			}
 		}
 	}
 }

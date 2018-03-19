@@ -64,7 +64,10 @@ namespace Mosa.Utility.RSP
 
 		private void SetReadCallBack()
 		{
-			stream.BeginRead(receivedByte, 0, 1, ReadAsyncCallback, null);
+			if (stream.IsConnected)
+			{
+				stream.BeginRead(receivedByte, 0, 1, ReadAsyncCallback, null);
+			}
 		}
 
 		private void ReadAsyncCallback(IAsyncResult ar)

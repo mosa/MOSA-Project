@@ -4,7 +4,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace Mosa.Tool.GDBDebugger.View
+namespace Mosa.Tool.GDBDebugger.Views
 {
 	public partial class BreakPointView : DebugDockContent
 	{
@@ -81,7 +81,7 @@ namespace Mosa.Tool.GDBDebugger.View
 			menu.Enabled = false;
 			var m = new ContextMenu();
 			m.MenuItems.Add(menu);
-			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.Name });
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.BreakPoint });
 			m.MenuItems.Add(new MenuItem("&Delete breakpoint", new EventHandler(MainForm.OnRemoveBreakPoint)) { Tag = clickedEntry.BreakPoint });
 
 			m.Show(dataGridView1, relativeMousePosition);

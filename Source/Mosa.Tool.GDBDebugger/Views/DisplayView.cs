@@ -3,7 +3,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Mosa.Tool.GDBDebugger.View
+namespace Mosa.Tool.GDBDebugger.Views
 {
 	/// <summary>
 	///

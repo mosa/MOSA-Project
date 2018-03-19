@@ -160,28 +160,29 @@ namespace Mosa.Kernel.x86
 			return threadID;
 		}
 
-		private static void CreateThread(uint methoAddress, uint stackSize, uint threadID)
+		private static void CreateThread(uint methodAddress, uint stackSize, uint threadID)
 		{
 			var thread = Threads[threadID];
 
 			var stack = VirtualPageAllocator.Reserve(stackSize);
-			uint stackStateSize = 52;
 			var stackTop = stack + stackSize;
 
 			// Setup stack state
 			Native.Set32(stackTop - 4, 0);          // Zero Sentinel
 			Native.Set32(stackTop - 8, SignalThreadTerminationMethodAddress);  // Address of method that will raise a interrupt signal to terminate thread
 
-			Native.Set32(stackTop - 4 - 8, 0);      // EFLAG
-			Native.Set32(stackTop - 8 - 8, 0);      // CS
-			Native.Set32(stackTop - 12 - 8, methoAddress);    // EIP
+			Native.Set32(stackTop - 4 - 8, 0x00000202);// EFLAG
+			Native.Set32(stackTop - 8 - 8, 0x08);      // CS
+			Native.Set32(stackTop - 12 - 8, methodAddress); // EIP
+
 			Native.Set32(stackTop - 16 - 8, 0);     // ErrorCode - not used
 			Native.Set32(stackTop - 20 - 8, 0);     // Interrupt Number - not used
+
 			Native.Set32(stackTop - 24 - 8, 0);     // EAX
 			Native.Set32(stackTop - 28 - 8, 0);     // ECX
 			Native.Set32(stackTop - 32 - 8, 0);     // EDX
 			Native.Set32(stackTop - 36 - 8, 0);     // EBX
-			Native.Set32(stackTop - 40 - 8, stackTop - 8); // ESP (original) - not used
+			Native.Set32(stackTop - 40 - 8, 0);     // ESP (original) - not used
 			Native.Set32(stackTop - 44 - 8, stackTop - 8); // EBP
 			Native.Set32(stackTop - 48 - 8, 0);     // ESI
 			Native.Set32(stackTop - 52 - 8, 0);     // EDI
@@ -189,7 +190,7 @@ namespace Mosa.Kernel.x86
 			thread.Status = ThreadStatus.Running;
 			thread.StackBottom = stack;
 			thread.StackTop = stackTop;
-			thread.StackStatePointer = stackTop - stackStateSize;
+			thread.StackStatePointer = stackTop - 52;
 		}
 
 		private static void SaveThreadState(uint threadID, uint stackSate)
