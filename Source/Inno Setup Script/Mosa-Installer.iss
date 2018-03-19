@@ -22,13 +22,13 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DisableDirPage=yes
 DefaultGroupName={#MyAppName}
-OutputDir=installer
+OutputDir=..\..\bin\MOSA Installer
 OutputBaseFilename=MOSA-Installer
-Compression=lzma/ultra64
 SolidCompression=yes
-InternalCompressLevel=ultra
 MinVersion=0,6.0
 AllowUNCPath=False
+Compression=lzma2/ultra64
+InternalCompressLevel=ultra64
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -52,16 +52,22 @@ Name: "{app}\Tools"
 Name: "{app}\bin"
 
 [Files]
-Source: "..\bin\*.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\bin\*.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\bin\*.config"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\Tools\Bochs"; DestDir: "{app}\Tools\Bochs"; Flags: ignoreversion createallsubdirs recursesubdirs
-Source: "..\Tools\mkisofs"; DestDir: "{app}\Tools\mkisofs"; Flags: ignoreversion createallsubdirs recursesubdirs
-Source: "..\Tools\ndisasm"; DestDir: "{app}\Tools\ndisasm"; Flags: ignoreversion createallsubdirs recursesubdirs
-Source: "..\Tools\qemu"; DestDir: "{app}\Tools\qemu"; Flags: ignoreversion createallsubdirs recursesubdirs
-Source: "..\Tools\xunit"; DestDir: "{app}\Tools\xunit"; Flags: ignoreversion createallsubdirs recursesubdirs
-Source: "..\Tools\readme.md"; DestDir: "{app}\Tools"; Flags: ignoreversion
-Source: "..\*.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\bin\*.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\*.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\*.config"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\Tools\mkisofs\*"; DestDir: "{app}\Tools\mkisofs"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Tools\ndisasm\*"; DestDir: "{app}\Tools\ndisasm"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Tools\qemu\*"; DestDir: "{app}\Tools\qemu"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Tools\rufus\*"; DestDir: "{app}\Tools\rufus"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Tools\syslinux\*"; DestDir: "{app}\Tools\syslinux"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Tools\gdb\*"; DestDir: "{app}\Tools\gdb"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Tools\grub\*"; DestDir: "{app}\Tools\grub"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Tools\Bochs\*"; DestDir: "{app}\Tools\Bochs"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Tools\nuget\*"; DestDir: "{app}\Tools\nuget"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Tools\Bochs\*"; DestDir: "{app}\Tools\Bochs"; Flags: ignoreversion createallsubdirs recursesubdirs
+Source: "..\..\Tools\readme.md"; DestDir: "{app}\Tools"; Flags: ignoreversion
+Source: "..\..\*.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\..\*.md"; DestDir: "{app}"; Flags: ignoreversion
 
 [ThirdParty]
 UseRelativePaths=True
