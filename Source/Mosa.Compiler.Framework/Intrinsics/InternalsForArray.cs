@@ -5,7 +5,6 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	/// <summary>
 	/// InternalsForArray
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.BaseInternals" />
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Array::Copy")]
 	[ReplacementTarget("System.Array::GetLength")]

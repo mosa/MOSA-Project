@@ -5,7 +5,6 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	/// <summary>
 	/// InternalsForObject
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.BaseInternals" />
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Object::GetType")]
 	[ReplacementTarget("System.Object::MemberwiseClone")]

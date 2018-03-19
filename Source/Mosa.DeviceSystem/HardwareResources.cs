@@ -24,7 +24,6 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="ioPortRegions">The io port regions.</param>
 		/// <param name="memoryRegions">The memory regions.</param>
-		/// <param name="interruptHandler">The interrupt handler.</param>
 		public HardwareResources(List<IOPortRegion> ioPortRegions, List<MemoryRegion> memoryRegions)
 		{
 			this.ioPortRegions = ioPortRegions;

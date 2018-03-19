@@ -5,7 +5,6 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	/// <summary>
 	/// InternalsForRuntimeHelpers
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.BaseInternals" />
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::InitializeArray")]
 	[ReplacementTarget("System.Runtime.CompilerServices.RuntimeHelpers::GetHashCode")]

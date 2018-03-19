@@ -5,7 +5,6 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	/// <summary>
 	/// InternalsForType
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.Intrinsics.BaseInternals" />
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Type::GetTypeImpl")]
 	[ReplacementTarget("System.Type::GetTypeFromHandleImpl")]
