@@ -25,12 +25,12 @@ namespace Mosa.Utility.Launcher
 		public bool AutoStart { get; set; }
 
 		[Option('l', "launch")]
-		public bool LaunchEmulator { get; set; }
+		public bool LaunchVM { get; set; }
 
 		[Option("launch-off")]
-		public bool LaunchEmulatorExtraOption
+		public bool LaunchVMExtraOption
 		{
-			set { LaunchEmulator = false; }
+			set { LaunchVM = false; }
 		}
 
 		[Option('e')]
@@ -198,35 +198,35 @@ namespace Mosa.Utility.Launcher
 		[Option("file-system")]
 		public FileSystem FileSystem { get; set; }
 
-		[Option("debug-connection")]
-		public DebugConnectionOption DebugConnectionOption { get; set; }
+		[Option("serial-connection")]
+		public SerialConnectionOption SerialConnectionOption { get; set; }
 
-		[Option("pipe")]
-		public bool DebugConnectionOptionPipe
+		[Option("serial-pipe")]
+		public bool SerialConnectionOptionPipe
 		{
-			set { DebugConnectionOption = DebugConnectionOption.Pipe; }
+			set { SerialConnectionOption = SerialConnectionOption.Pipe; }
 		}
 
-		[Option("tcpclient")]
-		public bool DebugConnectionOptionTCPClient
+		[Option("serial-tcpclient")]
+		public bool SerialConnectionOptionTCPClient
 		{
-			set { DebugConnectionOption = DebugConnectionOption.TCPClient; }
+			set { SerialConnectionOption = SerialConnectionOption.TCPClient; }
 		}
 
-		[Option("tcpserver")]
-		public bool DebugConnectionOptionTCPServer
+		[Option("serial-tcpserver")]
+		public bool SerialConnectionOptionTCPServer
 		{
-			set { DebugConnectionOption = DebugConnectionOption.TCPServer; }
+			set { SerialConnectionOption = SerialConnectionOption.TCPServer; }
 		}
 
-		[Option("debug-connection-port", Default = 9999)]
-		public int DebugConnectionPort { get; set; }
+		[Option("serial-connection-port", Default = 9999)]
+		public int SerialConnectionPort { get; set; }
 
-		[Option("debug-connection-address")]
-		public string DebugConnectionAddress { get; set; }
+		[Option("serial-connection-host")]
+		public string SerialConnectionHost { get; set; }
 
-		[Option("debug-pipe-name")]
-		public string DebugPipeName { get; set; } = "MOSA";
+		[Option("serial-pipe-name")]
+		public string SerialPipeName { get; set; } = "MOSA";
 
 		[Option("threading")]
 		public bool UseMultipleThreadCompiler { get; set; } = true;
@@ -338,8 +338,23 @@ namespace Mosa.Utility.Launcher
 		[Option("gdb", Default = false)]
 		public bool LaunchGDB { get; set; }
 
-		[Option("launch-mosa-debugger")]
-		public bool LaunchMosaDebugger { get; set; }
+		[Option("gdb-port", Default = 1234)]
+		public int GDBPort { get; set; }
+
+		[Option("gdb-host", Default = "localhost")]
+		public string GDBHost { get; set; }
+
+		[Option("launch-gdb-debugger")]
+		public bool LaunchGDBDebugger { get; set; }
+
+		[Option("image")]
+		public string ImageFile { get; set; }
+
+		[Option("debugfile")]
+		public string DebugFile { get; set; }
+
+		[Option("breakpoints")]
+		public string BreakPointsFile { get; set; }
 
 		public List<IncludeFile> IncludeFiles { get; set; }
 
@@ -386,18 +401,20 @@ namespace Mosa.Utility.Launcher
 			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
 			BootLoader = BootLoader.Syslinux_3_72; //Can't use the Default in the attribute because it would overwrite other bootloader options
 			BootFormat = BootFormat.Multiboot_0_7;
-			DebugConnectionOption = DebugConnectionOption.None;
+			SerialConnectionOption = SerialConnectionOption.None;
 			Emulator = EmulatorType.Qemu;
 			ImageFormat = ImageFormat.IMG;
 			LinkerFormatType = LinkerFormatType.Elf32;
 			PlatformType = PlatformType.X86;
 			FileSystem = FileSystem.FAT16;
 			BaseAddress = 0x00400000;
-			DebugConnectionAddress = "127.0.0.1";
+			SerialConnectionHost = "127.0.0.1";
 			InlinedIRMaximum = 8;
-			LaunchEmulator = true;
+			LaunchVM = true;
 			IRLongExpansion = true;
 			TwoPassOptimizations = true;
+			GDBPort = 1234;
+			GDBHost = "localhost";
 		}
 
 		private void AppendIncludeFiles(string file)
@@ -412,7 +429,7 @@ namespace Mosa.Utility.Launcher
 					if (string.IsNullOrEmpty(line))
 						continue;
 
-					string[] parts = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+					var parts = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
 					if (parts.Length == 0)
 						continue;

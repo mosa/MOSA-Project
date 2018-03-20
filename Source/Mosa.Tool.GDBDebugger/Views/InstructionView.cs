@@ -55,7 +55,7 @@ namespace Mosa.Tool.GDBDebugger.Views
 			if (!IsConnected || !IsPaused)
 				return;
 
-			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
+			var address = MainForm.ParseHexAddress(tbAddress.Text);
 			uint bytes = 512;
 
 			MemoryCache.ReadMemory(address, bytes, OnMemoryRead);

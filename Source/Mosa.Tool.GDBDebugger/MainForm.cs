@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using CommandLine;
+using Mosa.Compiler.Framework;
 using Mosa.Tool.GDBDebugger.DebugData;
 using Mosa.Tool.GDBDebugger.GDB;
 using Mosa.Tool.GDBDebugger.Views;
@@ -11,33 +12,34 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Windows.Forms;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.GDBDebugger
 {
-	public partial class MainForm : Form
+	public partial class MainForm : Form, IStarterEvent
 	{
-		private OutputView outputView;
+		public readonly OutputView outputView;
 
-		private RegisterView registersView;
+		private readonly RegisterView registersView;
 
-		private DisplayView displayView;
-		private ControlView controlView;
+		private readonly DisplayView displayView;
+		private readonly ControlView controlView;
 
-		private CallStackView callStackView;
-		private StackFrameView stackFrameView;
+		private readonly CallStackView callStackView;
+		private readonly StackFrameView stackFrameView;
 
 		//private StackView stackView;
 		//private FlagView flagView;
-		private StatusView statusView;
+		private readonly StatusView statusView;
 
-		private InstructionView instructionView;
+		private readonly InstructionView instructionView;
 
-		private SymbolView symbolView;
-		private WatchView watchView;
-		private BreakPointView breakPointView;
-		private MethodView methodView;
+		private readonly SymbolView symbolView;
+		private readonly WatchView watchView;
+		private readonly BreakPointView breakPointView;
+		private readonly MethodView methodView;
 
 		//private ScriptView scriptView;
 
@@ -84,10 +86,13 @@ namespace Mosa.Tool.GDBDebugger
 			//scriptView = new ScriptView(this);
 
 			AppLocations.FindApplications();
+			Options.EnableQemuGDB = true;
 		}
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
+			Text = "MOSA GDB Debugger v" + CompilerVersion.Version;
+
 			dockPanel.SuspendLayout(true);
 			dockPanel.DockTopPortion = 75;
 
@@ -119,19 +124,36 @@ namespace Mosa.Tool.GDBDebugger
 
 			dockPanel.ResumeLayout(true, true);
 
-			if (Options.AutoConnect)
+			if (Options.ImageFile != null)
+			{
+				VMProcess = StartQEMU();
+			}
+			else if (Options.AutoStart)
 			{
 				Connect();
 			}
 
-			LoadDebugInfo();
+			LoadBreakPoints();
+			LoadDebugFile();
 		}
 
-		private void LoadDebugInfo()
+		void IStarterEvent.NewStatus(string status)
 		{
-			if (Options.DebugInfoFile != null)
+			MethodInvoker method = () => NewStatus(status);
+
+			Invoke(method);
+		}
+
+		private void NewStatus(string info)
+		{
+			AddOutput(info);
+		}
+
+		private void LoadDebugFile()
+		{
+			if (Options.DebugFile != null && File.Exists(Options.DebugFile))
 			{
-				LoadDebugData.LoadDebugInfo(Options.DebugInfoFile, DebugSource);
+				LoadDebugData.LoadDebugInfo(Options.DebugFile, DebugSource);
 			}
 		}
 
@@ -142,20 +164,14 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void OnPause()
 		{
-			MethodInvoker method = delegate ()
-			{
-				NotifyPause();
-			};
+			MethodInvoker method = NotifyPause;
 
 			BeginInvoke(method);
 		}
 
 		private void OnRunning()
 		{
-			MethodInvoker method = delegate ()
-			{
-				NotifyRunning();
-			};
+			MethodInvoker method = NotifyRunning;
 
 			BeginInvoke(method);
 		}
@@ -204,7 +220,7 @@ namespace Mosa.Tool.GDBDebugger
 			}
 		}
 
-		public ulong ParseMemoryAddress(string input)
+		public ulong ParseHexAddress(string input)
 		{
 			string nbr = input.ToUpper().Trim();
 			int digits = 10;
@@ -236,6 +252,11 @@ namespace Mosa.Tool.GDBDebugger
 			{
 				GDBConnector.Disconnect();
 				MemoryCache = null;
+			}
+
+			if (Options.GDBPort == 0)
+			{
+				Options.GDBPort = 1234;
 			}
 
 			GDBConnector = new Connector(new X86Platform(), Options.GDBHost, Options.GDBPort);
@@ -274,7 +295,7 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			var list = DebugSource.GetSymbolsStartingAt(address);
 
-			if (list != null && list.Count >= 1)
+			if (list?.Count >= 1)
 			{
 				return list[0].CommonName;
 			}
@@ -296,7 +317,7 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			var list = DebugSource.GetSymbolsStartingAt(address);
 
-			if (list != null && list.Count >= 1)
+			if (list?.Count >= 1)
 			{
 				return list[0].CommonName;
 			}
@@ -454,43 +475,33 @@ namespace Mosa.Tool.GDBDebugger
 
 				if (File.Exists(debugFile))
 				{
-					Options.DebugInfoFile = debugFile;
+					Options.DebugFile = debugFile;
+				}
+
+				var breakpointFile = Path.Combine(
+					Path.GetDirectoryName(Options.ImageFile),
+					Path.GetFileNameWithoutExtension(Options.ImageFile)) + ".breakpoints";
+
+				if (File.Exists(debugFile))
+				{
+					Options.BreakPointsFile = breakpointFile;
 				}
 
 				Options.GDBPort++;
 
 				VMProcess = StartQEMU();
-				LoadDebugInfo();
-
+				LoadDebugFile();
 				Connect();
+				LoadBreakPoints();
 			}
 		}
 
 		private Process StartQEMU()
 		{
-			var info = new ProcessStartInfo();
-			info.FileName = AppLocations.QEMU;
 
-			info.Arguments = " -L \"" + AppLocations.QEMUBIOSDirectory + "\"";
+			var starter = new Starter(Options, AppLocations, this);
 
-			//TODO: Check platform
-			info.Arguments += " -cpu qemu32,+sse4.1";
-
-			info.Arguments = info.Arguments + " -S -gdb tcp::" + Options.GDBPort.ToString();
-
-			if (Options.ImageFormat == ImageFormat.ISO)
-			{
-				info.Arguments = info.Arguments + " -cdrom \"" + Options.ImageFile + "\"";
-			}
-			else
-			{
-				info.Arguments = info.Arguments + " -hda \"" + Options.ImageFile + "\"";
-			}
-
-			info.UseShellExecute = false;
-			info.CreateNoWindow = true;
-
-			return Process.Start(info);
+			return starter.LaunchVM();
 		}
 
 		private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -501,9 +512,88 @@ namespace Mosa.Tool.GDBDebugger
 				GDBConnector = null;
 			}
 
-			if (VMProcess != null)
+			if (VMProcess?.HasExited == false)
 			{
 				VMProcess.Kill();
+			}
+		}
+
+		public void LoadBreakPoints()
+		{
+			if (Options.BreakPointsFile == null || !File.Exists(Options.BreakPointsFile))
+				return;
+
+			bool remap = false;
+
+			foreach (var line in File.ReadAllLines(Options.BreakPointsFile))
+			{
+				if (string.IsNullOrEmpty(line))
+					continue;
+
+				if (line.StartsWith("#HASH: "))
+				{
+					if (Options.ImageFile != null && File.Exists(Options.ImageFile))
+					{
+						var imagehash = CalculateFileHash(Options.ImageFile);
+
+						var breakpointhash = line.Substring(7).Trim();
+
+						remap = imagehash != breakpointhash;
+					}
+					continue;
+				}
+
+				if (line.StartsWith("#"))
+					continue;
+
+				var parts = line.Split('\t');
+
+				if (parts.Length == 0)
+					continue;
+
+				var address = ParseHexAddress(parts[0]);
+
+				if (parts.Length >= 2 && remap)
+				{
+					var symbol = parts[1];
+
+					if (symbol.StartsWith("0x") && symbol.Contains('+'))
+						continue;
+
+					address = DebugSource.GetFirstSymbolByName(symbol);
+
+					if (address == 0)
+						continue;
+
+					AddBreakPoint(address);
+
+					continue;
+				}
+
+				if (parts.Length == 1)
+				{
+					AddBreakPoint(address);
+				}
+				else if (parts.Length == 2)
+				{
+					AddBreakPoint(address, parts[1]);
+				}
+				else
+				{
+					AddBreakPoint(address, parts[1], parts[2]);
+				}
+			}
+		}
+
+		public static string CalculateFileHash(string filename)
+		{
+			using (var md5 = MD5.Create())
+			{
+				using (var stream = File.Open(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+				{
+					var hash = md5.ComputeHash(stream);
+					return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+				}
 			}
 		}
 	}

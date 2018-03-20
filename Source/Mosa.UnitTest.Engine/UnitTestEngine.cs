@@ -89,10 +89,10 @@ namespace Mosa.UnitTest.Engine
 				EmitRelocations = false,
 				EmitSymbols = false,
 				Emitx86IRQMethods = true,
-				DebugConnectionOption = DebugConnectionOption.TCPServer,
-				DebugConnectionPort = 9999,
-				DebugConnectionAddress = "127.0.0.1",
-				DebugPipeName = "MOSA",
+				SerialConnectionOption = SerialConnectionOption.TCPServer,
+				SerialConnectionPort = 9999,
+				SerialConnectionHost = "127.0.0.1",
+				SerialPipeName = "MOSA",
 				ExitOnLaunch = true,
 				GenerateNASMFile = false,
 				GenerateASMFile = true,
@@ -349,7 +349,8 @@ namespace Mosa.UnitTest.Engine
 		{
 			if (starter == null)
 			{
-				starter = new Starter(Options, AppLocations, imagefile, this);
+				Options.ImageFile = imagefile;
+				starter = new Starter(Options, AppLocations, this);
 			}
 
 			process = starter.Launch();
@@ -400,14 +401,14 @@ namespace Mosa.UnitTest.Engine
 		{
 			if (!debugServerEngine.IsConnected)
 			{
-				if (Options.DebugConnectionOption == DebugConnectionOption.TCPServer)
+				if (Options.SerialConnectionOption == SerialConnectionOption.TCPServer)
 				{
-					var client = new TcpClient(Options.DebugConnectionAddress, Options.DebugConnectionPort);
+					var client = new TcpClient(Options.SerialConnectionHost, Options.SerialConnectionPort);
 					debugServerEngine.Stream = new DebugNetworkStream(client.Client, true);
 				}
-				else if (Options.DebugConnectionOption == DebugConnectionOption.Pipe)
+				else if (Options.SerialConnectionOption == SerialConnectionOption.Pipe)
 				{
-					var pipeStream = new NamedPipeClientStream(".", Options.DebugPipeName, PipeDirection.InOut);
+					var pipeStream = new NamedPipeClientStream(".", Options.SerialPipeName, PipeDirection.InOut);
 					pipeStream.Connect();
 					debugServerEngine.Stream = pipeStream;
 				}

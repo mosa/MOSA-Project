@@ -35,11 +35,6 @@ namespace Mosa.DeviceSystem
 		private SpinLock spinLock;
 
 		/// <summary>
-		/// The spin lock
-		/// </summary>
-		private SpinLock onChangeSpinLock;
-
-		/// <summary>
 		/// The interrupt handlers
 		/// </summary>
 		private readonly List<Device>[] irqDispatch;

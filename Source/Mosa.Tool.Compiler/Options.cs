@@ -28,7 +28,7 @@ namespace Mosa.Tool.Compiler
 						throw new Exception(string.Format("Input file '{0}' doesn't exist.", v));
 					}
 
-					FileInfo file = new FileInfo(v);
+					var file = new FileInfo(v);
 					if (string.Equals(file.Extension, ".exe", StringComparison.OrdinalIgnoreCase))
 					{
 						if (IsInputExecutable)

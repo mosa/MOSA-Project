@@ -105,7 +105,9 @@ namespace Mosa.Utility.Launcher
 
 				if (Options.GenerateDebugFile)
 				{
-					compiler.CompilerOptions.DebugFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.debug");
+					var debugFile = Options.DebugFile ?? Path.GetFileNameWithoutExtension(Options.SourceFile) + ".debug";
+
+					compiler.CompilerOptions.DebugFile = Path.Combine(Options.DestinationDirectory, debugFile);
 				}
 
 				if (!Directory.Exists(Options.DestinationDirectory))

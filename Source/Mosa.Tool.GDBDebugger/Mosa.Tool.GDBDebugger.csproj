@@ -91,7 +91,6 @@
       <DependentUpon>DebugAppLocationsWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="GDB\MemoryCache.cs" />
-    <Compile Include="Options.cs" />
     <Compile Include="Views\BreakPointView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -208,6 +207,10 @@
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
       <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
       <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
+      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
+      <Name>Mosa.Compiler.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj">
       <Project>{65F7691A-B355-4D98-BB97-0B19F13E2190}</Project>

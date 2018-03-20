@@ -35,7 +35,7 @@ namespace Mosa.Tool.GDBDebugger.Views
 			Columns = 6 * 4; // (lbMemory.Width - 100) / ((int)lbMemory.Font.Size * 3);
 			Rows = lbMemory.Height / (lbMemory.Font.Height + 2);
 
-			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
+			var address = MainForm.ParseHexAddress(tbAddress.Text);
 			uint bytes = (uint)(Rows * Columns);
 
 			//if (bytes > 0x800)

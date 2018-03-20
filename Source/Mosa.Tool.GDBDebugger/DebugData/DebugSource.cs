@@ -9,6 +9,7 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 	{
 		protected Dictionary<ulong, InstructionInfo> InstructionLookup = new Dictionary<ulong, InstructionInfo>();
 		protected KeyedList<ulong, SymbolInfo> SymbolLookup = new KeyedList<ulong, SymbolInfo>();
+		protected KeyedList<string, SymbolInfo> SymbolNameLookup = new KeyedList<string, SymbolInfo>();
 
 		public List<SymbolInfo> Symbols { get; } = new List<SymbolInfo>();
 		public List<SectionInfo> Sections { get; } = new List<SectionInfo>();
@@ -26,6 +27,7 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 		{
 			Symbols.Add(symbol);
 			SymbolLookup.Add(symbol.Address, symbol);
+			SymbolNameLookup.Add(symbol.Name, symbol);
 		}
 
 		public void Add(InstructionInfo instruction)
@@ -80,9 +82,7 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 
 		public InstructionInfo GetInstruction(ulong address)
 		{
-			InstructionInfo instruction = null;
-
-			InstructionLookup.TryGetValue(address, out instruction);
+			InstructionLookup.TryGetValue(address, out InstructionInfo instruction);
 
 			return instruction;
 		}
@@ -113,6 +113,16 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 			}
 
 			return null;
+		}
+
+		public ulong GetFirstSymbolByName(string name)
+		{
+			var sublist = SymbolNameLookup.Get(name);
+
+			if (sublist == null)
+				return 0;
+
+			return sublist[0].Address;
 		}
 	}
 }

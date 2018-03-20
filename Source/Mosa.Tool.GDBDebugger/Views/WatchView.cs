@@ -159,7 +159,7 @@ namespace Mosa.Tool.GDBDebugger.Views
 
 		private void btnAdd_Click(object sender, EventArgs e)
 		{
-			var address = MainForm.ParseMemoryAddress(tbAddress.Text);
+			var address = MainForm.ParseHexAddress(tbAddress.Text);
 
 			uint size = 0;
 
