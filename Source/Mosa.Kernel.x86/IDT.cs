@@ -427,7 +427,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case Scheduler.ClockIRQ:
-					Scheduler.SchedulerInterrupt(stackStatePointer);
+					Scheduler.ClockInterrupt(stackStatePointer);
 					break;
 
 				case Scheduler.ThreadTerminationSignalIRQ:

@@ -48,11 +48,12 @@ namespace Mosa.Kernel.x86
 		{
 			while (true)
 			{
+				Screen.Write(".");
 				Native.Hlt();
 			}
 		}
 
-		public static void SchedulerInterrupt(uint stackSate)
+		public static void ClockInterrupt(uint stackSate)
 		{
 			if (!Enabled)
 				return;
@@ -168,29 +169,29 @@ namespace Mosa.Kernel.x86
 			var stackTop = stack + stackSize;
 
 			// Setup stack state
-			Native.Set32(stackTop - 4, 0);          // Zero Sentinel
-			Native.Set32(stackTop - 8, SignalThreadTerminationMethodAddress);  // Address of method that will raise a interrupt signal to terminate thread
+			Intrinsic.Store32(stackTop, -4, 0);          // Zero Sentinel
+			Intrinsic.Store32(stackTop, -8, SignalThreadTerminationMethodAddress);  // Address of method that will raise a interrupt signal to terminate thread
 
-			Native.Set32(stackTop - 4 - 8, 0x00000202);// EFLAG
-			Native.Set32(stackTop - 8 - 8, 0x08);      // CS
-			Native.Set32(stackTop - 12 - 8, methodAddress); // EIP
+			Intrinsic.Store32(stackTop, -12, 0x00000202);// EFLAG
+			Intrinsic.Store32(stackTop, -16, 0x08);      // CS
+			Intrinsic.Store32(stackTop, -20, methodAddress); // EIP
 
-			Native.Set32(stackTop - 16 - 8, 0);     // ErrorCode - not used
-			Native.Set32(stackTop - 20 - 8, 0);     // Interrupt Number - not used
+			Intrinsic.Store32(stackTop, -24, 0);     // ErrorCode - not used
+			Intrinsic.Store32(stackTop, -28, 0);     // Interrupt Number - not used
 
-			Native.Set32(stackTop - 24 - 8, 0);     // EAX
-			Native.Set32(stackTop - 28 - 8, 0);     // ECX
-			Native.Set32(stackTop - 32 - 8, 0);     // EDX
-			Native.Set32(stackTop - 36 - 8, 0);     // EBX
-			Native.Set32(stackTop - 40 - 8, 0);     // ESP (original) - not used
-			Native.Set32(stackTop - 44 - 8, stackTop - 8); // EBP
-			Native.Set32(stackTop - 48 - 8, 0);     // ESI
-			Native.Set32(stackTop - 52 - 8, 0);     // EDI
+			Intrinsic.Store32(stackTop, -32, 0);     // EAX
+			Intrinsic.Store32(stackTop, -36, 0);     // ECX
+			Intrinsic.Store32(stackTop, -40, 0);     // EDX
+			Intrinsic.Store32(stackTop, -44, 0);     // EBX
+			Intrinsic.Store32(stackTop, -48, 0);     // ESP (original) - not used
+			Intrinsic.Store32(stackTop, -52, stackTop - 8); // EBP
+			Intrinsic.Store32(stackTop, -56, 0);     // ESI
+			Intrinsic.Store32(stackTop, -60, 0);     // EDI
 
 			thread.Status = ThreadStatus.Running;
 			thread.StackBottom = stack;
 			thread.StackTop = stackTop;
-			thread.StackStatePointer = stackTop - 52;
+			thread.StackStatePointer = stackTop - 60;
 		}
 
 		private static void SaveThreadState(uint threadID, uint stackSate)

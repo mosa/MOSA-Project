@@ -79,9 +79,8 @@ namespace Mosa.TestWorld.x86
 
 			Screen.Write("!");
 
-			Scheduler.CreateThread(Process, PageFrameAllocator.PageSize);
-
-			//Screen.Write("!");
+			Scheduler.CreateThread(Process1, PageFrameAllocator.PageSize);
+			Scheduler.CreateThread(Process2, PageFrameAllocator.PageSize);
 
 			//Console.Goto(22, 0);
 
@@ -96,9 +95,9 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
-		public static void Process()
+		public static void Process1()
 		{
-			Screen.Write("!Go!");
+			Screen.Write("!Go1!");
 
 			while (true)
 			{
@@ -107,6 +106,16 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
+		public static void Process2()
+		{
+			Screen.Write("!Go2!");
+
+			while (true)
+			{
+				Screen.Write("-");
+				Native.Hlt();
+			}
+		}
 		public unsafe static void DumpStackTrace()
 		{
 			uint depth = 0;
