@@ -38,7 +38,7 @@ namespace Mosa.Tool.GDBDebugger
 
 		private readonly SymbolView symbolView;
 		private readonly WatchView watchView;
-		private readonly BreakPointView breakPointView;
+		private readonly BreakpointView breakPointView;
 		private readonly MethodView methodView;
 
 		//private ScriptView scriptView;
@@ -58,7 +58,9 @@ namespace Mosa.Tool.GDBDebugger
 
 		public List<Watch> Watchs { get; } = new List<Watch>();
 
-		private Process VMProcess = null;
+		private Process VMProcess;
+
+		public string VMHash;
 
 		public MainForm()
 		{
@@ -79,7 +81,7 @@ namespace Mosa.Tool.GDBDebugger
 			statusView = new StatusView(this);
 			symbolView = new SymbolView(this);
 			watchView = new WatchView(this);
-			breakPointView = new BreakPointView(this);
+			breakPointView = new BreakpointView(this);
 			instructionView = new InstructionView(this);
 			methodView = new MethodView(this);
 
@@ -124,6 +126,8 @@ namespace Mosa.Tool.GDBDebugger
 
 			dockPanel.ResumeLayout(true, true);
 
+			CalculateVMHash();
+
 			if (Options.ImageFile != null)
 			{
 				VMProcess = StartQEMU();
@@ -134,6 +138,7 @@ namespace Mosa.Tool.GDBDebugger
 			}
 
 			LoadBreakPoints();
+			LoadWatches();
 			LoadDebugFile();
 		}
 
@@ -484,21 +489,32 @@ namespace Mosa.Tool.GDBDebugger
 
 				if (File.Exists(debugFile))
 				{
-					Options.BreakPointsFile = breakpointFile;
+					Options.BreakpointFile = breakpointFile;
+				}
+
+				var watchFile = Path.Combine(
+					Path.GetDirectoryName(Options.ImageFile),
+					Path.GetFileNameWithoutExtension(Options.ImageFile)) + ".watches";
+
+				if (File.Exists(watchFile))
+				{
+					Options.WatchFile = watchFile;
 				}
 
 				Options.GDBPort++;
+
+				CalculateVMHash();
 
 				VMProcess = StartQEMU();
 				LoadDebugFile();
 				Connect();
 				LoadBreakPoints();
+				LoadWatches();
 			}
 		}
 
 		private Process StartQEMU()
 		{
-
 			var starter = new Starter(Options, AppLocations, this);
 
 			return starter.LaunchVM();
@@ -520,12 +536,12 @@ namespace Mosa.Tool.GDBDebugger
 
 		public void LoadBreakPoints()
 		{
-			if (Options.BreakPointsFile == null || !File.Exists(Options.BreakPointsFile))
+			if (Options.BreakpointFile == null || !File.Exists(Options.BreakpointFile))
 				return;
 
 			bool remap = false;
 
-			foreach (var line in File.ReadAllLines(Options.BreakPointsFile))
+			foreach (var line in File.ReadAllLines(Options.BreakpointFile))
 			{
 				if (string.IsNullOrEmpty(line))
 					continue;
@@ -534,11 +550,9 @@ namespace Mosa.Tool.GDBDebugger
 				{
 					if (Options.ImageFile != null && File.Exists(Options.ImageFile))
 					{
-						var imagehash = CalculateFileHash(Options.ImageFile);
+						var hash = line.Substring(7).Trim();
 
-						var breakpointhash = line.Substring(7).Trim();
-
-						remap = imagehash != breakpointhash;
+						remap = VMHash != hash;
 					}
 					continue;
 				}
@@ -552,11 +566,10 @@ namespace Mosa.Tool.GDBDebugger
 					continue;
 
 				var address = ParseHexAddress(parts[0]);
+				var symbol = parts.Length >= 2 ? parts[1] : null;
 
-				if (parts.Length >= 2 && remap)
+				if (symbol != null && remap)
 				{
-					var symbol = parts[1];
-
 					if (symbol.StartsWith("0x") && symbol.Contains('+'))
 						continue;
 
@@ -564,24 +577,69 @@ namespace Mosa.Tool.GDBDebugger
 
 					if (address == 0)
 						continue;
+				}
 
-					AddBreakPoint(address);
+				AddBreakPoint(address, symbol);
+			}
+		}
 
+		public void LoadWatches()
+		{
+			if (Options.WatchFile == null || !File.Exists(Options.WatchFile))
+				return;
+
+			bool remap = false;
+
+			foreach (var line in File.ReadAllLines(Options.WatchFile))
+			{
+				if (string.IsNullOrEmpty(line))
+					continue;
+
+				if (line.StartsWith("#HASH: "))
+				{
+					if (Options.ImageFile != null && File.Exists(Options.ImageFile))
+					{
+						var hash = line.Substring(7).Trim();
+
+						remap = VMHash != hash;
+					}
 					continue;
 				}
 
-				if (parts.Length == 1)
+				if (line.StartsWith("#"))
+					continue;
+
+				var parts = line.Split('\t');
+
+				if (parts.Length < 2)
+					continue;
+
+				var address = ParseHexAddress(parts[0]);
+				var size = parts.Length >= 2 ? Convert.ToUInt32(parts[1]) : 0;
+				var symbol = parts.Length >= 3 ? parts[2] : null;
+
+				if (symbol != null && remap)
 				{
-					AddBreakPoint(address);
+					if (symbol.StartsWith("0x") && symbol.Contains('+'))
+						continue;
+
+					address = DebugSource.GetFirstSymbolByName(symbol);
+
+					if (address == 0)
+						continue;
 				}
-				else if (parts.Length == 2)
-				{
-					AddBreakPoint(address, parts[1]);
-				}
-				else
-				{
-					AddBreakPoint(address, parts[1], parts[2]);
-				}
+
+				AddWatch(symbol, address, size);
+			}
+		}
+
+		private void CalculateVMHash()
+		{
+			VMHash = null;
+
+			if (Options.ImageFile != null && File.Exists(Options.ImageFile))
+			{
+				VMHash = CalculateFileHash(Options.ImageFile);
 			}
 		}
 

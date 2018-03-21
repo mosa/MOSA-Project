@@ -12,14 +12,11 @@ namespace Mosa.Utility.Launcher
 {
 	public class Options
 	{
-		[Option("destination-dir")]
+		[Option("dest")]
 		public string DestinationDirectory { get; set; }
 
-		[Option("dest")]
-		public string DestinationDirectoryExtraOption
-		{
-			set { DestinationDirectory = value; }
-		}
+		[Option("destination-dir")]
+		public string DestinationDirectoryAlt { set { DestinationDirectory = value; } }
 
 		[Option('a')]
 		public bool AutoStart { get; set; }
@@ -28,75 +25,45 @@ namespace Mosa.Utility.Launcher
 		public bool LaunchVM { get; set; }
 
 		[Option("launch-off")]
-		public bool LaunchVMExtraOption
-		{
-			set { LaunchVM = false; }
-		}
+		public bool LaunchVMFalse { set { LaunchVM = false; } }
 
 		[Option('e')]
 		public bool ExitOnLaunch { get; set; }
 
 		[Option('q')]
-		public bool ExitOnLaunchExtraOption
-		{
-			set { ExitOnLaunch = value; }
-		}
+		public bool ExitOnLaunchFalse { set { ExitOnLaunch = value; } }
 
 		[Option("emulator")]
 		public EmulatorType Emulator { get; set; }
 
 		[Option("qemu")]
-		public bool EmulatorQEMU
-		{
-			set { Emulator = EmulatorType.Qemu; }
-		}
+		public bool EmulatorQEMU { set { Emulator = EmulatorType.Qemu; } }
 
 		[Option("vmware")]
-		public bool EmulatorVMware
-		{
-			set { Emulator = EmulatorType.VMware; }
-		}
+		public bool EmulatorVMware { set { Emulator = EmulatorType.VMware; } }
 
 		[Option("bochs")]
-		public bool EmulatorBochs
-		{
-			set { Emulator = EmulatorType.Bochs; }
-		}
+		public bool EmulatorBochs { set { Emulator = EmulatorType.Bochs; } }
 
 		[Option("image-format")]
 		public ImageFormat ImageFormat { get; set; }
 
 		[Option("vhd")]
-		public bool ImageFormatVHD
-		{
-			set { ImageFormat = ImageFormat.VHD; }
-		}
+		public bool ImageFormatVHD { set { ImageFormat = ImageFormat.VHD; } }
 
 		[Option("img")]
-		public bool ImageFormatIMG
-		{
-			set { ImageFormat = ImageFormat.IMG; }
-		}
+		public bool ImageFormatIMG { set { ImageFormat = ImageFormat.IMG; } }
 
 		[Option("vdi")]
-		public bool ImageFormatVDI
-		{
-			set { ImageFormat = ImageFormat.VDI; }
-		}
+		public bool ImageFormatVDI { set { ImageFormat = ImageFormat.VDI; } }
 
 		[Option("iso")]
-		public bool ImageFormatISO
-		{
-			set { ImageFormat = ImageFormat.ISO; }
-		}
+		public bool ImageFormatISO { set { ImageFormat = ImageFormat.ISO; } }
 
 		[Option("vmdk")]
-		public bool ImageFormatVMDK
-		{
-			set { ImageFormat = ImageFormat.VMDK; }
-		}
+		public bool ImageFormatVMDK { set { ImageFormat = ImageFormat.VMDK; } }
 
-		[Option("emulator-memory", Default = 128U, HelpText = "Emulator memory in megabytes.")]
+		[Option("emulator-memory", Default = 256U, HelpText = "Emulator memory in megabytes.")]
 		public uint EmulatorMemoryInMB { get; set; }
 
 		[Option("ssa", Default = true)]
@@ -106,28 +73,19 @@ namespace Mosa.Utility.Launcher
 		public bool EnableIROptimizations { get; set; }
 
 		[Option("optimization-ir-off")]
-		public bool IROptimizationsExtraOption
-		{
-			set { EnableIROptimizations = false; }
-		}
+		public bool IROptimizationsFalse { set { EnableIROptimizations = false; } }
 
 		[Option("sccp", Default = true)]
 		public bool EnableSparseConditionalConstantPropagation { get; set; }
 
 		[Option("optimization-sccp-off")]
-		public bool EnableSCCPExtraOption
-		{
-			set { EnableSparseConditionalConstantPropagation = false; }
-		}
+		public bool EnableSparseConditionalConstantPropagationFalse { set { EnableSparseConditionalConstantPropagation = false; } }
 
 		[Option("inline", Default = true)]
 		public bool EnableInlinedMethods { get; set; }
 
 		[Option("inline-off")]
-		public bool EnableInlinedMethodsExtraOption
-		{
-			set { EnableInlinedMethods = false; }
-		}
+		public bool EnableInlinedMethodsFalse { set { EnableInlinedMethods = false; } }
 
 		[Option("ir-long-expansion", Default = true)]
 		public bool IRLongExpansion { get; set; }
@@ -138,10 +96,7 @@ namespace Mosa.Utility.Launcher
 		public int InlinedIRMaximum { get; set; }
 
 		[Option("inline-level")]
-		public string InlinedIRMaximumHelper
-		{
-			set { InlinedIRMaximum = (int)value.ParseHexOrDecimal(); }
-		}
+		public string InlinedIRMaximumHelper { set { InlinedIRMaximum = (int)value.ParseHexOrDecimal(); } }
 
 		[Option("all-optimization-off")]
 		public bool AllOptimizationsOffHelper
@@ -172,25 +127,16 @@ namespace Mosa.Utility.Launcher
 		public LinkerFormatType LinkerFormatType { get; set; }
 
 		[Option("elf32")]
-		public bool LinkerFormatTypeELF32
-		{
-			set { LinkerFormatType = LinkerFormatType.Elf32; }
-		}
+		public bool LinkerFormatTypeELF32 { set { LinkerFormatType = LinkerFormatType.Elf32; } }
 
 		[Option("elf")]
-		public bool LinkerFormatTypeELF
-		{
-			set { LinkerFormatType = LinkerFormatType.Elf32; }
-		}
+		public bool LinkerFormatTypeELF { set { LinkerFormatType = LinkerFormatType.Elf32; } }
 
 		[Option("boot-format")]
 		public BootFormat BootFormat { get; set; }
 
 		[Option("mb0.7")]
-		public bool BootFormatMultiboot07
-		{
-			set { BootFormat = BootFormat.Multiboot_0_7; }
-		}
+		public bool BootFormatMultiboot07 { set { BootFormat = BootFormat.Multiboot_0_7; } }
 
 		[Option("platform")]
 		public PlatformType PlatformType { get; set; }
@@ -202,22 +148,13 @@ namespace Mosa.Utility.Launcher
 		public SerialConnectionOption SerialConnectionOption { get; set; }
 
 		[Option("serial-pipe")]
-		public bool SerialConnectionOptionPipe
-		{
-			set { SerialConnectionOption = SerialConnectionOption.Pipe; }
-		}
+		public bool SerialConnectionOptionPipe { set { SerialConnectionOption = SerialConnectionOption.Pipe; } }
 
 		[Option("serial-tcpclient")]
-		public bool SerialConnectionOptionTCPClient
-		{
-			set { SerialConnectionOption = SerialConnectionOption.TCPClient; }
-		}
+		public bool SerialConnectionOptionTCPClient { set { SerialConnectionOption = SerialConnectionOption.TCPClient; } }
 
 		[Option("serial-tcpserver")]
-		public bool SerialConnectionOptionTCPServer
-		{
-			set { SerialConnectionOption = SerialConnectionOption.TCPServer; }
-		}
+		public bool SerialConnectionOptionTCPServer { set { SerialConnectionOption = SerialConnectionOption.TCPServer; } }
 
 		[Option("serial-connection-port", Default = 9999)]
 		public int SerialConnectionPort { get; set; }
@@ -229,58 +166,31 @@ namespace Mosa.Utility.Launcher
 		public string SerialPipeName { get; set; } = "MOSA";
 
 		[Option("threading")]
-		public bool UseMultipleThreadCompiler { get; set; } = true;
+		public bool UseMultiThreadingCompiler { get; set; } = true;
 
 		[Option("threading-off")]
-		public bool UseMultipleThreadCompilerExtraOption
-		{
-			set { UseMultipleThreadCompiler = false; }
-		}
+		public bool UseMultiThreadingCompilerFalse { set { UseMultiThreadingCompiler = false; } }
 
 		[Option("bootloader")]
 		public BootLoader BootLoader { get; set; }
 
 		[Option("grub")]
-		public bool BootLoaderGRUB
-		{
-			set { BootLoader = BootLoader.Grub_0_97; }
-		}
+		public bool BootLoaderGRUB { set { BootLoader = BootLoader.Grub_0_97; } }
 
 		[Option("grub-0.97")]
-		public bool BootLoaderGRUB97
-		{
-			set { BootLoader = BootLoader.Grub_0_97; }
-		}
-
-		[Option("grub-2")]
-		public bool BootLoaderGRUB2
-		{
-			set { BootLoader = BootLoader.Grub_2_00; }
-		}
+		public bool BootLoaderGRUB97 { set { BootLoader = BootLoader.Grub_0_97; } }
 
 		[Option("grub2")]
-		public bool BootLoaderGRUB2_2
-		{
-			set { BootLoader = BootLoader.Grub_2_00; }
-		}
+		public bool BootLoaderGRUB2 { set { BootLoader = BootLoader.Grub_2_00; } }
 
 		[Option("syslinux")]
-		public bool BootLoaderSyslinux
-		{
-			set { BootLoader = BootLoader.Syslinux_6_03; }
-		}
+		public bool BootLoaderSyslinux { set { BootLoader = BootLoader.Syslinux_6_03; } }
 
 		[Option("syslinux-6.03")]
-		public bool BootLoaderSyslinux603
-		{
-			set { BootLoader = BootLoader.Syslinux_6_03; }
-		}
+		public bool BootLoaderSyslinux603 { set { BootLoader = BootLoader.Syslinux_6_03; } }
 
 		[Option("syslinux-3.72")]
-		public bool BootLoaderSyslinux372
-		{
-			set { BootLoader = BootLoader.Syslinux_3_72; }
-		}
+		public bool BootLoaderSyslinux372 { set { BootLoader = BootLoader.Syslinux_3_72; } }
 
 		[Option("video")]
 		public bool VBEVideo { get; set; }
@@ -297,37 +207,25 @@ namespace Mosa.Utility.Launcher
 		public ulong BaseAddress { get; set; }
 
 		[Option("base")]
-		public string BaseAddressHelper
-		{
-			set { BaseAddress = value.ParseHexOrDecimal(); }
-		}
+		public string BaseAddressHelper { set { BaseAddress = value.ParseHexOrDecimal(); } }
 
-		[Option("symbols")]
-		public bool EmitSymbols { get; set; }
+		[Option("emit-symbols")]
+		public bool EmitSymbols { get; set; } = true;
 
-		[Option("symbols-false")]
-		public bool EmitSymbolsExtraOption
-		{
-			set { EmitSymbols = false; }
-		}
+		[Option("emit-symbols-false")]
+		public bool EmitSymbolsFalse { set { EmitSymbols = false; } }
 
-		[Option("relocations")]
+		[Option("emit-relocations")]
 		public bool EmitRelocations { get; set; }
 
-		[Option("relocations-false")]
-		public bool EmitRelocationsExtraOption
-		{
-			set { EmitRelocations = false; }
-		}
+		[Option("emit-relocations-false")]
+		public bool EmitRelocationsFalse { set { EmitRelocations = false; } }
 
 		[Option("x86-irq-methods")]
 		public bool Emitx86IRQMethods { get; set; } = true;
 
 		[Option("x86-irq-methods-false")]
-		public bool Emitx86IRQMethodsExtraOption
-		{
-			set { Emitx86IRQMethods = false; }
-		}
+		public bool Emitx86IRQMethodsFalse { set { Emitx86IRQMethods = false; } }
 
 		[Option("bootloader-image")]
 		public string BootLoaderImage { get; set; }
@@ -354,7 +252,10 @@ namespace Mosa.Utility.Launcher
 		public string DebugFile { get; set; }
 
 		[Option("breakpoints")]
-		public string BreakPointsFile { get; set; }
+		public string BreakpointFile { get; set; }
+
+		[Option("watch")]
+		public string WatchFile { get; set; }
 
 		public List<IncludeFile> IncludeFiles { get; set; }
 

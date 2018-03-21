@@ -91,11 +91,11 @@
       <DependentUpon>DebugAppLocationsWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="GDB\MemoryCache.cs" />
-    <Compile Include="Views\BreakPointView.cs">
+    <Compile Include="Views\BreakpointView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Views\BreakPointView.designer.cs">
-      <DependentUpon>BreakPointView.cs</DependentUpon>
+    <Compile Include="Views\BreakpointView.designer.cs">
+      <DependentUpon>BreakpointView.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\CallStackView.cs">
       <SubType>Form</SubType>
@@ -243,8 +243,8 @@
     <EmbeddedResource Include="DebugAppLocationsWindow.resx">
       <DependentUpon>DebugAppLocationsWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\BreakPointView.resx">
-      <DependentUpon>BreakPointView.cs</DependentUpon>
+    <EmbeddedResource Include="Views\BreakpointView.resx">
+      <DependentUpon>BreakpointView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\CallStackView.resx">
       <DependentUpon>CallStackView.cs</DependentUpon>

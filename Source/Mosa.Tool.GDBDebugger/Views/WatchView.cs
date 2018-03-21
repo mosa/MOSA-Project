@@ -2,14 +2,16 @@
 
 using Mosa.Tool.GDBDebugger.GDB;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.GDBDebugger.Views
 {
 	public partial class WatchView : DebugDockContent
 	{
-		private BindingList<WatchEntry> watches = new BindingList<WatchEntry>();
+		private BindingList<WatchEntry> Watches = new BindingList<WatchEntry>();
 
 		private class WatchEntry
 		{
@@ -39,7 +41,7 @@ namespace Mosa.Tool.GDBDebugger.Views
 			: base(mainForm)
 		{
 			InitializeComponent();
-			dataGridView1.DataSource = watches;
+			dataGridView1.DataSource = Watches;
 			dataGridView1.AutoResizeColumns();
 			dataGridView1.Columns[0].Width = 65;
 			dataGridView1.Columns[1].Width = 250;
@@ -48,7 +50,7 @@ namespace Mosa.Tool.GDBDebugger.Views
 
 		public override void OnPause()
 		{
-			foreach (var watch in watches)
+			foreach (var watch in Watches)
 			{
 				watch.Value = 0;
 				watch.HexValue = string.Empty;
@@ -61,10 +63,10 @@ namespace Mosa.Tool.GDBDebugger.Views
 
 		public override void OnWatchChange()
 		{
-			watches.Clear();
+			Watches.Clear();
 			foreach (var watch in MainForm.Watchs)
 			{
-				watches.Add(new WatchEntry(watch));
+				Watches.Add(new WatchEntry(watch));
 			}
 
 			OnPause();
@@ -82,7 +84,7 @@ namespace Mosa.Tool.GDBDebugger.Views
 
 		private void UpdateDisplay(ulong address, byte[] bytes)
 		{
-			foreach (var watch in watches)
+			foreach (var watch in Watches)
 			{
 				if (watch.Watch.Address != address || watch.Size != bytes.Length)
 					continue;
@@ -112,7 +114,7 @@ namespace Mosa.Tool.GDBDebugger.Views
 			var watch = new Watch(name, address, size, signed);
 			var watchEntry = new WatchEntry(watch);
 
-			watches.Add(watchEntry);
+			Watches.Add(watchEntry);
 		}
 
 		private void dataGridView1_KeyDown(object sender, KeyEventArgs e)
@@ -173,6 +175,51 @@ namespace Mosa.Tool.GDBDebugger.Views
 			}
 
 			MainForm.AddWatch(null, address, size);
+		}
+
+		private void toolStripButton2_Click(object sender, EventArgs e)
+		{
+			if (openFileDialog1.ShowDialog() == DialogResult.OK)
+			{
+				Options.WatchFile = openFileDialog1.FileName;
+				MainForm.LoadWatches();
+			}
+		}
+
+		private void toolStripButton1_Click(object sender, EventArgs e)
+		{
+			if (Options.WatchFile == null)
+			{
+				if (Options.ImageFile != null)
+				{
+					Options.WatchFile = Path.Combine(
+						Path.GetDirectoryName(Options.ImageFile),
+						Path.GetFileNameWithoutExtension(Options.ImageFile)) + ".watches";
+				}
+				else
+				{
+					Options.WatchFile = Path.Combine(Path.GetTempPath(), "default.watches");
+				}
+			}
+
+			SaveWatches();
+		}
+
+		private void SaveWatches()
+		{
+			var lines = new List<string>();
+
+			if (Options.ImageFile != null)
+			{
+				lines.Add("#HASH: " + MainForm.VMHash);
+			}
+
+			foreach (var entry in Watches)
+			{
+				lines.Add(entry.Address + '\t' + entry.Size + '\t' + entry.Name);
+			}
+
+			File.WriteAllLines(Options.WatchFile, lines);
 		}
 	}
 }

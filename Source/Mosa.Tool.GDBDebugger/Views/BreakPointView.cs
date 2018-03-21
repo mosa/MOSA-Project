@@ -4,14 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.GDBDebugger.Views
 {
-	public partial class BreakPointView : DebugDockContent
+	public partial class BreakpointView : DebugDockContent
 	{
-		private readonly BindingList<BreakPointEntry> breakpoints = new BindingList<BreakPointEntry>();
+		private readonly BindingList<BreakPointEntry> Breakpoints = new BindingList<BreakPointEntry>();
 
 		private class BreakPointEntry
 		{
@@ -28,21 +27,21 @@ namespace Mosa.Tool.GDBDebugger.Views
 			}
 		}
 
-		public BreakPointView(MainForm mainForm)
+		public BreakpointView(MainForm mainForm)
 			: base(mainForm)
 		{
 			InitializeComponent();
-			dataGridView1.DataSource = breakpoints;
+			dataGridView1.DataSource = Breakpoints;
 			dataGridView1.AutoResizeColumns();
 			dataGridView1.Columns[1].Width = 400;
 		}
 
 		public override void OnBreakpointChange()
 		{
-			breakpoints.Clear();
+			Breakpoints.Clear();
 			foreach (var breakpoint in MainForm.BreakPoints)
 			{
-				breakpoints.Add(new BreakPointEntry(breakpoint));
+				Breakpoints.Add(new BreakPointEntry(breakpoint));
 			}
 		}
 
@@ -105,17 +104,17 @@ namespace Mosa.Tool.GDBDebugger.Views
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			if (Options.BreakPointsFile == null)
+			if (Options.BreakpointFile == null)
 			{
 				if (Options.ImageFile != null)
 				{
-					Options.BreakPointsFile = Path.Combine(
+					Options.BreakpointFile = Path.Combine(
 						Path.GetDirectoryName(Options.ImageFile),
 						Path.GetFileNameWithoutExtension(Options.ImageFile)) + ".breakpoints";
 				}
 				else
 				{
-					Options.BreakPointsFile = Path.Combine(Path.GetTempPath(), "default.breakpoints");
+					Options.BreakpointFile = Path.Combine(Path.GetTempPath(), "default.breakpoints");
 				}
 			}
 
@@ -128,24 +127,22 @@ namespace Mosa.Tool.GDBDebugger.Views
 
 			if (Options.ImageFile != null)
 			{
-				var hash = MainForm.CalculateFileHash(Options.ImageFile);
-
-				lines.Add("#HASH: " + hash);
+				lines.Add("#HASH: " + MainForm.VMHash);
 			}
 
-			foreach (var entry in breakpoints)
+			foreach (var entry in Breakpoints)
 			{
 				lines.Add(entry.Address + '\t' + entry.Name);
 			}
 
-			File.WriteAllLines(Options.BreakPointsFile, lines);
+			File.WriteAllLines(Options.BreakpointFile, lines);
 		}
 
 		private void toolStripButton2_Click(object sender, EventArgs e)
 		{
 			if (openFileDialog1.ShowDialog() == DialogResult.OK)
 			{
-				Options.BreakPointsFile = openFileDialog1.FileName;
+				Options.BreakpointFile = openFileDialog1.FileName;
 				MainForm.LoadBreakPoints();
 			}
 		}
