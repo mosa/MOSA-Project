@@ -83,6 +83,7 @@ namespace Mosa.TestWorld.x86
 			Scheduler.CreateThread(Thread1, PageFrameAllocator.PageSize);
 			Scheduler.CreateThread(Thread2, PageFrameAllocator.PageSize);
 			Scheduler.CreateThread(Thread3, PageFrameAllocator.PageSize);
+			Scheduler.CreateThread(Thread4, PageFrameAllocator.PageSize);
 
 			Scheduler.Start();
 
@@ -96,52 +97,63 @@ namespace Mosa.TestWorld.x86
 		}
 
 		private static SpinLock spinlock = new SpinLock();
+		private static uint totalticks = 0;
+
+		private static void UpdateThreadTicks(uint thread, uint ticks)
+		{
+			++totalticks;
+
+			if (totalticks % 10000 == 0)
+			{
+				bool taken = false;
+				spinlock.Enter(ref taken);
+
+				Console.Goto(0, 14 + thread * 13);
+				Console.Write("T" + thread.ToString() + ":" + ticks.ToString());
+
+				spinlock.Exit();
+
+				//Native.Hlt();
+			}
+		}
 
 		public static void Thread1()
 		{
-			bool taken = false;
 			uint ticks = 0;
 
 			while (true)
 			{
-				ticks++;
-				spinlock.Enter(ref taken);
-				Console.Goto(0, 30);
-				Console.Write("T1:" + ticks.ToString());
-				spinlock.Exit();
-				Native.Hlt();
+				UpdateThreadTicks(1, ++ticks);
 			}
 		}
 
 		public static void Thread2()
 		{
-			bool taken = false;
 			uint ticks = 0;
 
 			while (true)
 			{
-				ticks++;
-				spinlock.Enter(ref taken);
-				Console.Goto(0, 42);
-				Console.Write("T2:" + ticks.ToString());
-				spinlock.Exit();
-				Native.Hlt();
+				UpdateThreadTicks(2, ++ticks);
 			}
 		}
 
 		public static void Thread3()
 		{
-			bool taken = false;
 			uint ticks = 0;
 
 			while (true)
 			{
-				ticks++;
-				spinlock.Enter(ref taken);
-				Console.Goto(0, 54);
-				Console.Write("T3:" + ticks.ToString());
-				spinlock.Exit();
-				Native.Hlt();
+				UpdateThreadTicks(3, ++ticks);
+			}
+		}
+
+		public static void Thread4()
+		{
+			uint ticks = 0;
+
+			while (true)
+			{
+				UpdateThreadTicks(4, ++ticks);
 			}
 		}
 
