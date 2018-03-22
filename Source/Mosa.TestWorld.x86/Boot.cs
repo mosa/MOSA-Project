@@ -4,6 +4,7 @@ using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using Mosa.TestWorld.x86.Tests;
+using System.Threading;
 
 namespace Mosa.TestWorld.x86
 {
@@ -77,12 +78,11 @@ namespace Mosa.TestWorld.x86
 
 			DumpStackTrace();
 
-			Screen.Write("!");
+			Console.Goto(2, 0);
 
-			Scheduler.CreateThread(Process1, PageFrameAllocator.PageSize);
-			Scheduler.CreateThread(Process2, PageFrameAllocator.PageSize);
-
-			//Console.Goto(22, 0);
+			Scheduler.CreateThread(Thread1, PageFrameAllocator.PageSize);
+			Scheduler.CreateThread(Thread2, PageFrameAllocator.PageSize);
+			Scheduler.CreateThread(Thread3, PageFrameAllocator.PageSize);
 
 			Scheduler.Start();
 
@@ -95,27 +95,57 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
-		public static void Process1()
+		private static SpinLock spinlock = new SpinLock();
+
+		public static void Thread1()
 		{
-			Screen.Write("!Go1!");
+			bool taken = false;
+			uint ticks = 0;
 
 			while (true)
 			{
-				Screen.Write("+");
+				ticks++;
+				spinlock.Enter(ref taken);
+				Console.Goto(0, 30);
+				Console.Write("T1:" + ticks.ToString());
+				spinlock.Exit();
 				Native.Hlt();
 			}
 		}
 
-		public static void Process2()
+		public static void Thread2()
 		{
-			Screen.Write("!Go2!");
+			bool taken = false;
+			uint ticks = 0;
 
 			while (true)
 			{
-				Screen.Write("-");
+				ticks++;
+				spinlock.Enter(ref taken);
+				Console.Goto(0, 42);
+				Console.Write("T2:" + ticks.ToString());
+				spinlock.Exit();
 				Native.Hlt();
 			}
 		}
+
+		public static void Thread3()
+		{
+			bool taken = false;
+			uint ticks = 0;
+
+			while (true)
+			{
+				ticks++;
+				spinlock.Enter(ref taken);
+				Console.Goto(0, 54);
+				Console.Write("T3:" + ticks.ToString());
+				spinlock.Exit();
+				Native.Hlt();
+			}
+		}
+
+
 		public unsafe static void DumpStackTrace()
 		{
 			uint depth = 0;

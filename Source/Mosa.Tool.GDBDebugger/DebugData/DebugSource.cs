@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Tool.GDBDebugger.DebugData
 {
@@ -25,6 +26,7 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 
 		public void Add(SymbolInfo symbol)
 		{
+
 			Symbols.Add(symbol);
 			SymbolLookup.Add(symbol.Address, symbol);
 			SymbolNameLookup.Add(symbol.Name, symbol);

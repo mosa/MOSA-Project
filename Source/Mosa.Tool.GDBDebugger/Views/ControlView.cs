@@ -81,6 +81,7 @@ namespace Mosa.Tool.GDBDebugger.Views
 				GDBConnector.ClearAllBreakPoints();
 				GDBConnector.Step(true);
 
+				// TODO: Add timeout
 				while (GDBConnector.IsRunning)
 				{
 					Thread.Sleep(1);

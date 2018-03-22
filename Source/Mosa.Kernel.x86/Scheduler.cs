@@ -9,7 +9,7 @@ namespace Mosa.Kernel.x86
 	public static class Scheduler
 	{
 		public const int MaxThreads = 256;
-		public const int ClockIRQ = 40;
+		public const int ClockIRQ = 0x20;
 		public const int ThreadTerminationSignalIRQ = 254;
 
 		private static bool Enabled;
@@ -48,7 +48,6 @@ namespace Mosa.Kernel.x86
 		{
 			while (true)
 			{
-				Screen.Write(".");
 				Native.Hlt();
 			}
 		}
@@ -228,6 +227,8 @@ namespace Mosa.Kernel.x86
 			thread.Ticks++;
 
 			SetThreadID(threadID);
+
+			PIC.SendEndOfInterrupt(ClockIRQ);
 
 			Native.InterruptReturn(thread.StackStatePointer);
 		}
