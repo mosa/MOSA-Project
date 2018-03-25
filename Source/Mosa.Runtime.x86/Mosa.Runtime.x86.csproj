@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Division.cs" />
     <Compile Include="Internal.cs" />
+    <Compile Include="Korlib\System.Threading\Interlocked.cs" />
     <Compile Include="Native.cs" />
     <Compile Include="SpinLock.cs" />
   </ItemGroup>
@@ -87,6 +88,7 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>

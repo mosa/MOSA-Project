@@ -420,11 +420,13 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Call(Context context)
 		{
-			if (CanSkipDueToRecursiveSystemObjectCtorCall(context.Node))
+			if (ProcessUnsafeAsCall(context))
 			{
-				context.Empty();
 				return;
 			}
+
+			if (ProcessExternalPlugCall(context))
+				return;
 
 			if (ProcessExternalCall(context.Node))
 				return;
@@ -482,6 +484,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Callvirt(Context context)
 		{
+			if (ProcessExternalPlugCall(context))
+				return;
+
 			if (ProcessExternalCall(context.Node))
 				return;
 
@@ -1994,18 +1999,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return arrayElement;
 		}
 
-		private bool CanSkipDueToRecursiveSystemObjectCtorCall(InstructionNode node)
-		{
-			var currentMethod = MethodCompiler.Method;
-			var invokeTarget = node.InvokeMethod;
-
-			// Skip recursive System.Object ctor calls.
-			return currentMethod.DeclaringType.FullName == "System.Object"
-				&& currentMethod.Name == ".ctor"
-				&& invokeTarget.DeclaringType.FullName == "System.Object"
-				&& invokeTarget.Name == ".ctor";
-		}
-
 		/// <summary>
 		/// Gets the index.
 		/// </summary>
@@ -2031,6 +2024,42 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (!type.IsValueType) return 12;
 
 			throw new CompilerException();
+		}
+
+		private bool ProcessUnsafeAsCall(Context context)
+		{
+			if (!context.InvokeMethod.IsStatic)
+				return false;
+
+			if (context.InvokeMethod.DeclaringType.FullName != "System.Runtime.CompilerServices.Unsafe")
+				return false;
+
+			//if (!(context.InvokeMethod.Name == "As" || context.InvokeMethod.Name == "AsRef"))
+			if (context.InvokeMethod.Name != "As")
+				return false;
+
+			context.SetInstruction(Select(IRInstruction.MoveInteger32, IRInstruction.MoveInteger64), context.Result, context.Operand1);
+
+			return true;
+		}
+
+		private bool ProcessExternalPlugCall(Context context)
+		{
+			if (!context.InvokeMethod.IsStatic)
+				return false;
+
+			var plugMethod = MethodCompiler.Compiler.PlugSystem.GetPlugMethod(context.InvokeMethod);
+
+			if (plugMethod == null)
+				return false;
+
+			var result = context.Result;
+			var operands = new List<Operand>(context.Operands);
+			var symbol = Operand.CreateSymbolFromMethod(plugMethod, TypeSystem);
+
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
+
+			return true;
 		}
 
 		/// <summary>
@@ -2116,16 +2145,14 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var method = node.InvokeMethod;
 
-			if (!method.IsInternal)
+			if (!method.IsInternal || method.Name != ".ctor")
 				return false;
 
-			string replacementMethod = (method.Name == ".ctor") ? "Create" + method.DeclaringType.Name : "Internal" + method.Name;
-
-			method = method.DeclaringType.FindMethodByNameAndParameters(replacementMethod, method.Signature.Parameters);
+			var newmethod = method.DeclaringType.FindMethodByNameAndParameters("Ctor", method.Signature.Parameters);
 
 			var result = node.Result;
 			var operands = node.GetOperands();
-			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+			var symbol = Operand.CreateSymbolFromMethod(newmethod, TypeSystem);
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol);
 			node.AppendOperands(operands);

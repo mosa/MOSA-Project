@@ -78,7 +78,7 @@ namespace System
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		internal static extern string InternalAllocateString(int length);
 
-		private static unsafe string CreateString(char c, int count)
+		private static unsafe string Ctor(char c, int count)
 		{
 			string result = InternalAllocateString(count);
 			char* chars = result.first_char;
@@ -93,12 +93,12 @@ namespace System
 			return result;
 		}
 
-		private static string CreateString(char[] value)
+		private static string Ctor(char[] value)
 		{
-			return CreateString(value, 0, value.Length);
+			return Ctor(value, 0, value.Length);
 		}
 
-		private static unsafe string CreateString(char[] value, int startIndex, int length)
+		private static unsafe string Ctor(char[] value, int startIndex, int length)
 		{
 			if (length == 0)
 				return Empty;
@@ -115,7 +115,7 @@ namespace System
 			return result;
 		}
 
-		private static unsafe string CreateString(string source, int startIndex, int length)
+		private static unsafe string Ctor(string source, int startIndex, int length)
 		{
 			if (source.Length == 0)
 				return Empty;
@@ -132,7 +132,7 @@ namespace System
 			return result;
 		}
 
-		private static unsafe string CreateString(sbyte* value, int startIndex, int length)
+		private static unsafe string Ctor(sbyte* value, int startIndex, int length)
 		{
 			if (length == 0)
 				return Empty;
@@ -152,7 +152,7 @@ namespace System
 			return result;
 		}
 
-		private static unsafe string CreateString(sbyte* value)
+		private static unsafe string Ctor(sbyte* value)
 		{
 			int length = 0;
 			sbyte* at = value;
@@ -229,12 +229,12 @@ namespace System
 			return Equals(this, i);
 		}
 
-		public override bool Equals(object o)
+		public override bool Equals(object obj)
 		{
-			if (!(o is string))
+			if (!(obj is string))
 				return false;
 
-			string other = (string)o;
+			string other = (string)obj;
 			return other == this;
 		}
 
@@ -812,7 +812,7 @@ namespace System
 				{
 					return string.Empty;
 				}
-				return string.CreateString(this, start, len);
+				return string.Ctor(this, start, len);
 			}
 		}
 	}

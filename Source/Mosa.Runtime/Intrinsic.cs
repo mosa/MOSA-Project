@@ -105,6 +105,9 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static uint GetDelegateTargetAddress(Delegate d);
 
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern static RuntimeTypeHandle GetStringType();
+
 		#endregion Intrinsic
 	}
 }

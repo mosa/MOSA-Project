@@ -6,7 +6,7 @@
 namespace System
 {
 	/// <summary>
-	///
+	/// Char
 	/// </summary>
 	public struct Char
 	{

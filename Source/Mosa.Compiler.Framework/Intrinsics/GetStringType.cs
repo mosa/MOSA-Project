@@ -1,19 +1,18 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
+using System;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	/// InternalAllocateString
+	/// GetObjectAddress
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
-	[ReplacementTarget("System.String::InternalAllocateString")]
-	public sealed class InternalAllocateString : IIntrinsicInternalMethod
+	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetStringType")]
+	public sealed class GetStringType : IIntrinsicInternalMethod
 	{
-		/// <summary>
-		/// The string class type definition symbol name
-		/// </summary>
 		private const string StringClassTypeDefinitionSymbolName = "System.String" + Metadata.TypeDefinition;
 
 		/// <summary>
@@ -23,14 +22,11 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			var method = methodCompiler.Compiler.InternalRuntimeType.FindMethodByName("AllocateString");
-			var symbol = Operand.CreateSymbolFromMethod(method, methodCompiler.TypeSystem);
-
 			var typeDef = Operand.CreateUnmanagedSymbolPointer(StringClassTypeDefinitionSymbolName, methodCompiler.TypeSystem);
-			var length = context.Operand1;
-			var result = context.Result;
 
-			context.SetInstruction(IRInstruction.CallStatic, result, symbol, typeDef, length);
+			var move = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.MoveInteger32 : IRInstruction.MoveInteger64;
+
+			context.SetInstruction(move, context.Result, typeDef);
 		}
 	}
 }

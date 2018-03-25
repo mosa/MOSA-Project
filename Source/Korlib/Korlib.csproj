@@ -88,6 +88,8 @@
     <Compile Include="System.Runtime.CompilerServices\CompilationRelaxationsAttribute.cs" />
     <Compile Include="System.Runtime.CompilerServices\ExtensionAttribute.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeCompatibilityAttribute.cs" />
+    <Compile Include="System.Runtime.CompilerServices\IntrinsicAttribute.cs" />
+    <Compile Include="System.Runtime.CompilerServices\Unsafe.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeHelpers.cs" />
     <Compile Include="System.Runtime.InteropServices\CallingConvention.cs" />
     <Compile Include="System.Runtime.InteropServices\FieldOffsetAttribute.cs" />
@@ -99,8 +101,11 @@
     <Compile Include="System.Runtime.InteropServices\UnmanagedType.cs" />
     <Compile Include="System.Runtime.Versioning\NonVersionableAttribute.cs" />
     <Compile Include="System.Runtime.Versioning\TargetFrameworkAttribute.cs" />
+    <Compile Include="System.Threading\Interlocked.cs" />
+    <Compile Include="System.Threading\Monitor.cs" />
     <Compile Include="System.Threading\Thread.cs" />
     <Compile Include="System.Threading\SpinLock.cs" />
+    <Compile Include="System\PlatformNotSupportedException.cs" />
     <Compile Include="System\Action.cs" />
     <Compile Include="System\Activator.cs" />
     <Compile Include="System\ArgumentException.cs" />

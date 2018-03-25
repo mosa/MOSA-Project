@@ -117,6 +117,16 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
+		//private static object test = new object();
+
+		//public static void Test()
+		//{
+		//	lock (test)
+		//	{
+		//		totalticks++;
+		//	}
+		//}
+
 		public static void Thread1()
 		{
 			uint ticks = 0;
