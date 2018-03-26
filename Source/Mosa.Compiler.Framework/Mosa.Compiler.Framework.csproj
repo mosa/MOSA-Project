@@ -93,7 +93,6 @@
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
     <Compile Include="Analysis\BaseDominanceAnalysis.cs" />
     <Compile Include="BaseCompilerExtension.cs" />
-    <Compile Include="Intrinsics\UnsafeAs.cs" />
     <Compile Include="Intrinsics\GetStringType.cs" />
     <Compile Include="Intrinsics\GetDelegateTargetAddress.cs" />
     <Compile Include="Intrinsics\GetDelegateMethodAddress.cs" />
@@ -797,7 +796,6 @@
     <Compile Include="Stages\OperandAssignmentStage.cs" />
     <Compile Include="CompilerOptions.cs" />
     <Compile Include="Stages\StaticAllocationResolutionStage.cs" />
-    <Compile Include="Intrinsics\InternalAllocateString.cs" />
     <Compile Include="Stages\PlatformStubStage.cs" />
     <Compile Include="IIntrinsicPlatformMethod.cs" />
     <Compile Include="Stages\CILTransformationStage.cs" />

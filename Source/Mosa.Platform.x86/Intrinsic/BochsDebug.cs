@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			// xchg	bx, bx
 			var bx = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U2, GeneralPurposeRegister.EBX);
-			context.SetInstruction2(X86.Xchg32, bx, bx, bx, bx);
+			context.SetInstruction2(X86.XChg32, bx, bx, bx, bx);
 		}
 	}
 }

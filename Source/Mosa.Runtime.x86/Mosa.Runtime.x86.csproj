@@ -71,7 +71,6 @@
     <Compile Include="Internal.cs" />
     <Compile Include="Korlib\System.Threading\Interlocked.cs" />
     <Compile Include="Native.cs" />
-    <Compile Include="SpinLock.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Korlib\Korlib.csproj">

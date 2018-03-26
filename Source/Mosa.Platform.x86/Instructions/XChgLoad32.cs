@@ -7,13 +7,15 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// CmpXChgLoad32
+	/// XChgLoad32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class CmpXChgLoad32 : X86Instruction
+	public sealed class XChgLoad32 : X86Instruction
 	{
-		internal CmpXChgLoad32()
-			: base(1, 4)
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x87 } );
+
+		internal XChgLoad32()
+			: base(1, 3)
 		{
 		}
 
@@ -24,7 +26,7 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
 			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
 
-			StaticEmitters.EmitCmpXChgLoad32(node, emitter);
+			StaticEmitters.EmitXChgLoad32(node, emitter);
 		}
 	}
 }

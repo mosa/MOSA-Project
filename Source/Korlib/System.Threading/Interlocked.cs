@@ -44,12 +44,8 @@ namespace System.Threading
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public static extern IntPtr Exchange(ref IntPtr location1, IntPtr value);
 
-		//[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		//public static extern int CompareExchange(ref int location1, int value, int comparand);
-		public static long CompareExchange(ref int location1, int value, int comparand)
-		{
-			return 0; //temp
-		}
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public static extern int CompareExchange(ref int location1, int value, int comparand);
 
 		//[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		//public static extern long CompareExchange(ref long location1, long value, long comparand);
@@ -73,12 +69,8 @@ namespace System.Threading
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		internal static extern int CompareExchange(ref int location1, int value, int comparand, ref bool succeeded);
 
-		//[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		//internal static extern int ExchangeAdd(ref int location1, int value);
-		internal static int ExchangeAdd(ref int location1, int value)
-		{
-			return 0;
-		}
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		internal static extern int ExchangeAdd(ref int location1, int value);
 
 		//[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		//internal static extern long ExchangeAdd(ref long location1, long value);
