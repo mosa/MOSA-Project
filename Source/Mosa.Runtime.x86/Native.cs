@@ -97,7 +97,7 @@ namespace Mosa.Runtime.x86
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get32, Mosa.Platform.x86")]
 		public extern static uint Get32(uint address);
-		
+
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set8, Mosa.Platform.x86")]
 		public extern static void Set8(uint address, byte value);
 
@@ -106,7 +106,7 @@ namespace Mosa.Runtime.x86
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set32, Mosa.Platform.x86")]
 		public extern static void Set32(uint address, uint value);
-		
+
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEBP, Mosa.Platform.x86")]
 		public extern static uint GetEBP();
 
@@ -133,12 +133,6 @@ namespace Mosa.Runtime.x86
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Pause, Mosa.Platform.x86")]
 		public extern static void Pause();
-
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SyncCompareAndSwap, Mosa.Platform.x86")]
-		public extern static bool SyncCompareAndSwap(ref bool spinlock, int oldval, int newval);
-
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SyncSet, Mosa.Platform.x86")]
-		public extern static void SyncSet(ref bool spinlock, uint value);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetExceptionRegister, Mosa.Platform.x86")]
 		public extern static uint GetExceptionRegister();

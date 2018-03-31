@@ -193,7 +193,7 @@
 			"ResultCount": 0,
 			"OperandCount": 2,
 			"X86LegacyOpcode": "0x81",
-			"X86LegacyOpcodeRegF ld": "07",
+			"X86LegacyOpcodeRegField": "07",
 			"X86LegacyOpcodeOperandOrder": "12",
 			"X86ThreeTwoAddressConversion": "false"
 		},

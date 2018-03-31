@@ -649,13 +649,11 @@
     <Compile Include="Intrinsic\Out32.cs" />
     <Compile Include="Intrinsic\Pause.cs" />
     <Compile Include="Intrinsic\CmpXChgLoad32.cs" />
-    <Compile Include="Intrinsic\SyncSet.cs" />
     <Compile Include="Intrinsic\Remainder.cs" />
     <Compile Include="Intrinsic\Set32.cs" />
     <Compile Include="Intrinsic\Set16.cs" />
     <Compile Include="Intrinsic\Set8.cs" />
     <Compile Include="Intrinsic\SetFS.cs" />
-    <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
     <Compile Include="Stages\ConstantLoweringStage.cs" />
     <Compile Include="X86.cs">
       <AutoGen>True</AutoGen>
