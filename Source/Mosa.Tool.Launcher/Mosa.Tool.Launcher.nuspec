@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <package >
 	<metadata>
 		<id>Mosa.Tool.Launcher</id>
@@ -23,7 +23,6 @@
 		<file src="..\..\bin\Mosa.Tool.Launcher.exe" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.ARMv6.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.x86.dll" target="tools" />
-		<file src="..\..\bin\Mosa.Utility.Aot.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.BootImage.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.GUI.Common.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.Launcher.dll" target="tools" />
