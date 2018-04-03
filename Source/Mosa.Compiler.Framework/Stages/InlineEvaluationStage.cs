@@ -160,7 +160,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (method.HasDoNotInlineAttribute)
 				return false;
 
-			if (method.IsPlugged)	// comment out
+			if (method.IsPlugged)
 				return false;
 
 			if (method.HasProtectedRegions)
@@ -179,9 +179,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (method.NonIRInstructionCount > 0)
 				return false;
 
-			//if ((method.IRInstructionCount - method.IRStackParameterInstructionCount) > CompilerOptions.InlinedIRMaximum)
-			if ((method.IRInstructionCount) > CompilerOptions.InlinedIRMaximum)
-					return false;
+			if ((method.IRInstructionCount - method.IRStackParameterInstructionCount) > CompilerOptions.InlinedIRMaximum)
+				//if (method.IRInstructionCount > CompilerOptions.InlinedIRMaximum)
+				return false;
 
 			var returnType = method.Method.Signature.ReturnType;
 

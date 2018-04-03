@@ -167,6 +167,15 @@ namespace Mosa.Compiler.Framework.Stages
 					variables[op].Push(index);
 					counts[op] = index + 1;
 				}
+
+				if (!node.IsEmpty && node.Result2 != null && node.Result2.IsVirtualRegister)
+				{
+					var op = node.Result2;
+					var index = counts[op];
+					node.Result2 = GetSSAOperand(op, index);
+					variables[op].Push(index);
+					counts[op] = index + 1;
+				}
 			}
 
 			foreach (var s in block.NextBlocks)
@@ -201,6 +210,12 @@ namespace Mosa.Compiler.Framework.Stages
 				if (!context.IsEmpty && context.Result != null && context.Result.IsVirtualRegister)
 				{
 					var op = context.Result.SSAParent;
+					var index = variables[op].Pop();
+				}
+
+				if (!context.IsEmpty && context.Result2 != null && context.Result2.IsVirtualRegister)
+				{
+					var op = context.Result2.SSAParent;
 					var index = variables[op].Pop();
 				}
 			}
@@ -239,12 +254,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 					instructionCount++;
 
-					if (context.Result == null)
-						continue;
-
-					if (context.Result.IsVirtualRegister)
+					if (context.Result != null && context.Result.IsVirtualRegister)
 					{
 						AddToAssignments(context.Result, block);
+					}
+
+					if (context.Result2 != null && context.Result2.IsVirtualRegister)
+					{
+						AddToAssignments(context.Result2, block);
 					}
 				}
 			}

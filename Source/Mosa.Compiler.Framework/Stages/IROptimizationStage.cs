@@ -369,7 +369,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Definitions.Count != 1)
 				return;
 
-			if (node.ResultCount == 2 && node.Result2.IsVirtualRegister)
+			if (node.ResultCount == 2 && !node.Result2.IsVirtualRegister)
 				return;
 
 			if (node.ResultCount == 2 && node.Result2.Definitions.Count != 1)
@@ -2341,7 +2341,7 @@ namespace Mosa.Compiler.Framework.Stages
 				|| instruction == IRInstruction.LogicalAnd64
 				|| instruction == IRInstruction.LogicalOr64
 				|| instruction == IRInstruction.LogicalXor64
-				|| instruction == IRInstruction.LogicalNot32
+				|| instruction == IRInstruction.LogicalNot32  // todo: Not64 too?
 				|| instruction == IRInstruction.ShiftLeft32
 				|| instruction == IRInstruction.ShiftLeft64
 				|| instruction == IRInstruction.AddUnsigned32
@@ -2371,6 +2371,25 @@ namespace Mosa.Compiler.Framework.Stages
 			var operand2 = defNode.OperandCount == 2 ? defNode.Operand2 : null;
 
 			node.SetInstruction(IRInstruction.Nop);
+
+			if (instruction == IRInstruction.LogicalAnd64)
+				instruction = IRInstruction.LogicalAnd32;
+			else if (instruction == IRInstruction.LogicalOr64)
+				instruction = IRInstruction.LogicalOr32;
+			else if (instruction == IRInstruction.LogicalXor64)
+				instruction = IRInstruction.LogicalXor32;
+			else if (instruction == IRInstruction.ShiftLeft64)
+				instruction = IRInstruction.ShiftLeft32;
+			else if (instruction == IRInstruction.AddUnsigned64)
+				instruction = IRInstruction.AddUnsigned32;
+			else if (instruction == IRInstruction.MoveInteger64)
+				instruction = IRInstruction.MoveInteger32;
+			else if (instruction == IRInstruction.MulUnsigned64)
+				instruction = IRInstruction.MulUnsigned32;
+			else if (instruction == IRInstruction.DivUnsigned64)
+				instruction = IRInstruction.DivUnsigned32;
+			else if (instruction == IRInstruction.RemUnsigned64)
+				instruction = IRInstruction.RemUnsigned32;
 
 			var context = new Context(defNode);
 

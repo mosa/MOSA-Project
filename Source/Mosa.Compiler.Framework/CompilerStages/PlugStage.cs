@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		protected MosaType plugTypeAttribute;
 		protected MosaType plugMethodAttribute;
 
-		#endregion Data members
+		#endregion Data Members
 
 		private const string PlugTypeAttribute = "Mosa.Runtime.Plug.TypeAttribute";
 		private const string PlugMethodAttribute = "Mosa.Runtime.Plug.MethodAttribute";
