@@ -64,7 +64,10 @@ namespace Mosa.Utility.RSP
 
 		private void SetReadCallBack()
 		{
-			stream.BeginRead(receivedByte, 0, 1, ReadAsyncCallback, null);
+			if (stream.IsConnected)
+			{
+				stream.BeginRead(receivedByte, 0, 1, ReadAsyncCallback, null);
+			}
 		}
 
 		private void ReadAsyncCallback(IAsyncResult ar)
@@ -116,7 +119,7 @@ namespace Mosa.Utility.RSP
 			{
 				commandQueue.Clear();
 
-				Debug.WriteLine("SENT: BREAK");
+				//Debug.WriteLine("SENT: BREAK");
 
 				currentCommand = new GetReasonHalted();
 				stream.Write(breakData, 0, 1);
@@ -136,7 +139,7 @@ namespace Mosa.Utility.RSP
 
 				currentCommand = commandQueue.Dequeue();
 
-				Debug.WriteLine("SENT: " + currentCommand.Pack);
+				//Debug.WriteLine("SENT: " + currentCommand.Pack);
 
 				var data = ToBinary(currentCommand);
 				stream.Write(data, 0, data.Length);
@@ -165,7 +168,7 @@ namespace Mosa.Utility.RSP
 
 			if (len >= 4 && receivedData[0] == '$' && receivedData[len - 3] == '#')
 			{
-				Debug.WriteLine("RECEIVED: " + Encoding.UTF8.GetString(receivedData.ToArray()));
+				//Debug.WriteLine("RECEIVED: " + Encoding.UTF8.GetString(receivedData.ToArray()));
 
 				if (currentCommand == null)
 				{

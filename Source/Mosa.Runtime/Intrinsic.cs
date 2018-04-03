@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime
@@ -97,6 +98,15 @@ namespace Mosa.Runtime
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static uint* GetAssemblyListTable();
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern static uint GetDelegateMethodAddress(Delegate d);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern static uint GetDelegateTargetAddress(Delegate d);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern static RuntimeTypeHandle GetStringType();
 
 		#endregion Intrinsic
 	}

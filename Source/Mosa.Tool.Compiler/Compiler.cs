@@ -7,7 +7,6 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.Trace.BuiltIn;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 
 namespace Mosa.Tool.Compiler

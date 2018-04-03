@@ -10,19 +10,10 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal sealed class Invlpg : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			Debug.Assert(context.Operand1.IsConstant);
 			context.SetInstruction(X86.Invlpg, null, context.Operand1);
 		}
-
-		#endregion Methods
 	}
 }

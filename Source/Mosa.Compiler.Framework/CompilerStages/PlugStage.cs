@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		protected MosaType plugTypeAttribute;
 		protected MosaType plugMethodAttribute;
 
-		#endregion Data members
+		#endregion Data Members
 
 		private const string PlugTypeAttribute = "Mosa.Runtime.Plug.TypeAttribute";
 		private const string PlugMethodAttribute = "Mosa.Runtime.Plug.MethodAttribute";
@@ -178,7 +178,12 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			target = RemoveModule(target);
 
-			int pos = target.LastIndexOf('.');
+			int pos = target.IndexOf("::");
+
+			if (pos < 0)
+			{
+				pos = target.LastIndexOf('.');
+			}
 
 			return target.Substring(0, pos);
 		}
@@ -187,9 +192,18 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			target = RemoveModule(target);
 
-			int pos = target.LastIndexOf('.');
+			int pos = target.IndexOf("::");
 
-			return target.Substring(pos + 1);
+			if (pos < 0)
+			{
+				pos = target.LastIndexOf('.') + 1;
+			}
+			else
+			{
+				pos += 2;
+			}
+
+			return target.Substring(pos);
 		}
 
 		private string ParseNameSpace(string type)

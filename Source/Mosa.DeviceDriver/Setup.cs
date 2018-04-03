@@ -6,9 +6,9 @@ namespace Mosa.DeviceDriver
 {
 	public static class Setup
 	{
-		public static void Register(DeviceDriverRegistry registery)
+		public static void Register(DeviceManager deviceManager)
 		{
-			registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
+			deviceManager.RegisterDeviceDriver(new ISADeviceDriverRegistryEntry()
 			{
 				Name = "CMOS",
 				Platforms = PlatformArchitecture.X86,
@@ -18,7 +18,7 @@ namespace Mosa.DeviceDriver
 				Factory = delegate { return new ISA.CMOS(); }
 			});
 
-			registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
+			deviceManager.RegisterDeviceDriver(new ISADeviceDriverRegistryEntry()
 			{
 				Name = "StandardKeyboard",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -31,17 +31,17 @@ namespace Mosa.DeviceDriver
 				Factory = delegate { return new ISA.StandardKeyboard(); }
 			});
 
-			registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
-			{
-				Name = "PCIController",
-				Platforms = PlatformArchitecture.X86AndX64,
-				AutoLoad = true,
-				BasePort = 0x0CF8,
-				PortRange = 8,
-				Factory = delegate { return new ISA.PCIController(); }
-			});
+			//deviceManager.RegisterDeviceDriver(new ISADeviceDriverRegistryEntry()
+			//{
+			//	Name = "PCIController",
+			//	Platforms = PlatformArchitecture.X86AndX64,
+			//	AutoLoad = true,
+			//	BasePort = 0x0CF8,
+			//	PortRange = 8,
+			//	Factory = delegate { return new ISA.PCIController(); }
+			//});
 
-			registery.AddDeviceDriver(new ISADeviceDriverRegistryEntry()
+			deviceManager.RegisterDeviceDriver(new ISADeviceDriverRegistryEntry()
 			{
 				Name = "IDEController",
 				Platforms = PlatformArchitecture.X86AndX64,
@@ -53,7 +53,7 @@ namespace Mosa.DeviceDriver
 				Factory = delegate { return new ISA.IDEController(); }
 			});
 
-			//registery.AddDeviceDriver(new ISADeviceDriver()
+			//deviceManager.RegisterDeviceDriver(new ISADeviceDriver()
 			//{
 			//	Name = "IDEController (Secondary)",
 			//	Platforms = PlatformArchitecture.X86AndX64,
@@ -65,6 +65,11 @@ namespace Mosa.DeviceDriver
 			//	ForceOption = "ide2",
 			//	Factory = delegate { return new ISA.IDEController(); }
 			//});
+		}
+
+		public static void Start(DeviceManager deviceManager)
+		{
+			deviceManager.Initialize(new X86System(), null);
 		}
 	}
 }

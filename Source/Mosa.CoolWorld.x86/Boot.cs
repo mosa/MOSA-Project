@@ -2,12 +2,10 @@
 
 using Mosa.AppSystem;
 using Mosa.DeviceDriver.ScanCodeMap;
+using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
-
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
-using Mosa.DeviceSystem;
-using Mosa.CoolWorld.x86.HAL;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -22,7 +20,7 @@ namespace Mosa.CoolWorld.x86
 		/// <summary>
 		/// Main
 		/// </summary>
-		unsafe public static void Main()
+		public static void Main()
 		{
 			Kernel.x86.Kernel.Setup();
 
@@ -50,14 +48,17 @@ namespace Mosa.CoolWorld.x86
 
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 			var hardware = new HAL.Hardware();
-			Setup.Initialize(hardware);
+
+			var DeviceManager = Setup.Initialize(PlatformArchitecture.X86, hardware);
 
 			Console.WriteLine("> Registering device drivers...");
-			DeviceDriver.Setup.Register(Setup.DeviceDriverRegistry);
+			DeviceDriver.Setup.Register(DeviceManager);
+
+			Console.WriteLine("> Starting devices...");
+			DeviceDriver.Setup.Start(DeviceManager);
 
 			Console.Write("> Probing for ISA devices...");
-			Setup.StartISADevices();
-			var isaDevices = Setup.DeviceManager.GetAllDevices();
+			var isaDevices = DeviceManager.GetAllDevices();
 			Console.WriteLine("[Completed: " + isaDevices.Count.ToString() + " found]");
 
 			foreach (var device in isaDevices)
@@ -70,13 +71,14 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			Console.Write("> Probing for PCI devices...");
-			Setup.StartPCIDevices();
-			var pciDevices = Setup.DeviceManager.GetDevices<DeviceSystem.PCI.IPCIDevice>(DeviceStatus.Available);
+
+			//Setup.StartPCIDevices();
+			var pciDevices = DeviceManager.GetDevices<DeviceSystem.PCI.IPCIDevice>(DeviceStatus.Available);
 			Console.WriteLine("[Completed: " + pciDevices.Count.ToString() + " found]");
 
 			foreach (var device in pciDevices)
 			{
-				var pciDevice = device as DeviceSystem.PCI.IPCIDevice;
+				var pciDevice = device.DeviceDriver as DeviceSystem.PCI.IPCIDevice;
 
 				Console.Write("  ");
 				Bullet(Kernel.x86.Color.Yellow);
@@ -86,7 +88,7 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			Console.Write("> Probing for disk controllers...");
-			var diskcontrollers = Setup.DeviceManager.GetDevices<IDiskControllerDevice>();
+			var diskcontrollers = DeviceManager.GetDevices<IDiskControllerDevice>();
 			Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
 
 			foreach (var device in diskcontrollers)
@@ -98,11 +100,8 @@ namespace Mosa.CoolWorld.x86
 				Console.WriteLine();
 			}
 
-			var diskcontroller = new DiskControllerManager(Setup.DeviceManager);
-			diskcontroller.CreateDiskDevices();
-
 			Console.Write("> Probing for disks...");
-			var disks = Setup.DeviceManager.GetDevices<IDiskDevice>();
+			var disks = DeviceManager.GetDevices<IDiskDevice>();
 			Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
 			foreach (var disk in disks)
 			{
@@ -110,15 +109,17 @@ namespace Mosa.CoolWorld.x86
 				Bullet(Kernel.x86.Color.Yellow);
 				Console.Write(" ");
 				InBrackets(disk.Name, Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
-				Console.Write(" " + (disk as IDiskDevice).TotalBlocks.ToString() + " blocks");
+				Console.Write(" " + (disk.DeviceDriver as IDiskDevice).TotalBlocks.ToString() + " blocks");
 				Console.WriteLine();
 			}
 
-			var partitionManager = new PartitionManager(Setup.DeviceManager);
+			//ForeverLoop();
+
+			var partitionManager = new PartitionManager(DeviceManager);
 			partitionManager.CreatePartitionDevices();
 
 			Console.Write("> Finding partitions...");
-			var partitions = Setup.DeviceManager.GetDevices<IPartitionDevice>();
+			var partitions = DeviceManager.GetDevices<IPartitionDevice>();
 			Console.WriteLine("[Completed: " + partitions.Count.ToString() + " found]");
 			foreach (var partition in partitions)
 			{
@@ -126,9 +127,11 @@ namespace Mosa.CoolWorld.x86
 				Bullet(Kernel.x86.Color.Yellow);
 				Console.Write(" ");
 				InBrackets(partition.Name, Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
-				Console.Write(" " + (partition as IPartitionDevice).BlockCount.ToString() + " blocks");
+				Console.Write(" " + (partition.DeviceDriver as IPartitionDevice).BlockCount.ToString() + " blocks");
 				Console.WriteLine();
 			}
+
+			ForeverLoop();
 
 			Console.Write("> Finding file systems...");
 
@@ -172,7 +175,7 @@ namespace Mosa.CoolWorld.x86
 			ForeverLoop();
 
 			// Get StandardKeyboard
-			var standardKeyboards = Setup.DeviceManager.GetDevices("StandardKeyboard");
+			var standardKeyboards = DeviceManager.GetDevices("StandardKeyboard");
 
 			if (standardKeyboards.Count == 0)
 			{

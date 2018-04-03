@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem.PCI;
 using System.Collections.Generic;
 
 namespace Mosa.DeviceSystem
@@ -21,27 +20,14 @@ namespace Mosa.DeviceSystem
 		private readonly List<MemoryRegion> memoryRegions;
 
 		/// <summary>
-		/// The interrupt handler
-		/// </summary>
-		private readonly InterruptHandler interruptHandler;
-
-		/// <summary>
-		/// Gets the PCI device resource.
-		/// </summary>
-		/// <value>The PCI device resource.</value>
-		public IPCIDeviceResource DeviceResource { get; }
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="HardwareResources" /> class.
 		/// </summary>
 		/// <param name="ioPortRegions">The io port regions.</param>
 		/// <param name="memoryRegions">The memory regions.</param>
-		/// <param name="interruptHandler">The interrupt handler.</param>
-		public HardwareResources(List<IOPortRegion> ioPortRegions, List<MemoryRegion> memoryRegions, InterruptHandler interruptHandler)
+		public HardwareResources(List<IOPortRegion> ioPortRegions, List<MemoryRegion> memoryRegions)
 		{
 			this.ioPortRegions = ioPortRegions;
 			this.memoryRegions = memoryRegions;
-			this.interruptHandler = interruptHandler;
 		}
 
 		/// <summary>
@@ -117,37 +103,6 @@ namespace Mosa.DeviceSystem
 		public BaseMemory GetMemory(byte region)
 		{
 			return HAL.RequestPhysicalMemory(memoryRegions[region].BaseAddress, memoryRegions[region].Size);
-		}
-
-		/// <summary>
-		/// Gets the IRQ.
-		/// </summary>
-		/// <value>The IRQ.</value>
-		public byte IRQ
-		{
-			get
-			{
-				if (interruptHandler == null)
-					return 0xFF;    // 0xFF means unused
-				else
-					return interruptHandler.IRQ;
-			}
-		}
-
-		/// <summary>
-		/// Enables the IRQ.
-		/// </summary>
-		public void EnableIRQ()
-		{
-			interruptHandler.Enable();
-		}
-
-		/// <summary>
-		/// Disables the IRQ.
-		/// </summary>
-		public void DisableIRQ()
-		{
-			interruptHandler.Disable();
 		}
 	}
 }

@@ -41,8 +41,6 @@ namespace Mosa.UnitTest.Engine
 		private bool kernelInit = false;
 		private volatile bool ready = false;
 
-		private readonly Stopwatch stopwatch = new Stopwatch();
-
 		private const uint MaxRetries = 32;
 		private const uint RetryDelay = 1; // 1- seconds
 
@@ -59,7 +57,7 @@ namespace Mosa.UnitTest.Engine
 		private volatile bool processThreadAbort = false;
 
 		private int processCount = 0;
-		private Stopwatch stopWatch;
+		private Stopwatch stopWatch = new Stopwatch();
 
 		public UnitTestEngine()
 		{
@@ -80,7 +78,7 @@ namespace Mosa.UnitTest.Engine
 				EmulatorMemoryInMB = 128,
 				DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"),
 				FileSystem = FileSystem.FAT16,
-				UseMultipleThreadCompiler = false,
+				UseMultiThreadingCompiler = false,
 				InlinedIRMaximum = 8,
 				BootLoader = BootLoader.Syslinux_3_72,
 				VBEVideo = false,
@@ -91,10 +89,10 @@ namespace Mosa.UnitTest.Engine
 				EmitRelocations = false,
 				EmitSymbols = false,
 				Emitx86IRQMethods = true,
-				DebugConnectionOption = DebugConnectionOption.TCPServer,
-				DebugConnectionPort = 9999,
-				DebugConnectionAddress = "127.0.0.1",
-				DebugPipeName = "MOSA",
+				SerialConnectionOption = SerialConnectionOption.TCPServer,
+				SerialConnectionPort = 9999,
+				SerialConnectionHost = "127.0.0.1",
+				SerialPipeName = "MOSA",
 				ExitOnLaunch = true,
 				GenerateNASMFile = false,
 				GenerateASMFile = true,
@@ -110,7 +108,7 @@ namespace Mosa.UnitTest.Engine
 
 			Initialize();
 
-			stopwatch.Start();
+			//stopwatch.Start();
 
 			processThread = new Thread(ProcessQueue)
 			{
@@ -202,9 +200,9 @@ namespace Mosa.UnitTest.Engine
 
 				//Console.WriteLine(response.ToString());
 
-				if (processCount % 1000 == 0 && stopwatch.Elapsed.Seconds != 0)
+				if (processCount % 1000 == 0 && stopWatch.Elapsed.Seconds != 0)
 				{
-					Console.WriteLine("Unit Tests - Count: " + processCount.ToString() + " Elapsed: " + ((int)stopwatch.Elapsed.TotalSeconds).ToString() + " (" + (processCount / stopwatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
+					Console.WriteLine("Unit Tests - Count: " + processCount.ToString() + " Elapsed: " + ((int)stopWatch.Elapsed.TotalSeconds).ToString() + " (" + (processCount / stopWatch.Elapsed.TotalSeconds).ToString("F2") + " per second)");
 				}
 			}
 
@@ -351,7 +349,8 @@ namespace Mosa.UnitTest.Engine
 		{
 			if (starter == null)
 			{
-				starter = new Starter(Options, AppLocations, imagefile, this);
+				Options.ImageFile = imagefile;
+				starter = new Starter(Options, AppLocations, this);
 			}
 
 			process = starter.Launch();
@@ -402,14 +401,14 @@ namespace Mosa.UnitTest.Engine
 		{
 			if (!debugServerEngine.IsConnected)
 			{
-				if (Options.DebugConnectionOption == DebugConnectionOption.TCPServer)
+				if (Options.SerialConnectionOption == SerialConnectionOption.TCPServer)
 				{
-					var client = new TcpClient(Options.DebugConnectionAddress, Options.DebugConnectionPort);
+					var client = new TcpClient(Options.SerialConnectionHost, Options.SerialConnectionPort);
 					debugServerEngine.Stream = new DebugNetworkStream(client.Client, true);
 				}
-				else if (Options.DebugConnectionOption == DebugConnectionOption.Pipe)
+				else if (Options.SerialConnectionOption == SerialConnectionOption.Pipe)
 				{
-					var pipeStream = new NamedPipeClientStream(".", Options.DebugPipeName, PipeDirection.InOut);
+					var pipeStream = new NamedPipeClientStream(".", Options.SerialPipeName, PipeDirection.InOut);
 					pipeStream.Connect();
 					debugServerEngine.Stream = pipeStream;
 				}
@@ -721,9 +720,8 @@ namespace Mosa.UnitTest.Engine
 				if (fatalError)
 					return false;
 
-				if (stopWatch == null)
+				if (!stopWatch.IsRunning)
 				{
-					stopWatch = new Stopwatch();
 					stopWatch.Start();
 				}
 

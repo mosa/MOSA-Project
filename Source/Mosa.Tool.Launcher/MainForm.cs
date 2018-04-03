@@ -88,15 +88,15 @@ namespace Mosa.Tool.Launcher
 			Options.ExitOnLaunch = cbExitOnLaunch.Checked;
 			Options.EnableQemuGDB = cbEnableQemuGDB.Checked;
 			Options.LaunchGDB = cbLaunchGDB.Checked;
-			Options.LaunchMosaDebugger = cbLaunchMosaDebugger.Checked;
-			Options.UseMultipleThreadCompiler = cbCompilerUsesMultipleThreads.Checked;
+			Options.LaunchGDBDebugger = cbLaunchMosaDebugger.Checked;
+			Options.UseMultiThreadingCompiler = cbCompilerUsesMultipleThreads.Checked;
 			Options.EmulatorMemoryInMB = (uint)nmMemory.Value;
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
 			Options.IRLongExpansion = cbIRLongExpansion.Checked;
 			Options.TwoPassOptimizations = cbTwoPassOptimizations.Checked;
 
-			if (Options.LaunchMosaDebugger)
+			if (Options.LaunchGDBDebugger)
 			{
 				Options.GenerateDebugFile = true;
 			}
@@ -124,12 +124,12 @@ namespace Mosa.Tool.Launcher
 					}
 					catch (Exception e)
 					{
-						throw new Exception("An error occured while parsing VBE Mode: " + e.Message);
+						throw new Exception("An error occurred while parsing VBE Mode: " + e.Message);
 					}
 				}
 				else
 				{
-					throw new Exception("An error occured while parsing VBE Mode: There wasn't 3 arguments");
+					throw new Exception("An error occurred while parsing VBE Mode: There wasn't 3 arguments");
 				}
 			}
 
@@ -153,10 +153,10 @@ namespace Mosa.Tool.Launcher
 
 			switch (cbDebugConnectionOption.SelectedIndex)
 			{
-				case 0: Options.DebugConnectionOption = DebugConnectionOption.None; break;
-				case 1: Options.DebugConnectionOption = DebugConnectionOption.Pipe; break;
-				case 2: Options.DebugConnectionOption = DebugConnectionOption.TCPServer; break;
-				case 3: Options.DebugConnectionOption = DebugConnectionOption.TCPClient; break;
+				case 0: Options.SerialConnectionOption = SerialConnectionOption.None; break;
+				case 1: Options.SerialConnectionOption = SerialConnectionOption.Pipe; break;
+				case 2: Options.SerialConnectionOption = SerialConnectionOption.TCPServer; break;
+				case 3: Options.SerialConnectionOption = SerialConnectionOption.TCPClient; break;
 				default: break;
 			}
 
@@ -211,9 +211,9 @@ namespace Mosa.Tool.Launcher
 			cbExitOnLaunch.Checked = Options.ExitOnLaunch;
 			cbEnableQemuGDB.Checked = Options.EnableQemuGDB;
 			cbLaunchGDB.Checked = Options.LaunchGDB;
-			cbLaunchMosaDebugger.Checked = Options.LaunchMosaDebugger;
+			cbLaunchMosaDebugger.Checked = Options.LaunchGDBDebugger;
 			cbInlinedMethods.Checked = Options.EnableInlinedMethods;
-			cbCompilerUsesMultipleThreads.Checked = Options.UseMultipleThreadCompiler;
+			cbCompilerUsesMultipleThreads.Checked = Options.UseMultiThreadingCompiler;
 			nmMemory.Value = Options.EmulatorMemoryInMB;
 			cbVBEVideo.Checked = Options.VBEVideo;
 			tbBaseAddress.Text = "0x" + Options.BaseAddress.ToString("x8");
@@ -271,12 +271,12 @@ namespace Mosa.Tool.Launcher
 				default: cbBootFormat.SelectedIndex = 0; break;
 			}
 
-			switch (Options.DebugConnectionOption)
+			switch (Options.SerialConnectionOption)
 			{
-				case DebugConnectionOption.None: cbDebugConnectionOption.SelectedIndex = 0; break;
-				case DebugConnectionOption.Pipe: cbDebugConnectionOption.SelectedIndex = 1; break;
-				case DebugConnectionOption.TCPServer: cbDebugConnectionOption.SelectedIndex = 2; break;
-				case DebugConnectionOption.TCPClient: cbDebugConnectionOption.SelectedIndex = 3; break;
+				case SerialConnectionOption.None: cbDebugConnectionOption.SelectedIndex = 0; break;
+				case SerialConnectionOption.Pipe: cbDebugConnectionOption.SelectedIndex = 1; break;
+				case SerialConnectionOption.TCPServer: cbDebugConnectionOption.SelectedIndex = 2; break;
+				case SerialConnectionOption.TCPClient: cbDebugConnectionOption.SelectedIndex = 3; break;
 				default: break;
 			}
 
@@ -419,13 +419,7 @@ namespace Mosa.Tool.Launcher
 					{
 						if (!Builder.HasCompileError)
 						{
-							if (Builder.Options.LaunchEmulator)
-								OnCompileCompleted();
-
-							if (Options.ExitOnLaunch)
-							{
-								Application.Exit();
-							}
+							OnCompileCompleted();
 						}
 					}
 				}
@@ -448,19 +442,27 @@ namespace Mosa.Tool.Launcher
 
 		private void CompileCompleted()
 		{
-			foreach (var line in Builder.Counters)
+			if (Builder.Options.LaunchVM)
 			{
-				AddCounters(line);
+
+				foreach (var line in Builder.Counters)
+				{
+					AddCounters(line);
+				}
+
+				if (CheckKeyPressed())
+					return;
+
+				Options.ImageFile = Options.BootLoaderImage ?? Builder.ImageFile;
+				Starter = new Starter(Options, AppLocations, this, Builder.Linker);
+
+				Starter.Launch();
 			}
 
-			if (CheckKeyPressed())
-				return;
-
-			string imageFile = Options.BootLoaderImage ?? Builder.ImageFile;
-
-			Starter = new Starter(Options, AppLocations, imageFile, this, Builder.Linker);
-
-			Starter.Launch();
+			if (Options.ExitOnLaunch)
+			{
+				Application.Exit();
+			}
 		}
 
 		private bool CheckKeyPressed()

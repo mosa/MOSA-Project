@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem.PCI
 	/// <summary>
 	/// PCI Device
 	/// </summary>
-	public class PCIDevice : Device, IDevice, IPCIDevice, IPCIDeviceResource
+	public class PCIDevice : BaseDeviceDriver, IPCIDevice, IPCIDeviceResource
 	{
 		#region PCICommand
 
@@ -93,19 +93,19 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the bus.
 		/// </summary>
 		/// <value>The bus.</value>
-		public byte Bus { get; }
+		public byte Bus { get; protected set; }
 
 		/// <summary>
 		/// Gets the slot.
 		/// </summary>
 		/// <value>The slot.</value>
-		public byte Slot { get; }
+		public byte Slot { get; protected set; }
 
 		/// <summary>
 		/// Gets the function.
 		/// </summary>
 		/// <value>The function.</value>
-		public byte Function { get; }
+		public byte Function { get; protected set; }
 
 		/// <summary>
 		/// Gets the vendor ID.
@@ -189,23 +189,17 @@ namespace Mosa.DeviceSystem.PCI
 
 		#endregion Properties
 
-		/// <summary>
-		/// Create a new PCIDevice instance
-		/// </summary>
-		/// <param name="pciController">The pci controller.</param>
-		/// <param name="bus">The bus.</param>
-		/// <param name="slot">The slot.</param>
-		/// <param name="fun">The fun.</param>
-		public PCIDevice(IPCIController pciController, byte bus, byte slot, byte fun)
+		public override void Initialize()
 		{
-			base.Parent = pciController as Device;
-			base.Name = base.Parent.Name + "/" + bus.ToString() + "." + slot.ToString() + "." + fun.ToString();
-			base.DeviceStatus = DeviceStatus.Available;
+			pciController = base.Device.Parent as IPCIController;
 
-			this.pciController = pciController;
-			Bus = bus;
-			Slot = slot;
-			Function = fun;
+			var configuration = Device.Configuration as PCIDeviceConfiguration;
+
+			Bus = configuration.Bus;
+			Slot = configuration.Slot;
+			Function = configuration.Function;
+
+			Device.Name = Device.Parent.Name + "/" + Bus.ToString() + "." + Slot.ToString() + "." + Function.ToString();
 
 			ioPortRegionCount = memoryRegionCount = 0;
 			BaseAddresses = new BaseAddress[8];
@@ -213,16 +207,16 @@ namespace Mosa.DeviceSystem.PCI
 			for (byte i = 0; i < 6; i++)
 			{
 				byte barr = (byte)(PCIConfigurationHeader.BaseAddressRegisterBase + (i * 4));
-				uint address = pciController.ReadConfig32(bus, slot, fun, barr);
+				uint address = pciController.ReadConfig32(Bus, Slot, Function, barr);
 
 				if (address == 0)
 					continue;
 
 				HAL.DisableAllInterrupts();
 
-				pciController.WriteConfig32(bus, slot, fun, barr, 0xFFFFFFFF);
-				uint mask = pciController.ReadConfig32(bus, slot, fun, barr);
-				pciController.WriteConfig32(bus, slot, fun, barr, address);
+				pciController.WriteConfig32(Bus, Slot, Function, barr, 0xFFFFFFFF);
+				uint mask = pciController.ReadConfig32(Bus, Slot, Function, barr);
+				pciController.WriteConfig32(Bus, Slot, Function, barr, address);
 
 				HAL.EnableAllInterrupts();
 
@@ -255,6 +249,23 @@ namespace Mosa.DeviceSystem.PCI
 			}
 		}
 
+		public override void Probe() => Device.Status = DeviceStatus.Available;
+
+		public override void Start()
+		{
+			Device.Status = DeviceStatus.Online;
+		}
+
+		/// <summary>
+		/// Called when an interrupt is received.
+		/// </summary>
+		/// <returns></returns>
+		public override bool OnInterrupt()
+		{
+			// TODO
+			return true;
+		}
+
 		/// <summary>
 		/// Enables the device.
 		/// </summary>
@@ -276,7 +287,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		public void SetNoDriverFound()
 		{
-			DeviceStatus = DeviceStatus.NotFound;
+			Device.Status = DeviceStatus.NotFound;
 		}
 
 		/// <summary>
@@ -284,7 +295,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		public void SetDeviceOnline()
 		{
-			DeviceStatus = DeviceStatus.Online;
+			Device.Status = DeviceStatus.Online;
 		}
 	}
 }

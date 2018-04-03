@@ -9,13 +9,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal sealed class In8 : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			Operand v1 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U4);
@@ -27,7 +20,5 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			//context.SetInstruction(X86.In8, result, context.Operand1);
 		}
-
-		#endregion Methods
 	}
 }

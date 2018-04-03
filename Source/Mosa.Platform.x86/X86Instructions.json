@@ -198,13 +198,13 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "CmpXchgLoad32",
+			"Name": "CmpXChgLoad32",
 			"FamilyName": "X86",
 			"ResultCount": 1,
 			"OperandCount": 4,
 			"MemoryRead": "true",
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Comisd",
@@ -548,7 +548,7 @@
 			"ResultCount": 1,
 			"OperandCount": 1,
 			"X86LegacyOpcode": "0x8C",
-			"X86LegacyOpcodeOperandOrder": "r1",
+			"X86LegacyOpcodeOperandOrder": "1r",
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
@@ -1341,13 +1341,35 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "Xchg32",
+			"Name": "XAddLoad32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"MemoryRead": "true",
+			"Commutative": "false",
+			"X86LegacyOpcode": "0x87",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "XChg32",
 			"FamilyName": "X86",
 			"ResultCount": 2,
 			"OperandCount": 2,
 			"Commutative": "true",
 			"X86LegacyOpcode": "0x87",
 			"X86LegacyOpcodeOperandOrder": "r12",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "XChgLoad32",
+			"FamilyName": "X86",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"MemoryRead": "true",
+			"Commutative": "false",
+			"X86LegacyOpcode": "0x87",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{

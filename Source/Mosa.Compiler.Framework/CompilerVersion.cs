@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework
 	{
 		public static int Major = 1;
 		public static int Minor = 9;
-		public static int Build = 0;
+		public static int Build = 1;
 
 		public static string Version
 		{

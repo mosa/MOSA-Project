@@ -32,14 +32,8 @@ namespace Mosa.DeviceSystem
 			internal const uint SupportedRevision = 0x0100; // 1.0
 		}
 
-		/// <summary>
-		///
-		/// </summary>
 		protected bool valid;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected IDiskDevice diskDevice;
 
 		/// <summary>

@@ -60,8 +60,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Reflection.TypeExtensions, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reflection.TypeExtensions.4.4.0\lib\net461\System.Reflection.TypeExtensions.dll</HintPath>
+    <Reference Include="System.Reflection.TypeExtensions, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reflection.TypeExtensions.4.5.0-preview1-26216-02\lib\net461\System.Reflection.TypeExtensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -84,69 +84,68 @@
     <Compile Include="DebugData\MethodInfo.cs" />
     <Compile Include="DebugData\FieldInfo.cs" />
     <Compile Include="DebugData\TypeInfo.cs" />
-    <Compile Include="DebugQemuWindow.cs">
+    <Compile Include="DebugAppLocationsWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DebugQemuWindow.Designer.cs">
-      <DependentUpon>DebugQemuWindow.cs</DependentUpon>
+    <Compile Include="DebugAppLocationsWindow.Designer.cs">
+      <DependentUpon>DebugAppLocationsWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="GDB\MemoryCache.cs" />
-    <Compile Include="Options.cs" />
-    <Compile Include="View\BreakPointView.cs">
+    <Compile Include="Views\BreakpointView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\BreakPointView.designer.cs">
-      <DependentUpon>BreakPointView.cs</DependentUpon>
+    <Compile Include="Views\BreakpointView.designer.cs">
+      <DependentUpon>BreakpointView.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\CallStackView.cs">
+    <Compile Include="Views\CallStackView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\CallStackView.designer.cs">
+    <Compile Include="Views\CallStackView.designer.cs">
       <DependentUpon>CallStackView.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\DisplayView.cs">
+    <Compile Include="Views\DisplayView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\DisplayView.designer.cs">
+    <Compile Include="Views\DisplayView.designer.cs">
       <DependentUpon>DisplayView.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\MethodView.cs">
+    <Compile Include="Views\MethodView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\MethodView.designer.cs">
+    <Compile Include="Views\MethodView.designer.cs">
       <DependentUpon>MethodView.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\InstructionView.cs">
+    <Compile Include="Views\InstructionView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\InstructionView.designer.cs">
+    <Compile Include="Views\InstructionView.designer.cs">
       <DependentUpon>InstructionView.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\StackFrameView.cs">
+    <Compile Include="Views\StackFrameView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\StackFrameView.designer.cs">
+    <Compile Include="Views\StackFrameView.designer.cs">
       <DependentUpon>StackFrameView.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\SymbolView.cs">
+    <Compile Include="Views\SymbolView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\SymbolView.designer.cs">
+    <Compile Include="Views\SymbolView.designer.cs">
       <DependentUpon>SymbolView.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\WatchView.cs">
+    <Compile Include="Views\WatchView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\WatchView.designer.cs">
+    <Compile Include="Views\WatchView.designer.cs">
       <DependentUpon>WatchView.cs</DependentUpon>
     </Compile>
     <Compile Include="AddBreakPointArgs.cs" />
     <Compile Include="Watch.cs" />
     <Compile Include="Breakpoint.cs" />
-    <Compile Include="View\ControlView.cs">
+    <Compile Include="Views\ControlView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\ControlView.designer.cs">
+    <Compile Include="Views\ControlView.designer.cs">
       <DependentUpon>ControlView.cs</DependentUpon>
     </Compile>
     <Compile Include="DebugData\LoadDebugData.cs" />
@@ -166,16 +165,16 @@
     <Compile Include="MainForm.designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\MemoryView.cs">
+    <Compile Include="Views\MemoryView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\MemoryView.designer.cs">
+    <Compile Include="Views\MemoryView.designer.cs">
       <DependentUpon>MemoryView.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\OutputView.cs">
+    <Compile Include="Views\OutputView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\OutputView.designer.cs">
+    <Compile Include="Views\OutputView.designer.cs">
       <DependentUpon>OutputView.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -191,16 +190,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="View\RegisterView.cs">
+    <Compile Include="Views\RegisterView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\RegisterView.designer.cs">
+    <Compile Include="Views\RegisterView.designer.cs">
       <DependentUpon>RegisterView.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\StatusView.cs">
+    <Compile Include="Views\StatusView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\StatusView.designer.cs">
+    <Compile Include="Views\StatusView.designer.cs">
       <DependentUpon>StatusView.cs</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -208,6 +207,10 @@
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
       <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
       <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
+      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
+      <Name>Mosa.Compiler.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj">
       <Project>{65F7691A-B355-4D98-BB97-0B19F13E2190}</Project>
@@ -237,16 +240,16 @@
     <EmbeddedResource Include="ConnectWindow.resx">
       <DependentUpon>ConnectWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DebugQemuWindow.resx">
-      <DependentUpon>DebugQemuWindow.cs</DependentUpon>
+    <EmbeddedResource Include="DebugAppLocationsWindow.resx">
+      <DependentUpon>DebugAppLocationsWindow.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\BreakPointView.resx">
-      <DependentUpon>BreakPointView.cs</DependentUpon>
+    <EmbeddedResource Include="Views\BreakpointView.resx">
+      <DependentUpon>BreakpointView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\CallStackView.resx">
+    <EmbeddedResource Include="Views\CallStackView.resx">
       <DependentUpon>CallStackView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\ControlView.resx">
+    <EmbeddedResource Include="Views\ControlView.resx">
       <DependentUpon>ControlView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
@@ -255,38 +258,38 @@
     <EmbeddedResource Include="DebugDockContent.resx">
       <DependentUpon>DebugDockContent.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\DisplayView.resx">
+    <EmbeddedResource Include="Views\DisplayView.resx">
       <DependentUpon>DisplayView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\MethodView.resx">
+    <EmbeddedResource Include="Views\MethodView.resx">
       <DependentUpon>MethodView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\MemoryView.resx">
+    <EmbeddedResource Include="Views\MemoryView.resx">
       <DependentUpon>MemoryView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\OutputView.resx">
+    <EmbeddedResource Include="Views\OutputView.resx">
       <DependentUpon>OutputView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\RegisterView.resx">
+    <EmbeddedResource Include="Views\RegisterView.resx">
       <DependentUpon>RegisterView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\InstructionView.resx">
+    <EmbeddedResource Include="Views\InstructionView.resx">
       <DependentUpon>InstructionView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\StackFrameView.resx">
+    <EmbeddedResource Include="Views\StackFrameView.resx">
       <DependentUpon>StackFrameView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\StatusView.resx">
+    <EmbeddedResource Include="Views\StatusView.resx">
       <DependentUpon>StatusView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\SymbolView.resx">
+    <EmbeddedResource Include="Views\SymbolView.resx">
       <DependentUpon>SymbolView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\WatchView.resx">
+    <EmbeddedResource Include="Views\WatchView.resx">
       <DependentUpon>WatchView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>

@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Xchg32
+	/// XChg32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Xchg32 : X86Instruction
+	public sealed class XChg32 : X86Instruction
 	{
 		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x87 } );
 
-		internal Xchg32()
+		internal XChg32()
 			: base(2, 2)
 		{
 		}

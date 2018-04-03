@@ -40,7 +40,14 @@ namespace Mosa.Utility.BootImage
 			diskGeometry.GuessGeometry(blockCount);
 
 			// Create disk image file
-			var diskDevice = new BlockFileStream(options.DiskImageFileName);
+			var diskDeviceDriver = new BlockFileStreamDriver(options.DiskImageFileName);
+
+			var diskDevice = new Device() { DeviceDriver = diskDeviceDriver };
+
+			// Setup device -- required as part of framework in operating system
+			diskDeviceDriver.Setup(diskDevice);
+			diskDeviceDriver.Initialize();
+			diskDeviceDriver.Start();
 
 			if (options.ImageFormat == ImageFormat.VDI)
 			{
@@ -52,25 +59,32 @@ namespace Mosa.Utility.BootImage
 					diskGeometry
 				);
 
-				diskDevice.WriteBlock(0, 1, header);
+				diskDeviceDriver.WriteBlock(0, 1, header);
 
 				var map = VDI.CreateImageMap(blockCount);
 
-				diskDevice.WriteBlock(1, (uint)(map.Length / SectorSize), map);
+				diskDeviceDriver.WriteBlock(1, (uint)(map.Length / SectorSize), map);
 
-				diskDevice.BlockOffset = 1 + (uint)(map.Length / 512);
+				diskDeviceDriver.BlockOffset = 1 + (uint)(map.Length / 512);
 			}
 
 			// Expand disk image
-			diskDevice.WriteBlock(blockCount - 1, 1, new byte[SectorSize]);
+			diskDeviceDriver.WriteBlock(blockCount - 1, 1, new byte[SectorSize]);
 
-			// Create partition device
-			PartitionDevice partitionDevice;
+			// Create partition device driver
+			var partitionDevice = new PartitionDeviceDriver();
+
+			// Setup partition configuration
+			var configuraiton = new DiskPartitionConfiguration()
+			{
+				Index = 0,
+				ReadOnly = false,
+			};
 
 			if (options.MBROption)
 			{
 				// Create master boot block record
-				var mbr = new MasterBootBlock(diskDevice)
+				var mbr = new MasterBootBlock(diskDeviceDriver)
 				{
 					// Setup partition entry
 					DiskSignature = 0x12345678
@@ -92,12 +106,27 @@ namespace Mosa.Utility.BootImage
 
 				mbr.Write();
 
-				partitionDevice = new PartitionDevice(diskDevice, mbr.Partitions[0], false);
+				configuraiton.StartLBA = mbr.Partitions[0].StartLBA;
+				configuraiton.TotalBlocks = mbr.Partitions[0].TotalBlocks;
 			}
 			else
 			{
-				partitionDevice = new PartitionDevice(diskDevice, false);
+				configuraiton.StartLBA = 0;
+				configuraiton.TotalBlocks = diskDeviceDriver.TotalBlocks;
 			}
+
+			// Setup device -- required as part of framework in operating system
+			var device = new Device()
+			{
+				Configuration = configuraiton,
+				DeviceDriver = partitionDevice,
+				Parent = diskDevice,
+			};
+
+			// Setup and initialize
+			partitionDevice.Setup(device);
+			partitionDevice.Initialize();
+			partitionDevice.Start();
 
 			// Set FAT settings
 			var fatSettings = new FatSettings();
@@ -169,10 +198,10 @@ namespace Mosa.Utility.BootImage
 					diskGeometry
 				);
 
-				diskDevice.WriteBlock(blockCount, 1, footer);
+				diskDeviceDriver.WriteBlock(blockCount, 1, footer);
 			}
 
-			diskDevice.Dispose();
+			diskDeviceDriver.Dispose();
 		}
 	}
 }

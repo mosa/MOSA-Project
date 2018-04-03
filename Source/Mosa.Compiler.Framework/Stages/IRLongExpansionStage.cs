@@ -22,6 +22,9 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.LogicalNot64, LogicalNot64);
 			AddVisitation(IRInstruction.Truncation64x32, Truncation64x32);
 			AddVisitation(IRInstruction.ZeroExtended32x64, ZeroExtended32x64);
+
+			// IRInstruction.CompareInteger64x32 -- see LongOperandStage.CompareInteger64x64 for example
+			// IRInstruction.CompareInteger64x64 -- same as above
 		}
 
 		#region Visitation Methods
@@ -135,6 +138,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void LogicalAnd64(InstructionNode node)
 		{
+			if (!node.Result.Is64BitInteger)
+			{
+				MethodCompiler.Stop();
+				Debug.WriteLine(Method.FullName);
+				return;
+			}
+
 			Debug.Assert(node.Result.Is64BitInteger);
 
 			var result = node.Result;

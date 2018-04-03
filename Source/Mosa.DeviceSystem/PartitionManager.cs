@@ -33,7 +33,7 @@ namespace Mosa.DeviceSystem
 			// Find all online disk devices
 			foreach (var device in disks)
 			{
-				var diskDevice = device as IDiskDevice;
+				var diskDevice = device.DeviceDriver as IDiskDevice;
 
 				var mbr = new MasterBootBlock(diskDevice);
 
@@ -44,7 +44,15 @@ namespace Mosa.DeviceSystem
 				{
 					if (mbr.Partitions[i].PartitionType != PartitionType.Empty)
 					{
-						deviceManager.Add(new PartitionDevice(diskDevice, mbr.Partitions[i], false));
+						var configuration = new DiskPartitionConfiguration()
+						{
+							Index = i,
+							StartLBA = mbr.Partitions[i].StartLBA,
+							TotalBlocks = mbr.Partitions[i].TotalBlocks,
+							ReadOnly = false,
+						};
+
+						deviceManager.Initialize(new PartitionDeviceDriver(), device, configuration, null, null);
 					}
 				}
 			}

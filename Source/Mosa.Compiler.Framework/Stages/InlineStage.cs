@@ -205,7 +205,27 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			callSiteNode.SetInstruction(IRInstruction.Jmp, mapBlocks[blocks.PrologueBlock]);
+			var prologue = mapBlocks[blocks.PrologueBlock];
+
+			var callSiteOperands = callSiteNode.GetOperands();
+
+			if (callSiteOperands.Count > 1)
+			{
+				var context = new Context(prologue);
+
+				for (int i = 1; i < callSiteOperands.Count; i++)
+				{
+					var operand = callSiteOperands[i];
+
+					if (!operand.IsVirtualRegister || operand.Low == null)
+						continue;
+
+					context.AppendInstruction2(IRInstruction.Split64, operand.Low, operand.High, operand);
+				}
+			}
+
+			callSiteNode.SetInstruction(IRInstruction.Jmp, prologue);
+			//MethodCompiler.Stop();
 		}
 
 		private static void UpdateParameterInstructions(InstructionNode newNode)
@@ -317,6 +337,20 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			Debug.Assert(mappedOperand != null);
+
+			if (operand.IsSplitChild)
+			{
+				MethodCompiler.SplitLongOperand(mappedOperand);
+
+				if (operand.IsLow)
+				{
+					mappedOperand = mappedOperand.Low;
+				}
+				else if (operand.IsHigh)
+				{
+					mappedOperand = mappedOperand.High;
+				}
+			}
 
 			map.Add(operand, mappedOperand);
 

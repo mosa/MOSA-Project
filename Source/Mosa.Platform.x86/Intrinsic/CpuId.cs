@@ -9,18 +9,9 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal sealed class CpuId : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.CpuId, context.Result, context.Operand1);
 		}
-
-		#endregion Methods
 	}
 }

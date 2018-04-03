@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Instructions
 {
 	public static class StaticEmitters
 	{
-		internal static void EmitCmpXchgLoad32(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitCmpXChgLoad32(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
 			Debug.Assert(node.Operand1.IsCPURegister);
@@ -17,14 +17,12 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(node.GetOperand(3).IsCPURegister);
 			Debug.Assert(node.Result.Register == GeneralPurposeRegister.EAX);
 			Debug.Assert(node.Operand1.Register == GeneralPurposeRegister.EAX);
-			Debug.Assert(node.ResultCount == 1);
 
 			// Compare EAX with r/m32. If equal, ZF is set and r32 is loaded into r/m32.
 			// Else, clear ZF and load r/m32 into EAX.
 
 			// memory, register 0000 1111 : 1011 000w : mod reg r/m
 			var opcode = new OpcodeEncoder()
-				.AppendConditionalPrefix(false, 0x66)                           // 8:prefix: 16bit (node.Size == InstructionSize.Size16)
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
 				.AppendNibble(Bits.b1011)                                       // 4:opcode
@@ -37,6 +35,132 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.Emit(opcode, node.Operand2, (opcode.Size - 32) / 8);
 			else
 				emitter.Emit(opcode);
+		}
+
+		internal static void EmitXChgLoad32ConstantBase(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand3.IsCPURegister);
+			Debug.Assert(!node.Operand3.IsConstant);
+			Debug.Assert(node.Operand1.IsConstant);
+
+			// memory with reg : 1000 011w : mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b1000)                                       // 4:opcode
+				.Append3Bits(Bits.b011)                                         // 3:opcode
+				.AppendWidthBit(true)                                           // 1:width (node.Size != InstructionSize.Size8)
+
+				.AppendMod(Bits.b00)                                            // 2:mod (00)
+				.AppendRegister(node.Operand3)                                  // 3:source
+				.AppendRegister(Bits.b101)                                      // 3:r/m (101=Fixed Displacement)
+
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
+				.AppendConditionalIntegerValue(!node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
+			else
+				emitter.Emit(opcode);
+		}
+
+		internal static void EmitXChgLoad32Reg(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand3.IsCPURegister);
+			Debug.Assert(!node.Operand3.IsConstant);
+
+			// memory with reg : 1000 011w : mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b1000)                                       // 4:opcode
+				.Append3Bits(Bits.b011)                                         // 3:opcode
+				.AppendWidthBit(true)                                           // 1:width (node.Size != InstructionSize.Size8)
+
+				// This opcode has a directionality bit, and it is set to 0
+				// This means we must swap around operand1 and operand3, and set offsetDestination to false
+				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:displacement
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
+			else
+				emitter.Emit(opcode);
+		}
+
+		internal static void EmitXChgLoad32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			if (node.Operand1.IsConstant)
+			{
+				EmitXChgLoad32ConstantBase(node, emitter);
+			}
+			else
+			{
+				EmitXChgLoad32Reg(node, emitter);
+			}
+		}
+
+		internal static void EmitXAddLoad32ConstantBase(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand3.IsCPURegister);
+			Debug.Assert(!node.Operand3.IsConstant);
+			Debug.Assert(node.Operand1.IsConstant);
+
+			// memory, reg: 0000 1111 : 1100 000w: mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b1100)                                       // 4:opcode
+				.Append3Bits(Bits.b000)                                         // 3:opcode
+				.AppendWidthBit(true)                                           // 1:width (node.Size != InstructionSize.Size8)
+
+				.AppendMod(Bits.b00)                                            // 2:mod (00)
+				.AppendRegister(node.Operand3)                                  // 3:source
+				.AppendRegister(Bits.b101)                                      // 3:r/m (101=Fixed Displacement)
+
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
+				.AppendConditionalIntegerValue(!node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
+			else
+				emitter.Emit(opcode);
+		}
+
+		internal static void EmitXAddLoad32Reg(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			Debug.Assert(node.Result.IsCPURegister);
+			Debug.Assert(node.Operand3.IsCPURegister);
+			Debug.Assert(!node.Operand3.IsConstant);
+
+			// memory, reg : 0000 1111 : 1100 000w : mod reg r/m
+			var opcode = new OpcodeEncoder()
+				.AppendNibble(Bits.b0000)                                       // 4:opcode
+				.AppendNibble(Bits.b1111)                                       // 4:opcode
+				.AppendNibble(Bits.b1100)                                       // 4:opcode
+				.Append3Bits(Bits.b000)                                         // 3:opcode
+				.AppendWidthBit(true)                                           // 1:width (node.Size != InstructionSize.Size8)
+
+				// This opcode has a directionality bit, and it is set to 0
+				// This means we must swap around operand1 and operand3, and set offsetDestination to false
+				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
+				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:displacement
+
+			if (node.Operand1.IsLinkerResolved)
+				emitter.Emit(opcode, node.Operand1, patchOffset);
+			else
+				emitter.Emit(opcode);
+		}
+
+		internal static void EmitXAddLoad32(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			if (node.Operand1.IsConstant)
+			{
+				EmitXAddLoad32ConstantBase(node, emitter);
+			}
+			else
+			{
+				EmitXAddLoad32Reg(node, emitter);
+			}
 		}
 
 		internal static void EmitInvlpg(InstructionNode node, BaseCodeEmitter emitter)
@@ -628,13 +752,15 @@ namespace Mosa.Platform.x86.Instructions
 			Debug.Assert(node.Operand1.IsConstant);
 			Debug.Assert(node.Operand2.IsResolvedConstant);
 			Debug.Assert(node.Operand3.IsResolvedConstant);
+			Debug.Assert(node.Operand1.IsConstant);
+			Debug.Assert(node.Operand3.IsConstant);
 
 			// immediate to memory	1100 011w: mod 000 r/m : immediate data
 			var opcode = new OpcodeEncoder()
 				.AppendConditionalPrefix(size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
 				.AppendNibble(Bits.b1100)                                       // 4:opcode
 				.Append3Bits(Bits.b011)                                         // 3:opcode
-				.AppendWidthBit(size != InstructionSize.Size8)             // 1:width
+				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
 
 				.AppendMod(Bits.b00)                                            // 2:mod (00)
 				.Append3Bits(Bits.b000)                                         // 3:source (000)

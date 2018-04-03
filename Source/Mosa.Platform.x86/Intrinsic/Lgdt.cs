@@ -9,18 +9,11 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal sealed class Lgdt : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			Helper.FoldOperand1ToConstant(context);
 
-			var constantx10 = Operand.CreateConstant(0x10, methodCompiler.TypeSystem);
+			var constantx10 = methodCompiler.CreateConstant(0x10);
 
 			Operand eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			Operand ds = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.DS);
@@ -38,7 +31,5 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.MovStoreSeg32, ss, eax);
 			context.AppendInstruction(X86.FarJmp);
 		}
-
-		#endregion Methods
 	}
 }

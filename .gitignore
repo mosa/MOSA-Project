@@ -39,6 +39,7 @@ build.force
 /.vs/
 .vs/
 /Tests/BootImage/
+/Installer/installer
 
 # NuGet Packages
 *.nupkg

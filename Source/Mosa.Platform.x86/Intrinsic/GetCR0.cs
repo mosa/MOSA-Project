@@ -3,7 +3,7 @@
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	///
+	/// GetCR0
 	/// </summary>
 	internal sealed class GetCR0 : GetControlRegisterBase
 	{

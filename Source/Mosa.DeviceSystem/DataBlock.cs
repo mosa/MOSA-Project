@@ -10,17 +10,12 @@ namespace Mosa.DeviceSystem
 	public struct DataBlock
 	{
 		/// <summary>
-		/// The data
-		/// </summary>
-		private byte[] data;
-
-		/// <summary>
 		/// Initializes a new instance of the <see cref="DataBlock"/> struct.
 		/// </summary>
 		/// <param name="data">The data.</param>
 		public DataBlock(byte[] data)
 		{
-			this.data = data;
+			this.Data = data;
 		}
 
 		/// <summary>
@@ -29,7 +24,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="length">The length.</param>
 		public DataBlock(uint length)
 		{
-			data = new byte[length];
+			Data = new byte[length];
 		}
 
 		/// <summary>
@@ -38,27 +33,27 @@ namespace Mosa.DeviceSystem
 		/// <value>The length.</value>
 		public uint Length
 		{
-			get { return (uint)data.Length; }
+			get { return (uint)Data.Length; }
 		}
 
 		/// <summary>
 		/// Gets the data.
 		/// </summary>
 		/// <value>The data.</value>
-		public byte[] Data
-		{
-			get { return data; }
-		}
+		public byte[] Data { get; }
 
 		/// <summary>
-		/// Gets or sets the <see cref="System.Byte"/> at the specified index.
+		/// Gets or sets the <see cref="System.Byte" /> at the specified index.
 		/// </summary>
-		/// <value></value>
+		/// <value>
+		/// The <see cref="System.Byte"/>.
+		/// </value>
+		/// <param name="index">The index.</param>
 		/// <returns></returns>
 		public byte this[int index]
 		{
-			get { return data[index]; }
-			set { data[index] = value; }
+			get { return Data[index]; }
+			set { Data[index] = value; }
 		}
 
 		/// <summary>
@@ -68,7 +63,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public char GetChar(uint offset)
 		{
-			return (char)(data[offset]);
+			return (char)(Data[offset]);
 		}
 
 		/// <summary>
@@ -78,7 +73,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		public void SetChar(uint offset, char value)
 		{
-			data[offset] = (byte)value;
+			Data[offset] = (byte)value;
 		}
 
 		/// <summary>
@@ -106,7 +101,7 @@ namespace Mosa.DeviceSystem
 		{
 			var value = new byte[length];
 
-			for (uint index = 0; index < length; index++) { value[index] = data[offset + index]; }
+			for (uint index = 0; index < length; index++) { value[index] = Data[offset + index]; }
 
 			return value;
 		}
@@ -118,7 +113,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		public void SetChars(uint offset, char[] value)
 		{
-			for (uint index = 0; index < value.Length; index++) { data[offset + index] = (byte)value[index]; }
+			for (uint index = 0; index < value.Length; index++) { Data[offset + index] = (byte)value[index]; }
 		}
 
 		/// <summary>
@@ -128,7 +123,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		public void SetString(uint offset, string value)
 		{
-			for (int index = 0; index < value.Length; index++) { data[offset + index] = (byte)value[index]; }
+			for (int index = 0; index < value.Length; index++) { Data[offset + index] = (byte)value[index]; }
 		}
 
 		/// <summary>
@@ -139,7 +134,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="length">The length.</param>
 		public void SetString(uint offset, string value, uint length)
 		{
-			for (int index = 0; index < length; index++) { data[offset + index] = (byte)value[index]; }
+			for (int index = 0; index < length; index++) { Data[offset + index] = (byte)value[index]; }
 		}
 
 		/// <summary>
@@ -149,10 +144,10 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public uint GetUInt(uint offset)
 		{
-			uint value = data[offset++];
-			value += (uint)(data[offset++] << 8);
-			value += (uint)(data[offset++] << 16);
-			value += (uint)(data[offset] << 24);
+			uint value = Data[offset++];
+			value += (uint)(Data[offset++] << 8);
+			value += (uint)(Data[offset++] << 16);
+			value += (uint)(Data[offset] << 24);
 
 			return value;
 		}
@@ -164,10 +159,10 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		public void SetUInt(uint offset, uint value)
 		{
-			data[offset++] = (byte)(value & 0xFF);
-			data[offset++] = (byte)((value >> 8) & 0xFF);
-			data[offset++] = (byte)((value >> 16) & 0xFF);
-			data[offset] = (byte)((value >> 24) & 0xFF);
+			Data[offset++] = (byte)(value & 0xFF);
+			Data[offset++] = (byte)((value >> 8) & 0xFF);
+			Data[offset++] = (byte)((value >> 16) & 0xFF);
+			Data[offset] = (byte)((value >> 24) & 0xFF);
 		}
 
 		/// <summary>
@@ -177,10 +172,10 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		public void SetUIntReversed(uint offset, uint value)
 		{
-			data[offset++] = (byte)((value >> 24) & 0xFF);
-			data[offset++] = (byte)((value >> 16) & 0xFF);
-			data[offset++] = (byte)((value >> 8) & 0xFF);
-			data[offset] = (byte)(value & 0xFF);
+			Data[offset++] = (byte)((value >> 24) & 0xFF);
+			Data[offset++] = (byte)((value >> 16) & 0xFF);
+			Data[offset++] = (byte)((value >> 8) & 0xFF);
+			Data[offset] = (byte)(value & 0xFF);
 		}
 
 		/// <summary>
@@ -190,14 +185,14 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		public void SetULong(uint offset, ulong value)
 		{
-			data[offset++] = (byte)(value & 0xFF);
-			data[offset++] = (byte)((value >> 8) & 0xFF);
-			data[offset++] = (byte)((value >> 16) & 0xFF);
-			data[offset++] = (byte)((value >> 24) & 0xFF);
-			data[offset++] = (byte)((value >> 32) & 0xFF);
-			data[offset++] = (byte)((value >> 40) & 0xFF);
-			data[offset++] = (byte)((value >> 48) & 0xFF);
-			data[offset] = (byte)((value >> 56) & 0xFF);
+			Data[offset++] = (byte)(value & 0xFF);
+			Data[offset++] = (byte)((value >> 8) & 0xFF);
+			Data[offset++] = (byte)((value >> 16) & 0xFF);
+			Data[offset++] = (byte)((value >> 24) & 0xFF);
+			Data[offset++] = (byte)((value >> 32) & 0xFF);
+			Data[offset++] = (byte)((value >> 40) & 0xFF);
+			Data[offset++] = (byte)((value >> 48) & 0xFF);
+			Data[offset] = (byte)((value >> 56) & 0xFF);
 		}
 
 		/// <summary>
@@ -207,14 +202,14 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		public void SetULongReversed(uint offset, ulong value)
 		{
-			data[offset++] = (byte)((value >> 56) & 0xFF);
-			data[offset++] = (byte)((value >> 48) & 0xFF);
-			data[offset++] = (byte)((value >> 40) & 0xFF);
-			data[offset++] = (byte)((value >> 32) & 0xFF);
-			data[offset++] = (byte)((value >> 24) & 0xFF);
-			data[offset++] = (byte)((value >> 16) & 0xFF);
-			data[offset++] = (byte)((value >> 8) & 0xFF);
-			data[offset] = (byte)(value & 0xFF);
+			Data[offset++] = (byte)((value >> 56) & 0xFF);
+			Data[offset++] = (byte)((value >> 48) & 0xFF);
+			Data[offset++] = (byte)((value >> 40) & 0xFF);
+			Data[offset++] = (byte)((value >> 32) & 0xFF);
+			Data[offset++] = (byte)((value >> 24) & 0xFF);
+			Data[offset++] = (byte)((value >> 16) & 0xFF);
+			Data[offset++] = (byte)((value >> 8) & 0xFF);
+			Data[offset] = (byte)(value & 0xFF);
 		}
 
 		/// <summary>
@@ -224,8 +219,8 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public ushort GetUShort(uint offset)
 		{
-			ushort value = data[offset++];
-			value += (ushort)(data[offset] << 8);
+			ushort value = Data[offset++];
+			value += (ushort)(Data[offset] << 8);
 
 			return value;
 		}
@@ -237,8 +232,8 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		public void SetUShort(uint offset, ushort value)
 		{
-			data[offset++] = (byte)(value & 0xFF);
-			data[offset] = (byte)((value >> 8) & 0xFF);
+			Data[offset++] = (byte)(value & 0xFF);
+			Data[offset] = (byte)((value >> 8) & 0xFF);
 		}
 
 		/// <summary>
@@ -248,8 +243,8 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		public void SetUShortReversed(uint offset, ushort value)
 		{
-			data[offset++] = (byte)((value >> 8) & 0xFF);
-			data[offset] = (byte)(value & 0xFF);
+			Data[offset++] = (byte)((value >> 8) & 0xFF);
+			Data[offset] = (byte)(value & 0xFF);
 		}
 
 		/// <summary>
@@ -259,14 +254,14 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public ulong GetULong(uint offset)
 		{
-			ulong value = data[offset++];
-			value += (uint)(data[offset++] << 8);
-			value += (uint)(data[offset++] << 16);
-			value += (uint)(data[offset++] << 24);
-			value += (uint)(data[offset++] << 32);
-			value += (uint)(data[offset++] << 40);
-			value += (uint)(data[offset++] << 48);
-			value += (uint)(data[offset] << 56);
+			ulong value = Data[offset++];
+			value += (uint)(Data[offset++] << 8);
+			value += (uint)(Data[offset++] << 16);
+			value += (uint)(Data[offset++] << 24);
+			value += (uint)(Data[offset++] << 32);
+			value += (uint)(Data[offset++] << 40);
+			value += (uint)(Data[offset++] << 48);
+			value += (uint)(Data[offset] << 56);
 
 			return value;
 		}
@@ -278,14 +273,14 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		public void SetULong(ulong offset, ulong value)
 		{
-			data[offset++] = (byte)(value & 0xFF);
-			data[offset++] = (byte)((value >> 8) & 0xFF);
-			data[offset++] = (byte)((value >> 16) & 0xFF);
-			data[offset++] = (byte)((value >> 24) & 0xFF);
-			data[offset++] = (byte)((value >> 32) & 0xFF);
-			data[offset++] = (byte)((value >> 40) & 0xFF);
-			data[offset++] = (byte)((value >> 48) & 0xFF);
-			data[offset] = (byte)((value >> 56) & 0xFF);
+			Data[offset++] = (byte)(value & 0xFF);
+			Data[offset++] = (byte)((value >> 8) & 0xFF);
+			Data[offset++] = (byte)((value >> 16) & 0xFF);
+			Data[offset++] = (byte)((value >> 24) & 0xFF);
+			Data[offset++] = (byte)((value >> 32) & 0xFF);
+			Data[offset++] = (byte)((value >> 40) & 0xFF);
+			Data[offset++] = (byte)((value >> 48) & 0xFF);
+			Data[offset] = (byte)((value >> 56) & 0xFF);
 		}
 
 		/// <summary>
@@ -295,7 +290,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public byte GetByte(uint offset)
 		{
-			return data[offset];
+			return Data[offset];
 		}
 
 		/// <summary>
@@ -305,7 +300,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		public void SetByte(uint offset, byte value)
 		{
-			data[offset] = value;
+			Data[offset] = value;
 		}
 
 		/// <summary>
@@ -315,7 +310,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		public void SetBytes(uint offset, byte[] value)
 		{
-			for (uint index = 0; index < value.Length; index++) { data[offset + index] = value[index]; }
+			for (uint index = 0; index < value.Length; index++) { Data[offset + index] = value[index]; }
 		}
 
 		/// <summary>
@@ -327,7 +322,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="length">The length.</param>
 		public void SetBytes(uint offset, byte[] value, uint start, uint length)
 		{
-			for (uint index = 0; index < length; index++) { data[offset + index] = value[start + index]; }
+			for (uint index = 0; index < length; index++) { Data[offset + index] = value[start + index]; }
 		}
 
 		/// <summary>
@@ -338,7 +333,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="length">The length.</param>
 		public void Fill(uint offset, byte value, uint length)
 		{
-			for (uint index = 0; index < length; index++) { data[offset + index] = value; }
+			for (uint index = 0; index < length; index++) { Data[offset + index] = value; }
 		}
 
 		/// <summary>
@@ -349,7 +344,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public string GetString(uint offset, uint length)
 		{
-			return new ASCIIEncoding().GetString(data, (int)offset, (int)length);
+			return new ASCIIEncoding().GetString(Data, (int)offset, (int)length);
 		}
 	}
 }

@@ -8,76 +8,48 @@ namespace Mosa.DeviceDriver.ISA
 	/// Standard Keyboard Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x60, PortRange = 1, AltBasePort = 0x64, AltPortRange = 1, IRQ = 1, Platforms = PlatformArchitecture.X86AndX64)]
-	public class StandardKeyboard : HardwareDevice, IKeyboardDevice
+	public class StandardKeyboard : BaseDeviceDriver, IKeyboardDevice
 	{
-		/// <summary>
-		///
-		/// </summary>
 		protected IOPortReadWrite commandPort;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected IOPortReadWrite dataPort;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected const ushort fifoSize = 256;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected byte[] fifoBuffer;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected uint fifoStart;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected uint fifoEnd;
 
-		/// <summary>
-		///
-		/// </summary>
 		protected SpinLock spinLock;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="StandardKeyboard"/> class.
-		/// </summary>
-		public StandardKeyboard()
+		public override void Initialize()
 		{
-		}
+			Device.Name = "StandardKeyboard";
 
-		/// <summary>
-		/// Setups the standard keyboard driver
-		/// </summary>
-		/// <returns></returns>
-		public override bool Setup(HardwareResources hardwareResources)
-		{
-			this.HardwareResources = hardwareResources;
-			base.Name = "StandardKeyboard";
-
-			commandPort = base.HardwareResources.GetIOPortReadWrite(0, 0);
-			dataPort = base.HardwareResources.GetIOPortReadWrite(1, 0);
+			commandPort = Device.Resources.GetIOPortReadWrite(0, 0);
+			dataPort = Device.Resources.GetIOPortReadWrite(1, 0);
 
 			fifoBuffer = new byte[fifoSize];
 			fifoStart = 0;
 			fifoEnd = 0;
-
-			return true;
 		}
 
 		/// <summary>
-		/// Starts the standard keyboard device.
+		/// Probes this instance.
 		/// </summary>
-		/// <returns></returns>
-		public override DeviceDriverStartStatus Start()
+		/// <remarks>
+		/// Override for ISA devices, if example
+		/// </remarks>
+		public override void Probe() => Device.Status = DeviceStatus.Available;
+
+		/// <summary>
+		/// Starts this hardware device.
+		/// </summary>
+		public override void Start()
 		{
-			return DeviceDriverStartStatus.Started;
+			Device.Status = DeviceStatus.Online;
 		}
 
 		/// <summary>

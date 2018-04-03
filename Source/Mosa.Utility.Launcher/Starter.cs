@@ -13,21 +13,17 @@ namespace Mosa.Utility.Launcher
 	{
 		public IStarterEvent LauncherEvent { get; }
 
-		public string ImageFile { get; }
-
 		public BaseLinker Linker { get; }
 
-		public Starter(Options options, AppLocations appLocations, string imagefile, IStarterEvent launcherEvent)
+		public Starter(Options options, AppLocations appLocations, IStarterEvent launcherEvent)
 			: base(options, appLocations)
 		{
-			ImageFile = imagefile;
 			LauncherEvent = launcherEvent;
 		}
 
-		public Starter(Options options, AppLocations appLocations, string imagefile, IStarterEvent launcherEvent, BaseLinker linker)
+		public Starter(Options options, AppLocations appLocations, IStarterEvent launcherEvent, BaseLinker linker)
 			: base(options, appLocations)
 		{
-			ImageFile = imagefile;
 			LauncherEvent = launcherEvent;
 			Linker = linker;
 		}
@@ -41,9 +37,9 @@ namespace Mosa.Utility.Launcher
 		{
 			var process = LaunchVM();
 
-			if (Options.LaunchMosaDebugger)
+			if (Options.LaunchGDBDebugger)
 			{
-				LaunchMosaDebugger();
+				LaunchGDBDebugger();
 			}
 			if (Options.LaunchGDB)
 			{
@@ -58,7 +54,7 @@ namespace Mosa.Utility.Launcher
 			return process;
 		}
 
-		private Process LaunchVM()
+		public Process LaunchVM()
 		{
 			switch (Options.Emulator)
 			{
@@ -80,31 +76,31 @@ namespace Mosa.Utility.Launcher
 
 			//arg = arg + " -vga vmware";
 
-			if (Options.DebugConnectionOption == DebugConnectionOption.Pipe)
+			if (Options.SerialConnectionOption == SerialConnectionOption.Pipe)
 			{
-				arg = arg + " -serial pipe:" + Options.DebugPipeName;
+				arg = arg + " -serial pipe:" + Options.SerialPipeName;
 			}
-			else if (Options.DebugConnectionOption == DebugConnectionOption.TCPServer)
+			else if (Options.SerialConnectionOption == SerialConnectionOption.TCPServer)
 			{
-				arg = arg + " -serial tcp:" + Options.DebugConnectionAddress + ":" + Options.DebugConnectionPort.ToString() + ",server,nowait";
+				arg = arg + " -serial tcp:" + Options.SerialConnectionHost + ":" + Options.SerialConnectionPort.ToString() + ",server,nowait";
 			}
-			else if (Options.DebugConnectionOption == DebugConnectionOption.TCPClient)
+			else if (Options.SerialConnectionOption == SerialConnectionOption.TCPClient)
 			{
-				arg = arg + " -serial tcp:" + Options.DebugConnectionAddress + ":" + Options.DebugConnectionPort.ToString() + ",client,nowait";
+				arg = arg + " -serial tcp:" + Options.SerialConnectionHost + ":" + Options.SerialConnectionPort.ToString() + ",client,nowait";
 			}
 
 			if (Options.EnableQemuGDB)
 			{
-				arg += " -S -gdb tcp::1234";
+				arg += " -S -gdb tcp::" + Options.GDBPort.ToString();
 			}
 
 			if (Options.ImageFormat == ImageFormat.ISO)
 			{
-				arg = arg + " -cdrom " + Quote(ImageFile);
+				arg = arg + " -cdrom " + Quote(Options.ImageFile);
 			}
 			else
 			{
-				arg = arg + " -hda " + Quote(ImageFile);
+				arg = arg + " -hda " + Quote(Options.ImageFile);
 			}
 
 			return LaunchApplication(AppLocations.QEMU, arg, getOutput);
@@ -136,14 +132,14 @@ namespace Mosa.Utility.Launcher
 
 			if (Options.ImageFormat == ImageFormat.ISO)
 			{
-				sb.AppendLine("ata0-master: type=cdrom,path=" + Quote(ImageFile) + ",status=inserted");
+				sb.AppendLine("ata0-master: type=cdrom,path=" + Quote(Options.ImageFile) + ",status=inserted");
 			}
 			else
 			{
-				sb.AppendLine("ata0-master: type=disk,path=" + Quote(ImageFile) + ",biosdetect=none,cylinders=0,heads=0,spt=0");
+				sb.AppendLine("ata0-master: type=disk,path=" + Quote(Options.ImageFile) + ",biosdetect=none,cylinders=0,heads=0,spt=0");
 			}
 
-			if (Options.DebugConnectionOption == DebugConnectionOption.Pipe)
+			if (Options.SerialConnectionOption == SerialConnectionOption.Pipe)
 			{
 				sb.AppendLine(@"com1: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA");
 			}
@@ -173,7 +169,7 @@ namespace Mosa.Utility.Launcher
 			sb.AppendLine("priority.ungrabbed = \"normal\"");
 			sb.AppendLine("virtualHW.productCompatibility = \"hosted\"");
 			sb.AppendLine("ide0:0.present = \"TRUE\"");
-			sb.AppendLine("ide0:0.fileName = " + Quote(ImageFile));
+			sb.AppendLine("ide0:0.fileName = " + Quote(Options.ImageFile));
 
 			if (Options.ImageFormat == ImageFormat.ISO)
 			{
@@ -182,7 +178,7 @@ namespace Mosa.Utility.Launcher
 
 			sb.AppendLine("floppy0.present = \"FALSE\"");
 
-			if (Options.DebugConnectionOption == DebugConnectionOption.Pipe)
+			if (Options.SerialConnectionOption == SerialConnectionOption.Pipe)
 			{
 				sb.AppendLine("serial0.present = \"TRUE\"");
 				sb.AppendLine("serial0.yieldOnMsrRead = \"FALSE\"");
@@ -199,11 +195,12 @@ namespace Mosa.Utility.Launcher
 			return LaunchApplication(AppLocations.VMwarePlayer, arg, getOutput);
 		}
 
-		private void LaunchMosaDebugger()
+		private void LaunchGDBDebugger()
 		{
 			string arg = " -debugfile " + Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".debug");
-			arg += " -port 1234";
+			arg += " -port " + Options.GDBPort.ToString();
 			arg += " -connect";
+			arg += " -image " + Quote(Options.ImageFile);
 			LaunchApplication("Mosa.Tool.GDBDebugger.exe", arg);
 		}
 
@@ -222,7 +219,7 @@ namespace Mosa.Utility.Launcher
 
 			var sb = new StringBuilder();
 
-			sb.AppendLine("target remote localhost:1234");
+			sb.AppendLine("target remote localhost:" + Options.GDBPort.ToString());
 			sb.AppendLine("set confirm off ");
 			sb.AppendLine("set disassemble-next-line on");
 			sb.AppendLine("set disassembly-flavor intel");

@@ -98,31 +98,10 @@ namespace Mosa.Platform.ARMv6
 		}
 
 		/// <summary>
-		/// Retrieves the native integer size of the ARMv6 platform.
-		/// </summary>
-		/// <value>This property always returns 32.</value>
-		public override int NativeIntegerSize
-		{
-			get { return 32; }
-		}
-
-		/// <summary>
-		/// Gets the native alignment of the architecture in bytes.
-		/// </summary>
-		/// <value>This property always returns 4.</value>
-		public override int NativeAlignment
-		{
-			get { return 4; }
-		}
-
-		/// <summary>
 		/// Gets the native size of architecture in bytes.
 		/// </summary>
 		/// <value>This property always returns 4.</value>
-		public override int NativePointerSize
-		{
-			get { return 4; }
-		}
+		public override int NativePointerSize { get { return 4; } }
 
 		/// <summary>
 		/// Retrieves the register set of the ARMv6 platform.
@@ -277,7 +256,7 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Create platform compound move.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
+		/// <param name="methodCompiler">The compiler.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="destinationBase">The destination.</param>
 		/// <param name="destination">The destination offset.</param>
@@ -285,7 +264,7 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="source">The source offset.</param>
 		/// <param name="size">The size.</param>
 		/// <exception cref="NotImplementCompilerException"></exception>
-		public override void InsertCompoundCopy(MethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
+		public override void InsertCompoundCopy(MethodCompiler methodCompiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
 		{
 			throw new NotImplementCompilerException();
 		}

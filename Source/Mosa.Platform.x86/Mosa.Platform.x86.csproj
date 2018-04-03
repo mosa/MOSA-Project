@@ -198,7 +198,7 @@
     <Compile Include="Instructions\CmpConst32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmpXchgLoad32.cs">
+    <Compile Include="Instructions\CmpXChgLoad32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Dec32.cs">
@@ -606,7 +606,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Xchg32.cs">
+    <Compile Include="Instructions\XAddLoad32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\XChg32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\XChgLoad32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Xor32.cs">
@@ -615,13 +621,15 @@
     <Compile Include="Instructions\XorConst32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Intrinsic\XAddLoad32.cs" />
+    <Compile Include="Intrinsic\XChgLoad32.cs" />
     <Compile Include="Intrinsic\Div.cs" />
     <Compile Include="Intrinsic\AllocateStackSpace.cs" />
     <Compile Include="Intrinsic\FrameCallRetR8.cs" />
     <Compile Include="Intrinsic\FrameCallRetU8.cs" />
     <Compile Include="Intrinsic\FrameCallRetU4.cs" />
     <Compile Include="Intrinsic\FrameCall.cs" />
-    <Compile Include="Intrinsic\FrameIRet.cs" />
+    <Compile Include="Intrinsic\InterruptReturn.cs" />
     <Compile Include="Intrinsic\Get32.cs" />
     <Compile Include="Intrinsic\Get16.cs" />
     <Compile Include="Intrinsic\FrameJump.cs" />
@@ -640,13 +648,12 @@
     <Compile Include="Intrinsic\Out16.cs" />
     <Compile Include="Intrinsic\Out32.cs" />
     <Compile Include="Intrinsic\Pause.cs" />
-    <Compile Include="Intrinsic\LockSet.cs" />
+    <Compile Include="Intrinsic\CmpXChgLoad32.cs" />
     <Compile Include="Intrinsic\Remainder.cs" />
     <Compile Include="Intrinsic\Set32.cs" />
     <Compile Include="Intrinsic\Set16.cs" />
     <Compile Include="Intrinsic\Set8.cs" />
     <Compile Include="Intrinsic\SetFS.cs" />
-    <Compile Include="Intrinsic\SyncCompareAndSwap.cs" />
     <Compile Include="Stages\ConstantLoweringStage.cs" />
     <Compile Include="X86.cs">
       <AutoGen>True</AutoGen>

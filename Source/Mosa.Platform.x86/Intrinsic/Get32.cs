@@ -10,21 +10,10 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal sealed class Get32 : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			Debug.Assert(context.Result.IsI4 | context.Result.IsU4);
-			var zero = Operand.CreateConstant(0, methodCompiler.TypeSystem);
-
-			context.SetInstruction(X86.MovLoad32, context.Result, context.Operand1, zero);
+			context.SetInstruction(X86.MovLoad32, context.Result, context.Operand1, methodCompiler.ConstantZero);
 		}
-
-		#endregion Methods
 	}
 }

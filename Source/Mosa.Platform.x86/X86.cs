@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86
 		public static readonly Cli Cli = new Cli();
 		public static readonly Cmp32 Cmp32 = new Cmp32();
 		public static readonly CmpConst32 CmpConst32 = new CmpConst32();
-		public static readonly CmpXchgLoad32 CmpXchgLoad32 = new CmpXchgLoad32();
+		public static readonly CmpXChgLoad32 CmpXChgLoad32 = new CmpXChgLoad32();
 		public static readonly Comisd Comisd = new Comisd();
 		public static readonly Comiss Comiss = new Comiss();
 		public static readonly CpuId CpuId = new CpuId();
@@ -155,7 +155,9 @@ namespace Mosa.Platform.x86
 		public static readonly TestConst32 TestConst32 = new TestConst32();
 		public static readonly Ucomisd Ucomisd = new Ucomisd();
 		public static readonly Ucomiss Ucomiss = new Ucomiss();
-		public static readonly Xchg32 Xchg32 = new Xchg32();
+		public static readonly XAddLoad32 XAddLoad32 = new XAddLoad32();
+		public static readonly XChg32 XChg32 = new XChg32();
+		public static readonly XChgLoad32 XChgLoad32 = new XChgLoad32();
 		public static readonly Xor32 Xor32 = new Xor32();
 		public static readonly XorConst32 XorConst32 = new XorConst32();
 		public static readonly BranchOverflow BranchOverflow = new BranchOverflow();

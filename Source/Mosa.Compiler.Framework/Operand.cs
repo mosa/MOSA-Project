@@ -303,6 +303,10 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsLinkerResolved { get { return IsLabel || IsStaticField || IsSymbol; } }
 
+		public bool IsHigh { get { return SplitParent.High == this; } }
+
+		public bool IsLow { get { return SplitParent.Low == this; } }
+
 		/// <summary>
 		/// Gets a value indicating whether this instance is this.
 		/// </summary>
@@ -914,7 +918,6 @@ namespace Mosa.Compiler.Framework
 				{
 					IsConstant = true,
 					IsResolved = true,
-					Index = index,
 					ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger & uint.MaxValue,
 				};
 			}
@@ -973,7 +976,6 @@ namespace Mosa.Compiler.Framework
 				{
 					IsConstant = true,
 					IsResolved = true,
-					Index = index,
 					ConstantUnsignedLongInteger = ((uint)(longOperand.ConstantUnsignedLongInteger >> 32)) & uint.MaxValue
 				};
 			}
@@ -1035,33 +1037,33 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!IsSplitChild)
 				{
-					sb.AppendFormat("V_{0}", Index);
+					sb.AppendFormat("v{0}", Index);
 				}
 				else
 				{
-					sb.AppendFormat("<V_{0}_{1}_{2}>", Index, SplitParent.Index, (SplitParent.High == this) ? "H" : "L");
+					sb.AppendFormat("v{0}<v{1}{2}>", Index, SplitParent.Index, IsHigh ? "H" : "L");
 				}
 			}
 			else if (IsParameter)
 			{
 				if (!IsSplitChild)
 				{
-					sb.AppendFormat("P_{0}", Index);
+					sb.AppendFormat("p{0}", Index);
 				}
 				else
 				{
-					sb.AppendFormat("P_{0}_{1}", SplitParent.Index, (SplitParent.High == this) ? "H" : "L");
+					sb.AppendFormat("p{0}<p{1}{2}>", Index, SplitParent.Index, IsHigh ? "H" : "L");
 				}
 			}
 			else if (IsStackLocal && Name == null)
 			{
 				if (!IsSplitChild)
 				{
-					sb.AppendFormat("T_{0}", Index);
+					sb.AppendFormat("t{0}", Index);
 				}
 				else
 				{
-					sb.AppendFormat("T_{0}{1}", SplitParent.Index, (SplitParent.High == this) ? "h" : "l");
+					sb.AppendFormat("t{0}<t{1}{2}>", Index, SplitParent.Index, IsHigh ? "H" : "L");
 				}
 			}
 			else if (IsStaticField)

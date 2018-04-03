@@ -7,16 +7,22 @@ namespace Mosa.FileSystem.FAT
 	/// <summary>
 	/// Fat File System Device
 	/// </summary>
-	public class FatFileSystemDevice : Device, IDevice, IFileSystemDevice
+	public class FatFileSystemDevice : BaseDeviceDriver, IFileSystemDevice
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FatFileSystemDevice"/> class.
-		/// </summary>
-		private FatFileSystemDevice(IPartitionDevice partition)
+		// TODO: Incomplete
+
+		public override void Initialize()
 		{
-			base.Parent = partition as Device;
-			base.Name = base.Parent.Name + "/FS/Fat"; // need to give it a unique name
-			base.DeviceStatus = DeviceStatus.Online;
+			Device.Name = Device.Parent.Name + "/FS/Fat"; // need to give it a unique name
 		}
+
+		public override void Probe() => Device.Status = DeviceStatus.Available;
+
+		public override void Start()
+		{
+			Device.Status = DeviceStatus.Online;
+		}
+
+		public override bool OnInterrupt() => true;
 	}
 }

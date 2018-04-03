@@ -105,7 +105,9 @@ namespace Mosa.Utility.Launcher
 
 				if (Options.GenerateDebugFile)
 				{
-					compiler.CompilerOptions.DebugFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.debug");
+					var debugFile = Options.DebugFile ?? Path.GetFileNameWithoutExtension(Options.SourceFile) + ".debug";
+
+					compiler.CompilerOptions.DebugFile = Path.Combine(Options.DestinationDirectory, debugFile);
 				}
 
 				if (!Directory.Exists(Options.DestinationDirectory))
@@ -133,7 +135,7 @@ namespace Mosa.Utility.Launcher
 
 				compiler.Load(inputFiles);
 
-				var threads = Options.UseMultipleThreadCompiler ? Environment.ProcessorCount : 1;
+				var threads = Options.UseMultiThreadingCompiler ? Environment.ProcessorCount : 1;
 				compiler.ExecuteThreaded();
 
 				Linker = compiler.Linker;

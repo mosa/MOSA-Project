@@ -3,7 +3,7 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	///
+	/// IDiskDevice
 	/// </summary>
 	public interface IDiskDevice
 	{

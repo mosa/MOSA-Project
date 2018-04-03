@@ -6,7 +6,6 @@ using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Trace;
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
@@ -35,21 +34,6 @@ namespace Mosa.Compiler.Framework
 		/// The empty operand list
 		/// </summary>
 		private static readonly Operand[] emptyOperandList = new Operand[0];
-
-		/// <summary>
-		/// The stack frame
-		/// </summary>
-		public Operand StackFrame;
-
-		/// <summary>
-		/// The stack frame
-		/// </summary>
-		public Operand StackPointer;
-
-		/// <summary>
-		/// The constant zero
-		/// </summary>
-		public Operand ConstantZero;
 
 		/// <summary>
 		/// Holds flag that will stop method compiler
@@ -181,6 +165,21 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public CompilerMethodData MethodData { get; }
 
+		/// <summary>
+		/// The stack frame
+		/// </summary>
+		public Operand StackFrame { get; }
+
+		/// <summary>
+		/// The stack frame
+		/// </summary>
+		public Operand StackPointer { get; }
+
+		/// <summary>
+		/// The constant zero
+		/// </summary>
+		public Operand ConstantZero { get; }
+
 		#endregion Properties
 
 		#region Construction
@@ -203,17 +202,20 @@ namespace Mosa.Compiler.Framework
 			TypeLayout = compiler.TypeLayout;
 			Trace = compiler.CompilerTrace;
 			Linker = compiler.Linker;
+
 			BasicBlocks = basicBlocks ?? new BasicBlocks();
 			LocalStack = new List<Operand>();
+			VirtualRegisters = new VirtualRegisters();
 
-			ConstantZero = Operand.CreateConstant(0, TypeSystem);
 			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
 			Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
-			VirtualRegisters = new VirtualRegisters();
+			ConstantZero = Architecture.Is32BitPlatform ? CreateConstant((uint)0) : CreateConstant((ulong)0);
+
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
 			PluggedMethod = compiler.PlugSystem.GetPlugMethod(Method);
+
 			stop = false;
 
 			MethodData = compiler.CompilerData.GetCompilerMethodData(Method);
@@ -506,5 +508,44 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Methods
+
+		#region Constant Helper Methods
+
+		public Operand CreateConstant(byte value)
+		{
+			return Operand.CreateConstant(TypeSystem.BuiltIn.U1, value);
+		}
+
+		public Operand CreateConstant(int value)
+		{
+			return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
+		}
+
+		public Operand CreateConstant(uint value)
+		{
+			return Operand.CreateConstant(TypeSystem.BuiltIn.U4, value);
+		}
+
+		public Operand CreateConstant(long value)
+		{
+			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
+		}
+
+		public Operand CreateConstant(ulong value)
+		{
+			return Operand.CreateConstant(TypeSystem.BuiltIn.U8, value);
+		}
+
+		public Operand CreateConstant(float value)
+		{
+			return Operand.CreateConstant(value, TypeSystem);
+		}
+
+		public Operand CreateConstant(double value)
+		{
+			return Operand.CreateConstant(value, TypeSystem);
+		}
+
+		#endregion Constant Helper Methods
 	}
 }

@@ -28,7 +28,7 @@ namespace Mosa.Tool.Compiler
 						throw new Exception(string.Format("Input file '{0}' doesn't exist.", v));
 					}
 
-					FileInfo file = new FileInfo(v);
+					var file = new FileInfo(v);
 					if (string.Equals(file.Extension, ".exe", StringComparison.OrdinalIgnoreCase))
 					{
 						if (IsInputExecutable)
@@ -67,28 +67,19 @@ namespace Mosa.Tool.Compiler
 		public bool EnableStaticAllocation { set { CompilerOptions.EnableStaticAllocations = value; } }
 
 		[Option("enable-static-alloc", HelpText = "Performs static allocations at compile time.")]
-		public bool EnableStaticAllocationExtraOption
-		{
-			set { EnableStaticAllocation = value; }
-		}
+		public bool EnableStaticAllocationTrue { set { EnableStaticAllocation = true; } }
 
 		[Option("ssa", HelpText = "Performs single static assignments at compile time.")]
 		public bool EnableSSA { set { CompilerOptions.EnableSSA = value; } }
 
 		[Option("enable-single-static-assignment-form", HelpText = "Performs single static assignments at compile time.")]
-		public bool EnableSSAExtraOption
-		{
-			set { EnableSSA = value; }
-		}
+		public bool EnableSSATrue { set { EnableSSA = true; } }
 
-		[Option("optimize-ir", HelpText = "Performs single static assignments optimizations.")]
+		[Option("optimize-ir", HelpText = "Performs ir-level optimizations.")]
 		public bool EnableIROptimizaion { set { CompilerOptions.EnableIROptimizations = value; } }
 
-		[Option("enable-ir-optimizations", HelpText = "Performs single static assignments optimizations.")]
-		public bool EnableIROptimizaionExtraOption
-		{
-			set { EnableIROptimizaion = value; }
-		}
+		[Option("enable-ir-optimizations", HelpText = "Performs ir-level optimizations.")]
+		public bool EnableIROptimizaionAlt { set { EnableIROptimizaion = value; } }
 
 		[Option("emit-symbols", HelpText = "Emits the Symbol Table.")]
 		public bool EmitSymbols { set { CompilerOptions.EmitSymbols = value; } }
@@ -102,8 +93,7 @@ namespace Mosa.Tool.Compiler
 		[Option("base-address", HelpText = "Specify the base address.")]
 		public string BaseAddress { set { CompilerOptions.BaseAddress = value.ParseHexOrDecimal(); } }
 
-		public CompilerOptions CompilerOptions
-		{ get; set; }
+		public CompilerOptions CompilerOptions { get; set; }
 
 		public Options()
 		{

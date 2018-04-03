@@ -7,7 +7,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Interface to a hardware device driver
 	/// </summary>
-	public interface IHardwareDevice : IDevice
+	public interface IHardwareDevice
 	{
 		bool PreSetup(IPCIDeviceResource pciDeviceResource);
 

@@ -89,31 +89,10 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Retrieves the native integer size of the x86 platform.
-		/// </summary>
-		/// <value>This property always returns 32.</value>
-		public override int NativeIntegerSize
-		{
-			get { return 32; }
-		}
-
-		/// <summary>
-		/// Gets the native alignment of the architecture in bytes.
-		/// </summary>
-		/// <value>This property always returns 4.</value>
-		public override int NativeAlignment
-		{
-			get { return 4; }
-		}
-
-		/// <summary>
 		/// Gets the native size of architecture in bytes.
 		/// </summary>
 		/// <value>This property always returns 4.</value>
-		public override int NativePointerSize
-		{
-			get { return 4; }
-		}
+		public override int NativePointerSize { get { return 4; } }
 
 		/// <summary>
 		/// Retrieves the register set of the x86 platform.
@@ -364,14 +343,14 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Create platform compound move.
 		/// </summary>
-		/// <param name="compiler">The compiler.</param>
+		/// <param name="methodCompiler">The compiler.</param>
 		/// <param name="context">The context.</param>
 		/// <param name="destinationBase">The destination base.</param>
 		/// <param name="destination">The destination.</param>
 		/// <param name="sourceBase">The source base.</param>
 		/// <param name="source">The source.</param>
 		/// <param name="size">The size.</param>
-		public override void InsertCompoundCopy(MethodCompiler compiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
+		public override void InsertCompoundCopy(MethodCompiler methodCompiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
 		{
 			const int LargeAlignment = 16;
 			int alignedSize = size - (size % NativeAlignment);
@@ -379,33 +358,33 @@ namespace Mosa.Platform.x86
 
 			Debug.Assert(size > 0);
 
-			var srcReg = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-			var dstReg = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+			var srcReg = methodCompiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+			var dstReg = methodCompiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
 
 			context.AppendInstruction(IRInstruction.UnstableObjectTracking);
 
 			context.AppendInstruction(X86.Lea32, srcReg, sourceBase, source);
 			context.AppendInstruction(X86.Lea32, dstReg, destinationBase, destination);
 
-			var tmp = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-			var tmpLarge = compiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.R8);
+			var tmp = methodCompiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+			var tmpLarge = methodCompiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.R8);
 
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
 				// Large aligned moves allow 128bits to be copied at a time
-				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
+				var index = methodCompiler.CreateConstant((int)i);
 				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
 				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
 			}
 			for (int i = largeAlignedTypeSize; i < alignedSize; i += NativeAlignment)
 			{
-				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
+				var index = methodCompiler.CreateConstant(i);
 				context.AppendInstruction(X86.MovLoad32, tmp, srcReg, index);
 				context.AppendInstruction(X86.MovStore32, null, dstReg, index, tmp);
 			}
 			for (int i = alignedSize; i < size; i++)
 			{
-				var index = Operand.CreateConstant(destinationBase.Type.TypeSystem.BuiltIn.I4, i);
+				var index = methodCompiler.CreateConstant(i);
 				context.AppendInstruction(X86.MovLoad8, tmp, srcReg, index);
 				context.AppendInstruction(X86.MovStore8, null, dstReg, index, tmp);
 			}
@@ -433,7 +412,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
-				context.AppendInstruction2(X86.Xchg32, destination, source, source, destination);
+				context.AppendInstruction2(X86.XChg32, destination, source, source, destination);
 			}
 		}
 

@@ -70,6 +70,8 @@
     <Compile Include="IDTStack.cs" />
     <Compile Include="IOPort.cs" />
     <Compile Include="LZF.cs" />
+    <Compile Include="Thread.cs" />
+    <Compile Include="Scheduler.cs" />
     <Compile Include="UnitTestQueue.cs" />
     <Compile Include="UnitTestRunner.cs" />
     <Compile Include="Helpers\Assert.cs" />

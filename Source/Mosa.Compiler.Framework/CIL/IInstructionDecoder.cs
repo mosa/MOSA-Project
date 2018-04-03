@@ -39,6 +39,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <returns></returns>
 		BasicBlock GetBlock(int label);
 
+		/// <summary>
+		/// Converts the virtual register to stack local.
+		/// </summary>
+		/// <param name="virtualRegister">The virtual register.</param>
+		/// <returns></returns>
 		Operand ConvertVirtualRegisterToStackLocal(Operand virtualRegister);
 	}
 }

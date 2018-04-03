@@ -5,7 +5,7 @@ using Mosa.Runtime.x86;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	///
+	/// Panic
 	/// </summary>
 	public static class Panic
 	{
@@ -25,6 +25,7 @@ namespace Mosa.Kernel.x86
 		public static uint CS = 0;
 		public static uint EFLAGS = 0;
 		public static uint CR2 = 0;
+		public static uint FS = 0;
 
 		public static void Setup()
 		{
@@ -94,6 +95,8 @@ namespace Mosa.Kernel.x86
 			Screen.Write(ECX, 16, 8);
 			Screen.Write(" CS: ");
 			Screen.Write(CS, 16, 8);
+			Screen.Write(" FS: ");
+			Screen.Write(FS, 16, 8);
 			Screen.NextLine();
 			Screen.Write("EDX: ");
 			Screen.Write(EDX, 16, 8);

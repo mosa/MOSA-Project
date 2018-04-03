@@ -9,13 +9,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal sealed class Remainder : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var result = context.Result;
@@ -29,7 +22,7 @@ namespace Mosa.Platform.x86.Intrinsic
 				var xmm3 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R8);
 
 				context.SetInstruction(X86.Divsd, xmm1, dividend, divisor);
-				context.AppendInstruction(X86.Roundsd, xmm2, xmm1, Operand.CreateConstant(methodCompiler.TypeSystem.BuiltIn.U1, 0x3));
+				context.AppendInstruction(X86.Roundsd, xmm2, xmm1, methodCompiler.CreateConstant((byte)0x3));
 				context.AppendInstruction(X86.Mulsd, xmm3, divisor, xmm2);
 				context.AppendInstruction(X86.Subsd, result, dividend, xmm3);
 			}
@@ -40,12 +33,10 @@ namespace Mosa.Platform.x86.Intrinsic
 				var xmm3 = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.R4);
 
 				context.SetInstruction(X86.Divss, xmm1, dividend, divisor);
-				context.AppendInstruction(X86.Roundss, xmm2, xmm1, Operand.CreateConstant(methodCompiler.TypeSystem.BuiltIn.U1, 0x3));
+				context.AppendInstruction(X86.Roundss, xmm2, xmm1, methodCompiler.CreateConstant((byte)0x3));
 				context.AppendInstruction(X86.Mulss, xmm3, divisor, xmm2);
 				context.AppendInstruction(X86.Subss, result, dividend, xmm3);
 			}
 		}
-
-		#endregion Methods
 	}
 }

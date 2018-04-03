@@ -2,6 +2,7 @@
 
 using Mosa.Tool.GDBDebugger.DebugData;
 using Mosa.Tool.GDBDebugger.GDB;
+using Mosa.Utility.Launcher;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.GDBDebugger
@@ -9,6 +10,8 @@ namespace Mosa.Tool.GDBDebugger
 	public partial class DebugDockContent : DockContent
 	{
 		protected MainForm MainForm;
+
+		protected Options Options { get { return MainForm.Options; } }
 
 		public DebugDockContent()
 		{
@@ -25,10 +28,10 @@ namespace Mosa.Tool.GDBDebugger
 		public DebugSource DebugSource { get { return MainForm.DebugSource; } }
 
 		public Connector GDBConnector { get { return MainForm.GDBConnector; } }
-		public BasePlatform Platform { get { return (GDBConnector == null ? null : GDBConnector.Platform); } }
-		public MemoryCache MemoryCache { get { return (MainForm.MemoryCache == null ? null : MainForm.MemoryCache); } }
+		public BasePlatform Platform { get { return GDBConnector?.Platform; } }
+		public MemoryCache MemoryCache { get { return MainForm.MemoryCache; } }
 
-		public bool IsConnected { get { return GDBConnector == null ? false : GDBConnector.IsConnected; } }
+		public bool IsConnected { get { return GDBConnector?.IsConnected ?? false; } }
 		public bool IsRunning { get { return GDBConnector.IsRunning; } }
 		public bool IsPaused { get { return GDBConnector.IsPaused; } }
 

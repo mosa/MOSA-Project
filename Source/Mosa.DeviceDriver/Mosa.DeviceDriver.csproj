@@ -81,49 +81,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ISA\CMOSX.cs" />
-    <Compile Include="ISA\IDEControllerX.cs" />
-    <Compile Include="ISA\PCIControllerX.cs" />
-    <Compile Include="ISA\StandardKeyboardX.cs" />
+    <Compile Include="X86System.cs" />
+    <Compile Include="ISA\ISABus.cs" />
+    <Compile Include="ISA\CMOS.cs" />
+    <Compile Include="ISA\IDEController.cs" />
+    <Compile Include="ISA\PCIController.cs" />
+    <Compile Include="ISA\StandardKeyboard.cs" />
     <Compile Include="ScanCodeMap\HU.cs" />
     <Compile Include="Setup.cs" />
-    <Compile Include="ISA\CMOS.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ISA\IDEController.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ISA\PCIController.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="ISA\PIC.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ISA\PIT.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ISA\Serial.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ISA\StandardKeyboard.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ISA\VGAText.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PCI\Intel\Intel82541EI.cs" />
-    <Compile Include="PCI\Intel\Intel82540EM.cs" />
-    <Compile Include="PCI\Intel\IntelPIIX4.cs" />
-    <Compile Include="PCI\Intel\IntelPIIX3.cs" />
-    <Compile Include="PCI\Intel\Intel440FX.cs" />
-    <Compile Include="PCI\Intel\QuarkSoC\IntelHSUART.cs" />
-    <Compile Include="PCI\AMD\AMDPCNetII.cs" />
-    <Compile Include="PCI\Intel\QuarkSoC\IntelGPIOController.cs" />
-    <Compile Include="PCI\MassStorage\PCIIDEController.cs" />
-    <Compile Include="PCI\VideoCard\GenericVGA.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="PCI\S3\S3Trio64V2.cs" />
     <Compile Include="PCI\VMware\VMwareSVGAII.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -133,6 +101,13 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PCI\AMD\" />
+    <Folder Include="PCI\Intel\QuarkSoC\" />
+    <Folder Include="PCI\MassStorage\" />
+    <Folder Include="PCI\S3\" />
+    <Folder Include="PCI\VideoCard\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

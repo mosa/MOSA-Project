@@ -42,7 +42,7 @@ namespace Mosa.Utility.BootImage
 			public const uint RaidPatch = 18;       // Boot sector RAID mode patch pointer
 		}
 
-		public static void PatchSyslinux_6_03(PartitionDevice partitionDevice, FatFileSystem fat)
+		public static void PatchSyslinux_6_03(PartitionDeviceDriver partitionDevice, FatFileSystem fat)
 		{
 			// Locate ldlinux.sys file for patching
 			string filename = "ldlinux.sys";
@@ -165,7 +165,7 @@ namespace Mosa.Utility.BootImage
 			partitionDevice.WriteBlock(0, 1, fatBootSector.Data);
 		}
 
-		public static void PatchSyslinux_3_72(PartitionDevice partitionDevice, FatFileSystem fat)
+		public static void PatchSyslinux_3_72(PartitionDeviceDriver partitionDevice, FatFileSystem fat)
 		{
 			// Locate ldlinux.sys file for patching
 			string filename = "ldlinux.sys";

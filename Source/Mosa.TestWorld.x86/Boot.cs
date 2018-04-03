@@ -4,6 +4,7 @@ using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using Mosa.TestWorld.x86.Tests;
+using System.Threading;
 
 namespace Mosa.TestWorld.x86
 {
@@ -56,15 +57,17 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('8');
 			GC.Setup();
 			Screen.Write('9');
-
 			Runtime.Internal.Setup();
 			Screen.Write('A');
-			IDT.SetInterruptHandler(ProcessInterrupt);
+
+			Scheduler.Setup();
 			Screen.Write('B');
-			ConsoleManager.Setup();
+			IDT.SetInterruptHandler(ProcessInterrupt);
 			Screen.Write('C');
-			Console = ConsoleManager.Controller.Boot;
+			ConsoleManager.Setup();
 			Screen.Write('D');
+			Console = ConsoleManager.Controller.Boot;
+			Screen.Write('E');
 
 			Console.Color = 0x0E;
 			Console.BackgroundColor = 1;
@@ -75,31 +78,95 @@ namespace Mosa.TestWorld.x86
 
 			DumpStackTrace();
 
-			//System.Threading.SpinLock splk = new System.Threading.SpinLock();
+			Console.Goto(2, 0);
 
-			//bool lockTaken = false;
-			//splk.Enter(ref lockTaken);
-			//if (splk.IsHeld)
-			//	Console.Write("Entered...");
+			Scheduler.CreateThread(Thread1, PageFrameAllocator.PageSize);
+			Scheduler.CreateThread(Thread2, PageFrameAllocator.PageSize);
+			Scheduler.CreateThread(Thread3, PageFrameAllocator.PageSize);
+			Scheduler.CreateThread(Thread4, PageFrameAllocator.PageSize);
 
-			//lockTaken = false;
-			//splk.Enter(ref lockTaken);
+			Scheduler.Start();
 
-			//Console.Write("Should have looped!!!");
+			// should never get here
+			Screen.Write("!BAD!");
 
-			Console.Goto(22, 0);
-
-			Process();
-		}
-
-		public static void Process()
-		{
 			while (true)
 			{
-				var result = Mosa.UnitTest.Collection.BoxingTests.EqualsI4(10);
 				Native.Hlt();
 			}
 		}
+
+		private static SpinLock spinlock = new SpinLock();
+		private static uint totalticks = 0;
+
+		private static void UpdateThreadTicks(uint thread, uint ticks)
+		{
+			++totalticks;
+
+			if (totalticks % 10000 == 0)
+			{
+				bool taken = false;
+				spinlock.Enter(ref taken);
+
+				Console.Goto(0, 14 + thread * 13);
+				Console.Write("T" + thread.ToString() + ":" + ticks.ToString());
+
+				spinlock.Exit();
+
+				//Native.Hlt();
+			}
+		}
+
+		//private static object test = new object();
+
+		//public static void Test()
+		//{
+		//	lock (test)
+		//	{
+		//		totalticks++;
+		//	}
+		//}
+
+		public static void Thread1()
+		{
+			uint ticks = 0;
+
+			while (true)
+			{
+				UpdateThreadTicks(1, ++ticks);
+			}
+		}
+
+		public static void Thread2()
+		{
+			uint ticks = 0;
+
+			while (true)
+			{
+				UpdateThreadTicks(2, ++ticks);
+			}
+		}
+
+		public static void Thread3()
+		{
+			uint ticks = 0;
+
+			while (true)
+			{
+				UpdateThreadTicks(3, ++ticks);
+			}
+		}
+
+		public static void Thread4()
+		{
+			uint ticks = 0;
+
+			while (true)
+			{
+				UpdateThreadTicks(4, ++ticks);
+			}
+		}
+
 
 		public unsafe static void DumpStackTrace()
 		{

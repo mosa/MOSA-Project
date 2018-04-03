@@ -1,12 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime.x86;
 using System.Runtime.InteropServices;
 
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	///
+	/// IDT Stack
 	/// </summary>
 	[StructLayout(LayoutKind.Explicit)]
 	internal struct IDTStack

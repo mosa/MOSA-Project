@@ -12,14 +12,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal sealed class GetIDTJumpLocation : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
-		/// <exception cref="CompilerException"></exception>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var operand = context.Operand1;
@@ -49,7 +41,5 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			context.SetInstruction(IRInstruction.MoveInteger32, context.Result, Operand.CreateSymbolFromMethod(method, methodCompiler.TypeSystem));
 		}
-
-		#endregion Methods
 	}
 }

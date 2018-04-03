@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Call, Call);
 			AddVisitation(IRInstruction.CompareInteger64x32, CompareInteger64x32);
 			AddVisitation(IRInstruction.CompareInteger64x64, CompareInteger64x64);
-			AddVisitation(IRInstruction.CompareIntegerBranch, CompareIntegerBranch);
+			AddVisitation(IRInstruction.CompareIntegerBranch, CompareIntegerBranch); // FUTURE: break this into 32/64 bit versions
 			AddVisitation(IRInstruction.ConvertFloatR4ToInteger64, ConvertFloatR4ToInteger64);
 			AddVisitation(IRInstruction.ConvertFloatR8ToInteger64, ConvertFloatR8ToInteger64);
 			AddVisitation(IRInstruction.ConvertInteger64ToFloatR4, ConvertInteger64ToFloatR4);
@@ -181,7 +181,7 @@ namespace Mosa.Platform.x86.Stages
 			// Compare high dwords
 			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
 			context.AppendInstruction(X86.BranchEqual, newBlocks[1].Block);
-			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
+			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);  // FUTURE: if branch == X86.BranchEqual, then jump to newBlocks[2].Block
 
 			// Branch if check already gave results
 			newBlocks[0].AppendInstruction(branch, newBlocks[2].Block);
@@ -703,9 +703,7 @@ namespace Mosa.Platform.x86.Stages
 
 			SplitLongOperand(operand1, out Operand op1L, out Operand op1H);
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction2(IRInstruction.Split64, result, v1, op1L);
+			context.SetInstruction(X86.Mov32, result, op1L);
 		}
 
 		private void ZeroExtended16x64(Context context)

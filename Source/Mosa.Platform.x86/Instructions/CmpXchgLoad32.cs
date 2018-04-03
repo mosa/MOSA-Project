@@ -7,26 +7,24 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// CmpXchgLoad32
+	/// CmpXChgLoad32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class CmpXchgLoad32 : X86Instruction
+	public sealed class CmpXChgLoad32 : X86Instruction
 	{
-		internal CmpXchgLoad32()
+		internal CmpXChgLoad32()
 			: base(1, 4)
 		{
 		}
 
 		public override bool IsMemoryRead { get { return true; } }
 
-		public override bool ThreeTwoAddressConversion { get { return true; } }
-
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
 			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
 
-			StaticEmitters.EmitCmpXchgLoad32(node, emitter);
+			StaticEmitters.EmitCmpXChgLoad32(node, emitter);
 		}
 	}
 }

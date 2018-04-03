@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework
 
 		private readonly List<Operand> virtualRegisters = new List<Operand>();
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Properties
 
@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework
 			if (longOperand.Low == null && longOperand.High == null)
 			{
 				var low = Operand.CreateLowSplitForLong(longOperand, virtualRegisters.Count + 1, typeSystem);
-				var high = Operand.CreateHighSplitForLong(longOperand, virtualRegisters.Count + 1, typeSystem);
+				var high = Operand.CreateHighSplitForLong(longOperand, virtualRegisters.Count + 2, typeSystem);
 
 				if (longOperand.IsVirtualRegister)
 				{

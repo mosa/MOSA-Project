@@ -30,6 +30,10 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Something is wrong with this device
 		/// </summary>
-		Error
+		Error,
+
+		Offline,
+
+		Disabled,
 	}
 }

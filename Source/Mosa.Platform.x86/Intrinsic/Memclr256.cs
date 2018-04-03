@@ -9,26 +9,16 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal sealed class Memclr256 : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var dest = context.Operand1;
 
 			var v0 = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.Void, SSE2Register.XMM0);
-			var zero = Operand.CreateConstant(0, methodCompiler.TypeSystem);
-			var offset16 = Operand.CreateConstant(16, methodCompiler.TypeSystem);
+			var offset16 = methodCompiler.CreateConstant(16);
 
 			context.SetInstruction(X86.PXor, v0, v0, v0);
-			context.AppendInstruction(X86.MovupsStore, dest, zero, v0);
+			context.AppendInstruction(X86.MovupsStore, dest, methodCompiler.ConstantZero, v0);
 			context.AppendInstruction(X86.MovupsStore, dest, offset16, v0);
 		}
-
-		#endregion Methods
 	}
 }

@@ -9,13 +9,6 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal class AllocateStackSpace : IIntrinsicPlatformMethod
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			Operand result = context.Result;
@@ -26,7 +19,5 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(X86.Sub32, esp, esp, size);
 			context.AppendInstruction(X86.Mov32, result, esp);
 		}
-
-		#endregion Methods
 	}
 }
