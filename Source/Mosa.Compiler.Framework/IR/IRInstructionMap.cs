@@ -192,7 +192,8 @@ namespace Mosa.Compiler.Framework.IR
 			{ "Unbox32", IRInstruction.Unbox32 },
 			{ "Unbox64", IRInstruction.Unbox64 },
 			{ "To64", IRInstruction.To64 },
-			{ "Split64", IRInstruction.Split64 },
+			{ "GetLow64", IRInstruction.GetLow64 },
+			{ "GetHigh64", IRInstruction.GetHigh64 },
 		};
 	}
 }

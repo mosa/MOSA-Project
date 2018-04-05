@@ -7,13 +7,13 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// Split64
+	/// GetHigh64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class Split64 : BaseIRInstruction
+	public sealed class GetHigh64 : BaseIRInstruction
 	{
-		public Split64()
-			: base(1, 2)
+		public GetHigh64()
+			: base(1, 1)
 		{
 		}
 

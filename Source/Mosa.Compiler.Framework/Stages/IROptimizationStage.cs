@@ -47,11 +47,10 @@ namespace Mosa.Compiler.Framework.Stages
 		private int combineIntegerCompareBranchCount = 0;
 		private int removeUselessIntegerCompareBranch = 0;
 		private int arithmeticSimplificationModulus = 0;
-		private int split64Constant = 0;
-		private int simplifyTo64 = 0;
-		private int simplifySplit64 = 0;
-		private int reduceSplit64 = 0;
+		private int longConstantReduction = 0;
+		private int longPropagatation = 0;
 		private int simplifyIntegerCompare = 0;
+		private int longConstantFolding = 0;
 
 		private Stack<InstructionNode> worklist;
 
@@ -75,145 +74,6 @@ namespace Mosa.Compiler.Framework.Stages
 			debugRestrictOptimizationByCount = CompilerOptions.DebugRestrictOptimizationByCount;
 
 			transformations = CreateTransformationList();
-		}
-
-		protected override void Setup()
-		{
-			base.Setup();
-
-			instructionsRemovedCount = 0;
-			simplifyExtendedMoveWithConstantCount = 0;
-			arithmeticSimplificationSubtractionCount = 0;
-			arithmeticSimplificationMultiplicationCount = 0;
-			arithmeticSimplificationDivisionCount = 0;
-			arithmeticSimplificationAdditionAndSubstractionCount = 0;
-			arithmeticSimplificationLogicalOperatorsCount = 0;
-			arithmeticSimplificationShiftOperators = 0;
-			simpleConstantPropagationCount = 0;
-			forwardPropagateMove = 0;
-			forwardPropagateCompoundMove = 0;
-			deadCodeEliminationCount = 0;
-			reduceTruncationAndExpansionCount = 0;
-			constantFoldingIntegerOperationsCount = 0;
-			constantFoldingIntegerCompareCount = 0;
-			constantFoldingAdditionAndSubstractionCount = 0;
-			constantFoldingMultiplicationCount = 0;
-			constantFoldingDivisionCount = 0;
-			constantFoldingPhiCount = 0;
-			blockRemovedCount = 0;
-			foldIntegerCompareBranchCount = 0;
-			reduceZeroExtendedMoveCount = 0;
-			foldIntegerCompareCount = 0;
-			simplifyExtendedMoveCount = 0;
-			foldLoadStoreOffsetsCount = 0;
-			constantMoveToRightCount = 0;
-			simplifyPhiCount = 0;
-			deadCodeEliminationPhi = 0;
-			constantFoldingLogicalOrCount = 0;
-			constantFoldingLogicalAndCount = 0;
-			combineIntegerCompareBranchCount = 0;
-			removeUselessIntegerCompareBranch = 0;
-			arithmeticSimplificationModulus = 0;
-			split64Constant = 0;
-			simplifyTo64 = 0;
-			simplifySplit64 = 0;
-			reduceSplit64 = 0;
-			simplifyIntegerCompare = 0;
-		}
-
-		protected override void Run()
-		{
-			// Method is empty - must be a plugged method
-			if (!HasCode)
-				return;
-
-			trace = CreateTraceLog();
-
-			Optimize();
-
-			UpdateCounter("IROptimizations.IRInstructionRemoved", instructionsRemovedCount);
-			UpdateCounter("IROptimizations.ConstantFoldingIntegerOperations", constantFoldingIntegerOperationsCount);
-			UpdateCounter("IROptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
-			UpdateCounter("IROptimizations.ConstantFoldingAdditionAndSubstraction", constantFoldingAdditionAndSubstractionCount);
-			UpdateCounter("IROptimizations.ConstantFoldingMultiplication", constantFoldingMultiplicationCount);
-			UpdateCounter("IROptimizations.ConstantFoldingDivision", constantFoldingDivisionCount);
-			UpdateCounter("IROptimizations.ConstantFoldingLogicalOr", constantFoldingLogicalOrCount);
-			UpdateCounter("IROptimizations.ConstantFoldingLogicalAnd", constantFoldingLogicalAndCount);
-			UpdateCounter("IROptimizations.ConstantFoldingPhi", constantFoldingPhiCount);
-			UpdateCounter("IROptimizations.ConstantMoveToRight", constantMoveToRightCount);
-			UpdateCounter("IROptimizations.ArithmeticSimplificationSubtraction", arithmeticSimplificationSubtractionCount);
-			UpdateCounter("IROptimizations.ArithmeticSimplificationMultiplication", arithmeticSimplificationMultiplicationCount);
-			UpdateCounter("IROptimizations.ArithmeticSimplificationDivision", arithmeticSimplificationDivisionCount);
-			UpdateCounter("IROptimizations.ArithmeticSimplificationAdditionAndSubstraction", arithmeticSimplificationAdditionAndSubstractionCount);
-			UpdateCounter("IROptimizations.ArithmeticSimplificationLogicalOperators", arithmeticSimplificationLogicalOperatorsCount);
-			UpdateCounter("IROptimizations.ArithmeticSimplificationShiftOperators", arithmeticSimplificationShiftOperators);
-			UpdateCounter("IROptimizations.ArithmeticSimplificationModulus", arithmeticSimplificationModulus);
-			UpdateCounter("IROptimizations.SimpleConstantPropagation", simpleConstantPropagationCount);
-			UpdateCounter("IROptimizations.ForwardPropagateMove", forwardPropagateMove);
-			UpdateCounter("IROptimizations.ForwardPropagateCompoundMove", forwardPropagateCompoundMove);
-			UpdateCounter("IROptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranchCount);
-			UpdateCounter("IROptimizations.FoldIntegerCompare", foldIntegerCompareCount);
-			UpdateCounter("IROptimizations.FoldLoadStoreOffsets", foldLoadStoreOffsetsCount);
-			UpdateCounter("IROptimizations.DeadCodeElimination", deadCodeEliminationCount);
-			UpdateCounter("IROptimizations.DeadCodeEliminationPhi", deadCodeEliminationPhi);
-			UpdateCounter("IROptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansionCount);
-			UpdateCounter("IROptimizations.CombineIntegerCompareBranch", combineIntegerCompareBranchCount);
-			UpdateCounter("IROptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMoveCount);
-			UpdateCounter("IROptimizations.SimplifyExtendedMove", simplifyExtendedMoveCount);
-			UpdateCounter("IROptimizations.SimplifyExtendedMoveWithConstant", simplifyExtendedMoveWithConstantCount);
-			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhiCount);
-			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
-			UpdateCounter("IROptimizations.RemoveUselessIntegerCompareBranch", removeUselessIntegerCompareBranch);
-			UpdateCounter("IROptimizations.Split64Constant", split64Constant);
-			UpdateCounter("IROptimizations.SimplifyTo64", simplifyTo64);
-			UpdateCounter("IROptimizations.SimplifySplit64", simplifySplit64);
-			UpdateCounter("IROptimizations.ReduceSplit64", reduceSplit64);
-			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompare);
-		}
-
-		protected override void Finish()
-		{
-			base.Finish();
-
-			virtualRegisters.Clear();
-			worklist.Clear();
-			trace = null;
-		}
-
-		private void Optimize()
-		{
-			foreach (var block in BasicBlocks)
-			{
-				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
-				{
-					if (node.IsEmpty)
-						continue;
-
-					if (node.ResultCount == 0 && node.OperandCount == 0)
-						continue;
-
-					Do(node);
-
-					ProcessWorkList();
-
-					// Collect virtual registers
-					if (node.IsEmpty)
-						continue;
-
-					// add virtual registers
-					foreach (var op in node.Results)
-					{
-						if (op.IsVirtualRegister)
-							virtualRegisters.AddIfNew(op);
-					}
-
-					foreach (var op in node.Operands)
-					{
-						if (op.IsVirtualRegister)
-							virtualRegisters.AddIfNew(op);
-					}
-				}
-			}
 		}
 
 		private List<Transformation> CreateTransformationList()
@@ -259,11 +119,151 @@ namespace Mosa.Compiler.Framework.Stages
 				SimplifyPhi2,
 				DeadCodeEliminationPhi,
 				NormalizeConstantTo32Bit,
-				SimplifyTo64,
-				SimplifySplit64,
-				Split64Constant,
-				ReduceSplit64
+				GetHigh64Constant,
+				GetLow64Constant,
+				GetHigh64Propagation,
+				GetLow64Propagation,
+				GetHigh64ConstantFoldering,
+				GetLow64ConstantFoldering,
+				To64ConstantFoldering,
 			};
+		}
+
+		protected override void Setup()
+		{
+			base.Setup();
+
+			instructionsRemovedCount = 0;
+			simplifyExtendedMoveWithConstantCount = 0;
+			arithmeticSimplificationSubtractionCount = 0;
+			arithmeticSimplificationMultiplicationCount = 0;
+			arithmeticSimplificationDivisionCount = 0;
+			arithmeticSimplificationAdditionAndSubstractionCount = 0;
+			arithmeticSimplificationLogicalOperatorsCount = 0;
+			arithmeticSimplificationShiftOperators = 0;
+			simpleConstantPropagationCount = 0;
+			forwardPropagateMove = 0;
+			forwardPropagateCompoundMove = 0;
+			deadCodeEliminationCount = 0;
+			reduceTruncationAndExpansionCount = 0;
+			constantFoldingIntegerOperationsCount = 0;
+			constantFoldingIntegerCompareCount = 0;
+			constantFoldingAdditionAndSubstractionCount = 0;
+			constantFoldingMultiplicationCount = 0;
+			constantFoldingDivisionCount = 0;
+			constantFoldingPhiCount = 0;
+			blockRemovedCount = 0;
+			foldIntegerCompareBranchCount = 0;
+			reduceZeroExtendedMoveCount = 0;
+			foldIntegerCompareCount = 0;
+			simplifyExtendedMoveCount = 0;
+			foldLoadStoreOffsetsCount = 0;
+			constantMoveToRightCount = 0;
+			simplifyPhiCount = 0;
+			deadCodeEliminationPhi = 0;
+			constantFoldingLogicalOrCount = 0;
+			constantFoldingLogicalAndCount = 0;
+			combineIntegerCompareBranchCount = 0;
+			removeUselessIntegerCompareBranch = 0;
+			arithmeticSimplificationModulus = 0;
+			longConstantReduction = 0;
+			longPropagatation = 0;
+			simplifyIntegerCompare = 0;
+			longConstantFolding = 0;
+		}
+
+		protected override void Run()
+		{
+			// Method is empty - must be a plugged method
+			if (!HasCode)
+				return;
+
+			trace = CreateTraceLog();
+
+			Optimize();
+
+			UpdateCounter("IROptimizations.IRInstructionRemoved", instructionsRemovedCount);
+			UpdateCounter("IROptimizations.ConstantFoldingIntegerOperations", constantFoldingIntegerOperationsCount);
+			UpdateCounter("IROptimizations.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
+			UpdateCounter("IROptimizations.ConstantFoldingAdditionAndSubstraction", constantFoldingAdditionAndSubstractionCount);
+			UpdateCounter("IROptimizations.ConstantFoldingMultiplication", constantFoldingMultiplicationCount);
+			UpdateCounter("IROptimizations.ConstantFoldingDivision", constantFoldingDivisionCount);
+			UpdateCounter("IROptimizations.ConstantFoldingLogicalOr", constantFoldingLogicalOrCount);
+			UpdateCounter("IROptimizations.ConstantFoldingLogicalAnd", constantFoldingLogicalAndCount);
+			UpdateCounter("IROptimizations.ConstantFoldingPhi", constantFoldingPhiCount);
+			UpdateCounter("IROptimizations.ConstantMoveToRight", constantMoveToRightCount);
+			UpdateCounter("IROptimizations.ArithmeticSimplificationSubtraction", arithmeticSimplificationSubtractionCount);
+			UpdateCounter("IROptimizations.ArithmeticSimplificationMultiplication", arithmeticSimplificationMultiplicationCount);
+			UpdateCounter("IROptimizations.ArithmeticSimplificationDivision", arithmeticSimplificationDivisionCount);
+			UpdateCounter("IROptimizations.ArithmeticSimplificationAdditionAndSubstraction", arithmeticSimplificationAdditionAndSubstractionCount);
+			UpdateCounter("IROptimizations.ArithmeticSimplificationLogicalOperators", arithmeticSimplificationLogicalOperatorsCount);
+			UpdateCounter("IROptimizations.ArithmeticSimplificationShiftOperators", arithmeticSimplificationShiftOperators);
+			UpdateCounter("IROptimizations.ArithmeticSimplificationModulus", arithmeticSimplificationModulus);
+			UpdateCounter("IROptimizations.SimpleConstantPropagation", simpleConstantPropagationCount);
+			UpdateCounter("IROptimizations.ForwardPropagateMove", forwardPropagateMove);
+			UpdateCounter("IROptimizations.ForwardPropagateCompoundMove", forwardPropagateCompoundMove);
+			UpdateCounter("IROptimizations.FoldIntegerCompareBranch", foldIntegerCompareBranchCount);
+			UpdateCounter("IROptimizations.FoldIntegerCompare", foldIntegerCompareCount);
+			UpdateCounter("IROptimizations.FoldLoadStoreOffsets", foldLoadStoreOffsetsCount);
+			UpdateCounter("IROptimizations.DeadCodeElimination", deadCodeEliminationCount);
+			UpdateCounter("IROptimizations.DeadCodeEliminationPhi", deadCodeEliminationPhi);
+			UpdateCounter("IROptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansionCount);
+			UpdateCounter("IROptimizations.CombineIntegerCompareBranch", combineIntegerCompareBranchCount);
+			UpdateCounter("IROptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMoveCount);
+			UpdateCounter("IROptimizations.SimplifyExtendedMove", simplifyExtendedMoveCount);
+			UpdateCounter("IROptimizations.SimplifyExtendedMoveWithConstant", simplifyExtendedMoveWithConstantCount);
+			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhiCount);
+			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
+			UpdateCounter("IROptimizations.RemoveUselessIntegerCompareBranch", removeUselessIntegerCompareBranch);
+			UpdateCounter("IROptimizations.LongConstantReduction", longConstantReduction);
+			UpdateCounter("IROptimizations.LongPropagatation", longPropagatation);
+			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompare);
+			UpdateCounter("IROptimizations.LongConstantFolding", longConstantFolding);
+		}
+
+		protected override void Finish()
+		{
+			base.Finish();
+
+			virtualRegisters.Clear();
+			worklist.Clear();
+			trace = null;
+		}
+
+		private void Optimize()
+		{
+			foreach (var block in BasicBlocks)
+			{
+				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
+				{
+					if (node.IsEmpty)
+						continue;
+
+					if (node.ResultCount == 0 && node.OperandCount == 0)
+						continue;
+
+					Do(node);
+
+					ProcessWorkList();
+
+					// Collect virtual registers
+					if (node.IsEmpty)
+						continue;
+
+					// add virtual registers
+					foreach (var op in node.Results)
+					{
+						if (op.IsVirtualRegister)
+							virtualRegisters.AddIfNew(op);
+					}
+
+					foreach (var op in node.Operands)
+					{
+						if (op.IsVirtualRegister)
+							virtualRegisters.AddIfNew(op);
+					}
+				}
+			}
 		}
 
 		private void ProcessWorkList()
@@ -459,6 +459,8 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log("BEFORE:\t" + useNode);
 
 						AddOperandUsageToWorkList(operand);
+						AddOperandUsageToWorkList(useNode.GetOperand(i));
+
 						useNode.SetOperand(i, source);
 						simpleConstantPropagationCount++;
 						if (trace.Active) trace.Log("AFTER: \t" + useNode);
@@ -468,6 +470,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (propogated)
 				{
 					AddToWorkList(useNode);
+					AddToWorkList(node);
 				}
 			}
 		}
@@ -2205,9 +2208,9 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private void Split64Constant(InstructionNode node)
+		private void GetLow64Constant(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.Split64)
+			if (node.Instruction != IRInstruction.GetLow64)
 				return;
 
 			if (!node.Operand1.IsResolvedConstant)
@@ -2218,202 +2221,168 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AddOperandUsageToWorkList(node);
 
-			var result1 = node.Result;
-			var result2 = node.Result2;
-
-			var high = CreateConstant((uint)(node.Operand1.ConstantUnsignedLongInteger >> 32) & 0xFFFFFFFF);
 			var low = CreateConstant((uint)(node.Operand1.ConstantUnsignedLongInteger & 0xFFFFFFFF));
 
-			if (trace.Active) trace.Log("*** Split64Constant");
+			if (trace.Active) trace.Log("*** GetLow64Constant");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
-
-			var context = new Context(node);
-
-			context.SetInstruction(IRInstruction.MoveInteger32, result1, low);
-			context.AppendInstruction(IRInstruction.MoveInteger32, result2, high);
-
-			if (trace.Active) trace.Log("AFTER: \t" + context.Previous);
-			if (trace.Active) trace.Log("AFTER: \t" + context);
-			split64Constant++;
+			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, low);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			longConstantReduction++;
 		}
 
-		private void SimplifyTo64(InstructionNode node)
+		private void GetHigh64Constant(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetHigh64)
+				return;
+
+			if (!node.Operand1.IsResolvedConstant)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			AddOperandUsageToWorkList(node);
+
+			var high = CreateConstant((uint)(node.Operand1.ConstantUnsignedLongInteger >> 32));
+
+			if (trace.Active) trace.Log("*** GetHigh64Constant");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, high);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			longConstantReduction++;
+		}
+
+		private void GetLow64Propagation(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetLow64)
+				return;
+
+			if (!node.Operand1.IsVirtualRegister)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (node.Operand1.Definitions.Count != 1)
+				return;
+
+			var node2 = node.Operand1.Definitions[0];
+
+			if (node2.Instruction != IRInstruction.To64)
+				return;
+
+			if (!node2.Result.IsVirtualRegister)
+				return;
+
+			AddOperandUsageToWorkList(node);
+			AddOperandUsageToWorkList(node2);
+
+			if (trace.Active) trace.Log("*** GetLow64Propagation");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, node2.Operand1);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			longPropagatation++;
+		}
+
+		private void GetHigh64Propagation(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetHigh64)
+				return;
+
+			if (!node.Operand1.IsVirtualRegister)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (node.Operand1.Definitions.Count != 1)
+				return;
+
+			var node2 = node.Operand1.Definitions[0];
+
+			if (node2.Instruction != IRInstruction.To64)
+				return;
+
+			if (!node2.Result.IsVirtualRegister)
+				return;
+
+			AddOperandUsageToWorkList(node);
+			AddOperandUsageToWorkList(node2);
+
+			if (trace.Active) trace.Log("*** GetHigh64Propagation");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, node2.Operand2);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			longPropagatation++;
+		}
+
+		private void GetHigh64ConstantFoldering(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetHigh64)
+				return;
+
+			if (!node.Operand1.IsResolvedConstant)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			var constant = CreateConstant((uint)(node.Operand1.ConstantUnsignedLongInteger >> 32));
+
+			AddOperandUsageToWorkList(node);
+
+			if (trace.Active) trace.Log("*** GetHigh64ConstantFoldering");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, constant);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			longConstantFolding++;
+		}
+
+		private void GetLow64ConstantFoldering(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetLow64)
+				return;
+
+			if (!node.Operand1.IsResolvedConstant)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			var constant = CreateConstant((uint)(node.Operand1.ConstantUnsignedLongInteger) & 0xFFFFFFFF);
+
+			AddOperandUsageToWorkList(node);
+
+			if (trace.Active) trace.Log("*** GetLow64ConstantFoldering");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, constant);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			longConstantFolding++;
+		}
+
+		private void To64ConstantFoldering(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.To64)
 				return;
 
-			if (node.Operand1.Definitions.Count != 1)
+			if (!node.Operand1.IsResolvedConstant)
 				return;
 
-			if (node.Operand2.Definitions.Count != 1)
-				return;
-
-			var defNode = node.Operand1.Definitions[0];
-
-			if (defNode.Instruction != IRInstruction.Split64)
-				return;
-
-			if (defNode.Operand1.Definitions.Count != 1)
+			if (!node.Operand2.IsResolvedConstant)
 				return;
 
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
-				return;
-
-			// to keep things simple, we only check the first def are from the same split instruction
-			if (node.Operand1.Definitions[0] != node.Operand2.Definitions[0])
-				return;
+			var constant = CreateConstant(node.Operand2.ConstantUnsignedLongInteger << 32 | node.Operand1.ConstantUnsignedLongInteger);
 
 			AddOperandUsageToWorkList(node);
 
-			if (trace.Active) trace.Log("*** SimplifyTo64");
+			if (trace.Active) trace.Log("*** To64ConstantFoldering");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
-
-			node.SetInstruction(GetMoveInteger(node.Result), node.Result, defNode.Operand1);
-
+			node.SetInstruction(IRInstruction.MoveInteger64, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			simplifyTo64++;
-		}
-
-		private void SimplifySplit64(InstructionNode node)
-		{
-			if (node.Instruction != IRInstruction.Split64)
-				return;
-
-			if (node.Operand1.Definitions.Count != 1)
-				return;
-
-			var defNode = node.Operand1.Definitions[0];
-
-			if (defNode.Instruction != IRInstruction.To64)
-				return;
-
-			if (defNode.Operand1.Definitions.Count != 1)
-				return;
-
-			if (defNode.Operand2.Definitions.Count != 1)
-				return;
-
-			if (!node.Result.IsVirtualRegister)
-				return;
-
-			if (node.Result.Definitions.Count != 1)
-				return;
-
-			AddOperandUsageToWorkList(node);
-
-			if (trace.Active) trace.Log("*** SimplifySplit64");
-			if (trace.Active) trace.Log("BEFORE:\t" + node);
-
-			var result1 = node.Result;
-			var result2 = node.Result2;
-
-			var context = new Context(node);
-
-			context.SetInstruction(IRInstruction.MoveInteger32, result1, defNode.Operand1);
-			context.AppendInstruction(IRInstruction.MoveInteger32, result2, defNode.Operand2);
-
-			if (trace.Active) trace.Log("AFTER: \t" + context.Previous);
-			if (trace.Active) trace.Log("AFTER: \t" + context);
-			simplifySplit64++;
-		}
-
-		private void ReduceSplit64(InstructionNode node)
-		{
-			if (node.Instruction != IRInstruction.Split64)
-				return;
-
-			if (node.Operand1.Definitions.Count != 1)
-				return;
-
-			if (node.Result2.Uses.Count != 0)
-				return;
-
-			var defNode = node.Operand1.Definitions[0];
-
-			var instruction = defNode.Instruction;
-
-			if (!(instruction == IRInstruction.LogicalAnd32
-				|| instruction == IRInstruction.LogicalOr32
-				|| instruction == IRInstruction.LogicalXor32
-				|| instruction == IRInstruction.LogicalAnd64
-				|| instruction == IRInstruction.LogicalOr64
-				|| instruction == IRInstruction.LogicalXor64
-				|| instruction == IRInstruction.LogicalNot32  // todo: Not64 too?
-				|| instruction == IRInstruction.ShiftLeft32
-				|| instruction == IRInstruction.ShiftLeft64
-				|| instruction == IRInstruction.AddUnsigned32
-				|| instruction == IRInstruction.AddUnsigned64
-				|| instruction == IRInstruction.MoveInteger32
-				|| instruction == IRInstruction.MoveInteger64
-				|| instruction == IRInstruction.MulUnsigned32
-				|| instruction == IRInstruction.MulUnsigned64
-				|| instruction == IRInstruction.DivUnsigned32
-				|| instruction == IRInstruction.RemUnsigned32
-				|| instruction == IRInstruction.DivUnsigned64
-				|| instruction == IRInstruction.RemUnsigned64))
-				return;
-
-			if (defNode.Operand1.Definitions.Count != 1)
-				return;
-
-			if (defNode.OperandCount == 2 && defNode.Operand2.Definitions.Count != 1)
-				return;
-
-			if (trace.Active) trace.Log("*** ReduceSplit64");
-			if (trace.Active) trace.Log("BEFORE:\t" + defNode);
-			if (trace.Active) trace.Log("REMOVED:\t" + node);
-
-			var result1 = node.Result;
-			var operand1 = defNode.Operand1;
-			var operand2 = defNode.OperandCount == 2 ? defNode.Operand2 : null;
-
-			node.SetInstruction(IRInstruction.Nop);
-
-			if (instruction == IRInstruction.LogicalAnd64)
-				instruction = IRInstruction.LogicalAnd32;
-			else if (instruction == IRInstruction.LogicalOr64)
-				instruction = IRInstruction.LogicalOr32;
-			else if (instruction == IRInstruction.LogicalXor64)
-				instruction = IRInstruction.LogicalXor32;
-			else if (instruction == IRInstruction.ShiftLeft64)
-				instruction = IRInstruction.ShiftLeft32;
-			else if (instruction == IRInstruction.AddUnsigned64)
-				instruction = IRInstruction.AddUnsigned32;
-			else if (instruction == IRInstruction.MoveInteger64)
-				instruction = IRInstruction.MoveInteger32;
-			else if (instruction == IRInstruction.MulUnsigned64)
-				instruction = IRInstruction.MulUnsigned32;
-			else if (instruction == IRInstruction.DivUnsigned64)
-				instruction = IRInstruction.DivUnsigned32;
-			else if (instruction == IRInstruction.RemUnsigned64)
-				instruction = IRInstruction.RemUnsigned32;
-
-			var context = new Context(defNode);
-
-			var op1Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var op1High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			context.SetInstruction2(IRInstruction.Split64, op1Low, op1High, operand1);
-
-			if (operand2 != null)
-			{
-				var op2Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-				var op2High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-				context.AppendInstruction2(IRInstruction.Split64, op2Low, op2High, operand2);
-
-				context.AppendInstruction(instruction, result1, op1Low, op2Low);
-			}
-			else
-			{
-				context.AppendInstruction(instruction, result1, op1Low);
-			}
-
-			if (trace.Active && operand2 != null) trace.Log("AFTER: \t" + context.Previous.Previous);
-			if (trace.Active) trace.Log("AFTER: \t" + context.Previous);
-			if (trace.Active) trace.Log("AFTER: \t" + context);
-			reduceSplit64++;
+			longConstantFolding++;
 		}
 	}
 }
