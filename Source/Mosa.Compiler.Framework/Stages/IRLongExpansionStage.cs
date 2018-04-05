@@ -29,21 +29,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Visitation Methods
 
-		private void LoadInteger64(InstructionNode node)
+		private void LoadInteger64(Context context)
 		{
-			Debug.Assert(!node.Result.IsR4);
-			Debug.Assert(!node.Result.IsR8);
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
 
-			Debug.Assert(node.Result.Is64BitInteger);
+			Debug.Assert(context.Result.Is64BitInteger);
 
-			var result = node.Result;
-			var location = node.Operand1;
-			var offset = node.Operand2;
+			var result = context.Result;
+			var location = context.Operand1;
+			var offset = context.Operand2;
 
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			var context = new Context(node);
 
 			if (offset.IsConstant && !offset.IsLong && !location.IsLong)
 			{
@@ -62,7 +60,9 @@ namespace Mosa.Compiler.Framework.Stages
 				var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, location);
+				//context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, location);
+				context.SetInstruction(IRInstruction.GetLow64, op0Low, location);
+				context.AppendInstruction(IRInstruction.GetHigh64, op0High, location);
 				context.AppendInstruction(IRInstruction.LoadInteger32, resultLow, op0Low, offset);
 				context.AppendInstruction(IRInstruction.LoadInteger32, resultHigh, op0Low, offset4);
 				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
@@ -84,10 +84,12 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
 				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, location);
+//				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, location);
+				context.SetInstruction(IRInstruction.GetLow64, op0Low, location);
+				context.AppendInstruction(IRInstruction.GetHigh64, op0High, location);
+
 				context.AppendInstruction(IRInstruction.AddUnsigned32, offset4, offset, CreateConstant(4u));
 				context.AppendInstruction(IRInstruction.LoadInteger32, resultLow, op0Low, offset);
 				context.AppendInstruction(IRInstruction.LoadInteger32, resultHigh, op0Low, offset4);
@@ -99,57 +101,48 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
 				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-				context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, offset);
+				//context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, offset);
+				context.SetInstruction(IRInstruction.GetLow64, op0Low, offset);
+				context.AppendInstruction(IRInstruction.GetHigh64, op0High, offset);
+
 				context.AppendInstruction(IRInstruction.AddUnsigned32, offset4, op0Low, CreateConstant(4u));
 				context.AppendInstruction(IRInstruction.LoadInteger32, resultLow, location, op0Low);
 				context.AppendInstruction(IRInstruction.LoadInteger32, resultHigh, location, offset4);
 				context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 				return;
 			}
-
-			return;
 		}
 
-		private void LoadParameterInteger64(InstructionNode node)
+		private void LoadParameterInteger64(Context context)
 		{
-			Debug.Assert(!node.Result.IsR4);
-			Debug.Assert(!node.Result.IsR8);
-			Debug.Assert(node.Result.Is64BitInteger);
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+			Debug.Assert(context.Result.Is64BitInteger);
 
 			// TODO: Managed 64bit pointers
 
-			var result = node.Result;
-			var operand1 = node.Operand1;
+			var result = context.Result;
+			var operand1 = context.Operand1;
 
 			MethodCompiler.SplitLongOperand(operand1, out Operand op0Low, out Operand op0High);
 
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			var context = new Context(node);
-
 			context.SetInstruction(IRInstruction.LoadParameterInteger32, resultLow, op0Low);
 			context.AppendInstruction(IRInstruction.LoadParameterInteger32, resultHigh, op0High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalAnd64(InstructionNode node)
+		private void LogicalAnd64(Context context)
 		{
-			if (!node.Result.Is64BitInteger)
-			{
-				MethodCompiler.Stop();
-				Debug.WriteLine(Method.FullName);
-				return;
-			}
+			Debug.Assert(context.Result.Is64BitInteger);
 
-			Debug.Assert(node.Result.Is64BitInteger);
-
-			var result = node.Result;
-			var operand1 = node.Operand1;
-			var operand2 = node.Operand2;
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
 			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
@@ -158,43 +151,47 @@ namespace Mosa.Compiler.Framework.Stages
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			var context = new Context(node);
+			//context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
+			context.SetInstruction(IRInstruction.GetLow64, op0Low, operand1);
+			context.AppendInstruction(IRInstruction.GetHigh64, op0High, operand1);
 
-			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
-			context.AppendInstruction2(IRInstruction.Split64, op1Low, op1High, operand2);
+			//context.AppendInstruction2(IRInstruction.Split64, op1Low, op1High, operand2);
+			context.AppendInstruction(IRInstruction.GetLow64, op1Low, operand2);
+			context.AppendInstruction(IRInstruction.GetHigh64, op1High, operand2);
+
 			context.AppendInstruction(IRInstruction.LogicalAnd32, resultLow, op0Low, op1Low);
 			context.AppendInstruction(IRInstruction.LogicalAnd32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalNot64(InstructionNode node)
+		private void LogicalNot64(Context context)
 		{
-			if (!node.Result.Is64BitInteger)
-				return;
+			Debug.Assert(context.Result.Is64BitInteger);
 
-			var result = node.Result;
-			var operand1 = node.Operand1;
+			var result = context.Result;
+			var operand1 = context.Operand1;
 
 			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			var context = new Context(node);
+			//context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
+			context.SetInstruction(IRInstruction.GetLow64, op0Low, operand1);
+			context.AppendInstruction(IRInstruction.GetHigh64, op0High, operand1);
 
-			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
 			context.AppendInstruction(IRInstruction.LogicalNot32, resultLow, op0Low);
 			context.AppendInstruction(IRInstruction.LogicalNot32, resultHigh, op0High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalOr64(InstructionNode node)
+		private void LogicalOr64(Context context)
 		{
-			Debug.Assert(node.Result.Is64BitInteger);
+			Debug.Assert(context.Result.Is64BitInteger);
 
-			var result = node.Result;
-			var operand1 = node.Operand1;
-			var operand2 = node.Operand2;
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
 			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
@@ -203,22 +200,26 @@ namespace Mosa.Compiler.Framework.Stages
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			var context = new Context(node);
+			//context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
+			context.SetInstruction(IRInstruction.GetLow64, op0Low, operand1);
+			context.AppendInstruction(IRInstruction.GetHigh64, op0High, operand1);
 
-			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
-			context.AppendInstruction2(IRInstruction.Split64, op1Low, op1High, operand2);
+			//context.AppendInstruction2(IRInstruction.Split64, op1Low, op1High, operand2);
+			context.AppendInstruction(IRInstruction.GetLow64, op1Low, operand2);
+			context.AppendInstruction(IRInstruction.GetHigh64, op1High, operand2);
+
 			context.AppendInstruction(IRInstruction.LogicalOr32, resultLow, op0Low, op1Low);
 			context.AppendInstruction(IRInstruction.LogicalOr32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalXor64(InstructionNode node)
+		private void LogicalXor64(Context context)
 		{
-			Debug.Assert(node.Result.Is64BitInteger);
+			Debug.Assert(context.Result.Is64BitInteger);
 
-			var result = node.Result;
-			var operand1 = node.Operand1;
-			var operand2 = node.Operand2;
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
 			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
@@ -227,28 +228,28 @@ namespace Mosa.Compiler.Framework.Stages
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			var context = new Context(node);
+			//context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
+			context.SetInstruction(IRInstruction.GetLow64, op0Low, operand1);
+			context.AppendInstruction(IRInstruction.GetHigh64, op0High, operand1);
 
-			context.SetInstruction2(IRInstruction.Split64, op0Low, op0High, operand1);
-			context.AppendInstruction2(IRInstruction.Split64, op1Low, op1High, operand2);
+			//context.AppendInstruction2(IRInstruction.Split64, op1Low, op1High, operand2);
+			context.AppendInstruction(IRInstruction.GetLow64, op1Low, operand2);
+			context.AppendInstruction(IRInstruction.GetHigh64, op1High, operand2);
+
 			context.AppendInstruction(IRInstruction.LogicalXor32, resultLow, op0Low, op1Low);
 			context.AppendInstruction(IRInstruction.LogicalXor32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void Truncation64x32(InstructionNode node)
+		private void Truncation64x32(Context context)
 		{
-			Debug.Assert(node.Operand1.Is64BitInteger);
-			Debug.Assert(!node.Result.Is64BitInteger);
+			Debug.Assert(context.Operand1.Is64BitInteger);
+			Debug.Assert(!context.Result.Is64BitInteger);
 
-			var result = node.Result;
-			var operand1 = node.Operand1;
+			//MethodCompiler.SplitLongOperand(context.Operand1, out Operand op0Low, out Operand op0High);
 
-			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			var context = new Context(node);
-
-			context.SetInstruction2(IRInstruction.Split64, result, op0High, operand1);
+			//context.SetInstruction2(IRInstruction.Split64, result, op0High, operand1);
+			context.SetInstruction(IRInstruction.GetLow64, context.Result, context.Operand1);
 		}
 
 		private void ZeroExtended32x64(InstructionNode node)

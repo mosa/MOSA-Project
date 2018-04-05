@@ -96,6 +96,12 @@
     <Compile Include="Intrinsics\GetStringType.cs" />
     <Compile Include="Intrinsics\GetDelegateTargetAddress.cs" />
     <Compile Include="Intrinsics\GetDelegateMethodAddress.cs" />
+    <Compile Include="IR\GetHigh64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\GetLow64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Pipeline.cs" />
     <Compile Include="CompilerTypeData.cs" />
     <Compile Include="CompilerMethodData.cs" />
@@ -564,9 +570,6 @@
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\SignExtended8x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Split64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\StableObjectTracking.cs">

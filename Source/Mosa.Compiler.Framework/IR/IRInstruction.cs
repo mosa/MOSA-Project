@@ -189,6 +189,7 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly Unbox32 Unbox32 = new Unbox32();
 		public static readonly Unbox64 Unbox64 = new Unbox64();
 		public static readonly To64 To64 = new To64();
-		public static readonly Split64 Split64 = new Split64();
+		public static readonly GetLow64 GetLow64 = new GetLow64();
+		public static readonly GetHigh64 GetHigh64 = new GetHigh64();
 	}
 }

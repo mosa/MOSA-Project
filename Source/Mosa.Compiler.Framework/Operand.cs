@@ -255,12 +255,12 @@ namespace Mosa.Compiler.Framework
 		public bool IsSigned { get { return UnderlyingType.IsSigned; } }
 
 		/// <summary>
-		/// Gets a value indicating whether this instance is split64 child.
+		/// Gets a value indicating whether this instance has long parent.
 		/// </summary>
 		/// <value>
-		/// <c>true</c> if this instance is split64 child; otherwise, <c>false</c>.
+		///   <c>true</c> if this instance has long parent; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsSplitChild { get { return SplitParent != null && !IsSSA; } }
+		public bool HasLongParent { get { return LongParent != null && !IsSSA; } }
 
 		/// <summary>
 		/// Determines if the operand is a ssa operand.
@@ -303,9 +303,9 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsLinkerResolved { get { return IsLabel || IsStaticField || IsSymbol; } }
 
-		public bool IsHigh { get { return SplitParent.High == this; } }
+		public bool IsHigh { get { return LongParent.High == this; } }
 
-		public bool IsLow { get { return SplitParent.Low == this; } }
+		public bool IsLow { get { return LongParent.Low == this; } }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is this.
@@ -385,7 +385,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The split64 parent.
 		/// </value>
-		public Operand SplitParent { get; private set; }
+		public Operand LongParent { get; private set; }
 
 		/// <summary>
 		/// Gets the base operand.
@@ -897,13 +897,8 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateLowSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
 		{
-			if (longOperand.Low != null)
-			{
-				return longOperand.Low;
-			}
-
 			Debug.Assert(longOperand.IsLong);
-			Debug.Assert(longOperand.SplitParent == null);
+			Debug.Assert(longOperand.LongParent == null);
 			Debug.Assert(longOperand.Low == null);
 
 			Operand operand = null;
@@ -940,7 +935,7 @@ namespace Mosa.Compiler.Framework
 
 			Debug.Assert(operand != null);
 
-			operand.SplitParent = longOperand;
+			operand.LongParent = longOperand;
 			longOperand.Low = operand;
 
 			return operand;
@@ -955,13 +950,8 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateHighSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
 		{
-			if (longOperand.High != null)
-			{
-				return longOperand.High;
-			}
-
 			Debug.Assert(longOperand.IsLong);
-			Debug.Assert(longOperand.SplitParent == null || longOperand.SplitParent == longOperand);
+			Debug.Assert(longOperand.LongParent == null || longOperand.LongParent == longOperand);
 			Debug.Assert(longOperand.High == null);
 
 			Operand operand = null;
@@ -1003,7 +993,7 @@ namespace Mosa.Compiler.Framework
 
 			Debug.Assert(operand != null);
 
-			operand.SplitParent = longOperand;
+			operand.LongParent = longOperand;
 			longOperand.High = operand;
 
 			return operand;
@@ -1035,35 +1025,42 @@ namespace Mosa.Compiler.Framework
 
 			if (IsVirtualRegister)
 			{
-				if (!IsSplitChild)
+				if (!HasLongParent)
 				{
 					sb.AppendFormat("v{0}", Index);
 				}
 				else
 				{
-					sb.AppendFormat("v{0}<v{1}{2}>", Index, SplitParent.Index, IsHigh ? "H" : "L");
+					if (LongParent.IsSSA)
+					{
+						sb.AppendFormat("v{0}<v{1}{2}>", Index, LongParent.SSAParent.Index, IsHigh ? "H" : "L");
+					}
+					else
+					{
+						sb.AppendFormat("v{0}<v{1}{2}>", Index, LongParent.Index, IsHigh ? "H" : "L");
+					}
 				}
 			}
 			else if (IsParameter)
 			{
-				if (!IsSplitChild)
+				if (!HasLongParent)
 				{
 					sb.AppendFormat("p{0}", Index);
 				}
 				else
 				{
-					sb.AppendFormat("p{0}<p{1}{2}>", Index, SplitParent.Index, IsHigh ? "H" : "L");
+					sb.AppendFormat("p{0}<p{1}{2}>", Index, LongParent.Index, IsHigh ? "H" : "L");
 				}
 			}
 			else if (IsStackLocal && Name == null)
 			{
-				if (!IsSplitChild)
+				if (!HasLongParent)
 				{
 					sb.AppendFormat("t{0}", Index);
 				}
 				else
 				{
-					sb.AppendFormat("t{0}<t{1}{2}>", Index, SplitParent.Index, IsHigh ? "H" : "L");
+					sb.AppendFormat("t{0}<t{1}{2}>", Index, LongParent.Index, IsHigh ? "H" : "L");
 				}
 			}
 			else if (IsStaticField)

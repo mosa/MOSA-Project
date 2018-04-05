@@ -220,7 +220,8 @@ namespace Mosa.Compiler.Framework.Stages
 					if (!operand.IsVirtualRegister || operand.Low == null)
 						continue;
 
-					context.AppendInstruction2(IRInstruction.Split64, operand.Low, operand.High, operand);
+					context.AppendInstruction(IRInstruction.GetLow64, operand.Low, operand);
+					context.AppendInstruction(IRInstruction.GetHigh64, operand.High, operand);
 				}
 			}
 
@@ -338,7 +339,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(mappedOperand != null);
 
-			if (operand.IsSplitChild)
+			if (operand.HasLongParent)
 			{
 				MethodCompiler.SplitLongOperand(mappedOperand);
 

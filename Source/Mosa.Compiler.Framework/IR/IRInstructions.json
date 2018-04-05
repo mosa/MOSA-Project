@@ -1191,9 +1191,17 @@
 			"ResultType": "UInt64"
 		},
 		{
-			"Name": "Split64",
+			"Name": "GetLow64",
 			"FamilyName": "IR",
-			"ResultCount": 2,
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"ResultType": "UInt32",
+			"ResultType2": "UInt32"
+		},
+		{
+			"Name": "GetHigh64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
 			"OperandCount": 1,
 			"ResultType": "UInt32",
 			"ResultType2": "UInt32"

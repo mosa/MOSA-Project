@@ -51,7 +51,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.SignExtended16x64, SignExtended16x64);
 			AddVisitation(IRInstruction.SignExtended32x64, SignExtended32x64);
 			AddVisitation(IRInstruction.SignExtended8x64, SignExtended8x64);
-			AddVisitation(IRInstruction.Split64, Split64);
+			AddVisitation(IRInstruction.GetHigh64, GetHigh64);
+			AddVisitation(IRInstruction.GetLow64, GetLow64);
 			AddVisitation(IRInstruction.StoreInteger64, StoreInteger64);
 			AddVisitation(IRInstruction.StoreParameterInteger64, StoreParameterInteger64);
 			AddVisitation(IRInstruction.SubSigned64, SubUnsigned64);
@@ -615,7 +616,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov32, op0H, v3);
 		}
 
-		private void Split64(Context context)
+		private void __Split64(Context context)
 		{
 			var operand1 = context.Operand1;
 			var result = context.Result;
@@ -625,6 +626,20 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov32, result, op0L);
 			context.AppendInstruction(X86.Mov32, result2, op0H);
+		}
+
+		private void GetLow64(Context context)
+		{
+			SplitLongOperand(context.Operand1, out Operand op0L, out Operand op0H);
+
+			context.SetInstruction(X86.Mov32, context.Result, op0L);
+		}
+
+		private void GetHigh64(Context context)
+		{
+			SplitLongOperand(context.Operand1, out Operand op0L, out Operand op0H);
+
+			context.SetInstruction(X86.Mov32, context.Result, op0H);
 		}
 
 		private void StoreInteger64(Context context)

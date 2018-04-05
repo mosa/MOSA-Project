@@ -135,8 +135,16 @@ namespace Mosa.Utility.Launcher
 
 				compiler.Load(inputFiles);
 
-				var threads = Options.UseMultiThreadingCompiler ? Environment.ProcessorCount : 1;
-				compiler.ExecuteThreaded();
+				//var threads = Options.UseMultiThreadingCompiler ? Environment.ProcessorCount : 1;
+
+				if (Options.UseMultiThreadingCompiler)
+				{
+					compiler.ExecuteThreaded();
+				}
+				else
+				{
+					compiler.Execute();
+				}
 
 				Linker = compiler.Linker;
 				TypeSystem = compiler.TypeSystem;
