@@ -48,8 +48,9 @@ namespace Mosa.Compiler.Framework.Stages
 		private int removeUselessIntegerCompareBranch = 0;
 		private int arithmeticSimplificationModulus = 0;
 		private int longConstantReduction = 0;
-		private int longPropagate = 0;
+		private int longPropagatation = 0;
 		private int simplifyIntegerCompare = 0;
+		private int longConstantFolding = 0;
 
 		private Stack<InstructionNode> worklist;
 
@@ -73,6 +74,59 @@ namespace Mosa.Compiler.Framework.Stages
 			debugRestrictOptimizationByCount = CompilerOptions.DebugRestrictOptimizationByCount;
 
 			transformations = CreateTransformationList();
+		}
+
+		private List<Transformation> CreateTransformationList()
+		{
+			return new List<Transformation>()
+			{
+				SimpleConstantPropagation,
+				ForwardPropagateMove,
+				ForwardPropagateCompoundMove,
+				DeadCodeElimination,
+				ConstantFoldingIntegerOperations32,
+				ConstantFoldingIntegerOperations64,
+				ConstantMoveToRight,
+				ArithmeticSimplificationSubtraction,
+				ArithmeticSimplificationMultiplication,
+				ArithmeticSimplificationDivision,
+				ArithmeticSimplificationAdditionAndSubstraction,
+				ArithmeticSimplificationRemUnsignedModulus,
+				ArithmeticSimplificationRemSignedModulus,
+				ArithmeticSimplificationLogicalOperators,
+				ArithmeticSimplificationShiftOperators,
+
+				//ReduceZeroExtendedMove,
+				ConstantFoldingAdditionAndSubstraction,
+				ConstantFoldingMultiplication,
+				ConstantFoldingDivision,
+				ConstantFoldingIntegerCompare,
+				ConstantFoldingLogicalOr,
+				ConstantFoldingLogicalAnd,
+				CombineIntegerCompareBranch,
+				FoldIntegerCompare,
+				RemoveUselessIntegerCompareBranch,
+				ConstantFoldIntegerCompareBranch,
+
+				//ReduceTruncationAndExpansion,
+				SimplifyExtendedMoveWithConstant,
+				SimplifyExtendedMove,
+				SimplifyIntegerCompare2,
+				SimplifyIntegerCompare,
+				FoldLoadStoreOffsets,
+				ConstantFoldingPhi,
+				SimplifyPhi,
+				SimplifyPhi2,
+				DeadCodeEliminationPhi,
+				NormalizeConstantTo32Bit,
+				GetHigh64Constant,
+				GetLow64Constant,
+				GetHigh64Propagation,
+				GetLow64Propagation,
+				GetHigh64ConstantFoldering,
+				GetLow64ConstantFoldering,
+				To64ConstantFoldering,
+			};
 		}
 
 		protected override void Setup()
@@ -113,8 +167,9 @@ namespace Mosa.Compiler.Framework.Stages
 			removeUselessIntegerCompareBranch = 0;
 			arithmeticSimplificationModulus = 0;
 			longConstantReduction = 0;
-			longPropagate = 0;
+			longPropagatation = 0;
 			simplifyIntegerCompare = 0;
+			longConstantFolding = 0;
 		}
 
 		protected override void Run()
@@ -161,8 +216,9 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
 			UpdateCounter("IROptimizations.RemoveUselessIntegerCompareBranch", removeUselessIntegerCompareBranch);
 			UpdateCounter("IROptimizations.LongConstantReduction", longConstantReduction);
-			UpdateCounter("IROptimizations.LongPropagate", longPropagate);
+			UpdateCounter("IROptimizations.LongPropagatation", longPropagatation);
 			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompare);
+			UpdateCounter("IROptimizations.LongConstantFolding", longConstantFolding);
 		}
 
 		protected override void Finish()
@@ -208,56 +264,6 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 			}
-		}
-
-		private List<Transformation> CreateTransformationList()
-		{
-			return new List<Transformation>()
-			{
-				SimpleConstantPropagation,
-				ForwardPropagateMove,
-				ForwardPropagateCompoundMove,
-				DeadCodeElimination,
-				ConstantFoldingIntegerOperations32,
-				ConstantFoldingIntegerOperations64,
-				ConstantMoveToRight,
-				ArithmeticSimplificationSubtraction,
-				ArithmeticSimplificationMultiplication,
-				ArithmeticSimplificationDivision,
-				ArithmeticSimplificationAdditionAndSubstraction,
-				ArithmeticSimplificationRemUnsignedModulus,
-				ArithmeticSimplificationRemSignedModulus,
-				ArithmeticSimplificationLogicalOperators,
-				ArithmeticSimplificationShiftOperators,
-
-				//ReduceZeroExtendedMove,
-				ConstantFoldingAdditionAndSubstraction,
-				ConstantFoldingMultiplication,
-				ConstantFoldingDivision,
-				ConstantFoldingIntegerCompare,
-				ConstantFoldingLogicalOr,
-				ConstantFoldingLogicalAnd,
-				CombineIntegerCompareBranch,
-				FoldIntegerCompare,
-				RemoveUselessIntegerCompareBranch,
-				ConstantFoldIntegerCompareBranch,
-
-				//ReduceTruncationAndExpansion,
-				SimplifyExtendedMoveWithConstant,
-				SimplifyExtendedMove,
-				SimplifyIntegerCompare2,
-				SimplifyIntegerCompare,
-				FoldLoadStoreOffsets,
-				ConstantFoldingPhi,
-				SimplifyPhi,
-				SimplifyPhi2,
-				DeadCodeEliminationPhi,
-				NormalizeConstantTo32Bit,
-				GetLow64Constant,
-				GetHigh64Constant,
-				GetLow64,
-				GetHigh64,
-			};
 		}
 
 		private void ProcessWorkList()
@@ -453,6 +459,8 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log("BEFORE:\t" + useNode);
 
 						AddOperandUsageToWorkList(operand);
+						AddOperandUsageToWorkList(useNode.GetOperand(i));
+
 						useNode.SetOperand(i, source);
 						simpleConstantPropagationCount++;
 						if (trace.Active) trace.Log("AFTER: \t" + useNode);
@@ -462,6 +470,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (propogated)
 				{
 					AddToWorkList(useNode);
+					AddToWorkList(node);
 				}
 			}
 		}
@@ -2214,7 +2223,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var low = CreateConstant((uint)(node.Operand1.ConstantUnsignedLongInteger & 0xFFFFFFFF));
 
-			if (trace.Active) trace.Log("*** Split64Constant");
+			if (trace.Active) trace.Log("*** GetLow64Constant");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, low);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
@@ -2223,7 +2232,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void GetHigh64Constant(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.GetLow64)
+			if (node.Instruction != IRInstruction.GetHigh64)
 				return;
 
 			if (!node.Operand1.IsResolvedConstant)
@@ -2234,16 +2243,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AddOperandUsageToWorkList(node);
 
-			var high = CreateConstant((uint)(node.Operand1.ConstantUnsignedLongInteger >> 32) & 0xFFFFFFFF);
+			var high = CreateConstant((uint)(node.Operand1.ConstantUnsignedLongInteger >> 32));
 
-			if (trace.Active) trace.Log("*** Split64Constant");
+			if (trace.Active) trace.Log("*** GetHigh64Constant");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, high);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
 			longConstantReduction++;
 		}
 
-		private void GetLow64(InstructionNode node)
+		private void GetLow64Propagation(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.GetLow64)
 				return;
@@ -2268,14 +2277,14 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(node);
 			AddOperandUsageToWorkList(node2);
 
-			if (trace.Active) trace.Log("*** GetLow64");
+			if (trace.Active) trace.Log("*** GetLow64Propagation");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, node2.Operand1);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longPropagate++;
+			longPropagatation++;
 		}
 
-		private void GetHigh64(InstructionNode node)
+		private void GetHigh64Propagation(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.GetHigh64)
 				return;
@@ -2300,11 +2309,80 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(node);
 			AddOperandUsageToWorkList(node2);
 
-			if (trace.Active) trace.Log("*** GetHigh64");
+			if (trace.Active) trace.Log("*** GetHigh64Propagation");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, node2.Operand2);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longPropagate++;
+			longPropagatation++;
+		}
+
+		private void GetHigh64ConstantFoldering(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetHigh64)
+				return;
+
+			if (!node.Operand1.IsResolvedConstant)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			var constant = CreateConstant((uint)(node.Operand1.ConstantUnsignedLongInteger >> 32));
+
+			AddOperandUsageToWorkList(node);
+
+			if (trace.Active) trace.Log("*** GetHigh64ConstantFoldering");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, constant);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			longConstantFolding++;
+		}
+
+		private void GetLow64ConstantFoldering(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetLow64)
+				return;
+
+			if (!node.Operand1.IsResolvedConstant)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			var constant = CreateConstant((uint)(node.Operand1.ConstantUnsignedLongInteger) & 0xFFFFFFFF);
+
+			AddOperandUsageToWorkList(node);
+
+			if (trace.Active) trace.Log("*** GetLow64ConstantFoldering");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, constant);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			longConstantFolding++;
+		}
+
+		private void To64ConstantFoldering(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.To64)
+				return;
+
+			if (!node.Operand1.IsResolvedConstant)
+				return;
+
+			if (!node.Operand2.IsResolvedConstant)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			var constant = CreateConstant(node.Operand2.ConstantUnsignedLongInteger << 32 | node.Operand1.ConstantUnsignedLongInteger);
+
+			AddOperandUsageToWorkList(node);
+
+			if (trace.Active) trace.Log("*** To64ConstantFoldering");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.MoveInteger64, node.Result, constant);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			longConstantFolding++;
 		}
 	}
 }
