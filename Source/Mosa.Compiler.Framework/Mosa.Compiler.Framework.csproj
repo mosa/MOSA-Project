@@ -96,6 +96,12 @@
     <Compile Include="Intrinsics\GetStringType.cs" />
     <Compile Include="Intrinsics\GetDelegateTargetAddress.cs" />
     <Compile Include="Intrinsics\GetDelegateMethodAddress.cs" />
+    <Compile Include="IR\CompareIntegerBranch32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\CompareIntegerBranch64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="IR\GetHigh64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
@@ -207,9 +213,6 @@
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\CompareInteger64x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\CompareIntegerBranch.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\ConvertFloatR4ToFloatR8.cs">

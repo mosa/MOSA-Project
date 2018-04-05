@@ -1270,7 +1270,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void RemoveUselessIntegerCompareBranch(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.CompareIntegerBranch)
+			if (!(node.Instruction == IRInstruction.CompareIntegerBranch32
+				|| node.Instruction == IRInstruction.CompareIntegerBranch64))
 				return;
 
 			if (node.Block.NextBlocks.Count != 1)
@@ -1289,7 +1290,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void ConstantFoldIntegerCompareBranch(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.CompareIntegerBranch)
+			if (!(node.Instruction == IRInstruction.CompareIntegerBranch32
+				|| node.Instruction == IRInstruction.CompareIntegerBranch64))
 				return;
 
 			Debug.Assert(node.OperandCount == 2);
@@ -1686,7 +1688,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CombineIntegerCompareBranch(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.CompareIntegerBranch)
+			if (!(node.Instruction == IRInstruction.CompareIntegerBranch32
+				|| node.Instruction == IRInstruction.CompareIntegerBranch64))
 				return;
 
 			if (!(node.ConditionCode == ConditionCode.NotEqual || node.ConditionCode == ConditionCode.Equal))
@@ -1715,9 +1718,12 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(node);
 			if (trace.Active) trace.Log("*** CombineIntegerCompareBranch");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
+
 			node.ConditionCode = node.ConditionCode == ConditionCode.NotEqual ? node2.ConditionCode : node2.ConditionCode.GetOpposite();
 			node.Operand1 = node2.Operand1;
 			node.Operand2 = node2.Operand2;
+			node.Instruction = Select(node2.Operand1, IRInstruction.CompareIntegerBranch32, IRInstruction.CompareIntegerBranch64);
+
 			if (trace.Active) trace.Log("AFTER: \t" + node);
 			if (trace.Active) trace.Log("REMOVED:\t" + node2);
 			node2.SetInstruction(IRInstruction.Nop);

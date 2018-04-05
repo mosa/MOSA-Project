@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Call, Call);
 			AddVisitation(IRInstruction.CompareInteger64x32, CompareInteger64x32);
 			AddVisitation(IRInstruction.CompareInteger64x64, CompareInteger64x64);
-			AddVisitation(IRInstruction.CompareIntegerBranch, CompareIntegerBranch); // FUTURE: break this into 32/64 bit versions
+			AddVisitation(IRInstruction.CompareIntegerBranch64, CompareIntegerBranch64);
 			AddVisitation(IRInstruction.ConvertFloatR4ToInteger64, ConvertFloatR4ToInteger64);
 			AddVisitation(IRInstruction.ConvertFloatR8ToInteger64, ConvertFloatR8ToInteger64);
 			AddVisitation(IRInstruction.ConvertInteger64ToFloatR4, ConvertInteger64ToFloatR4);
@@ -167,8 +167,8 @@ namespace Mosa.Platform.x86.Stages
 			var op1 = context.Operand1;
 			var op2 = context.Operand2;
 
-			Debug.Assert(op1 != null && op2 != null, "IntegerCompareInstruction operand not memory!");
-			Debug.Assert(op0.IsVirtualRegister, "IntegerCompareInstruction result not memory and not register!");
+			Debug.Assert(op1 != null && op2 != null);
+			Debug.Assert(op0.IsVirtualRegister);
 
 			SplitLongOperand(op1, out Operand op1L, out Operand op1H);
 			SplitLongOperand(op2, out Operand op2L, out Operand op2H);
@@ -202,14 +202,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 
-		private void CompareIntegerBranch(Context context)
-		{
-			if (context.Operand1.Is64BitInteger || context.Operand2.Is64BitInteger)
-			{
-				ExpandBinaryBranch(context);
-			}
-		}
-
 		private void ConvertFloatR4ToInteger64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
@@ -240,7 +232,7 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Cvtsi2sd, context.Result, op1Low);
 		}
 
-		private void ExpandBinaryBranch(Context context)
+		private void CompareIntegerBranch64(Context context)
 		{
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);

@@ -120,7 +120,7 @@ namespace Mosa.Compiler.Framework
 			b0.AppendInstruction(loadInstruction, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(loadInstruction, opInstance, thisOperand, instanceOffsetOperand);
 			b0.AppendInstruction(IRInstruction.CompareInteger32x32, ConditionCode.Equal, opCompare, opInstance, c0); // FIXME -- not 64 compatible
-			b0.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, opCompare, c0);
+			b0.AppendInstruction(IRInstruction.CompareIntegerBranch32, ConditionCode.Equal, null, opCompare, c0); // FIXME -- not 64 compatible
 			b0.AddBranchTarget(b2.Block);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 

@@ -32,7 +32,8 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly CompareInteger32x32 CompareInteger32x32 = new CompareInteger32x32();
 		public static readonly CompareInteger64x32 CompareInteger64x32 = new CompareInteger64x32();
 		public static readonly CompareInteger64x64 CompareInteger64x64 = new CompareInteger64x64();
-		public static readonly CompareIntegerBranch CompareIntegerBranch = new CompareIntegerBranch();
+		public static readonly CompareIntegerBranch32 CompareIntegerBranch32 = new CompareIntegerBranch32();
+		public static readonly CompareIntegerBranch64 CompareIntegerBranch64 = new CompareIntegerBranch64();
 		public static readonly ConvertFloatR4ToFloatR8 ConvertFloatR4ToFloatR8 = new ConvertFloatR4ToFloatR8();
 		public static readonly ConvertFloatR4ToInteger32 ConvertFloatR4ToInteger32 = new ConvertFloatR4ToInteger32();
 		public static readonly ConvertFloatR4ToInteger64 ConvertFloatR4ToInteger64 = new ConvertFloatR4ToInteger64();
