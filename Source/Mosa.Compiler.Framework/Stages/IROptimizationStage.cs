@@ -47,10 +47,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private int combineIntegerCompareBranchCount = 0;
 		private int removeUselessIntegerCompareBranch = 0;
 		private int arithmeticSimplificationModulus = 0;
-		private int split64Constant = 0;
-		private int simplifyTo64 = 0;
-		private int simplifySplit64 = 0;
-		private int reduceSplit64 = 0;
+		private int longConstantReduction = 0;
+		private int longPropagate = 0;
 		private int simplifyIntegerCompare = 0;
 
 		private Stack<InstructionNode> worklist;
@@ -114,10 +112,8 @@ namespace Mosa.Compiler.Framework.Stages
 			combineIntegerCompareBranchCount = 0;
 			removeUselessIntegerCompareBranch = 0;
 			arithmeticSimplificationModulus = 0;
-			split64Constant = 0;
-			//simplifyTo64 = 0;
-			//simplifySplit64 = 0;
-			//reduceSplit64 = 0;
+			longConstantReduction = 0;
+			longPropagate = 0;
 			simplifyIntegerCompare = 0;
 		}
 
@@ -164,10 +160,8 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhiCount);
 			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
 			UpdateCounter("IROptimizations.RemoveUselessIntegerCompareBranch", removeUselessIntegerCompareBranch);
-			//UpdateCounter("IROptimizations.Split64Constant", split64Constant);
-			//UpdateCounter("IROptimizations.SimplifyTo64", simplifyTo64);
-			//UpdateCounter("IROptimizations.SimplifySplit64", simplifySplit64);
-			//UpdateCounter("IROptimizations.ReduceSplit64", reduceSplit64);
+			UpdateCounter("IROptimizations.LongConstantReduction", longConstantReduction);
+			UpdateCounter("IROptimizations.LongPropagate", longPropagate);
 			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompare);
 		}
 
@@ -261,6 +255,8 @@ namespace Mosa.Compiler.Framework.Stages
 				NormalizeConstantTo32Bit,
 				GetLow64Constant,
 				GetHigh64Constant,
+				GetLow64,
+				GetHigh64,
 			};
 		}
 
@@ -2222,7 +2218,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, low);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			split64Constant++;
+			longConstantReduction++;
 		}
 
 		private void GetHigh64Constant(InstructionNode node)
@@ -2244,7 +2240,71 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, high);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			split64Constant++;
+			longConstantReduction++;
+		}
+
+		private void GetLow64(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetLow64)
+				return;
+
+			if (!node.Operand1.IsVirtualRegister)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (node.Operand1.Definitions.Count != 1)
+				return;
+
+			var node2 = node.Operand1.Definitions[0];
+
+			if (node2.Instruction != IRInstruction.To64)
+				return;
+
+			if (!node2.Result.IsVirtualRegister)
+				return;
+
+			AddOperandUsageToWorkList(node);
+			AddOperandUsageToWorkList(node2);
+
+			if (trace.Active) trace.Log("*** GetLow64");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, node2.Operand1);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			longPropagate++;
+		}
+
+		private void GetHigh64(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetHigh64)
+				return;
+
+			if (!node.Operand1.IsVirtualRegister)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (node.Operand1.Definitions.Count != 1)
+				return;
+
+			var node2 = node.Operand1.Definitions[0];
+
+			if (node2.Instruction != IRInstruction.To64)
+				return;
+
+			if (!node2.Result.IsVirtualRegister)
+				return;
+
+			AddOperandUsageToWorkList(node);
+			AddOperandUsageToWorkList(node2);
+
+			if (trace.Active) trace.Log("*** GetHigh64");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.MoveInteger32, node.Result, node2.Operand2);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			longPropagate++;
 		}
 	}
 }
