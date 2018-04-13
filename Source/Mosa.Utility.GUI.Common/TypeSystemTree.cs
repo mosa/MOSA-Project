@@ -99,7 +99,7 @@ namespace Mosa.Utility.GUI.Common
 		{
 			if (!map.TryGetValue(module, out TreeNode moduleNode))
 			{
-				moduleNode = new TreeNode(module.Name);
+				moduleNode = new TreeNode(module.Name) { Tag = module };
 
 				map.Add(module, moduleNode);
 
@@ -136,7 +136,7 @@ namespace Mosa.Utility.GUI.Common
 				return typeNode;
 			}
 
-			typeNode = new TreeNode(type.FullName);
+			typeNode = new TreeNode(type.FullName) { Tag = type };
 
 			map.Add(type, typeNode);
 
@@ -320,7 +320,9 @@ namespace Mosa.Utility.GUI.Common
 				var methodTableNode = new TreeNode("Method Table");
 				typeNode.Nodes.Add(methodTableNode);
 
-				foreach (var method in TypeLayout.GetMethodTable(type))
+				var methodList = (new List<MosaMethod>(TypeLayout.GetMethodTable(type))).OrderBy(o => o.ShortName).ToList();
+
+				foreach (var method in methodList)
 				{
 					var methodNode = new TreeNode(method.ShortName) { Tag = method };
 					methodTableNode.Nodes.Add(methodNode);

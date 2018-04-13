@@ -50,7 +50,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MethodStore.cs" />
     <Compile Include="TypeSystemTree.cs" />
-    <Compile Include="OldTypeSystemTree.cs" />
     <Compile Include="MethodData.cs" />
   </ItemGroup>
   <ItemGroup>
