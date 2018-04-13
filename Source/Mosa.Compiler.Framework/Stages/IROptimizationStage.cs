@@ -1377,7 +1377,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			EmptyBlockOfAllInstructions(block);
 
-			UpdatePhiList(block, nextBlocks);
+			RemoveBlockFromPhiInstructions(block, nextBlocks);
 
 			Debug.Assert(block.NextBlocks.Count == 0);
 			Debug.Assert(block.PreviousBlocks.Count == 0);

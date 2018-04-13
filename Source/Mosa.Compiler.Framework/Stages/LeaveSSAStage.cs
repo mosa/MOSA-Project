@@ -41,11 +41,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (context.Instruction == IRInstruction.Phi)
 					{
-						//Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
-						if (context.OperandCount != context.Block.PreviousBlocks.Count)
-						{
-							throw new CompilerException(context.ToString());
-						}
+						Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
+						//if (context.OperandCount != context.Block.PreviousBlocks.Count)
+						//{
+						//	throw new CompilerException(context.ToString());
+						//}
 
 						ProcessPhiInstruction(context);
 					}

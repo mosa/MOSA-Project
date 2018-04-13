@@ -5,6 +5,7 @@ namespace Mosa.Compiler.Trace
 	public enum CompilerEvent
 	{
 		CompilingMethod,
+		CompiledMethod,
 		CompilingType,
 		Linking,
 		PreCompileStageStart,
@@ -29,6 +30,7 @@ namespace Mosa.Compiler.Trace
 			switch (stage)
 			{
 				case CompilerEvent.CompilingMethod: return "Compiling Method";
+				case CompilerEvent.CompiledMethod: return "Compiled Method";
 				case CompilerEvent.CompilingType: return "Compiling Type";
 				case CompilerEvent.SchedulingType: return "Scheduling Type";
 				case CompilerEvent.SchedulingMethod: return "Scheduling Method";

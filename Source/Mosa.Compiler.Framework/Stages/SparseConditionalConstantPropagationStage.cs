@@ -128,9 +128,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			EmptyBlockOfAllInstructions(block);
 
-			UpdatePhiList(block, nextBlocks);
-
-			Debug.Assert(block.NextBlocks.Count == 0);
+			RemoveBlockFromPhiInstructions(block, nextBlocks);
 		}
 
 		protected void RemoveBranchesToDeadBlocks(BasicBlock deadBlock)

@@ -349,7 +349,7 @@ namespace Mosa.Compiler.Framework
 
 			InitializeType();
 
-			var log = new TraceLog(TraceType.Counters, this.Method, string.Empty, Trace.TraceFilter.Active);
+			var log = new TraceLog(TraceType.Counters, Method, string.Empty, Trace.TraceFilter.Active);
 			log.Log(MethodData.Counters.Export());
 			Trace.TraceListener.OnNewTraceLog(log);
 		}

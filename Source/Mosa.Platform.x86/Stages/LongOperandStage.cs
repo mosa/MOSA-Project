@@ -182,11 +182,19 @@ namespace Mosa.Platform.x86.Stages
 			// Compare high dwords
 			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
 			context.AppendInstruction(X86.BranchEqual, newBlocks[1].Block);
-			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);  // FUTURE: if branch == X86.BranchEqual, then jump to newBlocks[2].Block
+			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
 			// Branch if check already gave results
-			newBlocks[0].AppendInstruction(branch, newBlocks[2].Block);
-			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[3].Block);
+			if (branch == X86.BranchEqual)
+			{
+				newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[3].Block);
+			}
+			else
+			{
+				// Branch if check already gave results
+				newBlocks[0].AppendInstruction(branch, newBlocks[2].Block);
+				newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[3].Block);
+			}
 
 			// Compare low dwords
 			newBlocks[1].AppendInstruction(X86.Cmp32, null, op1L, op2L);

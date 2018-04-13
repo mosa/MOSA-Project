@@ -352,11 +352,11 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Splits the block.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <returns></returns>
-		protected Context Split(Context ctx)
+		protected Context Split(Context context)
 		{
-			return new Context(Split(ctx.Node));
+			return new Context(Split(context.Node));
 		}
 
 		/// <summary>
@@ -439,11 +439,10 @@ namespace Mosa.Compiler.Framework
 
 			EmptyBlockOfAllInstructions(block);
 
-			Debug.Assert(block.NextBlocks.Count == 0);
 			Debug.Assert(block.PreviousBlocks.Count == 0);
 		}
 
-		protected static void UpdatePhiList(BasicBlock removedBlock, BasicBlock[] nextBlocks)
+		protected static void RemoveBlockFromPhiInstructions(BasicBlock removedBlock, BasicBlock[] nextBlocks)
 		{
 			foreach (var next in nextBlocks)
 			{
@@ -453,7 +452,7 @@ namespace Mosa.Compiler.Framework
 						continue;
 
 					if (node.Instruction != IRInstruction.Phi)
-						continue;
+						continue; // FUTURE: change to break, instead of continue
 
 					var sourceBlocks = node.PhiBlocks;
 
@@ -471,6 +470,44 @@ namespace Mosa.Compiler.Framework
 
 					node.SetOperand(node.OperandCount - 1, null);
 					node.OperandCount--;
+				}
+			}
+
+			Debug.Assert(removedBlock.NextBlocks.Count == 0);
+		}
+
+		protected static void MovePhiBlockOperandToLast(BasicBlock block)
+		{
+			if (block.NextBlocks.Count == 0)
+				return;
+
+			var nextBlocks = block.NextBlocks.ToArray();
+
+			foreach (var next in nextBlocks)
+			{
+				for (var node = next.First; !node.IsBlockEndInstruction; node = node.Next)
+				{
+					if (node.IsEmpty)
+						continue;
+
+					if (node.Instruction != IRInstruction.Phi)
+						continue; // FUTURE: change to break, instead of continue
+
+					var sourceBlocks = node.PhiBlocks;
+
+					int index = sourceBlocks.IndexOf(block);
+
+					if (index < 0)
+						continue;
+
+					var operand = node.GetOperand(index);
+
+					for (int i = index; index < node.OperandCount - 1; index++)
+					{
+						node.SetOperand(i, node.GetOperand(i + 1));
+					}
+
+					node.SetOperand(node.OperandCount - 1, operand);
 				}
 			}
 		}

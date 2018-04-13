@@ -589,7 +589,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="newblock">The newblock.</param>
 		public void Split(BasicBlock newblock)
 		{
-			//			Debug.Assert(!IsBlockEndInstruction);
+			//Debug.Assert(!IsBlockEndInstruction);
 
 			if (Next == Block.Last)
 				return;
@@ -614,8 +614,8 @@ namespace Mosa.Compiler.Framework
 				node.Block = newblock;
 			}
 
-			//	Block.DebugCheck();
-			//	newblock.DebugCheck();
+			//Block.DebugCheck();
+			//newblock.DebugCheck();
 		}
 
 		private void ClearOperands()

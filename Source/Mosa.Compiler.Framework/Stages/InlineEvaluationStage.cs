@@ -79,6 +79,10 @@ namespace Mosa.Compiler.Framework.Stages
 						|| node.Instruction == IRInstruction.LoadParameterZeroExtended32x64
 						|| node.Instruction == IRInstruction.LoadParameterZeroExtended8x32
 						|| node.Instruction == IRInstruction.LoadParameterZeroExtended8x64
+						//|| node.Instruction == IRInstruction.Epilogue
+						//|| node.Instruction == IRInstruction.Prologue
+						|| node.Block.IsEpilogue
+						|| node.Block.IsPrologue
 						)
 					{
 						totalStackParameterInstruction++;

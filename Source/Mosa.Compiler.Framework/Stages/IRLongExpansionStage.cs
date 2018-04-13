@@ -250,6 +250,14 @@ namespace Mosa.Compiler.Framework.Stages
 			var branch = context.ConditionCode;
 			var branchUnsigned = context.ConditionCode.GetUnsigned();
 
+			// CHALLENGE:
+			// To maintain PHI-form, the block order must be maintained.
+			// So on the split of block (A) with new block (B), the block order and phi operands list must stay in sync
+
+			// Trick move the phi block operand to the end of the list
+			// The block B will eventually end up at the end of the block list (win-win!)
+			MovePhiBlockOperandToLast(context.Block);
+
 			var nextBlock = Split(context);
 			var newBlocks = CreateNewBlockContexts(5);
 
@@ -264,14 +272,14 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.GetLow64, op1Low, operand2);
 			context.AppendInstruction(IRInstruction.GetHigh64, op1High, operand2);
 
-			// Compare high 
+			// Compare high
 			context.AppendInstruction(IRInstruction.CompareIntegerBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
 			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 			// Branch if check already gave results
 			if (branch == ConditionCode.Equal)
 			{
-				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[2].Block);
+				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 			}
 			else
 			{

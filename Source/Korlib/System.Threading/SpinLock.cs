@@ -13,6 +13,16 @@ namespace System.Threading
 		private const int LOCK_ID_DISABLE_MASK = unchecked((int)0x80000000);
 		private const int ID_DISABLED_AND_ANONYMOUS_OWNED = unchecked((int)0x80000001);
 
+		public SpinLock(bool enableThreadOwnerTracking)
+		{
+			m_owner = LOCK_UNOWNED;
+
+			if (!enableThreadOwnerTracking)
+			{
+				m_owner |= LOCK_ID_DISABLE_MASK;
+			}
+		}
+
 		public void Enter(ref bool lockTaken)
 		{
 			int observedOwner = m_owner;
@@ -26,13 +36,10 @@ namespace System.Threading
 		{
 			int observedOwner = m_owner;
 
-			if (CompareExchange(ref m_owner, observedOwner | 1, observedOwner, ref lockTaken) == observedOwner)
+			while (CompareExchange(ref m_owner, observedOwner | 1, observedOwner, ref lockTaken) != observedOwner)
 			{
-				// Acquired lock
-				return;
 			}
 		}
-
 
 		public void Exit()
 		{
