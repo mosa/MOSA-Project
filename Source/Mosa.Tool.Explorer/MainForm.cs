@@ -470,9 +470,9 @@ namespace Mosa.Tool.Explorer
 				return;
 
 			if (string.IsNullOrWhiteSpace(label) || label == "All")
-				tbResult.Text = methodStore.GetStageInstructions(lines, string.Empty);
+				tbResult.Text = methodStore.GetStageInstructions(lines, string.Empty, !showOperandTypes.Checked, padInstructions.Checked);
 			else
-				tbResult.Text = methodStore.GetStageInstructions(lines, label);
+				tbResult.Text = methodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked);
 		}
 
 		private void UpdateDebugResults()
@@ -742,6 +742,21 @@ namespace Mosa.Tool.Explorer
 		private void CbPlatform_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			//
+		}
+
+		private void showSizesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			CreateTree();
+		}
+
+		private void padInstructions_CheckStateChanged(object sender, EventArgs e)
+		{
+			UpdateResults();
+		}
+
+		private void showOperandTypes_CheckStateChanged(object sender, EventArgs e)
+		{
+			UpdateResults();
 		}
 	}
 }

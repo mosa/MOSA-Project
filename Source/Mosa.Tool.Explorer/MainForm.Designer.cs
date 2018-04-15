@@ -45,7 +45,6 @@
             this.nowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.snippetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableSSA = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableOptimizations = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableSparseConditionalConstantPropagation = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,6 +52,10 @@
             this.cbEnableInlinedMethods = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableTwoPassOptimizations = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableIRLongExpansion = new System.Windows.Forms.ToolStripMenuItem();
+            this.displayOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showOperandTypes = new System.Windows.Forms.ToolStripMenuItem();
+            this.padInstructions = new System.Windows.Forms.ToolStripMenuItem();
+            this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
             this.advanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dumpAllMethodStagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -76,6 +79,8 @@
             this.rbErrors = new System.Windows.Forms.RichTextBox();
             this.tbExceptions = new System.Windows.Forms.TabPage();
             this.rbException = new System.Windows.Forms.RichTextBox();
+            this.tbExtra = new System.Windows.Forms.TabPage();
+            this.tbExtraData = new System.Windows.Forms.RichTextBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
@@ -84,8 +89,6 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.cbPlatform = new System.Windows.Forms.ComboBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.tbExtra = new System.Windows.Forms.TabPage();
-            this.tbExtraData = new System.Windows.Forms.RichTextBox();
             label1 = new System.Windows.Forms.Label();
             stageLabel = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
@@ -103,8 +106,8 @@
             this.tbLogs.SuspendLayout();
             this.tbErrors.SuspendLayout();
             this.tbExceptions.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             this.tbExtra.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -143,9 +146,9 @@
             this.toolStripStatusLabel1,
             this.toolStripProgressBar1,
             this.toolStripStatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 306);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 479);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(766, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(891, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -170,10 +173,11 @@
             this.fileToolStripMenuItem,
             this.compileToolStripMenuItem,
             this.optionsToolStripMenuItem,
+            this.displayOptionsToolStripMenuItem,
             this.advanceToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(766, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(891, 24);
             this.menuStrip1.TabIndex = 3;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -232,27 +236,16 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.showSizes,
             this.cbEnableSSA,
             this.cbEnableOptimizations,
             this.cbEnableSparseConditionalConstantPropagation,
-            this.cbEnableBinaryCodeGeneration,
             this.cbEnableInlinedMethods,
             this.cbEnableTwoPassOptimizations,
-            this.cbEnableIRLongExpansion});
+            this.cbEnableIRLongExpansion,
+            this.cbEnableBinaryCodeGeneration});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.optionsToolStripMenuItem.Text = "Options";
-            // 
-            // showSizes
-            // 
-            this.showSizes.Checked = true;
-            this.showSizes.CheckOnClick = true;
-            this.showSizes.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showSizes.Name = "showSizes";
-            this.showSizes.Size = new System.Drawing.Size(293, 22);
-            this.showSizes.Text = "Show Sizes";
-            this.showSizes.Click += new System.EventHandler(this.ShowSizes_Click);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
+            this.optionsToolStripMenuItem.Text = "Optimizations";
             // 
             // cbEnableSSA
             // 
@@ -317,6 +310,44 @@
             this.cbEnableIRLongExpansion.Size = new System.Drawing.Size(293, 22);
             this.cbEnableIRLongExpansion.Text = "Enable IR Long Expansion";
             // 
+            // displayOptionsToolStripMenuItem
+            // 
+            this.displayOptionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showOperandTypes,
+            this.padInstructions,
+            this.showSizes});
+            this.displayOptionsToolStripMenuItem.Name = "displayOptionsToolStripMenuItem";
+            this.displayOptionsToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
+            this.displayOptionsToolStripMenuItem.Text = "Display";
+            // 
+            // showOperandTypes
+            // 
+            this.showOperandTypes.CheckOnClick = true;
+            this.showOperandTypes.Name = "showOperandTypes";
+            this.showOperandTypes.Size = new System.Drawing.Size(185, 22);
+            this.showOperandTypes.Text = "Show Operand Types";
+            this.showOperandTypes.CheckStateChanged += new System.EventHandler(this.showOperandTypes_CheckStateChanged);
+            // 
+            // padInstructions
+            // 
+            this.padInstructions.Checked = true;
+            this.padInstructions.CheckOnClick = true;
+            this.padInstructions.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.padInstructions.Name = "padInstructions";
+            this.padInstructions.Size = new System.Drawing.Size(185, 22);
+            this.padInstructions.Text = "Pad Instructions";
+            this.padInstructions.CheckStateChanged += new System.EventHandler(this.padInstructions_CheckStateChanged);
+            // 
+            // showSizes
+            // 
+            this.showSizes.Checked = true;
+            this.showSizes.CheckOnClick = true;
+            this.showSizes.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showSizes.Name = "showSizes";
+            this.showSizes.Size = new System.Drawing.Size(185, 22);
+            this.showSizes.Text = "Show Sizes";
+            this.showSizes.Click += new System.EventHandler(this.showSizesToolStripMenuItem_Click);
+            // 
             // advanceToolStripMenuItem
             // 
             this.advanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -344,7 +375,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treeView.Location = new System.Drawing.Point(0, 0);
             this.treeView.Name = "treeView";
-            this.treeView.Size = new System.Drawing.Size(206, 254);
+            this.treeView.Size = new System.Drawing.Size(239, 427);
             this.treeView.TabIndex = 3;
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView_AfterSelect);
             // 
@@ -367,8 +398,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.tabControl1);
             this.splitContainer1.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.splitContainer1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.splitContainer1.Size = new System.Drawing.Size(762, 251);
-            this.splitContainer1.SplitterDistance = 203;
+            this.splitContainer1.Size = new System.Drawing.Size(887, 424);
+            this.splitContainer1.SplitterDistance = 236;
             this.splitContainer1.SplitterWidth = 6;
             this.splitContainer1.TabIndex = 26;
             // 
@@ -391,7 +422,7 @@
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.Padding = new System.Drawing.Point(0, 0);
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(553, 254);
+            this.tabControl1.Size = new System.Drawing.Size(639, 427);
             this.tabControl1.TabIndex = 38;
             // 
             // tbStages
@@ -405,7 +436,7 @@
             this.tbStages.Location = new System.Drawing.Point(4, 25);
             this.tbStages.Margin = new System.Windows.Forms.Padding(0);
             this.tbStages.Name = "tbStages";
-            this.tbStages.Size = new System.Drawing.Size(545, 225);
+            this.tbStages.Size = new System.Drawing.Size(631, 398);
             this.tbStages.TabIndex = 0;
             this.tbStages.Text = "Instructions";
             // 
@@ -444,7 +475,7 @@
             this.tbResult.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbResult.Location = new System.Drawing.Point(0, 32);
             this.tbResult.Name = "tbResult";
-            this.tbResult.Size = new System.Drawing.Size(541, 197);
+            this.tbResult.Size = new System.Drawing.Size(633, 370);
             this.tbResult.TabIndex = 31;
             this.tbResult.Text = "";
             this.tbResult.WordWrap = false;
@@ -458,7 +489,7 @@
             this.tbDebug.Location = new System.Drawing.Point(4, 25);
             this.tbDebug.Margin = new System.Windows.Forms.Padding(0);
             this.tbDebug.Name = "tbDebug";
-            this.tbDebug.Size = new System.Drawing.Size(545, 225);
+            this.tbDebug.Size = new System.Drawing.Size(631, 398);
             this.tbDebug.TabIndex = 1;
             this.tbDebug.Text = "Debug";
             // 
@@ -493,7 +524,7 @@
             this.tbMethodCounters.Controls.Add(this.rbMethodCounters);
             this.tbMethodCounters.Location = new System.Drawing.Point(4, 25);
             this.tbMethodCounters.Name = "tbMethodCounters";
-            this.tbMethodCounters.Size = new System.Drawing.Size(545, 225);
+            this.tbMethodCounters.Size = new System.Drawing.Size(631, 398);
             this.tbMethodCounters.TabIndex = 6;
             this.tbMethodCounters.Text = "Counters";
             this.tbMethodCounters.UseVisualStyleBackColor = true;
@@ -518,7 +549,7 @@
             this.tbGlobalCounters.Location = new System.Drawing.Point(4, 25);
             this.tbGlobalCounters.Name = "tbGlobalCounters";
             this.tbGlobalCounters.Padding = new System.Windows.Forms.Padding(3);
-            this.tbGlobalCounters.Size = new System.Drawing.Size(545, 225);
+            this.tbGlobalCounters.Size = new System.Drawing.Size(631, 398);
             this.tbGlobalCounters.TabIndex = 4;
             this.tbGlobalCounters.Text = "Global Counters";
             // 
@@ -542,7 +573,7 @@
             this.tbLogs.Location = new System.Drawing.Point(4, 25);
             this.tbLogs.Name = "tbLogs";
             this.tbLogs.Padding = new System.Windows.Forms.Padding(3);
-            this.tbLogs.Size = new System.Drawing.Size(545, 225);
+            this.tbLogs.Size = new System.Drawing.Size(631, 398);
             this.tbLogs.TabIndex = 3;
             this.tbLogs.Text = "Log";
             // 
@@ -566,7 +597,7 @@
             this.tbErrors.Location = new System.Drawing.Point(4, 25);
             this.tbErrors.Name = "tbErrors";
             this.tbErrors.Padding = new System.Windows.Forms.Padding(3);
-            this.tbErrors.Size = new System.Drawing.Size(545, 225);
+            this.tbErrors.Size = new System.Drawing.Size(631, 398);
             this.tbErrors.TabIndex = 2;
             this.tbErrors.Text = "Errors";
             // 
@@ -589,7 +620,7 @@
             this.tbExceptions.Location = new System.Drawing.Point(4, 25);
             this.tbExceptions.Name = "tbExceptions";
             this.tbExceptions.Padding = new System.Windows.Forms.Padding(3);
-            this.tbExceptions.Size = new System.Drawing.Size(545, 225);
+            this.tbExceptions.Size = new System.Drawing.Size(631, 398);
             this.tbExceptions.TabIndex = 5;
             this.tbExceptions.Text = "Exceptions";
             this.tbExceptions.UseVisualStyleBackColor = true;
@@ -607,6 +638,30 @@
             this.rbException.Text = "";
             this.rbException.WordWrap = false;
             // 
+            // tbExtra
+            // 
+            this.tbExtra.Controls.Add(this.tbExtraData);
+            this.tbExtra.Location = new System.Drawing.Point(4, 25);
+            this.tbExtra.Name = "tbExtra";
+            this.tbExtra.Padding = new System.Windows.Forms.Padding(3);
+            this.tbExtra.Size = new System.Drawing.Size(631, 398);
+            this.tbExtra.TabIndex = 7;
+            this.tbExtra.Text = "Extra";
+            this.tbExtra.UseVisualStyleBackColor = true;
+            // 
+            // tbExtraData
+            // 
+            this.tbExtraData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbExtraData.Font = new System.Drawing.Font("Lucida Console", 8F);
+            this.tbExtraData.Location = new System.Drawing.Point(0, 1);
+            this.tbExtraData.Name = "tbExtraData";
+            this.tbExtraData.Size = new System.Drawing.Size(545, 223);
+            this.tbExtraData.TabIndex = 2;
+            this.tbExtraData.Text = "";
+            this.tbExtraData.WordWrap = false;
+            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -617,7 +672,7 @@
             this.toolStripSeparator2});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(766, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(891, 25);
             this.toolStrip1.TabIndex = 27;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -675,35 +730,11 @@
             // 
             this.folderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer;
             // 
-            // tbExtra
-            // 
-            this.tbExtra.Controls.Add(this.tbExtraData);
-            this.tbExtra.Location = new System.Drawing.Point(4, 25);
-            this.tbExtra.Name = "tbExtra";
-            this.tbExtra.Padding = new System.Windows.Forms.Padding(3);
-            this.tbExtra.Size = new System.Drawing.Size(545, 225);
-            this.tbExtra.TabIndex = 7;
-            this.tbExtra.Text = "Extra";
-            this.tbExtra.UseVisualStyleBackColor = true;
-            // 
-            // tbExtraData
-            // 
-            this.tbExtraData.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbExtraData.Font = new System.Drawing.Font("Lucida Console", 8F);
-            this.tbExtraData.Location = new System.Drawing.Point(0, 1);
-            this.tbExtraData.Name = "tbExtraData";
-            this.tbExtraData.Size = new System.Drawing.Size(545, 223);
-            this.tbExtraData.TabIndex = 2;
-            this.tbExtraData.Text = "";
-            this.tbExtraData.WordWrap = false;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(766, 328);
+            this.ClientSize = new System.Drawing.Size(891, 501);
             this.Controls.Add(this.cbPlatform);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.statusStrip1);
@@ -730,9 +761,9 @@
             this.tbLogs.ResumeLayout(false);
             this.tbErrors.ResumeLayout(false);
             this.tbExceptions.ResumeLayout(false);
+            this.tbExtra.ResumeLayout(false);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            this.tbExtra.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -748,7 +779,6 @@
 		private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
 		private System.Windows.Forms.OpenFileDialog openFileDialog;
 		private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem showSizes;
 		private System.Windows.Forms.TreeView treeView;
 		private System.Windows.Forms.SplitContainer splitContainer1;
 		private System.Windows.Forms.ToolStripMenuItem compileToolStripMenuItem;
@@ -794,5 +824,9 @@
 		private System.Windows.Forms.ToolStripMenuItem cbEnableTwoPassOptimizations;
 		private System.Windows.Forms.TabPage tbExtra;
 		private System.Windows.Forms.RichTextBox tbExtraData;
+		private System.Windows.Forms.ToolStripMenuItem displayOptionsToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem showOperandTypes;
+		private System.Windows.Forms.ToolStripMenuItem showSizes;
+		private System.Windows.Forms.ToolStripMenuItem padInstructions;
 	}
 }
