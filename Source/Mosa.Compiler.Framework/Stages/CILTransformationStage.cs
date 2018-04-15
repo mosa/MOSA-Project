@@ -274,11 +274,11 @@ namespace Mosa.Compiler.Framework.Stages
 				var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareFloatR4 : IRInstruction.CompareFloatR8;
 
 				context.SetInstruction(instruction, cc, result, first, second);
-				context.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, result, CreateConstant(1));
+				context.AppendInstruction(Select(result, IRInstruction.CompareIntegerBranch32, IRInstruction.CompareIntegerBranch64), ConditionCode.Equal, null, result, CreateConstant(1));
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.CompareIntegerBranch, cc, null, first, second);
+				context.SetInstruction(Select(first, IRInstruction.CompareIntegerBranch32, IRInstruction.CompareIntegerBranch64), cc, null, first, second);
 			}
 
 			context.AddBranchTarget(target);
@@ -1562,13 +1562,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (opcode == OpCode.Brtrue || opcode == OpCode.Brtrue_s)
 			{
-				context.SetInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.NotEqual, null, first, second);
+				context.SetInstruction(Select(first, IRInstruction.CompareIntegerBranch32, IRInstruction.CompareIntegerBranch64), ConditionCode.NotEqual, null, first, second);
 				context.AddBranchTarget(target);
 				return;
 			}
 			else if (opcode == OpCode.Brfalse || opcode == OpCode.Brfalse_s)
 			{
-				context.SetInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.Equal, null, first, second);
+				context.SetInstruction(Select(first, IRInstruction.CompareIntegerBranch32, IRInstruction.CompareIntegerBranch64), ConditionCode.Equal, null, first, second);
 				context.AddBranchTarget(target);
 				return;
 			}
@@ -1947,7 +1947,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Now compare length with index
 			// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-			before.AppendInstruction(IRInstruction.CompareIntegerBranch, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
+			before.AppendInstruction(Select(IRInstruction.CompareIntegerBranch32, IRInstruction.CompareIntegerBranch64), ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
 			before.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
 
 			// Build exception block which is just a call to throw exception

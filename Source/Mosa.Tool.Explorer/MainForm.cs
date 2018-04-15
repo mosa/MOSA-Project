@@ -35,6 +35,8 @@ namespace Mosa.Tool.Explorer
 
 		private readonly MethodStore methodStore = new MethodStore();
 
+		private TypeSystemTree typeSystemTree;
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -127,7 +129,7 @@ namespace Mosa.Tool.Explorer
 		{
 			LoadAssembly(filename, cbPlatform.Text, includeDirectory);
 
-			UpdateTree();
+			CreateTree();
 
 			Stage = CompileStage.Loaded;
 
@@ -136,9 +138,33 @@ namespace Mosa.Tool.Explorer
 			SetStatus("Assemblies Loaded!");
 		}
 
+		protected void CreateTree()
+		{
+			if (Compiler.TypeSystem == null || Compiler.TypeLayout == null)
+			{
+				typeSystemTree = null;
+				treeView.Nodes.Clear();
+				return;
+			}
+
+			typeSystemTree = new TypeSystemTree(treeView, Compiler.TypeSystem, Compiler.TypeLayout, showSizes.Checked);
+		}
+
 		protected void UpdateTree()
 		{
-			TypeSystemTree.UpdateTree(treeView, Compiler.TypeSystem, Compiler.TypeLayout, showSizes.Checked);
+			if (typeSystemTree == null)
+			{
+				CreateTree();
+			}
+			else
+			{
+				typeSystemTree.Update();
+			}
+		}
+
+		protected void UpdateTree(MosaMethod method)
+		{
+			typeSystemTree.Update(method);
 		}
 
 		private void QuitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -146,21 +172,16 @@ namespace Mosa.Tool.Explorer
 			Application.Exit();
 		}
 
-		private void ShowTokenValues_Click(object sender, EventArgs e)
-		{
-			UpdateTree();
-		}
-
 		private void ShowSizes_Click(object sender, EventArgs e)
 		{
-			UpdateTree();
+			CreateTree();
 		}
 
-		private void SubmitTraceEventGUI(CompilerEvent compilerStage, string info)
+		private void SubmitTraceEventGUI(CompilerEvent compilerEvent, string info)
 		{
-			if (compilerStage != CompilerEvent.DebugInfo)
+			if (compilerEvent != CompilerEvent.DebugInfo)
 			{
-				SetStatus(compilerStage.ToText() + ": " + info);
+				SetStatus(compilerEvent.ToText() + ": " + info);
 				toolStripStatusLabel1.GetCurrentParent().Refresh();
 			}
 		}
@@ -200,7 +221,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
 			Compiler.CompilerOptions.EnableInlinedMethods = cbEnableInlinedMethods.Checked;
 			Compiler.CompilerOptions.IRLongExpansion = cbEnableIRLongExpansion.Checked;
-			Compiler.CompilerOptions.InlinedIRMaximum = 8;
+			Compiler.CompilerOptions.InlinedIRMaximum = 12;
 		}
 
 		private void CleanGUI()
@@ -221,32 +242,23 @@ namespace Mosa.Tool.Explorer
 			compileStartTime = DateTime.Now;
 			SetCompilerOptions();
 
-			if (Stage == CompileStage.PreCompiled)
+			CleanGUI();
+
+			Compiler.ScheduleAll();
+
+			toolStrip1.Enabled = false;
+
+			ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
 			{
-				Compiler.ScheduleAll();
-				Compiler.Compile();
-				Compiler.PostCompile();
-			}
-			else
-			{
-				CleanGUI();
-
-				methodStore.Clear();
-
-				toolStrip1.Enabled = false;
-
-				ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+				try
 				{
-					try
-					{
-						Compiler.ExecuteThreaded();
-					}
-					finally
-					{
-						OnCompileCompleted();
-					}
-				}));
-			}
+					Compiler.ExecuteThreaded();
+				}
+				finally
+				{
+					OnCompileCompleted();
+				}
+			}));
 		}
 
 		private void OnCompileCompleted()
@@ -259,6 +271,8 @@ namespace Mosa.Tool.Explorer
 		private void CompileCompleted()
 		{
 			toolStrip1.Enabled = true;
+
+			Compiler.PostCompile();
 
 			Stage = CompileStage.Compiled;
 
@@ -300,27 +314,14 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private T GetCurrentNode<T>() where T : class
+		private MosaMethod GetCurrentMethod()
 		{
-			if (treeView.SelectedNode == null)
-				return null;
-
-			return treeView.SelectedNode as T;
-		}
-
-		private ViewNode<MosaMethod> GetCurrentNode()
-		{
-			return GetCurrentNode<ViewNode<MosaMethod>>();
-		}
-
-		private MosaMethod GetCurrentType()
-		{
-			var node = GetCurrentNode<ViewNode<MosaMethod>>();
+			var node = treeView.SelectedNode;
 
 			if (node == null)
 				return null;
 			else
-				return node.Type;
+				return node.Tag as MosaMethod;
 		}
 
 		private string GetCurrentStage()
@@ -340,12 +341,12 @@ namespace Mosa.Tool.Explorer
 
 		private List<string> GetCurrentLines()
 		{
-			var type = GetCurrentType();
+			var method = GetCurrentMethod();
 
-			if (type == null)
+			if (method == null)
 				return null;
 
-			var methodData = methodStore.GetMethodData(type, false);
+			var methodData = methodStore.GetMethodData(method, false);
 
 			if (methodData == null)
 				return null;
@@ -357,12 +358,12 @@ namespace Mosa.Tool.Explorer
 
 		private List<string> GetCurrentDebugLines()
 		{
-			var type = GetCurrentType();
+			var method = GetCurrentMethod();
 
-			if (type == null)
+			if (method == null)
 				return null;
 
-			var methodData = methodStore.GetMethodData(type, false);
+			var methodData = methodStore.GetMethodData(method, false);
 
 			if (methodData == null)
 				return null;
@@ -374,14 +375,14 @@ namespace Mosa.Tool.Explorer
 
 		private void UpdateStages()
 		{
-			var type = GetCurrentType();
+			var method = GetCurrentMethod();
 
-			if (type == null)
+			if (method == null)
 				return;
 
 			cbStages.Items.Clear();
 
-			var methodData = methodStore.GetMethodData(type, false);
+			var methodData = methodStore.GetMethodData(method, false);
 
 			if (methodData == null)
 				return;
@@ -396,14 +397,14 @@ namespace Mosa.Tool.Explorer
 
 		private void UpdateDebugStages()
 		{
-			var type = GetCurrentType();
+			var method = GetCurrentMethod();
 
-			if (type == null)
+			if (method == null)
 				return;
 
 			cbDebugStages.Items.Clear();
 
-			var methodData = methodStore.GetMethodData(type, false);
+			var methodData = methodStore.GetMethodData(method, false);
 
 			if (methodData == null)
 				return;
@@ -421,14 +422,14 @@ namespace Mosa.Tool.Explorer
 
 		private void UpdateCounters()
 		{
-			var type = GetCurrentType();
+			var method = GetCurrentMethod();
 
-			if (type == null)
+			if (method == null)
 				return;
 
 			rbMethodCounters.Text = string.Empty;
 
-			var methodData = methodStore.GetMethodData(type, false);
+			var methodData = methodStore.GetMethodData(method, false);
 
 			if (methodData == null)
 				return;
@@ -456,22 +457,22 @@ namespace Mosa.Tool.Explorer
 		{
 			tbResult.Text = string.Empty;
 
-			var type = GetCurrentType();
+			var method = GetCurrentMethod();
 			var lines = GetCurrentLines();
 			var label = GetCurrentLabel();
 
-			if (type == null)
+			if (method == null)
 				return;
 
-			SetStatus(type.FullName);
+			SetStatus(method.FullName);
 
 			if (lines == null)
 				return;
 
 			if (string.IsNullOrWhiteSpace(label) || label == "All")
-				tbResult.Text = methodStore.GetStageInstructions(lines, string.Empty);
+				tbResult.Text = methodStore.GetStageInstructions(lines, string.Empty, !showOperandTypes.Checked, padInstructions.Checked);
 			else
-				tbResult.Text = methodStore.GetStageInstructions(lines, label);
+				tbResult.Text = methodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked);
 		}
 
 		private void UpdateDebugResults()
@@ -490,18 +491,20 @@ namespace Mosa.Tool.Explorer
 		{
 			tbResult.Text = string.Empty;
 
-			var type = GetCurrentType();
+			var method = GetCurrentMethod();
 
-			if (type == null)
+			if (method == null)
 				return;
 
 			PreCompile();
 
-			if (!Compiler.CompilationScheduler.IsScheduled(type))
+			if (!Compiler.CompilationScheduler.IsScheduled(method))
 			{
-				Compiler.Schedule(type);
+				Compiler.Schedule(method);
 				Compiler.Compile();
 			}
+
+			UpdateTree(method);
 
 			UpdateStages();
 			UpdateDebugStages();
@@ -568,17 +571,12 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private void ToolStripButton3_Click(object sender, EventArgs e)
-		{
-			Compile();
-		}
-
 		private void CbLabels_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			UpdateResults();
 		}
 
-		private string CreateText(List<string> list)
+		private static string CreateText(List<string> list)
 		{
 			if (list == null)
 				return string.Empty;
@@ -608,9 +606,11 @@ namespace Mosa.Tool.Explorer
 		{
 			SubmitTraceEvent(compilerEvent, message, threadID);
 
-			MethodInvoker call = () => SubmitTraceEventGUI(compilerEvent, message);
-
-			Invoke(call);
+			if (compilerEvent != CompilerEvent.DebugInfo)
+			{
+				MethodInvoker call = () => SubmitTraceEventGUI(compilerEvent, message);
+				Invoke(call);
+			}
 		}
 
 		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
@@ -642,6 +642,13 @@ namespace Mosa.Tool.Explorer
 			{
 				methodStore.SetInstructionTraceInformation(traceLog.Method, traceLog.Stage, traceLog.Lines);
 			}
+		}
+
+		void ITraceListener.OnMethodcompiled(MosaMethod method)
+		{
+			//MethodInvoker call = () => UpdateTree(method);
+
+			//Invoke(call);
 		}
 
 		protected void LoadAssemblyDebugInfo(string assemblyFileName)
@@ -687,9 +694,9 @@ namespace Mosa.Tool.Explorer
 
 		private void DumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var type = GetCurrentType();
+			var method = GetCurrentMethod();
 
-			if (type == null)
+			if (method == null)
 				return;
 
 			if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
@@ -735,6 +742,21 @@ namespace Mosa.Tool.Explorer
 		private void CbPlatform_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			//
+		}
+
+		private void showSizesToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			CreateTree();
+		}
+
+		private void padInstructions_CheckStateChanged(object sender, EventArgs e)
+		{
+			UpdateResults();
+		}
+
+		private void showOperandTypes_CheckStateChanged(object sender, EventArgs e)
+		{
+			UpdateResults();
 		}
 	}
 }

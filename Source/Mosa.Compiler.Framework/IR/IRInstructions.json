@@ -158,7 +158,14 @@
 			"ResultType": "Boolean"
 		},
 		{
-			"Name": "CompareIntegerBranch",
+			"Name": "CompareIntegerBranch32",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 0,
+			"FlowControl": "ConditionalBranch"
+		},
+		{
+			"Name": "CompareIntegerBranch64",
 			"FamilyName": "IR",
 			"ResultCount": 2,
 			"OperandCount": 0,

@@ -30,7 +30,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.CompareFloatR4, CompareFloatR4);
 			AddVisitation(IRInstruction.CompareFloatR8, CompareFloatR8);
 			AddVisitation(IRInstruction.CompareInteger32x32, CompareInteger32x32);
-			AddVisitation(IRInstruction.CompareIntegerBranch, CompareIntegerBranch);
+			AddVisitation(IRInstruction.CompareIntegerBranch32, CompareIntegerBranch32);
 			AddVisitation(IRInstruction.LoadCompound, LoadCompound);
 			AddVisitation(IRInstruction.MoveCompound, MoveCompound);
 			AddVisitation(IRInstruction.StoreCompound, StoreCompound);
@@ -198,7 +198,7 @@ namespace Mosa.Platform.x86.Stages
 			//context.AppendInstruction(X86.Mov32, resultOperand, v1);
 		}
 
-		private void CompareIntegerBranch(Context context)
+		private void CompareIntegerBranch32(Context context)
 		{
 			var target = context.BranchTargets[0];
 			var condition = context.ConditionCode;

@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -41,11 +40,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (context.Instruction == IRInstruction.Phi)
 					{
-						//Debug.Assert(context.OperandCount == context.BasicBlock.PreviousBlocks.Count);
-						if (context.OperandCount != context.Block.PreviousBlocks.Count)
-						{
-							throw new CompilerException(context.ToString());
-						}
+						Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
+						//if (context.OperandCount != context.Block.PreviousBlocks.Count)
+						//{
+						//	throw new CompilerException(context.ToString());
+						//}
 
 						ProcessPhiInstruction(context);
 					}
@@ -124,7 +123,8 @@ namespace Mosa.Compiler.Framework.Stages
 			context.GotoPrevious();
 
 			while (context.IsEmpty
-				|| context.Instruction == IRInstruction.CompareIntegerBranch
+				|| context.Instruction == IRInstruction.CompareIntegerBranch32
+				|| context.Instruction == IRInstruction.CompareIntegerBranch64
 				|| context.Instruction == IRInstruction.Jmp)
 			{
 				context.GotoPrevious();

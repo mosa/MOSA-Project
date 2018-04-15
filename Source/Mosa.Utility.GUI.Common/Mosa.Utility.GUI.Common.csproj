@@ -51,7 +51,6 @@
     <Compile Include="MethodStore.cs" />
     <Compile Include="TypeSystemTree.cs" />
     <Compile Include="MethodData.cs" />
-    <Compile Include="ViewNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">

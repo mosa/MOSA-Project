@@ -430,7 +430,8 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				var node = instructionWorkList.Pop();
 
-				if (node.Instruction == IRInstruction.CompareIntegerBranch)
+				if (node.Instruction == IRInstruction.CompareIntegerBranch32
+					|| node.Instruction == IRInstruction.CompareIntegerBranch64)
 				{
 					// special case
 					ProcessInstructionsContinuiously(node);
@@ -545,7 +546,8 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Jmp(node);
 			}
-			else if (instruction == IRInstruction.CompareIntegerBranch)
+			else if (instruction == IRInstruction.CompareIntegerBranch32
+				|| instruction == IRInstruction.CompareIntegerBranch64)
 			{
 				return CompareIntegerBranch(node);
 			}

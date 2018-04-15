@@ -13,8 +13,7 @@ using System.Threading;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// Base class for just-in-time and ahead-of-time compilers, which use
-	/// the Mosa.Compiler.Framework framework.
+	/// Mosa Compiler
 	/// </summary>
 	public sealed class Compiler
 	{
@@ -153,9 +152,10 @@ namespace Mosa.Compiler.Framework
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
 				new LowerIRStage(),
 				(compilerOptions.IRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongExpansionStage() : null,
-				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
+				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
+				new BlockMergeStage(),
 				new IRCleanupStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 				new DevirtualizeCallStage(),
@@ -237,6 +237,9 @@ namespace Mosa.Compiler.Framework
 			var methodCompiler = GetMethodCompiler(method, basicBlocks, threadID);
 
 			methodCompiler.Compile();
+
+			NewCompilerTraceEvent(CompilerEvent.CompiledMethod, method.FullName, threadID);
+			CompilerTrace.TraceListener.OnMethodcompiled(method);
 		}
 
 		private MethodCompiler GetMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0)

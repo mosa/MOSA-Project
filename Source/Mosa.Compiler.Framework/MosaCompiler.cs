@@ -41,11 +41,6 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		/// <summary>
-		/// Gets a list of input file names.
-		/// </summary>
-		/// <param name="inputFiles">The input files.</param>
-		/// <returns></returns>
 		private static IEnumerable<string> GetInputFileNames(List<FileInfo> inputFiles)
 		{
 			foreach (var file in inputFiles)

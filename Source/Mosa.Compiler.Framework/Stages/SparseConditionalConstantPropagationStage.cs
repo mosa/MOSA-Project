@@ -128,9 +128,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			EmptyBlockOfAllInstructions(block);
 
-			UpdatePhiList(block, nextBlocks);
-
-			Debug.Assert(block.NextBlocks.Count == 0);
+			RemoveBlockFromPhiInstructions(block, nextBlocks);
 		}
 
 		protected void RemoveBranchesToDeadBlocks(BasicBlock deadBlock)
@@ -152,7 +150,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.BranchTargetsCount == 0)
 						continue;
 
-					if (node.Instruction == IRInstruction.CompareIntegerBranch)
+					if (node.Instruction == IRInstruction.CompareIntegerBranch32 || node.Instruction == IRInstruction.CompareIntegerBranch64)
 					{
 						if (trace.Active) trace.Log("*** RemoveBranchesToDeadBlocks");
 						if (trace.Active) trace.Log("REMOVED:\t" + node);

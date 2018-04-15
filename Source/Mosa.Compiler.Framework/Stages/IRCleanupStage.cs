@@ -12,12 +12,9 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			RemoveEmptyBlocks();
-
-			// TODO: merge block A & B, where A.Next contains only B, and B.Previous contains only A.
-
-			OrderBlocks();
 			RemoveNops();
+			RemoveEmptyBlocks();
+			OrderBlocks();
 		}
 
 		private void OrderBlocks()
@@ -46,7 +43,6 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					// Remove Nops
 					if (node.Instruction == IRInstruction.Nop)
 					{
 						node.Empty();

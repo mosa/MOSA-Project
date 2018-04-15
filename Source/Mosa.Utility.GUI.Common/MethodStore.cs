@@ -66,7 +66,7 @@ namespace Mosa.Utility.GUI.Common
 			}
 		}
 
-		public string GetStageInstructions(List<string> lines, string blockLabel)
+		public string GetStageInstructions(List<string> lines, string blockLabel, bool strip, bool pad)
 		{
 			var result = new StringBuilder();
 
@@ -75,10 +75,18 @@ namespace Mosa.Utility.GUI.Common
 
 			if (string.IsNullOrWhiteSpace(blockLabel))
 			{
-				foreach (var line in lines)
+				foreach (var l in lines)
 				{
+					string line = l;
+
 					if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
 						continue;
+
+					if (strip)
+						line = StripBracketContents(line);
+
+					if (pad)
+						line = PadInstruction(line);
 
 					result.Append(line);
 					result.Append("\n");
@@ -103,6 +111,12 @@ namespace Mosa.Utility.GUI.Common
 					if (line.Contains("IR.BlockStart") || line.Contains("IR.BlockEnd"))
 						continue;
 
+					if (strip)
+						line = StripBracketContents(line);
+
+					if (pad)
+						line = PadInstruction(line);
+
 					result.Append(line);
 					result.Append("\n");
 
@@ -115,5 +129,72 @@ namespace Mosa.Utility.GUI.Common
 
 			return result.ToString();
 		}
+
+		private static List<string> exceptions = new List<string>() { "NULL", "==", "!=", ">", ">=", "<", ">=" };
+
+		private string StripBracketContents(string s)
+		{
+			if (string.IsNullOrEmpty(s) || s.Length < 5)
+				return s;
+
+			if (!s.StartsWith("L_"))
+				return s;
+
+			int at = 0;
+
+			while (true)
+			{
+				int open = s.IndexOf(" [", at);
+
+				if (open < 0)
+					return s;
+
+				int close = s.IndexOf(']', open);
+
+				if (close < 0)
+					return s;
+
+				var part = s.Substring(open + 2, close - open - 2);
+
+				if (exceptions.Contains(part))
+				{
+					at = close;
+					continue;
+				}
+
+				s = s.Remove(open, close - open + 1);
+
+				at = open;
+			}
+		}
+
+		private string PadInstruction(string s)
+		{
+			const int padding = 30;
+
+			if (string.IsNullOrEmpty(s) || s.Length < 5)
+				return s;
+
+			if (!s.StartsWith("L_"))
+				return s;
+
+			int first = s.IndexOf(' ');
+
+			if (first < 0 || s.Length == first + 1)
+				return s;
+
+			int second = s.IndexOf(' ', first + 1);
+
+			if (second < 0)
+				return s;
+
+			if (second > padding)
+				return s;
+
+			s = s.Insert(second, new string(' ', padding - second));
+
+			return s;
+		}
+
 	}
 }

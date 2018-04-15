@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Trace.BuiltIn
@@ -16,6 +17,10 @@ namespace Mosa.Compiler.Trace.BuiltIn
 		}
 
 		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
+		{
+		}
+
+		void ITraceListener.OnMethodcompiled(MosaMethod method)
 		{
 		}
 	}

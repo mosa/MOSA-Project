@@ -98,7 +98,7 @@ namespace Mosa.Utility.Launcher
 		[Option("inline-level")]
 		public string InlinedIRMaximumHelper { set { InlinedIRMaximum = (int)value.ParseHexOrDecimal(); } }
 
-		[Option("all-optimization-off")]
+		[Option("all-optimizations-off")]
 		public bool AllOptimizationsOffHelper
 		{
 			set
@@ -310,7 +310,7 @@ namespace Mosa.Utility.Launcher
 			FileSystem = FileSystem.FAT16;
 			BaseAddress = 0x00400000;
 			SerialConnectionHost = "127.0.0.1";
-			InlinedIRMaximum = 8;
+			InlinedIRMaximum = 12;
 			LaunchVM = true;
 			IRLongExpansion = true;
 			TwoPassOptimizations = true;

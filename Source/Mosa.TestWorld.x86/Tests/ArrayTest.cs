@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.TestWorld.x86.Tests
@@ -25,6 +24,23 @@ namespace Mosa.TestWorld.x86.Tests
 			foreach (var i in iList)
 				result += i;
 			return result == 9;
+		}
+
+		public static bool GenericInterfaceTest2()
+		{
+			return GenericInterfaceTest2a() == 9;
+		}
+
+		private static int GenericInterfaceTest2a()
+		{
+			int[] list = new int[] { 1, 3, 5 };
+			IList<int> iList = list;
+
+			int result = 0;
+			foreach (var i in iList)
+				result += i;
+
+			return result;
 		}
 
 		public static bool ArrayBoundsCheck()

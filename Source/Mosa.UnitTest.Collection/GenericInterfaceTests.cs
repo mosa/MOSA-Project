@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
+
 namespace Mosa.UnitTest.Collection
 {
 	public interface IInterfaceAA<T>
@@ -43,6 +45,18 @@ namespace Mosa.UnitTest.Collection
 		{
 			IInterfaceBB<int> bb = new GenericInterfaceTestClass<int>();
 			return bb.Get(value);
+		}
+
+		public static int InterfaceTest4()
+		{
+			int[] list = new int[] { 1, 3, 5 };
+			IList<int> iList = list;
+
+			int result = 0;
+			foreach (var i in iList)
+				result += i;
+
+			return result;
 		}
 	}
 }

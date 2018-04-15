@@ -522,37 +522,48 @@ namespace Mosa.Compiler.Framework
 		{
 			//Block.DebugCheck();
 
-			node.Block = Block;
 			var firstnode = node;
+			var lastnode = node;
+
+			node.Block = Block;
 
 			while (firstnode.Previous != null)
 			{
-				firstnode.Block = Block;
 				firstnode = firstnode.Previous;
+				firstnode.Block = Block;
 			}
-
-			var lastnode = firstnode;
 
 			while (lastnode.Next != null)
 			{
-				lastnode.Block = Block;
 				lastnode = lastnode.Next;
+				lastnode.Block = Block;
 			}
 
-			Debug.Assert(!firstnode.IsBlockStartInstruction);
-			Debug.Assert(!firstnode.IsBlockEndInstruction);
-			Debug.Assert(!lastnode.IsBlockStartInstruction);
-			Debug.Assert(!lastnode.IsBlockEndInstruction);
-
 			lastnode.Next = Next;
+			firstnode.Previous = this;
+
 			Next.Previous = lastnode;
 			Next = firstnode;
-			firstnode.Previous = this;
 
 			Debug.Assert(this != Next);
 			Debug.Assert(this != Previous);
 
 			//Block.DebugCheck();
+		}
+
+		public void CutFrom(InstructionNode startNode, InstructionNode endNode)
+		{
+			var cutBlock = startNode.Previous.Block;
+
+			startNode.Previous.Next = endNode.Next;
+			endNode.Next.Previous = startNode.Previous;
+
+			//cutBlock.DebugCheck();
+
+			startNode.Previous = null;
+			endNode.Next = null;
+
+			Insert(startNode);
 		}
 
 		/// <summary>
@@ -589,7 +600,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="newblock">The newblock.</param>
 		public void Split(BasicBlock newblock)
 		{
-			//			Debug.Assert(!IsBlockEndInstruction);
+			//Debug.Assert(!IsBlockEndInstruction);
 
 			if (Next == Block.Last)
 				return;
@@ -614,8 +625,8 @@ namespace Mosa.Compiler.Framework
 				node.Block = newblock;
 			}
 
-			//	Block.DebugCheck();
-			//	newblock.DebugCheck();
+			//Block.DebugCheck();
+			//newblock.DebugCheck();
 		}
 
 		private void ClearOperands()
