@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -12,12 +13,10 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			RemoveEmptyBlocks();
-
-			// TODO: merge block A & B, where A.Next contains only B, and B.Previous contains only A.
-
-			OrderBlocks();
 			RemoveNops();
+			RemoveEmptyBlocks();
+			MergeBlocks();
+			OrderBlocks();
 		}
 
 		private void OrderBlocks()
@@ -46,11 +45,59 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					// Remove Nops
 					if (node.Instruction == IRInstruction.Nop)
 					{
 						node.Empty();
 					}
+				}
+			}
+		}
+
+		private void MergeBlocks()
+		{
+			var changed = true;
+
+			while (changed)
+			{
+				changed = false;
+
+				foreach (var block in BasicBlocks)
+				{
+					if (block.IsEpilogue
+						|| block.IsPrologue
+						|| block.IsTryHeadBlock
+						|| block.IsHandlerHeadBlock
+						|| !block.IsCompilerBlock)
+						continue;
+
+					if (block.NextBlocks.Count != 1)
+						continue;
+
+					var next = block.NextBlocks[0];
+
+					if (next.PreviousBlocks.Count != 1)
+						continue;
+
+					if (next.IsEpilogue
+						|| next.IsPrologue
+						|| next.IsTryHeadBlock
+						|| next.IsHandlerHeadBlock
+						|| !next.IsCompilerBlock)
+						continue;
+
+					var insertPoint = block.BeforeLast.GoBackwardsToNonEmpty();
+
+					var beforeInsertPoint = insertPoint.Previous.GoBackwardsToNonEmpty();
+
+					if (beforeInsertPoint.BranchTargetsCount != 0)
+					{
+						Debug.Assert(beforeInsertPoint.BranchTargets[0] == next);
+						beforeInsertPoint.Empty();
+					}
+
+					insertPoint.Empty();
+					insertPoint.CutFrom(next.First.Next.GoForwardToNonEmpty(), next.Last.Previous.GoBackwardsToNonEmpty());
+					changed = true;
 				}
 			}
 		}

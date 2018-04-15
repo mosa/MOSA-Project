@@ -26,5 +26,11 @@ namespace Mosa.UnitTest.Collection.xUnit
 		{
 			Assert.Equal(GenericInterfaceTests.InterfaceTest3(i), Run<int>("Mosa.UnitTest.Collection.GenericInterfaceTests.InterfaceTest3", i));
 		}
+
+		[Fact]
+		public void InterfaceTest4()
+		{
+			Assert.Equal(GenericInterfaceTests.InterfaceTest4(), Run<int>("Mosa.UnitTest.Collection.GenericInterfaceTests.InterfaceTest4"));
+		}
 	}
 }

@@ -23,6 +23,13 @@ namespace Mosa.Platform.x86.Stages
 			// Nothing to do
 		}
 
+		protected override void Setup()
+		{
+			base.Setup();
+
+			instructionsRemovedCount = 0;
+		}
+
 		protected override void Run()
 		{
 			bool changed = true;

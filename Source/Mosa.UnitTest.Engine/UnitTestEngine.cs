@@ -79,7 +79,7 @@ namespace Mosa.UnitTest.Engine
 				DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"),
 				FileSystem = FileSystem.FAT16,
 				UseMultiThreadingCompiler = false,
-				InlinedIRMaximum = 8,
+				InlinedIRMaximum = 12,
 				BootLoader = BootLoader.Syslinux_3_72,
 				VBEVideo = false,
 				Width = 640,

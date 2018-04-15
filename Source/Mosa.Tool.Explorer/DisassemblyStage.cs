@@ -12,6 +12,9 @@ namespace Mosa.Tool.Explorer
 	{
 		protected override void Run()
 		{
+			if (!CompilerOptions.EmitBinary)
+				return;
+
 			TraceDisassembly();
 			TracePatchRequests();
 		}
@@ -25,19 +28,13 @@ namespace Mosa.Tool.Explorer
 
 			// Determine the architecture mode
 			ArchitectureMode mode;
-			switch (this.Architecture.MachineType)
+			switch (Architecture.MachineType)
 			{
-				case Compiler.Linker.Elf.MachineType.Intel386:
-					mode = ArchitectureMode.x86_32;
-					break;
-
-				case Compiler.Linker.Elf.MachineType.IA_64:
-					mode = ArchitectureMode.x86_64;
-					break;
-
+				case Compiler.Linker.Elf.MachineType.Intel386: mode = ArchitectureMode.x86_32; break;
+				case Compiler.Linker.Elf.MachineType.IA_64: mode = ArchitectureMode.x86_64; break;
 				case Compiler.Linker.Elf.MachineType.ARM:
 				default:
-					trace.Log($"Unable to disassemble binary for machine type: {this.Architecture.MachineType}");
+					trace.Log($"Unable to disassemble binary for machine type: {Architecture.MachineType}");
 					return;
 			}
 
@@ -76,7 +73,7 @@ namespace Mosa.Tool.Explorer
 			catch (Exception e)
 			{
 				trace.Log($"Unable to continue disassembly, error encountered\r\n{e}");
-				NewCompilerTraceEvent(CompilerEvent.Error, $"Failed disassembly for method {this.MethodCompiler.Method}");
+				NewCompilerTraceEvent(CompilerEvent.Error, $"Failed disassembly for method {MethodCompiler.Method}");
 			}
 		}
 

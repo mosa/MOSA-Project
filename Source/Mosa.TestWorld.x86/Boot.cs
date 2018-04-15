@@ -167,7 +167,6 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
-
 		public unsafe static void DumpStackTrace()
 		{
 			uint depth = 0;

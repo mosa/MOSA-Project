@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///Inline Evaluation Stage
+	/// Inline Evaluation Stage
 	/// </summary>
 	public class InlineEvaluationStage : BaseMethodCompilerStage
 	{

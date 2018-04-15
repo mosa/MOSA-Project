@@ -259,6 +259,73 @@ namespace Mosa.Compiler.Framework.Stages
 			MovePhiBlockOperandToLast(context.Block);
 
 			var nextBlock = Split(context);
+			var newBlocks = CreateNewBlockContexts(4);
+
+			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op1Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op1High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			context.SetInstruction(IRInstruction.GetLow64, op0Low, operand1);
+			context.AppendInstruction(IRInstruction.GetHigh64, op0High, operand1);
+			context.AppendInstruction(IRInstruction.GetLow64, op1Low, operand2);
+			context.AppendInstruction(IRInstruction.GetHigh64, op1High, operand2);
+
+			// Compare high
+			context.AppendInstruction(IRInstruction.CompareIntegerBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
+
+			var success = CreateConstant((uint)1);
+			var failed = CreateConstant((uint)0);
+
+			// Branch if check already gave results
+			if (branch == ConditionCode.Equal)
+			{
+				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block); // failed
+			}
+			else
+			{
+				newBlocks[0].AppendInstruction(IRInstruction.CompareIntegerBranch32, branch, null, op0High, op1High, newBlocks[2].Block); // success
+				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block); // failed
+			}
+
+			// Compare low
+			newBlocks[1].AppendInstruction(IRInstruction.CompareIntegerBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block); // success
+			newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block); // failed
+
+			// Success
+			newBlocks[2].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
+
+			// Exit
+			newBlocks[3].AppendInstruction(IRInstruction.Phi, result, failed, failed, success);
+			newBlocks[3].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
+		}
+
+		private void CompareInteger64x32b(Context context)
+		{
+			Debug.Assert(context.Operand1.Is64BitInteger);
+			Debug.Assert(context.Operand2.Is64BitInteger);
+			Debug.Assert(!context.Result.Is64BitInteger);
+
+			// Note --- this breaks SSA form
+
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var branch = context.ConditionCode;
+			var branchUnsigned = context.ConditionCode.GetUnsigned();
+
+			// CHALLENGE:
+			// To maintain PHI-form, the block order must be maintained.
+			// So on the split of block (A) with new block (B), the block order and phi operands list must stay in sync
+
+			// Trick move the phi block operand to the end of the list
+			// The block B will eventually end up at the end of the block list (win-win!)
+			MovePhiBlockOperandToLast(context.Block);
+
+			var nextBlock = Split(context);
 			var newBlocks = CreateNewBlockContexts(5);
 
 			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);

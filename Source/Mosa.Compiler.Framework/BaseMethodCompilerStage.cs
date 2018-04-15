@@ -249,7 +249,9 @@ namespace Mosa.Compiler.Framework
 		{ }
 
 		protected virtual void Setup()
-		{ }
+		{
+			instructionCount = 0;
+		}
 
 		protected virtual void Run()
 		{ }

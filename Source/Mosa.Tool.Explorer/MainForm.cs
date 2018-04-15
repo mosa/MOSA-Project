@@ -221,7 +221,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
 			Compiler.CompilerOptions.EnableInlinedMethods = cbEnableInlinedMethods.Checked;
 			Compiler.CompilerOptions.IRLongExpansion = cbEnableIRLongExpansion.Checked;
-			Compiler.CompilerOptions.InlinedIRMaximum = 8;
+			Compiler.CompilerOptions.InlinedIRMaximum = 12;
 		}
 
 		private void CleanGUI()
@@ -576,7 +576,7 @@ namespace Mosa.Tool.Explorer
 			UpdateResults();
 		}
 
-		private string CreateText(List<string> list)
+		private static string CreateText(List<string> list)
 		{
 			if (list == null)
 				return string.Empty;
