@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// Transforms 64-bit arithmetic to 32-bit operations.
+	/// Transforms 64-bit Arith to 32-bit operations.
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	/// <remarks>
@@ -22,46 +22,46 @@ namespace Mosa.Platform.x86.Stages
 		{
 			AddVisitation(IRInstruction.AddSigned64, AddUnsigned64);
 			AddVisitation(IRInstruction.AddUnsigned64, AddUnsigned64);
-			AddVisitation(IRInstruction.ArithmeticShiftRight64, ArithmeticShiftRight64);
+			AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
 			AddVisitation(IRInstruction.Call, Call);
-			AddVisitation(IRInstruction.CompareInteger64x32, CompareInteger64x32);
-			AddVisitation(IRInstruction.CompareInteger64x64, CompareInteger64x64);
-			AddVisitation(IRInstruction.CompareIntegerBranch64, CompareIntegerBranch64);
-			AddVisitation(IRInstruction.ConvertFloatR4ToInteger64, ConvertFloatR4ToInteger64);
-			AddVisitation(IRInstruction.ConvertFloatR8ToInteger64, ConvertFloatR8ToInteger64);
-			AddVisitation(IRInstruction.ConvertInteger64ToFloatR4, ConvertInteger64ToFloatR4);
-			AddVisitation(IRInstruction.ConvertInteger64ToFloatR8, ConvertInteger64ToFloatR8);
-			AddVisitation(IRInstruction.LoadInteger64, LoadInteger64);
-			AddVisitation(IRInstruction.LoadParameterInteger64, LoadParameterInteger64);
-			AddVisitation(IRInstruction.LoadParameterSignExtended16x64, LoadParameterSignExtended16x64);
-			AddVisitation(IRInstruction.LoadParameterSignExtended32x64, LoadParameterSignExtended32x64);
-			AddVisitation(IRInstruction.LoadParameterSignExtended8x64, LoadParameterSignExtended8x64);
-			AddVisitation(IRInstruction.LoadParameterZeroExtended16x64, LoadParameterZeroExtended16x64);
-			AddVisitation(IRInstruction.LoadParameterZeroExtended32x64, LoadParameterZeroExtended32x64);
-			AddVisitation(IRInstruction.LoadParameterZeroExtended8x64, LoadParameterZeroExtended8x64);
+			AddVisitation(IRInstruction.CompareInt64x32, CompareInteger64x32);
+			AddVisitation(IRInstruction.CompareInt64x64, CompareInteger64x64);
+			AddVisitation(IRInstruction.CompareIntBranch64, CompareIntegerBranch64);
+			AddVisitation(IRInstruction.ConvertFloatR4ToInt64, ConvertFloatR4ToInt64);
+			AddVisitation(IRInstruction.ConvertFloatR8ToInt64, ConvertFloatR8ToInteger64);
+			AddVisitation(IRInstruction.ConvertInt64ToFloatR4, ConvertInteger64ToFloatR4);
+			AddVisitation(IRInstruction.ConvertInt64ToFloatR8, ConvertInteger64ToFloatR8);
+			AddVisitation(IRInstruction.LoadInt64, LoadInteger64);
+			AddVisitation(IRInstruction.LoadParamInt64, LoadParamInt64);
+			AddVisitation(IRInstruction.LoadParamSignExtend16x64, LoadParamSignExtend16x64);
+			AddVisitation(IRInstruction.LoadParamSignExtend32x64, LoadParamSignExtend32x64);
+			AddVisitation(IRInstruction.LoadParamSignExtend8x64, LoadParamSignExtend8x64);
+			AddVisitation(IRInstruction.LoadParamZeroExtend16x64, LoadParamZeroExtended16x64);
+			AddVisitation(IRInstruction.LoadParamZeroExtend32x64, LoadParamZeroExtended32x64);
+			AddVisitation(IRInstruction.LoadParamZeroExtend8x64, LoadParamZeroExtended8x64);
 			AddVisitation(IRInstruction.LogicalAnd64, LogicalAnd64);
 			AddVisitation(IRInstruction.LogicalNot64, LogicalNot64);
 			AddVisitation(IRInstruction.LogicalOr64, LogicalOr64);
 			AddVisitation(IRInstruction.LogicalXor64, LogicalXor64);
-			AddVisitation(IRInstruction.MoveInteger64, MoveInteger64);
+			AddVisitation(IRInstruction.MoveInt64, MoveInteger64);
 			AddVisitation(IRInstruction.MulSigned64, MulSigned64);
 			AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
 			AddVisitation(IRInstruction.ShiftLeft64, ShiftLeft64);
 			AddVisitation(IRInstruction.ShiftRight64, ShiftRight64);
-			AddVisitation(IRInstruction.SignExtended16x64, SignExtended16x64);
-			AddVisitation(IRInstruction.SignExtended32x64, SignExtended32x64);
-			AddVisitation(IRInstruction.SignExtended8x64, SignExtended8x64);
+			AddVisitation(IRInstruction.SignExtend16x64, SignExtend16x64);
+			AddVisitation(IRInstruction.SignExtend32x64, SignExtend32x64);
+			AddVisitation(IRInstruction.SignExtend8x64, SignExtend8x64);
 			AddVisitation(IRInstruction.GetHigh64, GetHigh64);
 			AddVisitation(IRInstruction.GetLow64, GetLow64);
-			AddVisitation(IRInstruction.StoreInteger64, StoreInteger64);
-			AddVisitation(IRInstruction.StoreParameterInteger64, StoreParameterInteger64);
+			AddVisitation(IRInstruction.StoreInt64, StoreInteger64);
+			AddVisitation(IRInstruction.StoreParamInt64, StoreParamInteger64);
 			AddVisitation(IRInstruction.SubSigned64, SubUnsigned64);
 			AddVisitation(IRInstruction.SubUnsigned64, SubUnsigned64);
 			AddVisitation(IRInstruction.To64, To64);
 			AddVisitation(IRInstruction.Truncation64x32, Truncation64x32);
-			AddVisitation(IRInstruction.ZeroExtended16x64, ZeroExtended16x64);
-			AddVisitation(IRInstruction.ZeroExtended32x64, ZeroExtended32x64);
-			AddVisitation(IRInstruction.ZeroExtended8x64, ZeroExtended8x64);
+			AddVisitation(IRInstruction.ZeroExtend16x64, ZeroExtended16x64);
+			AddVisitation(IRInstruction.ZeroExtend32x64, ZeroExtended32x64);
+			AddVisitation(IRInstruction.ZeroExtend8x64, ZeroExtended8x64);
 		}
 
 		protected override void Setup()
@@ -94,7 +94,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		private void ArithmeticShiftRight64(Context context)
+		private void ArithShiftRight64(Context context)
 		{
 			var count = context.Operand2;
 
@@ -210,7 +210,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 
-		private void ConvertFloatR4ToInteger64(Context context)
+		private void ConvertFloatR4ToInt64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
 
@@ -334,7 +334,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.MovLoad32, op0H, address, v1);
 		}
 
-		private void LoadParameterInteger64(Context context)
+		private void LoadParamInt64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
 			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
@@ -343,7 +343,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.MovLoad32, hiResult, StackFrame, highOffset);
 		}
 
-		private void LoadParameterSignExtended16x64(Context context)
+		private void LoadParamSignExtend16x64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
 			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
@@ -352,7 +352,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction2(X86.Cdq, hiResult, lowResult, lowResult);
 		}
 
-		private void LoadParameterSignExtended32x64(Context context)
+		private void LoadParamSignExtend32x64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
 			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
@@ -361,7 +361,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction2(X86.Cdq, hiResult, lowResult, lowResult);
 		}
 
-		private void LoadParameterSignExtended8x64(Context context)
+		private void LoadParamSignExtend8x64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
 			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
@@ -370,7 +370,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction2(X86.Cdq, hiResult, lowResult, lowResult);
 		}
 
-		private void LoadParameterZeroExtended16x64(Context context)
+		private void LoadParamZeroExtended16x64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
 			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
@@ -379,7 +379,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.MovConst32, hiResult, ConstantZero);
 		}
 
-		private void LoadParameterZeroExtended32x64(Context context)
+		private void LoadParamZeroExtended32x64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
 			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
@@ -388,7 +388,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.MovConst32, hiResult, ConstantZero);
 		}
 
-		private void LoadParameterZeroExtended8x64(Context context)
+		private void LoadParamZeroExtended8x64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand lowResult, out Operand hiResult);
 			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
@@ -565,7 +565,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 
-		private void SignExtended16x64(Context context)
+		private void SignExtend16x64(Context context)
 		{
 			Operand op0 = context.Result;
 			Operand op1 = context.Operand1;
@@ -582,7 +582,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov32, op0H, v3);
 		}
 
-		private void SignExtended32x64(Context context)
+		private void SignExtend32x64(Context context)
 		{
 			Operand op0 = context.Result;
 			Operand op1 = context.Operand1;
@@ -599,7 +599,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov32, op0H, v3);
 		}
 
-		private void SignExtended8x64(Context context)
+		private void SignExtend8x64(Context context)
 		{
 			Operand op0 = context.Result;
 			Operand op1 = context.Operand1;
@@ -666,7 +666,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.MovStore32, null, address, v1, op3H);
 		}
 
-		private void StoreParameterInteger64(Context context)
+		private void StoreParamInteger64(Context context)
 		{
 			SplitLongOperand(context.Operand1, out Operand op0L, out Operand op0H);
 			SplitLongOperand(context.Operand2, out Operand op1L, out Operand op1H);

@@ -21,7 +21,7 @@ namespace Mosa.Platform.x86.Intrinsic
 				// try to find the constant - a bit of a hack
 				var ctx = new Context(operand.Definitions[0]);
 
-				if ((ctx.Instruction == IRInstruction.MoveInteger64 || ctx.Instruction == IRInstruction.MoveInteger32) && ctx.Operand1.IsConstant)
+				if ((ctx.Instruction == IRInstruction.MoveInt64 || ctx.Instruction == IRInstruction.MoveInt32) && ctx.Operand1.IsConstant)
 				{
 					operand = ctx.Operand1;
 				}
@@ -39,7 +39,7 @@ namespace Mosa.Platform.x86.Intrinsic
 				throw new CompilerException();
 			}
 
-			context.SetInstruction(IRInstruction.MoveInteger32, context.Result, Operand.CreateSymbolFromMethod(method, methodCompiler.TypeSystem));
+			context.SetInstruction(IRInstruction.MoveInt32, context.Result, Operand.CreateSymbolFromMethod(method, methodCompiler.TypeSystem));
 		}
 	}
 }

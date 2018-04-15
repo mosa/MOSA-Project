@@ -1023,59 +1023,6 @@ namespace Mosa.Compiler.Framework
 
 			var sb = new StringBuilder();
 
-			if (IsVirtualRegister)
-			{
-				if (!HasLongParent)
-				{
-					sb.AppendFormat("v{0}", Index);
-				}
-				else
-				{
-					if (LongParent.IsSSA)
-					{
-						sb.AppendFormat("v{0}<v{1}{2}>", Index, LongParent.SSAParent.Index, IsHigh ? "H" : "L");
-					}
-					else
-					{
-						sb.AppendFormat("v{0}<v{1}{2}>", Index, LongParent.Index, IsHigh ? "H" : "L");
-					}
-				}
-			}
-			else if (IsParameter)
-			{
-				if (!HasLongParent)
-				{
-					sb.AppendFormat("p{0}", Index);
-				}
-				else
-				{
-					sb.AppendFormat("p{0}<p{1}{2}>", Index, LongParent.Index, IsHigh ? "H" : "L");
-				}
-			}
-			else if (IsStackLocal && Name == null)
-			{
-				if (!HasLongParent)
-				{
-					sb.AppendFormat("t{0}", Index);
-				}
-				else
-				{
-					sb.AppendFormat("t{0}<t{1}{2}>", Index, LongParent.Index, IsHigh ? "H" : "L");
-				}
-			}
-			else if (IsStaticField)
-			{
-				sb.Append(" <");
-				sb.Append(Field.FullName);
-				sb.Append("> ");
-			}
-			else if (Name != null)
-			{
-				sb.Append(" <");
-				sb.Append(Name);
-				sb.Append("> ");
-			}
-
 			if (IsConstant)
 			{
 				sb.Append(" const=");
@@ -1120,6 +1067,59 @@ namespace Mosa.Compiler.Framework
 			else if (IsCPURegister)
 			{
 				sb.AppendFormat(" {0}", Register);
+			}
+
+			if (IsVirtualRegister)
+			{
+				if (!HasLongParent)
+				{
+					sb.AppendFormat("v{0}", Index);
+				}
+				else
+				{
+					if (LongParent.IsSSA)
+					{
+						sb.AppendFormat("v{0}<v{1}{2}>", Index, LongParent.SSAParent.Index, IsHigh ? "H" : "L");
+					}
+					else
+					{
+						sb.AppendFormat("v{0}<v{1}{2}>", Index, LongParent.Index, IsHigh ? "H" : "L");
+					}
+				}
+			}
+			else if (IsParameter)
+			{
+				if (!HasLongParent)
+				{
+					sb.AppendFormat("(p{0})", Index);
+				}
+				else
+				{
+					sb.AppendFormat("(p{0}<p{1}{2}>)", Index, LongParent.Index, IsHigh ? "H" : "L");
+				}
+			}
+			else if (IsStackLocal && Name == null)
+			{
+				if (!HasLongParent)
+				{
+					sb.AppendFormat("t{0}", Index);
+				}
+				else
+				{
+					sb.AppendFormat("t{0}<t{1}{2}>", Index, LongParent.Index, IsHigh ? "H" : "L");
+				}
+			}
+			else if (IsStaticField)
+			{
+				sb.Append(" (");
+				sb.Append(Field.FullName);
+				sb.Append(") ");
+			}
+			else if (Name != null)
+			{
+				sb.Append(" (");
+				sb.Append(Name);
+				sb.Append(") ");
 			}
 
 			if (full)

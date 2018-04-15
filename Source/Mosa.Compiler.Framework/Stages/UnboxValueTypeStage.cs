@@ -42,9 +42,9 @@ namespace Mosa.Compiler.Framework.Stages
 			// Now push the this pointer by two native pointer sizes
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.TypedRef);
 
-			context.AppendInstruction(Select(IRInstruction.LoadInteger32, IRInstruction.LoadInteger64), v1, StackFrame, thisPtr);
+			context.AppendInstruction(Select(IRInstruction.LoadInt32, IRInstruction.LoadInt64), v1, StackFrame, thisPtr);
 			context.AppendInstruction(Select(IRInstruction.AddSigned32, IRInstruction.AddSigned64), v1, v1, CreateConstant(NativePointerSize * 2));
-			context.AppendInstruction(Select(IRInstruction.StoreInteger32, IRInstruction.StoreInteger64), null, StackFrame, thisPtr, v1);
+			context.AppendInstruction(Select(IRInstruction.StoreInt32, IRInstruction.StoreInt64), null, StackFrame, thisPtr, v1);
 		}
 
 		protected override void Finish()

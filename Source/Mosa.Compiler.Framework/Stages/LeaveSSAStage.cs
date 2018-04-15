@@ -123,8 +123,8 @@ namespace Mosa.Compiler.Framework.Stages
 			context.GotoPrevious();
 
 			while (context.IsEmpty
-				|| context.Instruction == IRInstruction.CompareIntegerBranch32
-				|| context.Instruction == IRInstruction.CompareIntegerBranch64
+				|| context.Instruction == IRInstruction.CompareIntBranch32
+				|| context.Instruction == IRInstruction.CompareIntBranch64
 				|| context.Instruction == IRInstruction.Jmp)
 			{
 				context.GotoPrevious();

@@ -64,21 +64,21 @@ namespace Mosa.Compiler.Framework.Stages
 						|| node.Instruction == IRInstruction.SetReturn64
 						|| node.Instruction == IRInstruction.SetReturnR4
 						|| node.Instruction == IRInstruction.SetReturnR8
-						|| node.Instruction == IRInstruction.LoadParameterCompound
-						|| node.Instruction == IRInstruction.LoadParameterInteger32
-						|| node.Instruction == IRInstruction.LoadParameterInteger64
-						|| node.Instruction == IRInstruction.LoadParameterFloatR4
-						|| node.Instruction == IRInstruction.LoadParameterFloatR4
-						|| node.Instruction == IRInstruction.LoadParameterSignExtended16x32
-						|| node.Instruction == IRInstruction.LoadParameterSignExtended16x64
-						|| node.Instruction == IRInstruction.LoadParameterSignExtended32x64
-						|| node.Instruction == IRInstruction.LoadParameterSignExtended8x32
-						|| node.Instruction == IRInstruction.LoadParameterSignExtended8x64
-						|| node.Instruction == IRInstruction.LoadParameterZeroExtended16x32
-						|| node.Instruction == IRInstruction.LoadParameterZeroExtended16x64
-						|| node.Instruction == IRInstruction.LoadParameterZeroExtended32x64
-						|| node.Instruction == IRInstruction.LoadParameterZeroExtended8x32
-						|| node.Instruction == IRInstruction.LoadParameterZeroExtended8x64
+						|| node.Instruction == IRInstruction.LoadParamCompound
+						|| node.Instruction == IRInstruction.LoadParamInt32
+						|| node.Instruction == IRInstruction.LoadParamInt64
+						|| node.Instruction == IRInstruction.LoadParamFloatR4
+						|| node.Instruction == IRInstruction.LoadParamFloatR4
+						|| node.Instruction == IRInstruction.LoadParamSignExtend16x32
+						|| node.Instruction == IRInstruction.LoadParamSignExtend16x64
+						|| node.Instruction == IRInstruction.LoadParamSignExtend32x64
+						|| node.Instruction == IRInstruction.LoadParamSignExtend8x32
+						|| node.Instruction == IRInstruction.LoadParamSignExtend8x64
+						|| node.Instruction == IRInstruction.LoadParamZeroExtend16x32
+						|| node.Instruction == IRInstruction.LoadParamZeroExtend16x64
+						|| node.Instruction == IRInstruction.LoadParamZeroExtend32x64
+						|| node.Instruction == IRInstruction.LoadParamZeroExtend8x32
+						|| node.Instruction == IRInstruction.LoadParamZeroExtend8x64
 						//|| node.Instruction == IRInstruction.Epilogue
 						//|| node.Instruction == IRInstruction.Prologue
 						|| node.Block.IsEpilogue

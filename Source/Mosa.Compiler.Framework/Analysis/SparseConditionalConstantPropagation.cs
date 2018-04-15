@@ -430,8 +430,8 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				var node = instructionWorkList.Pop();
 
-				if (node.Instruction == IRInstruction.CompareIntegerBranch32
-					|| node.Instruction == IRInstruction.CompareIntegerBranch64)
+				if (node.Instruction == IRInstruction.CompareIntBranch32
+					|| node.Instruction == IRInstruction.CompareIntBranch64)
 				{
 					// special case
 					ProcessInstructionsContinuiously(node);
@@ -449,8 +449,8 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			var instruction = node.Instruction;
 
-			if (instruction == IRInstruction.MoveInteger32
-				|| instruction == IRInstruction.MoveInteger64)
+			if (instruction == IRInstruction.MoveInt32
+				|| instruction == IRInstruction.MoveInt64)
 			{
 				Move(node);
 			}
@@ -469,37 +469,37 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Call(node);
 			}
-			else if (instruction == IRInstruction.LoadInteger32
-				|| instruction == IRInstruction.LoadInteger64
+			else if (instruction == IRInstruction.LoadInt32
+				|| instruction == IRInstruction.LoadInt64
 
-				|| instruction == IRInstruction.LoadSignExtended8x32
-				|| instruction == IRInstruction.LoadSignExtended16x32
-				|| instruction == IRInstruction.LoadSignExtended8x64
-				|| instruction == IRInstruction.LoadSignExtended16x64
-				|| instruction == IRInstruction.LoadSignExtended32x64
+				|| instruction == IRInstruction.LoadSignExtend8x32
+				|| instruction == IRInstruction.LoadSignExtend16x32
+				|| instruction == IRInstruction.LoadSignExtend8x64
+				|| instruction == IRInstruction.LoadSignExtend16x64
+				|| instruction == IRInstruction.LoadSignExtend32x64
 
-				|| instruction == IRInstruction.LoadZeroExtended8x32
-				|| instruction == IRInstruction.LoadZeroExtended16x32
-				|| instruction == IRInstruction.LoadZeroExtended8x64
-				|| instruction == IRInstruction.LoadZeroExtended16x64
-				|| instruction == IRInstruction.LoadZeroExtended32x64
+				|| instruction == IRInstruction.LoadZeroExtend8x32
+				|| instruction == IRInstruction.LoadZeroExtend16x32
+				|| instruction == IRInstruction.LoadZeroExtend8x64
+				|| instruction == IRInstruction.LoadZeroExtend16x64
+				|| instruction == IRInstruction.LoadZeroExtend32x64
 
 				|| instruction == IRInstruction.LoadFloatR4
 				|| instruction == IRInstruction.LoadFloatR8
-				|| instruction == IRInstruction.LoadParameterSignExtended8x32
-				|| instruction == IRInstruction.LoadParameterSignExtended16x32
-				|| instruction == IRInstruction.LoadParameterInteger32
-				|| instruction == IRInstruction.LoadParameterInteger64
-				|| instruction == IRInstruction.LoadParameterSignExtended8x64
-				|| instruction == IRInstruction.LoadParameterSignExtended16x64
-				|| instruction == IRInstruction.LoadParameterSignExtended32x64
-				|| instruction == IRInstruction.LoadParameterZeroExtended8x32
-				|| instruction == IRInstruction.LoadParameterZeroExtended16x32
-				|| instruction == IRInstruction.LoadParameterZeroExtended8x64
-				|| instruction == IRInstruction.LoadParameterZeroExtended16x64
-				|| instruction == IRInstruction.LoadParameterZeroExtended32x64
-				|| instruction == IRInstruction.LoadParameterFloatR4
-				|| instruction == IRInstruction.LoadParameterFloatR8)
+				|| instruction == IRInstruction.LoadParamSignExtend8x32
+				|| instruction == IRInstruction.LoadParamSignExtend16x32
+				|| instruction == IRInstruction.LoadParamInt32
+				|| instruction == IRInstruction.LoadParamInt64
+				|| instruction == IRInstruction.LoadParamSignExtend8x64
+				|| instruction == IRInstruction.LoadParamSignExtend16x64
+				|| instruction == IRInstruction.LoadParamSignExtend32x64
+				|| instruction == IRInstruction.LoadParamZeroExtend8x32
+				|| instruction == IRInstruction.LoadParamZeroExtend16x32
+				|| instruction == IRInstruction.LoadParamZeroExtend8x64
+				|| instruction == IRInstruction.LoadParamZeroExtend16x64
+				|| instruction == IRInstruction.LoadParamZeroExtend32x64
+				|| instruction == IRInstruction.LoadParamFloatR4
+				|| instruction == IRInstruction.LoadParamFloatR8)
 			{
 				Load(node);
 			}
@@ -527,14 +527,14 @@ namespace Mosa.Compiler.Framework.Analysis
 				|| instruction == IRInstruction.ShiftRight32
 				|| instruction == IRInstruction.ShiftLeft64
 				|| instruction == IRInstruction.ShiftRight64
-				|| instruction == IRInstruction.ArithmeticShiftRight32
-				|| instruction == IRInstruction.ArithmeticShiftRight64)
+				|| instruction == IRInstruction.ArithShiftRight32
+				|| instruction == IRInstruction.ArithShiftRight64)
 			{
 				IntegerOperation(node);
 			}
-			else if (instruction == IRInstruction.CompareInteger32x32
-				|| instruction == IRInstruction.CompareInteger64x32
-				|| instruction == IRInstruction.CompareInteger64x64)
+			else if (instruction == IRInstruction.CompareInt32x32
+				|| instruction == IRInstruction.CompareInt64x32
+				|| instruction == IRInstruction.CompareInt64x64)
 			{
 				CompareIntegerOperation(node);
 			}
@@ -546,8 +546,8 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Jmp(node);
 			}
-			else if (instruction == IRInstruction.CompareIntegerBranch32
-				|| instruction == IRInstruction.CompareIntegerBranch64)
+			else if (instruction == IRInstruction.CompareIntBranch32
+				|| instruction == IRInstruction.CompareIntBranch64)
 			{
 				return CompareIntegerBranch(node);
 			}
@@ -555,16 +555,16 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				AddressOf(node);
 			}
-			else if (instruction == IRInstruction.SignExtended8x32
-				|| instruction == IRInstruction.SignExtended16x32
-				|| instruction == IRInstruction.SignExtended8x64
-				|| instruction == IRInstruction.SignExtended16x64
-				|| instruction == IRInstruction.SignExtended32x64
-				|| instruction == IRInstruction.ZeroExtended8x32
-				|| instruction == IRInstruction.ZeroExtended16x32
-				|| instruction == IRInstruction.ZeroExtended8x64
-				|| instruction == IRInstruction.ZeroExtended16x64
-				|| instruction == IRInstruction.ZeroExtended32x64)
+			else if (instruction == IRInstruction.SignExtend8x32
+				|| instruction == IRInstruction.SignExtend16x32
+				|| instruction == IRInstruction.SignExtend8x64
+				|| instruction == IRInstruction.SignExtend16x64
+				|| instruction == IRInstruction.SignExtend32x64
+				|| instruction == IRInstruction.ZeroExtend8x32
+				|| instruction == IRInstruction.ZeroExtend16x32
+				|| instruction == IRInstruction.ZeroExtend8x64
+				|| instruction == IRInstruction.ZeroExtend16x64
+				|| instruction == IRInstruction.ZeroExtend32x64)
 			{
 				Move(node);
 			}
@@ -916,7 +916,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				result = (ulong)((long)operand1 % (long)operand2);
 				return true;
 			}
-			else if (instruction == IRInstruction.ArithmeticShiftRight32 || instruction == IRInstruction.ArithmeticShiftRight64)
+			else if (instruction == IRInstruction.ArithShiftRight32 || instruction == IRInstruction.ArithShiftRight64)
 			{
 				result = (ulong)(((long)operand1) >> (int)operand2);
 				return true;
@@ -931,9 +931,9 @@ namespace Mosa.Compiler.Framework.Analysis
 				result = operand1 << (int)operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.CompareInteger32x32
-				|| instruction == IRInstruction.CompareInteger64x32
-				|| instruction == IRInstruction.CompareInteger64x64)
+			else if (instruction == IRInstruction.CompareInt32x32
+				|| instruction == IRInstruction.CompareInt64x32
+				|| instruction == IRInstruction.CompareInt64x64)
 			{
 				bool? compare = Compare(operand1, operand2, conditionCode);
 

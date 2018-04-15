@@ -88,6 +88,8 @@ namespace Mosa.Utility.GUI.Common
 					if (pad)
 						line = PadInstruction(line);
 
+					line = Simplify(line);
+
 					result.Append(line);
 					result.Append("\n");
 				}
@@ -117,6 +119,8 @@ namespace Mosa.Utility.GUI.Common
 					if (pad)
 						line = PadInstruction(line);
 
+					line = Simplify(line);
+
 					result.Append(line);
 					result.Append("\n");
 
@@ -129,8 +133,6 @@ namespace Mosa.Utility.GUI.Common
 
 			return result.ToString();
 		}
-
-		private static List<string> exceptions = new List<string>() { "NULL", "==", "!=", ">", ">=", "<", ">=" };
 
 		private string StripBracketContents(string s)
 		{
@@ -156,7 +158,7 @@ namespace Mosa.Utility.GUI.Common
 
 				var part = s.Substring(open + 2, close - open - 2);
 
-				if (exceptions.Contains(part))
+				if (part == "NULL" || char.IsSymbol(part[0]))
 				{
 					at = close;
 					continue;
@@ -196,5 +198,9 @@ namespace Mosa.Utility.GUI.Common
 			return s;
 		}
 
+		private string Simplify(string s)
+		{
+			return s.Replace("const=", string.Empty);
+		}
 	}
 }

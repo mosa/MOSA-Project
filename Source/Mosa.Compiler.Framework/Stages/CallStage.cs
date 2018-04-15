@@ -21,8 +21,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			base.Setup();
 
-			loadInstruction = Select(IRInstruction.LoadInteger32, IRInstruction.LoadInteger64);
-			moveInstruction = Select(IRInstruction.MoveInteger32, IRInstruction.MoveInteger64);
+			loadInstruction = Select(IRInstruction.LoadInt32, IRInstruction.LoadInt64);
+			moveInstruction = Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64);
 		}
 
 		protected override void PopulateVisitationDictionary()
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void SetReturn32(Context context)
 		{
-			context.SetInstruction(IRInstruction.MoveInteger32, Operand.CreateCPURegister(context.Operand1.Type, Architecture.Return32BitRegister), context.Operand1);
+			context.SetInstruction(IRInstruction.MoveInt32, Operand.CreateCPURegister(context.Operand1.Type, Architecture.Return32BitRegister), context.Operand1);
 		}
 
 		private void SetReturn64(Context context)
@@ -65,12 +65,12 @@ namespace Mosa.Compiler.Framework.Stages
 				//context.SetInstruction2(IRInstruction.Split64, v1, v2, operand);
 				context.SetInstruction(IRInstruction.GetLow64, v1, operand);
 				context.AppendInstruction(IRInstruction.GetHigh64, v2, operand);
-				context.AppendInstruction(IRInstruction.MoveInteger32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return32BitRegister), v1);
-				context.AppendInstruction(IRInstruction.MoveInteger32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), v2);
+				context.AppendInstruction(IRInstruction.MoveInt32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return32BitRegister), v1);
+				context.AppendInstruction(IRInstruction.MoveInt32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), v2);
 			}
 			else
 			{
-				context.AppendInstruction(IRInstruction.MoveInteger64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), context.Operand1);
+				context.AppendInstruction(IRInstruction.MoveInt64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), context.Operand1);
 			}
 		}
 
@@ -300,7 +300,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (operand.IsInteger)
 			{
-				context.AppendInstruction(Select(operand, IRInstruction.StoreInteger32, IRInstruction.StoreInteger64), null, scratch, offsetOperand, operand);
+				context.AppendInstruction(Select(operand, IRInstruction.StoreInt32, IRInstruction.StoreInt64), null, scratch, offsetOperand, operand);
 			}
 			else if (operand.IsR4)
 			{
@@ -317,7 +317,7 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				// note: same for integer logic (above)
-				context.AppendInstruction(Select(operand, IRInstruction.StoreInteger32, IRInstruction.StoreInteger64), null, scratch, offsetOperand, operand);
+				context.AppendInstruction(Select(operand, IRInstruction.StoreInt32, IRInstruction.StoreInt64), null, scratch, offsetOperand, operand);
 			}
 		}
 
