@@ -180,12 +180,7 @@ namespace Mosa.Utility.GUI.Common
 			if (!s.StartsWith("L_"))
 				return s;
 
-			int first = s.IndexOf(' ');
-
-			if (first < 0 || s.Length == first + 1)
-				return s;
-
-			int second = s.IndexOf(' ', first + 1);
+			int second = s.IndexOf(' ', 9);
 
 			if (second < 0)
 				return s;

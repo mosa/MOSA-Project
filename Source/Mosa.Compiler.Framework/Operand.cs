@@ -1102,11 +1102,11 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!HasLongParent)
 				{
-					sb.AppendFormat("t{0}", Index);
+					sb.AppendFormat("(t{0})", Index);
 				}
 				else
 				{
-					sb.AppendFormat("t{0}<t{1}{2}>", Index, LongParent.Index, IsHigh ? "H" : "L");
+					sb.AppendFormat("(t{0}<t{1}{2}>)", Index, LongParent.Index, IsHigh ? "H" : "L");
 				}
 			}
 			else if (IsStaticField)
