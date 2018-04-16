@@ -189,6 +189,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			method.HasExplicitThis = methodDef.ExplicitThis;
 			method.IsInternalCall = methodDef.IsInternalCall;
 			method.IsNoInlining = methodDef.IsNoInlining;
+			method.IsAggressiveInlining = methodDef.IsAggressiveInlining;
 			method.IsSpecialName = methodDef.IsSpecialName;
 			method.IsRTSpecialName = methodDef.IsRuntimeSpecialName;
 			method.IsVirtual = methodDef.IsVirtual;

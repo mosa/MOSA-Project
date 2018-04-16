@@ -30,7 +30,8 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.IsCILDecoded = (!method.IsLinkerGenerated && method.Code.Count > 0);
 			MethodData.HasLoops = false;
 			MethodData.IsPlugged = IsPlugged;
-			MethodData.HasDoNotInlineAttribute = false;
+			MethodData.HasDoNotInlineAttribute = MethodCompiler.Method.IsNoInlining;
+			MethodData.HasAggressiveInliningAttribute = MethodCompiler.Method.IsAggressiveInlining;
 			MethodData.HasAddressOfInstruction = false;
 			MethodData.IsVirtual = method.IsVirtual;
 			MethodData.IsDevirtualized = (method.IsVirtual && !TypeLayout.IsMethodOverridden(method));
@@ -39,80 +40,68 @@ namespace Mosa.Compiler.Framework.Stages
 			int totalNonIRCount = 0;
 			int totalStackParameterInstruction = 0;
 
-			foreach (var block in BasicBlocks)
+			if (!MethodCompiler.Method.IsNoInlining)
 			{
-				for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+				foreach (var block in BasicBlocks)
 				{
-					if (node.IsEmpty)
-						continue;
-
-					if (node.Instruction is BaseIRInstruction)
+					for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 					{
-						totalIRCount++;
-					}
-					else
-					{
-						totalNonIRCount++;
+						if (node.IsEmpty)
+							continue;
+
+						if (node.Instruction is BaseIRInstruction)
+						{
+							totalIRCount++;
+						}
+						else
+						{
+							totalNonIRCount++;
+						}
+
+						if (node.Instruction == IRInstruction.AddressOf)
+						{
+							MethodData.HasAddressOfInstruction = true;
+						}
+
+						if (node.Instruction == IRInstruction.SetReturn32
+							|| node.Instruction == IRInstruction.SetReturn64
+							|| node.Instruction == IRInstruction.SetReturnR4
+							|| node.Instruction == IRInstruction.SetReturnR8
+							|| node.Instruction == IRInstruction.LoadParamCompound
+							|| node.Instruction == IRInstruction.LoadParamInt32
+							|| node.Instruction == IRInstruction.LoadParamInt64
+							|| node.Instruction == IRInstruction.LoadParamFloatR4
+							|| node.Instruction == IRInstruction.LoadParamFloatR4
+							|| node.Instruction == IRInstruction.LoadParamSignExtend16x32
+							|| node.Instruction == IRInstruction.LoadParamSignExtend16x64
+							|| node.Instruction == IRInstruction.LoadParamSignExtend32x64
+							|| node.Instruction == IRInstruction.LoadParamSignExtend8x32
+							|| node.Instruction == IRInstruction.LoadParamSignExtend8x64
+							|| node.Instruction == IRInstruction.LoadParamZeroExtend16x32
+							|| node.Instruction == IRInstruction.LoadParamZeroExtend16x64
+							|| node.Instruction == IRInstruction.LoadParamZeroExtend32x64
+							|| node.Instruction == IRInstruction.LoadParamZeroExtend8x32
+							|| node.Instruction == IRInstruction.LoadParamZeroExtend8x64
+							//|| node.Instruction == IRInstruction.Epilogue
+							//|| node.Instruction == IRInstruction.Prologue
+							|| node.Block.IsEpilogue
+							|| node.Block.IsPrologue
+							)
+						{
+							totalStackParameterInstruction++;
+						}
 					}
 
-					if (node.Instruction == IRInstruction.AddressOf)
+					if (block.PreviousBlocks.Count > 1)
 					{
-						MethodData.HasAddressOfInstruction = true;
+						MethodData.HasLoops = true;
 					}
-
-					if (node.Instruction == IRInstruction.SetReturn32
-						|| node.Instruction == IRInstruction.SetReturn64
-						|| node.Instruction == IRInstruction.SetReturnR4
-						|| node.Instruction == IRInstruction.SetReturnR8
-						|| node.Instruction == IRInstruction.LoadParamCompound
-						|| node.Instruction == IRInstruction.LoadParamInt32
-						|| node.Instruction == IRInstruction.LoadParamInt64
-						|| node.Instruction == IRInstruction.LoadParamFloatR4
-						|| node.Instruction == IRInstruction.LoadParamFloatR4
-						|| node.Instruction == IRInstruction.LoadParamSignExtend16x32
-						|| node.Instruction == IRInstruction.LoadParamSignExtend16x64
-						|| node.Instruction == IRInstruction.LoadParamSignExtend32x64
-						|| node.Instruction == IRInstruction.LoadParamSignExtend8x32
-						|| node.Instruction == IRInstruction.LoadParamSignExtend8x64
-						|| node.Instruction == IRInstruction.LoadParamZeroExtend16x32
-						|| node.Instruction == IRInstruction.LoadParamZeroExtend16x64
-						|| node.Instruction == IRInstruction.LoadParamZeroExtend32x64
-						|| node.Instruction == IRInstruction.LoadParamZeroExtend8x32
-						|| node.Instruction == IRInstruction.LoadParamZeroExtend8x64
-						//|| node.Instruction == IRInstruction.Epilogue
-						//|| node.Instruction == IRInstruction.Prologue
-						|| node.Block.IsEpilogue
-						|| node.Block.IsPrologue
-						)
-					{
-						totalStackParameterInstruction++;
-					}
-				}
-
-				if (block.PreviousBlocks.Count > 1)
-				{
-					MethodData.HasLoops = true;
 				}
 			}
 
 			MethodData.IRInstructionCount = totalIRCount;
 			MethodData.NonIRInstructionCount = totalNonIRCount;
 			MethodData.IRStackParameterInstructionCount = totalStackParameterInstruction;
-
-			MethodData.HasDoNotInlineAttribute = MethodCompiler.Method.IsNoInlining;
-
-			//if (!compilerMethod.HasDoNotInlineAttribute)
-			//{
-			//	// check attribute
-			//	// BUG: does not find the attribute
-			//	var methodAttribute = method.FindCustomAttribute(InlineMethodAttribute);
-
-			//	//TODO: check for specific attribute: System.Runtime.CompilerServices.MethodImplOptions.NoInlining
-			//	if (methodAttribute != null)
-			//	{
-			//		compilerMethod.HasDoNotInlineAttribute = true;
-			//	}
-			//}
 
 			MethodData.CanInline = CanInline(MethodData);
 
@@ -149,6 +138,7 @@ namespace Mosa.Compiler.Framework.Stages
 			trace.Log("InlinedIRMaximum: " + CompilerOptions.InlinedIRMaximum.ToString());
 			trace.Log("NonIRInstructionCount: " + MethodData.NonIRInstructionCount.ToString());
 			trace.Log("HasDoNotInlineAttribute: " + MethodData.HasDoNotInlineAttribute.ToString());
+			trace.Log("HasAggressiveInliningAttribute: " + MethodData.HasAggressiveInliningAttribute.ToString());
 			trace.Log("IsPlugged: " + MethodData.IsPlugged.ToString());
 			trace.Log("HasAddressOfInstruction: " + MethodData.HasAddressOfInstruction.ToString());
 
@@ -183,8 +173,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (method.NonIRInstructionCount > 0)
 				return false;
 
-			if ((method.IRInstructionCount - method.IRStackParameterInstructionCount) > CompilerOptions.InlinedIRMaximum)
-				//if (method.IRInstructionCount > CompilerOptions.InlinedIRMaximum)
+			// methods with aggressive inline attribute will double the IR instruction cout
+			int max = !method.HasAggressiveInliningAttribute ? CompilerOptions.InlinedIRMaximum : (CompilerOptions.InlinedIRMaximum * 2);
+
+			if ((method.IRInstructionCount - method.IRStackParameterInstructionCount) > max)
 				return false;
 
 			var returnType = method.Method.Signature.ReturnType;
