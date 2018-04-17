@@ -177,10 +177,15 @@ namespace Mosa.Utility.GUI.Common
 			if (string.IsNullOrEmpty(s) || s.Length < 5)
 				return s;
 
-			if (!s.StartsWith("L_"))
+			if (!char.IsDigit(s[0]))
 				return s;
 
-			int second = s.IndexOf(' ', 9);
+			int first = s.IndexOf(':');
+
+			if (first < 0 || first > 15)
+				return s;
+
+			int second = s.IndexOf(' ', first + 2);
 
 			if (second < 0)
 				return s;

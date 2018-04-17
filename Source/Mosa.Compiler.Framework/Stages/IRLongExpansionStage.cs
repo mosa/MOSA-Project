@@ -3,6 +3,7 @@
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -25,6 +26,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			//AddVisitation(IRInstruction.CompareInt64x64, CompareInteger64x64);
 			//AddVisitation(IRInstruction.CompareInt64x32, CompareInteger64x32);
+			AddVisitation(IRInstruction.CompareInt64x32, CompareInteger64x32InSSA);
+
+			//AddVisitation(IRInstruction.CompareIntBranch64, CompareIntBranch64);
 		}
 
 		#region Visitation Methods
@@ -235,7 +239,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.To64, context.Result, context.Operand1, ConstantZero);
 		}
 
-		private void CompareInteger64x32(Context context)
+		private void CompareInteger64x32InSSA(Context context)
 		{
 			Debug.Assert(context.Operand1.Is64BitInteger);
 			Debug.Assert(context.Operand2.Is64BitInteger);
@@ -250,16 +254,11 @@ namespace Mosa.Compiler.Framework.Stages
 			var branch = context.ConditionCode;
 			var branchUnsigned = context.ConditionCode.GetUnsigned();
 
-			// CHALLENGE:
-			// To maintain PHI-form, the block order must be maintained.
-			// So on the split of block (A) with new block (B), the block order and phi operands list must stay in sync
-
-			// Trick move the phi block operand to the end of the list
-			// The block B will eventually end up at the end of the block list (win-win!)
-			MovePhiBlockOperandToLast(context.Block);
-
 			var nextBlock = Split(context);
 			var newBlocks = CreateNewBlockContexts(4);
+
+			// CHALLENGE: To maintain PHI-form, the phi blocks list and phi operands must stay in sync
+			UpdatePhiInstructionTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
 
 			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
@@ -299,10 +298,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Exit
 			newBlocks[3].AppendInstruction(IRInstruction.Phi, result, failed, failed, success);
+			newBlocks[3].PhiBlocks = new List<BasicBlock>() { newBlocks[0].Block, newBlocks[1].Block, newBlocks[2].Block };
+
 			newBlocks[3].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
+
 		}
 
-		private void CompareInteger64x32b(Context context)
+		private void CompareInteger64x32(Context context)
 		{
 			Debug.Assert(context.Operand1.Is64BitInteger);
 			Debug.Assert(context.Operand2.Is64BitInteger);
@@ -317,16 +319,11 @@ namespace Mosa.Compiler.Framework.Stages
 			var branch = context.ConditionCode;
 			var branchUnsigned = context.ConditionCode.GetUnsigned();
 
-			// CHALLENGE:
-			// To maintain PHI-form, the block order must be maintained.
-			// So on the split of block (A) with new block (B), the block order and phi operands list must stay in sync
-
-			// Trick move the phi block operand to the end of the list
-			// The block B will eventually end up at the end of the block list (win-win!)
-			MovePhiBlockOperandToLast(context.Block);
-
 			var nextBlock = Split(context);
 			var newBlocks = CreateNewBlockContexts(5);
+
+			// CHALLENGE: To maintain PHI-form, the phi blocks list and phi operands must stay in sync
+			UpdatePhiInstructionTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
 
 			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);

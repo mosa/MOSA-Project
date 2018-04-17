@@ -478,16 +478,13 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(removedBlock.NextBlocks.Count == 0);
 		}
 
-		protected static void MovePhiBlockOperandToLast(BasicBlock block)
+		protected static void UpdatePhiInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
 		{
-			if (block.NextBlocks.Count == 0)
-				return;
-
-			var nextBlocks = block.NextBlocks.ToArray();
-
-			foreach (var next in nextBlocks)
+			foreach (var target in targets)
 			{
-				for (var node = next.First; !node.IsBlockEndInstruction; node = node.Next)
+				Debug.Assert(target.PreviousBlocks.Count > 0);
+
+				for (var node = target.First; !node.IsBlockEndInstruction; node = node.Next)
 				{
 					if (node.IsEmpty)
 						continue;
@@ -495,21 +492,9 @@ namespace Mosa.Compiler.Framework
 					if (node.Instruction != IRInstruction.Phi)
 						continue; // FUTURE: change to break, instead of continue
 
-					var sourceBlocks = node.PhiBlocks;
+					int index = node.PhiBlocks.IndexOf(source);
 
-					int index = sourceBlocks.IndexOf(block);
-
-					if (index < 0)
-						continue;
-
-					var operand = node.GetOperand(index);
-
-					for (int i = index; index < node.OperandCount - 1; index++)
-					{
-						node.SetOperand(i, node.GetOperand(i + 1));
-					}
-
-					node.SetOperand(node.OperandCount - 1, operand);
+					node.PhiBlocks[index] = newSource;
 				}
 			}
 		}

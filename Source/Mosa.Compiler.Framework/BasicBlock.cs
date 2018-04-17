@@ -13,10 +13,10 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class BasicBlock
 	{
-		public const int PrologueLabel = -1;
+		public const int PrologueLabel = 0x10000;
 		public const int StartLabel = 0;
-		public const int EpilogueLabel = int.MaxValue;
-		public const int CompilerBlockStartLabel = 0x10000000;
+		public const int EpilogueLabel = 0xFFFFF;
+		public const int CompilerBlockStartLabel = 0x10001;
 
 		#region Data Fields
 
@@ -99,7 +99,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if this instance is compiler block; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsCompilerBlock { get { return (Label >= CompilerBlockStartLabel) && (Label != EpilogueLabel); } }
+		public bool IsCompilerBlock { get { return (Label >= CompilerBlockStartLabel) && (Label != EpilogueLabel) && (Label != PrologueLabel); } }
 
 		public bool IsHandlerHeadBlock { get; internal set; }
 
@@ -197,7 +197,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>The code as a string value.</returns>
 		public override string ToString()
 		{
-			return String.Format("L_{0:X4}", Label);
+			return String.Format("L_{0:X5}", Label);
 		}
 
 		/// <summary>
