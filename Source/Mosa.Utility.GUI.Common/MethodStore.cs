@@ -139,7 +139,7 @@ namespace Mosa.Utility.GUI.Common
 			if (string.IsNullOrEmpty(s) || s.Length < 5)
 				return s;
 
-			if (!s.StartsWith("L_"))
+			if (!char.IsDigit(s[0]))
 				return s;
 
 			int at = 0;

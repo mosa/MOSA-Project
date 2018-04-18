@@ -274,7 +274,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareFloatR4 : IRInstruction.CompareFloatR8;
 
 				context.SetInstruction(instruction, cc, result, first, second);
-				context.AppendInstruction(Select(result, IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.Equal, null, result, CreateConstant(1));
+				context.AppendInstruction(Select(result, IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.Equal, null, result, CreateConstant(1)); /// QQQ: Constant may need to be 64bit
 			}
 			else
 			{
@@ -1562,13 +1562,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (opcode == OpCode.Brtrue || opcode == OpCode.Brtrue_s)
 			{
-				context.SetInstruction(Select(first, IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.NotEqual, null, first, second);
+				context.SetInstruction(Select(first, IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.NotEqual, null, first, second); /// QQQ: Constant may need to be 64bit (second)
 				context.AddBranchTarget(target);
 				return;
 			}
 			else if (opcode == OpCode.Brfalse || opcode == OpCode.Brfalse_s)
 			{
-				context.SetInstruction(Select(first, IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.Equal, null, first, second);
+				context.SetInstruction(Select(first, IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.Equal, null, first, second); /// QQQ: Constant may need to be 64bit (second)
 				context.AddBranchTarget(target);
 				return;
 			}
@@ -1947,7 +1947,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Now compare length with index
 			// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-			before.AppendInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
+			before.AppendInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block); /// QQQ: Constant may need to be 64bit (second)
 			before.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
 
 			// Build exception block which is just a call to throw exception

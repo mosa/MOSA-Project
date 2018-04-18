@@ -253,12 +253,6 @@ namespace Mosa.Platform.x86.Stages
 			var nextBlock = Split(context);
 			var newBlocks = CreateNewBlockContexts(2);
 
-			// FIXME: If the conditional branch and unconditional branch are the same, this could cause a problem
-			target.PreviousBlocks.Remove(context.Block);
-
-			// The block is being split on the condition, so the new next block has one too many next blocks!
-			nextBlock.Block.NextBlocks.Remove(target);
-
 			// Compare high dwords
 			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
 			context.AppendInstruction(X86.BranchEqual, newBlocks[1].Block);
