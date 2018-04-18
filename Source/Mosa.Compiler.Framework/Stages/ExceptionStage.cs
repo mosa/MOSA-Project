@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
 			exceptionRegister = Operand.CreateCPURegister(exceptionType, Architecture.ExceptionRegister);
-			leaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, Architecture.LeaveTargetRegister);
+			leaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, Architecture.LeaveTargetRegister); // TODO: Constant should be 64bit
 
 			nullOperand = Operand.GetNullObject(TypeSystem);
 
@@ -102,7 +102,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var ctx = new Context(node);
 
-			ctx.SetInstruction(Select(IRInstruction.MoveInteger32, IRInstruction.MoveInteger64), leaveTargetRegister, CreateConstant(target.Label));
+			ctx.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), leaveTargetRegister, CreateConstant(target.Label));
 		}
 
 		private void ExceptionStartInstruction(InstructionNode node)
@@ -112,7 +112,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ctx.SetInstruction(IRInstruction.KillAll);
 			ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
-			ctx.AppendInstruction(Select(IRInstruction.MoveInteger32, IRInstruction.MoveInteger64), exceptionVirtualRegister, exceptionRegister);
+			ctx.AppendInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionVirtualRegister, exceptionRegister);
 		}
 
 		private void FinallyEndInstruction(InstructionNode node)
@@ -126,12 +126,12 @@ namespace Mosa.Compiler.Framework.Stages
 			var ctx = new Context(node);
 			var nextBlock = Split(ctx);
 
-			ctx.SetInstruction(Select(IRInstruction.CompareIntegerBranch32, IRInstruction.CompareIntegerBranch64), ConditionCode.NotEqual, null, exceptionVirtualRegister, nullOperand, newBlocks[0].Block);
+			ctx.SetInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.NotEqual, null, exceptionVirtualRegister, nullOperand, newBlocks[0].Block);
 			ctx.AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 
 			var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
-			newBlocks[0].AppendInstruction(Select(IRInstruction.MoveInteger32, IRInstruction.MoveInteger64), exceptionRegister, exceptionVirtualRegister);
+			newBlocks[0].AppendInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, exceptionVirtualRegister);
 			newBlocks[0].AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, TypeSystem));
 		}
 
@@ -150,8 +150,8 @@ namespace Mosa.Compiler.Framework.Stages
 			ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
 			ctx.AppendInstruction(IRInstruction.Gen, leaveTargetRegister);
 
-			ctx.AppendInstruction(Select(IRInstruction.MoveInteger32, IRInstruction.MoveInteger64), exceptionVirtualRegister, exceptionRegister);
-			ctx.AppendInstruction(Select(IRInstruction.MoveInteger32, IRInstruction.MoveInteger64), leaveTargetVirtualRegister, leaveTargetRegister);
+			ctx.AppendInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionVirtualRegister, exceptionRegister);
+			ctx.AppendInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), leaveTargetVirtualRegister, leaveTargetRegister);
 		}
 
 		private void ThrowInstruction(InstructionNode node)
@@ -159,7 +159,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 			var ctx = new Context(node);
 
-			ctx.SetInstruction(Select(IRInstruction.MoveInteger32, IRInstruction.MoveInteger64), exceptionRegister, node.Operand1);
+			ctx.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, node.Operand1);
 
 			//ctx.AppendInstruction(IRInstruction.KillAllExcept, null, exceptionRegister);
 			ctx.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, TypeSystem));
@@ -171,7 +171,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// clear exception register
 			// FIXME: This will need to be preserved for filtered exceptions; will need a flag to know this - maybe an upper bit of leaveTargetRegister
-			ctx.SetInstruction(Select(IRInstruction.MoveInteger32, IRInstruction.MoveInteger64), exceptionRegister, nullOperand);
+			ctx.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, nullOperand);
 
 			var label = node.Label;
 			var exceptionContext = FindImmediateExceptionContext(label);
@@ -196,7 +196,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var nextBlock = Split(ctx);
 
 				// compare leaveTargetRegister > handlerBlock.End, then goto finally handler
-				ctx.AppendInstruction(Select(IRInstruction.CompareIntegerBranch32, IRInstruction.CompareIntegerBranch64), ConditionCode.GreaterThan, null, CreateConstant(handlerBlock.Label), leaveTargetRegister, nextBlock.Block);
+				ctx.AppendInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.GreaterThan, null, CreateConstant(handlerBlock.Label), leaveTargetRegister, nextBlock.Block); // TODO: Constant should be 64bit
 				ctx.AppendInstruction(IRInstruction.Jmp, handlerBlock);
 
 				ctx = nextBlock;
@@ -252,12 +252,12 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var newBlocks = CreateNewBlockContexts(targets.Count - 1);
 
-				ctx.AppendInstruction(Select(IRInstruction.CompareIntegerBranch32, IRInstruction.CompareIntegerBranch64), ConditionCode.Equal, null, leaveTargetRegister, CreateConstant(targets[0].Label), targets[0]);
+				ctx.AppendInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.Equal, null, leaveTargetRegister, CreateConstant(targets[0].Label), targets[0]); // TODO: Constant should be 64bit
 				ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 				for (int b = 1; b < targets.Count - 2; b++)
 				{
-					newBlocks[b - 1].AppendInstruction(Select(IRInstruction.CompareIntegerBranch32, IRInstruction.CompareIntegerBranch64), ConditionCode.Equal, null, leaveTargetRegister, CreateConstant(targets[b].Label), targets[b]);
+					newBlocks[b - 1].AppendInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.Equal, null, leaveTargetRegister, CreateConstant(targets[b].Label), targets[b]); // TODO: Constant should be 64bit
 					newBlocks[b - 1].AppendInstruction(IRInstruction.Jmp, newBlocks[b + 1].Block);
 				}
 

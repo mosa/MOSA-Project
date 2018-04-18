@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 				def.Empty();
 			}
 
-			var move = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.MoveInteger32 : IRInstruction.MoveInteger64;
+			var move = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.MoveInt32 : IRInstruction.MoveInt64;
 
 			context.SetInstruction(move, result, operand1);
 		}

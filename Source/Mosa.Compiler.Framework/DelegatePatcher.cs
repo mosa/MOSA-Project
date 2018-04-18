@@ -49,13 +49,13 @@ namespace Mosa.Compiler.Framework
 			var v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand.Type);
 			var v3 = methodCompiler.CreateVirtualRegister(instanceOperand.Type);
 
-			var loadParameterInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadParameterInteger32 : IRInstruction.LoadParameterInteger64;
+			var loadParameterInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadParamInt32 : IRInstruction.LoadParamInt64;
 
 			context.AppendInstruction(loadParameterInstruction, v1, thisOperand);
 			context.AppendInstruction(loadParameterInstruction, v2, methodPointerOperand);
 			context.AppendInstruction(loadParameterInstruction, v3, instanceOperand);
 
-			var storeIntegerInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.StoreInteger32 : IRInstruction.StoreInteger64;
+			var storeIntegerInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.StoreInt32 : IRInstruction.StoreInt64;
 
 			context.AppendInstruction(storeIntegerInstruction, null, v1, methodPointerOffsetOperand, v2);
 			context.MosaType = methodPointerOperand.Type;
@@ -92,7 +92,7 @@ namespace Mosa.Compiler.Framework
 
 				if (MosaTypeLayout.IsStoredOnStack(type))
 				{
-					b0.AppendInstruction(IRInstruction.LoadParameterCompound, vrs[i], methodCompiler.Parameters[i]);
+					b0.AppendInstruction(IRInstruction.LoadParamCompound, vrs[i], methodCompiler.Parameters[i]);
 					b0.MosaType = type;
 				}
 				else
@@ -115,12 +115,12 @@ namespace Mosa.Compiler.Framework
 			var opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
 			var c0 = methodCompiler.ConstantZero;
 
-			var loadInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInteger32 : IRInstruction.LoadInteger64;
+			var loadInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInt32 : IRInstruction.LoadInt64;
 
 			b0.AppendInstruction(loadInstruction, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(loadInstruction, opInstance, thisOperand, instanceOffsetOperand);
-			b0.AppendInstruction(IRInstruction.CompareInteger32x32, ConditionCode.Equal, opCompare, opInstance, c0); // FIXME -- not 64 compatible
-			b0.AppendInstruction(IRInstruction.CompareIntegerBranch32, ConditionCode.Equal, null, opCompare, c0); // FIXME -- not 64 compatible
+			b0.AppendInstruction(IRInstruction.CompareInt32x32, ConditionCode.Equal, opCompare, opInstance, c0); // FIXME -- not 64 compatible
+			b0.AppendInstruction(IRInstruction.CompareIntBranch32, ConditionCode.Equal, null, opCompare, c0); // FIXME -- not 64 compatible
 			b0.AddBranchTarget(b2.Block);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 

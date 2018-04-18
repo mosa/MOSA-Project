@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <exception cref="CompilerException"></exception>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			var instruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadZeroExtended16x32 : IRInstruction.LoadZeroExtended16x64;
+			var instruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadZeroExtend16x32 : IRInstruction.LoadZeroExtend16x64;
 
 			if (context.OperandCount == 1)
 			{

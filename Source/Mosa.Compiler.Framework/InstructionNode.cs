@@ -829,7 +829,7 @@ namespace Mosa.Compiler.Framework
 			// TODO: Copy this method into calling class
 			var sb = new StringBuilder();
 
-			sb.AppendFormat("L_{0:X4}", Label);
+			sb.AppendFormat("{0:X5}:", Label);
 
 			if (Marked)
 				sb.Append('*');
@@ -881,6 +881,17 @@ namespace Mosa.Compiler.Framework
 			if (OperandCount > 0)
 			{
 				sb.Length--;
+			}
+
+			if (PhiBlocks != null)
+			{
+				sb.Append(" {");
+				foreach (var block in PhiBlocks)
+				{
+					sb.AppendFormat("{0}, ", block);
+				}
+				sb.Length -= 2;
+				sb.Append("}");
 			}
 
 			if (BranchTargets != null)

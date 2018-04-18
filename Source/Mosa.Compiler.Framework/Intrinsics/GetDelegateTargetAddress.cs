@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="methodCompiler">The method compiler.</param>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			var load = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInteger32 : IRInstruction.LoadInteger64;
+			var load = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInt32 : IRInstruction.LoadInt64;
 
 			context.SetInstruction(load, context.Result, context.Operand1, methodCompiler.CreateConstant(3 * methodCompiler.Architecture.NativePointerSize));
 

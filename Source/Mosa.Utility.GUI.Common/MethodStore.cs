@@ -88,6 +88,8 @@ namespace Mosa.Utility.GUI.Common
 					if (pad)
 						line = PadInstruction(line);
 
+					line = Simplify(line);
+
 					result.Append(line);
 					result.Append("\n");
 				}
@@ -117,6 +119,8 @@ namespace Mosa.Utility.GUI.Common
 					if (pad)
 						line = PadInstruction(line);
 
+					line = Simplify(line);
+
 					result.Append(line);
 					result.Append("\n");
 
@@ -130,14 +134,12 @@ namespace Mosa.Utility.GUI.Common
 			return result.ToString();
 		}
 
-		private static List<string> exceptions = new List<string>() { "NULL", "==", "!=", ">", ">=", "<", ">=" };
-
 		private string StripBracketContents(string s)
 		{
 			if (string.IsNullOrEmpty(s) || s.Length < 5)
 				return s;
 
-			if (!s.StartsWith("L_"))
+			if (!char.IsDigit(s[0]))
 				return s;
 
 			int at = 0;
@@ -156,7 +158,7 @@ namespace Mosa.Utility.GUI.Common
 
 				var part = s.Substring(open + 2, close - open - 2);
 
-				if (exceptions.Contains(part))
+				if (part == "NULL" || char.IsSymbol(part[0]))
 				{
 					at = close;
 					continue;
@@ -175,15 +177,15 @@ namespace Mosa.Utility.GUI.Common
 			if (string.IsNullOrEmpty(s) || s.Length < 5)
 				return s;
 
-			if (!s.StartsWith("L_"))
+			if (!char.IsDigit(s[0]))
 				return s;
 
-			int first = s.IndexOf(' ');
+			int first = s.IndexOf(':');
 
-			if (first < 0 || s.Length == first + 1)
+			if (first < 0 || first > 15)
 				return s;
 
-			int second = s.IndexOf(' ', first + 1);
+			int second = s.IndexOf(' ', first + 2);
 
 			if (second < 0)
 				return s;
@@ -196,5 +198,9 @@ namespace Mosa.Utility.GUI.Common
 			return s;
 		}
 
+		private string Simplify(string s)
+		{
+			return s.Replace("const=", string.Empty);
+		}
 	}
 }

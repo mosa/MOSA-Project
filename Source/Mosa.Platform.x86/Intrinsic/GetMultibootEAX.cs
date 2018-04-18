@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			var MultibootEAX = Operand.CreateUnmanagedSymbolPointer(Multiboot0695Stage.MultibootEAX, methodCompiler.TypeSystem);
 
-			context.SetInstruction(IRInstruction.LoadInteger32, context.Result, MultibootEAX, methodCompiler.ConstantZero);
+			context.SetInstruction(IRInstruction.LoadInt32, context.Result, MultibootEAX, methodCompiler.ConstantZero);
 		}
 	}
 }

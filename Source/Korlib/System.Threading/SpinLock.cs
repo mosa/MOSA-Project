@@ -28,9 +28,9 @@ namespace System.Threading
 
 		private void ContinueTryEnter(ref bool lockTaken)
 		{
-			int observedOwner = m_owner;
+			int observedOwner = 0; // m_owner;
 
-			while (CompareExchange(ref m_owner, observedOwner | 1, observedOwner, ref lockTaken) != observedOwner)
+			while (CompareExchange(ref m_owner, observedOwner | LOCK_ANONYMOUS_OWNED, observedOwner, ref lockTaken) != observedOwner)
 			{
 			}
 		}
@@ -49,7 +49,7 @@ namespace System.Threading
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private int CompareExchange(ref int location, int value, int comparand, ref bool success)
+		private static int CompareExchange(ref int location, int value, int comparand, ref bool success)
 		{
 			int result = Interlocked.CompareExchange(ref location, value, comparand);
 
