@@ -83,8 +83,8 @@ namespace Mosa.Platform.x86.Stages
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X86.Mov32, v2, op1L);
-			context.AppendInstruction(X86.Add32, v2, v2, op2L);
-			context.AppendInstruction(X86.Mov32, op0L, v2);
+			context.AppendInstruction(X86.Add32, op0L, v2, op2L);
+			//			context.AppendInstruction(X86.Mov32, op0L, v2);
 			context.AppendInstruction(X86.Mov32, v1, op1H);
 			context.AppendInstruction(X86.Adc32, v1, v1, op2H);
 
@@ -270,37 +270,29 @@ namespace Mosa.Platform.x86.Stages
 
 		private void ExpandMul(Context context)
 		{
-			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
-			var eax = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var edx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var ebx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v5 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			var v20 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v12 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			context.SetInstruction(X86.Mov32, v1, op2L);
+			context.AppendInstruction2(X86.Mul32, v2, resultLow, v1, op1L);
 
-			// unoptimized
-			context.SetInstruction(X86.Mov32, eax, op2L);
-			context.AppendInstruction(X86.Mov32, v20, eax);
-			context.AppendInstruction(X86.Mov32, eax, v20);
-			context.AppendInstruction2(X86.Mul32, edx, eax, eax, op1L);
-			context.AppendInstruction(X86.Mov32, op0L, eax);
-
-			if (!op0H.IsConstantZero)
+			if (!resultHigh.IsConstantZero)
 			{
-				context.AppendInstruction(X86.Mov32, v12, edx);
-				context.AppendInstruction(X86.Mov32, eax, op1L);
-				context.AppendInstruction(X86.Mov32, ebx, eax);
-				context.AppendInstruction(X86.IMul, ebx, ebx, op2H);
-				context.AppendInstruction(X86.Mov32, eax, v12);
-				context.AppendInstruction(X86.Add32, eax, eax, ebx);
-				context.AppendInstruction(X86.Mov32, ebx, op2L);
-				context.AppendInstruction(X86.IMul, ebx, ebx, op1H);
-				context.AppendInstruction(X86.Add32, eax, eax, ebx);
-				context.AppendInstruction(X86.Mov32, v12, eax);
-				context.AppendInstruction(X86.Mov32, op0H, v12);
+				context.AppendInstruction(X86.Mov32, v5, v2);
+				context.AppendInstruction(X86.Mov32, v1, op1L);
+				context.AppendInstruction(X86.Mov32, v3, v1);
+				context.AppendInstruction(X86.IMul, v3, v3, op2H);
+				context.AppendInstruction(X86.Mov32, v1, v5);
+				context.AppendInstruction(X86.Add32, v1, v1, v3);
+				context.AppendInstruction(X86.Mov32, v3, op2L);
+				context.AppendInstruction(X86.IMul, v3, v3, op1H);
+				context.AppendInstruction(X86.Add32, resultHigh, v1, v3);
 			}
 		}
 
@@ -397,18 +389,10 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
-			if (!context.Result.Is64BitInteger)
-			{
-				context.SetInstruction(X86.Mov32, op0L, op1L);
-				context.AppendInstruction(X86.And32, op0L, op0L, op2L);
-			}
-			else
-			{
-				context.SetInstruction(X86.Mov32, op0H, op1H);
-				context.AppendInstruction(X86.Mov32, op0L, op1L);
-				context.AppendInstruction(X86.And32, op0H, op0H, op2H);
-				context.AppendInstruction(X86.And32, op0L, op0L, op2L);
-			}
+			context.SetInstruction(X86.Mov32, op0H, op1H);
+			context.AppendInstruction(X86.Mov32, op0L, op1L);
+			context.AppendInstruction(X86.And32, op0H, op0H, op2H);
+			context.AppendInstruction(X86.And32, op0L, op0L, op2L);
 		}
 
 		private void LogicalNot64(Context context)
@@ -416,15 +400,8 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
-			var eax = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-
-			context.SetInstruction(X86.Mov32, eax, op1H);
-			context.AppendInstruction(X86.Not32, eax, eax);
-			context.AppendInstruction(X86.Mov32, op0H, eax);
-
-			context.AppendInstruction(X86.Mov32, eax, op1L);
-			context.AppendInstruction(X86.Not32, eax, eax);
-			context.AppendInstruction(X86.Mov32, op0L, eax);
+			context.SetInstruction(X86.Not32, op0H, op1H);
+			context.AppendInstruction(X86.Not32, op0L, op1L);
 		}
 
 		private void LogicalOr64(Context context)
@@ -433,10 +410,8 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
-			context.SetInstruction(X86.Mov32, op0H, op1H);
-			context.AppendInstruction(X86.Mov32, op0L, op1L);
-			context.AppendInstruction(X86.Or32, op0H, op0H, op2H);
-			context.AppendInstruction(X86.Or32, op0L, op0L, op2L);
+			context.SetInstruction(X86.Or32, op0H, op1H, op2H);
+			context.AppendInstruction(X86.Or32, op0L, op1L, op2L);
 		}
 
 		private void LogicalXor64(Context context)
@@ -445,10 +420,8 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
-			context.SetInstruction(X86.Mov32, op0H, op1H);
-			context.AppendInstruction(X86.Mov32, op0L, op1L);
-			context.AppendInstruction(X86.Xor32, op0H, op0H, op2H);
-			context.AppendInstruction(X86.Xor32, op0L, op0L, op2L);
+			context.SetInstruction(X86.Xor32, op0H, op1H, op2H);
+			context.AppendInstruction(X86.Xor32, op0L, op1L, op2L);
 		}
 
 		private void MoveInteger64(Context context)
@@ -477,42 +450,42 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out Operand op0L, out Operand op0H);
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
-			var eax = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var edx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var ecx = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			var nextBlock = Split(context);
 			var newBlocks = CreateNewBlockContexts(6);
 
 			context.SetInstruction(X86.Jmp, newBlocks[0].Block);
 
-			newBlocks[0].AppendInstruction(X86.Mov32, ecx, count);
-			newBlocks[0].AppendInstruction(X86.Mov32, edx, op1H);
-			newBlocks[0].AppendInstruction(X86.Mov32, eax, op1L);
-			newBlocks[0].AppendInstruction(X86.CmpConst32, null, ecx, CreateConstant(64));
+			newBlocks[0].AppendInstruction(X86.Mov32, v3, count);
+			newBlocks[0].AppendInstruction(X86.Mov32, v2, op1H);
+			newBlocks[0].AppendInstruction(X86.Mov32, v1, op1L);
+			newBlocks[0].AppendInstruction(X86.CmpConst32, null, v3, CreateConstant(64));
 			newBlocks[0].AppendInstruction(X86.BranchUnsignedGreaterOrEqual, newBlocks[4].Block);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].Block);
 
-			newBlocks[1].AppendInstruction(X86.CmpConst32, null, ecx, CreateConstant(32));
+			newBlocks[1].AppendInstruction(X86.CmpConst32, null, v3, CreateConstant(32));
 			newBlocks[1].AppendInstruction(X86.BranchUnsignedGreaterOrEqual, newBlocks[3].Block);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].Block);
 
-			newBlocks[2].AppendInstruction(X86.Shld32, edx, edx, eax, ecx);
-			newBlocks[2].AppendInstruction(X86.Shl32, eax, eax, ecx);
+			newBlocks[2].AppendInstruction(X86.Shld32, v2, v2, v1, v3);
+			newBlocks[2].AppendInstruction(X86.Shl32, v1, v1, v3);
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[5].Block);
 
-			newBlocks[3].AppendInstruction(X86.Mov32, edx, eax);
-			newBlocks[3].AppendInstruction(X86.MovConst32, eax, ConstantZero);
-			newBlocks[3].AppendInstruction(X86.AndConst32, ecx, ecx, CreateConstant(0x1F));
-			newBlocks[3].AppendInstruction(X86.Shl32, edx, edx, ecx);
+			newBlocks[3].AppendInstruction(X86.Mov32, v2, v1);
+			newBlocks[3].AppendInstruction(X86.MovConst32, v1, ConstantZero);
+			newBlocks[3].AppendInstruction(X86.AndConst32, v3, v3, CreateConstant(0x1F));
+			newBlocks[3].AppendInstruction(X86.Shl32, v2, v2, v3);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].Block);
 
-			newBlocks[4].AppendInstruction(X86.MovConst32, eax, ConstantZero);
-			newBlocks[4].AppendInstruction(X86.MovConst32, edx, ConstantZero);
+			newBlocks[4].AppendInstruction(X86.MovConst32, v1, ConstantZero);
+			newBlocks[4].AppendInstruction(X86.MovConst32, v2, ConstantZero);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].Block);
 
-			newBlocks[5].AppendInstruction(X86.Mov32, op0H, edx);
-			newBlocks[5].AppendInstruction(X86.Mov32, op0L, eax);
+			newBlocks[5].AppendInstruction(X86.Mov32, op0H, v2);
+			newBlocks[5].AppendInstruction(X86.Mov32, op0L, v1);
 			newBlocks[5].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 
@@ -571,9 +544,7 @@ namespace Mosa.Platform.x86.Stages
 			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X86.Movsx16To32, v1, op1);
-			context.AppendInstruction2(X86.Cdq, v3, v2, v1);
-			context.AppendInstruction(X86.Mov32, op0L, v2);
-			context.AppendInstruction(X86.Mov32, op0H, v3);
+			context.AppendInstruction2(X86.Cdq, op0H, op0L, v1);
 		}
 
 		private void SignExtend32x64(Context context)
@@ -584,13 +555,9 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(op0, out Operand op0L, out Operand op0H);
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X86.Mov32, v1, op1);
-			context.AppendInstruction2(X86.Cdq, v3, v2, v1);
-			context.AppendInstruction(X86.Mov32, op0L, v2);
-			context.AppendInstruction(X86.Mov32, op0H, v3);
+			context.AppendInstruction2(X86.Cdq, op0H, op0L, v1);
 		}
 
 		private void SignExtend8x64(Context context)
@@ -601,26 +568,11 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(op0, out Operand op0L, out Operand op0H);
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X86.Movsx8To32, v1, op1);
-			context.AppendInstruction2(X86.Cdq, v3, v2, v1);
-			context.AppendInstruction(X86.Mov32, op0L, v2);
-			context.AppendInstruction(X86.Mov32, op0H, v3);
+			context.AppendInstruction2(X86.Cdq, op0H, op0L, v1);
 		}
 
-		private void __Split64(Context context)
-		{
-			var operand1 = context.Operand1;
-			var result = context.Result;
-			var result2 = context.Result2;
-
-			SplitLongOperand(operand1, out Operand op0L, out Operand op0H);
-
-			context.SetInstruction(X86.Mov32, result, op0L);
-			context.AppendInstruction(X86.Mov32, result2, op0H);
-		}
 
 		private void GetLow64(Context context)
 		{

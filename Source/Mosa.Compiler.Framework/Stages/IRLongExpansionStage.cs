@@ -26,6 +26,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.CompareInt64x32, CompareInteger64x32);
 			AddVisitation(IRInstruction.CompareIntBranch64, CompareIntBranch64);
 			//AddVisitation(IRInstruction.CompareInt64x64, CompareInteger64x64);
+			//ZeroExtended8x64
 		}
 
 		#region Visitation Methods

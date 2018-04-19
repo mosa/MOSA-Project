@@ -67,7 +67,7 @@ namespace Mosa.UnitTest.Engine
 				EnableIROptimizations = true,
 				EnableSparseConditionalConstantPropagation = true,
 				EnableInlinedMethods = true,
-				IRLongExpansion = true,
+				IRLongExpansion = false,
 				TwoPassOptimizations = true,
 
 				Emulator = EmulatorType.Qemu,

@@ -640,8 +640,8 @@ namespace Mosa.Platform.x86.Stages
 			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X86.MovConst32, v1, ConstantZero);
-			context.AppendInstruction2(X86.Div32, v1, v2, v1, operand1, operand2);
-			context.AppendInstruction(X86.Mov32, result, v1);
+			context.AppendInstruction2(X86.Div32, result, v2, v1, operand1, operand2);
+			//context.AppendInstruction(X86.Mov32, result, v1);
 		}
 
 		private void ShiftLeft32(InstructionNode node)
