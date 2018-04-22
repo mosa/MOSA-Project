@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package >
-	<metadata>
+	<metadata minClientVersion="3.3.0">
 		<id>Mosa.Korlib</id>
-		<version>1.0.0.0</version>
+		<version>1.0.0.1</version>
 		<title>Mosa.Korlib Library</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
@@ -14,8 +14,12 @@
 		<releaseNotes></releaseNotes>
 		<copyright>Copyright © 2017</copyright>
 		<tags>MOSA Compiler corlib</tags>
-	</metadata>
+		<contentFiles>
+			<files include="mscorlib.dll" buildAction="None" copyToOutput="true" />
+		</contentFiles>
+		</metadata>
 	<files>
 		<file src="..\..\bin\mscorlib.dll" target="lib\net45" />
+		<file src="..\..\bin\mscorlib.dll" target="contentFiles" />
 	</files>
 </package>

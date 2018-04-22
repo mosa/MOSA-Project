@@ -1,0 +1,50 @@
+﻿<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>Mosa.Tools.Package</id>
+		<version>1.0.0.0</version>
+		<title>Mosa.Tools.Package</title>
+		<authors>MOSA Project</authors>
+		<owners>MOSA Project</owners>
+		<licenseUrl>https://github.com/mosa/MOSA-Project/blob/master/LICENSE.txt</licenseUrl>
+		<projectUrl>http://www.mosa-project.org</projectUrl>
+		<iconUrl>https://raw.githubusercontent.com/tgiphil/MOSA-Project/VSIXProject/Source/Art/Mosa%20Icon.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>MOSA Tools Package</description>
+		<releaseNotes></releaseNotes>
+		<copyright>Copyright © 2018</copyright>
+		<tags>MOSA Compiler</tags>
+		<dependencies>
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="..\..\bin\dnlib.dll" target="tools" />
+		<file src="..\..\bin\Mosa.ClassLib.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Compiler.Common.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Compiler.Framework.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Compiler.Linker.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Compiler.Trace.dll" target="tools" />
+		<file src="..\..\bin\Mosa.DeviceSystem.dll" target="tools" />
+		<file src="..\..\bin\Mosa.FileSystem.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Platform.ARMv6.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Platform.x86.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Explorer.exe" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.GDBDebugger.exe" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Launcher.exe" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.BootImage.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.CodeDomCompiler.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.DebugEngine.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.GUI.Common.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.Launcher.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.RSP.dll" target="tools" />
+		<file src="..\..\bin\mosacl.exe" target="tools" />
+		<file src="..\..\bin\SharpDisasm.dll" target="tools" />
+		<file src="..\..\bin\MetroFramework.dll" target="tools" />
+		<file src="..\..\bin\MetroFramework.Design.dll" target="tools" />
+		<file src="..\..\bin\MetroFramework.Fonts.dll" target="tools" />
+		<file src="..\..\bin\WeifenLuo.WinFormsUI.Docking.dll" target="tools" />
+		<file src="..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll" target="tools" />
+		<file src="..\..\bin\CommandLine.dll" target="tools" />
+	</files>
+</package>

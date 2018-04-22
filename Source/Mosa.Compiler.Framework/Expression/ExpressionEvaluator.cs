@@ -213,7 +213,7 @@ namespace Mosa.Compiler.Framework.Expression
 				return new Value((ulong)left.UnsignedInteger - right.UnsignedInteger);
 			}
 
-			throw new CompilerException("ExpressionEvaluation: incompatible types for substraction operator: " + left + " and " + right);
+			throw new CompilerException("ExpressionEvaluation: incompatible types for subtraction operator: " + left + " and " + right);
 		}
 
 		protected static Value Multiplication(Value left, Value right)

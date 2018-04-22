@@ -69,9 +69,9 @@
     <Compile Include="Memory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Korlib\Korlib.csproj">
+    <ProjectReference Include="..\Korlib\Mosa.Korlib.csproj">
       <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
-      <Name>Korlib</Name>
+      <Name>Mosa.Korlib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj">
       <Project>{6509477A-7360-4937-A1B9-26FED0A75CDA}</Project>

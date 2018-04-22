@@ -1,26 +1,23 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <package >
 	<metadata>
-		<id>Mosa.Compiler.Framework</id>
+		<id>Mosa.Tools.Qemu</id>
 		<version>1.0.0.0</version>
-		<title>Mosa.Compiler.Framework</title>
+		<title>Mosa.Tools.Qemu</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
 		<licenseUrl>https://github.com/mosa/MOSA-Project/blob/master/LICENSE.txt</licenseUrl>
 		<projectUrl>http://www.mosa-project.org</projectUrl>
 		<iconUrl>https://raw.githubusercontent.com/tgiphil/MOSA-Project/VSIXProject/Source/Art/Mosa%20Icon.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>MOSA Compiler Framework</description>
+		<description>Minimal QEMU Package for MOSA</description>
 		<releaseNotes></releaseNotes>
 		<copyright>Copyright © 2017</copyright>
 		<tags>MOSA Compiler</tags>
+		<dependencies>
+		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\..\bin\Mosa.Compiler.Framework.dll" target="lib\net45" />
-		<file src="..\..\bin\Mosa.Compiler.Common.dll" target="lib\net45" />
-		<file src="..\..\bin\Mosa.Compiler.Linker.dll" target="lib\net45" />
-		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.dll" target="lib\net45" />
-		<file src="..\..\bin\Mosa.Compiler.Trace.dll" target="lib\net45" />
-		<file src="..\..\bin\dnlib.dll" target="lib\net45" />
+		<file src="..\..\Tools\qemu\*" target="tools" />
 	</files>
 </package>

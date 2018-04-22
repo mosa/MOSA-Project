@@ -63,9 +63,9 @@
   </PropertyGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\Korlib\Korlib.csproj">
+    <ProjectReference Include="..\Korlib\Mosa.Korlib.csproj">
       <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
-      <Name>Korlib</Name>
+      <Name>Mosa.Korlib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
