@@ -8,7 +8,7 @@ using Xunit.Extensions;
 
 namespace Mosa.UnitTest.Collection.xUnit
 {
-	public class Fixture_ComparisoneEqualU1 : TestFixture
+	public class Fixture_ComparisonEqualU1 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U1U1))]
@@ -18,7 +18,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneNotEqualU1 : TestFixture
+	public class Fixture_ComparisonNotEqualU1 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U1U1))]
@@ -28,7 +28,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanU1 : TestFixture
+	public class Fixture_ComparisonGreaterThanU1 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U1U1))]
@@ -38,7 +38,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanU1 : TestFixture
+	public class Fixture_ComparisonLessThanU1 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U1U1))]
@@ -48,7 +48,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanOrEqualU1 : TestFixture
+	public class Fixture_ComparisonGreaterThanOrEqualU1 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U1U1))]
@@ -58,7 +58,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanOrEqualU1 : TestFixture
+	public class Fixture_ComparisonLessThanOrEqualU1 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U1U1))]
@@ -68,7 +68,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneEqualU2 : TestFixture
+	public class Fixture_ComparisonEqualU2 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U2U2))]
@@ -78,7 +78,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneNotEqualU2 : TestFixture
+	public class Fixture_ComparisonNotEqualU2 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U2U2))]
@@ -88,7 +88,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanU2 : TestFixture
+	public class Fixture_ComparisonGreaterThanU2 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U2U2))]
@@ -98,7 +98,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanU2 : TestFixture
+	public class Fixture_ComparisonLessThanU2 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U2U2))]
@@ -108,7 +108,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanOrEqualU2 : TestFixture
+	public class Fixture_ComparisonGreaterThanOrEqualU2 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U2U2))]
@@ -118,7 +118,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanOrEqualU2 : TestFixture
+	public class Fixture_ComparisonLessThanOrEqualU2 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U2U2))]
@@ -128,7 +128,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneEqualU4 : TestFixture
+	public class Fixture_ComparisonEqualU4 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U4U4))]
@@ -138,7 +138,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneNotEqualU4 : TestFixture
+	public class Fixture_ComparisonNotEqualU4 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U4U4))]
@@ -148,7 +148,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanU4 : TestFixture
+	public class Fixture_ComparisonGreaterThanU4 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U4U4))]
@@ -158,7 +158,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanU4 : TestFixture
+	public class Fixture_ComparisonLessThanU4 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U4U4))]
@@ -168,7 +168,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanOrEqualU4 : TestFixture
+	public class Fixture_ComparisonGreaterThanOrEqualU4 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U4U4))]
@@ -178,7 +178,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanOrEqualU4 : TestFixture
+	public class Fixture_ComparisonLessThanOrEqualU4 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U4U4))]
@@ -188,7 +188,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneEqualU8 : TestFixture
+	public class Fixture_ComparisonEqualU8 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U8U8))]
@@ -198,7 +198,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneNotEqualU8 : TestFixture
+	public class Fixture_ComparisonNotEqualU8 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U8U8))]
@@ -208,7 +208,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanU8 : TestFixture
+	public class Fixture_ComparisonGreaterThanU8 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U8U8))]
@@ -218,7 +218,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanU8 : TestFixture
+	public class Fixture_ComparisonLessThanU8 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U8U8))]
@@ -228,7 +228,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanOrEqualU8 : TestFixture
+	public class Fixture_ComparisonGreaterThanOrEqualU8 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U8U8))]
@@ -238,7 +238,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanOrEqualU8 : TestFixture
+	public class Fixture_ComparisonLessThanOrEqualU8 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(U8U8))]
@@ -248,7 +248,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneEqualI1 : TestFixture
+	public class Fixture_ComparisonEqualI1 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I1I1))]
@@ -258,7 +258,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneNotEqualI1 : TestFixture
+	public class Fixture_ComparisonNotEqualI1 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I1I1))]
@@ -268,7 +268,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanI1 : TestFixture
+	public class Fixture_ComparisonGreaterThanI1 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I1I1))]
@@ -278,7 +278,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanI1 : TestFixture
+	public class Fixture_ComparisonLessThanI1 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I1I1))]
@@ -288,7 +288,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanOrEqualI1 : TestFixture
+	public class Fixture_ComparisonGreaterThanOrEqualI1 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I1I1))]
@@ -298,7 +298,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanOrEqualI1 : TestFixture
+	public class Fixture_ComparisonLessThanOrEqualI1 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I1I1))]
@@ -308,7 +308,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneEqualI2 : TestFixture
+	public class Fixture_ComparisonEqualI2 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I2I2))]
@@ -318,7 +318,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneNotEqualI2 : TestFixture
+	public class Fixture_ComparisonNotEqualI2 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I2I2))]
@@ -328,7 +328,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanI2 : TestFixture
+	public class Fixture_ComparisonGreaterThanI2 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I2I2))]
@@ -338,7 +338,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanI2 : TestFixture
+	public class Fixture_ComparisonLessThanI2 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I2I2))]
@@ -348,7 +348,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanOrEqualI2 : TestFixture
+	public class Fixture_ComparisonGreaterThanOrEqualI2 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I2I2))]
@@ -358,7 +358,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanOrEqualI2 : TestFixture
+	public class Fixture_ComparisonLessThanOrEqualI2 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I2I2))]
@@ -368,7 +368,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneEqualI4 : TestFixture
+	public class Fixture_ComparisonEqualI4 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I4I4))]
@@ -378,7 +378,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneNotEqualI4 : TestFixture
+	public class Fixture_ComparisonNotEqualI4 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I4I4))]
@@ -388,7 +388,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanI4 : TestFixture
+	public class Fixture_ComparisonGreaterThanI4 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I4I4))]
@@ -398,7 +398,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanI4 : TestFixture
+	public class Fixture_ComparisonLessThanI4 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I4I4))]
@@ -408,7 +408,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanOrEqualI4 : TestFixture
+	public class Fixture_ComparisonGreaterThanOrEqualI4 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I4I4))]
@@ -418,7 +418,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanOrEqualI4 : TestFixture
+	public class Fixture_ComparisonLessThanOrEqualI4 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I4I4))]
@@ -428,7 +428,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneEqualI8 : TestFixture
+	public class Fixture_ComparisonEqualI8 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I8I8))]
@@ -438,7 +438,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneNotEqualI8 : TestFixture
+	public class Fixture_ComparisonNotEqualI8 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I8I8))]
@@ -448,7 +448,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanI8 : TestFixture
+	public class Fixture_ComparisonGreaterThanI8 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I8I8))]
@@ -458,7 +458,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanI8 : TestFixture
+	public class Fixture_ComparisonLessThanI8 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I8I8))]
@@ -468,7 +468,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanOrEqualI8 : TestFixture
+	public class Fixture_ComparisonGreaterThanOrEqualI8 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I8I8))]
@@ -478,7 +478,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanOrEqualI8 : TestFixture
+	public class Fixture_ComparisonLessThanOrEqualI8 : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(I8I8))]
@@ -488,7 +488,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneEqualC : TestFixture
+	public class Fixture_ComparisonEqualC : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(CC))]
@@ -498,7 +498,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneNotEqualC : TestFixture
+	public class Fixture_ComparisonNotEqualC : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(CC))]
@@ -508,7 +508,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanC : TestFixture
+	public class Fixture_ComparisonGreaterThanC : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(CC))]
@@ -518,7 +518,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanC : TestFixture
+	public class Fixture_ComparisonLessThanC : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(CC))]
@@ -528,7 +528,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneGreaterThanOrEqualC : TestFixture
+	public class Fixture_ComparisonGreaterThanOrEqualC : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(CC))]
@@ -538,7 +538,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 	}
 
-	public class Fixture_ComparisoneLessThanOrEqualC : TestFixture
+	public class Fixture_ComparisonLessThanOrEqualC : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(CC))]

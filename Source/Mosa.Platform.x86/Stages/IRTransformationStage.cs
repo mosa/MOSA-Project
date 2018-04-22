@@ -184,18 +184,12 @@ namespace Mosa.Platform.x86.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			BaseInstruction setcc = GetSetcc(condition);
+			var setcc = GetSetcc(condition);
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			context.SetInstruction(X86.Cmp32, null, operand1, operand2);
 			context.AppendInstruction(setcc, v1);
 			context.AppendInstruction(X86.Movzx8To32, resultOperand, v1);
-
-			//Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			//context.SetInstruction(X86.MovConst32, v1, ConstantZero);
-			//context.AppendInstruction(X86.Cmp32, null, operand1, operand2);
-			//context.AppendInstruction(setcc, condition, v1);
-			//context.AppendInstruction(X86.Mov32, resultOperand, v1);
 		}
 
 		private void CompareIntBranch32(Context context)

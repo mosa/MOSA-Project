@@ -7,23 +7,23 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// CmovNotZero32
+	/// CMovNotZero32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class CmovNotZero32 : X86Instruction
+	public sealed class CMovNotZero32 : X86Instruction
 	{
-		public override string AlternativeName { get { return "CmovNZ32"; } }
+		public override string AlternativeName { get { return "CMovNZ32"; } }
 
 		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x45 } );
 
-		internal CmovNotZero32()
+		internal CMovNotZero32()
 			: base(1, 1)
 		{
 		}
 
 		public override BaseInstruction GetOpposite()
 		{
-			return X86.CmovZero32;
+			return X86.CMovZero32;
 		}
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)

@@ -118,8 +118,6 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(!context.Result.IsR8);
 			Debug.Assert(context.Result.Is64BitInteger);
 
-			// TODO: Managed 64bit pointers
-
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
@@ -238,6 +236,45 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		private void CompareInteger64x32(Context context)
+		{
+			Debug.Assert(context.Operand1.Is64BitInteger);
+			Debug.Assert(context.Operand2.Is64BitInteger);
+			Debug.Assert(!context.Result.Is64BitInteger);
+
+			var condition = context.ConditionCode;
+
+			if (condition == ConditionCode.Equal || condition == ConditionCode.NotEqual)
+			{
+				var result = context.Result;
+				var operand1 = context.Operand1;
+				var operand2 = context.Operand2;
+
+				var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var op1Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var op1High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+				context.SetInstruction(IRInstruction.GetLow64, op0Low, operand1);
+				context.AppendInstruction(IRInstruction.GetHigh64, op0High, operand1);
+				context.AppendInstruction(IRInstruction.GetLow64, op1Low, operand2);
+				context.AppendInstruction(IRInstruction.GetHigh64, op1High, operand2);
+
+				context.AppendInstruction(IRInstruction.LogicalXor32, v1, op0Low, op1Low);
+				context.AppendInstruction(IRInstruction.LogicalXor32, v2, op0High, op1High);
+				context.AppendInstruction(IRInstruction.LogicalOr32, v3, v1, v2);
+				context.AppendInstruction(IRInstruction.CompareInt32x32, condition, result, v3, ConstantZero);
+
+				return;
+			}
+
+			CompareInteger64x32Alt(context);
+		}
+
+		private void CompareInteger64x32Alt(Context context)
 		{
 			Debug.Assert(context.Operand1.Is64BitInteger);
 			Debug.Assert(context.Operand2.Is64BitInteger);
