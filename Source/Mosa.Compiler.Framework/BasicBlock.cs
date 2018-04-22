@@ -109,27 +109,36 @@ namespace Mosa.Compiler.Framework
 
 		#region Construction
 
-		internal BasicBlock(int sequence, int label)
+		internal BasicBlock(int sequence, int blockLabel, int instructionLabel)
 		{
 			NextBlocks = new List<BasicBlock>(2);
 			PreviousBlocks = new List<BasicBlock>(1);
-			Label = label;
+			Label = blockLabel;
 			Sequence = sequence;
 
 			First = new InstructionNode(IRInstruction.BlockStart)
 			{
-				Label = label,
+				Label = instructionLabel,
+				Block = this
+			};
+
+			var middle = new InstructionNode()
+			{
+				Label = instructionLabel,
 				Block = this
 			};
 
 			Last = new InstructionNode(IRInstruction.BlockEnd)
 			{
-				Label = label,
-				Block = this
+				Label = instructionLabel,
+				Block = this,
 			};
 
-			First.Next = Last;
-			Last.Previous = First;
+			middle.Next = Last;
+			middle.Previous = First;
+
+			First.Next = middle;
+			Last.Previous = middle;
 		}
 
 		#endregion Construction

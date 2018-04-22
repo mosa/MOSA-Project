@@ -323,7 +323,7 @@ namespace Mosa.Platform.x86.Stages
 						//L3:
 						//	mov	eax, 0
 
-						var newBlocks = CreateNewBlockContexts(2);
+						var newBlocks = CreateNewBlockContexts(2, context.Label);
 						var nextBlock = Split(context);
 
 						context.SetInstruction(X86.MovConst32, result, CreateConstant(1));
@@ -348,7 +348,7 @@ namespace Mosa.Platform.x86.Stages
 						//	movzx	eax, al
 						//L5:
 
-						var newBlocks = CreateNewBlockContexts(1);
+						var newBlocks = CreateNewBlockContexts(1, context.Label);
 						var nextBlock = Split(context);
 
 						context.SetInstruction(X86.Mov32, result, CreateConstant(1));

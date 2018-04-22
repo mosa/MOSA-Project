@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.Stages
 				Debug.Assert(plugMethod != null);
 
 				var plugSymbol = Operand.CreateSymbolFromMethod(plugMethod, TypeSystem);
-				var context = CreateNewBlockContext(-1);
+				var context = CreateNewBlockContext(-1, -1);
 				context.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
 				BasicBlocks.AddHeadBlock(context.Block);
 				return;
@@ -260,7 +260,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private BasicBlock GetBlockByLabel(int label)
 		{
-			var block = BasicBlocks.GetByLabel(label) ?? CreateNewBlock(label);
+			var block = BasicBlocks.GetByLabel(label) ?? CreateNewBlock(label, label);
 
 			return block;
 		}

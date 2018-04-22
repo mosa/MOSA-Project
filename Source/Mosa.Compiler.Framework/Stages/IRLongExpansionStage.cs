@@ -3,7 +3,6 @@
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
-using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -288,7 +287,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var branchUnsigned = context.ConditionCode.GetUnsigned();
 
 			var nextBlock = Split(context);
-			var newBlocks = CreateNewBlockContexts(5);
+			var newBlocks = CreateNewBlockContexts(5, context.Label);
 
 			UpdatePhiInstructionTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
 
@@ -356,7 +355,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var branchUnsigned = context.ConditionCode.GetUnsigned();
 
 			var nextBlock = Split(context);
-			var newBlocks = CreateNewBlockContexts(3);
+			var newBlocks = CreateNewBlockContexts(3, context.Label);
 
 			UpdatePhiInstructionTargets(nextBlock.Block.NextBlocks, context.Block, newBlocks[2].Block);
 

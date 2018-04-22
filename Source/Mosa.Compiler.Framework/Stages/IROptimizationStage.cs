@@ -1963,9 +1963,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Definitions.Count != 1)
 				return;
 
-			if (!node.Result.IsInteger) // future: should work on other types as well
-				return;
-
 			var operand = node.Operand1;
 
 			foreach (var op in node.Operands)
@@ -1973,6 +1970,9 @@ namespace Mosa.Compiler.Framework.Stages
 				if (op != operand)
 					return;
 			}
+
+			//if (!node.Result.IsInteger) // future: should work on other types as well
+			//	return;
 
 			if (trace.Active) trace.Log("*** SimplifyPhiInstruction");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);

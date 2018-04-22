@@ -122,7 +122,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var exceptionVirtualRegister = exceptionVirtualRegisters[headerBlock];
 
-			var newBlocks = CreateNewBlockContexts(1);
+			var newBlocks = CreateNewBlockContexts(1, node.Label);
 			var ctx = new Context(node);
 			var nextBlock = Split(ctx);
 
@@ -250,7 +250,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				var newBlocks = CreateNewBlockContexts(targets.Count - 1);
+				var newBlocks = CreateNewBlockContexts(targets.Count - 1, node.Label);
 
 				ctx.AppendInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.Equal, null, leaveTargetRegister, CreateConstant(targets[0].Label), targets[0]); // TODO: Constant should be 64bit
 				ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
