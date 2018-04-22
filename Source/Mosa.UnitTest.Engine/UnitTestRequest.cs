@@ -186,7 +186,7 @@ namespace Mosa.UnitTest.Engine
 			}
 			else if (type.IsI4)
 			{
-				return (int)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
+				return data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24);
 			}
 			else if (type.IsI8)
 			{
@@ -197,7 +197,7 @@ namespace Mosa.UnitTest.Engine
 			}
 			else if (type.IsU1)
 			{
-				return (byte)data[0];
+				return data[0];
 			}
 			else if (type.IsU2)
 			{
@@ -212,7 +212,7 @@ namespace Mosa.UnitTest.Engine
 				ulong low = (uint)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
 				ulong high = (uint)(data[4] | (data[5] << 8) | (data[6] << 16) | (data[7] << 24));
 
-				return (ulong)(low | (high << 32));
+				return low | (high << 32);
 			}
 			else if (type.IsChar)
 			{
@@ -220,7 +220,7 @@ namespace Mosa.UnitTest.Engine
 			}
 			else if (type.IsBoolean)
 			{
-				return (bool)(data[0] != 0);
+				return data[0] != 0;
 			}
 			else if (type.IsR4)
 			{
@@ -229,9 +229,7 @@ namespace Mosa.UnitTest.Engine
 				for (int i = 0; i < 8; i++)
 					value[i] = data[i];
 
-				var d = BitConverter.ToSingle(value, 0);
-
-				return d;
+				return BitConverter.ToSingle(value, 0);
 			}
 			else if (type.IsR8)
 			{
@@ -240,9 +238,7 @@ namespace Mosa.UnitTest.Engine
 				for (int i = 0; i < 8; i++)
 					value[i] = data[i];
 
-				var d = BitConverter.ToDouble(value, 0);
-
-				return d;
+				return BitConverter.ToDouble(value, 0);
 			}
 			else if (type.IsVoid)
 			{

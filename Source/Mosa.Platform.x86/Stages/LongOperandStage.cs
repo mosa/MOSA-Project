@@ -104,7 +104,7 @@ namespace Mosa.Platform.x86.Stages
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			var newBlocks = CreateNewBlockContexts(6);
+			var newBlocks = CreateNewBlockContexts(6, context.Label);
 			var nextBlock = Split(context);
 
 			context.SetInstruction(X86.Jmp, newBlocks[0].Block);
@@ -174,7 +174,7 @@ namespace Mosa.Platform.x86.Stages
 			var branchUnsigned = IRTransformationStage.GetBranch(context.ConditionCode.GetUnsigned());
 
 			var nextBlock = Split(context);
-			var newBlocks = CreateNewBlockContexts(4);
+			var newBlocks = CreateNewBlockContexts(4, context.Label);
 
 			// Compare high dwords
 			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
@@ -248,7 +248,7 @@ namespace Mosa.Platform.x86.Stages
 			var branchUnsigned = IRTransformationStage.GetBranch(context.ConditionCode.GetUnsigned());
 
 			var nextBlock = Split(context);
-			var newBlocks = CreateNewBlockContexts(2);
+			var newBlocks = CreateNewBlockContexts(2, context.Label);
 
 			// Compare high dwords
 			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
@@ -447,7 +447,7 @@ namespace Mosa.Platform.x86.Stages
 			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			var nextBlock = Split(context);
-			var newBlocks = CreateNewBlockContexts(6);
+			var newBlocks = CreateNewBlockContexts(6, context.Label);
 
 			context.SetInstruction(X86.Jmp, newBlocks[0].Block);
 
@@ -492,7 +492,7 @@ namespace Mosa.Platform.x86.Stages
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			var nextBlock = Split(context);
-			var newBlocks = CreateNewBlockContexts(4);
+			var newBlocks = CreateNewBlockContexts(4, context.Label);
 
 			context.SetInstruction(X86.Mov32, v1, count);
 			context.AppendInstruction(X86.CmpConst32, null, v1, CreateConstant(64));

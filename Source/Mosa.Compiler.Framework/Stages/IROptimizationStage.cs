@@ -110,7 +110,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				//ReduceTruncationAndExpansion,
 				SimplifyExtendedMoveWithConstant,
-				SimplifyExtendedMove,
+				SimplifyExtendedMoves,
 				SimplifyIntegerCompare2,
 				SimplifyIntegerCompare,
 				FoldLoadStoreOffsets,
@@ -899,6 +899,11 @@ namespace Mosa.Compiler.Framework.Stages
 				case ConditionCode.LessOrEqual: compareResult = (op1.ConstantUnsignedLongInteger <= op2.ConstantUnsignedLongInteger); break;
 				case ConditionCode.LessThan: compareResult = (op1.ConstantUnsignedLongInteger < op2.ConstantUnsignedLongInteger); break;
 
+				case ConditionCode.UnsignedGreaterThan: compareResult = (op1.ConstantUnsignedLongInteger > op2.ConstantUnsignedLongInteger); break;
+				case ConditionCode.UnsignedGreaterOrEqual: compareResult = (op1.ConstantUnsignedLongInteger >= op2.ConstantUnsignedLongInteger); break;
+				case ConditionCode.UnsignedLessThan: compareResult = (op1.ConstantUnsignedLongInteger < op2.ConstantUnsignedLongInteger); break;
+				case ConditionCode.UnsignedLessOrEqual: compareResult = (op1.ConstantUnsignedLongInteger <= op2.ConstantUnsignedLongInteger); break;
+
 				// TODO: Add more
 				default: return;
 			}
@@ -1224,8 +1229,6 @@ namespace Mosa.Compiler.Framework.Stages
 					return;
 				}
 			}
-
-			// TODO: Add more strength reductions especially for AND w/ 0xFF, 0xFFFF, 0xFFFFFFFF, etc when source or destination are same or smaller
 		}
 
 		/// <summary>
@@ -1329,6 +1332,11 @@ namespace Mosa.Compiler.Framework.Stages
 				case ConditionCode.GreaterThan: compareResult = (op1.ConstantUnsignedLongInteger > op2.ConstantUnsignedLongInteger); break;
 				case ConditionCode.LessOrEqual: compareResult = (op1.ConstantUnsignedLongInteger <= op2.ConstantUnsignedLongInteger); break;
 				case ConditionCode.LessThan: compareResult = (op1.ConstantUnsignedLongInteger < op2.ConstantUnsignedLongInteger); break;
+
+				case ConditionCode.UnsignedGreaterThan: compareResult = (op1.ConstantUnsignedLongInteger > op2.ConstantUnsignedLongInteger); break;
+				case ConditionCode.UnsignedGreaterOrEqual: compareResult = (op1.ConstantUnsignedLongInteger >= op2.ConstantUnsignedLongInteger); break;
+				case ConditionCode.UnsignedLessThan: compareResult = (op1.ConstantUnsignedLongInteger < op2.ConstantUnsignedLongInteger); break;
+				case ConditionCode.UnsignedLessOrEqual: compareResult = (op1.ConstantUnsignedLongInteger <= op2.ConstantUnsignedLongInteger); break;
 
 				// TODO: Add more
 				default: return;
@@ -1777,11 +1785,7 @@ namespace Mosa.Compiler.Framework.Stages
 			instructionsRemovedCount++;
 		}
 
-		/// <summary>
-		/// Simplifies sign/zero extended move
-		/// </summary>
-		/// <param name="node">The node.</param>
-		private void SimplifyExtendedMove(InstructionNode node)
+		private void SimplifyExtendedMoves(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.SignExtend8x32
 				|| node.Instruction == IRInstruction.SignExtend16x32
@@ -1885,10 +1889,6 @@ namespace Mosa.Compiler.Framework.Stages
 			instructionsRemovedCount++;
 		}
 
-		/// <summary>
-		/// Folds the constant phi instruction.
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void ConstantFoldingPhi(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.Phi)
@@ -1963,9 +1963,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Definitions.Count != 1)
 				return;
 
-			if (!node.Result.IsInteger) // future: should work on other types as well
-				return;
-
 			var operand = node.Operand1;
 
 			foreach (var op in node.Operands)
@@ -1973,6 +1970,9 @@ namespace Mosa.Compiler.Framework.Stages
 				if (op != operand)
 					return;
 			}
+
+			//if (!node.Result.IsInteger) // future: should work on other types as well
+			//	return;
 
 			if (trace.Active) trace.Log("*** SimplifyPhiInstruction");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
@@ -1983,6 +1983,7 @@ namespace Mosa.Compiler.Framework.Stages
 			simplifyPhiCount++;
 		}
 
+		// Doesn't work --- since non-lower byte is ignored
 		private void SimplifyIntegerCompare(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.CompareInt32x32
@@ -2001,6 +2002,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!((node.Operand1.IsVirtualRegister && node.Operand2.IsConstantZero)
 				|| (node.Operand2.IsVirtualRegister && node.Operand1.IsConstantZero)))
+				return;
+
+			// and the use of the result is just another comparison
+			var node2 = node.Result.Uses[0];
+
+			if (!(node2.Instruction == IRInstruction.CompareInt32x32
+				|| node2.Instruction == IRInstruction.CompareInt64x32
+				|| node2.Instruction == IRInstruction.CompareInt64x64))
 				return;
 
 			var operand = (node.Operand2.IsConstantZero) ? node.Operand1 : node.Operand2;
@@ -2077,10 +2086,6 @@ namespace Mosa.Compiler.Framework.Stages
 			deadCodeEliminationPhi++;
 		}
 
-		/// <summary>
-		/// Ariths the simplification rem unsigned modulus.
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationRemUnsignedModulus(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.RemUnsigned32 || node.Instruction == IRInstruction.RemUnsigned64))
@@ -2128,10 +2133,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return;
 		}
 
-		/// <summary>
-		/// Arithmetics the simplification rem signed modulus.
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationRemSignedModulus(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.RemSigned32 || node.Instruction == IRInstruction.RemSigned64))

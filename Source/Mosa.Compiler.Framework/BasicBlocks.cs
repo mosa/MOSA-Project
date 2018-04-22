@@ -146,26 +146,19 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the block.
 		/// </summary>
-		/// <param name="label">The label.</param>
+		/// <param name="blockLabel">The label.</param>
 		/// <returns></returns>
-		public BasicBlock CreateBlock(int label)
+		public BasicBlock CreateBlock(int blockLabel = -1, int instructionLabel = -1)
 		{
-			var basicBlock = new BasicBlock(basicBlocks.Count, label);
-			basicBlocks.Add(basicBlock);
-			basicBlocksByLabel.Add(label, basicBlock);
-			return basicBlock;
-		}
+			if (blockLabel < 0)
+				blockLabel = nextAvailableLabel++;
 
-		/// <summary>
-		/// Creates the block.
-		/// </summary>
-		/// <returns></returns>
-		public BasicBlock CreateBlock()
-		{
-			int label = nextAvailableLabel++;
-			var basicBlock = new BasicBlock(basicBlocks.Count, label);
+			if (instructionLabel < 0)
+				instructionLabel = blockLabel;
+
+			var basicBlock = new BasicBlock(basicBlocks.Count, blockLabel, instructionLabel);
 			basicBlocks.Add(basicBlock);
-			basicBlocksByLabel.Add(label, basicBlock);
+			basicBlocksByLabel.Add(blockLabel, basicBlock);
 			return basicBlock;
 		}
 

@@ -609,8 +609,8 @@ namespace Mosa.Compiler.Framework
 			//newblock.DebugCheck();
 
 			// check that new block is empty
-			Debug.Assert(newblock.First.Next == newblock.Last);
-			Debug.Assert(newblock.Last.Previous == newblock.First);
+			//Debug.Assert(newblock.First.Next == newblock.Last);
+			//Debug.Assert(newblock.Last.Previous == newblock.First);
 
 			newblock.First.Next = Next;
 			newblock.Last.Previous = Block.Last.Previous;

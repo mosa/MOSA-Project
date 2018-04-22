@@ -158,7 +158,7 @@ namespace Mosa.Utility.GUI.Common
 
 				var part = s.Substring(open + 2, close - open - 2);
 
-				if (part == "NULL" || char.IsSymbol(part[0]))
+				if (part == "NULL" || char.IsSymbol(part[0]) || char.IsPunctuation(part[0]))
 				{
 					at = close;
 					continue;

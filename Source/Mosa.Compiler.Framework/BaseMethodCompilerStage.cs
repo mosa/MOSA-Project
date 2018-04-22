@@ -266,16 +266,6 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Create an empty block.
 		/// </summary>
-		/// <param name="label">The label.</param>
-		/// <returns></returns>
-		protected BasicBlock CreateNewBlock(int label)
-		{
-			return BasicBlocks.CreateBlock(label);
-		}
-
-		/// <summary>
-		/// Create an empty block.
-		/// </summary>
 		/// <returns></returns>
 		protected BasicBlock CreateNewBlock()
 		{
@@ -285,11 +275,33 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Create an empty block.
 		/// </summary>
-		/// <param name="label">The label.</param>
+		/// <param name="blockLabel">The label.</param>
 		/// <returns></returns>
-		protected Context CreateNewBlockContext(int label)
+		protected BasicBlock CreateNewBlock(int blockLabel)
 		{
-			return new Context(CreateNewBlock(label));
+			return BasicBlocks.CreateBlock(blockLabel);
+		}
+
+		/// <summary>
+		/// Creates the new block.
+		/// </summary>
+		/// <param name="blockLabel">The label.</param>
+		/// <param name="instructionLabel">The instruction label.</param>
+		/// <returns></returns>
+		protected BasicBlock CreateNewBlock(int blockLabel, int instructionLabel)
+		{
+			return BasicBlocks.CreateBlock(blockLabel, instructionLabel);
+		}
+
+
+		/// <summary>
+		/// Create an empty block.
+		/// </summary>
+		/// <param name="blockLabel">The label.</param>
+		/// <returns></returns>
+		protected Context CreateNewBlockContext(int blockLabel, int instructionLabel)
+		{
+			return new Context(CreateNewBlock(blockLabel, instructionLabel));
 		}
 
 		/// <summary>
@@ -297,14 +309,14 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="blocks">The Blocks.</param>
 		/// <returns></returns>
-		protected BasicBlock[] CreateNewBlocks(int blocks)
+		protected BasicBlock[] CreateNewBlocks(int blocks, int instructionLabel)
 		{
 			// Allocate the block array
 			var result = new BasicBlock[blocks];
 
 			for (int index = 0; index < blocks; index++)
 			{
-				result[index] = CreateNewBlock();
+				result[index] = CreateNewBlock(-1, instructionLabel);
 			}
 
 			return result;
@@ -314,9 +326,9 @@ namespace Mosa.Compiler.Framework
 		/// Create an empty block.
 		/// </summary>
 		/// <returns></returns>
-		protected Context CreateNewBlockContext()
+		protected Context CreateNewBlockContext(int instructionLabel)
 		{
-			return new Context(CreateNewBlock());
+			return new Context(CreateNewBlock(-1, instructionLabel));
 		}
 
 		/// <summary>
@@ -324,14 +336,14 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="blocks">The Blocks.</param>
 		/// <returns></returns>
-		protected Context[] CreateNewBlockContexts(int blocks)
+		protected Context[] CreateNewBlockContexts(int blocks, int instructionLabel)
 		{
 			// Allocate the context array
 			var result = new Context[blocks];
 
 			for (int index = 0; index < blocks; index++)
 			{
-				result[index] = CreateNewBlockContext();
+				result[index] = CreateNewBlockContext(instructionLabel);
 			}
 
 			return result;
@@ -344,7 +356,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		protected BasicBlock Split(InstructionNode node)
 		{
-			var newblock = CreateNewBlock();
+			var newblock = CreateNewBlock(-1, node.Label);
 
 			node.Split(newblock);
 

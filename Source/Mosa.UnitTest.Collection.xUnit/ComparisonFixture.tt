@@ -10,7 +10,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 <# foreach (KeyValuePair<string, string> number in IntegersWithChar)
 	foreach (KeyValuePair<string, string> compare in Comparisons) 
 	{ #>
-	public class Fixture_Comparisone<#= compare.Value #><#= number.Value #> : TestFixture
+	public class Fixture_Comparison<#= compare.Value #><#= number.Value #> : TestFixture
 	{
 		[Theory]
 		[MemberData(nameof(<#= number.Value #><#= number.Value #>))]

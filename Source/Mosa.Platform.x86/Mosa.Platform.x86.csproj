@@ -132,64 +132,64 @@
     <Compile Include="Instructions\CallStatic.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovCarry32.cs">
+    <Compile Include="Instructions\CMovCarry32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovEqual32.cs">
+    <Compile Include="Instructions\CMovEqual32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovGreaterOrEqual32.cs">
+    <Compile Include="Instructions\CMovGreaterOrEqual32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovGreaterThan32.cs">
+    <Compile Include="Instructions\CMovGreaterThan32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovLessOrEqual32.cs">
+    <Compile Include="Instructions\CMovLessOrEqual32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovLessThan32.cs">
+    <Compile Include="Instructions\CMovLessThan32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovNoCarry32.cs">
+    <Compile Include="Instructions\CMovNoCarry32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovNoOverflow32.cs">
+    <Compile Include="Instructions\CMovNoOverflow32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovNoParity32.cs">
+    <Compile Include="Instructions\CMovNoParity32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovNotEqual32.cs">
+    <Compile Include="Instructions\CMovNotEqual32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovNotSigned32.cs">
+    <Compile Include="Instructions\CMovNotSigned32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovNotZero32.cs">
+    <Compile Include="Instructions\CMovNotZero32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovOverflow32.cs">
+    <Compile Include="Instructions\CMovOverflow32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovParity32.cs">
+    <Compile Include="Instructions\CMovParity32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovSigned32.cs">
+    <Compile Include="Instructions\CMovSigned32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovUnsignedGreaterOrEqual32.cs">
+    <Compile Include="Instructions\CMovUnsignedGreaterOrEqual32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovUnsignedGreaterThan32.cs">
+    <Compile Include="Instructions\CMovUnsignedGreaterThan32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovUnsignedLessOrEqual32.cs">
+    <Compile Include="Instructions\CMovUnsignedLessOrEqual32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovUnsignedLessThan32.cs">
+    <Compile Include="Instructions\CMovUnsignedLessThan32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\CmovZero32.cs">
+    <Compile Include="Instructions\CMovZero32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Cmp32.cs">

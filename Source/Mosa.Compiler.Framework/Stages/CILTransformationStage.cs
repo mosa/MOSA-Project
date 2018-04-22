@@ -1936,7 +1936,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var before = new Context(node).InsertBefore();
 
 			// First create new block and split current block
-			var exceptionContext = CreateNewBlockContexts(1)[0];
+			var exceptionContext = CreateNewBlockContexts(1, node.Label)[0];
 			var nextContext = Split(before);
 
 			// Get array length
