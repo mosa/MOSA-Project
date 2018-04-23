@@ -97,10 +97,6 @@
     <Compile Include="Boot.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Korlib\Mosa.Korlib.csproj">
-      <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
-      <Name>Mosa.Korlib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
       <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
       <Name>Mosa.ClassLib</Name>
@@ -124,6 +120,10 @@
     <ProjectReference Include="..\Mosa.Kernel\Mosa.Kernel.csproj">
       <Project>{ff099d48-3fa5-4ed6-bba0-1497d994962a}</Project>
       <Name>Mosa.Kernel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj">
+      <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
+      <Name>Mosa.Korlib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj">
       <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
