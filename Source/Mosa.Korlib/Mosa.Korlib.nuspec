@@ -1,26 +1,21 @@
-﻿<?xml version="1.0"?>
+<?xml version="1.0"?>
 <package >
-	<metadata>
-		<id>Mosa.Tool.Compiler</id>
-		<version>1.0.1.0</version>
-		<title>Mosa.Tool.Compiler</title>
+	<metadata minClientVersion="3.3.0">
+		<id>Mosa.Korlib</id>
+		<version>1.0.0.1</version>
+		<title>Mosa.Korlib Library</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
 		<licenseUrl>https://github.com/mosa/MOSA-Project/blob/master/LICENSE.txt</licenseUrl>
 		<projectUrl>http://www.mosa-project.org</projectUrl>
 		<iconUrl>https://raw.githubusercontent.com/tgiphil/MOSA-Project/VSIXProject/Source/Art/Mosa%20Icon.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<description>MOSA Compiler command line tool</description>
+		<description>MOSA implementation of corlib</description>
 		<releaseNotes></releaseNotes>
 		<copyright>Copyright © 2017</copyright>
-		<tags>MOSA Compiler</tags>
-		<dependencies>
-			<dependency id="Mosa.Compiler.Framework" version="1.0.0" />
-		</dependencies>
+		<tags>MOSA Compiler corlib</tags>
 	</metadata>
 	<files>
-		<file src="..\..\bin\mosacl.exe" target="tools" />
-		<file src="..\..\bin\Mosa.Platform.ARMv6.dll" target="tools" />
-		<file src="..\..\bin\Mosa.Platform.x86.dll" target="tools" />
+		<file src="..\..\bin\mscorlib.dll" target="lib\net45" />
 	</files>
 </package>

@@ -67,12 +67,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Korlib\Korlib.csproj">
-      <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
-      <Name>Korlib</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Builders\RuntimeAssembly.cs" />
     <Compile Include="Builders\RuntimeCustomAttributeData.cs" />
     <Compile Include="Builders\RuntimeType.cs" />
@@ -108,7 +102,12 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj">
+      <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
+      <Name>Mosa.Korlib</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>

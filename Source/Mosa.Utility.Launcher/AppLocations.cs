@@ -22,7 +22,7 @@ namespace Mosa.Utility.Launcher
 
 		public string Mkisofs { get; set; }
 
-		public string GDB { get; set; }
+		public string GDB { get; set; }		
 
 		// TODO: The following methods should be placed in another class, possibly as a class extension
 
@@ -213,5 +213,6 @@ namespace Mosa.Utility.Launcher
 
 			return false;
 		}
+
 	}
 }

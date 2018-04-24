@@ -73,9 +73,9 @@
     <Compile Include="Native.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Korlib\Korlib.csproj">
-      <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
-      <Name>Korlib</Name>
+    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj">
+      <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
+      <Name>Mosa.Korlib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
       <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>

@@ -102,13 +102,13 @@
     <Compile Include="Tests\GenericTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Korlib\Korlib.csproj">
-      <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
-      <Name>Korlib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj">
       <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
       <Name>Mosa.Kernel.x86</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj">
+      <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
+      <Name>Mosa.Korlib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj">
       <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>

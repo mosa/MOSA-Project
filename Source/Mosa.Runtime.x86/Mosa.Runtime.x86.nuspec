@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>Mosa.Runtime.x86</id>
-		<version>1.0.0.0</version>
+		<version>1.0.0.1</version>
 		<title>Mosa.Runtime.x86 Library</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
@@ -15,8 +15,8 @@
 		<copyright>Copyright © 2017</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
-			<dependency id="Mosa.Korlib" version="1.0.0" />
-			<dependency id="Mosa.Runtime" version="1.0.0" />
+			<dependency id="Mosa.Korlib" version="1.0.0.1" />
+			<dependency id="Mosa.Runtime" version="1.0.0.1" />
 		</dependencies>
 	</metadata>
 	<files>

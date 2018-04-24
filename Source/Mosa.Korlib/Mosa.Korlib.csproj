@@ -63,9 +63,7 @@
     <Compile Include="System.Reflection\CallingConventions.cs" />
     <Compile Include="System.Reflection\ConstructorInfo.cs" />
     <Compile Include="System.Reflection\CustomAttributeData.cs" />
-    <Compile Include="System.Reflection\CustomAttributeNamedArgument.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="System.Reflection\CustomAttributeNamedArgument.cs" />
     <Compile Include="System.Reflection\CustomAttributeTypedArgument.cs" />
     <Compile Include="System.Reflection\FieldAttributes.cs" />
     <Compile Include="System.Reflection\FieldInfo.cs" />
@@ -198,7 +196,7 @@
     <Compile Include="System.Runtime.InteropServices\OutAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Korlib.nuspec" />
+    <None Include="Mosa.Korlib.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <PropertyGroup>

@@ -158,7 +158,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Mosa.Tool.Launcher.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
