@@ -38,7 +38,7 @@
 		<file src="..\..\bin\Mosa.Utility.GUI.Common.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.Launcher.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.RSP.dll" target="tools" />
-		<file src="..\..\bin\mosacl.exe" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Compiler.exe" target="tools" />
 		<file src="..\..\bin\SharpDisasm.dll" target="tools" />
 		<file src="..\..\bin\MetroFramework.dll" target="tools" />
 		<file src="..\..\bin\MetroFramework.Design.dll" target="tools" />

@@ -99,7 +99,7 @@ namespace Mosa.Utility.Launcher
 		public string InlinedIRMaximumHelper { set { InlinedIRMaximum = (int)value.ParseHexOrDecimal(); } }
 
 		[Option("all-optimizations-off")]
-		public bool AllOptimizationsOffHelper
+		public bool AllOptimizationsOff
 		{
 			set
 			{
@@ -259,8 +259,10 @@ namespace Mosa.Utility.Launcher
 
 		public List<IncludeFile> IncludeFiles { get; set; }
 
+		public List<string> Paths { get; set; }
+
 		[Option("file", HelpText = "Path to a file which contains files to be included in the generated image file.")]
-		public string IncludeFilePath
+		public string IncludeFileHelper
 		{
 			set
 			{
@@ -270,37 +272,48 @@ namespace Mosa.Utility.Launcher
 					return;
 				}
 
-				AppendIncludeFiles(value);
+				ReadIncludeFile(value);
 			}
 		}
 
-		private string _sourceFile;
+		[Option("path")]
+		public string PathHelper
+		{
+			set
+			{
+				if (!Paths.Contains(value))
+				{
+					Paths.Add(value);
+				}
+			}
+		}
+
+		public string SourceFile;
 
 		[Value(0)]
-		public string SourceFile
+		public string SourceFileHelper
 		{
-			get
-			{
-				return _sourceFile;
-			}
 			set
 			{
 				if (value.IndexOf(Path.DirectorySeparatorChar) >= 0)
 				{
-					_sourceFile = value;
+					SourceFile = value;
 				}
 				else
 				{
-					_sourceFile = Path.Combine(Directory.GetCurrentDirectory(), value);
+					SourceFile = Path.Combine(Directory.GetCurrentDirectory(), value);
 				}
 			}
 		}
+		[Option("hunt-corlib")]
+		public bool HuntForCorLib { get; set; }
 
 		public Options()
 		{
 			IncludeFiles = new List<IncludeFile>();
+			Paths = new List<string>();
 			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
-			BootLoader = BootLoader.Syslinux_3_72; //Can't use the Default in the attribute because it would overwrite other bootloader options
+			BootLoader = BootLoader.Syslinux_3_72; // Can't use the Default in the attribute because it would overwrite other bootloader options
 			BootFormat = BootFormat.Multiboot_0_7;
 			SerialConnectionOption = SerialConnectionOption.None;
 			Emulator = EmulatorType.Qemu;
@@ -316,11 +329,13 @@ namespace Mosa.Utility.Launcher
 			TwoPassOptimizations = true;
 			GDBPort = 1234;
 			GDBHost = "localhost";
+			HuntForCorLib = true;
 		}
 
-		private void AppendIncludeFiles(string file)
+		private void ReadIncludeFile(string file)
 		{
 			string line;
+
 			using (var reader = new StreamReader(file))
 			{
 				while (!reader.EndOfStream)

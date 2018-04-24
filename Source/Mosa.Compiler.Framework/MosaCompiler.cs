@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		private static IEnumerable<string> GetInputFileNames(List<FileInfo> inputFiles)
+		private static IEnumerable<string> GetInputFileNames(IEnumerable<FileInfo> inputFiles)
 		{
 			foreach (var file in inputFiles)
 			{
@@ -49,7 +49,20 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void Load(List<FileInfo> inputFiles)
+		public void AddPath(string path)
+		{
+			ModuleLoader.AddPrivatePath(path);
+		}
+
+		public void AddPath(IEnumerable<string> paths)
+		{
+			foreach (string file in paths)
+			{
+				ModuleLoader.AddPrivatePath(file);
+			}
+		}
+
+		public void Load(IEnumerable<FileInfo> inputFiles)
 		{
 			ModuleLoader.AddPrivatePath(GetInputFileNames(inputFiles));
 

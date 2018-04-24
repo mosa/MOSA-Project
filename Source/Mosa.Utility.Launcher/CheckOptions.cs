@@ -15,12 +15,12 @@ namespace Mosa.Utility.Launcher
 
 			if (options.Emulator == EmulatorType.Bochs && options.ImageFormat == ImageFormat.VDI)
 			{
-				return "Boches does not support the VDI image format";
+				return "Bochs does not support the VDI image format";
 			}
 
 			if (options.Emulator == EmulatorType.Bochs && options.ImageFormat == ImageFormat.VMDK)
 			{
-				return "Boches does not support the VMDK image format";
+				return "Bochs does not support the VMDK image format";
 			}
 
 			if (options.Emulator == EmulatorType.VMware && options.ImageFormat == ImageFormat.IMG)

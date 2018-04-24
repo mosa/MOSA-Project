@@ -9,11 +9,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaModuleLoader : IModuleLoader, System.IDisposable
 	{
-		public AssemblyResolver Resolver { get; private set; }
+		public AssemblyResolver Resolver { get; }
 
-		internal IList<ModuleDefMD> Modules { get; private set; }
-
-		private List<string> privatePaths = new List<string>();
+		internal IList<ModuleDefMD> Modules { get; }
 
 		public MosaModuleLoader()
 		{
@@ -65,7 +63,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public void AddPrivatePath(IEnumerable<string> assemblyPaths)
 		{
 			foreach (string path in assemblyPaths)
+			{
 				AddPrivatePath(Path.GetDirectoryName(path));
+			}
 		}
 
 		/// <summary>
@@ -94,6 +94,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			foreach (var module in Modules)
 				module.Dispose();
+
 			Modules.Clear();
 		}
 	}

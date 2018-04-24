@@ -133,9 +133,20 @@ namespace Mosa.Utility.Launcher
 					new FileInfo(Options.SourceFile)
 				};
 
-				compiler.Load(inputFiles);
+				compiler.AddPath(Options.Paths);
 
-				//var threads = Options.UseMultiThreadingCompiler ? Environment.ProcessorCount : 1;
+				if (Options.HuntForCorLib)
+				{
+					var path = HuntForCorLibDirectory();
+
+					if (path != null)
+					{
+						OutputEvent("Hunted and found Corlib here: " + path);
+						compiler.AddPath(path);
+					}
+				}
+
+				compiler.Load(inputFiles);
 
 				if (Options.UseMultiThreadingCompiler)
 				{
@@ -456,5 +467,78 @@ namespace Mosa.Utility.Launcher
 				default: return null;
 			}
 		}
+
+		private string mscorlibFileName = "mscorlib.dll";
+
+		private bool CheckForCorLib(string directory)
+		{
+			return File.Exists(Path.Combine(directory, mscorlibFileName));
+		}
+
+		private string HuntForCorLibDirectory()
+		{
+			// Only hunt if it's not in any of the path directories already, or the source directory
+
+			// let's check the source directory
+			string path = Path.GetDirectoryName(Options.SourceFile);
+
+			if (CheckForCorLib(path))
+				return null;
+
+			foreach (var optPaths in Options.Paths)
+			{
+				if (CheckForCorLib(optPaths))
+					return null;
+			}
+
+			// okay -- need to hunt for it
+
+			// check current directory
+			if (CheckForCorLib(Environment.CurrentDirectory))
+				return Environment.CurrentDirectory;
+
+			string result = null;
+
+			// check within packages directory in 1 or 2 directories back
+			// this is how VS organizes projects and packages
+
+			result = SearchSubdirectories(Path.Combine(Path.GetDirectoryName(Options.SourceFile), "..", "packages"));
+
+			if (result != null)
+				return result;
+
+			result = SearchSubdirectories(Path.Combine(Path.GetDirectoryName(Options.SourceFile), "..", "..", "packages"));
+
+			if (result != null)
+				return result;
+
+			result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "packages"));
+
+			if (result != null)
+				return result;
+
+			result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "..", "packages"));
+
+			if (result != null)
+				return result;
+
+			return null;
+		}
+
+		private string SearchSubdirectories(string path)
+		{
+			if (Directory.Exists(path))
+			{
+				var result = Directory.GetFiles(path, mscorlibFileName, SearchOption.AllDirectories);
+
+				if (result?.Length >= 1)
+				{
+					return Path.GetDirectoryName(result[0]);
+				}
+			}
+
+			return null;
+		}
+
 	}
 }

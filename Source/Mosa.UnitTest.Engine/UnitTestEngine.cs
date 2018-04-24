@@ -331,6 +331,7 @@ namespace Mosa.UnitTest.Engine
 
 		private void Compile()
 		{
+			Options.Paths.Add(TestAssemblyPath);
 			Options.SourceFile = Path.Combine(TestAssemblyPath, TestSuiteFile);
 
 			var builder = new Builder(Options, AppLocations, this);

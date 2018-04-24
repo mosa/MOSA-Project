@@ -14,12 +14,8 @@
 		<releaseNotes></releaseNotes>
 		<copyright>Copyright © 2017</copyright>
 		<tags>MOSA Compiler corlib</tags>
-		<contentFiles>
-			<files include="mscorlib.dll" buildAction="None" copyToOutput="true" />
-		</contentFiles>
-		</metadata>
+	</metadata>
 	<files>
 		<file src="..\..\bin\mscorlib.dll" target="lib\net45" />
-		<file src="..\..\bin\mscorlib.dll" target="contentFiles" />
 	</files>
 </package>
