@@ -22,7 +22,7 @@ namespace Mosa.Utility.Launcher
 
 		public string Mkisofs { get; set; }
 
-		public string GDB { get; set; }		
+		public string GDB { get; set; }
 
 		// TODO: The following methods should be placed in another class, possibly as a class extension
 
@@ -41,6 +41,11 @@ namespace Mosa.Utility.Launcher
 						CombineParameterAndDirectory("ProgramFiles","qemu"),
 						CombineParameterAndDirectory("ProgramFiles(x86)","qemu"),
 						"/bin"
+					},
+					new string[]
+					{
+						@"..\packages",
+						@"..\..\packages",
 					}
 				);
 			}
@@ -60,6 +65,11 @@ namespace Mosa.Utility.Launcher
 							CombineParameterAndDirectory("ProgramFiles", "qemu"),
 							CombineParameterAndDirectory("ProgramFiles(x86)", "qemu"),
 							"/bin"
+						},
+						new string[]
+						{
+							@"..\packages",
+							@"..\..\packages",
 						}
 					);
 				}
@@ -72,6 +82,11 @@ namespace Mosa.Utility.Launcher
 							new string[] {
 								Path.GetDirectoryName(QEMU),
 								Path.Combine(Path.GetDirectoryName(QEMU), "bios"),"/usr/share/qemu"
+							},
+							new string[]
+							{
+								@"..\packages",
+								@"..\..\packages",
 							}
 						)
 					);
@@ -88,7 +103,13 @@ namespace Mosa.Utility.Launcher
 						CombineParameterAndDirectory("MOSA","ndisasm"),
 						@"..\Tools\ndisasm",
 						@"Tools\ndisasm",
+						CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools"),
 						"/bin"
+					},
+					new string[]
+					{
+						@"..\packages",
+						@"..\..\packages",
 					}
 				);
 			}
@@ -111,7 +132,12 @@ namespace Mosa.Utility.Launcher
 						@"..\Tools\Bochs",
 						@"Tools\Bochs",
 						"/bin"
-						}
+					},
+					new string[]
+					{
+						@"..\packages",
+						@"..\..\packages",
+					}
 				);
 			}
 
@@ -144,7 +170,13 @@ namespace Mosa.Utility.Launcher
 						CombineParameterAndDirectory("MOSA","mkisofs"),
 						@"..\Tools\mkisofs",
 						@"Tools\mkisofs",
+						CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools"),
 						"/bin"
+					},
+					new string[]
+					{
+						@"..\packages",
+						@"..\..\packages",
 					}
 				);
 			}
@@ -164,13 +196,19 @@ namespace Mosa.Utility.Launcher
 						@"C:\cygwin\bin",
 						@"C:\mingw32\bin",
 						@"C:\mingw\bin",
+						CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools"),
 						"/bin"
+					},
+					new string[]
+					{
+						@"..\packages",
+						@"..\..\packages",
 					}
 				);
 			}
 		}
 
-		private string CombineParameterAndDirectory(string parameter, string subdirectory)
+		private static string CombineParameterAndDirectory(string parameter, string subdirectory)
 		{
 			var variable = Environment.GetEnvironmentVariable(parameter);
 
@@ -180,8 +218,24 @@ namespace Mosa.Utility.Launcher
 			return Path.Combine(variable, subdirectory);
 		}
 
-		private string TryFind(IList<string> files, IList<string> directories)
+		private static string TryFind(IList<string> files, IList<string> directories, IList<string> searchdirectories = null)
 		{
+			if (searchdirectories != null)
+			{
+				foreach (var directory in searchdirectories)
+				{
+					foreach (var file in files)
+					{
+						var location = SearchSubdirectories(directory, file);
+
+						if (location != null)
+						{
+							return location;
+						}
+					}
+				}
+			}
+
 			foreach (var directory in directories)
 			{
 				foreach (var file in files)
@@ -196,7 +250,7 @@ namespace Mosa.Utility.Launcher
 			return string.Empty;
 		}
 
-		private bool TryFind(string file, string directory, out string location)
+		private static bool TryFind(string file, string directory, out string location)
 		{
 			location = string.Empty;
 
@@ -214,5 +268,19 @@ namespace Mosa.Utility.Launcher
 			return false;
 		}
 
+		private static string SearchSubdirectories(string path, string filename)
+		{
+			if (Directory.Exists(path))
+			{
+				var result = Directory.GetFiles(path, filename, SearchOption.AllDirectories);
+
+				if (result?.Length >= 1)
+				{
+					return result[0];
+				}
+			}
+
+			return null;
+		}
 	}
 }

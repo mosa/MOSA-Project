@@ -64,6 +64,8 @@ namespace Mosa.Tool.Launcher
 			dataGridView1.AutoResizeColumns();
 			dataGridView1.Columns[1].Width = 175;
 			dataGridView1.Columns[2].Width = 500;
+
+			AddOutput("Current Directory: " + Environment.CurrentDirectory);
 		}
 
 		private void UpdateInterfaceAppLocations()
