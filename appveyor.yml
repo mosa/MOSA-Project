@@ -31,11 +31,11 @@ test: off
 
 assembly_info:
   patch: true
-  file: MyVersion.cs
-  assembly_version: '{version}'
-  assembly_file_version: '{version}'
-  assembly_informational_version: '{version}-rc1'
+  file: AssemblyInfo.*
+  assembly_version: "1.8.{build}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
 
 artifacts:
-- path: '**\*.nupkg'
-- path: bin\MOSA Installer\MOSA-Installer.exe
+- path: 'bin\nupkg\*.nupkg'
+- path: 'bin\MOSA Installer\MOSA-Installer.exe'
