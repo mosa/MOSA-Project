@@ -6,7 +6,7 @@ image: Visual Studio 2017
 shallow_clone: true
 
 install:
-- cmd: choco install InnoSetup
+#- cmd: choco install InnoSetup
 
 before_build:
 - nuget restore -Verbosity quiet Source\MOSA.sln
@@ -18,7 +18,7 @@ build:
   publish_nuget: true
 
 after_build:
-- cmd: Source\Inno-Setup-Script\create-installer.bat
+- cmd: "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" Source\Inno-Setup-Script\Mosa-Installer.iss
 
 build_script:
 
