@@ -18,7 +18,7 @@ build:
   publish_nuget: true
 
 after_build:
-#- cmd: '"C:\Program Files (x86)\Inno Setup 5\ISCC.exe" "Source\Inno-Setup-Script\Mosa-Installer.iss"'
+- cmd: Source\Inno-Setup-Script\create-installer.bat
 
 build_script:
 
