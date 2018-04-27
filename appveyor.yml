@@ -1,13 +1,8 @@
-build:
-  verbosity: minimal
-  parallel: true
-  project: Source\MOSA.sln
-  publish_nuget: true
+version: '1.8.{build}'
 
 configuration: Release
 platform: Any CPU
 image: Visual Studio 2017
-
 shallow_clone: true
 
 install:
@@ -15,6 +10,12 @@ install:
 
 before_build:
 - nuget restore -Verbosity quiet Source\MOSA.sln
+
+build:
+  verbosity: minimal
+  parallel: true
+  project: Source\MOSA.sln
+  publish_nuget: true
 
 after_build:
 #- cmd: "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" Mosa-Installer.iss
@@ -28,14 +29,12 @@ nuget:
 
 test: off
 
-dotnet_csproj:
+assembly_info:
   patch: true
-  file: '**\*.csproj'
-  version: '{version}'
-  package_version: '{version}'
+  file: MyVersion.cs
   assembly_version: '{version}'
-  file_version: '{version}'
-  informational_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}-rc1'
 
 artifacts:
 - path: '**\*.nupkg'
