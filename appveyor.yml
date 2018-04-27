@@ -39,4 +39,4 @@ dotnet_csproj:
 
 artifacts:
 - path: '**\*.nupkg'
-- path: 'bin\MOSA Installer\MOSA-Installer.exe
+- path: bin\MOSA Installer\MOSA-Installer.exe
