@@ -14,10 +14,10 @@ install:
 - cmd: choco install InnoSetup
 
 before_build:
-  - nuget restore -Verbosity quiet Source\MOSA.sln
+- nuget restore -Verbosity quiet Source\MOSA.sln
 
 after_build:
-  - cmd: "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" Mosa-Installer.iss
+- cmd: "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" Mosa-Installer.iss
 
 build_script:
 
@@ -38,5 +38,5 @@ dotnet_csproj:
   informational_version: '{version}'
 
 artifacts:
-  - path: '**\*.nupkg'
-  - path: 'bin\MOSA Installer\MOSA-Installer.exe
+- path: '**\*.nupkg'
+- path: 'bin\MOSA Installer\MOSA-Installer.exe
