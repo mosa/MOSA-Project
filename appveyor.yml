@@ -33,9 +33,10 @@ test: off
 assembly_info:
   patch: true
   file: AssemblyInfo.*
-  assembly_version: "1.8.{build}"
+  assembly_version: "{version}"
   assembly_file_version: "{version}"
   assembly_informational_version: "{version}"
 
 artifacts:
 - path: 'bin\MOSA Installer\MOSA-Installer.exe'
+
