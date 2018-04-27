@@ -37,7 +37,7 @@
 		<DebugSymbols>true</DebugSymbols>
 		<FileAlignment>4096</FileAlignment>
 		<Optimize>false</Optimize>
-		<OutputPath>..\..\bin\</OutputPath>
+		<OutputPath>bin\</OutputPath>
 		<RegisterForComInterop>False</RegisterForComInterop>
 		<RemoveIntegerChecks>False</RemoveIntegerChecks>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -57,7 +57,7 @@
 		</DocumentationFile>
 		<FileAlignment>4096</FileAlignment>
 		<Optimize>true</Optimize>
-		<OutputPath>..\..\bin\</OutputPath>
+		<OutputPath>bin\</OutputPath>
 		<RegisterForComInterop>False</RegisterForComInterop>
 		<RemoveIntegerChecks>False</RemoveIntegerChecks>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -93,7 +93,7 @@
 	<Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<StartAction>Program</StartAction>
-		<StartProgram>$(ProjectDir)\..\tools\Mosa.Tool.Launcher.exe</StartProgram>
+		<StartProgram>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Tool.Bootstrap.exe</StartProgram>
 		<StartArguments>--q --a Mosa.Starter.x86.exe</StartArguments>
 	</PropertyGroup>
 </Project>
