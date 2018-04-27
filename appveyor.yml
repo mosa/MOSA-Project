@@ -11,6 +11,7 @@ image: Visual Studio 2017
 shallow_clone: true
 
 install:
+- cmd: choco install InnoSetup
 
 before_build:
   - nuget restore -Verbosity quiet Source\MOSA.sln
@@ -38,4 +39,4 @@ dotnet_csproj:
 
 artifacts:
   - path: '**\*.nupkg'
-  - path: 'bin\MOSA Installer\MOSA-Installer.exe'
+  - path: 'bin\MOSA Installer\MOSA-Installer.exe
