@@ -85,10 +85,12 @@ namespace Mosa.Compiler.Pdb
 				Debug.WriteLine(String.Format(@"PdbReader: Root stream page {0} (at offset {1})", pages[i], pages[i] * header.dwPageSize));
 			}
 
-			using (PdbStream pdbStream = GetStream(pages, dwStreamLength))
-			using (BinaryReader rootReader = new BinaryReader(pdbStream))
+			using (var pdbStream = GetStream(pages, dwStreamLength))
 			{
-				PdbRootStream.Read(rootReader, header.dwPageSize, out root);
+				using (var rootReader = new BinaryReader(pdbStream))
+				{
+					PdbRootStream.Read(rootReader, header.dwPageSize, out root);
+				}
 			}
 		}
 
@@ -139,11 +141,11 @@ namespace Mosa.Compiler.Pdb
 		{
 			get
 			{
-				using (BinaryReader reader = new BinaryReader(GetStream(3)))
+				using (var reader = new BinaryReader(GetStream(3)))
 				{
 					// Read the symbol header
 					PdbSymbolHeader header;
-					if (PdbSymbolHeader.Read(reader, out header) == true)
+					if (PdbSymbolHeader.Read(reader, out header))
 					{
 						// Now iterate all symbol file headers, which are added per source file.
 						// These map symbols to the files they're contained in via special PDB streams, which in

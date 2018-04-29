@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Pdb
 			if (state == null)
 				throw new ArgumentNullException(@"state");
 
-			Stream stream = (Stream)state;
+			var stream = (Stream)state;
 			return (stream.Position >= stream.Length);
 		}
 

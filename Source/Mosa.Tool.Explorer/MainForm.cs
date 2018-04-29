@@ -74,9 +74,10 @@ namespace Mosa.Tool.Explorer
 
 		private void OpenFile()
 		{
-			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
 				LoadAssembly(openFileDialog.FileName);
+				LoadAssemblyDebugInfo(openFileDialog.FileName);
 			}
 		}
 
@@ -655,37 +656,37 @@ namespace Mosa.Tool.Explorer
 		{
 			string dbgFile = Path.ChangeExtension(assemblyFileName, "pdb");
 
-			if (File.Exists(dbgFile))
+			if (!File.Exists(dbgFile))
+				return;
+
+			tbResult.AppendText("File: " + dbgFile + "\n");
+			tbResult.AppendText("======================\n");
+			using (var fileStream = new FileStream(dbgFile, FileMode.Open, FileAccess.Read, FileShare.Read))
 			{
-				tbResult.AppendText("File: " + dbgFile + "\n");
-				tbResult.AppendText("======================\n");
-				using (FileStream fileStream = new FileStream(dbgFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+				using (var reader = new PdbReader(fileStream))
 				{
-					using (PdbReader reader = new PdbReader(fileStream))
+					tbResult.AppendText("Global targetSymbols: \n");
+					tbResult.AppendText("======================\n");
+					foreach (var symbol in reader.GlobalSymbols)
 					{
-						tbResult.AppendText("Global targetSymbols: \n");
+						tbResult.AppendText(symbol + "\n");
+					}
+
+					tbResult.AppendText("Types:\n");
+					foreach (var type in reader.Types)
+					{
+						tbResult.AppendText(type.Name + "\n");
 						tbResult.AppendText("======================\n");
-						foreach (CvSymbol symbol in reader.GlobalSymbols)
+						tbResult.AppendText("Symbols:\n");
+						foreach (var symbol in type.Symbols)
 						{
-							tbResult.AppendText(symbol + "\n");
+							tbResult.AppendText("\t" + symbol + "\n");
 						}
 
-						tbResult.AppendText("Types:\n");
-						foreach (PdbType type in reader.Types)
+						tbResult.AppendText("Lines:\n");
+						foreach (var line in type.LineNumbers)
 						{
-							tbResult.AppendText(type.Name + "\n");
-							tbResult.AppendText("======================\n");
-							tbResult.AppendText("Symbols:\n");
-							foreach (CvSymbol symbol in type.Symbols)
-							{
-								tbResult.AppendText("\t" + symbol + "\n");
-							}
-
-							tbResult.AppendText("Lines:\n");
-							foreach (CvLine line in type.LineNumbers)
-							{
-								tbResult.AppendText("\t" + line.ToString() + "\n");
-							}
+							tbResult.AppendText("\t" + line.ToString() + "\n");
 						}
 					}
 				}

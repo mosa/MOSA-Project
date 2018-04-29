@@ -6,7 +6,7 @@ using System.IO;
 namespace Mosa.Compiler.Pdb
 {
 	/// <summary>
-	///
+	/// PdbSymbolHeader
 	/// </summary>
 	public struct PdbSymbolHeader
 	{

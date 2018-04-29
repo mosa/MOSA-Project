@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Pdb
 			// sizeOfLines: The size of the lines in bytes
 			int header, nextBlockOffset, start, seg, size, fileOffset, numberOfLines, sizeOfLines;
 
-			using (BinaryReader reader = new BinaryReader(this.reader.GetStream(stream)))
+			using (var reader = new BinaryReader(this.reader.GetStream(stream)))
 			{
 				reader.BaseStream.Position = offset;
 

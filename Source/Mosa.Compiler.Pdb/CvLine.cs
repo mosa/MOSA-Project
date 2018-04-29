@@ -17,35 +17,6 @@ namespace Mosa.Compiler.Pdb
 	/// </remarks>
 	public struct CvLine
 	{
-		#region Data Members
-
-		/// <summary>
-		/// Holds the segment of the instruction for this line.
-		/// </summary>
-		private readonly int segment;
-
-		/// <summary>
-		/// Holds the offset of the instruction for this line.
-		/// </summary>
-		private readonly int offset;
-
-		/// <summary>
-		/// Holds the line number.
-		/// </summary>
-		private readonly int line;
-
-		/// <summary>
-		/// Holds the line start column.
-		/// </summary>
-		private readonly int startCol;
-
-		/// <summary>
-		/// Holds the line end column.
-		/// </summary>
-		private readonly int endCol;
-
-		#endregion Data Members
-
 		#region Construction
 
 		/// <summary>
@@ -58,11 +29,11 @@ namespace Mosa.Compiler.Pdb
 		/// <param name="endCol">The end column on the line.</param>
 		public CvLine(int segment, int offset, int line, int startCol, int endCol)
 		{
-			this.segment = segment;
-			this.offset = offset;
-			this.line = line;
-			this.startCol = startCol;
-			this.endCol = endCol;
+			Segment = segment;
+			Offset = offset;
+			Line = line;
+			StartColumn = startCol;
+			EndColumn = endCol;
 		}
 
 		#endregion Construction
@@ -73,46 +44,31 @@ namespace Mosa.Compiler.Pdb
 		/// Gets the segment of the function.
 		/// </summary>
 		/// <value>The segment.</value>
-		public int Segment
-		{
-			get { return segment; }
-		}
+		public int Segment { get; }
 
 		/// <summary>
 		/// Gets the offset from the function start.
 		/// </summary>
 		/// <value>The offset.</value>
-		public int Offset
-		{
-			get { return offset; }
-		}
+		public int Offset { get; }
 
 		/// <summary>
 		/// Gets the line number associated with this and the following instructions.
 		/// </summary>
 		/// <value>The line number.</value>
-		public int Line
-		{
-			get { return line; }
-		}
+		public int Line { get; }
 
 		/// <summary>
 		/// Gets the start column on the line.
 		/// </summary>
 		/// <value>The start column.</value>
-		public int StartColumn
-		{
-			get { return startCol; }
-		}
+		public int StartColumn { get; }
 
 		/// <summary>
 		/// Gets the end column on the line.
 		/// </summary>
 		/// <value>The end column.</value>
-		public int EndColumn
-		{
-			get { return endCol; }
-		}
+		public int EndColumn { get; }
 
 		#endregion Properties
 
@@ -126,7 +82,7 @@ namespace Mosa.Compiler.Pdb
 		/// </returns>
 		public override string ToString()
 		{
-			return String.Format("Line {0} columns {1}-{2} at {3:x4}:{4:x8}", line, startCol, endCol, segment, offset);
+			return String.Format("Line {0} columns {1}-{2} at {3:x4}:{4:x8}", Line, StartColumn, EndColumn, Segment, Offset);
 		}
 
 		#endregion Object Overrides
