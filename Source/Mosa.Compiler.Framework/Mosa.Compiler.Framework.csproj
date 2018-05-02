@@ -706,8 +706,6 @@
       </SubType>
     </Compile>
     <Compile Include="Platform\BaseOpcodeEncoder.cs" />
-    <Compile Include="Platform\FlagInputState.cs" />
-    <Compile Include="Platform\FlagOutputState.cs" />
     <Compile Include="Platform\OpcodeEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterAllocator\BasicRegisterAllocator.cs" />
