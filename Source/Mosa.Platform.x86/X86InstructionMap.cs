@@ -46,7 +46,7 @@ namespace Mosa.Platform.x86
 			{ "Div32", X86.Div32 },
 			{ "Divsd", X86.Divsd },
 			{ "Divss", X86.Divss },
-			{ "FarJmp", X86.FarJmp },
+			{ "JmpFar", X86.JmpFar },
 			{ "Hlt", X86.Hlt },
 			{ "IDiv32", X86.IDiv32 },
 			{ "IMul", X86.IMul },

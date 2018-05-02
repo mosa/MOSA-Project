@@ -27,13 +27,15 @@ namespace Mosa.Compiler.Pdb
 		/// <param name="line">The line.</param>
 		/// <param name="startCol">The start column on the line.</param>
 		/// <param name="endCol">The end column on the line.</param>
-		public CvLine(int segment, int offset, int line, int startCol, int endCol)
+		public CvLine(int segment, int offset, int line, int startCol, int endCol, int start)
 		{
 			Segment = segment;
 			Offset = offset;
 			Line = line;
 			StartColumn = startCol;
 			EndColumn = endCol;
+
+			Start = start;
 		}
 
 		#endregion Construction
@@ -70,6 +72,8 @@ namespace Mosa.Compiler.Pdb
 		/// <value>The end column.</value>
 		public int EndColumn { get; }
 
+		public int Start { get; }
+
 		#endregion Properties
 
 		#region Object Overrides
@@ -82,7 +86,7 @@ namespace Mosa.Compiler.Pdb
 		/// </returns>
 		public override string ToString()
 		{
-			return String.Format("Line {0} columns {1}-{2} at {3:x4}:{4:x8}", Line, StartColumn, EndColumn, Segment, Offset);
+			return String.Format("Line {0} columns {1}-{2} at {3:x4}:{4:x8}+{5:x8} [{6:x6}]", Line, StartColumn, EndColumn, Segment, Start, Offset, Start + Offset);
 		}
 
 		#endregion Object Overrides

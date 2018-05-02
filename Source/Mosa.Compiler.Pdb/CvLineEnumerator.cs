@@ -69,16 +69,17 @@ namespace Mosa.Compiler.Pdb
 
 					//Debug.Assert(header == 0x000000F2, @"CvLineEnumerator: Header magic invalid for PDB v7.00");
 					if (header != 0x000000F2)
-
+					{
 						// Skip this, assume no line numbers
 						yield break;
+					}
 
 					nextBlockOffset = reader.ReadInt32();
 					start = reader.ReadInt32();
 					seg = reader.ReadInt32() & 0xFFFF;
 
 					// Is this the function we're looking for?
-					if (true || start == functionAddress)
+					if (start == functionAddress)
 					{
 						size = reader.ReadInt32();
 						fileOffset = reader.ReadInt32();
@@ -86,7 +87,8 @@ namespace Mosa.Compiler.Pdb
 						sizeOfLines = reader.ReadInt32();
 						Debug.WriteLine(String.Format("Line numbers table header: size={0}, fileOffset={1}, numberOfLines={2}, sizeOfLines={3}, address={4:x4}:{5:x8}", size, fileOffset, numberOfLines, sizeOfLines, seg, start));
 
-						int[] startCol = new int[numberOfLines], endCol = new int[numberOfLines];
+						var startCol = new int[numberOfLines];
+						var endCol = new int[numberOfLines];
 						long pos = reader.BaseStream.Position;
 
 						// Skip ahead by numberOfLines*8 bytes
@@ -106,7 +108,7 @@ namespace Mosa.Compiler.Pdb
 							int instructionOffset = reader.ReadInt32();
 							int line = reader.ReadInt32() & 0x7FFFFFFF;
 
-							yield return new CvLine(seg, start + instructionOffset, line, startCol[i], endCol[i]);
+							yield return new CvLine(seg, instructionOffset, line, startCol[i], endCol[i], start);
 						}
 
 						// Skip over the lines

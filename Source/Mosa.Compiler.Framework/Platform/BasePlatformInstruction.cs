@@ -8,10 +8,49 @@ namespace Mosa.Compiler.Framework.Platform
 	/// <seealso cref="Mosa.Compiler.Framework.BaseInstruction" />
 	public abstract class BasePlatformInstruction : BaseInstruction
 	{
+		#region Properties
+
+		public virtual bool IsZeroFlagUsed { get { return false; } }
+		public virtual bool IsZeroFlagSet { get { return false; } }
+		public virtual bool IsZeroFlagCleared { get { return false; } }
+		public virtual bool IsZeroFlagModified { get { return false; } }
+		public virtual bool IsZeroFlagUnchanged { get { return false; } }
+		public virtual bool IsZeroFlagUndefined { get { return false; } }
+
+		public virtual bool IsCarryFlagUsed { get { return false; } }
+		public virtual bool IsCarryFlagSet { get { return false; } }
+		public virtual bool IsCarryFlagCleared { get { return false; } }
+		public virtual bool IsCarryFlagModified { get { return false; } }
+		public virtual bool IsCarryFlagUnchanged { get { return false; } }
+		public virtual bool IsCarryFlagUndefined { get { return false; } }
+
+		public virtual bool IsSignFlagUsed { get { return false; } }
+		public virtual bool IsSignFlagSet { get { return false; } }
+		public virtual bool IsSignFlagCleared { get { return false; } }
+		public virtual bool IsSignFlagModified { get { return false; } }
+		public virtual bool IsSignFlagUnchanged { get { return false; } }
+		public virtual bool IsSignFlagUndefined { get { return false; } }
+
+		public virtual bool IsOverflowFlagUsed { get { return false; } }
+		public virtual bool IsOverflowFlagSet { get { return false; } }
+		public virtual bool IsOverflowFlagCleared { get { return false; } }
+		public virtual bool IsOverflowFlagModified { get { return false; } }
+		public virtual bool IsOverflowFlagUnchanged { get { return false; } }
+		public virtual bool IsOverflowFlagUndefined { get { return false; } }
+
+		public virtual bool IsParityFlagUsed { get { return false; } }
+		public virtual bool IsParityFlagSet { get { return false; } }
+		public virtual bool IsParityFlagCleared { get { return false; } }
+		public virtual bool IsParityFlagModified { get { return false; } }
+		public virtual bool IsParityFlagUnchanged { get { return false; } }
+		public virtual bool IsParityFlagUndefined { get { return false; } }
+
+		#endregion Properties
+
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
+		/// Initializes a new instance of the <see cref="BasePlatformInstruction"/> class.
 		/// </summary>
 		/// <param name="resultCount">The result count.</param>
 		/// <param name="operandCount">The operand count.</param>

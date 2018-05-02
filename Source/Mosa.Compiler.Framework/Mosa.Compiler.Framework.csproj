@@ -706,6 +706,8 @@
       </SubType>
     </Compile>
     <Compile Include="Platform\BaseOpcodeEncoder.cs" />
+    <Compile Include="Platform\FlagInputState.cs" />
+    <Compile Include="Platform\FlagOutputState.cs" />
     <Compile Include="Platform\OpcodeEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RegisterAllocator\BasicRegisterAllocator.cs" />
@@ -954,7 +956,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="IR\IRInstructions.json" />
-    <None Include="Mosa.Compiler.Framework.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="IR\IRInstruction.tt">
