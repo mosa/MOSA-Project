@@ -23,6 +23,8 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 
+		public override bool IsSignFlagUsed { get { return true; } }
+
 		public override BaseInstruction GetOpposite()
 		{
 			return X86.BranchNotSigned;

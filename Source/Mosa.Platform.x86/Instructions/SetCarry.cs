@@ -21,6 +21,8 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
+		public override bool IsCarryFlagUsed { get { return true; } }
+
 		public override BaseInstruction GetOpposite()
 		{
 			return X86.SetNoCarry;

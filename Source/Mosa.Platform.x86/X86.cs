@@ -47,7 +47,7 @@ namespace Mosa.Platform.x86
 		public static readonly Div32 Div32 = new Div32();
 		public static readonly Divsd Divsd = new Divsd();
 		public static readonly Divss Divss = new Divss();
-		public static readonly FarJmp FarJmp = new FarJmp();
+		public static readonly JmpFar JmpFar = new JmpFar();
 		public static readonly Hlt Hlt = new Hlt();
 		public static readonly IDiv32 IDiv32 = new IDiv32();
 		public static readonly IMul IMul = new IMul();

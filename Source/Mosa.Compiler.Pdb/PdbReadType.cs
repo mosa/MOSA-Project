@@ -79,8 +79,8 @@ namespace Mosa.Compiler.Pdb
 
 			protected override bool IsComplete(object state)
 			{
-				BinaryReader reader = (BinaryReader)state;
-				return (reader.BaseStream.Position >= size);
+				var reader = (BinaryReader)state;
+				return reader.BaseStream.Position >= size;
 			}
 
 			protected override object Prepare(BinaryReader reader)

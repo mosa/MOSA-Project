@@ -545,7 +545,7 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.WriteByte((byte)(0x58 + node.Result.Register.RegisterCode));
 		}
 
-		internal static void EmitFarJmp(InstructionNode node, BaseCodeEmitter emitter)
+		internal static void EmitJmpFar(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			(emitter as X86CodeEmitter).EmitFarJumpToNextInstruction();
 		}

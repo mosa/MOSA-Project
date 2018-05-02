@@ -7,12 +7,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// FarJmp
+	/// JmpFar
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class FarJmp : X86Instruction
+	public sealed class JmpFar : X86Instruction
 	{
-		internal FarJmp()
+		internal JmpFar()
 			: base(0, 1)
 		{
 		}
@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
 			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
 
-			StaticEmitters.EmitFarJmp(node, emitter);
+			StaticEmitters.EmitJmpFar(node, emitter);
 		}
 	}
 }

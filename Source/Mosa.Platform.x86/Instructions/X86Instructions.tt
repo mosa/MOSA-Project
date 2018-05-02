@@ -28,6 +28,9 @@ using Mosa.Compiler.Framework;
 <# if (entry.ResultType != null || entry.ResultType2 != null) { #>
 using Mosa.Compiler.MosaTypeSystem;
 <# } #>
+<# if (entry.FlagsUpdatedZCSOP != null && entry.FlagsUpdatedZCSOP != "?????") { #>
+using Mosa.Compiler.Framework.Platform;
+<# } #>
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -176,6 +179,126 @@ namespace Mosa.Platform.x86.Instructions
 <# if (entry.X86ThreeTwoAddressConversion != null && entry.X86ThreeTwoAddressConversion == "true") { #>
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
+<# } #>
+<# if (entry.FlagsUsed != null && entry.FlagsUsed.Contains("Z")) { #>
+
+		public override bool IsZeroFlagUsed { get { return true; } }
+<# } #>
+<# if (entry.FlagsSet != null && entry.FlagsSet.Contains("Z")) { #>
+
+		public override bool IsZeroFlagSet { get { return true; } }
+<# } #>
+<# if (entry.FlagsCleared != null && entry.FlagsCleared.Contains("Z")) { #>
+
+		public override bool IsZeroFlagCleared { get { return true; } }
+<# } #>
+<# if (entry.FlagsModified != null && (entry.FlagsModified.Contains("Z") || entry.FlagsSet.Contains("Z") || entry.FlagsCleared.Contains("Z"))) { #>
+
+		public override bool IsZeroFlagModified { get { return true; } }
+<# } #>
+<# if (entry.FlagsUndefined != null && entry.FlagsUndefined.Contains("Z")) { #>
+
+		public override bool IsZeroFlagUnchanged { get { return true; } }
+<# } #>
+<# if (entry.FlagsUnchanged != null && entry.FlagsUndefined.Contains("Z")) { #>
+
+		public override bool IsZeroFlagUndefined { get { return true; } }
+<# } #>
+<# if (entry.FlagsUsed != null && entry.FlagsUsed.Contains("C")) { #>
+
+		public override bool IsCarryFlagUsed { get { return true; } }
+<# } #>
+<# if (entry.FlagsSet != null && entry.FlagsSet.Contains("C")) { #>
+
+		public override bool IsCarryFlagSet { get { return true; } }
+<# } #>
+<# if (entry.FlagsCleared != null && entry.FlagsCleared.Contains("C")) { #>
+
+		public override bool IsCarryFlagCleared { get { return true; } }
+<# } #>
+<# if (entry.FlagsModified != null && (entry.FlagsModified.Contains("C") || entry.FlagsSet.Contains("C") || entry.FlagsCleared.Contains("C"))) { #>
+
+		public override bool IsCarryFlagModified { get { return true; } }
+<# } #>
+<# if (entry.FlagsUndefined != null && entry.FlagsUndefined.Contains("C")) { #>
+
+		public override bool IsCarryFlagUnchanged { get { return true; } }
+<# } #>
+<# if (entry.FlagsUnchanged != null && entry.FlagsUndefined.Contains("C")) { #>
+
+		public override bool IsCarryFlagUndefined { get { return true; } }
+<# } #>
+<# if (entry.FlagsUsed != null && entry.FlagsUsed.Contains("S")) { #>
+
+		public override bool IsSignFlagUsed { get { return true; } }
+<# } #>
+<# if (entry.FlagsSet != null && entry.FlagsSet.Contains("S")) { #>
+
+		public override bool IsSignFlagSet { get { return true; } }
+<# } #>
+<# if (entry.FlagsCleared != null && entry.FlagsCleared.Contains("S")) { #>
+
+		public override bool IsSignFlagCleared { get { return true; } }
+<# } #>
+<# if (entry.FlagsModified != null && (entry.FlagsModified.Contains("S") || entry.FlagsSet.Contains("S") || entry.FlagsCleared.Contains("S"))) { #>
+
+		public override bool IsSignFlagModified { get { return true; } }
+<# } #>
+<# if (entry.FlagsUndefined != null && entry.FlagsUndefined.Contains("S")) { #>
+
+		public override bool IsSignFlagUnchanged { get { return true; } }
+<# } #>
+<# if (entry.FlagsUnchanged != null && entry.FlagsUndefined.Contains("S")) { #>
+
+		public override bool IsSignFlagUndefined { get { return true; } }
+<# } #>
+<# if (entry.FlagsUsed != null && entry.FlagsUsed.Contains("O")) { #>
+
+		public override bool IsOverflowFlagUsed { get { return true; } }
+<# } #>
+<# if (entry.FlagsSet != null && entry.FlagsSet.Contains("O")) { #>
+
+		public override bool IsOverflowFlagSet { get { return true; } }
+<# } #>
+<# if (entry.FlagsCleared != null && entry.FlagsCleared.Contains("O")) { #>
+
+		public override bool IsOverflowFlagCleared { get { return true; } }
+<# } #>
+<# if (entry.FlagsModified != null && (entry.FlagsModified.Contains("O") || entry.FlagsSet.Contains("O") || entry.FlagsCleared.Contains("O"))) { #>
+
+		public override bool IsOverflowFlagModified { get { return true; } }
+<# } #>
+<# if (entry.FlagsUndefined != null && entry.FlagsUndefined.Contains("O")) { #>
+
+		public override bool IsOverflowFlagUnchanged { get { return true; } }
+<# } #>
+<# if (entry.FlagsUnchanged != null && entry.FlagsUndefined.Contains("O")) { #>
+
+		public override bool IsOverflowFlagUndefined { get { return true; } }
+<# } #>
+<# if (entry.FlagsUsed != null && entry.FlagsUsed.Contains("P")) { #>
+
+		public override bool IsParityFlagUsed { get { return true; } }
+<# } #>
+<# if (entry.FlagsSet != null && entry.FlagsSet.Contains("P")) { #>
+
+		public override bool IsParityFlagSet { get { return true; } }
+<# } #>
+<# if (entry.FlagsCleared != null && entry.FlagsCleared.Contains("P")) { #>
+
+		public override bool IsParityFlagCleared { get { return true; } }
+<# } #>
+<# if (entry.FlagsModified != null && (entry.FlagsModified.Contains("P") || entry.FlagsSet.Contains("P") || entry.FlagsCleared.Contains("P"))) { #>
+
+		public override bool IsParityFlagModified { get { return true; } }
+<# } #>
+<# if (entry.FlagsUndefined != null && entry.FlagsUndefined.Contains("P")) { #>
+
+		public override bool IsParityFlagUnchanged { get { return true; } }
+<# } #>
+<# if (entry.FlagsUnchanged != null && entry.FlagsUndefined.Contains("P")) { #>
+
+		public override bool IsParityFlagUndefined { get { return true; } }
 <# } #>
 <# if (entry.LogicalOpposite != null) { #>
 

@@ -7,7 +7,7 @@ using System.IO;
 namespace Mosa.Compiler.Pdb
 {
 	/// <summary>
-	///
+	/// PdbRootStream
 	/// </summary>
 	public struct PdbRootStream
 	{

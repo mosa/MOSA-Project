@@ -10,20 +10,6 @@ namespace Mosa.Compiler.Pdb
 	/// </summary>
 	public class CvSymbol
 	{
-		#region Data Members
-
-		/// <summary>
-		/// Holds the length of the symbol on disk.
-		/// </summary>
-		private readonly ushort length;
-
-		/// <summary>
-		/// Holds the codeview entry type.
-		/// </summary>
-		private readonly CvEntryType type;
-
-		#endregion Data Members
-
 		#region Construction
 
 		/// <summary>
@@ -33,8 +19,8 @@ namespace Mosa.Compiler.Pdb
 		/// <param name="type">The type of the CodeView entry.</param>
 		protected CvSymbol(ushort length, CvEntryType type)
 		{
-			this.length = length;
-			this.type = type;
+			Length = length;
+			Type = type;
 		}
 
 		#endregion Construction
@@ -45,19 +31,13 @@ namespace Mosa.Compiler.Pdb
 		/// Gets the length.
 		/// </summary>
 		/// <value>The length.</value>
-		public ushort Length
-		{
-			get { return length; }
-		}
+		public ushort Length { get; }
 
 		/// <summary>
 		/// Gets the type.
 		/// </summary>
 		/// <value>The type.</value>
-		public CvEntryType Type
-		{
-			get { return type; }
-		}
+		public CvEntryType Type { get; }
 
 		#endregion Properties
 
@@ -71,7 +51,7 @@ namespace Mosa.Compiler.Pdb
 		{
 			CvSymbol result;
 			ushort len = reader.ReadUInt16();
-			CvEntryType type = (CvEntryType)reader.ReadUInt16();
+			var type = (CvEntryType)reader.ReadUInt16();
 
 			switch (type)
 			{
@@ -99,7 +79,7 @@ namespace Mosa.Compiler.Pdb
 		/// </returns>
 		public override string ToString()
 		{
-			return String.Format("Unknown Symbol ({0:x})", type);
+			return String.Format("Unknown Symbol ({0:x})", Type);
 		}
 
 		#endregion Methods

@@ -240,6 +240,9 @@
     <Compile Include="Instructions\Jmp.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\JmpFar.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\JmpReg.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -676,9 +679,6 @@
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
     <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
-    <Compile Include="Instructions\FarJmp.cs">
-      <DependentUpon>X86Instructions.tt</DependentUpon>
-    </Compile>
     <Compile Include="Instructions\Leave.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>

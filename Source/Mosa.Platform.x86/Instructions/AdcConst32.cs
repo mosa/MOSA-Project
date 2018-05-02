@@ -21,6 +21,18 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
+		public override bool IsZeroFlagModified { get { return true; } }
+
+		public override bool IsCarryFlagUsed { get { return true; } }
+
+		public override bool IsCarryFlagModified { get { return true; } }
+
+		public override bool IsSignFlagModified { get { return true; } }
+
+		public override bool IsOverflowFlagModified { get { return true; } }
+
+		public override bool IsParityFlagModified { get { return true; } }
+
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);

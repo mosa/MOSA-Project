@@ -21,6 +21,10 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
+		public override bool IsSignFlagUsed { get { return true; } }
+
+		public override bool IsOverflowFlagUsed { get { return true; } }
+
 		public override BaseInstruction GetOpposite()
 		{
 			return X86.CMovGreaterOrEqual32;

@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.MovStoreSeg32, fs, eax);
 			context.AppendInstruction(X86.MovStoreSeg32, gs, eax);
 			context.AppendInstruction(X86.MovStoreSeg32, ss, eax);
-			context.AppendInstruction(X86.FarJmp);
+			context.AppendInstruction(X86.JmpFar);
 		}
 	}
 }

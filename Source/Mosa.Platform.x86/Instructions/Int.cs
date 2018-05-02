@@ -19,6 +19,26 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool HasIRUnspecifiedSideEffect { get { return true; } }
 
+		public override bool IsZeroFlagUnchanged { get { return true; } }
+
+		public override bool IsZeroFlagUndefined { get { return true; } }
+
+		public override bool IsCarryFlagUnchanged { get { return true; } }
+
+		public override bool IsCarryFlagUndefined { get { return true; } }
+
+		public override bool IsSignFlagUnchanged { get { return true; } }
+
+		public override bool IsSignFlagUndefined { get { return true; } }
+
+		public override bool IsOverflowFlagUnchanged { get { return true; } }
+
+		public override bool IsOverflowFlagUndefined { get { return true; } }
+
+		public override bool IsParityFlagUnchanged { get { return true; } }
+
+		public override bool IsParityFlagUndefined { get { return true; } }
+
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);

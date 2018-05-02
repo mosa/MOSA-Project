@@ -49,8 +49,9 @@ namespace Mosa.Compiler.Pdb
 
 		public IEnumerator<CvSymbol> GetEnumerator()
 		{
-			CvStream cvStream = new CvStream(stream);
-			using (BinaryReader reader = new BinaryReader(cvStream))
+			var cvStream = new CvStream(stream);
+
+			using (var reader = new BinaryReader(cvStream))
 			{
 				object state = Prepare(reader);
 
@@ -58,7 +59,7 @@ namespace Mosa.Compiler.Pdb
 				{
 					// Read the len+id of the symbol
 					long startPos = cvStream.Position;
-					CvSymbol symbol = CvSymbol.Read(reader);
+					var symbol = CvSymbol.Read(reader);
 					yield return symbol;
 
 					// Skip to the next 4 byte boundary
@@ -75,7 +76,7 @@ namespace Mosa.Compiler.Pdb
 						break;
 					}
 				}
-				while (IsComplete(state) == false);
+				while (!IsComplete(state));
 			}
 		}
 
