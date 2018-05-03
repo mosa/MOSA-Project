@@ -153,7 +153,7 @@ namespace Mosa.Platform.x86.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
 
 			context.SetInstruction(X86.Add32, result, operand1, operand2);
-			context.AppendInstruction(X86.SetCarry, v1);
+			context.AppendInstruction(X86.SetByteIfCarry, v1);
 			context.AppendInstruction(X86.Movzx8To32, result2, v1);
 		}
 
@@ -181,7 +181,7 @@ namespace Mosa.Platform.x86.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
 
 			context.SetInstruction(X86.Sub32, result, operand1, operand2);
-			context.AppendInstruction(X86.SetCarry, v1);
+			context.AppendInstruction(X86.SetByteIfCarry, v1);
 			context.AppendInstruction(X86.Movzx8To32, result2, v1);
 		}
 
@@ -408,7 +408,7 @@ namespace Mosa.Platform.x86.Stages
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.BranchParity, nextBlock.Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
-						newBlocks[0].AppendInstruction(X86.SetNotEqual, result);
+						newBlocks[0].AppendInstruction(X86.SetByteIfNotEqual, result);
 
 						//newBlocks[0].AppendInstruction(X86.Movzx, InstructionSize.Size8, result, result);
 						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
@@ -423,7 +423,7 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov32, result, ConstantZero);
 						context.AppendInstruction(instruction, null, right, left);
-						context.AppendInstruction(X86.SetUnsignedGreaterThan, result);
+						context.AppendInstruction(X86.SetByteIfUnsignedGreaterThan, result);
 						break;
 					}
 				case ConditionCode.GreaterThan:
@@ -435,7 +435,7 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.MovConst32, result, ConstantZero);
 						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X86.SetUnsignedGreaterThan, result);
+						context.AppendInstruction(X86.SetByteIfUnsignedGreaterThan, result);
 						break;
 					}
 				case ConditionCode.LessOrEqual:
@@ -447,7 +447,7 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov32, result, ConstantZero);
 						context.AppendInstruction(instruction, null, right, left);
-						context.AppendInstruction(X86.SetUnsignedGreaterOrEqual, result);
+						context.AppendInstruction(X86.SetByteIfUnsignedGreaterOrEqual, result);
 						break;
 					}
 				case ConditionCode.GreaterOrEqual:
@@ -459,7 +459,7 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov32, result, ConstantZero);
 						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X86.SetUnsignedGreaterOrEqual, result);
+						context.AppendInstruction(X86.SetByteIfUnsignedGreaterOrEqual, result);
 						break;
 					}
 			}
@@ -852,24 +852,24 @@ namespace Mosa.Platform.x86.Stages
 		{
 			switch (condition)
 			{
-				case ConditionCode.Overflow: return X86.SetOverflow;
-				case ConditionCode.NoOverflow: return X86.SetNoOverflow;
-				case ConditionCode.Carry: return X86.SetCarry;
-				case ConditionCode.UnsignedLessThan: return X86.SetUnsignedLessThan;
-				case ConditionCode.UnsignedGreaterOrEqual: return X86.SetUnsignedGreaterOrEqual;
-				case ConditionCode.NoCarry: return X86.SetNoCarry;
-				case ConditionCode.Equal: return X86.SetEqual;
-				case ConditionCode.Zero: return X86.SetZero;
-				case ConditionCode.NotEqual: return X86.SetNotEqual;
-				case ConditionCode.NotZero: return X86.SetNotZero;
-				case ConditionCode.UnsignedLessOrEqual: return X86.SetUnsignedLessOrEqual;
-				case ConditionCode.UnsignedGreaterThan: return X86.SetUnsignedGreaterThan;
-				case ConditionCode.Signed: return X86.SetSigned;
-				case ConditionCode.NotSigned: return X86.SetNotSigned;
-				case ConditionCode.LessThan: return X86.SetLessThan;
-				case ConditionCode.GreaterOrEqual: return X86.SetGreaterOrEqual;
-				case ConditionCode.LessOrEqual: return X86.SetLessOrEqual;
-				case ConditionCode.GreaterThan: return X86.SetGreaterThan;
+				case ConditionCode.Overflow: return X86.SetByteIfOverflow;
+				case ConditionCode.NoOverflow: return X86.SetByteIfNoOverflow;
+				case ConditionCode.Carry: return X86.SetByteIfCarry;
+				case ConditionCode.UnsignedLessThan: return X86.SetByteIfUnsignedLessThan;
+				case ConditionCode.UnsignedGreaterOrEqual: return X86.SetByteIfUnsignedGreaterOrEqual;
+				case ConditionCode.NoCarry: return X86.SetByteIfNoCarry;
+				case ConditionCode.Equal: return X86.SetByteIfEqual;
+				case ConditionCode.Zero: return X86.SetByteIfZero;
+				case ConditionCode.NotEqual: return X86.SetByteIfNotEqual;
+				case ConditionCode.NotZero: return X86.SetByteIfNotZero;
+				case ConditionCode.UnsignedLessOrEqual: return X86.SetByteIfUnsignedLessOrEqual;
+				case ConditionCode.UnsignedGreaterThan: return X86.SetByteIfUnsignedGreaterThan;
+				case ConditionCode.Signed: return X86.SetByteIfSigned;
+				case ConditionCode.NotSigned: return X86.SetByteIfNotSigned;
+				case ConditionCode.LessThan: return X86.SetByteIfLessThan;
+				case ConditionCode.GreaterOrEqual: return X86.SetByteIfGreaterOrEqual;
+				case ConditionCode.LessOrEqual: return X86.SetByteIfLessOrEqual;
+				case ConditionCode.GreaterThan: return X86.SetByteIfGreaterThan;
 
 				default: throw new NotSupportedException();
 			}

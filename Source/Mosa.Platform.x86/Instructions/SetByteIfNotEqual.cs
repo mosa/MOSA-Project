@@ -7,25 +7,25 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// SetNotSigned
+	/// SetByteIfNotEqual
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class SetNotSigned : X86Instruction
+	public sealed class SetByteIfNotEqual : X86Instruction
 	{
-		public override string AlternativeName { get { return "SetNS"; } }
+		public override string AlternativeName { get { return "SetNE"; } }
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x99 } );
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x95 } );
 
-		internal SetNotSigned()
+		internal SetByteIfNotEqual()
 			: base(1, 0)
 		{
 		}
 
-		public override bool IsSignFlagUsed { get { return true; } }
+		public override bool IsZeroFlagUsed { get { return true; } }
 
 		public override BaseInstruction GetOpposite()
 		{
-			return X86.SetSigned;
+			return X86.SetByteIfEqual;
 		}
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)

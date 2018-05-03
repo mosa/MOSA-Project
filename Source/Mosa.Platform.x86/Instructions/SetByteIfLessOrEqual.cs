@@ -7,27 +7,29 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// SetUnsignedLessOrEqual
+	/// SetByteIfLessOrEqual
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class SetUnsignedLessOrEqual : X86Instruction
+	public sealed class SetByteIfLessOrEqual : X86Instruction
 	{
-		public override string AlternativeName { get { return "SetBE"; } }
+		public override string AlternativeName { get { return "SetLE"; } }
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x96 } );
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x9E } );
 
-		internal SetUnsignedLessOrEqual()
+		internal SetByteIfLessOrEqual()
 			: base(1, 0)
 		{
 		}
 
 		public override bool IsZeroFlagUsed { get { return true; } }
 
-		public override bool IsCarryFlagUsed { get { return true; } }
+		public override bool IsSignFlagUsed { get { return true; } }
+
+		public override bool IsOverflowFlagUsed { get { return true; } }
 
 		public override BaseInstruction GetOpposite()
 		{
-			return X86.SetUnsignedGreaterThan;
+			return X86.SetByteIfGreaterThan;
 		}
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)

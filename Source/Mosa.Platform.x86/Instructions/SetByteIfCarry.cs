@@ -7,16 +7,16 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// SetUnsignedGreaterOrEqual
+	/// SetByteIfCarry
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class SetUnsignedGreaterOrEqual : X86Instruction
+	public sealed class SetByteIfCarry : X86Instruction
 	{
-		public override string AlternativeName { get { return "SetAE"; } }
+		public override string AlternativeName { get { return "SetC"; } }
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x93 } );
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x92 } );
 
-		internal SetUnsignedGreaterOrEqual()
+		internal SetByteIfCarry()
 			: base(1, 0)
 		{
 		}
@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override BaseInstruction GetOpposite()
 		{
-			return X86.SetUnsignedLessThan;
+			return X86.SetByteIfNoCarry;
 		}
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)

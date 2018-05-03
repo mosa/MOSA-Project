@@ -7,25 +7,25 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// SetZero
+	/// SetByteIfNoOverflow
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class SetZero : X86Instruction
+	public sealed class SetByteIfNoOverflow : X86Instruction
 	{
-		public override string AlternativeName { get { return "SetZ"; } }
+		public override string AlternativeName { get { return "SetNO"; } }
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x94 } );
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x91 } );
 
-		internal SetZero()
+		internal SetByteIfNoOverflow()
 			: base(1, 0)
 		{
 		}
 
-		public override bool IsZeroFlagUsed { get { return true; } }
+		public override bool IsOverflowFlagUsed { get { return true; } }
 
 		public override BaseInstruction GetOpposite()
 		{
-			return X86.SetNotZero;
+			return X86.SetByteIfOverflow;
 		}
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)

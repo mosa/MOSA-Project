@@ -387,64 +387,64 @@
     <Compile Include="Instructions\SbbConst32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetCarry.cs">
+    <Compile Include="Instructions\SetByteIfCarry.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetEqual.cs">
+    <Compile Include="Instructions\SetByteIfEqual.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetGreaterOrEqual.cs">
+    <Compile Include="Instructions\SetByteIfGreaterOrEqual.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetGreaterThan.cs">
+    <Compile Include="Instructions\SetByteIfGreaterThan.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetLessOrEqual.cs">
+    <Compile Include="Instructions\SetByteIfLessOrEqual.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetLessThan.cs">
+    <Compile Include="Instructions\SetByteIfLessThan.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetNoCarry.cs">
+    <Compile Include="Instructions\SetByteIfNoCarry.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetNoOverflow.cs">
+    <Compile Include="Instructions\SetByteIfNoOverflow.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetNoParity.cs">
+    <Compile Include="Instructions\SetByteIfNoParity.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetNotEqual.cs">
+    <Compile Include="Instructions\SetByteIfNotEqual.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetNotSigned.cs">
+    <Compile Include="Instructions\SetByteIfNotSigned.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetNotZero.cs">
+    <Compile Include="Instructions\SetByteIfNotZero.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetOverflow.cs">
+    <Compile Include="Instructions\SetByteIfOverflow.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetParity.cs">
+    <Compile Include="Instructions\SetByteIfParity.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetSigned.cs">
+    <Compile Include="Instructions\SetByteIfSigned.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetUnsignedGreaterOrEqual.cs">
+    <Compile Include="Instructions\SetByteIfUnsignedGreaterOrEqual.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetUnsignedGreaterThan.cs">
+    <Compile Include="Instructions\SetByteIfUnsignedGreaterThan.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetUnsignedLessOrEqual.cs">
+    <Compile Include="Instructions\SetByteIfUnsignedLessOrEqual.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetUnsignedLessThan.cs">
+    <Compile Include="Instructions\SetByteIfUnsignedLessThan.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\SetZero.cs">
+    <Compile Include="Instructions\SetByteIfZero.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Shl32.cs">

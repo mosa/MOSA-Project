@@ -7,16 +7,16 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// SetNotZero
+	/// SetByteIfZero
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class SetNotZero : X86Instruction
+	public sealed class SetByteIfZero : X86Instruction
 	{
-		public override string AlternativeName { get { return "SetNZ"; } }
+		public override string AlternativeName { get { return "SetZ"; } }
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x95 } );
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x94 } );
 
-		internal SetNotZero()
+		internal SetByteIfZero()
 			: base(1, 0)
 		{
 		}
@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override BaseInstruction GetOpposite()
 		{
-			return X86.SetZero;
+			return X86.SetByteIfNotZero;
 		}
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
