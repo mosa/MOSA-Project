@@ -12,14 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class BtConst32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xBA } , 0x05);
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xBA } , 0x04);
 
 		internal BtConst32()
 			: base(1, 2)
 		{
 		}
-
-		public override bool ThreeTwoAddressConversion { get { return true; } }
 
 		public override bool IsCarryFlagModified { get { return true; } }
 
@@ -39,9 +37,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
-			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
-			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
-			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
 			emitter.Emit(LegacyOpcode, node.Result, node.Operand2);
 		}

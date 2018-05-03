@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if this instance has side effect; otherwise, <c>false</c>.
 		/// </value>
-		public virtual bool HasIRUnspecifiedSideEffect { get { return false; } }
+		public virtual bool HasUnspecifiedSideEffect { get { return false; } }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has memory write side effect.

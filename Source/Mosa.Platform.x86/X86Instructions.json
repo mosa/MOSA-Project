@@ -187,9 +187,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
+			"UnspecifiedSideEffect": "true",
 			"X86LegacyOpcode": "0F A3",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "BtConst32",
@@ -204,8 +205,8 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0F BA",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86LegacyOpcodeRegField": "05",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86LegacyOpcodeRegField": "04",
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Bts32",
@@ -1455,7 +1456,7 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"X86EmitBytes": "90",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Not32",

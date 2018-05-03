@@ -14,6 +14,8 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly AddressOf AddressOf = new AddressOf();
 		public static readonly Add32 Add32 = new Add32();
 		public static readonly Add64 Add64 = new Add64();
+		public static readonly AddCarryOut32 AddCarryOut32 = new AddCarryOut32();
+		public static readonly AddWithCarry32 AddWithCarry32 = new AddWithCarry32();
 		public static readonly ArithShiftRight32 ArithShiftRight32 = new ArithShiftRight32();
 		public static readonly ArithShiftRight64 ArithShiftRight64 = new ArithShiftRight64();
 		public static readonly BlockEnd BlockEnd = new BlockEnd();
@@ -168,6 +170,8 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly SubFloatR8 SubFloatR8 = new SubFloatR8();
 		public static readonly Sub32 Sub32 = new Sub32();
 		public static readonly Sub64 Sub64 = new Sub64();
+		public static readonly SubCarryOut32 SubCarryOut32 = new SubCarryOut32();
+		public static readonly SubWithCarry32 SubWithCarry32 = new SubWithCarry32();
 		public static readonly Switch Switch = new Switch();
 		public static readonly Throw Throw = new Throw();
 		public static readonly Truncation64x32 Truncation64x32 = new Truncation64x32();

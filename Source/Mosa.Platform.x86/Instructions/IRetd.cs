@@ -21,7 +21,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override FlowControl FlowControl { get { return FlowControl.Return; } }
 
-		public override bool HasIRUnspecifiedSideEffect { get { return true; } }
+		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
 		public override bool IsZeroFlagUnchanged { get { return true; } }
 

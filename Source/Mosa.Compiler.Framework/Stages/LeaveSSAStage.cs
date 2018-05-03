@@ -41,10 +41,6 @@ namespace Mosa.Compiler.Framework.Stages
 					if (context.Instruction == IRInstruction.Phi)
 					{
 						Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
-						//if (context.OperandCount != context.Block.PreviousBlocks.Count)
-						//{
-						//	throw new CompilerException(context.ToString());
-						//}
 
 						ProcessPhiInstruction(context);
 					}
@@ -62,6 +58,11 @@ namespace Mosa.Compiler.Framework.Stages
 					if (context.Result?.IsSSA == true)
 					{
 						context.Result = GetFinalVirtualRegister(context.Result);
+					}
+
+					if (context.Result2?.IsSSA == true)
+					{
+						context.Result2 = GetFinalVirtualRegister(context.Result2);
 					}
 				}
 			}

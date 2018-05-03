@@ -102,6 +102,12 @@
     <Compile Include="IR\Add64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="IR\AddCarryOut32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\AddWithCarry32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="IR\ArithShiftRight32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
@@ -292,6 +298,12 @@
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\Sub64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\SubCarryOut32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\SubWithCarry32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\ZeroExtend16x32.cs">

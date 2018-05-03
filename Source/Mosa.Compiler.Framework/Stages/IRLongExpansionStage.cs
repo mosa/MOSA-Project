@@ -26,6 +26,9 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.CompareIntBranch64, CompareIntBranch64);
 			//AddVisitation(IRInstruction.CompareInt64x64, CompareInteger64x64);
 			//ZeroExtended8x64
+
+			AddVisitation(IRInstruction.Add64, Add64);
+			AddVisitation(IRInstruction.Sub64, Sub64);
 		}
 
 		#region Visitation Methods
@@ -385,6 +388,59 @@ namespace Mosa.Compiler.Framework.Stages
 			newBlocks[2].AppendInstruction(IRInstruction.Jmp, target);
 		}
 
+		private void Add64(Context context)
+		{
+			Debug.Assert(context.Result.Is64BitInteger);
+
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op1Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op1High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			var resultCarry = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction(IRInstruction.GetLow64, op0Low, operand1);
+			context.AppendInstruction(IRInstruction.GetHigh64, op0High, operand1);
+			context.AppendInstruction(IRInstruction.GetLow64, op1Low, operand2);
+			context.AppendInstruction(IRInstruction.GetHigh64, op1High, operand2);
+
+			context.AppendInstruction2(IRInstruction.AddCarryOut32, resultLow, resultCarry, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.AddWithCarry32, resultHigh, op0High, op1High, resultCarry);
+			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+		}
+
+		private void Sub64(Context context)
+		{
+			Debug.Assert(context.Result.Is64BitInteger);
+
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op1Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op1High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			var resultCarry = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction(IRInstruction.GetLow64, op0Low, operand1);
+			context.AppendInstruction(IRInstruction.GetHigh64, op0High, operand1);
+			context.AppendInstruction(IRInstruction.GetLow64, op1Low, operand2);
+			context.AppendInstruction(IRInstruction.GetHigh64, op1High, operand2);
+
+			context.AppendInstruction2(IRInstruction.SubCarryOut32, resultLow, resultCarry, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.SubWithCarry32, resultHigh, op0High, op1High, resultCarry);
+			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+		}
 		#endregion Visitation Methods
 	}
 }

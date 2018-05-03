@@ -174,7 +174,7 @@ namespace Mosa.Platform.x86.Instructions
 <# } #>
 <# if (entry.UnspecifiedSideEffect != null && entry.UnspecifiedSideEffect == "true") { #>
 
-		public override bool HasIRUnspecifiedSideEffect { get { return true; } }
+		public override bool HasUnspecifiedSideEffect { get { return true; } }
 <# } #>
 <# if (entry.X86ThreeTwoAddressConversion != null && entry.X86ThreeTwoAddressConversion == "true") { #>
 

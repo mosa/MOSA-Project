@@ -53,23 +53,37 @@ namespace Mosa.Platform.x86.Stages
 							continue;
 						}
 
-						// FUTURE: Only useless if not result is not used and no side effect
-
-						if (node.Instruction == X86.Call)
-							continue;
-
-						if (node.Instruction == X86.CallStatic)
-							continue;
-
-						if (node.Instruction == X86.CallReg)
-							continue;
-
 						if (node.Instruction == X86.Mov32)
 						{
 							Move(node);
+
+							if (!node.IsEmpty)
+							{
+								RemoveUseless(node);
+							}
+							continue;
 						}
 
-						if (node.IsEmpty)
+						if (node.Instruction.IsIOOperation
+							|| node.Instruction.IsMemoryRead
+							|| node.Instruction.IsMemoryWrite
+							|| node.Instruction.HasUnspecifiedSideEffect)
+							continue;
+
+						if (node.Instruction.FlowControl == FlowControl.Call)
+							continue;
+
+						var x86instruction = node.Instruction as X86Instruction;
+
+						if (x86instruction == null)
+							continue;
+
+						// a more complex analysis would tracks the flag usage down the basic block to determine if the flags are used
+						if (x86instruction.IsCarryFlagModified
+							|| x86instruction.IsOverflowFlagModified
+							|| x86instruction.IsZeroFlagModified
+							|| x86instruction.IsSignFlagModified
+							|| x86instruction.IsParityFlagModified)
 							continue;
 
 						RemoveUseless(node);
@@ -82,7 +96,7 @@ namespace Mosa.Platform.x86.Stages
 
 		private void RemoveUseless(InstructionNode node)
 		{
-			// Remove useless instructions
+			// Remove instruction, if useless
 			if (node.ResultCount == 1 && node.Result.Uses.Count == 0 && node.Result.IsVirtualRegister)
 			{
 				// Check is split child, if so check is parent in use (IR.Return for example)
@@ -103,8 +117,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The node.</param>
 		private void Move(InstructionNode node)
 		{
-			if (node.Instruction != X86.Mov32)
-				return;
+			Debug.Assert(node.Instruction == X86.Mov32);
 
 			var source = node.Operand1;
 			var destination = node.Result;

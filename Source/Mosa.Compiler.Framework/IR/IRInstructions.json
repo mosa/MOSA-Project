@@ -35,6 +35,20 @@
 			"Commutative": "true"
 		},
 		{
+			"Name": "AddCarryOut32",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "AddWithCarry32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"Commutative": "false"
+		},
+		{
 			"Name": "ArithShiftRight32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
@@ -1053,6 +1067,20 @@
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
+		},
+		{
+			"Name": "SubCarryOut32",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 2,
+			"Commutative": "false"
+		},
+		{
+			"Name": "SubWithCarry32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"Commutative": "false"
 		},
 		{
 			"Name": "Switch",

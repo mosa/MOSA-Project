@@ -62,11 +62,8 @@ namespace Mosa.Compiler.Framework.Stages
 				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 				var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-				//context.SetInstruction2(IRInstruction.Split64, v1, v2, operand);
-				context.SetInstruction(IRInstruction.GetLow64, v1, operand);
-				context.AppendInstruction(IRInstruction.GetHigh64, v2, operand);
-				context.AppendInstruction(IRInstruction.MoveInt32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return32BitRegister), v1);
-				context.AppendInstruction(IRInstruction.MoveInt32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), v2);
+				context.SetInstruction(IRInstruction.GetLow64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return32BitRegister), operand);
+				context.AppendInstruction(IRInstruction.GetHigh64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), operand);
 			}
 			else
 			{
