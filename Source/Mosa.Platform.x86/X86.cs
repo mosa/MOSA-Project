@@ -24,6 +24,8 @@ namespace Mosa.Platform.x86
 		public static readonly Break Break = new Break();
 		public static readonly Btr32 Btr32 = new Btr32();
 		public static readonly BtrConst32 BtrConst32 = new BtrConst32();
+		public static readonly Bt32 Bt32 = new Bt32();
+		public static readonly BtConst32 BtConst32 = new BtConst32();
 		public static readonly Bts32 Bts32 = new Bts32();
 		public static readonly BtsConst32 BtsConst32 = new BtsConst32();
 		public static readonly Call Call = new Call();

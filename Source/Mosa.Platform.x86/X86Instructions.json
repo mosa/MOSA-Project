@@ -177,6 +177,37 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
+			"Name": "Bt32",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "Z",
+			"FlagsUndefined": "SOP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"X86LegacyOpcode": "0F A3",
+			"X86LegacyOpcodeOperandOrder": "r2",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
+			"Name": "BtConst32",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "Z",
+			"FlagsUndefined": "SOP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"X86LegacyOpcode": "0F BA",
+			"X86LegacyOpcodeOperandOrder": "r2",
+			"X86LegacyOpcodeRegField": "05",
+			"X86ThreeTwoAddressConversion": "true"
+		},
+		{
 			"Name": "Bts32",
 			"FamilyName": "X86",
 			"FlagsCleared": "",

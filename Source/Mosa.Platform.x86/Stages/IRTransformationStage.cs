@@ -22,8 +22,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.AddFloatR4, AddFloatR4);
 			AddVisitation(IRInstruction.AddFloatR8, AddFloatR8);
 			AddVisitation(IRInstruction.AddressOf, AddressOf);
-			AddVisitation(IRInstruction.AddSigned32, AddSigned32);
-			AddVisitation(IRInstruction.AddUnsigned32, AddUnsigned32);
+			AddVisitation(IRInstruction.Add32, Add32);
 			AddVisitation(IRInstruction.ArithShiftRight32, ArithShiftRight32);
 			AddVisitation(IRInstruction.Break, Break);
 			AddVisitation(IRInstruction.CallDirect, CallDirect);
@@ -93,8 +92,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.StoreParamCompound, StoreParamCompound);
 			AddVisitation(IRInstruction.SubFloatR4, SubFloatR4);
 			AddVisitation(IRInstruction.SubFloatR8, SubFloatR8);
-			AddVisitation(IRInstruction.SubSigned32, SubSigned32);
-			AddVisitation(IRInstruction.SubUnsigned32, SubUnsigned32);
+			AddVisitation(IRInstruction.Sub32, Sub32);
 			AddVisitation(IRInstruction.Switch, Switch);
 		}
 
@@ -136,12 +134,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		private void AddSigned32(InstructionNode node)
-		{
-			node.ReplaceInstruction(X86.Add32);
-		}
-
-		private void AddUnsigned32(InstructionNode node)
+		private void Add32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Add32);
 		}
@@ -740,15 +733,11 @@ namespace Mosa.Platform.x86.Stages
 			node.ReplaceInstruction(X86.Subsd);
 		}
 
-		private void SubSigned32(InstructionNode node)
+		private void Sub32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Sub32);
 		}
 
-		private void SubUnsigned32(InstructionNode node)
-		{
-			node.ReplaceInstruction(X86.Sub32);
-		}
 
 		private void Switch(Context context)
 		{

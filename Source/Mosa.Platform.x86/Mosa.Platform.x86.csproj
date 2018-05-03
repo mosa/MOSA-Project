@@ -111,6 +111,12 @@
     <Compile Include="Instructions\AndConst32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\Bt32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BtConst32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\Btr32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>

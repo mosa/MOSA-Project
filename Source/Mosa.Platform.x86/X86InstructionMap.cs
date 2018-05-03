@@ -23,6 +23,8 @@ namespace Mosa.Platform.x86
 			{ "Break", X86.Break },
 			{ "Btr32", X86.Btr32 },
 			{ "BtrConst32", X86.BtrConst32 },
+			{ "Bt32", X86.Bt32 },
+			{ "BtConst32", X86.BtConst32 },
 			{ "Bts32", X86.Bts32 },
 			{ "BtsConst32", X86.BtsConst32 },
 			{ "Call", X86.Call },

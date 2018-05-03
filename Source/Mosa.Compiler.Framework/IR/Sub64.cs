@@ -5,17 +5,15 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// AddUnsigned64
+	/// Sub64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class AddUnsigned64 : BaseIRInstruction
+	public sealed class Sub64 : BaseIRInstruction
 	{
-		public AddUnsigned64()
+		public Sub64()
 			: base(2, 1)
 		{
 		}
-
-		public override bool IsCommutative { get { return true; } }
 	}
 }
 

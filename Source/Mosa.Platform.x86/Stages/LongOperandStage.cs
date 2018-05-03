@@ -20,8 +20,7 @@ namespace Mosa.Platform.x86.Stages
 
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(IRInstruction.AddSigned64, AddUnsigned64);
-			AddVisitation(IRInstruction.AddUnsigned64, AddUnsigned64);
+			AddVisitation(IRInstruction.Add64, Add64);
 			AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
 			AddVisitation(IRInstruction.Call, Call);
 			AddVisitation(IRInstruction.CompareInt64x32, CompareInteger64x32);
@@ -55,8 +54,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.GetLow64, GetLow64);
 			AddVisitation(IRInstruction.StoreInt64, StoreInteger64);
 			AddVisitation(IRInstruction.StoreParamInt64, StoreParamInteger64);
-			AddVisitation(IRInstruction.SubSigned64, SubUnsigned64);
-			AddVisitation(IRInstruction.SubUnsigned64, SubUnsigned64);
+			AddVisitation(IRInstruction.Sub64, Sub64);
 			AddVisitation(IRInstruction.To64, To64);
 			AddVisitation(IRInstruction.Truncation64x32, Truncation64x32);
 			AddVisitation(IRInstruction.ZeroExtend16x64, ZeroExtended16x64);
@@ -73,7 +71,7 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Visitation Methods
 
-		private void AddUnsigned64(Context context)
+		private void Add64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
@@ -604,7 +602,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.MovStore32, null, StackFrame, op0H, op1H);
 		}
 
-		private void SubUnsigned64(Context context)
+		private void Sub64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);

@@ -96,6 +96,12 @@
     <Compile Include="Intrinsics\GetStringType.cs" />
     <Compile Include="Intrinsics\GetDelegateTargetAddress.cs" />
     <Compile Include="Intrinsics\GetDelegateMethodAddress.cs" />
+    <Compile Include="IR\Add32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\Add64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="IR\ArithShiftRight32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
@@ -282,6 +288,12 @@
     <Compile Include="IR\StoreParamInt8.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="IR\Sub32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\Sub64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="IR\ZeroExtend16x32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
@@ -327,18 +339,6 @@
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\AddressOf.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\AddSigned32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\AddSigned64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\AddUnsigned32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\AddUnsigned64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\BlockEnd.cs">
@@ -639,18 +639,6 @@
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\SubFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SubSigned32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SubSigned64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SubUnsigned32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SubUnsigned64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
     <Compile Include="IR\Switch.cs">
