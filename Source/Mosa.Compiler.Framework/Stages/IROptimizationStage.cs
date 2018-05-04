@@ -26,7 +26,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private int forwardPropagateMove = 0;
 		private int forwardPropagateCompoundMove = 0;
 		private int deadCodeEliminationCount = 0;
-		private int reduceTruncationAndExpansionCount = 0;
 		private int constantFoldingIntegerOperationsCount = 0;
 		private int constantFoldingIntegerCompareCount = 0;
 		private int constantFoldingAdditionAndSubstractionCount = 0;
@@ -35,7 +34,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private int constantFoldingPhiCount = 0;
 		private int blockRemovedCount = 0;
 		private int foldIntegerCompareBranchCount = 0;
-		private int reduceZeroExtendedMoveCount = 0;
 		private int foldIntegerCompareCount = 0;
 		private int simplifyExtendedMoveCount = 0;
 		private int foldLoadStoreOffsetsCount = 0;
@@ -96,8 +94,6 @@ namespace Mosa.Compiler.Framework.Stages
 				ArithmeticSimplificationRemSignedModulus,
 				ArithmeticSimplificationLogicalOperators,
 				ArithmeticSimplificationShiftOperators,
-
-				//ReduceZeroExtendedMove,
 				ConstantFoldingAdditionAndSubstraction,
 				ConstantFoldingMultiplication,
 				ConstantFoldingDivision,
@@ -108,20 +104,18 @@ namespace Mosa.Compiler.Framework.Stages
 				FoldIntegerCompare,
 				RemoveUselessIntegerCompareBranch,
 				ConstantFoldIntegerCompareBranch,
-
-				//ReduceTruncationAndExpansion,
 				SimplifyExtendedMoveWithConstant,
 				SimplifyExtendedMoves,
 				SimplifyIntegerCompare2,
 				SimplifyIntegerCompare,
 				SimplifyAddCarryOut,
+				SimplifyAddWithCarry2,
 				SimplifySubCarryOut,
 				FoldLoadStoreOffsets,
 				ConstantFoldingPhi,
 				SimplifyPhi,
 				SimplifyPhi2,
 				DeadCodeEliminationPhi,
-				NormalizeConstantTo32Bit,
 				GetHigh64Constant,
 				GetLow64Constant,
 				GetHigh64Propagation,
@@ -148,7 +142,6 @@ namespace Mosa.Compiler.Framework.Stages
 			forwardPropagateMove = 0;
 			forwardPropagateCompoundMove = 0;
 			deadCodeEliminationCount = 0;
-			reduceTruncationAndExpansionCount = 0;
 			constantFoldingIntegerOperationsCount = 0;
 			constantFoldingIntegerCompareCount = 0;
 			constantFoldingAdditionAndSubstractionCount = 0;
@@ -157,7 +150,6 @@ namespace Mosa.Compiler.Framework.Stages
 			constantFoldingPhiCount = 0;
 			blockRemovedCount = 0;
 			foldIntegerCompareBranchCount = 0;
-			reduceZeroExtendedMoveCount = 0;
 			foldIntegerCompareCount = 0;
 			simplifyExtendedMoveCount = 0;
 			foldLoadStoreOffsetsCount = 0;
@@ -211,9 +203,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.FoldLoadStoreOffsets", foldLoadStoreOffsetsCount);
 			UpdateCounter("IROptimizations.DeadCodeElimination", deadCodeEliminationCount);
 			UpdateCounter("IROptimizations.DeadCodeEliminationPhi", deadCodeEliminationPhi);
-			UpdateCounter("IROptimizations.ReduceTruncationAndExpansion", reduceTruncationAndExpansionCount);
 			UpdateCounter("IROptimizations.CombineIntegerCompareBranch", combineIntegerCompareBranchCount);
-			UpdateCounter("IROptimizations.ReduceZeroExtendedMove", reduceZeroExtendedMoveCount);
 			UpdateCounter("IROptimizations.SimplifyExtendedMove", simplifyExtendedMoveCount);
 			UpdateCounter("IROptimizations.SimplifyExtendedMoveWithConstant", simplifyExtendedMoveWithConstantCount);
 			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhiCount);
@@ -2021,6 +2011,43 @@ namespace Mosa.Compiler.Framework.Stages
 			simplifyGeneralCount++;
 		}
 
+		private void SimplifyAddWithCarry2(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.AddWithCarry32)
+				return;
+
+			if (!node.Operand3.IsResolvedConstant)
+				return;
+
+			if (trace.Active) trace.Log("*** SimplifyAddCarryOut");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			AddOperandUsageToWorkList(node);
+
+			if (node.Operand3.IsConstantOne)
+			{
+				node.SetInstruction(IRInstruction.Add32, node.Operand1, node.Operand1, node.Operand2);
+				if (trace.Active) trace.Log("AFTER: \t" + node);
+			}
+			else
+			{
+				var result = node.Result;
+				var operand1 = node.Operand1;
+				var operand2 = node.Operand2;
+				var operand3 = node.Operand3;
+
+				var v1 = AllocateVirtualRegister(result.Type);
+
+				Context context = new Context(node);
+
+				context.SetInstruction(IRInstruction.Add32, v1, node.Operand1, node.Operand2);
+				context.SetInstruction(IRInstruction.Add32, result, v1, CreateConstant(1));
+				if (trace.Active) trace.Log("AFTER: \t" + context.Previous);
+				if (trace.Active) trace.Log("AFTER: \t" + context);
+			}
+
+			simplifyGeneralCount++;
+		}
+
 		private void SimplifySubCarryOut(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.SubCarryOut32)
@@ -2181,44 +2208,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return bits - 1;
-		}
-
-		private void NormalizeConstantTo32Bit(InstructionNode node)
-		{
-			if (node.ResultCount != 1)
-				return;
-
-			if (!node.Result.IsInt)
-				return;
-
-			if (node.Instruction == IRInstruction.LogicalAnd32
-				|| node.Instruction == IRInstruction.LogicalOr32
-				|| node.Instruction == IRInstruction.LogicalXor32
-				|| node.Instruction == IRInstruction.LogicalAnd64
-				|| node.Instruction == IRInstruction.LogicalOr64
-				|| node.Instruction == IRInstruction.LogicalXor64
-				|| node.Instruction == IRInstruction.LogicalNot32
-				|| node.Instruction == IRInstruction.LogicalNot64)
-			{
-				if (node.Operand1.IsResolvedConstant && node.Operand1.IsLong)
-				{
-					if (trace.Active) trace.Log("*** NormalizeConstantTo32Bit");
-
-					if (trace.Active) trace.Log("BEFORE:\t" + node);
-					node.Operand1 = CreateConstant((int)(node.Operand1.ConstantUnsignedLongInteger & uint.MaxValue));
-					if (trace.Active) trace.Log("AFTER: \t" + node);
-					AddOperandUsageToWorkList(node);
-				}
-				if (node.OperandCount >= 2 && node.Operand2.IsResolvedConstant && node.Operand2.IsLong)
-				{
-					if (trace.Active) trace.Log("*** NormalizeConstantTo32Bit");
-
-					if (trace.Active) trace.Log("BEFORE:\t" + node);
-					node.Operand2 = CreateConstant((int)(node.Operand2.ConstantUnsignedLongInteger & uint.MaxValue));
-					if (trace.Active) trace.Log("AFTER: \t" + node);
-					AddOperandUsageToWorkList(node);
-				}
-			}
 		}
 
 		private void GetLow64Constant(InstructionNode node)
