@@ -51,6 +51,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int longPropagatation = 0;
 		private int simplifyIntegerCompare = 0;
 		private int longConstantFolding = 0;
+		private int simplifyGeneralCount = 0;
 
 		private Stack<InstructionNode> worklist;
 
@@ -113,6 +114,8 @@ namespace Mosa.Compiler.Framework.Stages
 				SimplifyExtendedMoves,
 				SimplifyIntegerCompare2,
 				SimplifyIntegerCompare,
+				SimplifyAddCarryOut,
+				SimplifySubCarryOut,
 				FoldLoadStoreOffsets,
 				ConstantFoldingPhi,
 				SimplifyPhi,
@@ -170,6 +173,7 @@ namespace Mosa.Compiler.Framework.Stages
 			longPropagatation = 0;
 			simplifyIntegerCompare = 0;
 			longConstantFolding = 0;
+			simplifyGeneralCount = 0;
 		}
 
 		protected override void Run()
@@ -219,6 +223,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.LongPropagatation", longPropagatation);
 			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompare);
 			UpdateCounter("IROptimizations.LongConstantFolding", longConstantFolding);
+			UpdateCounter("IROptimizations.SimplifyGeneralCount", simplifyGeneralCount);
 		}
 
 		protected override void Finish()
@@ -797,7 +802,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				value = op1.ConstantUnsignedLongInteger + op2.ConstantUnsignedLongInteger;
 			}
-			else if (node.Instruction == IRInstruction.Sub32 )
+			else if (node.Instruction == IRInstruction.Sub32)
 			{
 				value = op1.ConstantUnsignedLongInteger - op2.ConstantUnsignedLongInteger;
 			}
@@ -1962,8 +1967,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.ConditionCode != ConditionCode.NotEqual)
 				return;
 
-			if (!node.Result.IsVirtualRegister)
-				return;
+			Debug.Assert(node.Result.IsVirtualRegister);
 
 			if (node.Result.Definitions.Count != 1)
 				return;
@@ -1998,6 +2002,40 @@ namespace Mosa.Compiler.Framework.Stages
 			node.SetInstruction(GetMoveInteger(node.Result), node.Result, operand);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
 			simplifyIntegerCompare++;
+		}
+
+		private void SimplifyAddCarryOut(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.AddCarryOut32)
+				return;
+
+			if (node.Result2.Uses.Count != 0)
+				return;
+
+			if (trace.Active) trace.Log("*** SimplifyAddCarryOut");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			AddOperandUsageToWorkList(node);
+
+			node.SetInstruction(IRInstruction.Add32, node.Result, node.Operand1, node.Operand2);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			simplifyGeneralCount++;
+		}
+
+		private void SimplifySubCarryOut(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.SubCarryOut32)
+				return;
+
+			if (node.Result2.Uses.Count != 0)
+				return;
+
+			if (trace.Active) trace.Log("*** SimplifyAddCarryOut");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			AddOperandUsageToWorkList(node);
+
+			node.SetInstruction(IRInstruction.Add32, node.Result, node.Operand1, node.Operand2);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			simplifyGeneralCount++;
 		}
 
 		private void SimplifyIntegerCompare2(InstructionNode node)
