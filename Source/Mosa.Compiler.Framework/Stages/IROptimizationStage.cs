@@ -109,7 +109,8 @@ namespace Mosa.Compiler.Framework.Stages
 				SimplifyIntegerCompare2,
 				SimplifyIntegerCompare,
 				SimplifyAddCarryOut,
-				SimplifyAddWithCarry2,
+				SimplifyAddCarryOut2,
+				SimplifyAddWithCarry,
 				SimplifySubCarryOut,
 				FoldLoadStoreOffsets,
 				ConstantFoldingPhi,
@@ -177,6 +178,11 @@ namespace Mosa.Compiler.Framework.Stages
 			trace = CreateTraceLog();
 
 			Optimize();
+		}
+
+		protected override void Finish()
+		{
+			base.Finish();
 
 			UpdateCounter("IROptimizations.IRInstructionRemoved", instructionsRemovedCount);
 			UpdateCounter("IROptimizations.ConstantFoldingIntegerOperations", constantFoldingIntegerOperationsCount);
@@ -214,11 +220,6 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompare);
 			UpdateCounter("IROptimizations.LongConstantFolding", longConstantFolding);
 			UpdateCounter("IROptimizations.SimplifyGeneralCount", simplifyGeneralCount);
-		}
-
-		protected override void Finish()
-		{
-			base.Finish();
 
 			virtualRegisters.Clear();
 			worklist.Clear();
@@ -2011,41 +2012,71 @@ namespace Mosa.Compiler.Framework.Stages
 			simplifyGeneralCount++;
 		}
 
-		private void SimplifyAddWithCarry2(InstructionNode node)
+		private void SimplifyAddCarryOut2(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.AddCarryOut32)
+				return;
+
+			var result = node.Result;
+			var result2 = node.Result2;
+			var operand1 = node.Operand1;
+			var operand2 = node.Operand2;
+
+			if (operand1.IsConstantZero || operand2.IsConstantZero)
+			{
+				if (trace.Active) trace.Log("*** SimplifyAddCarryOut2");
+				if (trace.Active) trace.Log("BEFORE:\t" + node);
+				AddOperandUsageToWorkList(node);
+
+				var context = new Context(node);
+				context.SetInstruction(IRInstruction.MoveInt32, result, operand1.IsConstantZero ? operand1 : operand2);
+				context.AppendInstruction(IRInstruction.MoveInt32, result2, ConstantZero);
+
+				if (trace.Active) trace.Log("AFTER: \t" + context);
+				if (trace.Active) trace.Log("AFTER: \t" + context.Previous);
+				simplifyGeneralCount++;
+			}
+		}
+
+		private void SimplifyAddWithCarry(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.AddWithCarry32)
 				return;
 
-			if (!node.Operand3.IsResolvedConstant)
-				return;
+			var result = node.Result;
+			var operand1 = node.Operand1;
+			var operand2 = node.Operand2;
+			var operand3 = node.Operand3;
 
-			if (trace.Active) trace.Log("*** SimplifyAddCarryOut");
-			if (trace.Active) trace.Log("BEFORE:\t" + node);
-			AddOperandUsageToWorkList(node);
-
-			if (node.Operand3.IsConstantOne)
+			if (operand3.IsResolvedConstant && operand3.IsConstantZero)
 			{
-				node.SetInstruction(IRInstruction.Add32, node.Operand1, node.Operand1, node.Operand2);
+				if (trace.Active) trace.Log("*** SimplifyAddWithCarry");
+				if (trace.Active) trace.Log("BEFORE:\t" + node);
+				AddOperandUsageToWorkList(node);
+
+				node.SetInstruction(IRInstruction.Add32, result, operand1, operand2);
 				if (trace.Active) trace.Log("AFTER: \t" + node);
+				simplifyGeneralCount++;
+				return;
 			}
-			else
-			{
-				var result = node.Result;
-				var operand1 = node.Operand1;
-				var operand2 = node.Operand2;
-				var operand3 = node.Operand3;
 
+			if (operand3.IsResolvedConstant && !operand3.IsConstantZero)
+			{
 				var v1 = AllocateVirtualRegister(result.Type);
 
-				Context context = new Context(node);
+				var context = new Context(node);
 
-				context.SetInstruction(IRInstruction.Add32, v1, node.Operand1, node.Operand2);
-				context.SetInstruction(IRInstruction.Add32, result, v1, CreateConstant(1));
+				if (trace.Active) trace.Log("*** SimplifyAddWithCarry");
+				if (trace.Active) trace.Log("BEFORE:\t" + node);
+				AddOperandUsageToWorkList(node);
+
+				context.SetInstruction(IRInstruction.Add32, v1, operand1, operand2);
+				context.AppendInstruction(IRInstruction.Add32, result, v1, CreateConstant(1));
 				if (trace.Active) trace.Log("AFTER: \t" + context.Previous);
 				if (trace.Active) trace.Log("AFTER: \t" + context);
+				simplifyGeneralCount++;
+				return;
 			}
-
-			simplifyGeneralCount++;
 		}
 
 		private void SimplifySubCarryOut(InstructionNode node)

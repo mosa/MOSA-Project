@@ -21,14 +21,6 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.ShlConst32, ConvertOperand2ToByte);
 			AddVisitation(X86.ShrConst32, ConvertOperand2ToByte);
 			AddVisitation(X86.BtConst32, ConvertOperand2ToByte);
-
-			//AddVisitation(X86.In8, ConvertOperand1ToByte);
-			//AddVisitation(X86.In16, ConvertOperand1ToByte);
-			//AddVisitation(X86.In32, ConvertOperand1ToByte);
-
-			//AddVisitation(X86.Out8, ConvertOperand1ToByte);
-			//AddVisitation(X86.Out16, ConvertOperand1ToByte);
-			//AddVisitation(X86.Out32, ConvertOperand1ToByte);
 		}
 
 		#region Visitation Methods

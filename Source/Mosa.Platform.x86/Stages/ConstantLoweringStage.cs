@@ -100,7 +100,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (context.Operand2.IsConstant)
 			{
-				context.SetInstruction(X86.TestConst32, context.Result, context.Operand1, context.Operand2);
+				context.SetInstruction(X86.TestConst32, null, context.Operand1, context.Operand2);
 			}
 		}
 

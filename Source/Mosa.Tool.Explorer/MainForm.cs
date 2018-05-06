@@ -273,7 +273,7 @@ namespace Mosa.Tool.Explorer
 		{
 			toolStrip1.Enabled = true;
 
-			Compiler.PostCompile();
+			//Compiler.PostCompile();
 
 			Stage = CompileStage.Compiled;
 

@@ -341,8 +341,6 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand3 = context.Operand3;
 			Operand result = context.Result;
 
-			Debug.Assert(result == operand1);
-
 			Operand ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 
 			context.SetInstruction(X86.Mov32, ECX, operand3);
@@ -374,8 +372,6 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand2 = context.Operand2;
 			Operand operand3 = context.Operand3;
 			Operand result = context.Result;
-
-			Debug.Assert(result == operand1);
 
 			Operand ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 
