@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Stages
 
 		protected override void Run()
 		{
-			bool changed = true;
+			changed = true;
 			trace = CreateTraceLog();
 
 			while (changed)
@@ -119,16 +119,16 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Debug.Assert(node.Instruction == X86.Mov32);
 
+			var result = node.Result;
 			var source = node.Operand1;
-			var destination = node.Result;
 
-			if (!destination.IsVirtualRegister)
+			if (!result.IsVirtualRegister)
 				return;
 
 			if (!source.IsVirtualRegister)
 				return;
 
-			if (destination.Definitions.Count != 1)
+			if (result.Definitions.Count != 1)
 				return;
 
 			if (source.Definitions.Count != 1)
@@ -137,31 +137,31 @@ namespace Mosa.Platform.x86.Stages
 			if (source.IsResolvedConstant)
 				return;
 
-			Debug.Assert(destination != source);
+			Debug.Assert(result != source);
 
-			foreach (var useNode in destination.Uses.ToArray())
+			changed = true;
+
+			foreach (var useNode in result.Uses.ToArray())
 			{
 				for (int i = 0; i < useNode.OperandCount; i++)
 				{
 					var operand = useNode.GetOperand(i);
 
-					if (destination == operand)
+					if (result == operand)
 					{
 						if (trace.Active) trace.Log("*** SimpleForwardCopyPropagation");
 						if (trace.Active) trace.Log("BEFORE:\t" + useNode);
 						useNode.SetOperand(i, source);
-						changed = true;
 						if (trace.Active) trace.Log("AFTER: \t" + useNode);
 					}
 				}
 			}
 
-			Debug.Assert(destination.Uses.Count == 0);
+			Debug.Assert(result.Uses.Count == 0);
 
 			if (trace.Active) trace.Log("REMOVED:\t" + node);
 			node.Empty();
 			instructionsRemovedCount++;
-			changed = true;
 		}
 	}
 }
