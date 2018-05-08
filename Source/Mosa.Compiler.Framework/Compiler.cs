@@ -167,6 +167,7 @@ namespace Mosa.Compiler.Framework
 				new PlatformIntrinsicStage(),
 				new PlatformEdgeSplitStage(),
 				new VirtualRegisterRenameStage(),
+				//new StopStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 				new EmptyBlockRemovalStage(),

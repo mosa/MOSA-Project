@@ -45,7 +45,6 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.MoveInt64, MoveInteger64);
 			AddVisitation(IRInstruction.MulSigned64, MulSigned64);
 			AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
-			//AddVisitation(IRInstruction.ShiftLeft64, ShiftLeft64v2);
 			AddVisitation(IRInstruction.ShiftLeft64, ShiftLeft64);
 			AddVisitation(IRInstruction.ShiftRight64, ShiftRight64);
 			AddVisitation(IRInstruction.SignExtend16x64, SignExtend16x64);
@@ -453,7 +452,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.CMovEqual32, resultHigh, v1);
 		}
 
-		private void ShiftLeft64v2(Context context)
+		private void ShiftLeft64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
@@ -470,52 +469,6 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.TestConst32, null, v2, CreateConstant(32));
 			context.AppendInstruction(X86.CMovNotEqual32, resultHigh, v1);
 			context.AppendInstruction(X86.CMovEqual32, resultLow, v1);
-		}
-
-		private void ShiftLeft64(Context context)
-		{
-			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
-			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
-
-			var count = context.Operand2;
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			var nextBlock = Split(context);
-			var newBlocks = CreateNewBlockContexts(6, context.Label);
-
-			context.SetInstruction(X86.Jmp, newBlocks[0].Block);
-
-			newBlocks[0].AppendInstruction(X86.Mov32, v3, count);
-			newBlocks[0].AppendInstruction(X86.Mov32, v2, op1H);
-			newBlocks[0].AppendInstruction(X86.Mov32, v1, op1L);
-			newBlocks[0].AppendInstruction(X86.CmpConst32, null, v3, CreateConstant(64));
-			newBlocks[0].AppendInstruction(X86.BranchUnsignedGreaterOrEqual, newBlocks[4].Block);
-			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].Block);
-
-			newBlocks[1].AppendInstruction(X86.CmpConst32, null, v3, CreateConstant(32));
-			newBlocks[1].AppendInstruction(X86.BranchUnsignedGreaterOrEqual, newBlocks[3].Block);
-			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].Block);
-
-			newBlocks[2].AppendInstruction(X86.Shld32, v2, v2, v1, v3);
-			newBlocks[2].AppendInstruction(X86.Shl32, v1, v1, v3);
-			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[5].Block);
-
-			newBlocks[3].AppendInstruction(X86.Mov32, v2, v1);
-			newBlocks[3].AppendInstruction(X86.MovConst32, v1, ConstantZero);
-			newBlocks[3].AppendInstruction(X86.AndConst32, v3, v3, CreateConstant(0x1F));
-			newBlocks[3].AppendInstruction(X86.Shl32, v2, v2, v3);
-			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].Block);
-
-			newBlocks[4].AppendInstruction(X86.MovConst32, v1, ConstantZero);
-			newBlocks[4].AppendInstruction(X86.MovConst32, v2, ConstantZero);
-			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].Block);
-
-			newBlocks[5].AppendInstruction(X86.Mov32, resultHigh, v2);
-			newBlocks[5].AppendInstruction(X86.Mov32, resultLow, v1);
-			newBlocks[5].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 
 		private void SignExtend16x64(Context context)

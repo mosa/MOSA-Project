@@ -663,7 +663,7 @@
     <Compile Include="Intrinsic\Set16.cs" />
     <Compile Include="Intrinsic\Set8.cs" />
     <Compile Include="Intrinsic\SetFS.cs" />
-    <Compile Include="Stages\ConstantLoweringStage.cs" />
+    <Compile Include="Stages\ConstantInstructionStage.cs" />
     <Compile Include="X86.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

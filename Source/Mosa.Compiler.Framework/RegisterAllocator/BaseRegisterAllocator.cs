@@ -1249,8 +1249,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			var intervals = liveInterval.SplitAt(splitAt);
 
 			ReplaceIntervals(liveInterval, intervals, true);
-
-			return;
 		}
 
 		protected void ReplaceIntervals(LiveInterval replaceLiveInterval, IList<LiveInterval> newIntervals, bool addToQueue)
