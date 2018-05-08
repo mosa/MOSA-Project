@@ -19,8 +19,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		public override bool ThreeTwoAddressConversion { get { return true; } }
-
 		public override bool IsZeroFlagModified { get { return true; } }
 
 		public override bool IsCarryFlagCleared { get { return true; } }
@@ -39,9 +37,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
-			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
-			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
-			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
 			emitter.Emit(LegacyOpcode, node.Operand1, node.Operand2);
 		}

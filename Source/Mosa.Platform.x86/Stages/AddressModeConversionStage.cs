@@ -41,7 +41,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="node">The conversion context.</param>
 		private void ThreeTwoAddressConversion(InstructionNode node)
 		{
-			if (node.Result.IsCPURegister && node.Operand1.IsCPURegister && node.Result.Register == node.Operand1.Register)
+			if (node.Result.IsCPURegister
+				&& node.Operand1.IsCPURegister
+				&& node.Result.Register == node.Operand1.Register)
 				return;
 
 			if (node.Result == node.Operand1)

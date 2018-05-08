@@ -21,7 +21,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool IsIOOperation { get { return true; } }
 
-		public override bool HasIRUnspecifiedSideEffect { get { return true; } }
+		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{

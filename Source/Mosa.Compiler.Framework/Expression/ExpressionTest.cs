@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 			//var nodeW = new Node(NodeType.OperandVariable, "w", 3);
 
-			var instruction1 = new Node(IRInstruction.AddUnsigned32);
+			var instruction1 = new Node(IRInstruction.Add32);
 			var instruction2 = new Node(IRInstruction.MulUnsigned32);
 			var instruction3 = new Node(IRInstruction.MulUnsigned32);
 
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 			context.AppendInstruction(IRInstruction.MulUnsigned32, t1, x, y);
 			context.AppendInstruction(IRInstruction.MulUnsigned32, t2, x, z);
-			context.AppendInstruction(IRInstruction.AddUnsigned32, r, t1, t2);
+			context.AppendInstruction(IRInstruction.Add32, r, t1, t2);
 
 			return basicBlocks;
 		}

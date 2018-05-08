@@ -177,6 +177,38 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
+			"Name": "Bt32",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "Z",
+			"FlagsUndefined": "SOP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"UnspecifiedSideEffect": "true",
+			"X86LegacyOpcode": "0F A3",
+			"X86LegacyOpcodeOperandOrder": "r2",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
+			"Name": "BtConst32",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "Z",
+			"FlagsUndefined": "SOP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"X86LegacyOpcode": "0F BA",
+			"X86LegacyOpcodeOperandOrder": "r2",
+			"X86LegacyOpcodeRegField": "04",
+			"X86ThreeTwoAddressConversion": "false"
+		},
+		{
 			"Name": "Bts32",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -1424,7 +1456,7 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"X86EmitBytes": "90",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Not32",
@@ -2143,7 +2175,7 @@
 			"ResultCount": 0,
 			"X86LegacyOpcode": "0x85",
 			"X86LegacyOpcodeOperandOrder": "12",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "TestConst32",
@@ -2159,7 +2191,7 @@
 			"X86LegacyOpcode": "0xF7",
 			"X86LegacyOpcodeOperandOrder": "12",
 			"X86LegacyOpcodeRegField": "00",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Ucomisd",
@@ -2635,7 +2667,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetOverflow",
+			"Name": "SetByteIfOverflow",
 			"AlternativeName": "SetO",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2644,7 +2676,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "O",
-			"LogicalOpposite": "SetNoOverflow",
+			"LogicalOpposite": "SetByteIfNoOverflow",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x90",
@@ -2652,7 +2684,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetNoOverflow",
+			"Name": "SetByteIfNoOverflow",
 			"AlternativeName": "SetNO",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2661,7 +2693,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "O",
-			"LogicalOpposite": "SetOverflow",
+			"LogicalOpposite": "SetByteIfOverflow",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x91",
@@ -2669,7 +2701,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetCarry",
+			"Name": "SetByteIfCarry",
 			"AlternativeName": "SetC",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2678,7 +2710,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
-			"LogicalOpposite": "SetNoCarry",
+			"LogicalOpposite": "SetByteIfNoCarry",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x92",
@@ -2686,7 +2718,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetUnsignedLessThan",
+			"Name": "SetByteIfUnsignedLessThan",
 			"AlternativeName": "SetB",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2695,7 +2727,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
-			"LogicalOpposite": "SetUnsignedGreaterOrEqual",
+			"LogicalOpposite": "SetByteIfUnsignedGreaterOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x92",
@@ -2703,7 +2735,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetUnsignedGreaterOrEqual",
+			"Name": "SetByteIfUnsignedGreaterOrEqual",
 			"AlternativeName": "SetAE",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2712,7 +2744,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
-			"LogicalOpposite": "SetUnsignedLessThan",
+			"LogicalOpposite": "SetByteIfUnsignedLessThan",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x93",
@@ -2720,7 +2752,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetNoCarry",
+			"Name": "SetByteIfNoCarry",
 			"AlternativeName": "SetNC",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2729,7 +2761,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
-			"LogicalOpposite": "SetCarry",
+			"LogicalOpposite": "SetByteIfCarry",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x93",
@@ -2737,7 +2769,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetEqual",
+			"Name": "SetByteIfEqual",
 			"AlternativeName": "SetE",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2746,7 +2778,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "Z",
-			"LogicalOpposite": "SetNotEqual",
+			"LogicalOpposite": "SetByteIfNotEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x94",
@@ -2754,7 +2786,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetZero",
+			"Name": "SetByteIfZero",
 			"AlternativeName": "SetZ",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2763,7 +2795,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "Z",
-			"LogicalOpposite": "SetNotZero",
+			"LogicalOpposite": "SetByteIfNotZero",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x94",
@@ -2771,7 +2803,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetNotEqual",
+			"Name": "SetByteIfNotEqual",
 			"AlternativeName": "SetNE",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2780,7 +2812,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "Z",
-			"LogicalOpposite": "SetEqual",
+			"LogicalOpposite": "SetByteIfEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x95",
@@ -2788,7 +2820,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetNotZero",
+			"Name": "SetByteIfNotZero",
 			"AlternativeName": "SetNZ",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2797,7 +2829,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "Z",
-			"LogicalOpposite": "SetZero",
+			"LogicalOpposite": "SetByteIfZero",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x95",
@@ -2805,7 +2837,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetUnsignedLessOrEqual",
+			"Name": "SetByteIfUnsignedLessOrEqual",
 			"AlternativeName": "SetBE",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2814,7 +2846,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "ZC",
-			"LogicalOpposite": "SetUnsignedGreaterThan",
+			"LogicalOpposite": "SetByteIfUnsignedGreaterThan",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x96",
@@ -2822,7 +2854,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetUnsignedGreaterThan",
+			"Name": "SetByteIfUnsignedGreaterThan",
 			"AlternativeName": "SetA",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2831,7 +2863,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "ZC",
-			"LogicalOpposite": "SetUnsignedLessOrEqual",
+			"LogicalOpposite": "SetByteIfUnsignedLessOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x97",
@@ -2839,7 +2871,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetSigned",
+			"Name": "SetByteIfSigned",
 			"AlternativeName": "SetS",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2848,7 +2880,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "S",
-			"LogicalOpposite": "SetNotSigned",
+			"LogicalOpposite": "SetByteIfNotSigned",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x98",
@@ -2856,7 +2888,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetNotSigned",
+			"Name": "SetByteIfNotSigned",
 			"AlternativeName": "SetNS",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2865,7 +2897,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "S",
-			"LogicalOpposite": "SetSigned",
+			"LogicalOpposite": "SetByteIfSigned",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x99",
@@ -2873,7 +2905,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetParity",
+			"Name": "SetByteIfParity",
 			"AlternativeName": "SetP",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2882,7 +2914,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "P",
-			"LogicalOpposite": "SetNoParity",
+			"LogicalOpposite": "SetByteIfNoParity",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x9A",
@@ -2890,7 +2922,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetNoParity",
+			"Name": "SetByteIfNoParity",
 			"AlternativeName": "SetNP",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2899,7 +2931,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "P",
-			"LogicalOpposite": "SetParity",
+			"LogicalOpposite": "SetByteIfParity",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x9B",
@@ -2907,7 +2939,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetLessThan",
+			"Name": "SetByteIfLessThan",
 			"AlternativeName": "SetL",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2916,7 +2948,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "SO",
-			"LogicalOpposite": "SetGreaterOrEqual",
+			"LogicalOpposite": "SetByteIfGreaterOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x9C",
@@ -2924,7 +2956,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetGreaterOrEqual",
+			"Name": "SetByteIfGreaterOrEqual",
 			"AlternativeName": "SetGE",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2933,7 +2965,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "SO",
-			"LogicalOpposite": "SetLessThan",
+			"LogicalOpposite": "SetByteIfLessThan",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x9D",
@@ -2941,7 +2973,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetLessOrEqual",
+			"Name": "SetByteIfLessOrEqual",
 			"AlternativeName": "SetLE",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2950,7 +2982,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "ZSO",
-			"LogicalOpposite": "SetGreaterThan",
+			"LogicalOpposite": "SetByteIfGreaterThan",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x9E",
@@ -2958,7 +2990,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "SetGreaterThan",
+			"Name": "SetByteIfGreaterThan",
 			"AlternativeName": "SetG",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
@@ -2967,7 +2999,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "ZSO",
-			"LogicalOpposite": "SetLessOrEqual",
+			"LogicalOpposite": "SetByteIfLessOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x9F",

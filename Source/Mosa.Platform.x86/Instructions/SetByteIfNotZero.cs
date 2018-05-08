@@ -7,25 +7,25 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// SetNoCarry
+	/// SetByteIfNotZero
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class SetNoCarry : X86Instruction
+	public sealed class SetByteIfNotZero : X86Instruction
 	{
-		public override string AlternativeName { get { return "SetNC"; } }
+		public override string AlternativeName { get { return "SetNZ"; } }
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x93 } );
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x95 } );
 
-		internal SetNoCarry()
+		internal SetByteIfNotZero()
 			: base(1, 0)
 		{
 		}
 
-		public override bool IsCarryFlagUsed { get { return true; } }
+		public override bool IsZeroFlagUsed { get { return true; } }
 
 		public override BaseInstruction GetOpposite()
 		{
-			return X86.SetCarry;
+			return X86.SetByteIfZero;
 		}
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)

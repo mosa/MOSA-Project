@@ -5,13 +5,13 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// SubSigned64
+	/// SubWithCarry32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class SubSigned64 : BaseIRInstruction
+	public sealed class SubWithCarry32 : BaseIRInstruction
 	{
-		public SubSigned64()
-			: base(2, 1)
+		public SubWithCarry32()
+			: base(3, 1)
 		{
 		}
 	}

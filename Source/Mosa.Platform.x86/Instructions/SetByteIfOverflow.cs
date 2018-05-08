@@ -7,16 +7,16 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// SetOverflow
+	/// SetByteIfOverflow
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class SetOverflow : X86Instruction
+	public sealed class SetByteIfOverflow : X86Instruction
 	{
 		public override string AlternativeName { get { return "SetO"; } }
 
 		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x90 } );
 
-		internal SetOverflow()
+		internal SetByteIfOverflow()
 			: base(1, 0)
 		{
 		}
@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override BaseInstruction GetOpposite()
 		{
-			return X86.SetNoOverflow;
+			return X86.SetByteIfNoOverflow;
 		}
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)

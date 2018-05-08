@@ -5,17 +5,15 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// AddUnsigned64
+	/// AddWithCarry32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class AddUnsigned64 : BaseIRInstruction
+	public sealed class AddWithCarry32 : BaseIRInstruction
 	{
-		public AddUnsigned64()
-			: base(2, 1)
+		public AddWithCarry32()
+			: base(3, 1)
 		{
 		}
-
-		public override bool IsCommutative { get { return true; } }
 	}
 }
 

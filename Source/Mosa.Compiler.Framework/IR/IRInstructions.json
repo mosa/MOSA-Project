@@ -21,32 +21,32 @@
 			"OperandCount": 1
 		},
 		{
-			"Name": "AddSigned32",
+			"Name": "Add32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "AddSigned64",
+			"Name": "Add64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "AddUnsigned32",
+			"Name": "AddCarryOut32",
 			"FamilyName": "IR",
-			"ResultCount": 1,
+			"ResultCount": 2,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "AddUnsigned64",
+			"Name": "AddWithCarry32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2,
-			"Commutative": "true"
+			"OperandCount": 3,
+			"Commutative": "false"
 		},
 		{
 			"Name": "ArithShiftRight32",
@@ -1057,28 +1057,30 @@
 			"OperandCount": 2
 		},
 		{
-			"Name": "SubSigned32",
+			"Name": "Sub32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
 		},
 		{
-			"Name": "SubSigned64",
+			"Name": "Sub64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2
 		},
 		{
-			"Name": "SubUnsigned32",
+			"Name": "SubCarryOut32",
 			"FamilyName": "IR",
-			"ResultCount": 1,
-			"OperandCount": 2
+			"ResultCount": 2,
+			"OperandCount": 2,
+			"Commutative": "false"
 		},
 		{
-			"Name": "SubUnsigned64",
+			"Name": "SubWithCarry32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 3,
+			"Commutative": "false"
 		},
 		{
 			"Name": "Switch",

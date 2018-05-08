@@ -467,16 +467,6 @@ namespace Mosa.Compiler.Framework
 			CompilerTrace.NewCompilerTraceEvent(compilerEvent, message, threadID);
 		}
 
-		/// <summary>
-		/// Updates the counter.
-		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <param name="count">The count.</param>
-		private void UpdateCounter(string name, int count)
-		{
-			GlobalCounters.Update(name, count);
-		}
-
 		private MosaType GetPlatformInternalRuntimeType()
 		{
 			return TypeSystem.GetTypeByName("Mosa.Runtime." + Architecture.PlatformName, "Internal");

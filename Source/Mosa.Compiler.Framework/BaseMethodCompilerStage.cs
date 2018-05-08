@@ -679,7 +679,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="count">The count.</param>
 		public void UpdateCounter(string name, int count)
 		{
-			MethodData.Counters.Update(name, count);
+			MethodData.Counters.UpdateNoLock(name, count);
 		}
 
 		#region Helpers

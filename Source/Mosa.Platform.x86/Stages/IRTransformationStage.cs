@@ -22,8 +22,9 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.AddFloatR4, AddFloatR4);
 			AddVisitation(IRInstruction.AddFloatR8, AddFloatR8);
 			AddVisitation(IRInstruction.AddressOf, AddressOf);
-			AddVisitation(IRInstruction.AddSigned32, AddSigned32);
-			AddVisitation(IRInstruction.AddUnsigned32, AddUnsigned32);
+			AddVisitation(IRInstruction.Add32, Add32);
+			AddVisitation(IRInstruction.AddCarryOut32, AddCarryOut32);
+			AddVisitation(IRInstruction.AddWithCarry32, AddWithCarry32);
 			AddVisitation(IRInstruction.ArithShiftRight32, ArithShiftRight32);
 			AddVisitation(IRInstruction.Break, Break);
 			AddVisitation(IRInstruction.CallDirect, CallDirect);
@@ -47,7 +48,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Jmp, Jmp);
 			AddVisitation(IRInstruction.LoadFloatR4, LoadFloatR4);
 			AddVisitation(IRInstruction.LoadFloatR8, LoadFloatR8);
-			AddVisitation(IRInstruction.LoadInt32, LoadInteger32);
+			AddVisitation(IRInstruction.LoadInt32, LoadInt32);
 			AddVisitation(IRInstruction.LoadSignExtend8x32, LoadSignExtend8x32);
 			AddVisitation(IRInstruction.LoadSignExtend16x32, LoadSignExtend16x32);
 			AddVisitation(IRInstruction.LoadZeroExtend8x32, LoadZeroExtend8x32);
@@ -66,7 +67,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.LogicalXor32, LogicalXor32);
 			AddVisitation(IRInstruction.MoveFloatR4, MoveFloatR4);
 			AddVisitation(IRInstruction.MoveFloatR8, MoveFloatR8);
-			AddVisitation(IRInstruction.MoveInt32, MoveInteger32);
+			AddVisitation(IRInstruction.MoveInt32, MoveInt32);
 			AddVisitation(IRInstruction.SignExtend8x32, SignExtend8x32);
 			AddVisitation(IRInstruction.SignExtend16x32, SignExtend16x32);
 			AddVisitation(IRInstruction.ZeroExtend8x32, ZeroExtend8x32);
@@ -82,19 +83,20 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.ShiftRight32, ShiftRight32);
 			AddVisitation(IRInstruction.StoreFloatR4, StoreFloatR4);
 			AddVisitation(IRInstruction.StoreFloatR8, StoreFloatR8);
-			AddVisitation(IRInstruction.StoreInt8, StoreInteger8);
-			AddVisitation(IRInstruction.StoreInt16, StoreInteger16);
-			AddVisitation(IRInstruction.StoreInt32, StoreInteger32);
+			AddVisitation(IRInstruction.StoreInt8, StoreInt8);
+			AddVisitation(IRInstruction.StoreInt16, StoreInt16);
+			AddVisitation(IRInstruction.StoreInt32, StoreInt32);
 			AddVisitation(IRInstruction.StoreParamFloatR4, StoreParamFloatR4);
 			AddVisitation(IRInstruction.StoreParamFloatR8, StoreParamFloatR8);
-			AddVisitation(IRInstruction.StoreParamInt8, StoreParamInteger8);
-			AddVisitation(IRInstruction.StoreParamInt16, StoreParamInteger16);
-			AddVisitation(IRInstruction.StoreParamInt32, StoreParamInteger32);
+			AddVisitation(IRInstruction.StoreParamInt8, StoreParamInt8);
+			AddVisitation(IRInstruction.StoreParamInt16, StoreParamInt16);
+			AddVisitation(IRInstruction.StoreParamInt32, StoreParamInt32);
 			AddVisitation(IRInstruction.StoreParamCompound, StoreParamCompound);
 			AddVisitation(IRInstruction.SubFloatR4, SubFloatR4);
 			AddVisitation(IRInstruction.SubFloatR8, SubFloatR8);
-			AddVisitation(IRInstruction.SubSigned32, SubSigned32);
-			AddVisitation(IRInstruction.SubUnsigned32, SubUnsigned32);
+			AddVisitation(IRInstruction.Sub32, Sub32);
+			AddVisitation(IRInstruction.SubCarryOut32, SubCarryOut32);
+			AddVisitation(IRInstruction.SubWithCarry32, SubWithCarry32);
 			AddVisitation(IRInstruction.Switch, Switch);
 		}
 
@@ -136,14 +138,65 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		private void AddSigned32(InstructionNode node)
+		private void Add32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Add32);
 		}
 
-		private void AddUnsigned32(InstructionNode node)
+		private void AddCarryOut32(Context context)
 		{
-			node.ReplaceInstruction(X86.Add32);
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction(X86.Add32, result, operand1, operand2);
+			context.AppendInstruction(X86.SetByteIfCarry, v1);
+			context.AppendInstruction(X86.Movzx8To32, result2, v1);
+		}
+
+		private void AddWithCarry32(Context context)
+		{
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			context.SetInstruction(X86.Bt32, v1, operand3, CreateConstant((byte)0));
+			context.AppendInstruction(X86.Adc32, result, operand1, operand2);
+		}
+
+		private void SubCarryOut32(Context context)
+		{
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction(X86.Sub32, result, operand1, operand2);
+			context.AppendInstruction(X86.SetByteIfCarry, v1);
+			context.AppendInstruction(X86.Movzx8To32, result2, v1);
+		}
+
+		private void SubWithCarry32(Context context)
+		{
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			context.SetInstruction(X86.Bt32, v1, operand3, CreateConstant((byte)0));
+			context.AppendInstruction(X86.Sbb32, result, operand1, operand2);
 		}
 
 		private void ArithShiftRight32(InstructionNode node)
@@ -355,7 +408,7 @@ namespace Mosa.Platform.x86.Stages
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.BranchParity, nextBlock.Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
-						newBlocks[0].AppendInstruction(X86.SetNotEqual, result);
+						newBlocks[0].AppendInstruction(X86.SetByteIfNotEqual, result);
 
 						//newBlocks[0].AppendInstruction(X86.Movzx, InstructionSize.Size8, result, result);
 						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
@@ -370,7 +423,7 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov32, result, ConstantZero);
 						context.AppendInstruction(instruction, null, right, left);
-						context.AppendInstruction(X86.SetUnsignedGreaterThan, result);
+						context.AppendInstruction(X86.SetByteIfUnsignedGreaterThan, result);
 						break;
 					}
 				case ConditionCode.GreaterThan:
@@ -382,7 +435,7 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.MovConst32, result, ConstantZero);
 						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X86.SetUnsignedGreaterThan, result);
+						context.AppendInstruction(X86.SetByteIfUnsignedGreaterThan, result);
 						break;
 					}
 				case ConditionCode.LessOrEqual:
@@ -394,7 +447,7 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov32, result, ConstantZero);
 						context.AppendInstruction(instruction, null, right, left);
-						context.AppendInstruction(X86.SetUnsignedGreaterOrEqual, result);
+						context.AppendInstruction(X86.SetByteIfUnsignedGreaterOrEqual, result);
 						break;
 					}
 				case ConditionCode.GreaterOrEqual:
@@ -406,7 +459,7 @@ namespace Mosa.Platform.x86.Stages
 
 						context.SetInstruction(X86.Mov32, result, ConstantZero);
 						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X86.SetUnsignedGreaterOrEqual, result);
+						context.AppendInstruction(X86.SetByteIfUnsignedGreaterOrEqual, result);
 						break;
 					}
 			}
@@ -439,7 +492,7 @@ namespace Mosa.Platform.x86.Stages
 			node.SetInstruction(X86.MovsdLoad, node.Result, node.Operand1, node.Operand2);
 		}
 
-		private void LoadInteger32(InstructionNode node)
+		private void LoadInt32(InstructionNode node)
 		{
 			Debug.Assert(!node.Result.IsR4);
 			Debug.Assert(!node.Result.IsR8);
@@ -559,12 +612,7 @@ namespace Mosa.Platform.x86.Stages
 			node.ReplaceInstruction(X86.Movsd);
 		}
 
-		private void MoveInteger(InstructionNode node)
-		{
-			node.ReplaceInstruction(X86.Mov32);
-		}
-
-		private void MoveInteger32(InstructionNode node)
+		private void MoveInt32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Mov32);
 		}
@@ -673,21 +721,21 @@ namespace Mosa.Platform.x86.Stages
 			node.SetInstruction(X86.MovsdStore, null, node.Operand1, node.Operand2, node.Operand3);
 		}
 
-		private void StoreInteger16(InstructionNode node)
+		private void StoreInt16(InstructionNode node)
 		{
 			LoadStore.OrderStoreOperands(node, MethodCompiler);
 
 			node.SetInstruction(X86.MovStore16, null, node.Operand1, node.Operand2, node.Operand3);
 		}
 
-		private void StoreInteger32(InstructionNode node)
+		private void StoreInt32(InstructionNode node)
 		{
 			LoadStore.OrderStoreOperands(node, MethodCompiler);
 
 			node.SetInstruction(X86.MovStore32, null, node.Operand1, node.Operand2, node.Operand3);
 		}
 
-		private void StoreInteger8(InstructionNode node)
+		private void StoreInt8(InstructionNode node)
 		{
 			LoadStore.OrderStoreOperands(node, MethodCompiler);
 
@@ -709,17 +757,17 @@ namespace Mosa.Platform.x86.Stages
 			node.SetInstruction(X86.MovsdStore, null, StackFrame, node.Operand1, node.Operand2);
 		}
 
-		private void StoreParamInteger16(InstructionNode node)
+		private void StoreParamInt16(InstructionNode node)
 		{
 			node.SetInstruction(X86.MovStore16, null, StackFrame, node.Operand1, node.Operand2);
 		}
 
-		private void StoreParamInteger32(InstructionNode node)
+		private void StoreParamInt32(InstructionNode node)
 		{
 			node.SetInstruction(X86.MovStore32, null, StackFrame, node.Operand1, node.Operand2);
 		}
 
-		private void StoreParamInteger8(InstructionNode node)
+		private void StoreParamInt8(InstructionNode node)
 		{
 			node.SetInstruction(X86.MovStore8, null, StackFrame, node.Operand1, node.Operand2);
 		}
@@ -740,12 +788,7 @@ namespace Mosa.Platform.x86.Stages
 			node.ReplaceInstruction(X86.Subsd);
 		}
 
-		private void SubSigned32(InstructionNode node)
-		{
-			node.ReplaceInstruction(X86.Sub32);
-		}
-
-		private void SubUnsigned32(InstructionNode node)
+		private void Sub32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X86.Sub32);
 		}
@@ -809,29 +852,83 @@ namespace Mosa.Platform.x86.Stages
 		{
 			switch (condition)
 			{
-				case ConditionCode.Overflow: return X86.SetOverflow;
-				case ConditionCode.NoOverflow: return X86.SetNoOverflow;
-				case ConditionCode.Carry: return X86.SetCarry;
-				case ConditionCode.UnsignedLessThan: return X86.SetUnsignedLessThan;
-				case ConditionCode.UnsignedGreaterOrEqual: return X86.SetUnsignedGreaterOrEqual;
-				case ConditionCode.NoCarry: return X86.SetNoCarry;
-				case ConditionCode.Equal: return X86.SetEqual;
-				case ConditionCode.Zero: return X86.SetZero;
-				case ConditionCode.NotEqual: return X86.SetNotEqual;
-				case ConditionCode.NotZero: return X86.SetNotZero;
-				case ConditionCode.UnsignedLessOrEqual: return X86.SetUnsignedLessOrEqual;
-				case ConditionCode.UnsignedGreaterThan: return X86.SetUnsignedGreaterThan;
-				case ConditionCode.Signed: return X86.SetSigned;
-				case ConditionCode.NotSigned: return X86.SetNotSigned;
-				case ConditionCode.LessThan: return X86.SetLessThan;
-				case ConditionCode.GreaterOrEqual: return X86.SetGreaterOrEqual;
-				case ConditionCode.LessOrEqual: return X86.SetLessOrEqual;
-				case ConditionCode.GreaterThan: return X86.SetGreaterThan;
+				case ConditionCode.Overflow: return X86.SetByteIfOverflow;
+				case ConditionCode.NoOverflow: return X86.SetByteIfNoOverflow;
+				case ConditionCode.Carry: return X86.SetByteIfCarry;
+				case ConditionCode.UnsignedLessThan: return X86.SetByteIfUnsignedLessThan;
+				case ConditionCode.UnsignedGreaterOrEqual: return X86.SetByteIfUnsignedGreaterOrEqual;
+				case ConditionCode.NoCarry: return X86.SetByteIfNoCarry;
+				case ConditionCode.Equal: return X86.SetByteIfEqual;
+				case ConditionCode.Zero: return X86.SetByteIfZero;
+				case ConditionCode.NotEqual: return X86.SetByteIfNotEqual;
+				case ConditionCode.NotZero: return X86.SetByteIfNotZero;
+				case ConditionCode.UnsignedLessOrEqual: return X86.SetByteIfUnsignedLessOrEqual;
+				case ConditionCode.UnsignedGreaterThan: return X86.SetByteIfUnsignedGreaterThan;
+				case ConditionCode.Signed: return X86.SetByteIfSigned;
+				case ConditionCode.NotSigned: return X86.SetByteIfNotSigned;
+				case ConditionCode.LessThan: return X86.SetByteIfLessThan;
+				case ConditionCode.GreaterOrEqual: return X86.SetByteIfGreaterOrEqual;
+				case ConditionCode.LessOrEqual: return X86.SetByteIfLessOrEqual;
+				case ConditionCode.GreaterThan: return X86.SetByteIfGreaterThan;
 
 				default: throw new NotSupportedException();
 			}
 		}
 
+		public static BaseInstruction GetCMovcc32(ConditionCode condition)
+		{
+			switch (condition)
+			{
+				case ConditionCode.Overflow: return X86.CMovOverflow32;
+				case ConditionCode.NoOverflow: return X86.CMovNoOverflow32;
+				case ConditionCode.Carry: return X86.CMovCarry32;
+				case ConditionCode.UnsignedLessThan: return X86.CMovUnsignedLessThan32;
+				case ConditionCode.UnsignedGreaterOrEqual: return X86.CMovUnsignedGreaterOrEqual32;
+				case ConditionCode.NoCarry: return X86.CMovNoCarry32;
+				case ConditionCode.Equal: return X86.CMovEqual32;
+				case ConditionCode.Zero: return X86.CMovZero32;
+				case ConditionCode.NotEqual: return X86.CMovNotEqual32;
+				case ConditionCode.NotZero: return X86.CMovNotZero32;
+				case ConditionCode.UnsignedLessOrEqual: return X86.CMovUnsignedLessOrEqual32;
+				case ConditionCode.UnsignedGreaterThan: return X86.CMovUnsignedGreaterThan32;
+				case ConditionCode.Signed: return X86.CMovSigned32;
+				case ConditionCode.NotSigned: return X86.CMovNotSigned32;
+				case ConditionCode.LessThan: return X86.CMovLessThan32;
+				case ConditionCode.GreaterOrEqual: return X86.CMovGreaterOrEqual32;
+				case ConditionCode.LessOrEqual: return X86.CMovLessOrEqual32;
+				case ConditionCode.GreaterThan: return X86.CMovGreaterThan32;
+
+				default: throw new NotSupportedException();
+			}
+		}
+
+		public static BaseInstruction GetCMovcc64(ConditionCode condition)
+		{
+			switch (condition)
+			{
+				// TODO
+				//case ConditionCode.Overflow: return X86.CMovOverflow64;
+				//case ConditionCode.NoOverflow: return X86.CMovNoOverflow64;
+				//case ConditionCode.Carry: return X86.CMovCarry64;
+				//case ConditionCode.UnsignedLessThan: return X86.CMovUnsignedLessThan64;
+				//case ConditionCode.UnsignedGreaterOrEqual: return X86.CMovUnsignedGreaterOrEqual64;
+				//case ConditionCode.NoCarry: return X86.CMovNoCarry64;
+				//case ConditionCode.Equal: return X86.CMovEqual64;
+				//case ConditionCode.Zero: return X86.CMovZero64;
+				//case ConditionCode.NotEqual: return X86.CMovNotEqual64;
+				//case ConditionCode.NotZero: return X86.CMovNotZero64;
+				//case ConditionCode.UnsignedLessOrEqual: return X86.CMovUnsignedLessOrEqual64;
+				//case ConditionCode.UnsignedGreaterThan: return X86.CMovUnsignedGreaterThan64;
+				//case ConditionCode.Signed: return X86.CMovSigned64;
+				//case ConditionCode.NotSigned: return X86.CMovNotSigned64;
+				//case ConditionCode.LessThan: return X86.CMovLessThan64;
+				//case ConditionCode.GreaterOrEqual: return X86.CMovGreaterOrEqual64;
+				//case ConditionCode.LessOrEqual: return X86.CMovLessOrEqual64;
+				//case ConditionCode.GreaterThan: return X86.CMovGreaterThan64;
+
+				default: throw new NotSupportedException();
+			}
+		}
 		#endregion Helper Methods
 	}
 }

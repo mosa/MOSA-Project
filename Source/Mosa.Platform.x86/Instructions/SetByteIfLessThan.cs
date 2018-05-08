@@ -7,16 +7,16 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// SetLessThan
+	/// SetByteIfLessThan
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class SetLessThan : X86Instruction
+	public sealed class SetByteIfLessThan : X86Instruction
 	{
 		public override string AlternativeName { get { return "SetL"; } }
 
 		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x9C } );
 
-		internal SetLessThan()
+		internal SetByteIfLessThan()
 			: base(1, 0)
 		{
 		}
@@ -27,7 +27,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override BaseInstruction GetOpposite()
 		{
-			return X86.SetGreaterOrEqual;
+			return X86.SetByteIfGreaterOrEqual;
 		}
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)

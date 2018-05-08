@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework
 			counters?.Clear();
 		}
 
-		public void Update(string name, int count)
+		public void Increment(string name, int count)
 		{
 			lock (_lock)
 			{
@@ -29,6 +29,31 @@ namespace Mosa.Compiler.Framework
 				else
 					counters.Add(name, count);
 			}
+		}
+
+		public void Update(string name, int count)
+		{
+			lock (_lock)
+			{
+				if (counters == null)
+					counters = new Dictionary<string, int>();
+
+				if (counters.ContainsKey(name))
+					counters[name] = count;
+				else
+					counters.Add(name, count);
+			}
+		}
+
+		public void UpdateNoLock(string name, int count)
+		{
+			if (counters == null)
+				counters = new Dictionary<string, int>();
+
+			if (counters.ContainsKey(name))
+				counters[name] = count;
+			else
+				counters.Add(name, count);
 		}
 
 		public IList<string> Export()
@@ -52,7 +77,7 @@ namespace Mosa.Compiler.Framework
 			{
 				foreach (var item in counters.counters)
 				{
-					Update(item.Key, item.Value);
+					Increment(item.Key, item.Value);
 				}
 			}
 		}

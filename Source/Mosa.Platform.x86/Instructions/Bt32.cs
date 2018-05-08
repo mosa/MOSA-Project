@@ -7,25 +7,21 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Int
+	/// Bt32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Int : X86Instruction
+	public sealed class Bt32 : X86Instruction
 	{
-		internal Int()
-			: base(0, 1)
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xA3 } );
+
+		internal Bt32()
+			: base(1, 2)
 		{
 		}
 
 		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
-		public override bool IsZeroFlagUnchanged { get { return true; } }
-
-		public override bool IsZeroFlagUndefined { get { return true; } }
-
-		public override bool IsCarryFlagUnchanged { get { return true; } }
-
-		public override bool IsCarryFlagUndefined { get { return true; } }
+		public override bool IsCarryFlagModified { get { return true; } }
 
 		public override bool IsSignFlagUnchanged { get { return true; } }
 
@@ -39,12 +35,12 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool IsParityFlagUndefined { get { return true; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
-			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			StaticEmitters.EmitInt(node, emitter);
+			emitter.Emit(LegacyOpcode, node.Result, node.Operand2);
 		}
 	}
 }

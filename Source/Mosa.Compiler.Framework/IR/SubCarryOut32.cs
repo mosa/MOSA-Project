@@ -5,17 +5,15 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// AddSigned32
+	/// SubCarryOut32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class AddSigned32 : BaseIRInstruction
+	public sealed class SubCarryOut32 : BaseIRInstruction
 	{
-		public AddSigned32()
-			: base(2, 1)
+		public SubCarryOut32()
+			: base(2, 2)
 		{
 		}
-
-		public override bool IsCommutative { get { return true; } }
 	}
 }
 

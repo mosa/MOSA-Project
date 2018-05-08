@@ -503,14 +503,10 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Load(node);
 			}
-			else if (instruction == IRInstruction.AddSigned32
-				|| instruction == IRInstruction.AddUnsigned32
-				|| instruction == IRInstruction.AddSigned64
-				|| instruction == IRInstruction.AddUnsigned64
-				|| instruction == IRInstruction.SubSigned32
-				|| instruction == IRInstruction.SubUnsigned32
-				|| instruction == IRInstruction.SubSigned64
-				|| instruction == IRInstruction.SubUnsigned64
+			else if (instruction == IRInstruction.Add32
+				|| instruction == IRInstruction.Add64
+				|| instruction == IRInstruction.Sub32
+				|| instruction == IRInstruction.Sub64
 				|| instruction == IRInstruction.MulSigned32
 				|| instruction == IRInstruction.MulUnsigned32
 				|| instruction == IRInstruction.MulSigned64
@@ -872,18 +868,14 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private bool IntegerOperation(BaseInstruction instruction, ulong operand1, ulong operand2, ConditionCode conditionCode, out ulong result)
 		{
-			if (instruction == IRInstruction.AddSigned32
-				|| instruction == IRInstruction.AddUnsigned32
-				|| instruction == IRInstruction.AddSigned64
-				|| instruction == IRInstruction.AddUnsigned64)
+			if (instruction == IRInstruction.Add32
+				|| instruction == IRInstruction.Add64)
 			{
 				result = operand1 + operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.SubSigned32
-				|| instruction == IRInstruction.SubUnsigned32
-				|| instruction == IRInstruction.SubSigned64
-				|| instruction == IRInstruction.SubUnsigned64)
+			else if (instruction == IRInstruction.Sub32
+				|| instruction == IRInstruction.Sub64)
 			{
 				result = operand1 - operand2;
 				return true;
