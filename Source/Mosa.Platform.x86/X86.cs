@@ -52,7 +52,7 @@ namespace Mosa.Platform.x86
 		public static readonly JmpFar JmpFar = new JmpFar();
 		public static readonly Hlt Hlt = new Hlt();
 		public static readonly IDiv32 IDiv32 = new IDiv32();
-		public static readonly IMul IMul = new IMul();
+		public static readonly IMul32 IMul32 = new IMul32();
 		public static readonly In8 In8 = new In8();
 		public static readonly In16 In16 = new In16();
 		public static readonly In32 In32 = new In32();
@@ -77,8 +77,8 @@ namespace Mosa.Platform.x86
 		public static readonly MovConst32 MovConst32 = new MovConst32();
 		public static readonly Movaps Movaps = new Movaps();
 		public static readonly MovapsLoad MovapsLoad = new MovapsLoad();
-		public static readonly MovCRLoad MovCRLoad = new MovCRLoad();
-		public static readonly MovCRStore MovCRStore = new MovCRStore();
+		public static readonly MovCRLoad32 MovCRLoad32 = new MovCRLoad32();
+		public static readonly MovCRStore32 MovCRStore32 = new MovCRStore32();
 		public static readonly Movd Movd = new Movd();
 		public static readonly MovLoad8 MovLoad8 = new MovLoad8();
 		public static readonly MovLoad16 MovLoad16 = new MovLoad16();
@@ -106,7 +106,7 @@ namespace Mosa.Platform.x86
 		public static readonly Mul32 Mul32 = new Mul32();
 		public static readonly Mulsd Mulsd = new Mulsd();
 		public static readonly Mulss Mulss = new Mulss();
-		public static readonly Neg Neg = new Neg();
+		public static readonly Neg32 Neg32 = new Neg32();
 		public static readonly Nop Nop = new Nop();
 		public static readonly Not32 Not32 = new Not32();
 		public static readonly Or32 Or32 = new Or32();

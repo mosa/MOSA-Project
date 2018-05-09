@@ -608,7 +608,7 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "IMul",
+			"Name": "IMul32",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "CO",
@@ -1001,7 +1001,7 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "MovCRLoad",
+			"Name": "MovCRLoad32",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -1017,7 +1017,7 @@
 			"X86ThreeTwoAddressConversion": "false"
 		},
 		{
-			"Name": "MovCRStore",
+			"Name": "MovCRStore32",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -1431,7 +1431,7 @@
 			"X86ThreeTwoAddressConversion": "true"
 		},
 		{
-			"Name": "Neg",
+			"Name": "Neg32",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",

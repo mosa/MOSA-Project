@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Cdq, Cdq);
 			AddVisitation(X86.Div32, Div32);
 			AddVisitation(X86.IDiv32, IDiv32);
-			AddVisitation(X86.IMul, IMul);
+			AddVisitation(X86.IMul32, IMul32);
 			AddVisitation(X86.In8, In8);
 			AddVisitation(X86.In16, In16);
 			AddVisitation(X86.In32, In32);
@@ -152,7 +152,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="IX86Visitor.IMul" /> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void IMul(Context context)
+		public void IMul32(Context context)
 		{
 			if (!context.Operand2.IsConstant)
 				return;

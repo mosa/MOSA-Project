@@ -222,6 +222,9 @@
     <Compile Include="Instructions\IDiv32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Instructions\IMul32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="Instructions\In16.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -262,6 +265,12 @@
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\MovConst32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovCRLoad32.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovCRStore32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\MovLoad16.cs">
@@ -319,6 +328,9 @@
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Mulss.cs">
+      <DependentUpon>X86Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Neg32.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Not32.cs">
@@ -550,12 +562,6 @@
     <Compile Include="Instructions\Movaps.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\MovCRStore.cs">
-      <DependentUpon>X86Instructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Instructions\MovCRLoad.cs">
-      <DependentUpon>X86Instructions.tt</DependentUpon>
-    </Compile>
     <Compile Include="Instructions\MovupsStore.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
@@ -584,9 +590,6 @@
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Movups.cs">
-      <DependentUpon>X86Instructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Instructions\IMul.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\PXor.cs">
@@ -805,9 +808,6 @@
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Stos.cs">
-      <DependentUpon>X86Instructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Instructions\Neg.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\Ucomisd.cs">

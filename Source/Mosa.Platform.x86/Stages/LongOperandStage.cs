@@ -280,10 +280,10 @@ namespace Mosa.Platform.x86.Stages
 			if (!resultHigh.IsConstantZero)
 			{
 				context.AppendInstruction(X86.Mov32, v2, op1L);
-				context.AppendInstruction(X86.IMul, v3, v2, op2H);
+				context.AppendInstruction(X86.IMul32, v3, v2, op2H);
 				context.AppendInstruction(X86.Add32, v4, v1, v3);
 				context.AppendInstruction(X86.Mov32, v3, op2L);
-				context.AppendInstruction(X86.IMul, v3, v3, op1H);
+				context.AppendInstruction(X86.IMul32, v3, v3, op1H);
 				context.AppendInstruction(X86.Add32, resultHigh, v4, v3);
 			}
 		}
@@ -447,6 +447,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero);
 			context.AppendInstruction(X86.Shr32, v1, op1H, count);
 			context.AppendInstruction(X86.Mov32, v2, count);
+
 			// FUTURE: Optimization - TestConst32 and conditional moves are not necessary if count is a constant
 			context.AppendInstruction(X86.TestConst32, null, v2, CreateConstant(32));
 			context.AppendInstruction(X86.CMovNotEqual32, resultLow, v1);
@@ -467,6 +468,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov32, resultLow, ConstantZero);
 			context.AppendInstruction(X86.Shl32, v1, op1L, count);
 			context.AppendInstruction(X86.Mov32, v2, count);
+
 			// FUTURE: Optimization - TestConst32 and conditional moves are not necessary if count is a constant
 			context.AppendInstruction(X86.TestConst32, null, v2, CreateConstant(32));
 			context.AppendInstruction(X86.CMovNotEqual32, resultHigh, v1);
