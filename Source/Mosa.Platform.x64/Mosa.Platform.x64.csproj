@@ -450,10 +450,10 @@
     <Compile Include="Instructions\MovStoreSeg64.cs">
       <DependentUpon>X64Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Movsx16To32.cs">
+    <Compile Include="Instructions\Movsx16To64.cs">
       <DependentUpon>X64Instructions.tt</DependentUpon>
     </Compile>
-    <Compile Include="Instructions\Movsx8To32.cs">
+    <Compile Include="Instructions\Movsx8To64.cs">
       <DependentUpon>X64Instructions.tt</DependentUpon>
     </Compile>
     <Compile Include="Instructions\MovsxLoad16.cs">
