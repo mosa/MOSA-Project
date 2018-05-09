@@ -80,14 +80,693 @@
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="X64Instructions.json" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Architecture.cs" />
     <Compile Include="ArchitectureFeatureFlags.cs" />
+    <Compile Include="GeneralPurposeRegister.cs" />
+    <Compile Include="Instructions\Adc64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\AdcConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Add64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\AddConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Addsd.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Addss.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\And64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\AndConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchCarry.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchEqual.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchGreaterOrEqual.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchGreaterThan.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchLessOrEqual.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchLessThan.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNoCarry.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNoOverflow.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNoParity.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNotEqual.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNotSigned.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchNotZero.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchOverflow.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchParity.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchSigned.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchUnsignedGreaterOrEqual.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchUnsignedGreaterThan.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchUnsignedLessOrEqual.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchUnsignedLessThan.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BranchZero.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Break.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Bt64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BtConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Btr64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BtrConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Bts64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\BtsConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Call.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CallReg.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CallStatic.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Cdq.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Cli.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovCarry64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovEqual64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovGreaterOrEqual64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovGreaterThan64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovLessOrEqual64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovLessThan64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovNoCarry64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovNoOverflow64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovNoParity64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovNotEqual64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovNotSigned64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovNotZero64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovOverflow64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovParity64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovSigned64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovUnsignedGreaterOrEqual64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovUnsignedGreaterThan64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovUnsignedLessOrEqual64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovUnsignedLessThan64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CMovZero64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Cmp64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CmpConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CmpXChgLoad64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Comisd.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Comiss.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\CpuId.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Cvtsd2ss.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Cvtsi2sd.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Cvtsi2ss.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Cvtss2sd.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Cvttsd2si.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Cvttss2si.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Dec64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Div64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Divsd.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Divss.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Hlt.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\IDiv64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\IMul64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\In16.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\In32.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\In8.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Inc64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\InConst16.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\InConst32.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\InConst8.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Int.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Invlpg.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\IRetd.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Jmp.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\JmpFar.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\JmpReg.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\JmpStatic.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Lea64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Leave.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Lgdt.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Lidt.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Lock.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Mov64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movaps.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovapsLoad.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovCRLoad64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovCRStore64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movd.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovLoad16.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovLoad32.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovLoad64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovLoad8.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovLoadSeg64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movsd.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovsdLoad.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovsdStore.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movss.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovssLoad.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovssStore.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovStore16.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovStore32.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovStore64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovStore8.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovStoreSeg64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movsx16To64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movsx8To64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovsxLoad16.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovsxLoad32.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovsxLoad8.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movups.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovupsLoad.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovupsStore.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movzx16To64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Movzx8To64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovzxLoad16.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovzxLoad32.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\MovzxLoad8.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Mul64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Mulsd.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Mulss.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Neg64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Nop.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Not64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Or64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\OrConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Out16.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Out32.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Out8.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\OutConst16.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\OutConst32.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\OutConst8.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Pause.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Pextrd.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Pop64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Popad.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Push64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Pushad.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\PushConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\PXor.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Rcr64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\RcrConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\RcrConstOne64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Rep.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Ret.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Roundsd.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Roundss.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Sar64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SarConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SarConstOne64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Sbb64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SbbConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfCarry.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfEqual.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfGreaterOrEqual.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfGreaterThan.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfLessOrEqual.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfLessThan.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfNoCarry.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfNoOverflow.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfNoParity.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfNotEqual.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfNotSigned.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfNotZero.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfOverflow.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfParity.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfSigned.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfUnsignedGreaterOrEqual.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfUnsignedGreaterThan.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfUnsignedLessOrEqual.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfUnsignedLessThan.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SetByteIfZero.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Shl64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\ShlConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\ShlConstOne64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Shld64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\ShldConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Shr64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\ShrConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\ShrConstOne64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Shrd64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\ShrdConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\StaticEmitters.cs" />
+    <Compile Include="Instructions\Sti.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Stos.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Sub64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\SubConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Subsd.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Subss.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Test64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\TestConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Ucomisd.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Ucomiss.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\X64Instructions.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Instructions\XAddLoad64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\XChg64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\XChgLoad64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\Xor64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Instructions\XorConst64.cs">
+      <DependentUpon>X64Instructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LegacyOpCode.cs" />
+    <Compile Include="OpcodeEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="X64.cs">
+      <DependentUpon>X64.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="X64Instruction.cs" />
+    <Compile Include="X64CodeEmitter.cs" />
+    <Compile Include="X64InstructionMap.cs">
+      <DependentUpon>X64InstructionMap.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Instructions\X64Instructions.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>X64Instructions.cs</LastGenOutput>
+    </Content>
+    <Content Include="X64.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>X64.cs</LastGenOutput>
+    </Content>
+    <Content Include="X64InstructionMap.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>X64InstructionMap.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

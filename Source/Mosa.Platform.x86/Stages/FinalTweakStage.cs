@@ -13,38 +13,43 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
+			AddVisitation(X86.BtConst32, ConvertOperand2ToByte);
 			AddVisitation(X86.CallReg, CallReg);
 			AddVisitation(X86.Mov32, Mov32);
-			AddVisitation(X86.MovLoad8, MovLoad8);
 			AddVisitation(X86.MovLoad16, MovLoad16);
-			AddVisitation(X86.MovStore8, MovStore8);
-			AddVisitation(X86.MovStore16, MovStore16);
+			AddVisitation(X86.MovLoad8, MovLoad8);
 			AddVisitation(X86.Movsd, Movsd);
 			AddVisitation(X86.Movss, Movss);
-			AddVisitation(X86.Nop, Nop);
-			AddVisitation(X86.SetByteIfOverflow, Setcc);
-			AddVisitation(X86.SetByteIfNoOverflow, Setcc);
-			AddVisitation(X86.SetByteIfCarry, Setcc);
-			AddVisitation(X86.SetByteIfUnsignedLessThan, Setcc);
-			AddVisitation(X86.SetByteIfUnsignedGreaterOrEqual, Setcc);
-			AddVisitation(X86.SetByteIfNoCarry, Setcc);
-			AddVisitation(X86.SetByteIfEqual, Setcc);
-			AddVisitation(X86.SetByteIfZero, Setcc);
-			AddVisitation(X86.SetByteIfNotEqual, Setcc);
-			AddVisitation(X86.SetByteIfNotZero, Setcc);
-			AddVisitation(X86.SetByteIfUnsignedLessOrEqual, Setcc);
-			AddVisitation(X86.SetByteIfUnsignedGreaterThan, Setcc);
-			AddVisitation(X86.SetByteIfSigned, Setcc);
-			AddVisitation(X86.SetByteIfNotSigned, Setcc);
-			AddVisitation(X86.SetByteIfParity, Setcc);
-			AddVisitation(X86.SetByteIfNoParity, Setcc);
-			AddVisitation(X86.SetByteIfLessThan, Setcc);
-			AddVisitation(X86.SetByteIfGreaterOrEqual, Setcc);
-			AddVisitation(X86.SetByteIfLessOrEqual, Setcc);
-			AddVisitation(X86.SetByteIfGreaterThan, Setcc);
-
-			AddVisitation(X86.Movzx8To32, Movzx8To32);
+			AddVisitation(X86.MovStore16, MovStore16);
+			AddVisitation(X86.MovStore8, MovStore8);
 			AddVisitation(X86.Movzx16To32, Movzx16To32);
+			AddVisitation(X86.Movzx8To32, Movzx8To32);
+			AddVisitation(X86.Nop, Nop);
+			AddVisitation(X86.SarConst32, ConvertOperand2ToByte);
+			AddVisitation(X86.SetByteIfCarry, Setcc);
+			AddVisitation(X86.SetByteIfEqual, Setcc);
+			AddVisitation(X86.SetByteIfGreaterOrEqual, Setcc);
+			AddVisitation(X86.SetByteIfGreaterThan, Setcc);
+			AddVisitation(X86.SetByteIfLessOrEqual, Setcc);
+			AddVisitation(X86.SetByteIfLessThan, Setcc);
+			AddVisitation(X86.SetByteIfNoCarry, Setcc);
+			AddVisitation(X86.SetByteIfNoOverflow, Setcc);
+			AddVisitation(X86.SetByteIfNoParity, Setcc);
+			AddVisitation(X86.SetByteIfNotEqual, Setcc);
+			AddVisitation(X86.SetByteIfNotSigned, Setcc);
+			AddVisitation(X86.SetByteIfNotZero, Setcc);
+			AddVisitation(X86.SetByteIfOverflow, Setcc);
+			AddVisitation(X86.SetByteIfParity, Setcc);
+			AddVisitation(X86.SetByteIfSigned, Setcc);
+			AddVisitation(X86.SetByteIfUnsignedGreaterOrEqual, Setcc);
+			AddVisitation(X86.SetByteIfUnsignedGreaterThan, Setcc);
+			AddVisitation(X86.SetByteIfUnsignedLessOrEqual, Setcc);
+			AddVisitation(X86.SetByteIfUnsignedLessThan, Setcc);
+			AddVisitation(X86.SetByteIfZero, Setcc);
+			AddVisitation(X86.ShlConst32, ConvertOperand2ToByte);
+			AddVisitation(X86.ShldConst32, ConvertOperand3ToByte);
+			AddVisitation(X86.ShrConst32, ConvertOperand2ToByte);
+			AddVisitation(X86.ShrdConst32, ConvertOperand3ToByte);
 		}
 
 		#region Visitation Methods
@@ -107,22 +112,6 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		public void MovLoad8(Context context)
-		{
-			Operand result = context.Result;
-
-			Debug.Assert(result.IsCPURegister);
-
-			if (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI)
-			{
-				Operand source = context.Operand1;
-				Operand offset = context.Operand2;
-
-				context.SetInstruction(X86.MovLoad32, result, source, offset);
-				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0x000000ff));
-			}
-		}
-
 		public void MovLoad16(Context context)
 		{
 			Operand result = context.Result;
@@ -139,37 +128,42 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		public void MovStore8(Context context)
+		public void MovLoad8(Context context)
 		{
-			Operand value = context.Operand3;
+			Operand result = context.Result;
 
-			if (value.IsCPURegister && (value.Register == GeneralPurposeRegister.ESI || value.Register == GeneralPurposeRegister.EDI))
+			Debug.Assert(result.IsCPURegister);
+
+			if (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI)
 			{
-				Operand dest = context.Operand1;
+				Operand source = context.Operand1;
 				Operand offset = context.Operand2;
 
-				Operand temporaryRegister = null;
+				context.SetInstruction(X86.MovLoad32, result, source, offset);
+				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0x000000ff));
+			}
+		}
+		public void Movsd(Context context)
+		{
+			Debug.Assert(context.Result.IsCPURegister);
+			Debug.Assert(context.Operand1.IsCPURegister);
 
-				if (dest.Register != GeneralPurposeRegister.EAX && offset.Register != GeneralPurposeRegister.EAX)
-				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-				}
-				else if (dest.Register != GeneralPurposeRegister.EBX && offset.Register != GeneralPurposeRegister.EBX)
-				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
-				}
-				else if (dest.Register != GeneralPurposeRegister.ECX && offset.Register != GeneralPurposeRegister.ECX)
-				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
-				}
-				else
-				{
-					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
-				}
+			if (context.Result.Register == context.Operand1.Register)
+			{
+				context.Empty();
+				return;
+			}
+		}
 
-				context.SetInstruction2(X86.XChg32, temporaryRegister, value, value, temporaryRegister);
-				context.AppendInstruction(X86.MovStore8, null, dest, offset, temporaryRegister);
-				context.AppendInstruction2(X86.XChg32, value, temporaryRegister, temporaryRegister, value);
+		public void Movss(Context context)
+		{
+			Debug.Assert(context.Result.IsCPURegister);
+			Debug.Assert(context.Operand1.IsCPURegister);
+
+			if (context.Result.Register == context.Operand1.Register)
+			{
+				context.Empty();
+				return;
 			}
 		}
 
@@ -207,27 +201,80 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		public void Movsd(Context context)
+		public void MovStore8(Context context)
+		{
+			Operand value = context.Operand3;
+
+			if (value.IsCPURegister && (value.Register == GeneralPurposeRegister.ESI || value.Register == GeneralPurposeRegister.EDI))
+			{
+				Operand dest = context.Operand1;
+				Operand offset = context.Operand2;
+
+				Operand temporaryRegister = null;
+
+				if (dest.Register != GeneralPurposeRegister.EAX && offset.Register != GeneralPurposeRegister.EAX)
+				{
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+				}
+				else if (dest.Register != GeneralPurposeRegister.EBX && offset.Register != GeneralPurposeRegister.EBX)
+				{
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
+				}
+				else if (dest.Register != GeneralPurposeRegister.ECX && offset.Register != GeneralPurposeRegister.ECX)
+				{
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+				}
+				else
+				{
+					temporaryRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+				}
+
+				context.SetInstruction2(X86.XChg32, temporaryRegister, value, value, temporaryRegister);
+				context.AppendInstruction(X86.MovStore8, null, dest, offset, temporaryRegister);
+				context.AppendInstruction2(X86.XChg32, value, temporaryRegister, temporaryRegister, value);
+			}
+		}
+		public void Movzx16To32(Context context)
 		{
 			Debug.Assert(context.Result.IsCPURegister);
-			Debug.Assert(context.Operand1.IsCPURegister);
 
-			if (context.Result.Register == context.Operand1.Register)
-			{
-				context.Empty();
+			// Movzx8To32 can not use with ESI or EDI registers
+			if (context.Operand1.Register != GeneralPurposeRegister.ESI && context.Operand1.Register != GeneralPurposeRegister.EDI)
 				return;
+
+			Operand result = context.Result;
+			Operand source = context.Operand1;
+
+			if (source.Register != result.Register)
+			{
+				context.SetInstruction(X86.Mov32, result, source);
+				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0xffff));
+			}
+			else
+			{
+				context.SetInstruction(X86.AndConst32, result, result, CreateConstant(0xffff));
 			}
 		}
 
-		public void Movss(Context context)
+		public void Movzx8To32(Context context)
 		{
 			Debug.Assert(context.Result.IsCPURegister);
-			Debug.Assert(context.Operand1.IsCPURegister);
 
-			if (context.Result.Register == context.Operand1.Register)
-			{
-				context.Empty();
+			// Movzx8To32 can not use with ESI or EDI registers
+			if (context.Operand1.Register != GeneralPurposeRegister.ESI && context.Operand1.Register != GeneralPurposeRegister.EDI)
 				return;
+
+			Operand result = context.Result;
+			Operand source = context.Operand1;
+
+			if (source.Register != result.Register)
+			{
+				context.SetInstruction(X86.Mov32, result, source);
+				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0xff));
+			}
+			else
+			{
+				context.SetInstruction(X86.AndConst32, result, result, CreateConstant(0xff));
 			}
 		}
 
@@ -257,51 +304,41 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction2(X86.XChg32, result, eax, eax, result);
 			}
 		}
-
-		public void Movzx8To32(Context context)
+		/// <summary>
+		/// Converts the operand1 to byte.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void ConvertOperand1ToByte(Context context)
 		{
-			Debug.Assert(context.Result.IsCPURegister);
-
-			// Movzx8To32 can not use with ESI or EDI registers
-			if (context.Operand1.Register != GeneralPurposeRegister.ESI && context.Operand1.Register != GeneralPurposeRegister.EDI)
+			if (!context.Operand1.IsConstant || context.Operand1.IsByte)
 				return;
 
-			Operand result = context.Result;
-			Operand source = context.Operand1;
-
-			if (source.Register != result.Register)
-			{
-				context.SetInstruction(X86.Mov32, result, source);
-				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0xff));
-			}
-			else
-			{
-				context.SetInstruction(X86.AndConst32, result, result, CreateConstant(0xff));
-			}
+			context.Operand1 = CreateConstant((byte)context.Operand1.ConstantUnsignedLongInteger);
 		}
 
-		public void Movzx16To32(Context context)
+		/// <summary>
+		/// Converts the operand2 to byte.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void ConvertOperand2ToByte(Context context)
 		{
-			Debug.Assert(context.Result.IsCPURegister);
-
-			// Movzx8To32 can not use with ESI or EDI registers
-			if (context.Operand1.Register != GeneralPurposeRegister.ESI && context.Operand1.Register != GeneralPurposeRegister.EDI)
+			if (!context.Operand2.IsConstant || context.Operand2.IsByte)
 				return;
 
-			Operand result = context.Result;
-			Operand source = context.Operand1;
-
-			if (source.Register != result.Register)
-			{
-				context.SetInstruction(X86.Mov32, result, source);
-				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0xffff));
-			}
-			else
-			{
-				context.SetInstruction(X86.AndConst32, result, result, CreateConstant(0xffff));
-			}
+			context.Operand2 = CreateConstant((byte)context.Operand2.ConstantUnsignedLongInteger);
 		}
 
+		/// <summary>
+		/// Converts the operand3 to byte.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void ConvertOperand3ToByte(Context context)
+		{
+			if (!context.Operand3.IsConstant || context.Operand3.IsByte)
+				return;
+
+			context.Operand3 = CreateConstant((byte)context.Operand3.ConstantUnsignedLongInteger);
+		}
 		#endregion Visitation Methods
 	}
 }

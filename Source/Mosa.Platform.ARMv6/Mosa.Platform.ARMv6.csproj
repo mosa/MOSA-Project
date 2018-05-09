@@ -158,7 +158,7 @@
     <Compile Include="Instructions\Yield.cs" />
     <Compile Include="ARMv6CodeEmitter.cs" />
     <Compile Include="Stages\IRTransformationStage.cs" />
-    <Compile Include="ARMv6OpcodeEncoder.cs" />
+    <Compile Include="OpcodeEncoder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Intrinsic\" />

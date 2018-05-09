@@ -36,7 +36,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand cr = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, control);
 
 			context.SetInstruction(X86.Mov32, eax, operand1);
-			context.AppendInstruction(X86.MovCRStore, null, cr, eax);
+			context.AppendInstruction(X86.MovCRStore32, null, cr, eax);
 		}
 
 		#endregion Methods

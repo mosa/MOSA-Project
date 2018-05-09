@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X86.MovCRLoad, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, control));
+			context.SetInstruction(X86.MovCRLoad32, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, control));
 		}
 	}
 }

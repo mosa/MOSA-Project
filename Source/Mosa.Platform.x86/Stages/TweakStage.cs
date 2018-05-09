@@ -14,13 +14,6 @@ namespace Mosa.Platform.x86.Stages
 		{
 			AddVisitation(X86.CallReg, CallReg);
 			AddVisitation(X86.Cmp32, Cmp32);
-			AddVisitation(X86.Sar32, ConvertOperand2ToByte);
-			AddVisitation(X86.Shl32, ConvertOperand2ToByte);
-			AddVisitation(X86.Shr32, ConvertOperand2ToByte);
-			AddVisitation(X86.SarConst32, ConvertOperand2ToByte);
-			AddVisitation(X86.ShlConst32, ConvertOperand2ToByte);
-			AddVisitation(X86.ShrConst32, ConvertOperand2ToByte);
-			AddVisitation(X86.BtConst32, ConvertOperand2ToByte);
 		}
 
 		#region Visitation Methods
@@ -62,24 +55,5 @@ namespace Mosa.Platform.x86.Stages
 
 		#endregion Visitation Methods
 
-		/// <summary>
-		/// Adjusts the shift constant.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ConvertOperand2ToByte(Context context)
-		{
-			if (!context.Operand2.IsConstant || context.Operand2.IsByte)
-				return;
-
-			context.Operand2 = CreateConstant((byte)context.Operand2.ConstantUnsignedLongInteger);
-		}
-
-		private void ConvertOperand1ToByte(Context context)
-		{
-			if (!context.Operand1.IsConstant || context.Operand1.IsByte)
-				return;
-
-			context.Operand1 = CreateConstant((byte)context.Operand1.ConstantUnsignedLongInteger);
-		}
 	}
 }

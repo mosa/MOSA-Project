@@ -154,7 +154,7 @@ namespace Mosa.Compiler.Framework
 				new BlockMergeStage(),
 				new IRCleanupStage(),
 				new LowerIRStage(),
-				(compilerOptions.IRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongExpansionStage() : null,
+				(compilerOptions.IRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongDecomposeStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
@@ -167,6 +167,8 @@ namespace Mosa.Compiler.Framework
 				new PlatformIntrinsicStage(),
 				new PlatformEdgeSplitStage(),
 				new VirtualRegisterRenameStage(),
+
+				//new StopStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 				new EmptyBlockRemovalStage(),

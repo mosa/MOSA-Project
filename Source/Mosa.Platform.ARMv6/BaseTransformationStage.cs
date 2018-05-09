@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework.Platform;
 namespace Mosa.Platform.ARMv6
 {
 	/// <summary>
-	///
+	/// BaseTransformationStage
 	/// </summary>
 	public abstract class BaseTransformationStage : BasePlatformTransformationStage
 	{
