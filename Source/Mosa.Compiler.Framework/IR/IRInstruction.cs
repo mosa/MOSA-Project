@@ -192,5 +192,7 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly To64 To64 = new To64();
 		public static readonly GetLow64 GetLow64 = new GetLow64();
 		public static readonly GetHigh64 GetHigh64 = new GetHigh64();
+		public static readonly IfThenElse32 IfThenElse32 = new IfThenElse32();
+		public static readonly IfThenElse64 IfThenElse64 = new IfThenElse64();
 	}
 }

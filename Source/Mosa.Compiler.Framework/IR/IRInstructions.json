@@ -1214,6 +1214,18 @@
 			"OperandCount": 1,
 			"ResultType": "UInt32",
 			"ResultType2": "UInt32"
+		},
+		{
+			"Name": "IfThenElse32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3
+		},
+		{
+			"Name": "IfThenElse64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3
 		}
 	]
 }

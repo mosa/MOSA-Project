@@ -45,11 +45,12 @@ namespace Mosa.Compiler.Framework.Stages
 		private int combineIntegerCompareBranchCount = 0;
 		private int removeUselessIntegerCompareBranch = 0;
 		private int arithmeticSimplificationModulus = 0;
-		private int longConstantReduction = 0;
-		private int longPropagatation = 0;
-		private int simplifyIntegerCompare = 0;
-		private int longConstantFolding = 0;
+		private int longConstantReductionCount = 0;
+		private int longPropagatationCount = 0;
+		private int simplifyIntegerCompareCount = 0;
+		private int foldLongConstantCount = 0;
 		private int simplifyGeneralCount = 0;
+		private int foldIfThenElseCount = 0;
 
 		private Stack<InstructionNode> worklist;
 
@@ -124,6 +125,7 @@ namespace Mosa.Compiler.Framework.Stages
 				GetHigh64ConstantFoldering,
 				GetLow64ConstantFoldering,
 				To64ConstantFoldering,
+				FoldIfThenElse,
 			};
 		}
 
@@ -162,10 +164,10 @@ namespace Mosa.Compiler.Framework.Stages
 			combineIntegerCompareBranchCount = 0;
 			removeUselessIntegerCompareBranch = 0;
 			arithmeticSimplificationModulus = 0;
-			longConstantReduction = 0;
-			longPropagatation = 0;
-			simplifyIntegerCompare = 0;
-			longConstantFolding = 0;
+			longConstantReductionCount = 0;
+			longPropagatationCount = 0;
+			simplifyIntegerCompareCount = 0;
+			foldLongConstantCount = 0;
 			simplifyGeneralCount = 0;
 		}
 
@@ -215,11 +217,12 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhiCount);
 			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
 			UpdateCounter("IROptimizations.RemoveUselessIntegerCompareBranch", removeUselessIntegerCompareBranch);
-			UpdateCounter("IROptimizations.LongConstantReduction", longConstantReduction);
-			UpdateCounter("IROptimizations.LongPropagatation", longPropagatation);
-			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompare);
-			UpdateCounter("IROptimizations.LongConstantFolding", longConstantFolding);
+			UpdateCounter("IROptimizations.LongConstantReduction", longConstantReductionCount);
+			UpdateCounter("IROptimizations.LongPropagatation", longPropagatationCount);
+			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompareCount);
+			UpdateCounter("IROptimizations.FoldLongConstantCount", foldLongConstantCount);
 			UpdateCounter("IROptimizations.SimplifyGeneralCount", simplifyGeneralCount);
+			UpdateCounter("IROptimizations.FoldLongConstantCount", foldLongConstantCount);
 
 			virtualRegisters.Clear();
 			worklist.Clear();
@@ -1884,10 +1887,6 @@ namespace Mosa.Compiler.Framework.Stages
 			constantFoldingPhiCount++;
 		}
 
-		/// <summary>
-		/// Simplifies the phi.
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void SimplifyPhi(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.Phi)
@@ -1992,7 +1991,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			node.SetInstruction(GetMoveInteger(node.Result), node.Result, operand);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			simplifyIntegerCompare++;
+			simplifyIntegerCompareCount++;
 		}
 
 		private void SimplifyAddCarryOut(InstructionNode node)
@@ -2124,7 +2123,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			node.SetInstruction(Select(node.Result, !node.Operand1.Is64BitInteger ? (BaseInstruction)IRInstruction.CompareInt32x32 : IRInstruction.CompareInt64x32, IRInstruction.CompareInt64x64), ConditionCode.NotEqual, node.Result, node.Operand1, node.Operand2);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			simplifyIntegerCompare++;
+			simplifyIntegerCompareCount++;
 		}
 
 		private void DeadCodeEliminationPhi(InstructionNode node)
@@ -2260,7 +2259,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, low);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longConstantReduction++;
+			longConstantReductionCount++;
 		}
 
 		private void GetHigh64Constant(InstructionNode node)
@@ -2282,7 +2281,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, high);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longConstantReduction++;
+			longConstantReductionCount++;
 		}
 
 		private void GetLow64Propagation(InstructionNode node)
@@ -2314,7 +2313,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, node2.Operand1);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longPropagatation++;
+			longPropagatationCount++;
 		}
 
 		private void GetHigh64Propagation(InstructionNode node)
@@ -2346,7 +2345,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, node2.Operand2);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longPropagatation++;
+			longPropagatationCount++;
 		}
 
 		private void GetHigh64ConstantFoldering(InstructionNode node)
@@ -2368,7 +2367,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longConstantFolding++;
+			foldLongConstantCount++;
 		}
 
 		private void GetLow64ConstantFoldering(InstructionNode node)
@@ -2390,7 +2389,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longConstantFolding++;
+			foldLongConstantCount++;
 		}
 
 		private void To64ConstantFoldering(InstructionNode node)
@@ -2415,7 +2414,46 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt64, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longConstantFolding++;
+			foldLongConstantCount++;
+		}
+
+		private void FoldIfThenElse(InstructionNode node)
+		{
+			if (!(node.Instruction == IRInstruction.IfThenElse64 || node.Instruction == IRInstruction.IfThenElse32))
+				return;
+
+			bool simplify = false;
+			bool result = false;
+
+			if (node.Operand2.IsVirtualRegister && node.Operand3.IsVirtualRegister && node.Operand2 == node.Operand3)
+			{
+				// always true
+				simplify = true;
+				result = true;
+			}
+			else if (node.Operand1.IsResolvedConstant)
+			{
+				simplify = true;
+				result = node.Operand1.ConstantUnsignedLongInteger != 0;
+			}
+			else if (node.Operand2.IsResolvedConstant && node.Operand3.IsResolvedConstant)
+			{
+				simplify = true;
+				result = node.Operand2.ConstantUnsignedLongInteger == node.Operand3.ConstantUnsignedLongInteger;
+			}
+
+			if (simplify)
+			{
+				var move = (node.Instruction == IRInstruction.IfThenElse32) ? (BaseInstruction)IRInstruction.MoveInt32 : IRInstruction.MoveInt64;
+				var operand = result ? node.Operand2 : node.Operand3;
+
+				AddOperandUsageToWorkList(node);
+				if (trace.Active) trace.Log("*** FoldIfThenElse");
+				if (trace.Active) trace.Log("BEFORE:\t" + node);
+				node.SetInstruction(move, node.Result, operand);
+				if (trace.Active) trace.Log("AFTER: \t" + node);
+				foldIfThenElseCount++;
+			}
 		}
 	}
 }

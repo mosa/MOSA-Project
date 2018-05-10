@@ -195,6 +195,8 @@ namespace Mosa.Compiler.Framework.IR
 			{ "To64", IRInstruction.To64 },
 			{ "GetLow64", IRInstruction.GetLow64 },
 			{ "GetHigh64", IRInstruction.GetHigh64 },
+			{ "IfThenElse32", IRInstruction.IfThenElse32 },
+			{ "IfThenElse64", IRInstruction.IfThenElse64 },
 		};
 	}
 }

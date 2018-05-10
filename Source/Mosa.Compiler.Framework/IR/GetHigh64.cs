@@ -22,3 +22,4 @@ namespace Mosa.Compiler.Framework.IR
 		public override BuiltInType ResultType2 { get { return BuiltInType.UInt32; } }
 	}
 }
+
