@@ -13,7 +13,7 @@ namespace Mosa.Tool.Bootstrap
 	/// </summary>
 	internal static class Program
 	{
-		static string LauncherFileName = "Mosa.Tool.Launcher.exe";
+		private static string LauncherFileName = "Mosa.Tool.Launcher.exe";
 
 		/// <summary>
 		/// Main entry point for the compiler.
@@ -33,7 +33,7 @@ namespace Mosa.Tool.Bootstrap
 			{
 				var sb = new StringBuilder();
 
-				foreach(var arg in args)
+				foreach (var arg in args)
 				{
 					sb.Append(arg);
 					sb.Append(' ');
