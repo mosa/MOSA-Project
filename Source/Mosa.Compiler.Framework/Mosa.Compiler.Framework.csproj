@@ -159,6 +159,12 @@
     <Compile Include="IR\GetLow64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="IR\IfThenElse32.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IR\IfThenElse64.cs">
+      <DependentUpon>IRInstructions.tt</DependentUpon>
+    </Compile>
     <Compile Include="IR\LoadInt32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>

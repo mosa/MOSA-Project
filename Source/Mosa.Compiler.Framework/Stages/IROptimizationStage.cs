@@ -45,11 +45,12 @@ namespace Mosa.Compiler.Framework.Stages
 		private int combineIntegerCompareBranchCount = 0;
 		private int removeUselessIntegerCompareBranch = 0;
 		private int arithmeticSimplificationModulus = 0;
-		private int longConstantReduction = 0;
-		private int longPropagatation = 0;
-		private int simplifyIntegerCompare = 0;
-		private int longConstantFolding = 0;
+		private int longConstantReductionCount = 0;
+		private int longPropagatationCount = 0;
+		private int simplifyIntegerCompareCount = 0;
+		private int foldLongConstantCount = 0;
 		private int simplifyGeneralCount = 0;
+		private int foldIfThenElseCount = 0;
 
 		private Stack<InstructionNode> worklist;
 
@@ -83,8 +84,7 @@ namespace Mosa.Compiler.Framework.Stages
 				ForwardPropagateMove,
 				ForwardPropagateCompoundMove,
 				DeadCodeElimination,
-				ConstantFoldingIntegerOperations32,
-				ConstantFoldingIntegerOperations64,
+				ConstantFoldingIntegerOperations,
 				ConstantMoveToRight,
 				ArithmeticSimplificationSubtraction,
 				ArithmeticSimplificationMultiplication,
@@ -121,9 +121,11 @@ namespace Mosa.Compiler.Framework.Stages
 				GetLow64Constant,
 				GetHigh64Propagation,
 				GetLow64Propagation,
-				GetHigh64ConstantFoldering,
-				GetLow64ConstantFoldering,
-				To64ConstantFoldering,
+				FoldGetHigh64Constant,
+				FoldGetLow64Constant,
+				FoldGetLow64PointerConstant,
+				FoldTo64Constant,
+				FoldIfThenElse,
 			};
 		}
 
@@ -162,10 +164,10 @@ namespace Mosa.Compiler.Framework.Stages
 			combineIntegerCompareBranchCount = 0;
 			removeUselessIntegerCompareBranch = 0;
 			arithmeticSimplificationModulus = 0;
-			longConstantReduction = 0;
-			longPropagatation = 0;
-			simplifyIntegerCompare = 0;
-			longConstantFolding = 0;
+			longConstantReductionCount = 0;
+			longPropagatationCount = 0;
+			simplifyIntegerCompareCount = 0;
+			foldLongConstantCount = 0;
 			simplifyGeneralCount = 0;
 		}
 
@@ -215,11 +217,12 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhiCount);
 			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
 			UpdateCounter("IROptimizations.RemoveUselessIntegerCompareBranch", removeUselessIntegerCompareBranch);
-			UpdateCounter("IROptimizations.LongConstantReduction", longConstantReduction);
-			UpdateCounter("IROptimizations.LongPropagatation", longPropagatation);
-			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompare);
-			UpdateCounter("IROptimizations.LongConstantFolding", longConstantFolding);
+			UpdateCounter("IROptimizations.LongConstantReduction", longConstantReductionCount);
+			UpdateCounter("IROptimizations.LongPropagatation", longPropagatationCount);
+			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompareCount);
+			UpdateCounter("IROptimizations.FoldLongConstantCount", foldLongConstantCount);
 			UpdateCounter("IROptimizations.SimplifyGeneralCount", simplifyGeneralCount);
+			UpdateCounter("IROptimizations.FoldLongConstantCount", foldLongConstantCount);
 
 			virtualRegisters.Clear();
 			worklist.Clear();
@@ -350,10 +353,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return false;
 		}
 
-		/// <summary>
-		/// Removes the useless (dead) code
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void DeadCodeElimination(InstructionNode node)
 		{
 			if (node.ResultCount == 0 || node.ResultCount > 2)
@@ -412,10 +411,6 @@ namespace Mosa.Compiler.Framework.Stages
 			deadCodeEliminationCount++;
 		}
 
-		/// <summary>
-		/// Simple constant propagation.
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void SimpleConstantPropagation(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.MoveInt32 || node.Instruction == IRInstruction.MoveInt64))
@@ -530,10 +525,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return false;
 		}
 
-		/// <summary>
-		/// Simple copy propagation.
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void ForwardPropagateMove(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.MoveInt32
@@ -598,10 +589,6 @@ namespace Mosa.Compiler.Framework.Stages
 			instructionsRemovedCount++;
 		}
 
-		/// <summary>
-		/// Simple copy propagation.
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void ForwardPropagateCompoundMove(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.MoveCompound)
@@ -646,9 +633,23 @@ namespace Mosa.Compiler.Framework.Stages
 			instructionsRemovedCount++;
 		}
 
-		private void ConstantFoldingIntegerOperations64(InstructionNode node)
+		private void ConstantFoldingIntegerOperations(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.Add64
+			if (!(node.Instruction == IRInstruction.Add32
+				|| node.Instruction == IRInstruction.Sub32
+				|| node.Instruction == IRInstruction.LogicalAnd32
+				|| node.Instruction == IRInstruction.LogicalOr32
+				|| node.Instruction == IRInstruction.LogicalXor32
+				|| node.Instruction == IRInstruction.MulSigned32
+				|| node.Instruction == IRInstruction.MulUnsigned32
+				|| node.Instruction == IRInstruction.DivSigned32
+				|| node.Instruction == IRInstruction.DivUnsigned32
+				|| node.Instruction == IRInstruction.RemSigned32
+				|| node.Instruction == IRInstruction.RemUnsigned32
+				|| node.Instruction == IRInstruction.ArithShiftRight32
+				|| node.Instruction == IRInstruction.ShiftLeft32
+				|| node.Instruction == IRInstruction.ShiftRight32
+				|| node.Instruction == IRInstruction.Add64
 				|| node.Instruction == IRInstruction.Sub64
 				|| node.Instruction == IRInstruction.LogicalAnd64
 				|| node.Instruction == IRInstruction.LogicalOr64
@@ -675,7 +676,11 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// Divide by zero!
-			if ((node.Instruction == IRInstruction.DivSigned64
+			if ((node.Instruction == IRInstruction.DivSigned32
+				|| node.Instruction == IRInstruction.DivUnsigned32
+				|| node.Instruction == IRInstruction.RemSigned32
+				|| node.Instruction == IRInstruction.RemUnsigned32
+				|| node.Instruction == IRInstruction.DivSigned64
 				|| node.Instruction == IRInstruction.DivUnsigned64
 				|| node.Instruction == IRInstruction.RemSigned64
 				|| node.Instruction == IRInstruction.RemUnsigned64)
@@ -684,132 +689,28 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ulong value = 0;
 
-			if (node.Instruction == IRInstruction.Add64)
+			if (node.Instruction == IRInstruction.Add32 || node.Instruction == IRInstruction.Add64)
 			{
 				value = op1.ConstantUnsignedLongInteger + op2.ConstantUnsignedLongInteger;
 			}
-			else if (node.Instruction == IRInstruction.Sub64)
+			else if (node.Instruction == IRInstruction.Sub32 || node.Instruction == IRInstruction.Sub64)
 			{
 				value = op1.ConstantUnsignedLongInteger - op2.ConstantUnsignedLongInteger;
 			}
-			else if (node.Instruction == IRInstruction.LogicalAnd64)
+			else if (node.Instruction == IRInstruction.LogicalAnd32 || node.Instruction == IRInstruction.LogicalAnd64)
 			{
 				value = op1.ConstantUnsignedLongInteger & op2.ConstantUnsignedLongInteger;
 			}
-			else if (node.Instruction == IRInstruction.LogicalOr64)
+			else if (node.Instruction == IRInstruction.LogicalOr32 || node.Instruction == IRInstruction.LogicalOr64)
 			{
 				value = op1.ConstantUnsignedLongInteger | op2.ConstantUnsignedLongInteger;
 			}
-			else if (node.Instruction == IRInstruction.LogicalXor64)
+			else if (node.Instruction == IRInstruction.LogicalXor32 || node.Instruction == IRInstruction.LogicalXor64)
 			{
 				value = op1.ConstantUnsignedLongInteger ^ op2.ConstantUnsignedLongInteger;
 			}
-			else if (node.Instruction == IRInstruction.MulSigned64 || node.Instruction == IRInstruction.MulUnsigned64)
-			{
-				value = op1.ConstantUnsignedLongInteger * op2.ConstantUnsignedLongInteger;
-			}
-			else if (node.Instruction == IRInstruction.DivUnsigned64 || node.Instruction == IRInstruction.DivUnsigned64)
-			{
-				value = op1.ConstantUnsignedLongInteger / op2.ConstantUnsignedLongInteger;
-			}
-			else if (node.Instruction == IRInstruction.DivSigned64 || node.Instruction == IRInstruction.DivSigned64)
-			{
-				value = (ulong)(op1.ConstantSignedLongInteger / op2.ConstantSignedLongInteger);
-			}
-			else if (node.Instruction == IRInstruction.ArithShiftRight64 || node.Instruction == IRInstruction.ArithShiftRight64)
-			{
-				value = (ulong)(((long)op1.ConstantUnsignedLongInteger) >> (int)op2.ConstantUnsignedLongInteger);
-			}
-			else if (node.Instruction == IRInstruction.ShiftRight64)
-			{
-				value = op1.ConstantUnsignedLongInteger >> (int)op2.ConstantUnsignedLongInteger;
-			}
-			else if (node.Instruction == IRInstruction.ShiftLeft64)
-			{
-				value = op1.ConstantUnsignedLongInteger << (int)op2.ConstantUnsignedLongInteger;
-			}
-			else if (node.Instruction == IRInstruction.RemSigned64)
-			{
-				value = (ulong)(op1.ConstantSignedLongInteger % op2.ConstantSignedLongInteger);
-			}
-			else if (node.Instruction == IRInstruction.RemUnsigned64)
-			{
-				value = op1.ConstantUnsignedLongInteger % op2.ConstantUnsignedLongInteger;
-			}
-			else
-			{
-				return;
-			}
-
-			var constant = CreateConstant(result.Type, value);
-
-			AddOperandUsageToWorkList(node);
-			if (trace.Active) trace.Log("*** ConstantFoldingIntegerOperations64");
-			if (trace.Active) trace.Log("BEFORE:\t" + node);
-			node.SetInstruction(IRInstruction.MoveInt64, node.Result, constant);
-			constantFoldingIntegerOperationsCount++;
-			if (trace.Active) trace.Log("AFTER: \t" + node);
-		}
-
-		private void ConstantFoldingIntegerOperations32(InstructionNode node)
-		{
-			if (!(node.Instruction == IRInstruction.Add32
-				|| node.Instruction == IRInstruction.Sub32
-				|| node.Instruction == IRInstruction.LogicalAnd32
-				|| node.Instruction == IRInstruction.LogicalOr32
-				|| node.Instruction == IRInstruction.LogicalXor32
-				|| node.Instruction == IRInstruction.MulSigned32
-				|| node.Instruction == IRInstruction.MulUnsigned32
-				|| node.Instruction == IRInstruction.DivSigned32
-				|| node.Instruction == IRInstruction.DivUnsigned32
-				|| node.Instruction == IRInstruction.RemSigned32
-				|| node.Instruction == IRInstruction.RemUnsigned32
-				|| node.Instruction == IRInstruction.ArithShiftRight32
-				|| node.Instruction == IRInstruction.ShiftLeft32
-				|| node.Instruction == IRInstruction.ShiftRight32))
-				return;
-
-			if (!node.Result.IsVirtualRegister)
-				return;
-
-			Operand result = node.Result;
-			Operand op1 = node.Operand1;
-			Operand op2 = node.Operand2;
-
-			if (!op1.IsResolvedConstant || !op2.IsResolvedConstant)
-				return;
-
-			// Divide by zero!
-			if ((node.Instruction == IRInstruction.DivSigned32
-				|| node.Instruction == IRInstruction.DivUnsigned32
-				|| node.Instruction == IRInstruction.RemSigned32
-				|| node.Instruction == IRInstruction.RemUnsigned32)
-				&& op2.IsConstantZero)
-				return;
-
-			ulong value = 0;
-
-			if (node.Instruction == IRInstruction.Add32)
-			{
-				value = op1.ConstantUnsignedLongInteger + op2.ConstantUnsignedLongInteger;
-			}
-			else if (node.Instruction == IRInstruction.Sub32)
-			{
-				value = op1.ConstantUnsignedLongInteger - op2.ConstantUnsignedLongInteger;
-			}
-			else if (node.Instruction == IRInstruction.LogicalAnd32)
-			{
-				value = op1.ConstantUnsignedLongInteger & op2.ConstantUnsignedLongInteger;
-			}
-			else if (node.Instruction == IRInstruction.LogicalOr32)
-			{
-				value = op1.ConstantUnsignedLongInteger | op2.ConstantUnsignedLongInteger;
-			}
-			else if (node.Instruction == IRInstruction.LogicalXor32)
-			{
-				value = op1.ConstantUnsignedLongInteger ^ op2.ConstantUnsignedLongInteger;
-			}
-			else if (node.Instruction == IRInstruction.MulSigned32 || node.Instruction == IRInstruction.MulUnsigned32)
+			else if (node.Instruction == IRInstruction.MulSigned32 || node.Instruction == IRInstruction.MulUnsigned32
+				|| node.Instruction == IRInstruction.MulSigned64 || node.Instruction == IRInstruction.MulUnsigned64)
 			{
 				value = op1.ConstantUnsignedLongInteger * op2.ConstantUnsignedLongInteger;
 			}
@@ -825,19 +726,19 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				value = (ulong)(((long)op1.ConstantUnsignedLongInteger) >> (int)op2.ConstantUnsignedLongInteger);
 			}
-			else if (node.Instruction == IRInstruction.ShiftRight32)
+			else if (node.Instruction == IRInstruction.ShiftRight32 || node.Instruction == IRInstruction.ShiftRight64)
 			{
 				value = op1.ConstantUnsignedLongInteger >> (int)op2.ConstantUnsignedLongInteger;
 			}
-			else if (node.Instruction == IRInstruction.ShiftLeft32)
+			else if (node.Instruction == IRInstruction.ShiftLeft32 || node.Instruction == IRInstruction.ShiftLeft64)
 			{
 				value = op1.ConstantUnsignedLongInteger << (int)op2.ConstantUnsignedLongInteger;
 			}
-			else if (node.Instruction == IRInstruction.RemSigned32)
+			else if (node.Instruction == IRInstruction.RemSigned32 || node.Instruction == IRInstruction.RemSigned64)
 			{
 				value = (ulong)(op1.ConstantSignedLongInteger % op2.ConstantSignedLongInteger);
 			}
-			else if (node.Instruction == IRInstruction.RemUnsigned32)
+			else if (node.Instruction == IRInstruction.RemUnsigned32 || node.Instruction == IRInstruction.RemUnsigned64)
 			{
 				value = op1.ConstantUnsignedLongInteger % op2.ConstantUnsignedLongInteger;
 			}
@@ -846,20 +747,19 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			var constant = CreateConstant(result.Type, value & 0xFFFFFFFF);
+			if (!node.Result.Is64BitInteger)
+				value &= 0xFFFFFFFF;
+
+			var constant = CreateConstant(result.Type, value);
 
 			AddOperandUsageToWorkList(node);
-			if (trace.Active) trace.Log("*** ConstantFoldingIntegerOperations32");
+			if (trace.Active) trace.Log("*** ConstantFoldingIntegerOperations");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
-			node.SetInstruction(IRInstruction.MoveInt32, node.Result, constant);
+			node.SetInstruction(GetMoveInteger(node.Result), node.Result, constant);
 			constantFoldingIntegerOperationsCount++;
 			if (trace.Active) trace.Log("AFTER: \t" + node);
 		}
 
-		/// <summary>
-		/// Folds the integer compare on constants
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void ConstantFoldingIntegerCompare(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.CompareInt32x32
@@ -908,10 +808,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("AFTER: \t" + node);
 		}
 
-		/// <summary>
-		/// Strength reduction for integer addition when one of the constants is zero
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationAdditionAndSubstraction(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.Add32
@@ -1000,10 +896,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Strength reduction for division when one of the constants is zero or one
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationDivision(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.DivSigned32
@@ -1064,10 +956,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Simplifies extended moves with a constant
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void SimplifyExtendedMoveWithConstant(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.SignExtend8x32
@@ -1128,10 +1016,6 @@ namespace Mosa.Compiler.Framework.Stages
 			else return (ulong)value;
 		}
 
-		/// <summary>
-		/// Simplifies subtraction where both operands are the same
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationSubtraction(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.Sub32
@@ -1155,16 +1039,14 @@ namespace Mosa.Compiler.Framework.Stages
 			arithmeticSimplificationSubtractionCount++;
 		}
 
-		/// <summary>
-		/// Strength reduction for logical operators
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationLogicalOperators(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.LogicalAnd32
-				|| node.Instruction == IRInstruction.LogicalOr32
 				|| node.Instruction == IRInstruction.LogicalAnd64
-				|| node.Instruction == IRInstruction.LogicalOr64))
+				|| node.Instruction == IRInstruction.LogicalOr64
+				|| node.Instruction == IRInstruction.LogicalOr32
+				|| node.Instruction == IRInstruction.LogicalXor64
+				|| node.Instruction == IRInstruction.LogicalXor32))
 				return;
 
 			if (!node.Result.IsVirtualRegister)
@@ -1189,6 +1071,64 @@ namespace Mosa.Compiler.Framework.Stages
 					if (trace.Active) trace.Log("AFTER: \t" + node);
 					return;
 				}
+
+				if (node.Instruction == IRInstruction.LogicalOr32 && op2.ConstantUnsignedInteger == 0xFFFFFFFF)
+				{
+					AddOperandUsageToWorkList(node);
+					if (trace.Active) trace.Log("*** ArithmeticSimplificationLogicalOperators");
+					if (trace.Active) trace.Log("BEFORE:\t" + node);
+					node.SetInstruction(IRInstruction.MoveInt32, result, CreateConstant((uint)0xFFFFFFFF));
+					arithmeticSimplificationLogicalOperatorsCount++;
+					if (trace.Active) trace.Log("AFTER: \t" + node);
+					return;
+				}
+
+				if (node.Instruction == IRInstruction.LogicalOr64 && op2.ConstantUnsignedLongInteger == 0xFFFFFFFFFFFFFFFF)
+				{
+					AddOperandUsageToWorkList(node);
+					if (trace.Active) trace.Log("*** ArithmeticSimplificationLogicalOperators");
+					if (trace.Active) trace.Log("BEFORE:\t" + node);
+					node.SetInstruction(IRInstruction.MoveInt64, result, CreateConstant((ulong)0xFFFFFFFFFFFFFFFF));
+					arithmeticSimplificationLogicalOperatorsCount++;
+					if (trace.Active) trace.Log("AFTER: \t" + node);
+					return;
+				}
+			}
+			else if (node.Instruction == IRInstruction.LogicalXor32 || node.Instruction == IRInstruction.LogicalXor64)
+			{
+				if (op2.IsConstantZero)
+				{
+					AddOperandUsageToWorkList(node);
+					if (trace.Active) trace.Log("*** ArithmeticSimplificationLogicalOperators");
+					if (trace.Active) trace.Log("BEFORE:\t" + node);
+					node.SetInstruction(GetMoveInteger(result), result, op1);
+					arithmeticSimplificationLogicalOperatorsCount++;
+					if (trace.Active) trace.Log("AFTER: \t" + node);
+					return;
+				}
+
+
+				if (node.Instruction == IRInstruction.LogicalXor32 && op2.ConstantUnsignedInteger == 0xFFFFFFFF)
+				{
+					AddOperandUsageToWorkList(node);
+					if (trace.Active) trace.Log("*** ArithmeticSimplificationLogicalOperators");
+					if (trace.Active) trace.Log("BEFORE:\t" + node);
+					node.SetInstruction(IRInstruction.LogicalNot32, result, op1);
+					arithmeticSimplificationLogicalOperatorsCount++;
+					if (trace.Active) trace.Log("AFTER: \t" + node);
+					return;
+				}
+
+				if (node.Instruction == IRInstruction.LogicalXor64 && op2.ConstantUnsignedLongInteger == 0xFFFFFFFFFFFFFFFF)
+				{
+					AddOperandUsageToWorkList(node);
+					if (trace.Active) trace.Log("*** ArithmeticSimplificationLogicalOperators");
+					if (trace.Active) trace.Log("BEFORE:\t" + node);
+					node.SetInstruction(IRInstruction.LogicalNot64, result, op1);
+					arithmeticSimplificationLogicalOperatorsCount++;
+					if (trace.Active) trace.Log("AFTER: \t" + node);
+					return;
+				}
 			}
 			else if (node.Instruction == IRInstruction.LogicalAnd32 || node.Instruction == IRInstruction.LogicalAnd64)
 			{
@@ -1203,13 +1143,23 @@ namespace Mosa.Compiler.Framework.Stages
 					return;
 				}
 
-				if (((result.IsI4 || result.IsU4 || result.IsI || result.IsU) && op2.ConstantUnsignedInteger == 0xFFFFFFFF)
-					|| ((result.IsI8 || result.IsU8) && op2.ConstantUnsignedLongInteger == 0xFFFFFFFFFFFFFFFF))
+				if (node.Instruction == IRInstruction.LogicalAnd32 && op2.ConstantUnsignedInteger == 0xFFFFFFFF)
 				{
 					AddOperandUsageToWorkList(node);
 					if (trace.Active) trace.Log("*** ArithmeticSimplificationLogicalOperators");
 					if (trace.Active) trace.Log("BEFORE:\t" + node);
-					node.SetInstruction(GetMoveInteger(result), result, op1);
+					node.SetInstruction(IRInstruction.MoveInt32, result, op1);
+					arithmeticSimplificationLogicalOperatorsCount++;
+					if (trace.Active) trace.Log("AFTER: \t" + node);
+					return;
+				}
+
+				if (node.Instruction == IRInstruction.LogicalAnd64 && op2.ConstantUnsignedLongInteger == 0xFFFFFFFFFFFFFFFF)
+				{
+					AddOperandUsageToWorkList(node);
+					if (trace.Active) trace.Log("*** ArithmeticSimplificationLogicalOperators");
+					if (trace.Active) trace.Log("BEFORE:\t" + node);
+					node.SetInstruction(IRInstruction.MoveInt64, result, op1);
 					arithmeticSimplificationLogicalOperatorsCount++;
 					if (trace.Active) trace.Log("AFTER: \t" + node);
 					return;
@@ -1217,10 +1167,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Strength reduction shift operators.
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void ArithmeticSimplificationShiftOperators(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.ShiftLeft32
@@ -1253,10 +1199,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Removes the unless integer compare branch.
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void RemoveUselessIntegerCompareBranch(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.CompareIntBranch32
@@ -1273,10 +1215,6 @@ namespace Mosa.Compiler.Framework.Stages
 			removeUselessIntegerCompareBranch++;
 		}
 
-		/// <summary>
-		/// Folds integer compare branch.
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void ConstantFoldIntegerCompareBranch(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.CompareIntBranch32
@@ -1551,7 +1489,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ulong r = node.Operand2.ConstantUnsignedLongInteger & node2.Operand2.ConstantUnsignedLongInteger;
 
-			if (trace.Active) trace.Log("*** ConstantFoldingLogicalOr");
+			if (trace.Active) trace.Log("*** ConstantFoldingLogicalAnd");
 			AddOperandUsageToWorkList(node2);
 			AddOperandUsageToWorkList(node);
 			if (trace.Active) trace.Log("BEFORE:\t" + node2);
@@ -1740,7 +1678,7 @@ namespace Mosa.Compiler.Framework.Stages
 				|| node2.Instruction == IRInstruction.CompareInt64x64))
 				return;
 
-			BaseInstruction compareInteger = node2.Instruction;
+			var compareInteger = node2.Instruction;
 			var conditionCode = node.ConditionCode == ConditionCode.NotEqual ? node2.ConditionCode : node2.ConditionCode.GetOpposite();
 
 			AddOperandUsageToWorkList(node2);
@@ -1884,10 +1822,6 @@ namespace Mosa.Compiler.Framework.Stages
 			constantFoldingPhiCount++;
 		}
 
-		/// <summary>
-		/// Simplifies the phi.
-		/// </summary>
-		/// <param name="node">The node.</param>
 		private void SimplifyPhi(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.Phi)
@@ -1992,7 +1926,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			node.SetInstruction(GetMoveInteger(node.Result), node.Result, operand);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			simplifyIntegerCompare++;
+			simplifyIntegerCompareCount++;
 		}
 
 		private void SimplifyAddCarryOut(InstructionNode node)
@@ -2124,7 +2058,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			node.SetInstruction(Select(node.Result, !node.Operand1.Is64BitInteger ? (BaseInstruction)IRInstruction.CompareInt32x32 : IRInstruction.CompareInt64x32, IRInstruction.CompareInt64x64), ConditionCode.NotEqual, node.Result, node.Operand1, node.Operand2);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			simplifyIntegerCompare++;
+			simplifyIntegerCompareCount++;
 		}
 
 		private void DeadCodeEliminationPhi(InstructionNode node)
@@ -2260,7 +2194,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, low);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longConstantReduction++;
+			longConstantReductionCount++;
 		}
 
 		private void GetHigh64Constant(InstructionNode node)
@@ -2282,7 +2216,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, high);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longConstantReduction++;
+			longConstantReductionCount++;
 		}
 
 		private void GetLow64Propagation(InstructionNode node)
@@ -2314,7 +2248,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, node2.Operand1);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longPropagatation++;
+			longPropagatationCount++;
 		}
 
 		private void GetHigh64Propagation(InstructionNode node)
@@ -2346,10 +2280,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, node2.Operand2);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longPropagatation++;
+			longPropagatationCount++;
 		}
 
-		private void GetHigh64ConstantFoldering(InstructionNode node)
+		private void FoldGetHigh64Constant(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.GetHigh64)
 				return;
@@ -2364,14 +2298,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AddOperandUsageToWorkList(node);
 
-			if (trace.Active) trace.Log("*** GetHigh64ConstantFoldering");
+			if (trace.Active) trace.Log("*** FoldGetHigh64Constant");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longConstantFolding++;
+			foldLongConstantCount++;
 		}
 
-		private void GetLow64ConstantFoldering(InstructionNode node)
+		private void FoldGetLow64Constant(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.GetLow64)
 				return;
@@ -2386,14 +2320,37 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AddOperandUsageToWorkList(node);
 
-			if (trace.Active) trace.Log("*** GetLow64ConstantFoldering");
+			if (trace.Active) trace.Log("*** FoldGetLow64Constant");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longConstantFolding++;
+			foldLongConstantCount++;
 		}
 
-		private void To64ConstantFoldering(InstructionNode node)
+		private void FoldGetLow64PointerConstant(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetLow64)
+				return;
+
+			if (node.Operand1.IsResolvedConstant)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (!(node.Operand1.IsPointer || node.Operand1.IsCPURegister))
+				return;
+
+			AddOperandUsageToWorkList(node);
+
+			if (trace.Active) trace.Log("*** FoldGetLow64UnresolvedSymbolConstant");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.MoveInt32, node.Result, node.Operand1);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			foldLongConstantCount++;
+		}
+
+		private void FoldTo64Constant(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.To64)
 				return;
@@ -2411,11 +2368,50 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AddOperandUsageToWorkList(node);
 
-			if (trace.Active) trace.Log("*** To64ConstantFoldering");
+			if (trace.Active) trace.Log("*** FoldTo64Constant");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt64, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			longConstantFolding++;
+			foldLongConstantCount++;
+		}
+
+		private void FoldIfThenElse(InstructionNode node)
+		{
+			if (!(node.Instruction == IRInstruction.IfThenElse64 || node.Instruction == IRInstruction.IfThenElse32))
+				return;
+
+			bool simplify = false;
+			bool result = false;
+
+			if (node.Operand2.IsVirtualRegister && node.Operand3.IsVirtualRegister && node.Operand2 == node.Operand3)
+			{
+				// always true
+				simplify = true;
+				result = true;
+			}
+			else if (node.Operand1.IsResolvedConstant)
+			{
+				simplify = true;
+				result = node.Operand1.ConstantUnsignedLongInteger != 0;
+			}
+			else if (node.Operand2.IsResolvedConstant && node.Operand3.IsResolvedConstant)
+			{
+				simplify = true;
+				result = node.Operand2.ConstantUnsignedLongInteger == node.Operand3.ConstantUnsignedLongInteger;
+			}
+
+			if (simplify)
+			{
+				var move = (node.Instruction == IRInstruction.IfThenElse32) ? (BaseInstruction)IRInstruction.MoveInt32 : IRInstruction.MoveInt64;
+				var operand = result ? node.Operand2 : node.Operand3;
+
+				AddOperandUsageToWorkList(node);
+				if (trace.Active) trace.Log("*** FoldIfThenElse");
+				if (trace.Active) trace.Log("BEFORE:\t" + node);
+				node.SetInstruction(move, node.Result, operand);
+				if (trace.Active) trace.Log("AFTER: \t" + node);
+				foldIfThenElseCount++;
+			}
 		}
 	}
 }

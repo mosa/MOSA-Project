@@ -32,6 +32,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.CompareFloatR8, CompareFloatR8);
 			AddVisitation(IRInstruction.CompareInt32x32, CompareInt32x32);
 			AddVisitation(IRInstruction.CompareIntBranch32, CompareIntBranch32);
+			AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
 			AddVisitation(IRInstruction.LoadCompound, LoadCompound);
 			AddVisitation(IRInstruction.MoveCompound, MoveCompound);
 			AddVisitation(IRInstruction.StoreCompound, StoreCompound);
@@ -243,6 +244,18 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Cmp32, null, operand1, operand2);
 			context.AppendInstruction(setcc, v1);
 			context.AppendInstruction(X86.Movzx8To32, resultOperand, v1);
+		}
+
+		private void IfThenElse32(Context context)
+		{
+			var result = context.Operand1;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero);
+			context.AppendInstruction(X86.CMovNotEqual32, result, operand1);    // true
+			context.AppendInstruction(X86.CMovEqual32, result, operand2);       // false
 		}
 
 		private void CompareIntBranch32(Context context)
@@ -683,6 +696,7 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.MovConst32, v1, ConstantZero);
 			context.AppendInstruction2(X86.Div32, result, v2, v1, operand1, operand2);
+
 			//context.AppendInstruction(X86.Mov32, result, v1);
 		}
 
@@ -929,6 +943,7 @@ namespace Mosa.Platform.x86.Stages
 				default: throw new NotSupportedException();
 			}
 		}
+
 		#endregion Helper Methods
 	}
 }
