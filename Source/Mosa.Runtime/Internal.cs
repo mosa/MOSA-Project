@@ -157,11 +157,6 @@ namespace Mosa.Runtime
 
 		#region Memory Manipulation
 
-		public static void MemoryCopy(void* dest, void* src, uint count)
-		{
-			MemoryCopy(new UIntPtr(dest), new UIntPtr(src), count);
-		}
-
 		public static void MemoryCopy(UIntPtr dest, UIntPtr src, uint count)
 		{
 			// PLUGGED
