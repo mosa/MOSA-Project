@@ -157,19 +157,19 @@ namespace Mosa.Runtime
 
 		#region Memory Manipulation
 
-		public static void MemoryCopy(void* dest, void* src, uint count)
+		public static void MemoryCopy(UIntPtr dest, UIntPtr src, uint count)
 		{
 			// PLUGGED
 			throw new NotImplementedException();
 		}
 
-		public static void MemorySet(void* dest, byte value, uint count)
+		public static void MemorySet(UIntPtr dest, byte value, uint count)
 		{
 			// PLUGGED
 			throw new NotImplementedException();
 		}
 
-		public static void MemoryClear(void* dest, uint count)
+		public static void MemoryClear(UIntPtr dest, uint count)
 		{
 			// PLUGGED
 			throw new NotImplementedException();
@@ -184,9 +184,9 @@ namespace Mosa.Runtime
 		public static void Setup()
 		{
 			// Get AssemblyListTable and Assembly count
-			Ptr assemblyListTable = Intrinsic.GetAssemblyListTable();
-			uint assemblyCount = (uint)assemblyListTable.Dereference(0);
-			assemblyListTable.Increment();
+			UIntPtr assemblyListTable = Intrinsic.GetAssemblyListTable();
+			uint assemblyCount = (uint)assemblyListTable;
+			assemblyListTable += UIntPtr.Size;
 
 			Assemblies = new LinkedList<RuntimeAssembly>();
 
@@ -194,7 +194,7 @@ namespace Mosa.Runtime
 			for (uint i = 0; i < assemblyCount; i++)
 			{
 				// Get the pointer to the Assembly Metadata
-				var ptr = (MDAssemblyDefinition*)(assemblyListTable.Dereference(i));
+				var ptr = (MDAssemblyDefinition*)(assemblyListTable + ((int)i * UIntPtr.Size));
 				Assemblies.AddLast(new RuntimeAssembly(ptr));
 			}
 		}

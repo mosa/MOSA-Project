@@ -94,10 +94,16 @@ namespace Mosa.Runtime
 		public static extern object GetObjectFromAddress(void* address);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern object GetObjectFromAddress(UIntPtr address);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static object CreateInstanceSimple(void* ctor, void* thisObject);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		public extern static uint* GetAssemblyListTable();
+		public extern static object CreateInstanceSimple(UIntPtr ctor, void* thisObject);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern static UIntPtr GetAssemblyListTable();
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static uint GetDelegateMethodAddress(Delegate d);

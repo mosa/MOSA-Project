@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -43,17 +44,17 @@ namespace Mosa.Kernel.x86
 
 		private unsafe static void MemoryClear(uint destination, uint count)
 		{
-			Internal.MemoryClear((void*)destination, count);
+			Internal.MemoryClear(new UIntPtr(destination), count);
 		}
 
 		private unsafe static void MemoryCopy(uint destination, uint source, uint count)
 		{
-			Internal.MemoryCopy((void*)destination, (void*)source, count);
+			Internal.MemoryCopy(new UIntPtr(destination), new UIntPtr(source), count);
 		}
 
 		private unsafe static void MemorySet(uint destination, byte value, uint count)
 		{
-			Internal.MemorySet((void*)destination, value, count);
+			Internal.MemorySet(new UIntPtr(destination), value, count);
 		}
 	}
 }

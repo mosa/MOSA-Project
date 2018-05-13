@@ -32,9 +32,13 @@ namespace Mosa.Runtime
 			MDTypeDefinition* typeStruct = (MDTypeDefinition*)((uint*)sourceArray);
 			var typeCode = typeStruct->TypeCode;
 
-			var size = (typeCode == TypeCode.ReferenceType) ? Ptr.Size : typeStruct->Size;
+			var size = (typeCode == TypeCode.ReferenceType) ? UIntPtr.Size : (int)typeStruct->Size;
 
-			Internal.MemoryCopy(((Ptr)destinationArray + (Ptr.Size * 2) + (destinationIndex * size)), ((Ptr)sourceArray + (Ptr.Size * 2) + (sourceIndex * size)), (uint)(length * size));
+			Internal.MemoryCopy(
+				new UIntPtr(destinationArray) + (UIntPtr.Size * 2) + (destinationIndex * size),
+				new UIntPtr(sourceArray) + (UIntPtr.Size * 2) + (sourceIndex * size),
+				(uint)(length * size)
+			);
 		}
 
 		public static int GetLength(void* o, int dimension)
