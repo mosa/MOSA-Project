@@ -63,7 +63,7 @@ namespace Mosa.Runtime.x86
 		}
 
 		[Method("Mosa.Runtime.Internal.MemoryCopy")]
-		public static void MemoryCopy(void* dest, void* src, uint count)
+		public static void MemoryCopy(UIntPtr dest, UIntPtr src, uint count)
 		{
 			ulong* _dest = (ulong*)dest;
 			ulong* _src = (ulong*)src;
@@ -86,7 +86,7 @@ namespace Mosa.Runtime.x86
 		}
 
 		[Method("Mosa.Runtime.Internal.MemorySet")]
-		public static void MemorySet(void* dest, byte value, uint count)
+		public static void MemorySet(UIntPtr dest, byte value, uint count)
 		{
 			// TEMP: assigning the method parameters into local variables forces the compiler to load the values
 			// into virtual registers, which unlocks the optimizer to generate much better code quality.
@@ -119,7 +119,7 @@ namespace Mosa.Runtime.x86
 		}
 
 		[Method("Mosa.Runtime.Internal.MemoryClear")]
-		public static void MemoryClear(void* dest, uint count)
+		public static void MemoryClear(UIntPtr dest, uint count)
 		{
 			// TEMP: assigning the method parameters into local variables forces the compiler to load the values
 			// into virtual registers, which unlocks the optimizer to generate much better code quality.
@@ -191,7 +191,7 @@ namespace Mosa.Runtime.x86
 			uint table = Native.GetMethodLookupTable();
 			uint entries = Intrinsic.Load32(table);
 
-			table = table + 4;
+			table += 4;
 
 			while (entries > 0)
 			{
@@ -203,7 +203,7 @@ namespace Mosa.Runtime.x86
 					return (MDMethodDefinition*)Intrinsic.Load32(table, NativeIntSize * 2);
 				}
 
-				table = table + (NativeIntSize * 3);
+				table += (NativeIntSize * 3);
 
 				entries--;
 			}
@@ -220,7 +220,7 @@ namespace Mosa.Runtime.x86
 
 			uint entries = Intrinsic.Load32(table);
 
-			table = table + NativeIntSize;
+			table += NativeIntSize;
 
 			while (entries > 0)
 			{
@@ -232,7 +232,7 @@ namespace Mosa.Runtime.x86
 					return (MDMethodDefinition*)Intrinsic.Load32(table, NativeIntSize * 2);
 				}
 
-				table = table + (NativeIntSize * 3);
+				table += (NativeIntSize * 3);
 
 				entries--;
 			}

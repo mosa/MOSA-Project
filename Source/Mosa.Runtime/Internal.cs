@@ -159,17 +159,22 @@ namespace Mosa.Runtime
 
 		public static void MemoryCopy(void* dest, void* src, uint count)
 		{
-			// PLUGGED
-			throw new NotImplementedException();
+			MemoryCopy(new UIntPtr(dest), new UIntPtr(src), count);
 		}
 
-		public static void MemorySet(void* dest, byte value, uint count)
+		public static void MemoryCopy(UIntPtr dest, UIntPtr src, uint count)
 		{
 			// PLUGGED
 			throw new NotImplementedException();
 		}
 
-		public static void MemoryClear(void* dest, uint count)
+		public static void MemorySet(UIntPtr dest, byte value, uint count)
+		{
+			// PLUGGED
+			throw new NotImplementedException();
+		}
+
+		public static void MemoryClear(UIntPtr dest, uint count)
 		{
 			// PLUGGED
 			throw new NotImplementedException();
