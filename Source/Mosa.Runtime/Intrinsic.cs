@@ -112,10 +112,10 @@ namespace Mosa.Runtime
 		public extern static UIntPtr GetAssemblyListTable();
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		public extern static uint GetDelegateMethodAddress(Delegate d);
+		public extern static UIntPtr GetDelegateMethodAddress(Delegate d);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		public extern static uint GetDelegateTargetAddress(Delegate d);
+		public extern static UIntPtr GetDelegateTargetAddress(Delegate d);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static RuntimeTypeHandle GetStringType();
