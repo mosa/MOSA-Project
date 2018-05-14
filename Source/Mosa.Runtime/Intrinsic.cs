@@ -43,6 +43,12 @@ namespace Mosa.Runtime
 		public static extern uint Load32(uint address, uint offset);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern UIntPtr Load(UIntPtr address);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern UIntPtr Load(UIntPtr address, int offset);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern uint Load32(UIntPtr address, int offset);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
@@ -107,6 +113,18 @@ namespace Mosa.Runtime
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store64(uint address, uint offset, ulong value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, uint value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, int value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, ulong value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, long value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void* GetObjectAddress<T>(T obj) where T : class;

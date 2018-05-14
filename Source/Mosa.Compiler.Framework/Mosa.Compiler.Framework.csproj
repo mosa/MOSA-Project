@@ -96,6 +96,8 @@
     <Compile Include="Intrinsics\GetStringType.cs" />
     <Compile Include="Intrinsics\GetDelegateTargetAddress.cs" />
     <Compile Include="Intrinsics\GetDelegateMethodAddress.cs" />
+    <Compile Include="Intrinsics\Load.cs" />
+    <Compile Include="Intrinsics\Store.cs" />
     <Compile Include="IR\Add32.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>

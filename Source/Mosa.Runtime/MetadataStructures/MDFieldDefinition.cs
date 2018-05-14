@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace Mosa.Runtime
@@ -7,11 +8,11 @@ namespace Mosa.Runtime
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MDFieldDefinition
 	{
-		private Ptr _name;
-		private Ptr _customAttributes;
+		private UIntPtr _name;
+		private UIntPtr _customAttributes;
 		private uint _attributes;
-		private Ptr _fieldType;
-		private Ptr _fieldData;
+		private UIntPtr _fieldType;
+		private UIntPtr _fieldData;
 		private uint _offsetOrSize;
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(_name);

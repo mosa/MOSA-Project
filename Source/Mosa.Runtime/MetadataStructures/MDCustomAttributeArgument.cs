@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace Mosa.Runtime
@@ -7,9 +8,9 @@ namespace Mosa.Runtime
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MDCustomAttributeArgument
 	{
-		private Ptr _name;
+		private UIntPtr _name;
 		private bool _isField;
-		private Ptr _argumentType;
+		private UIntPtr _argumentType;
 		private int _argumentSize;
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(_name);
