@@ -183,19 +183,19 @@ namespace Mosa.Runtime
 
 		public static void Setup()
 		{
-			// Get AssemblyListTable and Assembly count
-			Ptr assemblyListTable = Intrinsic.GetAssemblyListTable();
-			uint assemblyCount = (uint)assemblyListTable.Dereference(0);
-			assemblyListTable.Increment();
-
 			Assemblies = new LinkedList<RuntimeAssembly>();
 
+			// Get AssemblyListTable and Assembly count
+			var assemblyListTable = Intrinsic.GetAssemblyListTable();
+			uint assemblyCount = Intrinsic.Load32(assemblyListTable);
+
 			// Loop through and populate the array
-			for (uint i = 0; i < assemblyCount; i++)
+			for (int i = 0; i < assemblyCount; i++)
 			{
 				// Get the pointer to the Assembly Metadata
-				var ptr = (MDAssemblyDefinition*)(assemblyListTable.Dereference(i));
-				Assemblies.AddLast(new RuntimeAssembly(ptr));
+				var ptr = Intrinsic.Load32(assemblyListTable, UIntPtr.Size + (UIntPtr.Size * i));
+
+				Assemblies.AddLast(new RuntimeAssembly((MDAssemblyDefinition*)ptr));
 			}
 		}
 

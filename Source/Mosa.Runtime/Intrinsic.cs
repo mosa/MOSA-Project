@@ -31,6 +31,9 @@ namespace Mosa.Runtime
 		public static extern ushort Load16(uint address, uint offset);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern uint Load32(UIntPtr address);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern uint Load32(uint address);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
@@ -38,6 +41,12 @@ namespace Mosa.Runtime
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern uint Load32(uint address, uint offset);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern uint Load32(UIntPtr address, int offset);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern uint Load32(UIntPtr address, uint offset);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern ulong Load64(uint address);
@@ -100,7 +109,7 @@ namespace Mosa.Runtime
 		public extern static object CreateInstanceSimple(void* ctor, void* thisObject);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		public extern static uint* GetAssemblyListTable();
+		public extern static UIntPtr GetAssemblyListTable();
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static uint GetDelegateMethodAddress(Delegate d);
