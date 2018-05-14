@@ -51,6 +51,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int foldLongConstantCount = 0;
 		private int simplifyGeneralCount = 0;
 		private int foldIfThenElseCount = 0;
+		private int simplifyParamLoadCount = 0;
 
 		private Stack<InstructionNode> worklist;
 
@@ -126,6 +127,7 @@ namespace Mosa.Compiler.Framework.Stages
 				FoldGetLow64PointerConstant,
 				FoldTo64Constant,
 				FoldIfThenElse,
+				SimplifyParamLoadCount,
 			};
 		}
 
@@ -169,6 +171,7 @@ namespace Mosa.Compiler.Framework.Stages
 			simplifyIntegerCompareCount = 0;
 			foldLongConstantCount = 0;
 			simplifyGeneralCount = 0;
+			simplifyParamLoadCount = 0;
 		}
 
 		protected override void Run()
@@ -222,7 +225,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompareCount);
 			UpdateCounter("IROptimizations.FoldLongConstantCount", foldLongConstantCount);
 			UpdateCounter("IROptimizations.SimplifyGeneralCount", simplifyGeneralCount);
-			UpdateCounter("IROptimizations.FoldLongConstantCount", foldLongConstantCount);
+			UpdateCounter("IROptimizations.SimplifyParamLoadCount", simplifyParamLoadCount);
 
 			virtualRegisters.Clear();
 			worklist.Clear();
@@ -2372,6 +2375,86 @@ namespace Mosa.Compiler.Framework.Stages
 			node.SetInstruction(IRInstruction.MoveInt64, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
 			foldLongConstantCount++;
+		}
+
+		private void SimplifyParamLoadCount(InstructionNode node)
+		{
+			if (!(node.Instruction == IRInstruction.LoadInt32
+				|| node.Instruction == IRInstruction.LoadInt64
+				|| node.Instruction == IRInstruction.LoadSignExtend8x32
+				|| node.Instruction == IRInstruction.LoadSignExtend16x32
+				|| node.Instruction == IRInstruction.LoadSignExtend8x64
+				|| node.Instruction == IRInstruction.LoadSignExtend16x64
+				|| node.Instruction == IRInstruction.LoadSignExtend32x64
+				|| node.Instruction == IRInstruction.LoadZeroExtend8x32
+				|| node.Instruction == IRInstruction.LoadZeroExtend16x32
+				|| node.Instruction == IRInstruction.LoadZeroExtend8x64
+				|| node.Instruction == IRInstruction.LoadZeroExtend16x64
+				|| node.Instruction == IRInstruction.LoadZeroExtend32x64
+				|| node.Instruction == IRInstruction.LoadFloatR4
+				|| node.Instruction == IRInstruction.LoadFloatR8))
+				return;
+
+			if (!node.Operand1.IsVirtualRegister)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (!node.Operand2.IsConstantZero)
+				return;
+
+			if (node.Operand1.Definitions.Count != 1)
+				return;
+
+			var node2 = node.Operand1.Definitions[0];
+
+			if (node2.Instruction != IRInstruction.AddressOf)
+				return;
+
+			if (!node2.Result.IsVirtualRegister)
+				return;
+
+			if (!node2.Operand1.IsParameter)
+				return;
+
+			BaseInstruction instruction = null;
+
+			if (node.Instruction == IRInstruction.LoadInt32)
+				instruction = IRInstruction.LoadParamInt32;
+			else if (node.Instruction == IRInstruction.LoadInt64)
+				instruction = IRInstruction.LoadParamInt64;
+			else if (node.Instruction == IRInstruction.LoadFloatR4)
+				instruction = IRInstruction.LoadParamFloatR4;
+			else if (node.Instruction == IRInstruction.LoadFloatR8)
+				instruction = IRInstruction.LoadParamFloatR8;
+			else if (node.Instruction == IRInstruction.LoadSignExtend8x32)
+				instruction = IRInstruction.LoadParamSignExtend8x32;
+			else if (node.Instruction == IRInstruction.LoadSignExtend16x32)
+				instruction = IRInstruction.LoadParamSignExtend16x32;
+			else if (node.Instruction == IRInstruction.LoadSignExtend8x64)
+				instruction = IRInstruction.LoadParamSignExtend8x64;
+			else if (node.Instruction == IRInstruction.LoadSignExtend16x64)
+				instruction = IRInstruction.LoadParamSignExtend16x64;
+			else if (node.Instruction == IRInstruction.LoadSignExtend32x64)
+				instruction = IRInstruction.LoadParamSignExtend32x64;
+			else if (node.Instruction == IRInstruction.LoadZeroExtend8x32)
+				instruction = IRInstruction.LoadParamZeroExtend8x32;
+			else if (node.Instruction == IRInstruction.LoadZeroExtend16x32)
+				instruction = IRInstruction.LoadParamZeroExtend16x32;
+			else if (node.Instruction == IRInstruction.LoadZeroExtend8x64)
+				instruction = IRInstruction.LoadParamZeroExtend8x64;
+			else if (node.Instruction == IRInstruction.LoadZeroExtend16x64)
+				instruction = IRInstruction.LoadParamZeroExtend16x64;
+			else if (node.Instruction == IRInstruction.LoadZeroExtend32x64)
+				instruction = IRInstruction.LoadParamZeroExtend32x64;
+
+			AddOperandUsageToWorkList(node);
+			if (trace.Active) trace.Log("*** SimplifyParamLoadCount");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(instruction, node.Result, node2.Operand1);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			simplifyParamLoadCount++;
 		}
 
 		private void FoldIfThenElse(InstructionNode node)
