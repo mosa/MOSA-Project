@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace Mosa.Runtime
@@ -7,14 +8,14 @@ namespace Mosa.Runtime
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MDMethodDefinition
 	{
-		private Ptr _name;
-		private Ptr _customAttributes;
+		private UIntPtr _name;
+		private UIntPtr _customAttributes;
 		private uint _attributes;
 		private uint _stackSize;
-		private Ptr _method;
-		private Ptr _returnType;
-		private Ptr _protectedRegionTable;
-		private Ptr _gcTrackingInformation;
+		private UIntPtr _method;
+		private UIntPtr _returnType;
+		private UIntPtr _protectedRegionTable;
+		private UIntPtr _gcTrackingInformation;
 		private uint _numberOfParameters;
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(_name);
@@ -28,22 +29,21 @@ namespace Mosa.Runtime
 		/// <summary>
 		/// Points to the entry point of the method
 		/// </summary>
-		public void* Method => _method;
+		public UIntPtr Method => _method;
 
 		public MDTypeDefinition* ReturnType => (MDTypeDefinition*)_returnType;
 
 		public MDProtectedRegionTable* ProtectedRegionTable => (MDProtectedRegionTable*)_protectedRegionTable;
 
-		public Ptr GCTrackingInformation => _gcTrackingInformation;
+		public UIntPtr GCTrackingInformation => _gcTrackingInformation;
 
 		public uint NumberOfParameters => _numberOfParameters;
 
-		public Ptr GetParameterDefinition(uint slot)
+		public UIntPtr GetParameterDefinition(uint slot)
 		{
 			fixed (MDMethodDefinition* _this = &this)
 			{
-				Ptr pThis = _this;
-				return (Ptr)(pThis + sizeof(MDMethodDefinition) + (Ptr.Size * slot)).Dereference(0);
+				return Intrinsic.Load(new UIntPtr(_this) + sizeof(MDMethodDefinition) + (UIntPtr.Size * (int)slot));
 			}
 		}
 	}

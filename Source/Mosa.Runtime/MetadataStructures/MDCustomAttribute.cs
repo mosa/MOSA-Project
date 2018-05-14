@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace Mosa.Runtime
@@ -7,8 +8,8 @@ namespace Mosa.Runtime
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MDCustomAttribute
 	{
-		private Ptr _attributeType;
-		private Ptr _constructorMethod;
+		private UIntPtr _attributeType;
+		private UIntPtr _constructorMethod;
 		private int _numberOfArguments;
 
 		public MDTypeDefinition* AttributeType => (MDTypeDefinition*)_attributeType;
@@ -21,8 +22,7 @@ namespace Mosa.Runtime
 		{
 			fixed (MDCustomAttribute* _this = &this)
 			{
-				Ptr pThis = _this;
-				return (MDCustomAttributeArgument*)(pThis + sizeof(MDCustomAttribute) + (Ptr.Size * slot)).Dereference(0);
+				return (MDCustomAttributeArgument*)Intrinsic.Load(new UIntPtr(_this) + sizeof(MDCustomAttribute) + (UIntPtr.Size * (int)slot));
 			}
 		}
 	}

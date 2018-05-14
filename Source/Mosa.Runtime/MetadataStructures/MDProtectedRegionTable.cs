@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace Mosa.Runtime
@@ -16,8 +17,7 @@ namespace Mosa.Runtime
 		{
 			fixed (MDProtectedRegionTable* _this = &this)
 			{
-				Ptr pThis = _this;
-				return (MDProtectedRegionDefinition*)(pThis + sizeof(MDProtectedRegionTable) + (Ptr.Size * slot)).Dereference(0);
+				return (MDProtectedRegionDefinition*)Intrinsic.Load(new UIntPtr(_this) + sizeof(MDProtectedRegionTable) + (UIntPtr.Size * (int)slot));
 			}
 		}
 	}

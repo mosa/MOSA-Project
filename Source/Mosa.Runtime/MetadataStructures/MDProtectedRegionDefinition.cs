@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace Mosa.Runtime
@@ -12,7 +13,7 @@ namespace Mosa.Runtime
 		private uint _endOffset;
 		private uint _handlerOffset;
 		private uint _handlerType;
-		private Ptr _exceptionType;
+		private UIntPtr _exceptionType;
 
 		public uint StartOffset => _startOffset;
 

@@ -8,7 +8,7 @@ namespace Mosa.Runtime
 	// TODO: Implement properly for SZ arrays and multi dimensional arrays
 	public unsafe static class InternalsForArray
 	{
-		private static void Copy(void* sourceArray, int sourceIndex, void* destinationArray, int destinationIndex, int length, bool reliable)
+		private static void Copy(UIntPtr sourceArray, int sourceIndex, UIntPtr destinationArray, int destinationIndex, int length, bool reliable)
 		{
 			// TODO: add more checks, allow type upcasting, add multi dimensional array support
 			if (sourceArray == null)
@@ -35,20 +35,20 @@ namespace Mosa.Runtime
 			var size = (typeCode == TypeCode.ReferenceType) ? UIntPtr.Size : (int)typeStruct->Size;
 
 			Internal.MemoryCopy(
-				new UIntPtr(destinationArray) + (UIntPtr.Size * 2) + (destinationIndex * size),
-				new UIntPtr(sourceArray) + (UIntPtr.Size * 2) + (sourceIndex * size),
+				destinationArray + (UIntPtr.Size * 2) + (destinationIndex * size),
+				sourceArray + (UIntPtr.Size * 2) + (sourceIndex * size),
 				(uint)(length * size)
 			);
 		}
 
-		public static int GetLength(void* o, int dimension)
+		public static int GetLength(UIntPtr o, int dimension)
 		{
 			return *(((int*)o) + 2);
 		}
 
-		public static int GetLowerBound(void* o, int dimension)
+		public static int GetLowerBound(UIntPtr o, int dimension)
 		{
-			return 0;
+			return 0; // TODO
 		}
 	}
 }

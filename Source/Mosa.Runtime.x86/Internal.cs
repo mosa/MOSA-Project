@@ -46,14 +46,16 @@ namespace Mosa.Runtime.x86
 			if (objTypeDefinition == null)
 				return null;
 
-			uint* bitmap = (uint*)(objTypeDefinition->Bitmap);
+			UIntPtr bitmap = objTypeDefinition->Bitmap;
 
-			if (bitmap == null)
+			if (bitmap.ToPointer() == null)
 				return null;
 
 			int index = interfaceSlot / 32;
 			int bit = interfaceSlot % 32;
-			uint value = bitmap[index];
+
+			//uint value = bitmap[index];
+			uint value = Intrinsic.Load32(bitmap, index * UIntPtr.Size);
 			uint result = value & (uint)(1 << bit);
 
 			if (result == 0)

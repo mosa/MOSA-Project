@@ -1,119 +1,172 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
+
 namespace System
 {
-	/// <summary>
-	/// A platform-specific type that is used to represent a pointer or a handle.
-	/// </summary>
 	[Serializable]
-	public unsafe struct IntPtr
+	public struct IntPtr
 	{
-		/// <summary>
-		///
-		/// </summary>
-		private void* _value;
+		private unsafe void* _value; // Do not rename (binary serialization)
 
+		[Intrinsic]
 		public static readonly IntPtr Zero;
 
-		public IntPtr(int value)
+		[Intrinsic]
+		[NonVersionable]
+		public unsafe IntPtr(int value)
 		{
 			_value = (void*)value;
 		}
 
-		public IntPtr(long value)
+		[Intrinsic]
+		[NonVersionable]
+		public unsafe IntPtr(long value)
 		{
-			_value = (void*)value;
+			_value = (void*)((int)value);
 		}
 
-		unsafe public IntPtr(void* value)
+		[Intrinsic]
+		[NonVersionable]
+		public unsafe IntPtr(void* value)
 		{
 			_value = value;
 		}
 
-		public static int Size
+		public unsafe override bool Equals(Object obj)
 		{
-			get { return sizeof(void*); }
+			if (obj is IntPtr)
+			{
+				return (_value == ((IntPtr)obj)._value);
+			}
+			return false;
 		}
 
-		public override bool Equals(object obj)
+		public unsafe override int GetHashCode()
 		{
-			if (!(obj is IntPtr))
-				return false;
-
-			return ((IntPtr)obj)._value == _value;
+			return ((int)_value);
 		}
 
-		public override int GetHashCode()
-		{
-			return (int)_value;
-		}
-
-		public int ToInt32()
+		[Intrinsic]
+		[NonVersionable]
+		public unsafe int ToInt32()
 		{
 			return (int)_value;
 		}
 
-		public long ToInt64()
+		[Intrinsic]
+		[NonVersionable]
+		public unsafe long ToInt64()
 		{
 			return (long)_value;
 		}
 
-		unsafe public void* ToPointer()
-		{
-			return _value;
-		}
-
-		//override public string ToString()
-		//{
-		//    return ToString(null);
-		//}
-
-		//public string ToString(string format)
-		//{
-		//    if (Size == 4)
-		//        return ((int)_value).ToString(format);
-		//    else
-		//        return ((long)_value).ToString(format);
-		//}
-
-		public static bool operator ==(IntPtr value1, IntPtr value2)
-		{
-			return (value1._value == value2._value);
-		}
-
-		public static bool operator !=(IntPtr value1, IntPtr value2)
-		{
-			return (value1._value != value2._value);
-		}
-
-		public static explicit operator IntPtr(int value)
+		[Intrinsic]
+		[NonVersionable]
+		public static unsafe explicit operator IntPtr(int value)
 		{
 			return new IntPtr(value);
 		}
 
-		public static explicit operator IntPtr(long value)
+		[Intrinsic]
+		[NonVersionable]
+		public static unsafe explicit operator IntPtr(long value)
 		{
 			return new IntPtr(value);
 		}
 
-		unsafe public static explicit operator IntPtr(void* value)
+		[Intrinsic]
+		[NonVersionable]
+		public static unsafe explicit operator IntPtr(void* value)
 		{
 			return new IntPtr(value);
 		}
 
-		public static explicit operator int(IntPtr value)
+		[Intrinsic]
+		[NonVersionable]
+		public static unsafe explicit operator void* (IntPtr value)
+		{
+			return value._value;
+		}
+
+		[Intrinsic]
+		[NonVersionable]
+		public static unsafe explicit operator int(IntPtr value)
 		{
 			return (int)value._value;
 		}
 
-		public static explicit operator long(IntPtr value)
+		[Intrinsic]
+		[NonVersionable]
+		public static unsafe explicit operator long(IntPtr value)
 		{
-			return value.ToInt64();
+			return (long)value._value;
 		}
 
-		unsafe public static explicit operator void* (IntPtr value)
+		[Intrinsic]
+		[NonVersionable]
+		public static unsafe bool operator ==(IntPtr value1, IntPtr value2)
 		{
-			return value._value;
+			return value1._value == value2._value;
+		}
+
+		[Intrinsic]
+		[NonVersionable]
+		public static unsafe bool operator !=(IntPtr value1, IntPtr value2)
+		{
+			return value1._value != value2._value;
+		}
+
+		[NonVersionable]
+		public static IntPtr Add(IntPtr pointer, int offset)
+		{
+			return pointer + offset;
+		}
+
+		[Intrinsic]
+		[NonVersionable]
+		public static unsafe IntPtr operator +(IntPtr pointer, int offset)
+		{
+			return new IntPtr(pointer.ToInt32() + (uint)offset);
+		}
+
+		[NonVersionable]
+		public static IntPtr Subtract(IntPtr pointer, int offset)
+		{
+			return pointer - offset;
+		}
+
+		[Intrinsic]
+		[NonVersionable]
+		public static unsafe IntPtr operator -(IntPtr pointer, int offset)
+		{
+			return new IntPtr((long)pointer._value - offset);
+		}
+
+		public unsafe static int Size
+		{
+			[NonVersionable]
+			get
+			{
+				return sizeof(void*);
+			}
+		}
+
+		[Intrinsic]
+		[NonVersionable]
+		public unsafe void* ToPointer()
+		{
+			return _value;
+		}
+
+		public unsafe override string ToString()
+		{
+			return ((long)_value).ToString();
 		}
 	}
 }
