@@ -102,7 +102,7 @@ namespace Mosa.Runtime
 
 		public static void* BoxR8(RuntimeTypeHandle handle, double value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);
+			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size * 2);
 			*(double*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
 			return memory;
 		}
