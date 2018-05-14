@@ -97,16 +97,19 @@ namespace Mosa.Runtime
 		public static extern void Store32(UIntPtr address, uint value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store64(UIntPtr address, ulong value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store32(UIntPtr address, int offset, uint value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store32(UIntPtr address, int offset, int value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store32(UIntPtr address, uint offset, uint value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store32(UIntPtr address, uint offset, int value);
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern void Store64(UIntPtr address, ulong value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store64(uint address, int offset, ulong value);
@@ -125,6 +128,42 @@ namespace Mosa.Runtime
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store(UIntPtr address, long value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, int offset, uint value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, int offset, int value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, uint offset, uint value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, uint offset, int value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, uint offset, UIntPtr value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, int offset, UIntPtr value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, ulong offset, UIntPtr value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, long offset, UIntPtr value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, long offset, IntPtr value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, uint offset, IntPtr value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, int offset, IntPtr value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store(UIntPtr address, ulong offset, IntPtr value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void* GetObjectAddress<T>(T obj) where T : class;

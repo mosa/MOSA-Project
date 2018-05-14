@@ -1,67 +1,36 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+// See the LICENSE file in the project root for more information.
+
+using System.Runtime.Versioning;
+
 namespace System
 {
-	/// <summary>
-	///
-	/// </summary>
+	[Serializable]
 	public struct UIntPtr
 	{
-		/// <summary>
-		/// This is 32-bit specific :(
-		/// </summary>
-		internal uint _value;
+		private unsafe void* _value; // Do not rename (binary serialization)
 
-		public static int Size { get { return 4; } }
+		public static readonly UIntPtr Zero;
 
-		public UIntPtr(uint value)
+		[NonVersionable]
+		public unsafe UIntPtr(uint value)
 		{
-			_value = value;
+			_value = (void*)value;
 		}
 
+		[NonVersionable]
+		public unsafe UIntPtr(ulong value)
+		{
+			_value = (void*)((uint)value);
+		}
+
+		[NonVersionable]
 		public unsafe UIntPtr(void* value)
 		{
-			_value = (uint)value;
-		}
-
-		public static explicit operator UIntPtr(uint value)
-		{
-			return new UIntPtr(value);
-		}
-
-		//public static explicit operator UIntPtr(int value)
-		//{
-		//	return new UIntPtr((uint)value);
-		//}
-
-		public static explicit operator uint (UIntPtr value)
-		{
-			return value._value;
-		}
-
-		public static unsafe explicit operator UIntPtr(void* value)
-		{
-			return new UIntPtr(value);
-		}
-
-		public static unsafe explicit operator void* (UIntPtr value)
-		{
-			return value.ToPointer();
-		}
-
-		public unsafe static bool operator ==(UIntPtr value1, UIntPtr value2)
-		{
-			return value1._value == value2._value;
-		}
-
-		public unsafe static bool operator !=(UIntPtr value1, UIntPtr value2)
-		{
-			return value1._value != value2._value;
-		}
-
-		public unsafe override int GetHashCode()
-		{
-			return (int)_value & 0x7fffffff;
+			_value = value;
 		}
 
 		public unsafe override bool Equals(Object obj)
@@ -73,39 +42,113 @@ namespace System
 			return false;
 		}
 
+		public unsafe override int GetHashCode()
+		{
+			return ((int)_value);
+		}
+
+		[NonVersionable]
 		public unsafe uint ToUInt32()
 		{
-			return _value; ;
+			return ((uint)_value);
 		}
 
-		public unsafe override String ToString()
+		[NonVersionable]
+		public unsafe ulong ToUInt64()
 		{
-			return _value.ToString();
+			return (ulong)_value;
 		}
 
+		[NonVersionable]
+		public static explicit operator UIntPtr(uint value)
+		{
+			return new UIntPtr(value);
+		}
+
+		[NonVersionable]
+		public static explicit operator UIntPtr(ulong value)
+		{
+			return new UIntPtr(value);
+		}
+
+		[NonVersionable]
+		public static unsafe explicit operator UIntPtr(void* value)
+		{
+			return new UIntPtr(value);
+		}
+
+		[NonVersionable]
+		public static unsafe explicit operator void* (UIntPtr value)
+		{
+			return value._value;
+		}
+
+		[NonVersionable]
+		public static unsafe explicit operator uint(UIntPtr value)
+		{
+			return (uint)value._value;
+		}
+
+		[NonVersionable]
+		public static unsafe explicit operator ulong(UIntPtr value)
+		{
+			return (ulong)value._value;
+		}
+
+		[NonVersionable]
+		public static unsafe bool operator ==(UIntPtr value1, UIntPtr value2)
+		{
+			return value1._value == value2._value;
+		}
+
+		[NonVersionable]
+		public static unsafe bool operator !=(UIntPtr value1, UIntPtr value2)
+		{
+			return value1._value != value2._value;
+		}
+
+		[NonVersionable]
 		public static UIntPtr Add(UIntPtr pointer, int offset)
 		{
 			return pointer + offset;
 		}
 
-		public static UIntPtr operator +(UIntPtr pointer, int offset)
+		[NonVersionable]
+		public static unsafe UIntPtr operator +(UIntPtr pointer, int offset)
 		{
-			return new UIntPtr(pointer.ToUInt32() + (uint)offset);
+			return new UIntPtr((ulong)((long)pointer._value + offset));
 		}
 
+		[NonVersionable]
 		public static UIntPtr Subtract(UIntPtr pointer, int offset)
 		{
 			return pointer - offset;
 		}
 
-		public static UIntPtr operator -(UIntPtr pointer, int offset)
+		[NonVersionable]
+		public static unsafe UIntPtr operator -(UIntPtr pointer, int offset)
 		{
-			return new UIntPtr(pointer.ToUInt32() - (uint)offset);
+			return new UIntPtr((ulong)((long)pointer._value - offset));
 		}
 
+		public static unsafe int Size
+		{
+			[NonVersionable]
+			get
+			{
+				return sizeof(void*);
+			}
+		}
+
+		[NonVersionable]
 		public unsafe void* ToPointer()
 		{
-			return (void*)_value;
+			return _value;
+		}
+
+		public unsafe override string ToString()
+		{
+			return ((long)_value).ToString();
 		}
 	}
 }

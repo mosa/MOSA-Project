@@ -24,10 +24,15 @@ namespace Mosa.Runtime
 			uint allocationSize = (2 * (uint)(UIntPtr.Size)) + classSize;
 			var destination = AllocateMemory(allocationSize);
 
-			Intrinsic.Store32(destination, 0, handle.Value.ToInt32());
-			Intrinsic.Store32(destination, UIntPtr.Size, 0);
+			Intrinsic.Store(destination, 0, handle.Value);
+			Intrinsic.Store(destination, UIntPtr.Size, 0);
 
 			return destination;
+		}
+
+		public static UIntPtr AllocateObject(RuntimeTypeHandle handle, int classSize)
+		{
+			return AllocateObject(handle, (uint)classSize);
 		}
 
 		public static UIntPtr AllocateArray(RuntimeTypeHandle handle, uint elementSize, uint elements)
@@ -62,43 +67,43 @@ namespace Mosa.Runtime
 
 		public static void* Box8(RuntimeTypeHandle handle, byte value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, 4);    // 4 for alignment
-			*(memory + ((uint)(sizeof(void*)) * 2)) = value;
+			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);    // 4 for alignment
+			*(memory + ((uint)(UIntPtr.Size) * 2)) = value;
 			return memory;
 		}
 
 		public static void* Box16(RuntimeTypeHandle handle, ushort value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, 4);    // 4 for alignment
-			*(ushort*)(memory + ((uint)(sizeof(void*)) * 2)) = value;
+			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);    // 4 for alignment
+			*(ushort*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
 			return memory;
 		}
 
 		public static void* Box32(RuntimeTypeHandle handle, uint value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, 4);
-			*(uint*)(memory + ((uint)(sizeof(void*)) * 2)) = value;
+			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);
+			*(uint*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
 			return memory;
 		}
 
 		public static void* Box64(RuntimeTypeHandle handle, ulong value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, 8);
-			*(ulong*)(memory + ((uint)(sizeof(void*)) * 2)) = value;
+			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size * 2);
+			*(ulong*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
 			return memory;
 		}
 
 		public static void* BoxR4(RuntimeTypeHandle handle, float value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, 4);
-			*(float*)(memory + ((uint)(sizeof(void*)) * 2)) = value;
+			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);
+			*(float*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
 			return memory;
 		}
 
 		public static void* BoxR8(RuntimeTypeHandle handle, double value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, 8);
-			*(double*)(memory + ((uint)(sizeof(void*)) * 2)) = value;
+			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);
+			*(double*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
 			return memory;
 		}
 
@@ -106,7 +111,7 @@ namespace Mosa.Runtime
 		{
 			byte* memory = (byte*)AllocateObject(handle, size);
 
-			byte* dest = memory + (uint)(sizeof(void*) * 2);
+			byte* dest = memory + (uint)(UIntPtr.Size * 2);
 			byte* src = (byte*)value;
 
 			for (int i = 0; i < size; i++)
@@ -119,30 +124,30 @@ namespace Mosa.Runtime
 
 		public static byte Unbox8(void* box)
 		{
-			return *((byte*)box + (uint)(sizeof(void*)) * 2);
+			return *((byte*)box + (uint)(UIntPtr.Size) * 2);
 		}
 
 		public static ushort Unbox16(void* box)
 		{
-			return *(ushort*)((byte*)box + (uint)(sizeof(void*)) * 2);
+			return *(ushort*)((byte*)box + (uint)(UIntPtr.Size) * 2);
 		}
 
 		public static uint* Unbox32(void* box)
 		{
-			return (uint*)((byte*)box + (uint)(sizeof(void*)) * 2);
+			return (uint*)((byte*)box + (uint)(UIntPtr.Size) * 2);
 		}
 
 		public static ulong* Unbox64(void* box)
 		{
-			return (ulong*)((byte*)box + (uint)(sizeof(void*)) * 2);
+			return (ulong*)((byte*)box + (uint)(UIntPtr.Size) * 2);
 		}
 
 		public static void* Unbox(void* box, void* vt, uint size)
 		{
-			//MemoryCopy(vt, (byte*)box + (uint)(sizeof(void*)) * 2, size);
+			//MemoryCopy(vt, (byte*)box + (uint)(UIntPtr.Size) * 2, size);
 
 			byte* dest = (byte*)vt;
-			byte* src = (byte*)box + (uint)(sizeof(void*) * 2);
+			byte* src = (byte*)box + (uint)(UIntPtr.Size * 2);
 
 			for (int i = 0; i < size; i++)
 			{

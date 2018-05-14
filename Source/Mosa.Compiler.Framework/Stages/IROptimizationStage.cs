@@ -1107,7 +1107,6 @@ namespace Mosa.Compiler.Framework.Stages
 					return;
 				}
 
-
 				if (node.Instruction == IRInstruction.LogicalXor32 && op2.ConstantUnsignedInteger == 0xFFFFFFFF)
 				{
 					AddOperandUsageToWorkList(node);
