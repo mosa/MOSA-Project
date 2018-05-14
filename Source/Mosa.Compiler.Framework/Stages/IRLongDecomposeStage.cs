@@ -510,8 +510,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(IRInstruction.GetLow64, v1, operand1);
-			context.SetInstruction(IRInstruction.SignExtend16x32, resultLow, v1);
+			context.SetInstruction(IRInstruction.MoveInt32, v1, operand1);
+			context.AppendInstruction(IRInstruction.SignExtend16x32, resultLow, v1);
 			context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, CreateConstant((byte)31));
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
@@ -524,7 +524,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(IRInstruction.GetLow64, resultLow, operand1);
+			context.SetInstruction(IRInstruction.MoveInt32, resultLow, operand1);
 			context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, CreateConstant((byte)31));
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
@@ -538,8 +538,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(IRInstruction.GetLow64, v1, operand1);
-			context.SetInstruction(IRInstruction.SignExtend8x32, resultLow, v1);
+			context.SetInstruction(IRInstruction.MoveInt32, v1, operand1);
+			context.AppendInstruction(IRInstruction.SignExtend8x32, resultLow, v1);
 			context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, CreateConstant((byte)31));
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
