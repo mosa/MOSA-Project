@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace Mosa.Runtime
@@ -16,8 +17,7 @@ namespace Mosa.Runtime
 		{
 			fixed (MDCustomAttributeTable* _this = &this)
 			{
-				Ptr pThis = _this;
-				return (MDCustomAttribute*)(pThis + sizeof(MDCustomAttributeTable) + (Ptr.Size * slot)).Dereference(0);
+				return (MDCustomAttribute*)Intrinsic.Load(new UIntPtr(_this) + sizeof(MDCustomAttributeTable) + (UIntPtr.Size * (int)slot));
 			}
 		}
 	}
