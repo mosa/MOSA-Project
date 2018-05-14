@@ -9,29 +9,28 @@ namespace Mosa.Runtime
 	{
 		#region Allocation
 
-		public static void* AllocateMemory(uint size)
+		public static UIntPtr AllocateMemory(uint size)
 		{
 			return GC.AllocateObject(size);
 		}
 
-		public static void* AllocateObject(RuntimeTypeHandle handle, uint classSize)
+		public static UIntPtr AllocateObject(RuntimeTypeHandle handle, uint classSize)
 		{
 			// An object has the following memory layout:
 			//   - IntPtr TypeDef
 			//   - IntPtr SyncBlock
 			//   - 0 .. n object data fields
 
-			uint allocationSize = (2 * (uint)(sizeof(void*))) + classSize;
-			void* memory = AllocateMemory(allocationSize);
+			uint allocationSize = (2 * (uint)(UIntPtr.Size)) + classSize;
+			var destination = AllocateMemory(allocationSize);
 
-			uint* destination = (uint*)memory;
-			destination[0] = ((uint*)&handle)[0];
-			destination[1] = 0; // No sync block initially
+			Intrinsic.Store32(destination, 0, handle.Value.ToInt32());
+			Intrinsic.Store32(destination, UIntPtr.Size, 0);
 
-			return memory;
+			return destination;
 		}
 
-		public static void* AllocateArray(RuntimeTypeHandle handle, uint elementSize, uint elements)
+		public static UIntPtr AllocateArray(RuntimeTypeHandle handle, uint elementSize, uint elements)
 		{
 			// An array has the following memory layout:
 			//   - IntPtr TypeDef
@@ -40,19 +39,19 @@ namespace Mosa.Runtime
 			//   - ElementType[length] elements
 			//   - Padding
 
-			uint allocationSize = ((uint)(sizeof(void*)) * 3) + elements * elementSize;
+			uint allocationSize = ((uint)(UIntPtr.Size) * 3) + elements * elementSize;
 			allocationSize = (allocationSize + 3) & ~3u;    // Align to 4-bytes boundary
-			void* memory = AllocateMemory(allocationSize);
 
-			uint* destination = (uint*)memory;
-			destination[0] = ((uint*)&handle)[0];
-			destination[1] = 0; // No sync block initially
-			destination[2] = elements;
+			var destination = AllocateMemory(allocationSize);
 
-			return memory;
+			Intrinsic.Store32(destination, 0, handle.Value.ToInt32());
+			Intrinsic.Store32(destination, UIntPtr.Size, 0);
+			Intrinsic.Store32(destination, UIntPtr.Size * 2, elements);
+
+			return destination;
 		}
 
-		public static void* AllocateString(RuntimeTypeHandle handle, uint length)
+		public static UIntPtr AllocateString(RuntimeTypeHandle handle, uint length)
 		{
 			return AllocateArray(handle, sizeof(char), length);
 		}

@@ -71,7 +71,7 @@ namespace Mosa.VBEWorld.x86.HAL
 		/// <returns></returns>
 		public override BaseMemory AllocateMemory(uint size, uint alignment)
 		{
-			uint address = KernelMemory.AllocateMemory(size);
+			var address = KernelMemory.AllocateMemory(size);
 
 			return new Memory(address, size);
 		}

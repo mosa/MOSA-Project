@@ -88,6 +88,21 @@ namespace Mosa.Runtime
 		public static extern void Store64(uint address, ulong value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store32(UIntPtr address, uint value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store32(UIntPtr address, int offset, uint value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store32(UIntPtr address, uint offset, uint value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store32(UIntPtr address, uint offset, int value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store64(UIntPtr address, ulong value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store64(uint address, int offset, ulong value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
@@ -107,6 +122,9 @@ namespace Mosa.Runtime
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static object CreateInstanceSimple(void* ctor, void* thisObject);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern static object CreateInstanceSimple(UIntPtr ctor, UIntPtr thisObject);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static UIntPtr GetAssemblyListTable();

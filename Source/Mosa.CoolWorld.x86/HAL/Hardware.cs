@@ -4,6 +4,7 @@ using Mosa.DeviceSystem;
 using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
+using System;
 
 namespace Mosa.CoolWorld.x86.HAL
 {
@@ -70,7 +71,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <returns></returns>
 		public override BaseMemory AllocateMemory(uint size, uint alignment)
 		{
-			uint address = KernelMemory.AllocateMemory(size);
+			var address = KernelMemory.AllocateMemory(size);
 
 			return new Memory(address, size);
 		}

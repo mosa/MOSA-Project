@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace Mosa.Runtime
@@ -11,7 +12,7 @@ namespace Mosa.Runtime
 		private Ptr _customAttributes;
 		private uint _attributes;
 		private uint _stackSize;
-		private Ptr _method;
+		private UIntPtr _method;
 		private Ptr _returnType;
 		private Ptr _protectedRegionTable;
 		private Ptr _gcTrackingInformation;
@@ -28,7 +29,7 @@ namespace Mosa.Runtime
 		/// <summary>
 		/// Points to the entry point of the method
 		/// </summary>
-		public void* Method => _method;
+		public UIntPtr Method => _method;
 
 		public MDTypeDefinition* ReturnType => (MDTypeDefinition*)_returnType;
 

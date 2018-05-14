@@ -2,6 +2,7 @@
 
 using Mosa.DeviceSystem;
 using Mosa.Runtime;
+using System;
 
 namespace Mosa.Kernel
 {
@@ -13,6 +14,15 @@ namespace Mosa.Kernel
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		public Memory(uint address, uint size) : base(address, size)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Memory"/> class.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <param name="size">The size.</param>
+		public Memory(UIntPtr address, uint size) : base(address.ToUInt32(), size)
 		{
 		}
 
