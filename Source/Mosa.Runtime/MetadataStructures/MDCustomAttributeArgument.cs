@@ -21,12 +21,11 @@ namespace Mosa.Runtime
 
 		public int ArgumentSize => _argumentSize;
 
-		public Ptr GetArgumentValue()
+		public UIntPtr GetArgumentValue()
 		{
 			fixed (MDCustomAttributeArgument* _this = &this)
 			{
-				Ptr pThis = _this;
-				return (pThis + sizeof(MDCustomAttributeArgument));
+				return new UIntPtr(_this) + sizeof(MDCustomAttributeArgument);
 			}
 		}
 	}
