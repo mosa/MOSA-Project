@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.InteropServices;
 
 namespace Mosa.Runtime
@@ -7,8 +8,8 @@ namespace Mosa.Runtime
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MDAssemblyDefinition
 	{
-		private Ptr _name;
-		private Ptr _customAttributes;
+		private UIntPtr _name;
+		private UIntPtr _customAttributes;
 		private uint _attributes;
 		private uint _numberOfTypes;
 
@@ -24,8 +25,7 @@ namespace Mosa.Runtime
 		{
 			fixed (MDAssemblyDefinition* _this = &this)
 			{
-				Ptr pThis = _this;
-				return (MDTypeDefinition*)(pThis + sizeof(MDAssemblyDefinition) + (Ptr.Size * slot)).Dereference(0);
+				return (MDTypeDefinition*)Intrinsic.Load(new UIntPtr(_this) + sizeof(MDAssemblyDefinition) + (UIntPtr.Size * (int)slot));
 			}
 		}
 	}

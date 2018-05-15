@@ -260,6 +260,16 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
+		public static void LockTest()
+		{
+			var o = new object();
+
+			lock(o)
+			{
+				var i = o.GetHashCode();
+			}
+		}
+
 		//public static void Mandelbrot()
 		//{
 		//	double xmin = -2.1;

@@ -89,7 +89,6 @@
     <Compile Include="MetadataStructures\MDProtectedRegionDefinition.cs" />
     <Compile Include="MetadataStructures\MDProtectedRegionTable.cs" />
     <Compile Include="MetadataStructures\MDTypeDefinition.cs" />
-    <Compile Include="PlatformPointer.cs" />
     <Compile Include="Plug\FieldAttribute.cs" />
     <Compile Include="Plug\MethodAttribute.cs" />
     <Compile Include="Plug\TypeAttribute.cs" />

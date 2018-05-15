@@ -1235,7 +1235,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				Debug.Assert(result.Type.IsReferenceType, $"VmCall.AllocateObject only needs to be called for reference types. Type: {result.Type}");
+				Debug.Assert(result.Type.IsReferenceType);
 
 				var runtimeTypeHandle = GetRuntimeTypeHandle(classType);
 				var size = CreateConstant(TypeLayout.GetTypeSize(classType));
