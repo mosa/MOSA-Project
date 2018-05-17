@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework
 			counters.Clear();
 		}
 
-		public void Increment(string name, int count)
+		public void Update(string name, int count)
 		{
 			lock (_lock)
 			{
@@ -28,21 +28,10 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void Update(string name, int count)
-		{
-			lock (_lock)
-			{
-				if (counters.ContainsKey(name))
-					counters[name] = count;
-				else
-					counters.Add(name, count);
-			}
-		}
-
 		public void UpdateNoLock(string name, int count)
 		{
 			if (counters.ContainsKey(name))
-				counters[name] = count;
+				counters[name] += count;
 			else
 				counters.Add(name, count);
 		}
@@ -64,12 +53,9 @@ namespace Mosa.Compiler.Framework
 
 		public void Merge(Counters counters)
 		{
-			if (counters.counters != null)
+			foreach (var item in counters.counters)
 			{
-				foreach (var item in counters.counters)
-				{
-					Increment(item.Key, item.Value);
-				}
+				Update(item.Key, item.Value);
 			}
 		}
 	}

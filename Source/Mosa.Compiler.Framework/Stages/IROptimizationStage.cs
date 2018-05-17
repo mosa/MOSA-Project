@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int longConstantReductionCount = 0;
 		private int longPropagatationCount = 0;
 		private int simplifyIntegerCompareCount = 0;
-		private int foldLongConstantCount = 0;
+		private int longConstantFoldingCount = 0;
 		private int simplifyGeneralCount = 0;
 		private int foldIfThenElseCount = 0;
 		private int simplifyParamLoadCount = 0;
@@ -128,6 +128,7 @@ namespace Mosa.Compiler.Framework.Stages
 				FoldTo64Constant,
 				FoldIfThenElse,
 				SimplifyParamLoadCount,
+
 				//ReduceTemporaries,
 			};
 		}
@@ -170,7 +171,7 @@ namespace Mosa.Compiler.Framework.Stages
 			longConstantReductionCount = 0;
 			longPropagatationCount = 0;
 			simplifyIntegerCompareCount = 0;
-			foldLongConstantCount = 0;
+			longConstantFoldingCount = 0;
 			simplifyGeneralCount = 0;
 			simplifyParamLoadCount = 0;
 		}
@@ -223,8 +224,8 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.RemoveUselessIntegerCompareBranch", removeUselessIntegerCompareBranch);
 			UpdateCounter("IROptimizations.LongConstantReduction", longConstantReductionCount);
 			UpdateCounter("IROptimizations.LongPropagatation", longPropagatationCount);
+			UpdateCounter("IROptimizations.LongConstantFolding", longConstantFoldingCount);
 			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompareCount);
-			UpdateCounter("IROptimizations.FoldLongConstant", foldLongConstantCount);
 			UpdateCounter("IROptimizations.SimplifyGeneral", simplifyGeneralCount);
 			UpdateCounter("IROptimizations.SimplifyParamLoad", simplifyParamLoadCount);
 
@@ -2305,7 +2306,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			foldLongConstantCount++;
+			longConstantFoldingCount++;
 		}
 
 		private void FoldGetLow64Constant(InstructionNode node)
@@ -2327,7 +2328,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			foldLongConstantCount++;
+			longConstantFoldingCount++;
 		}
 
 		private void FoldGetLow64PointerConstant(InstructionNode node)
@@ -2350,7 +2351,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, node.Operand1);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			foldLongConstantCount++;
+			longConstantFoldingCount++;
 		}
 
 		private void FoldTo64Constant(InstructionNode node)
@@ -2375,7 +2376,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt64, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			foldLongConstantCount++;
+			longConstantFoldingCount++;
 		}
 
 		private void SimplifyParamLoadCount(InstructionNode node)
