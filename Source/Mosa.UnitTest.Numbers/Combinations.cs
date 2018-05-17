@@ -10,7 +10,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.B.Series)
+				foreach (var i1 in Numbers.B.Series)
 					yield return new object[] { i1 };
 			}
 		}
@@ -19,8 +19,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.B.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.B.Series)
+				foreach (var i1 in Numbers.B.Series)
+					foreach (var i2 in Numbers.B.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -29,7 +29,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.C.Series)
+				foreach (var i1 in Numbers.C.Series)
 					yield return new object[] { i1 };
 			}
 		}
@@ -38,8 +38,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.C.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.C.Series)
+				foreach (var i1 in Numbers.C.Series)
+					foreach (var i2 in Numbers.C.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -48,9 +48,9 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.C.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.C.Series)
-						foreach (var i3 in Mosa.UnitTest.Numbers.C.Series)
+				foreach (var i1 in Numbers.C.Series)
+					foreach (var i2 in Numbers.C.Series)
+						foreach (var i3 in Numbers.C.Series)
 							yield return new object[] { i1, i2, i3 };
 			}
 		}
@@ -59,7 +59,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I1.Series)
+				foreach (var i1 in Numbers.I1.Series)
 					yield return new object[] { i1 };
 			}
 		}
@@ -68,8 +68,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I1.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.I1.Series)
+				foreach (var i1 in Numbers.I1.Series)
+					foreach (var i2 in Numbers.I1.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -78,9 +78,9 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I1.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.I1.Series)
-						foreach (var i3 in Mosa.UnitTest.Numbers.I1.Series)
+				foreach (var i1 in Numbers.I1.Series)
+					foreach (var i2 in Numbers.I1.Series)
+						foreach (var i3 in Numbers.I1.Series)
 							yield return new object[] { i1, i2, i3 };
 			}
 		}
@@ -89,8 +89,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I1)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.U1UpTo16)
+				foreach (var i1 in Series.I1)
+					foreach (var i2 in Series.U1UpTo16)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -99,7 +99,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I1UpTo32)
+				foreach (var i1 in Series.I1UpTo32)
 					yield return new object[] { i1 };
 			}
 		}
@@ -108,7 +108,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I2.Series)
+				foreach (var i1 in Numbers.I2.Series)
 					yield return new object[] { i1 };
 			}
 		}
@@ -117,8 +117,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I2.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.I2.Series)
+				foreach (var i1 in Numbers.I2.Series)
+					foreach (var i2 in Numbers.I2.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -127,9 +127,9 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I2.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.I2.Series)
-						foreach (var i3 in Mosa.UnitTest.Numbers.I2.Series)
+				foreach (var i1 in Numbers.I2.Series)
+					foreach (var i2 in Numbers.I2.Series)
+						foreach (var i3 in Numbers.I2.Series)
 							yield return new object[] { i1, i2, i3 };
 			}
 		}
@@ -138,8 +138,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I2.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.U1UpTo16)
+				foreach (var i1 in Numbers.I2.Series)
+					foreach (var i2 in Series.U1UpTo16)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -148,7 +148,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I4.Series)
+				foreach (var i1 in Numbers.I4.Series)
 					yield return new object[] { i1 };
 			}
 		}
@@ -157,8 +157,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I4.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.I4.Series)
+				foreach (var i1 in Numbers.I4.Series)
+					foreach (var i2 in Numbers.I4.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -167,8 +167,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
-					foreach (var i2 in Mosa.UnitTest.Numbers.B.Series)
+				foreach (var i1 in Series.I4Small)
+					foreach (var i2 in Numbers.B.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -177,8 +177,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
-					foreach (var i2 in Mosa.UnitTest.Numbers.C.Series)
+				foreach (var i1 in Series.I4Small)
+					foreach (var i2 in Numbers.C.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -187,7 +187,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
+				foreach (var i1 in Series.I4Small)
 					yield return new object[] { i1 };
 			}
 		}
@@ -196,8 +196,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
-					foreach (var i2 in Mosa.UnitTest.Numbers.I1.Series)
+				foreach (var i1 in Series.I4Small)
+					foreach (var i2 in Numbers.I1.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -206,8 +206,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
-					foreach (var i2 in Mosa.UnitTest.Numbers.I2.Series)
+				foreach (var i1 in Series.I4Small)
+					foreach (var i2 in Numbers.I2.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -216,8 +216,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
-					foreach (var i2 in Mosa.UnitTest.Numbers.I4.Series)
+				foreach (var i1 in Series.I4Small)
+					foreach (var i2 in Numbers.I4.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -226,8 +226,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
-					foreach (var i2 in Mosa.UnitTest.Numbers.I8.Series)
+				foreach (var i1 in Series.I4Small)
+					foreach (var i2 in Numbers.I8.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -236,8 +236,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
-					foreach (var i2 in Mosa.UnitTest.Numbers.U1.Series)
+				foreach (var i1 in Series.I4Small)
+					foreach (var i2 in Numbers.U1.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -246,8 +246,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
-					foreach (var i2 in Mosa.UnitTest.Numbers.U2.Series)
+				foreach (var i1 in Series.I4Small)
+					foreach (var i2 in Numbers.U2.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -256,8 +256,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
-					foreach (var i2 in Mosa.UnitTest.Numbers.U4.Series)
+				foreach (var i1 in Series.I4Small)
+					foreach (var i2 in Numbers.U4.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -266,8 +266,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
-					foreach (var i2 in Mosa.UnitTest.Numbers.U8.Series)
+				foreach (var i1 in Series.I4Small)
+					foreach (var i2 in Numbers.U8.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -276,8 +276,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.R4Simple)
+				foreach (var i1 in Series.I4Small)
+					foreach (var i2 in Series.R4Simple)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -286,8 +286,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.R8Simple)
+				foreach (var i1 in Series.I4Small)
+					foreach (var i2 in Series.R8Simple)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -296,8 +296,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I4.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.I1UpTo32)
+				foreach (var i1 in Numbers.I4.Series)
+					foreach (var i2 in Series.I1UpTo32)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -306,8 +306,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I4.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.U1UpTo32)
+				foreach (var i1 in Numbers.I4.Series)
+					foreach (var i2 in Series.U1UpTo32)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -316,9 +316,9 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I4.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.I4.Series)
-						foreach (var i3 in Mosa.UnitTest.Numbers.I4.Series)
+				foreach (var i1 in Numbers.I4.Series)
+					foreach (var i2 in Numbers.I4.Series)
+						foreach (var i3 in Numbers.I4.Series)
 							yield return new object[] { i1, i2, i3 };
 			}
 		}
@@ -327,10 +327,10 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I4.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.I4.Series)
-						foreach (var i3 in Mosa.UnitTest.Numbers.I4.Series)
-							foreach (var i4 in Mosa.UnitTest.Numbers.I4.Series)
+				foreach (var i1 in Numbers.I4.Series)
+					foreach (var i2 in Numbers.I4.Series)
+						foreach (var i3 in Numbers.I4.Series)
+							foreach (var i4 in Numbers.I4.Series)
 								yield return new object[] { i1, i2, i3, i4 };
 			}
 		}
@@ -362,13 +362,13 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Small)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.I4Small)
-						foreach (var i3 in Mosa.UnitTest.Numbers.Series.I4Small)
-							foreach (var i4 in Mosa.UnitTest.Numbers.Series.I4Small)
-								foreach (var i5 in Mosa.UnitTest.Numbers.Series.I4Small)
-									foreach (var i6 in Mosa.UnitTest.Numbers.Series.I4Small)
-										foreach (var i7 in Mosa.UnitTest.Numbers.Series.I4Small)
+				foreach (var i1 in Series.I4Small)
+					foreach (var i2 in Series.I4Small)
+						foreach (var i3 in Series.I4Small)
+							foreach (var i4 in Series.I4Small)
+								foreach (var i5 in Series.I4Small)
+									foreach (var i6 in Series.I4Small)
+										foreach (var i7 in Series.I4Small)
 											yield return new object[] { i1, i2, i3, i4, i5, i6, i7 };
 			}
 		}
@@ -377,13 +377,13 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.I4Mini)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.I4Mini)
-						foreach (var i3 in Mosa.UnitTest.Numbers.Series.I4Mini)
-							foreach (var i4 in Mosa.UnitTest.Numbers.Series.I4Mini)
-								foreach (var i5 in Mosa.UnitTest.Numbers.Series.I4Mini)
-									foreach (var i6 in Mosa.UnitTest.Numbers.Series.I4Mini)
-										foreach (var i7 in Mosa.UnitTest.Numbers.Series.I4Mini)
+				foreach (var i1 in Series.I4Mini)
+					foreach (var i2 in Series.I4Mini)
+						foreach (var i3 in Series.I4Mini)
+							foreach (var i4 in Series.I4Mini)
+								foreach (var i5 in Series.I4Mini)
+									foreach (var i6 in Series.I4Mini)
+										foreach (var i7 in Series.I4Mini)
 											yield return new object[] { i1, i2, i3, i4, i5, i6, i7 };
 			}
 		}
@@ -392,7 +392,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I8.Series)
+				foreach (var i1 in Numbers.I8.Series)
 					yield return new object[] { i1 };
 			}
 		}
@@ -401,8 +401,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I8.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.I8.Series)
+				foreach (var i1 in Numbers.I8.Series)
+					foreach (var i2 in Numbers.I8.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -422,10 +422,10 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I8.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.I8.Series)
-						foreach (var i3 in Mosa.UnitTest.Numbers.I8.Series)
-							foreach (var i4 in Mosa.UnitTest.Numbers.I8.Series)
+				foreach (var i1 in Numbers.I8.Series)
+					foreach (var i2 in Numbers.I8.Series)
+						foreach (var i3 in Numbers.I8.Series)
+							foreach (var i4 in Numbers.I8.Series)
 								yield return new object[] { i1, i2, i3, i4 };
 			}
 		}
@@ -446,8 +446,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.I8.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.U1UpTo32)
+				foreach (var i1 in Numbers.I8.Series)
+					foreach (var i2 in Series.U1UpTo32)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -456,7 +456,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U1.Series)
+				foreach (var i1 in Numbers.U1.Series)
 					yield return new object[] { i1 };
 			}
 		}
@@ -465,8 +465,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U1.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.U1.Series)
+				foreach (var i1 in Numbers.U1.Series)
+					foreach (var i2 in Numbers.U1.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -475,9 +475,9 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U1.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.U1.Series)
-						foreach (var i3 in Mosa.UnitTest.Numbers.U1.Series)
+				foreach (var i1 in Numbers.U1.Series)
+					foreach (var i2 in Numbers.U1.Series)
+						foreach (var i3 in Numbers.U1.Series)
 							yield return new object[] { i1, i2, i3 };
 			}
 		}
@@ -486,7 +486,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U2.Series)
+				foreach (var i1 in Numbers.U2.Series)
 					yield return new object[] { i1 };
 			}
 		}
@@ -495,8 +495,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U2.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.U2.Series)
+				foreach (var i1 in Numbers.U2.Series)
+					foreach (var i2 in Numbers.U2.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -505,9 +505,9 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U2.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.U2.Series)
-						foreach (var i3 in Mosa.UnitTest.Numbers.U2.Series)
+				foreach (var i1 in Numbers.U2.Series)
+					foreach (var i2 in Numbers.U2.Series)
+						foreach (var i3 in Numbers.U2.Series)
 							yield return new object[] { i1, i2, i3 };
 			}
 		}
@@ -516,8 +516,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U1.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.U1UpTo16)
+				foreach (var i1 in Numbers.U1.Series)
+					foreach (var i2 in Series.U1UpTo16)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -526,8 +526,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U2.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.U1UpTo16)
+				foreach (var i1 in Numbers.U2.Series)
+					foreach (var i2 in Series.U1UpTo16)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -536,7 +536,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U4.Series)
+				foreach (var i1 in Numbers.U4.Series)
 					yield return new object[] { i1 };
 			}
 		}
@@ -545,8 +545,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U4.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.U4.Series)
+				foreach (var i1 in Numbers.U4.Series)
+					foreach (var i2 in Numbers.U4.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -566,10 +566,10 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U4.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.U8.Series)
-						foreach (var i3 in Mosa.UnitTest.Numbers.U8.Series)
-							foreach (var i4 in Mosa.UnitTest.Numbers.U8.Series)
+				foreach (var i1 in Numbers.U4.Series)
+					foreach (var i2 in Numbers.U8.Series)
+						foreach (var i3 in Numbers.U8.Series)
+							foreach (var i4 in Numbers.U8.Series)
 								yield return new object[] { i1, i2, i3, i4 };
 			}
 		}
@@ -590,8 +590,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U4.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.I1UpTo32)
+				foreach (var i1 in Numbers.U4.Series)
+					foreach (var i2 in Series.I1UpTo32)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -600,8 +600,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U4.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.U1UpTo32)
+				foreach (var i1 in Numbers.U4.Series)
+					foreach (var i2 in Series.U1UpTo32)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -610,7 +610,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U8.Series)
+				foreach (var i1 in Numbers.U8.Series)
 					yield return new object[] { i1 };
 			}
 		}
@@ -619,8 +619,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U8.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.U8.Series)
+				foreach (var i1 in Numbers.U8.Series)
+					foreach (var i2 in Numbers.U8.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -629,10 +629,10 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U8.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.U8.Series)
-						foreach (var i3 in Mosa.UnitTest.Numbers.U8.Series)
-							foreach (var i4 in Mosa.UnitTest.Numbers.U8.Series)
+				foreach (var i1 in Numbers.U8.Series)
+					foreach (var i2 in Numbers.U8.Series)
+						foreach (var i3 in Numbers.U8.Series)
+							foreach (var i4 in Numbers.U8.Series)
 								yield return new object[] { i1, i2, i3, i4 };
 			}
 		}
@@ -664,8 +664,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.U8.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.U1UpTo32)
+				foreach (var i1 in Numbers.U8.Series)
+					foreach (var i2 in Series.U1UpTo32)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -674,7 +674,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.R4.Series)
+				foreach (var i1 in Numbers.R4.Series)
 					yield return new object[] { i1 };
 			}
 		}
@@ -692,8 +692,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.R4.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.R4.Series)
+				foreach (var i1 in Numbers.R4.Series)
+					foreach (var i2 in Numbers.R4.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -713,8 +713,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.R4Simple)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.R4Simple)
+				foreach (var i1 in Series.R4Simple)
+					foreach (var i2 in Series.R4Simple)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -723,7 +723,7 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.R8.Series)
+				foreach (var i1 in Numbers.R8.Series)
 					yield return new object[] { i1 };
 			}
 		}
@@ -741,8 +741,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.R8.Series)
-					foreach (var i2 in Mosa.UnitTest.Numbers.R8.Series)
+				foreach (var i1 in Numbers.R8.Series)
+					foreach (var i2 in Numbers.R8.Series)
 						yield return new object[] { i1, i2 };
 			}
 		}
@@ -751,8 +751,8 @@ namespace Mosa.UnitTest.Numbers
 		{
 			get
 			{
-				foreach (var i1 in Mosa.UnitTest.Numbers.Series.R8Simple)
-					foreach (var i2 in Mosa.UnitTest.Numbers.Series.R8Simple)
+				foreach (var i1 in Series.R8Simple)
+					foreach (var i2 in Series.R8Simple)
 						yield return new object[] { i1, i2 };
 			}
 		}

@@ -120,6 +120,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
+			base.Finish();
+
 			if (counts == null)
 				return;
 
@@ -140,8 +142,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			UpdateCounter("CILDecodingStage.CILInstructions", total);
-
-			base.Finish();
 
 			instruction = null;
 			block = null;

@@ -82,6 +82,7 @@ namespace Mosa.Compiler.Framework.Stages
 							|| node.Instruction == IRInstruction.LoadParamZeroExtend32x64
 							|| node.Instruction == IRInstruction.LoadParamZeroExtend8x32
 							|| node.Instruction == IRInstruction.LoadParamZeroExtend8x64
+
 							//|| node.Instruction == IRInstruction.Epilogue
 							//|| node.Instruction == IRInstruction.Prologue
 							|| node.Block.IsEpilogue
@@ -142,7 +143,7 @@ namespace Mosa.Compiler.Framework.Stages
 			trace.Log("IsPlugged: " + MethodData.IsPlugged.ToString());
 			trace.Log("HasAddressOfInstruction: " + MethodData.HasAddressOfInstruction.ToString());
 
-			UpdateCounter("InlineMethodEvaluationStage.MethodCount", 1);
+			UpdateCounter("InlineMethodEvaluationStage.Methods", 1);
 			if (MethodData.CanInline)
 			{
 				UpdateCounter("InlineMethodEvaluationStage.CanInline", 1);

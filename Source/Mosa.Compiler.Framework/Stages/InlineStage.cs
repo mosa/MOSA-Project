@@ -84,11 +84,8 @@ namespace Mosa.Compiler.Framework.Stages
 				Inline(callSiteNode, blocks);
 			}
 
-			UpdateCounter("InlineStage.InlinedMethodCount", 1);
-			UpdateCounter("InlineStage.InlinedCallSiteCount", callSites.Count);
-
-			//UpdateCounter("InlineStage.Compiled", MethodData.CompileCount == 0 ? 1 : 0);
-			//UpdateCounter("InlineStage.Recompiled", MethodData.CompileCount > 1 ? 1 : 0);
+			UpdateCounter("InlineStage.InlinedMethods", 1);
+			UpdateCounter("InlineStage.InlinedCallSites", callSites.Count);
 		}
 
 		protected void Inline(InstructionNode callSiteNode, BasicBlocks blocks)
@@ -226,6 +223,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			callSiteNode.SetInstruction(IRInstruction.Jmp, prologue);
+
 			//MethodCompiler.Stop();
 		}
 

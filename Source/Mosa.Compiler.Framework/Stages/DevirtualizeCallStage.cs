@@ -23,7 +23,9 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Setup()
 		{
 			base.Setup();
+
 			trace = CreateTraceLog();
+
 			devirtualizedCount = 0;
 		}
 
@@ -31,7 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			base.Finish();
 
-			UpdateCounter("Devirtualize.CallCount", devirtualizedCount);
+			UpdateCounter("Devirtualize.Calls", devirtualizedCount);
 			trace = null;
 		}
 

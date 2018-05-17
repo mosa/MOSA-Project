@@ -26,6 +26,7 @@ namespace Mosa.Compiler.Framework.Stages
 			base.Setup();
 
 			trace = CreateTraceLog();
+
 			conditionalConstantPropagation = 0;
 			instructionsRemovedCount = 0;
 			changed = false;
@@ -41,8 +42,8 @@ namespace Mosa.Compiler.Framework.Stages
 			RemoveDeadBlocks(deadBlocks);
 			ReplaceVirtualRegistersWithConstants(constants);
 
-			UpdateCounter("ConditionalConstantPropagation.ConstantVariableCount", constants.Count);
-			UpdateCounter("ConditionalConstantPropagation.ConstantVariableUse", conditionalConstantPropagation);
+			UpdateCounter("ConditionalConstantPropagation.ConstantVariables", constants.Count);
+			UpdateCounter("ConditionalConstantPropagation.ConstantPropagations", conditionalConstantPropagation);
 			UpdateCounter("ConditionalConstantPropagation.DeadBlocks", deadBlocks.Count);
 			UpdateCounter("ConditionalConstantPropagation.IRInstructionRemoved", instructionsRemovedCount);
 		}

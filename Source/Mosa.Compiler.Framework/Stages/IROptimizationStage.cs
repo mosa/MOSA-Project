@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int longConstantReductionCount = 0;
 		private int longPropagatationCount = 0;
 		private int simplifyIntegerCompareCount = 0;
-		private int foldLongConstantCount = 0;
+		private int longConstantFoldingCount = 0;
 		private int simplifyGeneralCount = 0;
 		private int foldIfThenElseCount = 0;
 		private int simplifyParamLoadCount = 0;
@@ -128,6 +128,8 @@ namespace Mosa.Compiler.Framework.Stages
 				FoldTo64Constant,
 				FoldIfThenElse,
 				SimplifyParamLoadCount,
+
+				//ReduceTemporaries,
 			};
 		}
 
@@ -169,7 +171,7 @@ namespace Mosa.Compiler.Framework.Stages
 			longConstantReductionCount = 0;
 			longPropagatationCount = 0;
 			simplifyIntegerCompareCount = 0;
-			foldLongConstantCount = 0;
+			longConstantFoldingCount = 0;
 			simplifyGeneralCount = 0;
 			simplifyParamLoadCount = 0;
 		}
@@ -222,10 +224,10 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.RemoveUselessIntegerCompareBranch", removeUselessIntegerCompareBranch);
 			UpdateCounter("IROptimizations.LongConstantReduction", longConstantReductionCount);
 			UpdateCounter("IROptimizations.LongPropagatation", longPropagatationCount);
+			UpdateCounter("IROptimizations.LongConstantFolding", longConstantFoldingCount);
 			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompareCount);
-			UpdateCounter("IROptimizations.FoldLongConstantCount", foldLongConstantCount);
-			UpdateCounter("IROptimizations.SimplifyGeneralCount", simplifyGeneralCount);
-			UpdateCounter("IROptimizations.SimplifyParamLoadCount", simplifyParamLoadCount);
+			UpdateCounter("IROptimizations.SimplifyGeneral", simplifyGeneralCount);
+			UpdateCounter("IROptimizations.SimplifyParamLoad", simplifyParamLoadCount);
 
 			virtualRegisters.Clear();
 			worklist.Clear();
@@ -2304,7 +2306,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			foldLongConstantCount++;
+			longConstantFoldingCount++;
 		}
 
 		private void FoldGetLow64Constant(InstructionNode node)
@@ -2326,7 +2328,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			foldLongConstantCount++;
+			longConstantFoldingCount++;
 		}
 
 		private void FoldGetLow64PointerConstant(InstructionNode node)
@@ -2349,7 +2351,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt32, node.Result, node.Operand1);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			foldLongConstantCount++;
+			longConstantFoldingCount++;
 		}
 
 		private void FoldTo64Constant(InstructionNode node)
@@ -2374,7 +2376,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(IRInstruction.MoveInt64, node.Result, constant);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			foldLongConstantCount++;
+			longConstantFoldingCount++;
 		}
 
 		private void SimplifyParamLoadCount(InstructionNode node)
@@ -2494,6 +2496,50 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("AFTER: \t" + node);
 				foldIfThenElseCount++;
 			}
+		}
+
+		private void ReduceTemporaries(InstructionNode node)
+		{
+			if (!(node.Instruction == IRInstruction.LoadInt32
+				|| node.Instruction == IRInstruction.LoadInt64))
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (!node.Operand1.IsCPURegister)
+				return;
+
+			if (!node.Operand2.IsStackLocal)
+				return;
+
+			if (node.Operand2.Uses.Count == 0)
+				return;
+
+			var node2 = node.Operand2.Uses[0];
+
+			if (node2.Instruction != IRInstruction.AddressOf)
+				return;
+
+			if (!node2.Result.IsVirtualRegister)
+				return;
+
+			if (!node2.Operand1.IsStackLocal)
+				return;
+
+			BaseInstruction instruction = null;
+
+			if (node.Instruction == IRInstruction.LoadInt32)
+				instruction = IRInstruction.MoveInt32;
+			else if (node.Instruction == IRInstruction.LoadInt64)
+				instruction = IRInstruction.MoveInt64;
+
+			AddOperandUsageToWorkList(node);
+			if (trace.Active) trace.Log("*** ReduceTemporaries");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(instruction, node.Result, node2.Operand1);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			simplifyParamLoadCount++;
 		}
 	}
 }

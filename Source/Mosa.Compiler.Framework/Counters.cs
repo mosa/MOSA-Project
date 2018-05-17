@@ -9,21 +9,18 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class Counters
 	{
-		private Dictionary<string, int> counters;
+		private Dictionary<string, int> counters = new Dictionary<string, int>();
 		private readonly object _lock = new object();
 
-		public void Clear()
+		public void Reset()
 		{
-			counters?.Clear();
+			counters.Clear();
 		}
 
-		public void Increment(string name, int count)
+		public void Update(string name, int count)
 		{
 			lock (_lock)
 			{
-				if (counters == null)
-					counters = new Dictionary<string, int>();
-
 				if (counters.ContainsKey(name))
 					counters[name] += count;
 				else
@@ -31,27 +28,10 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void Update(string name, int count)
-		{
-			lock (_lock)
-			{
-				if (counters == null)
-					counters = new Dictionary<string, int>();
-
-				if (counters.ContainsKey(name))
-					counters[name] = count;
-				else
-					counters.Add(name, count);
-			}
-		}
-
 		public void UpdateNoLock(string name, int count)
 		{
-			if (counters == null)
-				counters = new Dictionary<string, int>();
-
 			if (counters.ContainsKey(name))
-				counters[name] = count;
+				counters[name] += count;
 			else
 				counters.Add(name, count);
 		}
@@ -73,12 +53,9 @@ namespace Mosa.Compiler.Framework
 
 		public void Merge(Counters counters)
 		{
-			if (counters.counters != null)
+			foreach (var item in counters.counters)
 			{
-				foreach (var item in counters.counters)
-				{
-					Increment(item.Key, item.Value);
-				}
+				Update(item.Key, item.Value);
 			}
 		}
 	}

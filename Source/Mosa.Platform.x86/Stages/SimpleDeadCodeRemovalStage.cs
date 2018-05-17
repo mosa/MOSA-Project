@@ -27,13 +27,14 @@ namespace Mosa.Platform.x86.Stages
 		{
 			base.Setup();
 
+			trace = CreateTraceLog();
+
 			instructionsRemovedCount = 0;
 		}
 
 		protected override void Run()
 		{
 			changed = true;
-			trace = CreateTraceLog();
 
 			while (changed)
 			{

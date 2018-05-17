@@ -740,6 +740,7 @@
     <Compile Include="Stages\DevirtualizeCallStage.cs" />
     <Compile Include="Stages\CallStage.cs" />
     <Compile Include="Stages\BlockMergeStage.cs" />
+    <Compile Include="Stages\PromoteStructToRegister.cs" />
     <Compile Include="Stages\IRLongDecomposeStage.cs" />
     <Compile Include="Stages\LowerIRStage.cs" />
     <Compile Include="Analysis\LiveVariableAnalysis\LivenessAnalysis.cs" />
