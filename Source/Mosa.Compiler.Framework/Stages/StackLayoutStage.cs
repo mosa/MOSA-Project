@@ -60,6 +60,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var operand in locals)
 			{
+				if (operand.Uses.Count == 0)
+					continue;
+
 				var size = GetTypeSize(operand.Type, true);
 
 				offset -= size;
