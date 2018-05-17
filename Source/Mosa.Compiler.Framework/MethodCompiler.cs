@@ -219,7 +219,7 @@ namespace Mosa.Compiler.Framework
 			stop = false;
 
 			MethodData = compiler.CompilerData.GetCompilerMethodData(Method);
-			MethodData.Counters.Clear();
+			MethodData.Counters.Reset();
 
 			EvaluateParameterOperands();
 

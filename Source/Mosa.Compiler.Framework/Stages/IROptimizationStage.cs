@@ -128,6 +128,7 @@ namespace Mosa.Compiler.Framework.Stages
 				FoldTo64Constant,
 				FoldIfThenElse,
 				SimplifyParamLoadCount,
+				//ReduceTemporaries,
 			};
 		}
 
@@ -223,9 +224,9 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.LongConstantReduction", longConstantReductionCount);
 			UpdateCounter("IROptimizations.LongPropagatation", longPropagatationCount);
 			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompareCount);
-			UpdateCounter("IROptimizations.FoldLongConstantCount", foldLongConstantCount);
-			UpdateCounter("IROptimizations.SimplifyGeneralCount", simplifyGeneralCount);
-			UpdateCounter("IROptimizations.SimplifyParamLoadCount", simplifyParamLoadCount);
+			UpdateCounter("IROptimizations.FoldLongConstant", foldLongConstantCount);
+			UpdateCounter("IROptimizations.SimplifyGeneral", simplifyGeneralCount);
+			UpdateCounter("IROptimizations.SimplifyParamLoad", simplifyParamLoadCount);
 
 			virtualRegisters.Clear();
 			worklist.Clear();
@@ -2494,6 +2495,50 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("AFTER: \t" + node);
 				foldIfThenElseCount++;
 			}
+		}
+
+		private void ReduceTemporaries(InstructionNode node)
+		{
+			if (!(node.Instruction == IRInstruction.LoadInt32
+				|| node.Instruction == IRInstruction.LoadInt64))
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (!node.Operand1.IsCPURegister)
+				return;
+
+			if (!node.Operand2.IsStackLocal)
+				return;
+
+			if (node.Operand2.Uses.Count == 0)
+				return;
+
+			var node2 = node.Operand2.Uses[0];
+
+			if (node2.Instruction != IRInstruction.AddressOf)
+				return;
+
+			if (!node2.Result.IsVirtualRegister)
+				return;
+
+			if (!node2.Operand1.IsStackLocal)
+				return;
+
+			BaseInstruction instruction = null;
+
+			if (node.Instruction == IRInstruction.LoadInt32)
+				instruction = IRInstruction.MoveInt32;
+			else if (node.Instruction == IRInstruction.LoadInt64)
+				instruction = IRInstruction.MoveInt64;
+
+			AddOperandUsageToWorkList(node);
+			if (trace.Active) trace.Log("*** ReduceTemporaries");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(instruction, node.Result, node2.Operand1);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			simplifyParamLoadCount++;
 		}
 	}
 }

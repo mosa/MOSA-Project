@@ -9,21 +9,18 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class Counters
 	{
-		private Dictionary<string, int> counters;
+		private Dictionary<string, int> counters = new Dictionary<string, int>();
 		private readonly object _lock = new object();
 
-		public void Clear()
+		public void Reset()
 		{
-			counters?.Clear();
+			counters.Clear();
 		}
 
 		public void Increment(string name, int count)
 		{
 			lock (_lock)
 			{
-				if (counters == null)
-					counters = new Dictionary<string, int>();
-
 				if (counters.ContainsKey(name))
 					counters[name] += count;
 				else
@@ -35,9 +32,6 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (_lock)
 			{
-				if (counters == null)
-					counters = new Dictionary<string, int>();
-
 				if (counters.ContainsKey(name))
 					counters[name] = count;
 				else
@@ -47,9 +41,6 @@ namespace Mosa.Compiler.Framework
 
 		public void UpdateNoLock(string name, int count)
 		{
-			if (counters == null)
-				counters = new Dictionary<string, int>();
-
 			if (counters.ContainsKey(name))
 				counters[name] = count;
 			else

@@ -489,10 +489,10 @@ namespace Mosa.Compiler.Framework
 				throw new CompilerException();
 			}
 
-			if (!(operand.IsInteger || operand.IsBoolean || operand.IsChar || operand.IsPointer || operand.IsReferenceType))
-			{
-				throw new CompilerException();
-			}
+			//if (!(operand.IsInteger || operand.IsBoolean || operand.IsChar || operand.IsPointer || operand.IsReferenceType))
+			//{
+			//	throw new CompilerException();
+			//}
 
 			return operand;
 		}
