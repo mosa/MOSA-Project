@@ -6,7 +6,7 @@ namespace Mosa.UnitTest.Collection
 {
 	public static class ArrayTest
 	{
-		[MosaUnitTestAttribute]
+		[MosaUnitTest]
 		public static bool BoundsCheck()
 		{
 			var myArray = new int[1];

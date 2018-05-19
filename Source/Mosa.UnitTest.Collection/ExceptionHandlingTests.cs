@@ -6,6 +6,7 @@ namespace Mosa.UnitTest.Collection
 {
 	public static class _ExceptionHandlingTests
 	{
+		[MosaUnitTest]
 		public static int TryFinally1()
 		{
 			int a = 10;
@@ -23,6 +24,7 @@ namespace Mosa.UnitTest.Collection
 			return a;
 		}
 
+		[MosaUnitTest]
 		public static int TryFinally2()
 		{
 			int a = 10;
@@ -44,6 +46,7 @@ namespace Mosa.UnitTest.Collection
 			return c;
 		}
 
+		[MosaUnitTest]
 		public static int TryFinally3()
 		{
 			int a = 10;
@@ -68,6 +71,7 @@ namespace Mosa.UnitTest.Collection
 			return a;
 		}
 
+		[MosaUnitTest]
 		public static int TryFinally4()
 		{
 			int a = 10;
@@ -111,6 +115,7 @@ namespace Mosa.UnitTest.Collection
 			return a;
 		}
 
+		[MosaUnitTest]
 		public static int TryFinally5()
 		{
 			int a = 10;
@@ -133,6 +138,7 @@ namespace Mosa.UnitTest.Collection
 			return a;
 		}
 
+		[MosaUnitTest]
 		public static int TryFinally6()
 		{
 			int a = 10;
@@ -168,6 +174,7 @@ namespace Mosa.UnitTest.Collection
 			return a;
 		}
 
+		[MosaUnitTest]
 		public static int TryFinally7()
 		{
 			// This doesn't actually generate a try/finally
@@ -176,6 +183,7 @@ namespace Mosa.UnitTest.Collection
 			return TryFinally7Part();
 		}
 
+		[MosaUnitTest]
 		private static int TryFinally7Part()
 		{
 			int[] b = new int[10];
@@ -192,6 +200,7 @@ namespace Mosa.UnitTest.Collection
 			return 0;
 		}
 
+		[MosaUnitTest]
 		public static int ExceptionTest1()
 		{
 			int a = 10;
@@ -215,6 +224,7 @@ namespace Mosa.UnitTest.Collection
 			return a;
 		}
 
+		[MosaUnitTest]
 		public static int ExceptionTest2()
 		{
 			int a = 10;
@@ -242,6 +252,7 @@ namespace Mosa.UnitTest.Collection
 			return a;
 		}
 
+		[MosaUnitTest]
 		public static int ExceptionTest3()
 		{
 			int a = 10;
@@ -276,6 +287,7 @@ namespace Mosa.UnitTest.Collection
 			return a;
 		}
 
+		[MosaUnitTest]
 		public static int ExceptionTest4()
 		{
 			int a = 10;
@@ -315,6 +327,7 @@ namespace Mosa.UnitTest.Collection
 			return a;
 		}
 
+		[MosaUnitTest]
 		public static int ExceptionTest5()
 		{
 			int a = 10;
@@ -337,6 +350,7 @@ namespace Mosa.UnitTest.Collection
 			throw new Exception();
 		}
 
+		[MosaUnitTest]
 		public static int ExceptionTest6()
 		{
 			int a = 10;
@@ -370,6 +384,7 @@ namespace Mosa.UnitTest.Collection
 			}
 		}
 
+		[MosaUnitTest]
 		public static int ExceptionTest7()
 		{
 			int a = 10;
@@ -408,6 +423,7 @@ namespace Mosa.UnitTest.Collection
 			}
 		}
 
+		[MosaUnitTest]
 		public static int ExceptionTest8()
 		{
 			int a = 10;
@@ -457,6 +473,7 @@ namespace Mosa.UnitTest.Collection
 			}
 		}
 
+		[MosaUnitTest]
 		public static ulong ExceptionTest9()
 		{
 			ulong n = 1;
@@ -501,6 +518,7 @@ namespace Mosa.UnitTest.Collection
 		{
 		}
 
+		[MosaUnitTest]
 		public static ulong ExceptionTest10()
 		{
 			ulong n = 1;
@@ -536,6 +554,7 @@ namespace Mosa.UnitTest.Collection
 			throw new Exception();
 		}
 
+		[MosaUnitTest]
 		public static int ExceptionTest11()
 		{
 			int a = 10;
@@ -556,6 +575,7 @@ namespace Mosa.UnitTest.Collection
 			return a;
 		}
 
+		[MosaUnitTest]
 		public static int ExceptionTest12()
 		{
 			int a = 10;
@@ -580,6 +600,7 @@ namespace Mosa.UnitTest.Collection
 			return a;
 		}
 
+		[MosaUnitTest]
 		public static int ExceptionTest13()
 		{
 			try
@@ -594,7 +615,7 @@ namespace Mosa.UnitTest.Collection
 			return 321;
 		}
 
-		public static int ExceptionTest13b()
+		private static int ExceptionTest13b()
 		{
 			int a = 10;
 

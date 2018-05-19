@@ -29,7 +29,7 @@ namespace Mosa.UnitTest.Collection
 			return (!first);
 		}
 
-		[MosaUnitTestAttribute]
+		[MosaUnitTest]
 		public static bool Newarr()
 		{
 			bool[] arr = new bool[0];

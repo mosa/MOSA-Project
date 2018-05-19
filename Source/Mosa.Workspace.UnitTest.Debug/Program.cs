@@ -49,6 +49,9 @@ namespace Mosa.Workspace.UnitTest.Debug
 
 		private static List<UnitTest> CreateUnitTests()
 		{
+			var combinationType = Assembly.Load("Mosa.UnitTest.Numbers").GetTypes().First(t => t.Name == "Combinations");
+			var seriesType = Assembly.Load("Mosa.UnitTest.Numbers").GetTypes().First(t => t.Name == "Series");
+
 			var unitTests = new List<UnitTest>();
 
 			var assembly = typeof(MosaUnitTestAttribute).Assembly;
@@ -90,11 +93,12 @@ namespace Mosa.Workspace.UnitTest.Debug
 					}
 					else if (attribute.Series != null)
 					{
-						var type = Assembly.Load("Mosa.UnitTest.Numbers").GetTypes().First(t => t.Name == "Combinations");
+						var property = combinationType.GetProperty(attribute.Series);
 
-						var seriesProperty = type.GetProperty(attribute.Series);
+						if (property == null)
+							property = seriesType.GetProperty(attribute.Series);
 
-						var value = seriesProperty.GetValue("Value");
+						var value = property.GetValue("Value");
 
 						var parameters = ((IEnumerable<object[]>)value).ToArray();
 

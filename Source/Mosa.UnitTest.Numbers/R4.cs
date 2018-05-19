@@ -59,7 +59,7 @@ namespace Mosa.UnitTest.Numbers
 			foreach (float value in list)
 			{
 				if (value > 0)
-					negs.AddIfNew<float>(-value);
+					negs.Add(-value);
 			}
 
 			return negs;

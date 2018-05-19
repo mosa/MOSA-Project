@@ -4,6 +4,7 @@ namespace Mosa.UnitTest.Collection
 {
 	public static class OptimizationTests
 	{
+		[MosaUnitTest]
 		public static bool OptimizationTest1()
 		{
 			int a = 10;
@@ -14,6 +15,7 @@ namespace Mosa.UnitTest.Collection
 			return c == 30;
 		}
 
+		[MosaUnitTest]
 		public static bool OptimizationTest2()
 		{
 			uint a = 10;
@@ -24,6 +26,7 @@ namespace Mosa.UnitTest.Collection
 			return c == 30;
 		}
 
+		[MosaUnitTest]
 		public static bool OptimizationTest3()
 		{
 			byte a = 10;
@@ -34,6 +37,7 @@ namespace Mosa.UnitTest.Collection
 			return c == 30;
 		}
 
+		[MosaUnitTest]
 		public static bool OptimizationTest4()
 		{
 			ulong a = 10;
@@ -44,6 +48,7 @@ namespace Mosa.UnitTest.Collection
 			return c == 30;
 		}
 
+		[MosaUnitTest]
 		public static bool OptimizationTest5()
 		{
 			ulong a = ulong.MaxValue;
@@ -54,6 +59,7 @@ namespace Mosa.UnitTest.Collection
 			return c == unchecked(ulong.MaxValue + 20);
 		}
 
+		[MosaUnitTest]
 		public static bool OptimizationTest6()
 		{
 			char a = (char)10;
@@ -64,6 +70,7 @@ namespace Mosa.UnitTest.Collection
 			return c == 30;
 		}
 
+		[MosaUnitTest]
 		public static bool OptimizationTest7()
 		{
 			ulong a = 10;
@@ -74,6 +81,7 @@ namespace Mosa.UnitTest.Collection
 			return c == 0;
 		}
 
+		[MosaUnitTest]
 		public static bool OptimizationTest8()
 		{
 			int a = 10;
@@ -84,6 +92,7 @@ namespace Mosa.UnitTest.Collection
 			return c == 0;
 		}
 
+		[MosaUnitTest]
 		public static bool OptimizationTest9()
 		{
 			ulong a = 10;
@@ -94,6 +103,7 @@ namespace Mosa.UnitTest.Collection
 			return c == 10;
 		}
 
+		[MosaUnitTest]
 		public static bool OptimizationTest10()
 		{
 			int a = 1;
@@ -104,6 +114,7 @@ namespace Mosa.UnitTest.Collection
 			return c == 10;
 		}
 
+		[MosaUnitTest]
 		public static bool OptimizationTest11()
 		{
 			int a = 0;
@@ -114,6 +125,7 @@ namespace Mosa.UnitTest.Collection
 			return c == 0;
 		}
 
+		[MosaUnitTest]
 		public static int OptimizationTest12()
 		{
 			int a = 32;
@@ -127,6 +139,7 @@ namespace Mosa.UnitTest.Collection
 			return z;
 		}
 
+		[MosaUnitTest(Series = "I4")]
 		public static int OptimizationTest13(int q)
 		{
 			int a = 10;
@@ -137,6 +150,7 @@ namespace Mosa.UnitTest.Collection
 			return c;
 		}
 
+		[MosaUnitTest]
 		public static int ConditionalConstantPropagation1()
 		{
 			int i = 1;
@@ -159,6 +173,7 @@ namespace Mosa.UnitTest.Collection
 			return j;
 		}
 
+		[MosaUnitTest]
 		public static int ConditionalConstantPropagation2()
 		{
 			int a = 3;
@@ -177,6 +192,7 @@ namespace Mosa.UnitTest.Collection
 			return z;
 		}
 
+		[MosaUnitTest(Series = "I4I4")]
 		public static bool ConditionalConstantPropagation3(int a, int b)
 		{
 			int x, y, z;

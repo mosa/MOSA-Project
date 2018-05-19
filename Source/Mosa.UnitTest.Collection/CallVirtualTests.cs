@@ -14,14 +14,14 @@ namespace Mosa.UnitTest.Collection
 	{
 		public static VirtualDerived Instance;// = new VirtualDerived();
 
-		[MosaUnitTestAttribute]
+		[MosaUnitTest]
 		public static int TestVirtualCall()
 		{
 			Instance = new VirtualDerived();
 			return Instance.Test();
 		}
 
-		[MosaUnitTestAttribute]
+		[MosaUnitTest]
 		public static int TestBaseCall()
 		{
 			Instance = new VirtualDerived();
