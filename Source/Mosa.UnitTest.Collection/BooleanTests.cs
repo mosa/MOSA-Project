@@ -4,29 +4,34 @@ namespace Mosa.UnitTest.Collection
 {
 	public static class BooleanTests
 	{
+		[MosaUnitTest(Series = "B")]
 		public static bool RetB(bool first)
 		{
 			return first;
 		}
 
+		[MosaUnitTest(Series = "BB")]
 		public static bool AndBB(bool first, bool second)
 		{
-			return (first & second);
+			return first & second;
 		}
 
+		[MosaUnitTest(Series = "BB")]
 		public static bool OrBB(bool first, bool second)
 		{
-			return (first | second);
+			return first | second;
 		}
 
+		[MosaUnitTest(Series = "BB")]
 		public static bool XorBB(bool first, bool second)
 		{
-			return (first ^ second);
+			return first ^ second;
 		}
 
+		[MosaUnitTest(Series = "BB")]
 		public static bool NotB(bool first)
 		{
-			return (!first);
+			return !first;
 		}
 
 		[MosaUnitTest]
@@ -36,12 +41,14 @@ namespace Mosa.UnitTest.Collection
 			return arr != null;
 		}
 
+		[MosaUnitTest(Series = "I4Small")]
 		public static bool Ldlen(int length)
 		{
 			bool[] arr = new bool[length];
 			return arr.Length == length;
 		}
 
+		[MosaUnitTest(Series = "I4SmallB")]
 		public static bool Ldelem(int index, bool value)
 		{
 			bool[] arr = new bool[index + 1];
@@ -49,6 +56,7 @@ namespace Mosa.UnitTest.Collection
 			return value == arr[index];
 		}
 
+		[MosaUnitTest(Series = "I4SmallB")]
 		public static bool Stelem(int index, bool value)
 		{
 			bool[] arr = new bool[index + 1];
@@ -56,6 +64,7 @@ namespace Mosa.UnitTest.Collection
 			return true;
 		}
 
+		[MosaUnitTest(Series = "I4SmallB")]
 		public static bool Ldelema(int index, bool value)
 		{
 			bool[] arr = new bool[index + 1];

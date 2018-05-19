@@ -45,6 +45,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitTestHelper.cs" />
+    <Compile Include="UnitTest.cs" />
+    <Compile Include="UnitTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -3,17 +3,18 @@ using System;
 
 namespace Mosa.UnitTest.Collection
 {
-
 	public static class BoxingTests 
 	{
-		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
-	
-		public static <#= number.Key #> Box<#= number.Value #>(<#= number.Key #> value) 
+<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
+
+		[MosaUnitTest(Series = "<#= number.Value #>")]
+		public static <#= number.Key #> Box<#= number.Value #>(<#= number.Key #> value)
 		{
 			object o = value;
 			return (<#= number.Key #>)o;
 		}
 
+		[MosaUnitTest(Series = "<#= number.Value #>")]
 		public static bool Equals<#= number.Value #>(<#= number.Key #> value)
 		{
 			object o = value;

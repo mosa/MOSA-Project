@@ -2,7 +2,7 @@
 
 namespace Mosa.UnitTest.Collection
 {
-	public class ArrayLayoutTests
+	public static class ArrayLayoutTests
 	{
 		[MosaUnitTest]
 		public static bool B()

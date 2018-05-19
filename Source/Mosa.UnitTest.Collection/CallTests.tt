@@ -6,14 +6,15 @@ namespace Mosa.UnitTest.Collection
 
 	public static class CallTests 
 	{
-	<# foreach (KeyValuePair<string, string> number in IntegersWithChar) { #>
+<# foreach (KeyValuePair<string, string> number in IntegersWithChar) { #>
 
-		public static bool Call<#= number.Value #>(<#= number.Key #> value) 
+		[MosaUnitTest(Series = "<#= number.Value #>")]
+		public static bool Call<#= number.Value #>(<#= number.Key #> value)
 		{ 
 			return value == CallTarget<#= number.Value #>(value); 
 		} 
 
-		private static <#= number.Key #> CallTarget<#= number.Value #>(<#= number.Key #> value) 
+		private static <#= number.Key #> CallTarget<#= number.Value #>(<#= number.Key #> value)
 		{ 
 			return value; 
 		}					
