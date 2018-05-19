@@ -108,8 +108,6 @@ namespace Mosa.UnitTest.Engine
 
 			Initialize();
 
-			//stopwatch.Start();
-
 			processThread = new Thread(ProcessQueue)
 			{
 				Name = "ProcesQueue"
@@ -280,15 +278,6 @@ namespace Mosa.UnitTest.Engine
 
 			QueueMessage(message);
 
-			//// for performance test --- create 1000 more to send
-			//var testMessage = new DebugMessage(message.Code, message.CommandData);
-			//testMessage.CallBack = MessageCallBack;
-
-			//for (int i = 0; i < 1000; i++)
-			//{
-			//	QueueMessage(testMessage);
-			//}
-
 			while (!request.HasResult)
 			{
 				Thread.Sleep(25);
@@ -311,6 +300,38 @@ namespace Mosa.UnitTest.Engine
 				Debug.Fail(String.Format("Failed to convert result {0} of destination {1} destination type {2}.", result, result.GetType(), typeof(T).ToString()));
 				throw;
 			}
+		}
+
+		public object Execute(string fullMethodName, params object[] parameters)
+		{
+			int first = fullMethodName.LastIndexOf(".");
+			int second = fullMethodName.LastIndexOf(".", first - 1);
+
+			string ns = fullMethodName.Substring(0, second);
+			string type = fullMethodName.Substring(second + 1, first - second - 1);
+			string method = fullMethodName.Substring(first + 1);
+
+			return Execute(ns, type, method, parameters);
+		}
+
+		public object Execute(string ns, string type, string method, params object[] parameters)
+		{
+			CheckCompiled();
+
+			var request = new UnitTestRequest(ns, type, method, parameters);
+
+			request.Resolve(typeSystem, linker);
+
+			var message = new DebugMessage(DebugCode.ExecuteUnitTest, request.Message, request);
+
+			QueueMessage(message);
+
+			while (!request.HasResult)
+			{
+				Thread.Sleep(25);
+			}
+
+			return request.Result;
 		}
 
 		private bool CheckCompiled()

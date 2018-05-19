@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mosa.UnitTest.Numbers
 {
@@ -21,24 +22,26 @@ namespace Mosa.UnitTest.Numbers
 
 		public static IList<uint> GetSeries()
 		{
-			List<uint> list = new List<uint>();
+			var list = new List<uint>
+			{
+				0,
+				1,
+				2,
+				byte.MinValue,
+				byte.MaxValue,
+				byte.MinValue + 1,
+				byte.MaxValue - 1,
+				ushort.MinValue,
+				ushort.MaxValue,
+				ushort.MinValue + 1,
+				ushort.MaxValue - 1,
+				uint.MinValue,
+				uint.MaxValue,
+				uint.MinValue + 1,
+				uint.MaxValue - 1
+			};
 
-			list.AddIfNew<uint>(0);
-			list.AddIfNew<uint>(1);
-			list.AddIfNew<uint>(2);
-			list.AddIfNew<uint>(byte.MinValue);
-			list.AddIfNew<uint>(byte.MaxValue);
-			list.AddIfNew<uint>(byte.MinValue + 1);
-			list.AddIfNew<uint>(byte.MaxValue - 1);
-			list.AddIfNew<uint>(ushort.MinValue);
-			list.AddIfNew<uint>(ushort.MaxValue);
-			list.AddIfNew<uint>(ushort.MinValue + 1);
-			list.AddIfNew<uint>(ushort.MaxValue - 1);
-			list.AddIfNew<uint>(uint.MinValue);
-			list.AddIfNew<uint>(uint.MaxValue);
-			list.AddIfNew<uint>(uint.MinValue + 1);
-			list.AddIfNew<uint>(uint.MaxValue - 1);
-
+			list = list.Distinct().ToList();
 			list.Sort();
 
 			return list;

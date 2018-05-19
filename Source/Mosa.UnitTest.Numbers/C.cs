@@ -21,22 +21,23 @@ namespace Mosa.UnitTest.Numbers
 
 		public static IList<char> GetSeries()
 		{
-			List<char> list = new List<char>();
-
-			list.AddIfNew<char>((char)1);
-			list.AddIfNew<char>((char)2);
-			list.AddIfNew<char>((char)127);
-			list.AddIfNew<char>(char.MinValue);
-			list.AddIfNew<char>(char.MaxValue);
-			list.AddIfNew<char>('0');
-			list.AddIfNew<char>('9');
-			list.AddIfNew<char>('A');
-			list.AddIfNew<char>('Z');
-			list.AddIfNew<char>('a');
-			list.AddIfNew<char>('z');
-			list.AddIfNew<char>(' ');
-			list.AddIfNew<char>('\n');
-			list.AddIfNew<char>('\t');
+			var list = new List<char>
+			{
+				(char)1,
+				(char)2,
+				(char)127,
+				char.MinValue,
+				char.MaxValue,
+				'0',
+				'9',
+				'A',
+				'Z',
+				'a',
+				'z',
+				' ',
+				'\n',
+				'\t'
+			};
 
 			list.Sort();
 

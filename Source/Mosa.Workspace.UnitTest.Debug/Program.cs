@@ -1,10 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.UnitTest.Collection;
 using Mosa.UnitTest.Engine;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
+using System.Linq;
+using System.Reflection;
 
 namespace Mosa.Workspace.UnitTest.Debug
 {
@@ -12,78 +14,174 @@ namespace Mosa.Workspace.UnitTest.Debug
 	{
 		private static readonly UnitTestEngine unitTestEngine = new UnitTestEngine();
 
+		public class UnitTest
+		{
+			public string FullMethodName { get; set; }
+			public MethodInfo Method { get; set; }
+			public MosaUnitTestAttribute UnitTestAttribute { get; set; }
+			public object[] ParameterValues { get; set; }
+			public object Expected { get; set; }
+			public object Result { get; set; }
+			public bool Skipped { get; set; }
+			public bool Passed { get; set; }
+		}
+
 		private static void Main()
 		{
-			Stopwatch stopwatch = new Stopwatch();
-
-			//unitTestEngine.Options.BootLoaderImage = @"..\Tests\BootImage\Mosa.BootLoader.x86.img"
+			var stopwatch = new Stopwatch();
 
 			unitTestEngine.Initialize();
 
 			stopwatch.Start();
 
-			var list = new List<Thread>();
+			var unitTests = CreateUnitTests();
 
-			for (int i = 0; i < 1; i++)
-			{
-				var thread = new Thread(LaunchTest)
-				{
-					Name = "#" + i.ToString()
-				};
+			Console.WriteLine("Tests: " + unitTests.Count.ToString());
+			Console.WriteLine("Time: " + stopwatch.ElapsedMilliseconds + " ms");
 
-				//thread.IsBackground = true;
-				thread.Start();
-				list.Add(thread);
-			}
-
-			foreach (var thread in list)
-			{
-				thread.Join();
-			}
+			ExecuteUnitTests(unitTests);
 
 			stopwatch.Stop();
 			Console.WriteLine("Time: " + stopwatch.ElapsedMilliseconds + " ms");
 
 			((IDisposable)(unitTestEngine)).Dispose();
-
-			return;
 		}
 
-		private static void LaunchTest()
+		private static List<UnitTest> CreateUnitTests()
 		{
-			Console.WriteLine("Thread Start: " + Thread.CurrentThread.Name);
+			var unitTests = new List<UnitTest>();
 
-			for (int i = 0; i < 3; i++)
+			var assembly = typeof(MosaUnitTestAttribute).Assembly;
+
+			var methods = assembly.GetTypes()
+					  .SelectMany(t => t.GetMethods())
+					  .Where(m => m.GetCustomAttributes(typeof(MosaUnitTestAttribute), false).Length > 0)
+					  .ToArray();
+
+			foreach (var method in methods)
 			{
-				int value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 1, 2);
+				var fullMethodName = method.DeclaringType.FullName + "." + method.Name;
 
-				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 3, 4);
+				foreach (var attribute in method.GetCustomAttributes<MosaUnitTestAttribute>())
+				{
+					if (attribute.Series == null)
+					{
+						var unitTest = new UnitTest()
+						{
+							Method = method,
+							FullMethodName = fullMethodName,
+							ParameterValues = null,
+							UnitTestAttribute = attribute,
+						};
 
-				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 5, 6);
-				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 7, 8);
-				value = unitTestEngine.Run<int>("Mosa.UnitTest.Collection", "Int32Tests", "AddI4I4", 9, 0);
+						unitTest.Skipped = false;
 
-				const double a1 = 7;
-				const double b1 = 9;
+						try
+						{
+							unitTest.Expected = unitTest.Method.Invoke(null, unitTest.ParameterValues);
+						}
+						catch (Exception e)
+						{
+							unitTest.Skipped = true;
+						}
 
-				var d1 = unitTestEngine.Run<double>("Mosa.UnitTest.Collection", "DoubleTests", "AddR8R8", a1, b1);
+						if (!unitTest.Skipped)
+							unitTests.Add(unitTest);
+					}
+					else if (attribute.Series != null)
+					{
+						var type = Assembly.Load("Mosa.UnitTest.Numbers").GetTypes().First(t => t.Name == "Combinations");
 
-				//var d2 = DoubleTests.AddR8R8(a1, b1);
+						var seriesProperty = type.GetProperty(attribute.Series);
 
-				//float a2 = 7;
-				//float b2 = 9;
+						var value = seriesProperty.GetValue("Value");
 
-				//var d1a = unitTestEngine.Run<float>("Mosa.UnitTest.Collection", "SingleTests", "AddR4R4", a2, b2);
-				//var d2a = SingleTests.AddR4R4(a2, b2);
+						var parameters = ((IEnumerable<object[]>)value).ToArray();
 
-				//var b1b = unitTestEngine.Run<bool>("Mosa.UnitTest.Collection", "ValueTypeTests", "TestValueTypeStaticField");
-				//var b2b = ValueTypeTests.TestValueTypeStaticField();
+						foreach (var param in parameters)
+						{
+							var unitTest = new UnitTest()
+							{
+								Method = method,
+								FullMethodName = fullMethodName,
+								ParameterValues = param,
+								UnitTestAttribute = attribute,
+							};
 
-				//var z = unitTestEngine.Run<bool>("Mosa.UnitTest.Collection", "LdlocaTests", "LdlocaCheckValueR8", 1d);
-				return;
+							unitTest.Skipped = false;
+
+							try
+							{
+								unitTest.Expected = unitTest.Method.Invoke(null, unitTest.ParameterValues);
+							}
+							catch (Exception e)
+							{
+								unitTest.Skipped = true;
+							}
+
+							if (!unitTest.Skipped)
+								unitTests.Add(unitTest);
+						}
+					}
+				}
 			}
 
-			Console.WriteLine("Thread End: " + Thread.CurrentThread.Name);
+			return unitTests;
+		}
+
+		private static void ExecuteUnitTests(List<UnitTest> unitTests)
+		{
+			foreach (var unitTest in unitTests)
+			{
+
+				if (!unitTest.Skipped)
+				{
+					unitTest.Result = unitTest.ParameterValues == null
+						? unitTestEngine.Execute(unitTest.FullMethodName)
+						: unitTestEngine.Execute(unitTest.FullMethodName, unitTest.ParameterValues);
+					unitTest.Passed = unitTest.Result.Equals(unitTest.Expected);
+
+				}
+
+				if (unitTest.Skipped)
+				{
+					Console.Write("[Skipped] ");
+				}
+				else
+				{
+					if (unitTest.Passed)
+						Console.Write("[Passed] ");
+					else
+						Console.Write("[FAILED] ");
+
+				}
+
+				Console.Write(unitTest.FullMethodName.Substring(25));
+				Console.Write("(");
+
+				if (unitTest.ParameterValues != null)
+				{
+					bool first = true;
+					foreach (var param in unitTest.ParameterValues)
+					{
+						if (first)
+						{
+							first = false;
+						}
+						else
+						{
+							Console.Write(", ");
+						}
+
+						Console.Write(param.ToString());
+					}
+				}
+
+				Console.Write(")");
+
+				Console.Write(" Expected: " + unitTest.Expected);
+				Console.WriteLine(" => " + unitTest.Result);
+			}
 		}
 	}
 }

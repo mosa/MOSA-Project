@@ -122,6 +122,7 @@
     </Compile>
     <Compile Include="GenericMethodTests.cs" />
     <Compile Include="GenericMixedTest.cs" />
+    <Compile Include="MosaUnitTestAttribute.cs" />
     <Compile Include="NullCheckOptimizationTests.cs" />
     <Compile Include="RemTests.cs" />
     <Compile Include="LargeSwitchTest.cs" />

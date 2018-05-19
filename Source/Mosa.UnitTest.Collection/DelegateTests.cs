@@ -10,12 +10,14 @@ namespace Mosa.UnitTest.Collection
 
 		private delegate void DelegateVoid();
 
+		[MosaUnitTestAttribute]
 		public static bool DefineDelegate()
 		{
 			DelegateVoid d = DelegateVoidTarget1;
 			return d != null;
 		}
 
+		[MosaUnitTestAttribute]
 		public static int CallDelegateVoid1()
 		{
 			status = 0;
@@ -24,6 +26,7 @@ namespace Mosa.UnitTest.Collection
 			return status;
 		}
 
+		[MosaUnitTestAttribute]
 		public static int CallDelegateVoid2()
 		{
 			status = 0;
@@ -32,6 +35,7 @@ namespace Mosa.UnitTest.Collection
 			return status;
 		}
 
+		[MosaUnitTestAttribute]
 		public static int ReassignDelegateVoid()
 		{
 			status = 0;
@@ -274,6 +278,7 @@ namespace Mosa.UnitTest.Collection
 
 		private delegate int ReturnInt();
 
+		[MosaUnitTestAttribute]
 		public static int InlineDelegate1()
 		{
 			ReturnInt o = delegate { return 124; };
@@ -285,6 +290,7 @@ namespace Mosa.UnitTest.Collection
 
 		private static ReturnInt here;
 
+		[MosaUnitTestAttribute]
 		public static int InlineDelegate2()
 		{
 			here = delegate { return 124; };
@@ -299,6 +305,7 @@ namespace Mosa.UnitTest.Collection
 			public ReturnInt Delegate;
 		}
 
+		[MosaUnitTestAttribute]
 		public static int InlineDelegate3()
 		{
 			var o = new MyDelegateObject { Delegate = delegate { return 124; } };
@@ -308,6 +315,7 @@ namespace Mosa.UnitTest.Collection
 
 		private static readonly MyDelegateObject myObject = new MyDelegateObject();
 
+		[MosaUnitTestAttribute]
 		public static int InlineDelegate4()
 		{
 			myObject.Delegate = delegate { return 124; };
@@ -315,6 +323,7 @@ namespace Mosa.UnitTest.Collection
 			return 0;
 		}
 
+		[MosaUnitTestAttribute]
 		public static int InlineDelegate5()
 		{
 			myObject.Delegate = delegate { return 124; };

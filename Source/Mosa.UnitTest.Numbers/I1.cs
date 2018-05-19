@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mosa.UnitTest.Numbers
 {
@@ -21,35 +22,32 @@ namespace Mosa.UnitTest.Numbers
 
 		public static IList<sbyte> GetSeries()
 		{
-			List<sbyte> list = new List<sbyte>();
+			var list = new List<sbyte>
+			{
+				0,
+				1,
+				2,
+				sbyte.MinValue,
+				sbyte.MaxValue,
+				sbyte.MinValue + 1,
+				sbyte.MaxValue - 1
+			};
 
-			list.Add(0);
-			list.Add(1);
-			list.Add(2);
-			list.Add(sbyte.MinValue);
-			list.Add(sbyte.MaxValue);
-			list.Add(sbyte.MinValue + 1);
-			list.Add(sbyte.MaxValue - 1);
+			AddNegatives(list);
 
-			// Get negatives
-			list.AddIfNew(GetNegatives(list));
-
+			list = list.Distinct().ToList();
 			list.Sort();
 
 			return list;
 		}
 
-		private static IList<sbyte> GetNegatives(IList<sbyte> list)
+		private static void AddNegatives(IList<sbyte> list)
 		{
-			List<sbyte> negs = new List<sbyte>();
-
-			foreach (sbyte value in list)
+			foreach (var value in list.ToArray())
 			{
 				if (value > 0)
-					negs.AddIfNew<sbyte>((sbyte)-value);
+					list.Add((sbyte)-value);
 			}
-
-			return negs;
 		}
 	}
 }

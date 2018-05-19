@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mosa.UnitTest.Numbers
 {
@@ -21,29 +22,31 @@ namespace Mosa.UnitTest.Numbers
 
 		public static IList<float> GetSeries()
 		{
-			List<float> list = new List<float>();
+			var list = new List<float>
+			{
+				0,
+				1,
+				2,
+				float.MinValue,
+				float.MaxValue,
+				float.NaN,
+				float.PositiveInfinity,
+				float.NegativeInfinity,
+				1.00012f,
+				17.0002501f,
+				23f,
+				12321452132.561f,
 
-			list.Add(0);
-			list.Add(1);
-			list.Add(2);
-			list.Add(float.MinValue);
-			list.Add(float.MaxValue);
-			list.Add(float.NaN);
-			list.Add(float.PositiveInfinity);
-			list.Add(float.NegativeInfinity);
-			list.Add(1.00012f);
-			list.Add(17.0002501f);
-			list.Add(23f);
-			list.Add(12321452132.561f);
+				// negatives
+				-1,
+				-2,
+				-1.00012f,
+				-17.0002501f,
+				-23f,
+				-12321452132.561f
+			};
 
-			// negatives
-			list.Add(-1);
-			list.Add(-2);
-			list.Add(-1.00012f);
-			list.Add(-17.0002501f);
-			list.Add(-23f);
-			list.Add(-12321452132.561f);
-
+			list = list.Distinct().ToList();
 			list.Sort();
 
 			return list;
@@ -51,7 +54,7 @@ namespace Mosa.UnitTest.Numbers
 
 		private static IList<float> GetNegatives(IList<float> list)
 		{
-			List<float> negs = new List<float>();
+			var negs = new List<float>();
 
 			foreach (float value in list)
 			{

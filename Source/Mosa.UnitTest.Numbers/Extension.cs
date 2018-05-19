@@ -15,7 +15,7 @@ namespace Mosa.UnitTest.Numbers
 		public static void AddIfNew<T>(this IList<T> list, IList<T> values)
 		{
 			foreach (T value in values)
-				list.AddIfNew<T>(value);
+				list.AddIfNew(value);
 		}
 	}
 }

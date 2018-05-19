@@ -89,6 +89,7 @@ namespace Mosa.UnitTest.Collection
 			return (first >= second);
 		}
 
+		[MosaUnitTestAttribute]
 		public static bool Newarr()
 		{
 			char[] arr = new char[0];

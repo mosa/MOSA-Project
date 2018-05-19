@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mosa.UnitTest.Numbers
 {
@@ -21,28 +22,30 @@ namespace Mosa.UnitTest.Numbers
 
 		public static IList<ulong> GetSeries()
 		{
-			List<ulong> list = new List<ulong>();
+			var list = new List<ulong>
+			{
+				0,
+				1,
+				2,
+				byte.MinValue,
+				byte.MaxValue,
+				byte.MinValue + 1,
+				byte.MaxValue - 1,
+				ushort.MinValue,
+				ushort.MaxValue,
+				ushort.MinValue + 1,
+				ushort.MaxValue - 1,
+				uint.MinValue,
+				uint.MaxValue,
+				uint.MinValue + 1,
+				uint.MaxValue - 1,
+				ulong.MinValue,
+				ulong.MaxValue,
+				ulong.MinValue + 1,
+				ulong.MaxValue - 1
+			};
 
-			list.AddIfNew<ulong>(0);
-			list.AddIfNew<ulong>(1);
-			list.AddIfNew<ulong>(2);
-			list.AddIfNew<ulong>(byte.MinValue);
-			list.AddIfNew<ulong>(byte.MaxValue);
-			list.AddIfNew<ulong>(byte.MinValue + 1);
-			list.AddIfNew<ulong>(byte.MaxValue - 1);
-			list.AddIfNew<ulong>(ushort.MinValue);
-			list.AddIfNew<ulong>(ushort.MaxValue);
-			list.AddIfNew<ulong>(ushort.MinValue + 1);
-			list.AddIfNew<ulong>(ushort.MaxValue - 1);
-			list.AddIfNew<ulong>(uint.MinValue);
-			list.AddIfNew<ulong>(uint.MaxValue);
-			list.AddIfNew<ulong>(uint.MinValue + 1);
-			list.AddIfNew<ulong>(uint.MaxValue - 1);
-			list.AddIfNew<ulong>(ulong.MinValue);
-			list.AddIfNew<ulong>(ulong.MaxValue);
-			list.AddIfNew<ulong>(ulong.MinValue + 1);
-			list.AddIfNew<ulong>(ulong.MaxValue - 1);
-
+			list = list.Distinct().ToList();
 			list.Sort();
 
 			return list;
