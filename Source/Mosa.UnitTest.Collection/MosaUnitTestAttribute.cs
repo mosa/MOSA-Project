@@ -25,11 +25,6 @@ namespace Mosa.UnitTest.Collection
 		{
 		}
 
-		public MosaUnitTestAttribute(String series)
-		{
-			Series = series;
-		}
-
 		public MosaUnitTestAttribute(object param1)
 		{
 			ParamCount = 1;
@@ -68,6 +63,46 @@ namespace Mosa.UnitTest.Collection
 			Param3 = param3;
 			Param4 = param4;
 			Param5 = param5;
+		}
+
+		public MosaUnitTestAttribute(string paramSeries1)
+		{
+			ParamCount = 1;
+			ParamSeries1 = paramSeries1;
+		}
+
+		public MosaUnitTestAttribute(string paramSeries1, string paramSeries2)
+		{
+			ParamCount = 2;
+			ParamSeries1 = paramSeries1;
+			ParamSeries2 = paramSeries2;
+		}
+
+		public MosaUnitTestAttribute(string paramSeries1, string paramSeries2, string paramSeries3)
+		{
+			ParamCount = 3;
+			ParamSeries1 = paramSeries1;
+			ParamSeries2 = paramSeries2;
+			ParamSeries3 = paramSeries3;
+		}
+
+		public MosaUnitTestAttribute(string paramSeries1, string paramSeries2, string paramSeries3, string paramSeries4)
+		{
+			ParamCount = 4;
+			ParamSeries1 = paramSeries1;
+			ParamSeries2 = paramSeries2;
+			ParamSeries3 = paramSeries3;
+			ParamSeries4 = paramSeries4;
+		}
+
+		public MosaUnitTestAttribute(string paramSeries1, string paramSeries2, string paramSeries3, string paramSeries4, string paramSeries5)
+		{
+			ParamCount = 5;
+			ParamSeries1 = paramSeries1;
+			ParamSeries2 = paramSeries2;
+			ParamSeries3 = paramSeries3;
+			ParamSeries4 = paramSeries4;
+			ParamSeries5 = paramSeries5;
 		}
 	}
 }

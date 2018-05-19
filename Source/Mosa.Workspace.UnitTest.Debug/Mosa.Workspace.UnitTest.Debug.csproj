@@ -45,6 +45,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CreateParameters.cs" />
     <Compile Include="UnitTestHelper.cs" />
     <Compile Include="UnitTest.cs" />
     <Compile Include="UnitTests.cs" />

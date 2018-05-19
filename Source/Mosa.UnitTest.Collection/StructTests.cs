@@ -18,7 +18,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one));
 		}
 
-		[MosaUnitTest(Series = "U1U1")]
+		//[MosaUnitTest(Series = "U1MiniU1Mini")]
 		public static bool StructTestSet2U1(byte one, byte two)
 		{
 			Struct3U1 structure;
@@ -29,7 +29,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 
-		[MosaUnitTest(Series = "U1U1U1")]
+		//[MosaUnitTest(Series = "U1MiniU1MiniU1Mini")]
 		public static bool StructTestSet3U1(byte one, byte two, byte three)
 		{
 			Struct3U1 structure;
@@ -51,7 +51,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one));
 		}
 
-		[MosaUnitTest(Series = "U2U2")]
+		//[MosaUnitTest(Series = "U2MiniU2Mini")]
 		public static bool StructTestSet2U2(ushort one, ushort two)
 		{
 			Struct3U2 structure;
@@ -62,7 +62,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 
-		[MosaUnitTest(Series = "U2U2U2")]
+		//[MosaUnitTest(Series = "U2MiniU2MiniU2Mini")]
 		public static bool StructTestSet3U2(ushort one, ushort two, ushort three)
 		{
 			Struct3U2 structure;
@@ -84,7 +84,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one));
 		}
 
-		[MosaUnitTest(Series = "U4U4")]
+		//[MosaUnitTest(Series = "U4MiniU4Mini")]
 		public static bool StructTestSet2U4(uint one, uint two)
 		{
 			Struct3U4 structure;
@@ -95,7 +95,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 
-		[MosaUnitTest(Series = "U4U4U4")]
+		//[MosaUnitTest(Series = "U4MiniU4MiniU4Mini")]
 		public static bool StructTestSet3U4(uint one, uint two, uint three)
 		{
 			Struct3U4 structure;
@@ -117,7 +117,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one));
 		}
 
-		[MosaUnitTest(Series = "U8U8")]
+		//[MosaUnitTest(Series = "U8MiniU8Mini")]
 		public static bool StructTestSet2U8(ulong one, ulong two)
 		{
 			Struct3U8 structure;
@@ -128,7 +128,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 
-		[MosaUnitTest(Series = "U8U8U8")]
+		//[MosaUnitTest(Series = "U8MiniU8MiniU8Mini")]
 		public static bool StructTestSet3U8(ulong one, ulong two, ulong three)
 		{
 			Struct3U8 structure;
@@ -150,7 +150,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one));
 		}
 
-		[MosaUnitTest(Series = "I1I1")]
+		//[MosaUnitTest(Series = "I1MiniI1Mini")]
 		public static bool StructTestSet2I1(sbyte one, sbyte two)
 		{
 			Struct3I1 structure;
@@ -161,7 +161,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 
-		[MosaUnitTest(Series = "I1I1I1")]
+		//[MosaUnitTest(Series = "I1MiniI1MiniI1Mini")]
 		public static bool StructTestSet3I1(sbyte one, sbyte two, sbyte three)
 		{
 			Struct3I1 structure;
@@ -183,7 +183,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one));
 		}
 
-		[MosaUnitTest(Series = "I2I2")]
+		//[MosaUnitTest(Series = "I2MiniI2Mini")]
 		public static bool StructTestSet2I2(short one, short two)
 		{
 			Struct3I2 structure;
@@ -194,7 +194,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 
-		[MosaUnitTest(Series = "I2I2I2")]
+		//[MosaUnitTest(Series = "I2MiniI2MiniI2Mini")]
 		public static bool StructTestSet3I2(short one, short two, short three)
 		{
 			Struct3I2 structure;
@@ -216,7 +216,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one));
 		}
 
-		[MosaUnitTest(Series = "I4I4")]
+		//[MosaUnitTest(Series = "I4MiniI4Mini")]
 		public static bool StructTestSet2I4(int one, int two)
 		{
 			Struct3I4 structure;
@@ -227,7 +227,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 
-		[MosaUnitTest(Series = "I4I4I4")]
+		//[MosaUnitTest(Series = "I4MiniI4MiniI4Mini")]
 		public static bool StructTestSet3I4(int one, int two, int three)
 		{
 			Struct3I4 structure;
@@ -249,7 +249,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one));
 		}
 
-		[MosaUnitTest(Series = "I8I8")]
+		//[MosaUnitTest(Series = "I8MiniI8Mini")]
 		public static bool StructTestSet2I8(long one, long two)
 		{
 			Struct3I8 structure;
@@ -260,7 +260,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 
-		[MosaUnitTest(Series = "I8I8I8")]
+		//[MosaUnitTest(Series = "I8MiniI8MiniI8Mini")]
 		public static bool StructTestSet3I8(long one, long two, long three)
 		{
 			Struct3I8 structure;
@@ -282,7 +282,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one));
 		}
 
-		[MosaUnitTest(Series = "R4R4")]
+		//[MosaUnitTest(Series = "R4MiniR4Mini")]
 		public static bool StructTestSet2R4(float one, float two)
 		{
 			Struct3R4 structure;
@@ -293,7 +293,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 
-		[MosaUnitTest(Series = "R4R4R4")]
+		//[MosaUnitTest(Series = "R4MiniR4MiniR4Mini")]
 		public static bool StructTestSet3R4(float one, float two, float three)
 		{
 			Struct3R4 structure;
@@ -315,7 +315,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one));
 		}
 
-		[MosaUnitTest(Series = "R8R8")]
+		//[MosaUnitTest(Series = "R8MiniR8Mini")]
 		public static bool StructTestSet2R8(double one, double two)
 		{
 			Struct3R8 structure;
@@ -326,7 +326,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 
-		[MosaUnitTest(Series = "R8R8R8")]
+		//[MosaUnitTest(Series = "R8MiniR8MiniR8Mini")]
 		public static bool StructTestSet3R8(double one, double two, double three)
 		{
 			Struct3R8 structure;
@@ -348,7 +348,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one));
 		}
 
-		[MosaUnitTest(Series = "CC")]
+		//[MosaUnitTest(Series = "CMiniCMini")]
 		public static bool StructTestSet2C(char one, char two)
 		{
 			Struct3C structure;
@@ -359,7 +359,7 @@ namespace Mosa.UnitTest.Collection
 			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
 
-		[MosaUnitTest(Series = "CCC")]
+		//[MosaUnitTest(Series = "CMiniCMiniCMini")]
 		public static bool StructTestSet3C(char one, char two, char three)
 		{
 			Struct3C structure;

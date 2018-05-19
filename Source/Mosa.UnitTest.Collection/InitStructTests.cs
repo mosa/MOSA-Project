@@ -19,100 +19,92 @@ namespace Mosa.UnitTest.Collection
 		public double ValueR8;
 		public bool ValueB;
 		public char ValueC;
-		public object ValueO;
 	}
 
 	public static class InitStructTests
 	{
-		[MosaUnitTest(Series = "U1")]
+		[MosaUnitTest]
 		public static byte InitStructU1()
 		{
 			InitStruct d = new InitStruct();
 			return d.ValueU1;
 		}
 
-		[MosaUnitTest(Series = "U2")]
+		[MosaUnitTest]
 		public static ushort InitStructU2()
 		{
 			InitStruct d = new InitStruct();
 			return d.ValueU2;
 		}
 
-		[MosaUnitTest(Series = "U4")]
+		[MosaUnitTest]
 		public static uint InitStructU4()
 		{
 			InitStruct d = new InitStruct();
 			return d.ValueU4;
 		}
 
-		[MosaUnitTest(Series = "U8")]
+		[MosaUnitTest]
 		public static ulong InitStructU8()
 		{
 			InitStruct d = new InitStruct();
 			return d.ValueU8;
 		}
 
-		[MosaUnitTest(Series = "I1")]
+		[MosaUnitTest]
 		public static sbyte InitStructI1()
 		{
 			InitStruct d = new InitStruct();
 			return d.ValueI1;
 		}
 
-		[MosaUnitTest(Series = "I2")]
+		[MosaUnitTest]
 		public static short InitStructI2()
 		{
 			InitStruct d = new InitStruct();
 			return d.ValueI2;
 		}
 
-		[MosaUnitTest(Series = "I4")]
+		[MosaUnitTest]
 		public static int InitStructI4()
 		{
 			InitStruct d = new InitStruct();
 			return d.ValueI4;
 		}
 
-		[MosaUnitTest(Series = "I8")]
+		[MosaUnitTest]
 		public static long InitStructI8()
 		{
 			InitStruct d = new InitStruct();
 			return d.ValueI8;
 		}
 
-		[MosaUnitTest(Series = "R4")]
+		[MosaUnitTest]
 		public static float InitStructR4()
 		{
 			InitStruct d = new InitStruct();
 			return d.ValueR4;
 		}
 
-		[MosaUnitTest(Series = "R8")]
+		[MosaUnitTest]
 		public static double InitStructR8()
 		{
 			InitStruct d = new InitStruct();
 			return d.ValueR8;
 		}
 
-		[MosaUnitTest(Series = "B")]
+		[MosaUnitTest]
 		public static bool InitStructB()
 		{
 			InitStruct d = new InitStruct();
 			return d.ValueB;
 		}
 
-		[MosaUnitTest(Series = "C")]
+		[MosaUnitTest]
 		public static char InitStructC()
 		{
 			InitStruct d = new InitStruct();
 			return d.ValueC;
-		}
-
-		[MosaUnitTest(Series = "O")]
-		public static object InitStructO()
-		{
-			InitStruct d = new InitStruct();
-			return d.ValueO;
 		}
 
 	}

@@ -1,5 +1,7 @@
 ﻿using Mosa.UnitTest.Collection;
 using System;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Mosa.Workspace.UnitTest.Debug

@@ -6,15 +6,15 @@ namespace Mosa.UnitTest.Collection
 {
 	internal struct InitStruct
 	{
-<# foreach (KeyValuePair<string, string> primitives in PrimitivesWithCharAndObject) { #>
+<# foreach (KeyValuePair<string, string> primitives in PrimitivesWithChar) { #>
 		public <#= primitives.Key #> Value<#= primitives.Value #>;
 <# } #>
 	}
 
 	public static class InitStructTests
 	{
-<# foreach (KeyValuePair<string, string> primitives in PrimitivesWithCharAndObject) {#>
-		[MosaUnitTest(Series = "<#= primitives.Value #>")]
+<# foreach (KeyValuePair<string, string> primitives in PrimitivesWithChar) {#>
+		[MosaUnitTest]
 		public static <#= primitives.Key #> InitStruct<#= primitives.Value #>()
 		{
 			InitStruct d = new InitStruct();
