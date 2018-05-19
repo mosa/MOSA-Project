@@ -4,32 +4,36 @@ namespace Mosa.UnitTest.Collection
 {
 	public static class LinkedListTests
 	{
+		[MosaUnitTest]
 		public static bool Create()
 		{
-			LinkedList<int> IntList = new LinkedList<int>();
+			var IntList = new LinkedList<int>();
 
 			return IntList != null;
 		}
 
+		[MosaUnitTest]
 		public static bool EmptySize()
 		{
-			LinkedList<int> IntList = new LinkedList<int>();
+			var IntList = new LinkedList<int>();
 
 			return IntList.Count == 0;
 		}
 
+		[MosaUnitTest]
 		public static bool Size1()
 		{
-			LinkedList<int> IntList = new LinkedList<int>();
+			var IntList = new LinkedList<int>();
 
 			IntList.AddLast(101);
 
 			return IntList.Count == 1;
 		}
 
+		[MosaUnitTest]
 		public static bool Size2()
 		{
-			LinkedList<int> IntList = new LinkedList<int>();
+			var IntList = new LinkedList<int>();
 
 			IntList.AddLast(101);
 			IntList.AddLast(202);
@@ -37,18 +41,20 @@ namespace Mosa.UnitTest.Collection
 			return IntList.Count == 2;
 		}
 
+		[MosaUnitTest]
 		public static bool First1()
 		{
-			LinkedList<int> IntList = new LinkedList<int>();
+			var IntList = new LinkedList<int>();
 
 			IntList.AddLast(101);
 
 			return IntList.First.Value == 101;
 		}
 
+		[MosaUnitTest]
 		public static bool First2()
 		{
-			LinkedList<int> IntList = new LinkedList<int>();
+			var IntList = new LinkedList<int>();
 
 			IntList.AddLast(101);
 			IntList.AddLast(202);
@@ -56,18 +62,20 @@ namespace Mosa.UnitTest.Collection
 			return IntList.First.Value == 101;
 		}
 
+		[MosaUnitTest]
 		public static bool Last1()
 		{
-			LinkedList<int> IntList = new LinkedList<int>();
+			var IntList = new LinkedList<int>();
 
 			IntList.AddLast(101);
 
 			return IntList.Last.Value == 101;
 		}
 
+		[MosaUnitTest]
 		public static bool Last2()
 		{
-			LinkedList<int> IntList = new LinkedList<int>();
+			var IntList = new LinkedList<int>();
 
 			IntList.AddLast(101);
 			IntList.AddLast(202);
@@ -77,7 +85,7 @@ namespace Mosa.UnitTest.Collection
 
 		private static LinkedList<int> Populate()
 		{
-			LinkedList<int> IntList = new LinkedList<int>();
+			var IntList = new LinkedList<int>();
 
 			for (int i = 1; i < 10; i++)
 			{
@@ -97,6 +105,7 @@ namespace Mosa.UnitTest.Collection
 			return IntList;
 		}
 
+		[MosaUnitTest]
 		public static bool PopulateList()
 		{
 			var list = Populate();
@@ -104,6 +113,7 @@ namespace Mosa.UnitTest.Collection
 			return list.Count == 9;
 		}
 
+		[MosaUnitTest]
 		public static int Foreach()
 		{
 			var list = Populate();
@@ -117,6 +127,7 @@ namespace Mosa.UnitTest.Collection
 			return sum;
 		}
 
+		[MosaUnitTest]
 		public static int ForeachNested()
 		{
 			var list = Populate2();
@@ -135,6 +146,7 @@ namespace Mosa.UnitTest.Collection
 			return sum;
 		}
 
+		[MosaUnitTest]
 		public static int ForeachNested2()
 		{
 			var list = Populate();
@@ -156,9 +168,10 @@ namespace Mosa.UnitTest.Collection
 			return sum + nestedSum;
 		}
 
+		[MosaUnitTest]
 		public static int ForeachBreak()
 		{
-			LinkedList<Holder> holderList = new LinkedList<Holder>();
+			var holderList = new LinkedList<Holder>();
 			for (int i = 1; i < 10; i++)
 			{
 				var p = new Holder(10 * i, 20 * i, 30 * i);

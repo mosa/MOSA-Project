@@ -8,7 +8,8 @@ namespace Mosa.UnitTest.Collection
 
 	public static class ForeachTests 
 	{
-		
+	
+		[MosaUnitTest]
 		public static byte ForeachU1()
 		{
 			byte[] a = new byte[5];
@@ -22,7 +23,8 @@ namespace Mosa.UnitTest.Collection
 
 			return total;
 		}
-		
+	
+		[MosaUnitTest]
 		public static ushort ForeachU2()
 		{
 			ushort[] a = new ushort[5];
@@ -36,7 +38,8 @@ namespace Mosa.UnitTest.Collection
 
 			return total;
 		}
-		
+	
+		[MosaUnitTest]
 		public static uint ForeachU4()
 		{
 			uint[] a = new uint[5];
@@ -50,7 +53,8 @@ namespace Mosa.UnitTest.Collection
 
 			return total;
 		}
-		
+	
+		[MosaUnitTest]
 		public static ulong ForeachU8()
 		{
 			ulong[] a = new ulong[5];
@@ -64,7 +68,8 @@ namespace Mosa.UnitTest.Collection
 
 			return total;
 		}
-		
+	
+		[MosaUnitTest]
 		public static sbyte ForeachI1()
 		{
 			sbyte[] a = new sbyte[5];
@@ -78,7 +83,8 @@ namespace Mosa.UnitTest.Collection
 
 			return total;
 		}
-		
+	
+		[MosaUnitTest]
 		public static short ForeachI2()
 		{
 			short[] a = new short[5];
@@ -92,7 +98,8 @@ namespace Mosa.UnitTest.Collection
 
 			return total;
 		}
-		
+	
+		[MosaUnitTest]
 		public static int ForeachI4()
 		{
 			int[] a = new int[5];
@@ -106,7 +113,8 @@ namespace Mosa.UnitTest.Collection
 
 			return total;
 		}
-		
+	
+		[MosaUnitTest]
 		public static long ForeachI8()
 		{
 			long[] a = new long[5];

@@ -17,7 +17,7 @@ namespace Mosa.UnitTest.Collection
 			return list;
 		}
 
-		public static List<object> Get<T>(List<object> objects)
+		internal static List<object> Get<T>(List<object> objects)
 		{
 			var list = new List<object>();
 
@@ -32,6 +32,7 @@ namespace Mosa.UnitTest.Collection
 			return list;
 		}
 
+		[MosaUnitTest]
 		public static int MethodTestInt()
 		{
 			var list = CreateList();
@@ -41,6 +42,7 @@ namespace Mosa.UnitTest.Collection
 			return ret.Count;
 		}
 
+		[MosaUnitTest]
 		public static int MethodTestObject()
 		{
 			var list = CreateList();
@@ -50,6 +52,7 @@ namespace Mosa.UnitTest.Collection
 			return ret.Count;
 		}
 
+		[MosaUnitTest]
 		public static int MethodTestString()
 		{
 			var list = CreateList();

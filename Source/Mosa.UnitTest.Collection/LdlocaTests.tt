@@ -8,7 +8,8 @@ namespace Mosa.UnitTest.Collection
 	{
 	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 
-		public static bool LdlocaCheckValue<#= number.Value #>(<#= number.Key #> expect) 
+		[MosaUnitTest(Series = "<#= number.Value #>")]
+		public static bool LdlocaCheckValue<#= number.Value #>(<#= number.Key #> expect)
 		{
 			<#= number.Key #> a = expect;
 			return LdlocaCheckValueRef<#= number.Value #>(expect, ref a);

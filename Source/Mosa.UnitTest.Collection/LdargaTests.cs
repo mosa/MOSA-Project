@@ -8,7 +8,8 @@ namespace Mosa.UnitTest.Collection
 	public static class LdargaTests 
 	{
 	
-		public static byte LdargaCheckValueU1(byte a) 
+		[MosaUnitTest(Series = "U1")]
+		public static byte LdargaCheckValueU1(byte a)
 		{
 			return LdargaCheckValueRefU1(ref a);
 		}
@@ -17,7 +18,8 @@ namespace Mosa.UnitTest.Collection
 		{
 			return a;
 		}
-				
+
+		[MosaUnitTest(Series = "U1U1")]
 		public static byte LdargaChangeValueU1(byte a, byte b)
 		{
 			LdargaChangeValueRefU1(ref a,b);
@@ -29,7 +31,8 @@ namespace Mosa.UnitTest.Collection
 			a = b;
 		}
 	
-		public static ushort LdargaCheckValueU2(ushort a) 
+		[MosaUnitTest(Series = "U2")]
+		public static ushort LdargaCheckValueU2(ushort a)
 		{
 			return LdargaCheckValueRefU2(ref a);
 		}
@@ -38,7 +41,8 @@ namespace Mosa.UnitTest.Collection
 		{
 			return a;
 		}
-				
+
+		[MosaUnitTest(Series = "U2U2")]
 		public static ushort LdargaChangeValueU2(ushort a, ushort b)
 		{
 			LdargaChangeValueRefU2(ref a,b);
@@ -50,7 +54,8 @@ namespace Mosa.UnitTest.Collection
 			a = b;
 		}
 	
-		public static uint LdargaCheckValueU4(uint a) 
+		[MosaUnitTest(Series = "U4")]
+		public static uint LdargaCheckValueU4(uint a)
 		{
 			return LdargaCheckValueRefU4(ref a);
 		}
@@ -59,7 +64,8 @@ namespace Mosa.UnitTest.Collection
 		{
 			return a;
 		}
-				
+
+		[MosaUnitTest(Series = "U4U4")]
 		public static uint LdargaChangeValueU4(uint a, uint b)
 		{
 			LdargaChangeValueRefU4(ref a,b);
@@ -71,7 +77,8 @@ namespace Mosa.UnitTest.Collection
 			a = b;
 		}
 	
-		public static ulong LdargaCheckValueU8(ulong a) 
+		[MosaUnitTest(Series = "U8")]
+		public static ulong LdargaCheckValueU8(ulong a)
 		{
 			return LdargaCheckValueRefU8(ref a);
 		}
@@ -80,7 +87,8 @@ namespace Mosa.UnitTest.Collection
 		{
 			return a;
 		}
-				
+
+		[MosaUnitTest(Series = "U8U8")]
 		public static ulong LdargaChangeValueU8(ulong a, ulong b)
 		{
 			LdargaChangeValueRefU8(ref a,b);
@@ -92,7 +100,8 @@ namespace Mosa.UnitTest.Collection
 			a = b;
 		}
 	
-		public static sbyte LdargaCheckValueI1(sbyte a) 
+		[MosaUnitTest(Series = "I1")]
+		public static sbyte LdargaCheckValueI1(sbyte a)
 		{
 			return LdargaCheckValueRefI1(ref a);
 		}
@@ -101,7 +110,8 @@ namespace Mosa.UnitTest.Collection
 		{
 			return a;
 		}
-				
+
+		[MosaUnitTest(Series = "I1I1")]
 		public static sbyte LdargaChangeValueI1(sbyte a, sbyte b)
 		{
 			LdargaChangeValueRefI1(ref a,b);
@@ -113,7 +123,8 @@ namespace Mosa.UnitTest.Collection
 			a = b;
 		}
 	
-		public static short LdargaCheckValueI2(short a) 
+		[MosaUnitTest(Series = "I2")]
+		public static short LdargaCheckValueI2(short a)
 		{
 			return LdargaCheckValueRefI2(ref a);
 		}
@@ -122,7 +133,8 @@ namespace Mosa.UnitTest.Collection
 		{
 			return a;
 		}
-				
+
+		[MosaUnitTest(Series = "I2I2")]
 		public static short LdargaChangeValueI2(short a, short b)
 		{
 			LdargaChangeValueRefI2(ref a,b);
@@ -134,7 +146,8 @@ namespace Mosa.UnitTest.Collection
 			a = b;
 		}
 	
-		public static int LdargaCheckValueI4(int a) 
+		[MosaUnitTest(Series = "I4")]
+		public static int LdargaCheckValueI4(int a)
 		{
 			return LdargaCheckValueRefI4(ref a);
 		}
@@ -143,7 +156,8 @@ namespace Mosa.UnitTest.Collection
 		{
 			return a;
 		}
-				
+
+		[MosaUnitTest(Series = "I4I4")]
 		public static int LdargaChangeValueI4(int a, int b)
 		{
 			LdargaChangeValueRefI4(ref a,b);
@@ -155,7 +169,8 @@ namespace Mosa.UnitTest.Collection
 			a = b;
 		}
 	
-		public static long LdargaCheckValueI8(long a) 
+		[MosaUnitTest(Series = "I8")]
+		public static long LdargaCheckValueI8(long a)
 		{
 			return LdargaCheckValueRefI8(ref a);
 		}
@@ -164,7 +179,8 @@ namespace Mosa.UnitTest.Collection
 		{
 			return a;
 		}
-				
+
+		[MosaUnitTest(Series = "I8I8")]
 		public static long LdargaChangeValueI8(long a, long b)
 		{
 			LdargaChangeValueRefI8(ref a,b);
@@ -176,7 +192,8 @@ namespace Mosa.UnitTest.Collection
 			a = b;
 		}
 	
-		public static float LdargaCheckValueR4(float a) 
+		[MosaUnitTest(Series = "R4")]
+		public static float LdargaCheckValueR4(float a)
 		{
 			return LdargaCheckValueRefR4(ref a);
 		}
@@ -185,7 +202,8 @@ namespace Mosa.UnitTest.Collection
 		{
 			return a;
 		}
-				
+
+		[MosaUnitTest(Series = "R4R4")]
 		public static float LdargaChangeValueR4(float a, float b)
 		{
 			LdargaChangeValueRefR4(ref a,b);
@@ -197,7 +215,8 @@ namespace Mosa.UnitTest.Collection
 			a = b;
 		}
 	
-		public static double LdargaCheckValueR8(double a) 
+		[MosaUnitTest(Series = "R8")]
+		public static double LdargaCheckValueR8(double a)
 		{
 			return LdargaCheckValueRefR8(ref a);
 		}
@@ -206,7 +225,8 @@ namespace Mosa.UnitTest.Collection
 		{
 			return a;
 		}
-				
+
+		[MosaUnitTest(Series = "R8R8")]
 		public static double LdargaChangeValueR8(double a, double b)
 		{
 			LdargaChangeValueRefR8(ref a,b);
@@ -218,7 +238,8 @@ namespace Mosa.UnitTest.Collection
 			a = b;
 		}
 	
-		public static char LdargaCheckValueC(char a) 
+		[MosaUnitTest(Series = "C")]
+		public static char LdargaCheckValueC(char a)
 		{
 			return LdargaCheckValueRefC(ref a);
 		}
@@ -227,7 +248,8 @@ namespace Mosa.UnitTest.Collection
 		{
 			return a;
 		}
-				
+
+		[MosaUnitTest(Series = "CC")]
 		public static char LdargaChangeValueC(char a, char b)
 		{
 			LdargaChangeValueRefC(ref a,b);
@@ -239,7 +261,8 @@ namespace Mosa.UnitTest.Collection
 			a = b;
 		}
 	
-		public static bool LdargaCheckValueB(bool a) 
+		[MosaUnitTest(Series = "B")]
+		public static bool LdargaCheckValueB(bool a)
 		{
 			return LdargaCheckValueRefB(ref a);
 		}
@@ -248,7 +271,8 @@ namespace Mosa.UnitTest.Collection
 		{
 			return a;
 		}
-				
+
+		[MosaUnitTest(Series = "BB")]
 		public static bool LdargaChangeValueB(bool a, bool b)
 		{
 			LdargaChangeValueRefB(ref a,b);

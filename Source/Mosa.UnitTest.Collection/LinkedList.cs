@@ -10,7 +10,7 @@ namespace Mosa.UnitTest.Collection
 	/// Represents a doubly linked list.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public class LinkedList<T> : IEnumerable<T>, ICollection<T>
+	internal class LinkedList<T> : IEnumerable<T>, ICollection<T>
 	{
 		protected int count;
 		protected LinkedListNode<T> first;

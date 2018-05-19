@@ -7,21 +7,25 @@ namespace Mosa.UnitTest.Collection
 		public static string valueA = "Foo";
 		public static string valueB = "Something";
 
+		[MosaUnitTest]
 		public static int CheckLength()
 		{
 			return valueA.Length;
 		}
 
+		[MosaUnitTest]
 		public static char CheckFirstCharacter()
 		{
 			return valueA[0];
 		}
 
+		[MosaUnitTest]
 		public static char CheckLastCharacter()
 		{
 			return valueA[valueA.Length - 1];
 		}
 
+		[MosaUnitTest]
 		public static char LastCharacterMustMatch()
 		{
 			char ch = '\0';
@@ -34,6 +38,7 @@ namespace Mosa.UnitTest.Collection
 			return ch;
 		}
 
+		[MosaUnitTest]
 		public static bool ConcatTest1()
 		{
 			string part1 = "abc";
@@ -44,6 +49,7 @@ namespace Mosa.UnitTest.Collection
 			return string.Equals(combined, ab);
 		}
 
+		[MosaUnitTest]
 		public static bool ConcatTest2()
 		{
 			string part1 = "abc";
@@ -55,6 +61,7 @@ namespace Mosa.UnitTest.Collection
 			return string.Equals(combined, abc);
 		}
 
+		[MosaUnitTest]
 		public static bool Equal1()
 		{
 			string a = "abc";
@@ -63,6 +70,7 @@ namespace Mosa.UnitTest.Collection
 			return string.Equals(a, b);
 		}
 
+		[MosaUnitTest]
 		public static bool NotEqual1()
 		{
 			string a = "abc";

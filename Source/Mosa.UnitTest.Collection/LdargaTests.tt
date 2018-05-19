@@ -8,7 +8,8 @@ namespace Mosa.UnitTest.Collection
 	{
 	<# foreach (KeyValuePair<string, string> number in NumbersWithCharAndBool) { #>
 
-		public static <#= number.Key #> LdargaCheckValue<#= number.Value #>(<#= number.Key #> a) 
+		[MosaUnitTest(Series = "<#= number.Value #>")]
+		public static <#= number.Key #> LdargaCheckValue<#= number.Value #>(<#= number.Key #> a)
 		{
 			return LdargaCheckValueRef<#= number.Value #>(ref a);
 		}
@@ -17,7 +18,8 @@ namespace Mosa.UnitTest.Collection
 		{
 			return a;
 		}
-				
+
+		[MosaUnitTest(Series = "<#= number.Value #><#= number.Value #>")]
 		public static <#= number.Key #> LdargaChangeValue<#= number.Value #>(<#= number.Key #> a, <#= number.Key #> b)
 		{
 			LdargaChangeValueRef<#= number.Value #>(ref a,b);

@@ -32,6 +32,7 @@ namespace Mosa.UnitTest.Collection
 			public valuetype content;
 		}
 
+		[MosaUnitTest]
 		public static bool TestValueTypeVariable()
 		{
 			valuetype p = new valuetype();
@@ -44,6 +45,7 @@ namespace Mosa.UnitTest.Collection
 
 		private static valuetype staticField;
 
+		[MosaUnitTest]
 		public static bool TestValueTypeStaticField()
 		{
 			valuetype p = new valuetype();
@@ -56,6 +58,7 @@ namespace Mosa.UnitTest.Collection
 			return staticField.a == 1 && staticField.b == 7 & staticField.c == 21 && staticField.d == 171;
 		}
 
+		[MosaUnitTest]
 		public static bool TestValueTypeInstanceField()
 		{
 			valuetype p = new valuetype();
@@ -69,6 +72,7 @@ namespace Mosa.UnitTest.Collection
 			return obj.content.a == 1 && obj.content.b == 7 & obj.content.c == 21 && obj.content.d == 171;
 		}
 
+		[MosaUnitTest]
 		public static bool TestNestedValueTypeField()
 		{
 			valuetype p = new valuetype();
@@ -89,6 +93,7 @@ namespace Mosa.UnitTest.Collection
 			return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 		}
 
+		[MosaUnitTest]
 		public static bool TestValueTypeParameter()
 		{
 			valuetype p = new valuetype();
@@ -110,6 +115,7 @@ namespace Mosa.UnitTest.Collection
 			return p;
 		}
 
+		[MosaUnitTest]
 		public static bool TestValueTypeReturnValue()
 		{
 			valuetype p = GetValue();
@@ -122,6 +128,7 @@ namespace Mosa.UnitTest.Collection
 			return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 		}
 
+		[MosaUnitTest]
 		public static bool TestValueTypeBox()
 		{
 			valuetype p = new valuetype();
@@ -135,6 +142,7 @@ namespace Mosa.UnitTest.Collection
 			return obj.content.a == 1 && obj.content.b == 7 & obj.content.c == 21 && obj.content.d == 171;
 		}
 
+		[MosaUnitTest]
 		public static bool TestValueTypeInstanceMethod()
 		{
 			valuetype p = new valuetype();
@@ -146,6 +154,7 @@ namespace Mosa.UnitTest.Collection
 			return p.Check(1, 7, 21, 171);
 		}
 
+		[MosaUnitTest]
 		public static bool TestValueTypeVirtualMethod()
 		{
 			valuetype p = new valuetype();
@@ -180,6 +189,7 @@ namespace Mosa.UnitTest.Collection
 			return p.a == 1 && p.b == 7 & p.c == 21 && p.d == 171;
 		}
 
+		[MosaUnitTest]
 		public static bool TestValueTypePassByRef()
 		{
 			valuetype p = new valuetype();
@@ -191,6 +201,7 @@ namespace Mosa.UnitTest.Collection
 			return ByRefOk(ref p);
 		}
 
+		[MosaUnitTest]
 		public static bool TestValueTypePassByRefModify()
 		{
 			valuetype p = new valuetype();
@@ -202,6 +213,7 @@ namespace Mosa.UnitTest.Collection
 			return ByRefModify(ref p) && p.Check(1, 7, 21, 171);
 		}
 
+		[MosaUnitTest]
 		public static bool TestValueTypeArray()
 		{
 			valuetype[] l = new valuetype[2];
@@ -215,6 +227,7 @@ namespace Mosa.UnitTest.Collection
 			return l[1].Check(3, 11, 41, 83);
 		}
 
+		[MosaUnitTest]
 		public static bool TestValueTypeArrayByRef()
 		{
 			valuetype[] l = new valuetype[2];

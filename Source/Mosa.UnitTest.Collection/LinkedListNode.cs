@@ -6,7 +6,7 @@ namespace Mosa.UnitTest.Collection
 	/// Represents a node in a LinkedList<T>. This class cannot be inherited.
 	/// </summary>
 	/// <typeparam name="T">Specifies the element type of the linked list.</typeparam>
-	public sealed class LinkedListNode<T>
+	internal sealed class LinkedListNode<T>
 	{
 		internal LinkedList<T> list;
 		internal LinkedListNode<T> next;

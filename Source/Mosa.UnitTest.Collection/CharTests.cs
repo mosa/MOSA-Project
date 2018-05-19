@@ -6,27 +6,27 @@ namespace Mosa.UnitTest.Collection
 	{
 		public static int AddCC(char first, char second)
 		{
-			return (first + second);
+			return first + second;
 		}
 
 		public static int SubCC(char first, char second)
 		{
-			return (first - second);
+			return first - second;
 		}
 
 		public static int MulCC(char first, char second)
 		{
-			return (first * second);
+			return first * second;
 		}
 
 		public static int DivCC(char first, char second)
 		{
-			return (first / second);
+			return first / second;
 		}
 
 		public static int RemCC(char first, char second)
 		{
-			return (first % second);
+			return first % second;
 		}
 
 		public static char RetC(char first)
@@ -36,57 +36,57 @@ namespace Mosa.UnitTest.Collection
 
 		public static int AndCC(char first, char second)
 		{
-			return (first & second);
+			return first & second;
 		}
 
 		public static int OrCC(char first, char second)
 		{
-			return (first | second);
+			return first | second;
 		}
 
 		public static int XorCC(char first, char second)
 		{
-			return (first ^ second);
+			return first ^ second;
 		}
 
 		public static int CompC(char first)
 		{
-			return (~first);
+			return ~first;
 		}
 
 		public static int ShiftLeftCC(char first, byte second)
 		{
-			return (first << second);
+			return first << second;
 		}
 
 		public static int ShiftRightCC(char first, byte second)
 		{
-			return (first >> second);
+			return first >> second;
 		}
 
 		public static bool CeqCC(char first, char second)
 		{
-			return (first == second);
+			return first == second;
 		}
 
 		public static bool CltCC(char first, char second)
 		{
-			return (first < second);
+			return first < second;
 		}
 
 		public static bool CgtCC(char first, char second)
 		{
-			return (first > second);
+			return first > second;
 		}
 
 		public static bool CleCC(char first, char second)
 		{
-			return (first <= second);
+			return first <= second;
 		}
 
 		public static bool CgeCC(char first, char second)
 		{
-			return (first >= second);
+			return first >= second;
 		}
 
 		[MosaUnitTest]

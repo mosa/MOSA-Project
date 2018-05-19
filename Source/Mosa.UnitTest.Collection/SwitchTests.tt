@@ -8,6 +8,7 @@ namespace Mosa.UnitTest.Collection
 	{
 	<# foreach (KeyValuePair<string, string> number in NegativeIntegers) { #>
 
+		[MosaUnitTest(Series = "<#= number.Value #>")]
 		public static <#= number.Key #> Switch<#= number.Value #>(<#= number.Key #> a)
 		{
 			switch (a)
@@ -35,6 +36,7 @@ namespace Mosa.UnitTest.Collection
 	<# } #>
 	<# foreach (KeyValuePair<string, string> number in PositiveIntegers) { #>
 
+		[MosaUnitTest(Series = "<#= number.Value #>")]
 		public static <#= number.Key #> Switch<#= number.Value #>(<#= number.Key #> a)
 		{
 			switch (a)

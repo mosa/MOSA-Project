@@ -4,7 +4,7 @@
 
 namespace Mosa.UnitTest.Collection
 {
-	public struct InitStruct
+	internal struct InitStruct
 	{
 <# foreach (KeyValuePair<string, string> primitives in PrimitivesWithCharAndObject) { #>
 		public <#= primitives.Key #> Value<#= primitives.Value #>;
@@ -14,6 +14,7 @@ namespace Mosa.UnitTest.Collection
 	public static class InitStructTests
 	{
 <# foreach (KeyValuePair<string, string> primitives in PrimitivesWithCharAndObject) {#>
+		[MosaUnitTest(Series = "<#= primitives.Value #>")]
 		public static <#= primitives.Key #> InitStruct<#= primitives.Value #>()
 		{
 			InitStruct d = new InitStruct();

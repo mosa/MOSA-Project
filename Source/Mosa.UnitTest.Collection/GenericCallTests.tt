@@ -11,6 +11,7 @@ namespace Mosa.UnitTest.Collection
 		}
 <# foreach (KeyValuePair<string, string> number in IntegersWithChar) { #>
 
+		[MosaUnitTest(Series = "<#= number.Value #>")]
 		public static bool GenericCall<#= number.Value #>(<#= number.Key #> value)
 		{
 			return value == GenericCallTarget<<#= number.Key #>>(value);
