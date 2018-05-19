@@ -463,6 +463,16 @@ namespace Mosa.UnitTest.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> I8U1UpTo64
+		{
+			get
+			{
+				foreach (var i1 in Numbers.I8.Series)
+					foreach (var i2 in Series.U1UpTo64)
+						yield return new object[] { i1, i2 };
+			}
+		}
+
 		public static IEnumerable<object[]> U1
 		{
 			get
@@ -683,6 +693,15 @@ namespace Mosa.UnitTest.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> U8U1UpTo64
+		{
+			get
+			{
+				foreach (var i1 in Numbers.U8.Series)
+					foreach (var i2 in Series.U1UpTo64)
+						yield return new object[] { i1, i2 };
+			}
+		}
 		public static IEnumerable<object[]> R4
 		{
 			get

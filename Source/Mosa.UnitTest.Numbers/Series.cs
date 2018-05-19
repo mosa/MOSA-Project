@@ -138,6 +138,11 @@ namespace Mosa.UnitTest.Numbers
 			get { foreach (byte a in GetUpTo(32)) yield return a; }
 		}
 
+		public static IEnumerable<byte> U1UpTo64
+		{
+			get { foreach (byte a in GetUpTo(32)) yield return a; }
+		}
+
 		#endregion U1 Types
 
 		#region I2 Types

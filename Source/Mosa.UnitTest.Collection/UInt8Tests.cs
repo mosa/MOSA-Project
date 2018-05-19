@@ -64,13 +64,13 @@ namespace Mosa.UnitTest.Collection
 			return ~first;
 		}
 
-		[MosaUnitTest(Series = "U1U1UpTo32")]
+		[MosaUnitTest(Series = "U1U1UpTo16")]
 		public static int ShiftLeftU1U1(byte first, byte second)
 		{
 			return first << second;
 		}
 
-		[MosaUnitTest(Series = "U1U1UpTo32")]
+		[MosaUnitTest(Series = "U1U1UpTo16")]
 		public static int ShiftRightU1U1(byte first, byte second)
 		{
 			return first >> second;
