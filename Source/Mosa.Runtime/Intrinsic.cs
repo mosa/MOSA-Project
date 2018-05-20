@@ -175,6 +175,24 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store64(UIntPtr address, UIntPtr value);
 
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void StoreR4(UIntPtr address, float value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void StoreR4(UIntPtr address, int offset, float value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void StoreR4(UIntPtr address, uint offset, float value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void StoreR8(UIntPtr address, double value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void StoreR8(UIntPtr address, int offset, double value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void StoreR8(UIntPtr address, uint offset, double value);
+
 		//[MethodImpl(MethodImplOptions.InternalCall)]
 		//public static extern void Store64(UIntPtr address, int offset, UIntPtr value);
 

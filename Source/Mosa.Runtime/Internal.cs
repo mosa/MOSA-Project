@@ -6,10 +6,11 @@ using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime
 {
-	public unsafe static class Internal
+	public  static class Internal
 	{
 		#region Allocation
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr AllocateMemory(uint size)
 		{
 			return GC.AllocateObject(size);
@@ -81,6 +82,7 @@ namespace Mosa.Runtime
 			return memory;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr Box16(RuntimeTypeHandle handle, ushort value)
 		{
 			var memory = AllocateObject(handle, UIntPtr.Size);
@@ -91,6 +93,7 @@ namespace Mosa.Runtime
 			return memory;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr Box32(RuntimeTypeHandle handle, uint value)
 		{
 			var memory = AllocateObject(handle, UIntPtr.Size);
@@ -101,6 +104,7 @@ namespace Mosa.Runtime
 			return memory;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr Box64(RuntimeTypeHandle handle, ulong value)
 		{
 			var memory = AllocateObject(handle, UIntPtr.Size * 2);
@@ -111,66 +115,62 @@ namespace Mosa.Runtime
 			return memory;
 		}
 
-		public static void* BoxR4(RuntimeTypeHandle handle, float value)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UIntPtr BoxR4(RuntimeTypeHandle handle, float value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);
-			*(float*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
-			return memory;
-		}
+			var memory = AllocateObject(handle, UIntPtr.Size);
 
-		public static void* BoxR8(RuntimeTypeHandle handle, double value)
-		{
-			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size * 2);
-			*(double*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
-			return memory;
-		}
-
-		public static void* Box(RuntimeTypeHandle handle, void* value, uint size)
-		{
-			byte* memory = (byte*)AllocateObject(handle, size);
-
-			byte* dest = memory + (uint)(UIntPtr.Size * 2);
-			byte* src = (byte*)value;
-
-			for (int i = 0; i < size; i++)
-			{
-				dest[i] = src[i];
-			}
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.StoreR4(memory, UIntPtr.Size * 2, value);
 
 			return memory;
 		}
 
-		public static byte Unbox8(void* box)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UIntPtr BoxR8(RuntimeTypeHandle handle, double value)
 		{
-			return *((byte*)box + (uint)(UIntPtr.Size) * 2);
+			var memory = AllocateObject(handle, UIntPtr.Size * 2);
+
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.StoreR8(memory, UIntPtr.Size * 2, value);
+
+			return memory;
+		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+
+		public static UIntPtr Box(RuntimeTypeHandle handle, UIntPtr value, uint size)
+		{
+			var memory = AllocateObject(handle, size);
+
+			MemoryCopy(memory + (UIntPtr.Size * 2), value, size);
+
+			return memory;
 		}
 
-		public static ushort Unbox16(void* box)
+		public static UIntPtr Unbox8(UIntPtr box)
 		{
-			return *(ushort*)((byte*)box + (uint)(UIntPtr.Size) * 2);
+			return box + (UIntPtr.Size * 2);
 		}
 
-		public static uint* Unbox32(void* box)
+		public static UIntPtr Unbox16(UIntPtr box)
 		{
-			return (uint*)((byte*)box + (uint)(UIntPtr.Size) * 2);
+			return box + (UIntPtr.Size * 2);
 		}
 
-		public static ulong* Unbox64(void* box)
+		public static UIntPtr Unbox32(UIntPtr box)
 		{
-			return (ulong*)((byte*)box + (uint)(UIntPtr.Size) * 2);
+			return box + (UIntPtr.Size * 2);
 		}
 
-		public static void* Unbox(void* box, void* vt, uint size)
+		public static UIntPtr Unbox64(UIntPtr box)
 		{
-			//MemoryCopy(vt, (byte*)box + (uint)(UIntPtr.Size) * 2, size);
+			return box + (UIntPtr.Size * 2);
+		}
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 
-			byte* dest = (byte*)vt;
-			byte* src = (byte*)box + (uint)(UIntPtr.Size * 2);
-
-			for (int i = 0; i < size; i++)
-			{
-				dest[i] = src[i];
-			}
+		public static UIntPtr Unbox(UIntPtr box, UIntPtr vt, uint size)
+		{
+			MemoryCopy(vt, box + (UIntPtr.Size * 2), size);
 
 			return vt;
 		}
@@ -203,7 +203,7 @@ namespace Mosa.Runtime
 
 		internal static LinkedList<RuntimeAssembly> Assemblies = null;
 
-		public static void Setup()
+		public unsafe static void Setup()
 		{
 			Assemblies = new LinkedList<RuntimeAssembly>();
 
