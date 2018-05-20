@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime
 {
@@ -14,6 +15,7 @@ namespace Mosa.Runtime
 			return GC.AllocateObject(size);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr AllocateObject(RuntimeTypeHandle handle, uint classSize)
 		{
 			// An object has the following memory layout:
@@ -22,19 +24,21 @@ namespace Mosa.Runtime
 			//   - 0 .. n object data fields
 
 			uint allocationSize = (2 * (uint)(UIntPtr.Size)) + classSize;
-			var destination = AllocateMemory(allocationSize);
+			var memory = AllocateMemory(allocationSize);
 
-			Intrinsic.Store(destination, 0, handle.Value);
-			Intrinsic.Store(destination, UIntPtr.Size, 0);
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.Store(memory, UIntPtr.Size, 0);
 
-			return destination;
+			return memory;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr AllocateObject(RuntimeTypeHandle handle, int classSize)
 		{
 			return AllocateObject(handle, (uint)classSize);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr AllocateArray(RuntimeTypeHandle handle, uint elementSize, uint elements)
 		{
 			// An array has the following memory layout:
@@ -47,15 +51,16 @@ namespace Mosa.Runtime
 			uint allocationSize = ((uint)(UIntPtr.Size) * 3) + elements * elementSize;
 			allocationSize = (allocationSize + 3) & ~3u;    // Align to 4-bytes boundary
 
-			var destination = AllocateMemory(allocationSize);
+			var memory = AllocateMemory(allocationSize);
 
-			Intrinsic.Store32(destination, 0, handle.Value.ToInt32());
-			Intrinsic.Store32(destination, UIntPtr.Size, 0);
-			Intrinsic.Store32(destination, UIntPtr.Size * 2, elements);
+			Intrinsic.Store32(memory, 0, handle.Value.ToInt32());
+			Intrinsic.Store32(memory, UIntPtr.Size, 0);
+			Intrinsic.Store32(memory, UIntPtr.Size * 2, elements);
 
-			return destination;
+			return memory;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr AllocateString(RuntimeTypeHandle handle, uint length)
 		{
 			return AllocateArray(handle, sizeof(char), length);
@@ -65,31 +70,44 @@ namespace Mosa.Runtime
 
 		#region (Un)Boxing
 
-		public static void* Box8(RuntimeTypeHandle handle, byte value)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UIntPtr Box8(RuntimeTypeHandle handle, byte value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);    // 4 for alignment
-			*(memory + ((uint)(UIntPtr.Size) * 2)) = value;
+			var memory = AllocateObject(handle, UIntPtr.Size);
+
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.Store8(memory, UIntPtr.Size * 2, value);
+
 			return memory;
 		}
 
-		public static void* Box16(RuntimeTypeHandle handle, ushort value)
+		public static UIntPtr Box16(RuntimeTypeHandle handle, ushort value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);    // 4 for alignment
-			*(ushort*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
+			var memory = AllocateObject(handle, UIntPtr.Size);
+
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.Store16(memory, UIntPtr.Size * 2, value);
+
 			return memory;
 		}
 
-		public static void* Box32(RuntimeTypeHandle handle, uint value)
+		public static UIntPtr Box32(RuntimeTypeHandle handle, uint value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);
-			*(uint*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
+			var memory = AllocateObject(handle, UIntPtr.Size);
+
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.Store32(memory, UIntPtr.Size * 2, value);
+
 			return memory;
 		}
 
-		public static void* Box64(RuntimeTypeHandle handle, ulong value)
+		public static UIntPtr Box64(RuntimeTypeHandle handle, ulong value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size * 2);
-			*(ulong*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
+			var memory = AllocateObject(handle, UIntPtr.Size * 2);
+
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.Store64(memory, UIntPtr.Size * 2, value);
+
 			return memory;
 		}
 

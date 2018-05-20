@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime
 {
@@ -13,6 +14,7 @@ namespace Mosa.Runtime
 			return new UIntPtr(0);
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public unsafe static UIntPtr AllocateObject(uint size)
 		{
 			return AllocateMemory(size);
