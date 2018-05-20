@@ -10,7 +10,7 @@ namespace Mosa.UnitTest.Collection
 		foreach (KeyValuePair<string, string> compare in Comparisons) 
 	{ #>
 
-		[MosaUnitTest(Series = "<#= number.Value #>")]
+		[MosaUnitTest(Series = "<#= number.Value #><#= number.Value #>")]
 		public static bool Compare<#= compare.Value #><#= number.Value #>(<#= number.Key #> a, <#= number.Key #> b)
 		{
 			return (a <#= compare.Key #> b);

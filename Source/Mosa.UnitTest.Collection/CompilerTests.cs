@@ -34,7 +34,7 @@ namespace Mosa.UnitTest.Collection
 			return (n % 4) != 0;
 		}
 
-		[MosaUnitTest(Series = "I4")]
+		[MosaUnitTest(Series = "U4")]
 		public static uint aligned4_unsigned(uint n)
 		{
 			return n % 4;

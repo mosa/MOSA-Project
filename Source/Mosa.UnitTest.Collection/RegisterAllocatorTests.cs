@@ -28,7 +28,6 @@ namespace Mosa.UnitTest.Collection
 			return z;
 		}
 
-		[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4Mini")]
 		public static int Pressure7(int a, int b, int c, int d, int e, int f, int g)
 		{
 			int h = 70;
@@ -89,7 +88,6 @@ namespace Mosa.UnitTest.Collection
 			return z * 10;
 		}
 
-		[MosaUnitTest(Series = "I4MiniI4MiniI4MiniI4Mini")]
 		public static int Pressure9(int a, int b, int c, int d, int e, int f, int g)
 		{
 			int a1 = a;

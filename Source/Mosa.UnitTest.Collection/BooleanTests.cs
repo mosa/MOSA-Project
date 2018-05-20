@@ -28,7 +28,7 @@ namespace Mosa.UnitTest.Collection
 			return first ^ second;
 		}
 
-		[MosaUnitTest(Series = "BB")]
+		[MosaUnitTest(Series = "B")]
 		public static bool NotB(bool first)
 		{
 			return !first;

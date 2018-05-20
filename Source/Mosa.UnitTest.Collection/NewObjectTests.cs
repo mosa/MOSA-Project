@@ -4,7 +4,6 @@ namespace Mosa.UnitTest.Collection
 {
 	public class NewObjectTests
 	{
-		[MosaUnitTest]
 		public int Test()
 		{
 			return 5;
