@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime
 {
-	public  static class Internal
+	public static class Internal
 	{
 		#region Allocation
 
@@ -24,8 +24,7 @@ namespace Mosa.Runtime
 			//   - IntPtr SyncBlock
 			//   - 0 .. n object data fields
 
-			uint allocationSize = (2 * (uint)(UIntPtr.Size)) + classSize;
-			var memory = AllocateMemory(allocationSize);
+			var memory = AllocateMemory((2 * (uint)(UIntPtr.Size)) + classSize);
 
 			Intrinsic.Store(memory, 0, handle.Value);
 			Intrinsic.Store(memory, UIntPtr.Size, 0);
@@ -49,7 +48,7 @@ namespace Mosa.Runtime
 			//   - ElementType[length] elements
 			//   - Padding
 
-			uint allocationSize = ((uint)(UIntPtr.Size) * 3) + elements * elementSize;
+			uint allocationSize = ((uint)(UIntPtr.Size) * 3) + (elements * elementSize);
 			allocationSize = (allocationSize + 3) & ~3u;    // Align to 4-bytes boundary
 
 			var memory = AllocateMemory(allocationSize);
@@ -136,8 +135,8 @@ namespace Mosa.Runtime
 
 			return memory;
 		}
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr Box(RuntimeTypeHandle handle, UIntPtr value, uint size)
 		{
 			var memory = AllocateObject(handle, size);
@@ -166,8 +165,8 @@ namespace Mosa.Runtime
 		{
 			return box + (UIntPtr.Size * 2);
 		}
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr Unbox(UIntPtr box, UIntPtr vt, uint size)
 		{
 			MemoryCopy(vt, box + (UIntPtr.Size * 2), size);
@@ -203,7 +202,7 @@ namespace Mosa.Runtime
 
 		internal static LinkedList<RuntimeAssembly> Assemblies = null;
 
-		public unsafe static void Setup()
+		public static void Setup()
 		{
 			Assemblies = new LinkedList<RuntimeAssembly>();
 
@@ -215,9 +214,9 @@ namespace Mosa.Runtime
 			for (int i = 0; i < assemblyCount; i++)
 			{
 				// Get the pointer to the Assembly Metadata
-				var ptr = Intrinsic.Load32(assemblyListTable, UIntPtr.Size + (UIntPtr.Size * i));
+				var ptr = Intrinsic.LoadPointer(assemblyListTable, UIntPtr.Size + (UIntPtr.Size * i));
 
-				Assemblies.AddLast(new RuntimeAssembly((MDAssemblyDefinition*)ptr));
+				Assemblies.AddLast(new RuntimeAssembly(ptr));
 			}
 		}
 
