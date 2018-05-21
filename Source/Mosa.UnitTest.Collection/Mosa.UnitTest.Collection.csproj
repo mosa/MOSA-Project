@@ -44,7 +44,7 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
-    <NoWarn>168,162</NoWarn>
+    <NoWarn>168,162,649</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
   </PropertyGroup>
