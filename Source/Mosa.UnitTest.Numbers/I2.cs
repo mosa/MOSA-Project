@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mosa.UnitTest.Numbers
 {
@@ -21,41 +22,37 @@ namespace Mosa.UnitTest.Numbers
 
 		public static IList<short> GetSeries()
 		{
-			List<short> list = new List<short>();
+			var list = new List<short>
+			{
+				0,
+				1,
+				2,
+				sbyte.MinValue,
+				sbyte.MaxValue,
+				sbyte.MinValue + 1,
+				sbyte.MaxValue - 1,
+				byte.MaxValue,
+				byte.MinValue,
+				short.MinValue,
+				short.MaxValue,
+				short.MinValue + 1,
+				short.MaxValue - 1
+			};
 
-			list.Add(0);
-			list.Add(1);
-			list.Add(2);
-			list.Add(sbyte.MinValue);
-			list.Add(sbyte.MaxValue);
-			list.Add(sbyte.MinValue + 1);
-			list.Add(sbyte.MaxValue - 1);
-			list.Add(byte.MaxValue);
-			list.Add(byte.MinValue);
-			list.Add(short.MinValue);
-			list.Add(short.MaxValue);
-			list.Add(short.MinValue + 1);
-			list.Add(short.MaxValue - 1);
-
-			// Get negatives
-			list.AddIfNew(GetNegatives(list));
-
+			AddNegatives(list);
+			list = list.Distinct().ToList();
 			list.Sort();
 
 			return list;
 		}
 
-		private static IList<short> GetNegatives(IList<short> list)
+		private static void AddNegatives(IList<short> list)
 		{
-			List<short> negs = new List<short>();
-
-			foreach (short value in list)
+			foreach (var value in list.ToArray())
 			{
 				if (value > 0)
-					negs.AddIfNew<short>((short)-value);
+					list.Add((short)-value);
 			}
-
-			return negs;
 		}
 	}
 }

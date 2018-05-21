@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Mosa.UnitTest.Numbers
 {
@@ -21,28 +22,30 @@ namespace Mosa.UnitTest.Numbers
 
 		public static IList<double> GetSeries()
 		{
-			List<double> list = new List<double>();
+			var list = new List<double>
+			{
+				0,
+				1,
+				2,
 
-			list.Add(0);
-			list.Add(1);
-			list.Add(2);
+				//list.Add(double.MinValue);
+				//list.Add(double.MaxValue);
+				double.NaN,
+				double.PositiveInfinity,
+				double.NegativeInfinity,
+				17,
+				23,
+				12321452132,
 
-			//list.Add(double.MinValue);
-			//list.Add(double.MaxValue);
-			list.Add(double.NaN);
-			list.Add(double.PositiveInfinity);
-			list.Add(double.NegativeInfinity);
-			list.Add(17);
-			list.Add(23);
-			list.Add(12321452132);
+				// negatives
+				-1,
+				-2,
+				-17,
+				-23,
+				-12321452132
+			};
 
-			// negatives
-			list.Add(-1);
-			list.Add(-2);
-			list.Add(-17);
-			list.Add(-23);
-			list.Add(-12321452132);
-
+			list = list.Distinct().ToList();
 			list.Sort();
 
 			return list;

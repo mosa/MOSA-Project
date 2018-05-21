@@ -123,11 +123,6 @@ namespace Mosa.UnitTest.Numbers
 			get { foreach (byte a in U1) if (a > 0) yield return a; }
 		}
 
-		public static IEnumerable<byte> U1BelowZero
-		{
-			get { foreach (byte a in U1) if (a < 0) yield return a; }
-		}
-
 		public static IEnumerable<byte> U1UpTo8
 		{
 			get { foreach (byte a in GetUpTo(8)) yield return a; }
@@ -139,6 +134,11 @@ namespace Mosa.UnitTest.Numbers
 		}
 
 		public static IEnumerable<byte> U1UpTo32
+		{
+			get { foreach (byte a in GetUpTo(32)) yield return a; }
+		}
+
+		public static IEnumerable<byte> U1UpTo64
 		{
 			get { foreach (byte a in GetUpTo(32)) yield return a; }
 		}
@@ -193,11 +193,6 @@ namespace Mosa.UnitTest.Numbers
 		public static IEnumerable<ushort> U2AboveZero
 		{
 			get { foreach (ushort a in U2) if (a > 0) yield return a; }
-		}
-
-		public static IEnumerable<ushort> U2BelowZero
-		{
-			get { foreach (ushort a in U2) if (a < 0) yield return a; }
 		}
 
 		public static IEnumerable<ushort> U2UpTo8
@@ -287,11 +282,6 @@ namespace Mosa.UnitTest.Numbers
 			get { foreach (uint a in U4) if (a > 0) yield return a; }
 		}
 
-		public static IEnumerable<uint> U4BelowZero
-		{
-			get { foreach (uint a in U4) if (a < 0) yield return a; }
-		}
-
 		public static IEnumerable<uint> U4UpTo16
 		{
 			get { foreach (uint a in GetUpTo(16)) yield return a; }
@@ -373,11 +363,6 @@ namespace Mosa.UnitTest.Numbers
 		public static IEnumerable<ulong> U8AboveZero
 		{
 			get { foreach (ulong a in U8) if (a > 0) yield return a; }
-		}
-
-		public static IEnumerable<ulong> U8BelowZero
-		{
-			get { foreach (ulong a in U8) if (a < 0) yield return a; }
 		}
 
 		public static IEnumerable<ulong> U8UpTo8

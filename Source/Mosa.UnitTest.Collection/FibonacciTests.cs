@@ -4,6 +4,7 @@ namespace Mosa.UnitTest.Collection
 {
 	public static class FibonacciTests
 	{
+		[MosaUnitTest(Series = "I4Small")]
 		public static int Fibonacci(int n)
 		{
 			if (n == 1 || n == 0)

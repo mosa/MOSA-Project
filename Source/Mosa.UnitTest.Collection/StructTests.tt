@@ -7,6 +7,8 @@ namespace Mosa.UnitTest.Collection
 	public class StructTests
 	{
 	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
+
+		[MosaUnitTest(Series = "<#= number.Value #>")]
 		public static bool StructTestSet1<#= number.Value #>(<#= number.Key #> one)
 		{
 			Struct1<#= number.Value #> structure;
@@ -15,7 +17,8 @@ namespace Mosa.UnitTest.Collection
 	
 			return (structure.One.Equals(one));
 		}
-	
+
+		//[MosaUnitTest(Series = "<#= number.Value #>Mini<#= number.Value #>Mini")]
 		public static bool StructTestSet2<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two)
 		{
 			Struct3<#= number.Value #> structure;
@@ -25,7 +28,8 @@ namespace Mosa.UnitTest.Collection
 			
 			return (structure.One.Equals(one) && structure.Two.Equals(two));
 		}
-	
+
+		//[MosaUnitTest(Series = "<#= number.Value #>Mini<#= number.Value #>Mini<#= number.Value #>Mini")]
 		public static bool StructTestSet3<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two, <#= number.Key #> three)
 		{
 			Struct3<#= number.Value #> structure;
@@ -41,23 +45,22 @@ namespace Mosa.UnitTest.Collection
 	}
 
 	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
-	public struct Struct1<#= number.Value #>
+	internal struct Struct1<#= number.Value #>
 	{
 		public <#= number.Key #> One;
 	}
 	
-	public struct Struct2<#= number.Value #>
+	internal struct Struct2<#= number.Value #>
 	{
 		public <#= number.Key #> One;
 		public <#= number.Key #> Two;
 	}
 	
-	public struct Struct3<#= number.Value #>
+	internal struct Struct3<#= number.Value #>
 	{
 		public <#= number.Key #> One;
 		public <#= number.Key #> Two;
 		public <#= number.Key #> Three;
 	}
-	<# } #>
-	
+<# } #>
 }

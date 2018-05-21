@@ -79,9 +79,9 @@ namespace System
 			}
 		}
 
-		internal RuntimeAssembly(MDAssemblyDefinition* pointer)
+		internal RuntimeAssembly(UIntPtr pointer)
 		{
-			assemblyDefinition = pointer;
+			assemblyDefinition = (MDAssemblyDefinition*)pointer.ToPointer();
 			fullName = assemblyDefinition->Name;
 
 			uint typeCount = assemblyDefinition->NumberOfTypes;

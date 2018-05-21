@@ -7,7 +7,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 	public class Int8Fixture : TestFixture
 	{
 		[Theory]
-		[InlineData((sbyte)-2, (sbyte)-4)]
+		[MemberData(nameof(I1I1))]
 		public void AddI1I1(sbyte a, sbyte b)
 		{
 			Assert.Equal(Int8Tests.AddI1I1(a, b), Run<int>("Mosa.UnitTest.Collection.Int8Tests.AddI1I1", a, b));

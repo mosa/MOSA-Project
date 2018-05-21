@@ -9,6 +9,7 @@ namespace Mosa.UnitTest.Collection
 	<# foreach (KeyValuePair<string, string> convert in Numbers) 
 		foreach (KeyValuePair<string, string> number in NegativeIntegers) { #>
 
+		//[MosaUnitTest(Series = "<#= convert.Value #><#= number.Value #>")]
 		public static bool Conv<#= convert.Value #><#= number.Value #>(<#= convert.Key #> expect, <#= number.Key #> a)
 		{
 			return expect == (<#= convert.Key #>)a;

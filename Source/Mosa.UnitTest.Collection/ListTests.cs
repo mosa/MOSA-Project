@@ -6,6 +6,7 @@ namespace Mosa.UnitTest.Collection
 {
 	public static class ListTests
 	{
+		[MosaUnitTest]
 		public static bool Create()
 		{
 			var list = new List<int>();
@@ -13,6 +14,7 @@ namespace Mosa.UnitTest.Collection
 			return list != null;
 		}
 
+		[MosaUnitTest]
 		public static bool EmptySize()
 		{
 			var list = new List<int>();
@@ -20,6 +22,7 @@ namespace Mosa.UnitTest.Collection
 			return list.Count == 0;
 		}
 
+		[MosaUnitTest]
 		public static bool Add1()
 		{
 			var list = new List<int>();
@@ -29,6 +32,7 @@ namespace Mosa.UnitTest.Collection
 			return list.Count == 1;
 		}
 
+		[MosaUnitTest]
 		public static bool Add2()
 		{
 			var list = new List<int>();
@@ -39,6 +43,7 @@ namespace Mosa.UnitTest.Collection
 			return list.Count == 2;
 		}
 
+		[MosaUnitTest]
 		public static bool Index1()
 		{
 			var list = new List<int>();
@@ -48,6 +53,7 @@ namespace Mosa.UnitTest.Collection
 			return list[0] == 101;
 		}
 
+		[MosaUnitTest]
 		public static bool Index2()
 		{
 			var list = new List<int>();
@@ -58,6 +64,7 @@ namespace Mosa.UnitTest.Collection
 			return list[1] == 202;
 		}
 
+		[MosaUnitTest]
 		public static bool IndexOf1()
 		{
 			var list = new List<int>();
@@ -68,6 +75,7 @@ namespace Mosa.UnitTest.Collection
 			return list.IndexOf(101) == 1;
 		}
 
+		[MosaUnitTest]
 		public static bool IndexOf2()
 		{
 			var list = new List<int>();
@@ -78,6 +86,7 @@ namespace Mosa.UnitTest.Collection
 			return list.IndexOf(202) == 2;
 		}
 
+		[MosaUnitTest]
 		public static bool Remove1()
 		{
 			var list = new List<int>();
@@ -89,6 +98,7 @@ namespace Mosa.UnitTest.Collection
 			return list.IndexOf(202) == 0;
 		}
 
+		[MosaUnitTest]
 		public static bool Remove2()
 		{
 			var list = new List<int>();
@@ -112,6 +122,7 @@ namespace Mosa.UnitTest.Collection
 			return list;
 		}
 
+		[MosaUnitTest]
 		public static bool PopulateList()
 		{
 			var list = Populate(6);
@@ -131,6 +142,7 @@ namespace Mosa.UnitTest.Collection
 			return sum;
 		}
 
+		[MosaUnitTest]
 		public static bool CheckPopulate()
 		{
 			int size = 50;
@@ -146,6 +158,7 @@ namespace Mosa.UnitTest.Collection
 			return true;
 		}
 
+		[MosaUnitTest]
 		public static int Foreach()
 		{
 			var list = Populate(10);
@@ -153,6 +166,7 @@ namespace Mosa.UnitTest.Collection
 			return SumAll(list);
 		}
 
+		[MosaUnitTest]
 		public static int ForeachNested()
 		{
 			var list = Populate(9);
@@ -171,6 +185,7 @@ namespace Mosa.UnitTest.Collection
 			return sum;
 		}
 
+		[MosaUnitTest]
 		public static int ForeachBreak()
 		{
 			var holderList = new List<Holder2>();

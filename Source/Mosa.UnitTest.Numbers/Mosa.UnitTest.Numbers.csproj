@@ -79,7 +79,6 @@
     <Compile Include="B.cs" />
     <Compile Include="C.cs" />
     <Compile Include="Combinations.cs" />
-    <Compile Include="Extension.cs" />
     <Compile Include="I1.cs" />
     <Compile Include="I2.cs" />
     <Compile Include="I4.cs" />

@@ -8,7 +8,8 @@ namespace Mosa.UnitTest.Collection
 	public static class LdlocaTests 
 	{
 	
-		public static bool LdlocaCheckValueU1(byte expect) 
+		[MosaUnitTest(Series = "U1")]
+		public static bool LdlocaCheckValueU1(byte expect)
 		{
 			byte a = expect;
 			return LdlocaCheckValueRefU1(expect, ref a);
@@ -19,7 +20,8 @@ namespace Mosa.UnitTest.Collection
 			return (expect.Equals(a));
 		}
 	
-		public static bool LdlocaCheckValueU2(ushort expect) 
+		[MosaUnitTest(Series = "U2")]
+		public static bool LdlocaCheckValueU2(ushort expect)
 		{
 			ushort a = expect;
 			return LdlocaCheckValueRefU2(expect, ref a);
@@ -30,7 +32,8 @@ namespace Mosa.UnitTest.Collection
 			return (expect.Equals(a));
 		}
 	
-		public static bool LdlocaCheckValueU4(uint expect) 
+		[MosaUnitTest(Series = "U4")]
+		public static bool LdlocaCheckValueU4(uint expect)
 		{
 			uint a = expect;
 			return LdlocaCheckValueRefU4(expect, ref a);
@@ -41,7 +44,8 @@ namespace Mosa.UnitTest.Collection
 			return (expect.Equals(a));
 		}
 	
-		public static bool LdlocaCheckValueU8(ulong expect) 
+		[MosaUnitTest(Series = "U8")]
+		public static bool LdlocaCheckValueU8(ulong expect)
 		{
 			ulong a = expect;
 			return LdlocaCheckValueRefU8(expect, ref a);
@@ -52,7 +56,8 @@ namespace Mosa.UnitTest.Collection
 			return (expect.Equals(a));
 		}
 	
-		public static bool LdlocaCheckValueI1(sbyte expect) 
+		[MosaUnitTest(Series = "I1")]
+		public static bool LdlocaCheckValueI1(sbyte expect)
 		{
 			sbyte a = expect;
 			return LdlocaCheckValueRefI1(expect, ref a);
@@ -63,7 +68,8 @@ namespace Mosa.UnitTest.Collection
 			return (expect.Equals(a));
 		}
 	
-		public static bool LdlocaCheckValueI2(short expect) 
+		[MosaUnitTest(Series = "I2")]
+		public static bool LdlocaCheckValueI2(short expect)
 		{
 			short a = expect;
 			return LdlocaCheckValueRefI2(expect, ref a);
@@ -74,7 +80,8 @@ namespace Mosa.UnitTest.Collection
 			return (expect.Equals(a));
 		}
 	
-		public static bool LdlocaCheckValueI4(int expect) 
+		[MosaUnitTest(Series = "I4")]
+		public static bool LdlocaCheckValueI4(int expect)
 		{
 			int a = expect;
 			return LdlocaCheckValueRefI4(expect, ref a);
@@ -85,7 +92,8 @@ namespace Mosa.UnitTest.Collection
 			return (expect.Equals(a));
 		}
 	
-		public static bool LdlocaCheckValueI8(long expect) 
+		[MosaUnitTest(Series = "I8")]
+		public static bool LdlocaCheckValueI8(long expect)
 		{
 			long a = expect;
 			return LdlocaCheckValueRefI8(expect, ref a);
@@ -96,7 +104,8 @@ namespace Mosa.UnitTest.Collection
 			return (expect.Equals(a));
 		}
 	
-		public static bool LdlocaCheckValueR4(float expect) 
+		[MosaUnitTest(Series = "R4")]
+		public static bool LdlocaCheckValueR4(float expect)
 		{
 			float a = expect;
 			return LdlocaCheckValueRefR4(expect, ref a);
@@ -107,7 +116,8 @@ namespace Mosa.UnitTest.Collection
 			return (expect.Equals(a));
 		}
 	
-		public static bool LdlocaCheckValueR8(double expect) 
+		[MosaUnitTest(Series = "R8")]
+		public static bool LdlocaCheckValueR8(double expect)
 		{
 			double a = expect;
 			return LdlocaCheckValueRefR8(expect, ref a);
@@ -118,7 +128,8 @@ namespace Mosa.UnitTest.Collection
 			return (expect.Equals(a));
 		}
 	
-		public static bool LdlocaCheckValueC(char expect) 
+		[MosaUnitTest(Series = "C")]
+		public static bool LdlocaCheckValueC(char expect)
 		{
 			char a = expect;
 			return LdlocaCheckValueRefC(expect, ref a);

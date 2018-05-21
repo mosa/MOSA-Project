@@ -8,57 +8,57 @@ namespace Mosa.UnitTest.Collection
 	{
 		public static double AddR8R8(double first, double second)
 		{
-			return (first + second);
+			return first + second;
 		}
 
 		public static double SubR8R8(double first, double second)
 		{
-			return (first - second);
+			return first - second;
 		}
 
 		public static double MulR8R8(double first, double second)
 		{
-			return (first * second);
+			return first * second;
 		}
 
 		public static double DivR8R8(double first, double second)
 		{
-			return (first / second);
+			return first / second;
 		}
 
 		public static double RemR8R8(double first, double second)
 		{
-			return (first % second);
+			return first % second;
 		}
 
 		public static bool CeqR8R8(double first, double second)
 		{
-			return (first.CompareTo(second) == 0);
+			return first.CompareTo(second) == 0;
 		}
 
 		public static bool CneqR8R8(double first, double second)
 		{
-			return (first.CompareTo(second) != 0);
+			return first.CompareTo(second) != 0;
 		}
 
 		public static bool CltR8R8(double first, double second)
 		{
-			return (first.CompareTo(second) < 0);
+			return first.CompareTo(second) < 0;
 		}
 
 		public static bool CgtR8R8(double first, double second)
 		{
-			return (first.CompareTo(second) > 0);
+			return first.CompareTo(second) > 0;
 		}
 
 		public static bool CleR8R8(double first, double second)
 		{
-			return (first.CompareTo(second) <= 0);
+			return first.CompareTo(second) <= 0;
 		}
 
 		public static bool CgeR8R8(double first, double second)
 		{
-			return (first.CompareTo(second) >= 0);
+			return first.CompareTo(second) >= 0;
 		}
 
 		public static bool Newarr()

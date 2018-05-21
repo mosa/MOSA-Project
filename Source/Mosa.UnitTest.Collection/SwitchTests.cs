@@ -8,6 +8,7 @@ namespace Mosa.UnitTest.Collection
 	public static class SwitchTests
 	{
 	
+		[MosaUnitTest(Series = "I1")]
 		public static sbyte SwitchI1(sbyte a)
 		{
 			switch (a)
@@ -33,6 +34,7 @@ namespace Mosa.UnitTest.Collection
 			}
 		}
 	
+		[MosaUnitTest(Series = "I2")]
 		public static short SwitchI2(short a)
 		{
 			switch (a)
@@ -58,6 +60,7 @@ namespace Mosa.UnitTest.Collection
 			}
 		}
 	
+		[MosaUnitTest(Series = "I4")]
 		public static int SwitchI4(int a)
 		{
 			switch (a)
@@ -83,6 +86,7 @@ namespace Mosa.UnitTest.Collection
 			}
 		}
 	
+		[MosaUnitTest(Series = "I8")]
 		public static long SwitchI8(long a)
 		{
 			switch (a)
@@ -108,6 +112,7 @@ namespace Mosa.UnitTest.Collection
 			}
 		}
 		
+		[MosaUnitTest(Series = "U1")]
 		public static byte SwitchU1(byte a)
 		{
 			switch (a)
@@ -127,6 +132,7 @@ namespace Mosa.UnitTest.Collection
 			}
 		}
 	
+		[MosaUnitTest(Series = "U2")]
 		public static ushort SwitchU2(ushort a)
 		{
 			switch (a)
@@ -146,6 +152,7 @@ namespace Mosa.UnitTest.Collection
 			}
 		}
 	
+		[MosaUnitTest(Series = "U4")]
 		public static uint SwitchU4(uint a)
 		{
 			switch (a)
@@ -165,6 +172,7 @@ namespace Mosa.UnitTest.Collection
 			}
 		}
 	
+		[MosaUnitTest(Series = "U8")]
 		public static ulong SwitchU8(ulong a)
 		{
 			switch (a)

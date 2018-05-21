@@ -29,56 +29,68 @@ namespace Mosa.UnitTest.Collection
 			string enumElementMinusOne = enumType + "." + number.Value + Math.Abs(value-1).ToString();
 			string enumElementPlusOne = enumType + "." + number.Value + Math.Abs(value+1).ToString();
 
-#>		public static <#= valueType #> <#= number.Value #>Conversion()
+#>
+		[MosaUnitTest]
+		public static <#= valueType #> <#= number.Value #>Conversion()
 		{
 			return (<#= valueType #>)<#= enumElement #>;
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>PlusOne1()
 		{
 			return (<#= valueType #>)(<#= enumElement #> + 1);
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>PlusOne2()
 		{
 			return (<#= valueType #>)(<#= enumElement #> + 2);
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>MinusOne1()
 		{
 			return (<#= valueType #>)(<#= enumElement #> - 1);
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>MinusOne2()
 		{
 			return (<#= valueType #>)(<#= enumElement #> - 2);
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>Shl()
 		{
 			return (<#= valueType #>)<#= enumElement #> << 1;
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>Shr()
 		{
 			return (<#= valueType #>)<#= enumElement #> >> 1;
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>Mul2()
 		{
 			return  (<#= valueType #>)<#= enumElement #> * 2;
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>Div2()
 		{
 			return (<#= valueType #>)<#= enumElement #> / 2;
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>Rem2()
 		{
 			return (<#= valueType #>)<#= enumElement #> % 2;
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>AssignPlusOne()
 		{
 			var e = <#= enumElement #>;
@@ -86,6 +98,7 @@ namespace Mosa.UnitTest.Collection
 			return (<#= valueType #>)e;
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>AssignMinusOne()
 		{
 			var e = <#= enumElement #>;
@@ -93,6 +106,7 @@ namespace Mosa.UnitTest.Collection
 			return (<#= valueType #>)e;
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>Preincrement()
 		{
 			var e = <#= enumElement #>;
@@ -100,6 +114,7 @@ namespace Mosa.UnitTest.Collection
 			return (<#= valueType #>)(e);
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>Predecrement()
 		{
 			var e = <#= enumElement #>;
@@ -107,6 +122,7 @@ namespace Mosa.UnitTest.Collection
 			return (<#= valueType #>)(e);
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>Postincrement()
 		{
 			var e = <#= enumElement #>;
@@ -114,6 +130,7 @@ namespace Mosa.UnitTest.Collection
 			return (<#= valueType #>)(e);
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>Postdecrement()
 		{
 			var e = <#= enumElement #>;
@@ -121,16 +138,19 @@ namespace Mosa.UnitTest.Collection
 			return (<#= valueType #>)(e);
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>And()
 		{
 			return (<#= valueType #>)<#= enumElement #> & 0xF;
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>Or()
 		{
 			return (<#= valueType #>)<#= enumElement #> | 1;
 		}
 
+		[MosaUnitTest]
 		public static <#= valueType #> <#= number.Value #>XOr()
 		{
 			return (<#= valueType #>)<#= enumElement #> ^ 1;
@@ -142,16 +162,19 @@ namespace Mosa.UnitTest.Collection
 			return (<#= valueType #>)e <#= comparison.Key #> v;
 		}
 
+		[MosaUnitTest]
 		public static bool <#= number.Value #><#= comparison.Value #>1()
 		{
 			return Internal<#= number.Value #><#= comparison.Value #>(<#= enumElement #>, <#= value #>);
 		}
 
+		[MosaUnitTest]
 		public static bool <#= number.Value #><#= comparison.Value #>2()
 		{
 			return Internal<#= number.Value #><#= comparison.Value #>(<#= enumElement #>, <#= value+1 #>);
 		}
 
+		[MosaUnitTest]
 		public static bool <#= number.Value #><#= comparison.Value #>3()
 		{
 			return Internal<#= number.Value #><#= comparison.Value #>(<#= enumElement #>, <#= value-1 #>);

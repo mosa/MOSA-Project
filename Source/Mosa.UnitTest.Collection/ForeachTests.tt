@@ -8,7 +8,8 @@ namespace Mosa.UnitTest.Collection
 	public static class ForeachTests 
 	{
 	<# foreach (KeyValuePair<string, string> number in Integers) { #>
-	
+
+		[MosaUnitTest]
 		public static <#= number.Key #> Foreach<#= number.Value #>()
 		{
 			<#= number.Key #>[] a = new <#= number.Key #>[5];

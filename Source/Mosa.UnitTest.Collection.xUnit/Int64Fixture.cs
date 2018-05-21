@@ -8,8 +8,7 @@ namespace Mosa.UnitTest.Collection.xUnit
 	{
 		[Theory]
 
-		//[MemberData(nameof(I8I8))]
-		[InlineData((long)1, (long)2)]
+		[MemberData(nameof(I8I8))]
 		public void AddI8I8(long a, long b)
 		{
 			Assert.Equal(Int64Tests.AddI8I8(a, b), Run<long>("Mosa.UnitTest.Collection.Int64Tests.AddI8I8", a, b));

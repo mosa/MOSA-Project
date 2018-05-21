@@ -32,7 +32,7 @@
     <NoStdLib>false</NoStdLib>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <Prefer32Bit>false</Prefer32Bit>
-    <NoWarn>168,162</NoWarn>
+    <NoWarn>168,162,649</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -44,7 +44,7 @@
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <Prefer32Bit>false</Prefer32Bit>
-    <NoWarn>168,162</NoWarn>
+    <NoWarn>168,162,649</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
   </PropertyGroup>
@@ -121,7 +121,7 @@
       <DependentUpon>EnumTests.tt</DependentUpon>
     </Compile>
     <Compile Include="GenericMethodTests.cs" />
-    <Compile Include="GenericMixedTest.cs" />
+    <Compile Include="MosaUnitTestAttribute.cs" />
     <Compile Include="NullCheckOptimizationTests.cs" />
     <Compile Include="RemTests.cs" />
     <Compile Include="LargeSwitchTest.cs" />

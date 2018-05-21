@@ -4,6 +4,7 @@ namespace Mosa.UnitTest.Collection
 {
 	public static class RegisterAllocatorTests
 	{
+		[MosaUnitTest]
 		public static int Pressure8()
 		{
 			int a = 10;

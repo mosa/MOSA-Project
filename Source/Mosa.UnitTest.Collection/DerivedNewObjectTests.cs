@@ -26,24 +26,28 @@ namespace Mosa.UnitTest.Collection
 			int32 = (v1 * v2) + v3;
 		}
 
+		[MosaUnitTest]
 		public static bool WithoutArgs()
 		{
 			DerivedNewObjectTests d = new DerivedNewObjectTests();
 			return d != null;
 		}
 
+		[MosaUnitTest]
 		public static bool WithOneArg()
 		{
 			DerivedNewObjectTests d = new DerivedNewObjectTests(42);
 			return (d.int32 == 42);
 		}
 
+		[MosaUnitTest]
 		public static bool WithTwoArgs()
 		{
 			DerivedNewObjectTests d = new DerivedNewObjectTests(42, 3);
 			return (d.int32 == 45);
 		}
 
+		[MosaUnitTest]
 		public static bool WithThreeArgs()
 		{
 			DerivedNewObjectTests d = new DerivedNewObjectTests(21, 2, 7);

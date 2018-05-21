@@ -43,6 +43,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var local in MethodCompiler.LocalStack)
 			{
+				if (local.Uses.Count == 0)
+					continue;
+
 				trace.Log(local + ": offset = " + local.Offset.ToString());
 			}
 		}
@@ -58,27 +61,27 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			int offset = offsetOfFirst;
 
-			foreach (var operand in locals)
+			foreach (var local in locals)
 			{
-				if (operand.Uses.Count == 0)
+				if (local.Uses.Count == 0)
 					continue;
 
-				var size = GetTypeSize(operand.Type, true);
+				var size = GetTypeSize(local.Type, true);
 
 				offset -= size;
 
-				operand.Offset = offset;
-				operand.IsResolved = true;
+				local.Offset = offset;
+				local.IsResolved = true;
 
-				if (operand.Low != null)
+				if (local.Low != null)
 				{
-					operand.Low.Offset = offset;
-					operand.Low.IsResolved = true;
+					local.Low.Offset = offset;
+					local.Low.IsResolved = true;
 				}
-				if (operand.High != null)
+				if (local.High != null)
 				{
-					operand.High.Offset = offset + 4;
-					operand.High.IsResolved = true;
+					local.High.Offset = offset + 4;
+					local.High.IsResolved = true;
 				}
 			}
 

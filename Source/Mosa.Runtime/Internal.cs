@@ -2,18 +2,21 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime
 {
-	public unsafe static class Internal
+	public static class Internal
 	{
 		#region Allocation
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr AllocateMemory(uint size)
 		{
 			return GC.AllocateObject(size);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr AllocateObject(RuntimeTypeHandle handle, uint classSize)
 		{
 			// An object has the following memory layout:
@@ -21,20 +24,21 @@ namespace Mosa.Runtime
 			//   - IntPtr SyncBlock
 			//   - 0 .. n object data fields
 
-			uint allocationSize = (2 * (uint)(UIntPtr.Size)) + classSize;
-			var destination = AllocateMemory(allocationSize);
+			var memory = AllocateMemory((2 * (uint)(UIntPtr.Size)) + classSize);
 
-			Intrinsic.Store(destination, 0, handle.Value);
-			Intrinsic.Store(destination, UIntPtr.Size, 0);
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.Store(memory, UIntPtr.Size, 0);
 
-			return destination;
+			return memory;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr AllocateObject(RuntimeTypeHandle handle, int classSize)
 		{
 			return AllocateObject(handle, (uint)classSize);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr AllocateArray(RuntimeTypeHandle handle, uint elementSize, uint elements)
 		{
 			// An array has the following memory layout:
@@ -44,18 +48,19 @@ namespace Mosa.Runtime
 			//   - ElementType[length] elements
 			//   - Padding
 
-			uint allocationSize = ((uint)(UIntPtr.Size) * 3) + elements * elementSize;
+			uint allocationSize = ((uint)(UIntPtr.Size) * 3) + (elements * elementSize);
 			allocationSize = (allocationSize + 3) & ~3u;    // Align to 4-bytes boundary
 
-			var destination = AllocateMemory(allocationSize);
+			var memory = AllocateMemory(allocationSize);
 
-			Intrinsic.Store32(destination, 0, handle.Value.ToInt32());
-			Intrinsic.Store32(destination, UIntPtr.Size, 0);
-			Intrinsic.Store32(destination, UIntPtr.Size * 2, elements);
+			Intrinsic.Store32(memory, 0, handle.Value.ToInt32());
+			Intrinsic.Store32(memory, UIntPtr.Size, 0);
+			Intrinsic.Store32(memory, UIntPtr.Size * 2, elements);
 
-			return destination;
+			return memory;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static UIntPtr AllocateString(RuntimeTypeHandle handle, uint length)
 		{
 			return AllocateArray(handle, sizeof(char), length);
@@ -65,94 +70,106 @@ namespace Mosa.Runtime
 
 		#region (Un)Boxing
 
-		public static void* Box8(RuntimeTypeHandle handle, byte value)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UIntPtr Box8(RuntimeTypeHandle handle, byte value)
 		{
-			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);    // 4 for alignment
-			*(memory + ((uint)(UIntPtr.Size) * 2)) = value;
-			return memory;
-		}
+			var memory = AllocateObject(handle, UIntPtr.Size);
 
-		public static void* Box16(RuntimeTypeHandle handle, ushort value)
-		{
-			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);    // 4 for alignment
-			*(ushort*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
-			return memory;
-		}
-
-		public static void* Box32(RuntimeTypeHandle handle, uint value)
-		{
-			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);
-			*(uint*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
-			return memory;
-		}
-
-		public static void* Box64(RuntimeTypeHandle handle, ulong value)
-		{
-			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size * 2);
-			*(ulong*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
-			return memory;
-		}
-
-		public static void* BoxR4(RuntimeTypeHandle handle, float value)
-		{
-			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size);
-			*(float*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
-			return memory;
-		}
-
-		public static void* BoxR8(RuntimeTypeHandle handle, double value)
-		{
-			byte* memory = (byte*)AllocateObject(handle, UIntPtr.Size * 2);
-			*(double*)(memory + ((uint)(UIntPtr.Size) * 2)) = value;
-			return memory;
-		}
-
-		public static void* Box(RuntimeTypeHandle handle, void* value, uint size)
-		{
-			byte* memory = (byte*)AllocateObject(handle, size);
-
-			byte* dest = memory + (uint)(UIntPtr.Size * 2);
-			byte* src = (byte*)value;
-
-			for (int i = 0; i < size; i++)
-			{
-				dest[i] = src[i];
-			}
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.Store8(memory, UIntPtr.Size * 2, value);
 
 			return memory;
 		}
 
-		public static byte Unbox8(void* box)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UIntPtr Box16(RuntimeTypeHandle handle, ushort value)
 		{
-			return *((byte*)box + (uint)(UIntPtr.Size) * 2);
+			var memory = AllocateObject(handle, UIntPtr.Size);
+
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.Store16(memory, UIntPtr.Size * 2, value);
+
+			return memory;
 		}
 
-		public static ushort Unbox16(void* box)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UIntPtr Box32(RuntimeTypeHandle handle, uint value)
 		{
-			return *(ushort*)((byte*)box + (uint)(UIntPtr.Size) * 2);
+			var memory = AllocateObject(handle, UIntPtr.Size);
+
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.Store32(memory, UIntPtr.Size * 2, value);
+
+			return memory;
 		}
 
-		public static uint* Unbox32(void* box)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UIntPtr Box64(RuntimeTypeHandle handle, ulong value)
 		{
-			return (uint*)((byte*)box + (uint)(UIntPtr.Size) * 2);
+			var memory = AllocateObject(handle, UIntPtr.Size * 2);
+
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.Store64(memory, UIntPtr.Size * 2, value);
+
+			return memory;
 		}
 
-		public static ulong* Unbox64(void* box)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UIntPtr BoxR4(RuntimeTypeHandle handle, float value)
 		{
-			return (ulong*)((byte*)box + (uint)(UIntPtr.Size) * 2);
+			var memory = AllocateObject(handle, UIntPtr.Size);
+
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.StoreR4(memory, UIntPtr.Size * 2, value);
+
+			return memory;
 		}
 
-		public static void* Unbox(void* box, void* vt, uint size)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UIntPtr BoxR8(RuntimeTypeHandle handle, double value)
 		{
-			//MemoryCopy(vt, (byte*)box + (uint)(UIntPtr.Size) * 2, size);
+			var memory = AllocateObject(handle, UIntPtr.Size * 2);
 
-			byte* dest = (byte*)vt;
-			byte* src = (byte*)box + (uint)(UIntPtr.Size * 2);
+			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.StoreR8(memory, UIntPtr.Size * 2, value);
 
-			for (int i = 0; i < size; i++)
-			{
-				dest[i] = src[i];
-			}
+			return memory;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UIntPtr Box(RuntimeTypeHandle handle, UIntPtr value, uint size)
+		{
+			var memory = AllocateObject(handle, size);
+
+			MemoryCopy(memory + (UIntPtr.Size * 2), value, size);
+
+			return memory;
+		}
+
+		public static UIntPtr Unbox8(UIntPtr box)
+		{
+			return box + (UIntPtr.Size * 2);
+		}
+
+		public static UIntPtr Unbox16(UIntPtr box)
+		{
+			return box + (UIntPtr.Size * 2);
+		}
+
+		public static UIntPtr Unbox32(UIntPtr box)
+		{
+			return box + (UIntPtr.Size * 2);
+		}
+
+		public static UIntPtr Unbox64(UIntPtr box)
+		{
+			return box + (UIntPtr.Size * 2);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static UIntPtr Unbox(UIntPtr box, UIntPtr vt, uint size)
+		{
+			MemoryCopy(vt, box + (UIntPtr.Size * 2), size);
 
 			return vt;
 		}
@@ -197,9 +214,9 @@ namespace Mosa.Runtime
 			for (int i = 0; i < assemblyCount; i++)
 			{
 				// Get the pointer to the Assembly Metadata
-				var ptr = Intrinsic.Load32(assemblyListTable, UIntPtr.Size + (UIntPtr.Size * i));
+				var ptr = Intrinsic.LoadPointer(assemblyListTable, UIntPtr.Size + (UIntPtr.Size * i));
 
-				Assemblies.AddLast(new RuntimeAssembly((MDAssemblyDefinition*)ptr));
+				Assemblies.AddLast(new RuntimeAssembly(ptr));
 			}
 		}
 
