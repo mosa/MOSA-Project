@@ -128,8 +128,6 @@ namespace Mosa.Compiler.Framework.Stages
 				FoldTo64Constant,
 				FoldIfThenElse,
 				SimplifyParamLoadCount,
-
-				//ReduceTemporaries,
 			};
 		}
 
@@ -497,16 +495,24 @@ namespace Mosa.Compiler.Framework.Stages
 			if (source.Type.IsUI8 & destination.Type.IsUI8)
 				return true;
 
-			if (NativePointerSize == 4 && (destination.IsI || destination.IsU || destination.IsUnmanagedPointer) && (source.IsI4 || source.IsU4))
+			if (NativePointerSize == 4
+				&& (destination.IsI || destination.IsU || destination.IsUnmanagedPointer)
+				&& (source.IsI4 || source.IsU4))
 				return true;
 
-			if (NativePointerSize == 4 && (source.IsI || source.IsU || source.IsUnmanagedPointer) && (destination.IsI4 || destination.IsU4))
+			if (NativePointerSize == 4
+				&& (source.IsI || source.IsU || source.IsUnmanagedPointer)
+				&& (destination.IsI4 || destination.IsU4))
 				return true;
 
-			if (NativePointerSize == 8 && (destination.IsI || destination.IsU || destination.IsUnmanagedPointer) && (source.IsI8 || source.IsU8))
+			if (NativePointerSize == 8
+				&& (destination.IsI || destination.IsU || destination.IsUnmanagedPointer)
+				&& (source.IsI8 || source.IsU8))
 				return true;
 
-			if (NativePointerSize == 8 && (source.IsI || source.IsU || source.IsUnmanagedPointer) && (destination.IsI8 || destination.IsU8))
+			if (NativePointerSize == 8
+				&& (source.IsI || source.IsU || source.IsUnmanagedPointer)
+				&& (destination.IsI8 || destination.IsU8))
 				return true;
 
 			if (source.IsR4 && destination.IsR4)
@@ -524,7 +530,15 @@ namespace Mosa.Compiler.Framework.Stages
 			if (source.Type == destination.Type)
 				return true;
 
-			if (source.Type.IsArray & destination.Type.IsArray & source.Type.ElementType == destination.Type.ElementType)
+			if (source.Type.IsArray
+				&& destination.Type.IsArray
+				&& source.Type.ElementType == destination.Type.ElementType)
+				return true;
+
+			if (source.Type.IsUserValueType
+				&& destination.Type.IsUserValueType
+				&& MosaTypeLayout.IsStoredOnStack(source.Type)
+				&& MosaTypeLayout.IsStoredOnStack(destination.Type))
 				return true;
 
 			return false;
@@ -555,8 +569,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// If the pointer or reference types are different, we can not copy propagation because type information would be lost.
 			// Also if the operand sign is different, we cannot do it as it requires a signed/unsigned extended move, not a normal move
-			if (!CanCopyPropagation(node.Result, node.Operand1))
-				return;
+			//if (!CanCopyPropagation(node.Result, node.Operand1))
+			//	return;
 
 			Operand destination = node.Result;
 			Operand source = node.Operand1;
@@ -2496,50 +2510,6 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("AFTER: \t" + node);
 				foldIfThenElseCount++;
 			}
-		}
-
-		private void ReduceTemporaries(InstructionNode node)
-		{
-			if (!(node.Instruction == IRInstruction.LoadInt32
-				|| node.Instruction == IRInstruction.LoadInt64))
-				return;
-
-			if (!node.Result.IsVirtualRegister)
-				return;
-
-			if (!node.Operand1.IsCPURegister)
-				return;
-
-			if (!node.Operand2.IsStackLocal)
-				return;
-
-			if (node.Operand2.Uses.Count == 0)
-				return;
-
-			var node2 = node.Operand2.Uses[0];
-
-			if (node2.Instruction != IRInstruction.AddressOf)
-				return;
-
-			if (!node2.Result.IsVirtualRegister)
-				return;
-
-			if (!node2.Operand1.IsStackLocal)
-				return;
-
-			BaseInstruction instruction = null;
-
-			if (node.Instruction == IRInstruction.LoadInt32)
-				instruction = IRInstruction.MoveInt32;
-			else if (node.Instruction == IRInstruction.LoadInt64)
-				instruction = IRInstruction.MoveInt64;
-
-			AddOperandUsageToWorkList(node);
-			if (trace.Active) trace.Log("*** ReduceTemporaries");
-			if (trace.Active) trace.Log("BEFORE:\t" + node);
-			node.SetInstruction(instruction, node.Result, node2.Operand1);
-			if (trace.Active) trace.Log("AFTER: \t" + node);
-			simplifyParamLoadCount++;
 		}
 	}
 }

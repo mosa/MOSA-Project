@@ -146,7 +146,7 @@ namespace Mosa.Compiler.Framework
 				new CILTransformationStage(),
 				new UnboxValueTypeStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
-				new PromoteStructToRegister(),
+				new PromoteTemporaryVariables(),
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
