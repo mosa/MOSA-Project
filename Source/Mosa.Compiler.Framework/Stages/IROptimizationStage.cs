@@ -345,17 +345,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return operand.Is64BitInteger ? (BaseInstruction)IRInstruction.MoveInt64 : IRInstruction.MoveInt32;
 		}
 
-		private bool ContainsAddressOf(Operand local)
-		{
-			foreach (var node in local.Uses)
-			{
-				if (node.Instruction == IRInstruction.AddressOf)
-					return true;
-			}
-
-			return false;
-		}
-
 		private void DeadCodeElimination(InstructionNode node)
 		{
 			if (node.ResultCount == 0 || node.ResultCount > 2)
@@ -469,81 +458,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private bool CanCopyPropagation(Operand source, Operand destination)
-		{
-			if (source.IsReferenceType && destination.IsReferenceType)
-				return true;
-
-			if (source.IsUnmanagedPointer && destination.IsUnmanagedPointer)
-				return true;
-
-			if (source.IsManagedPointer && destination.IsManagedPointer)
-				return true;
-
-			if (source.IsFunctionPointer && destination.IsFunctionPointer)
-				return true;
-
-			if (source.Type.IsUI1 & destination.Type.IsUI1)
-				return true;
-
-			if (source.Type.IsUI2 & destination.Type.IsUI2)
-				return true;
-
-			if (source.Type.IsUI4 & destination.Type.IsUI4)
-				return true;
-
-			if (source.Type.IsUI8 & destination.Type.IsUI8)
-				return true;
-
-			if (NativePointerSize == 4
-				&& (destination.IsI || destination.IsU || destination.IsUnmanagedPointer)
-				&& (source.IsI4 || source.IsU4))
-				return true;
-
-			if (NativePointerSize == 4
-				&& (source.IsI || source.IsU || source.IsUnmanagedPointer)
-				&& (destination.IsI4 || destination.IsU4))
-				return true;
-
-			if (NativePointerSize == 8
-				&& (destination.IsI || destination.IsU || destination.IsUnmanagedPointer)
-				&& (source.IsI8 || source.IsU8))
-				return true;
-
-			if (NativePointerSize == 8
-				&& (source.IsI || source.IsU || source.IsUnmanagedPointer)
-				&& (destination.IsI8 || destination.IsU8))
-				return true;
-
-			if (source.IsR4 && destination.IsR4)
-				return true;
-
-			if (source.IsR8 && destination.IsR8)
-				return true;
-
-			if ((source.IsI || source.IsU) && (destination.IsI || destination.IsU))
-				return true;
-
-			if (source.IsValueType || destination.IsValueType)
-				return false;
-
-			if (source.Type == destination.Type)
-				return true;
-
-			if (source.Type.IsArray
-				&& destination.Type.IsArray
-				&& source.Type.ElementType == destination.Type.ElementType)
-				return true;
-
-			if (source.Type.IsUserValueType
-				&& destination.Type.IsUserValueType
-				&& MosaTypeLayout.IsStoredOnStack(source.Type)
-				&& MosaTypeLayout.IsStoredOnStack(destination.Type))
-				return true;
-
-			return false;
-		}
-
 		private void ForwardPropagateMove(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.MoveInt32
@@ -567,18 +481,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Operand1.IsVirtualRegister)
 				return;
 
-			// If the pointer or reference types are different, we can not copy propagation because type information would be lost.
-			// Also if the operand sign is different, we cannot do it as it requires a signed/unsigned extended move, not a normal move
-			//if (!CanCopyPropagation(node.Result, node.Operand1))
-			//	return;
-
 			Operand destination = node.Result;
 			Operand source = node.Operand1;
 
 			Debug.Assert(destination != source);
-
-			if (ContainsAddressOf(destination))
-				return;
 
 			// for each statement T that uses operand, substituted c in statement T
 			AddOperandUsageToWorkList(node);
