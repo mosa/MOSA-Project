@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -198,7 +199,68 @@ namespace Mosa.Runtime
 
 		#endregion Memory Manipulation
 
-		#region Metadata
+		#region Virtual Machine
+
+		public static bool IsTypeInInheritanceChain(TypeDefinition typeDefinition, TypeDefinition chain)
+		{
+			while (!chain.IsNull)
+			{
+				if (chain.Handle == typeDefinition.Handle)
+					return true;
+
+				chain = chain.ParentType;
+			}
+
+			return false;
+		}
+
+		public static UIntPtr IsInstanceOfType(RuntimeTypeHandle handle, object obj)
+		{
+			if (obj == null)
+				return UIntPtr.Zero;
+
+			var o = Intrinsic.GetObjectAddress(obj);
+			var objTypeDefinition = new TypeDefinition(Intrinsic.LoadPointer(o));
+			var typeDefinition = new TypeDefinition(handle.Value);
+
+			if (IsTypeInInheritanceChain(typeDefinition, objTypeDefinition))
+				return o;
+
+			return UIntPtr.Zero;
+		}
+
+		public static object IsInstanceOfInterfaceType(int interfaceSlot, object obj)
+		{
+			if (obj == null)
+				return null;
+
+			var o = Intrinsic.GetObjectAddress(obj);
+
+			var objTypeDefinition = new TypeDefinition(Intrinsic.LoadPointer(o));
+
+			if (objTypeDefinition.IsNull)
+				return null;
+
+			var bitmap = objTypeDefinition.Bitmap;
+
+			if (bitmap == UIntPtr.Zero)
+				return null;
+
+			int index = interfaceSlot / 32;
+			int bit = interfaceSlot % 32;
+
+			uint value = Intrinsic.Load32(bitmap, index * 4);
+			uint result = value & (uint)(1 << bit);
+
+			if (result == 0)
+				return null;
+
+			return o;
+		}
+
+		#endregion Virtual Machine
+
+		#region Metadata Setup
 
 		internal static LinkedList<RuntimeAssembly> Assemblies = null;
 
@@ -220,7 +282,7 @@ namespace Mosa.Runtime
 			}
 		}
 
-		#endregion Metadata
+		#endregion Metadata Setup
 
 		public static void ThrowIndexOutOfRangeException()
 		{

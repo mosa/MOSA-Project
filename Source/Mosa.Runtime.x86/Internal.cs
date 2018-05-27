@@ -9,61 +9,6 @@ namespace Mosa.Runtime.x86
 {
 	public unsafe static class Internal
 	{
-		internal const uint NativeIntSize = 4;
-
-		public static bool IsTypeInInheritanceChain(TypeDefinition typeDefinition, TypeDefinition chain)
-		{
-			while (!chain.IsNull)
-			{
-				if (chain.Handle == typeDefinition.Handle)
-					return true;
-
-				chain = chain.ParentType;
-			}
-
-			return false;
-		}
-
-		public static void* IsInstanceOfType(RuntimeTypeHandle handle, void* obj)
-		{
-			if (obj == null)
-				return null;
-
-			MDTypeDefinition* typeDefinition = (MDTypeDefinition*)((uint**)&handle)[0];
-
-			MDTypeDefinition* objTypeDefinition = (MDTypeDefinition*)((uint*)obj)[0];
-
-			if (IsTypeInInheritanceChain(new TypeDefinition(new UIntPtr(typeDefinition)), new TypeDefinition(new UIntPtr(objTypeDefinition))))
-				return obj;
-
-			return null;
-		}
-
-		public static void* IsInstanceOfInterfaceType(int interfaceSlot, void* obj)
-		{
-			MDTypeDefinition* objTypeDefinition = (MDTypeDefinition*)((uint*)obj)[0];
-
-			if (objTypeDefinition == null)
-				return null;
-
-			UIntPtr bitmap = objTypeDefinition->Bitmap;
-
-			if (bitmap.ToPointer() == null)
-				return null;
-
-			int index = interfaceSlot / 32;
-			int bit = interfaceSlot % 32;
-
-			//uint value = bitmap[index];
-			uint value = Intrinsic.Load32(bitmap, index * UIntPtr.Size);
-			uint result = value & (uint)(1 << bit);
-
-			if (result == 0)
-				return null;
-
-			return obj;
-		}
-
 		[Method("Mosa.Runtime.Internal.MemoryCopy")]
 		public static void MemoryCopy(UIntPtr dest, UIntPtr src, uint count)
 		{
@@ -195,7 +140,7 @@ namespace Mosa.Runtime.x86
 			while (entries > 0)
 			{
 				var addr = Intrinsic.LoadPointer(table);
-				uint size = Intrinsic.Load32(table, NativeIntSize);
+				uint size = Intrinsic.Load32(table, UIntPtr.Size);
 
 				if (address.ToUInt64() >= addr.ToUInt64() && address.ToUInt64() < addr.ToUInt64() + size)
 				{
@@ -246,7 +191,7 @@ namespace Mosa.Runtime.x86
 					// If the handler is a finally clause, accept without testing
 					// If the handler is a exception clause, accept if the exception type is in the is within the inheritance chain of the exception object
 					if ((handlerType == ExceptionHandlerType.Finally) ||
-						(handlerType == ExceptionHandlerType.Exception && IsTypeInInheritanceChain(exType, exceptionType)))
+						(handlerType == ExceptionHandlerType.Exception && Runtime.Internal.IsTypeInInheritanceChain(exType, exceptionType)))
 					{
 						protectedRegionDefinition = prDef;
 						currentStart = start;

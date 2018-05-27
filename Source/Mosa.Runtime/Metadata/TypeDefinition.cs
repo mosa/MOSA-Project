@@ -33,6 +33,11 @@ namespace Mosa.Runtime.Metadata
 			Ptr = ptr;
 		}
 
+		public unsafe TypeDefinition(IntPtr ptr)
+		{
+			Ptr = new UIntPtr((void*)ptr.ToPointer());
+		}
+
 		public bool IsNull => Ptr == UIntPtr.Zero;
 
 		public ulong Handle => Ptr.ToUInt64();
