@@ -46,7 +46,9 @@ namespace Mosa.Runtime.Metadata
 
 		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, UIntPtr.Size));
 
-		public TypeAttributes OffsetOrSize => (TypeAttributes)(Intrinsic.Load32(Ptr, UIntPtr.Size * 2) & 0x00FFFFFF);
+		public TypeCode TypeCode => (TypeCode)(Intrinsic.Load32(Ptr, UIntPtr.Size * 2) >> 24);
+
+		public TypeAttributes Attributes => (TypeAttributes)(Intrinsic.Load32(Ptr, UIntPtr.Size * 2) & 0x00FFFFFF);
 
 		public uint Size => Intrinsic.Load32(Ptr, UIntPtr.Size * 3);
 
@@ -58,7 +60,7 @@ namespace Mosa.Runtime.Metadata
 
 		public TypeDefinition ElementType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 7));
 
-		public CustomAttributeTable DefaultConstructor => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 8));
+		public MethodDefinition DefaultConstructor => new MethodDefinition(Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 8));
 
 		public UIntPtr Properties => Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 9);
 

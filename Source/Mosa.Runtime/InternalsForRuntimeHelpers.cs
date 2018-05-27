@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -21,21 +22,27 @@ namespace Mosa.Runtime
 			return (o1 == o2);
 		}
 
-		public static void InitializeArray(uint* array, RuntimeFieldHandle handle)
+		public static void InitializeArray(UIntPtr array, RuntimeFieldHandle handle)
 		{
-			var fieldDefinition = (MDFieldDefinition*)((uint**)&handle)[0];
-			byte* arrayElements = (byte*)(array + 3);
+			// (FieldDefinition)((uint**)&handle)[0];
+			var fieldDefinition = new FieldDefinition(handle.Value);
+
+			//byte* arrayElements = (byte*)(array + 3);
+			var arrayElements = array + (3 * UIntPtr.Size);
 
 			// See FieldDefinition for format of field handle
-			byte* fieldData = fieldDefinition->FieldData;
-			uint dataLength = fieldDefinition->OffsetOrSize;
-			while (dataLength > 0)
-			{
-				*arrayElements = *fieldData;
-				arrayElements++;
-				fieldData++;
-				dataLength--;
-			}
+			var fieldData = fieldDefinition.FieldData;
+			uint dataLength = fieldDefinition.OffsetOrSize;
+
+			Internal.MemoryCopy(arrayElements, fieldData, dataLength);
+
+			//while (dataLength > 0)
+			//{
+			//	*arrayElements = *fieldData;
+			//	arrayElements++;
+			//	fieldData += 1;
+			//	dataLength--;
+			//}
 		}
 
 		public static void* UnsafeCast(void* o)
@@ -55,14 +62,16 @@ namespace Mosa.Runtime
 		{
 			// Cheat
 			var handle = type.TypeHandle;
-			var typeDefinition = (MDTypeDefinition*)((uint**)&handle)[0];
 
-			if (typeDefinition->DefaultConstructor == null)
+			//TypeDefinition typeDefinition = (TypeDefinition*)((uint**)&handle)[0];
+			var typeDefinition = new TypeDefinition(handle.Value);
+
+			if (typeDefinition.DefaultConstructor.IsNull)
 				throw new ArgumentException("Type has no parameterless constructor.");
 
-			var thisObject = Internal.AllocateObject(type.TypeHandle, typeDefinition->Size);
+			var thisObject = Internal.AllocateObject(type.TypeHandle, typeDefinition.Size);
 
-			return Intrinsic.CreateInstanceSimple(typeDefinition->DefaultConstructor->Method, thisObject);
+			return Intrinsic.CreateInstanceSimple(typeDefinition.DefaultConstructor.Method, thisObject);
 		}
 	}
 }

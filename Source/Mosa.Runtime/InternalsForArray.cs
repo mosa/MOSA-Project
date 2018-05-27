@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime.Metadata;
 using System;
 using System.Reflection;
 
@@ -29,7 +30,7 @@ namespace Mosa.Runtime
 				throw new ArgumentOutOfRangeException(nameof(length));
 
 			// Get type info
-			MDTypeDefinition* typeStruct = (MDTypeDefinition*)((uint*)sourceArray);
+			var typeStruct = (TypeDefinition*)((uint*)sourceArray);
 			var typeCode = typeStruct->TypeCode;
 
 			var size = (typeCode == TypeCode.ReferenceType) ? UIntPtr.Size : (int)typeStruct->Size;

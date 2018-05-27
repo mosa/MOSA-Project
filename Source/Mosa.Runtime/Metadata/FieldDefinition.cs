@@ -24,6 +24,11 @@ namespace Mosa.Runtime.Metadata
 			Ptr = ptr;
 		}
 
+		public unsafe FieldDefinition(IntPtr ptr)
+		{
+			Ptr = new UIntPtr((void*)ptr.ToPointer());
+		}
+
 		public bool IsNull => Ptr == UIntPtr.Zero;
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(Intrinsic.LoadPointer(Ptr));

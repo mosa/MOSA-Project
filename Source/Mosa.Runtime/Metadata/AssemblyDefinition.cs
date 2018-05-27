@@ -26,7 +26,7 @@ namespace Mosa.Runtime.Metadata
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(Intrinsic.LoadPointer(Ptr));
 
-		public CustomAttributeTable CustomAttributeTable => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, UIntPtr.Size));
+		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, UIntPtr.Size));
 
 		public uint Attributes => Intrinsic.Load32(Ptr, UIntPtr.Size * 2);
 
