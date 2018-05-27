@@ -17,7 +17,7 @@ namespace Mosa.Runtime
 		{
 			fixed (MDCustomAttributeTable* _this = &this)
 			{
-				return (MDCustomAttribute*)Intrinsic.LoadPointer(new UIntPtr(_this) + sizeof(MDCustomAttributeTable) + (UIntPtr.Size * (int)slot));
+				return (MDCustomAttribute*)Intrinsic.LoadPointer(new IntPtr(_this) + sizeof(MDCustomAttributeTable) + (IntPtr.Size * (int)slot));
 			}
 		}
 	}

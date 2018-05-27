@@ -79,7 +79,7 @@ namespace System
 			}
 		}
 
-		internal RuntimeAssembly(UIntPtr pointer)
+		internal RuntimeAssembly(IntPtr pointer)
 		{
 			assemblyDefinition = (MDAssemblyDefinition*)pointer.ToPointer();
 			fullName = assemblyDefinition->Name;

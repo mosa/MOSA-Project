@@ -109,7 +109,7 @@ namespace Mosa.Runtime.x86
 		public extern static void Set32(uint address, uint value);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEBP, Mosa.Platform.x86")]
-		public extern static UIntPtr GetEBP();
+		public extern static IntPtr GetEBP();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetFS, Mosa.Platform.x86")]
 		public extern static uint GetFS();
@@ -145,10 +145,10 @@ namespace Mosa.Runtime.x86
 		public extern static uint GetAssemblyListTable();
 
 		[DllImportAttribute("Mosa.Platform.x86.Intrinsic.GetMethodLookupTable, Mosa.Platform.x86")]
-		public extern static UIntPtr GetMethodLookupTable();
+		public extern static IntPtr GetMethodLookupTable();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMethodExceptionLookupTable, Mosa.Platform.x86")]
-		public extern static UIntPtr GetMethodExceptionLookupTable();
+		public extern static IntPtr GetMethodExceptionLookupTable();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMultibootEAX, Mosa.Platform.x86")]
 		public extern static uint GetMultibootEAX();
@@ -157,7 +157,7 @@ namespace Mosa.Runtime.x86
 		public extern static uint GetMultibootEBX();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.FrameJump, Mosa.Platform.x86")]
-		public extern static void FrameJump(UIntPtr eip, UIntPtr esp, UIntPtr ebp, uint exceptionRegister);
+		public extern static void FrameJump(IntPtr eip, IntPtr esp, IntPtr ebp, int exceptionRegister);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.FrameCall, Mosa.Platform.x86")]
 		public extern static void FrameCall(uint eip);

@@ -8,33 +8,33 @@ namespace Mosa.Runtime.Metadata
 	{
 		#region layout
 
-		// UIntPtr _name;
+		// IntPtr _name;
 		// bool _isField;
-		// UIntPtr _argumentType;
+		// IntPtr _argumentType;
 		// int _argumentSize;
 
 		#endregion layout
 
-		public UIntPtr Ptr;
+		public IntPtr Ptr;
 
-		public CustomAttributeArgument(UIntPtr ptr)
+		public CustomAttributeArgument(IntPtr ptr)
 		{
 			Ptr = ptr;
 		}
 
-		public bool IsNull => Ptr == UIntPtr.Zero;
+		public bool IsNull => Ptr == IntPtr.Zero;
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(Intrinsic.LoadPointer(Ptr));
 
-		public bool IsField => Intrinsic.Load8(Ptr, UIntPtr.Size) == 0;
+		public bool IsField => Intrinsic.Load8(Ptr, IntPtr.Size) == 0;
 
-		public TypeDefinition TypeDefinition => new TypeDefinition(Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 2));
+		public TypeDefinition TypeDefinition => new TypeDefinition(Intrinsic.LoadPointer(Ptr, IntPtr.Size * 2));
 
-		public uint ArgumentSize => Intrinsic.Load32(Ptr, UIntPtr.Size * 3);
+		public uint ArgumentSize => Intrinsic.Load32(Ptr, IntPtr.Size * 3);
 
-		public UIntPtr GetArgumentValue()
+		public IntPtr GetArgumentValue()
 		{
-			return Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 4);
+			return Intrinsic.LoadPointer(Ptr, IntPtr.Size * 4);
 		}
 	}
 }

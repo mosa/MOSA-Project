@@ -8,33 +8,33 @@ namespace Mosa.Runtime.Metadata
 	{
 		#region layout
 
-		// UIntPtr		_name;
-		// UIntPtr		_customAttributes;
+		// IntPtr		_name;
+		// IntPtr		_customAttributes;
 		// uint			_attributes;
 		// uint			_stackSize;
-		// UIntPtr		_method;
-		// UIntPtr		_returnType;
-		// UIntPtr		_protectedRegionTable;
-		// UIntPtr		_gcTrackingInformation;
+		// IntPtr		_method;
+		// IntPtr		_returnType;
+		// IntPtr		_protectedRegionTable;
+		// IntPtr		_gcTrackingInformation;
 		// uint			_numberOfParameters;
 
 		#endregion layout
 
-		public UIntPtr Ptr;
+		public IntPtr Ptr;
 
-		public MethodDefinition(UIntPtr ptr)
+		public MethodDefinition(IntPtr ptr)
 		{
 			Ptr = ptr;
 		}
 
-		public bool IsNull => Ptr == UIntPtr.Zero;
+		public bool IsNull => Ptr == IntPtr.Zero;
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(Intrinsic.LoadPointer(Ptr));
 
-		public uint StackSize => Intrinsic.Load32(Ptr, UIntPtr.Size * 3);
+		public uint StackSize => Intrinsic.Load32(Ptr, IntPtr.Size * 3);
 
-		public UIntPtr Method => Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 4);
+		public IntPtr Method => Intrinsic.LoadPointer(Ptr, IntPtr.Size * 4);
 
-		public ProtectedRegionTable ProtectedRegionTable => new ProtectedRegionTable(Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 6));
+		public ProtectedRegionTable ProtectedRegionTable => new ProtectedRegionTable(Intrinsic.LoadPointer(Ptr, IntPtr.Size * 6));
 	}
 }

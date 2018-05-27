@@ -8,11 +8,11 @@ namespace Mosa.Runtime
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MDFieldDefinition
 	{
-		private UIntPtr _name;
-		private UIntPtr _customAttributes;
+		private IntPtr _name;
+		private IntPtr _customAttributes;
 		private uint _attributes;
-		private UIntPtr _fieldType;
-		private UIntPtr _fieldData;
+		private IntPtr _fieldType;
+		private IntPtr _fieldData;
 		private uint _offsetOrSize;
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(_name);

@@ -14,7 +14,7 @@ namespace Mosa.Kernel.x86
 		public const int ThreadTerminationSignalIRQ = 254;
 
 		private static bool Enabled;
-		private static UIntPtr SignalThreadTerminationMethodAddress;
+		private static IntPtr SignalThreadTerminationMethodAddress;
 
 		private static Thread[] Threads;
 
@@ -31,7 +31,7 @@ namespace Mosa.Kernel.x86
 				Threads[i] = new Thread();
 			}
 
-			UIntPtr address = GetAddress(IdleThread);
+			IntPtr address = GetAddress(IdleThread);
 
 			SignalThreadTerminationMethodAddress = GetAddress(SignalThreadTerminationMethod);
 
@@ -124,24 +124,24 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		private static UIntPtr GetAddress(ThreadStart d)
+		private static IntPtr GetAddress(ThreadStart d)
 		{
 			return Intrinsic.GetDelegateMethodAddress(d);
 		}
 
-		private static UIntPtr GetAddress(ParameterizedThreadStart d)
+		private static IntPtr GetAddress(ParameterizedThreadStart d)
 		{
 			return Intrinsic.GetDelegateTargetAddress(d);
 		}
 
 		public static uint CreateThread(ThreadStart thread, uint stackSize)
 		{
-			UIntPtr address = GetAddress(thread);
+			IntPtr address = GetAddress(thread);
 
 			return CreateThread(address, stackSize);
 		}
 
-		public static uint CreateThread(UIntPtr methodAddress, uint stackSize)
+		public static uint CreateThread(IntPtr methodAddress, uint stackSize)
 		{
 			//Assert.True(stackSize != 0, "CreateThread(): invalid stack size = " + stackSize.ToString());
 			//Assert.True(stackSize % PageFrameAllocator.PageSize == 0, "CreateThread(): invalid stack size % PageSize, stack size = " + stackSize.ToString());
@@ -161,7 +161,7 @@ namespace Mosa.Kernel.x86
 			return threadID;
 		}
 
-		private static void CreateThread(UIntPtr methodAddress, uint stackSize, uint threadID)
+		private static void CreateThread(IntPtr methodAddress, uint stackSize, uint threadID)
 		{
 			var thread = Threads[threadID];
 
@@ -170,11 +170,11 @@ namespace Mosa.Kernel.x86
 
 			// Setup stack state
 			Intrinsic.Store32(stackTop, -4, 0);          // Zero Sentinel
-			Intrinsic.Store32(stackTop, -8, SignalThreadTerminationMethodAddress.ToUInt32());  // Address of method that will raise a interrupt signal to terminate thread
+			Intrinsic.Store32(stackTop, -8, SignalThreadTerminationMethodAddress.ToInt32());  // Address of method that will raise a interrupt signal to terminate thread
 
 			Intrinsic.Store32(stackTop, -12, 0x00000202);// EFLAG
 			Intrinsic.Store32(stackTop, -16, 0x08);      // CS
-			Intrinsic.Store32(stackTop, -20, methodAddress.ToUInt32()); // EIP
+			Intrinsic.Store32(stackTop, -20, methodAddress.ToInt32()); // EIP
 
 			Intrinsic.Store32(stackTop, -24, 0);     // ErrorCode - not used
 			Intrinsic.Store32(stackTop, -28, 0);     // Interrupt Number - not used

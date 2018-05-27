@@ -9,70 +9,65 @@ namespace Mosa.Runtime.Metadata
 	{
 		#region layout
 
-		// UIntPtr _name;
-		// UIntPtr _customAttributes;
+		// IntPtr _name;
+		// IntPtr _customAttributes;
 		// uint _attributes;
 		// uint _size;
-		// UIntPtr _assembly;
-		// UIntPtr _parentType;
-		// UIntPtr _declaringType;
-		// UIntPtr _elementType;
-		// UIntPtr _defaultConstructor;
-		// UIntPtr _properties;
-		// UIntPtr _fields;
-		// UIntPtr _slotTable;
-		// UIntPtr _bitmap;
+		// IntPtr _assembly;
+		// IntPtr _parentType;
+		// IntPtr _declaringType;
+		// IntPtr _elementType;
+		// IntPtr _defaultConstructor;
+		// IntPtr _properties;
+		// IntPtr _fields;
+		// IntPtr _slotTable;
+		// IntPtr _bitmap;
 		// uint _numberOfMethods;
 
 		#endregion layout
 
-		public readonly UIntPtr Ptr;
+		public readonly IntPtr Ptr;
 
-		public TypeDefinition(UIntPtr ptr)
+		public TypeDefinition(IntPtr ptr)
 		{
 			Ptr = ptr;
 		}
 
-		public unsafe TypeDefinition(IntPtr ptr)
-		{
-			Ptr = new UIntPtr((void*)ptr.ToPointer());
-		}
+		public bool IsNull => Ptr == IntPtr.Zero;
 
-		public bool IsNull => Ptr == UIntPtr.Zero;
-
-		public ulong Handle => Ptr.ToUInt64();
+		public long Handle => Ptr.ToInt64();
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(Intrinsic.LoadPointer(Ptr));
 
-		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, UIntPtr.Size));
+		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, IntPtr.Size));
 
-		public TypeAttributes OffsetOrSize => (TypeAttributes)(Intrinsic.Load32(Ptr, UIntPtr.Size * 2) & 0x00FFFFFF);
+		public TypeAttributes OffsetOrSize => (TypeAttributes)(Intrinsic.Load32(Ptr, IntPtr.Size * 2) & 0x00FFFFFF);
 
-		public uint Size => Intrinsic.Load32(Ptr, UIntPtr.Size * 3);
+		public uint Size => Intrinsic.Load32(Ptr, IntPtr.Size * 3);
 
-		public AssemblyDefinition Assembly => new AssemblyDefinition(Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 4));
+		public AssemblyDefinition Assembly => new AssemblyDefinition(Intrinsic.LoadPointer(Ptr, IntPtr.Size * 4));
 
-		public TypeDefinition ParentType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 5));
+		public TypeDefinition ParentType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, IntPtr.Size * 5));
 
-		public TypeDefinition DeclaringType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 6));
+		public TypeDefinition DeclaringType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, IntPtr.Size * 6));
 
-		public TypeDefinition ElementType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 7));
+		public TypeDefinition ElementType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, IntPtr.Size * 7));
 
-		public CustomAttributeTable DefaultConstructor => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 8));
+		public CustomAttributeTable DefaultConstructor => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, IntPtr.Size * 8));
 
-		public UIntPtr Properties => Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 9);
+		public IntPtr Properties => Intrinsic.LoadPointer(Ptr, IntPtr.Size * 9);
 
-		public UIntPtr Fields => Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 10);
+		public IntPtr Fields => Intrinsic.LoadPointer(Ptr, IntPtr.Size * 10);
 
-		public UIntPtr SlotTable => Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 11);
+		public IntPtr SlotTable => Intrinsic.LoadPointer(Ptr, IntPtr.Size * 11);
 
-		public UIntPtr Bitmap => Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 12);
+		public IntPtr Bitmap => Intrinsic.LoadPointer(Ptr, IntPtr.Size * 12);
 
-		public uint NumberOfMethods => Intrinsic.Load32(Ptr, UIntPtr.Size * 13);
+		public uint NumberOfMethods => Intrinsic.Load32(Ptr, IntPtr.Size * 13);
 
 		public MethodDefinition GetMethodDefinition(uint slot)
 		{
-			return new MethodDefinition(Intrinsic.LoadPointer(Ptr, (UIntPtr.Size * 14) + (UIntPtr.Size * (int)slot)));
+			return new MethodDefinition(Intrinsic.LoadPointer(Ptr, (IntPtr.Size * 14) + (IntPtr.Size * (int)slot)));
 		}
 
 		//public static bool operator ==(TypeDefinition a, TypeDefinition b)

@@ -17,7 +17,7 @@ namespace Mosa.Runtime
 		{
 			fixed (MDProtectedRegionTable* _this = &this)
 			{
-				return (MDProtectedRegionDefinition*)Intrinsic.LoadPointer(new UIntPtr(_this) + sizeof(MDProtectedRegionTable) + (UIntPtr.Size * (int)slot));
+				return (MDProtectedRegionDefinition*)Intrinsic.LoadPointer(new IntPtr(_this) + sizeof(MDProtectedRegionTable) + (IntPtr.Size * (int)slot));
 			}
 		}
 	}

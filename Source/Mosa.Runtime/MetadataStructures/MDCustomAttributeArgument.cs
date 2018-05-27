@@ -8,9 +8,9 @@ namespace Mosa.Runtime
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MDCustomAttributeArgument
 	{
-		private UIntPtr _name;
+		private IntPtr _name;
 		private bool _isField;
-		private UIntPtr _argumentType;
+		private IntPtr _argumentType;
 		private int _argumentSize;
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(_name);
@@ -21,11 +21,11 @@ namespace Mosa.Runtime
 
 		public int ArgumentSize => _argumentSize;
 
-		public UIntPtr GetArgumentValue()
+		public IntPtr GetArgumentValue()
 		{
 			fixed (MDCustomAttributeArgument* _this = &this)
 			{
-				return new UIntPtr(_this) + sizeof(MDCustomAttributeArgument);
+				return new IntPtr(_this) + sizeof(MDCustomAttributeArgument);
 			}
 		}
 	}

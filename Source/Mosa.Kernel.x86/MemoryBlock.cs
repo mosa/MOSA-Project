@@ -44,17 +44,17 @@ namespace Mosa.Kernel.x86
 
 		private unsafe static void MemoryClear(uint destination, uint count)
 		{
-			Internal.MemoryClear(new UIntPtr(destination), count);
+			Internal.MemoryClear(new IntPtr(destination), count);
 		}
 
 		private unsafe static void MemoryCopy(uint destination, uint source, uint count)
 		{
-			Internal.MemoryCopy(new UIntPtr(destination), new UIntPtr(source), count);
+			Internal.MemoryCopy(new IntPtr(destination), new IntPtr(source), count);
 		}
 
 		private unsafe static void MemorySet(uint destination, byte value, uint count)
 		{
-			Internal.MemorySet(new UIntPtr(destination), value, count);
+			Internal.MemorySet(new IntPtr(destination), value, count);
 		}
 	}
 }

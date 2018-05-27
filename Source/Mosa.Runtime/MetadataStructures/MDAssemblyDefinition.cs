@@ -8,8 +8,8 @@ namespace Mosa.Runtime
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MDAssemblyDefinition
 	{
-		private UIntPtr _name;
-		private UIntPtr _customAttributes;
+		private IntPtr _name;
+		private IntPtr _customAttributes;
 		private uint _attributes;
 		private uint _numberOfTypes;
 
@@ -25,7 +25,7 @@ namespace Mosa.Runtime
 		{
 			fixed (MDAssemblyDefinition* _this = &this)
 			{
-				return (MDTypeDefinition*)Intrinsic.LoadPointer(new UIntPtr(_this) + sizeof(MDAssemblyDefinition) + (UIntPtr.Size * (int)slot));
+				return (MDTypeDefinition*)Intrinsic.LoadPointer(new IntPtr(_this) + sizeof(MDAssemblyDefinition) + (IntPtr.Size * (int)slot));
 			}
 		}
 	}

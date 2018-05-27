@@ -13,7 +13,7 @@ namespace Mosa.Runtime
 		private uint _endOffset;
 		private uint _handlerOffset;
 		private uint _handlerType;
-		private UIntPtr _exceptionType;
+		private IntPtr _exceptionType;
 
 		public uint StartOffset => _startOffset;
 

@@ -9,19 +9,19 @@ namespace Mosa.Runtime
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MDTypeDefinition
 	{
-		private UIntPtr _name;
-		private UIntPtr _customAttributes;
+		private IntPtr _name;
+		private IntPtr _customAttributes;
 		private uint _attributes;
 		private uint _size;
-		private UIntPtr _assembly;
-		private UIntPtr _parentType;
-		private UIntPtr _declaringType;
-		private UIntPtr _elementType;
-		private UIntPtr _defaultConstructor;
-		private UIntPtr _properties;
-		private UIntPtr _fields;
-		private UIntPtr _slotTable;
-		private UIntPtr _bitmap;
+		private IntPtr _assembly;
+		private IntPtr _parentType;
+		private IntPtr _declaringType;
+		private IntPtr _elementType;
+		private IntPtr _defaultConstructor;
+		private IntPtr _properties;
+		private IntPtr _fields;
+		private IntPtr _slotTable;
+		private IntPtr _bitmap;
 		private uint _numberOfMethods;
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(_name);
@@ -44,13 +44,13 @@ namespace Mosa.Runtime
 
 		public MDMethodDefinition* DefaultConstructor => (MDMethodDefinition*)_defaultConstructor;
 
-		public UIntPtr Properties => _properties;
+		public IntPtr Properties => _properties;
 
-		public UIntPtr Fields => _fields;
+		public IntPtr Fields => _fields;
 
-		public UIntPtr SlotTable => _slotTable;
+		public IntPtr SlotTable => _slotTable;
 
-		public UIntPtr Bitmap => _bitmap;
+		public IntPtr Bitmap => _bitmap;
 
 		public uint NumberOfMethods => _numberOfMethods;
 
@@ -58,7 +58,7 @@ namespace Mosa.Runtime
 		{
 			fixed (MDTypeDefinition* _this = &this)
 			{
-				return (MDMethodDefinition*)Intrinsic.LoadPointer(new UIntPtr(_this) + sizeof(MDTypeDefinition) + (UIntPtr.Size * (int)slot));
+				return (MDMethodDefinition*)Intrinsic.LoadPointer(new IntPtr(_this) + sizeof(MDTypeDefinition) + (IntPtr.Size * (int)slot));
 			}
 		}
 	}
