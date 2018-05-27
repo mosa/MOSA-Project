@@ -22,13 +22,13 @@ namespace Mosa.Runtime
 			return (o1 == o2);
 		}
 
-		public static void InitializeArray(UIntPtr array, RuntimeFieldHandle handle)
+		public static void InitializeArray(IntPtr array, RuntimeFieldHandle handle)
 		{
 			// (FieldDefinition)((uint**)&handle)[0];
 			var fieldDefinition = new FieldDefinition(handle.Value);
 
 			//byte* arrayElements = (byte*)(array + 3);
-			var arrayElements = array + (3 * UIntPtr.Size);
+			var arrayElements = array + (3 * IntPtr.Size);
 
 			// See FieldDefinition for format of field handle
 			var fieldData = fieldDefinition.FieldData;

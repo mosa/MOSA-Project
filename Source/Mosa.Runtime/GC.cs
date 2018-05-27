@@ -9,13 +9,13 @@ namespace Mosa.Runtime
 	{
 		// This method will be plugged by the platform specific implementation;
 		// On x86, it is be Mosa.Kernel.x86.KernelMemory._AllocateMemory
-		private unsafe static UIntPtr AllocateMemory(uint size)
+		private unsafe static IntPtr AllocateMemory(uint size)
 		{
-			return new UIntPtr(0);
+			return new IntPtr(0);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public unsafe static UIntPtr AllocateObject(uint size)
+		public unsafe static IntPtr AllocateObject(uint size)
 		{
 			return AllocateMemory(size);
 		}

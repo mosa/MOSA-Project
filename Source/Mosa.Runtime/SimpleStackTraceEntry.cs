@@ -23,7 +23,7 @@ namespace Mosa.Runtime
 		public override string ToString()
 		{
 			return "0x" +
-				MethodDefinition.Method.ToUInt32().ToString("x") +
+				MethodDefinition.Method.ToInt32().ToString("x") +
 				"+0x" +
 				Offset.ToString("x") +
 				" " +

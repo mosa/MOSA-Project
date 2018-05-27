@@ -80,7 +80,7 @@ namespace System
 			}
 		}
 
-		internal RuntimeAssembly(UIntPtr pointer)
+		internal RuntimeAssembly(IntPtr pointer)
 		{
 			assemblyDefinition = new AssemblyDefinition(pointer);
 			fullName = assemblyDefinition.Name;

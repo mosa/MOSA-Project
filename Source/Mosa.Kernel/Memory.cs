@@ -27,6 +27,15 @@ namespace Mosa.Kernel
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="Memory"/> class.
+		/// </summary>
+		/// <param name="address">The address.</param>
+		/// <param name="size">The size.</param>
+		public Memory(IntPtr address, uint size) : base((uint)address.ToInt32(), size)
+		{
+		}
+
+		/// <summary>
 		/// Gets or sets the <see cref="System.Byte" /> at the specified index.
 		/// </summary>
 		/// <value>
