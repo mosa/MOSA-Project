@@ -73,6 +73,15 @@
     <Compile Include="Builders\RuntimeTypeInfo.cs" />
     <Compile Include="ExceptionHandlerType.cs" />
     <Compile Include="Korlib\System\String.cs" />
+    <Compile Include="Metadata\CustomAttribute.cs" />
+    <Compile Include="Metadata\AssemblyDefinition.cs" />
+    <Compile Include="Metadata\CustomAttributeArgument.cs" />
+    <Compile Include="Metadata\CustomAttributeTable.cs" />
+    <Compile Include="Metadata\FieldDefinition.cs" />
+    <Compile Include="Metadata\TypeDefinition.cs" />
+    <Compile Include="Metadata\ProtectedRegionDefinition.cs" />
+    <Compile Include="Metadata\ProtectedRegionTable.cs" />
+    <Compile Include="Metadata\MethodDefinition.cs" />
     <Compile Include="StartUp.cs" />
     <Compile Include="GC.cs" />
     <Compile Include="InternalsForArray.cs" />
@@ -94,7 +103,6 @@
     <Compile Include="Plug\TypeAttribute.cs" />
     <Compile Include="Internal.cs" />
     <Compile Include="SimpleStackTraceEntry.cs" />
-    <Compile Include="_StringBuffer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Mosa.Runtime.nuspec">

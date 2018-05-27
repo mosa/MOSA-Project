@@ -293,7 +293,6 @@ namespace Mosa.Compiler.Framework
 			return BasicBlocks.CreateBlock(blockLabel, instructionLabel);
 		}
 
-
 		/// <summary>
 		/// Create an empty block.
 		/// </summary>

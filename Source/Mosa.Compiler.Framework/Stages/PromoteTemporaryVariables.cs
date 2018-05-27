@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Trace;
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages

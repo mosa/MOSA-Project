@@ -743,6 +743,7 @@
     <Compile Include="Stages\DevirtualizeCallStage.cs" />
     <Compile Include="Stages\CallStage.cs" />
     <Compile Include="Stages\BlockMergeStage.cs" />
+    <Compile Include="Stages\PromoteTemporaryVariables.cs" />
     <Compile Include="Stages\IRLongDecomposeStage.cs" />
     <Compile Include="Stages\LowerIRStage.cs" />
     <Compile Include="Analysis\LiveVariableAnalysis\LivenessAnalysis.cs" />
@@ -752,7 +753,6 @@
     <Compile Include="Stages\InlineStage.cs" />
     <Compile Include="Stages\InlineEvaluationStage.cs" />
     <Compile Include="Stages\IRCleanupStage.cs" />
-    <Compile Include="Stages\PromoteTemporaryVariables.cs" />
     <Compile Include="Stages\SparseConditionalConstantPropagationStage.cs" />
     <Compile Include="CompilerStages\MethodExceptionLookupTableStage.cs" />
     <Compile Include="CompilerStages\MethodLookupTableStage.cs" />

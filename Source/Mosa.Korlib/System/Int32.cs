@@ -3,7 +3,7 @@
 namespace System
 {
 	/// <summary>
-	///
+	/// Int32
 	/// </summary>
 	public struct Int32
 	{

@@ -21,9 +21,6 @@ namespace System.Reflection
 		/// </summary>
 		public abstract IEnumerable<TypeInfo> DefinedTypes { get; }
 
-		/// <summary>
-		///
-		/// </summary>
 		public virtual IEnumerable<Type> ExportedTypes
 		{
 			get { return new Type[0]; }

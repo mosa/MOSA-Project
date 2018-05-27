@@ -956,9 +956,15 @@ namespace Mosa.Compiler.Framework.Stages
 			var objectOperand = node.Operand1;
 
 			int offset = TypeLayout.GetFieldOffset(node.MosaField);
-			var fixedOffset = CreateConstant(offset);
 
-			node.SetInstruction(Select(IRInstruction.Add32, IRInstruction.Add64), fieldAddress, objectOperand, fixedOffset);
+			if (offset == 0)
+			{
+				node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), fieldAddress, objectOperand);
+			}
+			else
+			{
+				node.SetInstruction(Select(IRInstruction.Add32, IRInstruction.Add64), fieldAddress, objectOperand, CreateConstant(offset));
+			}
 		}
 
 		/// <summary>
