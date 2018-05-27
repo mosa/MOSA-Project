@@ -156,7 +156,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount)
 					{
-						ConditionCode = node.ConditionCode
+						ConditionCode = node.ConditionCode,
+						Label = callSiteNode.Label
 					};
 
 					if (node.BranchTargets != null)

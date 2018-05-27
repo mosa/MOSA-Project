@@ -1945,11 +1945,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result2.Uses.Count != 0)
 				return;
 
-			if (trace.Active) trace.Log("*** SimplifyAddCarryOut");
+			if (trace.Active) trace.Log("*** SimplifySubCarryOut");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			AddOperandUsageToWorkList(node);
 
-			node.SetInstruction(IRInstruction.Add32, node.Result, node.Operand1, node.Operand2);
+			node.SetInstruction(IRInstruction.Sub32, node.Result, node.Operand1, node.Operand2);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
 			simplifyGeneralCount++;
 		}

@@ -141,7 +141,6 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store32(UIntPtr address, uint value);
 
-
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store32(UIntPtr address, int offset, uint value);
 
@@ -281,19 +280,13 @@ namespace Mosa.Runtime
 		public static extern void Store(UIntPtr address, ulong offset, IntPtr value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern void* GetObjectAddress<T>(T obj) where T : class;
+		public static extern UIntPtr GetObjectAddress<T>(T obj) where T : class;
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern void* GetValueTypeAddress<T>(T obj) where T : struct;
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern object GetObjectFromAddress(void* address);
+		public static extern UIntPtr GetValueTypeAddress<T>(T obj) where T : struct;
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern object GetObjectFromAddress(UIntPtr address);
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		public extern static object CreateInstanceSimple(void* ctor, void* thisObject);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static object CreateInstanceSimple(UIntPtr ctor, UIntPtr thisObject);

@@ -1,5 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime.Metadata;
+using System;
+
 namespace Mosa.Runtime
 {
 	/// <summary>
@@ -7,39 +10,24 @@ namespace Mosa.Runtime
 	/// </summary>
 	public struct SimpleStackTraceEntry
 	{
-		private string methodName;
-		public unsafe MDMethodDefinition* MethodDefinition;
-		public uint Offset;
+		public unsafe string MethodName { get { return MethodDefinition.Name; } }
 
-		unsafe public string MethodName
-		{
-			get
-			{
-				if (MethodDefinition == null)
-					return null;
-				if (methodName == null)
-					methodName = MethodDefinition->Name;
-				return methodName;
-			}
-		}
+		public MethodDefinition MethodDefinition;
+
+		public uint Offset;
 
 		/// <summary>
 		/// Returns a human readable text of this entry
 		/// </summary>
 		/// <returns></returns>
-		unsafe public StringBuffer ToStringBuffer()
+		public override string ToString()
 		{
-			var buf = new StringBuffer();
-
-			buf.Append("0x");
-			buf.Append((uint)MethodDefinition->Method, "X");
-			buf.Append("+0x");
-			buf.Append(Offset, "X");
-			buf.Append(" ");
-
-			var idx = MethodName.IndexOf(' ') + 1; //Skip return type
-			buf.Append(MethodName, idx);
-			return buf;
+			return "0x" +
+				MethodDefinition.Method.ToUInt32().ToString("x") +
+				"+0x" +
+				Offset.ToString("x") +
+				" " +
+				MethodName.Substring(MethodName.IndexOf(' ') + 1);
 		}
 
 		/// <summary>
