@@ -14,6 +14,7 @@ namespace Mosa.Runtime
 			// TODO: add more checks, allow type upcasting, add multi dimensional array support
 			if (sourceArray == null)
 				throw new ArgumentNullException(nameof(sourceArray));
+
 			if (destinationArray == null)
 				throw new ArgumentNullException(nameof(destinationArray));
 
@@ -30,21 +31,21 @@ namespace Mosa.Runtime
 				throw new ArgumentOutOfRangeException(nameof(length));
 
 			// Get type info
-			var typeStruct = (TypeDefinition*)((uint*)sourceArray);
-			var typeCode = typeStruct->TypeCode;
+			var typeStruct = new TypeDefinition(sourceArray);
+			var typeCode = typeStruct.TypeCode;
 
-			var size = (typeCode == TypeCode.ReferenceType) ? IntPtr.Size : (int)typeStruct->Size;
+			var size = (typeCode == TypeCode.ReferenceType) ? IntPtr.Size : (int)typeStruct.Size;
 
 			Internal.MemoryCopy(
-				destinationArray + (IntPtr.Size * 2) + (destinationIndex * size),
-				sourceArray + (IntPtr.Size * 2) + (sourceIndex * size),
+				destinationArray + (IntPtr.Size * 3) + (destinationIndex * size),
+				sourceArray + (IntPtr.Size * 3) + (sourceIndex * size),
 				(uint)(length * size)
 			);
 		}
 
-		public static int GetLength(IntPtr o, int dimension)
+		public static int GetLength(IntPtr array, int dimension)
 		{
-			return *(((int*)o) + 2);
+			return (int)Intrinsic.Load32(array, IntPtr.Size * 2);
 		}
 
 		public static int GetLowerBound(IntPtr o, int dimension)

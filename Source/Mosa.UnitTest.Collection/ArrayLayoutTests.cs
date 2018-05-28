@@ -54,6 +54,41 @@ namespace Mosa.UnitTest.Collection
 		}
 
 		[MosaUnitTest]
+		public static ulong U8a()
+		{
+			ulong[] arr = new ulong[] { 0x5555555555555555, 0x8080808080808080, 0xaaaaaaaaaaaaaaaa, 0xffffffffffffffff };
+			return arr[0];
+		}
+
+		[MosaUnitTest]
+		public static ulong U8b()
+		{
+			ulong[] arr = new ulong[] { 0x5555555555555555, 0x8080808080808080, 0xaaaaaaaaaaaaaaaa, 0xffffffffffffffff };
+			return arr[1];
+		}
+
+		[MosaUnitTest]
+		public static ulong U8c()
+		{
+			ulong[] arr = new ulong[] { 0x5555555555555555, 0x8080808080808080, 0xaaaaaaaaaaaaaaaa, 0xffffffffffffffff };
+			return arr[2];
+		}
+
+		[MosaUnitTest]
+		public static ulong U8d()
+		{
+			ulong[] arr = new ulong[] { 0x5555555555555555, 0x8080808080808080, 0xaaaaaaaaaaaaaaaa, 0xffffffffffffffff };
+			return arr[3];
+		}
+
+		[MosaUnitTest]
+		public static bool I8()
+		{
+			long[] arr = new long[] { 0x5555555555555555, 0x0080808080808080, 0x0aaaaaaaaaaaaaaa, 0x0fffffffffffffff };
+			return arr[0] == 0x5555555555555555 && arr[1] == 0x0080808080808080 && arr[2] == 0x0aaaaaaaaaaaaaaa && arr[3] == 0x0fffffffffffffff;
+		}
+
+		[MosaUnitTest]
 		public static bool R4()
 		{
 			float[] arr = new float[] { 1.234f, 5.678f, 9.012f, 3.456f };

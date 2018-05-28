@@ -24,25 +24,13 @@ namespace Mosa.Runtime
 
 		public static void InitializeArray(IntPtr array, RuntimeFieldHandle handle)
 		{
-			// (FieldDefinition)((uint**)&handle)[0];
 			var fieldDefinition = new FieldDefinition(handle.Value);
 
-			//byte* arrayElements = (byte*)(array + 3);
-			var arrayElements = array + (3 * IntPtr.Size);
-
-			// See FieldDefinition for format of field handle
+			var arrayElements = array + (IntPtr.Size * 3);
 			var fieldData = fieldDefinition.FieldData;
 			uint dataLength = fieldDefinition.OffsetOrSize;
 
 			Internal.MemoryCopy(arrayElements, fieldData, dataLength);
-
-			//while (dataLength > 0)
-			//{
-			//	*arrayElements = *fieldData;
-			//	arrayElements++;
-			//	fieldData += 1;
-			//	dataLength--;
-			//}
 		}
 
 		public static void* UnsafeCast(void* o)
@@ -60,11 +48,7 @@ namespace Mosa.Runtime
 
 		public static object CreateInstance(Type type, params object[] args)
 		{
-			// Cheat
-			var handle = type.TypeHandle;
-
-			//TypeDefinition typeDefinition = (TypeDefinition*)((uint**)&handle)[0];
-			var typeDefinition = new TypeDefinition(handle.Value);
+			var typeDefinition = new TypeDefinition(type.TypeHandle.Value);
 
 			if (typeDefinition.DefaultConstructor.IsNull)
 				throw new ArgumentException("Type has no parameterless constructor.");
