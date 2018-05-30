@@ -10,7 +10,7 @@ namespace Mosa.Utility.DebugEngine
 	{
 		public int ID { get; internal set; }
 
-		public int Code { get; }
+		public byte Code { get; }
 
 		public IList<byte> CommandData { get; }
 
@@ -20,13 +20,13 @@ namespace Mosa.Utility.DebugEngine
 
 		public object Other { get; set; }
 
-		public DebugMessage(int code, IList<byte> data)
+		public DebugMessage(byte code, IList<byte> data)
 		{
 			Code = code;
 			CommandData = data;
 		}
 
-		public DebugMessage(int code, byte[] data)
+		public DebugMessage(byte code, byte[] data)
 		{
 			Code = code;
 			CommandData = new List<byte>(data.Length);
@@ -37,7 +37,7 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
-		public DebugMessage(int code, byte[] data, int length)
+		public DebugMessage(byte code, byte[] data, int length)
 		{
 			Code = code;
 			CommandData = new List<byte>(data.Length);
@@ -48,7 +48,7 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
-		public DebugMessage(int code, IList<int> data)
+		public DebugMessage(byte code, IList<int> data)
 		{
 			Code = code;
 			CommandData = new List<byte>(data.Count * 4);
@@ -62,25 +62,25 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
-		public DebugMessage(int code, IList<int> data, object other)
+		public DebugMessage(byte code, IList<int> data, object other)
 			: this(code, data)
 		{
 			Other = other;
 		}
 
-		public DebugMessage(int code, IList<int> data, CallBack callback)
+		public DebugMessage(byte code, IList<int> data, CallBack callback)
 			: this(code, data)
 		{
 			CallBack = callback;
 		}
 
-		public DebugMessage(int code, IList<byte> data, CallBack callback)
+		public DebugMessage(byte code, IList<byte> data, CallBack callback)
 		: this(code, data)
 		{
 			CallBack = callback;
 		}
 
-		public DebugMessage(int code, int[] data, CallBack callback)
+		public DebugMessage(byte code, int[] data, CallBack callback)
 			: this(code, data)
 		{
 			CallBack = callback;

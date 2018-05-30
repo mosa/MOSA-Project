@@ -41,10 +41,10 @@ namespace Mosa.Kernel.x86
 			Intrinsic.Store32(queueNext, len + 4);
 			queueNext += 4;
 
-			Intrinsic.Store32(queueNext, (uint)id);
+			Intrinsic.Store32(queueNext, id);
 			queueNext += 4;
 
-			for (uint i = start; i < end; i = i + 4)
+			for (uint i = start; i < end; i += 4)
 			{
 				uint value = Intrinsic.Load32(i);
 				Intrinsic.Store32(queueNext, value);

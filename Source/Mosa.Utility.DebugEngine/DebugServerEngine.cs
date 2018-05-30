@@ -139,7 +139,7 @@ namespace Mosa.Utility.DebugEngine
 
 			if (message.CommandData == null)
 			{
-				packet.Add(0);  // length
+				packet.Add((int)0);  // length
 			}
 			else
 			{
@@ -154,7 +154,7 @@ namespace Mosa.Utility.DebugEngine
 			return packet;
 		}
 
-		private void PostResponse(int id, int code, List<byte> data)
+		private void PostResponse(int id, byte code, List<byte> data)
 		{
 			DebugMessage message = null;
 
@@ -186,6 +186,11 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
+		private byte GetByte(int index)
+		{
+			return buffer[index];
+		}
+
 		private int GetInteger(int index)
 		{
 			return (buffer[index + 3] << 24) | (buffer[index + 2] << 16) | (buffer[index + 1] << 8) | buffer[index];
@@ -194,14 +199,14 @@ namespace Mosa.Utility.DebugEngine
 		private bool ParseResponse()
 		{
 			int id = GetInteger(1);
-			int code = GetInteger(5);
-			int len = GetInteger(9);
+			byte code = GetByte(5);
+			int len = GetInteger(6);
 
 			var data = new List<byte>();
 
 			for (int i = 0; i < len; i++)
 			{
-				data.Add(buffer[i + 13]);
+				data.Add(buffer[i + 10]);
 			}
 
 			//Console.WriteLine("ID: " + id + " CODE: " + code + " LEN: " + len);
@@ -211,7 +216,7 @@ namespace Mosa.Utility.DebugEngine
 			return true;
 		}
 
-		// Message format:	// [0]MAGIC[4]ID[8]CODE[12]LEN[16]DATA[LEN]
+		// Message format:	// [0]MAGIC[1]ID[5]CODE[6]LEN[10]DATA[LEN]
 
 		private void Push(byte b)
 		{
@@ -226,9 +231,9 @@ namespace Mosa.Utility.DebugEngine
 
 			buffer.Add(b);
 
-			if (buffer.Count > 12)
+			if (buffer.Count >= 10)
 			{
-				int length = GetInteger(9);
+				int length = GetInteger(6);
 
 				if (length > MaxBufferSize)
 				{
@@ -236,7 +241,7 @@ namespace Mosa.Utility.DebugEngine
 					return;
 				}
 
-				if (buffer.Count == length + 13)
+				if (buffer.Count == length + 10)
 				{
 					ParseResponse();
 					buffer.Clear();
