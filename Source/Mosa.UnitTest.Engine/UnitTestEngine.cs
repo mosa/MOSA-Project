@@ -25,8 +25,9 @@ namespace Mosa.UnitTest.Engine
 		public string TestSuiteFile { get; set; }
 		public AppLocations AppLocations { get; set; }
 
-		protected TypeSystem typeSystem;
-		protected BaseLinker linker;
+		public TypeSystem TypeSystem { get; internal set; }
+		public BaseLinker Linker { get; internal set; }
+
 		protected string imagefile;
 		protected Starter starter;
 		protected Process process;
@@ -272,7 +273,7 @@ namespace Mosa.UnitTest.Engine
 
 			var request = new UnitTestRequest(ns, type, method, parameters);
 
-			request.Resolve(typeSystem, linker);
+			request.Resolve(TypeSystem, Linker);
 
 			var message = new DebugMessage(DebugCode.ExecuteUnitTest, request.Message, request);
 
@@ -320,7 +321,7 @@ namespace Mosa.UnitTest.Engine
 
 			var request = new UnitTestRequest(ns, type, method, parameters);
 
-			request.Resolve(typeSystem, linker);
+			request.Resolve(TypeSystem, Linker);
 
 			var message = new DebugMessage(DebugCode.ExecuteUnitTest, request.Message, request);
 
@@ -359,8 +360,8 @@ namespace Mosa.UnitTest.Engine
 
 			builder.Compile();
 
-			linker = builder.Linker;
-			typeSystem = builder.TypeSystem;
+			Linker = builder.Linker;
+			TypeSystem = builder.TypeSystem;
 			imagefile = Options.BootLoaderImage ?? builder.ImageFile;
 
 			fatalError = builder.HasCompileError;
@@ -495,7 +496,7 @@ namespace Mosa.UnitTest.Engine
 
 			uint originalSize = 0;
 
-			var bss = linker.LinkerSections[(int)SectionKind.BSS];
+			var bss = Linker.LinkerSections[(int)SectionKind.BSS];
 
 			var message = new DebugMessage(DebugCode.ClearMemory, new int[] { (int)bss.VirtualAddress, (int)bss.Size });
 
@@ -503,7 +504,7 @@ namespace Mosa.UnitTest.Engine
 
 			var compressed = new byte[maxsize * 2];
 
-			foreach (var section in linker.LinkerSections)
+			foreach (var section in Linker.LinkerSections)
 			{
 				if (section.SectionKind == SectionKind.BSS)
 					continue;
@@ -578,7 +579,7 @@ namespace Mosa.UnitTest.Engine
 			uint compressSize = 0;
 			uint originalSize = 0;
 
-			var bss = linker.LinkerSections[(int)SectionKind.BSS];
+			var bss = Linker.LinkerSections[(int)SectionKind.BSS];
 
 			var message = new DebugMessage(DebugCode.ClearMemory, new int[] { (int)bss.VirtualAddress, (int)bss.Size });
 
@@ -586,7 +587,7 @@ namespace Mosa.UnitTest.Engine
 
 			var compressed = new byte[maxsize * 2];
 
-			foreach (var section in linker.LinkerSections)
+			foreach (var section in Linker.LinkerSections)
 			{
 				if (section.SectionKind == SectionKind.BSS)
 					continue;
@@ -678,7 +679,7 @@ namespace Mosa.UnitTest.Engine
 
 		public void PrepareKernel()
 		{
-			ulong address = GetMethodAddress(typeSystem, linker, "Mosa.Runtime", "StartUp", "Initialize", new object[] { });
+			ulong address = GetMethodAddress(TypeSystem, Linker, "Mosa.Runtime", "StartUp", "Initialize", new object[] { });
 
 			var message = new DebugMessage(DebugCode.HardJump, new int[] { (int)address });
 

@@ -22,13 +22,13 @@ namespace Mosa.UnitTest.Collection
 			return first * second;
 		}
 
-		[MosaUnitTest(Series = "I1I1")]
+		[MosaUnitTest("I1", "I1NotZero")]
 		public static int DivI1I1(sbyte first, sbyte second)
 		{
 			return first / second;
 		}
 
-		[MosaUnitTest(Series = "I1I1")]
+		[MosaUnitTest("I1", "I1NotZero")]
 		public static int RemI1I1(sbyte first, sbyte second)
 		{
 			return first % second;

@@ -88,6 +88,7 @@
     </Compile>
     <Compile Include="R4.cs" />
     <Compile Include="R8.cs" />
+    <Compile Include="Series2.cs" />
     <Compile Include="Series.cs" />
     <Compile Include="U1.cs" />
     <Compile Include="U2.cs" />

@@ -18,9 +18,7 @@ namespace Mosa.Utility.DebugEngine
 		private List<byte> buffer = new List<byte>();
 
 		private CallBack globalDispatch;
-		private readonly byte[] receivedData = new byte[1];
-
-		private int length = -1;
+		private readonly byte[] receivedData = new byte[2000];
 
 		private const int MaxBufferSize = (64 * 1024) + 64;
 
@@ -36,7 +34,7 @@ namespace Mosa.Utility.DebugEngine
 
 				if (IsConnected)
 				{
-					stream.BeginRead(receivedData, 0, 1, ReadAsyncCallback, null);
+					stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
 				}
 			}
 		}
@@ -208,7 +206,6 @@ namespace Mosa.Utility.DebugEngine
 			int id = GetInteger(4);
 			int code = GetInteger(8);
 			int len = GetInteger(12);
-			int checksum = GetInteger(len);
 
 			var data = new List<byte>();
 
@@ -217,23 +214,14 @@ namespace Mosa.Utility.DebugEngine
 				data.Add(buffer[i + 16]);
 			}
 
+			//Console.WriteLine("ID: " + id + " CODE: " + code + " LEN: " + len);
+
 			PostResponse(id, code, data);
 
 			return true;
 		}
 
-		// Message format:	// [0]MAGIC[4]ID[8]CODE[12]LEN[16]DATA[LEN]CHECKSUM
-
-		private void BadDataAbort()
-		{
-			var data = buffer;
-
-			buffer = new List<byte>();
-
-			PostResponse(0, DebugCode.UnknownData, data);
-
-			length = -1;
-		}
+		// Message format:	// [0]MAGIC[4]ID[8]CODE[12]LEN[16]DATA[LEN]
 
 		private void Push(byte b)
 		{
@@ -248,30 +236,29 @@ namespace Mosa.Utility.DebugEngine
 			else if (buffer.Count == 3 && b != (byte)'A')
 				bad = true;
 
-			if (bad)
+			if (bad || buffer.Count > MaxBufferSize)
 			{
-				BadDataAbort();
+				buffer.Clear();
 				return;
 			}
 
 			buffer.Add(b);
 
-			if (buffer.Count >= 16 && length == -1)
+			if (buffer.Count > 15)
 			{
-				length = GetInteger(12);
-			}
+				int length = GetInteger(12);
 
-			if (length > MaxBufferSize || buffer.Count > MaxBufferSize)
-			{
-				BadDataAbort();
-				return;
-			}
+				if (length > MaxBufferSize)
+				{
+					buffer.Clear();
+					return;
+				}
 
-			if (length + 20 == buffer.Count)
-			{
-				bool valid = ParseResponse();
-				buffer.Clear();
-				length = -1;
+				if (buffer.Count == length + 16)
+				{
+					ParseResponse();
+					buffer.Clear();
+				}
 			}
 		}
 
@@ -279,11 +266,14 @@ namespace Mosa.Utility.DebugEngine
 		{
 			try
 			{
-				stream.EndRead(ar);
+				var bytes = stream.EndRead(ar);
 
-				Push(receivedData[0]);
+				for (int i = 0; i < bytes; i++)
+				{
+					Push(receivedData[i]);
+				}
 
-				stream.BeginRead(receivedData, 0, 1, ReadAsyncCallback, null);
+				stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
 			}
 			catch
 			{

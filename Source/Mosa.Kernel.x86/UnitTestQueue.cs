@@ -12,9 +12,8 @@ namespace Mosa.Kernel.x86
 		private static uint queueNext = Address.UnitTestQueue;
 		private static uint queueCurrent = Address.UnitTestQueue;
 		private static uint count = 0;
-		private static uint tick = 0;
 
-		private static uint TestQueueSize = 0x00001000;
+		private static uint TestQueueSize = 0x00100000;
 
 		public static void Setup()
 		{
@@ -40,16 +39,16 @@ namespace Mosa.Kernel.x86
 			}
 
 			Intrinsic.Store32(queueNext, len + 4);
-			queueNext = queueNext + 4;
+			queueNext += 4;
 
 			Intrinsic.Store32(queueNext, (uint)id);
-			queueNext = queueNext + 4;
+			queueNext += 4;
 
 			for (uint i = start; i < end; i = i + 4)
 			{
 				uint value = Intrinsic.Load32(i);
 				Intrinsic.Store32(queueNext, value);
-				queueNext = queueNext + 4;
+				queueNext += 4;
 			}
 
 			Intrinsic.Store32(queueNext, 0); // mark end
