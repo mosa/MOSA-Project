@@ -138,16 +138,12 @@ namespace Mosa.Utility.DebugEngine
 			packet.Add((byte)'S');
 			packet.Add((byte)'A');
 
-			packet.StartCRC();
-
 			packet.Add(message.ID);
 			packet.Add(message.Code);
 
 			if (message.CommandData == null)
 			{
 				packet.Add(0);
-
-				packet.Add(0); // checksum
 			}
 			else
 			{
@@ -157,8 +153,6 @@ namespace Mosa.Utility.DebugEngine
 				{
 					packet.Add(b);
 				}
-
-				packet.AppendCRC();
 			}
 
 			return packet;

@@ -155,16 +155,6 @@ namespace Mosa.Kernel.x86
 			SendResponse(0, DebugCode.Ready);
 		}
 
-		private static void BadDataAbort()
-		{
-			ResetBuffer();
-		}
-
-		private static void ResetBuffer()
-		{
-			index = 0;
-		}
-
 		private static byte GetByte(uint offset)
 		{
 			return Intrinsic.Load8(Address.DebuggerBuffer, offset);
@@ -265,31 +255,29 @@ namespace Mosa.Kernel.x86
 			else if (index == 3 && b != (byte)'A')
 				bad = true;
 
-			if (bad)
+			if (bad || (index + 1 > MaxBuffer))
 			{
-				BadDataAbort();
+				index = 0;
 				return true;
 			}
 
 			Intrinsic.Store8(Address.DebuggerBuffer, index, b);
 			index++;
 
-			uint length = 0;
-
-			if (index >= 16)
+			if (index > 15)
 			{
-				length = GetLength();
+				uint length = GetLength();
 
 				if (length > MaxBuffer || index > MaxBuffer)
 				{
-					BadDataAbort();
+					index = 0;
 					return true;
 				}
 
-				if (length + 20 == index)
+				if (index == length + 16)
 				{
 					ProcessCommand();
-					ResetBuffer();
+					index = 0;
 				}
 			}
 
@@ -310,7 +298,7 @@ namespace Mosa.Kernel.x86
 			Screen.NextLine();
 			Screen.ClearRow();
 			Screen.Write("ID: ");
-			Screen.Write((uint)id, 10, 5);
+			Screen.Write(id, 10, 5);
 			Screen.Write(" Code: ");
 			Screen.Write((uint)code, 10, 4);
 			Screen.Write(" Len: ");
