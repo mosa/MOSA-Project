@@ -3,7 +3,6 @@
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.UnitTest.Collection;
-using Mosa.UnitTest.Engine;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -27,6 +26,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 			Console.WriteLine("Found Tests: " + unitTests.Count.ToString());
 			var elapsedDiscovery = stopwatch.ElapsedMilliseconds;
 			Console.WriteLine("Elapsed: " + (elapsedDiscovery / 1000.0).ToString("F2") + " secs");
+			Console.WriteLine();
 
 			Console.WriteLine("Compiling Unit Tests...");
 			var unitTestEngine = new UnitTestEngineV2();
@@ -34,16 +34,19 @@ namespace Mosa.Workspace.UnitTest.Debug
 			unitTestEngine.Compile();
 			var elapsedCompile = stopwatch.ElapsedMilliseconds - elapsedDiscovery;
 			Console.WriteLine("Elapsed: " + (elapsedCompile / 1000.0).ToString("F2") + " secs");
+			Console.WriteLine();
 
 			Console.WriteLine("Preparing Unit Tests...");
 			PrepareUnitTest(unitTests, unitTestEngine.TypeSystem, unitTestEngine.Linker);
 			var elapsedPreparing = stopwatch.ElapsedMilliseconds - elapsedDiscovery - elapsedCompile;
 			Console.WriteLine("Elapsed: " + (elapsedPreparing / 1000.0).ToString("F2") + " secs");
+			Console.WriteLine();
 
 			Console.WriteLine("Executing Unit Tests...");
-			ExecuteV2(unitTests, unitTestEngine);
+			Execute(unitTests, unitTestEngine);
 			var elapsedExecuting = stopwatch.ElapsedMilliseconds - elapsedDiscovery - elapsedCompile - elapsedPreparing;
 			Console.WriteLine("Elapsed: " + (elapsedExecuting / 1000.0).ToString("F2") + " secs");
+			Console.WriteLine();
 
 			stopwatch.Stop();
 
@@ -59,10 +62,31 @@ namespace Mosa.Workspace.UnitTest.Debug
 			foreach (var unitTest in unitTests)
 			{
 				unitTest.UnitTestID = ++id;
+
+				ResolveExpectedResult(unitTest);
 				ResolveName(unitTest);
 				ResolveMosaMethod(unitTest, typeSystem);
 				ResolveAddress(unitTest, linker);
 				SerializeUnitTest(unitTest);
+			}
+		}
+
+		private static void ResolveExpectedResult(UnitTest unitTest)
+		{
+			try
+			{
+				unitTest.Expected = unitTest.MethodInfo.Invoke(null, unitTest.Values);
+			}
+			catch (Exception e)
+			{
+				if (e.InnerException is DivideByZeroException || e.InnerException is OverflowException)
+				{
+					unitTest.Skipped = true;
+				}
+				else
+				{
+					unitTest.Skipped = true;
+				}
 			}
 		}
 
@@ -94,22 +118,6 @@ namespace Mosa.Workspace.UnitTest.Debug
 							Skipped = false
 						};
 
-						try
-						{
-							unitTest.Expected = unitTest.MethodInfo.Invoke(null, unitTest.Values);
-						}
-						catch (Exception e)
-						{
-							if (e.InnerException is DivideByZeroException || e.InnerException is OverflowException)
-							{
-								unitTest.Skipped = true;
-							}
-							else
-							{
-								unitTest.Skipped = true;
-							}
-						}
-
 						unitTests.Add(unitTest);
 					}
 				}
@@ -118,44 +126,11 @@ namespace Mosa.Workspace.UnitTest.Debug
 			return unitTests;
 		}
 
-		private static void ExecuteV2(List<UnitTest> unitTests, UnitTestEngineV2 unitTestEngine)
+		private static void Execute(List<UnitTest> unitTests, UnitTestEngineV2 unitTestEngine)
 		{
 			unitTestEngine.QueueUnitTests(unitTests);
 
 			unitTestEngine.WaitUntilComplete();
-		}
-
-		private static void ExecuteV1(List<UnitTest> unitTests)
-		{
-			var unitTestEngine = new UnitTestEngine();
-
-			foreach (var unitTest in unitTests)
-			{
-				if (!unitTest.Skipped)
-				{
-					unitTest.Result = unitTest.Values.Length == 0
-						? unitTestEngine.Execute(unitTest.FullMethodName)
-						: unitTestEngine.Execute(unitTest.FullMethodName, unitTest.Values);
-					unitTest.Passed = unitTest.Result.Equals(unitTest.Expected);
-				}
-
-				if (unitTest.Skipped)
-				{
-					Console.Write("[Skipped] ");
-				}
-				else
-				{
-					if (unitTest.Passed)
-						Console.Write("[Passed] ");
-					else
-						Console.Write("[FAILED] ");
-				}
-
-				Console.Write(unitTest.FullMethodName.Substring(25));
-				Console.Write("(" + unitTest.Values.ToFormattedString() + ")");
-				Console.Write(": " + unitTest.Expected.ToFormattedString());
-				Console.WriteLine(" => " + unitTest.Result.ToFormattedString());
-			}
 		}
 
 		public static object GetParam(MosaUnitTestAttribute unitTest, int index)
