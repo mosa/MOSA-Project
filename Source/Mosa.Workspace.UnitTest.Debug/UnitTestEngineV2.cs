@@ -40,8 +40,8 @@ namespace Mosa.Workspace.UnitTest.Debug
 
 		private const uint MaxRetries = 32;
 
-		private const int DefaultMaxSentQueue = 5000;
-		private const int MinSend = 500;
+		private const int DefaultMaxSentQueue = 10000;
+		private const int MinSend = 2000;
 
 		private readonly Queue<DebugMessage> queue = new Queue<DebugMessage>();
 		private readonly HashSet<DebugMessage> sent = new HashSet<DebugMessage>();
@@ -170,7 +170,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 						}
 					}
 
-					Thread.Sleep(10);
+					Thread.Sleep(1);
 				}
 			}
 			catch (Exception e)

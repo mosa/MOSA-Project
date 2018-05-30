@@ -61,14 +61,19 @@ namespace Mosa.Workspace.UnitTest.Debug
 
 			foreach (var unitTest in unitTests)
 			{
-				unitTest.UnitTestID = ++id;
-
-				ResolveExpectedResult(unitTest);
-				ResolveName(unitTest);
-				ResolveMosaMethod(unitTest, typeSystem);
-				ResolveAddress(unitTest, linker);
-				SerializeUnitTest(unitTest);
+				ResolveUnitTest(typeSystem, linker, id++, unitTest);
 			}
+		}
+
+		private static void ResolveUnitTest(TypeSystem typeSystem, BaseLinker linker, int id, UnitTest unitTest)
+		{
+			unitTest.UnitTestID = id;
+
+			ResolveExpectedResult(unitTest);
+			ResolveName(unitTest);
+			ResolveMosaMethod(unitTest, typeSystem);
+			ResolveAddress(unitTest, linker);
+			SerializeUnitTest(unitTest);
 		}
 
 		private static void ResolveExpectedResult(UnitTest unitTest)

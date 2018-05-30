@@ -108,15 +108,14 @@ namespace Mosa.Kernel.x86
 			SendInteger((uint)((i >> 32) & 0xFFFFFFFF));
 		}
 
-		// MAGIC-ID-CODE-LEN-DATA-CHECKSUM
+		// MAGIC-ID-CODE-LEN-DATA
+
+		const int HeaderSize = 1 + 4 + 4 + 4;
 
 		private static void SendResponseStart(uint id, int code, uint len)
 		{
 			// Magic
-			SendByte('M');
-			SendByte('O');
-			SendByte('S');
-			SendByte('A');
+			SendByte('!');
 
 			// ID
 			SendInteger(id);
@@ -155,11 +154,6 @@ namespace Mosa.Kernel.x86
 			SendResponse(0, DebugCode.Ready);
 		}
 
-		private static byte GetByte(uint offset)
-		{
-			return Intrinsic.Load8(Address.DebuggerBuffer, offset);
-		}
-
 		private static int GetInt32(uint offset)
 		{
 			return (Intrinsic.Load8(Address.DebuggerBuffer, offset + 3) << 24) | (Intrinsic.Load8(Address.DebuggerBuffer, offset + 2) << 16) | (Intrinsic.Load8(Address.DebuggerBuffer, offset + 1) << 8) | Intrinsic.Load8(Address.DebuggerBuffer, offset + 0);
@@ -170,24 +164,34 @@ namespace Mosa.Kernel.x86
 			return (uint)GetInt32(offset);
 		}
 
-		private static int GetMagic()
+		private static byte GetDataByte(uint offset)
 		{
-			return GetInt32(0);
+			return Intrinsic.Load8(Address.DebuggerBuffer + HeaderSize, offset);
+		}
+
+		private static int GetDataInt32(uint offset)
+		{
+			return (Intrinsic.Load8(Address.DebuggerBuffer + HeaderSize, offset + 3) << 24) | (Intrinsic.Load8(Address.DebuggerBuffer + HeaderSize, offset + 2) << 16) | (Intrinsic.Load8(Address.DebuggerBuffer + HeaderSize, offset + 1) << 8) | Intrinsic.Load8(Address.DebuggerBuffer + HeaderSize, offset + 0);
+		}
+
+		private static uint GetDataUInt32(uint offset)
+		{
+			return (uint)GetInt32(offset);
 		}
 
 		private static uint GetID()
 		{
-			return GetUInt32(4);
+			return GetUInt32(1);
 		}
 
 		private static int GetCode()
 		{
-			return GetInt32(8);
+			return GetInt32(5);
 		}
 
 		private static uint GetLength()
 		{
-			return GetUInt32(12);
+			return GetUInt32(9);
 		}
 
 		internal unsafe static void Process(IDTStack* stack)
@@ -222,9 +226,9 @@ namespace Mosa.Kernel.x86
 				SendReady();
 			}
 
-			for (int x = 0; x < 25; x++)
+			for (int x = 0; x < 5; x++)
 			{
-				for (int i = 0; i < 100; i++)
+				for (int i = 0; i < 75; i++)
 				{
 					while (ProcessSerial()) ;
 				}
@@ -244,18 +248,10 @@ namespace Mosa.Kernel.x86
 
 			byte b = Serial.Read(com);
 
-			bool bad = false;
+			if (index == 0 && b != (byte)'!')
+				return true;
 
-			if (index == 0 && b != (byte)'M')
-				bad = true;
-			else if (index == 1 && b != (byte)'O')
-				bad = true;
-			else if (index == 2 && b != (byte)'S')
-				bad = true;
-			else if (index == 3 && b != (byte)'A')
-				bad = true;
-
-			if (bad || (index + 1 > MaxBuffer))
+			if (index + 1 > MaxBuffer)
 			{
 				index = 0;
 				return true;
@@ -264,7 +260,7 @@ namespace Mosa.Kernel.x86
 			Intrinsic.Store8(Address.DebuggerBuffer, index, b);
 			index++;
 
-			if (index > 15)
+			if (index > 12)
 			{
 				uint length = GetLength();
 
@@ -274,7 +270,7 @@ namespace Mosa.Kernel.x86
 					return true;
 				}
 
-				if (index == length + 16)
+				if (index == length + 13)
 				{
 					ProcessCommand();
 					index = 0;
@@ -286,7 +282,7 @@ namespace Mosa.Kernel.x86
 
 		private static void ProcessCommand()
 		{
-			// [0]MAGIC[4]ID[8]CODE[12]LEN[16]DATA[LEN]CHECKSUM
+			// [0]![1]ID[5]CODE[9]LEN[13]DATA[LEN]
 
 			int code = GetCode();
 			uint id = GetID();
@@ -323,8 +319,8 @@ namespace Mosa.Kernel.x86
 		private static void ReadMemory()
 		{
 			uint id = GetID();
-			uint start = (uint)GetInt32(16);
-			uint bytes = (uint)GetInt32(20);
+			uint start = (uint)GetDataInt32(0);
+			uint bytes = (uint)GetDataInt32(4);
 
 			SendResponseStart(id, DebugCode.ReadMemory, bytes + 8);
 
@@ -346,7 +342,7 @@ namespace Mosa.Kernel.x86
 
 			for (uint i = 0; i < count; i++)
 			{
-				uint address = GetUInt32((i * 4) + 16);
+				uint address = GetDataUInt32(i * 4);
 				SendInteger(address);
 				SendInteger(Intrinsic.Load32(address));
 			}
@@ -355,8 +351,8 @@ namespace Mosa.Kernel.x86
 		private static void WriteMemory()
 		{
 			uint id = GetID();
-			uint address = GetUInt32(16);
-			uint length = GetUInt32(20);
+			uint address = GetDataUInt32(0);
+			uint length = GetDataUInt32(4);
 
 			SendResponse(id, DebugCode.WriteMemory);
 
@@ -364,7 +360,7 @@ namespace Mosa.Kernel.x86
 
 			while (at + 4 < length)
 			{
-				uint value = GetUInt32(24 + at);
+				uint value = GetDataUInt32(8 + at);
 
 				Intrinsic.Store32(address, at, value);
 
@@ -373,7 +369,7 @@ namespace Mosa.Kernel.x86
 
 			while (at < length)
 			{
-				byte value = GetByte(24 + at);
+				byte value = GetDataByte(8 + at);
 
 				Intrinsic.Store8(address, at, value);
 
@@ -396,12 +392,12 @@ namespace Mosa.Kernel.x86
 		private static void CompressedWriteMemory()
 		{
 			uint id = GetID();
-			uint address = GetUInt32(16);
-			uint length = GetUInt32(20);
-			uint size = GetUInt32(24);
-			uint uncompresscrc = GetUInt32(28);
+			uint address = GetDataUInt32(0);
+			uint length = GetDataUInt32(4);
+			uint size = GetDataUInt32(8);
+			uint uncompresscrc = GetDataUInt32(12);
 
-			LZF.Decompress(Address.DebuggerBuffer + 32, length, address, size);
+			LZF.Decompress(Address.DebuggerBuffer + 16, length, address, size);
 
 			uint computedcrc = ComputeMemoryCRC(address, size);
 
@@ -432,8 +428,8 @@ namespace Mosa.Kernel.x86
 		private static void ClearMemory()
 		{
 			uint id = GetID();
-			uint start = GetUInt32(16);
-			uint bytes = GetUInt32(20);
+			uint start = GetDataUInt32(0);
+			uint bytes = GetDataUInt32(4);
 
 			uint at = 0;
 
@@ -441,14 +437,14 @@ namespace Mosa.Kernel.x86
 			{
 				Intrinsic.Store32(start, at, 0);
 
-				at = at + 4;
+				at += 4;
 			}
 
 			while (at < bytes)
 			{
 				Intrinsic.Store8(start, at, 0);
 
-				at = at + 1;
+				at++;
 			}
 
 			SendResponse(id, DebugCode.ClearMemory);
@@ -457,8 +453,8 @@ namespace Mosa.Kernel.x86
 		private static void GetMemoryCRC()
 		{
 			uint id = GetID();
-			uint start = GetUInt32(16);
-			uint length = GetUInt32(20);
+			uint start = GetDataUInt32(0);
+			uint length = GetDataUInt32(4);
 
 			uint crc = ComputeMemoryCRC(start, length);
 
@@ -483,18 +479,15 @@ namespace Mosa.Kernel.x86
 		{
 			uint id = GetID();
 
-			var start = Address.DebuggerBuffer + 16;
-			uint end = start + GetLength() + 16;
+			var start = Address.DebuggerBuffer + HeaderSize;
+			uint end = start + GetLength();
 
 			UnitTestQueue.QueueUnitTest(id, start, end);
 		}
 
 		private static void SendTestUnitResponse()
 		{
-			ulong result;
-			uint id;
-
-			if (UnitTestRunner.GetResult(out result, out id))
+			if (UnitTestRunner.GetResult(out ulong result, out uint id))
 			{
 				SendResponse(id, DebugCode.ExecuteUnitTest, result);
 			}
@@ -508,7 +501,7 @@ namespace Mosa.Kernel.x86
 		private unsafe static void HardJump()
 		{
 			uint id = GetID();
-			uint address = GetUInt32(16);
+			uint address = GetDataUInt32(0);
 
 			SendResponse(id, DebugCode.HardJump);
 
