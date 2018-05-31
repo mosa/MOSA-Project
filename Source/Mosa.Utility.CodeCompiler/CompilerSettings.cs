@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Utility.CodeDomCompiler
+namespace Mosa.Utility.CodeCompiler
 {
 	public class CompilerSettings
 	{

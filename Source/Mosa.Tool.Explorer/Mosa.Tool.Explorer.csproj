@@ -137,9 +137,9 @@
       <Project>{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}</Project>
       <Name>Mosa.Platform.x86</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Utility.CodeDomCompiler\Mosa.Utility.CodeDomCompiler.csproj">
+    <ProjectReference Include="..\Mosa.Utility.CodeDomCompiler\Mosa.Utility.CodeCompiler.csproj">
       <Project>{7b8fba4e-d6ac-4dad-a607-43ba112f8ec1}</Project>
-      <Name>Mosa.Utility.CodeDomCompiler</Name>
+      <Name>Mosa.Utility.CodeCompiler</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Utility.GUI.Common\Mosa.Utility.GUI.Common.csproj">
       <Project>{5a813793-78e2-413c-aa05-fcdd12b7db04}</Project>

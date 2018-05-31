@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Mosa.Utility.CodeDomCompiler")]
+[assembly: AssemblyTitle("Mosa.Utility.CodeCompiler")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MOSA Project")]
-[assembly: AssemblyProduct("Mosa.Utility.CodeDomCompiler")]
+[assembly: AssemblyProduct("Mosa.Utility.CodeCompiler")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

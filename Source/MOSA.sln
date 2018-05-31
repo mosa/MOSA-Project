@@ -116,7 +116,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.GUI.Common", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.UnitTest.Numbers", "Mosa.UnitTest.Numbers\Mosa.UnitTest.Numbers.csproj", "{AD653B6B-EBC7-4E69-93F7-FADA40462648}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.CodeDomCompiler", "Mosa.Utility.CodeDomCompiler\Mosa.Utility.CodeDomCompiler.csproj", "{7B8FBA4E-D6AC-4DAD-A607-43BA112F8EC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.CodeCompiler", "Mosa.Utility.CodeDomCompiler\Mosa.Utility.CodeCompiler.csproj", "{7B8FBA4E-D6AC-4DAD-A607-43BA112F8EC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Linker", "Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj", "{65866A51-B229-44C5-AC81-87A90FA1741C}"
 EndProject
