@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Utility.CodeDomCompiler;
+using Mosa.Utility.CodeCompiler;
 using System;
 using System.CodeDom.Compiler;
 using System.Windows.Forms;
@@ -26,7 +26,7 @@ namespace Mosa.Tool.Explorer
 			settings.CodeSource = SourceCode;
 			settings.AddReference("mscorlib.dll");
 
-			var results = Utility.CodeDomCompiler.Compiler.ExecuteCompiler(settings);
+			var results = Utility.CodeCompiler.Compiler.ExecuteCompiler(settings);
 
 			if (results.Errors.HasErrors)
 			{
