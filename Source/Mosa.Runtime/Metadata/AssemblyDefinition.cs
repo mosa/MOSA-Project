@@ -34,7 +34,7 @@ namespace Mosa.Runtime.Metadata
 
 		public TypeDefinition GetTypeDefinition(uint slot)
 		{
-			return new TypeDefinition(Intrinsic.LoadPointer(Ptr, 4 + (IntPtr.Size * 4) + (IntPtr.Size * (int)slot)));
+			return new TypeDefinition(Intrinsic.LoadPointer(Ptr, (IntPtr.Size * 4) + (IntPtr.Size * (int)slot)));
 		}
 	}
 }

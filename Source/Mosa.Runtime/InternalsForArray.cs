@@ -37,8 +37,8 @@ namespace Mosa.Runtime
 			var size = (typeCode == TypeCode.ReferenceType) ? IntPtr.Size : (int)typeStruct.Size;
 
 			Internal.MemoryCopy(
-				destinationArray + (IntPtr.Size * 3) + (destinationIndex * size),
-				sourceArray + (IntPtr.Size * 3) + (sourceIndex * size),
+				destinationArray + (IntPtr.Size * 2) + (destinationIndex * size),
+				sourceArray + (IntPtr.Size * 2) + (sourceIndex * size),
 				(uint)(length * size)
 			);
 		}
