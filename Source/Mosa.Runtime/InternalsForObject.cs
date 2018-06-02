@@ -19,7 +19,7 @@ namespace Mosa.Runtime
 			// Iterate through all the assemblies and look for the type handle
 			foreach (var assembly in Internal.Assemblies)
 			{
-				foreach (RuntimeType type in assembly.typeList)
+				foreach (var type in assembly.typeList)
 				{
 					// If its not a match then skip
 					if (type.TypeHandle != handle)

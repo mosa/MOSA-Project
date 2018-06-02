@@ -15,12 +15,12 @@ namespace Mosa.Kernel.x86
 		static private uint heapUsed = 0;
 
 		[Method("Mosa.Runtime.GC.AllocateMemory")]
-		static unsafe private UIntPtr _AllocateMemory(uint size)
+		static unsafe private IntPtr _AllocateMemory(uint size)
 		{
 			return AllocateMemory(size);
 		}
 
-		static public UIntPtr AllocateMemory(uint size)
+		static public IntPtr AllocateMemory(uint size)
 		{
 			if (heapStart == 0 || (heapSize - heapUsed) < size)
 			{
@@ -30,7 +30,7 @@ namespace Mosa.Kernel.x86
 				heapUsed = 0;
 			}
 
-			var at = new UIntPtr(heapStart + heapUsed);
+			var at = new IntPtr(heapStart + heapUsed);
 			heapUsed += size;
 			return at;
 		}

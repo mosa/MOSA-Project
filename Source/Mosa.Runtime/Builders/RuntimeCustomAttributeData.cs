@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using Mosa.Runtime.Metadata;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -9,33 +10,38 @@ namespace System
 	public sealed unsafe class RuntimeCustomAttributeData : CustomAttributeData
 	{
 		// We use this for cheats
-		internal readonly MDTypeDefinition* EnumTypePtr;
+		internal readonly TypeDefinition EnumTypePtr;
 
-		public RuntimeCustomAttributeData(MDCustomAttribute* customAttributeTable)
+		public RuntimeCustomAttributeData(CustomAttribute customAttributeTable)
 		{
-			RuntimeTypeHandle typeHandle = new RuntimeTypeHandle();
-			((uint**)&typeHandle)[0] = (uint*)customAttributeTable->AttributeType;
+			var typeHandle = new RuntimeTypeHandle();
+			((uint**)&typeHandle)[0] = (uint*)customAttributeTable.AttributeType.Ptr;
+
 			base.attributeType = Type.GetTypeFromHandle(typeHandle);
 
 			// Get the metadata pointer for the enum type
-			typeHandle = typeof(System.Enum).TypeHandle;
-			EnumTypePtr = (MDTypeDefinition*)((uint**)&typeHandle)[0];
+			typeHandle = typeof(Enum).TypeHandle;
+
+			//EnumTypePtr = (TypeDefinition*)((uint**)&typeHandle)[0];
+			EnumTypePtr = new TypeDefinition(typeHandle.Value);
 
 			// Create temporary lists to hold the arguments
 			var typedArgs = new LinkedList<CustomAttributeTypedArgument>();
 			var namedArgs = new LinkedList<CustomAttributeNamedArgument>();
 
-			for (uint i = 0; i < customAttributeTable->NumberOfArguments; i++)
+			for (uint i = 0; i < customAttributeTable.NumberOfArguments; i++)
 			{
 				// Get the argument metadata pointer
-				var argument = customAttributeTable->GetCustomAttributeArgument(i);
+				var argument = customAttributeTable.GetCustomAttributeArgument(i);
 
 				// Get the argument name (if any)
-				string name = argument->Name;
+				string name = argument.Name;
 
 				// Get the argument type
-				RuntimeTypeHandle argTypeHandle = new RuntimeTypeHandle();
-				((uint**)&argTypeHandle)[0] = (uint*)argument->ArgumentType;
+				var argTypeHandle = new RuntimeTypeHandle(argument.ArgumentType.Ptr);
+
+				//((uint**)&argTypeHandle)[0] = (uint*)argument.ArgumentType;
+
 				var argType = Type.GetTypeFromHandle(argTypeHandle);
 
 				// Get the argument value
@@ -48,7 +54,7 @@ namespace System
 				}
 				else
 				{
-					namedArgs.AddLast(CreateNamedArgumentStruct(name, argType, value, argument->IsField));
+					namedArgs.AddLast(CreateNamedArgumentStruct(name, argType, value, argument.IsField));
 				}
 			}
 
@@ -83,15 +89,15 @@ namespace System
 			return namedArgument;
 		}
 
-		private object ResolveArgumentValue(MDCustomAttributeArgument* argument, Type type)
+		private object ResolveArgumentValue(CustomAttributeArgument argument, Type type)
 		{
-			TypeCode typeCode = argument->ArgumentType->TypeCode;
-			var valuePtr = argument->GetArgumentValue();
+			TypeCode typeCode = argument.ArgumentType.TypeCode;
+			var valuePtr = argument.GetArgumentValue();
 
 			// If its an enum type
-			if (argument->ArgumentType->ParentType == EnumTypePtr)
+			if (argument.ArgumentType.ParentType.Handle == EnumTypePtr.Handle)
 			{
-				typeCode = argument->ArgumentType->ElementType->TypeCode;
+				typeCode = argument.ArgumentType.ElementType.TypeCode;
 			}
 
 			switch (typeCode)
@@ -148,8 +154,10 @@ namespace System
 					if (type.FullName == "System.Type")
 					{
 						// Get the argument type
-						RuntimeTypeHandle argTypeHandle = new RuntimeTypeHandle();
-						((uint**)&argTypeHandle)[0] = (uint*)argument->ArgumentType;
+						var argTypeHandle = new RuntimeTypeHandle(argument.ArgumentType.Ptr);
+
+						//((uint**)&argTypeHandle)[0] = (uint*)argument.ArgumentType;
+
 						return Type.GetTypeFromHandle(argTypeHandle);
 					}
 					throw new ArgumentException();
@@ -158,12 +166,12 @@ namespace System
 			//return null;
 		}
 
-		private object ResolveArrayValue(MDCustomAttributeArgument* argument, Type type)
+		private object ResolveArrayValue(CustomAttributeArgument argument, Type type)
 		{
-			TypeCode typeCode = argument->ArgumentType->ElementType->TypeCode;
-			var valuePtr = argument->GetArgumentValue();
+			TypeCode typeCode = argument.ArgumentType.ElementType.TypeCode;
+			var valuePtr = argument.GetArgumentValue();
 			var size = ((uint*)valuePtr)[0];
-			valuePtr += UIntPtr.Size;
+			valuePtr += IntPtr.Size;
 
 			switch (typeCode)
 			{

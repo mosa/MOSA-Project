@@ -18,9 +18,7 @@ namespace Mosa.Utility.DebugEngine
 		private List<byte> buffer = new List<byte>();
 
 		private CallBack globalDispatch;
-		private readonly byte[] receivedData = new byte[1];
-
-		private int length = -1;
+		private readonly byte[] receivedData = new byte[2000];
 
 		private const int MaxBufferSize = (64 * 1024) + 64;
 
@@ -36,7 +34,7 @@ namespace Mosa.Utility.DebugEngine
 
 				if (IsConnected)
 				{
-					stream.BeginRead(receivedData, 0, 1, ReadAsyncCallback, null);
+					stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
 				}
 			}
 		}
@@ -135,21 +133,13 @@ namespace Mosa.Utility.DebugEngine
 		{
 			var packet = new Packet();
 
-			packet.Add((byte)'M');
-			packet.Add((byte)'O');
-			packet.Add((byte)'S');
-			packet.Add((byte)'A');
-
-			packet.StartCRC();
-
+			packet.Add((byte)'!');
 			packet.Add(message.ID);
 			packet.Add(message.Code);
 
 			if (message.CommandData == null)
 			{
-				packet.Add(0);
-
-				packet.Add(0); // checksum
+				packet.Add((int)0);  // length
 			}
 			else
 			{
@@ -159,14 +149,12 @@ namespace Mosa.Utility.DebugEngine
 				{
 					packet.Add(b);
 				}
-
-				packet.AppendCRC();
 			}
 
 			return packet;
 		}
 
-		private void PostResponse(int id, int code, List<byte> data)
+		private void PostResponse(int id, byte code, List<byte> data)
 		{
 			DebugMessage message = null;
 
@@ -198,6 +186,11 @@ namespace Mosa.Utility.DebugEngine
 			}
 		}
 
+		private byte GetByte(int index)
+		{
+			return buffer[index];
+		}
+
 		private int GetInteger(int index)
 		{
 			return (buffer[index + 3] << 24) | (buffer[index + 2] << 16) | (buffer[index + 1] << 8) | buffer[index];
@@ -205,73 +198,54 @@ namespace Mosa.Utility.DebugEngine
 
 		private bool ParseResponse()
 		{
-			int id = GetInteger(4);
-			int code = GetInteger(8);
-			int len = GetInteger(12);
-			int checksum = GetInteger(len);
+			int id = GetInteger(1);
+			byte code = GetByte(5);
+			int len = GetInteger(6);
 
 			var data = new List<byte>();
 
 			for (int i = 0; i < len; i++)
 			{
-				data.Add(buffer[i + 16]);
+				data.Add(buffer[i + 10]);
 			}
+
+			//Console.WriteLine("ID: " + id + " CODE: " + code + " LEN: " + len);
 
 			PostResponse(id, code, data);
 
 			return true;
 		}
 
-		// Message format:	// [0]MAGIC[4]ID[8]CODE[12]LEN[16]DATA[LEN]CHECKSUM
-
-		private void BadDataAbort()
-		{
-			var data = buffer;
-
-			buffer = new List<byte>();
-
-			PostResponse(0, DebugCode.UnknownData, data);
-
-			length = -1;
-		}
+		// Message format:	// [0]MAGIC[1]ID[5]CODE[6]LEN[10]DATA[LEN]
 
 		private void Push(byte b)
 		{
-			bool bad = false;
+			if (buffer.Count == 0 && b != (byte)'!')
+				return;
 
-			if (buffer.Count == 0 && b != (byte)'M')
-				bad = true;
-			else if (buffer.Count == 1 && b != (byte)'O')
-				bad = true;
-			else if (buffer.Count == 2 && b != (byte)'S')
-				bad = true;
-			else if (buffer.Count == 3 && b != (byte)'A')
-				bad = true;
-
-			if (bad)
+			if (buffer.Count > MaxBufferSize)
 			{
-				BadDataAbort();
+				buffer.Clear();
 				return;
 			}
 
 			buffer.Add(b);
 
-			if (buffer.Count >= 16 && length == -1)
+			if (buffer.Count >= 10)
 			{
-				length = GetInteger(12);
-			}
+				int length = GetInteger(6);
 
-			if (length > MaxBufferSize || buffer.Count > MaxBufferSize)
-			{
-				BadDataAbort();
-				return;
-			}
+				if (length > MaxBufferSize)
+				{
+					buffer.Clear();
+					return;
+				}
 
-			if (length + 20 == buffer.Count)
-			{
-				bool valid = ParseResponse();
-				buffer.Clear();
-				length = -1;
+				if (buffer.Count == length + 10)
+				{
+					ParseResponse();
+					buffer.Clear();
+				}
 			}
 		}
 
@@ -279,11 +253,14 @@ namespace Mosa.Utility.DebugEngine
 		{
 			try
 			{
-				stream.EndRead(ar);
+				var bytes = stream.EndRead(ar);
 
-				Push(receivedData[0]);
+				for (int i = 0; i < bytes; i++)
+				{
+					Push(receivedData[i]);
+				}
 
-				stream.BeginRead(receivedData, 0, 1, ReadAsyncCallback, null);
+				stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
 			}
 			catch
 			{

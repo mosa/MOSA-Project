@@ -33,7 +33,7 @@
 		<file src="..\..\bin\Mosa.Tool.GDBDebugger.exe" target="tools" />
 		<file src="..\..\bin\Mosa.Tool.Launcher.exe" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.BootImage.dll" target="tools" />
-		<file src="..\..\bin\Mosa.Utility.CodeDomCompiler.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.CodeCompiler.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.DebugEngine.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.GUI.Common.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.Launcher.dll" target="tools" />

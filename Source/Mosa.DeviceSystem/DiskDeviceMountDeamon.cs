@@ -11,7 +11,13 @@ namespace Mosa.DeviceSystem
 			if (controller == null)
 				return;
 
+			if (device == null)
+				return; // BAD
+
 			var devicemanager = device.DeviceManager;
+
+			if (devicemanager == null)
+				return; // BAD
 
 			for (uint drive = 0; drive < controller.MaximunDriveCount; drive++)
 			{

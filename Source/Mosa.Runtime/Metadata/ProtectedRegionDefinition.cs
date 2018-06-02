@@ -12,27 +12,27 @@ namespace Mosa.Runtime.Metadata
 		// uint		_endOffset;
 		// uint		_handlerOffset;
 		// uint		_handlerType;
-		// UIntPtr	_exceptionType;
+		// IntPtr	_exceptionType;
 
 		#endregion layout
 
-		private UIntPtr Ptr;
+		private IntPtr Ptr;
 
-		public ProtectedRegionDefinition(UIntPtr ptr)
+		public ProtectedRegionDefinition(IntPtr ptr)
 		{
 			Ptr = ptr;
 		}
 
-		public bool IsNull => Ptr == UIntPtr.Zero;
+		public bool IsNull => Ptr == IntPtr.Zero;
 
 		public uint StartOffset => Intrinsic.Load32(Ptr);
 
-		public uint EndOffset => Intrinsic.Load32(Ptr, UIntPtr.Size);
+		public uint EndOffset => Intrinsic.Load32(Ptr, IntPtr.Size);
 
-		public uint HandlerOffset => Intrinsic.Load32(Ptr, UIntPtr.Size * 2);
+		public uint HandlerOffset => Intrinsic.Load32(Ptr, IntPtr.Size * 2);
 
-		public ExceptionHandlerType HandlerType => (ExceptionHandlerType)Intrinsic.Load32(Ptr, UIntPtr.Size * 3);
+		public ExceptionHandlerType HandlerType => (ExceptionHandlerType)Intrinsic.Load32(Ptr, IntPtr.Size * 3);
 
-		public TypeDefinition ExceptionType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, UIntPtr.Size * 4));
+		public TypeDefinition ExceptionType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, IntPtr.Size * 4));
 	}
 }

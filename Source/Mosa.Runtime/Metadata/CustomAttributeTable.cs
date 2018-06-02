@@ -15,20 +15,20 @@ namespace Mosa.Runtime.Metadata
 
 		#endregion layout
 
-		public UIntPtr Ptr;
+		public IntPtr Ptr;
 
-		public CustomAttributeTable(UIntPtr ptr)
+		public CustomAttributeTable(IntPtr ptr)
 		{
 			Ptr = ptr;
 		}
 
-		public bool IsNull => Ptr == UIntPtr.Zero;
+		public bool IsNull => Ptr == IntPtr.Zero;
 
 		public uint NumberOfAttributes => Intrinsic.Load32(Ptr);
 
 		public CustomAttribute GetCustomAttribute(uint slot)
 		{
-			return new CustomAttribute(Intrinsic.LoadPointer(Ptr, UIntPtr.Size + (UIntPtr.Size * (int)slot)));
+			return new CustomAttribute(Intrinsic.LoadPointer(Ptr, IntPtr.Size + (IntPtr.Size * (int)slot)));
 		}
 	}
 }

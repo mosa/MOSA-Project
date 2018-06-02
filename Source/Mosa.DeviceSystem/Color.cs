@@ -28,7 +28,7 @@ namespace Mosa.DeviceSystem
 		public byte Alpha;
 
 		/// <summary>
-		///
+		/// Transparent Color
 		/// </summary>
 		public static readonly Color Transparent = new Color(0, 0, 0, 0);
 
@@ -70,7 +70,7 @@ namespace Mosa.DeviceSystem
 		/// </returns>
 		public bool IsEqual(Color color)
 		{
-			return ((color.Red == Red) && (color.Green == Green) && (color.Blue == Blue) && (color.Alpha == Alpha));
+			return (color.Red == Red) && (color.Green == Green) && (color.Blue == Blue) && (color.Alpha == Alpha);
 		}
 	}
 }

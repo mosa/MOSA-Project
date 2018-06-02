@@ -5,7 +5,7 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Mosa.Utility.CodeDomCompiler
+namespace Mosa.Utility.CodeCompiler
 {
 	public static class Compiler
 	{
