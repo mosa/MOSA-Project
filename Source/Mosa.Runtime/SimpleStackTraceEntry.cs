@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime.Metadata;
-using System;
 
 namespace Mosa.Runtime
 {
@@ -22,12 +21,10 @@ namespace Mosa.Runtime
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return "0x" +
-				MethodDefinition.Method.ToInt32().ToString("x") +
-				"+0x" +
-				Offset.ToString("x") +
-				" " +
-				MethodName.Substring(MethodName.IndexOf(' ') + 1);
+			string methodAddress = MethodDefinition.IsNull ? "[NULL]" : MethodDefinition.Method.ToInt32().ToString("x");
+			string methodName = MethodName == null ? "(unknown method)" : MethodName.Substring(MethodName.IndexOf(' ') + 1);
+
+			return "0x" + methodAddress + "+0x" + Offset.ToString("x") + " " + methodName;
 		}
 
 		/// <summary>
@@ -39,15 +36,14 @@ namespace Mosa.Runtime
 			{
 				if (!Valid)
 					return true;
-				if (MethodName == null)
-					return true;
+
 				return MethodName.IndexOf("System.Void Mosa.Kernel.x86.Panic::") >= 0;
 			}
 		}
 
 		public bool Valid
 		{
-			get { return MethodName != null; }
+			get { return !MethodDefinition.IsNull && MethodName != null; }
 		}
 	}
 }

@@ -1,13 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using Mosa.Runtime.Metadata;
 using System.Reflection;
 
 namespace System
 {
 	public sealed unsafe class RuntimeType : Type
 	{
-		private MDTypeDefinition* typeDefinition;
+		private TypeDefinition typeDefinition;
 		private string assemblyQualifiedName;
 		private string name;
 		private string @namespace;
@@ -83,29 +84,31 @@ namespace System
 		internal RuntimeType(RuntimeTypeHandle handle)
 		{
 			this.handle = handle;
-			typeDefinition = (MDTypeDefinition*)((uint**)&handle)[0];
+			typeDefinition = new TypeDefinition(handle.Value); //  (TypeDefinition*)((uint**)&handle)[0];
 
-			assemblyQualifiedName = typeDefinition->Name;   // TODO
-			name = typeDefinition->Name;                    // TODO
-			@namespace = typeDefinition->Name;              // TODO
-			fullname = typeDefinition->Name;
+			assemblyQualifiedName = typeDefinition.Name;   // TODO
+			name = typeDefinition.Name;                    // TODO
+			@namespace = typeDefinition.Name;              // TODO
+			fullname = typeDefinition.Name;
 
-			typeCode = typeDefinition->TypeCode;
-			attributes = typeDefinition->Attributes;
+			typeCode = typeDefinition.TypeCode;
+			attributes = typeDefinition.Attributes;
 
 			// Declaring Type
-			if (typeDefinition->DeclaringType != null)
+			if (!typeDefinition.DeclaringType.IsNull)
 			{
-				RuntimeTypeHandle declaringHandle = new RuntimeTypeHandle();
-				((uint**)&declaringHandle)[0] = (uint*)typeDefinition->DeclaringType;
+				var declaringHandle = new RuntimeTypeHandle(typeDefinition.DeclaringType.Ptr);
+
+				//((uint**)&declaringHandle)[0] = (uint*)typeDefinition.DeclaringType;
 				declaringTypeHandle = declaringHandle;
 			}
 
 			// Element Type
-			if (typeDefinition->ElementType != null)
+			if (!typeDefinition.ElementType.IsNull)
 			{
-				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
-				((uint**)&elementHandle)[0] = (uint*)typeDefinition->ElementType;
+				var elementHandle = new RuntimeTypeHandle(typeDefinition.ElementType.Ptr);
+
+				//((uint**)&elementHandle)[0] = (uint*)typeDefinition.ElementType;
 				elementTypeHandle = elementHandle;
 			}
 		}
@@ -113,7 +116,7 @@ namespace System
 		public override int GetArrayRank()
 		{
 			// We don't know so just return 1 if array, 0 otherwise
-			return (IsArrayImpl() == true) ? 1 : 0;
+			return (IsArrayImpl()) ? 1 : 0;
 		}
 
 		public override Type GetElementType()

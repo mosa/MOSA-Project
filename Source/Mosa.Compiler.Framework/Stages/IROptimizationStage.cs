@@ -52,6 +52,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private int simplifyGeneralCount = 0;
 		private int foldIfThenElseCount = 0;
 		private int simplifyParamLoadCount = 0;
+		private int simplifyBranchComparison = 0;
 
 		private Stack<InstructionNode> worklist;
 
@@ -128,6 +129,7 @@ namespace Mosa.Compiler.Framework.Stages
 				FoldTo64Constant,
 				FoldIfThenElse,
 				SimplifyParamLoadCount,
+				SimplifyCompareBranch
 			};
 		}
 
@@ -172,6 +174,7 @@ namespace Mosa.Compiler.Framework.Stages
 			longConstantFoldingCount = 0;
 			simplifyGeneralCount = 0;
 			simplifyParamLoadCount = 0;
+			simplifyBranchComparison = 0;
 		}
 
 		protected override void Run()
@@ -226,6 +229,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompareCount);
 			UpdateCounter("IROptimizations.SimplifyGeneral", simplifyGeneralCount);
 			UpdateCounter("IROptimizations.SimplifyParamLoad", simplifyParamLoadCount);
+			UpdateCounter("IROptimizations.SimplifyBranchComparison", simplifyBranchComparison);
 
 			virtualRegisters.Clear();
 			worklist.Clear();
@@ -345,6 +349,11 @@ namespace Mosa.Compiler.Framework.Stages
 			return operand.Is64BitInteger ? (BaseInstruction)IRInstruction.MoveInt64 : IRInstruction.MoveInt32;
 		}
 
+		private static bool ValidateSSAForm(Operand operand)
+		{
+			return operand.Definitions.Count == 1;
+		}
+
 		private void DeadCodeElimination(InstructionNode node)
 		{
 			if (node.ResultCount == 0 || node.ResultCount > 2)
@@ -353,13 +362,13 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			if (node.ResultCount == 2 && !node.Result2.IsVirtualRegister)
 				return;
 
-			if (node.ResultCount == 2 && node.Result2.Definitions.Count != 1)
+			if (node.ResultCount == 2 && !ValidateSSAForm(node.Result2))
 				return;
 
 			if (node.Instruction == IRInstruction.CallDynamic
@@ -411,13 +420,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			if (!node.Operand1.IsResolvedConstant)
 				return;
-
-			Debug.Assert(node.Result.Definitions.Count == 1);
 
 			Operand destination = node.Result;
 			Operand source = node.Operand1;
@@ -469,10 +476,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
-			if (node.Operand1.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Operand1))
 				return;
 
 			if (node.Operand1.IsResolvedConstant)
@@ -519,10 +526,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Instruction != IRInstruction.MoveCompound)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
-			if (node.Operand1.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Operand1))
 				return;
 
 			Operand destination = node.Result;
@@ -898,7 +905,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			if (!node.Operand1.IsResolvedConstant)
@@ -1282,7 +1289,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			if (!node.Operand2.IsResolvedConstant)
@@ -1304,8 +1311,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!node2.Operand2.IsResolvedConstant)
 				return;
-
-			Debug.Assert(node2.Result.Definitions.Count == 1);
 
 			bool add = true;
 
@@ -1345,7 +1350,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			if (!node.Operand2.IsResolvedConstant)
@@ -1389,7 +1394,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			if (!node.Operand2.IsResolvedConstant)
@@ -1436,7 +1441,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			if (!node.Operand2.IsResolvedConstant)
@@ -1485,7 +1490,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			if (!node.Operand2.IsResolvedConstant)
@@ -1544,7 +1549,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (operand.Uses.Count != 1)
 				return;
 
-			if (operand.Definitions.Count != 1)
+			if (!ValidateSSAForm(operand))
 				return;
 
 			var node2 = operand.Definitions[0];
@@ -1590,10 +1595,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (operand.Uses.Count != 1)
 				return;
 
-			if (operand.Definitions.Count != 1)
+			if (!ValidateSSAForm(operand))
 				return;
-
-			Debug.Assert(operand.Definitions.Count == 1);
 
 			var node2 = operand.Definitions[0];
 
@@ -1720,7 +1723,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Instruction != IRInstruction.Phi)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			if (!node.Result.IsInteger)
@@ -1754,7 +1757,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.OperandCount != 1)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			if (!node.Result.IsInteger) // future: should work on other types as well
@@ -1782,7 +1785,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Instruction != IRInstruction.Phi)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			var operand = node.Operand1;
@@ -1818,7 +1821,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(node.Result.IsVirtualRegister);
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			if (!((node.Operand1.IsVirtualRegister && node.Operand2.IsConstantZero)
@@ -1838,7 +1841,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (operand.Uses.Count != 1)
 				return;
 
-			if (operand.Definitions.Count != 1)
+			if (!ValidateSSAForm(operand))
 				return;
 
 			if (operand.Is64BitInteger != node.Result.Is64BitInteger)
@@ -1967,7 +1970,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			if (!node.Operand2.IsConstantZero)
@@ -1990,7 +1993,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Instruction != IRInstruction.Phi)
 				return;
 
-			if (node.Result.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Result))
 				return;
 
 			var result = node.Result;
@@ -2154,7 +2157,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (node.Operand1.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Operand1))
 				return;
 
 			var node2 = node.Operand1.Definitions[0];
@@ -2186,7 +2189,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsVirtualRegister)
 				return;
 
-			if (node.Operand1.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Operand1))
 				return;
 
 			var node2 = node.Operand1.Definitions[0];
@@ -2326,7 +2329,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Operand2.IsConstantZero)
 				return;
 
-			if (node.Operand1.Definitions.Count != 1)
+			if (!ValidateSSAForm(node.Operand1))
 				return;
 
 			var node2 = node.Operand1.Definitions[0];
@@ -2416,6 +2419,34 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active) trace.Log("AFTER: \t" + node);
 				foldIfThenElseCount++;
 			}
+		}
+
+		private void SimplifyCompareBranch(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.CompareIntBranch64)
+				return;
+
+			if (!ValidateSSAForm(node.Operand1))
+				return;
+
+			if (!ValidateSSAForm(node.Operand2))
+				return;
+
+			if (node.Operand1.Definitions[0].Instruction != IRInstruction.SignExtend32x64)
+				return;
+
+			if (node.Operand2.Definitions[0].Instruction != IRInstruction.SignExtend32x64)
+				return;
+
+			AddOperandUsageToWorkList(node);
+			AddOperandUsageToWorkList(node.Operand1.Definitions[0]);
+			AddOperandUsageToWorkList(node.Operand2.Definitions[0]);
+
+			if (trace.Active) trace.Log("*** SimplifyCompareBranch");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.CompareIntBranch32, node.ConditionCode, null, node.Operand1.Definitions[0].Operand1, node.Operand2.Definitions[0].Operand1, node.BranchTargets[0]);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			simplifyBranchComparison++;
 		}
 	}
 }

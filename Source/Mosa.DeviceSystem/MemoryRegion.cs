@@ -3,19 +3,19 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	///
+	/// MemoryRegion
 	/// </summary>
 	public sealed class MemoryRegion
 	{
 		/// <summary>
 		/// Gets the base address.
 		/// </summary>
-		public uint BaseAddress { get; private set; }
+		public uint BaseAddress { get; }
 
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
-		public uint Size { get; private set; }
+		public uint Size { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MemoryRegion"/> class.
@@ -24,8 +24,8 @@ namespace Mosa.DeviceSystem
 		/// <param name="size">The size.</param>
 		public MemoryRegion(uint baseAddress, uint size)
 		{
-			this.BaseAddress = baseAddress;
-			this.Size = size;
+			BaseAddress = baseAddress;
+			Size = size;
 		}
 
 		/// <summary>

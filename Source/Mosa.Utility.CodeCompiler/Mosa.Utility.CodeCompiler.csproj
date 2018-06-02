@@ -9,13 +9,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Utility.CodeDomCompiler</AssemblyName>
+    <AssemblyName>Mosa.Utility.CodeCompiler</AssemblyName>
     <DelaySign>false</DelaySign>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
-    <RootNamespace>Mosa.Utility.CodeDomCompiler</RootNamespace>
+    <RootNamespace>Mosa.Utility.CodeCompiler</RootNamespace>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

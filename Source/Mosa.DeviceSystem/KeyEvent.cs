@@ -8,7 +8,7 @@ namespace Mosa.DeviceSystem
 	public struct KeyEvent
 	{
 		/// <summary>
-		///
+		/// Enum KeyPressType
 		/// </summary>
 		public enum KeyPressType : byte
 		{

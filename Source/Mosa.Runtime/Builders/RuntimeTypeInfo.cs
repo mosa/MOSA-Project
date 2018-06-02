@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using Mosa.Runtime.Metadata;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -8,7 +9,7 @@ namespace System
 {
 	public sealed unsafe class RuntimeTypeInfo : TypeInfo
 	{
-		private MDTypeDefinition* typeDefinition;
+		private TypeDefinition typeDefinition;
 		private readonly TypeCode typeCode;
 		private readonly Type baseType;
 		private readonly Type elementType;
@@ -36,13 +37,13 @@ namespace System
 				{
 					// Custom Attributes Data - Lazy load
 					customAttributesData = new LinkedList<CustomAttributeData>();
-					if (typeDefinition->CustomAttributes != null)
+					if (!typeDefinition.CustomAttributes.IsNull)
 					{
-						var customAttributesTable = typeDefinition->CustomAttributes;
-						var customAttributesCount = customAttributesTable->NumberOfAttributes;
+						var customAttributesTable = typeDefinition.CustomAttributes;
+						var customAttributesCount = customAttributesTable.NumberOfAttributes;
 						for (uint i = 0; i < customAttributesCount; i++)
 						{
-							RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData(customAttributesTable->GetCustomAttribute(i));
+							RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData(customAttributesTable.GetCustomAttribute(i));
 							customAttributesData.AddLast(cad);
 						}
 					}
@@ -103,42 +104,47 @@ namespace System
 
 		public RuntimeTypeInfo(RuntimeType type, Assembly assembly)
 		{
-			var handle = type.TypeHandle;
 			asType = type;
-			this.Assembly = assembly;
+			Assembly = assembly;
+
+			var handle = type.TypeHandle;
 
 			//this.handle = handle;
-			typeDefinition = (MDTypeDefinition*)((uint**)&handle)[0];
+			//typeDefinition = (TypeDefinition*)((uint**)&handle)[0];
+			typeDefinition = new TypeDefinition(handle.Value);
 
-			AssemblyQualifiedName = typeDefinition->Name;   // TODO
-			Name = typeDefinition->Name;                    // TODO
-			Namespace = typeDefinition->Name;              // TODO
-			FullName = typeDefinition->Name;
+			AssemblyQualifiedName = typeDefinition.Name;   // TODO
+			Name = typeDefinition.Name;                    // TODO
+			Namespace = typeDefinition.Name;              // TODO
+			FullName = typeDefinition.Name;
 
-			typeCode = typeDefinition->TypeCode;
-			Attributes = typeDefinition->Attributes;
+			typeCode = typeDefinition.TypeCode;
+			Attributes = typeDefinition.Attributes;
 
 			// Base Type
-			if (typeDefinition->ParentType != null)
+			if (!typeDefinition.ParentType.IsNull)
 			{
-				RuntimeTypeHandle parentHandle = new RuntimeTypeHandle();
-				((uint**)&parentHandle)[0] = (uint*)typeDefinition->ParentType;
+				var parentHandle = new RuntimeTypeHandle(typeDefinition.ParentType.Ptr);
+
+				//((uint**)&parentHandle)[0] = (uint*)typeDefinition.ParentType;
 				baseType = Type.GetTypeFromHandle(parentHandle);
 			}
 
 			// Declaring Type
-			if (typeDefinition->DeclaringType != null)
+			if (!typeDefinition.DeclaringType.IsNull)
 			{
-				RuntimeTypeHandle declaringHandle = new RuntimeTypeHandle();
-				((uint**)&declaringHandle)[0] = (uint*)typeDefinition->DeclaringType;
+				var declaringHandle = new RuntimeTypeHandle(typeDefinition.DeclaringType.Ptr);
+
+				//((uint**)&declaringHandle)[0] = (uint*)typeDefinition.DeclaringType;
 				DeclaringType = Type.GetTypeFromHandle(declaringHandle);
 			}
 
 			// Element Type
-			if (typeDefinition->ElementType != null)
+			if (!typeDefinition.ElementType.IsNull)
 			{
-				RuntimeTypeHandle elementHandle = new RuntimeTypeHandle();
-				((uint**)&elementHandle)[0] = (uint*)typeDefinition->ElementType;
+				var elementHandle = new RuntimeTypeHandle(typeDefinition.ElementType.Ptr);
+
+				//((uint**)&elementHandle)[0] = (uint*)typeDefinition.ElementType;
 				elementType = Type.GetTypeFromHandle(elementHandle);
 			}
 		}

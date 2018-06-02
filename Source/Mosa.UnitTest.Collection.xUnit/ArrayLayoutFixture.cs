@@ -49,6 +49,36 @@ namespace Mosa.UnitTest.Collection.xUnit
 		}
 
 		[Fact]
+		public void ArrayU8a()
+		{
+			Assert.Equal(Mosa.UnitTest.Collection.ArrayLayoutTests.U8a(), Run<ulong>("Mosa.UnitTest.Collection.ArrayLayoutTests.U8a"));
+		}
+
+		[Fact]
+		public void ArrayU8b()
+		{
+			Assert.Equal(Mosa.UnitTest.Collection.ArrayLayoutTests.U8b(), Run<ulong>("Mosa.UnitTest.Collection.ArrayLayoutTests.U8b"));
+		}
+
+		[Fact]
+		public void ArrayU8c()
+		{
+			Assert.Equal(Mosa.UnitTest.Collection.ArrayLayoutTests.U8c(), Run<ulong>("Mosa.UnitTest.Collection.ArrayLayoutTests.U8c"));
+		}
+
+		[Fact]
+		public void ArrayU8d()
+		{
+			Assert.Equal(Mosa.UnitTest.Collection.ArrayLayoutTests.U8d(), Run<ulong>("Mosa.UnitTest.Collection.ArrayLayoutTests.U8d"));
+		}
+
+		[Fact]
+		public void ArrayI8()
+		{
+			Assert.Equal(Mosa.UnitTest.Collection.ArrayLayoutTests.I8(), Run<bool>("Mosa.UnitTest.Collection.ArrayLayoutTests.I8"));
+		}
+
+		[Fact]
 		public void ArrayR4()
 		{
 			Assert.Equal(Mosa.UnitTest.Collection.ArrayLayoutTests.R4(), Run<bool>("Mosa.UnitTest.Collection.ArrayLayoutTests.R4"));

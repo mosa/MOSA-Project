@@ -26,7 +26,7 @@ namespace Mosa.Runtime.Metadata
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(Intrinsic.LoadPointer(Ptr));
 
-		public CustomAttributeTable CustomAttributeTable => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, IntPtr.Size));
+		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, IntPtr.Size));
 
 		public uint Attributes => Intrinsic.Load32(Ptr, IntPtr.Size * 2);
 
@@ -34,7 +34,7 @@ namespace Mosa.Runtime.Metadata
 
 		public TypeDefinition GetTypeDefinition(uint slot)
 		{
-			return new TypeDefinition(Intrinsic.LoadPointer(Ptr, 4 + (IntPtr.Size * 4) + (IntPtr.Size * (int)slot)));
+			return new TypeDefinition(Intrinsic.LoadPointer(Ptr, (IntPtr.Size * 4) + (IntPtr.Size * (int)slot)));
 		}
 	}
 }

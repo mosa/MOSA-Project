@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -21,21 +22,15 @@ namespace Mosa.Runtime
 			return (o1 == o2);
 		}
 
-		public static void InitializeArray(uint* array, RuntimeFieldHandle handle)
+		public static void InitializeArray(IntPtr array, RuntimeFieldHandle handle)
 		{
-			var fieldDefinition = (MDFieldDefinition*)((uint**)&handle)[0];
-			byte* arrayElements = (byte*)(array + 3);
+			var fieldDefinition = new FieldDefinition(handle.Value);
 
-			// See FieldDefinition for format of field handle
-			byte* fieldData = fieldDefinition->FieldData;
-			uint dataLength = fieldDefinition->OffsetOrSize;
-			while (dataLength > 0)
-			{
-				*arrayElements = *fieldData;
-				arrayElements++;
-				fieldData++;
-				dataLength--;
-			}
+			var arrayElements = array + (IntPtr.Size * 3);
+			var fieldData = fieldDefinition.FieldData;
+			uint dataLength = fieldDefinition.OffsetOrSize;
+
+			Internal.MemoryCopy(arrayElements, fieldData, dataLength);
 		}
 
 		public static void* UnsafeCast(void* o)
@@ -53,16 +48,14 @@ namespace Mosa.Runtime
 
 		public static object CreateInstance(Type type, params object[] args)
 		{
-			// Cheat
-			var handle = type.TypeHandle;
-			var typeDefinition = (MDTypeDefinition*)((uint**)&handle)[0];
+			var typeDefinition = new TypeDefinition(type.TypeHandle.Value);
 
-			if (typeDefinition->DefaultConstructor == null)
+			if (typeDefinition.DefaultConstructor.IsNull)
 				throw new ArgumentException("Type has no parameterless constructor.");
 
-			var thisObject = Internal.AllocateObject(type.TypeHandle, typeDefinition->Size);
+			var thisObject = Internal.AllocateObject(type.TypeHandle, typeDefinition.Size);
 
-			return Intrinsic.CreateInstanceSimple(typeDefinition->DefaultConstructor->Method, thisObject);
+			return Intrinsic.CreateInstanceSimple(typeDefinition.DefaultConstructor.Method, thisObject);
 		}
 	}
 }

@@ -23,9 +23,9 @@ namespace Mosa.Runtime.Metadata
 
 		public bool IsNull => Ptr == IntPtr.Zero;
 
-		public TypeDefinition TypeDefinition => new TypeDefinition(Ptr);
+		public TypeDefinition AttributeType => new TypeDefinition(Ptr);
 
-		public MethodDefinition MethodDefinition => new MethodDefinition(Ptr + IntPtr.Size);
+		public MethodDefinition ConstructorMethod => new MethodDefinition(Ptr + IntPtr.Size);
 
 		public uint NumberOfArguments => Intrinsic.Load32(Ptr, IntPtr.Size * 2);
 

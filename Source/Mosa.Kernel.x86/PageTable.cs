@@ -27,13 +27,13 @@ namespace Mosa.Kernel.x86
 			// Setup Page Directory
 			for (int index = 0; index < 1024; index++)
 			{
-				Intrinsic.Store32(Address.PageDirectory, (index << 2), (uint)(Address.PageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
+				Intrinsic.Store32(Address.PageDirectory, index << 2, (uint)(Address.PageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
 			}
 
 			// Map the first 128MB of memory (32786 4K pages) (why 128MB?)
 			for (int index = 0; index < 1024 * 32; index++)
 			{
-				Intrinsic.Store32(Address.PageTable, (index << 2), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
+				Intrinsic.Store32(Address.PageTable, index << 2, (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 			}
 
 			// Unmap the first page for null pointer exceptions

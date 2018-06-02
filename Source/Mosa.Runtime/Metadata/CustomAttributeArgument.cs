@@ -28,7 +28,7 @@ namespace Mosa.Runtime.Metadata
 
 		public bool IsField => Intrinsic.Load8(Ptr, IntPtr.Size) == 0;
 
-		public TypeDefinition TypeDefinition => new TypeDefinition(Intrinsic.LoadPointer(Ptr, IntPtr.Size * 2));
+		public TypeDefinition ArgumentType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, IntPtr.Size * 2));
 
 		public uint ArgumentSize => Intrinsic.Load32(Ptr, IntPtr.Size * 3);
 

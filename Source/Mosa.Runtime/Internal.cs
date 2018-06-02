@@ -181,20 +181,30 @@ namespace Mosa.Runtime
 
 		public static void MemoryCopy(IntPtr dest, IntPtr src, uint count)
 		{
-			// PLUGGED
-			throw new NotImplementedException();
+			// FUTURE: Improve
+			for (int i = 0; i < count; i++)
+			{
+				byte value = Intrinsic.Load8(src, i);
+				Intrinsic.Store8(dest, i, value);
+			}
 		}
 
 		public static void MemorySet(IntPtr dest, byte value, uint count)
 		{
-			// PLUGGED
-			throw new NotImplementedException();
+			// FUTURE: Improve
+			for (int i = 0; i < count; i++)
+			{
+				Intrinsic.Store8(dest, i, value);
+			}
 		}
 
 		public static void MemoryClear(IntPtr dest, uint count)
 		{
-			// PLUGGED
-			throw new NotImplementedException();
+			// FUTURE: Improve
+			for (int i = 0; i < count; i++)
+			{
+				Intrinsic.Store8(dest, i, 0);
+			}
 		}
 
 		#endregion Memory Manipulation
@@ -238,8 +248,8 @@ namespace Mosa.Runtime
 
 			var objTypeDefinition = new TypeDefinition(Intrinsic.LoadPointer(o));
 
-			if (objTypeDefinition.IsNull)
-				return null;
+			//if (objTypeDefinition.IsNull)		// can't be null
+			//	return null;
 
 			var bitmap = objTypeDefinition.Bitmap;
 
@@ -255,7 +265,7 @@ namespace Mosa.Runtime
 			if (result == 0)
 				return null;
 
-			return o;
+			return obj;
 		}
 
 		#endregion Virtual Machine

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using Mosa.Runtime.Metadata;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -8,7 +9,7 @@ namespace System
 {
 	public sealed unsafe class RuntimeAssembly : Assembly
 	{
-		internal MDAssemblyDefinition* assemblyDefinition;
+		internal AssemblyDefinition assemblyDefinition;
 		internal readonly LinkedList<RuntimeType> typeList;
 		internal readonly LinkedList<RuntimeTypeHandle> typeHandles;
 		internal LinkedList<RuntimeTypeInfo> typeInfoList = null;
@@ -23,14 +24,14 @@ namespace System
 				if (customAttributesData == null)
 				{
 					// Custom Attributes Data - Lazy load
-					if (assemblyDefinition->CustomAttributes != null)
+					if (!assemblyDefinition.CustomAttributes.IsNull)
 					{
-						var customAttributesTablePtr = assemblyDefinition->CustomAttributes;
-						var customAttributesCount = customAttributesTablePtr->NumberOfAttributes;
+						var customAttributesTablePtr = assemblyDefinition.CustomAttributes;
+						var customAttributesCount = customAttributesTablePtr.NumberOfAttributes;
 						customAttributesData = new LinkedList<CustomAttributeData>();
 						for (uint i = 0; i < customAttributesCount; i++)
 						{
-							var cad = new RuntimeCustomAttributeData(customAttributesTablePtr->GetCustomAttribute(i));
+							var cad = new RuntimeCustomAttributeData(customAttributesTablePtr.GetCustomAttribute(i));
 							customAttributesData.AddLast(cad);
 						}
 					}
@@ -81,18 +82,19 @@ namespace System
 
 		internal RuntimeAssembly(IntPtr pointer)
 		{
-			assemblyDefinition = (MDAssemblyDefinition*)pointer.ToPointer();
-			fullName = assemblyDefinition->Name;
-
-			uint typeCount = assemblyDefinition->NumberOfTypes;
+			assemblyDefinition = new AssemblyDefinition(pointer);
+			fullName = assemblyDefinition.Name;
 
 			typeList = new LinkedList<RuntimeType>();
 			typeHandles = new LinkedList<RuntimeTypeHandle>();
 
+			uint typeCount = assemblyDefinition.NumberOfTypes;
+
 			for (uint i = 0; i < typeCount; i++)
 			{
-				var handle = new RuntimeTypeHandle();
-				((uint**)&handle)[0] = (uint*)assemblyDefinition->GetTypeDefinition(i);
+				var handle = new RuntimeTypeHandle(assemblyDefinition.GetTypeDefinition(i).Ptr);
+
+				//((uint**)&handle)[0] = assemblyDefinition.GetTypeDefinition(i);
 
 				if (typeHandles.Contains(handle))
 					continue;
