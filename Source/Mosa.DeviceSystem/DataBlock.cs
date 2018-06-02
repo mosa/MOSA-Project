@@ -10,22 +10,10 @@ namespace Mosa.DeviceSystem
 	public struct DataBlock
 	{
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DataBlock"/> struct.
+		/// Gets the data.
 		/// </summary>
-		/// <param name="data">The data.</param>
-		public DataBlock(byte[] data)
-		{
-			this.Data = data;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DataBlock"/> struct.
-		/// </summary>
-		/// <param name="length">The length.</param>
-		public DataBlock(uint length)
-		{
-			Data = new byte[length];
-		}
+		/// <value>The data.</value>
+		public byte[] Data { get; }
 
 		/// <summary>
 		/// Gets the length.
@@ -37,10 +25,22 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Gets the data.
+		/// Initializes a new instance of the <see cref="DataBlock"/> struct.
 		/// </summary>
-		/// <value>The data.</value>
-		public byte[] Data { get; }
+		/// <param name="data">The data.</param>
+		public DataBlock(byte[] data)
+		{
+			Data = data;
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="DataBlock"/> struct.
+		/// </summary>
+		/// <param name="length">The length.</param>
+		public DataBlock(uint length)
+		{
+			Data = new byte[length];
+		}
 
 		/// <summary>
 		/// Gets or sets the <see cref="System.Byte" /> at the specified index.
@@ -138,7 +138,7 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// Gets the usigned int.
+		/// Gets the unsigned int.
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Plug;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -9,93 +8,6 @@ namespace Mosa.Runtime.x86
 {
 	public unsafe static class Internal
 	{
-		[Method("Mosa.Runtime.Internal.MemoryCopy")]
-		public static void MemoryCopy(IntPtr dest, IntPtr src, uint count)
-		{
-			ulong* _dest = (ulong*)dest;
-			ulong* _src = (ulong*)src;
-			uint byteCount = count & 7;
-			count >>= 3;
-
-			for (; count >= 4; count -= 4, _dest += 4, _src += 4)
-				Native.Memcpy256(_dest, _src);
-
-			for (uint index = 0; index < count; index++)
-				_dest[index] = _src[index];
-
-			_dest += count;
-			_src += count;
-
-			byte* __dest = (byte*)_dest;
-			byte* __src = (byte*)_src;
-			for (uint index = 0; index < byteCount; index++)
-				__dest[index] = __src[index];
-		}
-
-		[Method("Mosa.Runtime.Internal.MemorySet")]
-		public static void MemorySet(IntPtr dest, byte value, uint count)
-		{
-			// TEMP: assigning the method parameters into local variables forces the compiler to load the values
-			// into virtual registers, which unlocks the optimizer to generate much better code quality.
-			uint dst = (uint)dest;
-			uint cnt = count;
-
-			uint e3 = dst + cnt;
-			byte val = value;
-
-			// write 1 byte increments until 32-bit alignment
-			for (; (dst & 0x3) != 0; dst++)
-			{
-				Intrinsic.Store8(dst, val);
-			}
-
-			uint e2 = e3 & 0xFFFFFFFC;
-			uint value4 = (uint)((val << 24) | (val << 16) | (val << 8) | val);
-
-			// write in 32-bit increments
-			for (; dst < e2; dst += 4)
-			{
-				Intrinsic.Store32(dst, value4);
-			}
-
-			// write remaining in 1 byte increments
-			for (; dst < e3; dst++)
-			{
-				Intrinsic.Store8(dst, val);
-			}
-		}
-
-		[Method("Mosa.Runtime.Internal.MemoryClear")]
-		public static void MemoryClear(IntPtr dest, uint count)
-		{
-			// TEMP: assigning the method parameters into local variables forces the compiler to load the values
-			// into virtual registers, which unlocks the optimizer to generate much better code quality.
-			uint dst = (uint)dest;
-			uint cnt = count;
-
-			uint e3 = dst + cnt;
-
-			// write 1 byte increments until 32-bit alignment
-			for (; (dst & 0x3) != 0; dst++)
-			{
-				Intrinsic.Store8(dst, 0);
-			}
-
-			uint e2 = e3 & 0xFFFFFFFC;
-
-			// write in 32-bit increments
-			for (; dst < e2; dst += 4)
-			{
-				Intrinsic.Store32(dst, 0);
-			}
-
-			// write remaining in 1 byte increments
-			for (; dst < e3; dst++)
-			{
-				Intrinsic.Store8(dst, 0);
-			}
-		}
-
 		public static void Fault(uint code, uint extra = 0)
 		{
 			System.Diagnostics.Debug.Fail("Fault: " + ((int)code).ToString("hex") + " , Extra: " + ((int)extra).ToString("hex"));

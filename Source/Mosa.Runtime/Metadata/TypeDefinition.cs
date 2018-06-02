@@ -9,20 +9,20 @@ namespace Mosa.Runtime.Metadata
 	{
 		#region layout
 
-		// IntPtr _name;
-		// IntPtr _customAttributes;
-		// uint _attributes;
-		// uint _size;
-		// IntPtr _assembly;
-		// IntPtr _parentType;
-		// IntPtr _declaringType;
-		// IntPtr _elementType;
-		// IntPtr _defaultConstructor;
-		// IntPtr _properties;
-		// IntPtr _fields;
-		// IntPtr _slotTable;
-		// IntPtr _bitmap;
-		// uint _numberOfMethods;
+		// 0: IntPtr name;
+		// 1: IntPtr customAttributes;
+		// 2: uint attributes;
+		// 3: uint size;
+		// 4: IntPtr assembly;
+		// 5: IntPtr parentType;
+		// 6: IntPtr declaringType;
+		// 7: IntPtr elementType;
+		// 8: IntPtr defaultConstructor;
+		// 9: IntPtr properties;
+		// 10:IntPtr fields;
+		// 11:IntPtr slotTable;
+		// 12:IntPtr bitmap;
+		// 13:uint numberOfMethods;
 
 		#endregion layout
 

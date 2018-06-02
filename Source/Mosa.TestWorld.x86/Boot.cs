@@ -74,6 +74,8 @@ namespace Mosa.TestWorld.x86
 			Console.WriteLine();
 			Console.WriteLine();
 
+			var result = ArrayTest();
+
 			KernelTest.RunTests();
 
 			DumpStackTrace();
@@ -268,6 +270,11 @@ namespace Mosa.TestWorld.x86
 			{
 				var i = o.GetHashCode();
 			}
+		}
+
+		public static ulong ArrayTest()
+		{
+			return Mosa.UnitTest.Collection.ArrayLayoutTests.U8a();
 		}
 
 		//public static void Mandelbrot()
