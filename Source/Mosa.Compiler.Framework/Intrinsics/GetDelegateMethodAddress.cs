@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
-using System;
-using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
@@ -23,7 +21,6 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var load = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInt32 : IRInstruction.LoadInt64;
 
 			context.SetInstruction(load, context.Result, context.Operand1, methodCompiler.CreateConstant(2 * methodCompiler.Architecture.NativePointerSize));
-
 		}
 	}
 }

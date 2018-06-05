@@ -14,15 +14,13 @@ namespace System
 
 		public RuntimeCustomAttributeData(CustomAttribute customAttributeTable)
 		{
-			var typeHandle = new RuntimeTypeHandle();
-			((uint**)&typeHandle)[0] = (uint*)customAttributeTable.AttributeType.Ptr;
+			var typeHandle = new RuntimeTypeHandle(customAttributeTable.AttributeType.Ptr);
 
 			base.attributeType = Type.GetTypeFromHandle(typeHandle);
 
 			// Get the metadata pointer for the enum type
 			typeHandle = typeof(Enum).TypeHandle;
 
-			//EnumTypePtr = (TypeDefinition*)((uint**)&typeHandle)[0];
 			EnumTypePtr = new TypeDefinition(typeHandle.Value);
 
 			// Create temporary lists to hold the arguments
@@ -39,8 +37,6 @@ namespace System
 
 				// Get the argument type
 				var argTypeHandle = new RuntimeTypeHandle(argument.ArgumentType.Ptr);
-
-				//((uint**)&argTypeHandle)[0] = (uint*)argument.ArgumentType;
 
 				var argType = Type.GetTypeFromHandle(argTypeHandle);
 
@@ -65,26 +61,13 @@ namespace System
 
 		public CustomAttributeTypedArgument CreateTypedArgumentStruct(Type type, object value)
 		{
-			// Because C# doesn't like structs which contain object references to be referenced by pointers
-			// we need to use a special MOSA compiler trick to get its address to create a pointer
-			CustomAttributeTypedArgument typedArgument = new CustomAttributeTypedArgument();
-			var ptr = (uint**)Intrinsic.GetValueTypeAddress(typedArgument);
-			ptr[0] = (uint*)Intrinsic.GetObjectAddress(type);
-			ptr[1] = (uint*)Intrinsic.GetObjectAddress(value);
-
-			return typedArgument;
+			return new CustomAttributeTypedArgument(type, value);
 		}
 
 		public CustomAttributeNamedArgument CreateNamedArgumentStruct(string name, Type type, object value, bool isField)
 		{
-			// Because C# doesn't like structs which contain object references to be referenced by pointers
-			// we need to use a special MOSA compiler trick to get its address to create a pointer
-			CustomAttributeNamedArgument namedArgument = new CustomAttributeNamedArgument();
-			var ptr = (uint**)Intrinsic.GetValueTypeAddress(namedArgument);
-			ptr[0] = (uint*)Intrinsic.GetObjectAddress(name);
-			ptr[1] = (uint*)Intrinsic.GetObjectAddress(type);
-			ptr[2] = (uint*)Intrinsic.GetObjectAddress(value);
-			ptr[3] = (uint*)(isField ? 1 : 0);
+			var typeArgument = new CustomAttributeTypedArgument(type, value);
+			var namedArgument = new CustomAttributeNamedArgument(name, typeArgument, isField);
 
 			return namedArgument;
 		}
@@ -156,19 +139,15 @@ namespace System
 						// Get the argument type
 						var argTypeHandle = new RuntimeTypeHandle(argument.ArgumentType.Ptr);
 
-						//((uint**)&argTypeHandle)[0] = (uint*)argument.ArgumentType;
-
 						return Type.GetTypeFromHandle(argTypeHandle);
 					}
 					throw new ArgumentException();
 			}
-
-			//return null;
 		}
 
 		private object ResolveArrayValue(CustomAttributeArgument argument, Type type)
 		{
-			TypeCode typeCode = argument.ArgumentType.ElementType.TypeCode;
+			var typeCode = argument.ArgumentType.ElementType.TypeCode;
 			var valuePtr = argument.GetArgumentValue();
 			var size = ((uint*)valuePtr)[0];
 			valuePtr += IntPtr.Size;

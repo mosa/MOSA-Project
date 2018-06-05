@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		private readonly MosaTypeCode? elementType;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Construction
 

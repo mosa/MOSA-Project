@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.CIL
 			StackTypeCode.Unknown
 		};
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Construction
 

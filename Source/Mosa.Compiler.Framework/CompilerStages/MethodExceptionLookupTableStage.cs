@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		private PatchType NativePatchType;
 
-		#endregion Data members
+		#endregion Data Members
 
 		protected override void Setup()
 		{

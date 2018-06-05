@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (IsPlugged)
+			if (IsMethodPlugged)
 				return;
 
 			trace = CreateTraceLog();

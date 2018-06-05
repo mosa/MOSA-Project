@@ -73,6 +73,14 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
+		public LinkRequest[] GetLinkRequests()
+		{
+			lock (_lock)
+			{
+				return LinkRequests.ToArray();
+			}
+		}
+
 		public void ApplyPatch(long offset, ulong value, byte patchSize, Endianness endianness)
 		{
 			Stream.Position = offset;

@@ -198,6 +198,9 @@
   <ItemGroup>
     <None Include="Mosa.Korlib.nuspec" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="System.Reflection.Emit\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
   <PropertyGroup>
     <CompileDependsOn>GenerateCompilerResponseFile;$(CompileDependsOn)</CompileDependsOn>

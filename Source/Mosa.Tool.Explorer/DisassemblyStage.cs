@@ -86,7 +86,7 @@ namespace Mosa.Tool.Explorer
 
 			var symbol = MethodCompiler.Linker.FindSymbol(MethodCompiler.Method.FullName, SectionKind.Text);
 
-			foreach (var request in symbol.LinkRequests)
+			foreach (var request in symbol.GetLinkRequests())
 			{
 				trace.Log(String.Format("{0:x8} -> [{1}] +{2:x} [{3}] {4}",
 					request.PatchOffset,

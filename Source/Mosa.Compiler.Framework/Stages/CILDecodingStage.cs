@@ -49,9 +49,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (IsPlugged)
+			if (IsMethodPlugged)
 			{
-				var plugMethod = MethodCompiler.Compiler.PlugSystem.GetPlugMethod(MethodCompiler.Method);
+				var plugMethod = MethodCompiler.Compiler.PlugSystem.GetReplacement(MethodCompiler.Method);
 
 				Debug.Assert(plugMethod != null);
 

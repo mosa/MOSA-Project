@@ -96,6 +96,7 @@
 		},
 		{
 			"Name": "CallDynamic",
+			"Description": "The instruction represents a method called where method address is provide by a virtual register",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,

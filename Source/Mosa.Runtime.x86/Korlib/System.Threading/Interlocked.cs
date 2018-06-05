@@ -19,7 +19,7 @@ namespace Mosa.Runtime.x86.Korlib.System.Threading
 		}
 
 		[Method("System.Threading.Interlocked::ExchangeAdd")]
-		internal static  int ExchangeAdd(ref int location1, int value)
+		internal static int ExchangeAdd(ref int location1, int value)
 		{
 			return Native.XAddLoad32(ref location1, value);
 		}

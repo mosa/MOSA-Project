@@ -93,6 +93,5 @@ namespace System.Threading
 		{
 			return Interlocked.CompareExchange(ref location, 0, 0);
 		}
-
 	}
 }

@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		/// </summary>
 		private TextWriter writer;
 
-		#endregion Data members
+		#endregion Data Members
 
 		protected override void Setup()
 		{

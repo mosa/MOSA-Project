@@ -77,13 +77,13 @@ namespace Mosa.Tool.Explorer
 			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
 				LoadAssembly(openFileDialog.FileName);
-				LoadAssemblyDebugInfo(openFileDialog.FileName);
+				//LoadAssemblyDebugInfo(openFileDialog.FileName);
 			}
 		}
 
 		private Options ParseOptions(string[] args)
 		{
-			ParserResult<Options> result = new Parser(config => config.HelpWriter = Console.Out).ParseArguments<Options>(args);
+			var result = new Parser(config => config.HelpWriter = Console.Out).ParseArguments<Options>(args);
 
 			if (result.Tag == ParserResultType.NotParsed)
 			{
@@ -95,7 +95,7 @@ namespace Mosa.Tool.Explorer
 
 		public void LoadArguments(string[] args)
 		{
-			Options options = ParseOptions(args);
+			var options = ParseOptions(args);
 
 			if (options == null)
 				return;

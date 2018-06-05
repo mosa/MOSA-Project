@@ -5,22 +5,25 @@ using System.Diagnostics;
 
 namespace Mosa.Kernel.x86.Helpers
 {
-	[Type("System.Diagnostics.Debug")]
+	//[Type("System.Diagnostics.Debug")]
 	internal static class DebugImplementation
 	{
 		[Conditional("DEBUG")]
+		[Method("System.Diagnostics.Debug::Assert")]
 		public static void Assert(bool condition, string message, string detailMessage)
 		{
 			Helpers.Assert.True(condition, message);
 		}
 
 		[Conditional("DEBUG")]
+		[Method("System.Diagnostics.Debug::Fail")]
 		public static void Fail(string message, string detailMessage)
 		{
 			Panic.Error(message);
 		}
 
 		[Conditional("DEBUG")]
+		[Method("System.Diagnostics.Debug::Write")]
 		public static void Write(object value, string category)
 		{
 			if (value == null)
@@ -29,12 +32,14 @@ namespace Mosa.Kernel.x86.Helpers
 		}
 
 		[Conditional("DEBUG")]
+		[Method("System.Diagnostics.Debug::Write")]
 		public static void Write(string message, string category)
 		{
 			Screen.Write(message);
 		}
 
 		[Conditional("DEBUG")]
+		[Method("System.Diagnostics.Debug::WriteLine")]
 		public static void WriteLine(object value, string category)
 		{
 			if (value == null)
@@ -44,6 +49,7 @@ namespace Mosa.Kernel.x86.Helpers
 		}
 
 		[Conditional("DEBUG")]
+		[Method("System.Diagnostics.Debug::WriteLine")]
 		public static void WriteLine(string message, string category)
 		{
 			Screen.Write(message);
@@ -51,8 +57,7 @@ namespace Mosa.Kernel.x86.Helpers
 		}
 
 		[Conditional("DEBUG")]
-
-		//[Method("System.Diagnostics.Debug.Print")]
+		[Method("System.Diagnostics.Debug::Print")]
 		public static void Print(string message)
 		{
 			Panic.Error("print");

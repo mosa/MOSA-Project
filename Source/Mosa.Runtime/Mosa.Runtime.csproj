@@ -72,6 +72,7 @@
     <Compile Include="Builders\RuntimeType.cs" />
     <Compile Include="Builders\RuntimeTypeInfo.cs" />
     <Compile Include="ExceptionHandlerType.cs" />
+    <Compile Include="Korlib\System.Runtime.CompilerServices\RuntimeHelpers.cs" />
     <Compile Include="Korlib\System\String.cs" />
     <Compile Include="Metadata\CustomAttribute.cs" />
     <Compile Include="Metadata\AssemblyDefinition.cs" />
@@ -86,12 +87,9 @@
     <Compile Include="GC.cs" />
     <Compile Include="InternalsForArray.cs" />
     <Compile Include="InternalsForObject.cs" />
-    <Compile Include="InternalsForRuntimeHelpers.cs" />
     <Compile Include="InternalsForType.cs" />
     <Compile Include="Intrinsic.cs" />
-    <Compile Include="Plug\FieldAttribute.cs" />
     <Compile Include="Plug\MethodAttribute.cs" />
-    <Compile Include="Plug\TypeAttribute.cs" />
     <Compile Include="Internal.cs" />
     <Compile Include="SimpleStackTraceEntry.cs" />
   </ItemGroup>

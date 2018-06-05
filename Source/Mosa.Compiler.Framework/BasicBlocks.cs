@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework
 
 		private int nextAvailableLabel = BasicBlock.CompilerBlockStartLabel;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Construction
 

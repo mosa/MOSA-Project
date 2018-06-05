@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// </summary>
 		private readonly Dictionary<BasicBlock, List<BasicBlock>> children = new Dictionary<BasicBlock, List<BasicBlock>>();
 
-		#endregion Data members
+		#endregion Data Members
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SimpleFastDominance"/> class.

@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// If the method is static, non-virtual or is a constructor then don't process
-			if (MethodCompiler.Method.IsStatic || !MethodCompiler.Method.IsVirtual || MethodCompiler.Method.Name.Equals(".ctor"))
+			if (Method.IsStatic || !Method.IsVirtual || Method.Name.Equals(".ctor"))
 				return;
 
 			// If the method does not belong to an interface then don't process
@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Get the this pointer
 			var thisPtr = MethodCompiler.Parameters[0];
 
-			//todo: move this to the end of prologue
+			// FUTURE: move this to the end of prologue
 			var context = new Context(BasicBlocks.PrologueBlock.NextBlocks[0].First);
 
 			// Now push the this pointer by two native pointer sizes
@@ -44,6 +44,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.AppendInstruction(Select(IRInstruction.LoadInt32, IRInstruction.LoadInt64), v1, StackFrame, thisPtr);
 			context.AppendInstruction(Select(IRInstruction.Add32, IRInstruction.Add64), v1, v1, CreateConstant(NativePointerSize * 2));
+
+			// FUTURE: Change all thisPtr to v1
 			context.AppendInstruction(Select(IRInstruction.StoreInt32, IRInstruction.StoreInt64), null, StackFrame, thisPtr, v1);
 		}
 

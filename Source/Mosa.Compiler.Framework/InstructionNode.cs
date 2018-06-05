@@ -1081,17 +1081,6 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="target">The target.</param>
-		public InstructionNode(BaseInstruction instruction, MosaMethod target)
-			: this(instruction)
-		{
-			InvokeMethod = target;
-		}
-
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
 		/// <param name="block">The block.</param>
 		public InstructionNode(BaseInstruction instruction, BasicBlock block)
 			: this(instruction)
@@ -1319,7 +1308,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operands">The operands.</param>
 		public void SetInstruction(BaseInstruction instruction, Operand result, IList<Operand> operands)
 		{
-			SetInstruction(instruction, operands.Count, (byte)((result == null) ? 0 : 1));
+			SetInstruction(instruction, 0, (byte)((result == null) ? 0 : 1));
 			Result = result;
 			AppendOperands(operands);
 		}

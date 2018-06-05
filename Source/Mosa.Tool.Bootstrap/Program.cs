@@ -13,7 +13,7 @@ namespace Mosa.Tool.Bootstrap
 	/// </summary>
 	internal static class Program
 	{
-		private static string LauncherFileName = "Mosa.Tool.Launcher.exe";
+		private static readonly string LauncherFileName = "Mosa.Tool.Launcher.exe";
 
 		/// <summary>
 		/// Main entry point for the compiler.
@@ -70,10 +70,7 @@ namespace Mosa.Tool.Bootstrap
 
 			result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "..", "packages"));
 
-			if (result != null)
-				return result;
-
-			return null;
+			return result;
 		}
 
 		internal static bool CheckDirectory(string directory)

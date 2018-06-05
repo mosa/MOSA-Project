@@ -12,6 +12,13 @@ namespace System.Reflection
 		private CustomAttributeTypedArgument typedArgument;
 		private bool isField;
 
+		public CustomAttributeNamedArgument(string memberName, CustomAttributeTypedArgument typedArgument, bool isField)
+		{
+			this.memberName = memberName;
+			this.typedArgument = typedArgument;
+			this.isField = isField;
+		}
+
 		/// <summary>
 		/// Gets a value that indicates whether the named argument is a field.
 		/// </summary>
