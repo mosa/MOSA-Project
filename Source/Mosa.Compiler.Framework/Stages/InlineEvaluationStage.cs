@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.IsLinkerGenerated = method.IsLinkerGenerated;
 			MethodData.IsCILDecoded = (!method.IsLinkerGenerated && method.Code.Count > 0);
 			MethodData.HasLoops = false;
-			MethodData.IsPlugged = IsPlugged;
+			MethodData.IsMethodImplementationReplaced = IsMethodPlugged;
 			MethodData.HasDoNotInlineAttribute = MethodCompiler.Method.IsNoInlining;
 			MethodData.HasAggressiveInliningAttribute = MethodCompiler.Method.IsAggressiveInlining;
 			MethodData.HasAddressOfInstruction = false;
@@ -140,7 +140,7 @@ namespace Mosa.Compiler.Framework.Stages
 			trace.Log("NonIRInstructionCount: " + MethodData.NonIRInstructionCount.ToString());
 			trace.Log("HasDoNotInlineAttribute: " + MethodData.HasDoNotInlineAttribute.ToString());
 			trace.Log("HasAggressiveInliningAttribute: " + MethodData.HasAggressiveInliningAttribute.ToString());
-			trace.Log("IsPlugged: " + MethodData.IsPlugged.ToString());
+			trace.Log("IsPlugged: " + MethodData.IsMethodImplementationReplaced.ToString());
 			trace.Log("HasAddressOfInstruction: " + MethodData.HasAddressOfInstruction.ToString());
 
 			UpdateCounter("InlineMethodEvaluationStage.Methods", 1);
@@ -155,7 +155,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (method.HasDoNotInlineAttribute)
 				return false;
 
-			if (method.IsPlugged)
+			if (method.IsMethodImplementationReplaced)
 				return false;
 
 			if (method.HasProtectedRegions)
@@ -270,8 +270,6 @@ namespace Mosa.Compiler.Framework.Stages
 						newNode.MosaType = node.MosaType;
 					if (node.MosaField != null)
 						newNode.MosaField = node.MosaField;
-					if (node.InvokeMethod != null)
-						newNode.InvokeMethod = node.InvokeMethod;
 
 					newBlock.BeforeLast.Insert(newNode);
 				}

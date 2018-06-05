@@ -92,7 +92,6 @@ namespace Mosa.Compiler.Framework.Stages
 			var operands = node.GetOperands();
 
 			Debug.Assert(method != null);
-			Debug.Assert(method == node.InvokeMethod || node.InvokeMethod == null);
 
 			operands.RemoveAt(0);
 
@@ -127,7 +126,6 @@ namespace Mosa.Compiler.Framework.Stages
 			var operands = node.GetOperands();
 
 			Debug.Assert(method != null);
-			Debug.Assert(method == node.InvokeMethod || node.InvokeMethod == null);
 
 			operands.RemoveAt(0);
 
@@ -169,7 +167,6 @@ namespace Mosa.Compiler.Framework.Stages
 			var operands = node.GetOperands();
 
 			Debug.Assert(method != null);
-			Debug.Assert(method == node.InvokeMethod || node.InvokeMethod == null);
 
 			operands.RemoveAt(0);
 

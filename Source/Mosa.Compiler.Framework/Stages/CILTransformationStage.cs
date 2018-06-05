@@ -358,7 +358,7 @@ namespace Mosa.Compiler.Framework.Stages
 				Debug.Assert(value.IsVirtualRegister);
 
 				var moveInstruction = GetMoveInstruction(type);
-				context.ReplaceInstruction(moveInstruction);
+				context.SetInstruction(moveInstruction, context.Result, context.Operand1);
 				return;
 			}
 
@@ -425,8 +425,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (ProcessExternalPlugCall(context))
-				return;
+			//if (ProcessExternalPlugCall(context))
+			//	return;
 
 			if (ProcessExternalCall(context.Node))
 				return;
@@ -484,8 +484,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Callvirt(Context context)
 		{
-			if (ProcessExternalPlugCall(context))
-				return;
+			//if (ProcessExternalPlugCall(context))
+			//	return;
 
 			if (ProcessExternalCall(context.Node))
 				return;
@@ -1595,7 +1595,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!type.IsValueType)
 			{
 				var moveInstruction = GetMoveInstruction(type);
-				context.ReplaceInstruction(moveInstruction);
+				context.SetInstruction(moveInstruction, context.Result, context.Operand1);
 				return;
 			}
 
@@ -2049,25 +2049,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return true;
 		}
 
-		private bool ProcessExternalPlugCall(Context context)
-		{
-			if (!context.InvokeMethod.IsStatic)
-				return false;
-
-			var plugMethod = MethodCompiler.Compiler.PlugSystem.GetPlugMethod(context.InvokeMethod);
-
-			if (plugMethod == null)
-				return false;
-
-			var result = context.Result;
-			var operands = new List<Operand>(context.Operands);
-			var symbol = Operand.CreateSymbolFromMethod(plugMethod, TypeSystem);
-
-			context.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
-
-			return true;
-		}
-
 		/// <summary>
 		/// Processes external method calls.
 		/// </summary>
@@ -2097,7 +2078,13 @@ namespace Mosa.Compiler.Framework.Stages
 					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(node.InvokeMethod.DeclaringType.FullName + "::" + node.InvokeMethod.Name, out intrinsicType);
 				}
 
-				Debug.Assert(intrinsicType != null, "Method is internal but no processor found: " + node.InvokeMethod.FullName);
+				if (intrinsicType == null)
+				{
+					return false;
+				}
+
+				//return false;
+				//Debug.Assert(intrinsicType != null, "Method is internal but no processor found: " + node.InvokeMethod.FullName);
 			}
 
 			if (intrinsicType == null)
@@ -2107,12 +2094,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (instance is IIntrinsicInternalMethod instanceMethod)
 			{
-				instanceMethod.ReplaceIntrinsicCall(new Context(node), MethodCompiler);
+				var context = new Context(node);
+				instanceMethod.ReplaceIntrinsicCall(context, MethodCompiler);
 				return true;
 			}
 			else if (instance is IIntrinsicPlatformMethod)
 			{
-				node.ReplaceInstruction(IRInstruction.IntrinsicMethodCall);
+				var operands = node.GetOperands();
+				operands.Insert(0, Operand.CreateSymbolFromMethod(node.InvokeMethod, TypeSystem));
+				node.SetInstruction(IRInstruction.IntrinsicMethodCall, node.Result, operands);
+
 				return true;
 			}
 

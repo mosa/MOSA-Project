@@ -148,7 +148,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether this method is plugged.
 		/// </summary>
-		public bool IsPlugged { get { return PluggedMethod != null; } }
+		public bool IsMethodPlugged { get { return PluggedMethod != null; } }
 
 		/// <summary>
 		/// The labels
@@ -214,7 +214,7 @@ namespace Mosa.Compiler.Framework
 
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
-			PluggedMethod = compiler.PlugSystem.GetPlugMethod(Method);
+			PluggedMethod = compiler.PlugSystem.GetReplacement(Method);
 
 			stop = false;
 

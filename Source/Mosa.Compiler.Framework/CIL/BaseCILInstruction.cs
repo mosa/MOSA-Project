@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		protected readonly OpCode opcode;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Properties
 

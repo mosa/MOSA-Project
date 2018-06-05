@@ -17,7 +17,7 @@ namespace Mosa.Platform.x86.CompilerStages
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
 			var startUpMethod = startUpType.FindMethodByName("StartApplication");
 
-			Compiler.PlugSystem.CreatePlug(TypeSystem.EntryPoint, startUpMethod);
+			Compiler.PlugSystem.CreatePlug(startUpMethod, TypeSystem.EntryPoint);
 
 			if (Linker.EntryPoint == null)
 			{

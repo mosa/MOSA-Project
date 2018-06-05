@@ -51,7 +51,7 @@ namespace Mosa.Platform.x86.CompilerStages
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
 			var startUpMethod = startUpType.FindMethodByName("Stage2");
 
-			Compiler.PlugSystem.CreatePlug(sseInitMethod, startUpMethod);
+			Compiler.PlugSystem.CreatePlug(startUpMethod, sseInitMethod);
 		}
 	}
 }

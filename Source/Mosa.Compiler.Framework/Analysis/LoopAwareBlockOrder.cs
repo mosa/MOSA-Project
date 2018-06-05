@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private int orderIndex;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Priority class
 

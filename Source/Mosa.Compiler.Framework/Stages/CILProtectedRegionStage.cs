@@ -22,6 +22,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			if (IsMethodPlugged)
+				return;
+
 			InsertBlockProtectInstructions();
 			UpdateBlockProtectInstructions();
 

@@ -109,8 +109,6 @@ namespace System
 
 			var handle = type.TypeHandle;
 
-			//this.handle = handle;
-			//typeDefinition = (TypeDefinition*)((uint**)&handle)[0];
 			typeDefinition = new TypeDefinition(handle.Value);
 
 			AssemblyQualifiedName = typeDefinition.Name;   // TODO
@@ -126,7 +124,6 @@ namespace System
 			{
 				var parentHandle = new RuntimeTypeHandle(typeDefinition.ParentType.Ptr);
 
-				//((uint**)&parentHandle)[0] = (uint*)typeDefinition.ParentType;
 				baseType = Type.GetTypeFromHandle(parentHandle);
 			}
 
@@ -135,7 +132,6 @@ namespace System
 			{
 				var declaringHandle = new RuntimeTypeHandle(typeDefinition.DeclaringType.Ptr);
 
-				//((uint**)&declaringHandle)[0] = (uint*)typeDefinition.DeclaringType;
 				DeclaringType = Type.GetTypeFromHandle(declaringHandle);
 			}
 
@@ -144,7 +140,6 @@ namespace System
 			{
 				var elementHandle = new RuntimeTypeHandle(typeDefinition.ElementType.Ptr);
 
-				//((uint**)&elementHandle)[0] = (uint*)typeDefinition.ElementType;
 				elementType = Type.GetTypeFromHandle(elementHandle);
 			}
 		}

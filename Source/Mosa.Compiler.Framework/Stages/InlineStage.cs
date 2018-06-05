@@ -194,8 +194,6 @@ namespace Mosa.Compiler.Framework.Stages
 						newNode.MosaType = node.MosaType;
 					if (node.MosaField != null)
 						newNode.MosaField = node.MosaField;
-					if (node.InvokeMethod != null)
-						newNode.InvokeMethod = node.InvokeMethod;
 
 					UpdateParameterInstructions(newNode);
 

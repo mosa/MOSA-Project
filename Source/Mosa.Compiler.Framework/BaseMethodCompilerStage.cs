@@ -133,7 +133,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether this instance is plugged.
 		/// </summary>
-		public bool IsPlugged { get { return MethodCompiler.IsPlugged; } }
+		public bool IsMethodPlugged { get { return MethodCompiler.IsMethodPlugged; } }
 
 		/// <summary>
 		/// Gets the method.
@@ -197,6 +197,7 @@ namespace Mosa.Compiler.Framework
 		/// Setups the specified compiler.
 		/// </summary>
 		/// <param name="methodCompiler">The compiler.</param>
+		/// <param name="position">The position.</param>
 		public void Setup(MethodCompiler methodCompiler, int position)
 		{
 			MethodCompiler = methodCompiler;
@@ -297,6 +298,7 @@ namespace Mosa.Compiler.Framework
 		/// Create an empty block.
 		/// </summary>
 		/// <param name="blockLabel">The label.</param>
+		/// <param name="instructionLabel">The instruction label.</param>
 		/// <returns></returns>
 		protected Context CreateNewBlockContext(int blockLabel, int instructionLabel)
 		{
@@ -307,6 +309,7 @@ namespace Mosa.Compiler.Framework
 		/// Creates empty blocks.
 		/// </summary>
 		/// <param name="blocks">The Blocks.</param>
+		/// <param name="instructionLabel">The instruction label.</param>
 		/// <returns></returns>
 		protected BasicBlock[] CreateNewBlocks(int blocks, int instructionLabel)
 		{
@@ -324,6 +327,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Create an empty block.
 		/// </summary>
+		/// <param name="instructionLabel">The instruction label.</param>
 		/// <returns></returns>
 		protected Context CreateNewBlockContext(int instructionLabel)
 		{
@@ -334,6 +338,7 @@ namespace Mosa.Compiler.Framework
 		/// Creates empty blocks.
 		/// </summary>
 		/// <param name="blocks">The Blocks.</param>
+		/// <param name="instructionLabel">The instruction label.</param>
 		/// <returns></returns>
 		protected Context[] CreateNewBlockContexts(int blocks, int instructionLabel)
 		{

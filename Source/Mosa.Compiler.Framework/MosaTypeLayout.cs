@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework
 
 		private readonly object _lock = new object();
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Properties
 

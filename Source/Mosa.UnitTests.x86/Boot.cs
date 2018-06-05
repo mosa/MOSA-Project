@@ -10,7 +10,7 @@ namespace Mosa.UnitTests.x86
 	/// </summary>
 	public static class Boot
 	{
-		[Method("Mosa.Runtime.StartUp.SetInitialMemory")]
+		[Method("Mosa.Runtime.StartUp::SetInitialMemory")]
 		public static void SetInitialMemory()
 		{
 			KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);

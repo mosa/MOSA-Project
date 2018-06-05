@@ -248,9 +248,6 @@ namespace Mosa.Runtime
 
 			var objTypeDefinition = new TypeDefinition(Intrinsic.LoadPointer(o));
 
-			//if (objTypeDefinition.IsNull)		// can't be null
-			//	return null;
-
 			var bitmap = objTypeDefinition.Bitmap;
 
 			if (bitmap == IntPtr.Zero)

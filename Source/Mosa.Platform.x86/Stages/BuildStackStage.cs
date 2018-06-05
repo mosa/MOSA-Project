@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void Run()
 		{
-			if (IsPlugged)
+			if (IsMethodPlugged)
 				return;
 
 			Debug.Assert((MethodCompiler.StackSize % 4) == 0, "Stack size of interrupt can't be divided by 4!!");

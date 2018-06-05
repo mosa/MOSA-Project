@@ -35,8 +35,8 @@ namespace Mosa.Compiler.Framework
 		public bool HasDoNotInlineAttribute { get; set; }
 
 		public bool HasAggressiveInliningAttribute { get; set; }
-		
-		public bool IsPlugged { get; set; }
+
+		public bool IsMethodImplementationReplaced { get; set; }
 
 		public bool HasLoops { get; set; }
 

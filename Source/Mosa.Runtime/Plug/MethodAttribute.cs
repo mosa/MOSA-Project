@@ -9,14 +9,7 @@ namespace Mosa.Runtime.Plug
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 	public sealed class MethodAttribute : Attribute
 	{
-		private string target;
-		private string signature = null;
-
-		public MethodAttribute(string target, string signature)
-		{
-			this.target = target;
-			this.signature = signature;
-		}
+		private readonly string target;
 
 		public MethodAttribute(string target)
 		{

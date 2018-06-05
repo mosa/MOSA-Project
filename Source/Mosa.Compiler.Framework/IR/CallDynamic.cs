@@ -6,6 +6,7 @@ namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// CallDynamic
+	/// The instructions represents a method called where the address of the method is from a variable
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class CallDynamic : BaseIRInstruction

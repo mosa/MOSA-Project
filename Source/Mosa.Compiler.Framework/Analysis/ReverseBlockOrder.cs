@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private BasicBlock[] blockOrder;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region IBlockOrderAnalysis
 

@@ -39,13 +39,13 @@ namespace Mosa.Compiler.Framework
 		/// Gets the type system.
 		/// </summary>
 		/// <value>The type system.</value>
-		public TypeSystem TypeSystem { get; private set; }
+		public TypeSystem TypeSystem { get; }
 
 		/// <summary>
 		/// Gets the type layout.
 		/// </summary>
 		/// <value>The type layout.</value>
-		public MosaTypeLayout TypeLayout { get; private set; }
+		public MosaTypeLayout TypeLayout { get; }
 
 		/// <summary>
 		/// Gets the compiler trace.
@@ -79,12 +79,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the plug system.
 		/// </summary>
-		public PlugSystem PlugSystem { get; } = new PlugSystem();
+		public PlugSystem PlugSystem { get; }
 
 		/// <summary>
 		/// Gets the list of Intrinsic Types for internal call replacements.
 		/// </summary>
-		public Dictionary<string, Type> IntrinsicTypes { get; private set; }
+		public Dictionary<string, Type> IntrinsicTypes { get; }
 
 		/// <summary>
 		/// Gets the type of the platform internal runtime.
@@ -92,7 +92,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The type of the platform internal runtime.
 		/// </value>
-		public MosaType PlatformInternalRuntimeType { get; private set; }
+		public MosaType PlatformInternalRuntimeType { get; }
 
 		/// <summary>
 		/// Gets the type of the internal runtime.
@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The type of the internal runtime.
 		/// </value>
-		public MosaType InternalRuntimeType { get; private set; }
+		public MosaType InternalRuntimeType { get; }
 
 		/// <summary>
 		/// Gets the compiler data.
@@ -122,7 +122,6 @@ namespace Mosa.Compiler.Framework
 
 			return new List<BaseCompilerStage> {
 				bootStage,
-				new PlugStage(),
 				new TypeInitializerSchedulerStage(),
 				new MethodLookupTableStage(),
 				new MethodExceptionLookupTableStage(),
@@ -144,6 +143,7 @@ namespace Mosa.Compiler.Framework
 				new ExceptionStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
+				new PlugStage(),
 				new UnboxValueTypeStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				new PromoteTemporaryVariables(),
@@ -216,6 +216,8 @@ namespace Mosa.Compiler.Framework
 					}
 				}
 			}
+
+			PlugSystem = new PlugSystem(TypeSystem);
 
 			PlatformInternalRuntimeType = GetPlatformInternalRuntimeType();
 			InternalRuntimeType = GeInternalRuntimeType();
