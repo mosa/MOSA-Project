@@ -17,7 +17,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="length">The length of bytes to clear.</param>
 		public static void Clear(uint destination, uint length)
 		{
-			MemoryClear(destination, length);
+			Internal.MemoryClear(new IntPtr(destination), length);
 		}
 
 		/// <summary>
@@ -28,7 +28,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="length">The length of bytes to copy.</param>
 		public static void Copy(uint source, uint destination, uint length)
 		{
-			MemoryCopy(destination, source, length);
+			Internal.MemoryCopy(new IntPtr(destination), new IntPtr(source), length);
 		}
 
 		/// <summary>
@@ -39,22 +39,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="length">The length of bytes to set.</param>
 		public static void Set(uint destination, byte value, uint length)
 		{
-			MemorySet(destination, value, length);
-		}
-
-		private unsafe static void MemoryClear(uint destination, uint count)
-		{
-			Internal.MemoryClear(new IntPtr(destination), count);
-		}
-
-		private unsafe static void MemoryCopy(uint destination, uint source, uint count)
-		{
-			Internal.MemoryCopy(new IntPtr(destination), new IntPtr(source), count);
-		}
-
-		private unsafe static void MemorySet(uint destination, byte value, uint count)
-		{
-			Internal.MemorySet(new IntPtr(destination), value, count);
+			Internal.MemorySet(new IntPtr(destination), value, length);
 		}
 	}
 }

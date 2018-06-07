@@ -3,6 +3,7 @@
 using Mosa.ClassLib;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
+using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -109,7 +110,7 @@ namespace Mosa.Kernel.x86
 
 		// MAGIC-ID-CODE-LEN-DATA
 
-		const int HeaderSize = 1 + 1 + 4 + 4;
+		private const int HeaderSize = 1 + 1 + 4 + 4;
 
 		private static void SendResponseStart(uint id, byte code, uint len)
 		{
@@ -459,9 +460,9 @@ namespace Mosa.Kernel.x86
 		{
 			uint crc = CRC.InitialCRC;
 
-			for (uint i = start; i < start + length; i++)
+			for (uint i = 0; i < length; i++)
 			{
-				byte b = Intrinsic.Load8(i);
+				byte b = Intrinsic.Load8(new IntPtr(start), i);
 				crc = CRC.Update(crc, b);
 			}
 

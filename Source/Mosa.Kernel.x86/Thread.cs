@@ -1,4 +1,6 @@
-﻿namespace Mosa.Kernel.x86
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace Mosa.Kernel.x86
 {
 	public enum ThreadStatus { Empty = 0, Running, Terminating, Terminated, Waiting };
 

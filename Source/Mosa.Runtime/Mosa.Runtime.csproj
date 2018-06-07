@@ -72,6 +72,7 @@
     <Compile Include="Builders\RuntimeType.cs" />
     <Compile Include="Builders\RuntimeTypeInfo.cs" />
     <Compile Include="ExceptionHandlerType.cs" />
+    <Compile Include="IntPtrExtension.cs" />
     <Compile Include="Korlib\System.Runtime.CompilerServices\RuntimeHelpers.cs" />
     <Compile Include="Korlib\System\String.cs" />
     <Compile Include="Metadata\CustomAttribute.cs" />

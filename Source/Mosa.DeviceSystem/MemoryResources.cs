@@ -33,7 +33,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public BaseMemory GetMemory(uint address, uint size)
+		public Memory GetMemory(uint address, uint size)
 		{
 			return HAL.RequestPhysicalMemory(address, size);
 		}

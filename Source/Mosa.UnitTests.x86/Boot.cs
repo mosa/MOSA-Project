@@ -36,6 +36,7 @@ namespace Mosa.UnitTests.x86
 			PIC.Setup();
 			IDT.Setup();
 			GDT.Setup();
+
 			// ThreadScheduler.Setup();
 
 			//Runtime.Internal.Setup();

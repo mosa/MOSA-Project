@@ -177,7 +177,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public static bool ConditionalBug()
 		{
-			const uint address = 0x3000;
+			var address = new IntPtr(0x3000);
 			Intrinsic.Store8(address, 81);
 			var num = Intrinsic.Load8(address);
 

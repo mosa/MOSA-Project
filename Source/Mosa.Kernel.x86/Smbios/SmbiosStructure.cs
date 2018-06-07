@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using System;
 
 namespace Mosa.Kernel.x86.Smbios
 {
@@ -9,40 +10,40 @@ namespace Mosa.Kernel.x86.Smbios
 	/// </summary>
 	public abstract class SmbiosStructure
 	{
-		protected uint address = 0u;
-		protected uint length = 0u;
-		protected uint handle = 0u;
+		protected IntPtr address = IntPtr.Zero;
+		protected uint length;
+		protected uint handle;
 
-		protected SmbiosStructure(uint address)
+		protected SmbiosStructure(IntPtr address)
 		{
 			this.address = address;
 			length = Intrinsic.Load8(address, 0x01u);
 			handle = Intrinsic.Load16(address, 0x02u);
 		}
 
-		protected string GetStringFromIndex(byte index)
+		protected unsafe string GetStringFromIndex(byte index)
 		{
 			if (index == 0)
 				return string.Empty;
 
-			uint stringStart = address + length;
-			int count = 1;
+			var first = address + (int)length;
+			int offset = 0;
 
-			while (count++ != index)
-				while (Intrinsic.Load8(stringStart++) != 0x00u)
-					;
+			for (byte count = 1; count != index;)
+			{
+				if (Intrinsic.Load8(first, offset++) == 0x00)
+					count++;
+			}
 
-			uint stringEnd = stringStart;
-			while (Intrinsic.Load8(++stringEnd) != 0x00u)
-				;
+			var start = first + offset;
+			var end = start;
+			int len = 0;
 
-			int stringLength = (int)(stringEnd - stringStart);
-			string result = string.Empty;
+			while (Intrinsic.Load8(end, len++) != 0x00)
+			{
+			}
 
-			for (uint i = 0; i < stringLength; ++i)
-				result = string.Concat(result, new string((char)Intrinsic.Load8(stringStart, i), 1));
-
-			return result;
+			return new string((sbyte*)start.ToPointer(), 0, len);
 		}
 	}
 }

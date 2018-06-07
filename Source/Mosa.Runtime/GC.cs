@@ -11,7 +11,7 @@ namespace Mosa.Runtime
 		// On x86, it is be Mosa.Kernel.x86.KernelMemory._AllocateMemory
 		private unsafe static IntPtr AllocateMemory(uint size)
 		{
-			return new IntPtr(0);
+			return IntPtr.Zero;
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]

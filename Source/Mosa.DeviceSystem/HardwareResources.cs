@@ -100,7 +100,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="region">The region.</param>
 		/// <returns></returns>
-		public BaseMemory GetMemory(byte region)
+		public Memory GetMemory(byte region)
 		{
 			return HAL.RequestPhysicalMemory(memoryRegions[region].BaseAddress, memoryRegions[region].Size);
 		}

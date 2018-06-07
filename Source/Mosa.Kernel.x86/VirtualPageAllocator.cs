@@ -2,6 +2,7 @@
 
 using Mosa.Kernel.x86.Helpers;
 using Mosa.Runtime;
+using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -66,7 +67,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static bool GetPageStatus(uint page)  // true = available
 		{
-			uint at = (Address.VirtualPageAllocator + (page / 8));
+			var at = new IntPtr(Address.VirtualPageAllocator + (page / 8));
 			byte bit = (byte)(page % 8);
 			byte mask = (byte)(1 << bit);
 

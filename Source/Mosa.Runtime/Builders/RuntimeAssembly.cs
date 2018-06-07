@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
 using System.Collections.Generic;
 using System.Reflection;
@@ -54,8 +53,10 @@ namespace System
 				}
 
 				var types = new LinkedList<TypeInfo>();
+
 				foreach (var type in typeInfoList)
 					types.AddLast(type);
+
 				return types;
 			}
 		}
@@ -93,8 +94,6 @@ namespace System
 			for (uint i = 0; i < typeCount; i++)
 			{
 				var handle = new RuntimeTypeHandle(assemblyDefinition.GetTypeDefinition(i).Ptr);
-
-				//((uint**)&handle)[0] = assemblyDefinition.GetTypeDefinition(i);
 
 				if (typeHandles.Contains(handle))
 					continue;
