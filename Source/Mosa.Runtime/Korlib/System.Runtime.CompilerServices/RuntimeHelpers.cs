@@ -10,14 +10,14 @@ namespace Mosa.Runtime.Korlib.System.Runtime.CompilerServices
 {
 	internal static class RuntimeHelpers
 	{
-		[Method("System.Runtime.CompilerServices.RuntimeHelpers::GetHashCode")]
+		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::GetHashCode")]
 		internal unsafe static int GetHashCode(Object o)
 		{
 			// For now use the obj location in memory as the hash code
 			return Intrinsic.GetObjectAddress(o).ToInt32();
 		}
 
-		[Method("System.Runtime.CompilerServices.RuntimeHelpers::Equals")]
+		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::Equals")]
 		internal new static bool Equals(Object o1, Object o2)
 		{
 			// For now just compare the object locations
@@ -25,7 +25,7 @@ namespace Mosa.Runtime.Korlib.System.Runtime.CompilerServices
 			return o1 == o2;
 		}
 
-		[Method("System.Runtime.CompilerServices.RuntimeHelpers::InitializeArray")]
+		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::InitializeArray")]
 		internal static void InitializeArray(Array array, RuntimeFieldHandle fldHandle)
 		{
 			var arrayAddress = Intrinsic.GetObjectAddress(array);
@@ -38,13 +38,13 @@ namespace Mosa.Runtime.Korlib.System.Runtime.CompilerServices
 			Internal.MemoryCopy(arrayElements, fieldData, dataLength);
 		}
 
-		[Method("System.Runtime.CompilerServices.RuntimeHelpers::UnsafeCast")]
+		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::UnsafeCast")]
 		internal unsafe static Object UnsafeCast(Object o)
 		{
 			return o;
 		}
 
-		[Method("System.Runtime.CompilerServices.RuntimeHelpers::GetAssemblies")]
+		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::GetAssemblies")]
 		internal static IEnumerable<Assembly> GetAssemblies()
 		{
 			var assemblies = new LinkedList<Assembly>();
@@ -53,7 +53,7 @@ namespace Mosa.Runtime.Korlib.System.Runtime.CompilerServices
 			return assemblies;
 		}
 
-		[Method("System.Runtime.CompilerServices.RuntimeHelpers::CreateInstance")]
+		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::CreateInstance")]
 		internal static object CreateInstance(Type type, params object[] args)
 		{
 			var typeDefinition = new TypeDefinition(type.TypeHandle.Value);

@@ -15,7 +15,7 @@ namespace Mosa.TestWorld.x86
 	{
 		public static ConsoleSession Console;
 
-		[Method("Mosa.Runtime.StartUp::SetInitialMemory")]
+		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
 		public static void SetInitialMemory()
 		{
 			KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);

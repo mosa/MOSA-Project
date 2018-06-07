@@ -10,47 +10,12 @@ namespace Mosa.Kernel.x86.Smbios
 	public class CpuStructure : SmbiosStructure
 	{
 		/// <summary>
-		/// The vendor
-		/// </summary>
-		private string vendor = null;
-
-		/// <summary>
-		/// The version
-		/// </summary>
-		private string version = null;
-
-		/// <summary>
-		/// The maximum speed
-		/// </summary>
-		private uint maxSpeed = 0;
-
-		/// <summary>
-		/// The socket
-		/// </summary>
-		private string socket = null;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CpuStructure"/> class.
-		/// </summary>
-		public CpuStructure()
-			: base(SmbiosManager.GetStructureOfType(0x04))
-		{
-			version = GetStringFromIndex(Intrinsic.Load8(address, 0x10u));
-			socket = GetStringFromIndex(Intrinsic.Load8(address, 0x04u));
-			maxSpeed = Intrinsic.Load16(address, 0x16u);
-			vendor = GetStringFromIndex(Intrinsic.Load8(address, 0x07u));
-		}
-
-		/// <summary>
 		/// Gets the maximum speed.
 		/// </summary>
 		/// <value>
 		/// The maximum speed.
 		/// </value>
-		public uint MaxSpeed
-		{
-			get { return maxSpeed; }
-		}
+		public uint MaxSpeed { get; private set; }
 
 		/// <summary>
 		/// Gets the socket.
@@ -58,10 +23,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// <value>
 		/// The socket.
 		/// </value>
-		public string Socket
-		{
-			get { return socket; }
-		}
+		public string Socket { get; private set; }
 
 		/// <summary>
 		/// Gets the vendor.
@@ -69,10 +31,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// <value>
 		/// The vendor.
 		/// </value>
-		public string Vendor
-		{
-			get { return vendor; }
-		}
+		public string Vendor { get; private set; }
 
 		/// <summary>
 		/// Gets the version.
@@ -80,9 +39,18 @@ namespace Mosa.Kernel.x86.Smbios
 		/// <value>
 		/// The version.
 		/// </value>
-		public string Version
+		public string Version { get; private set; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CpuStructure"/> class.
+		/// </summary>
+		public CpuStructure()
+			: base(SmbiosManager.GetStructureOfType(0x04))
 		{
-			get { return version; }
+			Version = GetStringFromIndex(Intrinsic.Load8(address, 0x10u));
+			Socket = GetStringFromIndex(Intrinsic.Load8(address, 0x04u));
+			MaxSpeed = Intrinsic.Load16(address, 0x16u);
+			Vendor = GetStringFromIndex(Intrinsic.Load8(address, 0x07u));
 		}
 	}
 }

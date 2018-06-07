@@ -90,7 +90,7 @@
     <Compile Include="InternalsForObject.cs" />
     <Compile Include="InternalsForType.cs" />
     <Compile Include="Intrinsic.cs" />
-    <Compile Include="Plug\MethodAttribute.cs" />
+    <Compile Include="Plug\PlugAttribute.cs" />
     <Compile Include="Internal.cs" />
     <Compile Include="SimpleStackTraceEntry.cs" />
   </ItemGroup>

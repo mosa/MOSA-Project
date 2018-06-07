@@ -11,14 +11,6 @@ namespace Mosa.Kernel.x86.Smbios
 	public static class SmbiosManager
 	{
 		/// <summary>
-		/// Checks if SMBIOS is available
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if this instance is available; otherwise, <c>false</c>.
-		/// </value>
-		public static bool IsAvailable { get { return EntryPoint != new IntPtr(0x100000); } }
-
-		/// <summary>
 		/// Gets the table's entry point
 		/// </summary>
 		/// <value>
@@ -65,6 +57,14 @@ namespace Mosa.Kernel.x86.Smbios
 		/// The number of structures.
 		/// </value>
 		public static uint NumberOfStructures { get; private set; }
+
+		/// <summary>
+		/// Checks if SMBIOS is available
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is available; otherwise, <c>false</c>.
+		/// </value>
+		public static bool IsAvailable { get { return EntryPoint != new IntPtr(0x100000); } }
 
 		/// <summary>
 		/// Setups this instance.

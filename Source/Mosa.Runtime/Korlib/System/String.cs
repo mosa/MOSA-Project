@@ -7,7 +7,7 @@ namespace Mosa.Runtime.Korlib.System
 {
 	internal static class String
 	{
-		[Method("System.String::InternalAllocateString")]
+		[Plug("System.String::InternalAllocateString")]
 		internal static string InternalAllocateString(int length)
 		{
 			var v = Internal.AllocateString(Intrinsic.GetStringType(), (uint)length);

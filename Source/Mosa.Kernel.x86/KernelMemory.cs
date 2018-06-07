@@ -14,7 +14,7 @@ namespace Mosa.Kernel.x86
 		static private uint heapSize = 0x02000000;
 		static private uint heapUsed = 0;
 
-		[Method("Mosa.Runtime.GC::AllocateMemory")]
+		[Plug("Mosa.Runtime.GC::AllocateMemory")]
 		static unsafe private IntPtr _AllocateMemory(uint size)
 		{
 			return AllocateMemory(size);

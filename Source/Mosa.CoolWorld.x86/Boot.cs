@@ -18,7 +18,7 @@ namespace Mosa.CoolWorld.x86
 		public static ConsoleSession Console;
 		public static ConsoleSession Debug;
 
-		[Method("Mosa.Runtime.StartUp::SetInitialMemory")]
+		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
 		public static void SetInitialMemory()
 		{
 			KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
