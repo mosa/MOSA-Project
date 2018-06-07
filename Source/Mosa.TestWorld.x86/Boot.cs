@@ -2,9 +2,9 @@
 
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
+using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 using Mosa.TestWorld.x86.Tests;
-using System.Threading;
 
 namespace Mosa.TestWorld.x86
 {
@@ -14,6 +14,12 @@ namespace Mosa.TestWorld.x86
 	public static class Boot
 	{
 		public static ConsoleSession Console;
+
+		[Method("Mosa.Runtime.StartUp::SetInitialMemory")]
+		public static void SetInitialMemory()
+		{
+			KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
+		}
 
 		/// <summary>
 		/// Main
@@ -98,7 +104,8 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
-		private static SpinLock spinlock = new SpinLock();
+		private static readonly object spinlock = new object();
+
 		private static uint totalticks = 0;
 
 		private static void UpdateThreadTicks(uint thread, uint ticks)
@@ -107,27 +114,15 @@ namespace Mosa.TestWorld.x86
 
 			if (totalticks % 10000 == 0)
 			{
-				bool taken = false;
-				spinlock.Enter(ref taken);
-
-				Console.Goto(0, 14 + thread * 13);
-				Console.Write("T" + thread.ToString() + ":" + ticks.ToString());
-
-				spinlock.Exit();
+				lock (spinlock)
+				{
+					Console.Goto(0, 14 + (thread * 13));
+					Console.Write("T" + thread.ToString() + ":" + ticks.ToString());
+				}
 
 				//Native.Hlt();
 			}
 		}
-
-		//private static object test = new object();
-
-		//public static void Test()
-		//{
-		//	lock (test)
-		//	{
-		//		totalticks++;
-		//	}
-		//}
 
 		public static void Thread1()
 		{

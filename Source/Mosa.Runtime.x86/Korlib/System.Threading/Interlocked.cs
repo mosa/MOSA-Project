@@ -7,10 +7,21 @@ namespace Mosa.Runtime.x86.Korlib.System.Threading
 	public static class Interlocked
 	{
 		[Method("System.Threading.Interlocked::CompareExchange")]
-		internal static int Exchange(ref int location1, int value, int comparand)
+		internal static int CompareExchange(ref int location1, int value, int comparand)
 		{
 			return Native.CmpXChgLoad32(ref location1, value, comparand);
 		}
+
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//[Method("System.Threading.Interlocked::CompareExchange")]
+		//public static IntPtr CompareExchange(ref IntPtr location1, IntPtr value, IntPtr comparand)
+		//{
+		//	int location = location1.ToInt32(); // FIXME? might need to load instead
+		//
+		//	var result = Native.CmpXChgLoad32(location, value.ToInt32(), comparand.ToInt32());
+		//
+		//	return new IntPtr(result);
+		//}
 
 		[Method("System.Threading.Interlocked::Exchange")]
 		internal static int Exchange(ref int location1, int value)

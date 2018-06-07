@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Mosa.Compiler.Linker
 {
@@ -65,10 +66,19 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
+		private static string SortName(string a)
+		{
+			int pos = a.IndexOf(' ');
+			string s = (pos < 0) ? a : a.Substring(pos + 1);
+			return s;
+		}
+
 		internal void ResolveLayout(uint fileOffset, ulong virtualAddress)
 		{
 			VirtualAddress = virtualAddress;
 			FileOffset = fileOffset;
+
+			//var sortedSymbols = Symbols.OrderBy(x => SortName(x.Name)).ToList();
 
 			foreach (var symbol in Symbols)
 			{

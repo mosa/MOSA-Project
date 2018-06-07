@@ -126,11 +126,20 @@ namespace Mosa.Runtime.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CmpXChgLoad32, Mosa.Platform.x86")]
 		public extern static int CmpXChgLoad32(ref int location, int value, int comparand);
 
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CmpXChgLoad32, Mosa.Platform.x86")]
+		public extern static int CmpXChgLoad32(int location, int value, int comparand);
+
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.XAddLoad32, Mosa.Platform.x86")]
 		public extern static int XAddLoad32(ref int location, int value);
 
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.XAddLoad32, Mosa.Platform.x86")]
+		public extern static int XAddLoad32(int location, int value);
+
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.XChgLoad32, Mosa.Platform.x86")]
 		public extern static int XChgLoad32(ref int location, int value);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.XChgLoad32, Mosa.Platform.x86")]
+		public extern static int XChgLoad32(int location, int value);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Pause, Mosa.Platform.x86")]
 		public extern static void Pause();
