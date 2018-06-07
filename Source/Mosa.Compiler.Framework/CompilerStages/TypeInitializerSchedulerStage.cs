@@ -32,7 +32,8 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private readonly BasicBlocks basicBlocks;
 
 		private MosaMethod typeInitializerMethod;
-		private readonly object _lockObject = new object();
+
+		private readonly object _lock = new object();
 
 		#endregion Data Members
 
@@ -94,7 +95,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
-			lock (_lockObject)
+			lock (_lock)
 			{
 				start.AppendInstruction(IRInstruction.CallStatic, null, symbol);
 			}

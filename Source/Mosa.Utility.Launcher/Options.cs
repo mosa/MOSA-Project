@@ -305,6 +305,7 @@ namespace Mosa.Utility.Launcher
 				}
 			}
 		}
+
 		[Option("hunt-corlib")]
 		public bool HuntForCorLib { get; set; }
 

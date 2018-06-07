@@ -14,7 +14,7 @@ namespace Mosa.Runtime.x86.Korlib.System.Threading
 		{
 			var sync = Intrinsic.GetObjectAddress(obj) + IntPtr.Size;
 
-			while (Native.CmpXChgLoad32(sync.ToInt32(), 1, 0) == 0)
+			while (Native.CmpXChgLoad32(sync.ToInt32(), 1, 0) != 0)
 			{ }
 		}
 
@@ -24,7 +24,7 @@ namespace Mosa.Runtime.x86.Korlib.System.Threading
 		{
 			var sync = Intrinsic.GetObjectAddress(obj) + IntPtr.Size;
 
-			Native.XAddLoad32(sync.ToInt32(), 0);
+			Native.XAddLoad32(sync.ToInt32(), -1);
 		}
 	}
 }
