@@ -11,6 +11,11 @@ namespace Mosa.Runtime
 			return a.ToInt64() > b.ToInt64();
 		}
 
+		static public bool GreaterThanOrEqual(this IntPtr a, IntPtr b)
+		{
+			return a.ToInt64() >= b.ToInt64();
+		}
+
 		static public bool LessThan(this IntPtr a, IntPtr b)
 		{
 			return a.ToInt64() < b.ToInt64();

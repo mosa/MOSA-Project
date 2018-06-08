@@ -11,6 +11,7 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
+using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -67,7 +68,7 @@ namespace Mosa.Kernel.x86
 		public static uint GetPhysicalAddressFromVirtual(uint virtualAddress)
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			return Intrinsic.Load32(Address.PageTable, ((virtualAddress & 0xFFFFF000u) >> 10)) + (virtualAddress & 0xFFFu);
+			return Intrinsic.Load32(new IntPtr(Address.PageTable), ((virtualAddress & 0xFFFFF000u) >> 10)) + (virtualAddress & 0xFFFu);
 		}
 	}
 }

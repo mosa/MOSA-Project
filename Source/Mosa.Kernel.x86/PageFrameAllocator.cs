@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -10,10 +11,10 @@ namespace Mosa.Kernel.x86
 	public static class PageFrameAllocator
 	{
 		// Start of memory map
-		private static uint map;
+		private static IntPtr map;
 
 		// Current position in map data structure
-		private static uint at;
+		private static IntPtr at;
 
 		private static uint totalPages;
 		private static uint totalUsedPages;
@@ -23,8 +24,8 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Setup()
 		{
-			map = Address.PageFrameAllocator;
-			at = Address.PageFrameAllocator;
+			map = new IntPtr(Address.PageFrameAllocator);
+			at = new IntPtr(Address.PageFrameAllocator);
 			totalPages = 0;
 			totalUsedPages = 0;
 			SetupFreeMemory();
@@ -94,17 +95,17 @@ namespace Mosa.Kernel.x86
 		/// Allocate a physical page from the free list
 		/// </summary>
 		/// <returns>The page</returns>
-		public static uint Allocate()
+		public static IntPtr Allocate()
 		{
 			if (at == map)
-				return 0; // out of memory
+				return IntPtr.Zero; // out of memory
 
 			totalUsedPages++;
-			uint avail = Intrinsic.Load32(at);
+			var avail = Intrinsic.LoadPointer(at);
 			at -= 4;
 
 			// Clear out memory
-			MemoryBlock.Clear(avail, PageSize);
+			Runtime.Internal.MemoryClear(avail, PageSize);
 
 			return avail;
 		}
@@ -113,11 +114,11 @@ namespace Mosa.Kernel.x86
 		/// Releases a page to the free list
 		/// </summary>
 		/// <param name="address">The address.</param>
-		public static void Free(uint address)
+		public static void Free(IntPtr address)
 		{
 			totalUsedPages--;
-			at = at + 4;
-			Intrinsic.Store32(at, address);
+			at += 4;
+			Intrinsic.Store32(at, address.ToInt32());
 		}
 
 		/// <summary>

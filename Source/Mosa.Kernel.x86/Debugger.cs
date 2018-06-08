@@ -484,8 +484,8 @@ namespace Mosa.Kernel.x86
 			uint id = GetID();
 			uint length = GetLength();
 
-			uint start = Address.DebuggerBuffer + HeaderSize;
-			uint end = start + length;
+			var start = new IntPtr(Address.DebuggerBuffer) + HeaderSize;
+			var end = start + (int)length;
 
 			UnitTestQueue.QueueUnitTest(id, start, end);
 		}

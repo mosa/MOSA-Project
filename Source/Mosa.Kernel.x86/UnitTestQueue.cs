@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -9,33 +10,34 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class UnitTestQueue
 	{
-		private static uint queueNext = Address.UnitTestQueue;
-		private static uint queueCurrent = Address.UnitTestQueue;
+		private static IntPtr queueNext;
+		private static IntPtr queueCurrent;
 		private static uint count = 0;
 
 		private static uint TestQueueSize = 0x00100000;
 
 		public static void Setup()
 		{
-			queueNext = Address.UnitTestQueue;
-			queueCurrent = Address.UnitTestQueue;
+			queueNext = new IntPtr(Address.UnitTestQueue);
+			queueCurrent = new IntPtr(Address.UnitTestQueue);
 			count = 0;
 
 			Intrinsic.Store32(queueNext, 0);
 		}
 
-		public static bool QueueUnitTest(uint id, uint start, uint end)
+		public static bool QueueUnitTest(uint id, IntPtr start, IntPtr end)
 		{
-			uint len = end - start;
-			if (queueNext + len + 32 >= Address.UnitTestQueue + TestQueueSize)
+			uint len = (uint)(end.ToInt64() - start.ToInt64());
+
+			if ((queueNext + (int)len + 32).GreaterThan(new IntPtr(Address.UnitTestQueue) + (int)TestQueueSize))
 			{
-				if (Address.UnitTestQueue + len + 32 >= queueCurrent)
+				if (new IntPtr(Address.UnitTestQueue + len + 32).GreaterThanOrEqual(queueCurrent))
 					return false; // no space
 
 				Intrinsic.Store32(queueNext, uint.MaxValue); // mark jump to front
 
 				// cycle to front
-				queueNext = Address.UnitTestQueue;
+				queueNext = new IntPtr(Address.UnitTestQueue);
 			}
 
 			Intrinsic.Store32(queueNext, len + 4);
@@ -44,7 +46,7 @@ namespace Mosa.Kernel.x86
 			Intrinsic.Store32(queueNext, id);
 			queueNext += 4;
 
-			for (uint i = start; i < end; i += 4)
+			for (var i = start; i.LessThan(end); i += 4)
 			{
 				uint value = Intrinsic.Load32(i);
 				Intrinsic.Store32(queueNext, value);
@@ -71,7 +73,7 @@ namespace Mosa.Kernel.x86
 
 			if (marker == uint.MaxValue)
 			{
-				queueCurrent = Address.UnitTestQueue;
+				queueCurrent = new IntPtr(Address.UnitTestQueue);
 			}
 
 			uint len = Intrinsic.Load32(queueCurrent);
@@ -90,7 +92,7 @@ namespace Mosa.Kernel.x86
 				UnitTestRunner.SetUnitTestMethodParameter(index, value);
 			}
 
-			queueCurrent = queueCurrent + len + 4;
+			queueCurrent = queueCurrent + (int)len + 4;
 			--count;
 
 			Screen.Goto(17, 0);

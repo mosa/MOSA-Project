@@ -2,6 +2,7 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
+using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -23,13 +24,13 @@ namespace Mosa.Kernel.x86
 			internal const byte TotalSize = 0x08;
 		}
 
-		#endregion Data members
+		#endregion Data Members
 
 		public static void Setup()
 		{
-			MemoryBlock.Clear(Address.GDTTable, 6);
-			Intrinsic.Store16(Address.GDTTable, (Offset.TotalSize * 3) - 1);
-			Intrinsic.Store32(Address.GDTTable, 2, Address.GDTTable + 6);
+			Runtime.Internal.MemoryClear(new IntPtr(Address.GDTTable), 6);
+			Intrinsic.Store16(new IntPtr(Address.GDTTable), (Offset.TotalSize * 3) - 1);
+			Intrinsic.Store32(new IntPtr(Address.GDTTable), 2, Address.GDTTable + 6);
 
 			Set(0, 0, 0, 0, 0);                // Null segment
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
@@ -40,7 +41,7 @@ namespace Mosa.Kernel.x86
 
 		private static void Set(uint index, uint address, uint limit, byte access, byte granularity)
 		{
-			uint entry = GetEntryLocation(index);
+			var entry = GetEntryLocation(index);
 			Intrinsic.Store16(entry, Offset.BaseLow, (ushort)(address & 0xFFFF));
 			Intrinsic.Store8(entry, Offset.BaseMiddle, (byte)((address >> 16) & 0xFF));
 			Intrinsic.Store8(entry, Offset.BaseHigh, (byte)((address >> 24) & 0xFF));
@@ -54,9 +55,9 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		private static uint GetEntryLocation(uint index)
+		private static IntPtr GetEntryLocation(uint index)
 		{
-			return Address.GDTTable + 6 + (index * Offset.TotalSize);
+			return new IntPtr(Address.GDTTable + 6 + (index * Offset.TotalSize));
 		}
 	}
 }
