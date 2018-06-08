@@ -81,7 +81,7 @@ namespace Mosa.Kernel.x86
 					{
 						uint value = Intrinsic.Load32(new IntPtr(Address.UnitTestStack), (index * 4));
 
-						Intrinsic.Store32(esp, (index * 4), value);
+						Intrinsic.Store32(new IntPtr(esp), index * 4, value);
 					}
 
 					switch (testResultType)
@@ -106,7 +106,7 @@ namespace Mosa.Kernel.x86
 
 		public static void SetUnitTestMethodParameter(uint index, uint value)
 		{
-			Intrinsic.Store32(Address.UnitTestStack, (index * 4), value);
+			Intrinsic.Store32(new IntPtr(Address.UnitTestStack), index * 4, value);
 		}
 
 		public static void SetUnitTestMethodParameterCount(uint number)

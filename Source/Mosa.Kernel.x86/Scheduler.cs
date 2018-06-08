@@ -53,7 +53,7 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		public static void ClockInterrupt(uint stackSate)
+		public static void ClockInterrupt(IntPtr stackSate)
 		{
 			if (!Enabled)
 				return;
@@ -165,8 +165,8 @@ namespace Mosa.Kernel.x86
 		{
 			var thread = Threads[threadID];
 
-			var stack = VirtualPageAllocator.Reserve(stackSize);
-			var stackTop = stack + stackSize;
+			var stack = new IntPtr(VirtualPageAllocator.Reserve(stackSize));
+			var stackTop = stack + (int)stackSize;
 
 			// Setup stack state
 			Intrinsic.Store32(stackTop, -4, 0);          // Zero Sentinel
@@ -184,7 +184,7 @@ namespace Mosa.Kernel.x86
 			Intrinsic.Store32(stackTop, -40, 0);     // EDX
 			Intrinsic.Store32(stackTop, -44, 0);     // EBX
 			Intrinsic.Store32(stackTop, -48, 0);     // ESP (original) - not used
-			Intrinsic.Store32(stackTop, -52, stackTop - 8); // EBP
+			Intrinsic.Store32(stackTop, -52, (stackTop - 8).ToInt32()); // EBP
 			Intrinsic.Store32(stackTop, -56, 0);     // ESI
 			Intrinsic.Store32(stackTop, -60, 0);     // EDI
 
@@ -194,7 +194,7 @@ namespace Mosa.Kernel.x86
 			thread.StackStatePointer = stackTop - 60;
 		}
 
-		private static void SaveThreadState(uint threadID, uint stackSate)
+		private static void SaveThreadState(uint threadID, IntPtr stackSate)
 		{
 			//Assert.True(threadID < MaxThreads, "SaveThreadState(): invalid thread id > max");
 
@@ -231,7 +231,7 @@ namespace Mosa.Kernel.x86
 
 			PIC.SendEndOfInterrupt(ClockIRQ);
 
-			Native.InterruptReturn(thread.StackStatePointer);
+			Native.InterruptReturn((uint)thread.StackStatePointer.ToInt32());
 		}
 
 		private static uint FindEmptyThreadSlot()
