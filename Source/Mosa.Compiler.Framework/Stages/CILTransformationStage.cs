@@ -1227,7 +1227,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (result.Type.IsValueType)
 			{
-				Debug.Assert(result.Uses.Count <= 1, "Usages too high");
+				//Debug.Assert(result.Uses.Count <= 1, "Usages too high");
 
 				var newThisLocal = MethodCompiler.AddStackLocal(result.Type);
 				var newThis = MethodCompiler.CreateVirtualRegister(result.Type.ToManagedPointer());
