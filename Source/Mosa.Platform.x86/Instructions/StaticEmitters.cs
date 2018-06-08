@@ -680,7 +680,7 @@ namespace Mosa.Platform.x86.Instructions
 		internal static void EmitMovLoadConstantBase(InstructionNode node, BaseCodeEmitter emitter, InstructionSize size)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
-			Debug.Assert(node.Operand1.IsLinkerResolved);
+			//Debug.Assert(node.Operand1.IsLinkerResolved);
 
 			// memory to reg 1000 101w: mod reg r/m
 			var opcode = new OpcodeEncoder()

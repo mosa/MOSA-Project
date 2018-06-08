@@ -13,9 +13,6 @@ namespace Mosa.Runtime
 		#region Intrinsic
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern byte Load8(uint address, uint offset);
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern uint Load32(uint address);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
@@ -25,13 +22,7 @@ namespace Mosa.Runtime
 		public static extern uint Load32(uint address, uint offset);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern void Store8(uint address, byte value);
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store8(uint address, int offset, byte value);
-
-		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern void Store8(uint address, uint offset, byte value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store16(uint address, ushort value);

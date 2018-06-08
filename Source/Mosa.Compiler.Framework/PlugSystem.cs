@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Data Members
 
-		private const string PlugMethodAttributeName = "Mosa.Runtime.Plug.MethodAttribute";
+		private const string PlugMethodAttributeName = "Mosa.Runtime.Plug.PlugAttribute";
 
 		public PlugSystem(TypeSystem typeSystem)
 		{
