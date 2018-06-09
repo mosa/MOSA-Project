@@ -25,7 +25,9 @@ namespace Mosa.Runtime.x86
 				var addr = Intrinsic.LoadPointer(table);
 				uint size = Intrinsic.Load32(table, IntPtr.Size);
 
-				if (address.ToInt64() >= addr.ToInt64() && (address.ToInt64() < (addr.ToInt64() + size)))
+				if (address.GreaterThanOrEqual(addr) && address.LessThan(addr + (int)size))
+
+				//if (address.ToInt64() >= addr.ToInt64() && (address.ToInt64() < (addr.ToInt64() + size)))
 				{
 					return new MethodDefinition(Intrinsic.LoadPointer(table, IntPtr.Size * 2));
 				}
@@ -43,7 +45,9 @@ namespace Mosa.Runtime.x86
 			var table = Native.GetMethodExceptionLookupTable();
 
 			if (table == IntPtr.Zero)
+			{
 				return new MethodDefinition(IntPtr.Zero);
+			}
 
 			uint entries = Intrinsic.Load32(table);
 
@@ -54,7 +58,9 @@ namespace Mosa.Runtime.x86
 				var addr = Intrinsic.LoadPointer(table);
 				uint size = Intrinsic.Load32(table, IntPtr.Size);
 
-				if (address.ToInt64() >= addr.ToInt64() && address.ToInt64() < addr.ToInt64() + size)
+				if (address.GreaterThanOrEqual(addr) && address.LessThan(addr + (int)size))
+
+				//if (address.ToInt64() >= addr.ToInt64() && address.ToInt64() < addr.ToInt64() + size)
 				{
 					return new MethodDefinition(Intrinsic.LoadPointer(table, IntPtr.Size * 2));
 				}
@@ -73,14 +79,18 @@ namespace Mosa.Runtime.x86
 			var protectedRegionTable = methodDef.ProtectedRegionTable;
 
 			if (protectedRegionTable.IsNull)
+			{
 				return new ProtectedRegionDefinition(IntPtr.Zero);
+			}
 
 			var method = methodDef.Method;
 
 			if (method == IntPtr.Zero)
+			{
 				return new ProtectedRegionDefinition(IntPtr.Zero);
+			}
 
-			uint offset = (uint)(address.ToInt64() - method.ToInt64());
+			uint offset = (uint)method.GetOffset(address);
 			uint entries = protectedRegionTable.NumberOfRegions;
 
 			var protectedRegionDefinition = new ProtectedRegionDefinition(IntPtr.Zero);
@@ -120,7 +130,7 @@ namespace Mosa.Runtime.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static IntPtr GetPreviousStackFrame(IntPtr ebp)
 		{
-			if (ebp.ToInt64() < 0x1000)
+			if (ebp.LessThan(new IntPtr(0x1000)))
 			{
 				return IntPtr.Zero;
 			}
@@ -160,7 +170,7 @@ namespace Mosa.Runtime.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static IntPtr GetReturnAddressFromStackFrame(IntPtr stackframe)
 		{
-			if (stackframe.ToInt64() < 0x1000)
+			if (stackframe.LessThan(new IntPtr(0x1000)))
 			{
 				return IntPtr.Zero;
 			}
@@ -227,8 +237,7 @@ namespace Mosa.Runtime.x86
 				return entry;
 
 			entry.MethodDefinition = methodDef;
-			entry.Offset = (uint)(address.ToInt64() - methodDef.Method.ToInt64());
-
+			entry.Offset = (uint)methodDef.Method.GetOffset(address);
 			return entry;
 		}
 

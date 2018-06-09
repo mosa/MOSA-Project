@@ -83,7 +83,7 @@ namespace Mosa.VBEWorld.x86.HAL
 		/// <returns></returns>
 		public override uint GetPhysicalAddress(Memory memory)
 		{
-			return PageTable.GetPhysicalAddressFromVirtual((uint)memory.Address.ToInt32());
+			return PageTable.GetPhysicalAddressFromVirtual(memory.Address);
 		}
 
 		/// <summary>

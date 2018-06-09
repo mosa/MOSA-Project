@@ -20,5 +20,15 @@ namespace Mosa.Runtime
 		{
 			return a.ToInt64() < b.ToInt64();
 		}
+
+		static public bool LessThanOrEqual(this IntPtr a, IntPtr b)
+		{
+			return a.ToInt64() <= b.ToInt64();
+		}
+
+		static public long GetOffset(this IntPtr a, IntPtr b)
+		{
+			return b.ToInt64() - a.ToInt64();
+		}
 	}
 }

@@ -27,7 +27,7 @@ namespace Mosa.Kernel.x86
 
 		public static bool QueueUnitTest(uint id, IntPtr start, IntPtr end)
 		{
-			uint len = (uint)(end.ToInt64() - start.ToInt64());
+			uint len = (uint)start.GetOffset(end);
 
 			if ((queueNext + (int)len + 32).GreaterThan(new IntPtr(Address.UnitTestQueue) + (int)TestQueueSize))
 			{

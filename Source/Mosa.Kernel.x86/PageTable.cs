@@ -65,10 +65,10 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="virtualAddress">The virtual address.</param>
 		/// <returns></returns>
-		public static uint GetPhysicalAddressFromVirtual(uint virtualAddress)
+		public static uint GetPhysicalAddressFromVirtual(IntPtr virtualAddress)
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			return Intrinsic.Load32(new IntPtr(Address.PageTable), ((virtualAddress & 0xFFFFF000u) >> 10)) + (virtualAddress & 0xFFFu);
+			return Intrinsic.Load32(new IntPtr(Address.PageTable), (((uint)virtualAddress.ToInt32() & 0xFFFFF000u) >> 10)) + ((uint)virtualAddress.ToInt32() & 0xFFFu);
 		}
 	}
 }

@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 using System;
@@ -83,7 +82,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <returns></returns>
 		public override uint GetPhysicalAddress(Memory memory)
 		{
-			return PageTable.GetPhysicalAddressFromVirtual((uint)memory.Address.ToInt32());
+			return PageTable.GetPhysicalAddressFromVirtual(memory.Address);
 		}
 
 		/// <summary>
