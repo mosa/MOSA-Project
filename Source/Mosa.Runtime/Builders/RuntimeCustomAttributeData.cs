@@ -74,7 +74,7 @@ namespace System
 
 		private object ResolveArgumentValue(CustomAttributeArgument argument, Type type)
 		{
-			TypeCode typeCode = argument.ArgumentType.TypeCode;
+			var typeCode = argument.ArgumentType.TypeCode;
 			var valuePtr = argument.GetArgumentValue();
 
 			// If its an enum type
@@ -87,40 +87,40 @@ namespace System
 			{
 				// 1 byte
 				case TypeCode.Boolean:
-					return ((bool*)valuePtr)[0];
+					return (bool)(Intrinsic.Load8(valuePtr) != 0);
 
 				case TypeCode.U1:
-					return ((byte*)valuePtr)[0];
+					return (byte)Intrinsic.Load8(valuePtr);
 
 				case TypeCode.I1:
-					return ((sbyte*)valuePtr)[0];
+					return (sbyte)Intrinsic.Load8(valuePtr);
 
 				// 2 bytes
 				case TypeCode.Char:
-					return ((char*)valuePtr)[0];
+					return (char)Intrinsic.Load16(valuePtr);
 
 				case TypeCode.U2:
-					return ((ushort*)valuePtr)[0];
+					return (ushort)Intrinsic.Load16(valuePtr);
 
 				case TypeCode.I2:
-					return ((short*)valuePtr)[0];
+					return (short)Intrinsic.Load16(valuePtr);
 
 				// 4 bytes
 				case TypeCode.U4:
-					return ((uint*)valuePtr)[0];
+					return (uint)Intrinsic.Load32(valuePtr);
 
 				case TypeCode.I4:
-					return ((int*)valuePtr)[0];
+					return (int)Intrinsic.Load32(valuePtr);
 
 				case TypeCode.R4:
 					return ((float*)valuePtr)[0];
 
 				// 8 bytes
 				case TypeCode.U8:
-					return ((ulong*)valuePtr)[0];
+					return (ulong)Intrinsic.Load64(valuePtr);
 
 				case TypeCode.I8:
-					return ((long*)valuePtr)[0];
+					return (long)Intrinsic.Load64(valuePtr);
 
 				case TypeCode.R8:
 					return ((double*)valuePtr)[0];

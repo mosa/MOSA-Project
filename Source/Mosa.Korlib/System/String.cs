@@ -178,7 +178,7 @@ namespace System
 			return result;
 		}
 
-		private static unsafe string CreateString(char* value, int startIndex, int length)
+		private static unsafe string Ctor(char* value, int startIndex, int length)
 		{
 			if (length == 0)
 				return InternalAllocateString(0);
@@ -198,7 +198,7 @@ namespace System
 			return result;
 		}
 
-		private static unsafe string CreateString(char* value)
+		private static unsafe string Ctor(char* value)
 		{
 			int length = 0;
 			char* at = value;

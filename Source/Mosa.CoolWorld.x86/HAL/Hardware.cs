@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 using System;
@@ -19,7 +18,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public override BaseMemory RequestPhysicalMemory(uint address, uint size)
+		public override Memory RequestPhysicalMemory(uint address, uint size)
 		{
 			// Map physical memory space to virtual memory space
 			for (uint at = address; at < address + size; at += 4096)
@@ -27,7 +26,7 @@ namespace Mosa.CoolWorld.x86.HAL
 				PageTable.MapVirtualAddressToPhysical(at, at);
 			}
 
-			return new Memory(address, size);
+			return new Memory(new IntPtr(address), size);
 		}
 
 		/// <summary>
@@ -69,7 +68,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="size">The size.</param>
 		/// <param name="alignment">The alignment.</param>
 		/// <returns></returns>
-		public override BaseMemory AllocateMemory(uint size, uint alignment)
+		public override Memory AllocateMemory(uint size, uint alignment)
 		{
 			var address = KernelMemory.AllocateMemory(size);
 
@@ -81,7 +80,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="memory">The memory.</param>
 		/// <returns></returns>
-		public override uint GetPhysicalAddress(BaseMemory memory)
+		public override uint GetPhysicalAddress(Memory memory)
 		{
 			return PageTable.GetPhysicalAddressFromVirtual(memory.Address);
 		}

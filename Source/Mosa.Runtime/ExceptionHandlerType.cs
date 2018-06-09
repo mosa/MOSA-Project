@@ -3,7 +3,7 @@
 namespace Mosa.Runtime
 {
 	/// <summary>
-	///
+	/// Exception Handler Type
 	/// </summary>
 	public enum ExceptionHandlerType : uint
 	{

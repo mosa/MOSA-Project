@@ -48,6 +48,7 @@
  */
 
 using Mosa.Runtime;
+using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -64,7 +65,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="output">Reference to a buffer which will contain the decompressed data</param>
 		/// <param name="outputLength">The size of the decompressed archive in the output buffer</param>
 		/// <returns></returns>
-		public static bool Decompress(uint input, uint inputLength, uint output, uint outputLength)
+		public static bool Decompress(IntPtr input, uint inputLength, IntPtr output, uint outputLength)
 		{
 			uint iidx = 0;
 			uint oidx = 0;
@@ -117,11 +118,11 @@ namespace Mosa.Kernel.x86
 						return false;
 					}
 
-					if (reference < 0)
-					{
-						//SET_ERRNO (EINVAL);
-						return false;
-					}
+					//if (reference < 0)
+					//{
+					//	//SET_ERRNO (EINVAL);
+					//	return false;
+					//}
 
 					//output[oidx++] = output[reference++];
 					Intrinsic.Store8(output, oidx, Intrinsic.Load8(output, reference));

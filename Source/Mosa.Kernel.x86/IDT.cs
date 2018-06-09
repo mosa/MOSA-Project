@@ -2,6 +2,7 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
+using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -31,9 +32,9 @@ namespace Mosa.Kernel.x86
 		public static void Setup()
 		{
 			// Setup IDT table
-			MemoryBlock.Clear(Address.IDTTable, 6);
-			Intrinsic.Store16(Address.IDTTable, (Offset.TotalSize * 256) - 1);
-			Intrinsic.Store32(Address.IDTTable, 2, Address.IDTTable + 6);
+			Runtime.Internal.MemoryClear(new IntPtr(Address.IDTTable), 6);
+			Intrinsic.Store16(new IntPtr(Address.IDTTable), (Offset.TotalSize * 256) - 1);
+			Intrinsic.Store32(new IntPtr(Address.IDTTable), 2, Address.IDTTable + 6);
 
 			SetTableEntries();
 
@@ -55,7 +56,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="flags">The flags.</param>
 		private static void Set(uint index, uint address, ushort select, byte flags)
 		{
-			uint entry = Address.IDTTable + 6 + (index * Offset.TotalSize);
+			var entry = new IntPtr(Address.IDTTable + 6 + (index * Offset.TotalSize));
 			Intrinsic.Store16(entry, Offset.BaseLow, (ushort)(address & 0xFFFF));
 			Intrinsic.Store16(entry, Offset.BaseHigh, (ushort)((address >> 16) & 0xFFFF));
 			Intrinsic.Store16(entry, Offset.Select, select);
@@ -69,7 +70,7 @@ namespace Mosa.Kernel.x86
 		private static void SetTableEntries()
 		{
 			// Clear out idt table
-			MemoryBlock.Clear(Address.IDTTable + 6, Offset.TotalSize * 256);
+			Runtime.Internal.MemoryClear(new IntPtr(Address.IDTTable) + 6, Offset.TotalSize * 256);
 
 			// Note: GetIDTJumpLocation parameter must be a constant and not a variable
 			Set(0, Native.GetIDTJumpLocation(0), 0x08, 0x8E);
@@ -406,15 +407,15 @@ namespace Mosa.Kernel.x86
 						break;
 					}
 
-					uint physicalpage = PageFrameAllocator.Allocate();
+					var physicalpage = PageFrameAllocator.Allocate();
 
-					if (physicalpage == 0x0)
+					if (physicalpage == IntPtr.Zero)
 					{
 						Error(stack, "Out of Memory");
 						break;
 					}
 
-					PageTable.MapVirtualAddressToPhysical(cr2, physicalpage);
+					PageTable.MapVirtualAddressToPhysical(cr2, (uint)physicalpage.ToInt32());
 
 					break;
 
@@ -427,7 +428,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case Scheduler.ClockIRQ:
-					Scheduler.ClockInterrupt(stackStatePointer);
+					Scheduler.ClockInterrupt(new IntPtr(stackStatePointer));
 					break;
 
 				case Scheduler.ThreadTerminationSignalIRQ:

@@ -109,9 +109,9 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		protected IOPortReadWrite valuePort;
 
-		protected BaseMemory memory;
+		protected Memory memory;
 
-		protected BaseMemory fifo;
+		protected Memory fifo;
 
 		protected IFrameBuffer frameBuffer;
 

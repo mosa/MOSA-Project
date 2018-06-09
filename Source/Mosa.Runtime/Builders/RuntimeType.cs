@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
 using System.Reflection;
 
@@ -31,9 +30,10 @@ namespace System
 			get
 			{
 				if (declaringType == null)
-
+				{
 					// Declaring Type - Lazy load
 					declaringType = Type.GetTypeFromHandle(declaringTypeHandle);
+				}
 
 				return declaringType;
 			}
@@ -84,7 +84,7 @@ namespace System
 		internal RuntimeType(RuntimeTypeHandle handle)
 		{
 			this.handle = handle;
-			typeDefinition = new TypeDefinition(handle.Value); //  (TypeDefinition*)((uint**)&handle)[0];
+			typeDefinition = new TypeDefinition(handle.Value);
 
 			assemblyQualifiedName = typeDefinition.Name;   // TODO
 			name = typeDefinition.Name;                    // TODO
@@ -97,19 +97,13 @@ namespace System
 			// Declaring Type
 			if (!typeDefinition.DeclaringType.IsNull)
 			{
-				var declaringHandle = new RuntimeTypeHandle(typeDefinition.DeclaringType.Ptr);
-
-				//((uint**)&declaringHandle)[0] = (uint*)typeDefinition.DeclaringType;
-				declaringTypeHandle = declaringHandle;
+				declaringTypeHandle = new RuntimeTypeHandle(typeDefinition.DeclaringType.Ptr);
 			}
 
 			// Element Type
 			if (!typeDefinition.ElementType.IsNull)
 			{
-				var elementHandle = new RuntimeTypeHandle(typeDefinition.ElementType.Ptr);
-
-				//((uint**)&elementHandle)[0] = (uint*)typeDefinition.ElementType;
-				elementTypeHandle = elementHandle;
+				elementTypeHandle = new RuntimeTypeHandle(typeDefinition.ElementType.Ptr);
 			}
 		}
 
@@ -136,7 +130,7 @@ namespace System
 
 		protected override bool HasElementTypeImpl()
 		{
-			return (elementTypeHandle.Value != IntPtr.Zero);
+			return elementTypeHandle.Value != IntPtr.Zero;
 		}
 
 		protected override bool IsArrayImpl()

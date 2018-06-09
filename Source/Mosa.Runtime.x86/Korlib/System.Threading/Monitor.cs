@@ -9,7 +9,7 @@ namespace Mosa.Runtime.x86.Korlib.System.Threading
 	public static class Monitor
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		[Method("System.Threading.Monitor::Enter")]
+		[Plug("System.Threading.Monitor::Enter")]
 		internal static void Enter(Object obj)
 		{
 			var sync = Intrinsic.GetObjectAddress(obj) + IntPtr.Size;
@@ -19,7 +19,7 @@ namespace Mosa.Runtime.x86.Korlib.System.Threading
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		[Method("System.Threading.Monitor::Exit")]
+		[Plug("System.Threading.Monitor::Exit")]
 		internal static void Exit(Object obj)
 		{
 			var sync = Intrinsic.GetObjectAddress(obj) + IntPtr.Size;

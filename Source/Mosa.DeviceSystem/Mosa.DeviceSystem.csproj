@@ -66,6 +66,10 @@
       <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
       <Name>Mosa.Korlib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
+      <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
+      <Name>Mosa.Runtime</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DiskDeviceMountDeamon.cs" />
@@ -85,6 +89,7 @@
     <Compile Include="DeviceStatus.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="DiskPartitionConfiguration.cs" />
+    <Compile Include="Memory.cs" />
     <Compile Include="PCIDeviceConfiguration.cs" />
     <Compile Include="HAL.cs" />
     <Compile Include="BaseDeviceDriver.cs" />
@@ -96,7 +101,6 @@
     <Compile Include="BaseHardwareAbstraction.cs" />
     <Compile Include="IHardwareDevice.cs" />
     <Compile Include="IIOPorts.cs" />
-    <Compile Include="BaseMemory.cs" />
     <Compile Include="IOPortRegion.cs" />
     <Compile Include="IOPortResources.cs" />
     <Compile Include="IPCIController.cs" />

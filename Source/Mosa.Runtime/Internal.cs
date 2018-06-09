@@ -28,7 +28,15 @@ namespace Mosa.Runtime
 			var memory = AllocateMemory((2 * (uint)(IntPtr.Size)) + classSize);
 
 			Intrinsic.Store(memory, 0, handle.Value);
-			Intrinsic.Store(memory, IntPtr.Size, 0);
+
+			if (IntPtr.Size == 4)
+			{
+				Intrinsic.Store32(memory, IntPtr.Size, 0);
+			}
+			else
+			{
+				Intrinsic.Store64(memory, IntPtr.Size, 0);
+			}
 
 			return memory;
 		}
@@ -54,9 +62,18 @@ namespace Mosa.Runtime
 
 			var memory = AllocateMemory(allocationSize);
 
-			Intrinsic.Store32(memory, 0, handle.Value.ToInt32());
-			Intrinsic.Store32(memory, IntPtr.Size, 0);
-			Intrinsic.Store32(memory, IntPtr.Size * 2, elements);
+			Intrinsic.Store(memory, 0, handle.Value);
+
+			if (IntPtr.Size == 4)
+			{
+				Intrinsic.Store32(memory, IntPtr.Size, 0);
+				Intrinsic.Store32(memory, IntPtr.Size * 2, elements);
+			}
+			else
+			{
+				Intrinsic.Store64(memory, IntPtr.Size, 0);
+				Intrinsic.Store64(memory, IntPtr.Size * 2, elements);
+			}
 
 			return memory;
 		}

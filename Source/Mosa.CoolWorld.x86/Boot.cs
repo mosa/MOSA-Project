@@ -5,6 +5,7 @@ using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
+using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 
 namespace Mosa.CoolWorld.x86
@@ -16,6 +17,12 @@ namespace Mosa.CoolWorld.x86
 	{
 		public static ConsoleSession Console;
 		public static ConsoleSession Debug;
+
+		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
+		public static void SetInitialMemory()
+		{
+			KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
+		}
 
 		/// <summary>
 		/// Main
