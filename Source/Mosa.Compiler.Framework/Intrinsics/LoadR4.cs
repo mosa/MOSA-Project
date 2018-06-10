@@ -9,8 +9,8 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	/// Load32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
-	[ReplacementTarget("Mosa.Runtime.Intrinsic::Load")]
-	public sealed class Load : IIntrinsicInternalMethod
+	[ReplacementTarget("Mosa.Runtime.Intrinsic::LoadR4")]
+	public sealed class LoadR4 : IIntrinsicInternalMethod
 	{
 		/// <summary>
 		/// Replaces the intrinsic call site
@@ -20,15 +20,13 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <exception cref="CompilerException"></exception>
 		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			var instruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInt32 : IRInstruction.LoadZeroExtend32x64;
-
 			if (context.OperandCount == 1)
 			{
-				context.SetInstruction(instruction, context.Result, context.Operand1, methodCompiler.ConstantZero);
+				context.SetInstruction(IRInstruction.LoadFloatR4, context.Result, context.Operand1, methodCompiler.ConstantZero);
 			}
 			else if (context.OperandCount == 2)
 			{
-				context.SetInstruction(instruction, context.Result, context.Operand1, context.Operand2);
+				context.SetInstruction(IRInstruction.LoadFloatR4, context.Result, context.Operand1, context.Operand2);
 			}
 			else
 			{

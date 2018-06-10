@@ -113,7 +113,7 @@ namespace System
 					return (int)Intrinsic.Load32(valuePtr);
 
 				case TypeCode.R4:
-					return ((float*)valuePtr)[0];
+					return Intrinsic.LoadR4(valuePtr);
 
 				// 8 bytes
 				case TypeCode.U8:
@@ -123,7 +123,7 @@ namespace System
 					return (long)Intrinsic.Load64(valuePtr);
 
 				case TypeCode.R8:
-					return ((double*)valuePtr)[0];
+					return Intrinsic.LoadR8(valuePtr);
 
 				// SZArray
 				case TypeCode.SZArray:

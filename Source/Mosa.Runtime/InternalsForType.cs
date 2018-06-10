@@ -4,7 +4,7 @@ using System;
 
 namespace Mosa.Runtime
 {
-	public unsafe static class InternalsForType
+	public static class InternalsForType
 	{
 		public static Type GetTypeImpl(string typeName, bool throwOnError)
 		{

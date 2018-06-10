@@ -48,8 +48,10 @@ namespace System
 				{
 					// Type Info - Lazy load
 					typeInfoList = new LinkedList<RuntimeTypeInfo>();
-					foreach (RuntimeType type in typeList)
+					foreach (var type in typeList)
+					{
 						typeInfoList.AddLast(new RuntimeTypeInfo(type, this));
+					}
 				}
 
 				var types = new LinkedList<TypeInfo>();
@@ -71,7 +73,7 @@ namespace System
 			get
 			{
 				var list = new LinkedList<RuntimeType>();
-				foreach (RuntimeType type in typeList)
+				foreach (var type in typeList)
 				{
 					if ((type.attributes & TypeAttributes.VisibilityMask) != TypeAttributes.Public)
 						continue;

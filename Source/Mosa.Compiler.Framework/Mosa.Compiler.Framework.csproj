@@ -96,8 +96,9 @@
     <Compile Include="Intrinsics\GetStringType.cs" />
     <Compile Include="Intrinsics\GetDelegateTargetAddress.cs" />
     <Compile Include="Intrinsics\GetDelegateMethodAddress.cs" />
+    <Compile Include="Intrinsics\LoadR4.cs" />
+    <Compile Include="Intrinsics\LoadR8.cs" />
     <Compile Include="Intrinsics\LoadPointer.cs" />
-    <Compile Include="Intrinsics\Load.cs" />
     <Compile Include="Intrinsics\Store.cs" />
     <Compile Include="Intrinsics\StoreR8.cs" />
     <Compile Include="Intrinsics\StoreR4.cs" />
