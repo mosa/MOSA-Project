@@ -3,8 +3,8 @@
 using CommandLine;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker;
-using Mosa.Compiler.Trace.BuiltIn;
+using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.Framework.Trace.BuiltIn;
 using System;
 using System.Collections.Generic;
 using System.Text;

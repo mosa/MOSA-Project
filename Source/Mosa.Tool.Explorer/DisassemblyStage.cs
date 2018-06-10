@@ -1,8 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker;
-using Mosa.Compiler.Trace;
+using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.Framework.Linker.Elf;
+using Mosa.Compiler.Framework.Trace;
 using SharpDisasm;
 using System;
 
@@ -30,9 +31,9 @@ namespace Mosa.Tool.Explorer
 			ArchitectureMode mode;
 			switch (Architecture.MachineType)
 			{
-				case Compiler.Linker.Elf.MachineType.Intel386: mode = ArchitectureMode.x86_32; break;
-				case Compiler.Linker.Elf.MachineType.IA_64: mode = ArchitectureMode.x86_64; break;
-				case Compiler.Linker.Elf.MachineType.ARM:
+				case MachineType.Intel386: mode = ArchitectureMode.x86_32; break;
+				case MachineType.IA_64: mode = ArchitectureMode.x86_64; break;
+				case MachineType.ARM:
 				default:
 					trace.Log($"Unable to disassemble binary for machine type: {Architecture.MachineType}");
 					return;

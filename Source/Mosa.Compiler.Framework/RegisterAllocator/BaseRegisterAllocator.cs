@@ -4,7 +4,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.Trace;
+using Mosa.Compiler.Framework.Trace;
 using System;
 using System.Collections;
 using System.Collections.Generic;

@@ -4,7 +4,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.Linker.Elf;
+using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Platform.ARMv6.Stages;
 
 namespace Mosa.Platform.ARMv6

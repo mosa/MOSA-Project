@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Linker.Elf;
+using Mosa.Compiler.Framework.Linker.Elf;
 
 namespace Mosa.Compiler.Framework
 {

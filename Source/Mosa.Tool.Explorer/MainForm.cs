@@ -2,10 +2,10 @@
 
 using CommandLine;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Pdb;
-using Mosa.Compiler.Trace;
+using Mosa.Compiler.Framework.Trace;
 using Mosa.Utility.GUI.Common;
 using System;
 using System.Collections.Generic;
@@ -77,6 +77,7 @@ namespace Mosa.Tool.Explorer
 			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
 				LoadAssembly(openFileDialog.FileName);
+
 				//LoadAssemblyDebugInfo(openFileDialog.FileName);
 			}
 		}

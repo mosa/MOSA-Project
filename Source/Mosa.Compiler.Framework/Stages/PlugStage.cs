@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.Trace;
+using Mosa.Compiler.Framework.Trace;
 
 namespace Mosa.Compiler.Framework.Stages
 {

@@ -2,7 +2,7 @@
 
 using CommandLine;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Linker;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Utility.BootImage;
 using System;
 using System.Collections.Generic;
