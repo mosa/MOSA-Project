@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.Trace;
 
 namespace Mosa.Compiler.Framework.Stages
 {

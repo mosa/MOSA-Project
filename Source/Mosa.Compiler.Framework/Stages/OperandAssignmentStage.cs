@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Trace;
+using Mosa.Compiler.Framework.Trace;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;

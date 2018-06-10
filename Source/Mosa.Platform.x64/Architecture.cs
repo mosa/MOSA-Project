@@ -3,7 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker.Elf;
+using Mosa.Compiler.Framework.Linker.Elf;
 
 namespace Mosa.Platform.x64
 {

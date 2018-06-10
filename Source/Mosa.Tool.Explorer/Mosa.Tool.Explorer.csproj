@@ -117,10 +117,6 @@
       <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
-      <Project>{65866a51-b229-44c5-ac81-87a90fa1741c}</Project>
-      <Name>Mosa.Compiler.Linker</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Pdb\Mosa.Compiler.Pdb.csproj">
       <Project>{f970f8cb-8ff1-4244-9a31-d00c6d7aabe5}</Project>
       <Name>Mosa.Compiler.Pdb</Name>
@@ -128,10 +124,6 @@
     <ProjectReference Include="..\Mosa.Platform.ARMv6\Mosa.Platform.ARMv6.csproj">
       <Project>{0fb92651-3ee8-441d-84f2-c4dfda68e8a5}</Project>
       <Name>Mosa.Platform.ARMv6</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Trace\Mosa.Compiler.Trace.csproj">
-      <Project>{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}</Project>
-      <Name>Mosa.Compiler.Trace</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
       <Project>{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}</Project>
@@ -154,6 +146,7 @@
     <Content Include="..\..\3rdParty\app-icons\magnifier.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Mosa\Compiler\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>

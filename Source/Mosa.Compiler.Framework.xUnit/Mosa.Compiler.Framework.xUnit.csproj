@@ -97,10 +97,6 @@
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
       <Name>Mosa.Compiler.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
-      <Project>{65866a51-b229-44c5-ac81-87a90fa1741c}</Project>
-      <Name>Mosa.Compiler.Linker</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />

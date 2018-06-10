@@ -4,7 +4,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Linker;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
