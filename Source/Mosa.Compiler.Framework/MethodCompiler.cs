@@ -4,8 +4,8 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Framework.Trace;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework

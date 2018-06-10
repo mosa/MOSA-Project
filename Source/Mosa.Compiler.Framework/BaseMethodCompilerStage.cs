@@ -2,8 +2,8 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Framework.Trace;
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

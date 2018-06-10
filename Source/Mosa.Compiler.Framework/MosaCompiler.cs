@@ -1,8 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Framework.Trace;
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.IO;
