@@ -5,7 +5,7 @@ using System.IO;
 namespace Mosa.Compiler.Framework.Linker.Elf
 {
 	/// <summary>
-	///
+	/// RelocationAddendEntry
 	/// </summary>
 	public class RelocationAddendEntry
 	{
