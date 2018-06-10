@@ -63,11 +63,6 @@ namespace Mosa.DeviceDriver.ISA
 		#endregion Definitions
 
 		/// <summary>
-		/// The spin lock
-		/// </summary>
-		protected SpinLock spinLock;
-
-		/// <summary>
 		/// The drives per controller
 		/// </summary>
 		public const uint DrivesPerConroller = 2; // the maximum supported
@@ -523,9 +518,8 @@ namespace Mosa.DeviceDriver.ISA
 			if (data.Length < count * 512)
 				return false;
 
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
 				for (uint index = 0; index < count; index++)
 				{
 					switch (driveInfo[drive].AddressingMode)
@@ -534,6 +528,7 @@ namespace Mosa.DeviceDriver.ISA
 							{
 								if (!PerformLBA28(SectorOperation.Read, drive, block + index, data, index * 512))
 									return false;
+
 								break;
 							}
 
@@ -541,15 +536,12 @@ namespace Mosa.DeviceDriver.ISA
 							{
 								if (!PerformLBA48(SectorOperation.Read, drive, block + index, data, index * 512))
 									return false;
+
 								break;
 							}
 					}
 				}
 				return true;
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 		}
 
@@ -569,9 +561,8 @@ namespace Mosa.DeviceDriver.ISA
 			if (data.Length < count * 512)
 				return false;
 
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
 				for (uint index = 0; index < count; index++)
 				{
 					switch (driveInfo[drive].AddressingMode)
@@ -592,10 +583,6 @@ namespace Mosa.DeviceDriver.ISA
 					}
 				}
 				return true;
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 		}
 

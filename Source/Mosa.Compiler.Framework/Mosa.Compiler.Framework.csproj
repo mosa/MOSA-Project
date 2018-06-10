@@ -96,8 +96,9 @@
     <Compile Include="Intrinsics\GetStringType.cs" />
     <Compile Include="Intrinsics\GetDelegateTargetAddress.cs" />
     <Compile Include="Intrinsics\GetDelegateMethodAddress.cs" />
+    <Compile Include="Intrinsics\LoadR4.cs" />
+    <Compile Include="Intrinsics\LoadR8.cs" />
     <Compile Include="Intrinsics\LoadPointer.cs" />
-    <Compile Include="Intrinsics\Load.cs" />
     <Compile Include="Intrinsics\Store.cs" />
     <Compile Include="Intrinsics\StoreR8.cs" />
     <Compile Include="Intrinsics\StoreR4.cs" />
@@ -332,6 +333,36 @@
     <Compile Include="IR\ZeroExtend8x64.cs">
       <DependentUpon>IRInstructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="Linker\BaseLinker.cs" />
+    <Compile Include="Linker\Elf\ElfHeader.cs" />
+    <Compile Include="Linker\Elf\ElfLinker.cs" />
+    <Compile Include="Linker\Elf\FileType.cs" />
+    <Compile Include="Linker\Elf\IdentClass.cs" />
+    <Compile Include="Linker\Elf\IdentData.cs" />
+    <Compile Include="Linker\Elf\IdentIndex.cs" />
+    <Compile Include="Linker\Elf\MachineType.cs" />
+    <Compile Include="Linker\Elf\ProgramHeader.cs" />
+    <Compile Include="Linker\Elf\ProgramHeaderFlags.cs" />
+    <Compile Include="Linker\Elf\ProgramHeaderType.cs" />
+    <Compile Include="Linker\Elf\RelocationAddendEntry.cs" />
+    <Compile Include="Linker\Elf\RelocationEntry.cs" />
+    <Compile Include="Linker\Elf\RelocationType.cs" />
+    <Compile Include="Linker\Elf\Section.cs" />
+    <Compile Include="Linker\Elf\SectionAttribute.cs" />
+    <Compile Include="Linker\Elf\SectionHeaderEntry.cs" />
+    <Compile Include="Linker\Elf\SectionType.cs" />
+    <Compile Include="Linker\Elf\SymbolBinding.cs" />
+    <Compile Include="Linker\Elf\SymbolEntry.cs" />
+    <Compile Include="Linker\Elf\SymbolType.cs" />
+    <Compile Include="Linker\Elf\SymbolVisibility.cs" />
+    <Compile Include="Linker\Elf\Version.cs" />
+    <Compile Include="Linker\LinkerFormatType.cs" />
+    <Compile Include="Linker\LinkerSection.cs" />
+    <Compile Include="Linker\LinkerSymbol.cs" />
+    <Compile Include="Linker\LinkRequest.cs" />
+    <Compile Include="Linker\LinkType.cs" />
+    <Compile Include="Linker\PatchType.cs" />
+    <Compile Include="Linker\SectionKind.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="CompilerTypeData.cs" />
     <Compile Include="CompilerMethodData.cs" />
@@ -781,6 +812,14 @@
     <Compile Include="MosaTypeLayout.cs" />
     <Compile Include="Stages\UnboxValueTypeStage.cs" />
     <Compile Include="Stages\VirtualRegisterRenameStage.cs" />
+    <Compile Include="Trace\BuiltIn\ConsoleEventListener.cs" />
+    <Compile Include="Trace\BuiltIn\DebugCompilerEventListener.cs" />
+    <Compile Include="Trace\CompilerEvent.cs" />
+    <Compile Include="Trace\CompilerTrace.cs" />
+    <Compile Include="Trace\ITraceFactory.cs" />
+    <Compile Include="Trace\ITraceListener.cs" />
+    <Compile Include="Trace\TraceFilter.cs" />
+    <Compile Include="Trace\TraceLog.cs" />
     <Compile Include="VirtualRegisters.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
     <Compile Include="BaseInstruction.cs" />
@@ -933,17 +972,9 @@
       <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
       <Name>Mosa.Compiler.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Trace\Mosa.Compiler.Trace.csproj">
-      <Project>{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}</Project>
-      <Name>Mosa.Compiler.Trace</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
       <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
-      <Project>{65866a51-b229-44c5-ac81-87a90fa1741c}</Project>
-      <Name>Mosa.Compiler.Linker</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

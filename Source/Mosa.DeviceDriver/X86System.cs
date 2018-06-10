@@ -10,8 +10,6 @@ namespace Mosa.DeviceDriver
 	/// </summary>
 	public class X86System : BaseDeviceDriver
 	{
-		protected SpinLock spinLock;
-
 		public override void Initialize()
 		{
 			Device.Name = "X86System";

@@ -4,14 +4,14 @@ using System;
 
 namespace Mosa.Runtime
 {
-	public unsafe static class InternalsForObject
+	public static class InternalsForObject
 	{
-		public static object MemberwiseClone(void* obj)
+		public static object MemberwiseClone(object obj)
 		{
 			return null;
 		}
 
-		public static Type GetType(void* obj)
+		public static Type GetType(object obj)
 		{
 			// Get the handle of the object
 			var handle = GetTypeHandle(obj);
@@ -34,12 +34,10 @@ namespace Mosa.Runtime
 			return null;
 		}
 
-		private static RuntimeTypeHandle GetTypeHandle(void* obj)
+		private static RuntimeTypeHandle GetTypeHandle(object obj)
 		{
-			// TypeDefinition is located at the beginning of object (i.e. *obj )
-			var handle = new RuntimeTypeHandle();
-			((uint*)&handle)[0] = ((uint*)obj)[0];
-			return handle;
+			var o = Intrinsic.GetObjectAddress(obj);
+			return new RuntimeTypeHandle(Intrinsic.LoadPointer(o));
 		}
 	}
 }

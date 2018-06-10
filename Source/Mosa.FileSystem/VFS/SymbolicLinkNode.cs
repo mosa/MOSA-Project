@@ -14,7 +14,7 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private string target;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Construction
 

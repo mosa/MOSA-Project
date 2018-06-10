@@ -28,10 +28,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public bool[] portUsed;
 
-		/// <summary>
-		/// The spin lock
-		/// </summary>
-		private SpinLock spinLock;
+		private object _lock = new object();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IOPortResources"/> class.
@@ -65,30 +62,29 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool ClaimResources(HardwareResources hardwareResources)
 		{
-			spinLock.Enter();
-
-			for (byte r = 0; r < hardwareResources.IOPointRegionCount - 1; r++)
+			lock (_lock)
 			{
-				var region = hardwareResources.GetIOPortRegion(r);
-
-				for (int p = 0; p < region.Size; p++)
+				for (byte r = 0; r < hardwareResources.IOPointRegionCount - 1; r++)
 				{
-					if (portUsed[region.BaseIOPort + p])
-						return false;
+					var region = hardwareResources.GetIOPortRegion(r);
+
+					for (int p = 0; p < region.Size; p++)
+					{
+						if (portUsed[region.BaseIOPort + p])
+							return false;
+					}
+				}
+
+				for (byte r = 0; r < hardwareResources.IOPointRegionCount; r++)
+				{
+					var region = hardwareResources.GetIOPortRegion(r);
+
+					for (int p = 0; p < region.Size; p++)
+					{
+						portUsed[region.BaseIOPort + p] = true;
+					}
 				}
 			}
-
-			for (byte r = 0; r < hardwareResources.IOPointRegionCount; r++)
-			{
-				var region = hardwareResources.GetIOPortRegion(r);
-
-				for (int p = 0; p < region.Size; p++)
-				{
-					portUsed[region.BaseIOPort + p] = true;
-				}
-			}
-
-			spinLock.Exit();
 
 			return true;
 		}
@@ -99,19 +95,18 @@ namespace Mosa.DeviceSystem
 		/// <param name="hardwareResources">The hardware resources.</param>
 		public void ReleaseResources(HardwareResources hardwareResources)
 		{
-			spinLock.Enter();
-
-			for (byte r = 0; r < hardwareResources.IOPointRegionCount; r++)
+			lock (_lock)
 			{
-				var region = hardwareResources.GetIOPortRegion(r);
-
-				for (int p = 0; p < region.Size; p++)
+				for (byte r = 0; r < hardwareResources.IOPointRegionCount; r++)
 				{
-					portUsed[region.BaseIOPort + p] = false;
+					var region = hardwareResources.GetIOPortRegion(r);
+
+					for (int p = 0; p < region.Size; p++)
+					{
+						portUsed[region.BaseIOPort + p] = false;
+					}
 				}
 			}
-
-			spinLock.Exit();
 		}
 	}
 }

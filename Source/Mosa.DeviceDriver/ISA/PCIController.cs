@@ -16,10 +16,6 @@ namespace Mosa.DeviceDriver.ISA
 
 		#endregion Definitions
 
-		/// <summary>
-		/// The spin lock
-		/// </summary>
-		protected SpinLock spinLock;
 
 		/// <summary>
 		/// The configuration address

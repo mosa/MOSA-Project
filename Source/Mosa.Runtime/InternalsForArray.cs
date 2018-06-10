@@ -7,7 +7,7 @@ using System.Reflection;
 namespace Mosa.Runtime
 {
 	// TODO: Implement properly for SZ arrays and multi dimensional arrays
-	public unsafe static class InternalsForArray
+	public static class InternalsForArray
 	{
 		private static void Copy(IntPtr sourceArray, int sourceIndex, IntPtr destinationArray, int destinationIndex, int length, bool reliable)
 		{

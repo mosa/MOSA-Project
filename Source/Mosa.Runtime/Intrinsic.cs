@@ -58,6 +58,18 @@ namespace Mosa.Runtime
 		public static extern ulong Load64(IntPtr address, uint offset);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern float LoadR4(IntPtr address);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern float LoadR4(IntPtr address, uint offset);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern double LoadR8(IntPtr address);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern double LoadR8(IntPtr address, uint offset);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store8(IntPtr address, byte value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]

@@ -30,11 +30,6 @@ namespace Mosa.DeviceSystem
 		private readonly List<Device> devices;
 
 		/// <summary>
-		/// The spin lock
-		/// </summary>
-		private SpinLock spinLock;
-
-		/// <summary>
 		/// The interrupt handlers
 		/// </summary>
 		private readonly List<Device>[] irqDispatch;
@@ -48,6 +43,8 @@ namespace Mosa.DeviceSystem
 		/// The pending on change
 		/// </summary>
 		private readonly List<Device> pendingOnChange;
+
+		private object _lock = new object();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeviceManager" /> class.
@@ -73,15 +70,9 @@ namespace Mosa.DeviceSystem
 
 		public void RegisterDeviceDriver(DeviceDriverRegistryEntry deviceDriver)
 		{
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
-
 				registry.Add(deviceDriver);
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 		}
 
@@ -89,10 +80,8 @@ namespace Mosa.DeviceSystem
 		{
 			var drivers = new List<DeviceDriverRegistryEntry>();
 
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
-
 				foreach (var deviceDriver in registry)
 				{
 					if (deviceDriver.BusType == busType)
@@ -100,10 +89,6 @@ namespace Mosa.DeviceSystem
 						drivers.Add(deviceDriver);
 					}
 				}
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 
 			return drivers;
@@ -152,19 +137,14 @@ namespace Mosa.DeviceSystem
 		{
 			//HAL.DebugWriteLine("DeviceManger:StartDevice():Enter");
 
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
 				devices.Add(device);
 
 				if (device.Parent != null)
 				{
 					device.Parent.Children.Add(device);
 				}
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 
 			device.Status = DeviceStatus.Initializing;
@@ -197,10 +177,8 @@ namespace Mosa.DeviceSystem
 		{
 			var list = new List<Device>();
 
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
-
 				foreach (var device in devices)
 				{
 					if (device.DeviceDriver is T)
@@ -208,10 +186,6 @@ namespace Mosa.DeviceSystem
 						list.Add(device);
 					}
 				}
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 
 			return list;
@@ -221,10 +195,8 @@ namespace Mosa.DeviceSystem
 		{
 			var list = new List<Device>();
 
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
-
 				foreach (var device in devices)
 				{
 					if (device.Status == status && device.DeviceDriver is T)
@@ -232,10 +204,6 @@ namespace Mosa.DeviceSystem
 						list.Add(device);
 					}
 				}
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 
 			return list;
@@ -245,10 +213,8 @@ namespace Mosa.DeviceSystem
 		{
 			var list = new List<Device>();
 
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
-
 				foreach (var device in devices)
 				{
 					if (device.Name == name)
@@ -256,10 +222,6 @@ namespace Mosa.DeviceSystem
 						list.Add(device);
 					}
 				}
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 
 			return list;
@@ -269,18 +231,12 @@ namespace Mosa.DeviceSystem
 		{
 			var list = new List<Device>();
 
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
-
 				foreach (var device in parent.Children)
 				{
 					list.Add(device);
 				}
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 
 			return list;
@@ -290,18 +246,12 @@ namespace Mosa.DeviceSystem
 		{
 			var list = new List<Device>();
 
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
-
 				foreach (var device in devices)
 				{
 					list.Add(device);
 				}
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 
 			return list;
@@ -309,10 +259,8 @@ namespace Mosa.DeviceSystem
 
 		public bool CheckExists(Device parent, ulong componentID)
 		{
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
-
 				foreach (var device in devices)
 				{
 					if (device.Parent == parent && device.ComponentID == componentID)
@@ -320,10 +268,6 @@ namespace Mosa.DeviceSystem
 						return true;
 					}
 				}
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 
 			return false;
@@ -335,19 +279,13 @@ namespace Mosa.DeviceSystem
 
 		public void ProcessInterrupt(byte irq)
 		{
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
-
 				foreach (var device in irqDispatch[irq])
 				{
 					var deviceDriver = device.DeviceDriver;
 					deviceDriver.OnInterrupt();
 				}
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 		}
 
@@ -356,14 +294,9 @@ namespace Mosa.DeviceSystem
 			if (irq >= MaxInterrupts)
 				return;
 
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
 				irqDispatch[irq].Add(device);
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 		}
 
@@ -372,14 +305,9 @@ namespace Mosa.DeviceSystem
 			if (irq >= MaxInterrupts)
 				return;
 
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
 				irqDispatch[irq].Remove(device);
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 		}
 
@@ -389,15 +317,9 @@ namespace Mosa.DeviceSystem
 
 		public void RegisterDaemon(BaseMountDaemon daemon)
 		{
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
-
 				daemons.Add(daemon);
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 		}
 
@@ -408,18 +330,12 @@ namespace Mosa.DeviceSystem
 			if (device == null)
 				return;
 
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
-
 				//if (pendingOnChange.Contains(device))
 				//	return;
 
 				pendingOnChange.Add(device);
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 
 			//HAL.DebugWriteLine("OnChangeNotification:OnChange():Exit");
@@ -429,10 +345,8 @@ namespace Mosa.DeviceSystem
 
 		private Device GetPendingOnChangeNotification()
 		{
-			try
+			lock (_lock)
 			{
-				spinLock.Enter();
-
 				if (pendingOnChange.Count == 0)
 					return null;
 
@@ -440,10 +354,6 @@ namespace Mosa.DeviceSystem
 				pendingOnChange.RemoveAt(0);
 
 				return device;
-			}
-			finally
-			{
-				spinLock.Exit();
 			}
 		}
 

@@ -20,11 +20,6 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		protected IOPortReadWrite dataPort;
 
-		/// <summary>
-		/// The spin lock
-		/// </summary>
-		protected SpinLock spinLock;
-
 		public override void Initialize()
 		{
 			Device.Name = "CMOS";
@@ -53,11 +48,11 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		public byte Read(byte address)
 		{
-			spinLock.Enter();
-			commandPort.Write8(address);
-			var b = dataPort.Read8();
-			spinLock.Exit();
-			return b;
+			lock (_lock)
+			{
+				commandPort.Write8(address);
+				return dataPort.Read8();
+			}
 		}
 
 		/// <summary>

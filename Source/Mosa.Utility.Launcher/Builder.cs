@@ -3,9 +3,9 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Linker;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.Trace;
+using Mosa.Compiler.Framework.Trace;
 using Mosa.Utility.BootImage;
 using SharpDisasm;
 using SharpDisasm.Translators;
@@ -539,6 +539,5 @@ namespace Mosa.Utility.Launcher
 
 			return null;
 		}
-
 	}
 }

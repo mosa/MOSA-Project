@@ -41,7 +41,7 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private DirectoryEntry child, next;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Construction
 

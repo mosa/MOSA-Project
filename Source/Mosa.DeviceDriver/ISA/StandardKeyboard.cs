@@ -22,8 +22,6 @@ namespace Mosa.DeviceDriver.ISA
 
 		protected uint fifoEnd;
 
-		protected SpinLock spinLock;
-
 		public override void Initialize()
 		{
 			Device.Name = "StandardKeyboard";
@@ -129,13 +127,12 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		protected void ReadScanCode()
 		{
-			spinLock.Enter();
+			lock (_lock)
+			{
+				byte v = commandPort.Read8();
 
-			byte v = commandPort.Read8();
-
-			AddToFIFO(v);
-
-			spinLock.Exit();
+				AddToFIFO(v);
+			}
 		}
 
 		/// <summary>

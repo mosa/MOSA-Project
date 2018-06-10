@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	///
+	/// NetworkDevicePacketBuffer
 	/// </summary>
 	public class NetworkDevicePacketBuffer
 	{
@@ -61,12 +61,12 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// The transmit lock
 		/// </summary>
-		protected SpinLock transmitLock;
+		protected object transmitLock = new object();
 
 		/// <summary>
 		/// The receive lock
 		/// </summary>
-		protected SpinLock receiveLock;
+		protected object receiveLock = new object();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NetworkDevicePacketBuffer"/> class.
@@ -77,8 +77,8 @@ namespace Mosa.DeviceSystem
 			this.networkDevice = networkDevice;
 			maxTransmitQueue = 100;    // TODO: Lookup system default
 			maxReceiveQueue = 100;     // TODO: Lookup system default
-			transmitLock = new SpinLock();
-			receiveLock = new SpinLock();
+			transmitLock = new object();
+			receiveLock = new object();
 			countTransmitPackets = 0;
 			countReceivePackets = 0;
 			discardedTransmitPackets = 0;
@@ -96,8 +96,8 @@ namespace Mosa.DeviceSystem
 			this.networkDevice = networkDevice;
 			this.maxReceiveQueue = maxReceiveQueue;
 			this.maxTransmitQueue = maxTransmitQueue;
-			transmitLock = new SpinLock();
-			receiveLock = new SpinLock();
+			transmitLock = new object();
+			receiveLock = new object();
 			countTransmitPackets = 0;
 			countReceivePackets = 0;
 			discardedTransmitPackets = 0;
@@ -111,9 +111,8 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool SendPacketToDevice(byte[] data)
 		{
-			try
+			lock (transmitLock)
 			{
-				transmitLock.Enter();
 				if (transmitQueue.Count >= maxTransmitQueue)
 					return false;
 
@@ -121,10 +120,6 @@ namespace Mosa.DeviceSystem
 				countTransmitPackets++;
 
 				return true;
-			}
-			finally
-			{
-				transmitLock.Exit();
 			}
 		}
 
@@ -134,10 +129,8 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public byte[] GetPacketFromDevice()
 		{
-			try
+			lock (receiveLock)
 			{
-				receiveLock.Enter();
-
 				if (receiveQueue.Count == 0)
 					return null;
 
@@ -145,10 +138,6 @@ namespace Mosa.DeviceSystem
 				receiveQueue.RemoveFirst();
 
 				return data;
-			}
-			finally
-			{
-				receiveLock.Exit();
 			}
 		}
 
@@ -159,10 +148,8 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool QueuePacketForStack(byte[] data)
 		{
-			try
+			lock (receiveLock)
 			{
-				receiveLock.Enter();
-
 				if (receiveQueue.Count > maxReceiveQueue)
 				{
 					discardedReceivePackets++;
@@ -173,10 +160,6 @@ namespace Mosa.DeviceSystem
 				countReceivePackets++;
 
 				return true;
-			}
-			finally
-			{
-				receiveLock.Exit();
 			}
 		}
 
@@ -194,10 +177,8 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		protected void SendPackets()
 		{
-			try
+			lock (receiveLock)
 			{
-				receiveLock.Enter();
-
 				while (receiveQueue.Count != 0)
 				{
 					byte[] data = receiveQueue.First.Value;
@@ -207,10 +188,6 @@ namespace Mosa.DeviceSystem
 					else
 						return;
 				}
-			}
-			finally
-			{
-				receiveLock.Exit();
 			}
 		}
 	}
