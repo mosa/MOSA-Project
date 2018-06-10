@@ -10,8 +10,6 @@ namespace Mosa.DeviceDriver.ISA
 	/// </summary>
 	public class ISABus : BaseDeviceDriver
 	{
-		protected SpinLock spinLock;
-
 		public override void Initialize()
 		{
 			Device.Name = "ISA-BUS";

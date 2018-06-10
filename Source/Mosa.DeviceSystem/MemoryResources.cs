@@ -17,7 +17,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// The spin lock
 		/// </summary>
-		protected SpinLock spinLock;
+		protected object _lock = new object();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MemoryResources"/> class.
@@ -45,25 +45,24 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool ClaimResources(HardwareResources hardwareResources)
 		{
-			spinLock.Enter();
-
-			for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
+			lock (_lock)
 			{
-				var region = hardwareResources.GetMemoryRegion(r);
-
-				foreach (var memoryRegion in memoryRegions)
+				for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
 				{
-					if (memoryRegion.Contains(region.BaseAddress) || memoryRegion.Contains(region.BaseAddress + region.Size))
-						return false;
+					var region = hardwareResources.GetMemoryRegion(r);
+
+					foreach (var memoryRegion in memoryRegions)
+					{
+						if (memoryRegion.Contains(region.BaseAddress) || memoryRegion.Contains(region.BaseAddress + region.Size))
+							return false;
+					}
+				}
+
+				for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
+				{
+					memoryRegions.AddLast(hardwareResources.GetMemoryRegion(r));
 				}
 			}
-
-			for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
-			{
-				memoryRegions.AddLast(hardwareResources.GetMemoryRegion(r));
-			}
-
-			spinLock.Exit();
 
 			return true;
 		}
@@ -74,14 +73,13 @@ namespace Mosa.DeviceSystem
 		/// <param name="hardwareResources">The hardware resources.</param>
 		public void ReleaseResources(HardwareResources hardwareResources)
 		{
-			spinLock.Enter();
-
-			for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
+			lock (_lock)
 			{
-				memoryRegions.Remove(hardwareResources.GetMemoryRegion(r));
+				for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
+				{
+					memoryRegions.Remove(hardwareResources.GetMemoryRegion(r));
+				}
 			}
-
-			spinLock.Exit();
 		}
 	}
 }

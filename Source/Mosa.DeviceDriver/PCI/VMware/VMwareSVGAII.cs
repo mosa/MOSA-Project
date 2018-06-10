@@ -115,8 +115,6 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		protected IFrameBuffer frameBuffer;
 
-		protected SpinLock spinLock;
-
 		/// <summary>
 		/// The width
 		/// </summary>

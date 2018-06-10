@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.x86.Helpers;
-
 namespace Mosa.Kernel.x86
 {
 	/// <summary>

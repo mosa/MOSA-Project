@@ -23,7 +23,7 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private static DirectoryEntry rootNode;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Construction
 

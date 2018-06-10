@@ -39,7 +39,7 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private int depth;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Construction
 

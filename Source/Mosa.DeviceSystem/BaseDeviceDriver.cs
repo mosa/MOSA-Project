@@ -11,6 +11,8 @@ namespace Mosa.DeviceSystem
 
 		protected DeviceManager DeviceManager { get { return Device.DeviceManager; } }
 
+		protected object _lock = new object();
+
 		/// <summary>
 		/// Sets up the this device.
 		/// </summary>
