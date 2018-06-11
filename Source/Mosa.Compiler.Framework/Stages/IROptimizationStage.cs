@@ -53,6 +53,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private int foldIfThenElseCount = 0;
 		private int simplifyParamLoadCount = 0;
 		private int simplifyBranchComparison = 0;
+		private int simplifyGetLow = 0;
+		private int simplifyGetHigh = 0;
 
 		private Stack<InstructionNode> worklist;
 
@@ -129,7 +131,11 @@ namespace Mosa.Compiler.Framework.Stages
 				FoldTo64Constant,
 				FoldIfThenElse,
 				SimplifyParamLoadCount,
-				SimplifyCompareBranch
+				SimplifyCompareBranch,
+				SimplifyGetLow64,
+				SimplifyGetHigh64,
+				SimplifyGetLow64b,
+				SimplifyGetHigh64b,
 			};
 		}
 
@@ -175,6 +181,8 @@ namespace Mosa.Compiler.Framework.Stages
 			simplifyGeneralCount = 0;
 			simplifyParamLoadCount = 0;
 			simplifyBranchComparison = 0;
+			simplifyGetLow = 0;
+			simplifyGetHigh = 0;
 		}
 
 		protected override void Run()
@@ -230,6 +238,8 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.SimplifyGeneral", simplifyGeneralCount);
 			UpdateCounter("IROptimizations.SimplifyParamLoad", simplifyParamLoadCount);
 			UpdateCounter("IROptimizations.SimplifyBranchComparison", simplifyBranchComparison);
+			UpdateCounter("IROptimizations.SimplifyGetLow", simplifyGetLow);
+			UpdateCounter("IROptimizations.SimplifyGetHigh", simplifyGetHigh);
 
 			virtualRegisters.Clear();
 			worklist.Clear();
@@ -2165,8 +2175,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node2.Instruction != IRInstruction.To64)
 				return;
 
-			if (!node2.Result.IsVirtualRegister)
-				return;
+			Debug.Assert(node2.Result == node.Operand1);
+
+			//if (!node2.Result.IsVirtualRegister)
+			//	return;
 
 			AddOperandUsageToWorkList(node);
 			AddOperandUsageToWorkList(node2);
@@ -2197,8 +2209,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node2.Instruction != IRInstruction.To64)
 				return;
 
-			if (!node2.Result.IsVirtualRegister)
-				return;
+			Debug.Assert(node2.Result == node.Operand1);
+
+			//if (!node2.Result.IsVirtualRegister)
+			//	return;
 
 			AddOperandUsageToWorkList(node);
 			AddOperandUsageToWorkList(node2);
@@ -2447,6 +2461,178 @@ namespace Mosa.Compiler.Framework.Stages
 			node.SetInstruction(IRInstruction.CompareIntBranch32, node.ConditionCode, null, node.Operand1.Definitions[0].Operand1, node.Operand2.Definitions[0].Operand1, node.BranchTargets[0]);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
 			simplifyBranchComparison++;
+		}
+
+		private void SimplifyGetLow64(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetLow64)
+				return;
+
+			if (!node.Operand1.IsVirtualRegister)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (!ValidateSSAForm(node.Operand1))
+				return;
+
+			var node2 = node.Operand1.Definitions[0];
+
+			if (node2.Instruction != IRInstruction.ShiftRight64)
+				return;
+
+			Debug.Assert(node2.Result == node.Operand1);
+
+			if (node2.Operand2.IsVirtualRegister)
+				return;
+
+			if (!node2.Operand2.IsResolvedConstant)
+				return;
+
+			if (node2.Operand2.ConstantSignedInteger != 32)
+				return;
+
+			if (!ValidateSSAForm(node2.Operand1))
+				return;
+
+			AddOperandUsageToWorkList(node);
+			AddOperandUsageToWorkList(node2);
+
+			if (trace.Active) trace.Log("*** SimplifyGetLow64");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.GetHigh64, node.Result, node2.Operand1);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			simplifyGetLow++;
+		}
+
+		private void SimplifyGetHigh64(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetHigh64)
+				return;
+
+			if (!node.Operand1.IsVirtualRegister)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (!ValidateSSAForm(node.Operand1))
+				return;
+
+			var node2 = node.Operand1.Definitions[0];
+
+			if (node2.Instruction != IRInstruction.ShiftLeft64)
+				return;
+
+			Debug.Assert(node2.Result == node.Operand1);
+
+			if (node2.Operand2.IsVirtualRegister)
+				return;
+
+			if (!node2.Operand2.IsResolvedConstant)
+				return;
+
+			if (!ValidateSSAForm(node2.Operand1))
+				return;
+
+			if (node2.Operand2.ConstantSignedInteger != 32)
+				return;
+
+			AddOperandUsageToWorkList(node);
+			AddOperandUsageToWorkList(node2);
+
+			if (trace.Active) trace.Log("*** SimplifyGetHigh64");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.GetLow64, node.Result, node2.Operand1);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			simplifyGetHigh++;
+		}
+
+		private void SimplifyGetLow64b(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetLow64)
+				return;
+
+			if (!node.Operand1.IsVirtualRegister)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (!ValidateSSAForm(node.Operand1))
+				return;
+
+			var node2 = node.Operand1.Definitions[0];
+
+			if (node2.Instruction != IRInstruction.ShiftLeft64)
+				return;
+
+			Debug.Assert(node2.Result == node.Operand1);
+
+			if (node2.Operand2.IsVirtualRegister)
+				return;
+
+			if (!node2.Operand2.IsResolvedConstant)
+				return;
+
+			if (!ValidateSSAForm(node2.Operand1))
+				return;
+
+			if (node2.Operand2.ConstantSignedInteger < 32)
+				return;
+
+			AddOperandUsageToWorkList(node);
+			AddOperandUsageToWorkList(node2);
+
+			if (trace.Active) trace.Log("*** SimplifyGetLow64b");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.MoveInt32, node.Result, ConstantZero);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			simplifyGetHigh++;
+		}
+
+		private void SimplifyGetHigh64b(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.GetHigh64)
+				return;
+
+			if (!node.Operand1.IsVirtualRegister)
+				return;
+
+			if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (!ValidateSSAForm(node.Operand1))
+				return;
+
+			var node2 = node.Operand1.Definitions[0];
+
+			if (node2.Instruction != IRInstruction.ShiftRight64)
+				return;
+
+			Debug.Assert(node2.Result == node.Operand1);
+
+			if (node2.Operand2.IsVirtualRegister)
+				return;
+
+			if (!node2.Operand2.IsResolvedConstant)
+				return;
+
+			if (!ValidateSSAForm(node2.Operand1))
+				return;
+
+			if (node2.Operand2.ConstantSignedInteger < 32)
+				return;
+
+			AddOperandUsageToWorkList(node);
+			AddOperandUsageToWorkList(node2);
+
+			if (trace.Active) trace.Log("*** SimplifyGetHigh64b");
+			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(IRInstruction.MoveInt32, node.Result, ConstantZero);
+			if (trace.Active) trace.Log("AFTER: \t" + node);
+			simplifyGetHigh++;
 		}
 	}
 }
