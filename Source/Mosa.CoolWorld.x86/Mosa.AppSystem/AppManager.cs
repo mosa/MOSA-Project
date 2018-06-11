@@ -67,9 +67,7 @@ namespace Mosa.AppSystem
 				return;
 			}
 
-			var input = currentApp.Console.Input as AppInputStream;
-
-			if (input != null)
+			if (currentApp.Console.Input is AppInputStream input)
 			{
 				input.Write((byte)key.Character);
 
@@ -86,9 +84,7 @@ namespace Mosa.AppSystem
 		{
 			currentApp = app;
 
-			var console = currentApp.Console.Output as AppOutputStream;
-
-			if (console != null)
+			if (currentApp.Console.Output is AppOutputStream console)
 			{
 				ConsoleManager.Controller.Active = console.Session;
 			}
@@ -103,7 +99,7 @@ namespace Mosa.AppSystem
 
 			if (output == null)
 			{
-				var session = Mosa.Kernel.x86.ConsoleManager.Controller.CreateSeason();
+				var session = ConsoleManager.Controller.CreateSeason();
 
 				output = new AppOutputStream(session);
 			}
@@ -142,7 +138,7 @@ namespace Mosa.AppSystem
 
 			if (interrupt >= 0x20 && interrupt < 0x30)
 			{
-				DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
+				HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 			}
 
 			debug.Column = c;
@@ -159,20 +155,20 @@ namespace Mosa.AppSystem
 
 		public static void DumpData(string data)
 		{
-			Mosa.Kernel.x86.ConsoleManager.Controller.Debug.Write(data);
+			ConsoleManager.Controller.Debug.Write(data);
 		}
 
 		public static void DumpDataLine(string data)
 		{
-			Mosa.Kernel.x86.ConsoleManager.Controller.Debug.WriteLine(data);
+			ConsoleManager.Controller.Debug.WriteLine(data);
 		}
 
 		public unsafe static void DumpStackTrace(int line)
 		{
 			uint depth = 0;
 
-			Mosa.Kernel.x86.ConsoleManager.Controller.Debug.Write("At Line: ");
-			Mosa.Kernel.x86.ConsoleManager.Controller.Debug.WriteLine(line.ToString());
+			ConsoleManager.Controller.Debug.Write("At Line: ");
+			ConsoleManager.Controller.Debug.WriteLine(line.ToString());
 
 			while (true)
 			{
@@ -186,9 +182,9 @@ namespace Mosa.AppSystem
 				if (caller == null)
 					return;
 
-				Mosa.Kernel.x86.ConsoleManager.Controller.Debug.Write(depth, 10, 2);
-				Mosa.Kernel.x86.ConsoleManager.Controller.Debug.Write(":");
-				Mosa.Kernel.x86.ConsoleManager.Controller.Debug.WriteLine(caller);
+				ConsoleManager.Controller.Debug.Write(depth, 10, 2);
+				ConsoleManager.Controller.Debug.Write(":");
+				ConsoleManager.Controller.Debug.WriteLine(caller);
 
 				depth++;
 			}

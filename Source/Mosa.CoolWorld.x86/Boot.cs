@@ -110,6 +110,7 @@ namespace Mosa.CoolWorld.x86
 			Console.Write("> Probing for disks...");
 			var disks = DeviceManager.GetDevices<IDiskDevice>();
 			Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
+
 			foreach (var disk in disks)
 			{
 				Console.Write("  ");
@@ -120,14 +121,13 @@ namespace Mosa.CoolWorld.x86
 				Console.WriteLine();
 			}
 
-			//ForeverLoop();
-
 			var partitionManager = new PartitionManager(DeviceManager);
 			partitionManager.CreatePartitionDevices();
 
 			Console.Write("> Finding partitions...");
 			var partitions = DeviceManager.GetDevices<IPartitionDevice>();
 			Console.WriteLine("[Completed: " + partitions.Count.ToString() + " found]");
+
 			foreach (var partition in partitions)
 			{
 				Console.Write("  ");
@@ -138,13 +138,13 @@ namespace Mosa.CoolWorld.x86
 				Console.WriteLine();
 			}
 
-			ForeverLoop();
+			//ForeverLoop();
 
 			Console.Write("> Finding file systems...");
 
 			foreach (var partition in partitions)
 			{
-				var fat = new FatFileSystem(partition as IPartitionDevice);
+				var fat = new FatFileSystem(partition.DeviceDriver as IPartitionDevice);
 
 				if (fat.IsValid)
 				{
@@ -179,8 +179,6 @@ namespace Mosa.CoolWorld.x86
 				}
 			}
 
-			ForeverLoop();
-
 			// Get StandardKeyboard
 			var standardKeyboards = DeviceManager.GetDevices("StandardKeyboard");
 
@@ -190,7 +188,7 @@ namespace Mosa.CoolWorld.x86
 				ForeverLoop();
 			}
 
-			var standardKeyboard = standardKeyboards[0] as DeviceSystem.IKeyboardDevice;
+			var standardKeyboard = standardKeyboards[0] as IKeyboardDevice;
 
 			Debug = ConsoleManager.Controller.Debug;
 

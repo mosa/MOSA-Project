@@ -647,13 +647,12 @@ namespace Mosa.FileSystem.FAT
 				partition.WriteBlock(reservedSectors + sectorsPerFat, 1, firstFat.Data);
 
 			// Create Empty Root Directory
-			if (fatType == FatType.FAT32)
-			{
-			}
-			else
+			if (fatType != FatType.FAT32)
 			{
 				for (uint i = 0; i < rootDirSectors; i++)
+				{
 					partition.WriteBlock(firstRootDirectorySector + i, 1, emptyFat.Data);
+				}
 			}
 
 			return ReadBootSector();
