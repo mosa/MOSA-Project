@@ -188,7 +188,7 @@ namespace Mosa.CoolWorld.x86
 				ForeverLoop();
 			}
 
-			var standardKeyboard = standardKeyboards[0] as IKeyboardDevice;
+			var standardKeyboard = standardKeyboards[0].DeviceDriver as IKeyboardDevice;
 
 			Debug = ConsoleManager.Controller.Debug;
 
