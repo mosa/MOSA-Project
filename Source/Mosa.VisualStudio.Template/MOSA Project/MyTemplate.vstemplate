@@ -21,8 +21,4 @@
 	  <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">packages.config</ProjectItem>
 	</Project>
   </TemplateContent>
-	<WizardExtension>
-		<Assembly>Mosa.VisualStudio.Wizard, Version=1.0.0.0, Culture=Neutral, PublicKeyToken=17c939fa67930d5f</Assembly>
-		<FullClassName>Mosa.VisualStudio.Wizard.ProjectWizard</FullClassName>
-	</WizardExtension>
 </VSTemplate>
