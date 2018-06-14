@@ -5,7 +5,7 @@ using Mosa.Runtime.x86;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	///
+	/// Keyboard
 	/// </summary>
 	public static class Keyboard
 	{

@@ -83,8 +83,8 @@ namespace Mosa.Kernel.x86
 			textcolor = new byte[Columns * Rows];
 			ScrollRow = scrollRow;
 
-			Color = x86.Color.White;
-			BackgroundColor = x86.Color.Black;
+			Color = ScreenColor.White;
+			BackgroundColor = ScreenColor.Black;
 		}
 
 		/// <summary>

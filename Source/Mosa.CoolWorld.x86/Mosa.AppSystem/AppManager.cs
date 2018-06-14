@@ -35,12 +35,12 @@ namespace Mosa.AppSystem
 
 		public void Start()
 		{
-			var stream = new AppOutputStream(Mosa.CoolWorld.x86.Boot.Console);
+			var stream = new AppOutputStream(CoolWorld.x86.Boot.Console);
 
 			StartApp(shell, null, stream, true, null);
 		}
 
-		public void Poll()
+		public void CheckForKeyPress()
 		{
 			// get the key board input and directs it to the active application
 			var key = keyboard.GetKeyPressed();
@@ -74,7 +74,6 @@ namespace Mosa.AppSystem
 				if (currentApp.Console.EnableEcho)
 				{
 					var output = currentApp.Console.Output as AppOutputStream;
-
 					output?.WriteByte((byte)key.Character);
 				}
 			}
@@ -116,41 +115,43 @@ namespace Mosa.AppSystem
 
 		public void ProcessInterrupt(uint interrupt, uint errorCode)
 		{
+			tick++;
+
 			uint c = debug.Column;
 			uint r = debug.Row;
-			byte col = debug.Color;
-			byte back = debug.BackgroundColor;
+			var col = debug.Color;
+			var back = debug.BackgroundColor;
 			uint sr = debug.ScrollRow;
 
-			debug.Color = Kernel.x86.Color.Cyan;
-			debug.BackgroundColor = Kernel.x86.Color.Black;
+			debug.Color = ScreenColor.Cyan;
+			debug.BackgroundColor = ScreenColor.Black;
 			debug.Row = 24;
 			debug.Column = 0;
 			debug.ScrollRow = debug.Rows;
 
-			tick++;
 			debug.Write("Shell Mode - ");
 			debug.Write("Tick: ");
 			debug.Write(tick, 10, 7);
 			debug.Write(" Free Memory: ");
 			debug.Write((PageFrameAllocator.TotalPages - PageFrameAllocator.TotalPagesInUse) * PageFrameAllocator.PageSize / (1024 * 1024));
-			debug.Write(" MB    ");
+			debug.Write(" MB");
 
 			if (interrupt >= 0x20 && interrupt < 0x30)
 			{
 				HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 			}
 
-			debug.Column = c;
-			debug.Row = r;
-			debug.Color = col;
-			debug.BackgroundColor = back;
-			debug.ScrollRow = sr;
-
 			if (interrupt == 0x20)
 			{
-				Poll();
+				CheckForKeyPress();
 			}
+
+			debug.BackgroundColor = back;
+			debug.ScrollRow = sr;
+			debug.Column = c;
+			debug.Color = col;
+			debug.Row = r;
+			debug.Write('^');
 		}
 
 		public static void DumpData(string data)
@@ -172,7 +173,7 @@ namespace Mosa.AppSystem
 
 			while (true)
 			{
-				var methodDef = Mosa.Runtime.x86.Internal.GetMethodDefinitionFromStackFrameDepth(depth);
+				var methodDef = Runtime.x86.Internal.GetMethodDefinitionFromStackFrameDepth(depth);
 
 				if (methodDef.IsNull)
 					return;

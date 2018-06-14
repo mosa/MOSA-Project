@@ -16,6 +16,7 @@ namespace Mosa.CoolWorld.x86
 	public static class Boot
 	{
 		public static ConsoleSession Console;
+
 		public static ConsoleSession Debug;
 
 		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
@@ -32,26 +33,22 @@ namespace Mosa.CoolWorld.x86
 			Kernel.x86.Kernel.Setup();
 
 			Console = ConsoleManager.Controller.Boot;
-			Debug = ConsoleManager.Controller.Boot;
 
 			Console.Clear();
-
-			Console.ScrollRow = 23;
+			Console.Goto(0, 0);
 
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
-			Console.Color = Kernel.x86.Color.White;
-			Console.BackgroundColor = Kernel.x86.Color.Green;
+			Console.ScrollRow = 23;
+			Console.Color = ScreenColor.White;
+			Console.BackgroundColor = ScreenColor.Green;
+
+			Debug = ConsoleManager.Controller.Boot;
 
 			Console.Write("                   MOSA OS Version 1.5 - Compiler Version 1.5");
 			FillLine();
-			Console.Color = Kernel.x86.Color.White;
-			Console.BackgroundColor = Kernel.x86.Color.Black;
-
-			//Debug.Color = Color.White;
-			//Debug.BackgroundColor = Color.Blue;
-			//Debug.Clear();
-			//Debug.WriteLine("Debug Information:");
+			Console.Color = ScreenColor.White;
+			Console.BackgroundColor = ScreenColor.Black;
 
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 			var hardware = new HAL.Hardware();
@@ -71,9 +68,9 @@ namespace Mosa.CoolWorld.x86
 			foreach (var device in isaDevices)
 			{
 				Console.Write("  ");
-				Bullet(Kernel.x86.Color.Yellow);
+				Bullet(ScreenColor.Yellow);
 				Console.Write(" ");
-				InBrackets(device.Name, Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
+				InBrackets(device.Name, ScreenColor.White, ScreenColor.Green);
 				Console.WriteLine();
 			}
 
@@ -88,9 +85,9 @@ namespace Mosa.CoolWorld.x86
 				var pciDevice = device.DeviceDriver as DeviceSystem.PCI.IPCIDevice;
 
 				Console.Write("  ");
-				Bullet(Kernel.x86.Color.Yellow);
+				Bullet(ScreenColor.Yellow);
 				Console.Write(" ");
-				InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubVendorID.ToString("x") + " (" + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
+				InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubVendorID.ToString("x") + " (" + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ScreenColor.White, ScreenColor.Green);
 				Console.WriteLine();
 			}
 
@@ -101,9 +98,9 @@ namespace Mosa.CoolWorld.x86
 			foreach (var device in diskcontrollers)
 			{
 				Console.Write("  ");
-				Bullet(Kernel.x86.Color.Yellow);
+				Bullet(ScreenColor.Yellow);
 				Console.Write(" ");
-				InBrackets(device.Name, Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
+				InBrackets(device.Name, ScreenColor.White, ScreenColor.Green);
 				Console.WriteLine();
 			}
 
@@ -114,9 +111,9 @@ namespace Mosa.CoolWorld.x86
 			foreach (var disk in disks)
 			{
 				Console.Write("  ");
-				Bullet(Kernel.x86.Color.Yellow);
+				Bullet(ScreenColor.Yellow);
 				Console.Write(" ");
-				InBrackets(disk.Name, Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
+				InBrackets(disk.Name, ScreenColor.White, ScreenColor.Green);
 				Console.Write(" " + (disk.DeviceDriver as IDiskDevice).TotalBlocks.ToString() + " blocks");
 				Console.WriteLine();
 			}
@@ -131,9 +128,9 @@ namespace Mosa.CoolWorld.x86
 			foreach (var partition in partitions)
 			{
 				Console.Write("  ");
-				Bullet(Kernel.x86.Color.Yellow);
+				Bullet(ScreenColor.Yellow);
 				Console.Write(" ");
-				InBrackets(partition.Name, Kernel.x86.Color.White, Kernel.x86.Color.LightGreen);
+				InBrackets(partition.Name, ScreenColor.White, ScreenColor.Green);
 				Console.Write(" " + (partition.DeviceDriver as IPartitionDevice).BlockCount.ToString() + " blocks");
 				Console.WriteLine();
 			}
@@ -156,15 +153,15 @@ namespace Mosa.CoolWorld.x86
 
 					if (location.IsValid)
 					{
-						Console.WriteLine("Found: " + filename);
+						Console.Write("Found: " + filename);
 
 						var fatFileStream = new FatFileStream(fat, location);
 
 						uint len = (uint)fatFileStream.Length;
 
-						Console.WriteLine("Length: " + len.ToString());
+						Console.WriteLine(" - Length: " + len.ToString());
 
-						Console.WriteLine("Reading File:");
+						Console.Write("Reading File: ");
 
 						for (; ; )
 						{
@@ -175,6 +172,8 @@ namespace Mosa.CoolWorld.x86
 
 							Console.Write((char)i);
 						}
+
+						Console.WriteLine();
 					}
 				}
 			}
@@ -190,7 +189,7 @@ namespace Mosa.CoolWorld.x86
 
 			var standardKeyboard = standardKeyboards[0].DeviceDriver as IKeyboardDevice;
 
-			Debug = ConsoleManager.Controller.Debug;
+			//Debug = ConsoleManager.Controller.Debug;
 
 			// setup keymap
 			var keymap = new US();
@@ -242,33 +241,34 @@ namespace Mosa.CoolWorld.x86
 			Console.Color = restore;
 		}
 
-		private static uint tick = 0;
+		private static uint counter = 0;
 
-		public static void ProcessInterrupt(uint interrupt, uint errorCode)
+		public static void ProcessInterruptXX(uint interrupt, uint errorCode)
 		{
+			counter++;
+
 			uint c = Console.Column;
 			uint r = Console.Row;
-			byte col = Console.Color;
-			byte back = Console.BackgroundColor;
+			var col = Console.Color;
+			var back = Console.BackgroundColor;
 			uint sr = Console.ScrollRow;
 
-			Console.Color = Kernel.x86.Color.Cyan;
-			Console.BackgroundColor = Kernel.x86.Color.Black;
+			Console.Color = ScreenColor.Cyan;
+			Console.BackgroundColor = ScreenColor.Black;
 			Console.Row = 24;
 			Console.Column = 0;
 			Console.ScrollRow = Console.Rows;
 
-			tick++;
 			Console.Write("Booting - ");
 			Console.Write("Tick: ");
-			Console.Write(tick, 10, 7);
+			Console.Write(counter, 10, 7);
 			Console.Write(" Free Memory: ");
 			Console.Write((PageFrameAllocator.TotalPages - PageFrameAllocator.TotalPagesInUse) * PageFrameAllocator.PageSize / (1024 * 1024));
 			Console.Write(" MB         ");
 
 			if (interrupt >= 0x20 && interrupt < 0x30)
 			{
-				DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
+				//DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 			}
 
 			Console.Column = c;
@@ -277,5 +277,80 @@ namespace Mosa.CoolWorld.x86
 			Console.BackgroundColor = back;
 			Console.ScrollRow = sr;
 		}
+
+		public static void ProcessInterrupt(uint interrupt, uint errorCode)
+		{
+			counter++;
+
+			uint c = Console.Column;
+			uint r = Console.Row;
+			var col = Console.Color;
+			var back = Console.BackgroundColor;
+
+			Console.Column = 31;
+			Console.Row = 0;
+			Console.Color = ScreenColor.Cyan;
+			Console.BackgroundColor = ScreenColor.Black;
+
+			Console.Write(counter, 10, 7);
+			Console.Write(':');
+			Console.Write(interrupt, 16, 2);
+			Console.Write(':');
+			Console.Write(errorCode, 16, 2);
+
+			Console.Column = c;
+			Console.Row = r;
+			Console.Color = col;
+			Console.BackgroundColor = back;
+		}
+
+		//public static void Mandelbrot()
+		//{
+		//	double xmin = -2.1;
+		//	double ymin = -1.3;
+		//	double xmax = 1;
+		//	double ymax = 1.3;
+
+		//	int Width = 200;
+		//	int Height = 200;
+
+		//	double x, y, x1, y1, xx;
+
+		//	int looper, s, z = 0;
+		//	double intigralX, intigralY = 0.0;
+
+		//	intigralX = (xmax - xmin) / Width; // Make it fill the whole window
+		//	intigralY = (ymax - ymin) / Height;
+		//	x = xmin;
+
+		//	for (s = 1; s < Width; s++)
+		//	{
+		//		y = ymin;
+		//		for (z = 1; z < Height; z++)
+		//		{
+		//			x1 = 0;
+		//			y1 = 0;
+		//			looper = 0;
+		//			while (looper < 100 && Math.Sqrt((x1 * x1) + (y1 * y1)) < 2)
+		//			{
+		//				looper++;
+		//				xx = (x1 * x1) - (y1 * y1) + x;
+		//				y1 = 2 * x1 * y1 + y;
+		//				x1 = xx;
+		//			}
+
+		//			// Get the percent of where the looper stopped
+		//			double perc = looper / (100.0);
+		//			// Get that part of a 255 scale
+		//			int val = ((int)(perc * 255));
+		//			// Use that number to set the color
+
+		//			//map[s, z]= value;
+
+		//			y += intigralY;
+		//		}
+		//		x += intigralX;
+		//	}
+		//}
 	}
 }

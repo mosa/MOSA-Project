@@ -2,7 +2,7 @@
 
 namespace Mosa.Kernel.x86
 {
-	public static class Color
+	public static class ScreenColor
 	{
 		public static readonly byte Black = 0x00;
 		public static readonly byte Blue = 0x01;

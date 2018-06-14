@@ -13,7 +13,7 @@ namespace Mosa.Kernel.x86
 	{
 		public delegate void InterruptHandler(uint irq, uint error);
 
-		private static InterruptHandler interruptHandler;
+		private static InterruptHandler Interrupt;
 
 		#region Data Members
 
@@ -44,7 +44,7 @@ namespace Mosa.Kernel.x86
 
 		public static void SetInterruptHandler(InterruptHandler interruptHandler)
 		{
-			IDT.interruptHandler = interruptHandler;
+			Interrupt = interruptHandler;
 		}
 
 		/// <summary>
@@ -436,7 +436,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				default:
-					interruptHandler?.Invoke(stack->Interrupt, stack->ErrorCode);
+					Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
 					break;
 			}
 

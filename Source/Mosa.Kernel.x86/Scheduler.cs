@@ -20,18 +20,23 @@ namespace Mosa.Kernel.x86
 
 		private static uint CurrentThreadID;
 
+		private static int clockTicks = 0;
+
+		public static uint ClockTicks { get { return (uint)clockTicks; } }
+
 		public static void Setup()
 		{
 			Enabled = false;
 			Threads = new Thread[MaxThreads];
 			CurrentThreadID = 0;
+			clockTicks = 0;
 
 			for (int i = 0; i < MaxThreads; i++)
 			{
 				Threads[i] = new Thread();
 			}
 
-			IntPtr address = GetAddress(IdleThread);
+			var address = GetAddress(IdleThread);
 
 			SignalThreadTerminationMethodAddress = GetAddress(SignalThreadTerminationMethod);
 
@@ -42,6 +47,8 @@ namespace Mosa.Kernel.x86
 		{
 			SetThreadID(0);
 			Enabled = true;
+
+			//Native.Cli();
 			Native.Int(ClockIRQ);
 		}
 
@@ -55,6 +62,8 @@ namespace Mosa.Kernel.x86
 
 		public static void ClockInterrupt(IntPtr stackSate)
 		{
+			Interlocked.Increment(ref clockTicks);
+
 			if (!Enabled)
 				return;
 
@@ -136,7 +145,7 @@ namespace Mosa.Kernel.x86
 
 		public static uint CreateThread(ThreadStart thread, uint stackSize)
 		{
-			IntPtr address = GetAddress(thread);
+			var address = GetAddress(thread);
 
 			return CreateThread(address, stackSize);
 		}

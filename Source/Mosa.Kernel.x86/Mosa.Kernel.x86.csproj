@@ -70,6 +70,7 @@
     <Compile Include="IDTStack.cs" />
     <Compile Include="IOPort.cs" />
     <Compile Include="LZF.cs" />
+    <Compile Include="ScreenColor.cs" />
     <Compile Include="Thread.cs" />
     <Compile Include="Scheduler.cs" />
     <Compile Include="UnitTestQueue.cs" />
@@ -82,7 +83,6 @@
     <Compile Include="Serial.cs" />
     <Compile Include="KernelMemory.cs" />
     <Compile Include="CMOS.cs" />
-    <Compile Include="Color.cs" />
     <Compile Include="CpuInfo.cs" />
     <Compile Include="GDT.cs" />
     <Compile Include="IDT.cs" />
