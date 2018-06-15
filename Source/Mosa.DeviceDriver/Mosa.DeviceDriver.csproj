@@ -100,10 +100,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="PCI\AMD\" />
-    <Folder Include="PCI\Intel\QuarkSoC\" />
     <Folder Include="PCI\MassStorage\" />
-    <Folder Include="PCI\S3\" />
+    <Folder Include="PCI\Network\" />
     <Folder Include="PCI\VideoCard\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />

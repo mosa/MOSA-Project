@@ -3,7 +3,7 @@
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	///
+	/// Console Manager
 	/// </summary>
 	public class ConsoleManager
 	{

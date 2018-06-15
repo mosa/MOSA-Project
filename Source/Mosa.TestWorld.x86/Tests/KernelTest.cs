@@ -22,16 +22,16 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public void PrintResult(bool flag)
 		{
-			byte color = Console.Color;
+			var color = Console.Color;
 
 			if (flag)
 			{
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.Write("+");
 			}
 			else
 			{
-				Console.Color = Color.Red;
+				Console.Color = ScreenColor.Red;
 				Console.Write("X");
 			}
 
@@ -46,15 +46,15 @@ namespace Mosa.TestWorld.x86.Tests
 			Console = Boot.Console;
 
 			Console.Goto(2, 0);
-			Console.Color = Color.Yellow;
+			Console.Color = ScreenColor.Yellow;
 			Console.Write("[");
-			Console.Color = Color.White;
+			Console.Color = ScreenColor.White;
 			Console.Write("Tests");
-			Console.Color = Color.Yellow;
+			Console.Color = ScreenColor.Yellow;
 			Console.Write("]");
 			Console.WriteLine();
 			Console.WriteLine();
-			Console.Color = Color.Yellow;
+			Console.Color = ScreenColor.Yellow;
 
 			var delegateTest = new DelegateTest();
 			var stringTest = new StringTest();
@@ -89,7 +89,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public void Test()
 		{
-			Console.Color = Color.Yellow;
+			Console.Color = ScreenColor.Yellow;
 			Console.Write(testName);
 
 			int len = 15 - testName.Length;

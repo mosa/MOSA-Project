@@ -6,18 +6,13 @@ namespace Mosa.DeviceSystem
 	{
 		public override void OnChange(Device device)
 		{
+			// this mounts everything
 			var controller = device.DeviceDriver as IDiskControllerDevice;
 
 			if (controller == null)
 				return;
 
-			if (device == null)
-				return; // BAD
-
 			var devicemanager = device.DeviceManager;
-
-			if (devicemanager == null)
-				return; // BAD
 
 			for (uint drive = 0; drive < controller.MaximunDriveCount; drive++)
 			{

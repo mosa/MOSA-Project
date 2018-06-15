@@ -5,7 +5,7 @@ using Mosa.AppSystem;
 namespace Mosa.Application
 {
 	/// <summary>
-	///
+	/// Shell
 	/// </summary>
 	public class Shell : BaseApplication, IConsoleApp
 	{
@@ -30,8 +30,6 @@ namespace Mosa.Application
 					Console.WriteLine();
 					continue;
 				}
-
-				line = line.Trim();
 
 				int index = line.IndexOf(' ');
 

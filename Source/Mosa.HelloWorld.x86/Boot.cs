@@ -24,46 +24,42 @@ namespace Mosa.HelloWorld.x86
 			Console = ConsoleManager.Controller.Boot;
 
 			Console.Clear();
-
-			Console.ScrollRow = 25;
+			Console.Goto(0, 0);
 
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
-			Console.Color = Color.White;
-
-			Console.Goto(0, 0);
-
-			Console.Color = Color.Yellow;
-			Console.BackgroundColor = Color.Black;
+			Console.ScrollRow = 25;
+			Console.Color = ScreenColor.Yellow;
+			Console.BackgroundColor = ScreenColor.Black;
 
 			Console.Write("MOSA OS Version 1.4 '");
-			Console.Color = Color.Red;
+			Console.Color = ScreenColor.Red;
 			Console.Write("Neptune");
-			Console.Color = Color.Yellow;
-			Console.Write("'                                Copyright 2008-2017");
+			Console.Color = ScreenColor.Yellow;
+			Console.Write("'                                Copyright 2008-2018");
 
-			Console.Color = 0x0F;
+			Console.Color = ScreenColor.White;
 			Console.Write(new String((char)205, 60));
 			Console.Write((char)203);
 			Console.Write(new String((char)205, 19));
 			Console.WriteLine();
 
 			Console.Goto(2, 0);
-			Console.Color = Color.Green;
+			Console.Color = ScreenColor.Green;
 			Console.Write("Multibootaddress: ");
-			Console.Color = Color.Gray;
+			Console.Color = ScreenColor.Gray;
 			Console.Write(Multiboot.MultibootAddress, 16, 8);
 
 			Console.WriteLine();
-			Console.Color = Color.Green;
+			Console.Color = ScreenColor.Green;
 			Console.Write("Multiboot-Flags:  ");
-			Console.Color = Color.Gray;
+			Console.Color = ScreenColor.Gray;
 			Console.Write(Multiboot.Flags, 2, 32);
 			Console.WriteLine();
 
-			Console.Color = Color.Green;
+			Console.Color = ScreenColor.Green;
 			Console.Write("Size of Memory:   ");
-			Console.Color = Color.Gray;
+			Console.Color = ScreenColor.Gray;
 			Console.Write((Multiboot.MemoryLower + Multiboot.MemoryUpper) / 1024, 10, -1);
 			Console.Write(" MB (");
 			Console.Write(Multiboot.MemoryLower + Multiboot.MemoryUpper, 10, -1);
@@ -72,74 +68,74 @@ namespace Mosa.HelloWorld.x86
 			Console.WriteLine();
 
 			Console.WriteLine();
-			Console.Color = Color.Green;
+			Console.Color = ScreenColor.Green;
 			Console.Write("Smbios Info: ");
 
 			if (SmbiosManager.IsAvailable)
 			{
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.Write("[");
-				Console.Color = Color.Gray;
+				Console.Color = ScreenColor.Gray;
 				Console.Write("Version ");
 				Console.Write(SmbiosManager.MajorVersion, 10, -1);
 				Console.Write(".");
 				Console.Write(SmbiosManager.MinorVersion, 10, -1);
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.Write("]");
 				Console.WriteLine();
 
-				Console.Color = Color.Yellow;
+				Console.Color = ScreenColor.Yellow;
 				Console.Write("[Bios]");
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.WriteLine();
 
 				var biosInformation = new BiosInformationStructure();
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.Write("Vendor: ");
-				Console.Color = Color.Gray;
+				Console.Color = ScreenColor.Gray;
 				Console.Write(biosInformation.BiosVendor);
 				Console.WriteLine();
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.Write("Version: ");
-				Console.Color = Color.Gray;
+				Console.Color = ScreenColor.Gray;
 				Console.Write(biosInformation.BiosVersion);
 				Console.WriteLine();
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.Write("Date: ");
-				Console.Color = Color.Gray;
+				Console.Color = ScreenColor.Gray;
 				Console.Write(biosInformation.BiosDate);
 
-				Console.Color = Color.Yellow;
+				Console.Color = ScreenColor.Yellow;
 				Console.Row = 8;
 				Console.Column = 35;
 				Console.Write("[Cpu]");
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.WriteLine();
 				Console.Column = 35;
 
 				var cpuStructure = new CpuStructure();
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.Write("Vendor: ");
-				Console.Color = Color.Gray;
+				Console.Color = ScreenColor.Gray;
 				Console.Write(cpuStructure.Vendor);
 				Console.WriteLine();
 				Console.Column = 35;
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.Write("Version: ");
-				Console.Color = Color.Gray;
+				Console.Color = ScreenColor.Gray;
 				Console.Write(cpuStructure.Version);
 				Console.WriteLine();
 				Console.Column = 35;
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.Write("Socket: ");
-				Console.Color = Color.Gray;
+				Console.Color = ScreenColor.Gray;
 				Console.Write(cpuStructure.Socket);
 				Console.Write(" MHz");
 				Console.WriteLine();
 				Console.Column = 35;
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.Write("Cur. Speed: ");
-				Console.Color = Color.Gray;
+				Console.Color = ScreenColor.Gray;
 				Console.Write(cpuStructure.MaxSpeed, 10, -1);
 				Console.Write(" MHz");
 				Console.WriteLine();
@@ -147,41 +143,41 @@ namespace Mosa.HelloWorld.x86
 			}
 			else
 			{
-				Console.Color = Color.Red;
+				Console.Color = ScreenColor.Red;
 				Console.Write("No SMBIOS available on this system!");
 			}
 
 			Console.WriteLine();
 			Console.WriteLine();
 
-			Console.Color = Color.Green;
+			Console.Color = ScreenColor.Green;
 			Console.Write("Memory-Map:");
 			Console.WriteLine();
 
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++)
 			{
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.Write(Multiboot.GetMemoryMapBase(index), 16, 8);
 				Console.Write(" - ");
 				Console.Write(Multiboot.GetMemoryMapBase(index) + Multiboot.GetMemoryMapLength(index) - 1, 16, 8);
 				Console.Write(" (");
-				Console.Color = Color.Gray;
+				Console.Color = ScreenColor.Gray;
 				Console.Write(Multiboot.GetMemoryMapLength(index), 16, 8);
-				Console.Color = Color.White;
+				Console.Color = ScreenColor.White;
 				Console.Write(") ");
-				Console.Color = Color.Gray;
+				Console.Color = ScreenColor.Gray;
 				Console.Write("Type: ");
 				Console.Write(Multiboot.GetMemoryMapType(index), 16, 1);
 				Console.WriteLine();
 			}
 
-			Console.Color = Color.Yellow;
+			Console.Color = ScreenColor.Yellow;
 			Console.Goto(24, 29);
 			Console.Write("www.mosa-project.org");
 
 			// Borders
 
-			Console.Color = Color.White;
+			Console.Color = ScreenColor.White;
 
 			for (uint index = 0; index < 60; index++)
 			{
@@ -238,10 +234,10 @@ namespace Mosa.HelloWorld.x86
 		{
 			Console.Row = 2;
 			Console.Column = 65;
-			Console.Color = 0x0A;
+			Console.Color = ScreenColor.Green;
 			Console.Write("CMOS:");
 			Console.WriteLine();
-			Console.Color = 0x0F;
+			Console.Color = ScreenColor.White;
 
 			byte i = 0;
 			for (byte x = 0; x < 5; x++)
@@ -263,7 +259,7 @@ namespace Mosa.HelloWorld.x86
 		private static void DisplayTime()
 		{
 			Console.Goto(24, 50);
-			Console.Color = Color.Green;
+			Console.Color = ScreenColor.Green;
 			Console.Write("Time: ");
 
 			byte bcd = 10;
@@ -271,36 +267,38 @@ namespace Mosa.HelloWorld.x86
 			if (CMOS.BCD)
 				bcd = 16;
 
-			Console.Color = Color.White;
+			Console.Color = ScreenColor.White;
 			Console.Write(CMOS.Hour, bcd, 2);
-			Console.Color = Color.Gray;
+			Console.Color = ScreenColor.Gray;
 			Console.Write(':');
-			Console.Color = Color.White;
+			Console.Color = ScreenColor.White;
 			Console.Write(CMOS.Minute, bcd, 2);
-			Console.Color = Color.Gray;
+			Console.Color = ScreenColor.Gray;
 			Console.Write(':');
-			Console.Color = Color.White;
+			Console.Color = ScreenColor.White;
 			Console.Write(CMOS.Second, bcd, 2);
 			Console.Write(' ');
-			Console.Color = Color.Gray;
+			Console.Color = ScreenColor.Gray;
 			Console.Write('(');
-			Console.Color = Color.White;
+			Console.Color = ScreenColor.White;
 			Console.Write(CMOS.Month, bcd, 2);
-			Console.Color = Color.Gray;
+			Console.Color = ScreenColor.Gray;
 			Console.Write('/');
-			Console.Color = Color.White;
+			Console.Color = ScreenColor.White;
 			Console.Write(CMOS.Day, bcd, 2);
-			Console.Color = Color.Gray;
+			Console.Color = ScreenColor.Gray;
 			Console.Write('/');
-			Console.Color = Color.White;
+			Console.Color = ScreenColor.White;
 			Console.Write('2');
 			Console.Write('0');
 			Console.Write(CMOS.Year, bcd, 2);
-			Console.Color = Color.Gray;
+			Console.Color = ScreenColor.Gray;
 			Console.Write(')');
 		}
 
 		private static uint counter = 0;
+
+		public static object _lock { get; private set; }
 
 		public static void ProcessInterrupt(uint interrupt, uint errorCode)
 		{
@@ -308,13 +306,13 @@ namespace Mosa.HelloWorld.x86
 
 			uint c = Console.Column;
 			uint r = Console.Row;
-			byte col = Console.Color;
-			byte back = Console.BackgroundColor;
+			var col = Console.Color;
+			var back = Console.BackgroundColor;
 
 			Console.Column = 31;
 			Console.Row = 0;
-			Console.Color = Color.Cyan;
-			Console.BackgroundColor = Color.Black;
+			Console.Color = ScreenColor.Cyan;
+			Console.BackgroundColor = ScreenColor.Black;
 
 			Console.Write(counter, 10, 7);
 			Console.Write(':');
@@ -322,11 +320,7 @@ namespace Mosa.HelloWorld.x86
 			Console.Write(':');
 			Console.Write(errorCode, 16, 2);
 
-			if (interrupt == 0x20)
-			{
-				// Timer Interrupt! Switch Tasks!
-			}
-			else
+			if (interrupt != 0x20)
 			{
 				Console.Write('-');
 				Console.Write(counter, 10, 7);

@@ -18,8 +18,6 @@ namespace Mosa.DeviceSystem
 
 		public string ForceOption { get; set; }
 
-		public byte IRQ { get; set; }
-
 		public uint BaseAddress { get; set; }
 
 		public uint AddressRange { get; set; }

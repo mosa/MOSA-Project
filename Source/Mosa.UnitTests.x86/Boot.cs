@@ -47,7 +47,7 @@ namespace Mosa.UnitTests.x86
 			Screen.Color = 0x0;
 			Screen.Clear();
 			Screen.GotoTop();
-			Screen.Color = 0x0E;
+			Screen.Color = ScreenColor.Yellow;
 			Screen.Write("MOSA OS Version 1.6 - UnitTest");
 			Screen.NextLine();
 			Screen.NextLine();

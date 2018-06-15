@@ -13,5 +13,7 @@ namespace Mosa.DeviceSystem
 		public string Name { get; set; }
 
 		public InstantiateDeviceDriver Factory { get; set; }
+
+		public byte IRQ { get; set; }
 	}
 }

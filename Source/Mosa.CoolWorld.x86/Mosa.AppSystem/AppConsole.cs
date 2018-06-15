@@ -1,12 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.IO;
 using System;
+using System.IO;
 
 namespace Mosa.AppSystem
 {
 	/// <summary>
-	///
+	/// AppConsole
 	/// </summary>
 	public sealed class AppConsole
 	{
@@ -14,7 +14,15 @@ namespace Mosa.AppSystem
 
 		public Stream Input { get; set; }
 
-		public bool EnableEcho { get; set; }
+		public bool EnableEcho { get; set; } = true;
+
+		private char[] buffer;
+		private int bufferlen;
+
+		public AppConsole()
+		{
+			buffer = new char[100];
+		}
 
 		private static byte ConvertToByte(char c)
 		{
@@ -57,29 +65,12 @@ namespace Mosa.AppSystem
 			Output.WriteByte(10);
 		}
 
-		private char[] buffer;
-		private int bufferlen;
-
 		private void AddToBuffer(char c)
 		{
-			if (buffer == null)
+			if (bufferlen < buffer.Length)
 			{
-				buffer = new char[16];
-				bufferlen = 0;
+				buffer[bufferlen++] = c;
 			}
-			else if (bufferlen + 1 == buffer.Length)
-			{
-				var tmp = buffer;
-
-				buffer = new char[bufferlen >> 2];
-
-				for (int i = 0; i < bufferlen; i++)
-				{
-					buffer[i] = tmp[i];
-				}
-			}
-
-			buffer[bufferlen++] = c;
 		}
 
 		private void DeleteCharacterFromBuffer()
@@ -98,7 +89,7 @@ namespace Mosa.AppSystem
 					return (byte)value;
 
 				// Call Hlt so VM doesn't use up all the CPUs
-				Mosa.Runtime.x86.Native.Hlt();
+				Runtime.x86.Native.Hlt();
 			}
 		}
 

@@ -70,9 +70,7 @@ namespace Mosa.DeviceDriver.ISA
 			//	}
 			//}
 
-			//var interruptHandler = (driverEntry.IRQ != 0) ? new InterruptHandler(InterruptManager, driverEntry.IRQ, deviceDriver as IHardwareDevice) : null;
-
-			var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions);
+			var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, driverEntry.IRQ);
 
 			DeviceManager.Initialize(driverEntry, null, null, hardwareResources);
 		}
