@@ -10,9 +10,11 @@ namespace Mosa.DeviceDriver.ISA
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x60, PortRange = 1, AltBasePort = 0x64, AltPortRange = 1, IRQ = 1, Platforms = PlatformArchitecture.X86AndX64)]
 	public class StandardKeyboard : BaseDeviceDriver, IKeyboardDevice
 	{
-		protected IOPortReadWrite commandPort;
-
 		protected IOPortReadWrite dataPort;
+
+		protected IOPortRead statusPort;
+
+		protected IOPortWrite commandPort;
 
 		protected const ushort fifoSize = 256;
 
@@ -26,8 +28,9 @@ namespace Mosa.DeviceDriver.ISA
 		{
 			Device.Name = "StandardKeyboard";
 
-			commandPort = Device.Resources.GetIOPortReadWrite(0, 0);
-			dataPort = Device.Resources.GetIOPortReadWrite(1, 0);
+			dataPort = Device.Resources.GetIOPortReadWrite(0, 0);       // 0x60
+			statusPort = Device.Resources.GetIOPortRead(1, 0);          // 0x64
+			commandPort = Device.Resources.GetIOPortWrite(1, 0);        // 0x64
 
 			fifoBuffer = new byte[fifoSize];
 			fifoStart = 0;
@@ -45,10 +48,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		/// Starts this hardware device.
 		/// </summary>
-		public override void Start()
-		{
-			Device.Status = DeviceStatus.Online;
-		}
+		public override void Start() => Device.Status = DeviceStatus.Online;
 
 		/// <summary>
 		/// Called when interrupt is received.
@@ -105,7 +105,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// </returns>
 		protected bool IsFIFODataAvailable()
 		{
-			return (fifoEnd != fifoStart);
+			return fifoEnd != fifoStart;
 		}
 
 		/// <summary>
@@ -116,10 +116,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// </returns>
 		protected bool IsFIFOFull()
 		{
-			if ((((fifoEnd + 1) == fifoSize) ? 0 : fifoEnd + 1) == fifoStart)
-				return true;
-			else
-				return false;
+			return (((fifoEnd + 1) == fifoSize) ? 0 : fifoEnd + 1) == fifoStart;
 		}
 
 		/// <summary>
@@ -129,9 +126,14 @@ namespace Mosa.DeviceDriver.ISA
 		{
 			lock (_lock)
 			{
-				byte v = commandPort.Read8();
+				byte status = statusPort.Read8();
 
-				AddToFIFO(v);
+				if ((status & 0x01) == 0x01)
+				{
+					byte data = dataPort.Read8();
+
+					AddToFIFO(data);
+				}
 			}
 		}
 
@@ -141,12 +143,14 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		public byte GetScanCode()
 		{
-			if (!IsFIFODataAvailable())
+			lock (_lock)
 			{
-				return 0;
+				if (IsFIFODataAvailable())
+				{
+					return GetFromFIFO();
+				}
 			}
-
-			return GetFromFIFO();
+			return 0;
 		}
 	}
 }

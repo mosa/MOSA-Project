@@ -121,7 +121,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="message">The message.</param>
 		public override void DebugWrite(string message)
 		{
-			//Boot.Debug.Write(message);
+			Boot.Debug.Write(message);
 		}
 
 		/// <summary>
@@ -130,7 +130,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="message">The message.</param>
 		public override void DebugWriteLine(string message)
 		{
-			//Boot.Debug.WriteLine(message);
+			Boot.Debug.WriteLine(message);
 		}
 
 		/// <summary>

@@ -5,7 +5,7 @@ using Mosa.AppSystem;
 namespace Mosa.Application
 {
 	/// <summary>
-	///
+	/// Shell
 	/// </summary>
 	public class Shell : BaseApplication, IConsoleApp
 	{

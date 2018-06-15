@@ -117,11 +117,11 @@ namespace Mosa.AppSystem
 		{
 			tick++;
 
-			uint c = debug.Column;
-			uint r = debug.Row;
-			var col = debug.Color;
-			var back = debug.BackgroundColor;
-			uint sr = debug.ScrollRow;
+			uint column = debug.Column;
+			uint row = debug.Row;
+			var color = debug.Color;
+			var background = debug.BackgroundColor;
+			uint scrollrow = debug.ScrollRow;
 
 			debug.Color = ScreenColor.Cyan;
 			debug.BackgroundColor = ScreenColor.Black;
@@ -134,24 +134,34 @@ namespace Mosa.AppSystem
 			debug.Write(tick, 10, 7);
 			debug.Write(" Free Memory: ");
 			debug.Write((PageFrameAllocator.TotalPages - PageFrameAllocator.TotalPagesInUse) * PageFrameAllocator.PageSize / (1024 * 1024));
-			debug.Write(" MB");
+			debug.Write(" MB ");
+
+			debug.Write("IRQ: ");
+			debug.Write(interrupt, 16, 2);
 
 			if (interrupt >= 0x20 && interrupt < 0x30)
 			{
 				HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 			}
 
-			if (interrupt == 0x20)
+			if (interrupt != 0x20)
+			{
+				debug.Write(" IRQ: ");
+				debug.Write(interrupt, 16, 2);
+				debug.Write("-");
+				debug.Write(tick, 10, 7);
+			}
+
+			if (interrupt == 0x21)
 			{
 				CheckForKeyPress();
 			}
 
-			debug.BackgroundColor = back;
-			debug.ScrollRow = sr;
-			debug.Column = c;
-			debug.Color = col;
-			debug.Row = r;
-			debug.Write('^');
+			debug.BackgroundColor = background;
+			debug.ScrollRow = scrollrow;
+			debug.Column = column;
+			debug.Color = color;
+			debug.Row = row;
 		}
 
 		public static void DumpData(string data)

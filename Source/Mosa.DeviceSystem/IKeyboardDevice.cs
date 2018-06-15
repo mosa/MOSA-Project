@@ -12,5 +12,6 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <returns></returns>
 		byte GetScanCode();
+		void Start();
 	}
 }

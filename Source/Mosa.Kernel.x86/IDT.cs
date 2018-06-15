@@ -428,6 +428,7 @@ namespace Mosa.Kernel.x86
 					break;
 
 				case Scheduler.ClockIRQ:
+					Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
 					Scheduler.ClockInterrupt(new IntPtr(stackStatePointer));
 					break;
 
@@ -436,8 +437,10 @@ namespace Mosa.Kernel.x86
 					break;
 
 				default:
-					Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
-					break;
+					{
+						Interrupt?.Invoke(stack->Interrupt, stack->ErrorCode);
+						break;
+					}
 			}
 
 			PIC.SendEndOfInterrupt(stack->Interrupt);

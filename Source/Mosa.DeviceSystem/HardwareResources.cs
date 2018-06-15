@@ -20,14 +20,20 @@ namespace Mosa.DeviceSystem
 		private readonly List<MemoryRegion> memoryRegions;
 
 		/// <summary>
+		/// The irq
+		/// </summary>
+		public byte IRQ { get; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="HardwareResources" /> class.
 		/// </summary>
 		/// <param name="ioPortRegions">The io port regions.</param>
 		/// <param name="memoryRegions">The memory regions.</param>
-		public HardwareResources(List<IOPortRegion> ioPortRegions, List<MemoryRegion> memoryRegions)
+		public HardwareResources(List<IOPortRegion> ioPortRegions, List<MemoryRegion> memoryRegions, byte irq = 0)
 		{
 			this.ioPortRegions = ioPortRegions;
 			this.memoryRegions = memoryRegions;
+			this.IRQ = irq;
 		}
 
 		/// <summary>

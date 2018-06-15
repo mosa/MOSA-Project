@@ -37,7 +37,7 @@ namespace Mosa.CoolWorld.x86
 			Console.Clear();
 			Console.Goto(0, 0);
 
-			IDT.SetInterruptHandler(ProcessInterrupt);
+			//IDT.SetInterruptHandler(ProcessInterrupt);
 
 			Console.ScrollRow = 23;
 			Console.Color = ScreenColor.White;
@@ -135,8 +135,6 @@ namespace Mosa.CoolWorld.x86
 				Console.WriteLine();
 			}
 
-			//ForeverLoop();
-
 			Console.Write("> Finding file systems...");
 
 			foreach (var partition in partitions)
@@ -189,7 +187,7 @@ namespace Mosa.CoolWorld.x86
 
 			var standardKeyboard = standardKeyboards[0].DeviceDriver as IKeyboardDevice;
 
-			//Debug = ConsoleManager.Controller.Debug;
+			Debug = ConsoleManager.Controller.Debug;
 
 			// setup keymap
 			var keymap = new US();
@@ -242,41 +240,6 @@ namespace Mosa.CoolWorld.x86
 		}
 
 		private static uint counter = 0;
-
-		public static void ProcessInterruptXX(uint interrupt, uint errorCode)
-		{
-			counter++;
-
-			uint c = Console.Column;
-			uint r = Console.Row;
-			var col = Console.Color;
-			var back = Console.BackgroundColor;
-			uint sr = Console.ScrollRow;
-
-			Console.Color = ScreenColor.Cyan;
-			Console.BackgroundColor = ScreenColor.Black;
-			Console.Row = 24;
-			Console.Column = 0;
-			Console.ScrollRow = Console.Rows;
-
-			Console.Write("Booting - ");
-			Console.Write("Tick: ");
-			Console.Write(counter, 10, 7);
-			Console.Write(" Free Memory: ");
-			Console.Write((PageFrameAllocator.TotalPages - PageFrameAllocator.TotalPagesInUse) * PageFrameAllocator.PageSize / (1024 * 1024));
-			Console.Write(" MB         ");
-
-			if (interrupt >= 0x20 && interrupt < 0x30)
-			{
-				//DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
-			}
-
-			Console.Column = c;
-			Console.Row = r;
-			Console.Color = col;
-			Console.BackgroundColor = back;
-			Console.ScrollRow = sr;
-		}
 
 		public static void ProcessInterrupt(uint interrupt, uint errorCode)
 		{

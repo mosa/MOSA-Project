@@ -162,6 +162,8 @@ namespace Mosa.DeviceSystem
 					if (device.Status == DeviceStatus.Available)
 					{
 						device.DeviceDriver.Start();
+
+						AddInterruptHandler(device);
 					}
 				}
 			}
@@ -289,25 +291,35 @@ namespace Mosa.DeviceSystem
 			}
 		}
 
-		public void AddInterruptHandler(byte irq, Device device)
+		public void AddInterruptHandler(Device device)
 		{
-			if (irq >= MaxInterrupts)
-				return;
-
-			lock (_lock)
+			if (device.Resources != null)
 			{
-				irqDispatch[irq].Add(device);
+				byte irq = device.Resources.IRQ;
+
+				if (irq >= MaxInterrupts)
+					return;
+
+				lock (_lock)
+				{
+					irqDispatch[irq].Add(device);
+				}
 			}
 		}
 
-		public void ReleaseInterruptHandler(byte irq, Device device)
+		public void ReleaseInterruptHandler(Device device)
 		{
-			if (irq >= MaxInterrupts)
-				return;
-
-			lock (_lock)
+			if (device.Resources != null)
 			{
-				irqDispatch[irq].Remove(device);
+				byte irq = device.Resources.IRQ;
+
+				if (irq >= MaxInterrupts)
+					return;
+
+				lock (_lock)
+				{
+					irqDispatch[irq].Remove(device);
+				}
 			}
 		}
 
