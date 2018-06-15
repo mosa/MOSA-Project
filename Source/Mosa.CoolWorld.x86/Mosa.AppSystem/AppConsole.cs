@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.IO;
 using System;
+using System.IO;
 
 namespace Mosa.AppSystem
 {

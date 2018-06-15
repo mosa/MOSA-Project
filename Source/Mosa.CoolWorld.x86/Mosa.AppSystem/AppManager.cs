@@ -144,24 +144,16 @@ namespace Mosa.AppSystem
 				HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 			}
 
-			if (interrupt != 0x20)
-			{
-				debug.Write(" IRQ: ");
-				debug.Write(interrupt, 16, 2);
-				debug.Write("-");
-				debug.Write(tick, 10, 7);
-			}
-
-			if (interrupt == 0x21)
-			{
-				CheckForKeyPress();
-			}
-
 			debug.BackgroundColor = background;
 			debug.ScrollRow = scrollrow;
 			debug.Column = column;
 			debug.Color = color;
 			debug.Row = row;
+
+			if (interrupt == 0x21)
+			{
+				CheckForKeyPress();
+			}
 		}
 
 		public static void DumpData(string data)

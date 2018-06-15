@@ -31,8 +31,6 @@ namespace Mosa.Application
 					continue;
 				}
 
-				line = line.Trim();
-
 				int index = line.IndexOf(' ');
 
 				string cmd = index <= 0 ? line : line.Substring(0, index);
