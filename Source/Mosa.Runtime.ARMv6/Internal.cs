@@ -2,7 +2,7 @@
 
 namespace Mosa.Runtime.ARMv6
 {
-	public unsafe static class Internal
+	public static class Internal
 	{
 		// TODO
 	}
