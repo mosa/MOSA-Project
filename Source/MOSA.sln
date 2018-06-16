@@ -194,6 +194,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Package", "Mosa.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.CodeCompiler", "Mosa.Utility.CodeCompiler\Mosa.Utility.CodeCompiler.csproj", "{7B8FBA4E-D6AC-4DAD-A607-43BA112F8EC1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{A13B9E8A-DC5E-4396-B071-3671CC148E64}"
+	ProjectSection(SolutionItems) = preProject
+		Templates\DynamicJsonConverter.ttinclude = Templates\DynamicJsonConverter.ttinclude
+		Templates\MultipleOutputHelper.ttinclude = Templates\MultipleOutputHelper.ttinclude
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{624E8284-4F0A-4C3F-B5F2-271105E48ECF}"
+	ProjectSection(SolutionItems) = preProject
+		Inno-Setup-Script\Mosa-Installer.iss = Inno-Setup-Script\Mosa-Installer.iss
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -837,6 +848,8 @@ Global
 		{8534DDDE-8B1A-4B5E-AECE-3D07834D9902} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
 		{3C5B4E7A-0380-4DA4-BE61-4B2E6485841A} = {52646152-3847-437E-9CCC-55DE500A5D6F}
 		{7B8FBA4E-D6AC-4DAD-A607-43BA112F8EC1} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
+		{A13B9E8A-DC5E-4396-B071-3671CC148E64} = {F0EFF742-92D5-4219-939A-8F6F8DAB24E5}
+		{624E8284-4F0A-4C3F-B5F2-271105E48ECF} = {F0EFF742-92D5-4219-939A-8F6F8DAB24E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}
