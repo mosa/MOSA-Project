@@ -17,7 +17,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			while (signature.Next != null)
 			{
 				signature = signature.Next;
-				TypeSpec spec = signature.TryGetTypeSpec();
+				var spec = signature.TryGetTypeSpec();
 				if (spec != null)
 					signature = spec.TypeSig;
 			}
@@ -27,8 +27,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 		public static MethodDef ResolveMethod(this IMethodDefOrRef method)
 		{
-			MethodDef result = method as MethodDef;
-			if (result != null)
+			if (method is MethodDef result)
+
 				return result;
 
 			return ((MemberRef)method).ResolveMethodThrow();
@@ -41,7 +41,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 			if (signature is ModifierSig)
 			{
-				TypeSpec modifier = ((ModifierSig)signature).Modifier as TypeSpec;
+				var modifier = ((ModifierSig)signature).Modifier as TypeSpec;
+
 				if (modifier != null && HasOpenGenericParameter(modifier.TypeSig))
 					return true;
 			}
@@ -52,7 +53,8 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 			else if (signature is TypeDefOrRefSig)
 			{
-				TypeSpec type = ((TypeDefOrRefSig)signature).TypeDefOrRef as TypeSpec;
+				var type = ((TypeDefOrRefSig)signature).TypeDefOrRef as TypeSpec;
+
 				if (type != null && HasOpenGenericParameter(type.TypeSig))
 					return true;
 				else
@@ -60,13 +62,15 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			}
 			else if (signature is GenericInstSig)
 			{
-				GenericInstSig genericInst = (GenericInstSig)signature;
+				var genericInst = (GenericInstSig)signature;
+
 				foreach (var genericArg in genericInst.GenericArguments)
 				{
 					if (HasOpenGenericParameter(genericArg))
 						return true;
 				}
-				TypeSpec genericType = genericInst.GenericType.TypeDefOrRef as TypeSpec;
+				var genericType = genericInst.GenericType.TypeDefOrRef as TypeSpec;
+
 				if (genericType != null && HasOpenGenericParameter(genericType.TypeSig))
 					return true;
 			}
@@ -114,9 +118,13 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 		public static IList<TypeSig> GetGenericArguments(this IList<MosaType> types)
 		{
-			List<TypeSig> result = new List<TypeSig>();
+			var result = new List<TypeSig>();
+
 			foreach (var type in types)
+			{
 				result.Add(type.GetTypeSig());
+			}
+
 			return result;
 		}
 	}

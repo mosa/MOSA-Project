@@ -4,23 +4,39 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	public class MosaInstruction
 	{
-		public int Offset { get; }
+		public int Offset { get; set; }
 
-		public ushort OpCode { get; }
+		public ushort OpCode { get; set; }
 
-		public object Operand { get; }
+		public object Operand { get; set; }
 
-		public int? Previous { get; }
+		public int? Previous { get; set; }
 
-		public int? Next { get; }
+		public int? Next { get; set; }
 
-		public MosaInstruction(int offset, ushort opCode, object operand, int? prev, int? next)
-		{
-			Offset = offset;
-			OpCode = opCode;
-			Operand = operand;
-			Previous = prev;
-			Next = next;
-		}
+		/// <summary>
+		/// Document Name
+		/// </summary>
+		public string Document { get; set; }
+
+		/// <summary>
+		/// Start line
+		/// </summary>
+		public int StartLine { get; set; }
+
+		/// <summary>
+		/// Start column
+		/// </summary>
+		public int StartColumn { get; set; }
+
+		/// <summary>
+		/// End line
+		/// </summary>
+		public int EndLine { get; set; }
+
+		/// <summary>
+		/// End column
+		/// </summary>
+		public int EndColumn { get; set; }
 	}
 }

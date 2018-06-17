@@ -41,6 +41,8 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				EmitMethods();
 				EmitParameters();
 				EmitFields();
+
+				EmitSourceInformation();
 			}
 		}
 
@@ -167,8 +169,8 @@ namespace Mosa.Compiler.Framework.CompilerStages
 							parameter.FullName,
 							parameter.Name,
 							parameter.ParameterType.FullName,
-							(int)parameter.ParameterAttributes,
-							method.FullName
+							method.FullName,
+							(int)parameter.ParameterAttributes
 						);
 					}
 				}
@@ -210,6 +212,40 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			}
 		}
 
-		#endregion Internals
+		private void EmitSourceInformation()
+		{
+			writer.WriteLine("[Source]");
+			writer.WriteLine("Offset\tStartLine\tStartColumn\tEndLine\tEndColumn\tMethod\tDocument");
+
+			foreach (var type in TypeSystem.AllTypes)
+			{
+				if (type.IsModule)
+					continue;
+
+				foreach (var method in type.Methods)
+				{
+					int index = 0;
+
+					if (method.Code == null)
+						continue;
+
+					foreach (var instruction in method.Code)
+					{
+						writer.WriteLine(
+							"{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}",
+							instruction.Offset,
+							instruction.StartLine,
+							instruction.StartColumn,
+							instruction.EndLine,
+							instruction.EndColumn,
+							method.FullName,
+							instruction.Document
+						);
+					}
+				}
+			}
+
+			#endregion Internals
+		}
 	}
 }

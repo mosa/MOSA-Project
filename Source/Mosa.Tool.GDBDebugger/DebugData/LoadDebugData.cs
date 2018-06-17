@@ -117,8 +117,8 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 								FullName = parts[2],
 								Name = parts[3],
 								Type = parts[4],
-								Attributes = parts[5].ToUInt32(),
-								Method = parts[6],
+								Method = parts[5],
+								Attributes = parts[6].ToUInt32(),
 							};
 
 							debugSource.Add(parameter);

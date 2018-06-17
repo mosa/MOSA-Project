@@ -176,30 +176,30 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <returns></returns>
 		public MosaType CreateLinkerType(string name)
 		{
-			var mosatype = Controller.CreateType();
+			var mosaType = Controller.CreateType();
 
-			using (var type = Controller.MutateType(mosatype))
+			using (var type = Controller.MutateType(mosaType))
 			{
 				type.Module = LinkerModule;
 				type.Name = name;
 				type.IsLinkerGenerated = true;
 				type.TypeCode = MosaTypeCode.ReferenceType;
 			}
-			return mosatype;
+			return mosaType;
 		}
 
 		public MosaParameter CreateParameter(MosaMethod method, string name, MosaType parameterType)
 		{
-			var mosaparameter = Controller.CreateParameter();
+			var mosaParameter = Controller.CreateParameter();
 
-			using (var parameter = Controller.MutateParameter(mosaparameter))
+			using (var parameter = Controller.MutateParameter(mosaParameter))
 			{
 				parameter.Name = name;
 				parameter.ParameterAttributes = MosaParameterAttributes.In;
 				parameter.ParameterType = parameterType;
 				parameter.DeclaringMethod = method;
 
-				return mosaparameter;
+				return mosaParameter;
 			}
 		}
 
@@ -234,7 +234,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				else
 				{
-					MosaType result = source.Clone();
+					var result = source.Clone();
 					result.ID = id++;
 					return result;
 				}
@@ -252,7 +252,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				else
 				{
-					MosaMethod result = source.Clone();
+					var result = source.Clone();
 					result.ID = id++;
 					return result;
 				}
@@ -270,7 +270,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				else
 				{
-					MosaField result = source.Clone();
+					var result = source.Clone();
 					result.ID = id++;
 					return result;
 				}
@@ -288,7 +288,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				else
 				{
-					MosaProperty result = source.Clone();
+					var result = source.Clone();
 					result.ID = id++;
 					return result;
 				}
@@ -306,7 +306,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				else
 				{
-					MosaParameter result = source.Clone();
+					var result = source.Clone();
 					result.ID = id++;
 					return result;
 				}
