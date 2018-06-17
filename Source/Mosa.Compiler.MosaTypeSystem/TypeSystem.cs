@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.MosaTypeSystem.Metadata;
 using System;
 using System.Collections.Generic;
 
@@ -52,9 +53,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		internal ITypeSystemController Controller { get; private set; }
 
-		private readonly IMetadata metadata;
+		internal readonly CLRMetadata metadata;
 
-		private TypeSystem(IMetadata metadata)
+		private TypeSystem(CLRMetadata metadata)
 		{
 			this.metadata = metadata;
 			Modules = new List<MosaModule>();
@@ -62,7 +63,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public static TypeSystem Load(IMetadata metadata)
 		{
-			var result = new TypeSystem(metadata);
+			var result = new TypeSystem(metadata as CLRMetadata);
 			result.Load();
 			return result;
 		}

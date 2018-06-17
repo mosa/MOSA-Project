@@ -9,7 +9,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
 	public class MetadataCache
 	{
-		public IDictionary<string, MosaModule> Modules { get; }
+		public Dictionary<string, MosaModule> Modules { get; }
 
 		public MosaModule LinkerModule { get; }
 

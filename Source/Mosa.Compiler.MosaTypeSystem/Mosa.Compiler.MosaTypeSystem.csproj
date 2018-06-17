@@ -81,9 +81,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuiltInType.cs" />
-    <Compile Include="GenericArgumentResolver.cs" />
+    <Compile Include="Metadata\GenericArgumentResolver.cs" />
     <Compile Include="IMetadata.cs" />
-    <Compile Include="IModuleLoader.cs" />
     <Compile Include="Metadata\MetadataResolver.cs" />
     <Compile Include="ITypeSystemController.cs" />
     <Compile Include="Metadata\DnlibExtension.cs" />

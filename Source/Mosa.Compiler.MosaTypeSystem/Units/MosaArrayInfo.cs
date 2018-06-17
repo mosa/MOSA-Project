@@ -12,11 +12,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 	{
 		public static readonly MosaArrayInfo Vector = new MosaArrayInfo(new List<int>(), 1, new List<uint>());
 
-		public IList<int> LowerBounds { get; private set; }
+		public IList<int> LowerBounds { get; }
 
-		public uint Rank { get; private set; }
+		public uint Rank { get; }
 
-		public IList<uint> Sizes { get; private set; }
+		public IList<uint> Sizes { get; }
 
 		public MosaArrayInfo(IList<int> lowerBounds, uint rank, IList<uint> sizes)
 		{
@@ -27,14 +27,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Sizes = new List<uint>(sizes).AsReadOnly();
 		}
 
-		public bool Equals(MosaArrayInfo info)
+		public bool Equals(MosaArrayInfo other)
 		{
-			if (this == Vector && info == Vector)
+			if (this == Vector && other == Vector)
 				return true;
 
-			return Rank == info.Rank &&
-				   LowerBounds.SequenceEquals(info.LowerBounds) &&
-				   Sizes.SequenceEqual(info.Sizes);
+			return Rank == other.Rank &&
+				   LowerBounds.SequenceEquals(other.LowerBounds) &&
+				   Sizes.SequenceEqual(other.Sizes);
 		}
 
 		private string sig;

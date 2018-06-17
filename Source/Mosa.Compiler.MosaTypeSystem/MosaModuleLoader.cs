@@ -4,14 +4,15 @@ using dnlib.DotNet;
 using Mosa.Compiler.MosaTypeSystem.Metadata;
 using System.Collections.Generic;
 using System.IO;
+using System;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	public class MosaModuleLoader : IModuleLoader, System.IDisposable
+	public class MosaModuleLoader : IDisposable
 	{
 		public AssemblyResolver Resolver { get; }
 
-		internal IList<ModuleDefMD> Modules { get; }
+		internal List<ModuleDefMD> Modules { get; }
 
 		public MosaModuleLoader()
 		{
@@ -30,15 +31,19 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			if (seenModules.Contains(module.Location))
 				return;
+
 			seenModules.Add(module.Location);
 			Modules.Add(module);
 			Resolver.AddToCache(module);
 
 			foreach (var assemblyRef in module.GetAssemblyRefs())
 			{
-				AssemblyDef assembly = Resolver.ResolveThrow(assemblyRef, null);
+				var assembly = Resolver.ResolveThrow(assemblyRef, null);
+
 				foreach (var moduleRef in assembly.Modules)
+				{
 					LoadDependencies((ModuleDefMD)moduleRef);
+				}
 			}
 		}
 
@@ -80,11 +85,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 			LoadDependencies(module);
 		}
 
-		void IModuleLoader.LoadModuleFromFile(string file)
-		{
-			LoadModuleFromFile(file);
-		}
-
 		public IMetadata CreateMetadata()
 		{
 			return new CLRMetadata(this);
@@ -93,7 +93,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public void Dispose()
 		{
 			foreach (var module in Modules)
+			{
 				module.Dispose();
+			}
 
 			Modules.Clear();
 		}
