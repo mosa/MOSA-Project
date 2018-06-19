@@ -91,7 +91,7 @@ namespace Mosa.Tool.Compiler
 		public bool EmitX86IRQMethods { set { CompilerOptions.SetCustomOption("x86.irq-methods", value ? "true" : "false"); } }
 
 		[Option("base-address", HelpText = "Specify the base address.")]
-		public string BaseAddress { set { CompilerOptions.BaseAddress = value.ParseHexOrDecimal(); } }
+		public string BaseAddress { set { CompilerOptions.BaseAddress = value.ParseHexOrInteger(); } }
 
 		public CompilerOptions CompilerOptions { get; set; }
 

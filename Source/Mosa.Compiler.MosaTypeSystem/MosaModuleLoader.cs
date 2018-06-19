@@ -2,9 +2,9 @@
 
 using dnlib.DotNet;
 using Mosa.Compiler.MosaTypeSystem.Metadata;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {

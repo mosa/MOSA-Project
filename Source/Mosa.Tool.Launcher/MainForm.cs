@@ -103,7 +103,7 @@ namespace Mosa.Tool.Launcher
 				Options.GenerateDebugFile = true;
 			}
 
-			Options.BaseAddress = tbBaseAddress.Text.ParseHexOrDecimal();
+			Options.BaseAddress = tbBaseAddress.Text.ParseHexOrInteger();
 			Options.EmitSymbols = cbEmitSymbolTable.Checked;
 			Options.EmitRelocations = cbRelocationTable.Checked;
 			Options.Emitx86IRQMethods = cbEmitx86IRQMethods.Checked;

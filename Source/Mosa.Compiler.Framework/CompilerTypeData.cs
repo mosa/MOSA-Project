@@ -22,7 +22,10 @@ namespace Mosa.Compiler.Framework
 
 		public CompilerTypeData(MosaType mosaType)
 		{
-			MosaType = mosaType ?? throw new ArgumentNullException(nameof(mosaType));
+			if (mosaType == null)
+				throw new ArgumentNullException(nameof(mosaType));
+
+			MosaType = mosaType;
 		}
 
 		#endregion Methods

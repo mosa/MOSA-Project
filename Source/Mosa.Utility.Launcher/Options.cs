@@ -96,7 +96,7 @@ namespace Mosa.Utility.Launcher
 		public int InlinedIRMaximum { get; set; }
 
 		[Option("inline-level")]
-		public string InlinedIRMaximumHelper { set { InlinedIRMaximum = (int)value.ParseHexOrDecimal(); } }
+		public string InlinedIRMaximumHelper { set { InlinedIRMaximum = (int)value.ParseHexOrInteger(); } }
 
 		[Option("all-optimizations-off")]
 		public bool AllOptimizationsOff
@@ -207,7 +207,7 @@ namespace Mosa.Utility.Launcher
 		public ulong BaseAddress { get; set; }
 
 		[Option("base")]
-		public string BaseAddressHelper { set { BaseAddress = value.ParseHexOrDecimal(); } }
+		public string BaseAddressHelper { set { BaseAddress = value.ParseHexOrInteger(); } }
 
 		[Option("emit-symbols")]
 		public bool EmitSymbols { get; set; } = true;

@@ -25,17 +25,17 @@ namespace Mosa.Tool.Disassembler.Intel
 		//TODO: Better way of parsing these?
 		public ulong FileOffset
 		{
-			get { return FileOffsetString.ParseHexOrDecimal(); }
+			get { return FileOffsetString.ParseHexOrInteger(); }
 		}
 
 		public ulong Length
 		{
-			get { return LengthString.ParseHexOrDecimal(); }
+			get { return LengthString.ParseHexOrInteger(); }
 		}
 
 		public ulong StartingAddress
 		{
-			get { return StartingAddressString.ParseHexOrDecimal(); }
+			get { return StartingAddressString.ParseHexOrInteger(); }
 		}
 	}
 }

@@ -17,6 +17,7 @@ namespace Mosa.Compiler.Framework
 		public const int StartLabel = 0;
 		public const int EpilogueLabel = 0xFFFFF;
 		public const int CompilerBlockStartLabel = 0x10001;
+		public const int ReservedLabel = StartLabel - 1;
 
 		#region Data Fields
 
@@ -111,6 +112,8 @@ namespace Mosa.Compiler.Framework
 
 		internal BasicBlock(int sequence, int blockLabel, int instructionLabel)
 		{
+			Debug.Assert(blockLabel != ReservedLabel);
+
 			NextBlocks = new List<BasicBlock>(2);
 			PreviousBlocks = new List<BasicBlock>(1);
 			Label = blockLabel;

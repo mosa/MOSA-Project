@@ -19,9 +19,7 @@ namespace Mosa.Compiler.Common
 
 		public void Add(T key, V value)
 		{
-			List<V> list;
-
-			if (!Collection.TryGetValue(key, out list))
+			if (!Collection.TryGetValue(key, out List<V> list))
 			{
 				list = new List<V>();
 				Collection.Add(key, list);
@@ -32,9 +30,7 @@ namespace Mosa.Compiler.Common
 
 		public void AddIfNew(T key, V value)
 		{
-			List<V> list;
-
-			if (!Collection.TryGetValue(key, out list))
+			if (!Collection.TryGetValue(key, out List<V> list))
 			{
 				list = new List<V>();
 
@@ -49,9 +45,7 @@ namespace Mosa.Compiler.Common
 
 		public List<V> Get(T key)
 		{
-			List<V> list = null;
-
-			Collection.TryGetValue(key, out list);
+			Collection.TryGetValue(key, out List<V> list);
 
 			return list;
 		}

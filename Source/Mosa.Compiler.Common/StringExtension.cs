@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Common
 {
 	public static class StringExtension
 	{
-		public static ulong ParseHexOrDecimal(this string value)
+		public static ulong ParseHexOrInteger(this string value)
 		{
 			string nbr = value.ToUpper().Trim();
 			int digits = 10;
