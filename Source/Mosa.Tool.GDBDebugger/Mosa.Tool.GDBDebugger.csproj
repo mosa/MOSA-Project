@@ -111,6 +111,12 @@
     <Compile Include="Views\DisplayView.designer.cs">
       <DependentUpon>DisplayView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\SourceView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\SourceView.designer.cs">
+      <DependentUpon>SourceView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\MethodView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -262,6 +268,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\DisplayView.resx">
       <DependentUpon>DisplayView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\SourceView.resx">
+      <DependentUpon>SourceView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\MethodView.resx">
       <DependentUpon>MethodView.cs</DependentUpon>

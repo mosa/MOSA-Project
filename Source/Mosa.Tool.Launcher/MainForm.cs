@@ -87,6 +87,7 @@ namespace Mosa.Tool.Launcher
 			Options.GenerateNASMFile = cbGenerateNASMFile.Checked;
 			Options.GenerateASMFile = cbGenerateASMFile.Checked;
 			Options.GenerateMapFile = cbGenerateMapFile.Checked;
+			Options.GenerateDebugFile = cbGenerateDebugInfoFile.Checked;
 			Options.ExitOnLaunch = cbExitOnLaunch.Checked;
 			Options.EnableQemuGDB = cbEnableQemuGDB.Checked;
 			Options.LaunchGDB = cbLaunchGDB.Checked;
@@ -210,6 +211,7 @@ namespace Mosa.Tool.Launcher
 			cbGenerateNASMFile.Checked = Options.GenerateNASMFile;
 			cbGenerateASMFile.Checked = Options.GenerateASMFile;
 			cbGenerateMapFile.Checked = Options.GenerateMapFile;
+			cbGenerateDebugInfoFile.Checked = Options.GenerateDebugFile;
 			cbExitOnLaunch.Checked = Options.ExitOnLaunch;
 			cbEnableQemuGDB.Checked = Options.EnableQemuGDB;
 			cbLaunchGDB.Checked = Options.LaunchGDB;
@@ -446,7 +448,6 @@ namespace Mosa.Tool.Launcher
 		{
 			if (Builder.Options.LaunchVM)
 			{
-
 				foreach (var line in Builder.Counters)
 				{
 					AddCounters(line);

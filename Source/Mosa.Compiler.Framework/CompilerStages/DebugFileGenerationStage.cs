@@ -108,7 +108,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					continue;
 
 				writer.WriteLine(
-					"{0}{1:x8}\t{2}\t{3}\t{4}\t{5}\t{6}",
+					"{0}\t{1:x8}\t{2}\t{3}\t{4}\t{5}\t{6}",
 					type.ID,
 					Linker.GetSymbol(type.FullName + Metadata.TypeDefinition, SectionKind.ROData).VirtualAddress,
 					TypeLayout.GetTypeSize(type),
@@ -169,7 +169,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					foreach (var parameter in method.Signature.Parameters)
 					{
 						writer.WriteLine(
-							"{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}",
+							"{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}",
 							method.ID,
 							index++,
 							0,  // todo: offset to parameter
@@ -259,10 +259,13 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					{
 						var filename = instruction.Document;
 
+						if (filename == null)
+							continue;
+
 						if (last == filename)
 							continue;
 
-						if (hashset.Contains(filename))
+						if (!hashset.Contains(filename))
 						{
 							filenames.Add(filename);
 							hashset.Add(filename);
@@ -308,6 +311,12 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					foreach (var instruction in method.Code)
 					{
+						if (instruction.Document == null)
+							continue;
+
+						if (instruction.StartLine == 0xFEEFEE)
+							continue;
+
 						writer.WriteLine(
 							"{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}",
 							method.ID,

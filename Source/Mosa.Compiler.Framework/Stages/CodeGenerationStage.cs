@@ -168,9 +168,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 				BlockEnd(block);
 				generatedBlockCount++;
-
-				MethodCompiler.MethodData.AddLabelRegion(labelCurrent, labelStart, CodeEmitter.CurrentPosition - labelStart);
 			}
+
+			MethodCompiler.MethodData.AddLabelRegion(labelCurrent, labelStart, CodeEmitter.CurrentPosition - labelStart);
 		}
 
 		/// <summary>

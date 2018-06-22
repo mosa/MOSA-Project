@@ -162,7 +162,7 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 		{
 			foreach (var method in Methods)
 			{
-				if (method.Address >= address && (method.Address + method.Size) < address)
+				if (address >= method.Address && address < (method.Address + method.Size))
 				{
 					return method;
 				}
@@ -180,10 +180,10 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 
 			foreach (var sourceLabel in list)
 			{
-				if (sourceLabel.StartOffset < offset)
+				if (sourceLabel.StartOffset > offset)
 					continue;
 
-				if (sourceLabel.StartOffset + sourceLabel.Length > offset)
+				if (sourceLabel.StartOffset + sourceLabel.Length < offset)
 					continue;
 
 				return sourceLabel;
@@ -201,13 +201,37 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 
 			foreach (var source in list)
 			{
-				if (source.Offset != offset)
-					continue;
-
-				return source;
+				if (source.Offset == offset)
+					return source;
 			}
 
 			return null;
+		}
+
+		public SourceInfo GetSourceNextClosest(int methodID, int offset)
+		{
+			var list = SourceLookup.Get(methodID);
+
+			if (list == null)
+				return null;
+
+			SourceInfo closest = null;
+
+			foreach (var source in list)
+			{
+				if (source.Offset < offset)
+					continue;
+
+				if (closest == null || source.Offset <= closest.Offset)
+				{
+					closest = source;
+
+					if (closest.Offset == offset)
+						return source;
+				}
+			}
+
+			return closest;
 		}
 
 		public SourceFileInfo GetSourceFile(int sourceFileID)

@@ -111,16 +111,16 @@ namespace Mosa.Utility.Launcher
 			}
 		}
 
-		[Option("nasm")]
+		[Option("output-nasm")]
 		public bool GenerateNASMFile { get; set; }
 
-		[Option("asm", Default = false)]
+		[Option("output-asm", Default = false)]
 		public bool GenerateASMFile { get; set; }
 
-		[Option("map")]
+		[Option("output-map")]
 		public bool GenerateMapFile { get; set; }
 
-		[Option("debuginfo", Default = false)]
+		[Option("output-debug", Default = false)]
 		public bool GenerateDebugFile { get; set; }
 
 		[Option("linker-format")]
