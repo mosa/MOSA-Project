@@ -48,10 +48,11 @@ namespace Mosa.Tool.GDBDebugger.Views
 			if (sourceLocation.SourceFilename == null)
 				return;
 
-			if (currentSourceLocation == null || currentSourceLocation.SourceFilename != sourceLocation.SourceFilename)
-			{
-				currentSourceLocation = sourceLocation;
-			}
+			//if (currentSourceLocation == null || currentSourceLocation.SourceFilename != sourceLocation.SourceFilename)
+			//{
+			currentSourceLocation = sourceLocation;
+
+			//}
 
 			currentFileContent = currentSourceLocation.SourceFilename != null ? File.ReadAllText(currentSourceLocation.SourceFilename) : string.Empty;
 
@@ -100,12 +101,13 @@ namespace Mosa.Tool.GDBDebugger.Views
 			if (endPosition > length)
 				endPosition = length;
 
-			rtbSource.Select(startPosition - currentLineAtStart + 1, endPosition - startPosition - (currentLineAtEnd - currentLineAtStart) - 1);
+			rtbSource.Select(startPosition - currentLineAtStart + 1, endPosition - startPosition - (currentLineAtEnd - currentLineAtStart));
 			rtbSource.SelectionBackColor = Color.Blue;
 			rtbSource.SelectionColor = Color.White;
 			lbSourceFilename.Text = Path.GetFileName(currentSourceLocation.SourceFilename);
-			toolStripStatusLabel1.Text = "Lines " + currentSourceLocation.StartLine + "." + currentSourceLocation.StartColumn + "  to " + currentSourceLocation.EndLine + "." + currentSourceLocation.EndColumn;
+			toolStripStatusLabel1.Text = "Label: " + currentSourceLocation.Label + " / " + currentSourceLocation.SourceLabel + " - Lines " + currentSourceLocation.StartLine + "." + currentSourceLocation.StartColumn + "  to " + currentSourceLocation.EndLine + "." + currentSourceLocation.EndColumn;
 
+			rtbSource.ScrollToCaret();
 			textBox1.Text = currentFileContent.Substring(startPosition, endPosition - startPosition);
 		}
 	}

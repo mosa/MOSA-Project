@@ -20,7 +20,7 @@ namespace Mosa.Tool.Launcher
 
 		public Starter Starter { get; private set; }
 
-		public Options Options { get; set; }
+		public Options Options { get; }
 
 		public AppLocations AppLocations { get; set; }
 
@@ -334,7 +334,9 @@ namespace Mosa.Tool.Launcher
 			Refresh();
 
 			if (Options.AutoStart)
+			{
 				CompileBuildAndStart();
+			}
 		}
 
 		public void AddOutput(string data)

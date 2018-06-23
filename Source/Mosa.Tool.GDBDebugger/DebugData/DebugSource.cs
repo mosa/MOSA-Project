@@ -171,6 +171,11 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 			return null;
 		}
 
+		public List<SourceLabelInfo> GetSourceLabels(int methodID)
+		{
+			return SourceLabelLookup.Get(methodID);
+		}
+
 		public SourceLabelInfo GetSourceLabel(int methodID, int offset)
 		{
 			var list = SourceLabelLookup.Get(methodID);
@@ -192,6 +197,11 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 			return null;
 		}
 
+		public List<SourceInfo> GetSources(int methodID)
+		{
+			return SourceLookup.Get(methodID);
+		}
+
 		public SourceInfo GetSource(int methodID, int offset)
 		{
 			var list = SourceLookup.Get(methodID);
@@ -208,30 +218,30 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 			return null;
 		}
 
-		public SourceInfo GetSourceNextClosest(int methodID, int offset)
+		public SourceInfo GetSourcePreviousClosest(int methodID, int offset)
 		{
 			var list = SourceLookup.Get(methodID);
 
 			if (list == null)
 				return null;
 
-			SourceInfo closest = null;
+			SourceInfo previous = null;
 
 			foreach (var source in list)
 			{
-				if (source.Offset < offset)
+				if (source.Offset == offset)
+					return source;
+
+				if (source.Offset > offset)
 					continue;
 
-				if (closest == null || source.Offset <= closest.Offset)
+				if (previous == null || previous.Offset < source.Offset)
 				{
-					closest = source;
-
-					if (closest.Offset == offset)
-						return source;
+					previous = source;
 				}
 			}
 
-			return closest;
+			return previous;
 		}
 
 		public SourceFileInfo GetSourceFile(int sourceFileID)

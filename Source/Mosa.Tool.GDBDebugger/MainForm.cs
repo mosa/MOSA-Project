@@ -40,6 +40,7 @@ namespace Mosa.Tool.GDBDebugger
 		private readonly MethodView methodView;
 
 		private readonly SourceView sourceView;
+		private readonly SourceDataView sourceDataView;
 
 		//private ScriptView scriptView;
 
@@ -86,6 +87,7 @@ namespace Mosa.Tool.GDBDebugger
 			//scriptView = new ScriptView(this);
 
 			sourceView = new SourceView(this);
+			sourceDataView = new SourceDataView(this);
 
 			AppLocations.FindApplications();
 			Options.EnableQemuGDB = true;
@@ -111,6 +113,7 @@ namespace Mosa.Tool.GDBDebugger
 			registersView.Show(dockPanel, DockState.DockRight);
 
 			sourceView.Show(dockPanel, DockState.Document);
+			sourceDataView.Show(dockPanel, DockState.Document);
 
 			stackFrameView.Show(dockPanel, DockState.DockRight);
 
