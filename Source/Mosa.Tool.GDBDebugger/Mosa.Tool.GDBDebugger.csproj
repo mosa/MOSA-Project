@@ -90,8 +90,8 @@
     <Compile Include="DebugAppLocationsWindow.Designer.cs">
       <DependentUpon>DebugAppLocationsWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Debug\Source.cs" />
-    <Compile Include="Debug\SourceLocation.cs" />
+    <Compile Include="DebugData\Source.cs" />
+    <Compile Include="DebugData\SourceLocation.cs" />
     <Compile Include="GDB\MemoryCache.cs" />
     <Compile Include="Views\BreakpointView.cs">
       <SubType>Form</SubType>
