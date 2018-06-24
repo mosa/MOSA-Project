@@ -3,7 +3,6 @@
 using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Tool.GDBDebugger.GDB
 {
@@ -174,7 +173,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 						}
 						catch (Exception e)
 						{
-							Debug.WriteLine(e.ToString());
+							System.Diagnostics.Debug.WriteLine(e.ToString());
 						}
 					}
 				}

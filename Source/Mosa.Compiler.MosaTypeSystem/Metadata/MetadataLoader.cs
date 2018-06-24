@@ -45,6 +45,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		public MosaModule Load(ModuleDef moduleDef)
 		{
 			var mosaModule = metadata.Controller.CreateModule();
+
 			using (var module = metadata.Controller.MutateModule(mosaModule))
 			{
 				module.UnderlyingObject = new UnitDesc<ModuleDef, object>(moduleDef, moduleDef, null);
@@ -102,13 +103,14 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				type.TypeCode = (MosaTypeCode)typeSig.ElementType;
 
 				// Load members
-
 				foreach (var fieldDef in typeDef.Fields)
 				{
 					var mosaField = metadata.Controller.CreateField();
 
 					using (var field = metadata.Controller.MutateField(mosaField))
+					{
 						LoadField(mosaType, field, fieldDef);
+					}
 
 					type.Fields.Add(mosaField);
 					metadata.Cache.AddField(mosaField);
@@ -196,6 +198,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			method.IsNewSlot = methodDef.IsNewSlot;
 			method.IsFinal = methodDef.IsFinal;
 			method.IsSpecialName = methodDef.IsSpecialName;
+
 			if (methodDef.HasImplMap)
 				method.ExternMethod = methodDef.ImplMap.Module.Name;
 		}

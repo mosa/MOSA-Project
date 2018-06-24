@@ -39,7 +39,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.cbDebugInfo = new MetroFramework.Controls.MetroCheckBox();
+            this.cbGenerateDebugInfoFile = new MetroFramework.Controls.MetroCheckBox();
             this.cbGenerateNASMFile = new MetroFramework.Controls.MetroCheckBox();
             this.cbGenerateASMFile = new MetroFramework.Controls.MetroCheckBox();
             this.cbGenerateMapFile = new MetroFramework.Controls.MetroCheckBox();
@@ -259,7 +259,7 @@
             // groupBox2
             // 
             this.groupBox2.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.groupBox2.Controls.Add(this.cbDebugInfo);
+            this.groupBox2.Controls.Add(this.cbGenerateDebugInfoFile);
             this.groupBox2.Controls.Add(this.cbGenerateNASMFile);
             this.groupBox2.Controls.Add(this.cbGenerateASMFile);
             this.groupBox2.Controls.Add(this.cbGenerateMapFile);
@@ -271,17 +271,17 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Diagnostic Output:";
             // 
-            // cbDebugInfo
+            // cbGenerateDebugInfo
             // 
-            this.cbDebugInfo.AutoSize = true;
-            this.cbDebugInfo.Location = new System.Drawing.Point(6, 85);
-            this.cbDebugInfo.Name = "cbDebugInfo";
-            this.cbDebugInfo.Size = new System.Drawing.Size(79, 15);
-            this.cbDebugInfo.Style = MetroFramework.MetroColorStyle.Blue;
-            this.cbDebugInfo.TabIndex = 48;
-            this.cbDebugInfo.Text = "Debug File";
-            this.cbDebugInfo.UseCustomBackColor = true;
-            this.cbDebugInfo.UseSelectable = true;
+            this.cbGenerateDebugInfoFile.AutoSize = true;
+            this.cbGenerateDebugInfoFile.Location = new System.Drawing.Point(6, 85);
+            this.cbGenerateDebugInfoFile.Name = "cbGenerateDebugInfo";
+            this.cbGenerateDebugInfoFile.Size = new System.Drawing.Size(79, 15);
+            this.cbGenerateDebugInfoFile.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbGenerateDebugInfoFile.TabIndex = 48;
+            this.cbGenerateDebugInfoFile.Text = "Debug File";
+            this.cbGenerateDebugInfoFile.UseCustomBackColor = true;
+            this.cbGenerateDebugInfoFile.UseSelectable = true;
             // 
             // cbGenerateNASMFile
             // 
@@ -1559,7 +1559,7 @@
 		private MetroFramework.Controls.MetroCheckBox cbEnableQemuGDB;
 		private MetroFramework.Controls.MetroCheckBox cbLaunchGDB;
 		private MetroFramework.Controls.MetroCheckBox cbGenerateNASMFile;
-		private MetroFramework.Controls.MetroCheckBox cbDebugInfo;
+		private MetroFramework.Controls.MetroCheckBox cbGenerateDebugInfoFile;
 		private System.Windows.Forms.GroupBox groupBox5;
 		private MetroFramework.Controls.MetroComboBox cbDebugConnectionOption;
 		private MetroFramework.Controls.MetroLabel label8;

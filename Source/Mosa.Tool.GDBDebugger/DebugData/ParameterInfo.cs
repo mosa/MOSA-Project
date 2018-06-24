@@ -4,12 +4,12 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 {
 	public class ParameterInfo
 	{
+		public int MethodID { get; set; }
 		public uint Index { get; set; }
 		public uint Offset { get; set; }
-		public string FullName { get; set; }
+		public int ParameterTypeID { get; set; }
 		public string Name { get; set; }
-		public string Type { get; set; }
-		public string Method { get; set; }
+		public string FullName { get; set; }
 		public uint Attributes { get; set; }
 	}
 }

@@ -131,7 +131,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			public bool IsNoInlining { set { method.IsNoInlining = value; } }
 
 			public bool IsAggressiveInlining { set { method.IsAggressiveInlining = value; } }
-			
+
 			public bool IsSpecialName { set { method.IsSpecialName = value; } }
 
 			public bool IsRTSpecialName { set { method.IsRTSpecialName = value; } }

@@ -96,7 +96,7 @@ namespace Mosa.Utility.Launcher
 		public int InlinedIRMaximum { get; set; }
 
 		[Option("inline-level")]
-		public string InlinedIRMaximumHelper { set { InlinedIRMaximum = (int)value.ParseHexOrDecimal(); } }
+		public string InlinedIRMaximumHelper { set { InlinedIRMaximum = (int)value.ParseHexOrInteger(); } }
 
 		[Option("all-optimizations-off")]
 		public bool AllOptimizationsOff
@@ -111,16 +111,16 @@ namespace Mosa.Utility.Launcher
 			}
 		}
 
-		[Option("nasm")]
+		[Option("output-nasm")]
 		public bool GenerateNASMFile { get; set; }
 
-		[Option("asm", Default = false)]
+		[Option("output-asm", Default = false)]
 		public bool GenerateASMFile { get; set; }
 
-		[Option("map")]
+		[Option("output-map")]
 		public bool GenerateMapFile { get; set; }
 
-		[Option("debuginfo", Default = false)]
+		[Option("output-debug", Default = false)]
 		public bool GenerateDebugFile { get; set; }
 
 		[Option("linker-format")]
@@ -207,7 +207,7 @@ namespace Mosa.Utility.Launcher
 		public ulong BaseAddress { get; set; }
 
 		[Option("base")]
-		public string BaseAddressHelper { set { BaseAddress = value.ParseHexOrDecimal(); } }
+		public string BaseAddressHelper { set { BaseAddress = value.ParseHexOrInteger(); } }
 
 		[Option("emit-symbols")]
 		public bool EmitSymbols { get; set; } = true;

@@ -3,9 +3,9 @@
 using CommandLine;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Pdb;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Utility.GUI.Common;
 using System;
 using System.Collections.Generic;

@@ -30,8 +30,6 @@ namespace Mosa.Tool.GDBDebugger
 		private readonly CallStackView callStackView;
 		private readonly StackFrameView stackFrameView;
 
-		//private StackView stackView;
-		//private FlagView flagView;
 		private readonly StatusView statusView;
 
 		private readonly InstructionView instructionView;
@@ -40,6 +38,9 @@ namespace Mosa.Tool.GDBDebugger
 		private readonly WatchView watchView;
 		private readonly BreakpointView breakPointView;
 		private readonly MethodView methodView;
+
+		private readonly SourceView sourceView;
+		private readonly SourceDataView sourceDataView;
 
 		//private ScriptView scriptView;
 
@@ -76,8 +77,6 @@ namespace Mosa.Tool.GDBDebugger
 			callStackView = new CallStackView(this);
 			stackFrameView = new StackFrameView(this);
 
-			//stackView = new StackView(this);
-			//flagView = new FlagView(this);
 			statusView = new StatusView(this);
 			symbolView = new SymbolView(this);
 			watchView = new WatchView(this);
@@ -86,6 +85,9 @@ namespace Mosa.Tool.GDBDebugger
 			methodView = new MethodView(this);
 
 			//scriptView = new ScriptView(this);
+
+			sourceView = new SourceView(this);
+			sourceDataView = new SourceDataView(this);
 
 			AppLocations.FindApplications();
 			Options.EnableQemuGDB = true;
@@ -110,8 +112,9 @@ namespace Mosa.Tool.GDBDebugger
 			//scriptView.Show(dockPanel, DockState.Document);
 			registersView.Show(dockPanel, DockState.DockRight);
 
-			//flagView.Show(dockPanel, DockState.DockRight);
-			//stackView.Show(dockPanel, DockState.DockRight);
+			sourceView.Show(dockPanel, DockState.Document);
+			sourceDataView.Show(dockPanel, DockState.Document);
+
 			stackFrameView.Show(dockPanel, DockState.DockRight);
 
 			var memoryView = new MemoryView(this);

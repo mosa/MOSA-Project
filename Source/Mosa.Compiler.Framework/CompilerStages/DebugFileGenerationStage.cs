@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Linker;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Mosa.Compiler.Framework.CompilerStages
@@ -19,6 +20,8 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		/// Holds the text writer used to emit the map file.
 		/// </summary>
 		private TextWriter writer;
+
+		private Dictionary<string, int> SourceFiles = new Dictionary<string, int>();
 
 		#endregion Data Members
 
@@ -41,6 +44,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				EmitMethods();
 				EmitParameters();
 				EmitFields();
+				EmitSourceLabels();
+				EmitSourceFileInformation();
+				EmitSourceInformation();
 			}
 		}
 
@@ -95,20 +101,21 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private void EmitTypes()
 		{
 			writer.WriteLine("[Types]");
-			writer.WriteLine("TypeDef\tSize\tFullName\tParent Type\tDeclaring Type\tElement Type");
+			writer.WriteLine("TypeID\tTypeDef\tSize\tFullName\tBaseTypeID\tDeclaringTypeID\tElementTypeID");
 			foreach (var type in TypeSystem.AllTypes)
 			{
 				if (type.IsModule)
 					continue;
 
 				writer.WriteLine(
-					"{0:x8}\t{1}\t{2}\t{3}\t{4}\t{5}",
+					"{0}\t{1:x8}\t{2}\t{3}\t{4}\t{5}\t{6}",
+					type.ID,
 					Linker.GetSymbol(type.FullName + Metadata.TypeDefinition, SectionKind.ROData).VirtualAddress,
 					TypeLayout.GetTypeSize(type),
 					type.FullName,
-					(type.BaseType != null) ? type.BaseType.FullName : string.Empty,
-					(type.DeclaringType != null) ? type.DeclaringType.FullName : string.Empty,
-					(type.ElementType != null) ? type.ElementType.FullName : string.Empty
+					(type.BaseType != null) ? type.BaseType.ID : 0,
+					(type.DeclaringType != null) ? type.DeclaringType.ID : 0,
+					(type.ElementType != null) ? type.ElementType.ID : 0
 				);
 			}
 		}
@@ -116,7 +123,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private void EmitMethods()
 		{
 			writer.WriteLine("[Methods]");
-			writer.WriteLine("Address\tSize\tMethodDef\tFullName\tType\tReturnType\tStackSize\tParameterStackSize\tAttributes");
+			writer.WriteLine("MethodID\tAddress\tSize\tMethodDef\tFullName\tTypeID\tReturnTypeID\tStackSize\tParameterStackSize\tAttributes");
 
 			foreach (var type in TypeSystem.AllTypes)
 			{
@@ -126,19 +133,20 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				foreach (var method in type.Methods)
 				{
 					var symbol = Linker.GetSymbol(method.FullName, SectionKind.Text);
-					var methodData = this.Compiler.CompilerData.GetCompilerMethodData(method);
+					var methodData = Compiler.CompilerData.GetCompilerMethodData(method);
 
 					writer.WriteLine(
-						"{0:x8}\t{1}\t{2:x8}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
+						"{0}\t{1:x8}\t{2}\t{3:x8}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}",
+						method.ID,
 						symbol.VirtualAddress,
 						symbol.Size,
 						Linker.GetSymbol(method.FullName + Metadata.MethodDefinition, SectionKind.ROData).VirtualAddress,
 						method.FullName,
-						method.Signature.ReturnType.FullName,
+						method.Signature.ReturnType.ID,
 						methodData.LocalMethodStackSize,
 						methodData.ParameterStackSize,
 						(int)method.MethodAttributes,
-						type.FullName
+						type.ID
 					);
 				}
 			}
@@ -147,7 +155,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private void EmitParameters()
 		{
 			writer.WriteLine("[Parameters]");
-			writer.WriteLine("Index\tOffset\tFullName\tName\tType\tMethod\tAttributes");
+			writer.WriteLine("MethodID\tIndex\tOffset\tName\tFullName\tParameterTypeID\tAttributes");
 
 			foreach (var type in TypeSystem.AllTypes)
 			{
@@ -162,13 +170,13 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					{
 						writer.WriteLine(
 							"{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}",
+							method.ID,
 							index++,
 							0,  // todo: offset to parameter
-							parameter.FullName,
 							parameter.Name,
-							parameter.ParameterType.FullName,
-							(int)parameter.ParameterAttributes,
-							method.FullName
+							parameter.FullName,
+							parameter.ParameterType.ID,
+							(int)parameter.ParameterAttributes
 						);
 					}
 				}
@@ -178,7 +186,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private void EmitFields()
 		{
 			writer.WriteLine("[Fields]");
-			writer.WriteLine("Index\tFullName\tName\tFieldType\tAddress\tAttributes\tOffset\tDataLength\tDataAddress\tType");
+			writer.WriteLine("TypeID\tIndex\tFullName\tName\tFieldTypeID\tAddress\tAttributes\tOffset\tDataLength\tDataAddress");
 
 			foreach (var type in TypeSystem.AllTypes)
 			{
@@ -194,18 +202,149 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					//var datasection = (field.Data != null) ? SectionKind.ROData : SectionKind.BSS; // not used yet
 
 					writer.WriteLine(
-						"{0}\t{1}\t{2}\t{3}\t{4:x8}\t{5}\t{6}\t{7}\t{8:x8}\t{9}",
+						"{0}\t{1}\t{2}\t{3}\t{4}\t{5:x8}\t{6}\t{7}\t{8}\t{9:x8}",
+						type.ID,
 						index++,
 						field.FullName,
 						field.Name,
-						field.FieldType.FullName,
+						field.FieldType.ID,
 						symbol?.VirtualAddress ?? 0,
 						(int)field.FieldAttributes,
 						field.IsStatic && !field.IsLiteral ? 0 : TypeLayout.GetFieldOffset(field),  // todo: missing first offset
 						field.Data?.Length ?? 0,
-						0, // todo: DataAddress
-						type.FullName
+						0 // todo: DataAddress
 					);
+				}
+			}
+		}
+
+		private void EmitSourceLabels()
+		{
+			writer.WriteLine("[SourceLabels]");
+			writer.WriteLine("MethodID\tLabel\tStart\tLength");
+
+			foreach (var methodData in Compiler.CompilerData.MethodData)
+			{
+				if (methodData == null || methodData.LabelRegions.Count == 0)
+					continue;
+
+				var first = methodData.LabelRegions[0];
+
+				if (first.Start != 0)
+				{
+					// special case which maps any prologue instructions to the first label
+					writer.WriteLine(
+						"{0}\t{1}\t{2}\t{3}",
+						methodData.Method.ID,
+						0,
+						0,
+						first.Start
+					);
+				}
+
+				foreach (var labelRegion in methodData.LabelRegions)
+				{
+					writer.WriteLine(
+						"{0}\t{1}\t{2}\t{3}",
+						methodData.Method.ID,
+						labelRegion.Label,
+						labelRegion.Start,
+						labelRegion.Length
+					);
+				}
+			}
+		}
+
+		private void EmitSourceFileInformation()
+		{
+			var filenames = new List<string>();
+			var hashset = new HashSet<string>();
+
+			string last = string.Empty;
+
+			foreach (var type in TypeSystem.AllTypes)
+			{
+				if (type.IsModule)
+					continue;
+
+				foreach (var method in type.Methods)
+				{
+					if (method.Code == null)
+						continue;
+
+					foreach (var instruction in method.Code)
+					{
+						var filename = instruction.Document;
+
+						if (filename == null)
+							continue;
+
+						if (last == filename)
+							continue;
+
+						if (!hashset.Contains(filename))
+						{
+							filenames.Add(filename);
+							hashset.Add(filename);
+							last = filename;
+						}
+					}
+				}
+			}
+
+			writer.WriteLine("[SourceFile]");
+			writer.WriteLine("SourceFileID\tFileName");
+
+			int index = 0;
+
+			foreach (var filename in filenames)
+			{
+				writer.WriteLine(
+					"{0}\t{1}",
+					++index,
+					filename
+				);
+
+				SourceFiles.Add(filename, index);
+			}
+		}
+
+		private void EmitSourceInformation()
+		{
+			writer.WriteLine("[Source]");
+			writer.WriteLine("MethodID\tLabel\tStartLine\tStartColumn\tEndLine\tEndColumn\tSourceFileID");
+
+			foreach (var type in TypeSystem.AllTypes)
+			{
+				if (type.IsModule)
+					continue;
+
+				foreach (var method in type.Methods)
+				{
+					int index = 0;
+
+					if (method.Code == null)
+						continue;
+
+					foreach (var instruction in method.Code)
+					{
+						if (instruction.Document == null)
+							continue;
+
+						if (instruction.StartLine == 0xFEEFEE)
+							continue;
+
+						writer.WriteLine(
+							"{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}",
+							method.ID,
+							instruction.Offset,
+							instruction.StartLine,
+							instruction.StartColumn,
+							instruction.EndLine,
+							instruction.EndColumn,
+							SourceFiles[instruction.Document]
+						);
+					}
 				}
 			}
 		}

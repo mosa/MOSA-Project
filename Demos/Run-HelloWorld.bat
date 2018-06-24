@@ -1,1 +1,1 @@
-start ..\bin\Mosa.Tool.Launcher.exe --q --a --qemu --asm --threading-off ..\bin\Mosa.HelloWorld.x86.exe
+start ..\bin\Mosa.Tool.Launcher.exe --q --a --qemu --output-asm --threading-off ..\bin\Mosa.HelloWorld.x86.exe

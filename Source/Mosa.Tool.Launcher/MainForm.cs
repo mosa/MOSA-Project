@@ -20,7 +20,7 @@ namespace Mosa.Tool.Launcher
 
 		public Starter Starter { get; private set; }
 
-		public Options Options { get; set; }
+		public Options Options { get; }
 
 		public AppLocations AppLocations { get; set; }
 
@@ -87,6 +87,7 @@ namespace Mosa.Tool.Launcher
 			Options.GenerateNASMFile = cbGenerateNASMFile.Checked;
 			Options.GenerateASMFile = cbGenerateASMFile.Checked;
 			Options.GenerateMapFile = cbGenerateMapFile.Checked;
+			Options.GenerateDebugFile = cbGenerateDebugInfoFile.Checked;
 			Options.ExitOnLaunch = cbExitOnLaunch.Checked;
 			Options.EnableQemuGDB = cbEnableQemuGDB.Checked;
 			Options.LaunchGDB = cbLaunchGDB.Checked;
@@ -103,7 +104,7 @@ namespace Mosa.Tool.Launcher
 				Options.GenerateDebugFile = true;
 			}
 
-			Options.BaseAddress = tbBaseAddress.Text.ParseHexOrDecimal();
+			Options.BaseAddress = tbBaseAddress.Text.ParseHexOrInteger();
 			Options.EmitSymbols = cbEmitSymbolTable.Checked;
 			Options.EmitRelocations = cbRelocationTable.Checked;
 			Options.Emitx86IRQMethods = cbEmitx86IRQMethods.Checked;
@@ -210,6 +211,7 @@ namespace Mosa.Tool.Launcher
 			cbGenerateNASMFile.Checked = Options.GenerateNASMFile;
 			cbGenerateASMFile.Checked = Options.GenerateASMFile;
 			cbGenerateMapFile.Checked = Options.GenerateMapFile;
+			cbGenerateDebugInfoFile.Checked = Options.GenerateDebugFile;
 			cbExitOnLaunch.Checked = Options.ExitOnLaunch;
 			cbEnableQemuGDB.Checked = Options.EnableQemuGDB;
 			cbLaunchGDB.Checked = Options.LaunchGDB;
@@ -332,7 +334,9 @@ namespace Mosa.Tool.Launcher
 			Refresh();
 
 			if (Options.AutoStart)
+			{
 				CompileBuildAndStart();
+			}
 		}
 
 		public void AddOutput(string data)
@@ -446,7 +450,6 @@ namespace Mosa.Tool.Launcher
 		{
 			if (Builder.Options.LaunchVM)
 			{
-
 				foreach (var line in Builder.Counters)
 				{
 					AddCounters(line);

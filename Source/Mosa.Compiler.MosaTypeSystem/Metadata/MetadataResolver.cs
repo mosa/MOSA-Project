@@ -445,7 +445,19 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				code = (ushort)(0x100 + (code & 0xff));
 			}
 
-			return new MosaInstruction((int)instruction.Offset, code, operand, prev, next);
+			return new MosaInstruction()
+			{
+				Offset = (int)instruction.Offset,
+				OpCode = code,
+				Operand = operand,
+				Previous = prev,
+				Next = next,
+				Document = instruction.SequencePoint?.Document.Url,
+				StartLine = instruction.SequencePoint?.StartLine ?? 0,
+				StartColumn = instruction.SequencePoint?.StartColumn ?? 0,
+				EndLine = instruction.SequencePoint?.EndLine ?? 0,
+				EndColumn = instruction.SequencePoint?.EndColumn ?? 0,
+			};
 		}
 
 		private MosaField ResolveFieldOperand(IField operand, GenericArgumentResolver resolver)

@@ -64,6 +64,8 @@ namespace Mosa.Compiler.Framework
 
 		public int LocalMethodStackSize { get; set; }
 
+		public List<LabelRegion> LabelRegions { get; }
+
 		#endregion Properties
 
 		public CompilerMethodData(MosaMethod mosaMethod)
@@ -72,6 +74,7 @@ namespace Mosa.Compiler.Framework
 
 			Calls = new List<MosaMethod>();
 			CalledBy = new List<MosaMethod>();
+			LabelRegions = new List<LabelRegion>();
 			Counters = new Counters();
 			CompileCount = 0;
 		}
@@ -84,6 +87,16 @@ namespace Mosa.Compiler.Framework
 			{
 				CalledBy.AddIfNew(method);
 			}
+		}
+
+		public void AddLabelRegion(int label, int start, int length)
+		{
+			LabelRegions.Add(new LabelRegion()
+			{
+				Label = label,
+				Start = start,
+				Length = length
+			});
 		}
 
 		#endregion Methods

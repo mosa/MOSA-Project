@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Common;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Tool.GDBDebugger.DebugData
 {
@@ -12,6 +11,9 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 		protected KeyedList<ulong, SymbolInfo> SymbolLookup = new KeyedList<ulong, SymbolInfo>();
 		protected KeyedList<string, SymbolInfo> SymbolNameLookup = new KeyedList<string, SymbolInfo>();
 
+		protected KeyedList<int, SourceLabelInfo> SourceLabelLookup = new KeyedList<int, SourceLabelInfo>();
+		protected KeyedList<int, SourceInfo> SourceLookup = new KeyedList<int, SourceInfo>();
+
 		public List<SymbolInfo> Symbols { get; } = new List<SymbolInfo>();
 		public List<SectionInfo> Sections { get; } = new List<SectionInfo>();
 
@@ -20,13 +22,21 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 		public List<ParameterInfo> Parameters { get; } = new List<ParameterInfo>();
 		public List<FieldInfo> Fields { get; } = new List<FieldInfo>();
 
+		public List<SourceLabelInfo> SourceLabels { get; } = new List<SourceLabelInfo>();
+		public List<SourceFileInfo> SourceFileInfos { get; } = new List<SourceFileInfo>();
+		public List<SourceInfo> SourceInfos { get; } = new List<SourceInfo>();
+
 		public Dictionary<ulong, TypeInfo> TypeDefLookup = new Dictionary<ulong, TypeInfo>();
 		public Dictionary<string, TypeInfo> TypeFullNameLookup = new Dictionary<string, TypeInfo>();
 		public Dictionary<string, MethodInfo> MethodFullNameLookup = new Dictionary<string, MethodInfo>();
 
+		public Dictionary<int, TypeInfo> TypeIDLookup = new Dictionary<int, TypeInfo>();
+		public Dictionary<int, MethodInfo> MethodIDLookup = new Dictionary<int, MethodInfo>();
+
+		public Dictionary<int, SourceFileInfo> SourceFileLookup = new Dictionary<int, SourceFileInfo>();
+
 		public void Add(SymbolInfo symbol)
 		{
-
 			Symbols.Add(symbol);
 			SymbolLookup.Add(symbol.Address, symbol);
 			SymbolNameLookup.Add(symbol.Name, symbol);
@@ -46,6 +56,8 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 		{
 			Types.Add(type);
 
+			TypeIDLookup.Add(type.ID, type);
+
 			if (type.DefAddress != 0 && !TypeDefLookup.ContainsKey(type.DefAddress))
 			{
 				TypeDefLookup.Add(type.DefAddress, type);
@@ -60,6 +72,7 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 		public void Add(MethodInfo method)
 		{
 			Methods.Add(method);
+			MethodIDLookup.Add(method.ID, method);
 
 			if (!MethodFullNameLookup.ContainsKey(method.FullName))
 			{
@@ -75,6 +88,24 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 		public void Add(FieldInfo field)
 		{
 			Fields.Add(field);
+		}
+
+		public void Add(SourceLabelInfo sourceLabel)
+		{
+			SourceLabels.Add(sourceLabel);
+			SourceLabelLookup.Add(sourceLabel.MethodID, sourceLabel);
+		}
+
+		public void Add(SourceInfo source)
+		{
+			SourceInfos.Add(source);
+			SourceLookup.Add(source.MethodID, source);
+		}
+
+		public void Add(SourceFileInfo sourceFile)
+		{
+			SourceFileInfos.Add(sourceFile);
+			SourceFileLookup.Add(sourceFile.SourceFileID, sourceFile);
 		}
 
 		public List<SymbolInfo> GetSymbolsStartingAt(ulong address)
@@ -95,7 +126,7 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 
 			foreach (var symbol in Symbols)
 			{
-				if (symbol.Address >= address && (symbol.Address + (ulong)symbol.Length) < address)
+				if (symbol.Address >= address && (symbol.Address + symbol.Length) < address)
 				{
 					symbols.Add(symbol);
 				}
@@ -108,7 +139,7 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 		{
 			foreach (var symbol in Symbols)
 			{
-				if (address >= symbol.Address && address < (symbol.Address + (ulong)symbol.Length))
+				if (address >= symbol.Address && address < (symbol.Address + symbol.Length))
 				{
 					return symbol;
 				}
@@ -125,6 +156,99 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 				return 0;
 
 			return sublist[0].Address;
+		}
+
+		public MethodInfo GetMethod(ulong address)
+		{
+			foreach (var method in Methods)
+			{
+				if (address >= method.Address && address < (method.Address + method.Size))
+				{
+					return method;
+				}
+			}
+
+			return null;
+		}
+
+		public List<SourceLabelInfo> GetSourceLabels(int methodID)
+		{
+			return SourceLabelLookup.Get(methodID);
+		}
+
+		public SourceLabelInfo GetSourceLabel(int methodID, int offset)
+		{
+			var list = SourceLabelLookup.Get(methodID);
+
+			if (list == null)
+				return null;
+
+			foreach (var sourceLabel in list)
+			{
+				if (sourceLabel.StartOffset > offset)
+					continue;
+
+				if (sourceLabel.StartOffset + sourceLabel.Length < offset)
+					continue;
+
+				return sourceLabel;
+			}
+
+			return null;
+		}
+
+		public List<SourceInfo> GetSources(int methodID)
+		{
+			return SourceLookup.Get(methodID);
+		}
+
+		public SourceInfo GetSource(int methodID, int offset)
+		{
+			var list = SourceLookup.Get(methodID);
+
+			if (list == null)
+				return null;
+
+			foreach (var source in list)
+			{
+				if (source.Offset == offset)
+					return source;
+			}
+
+			return null;
+		}
+
+		public SourceInfo GetSourcePreviousClosest(int methodID, int offset)
+		{
+			var list = SourceLookup.Get(methodID);
+
+			if (list == null)
+				return null;
+
+			SourceInfo previous = null;
+
+			foreach (var source in list)
+			{
+				if (source.Offset == offset)
+					return source;
+
+				if (source.Offset > offset)
+					continue;
+
+				if (previous == null || previous.Offset < source.Offset)
+				{
+					previous = source;
+				}
+			}
+
+			return previous;
+		}
+
+		public SourceFileInfo GetSourceFile(int sourceFileID)
+		{
+			SourceFileLookup.TryGetValue(sourceFileID, out SourceFileInfo sourceFileInfo);
+
+			return sourceFileInfo;
 		}
 	}
 }

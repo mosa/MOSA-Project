@@ -13,7 +13,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 		public TypeSystem TypeSystem { get; private set; }
 
-		public ITypeSystemController Controller { get; private set; }
+		internal ITypeSystemController Controller { get; private set; }
 
 		public MetadataCache Cache { get; private set; }
 
@@ -21,7 +21,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 		public MetadataResolver Resolver { get; private set; }
 
-		public void Initialize(TypeSystem system, ITypeSystemController controller)
+		internal void Initialize(TypeSystem system, ITypeSystemController controller)
 		{
 			TypeSystem = system;
 			Controller = controller;
@@ -33,18 +33,22 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		public void LoadMetadata()
 		{
 			foreach (var module in moduleLoader.Modules)
+			{
 				Loader.Load(module);
+			}
 
 			Controller.SetCorLib(Loader.CorLib);
 
 			Resolver.Resolve();
 
 			foreach (var module in Cache.Modules.Values)
+			{
 				if (module.EntryPoint != null)
 				{
 					Controller.SetEntryPoint(module.EntryPoint);
 					break;
 				}
+			}
 		}
 
 		public string LookupUserString(MosaModule module, uint id)

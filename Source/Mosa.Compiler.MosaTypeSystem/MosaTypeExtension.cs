@@ -9,6 +9,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public static MosaType ToManagedPointer(this MosaType type)
 		{
 			var result = type.TypeSystem.Controller.CreateType();
+
 			using (var ptrType = type.TypeSystem.Controller.MutateType(result))
 			{
 				ptrType.Module = type.Module;
@@ -27,6 +28,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public static MosaType ToUnmanagedPointer(this MosaType type)
 		{
 			var result = type.TypeSystem.Controller.CreateType();
+
 			using (var ptrType = type.TypeSystem.Controller.MutateType(result))
 			{
 				ptrType.Module = type.Module;
@@ -46,6 +48,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			var array = type.TypeSystem.GetTypeByName(type.TypeSystem.CorLib, "System", "Array");
 			var result = type.TypeSystem.Controller.CreateType();
+
 			using (var arrayType = type.TypeSystem.Controller.MutateType(result))
 			{
 				// See Partition II 14.1 Vectors
@@ -70,6 +73,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			var array = type.TypeSystem.GetTypeByName(type.TypeSystem.CorLib, "System", "Array");
 			var result = type.TypeSystem.Controller.CreateType(array);
+
 			using (var arrayType = type.TypeSystem.Controller.MutateType(result))
 			{
 				// See Partition II 14.2 Arrays
@@ -103,6 +107,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			uint rank = info.Rank;
 
 			var methodGet = typeSystem.Controller.CreateMethod();
+
 			using (var method = typeSystem.Controller.MutateMethod(methodGet))
 			{
 				method.DeclaringType = arrayType;
@@ -113,6 +118,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				method.HasThis = true;
 
 				var parameters = new List<MosaParameter>();
+
 				for (uint i = 0; i < rank; i++)
 				{
 					var indexParam = typeSystem.Controller.CreateParameter();
@@ -127,9 +133,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				method.Signature = new MosaMethodSignature(arrayType.ElementType, parameters);
 			}
+
 			type.Methods.Add(methodGet);
 
 			var methodSet = typeSystem.Controller.CreateMethod();
+
 			using (var method = typeSystem.Controller.MutateMethod(methodSet))
 			{
 				method.DeclaringType = arrayType;
@@ -165,9 +173,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 				method.Signature = new MosaMethodSignature(typeSystem.BuiltIn.Void, parameters);
 			}
+
 			type.Methods.Add(methodSet);
 
 			var methodAdrOf = typeSystem.Controller.CreateMethod();
+
 			using (var method = typeSystem.Controller.MutateMethod(methodAdrOf))
 			{
 				method.DeclaringType = arrayType;
@@ -195,6 +205,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			type.Methods.Add(methodAdrOf);
 
 			var methodCtor = typeSystem.Controller.CreateMethod();
+
 			using (var method = typeSystem.Controller.MutateMethod(methodCtor))
 			{
 				method.DeclaringType = arrayType;
@@ -225,6 +236,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public static MosaType ToFnPtr(this TypeSystem typeSystem, MosaMethodSignature signature)
 		{
 			var result = typeSystem.Controller.CreateType();
+
 			using (var ptrType = typeSystem.Controller.MutateType(result))
 			{
 				ptrType.Module = typeSystem.LinkerModule;
@@ -274,6 +286,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			while (type.Modifier != null)
 				type = type.ElementType;
+
 			return type;
 		}
 	}

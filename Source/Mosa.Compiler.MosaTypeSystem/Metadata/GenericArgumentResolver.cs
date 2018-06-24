@@ -1,15 +1,15 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using dnlib.DotNet;
 using System;
 using System.Collections.Generic;
-using dnlib.DotNet;
 
-namespace Mosa.Compiler.MosaTypeSystem
+namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
 	/// <summary>
 	/// Resolves generic arguments
 	/// </summary>
-	public class GenericArgumentResolver
+	internal class GenericArgumentResolver
 	{
 		private GenericArguments genericArguments;
 		private RecursionCounter recursionCounter;
@@ -94,10 +94,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			if (sig == null)
 				return null;
+
 			if (!recursionCounter.Increment())
 				return null;
 
-			MethodSig result = ResolveGenericArgs(new MethodSig(sig.GetCallingConvention()), sig);
+			var result = ResolveGenericArgs(new MethodSig(sig.GetCallingConvention()), sig);
 
 			recursionCounter.Decrement();
 			return result;
@@ -106,14 +107,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 		private MethodSig ResolveGenericArgs(MethodSig sig, MethodSig old)
 		{
 			sig.RetType = ResolveGenericArgs(old.RetType);
+
 			foreach (var p in old.Params)
 				sig.Params.Add(ResolveGenericArgs(p));
 
 			if (sig.ParamsAfterSentinel != null)
 			{
 				foreach (var p in old.ParamsAfterSentinel)
+				{
 					sig.ParamsAfterSentinel.Add(ResolveGenericArgs(p));
+				}
 			}
+
 			return sig;
 		}
 
@@ -144,15 +149,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 				case ElementType.FnPtr: throw new NotSupportedException("FnPtr is not supported.");
 
 				case ElementType.Array:
-					ArraySig arraySig = (ArraySig)typeSig;
-					List<uint> sizes = new List<uint>(arraySig.Sizes);
-					List<int> lbounds = new List<int>(arraySig.LowerBounds);
+					var arraySig = (ArraySig)typeSig;
+					var sizes = new List<uint>(arraySig.Sizes);
+					var lbounds = new List<int>(arraySig.LowerBounds);
 					result = new ArraySig(ResolveGenericArgs(typeSig.Next), arraySig.Rank, sizes, lbounds);
 					break;
 
 				case ElementType.GenericInst:
-					GenericInstSig gis = (GenericInstSig)typeSig;
-					List<TypeSig> genArgs = new List<TypeSig>(gis.GenericArguments.Count);
+					var gis = (GenericInstSig)typeSig;
+					var genArgs = new List<TypeSig>(gis.GenericArguments.Count);
 					foreach (TypeSig ga in gis.GenericArguments)
 					{
 						genArgs.Add(ResolveGenericArgs(ga));
