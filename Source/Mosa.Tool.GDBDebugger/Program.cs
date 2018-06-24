@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using CommandLine;
 using System;
 using System.Windows.Forms;
 

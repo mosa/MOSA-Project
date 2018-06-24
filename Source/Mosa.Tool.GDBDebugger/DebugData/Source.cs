@@ -1,10 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Tool.GDBDebugger.DebugData;
-
-namespace Mosa.Tool.GDBDebugger.Debug
+namespace Mosa.Tool.GDBDebugger.DebugData
 {
-	public static class DebugData
+	public static class Source
 	{
 		public static SourceLocation Find(DebugSource debugSource, ulong address)
 		{

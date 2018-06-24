@@ -1,11 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Tool.GDBDebugger.Debug;
-using System;
-using System.Drawing;
-using System.IO;
-using System.Windows.Forms;
-
 namespace Mosa.Tool.GDBDebugger.Views
 {
 	public partial class SourceDataView : DebugDockContent
