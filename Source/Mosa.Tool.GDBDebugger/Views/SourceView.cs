@@ -10,8 +10,8 @@ namespace Mosa.Tool.GDBDebugger.Views
 {
 	public partial class SourceView : DebugDockContent
 	{
-		private SourceLocation currentSourceLocation;
-		private string currentFileContent;
+		private SourceLocation lastSourceLocation;
+		private string lastFileContent;
 
 		public SourceView(MainForm mainForm)
 			: base(mainForm)
@@ -48,22 +48,29 @@ namespace Mosa.Tool.GDBDebugger.Views
 			if (sourceLocation.SourceFilename == null)
 				return;
 
-			//if (currentSourceLocation == null || currentSourceLocation.SourceFilename != sourceLocation.SourceFilename)
-			//{
-			currentSourceLocation = sourceLocation;
+			string fileContent = string.Empty;
 
-			//}
+			if (sourceLocation.SourceFilename != null)
+			{
+				if (lastSourceLocation != null && lastSourceLocation.SourceFilename == sourceLocation.SourceFilename)
+				{
+					fileContent = lastFileContent;
+				}
+				else
+				{
+					fileContent = File.ReadAllText(sourceLocation.SourceFilename);
+					lastFileContent = fileContent;
+				}
+			}
 
-			currentFileContent = currentSourceLocation.SourceFilename != null ? File.ReadAllText(currentSourceLocation.SourceFilename) : string.Empty;
-
-			lbSourceFilename.Text = currentSourceLocation.SourceFilename != null ? currentSourceLocation.SourceFilename : string.Empty;
-			rtbSource.Text = currentFileContent;
+			lbSourceFilename.Text = sourceLocation.SourceFilename != null ? sourceLocation.SourceFilename : string.Empty;
+			rtbSource.Text = fileContent;
 			toolStripStatusLabel1.Text = string.Empty;
 
-			if (currentSourceLocation.SourceFilename == null)
+			if (sourceLocation.SourceFilename == null)
 				return;
 
-			int length = currentFileContent.Length;
+			int length = fileContent.Length;
 			int startPosition = -1;
 			int endPosition = -1;
 
@@ -75,19 +82,19 @@ namespace Mosa.Tool.GDBDebugger.Views
 
 			while (at < length)
 			{
-				char c = currentFileContent[at++];
+				char c = fileContent[at++];
 
 				if (c == '\n')
 					currentLine++;
 
-				if (currentLine == currentSourceLocation.StartLine && startPosition < 0)
+				if (currentLine == sourceLocation.StartLine && startPosition < 0)
 				{
-					startPosition = at + currentSourceLocation.StartColumn - 1;
+					startPosition = at + sourceLocation.StartColumn - 1;
 					currentLineAtStart = currentLine;
 				}
-				else if (currentLine == currentSourceLocation.EndLine && endPosition < 0)
+				else if (currentLine == sourceLocation.EndLine && endPosition < 0)
 				{
-					endPosition = at + currentSourceLocation.EndColumn - 1;
+					endPosition = at + sourceLocation.EndColumn - 1;
 					currentLineAtEnd = currentLine;
 				}
 			}
@@ -104,11 +111,12 @@ namespace Mosa.Tool.GDBDebugger.Views
 			rtbSource.Select(startPosition - currentLineAtStart + 1, endPosition - startPosition - (currentLineAtEnd - currentLineAtStart));
 			rtbSource.SelectionBackColor = Color.Blue;
 			rtbSource.SelectionColor = Color.White;
-			lbSourceFilename.Text = Path.GetFileName(currentSourceLocation.SourceFilename);
-			toolStripStatusLabel1.Text = "Label: " + currentSourceLocation.Label + " / " + currentSourceLocation.SourceLabel + " - Lines " + currentSourceLocation.StartLine + "." + currentSourceLocation.StartColumn + "  to " + currentSourceLocation.EndLine + "." + currentSourceLocation.EndColumn;
+			lbSourceFilename.Text = Path.GetFileName(sourceLocation.SourceFilename);
+			toolStripStatusLabel1.Text = "Label: " + sourceLocation.Label + " / " + sourceLocation.SourceLabel + " - Lines " + sourceLocation.StartLine + "." + sourceLocation.StartColumn + "  to " + sourceLocation.EndLine + "." + sourceLocation.EndColumn;
 
 			rtbSource.ScrollToCaret();
-			textBox1.Text = currentFileContent.Substring(startPosition, endPosition - startPosition);
+
+			lastSourceLocation = sourceLocation;
 		}
 	}
 }

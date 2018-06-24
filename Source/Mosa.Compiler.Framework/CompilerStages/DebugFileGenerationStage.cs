@@ -225,6 +225,23 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			foreach (var methodData in Compiler.CompilerData.MethodData)
 			{
+				if (methodData == null || methodData.LabelRegions.Count == 0)
+					continue;
+
+				var first = methodData.LabelRegions[0];
+
+				if (first.Start != 0)
+				{
+					// special case which maps any prologue instructions to the first label
+					writer.WriteLine(
+						"{0}\t{1}\t{2}\t{3}",
+						methodData.Method.ID,
+						0,
+						0,
+						first.Start
+					);
+				}
+
 				foreach (var labelRegion in methodData.LabelRegions)
 				{
 					writer.WriteLine(
