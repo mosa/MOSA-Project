@@ -46,9 +46,10 @@ namespace Mosa.Tool.GDBDebugger.Views
             this.rtbSource.Location = new System.Drawing.Point(-1, 30);
             this.rtbSource.Name = "rtbSource";
             this.rtbSource.ReadOnly = true;
-            this.rtbSource.Size = new System.Drawing.Size(532, 196);
+            this.rtbSource.Size = new System.Drawing.Size(532, 235);
             this.rtbSource.TabIndex = 0;
             this.rtbSource.Text = "";
+            this.rtbSource.WordWrap = false;
             // 
             // label1
             // 

@@ -4,7 +4,7 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 {
 	public static class Source
 	{
-		public static SourceLocation Find(DebugSource debugSource, ulong address)
+		public static SourceLocation GetSourceLocationByAddress(DebugSource debugSource, ulong address)
 		{
 			var method = debugSource.GetMethod(address);
 
@@ -17,6 +17,44 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 				return null;
 
 			var sourceInfo = debugSource.GetSourcePreviousClosest(method.ID, sourceLabel.Label);
+
+			if (sourceInfo == null)
+				return null;
+
+			var sourceFileInfo = debugSource.GetSourceFile(sourceInfo.SourceFileID);
+
+			var sourceLocation = new SourceLocation()
+			{
+				Address = method.Address + (ulong)sourceLabel.StartOffset,
+				Length = sourceLabel.Length,
+				Label = sourceLabel.Label,
+				SourceLabel = sourceInfo.Label,
+				MethodFullName = method.FullName,
+				StartLine = sourceInfo.StartLine,
+				StartColumn = sourceInfo.StartColumn,
+				EndLine = sourceInfo.EndLine,
+				EndColumn = sourceInfo.EndColumn,
+				SourceFilename = sourceFileInfo.Filename,
+				MethodID = method.ID,
+				SourceFileID = sourceInfo.SourceFileID,
+			};
+
+			return sourceLocation;
+		}
+
+		public static SourceLocation GetSourceLocationByMethodID(DebugSource debugSource, int methodID)
+		{
+			var method = debugSource.GetMethodByID(methodID);
+
+			if (method == null)
+				return null;
+
+			var sourceLabel = debugSource.GetSourceLabel(methodID, 0);
+
+			if (sourceLabel == null)
+				return null;
+
+			var sourceInfo = debugSource.GetSourcePreviousClosest(methodID, sourceLabel.Label);
 
 			if (sourceInfo == null)
 				return null;

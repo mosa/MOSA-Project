@@ -171,6 +171,13 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 			return null;
 		}
 
+		public MethodInfo GetMethodByID(int methodID)
+		{
+			MethodIDLookup.TryGetValue(methodID, out MethodInfo methodInfo);
+
+			return methodInfo;
+		}
+
 		public List<SourceLabelInfo> GetSourceLabels(int methodID)
 		{
 			return SourceLabelLookup.Get(methodID);

@@ -9,7 +9,6 @@ namespace Mosa.Tool.GDBDebugger.Views
 	public partial class SourceView : DebugDockContent
 	{
 		private SourceLocation lastSourceLocation;
-		private string lastFileContent;
 
 		public SourceView(MainForm mainForm)
 			: base(mainForm)
@@ -24,11 +23,13 @@ namespace Mosa.Tool.GDBDebugger.Views
 
 		public override void OnPause()
 		{
-			Query();
-		}
+			toolStripStatusLabel1.Text = string.Empty;
+			lbSourceFilename.Text = string.Empty;
 
-		private void Query()
-		{
+			//rtbSource.DeselectAll();
+			//rtbSource.SelectionBackColor = Color.LightBlue;
+			//rtbSource.SelectionColor = Color.Gray;
+
 			if (!IsConnected || !IsPaused)
 				return;
 
@@ -38,82 +39,56 @@ namespace Mosa.Tool.GDBDebugger.Views
 			if (Platform.Registers == null)
 				return;
 
-			var sourceLocation = Source.Find(DebugSource, Platform.InstructionPointer.Value);
+			var sourceLocation = Source.GetSourceLocationByAddress(DebugSource, Platform.InstructionPointer.Value);
 
-			if (sourceLocation == null)
-				return;
-
-			if (sourceLocation.SourceFilename == null)
-				return;
-
-			string fileContent = string.Empty;
-
-			if (sourceLocation.SourceFilename != null)
+			if (sourceLocation == null || sourceLocation.SourceFilename == null)
 			{
-				if (lastSourceLocation != null && lastSourceLocation.SourceFilename == sourceLocation.SourceFilename)
-				{
-					fileContent = lastFileContent;
-				}
-				else
-				{
-					fileContent = File.ReadAllText(sourceLocation.SourceFilename);
-					lastFileContent = fileContent;
-				}
+				lastSourceLocation = null;
+				return;
 			}
 
-			lbSourceFilename.Text = sourceLocation.SourceFilename != null ? sourceLocation.SourceFilename : string.Empty;
-			rtbSource.Text = fileContent;
-			toolStripStatusLabel1.Text = string.Empty;
-
-			if (sourceLocation.SourceFilename == null)
-				return;
-
-			int length = fileContent.Length;
-			int startPosition = -1;
-			int endPosition = -1;
-
-			int currentLineAtStart = 0;
-			int currentLineAtEnd = 0;
-
-			int at = 0;
-			int currentLine = 1;
-
-			while (at < length)
+			if (!(lastSourceLocation != null && lastSourceLocation.SourceFilename == sourceLocation.SourceFilename))
 			{
-				char c = fileContent[at++];
-
-				if (c == '\n')
-					currentLine++;
-
-				if (currentLine == sourceLocation.StartLine && startPosition < 0)
-				{
-					startPosition = at + sourceLocation.StartColumn - 1;
-					currentLineAtStart = currentLine;
-				}
-				else if (currentLine == sourceLocation.EndLine && endPosition < 0)
-				{
-					endPosition = at + sourceLocation.EndColumn - 1;
-					currentLineAtEnd = currentLine;
-				}
+				rtbSource.Text = File.ReadAllText(sourceLocation.SourceFilename);
+			}
+			else
+			{
+				rtbSource.Text = rtbSource.Text;
 			}
 
-			if (startPosition < 0)
-				return;
+			lbSourceFilename.Text = Path.GetFileName(sourceLocation.SourceFilename);
 
-			if (endPosition < 0)
-				return;
+			//var methodStartSourceLocation = Source.GetSourceLocationByMethodID(DebugSource, sourceLocation.MethodID);
 
-			if (endPosition > length)
-				endPosition = length;
+			//var firstLineIndex = rtbSource.GetFirstCharIndexFromLine(methodStartSourceLocation.StartLine - 1) + methodStartSourceLocation.StartColumn - 1;
+			var startIndex = rtbSource.GetFirstCharIndexFromLine(sourceLocation.StartLine - 1) + sourceLocation.StartColumn - 1;
+			var endIndex = rtbSource.GetFirstCharIndexFromLine(sourceLocation.EndLine - 1) + sourceLocation.EndColumn - 1;
 
-			rtbSource.Select(startPosition - currentLineAtStart + 1, endPosition - startPosition - (currentLineAtEnd - currentLineAtStart));
+			//if (sourceLocation.StartLine - methodStartSourceLocation.StartLine <= 10)
+			//{
+			//	rtbSource.Select(firstLineIndex, 1);
+			//}
+			//else
+			//{
+			//	int before = sourceLocation.StartLine > 10 ? sourceLocation.StartLine - 10 : 0;
+			//	var beforeLineIndex = rtbSource.GetFirstCharIndexFromLine(before);
+			//	rtbSource.Select(beforeLineIndex, 1);
+			//}
+
+			//rtbSource.ScrollToCaret();
+
 			rtbSource.SelectionBackColor = Color.Blue;
 			rtbSource.SelectionColor = Color.White;
-			lbSourceFilename.Text = Path.GetFileName(sourceLocation.SourceFilename);
-			toolStripStatusLabel1.Text = "Label: " + sourceLocation.Label + " / " + sourceLocation.SourceLabel + " - Lines " + sourceLocation.StartLine + "." + sourceLocation.StartColumn + "  to " + sourceLocation.EndLine + "." + sourceLocation.EndColumn;
 
+			rtbSource.Select(startIndex, endIndex - startIndex);
 			rtbSource.ScrollToCaret();
 
+			//rtbSource.GetCharIndexFromPosition
+			//rtbSource.GetFirstCharIndexFromLine
+			//rtbSource.GetFirstCharIndexOfCurrentLine
+			//rtbSource.GetLineFromCharIndex
+
+			toolStripStatusLabel1.Text = "Label: " + sourceLocation.Label + " / " + sourceLocation.SourceLabel + " - Lines " + sourceLocation.StartLine + "." + sourceLocation.StartColumn + "  to " + sourceLocation.EndLine + "." + sourceLocation.EndColumn;
 			lastSourceLocation = sourceLocation;
 		}
 	}
