@@ -4,9 +4,9 @@ using System.IO;
 using System.Text;
 using System.Web.Script.Serialization;
 
-namespace Mosa.Workspace.Generator.Debug
+namespace Mosa.Utility.SourceCodeGenerator
 {
-	public class Program
+	public static class Program
 	{
 		public static void Main(string[] args)
 		{
@@ -28,6 +28,18 @@ namespace Mosa.Workspace.Generator.Debug
 			new BuildIRInstructions(
 				Path.Combine(dataPath, @"IRInstructions.json"),
 				Path.Combine(targetPath, @"Mosa.Compiler.Framework\IR\")
+			);
+
+			new BuildX86(
+				Path.Combine(dataPath, @"X86Instructions.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.x86\"),
+				"X86.cs"
+			);
+
+			new BuildX86InstructionMap(
+				Path.Combine(dataPath, @"X86Instructions.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.x86\"),
+				"X86InstructionMap.cs"
 			);
 		}
 	}

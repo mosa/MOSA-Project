@@ -659,16 +659,6 @@
     <Compile Include="Intrinsic\Set8.cs" />
     <Compile Include="Intrinsic\SetFS.cs" />
     <Compile Include="Stages\ConstantInstructionStage.cs" />
-    <Compile Include="X86.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>X86.tt</DependentUpon>
-    </Compile>
-    <Compile Include="X86InstructionMap.cs">
-      <DependentUpon>X86InstructionMap.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
     <Compile Include="Stages\IRSubstitutionStage.cs" />
@@ -730,6 +720,7 @@
     <Compile Include="Instructions\Ret.cs">
       <DependentUpon>X86Instructions.tt</DependentUpon>
     </Compile>
+    <Compile Include="X86.cs" />
     <Compile Include="X86CodeEmitter.cs" />
     <Compile Include="Stages\TweakStage.cs" />
     <Compile Include="Instructions\Cdq.cs">
@@ -826,19 +817,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OpcodeEncoder.cs" />
+    <Compile Include="X86InstructionMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Instructions\X86Instructions.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>X86Instructions.cs</LastGenOutput>
-    </Content>
-    <Content Include="X86.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>X86.cs</LastGenOutput>
-    </Content>
-    <Content Include="X86InstructionMap.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>X86InstructionMap.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>

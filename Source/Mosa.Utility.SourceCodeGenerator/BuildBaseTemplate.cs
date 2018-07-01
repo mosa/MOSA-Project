@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Web.Script.Serialization;
 
-namespace Mosa.Workspace.Generator.Debug
+namespace Mosa.Utility.SourceCodeGenerator
 {
 	public class BuildBaseTemplate
 	{

@@ -7,8 +7,8 @@
     <ProjectGuid>{A8765C3C-1194-4A3A-8579-745CA47C36D1}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Workspace.Generator.Debug</RootNamespace>
-    <AssemblyName>Mosa.Workspace.Generator.Debug</AssemblyName>
+    <RootNamespace>Mosa.Utility.SourceCodeGenerator</RootNamespace>
+    <AssemblyName>Mosa.Utility.SourceCodeGenerator</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -37,7 +37,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Mosa.Workspace.Generator.Debug.Program</StartupObject>
+    <StartupObject>Mosa.Utility.SourceCodeGenerator.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +45,8 @@
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildX86InstructionMap.cs" />
+    <Compile Include="BuildX86.cs" />
     <Compile Include="BuildIRInstructions.cs" />
     <Compile Include="BuildIRInstruction.cs" />
     <Compile Include="BuildIRInstructionMap.cs" />
