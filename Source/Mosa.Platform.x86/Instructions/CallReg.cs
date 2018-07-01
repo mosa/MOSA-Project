@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class CallReg : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xFF } , 0x02);
-
 		internal CallReg()
 			: base(0, 1)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xFF }, 0x02);
 
 		public override FlowControl FlowControl { get { return FlowControl.Call; } }
 
@@ -50,4 +50,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

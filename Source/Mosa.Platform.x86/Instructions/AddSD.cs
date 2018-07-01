@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Addsd : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF2, 0x0F, 0x58 } );
-
 		internal Addsd()
 			: base(1, 2)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF2, 0x0F, 0x58 });
 
 		public override bool IsCommutative { get { return true; } }
 
@@ -35,4 +35,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

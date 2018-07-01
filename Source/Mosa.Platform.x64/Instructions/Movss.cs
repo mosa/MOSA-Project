@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// Movss
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Movss : X64Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF3, 0x0F, 0x10 } );
-
 		internal Movss()
 			: base(1, 1)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF3, 0x0F, 0x10 });
 
 		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
 		{
@@ -28,4 +28,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

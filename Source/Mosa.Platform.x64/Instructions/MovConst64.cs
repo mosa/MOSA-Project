@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// MovConst64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class MovConst64 : X64Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xC7 } , 0x00);
-
 		internal MovConst64()
 			: base(1, 1)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xC7 }, 0x00);
 
 		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
 		{
@@ -28,4 +28,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

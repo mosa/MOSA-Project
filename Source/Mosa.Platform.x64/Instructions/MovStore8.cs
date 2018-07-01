@@ -9,7 +9,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// MovStore8
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class MovStore8 : X64Instruction
 	{
 		internal MovStore8()
@@ -28,4 +28,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

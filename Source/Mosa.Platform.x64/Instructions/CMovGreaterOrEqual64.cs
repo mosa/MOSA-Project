@@ -9,17 +9,17 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// CMovGreaterOrEqual64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovGreaterOrEqual64 : X64Instruction
 	{
-		public override string AlternativeName { get { return "CMovGE64"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x4D } );
-
 		internal CMovGreaterOrEqual64()
 			: base(1, 1)
 		{
 		}
+
+		public override string AlternativeName { get { return "CMovGE64"; } }
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x4D });
 
 		public override bool IsSignFlagUsed { get { return true; } }
 
@@ -39,4 +39,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

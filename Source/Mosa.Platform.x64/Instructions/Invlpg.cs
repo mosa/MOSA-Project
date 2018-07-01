@@ -9,7 +9,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// Invlpg
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Invlpg : X64Instruction
 	{
 		internal Invlpg()
@@ -28,4 +28,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

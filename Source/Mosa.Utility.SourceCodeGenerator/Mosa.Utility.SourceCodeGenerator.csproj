@@ -45,6 +45,10 @@
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildX64Instructions.cs" />
+    <Compile Include="BuildX64.cs" />
+    <Compile Include="BuildX64InstructionMap.cs" />
+    <Compile Include="BuildX86Instructions.cs" />
     <Compile Include="BuildX86InstructionMap.cs" />
     <Compile Include="BuildX86.cs" />
     <Compile Include="BuildIRInstructions.cs" />

@@ -9,17 +9,17 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// BranchGreaterThan
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class BranchGreaterThan : X64Instruction
 	{
-		public override string AlternativeName { get { return "JG"; } }
-
-		public static readonly byte[] opcode = new byte[] { 0x0F, 0x8F };
-
 		internal BranchGreaterThan()
 			: base(0, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "JG"; } }
+
+		public static readonly byte[] opcode = new byte[] { 0x0F, 0x8F };
 
 		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 
@@ -44,4 +44,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

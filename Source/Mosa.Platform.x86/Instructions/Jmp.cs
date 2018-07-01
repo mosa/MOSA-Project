@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Jmp : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0xE9 };
-
 		internal Jmp()
 			: base(0, 0)
 		{
 		}
+
+		public static readonly byte[] opcode = new byte[] { 0xE9 };
 
 		public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
 
@@ -53,4 +53,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

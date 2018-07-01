@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class MovLoadSeg32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x8C } );
-
 		internal MovLoadSeg32()
 			: base(1, 1)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x8C });
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
@@ -28,4 +28,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

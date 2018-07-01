@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// Neg64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Neg64 : X64Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0xF7, 0x03 };
-
 		internal Neg64()
 			: base(1, 1)
 		{
 		}
+
+		public static readonly byte[] opcode = new byte[] { 0xF7, 0x03 };
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
@@ -50,4 +50,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

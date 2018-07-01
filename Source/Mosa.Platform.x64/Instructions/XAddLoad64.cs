@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// XAddLoad64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class XAddLoad64 : X64Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x87 } );
-
 		internal XAddLoad64()
 			: base(1, 3)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x87 });
 
 		public override bool IsMemoryRead { get { return true; } }
 
@@ -40,4 +40,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

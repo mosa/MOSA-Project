@@ -41,6 +41,28 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Path.Combine(targetPath, @"Mosa.Platform.x86\"),
 				"X86InstructionMap.cs"
 			);
+
+			new BuildX86Instructions(
+				Path.Combine(dataPath, @"X86Instructions.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.x86\Instructions")
+			);
+
+			new BuildX64(
+				Path.Combine(dataPath, @"X64Instructions.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.x64\"),
+				"X64.cs"
+			);
+
+			new BuildX64InstructionMap(
+				Path.Combine(dataPath, @"X64Instructions.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.x64\"),
+				"X64InstructionMap.cs"
+			);
+
+			new BuildX64Instructions(
+				Path.Combine(dataPath, @"X64Instructions.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.x64\Instructions")
+			);
 		}
 	}
 }

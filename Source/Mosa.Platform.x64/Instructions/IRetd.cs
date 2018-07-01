@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// IRetd
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class IRetd : X64Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0xCF };
-
 		internal IRetd()
 			: base(0, 0)
 		{
 		}
+
+		public static readonly byte[] opcode = new byte[] { 0xCF };
 
 		public override FlowControl FlowControl { get { return FlowControl.Return; } }
 
@@ -52,4 +52,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

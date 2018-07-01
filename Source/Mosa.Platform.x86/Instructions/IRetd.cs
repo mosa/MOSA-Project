@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class IRetd : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0xCF };
-
 		internal IRetd()
 			: base(0, 0)
 		{
 		}
+
+		public static readonly byte[] opcode = new byte[] { 0xCF };
 
 		public override FlowControl FlowControl { get { return FlowControl.Return; } }
 
@@ -52,4 +52,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

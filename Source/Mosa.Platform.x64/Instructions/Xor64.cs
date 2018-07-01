@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// Xor64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Xor64 : X64Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x33 } );
-
 		internal Xor64()
 			: base(1, 2)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x33 });
 
 		public override bool IsCommutative { get { return true; } }
 
@@ -49,4 +49,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

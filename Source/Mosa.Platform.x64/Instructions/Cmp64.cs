@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// Cmp64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Cmp64 : X64Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x3B } );
-
 		internal Cmp64()
 			: base(0, 2)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x3B });
 
 		public override bool IsZeroFlagUnchanged { get { return true; } }
 
@@ -48,4 +48,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

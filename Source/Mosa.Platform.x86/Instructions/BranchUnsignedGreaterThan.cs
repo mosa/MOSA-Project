@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class BranchUnsignedGreaterThan : X86Instruction
 	{
-		public override string AlternativeName { get { return "JA"; } }
-
-		public static readonly byte[] opcode = new byte[] { 0x0F, 0x87 };
-
 		internal BranchUnsignedGreaterThan()
 			: base(0, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "JA"; } }
+
+		public static readonly byte[] opcode = new byte[] { 0x0F, 0x87 };
 
 		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 
@@ -44,4 +44,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class SetByteIfSigned : X86Instruction
 	{
-		public override string AlternativeName { get { return "SetS"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x98 } );
-
 		internal SetByteIfSigned()
 			: base(1, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "SetS"; } }
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x98 });
 
 		public override bool IsSignFlagUsed { get { return true; } }
 
@@ -37,4 +37,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class In16 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x66, 0xED } );
-
 		internal In16()
 			: base(1, 1)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x66, 0xED });
 
 		public override bool IsIOOperation { get { return true; } }
 
@@ -32,4 +32,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

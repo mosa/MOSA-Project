@@ -9,7 +9,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// MovupsLoad
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class MovupsLoad : X64Instruction
 	{
 		internal MovupsLoad()
@@ -28,4 +28,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

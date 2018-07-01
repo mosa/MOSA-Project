@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Bt32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xA3 } );
-
 		internal Bt32()
 			: base(1, 2)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xA3 });
 
 		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
@@ -44,4 +44,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

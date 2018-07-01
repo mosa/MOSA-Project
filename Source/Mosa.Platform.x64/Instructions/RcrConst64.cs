@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// RcrConst64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class RcrConst64 : X64Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xC1 } , 0x03);
-
 		internal RcrConst64()
 			: base(1, 2)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xC1 }, 0x03);
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
@@ -39,4 +39,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

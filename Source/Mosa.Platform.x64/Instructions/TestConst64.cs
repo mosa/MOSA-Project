@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// TestConst64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class TestConst64 : X64Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF7 } , 0x00);
-
 		internal TestConst64()
 			: base(0, 2)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF7 }, 0x00);
 
 		public override bool IsZeroFlagModified { get { return true; } }
 
@@ -42,4 +42,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

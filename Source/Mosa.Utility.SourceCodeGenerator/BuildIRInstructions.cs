@@ -123,8 +123,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			Lines.AppendLine("\t}");
 			Lines.AppendLine("}");
-
-			//Lines.AppendLine();
 		}
 	}
 }

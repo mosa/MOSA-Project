@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class IDiv32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF7 } , 0x07);
-
 		internal IDiv32()
 			: base(2, 3)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF7 }, 0x07);
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
@@ -53,4 +53,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

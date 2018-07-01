@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class BranchNoOverflow : X86Instruction
 	{
-		public override string AlternativeName { get { return "JNO"; } }
-
-		public static readonly byte[] opcode = new byte[] { 0x0F, 0x81 };
-
 		internal BranchNoOverflow()
 			: base(0, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "JNO"; } }
+
+		public static readonly byte[] opcode = new byte[] { 0x0F, 0x81 };
 
 		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 
@@ -42,4 +42,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

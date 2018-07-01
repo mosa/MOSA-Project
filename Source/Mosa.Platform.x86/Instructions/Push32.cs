@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Push32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xFF } , 0x06);
-
 		internal Push32()
 			: base(0, 1)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xFF }, 0x06);
 
 		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
 		{
@@ -28,4 +28,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-
