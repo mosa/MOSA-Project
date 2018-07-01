@@ -40,10 +40,15 @@
     <StartupObject>Mosa.Workspace.Generator.Debug.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildIRInstructions.cs" />
+    <Compile Include="BuildIRInstruction.cs" />
+    <Compile Include="BuildIRInstructionMap.cs" />
+    <Compile Include="BuildBaseTemplate.cs" />
     <Compile Include="DynamicJsonConverter.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>

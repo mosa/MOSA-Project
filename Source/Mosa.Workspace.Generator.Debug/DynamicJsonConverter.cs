@@ -1,13 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-//using Microsoft.VisualStudio.TextTemplating;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
-using System.Text;
 using System.Web.Script.Serialization;
 
 public sealed class DynamicJsonConverter : JavaScriptConverter
@@ -36,57 +34,6 @@ public sealed class DynamicJsonConverter : JavaScriptConverter
 		public DynamicJsonObject(IDictionary<string, object> dictionary)
 		{
 			_dictionary = dictionary ?? throw new ArgumentNullException(nameof(dictionary));
-		}
-
-		public override string ToString()
-		{
-			var sb = new StringBuilder("{");
-			ToString(sb);
-			return sb.ToString();
-		}
-
-		private void ToString(StringBuilder sb)
-		{
-			var firstInDictionary = true;
-			foreach (var pair in _dictionary)
-			{
-				if (!firstInDictionary)
-					sb.Append(",");
-				firstInDictionary = false;
-				var value = pair.Value;
-				var name = pair.Key;
-				if (value is string)
-				{
-					sb.AppendFormat("{0}:\"{1}\"", name, value);
-				}
-				else if (value is IDictionary<string, object>)
-				{
-					new DynamicJsonObject((IDictionary<string, object>)value).ToString(sb);
-				}
-				else if (value is ArrayList)
-				{
-					sb.Append(name).Append(":[");
-					var firstInArray = true;
-					foreach (var arrayValue in (ArrayList)value)
-					{
-						if (!firstInArray)
-							sb.Append(",");
-						firstInArray = false;
-						if (arrayValue is IDictionary<string, object>)
-							new DynamicJsonObject((IDictionary<string, object>)arrayValue).ToString(sb);
-						else if (arrayValue is string)
-							sb.AppendFormat("\"{0}\"", arrayValue);
-						else
-							sb.AppendFormat("{0}", arrayValue);
-					}
-					sb.Append("]");
-				}
-				else
-				{
-					sb.AppendFormat("{0}:{1}", name, value);
-				}
-			}
-			sb.Append("}");
 		}
 
 		public override bool TryGetMember(GetMemberBinder binder, out object result)

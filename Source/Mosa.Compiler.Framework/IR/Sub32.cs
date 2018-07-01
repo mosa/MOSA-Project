@@ -16,4 +16,3 @@ namespace Mosa.Compiler.Framework.IR
 		}
 	}
 }
-

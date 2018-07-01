@@ -1,0 +1,18 @@
+﻿{
+	"IROptimizations": [
+		{
+			"Name": "MultipleBy1",
+			"Type": "StrengthReduction",
+			"Match": "(MulUnsigned 1 x)",
+			"Transform": "x",
+			"Criteria": "",
+		},
+		{
+			"Name": "MultipleBy0",
+			"Type": "StrengthReduction",
+			"Match": "(MulUnsigned 0 x)",
+			"Transform": "0",
+			"Criteria": "",
+		}
+	]
+}

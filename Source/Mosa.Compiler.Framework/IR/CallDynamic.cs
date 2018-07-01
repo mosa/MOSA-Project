@@ -19,4 +19,3 @@ namespace Mosa.Compiler.Framework.IR
 		public override bool VariableOperands { get { return true; } }
 	}
 }
-

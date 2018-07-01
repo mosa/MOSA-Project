@@ -207,6 +207,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{624E8284
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Workspace.Generator.Debug", "Mosa.Workspace.Generator.Debug\Mosa.Workspace.Generator.Debug.csproj", "{A8765C3C-1194-4A3A-8579-745CA47C36D1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{A406F567-5C89-45AB-88CE-E20616B28FFD}"
+	ProjectSection(SolutionItems) = preProject
+		Data\IRInstructions.json = Data\IRInstructions.json
+		Data\IROptimizations.json = Data\IROptimizations.json
+		Data\X64Instructions.json = Data\X64Instructions.json
+		Data\X86Instructions.json = Data\X86Instructions.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -865,6 +873,7 @@ Global
 		{A13B9E8A-DC5E-4396-B071-3671CC148E64} = {F0EFF742-92D5-4219-939A-8F6F8DAB24E5}
 		{624E8284-4F0A-4C3F-B5F2-271105E48ECF} = {F0EFF742-92D5-4219-939A-8F6F8DAB24E5}
 		{A8765C3C-1194-4A3A-8579-745CA47C36D1} = {AC7C3CDA-E0E8-408C-BB32-DBCBB905E3E1}
+		{A406F567-5C89-45AB-88CE-E20616B28FFD} = {F0EFF742-92D5-4219-939A-8F6F8DAB24E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}
