@@ -18,6 +18,7 @@ namespace Mosa.Platform.x86.Instructions
 			: base(1, 1)
 		{
 		}
+
 	}
 }
 
