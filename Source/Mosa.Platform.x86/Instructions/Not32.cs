@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Not32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF7 } , 0x02);
-
 		internal Not32()
 			: base(1, 1)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF7 }, 0x02);
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
@@ -33,4 +33,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

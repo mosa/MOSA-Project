@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Runtime.CompilerServices;
+
 namespace System
 {
 	/// <summary>
@@ -83,9 +85,17 @@ namespace System
 			return (value == _value);
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)] // 64-bit constants make the IL unusually large that makes the inliner to reject the method
 		public override int GetHashCode()
 		{
-			return (int)_value;
+			var bits = BitConverter.DoubleToInt64Bits(_value);
+
+			if (((bits - 1) & 0x7FFFFFFFFFFFFFFF) >= 0x7FF0000000000000)
+			{
+				bits &= 0x7FF0000000000000;
+			}
+
+			return unchecked((int)bits) ^ ((int)(bits >> 32));
 		}
 	}
 }

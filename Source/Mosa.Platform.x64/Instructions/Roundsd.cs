@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// Roundsd
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Roundsd : X64Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x66, 0x0F, 0x3A, 0x0B } );
-
 		internal Roundsd()
 			: base(1, 2)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x66, 0x0F, 0x3A, 0x0B });
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
@@ -33,4 +33,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

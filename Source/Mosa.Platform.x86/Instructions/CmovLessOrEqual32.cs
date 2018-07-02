@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class CMovLessOrEqual32 : X86Instruction
 	{
-		public override string AlternativeName { get { return "CMovLE32"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x4E } );
-
 		internal CMovLessOrEqual32()
 			: base(1, 1)
 		{
 		}
+
+		public override string AlternativeName { get { return "CMovLE32"; } }
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x4E });
 
 		public override bool IsZeroFlagUsed { get { return true; } }
 
@@ -41,4 +41,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

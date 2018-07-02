@@ -93,6 +93,193 @@
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
     <Compile Include="Analysis\BaseDominanceAnalysis.cs" />
     <Compile Include="BaseCompilerExtension.cs" />
+    <Compile Include="IR\Add32.cs" />
+    <Compile Include="IR\Add64.cs" />
+    <Compile Include="IR\AddCarryOut32.cs" />
+    <Compile Include="IR\AddFloatR4.cs" />
+    <Compile Include="IR\AddFloatR8.cs" />
+    <Compile Include="IR\AddressOf.cs" />
+    <Compile Include="IR\AddWithCarry32.cs" />
+    <Compile Include="IR\ArithShiftRight32.cs" />
+    <Compile Include="IR\ArithShiftRight64.cs" />
+    <Compile Include="IR\BlockEnd.cs" />
+    <Compile Include="IR\BlockStart.cs" />
+    <Compile Include="IR\Box.cs" />
+    <Compile Include="IR\Box32.cs" />
+    <Compile Include="IR\Box64.cs" />
+    <Compile Include="IR\BoxR4.cs" />
+    <Compile Include="IR\BoxR8.cs" />
+    <Compile Include="IR\Break.cs" />
+    <Compile Include="IR\Call.cs" />
+    <Compile Include="IR\CallDirect.cs" />
+    <Compile Include="IR\CallDynamic.cs" />
+    <Compile Include="IR\CallInterface.cs" />
+    <Compile Include="IR\CallStatic.cs" />
+    <Compile Include="IR\CallVirtual.cs" />
+    <Compile Include="IR\CompareFloatR4.cs" />
+    <Compile Include="IR\CompareFloatR8.cs" />
+    <Compile Include="IR\CompareInt32x32.cs" />
+    <Compile Include="IR\CompareInt64x32.cs" />
+    <Compile Include="IR\CompareInt64x64.cs" />
+    <Compile Include="IR\CompareIntBranch32.cs" />
+    <Compile Include="IR\CompareIntBranch64.cs" />
+    <Compile Include="IR\ConvertFloatR4ToFloatR8.cs" />
+    <Compile Include="IR\ConvertFloatR4ToInt32.cs" />
+    <Compile Include="IR\ConvertFloatR4ToInt64.cs" />
+    <Compile Include="IR\ConvertFloatR8ToFloatR4.cs" />
+    <Compile Include="IR\ConvertFloatR8ToInt32.cs" />
+    <Compile Include="IR\ConvertFloatR8ToInt64.cs" />
+    <Compile Include="IR\ConvertInt32ToFloatR4.cs" />
+    <Compile Include="IR\ConvertInt32ToFloatR8.cs" />
+    <Compile Include="IR\ConvertInt64ToFloatR4.cs" />
+    <Compile Include="IR\ConvertInt64ToFloatR8.cs" />
+    <Compile Include="IR\DivFloatR4.cs" />
+    <Compile Include="IR\DivFloatR8.cs" />
+    <Compile Include="IR\DivSigned32.cs" />
+    <Compile Include="IR\DivSigned64.cs" />
+    <Compile Include="IR\DivUnsigned32.cs" />
+    <Compile Include="IR\DivUnsigned64.cs" />
+    <Compile Include="IR\Epilogue.cs" />
+    <Compile Include="IR\ExceptionEnd.cs" />
+    <Compile Include="IR\ExceptionStart.cs" />
+    <Compile Include="IR\FilterEnd.cs" />
+    <Compile Include="IR\FilterStart.cs" />
+    <Compile Include="IR\FinallyEnd.cs" />
+    <Compile Include="IR\FinallyStart.cs" />
+    <Compile Include="IR\Flow.cs" />
+    <Compile Include="IR\Gen.cs" />
+    <Compile Include="IR\GetHigh64.cs" />
+    <Compile Include="IR\GetLow64.cs" />
+    <Compile Include="IR\GetVirtualFunctionPtr.cs" />
+    <Compile Include="IR\GotoLeaveTarget.cs" />
+    <Compile Include="IR\IfThenElse32.cs" />
+    <Compile Include="IR\IfThenElse64.cs" />
+    <Compile Include="IR\IntrinsicMethodCall.cs" />
+    <Compile Include="IR\IRInstruction.cs" />
+    <Compile Include="IR\IRInstructionMap.cs" />
+    <Compile Include="IR\IsInstanceOfInterfaceType.cs" />
+    <Compile Include="IR\IsInstanceOfType.cs" />
+    <Compile Include="IR\Jmp.cs" />
+    <Compile Include="IR\Kill.cs" />
+    <Compile Include="IR\KillAll.cs" />
+    <Compile Include="IR\KillAllExcept.cs" />
+    <Compile Include="IR\LoadCompound.cs" />
+    <Compile Include="IR\LoadConstant32.cs" />
+    <Compile Include="IR\LoadConstant64.cs" />
+    <Compile Include="IR\LoadFloatR4.cs" />
+    <Compile Include="IR\LoadFloatR8.cs" />
+    <Compile Include="IR\LoadInt32.cs" />
+    <Compile Include="IR\LoadInt64.cs" />
+    <Compile Include="IR\LoadParamCompound.cs" />
+    <Compile Include="IR\LoadParamFloatR4.cs" />
+    <Compile Include="IR\LoadParamFloatR8.cs" />
+    <Compile Include="IR\LoadParamInt32.cs" />
+    <Compile Include="IR\LoadParamInt64.cs" />
+    <Compile Include="IR\LoadParamSignExtend16x32.cs" />
+    <Compile Include="IR\LoadParamSignExtend16x64.cs" />
+    <Compile Include="IR\LoadParamSignExtend32x64.cs" />
+    <Compile Include="IR\LoadParamSignExtend8x32.cs" />
+    <Compile Include="IR\LoadParamSignExtend8x64.cs" />
+    <Compile Include="IR\LoadParamZeroExtend16x32.cs" />
+    <Compile Include="IR\LoadParamZeroExtend16x64.cs" />
+    <Compile Include="IR\LoadParamZeroExtend32x64.cs" />
+    <Compile Include="IR\LoadParamZeroExtend8x32.cs" />
+    <Compile Include="IR\LoadParamZeroExtend8x64.cs" />
+    <Compile Include="IR\LoadSignExtend16x32.cs" />
+    <Compile Include="IR\LoadSignExtend16x64.cs" />
+    <Compile Include="IR\LoadSignExtend32x64.cs" />
+    <Compile Include="IR\LoadSignExtend8x32.cs" />
+    <Compile Include="IR\LoadSignExtend8x64.cs" />
+    <Compile Include="IR\LoadZeroExtend16x32.cs" />
+    <Compile Include="IR\LoadZeroExtend16x64.cs" />
+    <Compile Include="IR\LoadZeroExtend32x64.cs" />
+    <Compile Include="IR\LoadZeroExtend8x32.cs" />
+    <Compile Include="IR\LoadZeroExtend8x64.cs" />
+    <Compile Include="IR\LogicalAnd32.cs" />
+    <Compile Include="IR\LogicalAnd64.cs" />
+    <Compile Include="IR\LogicalNot32.cs" />
+    <Compile Include="IR\LogicalNot64.cs" />
+    <Compile Include="IR\LogicalOr32.cs" />
+    <Compile Include="IR\LogicalOr64.cs" />
+    <Compile Include="IR\LogicalXor32.cs" />
+    <Compile Include="IR\LogicalXor64.cs" />
+    <Compile Include="IR\MemoryCopy.cs" />
+    <Compile Include="IR\MemorySet.cs" />
+    <Compile Include="IR\MoveCompound.cs" />
+    <Compile Include="IR\MoveFloatR4.cs" />
+    <Compile Include="IR\MoveFloatR8.cs" />
+    <Compile Include="IR\MoveInt32.cs" />
+    <Compile Include="IR\MoveInt64.cs" />
+    <Compile Include="IR\MulFloatR4.cs" />
+    <Compile Include="IR\MulFloatR8.cs" />
+    <Compile Include="IR\MulSigned32.cs" />
+    <Compile Include="IR\MulSigned64.cs" />
+    <Compile Include="IR\MulUnsigned32.cs" />
+    <Compile Include="IR\MulUnsigned64.cs" />
+    <Compile Include="IR\NewArray.cs" />
+    <Compile Include="IR\NewObject.cs" />
+    <Compile Include="IR\NewString.cs" />
+    <Compile Include="IR\Nop.cs" />
+    <Compile Include="IR\Phi.cs" />
+    <Compile Include="IR\Prologue.cs" />
+    <Compile Include="IR\RemFloatR4.cs" />
+    <Compile Include="IR\RemFloatR8.cs" />
+    <Compile Include="IR\RemSigned32.cs" />
+    <Compile Include="IR\RemSigned64.cs" />
+    <Compile Include="IR\RemUnsigned32.cs" />
+    <Compile Include="IR\RemUnsigned64.cs" />
+    <Compile Include="IR\Rethrow.cs" />
+    <Compile Include="IR\SetLeaveTarget.cs" />
+    <Compile Include="IR\SetReturn32.cs" />
+    <Compile Include="IR\SetReturn64.cs" />
+    <Compile Include="IR\SetReturnCompound.cs" />
+    <Compile Include="IR\SetReturnR4.cs" />
+    <Compile Include="IR\SetReturnR8.cs" />
+    <Compile Include="IR\ShiftLeft32.cs" />
+    <Compile Include="IR\ShiftLeft64.cs" />
+    <Compile Include="IR\ShiftRight32.cs" />
+    <Compile Include="IR\ShiftRight64.cs" />
+    <Compile Include="IR\SignExtend16x32.cs" />
+    <Compile Include="IR\SignExtend16x64.cs" />
+    <Compile Include="IR\SignExtend32x64.cs" />
+    <Compile Include="IR\SignExtend8x32.cs" />
+    <Compile Include="IR\SignExtend8x64.cs" />
+    <Compile Include="IR\StableObjectTracking.cs" />
+    <Compile Include="IR\StoreCompound.cs" />
+    <Compile Include="IR\StoreFloatR4.cs" />
+    <Compile Include="IR\StoreFloatR8.cs" />
+    <Compile Include="IR\StoreInt16.cs" />
+    <Compile Include="IR\StoreInt32.cs" />
+    <Compile Include="IR\StoreInt64.cs" />
+    <Compile Include="IR\StoreInt8.cs" />
+    <Compile Include="IR\StoreParamCompound.cs" />
+    <Compile Include="IR\StoreParamFloatR4.cs" />
+    <Compile Include="IR\StoreParamFloatR8.cs" />
+    <Compile Include="IR\StoreParamInt16.cs" />
+    <Compile Include="IR\StoreParamInt32.cs" />
+    <Compile Include="IR\StoreParamInt64.cs" />
+    <Compile Include="IR\StoreParamInt8.cs" />
+    <Compile Include="IR\Sub32.cs" />
+    <Compile Include="IR\Sub64.cs" />
+    <Compile Include="IR\SubCarryOut32.cs" />
+    <Compile Include="IR\SubFloatR4.cs" />
+    <Compile Include="IR\SubFloatR8.cs" />
+    <Compile Include="IR\SubWithCarry32.cs" />
+    <Compile Include="IR\Switch.cs" />
+    <Compile Include="IR\Throw.cs" />
+    <Compile Include="IR\To64.cs" />
+    <Compile Include="IR\Truncation64x32.cs" />
+    <Compile Include="IR\TryEnd.cs" />
+    <Compile Include="IR\TryStart.cs" />
+    <Compile Include="IR\Unbox.cs" />
+    <Compile Include="IR\Unbox32.cs" />
+    <Compile Include="IR\Unbox64.cs" />
+    <Compile Include="IR\UnstableObjectTracking.cs" />
+    <Compile Include="IR\ZeroExtend16x32.cs" />
+    <Compile Include="IR\ZeroExtend16x64.cs" />
+    <Compile Include="IR\ZeroExtend32x64.cs" />
+    <Compile Include="IR\ZeroExtend8x32.cs" />
+    <Compile Include="IR\ZeroExtend8x64.cs" />
     <Compile Include="LabelRegion.cs" />
     <Compile Include="Intrinsics\GetStringType.cs" />
     <Compile Include="Intrinsics\GetDelegateTargetAddress.cs" />
@@ -103,237 +290,6 @@
     <Compile Include="Intrinsics\Store.cs" />
     <Compile Include="Intrinsics\StoreR8.cs" />
     <Compile Include="Intrinsics\StoreR4.cs" />
-    <Compile Include="IR\Add32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Add64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\AddCarryOut32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\AddWithCarry32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ArithShiftRight32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ArithShiftRight64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\CompareInt32x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\CompareInt64x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\CompareInt64x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\CompareIntBranch32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\CompareIntBranch64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ConvertFloatR4ToInt32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ConvertFloatR4ToInt64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ConvertFloatR8ToInt32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ConvertFloatR8ToInt64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ConvertInt32ToFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ConvertInt32ToFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ConvertInt64ToFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ConvertInt64ToFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\GetHigh64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\GetLow64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\IfThenElse32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\IfThenElse64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadInt32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadInt64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamCompound.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamInt32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamInt64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamSignExtend16x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamSignExtend16x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamSignExtend32x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamSignExtend8x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamSignExtend8x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamZeroExtend16x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamZeroExtend16x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamZeroExtend32x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamZeroExtend8x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadParamZeroExtend8x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadSignExtend16x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadSignExtend16x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadSignExtend32x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadSignExtend8x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadSignExtend8x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadZeroExtend16x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadZeroExtend16x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadZeroExtend32x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadZeroExtend8x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadZeroExtend8x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\MoveInt32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\MoveInt64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SignExtend16x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SignExtend16x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SignExtend32x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SignExtend8x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SignExtend8x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreInt16.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreInt32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreInt64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreInt8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreParamCompound.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreParamFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreParamFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreParamInt16.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreParamInt32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreParamInt64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreParamInt8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Sub32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Sub64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SubCarryOut32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SubWithCarry32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ZeroExtend16x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ZeroExtend16x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ZeroExtend32x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ZeroExtend8x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ZeroExtend8x64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
     <Compile Include="Linker\BaseLinker.cs" />
     <Compile Include="Linker\Elf\ElfHeader.cs" />
     <Compile Include="Linker\Elf\ElfLinker.cs" />
@@ -387,345 +343,6 @@
     <Compile Include="Intrinsics\CreateInstanceSimple.cs" />
     <Compile Include="Intrinsics\GetAssemblyListTable.cs" />
     <Compile Include="Intrinsics\GetObjectFromAddress.cs" />
-    <Compile Include="IR\AddFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\AddFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\AddressOf.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\BlockEnd.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\BlockStart.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Box.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Box32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Box64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\BoxR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\BoxR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Break.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Call.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\CallDirect.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\CallDynamic.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\CallInterface.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\CallStatic.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\CallVirtual.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\CompareFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\CompareFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ConvertFloatR4ToFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ConvertFloatR8ToFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\DivFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\DivFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\DivSigned32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\DivSigned64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\DivUnsigned32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\DivUnsigned64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Epilogue.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ExceptionEnd.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ExceptionStart.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\FilterEnd.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\FilterStart.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\FinallyEnd.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\FinallyStart.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Flow.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Gen.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\GetVirtualFunctionPtr.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\GotoLeaveTarget.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\IntrinsicMethodCall.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\IRInstruction.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>IRInstruction.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\IRInstructionMap.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>IRInstructionMap.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\IRInstructions.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\IsInstanceOfInterfaceType.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\IsInstanceOfType.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Jmp.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Kill.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\KillAll.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\KillAllExcept.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadCompound.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadConstant32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadConstant64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LoadFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LogicalAnd32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LogicalAnd64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LogicalNot32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LogicalNot64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LogicalOr32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LogicalOr64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LogicalXor32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\LogicalXor64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\MemoryCopy.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\MemorySet.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\MoveCompound.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\MoveFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\MoveFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\MulFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\MulFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\MulSigned32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\MulSigned64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\MulUnsigned32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\MulUnsigned64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\NewArray.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\NewObject.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\NewString.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Nop.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Phi.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Prologue.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\RemFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\RemFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\RemSigned32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\RemSigned64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\RemUnsigned32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\RemUnsigned64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Rethrow.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SetLeaveTarget.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SetReturn32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SetReturn64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SetReturnCompound.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SetReturnR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SetReturnR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ShiftLeft32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ShiftLeft64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ShiftRight32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\ShiftRight64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StableObjectTracking.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreCompound.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\StoreFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SubFloatR4.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\SubFloatR8.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Switch.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Throw.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\To64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Truncation64x32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\TryEnd.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\TryStart.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Unbox.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Unbox32.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\Unbox64.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IR\UnstableObjectTracking.cs">
-      <DependentUpon>IRInstructions.tt</DependentUpon>
-    </Compile>
     <Compile Include="LoadStore.cs" />
     <Compile Include="Intrinsics\Load16.cs" />
     <Compile Include="Intrinsics\Store64.cs" />
@@ -994,23 +611,6 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="IR\IRInstructions.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="IR\IRInstruction.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>IRInstruction.cs</LastGenOutput>
-    </Content>
-    <Content Include="IR\IRInstructionMap.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>IRInstructionMap.cs</LastGenOutput>
-    </Content>
-    <Content Include="IR\IRInstructions.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>IRInstructions.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

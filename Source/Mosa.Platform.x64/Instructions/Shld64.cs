@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// Shld64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Shld64 : X64Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xA5 } );
-
 		internal Shld64()
 			: base(1, 3)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xA5 });
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
@@ -43,4 +43,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

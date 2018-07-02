@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class SetByteIfNotEqual : X86Instruction
 	{
-		public override string AlternativeName { get { return "SetNE"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x95 } );
-
 		internal SetByteIfNotEqual()
 			: base(1, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "SetNE"; } }
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x95 });
 
 		public override bool IsZeroFlagUsed { get { return true; } }
 
@@ -37,4 +37,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

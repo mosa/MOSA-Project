@@ -85,7 +85,14 @@ namespace System
 
 		public override int GetHashCode()
 		{
-			return (int)_value;
+			var bits = BitConverter.SingleToInt32Bits(_value);
+
+			if (((bits - 1) & 0x7FFFFFFF) >= 0x7F800000)
+			{
+				bits &= 0x7F800000;
+			}
+
+			return bits;
 		}
 	}
 }

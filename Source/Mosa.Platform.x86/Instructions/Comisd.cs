@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Comisd : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x66, 0x0F, 0x2F } );
-
 		internal Comisd()
 			: base(0, 2)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x66, 0x0F, 0x2F });
 
 		public override bool IsZeroFlagModified { get { return true; } }
 
@@ -42,4 +42,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

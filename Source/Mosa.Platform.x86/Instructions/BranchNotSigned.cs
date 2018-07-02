@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class BranchNotSigned : X86Instruction
 	{
-		public override string AlternativeName { get { return "JNS"; } }
-
-		public static readonly byte[] opcode = new byte[] { 0x0F, 0x89 };
-
 		internal BranchNotSigned()
 			: base(0, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "JNS"; } }
+
+		public static readonly byte[] opcode = new byte[] { 0x0F, 0x89 };
 
 		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 
@@ -42,4 +42,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

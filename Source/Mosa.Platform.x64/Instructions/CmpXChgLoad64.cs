@@ -9,7 +9,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// CmpXChgLoad64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CmpXChgLoad64 : X64Instruction
 	{
 		internal CmpXChgLoad64()
@@ -48,4 +48,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// Cli
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Cli : X64Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0xFA };
-
 		internal Cli()
 			: base(0, 0)
 		{
 		}
+
+		public static readonly byte[] opcode = new byte[] { 0xFA };
 
 		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
@@ -30,4 +30,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

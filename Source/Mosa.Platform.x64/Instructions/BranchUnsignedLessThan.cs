@@ -9,17 +9,17 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// BranchUnsignedLessThan
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class BranchUnsignedLessThan : X64Instruction
 	{
-		public override string AlternativeName { get { return "JB"; } }
-
-		public static readonly byte[] opcode = new byte[] { 0x0F, 0x82 };
-
 		internal BranchUnsignedLessThan()
 			: base(0, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "JB"; } }
+
+		public static readonly byte[] opcode = new byte[] { 0x0F, 0x82 };
 
 		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 
@@ -42,4 +42,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

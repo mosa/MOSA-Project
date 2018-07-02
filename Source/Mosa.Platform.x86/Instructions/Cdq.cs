@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Cdq : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0x99 };
-
 		internal Cdq()
 			: base(2, 1)
 		{
 		}
+
+		public static readonly byte[] opcode = new byte[] { 0x99 };
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
@@ -28,4 +28,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

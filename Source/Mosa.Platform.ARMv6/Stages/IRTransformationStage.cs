@@ -30,7 +30,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		private void AddSigned32(Context context)
 		{
-			context.ReplaceInstruction(ARMv6.Add);
+			context.ReplaceInstruction(ARMv6.Add32);
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		private void AddUnsigned32(Context context)
 		{
-			context.ReplaceInstruction(ARMv6.Add);
+			context.ReplaceInstruction(ARMv6.Add32);
 		}
 
 		/// <summary>
@@ -48,7 +48,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		private void LogicalOr32(Context context)
 		{
-			context.ReplaceInstruction(ARMv6.Orr);
+			context.ReplaceInstruction(ARMv6.Orr32);
 		}
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		private void SubSigned32(Context context)
 		{
-			context.ReplaceInstruction(ARMv6.Sub);
+			context.ReplaceInstruction(ARMv6.Sub32);
 		}
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace Mosa.Platform.ARMv6.Stages
 		/// <param name="context">The context.</param>
 		private void SubUnsigned32(Context context)
 		{
-			context.ReplaceInstruction(ARMv6.Sub);
+			context.ReplaceInstruction(ARMv6.Sub32);
 		}
 
 		#endregion Visitation Methods

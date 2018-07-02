@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Ret : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0xC3 };
-
 		internal Ret()
 			: base(0, 0)
 		{
 		}
+
+		public static readonly byte[] opcode = new byte[] { 0xC3 };
 
 		public override FlowControl FlowControl { get { return FlowControl.Return; } }
 
@@ -30,4 +30,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

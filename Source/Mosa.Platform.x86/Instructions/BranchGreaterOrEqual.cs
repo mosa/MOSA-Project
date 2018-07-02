@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class BranchGreaterOrEqual : X86Instruction
 	{
-		public override string AlternativeName { get { return "JGE"; } }
-
-		public static readonly byte[] opcode = new byte[] { 0x0F, 0x8D };
-
 		internal BranchGreaterOrEqual()
 			: base(0, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "JGE"; } }
+
+		public static readonly byte[] opcode = new byte[] { 0x0F, 0x8D };
 
 		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 
@@ -44,4 +44,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

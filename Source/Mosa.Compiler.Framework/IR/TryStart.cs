@@ -20,4 +20,3 @@ namespace Mosa.Compiler.Framework.IR
 		public override bool IgnoreInstructionBasicBlockTargets { get { return true; } }
 	}
 }
-

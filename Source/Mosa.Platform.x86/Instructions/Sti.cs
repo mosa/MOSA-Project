@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Sti : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0xFB };
-
 		internal Sti()
 			: base(0, 0)
 		{
 		}
+
+		public static readonly byte[] opcode = new byte[] { 0xFB };
 
 		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
@@ -30,4 +30,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

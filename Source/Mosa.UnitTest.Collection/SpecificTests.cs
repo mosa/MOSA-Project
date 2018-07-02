@@ -23,5 +23,16 @@ namespace Mosa.UnitTest.Collection
 		//{
 		//	return Double.IsPositiveInfinity(Double.NegativeInfinity);
 		//}
+
+		//private readonly struct Test
+		//{
+		//	public readonly uint x;
+
+		//	private static void Method()
+		//	{
+		//		Test x = default;
+		//		x.x.ToString();
+		//	}
+		//}
 	}
 }

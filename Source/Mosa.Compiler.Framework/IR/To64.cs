@@ -20,4 +20,3 @@ namespace Mosa.Compiler.Framework.IR
 		public override BuiltInType ResultType { get { return BuiltInType.UInt64; } }
 	}
 }
-

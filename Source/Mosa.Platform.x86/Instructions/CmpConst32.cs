@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class CmpConst32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x81 } , 0x07);
-
 		internal CmpConst32()
 			: base(0, 2)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x81 }, 0x07);
 
 		public override bool IsZeroFlagUnchanged { get { return true; } }
 
@@ -48,4 +48,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

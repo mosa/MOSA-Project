@@ -9,17 +9,17 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// CMovNoCarry64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovNoCarry64 : X64Instruction
 	{
-		public override string AlternativeName { get { return "CMovNC64"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x43 } );
-
 		internal CMovNoCarry64()
 			: base(1, 1)
 		{
 		}
+
+		public override string AlternativeName { get { return "CMovNC64"; } }
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x43 });
 
 		public override bool IsCarryFlagUsed { get { return true; } }
 
@@ -37,4 +37,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

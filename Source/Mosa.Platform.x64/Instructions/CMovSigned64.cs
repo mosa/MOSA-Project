@@ -9,17 +9,17 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// CMovSigned64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovSigned64 : X64Instruction
 	{
-		public override string AlternativeName { get { return "CMovS64"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x48 } );
-
 		internal CMovSigned64()
 			: base(1, 1)
 		{
 		}
+
+		public override string AlternativeName { get { return "CMovS64"; } }
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x48 });
 
 		public override bool IsSignFlagUsed { get { return true; } }
 
@@ -37,4 +37,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

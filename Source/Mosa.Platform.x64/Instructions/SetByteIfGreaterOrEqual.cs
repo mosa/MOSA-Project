@@ -9,17 +9,17 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// SetByteIfGreaterOrEqual
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class SetByteIfGreaterOrEqual : X64Instruction
 	{
-		public override string AlternativeName { get { return "SetGE"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x9D } );
-
 		internal SetByteIfGreaterOrEqual()
 			: base(1, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "SetGE"; } }
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x9D });
 
 		public override bool IsSignFlagUsed { get { return true; } }
 
@@ -39,4 +39,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

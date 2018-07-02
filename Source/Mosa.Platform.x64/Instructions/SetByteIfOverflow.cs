@@ -9,17 +9,17 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// SetByteIfOverflow
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class SetByteIfOverflow : X64Instruction
 	{
-		public override string AlternativeName { get { return "SetO"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x90 } );
-
 		internal SetByteIfOverflow()
 			: base(1, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "SetO"; } }
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x90 });
 
 		public override bool IsOverflowFlagUsed { get { return true; } }
 
@@ -37,4 +37,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

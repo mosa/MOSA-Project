@@ -9,7 +9,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// Pop64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Pop64 : X64Instruction
 	{
 		internal Pop64()
@@ -26,4 +26,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-
