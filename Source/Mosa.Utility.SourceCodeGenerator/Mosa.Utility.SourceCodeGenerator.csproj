@@ -45,6 +45,9 @@
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildARMv6.cs" />
+    <Compile Include="BuildARMv6InstructionMap.cs" />
+    <Compile Include="BuildARMv6Instructions.cs" />
     <Compile Include="BuildX64Instructions.cs" />
     <Compile Include="BuildX64.cs" />
     <Compile Include="BuildX64InstructionMap.cs" />

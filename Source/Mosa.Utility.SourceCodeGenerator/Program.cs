@@ -63,6 +63,23 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Path.Combine(dataPath, @"X64Instructions.json"),
 				Path.Combine(targetPath, @"Mosa.Platform.x64\Instructions")
 			);
+
+			new BuildARMv6(
+				Path.Combine(dataPath, @"ARMv6Instructions.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.ARMv6\"),
+				"ARMv6.cs"
+			);
+
+			new BuildARMv6InstructionMap(
+				Path.Combine(dataPath, @"ARMv6Instructions.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.ARMv6\"),
+				"ARMv6InstructionMap.cs"
+			);
+
+			new BuildARMv6Instructions(
+				Path.Combine(dataPath, @"ARMv6Instructions.json"),
+				Path.Combine(targetPath, @"Mosa.Platform.ARMv6\Instructions")
+			);
 		}
 	}
 }

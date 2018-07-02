@@ -5,18 +5,20 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16 instruction: Byte-Reverse Packed Halfword
+	/// Adr instruction: Form PC-relative Address
+	/// First operand is the PC. Second operand is an immediate constant.
 	/// </summary>
-	public class Rev16 : ARMv6Instruction
+	public class Adr32 : ARMv6Instruction
 	{
-		public override string __description { get { return "Byte-Reverse Packed Halfword"; } }
+		public override string __description { get { return "Form PC-relative Address"; } }
+		public override string __description2 { get { return "First operand is the PC. Second operand is an immediate constant."; } }
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Rev16"/>.
+		/// Initializes a new instance of <see cref="Adr32"/>.
 		/// </summary>
-		public Rev16() :
+		public Adr32() :
 			base(1, 3)
 		{
 		}

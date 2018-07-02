@@ -5,18 +5,18 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16 instruction: Byte-Reverse Packed Halfword
+	/// Lsl instruction: Logical Shift Left
 	/// </summary>
-	public class Rev16 : ARMv6Instruction
+	public class Lsl32 : ARMv6Instruction
 	{
-		public override string __description { get { return "Byte-Reverse Packed Halfword"; } }
+		public override string __description { get { return "Logical Shift Left"; } }
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Rev16"/>.
+		/// Initializes a new instance of <see cref="Lsl32"/>.
 		/// </summary>
-		public Rev16() :
+		public Lsl32() :
 			base(1, 3)
 		{
 		}

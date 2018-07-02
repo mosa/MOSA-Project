@@ -5,18 +5,20 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16 instruction: Byte-Reverse Packed Halfword
+	/// Uxtb instruction: Unsigned Extend Byte
+	/// Extend 8 bits to 32
 	/// </summary>
-	public class Rev16 : ARMv6Instruction
+	public class Uxtb32 : ARMv6Instruction
 	{
-		public override string __description { get { return "Byte-Reverse Packed Halfword"; } }
+		public override string __description { get { return "Unsigned Extend Byte"; } }
+		public override string __description2 { get { return "Extend 8 bits to 32"; } }
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Rev16"/>.
+		/// Initializes a new instance of <see cref="Uxtb32"/>.
 		/// </summary>
-		public Rev16() :
+		public Uxtb32() :
 			base(1, 3)
 		{
 		}

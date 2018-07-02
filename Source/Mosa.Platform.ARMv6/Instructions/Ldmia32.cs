@@ -5,18 +5,18 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16 instruction: Byte-Reverse Packed Halfword
+	/// Ldmia instruction: Load Multiple Increment After
 	/// </summary>
-	public class Rev16 : ARMv6Instruction
+	public class Ldmia32 : ARMv6Instruction
 	{
-		public override string __description { get { return "Byte-Reverse Packed Halfword"; } }
+		public override string __description { get { return "Load Multiple Increment After"; } }
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Rev16"/>.
+		/// Initializes a new instance of <see cref="Ldmia32"/>.
 		/// </summary>
-		public Rev16() :
+		public Ldmia32() :
 			base(1, 3)
 		{
 		}

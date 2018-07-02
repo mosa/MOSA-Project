@@ -5,18 +5,18 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16 instruction: Byte-Reverse Packed Halfword
+	/// Stm instruction: Store Multiple
 	/// </summary>
-	public class Rev16 : ARMv6Instruction
+	public class Stm32 : ARMv6Instruction
 	{
-		public override string __description { get { return "Byte-Reverse Packed Halfword"; } }
+		public override string __description { get { return "Store Multiple"; } }
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Rev16"/>.
+		/// Initializes a new instance of <see cref="Stm32"/>.
 		/// </summary>
-		public Rev16() :
+		public Stm32() :
 			base(1, 3)
 		{
 		}

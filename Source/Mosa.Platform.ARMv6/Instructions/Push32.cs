@@ -5,18 +5,20 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16 instruction: Byte-Reverse Packed Halfword
+	/// Push instruction: Push multiple registers onto the stack
+	/// This instruction decrements the base register before the memory access and updates the base register.
 	/// </summary>
-	public class Rev16 : ARMv6Instruction
+	public class Push32 : ARMv6Instruction
 	{
-		public override string __description { get { return "Byte-Reverse Packed Halfword"; } }
+		public override string __description { get { return "Push multiple registers onto the stack"; } }
+		public override string __description2 { get { return "This instruction decrements the base register before the memory access and updates the base register."; } }
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Rev16"/>.
+		/// Initializes a new instance of <see cref="Push32"/>.
 		/// </summary>
-		public Rev16() :
+		public Push32() :
 			base(1, 3)
 		{
 		}

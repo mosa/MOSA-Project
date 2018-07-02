@@ -5,18 +5,17 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16 instruction: Byte-Reverse Packed Halfword
+	/// Str instruction: Store 32-bit word
+	/// Load and store instructions
 	/// </summary>
-	public class Rev16 : ARMv6Instruction
+	public class Str32 : ARMv6Instruction
 	{
-		public override string __description { get { return "Byte-Reverse Packed Halfword"; } }
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Rev16"/>.
+		/// Initializes a new instance of <see cref="Str32"/>.
 		/// </summary>
-		public Rev16() :
+		public Str32() :
 			base(1, 3)
 		{
 		}
@@ -32,8 +31,11 @@ namespace Mosa.Platform.ARMv6.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, ARMv6CodeEmitter emitter)
 		{
-			// TODO
+			EmitMemoryStore(node, emitter);
 		}
+
+		public override string __emitter { get { return "EmitMemoryStore"; } }
+		public override string __description { get { return "Store 32-bit word"; } }
 
 		#endregion Methods
 	}

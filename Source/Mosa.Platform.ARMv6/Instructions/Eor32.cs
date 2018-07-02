@@ -1,22 +1,21 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16 instruction: Byte-Reverse Packed Halfword
+	/// Eor instruction: Bitwise Exclusive OR
 	/// </summary>
-	public class Rev16 : ARMv6Instruction
+	public class Eor32 : ARMv6Instruction
 	{
-		public override string __description { get { return "Byte-Reverse Packed Halfword"; } }
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Rev16"/>.
+		/// Initializes a new instance of <see cref="Eor32"/>.
 		/// </summary>
-		public Rev16() :
+		public Eor32() :
 			base(1, 3)
 		{
 		}
@@ -32,8 +31,12 @@ namespace Mosa.Platform.ARMv6.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, ARMv6CodeEmitter emitter)
 		{
-			// TODO
+			EmitDataProcessingInstruction(node, emitter, Bits.b0001);
 		}
+
+		public override string __emitter { get { return "EmitDataProcessingInstruction"; } }
+		public override string __bits { get { return "b0001"; } }
+		public override string __description { get { return "Bitwise Exclusive OR"; } }
 
 		#endregion Methods
 	}

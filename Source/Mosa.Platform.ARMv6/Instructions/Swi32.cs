@@ -5,18 +5,20 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16 instruction: Byte-Reverse Packed Halfword
+	/// Swi instruction:
+	/// Instruction is used to cause an SVCall (The Supervisor Call) exception to occur
 	/// </summary>
-	public class Rev16 : ARMv6Instruction
+	public class Swi32 : ARMv6Instruction
 	{
-		public override string __description { get { return "Byte-Reverse Packed Halfword"; } }
+		public override string __description { get { return "Supervisor Call"; } }
+		public override string __description2 { get { return "Instruction is used to cause an SVCall (The Supervisor Call) exception to occur"; } }
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Rev16"/>.
+		/// Initializes a new instance of <see cref="Swi32"/>.
 		/// </summary>
-		public Rev16() :
+		public Swi32() :
 			base(1, 3)
 		{
 		}

@@ -5,18 +5,18 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16 instruction: Byte-Reverse Packed Halfword
+	/// Revsh instruction: Byte-Reverse Signed Halfword
 	/// </summary>
-	public class Rev16 : ARMv6Instruction
+	public class Revsh32 : ARMv6Instruction
 	{
-		public override string __description { get { return "Byte-Reverse Packed Halfword"; } }
+		public override string __description { get { return "Byte-Reverse Signed Halfword"; } }
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Rev16"/>.
+		/// Initializes a new instance of <see cref="Revsh32"/>.
 		/// </summary>
-		public Rev16() :
+		public Revsh32() :
 			base(1, 3)
 		{
 		}

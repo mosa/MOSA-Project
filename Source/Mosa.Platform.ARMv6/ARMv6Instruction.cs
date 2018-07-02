@@ -12,6 +12,11 @@ namespace Mosa.Platform.ARMv6
 	/// <seealso cref="Mosa.Compiler.Framework.BaseInstruction" />
 	public abstract class ARMv6Instruction : BaseInstruction
 	{
+		public virtual string __description { get; set; }
+		public virtual string __description2 { get; set; }
+		public virtual string __emitter { get; set; }
+		public virtual string __bits { get; set; }
+
 		#region Construction
 
 		/// <summary>
@@ -108,7 +113,7 @@ namespace Mosa.Platform.ARMv6
 			}
 		}
 
-		protected void EmitMemoryLoadStore(InstructionNode node, ARMv6CodeEmitter emitter, TransferType transferType)
+		protected void EmitMemoryLoad(InstructionNode node, ARMv6CodeEmitter emitter)
 		{
 			if (node.Operand2.IsConstant)
 			{
@@ -118,7 +123,40 @@ namespace Mosa.Platform.ARMv6
 					OffsetDirection.Up,
 					TransferSize.Word,
 					WriteBack.NoWriteBack,
-					transferType,
+					TransferType.Load,
+					node.Operand1.Index,
+					node.Result.Index,
+					(uint)node.Operand2.ConstantUnsignedLongInteger
+				);
+			}
+			else
+			{
+				emitter.EmitSingleDataTransfer(
+					node.ConditionCode,
+					Indexing.Post,
+					OffsetDirection.Up,
+					TransferSize.Word,
+					WriteBack.NoWriteBack,
+					TransferType.Load,
+					node.Operand1.Index,
+					node.Result.Index,
+					node.Operand2.ShiftType,
+					node.Operand3.Index
+				  );
+			}
+		}
+
+		protected void EmitMemoryStore(InstructionNode node, ARMv6CodeEmitter emitter)
+		{
+			if (node.Operand2.IsConstant)
+			{
+				emitter.EmitSingleDataTransfer(
+					node.ConditionCode,
+					Indexing.Post,
+					OffsetDirection.Up,
+					TransferSize.Word,
+					WriteBack.NoWriteBack,
+					TransferType.Store,
 					node.Operand1.Index,
 					node.Result.Index,
 					(uint)node.Operand2.ConstantUnsignedLongInteger
@@ -132,7 +170,7 @@ namespace Mosa.Platform.ARMv6
 					  OffsetDirection.Up,
 					  TransferSize.Word,
 					  WriteBack.NoWriteBack,
-					  transferType,
+					 TransferType.Store,
 					  node.Operand1.Index,
 					  node.Result.Index,
 					  node.Operand2.ShiftType,

@@ -5,18 +5,17 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16 instruction: Byte-Reverse Packed Halfword
+	/// Mul instruction:
+	/// Performs a 32x32 multiply that generates a 32-bit result.The instruction can operate on signed or unsigned quantities.
 	/// </summary>
-	public class Rev16 : ARMv6Instruction
+	public class Mul32 : ARMv6Instruction
 	{
-		public override string __description { get { return "Byte-Reverse Packed Halfword"; } }
-
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Rev16"/>.
+		/// Initializes a new instance of <see cref="Mul32"/>.
 		/// </summary>
-		public Rev16() :
+		public Mul32() :
 			base(1, 3)
 		{
 		}
@@ -32,8 +31,11 @@ namespace Mosa.Platform.ARMv6.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(InstructionNode node, ARMv6CodeEmitter emitter)
 		{
-			// TODO
+			EmitMultiplyInstruction(node, emitter);
 		}
+
+		public override string __emitter { get { return "EmitMultiplyInstruction"; } }
+		public override string __description2 { get { return "Performs a 32x32 multiply that generates a 32-bit result.The instruction can operate on signed or unsigned quantities."; } }
 
 		#endregion Methods
 	}

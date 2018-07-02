@@ -5,18 +5,20 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16 instruction: Byte-Reverse Packed Halfword
+	/// Ldrh instruction: Load 16-bit unsigned halfword
+	/// Load and store instructions
 	/// </summary>
-	public class Rev16 : ARMv6Instruction
+	public class Ldrh32 : ARMv6Instruction
 	{
-		public override string __description { get { return "Byte-Reverse Packed Halfword"; } }
+		public override string __description { get { return "Load 16-bit unsigned halfword"; } }
+		public override string __description2 { get { return "Load and store instructions"; } }
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Rev16"/>.
+		/// Initializes a new instance of <see cref="Ldrh32"/>.
 		/// </summary>
-		public Rev16() :
+		public Ldrh32() :
 			base(1, 3)
 		{
 		}

@@ -57,6 +57,10 @@
       <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520559}</Project>
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.ARMv6\Mosa.Platform.ARMv6.csproj">
+      <Project>{0FB92651-3EE8-441D-84F2-C4DFDA68E8A5}</Project>
+      <Name>Mosa.Platform.ARMv6</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
       <Project>{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}</Project>
       <Name>Mosa.Platform.x86</Name>

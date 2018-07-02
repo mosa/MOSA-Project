@@ -5,18 +5,20 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16 instruction: Byte-Reverse Packed Halfword
+	/// Mrs instruction: "move the contents of the Application Program Status Register, APSR, to or from a general-purpose register."
+	/// Status register access instructions
 	/// </summary>
-	public class Rev16 : ARMv6Instruction
+	public class Mrs32 : ARMv6Instruction
 	{
-		public override string __description { get { return "Byte-Reverse Packed Halfword"; } }
+		public override string __description { get { return "Status register access"; } }
+		public override string __description2 { get { return "Move the contents of the Application Program Status Register, APSR, to or from a general-purpose register."; } }
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Rev16"/>.
+		/// Initializes a new instance of <see cref="Mrs32"/>.
 		/// </summary>
-		public Rev16() :
+		public Mrs32() :
 			base(1, 3)
 		{
 		}
