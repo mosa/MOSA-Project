@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// Stos
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Stos : X64Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0xAB };
-
 		internal Stos()
 			: base(0, 1)
 		{
 		}
+
+		public static readonly byte[] opcode = new byte[] { 0xAB };
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
@@ -28,4 +28,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

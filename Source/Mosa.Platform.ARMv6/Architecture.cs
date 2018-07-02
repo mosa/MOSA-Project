@@ -297,7 +297,7 @@ namespace Mosa.Platform.ARMv6
 		/// <returns></returns>
 		public override bool IsInstructionMove(BaseInstruction instruction)
 		{
-			return instruction == ARMv6.Mov;
+			return instruction == ARMv6.Mov32;
 		}
 	}
 }

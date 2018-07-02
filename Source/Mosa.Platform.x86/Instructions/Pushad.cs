@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Pushad : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0x60 };
-
 		internal Pushad()
 			: base(0, 0)
 		{
 		}
+
+		public static readonly byte[] opcode = new byte[] { 0x60 };
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
@@ -28,4 +28,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

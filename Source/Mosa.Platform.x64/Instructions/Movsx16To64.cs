@@ -9,7 +9,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// Movsx16To64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Movsx16To64 : X64Instruction
 	{
 		internal Movsx16To64()
@@ -26,4 +26,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

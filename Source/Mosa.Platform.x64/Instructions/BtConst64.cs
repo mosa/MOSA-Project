@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// BtConst64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class BtConst64 : X64Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xBA } , 0x04);
-
 		internal BtConst64()
 			: base(1, 2)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xBA }, 0x04);
 
 		public override bool IsCarryFlagModified { get { return true; } }
 
@@ -42,4 +42,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

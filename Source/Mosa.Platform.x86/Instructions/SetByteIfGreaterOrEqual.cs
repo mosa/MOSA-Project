@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class SetByteIfGreaterOrEqual : X86Instruction
 	{
-		public override string AlternativeName { get { return "SetGE"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x9D } );
-
 		internal SetByteIfGreaterOrEqual()
 			: base(1, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "SetGE"; } }
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x9D });
 
 		public override bool IsSignFlagUsed { get { return true; } }
 
@@ -39,4 +39,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

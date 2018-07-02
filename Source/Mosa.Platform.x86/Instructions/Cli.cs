@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Cli : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0xFA };
-
 		internal Cli()
 			: base(0, 0)
 		{
 		}
+
+		public static readonly byte[] opcode = new byte[] { 0xFA };
 
 		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
@@ -30,4 +30,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

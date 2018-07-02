@@ -9,7 +9,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// Lea64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Lea64 : X64Instruction
 	{
 		internal Lea64()
@@ -26,4 +26,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

@@ -9,17 +9,17 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// SetByteIfEqual
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class SetByteIfEqual : X64Instruction
 	{
-		public override string AlternativeName { get { return "SetE"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x94 } );
-
 		internal SetByteIfEqual()
 			: base(1, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "SetE"; } }
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x94 });
 
 		public override bool IsZeroFlagUsed { get { return true; } }
 
@@ -37,4 +37,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

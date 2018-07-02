@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Inc32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xFF } , 0x00);
-
 		internal Inc32()
 			: base(1, 1)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xFF }, 0x00);
 
 		public override bool IsZeroFlagModified { get { return true; } }
 
@@ -36,4 +36,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

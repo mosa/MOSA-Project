@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class SetByteIfNoParity : X86Instruction
 	{
-		public override string AlternativeName { get { return "SetNP"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x9B } );
-
 		internal SetByteIfNoParity()
 			: base(1, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "SetNP"; } }
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x9B });
 
 		public override bool IsParityFlagUsed { get { return true; } }
 
@@ -37,4 +37,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

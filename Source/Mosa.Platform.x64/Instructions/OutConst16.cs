@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// OutConst16
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class OutConst16 : X64Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xE7 } );
-
 		internal OutConst16()
 			: base(0, 2)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xE7 });
 
 		public override bool IsIOOperation { get { return true; } }
 
@@ -32,4 +32,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

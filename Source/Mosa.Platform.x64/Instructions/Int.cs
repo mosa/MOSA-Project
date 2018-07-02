@@ -9,7 +9,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// Int
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Int : X64Instruction
 	{
 		internal Int()
@@ -48,4 +48,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

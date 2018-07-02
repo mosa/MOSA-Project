@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class InConst32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xE5 } );
-
 		internal InConst32()
 			: base(1, 1)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xE5 });
 
 		public override bool IsIOOperation { get { return true; } }
 
@@ -32,4 +32,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

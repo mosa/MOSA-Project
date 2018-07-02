@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Neg32 : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0xF7, 0x03 };
-
 		internal Neg32()
 			: base(1, 1)
 		{
 		}
+
+		public static readonly byte[] opcode = new byte[] { 0xF7, 0x03 };
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
@@ -50,4 +50,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

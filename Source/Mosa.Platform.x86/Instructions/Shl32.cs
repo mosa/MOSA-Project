@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Shl32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xD3 } , 0x04);
-
 		internal Shl32()
 			: base(1, 2)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xD3 }, 0x04);
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
@@ -43,4 +43,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

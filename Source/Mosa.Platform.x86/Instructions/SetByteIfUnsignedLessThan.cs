@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class SetByteIfUnsignedLessThan : X86Instruction
 	{
-		public override string AlternativeName { get { return "SetB"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x92 } );
-
 		internal SetByteIfUnsignedLessThan()
 			: base(1, 0)
 		{
 		}
+
+		public override string AlternativeName { get { return "SetB"; } }
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x92 });
 
 		public override bool IsCarryFlagUsed { get { return true; } }
 
@@ -37,4 +37,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

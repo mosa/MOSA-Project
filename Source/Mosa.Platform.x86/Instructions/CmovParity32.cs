@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class CMovParity32 : X86Instruction
 	{
-		public override string AlternativeName { get { return "CMovP32"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x4A } );
-
 		internal CMovParity32()
 			: base(1, 1)
 		{
 		}
+
+		public override string AlternativeName { get { return "CMovP32"; } }
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x4A });
 
 		public override bool IsParityFlagUsed { get { return true; } }
 
@@ -37,4 +37,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

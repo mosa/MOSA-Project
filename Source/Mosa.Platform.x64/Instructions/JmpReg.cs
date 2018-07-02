@@ -9,15 +9,15 @@ namespace Mosa.Platform.x64.Instructions
 	/// <summary>
 	/// JmpReg
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.X64.X64Instruction" />
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class JmpReg : X64Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xFF } , 0x04);
-
 		internal JmpReg()
 			: base(0, 1)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xFF }, 0x04);
 
 		public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
 
@@ -50,4 +50,3 @@ namespace Mosa.Platform.x64.Instructions
 		}
 	}
 }
-

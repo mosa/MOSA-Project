@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Rep : X86Instruction
 	{
-		public static readonly byte[] opcode = new byte[] { 0xF3 };
-
 		internal Rep()
 			: base(0, 0)
 		{
 		}
+
+		public static readonly byte[] opcode = new byte[] { 0xF3 };
 
 		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
@@ -32,4 +32,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

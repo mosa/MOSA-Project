@@ -18,4 +18,3 @@ namespace Mosa.Compiler.Framework.IR
 		public override bool IsCommutative { get { return true; } }
 	}
 }
-

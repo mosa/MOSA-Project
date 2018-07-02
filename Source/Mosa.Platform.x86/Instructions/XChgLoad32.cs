@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class XChgLoad32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x87 } );
-
 		internal XChgLoad32()
 			: base(1, 3)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x87 });
 
 		public override bool IsMemoryRead { get { return true; } }
 
@@ -30,4 +30,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-

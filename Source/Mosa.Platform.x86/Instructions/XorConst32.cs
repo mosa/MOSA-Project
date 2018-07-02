@@ -12,12 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class XorConst32 : X86Instruction
 	{
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x81 } , 0x06);
-
 		internal XorConst32()
 			: base(1, 2)
 		{
 		}
+
+		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x81 }, 0x06);
 
 		public override bool IsCommutative { get { return true; } }
 
@@ -49,4 +49,3 @@ namespace Mosa.Platform.x86.Instructions
 		}
 	}
 }
-
