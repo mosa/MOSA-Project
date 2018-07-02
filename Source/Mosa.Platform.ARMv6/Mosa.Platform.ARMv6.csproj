@@ -82,10 +82,12 @@
   <ItemGroup>
     <Compile Include="Architecture.cs" />
     <Compile Include="ArchitectureFeatureFlags.cs" />
-    <Compile Include="ARMv6Instruction.cs" />
     <Compile Include="ARMv6.cs" />
+    <Compile Include="ARMv6Instruction.cs" />
+    <Compile Include="ARMv6InstructionMap.cs" />
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="GeneralPurposeRegister.cs" />
+    <Compile Include="ARMv6CodeEmitter.cs" />
     <Compile Include="Instructions\Adc32.cs" />
     <Compile Include="Instructions\Add32.cs" />
     <Compile Include="Instructions\Adr32.cs" />
@@ -122,12 +124,12 @@
     <Compile Include="Instructions\Orr32.cs" />
     <Compile Include="Instructions\Pop32.cs" />
     <Compile Include="Instructions\Push32.cs" />
-    <Compile Include="Instructions\Rev32.cs" />
     <Compile Include="Instructions\Rev16.cs" />
+    <Compile Include="Instructions\Rev32.cs" />
     <Compile Include="Instructions\Revsh32.cs" />
     <Compile Include="Instructions\Ror32.cs" />
-    <Compile Include="Instructions\Rsc32.cs" />
     <Compile Include="Instructions\Rsb32.cs" />
+    <Compile Include="Instructions\Rsc32.cs" />
     <Compile Include="Instructions\Sbc32.cs" />
     <Compile Include="Instructions\Sev32.cs" />
     <Compile Include="Instructions\Stm32.cs" />
@@ -148,7 +150,6 @@
     <Compile Include="Instructions\Wfe32.cs" />
     <Compile Include="Instructions\Wfi32.cs" />
     <Compile Include="Instructions\Yield32.cs" />
-    <Compile Include="ARMv6CodeEmitter.cs" />
     <Compile Include="Stages\IRTransformationStage.cs" />
     <Compile Include="OpcodeEncoder.cs" />
   </ItemGroup>

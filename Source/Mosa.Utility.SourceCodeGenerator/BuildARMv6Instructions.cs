@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Text;
-
 namespace Mosa.Utility.SourceCodeGenerator
 {
 	public class BuildARMv6Instructions : BuildBaseTemplate
@@ -26,14 +24,16 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Body(dynamic node = null)
 		{
-			string bytes = EncodeOpcodeBytes(node);
-			string operands = EncodeOperandsOrder(node);
-
 			Lines.AppendLine("using Mosa.Compiler.Framework;");
 
 			if (node.ResultType != null || node.ResultType2 != null)
 			{
 				Lines.AppendLine("using Mosa.Compiler.MosaTypeSystem;");
+			}
+
+			if (!string.IsNullOrWhiteSpace(node.ARMv6Opcode))
+			{
+				Lines.AppendLine("using Mosa.Compiler.Common;");
 			}
 
 			Lines.AppendLine();
@@ -324,104 +324,26 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\t}");
 			}
 
+			if (!string.IsNullOrWhiteSpace(node.ARMv6Emitter))
+			{
+				Lines.AppendLine();
+				Lines.AppendLine("\t\tprotected override void Emit(InstructionNode node, ARMv6CodeEmitter emitter)");
+				Lines.AppendLine("\t\t{");
+
+				if (!string.IsNullOrWhiteSpace(node.ARMv6Opcode))
+				{
+					Lines.AppendLine("\t\t\t" + node.ARMv6Emitter + "(node, emitter, Bits." + node.ARMv6Opcode + ");");
+				}
+				else
+				{
+					Lines.AppendLine("\t\t\t" + node.ARMv6Emitter + "(node, emitter);");
+				}
+
+				Lines.AppendLine("\t\t}");
+			}
+
 			Lines.AppendLine("\t}");
 			Lines.AppendLine("}");
-		}
-
-		private static string EncodeLegacyOpecodeRegField(dynamic node)
-		{
-			if (node.ARMv6LegacyOpcodeRegField == null)
-				return string.Empty;
-
-			return ", 0x" + node.ARMv6LegacyOpcodeRegField.Replace("0x", string.Empty);
-		}
-
-		private static string EncodeOperandsOrder(dynamic node)
-		{
-			if (string.IsNullOrWhiteSpace(node.ARMv6LegacyOpcodeOperandOrder))
-				return null;
-
-			var sb = new StringBuilder();
-
-			foreach (var c in node.ARMv6LegacyOpcodeOperandOrder)
-			{
-				if (c == 'R' || c == 'r')
-				{
-					sb.Append("node.Result");
-				}
-				else if (c == '1')
-				{
-					sb.Append("node.Operand1");
-				}
-				else if (c == '2')
-				{
-					sb.Append("node.Operand2");
-				}
-				else if (c == '3')
-				{
-					sb.Append("node.Operand3");
-				}
-				else if (c == 'N' || c == 'n')
-				{
-					sb.Append("node.Result");
-				}
-				sb.Append(", ");
-			}
-
-			sb.Length--;
-			sb.Length--;
-
-			return sb.ToString();
-		}
-
-		private static string EncodeLegacyOpcode(dynamic node)
-		{
-			if (node.ARMv6LegacyOpcode == null)
-				return null;
-
-			string legacy = string.Empty;
-			bool first = true;
-
-			foreach (var b in node.ARMv6LegacyOpcode.Split(' '))
-			{
-				string b2 = b.Replace("0x", string.Empty).Replace(",", string.Empty);
-
-				if (!first)
-				{
-					legacy += ", ";
-				}
-
-				legacy = legacy + "0x" + b2;
-
-				first = false;
-			}
-
-			return legacy;
-		}
-
-		private static string EncodeOpcodeBytes(dynamic node)
-		{
-			if (node.ARMv6EmitBytes == null)
-				return null;
-
-			string bytes = string.Empty;
-			bool first = true;
-
-			foreach (var b in node.ARMv6EmitBytes.Split(' '))
-			{
-				string b2 = b.Replace("0x", string.Empty).Replace(",", string.Empty);
-
-				if (!first)
-				{
-					bytes += ", ";
-				}
-
-				bytes = bytes + "0x" + b2;
-
-				first = false;
-			}
-
-			return bytes;
 		}
 	}
 }

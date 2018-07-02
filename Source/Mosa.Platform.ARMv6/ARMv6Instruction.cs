@@ -2,21 +2,16 @@
 
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
-using System;
+using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Platform.ARMv6
 {
 	/// <summary>
 	/// ARMv6 Instruction
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.BaseInstruction" />
-	public abstract class ARMv6Instruction : BaseInstruction
+	/// <seealso cref="Mosa.Compiler.Framework.Platform.BasePlatformInstruction" />
+	public abstract class ARMv6Instruction : BasePlatformInstruction
 	{
-		public virtual string __description { get; set; }
-		public virtual string __description2 { get; set; }
-		public virtual string __emitter { get; set; }
-		public virtual string __bits { get; set; }
-
 		#region Construction
 
 		/// <summary>
@@ -42,36 +37,27 @@ namespace Mosa.Platform.ARMv6
 		#region Methods
 
 		/// <summary>
-		/// Computes the opcode.
+		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		protected virtual uint ComputeOpCode(Operand destination, Operand source, Operand third)
+		/// <param name="node">The node.</param>
+		/// <param name="emitter">The emitter.</param>
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			throw new Exception("opcode not implemented for this instruction");
+			Emit(node, emitter as ARMv6CodeEmitter);
 		}
 
 		/// <summary>
-		/// Emits the specified platform instruction.
+		/// Emits the specified node.
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
 		protected virtual void Emit(InstructionNode node, ARMv6CodeEmitter emitter)
 		{
-			// TODO: Check x86 Implementation
 		}
 
-		/// <summary>
-		/// Emits the specified platform instruction.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		/// <param name="emitter">The emitter.</param>
-		public void Emit(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Emit(node, emitter as ARMv6CodeEmitter);
-		}
+		#endregion Methods
+
+		#region Methods - Helpers
 
 		/// <summary>
 		/// Emits the data processing instruction.
@@ -165,20 +151,20 @@ namespace Mosa.Platform.ARMv6
 			else
 			{
 				emitter.EmitSingleDataTransfer(
-					  node.ConditionCode,
-					  Indexing.Post,
-					  OffsetDirection.Up,
-					  TransferSize.Word,
-					  WriteBack.NoWriteBack,
-					 TransferType.Store,
-					  node.Operand1.Index,
-					  node.Result.Index,
-					  node.Operand2.ShiftType,
-					  node.Operand3.Index
+					node.ConditionCode,
+					Indexing.Post,
+					OffsetDirection.Up,
+					TransferSize.Word,
+					WriteBack.NoWriteBack,
+					TransferType.Store,
+					node.Operand1.Index,
+					node.Result.Index,
+					node.Operand2.ShiftType,
+					node.Operand3.Index
 				  );
 			}
 		}
 
-		#endregion Methods
+		#endregion Methods - Helpers
 	}
 }
