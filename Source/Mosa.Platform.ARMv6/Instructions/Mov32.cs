@@ -8,8 +8,7 @@ using Mosa.Compiler.Common;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Mov32
-	/// Copies operand to destination
+	/// Mov32 - Copies operand to destination
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Mov32 : ARMv6Instruction

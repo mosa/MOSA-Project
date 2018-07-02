@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Revsh32
-	/// Byte-Reverse Signed Halfword
+	/// Revsh32 - Byte-Reverse Signed Halfword
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Revsh32 : ARMv6Instruction

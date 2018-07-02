@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Ldr32
-	/// Load 32-bit word
+	/// Ldr32 - Load 32-bit word
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Ldr32 : ARMv6Instruction

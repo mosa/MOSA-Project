@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Msr32
-	/// Status register access 
+	/// Msr32 - Status register access 
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Msr32 : ARMv6Instruction

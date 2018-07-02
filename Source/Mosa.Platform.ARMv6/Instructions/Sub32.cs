@@ -8,8 +8,7 @@ using Mosa.Compiler.Common;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Sub32
-	/// Subtract
+	/// Sub32 - Subtract
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Sub32 : ARMv6Instruction

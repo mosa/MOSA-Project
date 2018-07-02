@@ -8,8 +8,7 @@ using Mosa.Compiler.Common;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Teq32
-	/// Test
+	/// Teq32 - Test
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Teq32 : ARMv6Instruction

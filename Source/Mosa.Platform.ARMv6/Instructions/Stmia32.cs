@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Stmia32
-	/// Store Multiple Increment After
+	/// Stmia32 - Store Multiple Increment After
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Stmia32 : ARMv6Instruction

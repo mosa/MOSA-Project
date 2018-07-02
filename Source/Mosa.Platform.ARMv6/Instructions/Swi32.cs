@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Swi32
-	/// Supervisor Call
+	/// Swi32 - Supervisor Call
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Swi32 : ARMv6Instruction

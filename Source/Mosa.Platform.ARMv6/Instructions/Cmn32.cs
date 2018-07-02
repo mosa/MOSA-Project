@@ -8,8 +8,7 @@ using Mosa.Compiler.Common;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Cmn32
-	/// Compare Negative
+	/// Cmn32 - Compare Negative
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Cmn32 : ARMv6Instruction

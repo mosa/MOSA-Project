@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Bkpt32
-	/// Breakpoint instruction
+	/// Bkpt32 - Breakpoint instruction
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Bkpt32 : ARMv6Instruction

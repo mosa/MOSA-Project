@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Sxth32
-	/// Signed Extend Halfword
+	/// Sxth32 - Signed Extend Halfword
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Sxth32 : ARMv6Instruction

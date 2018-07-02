@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Sxtb32
-	/// Signed Extend Byte
+	/// Sxtb32 - Signed Extend Byte
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Sxtb32 : ARMv6Instruction

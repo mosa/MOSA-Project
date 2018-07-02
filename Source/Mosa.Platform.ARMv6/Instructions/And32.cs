@@ -8,8 +8,7 @@ using Mosa.Compiler.Common;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// And32
-	/// Bitwise AND
+	/// And32 - Bitwise AND
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class And32 : ARMv6Instruction

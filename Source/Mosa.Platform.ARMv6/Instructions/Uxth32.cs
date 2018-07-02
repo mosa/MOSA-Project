@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Uxth32
-	/// Unsigned Extend Halfword
+	/// Uxth32 - Unsigned Extend Halfword
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Uxth32 : ARMv6Instruction

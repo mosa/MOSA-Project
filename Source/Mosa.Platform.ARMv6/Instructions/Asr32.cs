@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Asr32
-	/// Arithmetic Shift Right
+	/// Asr32 - Arithmetic Shift Right
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Asr32 : ARMv6Instruction

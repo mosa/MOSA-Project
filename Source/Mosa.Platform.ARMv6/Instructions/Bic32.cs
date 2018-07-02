@@ -8,8 +8,7 @@ using Mosa.Compiler.Common;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Bic32
-	/// Bitwise Bit Clear
+	/// Bic32 - Bitwise Bit Clear
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Bic32 : ARMv6Instruction

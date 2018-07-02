@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Uxtb32
-	/// Unsigned Extend Byte
+	/// Uxtb32 - Unsigned Extend Byte
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Uxtb32 : ARMv6Instruction

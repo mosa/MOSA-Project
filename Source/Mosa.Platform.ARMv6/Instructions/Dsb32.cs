@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Dsb32
-	/// Data Synchronization Barrier
+	/// Dsb32 - Data Synchronization Barrier
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Dsb32 : ARMv6Instruction

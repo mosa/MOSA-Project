@@ -8,8 +8,7 @@ using Mosa.Compiler.Common;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rsc32
-	/// Reverse Subtract Carry
+	/// Rsc32 - Reverse Subtract Carry
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Rsc32 : ARMv6Instruction

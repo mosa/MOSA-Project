@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Rev16
-	/// Byte-Reverse Packed Halfword
+	/// Rev16 - Byte-Reverse Packed Halfword
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Rev16 : ARMv6Instruction

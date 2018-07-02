@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Stmea32
-	/// Store Multiple Empty Ascending
+	/// Stmea32 - Store Multiple Empty Ascending
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Stmea32 : ARMv6Instruction

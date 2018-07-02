@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Isb32
-	/// Instruction Synchronization Barrier
+	/// Isb32 - Instruction Synchronization Barrier
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Isb32 : ARMv6Instruction

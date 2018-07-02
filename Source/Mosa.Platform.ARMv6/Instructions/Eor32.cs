@@ -8,8 +8,7 @@ using Mosa.Compiler.Common;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Eor32
-	/// Bitwise Exclusive OR
+	/// Eor32 - Bitwise Exclusive OR
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Eor32 : ARMv6Instruction

@@ -7,8 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv6.Instructions
 {
 	/// <summary>
-	/// Ldrb32
-	/// Load 8-bit unsigned byte
+	/// Ldrb32 - Load 8-bit unsigned byte
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Ldrb32 : ARMv6Instruction

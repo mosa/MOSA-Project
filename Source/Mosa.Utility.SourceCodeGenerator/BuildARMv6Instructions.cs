@@ -40,13 +40,14 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("namespace Mosa.Platform.ARMv6.Instructions");
 			Lines.AppendLine("{");
 			Lines.AppendLine("\t/// <summary>");
-			Lines.AppendLine("\t/// " + node.Name);
+			Lines.Append("\t/// " + node.Name);
 
 			if (!string.IsNullOrWhiteSpace(node.Description))
 			{
-				Lines.AppendLine("\t/// " + node.Description);
+				Lines.Append(" - " + node.Description);
 			}
 
+			Lines.AppendLine();
 			Lines.AppendLine("\t/// </summary>");
 			Lines.AppendLine("\t/// <seealso cref=\"Mosa.Platform.ARMv6.ARMv6Instruction\" />");
 			Lines.AppendLine("\tpublic sealed class " + node.Name + " : ARMv6Instruction");
