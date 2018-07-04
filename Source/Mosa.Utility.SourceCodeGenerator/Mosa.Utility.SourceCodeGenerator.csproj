@@ -46,17 +46,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuildARMv6.cs" />
-    <Compile Include="BuildARMv6InstructionMap.cs" />
     <Compile Include="BuildARMv6Instructions.cs" />
-    <Compile Include="BuildX64Instructions.cs" />
+    <Compile Include="BuildARMv6InstructionFiles.cs" />
+    <Compile Include="BuildX64InstructionFiles.cs" />
     <Compile Include="BuildX64.cs" />
-    <Compile Include="BuildX64InstructionMap.cs" />
+    <Compile Include="BuildX64Instructions.cs" />
+    <Compile Include="BuildX86InstructionFiles.cs" />
     <Compile Include="BuildX86Instructions.cs" />
-    <Compile Include="BuildX86InstructionMap.cs" />
     <Compile Include="BuildX86.cs" />
-    <Compile Include="BuildIRInstructions.cs" />
+    <Compile Include="BuildIRInstructionFiles.cs" />
     <Compile Include="BuildIRInstruction.cs" />
-    <Compile Include="BuildIRInstructionMap.cs" />
+    <Compile Include="BuildIRInstructions.cs" />
     <Compile Include="BuildBaseTemplate.cs" />
     <Compile Include="DynamicJsonConverter.cs" />
     <Compile Include="Program.cs" />

@@ -6,19 +6,21 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Expression
 {
-	public class Tokenizer
+	public enum ParseType { Expression, Instructions };
+
+	public sealed class Tokenizer
 	{
-		public string Expression { get; protected set; }
+		private List<Token> Tokens = new List<Token>();
+		private string Expression;
+		private ParseType ParseType;
+		private int Index;
 
-		protected int Index { get; set; } = 0;
-
-		public List<Token> Tokens { get; protected set; } = new List<Token>();
-
-		internal static List<KeyValuePair<string, TokenType>> operands = new List<KeyValuePair<string, TokenType>>()
+		private static List<KeyValuePair<string, TokenType>> operands = new List<KeyValuePair<string, TokenType>>()
 		{
 			new KeyValuePair<string, TokenType>("(", TokenType.OpenParens),
 			new KeyValuePair<string, TokenType>(")", TokenType.CloseParens),
-			new KeyValuePair<string, TokenType>("->", TokenType.Transform),
+
+			//new KeyValuePair<string, TokenType>("->", TokenType.Transform),
 			new KeyValuePair<string, TokenType>("!=", TokenType.CompareNotEqual),
 			new KeyValuePair<string, TokenType>("==", TokenType.CompareEqual),
 			new KeyValuePair<string, TokenType>(">=", TokenType.CompareGreaterThanOrEqual),
@@ -46,9 +48,19 @@ namespace Mosa.Compiler.Framework.Expression
 			new KeyValuePair<string, TokenType>("]", TokenType.CloseBracket),
 		};
 
-		public Tokenizer(string expression)
+		public static List<Token> Parse(string expression, ParseType parseType)
+		{
+			var tokenizer = new Tokenizer(expression, parseType);
+
+			return tokenizer.Tokens;
+		}
+
+		private Tokenizer(string expression, ParseType parseType)
 		{
 			Expression = expression;
+			ParseType = parseType;
+			Index = 0;
+
 			Parse();
 			Rewrite();
 			AssignNameLabels();
@@ -165,24 +177,21 @@ namespace Mosa.Compiler.Framework.Expression
 				}
 			}
 
-			bool instructionMatch = true;
-			bool criteria = false;
-			bool transform = false;
+			var parseType = ParseType;
 
 			for (int i = 0; i < Tokens.Count; i++)
 			{
 				var token = Peek(i);
 
-				if (token.TokenType == TokenType.And)
+				if (token.TokenType == TokenType.OpenBracket)
 				{
-					instructionMatch = false;
-					criteria = true;
+					parseType = ParseType.Expression;
+					continue;
 				}
-				else if (token.TokenType == TokenType.Transform)
+				else if (token.TokenType == TokenType.CloseBracket)
 				{
-					instructionMatch = true;
-					transform = true;
-					criteria = false;
+					parseType = ParseType;
+					continue;
 				}
 
 				if (Match(i, TypeVariableList))
@@ -202,26 +211,34 @@ namespace Mosa.Compiler.Framework.Expression
 					Tokens[i] = new Token(TokenType.ClassName, Tokens[i].Value);
 					Tokens[i + 2] = new Token(TokenType.MethodName, Tokens[i + 2].Value);
 				}
-				if (criteria && Match(i, MethodNameList))
+
+				if (parseType == ParseType.Expression)
 				{
-					// {Identifier}(  ->  {MethodName}(
-					Tokens[i] = new Token(TokenType.MethodName, Tokens[i].Value);
+					if (Match(i, MethodNameList))
+					{
+						// {Identifier}(  ->  {MethodName}(
+						Tokens[i] = new Token(TokenType.MethodName, Tokens[i].Value);
+					}
 				}
-				if (!criteria && Match(i, InstructionFamilyNameList))
+
+				if (parseType == ParseType.Instructions)
 				{
-					// ({Identifier}.{Identifier}(  ->  ({InstructionFamily}.{InstructionName}
-					Tokens[i + 1] = new Token(TokenType.InstructionFamily, Tokens[i + 1].Value);
-					Tokens[i + 3] = new Token(TokenType.InstructionName, Tokens[i + 3].Value);
-				}
-				if (!criteria && Match(i, InstructionNameList))
-				{
-					// ({Identifier}  ->  ({InstructionName}
-					Tokens[i + 1] = new Token(TokenType.InstructionName, Tokens[i + 1].Value);
-				}
-				if (!criteria && Match(i, HashList))
-				{
-					// #{Identifier}  ->  #{PhysicalRegister}
-					Tokens[i + 1] = new Token(TokenType.PhysicalRegister, Tokens[i + 1].Value);
+					if (Match(i, InstructionFamilyNameList))
+					{
+						// ({Identifier}.{Identifier}(  ->  ({InstructionFamily}.{InstructionName}
+						Tokens[i + 1] = new Token(TokenType.InstructionFamily, Tokens[i + 1].Value);
+						Tokens[i + 3] = new Token(TokenType.InstructionName, Tokens[i + 3].Value);
+					}
+					if (Match(i, InstructionNameList))
+					{
+						// ({Identifier}  ->  ({InstructionName}
+						Tokens[i + 1] = new Token(TokenType.InstructionName, Tokens[i + 1].Value);
+					}
+					if (Match(i, HashList))
+					{
+						// #{Identifier}  ->  #{PhysicalRegister}
+						Tokens[i + 1] = new Token(TokenType.PhysicalRegister, Tokens[i + 1].Value);
+					}
 				}
 			}
 
@@ -388,7 +405,7 @@ namespace Mosa.Compiler.Framework.Expression
 			return Expression;
 		}
 
-		public int FindFirst(TokenType token)
+		private int FindFirst(TokenType token)
 		{
 			for (int i = 0; i < Tokens.Count; i++)
 			{
@@ -399,7 +416,7 @@ namespace Mosa.Compiler.Framework.Expression
 			return -1;
 		}
 
-		public List<Token> GetPart(int start, int end)
+		private List<Token> GetPart(int start, int end)
 		{
 			var tokens = new List<Token>(end > start ? (end - start) + 1 : 0);
 

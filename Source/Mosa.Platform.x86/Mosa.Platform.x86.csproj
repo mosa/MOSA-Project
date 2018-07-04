@@ -394,13 +394,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OpcodeEncoder.cs" />
-    <Compile Include="X86InstructionMap.cs" />
+    <Compile Include="X86Instructions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="X86Instructions.json" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

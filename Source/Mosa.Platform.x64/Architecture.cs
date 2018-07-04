@@ -4,6 +4,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker.Elf;
+using System.Collections.Generic;
 
 namespace Mosa.Platform.x64
 {
@@ -144,6 +145,14 @@ namespace Mosa.Platform.x64
 		/// The name of the platform.
 		/// </value>
 		public override string PlatformName { get { return "x64"; } }
+
+		/// <summary>
+		/// Gets the instructions.
+		/// </summary>
+		/// <value>
+		/// The instructions.
+		/// </value>
+		public override List<BaseInstruction> Instructions { get { return X64Instructions.List; } }
 
 		/// <summary>
 		/// Factory method for the Architecture class.

@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Framework.Expression
 			ParentNodes.Add(node);
 		}
 
-		protected bool ValidateInstruction(InstructionNode node)
+		protected bool ValidateInstruction(Framework.InstructionNode node)
 		{
 			if (node == null)
 				return false;
@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework.Expression
 			return true;
 		}
 
-		protected bool ValidateOperand(InstructionNode node, int operandIndex, Operand[] operands, MosaType[] types)
+		protected bool ValidateOperand(Framework.InstructionNode node, int operandIndex, Operand[] operands, MosaType[] types)
 		{
 			if (operandIndex > node.OperandCount)
 				return false;
@@ -167,7 +167,7 @@ namespace Mosa.Compiler.Framework.Expression
 			return false;
 		}
 
-		public bool Match(InstructionNode node, Operand[] operands, MosaType[] types)
+		public bool Match(Framework.InstructionNode node, Operand[] operands, MosaType[] types)
 		{
 			if (NodeType == NodeType.Instruction)
 			{

@@ -6,13 +6,18 @@
 			"Match": "(MulUnsigned 1 x)",
 			"Transform": "x",
 			"Criteria": "",
+			"DefaultInstructionFamily": "IR",
+			"DefaultArchitectureFamily": "NA"
 		},
 		{
 			"Name": "MultipleBy0",
 			"Type": "StrengthReduction",
+			"DefaultInstructionFamily": "IR",
 			"Match": "(MulUnsigned 0 x)",
 			"Transform": "0",
 			"Criteria": "",
+			"DefaultInstructionFamily": "IR",
+			"DefaultArchitectureFamily": "NA"
 		}
 	]
 }

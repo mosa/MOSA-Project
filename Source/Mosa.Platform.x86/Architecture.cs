@@ -8,6 +8,7 @@ using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Platform.x86.CompilerStages;
 using Mosa.Platform.x86.Stages;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86
@@ -197,6 +198,14 @@ namespace Mosa.Platform.x86
 		/// The name of the platform.
 		/// </value>
 		public override string PlatformName { get { return "x86"; } }
+
+		/// <summary>
+		/// Gets the instructions.
+		/// </summary>
+		/// <value>
+		/// The instructions.
+		/// </value>
+		public override List<BaseInstruction> Instructions { get { return X86Instructions.List; } }
 
 		/// <summary>
 		/// Factory method for the Architecture class.
