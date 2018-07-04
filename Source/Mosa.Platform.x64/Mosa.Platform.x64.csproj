@@ -300,7 +300,7 @@
     <Compile Include="X64.cs" />
     <Compile Include="X64Instruction.cs" />
     <Compile Include="X64CodeEmitter.cs" />
-    <Compile Include="X64InstructionMap.cs" />
+    <Compile Include="X64Instructions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -57,46 +57,5 @@ namespace Mosa.Compiler.Framework.Expression
 
 			return basicBlocks;
 		}
-
-		private static TransformRule GetTestExpression(string text)
-		{
-			var builder = new ExpressionBuilder();
-
-			builder.AddInstructions(IRInstructionMap.Map);
-
-			//builder.AddPhysicalRegisters();
-
-			var expression = builder.CreateExpressionTree(text);
-
-			return expression;
-		}
-
-		public static TransformRule GetTestExpression2()
-		{
-			var expression = GetTestExpression("(AddUnsigned32(MulUnsigned x y)(MulUnsigned x z)) -> (MulUnsigned x (AddUnsigned32 y z))");
-
-			return expression;
-		}
-
-		public static TransformRule GetTestExpression3()
-		{
-			var expression = GetTestExpression("(MulUnsigned 1 x) -> x");
-
-			return expression;
-		}
-
-		public static TransformRule GetTestExpression4()
-		{
-			var expression = GetTestExpression("(MulUnsigned (Const c1) (Const c2)) -> [c1 * c2]");
-
-			return expression;
-		}
-
-		public static TransformRule GetTestExpression5()
-		{
-			var expression = GetTestExpression("(MulUnsigned 1 2) -> [1 * 2]");
-
-			return expression;
-		}
 	}
 }

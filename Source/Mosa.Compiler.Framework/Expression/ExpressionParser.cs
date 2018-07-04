@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Expression
 {
-	public class ExpressionParser
+	public sealed class ExpressionParser
 	{
-		protected List<Token> Tokens { get; }
-		protected Token CurrentToken { get { return Tokens[Index]; } }
-		protected TokenType CurrentTokenType { get { return CurrentToken.TokenType; } }
-		protected bool IsOutOfTokens { get { return Index >= Tokens.Count; } }
-		protected int Index = 0;
+		private List<Token> Tokens;
+		private Token CurrentToken { get { return Tokens[Index]; } }
+		private TokenType CurrentTokenType { get { return CurrentToken.TokenType; } }
+		private bool IsOutOfTokens { get { return Index >= Tokens.Count; } }
+		private int Index = 0;
 
-		protected ExpressionNode Root { get; private set; }
+		private ExpressionNode Root;
 
 		public static ExpressionNode Parse(List<Token> tokens)
 		{
@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Expression
 			return parse.Root;
 		}
 
-		protected ExpressionParser(List<Token> tokens)
+		private ExpressionParser(List<Token> tokens)
 		{
 			Tokens = tokens ?? throw new CompilerException("ExpressionEvaluation: tokens parameter is null");
 
@@ -135,7 +135,7 @@ namespace Mosa.Compiler.Framework.Expression
 				{
 					var token = new Token(CurrentTokenType, CurrentToken.Value, Index++);
 
-					Index++; // skip opening paraens
+					Index++; // skip opening parentheses
 
 					var parameters = new List<ExpressionNode>();
 
@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Expression
 						parameters.Add(parameter);
 					}
 
-					Index++; // skip closing parens
+					Index++; // skip closing parentheses
 
 					return new ExpressionNode(token, parameters);
 				}
@@ -220,29 +220,29 @@ namespace Mosa.Compiler.Framework.Expression
 			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + CurrentToken.Position.ToString() + " unexpected token: " + CurrentToken);
 		}
 
-		protected static bool IsConstant(TokenType tokenType)
+		private static bool IsConstant(TokenType tokenType)
 		{
 			return tokenType == TokenType.SignedIntegerConstant
 					|| tokenType == TokenType.UnsignedIntegerConstant
 					|| tokenType == TokenType.DoubleConstant;
 		}
 
-		protected static bool IsAddSubOperand(TokenType tokenType)
+		private static bool IsAddSubOperand(TokenType tokenType)
 		{
 			return tokenType == TokenType.Addition || tokenType == TokenType.Subtract;
 		}
 
-		protected static bool IsMulDivOperand(TokenType tokenType)
+		private static bool IsMulDivOperand(TokenType tokenType)
 		{
 			return tokenType == TokenType.Multiplication || tokenType == TokenType.Division || tokenType == TokenType.Modulus;
 		}
 
-		protected static bool IsLogicalOperand(TokenType tokenType)
+		private static bool IsLogicalOperand(TokenType tokenType)
 		{
 			return tokenType == TokenType.And || tokenType == TokenType.Or;
 		}
 
-		protected static bool IsComparisonOperand(TokenType tokenType)
+		private static bool IsComparisonOperand(TokenType tokenType)
 		{
 			return tokenType == TokenType.CompareEqual
 					|| tokenType == TokenType.CompareNotEqual

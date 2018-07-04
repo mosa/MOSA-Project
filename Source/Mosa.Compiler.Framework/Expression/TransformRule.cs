@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework.Expression
 			return false;
 		}
 
-		public InstructionNode Transform(InstructionNode node, TypeSystem typeSystem)
+		public Node Transform(InstructionNode node, TypeSystem typeSystem)
 		{
 			var operands = new Operand[OperandVariableCount];
 			var types = new MosaType[TypeVariableCount];
@@ -62,12 +62,12 @@ namespace Mosa.Compiler.Framework.Expression
 			return Transform(node, typeSystem, operands, types);
 		}
 
-		public InstructionNode Transform(InstructionNode baseNode, TypeSystem typeSystem, Operand[] operands, MosaType[] types)
+		public Node Transform(InstructionNode baseNode, TypeSystem typeSystem, Operand[] operands, MosaType[] types)
 		{
 			return Transform(Result, baseNode.Block, typeSystem, operands, types);
 		}
 
-		protected InstructionNode Transform(Node node, BasicBlock block, TypeSystem typeSystem, Operand[] operands, MosaType[] types)
+		protected Node Transform(Node node, BasicBlock block, TypeSystem typeSystem, Operand[] operands, MosaType[] types)
 		{
 			var newNode = new InstructionNode(node.Instruction, block);
 

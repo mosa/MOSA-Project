@@ -61,5 +61,7 @@ namespace Mosa.Compiler.Framework.Expression
 		VirtualRegister,
 
 		Method,     // ???
+
+		Null,
 	}
 }

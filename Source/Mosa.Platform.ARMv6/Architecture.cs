@@ -6,6 +6,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Platform.ARMv6.Stages;
+using System.Collections.Generic;
 
 namespace Mosa.Platform.ARMv6
 {
@@ -182,6 +183,14 @@ namespace Mosa.Platform.ARMv6
 		{
 			get { return GeneralPurposeRegister.PC; }
 		}
+
+		/// <summary>
+		/// Gets the instructions.
+		/// </summary>
+		/// <value>
+		/// The instructions.
+		/// </value>
+		public override List<BaseInstruction> Instructions { get { return ARMv6Instructions.List; } }
 
 		/// <summary>
 		/// Extends the assembly compiler pipeline with ARMv6 specific stages.

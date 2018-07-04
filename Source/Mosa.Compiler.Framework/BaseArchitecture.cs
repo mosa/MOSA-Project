@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker.Elf;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
 {
@@ -132,6 +133,14 @@ namespace Mosa.Compiler.Framework
 		/// The offset of first parameter.
 		/// </value>
 		public virtual int OffsetOfFirstParameter { get { return NativePointerSize * 2; } }
+
+		/// <summary>
+		/// Gets the instructions.
+		/// </summary>
+		/// <value>
+		/// The instructions.
+		/// </value>
+		public virtual List<BaseInstruction> Instructions { get; }
 
 		#endregion Properties
 

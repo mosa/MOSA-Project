@@ -84,7 +84,7 @@
     <Compile Include="ArchitectureFeatureFlags.cs" />
     <Compile Include="ARMv6.cs" />
     <Compile Include="ARMv6Instruction.cs" />
-    <Compile Include="ARMv6InstructionMap.cs" />
+    <Compile Include="ARMv6Instructions.cs" />
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="GeneralPurposeRegister.cs" />
     <Compile Include="ARMv6CodeEmitter.cs" />

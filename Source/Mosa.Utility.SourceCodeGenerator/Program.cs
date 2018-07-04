@@ -17,13 +17,13 @@ namespace Mosa.Utility.SourceCodeGenerator
 				"IRInstruction.cs"
 			);
 
-			new BuildIRInstructionMap(
+			new BuildIRInstructions(
 				Path.Combine(dataPath, @"IRInstructions.json"),
 				Path.Combine(targetPath, @"Mosa.Compiler.Framework\IR\"),
-				"IRInstructionMap.cs"
+				"IRInstructions.cs"
 			);
 
-			new BuildIRInstructions(
+			new BuildIRInstructionFiles(
 				Path.Combine(dataPath, @"IRInstructions.json"),
 				Path.Combine(targetPath, @"Mosa.Compiler.Framework\IR\")
 			);
@@ -34,13 +34,13 @@ namespace Mosa.Utility.SourceCodeGenerator
 				"X86.cs"
 			);
 
-			new BuildX86InstructionMap(
+			new BuildX86Instructions(
 				Path.Combine(dataPath, @"X86Instructions.json"),
 				Path.Combine(targetPath, @"Mosa.Platform.x86\"),
-				"X86InstructionMap.cs"
+				"X86Instructions.cs"
 			);
 
-			new BuildX86Instructions(
+			new BuildX86InstructionFiles(
 				Path.Combine(dataPath, @"X86Instructions.json"),
 				Path.Combine(targetPath, @"Mosa.Platform.x86\Instructions")
 			);
@@ -51,13 +51,13 @@ namespace Mosa.Utility.SourceCodeGenerator
 				"X64.cs"
 			);
 
-			new BuildX64InstructionMap(
+			new BuildX64Instructions(
 				Path.Combine(dataPath, @"X64Instructions.json"),
 				Path.Combine(targetPath, @"Mosa.Platform.x64\"),
-				"X64InstructionMap.cs"
+				"X64Instructions.cs"
 			);
 
-			new BuildX64Instructions(
+			new BuildX64InstructionFiles(
 				Path.Combine(dataPath, @"X64Instructions.json"),
 				Path.Combine(targetPath, @"Mosa.Platform.x64\Instructions")
 			);
@@ -68,13 +68,13 @@ namespace Mosa.Utility.SourceCodeGenerator
 				"ARMv6.cs"
 			);
 
-			new BuildARMv6InstructionMap(
+			new BuildARMv6Instructions(
 				Path.Combine(dataPath, @"ARMv6Instructions.json"),
 				Path.Combine(targetPath, @"Mosa.Platform.ARMv6\"),
-				"ARMv6InstructionMap.cs"
+				"ARMv6Instructions.cs"
 			);
 
-			new BuildARMv6Instructions(
+			new BuildARMv6InstructionFiles(
 				Path.Combine(dataPath, @"ARMv6Instructions.json"),
 				Path.Combine(targetPath, @"Mosa.Platform.ARMv6\Instructions")
 			);

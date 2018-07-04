@@ -93,6 +93,9 @@
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
     <Compile Include="Analysis\BaseDominanceAnalysis.cs" />
     <Compile Include="BaseCompilerExtension.cs" />
+    <Compile Include="CIL\IRInstructions.cs" />
+    <Compile Include="Expression\NodeParser.cs" />
+    <Compile Include="Expression\SymbolDictionary.cs" />
     <Compile Include="IR\Add32.cs" />
     <Compile Include="IR\Add64.cs" />
     <Compile Include="IR\AddCarryOut32.cs" />
@@ -156,7 +159,7 @@
     <Compile Include="IR\IfThenElse64.cs" />
     <Compile Include="IR\IntrinsicMethodCall.cs" />
     <Compile Include="IR\IRInstruction.cs" />
-    <Compile Include="IR\IRInstructionMap.cs" />
+    <Compile Include="IR\IRInstructionList.cs" />
     <Compile Include="IR\IsInstanceOfInterfaceType.cs" />
     <Compile Include="IR\IsInstanceOfType.cs" />
     <Compile Include="IR\Jmp.cs" />
@@ -327,7 +330,6 @@
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="Expression\ExpressionEvaluator.cs" />
     <Compile Include="Expression\ExpressionNode.cs" />
-    <Compile Include="Expression\ExpressionBuilder.cs" />
     <Compile Include="Expression\NodeType.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
     <Compile Include="Expression\Tokenizer.cs" />
