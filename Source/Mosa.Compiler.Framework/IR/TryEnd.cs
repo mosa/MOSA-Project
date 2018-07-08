@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class TryEnd : BaseIRInstruction
 	{
+		public override int ID { get { return 166; } }
+
 		public TryEnd()
 			: base(0, 0)
 		{

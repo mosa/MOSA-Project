@@ -11,30 +11,24 @@ namespace Mosa.Compiler.Framework.Expression
 		public ExpressionNode Condition { get; }
 		public Node Result { get; }
 
-		public int OperandVariableCount { get; protected set; }
-		public int TypeVariableCount { get; protected set; }
-
-		public TransformRule(Node match, ExpressionNode condition, Node result, int operandVariableCount, int typeVariableCount)
+		public TransformRule(Node match, ExpressionNode condition, Node result)
 		{
 			Match = match;
 			Condition = condition;
 			Result = result;
-			TypeVariableCount = typeVariableCount;
-			OperandVariableCount = operandVariableCount;
 		}
 
 		public bool Validate(InstructionNode node)
 		{
-			var operands = new Operand[OperandVariableCount];
-			var types = new MosaType[TypeVariableCount];
+			var variables = new ExpressionVariables();
 
-			return Validate(node, operands, types);
+			return Validate(node, variables);
 		}
 
-		public bool Validate(InstructionNode node, Operand[] operands, MosaType[] types)
+		public bool Validate(InstructionNode node, ExpressionVariables variables)
 		{
 			// validate the instructions and operands match
-			bool match = Match.Match(node, operands, types);
+			bool match = Match.Match(node, variables);
 
 			if (!match)
 				return false;
@@ -43,7 +37,7 @@ namespace Mosa.Compiler.Framework.Expression
 			if (Condition == null)
 				return true;
 
-			var result = ExpressionEvaluator.Evaluate(Condition, operands, types);
+			var result = ExpressionEvaluator.Evaluate(Condition, variables);
 
 			if (result.IsTrue)
 				return true;
@@ -51,23 +45,15 @@ namespace Mosa.Compiler.Framework.Expression
 			return false;
 		}
 
-		public Node Transform(InstructionNode node, TypeSystem typeSystem)
+		public Node Transform(InstructionNode node, TypeSystem typeSystem, ExpressionVariables variables)
 		{
-			var operands = new Operand[OperandVariableCount];
-			var types = new MosaType[TypeVariableCount];
-
-			if (!Validate(node, operands, types))
+			if (!Validate(node, variables))
 				return null;
 
-			return Transform(node, typeSystem, operands, types);
+			return Transform(Result, node.Block, typeSystem, variables);
 		}
 
-		public Node Transform(InstructionNode baseNode, TypeSystem typeSystem, Operand[] operands, MosaType[] types)
-		{
-			return Transform(Result, baseNode.Block, typeSystem, operands, types);
-		}
-
-		protected Node Transform(Node node, BasicBlock block, TypeSystem typeSystem, Operand[] operands, MosaType[] types)
+		protected Node Transform(Node node, BasicBlock block, TypeSystem typeSystem, ExpressionVariables variables)
 		{
 			var newNode = new InstructionNode(node.Instruction, block);
 
@@ -91,7 +77,7 @@ namespace Mosa.Compiler.Framework.Expression
 				}
 				else if (nodeOperand.NodeType == NodeType.ConstantVariable)
 				{
-					newNode.SetOperand(operandIndex++, operands[nodeOperand.Index]);
+					newNode.SetOperand(operandIndex++, variables.Operands[nodeOperand.Index]);
 					continue;
 				}
 				else if (nodeOperand.NodeType == NodeType.PhyiscalRegister)
@@ -102,12 +88,12 @@ namespace Mosa.Compiler.Framework.Expression
 				}
 				else if (nodeOperand.NodeType == NodeType.VirtualRegister)
 				{
-					newNode.SetOperand(operandIndex++, operands[nodeOperand.Index]);
+					newNode.SetOperand(operandIndex++, variables.Operands[nodeOperand.Index]);
 					continue;
 				}
 				else if (nodeOperand.NodeType == NodeType.OperandVariable)
 				{
-					newNode.SetOperand(operandIndex++, operands[nodeOperand.Index]);
+					newNode.SetOperand(operandIndex++, variables.Operands[nodeOperand.Index]);
 					continue;
 				}
 

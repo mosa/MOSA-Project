@@ -59,6 +59,7 @@
     <Compile Include="BuildIRInstructions.cs" />
     <Compile Include="BuildBaseTemplate.cs" />
     <Compile Include="DynamicJsonConverter.cs" />
+    <Compile Include="GenerateInstructionID.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>

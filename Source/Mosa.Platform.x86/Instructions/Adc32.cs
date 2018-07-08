@@ -12,6 +12,8 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Adc32 : X86Instruction
 	{
+		public override int ID { get { return 185; } }
+
 		internal Adc32()
 			: base(1, 2)
 		{

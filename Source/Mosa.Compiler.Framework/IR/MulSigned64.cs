@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class MulSigned64 : BaseIRInstruction
 	{
+		public override int ID { get { return 117; } }
+
 		public MulSigned64()
 			: base(2, 1)
 		{

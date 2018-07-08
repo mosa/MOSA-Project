@@ -12,6 +12,8 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class SetByteIfSigned : X64Instruction
 	{
+		public override int ID { get { return 579; } }
+
 		internal SetByteIfSigned()
 			: base(1, 0)
 		{

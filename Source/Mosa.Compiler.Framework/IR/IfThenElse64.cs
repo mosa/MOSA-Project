@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class IfThenElse64 : BaseIRInstruction
 	{
+		public override int ID { get { return 184; } }
+
 		public IfThenElse64()
 			: base(3, 1)
 		{

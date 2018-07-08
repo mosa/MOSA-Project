@@ -12,6 +12,8 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class OutConst16 : X86Instruction
 	{
+		public override int ID { get { return 287; } }
+
 		internal OutConst16()
 			: base(0, 2)
 		{

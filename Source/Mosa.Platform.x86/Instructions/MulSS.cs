@@ -12,6 +12,8 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Mulss : X86Instruction
 	{
+		public override int ID { get { return 277; } }
+
 		internal Mulss()
 			: base(1, 2)
 		{

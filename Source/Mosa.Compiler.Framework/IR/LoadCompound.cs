@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class LoadCompound : BaseIRInstruction
 	{
+		public override int ID { get { return 60; } }
+
 		public LoadCompound()
 			: base(2, 1)
 		{

@@ -12,13 +12,13 @@ namespace Mosa.Compiler.Framework.Expression
 
 	public class ExpressionEvaluator
 	{
-		public static Value Evaluate(ExpressionNode root, Operand[] operands, MosaType[] types)
+		public static Value Evaluate(ExpressionNode root, ExpressionVariables variables)
 		{
 			Debug.Assert(root != null);
 
 			if (root.Left != null && root.Right != null)
 			{
-				var left = Evaluate(root.Left, operands, types);
+				var left = Evaluate(root.Left, variables);
 
 				// shortcut evaluation
 				if (root.Token.TokenType == TokenType.And && left.IsFalse)
@@ -30,13 +30,13 @@ namespace Mosa.Compiler.Framework.Expression
 					return left;
 				}
 
-				var right = Evaluate(root.Right, operands, types);
+				var right = Evaluate(root.Right, variables);
 
 				return Eval(root.Token.TokenType, left, right);
 			}
 			else if (root.Left != null && root.Right == null)
 			{
-				var left = Evaluate(root.Left, operands, types);
+				var left = Evaluate(root.Left, variables);
 
 				return Eval(root.Token.TokenType, left);
 			}
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Expression
 			{
 				if (root.Token.TokenType == TokenType.If)
 				{
-					return IfStatement(root, operands, types);
+					return IfStatement(root, variables);
 				}
 				else if (root.Token.TokenType == TokenType.OperandVariable)
 				{
@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework.Expression
 				}
 				else if (root.Token.TokenType == TokenType.Method)
 				{
-					return Method(root, operands, types);
+					return Method(root, variables);
 				}
 				else
 				{
@@ -388,17 +388,17 @@ namespace Mosa.Compiler.Framework.Expression
 			throw new CompilerException("ExpressionEvaluation: incompatible types for comparison operator: " + left + " and " + right);
 		}
 
-		protected static Value IfStatement(ExpressionNode node, Operand[] operands, MosaType[] types)
+		protected static Value IfStatement(ExpressionNode node, ExpressionVariables variables)
 		{
 			if (node.Parameters.Count < 2 || node.Parameters.Count > 3)
 				throw new CompilerException("ExpressionEvaluation: Incomplete if statement");
 
-			var condition = Evaluate(node.Parameters[0], operands, types);
+			var condition = Evaluate(node.Parameters[0], variables);
 
-			return Evaluate(node.Parameters[condition.IsTrue ? 1 : 2], operands, types);
+			return Evaluate(node.Parameters[condition.IsTrue ? 1 : 2], variables);
 		}
 
-		protected static Value Method(ExpressionNode node, Operand[] operands, MosaType[] types)
+		protected static Value Method(ExpressionNode node, ExpressionVariables variables)
 		{
 			string name = node.Token.Value;
 

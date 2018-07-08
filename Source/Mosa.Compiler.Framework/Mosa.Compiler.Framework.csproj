@@ -96,6 +96,7 @@
     <Compile Include="CIL\IRInstructions.cs" />
     <Compile Include="Expression\NodeParser.cs" />
     <Compile Include="Expression\SymbolDictionary.cs" />
+    <Compile Include="Expression\ExpressionVariables.cs" />
     <Compile Include="IR\Add32.cs" />
     <Compile Include="IR\Add64.cs" />
     <Compile Include="IR\AddCarryOut32.cs" />

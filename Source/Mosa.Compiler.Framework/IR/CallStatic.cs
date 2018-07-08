@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class CallStatic : BaseIRInstruction
 	{
+		public override int ID { get { return 16; } }
+
 		public CallStatic()
 			: base(0, 0)
 		{

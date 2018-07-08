@@ -12,6 +12,8 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Ldm32 : ARMv6Instruction
 	{
+		public override int ID { get { return 624; } }
+
 		internal Ldm32()
 			: base(1, 3)
 		{

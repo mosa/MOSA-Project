@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Expression
 			instruction3.AddNode(nodeX);
 			instruction3.AddNode(nodeZ);
 
-			var tree = new TransformRule(instruction1, null, null, 4, 0);
+			var tree = new TransformRule(instruction1, null, null);
 
 			return tree;
 		}

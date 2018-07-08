@@ -12,6 +12,8 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Pushad : X64Instruction
 	{
+		public override int ID { get { return 508; } }
+
 		internal Pushad()
 			: base(0, 0)
 		{

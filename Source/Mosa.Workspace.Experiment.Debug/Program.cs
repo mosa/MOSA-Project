@@ -2,9 +2,7 @@
 
 using Mosa.Compiler.Framework.Expression;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Platform.ARMv6;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Workspace.Experiment.Debug
 {

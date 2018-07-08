@@ -12,6 +12,8 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class ShlConst64 : X64Instruction
 	{
+		public override int ID { get { return 523; } }
+
 		internal ShlConst64()
 			: base(1, 2)
 		{

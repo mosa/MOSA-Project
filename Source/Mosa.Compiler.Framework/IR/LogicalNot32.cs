@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class LogicalNot32 : BaseIRInstruction
 	{
+		public override int ID { get { return 92; } }
+
 		public LogicalNot32()
 			: base(1, 1)
 		{

@@ -12,6 +12,8 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Comiss : X64Instruction
 	{
+		public override int ID { get { return 418; } }
+
 		internal Comiss()
 			: base(0, 2)
 		{

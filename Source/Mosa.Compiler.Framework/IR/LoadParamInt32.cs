@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class LoadParamInt32 : BaseIRInstruction
 	{
+		public override int ID { get { return 78; } }
+
 		public LoadParamInt32()
 			: base(1, 1)
 		{

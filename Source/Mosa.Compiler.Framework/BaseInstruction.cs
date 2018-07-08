@@ -12,6 +12,14 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
+		/// Gets the instructions unique identifier.
+		/// </summary>
+		/// <value>
+		/// The identifier.
+		/// </value>
+		public virtual int ID { get; }
+
+		/// <summary>
 		/// Gets the default operand count of the instruction
 		/// </summary>
 		/// <value>The operand count.</value>

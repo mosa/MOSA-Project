@@ -12,6 +12,8 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Cmp32 : X86Instruction
 	{
+		public override int ID { get { return 205; } }
+
 		internal Cmp32()
 			: base(0, 2)
 		{

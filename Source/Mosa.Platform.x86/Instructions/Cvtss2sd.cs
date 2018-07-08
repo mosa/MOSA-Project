@@ -12,6 +12,8 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Cvtss2sd : X86Instruction
 	{
+		public override int ID { get { return 214; } }
+
 		internal Cvtss2sd()
 			: base(1, 1)
 		{

@@ -12,6 +12,8 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class BranchNoOverflow : X64Instruction
 	{
+		public override int ID { get { return 548; } }
+
 		internal BranchNoOverflow()
 			: base(0, 0)
 		{

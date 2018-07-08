@@ -12,6 +12,8 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class PushConst32 : X86Instruction
 	{
+		public override int ID { get { return 294; } }
+
 		internal PushConst32()
 			: base(0, 1)
 		{

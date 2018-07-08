@@ -12,6 +12,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class GetHigh64 : BaseIRInstruction
 	{
+		public override int ID { get { return 182; } }
+
 		public GetHigh64()
 			: base(1, 1)
 		{

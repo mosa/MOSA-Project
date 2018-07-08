@@ -12,6 +12,8 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class SetByteIfNotZero : X86Instruction
 	{
+		public override int ID { get { return 363; } }
+
 		internal SetByteIfNotZero()
 			: base(1, 0)
 		{

@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class KillAllExcept : BaseIRInstruction
 	{
+		public override int ID { get { return 57; } }
+
 		public KillAllExcept()
 			: base(1, 0)
 		{

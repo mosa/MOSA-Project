@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class BoxR4 : BaseIRInstruction
 	{
+		public override int ID { get { return 175; } }
+
 		public BoxR4()
 			: base(2, 1)
 		{

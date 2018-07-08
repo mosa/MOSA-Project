@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class Flow : BaseIRInstruction
 	{
+		public override int ID { get { return 48; } }
+
 		public Flow()
 			: base(0, 0)
 		{
