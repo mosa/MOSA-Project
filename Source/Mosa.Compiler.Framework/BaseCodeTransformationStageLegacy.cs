@@ -9,13 +9,13 @@ namespace Mosa.Compiler.Framework
 	/// Base class for code transformation stages.
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
-	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage
+	public abstract class BaseCodeTransformationStageLegacy : BaseMethodCompilerStage
 	{
 		protected delegate void ContextVisitationDelegate(Context context);
 
 		protected delegate void NodeVisitationDelegate(InstructionNode node);
 
-		private Dictionary<int, Tuple<ContextVisitationDelegate, NodeVisitationDelegate>> visitationDictionary;
+		private Dictionary<BaseInstruction, Tuple<ContextVisitationDelegate, NodeVisitationDelegate>> visitationDictionary;
 
 		protected abstract void PopulateVisitationDictionary();
 
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework
 		{
 			base.Initialize();
 
-			visitationDictionary = new Dictionary<int, Tuple<ContextVisitationDelegate, NodeVisitationDelegate>>();
+			visitationDictionary = new Dictionary<BaseInstruction, Tuple<ContextVisitationDelegate, NodeVisitationDelegate>>();
 
 			PopulateVisitationDictionary();
 		}
@@ -44,10 +44,7 @@ namespace Mosa.Compiler.Framework
 
 					instructionCount++;
 
-					if (node.Instruction.ID == 0)
-						continue; // no mapping
-
-					if (visitationDictionary.TryGetValue(node.Instruction.ID, out Tuple<ContextVisitationDelegate, NodeVisitationDelegate> visitationMethod))
+					if (visitationDictionary.TryGetValue(node.Instruction, out Tuple<ContextVisitationDelegate, NodeVisitationDelegate> visitationMethod))
 					{
 						if (visitationMethod.Item1 != null)
 						{
@@ -65,12 +62,12 @@ namespace Mosa.Compiler.Framework
 
 		protected void AddVisitation(BaseInstruction instruction, ContextVisitationDelegate visitation)
 		{
-			visitationDictionary.Add(instruction.ID, new Tuple<ContextVisitationDelegate, NodeVisitationDelegate>(visitation, null));
+			visitationDictionary.Add(instruction, new Tuple<ContextVisitationDelegate, NodeVisitationDelegate>(visitation, null));
 		}
 
 		protected void AddVisitation(BaseInstruction instruction, NodeVisitationDelegate visitation)
 		{
-			visitationDictionary.Add(instruction.ID, new Tuple<ContextVisitationDelegate, NodeVisitationDelegate>(null, visitation));
+			visitationDictionary.Add(instruction, new Tuple<ContextVisitationDelegate, NodeVisitationDelegate>(null, visitation));
 		}
 	}
 }

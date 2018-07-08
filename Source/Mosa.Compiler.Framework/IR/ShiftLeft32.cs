@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class ShiftLeft32 : BaseIRInstruction
 	{
-		public override int ID { get { return 138; } }
+		public override int ID { get { return 139; } }
 
 		public ShiftLeft32()
 			: base(2, 1)

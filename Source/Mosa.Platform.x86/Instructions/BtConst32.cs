@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class BtConst32 : X86Instruction
 	{
-		public override int ID { get { return 197; } }
+		public override int ID { get { return 198; } }
 
 		internal BtConst32()
 			: base(1, 2)

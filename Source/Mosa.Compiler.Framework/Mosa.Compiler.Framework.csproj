@@ -92,6 +92,7 @@
     <Compile Include="Analysis\ReverseBlockOrder.cs" />
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
     <Compile Include="Analysis\BaseDominanceAnalysis.cs" />
+    <Compile Include="BaseCodeTransformationStage.cs" />
     <Compile Include="BaseCompilerExtension.cs" />
     <Compile Include="CIL\IRInstructions.cs" />
     <Compile Include="Expression\NodeParser.cs" />
@@ -565,7 +566,7 @@
     <Compile Include="Stages\CodeGenerationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCodeTransformationStage.cs">
+    <Compile Include="BaseCodeTransformationStageLegacy.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FlowControl.cs">

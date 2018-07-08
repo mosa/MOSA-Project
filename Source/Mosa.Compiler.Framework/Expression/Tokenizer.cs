@@ -63,7 +63,6 @@ namespace Mosa.Compiler.Framework.Expression
 
 			Parse();
 			Rewrite();
-			AssignNameLabels();
 		}
 
 		private void Parse()
@@ -247,42 +246,6 @@ namespace Mosa.Compiler.Framework.Expression
 				if (Tokens[i].TokenType == TokenType.Identifier)
 				{
 					Tokens[i] = new Token(TokenType.OperandVariable, Tokens[i].Value);
-				}
-			}
-		}
-
-		private void AssignNameLabels()
-		{
-			var aliases = new Dictionary<string, int>();
-			var typeAlias = new Dictionary<string, int>();
-
-			for (int i = 0; i < Tokens.Count; i++)
-			{
-				var token = Tokens[i];
-
-				if (token.TokenType == TokenType.OperandVariable)
-				{
-					var name = token.Value;
-
-					if (!aliases.TryGetValue(name, out int value))
-					{
-						value = aliases.Count;
-						aliases.Add(name, value);
-					}
-
-					token.SetNameIndex(value);
-				}
-				else if (token.TokenType == TokenType.TypeVariable)
-				{
-					var name = token.Value;
-
-					if (!typeAlias.TryGetValue(name, out int value))
-					{
-						value = typeAlias.Count;
-						typeAlias.Add(name, value);
-					}
-
-					token.SetNameIndex(value);
 				}
 			}
 		}

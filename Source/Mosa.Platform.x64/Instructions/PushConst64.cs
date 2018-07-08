@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class PushConst64 : X64Instruction
 	{
-		public override int ID { get { return 507; } }
+		public override int ID { get { return 508; } }
 
 		internal PushConst64()
 			: base(0, 1)

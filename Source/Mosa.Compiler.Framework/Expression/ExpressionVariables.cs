@@ -1,27 +1,55 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.MosaTypeSystem;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Expression
 {
 	public class ExpressionVariables
 	{
-		public Operand[] Operands;
-		public MosaType[] Types;
+		public Dictionary<string, Operand> OperandMap = new Dictionary<string, Operand>();
+		public Dictionary<string, MosaType> TypeMap = new Dictionary<string, MosaType>();
 
 		public ExpressionVariables()
 		{
-			var operands = new Operand[4];
-			var types = new MosaType[4];
 		}
 
 		public void Clear()
 		{
-			for (int i = 0; i < Operands.Length; i++)
-				Operands[i] = null;
+			OperandMap.Clear();
+			TypeMap.Clear();
+		}
 
-			for (int i = 0; i < Types.Length; i++)
-				Types[i] = null;
+		public void SetOperand(string alias, Operand operand)
+		{
+			OperandMap.Add(alias, operand);
+		}
+
+		public void SetType(string alias, MosaType type)
+		{
+			TypeMap.Add(alias, type);
+		}
+
+		public Operand GetOperand(string alias)
+		{
+			OperandMap.TryGetValue(alias, out Operand operand);
+			return operand;
+		}
+
+		public MosaType GetType(string alias)
+		{
+			TypeMap.TryGetValue(alias, out MosaType type);
+			return type;
+		}
+
+		public bool ContainsOperand(string alias)
+		{
+			return OperandMap.ContainsKey(alias);
+		}
+
+		public bool ContainsType(string alias)
+		{
+			return TypeMap.ContainsKey(alias);
 		}
 	}
 }

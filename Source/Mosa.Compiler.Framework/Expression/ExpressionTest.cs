@@ -10,9 +10,9 @@ namespace Mosa.Compiler.Framework.Expression
 		{
 			// (Add(Mul x y)(Mul x z))
 
-			var nodeX = new Node(NodeType.OperandVariable, "x", 0);
-			var nodeY = new Node(NodeType.OperandVariable, "y", 1);
-			var nodeZ = new Node(NodeType.OperandVariable, "z", 2);
+			var nodeX = new Node(NodeType.OperandVariable, "x");
+			var nodeY = new Node(NodeType.OperandVariable, "y");
+			var nodeZ = new Node(NodeType.OperandVariable, "z");
 
 			//var nodeW = new Node(NodeType.OperandVariable, "w", 3);
 

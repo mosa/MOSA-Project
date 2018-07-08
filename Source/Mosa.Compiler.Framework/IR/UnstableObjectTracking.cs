@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class UnstableObjectTracking : BaseIRInstruction
 	{
-		public override int ID { get { return 168; } }
+		public override int ID { get { return 169; } }
 
 		public UnstableObjectTracking()
 			: base(0, 0)

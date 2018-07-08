@@ -74,11 +74,11 @@ namespace Mosa.Compiler.Framework.Expression
 			else if (token.TokenType == TokenType.VirtualRegister)
 			{
 				// not available with syntax yet
-				return new Node(NodeType.VirtualRegister, token.Value, token.Index);
+				return new Node(NodeType.VirtualRegister, token.Value);
 			}
 			else if (token.TokenType == TokenType.OperandVariable)
 			{
-				return new Node(NodeType.OperandVariable, token.Value, token.Index);
+				return new Node(NodeType.OperandVariable, token.Value);
 			}
 
 			throw new CompilerException("ExpressionEvaluation: Invalid parse: error at " + token.Position.ToString() + " unexpected token: " + token);
@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework.Expression
 				if (next.TokenType != TokenType.OperandVariable)
 					return null; // error
 
-				var node = new Node(NodeType.ConstantVariable, next.Value, next.Index);
+				var node = new Node(NodeType.ConstantVariable, next.Value);
 
 				// next token should be a close parentheses
 				var next2 = tokens[++Index];

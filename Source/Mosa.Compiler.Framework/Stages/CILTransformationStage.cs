@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
 	/// </remarks>
-	public sealed class CILTransformationStage : BaseCodeTransformationStage
+	public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	{
 		protected override void PopulateVisitationDictionary()
 		{

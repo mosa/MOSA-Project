@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class Throw : BaseIRInstruction
 	{
-		public override int ID { get { return 164; } }
+		public override int ID { get { return 165; } }
 
 		public Throw()
 			: base(1, 0)

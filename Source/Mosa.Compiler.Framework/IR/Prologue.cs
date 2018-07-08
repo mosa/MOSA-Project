@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class Prologue : BaseIRInstruction
 	{
-		public override int ID { get { return 125; } }
+		public override int ID { get { return 126; } }
 
 		public Prologue()
 			: base(0, 0)

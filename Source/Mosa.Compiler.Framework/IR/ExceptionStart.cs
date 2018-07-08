@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class ExceptionStart : BaseIRInstruction
 	{
-		public override int ID { get { return 43; } }
+		public override int ID { get { return 44; } }
 
 		public ExceptionStart()
 			: base(0, 1)

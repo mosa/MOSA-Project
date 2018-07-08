@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class Switch : BaseIRInstruction
 	{
-		public override int ID { get { return 163; } }
+		public override int ID { get { return 164; } }
 
 		public Switch()
 			: base(0, 0)

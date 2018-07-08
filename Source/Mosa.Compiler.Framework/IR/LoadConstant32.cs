@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class LoadConstant32 : BaseIRInstruction
 	{
-		public override int ID { get { return 58; } }
+		public override int ID { get { return 59; } }
 
 		public LoadConstant32()
 			: base(1, 1)

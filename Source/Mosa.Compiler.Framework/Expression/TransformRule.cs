@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework.Expression
 				}
 				else if (nodeOperand.NodeType == NodeType.ConstantVariable)
 				{
-					newNode.SetOperand(operandIndex++, variables.Operands[nodeOperand.Index]);
+					newNode.SetOperand(operandIndex++, variables.GetOperand(nodeOperand.Alias));
 					continue;
 				}
 				else if (nodeOperand.NodeType == NodeType.PhyiscalRegister)
@@ -88,12 +88,12 @@ namespace Mosa.Compiler.Framework.Expression
 				}
 				else if (nodeOperand.NodeType == NodeType.VirtualRegister)
 				{
-					newNode.SetOperand(operandIndex++, variables.Operands[nodeOperand.Index]);
+					newNode.SetOperand(operandIndex++, variables.GetOperand(nodeOperand.Alias));
 					continue;
 				}
 				else if (nodeOperand.NodeType == NodeType.OperandVariable)
 				{
-					newNode.SetOperand(operandIndex++, variables.Operands[nodeOperand.Index]);
+					newNode.SetOperand(operandIndex++, variables.GetOperand(nodeOperand.Alias));
 					continue;
 				}
 

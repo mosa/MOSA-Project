@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class FilterEnd : BaseIRInstruction
 	{
-		public override int ID { get { return 44; } }
+		public override int ID { get { return 45; } }
 
 		public FilterEnd()
 			: base(0, 0)

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class MoveCompound : BaseIRInstruction
 	{
-		public override int ID { get { return 99; } }
+		public override int ID { get { return 100; } }
 
 		public MoveCompound()
 			: base(1, 1)

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class AddressOf : BaseIRInstruction
 	{
-		public override int ID { get { return 2; } }
+		public override int ID { get { return 3; } }
 
 		public AddressOf()
 			: base(1, 1)

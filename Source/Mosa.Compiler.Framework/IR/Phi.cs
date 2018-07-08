@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class Phi : BaseIRInstruction
 	{
-		public override int ID { get { return 124; } }
+		public override int ID { get { return 125; } }
 
 		public Phi()
 			: base(0, 0)

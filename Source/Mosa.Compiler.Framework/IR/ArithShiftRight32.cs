@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class ArithShiftRight32 : BaseIRInstruction
 	{
-		public override int ID { get { return 7; } }
+		public override int ID { get { return 8; } }
 
 		public ArithShiftRight32()
 			: base(2, 1)

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class Add32 : BaseIRInstruction
 	{
-		public override int ID { get { return 3; } }
+		public override int ID { get { return 4; } }
 
 		public Add32()
 			: base(2, 1)

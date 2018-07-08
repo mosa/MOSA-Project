@@ -8,7 +8,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		public static int GetInstructionID()
 		{
-			return id++;
+			return ++id;
 		}
 	}
 }

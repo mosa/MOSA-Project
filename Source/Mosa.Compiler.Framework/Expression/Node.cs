@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -16,8 +15,7 @@ namespace Mosa.Compiler.Framework.Expression
 		public BaseInstruction Instruction { get; }
 		public ConditionCode ConditionCode { get; set; } = ConditionCode.Undefined;
 
-		public string Name { get; }
-		public int Index { get; }
+		public string Alias { get; }
 
 		public ulong ConstantInteger { get; }
 		public double ConstantDouble { get; }
@@ -63,7 +61,7 @@ namespace Mosa.Compiler.Framework.Expression
 			ExpressionNode = expressionNode;
 		}
 
-		public Node(NodeType type, string name, int index)
+		public Node(NodeType type, string alias)
 		{
 			Debug.Assert(type != NodeType.FixedIntegerConstant);
 			Debug.Assert(type != NodeType.PhyiscalRegister);
@@ -71,8 +69,9 @@ namespace Mosa.Compiler.Framework.Expression
 			Debug.Assert(type != NodeType.Expression);
 
 			NodeType = type;
-			Index = index;
-			Name = name;
+
+			//Index = index;
+			Alias = alias;
 		}
 
 		public void AddNode(Node node)
@@ -127,40 +126,46 @@ namespace Mosa.Compiler.Framework.Expression
 
 			if (NodeType == NodeType.ConstantVariable && operand.IsConstant)
 			{
-				if (variables.Operands[Index] == null)
+				var variableOperand = variables.GetOperand(Alias);
+
+				if (variableOperand == null)
 				{
-					variables.Operands[Index] = operand;
+					variables.SetOperand(Alias, operand);
 					return true;
 				}
 				else
 				{
-					return variables.Operands[Index].ConstantUnsignedInteger == operand.ConstantUnsignedInteger;
+					return variableOperand.ConstantUnsignedInteger == operand.ConstantUnsignedInteger;
 				}
 			}
 
 			if (NodeType == NodeType.OperandVariable)
 			{
-				if (variables.Operands[Index] == null)
+				var variableOperand = variables.GetOperand(Alias);
+
+				if (variableOperand == null)
 				{
-					variables.Operands[Index] = operand;
+					variables.SetOperand(Alias, operand);
 					return true;
 				}
 				else
 				{
-					return variables.Operands[Index] == operand;
+					return variableOperand == operand;
 				}
 			}
 
 			if (NodeType == NodeType.TypeVariable)
 			{
-				if (variables.Types[Index] == null)
+				var variableType = variables.GetType(Alias);
+
+				if (variableType == null)
 				{
-					variables.Types[Index] = operand.Type;
+					variables.SetType(Alias, operand.Type);
 					return true;
 				}
 				else
 				{
-					return variables.Types[Index] == operand.Type;
+					return variableType == operand.Type;
 				}
 			}
 
@@ -215,9 +220,9 @@ namespace Mosa.Compiler.Framework.Expression
 				case NodeType.FixedDoubleConstant: sb.Append(ConstantDouble.ToString()); break;
 				case NodeType.PhyiscalRegister: sb.Append(PhysicalRegister.ToString()); break;
 				case NodeType.VirtualRegister:
-				case NodeType.OperandVariable: sb.Append(Name); break;
-				case NodeType.ConstantVariable: sb.Append("(Const "); sb.Append(Name); sb.Append(")"); break;
-				case NodeType.TypeVariable: sb.Append('<'); sb.Append(Name); sb.Append('>'); break;
+				case NodeType.OperandVariable: sb.Append(Alias); break;
+				case NodeType.ConstantVariable: sb.Append("(Const "); sb.Append(Alias); sb.Append(")"); break;
+				case NodeType.TypeVariable: sb.Append('<'); sb.Append(Alias); sb.Append('>'); break;
 				case NodeType.Expression: sb.Append("["); sb.Append(ExpressionNode.ToString()); sb.Append("]"); break;
 				case NodeType.Any: sb.Append("_"); break;
 				default: break;
