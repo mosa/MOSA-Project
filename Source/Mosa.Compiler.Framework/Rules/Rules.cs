@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Rules
 				Criteria = "",
 				DefaultInstructionFamily = "IR",
 				DefaultArchitectureFamily = "NA",
-				IsOptimization  = false,
+				IsOptimization  = true,
 				IsTransformation  = false,
 			},
 			new Rule() {
@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Rules
 				Criteria = "",
 				DefaultInstructionFamily = "IR",
 				DefaultArchitectureFamily = "NA",
-				IsOptimization  = false,
+				IsOptimization  = true,
 				IsTransformation  = false,
 			},
 		};

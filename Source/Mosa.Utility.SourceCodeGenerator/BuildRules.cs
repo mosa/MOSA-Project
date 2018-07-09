@@ -1,10 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.IO;
-using System.Text;
-using System.Web.Script.Serialization;
-
 namespace Mosa.Utility.SourceCodeGenerator
 {
 	public class BuildRules : BuildBaseTemplate
@@ -80,12 +75,12 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			if (node.Optimization != null)
 			{
-				Lines.AppendLine("\t\t\t\tIsOptimization  = " + (node.Optimization.ToLower().Contains("true") ? "true" : "false") + ",");
+				Lines.AppendLine("\t\t\t\tIsOptimization  = " + (node.Optimization.ToLower().Contains("yes") ? "true" : "false") + ",");
 			}
 
 			if (node.Transformation != null)
 			{
-				Lines.AppendLine("\t\t\t\tIsTransformation  = " + (node.Transformation.ToLower().Contains("true") ? "true" : "false") + ",");
+				Lines.AppendLine("\t\t\t\tIsTransformation  = " + (node.Transformation.ToLower().Contains("yes") ? "true" : "false") + ",");
 			}
 
 			Lines.AppendLine("\t\t\t},");

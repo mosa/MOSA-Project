@@ -96,7 +96,6 @@
     <Compile Include="BaseCompilerExtension.cs" />
     <Compile Include="CIL\IRInstructions.cs" />
     <Compile Include="Expression\Rule.cs" />
-    <Compile Include="Expression\BaseRule.cs" />
     <Compile Include="Expression\NodeParser.cs" />
     <Compile Include="Expression\SymbolDictionary.cs" />
     <Compile Include="Expression\ExpressionVariables.cs" />
