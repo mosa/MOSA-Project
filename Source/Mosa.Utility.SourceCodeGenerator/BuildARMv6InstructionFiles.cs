@@ -24,7 +24,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Body(dynamic node = null)
 		{
-			int id = GenerateInstructionID.GetInstructionID();
+			int id = Identifiers.GetInstructionID();
 
 			Lines.AppendLine("using Mosa.Compiler.Framework;");
 

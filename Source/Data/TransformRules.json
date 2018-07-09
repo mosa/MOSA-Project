@@ -1,5 +1,5 @@
 ﻿{
-	"IROptimizations": [
+	"Rules": [
 		{
 			"Name": "MultipleBy1",
 			"Type": "StrengthReduction",
@@ -7,17 +7,20 @@
 			"Transform": "x",
 			"Criteria": "",
 			"DefaultInstructionFamily": "IR",
-			"DefaultArchitectureFamily": "NA"
+			"DefaultArchitectureFamily": "NA",
+			"Optimization": "Yes",
+			"Transformation": "No"
 		},
 		{
 			"Name": "MultipleBy0",
 			"Type": "StrengthReduction",
-			"DefaultInstructionFamily": "IR",
 			"Match": "(MulUnsigned 0 x)",
 			"Transform": "0",
 			"Criteria": "",
 			"DefaultInstructionFamily": "IR",
-			"DefaultArchitectureFamily": "NA"
+			"DefaultArchitectureFamily": "NA",
+			"Optimization": "Yes",
+			"Transformation": "No"
 		}
 	]
 }

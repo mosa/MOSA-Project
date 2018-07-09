@@ -26,7 +26,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Body(dynamic node = null)
 		{
-			int id = GenerateInstructionID.GetInstructionID();
+			int id = Identifiers.GetInstructionID();
 
 			string bytes = EncodeOpcodeBytes(node);
 			string legacy = EncodeLegacyOpcode(node);

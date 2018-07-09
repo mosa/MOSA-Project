@@ -1,10 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.IO;
-using System.Text;
-using System.Web.Script.Serialization;
-
 namespace Mosa.Utility.SourceCodeGenerator
 {
 	public class BuildIRInstructionFiles : BuildBaseTemplate
@@ -29,7 +24,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Body(dynamic node = null)
 		{
-			int id = GenerateInstructionID.GetInstructionID();
+			int id = Identifiers.GetInstructionID();
 
 			if (node.ResultType != null || node.ResultType2 != null)
 			{
