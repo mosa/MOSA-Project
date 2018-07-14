@@ -92,10 +92,13 @@
     <Compile Include="Analysis\ReverseBlockOrder.cs" />
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
     <Compile Include="Analysis\BaseDominanceAnalysis.cs" />
+    <Compile Include="BaseCodeTransformationStage.cs" />
     <Compile Include="BaseCompilerExtension.cs" />
     <Compile Include="CIL\IRInstructions.cs" />
+    <Compile Include="Expression\Rule.cs" />
     <Compile Include="Expression\NodeParser.cs" />
     <Compile Include="Expression\SymbolDictionary.cs" />
+    <Compile Include="Expression\ExpressionVariables.cs" />
     <Compile Include="IR\Add32.cs" />
     <Compile Include="IR\Add64.cs" />
     <Compile Include="IR\AddCarryOut32.cs" />
@@ -379,6 +382,7 @@
     <Compile Include="RegisterAllocator\MoveHint.cs" />
     <Compile Include="ReplacementTargetAttribute.cs" />
     <Compile Include="CompilerVersion.cs" />
+    <Compile Include="Rules.cs" />
     <Compile Include="ShiftType.cs" />
     <Compile Include="ConditionCodeExtension.cs" />
     <Compile Include="BasicBlocks.cs" />
@@ -391,6 +395,7 @@
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
     <Compile Include="CompilerStages\DebugFileGenerationStage.cs" />
+    <Compile Include="Stages\OptimizationRulesStage.cs" />
     <Compile Include="Stages\PlugStage.cs" />
     <Compile Include="Stages\DevirtualizeCallStage.cs" />
     <Compile Include="Stages\CallStage.cs" />
@@ -564,7 +569,7 @@
     <Compile Include="Stages\CodeGenerationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCodeTransformationStage.cs">
+    <Compile Include="BaseCodeTransformationStageLegacy.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FlowControl.cs">
@@ -617,5 +622,6 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

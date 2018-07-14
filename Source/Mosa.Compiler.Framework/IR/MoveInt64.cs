@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class MoveInt64 : BaseIRInstruction
 	{
+		public override int ID { get { return 114; } }
+
 		public MoveInt64()
 			: base(1, 1)
 		{

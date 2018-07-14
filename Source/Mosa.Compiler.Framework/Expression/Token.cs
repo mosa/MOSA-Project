@@ -21,8 +21,6 @@ namespace Mosa.Compiler.Framework.Expression
 		public ulong Integer { get; }
 		public double Double { get; }
 
-		public int Index { get; protected set; }
-
 		public Token(TokenType tokenType, string value = null, int index = -1)
 		{
 			TokenType = tokenType;
@@ -142,11 +140,6 @@ namespace Mosa.Compiler.Framework.Expression
 
 			TokenType = TokenType.UnsignedIntegerConstant;
 			Integer = u;
-		}
-
-		public void SetNameIndex(int index)
-		{
-			Index = index;
 		}
 
 		public override string ToString()

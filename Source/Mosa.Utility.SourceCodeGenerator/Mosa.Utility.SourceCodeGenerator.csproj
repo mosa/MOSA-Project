@@ -50,6 +50,7 @@
     <Compile Include="BuildARMv6InstructionFiles.cs" />
     <Compile Include="BuildX64InstructionFiles.cs" />
     <Compile Include="BuildX64.cs" />
+    <Compile Include="BuildRules.cs" />
     <Compile Include="BuildX64Instructions.cs" />
     <Compile Include="BuildX86InstructionFiles.cs" />
     <Compile Include="BuildX86Instructions.cs" />
@@ -59,6 +60,7 @@
     <Compile Include="BuildIRInstructions.cs" />
     <Compile Include="BuildBaseTemplate.cs" />
     <Compile Include="DynamicJsonConverter.cs" />
+    <Compile Include="Identifiers.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>

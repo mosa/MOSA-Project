@@ -24,6 +24,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Body(dynamic node = null)
 		{
+			int id = Identifiers.GetInstructionID();
+
 			Lines.AppendLine("using Mosa.Compiler.Framework;");
 
 			if (node.ResultType != null || node.ResultType2 != null)
@@ -52,7 +54,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("\t/// <seealso cref=\"Mosa.Platform.ARMv6.ARMv6Instruction\" />");
 			Lines.AppendLine("\tpublic sealed class " + node.Name + " : ARMv6Instruction");
 			Lines.AppendLine("\t{");
-
+			Lines.AppendLine("\t\tpublic override int ID { get { return " + id.ToString() + "; } }");
+			Lines.AppendLine();
 			Lines.AppendLine("\t\tinternal " + node.Name + "()");
 			Lines.AppendLine("\t\t\t: base(" + node.ResultCount + ", " + node.OperandCount + ")");
 			Lines.AppendLine("\t\t{");

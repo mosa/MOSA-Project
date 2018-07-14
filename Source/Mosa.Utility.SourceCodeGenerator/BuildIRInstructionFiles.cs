@@ -1,10 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.IO;
-using System.Text;
-using System.Web.Script.Serialization;
-
 namespace Mosa.Utility.SourceCodeGenerator
 {
 	public class BuildIRInstructionFiles : BuildBaseTemplate
@@ -29,6 +24,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Body(dynamic node = null)
 		{
+			int id = Identifiers.GetInstructionID();
+
 			if (node.ResultType != null || node.ResultType2 != null)
 			{
 				Lines.AppendLine("using Mosa.Compiler.MosaTypeSystem;");
@@ -42,14 +39,15 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			if (!string.IsNullOrWhiteSpace(node.Description))
 			{
-				Lines.AppendLine("\t/// " + node.Description);
+				Lines.AppendLine("\t\t/// " + node.Description);
 			}
 
 			Lines.AppendLine("\t/// </summary>");
 			Lines.AppendLine("\t/// <seealso cref=\"Mosa.Compiler.Framework.IR.BaseIRInstruction\" />");
 			Lines.AppendLine("\tpublic sealed class " + node.Name + " : BaseIRInstruction");
 			Lines.AppendLine("\t{");
-
+			Lines.AppendLine("\t\tpublic override int ID { get { return " + id.ToString() + "; } }");
+			Lines.AppendLine();
 			Lines.AppendLine("\t\tpublic " + node.Name + "()");
 			Lines.AppendLine("\t\t\t: base(" + node.OperandCount + ", " + node.ResultCount + ")");
 			Lines.AppendLine("\t\t{");

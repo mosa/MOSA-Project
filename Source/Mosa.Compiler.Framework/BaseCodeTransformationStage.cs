@@ -1,8 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
-
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
@@ -11,11 +8,13 @@ namespace Mosa.Compiler.Framework
 	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage
 	{
-		protected delegate void ContextVisitationDelegate(Context context);
+		private const int MaxInstructions = 1024;
 
+		protected delegate void ContextVisitationDelegate(Context context);
 		protected delegate void NodeVisitationDelegate(InstructionNode node);
 
-		private Dictionary<BaseInstruction, Tuple<ContextVisitationDelegate, NodeVisitationDelegate>> visitationDictionary;
+		protected ContextVisitationDelegate[] visitationContexts;
+		protected NodeVisitationDelegate[] visitationNodes;
 
 		protected abstract void PopulateVisitationDictionary();
 
@@ -23,16 +22,14 @@ namespace Mosa.Compiler.Framework
 		{
 			base.Initialize();
 
-			visitationDictionary = new Dictionary<BaseInstruction, Tuple<ContextVisitationDelegate, NodeVisitationDelegate>>();
+			visitationContexts = new ContextVisitationDelegate[MaxInstructions];
+			visitationNodes = new NodeVisitationDelegate[MaxInstructions];
 
 			PopulateVisitationDictionary();
 		}
 
 		protected override void Run()
 		{
-			if (visitationDictionary.Count == 0)
-				return;
-
 			var context = new Context(null as InstructionNode);
 
 			for (int index = 0; index < BasicBlocks.Count; index++)
@@ -44,30 +41,33 @@ namespace Mosa.Compiler.Framework
 
 					instructionCount++;
 
-					if (visitationDictionary.TryGetValue(node.Instruction, out Tuple<ContextVisitationDelegate, NodeVisitationDelegate> visitationMethod))
+					if (node.Instruction.ID == 0)
+						continue; // no mapping
+
+					var visitationContext = visitationContexts[node.Instruction.ID];
+
+					if (visitationContext != null)
 					{
-						if (visitationMethod.Item1 != null)
-						{
-							context.Node = node;
-							visitationMethod.Item1(context);
-						}
-						else
-						{
-							visitationMethod.Item2?.Invoke(node);
-						}
+						context.Node = node;
+						visitationContext(context);
 					}
+
+					if (node.IsEmpty)
+						continue;
+
+					visitationNodes[node.Instruction.ID]?.Invoke(node);
 				}
 			}
 		}
 
 		protected void AddVisitation(BaseInstruction instruction, ContextVisitationDelegate visitation)
 		{
-			visitationDictionary.Add(instruction, new Tuple<ContextVisitationDelegate, NodeVisitationDelegate>(visitation, null));
+			visitationContexts[instruction.ID] = visitation;
 		}
 
 		protected void AddVisitation(BaseInstruction instruction, NodeVisitationDelegate visitation)
 		{
-			visitationDictionary.Add(instruction, new Tuple<ContextVisitationDelegate, NodeVisitationDelegate>(null, visitation));
+			visitationNodes[instruction.ID] = visitation;
 		}
 	}
 }

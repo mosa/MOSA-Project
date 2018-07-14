@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class NewObject : BaseIRInstruction
 	{
+		public override int ID { get { return 122; } }
+
 		public NewObject()
 			: base(2, 1)
 		{

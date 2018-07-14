@@ -12,6 +12,8 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class TestConst64 : X64Instruction
 	{
+		public override int ID { get { return 540; } }
+
 		internal TestConst64()
 			: base(0, 2)
 		{

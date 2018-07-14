@@ -12,6 +12,8 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Call : X86Instruction
 	{
+		public override int ID { get { return 201; } }
+
 		internal Call()
 			: base(0, 0)
 		{

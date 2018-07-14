@@ -12,6 +12,8 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class BranchParity : X86Instruction
 	{
+		public override int ID { get { return 349; } }
+
 		internal BranchParity()
 			: base(0, 0)
 		{

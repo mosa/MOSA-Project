@@ -2,9 +2,7 @@
 
 using Mosa.Compiler.Framework.Expression;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Platform.ARMv6;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Workspace.Experiment.Debug
 {
@@ -17,7 +15,9 @@ namespace Mosa.Workspace.Experiment.Debug
 			map.Add(IRInstructionList.List);
 
 			var match = new List<string> {
+				"(IR.MulUnsigned 1 x)",
 				"(MulUnsigned 1 x)",
+				"(IR.AddUnsigned32(IR.MulUnsigned x y)(IR.MulUnsigned x z))",
 				"(AddUnsigned32(MulUnsigned x y)(MulUnsigned x z))",
 				"(MulUnsigned x (AddUnsigned32 y z))",
 				"(MulUnsigned 1 x)",
@@ -28,17 +28,12 @@ namespace Mosa.Workspace.Experiment.Debug
 				"[1 * 2]"
 			};
 
-			var tokenized = new List<Token>[] {
-				Tokenizer.Parse(match[0], ParseType.Instructions),
-				Tokenizer.Parse(match[1], ParseType.Instructions),
-				Tokenizer.Parse(match[2], ParseType.Instructions),
-				Tokenizer.Parse(match[3], ParseType.Instructions),
-				Tokenizer.Parse(match[4], ParseType.Instructions),
-				Tokenizer.Parse(match[5], ParseType.Instructions),
-				Tokenizer.Parse(match[6], ParseType.Instructions),
-				Tokenizer.Parse(match[7], ParseType.Instructions),
-				Tokenizer.Parse(match[8], ParseType.Instructions),
-			};
+			var tokenized = new List<List<Token>>();
+
+			foreach (var m in match)
+			{
+				tokenized.Add(Tokenizer.Parse(m, m.StartsWith("(") ? ParseType.Instructions : ParseType.Expression));
+			}
 
 			return;
 		}

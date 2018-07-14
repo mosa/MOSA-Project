@@ -12,6 +12,8 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovGreaterOrEqual64 : X64Instruction
 	{
+		public override int ID { get { return 605; } }
+
 		internal CMovGreaterOrEqual64()
 			: base(1, 1)
 		{

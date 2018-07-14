@@ -12,6 +12,8 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovNotSigned64 : X64Instruction
 	{
+		public override int ID { get { return 601; } }
+
 		internal CMovNotSigned64()
 			: base(1, 1)
 		{

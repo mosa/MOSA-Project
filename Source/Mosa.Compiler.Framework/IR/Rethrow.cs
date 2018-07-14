@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class Rethrow : BaseIRInstruction
 	{
+		public override int ID { get { return 170; } }
+
 		public Rethrow()
 			: base(2, 1)
 		{

@@ -10,12 +10,12 @@ namespace Mosa.Compiler.Framework.Expression
 
 	public sealed class Tokenizer
 	{
-		private List<Token> Tokens = new List<Token>();
-		private string Expression;
-		private ParseType ParseType;
+		private readonly List<Token> Tokens = new List<Token>();
+		private readonly string Expression;
+		private readonly ParseType ParseType;
 		private int Index;
 
-		private static List<KeyValuePair<string, TokenType>> operands = new List<KeyValuePair<string, TokenType>>()
+		private static readonly List<KeyValuePair<string, TokenType>> operands = new List<KeyValuePair<string, TokenType>>()
 		{
 			new KeyValuePair<string, TokenType>("(", TokenType.OpenParens),
 			new KeyValuePair<string, TokenType>(")", TokenType.CloseParens),
@@ -62,8 +62,7 @@ namespace Mosa.Compiler.Framework.Expression
 			Index = 0;
 
 			Parse();
-			Rewrite();
-			AssignNameLabels();
+			Lower();
 		}
 
 		private void Parse()
@@ -102,78 +101,24 @@ namespace Mosa.Compiler.Framework.Expression
 		{
 			int i = index + offset;
 
-			if (i >= Tokens.Count)
+			if (i >= Tokens.Count || i < 0)
 				return Token.Unknown;
 
 			return Tokens[i];
 		}
 
-		private bool Match(int index, TokenType[] tokens)
-		{
-			for (int i = 0; i < tokens.Length; i++)
-			{
-				if (index + i > Tokens.Count)
-					return false;
-
-				if (Peek(index, i).TokenType != tokens[i])
-					return false;
-			}
-
-			return true;
-		}
-
-		private static readonly TokenType[] TypeVariableList = new TokenType[]
-		{
-			// <Identifier>  ->  TypeVariable
-			TokenType.OpenBracket , TokenType.Identifier , TokenType.CloseBracket
-		};
-
-		private static readonly TokenType[] TypeMethodList = new TokenType[]
-		{
-			// {TypeVariable}.{Identifier}  ->  {TypeVariable}.{MethodName}
-			TokenType.TypeVariable , TokenType.Period , TokenType.Identifier
-		};
-
-		private static readonly TokenType[] ClassMethodList = new TokenType[]
-		{
-			// {Identifier}:{Identifier}  ->  {ClassName}:{MethodName}
-			TokenType.Identifier , TokenType.Colon , TokenType.Identifier
-		};
-
-		private static readonly TokenType[] MethodNameList = new TokenType[]
-		{
-			// {Identifier}(  ->  {MethodName}(
-			TokenType.Identifier , TokenType.OpenParens
-		};
-
-		private static readonly TokenType[] InstructionNameList = new TokenType[]
-		{
-			// ({Identifier}  ->  ({InstructionName}
-			TokenType.OpenParens , TokenType.Identifier
-		};
-
-		private static readonly TokenType[] HashList = new TokenType[]
-		{
-			// #{Identifier}  ->  #{PhysicalRegister}
-			TokenType.Hash , TokenType.Identifier
-		};
-
-		private static readonly TokenType[] InstructionFamilyNameList = new TokenType[]
-		{
-			// ({Identifier}.{Identifier}  ->  ({InstructionFamily}.{InstructionName}
-			TokenType.OpenParens , TokenType.Identifier , TokenType.Period, TokenType.Identifier, TokenType.OpenParens
-		};
-
 		/// <summary>
-		/// Rewrites the tokens by more specific tokens
+		/// Lowers tokens to more specific types of tokens
 		/// </summary>
-		private void Rewrite()
+		private void Lower()
 		{
 			for (int i = 0; i < Tokens.Count; i++)
 			{
-				if (Tokens[i].TokenType == TokenType.Identifier && string.Equals(Tokens[i].Value, "const", StringComparison.OrdinalIgnoreCase))
+				var token = Tokens[i];
+
+				if (token.TokenType == TokenType.Identifier && string.Equals(token.Value, "const", StringComparison.OrdinalIgnoreCase))
 				{
-					Tokens[i] = new Token(TokenType.ConstLiteral, Tokens[i].Value);
+					Tokens[i] = new Token(TokenType.ConstLiteral, token.Value);
 				}
 			}
 
@@ -181,108 +126,86 @@ namespace Mosa.Compiler.Framework.Expression
 
 			for (int i = 0; i < Tokens.Count; i++)
 			{
-				var token = Peek(i);
+				var current = Tokens[i].TokenType;
 
-				if (token.TokenType == TokenType.OpenBracket)
+				if (current == TokenType.Null)
+					continue;
+
+				if (current == TokenType.OpenBracket)
 				{
 					parseType = ParseType.Expression;
 					continue;
 				}
-				else if (token.TokenType == TokenType.CloseBracket)
+				else if (current == TokenType.CloseBracket)
 				{
 					parseType = ParseType;
 					continue;
 				}
 
-				if (Match(i, TypeVariableList))
-				{
-					// <Identifier>  ->  TypeVariable
-					Tokens[i] = new Token(TokenType.TypeVariable, Tokens[i + 1].Value);
-					Tokens.RemoveRange(i + 1, 2);
-				}
-				if (Match(i, TypeMethodList))
-				{
-					// {TypeVariable}.{Identifier}  ->  {TypeVariable}.{MethodName}
-					Tokens[i + 2] = new Token(TokenType.MethodName, Tokens[i + 2].Value);
-				}
-				if (Match(i, ClassMethodList))
-				{
-					// {Identifier}:{Identifier}  ->  {ClassName}:{MethodName}
-					Tokens[i] = new Token(TokenType.ClassName, Tokens[i].Value);
-					Tokens[i + 2] = new Token(TokenType.MethodName, Tokens[i + 2].Value);
-				}
+				var prev = Peek(i, -1).TokenType;
+				var next = Peek(i, 1).TokenType;
+				var next2 = Peek(i, 2).TokenType;
 
 				if (parseType == ParseType.Expression)
 				{
-					if (Match(i, MethodNameList))
+					if (current == TokenType.Identifier && next == TokenType.Period && next2 == TokenType.Identifier)
 					{
-						// {Identifier}(  ->  {MethodName}(
-						Tokens[i] = new Token(TokenType.MethodName, Tokens[i].Value);
+						// x.IsRegister
+						Tokens[i] = new Token(TokenType.OperandVariable, Tokens[i].Value);
+					}
+					else if (current == TokenType.Identifier && next == TokenType.OpenParens)
+					{
+						// IsPowerOfTwo(
+						Tokens[i] = new Token(TokenType.Method, Tokens[i].Value);
+					}
+					else if (current == TokenType.Identifier && next == TokenType.Colon && next2 == TokenType.Identifier)
+					{
+						// Math:IsPowerOfTwo(
+						Tokens[i] = new Token(TokenType.Method, Tokens[i].Value + ':' + Tokens[i + 2].Value);
+						Tokens[i + 1] = new Token(TokenType.Null);
+						Tokens[i + 2] = new Token(TokenType.Null);
+					}
+					else if (current == TokenType.Identifier)
+					{
+						// x
+						Tokens[i] = new Token(TokenType.OperandVariable, Tokens[i].Value);
 					}
 				}
-
-				if (parseType == ParseType.Instructions)
+				else if (parseType == ParseType.Instructions)
 				{
-					if (Match(i, InstructionFamilyNameList))
+					if (prev == TokenType.OpenParens && current == TokenType.Identifier)
 					{
-						// ({Identifier}.{Identifier}(  ->  ({InstructionFamily}.{InstructionName}
-						Tokens[i + 1] = new Token(TokenType.InstructionFamily, Tokens[i + 1].Value);
-						Tokens[i + 3] = new Token(TokenType.InstructionName, Tokens[i + 3].Value);
+						Tokens[i] = new Token(TokenType.Instruction, Tokens[i].Value);
 					}
-					if (Match(i, InstructionNameList))
+					else if (prev == TokenType.Hash && current == TokenType.Identifier)
 					{
-						// ({Identifier}  ->  ({InstructionName}
-						Tokens[i + 1] = new Token(TokenType.InstructionName, Tokens[i + 1].Value);
+						Tokens[i - 1] = new Token(TokenType.Null);
+						Tokens[i] = new Token(TokenType.PhysicalRegister, Tokens[i].Value);
 					}
-					if (Match(i, HashList))
+					else if (prev == TokenType.CompareLessThan && current == TokenType.Identifier && prev == TokenType.CompareGreaterThan)
 					{
-						// #{Identifier}  ->  #{PhysicalRegister}
-						Tokens[i + 1] = new Token(TokenType.PhysicalRegister, Tokens[i + 1].Value);
+						Tokens[i - 1] = new Token(TokenType.Null);
+						Tokens[i] = new Token(TokenType.TypeVariable, Tokens[i + 1].Value);
+						Tokens[i + 1] = new Token(TokenType.Null);
+					}
+					else if (prev == TokenType.Instruction && current == TokenType.Period && next == TokenType.Identifier)
+					{
+						Tokens[i - 1] = new Token(TokenType.Instruction, Tokens[i - 1].Value + '.' + Tokens[i + 1].Value);
+						Tokens[i] = new Token(TokenType.Null);
+						Tokens[i + 1] = new Token(TokenType.Null);
+					}
+					else if (current == TokenType.Identifier)
+					{
+						Tokens[i] = new Token(TokenType.OperandVariable, Tokens[i].Value);
 					}
 				}
 			}
 
-			for (int i = 0; i < Tokens.Count; i++)
+			for (int i = Tokens.Count - 1; i >= 0; i--)
 			{
-				if (Tokens[i].TokenType == TokenType.Identifier)
+				if (Tokens[i].TokenType == TokenType.Null)
 				{
-					Tokens[i] = new Token(TokenType.OperandVariable, Tokens[i].Value);
-				}
-			}
-		}
-
-		private void AssignNameLabels()
-		{
-			var aliases = new Dictionary<string, int>();
-			var typeAlias = new Dictionary<string, int>();
-
-			for (int i = 0; i < Tokens.Count; i++)
-			{
-				var token = Tokens[i];
-
-				if (token.TokenType == TokenType.OperandVariable)
-				{
-					var name = token.Value;
-
-					if (!aliases.TryGetValue(name, out int value))
-					{
-						value = aliases.Count;
-						aliases.Add(name, value);
-					}
-
-					token.SetNameIndex(value);
-				}
-				else if (token.TokenType == TokenType.TypeVariable)
-				{
-					var name = token.Value;
-
-					if (!typeAlias.TryGetValue(name, out int value))
-					{
-						value = typeAlias.Count;
-						typeAlias.Add(name, value);
-					}
-
-					token.SetNameIndex(value);
+					Tokens.RemoveAt(i);
 				}
 			}
 		}
@@ -403,29 +326,6 @@ namespace Mosa.Compiler.Framework.Expression
 		public override string ToString()
 		{
 			return Expression;
-		}
-
-		private int FindFirst(TokenType token)
-		{
-			for (int i = 0; i < Tokens.Count; i++)
-			{
-				if (Tokens[i].TokenType == token)
-					return i;
-			}
-
-			return -1;
-		}
-
-		private List<Token> GetPart(int start, int end)
-		{
-			var tokens = new List<Token>(end > start ? (end - start) + 1 : 0);
-
-			for (int i = start; i <= end; i++)
-			{
-				tokens.Add(Tokens[i]);
-			}
-
-			return tokens;
 		}
 	}
 }

@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -16,8 +15,7 @@ namespace Mosa.Compiler.Framework.Expression
 		public BaseInstruction Instruction { get; }
 		public ConditionCode ConditionCode { get; set; } = ConditionCode.Undefined;
 
-		public string Name { get; }
-		public int Index { get; }
+		public string Alias { get; }
 
 		public ulong ConstantInteger { get; }
 		public double ConstantDouble { get; }
@@ -63,7 +61,7 @@ namespace Mosa.Compiler.Framework.Expression
 			ExpressionNode = expressionNode;
 		}
 
-		public Node(NodeType type, string name, int index)
+		public Node(NodeType type, string alias)
 		{
 			Debug.Assert(type != NodeType.FixedIntegerConstant);
 			Debug.Assert(type != NodeType.PhyiscalRegister);
@@ -71,8 +69,9 @@ namespace Mosa.Compiler.Framework.Expression
 			Debug.Assert(type != NodeType.Expression);
 
 			NodeType = type;
-			Index = index;
-			Name = name;
+
+			//Index = index;
+			Alias = alias;
 		}
 
 		public void AddNode(Node node)
@@ -80,7 +79,7 @@ namespace Mosa.Compiler.Framework.Expression
 			ParentNodes.Add(node);
 		}
 
-		protected bool ValidateInstruction(Framework.InstructionNode node)
+		protected bool ValidateInstruction(InstructionNode node)
 		{
 			if (node == null)
 				return false;
@@ -100,15 +99,15 @@ namespace Mosa.Compiler.Framework.Expression
 			return true;
 		}
 
-		protected bool ValidateOperand(Framework.InstructionNode node, int operandIndex, Operand[] operands, MosaType[] types)
+		protected bool ValidateOperand(InstructionNode node, int operandIndex, ExpressionVariables variables)
 		{
 			if (operandIndex > node.OperandCount)
 				return false;
 
-			return ValidateOperand(node.GetOperand(operandIndex), operands, types);
+			return ValidateOperand(node.GetOperand(operandIndex), variables);
 		}
 
-		protected bool ValidateOperand(Operand operand, Operand[] operands, MosaType[] types)
+		protected bool ValidateOperand(Operand operand, ExpressionVariables variables)
 		{
 			if (operand == null)
 				return false;
@@ -127,47 +126,53 @@ namespace Mosa.Compiler.Framework.Expression
 
 			if (NodeType == NodeType.ConstantVariable && operand.IsConstant)
 			{
-				if (operands[Index] == null)
+				var variableOperand = variables.GetOperand(Alias);
+
+				if (variableOperand == null)
 				{
-					operands[Index] = operand;
+					variables.SetOperand(Alias, operand);
 					return true;
 				}
 				else
 				{
-					return operands[Index].ConstantUnsignedInteger == operand.ConstantUnsignedInteger;
+					return variableOperand.ConstantUnsignedInteger == operand.ConstantUnsignedInteger;
 				}
 			}
 
 			if (NodeType == NodeType.OperandVariable)
 			{
-				if (operands[Index] == null)
+				var variableOperand = variables.GetOperand(Alias);
+
+				if (variableOperand == null)
 				{
-					operands[Index] = operand;
+					variables.SetOperand(Alias, operand);
 					return true;
 				}
 				else
 				{
-					return operands[Index] == operand;
+					return variableOperand == operand;
 				}
 			}
 
 			if (NodeType == NodeType.TypeVariable)
 			{
-				if (types[Index] == null)
+				var variableType = variables.GetType(Alias);
+
+				if (variableType == null)
 				{
-					types[Index] = operand.Type;
+					variables.SetType(Alias, operand.Type);
 					return true;
 				}
 				else
 				{
-					return types[Index] == operand.Type;
+					return variableType == operand.Type;
 				}
 			}
 
 			return false;
 		}
 
-		public bool Match(Framework.InstructionNode node, Operand[] operands, MosaType[] types)
+		public bool Match(InstructionNode node, ExpressionVariables variables)
 		{
 			if (NodeType == NodeType.Instruction)
 			{
@@ -190,12 +195,12 @@ namespace Mosa.Compiler.Framework.Expression
 
 						var parent = operand.Definitions[0];
 
-						if (!parentNode.Match(parent, operands, types))
+						if (!parentNode.Match(parent, variables))
 							return false;
 					}
 					else
 					{
-						if (!parentNode.ValidateOperand(node, i, operands, types))
+						if (!parentNode.ValidateOperand(node, i, variables))
 							return false;
 					}
 				}
@@ -215,9 +220,9 @@ namespace Mosa.Compiler.Framework.Expression
 				case NodeType.FixedDoubleConstant: sb.Append(ConstantDouble.ToString()); break;
 				case NodeType.PhyiscalRegister: sb.Append(PhysicalRegister.ToString()); break;
 				case NodeType.VirtualRegister:
-				case NodeType.OperandVariable: sb.Append(Name); break;
-				case NodeType.ConstantVariable: sb.Append("(Const "); sb.Append(Name); sb.Append(")"); break;
-				case NodeType.TypeVariable: sb.Append('<'); sb.Append(Name); sb.Append('>'); break;
+				case NodeType.OperandVariable: sb.Append(Alias); break;
+				case NodeType.ConstantVariable: sb.Append("(Const "); sb.Append(Alias); sb.Append(")"); break;
+				case NodeType.TypeVariable: sb.Append('<'); sb.Append(Alias); sb.Append('>'); break;
 				case NodeType.Expression: sb.Append("["); sb.Append(ExpressionNode.ToString()); sb.Append("]"); break;
 				case NodeType.Any: sb.Append("_"); break;
 				default: break;

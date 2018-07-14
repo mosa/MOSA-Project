@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
@@ -58,8 +57,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Stack<InstructionNode> worklist;
 
-		private HashSet<Operand> virtualRegisters;
-
 		private TraceLog trace;
 
 		private delegate void Transformation(InstructionNode node);
@@ -73,7 +70,6 @@ namespace Mosa.Compiler.Framework.Stages
 			base.Initialize();
 
 			worklist = new Stack<InstructionNode>();
-			virtualRegisters = new HashSet<Operand>();
 
 			debugRestrictOptimizationByCount = CompilerOptions.DebugRestrictOptimizationByCount;
 
@@ -241,7 +237,6 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.SimplifyGetLow", simplifyGetLow);
 			UpdateCounter("IROptimizations.SimplifyGetHigh", simplifyGetHigh);
 
-			virtualRegisters.Clear();
 			worklist.Clear();
 			trace = null;
 		}
@@ -261,23 +256,6 @@ namespace Mosa.Compiler.Framework.Stages
 					Do(node);
 
 					ProcessWorkList();
-
-					// Collect virtual registers
-					if (node.IsEmpty)
-						continue;
-
-					// add virtual registers
-					foreach (var op in node.Results)
-					{
-						if (op.IsVirtualRegister)
-							virtualRegisters.AddIfNew(op);
-					}
-
-					foreach (var op in node.Operands)
-					{
-						if (op.IsVirtualRegister)
-							virtualRegisters.AddIfNew(op);
-					}
 				}
 			}
 		}
@@ -354,7 +332,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private BaseInstruction GetMoveInteger(Operand operand)
+		private static BaseInstruction GetMoveInteger(Operand operand)
 		{
 			return operand.Is64BitInteger ? (BaseInstruction)IRInstruction.MoveInt64 : IRInstruction.MoveInt32;
 		}

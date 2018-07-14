@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class Break : BaseIRInstruction
 	{
+		public override int ID { get { return 12; } }
+
 		public Break()
 			: base(0, 0)
 		{
