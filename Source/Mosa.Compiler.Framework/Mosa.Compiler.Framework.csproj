@@ -382,7 +382,7 @@
     <Compile Include="RegisterAllocator\MoveHint.cs" />
     <Compile Include="ReplacementTargetAttribute.cs" />
     <Compile Include="CompilerVersion.cs" />
-    <Compile Include="Rules\Rules.cs" />
+    <Compile Include="Rules.cs" />
     <Compile Include="ShiftType.cs" />
     <Compile Include="ConditionCodeExtension.cs" />
     <Compile Include="BasicBlocks.cs" />

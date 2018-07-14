@@ -3,7 +3,7 @@
 		{
 			"Name": "MultipleBy1",
 			"Type": "StrengthReduction",
-			"Match": "(MulUnsigned 1 x)",
+			"Match": "(IR.MulUnsigned 1 x)",
 			"Transform": "x",
 			"Criteria": "",
 			"DefaultInstructionFamily": "IR",
@@ -14,7 +14,7 @@
 		{
 			"Name": "MultipleBy0",
 			"Type": "StrengthReduction",
-			"Match": "(MulUnsigned 0 x)",
+			"Match": "(IR.MulUnsigned 0 x)",
 			"Transform": "0",
 			"Criteria": "",
 			"DefaultInstructionFamily": "IR",

@@ -7,8 +7,8 @@ namespace Mosa.Compiler.Framework.Expression
 {
 	public sealed class NodeParser
 	{
-		private Node Root;
-		private SymbolDictionary Map;
+		private readonly Node Root;
+		private readonly SymbolDictionary Map;
 		private int Index = 0;
 
 		public static Node Parse(List<Token> tokens, SymbolDictionary map)
@@ -88,7 +88,7 @@ namespace Mosa.Compiler.Framework.Expression
 		{
 			var token = tokens[Index];
 
-			if (token.TokenType == TokenType.InstructionName)
+			if (token.TokenType == TokenType.Instruction)
 			{
 				return ParseInstructionNode(tokens);
 			}

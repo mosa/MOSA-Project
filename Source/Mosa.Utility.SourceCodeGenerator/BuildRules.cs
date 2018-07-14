@@ -50,17 +50,17 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			if (node.Match != null)
 			{
-				Lines.AppendLine("\t\t\t\tMatch = \"" + node.Match + "\",");
+				Lines.AppendLine("\t\t\t\tMatch = \"" + node.Match.Replace("\n", " ") + "\",");
 			}
 
 			if (node.Transform != null)
 			{
-				Lines.AppendLine("\t\t\t\tTransform = \"" + node.Transform + "\",");
+				Lines.AppendLine("\t\t\t\tTransform = \"" + node.Transform.Replace("\n", " ") + "\",");
 			}
 
 			if (node.Criteria != null)
 			{
-				Lines.AppendLine("\t\t\t\tCriteria = \"" + node.Criteria + "\",");
+				Lines.AppendLine("\t\t\t\tCriteria = \"" + node.Criteria.Replace("\n", " ") + "\",");
 			}
 
 			if (node.DefaultInstructionFamily != null)

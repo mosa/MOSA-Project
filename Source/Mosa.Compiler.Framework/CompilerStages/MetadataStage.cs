@@ -24,10 +24,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		protected override void Setup()
 		{
-			if (TypeLayout.NativePointerSize == 4)
-				NativePatchType = PatchType.I4;
-			else
-				NativePatchType = PatchType.I8;
+			NativePatchType = (TypeLayout.NativePointerSize == 4) ? PatchType.I4 : NativePatchType = PatchType.I8;
 		}
 
 		protected override void RunPostCompile()

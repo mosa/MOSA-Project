@@ -39,10 +39,7 @@ namespace Mosa.Compiler.Framework.Expression
 
 			var result = ExpressionEvaluator.Evaluate(Condition, variables);
 
-			if (result.IsTrue)
-				return true;
-
-			return false;
+			return result.IsTrue;
 		}
 
 		public Node Transform(InstructionNode node, TypeSystem typeSystem, ExpressionVariables variables)

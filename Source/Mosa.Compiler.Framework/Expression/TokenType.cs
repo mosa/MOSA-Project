@@ -50,17 +50,15 @@ namespace Mosa.Compiler.Framework.Expression
 
 		Identifier,  // temporary
 
-		InstructionFamily,
-		InstructionName,
-		ClassName,
-		MethodName,
+		Instruction,
 		TypeVariable,
 		OperandVariable,
+
 		ConstLiteral,
 		PhysicalRegister,
 		VirtualRegister,
 
-		Method,     // ???
+		Method,
 
 		Null,
 	}
