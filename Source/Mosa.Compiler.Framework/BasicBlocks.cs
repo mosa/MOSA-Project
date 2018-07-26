@@ -283,13 +283,13 @@ namespace Mosa.Compiler.Framework
 
 			while (stack.Count != 0)
 			{
-				BasicBlock at = stack.Pop();
+				var at = stack.Pop();
 				if (!visited.Get(at.Sequence))
 				{
 					visited.Set(at.Sequence, true);
 					connected.Add(at);
 
-					foreach (BasicBlock next in at.NextBlocks)
+					foreach (var next in at.NextBlocks)
 					{
 						if (!visited.Get(next.Sequence))
 						{
@@ -311,7 +311,7 @@ namespace Mosa.Compiler.Framework
 
 			while (stack.Count != 0)
 			{
-				BasicBlock at = stack.Pop();
+				var at = stack.Pop();
 				if (!visited.Get(at.Sequence))
 				{
 					visited.Set(at.Sequence, true);
@@ -342,11 +342,11 @@ namespace Mosa.Compiler.Framework
 
 			while (workList.Count != 0)
 			{
-				BasicBlock current = workList.Dequeue();
+				var current = workList.Dequeue();
 				if (!result.Contains(current))
 				{
 					result.Add(current);
-					foreach (BasicBlock next in current.NextBlocks)
+					foreach (var next in current.NextBlocks)
 						workList.Enqueue(next);
 				}
 			}

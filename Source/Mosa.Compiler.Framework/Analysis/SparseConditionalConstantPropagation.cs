@@ -226,29 +226,35 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private readonly bool[] blockStates;
 
-		private readonly Dictionary<Operand, VariableState> variableStates = new Dictionary<Operand, VariableState>();
+		private readonly Dictionary<Operand, VariableState> variableStates;
 
-		private readonly Stack<InstructionNode> instructionWorkList = new Stack<InstructionNode>();
-		private readonly Stack<BasicBlock> blockWorklist = new Stack<BasicBlock>();
+		private readonly Stack<InstructionNode> instructionWorkList;
+		private readonly Stack<BasicBlock> blockWorklist;
 
-		private readonly HashSet<InstructionNode> executedStatements = new HashSet<InstructionNode>();
+		private readonly HashSet<InstructionNode> executedStatements;
 
 		private readonly BasicBlocks BasicBlocks;
 		private readonly ITraceFactory TraceFactory;
 		private readonly TraceLog MainTrace;
 
-		private readonly KeyedList<BasicBlock, InstructionNode> phiStatements = new KeyedList<BasicBlock, InstructionNode>();
+		private readonly KeyedList<BasicBlock, InstructionNode> phiStatements;
 
 		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, ITraceFactory traceFactory)
 		{
+			// Method is empty - must be a plugged method
+			if (basicBlocks.HeadBlocks.Count == 0)
+				return;
+
 			TraceFactory = traceFactory;
 			BasicBlocks = basicBlocks;
 
-			MainTrace = CreateTrace("SparseConditionalConstantPropagation");
+			variableStates = new Dictionary<Operand, VariableState>();
+			instructionWorkList = new Stack<InstructionNode>();
+			blockWorklist = new Stack<BasicBlock>();
+			phiStatements = new KeyedList<BasicBlock, InstructionNode>();
+			executedStatements = new HashSet<InstructionNode>();
 
-			// Method is empty - must be a plugged method
-			if (BasicBlocks.HeadBlocks.Count == 0)
-				return;
+			MainTrace = CreateTrace("SparseConditionalConstantPropagation");
 
 			blockStates = new bool[BasicBlocks.Count];
 

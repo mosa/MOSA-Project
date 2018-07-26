@@ -81,7 +81,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			new BuildRules(
 				Path.Combine(dataPath, @"TransformRules.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Rules"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\"),
 				"Rules.cs"
 			);
 		}
