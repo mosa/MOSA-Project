@@ -12,12 +12,6 @@ namespace Mosa.Runtime
 		#region Allocation
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static IntPtr AllocateMemory(uint size)
-		{
-			return GC.AllocateObject(size);
-		}
-
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static IntPtr AllocateObject(RuntimeTypeHandle handle, uint classSize)
 		{
 			// An object has the following memory layout:
@@ -25,7 +19,7 @@ namespace Mosa.Runtime
 			//   - IntPtr SyncBlock
 			//   - 0 .. n object data fields
 
-			var memory = AllocateMemory((2 * (uint)(IntPtr.Size)) + classSize);
+			var memory = GC.AllocateObject((2 * (uint)(IntPtr.Size)) + classSize);
 
 			Intrinsic.Store(memory, 0, handle.Value);
 
@@ -60,7 +54,7 @@ namespace Mosa.Runtime
 			uint allocationSize = ((uint)(IntPtr.Size) * 3) + (elements * elementSize);
 			allocationSize = (allocationSize + 3) & ~3u;    // Align to 4-bytes boundary
 
-			var memory = AllocateMemory(allocationSize);
+			var memory = GC.AllocateObject(allocationSize);
 
 			Intrinsic.Store(memory, 0, handle.Value);
 

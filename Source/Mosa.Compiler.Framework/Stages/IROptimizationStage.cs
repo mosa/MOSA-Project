@@ -1748,9 +1748,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!ValidateSSAForm(node.Result))
 				return;
 
-			if (!node.Result.IsInteger) // future: should work on other types as well
-				return;
-
 			if (trace.Active) trace.Log("*** SimplifyPhiInstruction");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			AddOperandUsageToWorkList(node);
@@ -1783,9 +1780,6 @@ namespace Mosa.Compiler.Framework.Stages
 				if (op != operand)
 					return;
 			}
-
-			//if (!node.Result.IsInteger) // future: should work on other types as well
-			//	return;
 
 			if (trace.Active) trace.Log("*** SimplifyPhiInstruction");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);

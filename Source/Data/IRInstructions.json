@@ -804,19 +804,22 @@
 			"Name": "NewArray",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "NewObject",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "NewString",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "Nop",
