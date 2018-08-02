@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		#endregion Data Members
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SimpleFastDominance"/> class.
+		/// Initializes a new instance of the <see cref="SimpleFastDominance" /> class.
 		/// </summary>
 		/// <param name="basicBlocks">The basic blocks.</param>
 		/// <param name="entryBlock">The entry block.</param>
@@ -65,7 +65,6 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// <summary>
 		/// Calculates the immediate dominance of all Blocks in the block provider.
 		/// </summary>
-		/// <param name="reversePostOrder">The rev post order.</param>
 		private void CalculateDominance()
 		{
 			// Changed flag
