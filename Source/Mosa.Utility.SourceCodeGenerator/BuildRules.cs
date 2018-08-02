@@ -16,7 +16,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("using Mosa.Compiler.Framework.Expression;");
 
 			Lines.AppendLine();
-			Lines.AppendLine("namespace Mosa.Compiler.Framework.Rules");
+			Lines.AppendLine("namespace Mosa.Compiler.Framework");
 			Lines.AppendLine("{");
 			Lines.AppendLine("\t/// <summary>");
 			Lines.AppendLine("\t/// Rules");

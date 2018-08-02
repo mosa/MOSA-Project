@@ -87,11 +87,8 @@
     <Compile Include="Analysis\LiveVariableAnalysis\BaseLivenessAnalysisEnvironment.cs" />
     <Compile Include="Analysis\LiveVariableAnalysis\LiveRanges.cs" />
     <Compile Include="Analysis\SparseConditionalConstantPropagation.cs" />
-    <Compile Include="Analysis\NaturalBlockOrder.cs" />
     <Compile Include="Analysis\ProtectedRegion.cs" />
-    <Compile Include="Analysis\ReverseBlockOrder.cs" />
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
-    <Compile Include="Analysis\BaseDominanceAnalysis.cs" />
     <Compile Include="BaseCodeTransformationStage.cs" />
     <Compile Include="BaseCompilerExtension.cs" />
     <Compile Include="CIL\IRInstructions.cs" />
@@ -364,7 +361,7 @@
     <Compile Include="Intrinsics\Load32.cs" />
     <Compile Include="Intrinsics\IntrinsicsHelper.cs" />
     <Compile Include="Intrinsics\InternalsForType.cs" />
-    <Compile Include="Analysis\IBlockOrderAnalysis.cs" />
+    <Compile Include="Analysis\BaseBlockOrder.cs" />
     <Compile Include="Metadata.cs">
       <SubType>
       </SubType>
@@ -410,6 +407,7 @@
     <Compile Include="Stages\InlineStage.cs" />
     <Compile Include="Stages\InlineEvaluationStage.cs" />
     <Compile Include="Stages\IRCleanupStage.cs" />
+    <Compile Include="Stages\ValueNumberingStage.cs" />
     <Compile Include="Stages\SparseConditionalConstantPropagationStage.cs" />
     <Compile Include="CompilerStages\MethodExceptionLookupTableStage.cs" />
     <Compile Include="CompilerStages\MethodLookupTableStage.cs" />

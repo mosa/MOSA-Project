@@ -63,6 +63,14 @@ namespace Mosa.Compiler.Framework
 		public bool EnableIROptimizations { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [enable value numbering].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [enable IR optimizations]; otherwise, <c>false</c>.
+		/// </value>
+		public bool EnableValueNumbering { get; set; }
+
+		/// <summary>
 		/// Gets or sets the debug restrict optimization by count.
 		/// </summary>
 		/// <value>
@@ -116,7 +124,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The block order analysis.
 		/// </value>
-		public Func<IBlockOrderAnalysis> BlockOrderAnalysisFactory { get; set; }
+		public Func<BaseBlockOrder> BlockOrderAnalysisFactory { get; set; }
 
 		/// <summary>
 		/// Gets or sets the type of the elf.
@@ -266,6 +274,7 @@ namespace Mosa.Compiler.Framework
 			TwoPassOptimizations = true;
 			EnableStatistics = true;
 			IRLongExpansion = true;
+			EnableValueNumbering = true;
 		}
 	}
 }

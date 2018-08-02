@@ -149,9 +149,9 @@ namespace Mosa.Compiler.Framework
 				new PromoteTemporaryVariables(),
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
-				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 
-				//(compilerOptions.EnableIROptimizations) ? new OptimizationRulesStage() : null,
+				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
+				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
 				new BlockMergeStage(),
@@ -180,6 +180,7 @@ namespace Mosa.Compiler.Framework
 				new BlockOrderingStage(),
 				new CodeGenerationStage(compilerOptions.EmitBinary),
 
+				//new GraphVizStage(),
 				//new PreciseGCStage(),
 				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null,
 			};

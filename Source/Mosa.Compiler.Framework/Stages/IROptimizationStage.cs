@@ -414,6 +414,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Operand1.IsResolvedConstant)
 				return;
 
+			//if (node.Operand1.IsStackLocal || node.Operand1.IsOnStack || node.Operand1.IsSymbol)
+			//	return;
+
 			Operand destination = node.Result;
 			Operand source = node.Operand1;
 
@@ -429,7 +432,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var operand = useNode.GetOperand(i);
 
-					if (operand == node.Result)
+					if (operand == destination)
 					{
 						propogated = true;
 
@@ -1232,6 +1235,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(block.NextBlocks.Count == 0);
 			Debug.Assert(block.PreviousBlocks.Count == 0);
+
+			foreach (var next in nextBlocks)
+			{
+				CheckAndClearEmptyBlock(next);
+			}
 		}
 
 		private void ConstantMoveToRight(InstructionNode node)
@@ -1748,9 +1756,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!ValidateSSAForm(node.Result))
 				return;
 
-			if (!node.Result.IsInteger) // future: should work on other types as well
-				return;
-
 			if (trace.Active) trace.Log("*** SimplifyPhiInstruction");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			AddOperandUsageToWorkList(node);
@@ -1783,9 +1788,6 @@ namespace Mosa.Compiler.Framework.Stages
 				if (op != operand)
 					return;
 			}
-
-			//if (!node.Result.IsInteger) // future: should work on other types as well
-			//	return;
 
 			if (trace.Active) trace.Log("*** SimplifyPhiInstruction");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);

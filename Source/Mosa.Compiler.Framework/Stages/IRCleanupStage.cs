@@ -2,6 +2,8 @@
 
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -15,6 +17,8 @@ namespace Mosa.Compiler.Framework.Stages
 			RemoveNops();
 			RemoveEmptyBlocks();
 			OrderBlocks();
+
+			//MethodCompiler.Stop();
 		}
 
 		private void OrderBlocks()
@@ -22,16 +26,18 @@ namespace Mosa.Compiler.Framework.Stages
 			//var blockOrderAnalysis = new SimpleTraceBlockOrder();   // faster than others
 			var blockOrderAnalysis = new LoopAwareBlockOrder();
 
-			blockOrderAnalysis.PerformAnalysis(BasicBlocks);
+			blockOrderAnalysis.Analyze(BasicBlocks);
 
 			var newBlockOrder = blockOrderAnalysis.NewBlockOrder;
 
-			if (HasProtectedRegions)
+			if (newBlockOrder.Count != BasicBlocks.Count && HasProtectedRegions)
 			{
-				newBlockOrder = AddMissingBlocks(newBlockOrder, true);
+				newBlockOrder = AddMissingBlocksIfRequired(newBlockOrder);
 			}
 
 			BasicBlocks.ReorderBlocks(newBlockOrder);
+
+			Debug.Assert(BasicBlocks.RuntimeValidation());
 		}
 
 		private void RemoveNops()

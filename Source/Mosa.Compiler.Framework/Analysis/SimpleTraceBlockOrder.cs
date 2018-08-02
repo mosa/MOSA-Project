@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Analysis
@@ -7,36 +8,25 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// <summary>
 	/// The Simple Trace Block Order quickly reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class SimpleTraceBlockOrder : IBlockOrderAnalysis
+	public class SimpleTraceBlockOrder : BaseBlockOrder
 	{
-		#region Data Members
-
-		private BasicBlock[] blockOrder;
-
-		#endregion Data Members
-
-		#region IBlockOrderAnalysis
-
-		public IList<BasicBlock> NewBlockOrder { get { return blockOrder; } }
-
-		public int GetLoopDepth(BasicBlock block)
+		public override int GetLoopDepth(BasicBlock block)
 		{
 			return 0;
 		}
 
-		public int GetLoopIndex(BasicBlock block)
+		public override int GetLoopIndex(BasicBlock block)
 		{
 			return 0;
 		}
 
-		public void PerformAnalysis(BasicBlocks basicBlocks)
+		public override void Analyze(BasicBlocks basicBlocks)
 		{
 			// Create dictionary of referenced blocks
-			var referenced = new Dictionary<BasicBlock, int>(basicBlocks.Count);
+			var referenced = new BitArray(basicBlocks.Count);
 
 			// Allocate list of ordered Blocks
-			blockOrder = new BasicBlock[basicBlocks.Count];
-			int orderBlockCnt = 0;
+			NewBlockOrder = new List<BasicBlock>(basicBlocks.Count);
 
 			// Create sorted worklist
 			var workList = new Stack<BasicBlock>();
@@ -49,14 +39,14 @@ namespace Mosa.Compiler.Framework.Analysis
 				{
 					var block = workList.Pop();
 
-					if (!referenced.ContainsKey(block))
+					if (!referenced.Get(block.Sequence))
 					{
-						referenced.Add(block, 0);
-						blockOrder[orderBlockCnt++] = block;
+						referenced.Set(block.Sequence, true);
+						NewBlockOrder.Add(block);
 
 						foreach (var successor in block.NextBlocks)
 						{
-							if (!referenced.ContainsKey(successor))
+							if (!referenced.Get(successor.Sequence))
 							{
 								workList.Push(successor);
 							}
@@ -65,7 +55,5 @@ namespace Mosa.Compiler.Framework.Analysis
 				}
 			}
 		}
-
-		#endregion IBlockOrderAnalysis
 	}
 }

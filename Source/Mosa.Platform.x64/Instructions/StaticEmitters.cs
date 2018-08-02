@@ -4,7 +4,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using System.Diagnostics;
-using Mosa.Platform.x64;
 
 namespace Mosa.Platform.x64.Instructions
 {
@@ -30,12 +29,15 @@ namespace Mosa.Platform.x64.Instructions
 				.Append3Bits(Bits.b000)                                         // 3:opcode
 				.AppendWidthBit(true)                                           // 1:width (node.Size != InstructionSize.Size8)
 				.ModRegRMSIBDisplacement(true, node.GetOperand(3), node.Operand2, node.Operand3) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(node.Operand2.IsLinkerResolved, 0);               // 32:memory
+				.GetPosition(out int patchOffset)
+				.AppendConditionalIntegerValue(node.Operand2.IsResolvedByLinker, 0);    // 32:memory
 
-			if (node.Operand2.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand2, (opcode.Size - 32) / 8);
-			else
-				emitter.Emit(opcode);
+			if (node.Operand2.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand2, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitXChgLoad32ConstantBase(InstructionNode node, BaseCodeEmitter emitter)
@@ -55,13 +57,15 @@ namespace Mosa.Platform.x64.Instructions
 				.AppendRegister(node.Operand3)                                  // 3:source
 				.AppendRegister(Bits.b101)                                      // 3:r/m (101=Fixed Displacement)
 
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
-				.AppendConditionalIntegerValue(!node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
+				.GetPosition(out int patchOffset)
+				.AppendConditionalIntegerValue(!node.Operand1.IsResolvedByLinker, node.Operand1.ConstantUnsignedInteger, 0); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
-			else
-				emitter.Emit(opcode);
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitXChgLoad32Reg(InstructionNode node, BaseCodeEmitter emitter)
@@ -79,12 +83,16 @@ namespace Mosa.Platform.x64.Instructions
 				// This opcode has a directionality bit, and it is set to 0
 				// This means we must swap around operand1 and operand3, and set offsetDestination to false
 				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:displacement
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:displacement
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitXChgLoad32(InstructionNode node, BaseCodeEmitter emitter)
@@ -118,13 +126,15 @@ namespace Mosa.Platform.x64.Instructions
 				.AppendRegister(node.Operand3)                                  // 3:source
 				.AppendRegister(Bits.b101)                                      // 3:r/m (101=Fixed Displacement)
 
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
-				.AppendConditionalIntegerValue(!node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
+				.GetPosition(out int patchOffset)
+				.AppendConditionalIntegerValue(!node.Operand1.IsResolvedByLinker, node.Operand1.ConstantUnsignedInteger, 0); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
-			else
-				emitter.Emit(opcode);
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitXAddLoad32Reg(InstructionNode node, BaseCodeEmitter emitter)
@@ -144,12 +154,16 @@ namespace Mosa.Platform.x64.Instructions
 				// This opcode has a directionality bit, and it is set to 0
 				// This means we must swap around operand1 and operand3, and set offsetDestination to false
 				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:displacement
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:displacement
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitXAddLoad32(InstructionNode node, BaseCodeEmitter emitter)
@@ -178,12 +192,15 @@ namespace Mosa.Platform.x64.Instructions
 				.Append3Bits(Bits.b010)                                         // 3:reg
 				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
 				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
-				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
+				.GetPosition(out int patchOffset)
+				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
-			else
-				emitter.Emit(opcode);
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitLgdt(InstructionNode node, BaseCodeEmitter emitter)
@@ -200,12 +217,15 @@ namespace Mosa.Platform.x64.Instructions
 				.Append3Bits(Bits.b010)                                         // 3:reg
 				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
 				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
-				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
+				.GetPosition(out int patchOffset)
+				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
-			else
-				emitter.Emit(opcode);
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitLidt(InstructionNode node, BaseCodeEmitter emitter)
@@ -222,12 +242,16 @@ namespace Mosa.Platform.x64.Instructions
 				.Append3Bits(Bits.b011)                                         // 3:reg
 				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
 				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
-				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0);               // 32:memory
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitMovd(InstructionNode node, BaseCodeEmitter emitter)
@@ -265,12 +289,16 @@ namespace Mosa.Platform.x64.Instructions
 				.AppendNibble(Bits.b0001)                                       // 4:opcode
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitMovsdStore(InstructionNode node, BaseCodeEmitter emitter)
@@ -289,12 +317,16 @@ namespace Mosa.Platform.x64.Instructions
 				// This opcode has a directionality bit, and it is set to 0
 				// This means we must swap around operand1 and operand3, and set offsetDestination to false
 				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitMovssLoad(InstructionNode node, BaseCodeEmitter emitter)
@@ -310,12 +342,16 @@ namespace Mosa.Platform.x64.Instructions
 				.AppendNibble(Bits.b0001)                                       // 4:opcode
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitMovssStore(InstructionNode node, BaseCodeEmitter emitter)
@@ -334,12 +370,16 @@ namespace Mosa.Platform.x64.Instructions
 				// This opcode has a directionality bit, and it is set to 0
 				// This means we must swap around operand1 and operand3, and set offsetDestination to false
 				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitPextrd(InstructionNode node, BaseCodeEmitter emitter)
@@ -385,13 +425,17 @@ namespace Mosa.Platform.x64.Instructions
 				.AppendMod(true, node.Operand2)                                 // 2:mod
 				.AppendRegister(node.Result.Register)                           // 3:register (destination)
 				.AppendRM(node.Operand1)                                        // 3:r/m (source)
-				.AppendConditionalDisplacement(!node.Operand2.IsConstantZero, node.Operand2)    // 8/32:displacement value
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+				.AppendConditionalDisplacement(!node.Operand2.IsConstantZero, node.Operand2)    // 8/32:displacement value
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitMovupsStore(InstructionNode node, BaseCodeEmitter emitter)
@@ -411,12 +455,15 @@ namespace Mosa.Platform.x64.Instructions
 				// This means we must swap around operand1 and operand3, and set offsetDestination to false
 				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset);  // 32:memory
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitMovapsLoad(InstructionNode node, BaseCodeEmitter emitter)
@@ -432,12 +479,16 @@ namespace Mosa.Platform.x64.Instructions
 				.AppendNibble(Bits.b0101)                                       // 4:opcode
 				.AppendNibble(Bits.b1101)                                       // 4:opcode
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitLea32(InstructionNode node, BaseCodeEmitter emitter)
@@ -451,12 +502,15 @@ namespace Mosa.Platform.x64.Instructions
 				.AppendNibble(Bits.b1000)                                       // 4:opcode
 				.AppendNibble(Bits.b1101)                                       // 3:opcode
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerValue(node.Operand1.IsLinkerResolved, 0);               // 32:memory
+				.GetPosition(out int patchOffset)
+				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0);               // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, (opcode.Size - 32) / 8);
-			else
-				emitter.Emit(opcode);
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitInt(InstructionNode node, BaseCodeEmitter emitter)
@@ -566,13 +620,17 @@ namespace Mosa.Platform.x64.Instructions
 				.Append3Bits(Bits.b111)                                             // 3:opcode
 				.AppendWidthBit(false)                                              // 1:width (node.Size != InstructionSize.Size8)
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
-				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker) // 32:memory
+				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsResolvedByLinker, node.Operand1.ConstantUnsignedInteger); // 32:memory
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitMovsxLoad16(InstructionNode node, BaseCodeEmitter emitter)
@@ -590,13 +648,17 @@ namespace Mosa.Platform.x64.Instructions
 				.Append3Bits(Bits.b111)                                             // 3:opcode
 				.AppendWidthBit(true)                                               // 1:width (node.Size != InstructionSize.Size8)
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
-				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker) // 32:memory
+				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsResolvedByLinker, node.Operand1.ConstantUnsignedInteger); // 32:memory
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitMovzxLoad8(InstructionNode node, BaseCodeEmitter emitter)
@@ -614,13 +676,17 @@ namespace Mosa.Platform.x64.Instructions
 				.Append3Bits(Bits.b011)                                             // 3:opcode
 				.AppendWidthBit(false)                                              // 1:width (node.Size != InstructionSize.Size8)
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
-				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker) // 32:memory
+				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsResolvedByLinker, node.Operand1.ConstantUnsignedInteger); // 32:memory
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitMovzxLoad16(InstructionNode node, BaseCodeEmitter emitter)
@@ -638,13 +704,17 @@ namespace Mosa.Platform.x64.Instructions
 				.Append3Bits(Bits.b011)                                             // 3:opcode
 				.AppendWidthBit(true)                                               // 1:width (node.Size != InstructionSize.Size8)
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
-				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker) // 32:memory
+				.AppendConditionalIntegerValue(node.Operand1.IsConstant && !node.Operand1.IsResolvedByLinker, node.Operand1.ConstantUnsignedInteger); // 32:memory
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitJmpStatic(InstructionNode node, BaseCodeEmitter emitter)
@@ -670,18 +740,23 @@ namespace Mosa.Platform.x64.Instructions
 				.Append3Bits(Bits.b101)                                         // 3:opcode
 				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
 				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		internal static void EmitMovLoadConstantBase(InstructionNode node, BaseCodeEmitter emitter, InstructionSize size)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
-			Debug.Assert(node.Operand1.IsLinkerResolved);
+
+			//Debug.Assert(node.Operand1.IsLinkerResolved);
 
 			// memory to reg 1000 101w: mod reg r/m
 			var opcode = new OpcodeEncoder()
@@ -692,13 +767,16 @@ namespace Mosa.Platform.x64.Instructions
 				.AppendMod(Bits.b00)                                                // 2:mod
 				.AppendRegister(node.Result.Register)                               // 3:register (destination)
 				.AppendRM(Bits.b101)                                                // 3:r/m (source)
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
-				.AppendConditionalIntegerValue(!node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
-			else
-				emitter.Emit(opcode);
+				.GetPosition(out int patchOffset)
+				.AppendConditionalIntegerValue(!node.Operand1.IsResolvedByLinker, node.Operand1.ConstantUnsignedInteger, 0); // 32:memory
+
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		private static void EmitMovLoad(InstructionNode node, BaseCodeEmitter emitter, InstructionSize size)
@@ -739,13 +817,17 @@ namespace Mosa.Platform.x64.Instructions
 				.Append3Bits(Bits.b011)                                         // 3:opcode
 				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
 				.ModRegRMSIBDisplacement(true, node.Operand1, node.Operand3, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.AppendConditionalIntegerOfSize(!node.Operand3.IsLinkerResolved, node.Operand3, size) // 8/16/32:immediate
-				.AppendConditionalPatchPlaceholder(node.Operand3.IsLinkerResolved, out int patchOffset); // 32:memory
 
-			if (node.Operand3.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand3, patchOffset, node.Operand2.ConstantSignedInteger);
-			else
-				emitter.Emit(opcode);
+				.AppendConditionalIntegerOfSize(!node.Operand3.IsResolvedByLinker, node.Operand3, size) // 8/16/32:immediate
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand3.IsResolvedByLinker); // 32:memory
+
+			if (node.Operand3.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand3, patchOffset, node.Operand2.ConstantSignedInteger);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		private static void EmitMoveStoreConstantBaseImmediate(InstructionNode node, BaseCodeEmitter emitter, InstructionSize size)
@@ -753,7 +835,6 @@ namespace Mosa.Platform.x64.Instructions
 			Debug.Assert(node.Operand1.IsConstant);
 			Debug.Assert(node.Operand2.IsResolvedConstant);
 			Debug.Assert(node.Operand3.IsResolvedConstant);
-			Debug.Assert(node.Operand1.IsConstant);
 			Debug.Assert(node.Operand3.IsConstant);
 
 			// immediate to memory	1100 011w: mod 000 r/m : immediate data
@@ -767,24 +848,23 @@ namespace Mosa.Platform.x64.Instructions
 				.Append3Bits(Bits.b000)                                         // 3:source (000)
 				.AppendRM(node.Operand1)                                        // 3:r/m (destination)
 
-				.AppendConditionalDisplacement(!node.Operand1.IsLinkerResolved, node.Operand1)   // 32:displacement value
+				.AppendConditionalDisplacement(!node.Operand1.IsResolvedByLinker, node.Operand1)   // 32:displacement value
 
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset)  // 32:memory
-				.AppendConditionalIntegerOfSize(true, node.Operand3, size);                     // 8/16/32:immediate
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker)  // 32:memory
+				.AppendIntegerOfSize(node.Operand3, size);                      // 8/16/32:immediate
 
-			if (node.Operand1.IsLinkerResolved && !node.Operand3.IsLinkerResolved)
+			if (node.Operand1.IsResolvedByLinker)
 			{
-				emitter.Emit(opcode, node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
+				emitter.EmitLink(node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
 			}
-			else if (node.Operand1.IsLinkerResolved && node.Operand3.IsLinkerResolved)
+			else if (node.Operand1.IsResolvedByLinker && node.Operand3.IsResolvedByLinker)
 			{
 				// fixme: trouble!
 				throw new NotImplementCompilerException("not here");
 			}
-			else
-			{
-				emitter.Emit(opcode);
-			}
+
+			emitter.Emit(opcode);
 		}
 
 		private static void EmitMovStoreConstantBase(InstructionNode node, BaseCodeEmitter emitter, InstructionSize size)
@@ -804,13 +884,15 @@ namespace Mosa.Platform.x64.Instructions
 				.AppendRegister(node.Operand3)                                  // 3:source
 				.AppendRegister(Bits.b101)                                      // 3:r/m (101=Fixed Displacement)
 
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset) // 32:memory
-				.AppendConditionalIntegerValue(!node.Operand1.IsLinkerResolved, node.Operand1.ConstantUnsignedInteger); // 32:memory
+				.GetPosition(out int patchOffset)
+				.AppendConditionalIntegerValue(!node.Operand1.IsResolvedByLinker, node.Operand1.ConstantUnsignedInteger, 0); // 32:memory
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
-			else
-				emitter.Emit(opcode);
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset, node.Operand2.ConstantSignedInteger);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		private static void EmitMovStoreReg(InstructionNode node, BaseCodeEmitter emitter, InstructionSize size)
@@ -821,21 +903,23 @@ namespace Mosa.Platform.x64.Instructions
 			// reg to memory	1000 100w: mod reg r/m
 			var opcode = new OpcodeEncoder()
 				.AppendConditionalPrefix(size == InstructionSize.Size16, 0x66)  // 8:prefix: 16bit
-
 				.AppendNibble(Bits.b1000)                                       // 4:opcode
 				.Append3Bits(Bits.b100)                                         // 3:opcode
-				.AppendWidthBit(size != InstructionSize.Size8)             // 1:width
+				.AppendWidthBit(size != InstructionSize.Size8)                  // 1:width
 
 				// This opcode has a directionality bit, and it is set to 0
 				// This means we must swap around operand1 and operand3, and set offsetDestination to false
 				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 
-				.AppendConditionalPatchPlaceholder(node.Operand1.IsLinkerResolved, out int patchOffset); // 32:displacement
+				.GetPosition(out int patchOffset)
+				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:displacement
 
-			if (node.Operand1.IsLinkerResolved)
-				emitter.Emit(opcode, node.Operand1, patchOffset);
-			else
-				emitter.Emit(opcode);
+			if (node.Operand1.IsResolvedByLinker)
+			{
+				emitter.EmitLink(node.Operand1, patchOffset);
+			}
+
+			emitter.Emit(opcode);
 		}
 
 		private static void EmitMovStore(InstructionNode node, BaseCodeEmitter emitter, InstructionSize size)

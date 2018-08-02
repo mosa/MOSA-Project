@@ -254,7 +254,9 @@ namespace Mosa.Tool.Explorer
 			{
 				try
 				{
-					Compiler.ExecuteThreaded();
+					Compiler.Execute();
+
+					//Compiler.ExecuteThreaded();
 				}
 				finally
 				{

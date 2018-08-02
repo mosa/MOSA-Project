@@ -68,8 +68,9 @@ namespace Mosa.UnitTest.Engine
 				EnableIROptimizations = true,
 				EnableSparseConditionalConstantPropagation = true,
 				EnableInlinedMethods = true,
-				IRLongExpansion = true,
+				EnableIRLongExpansion = true,
 				TwoPassOptimizations = true,
+				EnableValueNumbering = true,
 
 				Emulator = EmulatorType.Qemu,
 				ImageFormat = ImageFormat.IMG,

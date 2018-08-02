@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Dictionary<Operand, Stack<int>> variables;
 		private Dictionary<Operand, int> counts;
 		private Dictionary<Operand, Operand[]> ssaOperands;
-		private Dictionary<BasicBlock, BaseDominanceAnalysis> blockAnalysis;
+		private Dictionary<BasicBlock, SimpleFastDominance> blockAnalysis;
 		private Dictionary<Operand, List<BasicBlock>> assignments;
 
 		protected override void Initialize()
@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Stages
 			base.Initialize();
 
 			ssaOperands = new Dictionary<Operand, Operand[]>();
-			blockAnalysis = new Dictionary<BasicBlock, BaseDominanceAnalysis>();
+			blockAnalysis = new Dictionary<BasicBlock, SimpleFastDominance>();
 			assignments = new Dictionary<Operand, List<BasicBlock>>();
 		}
 
@@ -139,7 +139,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="block">The block.</param>
 		/// <param name="dominanceAnalysis">The dominance analysis.</param>
-		private void RenameVariables(BasicBlock block, BaseDominanceAnalysis dominanceAnalysis)
+		private void RenameVariables(BasicBlock block, SimpleFastDominance dominanceAnalysis)
 		{
 			for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 			{
@@ -200,7 +200,8 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			foreach (var s in dominanceAnalysis.GetChildren(block))
+			var children = dominanceAnalysis.GetChildren(block);
+			foreach (var s in children)
 			{
 				RenameVariables(s, dominanceAnalysis);
 			}

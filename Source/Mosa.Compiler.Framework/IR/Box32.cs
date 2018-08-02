@@ -16,5 +16,9 @@ namespace Mosa.Compiler.Framework.IR
 			: base(2, 1)
 		{
 		}
+
+		public override bool IsMemoryWrite { get { return true; } }
+
+		public override bool IsMemoryRead { get { return true; } }
 	}
 }

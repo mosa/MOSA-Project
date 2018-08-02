@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -283,13 +284,13 @@ namespace Mosa.Compiler.Framework
 
 			while (stack.Count != 0)
 			{
-				BasicBlock at = stack.Pop();
+				var at = stack.Pop();
 				if (!visited.Get(at.Sequence))
 				{
 					visited.Set(at.Sequence, true);
 					connected.Add(at);
 
-					foreach (BasicBlock next in at.NextBlocks)
+					foreach (var next in at.NextBlocks)
 					{
 						if (!visited.Get(next.Sequence))
 						{
@@ -311,7 +312,7 @@ namespace Mosa.Compiler.Framework
 
 			while (stack.Count != 0)
 			{
-				BasicBlock at = stack.Pop();
+				var at = stack.Pop();
 				if (!visited.Get(at.Sequence))
 				{
 					visited.Set(at.Sequence, true);
@@ -332,26 +333,54 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		public static List<BasicBlock> ReversePostorder(BasicBlock head)
+		public static List<BasicBlock> ReversePostOrder(BasicBlock head)
 		{
 			var result = new List<BasicBlock>();
 			var workList = new Queue<BasicBlock>();
 
-			// Add next block
 			workList.Enqueue(head);
 
 			while (workList.Count != 0)
 			{
-				BasicBlock current = workList.Dequeue();
+				var current = workList.Dequeue();
 				if (!result.Contains(current))
 				{
 					result.Add(current);
-					foreach (BasicBlock next in current.NextBlocks)
+					foreach (var next in current.NextBlocks)
 						workList.Enqueue(next);
 				}
 			}
 
 			return result;
+		}
+
+		public void RuntimeValidationWithFail()
+		{
+			Debug.Assert(RuntimeValidation(), "BasicBlocks Validation Failed");
+		}
+
+		public bool RuntimeValidation()
+		{
+			foreach (var block in basicBlocks)
+			{
+				foreach (var previous in block.PreviousBlocks)
+				{
+					if (!basicBlocks.Contains(previous))
+					{
+						return false;
+					}
+				}
+
+				foreach (var next in block.NextBlocks)
+				{
+					if (!basicBlocks.Contains(next))
+					{
+						return false;
+					}
+				}
+			}
+
+			return true;
 		}
 	}
 }

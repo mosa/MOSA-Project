@@ -174,6 +174,20 @@ namespace Mosa.Platform.x86
 			return this;
 		}
 
+		public OpcodeEncoder GetPosition(out int position)
+		{
+			position = (Size / 8);
+			return this;
+		}
+
+		public OpcodeEncoder AppendConditionalIntegerValue(bool condition, uint value, uint value2)
+		{
+			if (condition)
+				return AppendIntegerValue(value);
+			else
+				return AppendIntegerValue(value2);
+		}
+
 		public OpcodeEncoder AppendConditionalIntegerValue(bool include, uint value)
 		{
 			if (include)
@@ -182,18 +196,12 @@ namespace Mosa.Platform.x86
 				return this;
 		}
 
-		public OpcodeEncoder AppendConditionalPatchPlaceholder(bool include, out int position)
+		public OpcodeEncoder AppendConditionalPlaceholder32(bool include)
 		{
 			if (include)
-			{
-				position = (Size / 8);
 				return AppendIntegerValue(0x0);
-			}
 			else
-			{
-				position = -1;
 				return this;
-			}
 		}
 
 		public OpcodeEncoder AppendRegister(int value)
@@ -327,7 +335,7 @@ namespace Mosa.Platform.x86
 			return AppendIntegerValue(displacement.ConstantUnsignedInteger);
 		}
 
-		public OpcodeEncoder AppendConditionalDisplacement(Operand displacement)
+		private OpcodeEncoder AppendConditionalDisplacement(Operand displacement)
 		{
 			if (!displacement.IsConstant)
 				return this;
@@ -356,11 +364,8 @@ namespace Mosa.Platform.x86
 			return this;
 		}
 
-		public OpcodeEncoder AppendConditionalIntegerOfSize(bool include, Operand operand, InstructionSize size)
+		public OpcodeEncoder AppendIntegerOfSize(Operand operand, InstructionSize size)
 		{
-			if (!include)
-				return this;
-
 			if (size == InstructionSize.Size32)
 				return AppendIntegerValue(operand.ConstantUnsignedInteger);
 			if (size == InstructionSize.Size8)
@@ -369,6 +374,14 @@ namespace Mosa.Platform.x86
 				return AppendShortValue((ushort)operand.ConstantUnsignedInteger);
 
 			throw new CompilerException("Instruction size invalid");
+		}
+
+		public OpcodeEncoder AppendConditionalIntegerOfSize(bool include, Operand operand, InstructionSize size)
+		{
+			if (!include)
+				return this;
+
+			return AppendIntegerOfSize(operand, size);
 		}
 
 		public OpcodeEncoder ModRegRMSIBDisplacement(bool offsetDestination, Operand destination, Operand source, Operand offset)

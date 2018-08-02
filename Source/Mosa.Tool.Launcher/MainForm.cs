@@ -96,8 +96,10 @@ namespace Mosa.Tool.Launcher
 			Options.EmulatorMemoryInMB = (uint)nmMemory.Value;
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
-			Options.IRLongExpansion = cbIRLongExpansion.Checked;
+			Options.EnableIRLongExpansion = cbIRLongExpansion.Checked;
 			Options.TwoPassOptimizations = cbTwoPassOptimizations.Checked;
+			Options.EnableIRLongExpansion = cbIRLongExpansion.Checked;
+			Options.EnableValueNumbering = cbValueNumbering.Checked;
 
 			if (Options.LaunchGDBDebugger)
 			{
@@ -225,8 +227,9 @@ namespace Mosa.Tool.Launcher
 			cbEmitSymbolTable.Checked = Options.EmitSymbols;
 			cbEmitx86IRQMethods.Checked = Options.Emitx86IRQMethods;
 			tbMode.Text = Options.Width + "x" + Options.Height + "x" + Options.Depth;
-			cbIRLongExpansion.Checked = Options.IRLongExpansion;
+			cbIRLongExpansion.Checked = Options.EnableIRLongExpansion;
 			cbTwoPassOptimizations.Checked = Options.TwoPassOptimizations;
+			cbValueNumbering.Checked = Options.EnableValueNumbering;
 
 			switch (Options.ImageFormat)
 			{
