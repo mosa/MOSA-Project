@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
@@ -10,15 +11,19 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// IR Cleanup Stage
 	/// </summary>
-	public class IRCleanupStage : EmptyBlockRemovalStage
+	public class IRCleanupStage : DeadBlockStage
 	{
 		protected override void Run()
 		{
-			RemoveNops();
-			RemoveEmptyBlocks();
-			OrderBlocks();
+			if (!BasicBlocks.RuntimeValidation())
+			{
+				throw new CompilerException("IRCleanupStage (start): Block Validation Error in: " + Method);
+			}
 
-			//MethodCompiler.Stop();
+			RemoveNops();
+			EmptyDeadBlocks();
+			SkipEmptyBlocks();
+			OrderBlocks();
 		}
 
 		private void OrderBlocks()
@@ -37,6 +42,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			BasicBlocks.ReorderBlocks(newBlockOrder);
 
+			if (!BasicBlocks.RuntimeValidation())
+			{
+				throw new CompilerException("IRCleanupStage: Block Validation Error in: " + Method);
+			}
 			Debug.Assert(BasicBlocks.RuntimeValidation());
 		}
 

@@ -416,7 +416,7 @@
     <Compile Include="CompilerStages\MapFileGenerationStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />
-    <Compile Include="Stages\EmptyBlockRemovalStage.cs" />
+    <Compile Include="Stages\DeadBlockStage.cs" />
     <Compile Include="Stages\JumpOptimizationStage.cs" />
     <Compile Include="Stages\PlatformEdgeSplitStage.cs" />
     <Compile Include="Stages\StackSetupStage.cs" />

@@ -1,9 +1,20 @@
 ﻿{
 	"Rules": [
 		{
+			"Name": "AddConstants",
+			"Type": "StrengthReduction",
+			"Match": "(IR.Add32 (Const a) (Const b))",
+			"Transform": "a + b",
+			"Criteria": "",
+			"DefaultInstructionFamily": "IR",
+			"DefaultArchitectureFamily": "NA",
+			"Optimization": "Yes",
+			"Transformation": "No"
+		},
+		{
 			"Name": "MultipleBy1",
 			"Type": "StrengthReduction",
-			"Match": "(IR.MulUnsigned 1 x)",
+			"Match": "(IR.MulUnsigned32 1 x)",
 			"Transform": "x",
 			"Criteria": "",
 			"DefaultInstructionFamily": "IR",
@@ -14,7 +25,7 @@
 		{
 			"Name": "MultipleBy0",
 			"Type": "StrengthReduction",
-			"Match": "(IR.MulUnsigned 0 x)",
+			"Match": "(IR.MulUnsigned32 0 x)",
 			"Transform": "0",
 			"Criteria": "",
 			"DefaultInstructionFamily": "IR",

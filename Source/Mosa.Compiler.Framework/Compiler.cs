@@ -112,6 +112,16 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private List<BaseCompilerExtension> CompilerExtensions { get; } = new List<BaseCompilerExtension>();
 
+		private volatile bool AllStopFlag;
+
+		/// <summary>
+		/// Gets or sets a value indicating whether [all stop].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [all stop]; otherwise, <c>false</c>.
+		/// </value>
+		public bool AllStop { get { return AllStopFlag; } set { AllStopFlag = value; } }
+
 		#endregion Properties
 
 		#region Static Methods
@@ -176,7 +186,7 @@ namespace Mosa.Compiler.Framework
 				//new StopStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
-				new EmptyBlockRemovalStage(),
+				new DeadBlockStage(),
 				new BlockOrderingStage(),
 				new CodeGenerationStage(compilerOptions.EmitBinary),
 
@@ -236,6 +246,8 @@ namespace Mosa.Compiler.Framework
 			}
 
 			Architecture.ExtendCompilerPipeline(CompilerPipeline);
+
+			AllStop = false;
 		}
 
 		/// <summary>
@@ -337,6 +349,9 @@ namespace Mosa.Compiler.Framework
 		{
 			while (true)
 			{
+				if (AllStop)
+					return;
+
 				var method = CompilationScheduler.GetMethodToCompile();
 
 				if (method == null)

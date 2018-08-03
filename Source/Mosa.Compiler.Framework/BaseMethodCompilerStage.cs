@@ -222,6 +222,8 @@ namespace Mosa.Compiler.Framework
 			{
 				MethodCompiler.Stop();
 				NewCompilerTraceEvent(CompilerEvent.Exception, "Method: " + Method + " -> " + ex);
+
+				MethodCompiler.Compiler.AllStop = true;
 			}
 
 			SubmitTraceLogs(traceLogs);
