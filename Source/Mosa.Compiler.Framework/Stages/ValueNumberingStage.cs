@@ -51,9 +51,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (true)
-				return;
-
 			if (HasProtectedRegions)
 				return;
 
@@ -258,18 +255,18 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 				}
 
-				// FUTURE - simplify expression: constant folding & strength reduction
-				//var newOperand = ConstantFoldingIntegerOperations(node)
-				//		?? ConstantFoldingIntegerCompare(node);
+				// FUTURE - simplify expression: constant folding &strength reduction
+				var newOperand = ConstantFoldingIntegerOperations(node)
+					?? ConstantFoldingIntegerCompare(node);
 
-				//if (newOperand != null)
-				//{
-				//	SetValueNumber(node.Result, newOperand);
-				//	node.SetInstruction(IRInstruction.Nop);
-				//	instructionRemovalCount++;
-				//	constantFoldingIntegerOperationCount++;
-				//	continue;
-				//}
+				if (newOperand != null)
+				{
+					SetValueNumber(node.Result, newOperand);
+					node.SetInstruction(IRInstruction.Nop);
+					instructionRemovalCount++;
+					constantFoldingIntegerOperationCount++;
+					continue;
+				}
 
 				var hash = ComputeExpressionHash(node);
 				var list = GetExpressionsByHash(hash);
@@ -656,7 +653,7 @@ namespace Mosa.Compiler.Framework.Stages
 			ulong value = 0;
 
 			var op1Value = op1.ConstantUnsignedLongInteger;
-			var op2Value = op1.ConstantUnsignedLongInteger;
+			var op2Value = op2.ConstantUnsignedLongInteger;
 
 			if (instruction == IRInstruction.Add32)
 			{
