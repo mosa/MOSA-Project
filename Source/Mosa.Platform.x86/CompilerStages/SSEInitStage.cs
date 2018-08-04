@@ -19,7 +19,7 @@ namespace Mosa.Platform.x86.CompilerStages
 			var cr4 = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, ControlRegister.CR4);
 
 			var basicBlocks = new BasicBlocks();
-			var block = basicBlocks.CreateBlock();
+			var block = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
 			basicBlocks.AddHeadBlock(block);
 			var ctx = new Context(block);
 

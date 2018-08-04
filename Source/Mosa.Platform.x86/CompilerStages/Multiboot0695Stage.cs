@@ -72,7 +72,7 @@ namespace Mosa.Platform.x86.CompilerStages
 		/// </summary>
 		private LinkerSymbol multibootHeader;
 
-		#endregion Data members
+		#endregion Data Members
 
 		public bool HasVideo { get; set; }
 		public int Width { get; set; }
@@ -114,7 +114,7 @@ namespace Mosa.Platform.x86.CompilerStages
 			var four = CreateConstant(4);
 
 			var basicBlocks = new BasicBlocks();
-			var block = basicBlocks.CreateBlock();
+			var block = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
 			basicBlocks.AddHeadBlock(block);
 			var ctx = new Context(block);
 

@@ -212,11 +212,28 @@ namespace Mosa.Compiler.Framework
 
 		public void Execute()
 		{
-			Run();
+			//Run();
+
+			try
+			{
+				Run();
+			}
+			catch (Exception ex)
+			{
+				MethodCompiler.Stop();
+				NewCompilerTraceEvent(CompilerEvent.Exception, "Method: " + Method + " -> " + ex);
+
+				MethodCompiler.Compiler.AllStop = true;
+			}
 
 			SubmitTraceLogs(traceLogs);
 
 			Finish();
+
+			if (!MethodCompiler.IsStopped)
+			{
+				Debug.Assert(BasicBlocks.RuntimeValidation());
+			}
 
 			MethodCompiler = null;
 			traceLogs = null;
@@ -699,8 +716,9 @@ namespace Mosa.Compiler.Framework
 			return MethodCompiler.GetReferenceOrTypeSize(type, align);
 		}
 
-		public IList<BasicBlock> AddMissingBlocks(IList<BasicBlock> blocks, bool cleanUp)
+		public List<BasicBlock> AddMissingBlocksIfRequired(List<BasicBlock> blocks)
 		{
+			// make a copy
 			var list = new List<BasicBlock>(blocks.Count);
 
 			foreach (var block in blocks)
@@ -715,10 +733,11 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!blocks.Contains(block))
 				{
-					if ((!cleanUp) || (block.HasNextBlocks || block.HasPreviousBlocks || block.IsHandlerHeadBlock || block.IsTryHeadBlock))
-					{
-						list.Add(block);
-					}
+					// FUTURE:
+					//if (HasProtectedRegions && block.IsCompilerBlock)
+					//	continue;
+
+					list.Add(block);
 				}
 			}
 

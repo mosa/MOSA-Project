@@ -187,21 +187,24 @@ namespace Mosa.Compiler.Framework
 			opcode.WriteTo(codeStream);
 		}
 
-		public void Emit(BaseOpcodeEncoder opcode, Operand symbolOperand, int patchOffset, int referenceOffset = 0)
+		public void EmitLink(Operand symbolOperand, int patchOffset, int referenceOffset = 0)
 		{
-			int pos = (int)codeStream.Position + patchOffset;
+			EmitLink((int)codeStream.Position, symbolOperand, patchOffset, referenceOffset);
+		}
 
-			Emit(opcode);
+		protected void EmitLink(int position, Operand symbolOperand, int patchOffset, int referenceOffset = 0)
+		{
+			position += patchOffset;
 
 			if (symbolOperand.IsLabel)
 			{
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, pos, SectionKind.ROData, symbolOperand.Name, referenceOffset);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, position, SectionKind.ROData, symbolOperand.Name, referenceOffset);
 			}
 			else if (symbolOperand.IsStaticField)
 			{
 				var section = symbolOperand.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, pos, section, symbolOperand.Field.FullName, referenceOffset);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, position, section, symbolOperand.Field.FullName, referenceOffset);
 			}
 			else if (symbolOperand.IsSymbol)
 			{
@@ -212,7 +215,7 @@ namespace Mosa.Compiler.Framework
 				// Otherwise create the symbol in the expected section
 				var symbol = (linker.FindSymbol(symbolOperand.Name, section) ?? linker.FindSymbol(symbolOperand.Name)) ?? linker.GetSymbol(symbolOperand.Name, section);
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, pos, symbol, referenceOffset);
+				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, position, symbol, referenceOffset);
 			}
 		}
 

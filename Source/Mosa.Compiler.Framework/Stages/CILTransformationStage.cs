@@ -1604,7 +1604,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (typeSize <= 8)
 			{
-				context.AppendInstruction(typeSize != 8 ? (BaseIRInstruction)IRInstruction.Unbox32 : IRInstruction.Unbox64, tmp, value);
+				context.SetInstruction(typeSize != 8 ? (BaseIRInstruction)IRInstruction.Unbox32 : IRInstruction.Unbox64, tmp, value);
 			}
 			else
 			{

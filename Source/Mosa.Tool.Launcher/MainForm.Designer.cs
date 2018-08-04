@@ -122,6 +122,7 @@
             this.tabOutput = new MetroFramework.Controls.MetroTabPage();
             this.rtbOutput = new System.Windows.Forms.RichTextBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+            this.cbValueNumbering = new MetroFramework.Controls.MetroCheckBox();
             this.tbApplicationLocations.SuspendLayout();
             this.tabOptions.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -185,7 +186,7 @@
             this.tbApplicationLocations.Multiline = true;
             this.tbApplicationLocations.Name = "tbApplicationLocations";
             this.tbApplicationLocations.SelectedIndex = 0;
-            this.tbApplicationLocations.Size = new System.Drawing.Size(661, 438);
+            this.tbApplicationLocations.Size = new System.Drawing.Size(661, 430);
             this.tbApplicationLocations.Style = MetroFramework.MetroColorStyle.Blue;
             this.tbApplicationLocations.TabIndex = 22;
             this.tbApplicationLocations.UseSelectable = true;
@@ -206,7 +207,7 @@
             this.tabOptions.Location = new System.Drawing.Point(4, 22);
             this.tabOptions.Margin = new System.Windows.Forms.Padding(0);
             this.tabOptions.Name = "tabOptions";
-            this.tabOptions.Size = new System.Drawing.Size(653, 412);
+            this.tabOptions.Size = new System.Drawing.Size(653, 404);
             this.tabOptions.TabIndex = 0;
             this.tabOptions.Text = "Compile Options";
             this.tabOptions.VerticalScrollbarBarColor = true;
@@ -218,9 +219,9 @@
             this.groupBox12.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox12.Controls.Add(this.cbCompilerUsesMultipleThreads);
             this.groupBox12.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox12.Location = new System.Drawing.Point(264, 321);
+            this.groupBox12.Location = new System.Drawing.Point(264, 333);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(158, 40);
+            this.groupBox12.Size = new System.Drawing.Size(158, 44);
             this.groupBox12.TabIndex = 30;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "Misc Options:";
@@ -230,7 +231,7 @@
             this.cbCompilerUsesMultipleThreads.AutoSize = true;
             this.cbCompilerUsesMultipleThreads.Checked = true;
             this.cbCompilerUsesMultipleThreads.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbCompilerUsesMultipleThreads.Location = new System.Drawing.Point(6, 19);
+            this.cbCompilerUsesMultipleThreads.Location = new System.Drawing.Point(7, 19);
             this.cbCompilerUsesMultipleThreads.Name = "cbCompilerUsesMultipleThreads";
             this.cbCompilerUsesMultipleThreads.Size = new System.Drawing.Size(134, 15);
             this.cbCompilerUsesMultipleThreads.Style = MetroFramework.MetroColorStyle.Blue;
@@ -245,7 +246,7 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsStatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 390);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 382);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(653, 22);
             this.statusStrip1.TabIndex = 32;
@@ -271,11 +272,11 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Diagnostic Output:";
             // 
-            // cbGenerateDebugInfo
+            // cbGenerateDebugInfoFile
             // 
             this.cbGenerateDebugInfoFile.AutoSize = true;
             this.cbGenerateDebugInfoFile.Location = new System.Drawing.Point(6, 85);
-            this.cbGenerateDebugInfoFile.Name = "cbGenerateDebugInfo";
+            this.cbGenerateDebugInfoFile.Name = "cbGenerateDebugInfoFile";
             this.cbGenerateDebugInfoFile.Size = new System.Drawing.Size(79, 15);
             this.cbGenerateDebugInfoFile.Style = MetroFramework.MetroColorStyle.Blue;
             this.cbGenerateDebugInfoFile.TabIndex = 48;
@@ -332,14 +333,14 @@
             this.groupBox6.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox6.Location = new System.Drawing.Point(428, 203);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(215, 158);
+            this.groupBox6.Size = new System.Drawing.Size(215, 174);
             this.groupBox6.TabIndex = 28;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Virtual Machine Emulator:";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(10, 129);
+            this.button1.Location = new System.Drawing.Point(10, 140);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(168, 23);
             this.button1.TabIndex = 28;
@@ -384,7 +385,7 @@
             // cbExitOnLaunch
             // 
             this.cbExitOnLaunch.AutoSize = true;
-            this.cbExitOnLaunch.Location = new System.Drawing.Point(10, 108);
+            this.cbExitOnLaunch.Location = new System.Drawing.Point(10, 119);
             this.cbExitOnLaunch.Name = "cbExitOnLaunch";
             this.cbExitOnLaunch.Size = new System.Drawing.Size(109, 15);
             this.cbExitOnLaunch.Style = MetroFramework.MetroColorStyle.Blue;
@@ -704,6 +705,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox1.Controls.Add(this.cbValueNumbering);
             this.groupBox1.Controls.Add(this.cbTwoPassOptimizations);
             this.groupBox1.Controls.Add(this.cbIRLongExpansion);
             this.groupBox1.Controls.Add(this.cbInlinedMethods);
@@ -713,7 +715,7 @@
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(5, 203);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(253, 158);
+            this.groupBox1.Size = new System.Drawing.Size(253, 174);
             this.groupBox1.TabIndex = 22;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Optimizations:";
@@ -1414,6 +1416,20 @@
             this.openFileDialog2.Filter = "Executable|*.exe";
             this.openFileDialog2.Title = "Select Assembly";
             // 
+            // cbValueNumbering
+            // 
+            this.cbValueNumbering.AutoSize = true;
+            this.cbValueNumbering.Checked = true;
+            this.cbValueNumbering.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbValueNumbering.Location = new System.Drawing.Point(6, 148);
+            this.cbValueNumbering.Name = "cbValueNumbering";
+            this.cbValueNumbering.Size = new System.Drawing.Size(115, 15);
+            this.cbValueNumbering.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbValueNumbering.TabIndex = 12;
+            this.cbValueNumbering.Text = "Value Numbering";
+            this.cbValueNumbering.UseCustomBackColor = true;
+            this.cbValueNumbering.UseSelectable = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1572,5 +1588,6 @@
 		private MetroFramework.Controls.MetroCheckBox cbTwoPassOptimizations;
 		private MetroFramework.Controls.MetroCheckBox cbIRLongExpansion;
 		private System.Windows.Forms.DataGridView dataGridView1;
+		private MetroFramework.Controls.MetroCheckBox cbValueNumbering;
 	}
 }

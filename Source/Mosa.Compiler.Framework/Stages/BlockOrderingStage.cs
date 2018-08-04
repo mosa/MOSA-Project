@@ -13,13 +13,13 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var blockOrderAnalysis = CompilerOptions.BlockOrderAnalysisFactory();
 
-			blockOrderAnalysis.PerformAnalysis(BasicBlocks);
+			blockOrderAnalysis.Analyze(BasicBlocks);
 
 			var newBlockOrder = blockOrderAnalysis.NewBlockOrder;
 
 			if (HasProtectedRegions)
 			{
-				newBlockOrder = AddMissingBlocks(newBlockOrder, true);
+				newBlockOrder = AddMissingBlocksIfRequired(newBlockOrder);
 			}
 
 			BasicBlocks.ReorderBlocks(newBlockOrder);
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 			DumpTrace(blockOrderAnalysis);
 		}
 
-		private void DumpTrace(IBlockOrderAnalysis blockOrderAnalysis)
+		private void DumpTrace(BaseBlockOrder blockOrderAnalysis)
 		{
 			var trace = CreateTraceLog();
 
