@@ -143,6 +143,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 			{
+				if (node.IsEmpty)
+					continue;
+
 				if (node.Instruction != IRInstruction.Phi)
 				{
 					for (var i = 0; i < node.OperandCount; ++i)
@@ -159,18 +162,24 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 
-				if (!node.IsEmpty && node.Result != null && node.Result.IsVirtualRegister)
+				if (node.Result?.IsVirtualRegister == true)
 				{
 					var op = node.Result;
+
+					Debug.Assert(counts.ContainsKey(op), op + " is not in counts");
+
 					var index = counts[op];
 					node.Result = GetSSAOperand(op, index);
 					variables[op].Push(index);
 					counts[op] = index + 1;
 				}
 
-				if (!node.IsEmpty && node.Result2 != null && node.Result2.IsVirtualRegister)
+				if (node.Result2?.IsVirtualRegister == true)
 				{
 					var op = node.Result2;
+
+					Debug.Assert(counts.ContainsKey(op), op + " is not in counts");
+
 					var index = counts[op];
 					node.Result2 = GetSSAOperand(op, index);
 					variables[op].Push(index);
@@ -183,19 +192,22 @@ namespace Mosa.Compiler.Framework.Stages
 				// index does not change between this stage and PhiPlacementStage since the block list order does not change
 				var index = WhichPredecessor(s, block);
 
-				for (var context = new Context(s); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var node = s.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (context.Instruction != IRInstruction.Phi)
+					if (node.IsEmpty)
 						continue;
 
-					Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
+					if (node.Instruction != IRInstruction.Phi)
+						break;
 
-					var op = context.GetOperand(index);
+					Debug.Assert(node.OperandCount == node.Block.PreviousBlocks.Count);
+
+					var op = node.GetOperand(index);
 
 					if (variables[op].Count > 0)
 					{
 						var version = variables[op].Peek();
-						context.SetOperand(index, GetSSAOperand(context.GetOperand(index), version));
+						node.SetOperand(index, GetSSAOperand(node.GetOperand(index), version));
 					}
 				}
 			}
@@ -206,17 +218,20 @@ namespace Mosa.Compiler.Framework.Stages
 				RenameVariables(s, dominanceAnalysis);
 			}
 
-			for (var context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
+			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (!context.IsEmpty && context.Result != null && context.Result.IsVirtualRegister)
+				if (node.IsEmpty || node.ResultCount == 0)
+					continue;
+
+				if (node.Result?.IsVirtualRegister == true)
 				{
-					var op = context.Result.SSAParent;
+					var op = node.Result.SSAParent;
 					var index = variables[op].Pop();
 				}
 
-				if (!context.IsEmpty && context.Result2 != null && context.Result2.IsVirtualRegister)
+				if (node.Result2?.IsVirtualRegister == true)
 				{
-					var op = context.Result2.SSAParent;
+					var op = node.Result2.SSAParent;
 					var index = variables[op].Pop();
 				}
 			}
@@ -248,21 +263,21 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				for (var context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (context.IsEmpty)
+					if (node.IsEmpty)
 						continue;
 
 					instructionCount++;
 
-					if (context.Result != null && context.Result.IsVirtualRegister)
+					if (node.Result?.IsVirtualRegister == true)
 					{
-						AddToAssignments(context.Result, block);
+						AddToAssignments(node.Result, block);
 					}
 
-					if (context.Result2 != null && context.Result2.IsVirtualRegister)
+					if (node.Result2?.IsVirtualRegister == true)
 					{
-						AddToAssignments(context.Result2, block);
+						AddToAssignments(node.Result2, block);
 					}
 				}
 			}
@@ -294,7 +309,6 @@ namespace Mosa.Compiler.Framework.Stages
 			var context = new Context(block);
 			context.AppendInstruction(IRInstruction.Phi, variable);
 
-			//var sourceBlocks = new BasicBlock[block.PreviousBlocks.Count];
 			var sourceBlocks = new List<BasicBlock>(block.PreviousBlocks.Count);
 			context.PhiBlocks = sourceBlocks;
 
@@ -306,7 +320,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.OperandCount = block.PreviousBlocks.Count;
 
-			Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
+			//Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
 		}
 
 		/// <summary>

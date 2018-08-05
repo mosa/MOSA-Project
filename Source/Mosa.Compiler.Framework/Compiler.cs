@@ -157,7 +157,9 @@ namespace Mosa.Compiler.Framework
 				new UnboxValueTypeStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				new PromoteTemporaryVariables(),
+				new GraphVizStage(),
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
+				new GraphVizStage(),
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 
 				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
