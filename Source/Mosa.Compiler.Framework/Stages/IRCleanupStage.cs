@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if (node.Instruction == IRInstruction.Nop)
+					if (node.IsNop)
 					{
 						node.Empty();
 					}

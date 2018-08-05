@@ -141,9 +141,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="dominanceAnalysis">The dominance analysis.</param>
 		private void RenameVariables(BasicBlock block, SimpleFastDominance dominanceAnalysis)
 		{
-			for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
+			// Update Operands in current block
+			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (node.IsEmpty)
+				if (node.IsEmptyOrNop)
 					continue;
 
 				if (node.Instruction != IRInstruction.Phi)
@@ -187,6 +188,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
+			// Update PHIs in successor blocks
 			foreach (var s in block.NextBlocks)
 			{
 				// index does not change between this stage and PhiPlacementStage since the block list order does not change
@@ -194,7 +196,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				for (var node = s.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (node.Instruction != IRInstruction.Phi)
@@ -207,20 +209,23 @@ namespace Mosa.Compiler.Framework.Stages
 					if (variables[op].Count > 0)
 					{
 						var version = variables[op].Peek();
-						node.SetOperand(index, GetSSAOperand(node.GetOperand(index), version));
+						var ssaOperand = GetSSAOperand(node.GetOperand(index), version);
+						node.SetOperand(index, ssaOperand);
 					}
 				}
 			}
 
+			// Repeat for all children of the dominance block, if any
 			var children = dominanceAnalysis.GetChildren(block);
 			foreach (var s in children)
 			{
 				RenameVariables(s, dominanceAnalysis);
 			}
 
+			// Update Result Operands in current block
 			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (node.IsEmpty || node.ResultCount == 0)
+				if (node.IsEmptyOrNop || node.ResultCount == 0)
 					continue;
 
 				if (node.Result?.IsVirtualRegister == true)

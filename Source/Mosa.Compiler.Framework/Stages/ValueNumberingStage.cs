@@ -550,10 +550,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				for (var node = next.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
-						continue;
-
-					if (node.Instruction == IRInstruction.Nop)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (node.Instruction != IRInstruction.Phi)
@@ -571,10 +568,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			for (var previousPhi = node.Previous; !previousPhi.IsBlockStartInstruction; previousPhi = previousPhi.Previous)
 			{
-				if (previousPhi.IsEmpty)
-					continue;
-
-				if (previousPhi.Instruction == IRInstruction.Nop)
+				if (previousPhi.IsEmptyOrNop)
 					continue;
 
 				Debug.Assert(previousPhi.Instruction == IRInstruction.Phi);

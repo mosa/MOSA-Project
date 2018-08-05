@@ -408,10 +408,7 @@ namespace Mosa.Compiler.Framework
 
 			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (node.IsEmpty)
-					continue;
-
-				if (node.Instruction == IRInstruction.Nop)
+				if (node.IsEmptyOrNop)
 					continue;
 
 				if (node.Instruction.FlowControl != FlowControl.UnconditionalBranch)
