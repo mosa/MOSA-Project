@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Stages
 			if (BasicBlocks.PrologueBlock == null)
 				return;
 
-			for (var node = BasicBlocks.PrologueBlock.First; !node.IsBlockEndInstruction; node = node.Next)
+			for (var node = BasicBlocks.PrologueBlock.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				if (node.Instruction == IRInstruction.Prologue)
 				{
@@ -49,7 +49,7 @@ namespace Mosa.Platform.x86.Stages
 			if (BasicBlocks.EpilogueBlock == null)
 				return;
 
-			for (var node = BasicBlocks.EpilogueBlock.First; !node.IsBlockEndInstruction; node = node.Next)
+			for (var node = BasicBlocks.EpilogueBlock.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				if (node.Instruction == IRInstruction.Epilogue)
 				{

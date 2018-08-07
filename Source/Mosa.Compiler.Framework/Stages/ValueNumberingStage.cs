@@ -153,7 +153,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Processed.Set(block.Sequence, true);
 
-			for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
+			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				if (node.IsEmpty)
 					continue;
@@ -548,7 +548,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var next in block.NextBlocks)
 			{
-				for (var node = next.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+				for (var node = next.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
 					if (node.IsEmptyOrNop)
 						continue;
