@@ -23,8 +23,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private TraceLog trace;
 
 		private int instructionRemovalCount;
-		private int constantFoldingIntegerOperationCount;
-		private int constantFoldingIntegerCompareCount;
+		private int constantFoldingCount;
+		private int strengthReductionCount;
 
 		private class Expression
 		{
@@ -44,9 +44,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace = CreateTraceLog();
 
-			constantFoldingIntegerOperationCount = 0;
+			constantFoldingCount = 0;
 			instructionRemovalCount = 0;
-			constantFoldingIntegerCompareCount = 0;
+			strengthReductionCount = 0;
 		}
 
 		protected override void Run()
@@ -78,8 +78,8 @@ namespace Mosa.Compiler.Framework.Stages
 			base.Finish();
 
 			UpdateCounter("ValueNumbering.IRInstructionRemoved", instructionRemovalCount);
-			UpdateCounter("ValueNumbering.ConstantFoldingIntegerOperation", constantFoldingIntegerOperationCount);
-			UpdateCounter("ValueNumbering.ConstantFoldingIntegerCompare", constantFoldingIntegerCompareCount);
+			UpdateCounter("ValueNumbering.ConstantFolding", constantFoldingCount);
+			UpdateCounter("ValueNumbering.StrengthReduction", strengthReductionCount);
 
 			MapToValueNumber = null;
 			Expressions = null;
@@ -255,16 +255,32 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 				}
 
-				// FUTURE - simplify expression: constant folding &strength reduction
-				var newOperand = ConstantFoldingIntegerOperations(node)
-					?? ConstantFoldingIntegerCompare(node);
+				// Simplify expression: constant folding & strength reduction
+				Operand newOperand = null;
+
+				//var newOperand = ConstantFoldingIntegerOperations(node);
+
+				//if (newOperand == null)
+				//{
+				//	newOperand = StrengthReduction(node);
+
+				//	if (newOperand != null)
+				//	{
+				//		strengthReductionCount++;
+				//	}
+				//}
+				//else
+				//{
+				//	constantFoldingCount++;
+				//}
 
 				if (newOperand != null)
 				{
+					Debug.Assert(newOperand != node.Result);
+
 					SetValueNumber(node.Result, newOperand);
 					node.SetInstruction(IRInstruction.Nop);
 					instructionRemovalCount++;
-					constantFoldingIntegerOperationCount++;
 					continue;
 				}
 
@@ -590,220 +606,213 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand ConstantFoldingIntegerOperations(InstructionNode node)
 		{
-			if (node.OperandCount != 2 && node.ResultCount != 1)
+			if (node.OperandCount != 2 || node.ResultCount != 1)
+				return null;
+
+			if (!node.Operand1.IsResolvedConstant || !node.Operand2.IsResolvedConstant)
 				return null;
 
 			var instruction = node.Instruction;
-
-			if (!(instruction == IRInstruction.Add32
-				|| instruction == IRInstruction.Sub32
-				|| instruction == IRInstruction.LogicalAnd32
-				|| instruction == IRInstruction.LogicalOr32
-				|| instruction == IRInstruction.LogicalXor32
-				|| instruction == IRInstruction.MulSigned32
-				|| instruction == IRInstruction.MulUnsigned32
-				|| instruction == IRInstruction.DivSigned32
-				|| instruction == IRInstruction.DivUnsigned32
-				|| instruction == IRInstruction.RemSigned32
-				|| instruction == IRInstruction.RemUnsigned32
-				|| instruction == IRInstruction.ArithShiftRight32
-				|| instruction == IRInstruction.ShiftLeft32
-				|| instruction == IRInstruction.ShiftRight32
-				|| instruction == IRInstruction.Add64
-				|| instruction == IRInstruction.Sub64
-				|| instruction == IRInstruction.LogicalAnd64
-				|| instruction == IRInstruction.LogicalOr64
-				|| instruction == IRInstruction.LogicalXor64
-				|| instruction == IRInstruction.MulSigned64
-				|| instruction == IRInstruction.MulUnsigned64
-				|| instruction == IRInstruction.DivSigned64
-				|| instruction == IRInstruction.DivUnsigned64
-				|| instruction == IRInstruction.RemSigned64
-				|| instruction == IRInstruction.RemUnsigned64
-				|| instruction == IRInstruction.ArithShiftRight64
-				|| instruction == IRInstruction.ShiftLeft64
-				|| instruction == IRInstruction.ShiftRight64))
-				return null;
-
 			var result = node.Result;
 			var op1 = node.Operand1;
 			var op2 = node.Operand2;
 
-			if (!op1.IsResolvedConstant || !op2.IsResolvedConstant)
-				return null;
-
-			// Divide by zero!
-			if (op2.IsConstantZero &&
-				(instruction == IRInstruction.DivSigned32
-				|| instruction == IRInstruction.DivUnsigned32
-				|| instruction == IRInstruction.RemSigned32
-				|| instruction == IRInstruction.RemUnsigned32
-				|| instruction == IRInstruction.DivSigned64
-				|| instruction == IRInstruction.DivUnsigned64
-				|| instruction == IRInstruction.RemSigned64
-				|| instruction == IRInstruction.RemUnsigned64))
-				return null;
-
-			ulong value = 0;
-
-			var op1Value = op1.ConstantUnsignedLongInteger;
-			var op2Value = op2.ConstantUnsignedLongInteger;
-
 			if (instruction == IRInstruction.Add32)
 			{
-				value = (op1Value + op2Value) & 0xFFFFFFFF;
+				return CreateConstant(result.Type, (op1.ConstantUnsignedLongInteger + op2.ConstantUnsignedLongInteger) & 0xFFFFFFFF);
 			}
 			else if (instruction == IRInstruction.Add64)
 			{
-				value = op1Value + op2Value;
+				return CreateConstant(result.Type, op1.ConstantUnsignedLongInteger + op2.ConstantUnsignedLongInteger);
 			}
 			else if (instruction == IRInstruction.Sub32)
 			{
-				value = (op1Value - op2Value) & 0xFFFFFFFF;
+				return CreateConstant(result.Type, (op1.ConstantUnsignedLongInteger - op2.ConstantUnsignedLongInteger) & 0xFFFFFFFF);
 			}
 			else if (instruction == IRInstruction.Sub64)
 			{
-				value = op1Value - op2Value;
+				return CreateConstant(result.Type, op1.ConstantUnsignedLongInteger - op2.ConstantUnsignedLongInteger);
 			}
 			else if (instruction == IRInstruction.LogicalAnd32)
 			{
-				value = (op1Value & op2Value) & 0xFFFFFFFF;
+				return CreateConstant(result.Type, (op1.ConstantUnsignedLongInteger & op2.ConstantUnsignedLongInteger) & 0xFFFFFFFF);
 			}
 			else if (instruction == IRInstruction.LogicalAnd64)
 			{
-				value = op1Value & op2Value;
+				return CreateConstant(result.Type, op1.ConstantUnsignedLongInteger & op2.ConstantUnsignedLongInteger);
 			}
 			else if (instruction == IRInstruction.LogicalOr32)
 			{
-				value = (op1Value | op2Value) & 0xFFFFFFFF;
+				return CreateConstant(result.Type, (op1.ConstantUnsignedLongInteger | op2.ConstantUnsignedLongInteger) & 0xFFFFFFFF);
 			}
 			else if (instruction == IRInstruction.LogicalOr64)
 			{
-				value = op1Value | op2Value;
+				return CreateConstant(result.Type, op1.ConstantUnsignedLongInteger | op2.ConstantUnsignedLongInteger);
 			}
 			else if (instruction == IRInstruction.LogicalXor32)
 			{
-				value = (op1Value ^ op2Value) & 0xFFFFFFFF;
+				return CreateConstant(result.Type, (op1.ConstantUnsignedLongInteger ^ op2.ConstantUnsignedLongInteger) & 0xFFFFFFFF);
 			}
 			else if (instruction == IRInstruction.LogicalXor64)
 			{
-				value = op1Value ^ op2Value;
+				return CreateConstant(result.Type, op1.ConstantUnsignedLongInteger ^ op2.ConstantUnsignedLongInteger);
 			}
 			else if (instruction == IRInstruction.MulSigned32 || instruction == IRInstruction.MulUnsigned32)
 			{
-				value = (op1Value * op2Value) & 0xFFFFFFFF;
+				return CreateConstant(result.Type, (op1.ConstantUnsignedLongInteger * op2.ConstantUnsignedLongInteger) & 0xFFFFFFFF);
 			}
 			else if (instruction == IRInstruction.MulSigned64 || instruction == IRInstruction.MulUnsigned64)
 			{
-				value = op1Value * op2Value;
+				return CreateConstant(result.Type, op1.ConstantUnsignedLongInteger * op2.ConstantUnsignedLongInteger);
 			}
-			else if (instruction == IRInstruction.DivUnsigned32)
+			else if (instruction == IRInstruction.DivUnsigned32 && !op2.IsConstantZero)
 			{
-				value = (op1Value / op2Value) & 0xFFFFFFFF;
+				return CreateConstant(result.Type, (op1.ConstantUnsignedLongInteger / op2.ConstantUnsignedLongInteger) & 0xFFFFFFFF);
 			}
-			else if (instruction == IRInstruction.DivUnsigned64)
+			else if (instruction == IRInstruction.DivUnsigned64 && !op2.IsConstantZero)
 			{
-				value = op1Value / op2Value;
+				return CreateConstant(result.Type, op1.ConstantUnsignedLongInteger / op2.ConstantUnsignedLongInteger);
 			}
-			else if (instruction == IRInstruction.DivSigned32)
+			else if (instruction == IRInstruction.DivSigned32 && !op2.IsConstantZero)
 			{
-				value = ((ulong)(op1.ConstantSignedLongInteger / op2.ConstantSignedLongInteger)) & 0xFFFFFFFF;
+				return CreateConstant(result.Type, ((ulong)(op1.ConstantSignedLongInteger / op2.ConstantSignedLongInteger)) & 0xFFFFFFFF);
 			}
-			else if (instruction == IRInstruction.DivSigned64)
+			else if (instruction == IRInstruction.DivSigned64 && !op2.IsConstantZero)
 			{
-				value = (ulong)(op1.ConstantSignedLongInteger / op2.ConstantSignedLongInteger);
+				return CreateConstant(result.Type, (ulong)(op1.ConstantSignedLongInteger / op2.ConstantSignedLongInteger));
 			}
 			else if (instruction == IRInstruction.ArithShiftRight32)
 			{
-				value = ((ulong)(((long)op1Value) >> (int)op2Value)) & 0xFFFFFFFF;
+				return CreateConstant(result.Type, ((ulong)(((long)op1.ConstantUnsignedLongInteger) >> (int)op2.ConstantUnsignedLongInteger)) & 0xFFFFFFFF);
 			}
 			else if (instruction == IRInstruction.ArithShiftRight64)
 			{
-				value = (ulong)(((long)op1Value) >> (int)op2Value);
+				return CreateConstant(result.Type, (ulong)(((long)op1.ConstantUnsignedLongInteger) >> (int)op2.ConstantUnsignedLongInteger));
 			}
 			else if (instruction == IRInstruction.ShiftRight32)
 			{
-				value = (op1Value >> (int)op2Value) & 0xFFFFFFFF;
+				return CreateConstant(result.Type, (op1.ConstantUnsignedLongInteger >> (int)op2.ConstantUnsignedLongInteger) & 0xFFFFFFFF);
 			}
 			else if (instruction == IRInstruction.ShiftRight64)
 			{
-				value = op1Value >> (int)op2Value;
+				return CreateConstant(result.Type, op1.ConstantUnsignedLongInteger >> (int)op2.ConstantUnsignedLongInteger);
 			}
 			else if (instruction == IRInstruction.ShiftLeft32)
 			{
-				value = (op1Value << (int)op2Value) & 0xFFFFFFFF;
+				return CreateConstant(result.Type, (op1.ConstantUnsignedLongInteger << (int)op2.ConstantUnsignedLongInteger) & 0xFFFFFFFF);
 			}
 			else if (instruction == IRInstruction.ShiftLeft64)
 			{
-				value = op1Value << (int)op2Value;
+				return CreateConstant(result.Type, op1.ConstantUnsignedLongInteger << (int)op2.ConstantUnsignedLongInteger);
 			}
-			else if (instruction == IRInstruction.RemSigned32)
+			else if (instruction == IRInstruction.RemSigned32 && !op2.IsConstantZero)
 			{
-				value = ((ulong)(op1.ConstantSignedLongInteger % op2.ConstantSignedLongInteger)) & 0xFFFFFFFF;
+				return CreateConstant(result.Type, ((ulong)(op1.ConstantSignedLongInteger % op2.ConstantSignedLongInteger)) & 0xFFFFFFFF);
 			}
-			else if (instruction == IRInstruction.RemSigned64)
+			else if (instruction == IRInstruction.RemSigned64 && !op2.IsConstantZero)
 			{
-				value = (ulong)(op1.ConstantSignedLongInteger % op2.ConstantSignedLongInteger);
+				return CreateConstant(result.Type, (ulong)(op1.ConstantSignedLongInteger % op2.ConstantSignedLongInteger));
 			}
-			else if (instruction == IRInstruction.RemUnsigned32)
+			else if (instruction == IRInstruction.RemUnsigned32 && !op2.IsConstantZero)
 			{
-				value = (op1Value % op2Value) & 0xFFFFFFFF;
+				return CreateConstant(result.Type, (op1.ConstantUnsignedLongInteger % op2.ConstantUnsignedLongInteger) & 0xFFFFFFFF);
 			}
-			else if (instruction == IRInstruction.RemUnsigned64)
+			else if (instruction == IRInstruction.RemUnsigned64 && !op2.IsConstantZero)
 			{
-				value = op1Value % op2Value;
+				return CreateConstant(result.Type, op1.ConstantUnsignedLongInteger % op2.ConstantUnsignedLongInteger);
 			}
-			else
+			else if (instruction == IRInstruction.CompareInt32x32 || instruction == IRInstruction.CompareInt64x32 || instruction == IRInstruction.CompareInt64x64)
 			{
-				return null;
+				bool compareResult = true;
+
+				switch (node.ConditionCode)
+				{
+					case ConditionCode.Equal: compareResult = (op1.ConstantUnsignedLongInteger == op2.ConstantUnsignedLongInteger); break;
+					case ConditionCode.NotEqual: compareResult = (op1.ConstantUnsignedLongInteger != op2.ConstantUnsignedLongInteger); break;
+					case ConditionCode.GreaterOrEqual: compareResult = (op1.ConstantUnsignedLongInteger >= op2.ConstantUnsignedLongInteger); break;
+					case ConditionCode.GreaterThan: compareResult = (op1.ConstantUnsignedLongInteger > op2.ConstantUnsignedLongInteger); break;
+					case ConditionCode.LessOrEqual: compareResult = (op1.ConstantUnsignedLongInteger <= op2.ConstantUnsignedLongInteger); break;
+					case ConditionCode.LessThan: compareResult = (op1.ConstantUnsignedLongInteger < op2.ConstantUnsignedLongInteger); break;
+
+					case ConditionCode.UnsignedGreaterThan: compareResult = (op1.ConstantUnsignedLongInteger > op2.ConstantUnsignedLongInteger); break;
+					case ConditionCode.UnsignedGreaterOrEqual: compareResult = (op1.ConstantUnsignedLongInteger >= op2.ConstantUnsignedLongInteger); break;
+					case ConditionCode.UnsignedLessThan: compareResult = (op1.ConstantUnsignedLongInteger < op2.ConstantUnsignedLongInteger); break;
+					case ConditionCode.UnsignedLessOrEqual: compareResult = (op1.ConstantUnsignedLongInteger <= op2.ConstantUnsignedLongInteger); break;
+
+					// TODO: Add more
+					default: return null;
+				}
+
+				return CreateConstant(result.Type, compareResult ? 1 : 0);
 			}
 
-			return CreateConstant(result.Type, value);
+			return null;
 		}
 
-		private Operand ConstantFoldingIntegerCompare(InstructionNode node)
+		private Operand StrengthReduction(InstructionNode node)
 		{
-			if (node.OperandCount != 2 && node.ResultCount != 1)
+			if (node.OperandCount != 2 || node.ResultCount != 1)
 				return null;
 
 			var instruction = node.Instruction;
+			var result = node.Result;
+			var op1 = node.Operand1;
+			var op2 = node.Operand2;
 
-			if (!(instruction == IRInstruction.CompareInt32x32
-				|| instruction == IRInstruction.CompareInt64x32
-				|| instruction == IRInstruction.CompareInt64x64))
-				return null;
-
-			Operand result = node.Result;
-			Operand op1 = node.Operand1;
-			Operand op2 = node.Operand2;
-
-			if (!(op1.IsResolvedConstant && op2.IsResolvedConstant))
-				return null;
-
-			if (!op1.IsValueType || !op2.IsValueType)
-				return null;
-
-			bool compareResult = true;
-
-			switch (node.ConditionCode)
+			if ((instruction == IRInstruction.Add32 || instruction == IRInstruction.Add64) && op1.IsConstantZero)
 			{
-				case ConditionCode.Equal: compareResult = (op1.ConstantUnsignedLongInteger == op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.NotEqual: compareResult = (op1.ConstantUnsignedLongInteger != op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.GreaterOrEqual: compareResult = (op1.ConstantUnsignedLongInteger >= op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.GreaterThan: compareResult = (op1.ConstantUnsignedLongInteger > op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.LessOrEqual: compareResult = (op1.ConstantUnsignedLongInteger <= op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.LessThan: compareResult = (op1.ConstantUnsignedLongInteger < op2.ConstantUnsignedLongInteger); break;
-
-				case ConditionCode.UnsignedGreaterThan: compareResult = (op1.ConstantUnsignedLongInteger > op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.UnsignedGreaterOrEqual: compareResult = (op1.ConstantUnsignedLongInteger >= op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.UnsignedLessThan: compareResult = (op1.ConstantUnsignedLongInteger < op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.UnsignedLessOrEqual: compareResult = (op1.ConstantUnsignedLongInteger <= op2.ConstantUnsignedLongInteger); break;
-
-				// TODO: Add more
-				default: return null;
+				return op2;
+			}
+			else if ((instruction == IRInstruction.Add32 || instruction == IRInstruction.Add64) && op2.IsConstantZero)
+			{
+				return op1;
+			}
+			else if ((instruction == IRInstruction.Sub32 || instruction == IRInstruction.Sub64) && op2.IsConstantZero)
+			{
+				return op1;
+			}
+			else if ((instruction == IRInstruction.Sub32 || instruction == IRInstruction.Sub64) && (op1 == op2))
+			{
+				return CreateConstant(result.Type, 0);
+			}
+			else if ((instruction == IRInstruction.ShiftLeft32 || instruction == IRInstruction.ShiftLeft64 || instruction == IRInstruction.ShiftRight32 || instruction == IRInstruction.ShiftRight64) && op1.IsConstantZero)
+			{
+				return CreateConstant(result.Type, 0);
+			}
+			else if ((instruction == IRInstruction.ShiftLeft32 || instruction == IRInstruction.ShiftLeft64 || instruction == IRInstruction.ShiftRight32 || instruction == IRInstruction.ShiftRight64) && op2.IsConstantZero)
+			{
+				return op1;
+			}
+			else if ((instruction == IRInstruction.ShiftLeft32 || instruction == IRInstruction.ShiftRight32) && op2.ConstantUnsignedLongInteger >= 32)
+			{
+				return CreateConstant(result.Type, 0);
+			}
+			else if ((instruction == IRInstruction.ShiftLeft64 || instruction == IRInstruction.ShiftRight64) && op2.ConstantUnsignedLongInteger >= 64)
+			{
+				return CreateConstant(result.Type, 0);
+			}
+			else if ((instruction == IRInstruction.MulSigned32 || instruction == IRInstruction.MulUnsigned32 || instruction == IRInstruction.MulSigned64 || instruction == IRInstruction.MulUnsigned64) && (op1.IsConstantZero || op2.IsConstantZero))
+			{
+				return CreateConstant(result.Type, 0);
+			}
+			else if ((instruction == IRInstruction.MulSigned32 || instruction == IRInstruction.MulUnsigned32 || instruction == IRInstruction.MulSigned64 || instruction == IRInstruction.MulUnsigned64) && op1.IsConstantOne)
+			{
+				return op2;
+			}
+			else if ((instruction == IRInstruction.MulSigned32 || instruction == IRInstruction.MulUnsigned32 || instruction == IRInstruction.MulSigned64 || instruction == IRInstruction.MulUnsigned64) && op2.IsConstantOne)
+			{
+				return op1;
+			}
+			else if ((node.Instruction == IRInstruction.DivSigned32 || node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivSigned64 || node.Instruction == IRInstruction.DivUnsigned64) && op2.IsConstantOne)
+			{
+				return op1;
+			}
+			else if ((node.Instruction == IRInstruction.DivSigned32 || node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivSigned64 || node.Instruction == IRInstruction.DivUnsigned64) && op1.IsConstantZero)
+			{
+				return CreateConstant(result.Type, 0);
 			}
 
-			return CreateConstant(result.Type, compareResult ? 1 : 0);
+			return null;
 		}
 	}
 }
