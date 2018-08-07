@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -19,6 +20,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Dictionary<Operand, Operand[]> ssaOperands;
 		private Dictionary<BasicBlock, SimpleFastDominance> blockAnalysis;
 		private Dictionary<Operand, List<BasicBlock>> assignments;
+		private TraceLog trace;
 
 		protected override void Initialize()
 		{
@@ -37,6 +39,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (HasProtectedRegions)
 				return;
+
+			trace = CreateTraceLog();
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
@@ -268,7 +272,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
 					if (node.IsEmpty)
 						continue;
