@@ -433,9 +433,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			foreach (var block in BasicBlocks)
 			{
-				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
+				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty || node.IsBlockStartInstruction || node.IsBlockEndInstruction)
+					if (node.IsEmpty || node.IsBlockEndInstruction)
 						continue;
 
 					if (!Architecture.IsInstructionMove(node.Instruction))

@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
@@ -222,8 +223,7 @@ namespace Mosa.Compiler.Framework
 			{
 				MethodCompiler.Stop();
 				NewCompilerTraceEvent(CompilerEvent.Exception, "Method: " + Method + " -> " + ex);
-
-				MethodCompiler.Compiler.AllStop = true;
+				MethodCompiler.Compiler.Stop();
 			}
 
 			SubmitTraceLogs(traceLogs);
@@ -406,7 +406,7 @@ namespace Mosa.Compiler.Framework
 			if (block.NextBlocks.Count != 1)
 				return false;
 
-			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				if (node.IsEmptyOrNop)
 					continue;
@@ -424,7 +424,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="block">The block.</param>
 		protected void EmptyBlockOfAllInstructions(BasicBlock block)
 		{
-			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				node.Empty();
 			}
@@ -478,7 +478,7 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (var next in nextBlocks)
 			{
-				for (var node = next.First; !node.IsBlockEndInstruction; node = node.Next)
+				for (var node = next.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
 					if (node.IsEmpty)
 						continue;
@@ -1009,5 +1009,12 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Constant Helper Methods
+
+		public void AllStopWithException(string exception)
+		{
+			MethodCompiler.Stop();
+			MethodCompiler.Compiler.Stop();
+			throw new CompilerException(exception);
+		}
 	}
 }

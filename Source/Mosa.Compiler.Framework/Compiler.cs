@@ -112,15 +112,13 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private List<BaseCompilerExtension> CompilerExtensions { get; } = new List<BaseCompilerExtension>();
 
-		private volatile bool AllStopFlag;
-
 		/// <summary>
 		/// Gets or sets a value indicating whether [all stop].
 		/// </summary>
 		/// <value>
 		///   <c>true</c> if [all stop]; otherwise, <c>false</c>.
 		/// </value>
-		public bool AllStop { get { return AllStopFlag; } set { AllStopFlag = value; } }
+		public bool IsStopped { get; private set; }
 
 		#endregion Properties
 
@@ -249,7 +247,7 @@ namespace Mosa.Compiler.Framework
 
 			Architecture.ExtendCompilerPipeline(CompilerPipeline);
 
-			AllStop = false;
+			IsStopped = false;
 		}
 
 		/// <summary>
@@ -351,7 +349,7 @@ namespace Mosa.Compiler.Framework
 		{
 			while (true)
 			{
-				if (AllStop)
+				if (IsStopped)
 					return;
 
 				var method = CompilationScheduler.GetMethodToCompile();
@@ -459,6 +457,11 @@ namespace Mosa.Compiler.Framework
 			}
 
 			ExportCounters();
+		}
+
+		public void Stop()
+		{
+			IsStopped = true;
 		}
 
 		#endregion Methods
