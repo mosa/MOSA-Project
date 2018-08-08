@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
@@ -145,6 +146,21 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="dominanceAnalysis">The dominance analysis.</param>
 		private void RenameVariables(BasicBlock block, SimpleFastDominance dominanceAnalysis)
 		{
+			UpdateOperands(block);
+			UpdatePHIs(block);
+
+			// Repeat for all children of the dominance block, if any
+			var children = dominanceAnalysis.GetChildren(block);
+			foreach (var s in children)
+			{
+				RenameVariables(s, dominanceAnalysis);
+			}
+
+			UpdateResultOperands(block);
+		}
+
+		private void UpdateOperands(BasicBlock block)
+		{
 			// Update Operands in current block
 			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
@@ -191,7 +207,10 @@ namespace Mosa.Compiler.Framework.Stages
 					counts[op] = index + 1;
 				}
 			}
+		}
 
+		private void UpdatePHIs(BasicBlock block)
+		{
 			// Update PHIs in successor blocks
 			foreach (var s in block.NextBlocks)
 			{
@@ -218,14 +237,10 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 			}
+		}
 
-			// Repeat for all children of the dominance block, if any
-			var children = dominanceAnalysis.GetChildren(block);
-			foreach (var s in children)
-			{
-				RenameVariables(s, dominanceAnalysis);
-			}
-
+		private void UpdateResultOperands(BasicBlock block)
+		{
 			// Update Result Operands in current block
 			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
