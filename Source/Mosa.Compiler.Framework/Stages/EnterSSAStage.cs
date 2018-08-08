@@ -146,6 +146,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="dominanceAnalysis">The dominance analysis.</param>
 		private void RenameVariables(BasicBlock block, SimpleFastDominance dominanceAnalysis)
 		{
+			if (trace.Active) trace.Log("Processing: " + block);
+
 			UpdateOperands(block);
 			UpdatePHIs(block);
 
@@ -157,6 +159,50 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			UpdateResultOperands(block);
+		}
+
+		/// <summary>
+		/// Renames the variables.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="dominanceAnalysis">The dominance analysis.</param>
+		private void RenameVariablesYY(BasicBlock headBlock, SimpleFastDominance dominanceAnalysis)
+		{
+			var worklist = new Stack<BasicBlock>();
+
+			worklist.Push(headBlock);
+
+			while (worklist.Count != 0)
+			{
+				var block = worklist.Pop();
+
+				if (block != null)
+				{
+					if (trace.Active) trace.Log("Processing: " + block);
+
+					UpdateOperands(block);
+					UpdatePHIs(block);
+
+					worklist.Push(block);
+					worklist.Push(null);
+					if (trace.Active) trace.Log("  >Pushed: " + block + " (Return)");
+
+					// Repeat for all children of the dominance block, if any
+					var children = dominanceAnalysis.GetChildren(block);
+					foreach (var s in children)
+					{
+						worklist.Push(s);
+						if (trace.Active) trace.Log("  >Pushed: " + s);
+					}
+				}
+				else
+				{
+					block = worklist.Pop();
+
+					if (trace.Active) trace.Log("Processing: " + block + " (Back)");
+					UpdateResultOperands(block);
+				}
+			}
 		}
 
 		private void UpdateOperands(BasicBlock block)
@@ -186,6 +232,11 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Result?.IsVirtualRegister == true)
 				{
 					var op = node.Result;
+
+					if (!counts.ContainsKey(op))
+					{
+						throw new CompilerException(op + " is not in counts");
+					}
 
 					Debug.Assert(counts.ContainsKey(op), op + " is not in counts");
 
