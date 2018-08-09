@@ -144,7 +144,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="block">The block.</param>
 		/// <param name="dominanceAnalysis">The dominance analysis.</param>
-		private void RenameVariables(BasicBlock block, SimpleFastDominance dominanceAnalysis)
+		private void RenameVariables2(BasicBlock block, SimpleFastDominance dominanceAnalysis)
 		{
 			if (trace.Active) trace.Log("Processing: " + block);
 
@@ -155,7 +155,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var children = dominanceAnalysis.GetChildren(block);
 			foreach (var s in children)
 			{
-				RenameVariables(s, dominanceAnalysis);
+				RenameVariables2(s, dominanceAnalysis);
 			}
 
 			UpdateResultOperands(block);
@@ -164,9 +164,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Renames the variables.
 		/// </summary>
-		/// <param name="block">The block.</param>
+		/// <param name="headBlock">The head block.</param>
 		/// <param name="dominanceAnalysis">The dominance analysis.</param>
-		private void RenameVariablesYY(BasicBlock headBlock, SimpleFastDominance dominanceAnalysis)
+		private void RenameVariables(BasicBlock headBlock, SimpleFastDominance dominanceAnalysis)
 		{
 			var worklist = new Stack<BasicBlock>();
 
