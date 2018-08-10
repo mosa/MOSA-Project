@@ -68,7 +68,10 @@ namespace Mosa.Compiler.Framework.Stages
 			Processed = new BitArray(BasicBlocks.Count, false);
 
 			AnalysisDominance = new SimpleFastDominance(BasicBlocks, BasicBlocks.PrologueBlock);
+
 			ReversePostOrder = AnalysisDominance.GetReversePostOrder();
+
+			//ReversePostOrder = BasicBlocks.ReversePostOrder(BasicBlocks.PrologueBlock);
 
 			ValueNumber();
 		}

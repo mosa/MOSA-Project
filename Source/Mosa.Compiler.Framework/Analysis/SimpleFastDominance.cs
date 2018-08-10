@@ -2,7 +2,9 @@
 
 using Mosa.Compiler.Common;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Analysis
 {
@@ -20,7 +22,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// <summary>
 		/// Holds the dominance information of a block.
 		/// </summary>
-		private readonly Dictionary<BasicBlock, BasicBlock> doms = new Dictionary<BasicBlock, BasicBlock>();
+		private readonly BasicBlock[] doms;
 
 		/// <summary>
 		/// Holds the dominance frontier blocks.
@@ -51,6 +53,7 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// <param name="entryBlock">The entry block.</param>
 		public SimpleFastDominance(BasicBlocks basicBlocks, BasicBlock entryBlock)
 		{
+			doms = new BasicBlock[basicBlocks.Count];
 			domFrontierOfBlock = new List<BasicBlock>[basicBlocks.Count];
 			children = new List<BasicBlock>[basicBlocks.Count];
 
@@ -70,7 +73,9 @@ namespace Mosa.Compiler.Framework.Analysis
 			// Changed flag
 			bool changed = true;
 
-			doms.Add(reversePostOrder[0], reversePostOrder[0]);
+			var array = new BitArray(doms.Length, false);
+
+			doms[reversePostOrder[0].Sequence] = reversePostOrder[0];
 
 			// Calculate the dominance
 			while (changed)
@@ -88,23 +93,26 @@ namespace Mosa.Compiler.Framework.Analysis
 						}
 						else
 						{
-							if (doms.ContainsKey(previous))
+							if (doms[previous.Sequence] != null)
 							{
 								idom = Intersect(previous, idom);
 							}
 						}
 					}
 
-					if (!doms.TryGetValue(b, out BasicBlock dom))
+					var dom = doms[b.Sequence];
+
+					if (!array[b.Sequence])
 					{
-						doms.Add(b, idom);
+						doms[b.Sequence] = idom;
+						array[b.Sequence] = true;
 						changed = true;
 					}
 					else
 					{
 						if (!ReferenceEquals(dom, idom))
 						{
-							doms[b] = idom;
+							doms[b.Sequence] = idom;
 							changed = true;
 						}
 					}
@@ -124,9 +132,6 @@ namespace Mosa.Compiler.Framework.Analysis
 				if (immediateDominator == null)
 					continue;
 
-				if (block == immediateDominator)
-					continue;
-
 				var list = children[immediateDominator.Sequence];
 
 				if (list == null)
@@ -134,6 +139,9 @@ namespace Mosa.Compiler.Framework.Analysis
 					list = new List<BasicBlock>();
 					children[immediateDominator.Sequence] = list;
 				}
+
+				if (block == immediateDominator)
+					continue;
 
 				list.AddIfNew(block);
 			}
@@ -152,7 +160,7 @@ namespace Mosa.Compiler.Framework.Analysis
 					{
 						var runner = p;
 
-						while (runner != null && !ReferenceEquals(runner, doms[b]))
+						while (runner != null && runner != doms[b.Sequence])
 						{
 							var runnerFrontier = domFrontierOfBlock[runner.Sequence];
 
@@ -165,8 +173,7 @@ namespace Mosa.Compiler.Framework.Analysis
 							domFrontier.AddIfNew(b);
 							runnerFrontier.AddIfNew(b);
 
-							doms.TryGetValue(runner, out BasicBlock newrunner);
-							runner = newrunner;
+							runner = doms[runner.Sequence];
 						}
 					}
 				}
@@ -214,9 +221,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			if (block == null)
 				throw new ArgumentNullException(nameof(block));
 
-			doms.TryGetValue(block, out BasicBlock idom);
-
-			return idom;
+			return doms[block.Sequence];
 		}
 
 		public List<BasicBlock> GetDominators(BasicBlock block)
@@ -231,7 +236,9 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				result.Add(b);
 
-				if (!doms.TryGetValue(b, out b))
+				b = doms[b.Sequence];
+
+				if (b == null)
 				{
 					return result;
 				}
@@ -272,7 +279,9 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			while (b != null)
 			{
-				if (!doms.TryGetValue(b, out b))
+				b = doms[b.Sequence];
+
+				if (b == null)
 				{
 					return false;
 				}
@@ -311,16 +320,14 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			while (finger2 != null && finger1 != null && finger1 != finger2)
 			{
-				while (finger1?.Sequence > finger2.Sequence)
+				while (finger1 != null && finger1.Sequence > finger2.Sequence)
 				{
-					doms.TryGetValue(finger1, out BasicBlock f);
-					finger1 = f;
+					finger1 = doms[finger1.Sequence];
 				}
 
 				while (finger2 != null && finger1 != null && finger2.Sequence > finger1.Sequence)
 				{
-					doms.TryGetValue(finger2, out BasicBlock f);
-					finger2 = f;
+					finger2 = doms[finger2.Sequence];
 				}
 			}
 
