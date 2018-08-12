@@ -153,9 +153,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Repeat for all children of the dominance block, if any
 			var children = dominanceAnalysis.GetChildren(block);
-			foreach (var s in children)
+			if (children != null && children.Count != 0)
 			{
-				RenameVariables2(s, dominanceAnalysis);
+				foreach (var s in children)
+				{
+					RenameVariables2(s, dominanceAnalysis);
+				}
 			}
 
 			UpdateResultOperands(block);
@@ -189,10 +192,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 					// Repeat for all children of the dominance block, if any
 					var children = dominanceAnalysis.GetChildren(block);
-					foreach (var s in children)
+					if (children != null && children.Count > 0)
 					{
-						worklist.Push(s);
-						if (trace.Active) trace.Log("  >Pushed: " + s);
+						foreach (var s in children)
+						{
+							worklist.Push(s);
+							if (trace.Active) trace.Log("  >Pushed: " + s);
+						}
 					}
 				}
 				else

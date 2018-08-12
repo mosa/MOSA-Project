@@ -14,6 +14,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			OutputList();
 			OutputDiagram();
+			OutputDominanceBlock();
 		}
 
 		private void OutputList()
@@ -84,43 +85,34 @@ namespace Mosa.Compiler.Framework.Stages
 			trace.Log("}");
 		}
 
-		//private void OutputDominanceBlock()
-		//{
-		//	var trace = CreateTraceLog("DominanceBlock");
-		//	var sb = new StringBuilder();
+		private void OutputDominanceBlock()
+		{
+			var trace = CreateTraceLog("DominanceBlock");
+			var sb = new StringBuilder();
 
-		//	foreach (var headBlock in BasicBlocks.HeadBlocks)
-		//	{
-		//		trace.Log("Head: " + headBlock);
-		//		var dominance = new SimpleFastDominance(BasicBlocks, headBlock);
+			foreach (var headBlock in BasicBlocks.HeadBlocks)
+			{
+				trace.Log("Head: " + headBlock);
+				var dominance = new SimpleFastDominance(BasicBlocks, headBlock);
 
-		//		for (int i = 0; i < BasicBlocks.Count; i++)
-		//		{
-		//			var block = BasicBlocks[i];
+				for (int i = 0; i < BasicBlocks.Count; i++)
+				{
+					var block = BasicBlocks[i];
 
-		//			sb.Clear();
-		//			sb.Append("  Block ");
-		//			sb.Append(block);
-		//			sb.Append(" : ");
+					sb.Clear();
+					sb.Append("  Block ");
+					sb.Append(block);
+					sb.Append(" : ");
 
-		//			var children = dominance.GetDominators(block);
+					var dom = dominance.GetImmediateDominator(block);
 
-		//			if (children != null && children.Count != 0)
-		//			{
-		//				foreach (var child in children)
-		//				{
-		//					sb.Append(child);
-		//					sb.Append(", ");
-		//				}
+					sb.Append((dom != null) ? dom.ToString() : string.Empty);
 
-		//				sb.Length -= 2;
-		//			}
+					trace.Log(sb.ToString());
+				}
 
-		//			trace.Log(sb.ToString());
-		//		}
-
-		//		trace.Log();
-		//	}
-		//}
+				trace.Log();
+			}
+		}
 	}
 }

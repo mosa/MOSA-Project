@@ -44,6 +44,8 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// </summary>
 		private List<BasicBlock> reversePostOrder;
 
+		private int[] blockToPostorderIndex;
+
 		#endregion Data Members
 
 		/// <summary>
@@ -53,12 +55,22 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// <param name="entryBlock">The entry block.</param>
 		public SimpleFastDominance(BasicBlocks basicBlocks, BasicBlock entryBlock)
 		{
-			doms = new BasicBlock[basicBlocks.Count];
-			domFrontierOfBlock = new List<BasicBlock>[basicBlocks.Count];
-			children = new List<BasicBlock>[basicBlocks.Count];
+			int blockCount = basicBlocks.Count;
+
+			doms = new BasicBlock[blockCount];
+			domFrontierOfBlock = new List<BasicBlock>[blockCount];
+			children = new List<BasicBlock>[blockCount];
+			blockToPostorderIndex = new int[blockCount];
 
 			// Blocks in reverse post order topology
 			reversePostOrder = BasicBlocks.ReversePostOrder(entryBlock);
+
+			// Map block to reverse post order index
+			int i = reversePostOrder.Count;
+			foreach (var block in reversePostOrder)
+			{
+				blockToPostorderIndex[block.Sequence] = --i;
+			}
 
 			CalculateDominance();
 			CalculateChildren();
@@ -70,51 +82,42 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// </summary>
 		private void CalculateDominance()
 		{
-			// Changed flag
+			var startNode = reversePostOrder[0];
+			doms[startNode.Sequence] = startNode;
+
 			bool changed = true;
 
-			var array = new BitArray(doms.Length, false);
-
-			doms[reversePostOrder[0].Sequence] = reversePostOrder[0];
-
-			// Calculate the dominance
 			while (changed)
 			{
 				changed = false;
 				foreach (var b in reversePostOrder)
 				{
-					BasicBlock idom = null;
+					if (b == startNode)
+						continue;
+
+					BasicBlock newIDom = null;
 
 					foreach (var previous in b.PreviousBlocks)
 					{
-						if (idom == null)
+						var dom = doms[previous.Sequence];
+
+						if (dom == null)
+							continue;
+
+						if (newIDom == null)
 						{
-							idom = previous;
+							newIDom = previous;
 						}
 						else
 						{
-							if (doms[previous.Sequence] != null)
-							{
-								idom = Intersect(previous, idom);
-							}
+							newIDom = Intersect(previous, newIDom);
 						}
 					}
 
-					var dom = doms[b.Sequence];
-
-					if (!array[b.Sequence])
+					if (doms[b.Sequence] != newIDom || doms[b.Sequence] == null)
 					{
-						doms[b.Sequence] = idom;
-						array[b.Sequence] = true;
+						doms[b.Sequence] = newIDom;
 						changed = true;
-					}
-					else
-					{
-						if (!ReferenceEquals(dom, idom))
-						{
-							doms[b.Sequence] = idom;
-							changed = true;
-						}
 					}
 				}
 			}
@@ -190,7 +193,9 @@ namespace Mosa.Compiler.Framework.Analysis
 			var workList = new Queue<BasicBlock>();
 
 			foreach (var block in blocks)
+			{
 				workList.Enqueue(block);
+			}
 
 			while (workList.Count > 0)
 			{
@@ -218,17 +223,11 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		public BasicBlock GetImmediateDominator(BasicBlock block)
 		{
-			if (block == null)
-				throw new ArgumentNullException(nameof(block));
-
 			return doms[block.Sequence];
 		}
 
 		public List<BasicBlock> GetDominators(BasicBlock block)
 		{
-			if (block == null)
-				throw new ArgumentNullException(nameof(block));
-
 			var result = new List<BasicBlock>();
 			var b = block;
 
@@ -316,17 +315,20 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// <returns>The highest common dominator.</returns>
 		private BasicBlock Intersect(BasicBlock b1, BasicBlock b2)
 		{
-			BasicBlock finger1 = b1, finger2 = b2;
+			var finger1 = b1;
+			var finger2 = b2;
 
-			while (finger2 != null && finger1 != null && finger1 != finger2)
+			while (finger1 != finger2)
 			{
-				while (finger1 != null && finger1.Sequence > finger2.Sequence)
+				while (blockToPostorderIndex[finger1.Sequence] < blockToPostorderIndex[finger2.Sequence])
 				{
+					Debug.Assert(doms[finger1.Sequence] != null);
 					finger1 = doms[finger1.Sequence];
 				}
 
-				while (finger2 != null && finger1 != null && finger2.Sequence > finger1.Sequence)
+				while (blockToPostorderIndex[finger2.Sequence] < blockToPostorderIndex[finger1.Sequence])
 				{
+					Debug.Assert(doms[finger2.Sequence] != null);
 					finger2 = doms[finger2.Sequence];
 				}
 			}

@@ -339,7 +339,6 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdatePhiSuccesors(block);
 
 			var children = AnalysisDominance.GetChildren(block);
-
 			if (children != null || children.Count == 0)
 			{
 				nextblocks = new List<BasicBlock>(children.Capacity);
@@ -553,7 +552,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (node.Instruction == IRInstruction.Phi)
 							continue;
 
-						Debug.Assert(node.Instruction == IRInstruction.Phi);
+						//Debug.Assert(node.Instruction == IRInstruction.Phi);
 
 						throw new CompilerException("ValueNumbering Stage: Expected PHI instruction but found instead: " + node + " for " + operand);
 					}
