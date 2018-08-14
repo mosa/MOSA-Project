@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -142,6 +143,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public List<LiveRange> SplitAt(SlotIndex at)
 		{
+			if (!CanSplitAt(at))                        // remove me
+				throw new CompilerException("X");
+
 			Debug.Assert(CanSplitAt(at));
 
 			var ranges = new List<LiveRange>(2)

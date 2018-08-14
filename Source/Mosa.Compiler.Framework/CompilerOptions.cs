@@ -71,14 +71,6 @@ namespace Mosa.Compiler.Framework
 		public bool EnableValueNumbering { get; set; }
 
 		/// <summary>
-		/// Gets or sets the debug restrict optimization by count.
-		/// </summary>
-		/// <value>
-		/// The debug restrict optimization by count.
-		/// </value>
-		public int DebugRestrictOptimizationByCount { get; set; }
-
-		/// <summary>
 		/// Gets or sets a value indicating whether [enable conditional constant propagation].
 		/// </summary>
 		/// <value>
@@ -268,7 +260,6 @@ namespace Mosa.Compiler.Framework
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
 			EmitBinary = true;
 			InlinedIRMaximum = 8;
-			DebugRestrictOptimizationByCount = 0;
 			EmitSymbols = true;
 			EmitRelocations = true;
 			TwoPassOptimizations = true;

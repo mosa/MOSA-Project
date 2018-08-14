@@ -65,8 +65,8 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddPrologueInstructions(Context context)
 		{
-			Operand ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
-			Operand esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
+			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
+			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
 			context.SetInstruction(X86.Push32, null, ebp);
 			context.AppendInstruction(X86.Mov32, ebp, esp);
@@ -83,8 +83,8 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void AddEpilogueInstructions(Context context)
 		{
-			Operand ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
-			Operand esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
+			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
+			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
 
 			context.Empty();
 
@@ -95,6 +95,11 @@ namespace Mosa.Platform.x86.Stages
 
 			context.AppendInstruction(X86.Pop32, ebp);
 			context.AppendInstruction(X86.Ret);
+			AddEpilogueInstructions(context);
+		}
+
+		private void AddEpilogueKillInstructions(Context context)
+		{
 		}
 	}
 }

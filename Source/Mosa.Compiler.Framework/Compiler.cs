@@ -156,10 +156,10 @@ namespace Mosa.Compiler.Framework
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				new PromoteTemporaryVariables(),
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
-				new GraphVizStage(),
-				new DominanceOutputStage(),
-				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 
+				//new DominanceOutputStage(),	// TEMP
+				//new GraphVizStage(),			// TEMP
+				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
@@ -168,28 +168,28 @@ namespace Mosa.Compiler.Framework
 				new IRCleanupStage(),
 				new LowerIRStage(),
 				(compilerOptions.IRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongDecomposeStage() : null,
+				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
+				new DominanceOutputStage(),		// TEMP
+				new GraphVizStage(),			// TEMP
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
-
-				//(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new OptimizationRulesStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
-				(compilerOptions.TwoPassOptimizations ) ?new BlockMergeStage():  null,
-				(compilerOptions.TwoPassOptimizations ) ?new IRCleanupStage() :  null,
+				(compilerOptions.TwoPassOptimizations ) ? new BlockMergeStage():  null,
+				(compilerOptions.TwoPassOptimizations ) ? new IRCleanupStage() :  null,
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 				new DevirtualizeCallStage(),
 				new CallStage(),
 				new PlatformIntrinsicStage(),
 				new PlatformEdgeSplitStage(),
 				new VirtualRegisterRenameStage(),
-
-				//new StopStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
 				new DeadBlockStage(),
 				new BlockOrderingStage(),
 				new CodeGenerationStage(compilerOptions.EmitBinary),
 
+				//new StopStage(),
 				//new GraphVizStage(),
 				//new PreciseGCStage(),
 				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null,

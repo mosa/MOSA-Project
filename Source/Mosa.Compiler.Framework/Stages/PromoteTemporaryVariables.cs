@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Promotes Temporary Variables to Virtual Registers
 	/// </summary>
-	public class PromoteTemporaryVariables : DeadBlockStage
+	public class PromoteTemporaryVariables : BaseMethodCompilerStage
 	{
 		private TraceLog trace;
 

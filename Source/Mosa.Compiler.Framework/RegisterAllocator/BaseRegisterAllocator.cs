@@ -178,7 +178,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var block in ExtendedBlocks)
 			{
-				extendedBlockTrace.Log("Block # " + block.BasicBlock.Sequence.ToString() + " (" + block.Start + " destination " + block.End + ")");
+				extendedBlockTrace.Log("Block # " + block.BasicBlock + " [" + block.BasicBlock.Sequence.ToString() + "] (" + block.Start + " destination " + block.End + ")");
 				extendedBlockTrace.Log(" LiveIn:   " + block.LiveIn.ToString2());
 				extendedBlockTrace.Log(" LiveGen:  " + block.LiveGen.ToString2());
 				extendedBlockTrace.Log(" LiveKill: " + block.LiveKill.ToString2());
@@ -679,7 +679,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				block.LiveGen = liveGen;
 				block.LiveKill = liveKill;
-				block.LiveKillNot = ((BitArray)liveKill.Clone()).Not();
+				block.LiveKillNot = new BitArray(liveKill).Not();
 
 				if (liveSetTrace.Active)
 				{
@@ -709,8 +709,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						liveOut.Or(ExtendedBlocks[next.Sequence].LiveIn);
 					}
 
-					var liveIn = (BitArray)block.LiveOut.Clone();
-					liveIn.And(block.LiveKillNot);
+					var liveIn = new BitArray(block.LiveOut);
+
+					if (block.LiveKillNot != null)
+						liveIn.And(block.LiveKillNot);
+					else
+						liveIn.SetAll(false);
+
 					liveIn.Or(block.LiveGen);
 
 					// compare them for any changes
@@ -736,8 +741,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var block = ExtendedBlocks[b];
 
-				if (intervalTrace.Active)
-					intervalTrace.Log("Block # " + block.BasicBlock.Sequence.ToString());
+				if (intervalTrace.Active) intervalTrace.Log("Block # " + block.BasicBlock.Sequence.ToString());
 
 				for (int r = 0; r < RegisterCount; r++)
 				{
@@ -755,11 +759,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					}
 					else
 					{
-						if (intervalTrace.Active)
-						{
-							intervalTrace.Log("Add (!LiveOut) " + register + " : " + block.Interval.Start + " destination " + block.Interval.End);
-						}
-
+						if (intervalTrace.Active) intervalTrace.Log("Add (!LiveOut) " + register + " : " + block.Interval.Start + " destination " + block.Interval.End);
 						if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
 						register.AddLiveInterval(block.Interval);
 						if (intervalTrace.Active) intervalTrace.Log("    After: " + LiveIntervalsToString(register.LiveIntervals));
@@ -772,8 +772,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						continue;
 
 					var slotIndex = new SlotIndex(node);
-
-					var visitor = new OperandVisitor(node);
 
 					if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 					{
@@ -805,6 +803,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						}
 					}
 
+					var visitor = new OperandVisitor(node);
+
 					foreach (var result in visitor.Output)
 					{
 						if (result.IsCPURegister && result.Register.IsSpecial)
@@ -831,7 +831,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						}
 						else
 						{
-							// This is necesary to handled a result that is never used!
+							// This is necessary to handled a result that is never used!
 							// This is common with instructions with more than one result.
 							if (intervalTrace.Active) intervalTrace.Log("Add (Unused) " + register + " : " + slotIndex + " destination " + slotIndex);
 							if (intervalTrace.Active) intervalTrace.Log("   Before: " + LiveIntervalsToString(register.LiveIntervals));
@@ -1119,6 +1119,28 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// No live intervals to evict!
 			if (Trace.Active) Trace.Log("  No live intervals to evict");
 
+			if (Trace.Active)
+			{
+				foreach (var track in LiveIntervalTracks)
+				{
+					if (track.IsReserved)
+						continue;
+
+					if (track.IsFloatingPoint != liveInterval.VirtualRegister.IsFloatingPoint)
+						continue;
+
+					var assignedList = track.GetIntersections(liveInterval);
+
+					if (assignedList == null)
+						continue;
+
+					foreach (var assigned in assignedList)
+					{
+						Trace.Log("     Track: " + track + " Assigned: " + assigned + " / Spill Cost: " + liveInterval.SpillCost.ToString());
+					}
+				}
+			}
+
 			// prepare to split live interval
 			if (liveInterval.Stage == LiveInterval.AllocationStage.Initial)
 			{
@@ -1196,7 +1218,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void SplitLastResort(LiveInterval liveInterval)
 		{
-			// This is the last option when all other split option fail.
+			// This is the last option when all other split options fail.
 			// Split interval up into very small pieces that can always be placed.
 
 			// 1. Find the first use or def

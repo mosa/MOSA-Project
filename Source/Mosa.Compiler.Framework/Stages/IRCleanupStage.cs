@@ -15,11 +15,6 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			if (!BasicBlocks.RuntimeValidation())
-			{
-				throw new CompilerException("IRCleanupStage (start): Block Validation Error in: " + Method);
-			}
-
 			RemoveNops();
 			EmptyDeadBlocks();
 			SkipEmptyBlocks();
@@ -41,12 +36,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			BasicBlocks.ReorderBlocks(newBlockOrder);
-
-			if (!BasicBlocks.RuntimeValidation())
-			{
-				throw new CompilerException("IRCleanupStage: Block Validation Error in: " + Method);
-			}
-			Debug.Assert(BasicBlocks.RuntimeValidation());
 		}
 
 		private void RemoveNops()

@@ -63,15 +63,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private List<Transformation> transformations;
 
-		private int debugRestrictOptimizationByCount = 0;
-
 		protected override void Initialize()
 		{
 			base.Initialize();
 
 			worklist = new Stack<InstructionNode>();
-
-			debugRestrictOptimizationByCount = CompilerOptions.DebugRestrictOptimizationByCount;
 
 			transformations = CreateTransformationList();
 		}
@@ -273,8 +269,11 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var method in transformations)
 			{
-				if (node.IsEmpty)
+				if (node.IsEmptyOrNop)
 					return;
+
+				if (node.ResultCount == 0 && node.OperandCount == 0)
+					continue;
 
 				method.Invoke(node);
 			}
@@ -282,7 +281,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void AddToWorkList(InstructionNode node)
 		{
-			if (node.IsEmpty)
+			if (node.IsEmptyOrNop)
 				return;
 
 			// work list stays small, so the check is inexpensive
@@ -413,9 +412,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!node.Operand1.IsResolvedConstant)
 				return;
-
-			//if (node.Operand1.IsStackLocal || node.Operand1.IsOnStack || node.Operand1.IsSymbol)
-			//	return;
 
 			Operand destination = node.Result;
 			Operand source = node.Operand1;
@@ -1756,6 +1752,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!ValidateSSAForm(node.Result))
 				return;
 
+			//if (!node.Result.IsInteger) // future: should work on other types as well
+			//	return;
+
 			if (trace.Active) trace.Log("*** SimplifyPhiInstruction");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			AddOperandUsageToWorkList(node);
@@ -2156,9 +2155,6 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			Debug.Assert(node2.Result == node.Operand1);
-
-			//if (!node2.Result.IsVirtualRegister)
-			//	return;
 
 			AddOperandUsageToWorkList(node);
 			AddOperandUsageToWorkList(node2);

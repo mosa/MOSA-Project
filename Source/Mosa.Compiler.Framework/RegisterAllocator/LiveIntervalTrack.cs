@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public string ToString2()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			sb.Append(Register.ToString());
 			sb.Append(' ');
