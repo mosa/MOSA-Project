@@ -57,10 +57,6 @@
       <Project>{ff099d48-3fa5-4ed6-bba0-1497d734962a}</Project>
       <Name>Mosa.Kernel.x86</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Kernel\Mosa.Kernel.csproj">
-      <Project>{ff099d48-3fa5-4ed6-bba0-1497d994962a}</Project>
-      <Name>Mosa.Kernel</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj">
       <Project>{a47b7998-4ee8-4af8-9373-c664fdeddc65}</Project>
       <Name>Mosa.Runtime.x86</Name>
