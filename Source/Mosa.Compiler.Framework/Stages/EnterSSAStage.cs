@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
@@ -238,11 +237,6 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Result?.IsVirtualRegister == true)
 				{
 					var op = node.Result;
-
-					if (!counts.ContainsKey(op))
-					{
-						throw new CompilerException(op + " is not in counts");
-					}
 
 					Debug.Assert(counts.ContainsKey(op), op + " is not in counts");
 

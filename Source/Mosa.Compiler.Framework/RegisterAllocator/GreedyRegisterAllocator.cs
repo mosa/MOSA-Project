@@ -129,8 +129,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			if (moveHints.Length >= 1)
 				moveHints[0].Update(liveInterval);
-			else
-				if (moveHints.Length >= 2)
+			else if (moveHints.Length >= 2)
 				moveHints[1].Update(liveInterval);
 		}
 

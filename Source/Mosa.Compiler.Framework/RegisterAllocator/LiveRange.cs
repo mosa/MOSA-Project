@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Exceptions;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -29,6 +28,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public SlotIndex LastUse { get { return usePositions.Count == 0 ? null : usePositions.Values[usePositions.Count - 1]; } }
 
 		public SlotIndex LastDef { get { return defPositions.Count == 0 ? null : defPositions.Values[defPositions.Count - 1]; } }
+
+		public int UseCount { get { return usePositions.Count; } }
+
+		public int DefCount { get { return defPositions.Count; } }
 
 		public bool IsDefFirst { get; }
 
@@ -143,9 +146,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public List<LiveRange> SplitAt(SlotIndex at)
 		{
-			if (!CanSplitAt(at))                        // remove me
-				throw new CompilerException("X");
-
 			Debug.Assert(CanSplitAt(at));
 
 			var ranges = new List<LiveRange>(2)

@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Trace;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,7 +16,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private Queue<BasicBlock> worklist;
 		private List<InstructionNode> dupNodes;
 		private BitArray processed;
-		private TraceLog trace;
+
+		//private TraceLog trace;
 
 		private Dictionary<BasicBlock, List<Operand>> outgoingMoves;
 		private Dictionary<BasicBlock, List<Operand>> incomingMoves;
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (MethodCompiler.Method.Code.Count == 0)
 				return;
 
-			trace = CreateTraceLog();
+			//trace = CreateTraceLog();
 
 			processed = new BitArray(BasicBlocks.Count, false);
 
@@ -61,7 +61,8 @@ namespace Mosa.Compiler.Framework.Stages
 			worklist.Clear();
 			dupNodes.Clear();
 			processed = null;
-			trace = null;
+
+			//trace = null;
 		}
 
 		/// <summary>
@@ -100,25 +101,25 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var operandStack = new Stack<Operand>(incoming);
 
-			if (trace.Active)
-			{
-				trace.Log("IN:    Block: " + block + " Operand Stack Count: " + operandStack.Count.ToString());
-				foreach (var op in operandStack)
-				{
-					trace.Log("       -> " + op);
-				}
-			}
+			//if (trace.Active)
+			//{
+			//	trace.Log("IN:    Block: " + block + " Operand Stack Count: " + operandStack.Count.ToString());
+			//	foreach (var op in operandStack)
+			//	{
+			//		trace.Log("       -> " + op);
+			//	}
+			//}
 
 			AssignOperands(block, operandStack);
 
-			if (trace.Active)
-			{
-				trace.Log("AFTER: Block: " + block + " Operand Stack Count: " + operandStack.Count.ToString());
-				foreach (var op in operandStack)
-				{
-					trace.Log("       -> " + op);
-				}
-			}
+			//if (trace.Active)
+			//{
+			//	trace.Log("AFTER: Block: " + block + " Operand Stack Count: " + operandStack.Count.ToString());
+			//	foreach (var op in operandStack)
+			//	{
+			//		trace.Log("       -> " + op);
+			//	}
+			//}
 
 			var outgoing = new List<Operand>(operandStack);
 

@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
@@ -477,6 +478,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Operand destination = node.Result;
 			Operand source = node.Operand1;
+
+			if (destination == source)
+				throw new CompilerException("Ugh!");
 
 			Debug.Assert(destination != source);
 

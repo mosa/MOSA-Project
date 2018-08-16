@@ -112,8 +112,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			NumberInstructions();
 
 			// Generate trace information for instruction numbering
-			TraceNumberInstructions();
-			TraceDefAndUseLocations();
+			//TraceNumberInstructions();
+			//TraceDefAndUseLocations();
 
 			// Computer local live sets
 			ComputeLocalLiveSets();
@@ -125,12 +125,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			BuildLiveIntervals();
 
 			// Generate trace information for blocks
-			TraceBlocks();
+			//TraceBlocks();
 
-			TraceUsageMap("Initial");
+			//TraceUsageMap("Initial");
 
 			// Generate trace information for live intervals
-			TraceLiveIntervals("InitialLiveIntervals", false);
+			//TraceLiveIntervals("InitialLiveIntervals", false);
 
 			AdditionalSetup();
 
@@ -149,7 +149,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Create physical register operands
 			CreatePhysicalRegisterOperands();
 
-			TraceUsageMap("Post");
+			//TraceUsageMap("Post");
 
 			// Assign physical registers
 			AssignRegisters();
@@ -164,7 +164,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			ResolveDataFlow();
 
 			// Generate trace information for live intervals
-			TraceLiveIntervals("PostLiveIntervals", true);
+			//TraceLiveIntervals("PostLiveIntervals", true);
 		}
 
 		protected abstract void AdditionalSetup();
@@ -916,11 +916,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						// fixed and not spillable
 						liveInterval.NeverSpill = true;
 					}
-					else if (liveInterval.VirtualRegister.VirtualRegisterOperand.Type.IsUserValueType)
-					{
-						// Value types will never be spilled (they are already allocated in stack anyways)
-						liveInterval.NeverSpill = true;
-					}
+
+					//else if (liveInterval.VirtualRegister.VirtualRegisterOperand.Type.IsUserValueType)
+					//{
+					//	// Value types will never be spilled (they are already allocated in stack anyways)
+					//	liveInterval.NeverSpill = true;
+					//}
 					else
 					{
 						// Calculate spill costs for live interval
@@ -1136,7 +1137,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 					foreach (var assigned in assignedList)
 					{
-						Trace.Log("     Track: " + track + " Assigned: " + assigned + " / Spill Cost: " + liveInterval.SpillCost.ToString());
+						Trace.Log("     Track: " + track + " Assigned: " + assigned + " / Spill Cost: " + assigned.SpillCost.ToString());
 					}
 				}
 			}

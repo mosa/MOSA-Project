@@ -71,8 +71,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ReversePostOrder = AnalysisDominance.GetReversePostOrder();
 
-			//ReversePostOrder = BasicBlocks.ReversePostOrder(BasicBlocks.PrologueBlock);
-
 			ValueNumber();
 		}
 
@@ -259,23 +257,23 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				// Simplify expression: constant folding & strength reduction
-				Operand newOperand = null;
+				//Operand newOperand = null;
 
-				//var newOperand = ConstantFoldingIntegerOperations(node);
+				var newOperand = ConstantFoldingIntegerOperations(node);
 
-				//if (newOperand == null)
-				//{
-				//	newOperand = StrengthReduction(node);
+				if (newOperand == null)
+				{
+					newOperand = StrengthReduction(node);
 
-				//	if (newOperand != null)
-				//	{
-				//		strengthReductionCount++;
-				//	}
-				//}
-				//else
-				//{
-				//	constantFoldingCount++;
-				//}
+					if (newOperand != null)
+					{
+						strengthReductionCount++;
+					}
+				}
+				else
+				{
+					constantFoldingCount++;
+				}
 
 				if (newOperand != null)
 				{

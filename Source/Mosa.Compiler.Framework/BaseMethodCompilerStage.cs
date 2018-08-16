@@ -230,10 +230,10 @@ namespace Mosa.Compiler.Framework
 
 			Finish();
 
-			if (!MethodCompiler.IsStopped)
-			{
-				Debug.Assert(BasicBlocks.RuntimeValidation());
-			}
+			//if (!MethodCompiler.IsStopped)
+			//{
+			//	Debug.Assert(BasicBlocks.RuntimeValidation());
+			//}
 
 			MethodCompiler = null;
 			traceLogs = null;
@@ -480,11 +480,11 @@ namespace Mosa.Compiler.Framework
 			{
 				for (var node = next.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (node.Instruction != IRInstruction.Phi)
-						continue; // FUTURE: change to break, instead of continue
+						break;
 
 					var sourceBlocks = node.PhiBlocks;
 
@@ -516,11 +516,11 @@ namespace Mosa.Compiler.Framework
 
 				for (var node = target.First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (node.Instruction != IRInstruction.Phi)
-						continue; // FUTURE: change to break, instead of continue
+						break;
 
 					int index = node.PhiBlocks.IndexOf(source);
 

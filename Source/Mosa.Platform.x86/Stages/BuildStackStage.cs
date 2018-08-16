@@ -95,7 +95,8 @@ namespace Mosa.Platform.x86.Stages
 
 			context.AppendInstruction(X86.Pop32, ebp);
 			context.AppendInstruction(X86.Ret);
-			AddEpilogueInstructions(context);
+
+			//AddEpilogueKillInstructions(context);
 		}
 
 		private void AddEpilogueKillInstructions(Context context)

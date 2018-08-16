@@ -680,7 +680,7 @@ namespace Mosa.Compiler.Framework
 				case 2: Operand3 = operand; return;
 				default:
 					{
-						Operand current = GetAdditionalOperand(index);
+						var current = GetAdditionalOperand(index);
 						if (current == operand) return;
 						if (current != null)
 						{

@@ -157,10 +157,12 @@ namespace Mosa.Compiler.Framework
 				new PromoteTemporaryVariables(),
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 
-				//new DominanceOutputStage(),	// TEMP
-				//new GraphVizStage(),			// TEMP
+				new DominanceOutputStage(),	// TEMP
+				new GraphVizStage(),		// TEMP
+
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
+
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
@@ -169,11 +171,10 @@ namespace Mosa.Compiler.Framework
 				new LowerIRStage(),
 				(compilerOptions.IRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongDecomposeStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
-				new DominanceOutputStage(),		// TEMP
-				new GraphVizStage(),			// TEMP
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
-				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
+
+				//(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
 				(compilerOptions.TwoPassOptimizations ) ? new BlockMergeStage():  null,
 				(compilerOptions.TwoPassOptimizations ) ? new IRCleanupStage() :  null,
